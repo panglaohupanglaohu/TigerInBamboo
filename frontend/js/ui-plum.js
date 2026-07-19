@@ -1,7 +1,8 @@
-// 视角预设：每个机位都保持屏风画的"平远"构图
+// 寒梅归雁图 · 视角预设与界面：全景 / 梅下 / 塘雁 / 归飞（随雁）/ 远山
 import * as THREE from "three";
+import { PLUM_TREE_POS, POND } from "./environment-plum.js";
 
-export class CameraDirector {
+export class PlumCameraDirector {
   constructor(camera, controls) {
     this.camera = camera;
     this.controls = controls;
@@ -30,34 +31,45 @@ export class CameraDirector {
     this.controls.enabled = preset === "panorama";
   }
 
-  update(dt, tiger, pheasant) {
-    if (this.preset === "pheasant" && !pheasant) this.set("panorama"); // 鸟类暂不上场
+  update(dt, flock) {
     const desired = new THREE.Vector3();
     const look = new THREE.Vector3();
     switch (this.preset) {
-      case "follow": {
-        // 随虎：斜后上方，取画谱"回望"之势
-        const back = new THREE.Vector3(0, 0, -1).applyQuaternion(tiger.group.quaternion);
-        desired.copy(tiger.group.position).addScaledVector(back, 6.5).add(new THREE.Vector3(2.2, 3.0, 0));
-        look.copy(tiger.group.position).add(new THREE.Vector3(0, 1.2, 0));
+      case "plum": {
+        // 梅下：贴地仰观，干枝蔽空
+        desired.set(1, 1.6, 30);
+        look.set(PLUM_TREE_POS.x, 34, PLUM_TREE_POS.z);
         break;
       }
-      case "pheasant": {
-        const p = pheasant.group.position;
-        desired.set(p.x + 3.4, p.y + 2.0, p.z + 3.8);
-        look.set(p.x, p.y + 0.3, p.z);
+      case "pond": {
+        // 塘雁：隔水望坡，栖雁与游雁皆入画
+        desired.set(8, 2.5, 6);
+        look.set(POND.cx, 0.5, POND.cz);
         break;
       }
-      case "stream": {
-        // 溪涧平远：低机位顺水而望
-        desired.set(-2, 3.2, -20);
-        look.set(2, 0.2, 8);
+      case "flight": {
+        // 归飞：随领头雁，取其掠塘之势
+        const g = flock?.leader;
+        if (g) {
+          const p = g.pos;
+          const back = new THREE.Vector3(Math.sin(g.yaw), 0, Math.cos(g.yaw)).multiplyScalar(-7);
+          desired.copy(p).add(back).add(new THREE.Vector3(1.6, 2.6, 0));
+          look.copy(p);
+          break;
+        }
+        this.set("panorama");
+        return;
+      }
+      case "mountains": {
+        // 远山：隔水而望，山嶂占满、远线一抹
+        desired.set(0, 4, 20);
+        look.set(0, 45, -220);
         break;
       }
       default: {
-        // 全景：屏风正面，金地为底
-        desired.set(4, 10, 30);
-        look.set(0, 1.5, 0);
+        // 全景：贴地 1.8m 左移 6m，主干居画幅 1/4，归雁居中为焦点
+        desired.set(-6, 1.8, 42);
+        look.set(4, 16, -40);
         break;
       }
     }
@@ -71,7 +83,6 @@ export class CameraDirector {
       this.controls.update();
       return;
     }
-    // 平滑趋近目标机位
     this._blend = Math.min(this._blend + dt * 1.2, 1);
     const k = ease(this._blend);
     this.camera.position.lerpVectors(this._from, desired, k);
@@ -83,16 +94,12 @@ export class CameraDirector {
 
 function ease(t) { return t * t * (3 - 2 * t); }
 
-export function updateAgentPanel(tiger, rabbit, custom, pheasants) {
-  const t = document.getElementById("tiger-state");
-  const r = document.getElementById("rabbit-state");
-  const u = document.getElementById("custom-state");
-  const p = document.getElementById("pheasant-state");
-  if (t) t.textContent = tiger.state;
-  if (r && rabbit) r.textContent = rabbit.stateLabel;
-  if (u && custom) u.textContent = custom.stateLabel;
-  if (p && pheasants) {
-    const list = Array.isArray(pheasants) ? pheasants : [pheasants];
-    p.textContent = list.map((x) => x.stateLabel).join(" · ") || "—";
+export function updatePlumAgentPanel(flock, config) {
+  const g = document.getElementById("goose-state");
+  if (g && flock) g.textContent = flock.stateLabel;
+  const w = document.getElementById("weather-state");
+  if (w) {
+    const s = config.plum?.snowfall ?? 0.35;
+    w.textContent = s > 0.02 ? `薄雪 · ${Math.round(Math.min(s / 2, 1) * 100)}%` : "晴寒";
   }
 }

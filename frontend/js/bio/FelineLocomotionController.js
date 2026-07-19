@@ -22,22 +22,34 @@ export class FelineLocomotionController {
    */
   static update(boneMap, ctx) {
     if (!boneMap || boneMap.size === 0) return;
-    const { time: t, dt, state, gait, moving = 1, anatomyType = "DIGITIGRADE" } = ctx;
+    const { time: t, dt, state, gait, moving = 1, anatomyType = "DIGITIGRADE",
+            gaitAmp = 1, spineAmp = 1, tailAmp = 1 } = ctx;
 
     // —— 脊椎：行进时沿体长轻微 S 形波动，呼吸浮动 ——
     const wave = Math.sin(gait * Math.PI * 2);
     const sway = state === "WALK" ? moving : 0;
-    boneMap.get("Pelvis").rotation.y = wave * 0.04 * sway;
-    boneMap.get("Mid").rotation.y = Math.sin(gait * Math.PI * 2 - 0.6) * 0.05 * sway;
-    boneMap.get("Chest").rotation.y = Math.sin(gait * Math.PI * 2 - 1.2) * 0.04 * sway;
+    boneMap.get("Pelvis").rotation.y = wave * 0.04 * sway * spineAmp;
+    boneMap.get("Mid").rotation.y = Math.sin(gait * Math.PI * 2 - 0.6) * 0.05 * sway * spineAmp;
+    boneMap.get("Chest").rotation.y = Math.sin(gait * Math.PI * 2 - 1.2) * 0.04 * sway * spineAmp;
     const root = boneMap.get("Root");
-    root.position.y = root.userData.baseY + Math.sin(t * 1.7) * 0.008 + Math.abs(wave) * 0.02 * sway;
+    root.position.y = root.userData.baseY + Math.sin(t * 1.7) * 0.008 + Math.abs(wave) * 0.02 * sway * spineAmp;
 
-    // —— 四肢 ——
-    if (state === "WALK") {
-      if (anatomyType === "SALTATORIAL") this._hop(boneMap, gait, moving);
-      else this._gait(boneMap, gait, moving);
-    } else this._legsRelax(boneMap, dt);
+    // —— 四肢（leap 姿态在末尾统一覆盖） ——
+    if (state === "WALK" && !(ctx.leap > 0.02)) {
+      if (anatomyType === "SALTATORIAL") this._hop(boneMap, gait, moving * gaitAmp);
+      else if (ctx.locomotion === "gallop") this._gallop(boneMap, gait, moving * gaitAmp);
+      else this._gait(boneMap, gait, moving * gaitAmp);
+    } else if (!(ctx.leap > 0.02)) this._legsRelax(boneMap, dt);
+
+    // —— 匍匐：膝关节加折、根骨再沉（狩猎潜行） ——
+    if (ctx.crouch > 0.02) {
+      const kb = ctx.crouch * 0.5;
+      for (const n of ["FL2", "FR2", "BL2", "BR2"]) {
+        const b = boneMap.get(n);
+        if (b) b.rotation.x += kb;
+      }
+      root.position.y -= ctx.crouch * 0.06;
+    }
 
     // —— 头颈 ——
     const Neck = boneMap.get("Neck"), Head = boneMap.get("Head"), Jaw = boneMap.get("Jaw");
@@ -64,11 +76,11 @@ export class FelineLocomotionController {
     // —— 尾：五节链甩鞭 —— 行进与步态耦合、驻足以时间摆动；
     // 根→梢相位延迟 0.45rad、振幅递增（甩鞭流体波浪），尾尖保持上翘
     const waveT = state === "WALK" ? gait * Math.PI * 2 : t * 1.4;
-    const tailAmp = state === "WALK" ? moving : 0.55;
+    const tailSway = (state === "WALK" ? moving : 0.55) * tailAmp;
     for (let i = 1; i <= 5; i++) {
       const tb = boneMap.get(`Tail${i}`);
       if (!tb) break;
-      tb.rotation.y = Math.sin(waveT - (i - 1) * 0.45) * (0.1 + i * 0.07) * tailAmp;
+      tb.rotation.y = Math.sin(waveT - (i - 1) * 0.45) * (0.1 + i * 0.07) * tailSway;
     }
     boneMap.get("Tail1").rotation.x = 0.06 + Math.cos(waveT * 2) * 0.05; // 尾根微起伏
     boneMap.get("Tail5").rotation.x = 0.22; // 尾尖自信上翘
@@ -76,9 +88,75 @@ export class FelineLocomotionController {
     // —— 兔耳（仅 SALTATORIAL 装配）：静时微颤，跃时随蹬地冲量惯性后仰 ——
     const earL = boneMap.get("Ear_L"), earR = boneMap.get("Ear_R");
     if (earL && earR) {
-      const lag = state === "WALK" ? Math.max(0, Math.sin(gait * Math.PI * 2)) * 0.35 * moving : 0;
+      const lag = state === "WALK" ? Math.max(0, Math.sin(gait * Math.PI * 2)) * 0.35 * moving * gaitAmp : 0;
       earL.rotation.x = -0.12 - lag + Math.sin(t * 2.3) * 0.04;
       earR.rotation.x = -0.12 - lag + Math.sin(t * 2.3 + 0.3) * 0.04;
+    }
+
+    // —— 飞跃姿态：末帧统一覆盖（出膛直线，优先级最高） ——
+    if (ctx.leap > 0.02) this._leapPose(boneMap, ctx.leap);
+  }
+
+  /** 奔跃步态（rotary gallop）：大摆幅四肢 + 脊柱弓张发力 + 离地浮沉
+   *  关节量程参照猫科奔袭数据：髋 45~110°、膝 50~115°（摆幅远超对角步态） */
+  static _gallop(boneMap, gait, moving) {
+    const LEGS = [
+      { k1: "FL1", k2: "FL2", kF: "FLFoot", phase: 0.0, front: true },
+      { k1: "FR1", k2: "FR2", kF: "FRFoot", phase: 0.12, front: true },
+      { k1: "BL1", k2: "BL2", kF: "BLFoot", phase: 0.55, front: false },
+      { k1: "BR1", k2: "BR2", kF: "BRFoot", phase: 0.65, front: false },
+    ];
+    const SWING = 0.45; // 摆动期长（离地占比高，奔跃特征）
+    for (const L of LEGS) {
+      const p = ((gait + L.phase) % 1 + 1) % 1;
+      const fwd = L.front ? -1.02 : -0.85; // 前腿前探更深：虎掌大幅越过头位
+      let hipX, fold;
+      if (p < SWING) {
+        // 摆动期：腿由后向前大幅前探（虎掌前探可越头位）
+        const s = p / SWING;
+        hipX = THREE.MathUtils.lerp(0.78, fwd, Math.pow(s, 0.7));
+        fold = Math.sin(Math.PI * s) * 1.15;
+      } else {
+        // 支撑期：蹬地后摆
+        const s = (p - SWING) / (1 - SWING);
+        hipX = THREE.MathUtils.lerp(fwd, 0.78, s);
+        fold = 0;
+      }
+      hipX *= moving; fold *= moving;
+      const k1 = boneMap.get(L.k1), k2 = boneMap.get(L.k2), kF = boneMap.get(L.kF);
+      if (L.front) {
+        k1.rotation.x = hipX * 0.8;
+        k2.rotation.x = fold * 0.9;
+        kF.rotation.x = fold * 0.45 - hipX * 0.3;
+      } else {
+        k1.rotation.x = hipX * 0.75;
+        k2.rotation.x = fold * 1.0;
+        kF.rotation.x = fold * 0.6;
+      }
+    }
+    // 脊柱弓张：躯干弓起↔伸展（gallop 的核心推进器）
+    const tick = gait * Math.PI * 2;
+    boneMap.get("Mid").rotation.x = Math.sin(tick) * 0.17 * moving;
+    boneMap.get("Chest").rotation.x = Math.sin(tick + 0.5) * 0.13 * moving;
+    boneMap.get("Pelvis").rotation.x = Math.sin(tick - 0.4) * 0.1 * moving;
+    // 离地浮沉：腾空期上抛
+    boneMap.get("Root").position.y += Math.max(0, Math.sin(tick)) * 0.06 * moving;
+  }
+
+  /** 飞跃姿态：前肢前探、后肢后蹬、脊柱伸展、头前指、尾拉直 —— 出膛炮弹直线 */
+  static _leapPose(boneMap, k) {
+    const set = (n, v) => { const b = boneMap.get(n); if (b) b.rotation.x = v * k; };
+    set("FL1", -1.05); set("FL2", 0.22); set("FLFoot", 0.1); // 前掌尽量前够（扑击落点）
+    set("FR1", -1.05); set("FR2", 0.22); set("FRFoot", 0.1);
+    set("BL1", 0.72); set("BL2", 0.45); set("BLFoot", 0.32);
+    set("BR1", 0.72); set("BR2", 0.45); set("BRFoot", 0.32);
+    set("Mid", -0.09); set("Chest", -0.07);
+    set("Neck", 0.18); set("Head", 0.08);
+    for (let i = 1; i <= 5; i++) {
+      const tb = boneMap.get(`Tail${i}`);
+      if (!tb) break;
+      tb.rotation.y *= 1 - k;             // 尾摆收拢
+      tb.rotation.x = (0.08 + i * 0.015) * k; // 尾顺体拉直
     }
   }
 
@@ -110,15 +188,17 @@ export class FelineLocomotionController {
     for (const L of LEGS) {
       const p = ((gait + L.phase) % 1 + 1) % 1;
       let hipX, fold;
+      // 前腿前探极限比后腿更深（-0.62 vs -0.48）：虎掌向前跨幅更大（匍匐同走此分支）
+      const fwd = L.front ? -0.62 : -0.48;
       if (p < SWING) {
         // 摆动期：腿由后向前摆（hipX +→−），关节主动折叠防爪蹭地
         const s = p / SWING;
-        hipX = THREE.MathUtils.lerp(0.42, -0.48, Math.pow(s, 0.75));
+        hipX = THREE.MathUtils.lerp(0.42, fwd, Math.pow(s, 0.75));
         fold = Math.sin(Math.PI * s); // 0→1→0，摆动中段折叠最深
       } else {
         // 支撑期：爪钉地，腿整体由前向后蹬（hipX −→+），关节舒展
         const s = (p - SWING) / (1 - SWING);
-        hipX = THREE.MathUtils.lerp(-0.48, 0.42, s);
+        hipX = THREE.MathUtils.lerp(fwd, 0.42, s);
         fold = 0;
       }
       hipX *= moving; fold *= moving;

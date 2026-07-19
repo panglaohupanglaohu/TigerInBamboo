@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>寒梅归雁 · 系统配置 · 世界古典美术拟生平台</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="config-page">
+    <div class="config-header">
+      <h1>寒梅归雁图 · 系统配置</h1>
+      <a href="/plum.html">← 返回《寒梅归雁图》</a>
+    </div>
+    <p class="config-sub">
+      本页只管《寒梅归雁图》一画（plum 段与音乐），与《竹虎溪涧图》配置互不影响；
+      修改保存后刷新场景页生效。竹虎溪涧配置请移步 <a href="/config.html">系统配置</a>。
+    </p>
+
+    <form id="config-form" onsubmit="return false;">
+      <fieldset>
+        <legend>归 雁</legend>
+        <div class="field">
+          <label>塘边休息雁数</label>
+          <input type="range" id="plum.restGeese" min="0" max="8" step="1" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>归飞雁数（含领头雁）</label>
+          <input type="range" id="plum.flockGeese" min="1" max="12" step="1" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>大雁体型倍率</label>
+          <input type="range" id="plum.gooseScale" min="0.5" max="2" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>归飞盘旋时长（秒）</label>
+          <input type="range" id="plum.circuitTime" min="10" max="90" step="1" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>盘旋高度（米）</label>
+          <input type="range" id="plum.circuitAlt" min="6" max="30" step="0.5" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>游水/岸栖时长（秒）</label>
+          <input type="range" id="plum.groundedTime" min="10" max="120" step="1" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>古 梅 与 花 木</legend>
+        <div class="field">
+          <label>梅花花量倍率</label>
+          <input type="range" id="plum.blossomDensity" min="0" max="2" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>落花瓣数量</label>
+          <input type="range" id="plum.petalCount" min="0" max="600" step="10" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>塘岸芦苇丛数</label>
+          <input type="range" id="plum.reedClusters" min="0" max="24" step="1" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>山 石（梅树附近）</legend>
+        <table class="relations">
+          <thead>
+            <tr><th>石</th><th>X（米）</th><th>Z（米）</th><th>下沉（石高 0~0.6）</th><th>右倾角（度）</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>独立石 A（梅左远）</td>
+              <td><input type="number" id="plum.rocks.solo0.x" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.solo0.z" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.solo0.sink" min="0" max="0.6" step="0.01" /></td>
+              <td><input type="number" id="plum.rocks.solo0.tilt" min="-45" max="45" step="1" /></td>
+            </tr>
+            <tr>
+              <td>独立石 B（画面最左）</td>
+              <td><input type="number" id="plum.rocks.solo1.x" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.solo1.z" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.solo1.sink" min="0" max="0.6" step="0.01" /></td>
+              <td><input type="number" id="plum.rocks.solo1.tilt" min="-45" max="45" step="1" /></td>
+            </tr>
+            <tr>
+              <td>独立石 C（梅右前方）</td>
+              <td><input type="number" id="plum.rocks.solo2.x" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.solo2.z" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.solo2.sink" min="0" max="0.6" step="0.01" /></td>
+              <td><input type="number" id="plum.rocks.solo2.tilt" min="-45" max="45" step="1" /></td>
+            </tr>
+            <tr>
+              <td>护根盘石（挪开落点）</td>
+              <td><input type="number" id="plum.rocks.root.x" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.root.z" step="0.1" /></td>
+              <td><input type="number" id="plum.rocks.root.sink" min="0" max="0.6" step="0.01" /></td>
+              <td><input type="number" id="plum.rocks.root.tilt" min="-45" max="45" step="1" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </fieldset>
+
+      <fieldset>
+        <legend>梅 下 小 竹</legend>
+        <div class="field">
+          <label>每丛竹数</label>
+          <input type="range" id="plum.bamboo.count" min="1" max="10" step="1" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>最大倾斜角（度，各竿随机）</label>
+          <input type="range" id="plum.bamboo.lean" min="0" max="30" step="0.5" />
+          <span class="value"></span>
+        </div>
+        <table class="relations">
+          <thead>
+            <tr><th>竹丛</th><th>X（米）</th><th>Z（米）</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>丛 1（梅左）</td>
+              <td><input type="number" id="plum.bamboo.clumps.0.x" step="0.1" /></td>
+              <td><input type="number" id="plum.bamboo.clumps.0.z" step="0.1" /></td>
+            </tr>
+            <tr>
+              <td>丛 2（梅右）</td>
+              <td><input type="number" id="plum.bamboo.clumps.1.x" step="0.1" /></td>
+              <td><input type="number" id="plum.bamboo.clumps.1.z" step="0.1" /></td>
+            </tr>
+            <tr>
+              <td>丛 3（梅后）</td>
+              <td><input type="number" id="plum.bamboo.clumps.2.x" step="0.1" /></td>
+              <td><input type="number" id="plum.bamboo.clumps.2.z" step="0.1" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </fieldset>
+
+      <fieldset>
+        <legend>环 境 与 天 气</legend>
+        <div class="field">
+          <label>雾气浓度</label>
+          <input type="range" id="plum.mist" min="0" max="1" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>薄雪强度（0=无雪）</label>
+          <input type="range" id="plum.snowfall" min="0" max="2" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>风力（梅枝轻颤、雪飘）</label>
+          <input type="range" id="plum.wind" min="0" max="1" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>风向（度，0=北 90=东）</label>
+          <input type="range" id="plum.windDirection" min="0" max="360" step="5" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>视 角 与 音 乐</legend>
+        <div class="field">
+          <label>初始机位</label>
+          <select id="plum.cameraPreset">
+            <option value="panorama">全景（贴地远望）</option>
+            <option value="plum">梅下（贴地仰观）</option>
+            <option value="pond">塘雁（隔水望坡）</option>
+            <option value="flight">归飞（随领头雁）</option>
+            <option value="mountains">远山（隔水望嶂）</option>
+          </select>
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>背景音乐音量</label>
+          <input type="range" id="bgm.volume" min="0" max="1" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field" style="align-items:flex-start">
+          <label>背景音乐歌单</label>
+          <div id="playlist-editor" style="flex:1"></div>
+        </div>
+      </fieldset>
+
+      <div class="config-actions">
+        <button class="btn" id="save-btn">保 存</button>
+        <button class="btn ghost" id="reset-btn">恢复默认</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { loadConfig, saveConfig, resetConfig } from "/js/config.js";
+
+    let config = await loadConfig();
+
+    // ---- 标量字段绑定（id 即配置路径，如 plum.snowfall） ----
+    function getPath(obj, path) {
+      return path.split(".").reduce((o, k) => o?.[k], obj);
+    }
+    function setPath(obj, path, value) {
+      const keys = path.split(".");
+      const last = keys.pop();
+      const target = keys.reduce((o, k) => (o[k] ??= {}), obj);
+      target[last] = value;
+    }
+    function refreshFields() {
+      document.querySelectorAll("input[id], select[id]").forEach((el) => {
+        const v = getPath(config, el.id);
+        if (v === undefined) return;
+        if (el.type === "checkbox") el.checked = !!v;
+        else el.value = v;
+        const span = el.parentElement.querySelector(".value");
+        if (span && el.type === "range") span.textContent = Number(v).toFixed(2).replace(/\.?0+$/, "");
+        if (span && el.type === "checkbox") span.textContent = v ? "启" : "闭";
+      });
+    }
+    document.querySelectorAll("input[id], select[id]").forEach((el) => {
+      el.addEventListener("input", () => {
+        let v;
+        if (el.type === "checkbox") v = el.checked;
+        else if (el.type === "range" || el.type === "number") v = Number(el.value);
+        else v = el.value;
+        setPath(config, el.id, v);
+        refreshFields();
+      });
+    });
+
+    // ---- 背景音乐歌单编辑 ----
+    let audioLib = [];
+    try {
+      const r = await fetch("/api/audio");
+      if (r.ok) audioLib = (await r.json()).files ?? [];
+    } catch (_) { /* 离线时曲库不可达，仅可删不可加 */ }
+
+    function renderPlaylist() {
+      const box = document.getElementById("playlist-editor");
+      box.innerHTML = "";
+      config.bgm.playlist ??= [];
+      config.bgm.playlist.forEach((p, i) => {
+        const row = document.createElement("div");
+        row.style.cssText = "display:flex;gap:6px;align-items:center;margin:3px 0";
+        row.innerHTML = `
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+                title="${p}">${i + 1}. ${p.split("/").pop()}</span>
+          <button type="button" class="btn ghost" data-i="${i}" data-act="up" style="padding:2px 8px">↑</button>
+          <button type="button" class="btn ghost" data-i="${i}" data-act="down" style="padding:2px 8px">↓</button>
+          <button type="button" class="btn ghost" data-i="${i}" data-act="del" style="padding:2px 8px">删</button>`;
+        box.appendChild(row);
+      });
+      const rest = audioLib.filter((f) => !config.bgm.playlist.includes(f));
+      const addRow = document.createElement("div");
+      addRow.style.cssText = "display:flex;gap:6px;align-items:center;margin-top:6px";
+      addRow.innerHTML = rest.length
+        ? `<select id="playlist-add-sel" style="flex:1">${rest.map((f) => `<option value="${f}">${f.split("/").pop()}</option>`).join("")}</select>
+           <button type="button" class="btn ghost" id="playlist-add-btn" style="padding:2px 10px">添加</button>`
+        : `<span style="opacity:0.55;font-size:13px">${audioLib.length ? "曲库已全部入单" : "曲库不可达（需后端）"}</span>`;
+      box.appendChild(addRow);
+      box.querySelectorAll("button[data-act]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.dataset.i), act = btn.dataset.act, list = config.bgm.playlist;
+          if (act === "del") list.splice(i, 1);
+          else if (act === "up" && i > 0) [list[i - 1], list[i]] = [list[i], list[i - 1]];
+          else if (act === "down" && i < list.length - 1) [list[i + 1], list[i]] = [list[i], list[i + 1]];
+          renderPlaylist();
+        });
+      });
+      document.getElementById("playlist-add-btn")?.addEventListener("click", () => {
+        const sel = document.getElementById("playlist-add-sel");
+        if (sel?.value) { config.bgm.playlist.push(sel.value); renderPlaylist(); }
+      });
+    }
+
+    // ---- 保存 / 重置 ----
+    const toast = (msg) => {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2200);
+    };
+    document.getElementById("save-btn").addEventListener("click", async () => {
+      const ok = await saveConfig(config);
+      toast(ok ? "已封存 · 刷新场景页生效" : "保存失败");
+    });
+    document.getElementById("reset-btn").addEventListener("click", async () => {
+      config = await resetConfig();
+      refreshFields();
+      renderPlaylist();
+      toast("已恢复默认");
+    });
+
+    refreshFields();
+    renderPlaylist();
+  </script>
+</body>
+</html>

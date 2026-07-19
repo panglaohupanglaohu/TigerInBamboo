@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>物种实验室 · 世界古典美术拟生平台</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/lab.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="lab-page">
+    <div class="config-header">
+      <h1>物种实验室</h1>
+      <a href="/">← 返回《竹虎溪涧图》</a>
+    </div>
+    <p class="config-sub">
+      数据仓库 → 程序化网格 → 骨骼装配 → 状态机驱动：生物生成全管线调参与新物种存档。
+      左侧调形、右侧调骨与态，中部视窗实时预览（形体参数防抖 0.12 秒后整体重建）。
+    </p>
+
+    <div class="lab-grid">
+      <!-- 左栏：形体两卡 -->
+      <div class="lab-col">
+        <fieldset>
+          <legend>物 种 数 据 仓 库</legend>
+          <div class="field">
+            <label>解剖类型</label>
+            <select id="m-anatomy" data-path="anatomyType">
+              <option value="DIGITIGRADE">趾行 DIGITIGRADE</option>
+              <option value="UNGULIGRADE">蹄行 UNGULIGRADE</option>
+              <option value="SALTATORIAL">跳跃行 SALTATORIAL</option>
+              <option value="AVES">禽类 AVES</option>
+            </select>
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>体宽</label>
+            <input type="range" data-path="dimensions.width" min="0.1" max="1.0" step="0.01" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>总高</label>
+            <input type="range" data-path="dimensions.height" min="0.1" max="1.6" step="0.01" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>总长</label>
+            <input type="range" data-path="dimensions.length" min="0.2" max="3.5" step="0.01" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>肩高</label>
+            <input type="range" data-path="anatomicalRef.withersHeight" min="0.05" max="1.2" step="0.01" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>尾长</label>
+            <input type="range" data-path="anatomicalRef.tailLength" min="0.02" max="1.2" step="0.01" />
+            <span class="value"></span>
+          </div>
+          <div class="field" id="ear-field">
+            <label>耳长</label>
+            <input type="range" id="m-ear" data-path="anatomicalRef.earLength" min="0" max="0.2" step="0.005" />
+            <span class="value"></span>
+          </div>
+          <p class="hint">耳长仅跳跃行（兔科长耳）有效。</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>程 序 化 网 格 生 成 器</legend>
+          <div class="field">
+            <label>臀部粗细</label>
+            <input type="range" data-path="shape.rumpScale" min="0.5" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>腹部饱满</label>
+            <input type="range" data-path="shape.bellyScale" min="0.5" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>胸部发达</label>
+            <input type="range" data-path="shape.chestScale" min="0.5" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>头颈比例</label>
+            <input type="range" data-path="shape.headScale" min="0.5" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>腿径</label>
+            <input type="range" data-path="shape.legScale" min="0.4" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>尾径</label>
+            <input type="range" data-path="shape.tailScale" min="0.4" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- 中栏：3D 视窗 -->
+      <div class="lab-view">
+        <div class="view-toolbar">
+          <label class="btn ghost small" for="img-upload">上传图片建模</label>
+          <input type="file" id="img-upload" accept="image/*" hidden />
+          <img id="view-thumb" class="thumb" alt="缩略图" hidden />
+          <div class="swatches" id="swatches"></div>
+          <button type="button" class="btn ghost small" id="apply-suggest" hidden></button>
+          <button type="button" class="btn ghost small" id="snap-btn">摄型为照</button>
+        </div>
+        <div class="lab-canvas-wrap"><canvas id="viewport"></canvas></div>
+        <p class="hint">拖拽旋转 · 滚轮缩放 · 地面格距 0.1 m，旁置 1 m 比例尺</p>
+      </div>
+
+      <!-- 右栏：骨骼与驱动两卡 -->
+      <div class="lab-col">
+        <fieldset>
+          <legend>骨 骼 解 剖 学 装 配 器</legend>
+          <div class="field">
+            <label>颈长</label>
+            <input type="range" data-path="rigTuning.neckLen" min="0.6" max="1.6" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>关节折叠</label>
+            <input type="range" data-path="rigTuning.legFold" min="0" max="2" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>皮毛层数</label>
+            <input type="range" data-path="rendering.furLayers" min="0" max="24" step="1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>皮毛长度</label>
+            <input type="range" data-path="rendering.furLength" min="0" max="0.06" step="0.002" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>基色</label>
+            <input type="color" data-path="rendering.baseColor" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>粗糙度</label>
+            <input type="range" data-path="rendering.roughness" min="0" max="1" step="0.05" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>状 态 机 动 画 驱 动 器</legend>
+          <div class="state-row">
+            <button type="button" class="state-btn" data-state="IDLE">驻足 IDLE</button>
+            <button type="button" class="state-btn" data-state="WALK">行走 WALK</button>
+            <button type="button" class="state-btn" id="state-roar" data-state="ROAR">咆哮 ROAR</button>
+          </div>
+          <div class="field">
+            <label>步态频率</label>
+            <input type="range" data-path="gait.freq" min="0.4" max="2.5" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>摆动幅度</label>
+            <input type="range" data-path="gait.swing" min="0" max="2" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>脊椎波动</label>
+            <input type="range" data-path="gait.spine" min="0" max="2" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>摆尾幅度</label>
+            <input type="range" data-path="gait.tail" min="0" max="2" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <p class="hint">咆哮 ROAR 仅非跳跃行有意义。</p>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- 底部通栏：档案 -->
+    <fieldset class="lab-archive">
+      <legend>物 种 档 案</legend>
+      <div class="archive-grid">
+        <div>
+          <div class="field">
+            <label>启用</label>
+            <input type="checkbox" data-path="enabled" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>中文名</label>
+            <input type="text" data-path="cnName" placeholder="自定义物种" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>拉丁学名</label>
+            <input type="text" data-path="scientificName" placeholder="Species nova" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>解剖类型</label>
+            <select data-path="anatomyType">
+              <option value="DIGITIGRADE">趾行 DIGITIGRADE</option>
+              <option value="UNGULIGRADE">蹄行 UNGULIGRADE</option>
+              <option value="SALTATORIAL">跳跃行 SALTATORIAL</option>
+              <option value="AVES">禽类 AVES</option>
+            </select>
+            <span class="value"></span>
+          </div>
+        </div>
+        <div>
+          <div class="field">
+            <label>特点描述</label>
+            <textarea data-path="traits" rows="5" placeholder="形体、习性、与溪涧众生的相处之道……"></textarea>
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>缩略图</label>
+            <img id="archive-thumb" class="archive-thumb" alt="暂无图像" />
+            <span class="value"></span>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 底部通栏：关系 -->
+    <fieldset>
+      <legend>物 种 关 系</legend>
+      <table class="relations">
+        <thead>
+          <tr><th>对象</th><th>关系</th><th>内驱力</th><th>强度</th><th>说明</th><th></th></tr>
+        </thead>
+        <tbody id="rel-body"></tbody>
+      </table>
+      <button type="button" class="btn ghost small" id="rel-add">＋ 添加关系</button>
+    </fieldset>
+
+    <div class="config-actions">
+      <button class="btn" id="save-btn">封 存 物 种</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="/js/lab.js"></script>
+</body>
+</html>

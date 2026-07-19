@@ -2,10 +2,14 @@
 // 躯体可为程序化模型或图转 3D 的 GLB；行为骨架（对应《Artificial Fishes》
 // 的 fear/thirst 内驱力与 evasive action）不随模型改变。
 import * as THREE from "three";
-import { groundHeight, streamCurve } from "./environment.js";
+import { groundHeight, streamCurve, distToStream } from "./environment.js";
 import { loadGLB, normalizeModel, hasModel } from "./assets.js";
+import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
 
-export const BIRD_STATE = { FORAGE: "觅食", DRINK: "去饮水", DRINKING: "饮水", FLEE: "惊飞", PERCH: "栖止", RETURN: "归飞" };
+export const BIRD_STATE = {
+  FORAGE: "觅食", DRINK: "去饮水", DRINKING: "饮水",
+  ALERT: "警觉", RUN: "奔逃", FLEE: "惊飞", PERCH: "栖止", RETURN: "归飞", CAUGHT: "被获",
+};
 const S = BIRD_STATE;
 
 export class BirdAgent {
@@ -80,119 +84,81 @@ export class BirdAgent {
 
   // ---------- 程序化躯体（红腹锦鸡；GLB 缺失时的兜底） ----------
   _buildProcedural() {
-    const cast = (m) => { m.castShadow = true; return m; };
-    const paint = (geo, fn) => {
-      const pos = geo.attributes.position;
-      const colors = new Float32Array(pos.count * 3);
-      const c = new THREE.Color();
-      for (let i = 0; i < pos.count; i++) {
-        fn(pos.getX(i), pos.getY(i), pos.getZ(i), c);
-        colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
-      }
-      geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    };
-    const mat = () => new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85 });
-    const GOLD = new THREE.Color(0xd9a520), RED = new THREE.Color(0xa8261f);
-    const BROWN = new THREE.Color(0x7a5a33), DARK = new THREE.Color(0x2b2016);
-    const GREEN = new THREE.Color(0x1f5f3f);
-
-    const bodyGeo = new THREE.SphereGeometry(1, 24, 18);
-    bodyGeo.scale(0.15, 0.14, 0.23);
-    paint(bodyGeo, (x, y, z, c) => {
-      c.copy(RED).lerp(GOLD, THREE.MathUtils.clamp(y * 4 + 0.45 + z * 1.2, 0, 1));
+    const built = buildAvianBody({
+      height: 0.42,
+      bodyColor: this.opts.bodyColor ?? 0xa8261f,
+      accentColor: this.opts.accentColor ?? 0xd9a520,
+      neckColor: this.opts.neckColor ?? 0x1f5f3f,
+      crestColor: this.opts.crestColor ?? 0xe3b93a,
     });
-    this.body = cast(new THREE.Mesh(bodyGeo, mat()));
-    this.body.position.y = 0.22;
-    this.group.add(this.body);
-    this.proceduralParts.push(this.body);
-
-    this.head = new THREE.Group();
-    this.head.position.set(0, 0.32, 0.16);
-    const neckGeo = new THREE.SphereGeometry(0.075, 16, 12);
-    paint(neckGeo, (x, y, z, c) => c.copy(GREEN).lerp(GOLD, THREE.MathUtils.clamp(y * 5 + 0.4, 0, 1)));
-    this.head.add(cast(new THREE.Mesh(neckGeo, mat())));
-    const crestGeo = new THREE.ConeGeometry(0.02, 0.12, 6);
-    crestGeo.translate(0, 0.06, 0);
-    const crestMat = new THREE.MeshStandardMaterial({ color: 0xe3b93a, roughness: 0.8 });
-    for (let i = 0; i < 5; i++) {
-      const crest = new THREE.Mesh(crestGeo, crestMat);
-      crest.position.set((i - 2) * 0.018, 0.06, -0.01);
-      crest.rotation.x = -1.9 - (i % 2) * 0.25;
-      this.head.add(crest);
-    }
-    const beak = new THREE.Mesh(
-      new THREE.ConeGeometry(0.018, 0.06, 8),
-      new THREE.MeshStandardMaterial({ color: 0xd8c9a3, roughness: 0.6 })
-    );
-    beak.rotation.x = Math.PI / 2;
-    beak.position.set(0, 0.0, 0.1);
-    this.head.add(beak);
-    const eyeMat = new THREE.MeshStandardMaterial({ color: 0x14100a });
-    for (const s of [-1, 1]) {
-      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.012, 8, 6), eyeMat);
-      eye.position.set(s * 0.045, 0.02, 0.05);
-      this.head.add(eye);
-    }
-    this.group.add(this.head);
-    this.proceduralParts.push(this.head);
-
-    this.wings = [];
-    const wingGeo = new THREE.SphereGeometry(1, 12, 8);
-    wingGeo.scale(0.03, 0.09, 0.16);
-    paint(wingGeo, (x, y, z, c) => c.copy(BROWN).lerp(GOLD, THREE.MathUtils.clamp(-z * 3 + 0.4, 0, 1)));
-    for (const s of [-1, 1]) {
-      const pivot = new THREE.Group();
-      pivot.position.set(s * 0.09, 0.26, 0.02);
-      const wing = cast(new THREE.Mesh(wingGeo, mat()));
-      wing.position.x = s * 0.02;
-      pivot.add(wing);
-      this.group.add(pivot);
-      this.wings.push({ pivot, side: s });
-      this.proceduralParts.push(pivot);
-    }
-
-    this.tail = new THREE.Group();
-    this.tail.position.set(0, 0.22, -0.2);
-    const tailGeo = new THREE.BoxGeometry(0.045, 0.008, 0.55);
-    tailGeo.translate(0, 0, -0.26);
-    paint(tailGeo, (x, y, z, c) => {
-      const band = Math.sin(z * 40) > 0.2;
-      c.copy(band ? DARK : BROWN).lerp(GOLD, band ? 0.1 : 0.25);
-    });
-    for (let i = 0; i < 5; i++) {
-      const f = cast(new THREE.Mesh(tailGeo, mat()));
-      f.rotation.y = (i - 2) * 0.14;
-      f.rotation.x = 0.12 + Math.abs(i - 2) * 0.05;
-      this.tail.add(f);
-    }
-    this.group.add(this.tail);
-    this.proceduralParts.push(this.tail);
-
-    const legMat = new THREE.MeshStandardMaterial({ color: 0xc9b48a });
-    for (const s of [-1, 1]) {
-      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.14, 6), legMat);
-      leg.position.set(s * 0.04, 0.07, 0);
-      this.group.add(leg);
-      this.proceduralParts.push(leg);
-    }
+    this.group.add(built.group);
+    this.body = built.group.children[0];
+    this.head = built.head;
+    this.wings = built.wings;
+    this.tail = built.tail;
+    this.proceduralParts = built.parts;
   }
 
   // ---------- 行为层 ----------
   update(dt, time, tigerPos) {
     const cfg = this.config.pheasant;
     if (!cfg.enabled) { this.group.visible = false; return; }
+
+    // 被获：坠地 → 隐匿 → 延时重生回觅食点（被叼中则由虎口携带，跳过落地逻辑）
+    if (this.state === S.CAUGHT) {
+      if (this.carried) {
+        // 叼运中：位置由虎口头骨携带；计时兜底防卡死
+        this._respawn -= dt;
+        if (this._respawn <= 0) { // 理论上虎会先放下；兜底直接重生
+          this.carried = false;
+          this.pos.copy(this.forageSpot);
+          this.group.position.copy(this.forageSpot);
+          this.group.rotation.set(0, 0, 0);
+          this.group.scale.setScalar(1);
+          this.group.visible = true;
+          this.state = S.FORAGE;
+        }
+        this.stateLabel = this.state;
+        return;
+      }
+      const ground = groundHeight(this.pos.x, this.pos.z);
+      this.pos.y = Math.max(ground, this.pos.y - dt * 5);
+      this.group.position.copy(this.pos);
+      this._respawn -= dt;
+      if (this._dropped > 0) { // 献获放下：横陈片刻后隐匿
+        this._dropped -= dt;
+        if (this._dropped <= 0) this.group.visible = false;
+      } else if (this._respawn < (cfg.respawnDelay ?? 20) - 0.8) this.group.visible = false;
+      if (this._respawn <= 0) {
+        this.pos.copy(this.forageSpot);
+        this.group.visible = true;
+        this.state = S.FORAGE;
+        this._walkTimer = 0;
+      }
+      this.stateLabel = this.state;
+      return;
+    }
     this.group.visible = true;
 
     const tigerDist = tigerPos
       ? Math.hypot(tigerPos.x - this.pos.x, tigerPos.z - this.pos.z)
       : Infinity;
 
-    // 感知层：fear 压倒一切
-    if (this.state !== S.FLEE && this.state !== S.PERCH && this.state !== S.RETURN) {
-      if (tigerDist < cfg.fleeDistance) this._takeOff(this.perchSpot, S.FLEE);
+    // 感知层：fear 分级 —— 远警觉（冻结观察）、近奔逃、奔逃后惊飞
+    if (![S.RUN, S.FLEE, S.PERCH, S.RETURN].includes(this.state)) {
+      if (tigerDist < cfg.fleeDistance) {
+        this.state = S.RUN;
+        this._runLeft = cfg.runDuration ?? 1.2;
+      } else if (tigerDist < (cfg.alertDistance ?? 10)) {
+        if (this.state !== S.ALERT) { this._prevState = this.state; this.state = S.ALERT; }
+      } else if (this.state === S.ALERT) {
+        this.state = this._prevState && this._prevState !== S.ALERT ? this._prevState : S.FORAGE;
+      }
     }
 
     switch (this.state) {
+      case S.ALERT: this._alert(dt, time, tigerPos); break;
+      case S.RUN: this._run(dt, time, tigerPos); break;
       case S.FORAGE: this._forage(dt, time); break;
       case S.DRINK: this._gotoDrink(dt); break;
       case S.DRINKING: this._drinking(dt, time); break;
@@ -212,6 +178,79 @@ export class BirdAgent {
     }
     this.group.position.copy(this.pos);
     this.stateLabel = this.state;
+  }
+
+  /** 被虎飞扑捕获：坠地 → 隐匿 → 延时重生 */
+  _caught() {
+    if (this.state === S.CAUGHT) return;
+    this.state = S.CAUGHT;
+    this._respawn = this.config.pheasant.respawnDelay ?? 20;
+    this.group.visible = true;
+  }
+
+  /** 被叼起：挂到虎的头骨上（口中），保持可见、垂死下垂 */
+  _carriedBy(headBone) {
+    if (this.state === S.CAUGHT && this.carried) return;
+    this.state = S.CAUGHT;
+    this.carried = true;
+    this._respawn = this.config.pheasant.respawnDelay ?? 20;
+    headBone.add(this.group);
+    this.group.position.set(0, -0.07, 0.34); // 叼在口中
+    this.group.rotation.set(0.5, 0, 1.25);   // 垂坠姿态
+    this.group.scale.setScalar(0.85);
+    this.group.visible = true;
+  }
+
+  /** 被放下（献于母前）：交还场景、落地横陈，片刻后隐匿重生 */
+  _dropAt(scene, worldPos) {
+    scene.add(this.group);
+    this.group.position.copy(worldPos);
+    this.group.rotation.set(0, 0, 1.4);
+    this.group.scale.setScalar(1);
+    this.pos.copy(worldPos);
+    this.carried = false;
+    this._dropped = 1.2;
+  }
+
+  /** 警觉：冻结立定、面向威胁、颈羽微张（危险未近则不逃） */
+  _alert(dt, time, tigerPos) {
+    if (tigerPos) {
+      this.group.rotation.y = Math.atan2(tigerPos.x - this.pos.x, tigerPos.z - this.pos.z);
+    }
+    if (this.isGlb) this.modelRoot.rotation.x = -0.12;
+    else this.head.rotation.x = -0.3 + Math.sin(time * 6) * 0.03; // 昂首紧盯
+    // 翼根微张欲起（小幅高频颤翅）
+    for (const w of this.wings) w.pivot.rotation.z = w.side * (0.15 + Math.sin(time * 14) * 0.06);
+  }
+
+  /** 逃逸落点：背向虎远飞 ~14m（拉开距离），候选角度避开河床 */
+  _escapeTarget(tigerPos) {
+    const away = new THREE.Vector3().subVectors(this.pos, tigerPos).setY(0);
+    const base = away.lengthSq() > 1e-6 ? Math.atan2(away.x, away.z) : Math.random() * Math.PI * 2;
+    for (const off of [0, 0.7, -0.7, 1.4, -1.4]) {
+      const a = base + off;
+      const x = this.pos.x + Math.sin(a) * 14, z = this.pos.z + Math.cos(a) * 14;
+      if (Math.abs(x) < 38 && Math.abs(z) < 38 && distToStream(x, z) > 2.3) {
+        return new THREE.Vector3(x, 0, z);
+      }
+    }
+    return this.perchSpot.clone();
+  }
+
+  /** 奔逃：拍翅贴地疾窜（短时），随后向远处惊飞拉开距离 */
+  _run(dt, time, tigerPos) {
+    const cfg = this.config.pheasant;
+    this._runLeft -= dt;
+    if (tigerPos) {
+      const away = new THREE.Vector3().subVectors(this.pos, tigerPos).setY(0);
+      if (away.lengthSq() > 1e-6) this._target = this.pos.clone().add(away.normalize().multiplyScalar(3));
+    }
+    this._walkToward(dt, this.opts.walkSpeed * 2.8);
+    const flap = Math.sin(time * 22) * 0.7;
+    for (const w of this.wings) w.pivot.rotation.z = w.side * (0.4 + flap * 0.5);
+    if (this.isGlb) this.modelRoot.rotation.x = 0.2;
+    else this.head.rotation.x = 0.25;
+    if (this._runLeft <= 0) this._takeOff(this._escapeTarget(tigerPos ?? this.pos), S.FLEE);
   }
 
   _forage(dt, time) {

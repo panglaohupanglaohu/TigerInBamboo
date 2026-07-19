@@ -15,18 +15,19 @@ const TERRAIN_HALF = 56;
 const TERRAIN_GRID = 64; // 64×64 采样
 
 export class PhysicsWorld {
-  constructor(config = {}) {
+  constructor(config = {}, heightFn = groundHeight) {
     const ph = config.physics ?? {};
     this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, ph.gravity ?? -9.82, 0) });
     this.world.broadphase = new CANNON.SAPBroadphase(this.world);
     this.world.allowSleep = true;
     this.world.solver.iterations = Math.round(ph.solverIterations ?? 8);
 
+    this._heightFn = heightFn; // 地形高度函数（默认竹虎溪涧，寒梅归雁图传入自己的 groundHeight）
     this._bodies = [];
     this._buildGround();
   }
 
-  /** 地形：从 environment.groundHeight 采样生成 Heightfield */
+  /** 地形：从高度函数采样生成 Heightfield（默认 environment.groundHeight） */
   _buildGround() {
     const n = TERRAIN_GRID;
     const data = [];
@@ -35,7 +36,7 @@ export class PhysicsWorld {
       for (let j = 0; j <= n; j++) {
         const x = -TERRAIN_HALF + (i / n) * TERRAIN_HALF * 2;
         const z = -TERRAIN_HALF + (j / n) * TERRAIN_HALF * 2;
-        row.push(groundHeight(x, z));
+        row.push(this._heightFn(x, z));
       }
       data.push(row);
     }

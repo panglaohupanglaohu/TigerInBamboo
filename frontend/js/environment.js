@@ -89,8 +89,8 @@ export function waterLevelAt(x, z) {
 
 // 太湖石：瘦、皱、束腰 —— 多频皱褶位移 + 竖向拉伸；顶点色顶深（岩坚）底浅
 // opts: stretch 竖向拉伸；flareK/flareFrom 底部外展强度与起点（小石底粗）；
-//       waist 束腰内收量。位移保证轮廓不规则，杜绝方棱锥形。
-function taihuGeometry(seed, { stretch = 1.75, flareK = 0.35, flareFrom = 0.6, waist = 0.32 } = {}) {
+//       waist 束腰内收量；topSoft/flatK 尖峰软封顶（大圆润顶，不刺天）
+function taihuGeometry(seed, { stretch = 1.75, flareK = 0.35, flareFrom = 0.6, waist = 0.32, topSoft = 1.25, flatK = 0.35 } = {}) {
   let geo = BufferGeometryUtils.mergeVertices(new THREE.IcosahedronGeometry(1, 3));
   const pos = geo.attributes.position;
   const v = new THREE.Vector3();
@@ -104,7 +104,8 @@ function taihuGeometry(seed, { stretch = 1.75, flareK = 0.35, flareFrom = 0.6, w
       0.10 * Math.sin(n.z * 17.3 + n.x * 13.7 + seed * 3.7);
     const r = 1 + w;
     // 瘦：竖向拉伸；束腰内收、顶略削、底部外展
-    const y = n.y * r * stretch;
+    let y = n.y * r * stretch;
+    if (y > topSoft) y = topSoft + (y - topSoft) * flatK; // 尖峰软封顶：锐尖压成圆顶
     const waistF = 1 - waist * Math.exp(-((n.y / 0.45) ** 2));
     const topPinch = n.y > 0.55 ? 1 - (n.y - 0.55) * 0.5 : 1;
     const baseFlare = n.y < -flareFrom ? 1 + (-n.y - flareFrom) * flareK : 1;
@@ -273,6 +274,7 @@ export class Environment {
       uTime: { value: 0 },
       uSunDir: { value: new THREE.Vector3(-24, 30, -14).normalize() }, // 同主光
       uRocks: { value: rockVecs },
+      uWader: { value: new THREE.Vector4(0, 0, 0.55, 0) }, // 涉水者：x,z 位置 / z 半径 / w 强度
     };
     const mat = new THREE.ShaderMaterial({
       uniforms: this.waterUniforms,
@@ -295,6 +297,7 @@ export class Environment {
         uniform float uTime;
         uniform vec3 uSunDir;
         uniform vec4 uRocks[16];
+        uniform vec4 uWader;
         varying vec2 vUv;
         varying vec3 vWorld;
         varying float vSpeed;
@@ -326,6 +329,18 @@ export class Environment {
             ringGrad += (dv / d) * (13.0 * cos(phase) - 1.1 * sin(phase) * step(rr, d)) * att;
             foam += smoothstep(rr + 0.7, rr * 0.9, d) * 0.5;
             boost += exp(-max(d - rr, 0.0) * 0.9) * 0.8;
+          }
+
+          // —— 涉水者：足下药环外扩 + 近身泛白（虎行于涧，步步生涟） ——
+          if (uWader.w > 0.001) {
+            vec2 dv = vWorld.xz - uWader.xy;
+            float d = max(length(dv), 1e-3);
+            float phase = d * 16.0 - uTime * 5.0;
+            float att = exp(-d * 0.85) * uWader.w;
+            ring += sin(phase) * att;
+            ringGrad += (dv / d) * (16.0 * cos(phase)) * att;
+            foam += smoothstep(0.9, 0.2, d) * 0.35 * uWader.w;
+            boost += exp(-d * 0.7) * 0.5 * uWader.w;
           }
 
           // —— 波纹场：随流速推移（v=Q/宽；遇石再加速），噪声细波取代旧条带 ——
@@ -429,10 +444,10 @@ export class Environment {
         const a = main ? 0 : rand() * Math.PI * 2;
         const d = main ? 0 : gs * (0.8 + rand() * 0.5);
         const s = main ? gs : gs * (0.5 + rand() * 0.15);
-        const h = main ? gs * (1.7 + rand() * 0.4) : gs * (2.0 + rand() * 0.6);
+        const h = main ? gs * (1.2 + rand() * 0.3) : gs * (1.3 + rand() * 0.4); // 高度压低，峰不刺天
         const geo = main
-          ? taihuGeometry(rand() * 100, { stretch: 1.5, flareK: 0.5, waist: 0.28 })
-          : taihuGeometry(rand() * 100, { stretch: 1.95, flareK: 0.3, waist: 0.34 });
+          ? taihuGeometry(rand() * 100, { stretch: 1.3, flareK: 0.5, waist: 0.28 })
+          : taihuGeometry(rand() * 100, { stretch: 1.5, flareK: 0.3, waist: 0.34 });
         const lean = 0.14 + rand() * 0.18;
         const pose = k === layIdx ? "lay"
           : main ? null
@@ -483,6 +498,20 @@ export class Environment {
     this.rain.frustumCulled = false;
     this.rain.visible = false;
     this.scene.add(this.rain);
+  }
+
+  /** 涉水波纹：生物位置 + 移动强度 → 水 shader 的 uWader（入水才生效，强度平滑） */
+  updateWader(pos, moving = 1) {
+    const u = this.waterUniforms?.uWader;
+    if (!u) return;
+    const q = streamQuery(pos.x, pos.z);
+    const inWater = q.d < q.halfW * 0.95;
+    const target = inWater ? Math.min(moving, 1) : 0;
+    u.value.w += (target - u.value.w) * 0.08; // 渐入渐出
+    if (inWater) {
+      u.value.x = pos.x;
+      u.value.y = pos.z;
+    }
   }
 
   update(dt) {

@@ -17,7 +17,61 @@ export class BambooGrove {
     this.physics = physics;
     this.bamboos = [];
     this.time = 0;
+    this.onDisturb = null; // 竹被挤扰回调（由 main.js 挂：沙沙声 + 落雪）
     this._generate(patrolCurve);
+    this._initSnowBurst();
+  }
+
+  /** 落雪粒子池：竹被挤扰时竹顶积雪簌落（固定池，循环复用） */
+  _initSnowBurst() {
+    const MAX = 900;
+    this._sb = {
+      max: MAX, head: 0,
+      pos: new Float32Array(MAX * 3),
+      vel: new Float32Array(MAX * 3),
+      life: new Float32Array(MAX),
+    };
+    this._sb.pos.fill(-999); // 死粒子藏到地下
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(this._sb.pos, 3));
+    const mat = new THREE.PointsMaterial({
+      color: 0xf4f7f4, size: 0.07, transparent: true, opacity: 0.95,
+      sizeAttenuation: true, depthWrite: false,
+    });
+    this._sbPoints = new THREE.Points(geo, mat);
+    this._sbPoints.frustumCulled = false;
+    this.scene.add(this._sbPoints);
+  }
+
+  /** 竹顶积雪簌落：在 (x,y,z) 处爆发一团缓降雪粒 */
+  spawnSnowBurst(x, y, z, strength = 1) {
+    const sb = this._sb;
+    const n = Math.round(25 + strength * 55);
+    for (let i = 0; i < n; i++) {
+      const idx = sb.head = (sb.head + 1) % sb.max;
+      sb.pos[idx * 3] = x + (Math.random() - 0.5) * 0.7;
+      sb.pos[idx * 3 + 1] = y + Math.random() * 0.35;
+      sb.pos[idx * 3 + 2] = z + (Math.random() - 0.5) * 0.7;
+      sb.vel[idx * 3] = (Math.random() - 0.5) * 0.9;
+      sb.vel[idx * 3 + 1] = -0.15 - Math.random() * 0.6;
+      sb.vel[idx * 3 + 2] = (Math.random() - 0.5) * 0.9;
+      sb.life[idx] = 1.4 + Math.random() * 0.9;
+    }
+  }
+
+  /** 每帧推进落雪：缓降 + 横向散 + 到点隐匿 */
+  updateSnowBurst(dt) {
+    const sb = this._sb;
+    for (let i = 0; i < sb.max; i++) {
+      if (sb.life[i] <= 0) continue;
+      sb.life[i] -= dt;
+      sb.vel[i * 3 + 1] -= 2.2 * dt; // 轻重力（雪粒蓬松缓降）
+      sb.pos[i * 3] += sb.vel[i * 3] * dt;
+      sb.pos[i * 3 + 1] += sb.vel[i * 3 + 1] * dt;
+      sb.pos[i * 3 + 2] += sb.vel[i * 3 + 2] * dt;
+      if (sb.life[i] <= 0) sb.pos[i * 3 + 1] = -999;
+    }
+    this._sbPoints.geometry.attributes.position.needsUpdate = true;
   }
 
   _generate(patrolCurve) {
@@ -228,6 +282,13 @@ export class BambooGrove {
       // 向目标角速度混合：碰撞冲量（虎的推挤）保留在角速度里，自然回弹
       b.body.angularVelocity.lerp(target, BLEND, b.body.angularVelocity);
       b.body.wakeUp();
+      // —— 扰动检测：角速度冲尖（虎挤过）→ 触发沙沙声与落雪（每竹 0.8s 冷却） ——
+      b._disturbCd = Math.max(0, (b._disturbCd ?? 0) - dt);
+      const av = b.body.angularVelocity.length();
+      if (av > 0.7 && b._disturbCd <= 0) {
+        b._disturbCd = 0.8;
+        this.onDisturb?.(b, Math.min(av / 3, 1));
+      }
     }
   }
 

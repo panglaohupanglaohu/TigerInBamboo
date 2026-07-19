@@ -1,28 +1,17 @@
-// 母女对话系统：虎（女儿）中国传统式问安 → 兔（母亲）溺爱应答
+// 母女对话系统：虎（女儿）问 → 兔（母亲）答，一问一答成对抽取
 // 应答默认走内置问答脚本；配置 dialog.llmEndpoint 后由大模型生成母亲回复（OpenAI 兼容接口）
 // 语音：浏览器 speechSynthesis 中文女声（配置页可调嗓音/语速/音高/音量）
 import * as THREE from "three";
 
-// 内置问安题库（女儿·虎）：传统中国式问安
-const DAUGHTER_ASKS = [
-  "娘亲，晌午了，您用饭了吗？",
-  "娘，今日雪大，您身上可暖？",
-  "娘亲，您昨儿夜里睡得好吗？",
-  "娘，我给您问安。您腿脚还利索吗？",
-  "娘，您渴不渴？我给您衔些涧水来？",
-];
-
-// 内置溺爱应答（母亲·兔）：先答一句，再反过去疼女儿
-const MOTHER_REPLIES = [
-  "娘用过了。虎虎呢？又贪玩忘了吃罢——过来，娘给你留着嫩笋尖呢。",
-  "暖着呢，傻孩子。倒是你的爪子，莫在冰水里蹚太久。",
-  "睡得好，睡得好。虎虎半夜可又踹被子了？",
-  "利索，利索。你慢些跑，仔细脚下石头，别摔着。",
-  "娘不渴。你路上瞧见甜草根，自己也嚼些，别光顾着娘。",
+// 内置问答脚本（女儿·虎 问 → 母亲·兔 答）：成对抽取，一问一答
+const DIALOGUES = [
+  { ask: "妈妈，你睡的好吗？", reply: "睡的好，你别踹被子。" },
+  { ask: "妈妈，你饿吗？", reply: "妈妈不饿，但是你得多吃。" },
+  { ask: "妈妈，我饿了。", reply: "虎虎，妈妈给做做水煎肉。" },
 ];
 
 // 女儿接话（收尾一轮）
-const DAUGHTER_FOLLOWS = ["知道啦，娘。", "娘最好了。", "嗯，虎虎记下了。", "娘放心，我壮着呢。"];
+const DAUGHTER_FOLLOWS = ["知道啦，妈妈。", "妈妈最好了。", "嗯，虎虎记下了。", "妈妈放心，我壮着呢。"];
 
 const _pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const _v = new THREE.Vector3();
@@ -73,11 +62,11 @@ export class DialogSystem {
   }
 
   async _start() {
-    const ask = _pick(DAUGHTER_ASKS);
-    const reply = await this._askMother(ask);
+    const pair = _pick(DIALOGUES);
+    const reply = await this._askMother(pair);
     this._convo = {
       lines: [
-        { who: "tiger", text: ask },
+        { who: "tiger", text: pair.ask },
         { who: "rabbit", text: reply },
         { who: "tiger", text: _pick(DAUGHTER_FOLLOWS) },
       ],
@@ -113,10 +102,10 @@ export class DialogSystem {
     for (const el of Object.values(this._bubbles)) el?.classList.remove("show");
   }
 
-  /** 母亲应答：配了大模型接口则问 LLM（失败回落内置脚本），否则内置溺爱题库 */
-  async _askMother(question) {
+  /** 母亲应答：配了大模型接口则问 LLM（失败回落内置脚本），否则用内置问答 */
+  async _askMother(pair) {
     const { llmEndpoint, llmApiKey, llmModel } = this.cfg;
-    if (!llmEndpoint) return _pick(MOTHER_REPLIES);
+    if (!llmEndpoint) return pair.reply;
     try {
       const res = await fetch(llmEndpoint, {
         method: "POST",
@@ -133,7 +122,7 @@ export class DialogSystem {
                 "你是一只雪兔母亲，对方是你溺爱的女儿（一只小老虎）。用中文口语回一两句：" +
                 "先回答她的问安，再反过来叮嘱疼爱她，句句体现溺爱。不要书面腔。",
             },
-            { role: "user", content: question },
+            { role: "user", content: pair.ask },
           ],
           max_tokens: 80,
         }),
@@ -142,7 +131,7 @@ export class DialogSystem {
       const text = data?.choices?.[0]?.message?.content?.trim();
       if (text) return text;
     } catch (_) { /* 接口不可用则回落内置脚本 */ }
-    return _pick(MOTHER_REPLIES);
+    return pair.reply;
   }
 
   /** 语音朗读：中文女声；母兔音偏高柔、虎女略低嫩 */

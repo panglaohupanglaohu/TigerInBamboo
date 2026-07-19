@@ -15,6 +15,7 @@
     <p class="config-sub">
       智能体行为参数与物种关系配置。物种关系参考 Tu &amp; Terzopoulos《Artificial Fishes》的
       感知—内驱力—行为模型；修改保存后刷新场景页生效。
+      《寒梅归雁图》另有独立配置页：<a href="/plum-config.html">寒梅归雁 · 系统配置</a>。
     </p>
 
     <div class="config-tabs">
@@ -119,6 +120,80 @@
           <div class="field">
             <label>避险停留（秒）</label>
             <input type="range" id="pheasant.perchTime" min="1" max="15" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>锦鸡数量</label>
+            <input type="range" id="pheasant.count" min="0" max="6" step="1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>警觉距离（冻结观察）</label>
+            <input type="range" id="pheasant.alertDistance" min="4" max="20" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>奔逃时长（秒）</label>
+            <input type="range" id="pheasant.runDuration" min="0.3" max="3" step="0.1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>重生延时（秒）</label>
+            <input type="range" id="pheasant.respawnDelay" min="5" max="60" step="1" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>捕 食（音乐触发）</legend>
+          <div class="field">
+            <label>启用捕食</label>
+            <input type="checkbox" id="hunt.enabled" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>触发曲目（文件名含子串）</label>
+            <input type="text" id="hunt.musicTrigger" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>潜行发现距离（米）</label>
+            <input type="range" id="hunt.stalkDistance" min="4" max="45" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>潜行速度倍率</label>
+            <input type="range" id="hunt.stalkSpeed" min="0.2" max="1" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>爆发距离（米，起冲刺）</label>
+            <input type="range" id="hunt.sprintDistance" min="4" max="30" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>冲刺速度倍率</label>
+            <input type="range" id="hunt.sprintSpeed" min="1" max="4" step="0.1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>飞扑距离（米，起跳）</label>
+            <input type="range" id="hunt.pounceDistance" min="2" max="14" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>进食时长（秒）</label>
+            <input type="range" id="hunt.feedDuration" min="2" max="15" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>捕食间隔（秒）</label>
+            <input type="range" id="hunt.cooldown" min="4" max="60" step="1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>虎啸音效音量</label>
+            <input type="range" id="hunt.sfxVolume" min="0" max="1" step="0.05" />
             <span class="value"></span>
           </div>
         </fieldset>
@@ -280,6 +355,10 @@
             <input type="range" id="bgm.volume" min="0" max="1" step="0.05" />
             <span class="value"></span>
           </div>
+          <div class="field" style="align-items:flex-start">
+            <label>背景音乐歌单</label>
+            <div id="playlist-editor" style="flex:1"></div>
+          </div>
         </fieldset>
       </div>
 
@@ -371,6 +450,51 @@
       });
     }
 
+    // ---- 背景音乐歌单编辑 ----
+    let audioLib = [];
+    try {
+      const r = await fetch("/api/audio");
+      if (r.ok) audioLib = (await r.json()).files ?? [];
+    } catch (_) { /* 离线时曲库不可达，仅可删不可加 */ }
+
+    function renderPlaylist() {
+      const box = document.getElementById("playlist-editor");
+      box.innerHTML = "";
+      config.bgm.playlist ??= [];
+      config.bgm.playlist.forEach((p, i) => {
+        const row = document.createElement("div");
+        row.style.cssText = "display:flex;gap:6px;align-items:center;margin:3px 0";
+        row.innerHTML = `
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+                title="${p}">${i + 1}. ${p.split("/").pop()}</span>
+          <button type="button" class="btn ghost" data-i="${i}" data-act="up" style="padding:2px 8px">↑</button>
+          <button type="button" class="btn ghost" data-i="${i}" data-act="down" style="padding:2px 8px">↓</button>
+          <button type="button" class="btn ghost" data-i="${i}" data-act="del" style="padding:2px 8px">删</button>`;
+        box.appendChild(row);
+      });
+      const rest = audioLib.filter((f) => !config.bgm.playlist.includes(f));
+      const addRow = document.createElement("div");
+      addRow.style.cssText = "display:flex;gap:6px;align-items:center;margin-top:6px";
+      addRow.innerHTML = rest.length
+        ? `<select id="playlist-add-sel" style="flex:1">${rest.map((f) => `<option value="${f}">${f.split("/").pop()}</option>`).join("")}</select>
+           <button type="button" class="btn ghost" id="playlist-add-btn" style="padding:2px 10px">添加</button>`
+        : `<span style="opacity:0.55;font-size:13px">${audioLib.length ? "曲库已全部入单" : "曲库不可达（需后端）"}</span>`;
+      box.appendChild(addRow);
+      box.querySelectorAll("button[data-act]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.dataset.i), act = btn.dataset.act, list = config.bgm.playlist;
+          if (act === "del") list.splice(i, 1);
+          else if (act === "up" && i > 0) [list[i - 1], list[i]] = [list[i], list[i - 1]];
+          else if (act === "down" && i < list.length - 1) [list[i + 1], list[i]] = [list[i], list[i + 1]];
+          renderPlaylist();
+        });
+      });
+      document.getElementById("playlist-add-btn")?.addEventListener("click", () => {
+        const sel = document.getElementById("playlist-add-sel");
+        if (sel?.value) { config.bgm.playlist.push(sel.value); renderPlaylist(); }
+      });
+    }
+
     // ---- 保存 / 重置 ----
     const toast = (msg) => {
       const el = document.getElementById("toast");
@@ -386,11 +510,13 @@
       config = await resetConfig();
       refreshFields();
       renderRelations();
+      renderPlaylist();
       toast("已恢复默认");
     });
 
     refreshFields();
     renderRelations();
+    renderPlaylist();
   </script>
 </body>
 </html>

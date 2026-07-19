@@ -24,8 +24,9 @@
     <p>雪竹 · 斑斓虎 · 鹤雁</p>
   </header>
 
-  <!-- 视角与入口 -->
-  <nav class="hud">
+  <!-- 视角与入口（推拉收合：滑出画外仅留竖柄） -->
+  <nav class="hud collapsible" id="hud">
+    <button class="panel-handle" type="button" data-target="hud" aria-label="收起/展开">视角</button>
     <div class="hud-group" id="camera-presets">
       <span class="hud-label">视角</span>
       <button data-preset="panorama" class="preset active">全景</button>
@@ -34,17 +35,26 @@
     </div>
     <div class="hud-group">
       <button id="bgm-toggle" class="preset">♪ 静音</button>
+      <a class="preset link" href="/">展厅</a>
+      <a class="preset link" href="/lab.html" target="_blank">物种实验室</a>
       <a class="preset link" href="/config.html" target="_blank">系统配置</a>
     </div>
   </nav>
 
-  <!-- 智能体状态（感知 → 行为 可视化） -->
-  <aside class="agent-panel">
+  <!-- 智能体状态（感知 → 行为 可视化，推拉收合） -->
+  <aside class="agent-panel collapsible" id="agent-panel">
+    <button class="panel-handle" type="button" data-target="agent-panel" aria-label="收起/展开">生灵</button>
     <div class="agent" id="agent-tiger">
       <span class="dot tiger"></span>猛虎 · <em id="tiger-state">巡游</em>
     </div>
     <div class="agent" id="agent-rabbit">
       <span class="dot rabbit" style="background:#cfcfcf"></span>雪兔 · <em id="rabbit-state">驻足</em>
+    </div>
+    <div class="agent" id="agent-custom" style="display:none">
+      <span class="dot" style="background:#b8a06a"></span><em id="custom-name"></em> · <em id="custom-state"></em>
+    </div>
+    <div class="agent" id="agent-pheasant">
+      <span class="dot" style="background:#c23a2e"></span>锦鸡 · <em id="pheasant-state">觅食</em>
     </div>
   </aside>
 

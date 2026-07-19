@@ -82,12 +82,12 @@ export class Rabbit {
     for (const s of [-1, 1]) {
       const eye = new THREE.Mesh(new THREE.SphereGeometry(0.013, 10, 8),
         new THREE.MeshStandardMaterial({ color: DARK, roughness: 0.25 }));
-      eye.position.set(s * 0.03, 0.014, 0.018);
+      eye.position.set(s * 0.03, 0.008, 0.02);
       head.add(eye);
     }
     const nose = new THREE.Mesh(new THREE.BoxGeometry(0.014, 0.01, 0.012),
       new THREE.MeshStandardMaterial({ color: PINK, roughness: 0.6 }));
-    nose.position.set(0, -0.002, 0.022);
+    nose.position.set(0, -0.005, 0.048);
     head.add(nose);
 
     // 绒尾：尾根小毛球
@@ -96,9 +96,19 @@ export class Rabbit {
     B.get("Tail3").add(pom);
   }
 
-  /** 每帧：驻足 ↔ 蹦跳向目标（竹林环游）；行进只发生在蹬地冲量段（一窜一窜） */
-  update(dt, time) {
+  /** 每帧：驻足 ↔ 蹦跳向目标（竹林环游）；行进只发生在蹬地冲量段（一窜一窜）
+   *  女儿（虎）靠近时，母亲驻足等候 */
+  update(dt, time, tiger) {
     if (this.config.rabbit?.enabled === false) { this.group.visible = false; return; }
+
+    // 虎近身 5m 内：母亲察觉动静，停下等候（不逃、不再起跳）
+    const tigerNear = tiger && tiger.group.visible !== false &&
+      tiger.group.position.distanceTo(this.group.position) < 5.0;
+    if (tigerNear) {
+      this._target = null;
+      this.state = "IDLE";
+      this._timer = Math.max(this._timer, 0.5);
+    }
 
     this._timer -= dt;
     if (this.state === "WALK") {

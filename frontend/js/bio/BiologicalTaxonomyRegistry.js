@@ -4,6 +4,7 @@
 //   DIGITIGRADE  趾行（猫科：肘后折、膝前凸、飞节悬空 —— 弹性 Z 形后肢）
 //   UNGULIGRADE  蹄行（马科：直立负重关节）
 //   SALTATORIAL  跳跃行（兔科：后肢极长且深度折叠，双腿同频蹬跃）
+//   AVES         禽类（雉科：躯体由 AvianBodyBuilder 程序化构建，行为见 bird.js）
 export const BIOLOGICAL_TAXONOMY = {
   CARNIVORA: {
     scientificName: "Carnivora",
@@ -21,7 +22,7 @@ export const BIOLOGICAL_TAXONOMY = {
             vertexColors: true,   // 虎皮为顶点色绘制（斑纹由物种层注入）
             roughness: 0.85,
             furLayers: 12,        // 壳层皮毛层数（2~24）
-            furLength: 0.048,     // 毛尖最大外延（米）
+            furLength: 0.032,     // 毛尖最大外延（米，收紧防"刷子"刺感）
           },
         },
       },
@@ -58,13 +59,57 @@ export const BIOLOGICAL_TAXONOMY = {
           scientificName: "Lepus timidus",
           // 空间生存边界盒：宽 0.2m / 躯干高 0.30m（竖耳另由骨骼延伸，总高约 0.45m）/ 总长 0.5m
           dimensions: { width: 0.2, height: 0.30, length: 0.5 },
-          anatomicalRef: { withersHeight: 0.22, earLength: 0.12, tailLength: 0.06 },
+          anatomicalRef: { withersHeight: 0.22, earLength: 0.13, tailLength: 0.06 },
           rendering: {
             vertexColors: false,
             baseColor: 0xd3d3d3, // 雪兔冬毛：浅灰近白
             roughness: 0.7,
             furLayers: 10,
             furLength: 0.01,
+          },
+        },
+      },
+    },
+  },
+  ANSERIFORMES: {
+    scientificName: "Anseriformes",
+    ANATIDAE: {
+      scientificName: "Anatidae",
+      anatomyType: "AVES", // 禽类：躯体由 AvianBodyBuilder 程序化构建（行为见 goose.js）
+      ANSER: {
+        ALBIFRONS: {
+          scientificName: "Anser albifrons", // 白额雁（寒梅归雁图之大雁）
+          // 空间生存边界盒：宽 0.35m / 站高 0.78m（含伸颈）/ 全长 0.85m，翼展约 1.5m
+          dimensions: { width: 0.35, height: 0.78, length: 0.85 },
+          anatomicalRef: { withersHeight: 0.5, tailLength: 0.15, wingspan: 1.5 },
+          rendering: {
+            vertexColors: true,
+            baseColor: 0x8a7a5f, // 灰褐羽
+            roughness: 0.9,
+            furLayers: 0,        // 羽而非毛：无壳层
+            furLength: 0,
+          },
+        },
+      },
+    },
+  },
+  GALLIFORMES: {
+    scientificName: "Galliformes",
+    PHASIANIDAE: {
+      scientificName: "Phasianidae",
+      anatomyType: "AVES", // 禽类：躯体由 AvianBodyBuilder 程序化构建（非四足管线）
+      CHRYSOLOPHUS: {
+        PICTUS: {
+          scientificName: "Chrysolophus pictus",
+          // 空间生存边界盒：宽 0.18m / 站高 0.42m / 全长 0.75m（含修长尾羽）
+          dimensions: { width: 0.18, height: 0.42, length: 0.75 },
+          anatomicalRef: { withersHeight: 0.28, tailLength: 0.45 },
+          rendering: {
+            vertexColors: true,
+            baseColor: 0xa8261f, // 红腹锦鸡：腹红背金
+            roughness: 0.85,
+            furLayers: 0,        // 羽而非毛：无壳层
+            furLength: 0,
           },
         },
       },

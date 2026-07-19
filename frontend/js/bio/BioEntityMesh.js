@@ -24,7 +24,7 @@ function furNoiseTexture() {
   }
   const tex = new THREE.DataTexture(data, N, N);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(24, 24);
+  tex.repeat.set(48, 48); // 高频发丝空隙（加密一倍，消"刷子"颗粒感）
   tex.magFilter = THREE.NearestFilter;
   tex.needsUpdate = true;
   _furNoise = tex;
@@ -50,9 +50,10 @@ export class BioEntityMesh extends THREE.Group {
     rig.root.userData.baseY = rig.root.position.y; // 呼吸浮动基准
     this.add(rig.root);
 
-    // 2. 程序化蒙皮网格（含权重）
+    // 2. 程序化蒙皮网格（含权重；SALTATORIAL 走兔科轮廓与骨段吸附；shape 为形体旋钮）
     const geo = ProceduralSkinGenerator.generateSkinnedGeometry(
-      speciesNode.dimensions, speciesNode.anatomicalRef, rig.skeleton.bones
+      speciesNode.dimensions, speciesNode.anatomicalRef, rig.skeleton.bones,
+      this.anatomyType, speciesNode.shape ?? {}
     );
     hooks.paintGeometry?.(geo); // 物种外观（斑纹等顶点色）
 
