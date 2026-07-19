@@ -38,6 +38,13 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "tailCurl": True,         # 经过竹竿时尾巴缠绕
         "furLength": 1.0,         # 皮毛长度倍率（壳层纹理）
         "furLayers": 12,          # 皮毛壳层数（2~24）
+        "pauseInterval": 16.0,    # 驻足平均间隔（秒）
+        "pauseDuration": 2.4,     # 驻足时长（秒）
+        "tailCurlDistance": 1.75, # 缠竹触发距离（米）
+    },
+    "bamboo": {
+        "stiffness": 3.0,         # 回正刚度（角速度增益）
+        "sway": 1.0,              # 风摆幅度倍率
     },
     "pheasant": {
         "enabled": True,

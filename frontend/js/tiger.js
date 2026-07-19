@@ -69,7 +69,7 @@ export class Tiger {
     this.pathT = 0;
     this._speedCur = 0;
     this._gaitCyc = 0;
-    this._pauseTimer = 14 + Math.random() * 8; // 首次驻足计时
+    this._pauseTimer = (config.tiger.pauseInterval ?? 16) * (0.9 + Math.random() * 0.5); // 首次驻足计时
     this._pauseLeft = 0;
     this._buildPath();
 
@@ -158,8 +158,8 @@ export class Tiger {
     } else {
       this._pauseTimer -= dt;
       if (this._pauseTimer <= 0) {
-        this._pauseLeft = 2.4;
-        this._pauseTimer = 16 + Math.random() * 10;
+        this._pauseLeft = cfg.pauseDuration ?? 2.4;
+        this._pauseTimer = (cfg.pauseInterval ?? 16) * (0.8 + Math.random() * 0.6);
       }
       this.state = "巡游";
     }
@@ -207,12 +207,13 @@ export class Tiger {
     const B = this.entity.boneMap;
     let curl = null;
     if (grove && this.config.tiger.tailCurl) {
-      const hit = grove.nearestTo(this.group.position, 1.75);
+      const maxDist = this.config.tiger.tailCurlDistance ?? 1.75;
+      const hit = grove.nearestTo(this.group.position, maxDist);
       if (hit) {
         const b = hit.bamboo;
         const local = this.group.worldToLocal(new THREE.Vector3(b.x, b.baseY, b.z));
         if (local.z < 0.3 && local.z > -2.2 && Math.abs(local.x) < 1.4) {
-          curl = { w: THREE.MathUtils.smoothstep(1.75 - hit.dist, 0, 0.9), side: Math.sign(local.x) || 1 };
+          curl = { w: THREE.MathUtils.smoothstep(maxDist - hit.dist, 0, 0.9), side: Math.sign(local.x) || 1 };
         }
       }
     }

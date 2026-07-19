@@ -212,15 +212,17 @@ export class BambooGrove {
     const { wind, windDirection } = this.config.weather;
     const dirRad = (windDirection * Math.PI) / 180;
     const dirX = Math.sin(dirRad), dirZ = Math.cos(dirRad); // 与降水同一风向
+    const stiffness = this.config.bamboo?.stiffness ?? RESTORE_K;
+    const swayAmp = this.config.bamboo?.sway ?? 1;
     const up = new CANNON.Vec3(0, 1, 0);
     const axis = new CANNON.Vec3(), target = new CANNON.Vec3(), windT = new CANNON.Vec3();
     for (const b of this.bamboos) {
       // —— 回正：速度级 PD（朝向×竖直 = 回正轴，仿真验证 K=3 稳定且撞后回弹）——
       b.body.quaternion.vmult(up, axis);
       axis.cross(up, target);
-      target.scale(RESTORE_K, target);
+      target.scale(stiffness, target);
       // —— 风摆：叠加一个沿风向的倾侧角速度，随时间呼吸 ——
-      const sway = wind * 0.25 * Math.sin(this.time * 1.1 + b.phase);
+      const sway = wind * 0.25 * swayAmp * Math.sin(this.time * 1.1 + b.phase);
       windT.set(sway * dirZ, 0, -sway * dirX); // rotation.x 倾向 +Z，rotation.z 倾向 −X
       target.vadd(windT, target);
       // 向目标角速度混合：碰撞冲量（虎的推挤）保留在角速度里，自然回弹
