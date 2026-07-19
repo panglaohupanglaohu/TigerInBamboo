@@ -108,60 +108,95 @@ export class Tiger {
     }
   }
 
-  /** 头部细节：眼（带眼睑）/鼻/嘴/须/立耳，挂在 Head 骨上随骨骼运动 */
+  /** 头部组合件：颅腔 + 宽厚吻部 + 可动下颌 + 面颊鬃毛 + 立耳/眼睑/鼻/须
+   *  颅腔与吻部挂 Head 骨，下颌挂 Jaw 骨（张嘴咆哮） */
   _buildHeadDetails() {
+    const contrast = this.config.tiger.stripeContrast;
     const head = this.entity.boneMap.get("Head");
+    const jawBone = this.entity.boneMap.get("Jaw");
+    const fur = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, metalness: 0 });
+    const creamMat = new THREE.MeshStandardMaterial({ color: 0xf2e8d5, roughness: 0.9 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: 0x241a10, roughness: 0.85 });
     const eyeMat = new THREE.MeshStandardMaterial({ color: 0x140f08, roughness: 0.25 });
     const lidMat = new THREE.MeshStandardMaterial({ color: 0xb5621a, roughness: 0.85 });
-    const darkMat = new THREE.MeshStandardMaterial({ color: 0x241a10, roughness: 0.85 });
-    const creamMat = new THREE.MeshStandardMaterial({ color: 0xf2e8d5, roughness: 0.9 });
+    const cast = (m) => { m.castShadow = true; return m; };
+
+    // 颅腔：稍压扁的球（0.34×0.30×0.32），画额纹
+    const craniumGeo = new THREE.SphereGeometry(0.17, 28, 22);
+    craniumGeo.scale(1, 0.88, 0.94);
+    paintTiger(craniumGeo, { freq: 22, belly: -99, contrast });
+    const cranium = cast(new THREE.Mesh(craniumGeo, fur));
+    cranium.position.set(0, 0.08, 0.12);
+    head.add(cranium);
+
+    // 吻部：宽厚口鼻（圆润、贴紧颅腔前下），奶白
+    const muzzleGeo = new THREE.SphereGeometry(0.085, 18, 14);
+    muzzleGeo.scale(0.95, 0.75, 1.15);
+    const muzzle = cast(new THREE.Mesh(muzzleGeo, creamMat));
+    muzzle.position.set(0, -0.02, 0.22);
+    head.add(muzzle);
+
+    // 下颌：独立挂 Jaw 骨（锚点在颅颌交界，X 旋即咆哮），收在吻部下缘
+    const jawGeo = new THREE.SphereGeometry(0.055, 14, 10);
+    jawGeo.scale(0.85, 0.4, 1.1);
+    const jawMesh = cast(new THREE.Mesh(jawGeo, creamMat));
+    jawMesh.position.set(0, -0.015, 0.08);
+    jawBone.add(jawMesh);
+
+    // 面颊鬃毛：贴颊两侧的扁椭圆（威严的倒梯形脸廓），奶白，忌垂成"白蛋"
+    for (const s of [-1, 1]) {
+      const ruff = cast(new THREE.Mesh(new THREE.SphereGeometry(0.07, 14, 10), creamMat));
+      ruff.scale.set(0.5, 1.1, 0.7);
+      ruff.position.set(s * 0.13, 0.0, 0.06);
+      ruff.rotation.set(0.2, 0, s * 0.3);
+      head.add(ruff);
+    }
+
+    // 眼 + 眼睑（内低外高，不怒自威）
     for (const s of [-1, 1]) {
       const eye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 12, 10), eyeMat);
-      eye.position.set(s * 0.115, 0.07, 0.1);
+      eye.position.set(s * 0.085, 0.06, 0.19);
       head.add(eye);
-      // 眼睑：上半球盖，内低外高（不怒自威）
       const lid = new THREE.Mesh(
         new THREE.SphereGeometry(0.038, 12, 8, 0, Math.PI * 2, 0, Math.PI * 0.55),
         lidMat
       );
-      lid.position.set(s * 0.115, 0.078, 0.1);
+      lid.position.set(s * 0.085, 0.068, 0.19);
       lid.rotation.set(-0.35, 0, s * 0.18);
       head.add(lid);
-      // 立耳：小而圆，竖直微外张，背黑前白（虎耳"白心"特征）
-      const ear = new THREE.Mesh(new THREE.SphereGeometry(0.052, 12, 10), darkMat);
+      // 立耳：小而圆，竖直微外张，背黑前白
+      const ear = cast(new THREE.Mesh(new THREE.SphereGeometry(0.052, 12, 10), darkMat));
       ear.scale.set(0.9, 1.3, 0.5);
-      ear.position.set(s * 0.135, 0.21, -0.04);
+      ear.position.set(s * 0.11, 0.22, 0.04);
       ear.rotation.set(-0.08, 0, s * -0.12);
       head.add(ear);
       const earInner = new THREE.Mesh(new THREE.SphereGeometry(0.026, 8, 6), creamMat);
       earInner.scale.set(0.9, 1.2, 0.4);
-      earInner.position.set(s * 0.133, 0.2, 0.005);
+      earInner.position.set(s * 0.108, 0.21, 0.085);
       earInner.rotation.copy(ear.rotation);
       head.add(earInner);
       // 虎须：每侧三根，自吻侧扇出
       for (let w = 0; w < 3; w++) {
-        const whisker = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.0012, 0.0008, 0.17, 3),
-          creamMat
-        );
-        whisker.position.set(s * 0.1, -0.035 - w * 0.013, 0.27);
+        const whisker = new THREE.Mesh(new THREE.CylinderGeometry(0.0012, 0.0008, 0.17, 3), creamMat);
+        whisker.position.set(s * 0.075, -0.015 - w * 0.013, 0.3);
         whisker.rotation.z = -s * (Math.PI / 2 - 0.12);
         whisker.rotation.y = s * (0.1 + w * 0.12);
         head.add(whisker);
       }
     }
+
+    // 鼻（红褐）+ 鼻下唇线 + 口吻横线
     const nose = new THREE.Mesh(
-      new THREE.BoxGeometry(0.06, 0.035, 0.035),
+      new THREE.BoxGeometry(0.05, 0.03, 0.03),
       new THREE.MeshStandardMaterial({ color: 0x7a3b33, roughness: 0.6 })
     );
-    nose.position.set(0, -0.02, 0.3);
+    nose.position.set(0, 0.02, 0.315);
     head.add(nose);
-    // 嘴：鼻下唇线 + 口吻横线（近看有神态）
-    const lipLine = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.05, 0.012), darkMat);
-    lipLine.position.set(0, -0.07, 0.29);
+    const lipLine = new THREE.Mesh(new THREE.BoxGeometry(0.01, 0.045, 0.01), darkMat);
+    lipLine.position.set(0, -0.045, 0.31);
     head.add(lipLine);
-    const mouthLine = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.009, 0.012), darkMat);
-    mouthLine.position.set(0, -0.095, 0.265);
+    const mouthLine = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.008, 0.01), darkMat);
+    mouthLine.position.set(0, -0.07, 0.285);
     head.add(mouthLine);
   }
 
@@ -174,14 +209,47 @@ export class Tiger {
     this.pathLength = this.path.getLength();
   }
 
-  /** 每帧：grove 可为 null；传入了才做缠尾 */
-  update(dt, time, grove) {
+  /** 把巡游相位对齐到离当前位置最近的路径点（觅母离径后平滑回归） */
+  _syncPathT(pos) {
+    let best = 0, min = Infinity;
+    for (let i = 0; i < 64; i++) {
+      const p = this.path.getPointAt(i / 64);
+      const d = (p.x - pos.x) ** 2 + (p.z - pos.z) ** 2;
+      if (d < min) { min = d; best = i; }
+    }
+    this.pathT = best / 64;
+  }
+
+  /** 每帧：grove 可为 null；传入了才做缠尾；rabbit（母亲）传入则启用觅母接近 */
+  update(dt, time, grove, rabbit) {
     const cfg = this.config.tiger;
     const baseSpeed = 1.15 * cfg.speed;
 
-    // —— 行为层：巡游 / 驻足观望（内驱力计时器） ——
+    // —— 觅母：发现母亲（雪兔）则缓步接近（不扑不快）；
+    // 近身相伴片刻后回归巡游，跟丢了也放弃 ——
+    this._approachCd = Math.max(0, (this._approachCd ?? 0) - dt);
+    let stalk = null;
+    if (rabbit) {
+      const rd = this.group.position.distanceTo(rabbit.group.position);
+      if ((this._with ?? 0) > 0) {
+        this._with -= dt;
+        stalk = "stay";
+        if (this._with <= 0 || rd > 4.5) { this._with = 0; this._approachCd = 30; stalk = null; }
+      } else if (this._approachCd <= 0 && rd < 7) {
+        stalk = rd < 2.0 ? "stay" : "approach";
+        if (stalk === "stay") this._with = 6;
+      }
+    }
+
+    // —— 行为层：觅母 / 巡游 / 驻足观望（内驱力计时器） ——
     let targetSpeed = baseSpeed;
-    if (this._pauseLeft > 0) {
+    if (stalk === "approach") {
+      targetSpeed = baseSpeed * 0.35; // 有意接近，但不要太快
+      this.state = "接近";
+    } else if (stalk === "stay") {
+      targetSpeed = 0;
+      this.state = "相伴";
+    } else if (this._pauseLeft > 0) {
       this._pauseLeft -= dt;
       targetSpeed = 0;
       this.state = "驻足";
@@ -196,27 +264,43 @@ export class Tiger {
     this._speedCur += (targetSpeed - this._speedCur) * Math.min(dt * 3, 1);
     const moving = THREE.MathUtils.clamp(this._speedCur / baseSpeed, 0, 1);
 
-    // —— 运动层：沿巡游路径 ——
-    this.pathT = (this.pathT + (this._speedCur * dt) / this.pathLength) % 1;
-    const p = this.path.getPointAt(this.pathT);
-    const tan = this.path.getTangentAt(this.pathT);
-    const y = groundHeight(p.x, p.z);
-    const ahead = this.path.getPointAt((this.pathT + 0.01) % 1);
-    const slope = (groundHeight(ahead.x, ahead.z) - y) * 0.8;
-
-    this.group.position.set(p.x, y, p.z);
-    const targetYaw = Math.atan2(tan.x, tan.z);
+    // —— 运动层：觅母直趋 / 沿巡游路径 ——
+    const gp = this.group.position;
+    let targetYaw;
+    if (stalk) {
+      const rp = rabbit.group.position;
+      const dir = new THREE.Vector3(rp.x - gp.x, 0, rp.z - gp.z);
+      const dist = dir.length();
+      if (stalk === "approach" && dist > 1.6) {
+        dir.normalize();
+        gp.x += dir.x * this._speedCur * dt;
+        gp.z += dir.z * this._speedCur * dt;
+      }
+      gp.y = groundHeight(gp.x, gp.z);
+      targetYaw = Math.atan2(dir.x, dir.z);
+      this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, 0, 0.1);
+      this._syncPathT(gp); // 巡游相位跟到最近点，回归路径时不瞬移
+    } else {
+      this.pathT = (this.pathT + (this._speedCur * dt) / this.pathLength) % 1;
+      const p = this.path.getPointAt(this.pathT);
+      const tan = this.path.getTangentAt(this.pathT);
+      const y = groundHeight(p.x, p.z);
+      const ahead = this.path.getPointAt((this.pathT + 0.01) % 1);
+      const slope = (groundHeight(ahead.x, ahead.z) - y) * 0.8;
+      gp.set(p.x, y, p.z);
+      targetYaw = Math.atan2(tan.x, tan.z);
+      this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, THREE.MathUtils.clamp(slope, -0.2, 0.2), 0.1);
+    }
     this.group.rotation.y += shortestAngle(this.group.rotation.y, targetYaw) * Math.min(dt * 4, 1);
-    this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, THREE.MathUtils.clamp(slope, -0.2, 0.2), 0.1);
 
     // 物理刚体随动：kinematic 体需要速度量才能正确推挤竹竿（限速防脉冲）
     if (this.body) {
       const bp = this.body.position;
       const inv = 1 / Math.max(dt, 1e-4);
-      const vx = THREE.MathUtils.clamp((p.x - bp.x) * inv, -4, 4);
-      const vz = THREE.MathUtils.clamp((p.z - bp.z) * inv, -4, 4);
+      const vx = THREE.MathUtils.clamp((gp.x - bp.x) * inv, -4, 4);
+      const vz = THREE.MathUtils.clamp((gp.z - bp.z) * inv, -4, 4);
       this.body.velocity.set(vx, 0, vz);
-      bp.set(p.x, y, p.z);
+      bp.set(gp.x, gp.y, gp.z);
       this.body.quaternion.setFromEuler(0, this.group.rotation.y, 0);
     }
 

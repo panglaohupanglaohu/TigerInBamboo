@@ -40,10 +40,11 @@ export class BioEntityMesh extends THREE.Group {
   constructor(familyNode, speciesNode, hooks = {}) {
     super();
     this.species = speciesNode;
+    this.anatomyType = familyNode.anatomyType ?? "DIGITIGRADE";
     this.currentState = "IDLE";
 
     // 1. 骨骼装配
-    const rig = AnatomyRiggingEngine.createSkeleton(speciesNode, familyNode.anatomyType);
+    const rig = AnatomyRiggingEngine.createSkeleton(speciesNode, this.anatomyType);
     this.boneMap = rig.boneMap;
     this.skeleton = rig.skeleton;
     rig.root.userData.baseY = rig.root.position.y; // 呼吸浮动基准
@@ -115,7 +116,7 @@ export class BioEntityMesh extends THREE.Group {
    */
   tick(ctx) {
     FelineLocomotionController.update(this.boneMap, {
-      ...ctx, state: this.currentState,
+      ...ctx, state: this.currentState, anatomyType: this.anatomyType,
     });
   }
 }

@@ -7,6 +7,7 @@ import * as THREE from "three";
 export const BONE = {
   Root: "Root", Pelvis: "Pelvis", Mid: "Mid", Chest: "Chest",
   Neck: "Neck", Head: "Head", Jaw: "Jaw",
+  EarL: "Ear_L", EarR: "Ear_R", // 跳跃行（兔科）长耳
   FL1: "FL1", FL2: "FL2", FLFoot: "FLFoot",
   FR1: "FR1", FR2: "FR2", FRFoot: "FRFoot",
   BL1: "BL1", BL2: "BL2", BLFoot: "BLFoot",
@@ -17,10 +18,10 @@ export const BONE = {
 export class AnatomyRiggingEngine {
   /**
    * @param {Object} speciesNode - 数据仓库叶子节点（dimensions + anatomicalRef）
-   * @param {string} anatomyType - "DIGITIGRADE" | "UNGULIGRADE"
+   * @param {string} anatomyType - "DIGITIGRADE" | "UNGULIGRADE" | "SALTATORIAL"
    */
   static createSkeleton(speciesNode, anatomyType = "DIGITIGRADE") {
-    const { length } = speciesNode.dimensions;
+    const { width, length } = speciesNode.dimensions;
     const { withersHeight: H, tailLength } = speciesNode.anatomicalRef;
     const boneMap = new Map();
     const bones = [];
@@ -45,13 +46,32 @@ export class AnatomyRiggingEngine {
     const head = mk(BONE.Head, neck, 0, H * 0.029, length * 0.1);
     mk(BONE.Jaw, head, 0, -H * 0.095, length * 0.032);
 
-    // —— 四肢：趾行为弹性 Z 形（膝/踝预弯），蹄行为直立柱 ——
+    // —— 兔科长耳：自颅顶向后上舒展（动画驱动器做惯性滞后摆动） ——
+    if (anatomyType === "SALTATORIAL") {
+      mk(BONE.EarL, head, -width * 0.18, H * 0.18, -length * 0.015);
+      mk(BONE.EarR, head, width * 0.18, H * 0.18, -length * 0.015);
+    }
+
+    // —— 四肢：趾行为弹性 Z 形（膝/踝预弯），蹄行为直立柱，跳跃行后肢深折 ——
     const buildLeg = (parent, prefix, side, isFront) => {
-      const ux = isFront ? 0.26 : 0.27;              // 腿根外偏（体宽一半内收）
-      const uz = isFront ? 0.1 : -0.1;               // 前后腿距拉开
+      // 腿根外偏/前后距按体宽体长比例（与 ProceduralSkinGenerator._legDefs 一致）
+      const ux = width * (isFront ? 0.3611 : 0.375);
+      const uz = length * (isFront ? 0.0323 : -0.0323);
+      const hip = mk(`${prefix}1`, parent, side * ux, isFront ? -H * 0.14 : -H * 0.11, uz);
+      if (anatomyType === "SALTATORIAL") {
+        if (isFront) {
+          // 前肢短小，落地支撑用，肘微后折
+          const knee = mk(`${prefix}2`, hip, 0, -H * 0.34, -H * 0.06);
+          mk(`${prefix}Foot`, knee, 0, -H * 0.33, H * 0.05);
+        } else {
+          // 后肢极长且深度折叠：膝前顶、飞节后折，呈压缩"弹簧"
+          const knee = mk(`${prefix}2`, hip, 0, -H * 0.42, H * 0.3);
+          mk(`${prefix}Foot`, knee, 0, -H * 0.38, -H * 0.24);
+        }
+        return;
+      }
       const seg1 = isFront ? H * 0.36 : H * 0.38;    // 大腿长（腿不收长）
       const seg2 = isFront ? H * 0.31 : H * 0.32;    // 小腿长
-      const hip = mk(`${prefix}1`, parent, side * ux, isFront ? -H * 0.14 : -H * 0.11, uz);
       if (anatomyType === "DIGITIGRADE") {
         // 趾行：关节预弯 —— 前肢肘后凸、后肢膝前凸
         const knee = mk(`${prefix}2`, hip, 0, -seg1, isFront ? -0.03 : 0.04);
@@ -66,12 +86,12 @@ export class AnatomyRiggingEngine {
     buildLeg(pelvis, "BL", -1, false);
     buildLeg(pelvis, "BR", 1, false);
 
-    // —— 尾：自骨盆向后下，五节（摆动起来更柔） ——
-    const t1 = mk(BONE.Tail1, pelvis, 0, H * 0.06, -0.2);
-    const t2 = mk(BONE.Tail2, t1, 0, 0, -tailLength * 0.22);
-    const t3 = mk(BONE.Tail3, t2, 0, -H * 0.01, -tailLength * 0.22);
-    const t4 = mk(BONE.Tail4, t3, 0, -H * 0.01, -tailLength * 0.22);
-    mk(BONE.Tail5, t4, 0, -H * 0.02, -tailLength * 0.22);
+    // —— 尾：五节链，自胯后尾管接口至尾尖均布（与独立尾管几何逐段对位） ——
+    const t1 = mk(BONE.Tail1, pelvis, 0, H * 0.06, -length * 0.1617);
+    const t2 = mk(BONE.Tail2, t1, 0, 0, -tailLength * 0.25);
+    const t3 = mk(BONE.Tail3, t2, 0, -H * 0.01, -tailLength * 0.25);
+    const t4 = mk(BONE.Tail4, t3, 0, -H * 0.01, -tailLength * 0.25);
+    mk(BONE.Tail5, t4, 0, -H * 0.02, -tailLength * 0.25);
 
     return { root, skeleton: new THREE.Skeleton(bones), bones, boneMap };
   }

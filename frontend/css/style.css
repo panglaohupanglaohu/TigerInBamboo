@@ -127,3 +127,22 @@ table.relations td select { width: 130px; }
   pointer-events: none; z-index: 50;
 }
 .toast.show { opacity: 1; }
+
+/* ---------- 配置页 Tab ---------- */
+.config-tabs { display: flex; gap: 10px; margin-bottom: 24px;
+  border-bottom: 1px solid rgba(43, 38, 32, 0.4); padding-bottom: 12px; }
+.config-tabs button {
+  font-family: inherit; font-size: 14px; letter-spacing: 0.2em;
+  background: transparent; color: var(--ink);
+  border: 1px solid rgba(43, 38, 32, 0.45);
+  padding: 7px 20px; cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.config-tabs button:hover { background: rgba(43, 38, 32, 0.08); }
+.config-tabs button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.config-tabpane { display: none; }
+.config-tabpane.active { display: block; }
+input[type="text"], input[type="password"] {
+  font-family: inherit; font-size: 14px; padding: 4px 8px; width: 100%;
+  background: #fffdf6; border: 1px solid rgba(43, 38, 32, 0.4); color: var(--ink);
+}

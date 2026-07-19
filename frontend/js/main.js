@@ -5,11 +5,13 @@ import { loadConfig } from "./config.js";
 import { Environment } from "./environment.js";
 import { BambooGrove } from "./bamboo.js";
 import { Tiger } from "./tiger.js";
+import { Rabbit } from "./rabbit.js";
 import { Scenery } from "./scenery.js";
 import { WaterPlants } from "./plants.js";
 import { CameraDirector, updateAgentPanel } from "./ui.js";
 import { PhysicsWorld } from "./physics.js";
 import { BgmPlayer } from "./bgm.js";
+import { DialogSystem } from "./dialog.js";
 
 async function boot() {
   const config = await loadConfig();
@@ -36,15 +38,17 @@ async function boot() {
   controls.maxDistance = 70;
   controls.target.set(0, 1.5, 0);
 
-  const physics = new PhysicsWorld();
+  const physics = new PhysicsWorld(config);
   const env = new Environment(scene, config, physics);
   const grove = new BambooGrove(scene, config, null, physics);
   const tiger = new Tiger(scene, config, physics);
   // 决策：不采用 GLB 虎（四肢不分），保留程序化虎模型
+  const rabbit = new Rabbit(scene, config, grove); // 雪兔：SALTATORIAL 管线验证物种
+  const dialog = new DialogSystem(tiger, rabbit, config); // 母女对话（虎女·兔母）
   const scenery = new Scenery(scene);
   new WaterPlants(scene, config, env); // 菖蒲（靠水石旁，翠叶白花）+ 芦苇（阔水两岸，浅赭叶）
   const director = new CameraDirector(camera, controls);
-  window.__dbg = { tiger, camera, controls, director, physics, grove, bgm }; // 调试钩子：截图/调试用
+  window.__dbg = { tiger, rabbit, dialog, camera, controls, director, physics, grove, bgm }; // 调试钩子：截图/调试用
   if (config.style?.cameraPreset) director.set(config.style.cameraPreset);
 
   // 静音切换按钮
@@ -68,14 +72,16 @@ async function boot() {
     const time = clock.elapsedTime;
 
     env.update(dt);
-    tiger.update(dt, time, grove);
+    tiger.update(dt, time, grove, rabbit);
+    rabbit.update(dt, time);
+    dialog.update(dt, camera);
     grove.update(dt, tiger.group.position); // 施加回正/风扭矩
     physics.step(dt);                        // Cannon 解算：虎推竹、碰撞
     grove.syncFromPhysics();                 // 物理位姿写回可视模型
     director.update(dt, tiger, null);
 
     hudClock += dt;
-    if (hudClock > 0.25) { hudClock = 0; updateAgentPanel(tiger); }
+    if (hudClock > 0.25) { hudClock = 0; updateAgentPanel(tiger, rabbit); }
 
     renderer.render(scene, camera);
   });

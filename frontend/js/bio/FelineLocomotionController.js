@@ -1,6 +1,7 @@
 // 状态机动画驱动器：严格的解剖学行走摆动控制
 // 运行时只操纵骨骼旋转矩阵，不触碰几何体与着色器
-// 状态：'IDLE'（呼吸/扫视）| 'WALK'（对角步态）| 'ROAR'（昂首张嘴）
+// 状态：'IDLE'（呼吸/扫视）| 'WALK'（对角步态 / 兔科双跃）| 'ROAR'（昂首张嘴）
+// 步态分支：DIGITIGRADE/UNGULIGRADE 对角交替；SALTATORIAL 双后肢同频蹬跃
 import * as THREE from "three";
 
 // 猫科对角步态相位：左后0 → 左前0.25 → 右后0.5 → 右前0.75
@@ -21,7 +22,7 @@ export class FelineLocomotionController {
    */
   static update(boneMap, ctx) {
     if (!boneMap || boneMap.size === 0) return;
-    const { time: t, dt, state, gait, moving = 1 } = ctx;
+    const { time: t, dt, state, gait, moving = 1, anatomyType = "DIGITIGRADE" } = ctx;
 
     // —— 脊椎：行进时沿体长轻微 S 形波动，呼吸浮动 ——
     const wave = Math.sin(gait * Math.PI * 2);
@@ -33,8 +34,10 @@ export class FelineLocomotionController {
     root.position.y = root.userData.baseY + Math.sin(t * 1.7) * 0.008 + Math.abs(wave) * 0.02 * sway;
 
     // —— 四肢 ——
-    if (state === "WALK") this._gait(boneMap, gait, moving);
-    else this._legsRelax(boneMap, dt);
+    if (state === "WALK") {
+      if (anatomyType === "SALTATORIAL") this._hop(boneMap, gait, moving);
+      else this._gait(boneMap, gait, moving);
+    } else this._legsRelax(boneMap, dt);
 
     // —— 头颈 ——
     const Neck = boneMap.get("Neck"), Head = boneMap.get("Head"), Jaw = boneMap.get("Jaw");
@@ -58,14 +61,47 @@ export class FelineLocomotionController {
       Jaw.rotation.x += (0.03 + Math.sin(t * 1.7) * 0.015 - Jaw.rotation.x) * Math.min(dt * 6, 1);
     }
 
-    // —— 尾：五节链式摆动（自根至梢相位延迟，甩鞭感） ——
-    const swayT = t * (1.2 + moving * 1.2 * sway);
+    // —— 尾：五节链甩鞭 —— 行进与步态耦合、驻足以时间摆动；
+    // 根→梢相位延迟 0.45rad、振幅递增（甩鞭流体波浪），尾尖保持上翘
+    const waveT = state === "WALK" ? gait * Math.PI * 2 : t * 1.4;
+    const tailAmp = state === "WALK" ? moving : 0.55;
     for (let i = 1; i <= 5; i++) {
       const tb = boneMap.get(`Tail${i}`);
       if (!tb) break;
-      tb.rotation.y = Math.sin(swayT - (i - 1) * 0.55) * (0.28 + i * 0.07);
+      tb.rotation.y = Math.sin(waveT - (i - 1) * 0.45) * (0.1 + i * 0.07) * tailAmp;
     }
-    boneMap.get("Tail1").rotation.x = 0.28 + Math.sin(swayT * 0.5) * 0.08; // 尾根上扬不拖地
+    boneMap.get("Tail1").rotation.x = 0.06 + Math.cos(waveT * 2) * 0.05; // 尾根微起伏
+    boneMap.get("Tail5").rotation.x = 0.22; // 尾尖自信上翘
+
+    // —— 兔耳（仅 SALTATORIAL 装配）：静时微颤，跃时随蹬地冲量惯性后仰 ——
+    const earL = boneMap.get("Ear_L"), earR = boneMap.get("Ear_R");
+    if (earL && earR) {
+      const lag = state === "WALK" ? Math.max(0, Math.sin(gait * Math.PI * 2)) * 0.35 * moving : 0;
+      earL.rotation.x = -0.12 - lag + Math.sin(t * 2.3) * 0.04;
+      earR.rotation.x = -0.12 - lag + Math.sin(t * 2.3 + 0.3) * 0.04;
+    }
+  }
+
+  /** 跳跃行步态（兔形目）：双后肢同频蹬跃、前肢落地支撑、脊椎弓张如箭 */
+  static _hop(boneMap, gait, moving) {
+    const tick = gait * Math.PI * 2;          // 每个步态周期一次腾跃
+    const push = Math.max(0, Math.sin(tick)); // 蹬地冲量 0→1→0
+    // 脊椎：弓起 ↔ 舒展（弓箭式）
+    boneMap.get("Mid").rotation.x = Math.sin(tick) * 0.16 * moving;
+    boneMap.get("Chest").rotation.x = Math.sin(tick + 0.4) * 0.1 * moving;
+    // 腾空抛物线叠加于根骨呼吸浮动之上
+    boneMap.get("Root").position.y += push * 0.06 * moving;
+    // 双后肢同频：蹬地伸直 ↔ 腾空深折（不再镜像交替）
+    const hip = (-0.1 + push * 0.4) * moving;
+    const knee = (0.85 - push * 0.7) * moving;
+    for (const k of ["BL1", "BR1"]) boneMap.get(k).rotation.x = hip;
+    for (const k of ["BL2", "BR2"]) boneMap.get(k).rotation.x = knee;
+    for (const k of ["BLFoot", "BRFoot"]) boneMap.get(k).rotation.x = (0.3 - push * 0.5) * moving;
+    // 前肢落地支撑，微微错开防呆板
+    boneMap.get("FL1").rotation.x = Math.cos(tick) * 0.3 * moving;
+    boneMap.get("FR1").rotation.x = Math.cos(tick + 0.25) * 0.3 * moving;
+    boneMap.get("FL2").rotation.x = Math.max(0, -Math.sin(tick)) * 0.45 * moving;
+    boneMap.get("FR2").rotation.x = Math.max(0, -Math.sin(tick + 0.25)) * 0.45 * moving;
   }
 
   /** 步态：趾行关节方向 —— 前肢肘只向后弯；后肢 Z 形（膝前凸、飞节后折） */

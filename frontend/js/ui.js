@@ -83,11 +83,13 @@ export class CameraDirector {
 
 function ease(t) { return t * t * (3 - 2 * t); }
 
-export function updateAgentPanel(tiger, crane, geese = []) {
+export function updateAgentPanel(tiger, rabbit, crane, geese = []) {
   const t = document.getElementById("tiger-state");
+  const r = document.getElementById("rabbit-state");
   const c = document.getElementById("crane-state");
   const g = document.getElementById("goose-state");
   if (t) t.textContent = tiger.state;
+  if (r && rabbit) r.textContent = rabbit.stateLabel;
   if (c) c.textContent = crane.stateLabel;
   if (g) g.textContent = geese.map((x) => x.stateLabel).join(" · ");
 }

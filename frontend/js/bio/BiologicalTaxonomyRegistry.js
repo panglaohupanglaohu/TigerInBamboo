@@ -3,6 +3,7 @@
 // anatomyType 指导骨骼装配器的关节走势：
 //   DIGITIGRADE  趾行（猫科：肘后折、膝前凸、飞节悬空 —— 弹性 Z 形后肢）
 //   UNGULIGRADE  蹄行（马科：直立负重关节）
+//   SALTATORIAL  跳跃行（兔科：后肢极长且深度折叠，双腿同频蹬跃）
 export const BIOLOGICAL_TAXONOMY = {
   CARNIVORA: {
     scientificName: "Carnivora",
@@ -14,8 +15,8 @@ export const BIOLOGICAL_TAXONOMY = {
           scientificName: "Panthera tigris",
           // 空间生存边界盒：X 宽 / Y 总高(含昂起的头颈) / Z 总长(含头尾)
           dimensions: { width: 0.72, height: 1.24, length: 3.1 },
-          // 生物学参考：肩高决定四肢长度与躯干倾斜
-          anatomicalRef: { withersHeight: 0.97, tailLength: 1.15 },
+          // 生物学参考：肩高决定四肢长度与躯干倾斜；尾长 1.0m（独立锥形细分尾管）
+          anatomicalRef: { withersHeight: 0.97, tailLength: 1.0 },
           rendering: {
             vertexColors: true,   // 虎皮为顶点色绘制（斑纹由物种层注入）
             roughness: 0.85,
@@ -42,6 +43,28 @@ export const BIOLOGICAL_TAXONOMY = {
             roughness: 0.6,
             furLayers: 2,
             furLength: 0.005,
+          },
+        },
+      },
+    },
+  },
+  LAGOMORPHA: {
+    scientificName: "Lagomorpha",
+    LEPORIDAE: {
+      scientificName: "Leporidae",
+      anatomyType: "SALTATORIAL", // 跳跃行：后肢极长深折、双腿同频蹬跃
+      LEPUS: {
+        TIMIDUS: {
+          scientificName: "Lepus timidus",
+          // 空间生存边界盒：宽 0.2m / 躯干高 0.30m（竖耳另由骨骼延伸，总高约 0.45m）/ 总长 0.5m
+          dimensions: { width: 0.2, height: 0.30, length: 0.5 },
+          anatomicalRef: { withersHeight: 0.22, earLength: 0.12, tailLength: 0.06 },
+          rendering: {
+            vertexColors: false,
+            baseColor: 0xd3d3d3, // 雪兔冬毛：浅灰近白
+            roughness: 0.7,
+            furLayers: 10,
+            furLength: 0.01,
           },
         },
       },

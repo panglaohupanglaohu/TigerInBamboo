@@ -26,12 +26,32 @@ export const DEFAULT_CONFIG = {
     stiffness: 3.0,      // 回正刚度（角速度增益）
     sway: 1.0,           // 风摆幅度倍率
   },
+  physics: {
+    gravity: -9.82,        // 重力加速度（m/s²）
+    solverIterations: 8,   // 物理求解迭代次数
+  },
   pheasant: {
     enabled: true,
     fleeDistance: 6.0,
     returnDistance: 14.0,
     drinkInterval: 25.0,
     perchTime: 4.0,
+  },
+  rabbit: {
+    enabled: true,
+    speed: 0.7,        // 蹦跳速度
+    roamRadius: 6.0,   // 环游半径（米）
+  },
+  dialog: {
+    enabled: true,
+    interval: 26,          // 母女对话触发间隔（秒）
+    voiceName: "auto",     // 嗓音：auto 自动选中文女声
+    voiceRate: 1.0,        // 语速
+    voicePitch: 1.15,      // 音高
+    voiceVolume: 0.9,      // 音量 0~1
+    llmEndpoint: "",       // 大模型接口：留空用内置问答脚本
+    llmApiKey: "",         // 大模型 API Key
+    llmModel: "",          // 大模型模型名
   },
   ecology: {
     relations: [

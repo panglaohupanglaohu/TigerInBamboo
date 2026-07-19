@@ -17,174 +17,271 @@
       感知—内驱力—行为模型；修改保存后刷新场景页生效。
     </p>
 
+    <div class="config-tabs">
+      <button type="button" class="active" data-tab="creatures">生 物</button>
+      <button type="button" data-tab="env">环境配置</button>
+      <button type="button" data-tab="relations">物种关系</button>
+      <button type="button" data-tab="av">视 听</button>
+    </div>
+
     <form id="config-form" onsubmit="return false;">
-      <fieldset>
-        <legend>场 景</legend>
-        <div class="field">
-          <label>竹林密度（株）</label>
-          <input type="range" id="scene.bambooCount" min="20" max="180" step="5" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>雾气浓度</label>
-          <input type="range" id="scene.mist" min="0" max="1" step="0.05" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>金笺纸底色</label>
-          <input type="checkbox" id="scene.goldBackground" />
-          <span class="value"></span>
-        </div>
-      </fieldset>
+      <div class="config-tabpane active" id="tab-creatures">
+        <fieldset>
+          <legend>猛 虎</legend>
+          <div class="field">
+            <label>巡游速度</label>
+            <input type="range" id="tiger.speed" min="0.2" max="2.5" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>巡游范围</label>
+            <input type="range" id="tiger.patrolRadius" min="0.6" max="1.6" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>斑纹对比度</label>
+            <input type="range" id="tiger.stripeContrast" min="0.2" max="1.5" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>皮毛长度</label>
+            <input type="range" id="tiger.furLength" min="0" max="2" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>皮毛层数</label>
+            <input type="range" id="tiger.furLayers" min="2" max="24" step="1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>驻足间隔（秒，均值）</label>
+            <input type="range" id="tiger.pauseInterval" min="4" max="40" step="1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>驻足时长（秒）</label>
+            <input type="range" id="tiger.pauseDuration" min="0.5" max="8" step="0.1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>尾巴缠竹竿</label>
+            <input type="checkbox" id="tiger.tailCurl" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>缠竹触发距离（米）</label>
+            <input type="range" id="tiger.tailCurlDistance" min="0.5" max="3.5" step="0.05" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>天 气</legend>
-        <div class="field">
-          <label>温度（℃，&gt;0 下雨 / ≤0 下雪）</label>
-          <input type="range" id="weather.temperature" min="-15" max="20" step="0.5" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>降水强度</label>
-          <input type="range" id="weather.snowfall" min="0" max="2" step="0.05" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>风力</label>
-          <input type="range" id="weather.wind" min="0" max="1" step="0.05" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>风向（度，0=北 90=东）</label>
-          <input type="range" id="weather.windDirection" min="0" max="360" step="5" />
-          <span class="value"></span>
-        </div>
-      </fieldset>
+        <fieldset>
+          <legend>雪 兔</legend>
+          <div class="field">
+            <label>启用雪兔</label>
+            <input type="checkbox" id="rabbit.enabled" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>蹦跳速度</label>
+            <input type="range" id="rabbit.speed" min="0.2" max="1.5" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>环游半径（米）</label>
+            <input type="range" id="rabbit.roamRadius" min="2" max="12" step="0.5" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>竹 林</legend>
-        <div class="field">
-          <label>回正刚度（被虎撞弯后）</label>
-          <input type="range" id="bamboo.stiffness" min="1" max="8" step="0.1" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>风摆幅度</label>
-          <input type="range" id="bamboo.sway" min="0" max="2" step="0.05" />
-          <span class="value"></span>
-        </div>
-      </fieldset>
+        <fieldset>
+          <legend>锦 鸡</legend>
+          <div class="field">
+            <label>启用锦鸡</label>
+            <input type="checkbox" id="pheasant.enabled" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>警戒距离（惊飞）</label>
+            <input type="range" id="pheasant.fleeDistance" min="2" max="15" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>归返距离（虎远）</label>
+            <input type="range" id="pheasant.returnDistance" min="6" max="25" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>饮水间隔（秒）</label>
+            <input type="range" id="pheasant.drinkInterval" min="8" max="60" step="1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>避险停留（秒）</label>
+            <input type="range" id="pheasant.perchTime" min="1" max="15" step="0.5" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>猛 虎</legend>
-        <div class="field">
-          <label>巡游速度</label>
-          <input type="range" id="tiger.speed" min="0.2" max="2.5" step="0.05" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>巡游范围</label>
-          <input type="range" id="tiger.patrolRadius" min="0.6" max="1.6" step="0.05" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>斑纹对比度</label>
-          <input type="range" id="tiger.stripeContrast" min="0.2" max="1.5" step="0.05" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>皮毛长度</label>
-          <input type="range" id="tiger.furLength" min="0" max="2" step="0.05" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>皮毛层数</label>
-          <input type="range" id="tiger.furLayers" min="2" max="24" step="1" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>驻足间隔（秒，均值）</label>
-          <input type="range" id="tiger.pauseInterval" min="4" max="40" step="1" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>驻足时长（秒）</label>
-          <input type="range" id="tiger.pauseDuration" min="0.5" max="8" step="0.1" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>尾巴缠竹竿</label>
-          <input type="checkbox" id="tiger.tailCurl" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>缠竹触发距离（米）</label>
-          <input type="range" id="tiger.tailCurlDistance" min="0.5" max="3.5" step="0.05" />
-          <span class="value"></span>
-        </div>
-      </fieldset>
+        <fieldset>
+          <legend>母 女 对 话</legend>
+          <div class="field">
+            <label>启用对话</label>
+            <input type="checkbox" id="dialog.enabled" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>触发间隔（秒）</label>
+            <input type="range" id="dialog.interval" min="8" max="60" step="1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>嗓音</label>
+            <input type="text" id="dialog.voiceName" placeholder="auto（自动选中文女声）" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>语速</label>
+            <input type="range" id="dialog.voiceRate" min="0.5" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>音高</label>
+            <input type="range" id="dialog.voicePitch" min="0.5" max="2.0" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>音量</label>
+            <input type="range" id="dialog.voiceVolume" min="0" max="1" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>大模型接口</label>
+            <input type="text" id="dialog.llmEndpoint" placeholder="留空则使用内置问答脚本" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>API Key</label>
+            <input type="password" id="dialog.llmApiKey" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>模型名</label>
+            <input type="text" id="dialog.llmModel" placeholder="如 gpt-4o-mini" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+      </div>
 
-      <fieldset>
-        <legend>锦 鸡</legend>
-        <div class="field">
-          <label>启用锦鸡</label>
-          <input type="checkbox" id="pheasant.enabled" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>警戒距离（惊飞）</label>
-          <input type="range" id="pheasant.fleeDistance" min="2" max="15" step="0.5" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>归返距离（虎远）</label>
-          <input type="range" id="pheasant.returnDistance" min="6" max="25" step="0.5" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>饮水间隔（秒）</label>
-          <input type="range" id="pheasant.drinkInterval" min="8" max="60" step="1" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>避险停留（秒）</label>
-          <input type="range" id="pheasant.perchTime" min="1" max="15" step="0.5" />
-          <span class="value"></span>
-        </div>
-      </fieldset>
+      <div class="config-tabpane" id="tab-env">
+        <fieldset>
+          <legend>场 景</legend>
+          <div class="field">
+            <label>竹林密度（株）</label>
+            <input type="range" id="scene.bambooCount" min="20" max="180" step="5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>雾气浓度</label>
+            <input type="range" id="scene.mist" min="0" max="1" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>金笺纸底色</label>
+            <input type="checkbox" id="scene.goldBackground" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>视 觉 与 音 乐</legend>
-        <div class="field">
-          <label>初始机位</label>
-          <select id="style.cameraPreset">
-            <option value="panorama">全景（屏风正面）</option>
-            <option value="follow">随虎（斜后上方）</option>
-            <option value="stream">溪涧（低机位顺水）</option>
-          </select>
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>水墨勾线（预留）</label>
-          <input type="checkbox" id="style.inkOutline" />
-          <span class="value"></span>
-        </div>
-        <div class="field">
-          <label>背景音乐音量</label>
-          <input type="range" id="bgm.volume" min="0" max="1" step="0.05" />
-          <span class="value"></span>
-        </div>
-      </fieldset>
+        <fieldset>
+          <legend>天 气</legend>
+          <div class="field">
+            <label>温度（℃，&gt;0 下雨 / ≤0 下雪）</label>
+            <input type="range" id="weather.temperature" min="-15" max="20" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>降水强度</label>
+            <input type="range" id="weather.snowfall" min="0" max="2" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>风力</label>
+            <input type="range" id="weather.wind" min="0" max="1" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>风向（度，0=北 90=东）</label>
+            <input type="range" id="weather.windDirection" min="0" max="360" step="5" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>物 种 关 系</legend>
-        <table class="relations">
-          <thead>
-            <tr><th>主体</th><th>客体</th><th>关系</th><th>内驱力</th><th>强度</th><th>说明</th></tr>
-          </thead>
-          <tbody id="relations-body"></tbody>
-        </table>
-      </fieldset>
+        <fieldset>
+          <legend>竹 林</legend>
+          <div class="field">
+            <label>回正刚度（被虎撞弯后）</label>
+            <input type="range" id="bamboo.stiffness" min="1" max="8" step="0.1" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>风摆幅度</label>
+            <input type="range" id="bamboo.sway" min="0" max="2" step="0.05" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>物 理</legend>
+          <div class="field">
+            <label>重力加速度（m/s²）</label>
+            <input type="range" id="physics.gravity" min="-20" max="-1" step="0.01" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>求解迭代次数</label>
+            <input type="range" id="physics.solverIterations" min="2" max="16" step="1" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="config-tabpane" id="tab-relations">
+        <fieldset>
+          <legend>物 种 关 系</legend>
+          <table class="relations">
+            <thead>
+              <tr><th>主体</th><th>客体</th><th>关系</th><th>内驱力</th><th>强度</th><th>说明</th></tr>
+            </thead>
+            <tbody id="relations-body"></tbody>
+          </table>
+        </fieldset>
+      </div>
+
+      <div class="config-tabpane" id="tab-av">
+        <fieldset>
+          <legend>视 觉 与 音 乐</legend>
+          <div class="field">
+            <label>初始机位</label>
+            <select id="style.cameraPreset">
+              <option value="panorama">全景（屏风正面）</option>
+              <option value="follow">随虎（斜后上方）</option>
+              <option value="stream">溪涧（低机位顺水）</option>
+            </select>
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>水墨勾线（预留）</label>
+            <input type="checkbox" id="style.inkOutline" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>背景音乐音量</label>
+            <input type="range" id="bgm.volume" min="0" max="1" step="0.05" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+      </div>
 
       <div class="config-actions">
         <button class="btn" id="save-btn">保 存</button>
@@ -222,7 +319,7 @@
         if (el.type === "checkbox") el.checked = !!v;
         else el.value = v;
         const span = el.parentElement.querySelector(".value");
-        if (span && el.type === "range") span.textContent = Number(v).toFixed(2).replace(/\\.?0+$/, "");
+        if (span && el.type === "range") span.textContent = Number(v).toFixed(2).replace(/\.?0+$/, "");
         if (span && el.type === "checkbox") span.textContent = v ? "启" : "闭";
       });
     }
@@ -235,6 +332,16 @@
         else v = el.value;
         setPath(config, el.id, v);
         refreshFields();
+      });
+    });
+
+    // ---- Tab 切换 ----
+    document.querySelectorAll(".config-tabs button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".config-tabs button").forEach((b) =>
+          b.classList.toggle("active", b === btn));
+        document.querySelectorAll(".config-tabpane").forEach((pane) =>
+          pane.classList.toggle("active", pane.id === "tab-" + btn.dataset.tab));
       });
     });
 

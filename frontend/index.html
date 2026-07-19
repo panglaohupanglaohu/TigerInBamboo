@@ -43,7 +43,32 @@
     <div class="agent" id="agent-tiger">
       <span class="dot tiger"></span>猛虎 · <em id="tiger-state">巡游</em>
     </div>
+    <div class="agent" id="agent-rabbit">
+      <span class="dot rabbit" style="background:#cfcfcf"></span>雪兔 · <em id="rabbit-state">驻足</em>
+    </div>
   </aside>
+
+  <!-- 母女对话气泡（位置每帧由 dialog.js 投影更新） -->
+  <div class="speech-bubble" id="bubble-tiger"></div>
+  <div class="speech-bubble" id="bubble-rabbit"></div>
+  <style>
+    .speech-bubble {
+      position: fixed; z-index: 30; max-width: 240px;
+      transform: translate(-50%, -115%);
+      background: rgba(250, 246, 235, 0.95); color: #3a2f22;
+      border: 1px solid #8a7a5c; border-radius: 10px;
+      padding: 7px 11px; font-size: 14px; line-height: 1.5;
+      font-family: "Kaiti SC", "STKaiti", "KaiTi", serif;
+      box-shadow: 0 2px 10px rgba(40, 30, 15, 0.25);
+      pointer-events: none; opacity: 0; transition: opacity 0.25s;
+    }
+    .speech-bubble.show { opacity: 1; }
+    .speech-bubble::after { /* 气泡小尾巴 */
+      content: ""; position: absolute; left: 50%; bottom: -7px;
+      margin-left: -6px; border: 6px solid transparent;
+      border-top-color: #8a7a5c; border-bottom: none;
+    }
+  </style>
 
   <div class="vignette"></div>
   <div id="loading">铺 纸 研 墨 …</div>

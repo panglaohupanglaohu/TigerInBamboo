@@ -4,24 +4,23 @@
 import * as THREE from "three";
 import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
 
-// 躯干轮廓表（以 Panthera tigris 标定；z 位置 → [半径, 中心高度]）
-// 生成时按物种 dimensions 等比缩放
+// 躯干轮廓表（以 Panthera tigris altaica 解剖数据标定）
+// z 位置 → [半径, 中心高度, 腹侧纵向缩放]
+// 形体核心：前胸发达(0.32)、腰腹多肉微垂(0.24×0.86)、臀胯略窄(0.26)
+// 尾不在此表：尾为独立锥形细分管（见 _buildBody 尾部段）
 const BASE_PROFILE = [
-  [-1.95, 0.022, 0.86], // 尾尖（细长）
-  [-1.75, 0.036, 0.89],
-  [-1.55, 0.052, 0.93],
-  [-1.30, 0.075, 0.97],
-  [-1.05, 0.15, 1.00],  // 尾根/胯后
-  [-0.80, 0.34, 1.02],  // 臀胯圆实
-  [-0.45, 0.33, 0.98],  // 后腹
-  [-0.10, 0.34, 0.94],  // 腰腹（略下垂）
-  [0.25, 0.35, 0.98],   // 前腹
-  [0.55, 0.36, 1.04],   // 胸腔隆起（肩）
-  [0.80, 0.30, 1.08],   // 肩后颈起
-  [1.02, 0.24, 1.12],   // 颈
-  [1.24, 0.22, 1.16],   // 颈前/颅底
-  [1.40, 0.19, 1.14],   // 吻部后（头部前探出肩线）
-  [1.54, 0.10, 1.12],   // 吻尖
+  [-1.06, 0.03, 1.00, 1.0],   // 后封口
+  [-1.05, 0.15, 1.00, 1.0],   // 尾根/胯后（尾管接口）
+  [-0.85, 0.26, 1.00, 0.95],  // 臀胯骨盆（浑圆，窄于前胸）
+  [-0.55, 0.24, 0.98, 0.9],   // 后腹过渡
+  [-0.15, 0.24, 0.945, 0.86], // 腰腹多肉、腹线微垂
+  [0.20, 0.255, 0.955, 0.95], // 腹前段（饱满）
+  [0.50, 0.32, 1.02, 1.18],   // 前胸腔（发达深胸，扑食发力）
+  [0.75, 0.30, 1.06, 1.0],    // 肩峰
+  [0.95, 0.24, 1.10, 0.95],   // 颈
+  [1.15, 0.20, 1.14, 0.95],   // 颈前
+  [1.30, 0.15, 1.15, 0.9],    // 颅底（头由组合件构成）
+  [1.34, 0.03, 1.15, 0.9],    // 封口
 ];
 const BASE_DIM = { width: 0.72, height: 1.32, length: 3.1 };
 const RADIAL = 24;      // 径向分段（圆润、消除棱角）
@@ -45,17 +44,21 @@ export class ProceduralSkinGenerator {
     const kz = dim.length / BASE_DIM.length;
     const kw = dim.width / BASE_DIM.width;
     const kh = dim.height / BASE_DIM.height;
-    const profile = BASE_PROFILE.map(([z, r, cy]) => [z * kz, r * kw, cy * kh]);
+    const profile = BASE_PROFILE.map(([z, r, cy, ys]) => [z * kz, r * kw, cy * kh, ys]);
 
     // 主管：逐环生成 + 环间插值加密
     const ringPts = (r, t) => {
-      const [z0, rad0, cy0] = profile[r];
-      const [z1, rad1, cy1] = profile[r + 1];
+      const [z0, rad0, cy0, ys0] = profile[r];
+      const [z1, rad1, cy1, ys1] = profile[r + 1];
       const z = z0 + (z1 - z0) * t, rad = rad0 + (rad1 - rad0) * t, cy = cy0 + (cy1 - cy0) * t;
+      const ys = ys0 + (ys1 - ys0) * t;
       const pts = [];
       for (let k = 0; k < RADIAL; k++) {
         const a = (k / RADIAL) * Math.PI * 2;
-        pts.push([Math.cos(a) * rad * 1.05, cy + Math.sin(a) * rad * 0.95, z, Math.cos(a), Math.sin(a)]);
+        const sa = Math.sin(a);
+        // 腹侧（下半）按 ys 缩放：腰腹上提、前胸加深
+        const yScale = sa < 0 ? ys : 1;
+        pts.push([Math.cos(a) * rad * 1.05, cy + sa * rad * 0.95 * yScale, z, Math.cos(a), Math.sin(a)]);
       }
       return pts;
     };
@@ -89,20 +92,47 @@ export class ProceduralSkinGenerator {
     bodyGeo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
     bodyGeo.setIndex(indices);
 
-    // 四肢管（与权重剖分共用同一位置定义）
+    // 四肢管（肌肉渐变：前肢粗壮拍击、后肢扇形大腿；与权重剖分共用同一位置定义）
+    // 管径取体宽比例 ×2/3（纤细兽腿）
     const geos = [bodyGeo];
     const H = ref.withersHeight;
     for (const def of this._legDefs(dim)) {
       const topY = H * 0.95, pawY = 0.02;
-      const legGeo = new THREE.CylinderGeometry(dim.width * 0.16, dim.width * 0.097, topY - pawY, 14, 12);
-      legGeo.translate(0, (topY + pawY) / 2, 0);
-      const pawGeo = new THREE.SphereGeometry(dim.width * 0.118, 12, 8);
-      pawGeo.scale(1.05, 0.55, 1.3);
-      pawGeo.translate(0, pawY + 0.02, 0.03);
-      const leg = BufferGeometryUtils.mergeGeometries([legGeo, pawGeo]);
+      const front = def.key[0] === "F";
+      const parts = [];
+      if (front) {
+        // 前肢：大臂 → 腕渐细，肉垫掌
+        const legGeo = new THREE.CylinderGeometry(dim.width * 0.129, dim.width * 0.079, topY - pawY, 14, 12);
+        legGeo.translate(0, (topY + pawY) / 2, 0);
+        const pawGeo = new THREE.SphereGeometry(dim.width * 0.111, 12, 8);
+        pawGeo.scale(1.05, 0.5, 1.3);
+        pawGeo.translate(0, pawY + 0.02, 0.03);
+        parts.push(legGeo, pawGeo);
+      } else {
+        // 后肢：扇形大腿（上端宽扁）+ 细长小腿，后掌略小
+        const thigh = new THREE.SphereGeometry(dim.width * 0.167, 14, 10);
+        thigh.scale(0.85, 1.5, 1.1);
+        thigh.translate(0, topY - (topY - pawY) * 0.22, 0);
+        const calf = new THREE.CylinderGeometry(dim.width * 0.079, dim.width * 0.06, (topY - pawY) * 0.55, 12, 10);
+        calf.translate(0, pawY + (topY - pawY) * 0.275, 0);
+        const pawGeo = new THREE.SphereGeometry(dim.width * 0.093, 12, 8);
+        pawGeo.scale(1.05, 0.5, 1.3);
+        pawGeo.translate(0, pawY + 0.02, 0.03);
+        parts.push(thigh, calf, pawGeo);
+      }
+      const leg = BufferGeometryUtils.mergeGeometries(parts);
       leg.translate(def.x, 0, def.z);
       geos.push(leg);
     }
+
+    // 独立尾管：锥形、纵向 30 段细分（尾根粗→尾尖细），权重按进度给五节尾骨
+    // 长度取 anatomicalRef.tailLength（虎 1.0m / 兔 0.06m 绒尾）
+    const tailLen = ref.tailLength;
+    const tailGeo = new THREE.CylinderGeometry(dim.width * 0.028, dim.width * 0.0625, tailLen, 14, 30);
+    tailGeo.rotateX(-Math.PI / 2); // 卧倒：锥尖朝 -Z（尾尖）
+    tailGeo.translate(0, H * 1.03, -1.05 * kz - tailLen / 2); // 根接胯后、沿尾骨链高度
+    geos.push(tailGeo);
+
     const merged = BufferGeometryUtils.mergeGeometries(geos);
     merged.computeVertexNormals(); // 平滑着色：消除棱角
     return merged;
@@ -159,9 +189,9 @@ export class ProceduralSkinGenerator {
         } else {
           i1 = leg.bF; w1 = 1; i2 = leg.bF; w2 = 0;
         }
-      } else if (z < -1.0 * kz) {
-        // 尾：沿尾长向五节渐给（节多摆得柔；尾细长区 z -1.0~-1.95）
-        const t = THREE.MathUtils.clamp((-1.0 * kz - z) / (0.95 * kz), 0, 1) * 4; // 0..4
+      } else if (z < -1.052 * kz) {
+        // 尾管：沿尾长向五节渐给（尾根→尾尖，相位延迟甩鞭的几何基础）
+        const t = THREE.MathUtils.clamp((-1.052 * kz - z) / ref.tailLength, 0, 1) * 4; // 0..4
         const seg = Math.min(Math.floor(t), 3);
         const frac = t - seg;
         i1 = idxOf(`Tail${seg + 1}`); i2 = idxOf(`Tail${seg + 2}`);

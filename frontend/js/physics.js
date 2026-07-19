@@ -15,11 +15,12 @@ const TERRAIN_HALF = 56;
 const TERRAIN_GRID = 64; // 64×64 采样
 
 export class PhysicsWorld {
-  constructor() {
-    this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, -9.82, 0) });
+  constructor(config = {}) {
+    const ph = config.physics ?? {};
+    this.world = new CANNON.World({ gravity: new CANNON.Vec3(0, ph.gravity ?? -9.82, 0) });
     this.world.broadphase = new CANNON.SAPBroadphase(this.world);
     this.world.allowSleep = true;
-    this.world.solver.iterations = 8;
+    this.world.solver.iterations = Math.round(ph.solverIterations ?? 8);
 
     this._bodies = [];
     this._buildGround();
