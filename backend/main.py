@@ -62,6 +62,9 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "inkOutline": False,      # 水墨勾线（预留）
         "cameraPreset": "panorama",
     },
+    "bgm": {
+        "volume": 0.5,            # 背景音乐音量 0~1
+    },
 }
 
 

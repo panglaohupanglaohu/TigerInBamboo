@@ -40,6 +40,9 @@ export const DEFAULT_CONFIG = {
     inkOutline: false,
     cameraPreset: "panorama",
   },
+  bgm: {
+    volume: 0.5,         // 背景音乐音量 0~1
+  },
 };
 
 const STORAGE_KEY = "living-classical-art-config";

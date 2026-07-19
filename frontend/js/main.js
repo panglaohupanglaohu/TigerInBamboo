@@ -9,9 +9,13 @@ import { Scenery } from "./scenery.js";
 import { WaterPlants } from "./plants.js";
 import { CameraDirector, updateAgentPanel } from "./ui.js";
 import { PhysicsWorld } from "./physics.js";
+import { BgmPlayer } from "./bgm.js";
 
 async function boot() {
   const config = await loadConfig();
+
+  // BGM：Spiritual Hug of Angel 循环（首次交互后启动，文件缺失则安静跳过）
+  const bgm = new BgmPlayer("/assets/audio/bgm.mp3", { volume: config.bgm?.volume ?? 0.5 });
 
   const canvas = document.getElementById("stage");
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -40,8 +44,16 @@ async function boot() {
   const scenery = new Scenery(scene);
   new WaterPlants(scene, config, env); // 菖蒲（靠水石旁，翠叶白花）+ 芦苇（阔水两岸，浅赭叶）
   const director = new CameraDirector(camera, controls);
-  window.__dbg = { tiger, camera, controls, director, physics, grove }; // 调试钩子：截图/调试用
+  window.__dbg = { tiger, camera, controls, director, physics, grove, bgm }; // 调试钩子：截图/调试用
   if (config.style?.cameraPreset) director.set(config.style.cameraPreset);
+
+  // 静音切换按钮
+  const muteBtn = document.getElementById("bgm-toggle");
+  if (muteBtn) {
+    muteBtn.addEventListener("click", () => {
+      muteBtn.textContent = bgm.toggleMute() ? "♪ 启乐" : "♪ 静音";
+    });
+  }
 
   window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
