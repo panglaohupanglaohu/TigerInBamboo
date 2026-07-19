@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>系统配置 · 世界古典美术拟生平台</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="config-page">
+    <div class="config-header">
+      <h1>拟生平台 · 系统配置</h1>
+      <a href="/">← 返回《竹虎溪涧图》</a>
+    </div>
+    <p class="config-sub">
+      智能体行为参数与物种关系配置。物种关系参考 Tu &amp; Terzopoulos《Artificial Fishes》的
+      感知—内驱力—行为模型；修改保存后刷新场景页生效。
+    </p>
+
+    <form id="config-form" onsubmit="return false;">
+      <fieldset>
+        <legend>场 景</legend>
+        <div class="field">
+          <label>竹林密度（株）</label>
+          <input type="range" id="scene.bambooCount" min="20" max="180" step="5" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>雾气浓度</label>
+          <input type="range" id="scene.mist" min="0" max="1" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>金笺纸底色</label>
+          <input type="checkbox" id="scene.goldBackground" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>天 气</legend>
+        <div class="field">
+          <label>温度（℃，&gt;0 下雨 / ≤0 下雪）</label>
+          <input type="range" id="weather.temperature" min="-15" max="20" step="0.5" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>降水强度</label>
+          <input type="range" id="weather.snowfall" min="0" max="2" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>风力</label>
+          <input type="range" id="weather.wind" min="0" max="1" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>风向（度，0=北 90=东）</label>
+          <input type="range" id="weather.windDirection" min="0" max="360" step="5" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>猛 虎</legend>
+        <div class="field">
+          <label>巡游速度</label>
+          <input type="range" id="tiger.speed" min="0.2" max="2.5" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>巡游范围</label>
+          <input type="range" id="tiger.patrolRadius" min="0.6" max="1.6" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>斑纹对比度</label>
+          <input type="range" id="tiger.stripeContrast" min="0.2" max="1.5" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>皮毛长度</label>
+          <input type="range" id="tiger.furLength" min="0" max="2" step="0.05" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>皮毛层数</label>
+          <input type="range" id="tiger.furLayers" min="2" max="24" step="1" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>尾巴缠竹竿</label>
+          <input type="checkbox" id="tiger.tailCurl" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>锦 鸡</legend>
+        <div class="field">
+          <label>启用锦鸡</label>
+          <input type="checkbox" id="pheasant.enabled" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>警戒距离（惊飞）</label>
+          <input type="range" id="pheasant.fleeDistance" min="2" max="15" step="0.5" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>归返距离（虎远）</label>
+          <input type="range" id="pheasant.returnDistance" min="6" max="25" step="0.5" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>饮水间隔（秒）</label>
+          <input type="range" id="pheasant.drinkInterval" min="8" max="60" step="1" />
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>避险停留（秒）</label>
+          <input type="range" id="pheasant.perchTime" min="1" max="15" step="0.5" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>视 觉</legend>
+        <div class="field">
+          <label>初始机位</label>
+          <select id="style.cameraPreset">
+            <option value="panorama">全景（屏风正面）</option>
+            <option value="follow">随虎（斜后上方）</option>
+            <option value="stream">溪涧（低机位顺水）</option>
+          </select>
+          <span class="value"></span>
+        </div>
+        <div class="field">
+          <label>水墨勾线（预留）</label>
+          <input type="checkbox" id="style.inkOutline" />
+          <span class="value"></span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>物 种 关 系</legend>
+        <table class="relations">
+          <thead>
+            <tr><th>主体</th><th>客体</th><th>关系</th><th>内驱力</th><th>强度</th><th>说明</th></tr>
+          </thead>
+          <tbody id="relations-body"></tbody>
+        </table>
+      </fieldset>
+
+      <div class="config-actions">
+        <button class="btn" id="save-btn">保 存</button>
+        <button class="btn ghost" id="reset-btn">恢复默认</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { loadConfig, saveConfig, resetConfig, DEFAULT_CONFIG } from "/js/config.js";
+
+    const RELATION_TYPES = ["predator-prey", "physical", "resource", "mutualism", "competition"];
+    const DRIVES = ["fear", "hunger", "thirst", "libido", "none"];
+
+    let config = await loadConfig();
+
+    // ---- 标量字段绑定 ----
+    const fields = document.querySelectorAll("[id]");
+    function getPath(obj, path) {
+      return path.split(".").reduce((o, k) => o?.[k], obj);
+    }
+    function setPath(obj, path, value) {
+      const keys = path.split(".");
+      const last = keys.pop();
+      const target = keys.reduce((o, k) => (o[k] ??= {}), obj);
+      target[last] = value;
+    }
+    function refreshFields() {
+      document.querySelectorAll("input[id], select[id]").forEach((el) => {
+        if (el.closest("#relations-body")) return;
+        const v = getPath(config, el.id);
+        if (v === undefined) return;
+        if (el.type === "checkbox") el.checked = !!v;
+        else el.value = v;
+        const span = el.parentElement.querySelector(".value");
+        if (span && el.type === "range") span.textContent = Number(v).toFixed(2).replace(/\\.?0+$/, "");
+        if (span && el.type === "checkbox") span.textContent = v ? "启" : "闭";
+      });
+    }
+    document.querySelectorAll("input[id], select[id]").forEach((el) => {
+      if (el.closest("#relations-body")) return;
+      el.addEventListener("input", () => {
+        let v;
+        if (el.type === "checkbox") v = el.checked;
+        else if (el.type === "range" || el.type === "number") v = Number(el.value);
+        else v = el.value;
+        setPath(config, el.id, v);
+        refreshFields();
+      });
+    });
+
+    // ---- 物种关系表 ----
+    function renderRelations() {
+      const body = document.getElementById("relations-body");
+      body.innerHTML = "";
+      config.ecology.relations.forEach((rel, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${rel.a}</td><td>${rel.b}</td>
+          <td><select data-i="${i}" data-k="type">
+            ${RELATION_TYPES.map((t) => `<option ${t === rel.type ? "selected" : ""}>${t}</option>`).join("")}
+          </select></td>
+          <td><select data-i="${i}" data-k="drive">
+            ${DRIVES.map((d) => `<option ${d === rel.drive ? "selected" : ""}>${d}</option>`).join("")}
+          </select></td>
+          <td><input type="number" min="0" max="1" step="0.05" value="${rel.strength}" data-i="${i}" data-k="strength" /></td>
+          <td>${rel.note ?? ""}</td>`;
+        body.appendChild(tr);
+      });
+      body.querySelectorAll("select, input").forEach((el) => {
+        el.addEventListener("input", () => {
+          const rel = config.ecology.relations[Number(el.dataset.i)];
+          rel[el.dataset.k] = el.type === "number" ? Number(el.value) : el.value;
+        });
+      });
+    }
+
+    // ---- 保存 / 重置 ----
+    const toast = (msg) => {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2200);
+    };
+    document.getElementById("save-btn").addEventListener("click", async () => {
+      const ok = await saveConfig(config);
+      toast(ok ? "已封存 · 刷新场景页生效" : "保存失败");
+    });
+    document.getElementById("reset-btn").addEventListener("click", async () => {
+      config = await resetConfig();
+      refreshFields();
+      renderRelations();
+      toast("已恢复默认");
+    });
+
+    refreshFields();
+    renderRelations();
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.venv-*/
+venv/
+*.egg-info/
+
+# 运行时生成的配置
+backend/config.json
+
+# Node（若后续引入构建工具）
+node_modules/
+dist/
+
+# 大体积本地资产（不入库）
+tools/TripoSR/
+tools/out/
+tools/crops/
+pic/
+
+# OS / 编辑器
+.DS_Store
+.idea/
+.vscode/

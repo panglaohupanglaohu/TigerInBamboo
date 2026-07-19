@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>竹虎溪涧图 · 世界古典美术拟生平台</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+      "cannon-es": "/assets/vendor/cannon-es.js"
+    }
+  }
+  </script>
+</head>
+<body class="scene-page">
+  <canvas id="stage"></canvas>
+
+  <!-- 画题 · 竖排，仿屏风落款 -->
+  <header class="vertical-title">
+    <h1>竹虎溪涧图</h1>
+    <p>雪竹 · 斑斓虎 · 鹤雁</p>
+  </header>
+
+  <!-- 视角与入口 -->
+  <nav class="hud">
+    <div class="hud-group" id="camera-presets">
+      <span class="hud-label">视角</span>
+      <button data-preset="panorama" class="preset active">全景</button>
+      <button data-preset="follow" class="preset">随虎</button>
+      <button data-preset="stream" class="preset">溪涧</button>
+    </div>
+    <div class="hud-group">
+      <a class="preset link" href="/config.html" target="_blank">系统配置</a>
+    </div>
+  </nav>
+
+  <!-- 智能体状态（感知 → 行为 可视化） -->
+  <aside class="agent-panel">
+    <div class="agent" id="agent-tiger">
+      <span class="dot tiger"></span>猛虎 · <em id="tiger-state">巡游</em>
+    </div>
+  </aside>
+
+  <div class="vignette"></div>
+  <div id="loading">铺 纸 研 墨 …</div>
+
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
