@@ -7,10 +7,11 @@ import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js"
 // 躯干轮廓表（以 Panthera tigris 标定；z 位置 → [半径, 中心高度]）
 // 生成时按物种 dimensions 等比缩放
 const BASE_PROFILE = [
-  [-1.65, 0.028, 0.92], // 尾尖
-  [-1.45, 0.055, 0.94],
-  [-1.25, 0.09, 0.97],
-  [-1.05, 0.17, 1.00],  // 尾根/胯后
+  [-1.95, 0.022, 0.86], // 尾尖（细长）
+  [-1.75, 0.036, 0.89],
+  [-1.55, 0.052, 0.93],
+  [-1.30, 0.075, 0.97],
+  [-1.05, 0.15, 1.00],  // 尾根/胯后
   [-0.80, 0.34, 1.02],  // 臀胯圆实
   [-0.45, 0.33, 0.98],  // 后腹
   [-0.10, 0.34, 0.94],  // 腰腹（略下垂）
@@ -159,8 +160,8 @@ export class ProceduralSkinGenerator {
           i1 = leg.bF; w1 = 1; i2 = leg.bF; w2 = 0;
         }
       } else if (z < -1.0 * kz) {
-        // 尾：沿尾长向五节渐给（节多摆得柔）
-        const t = THREE.MathUtils.clamp((-1.0 * kz - z) / (0.65 * kz), 0, 1) * 4; // 0..4
+        // 尾：沿尾长向五节渐给（节多摆得柔；尾细长区 z -1.0~-1.95）
+        const t = THREE.MathUtils.clamp((-1.0 * kz - z) / (0.95 * kz), 0, 1) * 4; // 0..4
         const seg = Math.min(Math.floor(t), 3);
         const frac = t - seg;
         i1 = idxOf(`Tail${seg + 1}`); i2 = idxOf(`Tail${seg + 2}`);
