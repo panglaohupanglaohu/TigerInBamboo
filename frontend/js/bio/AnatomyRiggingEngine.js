@@ -11,7 +11,7 @@ export const BONE = {
   FR1: "FR1", FR2: "FR2", FRFoot: "FRFoot",
   BL1: "BL1", BL2: "BL2", BLFoot: "BLFoot",
   BR1: "BR1", BR2: "BR2", BRFoot: "BRFoot",
-  Tail1: "Tail1", Tail2: "Tail2", Tail3: "Tail3",
+  Tail1: "Tail1", Tail2: "Tail2", Tail3: "Tail3", Tail4: "Tail4", Tail5: "Tail5",
 };
 
 export class AnatomyRiggingEngine {
@@ -40,17 +40,18 @@ export class AnatomyRiggingEngine {
     const mid = mk(BONE.Mid, pelvis, 0, 0, length * 0.177);
     const chest = mk(BONE.Chest, mid, 0, 0, length * 0.177);
 
-    // —— 颈/头/下颌 ——
-    const neck = mk(BONE.Neck, chest, 0, H * 0.067, length * 0.097);
-    const head = mk(BONE.Head, neck, 0, H * 0.029, length * 0.084);
+    // —— 颈/头/下颌（头颈前伸，虎头探出肩线） ——
+    const neck = mk(BONE.Neck, chest, 0, H * 0.067, length * 0.11);
+    const head = mk(BONE.Head, neck, 0, H * 0.029, length * 0.1);
     mk(BONE.Jaw, head, 0, -H * 0.095, length * 0.032);
 
     // —— 四肢：趾行为弹性 Z 形（膝/踝预弯），蹄行为直立柱 ——
     const buildLeg = (parent, prefix, side, isFront) => {
       const ux = isFront ? 0.26 : 0.27;              // 腿根外偏（体宽一半内收）
-      const seg1 = isFront ? H * 0.38 : H * 0.40;    // 大腿长
-      const seg2 = isFront ? H * 0.33 : H * 0.34;    // 小腿长
-      const hip = mk(`${prefix}1`, parent, side * ux, isFront ? -H * 0.14 : -H * 0.11, isFront ? 0.02 : -0.02);
+      const uz = isFront ? 0.1 : -0.1;               // 前后腿距拉开
+      const seg1 = isFront ? H * 0.36 : H * 0.38;    // 大腿长（腿不收长）
+      const seg2 = isFront ? H * 0.31 : H * 0.32;    // 小腿长
+      const hip = mk(`${prefix}1`, parent, side * ux, isFront ? -H * 0.14 : -H * 0.11, uz);
       if (anatomyType === "DIGITIGRADE") {
         // 趾行：关节预弯 —— 前肢肘后凸、后肢膝前凸
         const knee = mk(`${prefix}2`, hip, 0, -seg1, isFront ? -0.03 : 0.04);
@@ -65,10 +66,12 @@ export class AnatomyRiggingEngine {
     buildLeg(pelvis, "BL", -1, false);
     buildLeg(pelvis, "BR", 1, false);
 
-    // —— 尾：自骨盆向后下，三段 ——
+    // —— 尾：自骨盆向后下，五节（摆动起来更柔） ——
     const t1 = mk(BONE.Tail1, pelvis, 0, H * 0.06, -0.2);
-    const t2 = mk(BONE.Tail2, t1, 0, 0, -tailLength * 0.39);
-    mk(BONE.Tail3, t2, 0, -H * 0.02, -tailLength * 0.39);
+    const t2 = mk(BONE.Tail2, t1, 0, 0, -tailLength * 0.22);
+    const t3 = mk(BONE.Tail3, t2, 0, -H * 0.01, -tailLength * 0.22);
+    const t4 = mk(BONE.Tail4, t3, 0, -H * 0.01, -tailLength * 0.22);
+    mk(BONE.Tail5, t4, 0, -H * 0.02, -tailLength * 0.22);
 
     return { root, skeleton: new THREE.Skeleton(bones), bones, boneMap };
   }

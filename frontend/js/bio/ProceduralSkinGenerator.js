@@ -17,10 +17,10 @@ const BASE_PROFILE = [
   [0.25, 0.35, 0.98],   // 前腹
   [0.55, 0.36, 1.04],   // 胸腔隆起（肩）
   [0.80, 0.30, 1.08],   // 肩后颈起
-  [1.00, 0.24, 1.12],   // 颈
-  [1.18, 0.22, 1.16],   // 颈前/颅底
-  [1.32, 0.19, 1.14],   // 吻部后
-  [1.44, 0.10, 1.12],   // 吻尖
+  [1.02, 0.24, 1.12],   // 颈
+  [1.24, 0.22, 1.16],   // 颈前/颅底
+  [1.40, 0.19, 1.14],   // 吻部后（头部前探出肩线）
+  [1.54, 0.10, 1.12],   // 吻尖
 ];
 const BASE_DIM = { width: 0.72, height: 1.32, length: 3.1 };
 const RADIAL = 24;      // 径向分段（圆润、消除棱角）
@@ -109,7 +109,7 @@ export class ProceduralSkinGenerator {
 
   // 四肢管位置（几何与权重共用，保证剖分一致）
   static _legDefs(dim) {
-    const lz = dim.length * 0.184;
+    const lz = dim.length * 0.21; // 前后腿距拉开
     return [
       { x: -dim.width * 0.361, z: lz, key: "FL" },
       { x: dim.width * 0.361, z: lz, key: "FR" },
@@ -158,11 +158,13 @@ export class ProceduralSkinGenerator {
         } else {
           i1 = leg.bF; w1 = 1; i2 = leg.bF; w2 = 0;
         }
-      } else if (z < -1.25 * kz) {
-        // 尾：三段渐给
-        const t = THREE.MathUtils.clamp((-1.25 * kz - z) / (0.3 * kz), 0, 1);
-        i1 = idxOf("Tail1"); w1 = 1 - t; i2 = idxOf("Tail3"); w2 = t;
-        if (t > 0.4) { i1 = idxOf("Tail2"); w1 = 1 - (t - 0.4) / 0.6; i2 = idxOf("Tail3"); w2 = (t - 0.4) / 0.6; }
+      } else if (z < -1.0 * kz) {
+        // 尾：沿尾长向五节渐给（节多摆得柔）
+        const t = THREE.MathUtils.clamp((-1.0 * kz - z) / (0.65 * kz), 0, 1) * 4; // 0..4
+        const seg = Math.min(Math.floor(t), 3);
+        const frac = t - seg;
+        i1 = idxOf(`Tail${seg + 1}`); i2 = idxOf(`Tail${seg + 2}`);
+        w1 = 1 - frac; w2 = frac;
       } else if (z < -0.55 * kz) {
         // 后躯：Pelvis ↔ Mid
         const t = (z + 1.25 * kz) / (0.7 * kz);

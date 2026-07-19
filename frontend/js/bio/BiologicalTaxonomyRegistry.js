@@ -13,9 +13,9 @@ export const BIOLOGICAL_TAXONOMY = {
         TIGRIS: {
           scientificName: "Panthera tigris",
           // 空间生存边界盒：X 宽 / Y 总高(含昂起的头颈) / Z 总长(含头尾)
-          dimensions: { width: 0.72, height: 1.32, length: 3.1 },
+          dimensions: { width: 0.72, height: 1.24, length: 3.1 },
           // 生物学参考：肩高决定四肢长度与躯干倾斜
-          anatomicalRef: { withersHeight: 1.05, tailLength: 0.9 },
+          anatomicalRef: { withersHeight: 0.97, tailLength: 0.9 },
           rendering: {
             vertexColors: true,   // 虎皮为顶点色绘制（斑纹由物种层注入）
             roughness: 0.85,

@@ -58,11 +58,13 @@ export class FelineLocomotionController {
       Jaw.rotation.x += (0.03 + Math.sin(t * 1.7) * 0.015 - Jaw.rotation.x) * Math.min(dt * 6, 1);
     }
 
-    // —— 尾：默认摆动（缠竹等外力由行为层在此后叠加） ——
+    // —— 尾：五节链式摆动（自根至梢相位延迟，甩鞭感） ——
     const swayT = t * (1.2 + moving * 1.2 * sway);
-    boneMap.get("Tail1").rotation.y = Math.sin(swayT) * 0.35;
-    boneMap.get("Tail2").rotation.y = Math.sin(swayT - 0.7) * 0.45;
-    boneMap.get("Tail3").rotation.y = Math.sin(swayT - 1.4) * 0.5;
+    for (let i = 1; i <= 5; i++) {
+      const tb = boneMap.get(`Tail${i}`);
+      if (!tb) break;
+      tb.rotation.y = Math.sin(swayT - (i - 1) * 0.55) * (0.28 + i * 0.07);
+    }
     boneMap.get("Tail1").rotation.x = 0.28 + Math.sin(swayT * 0.5) * 0.08; // 尾根上扬不拖地
   }
 

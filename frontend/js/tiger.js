@@ -16,8 +16,8 @@ const CREAM = new THREE.Color(0xf2e8d5);
 // 虎斑绘制：沿体长波浪斑纹 + 腹底留白（画谱"斑斓"意）；腿管画环纹、爪尖留白
 // 腿管位置与 ProceduralSkinGenerator._legDefs 一致（虎 dimensions 导出值）
 const LEG_REGIONS = [
-  { x: -0.26, z: 0.57 }, { x: 0.26, z: 0.57 },
-  { x: -0.27, z: -0.57 }, { x: 0.27, z: -0.57 },
+  { x: -0.26, z: 0.65 }, { x: 0.26, z: 0.65 },
+  { x: -0.27, z: -0.65 }, { x: 0.27, z: -0.65 },
 ];
 function legRegionAt(x, z, y) {
   if (y > 1.01) return false;
@@ -27,7 +27,7 @@ function legRegionAt(x, z, y) {
   return false;
 }
 
-function paintTiger(geo, { freq = 9, belly = 0.82, contrast = 1 } = {}) {
+function paintTiger(geo, { freq = 14, belly = 0.7, contrast = 1 } = {}) {
   const pos = geo.attributes.position;
   const colors = new Float32Array(pos.count * 3);
   const c = new THREE.Color();
@@ -86,6 +86,12 @@ export class Tiger {
     this._buildHeadDetails();
     scene.add(this.group);
 
+    // —— 足迹：步态落地时留下爪印，离虎 5 米外消逝 ——
+    this._prints = [];
+    this._printGroup = new THREE.Group();
+    scene.add(this._printGroup);
+    this._prevPhases = [0, 0, 0, 0];
+
     // —— Cannon 刚体：躯干双球近似，kinematic 由路径驱动 ——
     if (physics) {
       this.body = new CANNON.Body({
@@ -102,30 +108,47 @@ export class Tiger {
     }
   }
 
-  /** 头部细节：眼/鼻/耳挂在 Head 骨上，随骨骼运动 */
+  /** 头部细节：眼（带眼睑）/鼻/嘴/须/立耳，挂在 Head 骨上随骨骼运动 */
   _buildHeadDetails() {
     const head = this.entity.boneMap.get("Head");
     const eyeMat = new THREE.MeshStandardMaterial({ color: 0x140f08, roughness: 0.25 });
+    const lidMat = new THREE.MeshStandardMaterial({ color: 0xb5621a, roughness: 0.85 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: 0x241a10, roughness: 0.85 });
+    const creamMat = new THREE.MeshStandardMaterial({ color: 0xf2e8d5, roughness: 0.9 });
     for (const s of [-1, 1]) {
       const eye = new THREE.Mesh(new THREE.SphereGeometry(0.032, 12, 10), eyeMat);
       eye.position.set(s * 0.115, 0.07, 0.1);
       head.add(eye);
-      // 耳：小而圆，背黑前白（虎耳"白心"特征）
-      const ear = new THREE.Mesh(
-        new THREE.SphereGeometry(0.055, 12, 10),
-        new THREE.MeshStandardMaterial({ color: 0x241a10, roughness: 0.85 })
+      // 眼睑：上半球盖，内低外高（不怒自威）
+      const lid = new THREE.Mesh(
+        new THREE.SphereGeometry(0.038, 12, 8, 0, Math.PI * 2, 0, Math.PI * 0.55),
+        lidMat
       );
-      ear.scale.set(1, 1, 0.5);
-      ear.position.set(s * 0.14, 0.17, -0.05);
-      ear.rotation.z = s * -0.3;
+      lid.position.set(s * 0.115, 0.078, 0.1);
+      lid.rotation.set(-0.35, 0, s * 0.18);
+      head.add(lid);
+      // 立耳：小而圆，竖直微外张，背黑前白（虎耳"白心"特征）
+      const ear = new THREE.Mesh(new THREE.SphereGeometry(0.052, 12, 10), darkMat);
+      ear.scale.set(0.9, 1.3, 0.5);
+      ear.position.set(s * 0.135, 0.21, -0.04);
+      ear.rotation.set(-0.08, 0, s * -0.12);
       head.add(ear);
-      const earInner = new THREE.Mesh(
-        new THREE.SphereGeometry(0.028, 8, 6),
-        new THREE.MeshStandardMaterial({ color: 0xf2e8d5, roughness: 0.9 })
-      );
-      earInner.scale.set(1, 1, 0.4);
-      earInner.position.set(s * 0.138, 0.165, 0.0);
+      const earInner = new THREE.Mesh(new THREE.SphereGeometry(0.026, 8, 6), creamMat);
+      earInner.scale.set(0.9, 1.2, 0.4);
+      earInner.position.set(s * 0.133, 0.2, 0.005);
+      earInner.rotation.copy(ear.rotation);
       head.add(earInner);
+      // 虎须：每侧三根，自吻侧扇出
+      for (let w = 0; w < 3; w++) {
+        const whisker = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.0012, 0.0008, 0.17, 3),
+          creamMat
+        );
+        whisker.position.set(s * 0.1, -0.035 - w * 0.013, 0.27);
+        whisker.rotation.z = -s * (Math.PI / 2 - 0.12);
+        whisker.rotation.y = s * (0.1 + w * 0.12);
+        head.add(whisker);
+      }
     }
     const nose = new THREE.Mesh(
       new THREE.BoxGeometry(0.06, 0.035, 0.035),
@@ -133,6 +156,13 @@ export class Tiger {
     );
     nose.position.set(0, -0.02, 0.3);
     head.add(nose);
+    // 嘴：鼻下唇线 + 口吻横线（近看有神态）
+    const lipLine = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.05, 0.012), darkMat);
+    lipLine.position.set(0, -0.07, 0.29);
+    head.add(lipLine);
+    const mouthLine = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.009, 0.012), darkMat);
+    mouthLine.position.set(0, -0.095, 0.265);
+    head.add(mouthLine);
   }
 
   _buildPath() {
@@ -198,8 +228,64 @@ export class Tiger {
     this.entity.setBehaviorState(bioState);
     this.entity.tick({ time, dt, gait: this._gaitCyc, moving });
 
+    // —— 足迹：落地瞬间留印，5 米外消逝 ——
+    this._updatePrints(moving);
+
     // —— 尾：缠竹叠加（在驱动器默认摆动之上） ——
     this._updateTailCurl(dt, grove);
+  }
+
+  /** 足迹：四腿进入支撑期（爪落地）时在爪位留下爪印；距虎超 5 米即移除 */
+  _updatePrints(moving) {
+    const feet = [
+      { bone: "FLFoot", phase: 0.25 }, { bone: "FRFoot", phase: 0.75 },
+      { bone: "BLFoot", phase: 0.0 }, { bone: "BRFoot", phase: 0.5 },
+    ];
+    const SWING = 0.35;
+    feet.forEach((f, i) => {
+      const p = ((this._gaitCyc + f.phase) % 1 + 1) % 1;
+      const prev = this._prevPhases[i];
+      // 摆动期→支撑期的沿 = 落地
+      if (moving > 0.3 && prev < SWING && p >= SWING) this._dropPrint(f.bone);
+      this._prevPhases[i] = p;
+    });
+    // 消逝：距虎 5 米外移除
+    const tp = this.group.position;
+    for (let i = this._prints.length - 1; i >= 0; i--) {
+      const pr = this._prints[i];
+      if (pr.position.distanceTo(tp) > 5) {
+        this._printGroup.remove(pr);
+        pr.geometry.dispose();
+        pr.material.dispose();
+        this._prints.splice(i, 1);
+      }
+    }
+  }
+
+  _dropPrint(boneName) {
+    const foot = this.entity.boneMap.get(boneName);
+    if (!foot) return;
+    const w = new THREE.Vector3();
+    foot.getWorldPosition(w);
+    const geo = new THREE.CircleGeometry(0.085, 10);
+    geo.scale(0.85, 1.35, 1); // 椭圆爪印
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0x5a5348, transparent: true, opacity: 0.42, depthWrite: false,
+    });
+    const m = new THREE.Mesh(geo, mat);
+    m.rotation.x = -Math.PI / 2;
+    m.rotation.z = -this.group.rotation.y; // 顺虎行进方向
+    m.position.set(w.x, groundHeight(w.x, w.z) + 0.015, w.z);
+    m.renderOrder = 1;
+    this._printGroup.add(m);
+    this._prints.push(m);
+    // 上限 60 枚，先进先出
+    while (this._prints.length > 60) {
+      const old = this._prints.shift();
+      this._printGroup.remove(old);
+      old.geometry.dispose();
+      old.material.dispose();
+    }
   }
 
   /** 缠竹尾：虎身侧后有竹时，尾中后段卷向竹竿（配置 tiger.tailCurl 可开关） */
@@ -222,10 +308,13 @@ export class Tiger {
     if (curl) this._lastCurlSide = curl.side;
     const side = curl ? curl.side : this._lastCurlSide;
     if (w > 0.02 && side) {
-      const T1 = B.get("Tail1"), T2 = B.get("Tail2"), T3 = B.get("Tail3");
-      T1.rotation.y = THREE.MathUtils.lerp(T1.rotation.y, side * 0.6, w * 0.5);
-      T2.rotation.y = THREE.MathUtils.lerp(T2.rotation.y, side * 1.6, w);
-      T3.rotation.y = THREE.MathUtils.lerp(T3.rotation.y, side * 2.2, w);
+      // 缠卷幅度自尾根到尾梢递进（五节链）
+      const amps = [0.4, 0.9, 1.5, 2.0, 2.4];
+      for (let i = 1; i <= 5; i++) {
+        const T = B.get(`Tail${i}`);
+        if (!T) break;
+        T.rotation.y = THREE.MathUtils.lerp(T.rotation.y, side * amps[i - 1], w * Math.min(i * 0.4, 1));
+      }
     }
   }
 }
