@@ -20,13 +20,13 @@
 
 ## 技术要点
 
-### 虎：整体皮肤 + 骨骼 + 壳层皮毛
-- **统一网格**：躯干/颈/吻为一根 64 环高细分管（轮廓按解剖逐环缩放：颈细、胸隆、腹垂、胯圆、尾收），四肢为附接管，合并为单一 `BufferGeometry`，`computeVertexNormals()` 平滑着色，无拼接断缝
-- **骨骼层级（22 根）**：Root → 脊椎三段（Pelvis/Mid/Chest）→ Neck/Head/Jaw；四肢各三段（髋/膝/爪）；尾三段
-- **顶点权重**：按解剖区间精确分配，关节处线性插值过渡（腿根 60% 腿骨 + 40% 脊椎），皮肤随骨骼拉伸无"竹节"断裂
-- **猫科步态**：对角步态（占空比 0.65），趾行关节方向正确 —— 前肢肘只向后弯，后肢 Z 形（膝前凸、飞节后折），摆动期折叠、支撑期舒展
-- **壳层皮毛（Shell Texturing）**：基础网格外克隆 N 层壳（可配 2~24 层），`onBeforeCompile` 注入顶点着色器沿法线逐层膨胀，高频噪声 `alphaMap` 越外层越稀疏，随骨骼同步变形
-- **物理**：躯干为 Cannon kinematic 刚体（双球近似），沿路径驱动，推挤竹竿的碰撞由物理引擎解算
+### 虎：生物生成管线（四模块解耦）
+- **物种数据仓库**（`bio/BiologicalTaxonomyRegistry.js`）：纯数据定义，按拉丁学名组织（食肉目-猫科-豹属-虎），含边界盒尺寸、肩高、渲染配置；已预留马科数据可横向扩展
+- **骨骼解剖学装配器**（`bio/AnatomyRiggingEngine.js`）：22 根骨骼的通用层级（脊椎三段 + 颈/头/下颌 + 四肢各三段 + 尾三段），按肩高自动推算四肢长度与关节走势（趾行 Z 形 / 蹄行直立）
+- **程序化网格生成器**（`bio/ProceduralSkinGenerator.js`）：64 环轮廓管躯干 + 附接腿管合并为单一 `BufferGeometry`，按解剖区间为每个顶点精确注入 `skinIndex/skinWeight`，关节处线性插值，`computeVertexNormals()` 平滑着色
+- **状态机动画驱动器**（`bio/FelineLocomotionController.js`）：运行期只操纵骨骼旋转矩阵 —— IDLE（呼吸/扫视）/ WALK（对角步态，肘后折、膝前凸的趾行关节方向）/ ROAR（昂首张嘴）
+- **聚合实体**（`bio/BioEntityMesh.js`）：壳层皮毛 Shell Texturing 在构建期用 `onBeforeCompile` **一次编译** N 层壳（沿法线逐层膨胀、噪声 `alphaMap` 逐层稀疏），运行期零着色器改动，杜绝 WebGL 报错
+- **行为层**（`tiger.js`）：巡游路径/驻足状态机、Cannon kinematic 刚体（推挤竹竿由物理解算）、缠竹尾、虎斑顶点色注入
 
 ### 竹：刚体 + 球铰
 每根竹是 Cannon 动态刚体（Box），竹脚以 `PointToPointConstraint` 球铰锚定地面；
@@ -53,10 +53,16 @@ TigerInBamboo/
 │   ├── assets/vendor/       # cannon-es.js（本地化物理引擎）
 │   ├── css/style.css
 │   └── js/
+│       ├── bio/             # 生物生成管线（数据/几何/骨骼/动画解耦）
+│       │   ├── BiologicalTaxonomyRegistry.js  # 物种数据仓库（拉丁学名组织）
+│       │   ├── AnatomyRiggingEngine.js        # 骨骼解剖学装配器（通用骨骼层级）
+│       │   ├── ProceduralSkinGenerator.js     # 程序化网格生成器（顶点/法线/权重）
+│       │   ├── FelineLocomotionController.js  # 状态机动画驱动器（IDLE/WALK/ROAR）
+│       │   └── BioEntityMesh.js               # 聚合实体（壳层皮毛一次编译）
 │       ├── config.js        # 默认配置 + API 读写（离线回退 localStorage，含旧版迁移）
 │       ├── physics.js       # Cannon 世界：地形 Heightfield、刚体注册、定步长推进
 │       ├── environment.js   # 金笺纸天光、雾、雪地、溪涧、岩石、雨雪粒子
-│       ├── tiger.js         # 猛虎：统一网格、骨骼、权重、壳层皮毛、步态、缠竹尾
+│       ├── tiger.js         # 猛虎智能体：行为层（巡游/驻足状态机、物理刚体、缠竹尾、虎斑注入）
 │       ├── bamboo.js        # 竹林：Cannon 刚体 + 球铰 + 速度级 PD 回正
 │       ├── plants.js        # 菖蒲、芦苇
 │       ├── scenery.js       # 布景（预留：图转 3D 装饰模型）
