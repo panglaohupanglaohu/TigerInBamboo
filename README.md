@@ -1,5 +1,9 @@
 # 世界古典美术拟生平台 · Living Classical Art
 
+**🌐 在线展厅（GitHub Pages，点开即看，无需部署）：<https://panglaohupanglaohu.github.io/TigerInBamboo/>**
+
+[![《竹虎溪涧图》在线预览](docs/preview.jpg)](https://panglaohupanglaohu.github.io/TigerInBamboo/)
+
 > 为世界古典美术中的人、动物与环境进行生态模拟 —— 画中的生物与植物都是**自主智能体（Autonomous Agents）**，
 > 平台吸收当代最强的拟生（Artificial Life / Behavioral Animation）技术，让古画"活"过来。
 
