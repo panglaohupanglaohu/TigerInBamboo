@@ -3,35 +3,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>展厅 · 世界古典美术拟生平台</title>
+  <title>展厅 · 世界古典美术拟生平台 · Living Classical Art</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .lang-toggle { position: fixed; top: 18px; right: 22px; z-index: 10; }
+    .home-footer a { color: inherit; text-decoration: none; border-bottom: 1px solid rgba(43, 38, 32, 0.4); }
+    .home-footer a:hover { color: var(--cinnabar); border-bottom-color: var(--cinnabar); }
+    .home-footer .welcome { display: block; margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
+  </style>
 </head>
 <body class="home-page">
+  <button class="preset lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">EN</button>
+
   <header class="home-header">
-    <h1>世界古典美术拟生平台</h1>
-    <p>画中生物皆为自主智能体 —— 感知 · 行为 · 运动，古画活过来了</p>
+    <h1 data-i18n="title">世界古典美术拟生平台</h1>
+    <p data-i18n="subtitle">画中生物皆为自主智能体 —— 感知 · 行为 · 运动，古画活过来了</p>
   </header>
 
   <main class="gallery">
     <a class="painting-card" href="index.html">
       <figure><img src="assets/gallery/tiger.jpg" alt="竹虎溪涧图" /></figure>
       <div class="card-caption">
-        <h2>竹虎溪涧图</h2>
-        <p>雪竹 · 斑斓虎 · 雪兔 · 锦鸡 —— 狩野山乐《竹虎图》之威仪，雪舟《四季花鸟图》溪涧为境</p>
-        <span class="enter">入 画</span>
+        <h2 data-i18n="tigerTitle">竹虎溪涧图</h2>
+        <p data-i18n="tigerDesc">雪竹 · 斑斓虎 · 雪兔 · 锦鸡 —— 狩野山乐《竹虎图》之威仪，雪舟《四季花鸟图》溪涧为境</p>
+        <span class="enter" data-i18n="enter">入 画</span>
       </div>
     </a>
 
     <a class="painting-card" href="plum.html">
       <figure><img src="assets/gallery/plum.jpg" alt="寒梅归雁图" /></figure>
       <div class="card-caption">
-        <h2>寒梅归雁图</h2>
-        <p>古梅 · 修竹 · 水塘 · 归雁 —— 寒枝繁花，汀雁栖飞，远山如黛</p>
-        <span class="enter">入 画</span>
+        <h2 data-i18n="plumTitle">寒梅归雁图</h2>
+        <p data-i18n="plumDesc">古梅 · 修竹 · 水塘 · 归雁 —— 寒枝繁花，汀雁栖飞，远山如黛</p>
+        <span class="enter" data-i18n="enter">入 画</span>
       </div>
     </a>
   </main>
 
-  <footer class="home-footer">拟生 · Artificial Life —— Tu &amp; Terzopoulos《Artificial Fishes》遗法</footer>
+  <footer class="home-footer">
+    <span data-i18n="footer">拟生 · Artificial Life —— Tu &amp; Terzopoulos《Artificial Fishes》遗法</span>
+    <span class="welcome">
+      <span data-i18n="welcome">开源共建：欢迎来修改、提 Issue、参与讨论</span>
+      · <a href="https://github.com/panglaohupanglaohu/TigerInBamboo" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </footer>
+
+  <script>
+    // 展厅双语：默认随浏览器语言，手动切换并记忆
+    const I18N = {
+      zh: {
+        title: "世界古典美术拟生平台",
+        subtitle: "画中生物皆为自主智能体 —— 感知 · 行为 · 运动，古画活过来了",
+        tigerTitle: "竹虎溪涧图",
+        tigerDesc: "雪竹 · 斑斓虎 · 雪兔 · 锦鸡 —— 狩野山乐《竹虎图》之威仪，雪舟《四季花鸟图》溪涧为境",
+        plumTitle: "寒梅归雁图",
+        plumDesc: "古梅 · 修竹 · 水塘 · 归雁 —— 寒枝繁花，汀雁栖飞，远山如黛",
+        enter: "入 画",
+        footer: "拟生 · Artificial Life —— Tu & Terzopoulos《Artificial Fishes》遗法",
+        welcome: "开源共建：欢迎来修改、提 Issue、参与讨论",
+      },
+      en: {
+        title: "Living Classical Art",
+        subtitle: "Every creature is an autonomous agent — perception · behavior · locomotion — classical paintings come alive",
+        tigerTitle: "Tiger by the Bamboo Stream",
+        tigerDesc: "Snow bamboo · tiger · snow hare · golden pheasant — after Kanō Sanraku's “Tiger in Bamboo”, set in a stream scene from Sesshū",
+        plumTitle: "Returning Geese by the Wintry Plum",
+        plumDesc: "Ancient plum · slender bamboo · still pond · returning geese — blossoms on cold branches, geese above ink-blue hills",
+        enter: "Enter",
+        footer: "Artificial Life — after Tu & Terzopoulos' “Artificial Fishes”",
+        welcome: "Open source — contributions, issues and discussions are welcome",
+      },
+    };
+    const KEY = "ui.lang";
+    const btn = document.getElementById("lang-toggle");
+    let lang;
+    try { lang = localStorage.getItem(KEY); } catch (_) { lang = null; }
+    if (!lang) lang = (navigator.language || "zh").toLowerCase().startsWith("zh") ? "zh" : "en";
+    function applyLang() {
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const t = I18N[lang][el.dataset.i18n];
+        if (t) el.textContent = t;
+      });
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+      btn.textContent = lang === "zh" ? "EN" : "中文";
+    }
+    btn.addEventListener("click", () => {
+      lang = lang === "zh" ? "en" : "zh";
+      try { localStorage.setItem(KEY, lang); } catch (_) { /* 忽略 */ }
+      applyLang();
+    });
+    applyLang();
+  </script>
 </body>
 </html>

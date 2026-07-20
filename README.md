@@ -1,5 +1,7 @@
 # 世界古典美术拟生平台 · Living Classical Art
 
+**中文** · [**English**](#english)
+
 **🌐 在线展厅（GitHub Pages，点开即看，无需部署）：<https://panglaohupanglaohu.github.io/TigerInBamboo/>**
 
 [![《竹虎溪涧图》在线预览](docs/preview.jpg)](https://panglaohupanglaohu.github.io/TigerInBamboo/)
@@ -150,8 +152,230 @@ cd backend && uvicorn main:app --port 8931
 | 行为 | 感知驱动有限状态机（巡游/驻足/警戒） | Steering Behaviors、Boids 群体、强化学习动作策略 |
 | 生态 | 物种关系矩阵（捕食/警戒/互利/竞争） | 饥饿-恐惧-繁殖内驱力模型、生态系统涌现模拟 |
 
+## 欢迎参与
+
+这幅画是开放的：**欢迎大家来修改、讨论、再创作**。
+
+- 🐛 发现形体、动画、渲染问题 → 欢迎提 [Issue](https://github.com/panglaohupanglaohu/TigerInBamboo/issues)
+- 💡 新物种、新古画、新拟生技术的想法 → 欢迎来 [Discussions](https://github.com/panglaohupanglaohu/TigerInBamboo/discussions) 聊
+- 🔧 直接改代码、调参数、加生物 → 欢迎 Pull Request；物种实验室（`lab.html`）可以零代码造新物种
+- 🎨 不会写代码也能参与：系统配置页里几乎所有行为/环境参数都可调，调出好效果欢迎分享配置
+
 ## 参考
 
 - 狩野山乐《竹虎图》（猛虎形象与斑纹意趣）
 - 雪舟《四季花鸟图》屏风（东京国立博物馆藏，雪后溪涧构图）
 - Tu, X. & Terzopoulos, D. *Artificial Fishes: Physics, Locomotion, Perception, Behavior*（智能体框架与物种关系设计）
+
+---
+
+<a id="english"></a>
+
+# Living Classical Art · 世界古典美术拟生平台
+
+[**中文**](#readme) · **English**
+
+**🌐 Online gallery (GitHub Pages, no setup needed): <https://panglaohupanglaohu.github.io/TigerInBamboo/>**
+
+[![Tiger by the Bamboo Stream — live preview](docs/preview.jpg)](https://panglaohupanglaohu.github.io/TigerInBamboo/)
+
+> Ecological simulation for the people, animals and environments of classical art — every creature and plant in the
+> painting is an **autonomous agent**. Drawing on state-of-the-art artificial life / behavioral animation techniques,
+> the platform brings classical paintings to life.
+
+First scene: **"Tiger by the Bamboo Stream"** — starring the splendid tiger of Kanō Sanraku's *Tiger in Bamboo*,
+set in a snowy stream landscape inspired by Sesshū's *Flowers and Birds of the Four Seasons* screen
+(Tokyo National Museum).
+
+Second painting: **"Returning Geese by the Wintry Plum"** (`plum.html`) — five depth layers: foreground rocks and a
+stone path → a blossoming ancient plum with companion bamboo and reeds → a gentle pond-side slope (the water curves
+around the plum's roots into a bay, leaving one meter of land for roosting geese) → a still pond with geese flying
+home overhead (V-formation, circling descent, glide approach → flare-and-flap deceleration → touchdown skid;
+water-running takeoff, cruise with tucked feet, full wing-spread in flight) → four layers of boneless distant
+mountains (West-Lake style rolling ridges, no lone peaks). The geese are Anseriformes (Anatidae, *Anser*) autonomous
+agents, with bodies proportion-overridden by the AvianBodyBuilder (long neck / plump body / broad wings). This
+painting has its own config page: `plum-config.html` (separate from the tiger-stream config — geese, flora,
+environment, camera presets and playlist are all tunable).
+
+The entry `/` is a **gallery page** (`home.html`): two painting cards linking into the scene pages, with a
+中文/EN language toggle.
+
+## Core Idea
+
+Agent design pays homage to Tu & Terzopoulos' classic paper *Artificial Fishes: Physics, Locomotion, Perception,
+Behavior* (see `docs/references`): every creature is modeled **holistically as an autonomous agent**, with a full
+loop of perception → behavior decisions → locomotion control. No keyframed scripts — motion emerges from state
+machines interacting with the environment:
+
+- **Tiger**: skeleton-driven whole-body skin (SkinnedMesh) + feline diagonal gait + patrol/pause state machine;
+  chain-boned tail can curl around bamboo; slows down to approach and stay with the snow hare when spotted
+- **Snow hare**: SALTATORIAL lagomorph locomotion (egg-shaped arched back, folded hind limbs, synchronized
+  two-legged hopping), roaming the bamboo grove; pauses and waits when the tiger comes close
+- **Golden pheasant**: fear-driven state machine (forage → drink → alert freeze → wing-beating flee → burst flight
+  and glide → roost and return); count is configurable
+- **Predation (music-triggered)**: when the playlist switches to *Duan Ge Xing*, the tiger begins a hunt — stalking
+  low → explosive sprint → parabolic pounce (mid-air interception) → feeding and returning; all parameters tunable
+  in the config page
+- **Mother–daughter dialogues**: the tiger is the daughter, the hare her mother — Chinese-style greetings with
+  doting replies (built-in script / pluggable LLM), Chinese female TTS voices + overhead speech bubbles
+- **Bamboo**: Cannon.js rigid bodies + ball-socket constraints at the root — knocked aside when the tiger brushes
+  past, springing back elastically; wind torque sways them with the wind direction
+- **Weather**: temperature decides rain vs snow (>0°C rain / ≤0°C snow); wind direction drives both precipitation
+  drift and bamboo sway
+- **Species relation matrix**: predator–prey, alert-avoidance, mutualism and competition relations between agents,
+  configured in the config page (mirroring the fear/hunger drive models of the paper)
+- **Species lab** (`lab.html`): upload an image for palette extraction → tune four modules (taxonomy data / mesh
+  generation / skeleton assembly / state-machine driving) live → save and release your species into the stream
+  scene, where it interacts through the relation matrix
+
+## Technical Highlights
+
+### Tiger: the creature pipeline (four decoupled modules)
+- **Taxonomy registry** (`bio/BiologicalTaxonomyRegistry.js`): pure data, organized by Latin names
+  (Carnivora–Felidae–Panthera–tigris / Lagomorpha–Leporidae–Lepus–timidus), with bounding-box dimensions,
+  withers height and rendering config; horse family data pre-seeded for future species
+- **Anatomy rigging engine** (`bio/AnatomyRiggingEngine.js`): a generic 22+-bone hierarchy (3 spine + neck/head/jaw
+  + 3 per limb + 5 tail bones, plus two long ear bones for lagomorphs); limb lengths and joint trends derived from
+  withers height (digitigrade Z-shape / unguligrade straight / saltatorial deep-fold)
+- **Procedural skin generator** (`bio/ProceduralSkinGenerator.js`): profile-tube torso + attached leg tubes +
+  independent tapered tail tube merged into a single `BufferGeometry`, with per-vertex `skinIndex/skinWeight`
+  assigned by anatomical region (lagomorphs get an egg-shaped arched-back profile and nearest-bone-segment
+  attachment for folded hind limbs); `computeVertexNormals()` for smooth shading
+- **State-machine animation driver** (`bio/FelineLocomotionController.js`): only bone rotation matrices at runtime —
+  IDLE (breathing/scanning) / WALK (feline diagonal gait / lagomorph synchronized hopping with arched back and
+  inertial ear sway) / ROAR (head raised, jaw open); the 5-bone tail whips with phase delay
+- **Aggregate entity** (`bio/BioEntityMesh.js`): shell-texturing fur compiles **once** at build time via
+  `onBeforeCompile` (N shells inflated along normals, noise `alphaMap` thinning per layer); zero shader changes at
+  runtime, no WebGL errors
+- **Behavior layer** (`tiger.js` / `rabbit.js`): patrol path & pause state machine, approach-mother behavior,
+  Cannon kinematic body, bamboo-curling tail, tiger-stripe vertex-color injection; the hare hops between bamboo
+  targets and waits when the tiger is near
+- **Dialogue** (`dialog.js`): daughter (tiger) greets, mother (hare) replies with doting warmth; each has her own
+  independently configurable LLM endpoint (OpenAI-compatible; falls back to the built-in script when empty) and
+  voice (voice/rate/pitch/volume via browser speechSynthesis); bubbles project onto their heads; triggers within
+  2.8 m proximity
+
+### Bamboo: rigid bodies + ball joints
+Each bamboo is a Cannon dynamic rigid body (box), anchored to the ground by a `PointToPointConstraint` ball joint;
+upright recovery uses **velocity-level PD control** (angular velocity blended toward "recovery axis × stiffness"),
+so collision impulses are preserved naturally — the tiger pushes it aside, and it springs back when released.
+
+### Weather system
+An independent "weather" section in the config page: temperature (>0°C rain / ≤0°C snow), precipitation intensity
+(particle density), wind speed and direction (0=N, 90=E). Rain falls as slanted line segments, snow as drifting
+dots; ground contact uses the physics heightfield.
+
+### Background music
+Sequential playlist from `frontend/assets/audio/` (currently *Spiritual Hug of Angel* → *Shakuhachi · Duan Ge
+Xing*); browser autoplay policy requires a first click/keypress to start; the scene page has a mute toggle and the
+config page sets volume (takes effect after refresh).
+
+### Terrain & physics
+`physics.js` hosts one Cannon world: terrain sampled from an analytic height function into a 64×64 `Heightfield`;
+bamboo, tiger and (reserved) rocks all solve in the same physical space-time; rain and snow reuse the same height
+data for landing.
+
+## Project Structure
+
+```
+TigerInBamboo/
+├── backend/                 # Python backend (FastAPI)
+│   ├── main.py              # static hosting + /api/config read/write (with legacy config migration)
+│   └── requirements.txt
+├── frontend/                # Three.js frontend (ES Modules, three vendored locally)
+│   ├── home.html            # gallery page (/): two painting cards, bilingual 中文/EN
+│   ├── index.html           # 3D scene: Tiger by the Bamboo Stream
+│   ├── plum.html            # 3D scene: Returning Geese by the Wintry Plum
+│   ├── plum-config.html     # plum scene config (geese/flora/environment/camera/playlist)
+│   ├── config.html          # system config (scene/weather/tiger/pheasant/visuals/relations)
+│   ├── assets/vendor/       # vendored deps: cannon-es.js, three@0.160.0 (OrbitControls/GLTFLoader/BufferGeometryUtils)
+│   ├── css/style.css
+│   └── js/
+│       ├── bio/             # creature pipeline (data/geometry/skeleton/animation decoupled)
+│       │   ├── BiologicalTaxonomyRegistry.js  # taxonomy registry (Latin names, incl. Galliformes)
+│       │   ├── AnatomyRiggingEngine.js        # skeleton assembly (generic bone hierarchy)
+│       │   ├── ProceduralSkinGenerator.js     # procedural mesh (vertices/normals/weights)
+│       │   ├── FelineLocomotionController.js  # state-machine animation (IDLE/WALK/ROAR)
+│       │   ├── AvianBodyBuilder.js            # avian body builder (pheasant/custom birds)
+│       │   └── BioEntityMesh.js               # aggregate entity (shell fur compiled once)
+│       ├── config.js        # default config + API I/O (localStorage fallback, legacy migration)
+│       ├── physics.js       # Cannon world: heightfield terrain, body registry, fixed-step
+│       ├── environment.js   # gold-paper sky light, mist, snowfield, stream, rocks, precipitation
+│       ├── environment-plum.js # plum scene: grassy bank, still pond, path rocks, distant hills, light snow
+│       ├── plumtree.js      # ancient plum (tapered trunk + fractal branches + blossoms/buds), bamboo, reeds, falling petals
+│       ├── goose.js         # goose agent: V-formation, glide approach/flare/touchdown, water-running takeoff, swimming, shore roosting
+│       ├── ui-plum.js       # plum camera presets (panorama/under-plum/pond-geese/formation/hills) and panel
+│       ├── plum-main.js     # plum scene boot & main loop
+│       ├── tiger.js         # tiger agent: behavior layer (patrol/pause, approach-mother, rigid body, tail curl, stripes)
+│       ├── rabbit.js        # snow hare agent: grove roaming, waits when tiger near, ear/tail parts
+│       ├── bird.js          # pheasant agent: fear state machine (forage/drink/flee/roost/return)
+│       ├── custom.js        # custom species agent: from the lab, roaming + relation-matrix interaction
+│       ├── species.js       # species record storage (/api/species ↔ localStorage)
+│       ├── dialog.js        # mother–daughter dialogue: greetings/doting replies, built-in script + LLM, TTS
+│       ├── lab.js           # species lab page logic (four-module knobs + image palette + live preview)
+│       ├── bamboo.js        # bamboo: Cannon bodies + ball joints + velocity-level PD recovery
+│       ├── plants.js        # sweet flag, reeds
+│       ├── scenery.js       # scenery (reserved: image-to-3D decorative models)
+│       ├── ui.js            # camera presets and UI
+│       └── main.js          # boot & main loop (behavior → physics → sync)
+├── tools/                   # image-to-3D experiments (TripoSR, relief, GLB preview)
+├── docs/references/         # reference papers and artwork provenance
+├── LICENSE
+└── README.md
+```
+
+## Quick Start
+
+```bash
+# 1. Install backend dependencies (a virtualenv is recommended)
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r backend/requirements.txt
+
+# 2. Start the server
+cd backend && uvicorn main:app --port 8931
+```
+
+- Gallery: <http://localhost:8931/> (entries to both paintings)
+- 3D scenes: <http://localhost:8931/index.html> (tiger stream), <http://localhost:8931/plum.html> (plum & geese)
+- System config: <http://localhost:8931/config.html> (refresh the scene page after saving)
+
+> No backend handy? The frontend also runs fully static (e.g. on GitHub Pages): config and species records
+> automatically fall back to `localStorage`.
+
+## Configuration
+
+| Section | Parameters |
+|---|---|
+| Scene | bamboo density, mist density, gold-paper background |
+| Weather | temperature (>0°C rain / ≤0°C snow), precipitation intensity, wind speed, wind direction |
+| Bamboo | recovery stiffness, sway amplitude |
+| Tiger | patrol speed, patrol radius, stripe contrast, fur length, fur layers, pause interval, pause duration, tail curl, curl trigger distance |
+| Pheasant | enable, alert distance, return distance, drink interval, shelter stay (reserved, offstage for now) |
+| Visuals & music | initial camera (panorama/follow/stream), ink outline (reserved), BGM volume |
+| Species relations | subject–object–relation–drive–strength matrix |
+| Plum & geese (separate page plum-config.html) | roosting/flying geese counts, goose size, circling duration/altitude, roost duration, blossom count, falling petals, reed clusters, mist, light snow, wind, initial camera, rock position/sink/tilt near the plum, bamboo cluster positions/counts/max tilt, playlist |
+
+## Tech Stack & Roadmap
+
+| Layer | Current | Planned frontier techniques |
+|---|---|---|
+| Rendering | Three.js (PBR + vertex-color stripes + shell fur) | volumetric fog, ray marching, stylized NPR (ink outline) |
+| Locomotion | SkinnedMesh bones, procedural feline gait, chained tail | full-body IK, muscle-tendon physics (paper-style motor control) |
+| Physics | Cannon.js (heightfield terrain, rigid bamboo, kinematic tiger) | full rigid-body tiger, snow/rain accumulation on rocks |
+| Behavior | perception-driven FSM (patrol/pause/alert) | steering behaviors, boids flocks, RL action policies |
+| Ecology | species relation matrix (predation/alert/mutualism/competition) | hunger–fear–reproduction drive models, emergent ecosystem simulation |
+
+## Get Involved
+
+This painting is open — **everyone is welcome to modify, discuss and remix it**.
+
+- 🐛 Spot issues in shape, animation or rendering → open an [Issue](https://github.com/panglaohupanglaohu/TigerInBamboo/issues)
+- 💡 Ideas for new species, new paintings, new artificial-life techniques → join [Discussions](https://github.com/panglaohupanglaohu/TigerInBamboo/discussions)
+- 🔧 Code, tuning, new creatures → Pull Requests welcome; the species lab (`lab.html`) lets you build new species with zero code
+- 🎨 No coding required: nearly every behavior/environment parameter is tunable in the config pages — share your favorite presets
+
+## References
+
+- Kanō Sanraku, *Tiger in Bamboo* (tiger imagery and stripe aesthetics)
+- Sesshū, *Flowers and Birds of the Four Seasons* screen, Tokyo National Museum (snowy stream composition)
+- Tu, X. & Terzopoulos, D. *Artificial Fishes: Physics, Locomotion, Perception, Behavior* (agent framework and species-relation design)
