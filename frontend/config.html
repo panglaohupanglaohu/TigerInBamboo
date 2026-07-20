@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>系统配置 · 世界古典美术拟生平台</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="config-page">
     <div class="config-header">
       <h1>拟生平台 · 系统配置</h1>
-      <a href="/">← 返回《竹虎溪涧图》</a>
+      <a href="home.html">← 返回《竹虎溪涧图》</a>
     </div>
     <p class="config-sub">
       智能体行为参数与物种关系配置。物种关系参考 Tu &amp; Terzopoulos《Artificial Fishes》的
       感知—内驱力—行为模型；修改保存后刷新场景页生效。
-      《寒梅归雁图》另有独立配置页：<a href="/plum-config.html">寒梅归雁 · 系统配置</a>。
+      《寒梅归雁图》另有独立配置页：<a href="plum-config.html">寒梅归雁 · 系统配置</a>。
     </p>
 
     <div class="config-tabs">
@@ -210,39 +210,82 @@
             <input type="range" id="dialog.interval" min="8" max="60" step="1" />
             <span class="value"></span>
           </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>女 儿 · 虎（语音与模型）</legend>
           <div class="field">
             <label>嗓音</label>
-            <input type="text" id="dialog.voiceName" placeholder="auto（自动选中文女声）" />
+            <input type="text" id="dialog.daughter.voiceName" placeholder="auto（自动选中文女声）" />
             <span class="value"></span>
           </div>
           <div class="field">
             <label>语速</label>
-            <input type="range" id="dialog.voiceRate" min="0.5" max="1.8" step="0.05" />
+            <input type="range" id="dialog.daughter.voiceRate" min="0.5" max="1.8" step="0.05" />
             <span class="value"></span>
           </div>
           <div class="field">
             <label>音高</label>
-            <input type="range" id="dialog.voicePitch" min="0.5" max="2.0" step="0.05" />
+            <input type="range" id="dialog.daughter.voicePitch" min="0.5" max="2.0" step="0.05" />
             <span class="value"></span>
           </div>
           <div class="field">
             <label>音量</label>
-            <input type="range" id="dialog.voiceVolume" min="0" max="1" step="0.05" />
+            <input type="range" id="dialog.daughter.voiceVolume" min="0" max="1" step="0.05" />
             <span class="value"></span>
           </div>
           <div class="field">
             <label>大模型接口</label>
-            <input type="text" id="dialog.llmEndpoint" placeholder="留空则使用内置问答脚本" />
+            <input type="text" id="dialog.daughter.llmEndpoint" placeholder="留空则使用内置问安脚本" />
             <span class="value"></span>
           </div>
           <div class="field">
             <label>API Key</label>
-            <input type="password" id="dialog.llmApiKey" />
+            <input type="password" id="dialog.daughter.llmApiKey" />
             <span class="value"></span>
           </div>
           <div class="field">
             <label>模型名</label>
-            <input type="text" id="dialog.llmModel" placeholder="如 gpt-4o-mini" />
+            <input type="text" id="dialog.daughter.llmModel" placeholder="如 gpt-4o-mini" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>母 亲 · 兔（语音与模型）</legend>
+          <div class="field">
+            <label>嗓音</label>
+            <input type="text" id="dialog.mother.voiceName" placeholder="auto（自动选中文女声）" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>语速</label>
+            <input type="range" id="dialog.mother.voiceRate" min="0.5" max="1.8" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>音高</label>
+            <input type="range" id="dialog.mother.voicePitch" min="0.5" max="2.0" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>音量</label>
+            <input type="range" id="dialog.mother.voiceVolume" min="0" max="1" step="0.05" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>大模型接口</label>
+            <input type="text" id="dialog.mother.llmEndpoint" placeholder="留空则使用内置应答脚本" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>API Key</label>
+            <input type="password" id="dialog.mother.llmApiKey" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>模型名</label>
+            <input type="text" id="dialog.mother.llmModel" placeholder="如 gpt-4o-mini" />
             <span class="value"></span>
           </div>
         </fieldset>
@@ -372,7 +415,7 @@
   <div class="toast" id="toast"></div>
 
   <script type="module">
-    import { loadConfig, saveConfig, resetConfig, DEFAULT_CONFIG } from "/js/config.js";
+    import { loadConfig, saveConfig, resetConfig, DEFAULT_CONFIG } from "js/config.js";
 
     const RELATION_TYPES = ["predator-prey", "physical", "resource", "mutualism", "competition"];
     const DRIVES = ["fear", "hunger", "thirst", "libido", "none"];

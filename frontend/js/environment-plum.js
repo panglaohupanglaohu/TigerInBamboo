@@ -278,7 +278,7 @@ export class PlumEnvironment {
   /** 山石：第一层梅左立峰群与独立石；梅根盘石；第四层左侧山嶂；岸边点景 */
   _buildRocks() {
     const rand = makeRandom(77);
-    const rockTex = new THREE.TextureLoader().load("/assets/textures/rocks_taihu.png");
+    const rockTex = new THREE.TextureLoader().load("assets/textures/rocks_taihu.png");
     rockTex.colorSpace = THREE.SRGBColorSpace;
     rockTex.anisotropy = 4;
     const rockMat = new THREE.MeshStandardMaterial({ map: rockTex, vertexColors: true, roughness: 0.95 });
@@ -480,7 +480,7 @@ export class PlumEnvironment {
           col += spec * vec3(1.0, 0.96, 0.82);
           col += foam * vec3(0.8);
           float alpha = 0.52 + fres * 0.3 + foam * 0.25;
-          // —— 岸域场 L（与 JS 侧一致）：水只现于 L<0，梅环湾处岸线自然收束 ——
+          // —— 岸域场（与 JS 侧 landField 一致）：水只现于场值 <0，梅环湾处岸线自然收束 ——
           vec2 dp = vWorld.xz - uPond.xy;
           float dE = (length(dp / uPond.zw) - 1.0) * min(uPond.z, uPond.w);
           vec2 dt2 = vWorld.xz - uTree;
@@ -488,8 +488,8 @@ export class PlumEnvironment {
           vec2 vc = normalize(uPond.xy - uTree);
           float wrapAng = 0.5 + 0.5 * dot(dt2 / max(dt, 1e-3), vc);
           float w = exp(-dt * dt / 32.0) * wrapAng;
-          float L = max(1.0 - dt, dE - w * 3.0);
-          alpha *= smoothstep(0.08, -0.4, L);
+          float landF = max(1.0 - dt, dE - w * 3.0);
+          alpha *= smoothstep(0.08, -0.4, landF);
           gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.9));
         }`,
     });
@@ -525,10 +525,11 @@ export class PlumEnvironment {
       });
       this.scene.add(new THREE.Mesh(geo, mat));
     };
-    mkRidge(-170, 4, 16, 700, 0x8f8a76, 0.85, 7);    // 塘对岸近山（顶 20m，天际线带 < 画幅纵向 1/6）
-    mkRidge(-320, 6, 28, 1050, 0xa49e8a, 0.6, 13);  // 第二重（顶 34m，错落透出）
-    mkRidge(-500, 8, 38, 1500, 0xbab3a0, 0.42, 21); // 第三重 · 更大（顶 46m）
-    mkRidge(-720, 10, 50, 2000, 0xcec7b4, 0.28, 33); // 第四重 · 最大最淡（顶 60m）
+    // 远山抬高至画面约 4/5（画幅高≈梅高55m，4/5≈44m）：由近及远渐高，山嶂逼目
+    mkRidge(-170, 18, 26, 700, 0x8f8a76, 0.85, 7);    // 塘对岸近山（顶 44m ≈ 画幅 4/5）
+    mkRidge(-320, 26, 34, 1050, 0xa49e8a, 0.6, 13);  // 第二重（顶 60m）
+    mkRidge(-500, 34, 44, 1500, 0xbab3a0, 0.42, 21); // 第三重 · 更大（顶 78m）
+    mkRidge(-720, 44, 56, 2000, 0xcec7b4, 0.28, 33); // 第四重 · 最大最淡（顶 100m）
   }
 
   _buildSnowfall() {

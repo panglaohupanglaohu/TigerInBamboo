@@ -13,6 +13,12 @@ export function buildAvianBody({
   crestColor = 0xe3b93a,       // 冠色
   wingColor = 0x7a5a33,        // 翼色
   tailColor = 0x2b2016,        // 尾羽斑纹深色
+  tailBaseColor = null,        // 尾羽底色（缺省用翼色）
+  backColor = null,            // 上背色（与 rumpColor 成背侧渐变，缺省不分区）
+  rumpColor = null,            // 腰/尾上覆羽色
+  capeColor = null,            // 披肩色（锦鸡颈后扇形披肩，缺省无披肩）
+  capeEdgeColor = 0x14100c,    // 披肩扇贝斑纹色
+  wingPatchColor = null,       // 翼肩斑块色（缺省无）
   shape = {},                  // 比例覆写（见下方 S 的默认值）
 } = {}) {
   // 雉科默认比例（与旧版硬编码逐点一致）；shape 只覆写给定键
@@ -54,16 +60,29 @@ export function buildAvianBody({
     }
     geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   };
-  const mat = () => new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85 });
+  const mat = () => new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.75 });
   const BODY = new THREE.Color(bodyColor), ACC = new THREE.Color(accentColor);
   const NECK = new THREE.Color(neckColor), WING = new THREE.Color(wingColor);
   const TAIL = new THREE.Color(tailColor);
+  const TAILB = tailBaseColor != null ? new THREE.Color(tailBaseColor) : null;
+  const BACK = backColor != null ? new THREE.Color(backColor) : null;
+  const RUMP = rumpColor != null ? new THREE.Color(rumpColor) : null;
+  const PATCH = wingPatchColor != null ? new THREE.Color(wingPatchColor) : null;
+  const scratch = new THREE.Color();
 
   // 身体：横椭圆，腹背渐变
   const bodyGeo = new THREE.SphereGeometry(1, 24, 18);
   bodyGeo.scale(...S.bodyScale);
   paint(bodyGeo, (x, y, z, c) => {
     c.copy(BODY).lerp(ACC, THREE.MathUtils.clamp(y * 4 + 0.45 + z * 1.2, 0, 1));
+    if (BACK && RUMP) {
+      // 背部分区：颈后上背（backColor）→ 腰/尾上覆羽（rumpColor），腹面与前胸保持体色
+      const dorsal = THREE.MathUtils.smoothstep(y, -0.03, 0.06);
+      const chest = THREE.MathUtils.smoothstep(z, 0.06, 0.16); // 前胸不衰减则绿上会爬到胸口
+      const t = 1 - THREE.MathUtils.smoothstep(z, -0.18, 0.14); // 0 颈后 → 1 尾根
+      scratch.copy(BACK).lerp(RUMP, t);
+      c.lerp(scratch, dorsal * (1 - chest));
+    }
   });
   const body = cast(new THREE.Mesh(bodyGeo, mat()));
   body.position.y = S.bodyY;
@@ -90,10 +109,26 @@ export function buildAvianBody({
     const crestMat = new THREE.MeshStandardMaterial({ color: crestColor, roughness: 0.8 });
     for (let i = 0; i < S.crestCount; i++) {
       const crest = new THREE.Mesh(crestGeo, crestMat);
-      crest.position.set((i - (S.crestCount - 1) / 2) * 0.018, 0.06, -0.01);
-      crest.rotation.x = -1.9 - (i % 2) * 0.25;
+      crest.position.set((i - (S.crestCount - 1) / 2) * 0.018, 0.1, -0.01);
+      crest.rotation.x = -1.35 - (i % 2) * 0.2; // 向后上方披散（锦鸡金丝冠掠过披肩）
       head.add(crest);
     }
+  }
+  // 锦鸡披肩：颈后扇形羽片罩于肩背，橙底缀黑色扇贝纹（capeColor 缺省则无）
+  if (capeColor != null) {
+    const CAPE = new THREE.Color(capeColor), CAPEEDGE = new THREE.Color(capeEdgeColor);
+    const capeGeo = new THREE.SphereGeometry(0.088, 18, 10, 0, Math.PI * 2, 0, Math.PI * 0.62);
+    capeGeo.scale(1, 0.5, 1.4);
+    paint(capeGeo, (x, y, z, c) => {
+      const r = Math.hypot(x / 0.088, z / 0.123); // 0 顶心 → 1 边缘
+      const band = r > 0.42 && Math.sin(r * 28.0) > 0.35; // 细扇贝横斑，橙底为主
+      c.copy(band ? CAPEEDGE : CAPE);
+      if (r < 0.3) c.lerp(ACC, 0.35 * (1 - r / 0.3)); // 顶心近冠处透金
+    });
+    const cape = cast(new THREE.Mesh(capeGeo, mat()));
+    cape.position.set(0, 0.05, -0.042);
+    cape.rotation.x = -0.62; // 自颈后向肩背披垂
+    head.add(cape);
   }
   const beak = new THREE.Mesh(
     new THREE.ConeGeometry(S.beakR, S.beakLen, 8),
@@ -116,7 +151,14 @@ export function buildAvianBody({
   const wingGeo = new THREE.SphereGeometry(1, 12, 8);
   wingGeo.scale(...S.wingScale);
   wingGeo.translate(0, -S.wingScale[1], 0);
-  paint(wingGeo, (x, y, z, c) => c.copy(WING).lerp(ACC, THREE.MathUtils.clamp(-z * 3 + 0.4, 0, 1)));
+  paint(wingGeo, (x, y, z, c) => {
+    c.copy(WING).lerp(ACC, THREE.MathUtils.clamp(-z * 3 + 0.4, 0, 1));
+    if (PATCH) {
+      // 翼肩斑块（锦鸡钴蓝肩斑）：翼面前上区域
+      const m = THREE.MathUtils.smoothstep(y, -0.09, -0.03) * THREE.MathUtils.smoothstep(z, 0.0, 0.09);
+      c.lerp(PATCH, m * 0.85);
+    }
+  });
   for (const s of [-1, 1]) {
     const pivot = new THREE.Group();
     pivot.position.set(s * S.wingPivot[0], S.wingPivot[1], S.wingPivot[2]);
@@ -128,18 +170,18 @@ export function buildAvianBody({
     parts.push(pivot);
   }
 
-  // 尾扇：长羽数片，斑纹相间
+  // 尾扇：长羽数片，斑纹相间（z 向细分以解析横斑；片距按羽宽/羽长自适应保持交叠）
   const tail = new THREE.Group();
   tail.position.set(...S.tailPos);
-  const tailGeo = new THREE.BoxGeometry(S.tailW, 0.008, S.tailLen);
+  const tailGeo = new THREE.BoxGeometry(S.tailW, 0.008, S.tailLen, 1, 1, 24);
   tailGeo.translate(0, 0, -S.tailLen / 2 + 0.015);
   paint(tailGeo, (x, y, z, c) => {
     const band = Math.sin(z * 40) > 0.2;
-    c.copy(band ? TAIL : WING).lerp(ACC, band ? 0.1 : 0.25);
+    c.copy(band ? TAIL : (TAILB ?? WING)).lerp(ACC, band ? 0.05 : 0.18);
   });
   for (let i = 0; i < S.tailCount; i++) {
     const f = cast(new THREE.Mesh(tailGeo, mat()));
-    f.rotation.y = (i - (S.tailCount - 1) / 2) * 0.14;
+    f.rotation.y = (i - (S.tailCount - 1) / 2) * (S.tailW / S.tailLen) * 0.85;
     f.rotation.x = 0.12 + Math.abs(i - (S.tailCount - 1) / 2) * 0.05;
     tail.add(f);
   }

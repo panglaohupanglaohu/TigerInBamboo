@@ -41,14 +41,39 @@ export class FelineLocomotionController {
       else this._gait(boneMap, gait, moving * gaitAmp);
     } else if (!(ctx.leap > 0.02)) this._legsRelax(boneMap, dt);
 
-    // —— 匍匐：膝关节加折、根骨再沉（狩猎潜行） ——
-    if (ctx.crouch > 0.02) {
-      const kb = ctx.crouch * 0.5;
+    // —— 匍匐·蛛行：肘膝关节深折压低身位，肘/膝向体侧外展如蛛行（狩猎潜行） ——
+    const cz = ctx.crouch ?? 0;
+    if (cz > 0.02) {
+      const kb = cz * 1.0;  // 肘/膝深折（托住下沉的躯干，防爪没入雪中）
+      const kf = cz * 0.35; // 腕/飞节随折抬爪
       for (const n of ["FL2", "FR2", "BL2", "BR2"]) {
         const b = boneMap.get(n);
         if (b) b.rotation.x += kb;
       }
-      root.position.y -= ctx.crouch * 0.06;
+      for (const n of ["FLFoot", "FRFoot", "BLFoot", "BRFoot"]) {
+        const b = boneMap.get(n);
+        if (b) b.rotation.x += kf;
+      }
+      // 肘膝外展：四肢根部（肩/髋）大幅外摆、下腿反向回带 —— 肘/膝尖指向体侧外，爪仍落于体下
+      // 关键：匍匐潜行时根部弯曲量远大于行走。满匍匐(cz=1)根部外展达 ~1.6rad(≈92°) 甚至以上，
+      //       行走(cz→0)根部几乎不外展；下腿反向回带更多，把爪拉回体下支撑。
+      const ROOT_SPLAY = 1.6; // 根部外展上限(rad)，≈92°
+      for (const L of LEGS) {
+        const splay = ROOT_SPLAY * cz * (L.front ? 1 : 0.9);
+        const sideSign = L.k1[1] === "L" ? -1 : 1; // 左肢外摆为负 z 旋，右肢反之
+        const k1 = boneMap.get(L.k1), k2 = boneMap.get(L.k2);
+        if (k1) k1.rotation.z = sideSign * splay;               // 肩/髋：大幅外展，肘/膝尖朝体侧
+        if (k2) k2.rotation.z = -sideSign * splay * 1.25;       // 肘/膝：反向回带更多，爪落回体下
+      }
+      root.position.y -= cz * 0.08;
+    } else {
+      // 非匍匐：腿根/膝 z 旋回正（步态每帧只写 x，z 须显式复位）
+      const k = Math.max(0, 1 - (dt ?? 0.016) * 5);
+      for (const L of LEGS) {
+        const k1 = boneMap.get(L.k1), k2 = boneMap.get(L.k2);
+        if (k1) k1.rotation.z *= k;
+        if (k2) k2.rotation.z *= k;
+      }
     }
 
     // —— 头颈 ——

@@ -84,13 +84,35 @@ export class BirdAgent {
 
   // ---------- 程序化躯体（红腹锦鸡；GLB 缺失时的兜底） ----------
   _buildProcedural() {
-    const built = buildAvianBody({
+    // 红腹锦鸡（Chrysolophus pictus）雄鸟繁殖羽：朱红胸腹、金丝冠、橙底黑纹披肩、
+    // 翠绿上背、朱红腰腹、钴蓝肩斑、黄褐黑斑横尾 —— 取靓丽配色；lab 自定义鸟
+    // 传入 bodyColor 时走通用简洁羽色，不套锦鸡斑纹
+    const PHEASANT_PLUMAGE = {
       height: 0.42,
-      bodyColor: this.opts.bodyColor ?? 0xa8261f,
-      accentColor: this.opts.accentColor ?? 0xd9a520,
-      neckColor: this.opts.neckColor ?? 0x1f5f3f,
-      crestColor: this.opts.crestColor ?? 0xe3b93a,
-    });
+      bodyColor: 0xe02a12,      // 胸腹朱红
+      accentColor: 0xffc61a,    // 金
+      neckColor: 0xf0a018,      // 颈侧金橙（披肩覆于其上）
+      crestColor: 0xffd21f,     // 金丝冠
+      wingColor: 0x9a6226,      // 翼面赤褐
+      tailColor: 0x1c140d,      // 尾羽黑色横斑
+      tailBaseColor: 0xd9a648,  // 尾羽黄褐地
+      backColor: 0x12a34f,      // 上背翠绿
+      rumpColor: 0xe8451c,      // 腰及尾上覆羽朱红偏橙
+      wingPatchColor: 0x2456d8, // 肩斑钴蓝
+      capeColor: 0xf07818,      // 披肩橙黄
+      capeEdgeColor: 0x14100c,  // 披肩黑色扇贝纹
+      shape: { crestCount: 7, tailLen: 0.68, tailW: 0.055, tailCount: 7, legColor: 0xe0b53a },
+    };
+    const params = this.opts.bodyColor != null
+      ? {
+          height: 0.42,
+          bodyColor: this.opts.bodyColor,
+          accentColor: this.opts.accentColor ?? 0xd9a520,
+          neckColor: this.opts.neckColor ?? 0x1f5f3f,
+          crestColor: this.opts.crestColor ?? 0xe3b93a,
+        }
+      : PHEASANT_PLUMAGE;
+    const built = buildAvianBody(params);
     this.group.add(built.group);
     this.body = built.group.children[0];
     this.head = built.head;

@@ -23,7 +23,7 @@ async function boot() {
   // BGM：歌单顺序循环（配置页可增删排序；首次交互后启动，缺曲自动跳过）
   const playlist = config.bgm?.playlist?.length
     ? config.bgm.playlist
-    : ["/assets/audio/bgm.mp3", "/assets/audio/duange_xing.mp3"];
+    : ["assets/audio/bgm.mp3", "assets/audio/duange_xing.mp3"];
   const bgm = new BgmPlayer(playlist, { volume: config.bgm?.volume ?? 0.5 });
 
   const canvas = document.getElementById("stage");

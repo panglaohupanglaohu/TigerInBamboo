@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>竹虎溪涧图 · 世界古典美术拟生平台</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
   <script type="importmap">
   {
     "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-      "cannon-es": "/assets/vendor/cannon-es.js"
+      "three": "./assets/vendor/three/three.module.js",
+      "three/addons/": "./assets/vendor/three/jsm/",
+      "cannon-es": "./assets/vendor/cannon-es.js"
     }
   }
   </script>
@@ -35,9 +35,9 @@
     </div>
     <div class="hud-group">
       <button id="bgm-toggle" class="preset">♪ 静音</button>
-      <a class="preset link" href="/">展厅</a>
-      <a class="preset link" href="/lab.html" target="_blank">物种实验室</a>
-      <a class="preset link" href="/config.html" target="_blank">系统配置</a>
+      <a class="preset link" href="home.html">展厅</a>
+      <a class="preset link" href="lab.html" target="_blank">物种实验室</a>
+      <a class="preset link" href="config.html" target="_blank">系统配置</a>
     </div>
   </nav>
 
@@ -83,6 +83,6 @@
   <div class="vignette"></div>
   <div id="loading">铺 纸 研 墨 …</div>
 
-  <script type="module" src="/js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

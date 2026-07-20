@@ -1,6 +1,6 @@
 // 母女对话系统：虎（女儿）问 → 兔（母亲）答，一问一答成对抽取
-// 应答默认走内置问答脚本；配置 dialog.llmEndpoint 后由大模型生成母亲回复（OpenAI 兼容接口）
-// 语音：浏览器 speechSynthesis 中文女声（配置页可调嗓音/语速/音高/音量）
+// 母女各自独立配置：语音（嗓音/语速/音高/音量）与大模型接口（OpenAI 兼容），
+// 接口留空的一方走内置脚本；语音为浏览器 speechSynthesis 中文女声
 import * as THREE from "three";
 
 // 内置问答脚本（女儿·虎 问 → 母亲·兔 答）：成对抽取，一问一答
@@ -63,10 +63,11 @@ export class DialogSystem {
 
   async _start() {
     const pair = _pick(DIALOGUES);
-    const reply = await this._askMother(pair);
+    const ask = await this._askDaughter(pair);
+    const reply = await this._askMother(pair, ask);
     this._convo = {
       lines: [
-        { who: "tiger", text: pair.ask },
+        { who: "tiger", text: ask },
         { who: "rabbit", text: reply },
         { who: "tiger", text: _pick(DAUGHTER_FOLLOWS) },
       ],
@@ -102,10 +103,33 @@ export class DialogSystem {
     for (const el of Object.values(this._bubbles)) el?.classList.remove("show");
   }
 
-  /** 母亲应答：配了大模型接口则问 LLM（失败回落内置脚本），否则用内置问答 */
-  async _askMother(pair) {
-    const { llmEndpoint, llmApiKey, llmModel } = this.cfg;
-    if (!llmEndpoint) return pair.reply;
+  /** 女儿问安：配了她自己的接口则由 LLM 生成（失败回落内置问安脚本） */
+  async _askDaughter(pair) {
+    const text = await this._llm(
+      this.cfg.daughter,
+      "你是一只小老虎，对方是你亲爱的妈妈（一只雪兔）。用中文口语向妈妈问安或撒娇，" +
+      "一两句，天真孺慕，不要书面腔。",
+      "你蹦到妈妈身边，开口说话。"
+    );
+    return text ?? pair.ask;
+  }
+
+  /** 母亲应答：配了她自己的接口则问 LLM（失败回落内置应答脚本） */
+  async _askMother(pair, ask) {
+    const text = await this._llm(
+      this.cfg.mother,
+      "你是一只雪兔母亲，对方是你溺爱的女儿（一只小老虎）。用中文口语回一两句：" +
+      "先回答她的问安，再反过来叮嘱疼爱她，句句体现溺爱。不要书面腔。",
+      ask
+    );
+    // 回落：问句是内置原句则成对取答，否则给通用溺爱应答
+    return text ?? (ask === pair.ask ? pair.reply : "妈妈在呢，乖，妈妈都听见了。");
+  }
+
+  /** OpenAI 兼容接口调用：无接口/请求失败皆返回 null（调用方回落内置脚本） */
+  async _llm(roleCfg, system, user) {
+    const { llmEndpoint, llmApiKey, llmModel } = roleCfg ?? {};
+    if (!llmEndpoint) return null;
     try {
       const res = await fetch(llmEndpoint, {
         method: "POST",
@@ -116,41 +140,37 @@ export class DialogSystem {
         body: JSON.stringify({
           model: llmModel || "gpt-4o-mini",
           messages: [
-            {
-              role: "system",
-              content:
-                "你是一只雪兔母亲，对方是你溺爱的女儿（一只小老虎）。用中文口语回一两句：" +
-                "先回答她的问安，再反过来叮嘱疼爱她，句句体现溺爱。不要书面腔。",
-            },
-            { role: "user", content: pair.ask },
+            { role: "system", content: system },
+            { role: "user", content: user },
           ],
           max_tokens: 80,
         }),
       });
       const data = await res.json();
-      const text = data?.choices?.[0]?.message?.content?.trim();
-      if (text) return text;
-    } catch (_) { /* 接口不可用则回落内置脚本 */ }
-    return pair.reply;
+      return data?.choices?.[0]?.message?.content?.trim() ?? null;
+    } catch (_) {
+      return null;
+    }
   }
 
-  /** 语音朗读：中文女声；母兔音偏高柔、虎女略低嫩 */
+  /** 语音朗读：母女各自的中文女声配置（嗓音/语速/音高/音量） */
   _speak(text, who) {
     if (!("speechSynthesis" in window)) return;
+    const rc = (who === "rabbit" ? this.cfg.mother : this.cfg.daughter) ?? {};
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "zh-CN";
-    const v = this._pickVoice();
+    const v = this._pickVoice(rc.voiceName);
     if (v) u.voice = v;
-    u.rate = this.cfg.voiceRate ?? 1.0;
-    u.pitch = (this.cfg.voicePitch ?? 1.15) * (who === "rabbit" ? 1.05 : 0.9);
-    u.volume = this.cfg.voiceVolume ?? 0.9;
+    u.rate = rc.voiceRate ?? 1.0;
+    u.pitch = rc.voicePitch ?? (who === "rabbit" ? 1.2 : 1.05);
+    u.volume = rc.voiceVolume ?? 0.9;
     speechSynthesis.speak(u);
   }
 
-  _pickVoice() {
+  _pickVoice(voiceName) {
     const vs = speechSynthesis.getVoices();
     if (!vs.length) return null;
-    const name = (this.cfg.voiceName ?? "auto").trim();
+    const name = (voiceName ?? "auto").trim();
     if (name && name !== "auto") {
       const hit = vs.find((v) => v.name === name) ?? vs.find((v) => v.name.includes(name));
       if (hit) return hit;

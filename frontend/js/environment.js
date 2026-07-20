@@ -377,7 +377,7 @@ export class Environment {
   _buildRocks() {
     const rand = makeRandom(99);
     // 斧劈皴拼版贴图（rocks_taihu.png：原生分辨率笔触 ×4，不放大所以不糊）
-    const rockTex = new THREE.TextureLoader().load("/assets/textures/rocks_taihu.png");
+    const rockTex = new THREE.TextureLoader().load("assets/textures/rocks_taihu.png");
     rockTex.colorSpace = THREE.SRGBColorSpace;
     rockTex.anisotropy = 4;
     // 贴图 × 顶点色渐变（顶深底浅，见 taihuGeometry）

@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>寒梅归雁 · 系统配置 · 世界古典美术拟生平台</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="config-page">
     <div class="config-header">
       <h1>寒梅归雁图 · 系统配置</h1>
-      <a href="/plum.html">← 返回《寒梅归雁图》</a>
+      <a href="plum.html">← 返回《寒梅归雁图》</a>
     </div>
     <p class="config-sub">
       本页只管《寒梅归雁图》一画（plum 段与音乐），与《竹虎溪涧图》配置互不影响；
-      修改保存后刷新场景页生效。竹虎溪涧配置请移步 <a href="/config.html">系统配置</a>。
+      修改保存后刷新场景页生效。竹虎溪涧配置请移步 <a href="config.html">系统配置</a>。
     </p>
 
     <form id="config-form" onsubmit="return false;">
@@ -204,7 +204,7 @@
   <div class="toast" id="toast"></div>
 
   <script type="module">
-    import { loadConfig, saveConfig, resetConfig } from "/js/config.js";
+    import { loadConfig, saveConfig, resetConfig } from "js/config.js";
 
     let config = await loadConfig();
 

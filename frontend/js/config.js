@@ -70,13 +70,24 @@ export const DEFAULT_CONFIG = {
   dialog: {
     enabled: true,
     interval: 26,          // 母女对话触发间隔（秒）
-    voiceName: "auto",     // 嗓音：auto 自动选中文女声
-    voiceRate: 1.0,        // 语速
-    voicePitch: 1.15,      // 音高
-    voiceVolume: 0.9,      // 音量 0~1
-    llmEndpoint: "",       // 大模型接口：留空用内置问答脚本
-    llmApiKey: "",         // 大模型 API Key
-    llmModel: "",          // 大模型模型名
+    daughter: {            // 虎（女儿）：语音与大模型接口单独配置
+      voiceName: "auto",   // 嗓音：auto 自动选中文女声
+      voiceRate: 1.0,      // 语速
+      voicePitch: 1.05,    // 音高（略低嫩）
+      voiceVolume: 0.9,    // 音量 0~1
+      llmEndpoint: "",     // 大模型接口：留空用内置问安脚本
+      llmApiKey: "",       // 大模型 API Key
+      llmModel: "",        // 大模型模型名
+    },
+    mother: {              // 兔（母亲）
+      voiceName: "auto",
+      voiceRate: 1.0,
+      voicePitch: 1.2,     // 音高（偏高柔）
+      voiceVolume: 0.9,
+      llmEndpoint: "",     // 留空用内置应答脚本
+      llmApiKey: "",
+      llmModel: "",
+    },
   },
   ecology: {
     relations: [
@@ -126,8 +137,8 @@ export const DEFAULT_CONFIG = {
   bgm: {
     volume: 0.5,         // 背景音乐音量 0~1
     playlist: [          // 歌单（顺序循环）
-      "/assets/audio/bgm.mp3",
-      "/assets/audio/duange_xing.mp3",
+      "assets/audio/bgm.mp3",
+      "assets/audio/duange_xing.mp3",
     ],
   },
 };
@@ -164,6 +175,21 @@ export async function loadConfig() {
     cfg.weather = {};
     if (cfg.scene.snowfall !== undefined) cfg.weather.snowfall = cfg.scene.snowfall;
     if (cfg.scene.wind !== undefined) cfg.weather.wind = cfg.scene.wind;
+  }
+  // 迁移：旧版 dialog 平铺语音/大模型键 → 母女各自分组
+  // （语音键原为共用，并入双方；llm 键原仅母亲应答用，并入母亲）
+  const d = cfg?.dialog;
+  if (d && d.daughter === undefined && d.mother === undefined) {
+    const voiceKeys = ["voiceName", "voiceRate", "voicePitch", "voiceVolume"];
+    const llmKeys = ["llmEndpoint", "llmApiKey", "llmModel"];
+    if (voiceKeys.some((k) => k in d) || llmKeys.some((k) => k in d)) {
+      d.daughter = Object.fromEntries(voiceKeys.filter((k) => k in d).map((k) => [k, d[k]]));
+      d.mother = {
+        ...Object.fromEntries(voiceKeys.filter((k) => k in d).map((k) => [k, d[k]])),
+        ...Object.fromEntries(llmKeys.filter((k) => k in d).map((k) => [k, d[k]])),
+      };
+      for (const k of [...voiceKeys, ...llmKeys]) delete d[k];
+    }
   }
   return merge(DEFAULT_CONFIG, cfg);
 }

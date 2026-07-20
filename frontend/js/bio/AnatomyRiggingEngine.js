@@ -90,7 +90,9 @@ export class AnatomyRiggingEngine {
     buildLeg(pelvis, "BR", 1, false);
 
     // —— 尾：五节链，自胯后尾管接口至尾尖均布（与独立尾管几何逐段对位） ——
-    const t1 = mk(BONE.Tail1, pelvis, 0, H * 0.06, -length * 0.1617);
+    // 尾根接口与 ProceduralSkinGenerator 一致：猫科/蹄行 -0.94·kz（臀段已压缩），兔科 -0.165·kz
+    const tail1Z = anatomyType === "SALTATORIAL" ? -length * 0.153 : -length * 0.1262;
+    const t1 = mk(BONE.Tail1, pelvis, 0, H * 0.06, tail1Z);
     const t2 = mk(BONE.Tail2, t1, 0, 0, -tailLength * 0.25);
     const t3 = mk(BONE.Tail3, t2, 0, -H * 0.01, -tailLength * 0.25);
     const t4 = mk(BONE.Tail4, t3, 0, -H * 0.01, -tailLength * 0.25);

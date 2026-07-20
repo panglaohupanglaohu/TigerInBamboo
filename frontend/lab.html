@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>物种实验室 · 世界古典美术拟生平台</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/lab.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/lab.css" />
   <script type="importmap">
   {
     "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      "three": "./assets/vendor/three/three.module.js",
+      "three/addons/": "./assets/vendor/three/jsm/"
     }
   }
   </script>
@@ -19,7 +19,7 @@
   <div class="lab-page">
     <div class="config-header">
       <h1>物种实验室</h1>
-      <a href="/">← 返回《竹虎溪涧图》</a>
+      <a href="home.html">← 返回《竹虎溪涧图》</a>
     </div>
     <p class="config-sub">
       数据仓库 → 程序化网格 → 骨骼装配 → 状态机驱动：生物生成全管线调参与新物种存档。
@@ -256,6 +256,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <script type="module" src="/js/lab.js"></script>
+  <script type="module" src="js/lab.js"></script>
 </body>
 </html>

@@ -41,7 +41,7 @@
 - **状态机动画驱动器**（`bio/FelineLocomotionController.js`）：运行期只操纵骨骼旋转矩阵 —— IDLE（呼吸/扫视）/ WALK（猫科对角步态 / 兔科双后肢同频蹬跃 + 弓背 + 兔耳惯性摆动）/ ROAR（昂首张嘴）；尾五节链按相位延迟甩鞭
 - **聚合实体**（`bio/BioEntityMesh.js`）：壳层皮毛 Shell Texturing 在构建期用 `onBeforeCompile` **一次编译** N 层壳（沿法线逐层膨胀、噪声 `alphaMap` 逐层稀疏），运行期零着色器改动，杜绝 WebGL 报错
 - **行为层**（`tiger.js` / `rabbit.js`）：虎巡游路径/驻足状态机、觅母缓步接近（发现雪兔 7m 内减速靠近、相伴片刻）、Cannon kinematic 刚体、缠竹尾、虎斑顶点色注入；兔竹林环游（逐竹蹦跳目标点）、虎近身驻足等候
-- **母女对话**（`dialog.js`）：虎（女儿）中国传统式问安 → 兔（母亲）溺爱应答；应答默认内置脚本，配置大模型接口（OpenAI 兼容）后由 LLM 生成；语音为浏览器 speechSynthesis 中文女声，气泡投影跟随头顶；触发条件为母女相距 2.8m 内
+- **母女对话**（`dialog.js`）：虎（女儿）中国传统式问安 → 兔（母亲）溺爱应答；母女**各自独立配置**大模型接口（OpenAI 兼容，留空走内置脚本）与语音（嗓音/语速/音高/音量，浏览器 speechSynthesis 中文女声），气泡投影跟随头顶；触发条件为母女相距 2.8m 内
 
 ### 竹：刚体 + 球铰
 每根竹是 Cannon 动态刚体（Box），竹脚以 `PointToPointConstraint` 球铰锚定地面；
@@ -66,13 +66,13 @@ TigerInBamboo/
 ├── backend/                 # Python 后端（FastAPI）
 │   ├── main.py              # 静态托管 + /api/config 配置读写（含旧配置迁移）
 │   └── requirements.txt
-├── frontend/                # Three.js 前端（ES Modules，CDN 引入 three）
+├── frontend/                # Three.js 前端（ES Modules，three 已本地化）
 │   ├── home.html            # 展厅导航页（/）：两幅画卡入口
 │   ├── index.html           # 3D 场景：竹虎溪涧
 │   ├── plum.html            # 3D 场景：寒梅归雁
 │   ├── plum-config.html     # 寒梅归雁独立配置页（归雁/花木/环境/机位/歌单）
 │   ├── config.html          # 系统配置页（场景/天气/虎/锦鸡/视觉/生态关系）
-│   ├── assets/vendor/       # cannon-es.js（本地化物理引擎）
+│   ├── assets/vendor/       # 本地化依赖：cannon-es.js、three@0.160.0（含 OrbitControls/GLTFLoader/BufferGeometryUtils）
 │   ├── css/style.css
 │   └── js/
 │       ├── bio/             # 生物生成管线（数据/几何/骨骼/动画解耦）

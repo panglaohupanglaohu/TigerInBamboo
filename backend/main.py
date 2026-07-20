@@ -70,6 +70,28 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "cooldown": 15.0,       # 捕食间隔（秒）
         "sfxVolume": 0.8,       # 虎啸音效音量（0~1）
     },
+    "dialog": {                 # 母女对话（虎为女、兔为母）：语音与大模型接口各自独立
+        "enabled": True,
+        "interval": 26,         # 触发间隔（秒）
+        "daughter": {           # 虎（女儿）
+            "voiceName": "auto",    # 嗓音：auto 自动选中文女声
+            "voiceRate": 1.0,       # 语速
+            "voicePitch": 1.05,     # 音高（略低嫩）
+            "voiceVolume": 0.9,     # 音量 0~1
+            "llmEndpoint": "",      # 大模型接口：留空用内置问安脚本
+            "llmApiKey": "",        # 大模型 API Key
+            "llmModel": "",         # 大模型模型名
+        },
+        "mother": {             # 兔（母亲）
+            "voiceName": "auto",
+            "voiceRate": 1.0,
+            "voicePitch": 1.2,      # 音高（偏高柔）
+            "voiceVolume": 0.9,
+            "llmEndpoint": "",      # 留空用内置应答脚本
+            "llmApiKey": "",
+            "llmModel": "",
+        },
+    },
     # 物种关系矩阵：参考 Tu & Terzopoulos《Artificial Fishes》的
     # predator-prey / 内驱力（fear, hunger）模型
     "ecology": {
@@ -150,6 +172,19 @@ def load_config() -> dict:
                     (("snowfall", scene.get("snowfall")), ("wind", scene.get("wind")))
                     if v is not None
                 }
+            # 迁移：旧版 dialog 平铺语音/大模型键 → 母女各自分组
+            # （语音键原为共用，并入双方；llm 键原仅母亲应答用，并入母亲）
+            dlg = saved.get("dialog") or {}
+            if "daughter" not in dlg and "mother" not in dlg:
+                voice_keys = ("voiceName", "voiceRate", "voicePitch", "voiceVolume")
+                llm_keys = ("llmEndpoint", "llmApiKey", "llmModel")
+                if any(k in dlg for k in voice_keys + llm_keys):
+                    voice = {k: dlg[k] for k in voice_keys if k in dlg}
+                    dlg["daughter"] = dict(voice)
+                    dlg["mother"] = {**voice, **{k: dlg[k] for k in llm_keys if k in dlg}}
+                    for k in voice_keys + llm_keys:
+                        dlg.pop(k, None)
+                saved["dialog"] = dlg
             return _merge(DEFAULT_CONFIG, saved)
         except (json.JSONDecodeError, OSError):
             pass

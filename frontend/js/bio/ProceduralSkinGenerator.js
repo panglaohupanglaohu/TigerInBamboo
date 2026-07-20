@@ -18,11 +18,12 @@ function limbBetween(a, b, rA, rB) {
 // 躯干轮廓表（以 Panthera tigris altaica 解剖数据标定）
 // z 位置 → [半径, 中心高度, 腹侧纵向缩放]
 // 形体核心：前胸发达(0.32)、腰腹多肉微垂(0.24×0.86)、臀胯略窄(0.26)
+// 臀段紧凑：后腿(-0.65)至尾根 0.29m（原 0.41m 显长，已压缩）
 // 尾不在此表：尾为独立锥形细分管（见 _buildBody 尾部段）
 const BASE_PROFILE = [
-  [-1.06, 0.03, 1.00, 1.0],   // 后封口
-  [-1.05, 0.15, 1.00, 1.0],   // 尾根/胯后（尾管接口）
-  [-0.85, 0.26, 1.00, 0.95],  // 臀胯骨盆（浑圆，窄于前胸）
+  [-0.95, 0.03, 1.00, 1.0],   // 后封口
+  [-0.94, 0.15, 1.00, 1.0],   // 尾根/胯后（尾管接口）
+  [-0.78, 0.26, 1.00, 0.95],  // 臀胯骨盆（浑圆，窄于前胸）
   [-0.55, 0.24, 0.98, 0.9],   // 后腹过渡
   [-0.15, 0.24, 0.945, 0.86], // 腰腹多肉、腹线微垂
   [0.20, 0.255, 0.955, 0.95], // 腹前段（饱满）
@@ -182,7 +183,7 @@ export class ProceduralSkinGenerator {
       dim.width * (salt ? 0.1 : 0.028) * TS, dim.width * (salt ? 0.14 : 0.0625) * TS, tailLen, 14, 30
     );
     tailGeo.rotateX(-Math.PI / 2); // 卧倒：锥尖朝 -Z（尾尖）
-    tailGeo.translate(0, salt ? H * 0.92 : H * 1.03, (salt ? -0.165 * kz : -1.05 * kz) - tailLen / 2);
+    tailGeo.translate(0, salt ? H * 0.92 : H * 1.03, (salt ? -0.165 * kz : -0.94 * kz) - tailLen / 2);
     geos.push(tailGeo);
 
     const merged = BufferGeometryUtils.mergeGeometries(geos);
@@ -316,16 +317,16 @@ export class ProceduralSkinGenerator {
         } else {
           i1 = leg.bF; w1 = 1; i2 = leg.bF; w2 = 0;
         }
-      } else if (z < -1.052 * kz) {
+      } else if (z < -0.942 * kz) {
         // 尾管：沿尾长向五节渐给（尾根→尾尖，相位延迟甩鞭的几何基础）
-        const t = THREE.MathUtils.clamp((-1.052 * kz - z) / ref.tailLength, 0, 1) * 4; // 0..4
+        const t = THREE.MathUtils.clamp((-0.942 * kz - z) / ref.tailLength, 0, 1) * 4; // 0..4
         const seg = Math.min(Math.floor(t), 3);
         const frac = t - seg;
         i1 = idxOf(`Tail${seg + 1}`); i2 = idxOf(`Tail${seg + 2}`);
         w1 = 1 - frac; w2 = frac;
       } else if (z < -0.55 * kz) {
-        // 后躯：Pelvis ↔ Mid
-        const t = (z + 1.25 * kz) / (0.7 * kz);
+        // 后躯：Pelvis ↔ Mid（尾根接口 → 后腹过渡，随臀段压缩同步收拢）
+        const t = (z + 0.942 * kz) / (0.392 * kz);
         i1 = idxOf("Pelvis"); w1 = 1 - t; i2 = idxOf("Mid"); w2 = t;
       } else if (z < 0) {
         // 腰腹：Pelvis/Mid 混合偏 Mid

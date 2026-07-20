@@ -15,7 +15,7 @@ async function boot() {
 
   const playlist = config.bgm?.playlist?.length
     ? config.bgm.playlist
-    : ["/assets/audio/bgm.mp3", "/assets/audio/duange_xing.mp3"];
+    : ["assets/audio/bgm.mp3", "assets/audio/duange_xing.mp3"];
   const bgm = new BgmPlayer(playlist, { volume: config.bgm?.volume ?? 0.5 });
 
   const canvas = document.getElementById("stage");
