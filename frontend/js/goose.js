@@ -3,7 +3,7 @@
 //       休息觅食 → 踏水助跑 → 离地爬升归队，循环不息；飞行时翼面展开、巡航收蹼、起降垂脚
 import * as THREE from "three";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
-import { makeRandom, groundHeight, waterLevelAt, pondQuery, shorePoint, waterPoint, POND, PLUM_TREE_POS } from "./environment-plum.js";
+import { makeRandom, groundHeight, waterLevelAt, landField, shorePoint, waterPoint, POND, PLUM_TREE_POS } from "./environment-plum.js";
 
 // 白额雁造型：灰褐羽、长颈、阔翼（比例经 shape 覆写，雉科默认不受影响）
 const GOOSE_STYLE = {
@@ -76,37 +76,37 @@ class Goose {
     }[this.state] ?? this.state;
   }
 
-  /** 翅膀：扑翼（下扑快、回抬慢）/ 减速扑翼 / 滑翔 / 收拢；飞行时翼面 morph 展开 */
+  /** 翅膀：扑翼（下扑快、回抬慢）/ 减速扑翼 / 滑翔 / 收拢；飞行时翼面 morph 展开
+      角度约定（翼根为轴，几何沿 -y 伸展）：0=垂贴体侧，π/2=水平展开 */
   _wings(dt, mode) {
-    let targetZ = 0.95; // 收拢贴体
+    let targetZ = 0.35; // 收拢：垂贴体侧微张
     let spread = 0;     // 翼展目标（0=收拢，1=全展）
     if (mode === "flap") {
       // 有力扑翼：相位加弯，下扑段角速度大、回抬段缓（似真雁振翅）
       this.flapPhase += dt * 13;
       const p = this.flapPhase % (Math.PI * 2);
       const warped = p - 0.45 * Math.sin(p);
-      targetZ = 0.45 + Math.sin(warped) * 0.75;
+      targetZ = 1.5 + Math.sin(warped) * 0.75; // 下出 0.75 ~ 上扬 2.25
       spread = 1;
     } else if (mode === "brake") {
       // 降落减速：高频小幅扑翼
       this.flapPhase += dt * 22;
-      targetZ = -0.05 + Math.sin(this.flapPhase) * 0.35;
+      targetZ = 1.4 + Math.sin(this.flapPhase) * 0.35;
       spread = 1;
     } else if (mode === "glide") {
-      targetZ = -0.12 + Math.sin(this.flapPhase * 0.1) * 0.04; // 微张定翼
+      targetZ = 1.6 + Math.sin(this.flapPhase * 0.1) * 0.05; // 近水平定翼微张
       spread = 1;
     }
     for (const w of this.wings) {
       const want = w.side * targetZ;
       w.pivot.rotation.z += (want - w.pivot.rotation.z) * Math.min(dt * 8, 1);
       // 翼展 morph：飞时翼面沿展向伸长（雁翼展约为体长 1.5 倍），栖时收回贴体
+      // （几何根部已钉在 pivot 原点，scale 只向翼尖侧伸展）
       if (w.mesh) {
         const sy = 1 + spread * 2.4;
         const sz = 1 + spread * 0.5;
         w.mesh.scale.y += (sy - w.mesh.scale.y) * Math.min(dt * 4, 1);
         w.mesh.scale.z += (sz - w.mesh.scale.z) * Math.min(dt * 4, 1);
-        const oy = (w.mesh.scale.y - 1) * 0.04; // 展长向翼尖侧偏置，翼根留在肩
-        w.mesh.position.y += (oy - w.mesh.position.y) * Math.min(dt * 4, 1);
       }
     }
   }
@@ -137,18 +137,25 @@ class Goose {
     this.group.rotation.set(this.pitch, this.yaw, this.roll, "YXZ");
   }
 
-  /** 岸边踱步目标：当前位置附近随机取点，落水则拉回岸上并略向坡上 */
+  /** 岸边踱步目标：多取候选择最干者；全湿（梅环湾）则退回梅根北侧干地 */
   _walkSpot(range = 5) {
-    let x = this.pos.x + (this.rand() - 0.5) * range;
-    let z = this.pos.z + (this.rand() - 0.5) * range;
-    if (pondQuery(x, z).e < 1.06) {
-      const sp = shorePoint(x, z);
+    let best = null, bestL = -Infinity;
+    for (let k = 0; k < 4; k++) {
+      const x = this.pos.x + (this.rand() - 0.5) * range;
+      const z = this.pos.z + (this.rand() - 0.5) * range;
+      const L = landField(x, z);
+      if (L > bestL) { bestL = L; best = { x, z }; }
+    }
+    if (bestL < 0.15) {
+      const sp = shorePoint(best.x, best.z);
       const dx = sp.x - POND.cx, dz = sp.z - POND.cz;
       const l = Math.hypot(dx, dz) || 1;
-      x = sp.x + (dx / l) * 0.9;
-      z = sp.z + (dz / l) * 0.9;
+      best = { x: sp.x + (dx / l) * 1.2, z: sp.z + (dz / l) * 1.2 };
+      if (landField(best.x, best.z) < 0.15) {
+        best = { x: PLUM_TREE_POS.x + (this.rand() - 0.5) * 2, z: PLUM_TREE_POS.z + 1.5 + this.rand() };
+      }
     }
-    return new THREE.Vector3(x, 0, z);
+    return new THREE.Vector3(best.x, 0, best.z);
   }
 
   update(dt, time, flock) {
@@ -223,6 +230,7 @@ class Goose {
         this.timer = 6 + this.rand() * 8;
         this.speed = 0;
         this._flare = this._touchdown = false;
+        this.returnToTree = false; // 新一轮游水，清除上轮遗留的回梅标记
       }
     }
     this._head(dt, "level");
@@ -251,14 +259,21 @@ class Goose {
       this.yaw = lerpAngle(this.yaw, Math.atan2(dir.x, dir.z), dt * 1.6);
     } else {
       this.speed = 0;
-      if (this.returnToTree) { // 已到近岸浅水：上岸踱至梅根
+      if (this.returnToTree && landField(this.pos.x, this.pos.z) < -1) {
+        // 未抵岸却被冲散（深水中）：重新指派近岸水点，不上岸
+        this.returnToTree = false;
+        const wp = waterPoint(this.pos.x + (this.rand() - 0.5) * 16, this.pos.z + (this.rand() - 0.5) * 16);
+        this.target.set(wp.x, waterLevelAt(), wp.z);
+        this.timer = 8;
+      } else if (this.returnToTree) { // 已到近岸浅水：上岸踱至梅根
         this.returnToTree = false;
         let x = PLUM_TREE_POS.x + (this.rand() - 0.5) * 7, z = PLUM_TREE_POS.z + 0.6 + this.rand() * 2.4;
-        if (pondQuery(x, z).e < 1.06) {
+        if (landField(x, z) < 0.15) {
           const sp = shorePoint(x, z);
           const dx = sp.x - POND.cx, dz = sp.z - POND.cz;
           const l = Math.hypot(dx, dz) || 1;
           x = sp.x + (dx / l) * 0.9; z = sp.z + (dz / l) * 0.9;
+          if (landField(x, z) < 0.15) { x = PLUM_TREE_POS.x; z = PLUM_TREE_POS.z + 1.5; } // 环湾内退回梅根北
         }
         this.walkTarget = new THREE.Vector3(x, 0, z);
         this.state = "FORAGE";
@@ -390,7 +405,7 @@ export class GooseFlock {
       const [dx, dz] = anchors[i % anchors.length];
       let x = T.x + dx + (g.rand() - 0.5) * 1.2;
       let z = T.z + dz + (g.rand() - 0.5) * 1.2;
-      if (pondQuery(x, z).e < 1.06) { const sp = shorePoint(x, z); x = sp.x; z = sp.z; }
+      if (landField(x, z) < 0.15) { const sp = shorePoint(x, z); x = sp.x; z = sp.z; }
       g.pos.set(x, groundHeight(x, z), z);
       g.state = i % 2 ? "FORAGE" : "REST";
       g.walkTarget = new THREE.Vector3(x, 0, z);

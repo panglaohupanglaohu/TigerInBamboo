@@ -3,7 +3,7 @@
 //   向上五层 —— 一、二层分形；三、四层转横向；五层为向下垂枝之起始层
 //   向下三层 —— 垂枝分形三层；其中黄金分割点（0.618）出一枝超长垂枝（约常枝 3 倍）
 //   向上一、二层之黄金分割点亦出超长枝（约常枝 5 倍），独枝冲天、不再分枝
-//   另有一支出画垂枝：自冠右斜出，画幅右 1/4 处横垂入画，梢头出画右缘（按全景机位投影反推枝位）
+//   另有一支出画垂枝：画面右 1/5 处横垂入画、梢头出画右缘，主枝分形多枝、繁花似锦（按全景机位投影反推枝位）
 import * as THREE from "three";
 import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
 import { makeRandom, groundHeight, PLUM_TREE_POS, POND } from "./environment-plum.js";
@@ -171,16 +171,29 @@ export class PlumGrove {
       }
     }
 
-    // —— 出画垂枝：自冠右斜出、横垂下行，画幅右 1/4 入画，梢头出画右缘 ——
+    // —— 出画垂枝：画面右 1/5 处横垂入画，梢头出画右缘；主枝分形多枝、繁花似锦 ——
     // 枝点位按全景机位投影反推（世界坐标 → 树局部坐标）
     const gyT = groundHeight(PLUM_TREE_POS.x, PLUM_TREE_POS.z);
     const W = (x, y, z) => new THREE.Vector3(x - PLUM_TREE_POS.x, y - gyT, z - PLUM_TREE_POS.z);
     const overhang = [
-      W(2, 32, 5), W(6, 29, 7), W(10.2, 24.7, 8),
-      W(12.8, 20.8, 8), W(18, 16.4, 8), W(29.1, 12.2, 8),
+      W(6, 29, 7), W(10, 27, 7.6), W(15, 24.2, 8), W(17, 20.3, 8),
+      W(20.1, 16.5, 8), W(23.5, 13.5, 8), W(29, 11.1, 8),
     ];
     geos.push(tubeAlong(overhang, 0.5, 0.08, 6, rand));
-    for (let k = 2; k < overhang.length; k++) tips.push(overhang[k]); // 细枝疏花
+    // 分形小枝：可见段每节出 1~2 枝，垂挂分形两层
+    for (let k = 2; k < overhang.length - 1; k++) {
+      const n = 1 + (rand() < 0.6 ? 1 : 0);
+      for (let b = 0; b < n; b++) {
+        const dir = new THREE.Vector3(0.6 + rand() * 0.8, -(0.5 + rand() * 0.5), (rand() - 0.5) * 1.2).normalize();
+        this._branch(geos, tips, rand, overhang[k], dir, 2.2 + rand() * 1.8, 0.16, 1, 2, true);
+      }
+    }
+    // 繁花似锦：主枝每段密缀花点三段，末梢亦着花
+    for (let k = 1; k < overhang.length - 1; k++) {
+      const a = overhang[k], b = overhang[k + 1];
+      for (let j = 0; j < 3; j++) tips.push(a.clone().lerp(b, j / 3));
+    }
+    tips.push(overhang[overhang.length - 1]);
 
     const treeGeo = BufferGeometryUtils.mergeGeometries(geos);
     const treeMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92 });
@@ -251,7 +264,7 @@ export class PlumGrove {
     const leanMax = ((bc.lean ?? 12) * Math.PI) / 180;
     const spots = (Array.isArray(bc.clumps) && bc.clumps.length ? bc.clumps : null)
       ?.map((c) => [c.x ?? 0, c.z ?? 0])
-      ?? [[-14, 11.5], [-4.5, 11], [-10, 13]];
+      ?? [[-14, 11.5], [-4, 12.5], [-10, 13]];
 
     // 细锥化短管（竿段/枝），无顶点色以便同类合并
     const slimTube = (pts, r0, r1, radial = 4) => {

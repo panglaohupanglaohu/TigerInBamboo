@@ -167,9 +167,9 @@ function buildAvianEntity() {
   g.setBehaviorState = (s) => { state = s; };
   g.tick = ({ time, gait, moving = 0, gaitAmp = 1 }) => {
     if (state === "ROAR") {
-      // 展翅亮羽：双翼高频扑扇
+      // 展翅亮羽：双翼高频扑扇（翼根为轴）
       const flap = Math.sin(time * 10) * 0.35;
-      for (const w of built.wings) w.pivot.rotation.z = w.side * (0.55 + flap) * gaitAmp;
+      for (const w of built.wings) w.pivot.rotation.z = w.side * (1.4 + flap) * gaitAmp;
     } else {
       for (const w of built.wings) w.pivot.rotation.z *= 0.85;
       built.group.position.y = state === "WALK" ? Math.abs(Math.sin(gait * Math.PI * 2)) * 0.02 * moving : 0;

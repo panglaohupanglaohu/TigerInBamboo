@@ -111,9 +111,11 @@ export function buildAvianBody({
   group.add(head); parts.push(head);
 
   // 双翼：贴体两侧的扁椭圆（飞时绕根扑动）
+  // 翼面几何沿展向平移半展长：翼根钉在 pivot 原点，扑翼/翼展 morph 皆以贴体侧为轴
   const wings = [];
   const wingGeo = new THREE.SphereGeometry(1, 12, 8);
   wingGeo.scale(...S.wingScale);
+  wingGeo.translate(0, -S.wingScale[1], 0);
   paint(wingGeo, (x, y, z, c) => c.copy(WING).lerp(ACC, THREE.MathUtils.clamp(-z * 3 + 0.4, 0, 1)));
   for (const s of [-1, 1]) {
     const pivot = new THREE.Group();

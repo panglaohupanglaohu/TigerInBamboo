@@ -19,17 +19,19 @@ export function makeRandom(seed = 20260719) {
   };
 }
 
-// ---------- 地形起伏（缓，草岸平远） ----------
+// ---------- 地形起伏（缓，草岸平远；五倍频叠加，地势多变） ----------
 function baseHeight(x, z) {
   return (
     0.6 * Math.sin(x * 0.05) * Math.cos(z * 0.045) +
-    0.3 * Math.sin(x * 0.13 + 1.7) * Math.sin(z * 0.11 + 0.6) +
-    0.1 * Math.sin(x * 0.4 + z * 0.3)
+    0.35 * Math.sin(x * 0.13 + 1.7) * Math.sin(z * 0.11 + 0.6) +
+    0.22 * Math.sin(x * 0.23 + 0.4) * Math.cos(z * 0.19 + 2.1) +
+    0.12 * Math.sin(x * 0.4 + z * 0.3) +
+    0.06 * Math.sin(x * 0.7 + 1.1) * Math.sin(z * 0.6 + 2.7)
   );
 }
 
 // ---------- 水塘（放大静水，椭圆塘盆；北岸直逼梅根约 1 米） ----------
-export const POND = { cx: 10, cz: -26, rx: 55, rz: 36, level: -0.12, bed: -3.5 };
+export const POND = { cx: 10, cz: -32, rx: 65, rz: 40, level: -0.12, bed: -3.5 };
 
 /** 归一化椭圆距 e：<1 塘内，=1 岸线，>1 岸上 */
 export function pondQuery(x, z) {
@@ -60,16 +62,16 @@ export function groundHeight(x, z) {
   let h = baseHeight(x, z);
   // 地势南高北低：向水塘长缓坡下行（入水缓坡自左而右横展）
   h += THREE.MathUtils.clamp((z + 20) * 0.012, -0.4, 0.9);
-  const { e } = pondQuery(x, z);
-  // 岸带牵引：缓坡收至水线
-  if (e < 1.5) {
-    const t = THREE.MathUtils.clamp((1.5 - e) / 0.5, 0, 1);
+  const L = landField(x, z);
+  // 岸带牵引：缓坡收至水线（按岸域场，含梅环湾）
+  if (L < 18) {
+    const t = THREE.MathUtils.clamp((18 - L) / 18, 0, 1);
     const k = t * t * (3 - 2 * t);
     h = THREE.MathUtils.lerp(h, POND.level + 0.22, k * 0.9);
   }
-  // 塘床下切：入水渐深
-  if (e < 1.0) {
-    const t = THREE.MathUtils.clamp((1 - e) / 0.55, 0, 1);
+  // 塘床下切：入水渐深（近岸下切要陡过水线，环湾处方能积水成形）
+  if (L < 0) {
+    const t = THREE.MathUtils.clamp(-L / 8, 0, 1);
     const k = t * t * (3 - 2 * t);
     h = THREE.MathUtils.lerp(h, POND.bed, k);
   }
@@ -81,6 +83,24 @@ export function waterLevelAt() { return POND.level; }
 // 古梅立身处（坡顶偏左，居画幅 1/4 的画眼）
 export const PLUM_TREE_POS = { x: -9, z: 9 };
 export const PLUM_TREE_H = 55; // 梅高（十倍于旧），山石配比之基准
+
+/**
+ * 岸域场 L(x,z)：正=岸上，负=塘内，0=水线。
+ * 椭圆塘盆 + 塘水环绕梅根：向塘一侧水面绕树成湾，背塘一侧仍连岸，
+ * 梅根保留 1 米土地（L=1-dt 的环岛）。
+ */
+export function landField(x, z) {
+  const dx = (x - POND.cx) / POND.rx, dz = (z - POND.cz) / POND.rz;
+  const dE = (Math.hypot(dx, dz) - 1) * Math.min(POND.rx, POND.rz); // 椭圆岸距（近似，米）
+  const tx = x - PLUM_TREE_POS.x, tz = z - PLUM_TREE_POS.z;
+  const dt = Math.hypot(tx, tz);
+  // 环绕权重：靠近梅根、且在"树→塘心"方向一侧才下挖
+  const vcX = POND.cx - PLUM_TREE_POS.x, vcZ = POND.cz - PLUM_TREE_POS.z;
+  const vl = Math.hypot(vcX, vcZ);
+  const wrapAng = 0.5 + 0.5 * ((tx * vcX + tz * vcZ) / ((dt || 1e-3) * vl));
+  const w = Math.exp(-(dt * dt) / (2 * 4 * 4)) * wrapAng;
+  return Math.max(1 - dt, dE - w * 3);
+}
 
 // ---------- 太湖石（移植自 environment.js：瘦、皱、束腰） ----------
 function taihuGeometry(seed, { stretch = 1.75, flareK = 0.35, flareFrom = 0.6, waist = 0.32, topSoft = 1.25, flatK = 0.35, pinch = 0.5 } = {}) {
@@ -206,10 +226,10 @@ export class PlumEnvironment {
       const x = pos.getX(i), z = pos.getZ(i);
       const h = groundHeight(x, z);
       pos.setY(i, h);
-      const { e } = pondQuery(x, z);
-      if (e < 0.98) {
+      const L = landField(x, z);
+      if (L < -0.5) {
         c.copy(bed);
-      } else if (e < 1.12) {
+      } else if (L < 4.3) {
         c.copy(wet);
       } else {
         const shade = THREE.MathUtils.clamp(0.5 + h * 0.5, 0, 1);
@@ -352,10 +372,10 @@ export class PlumEnvironment {
 
     // —— 第四层：左侧山嶂（占画幅左 1/3~1/2，高至梅 2/3；塘扩后沿南岸退立） ——
     const wall = [
-      { x: -38, z: -56, h: H * 0.66, s: 13 },
-      { x: -26, z: -62, h: H * 0.55, s: 11 },
-      { x: -12, z: -61, h: H * 0.45, s: 9 },
-      { x: -48, z: -48, h: H * 0.5, s: 10 },
+      { x: -38, z: -66, h: H * 0.66, s: 13 },
+      { x: -26, z: -72, h: H * 0.55, s: 11 },
+      { x: -12, z: -71, h: H * 0.45, s: 9 },
+      { x: -48, z: -60, h: H * 0.5, s: 10 },
     ];
     for (const p of wall) {
       placeStone(p.x, p.z, p.s, p.h,
@@ -374,16 +394,18 @@ export class PlumEnvironment {
     }
   }
 
-  /** 第四层 · 静水塘：菲涅尔半透 + 微波 + 雁迹涟漪（uWaders[4]） */
+  /** 第四层 · 静水塘：菲涅尔半透 + 微波 + 雁迹涟漪（uWaders[4]）；岸线由岸域场 L 勾出（含梅环湾） */
   _buildPond() {
     const geo = new THREE.CircleGeometry(1, 128);
     geo.rotateX(-Math.PI / 2);
-    geo.scale(POND.rx * 1.06, 1, POND.rz * 1.06);
+    geo.scale(POND.rx * 1.15, 1, POND.rz * 1.15);
     geo.translate(POND.cx, POND.level, POND.cz);
 
     this.waterUniforms = {
       uTime: { value: 0 },
       uSunDir: { value: new THREE.Vector3(-60, 80, -30).normalize() },
+      uPond: { value: new THREE.Vector4(POND.cx, POND.cz, POND.rx, POND.rz) },
+      uTree: { value: new THREE.Vector2(PLUM_TREE_POS.x, PLUM_TREE_POS.z) },
       uWaders: { value: [0, 1, 2, 3].map(() => new THREE.Vector4(0, 0, 0.55, 0)) }, // x,z / 半径 / 强度
     };
     const mat = new THREE.ShaderMaterial({
@@ -403,6 +425,8 @@ export class PlumEnvironment {
       fragmentShader: /* glsl */`
         uniform float uTime;
         uniform vec3 uSunDir;
+        uniform vec4 uPond;  // cx, cz, rx, rz
+        uniform vec2 uTree;
         uniform vec4 uWaders[4];
         varying vec2 vUv;
         varying vec3 vWorld;
@@ -456,7 +480,16 @@ export class PlumEnvironment {
           col += spec * vec3(1.0, 0.96, 0.82);
           col += foam * vec3(0.8);
           float alpha = 0.52 + fres * 0.3 + foam * 0.25;
-          alpha *= smoothstep(1.02, 0.94, length(vUv - 0.5) * 2.0); // 岸缘渐隐入湿土
+          // —— 岸域场 L（与 JS 侧一致）：水只现于 L<0，梅环湾处岸线自然收束 ——
+          vec2 dp = vWorld.xz - uPond.xy;
+          float dE = (length(dp / uPond.zw) - 1.0) * min(uPond.z, uPond.w);
+          vec2 dt2 = vWorld.xz - uTree;
+          float dt = length(dt2);
+          vec2 vc = normalize(uPond.xy - uTree);
+          float wrapAng = 0.5 + 0.5 * dot(dt2 / max(dt, 1e-3), vc);
+          float w = exp(-dt * dt / 32.0) * wrapAng;
+          float L = max(1.0 - dt, dE - w * 3.0);
+          alpha *= smoothstep(0.08, -0.4, L);
           gl_FragColor = vec4(col, clamp(alpha, 0.0, 0.9));
         }`,
     });

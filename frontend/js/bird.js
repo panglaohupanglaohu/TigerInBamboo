@@ -220,7 +220,7 @@ export class BirdAgent {
     if (this.isGlb) this.modelRoot.rotation.x = -0.12;
     else this.head.rotation.x = -0.3 + Math.sin(time * 6) * 0.03; // 昂首紧盯
     // 翼根微张欲起（小幅高频颤翅）
-    for (const w of this.wings) w.pivot.rotation.z = w.side * (0.15 + Math.sin(time * 14) * 0.06);
+    for (const w of this.wings) w.pivot.rotation.z = w.side * (1.0 + Math.sin(time * 14) * 0.08);
   }
 
   /** 逃逸落点：背向虎远飞 ~14m（拉开距离），候选角度避开河床 */
@@ -247,7 +247,7 @@ export class BirdAgent {
     }
     this._walkToward(dt, this.opts.walkSpeed * 2.8);
     const flap = Math.sin(time * 22) * 0.7;
-    for (const w of this.wings) w.pivot.rotation.z = w.side * (0.4 + flap * 0.5);
+    for (const w of this.wings) w.pivot.rotation.z = w.side * (1.4 + flap * 0.6); // 翼根为轴绕肩扑扇
     if (this.isGlb) this.modelRoot.rotation.x = 0.2;
     else this.head.rotation.x = 0.25;
     if (this._runLeft <= 0) this._takeOff(this._escapeTarget(tigerPos ?? this.pos), S.FLEE);
@@ -335,7 +335,7 @@ export class BirdAgent {
       this.modelRoot.rotation.x = 0.18;
     } else {
       const flap = Math.sin(time * 26) * 0.95;
-      for (const w of this.wings) w.pivot.rotation.z = w.side * (0.5 + flap * 0.6);
+      for (const w of this.wings) w.pivot.rotation.z = w.side * (1.5 + flap * 0.6); // 翼根为轴绕肩扑扇
       this.tail.rotation.x = 0.35;
     }
     if (f.t >= 1) {
