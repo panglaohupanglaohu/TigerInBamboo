@@ -1,6 +1,6 @@
 // 启动：铺纸、研墨、布景
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import { OrbitControls } from "../assets/vendor/three/jsm/controls/OrbitControls.js";
 import { loadConfig } from "./config.js";
 import { Environment } from "./environment.js";
 import { BambooGrove } from "./bamboo.js";

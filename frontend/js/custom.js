@@ -1,7 +1,7 @@
 // 自定义物种智能体：物种实验室（lab.html）产出的物种进入溪涧图
 // 数据驱动：形体/解剖/渲染/步态全来自物种记录；
 // 行为 = 竹林漫游 + 关系矩阵驱动的互动（遇虎惊逃 / 互利亲近 / 临水而饮）
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 import { groundHeight, streamQuery } from "./environment.js";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";
 import { BirdAgent } from "./bird.js";

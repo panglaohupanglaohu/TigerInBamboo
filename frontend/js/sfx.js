@@ -209,3 +209,56 @@ export class TigerSfx {
     src.start(t0); src.stop(t0 + dur + 0.02);
   }
 }
+
+// 大雁扑翼声：WebAudio 程序化"扑楞"——大翼拍击的空气扑动（无音频素材依赖）
+// 每次振翅触发一声：带通噪声由低到高急扫 + 软起软收，似巨翼拍风的"扑楞"
+export class GooseSfx {
+  constructor({ volume = 0.4 } = {}) {
+    this.volume = volume;
+    this.ctx = null;
+    const unlock = () => { this._ensure(); this.ctx?.resume?.(); window.removeEventListener("pointerdown", unlock); };
+    window.addEventListener("pointerdown", unlock);
+  }
+
+  _ensure() {
+    if (!this.ctx) {
+      const AC = window.AudioContext ?? window.webkitAudioContext;
+      if (!AC) return null;
+      this.ctx = new AC();
+      // 主链：主增益 → 输出（扑翼声量大、无需压缩粘合）
+      this.master = this.ctx.createGain();
+      this.master.gain.value = this.volume;
+      this.master.connect(this.ctx.destination);
+      // 共享白噪声
+      const len = this.ctx.sampleRate * 2;
+      this._noiseBuf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+      const data = this._noiseBuf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    }
+    return this.ctx;
+  }
+
+  setVolume(v) {
+    this.volume = Math.max(0, Math.min(1, v));
+    if (this.master) this.master.gain.value = this.volume;
+  }
+
+  /** 单次扑翼"扑楞"：带通噪声 380→1200Hz 急扫，软起软收，模拟大翼拍风 */
+  flap(intensity = 1) {
+    if (!this._ensure() || this.ctx.state !== "running") return;
+    const ctx = this.ctx, t0 = ctx.currentTime;
+    const src = ctx.createBufferSource();
+    src.buffer = this._noiseBuf;
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass"; bp.Q.value = 0.8;
+    bp.frequency.setValueAtTime(380, t0);
+    bp.frequency.exponentialRampToValueAtTime(1200, t0 + 0.12);
+    const g = ctx.createGain();
+    const peak = 0.5 * Math.min(intensity, 1.2);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(peak, t0 + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18);
+    src.connect(bp).connect(g).connect(this.master);
+    src.start(t0); src.stop(t0 + 0.22);
+  }
+}

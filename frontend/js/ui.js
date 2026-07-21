@@ -1,5 +1,5 @@
 // 视角预设：每个机位都保持屏风画的"平远"构图
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 
 export class CameraDirector {
   constructor(camera, controls) {

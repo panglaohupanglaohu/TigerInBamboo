@@ -1,6 +1,6 @@
 // GLB 资产加载：缓存 + 归一化（居中、落地、定尺寸、定向）
-import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import { GLTFLoader } from "../assets/vendor/three/jsm/loaders/GLTFLoader.js";
 
 const loader = new GLTFLoader();
 const cache = new Map();

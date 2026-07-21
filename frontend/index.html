@@ -2,87 +2,12 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>竹虎溪涧图 · 世界古典美术拟生平台</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "./assets/vendor/three/three.module.js",
-      "three/addons/": "./assets/vendor/three/jsm/",
-      "cannon-es": "./assets/vendor/cannon-es.js"
-    }
-  }
-  </script>
+  <meta http-equiv="refresh" content="0; url=home.html" />
+  <title>世界古典美术拟生平台</title>
+  <link rel="canonical" href="home.html" />
 </head>
-<body class="scene-page">
-  <canvas id="stage"></canvas>
-
-  <!-- 画题 · 竖排，仿屏风落款 -->
-  <header class="vertical-title">
-    <h1>竹虎溪涧图</h1>
-    <p>雪竹 · 斑斓虎 · 鹤雁</p>
-  </header>
-
-  <!-- 视角与入口（推拉收合：滑出画外仅留竖柄） -->
-  <nav class="hud collapsible" id="hud">
-    <button class="panel-handle" type="button" data-target="hud" aria-label="收起/展开">视角</button>
-    <div class="hud-group" id="camera-presets">
-      <span class="hud-label">视角</span>
-      <button data-preset="panorama" class="preset active">全景</button>
-      <button data-preset="follow" class="preset">随虎</button>
-      <button data-preset="stream" class="preset">溪涧</button>
-    </div>
-    <div class="hud-group">
-      <button id="bgm-toggle" class="preset">♪ 静音</button>
-      <a class="preset link" href="home.html">展厅</a>
-      <a class="preset link" href="lab.html" target="_blank">物种实验室</a>
-      <a class="preset link" href="config.html" target="_blank">系统配置</a>
-    </div>
-  </nav>
-
-  <!-- 智能体状态（感知 → 行为 可视化，推拉收合） -->
-  <aside class="agent-panel collapsible" id="agent-panel">
-    <button class="panel-handle" type="button" data-target="agent-panel" aria-label="收起/展开">生灵</button>
-    <div class="agent" id="agent-tiger">
-      <span class="dot tiger"></span>猛虎 · <em id="tiger-state">巡游</em>
-    </div>
-    <div class="agent" id="agent-rabbit">
-      <span class="dot rabbit" style="background:#cfcfcf"></span>雪兔 · <em id="rabbit-state">驻足</em>
-    </div>
-    <div class="agent" id="agent-custom" style="display:none">
-      <span class="dot" style="background:#b8a06a"></span><em id="custom-name"></em> · <em id="custom-state"></em>
-    </div>
-    <div class="agent" id="agent-pheasant">
-      <span class="dot" style="background:#c23a2e"></span>锦鸡 · <em id="pheasant-state">觅食</em>
-    </div>
-  </aside>
-
-  <!-- 母女对话气泡（位置每帧由 dialog.js 投影更新） -->
-  <div class="speech-bubble" id="bubble-tiger"></div>
-  <div class="speech-bubble" id="bubble-rabbit"></div>
-  <style>
-    .speech-bubble {
-      position: fixed; z-index: 30; max-width: 240px;
-      transform: translate(-50%, -115%);
-      background: rgba(250, 246, 235, 0.95); color: #3a2f22;
-      border: 1px solid #8a7a5c; border-radius: 10px;
-      padding: 7px 11px; font-size: 14px; line-height: 1.5;
-      font-family: "Kaiti SC", "STKaiti", "KaiTi", serif;
-      box-shadow: 0 2px 10px rgba(40, 30, 15, 0.25);
-      pointer-events: none; opacity: 0; transition: opacity 0.25s;
-    }
-    .speech-bubble.show { opacity: 1; }
-    .speech-bubble::after { /* 气泡小尾巴 */
-      content: ""; position: absolute; left: 50%; bottom: -7px;
-      margin-left: -6px; border: 6px solid transparent;
-      border-top-color: #8a7a5c; border-bottom: none;
-    }
-  </style>
-
-  <div class="vignette"></div>
-  <div id="loading">铺 纸 研 墨 …</div>
-
-  <script type="module" src="js/main.js"></script>
+<body>
+  <p>正在进入展厅……若未自动跳转，请<a href="home.html">点击此处</a>。</p>
+  <script>location.replace("home.html");</script>
 </body>
 </html>

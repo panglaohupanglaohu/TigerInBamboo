@@ -1,7 +1,7 @@
 // 雪兔智能体：行为层（小半径随机蹦跳、驻足竖耳）
 // 身体由生物生成管线构建：数据仓库 LAGOMORPHA → SALTATORIAL 骨骼 → 程序化蒙皮 → 双跃驱动
 // 体型小，不设物理刚体（不推竹）；耳/绒尾等外观件挂骨骼随动
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 import { groundHeight, streamQuery } from "./environment.js";
 import { BIOLOGICAL_TAXONOMY } from "./bio/BiologicalTaxonomyRegistry.js";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";

@@ -1,8 +1,8 @@
 // 猛虎智能体：行为层（巡游路径、驻足状态机、物理刚体、缠竹尾）
 // 身体由生物生成管线构建：数据仓库 → 骨骼装配 → 程序化蒙皮 → 状态机驱动
 // 斑纹（拟狩野山乐《竹虎图》的斑斓）以顶点色注入；物理为 Cannon kinematic 刚体
-import * as THREE from "three";
-import * as CANNON from "cannon-es";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import * as CANNON from "../assets/vendor/cannon-es.js";
 import { groundHeight } from "./environment.js";
 import { GROUP } from "./physics.js";
 import { BIOLOGICAL_TAXONOMY } from "./bio/BiologicalTaxonomyRegistry.js";
@@ -297,7 +297,7 @@ export class Tiger {
         if (d > (hcfg.stalkDistance ?? 25) * 1.3) { this._hunt = null; this._huntCd = 5; return null; }
         // 猎物惊起跑/起飞 → 立即转爆发追击（追逐战开始）
         if (prey.state === "奔逃" || prey.state === "惊飞" || d < (hcfg.sprintDistance ?? 20)) H.stage = "sprint";
-        return { label: "潜行", stage: "stalk", targetSpeed: baseSpeed * (hcfg.stalkSpeed ?? 0.45), dir, bioState: "WALK", crouch: 1 };
+        return { label: "潜行", stage: "stalk", targetSpeed: baseSpeed * (hcfg.stalkSpeed ?? 0.45), dir, bioState: "STALK", crouch: 1 };
       }
       case "sprint": {
         // 猎物落地进入飞扑距离即跃出；被甩太远则放弃
@@ -498,8 +498,8 @@ export class Tiger {
       u.uGlowIntensity.value += (tG - u.uGlowIntensity.value) * k;
     }
 
-    // 潜行匍匐：颈前伸低伏、头压、尾垂（覆盖驱动器本帧姿态）
-    if (huntCtl && huntCtl.crouch >= 1) {
+    // 潜行匍匐：颈前伸低伏、头压、尾垂（STALK 分支已在驱动器内自管，此处跳过以免覆盖尾贴地）
+    if (huntCtl && huntCtl.crouch >= 1 && huntCtl.bioState !== "STALK") {
       const B = this.entity.boneMap;
       B.get("Neck").rotation.x = 0.28;
       B.get("Head").rotation.x = 0.32;

@@ -1,8 +1,8 @@
 // 状态机动画驱动器：严格的解剖学行走摆动控制
 // 运行时只操纵骨骼旋转矩阵，不触碰几何体与着色器
-// 状态：'IDLE'（呼吸/扫视）| 'WALK'（对角步态 / 兔科双跃）| 'ROAR'（昂首张嘴）
+// 状态：'IDLE'（呼吸/扫视）| 'WALK'（对角步态 / 兔科双跃）| 'ROAR'（昂首张嘴）| 'STALK'（匍匐潜行）
 // 步态分支：DIGITIGRADE/UNGULIGRADE 对角交替；SALTATORIAL 双后肢同频蹬跃
-import * as THREE from "three";
+import * as THREE from "../../assets/vendor/three/three.module.js";
 
 // 猫科对角步态相位：左后0 → 左前0.25 → 右后0.5 → 右前0.75
 const LEGS = [
@@ -24,6 +24,9 @@ export class FelineLocomotionController {
     if (!boneMap || boneMap.size === 0) return;
     const { time: t, dt, state, gait, moving = 1, anatomyType = "DIGITIGRADE",
             gaitAmp = 1, spineAmp = 1, tailAmp = 1 } = ctx;
+
+    // 匍匐潜行：独立状态分支，完全自管姿态（避开行走/匍匐通用逻辑冲突）
+    if (state === "STALK") { this._stalk(boneMap, ctx); return; }
 
     // —— 脊椎：行进时沿体长轻微 S 形波动，呼吸浮动 ——
     const wave = Math.sin(gait * Math.PI * 2);
@@ -120,6 +123,83 @@ export class FelineLocomotionController {
 
     // —— 飞跃姿态：末帧统一覆盖（出膛直线，优先级最高） ——
     if (ctx.leap > 0.02) this._leapPose(boneMap, ctx.leap);
+  }
+
+  /** 匍匐潜行 STALK：极低步频 + 大步幅 + 脊椎 S 形扭动 + 四肢横向外展（多轴 abduction）
+   *  解剖学三约束：① 肘/膝横向外展（z 旋，下臂反向回带使爪仍落体下）；
+   *  ② 脊椎盆-胸反相大幅扭动，颈对冲扭转 → 头死盯正前（锁死猎物）；
+   *  ③ 慢动作大跨步（步频≈行走 1/3、摆幅拉满）。骨骼名严格对应 AnatomyRiggingEngine。 */
+  static _stalk(boneMap, ctx) {
+    const { time: t, gaitAmp = 1 } = ctx;
+    const STALK_FREQ = 1.5;                 // 极低步频（慢动作 ≈ 行走 1/3）
+    const tick = t * STALK_FREQ;            // 绝对时钟驱动，慢且稳
+    const leftSignal = Math.sin(tick);      // 左前 / 右后 同步
+    const rightSignal = -Math.sin(tick);    // 右前 / 左后 同步（对角步态）
+
+    // —— 重心极端压低（贴地肉感）+ 随迈步微起伏 ——
+    const root = boneMap.get("Root");
+    if (root) root.position.y = root.userData.baseY - 0.24 + Math.abs(leftSignal) * 0.04;
+
+    // —— 脊椎 S 形大幅度扭动（Y 轴）——
+    const pelvis = boneMap.get("Pelvis");
+    const mid = boneMap.get("Mid");
+    const chest = boneMap.get("Chest");
+    if (pelvis) pelvis.rotation.y = leftSignal * 0.25;                  // 骨盆随左腿
+    if (mid) { mid.rotation.y = Math.sin(tick + 0.25) * 0.24; mid.rotation.x = Math.sin(tick) * 0.05; }
+    if (chest) chest.rotation.y = Math.sin(tick + 0.5) * 0.22;
+
+    // 四肢核心关节（腿根外展用常量，可调大以增强"炸开"感）
+    const FL1 = boneMap.get("FL1"), FL2 = boneMap.get("FL2"), FLFoot = boneMap.get("FLFoot");
+    const FR1 = boneMap.get("FR1"), FR2 = boneMap.get("FR2"), FRFoot = boneMap.get("FRFoot");
+    const BL1 = boneMap.get("BL1"), BL2 = boneMap.get("BL2"), BLFoot = boneMap.get("BLFoot");
+    const BR1 = boneMap.get("BR1"), BR2 = boneMap.get("BR2"), BRFoot = boneMap.get("BRFoot");
+    const SPLAY_F = 0.25, SPLAY_B = 0.30;     // 腿根横向外展(rad)。注：用户曾要求匍匐外展达 90°，
+                                             // 此处取伪代码值≈14~17°；想更"炸开"可上调至 1.6(≈92°)
+
+    // 前肢：大臂大跨步 + 肘外展 + 抬腿时肘深折防拖爪
+    if (FL1 && FL2) {
+      FL1.rotation.x = leftSignal * 0.45 * gaitAmp;     // 大前后摆
+      FL1.rotation.z = -SPLAY_F;                        // 肘向体左侧外展
+      FL2.rotation.z = SPLAY_F;                         // 下臂反向回带 → 爪仍落体下
+      FL2.rotation.x = leftSignal > 0 ? leftSignal * 0.6 : Math.abs(leftSignal) * 0.1; // 抬腿深折
+    }
+    if (FR1 && FR2) {
+      FR1.rotation.x = rightSignal * 0.45 * gaitAmp;
+      FR1.rotation.z = SPLAY_F;
+      FR2.rotation.z = -SPLAY_F;
+      FR2.rotation.x = rightSignal > 0 ? rightSignal * 0.6 : Math.abs(rightSignal) * 0.1;
+    }
+    // 后肢（对角潜行：左后与右前同步 = rightSignal；右后与左前同步 = leftSignal）
+    if (BL1 && BL2) {
+      BL1.rotation.x = rightSignal * 0.38 * gaitAmp;
+      BL1.rotation.z = -SPLAY_B;                        // 膝向体左侧外展
+      BL2.rotation.z = SPLAY_B;                        // 下臂反向回带
+      BL2.rotation.x = rightSignal > 0 ? rightSignal * 0.55 : Math.abs(rightSignal) * 0.15; // 膝前凸折叠蓄力
+      if (BLFoot) BLFoot.rotation.x = 0.2;
+    }
+    if (BR1 && BR2) {
+      BR1.rotation.x = leftSignal * 0.38 * gaitAmp;
+      BR1.rotation.z = SPLAY_B;
+      BR2.rotation.z = -SPLAY_B;
+      BR2.rotation.x = leftSignal > 0 ? leftSignal * 0.55 : Math.abs(leftSignal) * 0.15;
+      if (BRFoot) BRFoot.rotation.x = 0.2;
+    }
+    if (FLFoot) FLFoot.rotation.x = Math.max(0, leftSignal) * 0.25;   // 抬腿时爪背屈离地
+    if (FRFoot) FRFoot.rotation.x = Math.max(0, rightSignal) * 0.25;
+
+    // —— 头颈反向锁定（锁死前方猎物）——
+    const neck = boneMap.get("Neck"), head = boneMap.get("Head");
+    const midY = mid ? mid.rotation.y : 0, chestY = chest ? chest.rotation.y : 0;
+    if (neck) { neck.rotation.x = 0.28; neck.rotation.y = -(midY + chestY); } // 对冲盆-胸扭转
+    if (head) { head.rotation.x = 0.32; head.rotation.y = 0; }                // 头死盯正前
+
+    // —— 尾：极低贴地微摆（捕食前紧张）——
+    const tail1 = boneMap.get("Tail1"), tail4 = boneMap.get("Tail4");
+    if (tail1) { tail1.rotation.x = 0.4; tail1.rotation.y = leftSignal * 0.05; } // 整体垂落 + 极小幅摆
+    const tail2 = boneMap.get("Tail2"); if (tail2) { tail2.rotation.x = 0.36; tail2.rotation.y = leftSignal * 0.04; }
+    const tail3 = boneMap.get("Tail3"); if (tail3) tail3.rotation.x = 0.32;
+    if (tail4) tail4.rotation.y = Math.sin(tick * 3.0) * 0.15;   // 尾尖高频微动（兴奋紧绷）
+    const tail5 = boneMap.get("Tail5"); if (tail5) tail5.rotation.x = 0.28;
   }
 
   /** 奔跃步态（rotary gallop）：大摆幅四肢 + 脊柱弓张发力 + 离地浮沉

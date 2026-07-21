@@ -1,7 +1,7 @@
 // 物种实验室：数据仓库 → 程序化网格 → 骨骼装配 → 状态机驱动 的全管线可视化调参台
 // 形体/骨骼/渲染参数 → 防抖 120ms 整体重建预览实体；驱动器参数只改每帧 tick 的 ctx，不重建
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import { OrbitControls } from "../assets/vendor/three/jsm/controls/OrbitControls.js";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
 import { loadSpecies, saveSpecies } from "./species.js";
@@ -163,19 +163,38 @@ function buildAvianEntity() {
   });
   const g = new THREE.Group();
   g.add(built.group);
+  const n1 = built.head, n2 = built.headBone, hg = built.headGroup;
   let state = "WALK";
   g.setBehaviorState = (s) => { state = s; };
   g.tick = ({ time, gait, moving = 0, gaitAmp = 1 }) => {
+    const k = Math.min(0.4, 1); // lab 每帧 dt 近似，平滑趋近
+    const setR = (o, x, y) => { o.rotation.x += (x - o.rotation.x) * k; o.rotation.y += (y - o.rotation.y) * k; };
     if (state === "ROAR") {
       // 展翅亮羽：双翼高频扑扇（翼根为轴）
       const flap = Math.sin(time * 10) * 0.35;
       for (const w of built.wings) w.pivot.rotation.z = w.side * (1.4 + flap) * gaitAmp;
-    } else {
-      for (const w of built.wings) w.pivot.rotation.z *= 0.85;
-      built.group.position.y = state === "WALK" ? Math.abs(Math.sin(gait * Math.PI * 2)) * 0.02 * moving : 0;
-      built.head.rotation.x = state === "WALK"
-        ? Math.max(0, Math.sin(gait * Math.PI * 4)) * 0.7 * moving
-        : Math.sin(time * 2.2) * 0.08;
+    } else if (state === "ALERT") {
+      // 警觉：昂颈高频张望
+      const look = Math.sin(time * 8.0) * 0.4 * (Math.cos(time * 2.0) > 0.3 ? 1 : 0);
+      setR(n1, -0.1, 0); setR(n2, -0.05, look);
+      if (hg) { hg.rotation.x += (0 - hg.rotation.x) * k; hg.rotation.y += (-look - hg.rotation.y) * k; }
+    } else if (state === "WALK") {
+      // 🦢 S 型长颈探头顿挫（双颈骨相位差对冲 + 幂次顿挫 + 视线锁定）
+      const tick = time * 5.5;
+      const step = Math.sin(tick);
+      const jerk = Math.pow(Math.sin(tick), 3.0);
+      const jerkC = Math.pow(Math.cos(tick), 3.0);
+      const n1x = 0.15 + jerk * 0.25 * moving;
+      const n1y = step * 0.08 * moving;
+      const n2x = -0.25 - Math.pow(Math.sin(tick - 0.4), 3.0) * 0.35 * moving;
+      const n2y = -Math.sin(tick - 0.4) * 0.08 * moving;
+      setR(n1, n1x, n1y); setR(n2, n2x, n2y);
+      if (hg) { hg.rotation.x += (-(n1x + n2x) + 0.05 + jerkC * 0.06 - hg.rotation.x) * k; hg.rotation.y += (-(n1y + n2y) - hg.rotation.y) * k; }
+      built.group.position.y = Math.abs(Math.sin(gait * Math.PI * 2)) * 0.02 * moving;
+    } else { // IDLE 微呼吸
+      const br = Math.sin(time * 1.5) * 0.05;
+      setR(n1, br, 0); setR(n2, -br * 0.8, 0);
+      if (hg) hg.rotation.x += (-br * 0.2 - hg.rotation.x) * k;
     }
   };
   return g;

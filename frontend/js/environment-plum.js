@@ -1,4 +1,4 @@
-// 寒梅归雁图 · 环境：金笺天光、雾、缓坡草岸、静水塘、前景山石与石径、四重远山、薄雪
+// 寒梅归雁图 · 环境：银色屏风天光、寒雾、缓坡草岸、静水塘、前景山石与石径、四重远山、薄雪、明月
 // 与 environment.js（竹虎溪涧）同构接口：groundHeight / waterLevelAt / makeRandom，
 // 溪涧查询换成水塘查询（pondQuery / distToPondEdge / shorePoint / waterPoint）
 //
@@ -7,8 +7,8 @@
 //   第三层 · 入水缓坡（自左而右占画幅 2/3，塘岸直逼梅根一米）与栖雁
 //   第四层 · 左侧大山石（占画幅左 1/3~1/2，高至梅 2/3）、放大静水塘、归雁居中为焦点
 //   第五层 · 塘对岸起四重远山，如西湖层峦：缓丘相叠、无孤峰，由近及远渐大渐淡
-import * as THREE from "three";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import * as BufferGeometryUtils from "../assets/vendor/three/jsm/utils/BufferGeometryUtils.js";
 
 // ---------- 确定性随机 ----------
 export function makeRandom(seed = 20260719) {
@@ -127,8 +127,8 @@ function taihuGeometry(seed, { stretch = 1.75, flareK = 0.35, flareFrom = 0.6, w
   geo.computeBoundingBox();
   const bb = geo.boundingBox;
   const colors = new Float32Array(pos.count * 3);
-  const dark = new THREE.Color(0x4a3b2a);
-  const light = new THREE.Color(0xe8ddca);
+  const dark = new THREE.Color(0x3a4044);   // 山石深寒（冷灰青）
+  const light = new THREE.Color(0xc8ced2);   // 山石浅银
   const c = new THREE.Color();
   for (let i = 0; i < pos.count; i++) {
     const t = (pos.getY(i) - bb.min.y) / (bb.max.y - bb.min.y);
@@ -188,26 +188,50 @@ export class PlumEnvironment {
 
   _buildSkyAndLight() {
     const mist = this.config.plum?.mist ?? 0.55;
-    const gold = this.config.scene?.goldBackground ?? true;
-    const paper = gold ? new THREE.Color(0xe7d9b4) : new THREE.Color(0xdfe4e6);
-    this.scene.background = paper;
-    this.scene.fog = new THREE.FogExp2(paper, 0.002 + mist * 0.004); // 场景放大，薄雾留山形
+    // 银色屏风：冷银灰底色，寒塘孤寂
+    const silver = new THREE.Color(0xbcc4cc);
+    this.scene.background = silver;
+    this.scene.fog = new THREE.FogExp2(silver, 0.0025 + mist * 0.005); // 寒雾更浓，远山若隐
 
-    const sun = new THREE.DirectionalLight(0xffe8c4, 1.9);
-    sun.position.set(-60, 80, -30);
-    sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
-    sun.shadow.camera.left = -80; sun.shadow.camera.right = 80;
-    sun.shadow.camera.top = 80; sun.shadow.camera.bottom = -80;
-    sun.shadow.camera.far = 320;
-    sun.shadow.bias = -0.0008;
-    this.scene.add(sun);
+    // —— 月光：自明月方向洒落，冷白清辉（明月居画面右侧 1/5，低悬远山之后，山嶂遮挡下半月）——
+    const moonPos = new THREE.Vector3(70, 46, -190);
+    const moonDir = moonPos.clone().normalize();
+    const moonLight = new THREE.DirectionalLight(0xd8e0ec, 1.5);
+    moonLight.position.copy(moonPos);
+    moonLight.castShadow = true;
+    moonLight.shadow.mapSize.set(2048, 2048);
+    moonLight.shadow.camera.left = -80; moonLight.shadow.camera.right = 80;
+    moonLight.shadow.camera.top = 80; moonLight.shadow.camera.bottom = -80;
+    moonLight.shadow.camera.far = 320;
+    moonLight.shadow.bias = -0.0008;
+    this.scene.add(moonLight);
+    this._moonDir = moonDir;
 
-    this.scene.add(new THREE.HemisphereLight(0xdde6ea, 0xb9a98a, 0.85));
+    // 半球光：天顶冷银、地面灰青
+    this.scene.add(new THREE.HemisphereLight(0xc8d4dc, 0x6a706a, 0.7));
 
-    const rim = new THREE.DirectionalLight(0xcfe0e8, 0.5);
+    // 侧补光：冷青调，勾勒物体边缘
+    const rim = new THREE.DirectionalLight(0xb0c4d0, 0.4);
     rim.position.set(50, 30, 60);
     this.scene.add(rim);
+
+    // —— 一轮明月 ——
+    const moonGeo = new THREE.SphereGeometry(9, 32, 32);
+    const moonMat = new THREE.MeshBasicMaterial({ color: 0xf4f0e4, fog: false });
+    const moon = new THREE.Mesh(moonGeo, moonMat);
+    moon.position.copy(moonPos);
+    this.scene.add(moon);
+
+    // 月晕：外圈柔光
+    const haloGeo = new THREE.SphereGeometry(17, 32, 32);
+    const haloMat = new THREE.MeshBasicMaterial({
+      color: 0xe8e4d8, transparent: true, opacity: 0.1,
+      blending: THREE.AdditiveBlending, fog: false, depthWrite: false,
+    });
+    const halo = new THREE.Mesh(haloGeo, haloMat);
+    halo.position.copy(moonPos);
+    this.scene.add(halo);
+    this.moon = moon;
   }
 
   _buildGround() {
@@ -216,11 +240,11 @@ export class PlumEnvironment {
     geo.rotateX(-Math.PI / 2);
     const pos = geo.attributes.position;
     const colors = new Float32Array(pos.count * 3);
-    const grassLo = new THREE.Color(0x96895f);   // 冬草阴处
-    const grassHi = new THREE.Color(0xb5a87e);   // 冬草向阳
-    const frost = new THREE.Color(0xd9d2ba);     // 薄霜
-    const wet = new THREE.Color(0x8d8878);       // 岸线湿土
-    const bed = new THREE.Color(0x6b6a58);       // 塘床
+    const grassLo = new THREE.Color(0x6a746a);   // 寒草阴处（冷青灰）
+    const grassHi = new THREE.Color(0x8a948a);   // 寒草向阳（冷灰绿）
+    const frost = new THREE.Color(0xd4d8d4);     // 银霜
+    const wet = new THREE.Color(0x5a605a);       // 岸线冻土（冷暗）
+    const bed = new THREE.Color(0x404844);       // 塘床（深寒）
     const c = new THREE.Color();
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i), z = pos.getZ(i);
@@ -403,7 +427,7 @@ export class PlumEnvironment {
 
     this.waterUniforms = {
       uTime: { value: 0 },
-      uSunDir: { value: new THREE.Vector3(-60, 80, -30).normalize() },
+      uSunDir: { value: new THREE.Vector3(70, 46, -190).normalize() }, // 月光方向
       uPond: { value: new THREE.Vector4(POND.cx, POND.cz, POND.rx, POND.rz) },
       uTree: { value: new THREE.Vector2(PLUM_TREE_POS.x, PLUM_TREE_POS.z) },
       uWaders: { value: [0, 1, 2, 3].map(() => new THREE.Vector4(0, 0, 0.55, 0)) }, // x,z / 半径 / 强度
@@ -466,20 +490,20 @@ export class PlumEnvironment {
           float hz = rip(P + vec2(0.0, e)) - rip(P - vec2(0.0, e));
           vec3 N = normalize(vec3(-hx * 1.1 - ringGrad.x * 0.16, 1.0, -hz * 1.1 - ringGrad.y * 0.16));
 
-          // —— 玻璃质半透：菲涅尔 + 日光镜面 ——
+          // —— 寒水孤寂：菲涅尔 + 月光镜面 ——
           vec3 V = normalize(cameraPosition - vWorld);
           vec3 L = normalize(uSunDir);
           float fres = pow(1.0 - max(dot(V, N), 0.0), 3.0);
-          vec3 deep = vec3(0.22, 0.27, 0.25);    // 墨绿灰
-          vec3 shallow = vec3(0.48, 0.51, 0.44); // 近岸茶褐
+          vec3 deep = vec3(0.10, 0.14, 0.17);    // 寒渊深黑（冷墨青）
+          vec3 shallow = vec3(0.24, 0.28, 0.30); // 近岸冻灰
           float rim = smoothstep(0.55, 1.0, length(vUv - 0.5) * 2.0); // 0 心 → 1 岸
-          vec3 base = mix(deep, shallow, rim) * (0.9 + h0 * 0.25);
-          vec3 skyRef = vec3(0.91, 0.86, 0.72); // 金笺天光反射（水天一色）
-          vec3 col = mix(base, skyRef, 0.22 + fres * 0.55);
-          float spec = pow(max(dot(reflect(-L, N), V), 0.0), 140.0) * 1.2;
-          col += spec * vec3(1.0, 0.96, 0.82);
-          col += foam * vec3(0.8);
-          float alpha = 0.52 + fres * 0.3 + foam * 0.25;
+          vec3 base = mix(deep, shallow, rim) * (0.85 + h0 * 0.18); // 微波更弱，水面更寂
+          vec3 skyRef = vec3(0.73, 0.77, 0.80); // 银色屏风天光反射
+          vec3 col = mix(base, skyRef, 0.18 + fres * 0.5);
+          float spec = pow(max(dot(reflect(-L, N), V), 0.0), 200.0) * 1.0; // 月光镜面更锐
+          col += spec * vec3(0.92, 0.94, 1.0);   // 冷白月华
+          col += foam * vec3(0.7);
+          float alpha = 0.55 + fres * 0.28 + foam * 0.2;
           // —— 岸域场（与 JS 侧 landField 一致）：水只现于场值 <0，梅环湾处岸线自然收束 ——
           vec2 dp = vWorld.xz - uPond.xy;
           float dE = (length(dp / uPond.zw) - 1.0) * min(uPond.z, uPond.w);
@@ -525,11 +549,12 @@ export class PlumEnvironment {
       });
       this.scene.add(new THREE.Mesh(geo, mat));
     };
-    // 远山抬高至画面约 4/5（画幅高≈梅高55m，4/5≈44m）：由近及远渐高，山嶂逼目
-    mkRidge(-170, 18, 26, 700, 0x8f8a76, 0.85, 7);    // 塘对岸近山（顶 44m ≈ 画幅 4/5）
-    mkRidge(-320, 26, 34, 1050, 0xa49e8a, 0.6, 13);  // 第二重（顶 60m）
-    mkRidge(-500, 34, 44, 1500, 0xbab3a0, 0.42, 21); // 第三重 · 更大（顶 78m）
-    mkRidge(-720, 44, 56, 2000, 0xcec7b4, 0.28, 33); // 第四重 · 最大最淡（顶 100m）
+    // 远山抬高至月亮中点（月亮中心 Y=82，radius 9；「月亮的 1/2 处」= 其垂直中点 ≈82m）：
+    // 最近一重山顶即达月亮中心高度，由近及远继续升高，山嶂直逼月轮
+    mkRidge(-170, 56, 26, 700, 0x848a90, 0.85, 7);    // 塘对岸近山（顶 82m ≈ 月亮中心高度）
+    mkRidge(-320, 72, 34, 1050, 0x969ca2, 0.6, 13);  // 第二重（顶 106m）
+    mkRidge(-500, 90, 44, 1500, 0xa8aeb4, 0.42, 21); // 第三重 · 更大（顶 134m）
+    mkRidge(-720, 110, 56, 2000, 0xbac0c6, 0.28, 33); // 第四重 · 最大最淡（顶 166m）
   }
 
   _buildSnowfall() {

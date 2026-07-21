@@ -1,9 +1,9 @@
 // 竹林：碗口粗的翠竹，雪压竹梢；虎身经过时被挤开、回弹
 // 物理：每根竹是 Cannon 刚体（Box 近似），底部 PointToPoint 球铰锚定，
 // 回正与风摆由每帧施加的扭矩驱动，虎的碰撞由物理世界解算
-import * as THREE from "three";
-import * as CANNON from "cannon-es";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import * as CANNON from "../assets/vendor/cannon-es.js";
+import * as BufferGeometryUtils from "../assets/vendor/three/jsm/utils/BufferGeometryUtils.js";
 import { makeRandom, groundHeight, distToStream } from "./environment.js";
 import { GROUP } from "./physics.js";
 

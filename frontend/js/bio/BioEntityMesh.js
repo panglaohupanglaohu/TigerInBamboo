@@ -1,7 +1,7 @@
 // 聚合实体：骨骼装配 + 蒙皮网格 + 壳层皮毛 + 状态机驱动
 // 多层皮毛的着色器改写全部在构建期一次性编译（onBeforeCompile），
 // 运行期只读时钟更新骨骼旋转 —— 不克隆材质、不改着色器，杜绝 WebGL 报错
-import * as THREE from "three";
+import * as THREE from "../../assets/vendor/three/three.module.js";
 import { AnatomyRiggingEngine } from "./AnatomyRiggingEngine.js";
 import { ProceduralSkinGenerator } from "./ProceduralSkinGenerator.js";
 import { FelineLocomotionController } from "./FelineLocomotionController.js";

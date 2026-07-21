@@ -1,6 +1,6 @@
 // 布景：图转 3D 的装饰性模型（画中提取的竹丛、山石、梅花树）
 // 与可交互的程序化竹林互补——这些静置在巡游路径之外，承担画面纵深
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 import { groundHeight } from "./environment.js";
 import { loadGLB, normalizeModel, hasModel } from "./assets.js";
 

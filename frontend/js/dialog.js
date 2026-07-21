@@ -1,7 +1,7 @@
 // 母女对话系统：虎（女儿）问 → 兔（母亲）答，一问一答成对抽取
 // 母女各自独立配置：语音（嗓音/语速/音高/音量）与大模型接口（OpenAI 兼容），
 // 接口留空的一方走内置脚本；语音为浏览器 speechSynthesis 中文女声
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 
 // 内置问答脚本（女儿·虎 问 → 母亲·兔 答）：成对抽取，一问一答
 const DIALOGUES = [

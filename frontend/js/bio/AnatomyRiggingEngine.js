@@ -1,7 +1,7 @@
 // 骨骼解剖学装配器：根据物种数据构建通用骨骼层级
 // 输入：物种节点（dimensions / anatomicalRef）+ 解剖学类型
 // 输出：{ root, skeleton, boneMap } —— 骨骼局部坐标 = 实体局部坐标（原点在地，+Z 朝前）
-import * as THREE from "three";
+import * as THREE from "../../assets/vendor/three/three.module.js";
 
 // 骨骼名常量（权重写入与动画驱动共用）
 export const BONE = {

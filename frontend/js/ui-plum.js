@@ -1,5 +1,5 @@
 // 寒梅归雁图 · 视角预设与界面：全景 / 梅下 / 塘雁 / 归飞（随雁）/ 远山
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 import { PLUM_TREE_POS, POND } from "./environment-plum.js";
 
 export class PlumCameraDirector {
@@ -61,14 +61,14 @@ export class PlumCameraDirector {
         return;
       }
       case "mountains": {
-        // 远山：隔水而望，山嶂占满、远线一抹
-        desired.set(0, 4, 20);
-        look.set(0, 45, -220);
+        // 远山：隔水而望，山嶂占满、远线一抹（抬高至 7/8，仰望更甚）
+        desired.set(0, 5, 18);
+        look.set(0, 52, -220);
         break;
       }
       default: {
-        // 全景：贴地 1.8m 左移 6m，主干居画幅 1/4，归雁居中为焦点
-        desired.set(-6, 1.8, 42);
+        // 全景：上移 1m（2.8m），左移 6m，主干居画幅 1/4，归雁居中为焦点
+        desired.set(-6, 2.8, 42);
         look.set(4, 16, -40);
         break;
       }

@@ -1,8 +1,8 @@
 // 程序化网格生成器：根据物种数据算顶点、法线与骨骼权重
 // 躯干/颈/吻为一根高细分轮廓管（颈细、胸隆、腹垂、胯圆、尾收），
 // 四肢为附接管，合并为单一 BufferGeometry —— 无拼接断缝，弯曲时有肌肉延展感
-import * as THREE from "three";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+import * as THREE from "../../assets/vendor/three/three.module.js";
+import * as BufferGeometryUtils from "../../assets/vendor/three/jsm/utils/BufferGeometryUtils.js";
 
 // 两点间骨段圆柱（半径 rA→rB 渐细）：折叠后肢按骨骼绑定姿态成形的工具
 function limbBetween(a, b, rA, rB) {

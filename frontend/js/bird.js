@@ -1,7 +1,7 @@
 // 鸟类通用智能体：感知驱动的状态机（觅食 → 饮水 → 惊飞 → 栖止 → 归飞）
 // 躯体可为程序化模型或图转 3D 的 GLB；行为骨架（对应《Artificial Fishes》
 // 的 fear/thirst 内驱力与 evasive action）不随模型改变。
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 import { groundHeight, streamCurve, distToStream } from "./environment.js";
 import { loadGLB, normalizeModel, hasModel } from "./assets.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
@@ -115,7 +115,10 @@ export class BirdAgent {
     const built = buildAvianBody(params);
     this.group.add(built.group);
     this.body = built.group.children[0];
-    this.head = built.head;
+    this.head = built.head;            // 中段颈骨 (Neck_Lower)
+    this.headBone = built.headBone;    // 颈顶骨 (Neck_Upper)
+    this.headGroup = built.headGroup;  // 头部几何载体（挂在颈顶骨下）
+    this.spine = built.spine;          // 胸腔锚骨 (Spine_Chest)
     this.wings = built.wings;
     this.tail = built.tail;
     this.proceduralParts = built.parts;
@@ -123,6 +126,7 @@ export class BirdAgent {
 
   // ---------- 行为层 ----------
   update(dt, time, tigerPos) {
+    this._dt = dt;
     const cfg = this.config.pheasant;
     if (!cfg.enabled) { this.group.visible = false; return; }
 
@@ -240,7 +244,7 @@ export class BirdAgent {
       this.group.rotation.y = Math.atan2(tigerPos.x - this.pos.x, tigerPos.z - this.pos.z);
     }
     if (this.isGlb) this.modelRoot.rotation.x = -0.12;
-    else this.head.rotation.x = -0.3 + Math.sin(time * 6) * 0.03; // 昂首紧盯
+    else this._neckKinematics(dt, time, "alert"); // 昂颈张望 + 视线锁定
     // 翼根微张欲起（小幅高频颤翅）
     for (const w of this.wings) w.pivot.rotation.z = w.side * (1.0 + Math.sin(time * 14) * 0.08);
   }
@@ -271,7 +275,7 @@ export class BirdAgent {
     const flap = Math.sin(time * 22) * 0.7;
     for (const w of this.wings) w.pivot.rotation.z = w.side * (1.4 + flap * 0.6); // 翼根为轴绕肩扑扇
     if (this.isGlb) this.modelRoot.rotation.x = 0.2;
-    else this.head.rotation.x = 0.25;
+    else this._neckKinematics(dt, time, "extend"); // 颈前伸减阻
     if (this._runLeft <= 0) this._takeOff(this._escapeTarget(tigerPos ?? this.pos), S.FLEE);
   }
 
@@ -293,13 +297,14 @@ export class BirdAgent {
     }
     this._walkToward(dt, this.opts.walkSpeed);
     if (this._peck > 0) {
+      // 停下啄食：颈以 rest 微呼吸，头部局部点头（叠加在视线锁定之上）
       this._peck -= dt;
       const k = Math.abs(Math.sin(time * 14));
       if (this.isGlb) this.modelRoot.rotation.x = k * 0.35;
-      else this.head.rotation.x = k * 0.9;
+      else { this._neckKinematics(dt, time, "rest"); if (this.headGroup) this.headGroup.rotation.x += k * 0.9; }
     } else {
       if (this.isGlb) this.modelRoot.rotation.x *= 0.9;
-      else this.head.rotation.x *= 0.9;
+      else this._neckKinematics(dt, time, "walk"); // 踱步探头顿挫（S 型长颈 + 视线锁定）
     }
     this._idleWings();
   }
@@ -323,12 +328,15 @@ export class BirdAgent {
     }
     const ph = (this._dipTimer % 1.0) * Math.PI;
     if (this.isGlb) this.modelRoot.rotation.x = Math.sin(ph) * 0.5;
-    else this.head.rotation.x = Math.sin(ph) * 1.05;
+    else {
+      this._neckKinematics(dt, time, "extend");
+      if (this.headGroup) this.headGroup.rotation.x += Math.sin(ph) * 1.05; // 低头饮水
+    }
     if (this._dipLeft <= 0) {
       this._drinkClock = 0;
       this.state = S.FORAGE;
       if (this.isGlb) this.modelRoot.rotation.x = 0;
-      else this.head.rotation.x = 0;
+      else this._neckKinematics(dt, time, "rest");
     }
   }
 
@@ -359,6 +367,7 @@ export class BirdAgent {
       const flap = Math.sin(time * 26) * 0.95;
       for (const w of this.wings) w.pivot.rotation.z = w.side * (1.5 + flap * 0.6); // 翼根为轴绕肩扑扇
       this.tail.rotation.x = 0.35;
+      this._neckKinematics(dt, time, "extend"); // 颈前伸减阻
     }
     if (f.t >= 1) {
       this.group.rotation.x = 0;
@@ -377,8 +386,59 @@ export class BirdAgent {
 
   _idlePose(time) {
     if (this.isGlb) this.modelRoot.rotation.x = Math.sin(time * 2.2) * 0.03;
-    else this.head.rotation.x = Math.sin(time * 2.2) * 0.08;
+    else this._neckKinematics(this._dt || 0.016, time, "rest"); // 栖止微呼吸 S 摆
     this._idleWings();
+  }
+
+  /**
+   * 鸟类长颈流体运动学（科学建模 · S 型曲线 + 探头顿挫）
+   * 双颈骨相位差对冲 + 幂次顿挫正弦(pow3) + 视线锁定补偿，呈现在世界空间中
+   * 「推进期颈后缩锁视线、锁定迈步期颈前探爆发」的非线性生物顿挫。
+   * @param {string} mode 'walk' 踱步顿挫 | 'alert' 昂颈张望 | 'extend' 前伸(奔逃/惊飞) | 'rest' 微呼吸
+   */
+  _neckKinematics(dt, time, mode = "rest") {
+    if (this.isGlb) return; // GLB 模型无独立颈骨，跳过（沿用 modelRoot 整体俯仰）
+    const n1 = this.head, n2 = this.headBone, hg = this.headGroup;
+    const k = Math.min(dt * 9, 1); // 平滑趋近，避免阶跃跳变
+    const setR = (o, x, y) => {
+      o.rotation.x += (x - o.rotation.x) * k;
+      o.rotation.y += (y - o.rotation.y) * k;
+    };
+    if (mode === "walk") {
+      // 🦢 行走探头顿挫公式：高频步伐 + 幂次(pow3)让波形在过零处停顿、过渡时爆发
+      const tick = time * 5.5;                          // 鸟类步伐频率较快
+      const step = Math.sin(tick);
+      const jerk = Math.pow(Math.sin(tick), 3.0);        // 顿挫正弦（停顿→爆发）
+      const jerkC = Math.pow(Math.cos(tick), 3.0);
+      // 颈根(Neck_Lower)：向前下方压低并随步微摆
+      const n1x = 0.15 + jerk * 0.25;
+      const n1y = step * 0.08;
+      // 颈顶(Neck_Upper)：带时间差(-0.4)反向对冲 → 形成 S 型天鹅颈（绝杀公式）
+      const n2x = -0.25 - Math.pow(Math.sin(tick - 0.4), 3.0) * 0.35;
+      const n2y = -Math.sin(tick - 0.4) * 0.08;
+      n1.rotation.x += (n1x - n1.rotation.x) * k;
+      n1.rotation.y += (n1y - n1.rotation.y) * k;
+      n2.rotation.x += (n2x - n2.rotation.x) * k;
+      n2.rotation.y += (n2y - n2.rotation.y) * k;
+      // 视线锁定补偿：headGroup 反向抵消双颈骨累积旋转，喙/目在世界空间恒指前方
+      if (hg) { hg.rotation.x += (-(n1x + n2x) + 0.05 + jerkC * 0.06 - hg.rotation.x) * k; hg.rotation.y += (-(n1y + n2y) - hg.rotation.y) * k; }
+    } else if (mode === "alert") {
+      // 警觉：长颈笔直高昂，头高频小幅张望（神经质）
+      const look = Math.sin(time * 8.0) * 0.4 * (Math.cos(time * 2.0) > 0.3 ? 1 : 0);
+      setR(n1, -0.1, 0);
+      setR(n2, -0.05, look);
+      if (hg) { hg.rotation.x += (0 - hg.rotation.x) * k; hg.rotation.y += (-look - hg.rotation.y) * k; }
+    } else if (mode === "extend") {
+      // 奔逃/惊飞：颈前伸成直线减阻，头死盯前方
+      setR(n1, 0.3, 0);
+      setR(n2, -0.3, 0);
+      if (hg) { hg.rotation.x += (0 - hg.rotation.x) * k; hg.rotation.y += (0 - hg.rotation.y) * k; }
+    } else { // rest：微呼吸 S 摆
+      const br = Math.sin(time * 1.5) * 0.05;
+      setR(n1, br, 0);
+      setR(n2, -br * 0.8, 0);
+      if (hg) { hg.rotation.x += (-br * 0.2 - hg.rotation.x) * k; hg.rotation.y += (0 - hg.rotation.y) * k; }
+    }
   }
 
   _idleWings() {

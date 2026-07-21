@@ -1,6 +1,6 @@
 // 物理世界：Cannon.js 驱动 —— 地形 Heightfield、刚体注册、定步长推进
 // 系统内所有可交互物体（竹、虎、雨雪、岩石）统一在此世界中解算
-import * as CANNON from "cannon-es";
+import * as CANNON from "../assets/vendor/cannon-es.js";
 import { groundHeight } from "./environment.js";
 
 export const GROUP = {

@@ -1,6 +1,6 @@
 // 环境：金笺纸天光、雾气、雪原、溪涧（参考雪舟《四季花鸟图》屏风的水口）、太湖石与落雪
-import * as THREE from "three";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import * as BufferGeometryUtils from "../assets/vendor/three/jsm/utils/BufferGeometryUtils.js";
 
 // ---------- 确定性随机 ----------
 export function makeRandom(seed = 20260718) {

@@ -1,6 +1,6 @@
 // 水生植物：菖蒲（靠水小石旁，翠叶白花）、芦苇（阔水两岸，浅赭石色叶）
-import * as THREE from "three";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import * as BufferGeometryUtils from "../assets/vendor/three/jsm/utils/BufferGeometryUtils.js";
 import { makeRandom, groundHeight, streamQuery, streamCurve } from "./environment.js";
 
 export class WaterPlants {

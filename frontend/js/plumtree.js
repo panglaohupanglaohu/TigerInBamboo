@@ -4,15 +4,15 @@
 //   向下三层 —— 垂枝分形三层；其中黄金分割点（0.618）出一枝超长垂枝（约常枝 3 倍）
 //   向上一、二层之黄金分割点亦出超长枝（约常枝 5 倍），独枝冲天、不再分枝
 //   另有一支出画垂枝：画面右 1/5 处横垂入画、梢头出画右缘，主枝分形多枝、繁花似锦（按全景机位投影反推枝位）
-import * as THREE from "three";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+import * as THREE from "../assets/vendor/three/three.module.js";
+import * as BufferGeometryUtils from "../assets/vendor/three/jsm/utils/BufferGeometryUtils.js";
 import { makeRandom, groundHeight, PLUM_TREE_POS, POND } from "./environment-plum.js";
 
 const BARK_DARK = new THREE.Color(0x3d2f24);   // 老干皴皮深褐
 const BARK_LIGHT = new THREE.Color(0x6b5640);  // 向阳面赭褐
-const PETAL_WHITE = new THREE.Color(0xf5e8e6); // 白梅
-const PETAL_PINK = new THREE.Color(0xe9a9a2);  // 淡红晕
-const BUD_RED = new THREE.Color(0xc98a7e);     // 花蕾
+const PETAL_WHITE = new THREE.Color(0xeef1f2); // 冷白（高冷墨梅为骨）
+const PETAL_PINK = new THREE.Color(0xd7a7a6);  // 极淡赭粉，仅作微晕
+const BUD_RED = new THREE.Color(0xb8766c);     // 花蕾红，稀疏提神
 
 const GOLD = 0.618; // 黄金分割点
 
@@ -49,10 +49,97 @@ export class PlumGrove {
     this.scene = scene;
     this.config = config;
     this.time = 0;
+    this.bambooSnowCaps = []; // 竹上积雪帽（可被大雁碰落）
+    this._initFragmentPool();
     this._buildTree();
     this._buildBambooClumps();
     this._buildReeds();
     this._buildPetals();
+  }
+
+  /** 雪屑池：积雪碰落时飞溅的小雪粒 */
+  _initFragmentPool() {
+    const fragGeo = new THREE.SphereGeometry(0.05, 4, 3);
+    this._fragPool = [];
+    for (let i = 0; i < 80; i++) {
+      const m = new THREE.Mesh(fragGeo, new THREE.MeshStandardMaterial({ color: 0xf4f6f4, roughness: 1 }));
+      m.visible = false;
+      this.scene.add(m);
+      this._fragPool.push({ mesh: m, vel: new THREE.Vector3(), life: 0 });
+    }
+  }
+
+  _spawnFragments(pos) {
+    const n = 6 + Math.floor(Math.random() * 4);
+    let spawned = 0;
+    for (const frag of this._fragPool) {
+      if (frag.life > 0) continue;
+      frag.mesh.position.copy(pos);
+      frag.mesh.scale.setScalar(1);
+      frag.mesh.visible = true;
+      frag.vel.set(
+        (Math.random() - 0.5) * 2.5,
+        Math.random() * 1.5 + 0.3,
+        (Math.random() - 0.5) * 2.5);
+      frag.life = 1.2 + Math.random() * 0.4;
+      if (++spawned >= n) break;
+    }
+  }
+
+  /** 大雁碰落竹上积雪：飞行中的雁接近雪帽时触发雪块脱落飞溅 */
+  updateBambooSnow(dt, geese) {
+    if (!this.bambooSnowCaps.length || !geese) return;
+    for (const cap of this.bambooSnowCaps) {
+      if (cap.state === "resting") {
+        for (const g of geese) {
+          if (g.state !== "FORM" && g.state !== "LAND" && g.state !== "TAKEOFF") continue;
+          if (g.pos.distanceTo(cap.pos) < 3.0) {
+            cap.state = "falling";
+            const knock = new THREE.Vector3().subVectors(cap.pos, g.pos).normalize();
+            cap.vel.copy(knock).multiplyScalar(0.8 + Math.random() * 0.6);
+            cap.vel.y = -0.3;
+            cap.angVel.set(
+              (Math.random() - 0.5) * 4,
+              (Math.random() - 0.5) * 4,
+              (Math.random() - 0.5) * 4);
+            this._spawnFragments(cap.pos);
+            break;
+          }
+        }
+      } else if (cap.state === "falling") {
+        cap.vel.y -= 9.8 * dt;
+        cap.mesh.position.addScaledVector(cap.vel, dt);
+        cap.mesh.rotation.x += cap.angVel.x * dt;
+        cap.mesh.rotation.y += cap.angVel.y * dt;
+        cap.mesh.rotation.z += cap.angVel.z * dt;
+        const gy = groundHeight(cap.mesh.position.x, cap.mesh.position.z);
+        if (cap.mesh.position.y < gy + 0.1) {
+          cap.state = "gone";
+          cap.mesh.visible = false;
+          cap.regenTimer = 20 + Math.random() * 12;
+        }
+      } else if (cap.state === "gone") {
+        cap.regenTimer -= dt;
+        if (cap.regenTimer <= 0) {
+          cap.state = "resting";
+          cap.mesh.position.copy(cap.origPos);
+          cap.mesh.quaternion.copy(cap.origQuat);
+          cap.mesh.visible = true;
+          cap.vel.set(0, 0, 0);
+        }
+      }
+    }
+    // 雪屑飞溅
+    for (const frag of this._fragPool) {
+      if (frag.life <= 0) continue;
+      frag.life -= dt;
+      if (frag.life <= 0) { frag.mesh.visible = false; continue; }
+      frag.vel.y -= 6 * dt;
+      frag.mesh.position.addScaledVector(frag.vel, dt);
+      if (frag.life < 0.4) frag.mesh.scale.setScalar(frag.life / 0.4);
+      const gy = groundHeight(frag.mesh.position.x, frag.mesh.position.z);
+      if (frag.mesh.position.y < gy + 0.05) { frag.life = 0; frag.mesh.visible = false; }
+    }
   }
 
   /** 一枝：start 沿 dir 长 len 的锥化管（down=true 时垂向下弯）；返回 {mid, end} */
@@ -215,29 +302,31 @@ export class PlumGrove {
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler();
     const s = new THREE.Vector3(), p = new THREE.Vector3();
     for (const tip of tips) {
-      const n = Math.max(1, Math.round((1 + rand() * 1.6) * density));
+      // 开花枝：花密集——每梢多枚、紧簇于枝（抖动半径收窄），呈国画繁花积翠
+      const n = Math.max(2, Math.round((2.6 + rand() * 3.2) * density));
       for (let i = 0; i < n; i++) {
-        p.set(tip.x + (rand() - 0.5) * 2.4, tip.y + (rand() - 0.5) * 2.0, tip.z + (rand() - 0.5) * 2.4);
+        p.set(tip.x + (rand() - 0.5) * 0.9, tip.y + (rand() - 0.5) * 0.7, tip.z + (rand() - 0.5) * 0.9);
         e.set(rand() * Math.PI, rand() * Math.PI, rand() * Math.PI);
         q.setFromEuler(e);
-        const sc = 0.8 + rand() * 0.9;
+        const sc = 0.5 + rand() * 0.5;  // 单花缩小（整体约为原 1/2）
         s.set(sc, sc * (0.7 + rand() * 0.4), sc);
         m.compose(p, q, s);
         petalXforms.push(m.clone());
-        petalColors.push(PETAL_WHITE.clone().lerp(PETAL_PINK, rand() * 0.85));
+        // 高冷：冷白为骨，淡粉仅作极轻晕染
+        petalColors.push(PETAL_WHITE.clone().lerp(PETAL_PINK, rand() * 0.22));
       }
-      if (rand() < 0.7) { // 梢头花蕾
-        p.set(tip.x + (rand() - 0.5) * 1.6, tip.y + (rand() - 0.5) * 1.4, tip.z + (rand() - 0.5) * 1.6);
+      if (rand() < 0.55) { // 梢头花蕾（红点提神，稀疏）
+        p.set(tip.x + (rand() - 0.5) * 0.6, tip.y + (rand() - 0.5) * 0.5, tip.z + (rand() - 0.5) * 0.6);
         q.identity();
-        s.setScalar(0.8 + rand() * 0.6);
+        s.setScalar(0.5 + rand() * 0.4);
         m.compose(p, q, s);
         budXforms.push(m.clone());
       }
     }
 
-    // 花团：压扁球体成簇，远观如繁花积翠
-    const petalGeo = new THREE.SphereGeometry(0.55, 8, 6);
-    petalGeo.scale(1, 0.55, 1);
+    // 单花：压扁小球成瓣状花点（径缩至约 0.28，于十倍古梅上如墨点疏花，求其高冷）
+    const petalGeo = new THREE.SphereGeometry(0.28, 8, 6);
+    petalGeo.scale(1, 0.5, 1);
     const petalMat = new THREE.MeshStandardMaterial({ roughness: 0.75 });
     const petals = new THREE.InstancedMesh(petalGeo, petalMat, petalXforms.length);
     petalXforms.forEach((mx, i) => {
@@ -258,6 +347,7 @@ export class PlumGrove {
   _buildBambooClumps() {
     const rand = makeRandom(404);
     const culmGeos = [], ringGeos = [], leafGeos = [];
+    if (!this._snowMat) this._snowMat = new THREE.MeshStandardMaterial({ color: 0xf4f6f4, roughness: 1 });
     // 丛位/每丛竹数/最大倾角均可配置（默认即塘扩后的梅根岸上丛位）
     const bc = this.config.plum?.bamboo ?? {};
     const perClump = Math.max(1, Math.round(bc.count ?? 5));
@@ -327,6 +417,19 @@ export class PlumGrove {
             end.z + (rand() - 0.5) * 0.5);
           leafGeos.push(leaf);
         }
+        // 叶簇积雪：枝梢叶丛上方覆盖雪团
+        const lsR = 0.14 + rand() * 0.12;
+        const lsPos = end.clone(); lsPos.y += 0.06;
+        const lsCap = new THREE.Mesh(new THREE.SphereGeometry(lsR, 7, 5), this._snowMat);
+        lsCap.scale.y = 0.45;
+        lsCap.position.copy(lsPos);
+        lsCap.castShadow = true;
+        this.scene.add(lsCap);
+        this.bambooSnowCaps.push({
+          mesh: lsCap, pos: lsPos.clone(),
+          state: "resting", vel: new THREE.Vector3(), angVel: new THREE.Vector3(),
+          origPos: lsPos.clone(), origQuat: lsCap.quaternion.clone(), regenTimer: 0,
+        });
       }
     };
 
@@ -370,6 +473,59 @@ export class PlumGrove {
             const blen = (0.75 + rand() * 0.65) * (1 - (y / h) * 0.35);
             branchOut(at(y), dir, blen, Math.max(rNode * 0.45, 0.018), 0);
           }
+        }
+
+        // —— 积雪：竹竿顶端 + 全部竹节覆盖厚白雪 ——
+        const snowQuat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
+        // 顶端厚雪帽（最大）
+        const tipPos = at(h);
+        const tipR = Math.max(rBase * 0.5 * 4.0, 0.18);
+        const tipCap = new THREE.Mesh(new THREE.SphereGeometry(tipR, 10, 7), this._snowMat);
+        tipCap.scale.y = 0.7; // 厚堆积
+        tipCap.position.copy(tipPos).addScaledVector(up, tipR * 0.35);
+        tipCap.quaternion.copy(snowQuat);
+        tipCap.castShadow = true;
+        this.scene.add(tipCap);
+        this.bambooSnowCaps.push({
+          mesh: tipCap, pos: tipPos.clone(),
+          state: "resting", vel: new THREE.Vector3(), angVel: new THREE.Vector3(),
+          origPos: tipPos.clone(), origQuat: snowQuat.clone(), regenTimer: 0,
+        });
+        // 全部出土竹节厚雪帽（越往上越厚）
+        for (let k = 1; k < nNodes; k++) {
+          const ny = nodeH[k];
+          const nPos = at(ny);
+          const heightRatio = ny / h; // 0=底 1=顶
+          const nR = Math.max(rBase * (1 - heightRatio * 0.5) * (2.5 + heightRatio * 2.0), 0.12);
+          const nCap = new THREE.Mesh(new THREE.SphereGeometry(nR, 8, 6), this._snowMat);
+          nCap.scale.y = 0.55 + heightRatio * 0.2; // 上部更厚
+          nCap.position.copy(nPos).addScaledVector(up, nR * 0.25);
+          nCap.quaternion.copy(snowQuat);
+          nCap.castShadow = true;
+          this.scene.add(nCap);
+          this.bambooSnowCaps.push({
+            mesh: nCap, pos: nPos.clone(),
+            state: "resting", vel: new THREE.Vector3(), angVel: new THREE.Vector3(),
+            origPos: nPos.clone(), origQuat: snowQuat.clone(), regenTimer: 0,
+          });
+        }
+        // 竹枝分叉处亦添雪团（枝根节点处额外加厚）
+        for (let k = Math.max(1, nNodes - 3); k < nNodes; k++) {
+          const ny = nodeH[k];
+          const bPos = at(ny);
+          const bR = Math.max(rBase * (1 - (ny / h) * 0.5) * 3.5, 0.15);
+          const bCap = new THREE.Mesh(new THREE.SphereGeometry(bR, 8, 6), this._snowMat);
+          bCap.scale.y = 0.5;
+          bCap.scale.x = bCap.scale.z = 1.3; // 横向展宽，如雪团包裹枝根
+          bCap.position.copy(bPos).addScaledVector(up, bR * 0.2);
+          bCap.quaternion.copy(snowQuat);
+          bCap.castShadow = true;
+          this.scene.add(bCap);
+          this.bambooSnowCaps.push({
+            mesh: bCap, pos: bPos.clone(),
+            state: "resting", vel: new THREE.Vector3(), angVel: new THREE.Vector3(),
+            origPos: bPos.clone(), origQuat: snowQuat.clone(), regenTimer: 0,
+          });
         }
       }
     }

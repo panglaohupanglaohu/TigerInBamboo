@@ -21,6 +21,26 @@ body {
 .scene-page { overflow: hidden; height: 100vh; }
 #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 
+/* ---------- 寒梅归雁图 · 银色屏风主题 ---------- */
+.plum-scene {
+  --paper: #bcc4cc;          /* 银屏纸 */
+  --paper-deep: #a8b0b8;
+  --ink: #2a2e30;
+  --ink-soft: #4a5258;
+  --cinnabar: #8a3a2e;
+  --gold: #8a8e94;
+}
+.plum-scene .hud-group,
+.plum-scene .agent-panel {
+  background: rgba(188, 196, 204, 0.82);
+}
+.plum-scene .panel-handle {
+  background: rgba(188, 196, 204, 0.92);
+}
+.plum-scene .vignette {
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(30, 36, 42, 0.35) 100%);
+}
+
 .vertical-title {
   position: fixed; top: 28px; right: 30px; z-index: 10;
   writing-mode: vertical-rl;

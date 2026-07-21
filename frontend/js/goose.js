@@ -1,7 +1,7 @@
 // 寒梅归雁图 · 大雁智能体：雁形目躯体（AvianBodyBuilder 比例覆写：长颈/肥体/短尾/阔翼）
 // 行为：归飞编队（V 字）→ 盘旋渐降 → 定翼进近 → 拉平扑翼减速 → 触水滑跑 → 游水/上岸 →
 //       休息觅食 → 踏水助跑 → 离地爬升归队，循环不息；飞行时翼面展开、巡航收蹼、起降垂脚
-import * as THREE from "three";
+import * as THREE from "../assets/vendor/three/three.module.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
 import { makeRandom, groundHeight, waterLevelAt, landField, shorePoint, waterPoint, POND, PLUM_TREE_POS } from "./environment-plum.js";
 
@@ -15,7 +15,7 @@ const GOOSE_STYLE = {
   tailColor: 0x3f372c,
   shape: {
     bodyScale: [0.16, 0.15, 0.30], bodyY: 0.26,
-    neckPos: [0, 0.42, 0.26], neckR: 0.052, neckScale: [1, 1.9, 1.6],
+    neckPos: [0, 0.42, 0.26], neckR: 0.07, neckSausage: true, neckScale: [1, 1.9, 1.6],
     headR: 0.048, headPos: [0, 0.095, 0.05], // 长颈顶端独立头球，喙目皆附其上
     crestCount: 0,
     beakR: 0.02, beakLen: 0.1, beakColor: 0x2e2a26, beakPos: [0, 0.095, 0.105],
@@ -41,9 +41,11 @@ class Goose {
     const style = opts.scale && opts.scale !== 1
       ? { ...GOOSE_STYLE, height: GOOSE_STYLE.height * opts.scale }
       : GOOSE_STYLE;
-    const { group, head, wings, tail, legs } = buildAvianBody(style);
+    const { group, head, headBone, headGroup, wings, tail, legs } = buildAvianBody(style);
     this.group = group;
-    this.head = head;
+    this.head = head;            // 中段颈骨 (Neck_Lower)
+    this.headBone = headBone;    // 颈顶骨 (Neck_Upper)
+    this.headGroup = headGroup;  // 头部几何载体
     this.wings = wings;
     this.tail = tail;
     this.legs = legs;
@@ -61,6 +63,8 @@ class Goose {
     this.target = new THREE.Vector3();
     this.walkTarget = null;
     this.slotIdx = opts.slotIdx ?? 0;
+    this.sfx = opts.sfx || null;   // 起飞扑翼声（GooseSfx.flap）
+    this._beat = false;            // 本帧是否完成一次振翅
     // 起降阶段标志：踏水助跑中 / 已拉平 / 已触水
     this._airborne = false;
     this._flare = false;
@@ -81,9 +85,12 @@ class Goose {
   _wings(dt, mode) {
     let targetZ = 0.35; // 收拢：垂贴体侧微张
     let spread = 0;     // 翼展目标（0=收拢，1=全展）
+    this._beat = false; // 本帧是否完成一次振翅（用于起飞扑翼声）
     if (mode === "flap") {
       // 有力扑翼：相位加弯，下扑段角速度大、回抬段缓（似真雁振翅）
+      const prevBeat = Math.floor(this.flapPhase / (Math.PI * 2));
       this.flapPhase += dt * 13;
+      this._beat = Math.floor(this.flapPhase / (Math.PI * 2)) > prevBeat; // 跨过一个周期 = 一拍
       const p = this.flapPhase % (Math.PI * 2);
       const warped = p - 0.45 * Math.sin(p);
       targetZ = 1.5 + Math.sin(warped) * 0.75; // 下出 0.75 ~ 上扬 2.25
@@ -109,6 +116,10 @@ class Goose {
         w.mesh.scale.z += (sz - w.mesh.scale.z) * Math.min(dt * 4, 1);
       }
     }
+    // 起飞时每完成一拍振翅，发出"扑楞"扑翼声
+    if (this._beat && this.state === "TAKEOFF" && this.sfx) {
+      this.sfx.flap(this._airborne ? 1.1 : 0.85);
+    }
   }
 
   /** 双腿：起降垂脚（dangle）/ 巡航收蹼（tuck）/ 立地游水（stand） */
@@ -119,17 +130,46 @@ class Goose {
     }
   }
 
-  /** 头颈：平视 / 啄食 / 理羽 */
+  /**
+   * 大雁长颈流体运动学（科学建模 · S 型曲线 + 探头顿挫）
+   * 复用与锦鸡一致的双颈骨相位差对冲 + 幂次顿挫正弦(pow3) + 视线锁定补偿；
+   * 大雁颈更长，幅值略放大，呈现在世界空间中的生物顿挫探头。
+   * mode: 'walk' 踱步顿挫 | 'peck' 点首觅食 | 'preen' 理羽 | 'level' 平视(飞行/游水)
+   */
   _head(dt, mode) {
-    const h = this.head;
-    if (mode === "peck") {
-      h.rotation.x = Math.sin(this.time * 6) > 0 ? 0.9 : 0.15; // 频频点首
+    const n1 = this.head, n2 = this.headBone, hg = this.headGroup;
+    const k = Math.min(dt * 9, 1);
+    const setR = (o, x, y) => { o.rotation.x += (x - o.rotation.x) * k; o.rotation.y += (y - o.rotation.y) * k; };
+    if (mode === "walk") {
+      // 🦢 行走探头顿挫公式（大雁步伐频率稍缓于锦鸡）
+      const tick = this.time * 4.6;
+      const step = Math.sin(tick);
+      const jerk = Math.pow(Math.sin(tick), 3.0);
+      const jerkC = Math.pow(Math.cos(tick), 3.0);
+      const n1x = 0.18 + jerk * 0.30;            // 颈根前压
+      const n1y = step * 0.10;
+      const n2x = -0.30 - Math.pow(Math.sin(tick - 0.4), 3.0) * 0.42; // 反向对冲 → S 型长颈
+      const n2y = -Math.sin(tick - 0.4) * 0.10;
+      n1.rotation.x += (n1x - n1.rotation.x) * k;
+      n1.rotation.y += (n1y - n1.rotation.y) * k;
+      n2.rotation.x += (n2x - n2.rotation.x) * k;
+      n2.rotation.y += (n2y - n2.rotation.y) * k;
+      if (hg) { hg.rotation.x += (-(n1x + n2x) + 0.05 + jerkC * 0.07 - hg.rotation.x) * k; hg.rotation.y += (-(n1y + n2y) - hg.rotation.y) * k; } // 视线锁定
+    } else if (mode === "peck") {
+      // 停下频频点首（颈根为主，叠加视线补偿）
+      const px = Math.sin(this.time * 6) > 0 ? 0.95 : 0.15;
+      n1.rotation.x += (px - n1.rotation.x) * k;
+      n2.rotation.x += (-0.2 - n2.rotation.x) * k;
+      if (hg) { hg.rotation.x += (-(px - 0.2) + 0.1 - hg.rotation.x) * k; }
     } else if (mode === "preen") {
-      h.rotation.y = Math.sin(this.time * 1.8) * 1.2;
-      h.rotation.x = 0.5 + Math.sin(this.time * 3) * 0.2;
-    } else {
-      h.rotation.x += (0 - h.rotation.x) * Math.min(dt * 4, 1);
-      h.rotation.y += (0 - h.rotation.y) * Math.min(dt * 4, 1);
+      n1.rotation.y += (Math.sin(this.time * 1.8) * 1.2 - n1.rotation.y) * k;
+      n1.rotation.x += (0.5 + Math.sin(this.time * 3) * 0.2 - n1.rotation.x) * k;
+      n2.rotation.x += (-0.2 - n2.rotation.x) * k;
+      if (hg) hg.rotation.x += (-(n1.rotation.x + n2.rotation.x) - hg.rotation.x) * k;
+    } else { // level：平视微呼吸 S 摆（飞行/游水）
+      const br = Math.sin(this.time * 1.5) * 0.05;
+      setR(n1, br, 0); setR(n2, -br * 0.8, 0);
+      if (hg) hg.rotation.x += (-br * 0.2 - hg.rotation.x) * k;
     }
   }
 
@@ -304,7 +344,7 @@ class Goose {
       this.speed = 0.55;
       this.pos.addScaledVector(dir, this.speed * dt);
       this.yaw = lerpAngle(this.yaw, Math.atan2(dir.x, dir.z), dt * 2.5);
-      this._head(dt, "level");
+      this._head(dt, "walk"); // 踱步 S 型长颈探头顿挫
     } else {
       this.speed = 0;
       this._head(dt, "peck");
@@ -369,13 +409,14 @@ class Goose {
 }
 
 export class GooseFlock {
-  constructor(scene, config, env) {
+  constructor(scene, config, env, sfx) {
     this.scene = scene;
     this.env = env;
     const P = config.plum ?? {};
     const nFly = Math.max(1, Math.round(P.flockGeese ?? 5));
     const nRest = Math.max(0, Math.round(P.restGeese ?? 3));
     const scale = P.gooseScale ?? 1.0;
+    this.sfx = sfx || null;
     this.circuitTime = P.circuitTime ?? CIRCUIT_TIME;
     this.groundedTime = P.groundedTime ?? GROUNDED_TIME;
     this.circuitAlt = P.circuitAlt ?? CIRCUIT_ALT;
@@ -387,7 +428,7 @@ export class GooseFlock {
     this.modeT = 0;
     this.alt = this.circuitAlt;
     for (let i = 0; i < nFly; i++) {
-      const g = new Goose(scene, { airborne: true, seed: 100 + i, slotIdx: i, scale });
+      const g = new Goose(scene, { airborne: true, seed: 100 + i, slotIdx: i, scale, sfx: this.sfx });
       const a = this.theta - i * 0.16;
       const R = this._radius();
       g.pos.set(POND.cx + Math.cos(a) * R, this.alt - (i % 2) * 0.5, POND.cz + Math.sin(a) * R);
@@ -401,7 +442,7 @@ export class GooseFlock {
       [-10.6, 2.8], [8.8, 3.2], [-13.4, 3.6], [11.6, 4.0],
     ];
     for (let i = 0; i < nRest; i++) {
-      const g = new Goose(scene, { airborne: false, seed: 200 + i, slotIdx: nFly + i, scale });
+      const g = new Goose(scene, { airborne: false, seed: 200 + i, slotIdx: nFly + i, scale, sfx: this.sfx });
       const [dx, dz] = anchors[i % anchors.length];
       let x = T.x + dx + (g.rand() - 0.5) * 1.2;
       let z = T.z + dz + (g.rand() - 0.5) * 1.2;

@@ -3,7 +3,7 @@
 // shape 覆写比例（雁形目长颈/肥体/短尾/阔翼等），缺省逐项回落雉科默认值
 // 返回 { group, head, wings, tail, legs, parts } —— head/wings/legs 供行为层做啄食/扑翼/垂脚动画
 // wings: [{pivot, side, mesh}]，mesh 供飞行时翼展 morph（scale.y 翼展、scale.z 翼弦）
-import * as THREE from "three";
+import * as THREE from "../../assets/vendor/three/three.module.js";
 
 export function buildAvianBody({
   height = 0.42,               // 站高（米），按 0.42m 基准等比缩放
@@ -88,20 +88,76 @@ export function buildAvianBody({
   body.position.y = S.bodyY;
   group.add(body); parts.push(body);
 
-  // 头颈：颈前伸 + 羽冠 + 锥喙 + 侧目
-  const head = new THREE.Group();
-  head.position.set(...S.neckPos);
-  const neckGeo = new THREE.SphereGeometry(S.neckR, 16, 12);
-  neckGeo.scale(...S.neckScale);
-  paint(neckGeo, (x, y, z, c) => c.copy(NECK).lerp(ACC, THREE.MathUtils.clamp(y * 5 + 0.4, 0, 1)));
-  head.add(cast(new THREE.Mesh(neckGeo, mat())));
-  // 独立头球（长颈禽类：颈球只是颈，喙与目附于头球）
+  // 头颈（科学建模 · 根治「断颈」）：连续高分段的「无缝皮肤」长颈 + 双骨骼线性插值权重
+  // 整条颈是一张连续 SkinnedMesh 网格；沿中心线的顶点同时受相邻颈骨共同控制（各听一半），
+  // 弯曲时皮肤被均匀拉伸/压缩，绝不再出现独立圆柱错位穿模的断裂切面。
+  const L = S.neckR * S.neckScale[1] * 2;                 // 颈全长
+  const np = new THREE.Vector3(...S.neckPos);             // 颈中段（原 head 组位置）
+  const sz = S.neckScale[2];                              // 前后向（z）拉伸，烘焙进中心曲线
+  // 颈部中心曲线（组局部坐标）：雁形目带 S 弯，雉科近直微膨
+  const cLocal = S.neckSausage
+    ? [ new THREE.Vector3(0, -L / 2, 0),
+        new THREE.Vector3(0, -L / 6, S.neckR * 0.4 * sz),
+        new THREE.Vector3(0, L / 6, -S.neckR * 0.3 * sz),
+        new THREE.Vector3(0, L / 2, S.neckR * 0.25 * sz) ]
+    : [ new THREE.Vector3(0, -L / 2, 0),
+        new THREE.Vector3(0, -L / 4, S.neckR * 0.12 * sz),
+        new THREE.Vector3(0, L / 4, S.neckR * 0.12 * sz),
+        new THREE.Vector3(0, L / 2, 0) ];
+  const curve = new THREE.CatmullRomCurve3(cLocal.map((p) => p.clone().add(np)));
+  const TUB = 40, RAD = 14;                               // 纵向 40 段 · 径向 14 段（弯曲足够平滑）
+  const neckGeo = new THREE.TubeGeometry(curve, TUB, S.neckR, RAD, false);
+  paint(neckGeo, (x, y, z, c) => c.copy(NECK).lerp(ACC, THREE.MathUtils.clamp(z * 4 + 0.5, 0, 1)));
+
+  // 颈骨链：Spine_Chest(根/固定锚于体) → Neck_Lower(中段·动画句柄) → Neck_Upper(颈顶·挂头)
+  const bChest = new THREE.Bone(); bChest.name = "Spine_Chest";
+  bChest.position.copy(curve.getPoint(0.0));
+  const bLow = new THREE.Bone(); bLow.name = "Neck_Lower";
+  bLow.position.copy(curve.getPoint(0.5)).sub(curve.getPoint(0.0));
+  const bUp = new THREE.Bone(); bUp.name = "Neck_Upper";
+  bUp.position.copy(curve.getPoint(1.0)).sub(curve.getPoint(0.5));
+  bChest.add(bLow); bLow.add(bUp);
+
+  // 双骨骼线性插值权重：沿颈中心线 progress t∈[0,1]，上下两段各由相邻两骨平滑渐变，
+  // 交界处顶点同时听两骨（各半），弯曲即为平滑弧线而非硬切。
+  const pos = neckGeo.attributes.position;
+  const skinIndices = [], skinWeights = [];
+  const BONE = (n) => (n === "Spine_Chest" ? 0 : n === "Neck_Lower" ? 1 : 2);
+  for (let i = 0; i < pos.count; i++) {
+    const t = Math.floor(i / (RAD + 1)) / TUB;            // TubeGeometry：每环 (RAD+1) 顶点
+    const wC = THREE.MathUtils.clamp(1 - t / 0.5, 0, 1);  // 基→0
+    const wU = THREE.MathUtils.clamp((t - 0.5) / 0.5, 0, 1); // 顶→0
+    const wL = 1 - wC - wU;                               // 中段最重
+    let i1, i2, w1, w2;
+    if (wC >= wU) { i1 = "Spine_Chest"; i2 = "Neck_Lower"; const s = wC + wL || 1; w1 = wC / s; w2 = wL / s; }
+    else { i1 = "Neck_Lower"; i2 = "Neck_Upper"; const s = wL + wU || 1; w1 = wL / s; w2 = wU / s; }
+    skinIndices.push(BONE(i1), BONE(i2), 0, 0);
+    skinWeights.push(w1, w2, 0, 0);
+  }
+  neckGeo.setAttribute("skinIndex", new THREE.Uint16BufferAttribute(skinIndices, 4));
+  neckGeo.setAttribute("skinWeight", new THREE.Float32BufferAttribute(skinWeights, 4));
+
+  const neckMesh = new THREE.SkinnedMesh(neckGeo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.75 }));
+  neckMesh.castShadow = true;
+  neckMesh.frustumCulled = false;
+  group.add(neckMesh);
+  group.add(bChest);                                      // 根骨挂组（与 SkinnedMesh 同级）
+  parts.push(neckMesh, bChest);
+
+  // 头球/冠/披肩/喙/目 皆挂在颈顶骨 Neck_Upper 上（经 headGroup 复位到原 neckPos 世界位），
+  // 随颈弯曲自然跟随，且保持原锦鸡/大雁的头部比例与位置
+  const headGroup = new THREE.Group();
+  headGroup.position.copy(np.clone().sub(curve.getPoint(1.0)));
+  bUp.add(headGroup);
+  const head = bLow;                                      // 动画句柄：旋转中段颈骨 → 整条颈平滑弯曲（不破面）
+  const headBone = bUp;                                   // 颈顶骨：头/喙/冠挂其上；视线锁定补偿用（反推颈动）
+
   if (S.headR > 0) {
     const skullGeo = new THREE.SphereGeometry(S.headR, 16, 12);
     paint(skullGeo, (x, y, z, c) => c.copy(NECK).lerp(ACC, THREE.MathUtils.clamp(y * 5 + 0.4, 0, 1)));
     const skull = cast(new THREE.Mesh(skullGeo, mat()));
     skull.position.set(...S.headPos);
-    head.add(skull);
+    headGroup.add(skull);
   }
   if (S.crestCount > 0) {
     const crestGeo = new THREE.ConeGeometry(0.02, 0.12, 6);
@@ -111,7 +167,7 @@ export function buildAvianBody({
       const crest = new THREE.Mesh(crestGeo, crestMat);
       crest.position.set((i - (S.crestCount - 1) / 2) * 0.018, 0.1, -0.01);
       crest.rotation.x = -1.35 - (i % 2) * 0.2; // 向后上方披散（锦鸡金丝冠掠过披肩）
-      head.add(crest);
+      headGroup.add(crest);
     }
   }
   // 锦鸡披肩：颈后扇形羽片罩于肩背，橙底缀黑色扇贝纹（capeColor 缺省则无）
@@ -128,7 +184,7 @@ export function buildAvianBody({
     const cape = cast(new THREE.Mesh(capeGeo, mat()));
     cape.position.set(0, 0.05, -0.042);
     cape.rotation.x = -0.62; // 自颈后向肩背披垂
-    head.add(cape);
+    headGroup.add(cape);
   }
   const beak = new THREE.Mesh(
     new THREE.ConeGeometry(S.beakR, S.beakLen, 8),
@@ -136,14 +192,13 @@ export function buildAvianBody({
   );
   beak.rotation.x = Math.PI / 2;
   beak.position.set(...S.beakPos);
-  head.add(beak);
+  headGroup.add(beak);
   const eyeMat = new THREE.MeshStandardMaterial({ color: 0x14100a });
   for (const s of [-1, 1]) {
     const eye = new THREE.Mesh(new THREE.SphereGeometry(S.eyeR, 8, 6), eyeMat);
     eye.position.set(s * S.eyePos[0], S.eyePos[1], S.eyePos[2]);
-    head.add(eye);
+    headGroup.add(eye);
   }
-  group.add(head); parts.push(head);
 
   // 双翼：贴体两侧的扁椭圆（飞时绕根扑动）
   // 翼面几何沿展向平移半展长：翼根钉在 pivot 原点，扑翼/翼展 morph 皆以贴体侧为轴
@@ -196,6 +251,11 @@ export function buildAvianBody({
     group.add(leg); legs.push(leg); parts.push(leg);
   }
 
+  // 骨骼绑定：根骨已在场景图，缩放后刷新世界矩阵，再 bind（与 BioEntityMesh 同法）
   group.scale.setScalar(k);
-  return { group, head, wings, tail, legs, parts };
+  group.updateMatrixWorld(true);
+  const skeleton = new THREE.Skeleton([bChest, bLow, bUp]);
+  neckMesh.bind(skeleton);
+  neckMesh.normalizeSkinWeights(); // 绑定后归一权重（THREE.SkinnedMesh 方法，非 BufferGeometry）
+  return { group, head, headBone, headGroup, spine: bChest, wings, tail, legs, parts };
 }
