@@ -9,7 +9,7 @@
 > 为世界古典美术中的人、动物与环境进行生态模拟 —— 画中的生物与植物都是**自主智能体（Autonomous Agents）**，
 > 平台吸收当代最强的拟生（Artificial Life / Behavioral Animation）技术，让古画"活"过来。
 
-首个场景：**《竹虎溪涧图》** —— 以狩野山乐《竹虎图》的斑斓猛虎为主角，
+首个场景：**《竹虎溪涧图》**（`tiger.html`）—— 以狩野山乐《竹虎图》的斑斓猛虎为主角，
 竹林与雪景溪涧的环境取自东京国立博物馆藏·雪舟《四季花鸟图》屏风的溪涧意趣。
 
 第二幅：**《寒梅归雁图》**（`plum.html`）—— 五层纵深布景：前景山石与石径 → 繁花古梅及伴生小竹芦苇 →
@@ -19,7 +19,7 @@
 大雁为雁形目（ANSERIFORMES·鸭科·雁属）自主智能体，躯体由 AvianBodyBuilder 比例覆写生成（长颈/肥体/阔翼）。
 该画配置独立成页：`plum-config.html`（与竹虎溪涧配置分开，归雁/花木/环境/机位/歌单全参数可调）。
 
-入口 `/` 为**展厅导航页**（`home.html`）：两幅画卡，点击进入对应场景页。
+入口 `/` 为**展厅导航页**（`home.html`）：两幅画卡（场景实拍封面，中英双语切换）+ 物种实验室环形光点导航。
 
 ## 核心理念
 
@@ -49,6 +49,13 @@
 - **行为层**（`tiger.js` / `rabbit.js`）：虎巡游路径/驻足状态机、觅母缓步接近（发现雪兔 7m 内减速靠近、相伴片刻）、Cannon kinematic 刚体、缠竹尾、虎斑顶点色注入；兔竹林环游（逐竹蹦跳目标点）、虎近身驻足等候
 - **母女对话**（`dialog.js`）：虎（女儿）中国传统式问安 → 兔（母亲）溺爱应答；母女**各自独立配置**大模型接口（OpenAI 兼容，留空走内置脚本）与语音（嗓音/语速/音高/音量，浏览器 speechSynthesis 中文女声），气泡投影跟随头顶；触发条件为母女相距 2.8m 内
 
+### 禽：连续蒙皮长颈 + 探头顿挫运动学
+- **连续蒙皮长颈**（`bio/AvianBodyBuilder.js`）：长颈为沿中心曲线生成的 `TubeGeometry` 蒙皮管（可烘焙 S 型弯曲），
+  骨链 `Spine_Chest → Neck_Lower → Neck_Upper` 双骨骼权重插值 —— 根治早期拼接式脖颈的"断颈"问题；
+  构建器向动画层暴露 `headBone / headGroup / spine` 句柄
+- **行走探头顿挫**（`bird.js` / `goose.js`）：双颈骨相位差对冲 + 幂次顿挫正弦（pow3 波形）+ 视线锁定补偿，
+  行走时头部呈"探-停-探-停"的鸟类典型顿挫，颈呈自然 S 型曲线；物种实验室的禽类预览统一接入同一套颈运动学
+
 ### 竹：刚体 + 球铰
 每根竹是 Cannon 动态刚体（Box），竹脚以 `PointToPointConstraint` 球铰锚定地面；
 回正采用**速度级 PD 控制**（角速度向"回正轴 × 刚度"混合），碰撞冲量自然保留 —— 虎推开、松手弹回。
@@ -69,12 +76,13 @@
 
 ```
 TigerInBamboo/
+├── index.html               # 仓库根跳转页：GitHub Pages 入口 → 展厅
 ├── backend/                 # Python 后端（FastAPI）
 │   ├── main.py              # 静态托管 + /api/config 配置读写（含旧配置迁移）
 │   └── requirements.txt
 ├── frontend/                # Three.js 前端（ES Modules，three 已本地化）
-│   ├── home.html            # 展厅导航页（/）：两幅画卡入口
-│   ├── index.html           # 3D 场景：竹虎溪涧
+│   ├── home.html            # 展厅导航页（/）：场景实拍画卡（中英切换）+ 实验室光点导航
+│   ├── tiger.html           # 3D 场景：竹虎溪涧
 │   ├── plum.html            # 3D 场景：寒梅归雁
 │   ├── plum-config.html     # 寒梅归雁独立配置页（归雁/花木/环境/机位/歌单）
 │   ├── config.html          # 系统配置页（场景/天气/虎/锦鸡/视觉/生态关系）
@@ -82,11 +90,11 @@ TigerInBamboo/
 │   ├── css/style.css
 │   └── js/
 │       ├── bio/             # 生物生成管线（数据/几何/骨骼/动画解耦）
-│       │   ├── BiologicalTaxonomyRegistry.js  # 物种数据仓库（拉丁学名组织，含鸡形目禽类）
+│       │   ├── BiologicalTaxonomyRegistry.js  # 物种数据仓库（拉丁学名组织，含鸡形目/雁形目禽类）
 │       │   ├── AnatomyRiggingEngine.js        # 骨骼解剖学装配器（通用骨骼层级）
 │       │   ├── ProceduralSkinGenerator.js     # 程序化网格生成器（顶点/法线/权重）
 │       │   ├── FelineLocomotionController.js  # 状态机动画驱动器（IDLE/WALK/ROAR）
-│       │   ├── AvianBodyBuilder.js            # 禽类躯体构建器（锦鸡/自定义鸟）
+│       │   ├── AvianBodyBuilder.js            # 禽类躯体构建器（连续蒙皮长颈，锦鸡/归雁/自定义鸟）
 │       │   └── BioEntityMesh.js               # 聚合实体（壳层皮毛一次编译）
 │       ├── config.js        # 默认配置 + API 读写（离线回退 localStorage，含旧版迁移）
 │       ├── physics.js       # Cannon 世界：地形 Heightfield、刚体注册、定步长推进
@@ -98,16 +106,16 @@ TigerInBamboo/
 │       ├── plum-main.js     # 寒梅归雁图启动与主循环
 │       ├── tiger.js         # 猛虎智能体：行为层（巡游/驻足状态机、觅母接近、物理刚体、缠竹尾、虎斑注入）
 │       ├── rabbit.js        # 雪兔智能体：竹林环游、虎近身驻足等候、耳/绒尾外观件
-│       ├── bird.js          # 锦鸡智能体：fear 状态机（觅食/饮水/惊飞/栖止/归飞）
+│       ├── bird.js          # 锦鸡智能体：fear 状态机（觅食/饮水/惊飞/栖止/归飞）+ 探头顿挫
 │       ├── custom.js        # 自定义物种智能体：lab 页产出，漫游 + 关系矩阵互动
 │       ├── species.js       # 物种记录存取（/api/species ↔ localStorage）
 │       ├── dialog.js        # 母女对话：问安/溺爱应答、内置脚本 + LLM 接口、中文女声 TTS
-│       ├── lab.js           # 物种实验室页面逻辑（四模块旋钮 + 上传取色 + 实时预览）
+│       ├── lab.js           # 物种实验室页面逻辑（四模块旋钮 + 上传取色 + 实时预览 + 禽类颈运动学预览）
 │       ├── bamboo.js        # 竹林：Cannon 刚体 + 球铰 + 速度级 PD 回正
 │       ├── plants.js        # 菖蒲、芦苇
 │       ├── scenery.js       # 布景（预留：图转 3D 装饰模型）
 │       ├── ui.js            # 视角预设与界面
-│       └── main.js          # 启动与主循环（行为 → 物理 → 同步）
+│       └── main.js          # 竹虎溪涧启动与主循环（行为 → 物理 → 同步）
 ├── tools/                   # 图转 3D 实验（TripoSR、浮雕、GLB 预览）
 ├── docs/references/         # 参考论文与画作出处说明
 ├── LICENSE
@@ -125,9 +133,11 @@ pip install -r backend/requirements.txt
 cd backend && uvicorn main:app --port 8931
 ```
 
-- 展厅导航：<http://localhost:8931/>（两幅画卡入口）
-- 3D 场景：<http://localhost:8931/index.html>（竹虎溪涧）、<http://localhost:8931/plum.html>（寒梅归雁）
+- 展厅导航：<http://localhost:8931/>（两幅画卡 + 实验室入口，中英切换）
+- 3D 场景：<http://localhost:8931/tiger.html>（竹虎溪涧）、<http://localhost:8931/plum.html>（寒梅归雁）
 - 系统配置：<http://localhost:8931/config.html>（修改保存后刷新场景页生效）
+
+> 没有后端也能跑：前端为纯静态实现（如 GitHub Pages），配置与物种记录自动回退 localStorage。
 
 ## 系统配置项
 
@@ -147,7 +157,7 @@ cd backend && uvicorn main:app --port 8931
 | 层 | 当前实现 | 规划引入的前沿技术 |
 |---|---|---|
 | 渲染 | Three.js（PBR + 顶点色斑纹 + 壳层皮毛） | 体积雾、光线步进、风格化 NPR（水墨勾线） |
-| 运动 | SkinnedMesh 骨骼驱动、程序化猫科步态、链式尾骨 | IK 全身解算、肌肉-骨骼物理（论文式 motor control） |
+| 运动 | SkinnedMesh 骨骼驱动、程序化猫科步态、链式尾骨、禽类双颈骨顿挫 | IK 全身解算、肌肉-骨骼物理（论文式 motor control） |
 | 物理 | Cannon.js（地形 Heightfield、刚体竹、kinematic 虎） | 虎全刚体运动、雨雪与岩石碰撞堆积 |
 | 行为 | 感知驱动有限状态机（巡游/驻足/警戒） | Steering Behaviors、Boids 群体、强化学习动作策略 |
 | 生态 | 物种关系矩阵（捕食/警戒/互利/竞争） | 饥饿-恐惧-繁殖内驱力模型、生态系统涌现模拟 |
@@ -183,9 +193,9 @@ cd backend && uvicorn main:app --port 8931
 > painting is an **autonomous agent**. Drawing on state-of-the-art artificial life / behavioral animation techniques,
 > the platform brings classical paintings to life.
 
-First scene: **"Tiger by the Bamboo Stream"** — starring the splendid tiger of Kanō Sanraku's *Tiger in Bamboo*,
-set in a snowy stream landscape inspired by Sesshū's *Flowers and Birds of the Four Seasons* screen
-(Tokyo National Museum).
+First scene: **"Tiger by the Bamboo Stream"** (`tiger.html`) — starring the splendid tiger of Kanō Sanraku's
+*Tiger in Bamboo*, set in a snowy stream landscape inspired by Sesshū's *Flowers and Birds of the Four Seasons*
+screen (Tokyo National Museum).
 
 Second painting: **"Returning Geese by the Wintry Plum"** (`plum.html`) — five depth layers: foreground rocks and a
 stone path → a blossoming ancient plum with companion bamboo and reeds → a gentle pond-side slope (the water curves
@@ -197,8 +207,8 @@ agents, with bodies proportion-overridden by the AvianBodyBuilder (long neck / p
 painting has its own config page: `plum-config.html` (separate from the tiger-stream config — geese, flora,
 environment, camera presets and playlist are all tunable).
 
-The entry `/` is a **gallery page** (`home.html`): two painting cards linking into the scene pages, with a
-中文/EN language toggle.
+The entry `/` is a **gallery page** (`home.html`): two painting cards with live-scene covers (中文/EN toggle) plus a
+glowing orb navigation into the species lab.
 
 ## Core Idea
 
@@ -255,6 +265,15 @@ machines interacting with the environment:
   voice (voice/rate/pitch/volume via browser speechSynthesis); bubbles project onto their heads; triggers within
   2.8 m proximity
 
+### Birds: continuously-skinned long neck + staccato head-bob kinematics
+- **Continuously-skinned neck** (`bio/AvianBodyBuilder.js`): the long neck is a `TubeGeometry` skinned along a
+  center curve (S-curves can be baked in), driven by a `Spine_Chest → Neck_Lower → Neck_Upper` bone chain with
+  two-bone weight interpolation — permanently fixing the "broken neck" of the earlier segmented design; the builder
+  exposes `headBone / headGroup / spine` handles to the animation layer
+- **Walking head-bob staccato** (`bird.js` / `goose.js`): phase-opposed dual neck bones + power-curve staccato sine
+  (pow3 waveform) + gaze-lock compensation produce the characteristic avian "thrust-hold-thrust-hold" head motion
+  and a natural S-curved neck while walking; the species lab's avian preview runs the same neck kinematics
+
 ### Bamboo: rigid bodies + ball joints
 Each bamboo is a Cannon dynamic rigid body (box), anchored to the ground by a `PointToPointConstraint` ball joint;
 upright recovery uses **velocity-level PD control** (angular velocity blended toward "recovery axis × stiffness"),
@@ -279,12 +298,13 @@ data for landing.
 
 ```
 TigerInBamboo/
+├── index.html               # repo-root redirect: GitHub Pages entry → gallery
 ├── backend/                 # Python backend (FastAPI)
 │   ├── main.py              # static hosting + /api/config read/write (with legacy config migration)
 │   └── requirements.txt
 ├── frontend/                # Three.js frontend (ES Modules, three vendored locally)
-│   ├── home.html            # gallery page (/): two painting cards, bilingual 中文/EN
-│   ├── index.html           # 3D scene: Tiger by the Bamboo Stream
+│   ├── home.html            # gallery page (/): live-scene cards (中文/EN toggle) + orb nav to the lab
+│   ├── tiger.html           # 3D scene: Tiger by the Bamboo Stream
 │   ├── plum.html            # 3D scene: Returning Geese by the Wintry Plum
 │   ├── plum-config.html     # plum scene config (geese/flora/environment/camera/playlist)
 │   ├── config.html          # system config (scene/weather/tiger/pheasant/visuals/relations)
@@ -292,11 +312,11 @@ TigerInBamboo/
 │   ├── css/style.css
 │   └── js/
 │       ├── bio/             # creature pipeline (data/geometry/skeleton/animation decoupled)
-│       │   ├── BiologicalTaxonomyRegistry.js  # taxonomy registry (Latin names, incl. Galliformes)
+│       │   ├── BiologicalTaxonomyRegistry.js  # taxonomy registry (Latin names, incl. Galliformes/Anseriformes)
 │       │   ├── AnatomyRiggingEngine.js        # skeleton assembly (generic bone hierarchy)
 │       │   ├── ProceduralSkinGenerator.js     # procedural mesh (vertices/normals/weights)
 │       │   ├── FelineLocomotionController.js  # state-machine animation (IDLE/WALK/ROAR)
-│       │   ├── AvianBodyBuilder.js            # avian body builder (pheasant/custom birds)
+│       │   ├── AvianBodyBuilder.js            # avian body builder (skinned long neck; pheasant/goose/custom birds)
 │       │   └── BioEntityMesh.js               # aggregate entity (shell fur compiled once)
 │       ├── config.js        # default config + API I/O (localStorage fallback, legacy migration)
 │       ├── physics.js       # Cannon world: heightfield terrain, body registry, fixed-step
@@ -308,16 +328,16 @@ TigerInBamboo/
 │       ├── plum-main.js     # plum scene boot & main loop
 │       ├── tiger.js         # tiger agent: behavior layer (patrol/pause, approach-mother, rigid body, tail curl, stripes)
 │       ├── rabbit.js        # snow hare agent: grove roaming, waits when tiger near, ear/tail parts
-│       ├── bird.js          # pheasant agent: fear state machine (forage/drink/flee/roost/return)
+│       ├── bird.js          # pheasant agent: fear state machine (forage/drink/flee/roost/return) + head-bob staccato
 │       ├── custom.js        # custom species agent: from the lab, roaming + relation-matrix interaction
 │       ├── species.js       # species record storage (/api/species ↔ localStorage)
 │       ├── dialog.js        # mother–daughter dialogue: greetings/doting replies, built-in script + LLM, TTS
-│       ├── lab.js           # species lab page logic (four-module knobs + image palette + live preview)
+│       ├── lab.js           # species lab page logic (four-module knobs + image palette + live preview + avian neck preview)
 │       ├── bamboo.js        # bamboo: Cannon bodies + ball joints + velocity-level PD recovery
 │       ├── plants.js        # sweet flag, reeds
 │       ├── scenery.js       # scenery (reserved: image-to-3D decorative models)
 │       ├── ui.js            # camera presets and UI
-│       └── main.js          # boot & main loop (behavior → physics → sync)
+│       └── main.js          # tiger-stream boot & main loop (behavior → physics → sync)
 ├── tools/                   # image-to-3D experiments (TripoSR, relief, GLB preview)
 ├── docs/references/         # reference papers and artwork provenance
 ├── LICENSE
@@ -335,8 +355,8 @@ pip install -r backend/requirements.txt
 cd backend && uvicorn main:app --port 8931
 ```
 
-- Gallery: <http://localhost:8931/> (entries to both paintings)
-- 3D scenes: <http://localhost:8931/index.html> (tiger stream), <http://localhost:8931/plum.html> (plum & geese)
+- Gallery: <http://localhost:8931/> (two painting cards + lab entry, 中文/EN toggle)
+- 3D scenes: <http://localhost:8931/tiger.html> (tiger stream), <http://localhost:8931/plum.html> (plum & geese)
 - System config: <http://localhost:8931/config.html> (refresh the scene page after saving)
 
 > No backend handy? The frontend also runs fully static (e.g. on GitHub Pages): config and species records
@@ -360,7 +380,7 @@ cd backend && uvicorn main:app --port 8931
 | Layer | Current | Planned frontier techniques |
 |---|---|---|
 | Rendering | Three.js (PBR + vertex-color stripes + shell fur) | volumetric fog, ray marching, stylized NPR (ink outline) |
-| Locomotion | SkinnedMesh bones, procedural feline gait, chained tail | full-body IK, muscle-tendon physics (paper-style motor control) |
+| Locomotion | SkinnedMesh bones, procedural feline gait, chained tail, avian dual-neck-bone staccato | full-body IK, muscle-tendon physics (paper-style motor control) |
 | Physics | Cannon.js (heightfield terrain, rigid bamboo, kinematic tiger) | full rigid-body tiger, snow/rain accumulation on rocks |
 | Behavior | perception-driven FSM (patrol/pause/alert) | steering behaviors, boids flocks, RL action policies |
 | Ecology | species relation matrix (predation/alert/mutualism/competition) | hunger–fear–reproduction drive models, emergent ecosystem simulation |

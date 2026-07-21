@@ -11,69 +11,50 @@
     .home-footer a:hover { color: var(--cinnabar); border-bottom-color: var(--cinnabar); }
     .home-footer .welcome { display: block; margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
 
-    /* 物种实验室 · 环形光点导航（创新点子） */
+    /* 画卡：场景实拍封面 + hover 微起 */
+    .painting-card figure { position: relative; overflow: hidden; }
+    .painting-card img { transition: transform 0.6s ease; }
+    .painting-card:hover img { transform: scale(1.04); }
+    .painting-card .agents {
+      position: absolute; left: 10px; bottom: 8px;
+      font-size: 12px; letter-spacing: 0.18em; color: #fff;
+      text-shadow: 0 1px 6px rgba(20, 16, 10, 0.8);
+    }
+
+    /* 物种实验室 · 环形光点导航（悬停闪烁） */
     .idea-orb {
       --orb: 64px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin: 14px auto 0;
-      width: var(--orb);
-      text-decoration: none;
-      color: var(--ink-soft);
+      position: relative; display: flex; flex-direction: column; align-items: center;
+      gap: 10px; margin: 6px auto 0; width: var(--orb);
+      text-decoration: none; color: var(--ink-soft);
     }
-    .idea-orb .orb-ring,
-    .idea-orb .orb-core {
-      border-radius: 50%;
-      box-sizing: border-box;
-    }
+    .idea-orb .orb-ring, .idea-orb .orb-core { border-radius: 50%; box-sizing: border-box; }
     .idea-orb .orb-ring {
-      width: var(--orb);
-      height: var(--orb);
+      width: var(--orb); height: var(--orb);
       border: 1.5px solid rgba(210, 120, 60, 0.55);
       box-shadow: 0 0 18px rgba(210, 120, 60, 0.25) inset, 0 0 14px rgba(210, 120, 60, 0.2);
       animation: orbPulse 3.2s ease-in-out infinite;
     }
     .idea-orb .orb-core {
-      position: absolute;
-      top: calc(var(--orb) / 2 - 7px);
-      width: 14px;
-      height: 14px;
+      position: absolute; top: calc(var(--orb) / 2 - 7px);
+      width: 14px; height: 14px;
       background: radial-gradient(circle at 35% 30%, #ffd9a8, var(--cinnabar) 70%);
       box-shadow: 0 0 12px rgba(210, 90, 40, 0.7);
       animation: orbBreathe 2.4s ease-in-out infinite;
     }
-    .idea-orb .orb-label {
-      font-size: 13px;
-      letter-spacing: 0.14em;
-      opacity: 0.7;
-      transition: opacity 0.25s, color 0.25s;
-    }
+    .idea-orb .orb-label { font-size: 13px; letter-spacing: 0.14em; opacity: 0.7; transition: opacity 0.25s, color 0.25s; }
     .idea-orb:hover .orb-ring {
       border-color: rgba(210, 90, 40, 0.95);
       box-shadow: 0 0 30px rgba(210, 90, 40, 0.55) inset, 0 0 26px rgba(210, 90, 40, 0.5);
       animation: orbFlicker 0.5s ease-in-out infinite;
     }
-    .idea-orb:hover .orb-core {
-      animation: orbFlicker 0.5s ease-in-out infinite;
-      box-shadow: 0 0 20px rgba(255, 150, 80, 0.95);
-    }
+    .idea-orb:hover .orb-core { animation: orbFlicker 0.5s ease-in-out infinite; box-shadow: 0 0 20px rgba(255, 150, 80, 0.95); }
     .idea-orb:hover .orb-label { opacity: 1; color: var(--cinnabar); }
-    @keyframes orbPulse {
-      0%, 100% { transform: scale(1); opacity: 0.85; }
-      50% { transform: scale(1.08); opacity: 1; }
-    }
-    @keyframes orbBreathe {
-      0%, 100% { transform: scale(0.85); opacity: 0.75; }
-      50% { transform: scale(1.15); opacity: 1; }
-    }
+    @keyframes orbPulse { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.08); opacity: 1; } }
+    @keyframes orbBreathe { 0%, 100% { transform: scale(0.85); opacity: 0.75; } 50% { transform: scale(1.15); opacity: 1; } }
     @keyframes orbFlicker {
-      0%, 100% { opacity: 1; transform: scale(1.05); }
-      25% { opacity: 0.55; transform: scale(0.92); }
-      50% { opacity: 0.95; transform: scale(1.12); }
-      75% { opacity: 0.6; transform: scale(0.96); }
+      0%, 100% { opacity: 1; transform: scale(1.05); } 25% { opacity: 0.55; transform: scale(0.92); }
+      50% { opacity: 0.95; transform: scale(1.12); } 75% { opacity: 0.6; transform: scale(0.96); }
     }
     @media (prefers-reduced-motion: reduce) {
       .idea-orb .orb-ring, .idea-orb .orb-core,
@@ -91,7 +72,10 @@
 
   <main class="gallery">
     <a class="painting-card" href="tiger.html">
-      <figure><img src="assets/gallery/tiger.jpg" alt="竹虎溪涧图" /></figure>
+      <figure>
+        <img src="assets/gallery/tiger-scene.jpg" alt="竹虎溪涧图 · 实时场景" />
+        <span class="agents" data-i18n="tigerAgents">虎 · 雪兔 · 锦鸡 · 竹林 · 雨雪</span>
+      </figure>
       <div class="card-caption">
         <h2 data-i18n="tigerTitle">竹虎溪涧图</h2>
         <p data-i18n="tigerDesc">雪竹 · 斑斓虎 · 雪兔 · 锦鸡 —— 狩野山乐《竹虎图》之威仪，雪舟《四季花鸟图》溪涧为境</p>
@@ -100,7 +84,10 @@
     </a>
 
     <a class="painting-card" href="plum.html">
-      <figure><img src="assets/gallery/plum.jpg" alt="寒梅归雁图" /></figure>
+      <figure>
+        <img src="assets/gallery/plum-scene.jpg" alt="寒梅归雁图 · 实时场景" />
+        <span class="agents" data-i18n="plumAgents">古梅 · 归雁 · 静水塘 · 远山 · 薄雪</span>
+      </figure>
       <div class="card-caption">
         <h2 data-i18n="plumTitle">寒梅归雁图</h2>
         <p data-i18n="plumDesc">古梅 · 修竹 · 水塘 · 归雁 —— 寒枝繁花，汀雁栖飞，远山如黛</p>
@@ -109,7 +96,7 @@
     </a>
   </main>
 
-  <!-- 物种实验室：配置型页面 · 环形光点导航（创新点子之意），悬停闪烁 -->
+  <!-- 物种实验室：环形光点导航，悬停闪烁 -->
   <a class="idea-orb" href="lab.html" aria-label="物种实验室">
     <span class="orb-ring"></span>
     <span class="orb-core"></span>
@@ -132,26 +119,28 @@
         subtitle: "画中生物皆为自主智能体 —— 感知 · 行为 · 运动，古画活过来了",
         tigerTitle: "竹虎溪涧图",
         tigerDesc: "雪竹 · 斑斓虎 · 雪兔 · 锦鸡 —— 狩野山乐《竹虎图》之威仪，雪舟《四季花鸟图》溪涧为境",
+        tigerAgents: "虎 · 雪兔 · 锦鸡 · 竹林 · 雨雪",
         plumTitle: "寒梅归雁图",
         plumDesc: "古梅 · 修竹 · 水塘 · 归雁 —— 寒枝繁花，汀雁栖飞，远山如黛",
+        plumAgents: "古梅 · 归雁 · 静水塘 · 远山 · 薄雪",
         enter: "入 画",
+        labTitle: "物种实验室",
         footer: "拟生 · Artificial Life —— Tu & Terzopoulos《Artificial Fishes》遗法",
         welcome: "开源共建：欢迎来修改、提 Issue、参与讨论",
-        labTitle: "物种实验室",
-        labDesc: "自主智能体的骨骼 · 皮肤 · 行为参数实时调校 —— 虎 · 兔 · 锦鸡 · 大雁，看画中生物如何被科学地捏出来",
       },
       en: {
         title: "Living Classical Art",
         subtitle: "Every creature is an autonomous agent — perception · behavior · locomotion — classical paintings come alive",
         tigerTitle: "Tiger by the Bamboo Stream",
         tigerDesc: "Snow bamboo · tiger · snow hare · golden pheasant — after Kanō Sanraku's “Tiger in Bamboo”, set in a stream scene from Sesshū",
+        tigerAgents: "Tiger · snow hare · pheasant · bamboo · rain & snow",
         plumTitle: "Returning Geese by the Wintry Plum",
         plumDesc: "Ancient plum · slender bamboo · still pond · returning geese — blossoms on cold branches, geese above ink-blue hills",
+        plumAgents: "Plum · geese · pond · distant hills · light snow",
         enter: "Enter",
+        labTitle: "Species Lab",
         footer: "Artificial Life — after Tu & Terzopoulos' “Artificial Fishes”",
         welcome: "Open source — contributions, issues and discussions are welcome",
-        labTitle: "Species Lab",
-        labDesc: "Tune the skeleton, skin and behavior of every autonomous agent live — tiger, hare, pheasant and goose, and see how the creatures are scientifically sculpted.",
       },
     };
     const KEY = "ui.lang";
