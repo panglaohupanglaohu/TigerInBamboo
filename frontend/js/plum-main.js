@@ -3,10 +3,11 @@
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { OrbitControls } from "../assets/vendor/three/jsm/controls/OrbitControls.js";
 import { loadConfig } from "./config.js";
-import { PlumEnvironment } from "./environment-plum.js";
+import { PlumEnvironment, groundHeight, pondQuery, POND, PLUM_TREE_POS } from "./environment-plum.js";
 import { PlumGrove } from "./plumtree.js";
 import { GooseFlock } from "./goose.js";
 import { PlumCameraDirector, updatePlumAgentPanel } from "./ui-plum.js";
+import { CustomAgent, loadSavedSpecies } from "./custom.js";
 import { BgmPlayer } from "./bgm.js";
 import { GooseSfx } from "./sfx.js";
 import "./panels.js"; // 面板推拉收合（竖柄）
@@ -45,6 +46,33 @@ async function boot() {
   const flock = new GooseFlock(scene, config, env, gooseSfx); // 第三/四层：栖雁与归雁
   const director = new PlumCameraDirector(camera, controls);
   window.__dbg = { flock, env, grove, camera, controls, director, bgm, gooseSfx }; // 调试钩子
+
+  // 物种实验室产出 → 寒梅漫游（薄雪易滑、临梅塘而居、与归雁互动）
+  let custom = null;
+  loadSavedSpecies().then((rec) => {
+    if (!rec) return;
+    const plumAdapter = {
+      groundHeight: (x, z) => groundHeight(x, z),
+      isWater: (x, z) => pondQuery(x, z).inside,
+      waterLevel: POND.level,
+      snowSlick: () => 0.8, // 全场薄雪，易滑
+      home: new THREE.Vector3(-12, 0, 16),
+      wanders: [
+        { x: PLUM_TREE_POS.x, z: PLUM_TREE_POS.z },
+        { x: PLUM_TREE_POS.x + 2, z: PLUM_TREE_POS.z + 3 },
+        { x: -12, z: 12 }, { x: -10, z: 14 }, { x: -13, z: 18 }, { x: -8, z: 10 },
+      ],
+      waterPoint: () => new THREE.Vector3(POND.cx + (Math.random() - 0.5) * 3, 0, POND.cz + (Math.random() - 0.5) * 3),
+      getOther: () => flock?.leader?.pos ?? null,
+      who: "goose",
+      avesForage: [-12, 16],
+      avesPerch: [PLUM_TREE_POS.x, PLUM_TREE_POS.z + 4],
+    };
+    custom = new CustomAgent(scene, rec, plumAdapter, {
+      pheasant: { enabled: true, fleeDistance: 6, returnDistance: 14, drinkInterval: 25, perchTime: 4 },
+    });
+    window.__dbg.custom = custom;
+  });
   const preset = config.plum?.cameraPreset ?? config.style?.cameraPreset;
   if (preset) director.set(preset);
 
@@ -71,10 +99,11 @@ async function boot() {
     grove.update(dt);        // 落花瓣
     grove.updateBambooSnow(dt, flock.geese); // 大雁碰落竹上积雪
     flock.update(dt, time);  // 雁群状态机 + 涟漪
+    custom?.update(dt, time); // 实验室物种漫游（雪地打滑 / 临水 / 与雁互动）
     director.update(dt, flock);
 
     hudClock += dt;
-    if (hudClock > 0.25) { hudClock = 0; updatePlumAgentPanel(flock, config); }
+    if (hudClock > 0.25) { hudClock = 0; updatePlumAgentPanel(flock, config, custom); }
 
     renderer.render(scene, camera);
   });

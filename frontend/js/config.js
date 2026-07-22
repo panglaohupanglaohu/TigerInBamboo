@@ -1,4 +1,4 @@
-// 配置读写：优先走后端 /api/config，离线（file:// 等）回退 localStorage
+// 配置读写：优先走后端 api/config，离线（file:// 等）回退 localStorage
 export const DEFAULT_CONFIG = {
   scene: {
     bambooCount: 90,
@@ -161,7 +161,7 @@ function merge(base, override) {
 export async function loadConfig() {
   let cfg = null;
   try {
-    const res = await fetch("/api/config");
+    const res = await fetch("api/config");
     if (res.ok) cfg = await res.json();
   } catch (_) { /* 离线回退 */ }
   if (!cfg) {
@@ -197,7 +197,7 @@ export async function loadConfig() {
 export async function saveConfig(config) {
   const merged = merge(DEFAULT_CONFIG, config);
   try {
-    const res = await fetch("/api/config", {
+    const res = await fetch("api/config", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(merged),
@@ -214,7 +214,7 @@ export async function saveConfig(config) {
 
 export async function resetConfig() {
   try {
-    await fetch("/api/config/reset", { method: "POST" });
+    await fetch("api/config/reset", { method: "POST" });
   } catch (_) { /* ignore */ }
   try { localStorage.removeItem(STORAGE_KEY); } catch (_) { /* ignore */ }
   return JSON.parse(JSON.stringify(DEFAULT_CONFIG));

@@ -19,8 +19,7 @@ tools/out/
 tools/crops/
 pic/
 tools/.shot/
-# 版权乐曲：仅保留在本地，不入库
-frontend/assets/audio/*.mp3
+# 乐曲资源：随前端一并发布
 frontend/assets/audio/*.ogg
 
 # OS / 编辑器

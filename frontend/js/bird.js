@@ -6,6 +6,54 @@ import { groundHeight, streamCurve, distToStream } from "./environment.js";
 import { loadGLB, normalizeModel, hasModel } from "./assets.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
 
+const PHEASANT_CLEARINGS = [
+  { x: -30, z: -18, r: 7.5 },
+  { x: 24, z: -30, r: 8.5 },
+  { x: 31, z: 17, r: 8.0 },
+  { x: -27, z: 27, r: 7.0 },
+  { x: 12, z: 34, r: 6.5 },
+];
+
+export function randomPheasantSpot({
+  rng = Math.random,
+  minStreamDistance = 8.0,
+  avoid = null,
+  minAvoidDistance = 14.0,
+} = {}) {
+  for (let tries = 0; tries < 80; tries++) {
+    const c = PHEASANT_CLEARINGS[Math.floor(rng() * PHEASANT_CLEARINGS.length)];
+    const a = rng() * Math.PI * 2;
+    const r = Math.sqrt(rng()) * c.r;
+    const x = c.x + Math.cos(a) * r;
+    const z = c.z + Math.sin(a) * r;
+    if (Math.abs(x) > 38 || Math.abs(z) > 38) continue;
+    if (distToStream(x, z) < minStreamDistance) continue;
+    if (avoid && Math.hypot(x - avoid.x, z - avoid.z) < minAvoidDistance) continue;
+    return new THREE.Vector3(x, groundHeight(x, z), z);
+  }
+  const fallback = PHEASANT_CLEARINGS.find((c) => {
+    if (distToStream(c.x, c.z) < minStreamDistance) return false;
+    return !avoid || Math.hypot(c.x - avoid.x, c.z - avoid.z) >= minAvoidDistance;
+  }) || PHEASANT_CLEARINGS[0];
+  return new THREE.Vector3(fallback.x, groundHeight(fallback.x, fallback.z), fallback.z);
+}
+
+export function randomPheasantPerchSpot(forage, {
+  rng = Math.random,
+  minStreamDistance = 8.0,
+} = {}) {
+  for (let tries = 0; tries < 40; tries++) {
+    const a = rng() * Math.PI * 2;
+    const r = 5 + rng() * 7;
+    const x = forage.x + Math.cos(a) * r;
+    const z = forage.z + Math.sin(a) * r;
+    if (Math.abs(x) > 38 || Math.abs(z) > 38) continue;
+    if (distToStream(x, z) < minStreamDistance) continue;
+    return new THREE.Vector3(x, groundHeight(x, z), z);
+  }
+  return randomPheasantSpot({ rng, minStreamDistance });
+}
+
 export const BIRD_STATE = {
   FORAGE: "觅食", DRINK: "去饮水", DRINKING: "饮水",
   ALERT: "警觉", RUN: "奔逃", FLEE: "惊飞", PERCH: "栖止", RETURN: "归飞", CAUGHT: "被获",
@@ -118,6 +166,7 @@ export class BirdAgent {
     this.head = built.head;            // 中段颈骨 (Neck_Lower)
     this.headBone = built.headBone;    // 颈顶骨 (Neck_Upper)
     this.headGroup = built.headGroup;  // 头部几何载体（挂在颈顶骨下）
+    this.headLock = this.opts?.headLock ?? 0.28; // 头随颈倾摆比例（视线锁定降级）
     this.spine = built.spine;          // 胸腔锚骨 (Spine_Chest)
     this.wings = built.wings;
     this.tail = built.tail;
@@ -137,6 +186,7 @@ export class BirdAgent {
         this._respawn -= dt;
         if (this._respawn <= 0) { // 理论上虎会先放下；兜底直接重生
           this.carried = false;
+          this._pickRespawnSpot(tigerPos);
           this.pos.copy(this.forageSpot);
           this.group.position.copy(this.forageSpot);
           this.group.rotation.set(0, 0, 0);
@@ -156,6 +206,7 @@ export class BirdAgent {
         if (this._dropped <= 0) this.group.visible = false;
       } else if (this._respawn < (cfg.respawnDelay ?? 20) - 0.8) this.group.visible = false;
       if (this._respawn <= 0) {
+        this._pickRespawnSpot(tigerPos);
         this.pos.copy(this.forageSpot);
         this.group.visible = true;
         this.state = S.FORAGE;
@@ -261,6 +312,25 @@ export class BirdAgent {
       }
     }
     return this.perchSpot.clone();
+  }
+
+  /** 重生落点：随机落在远离溪涧的林缘/雪坡处（距虎 ≥14m）。
+   *  同时按新觅食点重算饮水点，使重生后行为（饮水/避险）自然衔接。 */
+  _pickRespawnSpot(tigerPos) {
+    const spot = randomPheasantSpot({ avoid: tigerPos, minStreamDistance: 8.0 });
+    this.forageSpot.copy(spot);
+    this.perchSpot.copy(randomPheasantPerchSpot(spot, { minStreamDistance: 8.0 }));
+    this._target.copy(this.forageSpot);
+    // 重算饮水点：距新觅食点最近的溪岸
+    let best = null, bd = Infinity;
+    for (let i = 0; i <= 60; i++) {
+      const p = streamCurve.getPointAt(i / 60);
+      const d = p.distanceTo(this.forageSpot);
+      if (d < bd) { bd = d; best = p.clone(); }
+    }
+    const toBank = new THREE.Vector3().subVectors(this.forageSpot, best).setY(0).normalize();
+    this.drinkSpot = best.clone().addScaledVector(toBank, 1.05);
+    this.drinkSpot.y = 0;
   }
 
   /** 奔逃：拍翅贴地疾窜（短时），随后向远处惊飞拉开距离 */
@@ -404,6 +474,8 @@ export class BirdAgent {
       o.rotation.x += (x - o.rotation.x) * k;
       o.rotation.y += (y - o.rotation.y) * k;
     };
+    const L = this.headLock ?? 0.28;            // 头随颈倾摆比例（视线锁定降级）
+    const lock = (x) => x * (1 - L);
     if (mode === "walk") {
       // 🦢 行走探头顿挫公式：高频步伐 + 幂次(pow3)让波形在过零处停顿、过渡时爆发
       const tick = time * 5.5;                          // 鸟类步伐频率较快
@@ -420,8 +492,8 @@ export class BirdAgent {
       n1.rotation.y += (n1y - n1.rotation.y) * k;
       n2.rotation.x += (n2x - n2.rotation.x) * k;
       n2.rotation.y += (n2y - n2.rotation.y) * k;
-      // 视线锁定补偿：headGroup 反向抵消双颈骨累积旋转，喙/目在世界空间恒指前方
-      if (hg) { hg.rotation.x += (-(n1x + n2x) + 0.05 + jerkC * 0.06 - hg.rotation.x) * k; hg.rotation.y += (-(n1y + n2y) - hg.rotation.y) * k; }
+      // 头随颈尖一起运动：视线锁定补偿按 headLock 衰减，头保留大部分颈倾摆（不再世界静止，消除脱节）
+      if (hg) { hg.rotation.x += (lock(-(n1x + n2x)) + 0.05 + jerkC * 0.06 - hg.rotation.x) * k; hg.rotation.y += (lock(-(n1y + n2y)) - hg.rotation.y) * k; }
     } else if (mode === "alert") {
       // 警觉：长颈笔直高昂，头高频小幅张望（神经质）
       const look = Math.sin(time * 8.0) * 0.4 * (Math.cos(time * 2.0) > 0.3 ? 1 : 0);
@@ -437,7 +509,7 @@ export class BirdAgent {
       const br = Math.sin(time * 1.5) * 0.05;
       setR(n1, br, 0);
       setR(n2, -br * 0.8, 0);
-      if (hg) { hg.rotation.x += (-br * 0.2 - hg.rotation.x) * k; hg.rotation.y += (0 - hg.rotation.y) * k; }
+      if (hg) { hg.rotation.x += (lock(-br * 0.2) - hg.rotation.x) * k; hg.rotation.y += (0 - hg.rotation.y) * k; }
     }
   }
 

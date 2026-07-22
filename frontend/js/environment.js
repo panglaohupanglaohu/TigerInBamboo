@@ -167,6 +167,7 @@ export class Environment {
     this.config = config;
     this.physics = physics;
     this.time = 0;
+    this._footRippleIdx = 0;
     this._buildSkyAndLight();
     this._buildGround();
     this._buildRocks();   // 先立石：溪涧波纹要绕石衍射
@@ -275,6 +276,7 @@ export class Environment {
       uSunDir: { value: new THREE.Vector3(-24, 30, -14).normalize() }, // 同主光
       uRocks: { value: rockVecs },
       uWader: { value: new THREE.Vector4(0, 0, 0.55, 0) }, // 涉水者：x,z 位置 / z 半径 / w 强度
+      uFootRipples: { value: Array.from({ length: 8 }, () => new THREE.Vector4(0, 0, 0, 0)) }, // per-foot 涟漪池：x,z / z=强度 / w=年龄
     };
     const mat = new THREE.ShaderMaterial({
       uniforms: this.waterUniforms,
@@ -298,6 +300,7 @@ export class Environment {
         uniform vec3 uSunDir;
         uniform vec4 uRocks[16];
         uniform vec4 uWader;
+        uniform vec4 uFootRipples[8];
         varying vec2 vUv;
         varying vec3 vWorld;
         varying float vSpeed;
@@ -341,6 +344,22 @@ export class Environment {
             ringGrad += (dv / d) * (16.0 * cos(phase)) * att;
             foam += smoothstep(0.9, 0.2, d) * 0.35 * uWader.w;
             boost += exp(-d * 0.7) * 0.5 * uWader.w;
+          }
+
+          // —— 足下涟漪：每只踏水的脚独立生环 + 遇石衍射（虎步生涟，步步清晰）——
+          for (int i = 0; i < 8; i++) {
+            vec4 fr = uFootRipples[i];
+            if (fr.z < 0.001) continue;
+            float age = fr.w;
+            float radius = age * 2.4;                 // 涟漪随时间外扩
+            vec2 dv = vWorld.xz - fr.xy;
+            float d = max(length(dv), 1e-3);
+            float phase = (d - radius) * 17.0;        // 以扩散前缘为波峰
+            float att = exp(-abs(d - radius) * 1.4) * fr.z * smoothstep(2.4, 0.4, age);
+            ring += sin(phase) * att;
+            ringGrad += (dv / d) * (17.0 * cos(phase)) * att;
+            foam += smoothstep(radius + 0.5, radius - 0.2, d) * 0.4 * fr.z * smoothstep(2.4, 0.4, age);
+            boost += exp(-abs(d - radius) * 1.0) * 0.5 * fr.z * smoothstep(2.4, 0.4, age);
           }
 
           // —— 波纹场：随流速推移（v=Q/宽；遇石再加速），噪声细波取代旧条带 ——
@@ -514,9 +533,30 @@ export class Environment {
     }
   }
 
+  /** 单只脚踏入溪水：在接触点触发一道外扩涟漪（绕石自动衍射）。
+   *  采用环状缓冲，最多 8 道并发涟漪；strength 由落脚力度决定。 */
+  spawnFootRipple(x, z, strength = 1) {
+    const arr = this.waterUniforms?.uFootRipples?.value;
+    if (!arr) return;
+    const v = arr[this._footRippleIdx % arr.length];
+    this._footRippleIdx++;
+    v.set(x, z, THREE.MathUtils.clamp(strength, 0, 1.5), 0.0);
+  }
+
   update(dt) {
     this.time += dt;
     this.waterUniforms.uTime.value = this.time;
+    // 足下涟漪年龄推进 + 强度自然衰减
+    const fr = this.waterUniforms.uFootRipples?.value;
+    if (fr) {
+      for (const v of fr) {
+        if (v.z > 0.001) {
+          v.w += dt;
+          v.z *= 1 - Math.min(dt * 0.9, 0.5); // 衰减
+          if (v.w > 2.4) v.z = 0;
+        }
+      }
+    }
     // 降水：温度 > 0℃ 下雨，≤ 0℃ 下雪；风向决定水平飘移方向
     const { temperature, snowfall, wind, windDirection } = this.config.weather;
     const isRain = temperature > 0;

@@ -1,253 +1,327 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>物种实验室 · 世界古典美术拟生平台</title>
+  <title>物种实验室 · 拟生造物</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/lab.css" />
 </head>
-<body>
-  <div class="lab-page">
-    <div class="config-header">
-      <h1>物种实验室</h1>
-      <a href="home.html">← 返回展厅</a>
-    </div>
-    <p class="config-sub">
-      数据仓库 → 程序化网格 → 骨骼装配 → 状态机驱动：生物生成全管线调参与新物种存档。
-      左侧调形、右侧调骨与态，中部视窗实时预览（形体参数防抖 0.12 秒后整体重建）。
-    </p>
+<body class="lab-page">
+  <header class="config-header">
+    <h1>物种实验室</h1>
+    <a href="home.html">← 返回首页</a>
+  </header>
+  <p class="config-sub">上传参考图后，实验室会把轮廓、物种、解剖、网格、习性与关系合成为可演练的 3D 生物。</p>
 
-    <div class="lab-grid">
-      <!-- 左栏：形体两卡 -->
-      <div class="lab-col">
-        <fieldset>
-          <legend>物 种 数 据 仓 库</legend>
-          <div class="field">
-            <label>解剖类型</label>
-            <select id="m-anatomy" data-path="anatomyType">
-              <option value="DIGITIGRADE">趾行 DIGITIGRADE</option>
-              <option value="UNGULIGRADE">蹄行 UNGULIGRADE</option>
-              <option value="SALTATORIAL">跳跃行 SALTATORIAL</option>
-              <option value="AVES">禽类 AVES</option>
-            </select>
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>体宽</label>
-            <input type="range" data-path="dimensions.width" min="0.1" max="1.0" step="0.01" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>总高</label>
-            <input type="range" data-path="dimensions.height" min="0.1" max="1.6" step="0.01" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>总长</label>
-            <input type="range" data-path="dimensions.length" min="0.2" max="3.5" step="0.01" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>肩高</label>
-            <input type="range" data-path="anatomicalRef.withersHeight" min="0.05" max="1.2" step="0.01" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>尾长</label>
-            <input type="range" data-path="anatomicalRef.tailLength" min="0.02" max="1.2" step="0.01" />
-            <span class="value"></span>
-          </div>
-          <div class="field" id="ear-field">
-            <label>耳长</label>
-            <input type="range" id="m-ear" data-path="anatomicalRef.earLength" min="0" max="0.2" step="0.005" />
-            <span class="value"></span>
-          </div>
-          <p class="hint">耳长仅跳跃行（兔科长耳）有效。</p>
-        </fieldset>
+  <div class="lab-shell">
+    <!-- ============ 左侧导航菜单 ============ -->
+    <nav class="lab-nav" aria-label="造物模块">
+      <p class="lab-nav-title">拟生造物管线</p>
+      <ul class="lab-nav-list">
+        <li><button class="lab-nav-btn active" data-pane="pane-registry">
+          <span class="nav-idx">壹</span><span class="nav-txt">物种数据仓库</span></button></li>
+        <li><button class="lab-nav-btn" data-pane="pane-rigging">
+          <span class="nav-idx">贰</span><span class="nav-txt">骨骼解剖学装配器</span></button></li>
+        <li><button class="lab-nav-btn" data-pane="pane-skin">
+          <span class="nav-idx">叁</span><span class="nav-txt">程序化网格生成器</span></button></li>
+        <li><button class="lab-nav-btn" data-pane="pane-locomotion">
+          <span class="nav-idx">肆</span><span class="nav-txt">状态机动画驱动器</span></button></li>
+      </ul>
 
-        <fieldset>
-          <legend>程 序 化 网 格 生 成 器</legend>
-          <div class="field">
-            <label>臀部粗细</label>
-            <input type="range" data-path="shape.rumpScale" min="0.5" max="1.8" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>腹部饱满</label>
-            <input type="range" data-path="shape.bellyScale" min="0.5" max="1.8" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>胸部发达</label>
-            <input type="range" data-path="shape.chestScale" min="0.5" max="1.8" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>头颈比例</label>
-            <input type="range" data-path="shape.headScale" min="0.5" max="1.8" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>腿径</label>
-            <input type="range" data-path="shape.legScale" min="0.4" max="1.8" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>尾径</label>
-            <input type="range" data-path="shape.tailScale" min="0.4" max="1.8" step="0.05" />
-            <span class="value"></span>
-          </div>
-        </fieldset>
-      </div>
+      <p class="lab-nav-title">习性 · 档案</p>
+      <ul class="lab-nav-list">
+        <li><button class="lab-nav-btn" data-pane="pane-semantics">
+          <span class="nav-idx">伍</span><span class="nav-txt">习性语义画像</span></button></li>
+        <li><button class="lab-nav-btn" data-pane="pane-archive">
+          <span class="nav-idx">陆</span><span class="nav-txt">物种档案</span></button></li>
+        <li><button class="lab-nav-btn" data-pane="pane-relations">
+          <span class="nav-idx">柒</span><span class="nav-txt">物种关系</span></button></li>
+      </ul>
+    </nav>
 
-      <!-- 中栏：3D 视窗 -->
-      <div class="lab-view">
+    <!-- ============ 右侧主区 ============ -->
+    <main class="lab-main">
+      <section class="bio-workbench" aria-label="图像拟生建模工作台">
+        <div class="workbench-card unified-console">
+          <div class="card-head">
+            <p class="eyebrow">Image · Rig · Evidence</p>
+            <h2>以图构形 / 复合拟生构建 / 调研依据</h2>
+          </div>
+          <div class="console-grid">
+            <div class="console-block upload-console">
+              <p class="block-title">图像输入</p>
+              <div class="image-row primary">
+                <label class="btn filebtn">上传图片<input id="img-upload" type="file" accept="image/*" hidden /></label>
+                <button class="btn" id="tiger-preset-btn">老虎潜行预设</button>
+                <button class="btn" id="avian-preset-btn">禽类建模预设</button>
+                <button class="btn" id="snap-btn">摄取模型影相</button>
+                <img id="view-thumb" class="thumb large" alt="上传或视窗缩略" />
+              </div>
+              <div id="infer-card" class="infer-card" hidden>
+                <div class="infer-row"><label>推断解剖</label><b id="infer-type">—</b><span class="pill" id="infer-conf"></span></div>
+                <div id="infer-bars"></div>
+                <div class="infer-actions">
+                  <button class="btn small" id="apply-infer" hidden>按当前解剖构建</button>
+                  <button class="btn small" id="apply-suggest" hidden>应用建议尺寸</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="console-block build-pipeline">
+              <p class="block-title">参数管线</p>
+              <ol class="pipeline-list" id="pipeline-list">
+                <li class="done" data-build-step="image"><span>01</span><b>图片 + 物种调参</b><em id="read-anatomy">等待图像</em></li>
+                <li data-build-step="rig"><span>02</span><b>解剖骨骼装配</b><em id="read-rig">肩高 / 尾长未计算</em></li>
+                <li data-build-step="mesh"><span>03</span><b>网格细化优化</b><em id="read-mesh">拓扑待构建</em></li>
+                <li data-build-step="state"><span>04</span><b>状态机动画演练</b><em id="read-gait">步态待计算</em></li>
+              </ol>
+            </div>
+
+            <div class="console-block research-brief">
+              <p class="block-title">科学证据 → 参数</p>
+              <ul class="evidence-list" id="evidence-list">
+                <li><b>物种证据</b><em>等待参数同步</em></li>
+                <li><b>骨骼证据</b><em>等待参数同步</em></li>
+                <li><b>步态证据</b><em>等待参数同步</em></li>
+              </ul>
+              <div class="source-links" id="source-links">
+                <a href="https://animals.sandiegozoo.org/animals/tiger" target="_blank" rel="noreferrer">San Diego Zoo</a>
+                <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0003808" target="_blank" rel="noreferrer">PLOS One</a>
+                <a href="https://animaldiversity.org/collections/mammal_anatomy/running_fast/" target="_blank" rel="noreferrer">Animal Diversity Web</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3D 视窗常驻顶部 -->
+      <section class="lab-view">
         <div class="view-toolbar">
-          <label class="btn ghost small" for="img-upload">上传图片建模</label>
-          <input type="file" id="img-upload" accept="image/*" hidden />
-          <img id="view-thumb" class="thumb" alt="缩略图" hidden />
+          <button class="btn small" id="rebuild-btn">重建模型</button>
+          <button class="btn small" id="inspect-rig-btn" aria-pressed="false">骨架透视</button>
           <div class="swatches" id="swatches"></div>
-          <button type="button" class="btn ghost small" id="apply-suggest" hidden></button>
-          <button type="button" class="btn ghost small" id="snap-btn">摄型为照</button>
+          <span class="hint" id="kind-hint">加载中…</span>
         </div>
-        <div class="lab-canvas-wrap"><canvas id="viewport"></canvas></div>
-        <p class="hint">拖拽旋转 · 滚轮缩放 · 地面格距 0.1 m，旁置 1 m 比例尺</p>
-      </div>
-
-      <!-- 右栏：骨骼与驱动两卡 -->
-      <div class="lab-col">
-        <fieldset>
-          <legend>骨 骼 解 剖 学 装 配 器</legend>
-          <div class="field">
-            <label>颈长</label>
-            <input type="range" data-path="rigTuning.neckLen" min="0.6" max="1.6" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>关节折叠</label>
-            <input type="range" data-path="rigTuning.legFold" min="0" max="2" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>皮毛层数</label>
-            <input type="range" data-path="rendering.furLayers" min="0" max="24" step="1" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>皮毛长度</label>
-            <input type="range" data-path="rendering.furLength" min="0" max="0.06" step="0.002" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>基色</label>
-            <input type="color" data-path="rendering.baseColor" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>粗糙度</label>
-            <input type="range" data-path="rendering.roughness" min="0" max="1" step="0.05" />
-            <span class="value"></span>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>状 态 机 动 画 驱 动 器</legend>
-          <div class="state-row">
-            <button type="button" class="state-btn" data-state="IDLE">驻足 IDLE</button>
-            <button type="button" class="state-btn" data-state="WALK">行走 WALK</button>
-            <button type="button" class="state-btn" id="state-roar" data-state="ROAR">咆哮 ROAR</button>
-          </div>
-          <div class="field">
-            <label>步态频率</label>
-            <input type="range" data-path="gait.freq" min="0.4" max="2.5" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>摆动幅度</label>
-            <input type="range" data-path="gait.swing" min="0" max="2" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>脊椎波动</label>
-            <input type="range" data-path="gait.spine" min="0" max="2" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>摆尾幅度</label>
-            <input type="range" data-path="gait.tail" min="0" max="2" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <p class="hint">咆哮 ROAR 仅非跳跃行有意义。</p>
-        </fieldset>
-      </div>
-    </div>
-
-    <!-- 底部通栏：档案 -->
-    <fieldset class="lab-archive">
-      <legend>物 种 档 案</legend>
-      <div class="archive-grid">
-        <div>
-          <div class="field">
-            <label>启用</label>
-            <input type="checkbox" data-path="enabled" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>中文名</label>
-            <input type="text" data-path="cnName" placeholder="自定义物种" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>拉丁学名</label>
-            <input type="text" data-path="scientificName" placeholder="Species nova" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>解剖类型</label>
-            <select data-path="anatomyType">
-              <option value="DIGITIGRADE">趾行 DIGITIGRADE</option>
-              <option value="UNGULIGRADE">蹄行 UNGULIGRADE</option>
-              <option value="SALTATORIAL">跳跃行 SALTATORIAL</option>
-              <option value="AVES">禽类 AVES</option>
-            </select>
-            <span class="value"></span>
-          </div>
+        <div class="lab-canvas-wrap">
+          <canvas id="viewport"></canvas>
         </div>
-        <div>
-          <div class="field">
-            <label>特点描述</label>
-            <textarea data-path="traits" rows="5" placeholder="形体、习性、与溪涧众生的相处之道……"></textarea>
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>缩略图</label>
-            <img id="archive-thumb" class="archive-thumb" alt="暂无图像" />
-            <span class="value"></span>
-          </div>
+        <div class="state-row">
+          <button class="state-btn active" data-state="IDLE">静立</button>
+          <button class="state-btn" data-state="WALK">行走</button>
+          <button class="state-btn" data-state="TROT">小跑</button>
+          <button class="state-btn" data-state="CREEP">匍匐</button>
+          <button class="state-btn" data-state="POUNCE">扑击</button>
         </div>
+      </section>
+
+      <!-- 标签页内容 -->
+      <div class="lab-panes">
+        <!-- 模块一：物种数据仓库 -->
+        <section class="lab-pane active" id="pane-registry">
+          <fieldset id="species-config">
+            <legend>模块一 · 物种数据仓库</legend>
+            <p class="pane-desc">以生物分类与拉丁学名驱动骨架选取，以空间边界盒（Bounding Box）约束真实体量。</p>
+            <div class="field"><label>物种中文名</label><input id="cfg-name" type="text" value="雪原猛兽" /><span class="value"></span></div>
+            <div class="field"><label>拉丁学名</label><input id="cfg-latin" type="text" value="Panthera tigris" /><span class="value"></span></div>
+            <div class="field"><label>纲</label>
+              <select id="cfg-class">
+                <option value="mammal">哺乳纲 Mammalia</option>
+                <option value="bird">鸟纲 Aves</option>
+                <option value="reptile">爬行纲 Reptilia</option>
+                <option value="amphibian">两栖纲 Amphibia</option>
+                <option value="fish">鱼纲 Pisces</option>
+                <option value="insect">昆虫纲 Insecta</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>解剖型</label>
+              <select id="cfg-anatomy">
+                <option value="FELINE">猫科（趾行）</option>
+                <option value="CANINE">犬科</option>
+                <option value="UNGULATE">蹄行（偶/奇蹄）</option>
+                <option value="LAGOMORPH">兔形（跳跃）</option>
+                <option value="RODENT">啮齿</option>
+                <option value="URSOID">熊形（跖行）</option>
+                <option value="AVIAN">禽类</option>
+                <option value="AVIAN_CURSORIAL">走禽（鸵鸟式健步）</option>
+                <option value="SALTATORIAL">跳跃型（后肢发达）</option>
+                <option value="SERPENT">蛇形</option>
+                <option value="ARTHROPOD">节肢</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>分类索引</label><input id="cfg-tid" type="text" value="CARNIVORA-FELIDAE" /><span class="value"></span></div>
+            <div class="field"><label>边界盒 X（宽）</label><input id="cfg-bx" type="range" min="0.3" max="3" step="0.05" value="1.2" /><span class="value" id="v-bx">1.20</span></div>
+            <div class="field"><label>边界盒 Y（总高）</label><input id="cfg-by" type="range" min="0.4" max="3" step="0.05" value="1.3" /><span class="value" id="v-by">1.30</span></div>
+            <div class="field"><label>边界盒 Z（长）</label><input id="cfg-bz" type="range" min="0.6" max="4" step="0.05" value="2.4" /><span class="value" id="v-bz">2.40</span></div>
+            <div class="field"><label>肩高 Withers</label><input id="cfg-withers" type="range" min="0.2" max="2" step="0.02" value="0.95" /><span class="value" id="v-withers">0.95</span></div>
+            <div class="field"><label>尾长（米）</label><input id="cfg-tail-length" type="range" min="0.02" max="1.4" step="0.02" value="1.0" /><span class="value" id="v-tail-length">1.00</span></div>
+            <div class="field" id="wing-field"><label>翼展（米）</label><input id="cfg-wingspan" type="range" min="0.15" max="2.4" step="0.05" value="1.2" /><span class="value" id="v-wingspan">1.20</span></div>
+            <div class="field"><label>生物学参考</label><input id="cfg-anatRef" type="text" value="真实东北虎肩高约 0.95–1.10m" /><span class="value"></span></div>
+            <div class="field" id="ear-field"><label>耳长</label><input id="cfg-ear" type="range" min="0.02" max="0.3" step="0.01" value="0.12" /><span class="value" id="v-ear">0.12</span></div>
+          </fieldset>
+        </section>
+
+        <!-- 模块二：骨骼解剖学装配器 -->
+        <section class="lab-pane" id="pane-rigging">
+          <fieldset id="morph-config">
+            <legend>模块二 · 骨骼解剖学装配器</legend>
+            <p class="pane-desc">依据肩高与总高自动推算躯干倾斜度与四肢长度；猫科呈弹性 Z 字，蹄科趋向垂直负重。</p>
+            <div class="field"><label>颈长系数</label><input id="cfg-neck" type="range" min="0.3" max="2" step="0.05" value="1" /><span class="value" id="v-neck">1.00</span></div>
+            <div class="field"><label>腿长系数</label><input id="cfg-leg" type="range" min="0.5" max="2" step="0.05" value="1" /><span class="value" id="v-leg">1.00</span></div>
+            <div class="field"><label>躯干倾斜</label><input id="cfg-slouch" type="range" min="-0.3" max="0.3" step="0.02" value="0" /><span class="value" id="v-slouch">0.00</span></div>
+            <div class="field"><label>头占比</label><input id="cfg-head" type="range" min="0.6" max="1.8" step="0.02" value="1" /><span class="value" id="v-head">1.00</span></div>
+            <div class="field"><label>胸肩肌量</label><input id="cfg-chest" type="range" min="0.7" max="1.6" step="0.02" value="1" /><span class="value" id="v-chest">1.00</span></div>
+            <div class="field"><label>臀胯肌量</label><input id="cfg-rump" type="range" min="0.7" max="1.6" step="0.02" value="1" /><span class="value" id="v-rump">1.00</span></div>
+            <div class="field"><label>尾长系数</label><input id="cfg-tail" type="range" min="0" max="2.5" step="0.05" value="1.2" /><span class="value" id="v-tail">1.20</span></div>
+            <div class="field"><label>躯干围度</label><input id="cfg-girth" type="range" min="0.5" max="2" step="0.05" value="1" /><span class="value" id="v-girth">1.00</span></div>
+            <div class="field"><label>飞节抬升</label><input id="cfg-hock" type="range" min="0" max="0.6" step="0.02" value="0.25" /><span class="value" id="v-hock">0.25</span></div>
+          </fieldset>
+        </section>
+
+        <!-- 模块三：程序化网格生成器 -->
+        <section class="lab-pane" id="pane-skin">
+          <fieldset id="skin-config">
+            <legend>模块三 · 程序化网格生成器</legend>
+            <p class="pane-desc">仅初始化一次：依边界盒计算顶点拓扑，沿 Z（长）/ X（宽）剖分，将高分段几何体无缝绑骨。</p>
+            <div class="field"><label>主色</label><input id="cfg-color" type="color" value="#d8c4a0" /><span class="value"></span></div>
+            <div class="field"><label>斑纹色</label><input id="cfg-stripe" type="color" value="#5a4632" /><span class="value"></span></div>
+            <div class="field"><label>花纹类型</label>
+              <select id="cfg-pattern">
+                <option value="stripes">条纹</option>
+                <option value="spots">斑点</option>
+                <option value="solid">纯色</option>
+                <option value="patch">斑块</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>斑纹密度</label><input id="cfg-density" type="range" min="0" max="1" step="0.05" value="0.6" /><span class="value" id="v-density">0.60</span></div>
+            <div class="field"><label>皮毛分段</label><input id="cfg-seg" type="range" min="4" max="16" step="1" value="10" /><span class="value" id="v-seg">10</span></div>
+            <div class="field"><label>腹部提亮</label><input id="cfg-belly" type="range" min="0" max="1" step="0.05" value="0.4" /><span class="value" id="v-belly">0.40</span></div>
+            <div class="field"><label>粗糙度</label><input id="cfg-rough" type="range" min="0.3" max="1" step="0.05" value="0.8" /><span class="value" id="v-rough">0.80</span></div>
+          </fieldset>
+        </section>
+
+        <!-- 模块四：状态机动画驱动器 -->
+        <section class="lab-pane" id="pane-locomotion">
+          <fieldset id="pose-config">
+            <legend>模块四 · 状态机动画驱动器</legend>
+            <p class="pane-desc">运行时仅操纵骨骼旋转矩阵，以对角线镜像相位差驱动四肢交替，杜绝关节穿模。</p>
+            <div class="field"><label>姿态</label>
+              <select id="cfg-pose">
+                <option value="stand">静立</option>
+                <option value="crouch">低伏</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>运动步频</label><input id="cfg-stride" type="range" min="0.5" max="2.5" step="0.05" value="1.3" /><span class="value" id="v-stride">1.30</span></div>
+            <div class="field"><label>步伐幅长</label><input id="cfg-step-len" type="range" min="0.05" max="0.6" step="0.01" value="0.22" /><span class="value" id="v-step">0.22</span></div>
+            <div class="field"><label>颈前伸度</label><input id="cfg-lean" type="range" min="-0.3" max="0.4" step="0.02" value="0.05" /><span class="value" id="v-lean">0.05</span></div>
+            <div class="field"><label>潜行压低</label><input id="cfg-creep-low" type="range" min="0.08" max="0.32" step="0.01" value="0.2" /><span class="value" id="v-creep-low">0.20</span></div>
+            <div class="field"><label>后足贴印</label><input id="cfg-direct-register" type="range" min="0" max="1" step="0.05" value="0.85" /><span class="value" id="v-direct-register">0.85</span></div>
+            <div class="field"><label>潜行步频</label><input id="cfg-creep-cadence" type="range" min="0.35" max="1.1" step="0.05" value="0.58" /><span class="value" id="v-creep-cadence">0.58</span></div>
+            <div class="field"><label>尾摆幅</label><input id="cfg-tailwhip" type="range" min="0" max="0.5" step="0.02" value="0.18" /><span class="value" id="v-tailwhip">0.18</span></div>
+            <div class="field"><label>呼吸起伏</label><input id="cfg-breathe" type="range" min="0" max="0.1" step="0.005" value="0.03" /><span class="value" id="v-breathe">0.03</span></div>
+          </fieldset>
+        </section>
+
+        <!-- 模块五：习性语义 -->
+        <section class="lab-pane" id="pane-semantics">
+          <fieldset id="semantics-card">
+            <legend>习性语义画像</legend>
+            <p class="pane-desc">以生境、食性、活动节律与社会结构标定习性原型，量化拟生环境的生境适配。</p>
+            <div class="infer-row"><label>习性原型</label><b id="archetype-label">—</b><span class="pill" id="fit-pill">—</span></div>
+            <div class="field"><label>生境</label>
+              <select id="sem-niche">
+                <option value="apex">顶级掠食</option>
+                <option value="riparian">溪岸亲水</option>
+                <option value="grazer">开放草食</option>
+                <option value="boreal">寒地独居</option>
+                <option value="alpine">高山攀岩</option>
+                <option value="canopy">林冠群飞</option>
+                <option value="understory">林下晨昏</option>
+                <option value="nocturnal">夜行隐栖</option>
+                <option value="generalist">广布杂食</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>食性</label>
+              <select id="sem-diet">
+                <option value="carnivore">肉食</option>
+                <option value="herbivore">草食</option>
+                <option value="omnivore">杂食</option>
+                <option value="piscivore">鱼食</option>
+                <option value="insectivore">虫食</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>活动节律</label>
+              <select id="sem-activity">
+                <option value="diurnal">昼行</option>
+                <option value="nocturnal">夜行</option>
+                <option value="crepuscular">晨昏</option>
+                <option value="cathemeral">无定</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>社会结构</label>
+              <select id="sem-social">
+                <option value="solitary">独行</option>
+                <option value="pair">成对</option>
+                <option value="herd">群居</option>
+                <option value="flock">集群</option>
+              </select><span class="value"></span></div>
+            <div class="field"><label>拟生环境</label>
+              <select id="sem-env">
+                <option value="stream">溪涧</option>
+                <option value="pond">寒塘</option>
+                <option value="snow">雪原</option>
+                <option value="mountain">山岩</option>
+              </select><span class="value"></span></div>
+            <div class="infer-row"><label>适配度</label>
+              <div class="bar"><i id="fit-bar"></i></div><span class="value" id="fit-num">—</span></div>
+            <div class="infer-bars" id="sem-bars"></div>
+            <div class="habit-summary" id="habit-summary"></div>
+          </fieldset>
+        </section>
+
+        <!-- 模块六：物种档案 -->
+        <section class="lab-pane" id="pane-archive">
+          <div class="lab-archive">
+            <fieldset id="archive-fs">
+              <legend>物种档案</legend>
+              <div class="archive-grid">
+                <div class="field"><label>发现者</label><input id="arc-discoverer" type="text" value="林泉" /><span class="value"></span></div>
+                <div class="field"><label>发现地</label><input id="arc-site" type="text" value="北境雪林" /><span class="value"></span></div>
+                <div class="field"><label>纪元</label><input id="arc-era" type="text" value="拟生纪·冬" /><span class="value"></span></div>
+                <div class="field"><label>保育等级</label><input id="arc-conserv" type="text" value="近危" /><span class="value"></span></div>
+              </div>
+              <div class="archive-desc">
+                <label>物种描述</label>
+                <textarea id="arc-desc" rows="4">雪原独行的伏击者，行于溪畔而不惊水禽。</textarea>
+              </div>
+              <div class="field"><label>档案缩略</label><input id="arc-thumb" type="text" value="" placeholder="缩略文件名（可选）" /><span class="value"></span></div>
+            </fieldset>
+            <div class="archive-actions">
+              <button class="btn" id="save-btn">封存此物种 →</button>
+              <span class="hint" id="save-hint">封存后将可导入「猛虎」「寒梅」场景漫游</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 模块七：物种关系 -->
+        <section class="lab-pane" id="pane-relations">
+          <fieldset id="relations-fs">
+            <legend>物种关系</legend>
+            <table class="relations">
+              <thead><tr><th>关系</th><th>对向物种</th><th>强度</th><th></th></tr></thead>
+              <tbody id="rel-body"></tbody>
+            </table>
+            <div id="rel-add">
+              <select id="rel-type">
+                <option value="predator">天敌</option>
+                <option value="prey">猎物</option>
+                <option value="symbiotic">共生</option>
+                <option value="rival">竞争</option>
+              </select>
+              <input id="rel-target" type="text" placeholder="对向物种名" />
+              <input id="rel-strength" type="range" min="0" max="1" step="0.1" value="0.5" />
+              <button class="btn small" id="rel-add-btn">添加</button>
+            </div>
+          </fieldset>
+        </section>
       </div>
-    </fieldset>
-
-    <!-- 底部通栏：关系 -->
-    <fieldset>
-      <legend>物 种 关 系</legend>
-      <table class="relations">
-        <thead>
-          <tr><th>对象</th><th>关系</th><th>内驱力</th><th>强度</th><th>说明</th><th></th></tr>
-        </thead>
-        <tbody id="rel-body"></tbody>
-      </table>
-      <button type="button" class="btn ghost small" id="rel-add">＋ 添加关系</button>
-    </fieldset>
-
-    <div class="config-actions">
-      <button class="btn" id="save-btn">封 存 物 种</button>
-    </div>
+    </main>
   </div>
 
   <div class="toast" id="toast"></div>
-
   <script type="module" src="js/lab.js"></script>
 </body>
 </html>

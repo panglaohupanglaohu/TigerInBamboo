@@ -5,6 +5,45 @@
 // wings: [{pivot, side, mesh}]，mesh 供飞行时翼展 morph（scale.y 翼展、scale.z 翼弦）
 import * as THREE from "../../assets/vendor/three/three.module.js";
 
+// 锥形管：沿曲线半径由 rBottom(曲线起点·靠身) 线性收至 rTop(曲线终点·靠头)
+// 顶点排布与 THREE.TubeGeometry 完全一致（(TUB+1) 环 × (RAD+1) 顶点/环），兼容双骨骼权重循环
+function makeTaperedTube(curve, tubularSegments, rBottom, rTop, radialSegments) {
+  const frames = curve.computeFrenetFrames(tubularSegments, false);
+  const positions = [], normals = [], uvs = [], indices = [];
+  const P = new THREE.Vector3(), normal = new THREE.Vector3(), vertex = new THREE.Vector3();
+  const vertsPerRing = radialSegments + 1;
+  for (let i = 0; i <= tubularSegments; i++) {
+    const u = i / tubularSegments;
+    const radius = rBottom + (rTop - rBottom) * u;     // 靠身粗 → 靠头细
+    curve.getPointAt(u, P);
+    const N = frames.normals[i], B = frames.binormals[i];
+    for (let j = 0; j <= radialSegments; j++) {
+      const v = (j / radialSegments) * Math.PI * 2;
+      const sin = Math.sin(v), cos = -Math.cos(v);
+      normal.set(cos * N.x + sin * B.x, cos * N.y + sin * B.y, cos * N.z + sin * B.z).normalize();
+      normals.push(normal.x, normal.y, normal.z);
+      vertex.copy(P).addScaledVector(normal, radius);
+      positions.push(vertex.x, vertex.y, vertex.z);
+      uvs.push(u, j / radialSegments);
+    }
+  }
+  for (let j = 1; j <= radialSegments; j++) {
+    for (let i = 1; i <= tubularSegments; i++) {
+      const a = vertsPerRing * (i - 1) + (j - 1);
+      const b = vertsPerRing * i + (j - 1);
+      const c = vertsPerRing * i + j;
+      const d = vertsPerRing * (i - 1) + j;
+      indices.push(a, b, d, b, c, d);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geo.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  geo.setIndex(indices);
+  return geo;
+}
+
 export function buildAvianBody({
   height = 0.42,               // 站高（米），按 0.42m 基准等比缩放
   bodyColor = 0xa8261f,        // 体色（腹背主色）
@@ -26,7 +65,9 @@ export function buildAvianBody({
     bodyScale: [0.15, 0.14, 0.23], // 身体椭球三轴半径
     bodyY: 0.22,                   // 身体中心高度
     neckPos: [0, 0.32, 0.16],      // 头颈组位置
-    neckR: 0.075,                  // 颈球半径
+    neckR: 0.075,                  // 颈球半径（基准）
+    neckRBase: null,               // 颈根(靠身)半径，缺省 = neckR*1.13
+    neckRTip: null,                // 颈梢(靠头)半径，缺省 = neckR*0.8（锥形：靠身粗、靠头细）
     neckScale: [1, 1, 1],          // 颈球三轴拉伸（雁：纵向伸长为长颈）
     headR: 0,                      // 独立头球半径（0=无独立头，颈球即头；雁：长颈顶端另有头球）
     headPos: [0, 0.05, 0.06],      // 头球中心（头颈组局部坐标）
@@ -46,6 +87,9 @@ export function buildAvianBody({
     legColor: 0xc9b48a,
     ...shape,
   };
+  // 锥形颈半径：靠身粗（与身体前胸对接）、靠头细（与头部/喙衔接），缺省由 neckR 派生
+  const neckRBase = S.neckRBase != null ? S.neckRBase : S.neckR * 1.13;
+  const neckRTip  = S.neckRTip  != null ? S.neckRTip  : S.neckR * 0.8;
   const k = height / 0.42;
   const group = new THREE.Group();
   const parts = [];
@@ -106,7 +150,8 @@ export function buildAvianBody({
         new THREE.Vector3(0, L / 2, 0) ];
   const curve = new THREE.CatmullRomCurve3(cLocal.map((p) => p.clone().add(np)));
   const TUB = 40, RAD = 14;                               // 纵向 40 段 · 径向 14 段（弯曲足够平滑）
-  const neckGeo = new THREE.TubeGeometry(curve, TUB, S.neckR, RAD, false);
+  // 锥形管：靠身(曲线起点)粗 = neckRBase，靠头(曲线终点)细 = neckRTip
+  const neckGeo = makeTaperedTube(curve, TUB, neckRBase, neckRTip, RAD);
   paint(neckGeo, (x, y, z, c) => c.copy(NECK).lerp(ACC, THREE.MathUtils.clamp(z * 4 + 0.5, 0, 1)));
 
   // 颈骨链：Spine_Chest(根/固定锚于体) → Neck_Lower(中段·动画句柄) → Neck_Upper(颈顶·挂头)
@@ -144,10 +189,11 @@ export function buildAvianBody({
   group.add(bChest);                                      // 根骨挂组（与 SkinnedMesh 同级）
   parts.push(neckMesh, bChest);
 
-  // 头球/冠/披肩/喙/目 皆挂在颈顶骨 Neck_Upper 上（经 headGroup 复位到原 neckPos 世界位），
-  // 随颈弯曲自然跟随，且保持原锦鸡/大雁的头部比例与位置
+  // 头球/冠/披肩/喙/目 皆挂在颈顶骨 Neck_Upper 上（bUp 的世界位即颈尖 curve.getPoint(1)）。
+  // headGroup 锚在颈尖，并以「头球底背贴颈尖」的偏移落位，使头随颈尖真实变换一起运动，
+  // 彻底消除原先把头座在颈中段(np)导致「颈上半截裸露、头是头脖子是脖子」的脱节。
   const headGroup = new THREE.Group();
-  headGroup.position.copy(np.clone().sub(curve.getPoint(1.0)));
+  headGroup.position.set(0, S.headR - S.headPos[1], S.headR - S.headPos[2]);
   bUp.add(headGroup);
   const head = bLow;                                      // 动画句柄：旋转中段颈骨 → 整条颈平滑弯曲（不破面）
   const headBone = bUp;                                   // 颈顶骨：头/喙/冠挂其上；视线锁定补偿用（反推颈动）

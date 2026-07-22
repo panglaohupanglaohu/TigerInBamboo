@@ -496,7 +496,7 @@
     // ---- 背景音乐歌单编辑 ----
     let audioLib = [];
     try {
-      const r = await fetch("/api/audio");
+      const r = await fetch("api/audio");
       if (r.ok) audioLib = (await r.json()).files ?? [];
     } catch (_) { /* 离线时曲库不可达，仅可删不可加 */ }
 

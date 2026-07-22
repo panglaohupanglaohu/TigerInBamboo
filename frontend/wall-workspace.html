@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>题壁工作空间 · 世界古典美术拟生平台</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/wall-workspace.css" />
+</head>
+<body class="wall-workspace-page">
+  <header class="wall-workspace-header">
+    <a class="preset" href="home.html">返回展厅</a>
+    <div class="wall-title-block">
+      <h1>题壁工作空间</h1>
+      <p id="analysis-status">正在读取题壁原作</p>
+    </div>
+    <label class="preset filebtn">换原作<input id="source-upload" type="file" accept="image/*" hidden /></label>
+  </header>
+
+  <main class="wall-workspace-layout">
+    <aside class="wall-side wall-env-menu" aria-label="环境菜单">
+      <div class="wall-menu-head">
+        <span>境</span>
+        <div>
+          <p>环境菜单</p>
+          <h2>画境生成</h2>
+        </div>
+      </div>
+
+      <section class="wall-control-group">
+        <h3>画境</h3>
+        <div class="wall-button-list" id="env-buttons"></div>
+      </section>
+
+      <section class="wall-control-group">
+        <h3>原作色</h3>
+        <div class="wall-swatch-row" id="env-palette"></div>
+      </section>
+
+      <section class="wall-control-group">
+        <h3>气韵</h3>
+        <div class="wall-segment" id="atmosphere-buttons">
+          <button type="button" data-atmosphere="paper">纸光</button>
+          <button type="button" data-atmosphere="dawn">晨光</button>
+          <button type="button" data-atmosphere="dusk">暮色</button>
+          <button type="button" data-atmosphere="moon">月色</button>
+        </div>
+      </section>
+
+      <section class="wall-control-group">
+        <h3>风水</h3>
+        <label class="wall-range">风
+          <input id="wind-range" type="range" min="0" max="1" step="0.05" value="0.35" />
+        </label>
+        <label class="wall-range">雾
+          <input id="mist-range" type="range" min="0" max="1" step="0.05" value="0.25" />
+        </label>
+      </section>
+    </aside>
+
+    <section class="wall-stage" aria-label="3D 工作空间">
+      <div class="wall-stage-toolbar">
+        <span id="source-thumb" class="source-thumb" aria-hidden="true">题</span>
+        <div class="source-copy">
+          <b id="source-title">待君题壁</b>
+          <span id="source-meta">留白墙 · 默认画境</span>
+        </div>
+        <button class="wall-icon-btn" id="reset-camera" type="button" aria-label="复位视角" title="复位视角">↺</button>
+      </div>
+      <div class="wall-canvas-shell">
+        <canvas id="wall-viewport"></canvas>
+      </div>
+      <div class="wall-state-readout" id="state-readout">留白墙 · 原作色境 · 静立</div>
+    </section>
+
+    <aside class="wall-side wall-bio-menu" aria-label="生物菜单">
+      <div class="wall-menu-head">
+        <span>生</span>
+        <div>
+          <p>生物菜单</p>
+          <h2>拟生入壁</h2>
+        </div>
+      </div>
+
+      <section class="wall-control-group">
+        <h3>生灵</h3>
+        <div class="wall-button-list" id="bio-buttons"></div>
+      </section>
+
+      <section class="wall-control-group">
+        <h3>体色</h3>
+        <div class="wall-swatch-row" id="bio-palette"></div>
+      </section>
+
+      <section class="wall-control-group">
+        <h3>行为</h3>
+        <div class="wall-segment wall-segment-grid" id="behavior-buttons">
+          <button type="button" data-behavior="IDLE">静立</button>
+          <button type="button" data-behavior="WALK">游走</button>
+          <button type="button" data-behavior="FORAGE">觅食</button>
+          <button type="button" data-behavior="LEAP">惊跃</button>
+        </div>
+      </section>
+
+      <section class="wall-control-group">
+        <h3>结构</h3>
+        <div class="wall-action-row">
+          <button class="btn small" id="skeleton-toggle" type="button" aria-pressed="false">骨相</button>
+          <button class="btn small" id="rebuild-creature" type="button">重构</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <div class="toast" id="wall-toast"></div>
+  <script type="module" src="js/wall-workspace.js"></script>
+</body>
+</html>

@@ -27,11 +27,26 @@ function legRegionAt(x, z, y) {
   return null;
 }
 
-function paintTiger(geo, { freq = 14, belly = -0.38, contrast = 1 } = {}) {
+// 由 rendering 推导底色/斑色/腹白，兼容未传入渲染参数的默认虎色
+function paletteFromRendering(rendering) {
+  if (!rendering) return { base: ORANGE, deep: ORANGE_DEEP, dark: DARK, cream: CREAM };
+  const base = new THREE.Color(rendering.baseColor ?? 0xd27a24);
+  const dark = new THREE.Color(rendering.stripeColor ?? 0x1d140d);
+  const cream = new THREE.Color(0xf2e8d5);
+  const deep = base.clone().lerp(dark, 0.25);
+  return { base, deep, dark, cream };
+}
+
+function paintTiger(geo, { freq = 14, belly = -0.38, contrast = 1, rendering } = {}) {
   const pos = geo.attributes.position;
   const nrm = geo.attributes.normal;
   const colors = new Float32Array(pos.count * 3);
   const c = new THREE.Color();
+  const pal = paletteFromRendering(rendering);
+  const pattern = rendering?.pattern || "stripes";
+  const density = rendering?.stripeDensity ?? 0.6;
+  const bellyLift = rendering?.bellyLightenAmt ?? 0.4;
+  const stripeK = 0.4 + density * 0.6; // 密度越高，斑纹覆盖越强
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
     const legL = legRegionAt(x, z, y);
@@ -39,35 +54,53 @@ function paintTiger(geo, { freq = 14, belly = -0.38, contrast = 1 } = {}) {
       // 腿管：橙底环纹（沿 y），爪部奶白自爪尖向上渐变消融（无硬边"白袜"）
       const ring = Math.sin(y * 22 + Math.sin(Math.atan2(z, x) * 4) * 0.8);
       const shade = THREE.MathUtils.clamp(0.45 + y * 0.4, 0, 1);
-      c.copy(ORANGE_DEEP).lerp(ORANGE, shade);
-      if (ring > 0.35) c.lerp(DARK, THREE.MathUtils.smoothstep(ring, 0.35, 0.9) * 0.7 * contrast);
+      c.copy(pal.deep).lerp(pal.base, shade);
+      if (ring > 0.35) c.lerp(pal.dark, THREE.MathUtils.smoothstep(ring, 0.35, 0.9) * 0.7 * contrast * stripeK);
       // 袜口边缘绕腿微起伏（毛边感），白色比例随高度平滑归零
       const wob = Math.sin(Math.atan2(z - legL.z, x - legL.x) * 5) * 0.025;
       const sock = 1 - THREE.MathUtils.smoothstep(y, 0.07 + wob, 0.19 + wob);
-      if (sock > 0) c.lerp(CREAM, sock);
+      if (sock > 0) c.lerp(pal.cream, sock);
       colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
       continue;
     }
     const along = z;
     const across = Math.atan2(x, y + 1e-4);
-    const w1 = Math.sin(along * freq + Math.sin(across * 3 + along * 0.7) * 1.3);
-    const w2 = Math.sin(across * 7 + along * 2.3); // 断续：虎纹不成环、节节垂落
-    const wave = w1 + w2 * 0.4;
+    let wave = 0;
+    if (pattern === "stripes") {
+      const w1 = Math.sin(along * freq + Math.sin(across * 3 + along * 0.7) * 1.3);
+      const w2 = Math.sin(across * 7 + along * 2.3); // 断续：虎纹不成环、节节垂落
+      wave = w1 + w2 * 0.4;
+    } else if (pattern === "spots") {
+      const sx = Math.sin(x * 26) * Math.cos(z * 18);
+      const sz = Math.sin(z * 26) * Math.cos(x * 18);
+      wave = Math.max(sx, sz);
+    } else if (pattern === "patch") {
+      const s = Math.sin(x * 9 + z * 7) * Math.cos(z * 11 - x * 5);
+      wave = s;
+    } else { // solid
+      wave = -1;
+    }
     const shade = THREE.MathUtils.clamp(0.5 + y * 0.5, 0, 1);
-    c.copy(ORANGE_DEEP).lerp(ORANGE, shade);
+    c.copy(pal.deep).lerp(pal.base, shade);
     if (wave > 0.2) {
-      const k = THREE.MathUtils.smoothstep(wave, 0.2, 0.85) * contrast;
-      c.lerp(DARK, Math.min(k, 1));
+      const k = THREE.MathUtils.smoothstep(wave, 0.2, 0.85) * contrast * stripeK;
+      c.lerp(pal.dark, Math.min(k, 1));
     }
     // 腹底留白：以表面朝向为准 —— 只有明显朝下的面（ny < belly 阈值）才留白，
-    // 平滑过渡；白腹藏在体下，顶视/侧视不再溢出"白翼"（belly=-99 等效禁用）
+    // 平滑过渡；白腹藏在体下，顶视/侧视不再溢出"白翼"
     const ny = nrm ? nrm.getY(i) : 1;
-    const cream = THREE.MathUtils.smoothstep(-ny, -belly - 0.15, -belly + 0.15);
-    if (cream > 0) c.lerp(CREAM, cream);
+    const cream = THREE.MathUtils.smoothstep(-ny, -belly - 0.15, -belly + 0.15) * bellyLift;
+    if (cream > 0) c.lerp(pal.cream, cream);
     colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
   }
   geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 }
+
+// 实验室通用接口：依 rendering 决定斑纹类型与配色
+export function paintGeometry(geo, dim, anat, rendering) {
+  paintTiger(geo, { rendering, contrast: 1 });
+}
+
 
 export class Tiger {
   constructor(scene, config, physics) {
@@ -297,7 +330,7 @@ export class Tiger {
         if (d > (hcfg.stalkDistance ?? 25) * 1.3) { this._hunt = null; this._huntCd = 5; return null; }
         // 猎物惊起跑/起飞 → 立即转爆发追击（追逐战开始）
         if (prey.state === "奔逃" || prey.state === "惊飞" || d < (hcfg.sprintDistance ?? 20)) H.stage = "sprint";
-        return { label: "潜行", stage: "stalk", targetSpeed: baseSpeed * (hcfg.stalkSpeed ?? 0.45), dir, bioState: "STALK", crouch: 1 };
+        return { label: "潜行", stage: "stalk", targetSpeed: baseSpeed * (hcfg.stalkSpeed ?? 0.45), dir, bioState: "STALK", crouch: 1, cadence: 2.6, gaitAmp: 0.9 };
       }
       case "sprint": {
         // 猎物落地进入飞扑距离即跃出；被甩太远则放弃
@@ -476,13 +509,15 @@ export class Tiger {
     }
 
     // —— 骨骼动画（状态机驱动器） ——
-    this._gaitCyc = (this._gaitCyc + (this._speedCur / 1.25) * dt) % 1;
+    // 步态相位按速度积分；匍匐时叠加 cadence（小步快走），使脚下与位移严格同步、不打滑
+    this._gaitCyc = (this._gaitCyc + (this._speedCur / 1.25) * (huntCtl?.cadence ?? 1) * dt) % 1;
     // 状态映射：行进→WALK；驻足→IDLE；驻足偶发咆哮→ROAR
     const roar = this.state === "驻足" && Math.sin(time * 0.8) > 0.85;
     const bioState = huntCtl?.bioState ?? (moving > 0.25 ? "WALK" : roar ? "ROAR" : "IDLE");
     this.entity.setBehaviorState(bioState);
     this.entity.tick({
       time, dt, gait: this._gaitCyc, moving,
+      gaitAmp: huntCtl?.gaitAmp ?? 1,
       locomotion: huntCtl?.stage === "sprint" ? "gallop" : undefined, // 爆发切奔跃步态
       leap: huntCtl?.leap ?? 0,       // 飞跃姿态（出膛直线）
       crouch: huntCtl?.crouch ?? 0,   // 匍匐膝折身沉
@@ -498,13 +533,8 @@ export class Tiger {
       u.uGlowIntensity.value += (tG - u.uGlowIntensity.value) * k;
     }
 
-    // 潜行匍匐：颈前伸低伏、头压、尾垂（STALK 分支已在驱动器内自管，此处跳过以免覆盖尾贴地）
-    if (huntCtl && huntCtl.crouch >= 1 && huntCtl.bioState !== "STALK") {
-      const B = this.entity.boneMap;
-      B.get("Neck").rotation.x = 0.28;
-      B.get("Head").rotation.x = 0.32;
-      B.get("Tail1").rotation.x = -0.12;
-    }
+    // 匍匐姿态完全由 FelineLocomotionController._stalk 自管（四肢小步快走 / 脊柱 S 扭 / 尾低垂扫摆），
+    // 此处不再手动覆盖骨骼，避免打断尾与躯干的连贯动作。
 
     // —— 足迹：落地瞬间留印，5 米外消逝 ——
     this._updatePrints(moving);

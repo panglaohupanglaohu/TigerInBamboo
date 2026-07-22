@@ -16,7 +16,9 @@ const GOOSE_STYLE = {
   shape: {
     bodyScale: [0.16, 0.15, 0.30], bodyY: 0.26,
     neckPos: [0, 0.42, 0.26], neckR: 0.07, neckSausage: true, neckScale: [1, 1.9, 1.6],
+    neckRBase: 0.09, neckRTip: 0.04, // 锥形长颈：靠身(前胸)粗、靠头(喙根)细
     headR: 0.048, headPos: [0, 0.095, 0.05], // 长颈顶端独立头球，喙目皆附其上
+    headLock: 0.38, // 头随颈倾摆比例（0=视线锁定/头不动，1=头完全随颈）；修复「头是头、脖子是脖子」脱节
     crestCount: 0,
     beakR: 0.02, beakLen: 0.1, beakColor: 0x2e2a26, beakPos: [0, 0.095, 0.105],
     eyePos: [0.035, 0.105, 0.075], eyeR: 0.013,
@@ -46,6 +48,7 @@ class Goose {
     this.head = head;            // 中段颈骨 (Neck_Lower)
     this.headBone = headBone;    // 颈顶骨 (Neck_Upper)
     this.headGroup = headGroup;  // 头部几何载体
+    this.headLock = style.headLock ?? 0.38; // 头随颈倾摆比例（视线锁定降级）
     this.wings = wings;
     this.tail = tail;
     this.legs = legs;
@@ -139,6 +142,8 @@ class Goose {
   _head(dt, mode) {
     const n1 = this.head, n2 = this.headBone, hg = this.headGroup;
     const k = Math.min(dt * 9, 1);
+    const L = this.headLock ?? 0.38;            // 头随颈倾摆比例（视线锁定降级）
+    const lock = (x) => x * (1 - L);            // 视线锁定补偿量随 L 衰减：L 越大，头越随颈动
     const setR = (o, x, y) => { o.rotation.x += (x - o.rotation.x) * k; o.rotation.y += (y - o.rotation.y) * k; };
     if (mode === "walk") {
       // 🦢 行走探头顿挫公式（大雁步伐频率稍缓于锦鸡）
@@ -154,22 +159,23 @@ class Goose {
       n1.rotation.y += (n1y - n1.rotation.y) * k;
       n2.rotation.x += (n2x - n2.rotation.x) * k;
       n2.rotation.y += (n2y - n2.rotation.y) * k;
-      if (hg) { hg.rotation.x += (-(n1x + n2x) + 0.05 + jerkC * 0.07 - hg.rotation.x) * k; hg.rotation.y += (-(n1y + n2y) - hg.rotation.y) * k; } // 视线锁定
+      // 头随颈尖一起运动：视线锁定补偿按 headLock 衰减，头保留大部分颈倾摆（不再世界静止）
+      if (hg) { hg.rotation.x += (lock(-(n1x + n2x)) + 0.05 + jerkC * 0.07 - hg.rotation.x) * k; hg.rotation.y += (lock(-(n1y + n2y)) - hg.rotation.y) * k; }
     } else if (mode === "peck") {
-      // 停下频频点首（颈根为主，叠加视线补偿）
+      // 停下频频点首（颈根为主，叠加视线补偿；头部随颈下探点首）
       const px = Math.sin(this.time * 6) > 0 ? 0.95 : 0.15;
       n1.rotation.x += (px - n1.rotation.x) * k;
       n2.rotation.x += (-0.2 - n2.rotation.x) * k;
-      if (hg) { hg.rotation.x += (-(px - 0.2) + 0.1 - hg.rotation.x) * k; }
+      if (hg) { hg.rotation.x += (lock(-(px - 0.2)) + 0.1 - hg.rotation.x) * k; }
     } else if (mode === "preen") {
       n1.rotation.y += (Math.sin(this.time * 1.8) * 1.2 - n1.rotation.y) * k;
       n1.rotation.x += (0.5 + Math.sin(this.time * 3) * 0.2 - n1.rotation.x) * k;
       n2.rotation.x += (-0.2 - n2.rotation.x) * k;
-      if (hg) hg.rotation.x += (-(n1.rotation.x + n2.rotation.x) - hg.rotation.x) * k;
+      if (hg) hg.rotation.x += (lock(-(n1.rotation.x + n2.rotation.x)) - hg.rotation.x) * k;
     } else { // level：平视微呼吸 S 摆（飞行/游水）
       const br = Math.sin(this.time * 1.5) * 0.05;
       setR(n1, br, 0); setR(n2, -br * 0.8, 0);
-      if (hg) hg.rotation.x += (-br * 0.2 - hg.rotation.x) * k;
+      if (hg) hg.rotation.x += (lock(-br * 0.2) - hg.rotation.x) * k;
     }
   }
 

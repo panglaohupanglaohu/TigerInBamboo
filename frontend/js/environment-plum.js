@@ -10,6 +10,8 @@
 import * as THREE from "../assets/vendor/three/three.module.js";
 import * as BufferGeometryUtils from "../assets/vendor/three/jsm/utils/BufferGeometryUtils.js";
 
+const PLUM_MOON_POS = new THREE.Vector3(70, 120, -190);
+
 // ---------- 确定性随机 ----------
 export function makeRandom(seed = 20260719) {
   let s = seed >>> 0;
@@ -193,8 +195,8 @@ export class PlumEnvironment {
     this.scene.background = silver;
     this.scene.fog = new THREE.FogExp2(silver, 0.0025 + mist * 0.005); // 寒雾更浓，远山若隐
 
-    // —— 月光：自明月方向洒落，冷白清辉（明月居画面右侧 1/5，低悬远山之后，山嶂遮挡下半月）——
-    const moonPos = new THREE.Vector3(70, 46, -190);
+    // —— 月光：自明月方向洒落，冷白清辉（月心约在全景画幅顶部下方 1/10，远山遮住月轮下半）——
+    const moonPos = PLUM_MOON_POS.clone();
     const moonDir = moonPos.clone().normalize();
     const moonLight = new THREE.DirectionalLight(0xd8e0ec, 1.5);
     moonLight.position.copy(moonPos);
@@ -226,7 +228,7 @@ export class PlumEnvironment {
     const haloGeo = new THREE.SphereGeometry(17, 32, 32);
     const haloMat = new THREE.MeshBasicMaterial({
       color: 0xe8e4d8, transparent: true, opacity: 0.1,
-      blending: THREE.AdditiveBlending, fog: false, depthWrite: false,
+      blending: THREE.AdditiveBlending, fog: false, depthTest: true, depthWrite: false,
     });
     const halo = new THREE.Mesh(haloGeo, haloMat);
     halo.position.copy(moonPos);
@@ -427,7 +429,7 @@ export class PlumEnvironment {
 
     this.waterUniforms = {
       uTime: { value: 0 },
-      uSunDir: { value: new THREE.Vector3(70, 46, -190).normalize() }, // 月光方向
+      uSunDir: { value: PLUM_MOON_POS.clone().normalize() }, // 月光方向
       uPond: { value: new THREE.Vector4(POND.cx, POND.cz, POND.rx, POND.rz) },
       uTree: { value: new THREE.Vector2(PLUM_TREE_POS.x, PLUM_TREE_POS.z) },
       uWaders: { value: [0, 1, 2, 3].map(() => new THREE.Vector4(0, 0, 0.55, 0)) }, // x,z / 半径 / 强度
@@ -545,13 +547,18 @@ export class PlumEnvironment {
       geo.setIndex(indices);
       // 不依场景雾（远山在雾中会隐没）：透明度与色阶自带烟雨渐远之意
       const mat = new THREE.MeshBasicMaterial({
-        color, transparent: true, opacity, fog: false, side: THREE.DoubleSide,
+        color,
+        transparent: opacity < 1,
+        opacity,
+        fog: false,
+        side: THREE.DoubleSide,
+        depthTest: true,
+        depthWrite: opacity >= 0.95,
       });
       this.scene.add(new THREE.Mesh(geo, mat));
     };
-    // 远山抬高至月亮中点（月亮中心 Y=82，radius 9；「月亮的 1/2 处」= 其垂直中点 ≈82m）：
-    // 最近一重山顶即达月亮中心高度，由近及远继续升高，山嶂直逼月轮
-    mkRidge(-170, 56, 26, 700, 0x848a90, 0.85, 7);    // 塘对岸近山（顶 82m ≈ 月亮中心高度）
+    // 月亮在 z=-190、Y=120；最近一重远山抬至月轮下半，作为不透明深度遮挡层。
+    mkRidge(-170, 82, 32, 700, 0x848a90, 1, 7);
     mkRidge(-320, 72, 34, 1050, 0x969ca2, 0.6, 13);  // 第二重（顶 106m）
     mkRidge(-500, 90, 44, 1500, 0xa8aeb4, 0.42, 21); // 第三重 · 更大（顶 134m）
     mkRidge(-720, 110, 56, 2000, 0xbac0c6, 0.28, 33); // 第四重 · 最大最淡（顶 166m）

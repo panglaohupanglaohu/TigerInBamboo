@@ -2,7 +2,7 @@
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { OrbitControls } from "../assets/vendor/three/jsm/controls/OrbitControls.js";
 import { loadConfig } from "./config.js";
-import { Environment } from "./environment.js";
+import { Environment, streamQuery } from "./environment.js";
 import { BambooGrove } from "./bamboo.js";
 import { Tiger } from "./tiger.js";
 import { Rabbit } from "./rabbit.js";
@@ -13,9 +13,36 @@ import { PhysicsWorld } from "./physics.js";
 import { BgmPlayer } from "./bgm.js";
 import { DialogSystem } from "./dialog.js";
 import { CustomAgent, loadSavedSpecies } from "./custom.js";
-import { BirdAgent } from "./bird.js";
+import { BirdAgent, randomPheasantPerchSpot, randomPheasantSpot } from "./bird.js";
 import { TigerSfx } from "./sfx.js";
 import "./panels.js"; // 面板推拉收合（竖柄）
+
+const FOOT_BONES = ["FLFoot", "FRFoot", "BLFoot", "BRFoot"];
+const _footPos = new THREE.Vector3();
+/** 检测虎四足是否踏入溪水；落水瞬间在接触点生成外扩涟漪（绕石衍射）。
+ *  throttled：每只脚 0.35s 内只生一道，避免一脚连刷。strength 随虎速增大。 */
+function spawnTigerFootRipples(tiger, env, time) {
+  const boneMap = tiger.entity?.boneMap;
+  if (!boneMap) return;
+  const speed = tiger._speedCur ?? 0;
+  for (const name of FOOT_BONES) {
+    const bone = boneMap.get(name);
+    if (!bone) continue;
+    bone.getWorldPosition(_footPos);
+    const q = streamQuery(_footPos.x, _footPos.z);
+    const inStream = q.d < q.halfW * 0.92;
+    const wl = q.elev - 0.12;
+    const planting = _footPos.y < wl + 0.18; // 脚接近/没入水面 = 触水
+    if (inStream && planting) {
+      const last = bone._rippleT ?? -1;
+      if (time - last > 0.35) {
+        bone._rippleT = time;
+        const strength = 0.5 + Math.min(speed / 1.15, 1) * 0.9;
+        env.spawnFootRipple(_footPos.x, _footPos.z, strength);
+      }
+    }
+  }
+}
 
 async function boot() {
   const config = await loadConfig();
@@ -53,15 +80,17 @@ async function boot() {
   const rabbit = new Rabbit(scene, config, grove); // 雪兔：SALTATORIAL 管线验证物种
   const dialog = new DialogSystem(tiger, rabbit, config); // 母女对话（虎女·兔母）
   // 锦鸡群：觅食/饮水/警觉/奔逃/惊飞（fear 内驱力），数量由配置决定
-  // 活动点均距兔穴（-1,4）≥38m：母女团聚不被打扰，虎猎需长途奔袭
+  // 初始位置随机落在林缘/雪坡，避开溪涧附近。
   const pheasants = [];
   {
-    const spots = [[39, 4], [-1, -36], [35, 23], [30, -22], [-33, 26], [-25, 34]];
     const n = Math.max(0, Math.min(6, Math.round(config.pheasant.count ?? 1)));
     for (let i = 0; i < n; i++) {
-      const [fx, fz] = spots[i % spots.length];
-      const jx = (Math.random() - 0.5) * 1.5, jz = (Math.random() - 0.5) * 1.5;
-      pheasants.push(new BirdAgent(scene, config, { forage: [fx + jx, fz + jz], perch: [fx - 6, fz + 6] }));
+      const spot = randomPheasantSpot({ minStreamDistance: 8.0 });
+      const perch = randomPheasantPerchSpot(spot, { minStreamDistance: 8.0 });
+      pheasants.push(new BirdAgent(scene, config, {
+        forage: [spot.x, spot.z],
+        perch: [perch.x, perch.z],
+      }));
     }
   }
   const sfx = new TigerSfx({ volume: config.hunt?.sfxVolume ?? 0.8 }); // 虎啸：潜行低吼/爆发短吼/飞扑咆哮/进食咀嚼
@@ -71,7 +100,21 @@ async function boot() {
     grove.spawnSnowBurst(b.x, b.baseY + b.height * (0.55 + Math.random() * 0.4), b.z, k);
   };  // 物种实验室保存的自定义物种：入画漫游并按关系矩阵互动
   const speciesRec = await loadSavedSpecies();
-  const custom = speciesRec ? new CustomAgent(scene, speciesRec, grove, config) : null;
+  const custom = speciesRec ? new CustomAgent(scene, speciesRec, {
+    // 溪涧场景适配器：把环境/竹林/虎封装给自定义物种
+    groundHeight: (x, z) => env.groundHeight(x, z),
+    isWater: (x, z) => { const q = streamQuery(x, z); return q.d < q.halfW; },
+    waterLevel: 0,
+    // 仅西侧雪原（离岸 >3m）易滑
+    snowSlick: (x, z) => { const q = streamQuery(x, z); return q.d > q.halfW + 3 ? 0.85 : 0; },
+    home: new THREE.Vector3(-5, 0, 8),
+    wanders: grove.bamboos.map((b) => ({ x: b.x, z: b.z })),
+    waterPoint: () => new THREE.Vector3(-3.5 + (Math.random() - 0.5) * 2, 0, 3 + (Math.random() - 0.5) * 4),
+    getOther: () => tiger?.group.position ?? null,
+    who: "tiger",
+    avesForage: [-5, 8],
+    avesPerch: [-8.5, 3.5],
+  }, { pheasant: { enabled: true, fleeDistance: 6, returnDistance: 14, drinkInterval: 25, perchTime: 4 } }) : null;
   if (custom) {
     const el = document.getElementById("agent-custom");
     if (el) {
@@ -112,6 +155,8 @@ async function boot() {
     tiger.huntArmed = !!config.hunt?.enabled &&
       (bgm.tracks?.[bgm._idx] ?? "").includes(config.hunt?.musicTrigger ?? "duange_xing.mp3");
     tiger.update(dt, time, grove, rabbit);
+    // 虎足触水：四只脚各自落入溪涧时，在该接触点触发一道外扩涟漪（绕石自动衍射）
+    spawnTigerFootRipples(tiger, env, time);
     // 虎啸：捕食阶段切换 + 驻足咆哮的音效联动
     const huntStage = tiger._hunt?.stage ?? null;
     if (huntStage !== prevHuntStage) {

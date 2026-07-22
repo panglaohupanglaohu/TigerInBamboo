@@ -45,9 +45,20 @@
     <div class="agent" id="agent-weather">
       <span class="dot" style="background:#f2efe6;border:1px solid #57503f"></span>天气 · <em id="weather-state">薄雪</em>
     </div>
+    <div class="agent" id="agent-custom" style="display:none">
+      <span class="dot custom"></span><em id="custom-name">—</em> · <em id="custom-state">—</em>
+    </div>
   </aside>
 
   <div class="vignette"></div>
+
+  <!-- 回展厅 · 环形呼吸光点，悬停闪烁 -->
+  <a class="idea-orb idea-orb--home" href="home.html" aria-label="返回展厅">
+    <span class="orb-ring"></span>
+    <span class="orb-core"></span>
+    <span class="orb-label">展厅</span>
+  </a>
+
   <div id="loading">铺 纸 研 墨 …</div>
 
   <script type="module" src="js/plum-main.js"></script>

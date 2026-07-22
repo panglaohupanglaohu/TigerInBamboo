@@ -12,6 +12,8 @@
     .home-footer .welcome { display: block; margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
 
     /* 画卡：场景实拍封面 + hover 微起 */
+    .home-page .gallery-row { max-width: 1420px; gap: 34px; }
+    .home-page .painting-card { width: 360px; }
     .painting-card figure { position: relative; overflow: hidden; }
     .painting-card img { transition: transform 0.6s ease; }
     .painting-card:hover img { transform: scale(1.04); }
@@ -20,46 +22,45 @@
       font-size: 12px; letter-spacing: 0.18em; color: #fff;
       text-shadow: 0 1px 6px rgba(20, 16, 10, 0.8);
     }
-
-    /* 物种实验室 · 环形光点导航（悬停闪烁） */
-    .idea-orb {
-      --orb: 64px;
-      position: relative; display: flex; flex-direction: column; align-items: center;
-      gap: 10px; margin: 6px auto 0; width: var(--orb);
-      text-decoration: none; color: var(--ink-soft);
+    .wall-card { border-color: rgba(169, 139, 79, 0.65); }
+    .wall-card figure { background: #d8c9a8; }
+    .wall-frame {
+      height: 300px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(180, 160, 112, 0.06), transparent 22%),
+        radial-gradient(circle at 76% 66%, rgba(120, 105, 75, 0.05), transparent 24%),
+        linear-gradient(90deg, rgba(80, 66, 38, 0.05), transparent 18%, transparent 82%, rgba(80, 66, 38, 0.05)),
+        #f7f5ec;
+      border: 1px solid rgba(43, 38, 32, 0.22);
     }
-    .idea-orb .orb-ring, .idea-orb .orb-core { border-radius: 50%; box-sizing: border-box; }
-    .idea-orb .orb-ring {
-      width: var(--orb); height: var(--orb);
-      border: 1.5px solid rgba(210, 120, 60, 0.55);
-      box-shadow: 0 0 18px rgba(210, 120, 60, 0.25) inset, 0 0 14px rgba(210, 120, 60, 0.2);
-      animation: orbPulse 3.2s ease-in-out infinite;
+    .wall-card img { height: 100%; background: #f7f5ec; }
+    .wall-placeholder {
+      width: 100%; height: 100%;
+      display: grid; place-items: center;
+      color: rgba(43, 38, 32, 0.72);
     }
-    .idea-orb .orb-core {
-      position: absolute; top: calc(var(--orb) / 2 - 7px);
-      width: 14px; height: 14px;
-      background: radial-gradient(circle at 35% 30%, #ffd9a8, var(--cinnabar) 70%);
-      box-shadow: 0 0 12px rgba(210, 90, 40, 0.7);
-      animation: orbBreathe 2.4s ease-in-out infinite;
+    .wall-placeholder span {
+      writing-mode: vertical-rl;
+      font-size: 30px;
+      letter-spacing: 0.36em;
+      text-indent: 0.36em;
     }
-    .idea-orb .orb-label { font-size: 13px; letter-spacing: 0.14em; opacity: 0.7; transition: opacity 0.25s, color 0.25s; }
-    .idea-orb:hover .orb-ring {
-      border-color: rgba(210, 90, 40, 0.95);
-      box-shadow: 0 0 30px rgba(210, 90, 40, 0.55) inset, 0 0 26px rgba(210, 90, 40, 0.5);
-      animation: orbFlicker 0.5s ease-in-out infinite;
+    .wall-card.is-ready .wall-placeholder { display: none; }
+    .wall-card.is-ready img { display: block; }
+    .wall-enter {
+      display: inline-block; margin-top: 14px; font-size: 13px; letter-spacing: 0.35em;
+      color: var(--cinnabar); border: 1px solid var(--cinnabar); padding: 5px 14px 5px 18px;
+      transition: background 0.2s, color 0.2s, opacity 0.2s;
+      font-family: inherit; background: transparent; cursor: pointer;
     }
-    .idea-orb:hover .orb-core { animation: orbFlicker 0.5s ease-in-out infinite; box-shadow: 0 0 20px rgba(255, 150, 80, 0.95); }
-    .idea-orb:hover .orb-label { opacity: 1; color: var(--cinnabar); }
-    @keyframes orbPulse { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.08); opacity: 1; } }
-    @keyframes orbBreathe { 0%, 100% { transform: scale(0.85); opacity: 0.75; } 50% { transform: scale(1.15); opacity: 1; } }
-    @keyframes orbFlicker {
-      0%, 100% { opacity: 1; transform: scale(1.05); } 25% { opacity: 0.55; transform: scale(0.92); }
-      50% { opacity: 0.95; transform: scale(1.12); } 75% { opacity: 0.6; transform: scale(0.96); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .idea-orb .orb-ring, .idea-orb .orb-core,
-      .idea-orb:hover .orb-ring, .idea-orb:hover .orb-core { animation: none; }
-    }
+    .wall-card:hover .wall-enter:not(:disabled),
+    .wall-enter:not(:disabled):hover { background: var(--cinnabar); color: var(--paper); }
+    .wall-enter:disabled { opacity: 0.48; cursor: not-allowed; }
+    .wall-error { min-height: 18px; margin-top: 8px; color: var(--cinnabar); font-size: 12px; letter-spacing: 0.1em; }
   </style>
 </head>
 <body class="home-page">
@@ -70,30 +71,48 @@
     <p data-i18n="subtitle">画中生物皆为自主智能体 —— 感知 · 行为 · 运动，古画活过来了</p>
   </header>
 
+  <!-- 拟生源泉：两幅原作即为入画之门，点击画作进入各拟生页面 -->
   <main class="gallery">
-    <a class="painting-card" href="tiger.html">
-      <figure>
-        <img src="assets/gallery/tiger-scene.jpg" alt="竹虎溪涧图 · 实时场景" />
-        <span class="agents" data-i18n="tigerAgents">虎 · 雪兔 · 锦鸡 · 竹林 · 雨雪</span>
-      </figure>
-      <div class="card-caption">
-        <h2 data-i18n="tigerTitle">竹虎溪涧图</h2>
-        <p data-i18n="tigerDesc">雪竹 · 斑斓虎 · 雪兔 · 锦鸡 —— 狩野山乐《竹虎图》之威仪，雪舟《四季花鸟图》溪涧为境</p>
-        <span class="enter" data-i18n="enter">入 画</span>
-      </div>
-    </a>
+    <h2 class="gallery-title" data-i18n="galleryTitle">拟生源泉 · 原作入画</h2>
+    <div class="gallery-row">
+      <a class="painting-card" href="tiger.html">
+        <figure>
+          <img src="assets/gallery/tiger.jpg" alt="竹虎图 · 原作" />
+        </figure>
+        <div class="card-caption">
+          <h2 data-i18n="tigerTitle">竹虎图</h2>
+          <p data-i18n="tigerDesc">狩野山乐《竹虎图》之威仪 —— 斑斓虎 · 雪竹 · 溪涧，点击入画</p>
+          <span class="enter" data-i18n="enter">入 画</span>
+        </div>
+      </a>
 
-    <a class="painting-card" href="plum.html">
-      <figure>
-        <img src="assets/gallery/plum-scene.jpg" alt="寒梅归雁图 · 实时场景" />
-        <span class="agents" data-i18n="plumAgents">古梅 · 归雁 · 静水塘 · 远山 · 薄雪</span>
-      </figure>
-      <div class="card-caption">
-        <h2 data-i18n="plumTitle">寒梅归雁图</h2>
-        <p data-i18n="plumDesc">古梅 · 修竹 · 水塘 · 归雁 —— 寒枝繁花，汀雁栖飞，远山如黛</p>
-        <span class="enter" data-i18n="enter">入 画</span>
-      </div>
-    </a>
+      <a class="painting-card" href="plum.html">
+        <figure>
+          <img src="assets/gallery/plum.jpg" alt="寒梅归雁图 · 原作" />
+        </figure>
+        <div class="card-caption">
+          <h2 data-i18n="plumTitle">寒梅归雁图</h2>
+          <p data-i18n="plumDesc">寒枝繁花，汀雁栖飞 —— 古梅 · 修竹 · 水塘 · 归雁，点击入画</p>
+          <span class="enter" data-i18n="enter">入 画</span>
+        </div>
+      </a>
+
+      <article class="painting-card wall-card" id="wall-card" role="button" tabindex="0" aria-label="待君题壁">
+        <figure>
+          <div class="wall-frame">
+            <img id="wall-preview" alt="待君题壁 · 原作预览" hidden />
+            <div class="wall-placeholder" id="wall-placeholder"><span data-i18n="wallMark">待君题壁</span></div>
+          </div>
+        </figure>
+        <div class="card-caption">
+          <h2 data-i18n="wallTitle">题壁新作</h2>
+          <p data-i18n="wallDesc">空白墙壁待原作入驻 —— 上传你的画，开一方拟生空间</p>
+          <button class="wall-enter" id="wall-enter" type="button" disabled data-i18n="wallEnter">入 画</button>
+          <p class="wall-error" id="wall-error" aria-live="polite"></p>
+        </div>
+      </article>
+      <input id="wall-upload" type="file" accept="image/*" hidden />
+    </div>
   </main>
 
   <!-- 物种实验室：环形光点导航，悬停闪烁 -->
@@ -117,12 +136,15 @@
       zh: {
         title: "世界古典美术拟生平台",
         subtitle: "画中生物皆为自主智能体 —— 感知 · 行为 · 运动，古画活过来了",
-        tigerTitle: "竹虎溪涧图",
-        tigerDesc: "雪竹 · 斑斓虎 · 雪兔 · 锦鸡 —— 狩野山乐《竹虎图》之威仪，雪舟《四季花鸟图》溪涧为境",
-        tigerAgents: "虎 · 雪兔 · 锦鸡 · 竹林 · 雨雪",
+        galleryTitle: "拟生源泉 · 原作入画",
+        tigerTitle: "竹虎图",
+        tigerDesc: "狩野山乐《竹虎图》之威仪 —— 斑斓虎 · 雪竹 · 溪涧，点击入画",
         plumTitle: "寒梅归雁图",
-        plumDesc: "古梅 · 修竹 · 水塘 · 归雁 —— 寒枝繁花，汀雁栖飞，远山如黛",
-        plumAgents: "古梅 · 归雁 · 静水塘 · 远山 · 薄雪",
+        plumDesc: "寒枝繁花，汀雁栖飞 —— 古梅 · 修竹 · 水塘 · 归雁，点击入画",
+        wallMark: "待君题壁",
+        wallTitle: "题壁新作",
+        wallDesc: "空白墙壁待原作入驻 —— 上传你的画，开一方拟生空间",
+        wallEnter: "入 画",
         enter: "入 画",
         labTitle: "物种实验室",
         footer: "拟生 · Artificial Life —— Tu & Terzopoulos《Artificial Fishes》遗法",
@@ -131,12 +153,15 @@
       en: {
         title: "Living Classical Art",
         subtitle: "Every creature is an autonomous agent — perception · behavior · locomotion — classical paintings come alive",
-        tigerTitle: "Tiger by the Bamboo Stream",
-        tigerDesc: "Snow bamboo · tiger · snow hare · golden pheasant — after Kanō Sanraku's “Tiger in Bamboo”, set in a stream scene from Sesshū",
-        tigerAgents: "Tiger · snow hare · pheasant · bamboo · rain & snow",
+        galleryTitle: "Source Works · Enter the Painting",
+        tigerTitle: "Tiger in Bamboo",
+        tigerDesc: "After Kanō Sanraku's “Tiger in Bamboo” — striped tiger · snow bamboo · stream, click to enter",
         plumTitle: "Returning Geese by the Wintry Plum",
-        plumDesc: "Ancient plum · slender bamboo · still pond · returning geese — blossoms on cold branches, geese above ink-blue hills",
-        plumAgents: "Plum · geese · pond · distant hills · light snow",
+        plumDesc: "Blossoms on cold branches, geese above ink-blue hills — ancient plum · bamboo · pond · geese, click to enter",
+        wallMark: "Awaiting Your Brush",
+        wallTitle: "Your Wall Painting",
+        wallDesc: "A blank wall for your source artwork — upload an image and open a living workspace",
+        wallEnter: "Enter",
         enter: "Enter",
         labTitle: "Species Lab",
         footer: "Artificial Life — after Tu & Terzopoulos' “Artificial Fishes”",
@@ -162,6 +187,90 @@
       applyLang();
     });
     applyLang();
+
+    const WALL_KEY = "living-classical-art-wall-source";
+    const wallCard = document.getElementById("wall-card");
+    const wallUpload = document.getElementById("wall-upload");
+    const wallPreview = document.getElementById("wall-preview");
+    const wallEnter = document.getElementById("wall-enter");
+    const wallError = document.getElementById("wall-error");
+    let wallPayload = null;
+
+    function setWallError(msg) {
+      if (wallError) wallError.textContent = msg || "";
+    }
+    function setWallReady(payload) {
+      wallPayload = payload;
+      wallCard?.classList.add("is-ready");
+      if (wallPreview) {
+        wallPreview.hidden = false;
+        wallPreview.src = payload.dataUrl;
+      }
+      if (wallEnter) wallEnter.disabled = false;
+      setWallError("");
+    }
+    function fileToImage(file) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("图片加载失败")); };
+        img.src = url;
+      });
+    }
+    async function fileToCompressedDataURL(file) {
+      const img = await fileToImage(file);
+      const maxSide = 1400;
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      return canvas.toDataURL("image/jpeg", 0.86);
+    }
+
+    try {
+      const saved = sessionStorage.getItem(WALL_KEY);
+      if (saved) setWallReady(JSON.parse(saved));
+    } catch (_) { /* 忽略旧会话 */ }
+
+    wallCard?.addEventListener("click", (event) => {
+      if (event.target.closest("#wall-enter")) return;
+      wallUpload?.click();
+    });
+    wallCard?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      wallUpload?.click();
+    });
+    wallUpload?.addEventListener("change", async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try {
+        setWallError(lang === "zh" ? "正在纳入原作…" : "Reading artwork...");
+        const dataUrl = await fileToCompressedDataURL(file);
+        const payload = {
+          name: file.name || "untitled-artwork",
+          type: "image/jpeg",
+          dataUrl,
+          updatedAt: Date.now(),
+        };
+        sessionStorage.setItem(WALL_KEY, JSON.stringify(payload));
+        setWallReady(payload);
+      } catch (err) {
+        setWallError(err?.message || (lang === "zh" ? "图片读取失败" : "Could not read image"));
+      }
+    });
+    wallEnter?.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (!wallPayload) {
+        wallUpload?.click();
+        return;
+      }
+      try { sessionStorage.setItem(WALL_KEY, JSON.stringify(wallPayload)); } catch (_) { /* 已有预览即可继续 */ }
+      location.href = "wall-workspace.html";
+    });
   </script>
 </body>
 </html>

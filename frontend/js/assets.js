@@ -9,9 +9,9 @@ let manifestPromise = null;
 /** 后端给出的已生成模型清单；取不到（离线）则视为全部可用，走直接加载 */
 function manifest() {
   if (!manifestPromise) {
-    manifestPromise = fetch("/api/models")
+    manifestPromise = fetch("api/models")
       .then((r) => (r.ok ? r.json() : { models: [] }))
-      .then((d) => new Set(d.models.map((n) => `/assets/models/${n}`)))
+      .then((d) => new Set(d.models.map((n) => `assets/models/${n}`)))
       .catch(() => null);
   }
   return manifestPromise;

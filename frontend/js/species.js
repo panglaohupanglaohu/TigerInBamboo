@@ -1,5 +1,5 @@
 // 物种记录读写：物种实验室与场景页共用的存档 schema
-// 优先走后端 /api/species，离线（静态托管等）回退 localStorage
+// 优先走后端 api/species，离线（静态托管等）回退 localStorage
 export const DEFAULT_SPECIES = {
   enabled: true,
   cnName: "自定义物种",
@@ -22,7 +22,11 @@ export const DEFAULT_SPECIES = {
   rigTuning: { neckLen: 1, legFold: 1 },
   // 驱动器：步态频率 / 摆动 / 脊椎 / 摆尾（每帧 tick 的 ctx，不重建网格）
   gait: { freq: 1, swing: 1, spine: 1, tail: 1 },
+  // 意思模块：物种生态语义（习性），与 habitat 复合拟合行为先验
+  semantics: { niche: "", diet: "omnivore", activityCycle: "diurnal", sociality: "solitary" },
+  habitat: "stream", // 拟生环境：stream/pond/snow/mountain
   traits: "",
+  archive: { discoverer: "", site: "", era: "", conservation: "", description: "", thumb: "" },
   relations: [
     { target: "tiger", type: "predator-prey", drive: "fear", strength: 0.7, note: "遇虎则避" },
     { target: "stream", type: "resource", drive: "thirst", strength: 0.5, note: "临水而饮" },
@@ -49,11 +53,11 @@ function merge(base, override) {
   return out;
 }
 
-/** 读存档：GET /api/species → localStorage → DEFAULT_SPECIES 深拷贝（缺键由默认补齐） */
+/** 读存档：GET api/species → localStorage → DEFAULT_SPECIES 深拷贝（缺键由默认补齐） */
 export async function loadSpecies() {
   let rec = null;
   try {
-    const res = await fetch("/api/species");
+    const res = await fetch("api/species");
     if (res.ok) {
       const data = await res.json();
       rec = data?.species ?? null;
@@ -69,12 +73,28 @@ export async function loadSpecies() {
 }
 
 /**
- * 写存档：PUT /api/species；失败写 localStorage
+ * 同步查询：返回实验室色样可用的一组物种预设（默认 + 已存档自定义）。
+ * 离线友好：仅读 localStorage，不发起网络请求。
+ */
+export function querySpecies() {
+  const list = [clone(DEFAULT_SPECIES)];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (saved && typeof saved === "object") list.push(merge(DEFAULT_SPECIES, saved));
+    }
+  } catch (_) { /* ignore */ }
+  return list;
+}
+
+/**
+ * 写存档：PUT api/species；失败写 localStorage
  * @returns {"api"|"local"|false} 实际写入通道（false = 全部失败）
  */
 export async function saveSpecies(record) {
   try {
-    const res = await fetch("/api/species", {
+    const res = await fetch("api/species", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(record),

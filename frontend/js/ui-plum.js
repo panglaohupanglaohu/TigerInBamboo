@@ -94,12 +94,25 @@ export class PlumCameraDirector {
 
 function ease(t) { return t * t * (3 - 2 * t); }
 
-export function updatePlumAgentPanel(flock, config) {
+export function updatePlumAgentPanel(flock, config, custom) {
   const g = document.getElementById("goose-state");
   if (g && flock) g.textContent = flock.stateLabel;
   const w = document.getElementById("weather-state");
   if (w) {
     const s = config.plum?.snowfall ?? 0.35;
     w.textContent = s > 0.02 ? `薄雪 · ${Math.round(Math.min(s / 2, 1) * 100)}%` : "晴寒";
+  }
+  // 实验室自定义物种面板
+  const cp = document.getElementById("agent-custom");
+  if (cp) {
+    if (custom) {
+      cp.style.display = "flex";
+      const nm = document.getElementById("custom-name");
+      const st = document.getElementById("custom-state");
+      if (nm) nm.textContent = custom.cnName;
+      if (st) st.textContent = custom.stateLabel;
+    } else {
+      cp.style.display = "none";
+    }
   }
 }

@@ -36,7 +36,8 @@
 - **竹林**：Cannon.js 刚体 + 竹脚球铰约束 —— 虎身经过时被撞开，弹性回正；风扭矩按风向摇摆
 - **天气**：温度决定雨雪（>0℃ 雨丝 / ≤0℃ 落雪），风向统一驱动雨雪飘移与竹摆
 - **物种关系矩阵**：在配置页以"捕食 / 警戒回避 / 互利 / 竞争"等关系配置智能体间作用（对应论文中的 predator–prey、fear/hunger 驱动模型）
-- **物种实验室**（`lab.html`）：上传图片取色 → 四模块旋钮（数据仓库/网格生成/骨骼装配/状态机驱动）实时调参 → 保存后入溪涧图漫游并按关系矩阵互动
+- **物种实验室**（`lab.html`）：上传图片 → 轮廓/主轴/主色分析**推断解剖结构**（解剖类型 + 体型比例）→ 程序化建模；以**生物运动学**（腿倒摆自然频率 / Froude 数）计算步态 → 让生物在**拟生环境**（溪涧/梅塘/雪竹/远山）中科学运动；**意思模块**以物种生态语义 × 栖息环境拟合行为先验，回灌状态机。保存后入溪涧图漫游并按关系矩阵互动
+- **回展厅光点**：竹虎（`tiger.html`）与寒梅（`plum.html`）场景页右下角均设环形呼吸光点，一键返回展厅（`home.html`）
 
 ## 技术要点
 
@@ -55,6 +56,19 @@
   构建器向动画层暴露 `headBone / headGroup / spine` 句柄
 - **行走探头顿挫**（`bird.js` / `goose.js`）：双颈骨相位差对冲 + 幂次顿挫正弦（pow3 波形）+ 视线锁定补偿，
   行走时头部呈"探-停-探-停"的鸟类典型顿挫，颈呈自然 S 型曲线；物种实验室的禽类预览统一接入同一套颈运动学
+- **头颈同步**：头部（`headGroup`）锚定至颈顶骨 `bUp` 的颈尖真实变换，并新增可调 `headLock` 将"视线锁定"降级
+  （头保留大部分颈倾摆），行走时头随颈 S 弯一起行进，根治早期"头是头、脖子是脖子"的脱节
+
+### 物种实验室：图像驱动的解剖建模 → 生物运动 → 意思模块
+- **图像推断**（`bio/anatomyEstimator.js`）：上传图经 `analyzeImage` 降采样，用前景像素二阶矩求主轴方向与伸长率，
+  结合纵横比推断解剖类型（禽 / 蹄行 / 趾行 / 跳跃行）与颈长/腿长/尾长比例，给出置信度供用户覆盖
+- **生物运动学**（`locomotionModel.js`）：以解剖类型 + 体型尺寸为键，由腿长推倒摆自然频率 f=(1/2π)√(g/L)，
+  据 Froude 数 Fr=v²/(gL) 标定步态区；物种实验室"采用推断"即按此重算步态（freq/swing/spine/tail）
+- **拟生环境**（`labEnv.js`）：预览环境可选溪涧 / 梅塘 / 雪竹 / 远山，提供地面 / 水面 / 气候上下文；
+  禽类在梅塘水面浮游、雪竹落雪飘移，并由环境驱动反应运动
+- **意思模块**（`bioSemantics.js`）：物种生态语义（生态位 / 食性 / 活动节律 / 社会性）× 拟生环境 → 栖息拟合
+  `fitHabitat` 推导行为先验（攻击 / 胆量 / 活跃 / 社群 / 觅食 / 亲和），回灌状态机与运动学，
+  实现"环境 × 习性"复合拟合，后续可接更细的生物习性库
 
 ### 竹：刚体 + 球铰
 每根竹是 Cannon 动态刚体（Box），竹脚以 `PointToPointConstraint` 球铰锚定地面；
@@ -234,9 +248,14 @@ machines interacting with the environment:
   drift and bamboo sway
 - **Species relation matrix**: predator–prey, alert-avoidance, mutualism and competition relations between agents,
   configured in the config page (mirroring the fear/hunger drive models of the paper)
-- **Species lab** (`lab.html`): upload an image for palette extraction → tune four modules (taxonomy data / mesh
-  generation / skeleton assembly / state-machine driving) live → save and release your species into the stream
-  scene, where it interacts through the relation matrix
+- **Species lab** (`lab.html`): upload an image → outline / principal-axis / dominant-color analysis **infers the
+  anatomy** (body plan + body proportions) → procedural modeling; **biomechanics** (leg-pendulum natural frequency /
+  Froude number) computes the gait → lets the creature move scientifically inside **bionic environments** (stream /
+  plum pond / snow & bamboo / distant hills); the **semantics module** fits behavioral priors from the species'
+  ecology × habitat and feeds them back into the state machine. Save and release it into the stream scene to
+  interact through the relation matrix
+- **Return-to-gallery orb**: the Tiger and Plum scene pages each carry a breathing ring-orb at the bottom-right that
+  returns to the gallery (`home.html`) in one click
 
 ## Technical Highlights
 
@@ -273,6 +292,25 @@ machines interacting with the environment:
 - **Walking head-bob staccato** (`bird.js` / `goose.js`): phase-opposed dual neck bones + power-curve staccato sine
   (pow3 waveform) + gaze-lock compensation produce the characteristic avian "thrust-hold-thrust-hold" head motion
   and a natural S-curved neck while walking; the species lab's avian preview runs the same neck kinematics
+- **Head–neck sync**: the head (`headGroup`) is anchored to the neck-tip transform of the top neck bone `bUp`, with a
+  tunable `headLock` that downgrades the gaze-lock (the head keeps most of the neck's tilt), so the head travels with
+  the S-curve instead of detaching — fixing the early "head is head, neck is neck" disconnect
+
+### Species lab: image-driven anatomy → biomechanics → semantics module
+- **Image inference** (`bio/anatomyEstimator.js`): the uploaded image is downsampled by `analyzeImage`; the foreground
+  pixel second moment yields the principal-axis direction and elongation, combined with the aspect ratio to infer the
+  body plan (bird / unguligrade / digitigrade / saltatorial) and neck/leg/tail proportions, with a confidence score
+  for the user to override
+- **Biomechanics** (`locomotionModel.js`): keyed on body plan + body dimensions, the leg-pendulum natural frequency
+  f=(1/2π)√(g/L) and the Froude number Fr=v²/(gL) set the gait regime; the lab's "apply inference" recomputes the
+  gait (freq/swing/spine/tail) from this
+- **Bionic environments** (`labEnv.js`): the preview environment is selectable (stream / plum pond / snow & bamboo /
+  distant hills), providing ground / water / climate context; birds swim on the plum pond surface, snow drifts in the
+  bamboo grove, and the environment drives reactive motion
+- **Semantics module** (`bioSemantics.js`): the species' ecological semantics (niche / diet / activity cycle /
+  sociality) × the bionic environment → `fitHabitat` derives behavioral priors (aggression / boldness / activity /
+  social / foraging / affinity) that feed back into the state machine and locomotion, realizing a composite
+  "environment × habit" fit that can later plug into a finer behavioral-habit library
 
 ### Bamboo: rigid bodies + ball joints
 Each bamboo is a Cannon dynamic rigid body (box), anchored to the ground by a `PointToPointConstraint` ball joint;

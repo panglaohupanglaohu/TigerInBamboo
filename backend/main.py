@@ -142,8 +142,8 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "bgm": {
         "volume": 0.5,            # 背景音乐音量 0~1
         "playlist": [             # 歌单（顺序循环）
-            "/assets/audio/bgm.mp3",
-            "/assets/audio/duange_xing.mp3",
+            "assets/audio/bgm.mp3",
+            "assets/audio/duange_xing.mp3",
         ],
     },
 }
@@ -254,7 +254,7 @@ def list_audio() -> dict:
     files = []
     if audio_dir.exists():
         files = sorted(
-            "/assets/audio/" + p.name
+            "assets/audio/" + p.name
             for p in audio_dir.iterdir()
             if p.suffix.lower() in (".mp3", ".ogg")
         )

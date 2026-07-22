@@ -25,8 +25,8 @@ export class FelineLocomotionController {
     const { time: t, dt, state, gait, moving = 1, anatomyType = "DIGITIGRADE",
             gaitAmp = 1, spineAmp = 1, tailAmp = 1 } = ctx;
 
-    // 匍匐潜行：独立状态分支，完全自管姿态（避开行走/匍匐通用逻辑冲突）
-    if (state === "STALK") { this._stalk(boneMap, ctx); return; }
+    // 匍匐潜行 / 实验室匍匐：独立状态分支，完全自管姿态（避开行走/匍匐通用逻辑冲突）
+    if (state === "STALK" || state === "CREEP") { this._stalk(boneMap, { ...ctx, state: "STALK" }); return; }
 
     // —— 脊椎：行进时沿体长轻微 S 形波动，呼吸浮动 ——
     const wave = Math.sin(gait * Math.PI * 2);
@@ -36,6 +36,7 @@ export class FelineLocomotionController {
     boneMap.get("Chest").rotation.y = Math.sin(gait * Math.PI * 2 - 1.2) * 0.04 * sway * spineAmp;
     const root = boneMap.get("Root");
     root.position.y = root.userData.baseY + Math.sin(t * 1.7) * 0.008 + Math.abs(wave) * 0.02 * sway * spineAmp;
+    root.rotation.x *= Math.max(0, 1 - (dt ?? 0.016) * 5);
 
     // —— 四肢（leap 姿态在末尾统一覆盖） ——
     if (state === "WALK" && !(ctx.leap > 0.02)) {
@@ -77,6 +78,24 @@ export class FelineLocomotionController {
         if (k1) k1.rotation.z *= k;
         if (k2) k2.rotation.z *= k;
       }
+    }
+
+    // —— 雪面打滑：足底侧向打滑 + 躯干侧倾摆动（仅当环境雪面易滑且正在行进）——
+    // 由 ctx.env 传入：{ isSnow, slick }。slick 0(抓地)..1(极滑)。
+    const slick = ctx.env?.slick ?? 0;
+    const onSnow = (ctx.env?.isSnow ?? false) || slick > 0.3;
+    if (onSnow && state === "WALK") {
+      const skid = Math.sin(t * 6.3) * slick * 0.5;        // 周期性侧向打滑
+      const lean = Math.sin(t * 4.1 + 0.7) * slick * 0.06; // 躯干轻微侧倾
+      if (root) root.rotation.z = lean;
+      for (const L of LEGS) {
+        const foot = boneMap.get(L.kF);
+        if (foot) foot.rotation.z = skid * (L.k1[1] === "L" ? -1 : 1);
+      }
+    } else if (root) {
+      const kz = Math.max(0, 1 - (dt ?? 0.016) * 6);
+      root.rotation.z *= kz;
+      for (const L of LEGS) { const foot = boneMap.get(L.kF); if (foot) foot.rotation.z *= kz; }
     }
 
     // —— 头颈 ——
@@ -125,81 +144,92 @@ export class FelineLocomotionController {
     if (ctx.leap > 0.02) this._leapPose(boneMap, ctx.leap);
   }
 
-  /** 匍匐潜行 STALK：极低步频 + 大步幅 + 脊椎 S 形扭动 + 四肢横向外展（多轴 abduction）
-   *  解剖学三约束：① 肘/膝横向外展（z 旋，下臂反向回带使爪仍落体下）；
-   *  ② 脊椎盆-胸反相大幅扭动，颈对冲扭转 → 头死盯正前（锁死猎物）；
-   *  ③ 慢动作大跨步（步频≈行走 1/3、摆幅拉满）。骨骼名严格对应 AnatomyRiggingEngine。 */
+  /** 猫科潜行 STALK：低重心、四拍落足、肩胛参与步长、后足尽量贴近前足轨迹。
+   *  依据：猫在隐蔽接近时会降低质心与髋高，采用更均匀的四足落点来换稳定；
+   *  虎是伏击型猎手，因此这里模拟“慢、低、稳、少抬爪”，而不是爬行动物式外展。 */
   static _stalk(boneMap, ctx) {
-    const { time: t, gaitAmp = 1 } = ctx;
-    const STALK_FREQ = 1.5;                 // 极低步频（慢动作 ≈ 行走 1/3）
-    const tick = t * STALK_FREQ;            // 绝对时钟驱动，慢且稳
-    const leftSignal = Math.sin(tick);      // 左前 / 右后 同步
-    const rightSignal = -Math.sin(tick);    // 右前 / 左后 同步（对角步态）
+    const gait = (((ctx.gait ?? 0) % 1) + 1) % 1;
+    const phase = gait * Math.PI * 2;
+    const gaitAmp = THREE.MathUtils.clamp(ctx.gaitAmp ?? 0.82, 0.45, 1.15);
+    const stepLen = THREE.MathUtils.clamp(ctx.stepLen ?? 0.16, 0.06, 0.28);
+    const low = THREE.MathUtils.clamp(ctx.creepLow ?? 0.2, 0.08, 0.32);
+    const directRegister = THREE.MathUtils.clamp(ctx.directRegister ?? 0.85, 0, 1);
+    const lean = THREE.MathUtils.clamp(ctx.lean ?? 0.12, -0.05, 0.32);
+    const ease = (x) => x * x * (3 - 2 * x);
 
-    // —— 重心极端压低（贴地肉感）+ 随迈步微起伏 ——
+    // —— 重心压低但保留胸腹离地：虎是伏击潜行，不是腹部拖地爬行 ——
     const root = boneMap.get("Root");
-    if (root) root.position.y = root.userData.baseY - 0.24 + Math.abs(leftSignal) * 0.04;
+    if (root) {
+      root.position.y = root.userData.baseY - low + Math.sin(phase * 2) * 0.008;
+      root.rotation.x = -lean * 0.1;
+    }
 
-    // —— 脊椎 S 形大幅度扭动（Y 轴）——
+    // —— 脊椎：盆-胸反相小幅 S 波，肩区前送来补足潜行步长 ——
     const pelvis = boneMap.get("Pelvis");
     const mid = boneMap.get("Mid");
     const chest = boneMap.get("Chest");
-    if (pelvis) pelvis.rotation.y = leftSignal * 0.25;                  // 骨盆随左腿
-    if (mid) { mid.rotation.y = Math.sin(tick + 0.25) * 0.24; mid.rotation.x = Math.sin(tick) * 0.05; }
-    if (chest) chest.rotation.y = Math.sin(tick + 0.5) * 0.22;
+    const spineWave = Math.sin(phase);
+    if (pelvis) { pelvis.rotation.y = -spineWave * 0.1 * gaitAmp; pelvis.rotation.x = -0.03; }
+    if (mid) { mid.rotation.y = Math.sin(phase + 0.45) * 0.14 * gaitAmp; mid.rotation.x = 0.04 + low * 0.16; }
+    if (chest) { chest.rotation.y = Math.sin(phase + 0.95) * 0.12 * gaitAmp; chest.rotation.x = 0.03 + lean * 0.12; }
 
-    // 四肢核心关节（腿根外展用常量，可调大以增强"炸开"感）
-    const FL1 = boneMap.get("FL1"), FL2 = boneMap.get("FL2"), FLFoot = boneMap.get("FLFoot");
-    const FR1 = boneMap.get("FR1"), FR2 = boneMap.get("FR2"), FRFoot = boneMap.get("FRFoot");
-    const BL1 = boneMap.get("BL1"), BL2 = boneMap.get("BL2"), BLFoot = boneMap.get("BLFoot");
-    const BR1 = boneMap.get("BR1"), BR2 = boneMap.get("BR2"), BRFoot = boneMap.get("BRFoot");
-    const SPLAY_F = 0.25, SPLAY_B = 0.30;     // 腿根横向外展(rad)。注：用户曾要求匍匐外展达 90°，
-                                             // 此处取伪代码值≈14~17°；想更"炸开"可上调至 1.6(≈92°)
+    // 四拍序列：同侧后足在前足之后进入摆动，形成“贴印”感。
+    const hindDelay = THREE.MathUtils.lerp(0.18, 0.27, directRegister);
+    const stalkLegs = [
+      { k1: "FL1", k2: "FL2", kF: "FLFoot", phase: 0.0, front: true, side: -1 },
+      { k1: "BL1", k2: "BL2", kF: "BLFoot", phase: hindDelay, front: false, side: -1 },
+      { k1: "FR1", k2: "FR2", kF: "FRFoot", phase: 0.5, front: true, side: 1 },
+      { k1: "BR1", k2: "BR2", kF: "BRFoot", phase: (0.5 + hindDelay) % 1, front: false, side: 1 },
+    ];
+    const swingWindow = THREE.MathUtils.lerp(0.2, 0.26, 1 - directRegister);
+    const trackSplay = THREE.MathUtils.lerp(0.18, 0.08, directRegister);
 
-    // 前肢：大臂大跨步 + 肘外展 + 抬腿时肘深折防拖爪
-    if (FL1 && FL2) {
-      FL1.rotation.x = leftSignal * 0.45 * gaitAmp;     // 大前后摆
-      FL1.rotation.z = -SPLAY_F;                        // 肘向体左侧外展
-      FL2.rotation.z = SPLAY_F;                         // 下臂反向回带 → 爪仍落体下
-      FL2.rotation.x = leftSignal > 0 ? leftSignal * 0.6 : Math.abs(leftSignal) * 0.1; // 抬腿深折
+    for (const L of stalkLegs) {
+      const p = ((gait - L.phase) % 1 + 1) % 1;
+      const inSwing = p < swingWindow;
+      const s = inSwing ? ease(p / swingWindow) : ease((p - swingWindow) / (1 - swingWindow));
+      const reach = stepLen * (L.front ? 2.25 : 1.9) * gaitAmp;
+      const hipX = inSwing
+        ? THREE.MathUtils.lerp(0.22, -reach, s)
+        : THREE.MathUtils.lerp(-reach, 0.22, s);
+      const lift = inSwing ? Math.sin(Math.PI * s) : 0;
+      const stanceFlex = L.front ? 0.34 + low * 0.75 : 0.42 + low * 0.68;
+      const fold = stanceFlex + lift * (L.front ? 0.36 : 0.32);
+      const splay = trackSplay * (L.front ? 0.75 : 0.9);
+      const k1 = boneMap.get(L.k1), k2 = boneMap.get(L.k2), foot = boneMap.get(L.kF);
+      if (k1) {
+        k1.rotation.x = hipX * (L.front ? 0.72 : 0.62);
+        k1.rotation.z = L.side * splay;
+      }
+      if (k2) {
+        k2.rotation.x = fold;
+        k2.rotation.z = -L.side * splay * 0.72;
+      }
+      if (foot) {
+        foot.rotation.x = (L.front ? 0.08 : 0.14) + lift * 0.16 - hipX * 0.16;
+        foot.rotation.z = -L.side * splay * 0.28;
+      }
     }
-    if (FR1 && FR2) {
-      FR1.rotation.x = rightSignal * 0.45 * gaitAmp;
-      FR1.rotation.z = SPLAY_F;
-      FR2.rotation.z = -SPLAY_F;
-      FR2.rotation.x = rightSignal > 0 ? rightSignal * 0.6 : Math.abs(rightSignal) * 0.1;
-    }
-    // 后肢（对角潜行：左后与右前同步 = rightSignal；右后与左前同步 = leftSignal）
-    if (BL1 && BL2) {
-      BL1.rotation.x = rightSignal * 0.38 * gaitAmp;
-      BL1.rotation.z = -SPLAY_B;                        // 膝向体左侧外展
-      BL2.rotation.z = SPLAY_B;                        // 下臂反向回带
-      BL2.rotation.x = rightSignal > 0 ? rightSignal * 0.55 : Math.abs(rightSignal) * 0.15; // 膝前凸折叠蓄力
-      if (BLFoot) BLFoot.rotation.x = 0.2;
-    }
-    if (BR1 && BR2) {
-      BR1.rotation.x = leftSignal * 0.38 * gaitAmp;
-      BR1.rotation.z = SPLAY_B;
-      BR2.rotation.z = -SPLAY_B;
-      BR2.rotation.x = leftSignal > 0 ? leftSignal * 0.55 : Math.abs(leftSignal) * 0.15;
-      if (BRFoot) BRFoot.rotation.x = 0.2;
-    }
-    if (FLFoot) FLFoot.rotation.x = Math.max(0, leftSignal) * 0.25;   // 抬腿时爪背屈离地
-    if (FRFoot) FRFoot.rotation.x = Math.max(0, rightSignal) * 0.25;
 
-    // —— 头颈反向锁定（锁死前方猎物）——
-    const neck = boneMap.get("Neck"), head = boneMap.get("Head");
+    // —— 头颈：前低、视线锁定；颈部对冲胸腰扭动，避免头像被身体甩走 ——
+    const neck = boneMap.get("Neck"), head = boneMap.get("Head"), jaw = boneMap.get("Jaw");
     const midY = mid ? mid.rotation.y : 0, chestY = chest ? chest.rotation.y : 0;
-    if (neck) { neck.rotation.x = 0.28; neck.rotation.y = -(midY + chestY); } // 对冲盆-胸扭转
-    if (head) { head.rotation.x = 0.32; head.rotation.y = 0; }                // 头死盯正前
+    if (neck) { neck.rotation.x = 0.18 + lean * 0.42; neck.rotation.y = -(midY * 0.7 + chestY); }
+    if (head) {
+      const neckY = neck ? neck.rotation.y : 0;
+      head.rotation.x = 0.08 + lean * 0.5;
+      head.rotation.y = -neckY * 0.22;
+    }
+    if (jaw) jaw.rotation.x = 0.02;
 
-    // —— 尾：极低贴地微摆（捕食前紧张）——
-    const tail1 = boneMap.get("Tail1"), tail4 = boneMap.get("Tail4");
-    if (tail1) { tail1.rotation.x = 0.4; tail1.rotation.y = leftSignal * 0.05; } // 整体垂落 + 极小幅摆
-    const tail2 = boneMap.get("Tail2"); if (tail2) { tail2.rotation.x = 0.36; tail2.rotation.y = leftSignal * 0.04; }
-    const tail3 = boneMap.get("Tail3"); if (tail3) tail3.rotation.x = 0.32;
-    if (tail4) tail4.rotation.y = Math.sin(tick * 3.0) * 0.15;   // 尾尖高频微动（兴奋紧绷）
-    const tail5 = boneMap.get("Tail5"); if (tail5) tail5.rotation.x = 0.28;
+    // —— 尾：低位配平，小幅相位延迟扫尾，避免潜行时尾尖过度兴奋 ——
+    const tailAmp = THREE.MathUtils.clamp(ctx.tail ?? 0.18, 0, 0.5);
+    for (let i = 1; i <= 5; i++) {
+      const tb = boneMap.get(`Tail${i}`);
+      if (!tb) break;
+      tb.rotation.x = 0.2 + low * 0.45 - i * 0.012;
+      tb.rotation.y = Math.sin(phase - i * 0.38) * (0.05 + i * 0.025) * tailAmp;
+    }
   }
 
   /** 奔跃步态（rotary gallop）：大摆幅四肢 + 脊柱弓张发力 + 离地浮沉
