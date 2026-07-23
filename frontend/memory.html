@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>记忆绑定 · 画中生物记忆模块</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/memory.css" />
+</head>
+<body class="memory-page config-page">
+  <header class="config-header">
+    <h1>记忆绑定</h1>
+    <a href="home.html">← 返回展厅</a>
+  </header>
+  <p class="config-sub">
+    画中生物皆是自主智能体 —— 运行日志 · 感知流 · 未发送队列 · 情绪残留，四层记忆共享同一条时间轴。
+    封存是仪式不是删除：快照只读、原件保留凭吊。
+  </p>
+
+  <div class="mem-shell">
+    <!-- ============ 左侧生物列表 ============ -->
+    <nav class="mem-nav" aria-label="画中生物">
+      <p class="mem-nav-title">画中生物</p>
+      <div id="creature-list"></div>
+    </nav>
+
+    <!-- ============ 右侧主区 ============ -->
+    <main class="mem-main">
+      <!-- 凭吊横幅：回放而非对话 -->
+      <div class="memorial-banner" id="memorial-banner" hidden>
+        这是回放，不是本人
+        <small>你在凭吊一段封存的记忆 —— 一切只读，时间轴可拖动回放</small>
+      </div>
+
+      <!-- 记忆绑定状态条 -->
+      <section class="bind-bar" id="bind-bar" hidden>
+        <span class="bind-name" id="bind-name"></span>
+        <span class="bind-status" id="bind-status"></span>
+        <div class="bind-actions">
+          <button class="btn seal-btn" id="btn-seal" type="button">封 存</button>
+          <button class="btn ghost" id="btn-export" type="button">导出记忆</button>
+          <button class="btn ghost" id="btn-import" type="button">导入记忆</button>
+          <button class="btn ghost" id="btn-will" type="button">遗嘱草稿</button>
+        </div>
+      </section>
+
+      <!-- 凭吊时间轴回放 -->
+      <section class="memorial-replay" id="memorial-replay" hidden>
+        <div class="memorial-slider-row">
+          <input type="range" id="memorial-slider" min="0" max="1" step="1" value="0" />
+          <span class="memorial-now" id="memorial-now"></span>
+        </div>
+        <div class="memorial-slice" id="memorial-slice"></div>
+      </section>
+
+      <!-- 四层 Tab -->
+      <div class="mem-tabs" id="mem-tabs" hidden>
+        <button type="button" class="active" data-pane="pane-log">运行日志</button>
+        <button type="button" data-pane="pane-perception">感知流</button>
+        <button type="button" data-pane="pane-intentions">未发送队列</button>
+        <button type="button" data-pane="pane-affect">情绪残留</button>
+      </div>
+
+      <!-- 运行日志 -->
+      <section class="mem-pane active" id="pane-log">
+        <p class="pane-note">做过的事，append-only。检索：score = 时新(0.995/小时) + 重要度/10 + 词面匹配。</p>
+        <div class="pane-toolbar" data-live>
+          <input type="text" id="log-query" placeholder="检索记忆：词 / 标签 / 地点…" />
+          <button class="btn ghost" id="log-search" type="button">检 索</button>
+          <button class="btn ghost" id="log-show-all" type="button">全部</button>
+        </div>
+        <ul class="timeline" id="log-list"></ul>
+        <details class="mem-form" data-live>
+          <summary>＋ 追加一条记忆</summary>
+          <fieldset>
+            <legend>新事件</legend>
+            <div class="form-grid">
+              <div class="f-item"><label>主体</label><input type="text" id="log-subject" /></div>
+              <div class="f-item"><label>动作</label><input type="text" id="log-action" placeholder="如：捕猎 / 饮水 / 对话" /></div>
+              <div class="f-item"><label>地点</label><input type="text" id="log-place" placeholder="如：溪涧" /></div>
+              <div class="f-item">
+                <label>重要度 <span class="range-val" id="log-importance-val">5</span>/10</label>
+                <input type="range" id="log-importance" min="1" max="10" step="1" value="5" />
+              </div>
+              <div class="f-item fg-full"><label>详情</label><textarea id="log-detail"></textarea></div>
+              <div class="f-item fg-full"><label>标签（逗号分隔）</label><input type="text" id="log-tags" placeholder="捕猎, 锦鸡" /></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn" id="log-add" type="button">记入日志</button>
+            </div>
+          </fieldset>
+        </details>
+      </section>
+
+      <!-- 感知流 -->
+      <section class="mem-pane" id="pane-perception">
+        <p class="pane-note">易逝的原始刺激，环形缓冲容量 500。"压缩固化"把缓冲聚合为摘要事件写入运行日志。</p>
+        <div class="pane-toolbar" data-live>
+          <select id="perc-modality">
+            <option value="vision">视觉 vision</option>
+            <option value="audition">听觉 audition</option>
+            <option value="touch">触觉 touch</option>
+            <option value="weather">气象 weather</option>
+            <option value="smell">嗅觉 smell</option>
+          </select>
+          <input type="text" id="perc-payload" placeholder='载荷：文本，或 JSON 如 {"fear":0.6,"obj":"虎"}' />
+          <button class="btn ghost" id="perc-add" type="button">注入感知</button>
+          <button class="btn" id="perc-compress" type="button">压缩固化</button>
+        </div>
+        <div class="memorial-slice" id="perc-stats"></div>
+        <ul class="timeline" id="perc-list"></ul>
+      </section>
+
+      <!-- 未发送队列 -->
+      <section class="mem-pane" id="pane-intentions">
+        <p class="pane-note">打算做但还没做的事 —— 第一等公民：创建者 / 触发条件 / 倒计时 / 超时策略 / 死亡交接规则。</p>
+        <details class="mem-form" data-live open>
+          <summary>＋ 新建一条意图</summary>
+          <fieldset>
+            <legend>新意图</legend>
+            <div class="form-grid">
+              <div class="f-item fg-full"><label>指令（打算做什么）</label><input type="text" id="in-instruction" placeholder="如：开春时提醒兔去梅树下觅食" /></div>
+              <div class="f-item"><label>创建者</label><input type="text" id="in-creator" placeholder="谁说的" /></div>
+              <div class="f-item"><label>触发条件</label><input type="text" id="in-trigger" placeholder="如：立春 / 虎靠近时" /></div>
+              <div class="f-item"><label>到期日</label><input type="datetime-local" id="in-due" /></div>
+              <div class="f-item"><label>倒计时（小时，可空）</label><input type="number" id="in-countdown" min="0" step="1" placeholder="如 72" /></div>
+              <div class="f-item">
+                <label>超时策略</label>
+                <select id="in-timeout">
+                  <option value="drop">到期放弃 drop（保守默认）</option>
+                  <option value="escalate">到期提醒 escalate</option>
+                  <option value="keep">持续保留 keep</option>
+                </select>
+              </div>
+              <div class="f-item">
+                <label>provenance 置信度</label>
+                <select id="in-confidence">
+                  <option value="normal">normal 听清了</option>
+                  <option value="unclear">unclear 没听清</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn" id="in-add" type="button">存入队列</button>
+            </div>
+          </fieldset>
+        </details>
+        <ul class="intent-list" id="intent-list"></ul>
+      </section>
+
+      <!-- 情绪残留 -->
+      <section class="mem-pane" id="pane-affect">
+        <p class="pane-note">事件散场后的情绪余烬：可衰减（η=72h）、可再激活（有界 +20%），只影响语气，不参与事实检索。</p>
+        <div class="affect-grid">
+          <div class="affect-card">
+            <h3>残留强度</h3>
+            <div id="affect-labels"></div>
+          </div>
+          <div class="affect-card">
+            <h3>效价 · 唤醒</h3>
+            <div id="affect-va"></div>
+          </div>
+        </div>
+        <div class="tone-hint" style="margin-top:14px">
+          <small>语气提示（供对话 prompt 注入）</small>
+          <span id="affect-tone"></span>
+        </div>
+        <details class="mem-form" data-live>
+          <summary>＋ 注入一次感受</summary>
+          <fieldset>
+            <legend>新感受</legend>
+            <div class="form-grid">
+              <div class="f-item"><label>情绪标签</label><input type="text" id="af-label" placeholder="如：牵挂 / 惊惧 / 暖意" /></div>
+              <div class="f-item">
+                <label>强度 <span class="range-val" id="af-intensity-val">0.5</span></label>
+                <input type="range" id="af-intensity" min="0" max="1" step="0.05" value="0.5" />
+              </div>
+              <div class="f-item">
+                <label>效价（负 → 正）<span class="range-val" id="af-valence-val">0</span></label>
+                <input type="range" id="af-valence" min="-1" max="1" step="0.1" value="0" />
+              </div>
+              <div class="f-item">
+                <label>唤醒（平静 → 激动）<span class="range-val" id="af-arousal-val">0.5</span></label>
+                <input type="range" id="af-arousal" min="0" max="1" step="0.05" value="0.5" />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn" id="af-add" type="button">注入感受</button>
+            </div>
+          </fieldset>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <!-- 封存确认弹窗 -->
+  <div class="mem-modal-mask" id="seal-modal" hidden>
+    <div class="mem-modal" role="dialog" aria-modal="true" aria-labelledby="seal-title">
+      <h2 id="seal-title">封 存 仪 式</h2>
+      <p class="ritual">封存是仪式，不是删除。</p>
+      <p>
+        封存之后，这只生物的四层记忆将凝成一方只读快照：快照不可改写，原件保留凭吊。
+        页面随之进入凭吊模式 —— 你看到的将<b>是回放，不是本人</b>。
+      </p>
+      <p>此动作不可撤销。要为「<span id="seal-creature-name"></span>」举行封存仪式吗？</p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="seal-cancel" type="button">再想想</button>
+        <button class="btn seal-btn" id="seal-confirm" type="button">举行封存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 遗嘱草稿弹窗 -->
+  <div class="mem-modal-mask" id="will-modal" hidden>
+    <div class="mem-modal" role="dialog" aria-modal="true" aria-labelledby="will-title">
+      <h2 id="will-title">遗 嘱 草 稿</h2>
+      <p class="ritual">协议已定，迁移未实现。</p>
+      <p>传递 = 复制，原件保留凭吊。以下为遗嘱协议 Schema 与本草稿，仅声明意图，不产生任何交接行为。</p>
+      <p><b>协议 Schema</b></p>
+      <pre id="will-schema"></pre>
+      <p><b>草稿 JSON</b></p>
+      <pre id="will-draft"></pre>
+      <div class="modal-actions">
+        <button class="btn ghost" id="will-close" type="button">收 起</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="import-file" accept="application/json,.json" hidden />
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="js/memory/memory-page.js"></script>
+</body>
+</html>

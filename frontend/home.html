@@ -37,7 +37,8 @@
         #f7f5ec;
       border: 1px solid rgba(43, 38, 32, 0.22);
     }
-    .wall-card img { height: 100%; background: #f7f5ec; }
+    .wall-card img { height: 100%; object-fit: contain; background: #f7f5ec; }
+    .wall-card img[hidden] { display: none; }
     .wall-placeholder {
       width: 100%; height: 100%;
       display: grid; place-items: center;
@@ -97,16 +98,16 @@
         </div>
       </a>
 
-      <article class="painting-card wall-card" id="wall-card" role="button" tabindex="0" aria-label="待君题壁">
+      <article class="painting-card wall-card" id="wall-card" role="button" tabindex="0" aria-label="置入原作">
         <figure>
           <div class="wall-frame">
-            <img id="wall-preview" alt="待君题壁 · 原作预览" hidden />
-            <div class="wall-placeholder" id="wall-placeholder"><span data-i18n="wallMark">待君题壁</span></div>
+            <img id="wall-preview" alt="自定义画作 · 原作预览" hidden />
+            <div class="wall-placeholder" id="wall-placeholder"><span data-i18n="wallMark">置入原作</span></div>
           </div>
         </figure>
         <div class="card-caption">
-          <h2 data-i18n="wallTitle">题壁新作</h2>
-          <p data-i18n="wallDesc">空白墙壁待原作入驻 —— 上传你的画，开一方拟生空间</p>
+          <h2 data-i18n="wallTitle">自定义画作</h2>
+          <p data-i18n="wallDesc">上传你的画 —— 它将成为环境与生物共同的拟生母版</p>
           <button class="wall-enter" id="wall-enter" type="button" disabled data-i18n="wallEnter">入 画</button>
           <p class="wall-error" id="wall-error" aria-live="polite"></p>
         </div>
@@ -141,9 +142,9 @@
         tigerDesc: "狩野山乐《竹虎图》之威仪 —— 斑斓虎 · 雪竹 · 溪涧，点击入画",
         plumTitle: "寒梅归雁图",
         plumDesc: "寒枝繁花，汀雁栖飞 —— 古梅 · 修竹 · 水塘 · 归雁，点击入画",
-        wallMark: "待君题壁",
-        wallTitle: "题壁新作",
-        wallDesc: "空白墙壁待原作入驻 —— 上传你的画，开一方拟生空间",
+        wallMark: "置入原作",
+        wallTitle: "自定义画作",
+        wallDesc: "上传你的画 —— 它将成为环境与生物共同的拟生母版",
         wallEnter: "入 画",
         enter: "入 画",
         labTitle: "物种实验室",
@@ -158,9 +159,9 @@
         tigerDesc: "After Kanō Sanraku's “Tiger in Bamboo” — striped tiger · snow bamboo · stream, click to enter",
         plumTitle: "Returning Geese by the Wintry Plum",
         plumDesc: "Blossoms on cold branches, geese above ink-blue hills — ancient plum · bamboo · pond · geese, click to enter",
-        wallMark: "Awaiting Your Brush",
-        wallTitle: "Your Wall Painting",
-        wallDesc: "A blank wall for your source artwork — upload an image and open a living workspace",
+        wallMark: "Place an Artwork",
+        wallTitle: "Your Artwork",
+        wallDesc: "Upload one image — it becomes the shared source for the living environment and creatures",
         wallEnter: "Enter",
         enter: "Enter",
         labTitle: "Species Lab",

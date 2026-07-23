@@ -7,11 +7,14 @@ from __future__ import annotations
 
 import copy
 import json
+import os
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, Body
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import FastAPI, Body, HTTPException
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -264,6 +267,145 @@ def list_audio() -> dict:
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+def _trellis2_server_url() -> str:
+    """Optional GPU worker; kept server-side so browsers never receive infrastructure URLs."""
+    return os.environ.get("TRELLIS2_SERVER_URL", "").strip().rstrip("/")
+
+
+def _scene_lift_server_url() -> str:
+    """Geometry/segmentation worker that preserves the artwork's pixel coordinates."""
+    return os.environ.get("SCENE_LIFT_SERVER_URL", "").strip().rstrip("/")
+
+
+@app.get("/api/scene-lift/status")
+def scene_lift_status() -> dict:
+    server = _scene_lift_server_url()
+    if not server:
+        return {
+            "available": False,
+            "geometry": "facebook/map-anything-apache",
+            "segmentation": "Grounding DINO + SAM 2.1",
+            "capabilities": {"depth": False, "camera": False, "segmentation": False},
+            "reason": "未设置 SCENE_LIFT_SERVER_URL；浏览器将使用不虚构物体的原画像素锁定浮雕",
+        }
+    try:
+        req = urllib.request.Request(f"{server}/health", headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=4) as upstream:
+            info = json.loads(upstream.read().decode("utf-8"))
+        available = info.get("status") == "ok" and bool(info.get("capabilities", {}).get("depth"))
+        return {
+            "available": available,
+            "geometry": info.get("geometry", "facebook/map-anything-apache"),
+            "segmentation": info.get("segmentation", "Grounding DINO + SAM 2.1"),
+            "capabilities": info.get("capabilities", {}),
+            "reason": info.get("reason") if not available else None,
+        }
+    except (OSError, ValueError, urllib.error.URLError) as exc:
+        return {
+            "available": False,
+            "geometry": "facebook/map-anything-apache",
+            "segmentation": "Grounding DINO + SAM 2.1",
+            "capabilities": {"depth": False, "camera": False, "segmentation": False},
+            "reason": f"场景转换服务未就绪：{exc}",
+        }
+
+
+@app.post("/api/scene-lift/analyze")
+def scene_lift_analyze(payload: dict = Body(...)) -> JSONResponse:
+    server = _scene_lift_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="场景转换服务未连接；请设置 SCENE_LIFT_SERVER_URL")
+    image = payload.get("image")
+    if not isinstance(image, str) or not image.startswith("data:image/"):
+        raise HTTPException(status_code=400, detail="image 必须是 data:image/... 格式的 home 画框原作")
+    subject = payload.get("subject")
+    if not isinstance(subject, dict) or not isinstance(subject.get("id"), str):
+        raise HTTPException(status_code=400, detail="subject 必须包含环境要素 id")
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    if len(body) > 12 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="画作数据超过 12 MB")
+    request = urllib.request.Request(
+        f"{server}/analyze",
+        data=body,
+        method="POST",
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+    )
+    timeout = float(os.environ.get("SCENE_LIFT_TIMEOUT", "900"))
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as upstream:
+            raw = upstream.read()
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:1200]
+        raise HTTPException(status_code=exc.code, detail=detail or "场景转换失败") from exc
+    except (OSError, urllib.error.URLError) as exc:
+        raise HTTPException(status_code=502, detail=f"无法访问场景转换服务：{exc}") from exc
+    if len(raw) > 18 * 1024 * 1024:
+        raise HTTPException(status_code=502, detail="场景转换结果超过 18 MB，请降低 gridMaxSide")
+    try:
+        result = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise HTTPException(status_code=502, detail="场景转换服务返回了无效 JSON") from exc
+    depth = result.get("depth") if isinstance(result, dict) else None
+    if not isinstance(depth, dict) or not isinstance(depth.get("values"), list):
+        raise HTTPException(status_code=502, detail="场景转换服务未返回逐像素深度图")
+    return JSONResponse(result)
+
+
+@app.get("/api/trellis2/status")
+def trellis2_status() -> dict:
+    server = _trellis2_server_url()
+    if not server:
+        return {
+            "available": False,
+            "model": "microsoft/TRELLIS.2-4B",
+            "reason": "未设置 TRELLIS2_SERVER_URL；原图程序预览仍可使用",
+        }
+    try:
+        req = urllib.request.Request(f"{server}/health", headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=3) as upstream:
+            info = json.loads(upstream.read().decode("utf-8"))
+        available = info.get("status") == "ok" and info.get("cuda", True) is not False
+        return {
+            "available": available,
+            "model": info.get("model", "microsoft/TRELLIS.2-4B"),
+            "reason": None if available else "TRELLIS.2 worker 未检测到可用 CUDA GPU",
+        }
+    except (OSError, ValueError, urllib.error.URLError) as exc:
+        return {"available": False, "model": "microsoft/TRELLIS.2-4B", "reason": f"生成服务未就绪：{exc}"}
+
+
+@app.post("/api/trellis2/generate")
+def trellis2_generate(payload: dict = Body(...)) -> Response:
+    server = _trellis2_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="TRELLIS.2 服务未连接；请设置 TRELLIS2_SERVER_URL")
+    image = payload.get("image")
+    if not isinstance(image, str) or not image.startswith("data:image/"):
+        raise HTTPException(status_code=400, detail="image 必须是 data:image/... 格式的画作")
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    if len(body) > 12 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="画作数据超过 12 MB")
+    request = urllib.request.Request(
+        f"{server}/generate",
+        data=body,
+        method="POST",
+        headers={"Content-Type": "application/json", "Accept": "model/gltf-binary"},
+    )
+    timeout = float(os.environ.get("TRELLIS2_TIMEOUT", "900"))
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as upstream:
+            model = upstream.read()
+            content_type = upstream.headers.get_content_type()
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:800]
+        raise HTTPException(status_code=exc.code, detail=detail or "TRELLIS.2 生成失败") from exc
+    except (OSError, urllib.error.URLError) as exc:
+        raise HTTPException(status_code=502, detail=f"无法访问 TRELLIS.2 生成服务：{exc}") from exc
+    if len(model) < 20:
+        raise HTTPException(status_code=502, detail="TRELLIS.2 返回了空模型")
+    return Response(content=model, media_type=content_type or "model/gltf-binary")
 
 
 @app.get("/")

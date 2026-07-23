@@ -1,0 +1,240 @@
+/* 记忆绑定页 · 延续展厅水墨 / 宣纸 / 古画色系（变量继承自 css/style.css） */
+
+.memory-page { min-height: 100vh; }
+
+.mem-shell {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 26px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+  align-items: start;
+}
+
+/* ---------- 左侧生物列表 ---------- */
+.mem-nav {
+  border: 1px solid rgba(43, 38, 32, 0.4);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 16px 14px;
+  position: sticky;
+  top: 20px;
+}
+.mem-nav-title {
+  font-size: 13px; letter-spacing: 0.35em; color: var(--ink-soft);
+  border-bottom: 1px solid rgba(43, 38, 32, 0.3);
+  padding-bottom: 10px; margin-bottom: 10px;
+}
+.mem-creature {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; text-align: left;
+  font-family: inherit; font-size: 15px; letter-spacing: 0.12em;
+  color: var(--ink); background: transparent;
+  border: 1px solid transparent;
+  padding: 9px 10px; cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.mem-creature:hover { background: rgba(43, 38, 32, 0.06); }
+.mem-creature.active { border-color: rgba(43, 38, 32, 0.5); background: rgba(43, 38, 32, 0.08); }
+.mem-creature .c-id { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.08em; }
+
+/* 印章式"已封存"标记：朱砂方印 */
+.seal-stamp {
+  margin-left: auto;
+  flex: none;
+  font-size: 10px; letter-spacing: 0.15em;
+  color: var(--cinnabar);
+  border: 1.5px solid var(--cinnabar);
+  padding: 2px 4px;
+  transform: rotate(-4deg);
+  opacity: 0.85;
+}
+
+/* ---------- 右侧主区 ---------- */
+.mem-main { min-width: 0; }
+
+/* 凭吊横幅：这是回放，不是本人 */
+.memorial-banner {
+  background: var(--ink); color: var(--paper);
+  text-align: center;
+  font-size: 15px; letter-spacing: 0.4em; text-indent: 0.4em;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  border: 1px solid var(--ink);
+  box-shadow: 0 3px 14px rgba(43, 38, 32, 0.35);
+}
+.memorial-banner small {
+  display: block; margin-top: 6px;
+  font-size: 11px; letter-spacing: 0.2em; color: var(--paper-deep); opacity: 0.85;
+}
+
+/* 记忆绑定状态条 */
+.bind-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  border: 1px solid rgba(43, 38, 32, 0.4);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 12px 16px; margin-bottom: 20px;
+}
+.bind-name { font-size: 18px; letter-spacing: 0.25em; }
+.bind-status { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.15em; }
+.bind-status em { font-style: normal; color: var(--cinnabar); }
+.bind-actions { margin-left: auto; display: flex; flex-wrap: wrap; gap: 8px; }
+.bind-actions .btn { padding: 7px 16px; font-size: 13px; }
+.btn.seal-btn { background: var(--cinnabar); border-color: var(--cinnabar); color: var(--paper); }
+.btn.seal-btn:hover { opacity: 0.88; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- 四层 Tab ---------- */
+.mem-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
+  border-bottom: 1px solid rgba(43, 38, 32, 0.4); padding-bottom: 12px; }
+.mem-tabs button {
+  font-family: inherit; font-size: 14px; letter-spacing: 0.2em;
+  background: transparent; color: var(--ink);
+  border: 1px solid rgba(43, 38, 32, 0.45);
+  padding: 7px 20px; cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.mem-tabs button:hover { background: rgba(43, 38, 32, 0.08); }
+.mem-tabs button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mem-pane { display: none; }
+.mem-pane.active { display: block; }
+
+.pane-note { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.08em; margin-bottom: 12px; }
+
+.pane-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.pane-toolbar input[type="text"] { flex: 1; min-width: 200px; }
+.pane-toolbar .btn { padding: 6px 16px; font-size: 13px; }
+
+/* ---------- 时间轴（运行日志 / 感知流） ---------- */
+.timeline { list-style: none; }
+.timeline li {
+  position: relative;
+  border-left: 2px solid rgba(43, 38, 32, 0.3);
+  padding: 4px 0 16px 18px;
+}
+.timeline li::before {
+  content: ""; position: absolute; left: -6px; top: 10px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--ink-soft);
+}
+.timeline li.hot::before { border-color: var(--cinnabar); background: rgba(176, 58, 46, 0.15); }
+.tl-time { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.1em; font-variant-numeric: tabular-nums; }
+.tl-head { font-size: 14px; margin-top: 2px; letter-spacing: 0.06em; }
+.tl-head b { font-weight: 600; }
+.tl-detail { font-size: 13px; color: var(--ink-soft); line-height: 1.7; margin-top: 2px; }
+.tl-meta { font-size: 11px; color: var(--gold); letter-spacing: 0.1em; margin-top: 3px; }
+.tl-score { font-size: 11px; color: var(--cinnabar); margin-left: 8px; font-variant-numeric: tabular-nums; }
+
+.empty-hint { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.15em; padding: 18px 4px; }
+
+/* ---------- 表单（沿用配置页 fieldset 语言） ---------- */
+.mem-form { margin-top: 18px; }
+.mem-form summary {
+  cursor: pointer; font-size: 13px; letter-spacing: 0.25em; color: var(--ink-soft);
+  padding: 6px 0;
+}
+.mem-form summary:hover { color: var(--cinnabar); }
+.mem-form fieldset { margin-top: 8px; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 16px; }
+.form-grid .fg-full { grid-column: 1 / -1; }
+.f-item label { display: block; font-size: 12px; color: var(--ink-soft); letter-spacing: 0.12em; margin-bottom: 4px; }
+.f-item input[type="text"], .f-item input[type="number"], .f-item input[type="datetime-local"],
+.f-item select, .f-item textarea {
+  width: 100%; font-family: inherit; font-size: 14px;
+  padding: 4px 8px; background: #fffdf6;
+  border: 1px solid rgba(43, 38, 32, 0.4); color: var(--ink);
+}
+.f-item textarea { min-height: 58px; resize: vertical; }
+.f-item input[type="range"] { width: 100%; accent-color: var(--cinnabar); }
+.f-item .range-val { font-size: 12px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.form-actions { margin-top: 12px; display: flex; gap: 10px; align-items: center; }
+.form-actions .btn { padding: 7px 20px; font-size: 13px; }
+
+/* ---------- 未发送队列 ---------- */
+.intent-list { list-style: none; }
+.intent-item {
+  border: 1px solid rgba(43, 38, 32, 0.35);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.intent-item.overdue { border-left: 4px solid var(--cinnabar); }
+.intent-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.intent-instruction { font-size: 15px; letter-spacing: 0.05em; }
+.intent-due { font-size: 12px; color: var(--cinnabar); letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+.intent-meta { font-size: 12px; color: var(--ink-soft); line-height: 1.8; margin-top: 5px; letter-spacing: 0.06em; }
+.intent-meta .unclear { color: var(--cinnabar); }
+.intent-actions { margin-top: 8px; display: flex; gap: 8px; }
+.intent-actions .btn { padding: 4px 14px; font-size: 12px; }
+.intent-done { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.15em; }
+.intent-done.confirmed { color: var(--bamboo); }
+.intent-done.dropped { color: var(--ink-soft); text-decoration: line-through; }
+
+/* ---------- 情绪残留可视化（纯 CSS 条形） ---------- */
+.affect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 720px) { .affect-grid { grid-template-columns: 1fr; } }
+.affect-card {
+  border: 1px solid rgba(43, 38, 32, 0.35);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 14px 16px;
+}
+.affect-card h3 { font-size: 14px; letter-spacing: 0.3em; margin-bottom: 12px; font-weight: 600; }
+.a-bar-row { display: grid; grid-template-columns: 76px 1fr 52px; gap: 10px; align-items: center; padding: 4px 0; }
+.a-bar-row .a-label { font-size: 13px; letter-spacing: 0.1em; }
+.a-bar-track { height: 12px; background: rgba(43, 38, 32, 0.1); border: 1px solid rgba(43, 38, 32, 0.25); position: relative; }
+.a-bar-fill { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--gold), var(--cinnabar)); }
+.a-bar-fill.cool { background: linear-gradient(90deg, var(--bamboo), var(--gold)); }
+.a-bar-val { font-size: 11px; text-align: right; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.tone-hint {
+  margin-top: 6px; padding: 12px 16px;
+  border-left: 3px solid var(--cinnabar);
+  background: rgba(176, 58, 46, 0.06);
+  font-size: 14px; letter-spacing: 0.08em; line-height: 1.8;
+}
+.tone-hint small { display: block; font-size: 11px; color: var(--ink-soft); letter-spacing: 0.15em; margin-bottom: 4px; }
+
+/* ---------- 凭吊回放 ---------- */
+.memorial-replay { margin-top: 8px; }
+.memorial-slider-row { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+.memorial-slider-row input[type="range"] { flex: 1; }
+.memorial-now { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.memorial-slice {
+  border: 1px dashed rgba(43, 38, 32, 0.4);
+  padding: 12px 16px; font-size: 13px; line-height: 2; color: var(--ink);
+  background: rgba(255, 252, 244, 0.4);
+}
+.memorial-slice b { color: var(--cinnabar); font-weight: 600; }
+
+/* ---------- 弹窗 ---------- */
+.mem-modal-mask {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(43, 38, 32, 0.45);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.mem-modal-mask[hidden] { display: none; }
+.mem-modal {
+  max-width: 560px; width: 100%; max-height: 84vh; overflow: auto;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  box-shadow: 0 12px 40px rgba(43, 38, 32, 0.4);
+  padding: 26px 30px;
+}
+.mem-modal h2 { font-size: 19px; letter-spacing: 0.3em; margin-bottom: 14px; }
+.mem-modal p { font-size: 14px; line-height: 2; color: var(--ink); letter-spacing: 0.05em; }
+.mem-modal p.ritual { color: var(--cinnabar); }
+.mem-modal pre {
+  background: rgba(43, 38, 32, 0.06);
+  border: 1px solid rgba(43, 38, 32, 0.3);
+  padding: 12px 14px; margin: 10px 0;
+  font-size: 12px; line-height: 1.7;
+  overflow: auto; max-height: 300px;
+  white-space: pre-wrap; word-break: break-all;
+}
+.mem-modal .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 18px; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 900px) {
+  .mem-shell { grid-template-columns: 1fr; }
+  .mem-nav { position: static; }
+  .bind-actions { margin-left: 0; width: 100%; }
+}

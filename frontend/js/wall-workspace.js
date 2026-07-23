@@ -1,6 +1,7 @@
-// 题壁工作空间：上传原作 → 自动推断画境/生灵 → 中央 Three.js 工作区
+// 拟生环境工作空间：home 画框原作 → 像素锁定场景抬升 → Three.js 工作区
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { OrbitControls } from "../assets/vendor/three/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "../assets/vendor/three/jsm/loaders/GLTFLoader.js";
 import { analyzeAndEstimate } from "./imageAnalysis.js";
 import { DEFAULT_SPECIES } from "./species.js";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";
@@ -23,6 +24,57 @@ const ENV_LIBRARY = {
   grove: { mark: "林", label: "林下", note: "竹影 · 草坡 · 暗绿", ground: 0xb8c2a0, wall: 0xf2eddb, bg: 0xc7d0bd },
 };
 
+const ENVIRONMENT_CATALOG = {
+  terrain: {
+    label: "地势",
+    note: "从原图明暗提取高程，保留画中的峰脊、坡度与岸线关系。",
+    items: [
+      { id: "mountain", label: "山", preset: "mountain", note: "山体量块", prompt: "mountain. mountain mass. mountain in a painting." },
+      { id: "rock", label: "石", preset: "mountain", note: "原图岩色与轮廓", prompt: "rock. stone. boulder in a painting." },
+      { id: "earth", label: "土", preset: "grove", note: "土色地表", prompt: "soil. earth ground. bare ground in a painting." },
+      { id: "slope", label: "坡", preset: "mountain", note: "连续坡面", prompt: "hillside. slope. sloping terrain in a painting." },
+      { id: "brook-bank", label: "溪", preset: "stream", note: "浅溪与两岸", prompt: "brook. creek. stream bank in a painting." },
+      { id: "ravine", label: "涧", preset: "stream", note: "纵深涧谷", prompt: "ravine. gorge. mountain stream valley in a painting." },
+      { id: "peak", label: "峰", preset: "mountain", note: "主峰高差", prompt: "mountain peak. summit in a painting." },
+      { id: "range", label: "峦", preset: "mountain", note: "远近层峦", prompt: "mountain range. layered mountains in a painting." },
+    ],
+  },
+  plants: {
+    label: "草木",
+    note: "以原图色板建立枝、叶、花层级，保留可受风驱动的结构。",
+    items: [
+      { id: "pine", label: "松", preset: "mountain", note: "松干与针冠", prompt: "pine tree. pine branch in a painting." },
+      { id: "bamboo", label: "竹", preset: "grove", note: "竹节与叶簇", prompt: "bamboo. bamboo stalks and leaves in a painting." },
+      { id: "plum", label: "梅", preset: "snow", note: "古干与梅花", prompt: "plum tree. plum blossom. flowering plum branch in a painting." },
+      { id: "orchid", label: "兰", preset: "grove", note: "修叶兰瓣", prompt: "orchid plant. orchid flower in a painting." },
+      { id: "chrysanthemum", label: "菊", preset: "grove", note: "重瓣菊花", prompt: "chrysanthemum flower in a painting." },
+      { id: "calamus", label: "菖蒲", preset: "pond", note: "水岸剑叶", prompt: "sweet flag plant. calamus plant by water in a painting." },
+      { id: "reed", label: "芦苇", preset: "pond", note: "芦秆与穗", prompt: "reeds. reed bed in a painting." },
+      { id: "shore-herb", label: "岸芷", preset: "stream", note: "岸边香草", prompt: "shore herbs. plants on a river bank in a painting." },
+      { id: "ting-orchid", label: "汀兰", preset: "pond", note: "沙洲兰草", prompt: "orchids on a sandbank. waterside orchid in a painting." },
+      { id: "wisteria", label: "紫藤", preset: "grove", note: "藤蔓垂花", prompt: "wisteria vine. hanging wisteria flowers in a painting." },
+      { id: "lotus-bloom", label: "荷花", preset: "pond", note: "出水荷叶花苞", prompt: "lotus flower and lotus leaves on water in a painting." },
+      { id: "lotus", label: "莲花", preset: "pond", note: "盛放莲瓣", prompt: "blooming lotus flower in a painting." },
+      { id: "camellia", label: "山茶", preset: "grove", note: "常绿叶与茶花", prompt: "camellia shrub. camellia flower in a painting." },
+      { id: "azalea", label: "杜鹃", preset: "mountain", note: "山岩花簇", prompt: "azalea shrub. rhododendron flowers in a painting." },
+      { id: "daylily", label: "萱草", preset: "grove", note: "长叶漏斗花", prompt: "daylily plant and flower in a painting." },
+      { id: "hibiscus", label: "芙蓉", preset: "pond", note: "木芙蓉花冠", prompt: "hibiscus shrub. hibiscus flower in a painting." },
+    ],
+  },
+  water: {
+    label: "水势",
+    note: "原图提供水色与岸线，实时波场提供流向、涟漪、浪峰与泡沫。",
+    items: [
+      { id: "brook", label: "溪水", preset: "stream", note: "窄幅顺流", prompt: "brook water. creek water in a painting.", flow: 0.72, wave: 0.035, foam: 0.06 },
+      { id: "ripples", label: "涟漪", preset: "pond", note: "环形细波", prompt: "water ripples. ripples on a pond in a painting.", flow: 0.18, wave: 0.025, foam: 0.01 },
+      { id: "river", label: "江流", preset: "stream", note: "宽幅定向流", prompt: "river water. flowing river in a painting.", flow: 0.84, wave: 0.065, foam: 0.16 },
+      { id: "lake", label: "湖泊", preset: "pond", note: "缓慢长波", prompt: "lake water. lake surface in a painting.", flow: 0.34, wave: 0.075, foam: 0.1 },
+      { id: "waves", label: "浪涛", preset: "pond", note: "叠加浪峰", prompt: "ocean waves. breaking waves in a painting.", flow: 0.9, wave: 0.15, foam: 0.68 },
+      { id: "cascade", label: "飞瀑", preset: "stream", note: "急流与白沫", prompt: "waterfall. cascade. white water in a painting.", flow: 1, wave: 0.11, foam: 0.86 },
+    ],
+  },
+};
+
 const ATMOSPHERES = {
   paper: { bg: 0xd8cfb6, hemi: 0xf9f0dc, ground: 0x4a483b, dir: 1.05, fog: 0.24 },
   dawn: { bg: 0xd5c8af, hemi: 0xffe5bd, ground: 0x435148, dir: 1.18, fog: 0.18 },
@@ -31,13 +83,13 @@ const ATMOSPHERES = {
 };
 
 const BIO_LIBRARY = {
-  auto: { mark: "原", label: "原作生灵", note: "由上传原作推断" },
-  digitigrade: { mark: "兽", label: "伏行走兽", note: "趾行 · 尾部配平" },
-  unguligrade: { mark: "蹄", label: "山野蹄兽", note: "高腿 · 稳步" },
-  saltatorial: { mark: "跃", label: "跳跃小兽", note: "后肢弹跳" },
-  avian: { mark: "禽", label: "塘岸禽鸟", note: "长颈 · 翼羽" },
-  fish: { mark: "鱼", label: "鱼影", note: "水线摆尾" },
-  insect: { mark: "蝶", label: "蝶群", note: "薄翼群飞" },
+  auto: { mark: "原", label: "原作生灵", note: "从画中物种推断" },
+  digitigrade: { mark: "兽", label: "虎豹犬科", note: "实例轮廓 · 趾行结构", prompt: "tiger." },
+  unguligrade: { mark: "蹄", label: "鹿马蹄兽", note: "实例轮廓 · 蹄行结构", prompt: "deer." },
+  saltatorial: { mark: "跃", label: "兔类小兽", note: "实例轮廓 · 跳跃结构", prompt: "rabbit." },
+  avian: { mark: "禽", label: "画中禽鸟", note: "实例轮廓 · 翼羽结构", prompt: "bird." },
+  fish: { mark: "鱼", label: "画中游鱼", note: "实例轮廓 · 水中深度", prompt: "fish." },
+  insect: { mark: "蝶", label: "画中蝴蝶", note: "实例轮廓 · 薄翼结构", prompt: "butterfly." },
 };
 
 const BEHAVIOR_LABEL = { IDLE: "静立", WALK: "游走", FORAGE: "觅食", LEAP: "惊跃" };
@@ -54,6 +106,8 @@ const state = {
   palette: [...DEFAULT_PALETTE],
   envId: "blank",
   envResolved: "blank",
+  envDomain: "terrain",
+  envSubject: "mountain",
   envTint: DEFAULT_PALETTE[0],
   atmosphere: "paper",
   creatureKind: "auto",
@@ -62,6 +116,24 @@ const state = {
   showSkeleton: false,
   wind: 0.35,
   mist: 0.25,
+  flow: 0.55,
+  referenceMap: null,
+  generationMode: "image-locked",
+  sceneLiftOnline: false,
+  sceneLiftSegmentation: false,
+  sceneLiftResult: null,
+  sceneLiftCache: new Map(),
+  independentLayerCount: 0,
+  pbrLayerCount: 0,
+  modelsExploded: false,
+  bioSceneLiftResult: null,
+  bioSceneLiftCache: new Map(),
+  bioIndependentLayerCount: 0,
+  bioPbrLayerCount: 0,
+  bioModelsExploded: false,
+  bioGenerationBusy: false,
+  trellisOnline: false,
+  generationBusy: false,
   gait: 0,
   orbit: 0,
   creature: null,
@@ -77,6 +149,7 @@ let clock;
 let ground;
 let wall;
 let envGroup;
+let bioGroup;
 let sourceGroup;
 let hemiLight;
 let keyLight;
@@ -84,10 +157,18 @@ let fillLight;
 let snowPoints = null;
 let skeletonHelper = null;
 let animationStarted = false;
+let waterSurfaces = [];
+let swayingPlants = [];
+let sourceTexture = null;
+let artworkFrame = null;
+let independentLayerMeshes = new Map();
+let bioLayerMeshes = new Map();
+const gltfLoader = new GLTFLoader();
 
 async function main() {
   initThree();
   bindControls();
+  await Promise.all([checkSceneLiftStatus(), checkTrellisStatus()]);
   await applySource(readStoredSource());
   if (!animationStarted) {
     animationStarted = true;
@@ -97,7 +178,7 @@ async function main() {
 
 function initThree() {
   const canvas = el("wall-viewport");
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.shadowMap.enabled = true;
@@ -140,6 +221,9 @@ function initThree() {
   envGroup = new THREE.Group();
   scene.add(envGroup);
 
+  bioGroup = new THREE.Group();
+  scene.add(bioGroup);
+
   hemiLight = new THREE.HemisphereLight(0xf9f0dc, 0x4a483b, 0.95);
   scene.add(hemiLight);
   keyLight = new THREE.DirectionalLight(0xffffff, 1.05);
@@ -166,6 +250,23 @@ function initThree() {
 
 function bindControls() {
   el("reset-camera")?.addEventListener("click", resetCamera);
+  el("generate-environment")?.addEventListener("click", generateEnvironmentFromSource);
+  el("separate-environment-models")?.addEventListener("click", () => setIndependentModelsExploded(true));
+  el("restore-environment-models")?.addEventListener("click", () => setIndependentModelsExploded(false));
+  el("generate-biology")?.addEventListener("click", generateBiologyFromSource);
+  el("separate-biology-models")?.addEventListener("click", () => setBiologyModelsExploded(true));
+  el("restore-biology-models")?.addEventListener("click", () => setBiologyModelsExploded(false));
+  el("env-domain-tabs")?.addEventListener("click", (event) => {
+    const btn = event.target.closest("button[data-domain]");
+    const domain = btn?.dataset.domain;
+    if (!domain || !ENVIRONMENT_CATALOG[domain]) return;
+    state.envDomain = domain;
+    const items = ENVIRONMENT_CATALOG[domain].items;
+    if (!items.some((item) => item.id === state.envSubject)) state.envSubject = items[0].id;
+    renderEnvironmentButtons();
+    renderSegments();
+    setEnvironment(state.envSubject);
+  });
   el("source-upload")?.addEventListener("change", async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -195,6 +296,7 @@ function bindControls() {
     if (!btn) return;
     state.behavior = btn.dataset.behavior;
     renderSegments();
+    updateBiologyModelState();
     updateReadout();
   });
 
@@ -205,6 +307,10 @@ function bindControls() {
     state.mist = parseFloat(event.target.value);
     applyAtmosphere();
   });
+  el("flow-range")?.addEventListener("input", (event) => {
+    state.flow = parseFloat(event.target.value);
+    for (const water of waterSurfaces) water.material.uniforms.uFlow.value = state.flow;
+  });
   el("skeleton-toggle")?.addEventListener("click", () => {
     state.showSkeleton = !state.showSkeleton;
     const btn = el("skeleton-toggle");
@@ -213,8 +319,9 @@ function bindControls() {
     updateSkeletonOverlay();
   });
   el("rebuild-creature")?.addEventListener("click", () => {
+    clearBiologyModels();
     buildCreature(state.creatureKind);
-    showToast("已重构生灵");
+    showToast("已启用程序化备选；原画识别模型可随时重新生成");
   });
 }
 
@@ -224,34 +331,58 @@ async function applySource(source) {
   state.palette = [...DEFAULT_PALETTE];
   state.envTint = DEFAULT_PALETTE[0];
   state.creatureColor = DEFAULT_PALETTE[0];
+  state.referenceMap = null;
+  state.sceneLiftResult = null;
+  state.sceneLiftCache = new Map();
+  state.independentLayerCount = 0;
+  state.pbrLayerCount = 0;
+  state.modelsExploded = false;
+  independentLayerMeshes = new Map();
+  state.bioSceneLiftResult = null;
+  state.bioSceneLiftCache = new Map();
+  state.bioIndependentLayerCount = 0;
+  state.bioPbrLayerCount = 0;
+  state.bioModelsExploded = false;
+  state.bioGenerationBusy = false;
+  bioLayerMeshes = new Map();
+  state.generationMode = "image-locked";
   updateSourceCopy();
   await setWallArtwork(state.source);
 
   if (state.source?.dataUrl) {
-    setStatus("正在解析原作轮廓与色板…");
+    setStatus("正在把 home 画框中的原作解析为环境母版…");
     try {
       const file = await sourceToFile(state.source);
-      const estimate = await analyzeAndEstimate(file);
+      const [estimate, referenceMap] = await Promise.all([
+        analyzeAndEstimate(file),
+        sampleReferenceMap(state.source.dataUrl),
+      ]);
       state.estimate = estimate;
+      state.referenceMap = referenceMap;
       state.palette = cleanPalette(estimate.palette);
-      state.envTint = state.palette[0];
+      state.envTint = pickEnvironmentTint(state.palette);
       state.creatureColor = makeVisibleColor(estimate.bestHex || state.palette[0]);
-      state.envId = "auto";
+      const inferredEnvironment = inferEnvironmentFromArtwork();
+      state.envDomain = inferredEnvironment.domain;
+      state.envSubject = inferredEnvironment.subject;
+      state.envId = state.envSubject;
       state.creatureKind = "auto";
-      setStatus(`${ANATOMY_LABEL[estimate.anatomyType] || "未知轮廓"} · 置信 ${Math.round((estimate.confidence || 0) * 100)}%`);
+      setStatus(`原画像素已锁定 · ${ENVIRONMENT_CATALOG[state.envDomain].label} / ${environmentSubject(state.envSubject)?.label}`);
     } catch (err) {
       console.error("[wall-workspace] image analysis failed", err);
-      setStatus("原作已入壁，自动分析暂不可用");
+      setStatus("原作已载入；深度解析暂使用本地图像浮雕");
     }
   } else {
-    state.envId = "blank";
+    state.envDomain = "terrain";
+    state.envSubject = "mountain";
+    state.envId = state.envSubject;
     state.creatureKind = "auto";
-    setStatus("留白墙 · 默认画境");
+    setStatus("请先在 home 页第三个画框中填入图画");
   }
 
   renderMenus();
-  setEnvironment(state.envId);
-  buildCreature(state.creatureKind);
+  setEnvironment(state.envSubject);
+  clearCreatureFromScene();
   updateReadout();
 }
 
@@ -267,12 +398,25 @@ function readStoredSource() {
 function updateSourceCopy() {
   const title = el("source-title");
   const meta = el("source-meta");
+  const envName = el("environment-source-name");
+  const envPreview = el("environment-source-preview");
   if (state.source?.dataUrl) {
-    if (title) title.textContent = state.source.name || "题壁原作";
-    if (meta) meta.textContent = "原作已入壁";
+    const name = state.source.name || "画框原作";
+    if (title) title.textContent = name;
+    if (meta) meta.textContent = "home 画框母版 · 已对映";
+    if (envName) envName.textContent = name;
+    if (envPreview) {
+      envPreview.src = state.source.dataUrl;
+      envPreview.hidden = false;
+    }
   } else {
-    if (title) title.textContent = "待君题壁";
-    if (meta) meta.textContent = "留白墙 · 默认画境";
+    if (title) title.textContent = "尚未选择画作";
+    if (meta) meta.textContent = "请从 home 画框进入";
+    if (envName) envName.textContent = "等待 home 画框中的图画";
+    if (envPreview) {
+      envPreview.hidden = true;
+      envPreview.removeAttribute("src");
+    }
   }
 }
 
@@ -293,10 +437,26 @@ function renderEnvironmentButtons() {
   const wrap = el("env-buttons");
   if (!wrap) return;
   wrap.innerHTML = "";
-  for (const opt of environmentOptions()) {
-    const btn = makeToolButton(opt, state.envId === opt.id);
+  const catalog = ENVIRONMENT_CATALOG[state.envDomain] || ENVIRONMENT_CATALOG.terrain;
+  for (const opt of catalog.items) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "wall-subject-btn";
+    btn.textContent = opt.label;
+    btn.title = opt.note;
+    btn.classList.toggle("active", state.envSubject === opt.id);
     btn.addEventListener("click", () => setEnvironment(opt.id));
     wrap.appendChild(btn);
+  }
+  const selected = environmentSubject(state.envSubject) || catalog.items[0];
+  const note = el("environment-note");
+  if (note) {
+    const result = state.sceneLiftCache.get(selected.id);
+    const count = result?.layers?.length || 0;
+    const suffix = result
+      ? (count ? `已建立 ${count} 个独立 Three.js 实体，可分别变换与替换。` : "画中未确认该要素，系统不会生成替代物。")
+      : "点击“按原画锁位重建”提取深度、轮廓和坐标。";
+    note.textContent = `${catalog.label} · ${selected.label}：${selected.note}；${suffix}`;
   }
 }
 
@@ -306,9 +466,10 @@ function renderBioButtons() {
   wrap.innerHTML = "";
   for (const opt of bioOptions()) {
     const btn = makeToolButton(opt, state.creatureKind === opt.id);
-    btn.addEventListener("click", () => buildCreature(opt.id));
+    btn.addEventListener("click", () => selectBiologySubject(opt.id));
     wrap.appendChild(btn);
   }
+  updateBiologySelectionNote();
 }
 
 function makeToolButton(opt, active) {
@@ -341,14 +502,21 @@ function renderPalette(id, scope) {
     btn.title = hex;
     const active = scope === "env" ? hex === state.envTint : hex === state.creatureColor;
     btn.classList.toggle("active", active);
+    if (scope === "env") {
+      btn.disabled = true;
+      btn.title = `${hex} · 原画固有色（锁位重建不改写）`;
+      wrap.appendChild(btn);
+      return;
+    }
+    if (scope === "bio" && state.source?.dataUrl) {
+      btn.disabled = true;
+      btn.title = `${hex} · 原画固有色（识别模型不改写）`;
+      wrap.appendChild(btn);
+      return;
+    }
     btn.addEventListener("click", () => {
-      if (scope === "env") {
-        state.envTint = hex;
-        setEnvironment(state.envId);
-      } else {
-        state.creatureColor = makeVisibleColor(hex);
-        buildCreature(state.creatureKind);
-      }
+      state.creatureColor = makeVisibleColor(hex);
+      buildCreature(state.creatureKind);
       renderPalette(id, scope);
     });
     wrap.appendChild(btn);
@@ -362,29 +530,34 @@ function renderSegments() {
   document.querySelectorAll("#behavior-buttons button").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.behavior === state.behavior);
   });
+  document.querySelectorAll("#env-domain-tabs button[data-domain]").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.domain === state.envDomain);
+  });
 }
 
-function environmentOptions() {
-  const ids = [];
-  const add = (id) => { if (!ids.includes(id)) ids.push(id); };
-  if (state.estimate) {
-    add("auto");
-    const anatomy = state.estimate.anatomyType;
-    if (anatomy === "AVES") { add("pond"); add("grove"); }
-    else if (anatomy === "DIGITIGRADE") { add("snow"); add("stream"); }
-    else if (anatomy === "UNGULIGRADE") { add("mountain"); add("grove"); }
-    else if (anatomy === "SALTATORIAL") { add("grove"); add("stream"); }
+function environmentSubject(id) {
+  for (const [domain, catalog] of Object.entries(ENVIRONMENT_CATALOG)) {
+    const item = catalog.items.find((candidate) => candidate.id === id);
+    if (item) return { ...item, domain };
   }
-  ["blank", "stream", "pond", "snow", "mountain", "grove"].forEach(add);
-  return ids.map((id) => id === "auto"
-    ? { id, mark: "色", label: "原作色境", note: "由上传原作生成" }
-    : { id, ...ENV_LIBRARY[id] });
+  return null;
+}
+
+function inferEnvironmentFromArtwork() {
+  const name = `${state.source?.name || ""}`.toLowerCase();
+  if (/tiger|竹虎|虎|bamboo/.test(name)) return { domain: "terrain", subject: "ravine" };
+  if (/plum|梅|goose|雁/.test(name)) return { domain: "plants", subject: "plum" };
+  const mood = paletteMood(state.palette);
+  if (mood.blue > 0.18) return { domain: "water", subject: "lake" };
+  if (mood.green > 0.16) return { domain: "plants", subject: "bamboo" };
+  if (state.estimate?.anatomyType === "AVES") return { domain: "water", subject: "ripples" };
+  return { domain: "terrain", subject: "mountain" };
 }
 
 function bioOptions() {
   const ids = ["auto"];
   const add = (id) => { if (!ids.includes(id)) ids.push(id); };
-  const inferred = resolveCreatureKind("auto");
+  const inferred = biologySubject("auto").kind;
   add(inferred);
   if (inferred === "avian") add("fish");
   if (inferred === "digitigrade") add("saltatorial");
@@ -393,32 +566,1280 @@ function bioOptions() {
   return ids.map((id) => ({ id, ...BIO_LIBRARY[id] }));
 }
 
-function resolveEnvironmentId(id) {
-  if (id !== "auto") return id;
-  const anatomy = state.estimate?.anatomyType;
-  const mood = paletteMood(state.palette);
-  if (anatomy === "AVES") return mood.blue > 0.18 ? "pond" : "grove";
-  if (anatomy === "DIGITIGRADE") return mood.cool > 0.48 ? "snow" : "stream";
-  if (anatomy === "UNGULIGRADE") return "mountain";
-  if (anatomy === "SALTATORIAL") return mood.green > 0.15 ? "grove" : "stream";
-  return "blank";
+function biologySubject(kind = state.creatureKind) {
+  let resolved = resolveCreatureKind(kind);
+  const name = `${state.source?.name || ""}`.toLowerCase();
+  let prompt = BIO_LIBRARY[resolved]?.prompt || "animal.";
+  if (kind === "auto") {
+    if (/tiger|竹虎|虎/.test(name)) {
+      prompt = "tiger.";
+      resolved = "digitigrade";
+    } else if (/plum|goose|雁/.test(name)) {
+      prompt = "goose.";
+      resolved = "avian";
+    } else if (/crane|鹤/.test(name)) {
+      prompt = "crane.";
+      resolved = "avian";
+    } else if (/fish|鱼/.test(name)) {
+      prompt = "fish.";
+      resolved = "fish";
+    } else if (/butterfly|蝶/.test(name)) {
+      prompt = "butterfly.";
+      resolved = "insect";
+    }
+  }
+  const promptKey = prompt.replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || resolved;
+  return {
+    id: `biology-${kind}-${promptKey}`,
+    kind: resolved,
+    domain: "biology",
+    label: kind === "auto" ? `${BIO_LIBRARY.auto.label}（${BIO_LIBRARY[resolved]?.label || "生物"}）` : BIO_LIBRARY[kind]?.label || "画中生灵",
+    prompt,
+  };
+}
+
+function selectBiologySubject(kind) {
+  state.creatureKind = kind;
+  state.bioModelsExploded = false;
+  clearCreatureFromScene({ keepBiology: true });
+  const subject = biologySubject(kind);
+  const cached = state.bioSceneLiftCache.get(subject.id);
+  if (cached) installBiologySceneLiftResult(cached, subject);
+  else clearBiologyModels();
+  renderBioButtons();
+  renderPalette("bio-palette", "bio");
+  updateBiologyModelState(subject);
+  updateReadout();
+}
+
+function updateBiologySelectionNote() {
+  const note = el("biology-note");
+  if (!note) return;
+  const subject = biologySubject();
+  const result = state.bioSceneLiftCache.get(subject.id);
+  const count = result?.layers?.length || 0;
+  const suffix = result
+    ? (count ? `已建立 ${count} 个独立 3D 实体，并保留画中锚点。` : "画中未确认该生物，不生成替代物。")
+    : "点击“识别并生成独立模型”提取实例遮罩、深度与坐标。";
+  note.textContent = `${subject.label} · 识别提示“${subject.prompt.replace(/\.$/, "")}”；${suffix}`;
+}
+
+async function checkSceneLiftStatus() {
+  const badge = el("scene-lift-status");
+  try {
+    const response = await fetch("/api/scene-lift/status", { cache: "no-store" });
+    const info = await response.json();
+    state.sceneLiftOnline = Boolean(response.ok && info.available);
+    state.sceneLiftSegmentation = Boolean(info.capabilities?.segmentation);
+    if (badge) {
+      badge.dataset.state = state.sceneLiftOnline ? "online" : "offline";
+      badge.textContent = state.sceneLiftOnline ? "已连接" : "待连接";
+      badge.title = info.reason || `${info.geometry || "MapAnything"} · ${info.segmentation || "Grounded SAM 2"}`;
+    }
+    const line = el("generation-state");
+    if (line) {
+      line.textContent = state.sceneLiftOnline
+        ? (state.sceneLiftSegmentation ? "深度与语义锁位可用" : "深度锁位可用 · 语义分割待连接")
+        : "本地图像锁位可用 · AI 深度服务待连接";
+    }
+    const biologyLine = el("biology-generation-state");
+    if (biologyLine) {
+      biologyLine.textContent = state.sceneLiftOnline && state.sceneLiftSegmentation
+        ? "实例识别、深度与原画锚点可用"
+        : "Grounded SAM 2 实例分割待连接";
+    }
+  } catch (_) {
+    state.sceneLiftOnline = false;
+    state.sceneLiftSegmentation = false;
+    if (badge) {
+      badge.dataset.state = "offline";
+      badge.textContent = "待连接";
+    }
+    const biologyLine = el("biology-generation-state");
+    if (biologyLine) biologyLine.textContent = "生物实例分割服务待连接";
+  }
+}
+
+async function checkTrellisStatus() {
+  const badge = el("trellis-status");
+  try {
+    const response = await fetch("/api/trellis2/status", { cache: "no-store" });
+    const info = await response.json();
+    state.trellisOnline = Boolean(response.ok && info.available);
+    if (badge) {
+      badge.dataset.state = state.trellisOnline ? "online" : "offline";
+      badge.textContent = state.trellisOnline ? "TRELLIS.2 已连接" : "TRELLIS.2 待连接";
+      badge.title = info.reason || info.model || "";
+    }
+  } catch (_) {
+    state.trellisOnline = false;
+    if (badge) {
+      badge.dataset.state = "offline";
+      badge.textContent = "TRELLIS.2 待连接";
+    }
+  }
+}
+
+async function generateEnvironmentFromSource() {
+  if (state.generationBusy) return;
+  if (!state.source?.dataUrl) {
+    showToast("请先在 home 页第三个画框中填入图画");
+    return;
+  }
+  const button = el("generate-environment");
+  const line = el("generation-state");
+  const subject = environmentSubject(state.envSubject);
+  const cached = state.sceneLiftCache.get(subject.id);
+  if (cached) {
+    installSceneLiftResult(cached, subject);
+    if (line) line.textContent = describeSceneLiftResult(cached, subject);
+    showToast(`已恢复“${subject.label}”的原画锁位结果`);
+    return;
+  }
+  if (!state.sceneLiftOnline) {
+    state.generationMode = "image-locked";
+    setEnvironment(state.envSubject);
+    if (line) line.textContent = "已构建原画像素锁定浮雕 · 未虚构物体";
+    showToast("转换服务未连接：保留原画位置与轮廓，不再随机造景");
+    return;
+  }
+  state.generationBusy = true;
+  if (button) button.disabled = true;
+  if (line) line.textContent = `正在解析“${subject.label}”的深度、轮廓与画中坐标…`;
+  try {
+    const response = await fetch("/api/scene-lift/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: state.source.dataUrl,
+        name: state.source.name || "artwork",
+        domain: subject.domain,
+        subject: { id: subject.id, label: subject.label, prompt: subject.prompt },
+        gridMaxSide: 320,
+      }),
+    });
+    if (!response.ok) {
+      let message = `转换失败（${response.status}）`;
+      try { message = (await response.json()).detail || message; } catch (_) { /* ignore */ }
+      throw new Error(message);
+    }
+    const result = await response.json();
+    validateSceneLiftResult(result);
+    const segmentationFailure = result.warnings?.find((warning) => warning.startsWith("semantic segmentation unavailable:"));
+    if (state.sceneLiftSegmentation && segmentationFailure) {
+      throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "对象分割失败："));
+    }
+    state.sceneLiftCache.set(subject.id, result);
+    installSceneLiftResult(result, subject);
+    if (result.layers?.length && state.trellisOnline) {
+      if (line) line.textContent = `${describeSceneLiftResult(result, subject)} · 正在逐物体补全体积…`;
+      state.pbrLayerCount = await completeIndependentLayers(result.layers, subject);
+      updateIndependentModelState(subject);
+      updateReadout();
+    }
+    if (line) {
+      const pbr = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 个 PBR 体积已回装` : "";
+      line.textContent = `${describeSceneLiftResult(result, subject)}${pbr}`;
+    }
+    showToast(result.layers?.length ? `“${subject.label}”已按原画轮廓锁位` : `未在画中确认“${subject.label}”，未凭空生成`);
+  } catch (err) {
+    console.error("[wall-workspace] scene lift failed", err);
+    state.generationMode = "image-locked";
+    setEnvironment(state.envSubject);
+    const currentLine = el("generation-state");
+    if (currentLine) currentLine.textContent = `AI 转换失败 · ${err?.message || "未知错误"}`;
+    showToast(err?.message || "场景转换失败");
+  } finally {
+    state.generationBusy = false;
+    if (button) button.disabled = false;
+  }
+}
+
+function validateSceneLiftResult(result) {
+  const depth = result?.depth;
+  if (!depth || !Number.isInteger(depth.width) || !Number.isInteger(depth.height) || !Array.isArray(depth.values)) {
+    throw new Error("场景转换服务没有返回有效深度图");
+  }
+  if (depth.values.length !== depth.width * depth.height) {
+    throw new Error("场景转换服务返回的深度图尺寸不一致");
+  }
+}
+
+function installSceneLiftResult(result, subject) {
+  state.sceneLiftResult = result;
+  state.referenceMap = {
+    width: result.depth.width,
+    height: result.depth.height,
+    values: Float32Array.from(result.depth.values),
+    validRle: result.depth.validRle || null,
+    aspect: result.image?.width && result.image?.height ? result.image.width / result.image.height : undefined,
+    source: result.engine?.geometry || "MapAnything",
+  };
+  state.generationMode = "scene-lift";
+  setEnvironment(subject.id);
+}
+
+function describeSceneLiftResult(result, subject) {
+  const count = result.layers?.length || 0;
+  const geometry = result.engine?.geometry || "MapAnything";
+  if (!count) return `${geometry} 深度已锁定 · 画中未确认“${subject.label}”，未生成替代物`;
+  return `${geometry} 深度 + Grounded SAM 2 轮廓 · ${count} 个“${subject.label}”独立 Three.js 实体已建立`;
+}
+
+async function generateBiologyFromSource() {
+  if (state.bioGenerationBusy) return;
+  if (!state.source?.dataUrl) {
+    showToast("请先在 home 页第三个画框中填入图画");
+    return;
+  }
+  const button = el("generate-biology");
+  const subject = biologySubject();
+  const cached = state.bioSceneLiftCache.get(subject.id);
+  if (cached) {
+    installBiologySceneLiftResult(cached, subject);
+    const line = el("biology-generation-state");
+    if (line) line.textContent = describeBiologyResult(cached, subject);
+    showToast(`已恢复“${subject.label}”的原画锚定模型`);
+    return;
+  }
+  if (!state.sceneLiftOnline || !state.sceneLiftSegmentation) {
+    const line = el("biology-generation-state");
+    if (line) line.textContent = "实例分割引擎未连接 · 不生成替代生物";
+    showToast("需要 Grounded SAM 2 才能建立与原画对映的生物实例");
+    return;
+  }
+
+  state.bioGenerationBusy = true;
+  if (button) button.disabled = true;
+  const initialLine = el("biology-generation-state");
+  if (initialLine) initialLine.textContent = `正在识别“${subject.label}”的实例、轮廓、深度与画中坐标…`;
+  try {
+    const response = await fetch("/api/scene-lift/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: state.source.dataUrl,
+        name: state.source.name || "artwork",
+        domain: "biology",
+        subject: { id: subject.id, label: subject.label, prompt: subject.prompt },
+        gridMaxSide: 320,
+      }),
+    });
+    if (!response.ok) {
+      let message = `生物转换失败（${response.status}）`;
+      try { message = (await response.json()).detail || message; } catch (_) { /* ignore */ }
+      throw new Error(message);
+    }
+    const result = await response.json();
+    validateSceneLiftResult(result);
+    const segmentationFailure = result.warnings?.find((warning) => warning.startsWith("semantic segmentation unavailable:"));
+    if (segmentationFailure) throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "生物实例分割失败："));
+
+    state.bioSceneLiftCache.set(subject.id, result);
+    installBiologySceneLiftResult(result, subject);
+    if (result.layers?.length && state.trellisOnline) {
+      const line = el("biology-generation-state");
+      if (line) line.textContent = `${describeBiologyResult(result, subject)} · 正在逐实例补全 PBR 体积…`;
+      state.bioPbrLayerCount = await completeLayerModels(
+        result.layers,
+        subject,
+        bioLayerMeshes,
+        biologyReferenceMap(result),
+        4126
+      );
+      updateBiologyModelState(subject);
+    }
+    const line = el("biology-generation-state");
+    const pbr = state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 个 PBR 体积已回装` : "";
+    if (line) line.textContent = `${describeBiologyResult(result, subject)}${pbr}`;
+    showToast(result.layers?.length ? `“${subject.label}”已生成独立模型并锁定原画坐标` : `画中未确认“${subject.label}”，未生成替代物`);
+  } catch (err) {
+    console.error("[wall-workspace] biology scene lift failed", err);
+    clearBiologyModels();
+    const line = el("biology-generation-state");
+    if (line) line.textContent = `生物转换失败 · ${err?.message || "未知错误"}`;
+    showToast(err?.message || "生物实例转换失败");
+  } finally {
+    state.bioGenerationBusy = false;
+    const currentButton = el("generate-biology");
+    if (currentButton) currentButton.disabled = false;
+    updateReadout();
+  }
+}
+
+function biologyReferenceMap(result) {
+  return {
+    width: result.depth.width,
+    height: result.depth.height,
+    values: Float32Array.from(result.depth.values),
+    validRle: result.depth.validRle || null,
+    aspect: result.image?.width && result.image?.height ? result.image.width / result.image.height : undefined,
+    source: result.engine?.geometry || "MapAnything",
+  };
+}
+
+function installBiologySceneLiftResult(result, subject) {
+  state.bioSceneLiftResult = result;
+  state.bioPbrLayerCount = 0;
+  state.bioModelsExploded = false;
+  buildBiologyImageLockedModels(result, subject);
+  updateBiologySelectionNote();
+  updateBiologyModelState(subject);
+  renderBioButtons();
+  updateReadout();
+}
+
+function describeBiologyResult(result, subject) {
+  const count = result.layers?.length || 0;
+  const geometry = result.engine?.geometry || "MapAnything";
+  if (!count) return `${geometry} 深度已锁定 · 画中未确认“${subject.label}”`;
+  return `${geometry} 深度 + Grounded SAM 2 实例 · ${count} 个独立生物 3D 模型已建立`;
+}
+
+function buildBiologyImageLockedModels(result, subject) {
+  clearGroup(bioGroup);
+  bioLayerMeshes = new Map();
+  if (state.creature) {
+    scene.remove(state.creature);
+    disposeObject(state.creature);
+    state.creature = null;
+  }
+  clearSkeletonOverlay();
+  state.creatureRecord = null;
+  const ref = biologyReferenceMap(result);
+  const aspect = clamp(ref.aspect || ref.width / ref.height || 1.6, 0.45, 3.4);
+  const width = artworkFrame?.width || (aspect >= 1 ? 5.8 : 5.8 * aspect);
+  const height = artworkFrame?.height || width / aspect;
+  const centerY = artworkFrame?.centerY || Math.max(1.72, height * 0.5 + 0.08);
+  const baseZ = artworkFrame?.z ?? -1.35;
+  const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
+
+  for (const layer of layers) {
+    const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
+    const isolated = createIndependentLayerGeometry(ref, mask, layer, width, height, true);
+    if (!isolated) continue;
+    const material = new THREE.MeshBasicMaterial({
+      map: sourceTexture,
+      side: THREE.DoubleSide,
+      toneMapped: false,
+    });
+    const surface = new THREE.Mesh(isolated.geometry, material);
+    surface.renderOrder = 7;
+    surface.castShadow = true;
+    surface.receiveShadow = true;
+    surface.userData = {
+      biologyModel: true,
+      independentModel: true,
+      layerId: layer.id,
+      sourceAnchor: layer.anchor || null,
+      sourceBbox: layer.bbox,
+      pbrCompleted: false,
+    };
+    const entity = new THREE.Group();
+    entity.position.set(isolated.anchor.x, centerY + isolated.anchor.y, baseZ + isolated.anchor.z + 0.09);
+    entity.userData = {
+      biologyModel: true,
+      independentModel: true,
+      layerId: layer.id,
+      biologyKind: subject.kind,
+      sourceAnchor: layer.anchor || null,
+      sourceBbox: layer.bbox,
+      homePosition: { x: entity.position.x, y: entity.position.y, z: entity.position.z },
+      homeRotation: { x: 0, y: 0, z: 0 },
+      surface,
+      phase: bioLayerMeshes.size * 0.73,
+    };
+    entity.add(surface);
+    const inspection = new THREE.Mesh(
+      isolated.geometry,
+      new THREE.MeshBasicMaterial({
+        color: 0xb94c3e,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.42,
+        depthTest: false,
+        toneMapped: false,
+      })
+    );
+    inspection.visible = false;
+    inspection.renderOrder = 20;
+    inspection.userData.inspectionOverlay = true;
+    entity.userData.inspection = inspection;
+    entity.add(inspection);
+    bioGroup.add(entity);
+    bioLayerMeshes.set(layer.id, entity);
+  }
+  state.bioIndependentLayerCount = bioLayerMeshes.size;
+  state.creatureBaseY = 0;
+}
+
+function updateBiologyModelState(subject = biologySubject()) {
+  const node = el("bio-independent-model-state");
+  const separate = el("separate-biology-models");
+  const restore = el("restore-biology-models");
+  const skeleton = el("skeleton-toggle");
+  const canTransform = state.bioIndependentLayerCount > 0;
+  if (separate) separate.disabled = !canTransform || state.bioModelsExploded;
+  if (restore) restore.disabled = !canTransform || (!state.bioModelsExploded && state.behavior === "IDLE");
+  if (skeleton) {
+    skeleton.disabled = canTransform;
+    skeleton.title = canTransform ? "原画实例网格尚未绑定骨骼；行为以实体锚点驱动" : "显示程序化备选模型骨相";
+  }
+  if (!node) return;
+  const result = state.bioSceneLiftCache.get(subject.id);
+  if (!result) {
+    node.textContent = "等待生物实例遮罩 · 尚无独立 Three.js 实体";
+    return;
+  }
+  if (!state.bioIndependentLayerCount) {
+    node.textContent = `画中未确认“${subject.label}” · 0 个实体 · 未生成替代物`;
+    return;
+  }
+  const pbr = state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 个 PBR 体积` : " · 原画封闭网格";
+  const view = state.bioModelsExploded ? " · 当前为分离检查视图" : " · 当前与原画坐标对映";
+  node.textContent = `${state.bioIndependentLayerCount} 个独立生物实体 · 独立原点/实例遮罩/深度锚点${pbr}${view}`;
+}
+
+function setBiologyModelsExploded(exploded) {
+  if (!bioLayerMeshes.size) return;
+  const entities = [...bioLayerMeshes.values()];
+  entities.forEach((entity, index) => {
+    const home = entity.userData.homePosition;
+    if (!home) return;
+    entity.position.set(home.x, home.y, home.z);
+    entity.rotation.set(0, 0, 0);
+    if (entity.userData.inspection) entity.userData.inspection.visible = exploded;
+    if (!exploded) return;
+    const centeredIndex = index - (entities.length - 1) * 0.5;
+    entity.position.x += entities.length === 1 ? 0.78 : centeredIndex * 0.56;
+    entity.position.z += 0.56 + Math.abs(centeredIndex) * 0.08;
+    entity.rotation.y = entities.length === 1 ? 0.34 : centeredIndex * 0.16;
+  });
+  state.bioModelsExploded = exploded;
+  if (!exploded) {
+    state.behavior = "IDLE";
+    renderSegments();
+  }
+  updateBiologyModelState();
+  updateReadout();
+  showToast(exploded ? "生物实体已从原画锚点分离，可检查独立体积" : "生物实体已归位到原画坐标");
+}
+
+function parseGeneratedGlb(buffer) {
+  return new Promise((resolve, reject) => gltfLoader.parse(buffer, "", resolve, reject));
+}
+
+async function completeIndependentLayers(layers, subject) {
+  return completeLayerModels(layers, subject, independentLayerMeshes, state.referenceMap, 2026);
+}
+
+async function completeLayerModels(layers, subject, registry, referenceMap, seedBase) {
+  let completed = 0;
+  for (const layer of layers.slice(0, 4)) {
+    const anchorMesh = registry.get(layer.id);
+    if (!anchorMesh) continue;
+    try {
+      const crop = createLayerCropDataUrl(layer, referenceMap);
+      const response = await fetch("/api/trellis2/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image: crop,
+          name: `${state.source?.name || "artwork"}-${layer.id}`,
+          domain: subject.domain,
+          subject: subject.id,
+          layerId: layer.id,
+          seed: seedBase + completed,
+        }),
+      });
+      if (!response.ok) throw new Error(`TRELLIS.2 ${response.status}`);
+      const gltf = await parseGeneratedGlb(await response.arrayBuffer());
+      installGeneratedLayer(gltf.scene, layer, anchorMesh);
+      completed++;
+    } catch (err) {
+      console.warn(`[wall-workspace] PBR completion skipped for ${layer.id}`, err);
+    }
+  }
+  return completed;
+}
+
+function createLayerCropDataUrl(layer, referenceMap = state.referenceMap) {
+  const image = sourceTexture?.image;
+  const ref = referenceMap;
+  if (!image || !ref || !Array.isArray(layer.bbox) || layer.bbox.length !== 4) {
+    throw new Error("独立物体缺少原图或遮罩包围盒");
+  }
+  const padding = 0.035;
+  const x0 = clamp(layer.bbox[0] - padding, 0, 1);
+  const y0 = clamp(layer.bbox[1] - padding, 0, 1);
+  const x1 = clamp(layer.bbox[2] + padding, 0, 1);
+  const y1 = clamp(layer.bbox[3] + padding, 0, 1);
+  const sourceWidth = image.naturalWidth || image.width;
+  const sourceHeight = image.naturalHeight || image.height;
+  const cropWidth = Math.max(2, (x1 - x0) * sourceWidth);
+  const cropHeight = Math.max(2, (y1 - y0) * sourceHeight);
+  const scale = Math.min(1, 768 / Math.max(cropWidth, cropHeight));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(32, Math.round(cropWidth * scale));
+  canvas.height = Math.max(32, Math.round(cropHeight * scale));
+  const context = canvas.getContext("2d");
+  context.drawImage(
+    image,
+    x0 * sourceWidth,
+    y0 * sourceHeight,
+    cropWidth,
+    cropHeight,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
+  const maskCanvas = document.createElement("canvas");
+  maskCanvas.width = ref.width;
+  maskCanvas.height = ref.height;
+  const maskContext = maskCanvas.getContext("2d");
+  const pixels = maskContext.createImageData(ref.width, ref.height);
+  for (let i = 0; i < mask.length; i++) {
+    const offset = i * 4;
+    pixels.data[offset] = 255;
+    pixels.data[offset + 1] = 255;
+    pixels.data[offset + 2] = 255;
+    pixels.data[offset + 3] = mask[i] ? 255 : 0;
+  }
+  maskContext.putImageData(pixels, 0, 0);
+  context.globalCompositeOperation = "destination-in";
+  context.imageSmoothingEnabled = false;
+  context.drawImage(
+    maskCanvas,
+    x0 * ref.width,
+    y0 * ref.height,
+    Math.max(1, (x1 - x0) * ref.width),
+    Math.max(1, (y1 - y0) * ref.height),
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+  context.globalCompositeOperation = "source-over";
+  return canvas.toDataURL("image/png");
+}
+
+function installGeneratedLayer(root, layer, anchorEntity) {
+  const anchorMesh = anchorEntity.userData.surface;
+  if (!anchorMesh?.geometry) throw new Error(`独立实体 ${layer.id} 缺少原画表面`);
+  root.traverse((node) => {
+    if (!node.isMesh) return;
+    node.castShadow = true;
+    node.receiveShadow = true;
+    const materials = Array.isArray(node.material) ? node.material : [node.material];
+    for (const material of materials) {
+      if (!material) continue;
+      material.side = THREE.DoubleSide;
+      material.needsUpdate = true;
+    }
+  });
+  root.updateMatrixWorld(true);
+  const sourceBox = new THREE.Box3().setFromObject(root);
+  const sourceSize = sourceBox.getSize(new THREE.Vector3());
+  anchorMesh.geometry.computeBoundingBox();
+  const targetBox = anchorMesh.geometry.boundingBox.clone();
+  const targetSize = targetBox.getSize(new THREE.Vector3());
+  const scale = Math.min(
+    targetSize.x / Math.max(sourceSize.x, 0.001),
+    targetSize.y / Math.max(sourceSize.y, 0.001)
+  );
+  root.scale.setScalar(scale);
+  root.updateMatrixWorld(true);
+  const scaledCenter = new THREE.Box3().setFromObject(root).getCenter(new THREE.Vector3());
+  const targetCenter = targetBox.getCenter(new THREE.Vector3());
+  root.position.add(targetCenter.sub(scaledCenter));
+  root.userData = {
+    ...root.userData,
+    independentModel: true,
+    pbrCompletion: true,
+    layerId: layer.id,
+    sourceAnchor: layer.anchor || null,
+  };
+  anchorEntity.add(root);
+  anchorEntity.userData.pbrCompleted = true;
+  anchorMesh.userData.pbrCompleted = true;
+  if (anchorMesh.material && !Array.isArray(anchorMesh.material)) {
+    anchorMesh.material.transparent = true;
+    anchorMesh.material.opacity = 0.78;
+    anchorMesh.material.depthWrite = false;
+    anchorMesh.material.needsUpdate = true;
+  }
+}
+
+function installGeneratedEnvironment(root, subject) {
+  clearGroup(envGroup);
+  snowPoints = null;
+  waterSurfaces = [];
+  swayingPlants = [];
+  independentLayerMeshes = new Map();
+  state.independentLayerCount = 0;
+  state.pbrLayerCount = 0;
+  state.modelsExploded = false;
+  root.traverse((node) => {
+    if (!node.isMesh) return;
+    node.castShadow = true;
+    node.receiveShadow = true;
+    const mats = Array.isArray(node.material) ? node.material : [node.material];
+    for (const mat of mats) {
+      if (!mat) continue;
+      mat.side = THREE.DoubleSide;
+      mat.needsUpdate = true;
+    }
+  });
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(root);
+  const size = box.getSize(new THREE.Vector3());
+  const longest = Math.max(size.x, size.y, size.z, 0.001);
+  const target = subject.domain === "plants" ? 2.1 : 4.4;
+  root.scale.setScalar(target / longest);
+  root.updateMatrixWorld(true);
+  const nextBox = new THREE.Box3().setFromObject(root);
+  const center = nextBox.getCenter(new THREE.Vector3());
+  root.position.x -= center.x;
+  root.position.z -= center.z + 0.28;
+  root.position.y -= nextBox.min.y;
+  envGroup.add(root);
 }
 
 function setEnvironment(id) {
-  state.envId = id;
-  state.envResolved = resolveEnvironmentId(id);
+  const subject = environmentSubject(id) || environmentSubject("mountain");
+  state.envId = subject.id;
+  state.envSubject = subject.id;
+  state.envDomain = subject.domain;
+  state.envResolved = subject.preset;
+  if (state.generationMode !== "scene-lift" || state.sceneLiftResult !== state.sceneLiftCache.get(subject.id)) {
+    const cached = state.sceneLiftCache.get(subject.id);
+    if (cached) {
+      state.sceneLiftResult = cached;
+      state.referenceMap = {
+        width: cached.depth.width,
+        height: cached.depth.height,
+        values: Float32Array.from(cached.depth.values),
+        validRle: cached.depth.validRle || null,
+        aspect: cached.image?.width && cached.image?.height ? cached.image.width / cached.image.height : undefined,
+        source: cached.engine?.geometry || "MapAnything",
+      };
+      state.generationMode = "scene-lift";
+    } else {
+      state.sceneLiftResult = null;
+      state.generationMode = "image-locked";
+    }
+  }
+  if (subject.domain === "water" && Number.isFinite(subject.flow)) {
+    state.flow = subject.flow;
+    if (el("flow-range")) el("flow-range").value = String(state.flow);
+  }
   clearGroup(envGroup);
   snowPoints = null;
+  waterSurfaces = [];
+  swayingPlants = [];
+
+  independentLayerMeshes = new Map();
+  state.independentLayerCount = 0;
+  state.pbrLayerCount = 0;
+  state.modelsExploded = false;
 
   const preset = ENV_LIBRARY[state.envResolved] || ENV_LIBRARY.blank;
   const tint = new THREE.Color(state.envTint || DEFAULT_PALETTE[0]);
-  ground.material.color.setHex(preset.ground).lerp(tint, id === "auto" ? 0.22 : 0.08);
-  wall.material.color.setHex(preset.wall).lerp(tint, id === "auto" ? 0.1 : 0.03);
-  buildEnvironmentDecor(state.envResolved, tint);
+  ground.material.color.setHex(preset.ground).lerp(tint, 0.2);
+  ground.visible = !state.source?.dataUrl;
+  wall.visible = false;
+  if (state.source?.dataUrl && sourceTexture && state.referenceMap) {
+    buildImageLockedEnvironment(subject);
+  }
+  updateIndependentModelState(subject);
   applyAtmosphere();
   renderEnvironmentButtons();
+  renderSegments();
   renderPalette("env-palette", "env");
   updateReadout();
+}
+
+function updateIndependentModelState(subject) {
+  const node = el("independent-model-state");
+  if (!node) return;
+  const separate = el("separate-environment-models");
+  const restore = el("restore-environment-models");
+  const canTransform = state.independentLayerCount > 0;
+  if (separate) separate.disabled = !canTransform || state.modelsExploded;
+  if (restore) restore.disabled = !canTransform || !state.modelsExploded;
+  const result = state.sceneLiftCache.get(subject.id);
+  if (!result) {
+    node.textContent = "等待语义遮罩 · 尚无独立 Three.js 实体";
+    return;
+  }
+  if (!state.independentLayerCount) {
+    node.textContent = `画中未确认“${subject.label}” · 0 个实体 · 未生成替代物`;
+    return;
+  }
+  const pbr = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 个已完成 PBR 体积补全` : " · 原画封闭网格";
+  const view = state.modelsExploded ? " · 当前为分离检查视图" : " · 当前与原画坐标对映";
+  node.textContent = `${state.independentLayerCount} 个独立 Three.js 实体 · 独立原点/遮罩边界/深度锚点${pbr}${view}`;
+}
+
+function setIndependentModelsExploded(exploded) {
+  if (!independentLayerMeshes.size) return;
+  const entities = [...independentLayerMeshes.values()];
+  entities.forEach((entity, index) => {
+    const home = entity.userData.homePosition;
+    if (!home) return;
+    entity.position.set(home.x, home.y, home.z);
+    entity.rotation.set(0, 0, 0);
+    if (!exploded) return;
+    if (entities.length === 1) {
+      entity.position.x += 0.72;
+      entity.position.z += 0.5;
+      entity.rotation.y = 0.28;
+      return;
+    }
+    const centeredIndex = index - (entities.length - 1) * 0.5;
+    entity.position.x += centeredIndex * 0.48;
+    entity.position.z += 0.34 + Math.abs(centeredIndex) * 0.06;
+    entity.rotation.y = centeredIndex * 0.12;
+  });
+  state.modelsExploded = exploded;
+  updateIndependentModelState(environmentSubject(state.envSubject));
+  showToast(exploded ? "独立实体已分离；可确认它们不是同一张浮雕" : "独立实体已归位到原画坐标");
+}
+
+function buildImageLockedEnvironment(subject) {
+  const ref = state.referenceMap;
+  const aspect = clamp(ref.aspect || ref.width / ref.height || 1.6, 0.45, 3.4);
+  const width = aspect >= 1 ? 5.8 : 5.8 * aspect;
+  const height = width / aspect;
+  const centerY = Math.max(1.72, height * 0.5 + 0.08);
+  const baseZ = -1.35;
+  const geometry = createReliefGeometry(ref, width, height);
+  const layers = (state.sceneLiftResult?.layers || []).filter((layer) => layer.subjectId === subject.id);
+  artworkFrame = { width, height, centerY, z: baseZ };
+  const validTexture = ref.validRle ? createMaskTexture(ref.validRle, ref.width, ref.height) : null;
+  const baseOpacity = layers.length ? 0.16 : 1;
+  const baseMaterial = new THREE.MeshBasicMaterial({
+    map: sourceTexture,
+    alphaMap: validTexture,
+    alphaTest: validTexture ? 0.05 : 0,
+    transparent: baseOpacity < 1 || Boolean(validTexture),
+    opacity: baseOpacity,
+    side: THREE.DoubleSide,
+    toneMapped: false,
+  });
+  const baseMesh = new THREE.Mesh(geometry, baseMaterial);
+  baseMesh.position.set(0, centerY, baseZ);
+  baseMesh.userData.imageLocked = true;
+  envGroup.add(baseMesh);
+
+  for (const layer of layers) {
+    const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
+    const isolated = createIndependentLayerGeometry(ref, mask, layer, width, height, subject.domain !== "water");
+    if (!isolated) continue;
+    const maskTexture = subject.domain === "water" ? createMaskTexture(layer.maskRle, ref.width, ref.height) : null;
+    const layerMaterial = subject.domain === "water"
+      ? createMaskedWaterMaterial(maskTexture, subject)
+      : new THREE.MeshBasicMaterial({
+          map: sourceTexture,
+          side: THREE.DoubleSide,
+          toneMapped: false,
+        });
+    const layerMesh = new THREE.Mesh(isolated.geometry, layerMaterial);
+    layerMesh.renderOrder = 4;
+    layerMesh.castShadow = subject.domain !== "water";
+    layerMesh.receiveShadow = true;
+    layerMesh.userData = {
+      imageLocked: true,
+      independentModel: true,
+      layerId: layer.id,
+      subjectId: subject.id,
+      sourceBbox: layer.bbox,
+      sourceAnchor: layer.anchor || null,
+      pbrCompleted: false,
+    };
+    const entity = new THREE.Group();
+    entity.position.set(isolated.anchor.x, centerY + isolated.anchor.y, baseZ + isolated.anchor.z + 0.018);
+    entity.userData = {
+      independentModel: true,
+      layerId: layer.id,
+      subjectId: subject.id,
+      sourceBbox: layer.bbox,
+      sourceAnchor: layer.anchor || null,
+      homePosition: { x: entity.position.x, y: entity.position.y, z: entity.position.z },
+      surface: layerMesh,
+    };
+    entity.add(layerMesh);
+    envGroup.add(entity);
+    independentLayerMeshes.set(layer.id, entity);
+    if (subject.domain === "water") waterSurfaces.push(layerMesh);
+  }
+  state.independentLayerCount = independentLayerMeshes.size;
+
+  const shell = el("wall-viewport")?.parentElement;
+  shell?.classList.add("relief-active");
+  frameArtworkCamera(false);
+}
+
+function createIndependentLayerGeometry(ref, mask, layer, width, height, solid = true) {
+  const gridWidth = ref.width;
+  const gridHeight = ref.height;
+  if (!mask?.length || mask.length !== gridWidth * gridHeight || gridWidth < 2 || gridHeight < 2) return null;
+  let pixelCount = 0;
+  let sumX = 0;
+  let sumY = 0;
+  for (let y = 0; y < gridHeight; y++) {
+    for (let x = 0; x < gridWidth; x++) {
+      if (!mask[y * gridWidth + x]) continue;
+      pixelCount++;
+      sumX += x;
+      sumY += y;
+    }
+  }
+  if (pixelCount < 4) return null;
+
+  const centroid = layer.anchor?.centroid || [sumX / pixelCount / (gridWidth - 1), sumY / pixelCount / (gridHeight - 1)];
+  const centerX = (centroid[0] - 0.5) * width;
+  const centerY = (0.5 - centroid[1]) * height;
+  const amplitude = ref.source === "local-luminance" ? 0.11 : 0.72;
+  const centerRelief = Number.isFinite(layer.anchor?.reliefMedian)
+    ? layer.anchor.reliefMedian
+    : sampleRelief(centroid[0], centroid[1]);
+  const centerZ = clamp(centerRelief, -1, 1) * amplitude;
+  const thickness = solid ? Math.max(0.045, Math.min(width, height) * 0.035) : 0;
+  const cellWidth = gridWidth - 1;
+  const cellHeight = gridHeight - 1;
+  const active = new Uint8Array(cellWidth * cellHeight);
+  const cellAt = (x, y) => (x >= 0 && y >= 0 && x < cellWidth && y < cellHeight ? active[y * cellWidth + x] : 0);
+  for (let y = 0; y < cellHeight; y++) {
+    for (let x = 0; x < cellWidth; x++) {
+      const coverage = mask[y * gridWidth + x]
+        + mask[y * gridWidth + x + 1]
+        + mask[(y + 1) * gridWidth + x]
+        + mask[(y + 1) * gridWidth + x + 1];
+      if (coverage >= 2) active[y * cellWidth + x] = 1;
+    }
+  }
+
+  const positions = [];
+  const uvs = [];
+  const point = (x, y, back = false) => {
+    const u = x / (gridWidth - 1);
+    const fromTop = y / (gridHeight - 1);
+    const relief = clamp(ref.values[y * gridWidth + x] || 0, -1, 1) * amplitude;
+    return {
+      x: (u - 0.5) * width - centerX,
+      y: (0.5 - fromTop) * height - centerY,
+      z: relief - centerZ - (back ? thickness : 0),
+      u,
+      v: 1 - fromTop,
+    };
+  };
+  const triangle = (a, b, c) => {
+    for (const vertex of [a, b, c]) {
+      positions.push(vertex.x, vertex.y, vertex.z);
+      uvs.push(vertex.u, vertex.v);
+    }
+  };
+  const quad = (a, b, c, d) => {
+    triangle(a, b, c);
+    triangle(a, c, d);
+  };
+
+  for (let y = 0; y < cellHeight; y++) {
+    for (let x = 0; x < cellWidth; x++) {
+      if (!cellAt(x, y)) continue;
+      const p00 = point(x, y);
+      const p10 = point(x + 1, y);
+      const p01 = point(x, y + 1);
+      const p11 = point(x + 1, y + 1);
+      quad(p00, p01, p11, p10);
+      if (!solid) continue;
+      const b00 = point(x, y, true);
+      const b10 = point(x + 1, y, true);
+      const b01 = point(x, y + 1, true);
+      const b11 = point(x + 1, y + 1, true);
+      quad(b00, b10, b11, b01);
+      if (!cellAt(x, y - 1)) quad(p00, p10, b10, b00);
+      if (!cellAt(x + 1, y)) quad(p10, p11, b11, b10);
+      if (!cellAt(x, y + 1)) quad(p11, p01, b01, b11);
+      if (!cellAt(x - 1, y)) quad(p01, p00, b00, b01);
+    }
+  }
+  if (!positions.length) return null;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData = { independentLayer: true, layerId: layer.id, closedVolume: solid };
+  return { geometry, anchor: { x: centerX, y: centerY, z: centerZ }, pixelCount };
+}
+
+function createReliefGeometry(ref, width, height) {
+  const geometry = new THREE.PlaneGeometry(width, height, ref.width - 1, ref.height - 1);
+  const positions = geometry.attributes.position;
+  const values = ref.values;
+  const amplitude = ref.source === "local-luminance" ? 0.11 : 0.72;
+  for (let i = 0; i < positions.count; i++) {
+    const relief = Number.isFinite(values[i]) ? values[i] : 0;
+    positions.setZ(i, clamp(relief, -1, 1) * amplitude);
+  }
+  positions.needsUpdate = true;
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+function createMaskTexture(rle, width, height) {
+  const mask = decodeMaskRle(rle, width * height);
+  const bytes = new Uint8Array(mask.length * 4);
+  for (let i = 0; i < mask.length; i++) {
+    const value = mask[i] ? 255 : 0;
+    const offset = i * 4;
+    bytes[offset] = value;
+    bytes[offset + 1] = value;
+    bytes[offset + 2] = value;
+    bytes[offset + 3] = 255;
+  }
+  const texture = new THREE.DataTexture(bytes, width, height, THREE.RGBAFormat, THREE.UnsignedByteType);
+  texture.flipY = true;
+  texture.magFilter = THREE.LinearFilter;
+  texture.minFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function decodeMaskRle(rle, expectedSize) {
+  const out = new Uint8Array(expectedSize);
+  const counts = Array.isArray(rle?.counts) ? rle.counts : [];
+  let offset = 0;
+  let value = Number(rle?.startsWith || 0) ? 1 : 0;
+  for (const rawCount of counts) {
+    const count = Math.max(0, Number(rawCount) || 0);
+    if (value) out.fill(1, offset, Math.min(expectedSize, offset + count));
+    offset += count;
+    value = value ? 0 : 1;
+    if (offset >= expectedSize) break;
+  }
+  return out;
+}
+
+function createMaskedWaterMaterial(maskTexture, subject) {
+  return new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: true,
+    side: THREE.DoubleSide,
+    uniforms: {
+      uMap: { value: sourceTexture },
+      uMask: { value: maskTexture },
+      uTime: { value: 0 },
+      uFlow: { value: subject.flow ?? state.flow },
+      uAmplitude: { value: Math.min(0.055, (subject.wave ?? 0.04) * 0.42) },
+    },
+    vertexShader: `
+      uniform sampler2D uMask;
+      uniform float uTime;
+      uniform float uFlow;
+      uniform float uAmplitude;
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        float mask = texture2D(uMask, uv).r;
+        vec3 p = position;
+        float wave = sin(uv.x * 34.0 + uTime * (1.2 + uFlow * 2.2));
+        wave += sin(uv.y * 47.0 - uTime * (0.9 + uFlow * 1.6)) * 0.46;
+        p.z += wave * uAmplitude * smoothstep(0.12, 0.85, mask);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D uMap;
+      uniform sampler2D uMask;
+      uniform float uTime;
+      uniform float uFlow;
+      varying vec2 vUv;
+      void main() {
+        float mask = texture2D(uMask, vUv).r;
+        if (mask < 0.18) discard;
+        vec2 drift = vec2(sin(vUv.y * 31.0 + uTime * 1.5), cos(vUv.x * 27.0 - uTime)) * 0.0018 * uFlow;
+        vec4 painted = texture2D(uMap, clamp(vUv + drift, 0.0, 1.0));
+        float glint = (0.5 + 0.5 * sin((vUv.x + vUv.y) * 52.0 + uTime * 2.0)) * 0.08;
+        gl_FragColor = vec4(painted.rgb + glint, mask);
+      }
+    `,
+  });
+}
+
+function frameArtworkCamera(force = true) {
+  if (!artworkFrame || !camera || !controls) return;
+  if (!force && controls.userData?.hasUserFramedArtwork) return;
+  const canvas = el("wall-viewport");
+  const aspect = Math.max(0.6, (canvas?.clientWidth || 900) / (canvas?.clientHeight || 620));
+  const verticalFov = THREE.MathUtils.degToRad(camera.fov);
+  const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * aspect);
+  const distance = Math.max(
+    artworkFrame.height / (2 * Math.tan(verticalFov / 2)),
+    artworkFrame.width / (2 * Math.tan(horizontalFov / 2))
+  ) * 1.06;
+  controls.target.set(0, artworkFrame.centerY, artworkFrame.z);
+  camera.position.set(0, artworkFrame.centerY, artworkFrame.z + distance);
+  camera.lookAt(controls.target);
+  controls.update();
+  controls.userData = controls.userData || {};
+  controls.userData.hasUserFramedArtwork = true;
+}
+
+function buildTerrainEnvironment(subject, tint) {
+  const width = 5.8;
+  const depth = 4.6;
+  const sx = 42;
+  const sy = 32;
+  const geometry = new THREE.PlaneGeometry(width, depth, sx, sy);
+  const positions = geometry.attributes.position;
+  const rand = seededRandom(`terrain:${subject.id}:${state.source?.name || "blank"}`);
+  for (let i = 0; i < positions.count; i++) {
+    const x = positions.getX(i);
+    const y = positions.getY(i);
+    const u = x / width + 0.5;
+    const v = y / depth + 0.5;
+    const imageRelief = sampleRelief(u, 1 - v);
+    let h = imageRelief * 0.42 + (rand() - 0.5) * 0.018;
+    if (subject.id === "earth") h *= 0.18;
+    if (subject.id === "slope") h = h * 0.3 + (v - 0.2) * 0.42;
+    if (subject.id === "peak") h += Math.exp(-(x * x * 0.82 + (y + 0.45) ** 2 * 0.48)) * 0.78;
+    if (subject.id === "range") h += (Math.sin(x * 2.1 + y * 0.35) * 0.15 + 0.18) * (0.45 + v);
+    if (subject.id === "brook-bank") h -= Math.exp(-x * x * 3.8) * 0.28;
+    if (subject.id === "ravine") h -= Math.exp(-((x + Math.sin(y * 1.2) * 0.36) ** 2) * 5.2) * 0.48;
+    positions.setZ(i, h);
+  }
+  geometry.computeVertexNormals();
+  const terrainColor = tint.clone().lerp(new THREE.Color(ENV_LIBRARY[subject.preset].ground), 0.58);
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({
+    color: terrainColor,
+    roughness: 0.96,
+    metalness: 0,
+    transparent: Boolean(state.source?.dataUrl),
+    opacity: state.source?.dataUrl ? 0.62 : 1,
+  }));
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.set(0, 0.015, -0.35);
+  mesh.receiveShadow = true;
+  envGroup.add(mesh);
+
+  if (subject.id === "rock") {
+    for (let i = 0; i < 13; i++) addStone(rand, -2.25 + rand() * 4.5, -1.8 + rand() * 3.5, 0.14 + rand() * 0.42);
+  }
+  if (subject.id === "mountain" || subject.id === "peak" || subject.id === "range") {
+    for (let i = 0; i < 4; i++) addRidge(-1.85 + i * 1.22, 1.1 - i * 0.08, -2.28, 2.35 - i * 0.18, 0.58 + i * 0.1);
+  }
+  if (subject.id === "brook-bank" || subject.id === "ravine") {
+    addDynamicWaterSurface(subject.id === "ravine" ? 0.15 : -0.05, 0.055, 0.1, subject.id === "ravine" ? 0.78 : 1.05, 4.9, 0x6e98a7, {
+      flow: subject.id === "ravine" ? 0.88 : 0.65,
+      wave: 0.034,
+      foam: subject.id === "ravine" ? 0.28 : 0.08,
+    });
+  }
+}
+
+function sampleRelief(u, v) {
+  const ref = state.referenceMap;
+  if (!ref?.values?.length) return Math.sin(u * Math.PI * 3) * Math.sin(v * Math.PI * 2) * 0.16;
+  const x = clamp(Math.round(u * (ref.width - 1)), 0, ref.width - 1);
+  const y = clamp(Math.round(v * (ref.height - 1)), 0, ref.height - 1);
+  return ref.values[y * ref.width + x] || 0;
+}
+
+function buildPlantEnvironment(subject, tint) {
+  const rand = seededRandom(`plant:${subject.id}:${state.source?.name || "blank"}`);
+  const aquatic = ["calamus", "reed", "lotus-bloom", "lotus", "hibiscus"].includes(subject.id);
+  if (aquatic) addDynamicWaterSurface(0, 0.025, -0.25, 4.9, 3.5, 0x7596a1, { flow: 0.22, wave: 0.025, foam: 0.01 });
+  const count = ["pine", "plum", "wisteria", "camellia", "azalea", "hibiscus"].includes(subject.id) ? 6 : 10;
+  for (let i = 0; i < count; i++) {
+    const x = -2.2 + rand() * 4.4;
+    const z = -1.55 + rand() * 2.9;
+    const scale = 0.72 + rand() * 0.7;
+    addPlantSpecimen(subject.id, rand, x, z, scale, tint);
+  }
+}
+
+function addPlantSpecimen(kind, rand, x, z, scale, tint) {
+  const root = new THREE.Group();
+  root.position.set(x, 0, z);
+  root.scale.setScalar(scale);
+  root.userData.sway = { phase: rand() * Math.PI * 2, flex: 0.012 + rand() * 0.025 };
+  swayingPlants.push(root);
+  envGroup.add(root);
+  const green = tint.clone().lerp(new THREE.Color(0x53704b), 0.62);
+  const leafMat = new THREE.MeshStandardMaterial({ color: green, roughness: 0.78, side: THREE.DoubleSide });
+  const stemMat = new THREE.MeshStandardMaterial({ color: 0x67513b, roughness: 0.94 });
+  const accent = new THREE.Color(state.palette[4] || "#b03a2e");
+
+  if (kind === "pine") {
+    addCylinder(root, 0.055, 1.45, stemMat, 0, 0.72, 0);
+    for (let i = 0; i < 4; i++) {
+      const crown = new THREE.Mesh(new THREE.ConeGeometry(0.42 - i * 0.05, 0.46, 10), leafMat);
+      crown.position.y = 0.58 + i * 0.25;
+      crown.castShadow = true;
+      root.add(crown);
+    }
+    return;
+  }
+  if (kind === "bamboo") {
+    const bambooMat = new THREE.MeshStandardMaterial({ color: green.clone().lerp(new THREE.Color(0x315f3d), 0.32), roughness: 0.82 });
+    for (let c = 0; c < 3; c++) {
+      const cx = (c - 1) * 0.1;
+      addCylinder(root, 0.025, 1.45 - c * 0.12, bambooMat, cx, 0.7, c * 0.05);
+      for (let j = 0; j < 6; j++) addPlantLeaf(root, leafMat, cx + (rand() - 0.5) * 0.22, 0.55 + rand() * 0.82, c * 0.05, 0.34, rand() * Math.PI);
+    }
+    return;
+  }
+  if (["plum", "wisteria", "camellia", "azalea", "hibiscus"].includes(kind)) {
+    addCylinder(root, 0.045, 0.92, stemMat, 0, 0.44, 0);
+    for (let b = 0; b < 4; b++) {
+      const branch = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.03, 0.62, 7), stemMat);
+      branch.position.set((b - 1.5) * 0.08, 0.72 + b * 0.06, 0);
+      branch.rotation.z = (b % 2 ? -1 : 1) * (0.68 + rand() * 0.28);
+      root.add(branch);
+    }
+    const flowers = kind === "wisteria" ? 11 : 7;
+    const flowerColor = kind === "wisteria" ? new THREE.Color(0x8062a2) : kind === "plum" ? new THREE.Color(0xe8d4d1) : accent;
+    for (let f = 0; f < flowers; f++) {
+      addFlowerHead(root, flowerColor, (rand() - 0.5) * 0.78, kind === "wisteria" ? 0.34 + rand() * 0.7 : 0.65 + rand() * 0.55, (rand() - 0.5) * 0.35, kind === "hibiscus" ? 0.13 : 0.085, kind === "chrysanthemum" ? 12 : 6);
+    }
+    for (let l = 0; l < 8; l++) addPlantLeaf(root, leafMat, (rand() - 0.5) * 0.7, 0.52 + rand() * 0.62, (rand() - 0.5) * 0.3, 0.25, rand() * Math.PI);
+    return;
+  }
+  if (kind === "lotus-bloom" || kind === "lotus") {
+    const waterStem = new THREE.MeshStandardMaterial({ color: 0x527355, roughness: 0.82 });
+    addCylinder(root, 0.016, 0.72, waterStem, 0, 0.36, 0);
+    const leaf = new THREE.Mesh(new THREE.CircleGeometry(0.26, 24), leafMat);
+    leaf.rotation.x = -Math.PI / 2;
+    leaf.position.set(-0.12, 0.42, 0.04);
+    root.add(leaf);
+    addFlowerHead(root, kind === "lotus" ? new THREE.Color(0xf0c9cf) : new THREE.Color(0xe9a9b4), 0.08, 0.76, 0, kind === "lotus" ? 0.16 : 0.12, 10);
+    return;
+  }
+
+  const bladeCount = kind === "chrysanthemum" ? 8 : 12;
+  for (let i = 0; i < bladeCount; i++) {
+    const h = 0.38 + rand() * (kind === "reed" ? 0.9 : 0.52);
+    addPlantLeaf(root, leafMat, (rand() - 0.5) * 0.28, h * 0.5, (rand() - 0.5) * 0.22, h, rand() * Math.PI);
+  }
+  if (kind === "reed") {
+    const head = new THREE.Mesh(new THREE.CapsuleGeometry(0.035, 0.2, 4, 7), new THREE.MeshStandardMaterial({ color: 0x9a754d, roughness: 1 }));
+    head.position.y = 1.08;
+    root.add(head);
+  } else {
+    const flowerColor = kind === "daylily" ? new THREE.Color(0xd78342) : kind === "chrysanthemum" ? new THREE.Color(0xd4a93e) : accent.clone().lerp(new THREE.Color(0xd8d3b4), 0.45);
+    addFlowerHead(root, flowerColor, 0, 0.66, 0, kind === "chrysanthemum" ? 0.13 : 0.085, kind === "chrysanthemum" ? 14 : 6);
+  }
+}
+
+function addCylinder(parent, radius, height, material, x, y, z) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.82, radius, height, 8), material);
+  mesh.position.set(x, y, z);
+  mesh.castShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function addPlantLeaf(parent, material, x, y, z, length, rotationY) {
+  const leaf = new THREE.Mesh(new THREE.PlaneGeometry(Math.max(0.035, length * 0.16), length), material);
+  leaf.position.set(x, y, z);
+  leaf.rotation.set((Math.random() - 0.5) * 0.26, rotationY, (Math.random() - 0.5) * 0.7);
+  parent.add(leaf);
+}
+
+function addFlowerHead(parent, color, x, y, z, radius, petals = 6) {
+  const petalMat = new THREE.MeshStandardMaterial({ color, roughness: 0.7, side: THREE.DoubleSide });
+  const centerMat = new THREE.MeshStandardMaterial({ color: 0xd6af49, roughness: 0.78 });
+  const group = new THREE.Group();
+  group.position.set(x, y, z);
+  for (let i = 0; i < petals; i++) {
+    const petal = new THREE.Mesh(new THREE.CircleGeometry(radius, 10), petalMat);
+    const angle = i / petals * Math.PI * 2;
+    petal.scale.set(0.52, 1.15, 1);
+    petal.position.set(Math.cos(angle) * radius * 0.75, Math.sin(angle) * radius * 0.75, 0);
+    petal.rotation.z = angle - Math.PI / 2;
+    group.add(petal);
+  }
+  const center = new THREE.Mesh(new THREE.SphereGeometry(radius * 0.42, 10, 7), centerMat);
+  center.position.z = 0.012;
+  group.add(center);
+  parent.add(group);
+}
+
+function buildWaterEnvironment(subject, tint) {
+  const waterColor = tint.clone().lerp(new THREE.Color(0x5c8a98), 0.68).getHex();
+  const dims = subject.id === "brook" || subject.id === "cascade" ? { x: -0.5, w: 1.25, d: 5.2 } : { x: 0, w: 5.4, d: 4.0 };
+  addDynamicWaterSurface(dims.x, 0.035, -0.2, dims.w, dims.d, waterColor, subject);
+  const rand = seededRandom(`water:${subject.id}:${state.source?.name || "blank"}`);
+  if (subject.id === "brook" || subject.id === "cascade") {
+    for (let i = 0; i < 14; i++) addStone(rand, -1.75 + rand() * 3.5, -1.9 + rand() * 3.7, 0.1 + rand() * 0.24);
+  }
+  if (subject.id === "ripples" || subject.id === "lake") {
+    for (let i = 0; i < 7; i++) addLotusLeaf(-1.9 + rand() * 3.8, -1.35 + rand() * 2.6, 0.13 + rand() * 0.12);
+  }
+}
+
+function addDynamicWaterSurface(x, y, z, w, d, color, options = {}) {
+  const deep = new THREE.Color(color).lerp(new THREE.Color(0x183744), 0.48);
+  const shallow = new THREE.Color(color).lerp(new THREE.Color(0xc8ded5), 0.3);
+  const material = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    uniforms: {
+      uTime: { value: 0 },
+      uFlow: { value: options.flow ?? state.flow },
+      uAmplitude: { value: options.wave ?? 0.05 },
+      uFoam: { value: options.foam ?? 0.08 },
+      uDeep: { value: deep },
+      uShallow: { value: shallow },
+    },
+    vertexShader: `
+      uniform float uTime;
+      uniform float uFlow;
+      uniform float uAmplitude;
+      varying float vWave;
+      varying vec2 vUvWater;
+      void main() {
+        vec3 p = position;
+        float directional = sin(p.y * 3.2 - uTime * (0.8 + uFlow * 2.4));
+        float crossWave = sin(p.x * 5.4 + p.y * 1.2 + uTime * 1.15) * 0.52;
+        float ripple = sin(length(p.xy) * 10.0 - uTime * 2.1) * 0.34;
+        vWave = directional * 0.54 + crossWave + ripple;
+        p.z += vWave * uAmplitude;
+        vUvWater = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform float uTime;
+      uniform float uFoam;
+      uniform vec3 uDeep;
+      uniform vec3 uShallow;
+      varying float vWave;
+      varying vec2 vUvWater;
+      void main() {
+        float lightBand = 0.5 + 0.5 * sin((vUvWater.x + vUvWater.y) * 18.0 + uTime * 1.4 + vWave * 3.0);
+        vec3 color = mix(uDeep, uShallow, clamp(0.42 + vWave * 0.28 + lightBand * 0.16, 0.0, 1.0));
+        float foam = smoothstep(0.72, 1.08, abs(vWave)) * uFoam;
+        color = mix(color, vec3(0.94, 0.96, 0.91), foam);
+        gl_FragColor = vec4(color, 0.54 + lightBand * 0.12 + foam * 0.26);
+      }
+    `,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, d, 48, 36), material);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.set(x, y, z);
+  mesh.userData.water = true;
+  waterSurfaces.push(mesh);
+  envGroup.add(mesh);
+  return mesh;
 }
 
 function buildEnvironmentDecor(id, tint) {
@@ -464,8 +1885,8 @@ function applyAtmosphere() {
   const bg = new THREE.Color(preset.bg).lerp(new THREE.Color(a.bg), 0.45);
   const fogNear = THREE.MathUtils.lerp(9, 3.8, state.mist * (0.45 + a.fog));
   const fogFar = THREE.MathUtils.lerp(18, 7.2, state.mist * (0.55 + a.fog));
-  scene.background = bg;
-  scene.fog = new THREE.Fog(bg, fogNear, fogFar);
+  scene.background = state.source?.dataUrl ? null : bg;
+  scene.fog = state.source?.dataUrl && state.mist < 0.08 ? null : new THREE.Fog(bg, fogNear, fogFar);
   hemiLight.color.setHex(a.hemi);
   hemiLight.groundColor.setHex(a.ground);
   hemiLight.intensity = state.atmosphere === "moon" ? 0.72 : 0.95;
@@ -621,6 +2042,29 @@ function buildCreature(kind) {
   updateReadout();
 }
 
+function clearCreatureFromScene({ keepBiology = false } = {}) {
+  if (state.creature) {
+    scene.remove(state.creature);
+    disposeObject(state.creature);
+    state.creature = null;
+  }
+  clearSkeletonOverlay();
+  state.creatureRecord = null;
+  state.gait = 0;
+  state.orbit = 0;
+  if (!keepBiology) clearBiologyModels();
+}
+
+function clearBiologyModels() {
+  clearGroup(bioGroup);
+  bioLayerMeshes = new Map();
+  state.bioSceneLiftResult = null;
+  state.bioIndependentLayerCount = 0;
+  state.bioPbrLayerCount = 0;
+  state.bioModelsExploded = false;
+  updateBiologyModelState();
+}
+
 function resolveCreatureKind(kind) {
   if (kind !== "auto") return kind;
   const anatomy = state.estimate?.anatomyType;
@@ -755,7 +2199,7 @@ function makeSpeciesRecord(anatomy) {
   const tailScale = prop?.tailLen ? clamp(prop.tailLen * 1.2, 0.18, 1.55) : anatomy === "SALTATORIAL" ? 0.85 : anatomy === "AVES" ? 0.25 : 0.78;
 
   rec.enabled = true;
-  rec.cnName = state.source?.name ? "题壁生灵" : "留白生灵";
+  rec.cnName = state.source?.name ? "画中生灵" : "待选生灵";
   rec.scientificName = "Ex pictura viva";
   rec.taxonomyClass = anatomy === "AVES" ? "bird" : "mammal";
   rec.anatomyType = anatomy;
@@ -765,7 +2209,7 @@ function makeSpeciesRecord(anatomy) {
     tailLength: +(rec.dimensions.height * tailScale).toFixed(2),
     wingspan: +(Math.max(rec.dimensions.length * 1.55, 0.55)).toFixed(2),
     earLength: anatomy === "SALTATORIAL" ? 0.16 : 0.04,
-    note: "由题壁原作的轮廓与色板推断，可用右侧菜单继续重构。",
+    note: "由 home 画框原作的轮廓与色板推断，可用右侧菜单继续重构。",
   };
   rec.rigTuning = { neckLen, legFold: anatomy === "SALTATORIAL" ? 1.28 : 1, backAngle: anatomy === "DIGITIGRADE" ? -0.08 : 0.02, hockLift: anatomy === "DIGITIGRADE" ? 0.24 : 0.08 };
   rec.shape = {
@@ -838,6 +2282,10 @@ function frameCreature(creature, kind) {
 }
 
 function updateCreature(dt, time) {
+  if (bioLayerMeshes.size) {
+    updateImageLockedBiology(time);
+    return;
+  }
   const creature = state.creature;
   if (!creature) return;
   const kind = resolveCreatureKind(state.creatureKind);
@@ -898,6 +2346,36 @@ function updateCreature(dt, time) {
   });
 }
 
+function updateImageLockedBiology(time) {
+  if (state.bioModelsExploded) return;
+  const behavior = state.behavior;
+  for (const entity of bioLayerMeshes.values()) {
+    const home = entity.userData.homePosition;
+    if (!home) continue;
+    const phase = entity.userData.phase || 0;
+    const kind = entity.userData.biologyKind;
+    entity.position.set(home.x, home.y, home.z);
+    entity.rotation.set(0, 0, 0);
+    if (behavior === "IDLE") continue;
+
+    const travel = Math.sin(time * 0.72 + phase);
+    if (behavior === "WALK") {
+      entity.position.x += travel * (kind === "fish" ? 0.42 : 0.28);
+      entity.position.y += Math.sin(time * 1.44 + phase) * (kind === "avian" || kind === "insect" ? 0.13 : 0.025);
+      entity.rotation.z = Math.cos(time * 0.72 + phase) * 0.035;
+    } else if (behavior === "FORAGE") {
+      entity.position.y -= 0.065 + Math.max(0, Math.sin(time * 1.2 + phase)) * 0.045;
+      entity.rotation.x = 0.12;
+      entity.rotation.z = Math.sin(time * 1.2 + phase) * 0.028;
+    } else if (behavior === "LEAP") {
+      const leap = Math.max(0, Math.sin(time * 1.8 + phase));
+      entity.position.x += travel * 0.18;
+      entity.position.y += leap * (kind === "avian" || kind === "insect" ? 0.42 : 0.28);
+      entity.rotation.z = Math.cos(time * 1.8 + phase) * 0.055;
+    }
+  }
+}
+
 function tickAvian(built, driverState, ctx) {
   const phase = ctx.gait * Math.PI * 2;
   const moving = driverState !== "IDLE";
@@ -938,33 +2416,33 @@ function tickButterflies(root, time) {
 
 async function setWallArtwork(source) {
   clearGroup(sourceGroup);
-  let aspect = 1.25;
-  let texture;
+  const backdrop = el("source-backdrop");
+  const shell = el("wall-viewport")?.parentElement;
+  shell?.classList.remove("relief-active");
+  artworkFrame = null;
+  if (sourceTexture) {
+    sourceTexture.dispose();
+    sourceTexture = null;
+  }
   if (source?.dataUrl) {
-    const img = await loadImage(source.dataUrl);
-    aspect = img.width / Math.max(1, img.height);
-    texture = new THREE.TextureLoader().load(source.dataUrl);
+    const image = await loadImage(source.dataUrl);
+    sourceTexture = new THREE.Texture(image);
+    sourceTexture.colorSpace = THREE.SRGBColorSpace;
+    sourceTexture.minFilter = THREE.LinearMipmapLinearFilter;
+    sourceTexture.magFilter = THREE.LinearFilter;
+    sourceTexture.needsUpdate = true;
+    if (backdrop) {
+      backdrop.src = source.dataUrl;
+      backdrop.hidden = false;
+    }
   } else {
-    texture = makePlaceholderTexture();
-    aspect = 0.82;
+    if (backdrop) {
+      backdrop.hidden = true;
+      backdrop.removeAttribute("src");
+    }
   }
-  texture.colorSpace = THREE.SRGBColorSpace;
-  const maxW = 2.28;
-  const maxH = 1.62;
-  let w = maxW;
-  let h = w / aspect;
-  if (h > maxH) {
-    h = maxH;
-    w = h * aspect;
-  }
-  const paper = new THREE.Mesh(
-    new THREE.PlaneGeometry(w, h),
-    new THREE.MeshStandardMaterial({ map: texture, color: 0xffffff, roughness: 0.86 })
-  );
-  paper.castShadow = false;
-  paper.receiveShadow = true;
-  sourceGroup.add(paper);
-  addArtworkFrame(w, h);
+  if (controls?.userData) controls.userData.hasUserFramedArtwork = false;
+  wall.visible = false;
 }
 
 function addArtworkFrame(w, h) {
@@ -1037,22 +2515,51 @@ function updateSnow(dt, time) {
 }
 
 function resetCamera() {
+  if (artworkFrame) {
+    if (controls?.userData) controls.userData.hasUserFramedArtwork = false;
+    frameArtworkCamera(true);
+    return;
+  }
   camera.position.set(3.7, 2.1, 4.9);
   controls.target.set(0, 0.82, -0.25);
   controls.update();
 }
 
 function updateReadout() {
-  const envLabel = state.envId === "auto" ? "原作色境" : (ENV_LIBRARY[state.envId]?.label || "画境");
-  const resolved = ENV_LIBRARY[state.envResolved]?.label || envLabel;
-  const bio = state.creatureKind === "auto" ? `${BIO_LIBRARY.auto.label} · ${BIO_LIBRARY[resolveCreatureKind("auto")]?.label}` : BIO_LIBRARY[state.creatureKind]?.label;
+  const subject = environmentSubject(state.envSubject);
+  const envLabel = subject ? `${ENVIRONMENT_CATALOG[subject.domain].label} · ${subject.label}` : "画境";
+  const bioSubject = biologySubject();
+  const bio = state.bioIndependentLayerCount
+    ? `${bioSubject.label} · ${state.bioIndependentLayerCount} 独立实体${state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} PBR` : ""}`
+    : state.creature
+      ? (state.creatureKind === "auto" ? `${BIO_LIBRARY.auto.label} · ${BIO_LIBRARY[resolveCreatureKind("auto")]?.label}` : BIO_LIBRARY[state.creatureKind]?.label)
+      : "生物尚未入境";
   const behavior = BEHAVIOR_LABEL[state.behavior] || state.behavior;
   const readout = el("state-readout");
-  if (readout) readout.textContent = `${envLabel}（${resolved}） · ${bio} · ${behavior}`;
+  const geometryEngine = state.sceneLiftResult?.engine?.geometry || "MapAnything";
+  const geometryLabel = geometryEngine.includes("Depth-Anything") ? "Depth Anything V2" : geometryEngine.includes("map-anything") ? "MapAnything" : geometryEngine;
+  const hasSemanticLayer = Boolean(state.sceneLiftResult?.layers?.length);
+  const pbrSuffix = state.pbrLayerCount ? ` · ${state.pbrLayerCount} PBR 实体` : "";
+  const generator = state.generationMode === "scene-lift"
+    ? `${geometryLabel} 深度${hasSemanticLayer ? " · Grounded SAM 2 独立实体" : " · 原画像素锁定"}${pbrSuffix}`
+    : state.source?.dataUrl ? "原画像素锁定浮雕" : "等待画作";
+  if (readout) readout.textContent = `${envLabel} · ${generator} · ${bio} · ${behavior}`;
   const meta = el("source-meta");
   if (meta) meta.textContent = state.estimate
-    ? `${ANATOMY_LABEL[state.estimate.anatomyType] || "轮廓"} · ${state.palette.slice(0, 3).join(" ")}`
-    : "留白墙 · 默认画境";
+    ? `home 画框母版 · ${state.palette.slice(0, 3).join(" ")}`
+    : "请从 home 画框进入";
+}
+
+function updateEnvironmentMotion(time) {
+  for (const water of waterSurfaces) {
+    if (water.material?.uniforms?.uTime) water.material.uniforms.uTime.value = time;
+  }
+  for (const plant of swayingPlants) {
+    const sway = plant.userData.sway;
+    if (!sway) continue;
+    plant.rotation.z = Math.sin(time * (0.72 + state.wind * 1.4) + sway.phase) * sway.flex * (0.3 + state.wind * 1.7);
+    plant.rotation.x = Math.cos(time * 0.48 + sway.phase) * sway.flex * state.wind * 0.38;
+  }
 }
 
 function animate() {
@@ -1060,6 +2567,7 @@ function animate() {
   const dt = Math.min(0.05, clock.getDelta());
   const time = clock.elapsedTime;
   updateSnow(dt, time);
+  updateEnvironmentMotion(time);
   updateCreature(dt, time);
   if (skeletonHelper) skeletonHelper.update();
   controls.update();
@@ -1096,6 +2604,15 @@ function makeVisibleColor(hex) {
   return `#${c.getHexString()}`;
 }
 
+function pickEnvironmentTint(palette) {
+  for (const hex of palette || []) {
+    const c = new THREE.Color(hex);
+    const lum = c.r * 0.299 + c.g * 0.587 + c.b * 0.114;
+    if (lum >= 0.16 && lum <= 0.82) return hex;
+  }
+  return palette?.[0] || DEFAULT_PALETTE[0];
+}
+
 function colorToHex(value, fallback) {
   try { return new THREE.Color(value).getHex(); }
   catch (_) { return fallback; }
@@ -1122,6 +2639,35 @@ function loadImage(src) {
     img.onerror = () => reject(new Error("图片加载失败"));
     img.src = src;
   });
+}
+
+async function sampleReferenceMap(src) {
+  const img = await loadImage(src);
+  const maxSide = 128;
+  const scale = maxSide / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height);
+  const width = Math.max(24, Math.round((img.naturalWidth || img.width) * scale));
+  const height = Math.max(24, Math.round((img.naturalHeight || img.height) * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.drawImage(img, 0, 0, width, height);
+  const rgba = ctx.getImageData(0, 0, width, height).data;
+  const luminance = new Float32Array(width * height);
+  let mean = 0;
+  for (let i = 0; i < luminance.length; i++) {
+    const o = i * 4;
+    const value = (rgba[o] * 0.299 + rgba[o + 1] * 0.587 + rgba[o + 2] * 0.114) / 255;
+    luminance[i] = value;
+    mean += value;
+  }
+  mean /= luminance.length;
+  let variance = 0;
+  for (const value of luminance) variance += (value - mean) ** 2;
+  const sigma = Math.sqrt(variance / luminance.length) || 0.18;
+  const values = new Float32Array(luminance.length);
+  for (let i = 0; i < luminance.length; i++) values[i] = clamp((mean - luminance[i]) / sigma * 0.22, -0.36, 0.58);
+  return { width, height, values, aspect: (img.naturalWidth || img.width) / (img.naturalHeight || img.height), source: "local-luminance" };
 }
 
 function fileToCompressedDataURL(file) {
@@ -1175,8 +2721,15 @@ function disposeObject(obj) {
   obj.traverse?.((node) => {
     node.geometry?.dispose?.();
     const mat = node.material;
-    if (Array.isArray(mat)) mat.forEach((m) => m.dispose?.());
-    else mat?.dispose?.();
+    const disposeMaterial = (material) => {
+      if (!material) return;
+      if (material.alphaMap && material.alphaMap !== sourceTexture) material.alphaMap.dispose?.();
+      const mask = material.uniforms?.uMask?.value;
+      if (mask && mask !== sourceTexture) mask.dispose?.();
+      material.dispose?.();
+    };
+    if (Array.isArray(mat)) mat.forEach(disposeMaterial);
+    else disposeMaterial(mat);
   });
 }
 

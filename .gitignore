@@ -26,3 +26,8 @@ frontend/assets/audio/*.ogg
 .DS_Store
 .idea/
 .vscode/
+
+# 调试截图 / 缓存 / 大体积生成物（不入库）
+.playwright-cli/
+lab-*.png
+video_xiaoman/

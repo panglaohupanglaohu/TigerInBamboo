@@ -38,7 +38,7 @@
 - **天气**：温度决定雨雪（>0℃ 雨丝 / ≤0℃ 落雪），风向统一驱动雨雪飘移与竹摆
 - **物种关系矩阵**：在配置页以"捕食 / 警戒回避 / 互利 / 竞争"等关系配置智能体间作用（对应论文中的 predator–prey、fear/hunger 驱动模型）
 - **物种实验室**（`lab.html`）：上传图片 → 轮廓/主轴/主色分析**推断解剖结构**（解剖类型 + 体型比例）→ 程序化建模；以**生物运动学**（腿倒摆自然频率 / Froude 数）计算步态 → 让生物在**拟生环境**（溪涧/梅塘/雪竹/远山）中科学运动；**意思模块**以物种生态语义 × 栖息环境拟合行为先验，回灌状态机。保存后入溪涧图漫游并按关系矩阵互动
-- **题壁工作空间**（`wall-workspace.html`）：从展厅「待君题壁」卡上传任意古画原作 → 纯前端离线图像分析（Otsu 分割 / PCA 主轴 / K-means 主色）自动推断画境与生灵 → 进入中央 Three.js 工作区：**六种画境**（留白墙 / 溪涧 / 梅塘 / 雪竹 / 山岩 / 林下）× **四种天光氛围**（纸 / 晨 / 昏 / 月）× **七种生灵**（原作生灵 / 伏行走兽 / 山野蹄兽 / 跳跃小兽 / 塘岸禽鸟 / 鱼影 / 蝶群），生物力学步态驱动 —— 让任何一幅古画当场"活"起来
+- **拟生环境工作空间**（`wall-workspace.html`）：home 画框中的原作先进入像素锁定的 Scene Lift 管线；MapAnything/Depth Anything 恢复逐像素深度，Grounding DINO + SAM 2.1 分别提取左侧山石、草木、水域和右侧鸟、兽、鱼、蝶的实例轮廓与画中坐标。每个环境或生物实例都建立为拥有独立原点、前后表面和边界侧壁的封闭 Three.js `BufferGeometry`，可以“分离查看”并精确“归位对映”；整幅画只作为低透明度坐标参照。未检测到的元素不会用随机几何体顶替，TRELLIS.2 只负责在同一对象锚点补全不可见背面/PBR 体积。
 - **回展厅光点**：竹虎（`tiger.html`）与寒梅（`plum.html`）场景页右下角均设环形呼吸光点，一键返回展厅（`home.html`）
 
 ## 技术要点
@@ -72,11 +72,8 @@
   `fitHabitat` 推导行为先验（攻击 / 胆量 / 活跃 / 社群 / 觅食 / 亲和），回灌状态机与运动学，
   实现"环境 × 习性"复合拟合，后续可接更细的生物习性库
 
-### 题壁工作空间：任意古画 → 拟生空间
-展厅「待君题壁」卡上传原作图片后（暂存于 sessionStorage），`wall-workspace.js` 调 `imageAnalysis.js`
-（灰度降采样 → Otsu 自动阈值分割 → 前景包围盒 / PCA 主轴 / K-means 主色板）→ `bio/anatomyEstimator.js`
-按解剖先验（禽 / 蹄行 / 趾行 / 跳跃行）推断解剖类型与颈/腿/尾比例，再由 `locomotionModel.js` 生物力学
-步态驱动生灵在六种画境、四种氛围的工作区中游走；所有推断项均可在面板上覆盖调整。
+### 拟生环境工作空间：原画 → 像素锁定 3D
+home 画框上传的图片暂存于 `sessionStorage`，`wall-workspace.js` 立即生成保守的原图参照面；该降级路径只提供轻微视差，不猜测山、树、水域或生物。连接 `tools/scene_lift_worker.py` 后，MapAnything（缺失时为 Depth Anything V2）返回逐像素深度，Grounded SAM 2 返回当前左右菜单所选对象的实例遮罩。前端把每个遮罩回投成独立封闭网格，而不是把整幅画统一隆起；水域动态只在对应遮罩内部发生。右侧生物实体同样保留原画色彩、独立锚点和归位坐标，行为动画始终以该锚点为基准。
 
 ### 竹：刚体 + 球铰
 每根竹是 Cannon 动态刚体（Box），竹脚以 `PointToPointConstraint` 球铰锚定地面；
@@ -274,13 +271,11 @@ machines interacting with the environment:
   plum pond / snow & bamboo / distant hills); the **semantics module** fits behavioral priors from the species'
   ecology × habitat and feeds them back into the state machine. Save and release it into the stream scene to
   interact through the relation matrix
-- **Wall workspace** (`wall-workspace.html`): upload any classical painting from the gallery's "Awaiting Your
-  Brush" card → fully client-side, offline image analysis (Otsu thresholding / PCA principal axis / K-means
-  palette) infers the scene and the creature → a central Three.js workspace opens with **six painted realms**
-  (blank wall / stream / plum pond / snow bamboo / mountain rock / grove) × **four lighting atmospheres**
-  (paper / dawn / dusk / moon) × **seven creature kinds** (inferred-from-artwork / digitigrade beast /
-  unguligrade / saltatorial hopper / shore bird / fish shadow / butterfly swarm), all driven by biomechanical
-  gait — any classical painting comes alive on the spot
+- **Environment workspace** (`wall-workspace.html`): place a painting in the gallery's custom-artwork frame and
+  use that exact image as the shared source of truth. Its luminance and palette drive **8 terrain forms**, **16
+  plant families**, and **6 animated water regimes**. A connected TRELLIS.2 worker replaces the local preview
+  with a high-fidelity PBR GLB; wind and water remain live Three.js simulation layers. The creature controls stay
+  isolated on the right so environment and anatomy can evolve independently.
 - **Return-to-gallery orb**: the Tiger and Plum scene pages each carry a breathing ring-orb at the bottom-right that
   returns to the gallery (`home.html`) in one click
 
@@ -439,11 +434,49 @@ cd backend && uvicorn main:app --port 8931
 
 - Gallery: <http://localhost:8931/> (original-artwork cards + "Awaiting Your Brush" + lab entry, 中文/EN toggle)
 - 3D scenes: <http://localhost:8931/tiger.html> (tiger stream), <http://localhost:8931/plum.html> (plum & geese)
-- Wall workspace: upload an artwork via the gallery's "Awaiting Your Brush" card (or visit <http://localhost:8931/wall-workspace.html> directly)
+- Environment workspace: upload an artwork through the gallery's custom-artwork frame (or visit <http://localhost:8931/wall-workspace.html> directly)
 - System config: <http://localhost:8931/config.html> (refresh the scene page after saving)
 
 > No backend handy? The frontend also runs fully static (e.g. on GitHub Pages): config and species records
 > automatically fall back to `localStorage`.
+
+### Optional pixel-locked Scene Lift worker
+
+Install the official [`facebookresearch/map-anything`](https://github.com/facebookresearch/map-anything)
+environment. The Apache-licensed checkpoint is the default in the bundled adapter. For semantic layer masks,
+also clone [`IDEA-Research/Grounded-SAM-2`](https://github.com/IDEA-Research/Grounded-SAM-2), download a SAM 2.1
+checkpoint, and provide its paths:
+
+```bash
+export GROUNDED_SAM2_ROOT=/absolute/path/to/Grounded-SAM-2
+export SAM2_CHECKPOINT=/absolute/path/to/sam2.1_hiera_large.pt
+export SAM2_CONFIG=configs/sam2.1/sam2.1_hiera_l.yaml
+uvicorn /absolute/path/to/TigerInBamboo/tools/scene_lift_worker.py:app --host 127.0.0.1 --port 7863
+SCENE_LIFT_SERVER_URL=http://127.0.0.1:7863 ./start.sh
+```
+
+Without Grounded SAM 2, the worker still returns MapAnything geometry and the UI truthfully reports that no
+semantic mask is available. Without the worker, the browser uses the original texture with shallow local
+parallax and never falls back to random proxy plants, rocks, or rectangular water.
+
+For a CPU/MPS development machine that does not yet have MapAnything, the same worker can use the cached
+`depth-anything/Depth-Anything-V2-Small-hf` model as a clearly labelled relative-depth fallback. MapAnything
+remains first priority whenever it is installed; only MapAnything results are labelled metric/camera-aware.
+
+### Optional TRELLIS.2 object-completion worker
+
+TRELLIS.2 is intentionally not the scene-layout engine. Install the official
+[`microsoft/TRELLIS.2`](https://github.com/microsoft/TRELLIS.2) environment on a Linux host with a supported
+NVIDIA GPU, then run the bundled adapter for future masked object completion:
+
+```bash
+pip install fastapi uvicorn
+uvicorn /absolute/path/to/TigerInBamboo/tools/trellis2_worker.py:app --host 127.0.0.1 --port 7862
+TRELLIS2_SERVER_URL=http://127.0.0.1:7862 ./start.sh
+```
+
+The main backend keeps both worker addresses server-side. Scene Lift owns depth, masks, scale, and placement;
+TRELLIS.2 may only replace a selected masked layer while retaining those anchors.
 
 ## Configuration
 

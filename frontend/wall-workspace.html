@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>题壁工作空间 · 世界古典美术拟生平台</title>
+  <title>拟生环境工作空间 · 世界古典美术拟生平台</title>
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/wall-workspace.css" />
+  <link rel="stylesheet" href="css/wall-workspace.css?v=4" />
 </head>
 <body class="wall-workspace-page">
   <header class="wall-workspace-header">
     <a class="preset" href="home.html">返回展厅</a>
     <div class="wall-title-block">
-      <h1>题壁工作空间</h1>
-      <p id="analysis-status">正在读取题壁原作</p>
+      <h1>拟生环境工作空间</h1>
+      <p id="analysis-status">正在读取画框中的原作</p>
     </div>
-    <label class="preset filebtn">换原作<input id="source-upload" type="file" accept="image/*" hidden /></label>
+    <label class="preset filebtn">更换画作<input id="source-upload" type="file" accept="image/*" hidden /></label>
   </header>
 
   <main class="wall-workspace-layout">
@@ -22,18 +22,51 @@
       <div class="wall-menu-head">
         <span>境</span>
         <div>
-          <p>环境菜单</p>
-          <h2>画境生成</h2>
+          <p>原图驱动 · ENVIRONMENT</p>
+          <h2>画境重构</h2>
         </div>
       </div>
 
-      <section class="wall-control-group">
-        <h3>画境</h3>
-        <div class="wall-button-list" id="env-buttons"></div>
+      <section class="wall-source-card" id="environment-source-card">
+        <img id="environment-source-preview" alt="当前环境母版" hidden />
+        <div>
+          <span>当前母版</span>
+          <b id="environment-source-name">等待 home 画框中的图画</b>
+        </div>
+      </section>
+
+      <section class="wall-model-card" aria-label="原画场景抬升转换引擎">
+        <div class="wall-model-topline">
+          <div><span>OPEN SOURCE · SCENE LIFT</span><b>MAPANYTHING + GROUNDED SAM 2</b></div>
+          <em id="scene-lift-status" data-state="checking">检测中</em>
+        </div>
+        <p>逐像素深度、语义遮罩与画中坐标先锁定；TRELLIS.2 仅补全局部物体背面。</p>
+        <div class="wall-model-stages"><span>深度</span><i>›</i><span>分割</span><i>›</i><span>回投</span><i>›</i><span>补面</span></div>
+        <span id="trellis-status" class="wall-secondary-status" data-state="checking">TRELLIS.2 检测中</span>
+      </section>
+
+      <section class="wall-control-group wall-environment-builder">
+        <h3>画中要素</h3>
+        <div class="wall-segment wall-domain-tabs" id="env-domain-tabs">
+          <button type="button" data-domain="terrain">地势</button>
+          <button type="button" data-domain="plants">草木</button>
+          <button type="button" data-domain="water">水势</button>
+        </div>
+        <div class="wall-subject-grid" id="env-buttons"></div>
+        <p class="wall-selection-note" id="environment-note">选择画中要素，以原图色彩与轮廓构建。</p>
+        <button class="wall-build-button" id="generate-environment" type="button">
+          <span>按原画锁位重建</span>
+          <small id="generation-state">正在检测场景转换引擎</small>
+        </button>
+        <p class="wall-independent-state" id="independent-model-state">等待语义遮罩 · 尚无独立 Three.js 实体</p>
+        <div class="wall-action-row wall-independent-actions">
+          <button class="btn small" id="separate-environment-models" type="button" disabled>分离查看</button>
+          <button class="btn small" id="restore-environment-models" type="button" disabled>归位对映</button>
+        </div>
       </section>
 
       <section class="wall-control-group">
-        <h3>原作色</h3>
+        <h3>原作色板 · 保留</h3>
         <div class="wall-swatch-row" id="env-palette"></div>
       </section>
 
@@ -47,27 +80,32 @@
         </div>
       </section>
 
-      <section class="wall-control-group">
-        <h3>风水</h3>
+      <section class="wall-control-group wall-motion-controls">
+        <h3>环境动态</h3>
         <label class="wall-range">风
           <input id="wind-range" type="range" min="0" max="1" step="0.05" value="0.35" />
         </label>
         <label class="wall-range">雾
           <input id="mist-range" type="range" min="0" max="1" step="0.05" value="0.25" />
         </label>
+        <label class="wall-range">流
+          <input id="flow-range" type="range" min="0" max="1" step="0.05" value="0.55" />
+        </label>
       </section>
     </aside>
 
     <section class="wall-stage" aria-label="3D 工作空间">
       <div class="wall-stage-toolbar">
-        <span id="source-thumb" class="source-thumb" aria-hidden="true">题</span>
+        <span id="source-thumb" class="source-thumb" aria-hidden="true">画</span>
         <div class="source-copy">
-          <b id="source-title">待君题壁</b>
-          <span id="source-meta">留白墙 · 默认画境</span>
+          <b id="source-title">等待画作</b>
+          <span id="source-meta">请从 home 画框进入</span>
         </div>
         <button class="wall-icon-btn" id="reset-camera" type="button" aria-label="复位视角" title="复位视角">↺</button>
       </div>
       <div class="wall-canvas-shell">
+        <img id="source-backdrop" class="source-backdrop" alt="画作环境母版" hidden />
+        <div class="source-backdrop-vignette" aria-hidden="true"></div>
         <canvas id="wall-viewport"></canvas>
       </div>
       <div class="wall-state-readout" id="state-readout">留白墙 · 原作色境 · 静立</div>
@@ -77,18 +115,28 @@
       <div class="wall-menu-head">
         <span>生</span>
         <div>
-          <p>生物菜单</p>
-          <h2>拟生入壁</h2>
+          <p>原图驱动 · BIOLOGY</p>
+          <h2>画中生灵重构</h2>
         </div>
       </div>
 
-      <section class="wall-control-group">
-        <h3>生灵</h3>
+      <section class="wall-control-group wall-biology-builder">
+        <h3>画中生灵</h3>
         <div class="wall-button-list" id="bio-buttons"></div>
+        <p class="wall-selection-note wall-bio-selection-note" id="biology-note">选择生灵类别，以原图实例轮廓、深度和坐标建模。</p>
+        <button class="wall-build-button wall-bio-build-button" id="generate-biology" type="button">
+          <span>识别并生成独立模型</span>
+          <small id="biology-generation-state">正在检测场景转换引擎</small>
+        </button>
+        <p class="wall-independent-state wall-bio-independent-state" id="bio-independent-model-state">等待生物实例遮罩 · 尚无独立 Three.js 实体</p>
+        <div class="wall-action-row wall-bio-independent-actions">
+          <button class="btn small" id="separate-biology-models" type="button" disabled>分离查看</button>
+          <button class="btn small" id="restore-biology-models" type="button" disabled>归位对映</button>
+        </div>
       </section>
 
       <section class="wall-control-group">
-        <h3>体色</h3>
+        <h3>原作体色 · 保留</h3>
         <div class="wall-swatch-row" id="bio-palette"></div>
       </section>
 
@@ -106,13 +154,13 @@
         <h3>结构</h3>
         <div class="wall-action-row">
           <button class="btn small" id="skeleton-toggle" type="button" aria-pressed="false">骨相</button>
-          <button class="btn small" id="rebuild-creature" type="button">重构</button>
+          <button class="btn small" id="rebuild-creature" type="button">程序化备选</button>
         </div>
       </section>
     </aside>
   </main>
 
   <div class="toast" id="wall-toast"></div>
-  <script type="module" src="js/wall-workspace.js"></script>
+  <script type="module" src="js/wall-workspace.js?v=4"></script>
 </body>
 </html>

@@ -1,0 +1,111 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - heading "物种实验室" [level=1] [ref=e3]
+    - link "← 返回首页" [ref=e4] [cursor=pointer]:
+      - /url: home.html
+  - paragraph [ref=e5]: 以生物学分类为骨、以网格剖分为肉、以状态机为魂，逐层拟造可游走的生灵。
+  - generic [ref=e6]:
+    - navigation "造物模块" [ref=e7]:
+      - paragraph [ref=e8]: 拟生造物管线
+      - list [ref=e9]:
+        - listitem [ref=e10]:
+          - button "壹 物种数据仓库" [ref=e11] [cursor=pointer]:
+            - generic [ref=e12]: 壹
+            - generic [ref=e13]: 物种数据仓库
+        - listitem [ref=e14]:
+          - button "贰 骨骼解剖学装配器" [ref=e15] [cursor=pointer]:
+            - generic [ref=e16]: 贰
+            - generic [ref=e17]: 骨骼解剖学装配器
+        - listitem [ref=e18]:
+          - button "叁 程序化网格生成器" [ref=e19] [cursor=pointer]:
+            - generic [ref=e20]: 叁
+            - generic [ref=e21]: 程序化网格生成器
+        - listitem [ref=e22]:
+          - button "肆 状态机动画驱动器" [ref=e23] [cursor=pointer]:
+            - generic [ref=e24]: 肆
+            - generic [ref=e25]: 状态机动画驱动器
+      - paragraph [ref=e26]: 习性 · 档案
+      - list [ref=e27]:
+        - listitem [ref=e28]:
+          - button "伍 习性语义画像" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]: 伍
+            - generic [ref=e31]: 习性语义画像
+        - listitem [ref=e32]:
+          - button "陆 物种档案" [ref=e33] [cursor=pointer]:
+            - generic [ref=e34]: 陆
+            - generic [ref=e35]: 物种档案
+        - listitem [ref=e36]:
+          - button "柒 物种关系" [ref=e37] [cursor=pointer]:
+            - generic [ref=e38]: 柒
+            - generic [ref=e39]: 物种关系
+    - main [ref=e40]:
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - button "重建模型" [ref=e43] [cursor=pointer]
+          - button "自定义物种" [ref=e45] [cursor=pointer]
+          - generic [ref=e46]: 模块四 · 状态机动画
+        - generic [ref=e49]:
+          - button "静立" [ref=e50] [cursor=pointer]
+          - button "行走" [ref=e51] [cursor=pointer]
+          - button "小跑" [ref=e52] [cursor=pointer]
+          - button "匍匐" [ref=e53] [cursor=pointer]
+          - button "扑击" [ref=e54] [cursor=pointer]
+      - group "模块一 · 物种数据仓库" [ref=e57]:
+        - generic [ref=e58]: 模块一 · 物种数据仓库
+        - paragraph [ref=e59]: 以生物分类与拉丁学名驱动骨架选取，以空间边界盒（Bounding Box）约束真实体量。
+        - generic [ref=e60]:
+          - generic [ref=e61]: 物种中文名
+          - textbox [ref=e62]: 自定义物种
+        - generic [ref=e63]:
+          - generic [ref=e64]: 拉丁学名
+          - textbox [ref=e65]: Species nova
+        - generic [ref=e66]:
+          - generic [ref=e67]: 纲
+          - combobox [ref=e68]:
+            - option "哺乳纲 Mammalia" [selected]
+            - option "鸟纲 Aves"
+            - option "爬行纲 Reptilia"
+            - option "两栖纲 Amphibia"
+            - option "鱼纲 Pisces"
+            - option "昆虫纲 Insecta"
+        - generic [ref=e69]:
+          - generic [ref=e70]: 解剖型
+          - combobox [ref=e71]:
+            - option "猫科（趾行）"
+            - option "犬科"
+            - option "蹄行（偶/奇蹄）"
+            - option "兔形（跳跃）"
+            - option "啮齿"
+            - option "熊形（跖行）"
+            - option "禽类"
+            - option "跳跃型（后肢发达）" [selected]
+            - option "蛇形"
+            - option "节肢"
+        - generic [ref=e72]:
+          - generic [ref=e73]: 分类索引
+          - textbox [ref=e74]: CARNIVORA-FELIDAE
+        - generic [ref=e75]:
+          - generic [ref=e76]: 边界盒 X（宽）
+          - slider [ref=e77]: "0.3"
+          - generic [ref=e78]: "0.20"
+        - generic [ref=e79]:
+          - generic [ref=e80]: 边界盒 Y（总高）
+          - slider [ref=e81]: "0.4"
+          - generic [ref=e82]: "0.30"
+        - generic [ref=e83]:
+          - generic [ref=e84]: 边界盒 Z（长）
+          - slider [ref=e85]: "0.6"
+          - generic [ref=e86]: "0.50"
+        - generic [ref=e87]:
+          - generic [ref=e88]: 肩高 Withers
+          - slider [ref=e89]: "0.22"
+          - generic [ref=e90]: "0.22"
+        - generic [ref=e91]:
+          - generic [ref=e92]: 生物学参考
+          - textbox [ref=e93]: 真实东北虎肩高约 0.95–1.10m
+        - generic [ref=e94]:
+          - generic [ref=e95]: 耳长
+          - slider [ref=e96]: "0.13"
+          - generic [ref=e97]: "0.13"
+        - group [ref=e98]:
+          - generic "以图拟形 · 上传参考图自动推断" [ref=e99] [cursor=pointer]
