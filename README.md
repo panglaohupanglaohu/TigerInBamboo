@@ -38,7 +38,7 @@
 - **天气**：温度决定雨雪（>0℃ 雨丝 / ≤0℃ 落雪），风向统一驱动雨雪飘移与竹摆
 - **物种关系矩阵**：在配置页以"捕食 / 警戒回避 / 互利 / 竞争"等关系配置智能体间作用（对应论文中的 predator–prey、fear/hunger 驱动模型）
 - **物种实验室**（`lab.html`）：上传图片 → 轮廓/主轴/主色分析**推断解剖结构**（解剖类型 + 体型比例）→ 程序化建模；以**生物运动学**（腿倒摆自然频率 / Froude 数）计算步态 → 让生物在**拟生环境**（溪涧/梅塘/雪竹/远山）中科学运动；**意思模块**以物种生态语义 × 栖息环境拟合行为先验，回灌状态机。保存后入溪涧图漫游并按关系矩阵互动
-- **拟生环境工作空间**（`wall-workspace.html`）：home 画框中的原作先进入像素锁定的 Scene Lift 管线；MapAnything/Depth Anything 恢复逐像素深度，Grounding DINO + SAM 2.1 分别提取左侧山石、草木、水域和右侧鸟、兽、鱼、蝶的实例轮廓与画中坐标。每个环境或生物实例都建立为拥有独立原点、前后表面和边界侧壁的封闭 Three.js `BufferGeometry`，可以“分离查看”并精确“归位对映”；整幅画只作为低透明度坐标参照。未检测到的元素不会用随机几何体顶替，TRELLIS.2 只负责在同一对象锚点补全不可见背面/PBR 体积。
+- **拟生环境工作空间**（`wall-workspace.html`）：home 画框中的原作先进入候选审稿管线；Depth Anything 恢复逐像素深度，Grounding DINO + SAM 2.1 分别提取左侧山石、草木、水域和右侧鸟、兽、鱼、蝶的透明实例裁剪与画中坐标。页面先把候选高亮给用户确认，不把遮罩浮雕当作成品；确认后才把透明 PNG 裁剪送入当前图生 3D 引擎：Linux/CUDA 优先 TRELLIS.2，本机无 CUDA 时自动使用 TripoSR fallback；生成的 GLB/PBR 模型回装原画锚点。未检测到或未确认的元素不会用剪影、随机几何体顶替。
 - **回展厅光点**：竹虎（`tiger.html`）与寒梅（`plum.html`）场景页右下角均设环形呼吸光点，一键返回展厅（`home.html`）
 
 ## 技术要点
@@ -463,11 +463,12 @@ For a CPU/MPS development machine that does not yet have MapAnything, the same w
 `depth-anything/Depth-Anything-V2-Small-hf` model as a clearly labelled relative-depth fallback. MapAnything
 remains first priority whenever it is installed; only MapAnything results are labelled metric/camera-aware.
 
-### Optional TRELLIS.2 object-completion worker
+### Optional image-to-3D worker
 
-TRELLIS.2 is intentionally not the scene-layout engine. Install the official
+The image-to-3D worker is intentionally not the detector or scene-layout engine. It chooses TRELLIS.2 when CUDA is available,
+and falls back to the bundled TripoSR checkout on local CPU/MPS Macs. Install the official
 [`microsoft/TRELLIS.2`](https://github.com/microsoft/TRELLIS.2) environment on a Linux host with a supported
-NVIDIA GPU, then run the bundled adapter for future masked object completion:
+NVIDIA GPU for the highest-fidelity path, or run the same adapter locally for TripoSR fallback:
 
 ```bash
 pip install fastapi uvicorn
@@ -476,7 +477,7 @@ TRELLIS2_SERVER_URL=http://127.0.0.1:7862 ./start.sh
 ```
 
 The main backend keeps both worker addresses server-side. Scene Lift owns depth, masks, scale, and placement;
-TRELLIS.2 may only replace a selected masked layer while retaining those anchors.
+the image-to-3D worker may only generate a user-confirmed candidate crop while retaining that candidate's original artwork anchor.
 
 ## Configuration
 

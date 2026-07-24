@@ -124,15 +124,18 @@ const state = {
   sceneLiftResult: null,
   sceneLiftCache: new Map(),
   independentLayerCount: 0,
+  reviewCandidateCount: 0,
   pbrLayerCount: 0,
   modelsExploded: false,
   bioSceneLiftResult: null,
   bioSceneLiftCache: new Map(),
   bioIndependentLayerCount: 0,
+  bioReviewCandidateCount: 0,
   bioPbrLayerCount: 0,
   bioModelsExploded: false,
   bioGenerationBusy: false,
   trellisOnline: false,
+  imageTo3dLabel: "图生 3D",
   generationBusy: false,
   gait: 0,
   orbit: 0,
@@ -164,6 +167,10 @@ let artworkFrame = null;
 let independentLayerMeshes = new Map();
 let bioLayerMeshes = new Map();
 const gltfLoader = new GLTFLoader();
+const candidateReview = {
+  environment: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
+  biology: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
+};
 
 async function main() {
   initThree();
@@ -335,17 +342,21 @@ async function applySource(source) {
   state.sceneLiftResult = null;
   state.sceneLiftCache = new Map();
   state.independentLayerCount = 0;
+  state.reviewCandidateCount = 0;
   state.pbrLayerCount = 0;
   state.modelsExploded = false;
   independentLayerMeshes = new Map();
   state.bioSceneLiftResult = null;
   state.bioSceneLiftCache = new Map();
   state.bioIndependentLayerCount = 0;
+  state.bioReviewCandidateCount = 0;
   state.bioPbrLayerCount = 0;
   state.bioModelsExploded = false;
   state.bioGenerationBusy = false;
   bioLayerMeshes = new Map();
   state.generationMode = "image-locked";
+  resetReviewState("environment");
+  resetReviewState("biology");
   updateSourceCopy();
   await setWallArtwork(state.source);
 
@@ -454,8 +465,8 @@ function renderEnvironmentButtons() {
     const result = state.sceneLiftCache.get(selected.id);
     const count = result?.layers?.length || 0;
     const suffix = result
-      ? (count ? `已建立 ${count} 个独立 Three.js 实体，可分别变换与替换。` : "画中未确认该要素，系统不会生成替代物。")
-      : "点击“按原画锁位重建”提取深度、轮廓和坐标。";
+      ? (count ? `已识别 ${count} 个候选，请先确认裁剪，再生成 3D 模型。` : "画中未确认该要素，系统不会生成替代物。")
+      : "点击“识别候选对象”提取实例裁剪、深度和画中坐标。";
     note.textContent = `${catalog.label} · ${selected.label}：${selected.note}；${suffix}`;
   }
 }
@@ -604,8 +615,13 @@ function selectBiologySubject(kind) {
   clearCreatureFromScene({ keepBiology: true });
   const subject = biologySubject(kind);
   const cached = state.bioSceneLiftCache.get(subject.id);
-  if (cached) installBiologySceneLiftResult(cached, subject);
-  else clearBiologyModels();
+  if (cached) {
+    if (candidateReview.biology.subject?.id !== subject.id || candidateReview.biology.result !== cached) {
+      installBiologySceneLiftResult(cached, subject);
+    }
+  } else {
+    clearBiologyModels();
+  }
   renderBioButtons();
   renderPalette("bio-palette", "bio");
   updateBiologyModelState(subject);
@@ -619,8 +635,8 @@ function updateBiologySelectionNote() {
   const result = state.bioSceneLiftCache.get(subject.id);
   const count = result?.layers?.length || 0;
   const suffix = result
-    ? (count ? `已建立 ${count} 个独立 3D 实体，并保留画中锚点。` : "画中未确认该生物，不生成替代物。")
-    : "点击“识别并生成独立模型”提取实例遮罩、深度与坐标。";
+    ? (count ? `已识别 ${count} 个候选，请确认裁剪后再生成生物 3D 模型。` : "画中未确认该生物，不生成替代物。")
+    : "点击“识别候选生灵”提取实例裁剪、深度与坐标。";
   note.textContent = `${subject.label} · 识别提示“${subject.prompt.replace(/\.$/, "")}”；${suffix}`;
 }
 
@@ -639,13 +655,13 @@ async function checkSceneLiftStatus() {
     const line = el("generation-state");
     if (line) {
       line.textContent = state.sceneLiftOnline
-        ? (state.sceneLiftSegmentation ? "深度与语义锁位可用" : "深度锁位可用 · 语义分割待连接")
-        : "本地图像锁位可用 · AI 深度服务待连接";
+        ? (state.sceneLiftSegmentation ? "可识别候选裁剪 · 等待确认" : "深度可用 · 语义分割待连接")
+        : "AI 识别服务待连接";
     }
     const biologyLine = el("biology-generation-state");
     if (biologyLine) {
       biologyLine.textContent = state.sceneLiftOnline && state.sceneLiftSegmentation
-        ? "实例识别、深度与原画锚点可用"
+        ? "可识别候选裁剪 · 等待确认"
         : "Grounded SAM 2 实例分割待连接";
     }
   } catch (_) {
@@ -657,6 +673,8 @@ async function checkSceneLiftStatus() {
     }
     const biologyLine = el("biology-generation-state");
     if (biologyLine) biologyLine.textContent = "生物实例分割服务待连接";
+    const line = el("generation-state");
+    if (line) line.textContent = "AI 识别服务待连接";
   }
 }
 
@@ -666,18 +684,32 @@ async function checkTrellisStatus() {
     const response = await fetch("/api/trellis2/status", { cache: "no-store" });
     const info = await response.json();
     state.trellisOnline = Boolean(response.ok && info.available);
+    state.imageTo3dLabel = resolveImageTo3dLabel(info);
     if (badge) {
       badge.dataset.state = state.trellisOnline ? "online" : "offline";
-      badge.textContent = state.trellisOnline ? "TRELLIS.2 已连接" : "TRELLIS.2 待连接";
+      badge.textContent = state.trellisOnline ? `${state.imageTo3dLabel} 已连接` : `${state.imageTo3dLabel} 待连接`;
       badge.title = info.reason || info.model || "";
     }
   } catch (_) {
     state.trellisOnline = false;
+    state.imageTo3dLabel = "图生 3D";
     if (badge) {
       badge.dataset.state = "offline";
-      badge.textContent = "TRELLIS.2 待连接";
+      badge.textContent = "图生3D待连接";
     }
   }
+}
+
+function resolveImageTo3dLabel(info = {}) {
+  const engine = `${info.engine || ""}`.toLowerCase();
+  const model = `${info.model || ""}`;
+  if (engine.includes("triposr") || model.toLowerCase().includes("triposr")) return "TripoSR";
+  if (engine.includes("trellis") || model.toLowerCase().includes("trellis")) return "TRELLIS.2";
+  return model || "图生 3D";
+}
+
+function imageTo3dLabel() {
+  return state.imageTo3dLabel || "图生 3D";
 }
 
 async function generateEnvironmentFromSource() {
@@ -691,21 +723,19 @@ async function generateEnvironmentFromSource() {
   const subject = environmentSubject(state.envSubject);
   const cached = state.sceneLiftCache.get(subject.id);
   if (cached) {
-    installSceneLiftResult(cached, subject);
+    installCandidateReview("environment", cached, subject);
     if (line) line.textContent = describeSceneLiftResult(cached, subject);
-    showToast(`已恢复“${subject.label}”的原画锁位结果`);
+    showToast(`已恢复“${subject.label}”候选，请确认裁剪后生成 3D`);
     return;
   }
-  if (!state.sceneLiftOnline) {
-    state.generationMode = "image-locked";
-    setEnvironment(state.envSubject);
-    if (line) line.textContent = "已构建原画像素锁定浮雕 · 未虚构物体";
-    showToast("转换服务未连接：保留原画位置与轮廓，不再随机造景");
+  if (!state.sceneLiftOnline || !state.sceneLiftSegmentation) {
+    if (line) line.textContent = "识别服务未连接 · 不生成剪影替代物";
+    showToast("需要 Grounded SAM 2 先识别候选裁剪");
     return;
   }
   state.generationBusy = true;
   if (button) button.disabled = true;
-  if (line) line.textContent = `正在解析“${subject.label}”的深度、轮廓与画中坐标…`;
+  if (line) line.textContent = `正在识别“${subject.label}”候选，并准备给你审裁剪…`;
   try {
     const response = await fetch("/api/scene-lift/analyze", {
       method: "POST",
@@ -730,22 +760,11 @@ async function generateEnvironmentFromSource() {
       throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "对象分割失败："));
     }
     state.sceneLiftCache.set(subject.id, result);
-    installSceneLiftResult(result, subject);
-    if (result.layers?.length && state.trellisOnline) {
-      if (line) line.textContent = `${describeSceneLiftResult(result, subject)} · 正在逐物体补全体积…`;
-      state.pbrLayerCount = await completeIndependentLayers(result.layers, subject);
-      updateIndependentModelState(subject);
-      updateReadout();
-    }
-    if (line) {
-      const pbr = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 个 PBR 体积已回装` : "";
-      line.textContent = `${describeSceneLiftResult(result, subject)}${pbr}`;
-    }
-    showToast(result.layers?.length ? `“${subject.label}”已按原画轮廓锁位` : `未在画中确认“${subject.label}”，未凭空生成`);
+    installCandidateReview("environment", result, subject);
+    if (line) line.textContent = describeSceneLiftResult(result, subject);
+    showToast(result.layers?.length ? `请检查“${subject.label}”裁剪，确认后再生成 3D` : `未在画中确认“${subject.label}”，未凭空生成`);
   } catch (err) {
     console.error("[wall-workspace] scene lift failed", err);
-    state.generationMode = "image-locked";
-    setEnvironment(state.envSubject);
     const currentLine = el("generation-state");
     if (currentLine) currentLine.textContent = `AI 转换失败 · ${err?.message || "未知错误"}`;
     showToast(err?.message || "场景转换失败");
@@ -766,24 +785,14 @@ function validateSceneLiftResult(result) {
 }
 
 function installSceneLiftResult(result, subject) {
-  state.sceneLiftResult = result;
-  state.referenceMap = {
-    width: result.depth.width,
-    height: result.depth.height,
-    values: Float32Array.from(result.depth.values),
-    validRle: result.depth.validRle || null,
-    aspect: result.image?.width && result.image?.height ? result.image.width / result.image.height : undefined,
-    source: result.engine?.geometry || "MapAnything",
-  };
-  state.generationMode = "scene-lift";
-  setEnvironment(subject.id);
+  installCandidateReview("environment", result, subject);
 }
 
 function describeSceneLiftResult(result, subject) {
   const count = result.layers?.length || 0;
   const geometry = result.engine?.geometry || "MapAnything";
-  if (!count) return `${geometry} 深度已锁定 · 画中未确认“${subject.label}”，未生成替代物`;
-  return `${geometry} 深度 + Grounded SAM 2 轮廓 · ${count} 个“${subject.label}”独立 Three.js 实体已建立`;
+  if (!count) return `${geometry} 深度已读 · 画中未识别到“${subject.label}”候选`;
+  return `${geometry} 深度 + Grounded SAM 2 · ${count} 个“${subject.label}”候选待确认`;
 }
 
 async function generateBiologyFromSource() {
@@ -796,10 +805,10 @@ async function generateBiologyFromSource() {
   const subject = biologySubject();
   const cached = state.bioSceneLiftCache.get(subject.id);
   if (cached) {
-    installBiologySceneLiftResult(cached, subject);
+    installCandidateReview("biology", cached, subject);
     const line = el("biology-generation-state");
     if (line) line.textContent = describeBiologyResult(cached, subject);
-    showToast(`已恢复“${subject.label}”的原画锚定模型`);
+    showToast(`已恢复“${subject.label}”候选，请确认裁剪后生成 3D`);
     return;
   }
   if (!state.sceneLiftOnline || !state.sceneLiftSegmentation) {
@@ -812,7 +821,7 @@ async function generateBiologyFromSource() {
   state.bioGenerationBusy = true;
   if (button) button.disabled = true;
   const initialLine = el("biology-generation-state");
-  if (initialLine) initialLine.textContent = `正在识别“${subject.label}”的实例、轮廓、深度与画中坐标…`;
+  if (initialLine) initialLine.textContent = `正在识别“${subject.label}”候选，并准备给你审裁剪…`;
   try {
     const response = await fetch("/api/scene-lift/analyze", {
       method: "POST",
@@ -836,23 +845,10 @@ async function generateBiologyFromSource() {
     if (segmentationFailure) throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "生物实例分割失败："));
 
     state.bioSceneLiftCache.set(subject.id, result);
-    installBiologySceneLiftResult(result, subject);
-    if (result.layers?.length && state.trellisOnline) {
-      const line = el("biology-generation-state");
-      if (line) line.textContent = `${describeBiologyResult(result, subject)} · 正在逐实例补全 PBR 体积…`;
-      state.bioPbrLayerCount = await completeLayerModels(
-        result.layers,
-        subject,
-        bioLayerMeshes,
-        biologyReferenceMap(result),
-        4126
-      );
-      updateBiologyModelState(subject);
-    }
+    installCandidateReview("biology", result, subject);
     const line = el("biology-generation-state");
-    const pbr = state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 个 PBR 体积已回装` : "";
-    if (line) line.textContent = `${describeBiologyResult(result, subject)}${pbr}`;
-    showToast(result.layers?.length ? `“${subject.label}”已生成独立模型并锁定原画坐标` : `画中未确认“${subject.label}”，未生成替代物`);
+    if (line) line.textContent = describeBiologyResult(result, subject);
+    showToast(result.layers?.length ? `请检查“${subject.label}”裁剪，确认后再生成 3D` : `画中未确认“${subject.label}”，未生成替代物`);
   } catch (err) {
     console.error("[wall-workspace] biology scene lift failed", err);
     clearBiologyModels();
@@ -868,6 +864,10 @@ async function generateBiologyFromSource() {
 }
 
 function biologyReferenceMap(result) {
+  return referenceMapFromResult(result);
+}
+
+function referenceMapFromResult(result) {
   return {
     width: result.depth.width,
     height: result.depth.height,
@@ -878,22 +878,370 @@ function biologyReferenceMap(result) {
   };
 }
 
-function installBiologySceneLiftResult(result, subject) {
-  state.bioSceneLiftResult = result;
-  state.bioPbrLayerCount = 0;
-  state.bioModelsExploded = false;
-  buildBiologyImageLockedModels(result, subject);
-  updateBiologySelectionNote();
-  updateBiologyModelState(subject);
-  renderBioButtons();
+function resetReviewState(scope) {
+  const review = candidateReview[scope];
+  if (!review) return;
+  review.result = null;
+  review.subject = null;
+  review.selectedId = null;
+  review.generatingIds = new Set();
+  review.generatedIds = new Set();
+  review.cropUrls = new Map();
+  review.previewMeshes = new Map();
+  const panel = el(scope === "biology" ? "biology-candidate-panel" : "environment-candidate-panel");
+  if (panel) {
+    panel.hidden = true;
+    panel.innerHTML = "";
+  }
+  if (scope === "biology") state.bioReviewCandidateCount = 0;
+  else state.reviewCandidateCount = 0;
+}
+
+function installCandidateReview(scope, result, subject) {
+  const isBiology = scope === "biology";
+  const review = candidateReview[scope];
+  if (!review) return;
+  const ref = referenceMapFromResult(result);
+  review.result = result;
+  review.subject = subject;
+  review.selectedId = null;
+  review.generatingIds = new Set();
+  review.generatedIds = new Set();
+  review.cropUrls = new Map();
+  review.previewMeshes = new Map();
+
+  if (isBiology) {
+    state.bioSceneLiftResult = result;
+    state.bioPbrLayerCount = 0;
+    state.bioIndependentLayerCount = 0;
+    state.bioModelsExploded = false;
+    bioLayerMeshes = new Map();
+    clearGroup(bioGroup);
+    if (state.creature) {
+      scene.remove(state.creature);
+      disposeObject(state.creature);
+      state.creature = null;
+    }
+    clearSkeletonOverlay();
+    state.creatureRecord = null;
+  } else {
+    state.sceneLiftResult = result;
+    state.referenceMap = ref;
+    state.generationMode = "candidate-review";
+    state.pbrLayerCount = 0;
+    state.independentLayerCount = 0;
+    state.modelsExploded = false;
+    independentLayerMeshes = new Map();
+    clearGroup(envGroup);
+    snowPoints = null;
+    waterSurfaces = [];
+    swayingPlants = [];
+  }
+
+  const count = buildCandidatePreviewAnchors(scope, result, subject, ref);
+  if (isBiology) state.bioReviewCandidateCount = count;
+  else state.reviewCandidateCount = count;
+
+  const firstLayer = reviewLayerList(scope)[0];
+  if (firstLayer) setReviewSelection(scope, firstLayer.id, false);
+  renderCandidateReview(scope);
+  if (isBiology) {
+    updateBiologySelectionNote();
+    updateBiologyModelState(subject);
+    renderBioButtons();
+  } else {
+    updateIndependentModelState(subject);
+    renderEnvironmentButtons();
+  }
   updateReadout();
+}
+
+function buildCandidatePreviewAnchors(scope, result, subject, ref) {
+  const review = candidateReview[scope];
+  const group = scope === "biology" ? bioGroup : envGroup;
+  const frame = ensureArtworkFrame(ref);
+  const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
+  for (const layer of layers) {
+    const entity = createCandidatePreviewEntity(scope, ref, layer, frame);
+    if (!entity) continue;
+    group.add(entity);
+    review.previewMeshes.set(layer.id, entity);
+  }
+  frameArtworkCamera(false);
+  return review.previewMeshes.size;
+}
+
+function ensureArtworkFrame(ref) {
+  const aspect = clamp(ref.aspect || ref.width / ref.height || 1.6, 0.45, 3.4);
+  const width = aspect >= 1 ? 5.8 : 5.8 * aspect;
+  const height = width / aspect;
+  const centerY = Math.max(1.72, height * 0.5 + 0.08);
+  const baseZ = -1.35;
+  artworkFrame = { width, height, centerY, z: baseZ };
+  return artworkFrame;
+}
+
+function createCandidatePreviewEntity(scope, ref, layer, frame) {
+  const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
+  const isolated = createIndependentLayerGeometry(ref, mask, layer, frame.width, frame.height, false);
+  if (!isolated) return null;
+  const color = scope === "biology" ? 0xb94c3e : 0xdab25d;
+  const fill = new THREE.MeshBasicMaterial({
+    color,
+    transparent: true,
+    opacity: 0.18,
+    side: THREE.DoubleSide,
+    depthTest: false,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const surface = new THREE.Mesh(isolated.geometry, fill);
+  surface.renderOrder = 28;
+  surface.userData = {
+    reviewAnchor: true,
+    layerId: layer.id,
+    sourceBbox: layer.bbox,
+    sourceAnchor: layer.anchor || null,
+  };
+  const outline = new THREE.Mesh(
+    isolated.geometry.clone(),
+    new THREE.MeshBasicMaterial({
+      color,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.42,
+      depthTest: false,
+      depthWrite: false,
+      toneMapped: false,
+    })
+  );
+  outline.renderOrder = 29;
+  outline.userData.reviewOutline = true;
+
+  const entity = new THREE.Group();
+  entity.position.set(isolated.anchor.x, frame.centerY + isolated.anchor.y, frame.z + isolated.anchor.z + 0.1);
+  entity.userData = {
+    reviewCandidate: true,
+    independentModel: true,
+    layerId: layer.id,
+    subjectId: layer.subjectId,
+    sourceBbox: layer.bbox,
+    sourceAnchor: layer.anchor || null,
+    homePosition: { x: entity.position.x, y: entity.position.y, z: entity.position.z },
+    surface,
+    outline,
+  };
+  entity.add(surface, outline);
+  return entity;
+}
+
+function reviewLayerList(scope) {
+  const review = candidateReview[scope];
+  if (!review?.result || !review.subject) return [];
+  return (review.result.layers || []).filter((layer) => layer.subjectId === review.subject.id && review.previewMeshes.has(layer.id));
+}
+
+function setReviewSelection(scope, layerId, render = true) {
+  const review = candidateReview[scope];
+  if (!review || !layerId) return;
+  review.selectedId = layerId;
+  for (const [id, entity] of review.previewMeshes.entries()) {
+    applyCandidateVisualState(scope, id, entity);
+  }
+  if (render) renderCandidateReview(scope);
+}
+
+function applyCandidateVisualState(scope, layerId, entity) {
+  const review = candidateReview[scope];
+  const selected = review.selectedId === layerId;
+  const generated = review.generatedIds.has(layerId);
+  const generating = review.generatingIds.has(layerId);
+  const fill = entity.userData.surface?.material;
+  const outline = entity.userData.outline?.material;
+  const color = generated ? 0x73c58f : generating ? 0xdab25d : scope === "biology" ? 0xb94c3e : 0xdab25d;
+  if (fill) {
+    fill.color.setHex(color);
+    fill.opacity = generated ? (selected ? 0.18 : 0.04) : selected ? 0.46 : 0.16;
+    fill.needsUpdate = true;
+  }
+  if (outline) {
+    outline.color.setHex(color);
+    outline.opacity = selected ? 0.76 : generated ? 0.28 : 0.34;
+    outline.needsUpdate = true;
+  }
+  if (entity.userData.surface) entity.userData.surface.visible = !generated;
+  if (entity.userData.outline) entity.userData.outline.visible = selected || !generated;
+}
+
+function renderCandidateReview(scope) {
+  const isBiology = scope === "biology";
+  const panel = el(isBiology ? "biology-candidate-panel" : "environment-candidate-panel");
+  const review = candidateReview[scope];
+  if (!panel || !review?.result || !review.subject) {
+    if (panel) panel.hidden = true;
+    return;
+  }
+  const layers = reviewLayerList(scope);
+  panel.hidden = false;
+  panel.innerHTML = "";
+
+  const head = document.createElement("div");
+  head.className = "wall-candidate-head";
+  const title = document.createElement("b");
+  title.textContent = layers.length ? `${layers.length} 个候选 · 请确认裁剪是否正确` : "未识别到候选";
+  const prompt = document.createElement("span");
+  prompt.textContent = layers.length
+    ? `先点高亮检查位置；确认后才调用 ${imageTo3dLabel()} 生成真正 GLB 模型。`
+    : "没有通过分割审查的对象，系统不会用剪影或随机模型顶替。";
+  head.append(title, prompt);
+  panel.appendChild(head);
+
+  for (const [index, layer] of layers.entries()) {
+    const card = document.createElement("div");
+    card.className = "wall-candidate-card";
+    card.classList.toggle("is-selected", review.selectedId === layer.id);
+    card.classList.toggle("is-generated", review.generatedIds.has(layer.id));
+    card.addEventListener("click", () => setReviewSelection(scope, layer.id));
+
+    const image = document.createElement("img");
+    image.alt = `${review.subject.label} 候选裁剪`;
+    image.src = cropUrlForReview(scope, layer);
+
+    const copy = document.createElement("div");
+    copy.className = "wall-candidate-copy";
+    const label = document.createElement("b");
+    label.textContent = `${review.subject.label}候选 ${index + 1}`;
+    const score = document.createElement("small");
+    score.textContent = candidateMeta(layer);
+    const actions = document.createElement("div");
+    actions.className = "wall-candidate-actions";
+
+    const select = document.createElement("button");
+    select.type = "button";
+    select.textContent = review.selectedId === layer.id ? "已高亮" : "高亮位置";
+    select.disabled = review.selectedId === layer.id;
+    select.addEventListener("click", (event) => {
+      event.stopPropagation();
+      setReviewSelection(scope, layer.id);
+    });
+
+    const generate = document.createElement("button");
+    generate.type = "button";
+    const generated = review.generatedIds.has(layer.id);
+    const generating = review.generatingIds.has(layer.id);
+    generate.textContent = generated ? "已生成 GLB" : generating ? "生成中" : "确认生成3D";
+    generate.disabled = generated || generating;
+    generate.addEventListener("click", (event) => {
+      event.stopPropagation();
+      confirmReviewLayer(scope, layer.id);
+    });
+
+    actions.append(select, generate);
+    copy.append(label, score, actions);
+    card.append(image, copy);
+    panel.appendChild(card);
+  }
+}
+
+function candidateMeta(layer) {
+  const score = Number.isFinite(layer.score) ? `置信 ${Math.round(layer.score * 100)}%` : "语义候选";
+  const area = Number.isFinite(layer.coverage) ? `覆盖 ${(layer.coverage * 100).toFixed(1)}%` : "";
+  return [score, area, "透明 PNG 裁剪"].filter(Boolean).join(" · ");
+}
+
+function cropUrlForReview(scope, layer) {
+  const review = candidateReview[scope];
+  if (review.cropUrls.has(layer.id)) return review.cropUrls.get(layer.id);
+  try {
+    const ref = scope === "biology" ? referenceMapFromResult(review.result) : state.referenceMap;
+    const url = createLayerCropDataUrl(layer, ref);
+    review.cropUrls.set(layer.id, url);
+    return url;
+  } catch (err) {
+    console.warn("[wall-workspace] candidate crop failed", err);
+    return transparentPixel();
+  }
+}
+
+function transparentPixel() {
+  return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mP8z8BQDwAFgwJ/l9gdrwAAAABJRU5ErkJggg==";
+}
+
+async function confirmReviewLayer(scope, layerId) {
+  const review = candidateReview[scope];
+  const layer = reviewLayerList(scope).find((candidate) => candidate.id === layerId);
+  if (!review?.subject || !layer) return;
+  setReviewSelection(scope, layerId);
+  await checkTrellisStatus();
+  const line = el(scope === "biology" ? "biology-generation-state" : "generation-state");
+  if (!state.trellisOnline) {
+    if (line) line.textContent = "图生 3D 引擎未连接 · 候选已高亮，但不会用剪影冒充 3D";
+    showToast("图生 3D 引擎未连接，无法生成真正 GLB");
+    return;
+  }
+
+  review.generatingIds.add(layerId);
+  applyCandidateVisualState(scope, layerId, review.previewMeshes.get(layerId));
+  renderCandidateReview(scope);
+  if (line) line.textContent = `正在把“${review.subject.label}”候选送入 ${imageTo3dLabel()} 图生 3D…`;
+  try {
+    const crop = cropUrlForReview(scope, layer);
+    const response = await fetch("/api/trellis2/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: crop,
+        name: `${state.source?.name || "artwork"}-${scope}-${layer.id}`,
+        domain: review.subject.domain,
+        subject: review.subject.id,
+        layerId: layer.id,
+        seed: (scope === "biology" ? 4126 : 2026) + review.generatedIds.size,
+      }),
+    });
+    if (!response.ok) {
+      let message = `${imageTo3dLabel()} ${response.status}`;
+      try { message = (await response.json()).detail || message; } catch (_) { /* ignore */ }
+      throw new Error(message);
+    }
+    const gltf = await parseGeneratedGlb(await response.arrayBuffer());
+    const anchorEntity = review.previewMeshes.get(layer.id);
+    installGeneratedLayer(gltf.scene, layer, anchorEntity);
+    review.generatedIds.add(layer.id);
+    if (scope === "biology") {
+      bioLayerMeshes.set(layer.id, anchorEntity);
+      state.bioIndependentLayerCount = bioLayerMeshes.size;
+      state.bioPbrLayerCount = review.generatedIds.size;
+      updateBiologyModelState(review.subject);
+    } else {
+      independentLayerMeshes.set(layer.id, anchorEntity);
+      state.independentLayerCount = independentLayerMeshes.size;
+      state.pbrLayerCount = review.generatedIds.size;
+      updateIndependentModelState(review.subject);
+    }
+    if (line) line.textContent = `${review.subject.label} · ${review.generatedIds.size} 个 ${imageTo3dLabel()} GLB 已回装原画锚点`;
+    showToast("确认裁剪已生成 3D 模型，并回装到原画位置");
+  } catch (err) {
+    console.error("[wall-workspace] confirmed image-to-3d failed", err);
+    if (line) line.textContent = `图生 3D 失败 · ${err?.message || "未知错误"}`;
+    showToast(err?.message || "图生 3D 失败");
+  } finally {
+    review.generatingIds.delete(layerId);
+    const anchorEntity = review.previewMeshes.get(layerId);
+    if (anchorEntity) applyCandidateVisualState(scope, layerId, anchorEntity);
+    renderCandidateReview(scope);
+    updateReadout();
+  }
+}
+
+function installBiologySceneLiftResult(result, subject) {
+  installCandidateReview("biology", result, subject);
 }
 
 function describeBiologyResult(result, subject) {
   const count = result.layers?.length || 0;
   const geometry = result.engine?.geometry || "MapAnything";
-  if (!count) return `${geometry} 深度已锁定 · 画中未确认“${subject.label}”`;
-  return `${geometry} 深度 + Grounded SAM 2 实例 · ${count} 个独立生物 3D 模型已建立`;
+  if (!count) return `${geometry} 深度已读 · 画中未识别到“${subject.label}”候选`;
+  return `${geometry} 深度 + Grounded SAM 2 实例 · ${count} 个候选待确认`;
 }
 
 function buildBiologyImageLockedModels(result, subject) {
@@ -988,16 +1336,20 @@ function updateBiologyModelState(subject = biologySubject()) {
   if (!node) return;
   const result = state.bioSceneLiftCache.get(subject.id);
   if (!result) {
-    node.textContent = "等待生物实例遮罩 · 尚无独立 Three.js 实体";
+    node.textContent = "等待候选确认 · 尚无 2D→3D 生物模型";
+    return;
+  }
+  if (state.bioReviewCandidateCount && !state.bioIndependentLayerCount) {
+    node.textContent = `${state.bioReviewCandidateCount} 个候选待确认 · 先审裁剪，再生成 ${imageTo3dLabel()} GLB`;
     return;
   }
   if (!state.bioIndependentLayerCount) {
     node.textContent = `画中未确认“${subject.label}” · 0 个实体 · 未生成替代物`;
     return;
   }
-  const pbr = state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 个 PBR 体积` : " · 原画封闭网格";
+  const pbr = state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 个 ${imageTo3dLabel()} GLB` : " · 等待图生 3D";
   const view = state.bioModelsExploded ? " · 当前为分离检查视图" : " · 当前与原画坐标对映";
-  node.textContent = `${state.bioIndependentLayerCount} 个独立生物实体 · 独立原点/实例遮罩/深度锚点${pbr}${view}`;
+  node.textContent = `${state.bioIndependentLayerCount} 个已确认生物 2D→3D 模型 · 独立原点/原画锚点${pbr}${view}`;
 }
 
 function setBiologyModelsExploded(exploded) {
@@ -1052,7 +1404,7 @@ async function completeLayerModels(layers, subject, registry, referenceMap, seed
           seed: seedBase + completed,
         }),
       });
-      if (!response.ok) throw new Error(`TRELLIS.2 ${response.status}`);
+      if (!response.ok) throw new Error(`${imageTo3dLabel()} ${response.status}`);
       const gltf = await parseGeneratedGlb(await response.arrayBuffer());
       installGeneratedLayer(gltf.scene, layer, anchorMesh);
       completed++;
@@ -1165,7 +1517,11 @@ function installGeneratedLayer(root, layer, anchorEntity) {
   anchorEntity.add(root);
   anchorEntity.userData.pbrCompleted = true;
   anchorMesh.userData.pbrCompleted = true;
-  if (anchorMesh.material && !Array.isArray(anchorMesh.material)) {
+  if (anchorMesh.userData.reviewAnchor) {
+    anchorMesh.visible = false;
+    const outline = anchorEntity.userData.outline;
+    if (outline) outline.visible = false;
+  } else if (anchorMesh.material && !Array.isArray(anchorMesh.material)) {
     anchorMesh.material.transparent = true;
     anchorMesh.material.opacity = 0.78;
     anchorMesh.material.depthWrite = false;
@@ -1214,46 +1570,36 @@ function setEnvironment(id) {
   state.envSubject = subject.id;
   state.envDomain = subject.domain;
   state.envResolved = subject.preset;
-  if (state.generationMode !== "scene-lift" || state.sceneLiftResult !== state.sceneLiftCache.get(subject.id)) {
-    const cached = state.sceneLiftCache.get(subject.id);
-    if (cached) {
-      state.sceneLiftResult = cached;
-      state.referenceMap = {
-        width: cached.depth.width,
-        height: cached.depth.height,
-        values: Float32Array.from(cached.depth.values),
-        validRle: cached.depth.validRle || null,
-        aspect: cached.image?.width && cached.image?.height ? cached.image.width / cached.image.height : undefined,
-        source: cached.engine?.geometry || "MapAnything",
-      };
-      state.generationMode = "scene-lift";
-    } else {
-      state.sceneLiftResult = null;
-      state.generationMode = "image-locked";
-    }
-  }
   if (subject.domain === "water" && Number.isFinite(subject.flow)) {
     state.flow = subject.flow;
     if (el("flow-range")) el("flow-range").value = String(state.flow);
   }
-  clearGroup(envGroup);
-  snowPoints = null;
-  waterSurfaces = [];
-  swayingPlants = [];
-
-  independentLayerMeshes = new Map();
-  state.independentLayerCount = 0;
-  state.pbrLayerCount = 0;
-  state.modelsExploded = false;
-
   const preset = ENV_LIBRARY[state.envResolved] || ENV_LIBRARY.blank;
   const tint = new THREE.Color(state.envTint || DEFAULT_PALETTE[0]);
   ground.material.color.setHex(preset.ground).lerp(tint, 0.2);
   ground.visible = !state.source?.dataUrl;
   wall.visible = false;
-  if (state.source?.dataUrl && sourceTexture && state.referenceMap) {
-    buildImageLockedEnvironment(subject);
+
+  const cached = state.sceneLiftCache.get(subject.id);
+  if (cached) {
+    if (candidateReview.environment.subject?.id !== subject.id || candidateReview.environment.result !== cached) {
+      installCandidateReview("environment", cached, subject);
+    }
+    return;
   }
+
+  clearGroup(envGroup);
+  snowPoints = null;
+  waterSurfaces = [];
+  swayingPlants = [];
+  independentLayerMeshes = new Map();
+  state.independentLayerCount = 0;
+  state.reviewCandidateCount = 0;
+  state.pbrLayerCount = 0;
+  state.modelsExploded = false;
+  state.sceneLiftResult = null;
+  state.generationMode = state.source?.dataUrl ? "candidate-review" : "image-locked";
+  resetReviewState("environment");
   updateIndependentModelState(subject);
   applyAtmosphere();
   renderEnvironmentButtons();
@@ -1272,16 +1618,20 @@ function updateIndependentModelState(subject) {
   if (restore) restore.disabled = !canTransform || !state.modelsExploded;
   const result = state.sceneLiftCache.get(subject.id);
   if (!result) {
-    node.textContent = "等待语义遮罩 · 尚无独立 Three.js 实体";
+    node.textContent = "等待候选确认 · 尚无 2D→3D 模型";
+    return;
+  }
+  if (state.reviewCandidateCount && !state.independentLayerCount) {
+    node.textContent = `${state.reviewCandidateCount} 个候选待确认 · 先审裁剪，再生成 ${imageTo3dLabel()} GLB`;
     return;
   }
   if (!state.independentLayerCount) {
     node.textContent = `画中未确认“${subject.label}” · 0 个实体 · 未生成替代物`;
     return;
   }
-  const pbr = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 个已完成 PBR 体积补全` : " · 原画封闭网格";
+  const pbr = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 个 ${imageTo3dLabel()} GLB` : " · 等待图生 3D";
   const view = state.modelsExploded ? " · 当前为分离检查视图" : " · 当前与原画坐标对映";
-  node.textContent = `${state.independentLayerCount} 个独立 Three.js 实体 · 独立原点/遮罩边界/深度锚点${pbr}${view}`;
+  node.textContent = `${state.independentLayerCount} 个已确认 2D→3D 模型 · 独立原点/原画锚点${pbr}${view}`;
 }
 
 function setIndependentModelsExploded(exploded) {
@@ -2060,8 +2410,10 @@ function clearBiologyModels() {
   bioLayerMeshes = new Map();
   state.bioSceneLiftResult = null;
   state.bioIndependentLayerCount = 0;
+  state.bioReviewCandidateCount = 0;
   state.bioPbrLayerCount = 0;
   state.bioModelsExploded = false;
+  resetReviewState("biology");
   updateBiologyModelState();
 }
 
@@ -2530,7 +2882,9 @@ function updateReadout() {
   const envLabel = subject ? `${ENVIRONMENT_CATALOG[subject.domain].label} · ${subject.label}` : "画境";
   const bioSubject = biologySubject();
   const bio = state.bioIndependentLayerCount
-    ? `${bioSubject.label} · ${state.bioIndependentLayerCount} 独立实体${state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} PBR` : ""}`
+    ? `${bioSubject.label} · ${state.bioIndependentLayerCount} 个 2D→3D 模型${state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} GLB` : ""}`
+    : state.bioReviewCandidateCount
+      ? `${bioSubject.label} · ${state.bioReviewCandidateCount} 候选待确认`
     : state.creature
       ? (state.creatureKind === "auto" ? `${BIO_LIBRARY.auto.label} · ${BIO_LIBRARY[resolveCreatureKind("auto")]?.label}` : BIO_LIBRARY[state.creatureKind]?.label)
       : "生物尚未入境";
@@ -2540,9 +2894,11 @@ function updateReadout() {
   const geometryLabel = geometryEngine.includes("Depth-Anything") ? "Depth Anything V2" : geometryEngine.includes("map-anything") ? "MapAnything" : geometryEngine;
   const hasSemanticLayer = Boolean(state.sceneLiftResult?.layers?.length);
   const pbrSuffix = state.pbrLayerCount ? ` · ${state.pbrLayerCount} PBR 实体` : "";
-  const generator = state.generationMode === "scene-lift"
-    ? `${geometryLabel} 深度${hasSemanticLayer ? " · Grounded SAM 2 独立实体" : " · 原画像素锁定"}${pbrSuffix}`
-    : state.source?.dataUrl ? "原画像素锁定浮雕" : "等待画作";
+  const generator = state.independentLayerCount
+    ? `${geometryLabel} 深度 · ${state.independentLayerCount} 个 ${imageTo3dLabel()} GLB${pbrSuffix}`
+    : state.reviewCandidateCount
+      ? `${geometryLabel} 深度 · Grounded SAM 2 · ${state.reviewCandidateCount} 候选待确认`
+      : state.source?.dataUrl ? "等待候选识别" : "等待画作";
   if (readout) readout.textContent = `${envLabel} · ${generator} · ${bio} · ${behavior}`;
   const meta = el("source-meta");
   if (meta) meta.textContent = state.estimate

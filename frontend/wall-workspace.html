@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>拟生环境工作空间 · 世界古典美术拟生平台</title>
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/wall-workspace.css?v=4" />
+  <link rel="stylesheet" href="css/wall-workspace.css?v=5" />
 </head>
 <body class="wall-workspace-page">
   <header class="wall-workspace-header">
@@ -37,12 +37,12 @@
 
       <section class="wall-model-card" aria-label="原画场景抬升转换引擎">
         <div class="wall-model-topline">
-          <div><span>OPEN SOURCE · SCENE LIFT</span><b>MAPANYTHING + GROUNDED SAM 2</b></div>
+          <div><span>OPEN SOURCE · IMAGE TO 3D</span><b>GROUNDED SAM 2 + TRELLIS.2 / TRIPOSR</b></div>
           <em id="scene-lift-status" data-state="checking">检测中</em>
         </div>
-        <p>逐像素深度、语义遮罩与画中坐标先锁定；TRELLIS.2 仅补全局部物体背面。</p>
-        <div class="wall-model-stages"><span>深度</span><i>›</i><span>分割</span><i>›</i><span>回投</span><i>›</i><span>补面</span></div>
-        <span id="trellis-status" class="wall-secondary-status" data-state="checking">TRELLIS.2 检测中</span>
+        <p>先识别候选并高亮裁剪；确认后才把透明实例送入当前图生 3D 引擎生成 GLB。</p>
+        <div class="wall-model-stages"><span>识别</span><i>›</i><span>审图</span><i>›</i><span>高亮</span><i>›</i><span>图生3D</span></div>
+        <span id="trellis-status" class="wall-secondary-status" data-state="checking">图生3D检测中</span>
       </section>
 
       <section class="wall-control-group wall-environment-builder">
@@ -55,10 +55,11 @@
         <div class="wall-subject-grid" id="env-buttons"></div>
         <p class="wall-selection-note" id="environment-note">选择画中要素，以原图色彩与轮廓构建。</p>
         <button class="wall-build-button" id="generate-environment" type="button">
-          <span>按原画锁位重建</span>
+          <span>识别候选对象</span>
           <small id="generation-state">正在检测场景转换引擎</small>
         </button>
-        <p class="wall-independent-state" id="independent-model-state">等待语义遮罩 · 尚无独立 Three.js 实体</p>
+        <div class="wall-candidate-panel" id="environment-candidate-panel" hidden></div>
+        <p class="wall-independent-state" id="independent-model-state">等待确认生成 · 尚无 2D→3D 模型</p>
         <div class="wall-action-row wall-independent-actions">
           <button class="btn small" id="separate-environment-models" type="button" disabled>分离查看</button>
           <button class="btn small" id="restore-environment-models" type="button" disabled>归位对映</button>
@@ -125,10 +126,11 @@
         <div class="wall-button-list" id="bio-buttons"></div>
         <p class="wall-selection-note wall-bio-selection-note" id="biology-note">选择生灵类别，以原图实例轮廓、深度和坐标建模。</p>
         <button class="wall-build-button wall-bio-build-button" id="generate-biology" type="button">
-          <span>识别并生成独立模型</span>
+          <span>识别候选生灵</span>
           <small id="biology-generation-state">正在检测场景转换引擎</small>
         </button>
-        <p class="wall-independent-state wall-bio-independent-state" id="bio-independent-model-state">等待生物实例遮罩 · 尚无独立 Three.js 实体</p>
+        <div class="wall-candidate-panel wall-bio-candidate-panel" id="biology-candidate-panel" hidden></div>
+        <p class="wall-independent-state wall-bio-independent-state" id="bio-independent-model-state">等待确认生成 · 尚无 2D→3D 生物模型</p>
         <div class="wall-action-row wall-bio-independent-actions">
           <button class="btn small" id="separate-biology-models" type="button" disabled>分离查看</button>
           <button class="btn small" id="restore-biology-models" type="button" disabled>归位对映</button>
@@ -161,6 +163,6 @@
   </main>
 
   <div class="toast" id="wall-toast"></div>
-  <script type="module" src="js/wall-workspace.js?v=4"></script>
+  <script type="module" src="js/wall-workspace.js?v=5"></script>
 </body>
 </html>

@@ -360,27 +360,29 @@ def trellis2_status() -> dict:
         return {
             "available": False,
             "model": "microsoft/TRELLIS.2-4B",
-            "reason": "未设置 TRELLIS2_SERVER_URL；原图程序预览仍可使用",
+            "engine": "none",
+            "reason": "未设置 TRELLIS2_SERVER_URL；图生 3D 服务未连接",
         }
     try:
         req = urllib.request.Request(f"{server}/health", headers={"Accept": "application/json"})
         with urllib.request.urlopen(req, timeout=3) as upstream:
             info = json.loads(upstream.read().decode("utf-8"))
-        available = info.get("status") == "ok" and info.get("cuda", True) is not False
+        available = info.get("status") == "ok" and bool(info.get("available", info.get("cuda", True)))
         return {
             "available": available,
             "model": info.get("model", "microsoft/TRELLIS.2-4B"),
-            "reason": None if available else "TRELLIS.2 worker 未检测到可用 CUDA GPU",
+            "engine": info.get("engine", "trellis2"),
+            "reason": None if available else info.get("reason") or "图生 3D worker 未就绪",
         }
     except (OSError, ValueError, urllib.error.URLError) as exc:
-        return {"available": False, "model": "microsoft/TRELLIS.2-4B", "reason": f"生成服务未就绪：{exc}"}
+        return {"available": False, "model": "microsoft/TRELLIS.2-4B", "engine": "none", "reason": f"生成服务未就绪：{exc}"}
 
 
 @app.post("/api/trellis2/generate")
 def trellis2_generate(payload: dict = Body(...)) -> Response:
     server = _trellis2_server_url()
     if not server:
-        raise HTTPException(status_code=503, detail="TRELLIS.2 服务未连接；请设置 TRELLIS2_SERVER_URL")
+        raise HTTPException(status_code=503, detail="图生 3D 服务未连接；请设置 TRELLIS2_SERVER_URL")
     image = payload.get("image")
     if not isinstance(image, str) or not image.startswith("data:image/"):
         raise HTTPException(status_code=400, detail="image 必须是 data:image/... 格式的画作")
@@ -400,11 +402,11 @@ def trellis2_generate(payload: dict = Body(...)) -> Response:
             content_type = upstream.headers.get_content_type()
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")[:800]
-        raise HTTPException(status_code=exc.code, detail=detail or "TRELLIS.2 生成失败") from exc
+        raise HTTPException(status_code=exc.code, detail=detail or "图生 3D 生成失败") from exc
     except (OSError, urllib.error.URLError) as exc:
-        raise HTTPException(status_code=502, detail=f"无法访问 TRELLIS.2 生成服务：{exc}") from exc
+        raise HTTPException(status_code=502, detail=f"无法访问图生 3D 生成服务：{exc}") from exc
     if len(model) < 20:
-        raise HTTPException(status_code=502, detail="TRELLIS.2 返回了空模型")
+        raise HTTPException(status_code=502, detail="图生 3D 服务返回了空模型")
     return Response(content=model, media_type=content_type or "model/gltf-binary")
 
 
