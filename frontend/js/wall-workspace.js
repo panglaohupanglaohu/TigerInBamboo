@@ -164,6 +164,7 @@ let waterSurfaces = [];
 let swayingPlants = [];
 let sourceTexture = null;
 let artworkFrame = null;
+let artworkReferencePlane = null;
 let independentLayerMeshes = new Map();
 let bioLayerMeshes = new Map();
 const gltfLoader = new GLTFLoader();
@@ -959,7 +960,7 @@ function installCandidateReview(scope, result, subject) {
 function buildCandidatePreviewAnchors(scope, result, subject, ref) {
   const review = candidateReview[scope];
   const group = scope === "biology" ? bioGroup : envGroup;
-  const frame = ensureArtworkFrame(ref);
+  const frame = syncArtworkReferencePlane(ref, 1) || ensureArtworkFrame(ref);
   const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
   for (const layer of layers) {
     const entity = createCandidatePreviewEntity(scope, ref, layer, frame);
@@ -979,6 +980,41 @@ function ensureArtworkFrame(ref) {
   const baseZ = -1.35;
   artworkFrame = { width, height, centerY, z: baseZ };
   return artworkFrame;
+}
+
+function setThreeSourceBackdropActive(active) {
+  const shell = el("wall-viewport")?.parentElement;
+  shell?.classList.toggle("three-source-active", Boolean(active));
+}
+
+function clearArtworkReferencePlane() {
+  if (!artworkReferencePlane) return;
+  scene?.remove(artworkReferencePlane);
+  disposeObject(artworkReferencePlane);
+  artworkReferencePlane = null;
+}
+
+function syncArtworkReferencePlane(ref, opacity = 1) {
+  if (!scene || !sourceTexture || !ref) return null;
+  const frame = ensureArtworkFrame(ref);
+  clearArtworkReferencePlane();
+  const material = new THREE.MeshBasicMaterial({
+    map: sourceTexture,
+    transparent: opacity < 1,
+    opacity,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(frame.width, frame.height), material);
+  plane.name = "artwork-reference-plane";
+  plane.position.set(0, frame.centerY, frame.z - 0.035);
+  plane.renderOrder = 0;
+  plane.userData = { artworkReferencePlane: true };
+  scene.add(plane);
+  artworkReferencePlane = plane;
+  setThreeSourceBackdropActive(true);
+  return frame;
 }
 
 function createCandidatePreviewEntity(scope, ref, layer, frame) {
@@ -2768,9 +2804,11 @@ function tickButterflies(root, time) {
 
 async function setWallArtwork(source) {
   clearGroup(sourceGroup);
+  clearArtworkReferencePlane();
   const backdrop = el("source-backdrop");
   const shell = el("wall-viewport")?.parentElement;
   shell?.classList.remove("relief-active");
+  shell?.classList.remove("three-source-active");
   artworkFrame = null;
   if (sourceTexture) {
     sourceTexture.dispose();

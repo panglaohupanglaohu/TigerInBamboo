@@ -73,7 +73,7 @@
   实现"环境 × 习性"复合拟合，后续可接更细的生物习性库
 
 ### 拟生环境工作空间：原画 → 像素锁定 3D
-home 画框上传的图片暂存于 `sessionStorage`，`wall-workspace.js` 立即生成保守的原图参照面；该降级路径只提供轻微视差，不猜测山、树、水域或生物。连接 `tools/scene_lift_worker.py` 后，MapAnything（缺失时为 Depth Anything V2）返回逐像素深度，Grounded SAM 2 返回当前左右菜单所选对象的实例遮罩。前端把每个遮罩回投成独立封闭网格，而不是把整幅画统一隆起；水域动态只在对应遮罩内部发生。右侧生物实体同样保留原画色彩、独立锚点和归位坐标，行为动画始终以该锚点为基准。
+home 画框上传的图片暂存于 `sessionStorage`，`wall-workspace.js` 立即生成保守的原图参照面；该降级路径只提供轻微视差，不猜测山、树、水域或生物。连接 `tools/scene_lift_worker.py` 后，MapAnything（缺失时为 Depth Anything V2）返回逐像素深度，Grounded SAM 2 返回当前左右菜单所选对象的实例遮罩。前端把每个遮罩回投成独立封闭网格，而不是把整幅画统一隆起；水域动态只在对应遮罩内部发生。候选审稿高亮、原作参照面和确认后的 GLB 回装共用同一个 Three.js 原作平面，避免 CSS 背景图与 3D 锚点坐标错位。右侧生物实体同样保留原画色彩、独立锚点和归位坐标，行为动画始终以该锚点为基准。
 
 ### 竹：刚体 + 球铰
 每根竹是 Cannon 动态刚体（Box），竹脚以 `PointToPointConstraint` 球铰锚定地面；

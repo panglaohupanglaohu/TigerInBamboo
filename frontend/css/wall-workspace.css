@@ -710,8 +710,9 @@
 
 .wall-stage {
   min-width: 0;
+  align-self: start;
   display: grid;
-  grid-template-rows: auto minmax(480px, 1fr) auto;
+  grid-template-rows: auto auto auto;
   border: 1px solid rgba(43, 38, 32, 0.36);
   border-radius: 6px;
   overflow: hidden;
@@ -787,6 +788,7 @@
 
 .wall-canvas-shell {
   position: relative;
+  height: min(72vh, 760px);
   min-height: 480px;
   overflow: hidden;
   background: #151714;
@@ -810,11 +812,13 @@
   transition: opacity 180ms ease;
 }
 
-.wall-canvas-shell.relief-active .source-backdrop {
+.wall-canvas-shell.relief-active .source-backdrop,
+.wall-canvas-shell.three-source-active .source-backdrop {
   opacity: 0;
 }
 
-.wall-canvas-shell.relief-active .source-backdrop-vignette {
+.wall-canvas-shell.relief-active .source-backdrop-vignette,
+.wall-canvas-shell.three-source-active .source-backdrop-vignette {
   opacity: 0;
 }
 
@@ -831,8 +835,7 @@
   z-index: 2;
   display: block;
   width: 100%;
-  height: min(72vh, 760px);
-  min-height: 480px;
+  height: 100%;
   cursor: grab;
   touch-action: none;
 }
@@ -894,7 +897,7 @@
     min-height: 420px;
   }
 
-  #wall-viewport {
+  .wall-canvas-shell {
     height: 62vh;
   }
 }
