@@ -969,7 +969,8 @@ function buildCandidatePreviewAnchors(scope, result, subject, ref) {
   const frame = syncArtworkReferencePlane(ref, 1) || ensureArtworkFrame(ref);
   const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
   for (const layer of layers) {
-    const entity = createCandidatePreviewEntity(scope, ref, layer, frame);
+    layer.reconstructionProfile = buildReconstructionProfile(scope, ref, layer, subject);
+    const entity = createCandidatePreviewEntity(scope, ref, layer, frame, subject);
     if (!entity) continue;
     group.add(entity);
     review.previewMeshes.set(layer.id, entity);
@@ -1023,8 +1024,9 @@ function syncArtworkReferencePlane(ref, opacity = 1) {
   return frame;
 }
 
-function createCandidatePreviewEntity(scope, ref, layer, frame) {
+function createCandidatePreviewEntity(scope, ref, layer, frame, subject) {
   const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
+  if (!layer.reconstructionProfile) layer.reconstructionProfile = buildReconstructionProfile(scope, ref, layer, subject);
   const isolated = createIndependentLayerGeometry(ref, mask, layer, frame.width, frame.height, false);
   if (!isolated) return null;
   const color = scope === "biology" ? 0xb94c3e : 0xdab25d;
@@ -1045,6 +1047,7 @@ function createCandidatePreviewEntity(scope, ref, layer, frame) {
     layerId: layer.id,
     sourceBbox: layer.bbox,
     sourceAnchor: layer.anchor || null,
+    reconstructionProfile: layer.reconstructionProfile || null,
   };
   const outline = new THREE.Mesh(
     isolated.geometry.clone(),
@@ -1130,6 +1133,171 @@ function findCandidateEntity(object) {
     node = node.parent;
   }
   return null;
+}
+
+function buildReconstructionProfile(scope, ref, layer, subject = {}) {
+  const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
+  const metrics = analyzeMaskStructure(mask, ref.width, ref.height, layer);
+  const kind = classifyReconstructionKind(scope, subject, metrics);
+  const label = reconstructionKindLabel(kind);
+  const alignToPrincipalAxis = metrics.slenderness > 1.35 && kind !== "terrain-mass" && kind !== "water-surface";
+  const anisotropic = metrics.slenderness > 2.2 && ["vertical-stem", "branch-vine", "reed-bank", "water-surface"].includes(kind);
+  return {
+    version: 1,
+    scope,
+    subjectId: subject.id || layer.subjectId,
+    subjectLabel: subject.label || layer.label || "",
+    kind,
+    label,
+    bbox: layer.bbox || metrics.bbox,
+    coverage: layer.coverage || metrics.coverage,
+    metrics: {
+      aspect: +metrics.aspect.toFixed(5),
+      slenderness: +metrics.slenderness.toFixed(5),
+      screenAngleDeg: +THREE.MathUtils.radToDeg(metrics.screenAngle).toFixed(2),
+      worldAngleDeg: +THREE.MathUtils.radToDeg(metrics.worldAngle).toFixed(2),
+      majorPx: +metrics.majorPx.toFixed(2),
+      minorPx: +metrics.minorPx.toFixed(2),
+    },
+    crop: {
+      mode: anisotropic || kind === "vertical-stem" || kind === "branch-vine" ? "upright-structure" : "raw-instance",
+      upright: anisotropic || kind === "vertical-stem" || kind === "branch-vine",
+      rotationRad: +lineAngleDelta(metrics.screenAngle, Math.PI / 2).toFixed(6),
+    },
+    fit: {
+      alignToPrincipalAxis,
+      anisotropic,
+      rotationZ: +lineAngleDelta(Math.PI / 2, metrics.worldAngle).toFixed(6),
+      thicknessBias: kind === "water-surface" ? 0.08 : kind === "terrain-mass" ? 0.42 : anisotropic ? 0.22 : 0.36,
+    },
+  };
+}
+
+function analyzeMaskStructure(mask, width, height, layer = {}) {
+  let count = 0;
+  let sumX = 0;
+  let sumY = 0;
+  let minX = width;
+  let minY = height;
+  let maxX = 0;
+  let maxY = 0;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if (!mask[y * width + x]) continue;
+      count++;
+      sumX += x;
+      sumY += y;
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+  }
+  if (!count) {
+    const bbox = Array.isArray(layer.bbox) ? layer.bbox : [0, 0, 1, 1];
+    const bw = Math.max(0.001, bbox[2] - bbox[0]);
+    const bh = Math.max(0.001, bbox[3] - bbox[1]);
+    return {
+      bbox,
+      coverage: 0,
+      aspect: bw / bh,
+      slenderness: Math.max(bw, bh) / Math.min(bw, bh),
+      screenAngle: bh >= bw ? Math.PI / 2 : 0,
+      worldAngle: bh >= bw ? Math.PI / 2 : 0,
+      majorPx: Math.max(bw * width, bh * height),
+      minorPx: Math.min(bw * width, bh * height),
+    };
+  }
+  const meanX = sumX / count;
+  const meanY = sumY / count;
+  let covXX = 0;
+  let covXY = 0;
+  let covYY = 0;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if (!mask[y * width + x]) continue;
+      const dx = x - meanX;
+      const dy = y - meanY;
+      covXX += dx * dx;
+      covXY += dx * dy;
+      covYY += dy * dy;
+    }
+  }
+  covXX /= count;
+  covXY /= count;
+  covYY /= count;
+  const trace = covXX + covYY;
+  const spread = Math.sqrt(Math.max(0, (covXX - covYY) ** 2 + 4 * covXY * covXY));
+  const majorVariance = Math.max(0.000001, (trace + spread) / 2);
+  const minorVariance = Math.max(0.000001, (trace - spread) / 2);
+  let vx = covXY;
+  let vy = majorVariance - covXX;
+  if (Math.hypot(vx, vy) < 0.000001) {
+    vx = covXX >= covYY ? 1 : 0;
+    vy = covXX >= covYY ? 0 : 1;
+  }
+  const length = Math.hypot(vx, vy) || 1;
+  vx /= length;
+  vy /= length;
+  const bbox = [
+    minX / Math.max(1, width - 1),
+    minY / Math.max(1, height - 1),
+    (maxX + 1) / Math.max(1, width),
+    (maxY + 1) / Math.max(1, height),
+  ];
+  const bboxW = Math.max(0.001, bbox[2] - bbox[0]);
+  const bboxH = Math.max(0.001, bbox[3] - bbox[1]);
+  const majorPx = Math.sqrt(majorVariance) * 4;
+  const minorPx = Math.sqrt(minorVariance) * 4;
+  return {
+    bbox,
+    coverage: count / Math.max(1, width * height),
+    aspect: bboxW / bboxH,
+    slenderness: Math.max(bboxW, bboxH) / Math.min(bboxW, bboxH),
+    screenAngle: Math.atan2(vy, vx),
+    worldAngle: Math.atan2(-vy, vx),
+    majorPx,
+    minorPx,
+  };
+}
+
+function classifyReconstructionKind(scope, subject = {}, metrics = {}) {
+  const id = subject.id || "";
+  const kind = subject.kind || "";
+  if (scope === "biology") {
+    if (kind === "avian" || /bird|goose|crane|avian/.test(id)) return "avian-body";
+    if (kind === "fish" || /fish/.test(id)) return "fish-body";
+    if (kind === "insect" || /butterfly|insect/.test(id)) return "thin-wing-body";
+    return "creature-body";
+  }
+  if (subject.domain === "water") return "water-surface";
+  if (subject.domain === "terrain") return "terrain-mass";
+  if (["bamboo", "pine", "reed", "calamus"].includes(id) && metrics.slenderness > 1.6) return "vertical-stem";
+  if (["wisteria", "plum", "shore-herb", "ting-orchid"].includes(id) || metrics.slenderness > 2.4) return "branch-vine";
+  if (["lotus", "lotus-bloom"].includes(id)) return "aquatic-flower";
+  return "plant-cluster";
+}
+
+function reconstructionKindLabel(kind) {
+  return {
+    "vertical-stem": "竖向茎干",
+    "branch-vine": "枝藤骨架",
+    "plant-cluster": "草木簇",
+    "aquatic-flower": "水生花叶",
+    "water-surface": "水面薄层",
+    "terrain-mass": "地势体块",
+    "avian-body": "禽鸟体轴",
+    "fish-body": "鱼体轴",
+    "thin-wing-body": "薄翼体",
+    "creature-body": "生物体轴",
+  }[kind] || "结构层";
+}
+
+function lineAngleDelta(fromAngle, toAngle) {
+  let delta = toAngle - fromAngle;
+  while (delta > Math.PI / 2) delta -= Math.PI;
+  while (delta < -Math.PI / 2) delta += Math.PI;
+  return delta;
 }
 
 function reviewLayerList(scope) {
@@ -1259,7 +1427,8 @@ function renderCandidateReview(scope) {
 function candidateMeta(layer) {
   const score = Number.isFinite(layer.score) ? `置信 ${Math.round(layer.score * 100)}%` : "语义候选";
   const area = Number.isFinite(layer.coverage) ? `覆盖 ${(layer.coverage * 100).toFixed(1)}%` : "";
-  return [score, area, "透明 PNG 裁剪"].filter(Boolean).join(" · ");
+  const structure = layer.reconstructionProfile?.label ? `结构 ${layer.reconstructionProfile.label}` : "";
+  return [score, area, structure, "透明 PNG 裁剪"].filter(Boolean).join(" · ");
 }
 
 function cropUrlForReview(scope, layer) {
@@ -1298,7 +1467,10 @@ async function confirmReviewLayer(scope, layerId) {
   renderCandidateReview(scope);
   if (line) line.textContent = `正在把“${review.subject.label}”候选送入 ${imageTo3dLabel()} 图生 3D…`;
   try {
-    const crop = cropUrlForReview(scope, layer);
+    const ref = scope === "biology" ? referenceMapFromResult(review.result) : state.referenceMap;
+    const profile = layer.reconstructionProfile || buildReconstructionProfile(scope, ref, layer, review.subject);
+    layer.reconstructionProfile = profile;
+    const crop = createLayerCropDataUrl(layer, ref, { reconstruction: true, profile });
     const response = await fetch("/api/trellis2/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1308,6 +1480,7 @@ async function confirmReviewLayer(scope, layerId) {
         domain: review.subject.domain,
         subject: review.subject.id,
         layerId: layer.id,
+        reconstructionProfile: profile,
         seed: (scope === "biology" ? 4126 : 2026) + review.generatedIds.size,
       }),
     });
@@ -1318,7 +1491,7 @@ async function confirmReviewLayer(scope, layerId) {
     }
     const gltf = await parseGeneratedGlb(await response.arrayBuffer());
     const anchorEntity = review.previewMeshes.get(layer.id);
-    installGeneratedLayer(gltf.scene, layer, anchorEntity);
+    installGeneratedLayer(gltf.scene, layer, anchorEntity, profile);
     review.generatedIds.add(layer.id);
     if (scope === "biology") {
       bioLayerMeshes.set(layer.id, anchorEntity);
@@ -1504,7 +1677,9 @@ async function completeLayerModels(layers, subject, registry, referenceMap, seed
     const anchorMesh = registry.get(layer.id);
     if (!anchorMesh) continue;
     try {
-      const crop = createLayerCropDataUrl(layer, referenceMap);
+      const profile = layer.reconstructionProfile || buildReconstructionProfile(subject.domain === "biology" ? "biology" : "environment", referenceMap, layer, subject);
+      layer.reconstructionProfile = profile;
+      const crop = createLayerCropDataUrl(layer, referenceMap, { reconstruction: true, profile });
       const response = await fetch("/api/trellis2/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1514,12 +1689,13 @@ async function completeLayerModels(layers, subject, registry, referenceMap, seed
           domain: subject.domain,
           subject: subject.id,
           layerId: layer.id,
+          reconstructionProfile: profile,
           seed: seedBase + completed,
         }),
       });
       if (!response.ok) throw new Error(`${imageTo3dLabel()} ${response.status}`);
       const gltf = await parseGeneratedGlb(await response.arrayBuffer());
-      installGeneratedLayer(gltf.scene, layer, anchorMesh);
+      installGeneratedLayer(gltf.scene, layer, anchorMesh, profile);
       completed++;
     } catch (err) {
       console.warn(`[wall-workspace] PBR completion skipped for ${layer.id}`, err);
@@ -1528,7 +1704,7 @@ async function completeLayerModels(layers, subject, registry, referenceMap, seed
   return completed;
 }
 
-function createLayerCropDataUrl(layer, referenceMap = state.referenceMap) {
+function createLayerCropDataUrl(layer, referenceMap = state.referenceMap, options = {}) {
   const image = sourceTexture?.image;
   const ref = referenceMap;
   if (!image || !ref || !Array.isArray(layer.bbox) || layer.bbox.length !== 4) {
@@ -1588,10 +1764,33 @@ function createLayerCropDataUrl(layer, referenceMap = state.referenceMap) {
     canvas.height
   );
   context.globalCompositeOperation = "source-over";
+  if (options?.reconstruction) {
+    return normalizeCropCanvasForReconstruction(canvas, options.profile || layer.reconstructionProfile);
+  }
   return canvas.toDataURL("image/png");
 }
 
-function installGeneratedLayer(root, layer, anchorEntity) {
+function normalizeCropCanvasForReconstruction(canvas, profile) {
+  const rotation = Number(profile?.crop?.rotationRad) || 0;
+  if (!profile?.crop?.upright && Math.abs(rotation) < 0.01) return canvas.toDataURL("image/png");
+  const size = Math.max(192, Math.min(768, Math.ceil(Math.max(canvas.width, canvas.height) * 1.35)));
+  const out = document.createElement("canvas");
+  out.width = size;
+  out.height = size;
+  const context = out.getContext("2d");
+  context.clearRect(0, 0, size, size);
+  context.save();
+  context.translate(size / 2, size / 2);
+  context.rotate(rotation);
+  const scale = Math.min((size * 0.72) / Math.max(1, canvas.width), (size * 0.72) / Math.max(1, canvas.height));
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.drawImage(canvas, -canvas.width * scale / 2, -canvas.height * scale / 2, canvas.width * scale, canvas.height * scale);
+  context.restore();
+  return out.toDataURL("image/png");
+}
+
+function installGeneratedLayer(root, layer, anchorEntity, profile = layer.reconstructionProfile) {
   const anchorMesh = anchorEntity.userData.surface;
   if (!anchorMesh?.geometry) throw new Error(`独立实体 ${layer.id} 缺少原画表面`);
   root.traverse((node) => {
@@ -1607,7 +1806,7 @@ function installGeneratedLayer(root, layer, anchorEntity) {
   });
   anchorMesh.geometry.computeBoundingBox();
   const targetBox = anchorMesh.geometry.boundingBox.clone();
-  const fittedRoot = fitGeneratedRootToAnchor(root, targetBox, layer);
+  const fittedRoot = fitGeneratedRootToAnchor(root, targetBox, layer, profile);
   fittedRoot.userData = {
     ...fittedRoot.userData,
     ...root.userData,
@@ -1631,7 +1830,7 @@ function installGeneratedLayer(root, layer, anchorEntity) {
   }
 }
 
-function fitGeneratedRootToAnchor(root, targetBox, layer) {
+function fitGeneratedRootToAnchor(root, targetBox, layer, profile = layer.reconstructionProfile) {
   const fitGroup = new THREE.Group();
   fitGroup.name = "image-to-3d-anchor-fit";
   const orientedGroup = new THREE.Group();
@@ -1647,8 +1846,9 @@ function fitGeneratedRootToAnchor(root, targetBox, layer) {
 
   const sourceBox = new THREE.Box3().setFromObject(orientedGroup);
   const sourceSize = sourceBox.getSize(new THREE.Vector3());
-  const scale = generatedLayerFitScaleVector(sourceSize, targetSize);
+  const scale = generatedLayerFitScaleVector(sourceSize, targetSize, profile);
   fitGroup.scale.copy(scale);
+  if (profile?.fit?.alignToPrincipalAxis) fitGroup.rotation.z = Number(profile.fit.rotationZ) || 0;
   fitGroup.updateMatrixWorld(true);
 
   const fittedBox = new THREE.Box3().setFromObject(fitGroup);
@@ -1659,6 +1859,7 @@ function fitGeneratedRootToAnchor(root, targetBox, layer) {
     pbrCompletion: true,
     layerId: layer.id,
     sourceAnchor: layer.anchor || null,
+    reconstructionProfile: profile || null,
     axisFit: {
       orientation: orientation.name,
       sourceAspect: Number.isFinite(orientation.aspect) ? +orientation.aspect.toFixed(4) : null,
@@ -1702,7 +1903,7 @@ function planarAspect(size) {
   return Math.max(0.001, size.x) / Math.max(0.001, size.y);
 }
 
-function generatedLayerFitScaleVector(sourceSize, targetSize) {
+function generatedLayerFitScaleVector(sourceSize, targetSize, profile = null) {
   const safeSourceX = Math.max(sourceSize.x, 0.001);
   const safeSourceY = Math.max(sourceSize.y, 0.001);
   const safeSourceZ = Math.max(sourceSize.z, 0.001);
@@ -1710,7 +1911,7 @@ function generatedLayerFitScaleVector(sourceSize, targetSize) {
   const safeTargetY = Math.max(targetSize.y, 0.001);
   const targetMajor = Math.max(safeTargetX, safeTargetY);
   const targetMinor = Math.min(safeTargetX, safeTargetY);
-  const targetIsSlender = targetMajor / targetMinor > 2.2;
+  const targetIsSlender = targetMajor / targetMinor > 2.2 || Boolean(profile?.fit?.anisotropic);
   const uniform = Math.min(safeTargetX / safeSourceX, safeTargetY / safeSourceY) * 0.96;
   if (!targetIsSlender) {
     const safeUniform = clamp(uniform, 0.001, 80);
@@ -1719,7 +1920,8 @@ function generatedLayerFitScaleVector(sourceSize, targetSize) {
   const sx = clamp((safeTargetX / safeSourceX) * 0.96, 0.001, 80);
   const sy = clamp((safeTargetY / safeSourceY) * 0.98, 0.001, 80);
   const planarMean = Math.sqrt(Math.max(0.000001, sx * sy));
-  const sz = clamp(Math.min(planarMean * 0.78, Math.max(sx, sy) * 0.55, Math.max(safeTargetX, safeTargetY) / safeSourceZ * 0.22), 0.001, 80);
+  const thicknessBias = clamp(Number(profile?.fit?.thicknessBias) || 0.22, 0.04, 0.8);
+  const sz = clamp(Math.min(planarMean * 0.78, Math.max(sx, sy) * 0.55, Math.max(safeTargetX, safeTargetY) / safeSourceZ * thicknessBias), 0.001, 80);
   return new THREE.Vector3(sx, sy, sz);
 }
 
