@@ -15,12 +15,14 @@ go through a real single-image-to-mesh model instead of a flat mask extrusion.
 from __future__ import annotations
 
 import base64
+import inspect
 import io
 import os
 import sys
 import tempfile
 import threading
 from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
@@ -52,6 +54,9 @@ class GenerationRequest(BaseModel):
     name: str = "artwork"
     domain: str = "terrain"
     subject: str = "mountain"
+    layerId: str | None = None
+    reconstructionProfile: dict[str, Any] | None = None
+    objectReference: dict[str, Any] | None = None
     seed: int = Field(2026, ge=0, le=2**32 - 1)
 
 
@@ -181,10 +186,51 @@ def _generate_triposr(image: Image.Image) -> bytes:
     return data
 
 
-def _generate_trellis2(image: Image.Image, seed: int) -> bytes:
+def _reference_text(value: Any, max_items: int = 8) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        return ", ".join(str(item) for item in value[:max_items] if item)
+    if isinstance(value, dict):
+        return ", ".join(f"{key}: {val}" for key, val in value.items() if val)
+    return ""
+
+
+def _build_generation_prompts(request: GenerationRequest) -> tuple[str, str]:
+    reference = request.objectReference or {}
+    profile = request.reconstructionProfile or {}
+    label = reference.get("label") or request.subject
+    archetype = reference.get("archetype") or ""
+    parts = _reference_text(reference.get("parts"))
+    traits = _reference_text(reference.get("physicalTraits"))
+    geometry = _reference_text(reference.get("geometryHints"))
+    profile_kind = profile.get("label") or profile.get("kind") or ""
+    prompt = (
+        f"single real-world 3D object from a transparent artwork crop; subject {label}; "
+        f"structure {profile_kind}; morphology {archetype}; parts {parts}; physical traits {traits}; geometry {geometry}; "
+        "faithful to the crop silhouette, volumetric, coherent parts, not a flat cutout"
+    )
+    negatives = _reference_text(reference.get("negativeHints"))
+    negative_prompt = (
+        f"{negatives}; flat paper board, cardboard cutout, random proxy geometry, floating pieces, wrong orientation, "
+        "missing limbs, missing branches, melted blob"
+    )
+    return prompt[:1800], negative_prompt[:1200]
+
+
+def _generate_trellis2(image: Image.Image, seed: int, prompt: str = "", negative_prompt: str = "") -> bytes:
     pipeline = _load_pipeline()
     with _pipeline_lock:
-        mesh = pipeline.run(image, seed=seed)[0]
+        run_kwargs: dict[str, Any] = {"seed": seed}
+        try:
+            parameters = inspect.signature(pipeline.run).parameters
+            if prompt and "prompt" in parameters:
+                run_kwargs["prompt"] = prompt
+            if negative_prompt and "negative_prompt" in parameters:
+                run_kwargs["negative_prompt"] = negative_prompt
+        except (TypeError, ValueError):
+            pass
+        mesh = pipeline.run(image, **run_kwargs)[0]
         mesh.simplify(16_777_216)
 
         import o_voxel
@@ -259,9 +305,15 @@ def generate(request: GenerationRequest) -> Response:
     try:
         image = _decode_image(request.image)
         engine = _select_engine()
-        data = _generate_trellis2(image, request.seed) if engine == "trellis2" else _generate_triposr(image)
+        prompt, negative_prompt = _build_generation_prompts(request)
+        data = _generate_trellis2(image, request.seed, prompt, negative_prompt) if engine == "trellis2" else _generate_triposr(image)
     except (ValueError, RuntimeError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"image-to-3D generation failed: {exc}") from exc
-    return Response(content=data, media_type="model/gltf-binary")
+    reference = request.objectReference or {}
+    headers = {
+        "X-Image-To-3D-Engine": engine,
+        "X-Object-Reference": str(reference.get("label") or reference.get("key") or request.subject)[:120],
+    }
+    return Response(content=data, media_type="model/gltf-binary", headers=headers)

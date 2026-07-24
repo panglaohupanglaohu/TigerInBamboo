@@ -729,6 +729,7 @@ async function generateEnvironmentFromSource() {
   const subject = environmentSubject(state.envSubject);
   const cached = state.sceneLiftCache.get(subject.id);
   if (cached) {
+    await enrichCandidateObjectReferences("environment", cached, subject);
     installCandidateReview("environment", cached, subject);
     if (line) line.textContent = describeSceneLiftResult(cached, subject);
     showToast(`已恢复“${subject.label}”候选，请确认裁剪后生成 3D`);
@@ -765,6 +766,7 @@ async function generateEnvironmentFromSource() {
     if (state.sceneLiftSegmentation && segmentationFailure) {
       throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "对象分割失败："));
     }
+    await enrichCandidateObjectReferences("environment", result, subject);
     state.sceneLiftCache.set(subject.id, result);
     installCandidateReview("environment", result, subject);
     if (line) line.textContent = describeSceneLiftResult(result, subject);
@@ -811,6 +813,7 @@ async function generateBiologyFromSource() {
   const subject = biologySubject();
   const cached = state.bioSceneLiftCache.get(subject.id);
   if (cached) {
+    await enrichCandidateObjectReferences("biology", cached, subject);
     installCandidateReview("biology", cached, subject);
     const line = el("biology-generation-state");
     if (line) line.textContent = describeBiologyResult(cached, subject);
@@ -850,6 +853,7 @@ async function generateBiologyFromSource() {
     const segmentationFailure = result.warnings?.find((warning) => warning.startsWith("semantic segmentation unavailable:"));
     if (segmentationFailure) throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "生物实例分割失败："));
 
+    await enrichCandidateObjectReferences("biology", result, subject);
     state.bioSceneLiftCache.set(subject.id, result);
     installCandidateReview("biology", result, subject);
     const line = el("biology-generation-state");
@@ -882,6 +886,107 @@ function referenceMapFromResult(result) {
     aspect: result.image?.width && result.image?.height ? result.image.width / result.image.height : undefined,
     source: result.engine?.geometry || "MapAnything",
   };
+}
+
+function attachReconstructionProfiles(scope, result, subject, ref = referenceMapFromResult(result)) {
+  const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
+  for (const layer of layers) {
+    if (!layer.reconstructionProfile) layer.reconstructionProfile = buildReconstructionProfile(scope, ref, layer, subject);
+    if (layer.objectReference) applyObjectReferenceToProfile(layer.reconstructionProfile, layer.objectReference);
+  }
+  return layers;
+}
+
+async function enrichCandidateObjectReferences(scope, result, subject) {
+  const ref = referenceMapFromResult(result);
+  const layers = attachReconstructionProfiles(scope, result, subject, ref);
+  if (!layers.length) return result;
+  const line = el(scope === "biology" ? "biology-generation-state" : "generation-state");
+  if (line) line.textContent = `正在查询“${subject.label}”现实物象形态，再约束 2D→3D…`;
+  try {
+    const response = await fetch("/api/object-reference/lookup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        scope,
+        artwork: { name: state.source?.name || "artwork" },
+        subject,
+        layers: layers.map((layer) => ({
+          id: layer.id,
+          label: layer.label || subject.label,
+          bbox: layer.bbox,
+          coverage: layer.coverage,
+          reconstructionProfile: layer.reconstructionProfile,
+        })),
+      }),
+    });
+    if (!response.ok) throw new Error(`物象检索 ${response.status}`);
+    const info = await response.json();
+    const references = info.references || {};
+    for (const layer of layers) {
+      const objectReference = references[layer.id];
+      if (!objectReference) continue;
+      layer.objectReference = objectReference;
+      applyObjectReferenceToProfile(layer.reconstructionProfile, objectReference);
+    }
+    for (const warning of info.warnings || []) console.warn("[wall-workspace] object reference warning", warning);
+  } catch (err) {
+    console.warn("[wall-workspace] object reference lookup skipped", err);
+    for (const layer of layers) {
+      layer.objectReference = layer.objectReference || localObjectReferenceFallback(subject, layer.reconstructionProfile);
+      applyObjectReferenceToProfile(layer.reconstructionProfile, layer.objectReference);
+    }
+  }
+  return result;
+}
+
+function localObjectReferenceFallback(subject, profile = {}) {
+  const kind = profile.kind || "";
+  const id = subject.id || "";
+  const biology = subject.kind || "";
+  let label = subject.label || "物象";
+  if (biology === "avian" || kind === "avian-body") label = "禽鸟";
+  else if (biology === "fish" || kind === "fish-body") label = "鱼";
+  else if (biology === "insect" || kind === "thin-wing-body") label = "蝶虫";
+  else if (subject.domain === "water" || kind === "water-surface") label = "水面";
+  else if (subject.domain === "terrain" || kind === "terrain-mass") label = "地势";
+  else if (["bamboo", "pine", "plum", "reed", "lotus", "lotus-bloom", "wisteria"].includes(id)) label = subject.label;
+  return {
+    key: id || kind || "object",
+    label,
+    source: "browser-fallback",
+    llmUsed: false,
+    archetype: `${label} 的真实物理结构约束`,
+    geometryHints: {},
+    fitHints: {},
+    negativeHints: ["不要用剪影、纸板或随机几何体顶替确认后的图生 3D 模型"],
+  };
+}
+
+function applyObjectReferenceToProfile(profile, objectReference) {
+  if (!profile || !objectReference) return profile;
+  profile.objectReference = objectReference;
+  profile.fit = profile.fit || {};
+  profile.crop = profile.crop || {};
+  const fitHints = objectReference.fitHints || {};
+  const geometryHints = objectReference.geometryHints || {};
+  if (typeof fitHints.anisotropic === "boolean") profile.fit.anisotropic = fitHints.anisotropic;
+  const thicknessBias = Number(fitHints.thicknessBias);
+  if (Number.isFinite(thicknessBias)) profile.fit.thicknessBias = clamp(thicknessBias, 0.03, 0.75);
+  if (fitHints.avoidHorizontalRod) profile.fit.alignToPrincipalAxis = true;
+  if (geometryHints.primaryAxis === "vertical" || ["hollow-cylinder", "thin-cylinder"].includes(geometryHints.crossSection)) {
+    profile.crop.upright = true;
+    profile.fit.alignToPrincipalAxis = true;
+    if (!Number.isFinite(Number(fitHints.thicknessBias))) profile.fit.thicknessBias = Math.min(profile.fit.thicknessBias || 0.18, 0.18);
+  }
+  if (geometryHints.primaryAxis === "surface") {
+    profile.fit.anisotropic = false;
+    profile.fit.thicknessBias = Math.min(profile.fit.thicknessBias || 0.06, 0.08);
+  }
+  if (geometryHints.wing || geometryHints.fin || geometryHints.leaf === "thin-disc" || geometryHints.leaf === "thin-surface") {
+    profile.fit.thicknessBias = Math.min(profile.fit.thicknessBias || 0.14, 0.14);
+  }
+  return profile;
 }
 
 function resetReviewState(scope) {
@@ -969,7 +1074,8 @@ function buildCandidatePreviewAnchors(scope, result, subject, ref) {
   const frame = syncArtworkReferencePlane(ref, 1) || ensureArtworkFrame(ref);
   const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
   for (const layer of layers) {
-    layer.reconstructionProfile = buildReconstructionProfile(scope, ref, layer, subject);
+    if (!layer.reconstructionProfile) layer.reconstructionProfile = buildReconstructionProfile(scope, ref, layer, subject);
+    if (layer.objectReference) applyObjectReferenceToProfile(layer.reconstructionProfile, layer.objectReference);
     const entity = createCandidatePreviewEntity(scope, ref, layer, frame, subject);
     if (!entity) continue;
     group.add(entity);
@@ -1027,6 +1133,7 @@ function syncArtworkReferencePlane(ref, opacity = 1) {
 function createCandidatePreviewEntity(scope, ref, layer, frame, subject) {
   const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
   if (!layer.reconstructionProfile) layer.reconstructionProfile = buildReconstructionProfile(scope, ref, layer, subject);
+  if (layer.objectReference) applyObjectReferenceToProfile(layer.reconstructionProfile, layer.objectReference);
   const isolated = createIndependentLayerGeometry(ref, mask, layer, frame.width, frame.height, false);
   if (!isolated) return null;
   const color = scope === "biology" ? 0xb94c3e : 0xdab25d;
@@ -1147,6 +1254,7 @@ function buildReconstructionProfile(scope, ref, layer, subject = {}) {
     scope,
     subjectId: subject.id || layer.subjectId,
     subjectLabel: subject.label || layer.label || "",
+    objectReference: layer.objectReference || null,
     kind,
     label,
     bbox: layer.bbox || metrics.bbox,
@@ -1428,7 +1536,21 @@ function candidateMeta(layer) {
   const score = Number.isFinite(layer.score) ? `置信 ${Math.round(layer.score * 100)}%` : "语义候选";
   const area = Number.isFinite(layer.coverage) ? `覆盖 ${(layer.coverage * 100).toFixed(1)}%` : "";
   const structure = layer.reconstructionProfile?.label ? `结构 ${layer.reconstructionProfile.label}` : "";
-  return [score, area, structure, "透明 PNG 裁剪"].filter(Boolean).join(" · ");
+  const object = objectReferenceMeta(layer);
+  return [score, area, structure, object, "透明 PNG 裁剪"].filter(Boolean).join(" · ");
+}
+
+function objectReferenceMeta(layer) {
+  const reference = layer.objectReference || layer.reconstructionProfile?.objectReference;
+  if (!reference) return "";
+  const label = reference.label || reference.key || "物象";
+  const source = reference.llmUsed ? "LLM" : "";
+  return `物象 ${trimMetaText(label, 8)}${source ? `/${source}` : ""}`;
+}
+
+function trimMetaText(value, max = 10) {
+  const text = `${value || ""}`.trim();
+  return text.length > max ? `${text.slice(0, max)}…` : text;
 }
 
 function cropUrlForReview(scope, layer) {
@@ -1470,6 +1592,8 @@ async function confirmReviewLayer(scope, layerId) {
     const ref = scope === "biology" ? referenceMapFromResult(review.result) : state.referenceMap;
     const profile = layer.reconstructionProfile || buildReconstructionProfile(scope, ref, layer, review.subject);
     layer.reconstructionProfile = profile;
+    if (!layer.objectReference) layer.objectReference = localObjectReferenceFallback(review.subject, profile);
+    applyObjectReferenceToProfile(profile, layer.objectReference);
     const crop = createLayerCropDataUrl(layer, ref, { reconstruction: true, profile });
     const response = await fetch("/api/trellis2/generate", {
       method: "POST",
@@ -1481,6 +1605,7 @@ async function confirmReviewLayer(scope, layerId) {
         subject: review.subject.id,
         layerId: layer.id,
         reconstructionProfile: profile,
+        objectReference: layer.objectReference || profile.objectReference || null,
         seed: (scope === "biology" ? 4126 : 2026) + review.generatedIds.size,
       }),
     });
@@ -1679,6 +1804,8 @@ async function completeLayerModels(layers, subject, registry, referenceMap, seed
     try {
       const profile = layer.reconstructionProfile || buildReconstructionProfile(subject.domain === "biology" ? "biology" : "environment", referenceMap, layer, subject);
       layer.reconstructionProfile = profile;
+      if (!layer.objectReference) layer.objectReference = localObjectReferenceFallback(subject, profile);
+      applyObjectReferenceToProfile(profile, layer.objectReference);
       const crop = createLayerCropDataUrl(layer, referenceMap, { reconstruction: true, profile });
       const response = await fetch("/api/trellis2/generate", {
         method: "POST",
@@ -1690,6 +1817,7 @@ async function completeLayerModels(layers, subject, registry, referenceMap, seed
           subject: subject.id,
           layerId: layer.id,
           reconstructionProfile: profile,
+          objectReference: layer.objectReference || profile.objectReference || null,
           seed: seedBase + completed,
         }),
       });

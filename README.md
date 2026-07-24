@@ -38,7 +38,7 @@
 - **天气**：温度决定雨雪（>0℃ 雨丝 / ≤0℃ 落雪），风向统一驱动雨雪飘移与竹摆
 - **物种关系矩阵**：在配置页以"捕食 / 警戒回避 / 互利 / 竞争"等关系配置智能体间作用（对应论文中的 predator–prey、fear/hunger 驱动模型）
 - **物种实验室**（`lab.html`）：上传图片 → 轮廓/主轴/主色分析**推断解剖结构**（解剖类型 + 体型比例）→ 程序化建模；以**生物运动学**（腿倒摆自然频率 / Froude 数）计算步态 → 让生物在**拟生环境**（溪涧/梅塘/雪竹/远山）中科学运动；**意思模块**以物种生态语义 × 栖息环境拟合行为先验，回灌状态机。保存后入溪涧图漫游并按关系矩阵互动
-- **拟生环境工作空间**（`wall-workspace.html`）：home 画框中的原作先进入候选审稿管线；Depth Anything 恢复逐像素深度，Grounding DINO + SAM 2.1 分别提取左侧山石、草木、水域和右侧鸟、兽、鱼、蝶的透明实例裁剪与画中坐标。页面先把候选高亮给用户确认，不把遮罩浮雕当作成品；确认后才把透明 PNG 裁剪送入当前图生 3D 引擎：Linux/CUDA 优先 TRELLIS.2，本机无 CUDA 时自动使用 TripoSR fallback；生成的 GLB/PBR 模型回装原画锚点。未检测到或未确认的元素不会用剪影、随机几何体顶替。
+- **拟生环境工作空间**（`wall-workspace.html`）：home 画框中的原作先进入候选审稿管线；Depth Anything 恢复逐像素深度，Grounding DINO + SAM 2.1 分别提取左侧山石、草木、水域和右侧鸟、兽、鱼、蝶的透明实例裁剪与画中坐标。候选进入 `objectReference` 物象检索层，由外部 LLM/RAG 或内置物象库补充真实世界形态、部件、比例与生成禁忌；页面先把候选高亮给用户确认，不把遮罩浮雕当作成品；确认后才把透明 PNG 裁剪送入当前图生 3D 引擎：Linux/CUDA 优先 TRELLIS.2，本机无 CUDA 时自动使用 TripoSR fallback；生成的 GLB/PBR 模型回装原画锚点。未检测到或未确认的元素不会用剪影、随机几何体顶替。
 - **回展厅光点**：竹虎（`tiger.html`）与寒梅（`plum.html`）场景页右下角均设环形呼吸光点，一键返回展厅（`home.html`）
 
 ## 技术要点
@@ -73,7 +73,7 @@
   实现"环境 × 习性"复合拟合，后续可接更细的生物习性库
 
 ### 拟生环境工作空间：原画 → 像素锁定 3D
-home 画框上传的图片暂存于 `sessionStorage`，`wall-workspace.js` 立即生成保守的原图参照面；该降级路径只提供轻微视差，不猜测山、树、水域或生物。连接 `tools/scene_lift_worker.py` 后，MapAnything（缺失时为 Depth Anything V2）返回逐像素深度，Grounded SAM 2 返回当前左右菜单所选对象的实例遮罩。前端把每个遮罩回投成独立封闭网格，而不是把整幅画统一隆起；水域动态只在对应遮罩内部发生。识别候选和图生 3D 之间有一层 `reconstructionProfile` 结构重建档案：记录候选的主轴、长宽比、脚点/锚点、结构类型（竖向茎干、枝藤骨架、禽鸟体轴、水面薄层等），并据此生成给图生 3D 的结构化裁剪。候选审稿高亮、原作参照面和确认后的 GLB 回装共用同一个 Three.js 原作平面，用户可直接点击画中高亮区域或侧栏候选卡来选取；GLB 回装时按该结构档案做姿态适配，细长候选会按原画 X/Y 比例做轴向缩放，避免 CSS 背景图与 3D 锚点坐标错位，也避免竖向对象被横向装回。右侧生物实体同样保留原画色彩、独立锚点和归位坐标，行为动画始终以该锚点为基准。
+home 画框上传的图片暂存于 `sessionStorage`，`wall-workspace.js` 立即生成保守的原图参照面；该降级路径只提供轻微视差，不猜测山、树、水域或生物。连接 `tools/scene_lift_worker.py` 后，MapAnything（缺失时为 Depth Anything V2）返回逐像素深度，Grounded SAM 2 返回当前左右菜单所选对象的实例遮罩。前端把每个遮罩回投成独立封闭网格，而不是把整幅画统一隆起；水域动态只在对应遮罩内部发生。识别候选和图生 3D 之间现在有两层约束：`objectReference` 物象检索层先查询竹、松、梅、芦苇、禽鸟、水面等真实物象的部件、物理形态和“不要生成成纸板/横棍/厚块”的负面提示；`reconstructionProfile` 结构重建档案再记录候选的主轴、长宽比、脚点/锚点、结构类型（竖向茎干、枝藤骨架、禽鸟体轴、水面薄层等），并据此生成给图生 3D 的结构化裁剪。候选审稿高亮、原作参照面和确认后的 GLB 回装共用同一个 Three.js 原作平面，用户可直接点击画中高亮区域或侧栏候选卡来选取；GLB 回装时按物象参考和结构档案做姿态适配，细长候选会按原画 X/Y 比例做轴向缩放，避免 CSS 背景图与 3D 锚点坐标错位，也避免竖向对象被横向装回。右侧生物实体同样保留原画色彩、独立锚点和归位坐标，行为动画始终以该锚点为基准。
 
 ### 竹：刚体 + 球铰
 每根竹是 Cannon 动态刚体（Box），竹脚以 `PointToPointConstraint` 球铰锚定地面；
@@ -478,6 +478,18 @@ TRELLIS2_SERVER_URL=http://127.0.0.1:7862 ./start.sh
 
 The main backend keeps both worker addresses server-side. Scene Lift owns depth, masks, scale, and placement;
 the image-to-3D worker may only generate a user-confirmed candidate crop while retaining that candidate's original artwork anchor.
+
+### Optional object-reference LLM/RAG lookup
+
+`/api/object-reference/lookup` runs between segmentation and image-to-3D generation. By default it uses a built-in physical-archetype catalog for bamboo, pine, plum, reeds, lotus, terrain, water, birds, fish, insects, and quadrupeds. To replace or enrich that catalog with an LLM/RAG service, expose an OpenAI-compatible or custom JSON endpoint and start the backend with:
+
+```bash
+LLM_OBJECT_REFERENCE_URL=http://127.0.0.1:7870/object-reference \
+LLM_OBJECT_REFERENCE_API_KEY=optional-server-side-key \
+TRELLIS2_SERVER_URL=http://127.0.0.1:7862 ./start.sh
+```
+
+The lookup result never changes mask pixels, bounding boxes, or anchors. It only adds morphology, part lists, geometry hints, fit hints, and negative hints that constrain the confirmed 2D→3D crop.
 
 ## Configuration
 

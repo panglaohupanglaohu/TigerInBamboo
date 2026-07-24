@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>拟生环境工作空间 · 世界古典美术拟生平台</title>
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/wall-workspace.css?v=12" />
+  <link rel="stylesheet" href="css/wall-workspace.css?v=13" />
 </head>
 <body class="wall-workspace-page">
   <header class="wall-workspace-header">
@@ -40,8 +40,8 @@
           <div><span>OPEN SOURCE · IMAGE TO 3D</span><b>GROUNDED SAM 2 + TRELLIS.2 / TRIPOSR</b></div>
           <em id="scene-lift-status" data-state="checking">检测中</em>
         </div>
-        <p>先识别候选并高亮裁剪；确认后才把透明实例送入当前图生 3D 引擎生成 GLB。</p>
-        <div class="wall-model-stages"><span>识别</span><i>›</i><span>审图</span><i>›</i><span>高亮</span><i>›</i><span>图生3D</span></div>
+        <p>先识别候选，再用 LLM/物象库检索真实形态；确认后才把透明实例送入当前图生 3D 引擎生成 GLB。</p>
+        <div class="wall-model-stages"><span>识别</span><i>›</i><span>物象</span><i>›</i><span>审图</span><i>›</i><span>高亮</span><i>›</i><span>图生3D</span></div>
         <span id="trellis-status" class="wall-secondary-status" data-state="checking">图生3D检测中</span>
       </section>
 
@@ -163,6 +163,6 @@
   </main>
 
   <div class="toast" id="wall-toast"></div>
-  <script type="module" src="js/wall-workspace.js?v=12"></script>
+  <script type="module" src="js/wall-workspace.js?v=13"></script>
 </body>
 </html>

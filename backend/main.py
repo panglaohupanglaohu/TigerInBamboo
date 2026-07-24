@@ -22,6 +22,159 @@ FRONTEND = ROOT / "frontend"
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 SPECIES_PATH = Path(__file__).resolve().parent / "species.json"
 
+OBJECT_REFERENCE_CATALOG: dict[str, dict[str, Any]] = {
+    "bamboo": {
+        "label": "竹",
+        "query": "bamboo culm node internode branch leaf real-world morphology",
+        "archetype": "中空分节竖向茎干，节与节间清晰，细枝侧出，披针形叶簇挂在枝端",
+        "parts": ["竖向竹竿", "竹节", "节间", "侧枝", "披针形竹叶", "基部丛生关系"],
+        "physicalTraits": ["竿身细长近圆柱", "节点略凸起成环", "整体弹性强但主轴稳定", "枝叶轻薄外展"],
+        "geometryHints": {"primaryAxis": "vertical", "crossSection": "hollow-cylinder", "segmentation": "nodes-internodes", "branching": "lateral-twigs"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.16, "avoidHorizontalRod": True},
+        "negativeHints": ["不要把竹竿生成成横向粗杆", "不要把叶簇和主竿合成一个无节块体", "不要丢失竖向主轴"],
+    },
+    "pine": {
+        "label": "松",
+        "query": "pine tree trunk branch whorl needle foliage morphology",
+        "archetype": "粗糙树干与曲折枝干支撑针叶簇，枝条多横斜伸展但有明确木质骨架",
+        "parts": ["主干", "侧枝", "针叶簇", "树皮皴裂", "枝端冠团"],
+        "physicalTraits": ["树干较硬", "枝条横斜", "针叶成簇", "冠团不应变成实体板"],
+        "geometryHints": {"primaryAxis": "branching", "crossSection": "woody-cylinder", "foliage": "needle-clumps"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.22, "avoidHorizontalRod": True},
+        "negativeHints": ["不要把整片松针冠生成成单块纸板", "不要忽略枝干支撑关系"],
+    },
+    "plum": {
+        "label": "梅",
+        "query": "plum blossom old branch flower morphology",
+        "archetype": "苍老曲枝、短枝节、散点梅花共同构成，花朵附着在枝条节点附近",
+        "parts": ["老枝", "短枝", "花瓣", "花蕊", "节点"],
+        "physicalTraits": ["枝条曲折硬质", "花瓣薄而圆", "花朵不应漂离枝条"],
+        "geometryHints": {"primaryAxis": "curved-branch", "flower": "thin-petals"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.2},
+        "negativeHints": ["不要把梅花和枝干合成一团", "不要生成无枝撑的花球"],
+    },
+    "flower": {
+        "label": "花草",
+        "query": "flowering herb shrub stem leaf petal morphology",
+        "archetype": "细茎、叶片、花萼和薄花瓣共同构成，花朵必须依附茎叶而不是漂浮花球",
+        "parts": ["茎", "叶", "花萼", "薄花瓣", "花蕊", "基部"],
+        "physicalTraits": ["茎叶较薄", "花瓣轻薄有层次", "花冠与枝叶有连接点"],
+        "geometryHints": {"primaryAxis": "stem-flower", "leaf": "thin-surface", "flower": "layered-petals"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.14},
+        "negativeHints": ["不要把花瓣做成厚块", "不要让花冠脱离枝茎", "不要把整株压成一张纸"],
+    },
+    "vine": {
+        "label": "藤蔓",
+        "query": "wisteria vine hanging raceme woody vine morphology",
+        "archetype": "缠绕木质藤条、细枝和下垂花序共同构成，主藤有曲线骨架",
+        "parts": ["主藤", "缠绕枝", "叶片", "下垂花序", "附着点"],
+        "physicalTraits": ["藤条细长曲折", "花序重心向下", "叶片薄而分散"],
+        "geometryHints": {"primaryAxis": "curved-vine", "flower": "hanging-raceme"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.15, "avoidHorizontalRod": True},
+        "negativeHints": ["不要把藤蔓生成为硬直横杆", "不要把花序合成单个块体"],
+    },
+    "reed": {
+        "label": "芦苇",
+        "query": "reed stem plume wetland plant morphology",
+        "archetype": "水岸细长秆、线形叶和穗状花序构成的成丛湿地植物",
+        "parts": ["细秆", "线形叶", "穗", "丛生基部"],
+        "physicalTraits": ["极细长", "成簇直立或微倾", "顶部穗较轻"],
+        "geometryHints": {"primaryAxis": "vertical", "crossSection": "thin-cylinder", "foliage": "linear-leaves"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.12},
+        "negativeHints": ["不要生成厚板", "不要把秆横放"],
+    },
+    "lotus": {
+        "label": "莲荷",
+        "query": "lotus leaf flower stem aquatic morphology",
+        "archetype": "圆盾形荷叶、细长叶柄和层叠花瓣组成，水面以下有根茎",
+        "parts": ["圆叶", "叶柄", "花瓣", "莲蓬", "水下根茎"],
+        "physicalTraits": ["叶片薄而宽", "柄细长", "花瓣层叠"],
+        "geometryHints": {"primaryAxis": "stem-with-disc", "leaf": "thin-disc", "flower": "layered-petals"},
+        "fitHints": {"anisotropic": False, "thicknessBias": 0.12},
+        "negativeHints": ["不要把荷叶做成厚石块", "不要让花叶脱离叶柄"],
+    },
+    "bird": {
+        "label": "禽鸟",
+        "query": "bird body wing tail beak leg morphology",
+        "archetype": "椭圆躯干、头颈、双翼、尾羽、喙和足共同构成，飞行姿态有翼展主轴",
+        "parts": ["躯干", "头颈", "喙", "翼", "尾羽", "腿足"],
+        "physicalTraits": ["躯干有体积", "翼为薄面羽片", "喙和尾羽形成方向性", "足部可很细"],
+        "geometryHints": {"primaryAxis": "body-wing", "wing": "thin-surface", "body": "ellipsoid"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.18},
+        "negativeHints": ["不要把鸟生成单个无翼团块", "不要把翼做成厚实体"],
+    },
+    "quadruped": {
+        "label": "趾行走兽",
+        "query": "digitigrade quadruped body leg tail head morphology tiger leopard dog",
+        "archetype": "有胸腹体积、头颈、四肢、爪足和尾部的趾行四足兽，体轴与脊柱方向清楚",
+        "parts": ["躯干", "头颈", "肩胯", "前后肢", "爪足", "尾"],
+        "physicalTraits": ["躯干为主质量", "四肢支撑身体", "足端细但不能丢失", "尾部延续体轴"],
+        "geometryHints": {"primaryAxis": "spine", "body": "ellipsoid", "limbs": "jointed-cylinders"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.28},
+        "negativeHints": ["不要生成无腿团块", "不要把尾巴并进身体", "不要让身体变成薄纸片"],
+    },
+    "ungulate": {
+        "label": "蹄兽",
+        "query": "unguligrade deer horse hoof leg body morphology",
+        "archetype": "长腿、蹄端、躯干、颈和头共同构成，腿部竖向承重非常关键",
+        "parts": ["躯干", "长颈", "头", "细长腿", "蹄", "尾"],
+        "physicalTraits": ["腿长且细", "蹄端接地", "躯干较横向", "颈部抬升形成姿态"],
+        "geometryHints": {"primaryAxis": "body-leg", "limbs": "slender-load-bearing"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.18},
+        "negativeHints": ["不要把四条腿糊成一块", "不要丢失蹄端接地关系"],
+    },
+    "rabbit": {
+        "label": "兔类小兽",
+        "query": "rabbit hare body ear hind leg morphology",
+        "archetype": "圆润小躯干、长耳、短前肢和强壮后腿共同构成，跳跃结构以后肢为主",
+        "parts": ["躯干", "长耳", "头", "前肢", "后腿", "短尾"],
+        "physicalTraits": ["身体圆润", "耳朵薄而长", "后腿体量比前肢明显"],
+        "geometryHints": {"primaryAxis": "body-hindleg", "ears": "thin-surfaces"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.24},
+        "negativeHints": ["不要把耳朵丢掉", "不要把后腿做成单块阴影"],
+    },
+    "fish": {
+        "label": "鱼",
+        "query": "fish body fin tail aquatic morphology",
+        "archetype": "流线形鱼体、尾鳍、背鳍、胸鳍和腹鳍共同构成，体轴沿游动方向",
+        "parts": ["流线鱼体", "尾鳍", "背鳍", "胸鳍", "眼"],
+        "physicalTraits": ["侧向扁", "体轴清晰", "鳍为薄片"],
+        "geometryHints": {"primaryAxis": "body-tail", "fin": "thin-surface"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.16},
+        "negativeHints": ["不要生成圆球鱼", "不要丢失尾鳍方向"],
+    },
+    "insect": {
+        "label": "蝶虫",
+        "query": "butterfly insect body wing antenna morphology",
+        "archetype": "细小躯干、触角、足和大面积薄翼共同构成，翼面极薄且左右对称",
+        "parts": ["躯干", "触角", "薄翼", "足", "翅脉"],
+        "physicalTraits": ["翼面宽薄", "躯干细小", "触角和足可细但不能消失"],
+        "geometryHints": {"primaryAxis": "body-wing", "wing": "very-thin-surface"},
+        "fitHints": {"anisotropic": True, "thicknessBias": 0.08},
+        "negativeHints": ["不要把蝴蝶生成厚块", "不要把双翼并成一团"],
+    },
+    "water": {
+        "label": "水面",
+        "query": "water ripple wave surface flow physical behavior",
+        "archetype": "连续薄层流体表面，涟漪与浪峰来自法线和位移变化而不是实体厚块",
+        "parts": ["薄水面", "流向", "涟漪", "浪峰", "泡沫边缘"],
+        "physicalTraits": ["厚度极薄", "连续面", "局部高光和法线扰动表现流动"],
+        "geometryHints": {"primaryAxis": "surface", "crossSection": "thin-plane"},
+        "fitHints": {"anisotropic": False, "thicknessBias": 0.05},
+        "negativeHints": ["不要生成固体蓝色厚板", "不要把涟漪做成孤立石块"],
+    },
+    "terrain": {
+        "label": "地势",
+        "query": "terrain rock mountain slope soil morphology",
+        "archetype": "连续地形体块由坡面、岩脊、碎石和土层构成，适合低频体积和表面起伏",
+        "parts": ["坡面", "岩脊", "土层", "碎石", "岸线"],
+        "physicalTraits": ["体积稳定", "底部接地", "起伏连续", "边缘不应像纸片"],
+        "geometryHints": {"primaryAxis": "mass", "crossSection": "solid-relief"},
+        "fitHints": {"anisotropic": False, "thicknessBias": 0.45},
+        "negativeHints": ["不要生成薄纸片地形", "不要让山石悬浮"],
+    },
+}
+
 # 与 frontend/js/config.js 中的 DEFAULT_CONFIG 保持一致
 DEFAULT_CONFIG: dict[str, Any] = {
     "scene": {
@@ -277,6 +430,229 @@ def _trellis2_server_url() -> str:
 def _scene_lift_server_url() -> str:
     """Geometry/segmentation worker that preserves the artwork's pixel coordinates."""
     return os.environ.get("SCENE_LIFT_SERVER_URL", "").strip().rstrip("/")
+
+
+def _object_reference_server_url() -> str:
+    """Optional LLM/RAG lookup that describes the real-world object before 2D→3D generation."""
+    return os.environ.get("LLM_OBJECT_REFERENCE_URL", "").strip().rstrip("/")
+
+
+OBJECT_REFERENCE_SUBJECT_KEYS = {
+    "mountain": "terrain",
+    "rock": "terrain",
+    "earth": "terrain",
+    "slope": "terrain",
+    "brook-bank": "terrain",
+    "ravine": "terrain",
+    "peak": "terrain",
+    "range": "terrain",
+    "pine": "pine",
+    "bamboo": "bamboo",
+    "plum": "plum",
+    "orchid": "flower",
+    "chrysanthemum": "flower",
+    "calamus": "reed",
+    "reed": "reed",
+    "shore-herb": "flower",
+    "ting-orchid": "flower",
+    "wisteria": "vine",
+    "lotus-bloom": "lotus",
+    "lotus": "lotus",
+    "camellia": "flower",
+    "azalea": "flower",
+    "daylily": "flower",
+    "hibiscus": "flower",
+    "brook": "water",
+    "ripples": "water",
+    "river": "water",
+    "lake": "water",
+    "waves": "water",
+    "cascade": "water",
+}
+
+
+OBJECT_REFERENCE_BIOLOGY_KEYS = {
+    "digitigrade": "quadruped",
+    "unguligrade": "ungulate",
+    "saltatorial": "rabbit",
+    "avian": "bird",
+    "fish": "fish",
+    "insect": "insect",
+}
+
+
+def _object_reference_key(subject: dict[str, Any], profile: dict[str, Any] | None = None) -> str:
+    subject_id = str(subject.get("id") or subject.get("subject") or "").lower()
+    subject_kind = str(subject.get("kind") or "").lower()
+    subject_domain = str(subject.get("domain") or "").lower()
+    prompt = str(subject.get("prompt") or "").lower()
+    profile_kind = str((profile or {}).get("kind") or "").lower()
+
+    if subject_kind in OBJECT_REFERENCE_BIOLOGY_KEYS:
+        return OBJECT_REFERENCE_BIOLOGY_KEYS[subject_kind]
+    if subject_id in OBJECT_REFERENCE_SUBJECT_KEYS:
+        return OBJECT_REFERENCE_SUBJECT_KEYS[subject_id]
+    if "biology" in subject_domain or subject_id.startswith("biology-"):
+        for marker, key in (
+            ("goose", "bird"),
+            ("crane", "bird"),
+            ("bird", "bird"),
+            ("fish", "fish"),
+            ("butterfly", "insect"),
+            ("tiger", "quadruped"),
+            ("rabbit", "rabbit"),
+            ("deer", "ungulate"),
+            ("horse", "ungulate"),
+        ):
+            if marker in prompt or marker in subject_id:
+                return key
+        return "quadruped"
+    if subject_domain == "water" or profile_kind == "water-surface":
+        return "water"
+    if subject_domain == "terrain" or profile_kind == "terrain-mass":
+        return "terrain"
+    if profile_kind in ("vertical-stem", "reed-bank"):
+        return "bamboo" if "bamboo" in prompt or "竹" in str(subject.get("label") or "") else "reed"
+    if profile_kind == "branch-vine":
+        return "vine" if "wisteria" in prompt else "plum"
+    return "flower" if subject_domain == "plants" else "terrain"
+
+
+def _local_object_reference(subject: dict[str, Any], profile: dict[str, Any] | None = None) -> dict[str, Any]:
+    key = _object_reference_key(subject, profile)
+    base = copy.deepcopy(OBJECT_REFERENCE_CATALOG.get(key) or OBJECT_REFERENCE_CATALOG["terrain"])
+    base.update(
+        {
+            "key": key,
+            "source": "local-catalog",
+            "llmUsed": False,
+            "subjectId": subject.get("id"),
+            "subjectLabel": subject.get("label"),
+            "profileKind": (profile or {}).get("kind"),
+        }
+    )
+    return base
+
+
+def _merge_reference(base: dict[str, Any], override: dict[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(override, dict):
+        return base
+    out = copy.deepcopy(base)
+    for key, value in override.items():
+        if value in (None, "", [], {}):
+            continue
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            out[key].update(value)
+        else:
+            out[key] = value
+    out["source"] = "llm+local-catalog"
+    out["llmUsed"] = True
+    return out
+
+
+def _external_object_reference_lookup(payload: dict[str, Any]) -> tuple[dict[str, Any] | None, list[str]]:
+    server = _object_reference_server_url()
+    if not server:
+        return None, []
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
+    api_key = os.environ.get("LLM_OBJECT_REFERENCE_API_KEY", "").strip()
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    request = urllib.request.Request(server, data=body, method="POST", headers=headers)
+    timeout = float(os.environ.get("LLM_OBJECT_REFERENCE_TIMEOUT", "20"))
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as upstream:
+            raw = upstream.read()
+        result = json.loads(raw.decode("utf-8"))
+        if isinstance(result, dict):
+            return result, []
+        return None, ["LLM 物象检索服务返回的不是 JSON 对象，已使用本地物象库"]
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:500]
+        return None, [f"LLM 物象检索失败 HTTP {exc.code}: {detail or exc.reason}；已使用本地物象库"]
+    except (OSError, ValueError, urllib.error.URLError) as exc:
+        return None, [f"LLM 物象检索未就绪：{exc}；已使用本地物象库"]
+
+
+def _external_reference_for_layer(external: dict[str, Any] | None, layer_id: str) -> dict[str, Any] | None:
+    if not isinstance(external, dict):
+        return None
+    references = external.get("references")
+    if isinstance(references, dict) and isinstance(references.get(layer_id), dict):
+        return references[layer_id]
+    items = external.get("items")
+    if isinstance(items, list):
+        for item in items:
+            if isinstance(item, dict) and str(item.get("layerId") or item.get("id")) == layer_id:
+                return item.get("reference") if isinstance(item.get("reference"), dict) else item
+    reference = external.get("reference")
+    return reference if isinstance(reference, dict) else None
+
+
+@app.get("/api/object-reference/status")
+def object_reference_status() -> dict:
+    server = _object_reference_server_url()
+    return {
+        "available": True,
+        "engine": "llm+local-catalog" if server else "local-catalog",
+        "model": os.environ.get("LLM_OBJECT_REFERENCE_MODEL", "external-llm-rag" if server else "built-in physical archetype catalog"),
+        "llmConfigured": bool(server),
+        "reason": None if server else "未设置 LLM_OBJECT_REFERENCE_URL；使用内置物象常识库约束 2D→3D",
+    }
+
+
+@app.post("/api/object-reference/lookup")
+def object_reference_lookup(payload: dict = Body(...)) -> JSONResponse:
+    subject = payload.get("subject")
+    layers = payload.get("layers")
+    if not isinstance(subject, dict):
+        raise HTTPException(status_code=400, detail="subject 必须包含当前识别对象")
+    if not isinstance(layers, list):
+        raise HTTPException(status_code=400, detail="layers 必须是候选对象列表")
+
+    references: dict[str, dict[str, Any]] = {}
+    slim_layers: list[dict[str, Any]] = []
+    for index, layer in enumerate(layers):
+        if not isinstance(layer, dict):
+            continue
+        layer_id = str(layer.get("id") or f"layer-{index}")
+        profile = layer.get("reconstructionProfile") if isinstance(layer.get("reconstructionProfile"), dict) else None
+        references[layer_id] = _local_object_reference(subject, profile)
+        slim_layers.append(
+            {
+                "id": layer_id,
+                "label": layer.get("label"),
+                "bbox": layer.get("bbox"),
+                "coverage": layer.get("coverage"),
+                "reconstructionProfile": profile,
+            }
+        )
+
+    external, warnings = _external_object_reference_lookup(
+        {
+            "task": "real-world-object-reference-for-image-to-3d",
+            "scope": payload.get("scope"),
+            "artwork": payload.get("artwork"),
+            "subject": subject,
+            "layers": slim_layers,
+            "instructions": (
+                "Return concise morphology, parts, physical traits, geometry hints, fit hints, and negative hints. "
+                "Do not change pixel positions; masks and anchors are user-reviewed."
+            ),
+        }
+    )
+    for layer_id, base in list(references.items()):
+        references[layer_id] = _merge_reference(base, _external_reference_for_layer(external, layer_id))
+
+    return JSONResponse(
+        {
+            "available": True,
+            "engine": "llm+local-catalog" if _object_reference_server_url() and external else "local-catalog",
+            "references": references,
+            "warnings": warnings,
+        }
+    )
 
 
 @app.get("/api/scene-lift/status")
