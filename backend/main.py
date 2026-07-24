@@ -529,9 +529,107 @@ def _local_object_reference(subject: dict[str, Any], profile: dict[str, Any] | N
             "subjectId": subject.get("id"),
             "subjectLabel": subject.get("label"),
             "profileKind": (profile or {}).get("kind"),
+            "morphologyPlan": _morphology_plan_for_key(key, subject, profile),
         }
     )
     return base
+
+
+def _morphology_plan_for_key(key: str, subject: dict[str, Any], profile: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Translate real-world morphology into a Three.js component plan.
+
+    The plan is intentionally geometric rather than pixel-based: masks keep
+    the artwork anchor, while these components define what the confirmed object
+    must be made of. An external LLM/RAG response may override this plan.
+    """
+    base = {
+        "version": 1,
+        "planner": "llm-physical-morphology",
+        "renderer": "threejs-procedural",
+        "policy": "componentized-volumetric-model-not-cutout",
+        "subjectId": subject.get("id"),
+        "profileKind": (profile or {}).get("kind"),
+        "fit": {"preserveArtworkAnchor": True, "useMaskAsScaleOnly": True},
+    }
+    plans: dict[str, dict[str, Any]] = {
+        "lotus": {
+            "archetype": "aquatic lotus composed of shield leaves, slender petioles, layered petals, and seedpod center",
+            "components": [
+                {"type": "petiole", "role": "leaf-stem", "count": 2, "radius": 0.018, "height": 0.72, "lean": 0.18},
+                {"type": "lotusLeaf", "role": "shield-leaf", "count": 2, "radiusX": 0.34, "radiusY": 0.27, "thickness": 0.018, "dome": 0.045, "veins": 12, "notch": 0.16},
+                {"type": "flowerStem", "role": "flower-support", "count": 1, "radius": 0.014, "height": 0.88, "lean": -0.08},
+                {"type": "petalLayer", "role": "outer-petals", "count": 9, "length": 0.22, "width": 0.07, "thickness": 0.014, "tilt": 0.65},
+                {"type": "petalLayer", "role": "middle-petals", "count": 8, "length": 0.18, "width": 0.06, "thickness": 0.012, "tilt": 0.34},
+                {"type": "petalLayer", "role": "inner-petals", "count": 7, "length": 0.13, "width": 0.045, "thickness": 0.01, "tilt": 0.1},
+                {"type": "seedpod", "role": "flower-center", "count": 1, "radius": 0.05, "height": 0.035},
+            ],
+            "constraints": [
+                "leaf discs are shallow domes with thickness and veins, not flat planes",
+                "petals are layered curved thin solids connected to the seedpod",
+                "stems connect leaf and flower to the waterline",
+            ],
+        },
+        "bamboo": {
+            "archetype": "segmented hollow bamboo culms with nodes, internodes, lateral twigs, and lanceolate leaves",
+            "components": [
+                {"type": "culm", "role": "vertical-stem", "count": 2, "radius": 0.026, "height": 1.05, "nodes": 7},
+                {"type": "nodeRing", "role": "bamboo-nodes", "count": 14, "radius": 0.03, "height": 0.01},
+                {"type": "twig", "role": "lateral-branch", "count": 5, "radius": 0.01, "length": 0.24},
+                {"type": "lanceolateLeaf", "role": "leaf-cluster", "count": 16, "length": 0.18, "width": 0.035, "thickness": 0.004},
+            ],
+            "constraints": ["main culms remain vertical", "nodes must be visible rings", "leaves attach to twigs"],
+        },
+        "pine": {
+            "archetype": "woody trunk and branches carrying needle foliage clusters",
+            "components": [
+                {"type": "woodyTrunk", "role": "trunk", "count": 1, "radius": 0.055, "height": 0.92},
+                {"type": "branch", "role": "woody-branches", "count": 5, "radius": 0.018, "length": 0.42},
+                {"type": "needleCluster", "role": "foliage", "count": 8, "radius": 0.16, "needles": 18},
+            ],
+            "constraints": ["needle masses must be supported by branches", "avoid single flat crown plate"],
+        },
+        "reed": {
+            "archetype": "wetland reed clump with thin upright stems, linear leaves, and plume heads",
+            "components": [
+                {"type": "reedStem", "role": "thin-stem", "count": 5, "radius": 0.012, "height": 0.95},
+                {"type": "linearLeaf", "role": "blade-leaves", "count": 14, "length": 0.36, "width": 0.025, "thickness": 0.004},
+                {"type": "plume", "role": "seed-head", "count": 3, "radius": 0.035, "height": 0.18},
+            ],
+            "constraints": ["stems stay thin and upright", "plumes attach to the tops of stems"],
+        },
+        "flower": {
+            "archetype": "flowering herb or shrub with stems, leaves, calyx, petals, and center",
+            "components": [
+                {"type": "stem", "role": "support", "count": 2, "radius": 0.018, "height": 0.65},
+                {"type": "leaf", "role": "thin-leaves", "count": 8, "length": 0.22, "width": 0.06, "thickness": 0.006},
+                {"type": "petalLayer", "role": "flower-petals", "count": 10, "length": 0.13, "width": 0.045, "thickness": 0.01, "tilt": 0.28},
+                {"type": "seedpod", "role": "flower-center", "count": 1, "radius": 0.035, "height": 0.028},
+            ],
+            "constraints": ["petals connect to center", "flower connects to stem"],
+        },
+        "vine": {
+            "archetype": "curved woody vine with attached leaves and hanging flower racemes",
+            "components": [
+                {"type": "curvedVine", "role": "main-vine", "count": 1, "radius": 0.018, "length": 0.92},
+                {"type": "leaf", "role": "vine-leaves", "count": 10, "length": 0.18, "width": 0.05, "thickness": 0.005},
+                {"type": "hangingPetals", "role": "raceme", "count": 12, "length": 0.09, "width": 0.035, "thickness": 0.008},
+            ],
+            "constraints": ["racemes hang from vine", "main vine remains curved not straight rod"],
+        },
+    }
+    selected = plans.get(key)
+    if selected is None and key in {"plum"}:
+        selected = plans.get("flower")
+    if selected is None:
+        selected = {
+            "archetype": f"{key} object with separate physical parts",
+            "components": [
+                {"type": "bodyVolume", "role": "main-volume", "count": 1, "radius": 0.25, "height": 0.38},
+                {"type": "supportDetail", "role": "secondary-parts", "count": 4, "radius": 0.035, "length": 0.22},
+            ],
+            "constraints": ["build separate connected components, never a flat mask board"],
+        }
+    return {**base, **copy.deepcopy(selected)}
 
 
 def _merge_reference(base: dict[str, Any], override: dict[str, Any] | None) -> dict[str, Any]:

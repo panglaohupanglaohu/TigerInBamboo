@@ -959,6 +959,7 @@ function localObjectReferenceFallback(subject, profile = {}) {
     archetype: `${label} 的真实物理结构约束`,
     geometryHints: {},
     fitHints: {},
+    morphologyPlan: buildFallbackMorphologyPlan(subject, profile),
     negativeHints: ["不要用剪影、纸板或随机几何体顶替确认后的图生 3D 模型"],
   };
 }
@@ -987,6 +988,337 @@ function applyObjectReferenceToProfile(profile, objectReference) {
     profile.fit.thicknessBias = Math.min(profile.fit.thicknessBias || 0.14, 0.14);
   }
   return profile;
+}
+
+function buildFallbackMorphologyPlan(subject, profile = {}) {
+  const id = subject.id || "";
+  if (id === "lotus" || id === "lotus-bloom" || profile.kind === "aquatic-flower") {
+    return {
+      version: 1,
+      planner: "browser-physical-morphology",
+      renderer: "threejs-procedural",
+      policy: "componentized-volumetric-model-not-cutout",
+      archetype: "aquatic lotus with shield leaf, petiole, layered petals, and seedpod",
+      components: [
+        { type: "petiole", count: 2, radius: 0.018, height: 0.72, lean: 0.18 },
+        { type: "lotusLeaf", count: 2, radiusX: 0.34, radiusY: 0.27, thickness: 0.018, dome: 0.045, veins: 12, notch: 0.16 },
+        { type: "flowerStem", count: 1, radius: 0.014, height: 0.88, lean: -0.08 },
+        { type: "petalLayer", role: "outer-petals", count: 9, length: 0.22, width: 0.07, thickness: 0.014, tilt: 0.65 },
+        { type: "petalLayer", role: "middle-petals", count: 8, length: 0.18, width: 0.06, thickness: 0.012, tilt: 0.34 },
+        { type: "petalLayer", role: "inner-petals", count: 7, length: 0.13, width: 0.045, thickness: 0.01, tilt: 0.1 },
+        { type: "seedpod", count: 1, radius: 0.05, height: 0.035 },
+      ],
+    };
+  }
+  return {
+    version: 1,
+    planner: "browser-physical-morphology",
+    renderer: "threejs-procedural",
+    policy: "componentized-volumetric-model-not-cutout",
+    archetype: `${subject.label || "植物"} with stems, leaves, and connected flower structures`,
+    components: [
+      { type: "stem", count: 2, radius: 0.018, height: 0.65 },
+      { type: "leaf", count: 8, length: 0.22, width: 0.06, thickness: 0.006 },
+      { type: "petalLayer", count: 10, length: 0.13, width: 0.045, thickness: 0.01, tilt: 0.28 },
+      { type: "seedpod", count: 1, radius: 0.035, height: 0.028 },
+    ],
+  };
+}
+
+function shouldUseProceduralMorphologyModel(subject, layer, profile) {
+  const reference = layer.objectReference || profile?.objectReference;
+  const plan = reference?.morphologyPlan;
+  return subject?.domain === "plants" && plan?.renderer === "threejs-procedural";
+}
+
+function createProceduralMorphologyModel(subject, layer, profile, objectReference = {}) {
+  const plan = objectReference.morphologyPlan || buildFallbackMorphologyPlan(subject, profile);
+  const key = objectReference.key || subject.id || profile.kind;
+  const root = (key === "lotus" || subject.id === "lotus" || subject.id === "lotus-bloom" || profile.kind === "aquatic-flower")
+    ? createLotusMorphologyModel(plan, subject, layer)
+    : createGenericPlantMorphologyModel(plan, subject, layer);
+  root.name = `llm-threejs-${subject.id || key}-${layer.id}`;
+  root.userData = {
+    generatedBy: "llm-morphology-threejs",
+    engineLabel: "LLM 形态 Three.js",
+    morphologyPlan: plan,
+    objectReference,
+    reconstructionProfile: profile,
+  };
+  return root;
+}
+
+function morphologyMaterials(subject) {
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const green = base.clone().lerp(new THREE.Color(0x4f7a4f), 0.74);
+  const darkGreen = green.clone().lerp(new THREE.Color(0x23452e), 0.32);
+  const petal = subject.id === "lotus"
+    ? new THREE.Color(0xf0c9d1)
+    : new THREE.Color(0xe9a9b4).lerp(new THREE.Color(state.palette[4] || "#d6afa7"), 0.22);
+  return {
+    stem: new THREE.MeshStandardMaterial({ color: darkGreen, roughness: 0.86, metalness: 0.02 }),
+    leaf: new THREE.MeshStandardMaterial({ color: green, roughness: 0.74, metalness: 0.01, side: THREE.DoubleSide }),
+    vein: new THREE.MeshStandardMaterial({ color: green.clone().lerp(new THREE.Color(0xd5dec3), 0.38), roughness: 0.8 }),
+    petal: new THREE.MeshStandardMaterial({ color: petal, roughness: 0.66, metalness: 0.01, side: THREE.DoubleSide }),
+    petalInner: new THREE.MeshStandardMaterial({ color: petal.clone().lerp(new THREE.Color(0xffedf0), 0.32), roughness: 0.62, side: THREE.DoubleSide }),
+    center: new THREE.MeshStandardMaterial({ color: 0xd6b64f, roughness: 0.72, metalness: 0.02 }),
+  };
+}
+
+function createLotusMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const mats = morphologyMaterials(subject);
+  const components = plan.components || [];
+  const leafSpec = components.find((part) => part.type === "lotusLeaf") || {};
+  const petioleSpec = components.find((part) => part.type === "petiole") || {};
+  const flowerStemSpec = components.find((part) => part.type === "flowerStem") || {};
+  const seedSpec = components.find((part) => part.type === "seedpod") || {};
+  const leafCount = clamp(Math.round(Number(leafSpec.count) || 2), 1, 4);
+  const leafAnchors = [
+    { base: [-0.3, -0.48, -0.025], tip: [-0.24, 0.08, 0.04], rot: -0.22, scale: 1 },
+    { base: [0.1, -0.48, -0.03], tip: [0.25, -0.02, -0.01], rot: 0.34, scale: 0.82 },
+    { base: [-0.05, -0.48, -0.04], tip: [-0.02, -0.12, 0.02], rot: 0.08, scale: 0.62 },
+    { base: [0.28, -0.48, -0.03], tip: [0.36, 0.14, 0.03], rot: -0.12, scale: 0.54 },
+  ];
+
+  for (let i = 0; i < leafCount; i++) {
+    const anchor = leafAnchors[i];
+    const base = new THREE.Vector3(...anchor.base);
+    const tip = new THREE.Vector3(...anchor.tip);
+    addCylinderBetween(root, base, tip, Number(petioleSpec.radius) || 0.018, mats.stem, 10);
+    const leafGroup = new THREE.Group();
+    leafGroup.position.copy(tip);
+    leafGroup.rotation.z = anchor.rot;
+    leafGroup.scale.setScalar(anchor.scale);
+    const leaf = new THREE.Mesh(
+      createLotusLeafGeometry(
+        Number(leafSpec.radiusX) || 0.34,
+        Number(leafSpec.radiusY) || 0.27,
+        Number(leafSpec.thickness) || 0.018,
+        Number(leafSpec.dome) || 0.045,
+        Number(leafSpec.notch) || 0.16
+      ),
+      mats.leaf
+    );
+    leaf.castShadow = true;
+    leaf.receiveShadow = true;
+    leafGroup.add(leaf);
+    const veins = clamp(Math.round(Number(leafSpec.veins) || 12), 6, 18);
+    for (let v = 0; v < veins; v++) {
+      const angle = (v / veins) * Math.PI * 2 + 0.08;
+      const end = new THREE.Vector3(Math.cos(angle) * (Number(leafSpec.radiusX) || 0.34) * 0.9, Math.sin(angle) * (Number(leafSpec.radiusY) || 0.27) * 0.9, 0.035);
+      addCylinderBetween(leafGroup, new THREE.Vector3(0, 0, 0.038), end, 0.0028, mats.vein, 5);
+    }
+    root.add(leafGroup);
+  }
+
+  const flowerBase = new THREE.Vector3(0.02, -0.48, 0.0);
+  const flowerCenter = new THREE.Vector3(0.08, 0.34, 0.08);
+  addCylinderBetween(root, flowerBase, flowerCenter, Number(flowerStemSpec.radius) || 0.014, mats.stem, 10);
+  const flower = new THREE.Group();
+  flower.position.copy(flowerCenter);
+  flower.rotation.z = 0.05;
+  const layers = components.filter((part) => part.type === "petalLayer");
+  layers.forEach((spec, layerIndex) => {
+    const count = clamp(Math.round(Number(spec.count) || 8), 5, 18);
+    const length = Number(spec.length) || 0.16;
+    const width = Number(spec.width) || 0.05;
+    const thickness = Number(spec.thickness) || 0.01;
+    const tilt = Number(spec.tilt) || 0.2;
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + layerIndex * 0.21;
+      const petal = new THREE.Mesh(
+        createCurvedPetalGeometry(length, width, thickness, 0.035 + layerIndex * 0.006),
+        layerIndex === layers.length - 1 ? mats.petalInner : mats.petal
+      );
+      petal.position.set(Math.cos(angle) * length * 0.14, Math.sin(angle) * length * 0.14, 0.012 + layerIndex * 0.012);
+      petal.rotation.z = angle - Math.PI / 2;
+      petal.rotation.x = tilt * Math.sin(angle) * 0.32;
+      petal.rotation.y = -tilt * Math.cos(angle) * 0.32;
+      petal.castShadow = true;
+      flower.add(petal);
+    }
+  });
+  const center = new THREE.Mesh(new THREE.SphereGeometry(Number(seedSpec.radius) || 0.05, 16, 10), mats.center);
+  center.scale.set(1, 0.72, 0.48);
+  center.position.z = 0.04;
+  flower.add(center);
+  root.add(flower);
+  addMorphologyWaterline(root);
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+function createGenericPlantMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const mats = morphologyMaterials(subject);
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const stemCount = clamp(Math.round((plan.components || []).find((part) => /stem|culm|trunk/i.test(part.type))?.count || 2), 1, 5);
+  for (let i = 0; i < stemCount; i++) {
+    const x = (i - (stemCount - 1) / 2) * 0.12;
+    const base = new THREE.Vector3(x * 0.4, -0.46, 0);
+    const tip = new THREE.Vector3(x + (rand() - 0.5) * 0.12, 0.22 + rand() * 0.28, (rand() - 0.5) * 0.08);
+    addCylinderBetween(root, base, tip, 0.018 + rand() * 0.008, mats.stem, 9);
+    for (let l = 0; l < 4; l++) {
+      const t = 0.25 + l * 0.16;
+      const pos = base.clone().lerp(tip, t);
+      const leaf = new THREE.Mesh(createCurvedPetalGeometry(0.16 + rand() * 0.08, 0.045, 0.006, 0.012), mats.leaf);
+      leaf.position.copy(pos);
+      leaf.rotation.z = (rand() > 0.5 ? 1 : -1) * (0.5 + rand() * 0.8);
+      leaf.rotation.y = (rand() - 0.5) * 0.7;
+      root.add(leaf);
+    }
+  }
+  const flower = new THREE.Group();
+  flower.position.set(0.02, 0.32, 0.04);
+  const petalSpec = (plan.components || []).find((part) => part.type === "petalLayer") || {};
+  const petalCount = clamp(Math.round(Number(petalSpec.count) || 10), 5, 18);
+  for (let i = 0; i < petalCount; i++) {
+    const angle = (i / petalCount) * Math.PI * 2;
+    const petal = new THREE.Mesh(createCurvedPetalGeometry(Number(petalSpec.length) || 0.13, Number(petalSpec.width) || 0.045, Number(petalSpec.thickness) || 0.01, 0.02), mats.petal);
+    petal.rotation.z = angle - Math.PI / 2;
+    petal.position.set(Math.cos(angle) * 0.035, Math.sin(angle) * 0.035, 0.02);
+    flower.add(petal);
+  }
+  flower.add(new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 8), mats.center));
+  root.add(flower);
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+function createLotusLeafGeometry(radiusX, radiusY, thickness, dome, notch = 0.12, segments = 56, rings = 8) {
+  const positions = [];
+  const indices = [];
+  const vertex = (r, s, side) => {
+    const theta = (s / segments) * Math.PI * 2;
+    const notchInfluence = Math.exp(-(angleDistance(theta, -Math.PI / 2) ** 2) / 0.055);
+    const radiusScale = 1 - clamp(notch, 0, 0.34) * notchInfluence * (0.25 + r * 0.75);
+    const ripple = Math.sin(theta * 8) * 0.004 * r;
+    const x = Math.cos(theta) * radiusX * r * radiusScale;
+    const y = Math.sin(theta) * radiusY * r * radiusScale;
+    const z = side * thickness * 0.5 + (side > 0 ? dome * (1 - r * r) + ripple : -dome * 0.12 * (1 - r));
+    positions.push(x, y, z);
+  };
+  for (const side of [1, -1]) {
+    for (let ring = 0; ring <= rings; ring++) {
+      const r = ring / rings;
+      for (let s = 0; s < segments; s++) vertex(r, s, side);
+    }
+  }
+  const sideOffset = (rings + 1) * segments;
+  const id = (ring, s) => ring * segments + (s % segments);
+  for (let ring = 0; ring < rings; ring++) {
+    for (let s = 0; s < segments; s++) {
+      const a = id(ring, s), b = id(ring + 1, s), c = id(ring + 1, s + 1), d = id(ring, s + 1);
+      indices.push(a, b, c, a, c, d);
+      indices.push(sideOffset + a, sideOffset + c, sideOffset + b, sideOffset + a, sideOffset + d, sideOffset + c);
+    }
+  }
+  for (let s = 0; s < segments; s++) {
+    const topA = id(rings, s);
+    const topB = id(rings, s + 1);
+    const botA = sideOffset + topA;
+    const botB = sideOffset + topB;
+    indices.push(topA, botA, botB, topA, botB, topB);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+function createCurvedPetalGeometry(length, width, thickness, curve = 0.025, columns = 6, rows = 10) {
+  const positions = [];
+  const indices = [];
+  const pushVertex = (u, v, side) => {
+    const taper = 0.22 + 0.78 * Math.sin(v * Math.PI * 0.92);
+    const x = u * width * taper;
+    const y = (v - 0.18) * length;
+    const cup = curve * Math.sin(v * Math.PI) * (1 - u * u);
+    const z = cup + side * thickness * 0.5;
+    positions.push(x, y, z);
+  };
+  for (const side of [1, -1]) {
+    for (let row = 0; row <= rows; row++) {
+      const v = row / rows;
+      for (let col = 0; col <= columns; col++) {
+        const u = (col / columns) * 2 - 1;
+        pushVertex(u, v, side);
+      }
+    }
+  }
+  const rowStride = columns + 1;
+  const sideOffset = (rows + 1) * rowStride;
+  const id = (row, col) => row * rowStride + col;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < columns; col++) {
+      const a = id(row, col), b = id(row + 1, col), c = id(row + 1, col + 1), d = id(row, col + 1);
+      indices.push(a, b, c, a, c, d);
+      indices.push(sideOffset + a, sideOffset + c, sideOffset + b, sideOffset + a, sideOffset + d, sideOffset + c);
+    }
+  }
+  for (let row = 0; row < rows; row++) {
+    const leftA = id(row, 0), leftB = id(row + 1, 0), rightA = id(row, columns), rightB = id(row + 1, columns);
+    indices.push(leftA, sideOffset + leftB, sideOffset + leftA, leftA, leftB, sideOffset + leftB);
+    indices.push(rightA, sideOffset + rightA, sideOffset + rightB, rightA, sideOffset + rightB, rightB);
+  }
+  for (const row of [0, rows]) {
+    for (let col = 0; col < columns; col++) {
+      const a = id(row, col), b = id(row, col + 1), c = sideOffset + b, d = sideOffset + a;
+      indices.push(a, d, c, a, c, b);
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+function addCylinderBetween(parent, start, end, radius, material, radialSegments = 8) {
+  const from = start.clone ? start : new THREE.Vector3(...start);
+  const to = end.clone ? end : new THREE.Vector3(...end);
+  const direction = to.clone().sub(from);
+  const length = direction.length();
+  if (length < 0.0001) return null;
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.82, radius, length, radialSegments), material);
+  mesh.position.copy(from.clone().lerp(to, 0.5));
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function angleDistance(a, b) {
+  let delta = a - b;
+  while (delta > Math.PI) delta -= Math.PI * 2;
+  while (delta < -Math.PI) delta += Math.PI * 2;
+  return Math.abs(delta);
+}
+
+function addMorphologyWaterline(root) {
+  const material = new THREE.MeshBasicMaterial({ color: 0x8bb4b5, transparent: true, opacity: 0.16, side: THREE.DoubleSide });
+  const water = new THREE.Mesh(new THREE.CircleGeometry(0.44, 42), material);
+  water.rotation.x = Math.PI / 2;
+  water.position.y = -0.49;
+  water.position.z = -0.025;
+  root.add(water);
+}
+
+function normalizeProceduralRoot(root) {
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(root);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  const scale = 1 / Math.max(size.x, size.y, size.z, 0.001);
+  root.children.forEach((child) => {
+    child.position.sub(center);
+    child.position.multiplyScalar(scale);
+    child.scale.multiplyScalar(scale);
+  });
+  root.userData.normalizedFromMorphologyPlan = true;
 }
 
 function resetReviewState(scope) {
@@ -1479,7 +1811,7 @@ function renderCandidateReview(scope) {
   title.textContent = layers.length ? `${layers.length} 个候选 · 请确认裁剪是否正确` : "未识别到候选";
   const prompt = document.createElement("span");
   prompt.textContent = layers.length
-    ? `点画中高亮区域或候选卡来选取；确认后才调用 ${imageTo3dLabel()} 生成真正 GLB 模型。`
+    ? `点画中高亮区域或候选卡来选取；确认后先用 LLM 物象方案，再生成真正 3D 模型。`
     : "没有通过分割审查的对象，系统不会用剪影或随机模型顶替。";
   head.append(title, prompt);
   panel.appendChild(head);
@@ -1518,7 +1850,7 @@ function renderCandidateReview(scope) {
     generate.type = "button";
     const generated = review.generatedIds.has(layer.id);
     const generating = review.generatingIds.has(layer.id);
-    generate.textContent = generated ? "已生成 GLB" : generating ? "生成中" : "确认生成3D";
+    generate.textContent = generated ? "已生成3D" : generating ? "生成中" : "确认生成3D";
     generate.disabled = generated || generating;
     generate.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -1545,7 +1877,8 @@ function objectReferenceMeta(layer) {
   if (!reference) return "";
   const label = reference.label || reference.key || "物象";
   const source = reference.llmUsed ? "LLM" : "";
-  return `物象 ${trimMetaText(label, 8)}${source ? `/${source}` : ""}`;
+  const plan = reference.morphologyPlan?.renderer === "threejs-procedural" ? "/Three.js方案" : "";
+  return `物象 ${trimMetaText(label, 8)}${source ? `/${source}` : ""}${plan}`;
 }
 
 function trimMetaText(value, max = 10) {
@@ -1576,47 +1909,60 @@ async function confirmReviewLayer(scope, layerId) {
   const layer = reviewLayerList(scope).find((candidate) => candidate.id === layerId);
   if (!review?.subject || !layer) return;
   setReviewSelection(scope, layerId);
-  await checkTrellisStatus();
   const line = el(scope === "biology" ? "biology-generation-state" : "generation-state");
-  if (!state.trellisOnline) {
-    if (line) line.textContent = "图生 3D 引擎未连接 · 候选已高亮，但不会用剪影冒充 3D";
-    showToast("图生 3D 引擎未连接，无法生成真正 GLB");
-    return;
+  const ref = scope === "biology" ? referenceMapFromResult(review.result) : state.referenceMap;
+  const profile = layer.reconstructionProfile || buildReconstructionProfile(scope, ref, layer, review.subject);
+  layer.reconstructionProfile = profile;
+  if (!layer.objectReference) layer.objectReference = localObjectReferenceFallback(review.subject, profile);
+  applyObjectReferenceToProfile(profile, layer.objectReference);
+  const useMorphologyModel = shouldUseProceduralMorphologyModel(review.subject, layer, profile);
+  if (!useMorphologyModel) {
+    await checkTrellisStatus();
+    if (!state.trellisOnline) {
+      if (line) line.textContent = "图生 3D 引擎未连接 · 候选已高亮，但不会用剪影冒充 3D";
+      showToast("图生 3D 引擎未连接，无法生成真正 GLB");
+      return;
+    }
   }
 
   review.generatingIds.add(layerId);
   applyCandidateVisualState(scope, layerId, review.previewMeshes.get(layerId));
   renderCandidateReview(scope);
-  if (line) line.textContent = `正在把“${review.subject.label}”候选送入 ${imageTo3dLabel()} 图生 3D…`;
+  if (line) {
+    line.textContent = useMorphologyModel
+      ? `正在经 LLM 物象方案计算“${review.subject.label}”Three.js 部件模型…`
+      : `正在把“${review.subject.label}”候选送入 ${imageTo3dLabel()} 图生 3D…`;
+  }
   try {
-    const ref = scope === "biology" ? referenceMapFromResult(review.result) : state.referenceMap;
-    const profile = layer.reconstructionProfile || buildReconstructionProfile(scope, ref, layer, review.subject);
-    layer.reconstructionProfile = profile;
-    if (!layer.objectReference) layer.objectReference = localObjectReferenceFallback(review.subject, profile);
-    applyObjectReferenceToProfile(profile, layer.objectReference);
-    const crop = createLayerCropDataUrl(layer, ref, { reconstruction: true, profile });
-    const response = await fetch("/api/trellis2/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        image: crop,
-        name: `${state.source?.name || "artwork"}-${scope}-${layer.id}`,
-        domain: review.subject.domain,
-        subject: review.subject.id,
-        layerId: layer.id,
-        reconstructionProfile: profile,
-        objectReference: layer.objectReference || profile.objectReference || null,
-        seed: (scope === "biology" ? 4126 : 2026) + review.generatedIds.size,
-      }),
-    });
-    if (!response.ok) {
-      let message = `${imageTo3dLabel()} ${response.status}`;
-      try { message = (await response.json()).detail || message; } catch (_) { /* ignore */ }
-      throw new Error(message);
-    }
-    const gltf = await parseGeneratedGlb(await response.arrayBuffer());
     const anchorEntity = review.previewMeshes.get(layer.id);
-    installGeneratedLayer(gltf.scene, layer, anchorEntity, profile);
+    if (!anchorEntity) throw new Error("候选锚点不存在，无法回装 3D 模型");
+    if (useMorphologyModel) {
+      const procedural = createProceduralMorphologyModel(review.subject, layer, profile, layer.objectReference);
+      installGeneratedLayer(procedural, layer, anchorEntity, profile);
+    } else {
+      const crop = createLayerCropDataUrl(layer, ref, { reconstruction: true, profile });
+      const response = await fetch("/api/trellis2/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image: crop,
+          name: `${state.source?.name || "artwork"}-${scope}-${layer.id}`,
+          domain: review.subject.domain,
+          subject: review.subject.id,
+          layerId: layer.id,
+          reconstructionProfile: profile,
+          objectReference: layer.objectReference || profile.objectReference || null,
+          seed: (scope === "biology" ? 4126 : 2026) + review.generatedIds.size,
+        }),
+      });
+      if (!response.ok) {
+        let message = `${imageTo3dLabel()} ${response.status}`;
+        try { message = (await response.json()).detail || message; } catch (_) { /* ignore */ }
+        throw new Error(message);
+      }
+      const gltf = await parseGeneratedGlb(await response.arrayBuffer());
+      installGeneratedLayer(gltf.scene, layer, anchorEntity, profile);
+    }
     review.generatedIds.add(layer.id);
     if (scope === "biology") {
       bioLayerMeshes.set(layer.id, anchorEntity);
@@ -1629,12 +1975,15 @@ async function confirmReviewLayer(scope, layerId) {
       state.pbrLayerCount = review.generatedIds.size;
       updateIndependentModelState(review.subject);
     }
-    if (line) line.textContent = `${review.subject.label} · ${review.generatedIds.size} 个 ${imageTo3dLabel()} GLB 已回装原画锚点`;
-    showToast("确认裁剪已生成 3D 模型，并回装到原画位置");
+    if (line) {
+      const engineLabel = useMorphologyModel ? "LLM 形态 Three.js 模型" : `${imageTo3dLabel()} GLB`;
+      line.textContent = `${review.subject.label} · ${review.generatedIds.size} 个 ${engineLabel} 已回装原画锚点`;
+    }
+    showToast(useMorphologyModel ? "LLM 物象方案已计算成 Three.js 部件模型" : "确认裁剪已生成 3D 模型，并回装到原画位置");
   } catch (err) {
     console.error("[wall-workspace] confirmed image-to-3d failed", err);
-    if (line) line.textContent = `图生 3D 失败 · ${err?.message || "未知错误"}`;
-    showToast(err?.message || "图生 3D 失败");
+    if (line) line.textContent = `3D 化失败 · ${err?.message || "未知错误"}`;
+    showToast(err?.message || "3D 化失败");
   } finally {
     review.generatingIds.delete(layerId);
     const anchorEntity = review.previewMeshes.get(layerId);
@@ -1751,14 +2100,14 @@ function updateBiologyModelState(subject = biologySubject()) {
     return;
   }
   if (state.bioReviewCandidateCount && !state.bioIndependentLayerCount) {
-    node.textContent = `${state.bioReviewCandidateCount} 个候选待确认 · 先审裁剪，再生成 ${imageTo3dLabel()} GLB`;
+    node.textContent = `${state.bioReviewCandidateCount} 个候选待确认 · 先审裁剪，再生成 3D 模型`;
     return;
   }
   if (!state.bioIndependentLayerCount) {
     node.textContent = `画中未确认“${subject.label}” · 0 个实体 · 未生成替代物`;
     return;
   }
-  const pbr = state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 个 ${imageTo3dLabel()} GLB` : " · 等待图生 3D";
+  const pbr = state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 个 3D 模型` : " · 等待图生 3D";
   const view = state.bioModelsExploded ? " · 当前为分离检查视图" : " · 当前与原画坐标对映";
   node.textContent = `${state.bioIndependentLayerCount} 个已确认生物 2D→3D 模型 · 独立原点/原画锚点${pbr}${view}`;
 }
@@ -2146,14 +2495,14 @@ function updateIndependentModelState(subject) {
     return;
   }
   if (state.reviewCandidateCount && !state.independentLayerCount) {
-    node.textContent = `${state.reviewCandidateCount} 个候选待确认 · 先审裁剪，再生成 ${imageTo3dLabel()} GLB`;
+    node.textContent = `${state.reviewCandidateCount} 个候选待确认 · 先审裁剪，再生成 3D 模型`;
     return;
   }
   if (!state.independentLayerCount) {
     node.textContent = `画中未确认“${subject.label}” · 0 个实体 · 未生成替代物`;
     return;
   }
-  const pbr = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 个 ${imageTo3dLabel()} GLB` : " · 等待图生 3D";
+  const pbr = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 个 3D 模型` : " · 等待图生 3D";
   const view = state.modelsExploded ? " · 当前为分离检查视图" : " · 当前与原画坐标对映";
   node.textContent = `${state.independentLayerCount} 个已确认 2D→3D 模型 · 独立原点/原画锚点${pbr}${view}`;
 }
@@ -3408,7 +3757,7 @@ function updateReadout() {
   const envLabel = subject ? `${ENVIRONMENT_CATALOG[subject.domain].label} · ${subject.label}` : "画境";
   const bioSubject = biologySubject();
   const bio = state.bioIndependentLayerCount
-    ? `${bioSubject.label} · ${state.bioIndependentLayerCount} 个 2D→3D 模型${state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} GLB` : ""}`
+    ? `${bioSubject.label} · ${state.bioIndependentLayerCount} 个 2D→3D 模型${state.bioPbrLayerCount ? ` · ${state.bioPbrLayerCount} 3D实体` : ""}`
     : state.bioReviewCandidateCount
       ? `${bioSubject.label} · ${state.bioReviewCandidateCount} 候选待确认`
     : state.creature
@@ -3419,9 +3768,9 @@ function updateReadout() {
   const geometryEngine = state.sceneLiftResult?.engine?.geometry || "MapAnything";
   const geometryLabel = geometryEngine.includes("Depth-Anything") ? "Depth Anything V2" : geometryEngine.includes("map-anything") ? "MapAnything" : geometryEngine;
   const hasSemanticLayer = Boolean(state.sceneLiftResult?.layers?.length);
-  const pbrSuffix = state.pbrLayerCount ? ` · ${state.pbrLayerCount} PBR 实体` : "";
+  const pbrSuffix = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 3D实体` : "";
   const generator = state.independentLayerCount
-    ? `${geometryLabel} 深度 · ${state.independentLayerCount} 个 ${imageTo3dLabel()} GLB${pbrSuffix}`
+    ? `${geometryLabel} 深度 · ${state.independentLayerCount} 个 2D→3D 模型${pbrSuffix}`
     : state.reviewCandidateCount
       ? `${geometryLabel} 深度 · Grounded SAM 2 · ${state.reviewCandidateCount} 候选待确认`
       : state.source?.dataUrl ? "等待候选识别" : "等待画作";
