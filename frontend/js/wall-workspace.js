@@ -1605,29 +1605,18 @@ function installGeneratedLayer(root, layer, anchorEntity) {
       material.needsUpdate = true;
     }
   });
-  root.updateMatrixWorld(true);
-  const sourceBox = new THREE.Box3().setFromObject(root);
-  const sourceSize = sourceBox.getSize(new THREE.Vector3());
   anchorMesh.geometry.computeBoundingBox();
   const targetBox = anchorMesh.geometry.boundingBox.clone();
-  const targetSize = targetBox.getSize(new THREE.Vector3());
-  const scale = Math.min(
-    targetSize.x / Math.max(sourceSize.x, 0.001),
-    targetSize.y / Math.max(sourceSize.y, 0.001)
-  );
-  root.scale.setScalar(scale);
-  root.updateMatrixWorld(true);
-  const scaledCenter = new THREE.Box3().setFromObject(root).getCenter(new THREE.Vector3());
-  const targetCenter = targetBox.getCenter(new THREE.Vector3());
-  root.position.add(targetCenter.sub(scaledCenter));
-  root.userData = {
+  const fittedRoot = fitGeneratedRootToAnchor(root, targetBox, layer);
+  fittedRoot.userData = {
+    ...fittedRoot.userData,
     ...root.userData,
     independentModel: true,
     pbrCompletion: true,
     layerId: layer.id,
     sourceAnchor: layer.anchor || null,
   };
-  anchorEntity.add(root);
+  anchorEntity.add(fittedRoot);
   anchorEntity.userData.pbrCompleted = true;
   anchorMesh.userData.pbrCompleted = true;
   if (anchorMesh.userData.reviewAnchor) {
@@ -1640,6 +1629,98 @@ function installGeneratedLayer(root, layer, anchorEntity) {
     anchorMesh.material.depthWrite = false;
     anchorMesh.material.needsUpdate = true;
   }
+}
+
+function fitGeneratedRootToAnchor(root, targetBox, layer) {
+  const fitGroup = new THREE.Group();
+  fitGroup.name = "image-to-3d-anchor-fit";
+  const orientedGroup = new THREE.Group();
+  orientedGroup.name = "image-to-3d-axis-adapter";
+  orientedGroup.add(root);
+  fitGroup.add(orientedGroup);
+
+  const targetSize = targetBox.getSize(new THREE.Vector3());
+  const targetCenter = targetBox.getCenter(new THREE.Vector3());
+  const orientation = chooseGeneratedLayerOrientation(orientedGroup, targetSize);
+  orientedGroup.rotation.set(orientation.rotation.x, orientation.rotation.y, orientation.rotation.z);
+  fitGroup.updateMatrixWorld(true);
+
+  const sourceBox = new THREE.Box3().setFromObject(orientedGroup);
+  const sourceSize = sourceBox.getSize(new THREE.Vector3());
+  const scale = generatedLayerFitScaleVector(sourceSize, targetSize);
+  fitGroup.scale.copy(scale);
+  fitGroup.updateMatrixWorld(true);
+
+  const fittedBox = new THREE.Box3().setFromObject(fitGroup);
+  const fittedCenter = fittedBox.getCenter(new THREE.Vector3());
+  fitGroup.position.add(targetCenter.sub(fittedCenter));
+  fitGroup.userData = {
+    independentModel: true,
+    pbrCompletion: true,
+    layerId: layer.id,
+    sourceAnchor: layer.anchor || null,
+    axisFit: {
+      orientation: orientation.name,
+      sourceAspect: Number.isFinite(orientation.aspect) ? +orientation.aspect.toFixed(4) : null,
+      targetAspect: planarAspect(targetSize),
+      scale: { x: +scale.x.toFixed(5), y: +scale.y.toFixed(5), z: +scale.z.toFixed(5) },
+    },
+  };
+  return fitGroup;
+}
+
+function chooseGeneratedLayerOrientation(orientedGroup, targetSize) {
+  const targetAspect = planarAspect(targetSize);
+  const rotations = [
+    { name: "identity", rotation: new THREE.Euler(0, 0, 0) },
+    { name: "quarter-z+", rotation: new THREE.Euler(0, 0, Math.PI / 2) },
+    { name: "quarter-z-", rotation: new THREE.Euler(0, 0, -Math.PI / 2) },
+    { name: "depth-to-y+", rotation: new THREE.Euler(Math.PI / 2, 0, 0) },
+    { name: "depth-to-y-", rotation: new THREE.Euler(-Math.PI / 2, 0, 0) },
+    { name: "depth-to-x+", rotation: new THREE.Euler(0, Math.PI / 2, 0) },
+    { name: "depth-to-x-", rotation: new THREE.Euler(0, -Math.PI / 2, 0) },
+  ];
+  let best = { name: "identity", rotation: rotations[0].rotation, score: Infinity, aspect: 1 };
+  for (const option of rotations) {
+    orientedGroup.rotation.set(option.rotation.x, option.rotation.y, option.rotation.z);
+    orientedGroup.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(orientedGroup);
+    const size = box.getSize(new THREE.Vector3());
+    const aspect = planarAspect(size);
+    const aspectScore = Math.abs(Math.log(Math.max(0.001, aspect) / Math.max(0.001, targetAspect)));
+    const targetTall = targetSize.y > targetSize.x * 1.35;
+    const targetWide = targetSize.x > targetSize.y * 1.35;
+    const directionPenalty = targetTall && size.y < size.x ? 1.2 : targetWide && size.x < size.y ? 1.2 : 0;
+    const depthPenalty = clamp(size.z / Math.max(size.x, size.y, 0.001), 0, 8) * 0.08;
+    const score = aspectScore + directionPenalty + depthPenalty;
+    if (score < best.score) best = { ...option, score, aspect };
+  }
+  return best;
+}
+
+function planarAspect(size) {
+  return Math.max(0.001, size.x) / Math.max(0.001, size.y);
+}
+
+function generatedLayerFitScaleVector(sourceSize, targetSize) {
+  const safeSourceX = Math.max(sourceSize.x, 0.001);
+  const safeSourceY = Math.max(sourceSize.y, 0.001);
+  const safeSourceZ = Math.max(sourceSize.z, 0.001);
+  const safeTargetX = Math.max(targetSize.x, 0.001);
+  const safeTargetY = Math.max(targetSize.y, 0.001);
+  const targetMajor = Math.max(safeTargetX, safeTargetY);
+  const targetMinor = Math.min(safeTargetX, safeTargetY);
+  const targetIsSlender = targetMajor / targetMinor > 2.2;
+  const uniform = Math.min(safeTargetX / safeSourceX, safeTargetY / safeSourceY) * 0.96;
+  if (!targetIsSlender) {
+    const safeUniform = clamp(uniform, 0.001, 80);
+    return new THREE.Vector3(safeUniform, safeUniform, safeUniform);
+  }
+  const sx = clamp((safeTargetX / safeSourceX) * 0.96, 0.001, 80);
+  const sy = clamp((safeTargetY / safeSourceY) * 0.98, 0.001, 80);
+  const planarMean = Math.sqrt(Math.max(0.000001, sx * sy));
+  const sz = clamp(Math.min(planarMean * 0.78, Math.max(sx, sy) * 0.55, Math.max(safeTargetX, safeTargetY) / safeSourceZ * 0.22), 0.001, 80);
+  return new THREE.Vector3(sx, sy, sz);
 }
 
 function installGeneratedEnvironment(root, subject) {
