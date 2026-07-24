@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>拟生环境工作空间 · 世界古典美术拟生平台</title>
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/wall-workspace.css?v=14" />
+  <link rel="stylesheet" href="css/wall-workspace.css?v=15" />
 </head>
 <body class="wall-workspace-page">
   <header class="wall-workspace-header">
@@ -63,6 +63,39 @@
         <div class="wall-action-row wall-independent-actions">
           <button class="btn small" id="separate-environment-models" type="button" disabled>分离查看</button>
           <button class="btn small" id="restore-environment-models" type="button" disabled>归位对映</button>
+        </div>
+        <div class="wall-placement-panel" id="environment-placement-panel" hidden>
+          <div class="wall-placement-head">
+            <b>模型安置 · 原画对映</b>
+            <span id="environment-placement-note">选中已生成 3D 模型后可调整。</span>
+          </div>
+          <div class="wall-placement-actions">
+            <button type="button" id="environment-placement-drag" aria-pressed="false">鼠标拖拽：关</button>
+            <button type="button" id="environment-placement-reset">归位锚点</button>
+          </div>
+          <div class="wall-placement-nudges" aria-label="环境模型微调">
+            <button type="button" data-placement-scope="environment" data-placement-nudge="left">←</button>
+            <button type="button" data-placement-scope="environment" data-placement-nudge="right">→</button>
+            <button type="button" data-placement-scope="environment" data-placement-nudge="up">↑</button>
+            <button type="button" data-placement-scope="environment" data-placement-nudge="down">↓</button>
+            <button type="button" data-placement-scope="environment" data-placement-nudge="near">近</button>
+            <button type="button" data-placement-scope="environment" data-placement-nudge="far">远</button>
+          </div>
+          <label class="wall-range wall-placement-range">左右 X
+            <input id="environment-placement-x" type="range" min="-1.6" max="1.6" step="0.01" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">上下 Y
+            <input id="environment-placement-y" type="range" min="-1.2" max="1.2" step="0.01" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">深浅 Z
+            <input id="environment-placement-z" type="range" min="-0.9" max="0.9" step="0.01" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">旋转
+            <input id="environment-placement-rotation" type="range" min="-180" max="180" step="1" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">缩放
+            <input id="environment-placement-scale" type="range" min="0.25" max="2.5" step="0.01" value="1" />
+          </label>
         </div>
       </section>
 
@@ -135,6 +168,39 @@
           <button class="btn small" id="separate-biology-models" type="button" disabled>分离查看</button>
           <button class="btn small" id="restore-biology-models" type="button" disabled>归位对映</button>
         </div>
+        <div class="wall-placement-panel wall-bio-placement-panel" id="biology-placement-panel" hidden>
+          <div class="wall-placement-head">
+            <b>模型安置 · 原画对映</b>
+            <span id="biology-placement-note">选中已生成 3D 生灵后可调整。</span>
+          </div>
+          <div class="wall-placement-actions">
+            <button type="button" id="biology-placement-drag" aria-pressed="false">鼠标拖拽：关</button>
+            <button type="button" id="biology-placement-reset">归位锚点</button>
+          </div>
+          <div class="wall-placement-nudges" aria-label="生物模型微调">
+            <button type="button" data-placement-scope="biology" data-placement-nudge="left">←</button>
+            <button type="button" data-placement-scope="biology" data-placement-nudge="right">→</button>
+            <button type="button" data-placement-scope="biology" data-placement-nudge="up">↑</button>
+            <button type="button" data-placement-scope="biology" data-placement-nudge="down">↓</button>
+            <button type="button" data-placement-scope="biology" data-placement-nudge="near">近</button>
+            <button type="button" data-placement-scope="biology" data-placement-nudge="far">远</button>
+          </div>
+          <label class="wall-range wall-placement-range">左右 X
+            <input id="biology-placement-x" type="range" min="-1.6" max="1.6" step="0.01" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">上下 Y
+            <input id="biology-placement-y" type="range" min="-1.2" max="1.2" step="0.01" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">深浅 Z
+            <input id="biology-placement-z" type="range" min="-0.9" max="0.9" step="0.01" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">旋转
+            <input id="biology-placement-rotation" type="range" min="-180" max="180" step="1" value="0" />
+          </label>
+          <label class="wall-range wall-placement-range">缩放
+            <input id="biology-placement-scale" type="range" min="0.25" max="2.5" step="0.01" value="1" />
+          </label>
+        </div>
       </section>
 
       <section class="wall-control-group">
@@ -163,6 +229,6 @@
   </main>
 
   <div class="toast" id="wall-toast"></div>
-  <script type="module" src="js/wall-workspace.js?v=14"></script>
+  <script type="module" src="js/wall-workspace.js?v=15"></script>
 </body>
 </html>

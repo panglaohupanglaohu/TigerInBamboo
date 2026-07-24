@@ -171,6 +171,17 @@ let activeReviewScope = "environment";
 const candidateRaycaster = new THREE.Raycaster();
 const candidatePointer = new THREE.Vector2();
 const candidatePointerDown = { x: 0, y: 0 };
+const placementPlane = new THREE.Plane();
+const placementPoint = new THREE.Vector3();
+const placementMouseEnabled = { environment: false, biology: false };
+const placementDragState = {
+  active: false,
+  scope: null,
+  layerId: null,
+  entity: null,
+  offset: new THREE.Vector3(),
+  pointerId: null,
+};
 const gltfLoader = new GLTFLoader();
 const candidateReview = {
   environment: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
@@ -269,6 +280,11 @@ function bindControls() {
   el("generate-biology")?.addEventListener("click", generateBiologyFromSource);
   el("separate-biology-models")?.addEventListener("click", () => setBiologyModelsExploded(true));
   el("restore-biology-models")?.addEventListener("click", () => setBiologyModelsExploded(false));
+  bindPlacementControls("environment");
+  bindPlacementControls("biology");
+  document.querySelectorAll("[data-placement-nudge]").forEach((button) => {
+    button.addEventListener("click", () => nudgePlacement(button.dataset.placementScope, button.dataset.placementNudge));
+  });
   el("env-domain-tabs")?.addEventListener("click", (event) => {
     const btn = event.target.closest("button[data-domain]");
     const domain = btn?.dataset.domain;
@@ -1321,6 +1337,186 @@ function normalizeProceduralRoot(root) {
   root.userData.normalizedFromMorphologyPlan = true;
 }
 
+function bindPlacementControls(scope) {
+  const ids = placementIds(scope);
+  el(ids.drag)?.addEventListener("click", () => togglePlacementMouse(scope));
+  el(ids.reset)?.addEventListener("click", () => resetSelectedPlacement(scope));
+  for (const key of ["x", "y", "z", "rotation", "scale"]) {
+    el(ids[key])?.addEventListener("input", () => applyPlacementFromControls(scope));
+  }
+}
+
+function placementIds(scope) {
+  const prefix = scope === "biology" ? "biology" : "environment";
+  return {
+    panel: `${prefix}-placement-panel`,
+    note: `${prefix}-placement-note`,
+    drag: `${prefix}-placement-drag`,
+    reset: `${prefix}-placement-reset`,
+    x: `${prefix}-placement-x`,
+    y: `${prefix}-placement-y`,
+    z: `${prefix}-placement-z`,
+    rotation: `${prefix}-placement-rotation`,
+    scale: `${prefix}-placement-scale`,
+  };
+}
+
+function selectedGeneratedEntity(scope = activeReviewScope) {
+  const review = candidateReview[scope];
+  if (!review?.selectedId || !review.generatedIds.has(review.selectedId)) return null;
+  return review.previewMeshes.get(review.selectedId) || null;
+}
+
+function ensureEntityPlacement(entity) {
+  const p = entity.userData.placement || {};
+  entity.userData.placement = {
+    x: Number.isFinite(Number(p.x)) ? Number(p.x) : 0,
+    y: Number.isFinite(Number(p.y)) ? Number(p.y) : 0,
+    z: Number.isFinite(Number(p.z)) ? Number(p.z) : 0,
+    rotationZ: Number.isFinite(Number(p.rotationZ)) ? Number(p.rotationZ) : 0,
+    scale: Number.isFinite(Number(p.scale)) ? Math.max(0.05, Number(p.scale)) : 1,
+  };
+  return entity.userData.placement;
+}
+
+function applyPlacementToEntity(entity) {
+  if (!entity?.userData?.homePosition) return;
+  const home = entity.userData.homePosition;
+  const p = ensureEntityPlacement(entity);
+  entity.position.set(home.x + p.x, home.y + p.y, home.z + p.z);
+  entity.rotation.set(0, 0, p.rotationZ);
+  entity.scale.setScalar(p.scale);
+}
+
+function placementFromEntityPosition(entity) {
+  if (!entity?.userData?.homePosition) return null;
+  const home = entity.userData.homePosition;
+  const p = ensureEntityPlacement(entity);
+  p.x = entity.position.x - home.x;
+  p.y = entity.position.y - home.y;
+  p.z = entity.position.z - home.z;
+  p.rotationZ = entity.rotation.z || 0;
+  p.scale = entity.scale.x || 1;
+  return p;
+}
+
+function updatePlacementPanel(scope) {
+  const ids = placementIds(scope);
+  const panel = el(ids.panel);
+  if (!panel) return;
+  const entity = selectedGeneratedEntity(scope);
+  const exploded = scope === "biology" ? state.bioModelsExploded : state.modelsExploded;
+  if (!entity) {
+    panel.hidden = true;
+    return;
+  }
+  panel.hidden = false;
+  const p = ensureEntityPlacement(entity);
+  const note = el(ids.note);
+  if (note) {
+    const label = candidateReview[scope]?.subject?.label || "模型";
+    note.textContent = exploded
+      ? "当前为分离查看；先点“归位对映”再精确安置。"
+      : `${label}候选 · X ${p.x.toFixed(2)} / Y ${p.y.toFixed(2)} / Z ${p.z.toFixed(2)} · 可拖拽或滑杆微调`;
+  }
+  const values = {
+    x: p.x,
+    y: p.y,
+    z: p.z,
+    rotation: THREE.MathUtils.radToDeg(p.rotationZ),
+    scale: p.scale,
+  };
+  for (const [key, value] of Object.entries(values)) {
+    const input = el(ids[key]);
+    if (!input) continue;
+    input.disabled = exploded;
+    input.value = String(key === "rotation" ? Math.round(value) : +value.toFixed(3));
+  }
+  const drag = el(ids.drag);
+  if (drag) {
+    drag.disabled = exploded;
+    drag.setAttribute("aria-pressed", placementMouseEnabled[scope] && !exploded ? "true" : "false");
+    drag.textContent = placementMouseEnabled[scope] && !exploded ? "鼠标拖拽：开" : "鼠标拖拽：关";
+  }
+  const reset = el(ids.reset);
+  if (reset) reset.disabled = exploded;
+  panel.querySelectorAll("[data-placement-nudge]").forEach((button) => {
+    button.disabled = exploded;
+  });
+  updatePlacementCursor();
+}
+
+function updateAllPlacementPanels() {
+  updatePlacementPanel("environment");
+  updatePlacementPanel("biology");
+}
+
+function applyPlacementFromControls(scope) {
+  const entity = selectedGeneratedEntity(scope);
+  if (!entity) return;
+  const ids = placementIds(scope);
+  const p = ensureEntityPlacement(entity);
+  p.x = clamp(Number(el(ids.x)?.value) || 0, -1.6, 1.6);
+  p.y = clamp(Number(el(ids.y)?.value) || 0, -1.2, 1.2);
+  p.z = clamp(Number(el(ids.z)?.value) || 0, -0.9, 0.9);
+  p.rotationZ = THREE.MathUtils.degToRad(clamp(Number(el(ids.rotation)?.value) || 0, -180, 180));
+  p.scale = clamp(Number(el(ids.scale)?.value) || 1, 0.25, 2.5);
+  applyPlacementToEntity(entity);
+  updatePlacementPanel(scope);
+  updateReadout();
+}
+
+function resetSelectedPlacement(scope) {
+  const entity = selectedGeneratedEntity(scope);
+  if (!entity) return;
+  entity.userData.placement = { x: 0, y: 0, z: 0, rotationZ: 0, scale: 1 };
+  applyPlacementToEntity(entity);
+  updatePlacementPanel(scope);
+  updateReadout();
+  showToast("模型已归位到原画锚点");
+}
+
+function nudgePlacement(scope, direction) {
+  if (scope !== "environment" && scope !== "biology") return;
+  const entity = selectedGeneratedEntity(scope);
+  if (!entity) return;
+  const exploded = scope === "biology" ? state.bioModelsExploded : state.modelsExploded;
+  if (exploded) {
+    showToast("分离查看中，请先归位对映再安置");
+    return;
+  }
+  const p = ensureEntityPlacement(entity);
+  const step = 0.035;
+  const depthStep = 0.025;
+  if (direction === "left") p.x = clamp(p.x - step, -1.6, 1.6);
+  if (direction === "right") p.x = clamp(p.x + step, -1.6, 1.6);
+  if (direction === "up") p.y = clamp(p.y + step, -1.2, 1.2);
+  if (direction === "down") p.y = clamp(p.y - step, -1.2, 1.2);
+  if (direction === "near") p.z = clamp(p.z + depthStep, -0.9, 0.9);
+  if (direction === "far") p.z = clamp(p.z - depthStep, -0.9, 0.9);
+  applyPlacementToEntity(entity);
+  updatePlacementPanel(scope);
+  updateReadout();
+}
+
+function togglePlacementMouse(scope) {
+  placementMouseEnabled[scope] = !placementMouseEnabled[scope];
+  if (placementMouseEnabled[scope]) {
+    activeReviewScope = scope;
+    showToast("鼠标拖拽已开启：在画面中拖动已生成模型");
+  } else {
+    showToast("鼠标拖拽已关闭");
+  }
+  updatePlacementPanel(scope);
+}
+
+function updatePlacementCursor() {
+  const canvas = el("wall-viewport");
+  const anyEnabled = (placementMouseEnabled.environment && !state.modelsExploded)
+    || (placementMouseEnabled.biology && !state.bioModelsExploded);
+  canvas?.classList.toggle("placement-drag-enabled", Boolean(anyEnabled));
+}
+
 function resetReviewState(scope) {
   const review = candidateReview[scope];
   if (!review) return;
@@ -1338,6 +1534,7 @@ function resetReviewState(scope) {
   }
   if (scope === "biology") state.bioReviewCandidateCount = 0;
   else state.reviewCandidateCount = 0;
+  updatePlacementPanel(scope);
 }
 
 function installCandidateReview(scope, result, subject) {
@@ -1397,6 +1594,7 @@ function installCandidateReview(scope, result, subject) {
     updateIndependentModelState(subject);
     renderEnvironmentButtons();
   }
+  updatePlacementPanel(scope);
   updateReadout();
 }
 
@@ -1525,13 +1723,114 @@ function bindCanvasCandidateSelection(canvas) {
   canvas.addEventListener("pointerdown", (event) => {
     candidatePointerDown.x = event.clientX;
     candidatePointerDown.y = event.clientY;
+    if (beginPlacementDrag(event)) {
+      canvas.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    }
+  });
+  canvas.addEventListener("pointermove", (event) => {
+    if (updatePlacementDrag(event)) event.preventDefault();
   });
   canvas.addEventListener("pointerup", (event) => {
+    if (placementDragState.active) {
+      endPlacementDrag(event);
+      event.currentTarget.releasePointerCapture?.(event.pointerId);
+      event.preventDefault();
+      return;
+    }
     const dx = event.clientX - candidatePointerDown.x;
     const dy = event.clientY - candidatePointerDown.y;
     if (Math.hypot(dx, dy) > 6) return;
     selectCandidateFromCanvas(event);
   });
+  canvas.addEventListener("pointercancel", (event) => {
+    if (!placementDragState.active) return;
+    endPlacementDrag(event);
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+  });
+}
+
+function beginPlacementDrag(event) {
+  if (!camera || !renderer || !(placementMouseEnabled.environment || placementMouseEnabled.biology)) return false;
+  const picked = pickGeneratedEntityFromCanvas(event);
+  if (!picked || !placementMouseEnabled[picked.scope]) return false;
+  const exploded = picked.scope === "biology" ? state.bioModelsExploded : state.modelsExploded;
+  if (exploded) {
+    showToast("分离查看中，请先归位对映再安置");
+    return false;
+  }
+  if (!intersectPointerWithZPlane(event, picked.entity.position.z, placementPoint)) return false;
+  setReviewSelection(picked.scope, picked.layerId);
+  placementDragState.active = true;
+  placementDragState.scope = picked.scope;
+  placementDragState.layerId = picked.layerId;
+  placementDragState.entity = picked.entity;
+  placementDragState.pointerId = event.pointerId;
+  placementDragState.offset.copy(picked.entity.position).sub(placementPoint);
+  if (controls) controls.enabled = false;
+  return true;
+}
+
+function updatePlacementDrag(event) {
+  if (!placementDragState.active || !placementDragState.entity) return false;
+  if (placementDragState.pointerId !== null && event.pointerId !== placementDragState.pointerId) return false;
+  const entity = placementDragState.entity;
+  if (!intersectPointerWithZPlane(event, entity.position.z, placementPoint)) return false;
+  entity.position.x = placementPoint.x + placementDragState.offset.x;
+  entity.position.y = placementPoint.y + placementDragState.offset.y;
+  placementFromEntityPosition(entity);
+  updatePlacementPanel(placementDragState.scope);
+  updateReadout();
+  return true;
+}
+
+function endPlacementDrag() {
+  if (!placementDragState.active) return;
+  const scope = placementDragState.scope;
+  placementDragState.active = false;
+  placementDragState.scope = null;
+  placementDragState.layerId = null;
+  placementDragState.entity = null;
+  placementDragState.pointerId = null;
+  if (controls) controls.enabled = true;
+  updatePlacementPanel(scope || activeReviewScope);
+  showToast("模型安置已更新");
+}
+
+function pickGeneratedEntityFromCanvas(event) {
+  const generatedRoots = [];
+  for (const scope of ["environment", "biology"]) {
+    const review = candidateReview[scope];
+    for (const [layerId, entity] of review.previewMeshes.entries()) {
+      if (!review.generatedIds.has(layerId)) continue;
+      generatedRoots.push(entity);
+    }
+  }
+  if (!generatedRoots.length) return null;
+  setPointerFromEvent(event);
+  candidateRaycaster.setFromCamera(candidatePointer, camera);
+  const hits = candidateRaycaster.intersectObjects(generatedRoots, true);
+  for (const hit of hits) {
+    const entity = findCandidateEntity(hit.object);
+    const scope = entity?.userData?.scope;
+    const layerId = entity?.userData?.layerId;
+    if (!scope || !layerId || !candidateReview[scope]?.generatedIds.has(layerId)) continue;
+    return { scope, layerId, entity };
+  }
+  return null;
+}
+
+function intersectPointerWithZPlane(event, z, target) {
+  setPointerFromEvent(event);
+  candidateRaycaster.setFromCamera(candidatePointer, camera);
+  placementPlane.set(new THREE.Vector3(0, 0, 1), -z);
+  return candidateRaycaster.ray.intersectPlane(placementPlane, target);
+}
+
+function setPointerFromEvent(event) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  candidatePointer.x = ((event.clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1;
+  candidatePointer.y = -(((event.clientY - rect.top) / Math.max(1, rect.height)) * 2 - 1);
 }
 
 function selectCandidateFromCanvas(event) {
@@ -1541,10 +1840,7 @@ function selectCandidateFromCanvas(event) {
     ...candidateReview.biology.previewMeshes.values(),
   ];
   if (!candidateRoots.length) return false;
-  const rect = renderer.domElement.getBoundingClientRect();
-  if (!rect.width || !rect.height) return false;
-  candidatePointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-  candidatePointer.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+  setPointerFromEvent(event);
   candidateRaycaster.setFromCamera(candidatePointer, camera);
   const hits = candidateRaycaster.intersectObjects(candidateRoots, true);
   const candidates = [];
@@ -1754,6 +2050,7 @@ function setReviewSelection(scope, layerId, render = true) {
   for (const [id, entity] of review.previewMeshes.entries()) {
     applyCandidateVisualState(scope, id, entity);
   }
+  updatePlacementPanel(scope);
   if (render) {
     renderCandidateReview(scope);
     scrollSelectedCandidateCard(scope);
@@ -1979,6 +2276,7 @@ async function confirmReviewLayer(scope, layerId) {
       const engineLabel = useMorphologyModel ? "LLM 形态 Three.js 模型" : `${imageTo3dLabel()} GLB`;
       line.textContent = `${review.subject.label} · ${review.generatedIds.size} 个 ${engineLabel} 已回装原画锚点`;
     }
+    updatePlacementPanel(scope);
     showToast(useMorphologyModel ? "LLM 物象方案已计算成 Three.js 部件模型" : "确认裁剪已生成 3D 模型，并回装到原画位置");
   } catch (err) {
     console.error("[wall-workspace] confirmed image-to-3d failed", err);
@@ -2116,10 +2414,8 @@ function setBiologyModelsExploded(exploded) {
   if (!bioLayerMeshes.size) return;
   const entities = [...bioLayerMeshes.values()];
   entities.forEach((entity, index) => {
-    const home = entity.userData.homePosition;
-    if (!home) return;
-    entity.position.set(home.x, home.y, home.z);
-    entity.rotation.set(0, 0, 0);
+    if (!entity.userData.homePosition) return;
+    applyPlacementToEntity(entity);
     if (entity.userData.inspection) entity.userData.inspection.visible = exploded;
     if (!exploded) return;
     const centeredIndex = index - (entities.length - 1) * 0.5;
@@ -2133,6 +2429,7 @@ function setBiologyModelsExploded(exploded) {
     renderSegments();
   }
   updateBiologyModelState();
+  updatePlacementPanel("biology");
   updateReadout();
   showToast(exploded ? "生物实体已从原画锚点分离，可检查独立体积" : "生物实体已归位到原画坐标");
 }
@@ -2294,6 +2591,7 @@ function installGeneratedLayer(root, layer, anchorEntity, profile = layer.recons
   };
   anchorEntity.add(fittedRoot);
   anchorEntity.userData.pbrCompleted = true;
+  ensureEntityPlacement(anchorEntity);
   anchorMesh.userData.pbrCompleted = true;
   if (anchorMesh.userData.reviewAnchor) {
     anchorMesh.visible = false;
@@ -2511,10 +2809,8 @@ function setIndependentModelsExploded(exploded) {
   if (!independentLayerMeshes.size) return;
   const entities = [...independentLayerMeshes.values()];
   entities.forEach((entity, index) => {
-    const home = entity.userData.homePosition;
-    if (!home) return;
-    entity.position.set(home.x, home.y, home.z);
-    entity.rotation.set(0, 0, 0);
+    if (!entity.userData.homePosition) return;
+    applyPlacementToEntity(entity);
     if (!exploded) return;
     if (entities.length === 1) {
       entity.position.x += 0.72;
@@ -2529,6 +2825,7 @@ function setIndependentModelsExploded(exploded) {
   });
   state.modelsExploded = exploded;
   updateIndependentModelState(environmentSubject(state.envSubject));
+  updatePlacementPanel("environment");
   showToast(exploded ? "独立实体已分离；可确认它们不是同一张浮雕" : "独立实体已归位到原画坐标");
 }
 
