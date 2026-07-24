@@ -844,6 +844,14 @@
   cursor: grabbing;
 }
 
+.wall-canvas-shell.three-source-active #wall-viewport {
+  cursor: pointer;
+}
+
+.wall-canvas-shell.three-source-active #wall-viewport:active {
+  cursor: pointer;
+}
+
 .wall-state-readout {
   min-height: 44px;
   padding: 12px 14px;

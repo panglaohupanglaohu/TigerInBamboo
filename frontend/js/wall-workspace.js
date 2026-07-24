@@ -167,6 +167,10 @@ let artworkFrame = null;
 let artworkReferencePlane = null;
 let independentLayerMeshes = new Map();
 let bioLayerMeshes = new Map();
+let activeReviewScope = "environment";
+const candidateRaycaster = new THREE.Raycaster();
+const candidatePointer = new THREE.Vector2();
+const candidatePointerDown = { x: 0, y: 0 };
 const gltfLoader = new GLTFLoader();
 const candidateReview = {
   environment: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
@@ -205,6 +209,7 @@ function initThree() {
   controls.maxDistance = 9;
   controls.maxPolarAngle = Math.PI * 0.9;
   controls.update();
+  bindCanvasCandidateSelection(canvas);
 
   ground = new THREE.Mesh(
     new THREE.PlaneGeometry(9, 9),
@@ -902,6 +907,7 @@ function installCandidateReview(scope, result, subject) {
   const isBiology = scope === "biology";
   const review = candidateReview[scope];
   if (!review) return;
+  activeReviewScope = scope;
   const ref = referenceMapFromResult(result);
   review.result = result;
   review.subject = subject;
@@ -1035,6 +1041,7 @@ function createCandidatePreviewEntity(scope, ref, layer, frame) {
   surface.renderOrder = 28;
   surface.userData = {
     reviewAnchor: true,
+    scope,
     layerId: layer.id,
     sourceBbox: layer.bbox,
     sourceAnchor: layer.anchor || null,
@@ -1052,12 +1059,13 @@ function createCandidatePreviewEntity(scope, ref, layer, frame) {
     })
   );
   outline.renderOrder = 29;
-  outline.userData.reviewOutline = true;
+  outline.userData = { reviewOutline: true, scope, layerId: layer.id };
 
   const entity = new THREE.Group();
   entity.position.set(isolated.anchor.x, frame.centerY + isolated.anchor.y, frame.z + isolated.anchor.z + 0.1);
   entity.userData = {
     reviewCandidate: true,
+    scope,
     independentModel: true,
     layerId: layer.id,
     subjectId: layer.subjectId,
@@ -1071,6 +1079,59 @@ function createCandidatePreviewEntity(scope, ref, layer, frame) {
   return entity;
 }
 
+function bindCanvasCandidateSelection(canvas) {
+  canvas.addEventListener("pointerdown", (event) => {
+    candidatePointerDown.x = event.clientX;
+    candidatePointerDown.y = event.clientY;
+  });
+  canvas.addEventListener("pointerup", (event) => {
+    const dx = event.clientX - candidatePointerDown.x;
+    const dy = event.clientY - candidatePointerDown.y;
+    if (Math.hypot(dx, dy) > 6) return;
+    selectCandidateFromCanvas(event);
+  });
+}
+
+function selectCandidateFromCanvas(event) {
+  if (!camera || !renderer) return false;
+  const candidateRoots = [
+    ...candidateReview.environment.previewMeshes.values(),
+    ...candidateReview.biology.previewMeshes.values(),
+  ];
+  if (!candidateRoots.length) return false;
+  const rect = renderer.domElement.getBoundingClientRect();
+  if (!rect.width || !rect.height) return false;
+  candidatePointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  candidatePointer.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+  candidateRaycaster.setFromCamera(candidatePointer, camera);
+  const hits = candidateRaycaster.intersectObjects(candidateRoots, true);
+  const candidates = [];
+  for (const hit of hits) {
+    const candidate = findCandidateEntity(hit.object);
+    const scope = candidate?.userData?.scope;
+    const layerId = candidate?.userData?.layerId;
+    if (!scope || !layerId || !candidateReview[scope]?.previewMeshes.has(layerId)) continue;
+    candidates.push({ scope, layerId });
+  }
+  const picked = candidates.find((candidate) => candidate.scope === activeReviewScope) || candidates[0];
+  if (picked) {
+    setReviewSelection(picked.scope, picked.layerId);
+    const label = candidateReview[picked.scope]?.subject?.label || "候选";
+    showToast(`已选中画中“${label}”候选，可确认生成 3D`);
+    return true;
+  }
+  return false;
+}
+
+function findCandidateEntity(object) {
+  let node = object;
+  while (node) {
+    if (node.userData?.reviewCandidate) return node;
+    node = node.parent;
+  }
+  return null;
+}
+
 function reviewLayerList(scope) {
   const review = candidateReview[scope];
   if (!review?.result || !review.subject) return [];
@@ -1080,11 +1141,26 @@ function reviewLayerList(scope) {
 function setReviewSelection(scope, layerId, render = true) {
   const review = candidateReview[scope];
   if (!review || !layerId) return;
+  activeReviewScope = scope;
   review.selectedId = layerId;
   for (const [id, entity] of review.previewMeshes.entries()) {
     applyCandidateVisualState(scope, id, entity);
   }
-  if (render) renderCandidateReview(scope);
+  if (render) {
+    renderCandidateReview(scope);
+    scrollSelectedCandidateCard(scope);
+  }
+}
+
+function scrollSelectedCandidateCard(scope) {
+  const review = candidateReview[scope];
+  const panel = el(scope === "biology" ? "biology-candidate-panel" : "environment-candidate-panel");
+  if (!panel || !review?.selectedId) return;
+  requestAnimationFrame(() => {
+    const card = [...panel.querySelectorAll(".wall-candidate-card")]
+      .find((candidateCard) => candidateCard.dataset.layerId === review.selectedId);
+    card?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  });
 }
 
 function applyCandidateVisualState(scope, layerId, entity) {
@@ -1127,7 +1203,7 @@ function renderCandidateReview(scope) {
   title.textContent = layers.length ? `${layers.length} 个候选 · 请确认裁剪是否正确` : "未识别到候选";
   const prompt = document.createElement("span");
   prompt.textContent = layers.length
-    ? `先点高亮检查位置；确认后才调用 ${imageTo3dLabel()} 生成真正 GLB 模型。`
+    ? `点画中高亮区域或候选卡来选取；确认后才调用 ${imageTo3dLabel()} 生成真正 GLB 模型。`
     : "没有通过分割审查的对象，系统不会用剪影或随机模型顶替。";
   head.append(title, prompt);
   panel.appendChild(head);
@@ -1135,6 +1211,7 @@ function renderCandidateReview(scope) {
   for (const [index, layer] of layers.entries()) {
     const card = document.createElement("div");
     card.className = "wall-candidate-card";
+    card.dataset.layerId = layer.id;
     card.classList.toggle("is-selected", review.selectedId === layer.id);
     card.classList.toggle("is-generated", review.generatedIds.has(layer.id));
     card.addEventListener("click", () => setReviewSelection(scope, layer.id));
