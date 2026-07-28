@@ -434,6 +434,7 @@ export class Environment {
     };
 
     // 小山石：涧边点景 —— 底部粗、多棱面（flatShading）、轮廓不规则，杜绝方棱锥
+    const obstacles = []; // 岩石刚体碰撞圈（虎行走/捕猎绕行用）
     const nearWater = [];
     for (let i = 0; i < 26; i++) {
       const t = rand();
@@ -446,6 +447,7 @@ export class Environment {
       placeStone(x, z, s, s * (1.6 + rand() * 0.8),
         taihuGeometry(rand() * 100, { stretch: 1.3, flareK: 1.0, flareFrom: 0.35, waist: 0.2 }),
         facetMat);
+      if (s >= 0.5) obstacles.push({ x, z, r: s * 1.05 }); // 过矮的汀石可迈过，不列入
       const q = streamQuery(x, z);
       if (q.d < q.halfW + 1.2) nearWater.push({ x, z, r: s * 1.15 }); // 会碰水的石
     }
@@ -472,8 +474,10 @@ export class Environment {
           : main ? null
           : { x: (rand() - 0.5) * lean, z: (rand() - 0.5) * lean };
         placeStone(gx + Math.cos(a) * d, gz + Math.sin(a) * d, s, h, geo, rockMat, pose);
+        obstacles.push({ x: gx + Math.cos(a) * d, z: gz + Math.sin(a) * d, r: s * 1.05 });
       }
     }
+    this.rockObstacles = obstacles; // 全部岩石刚体碰撞圈（供虎等行走绕行）
   }
 
   _buildSnowfall() {

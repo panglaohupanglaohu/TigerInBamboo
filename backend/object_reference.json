@@ -1,0 +1,1069 @@
+{
+  "version": 1,
+  "archetypes": {
+    "bamboo": {
+      "label": "竹",
+      "query": "bamboo culm node internode branch leaf real-world morphology",
+      "archetype": "中空分节竖向茎干，节与节间清晰，细枝侧出，披针形叶簇挂在枝端",
+      "parts": [
+        "竖向竹竿",
+        "竹节",
+        "节间",
+        "侧枝",
+        "披针形竹叶",
+        "基部丛生关系"
+      ],
+      "physicalTraits": [
+        "竿身细长近圆柱",
+        "节点略凸起成环",
+        "整体弹性强但主轴稳定",
+        "枝叶轻薄外展"
+      ],
+      "geometryHints": {
+        "primaryAxis": "vertical",
+        "crossSection": "hollow-cylinder",
+        "segmentation": "nodes-internodes",
+        "branching": "lateral-twigs"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.16,
+        "avoidHorizontalRod": true
+      },
+      "negativeHints": [
+        "不要把竹竿生成成横向粗杆",
+        "不要把叶簇和主竿合成一个无节块体",
+        "不要丢失竖向主轴"
+      ]
+    },
+    "pine": {
+      "label": "松",
+      "query": "pine tree trunk branch whorl needle foliage morphology",
+      "archetype": "粗糙树干与曲折枝干支撑针叶簇，枝条多横斜伸展但有明确木质骨架",
+      "parts": [
+        "主干",
+        "侧枝",
+        "针叶簇",
+        "树皮皴裂",
+        "枝端冠团"
+      ],
+      "physicalTraits": [
+        "树干较硬",
+        "枝条横斜",
+        "针叶成簇",
+        "冠团不应变成实体板"
+      ],
+      "geometryHints": {
+        "primaryAxis": "branching",
+        "crossSection": "woody-cylinder",
+        "foliage": "needle-clumps"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.22,
+        "avoidHorizontalRod": true
+      },
+      "negativeHints": [
+        "不要把整片松针冠生成成单块纸板",
+        "不要忽略枝干支撑关系"
+      ]
+    },
+    "plum": {
+      "label": "梅",
+      "query": "plum blossom old branch flower morphology",
+      "archetype": "苍老曲枝、短枝节、散点梅花共同构成，花朵附着在枝条节点附近",
+      "parts": [
+        "老枝",
+        "短枝",
+        "花瓣",
+        "花蕊",
+        "节点"
+      ],
+      "physicalTraits": [
+        "枝条曲折硬质",
+        "花瓣薄而圆",
+        "花朵不应漂离枝条"
+      ],
+      "geometryHints": {
+        "primaryAxis": "curved-branch",
+        "flower": "thin-petals"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.2
+      },
+      "negativeHints": [
+        "不要把梅花和枝干合成一团",
+        "不要生成无枝撑的花球"
+      ]
+    },
+    "flower": {
+      "label": "花草",
+      "query": "flowering herb shrub stem leaf petal morphology",
+      "archetype": "细茎、叶片、花萼和薄花瓣共同构成，花朵必须依附茎叶而不是漂浮花球",
+      "parts": [
+        "茎",
+        "叶",
+        "花萼",
+        "薄花瓣",
+        "花蕊",
+        "基部"
+      ],
+      "physicalTraits": [
+        "茎叶较薄",
+        "花瓣轻薄有层次",
+        "花冠与枝叶有连接点"
+      ],
+      "geometryHints": {
+        "primaryAxis": "stem-flower",
+        "leaf": "thin-surface",
+        "flower": "layered-petals"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.14
+      },
+      "negativeHints": [
+        "不要把花瓣做成厚块",
+        "不要让花冠脱离枝茎",
+        "不要把整株压成一张纸"
+      ]
+    },
+    "vine": {
+      "label": "藤蔓",
+      "query": "wisteria vine hanging raceme woody vine morphology",
+      "archetype": "缠绕木质藤条、细枝和下垂花序共同构成，主藤有曲线骨架",
+      "parts": [
+        "主藤",
+        "缠绕枝",
+        "叶片",
+        "下垂花序",
+        "附着点"
+      ],
+      "physicalTraits": [
+        "藤条细长曲折",
+        "花序重心向下",
+        "叶片薄而分散"
+      ],
+      "geometryHints": {
+        "primaryAxis": "curved-vine",
+        "flower": "hanging-raceme"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.15,
+        "avoidHorizontalRod": true
+      },
+      "negativeHints": [
+        "不要把藤蔓生成为硬直横杆",
+        "不要把花序合成单个块体"
+      ]
+    },
+    "reed": {
+      "label": "芦苇",
+      "query": "reed stem plume wetland plant morphology",
+      "archetype": "水岸细长秆、线形叶和穗状花序构成的成丛湿地植物",
+      "parts": [
+        "细秆",
+        "线形叶",
+        "穗",
+        "丛生基部"
+      ],
+      "physicalTraits": [
+        "极细长",
+        "成簇直立或微倾",
+        "顶部穗较轻"
+      ],
+      "geometryHints": {
+        "primaryAxis": "vertical",
+        "crossSection": "thin-cylinder",
+        "foliage": "linear-leaves"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.12
+      },
+      "negativeHints": [
+        "不要生成厚板",
+        "不要把秆横放"
+      ]
+    },
+    "lotus": {
+      "label": "莲荷",
+      "query": "lotus leaf flower stem aquatic morphology",
+      "archetype": "圆盾形荷叶由细长叶柄自盘面中心下方伞式支撑，花梗顶端托举杯状层叠花瓣与朝上莲蓬，水面以下有根茎",
+      "parts": [
+        "圆叶",
+        "叶柄",
+        "花瓣",
+        "莲蓬",
+        "水下根茎"
+      ],
+      "physicalTraits": [
+        "叶片薄而宽",
+        "柄细长",
+        "花瓣层叠"
+      ],
+      "geometryHints": {
+        "primaryAxis": "stem-with-disc",
+        "leaf": "thin-disc",
+        "flower": "layered-petals"
+      },
+      "fitHints": {
+        "anisotropic": false,
+        "thicknessBias": 0.12
+      },
+      "negativeHints": [
+        "不要把荷叶做成厚石块",
+        "不要让花叶脱离叶柄"
+      ]
+    },
+    "bird": {
+      "label": "禽鸟",
+      "query": "bird body wing tail beak leg morphology",
+      "archetype": "椭圆躯干、头颈、双翼、尾羽、喙和足共同构成，飞行姿态有翼展主轴",
+      "parts": [
+        "躯干",
+        "头颈",
+        "喙",
+        "翼",
+        "尾羽",
+        "腿足"
+      ],
+      "physicalTraits": [
+        "躯干有体积",
+        "翼为薄面羽片",
+        "喙和尾羽形成方向性",
+        "足部可很细"
+      ],
+      "geometryHints": {
+        "primaryAxis": "body-wing",
+        "wing": "thin-surface",
+        "body": "ellipsoid"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.18
+      },
+      "negativeHints": [
+        "不要把鸟生成单个无翼团块",
+        "不要把翼做成厚实体"
+      ]
+    },
+    "quadruped": {
+      "label": "趾行走兽",
+      "query": "digitigrade quadruped body leg tail head morphology tiger leopard dog",
+      "archetype": "有胸腹体积、头颈、四肢、爪足和尾部的趾行四足兽，体轴与脊柱方向清楚",
+      "parts": [
+        "躯干",
+        "头颈",
+        "肩胯",
+        "前后肢",
+        "爪足",
+        "尾"
+      ],
+      "physicalTraits": [
+        "躯干为主质量",
+        "四肢支撑身体",
+        "足端细但不能丢失",
+        "尾部延续体轴"
+      ],
+      "geometryHints": {
+        "primaryAxis": "spine",
+        "body": "ellipsoid",
+        "limbs": "jointed-cylinders"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.28
+      },
+      "negativeHints": [
+        "不要生成无腿团块",
+        "不要把尾巴并进身体",
+        "不要让身体变成薄纸片"
+      ]
+    },
+    "ungulate": {
+      "label": "蹄兽",
+      "query": "unguligrade deer horse hoof leg body morphology",
+      "archetype": "长腿、蹄端、躯干、颈和头共同构成，腿部竖向承重非常关键",
+      "parts": [
+        "躯干",
+        "长颈",
+        "头",
+        "细长腿",
+        "蹄",
+        "尾"
+      ],
+      "physicalTraits": [
+        "腿长且细",
+        "蹄端接地",
+        "躯干较横向",
+        "颈部抬升形成姿态"
+      ],
+      "geometryHints": {
+        "primaryAxis": "body-leg",
+        "limbs": "slender-load-bearing"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.18
+      },
+      "negativeHints": [
+        "不要把四条腿糊成一块",
+        "不要丢失蹄端接地关系"
+      ]
+    },
+    "rabbit": {
+      "label": "兔类小兽",
+      "query": "rabbit hare body ear hind leg morphology",
+      "archetype": "圆润小躯干、长耳、短前肢和强壮后腿共同构成，跳跃结构以后肢为主",
+      "parts": [
+        "躯干",
+        "长耳",
+        "头",
+        "前肢",
+        "后腿",
+        "短尾"
+      ],
+      "physicalTraits": [
+        "身体圆润",
+        "耳朵薄而长",
+        "后腿体量比前肢明显"
+      ],
+      "geometryHints": {
+        "primaryAxis": "body-hindleg",
+        "ears": "thin-surfaces"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.24
+      },
+      "negativeHints": [
+        "不要把耳朵丢掉",
+        "不要把后腿做成单块阴影"
+      ]
+    },
+    "fish": {
+      "label": "鱼",
+      "query": "fish body fin tail aquatic morphology",
+      "archetype": "流线形鱼体、尾鳍、背鳍、胸鳍和腹鳍共同构成，体轴沿游动方向",
+      "parts": [
+        "流线鱼体",
+        "尾鳍",
+        "背鳍",
+        "胸鳍",
+        "眼"
+      ],
+      "physicalTraits": [
+        "侧向扁",
+        "体轴清晰",
+        "鳍为薄片"
+      ],
+      "geometryHints": {
+        "primaryAxis": "body-tail",
+        "fin": "thin-surface"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.16
+      },
+      "negativeHints": [
+        "不要生成圆球鱼",
+        "不要丢失尾鳍方向"
+      ]
+    },
+    "insect": {
+      "label": "蝶虫",
+      "query": "butterfly insect body wing antenna morphology",
+      "archetype": "细小躯干、触角、足和大面积薄翼共同构成，翼面极薄且左右对称",
+      "parts": [
+        "躯干",
+        "触角",
+        "薄翼",
+        "足",
+        "翅脉"
+      ],
+      "physicalTraits": [
+        "翼面宽薄",
+        "躯干细小",
+        "触角和足可细但不能消失"
+      ],
+      "geometryHints": {
+        "primaryAxis": "body-wing",
+        "wing": "very-thin-surface"
+      },
+      "fitHints": {
+        "anisotropic": true,
+        "thicknessBias": 0.08
+      },
+      "negativeHints": [
+        "不要把蝴蝶生成厚块",
+        "不要把双翼并成一团"
+      ]
+    },
+    "water": {
+      "label": "水面",
+      "query": "water ripple wave surface flow physical behavior",
+      "archetype": "连续薄层流体表面，涟漪与浪峰来自法线和位移变化而不是实体厚块",
+      "parts": [
+        "薄水面",
+        "流向",
+        "涟漪",
+        "浪峰",
+        "泡沫边缘"
+      ],
+      "physicalTraits": [
+        "厚度极薄",
+        "连续面",
+        "局部高光和法线扰动表现流动"
+      ],
+      "geometryHints": {
+        "primaryAxis": "surface",
+        "crossSection": "thin-plane"
+      },
+      "fitHints": {
+        "anisotropic": false,
+        "thicknessBias": 0.05
+      },
+      "negativeHints": [
+        "不要生成固体蓝色厚板",
+        "不要把涟漪做成孤立石块"
+      ]
+    },
+    "terrain": {
+      "label": "地势",
+      "query": "terrain rock mountain slope soil morphology",
+      "archetype": "连续地形体块由坡面、岩脊、碎石和土层构成，适合低频体积和表面起伏",
+      "parts": [
+        "坡面",
+        "岩脊",
+        "土层",
+        "碎石",
+        "岸线"
+      ],
+      "physicalTraits": [
+        "体积稳定",
+        "底部接地",
+        "起伏连续",
+        "边缘不应像纸片"
+      ],
+      "geometryHints": {
+        "primaryAxis": "mass",
+        "crossSection": "solid-relief"
+      },
+      "fitHints": {
+        "anisotropic": false,
+        "thicknessBias": 0.45
+      },
+      "negativeHints": [
+        "不要生成薄纸片地形",
+        "不要让山石悬浮"
+      ]
+    }
+  },
+  "morphologyPlans": {
+    "lotus": {
+      "archetype": "aquatic lotus composed of shield leaves, slender petioles, layered petals, and seedpod center",
+      "components": [
+        {
+          "type": "petiole",
+          "role": "leaf-stem",
+          "count": 2,
+          "radius": 0.018,
+          "height": 0.72,
+          "lean": 0.18
+        },
+        {
+          "type": "lotusLeaf",
+          "role": "shield-leaf",
+          "count": 2,
+          "radiusX": 0.34,
+          "radiusY": 0.27,
+          "thickness": 0.018,
+          "dome": 0.045,
+          "veins": 12,
+          "notch": 0.16
+        },
+        {
+          "type": "flowerStem",
+          "role": "flower-support",
+          "count": 1,
+          "radius": 0.014,
+          "height": 0.88,
+          "lean": -0.08
+        },
+        {
+          "type": "petalLayer",
+          "role": "outer-petals",
+          "count": 9,
+          "length": 0.22,
+          "width": 0.07,
+          "thickness": 0.014,
+          "tilt": 0.65
+        },
+        {
+          "type": "petalLayer",
+          "role": "middle-petals",
+          "count": 8,
+          "length": 0.18,
+          "width": 0.06,
+          "thickness": 0.012,
+          "tilt": 0.34
+        },
+        {
+          "type": "petalLayer",
+          "role": "inner-petals",
+          "count": 7,
+          "length": 0.13,
+          "width": 0.045,
+          "thickness": 0.01,
+          "tilt": 0.1
+        },
+        {
+          "type": "seedpod",
+          "role": "flower-center",
+          "count": 1,
+          "radius": 0.05,
+          "height": 0.035
+        }
+      ],
+      "constraints": [
+        "leaf discs are shallow domes with thickness and veins, not flat planes",
+        "petioles support leaf discs from below the center, umbrella-like, never attached at the disc rim",
+        "petals are layered curved thin solids cupped upward around the upright seedpod",
+        "stems connect leaf centers and the flower base to the waterline"
+      ]
+    },
+    "bamboo": {
+      "archetype": "segmented hollow bamboo culms with nodes, internodes, lateral twigs, and lanceolate leaves",
+      "components": [
+        {
+          "type": "culm",
+          "role": "vertical-stem",
+          "count": 2,
+          "radius": 0.026,
+          "height": 1.05,
+          "nodes": 7
+        },
+        {
+          "type": "nodeRing",
+          "role": "bamboo-nodes",
+          "count": 14,
+          "radius": 0.03,
+          "height": 0.01
+        },
+        {
+          "type": "twig",
+          "role": "lateral-branch",
+          "count": 5,
+          "radius": 0.01,
+          "length": 0.24
+        },
+        {
+          "type": "lanceolateLeaf",
+          "role": "leaf-cluster",
+          "count": 16,
+          "length": 0.18,
+          "width": 0.035,
+          "thickness": 0.004
+        }
+      ],
+      "constraints": [
+        "main culms remain vertical",
+        "nodes must be visible rings",
+        "leaves attach to twigs"
+      ]
+    },
+    "pine": {
+      "archetype": "woody trunk and branches carrying needle foliage clusters",
+      "components": [
+        {
+          "type": "woodyTrunk",
+          "role": "trunk",
+          "count": 1,
+          "radius": 0.055,
+          "height": 0.92
+        },
+        {
+          "type": "branch",
+          "role": "woody-branches",
+          "count": 5,
+          "radius": 0.018,
+          "length": 0.42
+        },
+        {
+          "type": "needleCluster",
+          "role": "foliage",
+          "count": 8,
+          "radius": 0.16,
+          "needles": 18
+        }
+      ],
+      "constraints": [
+        "needle masses must be supported by branches",
+        "avoid single flat crown plate"
+      ]
+    },
+    "bird": {
+      "archetype": "bird with ellipsoid torso, neck and head, pointed beak, paired thin wings swept back, fan tail, and thin legs; beak-tail axis defines heading",
+      "components": [
+        {
+          "type": "birdBody",
+          "role": "torso",
+          "count": 1,
+          "radiusX": 0.17,
+          "radiusY": 0.12,
+          "radiusZ": 0.1
+        },
+        {
+          "type": "birdHead",
+          "role": "head-neck",
+          "count": 1,
+          "radius": 0.07,
+          "neckLength": 0.1
+        },
+        {
+          "type": "beak",
+          "role": "beak",
+          "count": 1,
+          "length": 0.06,
+          "radius": 0.012
+        },
+        {
+          "type": "wingPair",
+          "role": "wings",
+          "count": 1,
+          "span": 0.42,
+          "chord": 0.14,
+          "thickness": 0.008
+        },
+        {
+          "type": "tailFan",
+          "role": "tail",
+          "count": 1,
+          "length": 0.16,
+          "width": 0.09,
+          "thickness": 0.006
+        },
+        {
+          "type": "birdLeg",
+          "role": "legs",
+          "count": 2,
+          "radius": 0.006,
+          "height": 0.12
+        }
+      ],
+      "constraints": [
+        "wings are thin surfaces attached to the torso sides, not merged blobs",
+        "beak and tail define the heading axis",
+        "legs attach under the torso; head connects to torso through a neck"
+      ]
+    },
+    "water": {
+      "archetype": "shallow flowing water surface: a thin animated sheet with gentle ripple relief, never a solid slab",
+      "components": [
+        {
+          "type": "waterSheet",
+          "role": "water-surface",
+          "count": 1,
+          "thickness": 0.012,
+          "wave": 0.03
+        }
+      ],
+      "constraints": [
+        "water is a thin horizontal flowing sheet, never a solid block",
+        "ripples are gentle relief on the sheet, not separate objects"
+      ]
+    },
+    "fish": {
+      "archetype": "fish with streamlined laterally-flattened body, forked tail fin, dorsal fin, and paired pectoral fins; body axis along swim direction",
+      "components": [
+        {
+          "type": "fishBody",
+          "role": "torso",
+          "count": 1,
+          "length": 0.4,
+          "height": 0.14,
+          "width": 0.05
+        },
+        {
+          "type": "tailFin",
+          "role": "tail",
+          "count": 1,
+          "length": 0.14,
+          "height": 0.12,
+          "thickness": 0.006
+        },
+        {
+          "type": "dorsalFin",
+          "role": "dorsal",
+          "count": 1,
+          "length": 0.14,
+          "height": 0.06,
+          "thickness": 0.005
+        },
+        {
+          "type": "pectoralFin",
+          "role": "paired-fins",
+          "count": 2,
+          "length": 0.08,
+          "height": 0.05,
+          "thickness": 0.004
+        }
+      ],
+      "constraints": [
+        "fins are thin surfaces attached to the body, never merged blobs",
+        "tail fin defines the rear; body tapers toward the tail"
+      ]
+    },
+    "insect": {
+      "archetype": "butterfly with slender segmented body, head with antennae, and two pairs of large thin symmetric wings held with slight dihedral",
+      "components": [
+        {
+          "type": "insectBody",
+          "role": "body",
+          "count": 1,
+          "length": 0.16,
+          "radius": 0.02
+        },
+        {
+          "type": "antenna",
+          "role": "antennae",
+          "count": 2,
+          "length": 0.08,
+          "radius": 0.003
+        },
+        {
+          "type": "insectWing",
+          "role": "fore-wings",
+          "count": 2,
+          "length": 0.2,
+          "width": 0.12,
+          "thickness": 0.004
+        },
+        {
+          "type": "insectWing",
+          "role": "hind-wings",
+          "count": 2,
+          "length": 0.14,
+          "width": 0.09,
+          "thickness": 0.004
+        }
+      ],
+      "constraints": [
+        "wings are paper-thin and bilaterally symmetric",
+        "body stays slender; wings attach to the thorax"
+      ]
+    },
+    "quadruped": {
+      "archetype": "digitigrade quadruped (tiger/leopard/dog) with muscular torso, head on neck, four jointed legs, paws, and a long balancing tail",
+      "components": [
+        {
+          "type": "torso",
+          "role": "torso",
+          "count": 1,
+          "length": 0.42,
+          "height": 0.18,
+          "width": 0.14
+        },
+        {
+          "type": "headNeck",
+          "role": "head-neck",
+          "count": 1,
+          "radius": 0.075,
+          "neckLength": 0.08
+        },
+        {
+          "type": "legJointed",
+          "role": "legs",
+          "count": 4,
+          "radius": 0.022,
+          "height": 0.2
+        },
+        {
+          "type": "tail",
+          "role": "tail",
+          "count": 1,
+          "radius": 0.014,
+          "length": 0.26
+        }
+      ],
+      "constraints": [
+        "four legs attach at shoulder and hip corners and reach the ground",
+        "tail extends the spine line, not merged into the torso"
+      ]
+    },
+    "ungulate": {
+      "archetype": "ungulate (deer/horse) with horizontal torso, long neck, slender load-bearing legs with hooves, and a short tail",
+      "components": [
+        {
+          "type": "torso",
+          "role": "torso",
+          "count": 1,
+          "length": 0.4,
+          "height": 0.17,
+          "width": 0.12
+        },
+        {
+          "type": "headNeck",
+          "role": "long-neck-head",
+          "count": 1,
+          "radius": 0.06,
+          "neckLength": 0.16
+        },
+        {
+          "type": "legJointed",
+          "role": "slender-legs",
+          "count": 4,
+          "radius": 0.014,
+          "height": 0.3
+        },
+        {
+          "type": "tail",
+          "role": "short-tail",
+          "count": 1,
+          "radius": 0.01,
+          "length": 0.1
+        }
+      ],
+      "constraints": [
+        "legs are long thin columns ending in hooves",
+        "neck lifts the head above the torso line"
+      ]
+    },
+    "rabbit": {
+      "archetype": "rabbit with round compact torso, head with long upright ears, short forelegs, powerful hind legs, and a tiny tail",
+      "components": [
+        {
+          "type": "torso",
+          "role": "torso",
+          "count": 1,
+          "length": 0.26,
+          "height": 0.16,
+          "width": 0.13
+        },
+        {
+          "type": "headNeck",
+          "role": "head",
+          "count": 1,
+          "radius": 0.07,
+          "neckLength": 0.03
+        },
+        {
+          "type": "ear",
+          "role": "long-ears",
+          "count": 2,
+          "length": 0.14,
+          "width": 0.03,
+          "thickness": 0.006
+        },
+        {
+          "type": "legJointed",
+          "role": "hind-legs",
+          "count": 2,
+          "radius": 0.03,
+          "height": 0.14
+        }
+      ],
+      "constraints": [
+        "ears are thin upright blades attached to the head",
+        "hind legs visibly larger than forelegs"
+      ]
+    },
+    "terrain": {
+      "archetype": "terrain mass of rocky peaks or boulders with faceted relief, grounded on the base plane, preserving the painted ridge silhouette",
+      "components": [
+        {
+          "type": "peakCluster",
+          "role": "peaks",
+          "count": 3,
+          "radius": 0.16,
+          "height": 0.4
+        },
+        {
+          "type": "rockMass",
+          "role": "base-rocks",
+          "count": 2,
+          "radius": 0.1
+        }
+      ],
+      "constraints": [
+        "peaks are faceted rock volumes sitting on the ground, never floating slabs"
+      ]
+    },
+    "plum": {
+      "archetype": "flowering plum: gnarled old woody branch with short twigs, small five-petal blossoms attached near the nodes, never a leafless flower ball",
+      "components": [
+        {
+          "type": "gnarledBranch",
+          "role": "old-branch",
+          "count": 1,
+          "radius": 0.022,
+          "length": 0.5
+        },
+        {
+          "type": "twig",
+          "role": "short-twigs",
+          "count": 4,
+          "radius": 0.008,
+          "length": 0.14
+        },
+        {
+          "type": "blossom",
+          "role": "flowers",
+          "count": 6,
+          "radius": 0.035,
+          "petals": 5
+        }
+      ],
+      "constraints": [
+        "blossoms attach to the branch at twig nodes",
+        "the branch stays visibly woody and bent"
+      ]
+    },
+    "reed": {
+      "archetype": "wetland reed clump with thin upright stems, linear leaves, and plume heads",
+      "components": [
+        {
+          "type": "reedStem",
+          "role": "thin-stem",
+          "count": 5,
+          "radius": 0.012,
+          "height": 0.95
+        },
+        {
+          "type": "linearLeaf",
+          "role": "blade-leaves",
+          "count": 14,
+          "length": 0.36,
+          "width": 0.025,
+          "thickness": 0.004
+        },
+        {
+          "type": "plume",
+          "role": "seed-head",
+          "count": 3,
+          "radius": 0.035,
+          "height": 0.18
+        }
+      ],
+      "constraints": [
+        "stems stay thin and upright",
+        "plumes attach to the tops of stems"
+      ]
+    },
+    "flower": {
+      "archetype": "flowering herb or shrub with stems, leaves, calyx, petals, and center",
+      "components": [
+        {
+          "type": "stem",
+          "role": "support",
+          "count": 2,
+          "radius": 0.018,
+          "height": 0.65
+        },
+        {
+          "type": "leaf",
+          "role": "thin-leaves",
+          "count": 8,
+          "length": 0.22,
+          "width": 0.06,
+          "thickness": 0.006
+        },
+        {
+          "type": "petalLayer",
+          "role": "flower-petals",
+          "count": 10,
+          "length": 0.13,
+          "width": 0.045,
+          "thickness": 0.01,
+          "tilt": 0.28
+        },
+        {
+          "type": "seedpod",
+          "role": "flower-center",
+          "count": 1,
+          "radius": 0.035,
+          "height": 0.028
+        }
+      ],
+      "constraints": [
+        "petals connect to center",
+        "flower connects to stem"
+      ]
+    },
+    "vine": {
+      "archetype": "curved woody vine with attached leaves and hanging flower racemes",
+      "components": [
+        {
+          "type": "curvedVine",
+          "role": "main-vine",
+          "count": 1,
+          "radius": 0.018,
+          "length": 0.92
+        },
+        {
+          "type": "leaf",
+          "role": "vine-leaves",
+          "count": 10,
+          "length": 0.18,
+          "width": 0.05,
+          "thickness": 0.005
+        },
+        {
+          "type": "hangingPetals",
+          "role": "raceme",
+          "count": 12,
+          "length": 0.09,
+          "width": 0.035,
+          "thickness": 0.008
+        }
+      ],
+      "constraints": [
+        "racemes hang from vine",
+        "main vine remains curved not straight rod"
+      ]
+    }
+  },
+  "subjectKeys": {
+    "mountain": "terrain",
+    "rock": "terrain",
+    "earth": "terrain",
+    "slope": "terrain",
+    "brook-bank": "terrain",
+    "ravine": "terrain",
+    "peak": "terrain",
+    "range": "terrain",
+    "pine": "pine",
+    "bamboo": "bamboo",
+    "plum": "plum",
+    "orchid": "flower",
+    "chrysanthemum": "flower",
+    "calamus": "reed",
+    "reed": "reed",
+    "shore-herb": "flower",
+    "ting-orchid": "flower",
+    "wisteria": "vine",
+    "lotus-bloom": "lotus",
+    "lotus": "lotus",
+    "camellia": "flower",
+    "azalea": "flower",
+    "daylily": "flower",
+    "hibiscus": "flower",
+    "brook": "water",
+    "ripples": "water",
+    "river": "water",
+    "lake": "water",
+    "waves": "water",
+    "cascade": "water"
+  },
+  "biologyKeys": {
+    "digitigrade": "quadruped",
+    "unguligrade": "ungulate",
+    "saltatorial": "rabbit",
+    "avian": "bird",
+    "fish": "fish",
+    "insect": "insect"
+  }
+}

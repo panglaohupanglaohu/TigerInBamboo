@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>拟生环境工作空间 · 世界古典美术拟生平台</title>
+  <title>拟生场景 · 世界古典美术拟生平台</title>
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/wall-workspace.css?v=21" />
+  <link rel="stylesheet" href="css/wall-workspace.css?v=22" />
 </head>
-<body class="wall-workspace-page">
+<body class="wall-workspace-page scene-view-page">
   <header class="wall-workspace-header">
-    <a class="preset" href="home.html">返回展厅</a>
+    <a class="preset" href="wall-workspace.html">返回工作空间</a>
     <div class="wall-title-block">
-      <h1>拟生环境工作空间</h1>
-      <p id="analysis-status">正在读取画框中的原作</p>
+      <h1>拟生场景</h1>
+      <p id="analysis-status">正在按发布配置重建拟生场景</p>
     </div>
-    <label class="preset filebtn">更换画作<input id="source-upload" type="file" accept="image/*" hidden /></label>
+    
   </header>
 
   <main class="wall-workspace-layout">
@@ -63,16 +63,6 @@
           <small id="generation-state">正在检测场景转换引擎</small>
         </button>
         <button class="btn small" id="manual-box-environment" type="button" style="margin-top:8px;">手动画框 / 点选目标（识别不到时）</button>
-        <div class="wall-manual-picker" id="manual-picker-environment" hidden>
-          <b>框选哪个要素？</b>
-          <div class="wall-manual-picker-subjects" id="manual-picker-subjects-environment"></div>
-          <div class="wall-manual-add">
-            <input id="manual-picker-custom-environment" type="text" placeholder="没有？添加要素名（如：牡丹）" />
-            <input id="manual-picker-alias-environment" type="text" placeholder="英文别名（可选，如 peony）" />
-            <button type="button" id="manual-picker-add-environment">添加并框选</button>
-          </div>
-          <button type="button" class="wall-manual-cancel" id="manual-picker-cancel-environment">取消</button>
-        </div>
         <div class="wall-candidate-panel" id="environment-candidate-panel" hidden></div>
         <p class="wall-independent-state" id="independent-model-state">等待确认生成 · 尚无 2D→3D 模型</p>
         <div class="wall-action-row wall-independent-actions">
@@ -152,6 +142,8 @@
         </div>
         <button class="wall-icon-btn" id="env-params-toggle" type="button" title="环境参数与互动关系配置">☰</button>
         <button class="wall-publish-btn" id="publish-scene" type="button" disabled title="发布拟生场景，打开拟生网页">发布</button>
+        <button class="wall-icon-btn" id="backdrop-toggle" type="button" aria-pressed="false" title="显示/隐藏画作背景">画</button>
+        <button class="wall-icon-btn" id="scene-chat-toggle" type="button" title="对话编辑场景">话</button>
         <button class="wall-icon-btn" id="reset-camera" type="button" aria-label="复位视角" title="复位视角">↺</button>
       </div>
       <div class="wall-canvas-shell">
@@ -180,11 +172,6 @@
           <small id="biology-generation-state">正在检测场景转换引擎</small>
         </button>
         <button class="btn small" id="manual-box-biology" type="button" style="margin-top:8px;">手动画框 / 点选目标（识别不到时）</button>
-        <div class="wall-manual-picker" id="manual-picker-biology" hidden>
-          <b>框选哪种生灵？</b>
-          <div class="wall-manual-picker-subjects" id="manual-picker-subjects-biology"></div>
-          <button type="button" class="wall-manual-cancel" id="manual-picker-cancel-biology">取消</button>
-        </div>
         <div class="wall-candidate-panel wall-bio-candidate-panel" id="biology-candidate-panel" hidden></div>
         <p class="wall-independent-state wall-bio-independent-state" id="bio-independent-model-state">等待确认生成 · 尚无 2D→3D 生物模型</p>
         <div class="wall-action-row wall-bio-independent-actions">
@@ -253,7 +240,18 @@
     </aside>
   </main>
 
+  <aside id="scene-bio-dock" class="scene-bio-dock" hidden>
+    <h3>画中生灵</h3>
+    <ul id="scene-bio-list"></ul>
+  </aside>
+  <section id="scene-chat" class="scene-chat" hidden>
+    <div id="scene-chat-log" class="scene-chat-log"></div>
+    <div class="scene-chat-input-row">
+      <input id="scene-chat-input" type="text" placeholder="例如：把莲花往左移一点 / 雾大一点 / 暮色" />
+      <button id="scene-chat-send" type="button">送出</button>
+    </div>
+  </section>
   <div class="toast" id="wall-toast"></div>
-  <script type="module" src="js/wall-workspace.js?v=65"></script>
+  <script type="module" src="js/wall-workspace.js?v=64"></script>
 </body>
 </html>

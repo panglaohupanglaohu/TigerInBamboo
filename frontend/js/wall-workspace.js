@@ -3,13 +3,23 @@ import * as THREE from "../assets/vendor/three/three.module.js";
 import { OrbitControls } from "../assets/vendor/three/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "../assets/vendor/three/jsm/loaders/GLTFLoader.js";
 import { analyzeAndEstimate } from "./imageAnalysis.js";
+import { extractLocalCandidates, extractSeedCandidate, extractBoxCandidate, encodeMaskRle, learnFromSelection, forgetSelection, learnedSimilarity, learnEmbeddingSample, hasEmbeddingSamples, embeddingSimilarity } from "./localCandidate.js?v=23";
 import { DEFAULT_SPECIES } from "./species.js";
+import { createGaussianSplatLayer, updateGaussianSplats } from "./gaussianSplat.js?v=1";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
 import { paintGeometry } from "./tiger.js";
 import { applyGait, computeGait } from "./locomotionModel.js";
+import { loadConfig } from "./config.js";
+import {
+  runWithConcurrency,
+  requestGenerateWithProgress,
+  resolveGenerationRoute,
+  trackRouteHit,
+} from "./generation.js?v=1";
 
 const WALL_KEY = "living-classical-art-wall-source";
+const SCENE_VIEW = typeof document !== "undefined" && document.body?.classList.contains("scene-view-page");
 const DEFAULT_PALETTE = ["#d8c4a0", "#5a4632", "#386456", "#8a7a5f", "#b03a2e", "#f4efe2"];
 const clamp = THREE.MathUtils.clamp;
 const el = (id) => document.getElementById(id);
@@ -53,8 +63,8 @@ const ENVIRONMENT_CATALOG = {
       { id: "shore-herb", label: "岸芷", preset: "stream", note: "岸边香草", prompt: "shore herbs. plants on a river bank in a painting." },
       { id: "ting-orchid", label: "汀兰", preset: "pond", note: "沙洲兰草", prompt: "orchids on a sandbank. waterside orchid in a painting." },
       { id: "wisteria", label: "紫藤", preset: "grove", note: "藤蔓垂花", prompt: "wisteria vine. hanging wisteria flowers in a painting." },
-      { id: "lotus-bloom", label: "荷花", preset: "pond", note: "出水荷叶花苞", prompt: "lotus flower and lotus leaves on water in a painting." },
-      { id: "lotus", label: "莲花", preset: "pond", note: "盛放莲瓣", prompt: "blooming lotus flower in a painting." },
+      { id: "lotus-bloom", label: "荷花", preset: "pond", note: "出水荷叶花苞", prompt: "lotus. lotus flower. lotus leaf. water lily." },
+      { id: "lotus", label: "莲花", preset: "pond", note: "盛放莲瓣", prompt: "lotus. lotus flower. lotus leaf. water lily." },
       { id: "camellia", label: "山茶", preset: "grove", note: "常绿叶与茶花", prompt: "camellia shrub. camellia flower in a painting." },
       { id: "azalea", label: "杜鹃", preset: "mountain", note: "山岩花簇", prompt: "azalea shrub. rhododendron flowers in a painting." },
       { id: "daylily", label: "萱草", preset: "grove", note: "长叶漏斗花", prompt: "daylily plant and flower in a painting." },
@@ -87,7 +97,7 @@ const BIO_LIBRARY = {
   digitigrade: { mark: "兽", label: "虎豹犬科", note: "实例轮廓 · 趾行结构", prompt: "tiger." },
   unguligrade: { mark: "蹄", label: "鹿马蹄兽", note: "实例轮廓 · 蹄行结构", prompt: "deer." },
   saltatorial: { mark: "跃", label: "兔类小兽", note: "实例轮廓 · 跳跃结构", prompt: "rabbit." },
-  avian: { mark: "禽", label: "画中禽鸟", note: "实例轮廓 · 翼羽结构", prompt: "bird." },
+  avian: { mark: "禽", label: "画中禽鸟", note: "实例轮廓 · 翼羽结构", prompt: "bird. goose. crane. swan." },
   fish: { mark: "鱼", label: "画中游鱼", note: "实例轮廓 · 水中深度", prompt: "fish." },
   insect: { mark: "蝶", label: "画中蝴蝶", note: "实例轮廓 · 薄翼结构", prompt: "butterfly." },
 };
@@ -117,6 +127,14 @@ const state = {
   wind: 0.35,
   mist: 0.25,
   flow: 0.55,
+  windDirDeg: 20,
+  snow: null,
+  rain: 0,
+  cloud: 0.4,
+  fire: 0,
+  dayNight: 1,
+  published: false,
+  interactions: { beeLotus: false, tigerBamboo: false },
   referenceMap: null,
   generationMode: "image-locked",
   sceneLiftOnline: false,
@@ -137,6 +155,10 @@ const state = {
   trellisOnline: false,
   imageTo3dLabel: "图生 3D",
   generationBusy: false,
+  environmentModel: "pointcloud", // pointcloud | mesh | auto
+  remoteCatalog: null,           // /api/object-reference/catalog
+  sceneLiftTier: null,           // grounded-sam2 | dino+grabcut
+  metricsSnapshot: null,
   gait: 0,
   orbit: 0,
   creature: null,
@@ -158,6 +180,11 @@ let hemiLight;
 let keyLight;
 let fillLight;
 let snowPoints = null;
+let rainPoints = null;
+let cloudSprites = [];
+let fireLight = null;
+let firePoints = null;
+let beeAgents = [];
 let skeletonHelper = null;
 let animationStarted = false;
 let waterSurfaces = [];
@@ -182,17 +209,89 @@ const placementDragState = {
   offset: new THREE.Vector3(),
   pointerId: null,
 };
+// 三环安置 gizmo：拨环旋转、径向拉环缩放、拖中心球/模型移位、环交点手柄双轴缩放
+const GIZMO_COLORS = { x: 0xe0635a, y: 0x7fb069, z: 0x5a8de0 };
+const GIZMO_HIGHLIGHT = 0xf5d76e;
+const GIZMO_HANDLE_COLOR = 0xd8c690;
+const GIZMO_AXES = {
+  x: new THREE.Vector3(1, 0, 0),
+  y: new THREE.Vector3(0, 1, 0),
+  z: new THREE.Vector3(0, 0, 1),
+};
+const placementGizmo = {
+  group: null,
+  rings: {},
+  arrows: {},
+  handles: {},
+  centerMesh: null,
+  proxies: [],
+  hoverKey: null,
+  drag: {
+    active: false,
+    pointerId: null,
+    entity: null,
+    scope: null,
+    kind: null,
+    axis: null,
+    plane: null,
+    mode: null,
+    centerX: 0,
+    centerY: 0,
+    theta0: 0,
+    r0: 1,
+    axisViewZ: 1,
+    angle0: null,
+    grabX: 0,
+    grabY: 0,
+    screenDirX: 1,
+    screenDirY: 0,
+    lastTheta: 0,
+    centerWorld: new THREE.Vector3(),
+    startQuat: new THREE.Quaternion(),
+    startScale: 1,
+    startScaleVec: new THREE.Vector3(1, 1, 1),
+    moveOffset: new THREE.Vector3(),
+  },
+};
 const gltfLoader = new GLTFLoader();
 const candidateReview = {
-  environment: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
-  biology: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
+  environment: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), placedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
+  biology: { result: null, subject: null, selectedId: null, generatingIds: new Set(), generatedIds: new Set(), placedIds: new Set(), cropUrls: new Map(), previewMeshes: new Map() },
 };
+// 已安置实体注册表：跨识别要素保留（key = `${subjectId}:${layerId}`）。
+// 只有更换画作（applySource）才清空；切换识别对象/重新识别不清空。
+const placedRegistry = {
+  environment: new Map(),
+  biology: new Map(),
+};
+let placedEnvGroup;
+let placedBioGroup;
+
+function placedGroupFor(scope) {
+  return scope === "biology" ? placedBioGroup : placedEnvGroup;
+}
+
+function placedCountTotal() {
+  return placedRegistry.environment.size + placedRegistry.biology.size;
+}
+
+function clearPlacedEntities() {
+  for (const scope of ["environment", "biology"]) {
+    placedRegistry[scope].clear();
+    const group = placedGroupFor(scope);
+    if (group) clearGroup(group);
+  }
+}
 
 async function main() {
   initThree();
   bindControls();
-  await Promise.all([checkSceneLiftStatus(), checkTrellisStatus()]);
+  loadCustomEnvironmentSubjects();
+  await Promise.all([checkSceneLiftStatus(), checkTrellisStatus(), initObjectReference(), loadWorkspaceConfig()]);
+  bindWorkspaceConnectAndManual();
+  updatePublishButton();
   await applySource(readStoredSource());
+  if (SCENE_VIEW) await replayPublishedScene();
   if (!animationStarted) {
     animationStarted = true;
     animate();
@@ -248,6 +347,12 @@ function initThree() {
   bioGroup = new THREE.Group();
   scene.add(bioGroup);
 
+  // 已安置实体的常驻组：切换识别要素时 envGroup/bioGroup 会被清空，这里保留
+  placedEnvGroup = new THREE.Group();
+  scene.add(placedEnvGroup);
+  placedBioGroup = new THREE.Group();
+  scene.add(placedBioGroup);
+
   hemiLight = new THREE.HemisphereLight(0xf9f0dc, 0x4a483b, 0.95);
   scene.add(hemiLight);
   keyLight = new THREE.DirectionalLight(0xffffff, 1.05);
@@ -274,6 +379,16 @@ function initThree() {
 
 function bindControls() {
   el("reset-camera")?.addEventListener("click", resetCamera);
+  // 拟生场景页：画作背景显隐开关（工作空间页无此按钮，跳过）
+  el("backdrop-toggle")?.addEventListener("click", () => {
+    const shell = el("wall-viewport")?.parentElement;
+    const btn = el("backdrop-toggle");
+    if (!shell || !btn) return;
+    const off = shell.classList.toggle("backdrop-off");
+    btn.setAttribute("aria-pressed", String(off));
+    btn.title = off ? "显示画作背景" : "显示/隐藏画作背景";
+  });
+  bindSceneViewExtras();
   el("generate-environment")?.addEventListener("click", generateEnvironmentFromSource);
   el("separate-environment-models")?.addEventListener("click", () => setIndependentModelsExploded(true));
   el("restore-environment-models")?.addEventListener("click", () => setIndependentModelsExploded(false));
@@ -379,6 +494,7 @@ async function applySource(source) {
   state.generationMode = "image-locked";
   resetReviewState("environment");
   resetReviewState("biology");
+  clearPlacedEntities();
   updateSourceCopy();
   await setWallArtwork(state.source);
 
@@ -640,6 +756,11 @@ function selectBiologySubject(kind) {
   if (cached) {
     if (candidateReview.biology.subject?.id !== subject.id || candidateReview.biology.result !== cached) {
       installBiologySceneLiftResult(cached, subject);
+    } else {
+      // 已是当前生灵：只切换识别栏，恢复本栏线框、隐藏另一栏
+      activeReviewScope = "biology";
+      updatePreviewOverlayVisibility();
+      updatePlacementPanel("biology");
     }
   } else {
     clearBiologyModels();
@@ -672,19 +793,24 @@ async function checkSceneLiftStatus() {
     if (badge) {
       badge.dataset.state = state.sceneLiftOnline ? "online" : "offline";
       badge.textContent = state.sceneLiftOnline ? "已连接" : "待连接";
-      badge.title = info.reason || `${info.geometry || "MapAnything"} · ${info.segmentation || "Grounded SAM 2"}`;
+      state.sceneLiftTier = info.segmentationTier || null;
+      const tier = info.segmentationTier ? ` · ${info.segmentationTier}` : "";
+      badge.title = info.reason || `${info.geometry || "MapAnything"} · ${info.segmentation || "Grounded SAM 2"}${tier}`;
+      if (state.sceneLiftOnline && info.segmentationTier) {
+        badge.textContent = info.segmentationTier === "grounded-sam2" ? "SAM2 已连接" : "DINO 已连接";
+      }
     }
     const line = el("generation-state");
     if (line) {
       line.textContent = state.sceneLiftOnline
-        ? (state.sceneLiftSegmentation ? "可识别候选裁剪 · 等待确认" : "深度可用 · 语义分割待连接")
-        : "AI 识别服务待连接";
+        ? (state.sceneLiftSegmentation ? "可识别候选裁剪 · 等待确认" : "精确实例分割待连接 · 已启用本地候选提取")
+        : "AI 识别服务待连接 · 已启用本地候选提取";
     }
     const biologyLine = el("biology-generation-state");
     if (biologyLine) {
-      biologyLine.textContent = state.sceneLiftOnline && state.sceneLiftSegmentation
-        ? "可识别候选裁剪 · 等待确认"
-        : "Grounded SAM 2 实例分割待连接";
+      biologyLine.textContent = state.sceneLiftOnline
+        ? (state.sceneLiftSegmentation ? "可识别候选裁剪 · 等待确认" : "精确实例分割待连接 · 已启用本地候选提取")
+        : "AI 识别服务待连接 · 已启用本地候选提取";
     }
   } catch (_) {
     state.sceneLiftOnline = false;
@@ -694,9 +820,9 @@ async function checkSceneLiftStatus() {
       badge.textContent = "待连接";
     }
     const biologyLine = el("biology-generation-state");
-    if (biologyLine) biologyLine.textContent = "生物实例分割服务待连接";
+    if (biologyLine) biologyLine.textContent = "AI 识别服务待连接 · 已启用本地候选提取";
     const line = el("generation-state");
-    if (line) line.textContent = "AI 识别服务待连接";
+    if (line) line.textContent = "AI 识别服务待连接 · 已启用本地候选提取";
   }
 }
 
@@ -720,6 +846,10 @@ async function checkTrellisStatus() {
       badge.textContent = "图生3D待连接";
     }
   }
+  try {
+    const m = await fetch("/api/metrics", { cache: "no-store" });
+    if (m.ok) state.metricsSnapshot = await m.json();
+  } catch (_) { /* ignore */ }
 }
 
 function resolveImageTo3dLabel(info = {}) {
@@ -734,29 +864,45 @@ function imageTo3dLabel() {
   return state.imageTo3dLabel || "图生 3D";
 }
 
-async function generateEnvironmentFromSource() {
-  if (state.generationBusy) return;
+async function generateFromSource(scope) {
+  const isBio = scope === "biology";
+  const busyKey = isBio ? "bioGenerationBusy" : "generationBusy";
+  if (state[busyKey]) return;
   if (!state.source?.dataUrl) {
     showToast("请先在 home 页第三个画框中填入图画");
     return;
   }
-  const button = el("generate-environment");
-  const line = el("generation-state");
-  const subject = environmentSubject(state.envSubject);
-  const cached = state.sceneLiftCache.get(subject.id);
+  const button = el(isBio ? "generate-biology" : "generate-environment");
+  const line = el(isBio ? "biology-generation-state" : "generation-state");
+  const subject = isBio ? biologySubject() : environmentSubject(state.envSubject);
+  const cache = isBio ? state.bioSceneLiftCache : state.sceneLiftCache;
+  const cached = cache.get(subject.id);
   if (cached) {
-    await enrichCandidateObjectReferences("environment", cached, subject);
-    installCandidateReview("environment", cached, subject);
-    if (line) line.textContent = describeSceneLiftResult(cached, subject);
+    await enrichCandidateObjectReferences(scope, cached, subject);
+    installCandidateReview(scope, cached, subject);
+    if (line) line.textContent = isBio ? describeBiologyResult(cached, subject) : describeSceneLiftResult(cached, subject);
     showToast(`已恢复“${subject.label}”候选，请确认裁剪后生成 3D`);
     return;
   }
   if (!state.sceneLiftOnline || !state.sceneLiftSegmentation) {
-    if (line) line.textContent = "识别服务未连接 · 不生成剪影替代物";
-    showToast("需要 Grounded SAM 2 先识别候选裁剪");
+    state[busyKey] = true;
+    if (button) button.disabled = true;
+    if (line) line.textContent = "识别服务未连接 · 正在本地候选提取…";
+    try {
+      const local = await runLocalCandidateExtraction(scope, subject, { offline: true });
+      await ingestSceneLiftResult(scope, local, subject, line);
+    } catch (err) {
+      console.error(`[wall-workspace] ${scope} local candidate extraction failed`, err);
+      if (line) line.textContent = `本地候选提取失败 · ${err?.message || "未知错误"}`;
+      showToast(err?.message || "本地候选提取失败");
+    } finally {
+      state[busyKey] = false;
+      if (button) button.disabled = false;
+      if (isBio) updateReadout();
+    }
     return;
   }
-  state.generationBusy = true;
+  state[busyKey] = true;
   if (button) button.disabled = true;
   if (line) line.textContent = `正在识别“${subject.label}”候选，并准备给你审裁剪…`;
   try {
@@ -766,7 +912,7 @@ async function generateEnvironmentFromSource() {
       body: JSON.stringify({
         image: state.source.dataUrl,
         name: state.source.name || "artwork",
-        domain: subject.domain,
+        domain: isBio ? "biology" : subject.domain,
         subject: { id: subject.id, label: subject.label, prompt: subject.prompt },
         gridMaxSide: 320,
       }),
@@ -779,24 +925,30 @@ async function generateEnvironmentFromSource() {
     const result = await response.json();
     validateSceneLiftResult(result);
     const segmentationFailure = result.warnings?.find((warning) => warning.startsWith("semantic segmentation unavailable:"));
-    if (state.sceneLiftSegmentation && segmentationFailure) {
-      throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "对象分割失败："));
+    if (segmentationFailure || !result.layers?.length) {
+      const local = await runLocalCandidateExtraction(scope, subject, { serverResult: result });
+      await ingestSceneLiftResult(scope, local, subject, line);
+      return;
     }
-    await enrichCandidateObjectReferences("environment", result, subject);
-    state.sceneLiftCache.set(subject.id, result);
-    installCandidateReview("environment", result, subject);
-    if (line) line.textContent = describeSceneLiftResult(result, subject);
+    await mergeLocalExtras(scope, subject, result);
+    await enrichCandidateObjectReferences(scope, result, subject);
+    cache.set(subject.id, result);
+    installCandidateReview(scope, result, subject);
+    if (line) line.textContent = isBio ? describeBiologyResult(result, subject) : describeSceneLiftResult(result, subject);
     showToast(result.layers?.length ? `请检查“${subject.label}”裁剪，确认后再生成 3D` : `未在画中确认“${subject.label}”，未凭空生成`);
   } catch (err) {
-    console.error("[wall-workspace] scene lift failed", err);
-    const currentLine = el("generation-state");
-    if (currentLine) currentLine.textContent = `AI 转换失败 · ${err?.message || "未知错误"}`;
+    console.error(`[wall-workspace] ${scope} scene lift failed`, err);
+    if (isBio) clearBiologyModels();
+    if (line) line.textContent = `AI 转换失败 · ${err?.message || "未知错误"}`;
     showToast(err?.message || "场景转换失败");
   } finally {
-    state.generationBusy = false;
+    state[busyKey] = false;
     if (button) button.disabled = false;
+    if (isBio) updateReadout();
   }
 }
+
+const generateEnvironmentFromSource = () => generateFromSource("environment");
 
 function validateSceneLiftResult(result) {
   const depth = result?.depth;
@@ -819,75 +971,7 @@ function describeSceneLiftResult(result, subject) {
   return `${geometry} 深度 + Grounded SAM 2 · ${count} 个“${subject.label}”候选待确认`;
 }
 
-async function generateBiologyFromSource() {
-  if (state.bioGenerationBusy) return;
-  if (!state.source?.dataUrl) {
-    showToast("请先在 home 页第三个画框中填入图画");
-    return;
-  }
-  const button = el("generate-biology");
-  const subject = biologySubject();
-  const cached = state.bioSceneLiftCache.get(subject.id);
-  if (cached) {
-    await enrichCandidateObjectReferences("biology", cached, subject);
-    installCandidateReview("biology", cached, subject);
-    const line = el("biology-generation-state");
-    if (line) line.textContent = describeBiologyResult(cached, subject);
-    showToast(`已恢复“${subject.label}”候选，请确认裁剪后生成 3D`);
-    return;
-  }
-  if (!state.sceneLiftOnline || !state.sceneLiftSegmentation) {
-    const line = el("biology-generation-state");
-    if (line) line.textContent = "实例分割引擎未连接 · 不生成替代生物";
-    showToast("需要 Grounded SAM 2 才能建立与原画对映的生物实例");
-    return;
-  }
-
-  state.bioGenerationBusy = true;
-  if (button) button.disabled = true;
-  const initialLine = el("biology-generation-state");
-  if (initialLine) initialLine.textContent = `正在识别“${subject.label}”候选，并准备给你审裁剪…`;
-  try {
-    const response = await fetch("/api/scene-lift/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        image: state.source.dataUrl,
-        name: state.source.name || "artwork",
-        domain: "biology",
-        subject: { id: subject.id, label: subject.label, prompt: subject.prompt },
-        gridMaxSide: 320,
-      }),
-    });
-    if (!response.ok) {
-      let message = `生物转换失败（${response.status}）`;
-      try { message = (await response.json()).detail || message; } catch (_) { /* ignore */ }
-      throw new Error(message);
-    }
-    const result = await response.json();
-    validateSceneLiftResult(result);
-    const segmentationFailure = result.warnings?.find((warning) => warning.startsWith("semantic segmentation unavailable:"));
-    if (segmentationFailure) throw new Error(segmentationFailure.replace("semantic segmentation unavailable:", "生物实例分割失败："));
-
-    await enrichCandidateObjectReferences("biology", result, subject);
-    state.bioSceneLiftCache.set(subject.id, result);
-    installCandidateReview("biology", result, subject);
-    const line = el("biology-generation-state");
-    if (line) line.textContent = describeBiologyResult(result, subject);
-    showToast(result.layers?.length ? `请检查“${subject.label}”裁剪，确认后再生成 3D` : `画中未确认“${subject.label}”，未生成替代物`);
-  } catch (err) {
-    console.error("[wall-workspace] biology scene lift failed", err);
-    clearBiologyModels();
-    const line = el("biology-generation-state");
-    if (line) line.textContent = `生物转换失败 · ${err?.message || "未知错误"}`;
-    showToast(err?.message || "生物实例转换失败");
-  } finally {
-    state.bioGenerationBusy = false;
-    const currentButton = el("generate-biology");
-    if (currentButton) currentButton.disabled = false;
-    updateReadout();
-  }
-}
+const generateBiologyFromSource = () => generateFromSource("biology");
 
 function biologyReferenceMap(result) {
   return referenceMapFromResult(result);
@@ -903,6 +987,385 @@ function referenceMapFromResult(result) {
     source: result.engine?.geometry || "MapAnything",
   };
 }
+
+async function ingestSceneLiftResult(scope, result, subject, line) {
+  result = await enrichCandidateObjectReferences(scope, result, subject);
+  if (scope === "environment") state.sceneLiftCache.set(subject.id, result);
+  else state.bioSceneLiftCache.set(subject.id, result);
+  installCandidateReview(scope, result, subject);
+  const count = reviewLayerList(scope).length;
+  if (line) {
+    line.textContent = scope === "biology"
+      ? describeBiologyResult(result, subject)
+      : describeSceneLiftResult(result, subject);
+  }
+  if (count === 0) showToast("未识别到候选，请更换元素或手动画框");
+  else showToast(result.localExtraction
+    ? `本地候选提取完成，已生成 ${count} 个候选供你审稿`
+    : `场景分析完成，已生成 ${count} 个候选供你审稿`);
+  return result;
+}
+
+async function runLocalCandidateExtraction(scope, subject, opts = {}) {
+  const serverResult = opts.serverResult || null;
+  const extracted = await extractLocalCandidates(state.source.dataUrl, {
+    domain: subject.domain || (scope === "biology" ? "biology" : "auto"),
+    label: subject.label,
+    subjectId: subject.id,
+    gridWidth: serverResult?.depth?.width,
+    gridHeight: serverResult?.depth?.height,
+    gridMaxSide: 256,
+  });
+  const base = serverResult || {};
+  return {
+    image: {
+      width: base.depth?.width || extracted.width,
+      height: base.depth?.height || extracted.height,
+    },
+    depth: base.depth || extracted.depth,
+    layers: extracted.layers,
+    engine: base.engine || { geometry: "local-luminance" },
+    localExtraction: true,
+    offline: Boolean(opts.offline),
+    warnings: [
+      ...(base.warnings || []),
+      opts.offline ? "本地候选提取（服务未连接）" : "本地候选提取替代实例分割",
+    ],
+  };
+}
+
+// 自定义画中要素：用户现场添加的要素入册并持久化，之后出现在要素列表中
+const CUSTOM_SUBJECTS_KEY = "ui.customEnvSubjects";
+
+function loadCustomEnvironmentSubjects() {
+  try {
+    const list = JSON.parse(localStorage.getItem(CUSTOM_SUBJECTS_KEY) || "[]");
+    for (const entry of list) {
+      const catalog = ENVIRONMENT_CATALOG[entry.domain];
+      if (catalog && !catalog.items.some((item) => item.id === entry.id)) catalog.items.push(entry);
+    }
+  } catch { /* 忽略损坏数据 */ }
+}
+
+function addCustomEnvironmentSubject(label, domain, alias = "") {
+  const text = `${label || ""}`.trim();
+  if (!text) return null;
+  const en = `${alias || ""}`.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
+  const slug = (en || text.toLowerCase()).replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-|-$/g, "") || "object";
+  const id = `custom-${slug}`;
+  if (environmentSubject(id)) return id;
+  const entry = {
+    id,
+    label: text,
+    preset: "grove",
+    note: "自定义要素",
+    prompt: en ? `${en}. ${text}.` : `${text}.`,
+    en: en || undefined,
+    custom: true,
+  };
+  ENVIRONMENT_CATALOG[domain]?.items.push(entry);
+  try {
+    const list = JSON.parse(localStorage.getItem(CUSTOM_SUBJECTS_KEY) || "[]");
+    list.push({ domain, ...entry });
+    localStorage.setItem(CUSTOM_SUBJECTS_KEY, JSON.stringify(list.slice(-30)));
+  } catch { /* 隐私模式忽略 */ }
+  renderEnvironmentButtons();
+  return id;
+}
+
+function removeCustomEnvironmentSubject(id) {
+  for (const catalog of Object.values(ENVIRONMENT_CATALOG)) {
+    const index = catalog.items.findIndex((item) => item.id === id && item.custom);
+    if (index >= 0) catalog.items.splice(index, 1);
+  }
+  try {
+    const list = JSON.parse(localStorage.getItem(CUSTOM_SUBJECTS_KEY) || "[]");
+    localStorage.setItem(CUSTOM_SUBJECTS_KEY, JSON.stringify(list.filter((entry) => entry.id !== id)));
+  } catch { /* 隐私模式忽略 */ }
+  renderEnvironmentButtons();
+}
+
+// 框选要素选择器：先选/加要素，再进入框选或点选
+function openManualPicker(scope) {
+  const picker = el(`manual-picker-${scope}`);
+  const host = el(`manual-picker-subjects-${scope}`);
+  if (!picker || !host) return;
+  host.innerHTML = "";
+  const current = scope === "biology" ? biologySubject() : environmentSubject(state.envSubject);
+  const subjects = scope === "biology"
+    ? Object.entries(BIO_LIBRARY)
+        .filter(([kind]) => kind !== "auto")
+        .map(([kind, info]) => ({ id: kind, label: info.label }))
+    : Object.entries(ENVIRONMENT_CATALOG).flatMap(([domain, catalog]) =>
+        catalog.items.map((item) => ({ id: item.id, label: item.label, domain, custom: Boolean(item.custom) }))
+      );
+  for (const subject of subjects) {
+    const button = document.createElement("button");
+    button.type = "button";
+    const isCurrent = scope === "biology" ? current?.kind === subject.id : current?.id === subject.id;
+    button.classList.toggle("is-current", Boolean(isCurrent));
+    if (subject.custom) {
+      const labelSpan = document.createElement("span");
+      labelSpan.textContent = subject.label;
+      const remove = document.createElement("em");
+      remove.textContent = "×";
+      remove.title = "删除该自定义要素";
+      remove.addEventListener("click", (event) => {
+        event.stopPropagation();
+        removeCustomEnvironmentSubject(subject.id);
+        openManualPicker(scope);
+      });
+      button.append(labelSpan, remove);
+    } else {
+      button.textContent = subject.label;
+    }
+    button.addEventListener("click", () => proceedManualWithSubject(scope, subject.id, subject.domain));
+    host.appendChild(button);
+  }
+  picker.hidden = false;
+}
+
+function closeManualPicker(scope) {
+  const picker = el(`manual-picker-${scope}`);
+  if (picker) picker.hidden = true;
+}
+
+async function proceedManualWithSubject(scope, idOrKind, domain) {
+  closeManualPicker(scope);
+  if (scope === "environment") {
+    setEnvironment(idOrKind);
+    if (!candidateReview.environment.result) await generateEnvironmentFromSource();
+  } else {
+    selectBiologySubject(idOrKind);
+    if (!candidateReview.biology.result) await generateBiologyFromSource();
+  }
+  enableManualBoxDraw(scope);
+}
+
+function enableManualBoxDraw(scope) {
+  const overlay = ensureManualDrawOverlay();
+  overlay.hidden = false;
+  manualDrawState = { scope, overlay };
+  showToast("手动框选：拖拽画框，或在目标内部单击点选");
+}
+
+function ensureManualDrawOverlay() {
+  let overlay = el("manual-draw-overlay");
+  if (!overlay) {
+    const shell = el("wall-viewport")?.parentElement || el("wall-viewport");
+    overlay = document.createElement("div");
+    overlay.id = "manual-draw-overlay";
+    overlay.hidden = true;
+    overlay.style.cssText = "position:absolute;inset:0;cursor:crosshair;z-index:30;";
+    const rect = document.createElement("div");
+    rect.id = "manual-draw-rect";
+    rect.style.cssText = "position:absolute;border:2px dashed #e8b04b;background:rgba(232,176,75,0.15);display:none;";
+    overlay.appendChild(rect);
+    overlay.addEventListener("pointerdown", onManualDrawDown);
+    overlay.addEventListener("pointermove", onManualDrawMove);
+    overlay.addEventListener("pointerup", onManualDrawUp);
+    shell?.appendChild(overlay);
+  }
+  return overlay;
+}
+
+// 画布指针 → 画作 UV：射线与画作平面求交，解决 3D 视角下画不铺满画布导致的框选错位
+function canvasToArtworkUV(event) {
+  if (!artworkFrame || !camera || !renderer) return null;
+  setPointerFromEvent(event);
+  candidateRaycaster.setFromCamera(candidatePointer, camera);
+  placementPlane.set(new THREE.Vector3(0, 0, 1), -artworkFrame.z);
+  if (!candidateRaycaster.ray.intersectPlane(placementPlane, placementPoint)) return null;
+  const u = (placementPoint.x + artworkFrame.width / 2) / artworkFrame.width;
+  const v = 1 - (placementPoint.y - (artworkFrame.centerY - artworkFrame.height / 2)) / artworkFrame.height;
+  return [clamp(u, 0, 1), clamp(v, 0, 1)];
+}
+
+function manualDrawPoint(event) {
+  const uv = canvasToArtworkUV(event);
+  if (uv) return uv;
+  const rect = manualDrawState.overlay.getBoundingClientRect();
+  return [
+    clamp((event.clientX - rect.left) / rect.width, 0, 1),
+    clamp((event.clientY - rect.top) / rect.height, 0, 1),
+  ];
+}
+
+function onManualDrawDown(event) {
+  if (!manualDrawState) return;
+  const rect = manualDrawState.overlay.getBoundingClientRect();
+  const [ux, uy] = manualDrawPoint(event);
+  manualDrawState.startX = ux;
+  manualDrawState.startY = uy;
+  manualDrawState.dispX = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+  manualDrawState.dispY = clamp((event.clientY - rect.top) / rect.height, 0, 1);
+  const box = manualDrawState.overlay.querySelector("#manual-draw-rect");
+  box.style.display = "block";
+  box.style.left = `${manualDrawState.dispX * 100}%`;
+  box.style.top = `${manualDrawState.dispY * 100}%`;
+  box.style.width = "0%";
+  box.style.height = "0%";
+}
+
+function onManualDrawMove(event) {
+  if (!manualDrawState) return;
+  const rect = manualDrawState.overlay.getBoundingClientRect();
+  const curX = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+  const curY = clamp((event.clientY - rect.top) / rect.height, 0, 1);
+  const x0 = Math.min(manualDrawState.dispX, curX);
+  const y0 = Math.min(manualDrawState.dispY, curY);
+  const w = Math.abs(curX - manualDrawState.dispX);
+  const h = Math.abs(curY - manualDrawState.dispY);
+  const box = manualDrawState.overlay.querySelector("#manual-draw-rect");
+  box.style.left = `${x0 * 100}%`;
+  box.style.top = `${y0 * 100}%`;
+  box.style.width = `${w * 100}%`;
+  box.style.height = `${h * 100}%`;
+}
+
+function onManualDrawUp(event) {
+  if (!manualDrawState) return;
+  const overlay = manualDrawState.overlay;
+  const rect = overlay.getBoundingClientRect();
+  const dispX1 = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+  const dispY1 = clamp((event.clientY - rect.top) / rect.height, 0, 1);
+  const dispX0 = manualDrawState.dispX;
+  const dispY0 = manualDrawState.dispY;
+  const [ux1, uy1] = manualDrawPoint(event);
+  const ax0 = Math.min(manualDrawState.startX, ux1);
+  const ay0 = Math.min(manualDrawState.startY, uy1);
+  const ax1 = Math.max(manualDrawState.startX, ux1);
+  const ay1 = Math.max(manualDrawState.startY, uy1);
+  overlay.hidden = true;
+  overlay.querySelector("#manual-draw-rect").style.display = "none";
+  const scope = manualDrawState.scope;
+  manualDrawState = null;
+  const dispW = Math.abs(dispX1 - dispX0);
+  const dispH = Math.abs(dispY1 - dispY0);
+  if (dispW < 0.02 || dispH < 0.02) {
+    // 单击（近似点选）：以该点为种子提取目标掩码
+    addSeedCandidate(scope, [(ax0 + ax1) / 2, (ay0 + ay1) / 2]);
+    return;
+  }
+  addManualCandidate(scope, [ax0, ay0, ax1, ay1]);
+}
+
+// 种子点识别：在目标内部点一下 → 提出该物体掩码候选，并立即注册为学习样本
+async function addSeedCandidate(scope, point) {
+  const review = candidateReview[scope];
+  if (!review?.result || !review.subject) {
+    showToast("请先点击识别生成候选，再点选目标");
+    return;
+  }
+  const ref = referenceMapFromResult(review.result);
+  showToast("正在按点选位置提取目标…");
+  try {
+    const extracted = await extractSeedCandidate(state.source.dataUrl, point, {
+      domain: review.subject.domain || (scope === "biology" ? "biology" : "auto"),
+      label: review.subject.label,
+      subjectId: review.subject.id,
+      gridWidth: ref.width,
+      gridHeight: ref.height,
+    });
+    if (!extracted.layers.length) {
+      showToast("点选处未提取到目标，请点在物体内部");
+      return;
+    }
+    const layer = { ...extracted.layers[0], id: `seed-${Date.now()}` };
+    review.result.layers.push(layer);
+    installCandidateReview(scope, review.result, review.subject);
+    learnFromSelection(review.subject.id, layer);
+    learnEmbeddingForLayer(scope, layer, review.subject.id);
+    setReviewSelection(scope, layer.id);
+  } catch (err) {
+    console.warn("[wall-workspace] seed candidate failed", err);
+    showToast("点选提取失败");
+  }
+}
+
+async function addManualCandidate(scope, bbox) {
+  const review = candidateReview[scope];
+  if (!review?.result) {
+    showToast("请先点击图生3D生成候选，再手动画框");
+    return;
+  }
+  const ref = referenceMapFromResult(review.result);
+  showToast("正在按画框提取目标…");
+  try {
+    const extracted = await extractBoxCandidate(state.source.dataUrl, bbox, {
+      domain: review.subject.domain || (scope === "biology" ? "biology" : "auto"),
+      label: review.subject.label,
+      subjectId: review.subject.id,
+      gridWidth: ref.width,
+      gridHeight: ref.height,
+    });
+    const layer = extracted.layers[0];
+    if (!layer) {
+      showToast("画框内未提取到目标，请框住物体主体");
+      return;
+    }
+    layer.id = `manual-${Date.now()}`;
+    review.result.layers.push(layer);
+    installCandidateReview(scope, review.result, review.subject);
+    learnFromSelection(review.subject.id, layer);
+    learnEmbeddingForLayer(scope, layer, review.subject.id);
+    setReviewSelection(scope, layer.id);
+  } catch (err) {
+    console.warn("[wall-workspace] manual box candidate failed", err);
+    showToast("画框提取失败");
+  }
+}
+
+function bindWorkspaceConnectAndManual() {
+  const mbEnv = el("manual-box-environment");
+  if (mbEnv) mbEnv.addEventListener("click", () => openManualPicker("environment"));
+  const mbBio = el("manual-box-biology");
+  if (mbBio) mbBio.addEventListener("click", () => openManualPicker("biology"));
+  for (const scope of ["environment", "biology"]) {
+    el(`manual-picker-cancel-${scope}`)?.addEventListener("click", () => closeManualPicker(scope));
+  }
+  el("manual-picker-add-environment")?.addEventListener("click", () => {
+    const input = el("manual-picker-custom-environment");
+    const alias = el("manual-picker-alias-environment");
+    const id = addCustomEnvironmentSubject(input?.value, state.envDomain || "plants", alias?.value);
+    if (id) {
+      if (input) input.value = "";
+      if (alias) alias.value = "";
+      proceedManualWithSubject("environment", id, state.envDomain || "plants");
+    } else {
+      showToast("请输入要素名");
+    }
+  });
+  // 点选器外区域自动收起
+  document.addEventListener("pointerdown", (event) => {
+    for (const scope of ["environment", "biology"]) {
+      const picker = el(`manual-picker-${scope}`);
+      if (!picker || picker.hidden) continue;
+      if (picker.contains(event.target)) continue;
+      if (event.target.closest(`#manual-box-${scope}`)) continue;
+      closeManualPicker(scope);
+    }
+  });
+  const publish = el("publish-scene");
+  if (publish) publish.addEventListener("click", () => {
+    if (!publish.disabled) publishScene();
+  });
+  const paramsToggle = el("env-params-toggle");
+  if (paramsToggle) paramsToggle.addEventListener("click", toggleEnvParamsPanel);
+  const reconnect = el("reconnect-services");
+  if (reconnect) reconnect.addEventListener("click", async () => {
+    reconnect.disabled = true;
+    try {
+      await Promise.all([checkSceneLiftStatus(), checkTrellisStatus(), initObjectReference(), loadWorkspaceConfig()]);
+      const ok = state.sceneLiftOnline || state.trellisOnline;
+      showToast(ok ? "已连接到本地服务" : "未探测到本地服务，已使用本地候选提取");
+    } finally {
+      reconnect.disabled = false;
+    }
+  });
+}
+
+let manualDrawState = null;
 
 function attachReconstructionProfiles(scope, result, subject, ref = referenceMapFromResult(result)) {
   const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
@@ -1006,24 +1469,65 @@ function applyObjectReferenceToProfile(profile, objectReference) {
   return profile;
 }
 
+
+async function loadWorkspaceConfig() {
+  try {
+    const cfg = await loadConfig();
+    if (cfg?.environmentModel) state.environmentModel = cfg.environmentModel;
+  } catch (_) { /* keep default */ }
+}
+
+async function initObjectReference() {
+  try {
+    const response = await fetch("/api/object-reference/catalog", { cache: "no-store" });
+    if (!response.ok) throw new Error(`catalog ${response.status}`);
+    state.remoteCatalog = await response.json();
+  } catch (err) {
+    state.remoteCatalog = null;
+    console.warn("[wall-workspace] 物象库不可用，形态构建器将仅使用服务端 lookup 结果", err);
+  }
+}
+
+function catalogMorphologyPlan(key) {
+  const plans = state.remoteCatalog?.morphologyPlans;
+  if (!plans || !key) return null;
+  const plan = plans[key] || (key === "plum" ? plans.flower : null);
+  if (!plan) return null;
+  return {
+    version: 1,
+    planner: "remote-catalog",
+    renderer: "threejs-procedural",
+    policy: "componentized-volumetric-model-not-cutout",
+    ...plan,
+  };
+}
+
+function resolveCatalogKey(subject, profile = {}) {
+  const id = String(subject?.id || "").toLowerCase();
+  const subjectKeys = state.remoteCatalog?.subjectKeys || {};
+  const biologyKeys = state.remoteCatalog?.biologyKeys || {};
+  if (subject?.kind && biologyKeys[subject.kind]) return biologyKeys[subject.kind];
+  if (subjectKeys[id]) return subjectKeys[id];
+  if (id === "lotus" || id === "lotus-bloom" || profile.kind === "aquatic-flower") return "lotus";
+  if (subject?.domain === "water" || profile.kind === "water-surface") return "water";
+  if (subject?.domain === "terrain" || profile.kind === "terrain-mass") return "terrain";
+  if (subject?.domain === "plants") return "flower";
+  return id || "terrain";
+}
+
 function buildFallbackMorphologyPlan(subject, profile = {}) {
-  const id = subject.id || "";
-  if (id === "lotus" || id === "lotus-bloom" || profile.kind === "aquatic-flower") {
+  const key = resolveCatalogKey(subject, profile);
+  const fromCatalog = catalogMorphologyPlan(key);
+  if (fromCatalog) return fromCatalog;
+  // Backend unavailable: disable rich procedural fallback (null → mesh-generate when no builder)
+  if (!state.remoteCatalog) {
     return {
       version: 1,
-      planner: "browser-physical-morphology",
-      renderer: "threejs-procedural",
-      policy: "componentized-volumetric-model-not-cutout",
-      archetype: "aquatic lotus with shield leaf, petiole, layered petals, and seedpod",
-      components: [
-        { type: "petiole", count: 2, radius: 0.018, height: 0.72, lean: 0.18 },
-        { type: "lotusLeaf", count: 2, radiusX: 0.34, radiusY: 0.27, thickness: 0.018, dome: 0.045, veins: 12, notch: 0.16 },
-        { type: "flowerStem", count: 1, radius: 0.014, height: 0.88, lean: -0.08 },
-        { type: "petalLayer", role: "outer-petals", count: 9, length: 0.22, width: 0.07, thickness: 0.014, tilt: 0.65 },
-        { type: "petalLayer", role: "middle-petals", count: 8, length: 0.18, width: 0.06, thickness: 0.012, tilt: 0.34 },
-        { type: "petalLayer", role: "inner-petals", count: 7, length: 0.13, width: 0.045, thickness: 0.01, tilt: 0.1 },
-        { type: "seedpod", count: 1, radius: 0.05, height: 0.035 },
-      ],
+      planner: "browser-disabled",
+      renderer: "none",
+      policy: "catalog-unavailable",
+      archetype: subject.label || "object",
+      components: [],
     };
   }
   return {
@@ -1041,20 +1545,60 @@ function buildFallbackMorphologyPlan(subject, profile = {}) {
   };
 }
 
+// 有专用部件构建器的形态 key；返回 null 表示走图生3D或通用构建器。
+// 提示词形态链路：画中要素 → 物象库 archetype/部件方案 → 这里命中对应构建器。
+function resolveProceduralBuilderKey(subject, profile, objectReference) {
+  const plan = objectReference?.morphologyPlan;
+  if (!plan || plan.renderer !== "threejs-procedural") return null;
+  if (!state.remoteCatalog && plan.planner === "browser-disabled") return null;
+  const key = objectReference?.key || subject?.id || profile?.kind || "";
+  const types = new Set((plan.components || []).map((part) => part.type));
+  if (key === "lotus" || subject?.id === "lotus" || subject?.id === "lotus-bloom" || profile?.kind === "aquatic-flower" || types.has("lotusLeaf")) return "lotus";
+  if (key === "pine" || subject?.id === "pine" || types.has("needleCluster")) return "pine";
+  if (key === "bamboo" || subject?.id === "bamboo" || types.has("culm")) return "bamboo";
+  if (key === "bird" || subject?.kind === "avian" || types.has("birdBody") || types.has("wingPair")) return "avian";
+  if (key === "water" || subject?.domain === "water" || profile?.kind === "water-surface" || types.has("waterSheet")) return "water";
+  if (key === "reed" || subject?.id === "reed" || subject?.id === "calamus" || types.has("reedStem")) return "reed";
+  if (key === "vine" || subject?.id === "wisteria" || types.has("curvedVine")) return "vine";
+  if (key === "plum" || subject?.id === "plum" || types.has("gnarledBranch") || types.has("blossom")) return "plum";
+  if (key === "fish" || subject?.kind === "fish" || types.has("fishBody") || types.has("tailFin")) return "fish";
+  if (key === "insect" || subject?.kind === "insect" || types.has("insectBody") || types.has("insectWing")) return "insect";
+  if (key === "quadruped" || key === "ungulate" || key === "rabbit"
+    || ["digitigrade", "unguligrade", "saltatorial"].includes(subject?.kind)
+    || types.has("torso") || types.has("legJointed")) return "quadruped";
+  if (key === "terrain" || subject?.domain === "terrain" || profile?.kind === "terrain-mass" || types.has("peakCluster") || types.has("rockMass")) return "terrain";
+  // 其余草木（兰/菊/山茶/杜鹃/芙蓉/萱草/岸芷/汀兰等）：通用花草程序化模型，不走网格
+  if (subject?.domain === "plants") return "generic-plant";
+  return null;
+}
+
 function shouldUseProceduralMorphologyModel(subject, layer, profile) {
   const reference = layer.objectReference || profile?.objectReference;
-  const plan = reference?.morphologyPlan;
-  return subject?.domain === "plants" && plan?.renderer === "threejs-procedural";
+  return Boolean(resolveProceduralBuilderKey(subject, profile, reference));
 }
 
 function createProceduralMorphologyModel(subject, layer, profile, objectReference = {}) {
   const plan = objectReference.morphologyPlan || buildFallbackMorphologyPlan(subject, profile);
   const key = objectReference.key || subject.id || profile.kind;
-  const root = (key === "lotus" || subject.id === "lotus" || subject.id === "lotus-bloom" || profile.kind === "aquatic-flower")
-    ? createLotusMorphologyModel(plan, subject, layer)
-    : createGenericPlantMorphologyModel(plan, subject, layer);
+  const builderKey = resolveProceduralBuilderKey(subject, profile, objectReference);
+  const builders = {
+    lotus: createLotusMorphologyModel,
+    pine: createPineMorphologyModel,
+    bamboo: createBambooMorphologyModel,
+    avian: createAvianMorphologyModel,
+    water: createWaterMorphologyModel,
+    reed: createReedMorphologyModel,
+    vine: createVineMorphologyModel,
+    plum: createPlumMorphologyModel,
+    fish: createFishMorphologyModel,
+    insect: createInsectMorphologyModel,
+    quadruped: createQuadrupedMorphologyModel,
+    terrain: createTerrainMorphologyModel,
+  };
+  const root = (builders[builderKey] || createGenericPlantMorphologyModel)(plan, subject, layer);
   root.name = `llm-threejs-${subject.id || key}-${layer.id}`;
   root.userData = {
+    ...root.userData,
     generatedBy: "llm-morphology-threejs",
     engineLabel: "LLM 形态 Three.js",
     morphologyPlan: plan,
@@ -1081,6 +1625,9 @@ function morphologyMaterials(subject) {
   };
 }
 
+// 荷花部件模型：遵循真实物理结构——叶柄自水下斜出，顶端托住近似水平的盾形荷叶
+// （伞式支撑，柄接叶盘中心下方而非盘边）；花梗顶端托花，花瓣绕竖轴杯状层叠
+// 展开，莲蓬坐于花心、顶面朝上。
 function createLotusMorphologyModel(plan, subject, layer) {
   const root = new THREE.Group();
   const mats = morphologyMaterials(subject);
@@ -1090,20 +1637,25 @@ function createLotusMorphologyModel(plan, subject, layer) {
   const flowerStemSpec = components.find((part) => part.type === "flowerStem") || {};
   const seedSpec = components.find((part) => part.type === "seedpod") || {};
   const leafCount = clamp(Math.round(Number(leafSpec.count) || 2), 1, 4);
+  const waterY = -0.48;
+  // tip = 叶盘中心（叶柄顶端支撑点）；tilt = 叶盘朝观者的倾角
   const leafAnchors = [
-    { base: [-0.3, -0.48, -0.025], tip: [-0.24, 0.08, 0.04], rot: -0.22, scale: 1 },
-    { base: [0.1, -0.48, -0.03], tip: [0.25, -0.02, -0.01], rot: 0.34, scale: 0.82 },
-    { base: [-0.05, -0.48, -0.04], tip: [-0.02, -0.12, 0.02], rot: 0.08, scale: 0.62 },
-    { base: [0.28, -0.48, -0.03], tip: [0.36, 0.14, 0.03], rot: -0.12, scale: 0.54 },
+    { tip: [-0.24, 0.06, 0.06], tilt: 0.55, rot: -0.2, scale: 1 },
+    { tip: [0.22, -0.1, -0.02], tilt: 0.42, rot: 0.3, scale: 0.8 },
+    { tip: [-0.02, -0.22, 0.1], tilt: 0.75, rot: 0.05, scale: 0.6 },
+    { tip: [0.3, 0.12, 0.03], tilt: 0.5, rot: -0.1, scale: 0.5 },
   ];
 
   for (let i = 0; i < leafCount; i++) {
     const anchor = leafAnchors[i];
-    const base = new THREE.Vector3(...anchor.base);
     const tip = new THREE.Vector3(...anchor.tip);
+    // 叶柄：水下基部斜向伸出，顶端止于叶盘中心（伞骨式支撑）
+    const base = new THREE.Vector3(tip.x * 0.35, waterY, tip.z * 0.35);
     addCylinderBetween(root, base, tip, Number(petioleSpec.radius) || 0.018, mats.stem, 10);
     const leafGroup = new THREE.Group();
     leafGroup.position.copy(tip);
+    // 叶盘从「竖立盘子」改为近似水平、略倾向观者：盘心即柄端
+    leafGroup.rotation.x = -Math.PI / 2 + anchor.tilt;
     leafGroup.rotation.z = anchor.rot;
     leafGroup.scale.setScalar(anchor.scale);
     const leaf = new THREE.Mesh(
@@ -1128,39 +1680,778 @@ function createLotusMorphologyModel(plan, subject, layer) {
     root.add(leafGroup);
   }
 
-  const flowerBase = new THREE.Vector3(0.02, -0.48, 0.0);
-  const flowerCenter = new THREE.Vector3(0.08, 0.34, 0.08);
-  addCylinderBetween(root, flowerBase, flowerCenter, Number(flowerStemSpec.radius) || 0.014, mats.stem, 10);
+  // 花梗：顶端托花；花朵绕竖直轴杯状展开后整体倾向观者
+  const flowerBase = new THREE.Vector3(0.02, waterY, 0.02);
+  const flowerTip = new THREE.Vector3(0.08, 0.26, 0.1);
+  addCylinderBetween(root, flowerBase, flowerTip, Number(flowerStemSpec.radius) || 0.014, mats.stem, 10);
   const flower = new THREE.Group();
-  flower.position.copy(flowerCenter);
-  flower.rotation.z = 0.05;
+  flower.position.copy(flowerTip);
+  flower.rotation.x = 0.42;
+  flower.rotation.z = 0.04;
+  // 莲蓬：顶面朝上的扁圆台，坐于花梗顶端
+  const seedRadius = Number(seedSpec.radius) || 0.05;
+  const seedHeight = Number(seedSpec.height) || 0.035;
+  const center = new THREE.Mesh(
+    new THREE.CylinderGeometry(seedRadius * 1.12, seedRadius * 0.82, seedHeight, 18, 1),
+    mats.center
+  );
+  center.position.y = seedHeight * 0.4;
+  center.castShadow = true;
+  flower.add(center);
   const layers = components.filter((part) => part.type === "petalLayer");
+  const ecologyPetals = [];
   layers.forEach((spec, layerIndex) => {
     const count = clamp(Math.round(Number(spec.count) || 8), 5, 18);
     const length = Number(spec.length) || 0.16;
     const width = Number(spec.width) || 0.05;
     const thickness = Number(spec.thickness) || 0.01;
+    // tilt 语义：瓣轴与竖直方向的夹角，外层更开张
     const tilt = Number(spec.tilt) || 0.2;
+    const ringRadius = 0.012 + layerIndex * 0.008;
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2 + layerIndex * 0.21;
       const petal = new THREE.Mesh(
         createCurvedPetalGeometry(length, width, thickness, 0.035 + layerIndex * 0.006),
         layerIndex === layers.length - 1 ? mats.petalInner : mats.petal
       );
-      petal.position.set(Math.cos(angle) * length * 0.14, Math.sin(angle) * length * 0.14, 0.012 + layerIndex * 0.012);
-      petal.rotation.z = angle - Math.PI / 2;
-      petal.rotation.x = tilt * Math.sin(angle) * 0.32;
-      petal.rotation.y = -tilt * Math.cos(angle) * 0.32;
+      petal.position.set(Math.cos(angle) * ringRadius, 0, Math.sin(angle) * ringRadius);
+      // 先绕 X 外倾 tilt，再绕 Y 转到方位角：花瓣自莲蓬基部向外上方杯状展开
+      petal.quaternion.copy(
+        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle)
+          .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), tilt))
+      );
       petal.castShadow = true;
       flower.add(petal);
+      ecologyPetals.push({ mesh: petal, angle, tilt });
     }
   });
-  const center = new THREE.Mesh(new THREE.SphereGeometry(Number(seedSpec.radius) || 0.05, 16, 10), mats.center);
-  center.scale.set(1, 0.72, 0.48);
-  center.position.z = 0.04;
-  flower.add(center);
   root.add(flower);
+  // 生态数据：供昼开夜闭与蜜蜂采蜜定位花心
+  root.userData.ecology = { type: "lotus", petals: ecologyPetals, flowerGroup: flower };
   addMorphologyWaterline(root);
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 竹子部件模型：竖向竹竿分节（节间微收分）、节点环凸起、上部侧枝、
+// 枝端披针叶簇下垂外展。对应物象库 bamboo 方案的 culm / nodeRing / twig / lanceolateLeaf。
+function createBambooMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const culmSpec = components.find((part) => part.type === "culm") || {};
+  const twigSpec = components.find((part) => part.type === "twig") || {};
+  const leafSpec = components.find((part) => part.type === "lanceolateLeaf") || {};
+
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const culmMat = new THREE.MeshStandardMaterial({
+    color: base.clone().lerp(new THREE.Color(0x5d7a4a), 0.72),
+    roughness: 0.78,
+    metalness: 0.01,
+  });
+  const nodeMat = new THREE.MeshStandardMaterial({
+    color: base.clone().lerp(new THREE.Color(0x42603a), 0.78),
+    roughness: 0.82,
+  });
+  const leafMat = new THREE.MeshStandardMaterial({
+    color: base.clone().lerp(new THREE.Color(0x4f7a4f), 0.76),
+    roughness: 0.72,
+    side: THREE.DoubleSide,
+  });
+
+  const culmCount = clamp(Math.round(Number(culmSpec.count) || 2), 1, 4);
+  const culmHeight = Number(culmSpec.height) || 1.05;
+  const culmRadius = Number(culmSpec.radius) || 0.026;
+  const nodeTotal = clamp(Math.round(Number(culmSpec.nodes) || 7), 4, 10);
+  const twigsPerCulm = clamp(Math.round((Number(twigSpec.count) || 5) / culmCount), 1, 4);
+
+  for (let c = 0; c < culmCount; c++) {
+    const x0 = (c - (culmCount - 1) / 2) * 0.14 + (rand() - 0.5) * 0.05;
+    const z0 = (rand() - 0.5) * 0.06;
+    const leanX = (rand() - 0.5) * 0.12;
+    const leanZ = (rand() - 0.5) * 0.05;
+    // 节点折线：竖直主轴 + 微倾
+    const nodes = [new THREE.Vector3(x0, -0.48, z0)];
+    for (let n = 1; n <= nodeTotal; n++) {
+      const t = n / nodeTotal;
+      nodes.push(new THREE.Vector3(
+        x0 + leanX * t + (rand() - 0.5) * 0.012,
+        -0.48 + culmHeight * t,
+        z0 + leanZ * t + (rand() - 0.5) * 0.01
+      ));
+    }
+    for (let n = 0; n < nodeTotal; n++) {
+      const t = n / nodeTotal;
+      const radius = culmRadius * (1 - t * 0.35);
+      addCylinderBetween(root, nodes[n], nodes[n + 1], radius, culmMat, 10);
+      if (n > 0) {
+        // 竹节环：略鼓起的短环
+        const ring = new THREE.Mesh(
+          new THREE.CylinderGeometry(radius * 1.22, radius * 1.22, 0.009, 10),
+          nodeMat
+        );
+        ring.position.copy(nodes[n]);
+        ring.quaternion.setFromUnitVectors(
+          new THREE.Vector3(0, 1, 0),
+          nodes[n + 1].clone().sub(nodes[n]).normalize()
+        );
+        ring.castShadow = true;
+        root.add(ring);
+      }
+    }
+    // 侧枝：从上半部节点斜出
+    for (let tw = 0; tw < twigsPerCulm; tw++) {
+      const nodeIdx = clamp(Math.floor(nodeTotal * (0.5 + rand() * 0.45)), 2, nodeTotal - 1);
+      const attach = nodes[nodeIdx];
+      const theta = rand() * Math.PI * 2;
+      const len = (Number(twigSpec.length) || 0.24) * (0.7 + rand() * 0.6);
+      const tip = attach.clone().add(new THREE.Vector3(
+        Math.cos(theta) * len,
+        len * (0.25 + rand() * 0.3),
+        Math.sin(theta) * len
+      ));
+      addCylinderBetween(root, attach, tip, (Number(twigSpec.radius) || 0.01) * 0.8, culmMat, 6);
+      // 披针叶簇：自枝端下垂外展
+      const leavesPer = 3 + Math.floor(rand() * 3);
+      for (let l = 0; l < leavesPer; l++) {
+        const leaf = new THREE.Mesh(
+          createCurvedPetalGeometry(
+            (Number(leafSpec.length) || 0.18) * (0.85 + rand() * 0.3),
+            Number(leafSpec.width) || 0.035,
+            Number(leafSpec.thickness) || 0.004,
+            0.012
+          ),
+          leafMat
+        );
+        leaf.position.copy(tip);
+        const yaw = rand() * Math.PI * 2;
+        const droop = 1.9 + rand() * 0.7;
+        leaf.quaternion.copy(
+          new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw)
+            .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), droop))
+        );
+        leaf.castShadow = true;
+        root.add(leaf);
+      }
+    }
+  }
+
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 水面部件模型：近似水平的微波薄层，受原作水色，不做实体板块。
+// 对应物象库 water 方案的 waterSheet；ecology 标记便于后续水流参数驱动。
+function createWaterMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const components = plan.components || [];
+  const sheetSpec = components.find((part) => part.type === "waterSheet") || {};
+  const waveAmp = Number(sheetSpec.wave) || 0.03;
+  const geometry = new THREE.PlaneGeometry(0.92, 0.6, 26, 16);
+  const pos = geometry.getAttribute("position");
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    pos.setZ(i, Math.sin(x * 9.2) * waveAmp * 0.42 + Math.cos(y * 11.5 + x * 3) * waveAmp * 0.27);
+  }
+  geometry.computeVertexNormals();
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const material = new THREE.MeshStandardMaterial({
+    color: base.clone().lerp(new THREE.Color(0x5f7f8a), 0.7),
+    transparent: true,
+    opacity: 0.74,
+    roughness: 0.24,
+    metalness: 0.12,
+    side: THREE.DoubleSide,
+  });
+  const sheet = new THREE.Mesh(geometry, material);
+  sheet.rotation.x = -Math.PI / 2;
+  sheet.receiveShadow = true;
+  root.add(sheet);
+  root.userData.ecology = { type: "water", waveAmp };
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 禽鸟部件模型：椭圆躯干 + 颈头 + 尖喙 + 后掠薄翼 + 扇尾 + 细腿。
+// 喙-尾轴（+X 为喙向）定义朝向，翼为贴躯干的薄面而非肉块。
+// 对应物象库 bird 方案的 birdBody / birdHead / beak / wingPair / tailFan / birdLeg。
+function createAvianMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const bodySpec = components.find((part) => part.type === "birdBody") || {};
+  const headSpec = components.find((part) => part.type === "birdHead") || {};
+  const beakSpec = components.find((part) => part.type === "beak") || {};
+  const wingSpec = components.find((part) => part.type === "wingPair") || {};
+  const tailSpec = components.find((part) => part.type === "tailFan") || {};
+  const legSpec = components.find((part) => part.type === "birdLeg") || {};
+
+  const base = new THREE.Color(state.creatureColor || state.palette[0] || "#645540");
+  const feather = base.clone().lerp(new THREE.Color(0x8a7a66), 0.55);
+  const featherDark = feather.clone().lerp(new THREE.Color(0x3a332b), 0.45);
+  const bodyMat = new THREE.MeshStandardMaterial({ color: feather, roughness: 0.85, metalness: 0.01 });
+  const wingMat = new THREE.MeshStandardMaterial({ color: featherDark, roughness: 0.8, side: THREE.DoubleSide });
+  const beakMat = new THREE.MeshStandardMaterial({ color: 0x3a3026, roughness: 0.7 });
+  const legMat = new THREE.MeshStandardMaterial({ color: 0x4a3a28, roughness: 0.8 });
+
+  const bodyX = Number(bodySpec.radiusX) || 0.17;
+  const bodyY = Number(bodySpec.radiusY) || 0.12;
+  const bodyZ = Number(bodySpec.radiusZ) || 0.1;
+  // 躯干椭圆体：体轴沿 X（+X 为喙向，-X 为尾向）
+  const body = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), bodyMat);
+  body.scale.set(bodyX, bodyY, bodyZ);
+  body.position.set(0, -0.08, 0);
+  body.castShadow = true;
+  root.add(body);
+
+  // 颈 + 头：自躯干前上方伸出
+  const headR = Number(headSpec.radius) || 0.07;
+  const neckLen = Number(headSpec.neckLength) || 0.1;
+  const neckBase = new THREE.Vector3(bodyX * 0.68, -0.04, 0);
+  const headPos = new THREE.Vector3(neckBase.x + 0.05, neckBase.y + neckLen, 0);
+  addCylinderBetween(root, neckBase, headPos, headR * 0.52, bodyMat, 8);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(headR, 14, 10), bodyMat);
+  head.scale.set(1.15, 1, 0.9);
+  head.position.copy(headPos);
+  head.castShadow = true;
+  root.add(head);
+
+  // 喙：圆锥朝 +X
+  const beakLen = Number(beakSpec.length) || 0.06;
+  const beak = new THREE.Mesh(new THREE.ConeGeometry(Number(beakSpec.radius) || 0.012, beakLen, 8), beakMat);
+  beak.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0));
+  beak.position.set(headPos.x + headR * 0.9 + beakLen * 0.42, headPos.y - 0.005, 0);
+  root.add(beak);
+
+  // 后掠双翼：薄面贴躯干两侧，长轴指向后下方外展
+  const wingLen = (Number(wingSpec.span) || 0.42) * 0.5;
+  const wingChord = Number(wingSpec.chord) || 0.14;
+  for (const side of [1, -1]) {
+    const wing = new THREE.Mesh(
+      createCurvedPetalGeometry(wingLen, wingChord, Number(wingSpec.thickness) || 0.008, 0.02),
+      wingMat
+    );
+    wing.position.set(bodyX * 0.15, -0.04, side * bodyZ * 0.8);
+    const dir = new THREE.Vector3(-0.78, -0.28, side * 0.56).normalize();
+    wing.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+    wing.castShadow = true;
+    root.add(wing);
+  }
+
+  // 扇尾：-X 后上方展开
+  const tail = new THREE.Mesh(
+    createCurvedPetalGeometry(Number(tailSpec.length) || 0.16, Number(tailSpec.width) || 0.09, Number(tailSpec.thickness) || 0.006, 0.012),
+    wingMat
+  );
+  tail.position.set(-bodyX * 0.82, -0.06, 0);
+  tail.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.92, 0.28, 0).normalize());
+  tail.castShadow = true;
+  root.add(tail);
+
+  // 细腿：躯干腹面着地
+  const legH = Number(legSpec.height) || 0.12;
+  const legR = Number(legSpec.radius) || 0.006;
+  for (const side of [1, -1]) {
+    const hip = new THREE.Vector3(bodyX * 0.1, -0.08 - bodyY * 0.85, side * bodyZ * 0.4);
+    const foot = hip.clone().add(new THREE.Vector3((rand() - 0.5) * 0.01, -legH, (rand() - 0.5) * 0.01));
+    addCylinderBetween(root, hip, foot, legR, legMat, 6);
+  }
+
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 芦苇/菖蒲部件模型：丛生细秆 + 线形垂叶 + 顶端苇穗。
+function createReedMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const stemSpec = components.find((part) => part.type === "reedStem") || {};
+  const leafSpec = components.find((part) => part.type === "linearLeaf") || {};
+  const plumeSpec = components.find((part) => part.type === "plume") || {};
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const stemMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x8a7a4e), 0.7), roughness: 0.85 });
+  const leafMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x6a7a4a), 0.75), roughness: 0.8, side: THREE.DoubleSide });
+  const plumeMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0xb8a678), 0.75), roughness: 0.9 });
+  const stemCount = clamp(Math.round(Number(stemSpec.count) || 5), 3, 9);
+  const stemH = Number(stemSpec.height) || 0.95;
+  const plumeTotal = clamp(Math.round(Number(plumeSpec.count) || 3), 1, 5);
+  const tops = [];
+  for (let i = 0; i < stemCount; i++) {
+    const x0 = (i - (stemCount - 1) / 2) * 0.07 + (rand() - 0.5) * 0.05;
+    const z0 = (rand() - 0.5) * 0.06;
+    const lean = (rand() - 0.5) * 0.16;
+    const base3 = new THREE.Vector3(x0, -0.48, z0);
+    const tip = new THREE.Vector3(x0 + lean, -0.48 + stemH * (0.85 + rand() * 0.3), z0 + (rand() - 0.5) * 0.05);
+    addCylinderBetween(root, base3, tip, Number(stemSpec.radius) || 0.012, stemMat, 6);
+    tops.push(tip);
+    for (let l = 0; l < 2; l++) {
+      const at = base3.clone().lerp(tip, 0.3 + rand() * 0.4);
+      const leaf = new THREE.Mesh(
+        createCurvedPetalGeometry((Number(leafSpec.length) || 0.36) * (0.8 + rand() * 0.4), Number(leafSpec.width) || 0.025, Number(leafSpec.thickness) || 0.004, 0.02),
+        leafMat
+      );
+      leaf.position.copy(at);
+      leaf.quaternion.copy(
+        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rand() * Math.PI * 2)
+          .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), 1.5 + rand() * 0.7))
+      );
+      root.add(leaf);
+    }
+  }
+  for (let i = 0; i < Math.min(plumeTotal, tops.length); i++) {
+    const top = tops[Math.floor(rand() * tops.length)];
+    const plume = new THREE.Group();
+    plume.position.copy(top);
+    const plumeH = Number(plumeSpec.height) || 0.18;
+    const plumeR = Number(plumeSpec.radius) || 0.035;
+    addCylinderBetween(plume, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, plumeH, 0), plumeR * 0.5, plumeMat, 8);
+    for (let f = 0; f < 10; f++) {
+      const a = rand() * Math.PI * 2;
+      const from = new THREE.Vector3(0, plumeH * (0.3 + rand() * 0.6), 0);
+      const to = from.clone().add(new THREE.Vector3(Math.cos(a) * plumeR * (0.8 + rand()), 0.02 + rand() * 0.03, Math.sin(a) * plumeR * (0.8 + rand())));
+      addCylinderBetween(plume, from, to, 0.0018, plumeMat, 3);
+    }
+    root.add(plume);
+  }
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 紫藤部件模型：弯曲木质主藤 + 沿藤小叶 + 下垂花序串。
+function createVineMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const vineSpec = components.find((part) => part.type === "curvedVine") || {};
+  const leafSpec = components.find((part) => part.type === "leaf") || {};
+  const racemeSpec = components.find((part) => part.type === "hangingPetals") || {};
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const vineMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x5a4632), 0.7), roughness: 0.9 });
+  const leafMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x4f7a4f), 0.75), roughness: 0.78, side: THREE.DoubleSide });
+  const flowerMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0xa48ac8), 0.72), roughness: 0.7, side: THREE.DoubleSide });
+  const vineLen = Number(vineSpec.length) || 0.92;
+  const pts = [];
+  const segs = 6;
+  for (let s = 0; s <= segs; s++) {
+    const t = s / segs;
+    pts.push(new THREE.Vector3(
+      Math.sin(t * Math.PI * 1.6) * 0.12 + (rand() - 0.5) * 0.03,
+      0.44 - vineLen * t,
+      Math.cos(t * Math.PI * 1.2) * 0.05
+    ));
+  }
+  for (let s = 0; s < segs; s++) {
+    addCylinderBetween(root, pts[s], pts[s + 1], (Number(vineSpec.radius) || 0.018) * (1 - s * 0.1), vineMat, 8);
+  }
+  const leafCount = clamp(Math.round(Number(leafSpec.count) || 10), 4, 16);
+  for (let i = 0; i < leafCount; i++) {
+    const at = pts[1 + Math.floor(rand() * (segs - 1))];
+    const leaf = new THREE.Mesh(
+      createCurvedPetalGeometry((Number(leafSpec.length) || 0.18) * (0.7 + rand() * 0.5), Number(leafSpec.width) || 0.05, Number(leafSpec.thickness) || 0.005, 0.015),
+      leafMat
+    );
+    leaf.position.copy(at);
+    leaf.quaternion.copy(
+      new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rand() * Math.PI * 2)
+        .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), 0.8 + rand() * 0.8))
+    );
+    root.add(leaf);
+  }
+  const chains = clamp(Math.round((Number(racemeSpec.count) || 12) / 4), 2, 4);
+  for (let i = 0; i < chains; i++) {
+    const at = pts[1 + Math.floor(rand() * 3)];
+    const chainLen = 5 + Math.floor(rand() * 4);
+    for (let f = 0; f < chainLen; f++) {
+      const t = f / chainLen;
+      const flower = new THREE.Mesh(
+        createCurvedPetalGeometry((Number(racemeSpec.length) || 0.09) * (1 - t * 0.4), Number(racemeSpec.width) || 0.035, Number(racemeSpec.thickness) || 0.008, 0.01),
+        flowerMat
+      );
+      flower.position.set(at.x + Math.sin(f * 1.3) * 0.02, at.y - 0.03 - t * 0.2, at.z + Math.cos(f * 1.1) * 0.02);
+      flower.rotation.x = Math.PI - 0.4;
+      flower.rotation.z = rand() * Math.PI * 2;
+      root.add(flower);
+    }
+  }
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 梅花部件模型：苍劲曲枝 + 短枝 + 贴枝节点五瓣小花，不做无枝花球。
+function createPlumMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const branchSpec = components.find((part) => part.type === "gnarledBranch") || {};
+  const twigSpec = components.find((part) => part.type === "twig") || {};
+  const blossomSpec = components.find((part) => part.type === "blossom") || {};
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const barkMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x4a3a2a), 0.75), roughness: 0.94 });
+  const petalMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0xe8b8c0), 0.8), roughness: 0.66, side: THREE.DoubleSide });
+  const centerMat = new THREE.MeshStandardMaterial({ color: 0xd6b64f, roughness: 0.7 });
+  const branchLen = Number(branchSpec.length) || 0.5;
+  const branchR = Number(branchSpec.radius) || 0.022;
+  const nodes = [new THREE.Vector3(-0.3, -0.42, 0)];
+  const dir = new THREE.Vector3(0.8, 0.55, 0.05).normalize();
+  for (let s = 1; s <= 3; s++) {
+    nodes.push(nodes[s - 1].clone().addScaledVector(dir, branchLen / 3));
+    dir.set(dir.x + (rand() - 0.5) * 0.5, dir.y + (rand() - 0.3) * 0.3, (rand() - 0.5) * 0.3).normalize();
+  }
+  for (let s = 0; s < 3; s++) {
+    addCylinderBetween(root, nodes[s], nodes[s + 1], branchR * (1 - s * 0.22), barkMat, 9);
+  }
+  const twigCount = clamp(Math.round(Number(twigSpec.count) || 4), 2, 7);
+  const twigTips = [];
+  for (let i = 0; i < twigCount; i++) {
+    const at = nodes[1 + Math.floor(rand() * 3)];
+    const len = (Number(twigSpec.length) || 0.14) * (0.6 + rand() * 0.8);
+    const tip = at.clone().add(new THREE.Vector3((rand() - 0.5) * len, len * (0.4 + rand() * 0.8), (rand() - 0.5) * len));
+    addCylinderBetween(root, at, tip, (Number(twigSpec.radius) || 0.008) * 0.8, barkMat, 6);
+    twigTips.push(tip);
+  }
+  const blossomCount = clamp(Math.round(Number(blossomSpec.count) || 6), 3, 10);
+  const petalN = clamp(Math.round(Number(blossomSpec.petals) || 5), 4, 7);
+  const spots = [...twigTips, ...nodes.slice(1)];
+  for (let i = 0; i < blossomCount; i++) {
+    const at = spots[Math.floor(rand() * spots.length)];
+    const flower = new THREE.Group();
+    flower.position.copy(at).add(new THREE.Vector3((rand() - 0.5) * 0.03, (rand() - 0.5) * 0.03, 0.02));
+    const r = Number(blossomSpec.radius) || 0.035;
+    for (let p = 0; p < petalN; p++) {
+      const angle = (p / petalN) * Math.PI * 2;
+      const petal = new THREE.Mesh(createCurvedPetalGeometry(r * 1.4, r * 0.9, 0.006, 0.01), petalMat);
+      petal.position.set(Math.cos(angle) * r * 0.4, Math.sin(angle) * r * 0.4, 0);
+      petal.rotation.z = angle - Math.PI / 2;
+      flower.add(petal);
+    }
+    flower.add(new THREE.Mesh(new THREE.SphereGeometry(r * 0.28, 8, 6), centerMat));
+    root.add(flower);
+  }
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 鱼部件模型：侧扁流线鱼体 + 叉形尾鳍 + 背鳍 + 胸鳍 + 眼，体轴沿 +X。
+function createFishMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const components = plan.components || [];
+  const bodySpec = components.find((part) => part.type === "fishBody") || {};
+  const tailSpec = components.find((part) => part.type === "tailFin") || {};
+  const dorsalSpec = components.find((part) => part.type === "dorsalFin") || {};
+  const pectoralSpec = components.find((part) => part.type === "pectoralFin") || {};
+  const base = new THREE.Color(state.creatureColor || state.palette[0] || "#645540");
+  const bodyMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x7a8a94), 0.55), roughness: 0.62, metalness: 0.08 });
+  const finMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x5a6a74), 0.6), roughness: 0.7, side: THREE.DoubleSide });
+  const len = Number(bodySpec.length) || 0.4;
+  const h = Number(bodySpec.height) || 0.14;
+  const w = Number(bodySpec.width) || 0.05;
+  const body = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 12), bodyMat);
+  body.scale.set(len * 0.5, h * 0.5, w * 0.5);
+  body.position.y = -0.05;
+  body.castShadow = true;
+  root.add(body);
+  for (const sign of [1, -1]) {
+    const fin = new THREE.Mesh(
+      createCurvedPetalGeometry(Number(tailSpec.length) || 0.14, (Number(tailSpec.height) || 0.12) * 0.55, Number(tailSpec.thickness) || 0.006, 0.008),
+      finMat
+    );
+    fin.position.set(-len * 0.48, -0.05, 0);
+    fin.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.85, sign * 0.5, 0).normalize());
+    root.add(fin);
+  }
+  const dorsal = new THREE.Mesh(
+    createCurvedPetalGeometry(Number(dorsalSpec.length) || 0.14, Number(dorsalSpec.height) || 0.06, Number(dorsalSpec.thickness) || 0.005, 0.01),
+    finMat
+  );
+  dorsal.position.set(-len * 0.05, -0.05 + h * 0.42, 0);
+  dorsal.rotation.y = Math.PI / 2;
+  root.add(dorsal);
+  for (const side of [1, -1]) {
+    const fin = new THREE.Mesh(
+      createCurvedPetalGeometry(Number(pectoralSpec.length) || 0.08, Number(pectoralSpec.height) || 0.05, Number(pectoralSpec.thickness) || 0.004, 0.008),
+      finMat
+    );
+    fin.position.set(len * 0.12, -0.08, side * w * 0.55);
+    fin.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.4, -0.5, side * 0.75).normalize());
+    root.add(fin);
+  }
+  const eyeMat = new THREE.MeshStandardMaterial({ color: 0x22201c, roughness: 0.5 });
+  for (const side of [1, -1]) {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.008, 8, 6), eyeMat);
+    eye.position.set(len * 0.34, -0.02, side * w * 0.42);
+    root.add(eye);
+  }
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 蝶虫部件模型：细躯干 + 触角 + 两对对称薄翼（微上反角）。
+function createInsectMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const components = plan.components || [];
+  const bodySpec = components.find((part) => part.type === "insectBody") || {};
+  const antennaSpec = components.find((part) => part.type === "antenna") || {};
+  const wingSpecs = components.filter((part) => part.type === "insectWing");
+  const base = new THREE.Color(state.creatureColor || state.palette[0] || "#645540");
+  const bodyMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x3a332b), 0.6), roughness: 0.75 });
+  const wingMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0xd8c8a8), 0.6), roughness: 0.6, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
+  const bodyLen = Number(bodySpec.length) || 0.16;
+  const bodyR = Number(bodySpec.radius) || 0.02;
+  addCylinderBetween(root, new THREE.Vector3(-bodyLen * 0.5, -0.05, 0), new THREE.Vector3(bodyLen * 0.5, 0.02, 0), bodyR, bodyMat, 8);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(bodyR * 1.3, 10, 8), bodyMat);
+  head.position.set(bodyLen * 0.55, 0.025, 0);
+  root.add(head);
+  for (const side of [1, -1]) {
+    addCylinderBetween(
+      root,
+      new THREE.Vector3(bodyLen * 0.58, 0.035, side * bodyR * 0.5),
+      new THREE.Vector3(bodyLen * 0.58 + (Number(antennaSpec.length) || 0.08) * 0.7, 0.09, side * (Number(antennaSpec.length) || 0.08) * 0.55),
+      Number(antennaSpec.radius) || 0.003,
+      bodyMat,
+      4
+    );
+  }
+  const fore = wingSpecs.find((part) => part.role === "fore-wings") || wingSpecs[0] || {};
+  const hind = wingSpecs.find((part) => part.role === "hind-wings") || wingSpecs[1] || {};
+  for (const side of [1, -1]) {
+    const foreWing = new THREE.Mesh(
+      createCurvedPetalGeometry(Number(fore.length) || 0.2, Number(fore.width) || 0.12, Number(fore.thickness) || 0.004, 0.015),
+      wingMat
+    );
+    foreWing.position.set(0.02, 0.02, side * bodyR);
+    foreWing.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.25, 0.15, side * 0.95).normalize());
+    root.add(foreWing);
+    const hindWing = new THREE.Mesh(
+      createCurvedPetalGeometry(Number(hind.length) || 0.14, Number(hind.width) || 0.09, Number(hind.thickness) || 0.004, 0.012),
+      wingMat
+    );
+    hindWing.position.set(-0.03, -0.01, side * bodyR);
+    hindWing.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.55, -0.1, side * 0.8).normalize());
+    root.add(hindWing);
+  }
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 走兽部件模型：躯干椭圆体 + 颈头吻 + 关节四肢 + 尾；
+// 按方案覆盖趾行（虎豹）、蹄行（鹿马长腿）、兔（含长耳部件时）。
+function createQuadrupedMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const torsoSpec = components.find((part) => part.type === "torso") || {};
+  const headSpec = components.find((part) => part.type === "headNeck") || {};
+  const legSpec = components.find((part) => part.type === "legJointed") || {};
+  const tailSpec = components.find((part) => part.type === "tail") || {};
+  const earSpec = components.find((part) => part.type === "ear") || null;
+  const base = new THREE.Color(state.creatureColor || state.palette[0] || "#645540");
+  const furMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x8a7050), 0.5), roughness: 0.85 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x4a3a2a), 0.6), roughness: 0.88 });
+  const len = Number(torsoSpec.length) || 0.42;
+  const h = Number(torsoSpec.height) || 0.18;
+  const w = Number(torsoSpec.width) || 0.14;
+  const legH = Number(legSpec.height) || 0.2;
+  const torsoY = -0.48 + legH + h * 0.5;
+  const torso = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 12), furMat);
+  torso.scale.set(len * 0.5, h * 0.5, w * 0.5);
+  torso.position.set(0, torsoY, 0);
+  torso.castShadow = true;
+  root.add(torso);
+  const headR = Number(headSpec.radius) || 0.075;
+  const neckLen = Number(headSpec.neckLength) || 0.08;
+  const neckBase = new THREE.Vector3(len * 0.38, torsoY + h * 0.18, 0);
+  const headPos = new THREE.Vector3(neckBase.x + neckLen * 0.6, neckBase.y + neckLen * 0.8, 0);
+  addCylinderBetween(root, neckBase, headPos, headR * 0.55, furMat, 9);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(headR, 14, 10), furMat);
+  head.scale.set(1.25, 1, 0.85);
+  head.position.copy(headPos);
+  head.castShadow = true;
+  root.add(head);
+  const snout = new THREE.Mesh(new THREE.SphereGeometry(headR * 0.55, 10, 8), darkMat);
+  snout.scale.set(1.2, 0.75, 0.75);
+  snout.position.set(headPos.x + headR * 0.95, headPos.y - headR * 0.2, 0);
+  root.add(snout);
+  const legR = Number(legSpec.radius) || 0.022;
+  const legCount = clamp(Math.round(Number(legSpec.count) || 4), 2, 4);
+  const legSpots = legCount >= 4
+    ? [[len * 0.3, w * 0.32], [len * 0.3, -w * 0.32], [-len * 0.3, w * 0.32], [-len * 0.3, -w * 0.32]]
+    : [[-len * 0.2, w * 0.3], [-len * 0.2, -w * 0.3]];
+  for (const [lx, lz] of legSpots) {
+    const hip = new THREE.Vector3(lx, torsoY - h * 0.3, lz);
+    const knee = new THREE.Vector3(lx + (rand() - 0.5) * 0.02, hip.y - legH * 0.5, lz);
+    const foot = new THREE.Vector3(knee.x + (rand() - 0.5) * 0.02, hip.y - legH, lz);
+    addCylinderBetween(root, hip, knee, legR, furMat, 8);
+    addCylinderBetween(root, knee, foot, legR * 0.75, darkMat, 7);
+  }
+  const tailLen = Number(tailSpec.length) || 0.26;
+  const tailBase = new THREE.Vector3(-len * 0.46, torsoY + h * 0.1, 0);
+  const tailMid = tailBase.clone().add(new THREE.Vector3(-tailLen * 0.5, tailLen * 0.25, 0));
+  const tailTip = tailMid.clone().add(new THREE.Vector3(-tailLen * 0.35, tailLen * 0.45, 0));
+  addCylinderBetween(root, tailBase, tailMid, Number(tailSpec.radius) || 0.014, furMat, 7);
+  addCylinderBetween(root, tailMid, tailTip, (Number(tailSpec.radius) || 0.014) * 0.7, darkMat, 6);
+  if (earSpec) {
+    for (const side of [1, -1]) {
+      const ear = new THREE.Mesh(
+        createCurvedPetalGeometry(Number(earSpec.length) || 0.14, Number(earSpec.width) || 0.03, Number(earSpec.thickness) || 0.006, 0.012),
+        furMat
+      );
+      ear.position.set(headPos.x - headR * 0.3, headPos.y + headR * 0.7, side * headR * 0.4);
+      ear.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(-0.25, 0.92, side * 0.3).normalize());
+      root.add(ear);
+    }
+  }
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 地势部件模型：多峰错动石山簇 + 基座岩块，峰体落地、保留画中山脊错落。
+function createTerrainMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const peakSpec = components.find((part) => part.type === "peakCluster") || {};
+  const rockSpec = components.find((part) => part.type === "rockMass") || {};
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const rockMat = new THREE.MeshStandardMaterial({ color: base.clone().lerp(new THREE.Color(0x6f6a60), 0.55), roughness: 0.96, flatShading: true });
+  const peakCount = clamp(Math.round(Number(peakSpec.count) || 3), 1, 5);
+  const peakR = Number(peakSpec.radius) || 0.16;
+  const peakH = Number(peakSpec.height) || 0.4;
+  for (let i = 0; i < peakCount; i++) {
+    const height = peakH * (0.55 + rand() * 0.6);
+    const radius = peakR * (0.7 + rand() * 0.6);
+    const geo = new THREE.ConeGeometry(radius, height, 7, 3);
+    const pos = geo.getAttribute("position");
+    for (let vi = 0; vi < pos.count; vi++) {
+      pos.setX(vi, pos.getX(vi) + (rand() - 0.5) * radius * 0.22);
+      pos.setZ(vi, pos.getZ(vi) + (rand() - 0.5) * radius * 0.22);
+    }
+    geo.computeVertexNormals();
+    const peak = new THREE.Mesh(geo, rockMat);
+    peak.position.set((i - (peakCount - 1) / 2) * peakR * 1.5 + (rand() - 0.5) * 0.05, -0.48 + height / 2, (rand() - 0.5) * 0.1);
+    peak.rotation.y = rand() * Math.PI;
+    peak.castShadow = true;
+    peak.receiveShadow = true;
+    root.add(peak);
+  }
+  const rockCount = clamp(Math.round(Number(rockSpec.count) || 2), 1, 4);
+  for (let i = 0; i < rockCount; i++) {
+    const r = (Number(rockSpec.radius) || 0.1) * (0.7 + rand() * 0.6);
+    const geo = new THREE.IcosahedronGeometry(r, 1);
+    const pos = geo.getAttribute("position");
+    for (let vi = 0; vi < pos.count; vi++) {
+      pos.setXYZ(vi, pos.getX(vi) * (1 + (rand() - 0.5) * 0.3), pos.getY(vi) * (0.7 + rand() * 0.3), pos.getZ(vi) * (1 + (rand() - 0.5) * 0.3));
+    }
+    geo.computeVertexNormals();
+    const rock = new THREE.Mesh(geo, rockMat);
+    rock.position.set((rand() - 0.5) * 0.5, -0.48 + r * 0.35, 0.06 + (rand() - 0.5) * 0.08);
+    rock.castShadow = true;
+    root.add(rock);
+  }
+  normalizeProceduralRoot(root);
+  return root;
+}
+
+// 松树部件模型：曲折木质主干 + 横斜侧枝 + 枝端针叶簇。
+// 对应物象库 pine 方案的 woodyTrunk / branch / needleCluster 部件，
+// 不再落到「茎+花瓣」的通用花草模型。
+function createPineMorphologyModel(plan, subject, layer) {
+  const root = new THREE.Group();
+  const rand = seededRandom(`morph:${subject.id}:${layer.id}`);
+  const components = plan.components || [];
+  const trunkSpec = components.find((part) => part.type === "woodyTrunk") || {};
+  const branchSpec = components.find((part) => part.type === "branch") || {};
+  const needleSpec = components.find((part) => part.type === "needleCluster") || {};
+
+  const base = new THREE.Color(state.envTint || state.palette[0] || "#645540");
+  const barkMat = new THREE.MeshStandardMaterial({
+    color: base.clone().lerp(new THREE.Color(0x4b3823), 0.72),
+    roughness: 0.94,
+    metalness: 0.02,
+  });
+  const needleMat = new THREE.MeshStandardMaterial({
+    color: base.clone().lerp(new THREE.Color(0x2e4a30), 0.8),
+    roughness: 0.82,
+    metalness: 0.01,
+  });
+  const needleTipMat = new THREE.MeshStandardMaterial({
+    color: base.clone().lerp(new THREE.Color(0x49683c), 0.7),
+    roughness: 0.8,
+    side: THREE.DoubleSide,
+  });
+
+  // 曲折主干：分段折线，向上收分
+  const trunkHeight = Number(trunkSpec.height) || 0.92;
+  const trunkRadius = Number(trunkSpec.radius) || 0.055;
+  const trunkSegs = 4;
+  const trunkPts = [new THREE.Vector3(0, -0.48, 0)];
+  for (let s = 1; s <= trunkSegs; s++) {
+    const prev = trunkPts[s - 1];
+    trunkPts.push(new THREE.Vector3(
+      prev.x + (rand() - 0.5) * 0.1,
+      -0.48 + trunkHeight * (s / trunkSegs),
+      prev.z + (rand() - 0.5) * 0.06
+    ));
+  }
+  for (let s = 0; s < trunkSegs; s++) {
+    addCylinderBetween(root, trunkPts[s], trunkPts[s + 1], trunkRadius * (1 - 0.52 * (s / trunkSegs)), barkMat, 9);
+  }
+  const trunkPointAt = (t) => {
+    const scaled = clamp(t, 0, 1) * trunkSegs;
+    const idx = Math.min(trunkSegs - 1, Math.floor(scaled));
+    return trunkPts[idx].clone().lerp(trunkPts[idx + 1], scaled - idx);
+  };
+
+  // 横斜侧枝：分布在主干上半部，先扬后抑
+  const branchCount = clamp(Math.round(Number(branchSpec.count) || 5), 3, 8);
+  const branchLength = Number(branchSpec.length) || 0.42;
+  const branchRadius = Number(branchSpec.radius) || 0.018;
+  const clusterRadius = Number(needleSpec.radius) || 0.16;
+  const clusterTips = [];
+  for (let i = 0; i < branchCount; i++) {
+    const t = 0.42 + (i / Math.max(1, branchCount - 1)) * 0.5;
+    const attach = trunkPointAt(t);
+    const theta = i * 2.4 + rand() * 0.9;
+    const dir = new THREE.Vector3(Math.cos(theta), 0, Math.sin(theta));
+    const len = branchLength * (0.72 + rand() * 0.5) * (1.08 - t * 0.4);
+    const mid = attach.clone().addScaledVector(dir, len * 0.55);
+    mid.y += len * 0.1;
+    const tip = mid.clone().addScaledVector(dir, len * 0.45);
+    tip.y -= len * (0.08 + rand() * 0.1);
+    addCylinderBetween(root, attach, mid, branchRadius, barkMat, 7);
+    addCylinderBetween(root, mid, tip, branchRadius * 0.62, barkMat, 6);
+    clusterTips.push(tip);
+    if (rand() > 0.45) clusterTips.push(mid.clone().lerp(tip, 0.55));
+  }
+  clusterTips.push(trunkPts[trunkSegs].clone().add(new THREE.Vector3(0, 0.05, 0)));
+
+  // 针叶簇：扁平冠团 + 放射针叶，不生成单板
+  const clusterTarget = clamp(Math.round(Number(needleSpec.count) || 8), 4, 14);
+  const needlesPer = clamp(Math.round(Number(needleSpec.needles) || 18), 8, 28);
+  for (let i = 0; i < Math.min(clusterTarget, clusterTips.length); i++) {
+    const center = clusterTips[i];
+    const puff = new THREE.Mesh(new THREE.SphereGeometry(clusterRadius, 12, 8), needleMat);
+    puff.position.copy(center);
+    puff.scale.set(1, 0.42, 0.74);
+    puff.rotation.y = rand() * Math.PI;
+    puff.rotation.z = (rand() - 0.5) * 0.3;
+    puff.castShadow = true;
+    root.add(puff);
+    for (let n = 0; n < needlesPer; n++) {
+      const phi = rand() * Math.PI * 2;
+      const dir = new THREE.Vector3(
+        Math.cos(phi) * (0.6 + rand() * 0.4),
+        (rand() * 0.9 + 0.15) * (rand() > 0.35 ? 1 : -0.4),
+        Math.sin(phi) * (0.6 + rand() * 0.4)
+      ).normalize();
+      const len = clusterRadius * (0.55 + rand() * 0.5);
+      const start = center.clone().addScaledVector(dir, clusterRadius * 0.3);
+      const end = start.clone().addScaledVector(dir, len);
+      addCylinderBetween(root, start, end, 0.0035, needleTipMat, 4);
+    }
+  }
+
   normalizeProceduralRoot(root);
   return root;
 }
@@ -1369,12 +2660,18 @@ function selectedGeneratedEntity(scope = activeReviewScope) {
 
 function ensureEntityPlacement(entity) {
   const p = entity.userData.placement || {};
+  const legacy = Number.isFinite(Number(p.scale)) ? Math.max(0.05, Number(p.scale)) : 1;
+  const axis = (value) => (Number.isFinite(Number(value)) ? clamp(Number(value), 0.05, 4) : legacy);
   entity.userData.placement = {
     x: Number.isFinite(Number(p.x)) ? Number(p.x) : 0,
     y: Number.isFinite(Number(p.y)) ? Number(p.y) : 0,
     z: Number.isFinite(Number(p.z)) ? Number(p.z) : 0,
+    rotationX: Number.isFinite(Number(p.rotationX)) ? Number(p.rotationX) : 0,
+    rotationY: Number.isFinite(Number(p.rotationY)) ? Number(p.rotationY) : 0,
     rotationZ: Number.isFinite(Number(p.rotationZ)) ? Number(p.rotationZ) : 0,
-    scale: Number.isFinite(Number(p.scale)) ? Math.max(0.05, Number(p.scale)) : 1,
+    scaleX: axis(p.scaleX),
+    scaleY: axis(p.scaleY),
+    scaleZ: axis(p.scaleZ),
   };
   return entity.userData.placement;
 }
@@ -1384,8 +2681,8 @@ function applyPlacementToEntity(entity) {
   const home = entity.userData.homePosition;
   const p = ensureEntityPlacement(entity);
   entity.position.set(home.x + p.x, home.y + p.y, home.z + p.z);
-  entity.rotation.set(0, 0, p.rotationZ);
-  entity.scale.setScalar(p.scale);
+  entity.rotation.set(p.rotationX, p.rotationY, p.rotationZ);
+  entity.scale.set(p.scaleX, p.scaleY, p.scaleZ);
 }
 
 function placementFromEntityPosition(entity) {
@@ -1395,8 +2692,12 @@ function placementFromEntityPosition(entity) {
   p.x = entity.position.x - home.x;
   p.y = entity.position.y - home.y;
   p.z = entity.position.z - home.z;
+  p.rotationX = entity.rotation.x || 0;
+  p.rotationY = entity.rotation.y || 0;
   p.rotationZ = entity.rotation.z || 0;
-  p.scale = entity.scale.x || 1;
+  p.scaleX = entity.scale.x || 1;
+  p.scaleY = entity.scale.y || 1;
+  p.scaleZ = entity.scale.z || 1;
   return p;
 }
 
@@ -1417,14 +2718,14 @@ function updatePlacementPanel(scope) {
     const label = candidateReview[scope]?.subject?.label || "模型";
     note.textContent = exploded
       ? "当前为分离查看；先点“归位对映”再精确安置。"
-      : `${label}候选 · X ${p.x.toFixed(2)} / Y ${p.y.toFixed(2)} / Z ${p.z.toFixed(2)} · 可拖拽或滑杆微调`;
+      : `${label}候选 · X ${p.x.toFixed(2)} / Y ${p.y.toFixed(2)} / Z ${p.z.toFixed(2)} · 拨环旋转 / 径向拉环缩放 / 拖中心球或模型移位`;
   }
   const values = {
     x: p.x,
     y: p.y,
     z: p.z,
     rotation: THREE.MathUtils.radToDeg(p.rotationZ),
-    scale: p.scale,
+    scale: (p.scaleX + p.scaleY + p.scaleZ) / 3,
   };
   for (const [key, value] of Object.entries(values)) {
     const input = el(ids[key]);
@@ -1460,7 +2761,10 @@ function applyPlacementFromControls(scope) {
   p.y = clamp(Number(el(ids.y)?.value) || 0, -1.2, 1.2);
   p.z = clamp(Number(el(ids.z)?.value) || 0, -0.9, 0.9);
   p.rotationZ = THREE.MathUtils.degToRad(clamp(Number(el(ids.rotation)?.value) || 0, -180, 180));
-  p.scale = clamp(Number(el(ids.scale)?.value) || 1, 0.25, 2.5);
+  const uniform = clamp(Number(el(ids.scale)?.value) || 1, 0.25, 2.5);
+  p.scaleX = uniform;
+  p.scaleY = uniform;
+  p.scaleZ = uniform;
   applyPlacementToEntity(entity);
   updatePlacementPanel(scope);
   updateReadout();
@@ -1469,7 +2773,7 @@ function applyPlacementFromControls(scope) {
 function resetSelectedPlacement(scope) {
   const entity = selectedGeneratedEntity(scope);
   if (!entity) return;
-  entity.userData.placement = { x: 0, y: 0, z: 0, rotationZ: 0, scale: 1 };
+  entity.userData.placement = { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0, scaleX: 1, scaleY: 1, scaleZ: 1 };
   applyPlacementToEntity(entity);
   updatePlacementPanel(scope);
   updateReadout();
@@ -1525,6 +2829,7 @@ function resetReviewState(scope) {
   review.selectedId = null;
   review.generatingIds = new Set();
   review.generatedIds = new Set();
+  review.placedIds = new Set();
   review.cropUrls = new Map();
   review.previewMeshes = new Map();
   const panel = el(scope === "biology" ? "biology-candidate-panel" : "environment-candidate-panel");
@@ -1535,6 +2840,7 @@ function resetReviewState(scope) {
   if (scope === "biology") state.bioReviewCandidateCount = 0;
   else state.reviewCandidateCount = 0;
   updatePlacementPanel(scope);
+  updatePublishButton();
 }
 
 function installCandidateReview(scope, result, subject) {
@@ -1545,6 +2851,14 @@ function installCandidateReview(scope, result, subject) {
   const ref = referenceMapFromResult(result);
   review.result = result;
   review.subject = subject;
+  // 用户选取学习：有历史样本时，按相似度重排候选（最像已确认对象的排最前）
+  if (subject?.id && (result.layers || []).length > 1) {
+    const scored = result.layers.map((layer, index) => ({ layer, index, sim: learnedSimilarity(subject.id, layer) }));
+    if (scored.some((entry) => entry.sim > 0)) {
+      scored.sort((a, b) => (b.sim - a.sim) || (a.index - b.index));
+      result.layers = scored.map((entry) => entry.layer);
+    }
+  }
   review.selectedId = null;
   review.generatingIds = new Set();
   review.generatedIds = new Set();
@@ -1580,8 +2894,28 @@ function installCandidateReview(scope, result, subject) {
   }
 
   const count = buildCandidatePreviewAnchors(scope, result, subject, ref);
-  if (isBiology) state.bioReviewCandidateCount = count;
-  else state.reviewCandidateCount = count;
+  // 识别为空引导：同一要素连续两次零候选 → 自动打开框选选择器教学
+  const emptyKey = `${scope}:${subject?.id || "?"}`;
+  if (count === 0) {
+    state.emptyIdentifyRuns = state.emptyIdentifyRuns || {};
+    state.emptyIdentifyRuns[emptyKey] = (state.emptyIdentifyRuns[emptyKey] || 0) + 1;
+    if (state.emptyIdentifyRuns[emptyKey] >= 2) {
+      state.emptyIdentifyRuns[emptyKey] = 0;
+      openManualPicker(scope);
+      showToast("两次未识别到候选：直接框选或点选目标，我来学习");
+    }
+  } else if (state.emptyIdentifyRuns) {
+    state.emptyIdentifyRuns[emptyKey] = 0;
+  }
+  if (isBiology) {
+    state.bioReviewCandidateCount = count;
+    state.bioIndependentLayerCount = bioLayerMeshes.size;
+    state.bioPbrLayerCount = review.generatedIds.size;
+  } else {
+    state.reviewCandidateCount = count;
+    state.independentLayerCount = independentLayerMeshes.size;
+    state.pbrLayerCount = review.generatedIds.size;
+  }
 
   const firstLayer = reviewLayerList(scope)[0];
   if (firstLayer) setReviewSelection(scope, firstLayer.id, false);
@@ -1595,7 +2929,9 @@ function installCandidateReview(scope, result, subject) {
     renderEnvironmentButtons();
   }
   updatePlacementPanel(scope);
+  updatePreviewOverlayVisibility();
   updateReadout();
+  scheduleEmbeddingRerank(scope);
 }
 
 function buildCandidatePreviewAnchors(scope, result, subject, ref) {
@@ -1604,6 +2940,16 @@ function buildCandidatePreviewAnchors(scope, result, subject, ref) {
   const frame = syncArtworkReferencePlane(ref, 1) || ensureArtworkFrame(ref);
   const layers = (result.layers || []).filter((layer) => layer.subjectId === subject.id);
   for (const layer of layers) {
+    // 已安置的候选：从常驻注册表恢复实体与状态，不再新建预览锚点
+    const placed = placedRegistry[scope].get(`${subject.id}:${layer.id}`);
+    if (placed) {
+      review.generatedIds.add(layer.id);
+      review.placedIds.add(layer.id);
+      review.previewMeshes.set(layer.id, placed.entity);
+      if (scope === "biology") bioLayerMeshes.set(layer.id, placed.entity);
+      else independentLayerMeshes.set(layer.id, placed.entity);
+      continue;
+    }
     if (!layer.reconstructionProfile) layer.reconstructionProfile = buildReconstructionProfile(scope, ref, layer, subject);
     if (layer.objectReference) applyObjectReferenceToProfile(layer.reconstructionProfile, layer.objectReference);
     const entity = createCandidatePreviewEntity(scope, ref, layer, frame, subject);
@@ -1723,15 +3069,25 @@ function bindCanvasCandidateSelection(canvas) {
   canvas.addEventListener("pointerdown", (event) => {
     candidatePointerDown.x = event.clientX;
     candidatePointerDown.y = event.clientY;
-    if (beginPlacementDrag(event)) {
+    if (beginGizmoDrag(event) || beginPlacementDrag(event)) {
       canvas.setPointerCapture?.(event.pointerId);
       event.preventDefault();
     }
   });
   canvas.addEventListener("pointermove", (event) => {
-    if (updatePlacementDrag(event)) event.preventDefault();
+    if (updateGizmoDrag(event) || updatePlacementDrag(event)) {
+      event.preventDefault();
+      return;
+    }
+    hoverGizmoHandle(event);
   });
   canvas.addEventListener("pointerup", (event) => {
+    if (placementGizmo.drag.active) {
+      endGizmoDrag(event);
+      event.currentTarget.releasePointerCapture?.(event.pointerId);
+      event.preventDefault();
+      return;
+    }
     if (placementDragState.active) {
       endPlacementDrag(event);
       event.currentTarget.releasePointerCapture?.(event.pointerId);
@@ -1744,6 +3100,11 @@ function bindCanvasCandidateSelection(canvas) {
     selectCandidateFromCanvas(event);
   });
   canvas.addEventListener("pointercancel", (event) => {
+    if (placementGizmo.drag.active) {
+      endGizmoDrag(event);
+      event.currentTarget.releasePointerCapture?.(event.pointerId);
+      return;
+    }
     if (!placementDragState.active) return;
     endPlacementDrag(event);
     event.currentTarget.releasePointerCapture?.(event.pointerId);
@@ -1751,9 +3112,10 @@ function bindCanvasCandidateSelection(canvas) {
 }
 
 function beginPlacementDrag(event) {
-  if (!camera || !renderer || !(placementMouseEnabled.environment || placementMouseEnabled.biology)) return false;
+  if (SCENE_VIEW) return false;
+  if (!camera || !renderer) return false;
   const picked = pickGeneratedEntityFromCanvas(event);
-  if (!picked || !placementMouseEnabled[picked.scope]) return false;
+  if (!picked) return false;
   const exploded = picked.scope === "biology" ? state.bioModelsExploded : state.modelsExploded;
   if (exploded) {
     showToast("分离查看中，请先归位对映再安置");
@@ -1795,6 +3157,1419 @@ function endPlacementDrag() {
   if (controls) controls.enabled = true;
   updatePlacementPanel(scope || activeReviewScope);
   showToast("模型安置已更新");
+}
+
+function createPlacementGizmo() {
+  const group = new THREE.Group();
+  group.name = "placement-gizmo";
+  group.renderOrder = 40;
+  const radius = 0.34;
+  const rotations = {
+    x: new THREE.Euler(0, Math.PI / 2, 0),
+    y: new THREE.Euler(Math.PI / 2, 0, 0),
+    z: new THREE.Euler(0, 0, 0),
+  };
+  placementGizmo.rings = {};
+  placementGizmo.arrows = {};
+  placementGizmo.handles = {};
+  placementGizmo.proxies = [];
+  for (const axis of ["x", "y", "z"]) {
+    // 每轴一个子组：环、拾取代理、转动箭头都建在局部 XY 平面，再整体旋转到位
+    const axisGroup = new THREE.Group();
+    axisGroup.rotation.copy(rotations[axis]);
+    group.add(axisGroup);
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(radius, 0.007, 8, 72),
+      new THREE.MeshBasicMaterial({ color: GIZMO_COLORS[axis], transparent: true, opacity: 0.92, depthTest: false, toneMapped: false })
+    );
+    ring.userData = { gizmoAxis: axis, gizmoKind: "ring" };
+    axisGroup.add(ring);
+    placementGizmo.rings[axis] = ring;
+    // 粗隐形代理环：扩大可点中区域；colorWrite=false 不渲染但仍可被 raycast
+    const proxy = new THREE.Mesh(
+      new THREE.TorusGeometry(radius, 0.045, 8, 48),
+      new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false, depthTest: false })
+    );
+    proxy.userData = { gizmoAxis: axis, gizmoKind: "ring" };
+    axisGroup.add(proxy);
+    placementGizmo.proxies.push(proxy);
+    // 转动箭头：环上一对切向箭头，平时淡雅，悬停该环时高亮
+    placementGizmo.arrows[axis] = [];
+    for (const theta of [Math.PI * 0.22, Math.PI * 1.22]) {
+      const arrow = new THREE.Mesh(
+        new THREE.ConeGeometry(0.016, 0.05, 10),
+        new THREE.MeshBasicMaterial({ color: GIZMO_COLORS[axis], transparent: true, opacity: 0.4, depthTest: false, toneMapped: false })
+      );
+      arrow.position.set(Math.cos(theta) * radius, Math.sin(theta) * radius, 0);
+      const tangent = new THREE.Vector3(-Math.sin(theta), Math.cos(theta), 0);
+      arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tangent);
+      arrow.userData = { gizmoAxis: axis, gizmoKind: "ring" };
+      axisGroup.add(arrow);
+      placementGizmo.arrows[axis].push(arrow);
+    }
+  }
+  // 两环相交处（±轴端点）的双轴缩放手柄：拉动可在该两轴平面内缩放
+  const planeOfPoint = { x: "yz", y: "xz", z: "xy" };
+  for (const pointAxis of ["x", "y", "z"]) {
+    for (const sign of [1, -1]) {
+      const handle = new THREE.Mesh(
+        new THREE.OctahedronGeometry(0.026),
+        new THREE.MeshBasicMaterial({ color: GIZMO_HANDLE_COLOR, transparent: true, opacity: 0.95, depthTest: false, toneMapped: false })
+      );
+      handle.position.copy(GIZMO_AXES[pointAxis]).multiplyScalar(radius * sign);
+      handle.userData = { gizmoAxis: null, gizmoKind: "scale2", plane: planeOfPoint[pointAxis] };
+      group.add(handle);
+      placementGizmo.handles[`${planeOfPoint[pointAxis]}${sign > 0 ? "+" : "-"}`] = handle;
+      const proxy = new THREE.Mesh(
+        new THREE.SphereGeometry(0.05, 10, 8),
+        new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false, depthTest: false })
+      );
+      proxy.position.copy(handle.position);
+      proxy.userData = { gizmoAxis: null, gizmoKind: "scale2", plane: planeOfPoint[pointAxis] };
+      group.add(proxy);
+      placementGizmo.proxies.push(proxy);
+    }
+  }
+  const center = new THREE.Mesh(
+    new THREE.SphereGeometry(0.05, 16, 12),
+    new THREE.MeshBasicMaterial({ color: 0xf0ead8, depthTest: false, toneMapped: false })
+  );
+  center.userData = { gizmoAxis: null, gizmoKind: "move" };
+  group.add(center);
+  placementGizmo.centerMesh = center;
+  const centerProxy = new THREE.Mesh(
+    new THREE.SphereGeometry(0.11, 12, 8),
+    new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false, depthTest: false })
+  );
+  centerProxy.userData = { gizmoAxis: null, gizmoKind: "move" };
+  group.add(centerProxy);
+  placementGizmo.proxies.push(centerProxy);
+  group.visible = false;
+  scene.add(group);
+  placementGizmo.group = group;
+}
+
+function updatePlacementGizmo() {
+  if (!scene) return;
+  if (SCENE_VIEW) {
+    if (placementGizmo.group) placementGizmo.group.visible = false;
+    return;
+  }
+  if (!placementGizmo.group) createPlacementGizmo();
+  const group = placementGizmo.group;
+  const d = placementGizmo.drag;
+  const entity = d.active ? d.entity : selectedGeneratedEntity(activeReviewScope);
+  const scope = d.active ? d.scope : activeReviewScope;
+  const exploded = scope === "biology" ? state.bioModelsExploded : state.modelsExploded;
+  if (!entity || exploded || !entity.parent) {
+    group.visible = false;
+    placementGizmo.hoverKey = null;
+    placementGizmo.boundsEntity = null;
+    return;
+  }
+  group.visible = true;
+  group.position.copy(entity.position);
+  // 环大小跟随模型包围盒：让三环围绕模型而不是缩在模型内部
+  if (placementGizmo.boundsEntity !== entity) {
+    placementGizmo.boundsEntity = entity;
+    const box = new THREE.Box3().setFromObject(entity);
+    const size = box.getSize(new THREE.Vector3());
+    placementGizmo.baseRadius = clamp(Math.max(size.x, size.y, 0.05) * 0.62, 0.22, 1.4);
+  }
+  group.scale.setScalar((placementGizmo.baseRadius || 0.34) / 0.34);
+}
+
+function pickGizmoHandle(event) {
+  if (!placementGizmo.group?.visible || !camera || !renderer) return null;
+  const rect = renderer.domElement.getBoundingClientRect();
+  const center = placementGizmo.group.position;
+  const radius = placementGizmo.baseRadius || 0.34;
+  const project = (vec) => {
+    const p = vec.clone().project(camera);
+    return {
+      x: (p.x * 0.5 + 0.5) * rect.width + rect.left,
+      y: (-p.y * 0.5 + 0.5) * rect.height + rect.top,
+    };
+  };
+  // 各环平面基向量：X 环在 YZ 平面、Y 环在 XZ 平面、Z 环在 XY 平面
+  const planeBasis = {
+    x: [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1)],
+    y: [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1)],
+    z: [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0)],
+  };
+  const pointer = { x: event.clientX, y: event.clientY };
+  const distToSegment = (p, a, b) => {
+    const abx = b.x - a.x;
+    const aby = b.y - a.y;
+    const len2 = abx * abx + aby * aby || 1e-6;
+    const t = clamp(((p.x - a.x) * abx + (p.y - a.y) * aby) / len2, 0, 1);
+    return Math.hypot(p.x - (a.x + abx * t), p.y - (a.y + aby * t));
+  };
+  const curveDistance = (axis) => {
+    const [u, w] = planeBasis[axis];
+    let min = Infinity;
+    let prev = null;
+    for (let i = 0; i <= 24; i++) {
+      const theta = (i / 24) * Math.PI * 2;
+      const point = center.clone().addScaledVector(u, Math.cos(theta) * radius).addScaledVector(w, Math.sin(theta) * radius);
+      const screen = project(point);
+      if (prev) min = Math.min(min, distToSegment(pointer, prev, screen));
+      prev = screen;
+    }
+    return min;
+  };
+  // 手柄（两环交点）：屏幕距离足够近才算命中
+  const handles = [
+    { plane: "yz", point: center.clone().add(new THREE.Vector3(radius, 0, 0)) },
+    { plane: "yz", point: center.clone().add(new THREE.Vector3(-radius, 0, 0)) },
+    { plane: "xz", point: center.clone().add(new THREE.Vector3(0, radius, 0)) },
+    { plane: "xz", point: center.clone().add(new THREE.Vector3(0, -radius, 0)) },
+    { plane: "xy", point: center.clone().add(new THREE.Vector3(0, 0, radius)) },
+    { plane: "xy", point: center.clone().add(new THREE.Vector3(0, 0, -radius)) },
+  ];
+  let handleHit = null;
+  let handleDist = Infinity;
+  for (const handle of handles) {
+    const screen = project(handle.point);
+    const dist = Math.hypot(pointer.x - screen.x, pointer.y - screen.y);
+    if (dist < handleDist) {
+      handleDist = dist;
+      handleHit = handle;
+    }
+  }
+  if (handleHit && handleDist < 10) return { axis: null, kind: "scale2", plane: handleHit.plane };
+  // 环：屏幕距离最近的投影曲线优先
+  let ringHit = null;
+  let ringDist = Infinity;
+  for (const axis of ["x", "y", "z"]) {
+    const dist = curveDistance(axis);
+    if (dist < ringDist) {
+      ringDist = dist;
+      ringHit = axis;
+    }
+  }
+  if (ringHit && ringDist < 14) return { axis: ringHit, kind: "ring", plane: null };
+  // 中心球：拖动移位
+  const centerScreen = project(center.clone());
+  if (Math.hypot(pointer.x - centerScreen.x, pointer.y - centerScreen.y) < 12) {
+    return { axis: null, kind: "move", plane: null };
+  }
+  return null;
+}
+
+function signedAngleDelta(a, b) {
+  let delta = a - b;
+  while (delta > Math.PI) delta -= Math.PI * 2;
+  while (delta < -Math.PI) delta += Math.PI * 2;
+  return delta;
+}
+
+function beginGizmoDrag(event) {
+  if (SCENE_VIEW) return false;
+  const picked = pickGizmoHandle(event);
+  if (!picked) return false;
+  const entity = selectedGeneratedEntity(activeReviewScope);
+  if (!entity) return false;
+  const scope = activeReviewScope;
+  const exploded = scope === "biology" ? state.bioModelsExploded : state.modelsExploded;
+  if (exploded) return false;
+  const d = placementGizmo.drag;
+  if (picked.kind === "move") {
+    if (!intersectPointerWithZPlane(event, entity.position.z, placementPoint)) return false;
+    d.moveOffset.copy(entity.position).sub(placementPoint);
+  }
+  const rect = renderer.domElement.getBoundingClientRect();
+  const projected = entity.position.clone().project(camera);
+  d.centerX = (projected.x * 0.5 + 0.5) * rect.width + rect.left;
+  d.centerY = (-projected.y * 0.5 + 0.5) * rect.height + rect.top;
+  const dx = event.clientX - d.centerX;
+  const dy = event.clientY - d.centerY;
+  d.active = true;
+  d.pointerId = event.pointerId;
+  d.entity = entity;
+  d.scope = scope;
+  d.kind = picked.kind;
+  d.axis = picked.axis;
+  d.plane = picked.plane || null;
+  d.mode = picked.kind === "move" ? "move" : picked.kind === "scale2" ? "scale2" : null;
+  d.theta0 = Math.atan2(-dy, dx);
+  d.r0 = Math.max(4, Math.hypot(dx, dy));
+  d.grabX = event.clientX;
+  d.grabY = event.clientY;
+  d.lastTheta = 0;
+  d.startQuat.copy(entity.quaternion);
+  d.startScale = entity.scale.x || 1;
+  d.startScaleVec.copy(entity.scale);
+  d.centerWorld.copy(entity.position);
+  if (picked.axis) {
+    d.angle0 = gizmoPlaneAngle(event, picked.axis);
+    d.axisViewZ = GIZMO_AXES[picked.axis].clone().transformDirection(camera.matrixWorldInverse).z;
+    // 侧向环（轴与视线近垂直）：投影线方向与像素半径，用于「沿线拨 = 旋转」
+    if (Math.abs(d.axisViewZ) <= 0.5) {
+      const camDir = camera.getWorldDirection(new THREE.Vector3());
+      const t = new THREE.Vector3().crossVectors(GIZMO_AXES[picked.axis], camDir).normalize();
+      const p0 = entity.position.clone().project(camera);
+      const p1 = entity.position.clone().addScaledVector(t, 0.1).project(camera);
+      const sdx = p1.x - p0.x;
+      const sdy = -(p1.y - p0.y);
+      const slen = Math.hypot(sdx, sdy) || 1;
+      d.screenDirX = sdx / slen;
+      d.screenDirY = sdy / slen;
+      const edgeWorld = entity.position.clone().addScaledVector(t, placementGizmo.baseRadius || 0.34);
+      const pe = edgeWorld.project(camera);
+      d.lineScreenRadius = Math.max(24, Math.hypot((pe.x - p0.x) * rect.width * 0.5, (pe.y - p0.y) * rect.height * 0.5));
+    }
+  }
+  if (controls) controls.enabled = false;
+  return true;
+}
+
+// 指针射线与「环平面」（过 gizmo 中心、法线为环轴）求交，
+// 用交点在平面内的极角度量旋转——侧向（edge-on）的环也能正确拨转。
+function gizmoPlaneAngle(event, axis) {
+  setPointerFromEvent(event);
+  candidateRaycaster.setFromCamera(candidatePointer, camera);
+  const d = placementGizmo.drag;
+  const normal = GIZMO_AXES[axis];
+  placementPlane.set(normal, -normal.dot(d.centerWorld));
+  if (!candidateRaycaster.ray.intersectPlane(placementPlane, placementPoint)) return null;
+  const v = placementPoint.clone().sub(d.centerWorld);
+  if (v.lengthSq() < 1e-8) return null;
+  const u = Math.abs(normal.y) < 0.9
+    ? new THREE.Vector3().crossVectors(normal, new THREE.Vector3(0, 1, 0)).normalize()
+    : new THREE.Vector3().crossVectors(normal, new THREE.Vector3(1, 0, 0)).normalize();
+  const w = new THREE.Vector3().crossVectors(normal, u).normalize();
+  return Math.atan2(v.dot(w), v.dot(u));
+}
+
+function updateGizmoDrag(event) {
+  const d = placementGizmo.drag;
+  if (!d.active || !d.entity) return false;
+  if (d.pointerId !== null && event.pointerId !== d.pointerId) return false;
+  if (d.kind === "move") {
+    if (!intersectPointerWithZPlane(event, d.entity.position.z, placementPoint)) return false;
+    d.entity.position.x = placementPoint.x + d.moveOffset.x;
+    d.entity.position.y = placementPoint.y + d.moveOffset.y;
+  } else {
+    const dx = event.clientX - d.centerX;
+    const dy = event.clientY - d.centerY;
+    const r = Math.max(4, Math.hypot(dx, dy));
+    const edgeOnRing = d.kind === "ring" && d.axis && Math.abs(d.axisViewZ) <= 0.5;
+    if (!d.mode) {
+      if (edgeOnRing) {
+        // 侧向环：沿投影线方向拖 = 拨转；明显偏离线方向（径向拽）= 缩放
+        const dragDx = event.clientX - d.grabX;
+        const dragDy = event.clientY - d.grabY;
+        const len = Math.hypot(dragDx, dragDy);
+        if (len < 5) return true;
+        const align = Math.abs((dragDx * d.screenDirX + dragDy * d.screenDirY) / len);
+        d.mode = align > 0.55 ? "rotate" : "scale";
+      } else {
+        const planeAngle0 = d.kind === "ring" && d.axis ? gizmoPlaneAngle(event, d.axis) : null;
+        const screenTheta0 = Math.atan2(-dy, dx);
+        const dTheta0 = planeAngle0 !== null && d.angle0 !== null
+          ? signedAngleDelta(planeAngle0, d.angle0)
+          : signedAngleDelta(screenTheta0, d.theta0);
+        const rRatio0 = (r - d.r0) / d.r0;
+        if (Math.max(Math.abs(dTheta0), Math.abs(rRatio0)) < 0.035) return true;
+        d.mode = Math.abs(rRatio0) > Math.max(0.12, Math.abs(dTheta0) * 1.2) ? "scale" : "rotate";
+      }
+    }
+    if (d.mode === "rotate") {
+      if (d.axis && Math.abs(d.axisViewZ) <= 0.5) {
+        // 侧向环：平面投影角退化，改用沿线位移线性映射（含箭头方向符号）
+        const dragDx = event.clientX - d.grabX;
+        const dragDy = event.clientY - d.grabY;
+        d.lastTheta = -(dragDx * d.screenDirX + dragDy * d.screenDirY) / Math.max(24, d.lineScreenRadius || 24);
+      } else if (d.axis) {
+        // 正向环：环平面角度增量；投影点离中心过近时角度不稳定，冻结沿用上一次
+        const planeAngle = gizmoPlaneAngle(event, d.axis);
+        if (planeAngle !== null && d.angle0 !== null) {
+          const distFromCenter = placementPoint.distanceTo(d.centerWorld);
+          d.dbg = { planeAngle, angle0: d.angle0, distFromCenter, baseRadius: placementGizmo.baseRadius };
+          if (distFromCenter > (placementGizmo.baseRadius || 0.34) * 0.25) {
+            d.lastTheta = signedAngleDelta(planeAngle, d.angle0);
+          }
+        } else {
+          d.dbg = { planeAngle, angle0: d.angle0, fallback: true };
+          d.lastTheta = signedAngleDelta(Math.atan2(-dy, dx), d.theta0);
+        }
+      }
+      const delta = new THREE.Quaternion().setFromAxisAngle(GIZMO_AXES[d.axis], d.lastTheta);
+      d.entity.quaternion.copy(delta).multiply(d.startQuat);
+    } else if (d.mode === "scale2") {
+      // 两环相交处的手柄：只缩放该两轴，第三轴保持
+      const factor = clamp(r / d.r0, 0.2, 5);
+      const applyAxis = (component, inPlane) => clamp(inPlane ? d.startScaleVec[component] * factor : d.startScaleVec[component], 0.25, 2.5);
+      d.entity.scale.set(
+        applyAxis("x", d.plane?.includes("x")),
+        applyAxis("y", d.plane?.includes("y")),
+        applyAxis("z", d.plane?.includes("z"))
+      );
+    } else {
+      d.entity.scale.setScalar(clamp(d.startScale * clamp(r / d.r0, 0.2, 5), 0.25, 2.5));
+    }
+  }
+  placementFromEntityPosition(d.entity);
+  updatePlacementPanel(d.scope);
+  updateReadout();
+  return true;
+}
+
+function endGizmoDrag() {
+  const d = placementGizmo.drag;
+  if (!d.active) return;
+  const scope = d.scope;
+  const mode = d.mode;
+  d.active = false;
+  d.pointerId = null;
+  d.entity = null;
+  d.scope = null;
+  d.kind = null;
+  d.axis = null;
+  d.plane = null;
+  d.mode = null;
+  if (controls) controls.enabled = true;
+  updatePlacementPanel(scope || activeReviewScope);
+  updateReadout();
+  if (mode === "scale" || mode === "scale2") showToast("模型缩放已更新");
+  else if (mode === "rotate") showToast("模型旋转已更新");
+  else if (mode === "move") showToast("模型安置已更新");
+}
+
+function hoverGizmoHandle(event) {
+  if (placementGizmo.drag.active || !placementGizmo.group?.visible) return;
+  const picked = pickGizmoHandle(event);
+  const key = picked ? picked.kind === "scale2" ? `scale2:${picked.plane}` : picked.axis || "center" : null;
+  if (key === placementGizmo.hoverKey) return;
+  placementGizmo.hoverKey = key;
+  for (const [axis, mesh] of Object.entries(placementGizmo.rings)) {
+    mesh.material.color.setHex(axis === key ? GIZMO_HIGHLIGHT : GIZMO_COLORS[axis]);
+  }
+  // 悬停环 → 该环转动箭头高亮加粗显示
+  for (const [axis, arrows] of Object.entries(placementGizmo.arrows)) {
+    for (const arrow of arrows) {
+      const active = axis === key;
+      arrow.material.color.setHex(active ? GIZMO_HIGHLIGHT : GIZMO_COLORS[axis]);
+      arrow.material.opacity = active ? 1 : 0.4;
+      arrow.scale.setScalar(active ? 1.5 : 1);
+    }
+  }
+  // 悬停双轴缩放手柄 → 对应手柄高亮
+  for (const handle of Object.values(placementGizmo.handles)) {
+    const active = key === `scale2:${handle.userData.plane}`;
+    handle.material.color.setHex(active ? GIZMO_HIGHLIGHT : GIZMO_HANDLE_COLOR);
+    handle.scale.setScalar(active ? 1.45 : 1);
+  }
+  if (placementGizmo.centerMesh) {
+    placementGizmo.centerMesh.material.color.setHex(key === "center" ? GIZMO_HIGHLIGHT : 0xf0ead8);
+  }
+  const canvas = el("wall-viewport");
+  if (canvas) canvas.style.cursor = key ? "grab" : "";
+}
+
+// ===== 拟生网页（scene.html）：按发布配置自动重建场景 =====
+
+function bboxOverlapScore(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b)) return 0;
+  const left = Math.max(a[0], b[0]);
+  const top = Math.max(a[1], b[1]);
+  const right = Math.min(a[2], b[2]);
+  const bottom = Math.min(a[3], b[3]);
+  const intersection = Math.max(0, right - left) * Math.max(0, bottom - top);
+  const areaA = Math.max(1e-6, (a[2] - a[0]) * (a[3] - a[1]));
+  const areaB = Math.max(1e-6, (b[2] - b[0]) * (b[3] - b[1]));
+  return intersection / Math.max(1e-6, areaA + areaB - intersection);
+}
+
+async function replayPlacedLayer(entry) {
+  const scope = entry.scope === "biology" ? "biology" : "environment";
+  if (scope === "environment") {
+    if (entry.subject) setEnvironment(entry.subject);
+    await generateEnvironmentFromSource();
+  } else {
+    const kind = entry.subjectKind || `${entry.subject || ""}`.split("-")[1] || "auto";
+    selectBiologySubject(kind);
+    await generateBiologyFromSource();
+  }
+  const layers = reviewLayerList(scope);
+  if (!layers.length) return;
+  const target = layers.find((layer) => layer.id === entry.layerId)
+    || layers.reduce((best, layer) => (bboxOverlapScore(layer.bbox, entry.bbox) > bboxOverlapScore(best?.bbox, entry.bbox) ? layer : best), null)
+    || layers[0];
+  await confirmReviewLayer(scope, target.id);
+  const entity = candidateReview[scope].previewMeshes.get(target.id);
+  if (entity && entry.placement) {
+    entity.userData.placement = { ...entity.userData.placement, ...entry.placement };
+    // 发布存档带绝对坐标时，反推本次重识别的锚点（homePosition），
+    // 保证实体落点与发布时一致；applyPlacementToEntity 只读 .x/.y/.z，Vector3 兼容
+    const pos = entry.position;
+    if (pos && Number.isFinite(pos.x) && Number.isFinite(pos.y) && Number.isFinite(pos.z)) {
+      const p = entity.userData.placement;
+      entity.userData.homePosition = new THREE.Vector3(
+        pos.x - (p.x || 0),
+        pos.y - (p.y || 0),
+        pos.z - (p.z || 0)
+      );
+    }
+    applyPlacementToEntity(entity);
+    placementFromEntityPosition(entity);
+  }
+  markLayerPlaced(scope, target.id);
+}
+
+async function replayPublishedScene() {
+  let config = null;
+  // 优先级：服务端短链（含原作图）> 压缩参数 > sessionStorage（本机发布）
+  const urlParams = new URLSearchParams(location.search);
+  const shareId = urlParams.get("id");
+  if (shareId) {
+    try {
+      const response = await fetch(`/api/scene/share/${shareId}`, { cache: "no-store" });
+      if (response.ok) config = await response.json();
+    } catch (err) {
+      console.warn("[scene-view] share fetch failed", err);
+    }
+  }
+  if (!config && urlParams.get("c")) {
+    try {
+      config = await decodeSceneShare(urlParams.get("c"));
+    } catch (err) {
+      console.warn("[scene-view] share link decode failed", err);
+    }
+  }
+  if (!config) {
+    try {
+      config = JSON.parse(sessionStorage.getItem("living-classical-art-wall-published") || "null");
+    } catch (_) { /* ignore */ }
+  }
+  if (!config) {
+    setStatus("未找到已发布的拟生配置；请回到工作空间完成安置后点击发布");
+    return;
+  }
+  // 分享链接自带原作：本机没有画作时先装载
+  if (config.source && !state.source?.dataUrl) {
+    await applySource({ name: config.name || "artwork", type: "image/jpeg", dataUrl: config.source, updatedAt: Date.now() });
+  }
+  const params = config.params || {};
+  state.wind = params.wind ?? state.wind;
+  state.windDirDeg = params.windDirDeg ?? state.windDirDeg;
+  state.mist = params.mist ?? state.mist;
+  state.flow = params.flow ?? state.flow;
+  state.snow = params.snow ?? 0;
+  state.rain = params.rain ?? 0;
+  state.cloud = params.cloud ?? 0;
+  state.fire = params.fire ?? 0;
+  state.dayNight = params.dayNight ?? 1;
+  if (params.atmosphere) state.atmosphere = params.atmosphere;
+  state.interactions = { ...state.interactions, ...(config.interactions || {}) };
+  applyAtmosphere();
+  applyWindDirection();
+  ensureRain();
+  ensureClouds();
+  ensureFire();
+  setStatus(`正在按发布配置重建「${config.name || "画作"}」的拟生场景…`);
+  for (const entry of config.layers || []) {
+    try {
+      await replayPlacedLayer(entry);
+      setStatus(`正在重建拟生场景… 已完成 ${placedCountTotal()}/${(config.layers || []).length} 个对象`);
+    } catch (err) {
+      console.warn("[scene-view] replay layer failed", entry, err);
+    }
+  }
+  ensureBeeAgents();
+  setStatus(`${config.name || "画作"} · 拟生场景运行中 · ${placedCountTotal()} 个对象`);
+  updateReadout();
+  renderSceneBioDock();
+}
+
+function updatePublishButton() {
+  const btn = el("publish-scene");
+  if (!btn) return;
+  const placed = placedCountTotal();
+  btn.disabled = placed === 0;
+  btn.title = placed ? `发布拟生场景（已安置 ${placed} 个对象），进入环境参数配置` : "先完成至少一个候选的安置";
+}
+
+function collectSceneConfig() {
+  const layers = [];
+  for (const scope of ["environment", "biology"]) {
+    for (const [key, record] of placedRegistry[scope]) {
+      layers.push({
+        scope,
+        subject: record.subject?.id || null,
+        subjectKind: record.subject?.kind || null,
+        subjectLabel: record.subject?.label || null,
+        layerId: key.split(":").pop(),
+        placement: record.entity?.userData?.placement ? { ...record.entity.userData.placement } : null,
+        // 发布时的绝对坐标：重放时重新识别的锚点可能漂移，用它钉住实体的最终落点
+        position: record.entity ? { x: record.entity.position.x, y: record.entity.position.y, z: record.entity.position.z } : null,
+        bbox: record.layer?.bbox || null,
+      });
+    }
+  }
+  return {
+    name: state.source?.name || "artwork",
+    source: state.source?.dataUrl || null,
+    publishedAt: new Date().toISOString(),
+    layers,
+    params: {
+      wind: state.wind,
+      windDirDeg: state.windDirDeg,
+      snow: state.snow,
+      rain: state.rain,
+      mist: state.mist,
+      cloud: state.cloud,
+      flow: state.flow,
+      fire: state.fire,
+      dayNight: state.dayNight,
+      atmosphere: state.atmosphere,
+    },
+    interactions: { ...state.interactions },
+  };
+}
+
+// 分享链接：配置 deflate 压缩 + base64url，跨浏览器可打开
+async function encodeSceneShare(config) {
+  const stream = new Blob([new TextEncoder().encode(JSON.stringify(config))]).stream()
+    .pipeThrough(new CompressionStream("deflate-raw"));
+  const buffer = await new Response(stream).arrayBuffer();
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+    .replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
+}
+
+async function decodeSceneShare(code) {
+  const b64 = code.replaceAll("-", "+").replaceAll("_", "/");
+  const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
+  const bytes = Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return JSON.parse(await new Response(stream).text());
+}
+
+/* ============ 拟生场景页（scene.html）专属：生灵坞 + 对话现场编辑 ============ */
+
+// 画中生灵坞：列出已安置生灵，可跳物种实验室编辑并带返回链接
+function renderSceneBioDock() {
+  if (!SCENE_VIEW) return;
+  const dock = el("scene-bio-dock");
+  const list = el("scene-bio-list");
+  if (!dock || !list) return;
+  list.innerHTML = "";
+  for (const [, record] of placedRegistry.biology) {
+    const label = record.subject?.label || "生灵";
+    const item = document.createElement("li");
+    const name = document.createElement("span");
+    name.textContent = label;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "实验室编辑";
+    btn.addEventListener("click", () => {
+      location.href = "lab.html?from=scene&return=" + encodeURIComponent(location.href) + "&subject=" + encodeURIComponent(label);
+    });
+    item.append(name, btn);
+    list.appendChild(item);
+  }
+  dock.hidden = list.childElementCount === 0;
+}
+
+// 场景简述：供大模型理解当前画面（对象标签/落点 + 环境参数）
+function sceneEditSummary() {
+  const layers = [];
+  for (const scope of ["environment", "biology"]) {
+    for (const [, record] of placedRegistry[scope]) {
+      layers.push({
+        label: record.subject?.label || "未名",
+        scope,
+        position: record.entity
+          ? { x: +record.entity.position.x.toFixed(3), y: +record.entity.position.y.toFixed(3), z: +record.entity.position.z.toFixed(3) }
+          : null,
+      });
+    }
+  }
+  return {
+    layers,
+    params: {
+      wind: state.wind, mist: state.mist, flow: state.flow, cloud: state.cloud,
+      rain: state.rain, snow: state.snow ?? 0, fire: state.fire, dayNight: state.dayNight,
+      atmosphere: state.atmosphere,
+    },
+  };
+}
+
+// 内置指令解析（离线兜底）：移动/缩放/环境参数/气韵
+function parseLocalSceneEdit(text) {
+  const input = (text || "").trim();
+  const actions = [];
+  const move = input.match(/[把将]?\s*(.+?)\s*向?(左|右|上|下|近|远)\s*移/);
+  if (move) {
+    const step = 0.25;
+    const d = { dx: 0, dy: 0, dz: 0 };
+    if (move[2] === "左") d.dx = -step;
+    else if (move[2] === "右") d.dx = step;
+    else if (move[2] === "上") d.dy = step;
+    else if (move[2] === "下") d.dy = -step;
+    else if (move[2] === "近") d.dz = step;
+    else if (move[2] === "远") d.dz = -step;
+    actions.push({ type: "move", target: move[1].trim(), ...d });
+  }
+  const scale = input.match(/(放大|缩小)\s*(.+)/);
+  if (scale) actions.push({ type: "scale", target: scale[2].trim(), factor: scale[1] === "放大" ? 1.2 : 0.83 });
+  const paramMap = { 风: "wind", 雾: "mist", 流: "flow" };
+  const param = input.match(/(风|雾|流)\s*(大|小)\s*一点/);
+  if (param) {
+    const key = paramMap[param[1]];
+    const value = clamp((state[key] ?? 0) + (param[2] === "大" ? 0.15 : -0.15), 0, 1);
+    actions.push({ type: "set", param: key, value });
+  }
+  const atmMap = { 纸光: "paper", 晨光: "dawn", 暮色: "dusk", 月色: "moon" };
+  for (const [word, value] of Object.entries(atmMap)) {
+    if (input.includes(word)) {
+      actions.push({ type: "atmosphere", value });
+      break;
+    }
+  }
+  if (!actions.length) {
+    return { reply: "没听懂这句指令。可以试试：把莲花往左移一点 / 放大莲花 / 雾大一点 / 暮色。", actions };
+  }
+  return { reply: "好，按你说的调整。", actions };
+}
+
+// 按标签包含匹配已安置实体（环境/生灵两个注册表，取首个命中）
+function findPlacedRecordByLabel(target) {
+  const want = (target || "").trim();
+  if (!want) return null;
+  for (const scope of ["environment", "biology"]) {
+    for (const [, record] of placedRegistry[scope]) {
+      const label = record.subject?.label || "";
+      if (label && (label.includes(want) || want.includes(label))) return record;
+    }
+  }
+  return null;
+}
+
+// 逐条应用编辑动作；返回实际生效的动作数
+function applySceneEditActions(actions) {
+  let applied = 0;
+  let atmosphereTouched = false;
+  for (const action of actions || []) {
+    if (!action || typeof action !== "object") continue;
+    if (action.type === "move" || action.type === "rotate" || action.type === "scale") {
+      const record = findPlacedRecordByLabel(action.target);
+      if (!record?.entity) continue;
+      const p = ensureEntityPlacement(record.entity);
+      if (action.type === "move") {
+        p.x += Number(action.dx) || 0;
+        p.y += Number(action.dy) || 0;
+        p.z += Number(action.dz) || 0;
+      } else if (action.type === "rotate") {
+        p.rotationZ += (Number(action.deg) || 0) * Math.PI / 180;
+      } else {
+        const factor = clamp(Number(action.factor) || 1, 0.05, 4);
+        p.scaleX = clamp(p.scaleX * factor, 0.05, 4);
+        p.scaleY = clamp(p.scaleY * factor, 0.05, 4);
+        p.scaleZ = clamp(p.scaleZ * factor, 0.05, 4);
+      }
+      applyPlacementToEntity(record.entity);
+      applied += 1;
+    } else if (action.type === "set") {
+      const key = `${action.param || ""}`;
+      if (!["wind", "mist", "flow", "cloud", "rain", "snow", "fire", "dayNight"].includes(key)) continue;
+      const value = clamp(Number(action.value), 0, 1);
+      if (!Number.isFinite(value)) continue;
+      state[key] = value;
+      const slider = el({ wind: "wind-range", mist: "mist-range", flow: "flow-range" }[key]);
+      if (slider) slider.value = String(value);
+      if (key === "rain") ensureRain();
+      if (key === "cloud") ensureClouds();
+      if (key === "fire") ensureFire();
+      if (key === "flow") for (const water of waterSurfaces) water.material.uniforms.uFlow.value = state.flow;
+      atmosphereTouched = true;
+      applied += 1;
+    } else if (action.type === "atmosphere") {
+      if (!ATMOSPHERES[action.value]) continue;
+      state.atmosphere = action.value;
+      atmosphereTouched = true;
+      applied += 1;
+    }
+    // 未知 action 跳过
+  }
+  if (atmosphereTouched) applyAtmosphere();
+  updateReadout();
+  return applied;
+}
+
+function appendSceneChatBubble(role, text) {
+  const log = el("scene-chat-log");
+  if (!log) return;
+  const bubble = document.createElement("div");
+  bubble.className = `scene-chat-msg ${role}`;
+  bubble.textContent = text;
+  log.appendChild(bubble);
+  log.scrollTop = log.scrollHeight;
+}
+
+let sceneEditConfigPromise = null;
+
+// OpenAI 兼容接口：要求模型只输出 {"reply":"...","actions":[...]}；失败返回 null
+async function requestSceneEditLlm(text) {
+  sceneEditConfigPromise = sceneEditConfigPromise || loadConfig();
+  const cfg = (await sceneEditConfigPromise)?.sceneEdit || {};
+  const { llmEndpoint, llmApiKey, llmModel } = cfg;
+  if (!llmEndpoint) return null;
+  const system = "你是古典画拟生场景的编辑助手。用户用中文描述想怎么改场景，你只输出一行 JSON：" +
+    "{\"reply\":\"一句中文回话\",\"actions\":[...]}，不要输出别的文字。" +
+    "action 类型：{\"type\":\"move\",\"target\":\"标签\",\"dx\":0,\"dy\":0,\"dz\":0}；" +
+    "{\"type\":\"rotate\",\"target\":\"标签\",\"deg\":数}；" +
+    "{\"type\":\"scale\",\"target\":\"标签\",\"factor\":数}；" +
+    "{\"type\":\"set\",\"param\":\"wind|mist|flow|cloud|rain|snow|fire|dayNight\",\"value\":0~1}；" +
+    "{\"type\":\"atmosphere\",\"value\":\"paper|dawn|dusk|moon\"}。" +
+    "target 必须用工单 layers 里的 label 原文；无法理解的请求 actions 留空，reply 里说明。";
+  const user = `当前场景：${JSON.stringify(sceneEditSummary())}\n用户指令：${text}`;
+  try {
+    const res = await fetch(llmEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(llmApiKey ? { Authorization: `Bearer ${llmApiKey}` } : {}),
+      },
+      body: JSON.stringify({
+        model: llmModel || "gpt-4o-mini",
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+        ],
+        max_tokens: 400,
+      }),
+    });
+    const data = await res.json();
+    const content = data?.choices?.[0]?.message?.content?.trim();
+    if (!content) return null;
+    // 容错提取：截取首个 { 至末个 } 再解析；失败则把原文当回话展示
+    const start = content.indexOf("{");
+    const end = content.lastIndexOf("}");
+    if (start >= 0 && end > start) {
+      try {
+        return JSON.parse(content.slice(start, end + 1));
+      } catch (_) { /* fallthrough */ }
+    }
+    return { reply: content, actions: [] };
+  } catch (err) {
+    console.warn("[scene-chat] llm request failed", err);
+    return null;
+  }
+}
+
+async function sendSceneChat() {
+  const input = el("scene-chat-input");
+  const sendBtn = el("scene-chat-send");
+  const text = input?.value.trim();
+  if (!text || !input || !sendBtn) return;
+  input.value = "";
+  appendSceneChatBubble("user", text);
+  sendBtn.disabled = true;
+  try {
+    const llm = await requestSceneEditLlm(text);
+    const result = llm || parseLocalSceneEdit(text);
+    const applied = applySceneEditActions(result.actions);
+    const reply = result.reply || (applied ? "已调整。" : "没有可执行的调整。");
+    appendSceneChatBubble("assistant", llm ? reply : `${reply}（内置解析）`);
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+// 拟生场景页绑定：对话面板开关、送出、Enter 发送（工作空间页无这些元素，直接跳过）
+function bindSceneViewExtras() {
+  if (!SCENE_VIEW) return;
+  el("scene-chat-toggle")?.addEventListener("click", () => {
+    const chat = el("scene-chat");
+    if (chat) chat.hidden = !chat.hidden;
+  });
+  el("scene-chat-send")?.addEventListener("click", sendSceneChat);
+  el("scene-chat-input")?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendSceneChat();
+    }
+  });
+}
+
+// 发布：生成拟生配置并打开独立的拟生网页（scene.html 自动按配置重建场景）。
+// 环境参数与互动关系的配置在工作区内通过「环境参数」入口独立完成，与发布解耦。
+async function publishScene() {
+  const config = collectSceneConfig();
+  sessionStorage.setItem("living-classical-art-wall-published", JSON.stringify(config));
+  let url = "scene.html";
+  // 优先服务端短链分享（含原作图，跨浏览器可用）；失败退回压缩参数
+  try {
+    const response = await fetch("/api/scene/share", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ config }),
+    });
+    if (response.ok) {
+      const info = await response.json();
+      url = info.url || url;
+    }
+  } catch (_) { /* 离线退回参数模式 */ }
+  if (url === "scene.html") {
+    try {
+      const code = await encodeSceneShare(config);
+      url = `scene.html?c=${code}`;
+    } catch (_) { /* ignore */ }
+  }
+  try {
+    await navigator.clipboard?.writeText(new URL(url, location.href).href).catch(() => {});
+    showToast("拟生配置已生成，分享链接已复制，正在打开拟生网页…");
+  } catch (_) {
+    showToast("拟生配置已生成，正在打开拟生网页…");
+  }
+  const view = window.open(url, "_blank");
+  if (!view) window.location.href = url;
+}
+
+function toggleEnvParamsPanel() {
+  const menu = document.querySelector(".wall-bio-menu");
+  const entering = !menu?.classList.contains("is-params-mode");
+  if (entering) {
+    renderEnvParamsPanel();
+    menu?.classList.add("is-params-mode");
+    showToast("环境参数配置：风/雨/雪/云/火/水流/生态与互动关系");
+  } else {
+    closeEnvParamsPanel();
+  }
+}
+
+function closeEnvParamsPanel() {
+  document.querySelector(".wall-bio-menu")?.classList.remove("is-params-mode");
+  const panel = el("env-params-panel");
+  if (panel) panel.hidden = true;
+}
+
+function exportSceneConfig() {
+  const config = collectSceneConfig();
+  const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `${config.name.replace(/\.[^.]+$/, "") || "scene"}-scene-config.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+function paramsRange(label, min, max, step, value, onInput) {
+  const wrap = document.createElement("label");
+  wrap.className = "wall-range";
+  const text = document.createElement("span");
+  text.textContent = label;
+  const input = document.createElement("input");
+  input.type = "range";
+  input.min = String(min);
+  input.max = String(max);
+  input.step = String(step);
+  input.value = String(value);
+  input.addEventListener("input", () => onInput(Number(input.value)));
+  wrap.append(text, input);
+  return wrap;
+}
+
+function paramsGroup(title, controls) {
+  const group = document.createElement("div");
+  group.className = "wall-params-group";
+  const head = document.createElement("b");
+  head.textContent = title;
+  group.appendChild(head);
+  for (const control of controls) group.appendChild(control);
+  return group;
+}
+
+function renderEnvParamsPanel() {
+  const panel = el("env-params-panel");
+  if (!panel) return;
+  // 首次打开时给生态参数一个随气韵的默认值
+  if (state.snow === null) state.snow = snowPoints ? 0.7 : 0;
+  if (!state.paramsInitialized) {
+    state.paramsInitialized = true;
+    state.dayNight = { paper: 1, dawn: 1, dusk: 0.55, moon: 0.1 }[state.atmosphere] ?? 1;
+  }
+  panel.innerHTML = "";
+  panel.hidden = false;
+
+  panel.appendChild(paramsGroup("风", [
+    paramsRange("风速", 0, 1, 0.05, state.wind, (v) => {
+      state.wind = v;
+      const slider = el("wind-range");
+      if (slider) slider.value = String(v);
+    }),
+    paramsRange("风向°", 0, 360, 5, state.windDirDeg, (v) => {
+      state.windDirDeg = v;
+      applyWindDirection();
+    }),
+  ]));
+
+  panel.appendChild(paramsGroup("雨雪", [
+    paramsRange("雪势", 0, 1, 0.05, state.snow ?? 0, (v) => { state.snow = v; }),
+    paramsRange("雨势", 0, 1, 0.05, state.rain, (v) => {
+      state.rain = v;
+      ensureRain();
+    }),
+  ]));
+
+  panel.appendChild(paramsGroup("云雾", [
+    paramsRange("雾", 0, 1, 0.05, state.mist, (v) => {
+      state.mist = v;
+      const slider = el("mist-range");
+      if (slider) slider.value = String(v);
+      applyAtmosphere();
+    }),
+    paramsRange("云", 0, 1, 0.05, state.cloud, (v) => {
+      state.cloud = v;
+      ensureClouds();
+    }),
+  ]));
+
+  panel.appendChild(paramsGroup("水流", [
+    paramsRange("流速", 0, 1, 0.05, state.flow, (v) => {
+      state.flow = v;
+      const slider = el("flow-range");
+      if (slider) slider.value = String(v);
+      for (const water of waterSurfaces) water.material.uniforms.uFlow.value = state.flow;
+    }),
+  ]));
+
+  panel.appendChild(paramsGroup("火势", [
+    paramsRange("燃烧火势", 0, 1, 0.05, state.fire, (v) => {
+      state.fire = v;
+      ensureFire();
+    }),
+  ]));
+
+  panel.appendChild(paramsGroup("生态 · 荷花", [
+    paramsRange("昼夜(夜0·昼1)", 0, 1, 0.05, state.dayNight, (v) => { state.dayNight = v; }),
+  ]));
+
+  const interactions = paramsGroup("互动关系", []);
+  const beeRow = document.createElement("label");
+  beeRow.className = "wall-interaction-row";
+  const beeBox = document.createElement("input");
+  beeBox.type = "checkbox";
+  beeBox.checked = state.interactions.beeLotus;
+  beeBox.addEventListener("change", () => {
+    state.interactions.beeLotus = beeBox.checked;
+    ensureBeeAgents();
+  });
+  beeRow.append(beeBox, document.createTextNode("蜜蜂 → 荷花 · 采蜜互动"));
+  const tigerRow = document.createElement("label");
+  tigerRow.className = "wall-interaction-row";
+  const tigerBox = document.createElement("input");
+  tigerBox.type = "checkbox";
+  tigerBox.checked = state.interactions.tigerBamboo;
+  tigerBox.addEventListener("change", () => {
+    state.interactions.tigerBamboo = tigerBox.checked;
+  });
+  tigerRow.append(tigerBox, document.createTextNode("老虎 → 竹子 · 触碰摇动"));
+  interactions.append(beeRow, tigerRow);
+  panel.appendChild(interactions);
+
+  const actions = document.createElement("div");
+  actions.className = "wall-params-actions";
+  const exportBtn = document.createElement("button");
+  exportBtn.type = "button";
+  exportBtn.className = "btn small";
+  exportBtn.textContent = "导出配置 JSON";
+  exportBtn.addEventListener("click", exportSceneConfig);
+  const backBtn = document.createElement("button");
+  backBtn.type = "button";
+  backBtn.className = "btn small";
+  backBtn.textContent = "返回安置调整";
+  backBtn.addEventListener("click", closeEnvParamsPanel);
+  actions.append(exportBtn, backBtn);
+  panel.appendChild(actions);
+
+  // 进入面板时按当前值激活各系统
+  ensureRain();
+  ensureClouds();
+  ensureFire();
+  ensureBeeAgents();
+}
+
+// ===== 环境参数系统：风向 / 雨 / 云 / 火 =====
+
+function windDirectionVector() {
+  const rad = THREE.MathUtils.degToRad(state.windDirDeg || 0);
+  return new THREE.Vector3(Math.cos(rad), 0, Math.sin(rad));
+}
+
+function applyWindDirection() {
+  const dir = windDirectionVector();
+  const yaw = Math.atan2(dir.x, dir.z);
+  for (const plant of swayingPlants) plant.rotation.y = yaw;
+}
+
+function ensureRain() {
+  if (rainPoints && !rainPoints.parent) rainPoints = null;
+  if (state.rain <= 0.02) {
+    if (rainPoints) rainPoints.visible = false;
+    return;
+  }
+  if (!rainPoints) {
+    const count = 700;
+    const positions = new Float32Array(count * 3);
+    const rand = seededRandom("rain");
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = -3 + rand() * 6;
+      positions[i * 3 + 1] = 0.2 + rand() * 3.4;
+      positions[i * 3 + 2] = -2.2 + rand() * 4.6;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    rainPoints = new THREE.Points(
+      geo,
+      new THREE.PointsMaterial({ color: 0x9db4c0, size: 0.018, transparent: true, opacity: 0.62 })
+    );
+    envGroup.add(rainPoints);
+  }
+  rainPoints.visible = true;
+}
+
+function updateRain(dt) {
+  if (!rainPoints || !rainPoints.parent || state.rain <= 0.02) return;
+  const dir = windDirectionVector();
+  const pos = rainPoints.geometry.attributes.position;
+  const fall = dt * (1.4 + state.rain * 2.2);
+  const driftX = dir.x * state.wind * dt * 0.9;
+  const driftZ = dir.z * state.wind * dt * 0.9;
+  for (let i = 0; i < pos.count; i++) {
+    let y = pos.getY(i) - fall;
+    if (y < 0.02) y = 3.4;
+    pos.setY(i, y);
+    pos.setX(i, pos.getX(i) + driftX);
+    pos.setZ(i, pos.getZ(i) + driftZ);
+    if (pos.getX(i) > 3.2) pos.setX(i, -3.2);
+    if (pos.getX(i) < -3.2) pos.setX(i, 3.2);
+    if (pos.getZ(i) > 2.6) pos.setZ(i, -2.2);
+    if (pos.getZ(i) < -2.2) pos.setZ(i, 2.6);
+  }
+  pos.needsUpdate = true;
+  rainPoints.material.opacity = 0.25 + state.rain * 0.5;
+}
+
+function cloudTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 128;
+  canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+  const grad = ctx.createRadialGradient(64, 36, 6, 64, 36, 52);
+  grad.addColorStop(0, "rgba(255,255,255,0.85)");
+  grad.addColorStop(0.6, "rgba(255,255,255,0.35)");
+  grad.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 128, 64);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+function ensureClouds() {
+  cloudSprites = cloudSprites.filter((sprite) => sprite.parent);
+  if (state.cloud <= 0.02) {
+    for (const sprite of cloudSprites) sprite.visible = false;
+    return;
+  }
+  if (!cloudSprites.length) {
+    const texture = cloudTexture();
+    const rand = seededRandom("clouds");
+    for (let i = 0; i < 5; i++) {
+      const sprite = new THREE.Sprite(
+        new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.4, depthWrite: false })
+      );
+      sprite.position.set(-3 + rand() * 6, 2.5 + rand() * 1.1, -1.6 - rand() * 0.8);
+      sprite.scale.set(1.6 + rand() * 1.4, 0.7 + rand() * 0.5, 1);
+      sprite.userData.speed = 0.5 + rand() * 0.8;
+      envGroup.add(sprite);
+      cloudSprites.push(sprite);
+    }
+  }
+  for (const sprite of cloudSprites) {
+    sprite.visible = true;
+    sprite.material.opacity = 0.14 + state.cloud * 0.42;
+  }
+}
+
+function updateClouds(dt) {
+  if (state.cloud <= 0.02) return;
+  const dir = windDirectionVector();
+  for (const sprite of cloudSprites) {
+    if (!sprite.parent) continue;
+    sprite.position.addScaledVector(dir, dt * (0.04 + state.wind * 0.22) * sprite.userData.speed);
+    if (dir.x > 0 && sprite.position.x > 3.4) sprite.position.x = -3.4;
+    if (dir.x < 0 && sprite.position.x < -3.4) sprite.position.x = 3.4;
+    if (dir.z > 0 && sprite.position.z > 2.4) sprite.position.z = -2.4;
+    if (dir.z < 0 && sprite.position.z < -2.6) sprite.position.z = 2.4;
+  }
+}
+
+function ensureFire() {
+  if (fireLight && !fireLight.parent) fireLight = null;
+  if (firePoints && !firePoints.parent) firePoints = null;
+  if (state.fire <= 0.02) {
+    if (fireLight) fireLight.visible = false;
+    if (firePoints) firePoints.visible = false;
+    return;
+  }
+  if (!fireLight) {
+    fireLight = new THREE.PointLight(0xff8a3c, 0, 2.6, 1.6);
+    fireLight.position.set(1.2, 0.22, 0.95);
+    envGroup.add(fireLight);
+  }
+  if (!firePoints) {
+    const count = 48;
+    const positions = new Float32Array(count * 3);
+    const rand = seededRandom("fire");
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = 1.2 + (rand() - 0.5) * 0.1;
+      positions[i * 3 + 1] = 0.06 + rand() * 0.26;
+      positions[i * 3 + 2] = 0.95 + (rand() - 0.5) * 0.1;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    firePoints = new THREE.Points(
+      geo,
+      new THREE.PointsMaterial({ color: 0xffa048, size: 0.03, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false })
+    );
+    firePoints.userData.rand = seededRandom("fire-motion");
+    envGroup.add(firePoints);
+  }
+  fireLight.visible = true;
+  firePoints.visible = true;
+}
+
+function updateFire(dt, time) {
+  if (state.fire <= 0.02 || !fireLight?.parent) return;
+  fireLight.intensity = state.fire * (1.5 + Math.sin(time * 11) * 0.35 + Math.sin(time * 23.7) * 0.18);
+  const pos = firePoints.geometry.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    let y = pos.getY(i) + dt * (0.16 + state.fire * 0.3);
+    if (y > 0.34) y = 0.06;
+    pos.setY(i, y);
+    pos.setX(i, 1.2 + Math.sin(time * 6 + i * 1.7) * 0.035 * (0.4 + state.fire));
+  }
+  pos.needsUpdate = true;
+  firePoints.material.opacity = 0.35 + state.fire * 0.55;
+}
+
+// ===== 生态：荷花昼开夜闭 =====
+
+function updateEcology() {
+  const openness = clamp(state.dayNight ?? 1, 0, 1);
+  const tiltFactor = 0.25 + 0.75 * openness;
+  const entities = [];
+  const seen = new Set();
+  const collect = (entity) => {
+    if (entity && !seen.has(entity)) {
+      seen.add(entity);
+      entities.push(entity);
+    }
+  };
+  for (const registry of [independentLayerMeshes, bioLayerMeshes]) {
+    for (const entity of registry.values()) collect(entity);
+  }
+  for (const scope of ["environment", "biology"]) {
+    for (const record of placedRegistry[scope].values()) collect(record.entity);
+  }
+  for (const entity of entities) {
+    const ecology = entity.userData?.ecology;
+    if (ecology?.type !== "lotus") continue;
+    if (ecology.lastOpenness === openness) continue;
+    ecology.lastOpenness = openness;
+    for (const petal of ecology.petals || []) {
+      petal.mesh.quaternion.copy(
+        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), petal.angle)
+          .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), petal.tilt * tiltFactor))
+      );
+    }
+  }
+}
+
+// ===== 互动关系：蜜蜂采蜜 / 虎竹触碰 =====
+
+function collectLotusFlowerPoints() {
+  const points = [];
+  const seen = new Set();
+  const collect = (entity) => {
+    if (!entity || seen.has(entity)) return;
+    seen.add(entity);
+    const ecology = entity.userData?.ecology;
+    if (ecology?.type !== "lotus" || !ecology.flowerGroup) return;
+    const point = new THREE.Vector3();
+    ecology.flowerGroup.getWorldPosition(point);
+    points.push(point);
+  };
+  for (const registry of [independentLayerMeshes, bioLayerMeshes]) {
+    for (const entity of registry.values()) collect(entity);
+  }
+  for (const scope of ["environment", "biology"]) {
+    for (const record of placedRegistry[scope].values()) collect(record.entity);
+  }
+  return points;
+}
+
+function createBeeMesh() {
+  const bee = new THREE.Group();
+  const body = new THREE.Mesh(
+    new THREE.SphereGeometry(0.02, 10, 8),
+    new THREE.MeshStandardMaterial({ color: 0xd8a832, roughness: 0.6 })
+  );
+  body.scale.set(1.35, 0.9, 0.9);
+  const stripe = new THREE.Mesh(
+    new THREE.SphereGeometry(0.0165, 10, 8),
+    new THREE.MeshStandardMaterial({ color: 0x2b241c, roughness: 0.7 })
+  );
+  stripe.scale.set(0.9, 0.92, 0.92);
+  stripe.position.x = -0.012;
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.011, 8, 6),
+    new THREE.MeshStandardMaterial({ color: 0x2b241c, roughness: 0.7 })
+  );
+  head.position.x = 0.024;
+  const wingMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5, side: THREE.DoubleSide });
+  const wingL = new THREE.Mesh(new THREE.PlaneGeometry(0.03, 0.014), wingMat);
+  wingL.position.set(-0.004, 0.016, 0.012);
+  wingL.rotation.x = 0.6;
+  const wingR = wingL.clone();
+  wingR.position.z = -0.012;
+  wingR.rotation.x = -0.6;
+  bee.add(body, stripe, head, wingL, wingR);
+  bee.userData.wings = [wingL, wingR];
+  return bee;
+}
+
+function clearBeeAgents() {
+  for (const agent of beeAgents) {
+    agent.mesh.parent?.remove(agent.mesh);
+  }
+  beeAgents = [];
+}
+
+function ensureBeeAgents() {
+  clearBeeAgents();
+  if (!state.interactions.beeLotus) return;
+  const flowers = collectLotusFlowerPoints();
+  if (!flowers.length) {
+    showToast("画面中没有已安置的荷花，蜜蜂无处采蜜");
+    state.interactions.beeLotus = false;
+    renderEnvParamsPanel();
+    return;
+  }
+  const count = Math.min(3, flowers.length + 1);
+  for (let i = 0; i < count; i++) {
+    const mesh = createBeeMesh();
+    const rand = seededRandom(`bee:${i}`);
+    mesh.position.copy(flowers[i % flowers.length]).add(new THREE.Vector3((rand() - 0.5) * 0.4, 0.15 + rand() * 0.1, 0.2 + rand() * 0.2));
+    scene.add(mesh);
+    beeAgents.push({
+      mesh,
+      rand,
+      phase: rand() * Math.PI * 2,
+      speed: 0.35 + rand() * 0.3,
+      mode: "fly",
+      timer: 0,
+      target: flowers[i % flowers.length].clone(),
+      flowers,
+    });
+  }
+  showToast(`蜜蜂已入境，将在 ${flowers.length} 朵荷花间采蜜`);
+}
+
+function updateBeeAgents(dt, time) {
+  if (!beeAgents.length) return;
+  for (const agent of beeAgents) {
+    const bee = agent.mesh;
+    agent.timer -= dt;
+    if (agent.mode === "fly") {
+      const dir = agent.target.clone().sub(bee.position);
+      const dist = dir.length();
+      if (dist < 0.04) {
+        agent.mode = "sip";
+        agent.timer = 2 + agent.rand() * 2.5;
+      } else {
+        dir.normalize();
+        bee.position.addScaledVector(dir, Math.min(dist, dt * (0.4 + agent.speed)));
+        bee.position.y += Math.sin(time * 9 + agent.phase) * 0.0024;
+        bee.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), dir);
+      }
+    } else {
+      bee.position.set(
+        agent.target.x + Math.sin(time * 3 + agent.phase) * 0.02,
+        agent.target.y + 0.035 + Math.sin(time * 6 + agent.phase) * 0.008,
+        agent.target.z + Math.cos(time * 2.6 + agent.phase) * 0.02
+      );
+      if (agent.timer <= 0) {
+        agent.mode = "fly";
+        const choices = agent.flowers.filter((point) => !point.equals(agent.target));
+        agent.target = (choices.length ? choices[Math.floor(agent.rand() * choices.length)] : agent.flowers[0]).clone();
+      }
+    }
+    const flap = Math.sin(time * 60 + agent.phase) * 0.5;
+    bee.userData.wings[0].rotation.x = 0.6 + flap;
+    bee.userData.wings[1].rotation.x = -0.6 - flap;
+  }
+}
+
+function updateTigerBambooTouch(dt, time) {
+  if (!state.interactions.tigerBamboo) return;
+  // 老虎来源：程序化生物（趾行类）或已安置的趾行生物实体
+  const tigers = [];
+  if (state.creature && resolveCreatureKind(state.creatureKind) === "digitigrade") tigers.push(state.creature);
+  const seen = new Set();
+  const collectEntities = (entity) => {
+    if (entity && !seen.has(entity)) {
+      seen.add(entity);
+      if (entity.userData?.biologyKind === "digitigrade") tigers.push(entity);
+    }
+  };
+  for (const entity of bioLayerMeshes.values()) collectEntities(entity);
+  for (const record of placedRegistry.biology.values()) collectEntities(record.entity);
+  if (!tigers.length) return;
+  const bamboos = [];
+  const seenBamboo = new Set();
+  const collectBamboo = (entity) => {
+    if (entity && !seenBamboo.has(entity) && entity.userData?.subjectId === "bamboo") {
+      seenBamboo.add(entity);
+      bamboos.push(entity);
+    }
+  };
+  for (const entity of independentLayerMeshes.values()) collectBamboo(entity);
+  for (const record of placedRegistry.environment.values()) collectBamboo(record.entity);
+  if (!bamboos.length) return;
+  for (const bamboo of bamboos) {
+    const fit = bamboo.getObjectByName("image-to-3d-anchor-fit");
+    if (!fit) continue;
+    if (fit.userData.baseRotZ === undefined) fit.userData.baseRotZ = fit.rotation.z;
+    let touching = false;
+    for (const tiger of tigers) {
+      const dx = tiger.position.x - bamboo.position.x;
+      const dz = tiger.position.z - bamboo.position.z;
+      if (Math.hypot(dx, dz) < 0.55) {
+        touching = true;
+        break;
+      }
+    }
+    if (touching) {
+      if (!fit.userData.touchPulse) {
+        fit.userData.touchPulse = 1;
+        if (!updateTigerBambooTouch.lastToast || time - updateTigerBambooTouch.lastToast > 5) {
+          updateTigerBambooTouch.lastToast = time;
+          showToast("虎身触竹，竹枝摇动");
+        }
+      }
+    }
+    if (fit.userData.touchPulse) {
+      fit.userData.touchPulse = Math.max(0, fit.userData.touchPulse - dt * 0.5);
+      fit.rotation.z = fit.userData.baseRotZ + Math.sin(time * 7) * 0.08 * fit.userData.touchPulse;
+      if (!fit.userData.touchPulse) fit.rotation.z = fit.userData.baseRotZ;
+    }
+  }
 }
 
 function pickGeneratedEntityFromCanvas(event) {
@@ -2042,6 +4817,22 @@ function reviewLayerList(scope) {
   return (review.result.layers || []).filter((layer) => layer.subjectId === review.subject.id && review.previewMeshes.has(layer.id));
 }
 
+// 网状预览可见性：未生成 3D 的候选线框只显示当前识别栏的；
+// 已生成/已安置的实体模型始终保留在画面中。
+function updatePreviewOverlayVisibility() {
+  for (const scope of ["environment", "biology"]) {
+    const review = candidateReview[scope];
+    const active = scope === activeReviewScope;
+    for (const [layerId, entity] of review.previewMeshes.entries()) {
+      if (review.generatedIds.has(layerId) || review.placedIds.has(layerId)) {
+        entity.visible = true;
+        continue;
+      }
+      entity.visible = active;
+    }
+  }
+}
+
 function setReviewSelection(scope, layerId, render = true) {
   const review = candidateReview[scope];
   if (!review || !layerId) return;
@@ -2050,6 +4841,7 @@ function setReviewSelection(scope, layerId, render = true) {
   for (const [id, entity] of review.previewMeshes.entries()) {
     applyCandidateVisualState(scope, id, entity);
   }
+  updatePreviewOverlayVisibility();
   updatePlacementPanel(scope);
   if (render) {
     renderCandidateReview(scope);
@@ -2111,6 +4903,13 @@ function renderCandidateReview(scope) {
     ? `点画中高亮区域或候选卡来选取；确认后先用 LLM 物象方案，再生成真正 3D 模型。`
     : "没有通过分割审查的对象，系统不会用剪影或随机模型顶替。";
   head.append(title, prompt);
+  const placedCount = layers.filter((layer) => review.placedIds.has(layer.id)).length;
+  if (layers.length && placedCount) {
+    const progress = document.createElement("span");
+    progress.className = "wall-review-progress";
+    progress.textContent = `已安置 ${placedCount}/${layers.length}`;
+    head.appendChild(progress);
+  }
   panel.appendChild(head);
 
   for (const [index, layer] of layers.entries()) {
@@ -2119,6 +4918,7 @@ function renderCandidateReview(scope) {
     card.dataset.layerId = layer.id;
     card.classList.toggle("is-selected", review.selectedId === layer.id);
     card.classList.toggle("is-generated", review.generatedIds.has(layer.id));
+    card.classList.toggle("is-placed", review.placedIds.has(layer.id));
     card.addEventListener("click", () => setReviewSelection(scope, layer.id));
 
     const image = document.createElement("img");
@@ -2128,7 +4928,19 @@ function renderCandidateReview(scope) {
     const copy = document.createElement("div");
     copy.className = "wall-candidate-copy";
     const label = document.createElement("b");
-    label.textContent = `${review.subject.label}候选 ${index + 1}`;
+    label.textContent = `${review.subject.label}候选 ${index + 1}${index === 0 && review.result?.localExtraction ? " · 推荐" : ""}`;
+    // 来源徽标：语义(DINO) / 本地(显著性) / 框选 / 点选
+    const sourceTag = layer.seeded ? ["点选", "seed"] : layer.boxed ? ["框选", "box"] : (layer.localExtraction || review.result?.localExtraction) ? ["本地", "local"] : ["语义", "semantic"];
+    const sourceBadge = document.createElement("em");
+    sourceBadge.className = `wall-src-badge wall-src-${sourceTag[1]}`;
+    sourceBadge.textContent = sourceTag[0];
+    label.appendChild(sourceBadge);
+    if (review.placedIds.has(layer.id)) {
+      const badge = document.createElement("em");
+      badge.className = "wall-placed-badge";
+      badge.textContent = "✓ 已安置";
+      label.appendChild(badge);
+    }
     const score = document.createElement("small");
     score.textContent = candidateMeta(layer);
     const actions = document.createElement("div");
@@ -2143,6 +4955,35 @@ function renderCandidateReview(scope) {
       setReviewSelection(scope, layer.id);
     });
 
+    const routeSelect = document.createElement("select");
+    routeSelect.className = "wall-route-select";
+    routeSelect.title = "生成方式（可手动覆盖）";
+    const autoRoute = resolveGenerationRoute(layer, {
+      scope,
+      subject: review.subject,
+      profile: layer.reconstructionProfile,
+      environmentModel: state.environmentModel,
+      hasProceduralBuilder: shouldUseProceduralMorphologyModel(review.subject, layer, layer.reconstructionProfile || {}),
+    });
+    const routeOptions = [
+      ["", `自动 · ${autoRoute}`],
+      ["gaussian-splat", "点云"],
+      ["procedural", "形态部件"],
+      ["mesh-generate", "图生3D GLB"],
+    ];
+    for (const [value, label] of routeOptions) {
+      const opt = document.createElement("option");
+      opt.value = value;
+      opt.textContent = label;
+      if ((layer.userRouteOverride || "") === value) opt.selected = true;
+      routeSelect.appendChild(opt);
+    }
+    routeSelect.addEventListener("click", (event) => event.stopPropagation());
+    routeSelect.addEventListener("change", (event) => {
+      event.stopPropagation();
+      layer.userRouteOverride = routeSelect.value || null;
+    });
+
     const generate = document.createElement("button");
     generate.type = "button";
     const generated = review.generatedIds.has(layer.id);
@@ -2154,11 +4995,162 @@ function renderCandidateReview(scope) {
       confirmReviewLayer(scope, layer.id);
     });
 
-    actions.append(select, generate);
+    actions.append(select, routeSelect, generate);
+    if (generated && !review.placedIds.has(layer.id)) {
+      const place = document.createElement("button");
+      place.type = "button";
+      place.className = "wall-place-btn";
+      place.textContent = "安置完成";
+      place.title = "确认该模型与原画的对映调整结束";
+      place.addEventListener("click", (event) => {
+        event.stopPropagation();
+        markLayerPlaced(scope, layer.id);
+      });
+      actions.appendChild(place);
+    }
+    if (review.placedIds.has(layer.id)) {
+      const unplace = document.createElement("button");
+      unplace.type = "button";
+      unplace.textContent = "取消安置";
+      unplace.title = "撤销安置完成标记，回到可调整状态";
+      unplace.addEventListener("click", (event) => {
+        event.stopPropagation();
+        unmarkLayerPlaced(scope, layer.id);
+      });
+      actions.appendChild(unplace);
+    }
     copy.append(label, score, actions);
     card.append(image, copy);
     panel.appendChild(card);
   }
+}
+
+async function embedCandidateCrop(dataUrl) {
+  try {
+    const response = await fetch("/api/scene-lift/embed", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: dataUrl }),
+    });
+    if (!response.ok) return null;
+    const info = await response.json();
+    return Array.isArray(info.embedding) ? info.embedding : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+// 安置完成 → 深度特征样本：把该候选裁剪的 DINO-ViT 特征记入此要素
+async function learnEmbeddingForLayer(scope, layer, subjectId) {
+  if (!subjectId || !layer) return;
+  try {
+    const crop = cropUrlForReview(scope, layer);
+    const embedding = await embedCandidateCrop(crop);
+    if (!embedding) return;
+    const count = learnEmbeddingSample(subjectId, embedding);
+    if (count) showToast(`深度特征已学习（${count} 个样本）· 下次识别优先相似形态`);
+  } catch (err) {
+    console.warn("[wall-workspace] embedding learn failed", err);
+  }
+}
+
+// 有深度特征样本时：为候选裁剪逐一计算相似度并重排卡片
+const embeddingRerankToken = { environment: 0, biology: 0 };
+
+function scheduleEmbeddingRerank(scope) {
+  const review = candidateReview[scope];
+  const subjectId = review?.subject?.id;
+  if (!subjectId || !hasEmbeddingSamples(subjectId)) return;
+  const token = ++embeddingRerankToken[scope];
+  (async () => {
+    let any = false;
+    for (const layer of reviewLayerList(scope).slice(0, 10)) {
+      const crop = cropUrlForReview(scope, layer);
+      if (!crop) continue;
+      const embedding = await embedCandidateCrop(crop);
+      if (!embedding) continue;
+      layer.learnedSim = embeddingSimilarity(subjectId, embedding);
+      any = true;
+    }
+    if (!any || token !== embeddingRerankToken[scope]) return;
+    const current = candidateReview[scope];
+    if (!current?.result?.layers) return;
+    current.result.layers.sort((a, b) => (b.learnedSim || 0) - (a.learnedSim || 0));
+    renderCandidateReview(scope);
+  })();
+}
+
+// 语义命中过少时合并本地候选：宁可多给用户挑，不漏掉目标
+async function mergeLocalExtras(scope, subject, result) {
+  if (!result.layers?.length || result.layers.length >= 4) return result;
+  try {
+    const local = await runLocalCandidateExtraction(scope, subject, { serverResult: result });
+    const extras = (local.layers || []).filter(
+      (layer) => !result.layers.some((semantic) => bboxOverlapScore(layer.bbox, semantic.bbox) > 0.5)
+    );
+    for (const extra of extras) extra.localExtraction = true;
+    if (extras.length) {
+      result.layers = [...result.layers, ...extras].slice(0, 7);
+      result.warnings = [...(result.warnings || []), `本地候选补充 ${extras.length} 个`];
+    }
+  } catch (err) {
+    console.warn("[wall-workspace] merge local extras failed", err);
+  }
+  return result;
+}
+
+// 安置完成：记录进度，提示，并自动带用户到下一个待安置候选
+function markLayerPlaced(scope, layerId) {
+  const review = candidateReview[scope];
+  if (!review?.generatedIds.has(layerId)) return;
+  review.placedIds.add(layerId);
+  // 移入常驻注册表与常驻组：之后识别其他要素时该模型保留在场景中
+  const entity = review.previewMeshes.get(layerId);
+  const layer = reviewLayerList(scope).find((candidate) => candidate.id === layerId);
+  if (entity && review.subject) {
+    placedRegistry[scope].set(`${review.subject.id}:${layerId}`, { entity, subject: review.subject, layer });
+    placedGroupFor(scope)?.add(entity);
+  }
+  const layers = reviewLayerList(scope);
+  const placedCount = layers.filter((candidate) => review.placedIds.has(candidate.id)).length;
+  // 学习用户选取：该候选成为此要素的正样本，之后识别会优先相似区域
+  let learnNote = "";
+  if (layer && review.subject) {
+    const samples = learnFromSelection(review.subject.id, layer);
+    if (samples) learnNote = ` · 已学习该选取（${samples} 个样本）`;
+    learnEmbeddingForLayer(scope, layer, review.subject.id);
+  }
+  showToast(`该区域物体识别定位安置完成（${placedCount}/${layers.length}）${learnNote}`);
+  // 下一个待处理：优先已生成未安置，其次未生成
+  const next = layers.find((candidate) => review.generatedIds.has(candidate.id) && !review.placedIds.has(candidate.id))
+    || layers.find((candidate) => !review.generatedIds.has(candidate.id));
+  renderCandidateReview(scope);
+  updatePlacementPanel(scope);
+  updateReadout();
+  updatePublishButton();
+  if (next) setReviewSelection(scope, next.id);
+  else showToast("该要素全部候选均已安置，可继续其他识别项或发布场景");
+  renderSceneBioDock();
+}
+
+// 取消安置：撤销安置标记，实体回到当前要素组，可继续调整
+function unmarkLayerPlaced(scope, layerId) {
+  const review = candidateReview[scope];
+  if (!review?.placedIds.has(layerId)) return;
+  review.placedIds.delete(layerId);
+  const entity = review.previewMeshes.get(layerId);
+  const layer = reviewLayerList(scope).find((candidate) => candidate.id === layerId);
+  if (review.subject) {
+    placedRegistry[scope].delete(`${review.subject.id}:${layerId}`);
+    if (layer) forgetSelection(review.subject.id, layer);
+  }
+  if (entity) (scope === "biology" ? bioGroup : envGroup)?.add(entity);
+  renderCandidateReview(scope);
+  updatePlacementPanel(scope);
+  updateReadout();
+  updatePublishButton();
+  showToast("已撤销安置标记，可继续调整后再确认");
+  renderSceneBioDock();
 }
 
 function candidateMeta(layer) {
@@ -2166,7 +5158,9 @@ function candidateMeta(layer) {
   const area = Number.isFinite(layer.coverage) ? `覆盖 ${(layer.coverage * 100).toFixed(1)}%` : "";
   const structure = layer.reconstructionProfile?.label ? `结构 ${layer.reconstructionProfile.label}` : "";
   const object = objectReferenceMeta(layer);
-  return [score, area, structure, object, "透明 PNG 裁剪"].filter(Boolean).join(" · ");
+  const learned = Number.isFinite(layer.learnedSim) && layer.learnedSim > 0.45 ? `已学习相似 ${Math.round(layer.learnedSim * 100)}%` : "";
+  const provenance = layer.localExtraction ? "本地补充" : "";
+  return [score, area, structure, object, learned, provenance, "透明 PNG 裁剪"].filter(Boolean).join(" · ");
 }
 
 function objectReferenceMeta(layer) {
@@ -2212,8 +5206,16 @@ async function confirmReviewLayer(scope, layerId) {
   layer.reconstructionProfile = profile;
   if (!layer.objectReference) layer.objectReference = localObjectReferenceFallback(review.subject, profile);
   applyObjectReferenceToProfile(profile, layer.objectReference);
-  const useMorphologyModel = shouldUseProceduralMorphologyModel(review.subject, layer, profile);
-  if (!useMorphologyModel) {
+  const hasProceduralBuilder = shouldUseProceduralMorphologyModel(review.subject, layer, profile);
+  const route = resolveGenerationRoute(layer, {
+    scope,
+    subject: review.subject,
+    profile,
+    environmentModel: state.environmentModel,
+    hasProceduralBuilder,
+  });
+  trackRouteHit(route);
+  if (route === "mesh-generate") {
     await checkTrellisStatus();
     if (!state.trellisOnline) {
       if (line) line.textContent = "图生 3D 引擎未连接 · 候选已高亮，但不会用剪影冒充 3D";
@@ -2226,22 +5228,24 @@ async function confirmReviewLayer(scope, layerId) {
   applyCandidateVisualState(scope, layerId, review.previewMeshes.get(layerId));
   renderCandidateReview(scope);
   if (line) {
-    line.textContent = useMorphologyModel
+    line.textContent = route === "gaussian-splat"
+      ? `正在以 4D 高斯点云重建“${review.subject.label}”（本机轻量近似）…`
+      : route === "procedural"
       ? `正在经 LLM 物象方案计算“${review.subject.label}”Three.js 部件模型…`
       : `正在把“${review.subject.label}”候选送入 ${imageTo3dLabel()} 图生 3D…`;
   }
   try {
     const anchorEntity = review.previewMeshes.get(layer.id);
     if (!anchorEntity) throw new Error("候选锚点不存在，无法回装 3D 模型");
-    if (useMorphologyModel) {
+    if (route === "gaussian-splat") {
+      installGaussianSplatLayer(ref, layer, anchorEntity, review.subject);
+    } else if (route === "procedural") {
       const procedural = createProceduralMorphologyModel(review.subject, layer, profile, layer.objectReference);
       installGeneratedLayer(procedural, layer, anchorEntity, profile);
     } else {
       const crop = createLayerCropDataUrl(layer, ref, { reconstruction: true, profile });
-      const response = await fetch("/api/trellis2/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const buffer = await requestGenerateWithProgress(
+        {
           image: crop,
           name: `${state.source?.name || "artwork"}-${scope}-${layer.id}`,
           domain: review.subject.domain,
@@ -2250,14 +5254,12 @@ async function confirmReviewLayer(scope, layerId) {
           reconstructionProfile: profile,
           objectReference: layer.objectReference || profile.objectReference || null,
           seed: (scope === "biology" ? 4126 : 2026) + review.generatedIds.size,
-        }),
-      });
-      if (!response.ok) {
-        let message = `${imageTo3dLabel()} ${response.status}`;
-        try { message = (await response.json()).detail || message; } catch (_) { /* ignore */ }
-        throw new Error(message);
-      }
-      const gltf = await parseGeneratedGlb(await response.arrayBuffer());
+        },
+        (stage, pct) => {
+          if (line) line.textContent = `${imageTo3dLabel()} · ${stage || "生成中"} ${Math.round(pct || 0)}% · “${review.subject.label}”`;
+        },
+      );
+      const gltf = await parseGeneratedGlb(buffer);
       installGeneratedLayer(gltf.scene, layer, anchorEntity, profile);
     }
     review.generatedIds.add(layer.id);
@@ -2273,11 +5275,11 @@ async function confirmReviewLayer(scope, layerId) {
       updateIndependentModelState(review.subject);
     }
     if (line) {
-      const engineLabel = useMorphologyModel ? "LLM 形态 Three.js 模型" : `${imageTo3dLabel()} GLB`;
+      const engineLabel = route === "gaussian-splat" ? "4D 高斯点云" : route === "procedural" ? "LLM 形态 Three.js 模型" : `${imageTo3dLabel()} GLB`;
       line.textContent = `${review.subject.label} · ${review.generatedIds.size} 个 ${engineLabel} 已回装原画锚点`;
     }
     updatePlacementPanel(scope);
-    showToast(useMorphologyModel ? "LLM 物象方案已计算成 Three.js 部件模型" : "确认裁剪已生成 3D 模型，并回装到原画位置");
+    showToast(route === "gaussian-splat" ? "已用 4D 高斯点云重建并回装原画锚点" : route === "procedural" ? "LLM 物象方案已计算成 Three.js 部件模型" : "确认裁剪已生成 3D 模型，并回装到原画位置");
   } catch (err) {
     console.error("[wall-workspace] confirmed image-to-3d failed", err);
     if (line) line.textContent = `3D 化失败 · ${err?.message || "未知错误"}`;
@@ -2438,43 +5440,36 @@ function parseGeneratedGlb(buffer) {
   return new Promise((resolve, reject) => gltfLoader.parse(buffer, "", resolve, reject));
 }
 
-async function completeIndependentLayers(layers, subject) {
-  return completeLayerModels(layers, subject, independentLayerMeshes, state.referenceMap, 2026);
-}
-
 async function completeLayerModels(layers, subject, registry, referenceMap, seedBase) {
   let completed = 0;
-  for (const layer of layers.slice(0, 4)) {
+  const pending = layers.slice(0, 4).filter((layer) => registry.get(layer.id));
+  await runWithConcurrency(pending, 2, async (layer) => {
     const anchorMesh = registry.get(layer.id);
-    if (!anchorMesh) continue;
+    if (!anchorMesh) return;
     try {
       const profile = layer.reconstructionProfile || buildReconstructionProfile(subject.domain === "biology" ? "biology" : "environment", referenceMap, layer, subject);
       layer.reconstructionProfile = profile;
       if (!layer.objectReference) layer.objectReference = localObjectReferenceFallback(subject, profile);
       applyObjectReferenceToProfile(profile, layer.objectReference);
       const crop = createLayerCropDataUrl(layer, referenceMap, { reconstruction: true, profile });
-      const response = await fetch("/api/trellis2/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          image: crop,
-          name: `${state.source?.name || "artwork"}-${layer.id}`,
-          domain: subject.domain,
-          subject: subject.id,
-          layerId: layer.id,
-          reconstructionProfile: profile,
-          objectReference: layer.objectReference || profile.objectReference || null,
-          seed: seedBase + completed,
-        }),
+      trackRouteHit("mesh-generate");
+      const buffer = await requestGenerateWithProgress({
+        image: crop,
+        name: `${state.source?.name || "artwork"}-${layer.id}`,
+        domain: subject.domain,
+        subject: subject.id,
+        layerId: layer.id,
+        reconstructionProfile: profile,
+        objectReference: layer.objectReference || profile.objectReference || null,
+        seed: seedBase + completed,
       });
-      if (!response.ok) throw new Error(`${imageTo3dLabel()} ${response.status}`);
-      const gltf = await parseGeneratedGlb(await response.arrayBuffer());
+      const gltf = await parseGeneratedGlb(buffer);
       installGeneratedLayer(gltf.scene, layer, anchorMesh, profile);
       completed++;
     } catch (err) {
       console.warn(`[wall-workspace] PBR completion skipped for ${layer.id}`, err);
     }
-  }
+  });
   return completed;
 }
 
@@ -2564,6 +5559,23 @@ function normalizeCropCanvasForReconstruction(canvas, profile) {
   return out.toDataURL("image/png");
 }
 
+// 环境物象：4D 高斯点云回装候选锚点（参考 4DGS 方法的本机轻量近似，离线可用）。
+// 点云与候选预览共用同一局部坐标/锚点语义，直接装入锚点实体，隐藏预览面片。
+function installGaussianSplatLayer(ref, layer, anchorEntity, subject) {
+  const frame = artworkFrame;
+  const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
+  const splat = createGaussianSplatLayer(ref, mask, layer, frame.width, frame.height, sourceTexture?.image, {
+    sway: subject?.domain === "plants" ? 0.05 : 0.012,
+  });
+  if (!splat) throw new Error("高斯点云构建失败（有效像素不足）");
+  anchorEntity.add(splat.object);
+  anchorEntity.userData.pbrCompleted = true;
+  anchorEntity.userData.gaussianSplat = true;
+  anchorEntity.userData.splatCount = splat.splatCount;
+  if (anchorEntity.userData.surface) anchorEntity.userData.surface.visible = false;
+  if (anchorEntity.userData.outline) anchorEntity.userData.outline.visible = false;
+}
+
 function installGeneratedLayer(root, layer, anchorEntity, profile = layer.reconstructionProfile) {
   const anchorMesh = anchorEntity.userData.surface;
   if (!anchorMesh?.geometry) throw new Error(`独立实体 ${layer.id} 缺少原画表面`);
@@ -2591,6 +5603,7 @@ function installGeneratedLayer(root, layer, anchorEntity, profile = layer.recons
   };
   anchorEntity.add(fittedRoot);
   anchorEntity.userData.pbrCompleted = true;
+  if (root.userData?.ecology) anchorEntity.userData.ecology = root.userData.ecology;
   ensureEntityPlacement(anchorEntity);
   anchorMesh.userData.pbrCompleted = true;
   if (anchorMesh.userData.reviewAnchor) {
@@ -2615,13 +5628,19 @@ function fitGeneratedRootToAnchor(root, targetBox, layer, profile = layer.recons
 
   const targetSize = targetBox.getSize(new THREE.Vector3());
   const targetCenter = targetBox.getCenter(new THREE.Vector3());
-  const orientation = chooseGeneratedLayerOrientation(orientedGroup, targetSize);
+  // 程序化形态模型（LLM 物象方案）构建时就是正确物理朝向，直接用 identity；
+  // 朝向猜测只用于 TripoSR 等外部引擎产物
+  const proceduralMorphology = root.userData?.generatedBy === "llm-morphology-threejs";
+  const orientation = proceduralMorphology
+    ? { name: "identity-procedural", rotation: new THREE.Euler(0, 0, 0), aspect: null }
+    : chooseGeneratedLayerOrientation(orientedGroup, targetSize);
   orientedGroup.rotation.set(orientation.rotation.x, orientation.rotation.y, orientation.rotation.z);
   fitGroup.updateMatrixWorld(true);
 
   const sourceBox = new THREE.Box3().setFromObject(orientedGroup);
   const sourceSize = sourceBox.getSize(new THREE.Vector3());
-  const scale = generatedLayerFitScaleVector(sourceSize, targetSize, profile);
+  // 程序化模型同样不做非等比拉伸：细长锚框只决定等比缩放，避免压扁物理结构
+  const scale = generatedLayerFitScaleVector(sourceSize, targetSize, profile, proceduralMorphology);
   fitGroup.scale.copy(scale);
   if (profile?.fit?.alignToPrincipalAxis) fitGroup.rotation.z = Number(profile.fit.rotationZ) || 0;
   fitGroup.updateMatrixWorld(true);
@@ -2678,7 +5697,7 @@ function planarAspect(size) {
   return Math.max(0.001, size.x) / Math.max(0.001, size.y);
 }
 
-function generatedLayerFitScaleVector(sourceSize, targetSize, profile = null) {
+function generatedLayerFitScaleVector(sourceSize, targetSize, profile = null, forceUniform = false) {
   const safeSourceX = Math.max(sourceSize.x, 0.001);
   const safeSourceY = Math.max(sourceSize.y, 0.001);
   const safeSourceZ = Math.max(sourceSize.z, 0.001);
@@ -2686,7 +5705,7 @@ function generatedLayerFitScaleVector(sourceSize, targetSize, profile = null) {
   const safeTargetY = Math.max(targetSize.y, 0.001);
   const targetMajor = Math.max(safeTargetX, safeTargetY);
   const targetMinor = Math.min(safeTargetX, safeTargetY);
-  const targetIsSlender = targetMajor / targetMinor > 2.2 || Boolean(profile?.fit?.anisotropic);
+  const targetIsSlender = !forceUniform && (targetMajor / targetMinor > 2.2 || Boolean(profile?.fit?.anisotropic));
   const uniform = Math.min(safeTargetX / safeSourceX, safeTargetY / safeSourceY) * 0.96;
   if (!targetIsSlender) {
     const safeUniform = clamp(uniform, 0.001, 80);
@@ -2755,6 +5774,11 @@ function setEnvironment(id) {
   if (cached) {
     if (candidateReview.environment.subject?.id !== subject.id || candidateReview.environment.result !== cached) {
       installCandidateReview("environment", cached, subject);
+    } else {
+      // 已是当前要素：只切换识别栏，恢复本栏线框、隐藏另一栏
+      activeReviewScope = "environment";
+      updatePreviewOverlayVisibility();
+      updatePlacementPanel("environment");
     }
     return;
   }
@@ -2829,79 +5853,6 @@ function setIndependentModelsExploded(exploded) {
   showToast(exploded ? "独立实体已分离；可确认它们不是同一张浮雕" : "独立实体已归位到原画坐标");
 }
 
-function buildImageLockedEnvironment(subject) {
-  const ref = state.referenceMap;
-  const aspect = clamp(ref.aspect || ref.width / ref.height || 1.6, 0.45, 3.4);
-  const width = aspect >= 1 ? 5.8 : 5.8 * aspect;
-  const height = width / aspect;
-  const centerY = Math.max(1.72, height * 0.5 + 0.08);
-  const baseZ = -1.35;
-  const geometry = createReliefGeometry(ref, width, height);
-  const layers = (state.sceneLiftResult?.layers || []).filter((layer) => layer.subjectId === subject.id);
-  artworkFrame = { width, height, centerY, z: baseZ };
-  const validTexture = ref.validRle ? createMaskTexture(ref.validRle, ref.width, ref.height) : null;
-  const baseOpacity = layers.length ? 0.16 : 1;
-  const baseMaterial = new THREE.MeshBasicMaterial({
-    map: sourceTexture,
-    alphaMap: validTexture,
-    alphaTest: validTexture ? 0.05 : 0,
-    transparent: baseOpacity < 1 || Boolean(validTexture),
-    opacity: baseOpacity,
-    side: THREE.DoubleSide,
-    toneMapped: false,
-  });
-  const baseMesh = new THREE.Mesh(geometry, baseMaterial);
-  baseMesh.position.set(0, centerY, baseZ);
-  baseMesh.userData.imageLocked = true;
-  envGroup.add(baseMesh);
-
-  for (const layer of layers) {
-    const mask = decodeMaskRle(layer.maskRle, ref.width * ref.height);
-    const isolated = createIndependentLayerGeometry(ref, mask, layer, width, height, subject.domain !== "water");
-    if (!isolated) continue;
-    const maskTexture = subject.domain === "water" ? createMaskTexture(layer.maskRle, ref.width, ref.height) : null;
-    const layerMaterial = subject.domain === "water"
-      ? createMaskedWaterMaterial(maskTexture, subject)
-      : new THREE.MeshBasicMaterial({
-          map: sourceTexture,
-          side: THREE.DoubleSide,
-          toneMapped: false,
-        });
-    const layerMesh = new THREE.Mesh(isolated.geometry, layerMaterial);
-    layerMesh.renderOrder = 4;
-    layerMesh.castShadow = subject.domain !== "water";
-    layerMesh.receiveShadow = true;
-    layerMesh.userData = {
-      imageLocked: true,
-      independentModel: true,
-      layerId: layer.id,
-      subjectId: subject.id,
-      sourceBbox: layer.bbox,
-      sourceAnchor: layer.anchor || null,
-      pbrCompleted: false,
-    };
-    const entity = new THREE.Group();
-    entity.position.set(isolated.anchor.x, centerY + isolated.anchor.y, baseZ + isolated.anchor.z + 0.018);
-    entity.userData = {
-      independentModel: true,
-      layerId: layer.id,
-      subjectId: subject.id,
-      sourceBbox: layer.bbox,
-      sourceAnchor: layer.anchor || null,
-      homePosition: { x: entity.position.x, y: entity.position.y, z: entity.position.z },
-      surface: layerMesh,
-    };
-    entity.add(layerMesh);
-    envGroup.add(entity);
-    independentLayerMeshes.set(layer.id, entity);
-    if (subject.domain === "water") waterSurfaces.push(layerMesh);
-  }
-  state.independentLayerCount = independentLayerMeshes.size;
-
-  const shell = el("wall-viewport")?.parentElement;
-  shell?.classList.add("relief-active");
-  frameArtworkCamera(false);
-}
 
 function createIndependentLayerGeometry(ref, mask, layer, width, height, solid = true) {
   const gridWidth = ref.width;
@@ -3874,26 +6825,29 @@ function updateImageLockedBiology(time) {
   for (const entity of bioLayerMeshes.values()) {
     const home = entity.userData.homePosition;
     if (!home) continue;
+    // 基准 = 原画锚点 + 用户安置（三环/滑杆调整），行为动画叠加其上，
+    // 不再每帧把位置旋转清零（否则会抹掉安置调整）
+    const p = ensureEntityPlacement(entity);
     const phase = entity.userData.phase || 0;
     const kind = entity.userData.biologyKind;
-    entity.position.set(home.x, home.y, home.z);
-    entity.rotation.set(0, 0, 0);
+    entity.position.set(home.x + p.x, home.y + p.y, home.z + p.z);
+    entity.rotation.set(p.rotationX, p.rotationY, p.rotationZ);
     if (behavior === "IDLE") continue;
 
     const travel = Math.sin(time * 0.72 + phase);
     if (behavior === "WALK") {
       entity.position.x += travel * (kind === "fish" ? 0.42 : 0.28);
       entity.position.y += Math.sin(time * 1.44 + phase) * (kind === "avian" || kind === "insect" ? 0.13 : 0.025);
-      entity.rotation.z = Math.cos(time * 0.72 + phase) * 0.035;
+      entity.rotation.z += Math.cos(time * 0.72 + phase) * 0.035;
     } else if (behavior === "FORAGE") {
       entity.position.y -= 0.065 + Math.max(0, Math.sin(time * 1.2 + phase)) * 0.045;
-      entity.rotation.x = 0.12;
-      entity.rotation.z = Math.sin(time * 1.2 + phase) * 0.028;
+      entity.rotation.x += 0.12;
+      entity.rotation.z += Math.sin(time * 1.2 + phase) * 0.028;
     } else if (behavior === "LEAP") {
       const leap = Math.max(0, Math.sin(time * 1.8 + phase));
       entity.position.x += travel * 0.18;
       entity.position.y += leap * (kind === "avian" || kind === "insect" ? 0.42 : 0.28);
-      entity.rotation.z = Math.cos(time * 1.8 + phase) * 0.055;
+      entity.rotation.z += Math.cos(time * 1.8 + phase) * 0.055;
     }
   }
 }
@@ -4027,15 +6981,22 @@ function clearSkeletonOverlay() {
 
 function updateSnow(dt, time) {
   if (!snowPoints) return;
+  const level = state.snow ?? (snowPoints ? 0.7 : 0);
+  snowPoints.visible = level > 0.02;
+  if (!snowPoints.visible) return;
+  const dir = windDirectionVector();
   const pos = snowPoints.geometry.attributes.position;
-  const drift = state.wind * dt * 0.55;
+  const driftX = dir.x * state.wind * dt * 0.55;
+  const driftZ = dir.z * state.wind * dt * 0.55;
   for (let i = 0; i < pos.count; i++) {
-    let y = pos.getY(i) - dt * (0.28 + state.wind * 0.3);
+    let y = pos.getY(i) - dt * (0.28 + state.wind * 0.3) * (0.4 + level);
     if (y < 0.02) y = 3.1;
     pos.setY(i, y);
-    pos.setX(i, pos.getX(i) + Math.sin(time + i * 0.31) * drift);
+    pos.setX(i, pos.getX(i) + Math.sin(time + i * 0.31) * driftX);
+    pos.setZ(i, pos.getZ(i) + driftZ);
   }
   pos.needsUpdate = true;
+  snowPoints.material.opacity = 0.3 + level * 0.58;
 }
 
 function resetCamera() {
@@ -4066,12 +7027,20 @@ function updateReadout() {
   const geometryLabel = geometryEngine.includes("Depth-Anything") ? "Depth Anything V2" : geometryEngine.includes("map-anything") ? "MapAnything" : geometryEngine;
   const hasSemanticLayer = Boolean(state.sceneLiftResult?.layers?.length);
   const pbrSuffix = state.pbrLayerCount ? ` · ${state.pbrLayerCount} 3D实体` : "";
+  const segLabel = state.sceneLiftTier || (hasSemanticLayer ? "Grounded SAM 2" : "分割");
   const generator = state.independentLayerCount
     ? `${geometryLabel} 深度 · ${state.independentLayerCount} 个 2D→3D 模型${pbrSuffix}`
     : state.reviewCandidateCount
-      ? `${geometryLabel} 深度 · Grounded SAM 2 · ${state.reviewCandidateCount} 候选待确认`
+      ? `${geometryLabel} 深度 · ${segLabel} · ${state.reviewCandidateCount} 候选待确认`
       : state.source?.dataUrl ? "等待候选识别" : "等待画作";
-  if (readout) readout.textContent = `${envLabel} · ${generator} · ${bio} · ${behavior}`;
+  const routeStats = state.metricsSnapshot?.counters
+    ? Object.entries(state.metricsSnapshot.counters)
+        .filter(([k]) => k.startsWith("route."))
+        .map(([k, v]) => `${k.replace("route.", "")}:${v}`)
+        .join(" ")
+    : "";
+  const envMode = state.environmentModel && state.environmentModel !== "pointcloud" ? ` · env=${state.environmentModel}` : "";
+  if (readout) readout.textContent = `${envLabel} · ${generator} · ${bio} · ${behavior}${envMode}${routeStats ? ` · ${routeStats}` : ""}`;
   const meta = el("source-meta");
   if (meta) meta.textContent = state.estimate
     ? `home 画框母版 · ${state.palette.slice(0, 3).join(" ")}`
@@ -4082,6 +7051,11 @@ function updateEnvironmentMotion(time) {
   for (const water of waterSurfaces) {
     if (water.material?.uniforms?.uTime) water.material.uniforms.uTime.value = time;
   }
+  // 4D 高斯点云：推进时间形变场与投影参数
+  const pointScale = renderer && camera
+    ? renderer.domElement.height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2))
+    : 0;
+  updateGaussianSplats(time, state.wind, pointScale);
   for (const plant of swayingPlants) {
     const sway = plant.userData.sway;
     if (!sway) continue;
@@ -4095,9 +7069,16 @@ function animate() {
   const dt = Math.min(0.05, clock.getDelta());
   const time = clock.elapsedTime;
   updateSnow(dt, time);
+  updateRain(dt);
+  updateClouds(dt);
+  updateFire(dt, time);
+  updateEcology();
+  updateBeeAgents(dt, time);
+  updateTigerBambooTouch(dt, time);
   updateEnvironmentMotion(time);
   updateCreature(dt, time);
   if (skeletonHelper) skeletonHelper.update();
+  updatePlacementGizmo();
   controls.update();
   renderer.render(scene, camera);
 }
@@ -4269,6 +7250,75 @@ function showToast(msg) {
   clearTimeout(t._timer);
   t._timer = setTimeout(() => t.classList.remove("show"), 1800);
 }
+
+// 调试句柄：e2e 与排障用（只读）
+window.__wallDebug = {
+  sceneState() {
+    return { wind: state.wind, mist: state.mist, flow: state.flow, atmosphere: state.atmosphere, placed: placedCountTotal() };
+  },
+  // 已安置实体的绝对坐标（校验发布/重放对位用）
+  placedPositions() {
+    const out = [];
+    for (const scope of ["environment", "biology"]) {
+      for (const [key, record] of placedRegistry[scope]) {
+        const p = record.entity?.position;
+        if (p) out.push({ key, label: record.subject?.label || null, x: p.x, y: p.y, z: p.z });
+      }
+    }
+    return out;
+  },
+  // 场景内 4D 高斯点云清单（建模替换验证用）
+  splatInfo() {
+    const out = [];
+    scene?.traverse((o) => {
+      if (o.isPoints && o.userData?.gaussianSplat && o.material?.uniforms) {
+        out.push({ layerId: o.userData.layerId, splatCount: o.userData.splatCount,
+          visible: o.visible, uTime: +o.material.uniforms.uTime.value.toFixed(2) });
+      }
+    });
+    return out;
+  },
+  selectedRotation() {
+    const entity = selectedGeneratedEntity(activeReviewScope);
+    return entity ? [entity.rotation.x, entity.rotation.y, entity.rotation.z] : null;
+  },
+  gizmoScreen() {
+    const entity = selectedGeneratedEntity(activeReviewScope);
+    if (!entity || !camera || !renderer || !placementGizmo.group?.visible) return null;
+    const rect = renderer.domElement.getBoundingClientRect();
+    const project = (vec) => {
+      const p = vec.project(camera);
+      return { x: (p.x * 0.5 + 0.5) * rect.width + rect.left, y: (-p.y * 0.5 + 0.5) * rect.height + rect.top };
+    };
+    const center = project(entity.position.clone());
+    const edge = project(entity.position.clone().add(new THREE.Vector3(placementGizmo.baseRadius || 0.34, 0, 0)));
+    return { center, radius: Math.hypot(edge.x - center.x, edge.y - center.y) };
+  },
+  gizmoVisible() {
+    return Boolean(placementGizmo.group?.visible);
+  },
+  pickAt(x, y) {
+    const picked = pickGizmoHandle({ clientX: x, clientY: y });
+    return picked ? `${picked.kind}:${picked.axis || picked.plane || "center"}` : null;
+  },
+  dragState() {
+    const d = placementGizmo.drag;
+    const selected = selectedGeneratedEntity(activeReviewScope);
+    return {
+      active: d.active, mode: d.mode, angle0: d.angle0, lastTheta: d.lastTheta ?? null,
+      kind: d.kind, axis: d.axis, axisViewZ: d.axisViewZ, dbg: d.dbg || null,
+      sameEntity: d.entity === selected,
+      entityRot: d.entity ? [d.entity.rotation.x, d.entity.rotation.y, d.entity.rotation.z] : null,
+      entityQuat: d.entity ? [d.entity.quaternion.x, d.entity.quaternion.y, d.entity.quaternion.z, d.entity.quaternion.w] : null,
+    };
+  },
+  probeAngle(x, y, axis) {
+    return gizmoPlaneAngle({ clientX: x, clientY: y }, axis);
+  },
+  baseRadius() {
+    return placementGizmo.baseRadius || null;
+  },
+};
 
 main().catch((err) => {
   console.error("[wall-workspace] init failed", err);

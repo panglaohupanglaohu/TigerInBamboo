@@ -5,9 +5,10 @@ import * as THREE from "../assets/vendor/three/three.module.js";
 
 // 内置问答脚本（女儿·虎 问 → 母亲·兔 答）：成对抽取，一问一答
 const DIALOGUES = [
-  { ask: "妈妈，你睡的好吗？", reply: "睡的好，你别踹被子。" },
+  { ask: "妈妈，你睡的好吗？", reply: "睡的好，你别踹被子，冻着了。" },
   { ask: "妈妈，你饿吗？", reply: "妈妈不饿，但是你得多吃。" },
   { ask: "妈妈，我饿了。", reply: "虎虎，妈妈给做做水煎肉。" },
+  { ask: "没手机，抓着玩，不无聊。", reply: "虎虎，别抓鸡了，我不吃。" },
 ];
 
 // 女儿接话（收尾一轮）

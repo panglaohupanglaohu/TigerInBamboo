@@ -31,3 +31,8 @@ frontend/assets/audio/*.ogg
 .playwright-cli/
 lab-*.png
 video_xiaoman/
+
+# e2e / 运行产物
+tools/e2e/
+frontend/scenes/*.json
+backend/runtime.json

@@ -8,172 +8,56 @@ from __future__ import annotations
 import copy
 import json
 import os
+import re
+import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, Body, HTTPException
-from fastapi.responses import FileResponse, JSONResponse, Response
+import httpx
+from fastapi import FastAPI, Body, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
+
+from backend.runtime_config import get_runtime, set_runtime
+
+# Metrics helper lives under tools/; allow import when running as uvicorn backend.main:app
+_TOOLS = Path(__file__).resolve().parent.parent / "tools"
+if str(_TOOLS) not in sys.path:
+    sys.path.insert(0, str(_TOOLS))
+from metrics import metrics  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 FRONTEND = ROOT / "frontend"
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 SPECIES_PATH = Path(__file__).resolve().parent / "species.json"
+OBJECT_REFERENCE_PATH = Path(__file__).resolve().parent / "object_reference.json"
 
-OBJECT_REFERENCE_CATALOG: dict[str, dict[str, Any]] = {
-    "bamboo": {
-        "label": "竹",
-        "query": "bamboo culm node internode branch leaf real-world morphology",
-        "archetype": "中空分节竖向茎干，节与节间清晰，细枝侧出，披针形叶簇挂在枝端",
-        "parts": ["竖向竹竿", "竹节", "节间", "侧枝", "披针形竹叶", "基部丛生关系"],
-        "physicalTraits": ["竿身细长近圆柱", "节点略凸起成环", "整体弹性强但主轴稳定", "枝叶轻薄外展"],
-        "geometryHints": {"primaryAxis": "vertical", "crossSection": "hollow-cylinder", "segmentation": "nodes-internodes", "branching": "lateral-twigs"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.16, "avoidHorizontalRod": True},
-        "negativeHints": ["不要把竹竿生成成横向粗杆", "不要把叶簇和主竿合成一个无节块体", "不要丢失竖向主轴"],
-    },
-    "pine": {
-        "label": "松",
-        "query": "pine tree trunk branch whorl needle foliage morphology",
-        "archetype": "粗糙树干与曲折枝干支撑针叶簇，枝条多横斜伸展但有明确木质骨架",
-        "parts": ["主干", "侧枝", "针叶簇", "树皮皴裂", "枝端冠团"],
-        "physicalTraits": ["树干较硬", "枝条横斜", "针叶成簇", "冠团不应变成实体板"],
-        "geometryHints": {"primaryAxis": "branching", "crossSection": "woody-cylinder", "foliage": "needle-clumps"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.22, "avoidHorizontalRod": True},
-        "negativeHints": ["不要把整片松针冠生成成单块纸板", "不要忽略枝干支撑关系"],
-    },
-    "plum": {
-        "label": "梅",
-        "query": "plum blossom old branch flower morphology",
-        "archetype": "苍老曲枝、短枝节、散点梅花共同构成，花朵附着在枝条节点附近",
-        "parts": ["老枝", "短枝", "花瓣", "花蕊", "节点"],
-        "physicalTraits": ["枝条曲折硬质", "花瓣薄而圆", "花朵不应漂离枝条"],
-        "geometryHints": {"primaryAxis": "curved-branch", "flower": "thin-petals"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.2},
-        "negativeHints": ["不要把梅花和枝干合成一团", "不要生成无枝撑的花球"],
-    },
-    "flower": {
-        "label": "花草",
-        "query": "flowering herb shrub stem leaf petal morphology",
-        "archetype": "细茎、叶片、花萼和薄花瓣共同构成，花朵必须依附茎叶而不是漂浮花球",
-        "parts": ["茎", "叶", "花萼", "薄花瓣", "花蕊", "基部"],
-        "physicalTraits": ["茎叶较薄", "花瓣轻薄有层次", "花冠与枝叶有连接点"],
-        "geometryHints": {"primaryAxis": "stem-flower", "leaf": "thin-surface", "flower": "layered-petals"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.14},
-        "negativeHints": ["不要把花瓣做成厚块", "不要让花冠脱离枝茎", "不要把整株压成一张纸"],
-    },
-    "vine": {
-        "label": "藤蔓",
-        "query": "wisteria vine hanging raceme woody vine morphology",
-        "archetype": "缠绕木质藤条、细枝和下垂花序共同构成，主藤有曲线骨架",
-        "parts": ["主藤", "缠绕枝", "叶片", "下垂花序", "附着点"],
-        "physicalTraits": ["藤条细长曲折", "花序重心向下", "叶片薄而分散"],
-        "geometryHints": {"primaryAxis": "curved-vine", "flower": "hanging-raceme"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.15, "avoidHorizontalRod": True},
-        "negativeHints": ["不要把藤蔓生成为硬直横杆", "不要把花序合成单个块体"],
-    },
-    "reed": {
-        "label": "芦苇",
-        "query": "reed stem plume wetland plant morphology",
-        "archetype": "水岸细长秆、线形叶和穗状花序构成的成丛湿地植物",
-        "parts": ["细秆", "线形叶", "穗", "丛生基部"],
-        "physicalTraits": ["极细长", "成簇直立或微倾", "顶部穗较轻"],
-        "geometryHints": {"primaryAxis": "vertical", "crossSection": "thin-cylinder", "foliage": "linear-leaves"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.12},
-        "negativeHints": ["不要生成厚板", "不要把秆横放"],
-    },
-    "lotus": {
-        "label": "莲荷",
-        "query": "lotus leaf flower stem aquatic morphology",
-        "archetype": "圆盾形荷叶、细长叶柄和层叠花瓣组成，水面以下有根茎",
-        "parts": ["圆叶", "叶柄", "花瓣", "莲蓬", "水下根茎"],
-        "physicalTraits": ["叶片薄而宽", "柄细长", "花瓣层叠"],
-        "geometryHints": {"primaryAxis": "stem-with-disc", "leaf": "thin-disc", "flower": "layered-petals"},
-        "fitHints": {"anisotropic": False, "thicknessBias": 0.12},
-        "negativeHints": ["不要把荷叶做成厚石块", "不要让花叶脱离叶柄"],
-    },
-    "bird": {
-        "label": "禽鸟",
-        "query": "bird body wing tail beak leg morphology",
-        "archetype": "椭圆躯干、头颈、双翼、尾羽、喙和足共同构成，飞行姿态有翼展主轴",
-        "parts": ["躯干", "头颈", "喙", "翼", "尾羽", "腿足"],
-        "physicalTraits": ["躯干有体积", "翼为薄面羽片", "喙和尾羽形成方向性", "足部可很细"],
-        "geometryHints": {"primaryAxis": "body-wing", "wing": "thin-surface", "body": "ellipsoid"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.18},
-        "negativeHints": ["不要把鸟生成单个无翼团块", "不要把翼做成厚实体"],
-    },
-    "quadruped": {
-        "label": "趾行走兽",
-        "query": "digitigrade quadruped body leg tail head morphology tiger leopard dog",
-        "archetype": "有胸腹体积、头颈、四肢、爪足和尾部的趾行四足兽，体轴与脊柱方向清楚",
-        "parts": ["躯干", "头颈", "肩胯", "前后肢", "爪足", "尾"],
-        "physicalTraits": ["躯干为主质量", "四肢支撑身体", "足端细但不能丢失", "尾部延续体轴"],
-        "geometryHints": {"primaryAxis": "spine", "body": "ellipsoid", "limbs": "jointed-cylinders"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.28},
-        "negativeHints": ["不要生成无腿团块", "不要把尾巴并进身体", "不要让身体变成薄纸片"],
-    },
-    "ungulate": {
-        "label": "蹄兽",
-        "query": "unguligrade deer horse hoof leg body morphology",
-        "archetype": "长腿、蹄端、躯干、颈和头共同构成，腿部竖向承重非常关键",
-        "parts": ["躯干", "长颈", "头", "细长腿", "蹄", "尾"],
-        "physicalTraits": ["腿长且细", "蹄端接地", "躯干较横向", "颈部抬升形成姿态"],
-        "geometryHints": {"primaryAxis": "body-leg", "limbs": "slender-load-bearing"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.18},
-        "negativeHints": ["不要把四条腿糊成一块", "不要丢失蹄端接地关系"],
-    },
-    "rabbit": {
-        "label": "兔类小兽",
-        "query": "rabbit hare body ear hind leg morphology",
-        "archetype": "圆润小躯干、长耳、短前肢和强壮后腿共同构成，跳跃结构以后肢为主",
-        "parts": ["躯干", "长耳", "头", "前肢", "后腿", "短尾"],
-        "physicalTraits": ["身体圆润", "耳朵薄而长", "后腿体量比前肢明显"],
-        "geometryHints": {"primaryAxis": "body-hindleg", "ears": "thin-surfaces"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.24},
-        "negativeHints": ["不要把耳朵丢掉", "不要把后腿做成单块阴影"],
-    },
-    "fish": {
-        "label": "鱼",
-        "query": "fish body fin tail aquatic morphology",
-        "archetype": "流线形鱼体、尾鳍、背鳍、胸鳍和腹鳍共同构成，体轴沿游动方向",
-        "parts": ["流线鱼体", "尾鳍", "背鳍", "胸鳍", "眼"],
-        "physicalTraits": ["侧向扁", "体轴清晰", "鳍为薄片"],
-        "geometryHints": {"primaryAxis": "body-tail", "fin": "thin-surface"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.16},
-        "negativeHints": ["不要生成圆球鱼", "不要丢失尾鳍方向"],
-    },
-    "insect": {
-        "label": "蝶虫",
-        "query": "butterfly insect body wing antenna morphology",
-        "archetype": "细小躯干、触角、足和大面积薄翼共同构成，翼面极薄且左右对称",
-        "parts": ["躯干", "触角", "薄翼", "足", "翅脉"],
-        "physicalTraits": ["翼面宽薄", "躯干细小", "触角和足可细但不能消失"],
-        "geometryHints": {"primaryAxis": "body-wing", "wing": "very-thin-surface"},
-        "fitHints": {"anisotropic": True, "thicknessBias": 0.08},
-        "negativeHints": ["不要把蝴蝶生成厚块", "不要把双翼并成一团"],
-    },
-    "water": {
-        "label": "水面",
-        "query": "water ripple wave surface flow physical behavior",
-        "archetype": "连续薄层流体表面，涟漪与浪峰来自法线和位移变化而不是实体厚块",
-        "parts": ["薄水面", "流向", "涟漪", "浪峰", "泡沫边缘"],
-        "physicalTraits": ["厚度极薄", "连续面", "局部高光和法线扰动表现流动"],
-        "geometryHints": {"primaryAxis": "surface", "crossSection": "thin-plane"},
-        "fitHints": {"anisotropic": False, "thicknessBias": 0.05},
-        "negativeHints": ["不要生成固体蓝色厚板", "不要把涟漪做成孤立石块"],
-    },
-    "terrain": {
-        "label": "地势",
-        "query": "terrain rock mountain slope soil morphology",
-        "archetype": "连续地形体块由坡面、岩脊、碎石和土层构成，适合低频体积和表面起伏",
-        "parts": ["坡面", "岩脊", "土层", "碎石", "岸线"],
-        "physicalTraits": ["体积稳定", "底部接地", "起伏连续", "边缘不应像纸片"],
-        "geometryHints": {"primaryAxis": "mass", "crossSection": "solid-relief"},
-        "fitHints": {"anisotropic": False, "thicknessBias": 0.45},
-        "negativeHints": ["不要生成薄纸片地形", "不要让山石悬浮"],
-    },
-}
+_PROXY_TIMEOUT = httpx.Timeout(connect=5.0, read=900.0, write=30.0, pool=5.0)
+_proxy_client: httpx.AsyncClient | None = None
+
+
+def get_proxy_client() -> httpx.AsyncClient:
+    global _proxy_client
+    if _proxy_client is None:
+        _proxy_client = httpx.AsyncClient(timeout=_PROXY_TIMEOUT)
+    return _proxy_client
+
+
+def _load_object_reference_store() -> dict[str, Any]:
+    if not OBJECT_REFERENCE_PATH.exists():
+        return {"archetypes": {}, "morphologyPlans": {}, "subjectKeys": {}, "biologyKeys": {}}
+    try:
+        data = json.loads(OBJECT_REFERENCE_PATH.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {"archetypes": {}, "morphologyPlans": {}, "subjectKeys": {}, "biologyKeys": {}}
+    except (OSError, json.JSONDecodeError):
+        return {"archetypes": {}, "morphologyPlans": {}, "subjectKeys": {}, "biologyKeys": {}}
+
+
+_OBJECT_REF_STORE = _load_object_reference_store()
+OBJECT_REFERENCE_CATALOG: dict[str, dict[str, Any]] = dict(_OBJECT_REF_STORE.get("archetypes") or {})
 
 # 与 frontend/js/config.js 中的 DEFAULT_CONFIG 保持一致
 DEFAULT_CONFIG: dict[str, Any] = {
@@ -295,6 +179,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
             ],
         },
     },
+    "environmentModel": "pointcloud",  # pointcloud | mesh | auto — 环境物象 3D 路径（TODO-7）
     "bgm": {
         "volume": 0.5,            # 背景音乐音量 0~1
         "playlist": [             # 歌单（顺序循环）
@@ -348,6 +233,49 @@ def load_config() -> dict:
 
 
 app = FastAPI(title="世界古典美术拟生平台", version="0.1.0")
+
+@app.on_event("shutdown")
+async def _close_proxy_client() -> None:
+    global _proxy_client
+    if _proxy_client is not None:
+        await _proxy_client.aclose()
+        _proxy_client = None
+
+
+@app.get("/api/object-reference/catalog")
+def object_reference_catalog() -> JSONResponse:
+    """Single source of truth for archetypes + morphology plans."""
+    store = _load_object_reference_store()
+    return JSONResponse(
+        {
+            "version": store.get("version", 1),
+            "archetypes": store.get("archetypes") or {},
+            "morphologyPlans": store.get("morphologyPlans") or {},
+            "subjectKeys": store.get("subjectKeys") or OBJECT_REFERENCE_SUBJECT_KEYS,
+            "biologyKeys": store.get("biologyKeys") or OBJECT_REFERENCE_BIOLOGY_KEYS,
+        }
+    )
+
+
+@app.get("/api/metrics")
+def api_metrics() -> dict:
+    snap = metrics.snapshot()
+    snap["workers"] = {
+        "trellis2": _trellis2_server_url() or None,
+        "sceneLift": _scene_lift_server_url() or None,
+    }
+    return snap
+
+
+@app.post("/api/metrics/count")
+def api_metrics_count(payload: dict = Body(...)) -> dict:
+    name = str(payload.get("name") or "").strip()
+    if not name:
+        raise HTTPException(status_code=400, detail="name required")
+    n = int(payload.get("n") or 1)
+    metrics.count(name, n)
+    return {"ok": True, "name": name, "n": n}
+
 
 
 @app.middleware("http")
@@ -422,19 +350,98 @@ def health() -> dict:
     return {"status": "ok"}
 
 
+SCENES_DIR = FRONTEND / "scenes"
+
+
+@app.post("/api/scene/share")
+def scene_share_create(payload: dict = Body(...)) -> dict:
+    """保存拟生配置（含原作图），返回短 id 分享链接。跨浏览器可打开。"""
+    import hashlib
+
+    config = payload.get("config")
+    if not isinstance(config, dict) or not config.get("layers"):
+        raise HTTPException(status_code=400, detail="config 必须包含 layers")
+    raw = json.dumps(config, ensure_ascii=False).encode("utf-8")
+    if len(raw) > 12 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="配置超过 12 MB")
+    scene_id = hashlib.sha1(raw + str(time.time()).encode()).hexdigest()[:10]
+    SCENES_DIR.mkdir(parents=True, exist_ok=True)
+    (SCENES_DIR / f"{scene_id}.json").write_bytes(raw)
+    return {"id": scene_id, "url": f"scene.html?id={scene_id}"}
+
+
+@app.get("/api/scene/share/{scene_id}")
+def scene_share_read(scene_id: str) -> Response:
+    if not re.fullmatch(r"[0-9a-f]{6,16}", scene_id or ""):
+        raise HTTPException(status_code=400, detail="无效的场景 id")
+    path = SCENES_DIR / f"{scene_id}.json"
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="场景不存在或已过期")
+    return Response(content=path.read_bytes(), media_type="application/json")
+
+
+def _probe_local_worker(port: int, timeout: float = 0.6) -> bool:
+    """探测本机 worker 健康端点；程序自动连接，无需用户在页面配置服务地址。"""
+    try:
+        req = urllib.request.Request(f"http://127.0.0.1:{port}/health", headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            info = json.loads(resp.read().decode("utf-8"))
+        return resp.status == 200 and info.get("status") == "ok"
+    except Exception:
+        return False
+
+
+def _auto_connect(env_var: str, default_port: int) -> str:
+    # Priority: explicit env > runtime.json > localhost probe
+    url = str(get_runtime(env_var, "") or "").strip().rstrip("/")
+    if url:
+        return url
+    candidate = f"http://127.0.0.1:{default_port}"
+    if _probe_local_worker(default_port):
+        # Cache discovery in-process only; do not pollute runtime.json
+        os.environ[env_var] = candidate
+        return candidate
+    return ""
+
+
 def _trellis2_server_url() -> str:
     """Optional GPU worker; kept server-side so browsers never receive infrastructure URLs."""
-    return os.environ.get("TRELLIS2_SERVER_URL", "").strip().rstrip("/")
+    return _auto_connect("TRELLIS2_SERVER_URL", 7862)
 
 
 def _scene_lift_server_url() -> str:
     """Geometry/segmentation worker that preserves the artwork's pixel coordinates."""
-    return os.environ.get("SCENE_LIFT_SERVER_URL", "").strip().rstrip("/")
+    return _auto_connect("SCENE_LIFT_SERVER_URL", 7863)
 
 
 def _object_reference_server_url() -> str:
     """Optional LLM/RAG lookup that describes the real-world object before 2D→3D generation."""
-    return os.environ.get("LLM_OBJECT_REFERENCE_URL", "").strip().rstrip("/")
+    return str(get_runtime("LLM_OBJECT_REFERENCE_URL", "") or "").strip().rstrip("/")
+
+
+async def _proxy_request(
+    method: str,
+    base_url: str,
+    path: str,
+    *,
+    body: bytes | None = None,
+    headers: dict[str, str] | None = None,
+    timeout: httpx.Timeout | None = None,
+) -> httpx.Response:
+    client = get_proxy_client()
+    url = f"{base_url.rstrip('/')}{path}"
+    try:
+        return await client.request(
+            method,
+            url,
+            content=body,
+            headers=headers or {},
+            timeout=timeout or _PROXY_TIMEOUT,
+        )
+    except httpx.ConnectError as exc:
+        raise HTTPException(status_code=503, detail=f"worker unreachable: {base_url}") from exc
+    except httpx.TimeoutException as exc:
+        raise HTTPException(status_code=504, detail=f"worker timeout: {base_url}") from exc
 
 
 OBJECT_REFERENCE_SUBJECT_KEYS = {
@@ -479,6 +486,13 @@ OBJECT_REFERENCE_BIOLOGY_KEYS = {
     "fish": "fish",
     "insect": "insect",
 }
+
+# Prefer single-source JSON when present
+if _OBJECT_REF_STORE.get("subjectKeys"):
+    OBJECT_REFERENCE_SUBJECT_KEYS = dict(_OBJECT_REF_STORE["subjectKeys"])
+if _OBJECT_REF_STORE.get("biologyKeys"):
+    OBJECT_REFERENCE_BIOLOGY_KEYS = dict(_OBJECT_REF_STORE["biologyKeys"])
+
 
 
 def _object_reference_key(subject: dict[str, Any], profile: dict[str, Any] | None = None) -> str:
@@ -538,9 +552,8 @@ def _local_object_reference(subject: dict[str, Any], profile: dict[str, Any] | N
 def _morphology_plan_for_key(key: str, subject: dict[str, Any], profile: dict[str, Any] | None = None) -> dict[str, Any]:
     """Translate real-world morphology into a Three.js component plan.
 
-    The plan is intentionally geometric rather than pixel-based: masks keep
-    the artwork anchor, while these components define what the confirmed object
-    must be made of. An external LLM/RAG response may override this plan.
+    Plans live in backend/object_reference.json (single source of truth).
+    An external LLM/RAG response may still override the plan at lookup time.
     """
     base = {
         "version": 1,
@@ -551,74 +564,9 @@ def _morphology_plan_for_key(key: str, subject: dict[str, Any], profile: dict[st
         "profileKind": (profile or {}).get("kind"),
         "fit": {"preserveArtworkAnchor": True, "useMaskAsScaleOnly": True},
     }
-    plans: dict[str, dict[str, Any]] = {
-        "lotus": {
-            "archetype": "aquatic lotus composed of shield leaves, slender petioles, layered petals, and seedpod center",
-            "components": [
-                {"type": "petiole", "role": "leaf-stem", "count": 2, "radius": 0.018, "height": 0.72, "lean": 0.18},
-                {"type": "lotusLeaf", "role": "shield-leaf", "count": 2, "radiusX": 0.34, "radiusY": 0.27, "thickness": 0.018, "dome": 0.045, "veins": 12, "notch": 0.16},
-                {"type": "flowerStem", "role": "flower-support", "count": 1, "radius": 0.014, "height": 0.88, "lean": -0.08},
-                {"type": "petalLayer", "role": "outer-petals", "count": 9, "length": 0.22, "width": 0.07, "thickness": 0.014, "tilt": 0.65},
-                {"type": "petalLayer", "role": "middle-petals", "count": 8, "length": 0.18, "width": 0.06, "thickness": 0.012, "tilt": 0.34},
-                {"type": "petalLayer", "role": "inner-petals", "count": 7, "length": 0.13, "width": 0.045, "thickness": 0.01, "tilt": 0.1},
-                {"type": "seedpod", "role": "flower-center", "count": 1, "radius": 0.05, "height": 0.035},
-            ],
-            "constraints": [
-                "leaf discs are shallow domes with thickness and veins, not flat planes",
-                "petals are layered curved thin solids connected to the seedpod",
-                "stems connect leaf and flower to the waterline",
-            ],
-        },
-        "bamboo": {
-            "archetype": "segmented hollow bamboo culms with nodes, internodes, lateral twigs, and lanceolate leaves",
-            "components": [
-                {"type": "culm", "role": "vertical-stem", "count": 2, "radius": 0.026, "height": 1.05, "nodes": 7},
-                {"type": "nodeRing", "role": "bamboo-nodes", "count": 14, "radius": 0.03, "height": 0.01},
-                {"type": "twig", "role": "lateral-branch", "count": 5, "radius": 0.01, "length": 0.24},
-                {"type": "lanceolateLeaf", "role": "leaf-cluster", "count": 16, "length": 0.18, "width": 0.035, "thickness": 0.004},
-            ],
-            "constraints": ["main culms remain vertical", "nodes must be visible rings", "leaves attach to twigs"],
-        },
-        "pine": {
-            "archetype": "woody trunk and branches carrying needle foliage clusters",
-            "components": [
-                {"type": "woodyTrunk", "role": "trunk", "count": 1, "radius": 0.055, "height": 0.92},
-                {"type": "branch", "role": "woody-branches", "count": 5, "radius": 0.018, "length": 0.42},
-                {"type": "needleCluster", "role": "foliage", "count": 8, "radius": 0.16, "needles": 18},
-            ],
-            "constraints": ["needle masses must be supported by branches", "avoid single flat crown plate"],
-        },
-        "reed": {
-            "archetype": "wetland reed clump with thin upright stems, linear leaves, and plume heads",
-            "components": [
-                {"type": "reedStem", "role": "thin-stem", "count": 5, "radius": 0.012, "height": 0.95},
-                {"type": "linearLeaf", "role": "blade-leaves", "count": 14, "length": 0.36, "width": 0.025, "thickness": 0.004},
-                {"type": "plume", "role": "seed-head", "count": 3, "radius": 0.035, "height": 0.18},
-            ],
-            "constraints": ["stems stay thin and upright", "plumes attach to the tops of stems"],
-        },
-        "flower": {
-            "archetype": "flowering herb or shrub with stems, leaves, calyx, petals, and center",
-            "components": [
-                {"type": "stem", "role": "support", "count": 2, "radius": 0.018, "height": 0.65},
-                {"type": "leaf", "role": "thin-leaves", "count": 8, "length": 0.22, "width": 0.06, "thickness": 0.006},
-                {"type": "petalLayer", "role": "flower-petals", "count": 10, "length": 0.13, "width": 0.045, "thickness": 0.01, "tilt": 0.28},
-                {"type": "seedpod", "role": "flower-center", "count": 1, "radius": 0.035, "height": 0.028},
-            ],
-            "constraints": ["petals connect to center", "flower connects to stem"],
-        },
-        "vine": {
-            "archetype": "curved woody vine with attached leaves and hanging flower racemes",
-            "components": [
-                {"type": "curvedVine", "role": "main-vine", "count": 1, "radius": 0.018, "length": 0.92},
-                {"type": "leaf", "role": "vine-leaves", "count": 10, "length": 0.18, "width": 0.05, "thickness": 0.005},
-                {"type": "hangingPetals", "role": "raceme", "count": 12, "length": 0.09, "width": 0.035, "thickness": 0.008},
-            ],
-            "constraints": ["racemes hang from vine", "main vine remains curved not straight rod"],
-        },
-    }
+    plans: dict[str, dict[str, Any]] = _OBJECT_REF_STORE.get("morphologyPlans") or {}
     selected = plans.get(key)
-    if selected is None and key in {"plum"}:
+    if selected is None and key == "plum":
         selected = plans.get("flower")
     if selected is None:
         selected = {
@@ -761,6 +709,8 @@ def scene_lift_status() -> dict:
             "available": False,
             "geometry": "facebook/map-anything-apache",
             "segmentation": "Grounding DINO + SAM 2.1",
+            "segmentationTier": None,
+            "groundingModel": None,
             "capabilities": {"depth": False, "camera": False, "segmentation": False},
             "reason": "未设置 SCENE_LIFT_SERVER_URL；浏览器将使用不虚构物体的原画像素锁定浮雕",
         }
@@ -773,6 +723,8 @@ def scene_lift_status() -> dict:
             "available": available,
             "geometry": info.get("geometry", "facebook/map-anything-apache"),
             "segmentation": info.get("segmentation", "Grounding DINO + SAM 2.1"),
+            "segmentationTier": info.get("segmentationTier"),
+            "groundingModel": info.get("groundingModel"),
             "capabilities": info.get("capabilities", {}),
             "reason": info.get("reason") if not available else None,
         }
@@ -781,13 +733,35 @@ def scene_lift_status() -> dict:
             "available": False,
             "geometry": "facebook/map-anything-apache",
             "segmentation": "Grounding DINO + SAM 2.1",
+            "segmentationTier": None,
+            "groundingModel": None,
             "capabilities": {"depth": False, "camera": False, "segmentation": False},
             "reason": f"场景转换服务未就绪：{exc}",
         }
 
 
+@app.post("/api/scene-lift/config")
+async def scene_lift_config(request: Request):
+    data = await request.json()
+    url = (data.get("url") or "").strip().rstrip("/")
+    if url:
+        set_runtime("SCENE_LIFT_SERVER_URL", url)
+        os.environ["SCENE_LIFT_SERVER_URL"] = url
+    return scene_lift_status()
+
+
+@app.post("/api/trellis2/config")
+async def trellis2_config(request: Request):
+    data = await request.json()
+    url = (data.get("url") or "").strip().rstrip("/")
+    if url:
+        set_runtime("TRELLIS2_SERVER_URL", url)
+        os.environ["TRELLIS2_SERVER_URL"] = url
+    return trellis2_status()
+
+
 @app.post("/api/scene-lift/analyze")
-def scene_lift_analyze(payload: dict = Body(...)) -> JSONResponse:
+async def scene_lift_analyze(payload: dict = Body(...)) -> JSONResponse:
     server = _scene_lift_server_url()
     if not server:
         raise HTTPException(status_code=503, detail="场景转换服务未连接；请设置 SCENE_LIFT_SERVER_URL")
@@ -800,21 +774,21 @@ def scene_lift_analyze(payload: dict = Body(...)) -> JSONResponse:
     body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
     if len(body) > 12 * 1024 * 1024:
         raise HTTPException(status_code=413, detail="画作数据超过 12 MB")
-    request = urllib.request.Request(
-        f"{server}/analyze",
-        data=body,
-        method="POST",
-        headers={"Content-Type": "application/json", "Accept": "application/json"},
-    )
-    timeout = float(os.environ.get("SCENE_LIFT_TIMEOUT", "900"))
+    t0 = time.perf_counter()
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as upstream:
-            raw = upstream.read()
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:1200]
-        raise HTTPException(status_code=exc.code, detail=detail or "场景转换失败") from exc
-    except (OSError, urllib.error.URLError) as exc:
-        raise HTTPException(status_code=502, detail=f"无法访问场景转换服务：{exc}") from exc
+        upstream = await _proxy_request(
+            "POST",
+            server,
+            "/analyze",
+            body=body,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+        )
+    except HTTPException:
+        raise
+    raw = upstream.content
+    if upstream.status_code >= 400:
+        detail = raw.decode("utf-8", errors="replace")[:1200]
+        raise HTTPException(status_code=upstream.status_code, detail=detail or "场景转换失败")
     if len(raw) > 18 * 1024 * 1024:
         raise HTTPException(status_code=502, detail="场景转换结果超过 18 MB，请降低 gridMaxSide")
     try:
@@ -824,6 +798,8 @@ def scene_lift_analyze(payload: dict = Body(...)) -> JSONResponse:
     depth = result.get("depth") if isinstance(result, dict) else None
     if not isinstance(depth, dict) or not isinstance(depth.get("values"), list):
         raise HTTPException(status_code=502, detail="场景转换服务未返回逐像素深度图")
+    metrics.observe("proxy.scene_lift.analyze", time.perf_counter() - t0)
+    metrics.count("proxy.scene_lift.analyze")
     return JSONResponse(result)
 
 
@@ -853,35 +829,136 @@ def trellis2_status() -> dict:
 
 
 @app.post("/api/trellis2/generate")
-def trellis2_generate(payload: dict = Body(...)) -> Response:
+async def trellis2_generate(request: Request) -> Response:
     server = _trellis2_server_url()
     if not server:
         raise HTTPException(status_code=503, detail="图生 3D 服务未连接；请设置 TRELLIS2_SERVER_URL")
+    body = await request.body()
+    if len(body) > 12 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="画作数据超过 12 MB")
+    # Light validation without fully parsing large payloads twice when possible
+    try:
+        payload = json.loads(body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise HTTPException(status_code=400, detail="请求体必须是 JSON") from exc
     image = payload.get("image")
     if not isinstance(image, str) or not image.startswith("data:image/"):
         raise HTTPException(status_code=400, detail="image 必须是 data:image/... 格式的画作")
-    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-    if len(body) > 12 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="画作数据超过 12 MB")
-    request = urllib.request.Request(
-        f"{server}/generate",
-        data=body,
-        method="POST",
-        headers={"Content-Type": "application/json", "Accept": "model/gltf-binary"},
-    )
-    timeout = float(os.environ.get("TRELLIS2_TIMEOUT", "900"))
+    t0 = time.perf_counter()
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as upstream:
-            model = upstream.read()
-            content_type = upstream.headers.get_content_type()
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:800]
-        raise HTTPException(status_code=exc.code, detail=detail or "图生 3D 生成失败") from exc
-    except (OSError, urllib.error.URLError) as exc:
-        raise HTTPException(status_code=502, detail=f"无法访问图生 3D 生成服务：{exc}") from exc
+        upstream = await _proxy_request(
+            "POST",
+            server,
+            "/generate",
+            body=body,
+            headers={"Content-Type": "application/json", "Accept": "application/json, model/gltf-binary"},
+        )
+    except HTTPException:
+        raise
+    if upstream.status_code >= 400:
+        detail = upstream.content.decode("utf-8", errors="replace")[:800]
+        raise HTTPException(status_code=upstream.status_code, detail=detail or "图生 3D 生成失败")
+    content_type = upstream.headers.get("content-type") or "model/gltf-binary"
+    # Task-mode (TODO-4): JSON with task_id — pass through
+    if "application/json" in content_type:
+        metrics.observe("proxy.trellis2.generate", time.perf_counter() - t0)
+        metrics.count("proxy.trellis2.generate.task")
+        return Response(content=upstream.content, media_type="application/json", status_code=upstream.status_code)
+    model = upstream.content
     if len(model) < 20:
         raise HTTPException(status_code=502, detail="图生 3D 服务返回了空模型")
-    return Response(content=model, media_type=content_type or "model/gltf-binary")
+    metrics.observe("proxy.trellis2.generate", time.perf_counter() - t0)
+    metrics.count("proxy.trellis2.generate")
+    headers = {}
+    for key in ("X-Image-To-3D-Engine", "X-Object-Reference"):
+        if key.lower() in upstream.headers:
+            headers[key] = upstream.headers[key.lower()]
+        elif key in upstream.headers:
+            headers[key] = upstream.headers[key]
+    return Response(content=model, media_type=content_type, headers=headers)
+
+
+@app.get("/api/trellis2/generate/stream/{task_id}")
+async def trellis2_generate_stream(task_id: str):
+    server = _trellis2_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="图生 3D 服务未连接")
+    client = get_proxy_client()
+    url = f"{server.rstrip('/')}/generate/stream/{task_id}"
+
+    async def events():
+        try:
+            async with client.stream("GET", url, timeout=httpx.Timeout(connect=5.0, read=900.0, write=30.0, pool=5.0)) as resp:
+                async for chunk in resp.aiter_bytes():
+                    yield chunk
+        except httpx.ConnectError as exc:
+            yield f"data: {json.dumps({'error': f'worker unreachable: {exc}'})}\n\n".encode()
+        except httpx.TimeoutException as exc:
+            yield f"data: {json.dumps({'error': f'worker timeout: {exc}'})}\n\n".encode()
+
+    return StreamingResponse(events(), media_type="text/event-stream")
+
+
+@app.get("/api/trellis2/generate/result/{task_id}")
+async def trellis2_generate_result(task_id: str) -> Response:
+    server = _trellis2_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="图生 3D 服务未连接")
+    try:
+        upstream = await _proxy_request("GET", server, f"/generate/result/{task_id}")
+    except HTTPException:
+        raise
+    if upstream.status_code >= 400:
+        detail = upstream.content.decode("utf-8", errors="replace")[:800]
+        raise HTTPException(status_code=upstream.status_code, detail=detail or "result unavailable")
+    headers = {}
+    for key in ("X-Image-To-3D-Engine", "X-Object-Reference"):
+        lk = key.lower()
+        if lk in upstream.headers:
+            headers[key] = upstream.headers[lk]
+    return Response(
+        content=upstream.content,
+        media_type=upstream.headers.get("content-type") or "model/gltf-binary",
+        headers=headers,
+    )
+
+
+@app.post("/api/trellis2/generate/cancel/{task_id}")
+async def trellis2_generate_cancel(task_id: str) -> JSONResponse:
+    server = _trellis2_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="图生 3D 服务未连接")
+    try:
+        upstream = await _proxy_request("POST", server, f"/generate/cancel/{task_id}")
+    except HTTPException:
+        raise
+    return JSONResponse(content=json.loads(upstream.content.decode("utf-8") or "{}"), status_code=upstream.status_code)
+
+
+@app.post("/api/scene-lift/embed")
+async def scene_lift_embed(payload: dict = Body(...)) -> JSONResponse:
+    server = _scene_lift_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="场景转换服务未连接；无法提取视觉特征")
+    image = payload.get("image")
+    if not isinstance(image, str) or not image.startswith("data:image/"):
+        raise HTTPException(status_code=400, detail="image 必须是 data:image/... 格式的裁剪")
+    body = json.dumps({"image": image}, ensure_ascii=False).encode("utf-8")
+    try:
+        upstream = await _proxy_request(
+            "POST",
+            server,
+            "/embed",
+            body=body,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            timeout=httpx.Timeout(connect=5.0, read=60.0, write=30.0, pool=5.0),
+        )
+    except HTTPException:
+        raise
+    if upstream.status_code >= 400:
+        detail = upstream.content.decode("utf-8", errors="replace")[:600]
+        raise HTTPException(status_code=upstream.status_code, detail=detail or "视觉特征提取失败")
+    return JSONResponse(json.loads(upstream.content.decode("utf-8")))
 
 
 @app.get("/")

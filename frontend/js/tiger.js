@@ -112,6 +112,7 @@ export class Tiger {
     this._gaitCyc = 0;
     this._pauseTimer = (config.tiger.pauseInterval ?? 16) * (0.9 + Math.random() * 0.5); // 首次驻足计时
     this._pauseLeft = 0;
+    this.obstacles = []; // 岩石刚体碰撞圈（由 main.js 注入 env.rockObstacles）
     this._buildPath();
 
     // —— 生物生成管线：数据仓库 → 骨骼装配 → 程序化蒙皮 → 聚合实体 ——
@@ -298,8 +299,35 @@ export class Tiger {
     this.pathLength = this.path.getLength();
   }
 
-  /** 捕食状态机（音乐触发时由 main.js 置 huntArmed）：
-   *  潜行隐蔽 → 瞬间爆发 → 飞扑撕咬 → 进食归位；返回每帧指令或 null（未在捕猎） */
+  /** 起扑：猎物惊飞躲避，虎预判其空中落点截击（直跃版/追近后跃出版共用）。
+   *  返回 pounce 状态：leapTo = 截击点（猎物飞行弧 t=0.55 处），dur 对齐截击时刻。 */
+  _beginPounce(prey, gp, hcfg) {
+    if (!prey._flight) prey._takeOff(prey._escapeTarget(gp), "惊飞");
+    const f = prey._flight;
+    const tI = Math.max(0.3, f.dur * 0.55);
+    const intercept = new THREE.Vector3().lerpVectors(f.from, f.to, Math.min(tI / f.dur, 1));
+    intercept.y = THREE.MathUtils.lerp(f.from.y, f.to.y, Math.min(tI / f.dur, 1))
+      + Math.sin(Math.min(tI / f.dur, 1) * Math.PI) * (prey.opts?.flightArc ?? 1.6);
+    const d = Math.hypot(intercept.x - gp.x, intercept.z - gp.z);
+    this._resolveRocksPoint(intercept, 0.75); // 落点避开岩石刚体（着陆不进石）
+    return {
+      stage: "pounce",
+      prey,
+      t: 0,
+      from: gp.clone(),
+      leapTo: intercept,
+      dur: Math.max(0.3, tI),
+      arc: THREE.MathUtils.clamp(Math.max(d * 0.16, intercept.y * 0.9), 0.5, 2.2),
+      rolled: false,
+      caught: false,
+      spin: 0,
+    };
+  }
+
+  /** 捕食状态机（任意音乐播放时由 main.js 置 huntArmed）：
+   *  选最近锦鸡；>30m 正常步行不狩猎；15~30m 奔跑逼近（约奔 10m）；奔进 10~25m
+   *  窗口或 15m 内 → 跃起（预判空中落点截击，存在空捕概率）。
+   *  空捕成功 → 前爪擒获 + 空中转体 + 子弹时间；扑空 → 就地思量后再猎。 */
   _huntStep(dt, baseSpeed) {
     const hcfg = this.config.hunt ?? {};
     const armed = this.huntArmed && hcfg.enabled !== false && this.pheasants?.length;
@@ -310,61 +338,92 @@ export class Tiger {
     if (this._huntCd > 0) { this._huntCd -= dt; return null; }
     const gp = this.group.position;
     if (!this._hunt) {
-      // 发现猎物：选范围内【最远】的可见锦鸡（择远而猎，追击出速度感）
-      let best = null, bd = 0;
+      // 发现猎物：选【最近】的可见锦鸡（就近而猎，减少无效奔袭）
+      let best = null, bd = Infinity;
       for (const p of this.pheasants) {
         if (!p.group.visible || p.state === "被获") continue;
         const d = gp.distanceTo(p.pos);
-        if (d <= (hcfg.stalkDistance ?? 12) && d > bd) { bd = d; best = p; }
+        if (d < bd) { bd = d; best = p; }
       }
-      if (!best) return null;
-      this._hunt = { stage: "stalk", prey: best, t: 0 };
+      if (!best || bd > (hcfg.stalkDistance ?? 30)) return null; // 超过 30 米：正常步行，不狩猎
+      if (bd <= (hcfg.directPounceDistance ?? 15)) {
+        // 距离小于 15 米：不起步直接跃起捕食
+        this._hunt = this._beginPounce(best, gp, hcfg);
+        return { label: "飞扑", stage: "pounce", targetSpeed: 0, dir: this._hunt.leapTo.clone().sub(gp), bioState: "ROAR", locked: true, leap: 0.3 };
+      }
+      this._hunt = { stage: "sprint", prey: best, t: 0 }; // 15~30 米：奔跑逼近
     }
     const H = this._hunt, prey = H.prey;
-    if (prey.state === "被获" && !["feed", "carry"].includes(H.stage)) { this._hunt = null; this._huntCd = 8; return null; }
+    if (prey.state === "被获" && !["feed", "carry", "pounce"].includes(H.stage)) { this._hunt = null; this._huntCd = 8; return null; }
     const pp = prey.pos;
     const d = Math.hypot(pp.x - gp.x, pp.z - gp.z);
     const dir = new THREE.Vector3(pp.x - gp.x, 0, pp.z - gp.z);
     switch (H.stage) {
-      case "stalk": {
-        if (d > (hcfg.stalkDistance ?? 25) * 1.3) { this._hunt = null; this._huntCd = 5; return null; }
-        // 猎物惊起跑/起飞 → 立即转爆发追击（追逐战开始）
-        if (prey.state === "奔逃" || prey.state === "惊飞" || d < (hcfg.sprintDistance ?? 20)) H.stage = "sprint";
-        return { label: "潜行", stage: "stalk", targetSpeed: baseSpeed * (hcfg.stalkSpeed ?? 0.45), dir, bioState: "STALK", crouch: 1, cadence: 2.6, gaitAmp: 0.9 };
-      }
       case "sprint": {
-        // 猎物落地进入飞扑距离即跃出；被甩太远则放弃
-        if (d > (hcfg.stalkDistance ?? 25) * 1.6) { this._hunt = null; this._huntCd = 8; return null; }
-        if ((prey.state === "栖止" || prey.state === "觅食" || prey.state === "警觉" || prey.state === "奔逃") &&
-            d < (hcfg.pounceDistance ?? 10)) {
-          H.stage = "pounce"; H.t = 0;
-          H.from = gp.clone();
-          H.leapTo = new THREE.Vector3(pp.x, 0, pp.z);
-          // 飞跃时长/弧高随跃距（10m 级大跳：出膛炮弹抛物线）
-          H.dur = THREE.MathUtils.clamp(d * 0.085, 0.45, 0.95);
-          H.arc = THREE.MathUtils.clamp(d * 0.13, 0.4, 1.3);
-          return { label: "飞扑", stage: "pounce", targetSpeed: 0, dir, bioState: "ROAR", locked: true, leap: 0.3 };
+        if (d > (hcfg.stalkDistance ?? 30) * 1.3) { this._hunt = null; this._huntCd = 5; return null; }
+        // 奔进 10~25 米跃起窗口（默认 ≤20m，约奔 10m）或猎物惊逃 → 起扑
+        if (d <= (hcfg.pounceDistance ?? 20) || prey.state === "奔逃" || prey.state === "惊飞") {
+          const next = this._beginPounce(prey, gp, hcfg);
+          this._hunt = next;
+          return { label: "飞扑", stage: "pounce", targetSpeed: 0, dir: next.leapTo.clone().sub(gp), bioState: "ROAR", locked: true, leap: 0.3 };
         }
-        return { label: "爆发", stage: "sprint", targetSpeed: baseSpeed * (hcfg.sprintSpeed ?? 3.0), dir, bioState: "WALK", crouch: 0.15 };
+        return { label: "奔跑", stage: "sprint", targetSpeed: baseSpeed * (hcfg.sprintSpeed ?? 3.0), dir, bioState: "WALK", crouch: 0.15 };
       }
       case "pounce": {
         H.t += dt / H.dur;
         const t = Math.min(H.t, 1);
         gp.x = THREE.MathUtils.lerp(H.from.x, H.leapTo.x, t);
         gp.z = THREE.MathUtils.lerp(H.from.z, H.leapTo.z, t);
-        gp.y = groundHeight(gp.x, gp.z) + Math.sin(t * Math.PI) * H.arc;
-        // 下降段劫获：落点即猎物所在（1.5m 内锁喉）→ 叼起献母
-        const dd = Math.hypot(pp.x - gp.x, pp.z - gp.z);
-        if (t > 0.55 && dd < 1.5 && prey.state !== "被获") {
-          prey._carriedBy(this.entity.boneMap.get("Head"));
-          H.stage = "carry"; H.t = 0;
-          return { label: "献获", stage: "carry", targetSpeed: 0, dir, bioState: "IDLE", locked: true };
+        gp.y = groundHeight(gp.x, gp.z) + Math.sin(t * Math.PI) * H.arc + (H.caught ? Math.sin(t * Math.PI) * 0.6 : 0);
+        // 空捕判定：临近截击点且未掷签 → 按概率空中捕获
+        if (!H.rolled && H.t >= 0.82) {
+          H.rolled = true;
+          if (Math.random() < (hcfg.airCatchProbability ?? 0.35)) {
+            H.caught = true;
+            // 前爪够着锦鸡：挂到前足骨，同时触发空中转体 + 子弹时间
+            const paw = this.entity.boneMap.get("FLFoot") || this.entity.boneMap.get("FRFoot");
+            if (paw) prey._carriedBy(paw);
+            else prey._carriedBy(this.entity.boneMap.get("Head"));
+            H.spin = (Math.random() < 0.5 ? -1 : 1) * Math.PI * 2 * 1.25; // 空中转体一周余
+            this.slowmoLeft = hcfg.bulletTimeDuration ?? 1.6;             // 子弹时间慢镜头
+            this.onAirCatch?.(gp.clone());
+          }
+        }
+        if (H.caught) {
+          // 空中转体：在剩余滞空段绕身轴旋转
+          this.group.rotation.y += H.spin * dt * 0.9;
         }
         if (t >= 1) {
-          this._hunt = null; this._huntCd = 8; // 扑空
+          // 落地：雪花半球飞溅（跃起击杀力度）
+          this.onLeapLand?.(gp.clone());
+          if (H.caught) {
+            // 由前爪转衔于口，进入献获
+            prey._carriedBy(this.entity.boneMap.get("Head"));
+            H.stage = "carry"; H.t = 0;
+            return { label: "献获", stage: "carry", targetSpeed: 0, dir, bioState: "IDLE", locked: true };
+          }
+          // 扑空（锦鸡逃脱）：虎是捕猎者，不消失不重生——就地落住进入「思量」，
+          // 随后从此处重新判断下一次捕食路线
+          this._hunt = { stage: "ponder", prey, t: 0, dir: dir.clone() };
+          return { label: "思量", stage: "ponder", targetSpeed: 0, dir, bioState: "IDLE", locked: true, crouch: 0.22 };
+        }
+        return { label: H.caught ? "空捕" : "飞扑", stage: "pounce", targetSpeed: 0, dir, bioState: "ROAR", locked: true, leap: Math.min(t * 1.8, 1) };
+      }
+      case "ponder": {
+        // 思量：在不成功地点驻留，缓转头扫视判断；结束即快速转向下一次捕食
+        H.t += dt;
+        if (H.t >= (hcfg.ponderDuration ?? 2.4)) {
+          this._hunt = null;
+          this._huntCd = 0.6; // 短冷却：立即从不成功地点重新规划捕食路线
           return null;
         }
-        return { label: "飞扑", stage: "pounce", targetSpeed: 0, dir, bioState: "ROAR", locked: true, leap: Math.min(t * 1.8, 1) };
+        const scan = Math.sin(H.t * 1.7) * 0.85; // 左右扫视
+        const yaw0 = Math.atan2(H.dir.x, H.dir.z) + scan;
+        return {
+          label: "思量", stage: "ponder", targetSpeed: 0,
+          dir: new THREE.Vector3(Math.sin(yaw0), 0, Math.cos(yaw0)),
+          bioState: "IDLE", locked: true, crouch: 0.22,
+        };
       }
       case "carry": {
         // 叼着猎物去见母亲（雪兔）：抵达 2.5m 即放下献获，与母相伴片刻
@@ -402,10 +461,36 @@ export class Tiger {
     this.pathT = best / 64;
   }
 
+  /** 岩石刚体避让：把点推出岩体碰撞圈（径向推出→自然沿切向滑绕；两遍处理重叠岩组） */
+  _resolveRocksPoint(v, margin = 0.55) {
+    const rocks = this.obstacles;
+    if (!rocks?.length) return v;
+    for (let pass = 0; pass < 2; pass++) {
+      for (const r of rocks) {
+        const dx = v.x - r.x, dz = v.z - r.z;
+        const min = r.r + margin;
+        const d2 = dx * dx + dz * dz;
+        if (d2 >= min * min) continue;
+        const d = Math.sqrt(d2) || 1e-4;
+        v.x = r.x + (dx / d) * min;
+        v.z = r.z + (dz / d) * min;
+      }
+    }
+    return v;
+  }
+
   /** 每帧：grove 可为 null；传入了才做缠尾；rabbit（母亲）传入则启用觅母接近 */
   update(dt, time, grove, rabbit) {
     const cfg = this.config.tiger;
     const baseSpeed = 1.15 * cfg.speed;
+
+    // 帧首撤销上帧的头颈瞄准增量：让步态驱动器从干净基线插值，瞄准量不逐帧累积
+    if (this._aimApplied) {
+      const a = this._aimApplied;
+      a.neck?.rotation && (a.neck.rotation.y -= a.ny);
+      if (a.head) { a.head.rotation.y -= a.hy; a.head.rotation.x -= a.hx; }
+      this._aimApplied = null;
+    }
 
     // —— 捕食（音乐触发）：潜行 → 爆发 → 飞扑 → 叼起献母，优先于觅母与巡游 ——
     this._mother = rabbit;
@@ -465,6 +550,7 @@ export class Tiger {
           gp.x += dir.x * this._speedCur * dt;
           gp.z += dir.z * this._speedCur * dt;
         }
+        this._resolveRocksPoint(gp); // 岩石刚体：绕石而行
         gp.y = groundHeight(gp.x, gp.z);
       }
       gp.y -= (huntCtl.crouch ?? 0) * 0.16; // 潜行深压身位（匍匐）
@@ -480,6 +566,7 @@ export class Tiger {
         gp.x += dir.x * this._speedCur * dt;
         gp.z += dir.z * this._speedCur * dt;
       }
+      this._resolveRocksPoint(gp); // 岩石刚体：绕石而行
       gp.y = groundHeight(gp.x, gp.z);
       targetYaw = Math.atan2(dir.x, dir.z);
       this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, 0, 0.1);
@@ -487,15 +574,34 @@ export class Tiger {
     } else {
       this.pathT = (this.pathT + (this._speedCur * dt) / this.pathLength) % 1;
       const p = this.path.getPointAt(this.pathT);
-      const tan = this.path.getTangentAt(this.pathT);
-      const y = groundHeight(p.x, p.z);
-      const ahead = this.path.getPointAt((this.pathT + 0.01) % 1);
-      const slope = (groundHeight(ahead.x, ahead.z) - y) * 0.8;
-      gp.set(p.x, y, p.z);
-      targetYaw = Math.atan2(tan.x, tan.z);
-      this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, THREE.MathUtils.clamp(slope, -0.2, 0.2), 0.1);
+      const offPath = Math.hypot(p.x - gp.x, p.z - gp.z);
+      if (offPath > 1.6) {
+        // 离径（捕猎/觅母/思量之后）：径直走回路径附近，虎不瞬移、不消失重生
+        const d = Math.max(offPath, 1e-4);
+        gp.x += ((p.x - gp.x) / d) * this._speedCur * dt;
+        gp.z += ((p.z - gp.z) / d) * this._speedCur * dt;
+        this._resolveRocksPoint(gp); // 岩石刚体：绕石而行
+        gp.y = groundHeight(gp.x, gp.z);
+        targetYaw = Math.atan2(p.x - gp.x, p.z - gp.z);
+        this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, 0, 0.1);
+      } else {
+        const tan = this.path.getTangentAt(this.pathT);
+        const y = groundHeight(p.x, p.z);
+        const ahead = this.path.getPointAt((this.pathT + 0.01) % 1);
+        const slope = (groundHeight(ahead.x, ahead.z) - y) * 0.8;
+        gp.set(p.x, y, p.z);
+        this._resolveRocksPoint(gp); // 岩石刚体：路径穿石处滑绕而过
+        gp.y = groundHeight(gp.x, gp.z);
+        targetYaw = Math.atan2(tan.x, tan.z);
+        this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, THREE.MathUtils.clamp(slope, -0.2, 0.2), 0.1);
+      }
     }
-    this.group.rotation.y += shortestAngle(this.group.rotation.y, targetYaw) * Math.min(dt * 4, 1);
+    // 捕食全程身体跟踪猎物当前位置（跃起未擒时也随猎物移动修正朝向；思量/空擒转体除外）
+    const huntPrey = this._hunt?.prey;
+    const trackPrey = huntCtl && huntPrey && !this._hunt.caught
+      && huntPrey.state !== "被获" && !["ponder", "carry"].includes(this._hunt.stage);
+    if (trackPrey) targetYaw = Math.atan2(huntPrey.pos.x - gp.x, huntPrey.pos.z - gp.z);
+    this.group.rotation.y += shortestAngle(this.group.rotation.y, targetYaw) * Math.min(dt * (trackPrey ? 7 : 4), 1);
 
     // 物理刚体随动：kinematic 体需要速度量才能正确推挤竹竿（限速防脉冲）
     if (this.body) {
@@ -522,6 +628,26 @@ export class Tiger {
       leap: huntCtl?.leap ?? 0,       // 飞跃姿态（出膛直线）
       crouch: huntCtl?.crouch ?? 0,   // 匍匐膝折身沉
     });
+
+    // 虎头锁定猎物：身体未转足的偏角由颈/头骨补足（无论匍匐、奔跑、跃起；
+    // 空擒转体/献获/思量除外——猎物已入爪口或已脱离追击）。
+    // 增量记在 _aimApplied，下一帧首撤销，避免与驱动器插值叠加累积。
+    if (trackPrey) {
+      const dx = huntPrey.pos.x - gp.x, dz = huntPrey.pos.z - gp.z;
+      const dy = huntPrey.pos.y - (gp.y + 1.0); // 猎物相对头高（≈1m）的仰角
+      const yawErr = shortestAngle(this.group.rotation.y, Math.atan2(dx, dz));
+      const pitchErr = Math.atan2(dy, Math.max(Math.hypot(dx, dz), 1e-3));
+      const neck = this.entity.boneMap.get("Neck"), head = this.entity.boneMap.get("Head");
+      const ay = THREE.MathUtils.clamp(yawErr, -0.9, 0.9);
+      const ap = THREE.MathUtils.clamp(-pitchErr, -0.55, 0.55); // 骨局部绕 +X 正转为低头
+      const applied = { neck, head, ny: ay * 0.3, hy: ay * 0.7, hx: ap * 0.7 };
+      if (neck) neck.rotation.y += applied.ny;
+      if (head) {
+        head.rotation.y += applied.hy;
+        head.rotation.x += applied.hx;
+      }
+      this._aimApplied = applied;
+    }
 
     // 虎眼生理联动：驻足细缝、行走微张、咆哮怒目浑圆 + 照膜金光
     if (this._eyeUniforms) {

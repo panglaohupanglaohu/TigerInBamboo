@@ -1647,6 +1647,19 @@ function animate() {
 /* ============ 启动 ============ */
 async function main() {
   try {
+    // 从拟生场景跳入：改写返回链接并提示正在编辑的生灵
+    const params = new URLSearchParams(location.search);
+    const returnTo = params.get("return");
+    const fromSubject = params.get("subject");
+    if (returnTo) {
+      const back = el("lab-back");
+      if (back) {
+        back.href = returnTo;
+        back.textContent = "← 返回拟生场景";
+      }
+    }
+    if (fromSubject) showToast("正在编辑来自拟生场景的生灵：" + fromSubject);
+
     initThree();
     bindTabs();
     bindStateButtons();

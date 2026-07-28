@@ -3,7 +3,6 @@
 // 的 fear/thirst 内驱力与 evasive action）不随模型改变。
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { groundHeight, streamCurve, distToStream } from "./environment.js";
-import { loadGLB, normalizeModel, hasModel } from "./assets.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
 
 const PHEASANT_CLEARINGS = [
@@ -108,26 +107,8 @@ export class BirdAgent {
     this.proceduralParts = [];
     this.isGlb = false;
     this._buildProcedural();
-    if (this.opts.modelUrl) this._attachGLB(this.opts.modelUrl);
+    // 历史 hasModel/loadGLB 资产路径已撤：一律程序化躯体（TODO-12）
     scene.add(this.group);
-  }
-
-  async _attachGLB(url) {
-    try {
-      if (!(await hasModel(url))) return; // 尚未生成，保留程序化躯体
-      const raw = await loadGLB(url);
-      const model = normalizeModel(raw, {
-        targetHeight: this.opts.targetHeight,
-        yaw: this.opts.modelYaw,
-      });
-      this.modelRoot = new THREE.Group();
-      this.modelRoot.add(model);
-      this.group.add(this.modelRoot);
-      for (const p of this.proceduralParts) p.visible = false;
-      this.isGlb = true;
-    } catch (err) {
-      console.warn(`${this.opts.name} GLB 加载失败，保留程序化模型：`, err);
-    }
   }
 
   // ---------- 程序化躯体（红腹锦鸡；GLB 缺失时的兜底） ----------
@@ -265,9 +246,9 @@ export class BirdAgent {
     this.group.visible = true;
   }
 
-  /** 被叼起：挂到虎的头骨上（口中），保持可见、垂死下垂 */
+  /** 被叼起：挂到虎的头骨上（口中），保持可见、垂死下垂；已挂载时允许换挂（前爪→口衔） */
   _carriedBy(headBone) {
-    if (this.state === S.CAUGHT && this.carried) return;
+    if (this.state === S.CAUGHT && this.carried && this.group.parent === headBone) return;
     this.state = S.CAUGHT;
     this.carried = true;
     this._respawn = this.config.pheasant.respawnDelay ?? 20;

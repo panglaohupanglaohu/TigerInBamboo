@@ -43,14 +43,16 @@ export const DEFAULT_CONFIG = {
     escapeDistance: 7.0, // 惊飞逃逸距离（米）：短促抛物线
     escapeArc: 1.6,      // 逃逸抛物线弧高（米）
   },
-  hunt: {                // 虎捕食（仅当背景音乐为触发曲目时开启）
+  hunt: {                // 虎捕食（任意背景音乐播放时开启）
     enabled: true,
-    musicTrigger: "duange_xing.mp3", // 触发曲目（子串匹配）
-    stalkDistance: 40.0,   // 发现猎物距离（开始潜行）
-    stalkSpeed: 0.45,      // 潜行速度倍率
-    sprintDistance: 20.0,  // 爆发距离（20m 起冲刺）
-    sprintSpeed: 3.0,      // 冲刺速度倍率
-    pounceDistance: 10.0,  // 飞扑距离（10m 起跳，落点即猎物）
+    stalkDistance: 30.0,   // 发现猎物距离（超过 30 米正常步行，不狩猎）
+    sprintSpeed: 3.0,      // 奔跑速度倍率（15~30m 奔跑逼近，约奔 10m 后起扑）
+    pounceDistance: 20.0,  // 跃起距离（奔进 10~25m 窗口后起扑）
+    directPounceDistance: 15.0, // 直接跃起距离（15m 内不起步直接扑）
+    airCatchProbability: 0.35,  // 锦鸡空中被捕获概率（0~1）
+    bulletTimeScale: 0.22,      // 子弹时间倍率（空捕触发）
+    bulletTimeDuration: 1.6,    // 子弹时间持续（秒）
+    ponderDuration: 2.4,        // 扑空后思量时长（秒）：就地驻留扫视，随后就地重猎
     feedDuration: 6.0,     // 进食时长（秒）
     cooldown: 15.0,        // 捕食间隔（秒）
     sfxVolume: 0.8,        // 虎啸音效音量（0~1）
@@ -88,6 +90,11 @@ export const DEFAULT_CONFIG = {
       llmApiKey: "",
       llmModel: "",
     },
+  },
+  sceneEdit: {           // 拟生场景 · 对话编辑（大模型，OpenAI 兼容接口）
+    llmEndpoint: "",     // 留空则用内置指令解析（离线可用）
+    llmApiKey: "",
+    llmModel: "",
   },
   ecology: {
     relations: [
@@ -134,6 +141,8 @@ export const DEFAULT_CONFIG = {
       ],
     },
   },
+  // 环境物象 3D 路径：pointcloud（默认伪 4DGS）| mesh（图生 3D GLB）| auto（无形态构建器时走 mesh）
+  environmentModel: "pointcloud",
   bgm: {
     volume: 0.5,         // 背景音乐音量 0~1
     playlist: [          // 歌单（顺序循环）

@@ -1,37 +1,113 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+# TigerInBamboo 一键重启：杀掉占用端口的旧进程，重启后端 + 两个 worker
+# 端口：8931 主后端(前端静态页同服) 7863 识别/深度/特征 7862 图生3D
+set -u
+cd "$(dirname "$0")"
+ROOT="$PWD"
+OUT="$ROOT/tools/out"
+mkdir -p "$OUT"
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VENV_DIR="${VENV_DIR:-$ROOT_DIR/.venv}"
-HOST="${HOST:-127.0.0.1}"
-PORT="${PORT:-8931}"
-RELOAD="${RELOAD:-1}"
+PORTS="8931 7862 7863"
 
-cd "$ROOT_DIR"
+echo "== 清理旧进程 =="
+# 先按启动命令的模式杀（覆盖 --reload 产生的父子进程树）
+pkill -f "uvicorn backend.main:app" 2>/dev/null || true
+pkill -f "trellis2_worker" 2>/dev/null || true
+pkill -f "scene_lift_worker" 2>/dev/null || true
+# 再按端口杀残留
+for port in $PORTS; do
+  pids=$(lsof -ti tcp:"$port" 2>/dev/null || true)
+  [ -n "$pids" ] && kill $pids 2>/dev/null || true
+done
 
-if [[ ! -d "$VENV_DIR" ]]; then
-  echo "[start] Creating Python virtual environment: $VENV_DIR"
-  python3 -m venv "$VENV_DIR"
+# 等端口真正释放（--reload 子进程可能延迟松开 socket），最多 20 秒/端口
+for port in $PORTS; do
+  for i in $(seq 1 20); do
+    pids=$(lsof -ti tcp:"$port" 2>/dev/null || true)
+    if [ -z "$pids" ]; then
+      break
+    fi
+    if [ "$i" -gt 6 ]; then
+      kill -9 $pids 2>/dev/null || true
+    fi
+    sleep 1
+  done
+  pids=$(lsof -ti tcp:"$port" 2>/dev/null || true)
+  if [ -n "$pids" ]; then
+    echo "  :$port 仍被 $pids 占用，启动可能失败"
+  else
+    echo "  :$port 已释放"
+  fi
+done
+
+PY_MAIN="$ROOT/.venv/bin/python"
+PY_IMG="$ROOT/.venv-img2mesh/bin/python"
+export HF_HUB_OFFLINE=1
+export TOKENIZERS_PARALLELISM=false
+
+echo "== 启动服务 =="
+nohup "$PY_MAIN" -m uvicorn backend.main:app --host 127.0.0.1 --port 8931 --reload \
+  > "$OUT/backend.log" 2>&1 &
+PID_BACKEND=$!
+echo "  后端      :8931  pid $PID_BACKEND  日志 tools/out/backend.log"
+
+# 图生 3D：默认 MC 分辨率 192；可用 TRIPOSR_MC_RES 覆盖
+export TRIPOSR_MC_RES="${TRIPOSR_MC_RES:-192}"
+export TRIPOSR_DEVICE="${TRIPOSR_DEVICE:-auto}"
+nohup "$PY_IMG" -m uvicorn tools.trellis2_worker:app --host 127.0.0.1 --port 7862 \
+  > "$OUT/trellis2_worker.log" 2>&1 &
+PID_TRELLIS=$!
+echo "  图生3D    :7862  pid $PID_TRELLIS  日志 tools/out/trellis2_worker.log"
+
+# Grounded SAM 2：有 checkpoint 则用全量分割，否则明确警告并降级 DINO+GrabCut
+export GROUNDED_SAM2_ROOT="${GROUNDED_SAM2_ROOT:-$HOME/.cache/tigerinbamboo/Grounded-SAM-2}"
+export SAM2_CHECKPOINT="${SAM2_CHECKPOINT:-$GROUNDED_SAM2_ROOT/checkpoints/sam2.1_hiera_large.pt}"
+export SAM2_CONFIG="${SAM2_CONFIG:-configs/sam2.1/sam2.1_hiera_l.yaml}"
+export GROUNDING_MODEL="${GROUNDING_MODEL:-IDEA-Research/grounding-dino-base}"
+if [ ! -f "$SAM2_CHECKPOINT" ]; then
+  echo "  [warn] SAM2 checkpoint 缺失：$SAM2_CHECKPOINT"
+  echo "  [warn] 分割将降级为 grounding-dino + GrabCut（可设置 GROUNDED_SAM2_ROOT / SAM2_CHECKPOINT）"
 fi
+nohup "$PY_IMG" -m uvicorn tools.scene_lift_worker:app --host 127.0.0.1 --port 7863 \
+  > "$OUT/scene_lift_worker.log" 2>&1 &
+PID_SCENE=$!
+echo "  识别/深度 :7863  pid $PID_SCENE  日志 tools/out/scene_lift_worker.log  grounding=$GROUNDING_MODEL"
 
-# shellcheck disable=SC1091
-source "$VENV_DIR/bin/activate"
+echo "== 等待就绪 =="
+wait_health() {
+  local name="$1" url="$2" log="$3" i
+  for i in $(seq 1 40); do
+    if curl -s -m 2 "$url" | grep -q '"status":"ok"'; then
+      echo "  $name 就绪"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "  $name 未就绪，日志尾部："
+  tail -5 "$log" | sed 's/^/    /'
+  return 1
+}
+wait_health "后端      :8931" "http://127.0.0.1:8931/api/health" "$OUT/backend.log"
+wait_health "图生3D    :7862" "http://127.0.0.1:7862/health" "$OUT/trellis2_worker.log"
+wait_health "识别/深度 :7863" "http://127.0.0.1:7863/health" "$OUT/scene_lift_worker.log"
 
-echo "[start] Installing backend dependencies"
-python -m pip install -r "$ROOT_DIR/backend/requirements.txt"
+echo ""
+echo "打开 http://localhost:8931/wall-workspace.html"
+echo ""
+echo "== 日志输出中（Ctrl+C 停止全部服务）=="
 
-UVICORN_ARGS=(
-  "backend.main:app"
-  "--host" "$HOST"
-  "--port" "$PORT"
-)
+cleanup() {
+  echo ""
+  echo "== 停止服务 =="
+  kill "$PID_BACKEND" "$PID_TRELLIS" "$PID_SCENE" 2>/dev/null || true
+  sleep 1
+  kill -9 "$PID_BACKEND" "$PID_TRELLIS" "$PID_SCENE" 2>/dev/null || true
+  echo "  已全部停止"
+  exit 0
+}
+trap cleanup INT TERM
 
-if [[ "$RELOAD" != "0" ]]; then
-  UVICORN_ARGS+=("--reload")
-fi
-
-echo "[start] Backend API: http://$HOST:$PORT/api/health"
-echo "[start] Frontend:    http://$HOST:$PORT/"
-echo "[start] Press Ctrl+C to stop"
-
-exec uvicorn "${UVICORN_ARGS[@]}"
+# 常驻前台，持续输出三个服务的日志；tail 放后台 + wait，保证 Ctrl+C 能立即触发清理
+tail -F "$OUT/backend.log" "$OUT/trellis2_worker.log" "$OUT/scene_lift_worker.log" &
+TAIL_PID=$!
+wait $TAIL_PID

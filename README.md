@@ -436,6 +436,13 @@ cd backend && uvicorn main:app --port 8931
 - 3D scenes: <http://localhost:8931/tiger.html> (tiger stream), <http://localhost:8931/plum.html> (plum & geese)
 - Environment workspace: upload an artwork through the gallery's custom-artwork frame (or visit <http://localhost:8931/wall-workspace.html> directly)
 - System config: <http://localhost:8931/config.html> (refresh the scene page after saving)
+- Metrics snapshot: <http://localhost:8931/api/metrics>
+- Object-reference catalog (single source): <http://localhost:8931/api/object-reference/catalog>
+
+**Config priority** (worker URLs etc.): explicit process environment variable → `backend/runtime.json` → localhost auto-probe.  
+Scene knobs still live in `backend/config.json` (merged over frontend `DEFAULT_CONFIG`).
+
+**Environment 3D path** (`environmentModel` in config): `pointcloud` (default pseudo-4DGS) | `mesh` (image-to-3D GLB) | `auto` (mesh when no procedural builder).
 
 > No backend handy? The frontend also runs fully static (e.g. on GitHub Pages): config and species records
 > automatically fall back to `localStorage`.

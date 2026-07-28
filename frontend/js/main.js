@@ -2,7 +2,7 @@
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { OrbitControls } from "../assets/vendor/three/jsm/controls/OrbitControls.js";
 import { loadConfig } from "./config.js";
-import { Environment, streamQuery } from "./environment.js";
+import { Environment, streamQuery, streamCurve } from "./environment.js";
 import { BambooGrove } from "./bamboo.js";
 import { Tiger } from "./tiger.js";
 import { Rabbit } from "./rabbit.js";
@@ -76,24 +76,89 @@ async function boot() {
   const env = new Environment(scene, config, physics);
   const grove = new BambooGrove(scene, config, null, physics);
   const tiger = new Tiger(scene, config, physics);
+  tiger.obstacles = env.rockObstacles ?? []; // 岩石刚体：行走/捕猎绕石而行，不穿模
   // 决策：不采用 GLB 虎（四肢不分），保留程序化虎模型
   const rabbit = new Rabbit(scene, config, grove); // 雪兔：SALTATORIAL 管线验证物种
   const dialog = new DialogSystem(tiger, rabbit, config); // 母女对话（虎女·兔母）
-  // 锦鸡群：觅食/饮水/警觉/奔逃/惊飞（fear 内驱力），数量由配置决定
-  // 初始位置随机落在林缘/雪坡，避开溪涧附近。
+  // 锦鸡群：觅食/饮水/警觉/奔逃/惊飞（fear 内驱力），数量由配置决定。
+  // 分布：1/2 落远处林缘雪坡，1/2 落溪涧岸边。
   const pheasants = [];
   {
     const n = Math.max(0, Math.min(6, Math.round(config.pheasant.count ?? 1)));
     for (let i = 0; i < n; i++) {
-      const spot = randomPheasantSpot({ minStreamDistance: 8.0 });
-      const perch = randomPheasantPerchSpot(spot, { minStreamDistance: 8.0 });
+      let spot;
+      if (i % 2 === 0) {
+        // 远处：林缘/雪坡（远离溪涧）
+        spot = randomPheasantSpot({ minStreamDistance: 8.0 });
+      } else {
+        // 溪涧边：河道曲线旁 2~4 米
+        const p = streamCurve.getPointAt(Math.random());
+        const side = new THREE.Vector3(Math.random() - 0.5, 0, Math.random() - 0.5).normalize();
+        spot = p.clone().addScaledVector(side, 2 + Math.random() * 2);
+        spot.y = 0;
+      }
+      const perch = i % 2 === 0
+        ? randomPheasantPerchSpot(spot, { minStreamDistance: 8.0 })
+        : spot.clone();
       pheasants.push(new BirdAgent(scene, config, {
         forage: [spot.x, spot.z],
         perch: [perch.x, perch.z],
       }));
     }
   }
-  const sfx = new TigerSfx({ volume: config.hunt?.sfxVolume ?? 0.8 }); // 虎啸：潜行低吼/爆发短吼/飞扑咆哮/进食咀嚼
+  const sfx = new TigerSfx({ volume: config.hunt?.sfxVolume ?? 0.8 }); // 虎啸：奔跑短吼/飞扑咆哮/进食咀嚼
+
+  // 跃起落点雪花飞溅：自地面向上呈半球体向四周喷溅，体现跃起击杀力度
+  const snowSplash = (() => {
+    const MAX = 360;
+    const pos = new Float32Array(MAX * 3);
+    const vel = new Float32Array(MAX * 3);
+    const life = new Float32Array(MAX);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    const points = new THREE.Points(geo, new THREE.PointsMaterial({
+      color: 0xf6f9fa, size: 0.075, transparent: true, opacity: 0.95, depthWrite: false,
+    }));
+    points.frustumCulled = false;
+    scene.add(points);
+    let head = 0;
+    return {
+      spawn(center, strength = 1) {
+        const n = Math.round(90 + strength * 70);
+        for (let i = 0; i < n; i++) {
+          const idx = head = (head + 1) % MAX;
+          const az = Math.random() * Math.PI * 2;
+          const el = (0.12 + Math.random() * 0.38) * Math.PI; // 半球：仰角 20°~90°
+          const speed = (2.2 + Math.random() * 3.6) * (0.7 + strength * 0.5);
+          pos[idx * 3] = center.x + (Math.random() - 0.5) * 0.5;
+          pos[idx * 3 + 1] = Math.max(0.02, center.y) + Math.random() * 0.08;
+          pos[idx * 3 + 2] = center.z + (Math.random() - 0.5) * 0.5;
+          vel[idx * 3] = Math.cos(az) * Math.cos(el) * speed;
+          vel[idx * 3 + 1] = Math.sin(el) * speed;
+          vel[idx * 3 + 2] = Math.sin(az) * Math.cos(el) * speed;
+          life[idx] = 0.8 + Math.random() * 0.8;
+        }
+        geo.attributes.position.needsUpdate = true;
+      },
+      update(dt) {
+        let any = false;
+        for (let i = 0; i < MAX; i++) {
+          if (life[i] <= 0) continue;
+          any = true;
+          life[i] -= dt;
+          vel[i * 3 + 1] -= 7.5 * dt;
+          pos[i * 3] += vel[i * 3] * dt;
+          pos[i * 3 + 1] += vel[i * 3 + 1] * dt;
+          pos[i * 3 + 2] += vel[i * 3 + 2] * dt;
+          if (pos[i * 3 + 1] < 0.01) { pos[i * 3 + 1] = 0.01; vel[i * 3 + 1] = 0; }
+        }
+        points.visible = any;
+        if (any) geo.attributes.position.needsUpdate = true;
+      },
+    };
+  })();
+  tiger.onLeapLand = (center) => snowSplash.spawn(center, 1.2); // 跃起落地：雪花飞溅
+  tiger.onAirCatch = () => { /* 空捕瞬间：子弹时间由 slowmoLeft 驱动（主循环） */ };
   // 竹被挤扰：沙沙声 + 竹顶积雪簌落
   grove.onDisturb = (b, k) => {
     sfx.rustle(0.4 + k * 0.6);
@@ -146,14 +211,17 @@ async function boot() {
   let hudClock = 0;
   let prevHuntStage = null, prevBioState = null;
   renderer.setAnimationLoop(() => {
-    const dt = Math.min(clock.getDelta(), 0.05);
+    const rawDt = Math.min(clock.getDelta(), 0.05);
+    // 子弹时间：空捕触发 slowmoLeft，全局慢镜头（相机操作不受影响感）
+    const timeScale = (tiger.slowmoLeft ?? 0) > 0 ? (config.hunt?.bulletTimeScale ?? 0.22) : 1;
+    tiger.slowmoLeft = Math.max(0, (tiger.slowmoLeft ?? 0) - rawDt);
+    const dt = rawDt * timeScale;
     const time = clock.elapsedTime;
 
     env.update(dt);
-    // 捕食开关：仅当当前曲目为触发曲（默认《短歌行》）时虎开启狩猎
+    // 捕食开关：任意背景音乐播放时虎皆可狩猎
     tiger.pheasants = pheasants;
-    tiger.huntArmed = !!config.hunt?.enabled &&
-      (bgm.tracks?.[bgm._idx] ?? "").includes(config.hunt?.musicTrigger ?? "duange_xing.mp3");
+    tiger.huntArmed = !!config.hunt?.enabled;
     tiger.update(dt, time, grove, rabbit);
     // 虎足触水：四只脚各自落入溪涧时，在该接触点触发一道外扩涟漪（绕石自动衍射）
     spawnTigerFootRipples(tiger, env, time);
@@ -178,6 +246,7 @@ async function boot() {
     dialog.update(dt, camera);
     grove.update(dt, tiger.group.position); // 施加回正/风扭矩
     grove.updateSnowBurst(dt);               // 落雪粒子推进
+    snowSplash.update(dt);                   // 跃起落点雪花飞溅推进
     physics.step(dt);                        // Cannon 解算：虎推竹、碰撞
     grove.syncFromPhysics();                 // 物理位姿写回可视模型
     director.update(dt, tiger, pheasants[0] ?? null);

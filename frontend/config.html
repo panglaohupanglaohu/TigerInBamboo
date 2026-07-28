@@ -145,40 +145,30 @@
         </fieldset>
 
         <fieldset>
-          <legend>捕 食（音乐触发）</legend>
+          <legend>捕 食</legend>
           <div class="field">
             <label>启用捕食</label>
             <input type="checkbox" id="hunt.enabled" />
             <span class="value"></span>
           </div>
           <div class="field">
-            <label>触发曲目（文件名含子串）</label>
-            <input type="text" id="hunt.musicTrigger" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>潜行发现距离（米）</label>
+            <label>发现猎物距离（米，超出正常步行）</label>
             <input type="range" id="hunt.stalkDistance" min="4" max="45" step="0.5" />
             <span class="value"></span>
           </div>
           <div class="field">
-            <label>潜行速度倍率</label>
-            <input type="range" id="hunt.stalkSpeed" min="0.2" max="1" step="0.05" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>爆发距离（米，起冲刺）</label>
-            <input type="range" id="hunt.sprintDistance" min="4" max="30" step="0.5" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>冲刺速度倍率</label>
+            <label>奔跑速度倍率（15~30m 奔跑逼近）</label>
             <input type="range" id="hunt.sprintSpeed" min="1" max="4" step="0.1" />
             <span class="value"></span>
           </div>
           <div class="field">
-            <label>飞扑距离（米，起跳）</label>
-            <input type="range" id="hunt.pounceDistance" min="2" max="14" step="0.5" />
+            <label>跃起距离（米，奔进 10~25m 窗口起扑）</label>
+            <input type="range" id="hunt.pounceDistance" min="2" max="25" step="0.5" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>直接跃起距离（米，15m 内不起步直接扑）</label>
+            <input type="range" id="hunt.directPounceDistance" min="2" max="25" step="0.5" />
             <span class="value"></span>
           </div>
           <div class="field">
@@ -286,6 +276,25 @@
           <div class="field">
             <label>模型名</label>
             <input type="text" id="dialog.mother.llmModel" placeholder="如 gpt-4o-mini" />
+            <span class="value"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>拟生场景 · 对话编辑（大模型）</legend>
+          <div class="field">
+            <label>大模型接口</label>
+            <input type="text" id="sceneEdit.llmEndpoint" placeholder="留空则用内置指令解析" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>API Key</label>
+            <input type="password" id="sceneEdit.llmApiKey" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>模型名</label>
+            <input type="text" id="sceneEdit.llmModel" placeholder="如 gpt-4o-mini" />
             <span class="value"></span>
           </div>
         </fieldset>
