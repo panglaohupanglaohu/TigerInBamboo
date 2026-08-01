@@ -44,10 +44,10 @@
   - `node tools/e2e/accept_tiger_messenger.mjs`：语法 ✓ / 无头截图 ✓ / 控制台零 error 零 warning ✓
   - 截图核验：开场、任务面板、信件清单、罗盘（指向小虎）、夜色场景渲染正常
 - [x] 7b. 视觉方案 **评审定稿**（Kimi 2026-08-02）：夜色低多边形板与提案一致，定稿
-- [ ] 12. 部署：GitHub Pages 验证 `/TigerMessenger/` 在线可玩
-  - 已备：`TigerMessenger/` 全量、`vendor/`、主站 README 入口、home 相对路径 `../TigerMessenger/`
-  - **待做**：把 `TigerMessenger/` + 相关改动 **push 到 main**，再打开  
-    `https://panglaohupanglaohu.github.io/TigerInBamboo/TigerMessenger/` 点验
+- [x] 12. 部署：GitHub Pages 验证 `/TigerMessenger/` 在线可玩（2026-08-02）
+  - commit `0b48f06` push 至 `main`（仅 TM 相关：`TigerMessenger/`、home 入口、backend 挂载、README 段落）
+  - 在线 200：https://panglaohupanglaohu.github.io/TigerInBamboo/TigerMessenger/
+  - vendor / 展厅「进入二次元」入口均已核验
 - [x] 13a. 信使记忆轻量彩蛋（Grok 2026-08-02，自包含 localStorage）
   - `src/quest/letterJournal.js` + 信袋面板（`L` / 任务栏按钮）
   - 送达写入、开场提示往事数量、通关打开信袋
@@ -60,6 +60,6 @@
 - 单文件超 ~800 行后由 Kimi 拆 `src/`；之后 Grok 按模块续写。
 - **Grok 工作循环**：时不时回看本文件，未完成且不依赖主人批准的项直接做掉。
 - **当前阻塞（2026-08-02 扫 TODO）**：
-  - `#12` 需 **git push**（远程 Pages 仍 404；本地验收已绿）
+  - `#12` ✅ 已上线 Pages
   - `#13b` 需主人批准跨目录接 `frontend/js/memory/`
   - 除此以外 **Grok 可做项 = 0**
