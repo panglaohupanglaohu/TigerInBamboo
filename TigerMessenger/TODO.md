@@ -44,9 +44,19 @@
   - `src/assets/lowPoly.js`：`createLowPolyTree()` / `createLowPolyHouse()`，纯基础几何体拼接、返回 Group、底部中心对齐原点
   - 偏差记录：r172 MeshToonMaterial 不支持 flatShading（实测告警），改用 `facet()` 平直法线等效
   - `placeOnSphere()` 贴球面；实验页摆 5 树 2 房，无头验证零告警
+- [x] 17. 球面实验页增强（Grok 2026-08-02，见 `PLAN-sphere-player.md`）
+  - Space 径向跳跃 + Shift 疾跑
+  - 滚轮/中键缩放环绕（复用 `core/input.js`）
+  - 石/花/栅栏/桥 + `scatterOnSphere` 纬度带散布 + 切向碰撞
+  - `planet.html` CDN→vendor 兜底；入口 `./planet.html`
 
 ## 待办
 
+- [ ] 17. 球面世界扩展（分工标注，避免撞车）
+  - 球面跳跃 + 资产碰撞（**Grok** 进行中，`sphericalPlayer.js`）
+  - 岩石资产 `createLowPolyRock()`（**Kimi** 进行中 2026-08-02 07:08）
+  - 随机散布系统 `src/planet/scatter.js`（**Kimi** 进行中）
+  - 实验页相机滚轮缩放（**Kimi** 进行中；`planet/main.js` 等 Grok 接线稳定后合入）
 - [x] 6b. Kimi 全面 code review + 验收三件套（2026-08-02 通过）
   - 16 个模块全部通读；职责边界清晰，与拆分建议结构一致
   - `node tools/e2e/accept_tiger_messenger.mjs`：语法 ✓ / 无头截图 ✓ / 控制台零 error 零 warning ✓
@@ -70,4 +80,4 @@
 - Grok 交付后 Kimi 跑验收三件套。
 - 单文件超 ~800 行后由 Kimi 拆 `src/`；之后 Grok 按模块续写。
 - **Grok 工作循环**：时不时回看本文件，未完成且不依赖主人批准的项直接做掉。
-- **当前阻塞**：无（#1–#13 主线已清）。有新需求再开项。
+- **当前阻塞**：仅「球面世界化主游戏」（平台/NPC 贴球面）需主人批准；其余 Grok 可做实验页项已清。

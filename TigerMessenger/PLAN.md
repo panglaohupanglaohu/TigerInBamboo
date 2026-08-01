@@ -74,10 +74,12 @@ TigerMessenger/
 - [x] 第 6 步：`src/` 模块化解构 + Kimi 全面 review（2026-08-02 验收三件套通过）
 - [x] 第 11 步：CDN → vendor 兜底 + 帧率巡检（`?local=1` 离线路径已验证）
 - [x] 第 7 步：视觉方案 **评审定稿**（Kimi 2026-08-02，夜色低多边形板定稿）
-- [ ] 第 12 步：Pages 在线点验 ← Kimi（文档已备）
+- [x] 第 12 步：Pages 在线点验（`0b48f06` 已上线）
+- [x] 第 13 步：信使记忆 13a/13b
+- [x] 球面实验页增强（跳跃/缩放/散布/碰撞，见 `PLAN-sphere-player.md`）
 
-> 操作：`WASD` 移动 · `Shift` 疾跑 · `Space` 跳 · 滚轮/中键缩放 · 靠近发光点交互 · `M` 静音  
-> 本地试玩：`http://localhost:8931/TigerMessenger/`（或 `?local=1` / `?fps=1`）。
+> 操作：`WASD` 移动 · `Shift` 疾跑 · `Space` 跳 · 滚轮/中键缩放 · 靠近发光点交互 · `M` 静音 · `L` 信袋  
+> 本地试玩：`http://localhost:8931/TigerMessenger/`（或 `?local=1` / `?fps=1`）；星球实验：`planet.html`。
 
 ---
 

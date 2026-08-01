@@ -9,6 +9,7 @@ TigerInBamboo 子项目：网页 3D 二次元信使小游戏。
 
 ```text
 http://localhost:8931/TigerMessenger/
+http://localhost:8931/TigerMessenger/planet.html   # 球面实验页
 ```
 
 纯静态亦可：

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TigerMessenger · 星球实验页</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #05080f;
+      font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #e8eef8;
+      user-select: none;
+    }
+    canvas { display: block; }
+    #hint {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 18px;
+      font-size: 13px;
+      white-space: nowrap;
+      background: rgba(8, 12, 22, 0.72);
+      border: 1px solid rgba(140, 180, 255, 0.22);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+    #hint kbd {
+      display: inline-block;
+      min-width: 1.4em;
+      padding: 1px 6px;
+      margin: 0 1px;
+      border-radius: 5px;
+      border: 1px solid rgba(180, 200, 255, 0.35);
+      background: rgba(30, 40, 70, 0.85);
+      font-size: 12px;
+      text-align: center;
+    }
+    #back {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 5;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(140, 180, 255, 0.28);
+      background: rgba(8, 12, 22, 0.75);
+      color: #cfe0ff;
+      text-decoration: none;
+      font-size: 12px;
+      backdrop-filter: blur(8px);
+    }
+    #back:hover { filter: brightness(1.08); }
+  </style>
+</head>
+<body>
+  <a id="back" href="./">← 主游戏</a>
+  <div id="hint">
+    <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 滑行
+    · <kbd>Space</kbd> 跳
+    · <kbd>Shift</kbd> 疾跑
+    · 滚轮/中键 缩放环绕
+    · 树石房可挡路
+  </div>
+
+  <!-- CDN 优先，失败回退 vendor（与主游戏一致） -->
+  <script type="module">
+    const CDN_THREE = "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js";
+    const CDN_ADDONS = "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/";
+    const LOCAL_THREE = "./vendor/three.module.js";
+    const LOCAL_ADDONS = "./vendor/jsm/";
+    const forceLocal =
+      /[?&]local=1\b/.test(location.search) ||
+      sessionStorage.getItem("tm_use_local") === "1";
+
+    function injectImportMap(threeUrl, addonsUrl) {
+      const el = document.createElement("script");
+      el.type = "importmap";
+      el.textContent = JSON.stringify({
+        imports: { three: threeUrl, "three/addons/": addonsUrl },
+      });
+      document.head.appendChild(el);
+    }
+
+    async function boot(source) {
+      injectImportMap(
+        source === "cdn" ? CDN_THREE : LOCAL_THREE,
+        source === "cdn" ? CDN_ADDONS : LOCAL_ADDONS
+      );
+      console.info("[planet lab] three.js source:", source);
+      await import("./src/planet/main.js");
+    }
+
+    try {
+      if (forceLocal) await boot("local");
+      else {
+        try {
+          await boot("cdn");
+        } catch (e) {
+          console.warn("[planet lab] CDN 失败，回退 vendor", e);
+          sessionStorage.setItem("tm_use_local", "1");
+          const u = new URL(location.href);
+          u.searchParams.set("local", "1");
+          location.replace(u.toString());
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      document.body.insertAdjacentHTML(
+        "beforeend",
+        `<p style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#ffb0b0">星球实验页加载失败</p>`
+      );
+    }
+  </script>
+</body>
+</html>
