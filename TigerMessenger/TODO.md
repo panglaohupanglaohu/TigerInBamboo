@@ -49,14 +49,16 @@
   - 滚轮/中键缩放环绕（复用 `core/input.js`）
   - 石/花/栅栏/桥 + `scatterOnSphere` 纬度带散布 + 切向碰撞
   - `planet.html` CDN→vendor 兜底；入口 `./planet.html`
+- [x] 18. 主游戏球面世界化（Grok 2026-08-02，主人批准）
+  - `sphereMath.js` + 平台/NPC 贴球面；球心引力、法线跳跃
+  - 球面碰撞（台面/星球表面）、相机 up=法线、罗盘切平面指向
+  - 关卡仍用平面设计坐标自动映射，任务链不变
 
 ## 待办
 
-- [ ] 17. 球面世界扩展（分工标注，避免撞车）
-  - 球面跳跃 + 资产碰撞（**Grok** 进行中，`sphericalPlayer.js`）
-  - 岩石资产 `createLowPolyRock()`（**Kimi** 进行中 2026-08-02 07:08）
-  - 随机散布系统 `src/planet/scatter.js`（**Kimi** 进行中）
-  - 实验页相机滚轮缩放（**Kimi** 进行中；`planet/main.js` 等 Grok 接线稳定后合入）
+- [x] 17b. 球面实验页增强 **验收**（Kimi 2026-08-02 07:12 通过）
+  - 无头截图 ×3（散布全景 / 跳跃离地 / 落地续行），控制台零告警
+  - review 纪要见 `PLAN-sphere-player.md`「阶段二扩展 · 验收记录」（含 2 个可选优化项）
 - [x] 6b. Kimi 全面 code review + 验收三件套（2026-08-02 通过）
   - 16 个模块全部通读；职责边界清晰，与拆分建议结构一致
   - `node tools/e2e/accept_tiger_messenger.mjs`：语法 ✓ / 无头截图 ✓ / 控制台零 error 零 warning ✓
@@ -80,4 +82,4 @@
 - Grok 交付后 Kimi 跑验收三件套。
 - 单文件超 ~800 行后由 Kimi 拆 `src/`；之后 Grok 按模块续写。
 - **Grok 工作循环**：时不时回看本文件，未完成且不依赖主人批准的项直接做掉。
-- **当前阻塞**：仅「球面世界化主游戏」（平台/NPC 贴球面）需主人批准；其余 Grok 可做实验页项已清。
+- **当前阻塞**：无。球面世界化已落地。

@@ -7,17 +7,15 @@ export const PLANET_RADIUS = 40;
 export const PLANET_COLOR = 0xa8e6e3; // 淡青色
 
 /**
- * 在场景中心 (0,0,0) 创建星球球体。
- * 注意：当前玩法世界（±20 范围）位于球体内部，默认 FrontSide 材质
- * 从球内观察会被背面剔除（不可见）；作为世界外壳/远景基底存在。
+ * 场景中心星球：玩法在球「外表面」行走（平台/NPC 贴球面）。
  */
 export function createPlanet(scene) {
-  const geo = new THREE.SphereGeometry(PLANET_RADIUS, 32, 24);
+  const geo = new THREE.SphereGeometry(PLANET_RADIUS, 48, 32);
   const mat = new THREE.MeshStandardMaterial({
     color: PLANET_COLOR,
-    roughness: 0.85,
-    metalness: 0.05,
-    flatShading: true, // 与全场景低多边风格一致
+    roughness: 0.88,
+    metalness: 0.04,
+    flatShading: true,
   });
   const planet = new THREE.Mesh(geo, mat);
   planet.position.set(0, 0, 0);

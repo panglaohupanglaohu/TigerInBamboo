@@ -6,15 +6,16 @@ import * as THREE from "three";
 export function createStage() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x070c18);
-  scene.fog = new THREE.FogExp2(0x0a1020, 0.024);
+  // 球外视角：雾淡一些，远裁远一些
+  scene.fog = new THREE.FogExp2(0x0a1020, 0.012);
 
   const camera = new THREE.PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
     0.1,
-    200
+    500
   );
-  camera.position.set(0, 6, 12);
+  camera.position.set(0, 50, 20);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);

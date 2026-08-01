@@ -48,6 +48,7 @@ http://localhost:8931/TigerMessenger/?fps=1
 
 - **零构建**：原生 ES modules + importmap
 - **Three.js r172**：优先 CDN，失败回退 `vendor/`
+- **球面世界**：平台/NPC 贴星球表面；球心引力 + 切向移动（设计坐标仍用平面 x/z 自动映射）
 - **模块结构**
 
 ```text

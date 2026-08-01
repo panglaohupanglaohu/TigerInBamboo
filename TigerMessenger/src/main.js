@@ -23,11 +23,11 @@ const { scene, camera, renderer } = createStage();
 // ---------- 环境：光照 / 天空 / 星月 / 漂浮光点 ----------
 const { lanterns } = setupEnvironment(scene);
 
-// ---------- 世界：平台 + 装饰 ----------
-const platforms = buildWorld(scene);
-
-// ---------- 星球：场景中心半径 40 的淡青色球体 ----------
+// ---------- 星球（先放，平台贴其表面） ----------
 createPlanet(scene);
+
+// ---------- 世界：球面平台 + 装饰 ----------
+const platforms = buildWorld(scene);
 
 // ---------- 玩家 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
@@ -112,7 +112,16 @@ function animate() {
   // 同步视觉
   syncPlayerVisual(player, playerGroup);
 
-  const moving = Math.hypot(player.velocity.x, player.velocity.z) > 0.3;
+  // 切向速率（去掉径向）判断是否在移动
+  const upLen = player.position.length() || 1;
+  const ux = player.position.x / upLen;
+  const uy = player.position.y / upLen;
+  const uz = player.position.z / upLen;
+  const vr = player.velocity.x * ux + player.velocity.y * uy + player.velocity.z * uz;
+  const tx = player.velocity.x - vr * ux;
+  const ty = player.velocity.y - vr * uy;
+  const tz = player.velocity.z - vr * uz;
+  const moving = Math.hypot(tx, ty, tz) > 0.3;
   updatePlayerAnim(player, messengerMesh, dt, moving);
   cameraRig.update(dt);
   quest.updateInteraction(dt);

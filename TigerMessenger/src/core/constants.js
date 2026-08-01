@@ -14,4 +14,4 @@ export const CAMERA_DIST_MAX = 18;
 export const CAMERA_HEIGHT = 3.2;
 export const CAMERA_LOOK_Y = 1.1;
 export const CAMERA_LERP = 6.5;
-export const INTERACT_RANGE = 2.4;
+export const INTERACT_RANGE = 3.2; // 球面弦长，略宽于平面时代

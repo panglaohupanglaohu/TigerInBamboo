@@ -32,7 +32,7 @@ export function setupEnvironment(scene) {
 
   // ---------- 天空球：竖直渐变（夜色二次元） ----------
   {
-    const skyGeo = new THREE.SphereGeometry(120, 24, 16);
+    const skyGeo = new THREE.SphereGeometry(220, 24, 16);
     const skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
@@ -71,7 +71,7 @@ export function setupEnvironment(scene) {
       new THREE.SphereGeometry(3.2, 16, 12),
       new THREE.MeshBasicMaterial({ color: 0xd8e6ff })
     );
-    moon.position.set(-28, 38, -40);
+    moon.position.set(-60, 90, -80);
     scene.add(moon);
     const moonGlow = new THREE.PointLight(0xb0c8ff, 0.55, 120, 2);
     moonGlow.position.copy(moon.position);
@@ -80,7 +80,7 @@ export function setupEnvironment(scene) {
     const starCount = 500;
     const positions = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount; i++) {
-      const r = 70 + Math.random() * 40;
+      const r = 140 + Math.random() * 60;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(0.05 + Math.random() * 0.85);
       positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
@@ -112,10 +112,14 @@ export function setupEnvironment(scene) {
           opacity: 0.75,
         })
       );
+      // 球外附近漂浮，围绕赤道带
+      const ang = Math.random() * Math.PI * 2;
+      const elev = (Math.random() - 0.3) * 0.8;
+      const rr = 42 + Math.random() * 18;
       const base = new THREE.Vector3(
-        (Math.random() - 0.5) * 36,
-        1.5 + Math.random() * 8,
-        (Math.random() - 0.5) * 36
+        Math.cos(ang) * Math.cos(elev) * rr,
+        Math.sin(elev) * rr + 8,
+        Math.sin(ang) * Math.cos(elev) * rr
       );
       m.position.copy(base);
       m.userData = {

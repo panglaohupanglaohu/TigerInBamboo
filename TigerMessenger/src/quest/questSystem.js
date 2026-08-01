@@ -225,31 +225,35 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
         : npcGroups.get(`${q.id}-receiver`);
     if (!targetNpc) return;
 
-    const dx = targetNpc.position.x - player.position.x;
-    const dz = targetNpc.position.z - player.position.z;
-    // 世界中目标方位（atan2 x,z → 相对 +Z）
-    const targetYaw = Math.atan2(dx, dz);
+    // 球面：目标在玩家切平面上的方向 vs 相机前向（均去掉径向）
+    const up = new THREE.Vector3().copy(player.position).normalize();
+    const toTarget = new THREE.Vector3()
+      .subVectors(targetNpc.position, player.position)
+      .addScaledVector(up, 0);
+    toTarget.addScaledVector(up, -toTarget.dot(up));
+    if (toTarget.lengthSq() < 1e-8) {
+      elCompassNeedle.style.transform = "rotate(0deg)";
+      return;
+    }
+    toTarget.normalize();
 
-    // 相机水平朝向
     const camDir = new THREE.Vector3();
     camera.getWorldDirection(camDir);
-    camDir.y = 0;
-    if (camDir.lengthSq() < 1e-6) camDir.set(0, 0, -1);
+    camDir.addScaledVector(up, -camDir.dot(up));
+    if (camDir.lengthSq() < 1e-8) camDir.set(0, 0, -1);
     else camDir.normalize();
-    const camYaw = Math.atan2(camDir.x, camDir.z);
 
-    let rel = targetYaw - camYaw;
-    while (rel > Math.PI) rel -= Math.PI * 2;
-    while (rel < -Math.PI) rel += Math.PI * 2;
-    // CSS 旋转：0° 向上（屏幕 -Y），世界前向对齐相机时目标在前方 → 0
-    const deg = (-rel * 180) / Math.PI;
+    const camRight = new THREE.Vector3().crossVectors(camDir, up).normalize();
+    // 相对角：在切平面用 atan2(右分量, 前分量)
+    const x = toTarget.dot(camRight);
+    const z = toTarget.dot(camDir);
+    const deg = (-Math.atan2(x, z) * 180) / Math.PI;
     elCompassNeedle.style.transform = `rotate(${deg}deg)`;
   }
 
+  /** 球面世界：用欧氏距离（弦长）做靠近判定，阈值略放宽 */
   function horizontalDist(a, b) {
-    const dx = a.x - b.x;
-    const dz = a.z - b.z;
-    return Math.hypot(dx, dz);
+    return a.distanceTo(b);
   }
 
   function tryInteract() {

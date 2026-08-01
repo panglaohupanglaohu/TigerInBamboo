@@ -49,7 +49,9 @@ camera.up ← up                                   # 相机 up 同步球面法�
 - [x] 无头验证截图 ×2（`tools/e2e/e2e-planet-idle.png` / `e2e-planet-move.png`）（Kimi，2026-08-02 01:02）
 - [x] 球面跳跃（沿 +up 冲量，落回球面）（**Grok**，2026-08-02）
 - [x] 相机滚轮缩放 / 中键环绕（复用 `core/input.js`）（**Grok**，2026-08-02）
-- [ ] 球面世界化：平台/NPC/信件贴球面排布（**Grok**，需主人批准后再动主游戏）
+- [x] 球面世界化：平台/NPC/信件贴球面排布（**Grok**，2026-08-02，主人批准）
+  - `sphereMath.js` 平面设计坐标 → 北极附近球面
+  - 主游戏：球面重力/跳跃、贴地平台碰撞、NPC 贴台、球面相机与罗盘
 
 ## 已知事项
 
@@ -96,3 +98,34 @@ camera.up ← up                                   # 相机 up 同步球面法�
 - [x] 更多资产：石头 / 花草 / 栅栏 / 桥（**Grok**，2026-08-02，`lowPoly.js`）
 - [x] 随机散布系统：`scatterOnSphere` 按纬度带撒资产（**Grok**，2026-08-02）
 - [x] 资产碰撞体：切向推开玩家（**Grok**，2026-08-02）
+
+---
+
+## 阶段二扩展 · 验收记录（Kimi 2026-08-02 07:12）
+
+> 本轮由 **Grok** 实时实现（球面跳跃 / Shift 疾跑 / 相机缩放环绕 /
+> 石·花·栅栏·桥资产 / `scatterOnSphere` 散布 / 切向碰撞 / planet.html vendor 兜底），
+> **Kimi** 负责验收与评审，未重复动工。
+
+### 验收（无头 Chrome，planet.html）
+
+- 路径：加载 → 前进+疾跑 1.2s → Space 跳跃（空中截图）→ 落地续行
+- 截图：`tools/e2e/e2e-planet-scatter.png`（散布全景）/
+  `e2e-planet-jump.png`（立方体明显离地，影子分离）/`e2e-planet-after.png`
+- 控制台：零 error / 零 warning ✅
+
+### Code review 纪要
+
+- `lowPoly.js` 新资产与既有约定一致（facet 平直化 / toon / 底部原点 / `userData.collideRadius`）✅
+- `scatterOnSphere`：LCG 可复现种子；花草（0.15）被 `cr >= 0.25` 过滤不进碰撞，合理 ✅
+- 两个已知小瑕疵（不阻塞，后续可优化）：
+  1. 纬度均匀采样导致高纬度资产偏密（面积元未按 cos(lat) 加权）
+  2. 无最小间距检查，资产可能相互穿插
+- `sphericalPlayer.js`：`resolveSphericalColliders` 内有一段空 if 死代码（82–86 行）；
+  碰撞推开后只防下陷、径向微浮由引力自然回落，行为正确 ✅
+
+### Todos
+
+- [x] 17b 验收：无头截图 ×3 + 移动/疾跑/跳跃路径（Kimi，2026-08-02 07:12）
+- [ ] 散布密度按 cos(lat) 加权 + 最小间距检查（**Grok**，可选优化）
+- [ ] 清理 `resolveSphericalColliders` 死代码段（**Grok**，随手）

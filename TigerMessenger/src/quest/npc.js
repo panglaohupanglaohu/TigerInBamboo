@@ -1,7 +1,13 @@
 // =====================================================================
-//  NPC：六棱柱身体 + 光圈 / 光柱 / 标记球
+//  NPC：六棱柱身体；贴球面平台
 // =====================================================================
 import * as THREE from "three";
+import { flatToWorld, quatYToDir, surfaceNormal } from "../world/sphereMath.js";
+import { PLANET_RADIUS } from "../world/planet.js";
+import { findPlatformTopAtFlat } from "../world/platforms.js";
+
+const _dir = new THREE.Vector3();
+const _quat = new THREE.Quaternion();
 
 export function createNpc(scene, platforms, def, role) {
   const g = new THREE.Group();
@@ -29,7 +35,6 @@ export function createNpc(scene, platforms, def, role) {
   head.castShadow = true;
   g.add(head);
 
-  // 角色脚下光圈
   const ring = new THREE.Mesh(
     new THREE.RingGeometry(0.55, 0.75, 24),
     new THREE.MeshBasicMaterial({
@@ -44,7 +49,6 @@ export function createNpc(scene, platforms, def, role) {
   ring.position.y = 0.05;
   g.add(ring);
 
-  // 头顶光柱
   const beam = new THREE.Mesh(
     new THREE.CylinderGeometry(0.06, 0.2, 2.2, 8, 1, true),
     new THREE.MeshBasicMaterial({
@@ -58,7 +62,6 @@ export function createNpc(scene, platforms, def, role) {
   beam.position.y = 2.0;
   g.add(beam);
 
-  // 悬浮标记球
   const orb = new THREE.Mesh(
     new THREE.IcosahedronGeometry(0.18, 0),
     new THREE.MeshStandardMaterial({
@@ -72,21 +75,15 @@ export function createNpc(scene, platforms, def, role) {
   orb.position.y = 2.35;
   g.add(orb);
 
-  // 贴到对应平台顶面
-  let standY = def.pos[1];
-  for (const p of platforms) {
-    if (
-      def.pos[0] >= p.min.x - 0.1 &&
-      def.pos[0] <= p.max.x + 0.1 &&
-      def.pos[2] >= p.min.z - 0.1 &&
-      def.pos[2] <= p.max.z + 0.1
-    ) {
-      standY = p.max.y;
-      break;
-    }
-  }
+  // 平面设计坐标 → 球面：优先落在匹配平台顶面高度
+  const [fx, fy, fz] = def.pos;
+  const plat = findPlatformTopAtFlat(platforms, fx, fz);
+  const height = plat ? plat.flatPos[1] : fy;
+  flatToWorld(fx, height, fz, PLANET_RADIUS, g.position);
+  surfaceNormal(g.position, _dir);
+  quatYToDir(_dir, _quat);
+  g.quaternion.copy(_quat);
 
-  g.position.set(def.pos[0], standY, def.pos[2]);
   g.userData = {
     role,
     name: def.name,
@@ -95,6 +92,7 @@ export function createNpc(scene, platforms, def, role) {
     beam,
     orb,
     active: false,
+    flatPos: [fx, fy, fz],
   };
   scene.add(g);
   return g;
@@ -107,7 +105,6 @@ export function setNpcMarker(group, on) {
   group.userData.orb.visible = on;
 }
 
-// 激活 NPC 的标记动画
 export function animateMarkers(npcGroups, t) {
   for (const g of npcGroups.values()) {
     if (!g.userData.orb.visible) continue;
