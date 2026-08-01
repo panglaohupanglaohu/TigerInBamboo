@@ -68,7 +68,7 @@
 
 - [x] 17b. 球面实验页增强 **验收**（Kimi 2026-08-02 07:12 通过）
   - 无头截图 ×3（散布全景 / 跳跃离地 / 落地续行），控制台零告警
-  - review 纪要见 `PLAN-sphere-player.md`「阶段二扩展 · 验收记录」（含 2 个可选优化项）
+  - review 纪要见 `PLAN-sphere-player.md`；可选优化（面积加权散布 / 碰撞死代码）已由 Grok 清掉
 - [x] 6b. Kimi 全面 code review + 验收三件套（2026-08-02 通过）
   - 16 个模块全部通读；职责边界清晰，与拆分建议结构一致
   - `node tools/e2e/accept_tiger_messenger.mjs`：语法 ✓ / 无头截图 ✓ / 控制台零 error 零 warning ✓
