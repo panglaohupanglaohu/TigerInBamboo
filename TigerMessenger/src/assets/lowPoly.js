@@ -217,7 +217,10 @@ export function placeOnSphere(obj, latDeg, lonDeg, radius) {
 }
 
 /**
- * 在球面随机撒资产（按纬度带）。
+ * 在球面随机撒资产。
+ * - 纬度按面积元加权：pdf ∝ cos(lat)（高纬不再偏密）
+ * - minSpacing：与已放置点的最小弦长（失败重试 maxAttempts）
+ *
  * @returns {{ meshes: THREE.Object3D[], colliders: { position: THREE.Vector3, radius: number }[] }}
  */
 export function scatterOnSphere(scene, planetRadius, opts = {}) {
@@ -229,9 +232,10 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
     fences = 8,
     houses = 4,
     bridges = 2,
-    // 避开极区出生点：纬度上限（度，90=北极）
     latMax = 72,
     latMin = -40,
+    minSpacing = 2.2,
+    maxAttempts = 40,
   } = opts;
 
   // 简易 LCG
@@ -240,6 +244,16 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
     s = (Math.imul(1664525, s) + 1013904223) >>> 0;
     return s / 0x100000000;
   };
+
+  // 面积加权采样纬度：u ~ U(0,1) → sin(lat) 在 [sin latMin, sin latMax] 均匀
+  const sinMin = Math.sin(THREE.MathUtils.degToRad(latMin));
+  const sinMax = Math.sin(THREE.MathUtils.degToRad(latMax));
+  function sampleLatLon() {
+    const sinLat = sinMin + rnd() * (sinMax - sinMin);
+    const lat = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(sinLat, -1, 1)));
+    const lon = rnd() * 360 - 180;
+    return { lat, lon };
+  }
 
   const makers = [];
   for (let i = 0; i < trees; i++) makers.push(createLowPolyTree);
@@ -255,24 +269,46 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
 
   const meshes = [];
   const colliders = [];
+  /** @type {THREE.Vector3[]} */
+  const placed = [];
+  const minSp2 = minSpacing * minSpacing;
+
+  function farEnough(pos) {
+    for (const q of placed) {
+      if (pos.distanceToSquared(q) < minSp2) return false;
+    }
+    return true;
+  }
 
   for (const make of makers) {
-    const lat = latMin + rnd() * (latMax - latMin);
-    const lon = rnd() * 360 - 180;
-    // 远离北极出生点（lat>82 跳过）
-    if (lat > 82) continue;
-    const obj = placeOnSphere(make(), lat, lon, planetRadius);
-    // 随机绕法线扭一下
-    obj.rotateY(rnd() * Math.PI * 2);
-    scene.add(obj);
-    meshes.push(obj);
-    const cr = obj.userData.collideRadius ?? 0.4;
-    if (cr >= 0.25) {
-      colliders.push({
-        position: obj.position.clone(),
-        radius: cr,
-      });
+    let placedOk = false;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const { lat, lon } = sampleLatLon();
+      if (lat > 82) continue; // 远离北极出生点
+      const obj = placeOnSphere(make(), lat, lon, planetRadius);
+      if (!farEnough(obj.position)) {
+        // 丢弃未入场景的对象几何
+        obj.traverse((c) => {
+          if (c.geometry) c.geometry.dispose();
+          if (c.material) {
+            if (Array.isArray(c.material)) c.material.forEach((m) => m.dispose());
+            else c.material.dispose();
+          }
+        });
+        continue;
+      }
+      obj.rotateY(rnd() * Math.PI * 2);
+      scene.add(obj);
+      meshes.push(obj);
+      placed.push(obj.position.clone());
+      const cr = obj.userData.collideRadius ?? 0.4;
+      if (cr >= 0.25) {
+        colliders.push({ position: obj.position.clone(), radius: cr });
+      }
+      placedOk = true;
+      break;
     }
+    void placedOk; // 放不下就跳过该实例
   }
 
   return { meshes, colliders };

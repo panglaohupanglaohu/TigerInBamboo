@@ -12,6 +12,7 @@ import {
   scatterOnSphere,
 } from "../assets/lowPoly.js";
 import { createInput } from "../core/input.js";
+import { createNpcs, findNearbyNpc } from "./npcs.js";
 
 // ---------- 场景 / 相机 / 渲染器 ----------
 const scene = new THREE.Scene();
@@ -88,6 +89,10 @@ colliders.push(
   { position: placeOnSphere(new THREE.Object3D(), 80, -10, PLANET_RADIUS).position.clone(), radius: 1.1 }
 );
 
+// ---------- NPC：球面固定位置的 3 个彩色方块 ----------
+const npcs = createNpcs(scene, PLANET_RADIUS);
+const elNpcHint = document.getElementById("npc-hint");
+
 // ---------- 相机：距离 + 环绕角 ----------
 let camDist = 12;
 const CAM_DIST_MIN = 5;
@@ -110,6 +115,7 @@ const keys = createInput({
 
 // ---------- 球面跟随相机 ----------
 const _camUp = new THREE.Vector3();
+const _upSmooth = new THREE.Vector3(0, 1, 0); // 平滑翻转的相机 Up（出生点即北极法线）
 const _camBack = new THREE.Vector3();
 const _camRight = new THREE.Vector3();
 const _camDesired = new THREE.Vector3();
@@ -117,6 +123,12 @@ const _look = new THREE.Vector3();
 
 function updateFollowCamera(dt) {
   _camUp.copy(player.position).normalize();
+
+  // 相机 Up 平滑追踪球面法线：玩家走到侧面/底部时姿态渐进翻转，
+  // 玩家在屏幕上始终"头顶朝上"（硬拷贝会在跨半球瞬间跳变）
+  _upSmooth.lerp(_camUp, 1 - Math.exp(-4 * dt));
+  if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(_camUp); // 过对跖点兜底
+  _upSmooth.normalize();
 
   // 背后方向：玩家 forward 的反方向，再按 camOrbit 绕 up 旋转
   _camBack.copy(player.forward).multiplyScalar(-1);
@@ -140,8 +152,8 @@ function updateFollowCamera(dt) {
 
   const t = 1 - Math.exp(-(midDrag ? 12 : 6) * dt);
   camera.position.lerp(_camDesired, t);
-  camera.up.copy(_camUp);
-  _look.copy(player.position).addScaledVector(_camUp, 0.6);
+  camera.up.copy(_upSmooth);
+  _look.copy(player.position).addScaledVector(_upSmooth, 0.6);
   camera.lookAt(_look);
 }
 updateFollowCamera(1);
@@ -155,6 +167,9 @@ function animate() {
 
   updateSphericalPlayer(player, keys, camera, dt, PLANET_RADIUS, colliders);
   updateFollowCamera(dt);
+
+  // NPC 距离检测：小于 5 显示对话提示
+  elNpcHint.classList.toggle("show", !!findNearbyNpc(player, npcs));
 
   renderer.render(scene, camera);
 }

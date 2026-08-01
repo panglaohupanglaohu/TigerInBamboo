@@ -55,10 +55,43 @@
       backdrop-filter: blur(8px);
     }
     #back:hover { filter: brightness(1.08); }
+    /* NPC 对话提示（屏幕中央） */
+    #npc-hint {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 14px 28px;
+      font-size: 17px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      background: rgba(8, 12, 22, 0.82);
+      border: 1px solid rgba(255, 224, 138, 0.45);
+      border-radius: 12px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    #npc-hint.show { opacity: 1; }
+    #npc-hint kbd {
+      display: inline-block;
+      min-width: 1.4em;
+      padding: 1px 8px;
+      margin: 0 2px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 224, 138, 0.6);
+      background: rgba(70, 55, 20, 0.85);
+      font-size: 15px;
+      text-align: center;
+      color: #ffe08a;
+    }
   </style>
 </head>
 <body>
   <a id="back" href="./">← 主游戏</a>
+  <div id="npc-hint">按 <kbd>E</kbd> 键与 NPC 对话</div>
   <div id="hint">
     <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 滑行
     · <kbd>Space</kbd> 跳

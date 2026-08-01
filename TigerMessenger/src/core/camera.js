@@ -17,6 +17,7 @@ export function createCameraRig(camera, player) {
   const camDesired = new THREE.Vector3();
   const lookAtPoint = new THREE.Vector3();
   const _up = new THREE.Vector3();
+  const _upSmooth = new THREE.Vector3(); // 平滑翻转的相机 Up（snapToPlayer 时初始化）
   const _back = new THREE.Vector3();
   const _right = new THREE.Vector3();
   let camOrbit = 0; // 绕法线的环绕角
@@ -42,6 +43,13 @@ export function createCameraRig(camera, player) {
   function update(dt) {
     const up = surfaceNormal(player.position, _up);
 
+    // 相机 Up 平滑追踪球面法线：玩家绕到侧面/底部时姿态渐进翻转，
+    // 屏幕上玩家始终"头顶朝上"（硬拷贝会跨半球瞬间跳变）
+    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up); // 未初始化则直接就位
+    _upSmooth.lerp(up, 1 - Math.exp(-4 * dt));
+    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up); // 过对跖点兜底
+    _upSmooth.normalize();
+
     // 背后：-forward 切向，再绕 up 旋转 camOrbit
     const fwd = player.forward || player.facing || new THREE.Vector3(0, 0, 1);
     _back.copy(fwd).multiplyScalar(-1);
@@ -65,15 +73,16 @@ export function createCameraRig(camera, player) {
 
     const t = 1 - Math.exp(-(midDrag ? 12 : CAMERA_LERP) * dt);
     camera.position.lerp(camDesired, t);
-    camera.up.copy(up);
+    camera.up.copy(_upSmooth);
 
-    lookAtPoint.copy(player.position).addScaledVector(up, CAMERA_LOOK_Y);
+    lookAtPoint.copy(player.position).addScaledVector(_upSmooth, CAMERA_LOOK_Y);
     camTarget.lerp(lookAtPoint, t);
     camera.lookAt(camTarget);
   }
 
   function snapToPlayer() {
     const up = surfaceNormal(player.position, _up);
+    _upSmooth.copy(up); // 初始/复位时 Up 直接就位
     const fwd = player.forward || new THREE.Vector3(0, 0, 1);
     _back.copy(fwd).multiplyScalar(-1).addScaledVector(up, 0);
     _back.addScaledVector(up, -_back.dot(up));
@@ -83,7 +92,7 @@ export function createCameraRig(camera, player) {
       .copy(player.position)
       .addScaledVector(up, CAMERA_HEIGHT)
       .addScaledVector(_back, camDist);
-    camera.up.copy(up);
+    camera.up.copy(_upSmooth);
     camTarget.copy(player.position).addScaledVector(up, CAMERA_LOOK_Y);
     camera.lookAt(camTarget);
   }

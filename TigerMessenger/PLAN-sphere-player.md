@@ -127,5 +127,86 @@ camera.up ← up                                   # 相机 up 同步球面法�
 ### Todos
 
 - [x] 17b 验收：无头截图 ×3 + 移动/疾跑/跳跃路径（Kimi，2026-08-02 07:12）
-- [ ] 散布密度按 cos(lat) 加权 + 最小间距检查（**Grok**，可选优化）
-- [ ] 清理 `resolveSphericalColliders` 死代码段（**Grok**，随手）
+- [x] 散布密度按 cos(lat) 加权 + 最小间距检查（**Grok**，2026-08-02）
+  - `sin(lat)` 均匀采样 ⇒ pdf∝cos(lat)；`minSpacing` 弦长 + 重试
+- [x] 清理 `resolveSphericalColliders` 死代码段（**Grok**，2026-08-02）
+  - 切向推开后 `setLength(rKeep)` 保持径向
+
+---
+
+## 第三人称球面相机 · 平滑 Up 翻转（2026-08-02 07:14 起）
+
+> 负责人标注：跟随框架（lerp 斜后方 + lookAt + up 对齐法线）为 **Grok** 既有实现；
+> 本轮 **Kimi** 补齐「Up 平滑翻转」并做球底实测。
+
+### 需求（主人 2026-08-02 07:14 提出）
+
+1. Vector3.lerp 平滑保持在玩家斜后方低空；2. lookAt 永远聚焦玩家；
+3. 玩家到球体侧面/底部时相机 Up 轴**平滑**翻转，屏幕上玩家永远"头顶朝上"。
+
+### 现状盘点与改动
+
+- 既有（Grok）：`planet/main.js` `updateFollowCamera` 已满足 1、2，
+  且 `camera.up` 对齐球面法线——但为**每帧硬拷贝**，跨半球瞬间姿态跳变。
+- 本轮（Kimi）：新增 `_upSmooth` 向量，每帧
+  `_upSmooth.lerp(球面法线, 1-exp(-4dt))` 后归一化作为 `camera.up` 与 lookAt 偏移基准；
+  过对跖点（lerp 中间向量近零长）有兜底。`camera.position.lerp` 维持不变。
+
+### 核心伪代码（每帧）
+
+```
+upTarget ← normalize(player.position)          # 球面法线
+upSmooth ← normalize(lerp(upSmooth, upTarget, 1-e^(-4dt)))   # Up 平滑翻转
+back     ← -player.forward 投影到切平面，按 orbit 角绕 up 旋转
+desired  ← player.pos + upTarget×height + back×camDist        # 斜后方低空
+camera.position ← lerp(camera.position, desired, 1-e^(-6dt))  # 平滑跟随
+camera.up ← upSmooth
+camera.lookAt(player.pos + upSmooth×0.6)                      # 聚焦玩家
+```
+
+### 验收（无头 Chrome，2026-08-02 07:15）
+
+- 疾跑直冲 9s → 球体侧面截图 `e2e-cam-side.png`：玩家直立、地面在屏幕下方 ✅
+- 继续至 18s → 球体背面/底部截图 `e2e-cam-bottom.png`：玩家仍"头顶朝上"，
+  无瞬间倒转（背面光照变暗为向阳角度所致，正常）✅
+- 控制台零 error / 零 warning ✅
+
+### Todos
+
+- [x] Up 平滑翻转：`_upSmooth` lerp + 归一化 + 对跖点兜底（Kimi，2026-08-02 07:14）
+- [x] 球体侧面/底部实测截图 ×2（Kimi，2026-08-02 07:15）
+- [ ] 可选：把相机封装为 `src/planet/followCamera.js` 独立模块（**Grok**，lab 转正时再做）
+
+---
+
+## 球面 NPC 系统（2026-08-02 07:21 起）
+
+> 负责人标注：**Kimi** 实现并验收；**Grok** 请跳过已完成项。
+
+### 需求（主人 2026-08-02 07:21 提出）
+
+1. 球面固定位置生成 3 个不同颜色的方块 NPC；
+2. 主循环实时计算玩家与每个 NPC 的三维距离；
+3. 距离 < 5 时屏幕中央 HTML 层显示「按 E 键与 NPC 对话」。
+
+### 落地记录
+
+| 项 | 实现 | 负责 | 时间 |
+|---|------|------|------|
+| NPC 模块 | `src/planet/npcs.js`：`NPC_DEFS`（红/绿/蓝三方块，固定经纬度）、`createNpcs`（`placeOnSphere` 贴球面、底部对齐）、`findNearbyNpc`（`distanceTo` 三维距离，返回 5 内最近者） | Kimi | 07:22 |
+| 提示层 | `planet.html`：`#npc-hint` 屏幕中央，`.show` 控制显隐（opacity 过渡） | Kimi | 07:22 |
+| 主循环接线 | `src/planet/main.js`：每帧 `findNearbyNpc` → `classList.toggle("show", …)` | Kimi | 07:23 |
+
+### 验收（无头 Chrome，2026-08-02 07:23）
+
+- 出生点（红方在正前方约 7 单位）：提示隐藏（DOM 断言 `show=false`）✅
+- 按 W 前进 1s 进入 5 单位圈：提示出现（DOM 断言 `show=true`）✅
+- 截图 `e2e-npc-far.png` / `e2e-npc-near.png`；控制台零 error/warning ✅
+
+### Todos
+
+- [x] 3 色方块 NPC 固定位置生成（Kimi，2026-08-02 07:22）
+- [x] 主循环三维距离检测（Kimi，2026-08-02 07:23）
+- [x] 距离 < 5 中央提示显隐（Kimi，2026-08-02 07:23）
+- [x] 无头验证 DOM 断言 + 截图（Kimi，2026-08-02 07:23）
+- [ ] E 键按下后的对话行为（气泡/台词框）（**Grok**，需求未含，后续可做）

@@ -56,11 +56,12 @@ export function createSphericalPlayer(scene, planetRadius) {
 }
 
 /**
- * 与球面贴地碰撞体（切向圆）推开。
+ * 与球面贴地碰撞体（切向圆）推开，保持当前径向距离。
  * @param {{ position: THREE.Vector3, radius: number }[]} colliders
  */
 export function resolveSphericalColliders(player, colliders) {
   if (!colliders || !colliders.length) return;
+  const rKeep = player.position.length();
   const up = _up.copy(player.position).normalize();
   for (const c of colliders) {
     _push.copy(player.position).sub(c.position);
@@ -79,12 +80,8 @@ export function resolveSphericalColliders(player, colliders) {
       continue;
     }
     player.position.add(_push);
-    // 保持当前高度（贴地或空中）
-    const r = player.position.length();
-    // 不改变径向距离，只切向推
-    if (r > 1e-6) {
-      // already moved tangentially; re-normalize length to previous r approx
-    }
+    // 只切向推开后，锁回原径向距离
+    if (rKeep > 1e-6) player.position.setLength(rKeep);
   }
 }
 
