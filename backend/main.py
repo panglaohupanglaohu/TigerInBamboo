@@ -31,6 +31,7 @@ from metrics import metrics  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 FRONTEND = ROOT / "frontend"
+TIGER_MESSENGER = ROOT / "TigerMessenger"
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 SPECIES_PATH = Path(__file__).resolve().parent / "species.json"
 OBJECT_REFERENCE_PATH = Path(__file__).resolve().parent / "object_reference.json"
@@ -970,6 +971,15 @@ def home_page() -> FileResponse:
 @app.get("/config.html")
 def config_page() -> FileResponse:
     return FileResponse(FRONTEND / "config.html")
+
+
+# 二次元子项目：仓库根 TigerMessenger/（须在 frontend 的 "/" 挂载之前）
+if TIGER_MESSENGER.is_dir():
+    app.mount(
+        "/TigerMessenger",
+        StaticFiles(directory=TIGER_MESSENGER, html=True),
+        name="tiger_messenger",
+    )
 
 
 # 静态托管放在最后，API 路由优先匹配

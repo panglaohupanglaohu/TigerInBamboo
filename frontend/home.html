@@ -62,6 +62,10 @@
     .wall-enter:not(:disabled):hover { background: var(--cinnabar); color: var(--paper); }
     .wall-enter:disabled { opacity: 0.48; cursor: not-allowed; }
     .wall-error { min-height: 18px; margin-top: 8px; color: var(--cinnabar); font-size: 12px; letter-spacing: 0.1em; }
+
+    /* 光点导航行：实验室与二次元并列 */
+    .orb-row { display: flex; justify-content: center; gap: 64px; }
+    .orb-row .idea-orb { margin: 6px 0 0; }
   </style>
 </head>
 <body class="home-page">
@@ -116,12 +120,19 @@
     </div>
   </main>
 
-  <!-- 物种实验室：环形光点导航，悬停闪烁 -->
-  <a class="idea-orb" href="lab.html" aria-label="物种实验室">
-    <span class="orb-ring"></span>
-    <span class="orb-core"></span>
-    <span class="orb-label" data-i18n="labTitle">物种实验室</span>
-  </a>
+  <!-- 光点导航：物种实验室 / 进入二次元，悬停闪烁 -->
+  <div class="orb-row">
+    <a class="idea-orb" href="lab.html" aria-label="物种实验室">
+      <span class="orb-ring"></span>
+      <span class="orb-core"></span>
+      <span class="orb-label" data-i18n="labTitle">物种实验室</span>
+    </a>
+    <a class="idea-orb" href="../TigerMessenger/" aria-label="进入二次元">
+      <span class="orb-ring"></span>
+      <span class="orb-core"></span>
+      <span class="orb-label" data-i18n="animeTitle">进入二次元</span>
+    </a>
+  </div>
 
   <footer class="home-footer">
     <span data-i18n="footer">拟生 · Artificial Life —— Tu &amp; Terzopoulos《Artificial Fishes》遗法</span>
@@ -148,6 +159,7 @@
         wallEnter: "入 画",
         enter: "入 画",
         labTitle: "物种实验室",
+        animeTitle: "进入二次元",
         footer: "拟生 · Artificial Life —— Tu & Terzopoulos《Artificial Fishes》遗法",
         welcome: "开源共建：欢迎来修改、提 Issue、参与讨论",
       },
@@ -165,6 +177,7 @@
         wallEnter: "Enter",
         enter: "Enter",
         labTitle: "Species Lab",
+        animeTitle: "Into the Anime World",
         footer: "Artificial Life — after Tu & Terzopoulos' “Artificial Fishes”",
         welcome: "Open source — contributions, issues and discussions are welcome",
       },

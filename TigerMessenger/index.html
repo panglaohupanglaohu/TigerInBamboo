@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TigerMessenger · 二次元</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #0b0e14;
+      font-family: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #e8eef8;
+      user-select: none;
+    }
+    canvas { display: block; }
+
+    /* ---------- HUD ---------- */
+    #hud {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    #hud .panel {
+      position: absolute;
+      background: rgba(8, 12, 22, 0.72);
+      border: 1px solid rgba(140, 180, 255, 0.22);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+    #quest-panel {
+      top: 16px;
+      left: 16px;
+      min-width: 240px;
+      max-width: min(360px, 42vw);
+      padding: 14px 16px 12px;
+    }
+    #quest-panel h1 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #9ec5ff;
+    }
+    #quest-panel .subtitle {
+      margin: 0 0 10px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+    #quest-status {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    #quest-status strong { color: #ffe08a; font-weight: 600; }
+    #quest-status .done { color: #7dffb2; }
+    #letter-list {
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      font-size: 11px;
+      line-height: 1.55;
+      opacity: 0.88;
+    }
+    #letter-list li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 0;
+      border-top: 1px solid rgba(140, 180, 255, 0.08);
+    }
+    #letter-list li:first-child { border-top: none; }
+    #letter-list .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #4a6088;
+    }
+    #letter-list .dot.active { background: #ffe08a; box-shadow: 0 0 8px rgba(255, 224, 138, 0.7); }
+    #letter-list .dot.done { background: #7dffb2; }
+    #letter-list .muted { opacity: 0.45; text-decoration: line-through; }
+    #score-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(110, 160, 255, 0.18);
+      border: 1px solid rgba(140, 180, 255, 0.28);
+      color: #cfe0ff;
+    }
+    #journal-toggle {
+      pointer-events: auto;
+      cursor: pointer;
+      display: inline-block;
+      margin: 10px 0 0 8px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(200, 168, 255, 0.14);
+      border: 1px solid rgba(200, 168, 255, 0.32);
+      color: #e0d0ff;
+    }
+    #journal-toggle:hover { filter: brightness(1.1); }
+    #journal-panel {
+      display: none;
+      top: 16px;
+      right: 96px;
+      width: min(280px, 42vw);
+      max-height: min(52vh, 420px);
+      padding: 12px 14px;
+      overflow: auto;
+      pointer-events: auto;
+    }
+    #journal-panel.open { display: block; }
+    #journal-panel h2 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #d4c0ff;
+      letter-spacing: 0.04em;
+    }
+    #journal-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    #journal-list li {
+      display: flex;
+      gap: 6px;
+      padding: 5px 0;
+      border-top: 1px solid rgba(140, 180, 255, 0.08);
+    }
+    #journal-list li:first-child { border-top: none; }
+    #journal-list .dot {
+      width: 7px;
+      height: 7px;
+      margin-top: 4px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #7dffb2;
+    }
+    #journal-list .muted { opacity: 0.55; }
+    #journal-clear {
+      pointer-events: auto;
+      cursor: pointer;
+      margin-top: 8px;
+      border: none;
+      background: transparent;
+      color: #8a9bb8;
+      font-size: 11px;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    /* 目标方向罗盘 */
+    #compass {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(8, 12, 22, 0.72);
+      border: 1px solid rgba(140, 180, 255, 0.28);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+    }
+    #compass-needle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      margin-left: -6px;
+      margin-top: -18px;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 22px solid #9ec5ff;
+      transform-origin: 50% 18px;
+      transition: transform 0.08s linear;
+      filter: drop-shadow(0 0 6px rgba(158, 197, 255, 0.55));
+    }
+    #compass-label {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      white-space: nowrap;
+      opacity: 0.75;
+      color: #cfe0ff;
+    }
+
+    #hint-panel {
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 18px;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      opacity: 0.92;
+    }
+    @media (max-width: 640px) {
+      #hint-panel { font-size: 11px; white-space: normal; text-align: center; max-width: 92vw; }
+      #quest-panel { max-width: calc(100vw - 32px); }
+    }
+    #hint-panel kbd {
+      display: inline-block;
+      min-width: 1.4em;
+      padding: 1px 6px;
+      margin: 0 1px;
+      border-radius: 5px;
+      border: 1px solid rgba(180, 200, 255, 0.35);
+      background: rgba(30, 40, 70, 0.85);
+      font-family: inherit;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    #toast {
+      top: 22%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      padding: 12px 22px;
+      font-size: 15px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      max-width: min(480px, 86vw);
+      text-align: center;
+      pointer-events: none;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #bubble {
+      position: absolute;
+      padding: 8px 12px;
+      font-size: 13px;
+      line-height: 1.4;
+      border-radius: 10px;
+      background: rgba(12, 18, 32, 0.88);
+      border: 1px solid rgba(160, 200, 255, 0.35);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      transform: translate(-50%, -100%);
+      pointer-events: none;
+    }
+    #bubble.visible { opacity: 1; }
+    #bubble::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      width: 10px;
+      height: 10px;
+      background: inherit;
+      border-right: 1px solid rgba(160, 200, 255, 0.35);
+      border-bottom: 1px solid rgba(160, 200, 255, 0.35);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 50% 40%, rgba(30, 50, 90, 0.55), rgba(5, 8, 14, 0.92));
+      pointer-events: auto;
+      transition: opacity 0.5s ease;
+    }
+    #intro.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #intro .card {
+      width: min(420px, 90vw);
+      padding: 28px 28px 22px;
+      border-radius: 16px;
+      background: rgba(10, 14, 24, 0.88);
+      border: 1px solid rgba(140, 180, 255, 0.28);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      text-align: center;
+    }
+    #intro h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 650;
+      color: #b8d4ff;
+      letter-spacing: 0.06em;
+    }
+    #intro p {
+      margin: 0 0 18px;
+      font-size: 14px;
+      line-height: 1.65;
+      opacity: 0.85;
+    }
+    #intro button {
+      pointer-events: auto;
+      cursor: pointer;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #0b1020;
+      background: linear-gradient(135deg, #9ec5ff, #7eb0ff 50%, #c9a8ff);
+      box-shadow: 0 6px 20px rgba(100, 150, 255, 0.35);
+    }
+    #intro button:hover { filter: brightness(1.06); }
+  </style>
+</head>
+<body>
+  <!-- HUD 层 -->
+  <div id="hud">
+    <div id="quest-panel" class="panel">
+      <h1>TigerMessenger</h1>
+      <p class="subtitle">夜色信使 · 把信送到对的人手上</p>
+      <p id="quest-status">准备出发…</p>
+      <ul id="letter-list"></ul>
+      <div id="score-badge">本局 <span id="score-num">0</span> / <span id="score-total">0</span></div>
+      <button type="button" id="journal-toggle" title="信使记忆（L）">信袋</button>
+    </div>
+    <div id="journal-panel" class="panel" aria-label="信使记忆">
+      <h2>信使记忆 · 送达过的信</h2>
+      <ul id="journal-list"></ul>
+      <button type="button" id="journal-clear">清空记录</button>
+    </div>
+    <div id="compass" aria-hidden="true">
+      <div id="compass-needle"></div>
+      <div id="compass-label">目标</div>
+    </div>
+    <div id="hint-panel" class="panel">
+      <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动
+      · <kbd>Shift</kbd> 疾跑
+      · <kbd>Space</kbd> 跳跃
+      · 滚轮/中键 缩放
+      · 靠近发光点 接信 / 送达
+      · <kbd>L</kbd> 信袋
+      · <kbd>M</kbd> 静音
+    </div>
+    <div id="toast" class="panel"></div>
+    <div id="bubble"></div>
+  </div>
+
+  <div id="intro">
+    <div class="card">
+      <h2>进入二次元</h2>
+      <p>
+        你是夜色中的信使。<br />
+        从发光的寄件人处接过信件，再送到收件人手中。<br />
+        平台之间跳跃，完成所有投递。
+      </p>
+      <button type="button" id="start-btn">开始送信</button>
+    </div>
+  </div>
+
+  <!-- 加载失败提示（CDN / 本地均失败时显示） -->
+  <div id="load-error" style="display:none;position:fixed;inset:0;z-index:50;align-items:center;justify-content:center;background:rgba(5,8,14,0.92);color:#e8eef8;font-family:inherit;padding:24px;text-align:center;">
+    <div style="max-width:420px;padding:28px;border-radius:16px;background:rgba(10,14,24,0.92);border:1px solid rgba(255,140,140,0.35);">
+      <h2 style="margin:0 0 10px;font-size:18px;color:#ffb0b0;">资源加载失败</h2>
+      <p id="load-error-msg" style="margin:0 0 16px;font-size:13px;line-height:1.6;opacity:0.85;"></p>
+      <button type="button" id="load-error-retry" style="cursor:pointer;border:none;border-radius:999px;padding:10px 22px;font-weight:600;background:linear-gradient(135deg,#9ec5ff,#c9a8ff);color:#0b1020;">重试</button>
+    </div>
+  </div>
+
+  <!--
+    启动：优先 CDN three@0.172，失败则回退 vendor/ 本地副本。
+    importmap 必须在任何 ES module 解析前注入。
+  -->
+  <script type="module">
+    const CDN_THREE = "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js";
+    const CDN_ADDONS = "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/";
+    const LOCAL_THREE = "./vendor/three.module.js";
+    const LOCAL_ADDONS = "./vendor/jsm/";
+    const forceLocal =
+      /[?&]local=1\b/.test(location.search) ||
+      sessionStorage.getItem("tm_use_local") === "1";
+
+    function injectImportMap(threeUrl, addonsUrl) {
+      const el = document.createElement("script");
+      el.type = "importmap";
+      el.textContent = JSON.stringify({
+        imports: {
+          three: threeUrl,
+          "three/addons/": addonsUrl,
+        },
+      });
+      document.head.appendChild(el);
+    }
+
+    function showLoadError(msg) {
+      const box = document.getElementById("load-error");
+      const text = document.getElementById("load-error-msg");
+      if (text) text.textContent = msg;
+      if (box) box.style.display = "flex";
+      const btn = document.getElementById("load-error-retry");
+      if (btn) {
+        btn.onclick = () => {
+          sessionStorage.removeItem("tm_use_local");
+          location.reload();
+        };
+      }
+    }
+
+    async function boot(source) {
+      const threeUrl = source === "cdn" ? CDN_THREE : LOCAL_THREE;
+      const addonsUrl = source === "cdn" ? CDN_ADDONS : LOCAL_ADDONS;
+      injectImportMap(threeUrl, addonsUrl);
+      console.info(`[TigerMessenger] three.js source: ${source}`);
+      await import("./src/main.js");
+    }
+
+    try {
+      if (forceLocal) {
+        await boot("local");
+      } else {
+        try {
+          await boot("cdn");
+        } catch (cdnErr) {
+          console.warn("[TigerMessenger] CDN 失败，回退 vendor/", cdnErr);
+          sessionStorage.setItem("tm_use_local", "1");
+          // importmap 只能注册一次：整页重载走本地
+          const u = new URL(location.href);
+          u.searchParams.set("local", "1");
+          location.replace(u.toString());
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      showLoadError(
+        "无法启动游戏（CDN 与本地 vendor 可能均不可用）。" +
+          (err && err.message ? "\n" + err.message : "")
+      );
+    }
+  </script>
+</body>
+</html>

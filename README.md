@@ -22,6 +22,10 @@
 入口 `/` 为**展厅导航页**（`home.html`）：古画原作封面画卡（竹虎图 / 寒梅归雁图，点击入画）+
 「待君题壁」卡（上传你的原作，开一方拟生空间）+ 物种实验室环形光点导航，全页中英双语切换。
 
+**二次元子项目 · TigerMessenger**（`/TigerMessenger/`）：夜色信使 3D 小游戏 —— 接信 → 送达 → 检查点重生；
+WASD / Shift 疾跑 / 空格跳 / 滚轮缩放。零构建 ES modules，Three.js CDN 失败时回退 `TigerMessenger/vendor/`。
+详见 [`TigerMessenger/README.md`](TigerMessenger/README.md)。
+
 ## 核心理念
 
 平台智能体设计致敬 Tu & Terzopoulos 的经典论文 *Artificial Fishes: Physics, Locomotion, Perception, Behavior*
