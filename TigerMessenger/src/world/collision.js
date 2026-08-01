@@ -1,5 +1,6 @@
 // =====================================================================
-//  球面物理：切向移动 + 径向重力 + 平台顶面 / 星球表面着陆
+//  球面物理：切向移动 + 径向重力 + 曲面平台 / 星球表面着陆
+//  曲面平台：同心球壳台面（半径 topHeight），足迹用中心切平面投影判定
 // =====================================================================
 import * as THREE from "three";
 import { PLAYER_RADIUS } from "../core/constants.js";
@@ -7,104 +8,106 @@ import { PLANET_RADIUS } from "./planet.js";
 import { flatToWorld } from "./sphereMath.js";
 
 const _up = new THREE.Vector3();
-const _local = new THREE.Vector3();
 const _tmp = new THREE.Vector3();
-const _invQ = new THREE.Quaternion();
+const _delta = new THREE.Vector3();
 
 /**
- * @param {THREE.Vector3} pos 玩家脚底（会被修改）
- * @param {THREE.Vector3} vel 世界速度（会被修改）
- * @param {object[]} platforms 球面平台
- * @param {object} player 状态（onGround / checkpoint）
+ * 点是否落在曲面平台足迹内（相对平台中心的切向 u/v）
+ */
+function inFootprint(pos, p, margin = 0) {
+  // 从球心看：用位置与平台中心方向夹角 + 切向分解
+  _delta.copy(pos).sub(p.center);
+  // 投影到切平面（去掉沿平台中心法线分量 —— 对曲面用位置的径向）
+  const n = p.normal;
+  const u = _delta.dot(p.right);
+  const v = _delta.dot(p.forward);
+  const hx = p.half.x + margin;
+  const hz = p.half.z + margin;
+  return Math.abs(u) <= hx && Math.abs(v) <= hz;
+}
+
+/**
+ * @param {THREE.Vector3} pos 玩家脚底
+ * @param {THREE.Vector3} vel 世界速度
+ * @param {object[]} platforms
+ * @param {object} player
  * @param {() => void} onVoidFall
  */
 export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall) {
-  // 积分
   pos.addScaledVector(vel, dt);
 
-  const up = _up.copy(pos).normalize();
   let grounded = false;
-  let groundR = PLANET_RADIUS; // 脚底可站立的球心距离
+  let groundR = PLANET_RADIUS;
 
-  // ---- 平台顶面：在局部切向框内则抬到 topHeight ----
+  // ---- 曲面平台：足迹内 → 脚底贴到同心球壳半径 topHeight ----
   for (const p of platforms) {
-    if (!p.center || !p.quat) continue;
-    _invQ.copy(p.quat).invert();
-    _local.copy(pos).sub(p.center).applyQuaternion(_invQ);
-    const hx = p.half.x;
-    const hy = p.half.y;
-    const hz = p.half.z;
-    // 顶面在 local y = +hy；脚在顶面附近
-    if (Math.abs(_local.x) <= hx + PLAYER_RADIUS * 0.4 && Math.abs(_local.z) <= hz + PLAYER_RADIUS * 0.4) {
-      const topLocalY = hy;
-      // 脚底相对中心
-      if (_local.y < topLocalY + 0.55 && _local.y > topLocalY - 0.85) {
-        // 径向速度朝球心（下落）或已贴地
-        const radialVel = up.dot(vel);
-        if (radialVel <= 0.5 || player.onGround) {
-          // 把脚放在顶面：center + normal * (topHeight 用 centerR+hy)
-          const topR = p.topHeight;
-          pos.copy(p.normal).multiplyScalar(topR);
-          // 切向微调保持在平台内（可选：夹紧 local xz）
-          _local.y = topLocalY;
-          _local.x = THREE.MathUtils.clamp(_local.x, -hx, hx);
-          _local.z = THREE.MathUtils.clamp(_local.z, -hz, hz);
-          // 从 local 重建：用 platform quat
-          _tmp.set(_local.x, 0, _local.z).applyQuaternion(p.quat);
-          pos.copy(p.normal).multiplyScalar(topR).add(_tmp);
-          // 消去内向径向速度
-          const n = _up.copy(pos).normalize();
-          const vr = n.dot(vel);
-          if (vr < 0) vel.addScaledVector(n, -vr);
-          grounded = true;
-          groundR = topR;
-          break;
-        }
+    if (!p.center || !p.normal || p.topHeight == null) continue;
+    if (!inFootprint(pos, p, PLAYER_RADIUS * 0.35)) continue;
+
+    const topR = p.topHeight;
+    const r = pos.length();
+    // 在台面附近（上方可落下，下方可顶）
+    if (r < topR + 0.65 && r > topR - p.half.y - 0.9) {
+      const n = _up.copy(pos).normalize();
+      const radialVel = n.dot(vel);
+      if (radialVel <= 0.55 || player.onGround || Math.abs(r - topR) < 0.25) {
+        // 保持足迹内的角向位置，只改径向
+        pos.setLength(topR);
+        const n2 = _up.copy(pos).normalize();
+        const vr = n2.dot(vel);
+        if (vr < 0) vel.addScaledVector(n2, -vr);
+        grounded = true;
+        groundR = topR;
+        break;
       }
     }
   }
 
-  // ---- 星球表面：未站在平台上时的默认地面 ----
+  // ---- 星球表面 ----
   if (!grounded) {
     const r = pos.length();
-    const surfaceR = PLANET_RADIUS; // 脚底在表面
-    if (r < surfaceR + 0.08) {
-      pos.setLength(surfaceR);
+    if (r < PLANET_RADIUS + 0.1) {
+      pos.setLength(PLANET_RADIUS);
       const n = _up.copy(pos).normalize();
       const vr = n.dot(vel);
       if (vr < 0) vel.addScaledVector(n, -vr);
       grounded = true;
-      groundR = surfaceR;
+      groundR = PLANET_RADIUS;
     }
   }
 
-  // ---- 侧向：与平台体相交时沿切向推出（简易）----
+  // ---- 侧向：贴在曲面足迹边缘时轻微推出（避免穿进壳侧）----
   if (!grounded) {
     for (const p of platforms) {
-      if (!p.center || !p.quat) continue;
-      _invQ.copy(p.quat).invert();
-      _local.copy(pos).sub(p.center).applyQuaternion(_invQ);
+      if (!p.center || !p.normal) continue;
+      const r = pos.length();
+      const topR = p.topHeight;
+      const botR = topR - p.half.y * 2;
+      if (r < botR - 0.2 || r > topR + 0.5) continue;
+
+      _delta.copy(pos).sub(p.center);
+      const u = _delta.dot(p.right);
+      const v = _delta.dot(p.forward);
       const hx = p.half.x + PLAYER_RADIUS;
-      const hy = p.half.y + 0.2;
       const hz = p.half.z + PLAYER_RADIUS;
-      if (
-        Math.abs(_local.x) < hx &&
-        Math.abs(_local.y) < hy &&
-        Math.abs(_local.z) < hz
-      ) {
-        // 推出最近面
-        const dx = hx - Math.abs(_local.x);
-        const dy = hy - Math.abs(_local.y);
-        const dz = hz - Math.abs(_local.z);
-        if (dx <= dy && dx <= dz) _local.x += Math.sign(_local.x || 1) * dx;
-        else if (dz <= dy) _local.z += Math.sign(_local.z || 1) * dz;
-        else _local.y += Math.sign(_local.y || 1) * dy;
-        pos.copy(_local).applyQuaternion(p.quat).add(p.center);
+      if (Math.abs(u) < hx && Math.abs(v) < hz) {
+        // 在壳厚度内：推到足迹外最近边
+        const du = hx - Math.abs(u);
+        const dv = hz - Math.abs(v);
+        if (du < dv) {
+          const sign = u >= 0 ? 1 : -1;
+          pos.addScaledVector(p.right, sign * du);
+        } else {
+          const sign = v >= 0 ? 1 : -1;
+          pos.addScaledVector(p.forward, sign * dv);
+        }
+        // 保持当前半径
+        pos.setLength(r);
       }
     }
   }
 
-  // ---- 飞出太远 / 掉进球内过深 → 检查点 ----
+  // ---- 虚空 / 穿心复位 ----
   const rNow = pos.length();
   if (rNow < PLANET_RADIUS * 0.5 || rNow > PLANET_RADIUS + 80) {
     if (player.checkpoint) pos.copy(player.checkpoint);
