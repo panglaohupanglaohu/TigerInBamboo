@@ -87,25 +87,46 @@ export function createLowPolyHouse() {
   return g;
 }
 
-/** 石头：错落球体簇 */
+/** 岩石：随机扰动二十面体顶点，制造不规则感（相同坐标的顶点共享同一扰动，避免裂缝） */
 export function createLowPolyRock() {
   const g = new THREE.Group();
-  const parts = [
-    { r: 0.45, y: 0.35, x: 0, z: 0, c: 0x7a8494 },
-    { r: 0.28, y: 0.22, x: 0.28, z: 0.1, c: 0x6a7484 },
-    { r: 0.22, y: 0.18, x: -0.22, z: -0.15, c: 0x8a94a4 },
+  const geo = new THREE.IcosahedronGeometry(0.5, 1);
+  const pos = geo.attributes.position;
+  const v = new THREE.Vector3();
+  const jitterCache = new Map(); // 非索引几何体顶点按面重复，按坐标哈希共享扰动
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i);
+    const key = `${v.x.toFixed(4)},${v.y.toFixed(4)},${v.z.toFixed(4)}`;
+    if (!jitterCache.has(key)) jitterCache.set(key, 0.72 + Math.random() * 0.56);
+    v.multiplyScalar(jitterCache.get(key));
+    pos.setXYZ(i, v.x, v.y, v.z);
+  }
+  const rock = new THREE.Mesh(facet(geo), toonMat(0x7a8494));
+  rock.scale.set(1, 0.7, 0.9);
+  rock.position.y = 0.28; // 底部贴地
+  rock.castShadow = true;
+  rock.receiveShadow = true;
+  g.add(rock);
+  g.userData.collideRadius = 0.6;
+  return g;
+}
+
+/** 低空卡通云朵：4 个大小不一、互相重叠的低面数球体 */
+export function createLowPolyCloud() {
+  const g = new THREE.Group();
+  const mat = toonMat(0xf4f8ff);
+  const puffs = [
+    { r: 0.55, x: 0, y: 0.5, z: 0 },
+    { r: 0.42, x: 0.52, y: 0.42, z: 0.1 },
+    { r: 0.38, x: -0.48, y: 0.4, z: -0.06 },
+    { r: 0.3, x: 0.14, y: 0.32, z: 0.36 },
   ];
-  for (const p of parts) {
-    const m = new THREE.Mesh(
-      facet(new THREE.IcosahedronGeometry(p.r, 0)),
-      toonMat(p.c)
-    );
+  for (const p of puffs) {
+    const m = new THREE.Mesh(facet(new THREE.SphereGeometry(p.r, 6, 5)), mat);
     m.position.set(p.x, p.y, p.z);
-    m.castShadow = true;
-    m.receiveShadow = true;
     g.add(m);
   }
-  g.userData.collideRadius = 0.55;
+  g.userData.isCloud = true; // 验收计数标记
   return g;
 }
 
@@ -232,6 +253,8 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
     fences = 8,
     houses = 4,
     bridges = 2,
+    clouds = 10,
+    cloudHeight = 5, // 云朵距球面的低空高度
     latMax = 72,
     latMin = -40,
     minSpacing = 2.2,
@@ -309,6 +332,16 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
       break;
     }
     void placedOk; // 放不下就跳过该实例
+  }
+
+  // 云朵：低空空飘（不进碰撞、不做间距检查）
+  for (let i = 0; i < clouds; i++) {
+    const { lat, lon } = sampleLatLon();
+    const obj = placeOnSphere(createLowPolyCloud(), lat, lon, planetRadius + cloudHeight);
+    obj.rotateY(rnd() * Math.PI * 2);
+    obj.scale.setScalar(0.8 + rnd() * 0.8);
+    scene.add(obj);
+    meshes.push(obj);
   }
 
   return { meshes, colliders };

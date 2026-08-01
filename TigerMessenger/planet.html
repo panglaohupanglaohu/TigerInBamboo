@@ -75,6 +75,42 @@
       transition: opacity 0.2s ease;
     }
     #npc-hint.show { opacity: 1; }
+    /* 对话框（极简，盖在 3D 场景之上） */
+    #dialog {
+      position: fixed;
+      bottom: 84px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 280px;
+      max-width: min(520px, 88vw);
+      padding: 14px 22px;
+      font-size: 16px;
+      line-height: 1.6;
+      text-align: center;
+      background: rgba(10, 14, 24, 0.9);
+      border: 1px solid rgba(140, 180, 255, 0.35);
+      border-radius: 12px;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    #dialog.show { opacity: 1; }
+    /* 计分徽标 */
+    #score-badge {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      padding: 8px 14px;
+      font-size: 13px;
+      background: rgba(8, 12, 22, 0.75);
+      border: 1px solid rgba(140, 180, 255, 0.28);
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+    #score-badge strong { color: #ffe08a; }
     #npc-hint kbd {
       display: inline-block;
       min-width: 1.4em;
@@ -92,11 +128,14 @@
 <body>
   <a id="back" href="./">← 主游戏</a>
   <div id="npc-hint">按 <kbd>E</kbd> 键与 NPC 对话</div>
+  <div id="dialog"></div>
+  <div id="score-badge">得分 <strong id="score-num">0</strong></div>
   <div id="hint">
     <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 滑行
     · <kbd>Space</kbd> 跳
     · <kbd>Shift</kbd> 疾跑
     · 滚轮/中键 缩放环绕
+    · <kbd>E</kbd> 对话/接送
     · 树石房可挡路
   </div>
 

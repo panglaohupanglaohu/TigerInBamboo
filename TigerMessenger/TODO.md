@@ -63,6 +63,14 @@
   - `src/planet/npcs.js`：红/绿/蓝 3 方块固定经纬度贴球面；`findNearbyNpc` 三维距离检测
   - 距离 < 5 时 `planet.html` 中央提示「按 E 键与 NPC 对话」
   - 无头验证：出生隐藏 → 走近出现（DOM 断言 + 截图），控制台零告警
+- [x] 21. 对话框 UI + 送信任务状态机（Kimi 2026-08-02 07:26–07:28，见 `PLAN-sphere-player.md`）
+  - `src/planet/letterQuest.js`：idle→carry→idle；A=红方发信、B=绿方收信
+  - `planet.html` 极简对话框 + 计分徽标；E 键接线、对话 3.2s 自动隐藏
+  - 无头全链路 DOM 断言：接信文案/携信中/送达文案/加分全对，控制台零告警
+- [x] 22. 实验页任务增强（Grok 2026-08-02）
+  - 携信头顶信件+光环；送达后随机下一对 NPC
+  - `followCamera.js` 相机模块抽出
+  - 入库 `letterQuest.js` 与相关接线
 
 ## 待办
 

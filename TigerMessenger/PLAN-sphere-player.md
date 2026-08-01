@@ -175,7 +175,7 @@ camera.lookAt(player.pos + upSmooth×0.6)                      # 聚焦玩家
 
 - [x] Up 平滑翻转：`_upSmooth` lerp + 归一化 + 对跖点兜底（Kimi，2026-08-02 07:14）
 - [x] 球体侧面/底部实测截图 ×2（Kimi，2026-08-02 07:15）
-- [ ] 可选：把相机封装为 `src/planet/followCamera.js` 独立模块（**Grok**，lab 转正时再做）
+- [x] 可选：把相机封装为 `src/planet/followCamera.js` 独立模块（**Grok**，2026-08-02）
 
 ---
 
@@ -209,4 +209,39 @@ camera.lookAt(player.pos + upSmooth×0.6)                      # 聚焦玩家
 - [x] 主循环三维距离检测（Kimi，2026-08-02 07:23）
 - [x] 距离 < 5 中央提示显隐（Kimi，2026-08-02 07:23）
 - [x] 无头验证 DOM 断言 + 截图（Kimi，2026-08-02 07:23）
-- [ ] E 键按下后的对话行为（气泡/台词框）（**Grok**，需求未含，后续可做）
+- [x] E 键按下后的对话行为（对话框）（**Kimi** 落地 + **Grok** 文案/链化增强，2026-08-02）
+
+---
+
+## 对话框 UI + 送信任务状态机（2026-08-02 07:26 起）
+
+> 负责人标注：**Kimi** 实现并验收；**Grok** 请跳过已完成项。
+
+### 需求（主人 2026-08-02 07:26 提出）
+
+纯 HTML/CSS/JS 极简对话框盖在 3D 场景之上；任务状态机：
+NPC A 处按 E → 显示「请把这封信送给 NPC B」、状态变「携信中」；
+NPC B 处按 E → 显示「谢谢你！任务完成」、状态清除、加一分。
+
+### 落地记录
+
+| 项 | 实现 | 负责 | 时间 |
+|---|------|------|------|
+| 状态机 | `src/planet/letterQuest.js`：`idle → carry → idle`；A=红方（发信）、B=绿方（收信）、蓝方不参与；`tryTalk()` 按 E 时依据最近 NPC + 当前状态推进，文案常量 `QUEST_TEXT` | Kimi | 07:26 |
+| 对话框 UI | `planet.html`：`#dialog` 底部居中极简面板（opacity 过渡）；`#score-badge` 右上计分 | Kimi | 07:27 |
+| 接线 | `src/planet/main.js`：keydown `KeyE`（去 `repeat`）→ `tryTalk()` → 显示对话 3.2s 自动隐藏；`onScore` 更新计分；`window.__lab` 调试句柄（无头验收用） | Kimi | 07:27 |
+
+### 验收（无头 Chrome，2026-08-02 07:28，DOM 断言）
+
+- 走到 A 按 E：`show=true, text="请把这封信送给 NPC B", state="carry", score=0` ✅
+- 到 B 按 E：`show=true, text="谢谢你！任务完成", state="idle", score=1` ✅
+- 截图 `e2e-quest-accept.png` / `e2e-quest-done.png`；控制台零 error/warning ✅
+
+### Todos
+
+- [x] 任务状态机 `letterQuest.js`（Kimi，2026-08-02 07:26）
+- [x] 对话框 + 计分 UI（Kimi，2026-08-02 07:27）
+- [x] E 键接线 + 对话自动隐藏（Kimi，2026-08-02 07:27）
+- [x] 无头全链路断言（Kimi，2026-08-02 07:28）
+- [x] 携信中的视觉表现（玩家头顶信件图标/光环）（**Grok**，2026-08-02）
+- [x] 任务链化：送达后随机指派下一对 NPC（**Grok**，2026-08-02）

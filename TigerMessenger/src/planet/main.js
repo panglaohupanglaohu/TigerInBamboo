@@ -1,5 +1,5 @@
 // =====================================================================
-//  星球实验页：星球 + 球面玩家（跳/疾跑）+ 低多边散布 + 相机缩放环绕
+//  星球实验页：球面玩家 + 散布 + 跟随相机 + NPC 送信任务
 // =====================================================================
 import * as THREE from "three";
 import { Timer } from "three/addons/misc/Timer.js";
@@ -13,6 +13,8 @@ import {
 } from "../assets/lowPoly.js";
 import { createInput } from "../core/input.js";
 import { createNpcs, findNearbyNpc } from "./npcs.js";
+import { createLetterQuest, createCarryLetterVisual } from "./letterQuest.js";
+import { createFollowCamera } from "./followCamera.js";
 
 // ---------- 场景 / 相机 / 渲染器 ----------
 const scene = new THREE.Scene();
@@ -40,7 +42,6 @@ window.addEventListener("resize", () => {
 
 // ---------- 光源 ----------
 scene.add(new THREE.AmbientLight(0x8899bb, 0.35));
-
 const sun = new THREE.DirectionalLight(0xfff2d8, 1.3);
 sun.position.set(60, 80, 40);
 sun.castShadow = true;
@@ -57,8 +58,9 @@ scene.add(sun);
 // ---------- 星球 + 玩家 ----------
 createPlanet(scene);
 const player = createSphericalPlayer(scene, PLANET_RADIUS);
+const carryVisual = createCarryLetterVisual(player.mesh);
 
-// ---------- 出生点附近固定演示 + 全图随机散布 ----------
+// ---------- 固定演示 + 散布 ----------
 {
   const spots = [
     { make: createLowPolyTree, lat: 84, lon: -30 },
@@ -80,83 +82,54 @@ const { colliders } = scatterOnSphere(scene, PLANET_RADIUS, {
   bridges: 2,
   latMax: 78,
   latMin: -35,
+  minSpacing: 2.2,
 });
 
-// 出生点固定物也进碰撞（简单：再扫一遍附近硬编码半径）
 colliders.push(
   { position: placeOnSphere(new THREE.Object3D(), 84, -30, PLANET_RADIUS).position.clone(), radius: 0.55 },
   { position: placeOnSphere(new THREE.Object3D(), 82, 20, PLANET_RADIUS).position.clone(), radius: 0.55 },
   { position: placeOnSphere(new THREE.Object3D(), 80, -10, PLANET_RADIUS).position.clone(), radius: 1.1 }
 );
 
-// ---------- NPC：球面固定位置的 3 个彩色方块 ----------
+// ---------- NPC + 送信 ----------
 const npcs = createNpcs(scene, PLANET_RADIUS);
 const elNpcHint = document.getElementById("npc-hint");
+const elDialog = document.getElementById("dialog");
+const elScoreNum = document.getElementById("score-num");
+let score = 0;
+let dialogTimer = 0;
 
-// ---------- 相机：距离 + 环绕角 ----------
-let camDist = 12;
-const CAM_DIST_MIN = 5;
-const CAM_DIST_MAX = 28;
-let camOrbit = 0; // 相对玩家 forward 的水平偏角
-let midDrag = false;
-
-const keys = createInput({
-  isActive: () => true,
-  onZoom: (d) => {
-    camDist = Math.min(CAM_DIST_MAX, Math.max(CAM_DIST_MIN, camDist + d));
+const quest = createLetterQuest({
+  player,
+  npcs,
+  onScore: () => {
+    score += 1;
+    elScoreNum.textContent = String(score);
   },
-  onOrbit: (dx) => {
-    camOrbit -= dx;
-  },
-  onMidDrag: (on) => {
-    midDrag = !!on;
-  },
+  onCarryChange: (on) => carryVisual.setCarrying(on),
 });
 
-// ---------- 球面跟随相机 ----------
-const _camUp = new THREE.Vector3();
-const _upSmooth = new THREE.Vector3(0, 1, 0); // 平滑翻转的相机 Up（出生点即北极法线）
-const _camBack = new THREE.Vector3();
-const _camRight = new THREE.Vector3();
-const _camDesired = new THREE.Vector3();
-const _look = new THREE.Vector3();
+window.addEventListener("keydown", (e) => {
+  if (e.code !== "KeyE" || e.repeat) return;
+  const result = quest.tryTalk();
+  if (result) {
+    elDialog.textContent = result.text;
+    elDialog.classList.add("show");
+    dialogTimer = result.completed ? 4.2 : 3.2;
+  }
+});
 
-function updateFollowCamera(dt) {
-  _camUp.copy(player.position).normalize();
+window.__lab = { player, npcs, quest, carryVisual };
 
-  // 相机 Up 平滑追踪球面法线：玩家走到侧面/底部时姿态渐进翻转，
-  // 玩家在屏幕上始终"头顶朝上"（硬拷贝会在跨半球瞬间跳变）
-  _upSmooth.lerp(_camUp, 1 - Math.exp(-4 * dt));
-  if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(_camUp); // 过对跖点兜底
-  _upSmooth.normalize();
-
-  // 背后方向：玩家 forward 的反方向，再按 camOrbit 绕 up 旋转
-  _camBack.copy(player.forward).multiplyScalar(-1);
-  _camBack.addScaledVector(_camUp, -_camBack.dot(_camUp));
-  if (_camBack.lengthSq() < 1e-6) _camBack.set(0, 0, 1);
-  _camBack.normalize();
-  _camRight.crossVectors(_camUp, _camBack).normalize();
-  // orbit
-  const cos = Math.cos(camOrbit);
-  const sin = Math.sin(camOrbit);
-  const bx = _camBack.x * cos + _camRight.x * sin;
-  const by = _camBack.y * cos + _camRight.y * sin;
-  const bz = _camBack.z * cos + _camRight.z * sin;
-  _camBack.set(bx, by, bz).normalize();
-
-  const height = 4 + camDist * 0.2;
-  _camDesired
-    .copy(player.position)
-    .addScaledVector(_camUp, height)
-    .addScaledVector(_camBack, camDist);
-
-  const t = 1 - Math.exp(-(midDrag ? 12 : 6) * dt);
-  camera.position.lerp(_camDesired, t);
-  camera.up.copy(_upSmooth);
-  _look.copy(player.position).addScaledVector(_upSmooth, 0.6);
-  camera.lookAt(_look);
-}
-updateFollowCamera(1);
+// ---------- 相机 ----------
+const followCam = createFollowCamera(camera, player);
+const keys = createInput({
+  isActive: () => true,
+  onZoom: (d) => followCam.zoomBy(d),
+  onOrbit: (dx) => followCam.orbitBy(dx),
+  onMidDrag: (on) => followCam.setMidDrag(on),
+});
+followCam.snap();
 
 // ---------- 主循环 ----------
 const timer = new Timer();
@@ -164,12 +137,18 @@ function animate() {
   requestAnimationFrame(animate);
   timer.update();
   const dt = Math.min(timer.getDelta(), 0.05);
+  const t = performance.now() * 0.001;
 
   updateSphericalPlayer(player, keys, camera, dt, PLANET_RADIUS, colliders);
-  updateFollowCamera(dt);
+  followCam.update(dt);
+  carryVisual.update(t);
 
-  // NPC 距离检测：小于 5 显示对话提示
   elNpcHint.classList.toggle("show", !!findNearbyNpc(player, npcs));
+
+  if (dialogTimer > 0) {
+    dialogTimer -= dt;
+    if (dialogTimer <= 0) elDialog.classList.remove("show");
+  }
 
   renderer.render(scene, camera);
 }
