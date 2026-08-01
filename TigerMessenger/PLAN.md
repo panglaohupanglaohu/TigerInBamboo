@@ -47,7 +47,7 @@ TigerMessenger/
 | 10 | UI/HUD：任务列表、对话气泡、开场提示 | 清单 + 罗盘 + 气泡 + 开场 | **Grok** ✅；**Kimi** 润色 |
 | 11 | CDN 兜底与性能：vendor 回退、帧率巡检 | `vendor/`、启动器回退、`?fps=1` | **Grok** ✅ |
 | 12 | 部署：GitHub Pages 验证 `/TigerMessenger/` 在线可玩 | `0b48f06` 已上线 | **Grok** ✅ |
-| 13 | （可选彩蛋）信使记忆 | 13a localStorage 信袋 ✅；13b 主站四层记忆 | **Grok** ✅ 轻量；桥接需主人批准 |
+| 13 | （可选彩蛋）信使记忆 | 13a 信袋 ✅；13b 四层记忆桥接 ✅ | **Grok** ✅ |
 
 ### 分工速查
 

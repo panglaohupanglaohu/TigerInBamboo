@@ -147,6 +147,15 @@
       background: #7dffb2;
     }
     #journal-list .muted { opacity: 0.55; }
+    #journal-status, .journal-status {
+      margin: 0 0 8px;
+      font-size: 10px;
+      line-height: 1.45;
+      opacity: 0.72;
+      color: #c9b8ff;
+    }
+    #journal-status[data-bridge="on"] { color: #9ee0c0; }
+    #journal-status[data-bridge="off"] { color: #8a9bb8; }
     #journal-clear {
       pointer-events: auto;
       cursor: pointer;
@@ -337,8 +346,9 @@
     </div>
     <div id="journal-panel" class="panel" aria-label="信使记忆">
       <h2>信使记忆 · 送达过的信</h2>
+      <p id="journal-status" class="journal-status">记忆：—</p>
       <ul id="journal-list"></ul>
-      <button type="button" id="journal-clear">清空记录</button>
+      <button type="button" id="journal-clear">清空本机信袋</button>
     </div>
     <div id="compass" aria-hidden="true">
       <div id="compass-needle"></div>

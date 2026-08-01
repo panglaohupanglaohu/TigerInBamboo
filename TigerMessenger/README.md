@@ -86,8 +86,12 @@ https://panglaohupanglaohu.github.io/TigerInBamboo/TigerMessenger/
 
 ## 信使记忆
 
-送达记录写入本机 `localStorage`（键 `tm.letterJournal.v1`）。  
-`L` 或任务栏「信袋」查看；与主站四层记忆模块解耦，后续若批准可再桥接。
+- **本机信袋**：`localStorage` 键 `tm.letterJournal.v1`（送达清单）
+- **主站四层记忆**（`frontend/js/memory/`，creatureId=`messenger`）：
+  - 接信 → 运行日志 / 感知 / 意图队列 / 情绪「使命」
+  - 送达 → 日志 / 确认意图 / 情绪「欣慰」
+  - 加载失败时自动退回仅信袋（Pages 与本地路径均有候选）
+- `L` 或任务栏「信袋」查看；状态行显示是否已连接四层记忆
 
 ## 分工（见 PLAN.md）
 

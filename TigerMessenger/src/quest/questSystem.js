@@ -22,9 +22,11 @@ import {
 import { sfxPickup, sfxDeliver, sfxWin } from "../audio/sfx.js";
 import {
   recordDelivery,
+  recordPickup,
   journalCount,
   renderJournalList,
   clearJournal,
+  warmMemoryBridge,
 } from "./letterJournal.js";
 
 /**
@@ -86,13 +88,27 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
   elScoreTotal.textContent = String(QUEST_DEFS.length);
 
   // ---------- 信使记忆（信袋） ----------
+  // 信袋状态行（四层记忆桥接提示）
+  let elJournalStatus = document.getElementById("journal-status");
+  if (!elJournalStatus && elJournalPanel) {
+    elJournalStatus = document.createElement("p");
+    elJournalStatus.id = "journal-status";
+    elJournalStatus.className = "journal-status";
+    const h2 = elJournalPanel.querySelector("h2");
+    if (h2 && h2.nextSibling) elJournalPanel.insertBefore(elJournalStatus, h2.nextSibling);
+    else elJournalPanel.appendChild(elJournalStatus);
+  }
+
   function refreshJournalUI() {
-    renderJournalList(elJournalList);
+    renderJournalList(elJournalList, elJournalStatus);
     if (elJournalToggle) {
       const n = journalCount();
       elJournalToggle.textContent = n > 0 ? `信袋 · ${n}` : "信袋";
     }
   }
+
+  // 预热主站记忆模块（不阻塞）
+  warmMemoryBridge().catch(() => {});
 
   function toggleJournal(force) {
     if (!elJournalPanel) return;
@@ -249,6 +265,12 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
         messengerMesh.userData.letter.visible = true;
         holdAura.intensity = 1.2;
         setCheckpointHere();
+        recordPickup({
+          id: q.id,
+          letter: q.letter,
+          from: q.sender.name,
+          to: q.receiver.name,
+        });
         sfxPickup();
         showToast(`已接过「${q.letter}」→ 去找 ${q.receiver.name}`);
         refreshNpcHighlights();

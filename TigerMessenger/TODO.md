@@ -36,6 +36,14 @@
   - `environment.js`：新增弱环境光 `AmbientLight(0x8899bb, 0.22)`
   - 太阳平行光/shadowMap 沿用既有（`DirectionalLight` 带阴影 + `stage.js` PCFSoftShadowMap），未重复添加
   - 验收三件套通过；注意：玩法世界在球体内部，FrontSide 材质球内不可见（见 plan 文档「已知事项」）
+- [x] 15. 球面玩家实验页（Kimi 2026-08-02 00:59–01:02，详见 `PLAN-sphere-player.md`）
+  - `planet.html` + `src/planet/`：立方体玩家、WASD 沿球面滑行
+  - 引力永远指向球心（`-up·G·dt`）；Up 轴 = 球面法线；半径锁定不脱离/不陷入
+  - 无头验证通过（双截图，控制台零告警）；不改动主游戏玩法
+- [x] 16. 程序化 Low-Poly 资产（Kimi 2026-08-02 01:06–01:09，详见 `PLAN-sphere-player.md` 阶段二）
+  - `src/assets/lowPoly.js`：`createLowPolyTree()` / `createLowPolyHouse()`，纯基础几何体拼接、返回 Group、底部中心对齐原点
+  - 偏差记录：r172 MeshToonMaterial 不支持 flatShading（实测告警），改用 `facet()` 平直法线等效
+  - `placeOnSphere()` 贴球面；实验页摆 5 树 2 房，无头验证零告警
 
 ## 待办
 
@@ -51,15 +59,15 @@
 - [x] 13a. 信使记忆轻量彩蛋（Grok 2026-08-02，自包含 localStorage）
   - `src/quest/letterJournal.js` + 信袋面板（`L` / 任务栏按钮）
   - 送达写入、开场提示往事数量、通关打开信袋
-  - **不**跨目录引用主站 memory（避免未批准耦合）
-- [ ] 13b. （可选）桥接主站 `frontend/js/memory/` 四层记忆（需主人批准）
+- [x] 13b. 桥接主站四层记忆（Grok 2026-08-02，主人批准）
+  - `src/quest/memoryBridge.js`：动态加载 `MemoryCore`（creatureId=`messenger`）
+  - 路径候选：Pages `../frontend/js/memory/` · 本地 `/js/memory/`
+  - 接信 → log + perception + intention + affect；送达 → log + 确认意图 + 欣慰
+  - 失败静默退回本机信袋；信袋状态行显示连接/语气
 
 ## 流程约定
 
 - Grok 交付后 Kimi 跑验收三件套。
 - 单文件超 ~800 行后由 Kimi 拆 `src/`；之后 Grok 按模块续写。
 - **Grok 工作循环**：时不时回看本文件，未完成且不依赖主人批准的项直接做掉。
-- **当前阻塞（2026-08-02 扫 TODO）**：
-  - `#12` ✅ 已上线 Pages
-  - `#13b` 需主人批准跨目录接 `frontend/js/memory/`
-  - 除此以外 **Grok 可做项 = 0**
+- **当前阻塞**：无（#1–#13 主线已清）。有新需求再开项。
