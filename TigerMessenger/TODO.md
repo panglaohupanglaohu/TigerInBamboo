@@ -92,9 +92,11 @@
 
 - [x] 45. 开发者地图编辑器（Grok 2026-08-02）
   - 🤖 菜单 →「打开地图编辑」：顶视平面图
-  - 选中建筑拖动移动、复制、删除、调朝向
+  - 选中建筑拖动移动、复制、删除
+  - 朝向：0–360° 滑杆 + 数字框 + 预设角 / ±15°
+  - 招牌：书店两行烫金文字可改（`setBookshopSignText`）
   - 调色板放置：书店/房/古松/路牌/街灯/电线杆/岩
-  - 贴 `groundLiftAt` + 碰撞同步；布局 `localStorage`
+  - 贴 `groundLiftAt` + 碰撞同步；布局（含角度/招牌）`localStorage`
 - [x] 43. 送信人 = AgentsGroup2026 智能体（主人定夺，Grok 2026-08-02）
   - `player/agentMessenger.js`：头环核心 + 半透明 U 躯干 + 持信件
   - `player.js` 接 `buildAgentMessenger()`（**不用**竹虎模型）
@@ -213,13 +215,18 @@
     + 左侧荒山 5 岩堆叠（~玩家 3×）含内凹山洞 + 崖壁 4 级叠瀑入浅海 + 太空水环（r≈80 半透明青绿）
     + 弹琴老人（坐姿深灰身/白须/膝上手风琴，净空 3 单位）
   - messengerIsland 换接：替换 startGardenVista；碰撞并入
-  - 顺带纠回 Grok 私改的天色：恢复主人规格的宣纸米 #DFD5C3 + 雾
   - 截图核验：海滩阶梯/叠瀑/弹琴老人/荒山齐；三件套通过
 - [x] 43. 主人裁决：天空与送信人模型冻结（2026-08-02）
   - 天空：青绿（Grok 版 `0x7fcfc8` + 天空球 teal 渐变）系主人让 Grok 改的，**保持不动**
     （Kimi 曾误判为私改并回滚宣纸米，已按主人指示改回）
   - 送信人：维持原积木信使模型（`player/messenger.js`，不用老虎模型、**冻结不改**）
   - 勘误：TODO #42 中"纠回天色"一条作废，以本条为准
+- [x] 44. 书店周边绣球花丛（Kimi 2026-08-02，主人提示词）
+  - `assets/hydrangea.js` `createLowPolyHydrangeaBush()`：detail-1 二十面体花球
+    三色盘（#A9CBEF/#F4F7ED/#CBE685）+ 六边形斜展绿叶（#2E7D32/#43A047）
+    24 球层叠穿插：底大蓝白、顶小黄绿；全件描边 + castShadow/receiveShadow
+  - `createBookshopHydrangeas()`：草坪沿 5 丛 + 门廊两侧 2 小丛 + 贴墙 2 丛
+    作为书店子节点同变换部署；放大截图核验三色与穿插感；三件套通过
 - [x] 17b. 球面实验页增强 **验收**（Kimi 2026-08-02 07:12 通过）
   - 无头截图 ×3（散布全景 / 跳跃离地 / 落地续行），控制台零告警
   - review 纪要见 `PLAN-sphere-player.md`；可选优化（面积加权散布 / 碰撞死代码）已由 Grok 清掉

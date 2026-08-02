@@ -45,7 +45,7 @@ export function createMapEditor({
         <button type="button" id="map-editor-close" title="关闭">✕</button>
       </div>
       <p class="map-editor-hint">
-        点选标记拖动移动 · 「复制」克隆 · 下方选类型后点地图放置 · 自动贴地
+        点选拖动 · 复制/删除 · 下方选类型点地图放置 · 可贴地 · 可改朝向与招牌
       </p>
       <canvas id="map-canvas" width="360" height="360" aria-label="主岛平面图"></canvas>
       <div class="map-editor-coords"><span id="map-cursor">x: —  z: —</span>
@@ -53,10 +53,30 @@ export function createMapEditor({
       <div class="map-editor-tools">
         <button type="button" id="map-btn-copy" disabled>复制</button>
         <button type="button" id="map-btn-delete" disabled>删除</button>
-        <label class="map-yaw">朝向
-          <input type="range" id="map-yaw" min="-3.14" max="3.14" step="0.05" value="0" disabled>
-        </label>
       </div>
+      <div class="map-editor-group">建筑朝向</div>
+      <div class="map-angle-row">
+        <input type="range" id="map-yaw" min="0" max="360" step="1" value="0" disabled>
+        <input type="number" id="map-yaw-deg" min="0" max="360" step="1" value="0" disabled>
+        <span class="map-deg-unit">°</span>
+      </div>
+      <div class="map-angle-presets" id="map-angle-presets">
+        <button type="button" data-deg="0" disabled>0°</button>
+        <button type="button" data-deg="45" disabled>45°</button>
+        <button type="button" data-deg="90" disabled>90°</button>
+        <button type="button" data-deg="135" disabled>135°</button>
+        <button type="button" data-deg="180" disabled>180°</button>
+        <button type="button" data-deg="270" disabled>270°</button>
+        <button type="button" id="map-yaw-ccw" disabled title="逆时针 15°">↺15°</button>
+        <button type="button" id="map-yaw-cw" disabled title="顺时针 15°">↻15°</button>
+      </div>
+      <div class="map-editor-group">招牌文字</div>
+      <div class="map-sign-fields" id="map-sign-fields">
+        <label>第一行 <input type="text" id="map-sign-l1" maxlength="28" placeholder="HARD TO FIND" disabled></label>
+        <label>第二行 <input type="text" id="map-sign-l2" maxlength="28" placeholder="BOOKSHOP" disabled></label>
+        <button type="button" id="map-sign-apply" disabled>应用招牌</button>
+      </div>
+      <p class="map-editor-hint" id="map-sign-hint">选中带招牌的建筑（如书店）后可改文字</p>
       <div class="map-editor-group">放置类型</div>
       <div class="map-palette" id="map-palette"></div>
       <div class="map-editor-group">已放置</div>
@@ -78,6 +98,38 @@ export function createMapEditor({
   const btnCopy = overlay.querySelector("#map-btn-copy");
   const btnDelete = overlay.querySelector("#map-btn-delete");
   const yawSlider = overlay.querySelector("#map-yaw");
+  const yawDegInput = overlay.querySelector("#map-yaw-deg");
+  const signL1 = overlay.querySelector("#map-sign-l1");
+  const signL2 = overlay.querySelector("#map-sign-l2");
+  const btnSignApply = overlay.querySelector("#map-sign-apply");
+  const signHint = overlay.querySelector("#map-sign-hint");
+  const anglePresetBtns = [...overlay.querySelectorAll("#map-angle-presets button")];
+
+  function yawToDeg(yawRad) {
+    let d = ((yawRad * 180) / Math.PI) % 360;
+    if (d < 0) d += 360;
+    return Math.round(d);
+  }
+  function degToYaw(deg) {
+    let d = Number(deg);
+    if (!Number.isFinite(d)) d = 0;
+    d = ((d % 360) + 360) % 360;
+    return (d * Math.PI) / 180;
+  }
+  function setYawUI(yawRad) {
+    const d = yawToDeg(yawRad);
+    yawSlider.value = String(d);
+    yawDegInput.value = String(d);
+  }
+  function applyYawFromDeg(deg) {
+    const p = getSelected();
+    if (!p) return;
+    p.yaw = degToYaw(deg);
+    setYawUI(p.yaw);
+    applyPose(p);
+    redraw();
+    persist();
+  }
 
   // 调色板
   for (const def of listBuildingTypes()) {
@@ -117,7 +169,10 @@ export function createMapEditor({
   btnCopy.addEventListener("click", () => {
     const p = getSelected();
     if (!p) return;
-    const copy = spawnPlacement(p.type, p.x + 1.2, p.z + 1.2, p.yaw + 0.2);
+    const copy = spawnPlacement(p.type, p.x + 1.2, p.z + 1.2, p.yaw + 0.2, {
+      signLine1: p.signLine1,
+      signLine2: p.signLine2,
+    });
     if (copy) {
       selectedUid = copy.uid;
       placeModeType = null;
@@ -141,14 +196,54 @@ export function createMapEditor({
     persist();
   });
 
-  yawSlider.addEventListener("input", () => {
+  yawSlider.addEventListener("input", () => applyYawFromDeg(yawSlider.value));
+  yawDegInput.addEventListener("change", () => applyYawFromDeg(yawDegInput.value));
+  yawDegInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      applyYawFromDeg(yawDegInput.value);
+    }
+  });
+  for (const btn of anglePresetBtns) {
+    if (btn.dataset.deg != null) {
+      btn.addEventListener("click", () => applyYawFromDeg(btn.dataset.deg));
+    }
+  }
+  overlay.querySelector("#map-yaw-ccw")?.addEventListener("click", () => {
     const p = getSelected();
     if (!p) return;
-    p.yaw = Number(yawSlider.value);
-    applyPose(p);
-    redraw();
+    applyYawFromDeg(yawToDeg(p.yaw) - 15);
+  });
+  overlay.querySelector("#map-yaw-cw")?.addEventListener("click", () => {
+    const p = getSelected();
+    if (!p) return;
+    applyYawFromDeg(yawToDeg(p.yaw) + 15);
+  });
+
+  btnSignApply.addEventListener("click", () => {
+    const p = getSelected();
+    if (!p || !p.object?.userData?.hasSign) {
+      toast("请先选中带招牌的建筑（如书店）", 1.6);
+      return;
+    }
+    const l1 = signL1.value.trim() || "HARD TO FIND";
+    const l2 = signL2.value.trim() || "BOOKSHOP";
+    if (typeof p.object.userData.setSignText === "function") {
+      p.object.userData.setSignText(l1, l2);
+    }
+    p.signLine1 = l1;
+    p.signLine2 = l2;
+    toast("招牌已更新", 1.4);
     persist();
   });
+  const onSignKey = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      btnSignApply.click();
+    }
+  };
+  signL1.addEventListener("keydown", onSignKey);
+  signL2.addEventListener("keydown", onSignKey);
 
   // 地图交互
   canvas.addEventListener("pointerdown", (e) => {
@@ -252,13 +347,19 @@ export function createMapEditor({
     }
   }
 
-  function spawnPlacement(typeId, x, z, yaw = 0) {
+  function spawnPlacement(typeId, x, z, yaw = 0, extra = {}) {
     const def = getBuildingDef(typeId);
     if (!def) {
       toast(`未知建筑类型：${typeId}`, 1.5);
       return null;
     }
-    const object = def.create();
+    const signLine1 = extra.signLine1 ?? def.defaultSignLine1;
+    const signLine2 = extra.signLine2 ?? def.defaultSignLine2;
+    const object =
+      typeof def.create === "function"
+        ? def.create({ signLine1, signLine2 })
+        : null;
+    if (!object) return null;
     object.userData.mapEditable = true;
     object.userData.mapType = typeId;
     const uid = `b${uidSeq++}`;
@@ -282,6 +383,8 @@ export function createMapEditor({
       yaw,
       object,
       collider,
+      signLine1: object.userData.signLine1 ?? signLine1 ?? null,
+      signLine2: object.userData.signLine2 ?? signLine2 ?? null,
     };
     applyPose(p);
     placements.push(p);
@@ -341,6 +444,8 @@ export function createMapEditor({
       yaw,
       object,
       collider,
+      signLine1: object.userData.signLine1 ?? def?.defaultSignLine1 ?? null,
+      signLine2: object.userData.signLine2 ?? def?.defaultSignLine2 ?? null,
     };
     placements.push(p);
     return p;
@@ -455,14 +560,37 @@ export function createMapEditor({
     const p = getSelected();
     btnCopy.disabled = !p;
     btnDelete.disabled = !p;
-    yawSlider.disabled = !p;
+    const canAngle = !!p;
+    yawSlider.disabled = !canAngle;
+    yawDegInput.disabled = !canAngle;
+    for (const btn of anglePresetBtns) btn.disabled = !canAngle;
+
+    const canSign = !!(p && p.object?.userData?.hasSign);
+    signL1.disabled = !canSign;
+    signL2.disabled = !canSign;
+    btnSignApply.disabled = !canSign;
+    if (signHint) {
+      signHint.textContent = canSign
+        ? "修改后点「应用招牌」或按 Enter"
+        : "选中带招牌的建筑（如书店）后可改文字";
+    }
+
     if (p) {
-      yawSlider.value = String(p.yaw);
-      elSelected.textContent = `选中：${p.label}`;
+      setYawUI(p.yaw);
+      elSelected.textContent = `选中：${p.label} · ${yawToDeg(p.yaw)}°`;
+      if (canSign) {
+        signL1.value = p.signLine1 ?? p.object.userData.signLine1 ?? "";
+        signL2.value = p.signLine2 ?? p.object.userData.signLine2 ?? "";
+      } else {
+        signL1.value = "";
+        signL2.value = "";
+      }
     } else {
       elSelected.textContent = placeModeType
         ? `放置中：${getBuildingDef(placeModeType)?.label || placeModeType}`
         : "未选中";
+      signL1.value = "";
+      signL2.value = "";
     }
   }
 
@@ -473,6 +601,8 @@ export function createMapEditor({
       z: p.z,
       yaw: p.yaw,
       uid: p.uid,
+      signLine1: p.signLine1 ?? null,
+      signLine2: p.signLine2 ?? null,
     }));
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -498,15 +628,28 @@ export function createMapEditor({
     if (!Array.isArray(list)) return;
     for (const item of list) {
       if (!item?.type || skipUids.has(item.uid)) continue;
-      // 已登记的同类型同位置跳过（避免和场景内置书店重复）
-      const near = placements.some(
+      // 已登记的同类型同位置：只同步招牌/朝向，不重复生成
+      const existing = placements.find(
         (p) => p.type === item.type && Math.hypot(p.x - item.x, p.z - item.z) < 0.4
       );
-      if (near) continue;
-      const p = spawnPlacement(item.type, item.x, item.z, item.yaw ?? 0);
-      if (p && item.uid) {
-        // 保持 uid 尽量稳定
+      if (existing) {
+        if (item.yaw != null) {
+          existing.yaw = item.yaw;
+          applyPose(existing);
+        }
+        if (item.signLine1 != null || item.signLine2 != null) {
+          existing.signLine1 = item.signLine1 ?? existing.signLine1;
+          existing.signLine2 = item.signLine2 ?? existing.signLine2;
+          if (typeof existing.object?.userData?.setSignText === "function") {
+            existing.object.userData.setSignText(existing.signLine1, existing.signLine2);
+          }
+        }
+        continue;
       }
+      spawnPlacement(item.type, item.x, item.z, item.yaw ?? 0, {
+        signLine1: item.signLine1,
+        signLine2: item.signLine2,
+      });
     }
   }
 

@@ -95,8 +95,12 @@ export function createGrassTuft() {
   return g;
 }
 
-/** 招牌烫金文字纹理（Canvas 实时绘制：HARD TO FIND / BOOKSHOP） */
-function makeSignTexture() {
+/**
+ * 招牌烫金文字纹理（Canvas 实时绘制）
+ * @param {string} [line1]
+ * @param {string} [line2]
+ */
+export function makeSignTexture(line1 = "HARD TO FIND", line2 = "BOOKSHOP") {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 224;
@@ -105,16 +109,50 @@ function makeSignTexture() {
   ctx.fillStyle = "#D4AF37";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.font = "bold 60px Georgia, 'Times New Roman', serif";
-  ctx.fillText("HARD TO FIND", 256, 84);
-  ctx.font = "italic 34px Georgia, serif";
-  ctx.fillText("BOOKSHOP", 256, 158);
+  const l1 = String(line1 || "").slice(0, 28);
+  const l2 = String(line2 || "").slice(0, 28);
+  // 字号随长度略缩，避免溢出
+  const size1 = l1.length > 16 ? 42 : l1.length > 12 ? 50 : 60;
+  const size2 = l2.length > 16 ? 26 : l2.length > 12 ? 30 : 34;
+  ctx.font = `bold ${size1}px Georgia, 'Times New Roman', serif`;
+  ctx.fillText(l1, 256, l2 ? 84 : 112);
+  if (l2) {
+    ctx.font = `italic ${size2}px Georgia, serif`;
+    ctx.fillText(l2, 256, 158);
+  }
   const tex = new THREE.CanvasTexture(canvas);
   tex.anisotropy = 4;
+  tex.needsUpdate = true;
   return tex;
 }
 
-export function createHardToFindBookshop({ bermEdgeY = 0.02 } = {}) {
+/**
+ * 更新书店招牌两行文字（地图编辑器用）
+ * @param {THREE.Object3D} group
+ * @param {string} line1
+ * @param {string} line2
+ */
+export function setBookshopSignText(group, line1, line2) {
+  if (!group) return;
+  const plane = group.userData?.signNamePlane;
+  if (!plane?.material) return;
+  const l1 = line1 != null ? String(line1) : group.userData.signLine1 || "HARD TO FIND";
+  const l2 = line2 != null ? String(line2) : group.userData.signLine2 || "BOOKSHOP";
+  const old = plane.material.map;
+  const tex = makeSignTexture(l1, l2);
+  plane.material.map = tex;
+  plane.material.needsUpdate = true;
+  if (old && old !== tex) old.dispose?.();
+  group.userData.signLine1 = l1;
+  group.userData.signLine2 = l2;
+  group.userData.hasSign = true;
+}
+
+export function createHardToFindBookshop({
+  bermEdgeY = 0.02,
+  signLine1 = "HARD TO FIND",
+  signLine2 = "BOOKSHOP",
+} = {}) {
   const g = new THREE.Group();
   g.name = "hard-to-find-bookshop";
   const brick = toonMat(BRICK);
@@ -208,12 +246,16 @@ export function createHardToFindBookshop({ bermEdgeY = 0.02 } = {}) {
   const board = box(1.68, 0.94, 0.09, signBg, O_S); // 黑底面板
   board.position.set(0, 0.55, 0.02);
   signG.add(board);
-  // 烫金店名（CanvasTexture 贴在面板正面）
+  // 烫金店名（CanvasTexture 贴在面板正面；可被 setBookshopSignText 热更新）
   const namePlane = new THREE.Mesh(
     new THREE.PlaneGeometry(1.5, 0.66),
-    new THREE.MeshBasicMaterial({ map: makeSignTexture(), transparent: true })
+    new THREE.MeshBasicMaterial({
+      map: makeSignTexture(signLine1, signLine2),
+      transparent: true,
+    })
   );
   namePlane.position.set(0, 0.55, 0.075);
+  namePlane.name = "bookshop-sign-text";
   signG.add(namePlane);
   const arch = new THREE.Mesh( // 圆弧顶
     facet(new THREE.CylinderGeometry(0.92, 0.92, 0.07, 12, 1, false, 0, Math.PI)),
@@ -241,5 +283,10 @@ export function createHardToFindBookshop({ bermEdgeY = 0.02 } = {}) {
 
   // 碰撞：主体 + 招牌一体近似
   g.userData.collideRadius = 3.2;
+  g.userData.hasSign = true;
+  g.userData.signNamePlane = namePlane;
+  g.userData.signLine1 = signLine1;
+  g.userData.signLine2 = signLine2;
+  g.userData.setSignText = (l1, l2) => setBookshopSignText(g, l1, l2);
   return g;
 }

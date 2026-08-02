@@ -21,10 +21,18 @@ export const BUILDING_CATALOG = {
   bookshop: {
     id: "bookshop",
     label: "Hard To Find 书店",
-    create: () => createHardToFindBookshop({ bermEdgeY: 0.02 }),
+    create: (opts = {}) =>
+      createHardToFindBookshop({
+        bermEdgeY: 0.02,
+        signLine1: opts.signLine1,
+        signLine2: opts.signLine2,
+      }),
     defaultYaw: -0.5,
     collideRadius: 3.2,
     color: "#c45a3a",
+    hasSign: true,
+    defaultSignLine1: "HARD TO FIND",
+    defaultSignLine2: "BOOKSHOP",
   },
   house: {
     id: "house",
