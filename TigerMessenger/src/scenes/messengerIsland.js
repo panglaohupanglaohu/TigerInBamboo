@@ -6,10 +6,12 @@
 //  不包含西芳寺景观（见 saihojiGarden.js）
 // =====================================================================
 import { PLANET_RADIUS } from "../world/planet.js";
+import { P } from "../core/params.js";
 import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
 import { buildHills } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing } from "../world/nature.js";
 import { createGreatLake, updateGreatLakeWade } from "../world/lake.js";
+import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import { groundLiftAt } from "../world/hills.js";
@@ -39,6 +41,9 @@ export const messengerIslandScene = {
     const farSide = decorateFarSide(scene, R);
     const greatLake = createGreatLake(scene, R);
 
+    // 基督城有轨电车：营地→书店→天桥→西芳寺 环形轨道
+    const tramSystem = buildChristchurchTramSystem(scene, R);
+
     // Hard To Find Bookshop：与地图共用 createCatalogObject（同一工厂/参数）
     const bookshopX = 11.5;
     const bookshopZ = 5.5;
@@ -47,6 +52,8 @@ export const messengerIslandScene = {
       signLine1: "HARD TO FIND",
       signLine2: "BOOKSHOP",
     });
+    // 稳定 uid：地图存档跨次加载可对齐，不必依赖初始化坐标
+    bookshop.userData.mapUid = "world-bookshop";
     // 底部原点 = 球面 R+lift（与 mapEditor.applyPose 同序：place + rotateY）
     placeObjectOnSphere(bookshop, bookshopX, bookshopZ, bookshopLift, R);
     bookshop.rotateY(-0.5); // 立面朝向街道
@@ -103,10 +110,12 @@ export const messengerIslandScene = {
         camp,
         farSide,
         bookshop,
+        tramSystem,
       },
       update(dt, t, runtime) {
         updatePlatformPulse(platforms, t);
-        updateClouds(clouds, dt, t);
+        updateClouds(clouds, dt, t, { speed: P.windSpeed, dirDeg: P.windDir });
+        tramSystem.update(dt, runtime?.player?.position);
         const player = runtime?.player;
         if (player) {
           // 先重置，再由大湖写 factor

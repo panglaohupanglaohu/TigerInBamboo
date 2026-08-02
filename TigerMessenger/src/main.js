@@ -123,7 +123,7 @@ const mapEditor = createMapEditor({
   colliders: assetColliders,
   toast: showToast,
 });
-// 登记场景内置书店
+// 登记场景内置书店（无存档时作为默认布局；有存档则由 loadPersisted 整表覆盖）
 if (messenger?.landmarks?.bookshop) {
   const shop = messenger.landmarks.bookshop;
   const col = assetColliders.find(
@@ -131,7 +131,7 @@ if (messenger?.landmarks?.bookshop) {
   );
   mapEditor.registerFromWorld("bookshop", shop, -0.5, col || null);
 }
-// 恢复本机保存的额外放置（跳过已在场内的近重复）
+// 有本机布局时完整恢复（位置/朝向/招牌/增删），不再回落到初始化布局
 mapEditor.loadPersisted();
 // 地图打开时：3D 左键点选模型 → 地图同步选中高亮
 mapEditor.bindScenePick({ camera, domElement: renderer.domElement });
@@ -164,6 +164,9 @@ const tramRide = createTramRide({
     showToast("已上车 · 坐在窗边向外看风景 · 再按 F 下车", 3.2);
   },
 });
+
+// ---------- 天气（雨/雪/闪电，受风速风向影响） ----------
+const weather = createWeatherSystem(scene, PLANET_RADIUS);
 
 // ---------- 弹琴老人（近身 E 键播放 / 停止八音盒） ----------
 const elderMusic = createElderMusicInteraction({
@@ -220,6 +223,7 @@ function animate() {
 
   updateToast(dt);
   dayNight.update(dt);
+  weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   mapEditor.tickHighlight?.();
 
   // 电车搭乘接管：上车动画/乘坐时跳过移动与碰撞

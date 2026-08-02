@@ -393,6 +393,17 @@ export function createMapEditor({
     }
   }
 
+  function nextUid() {
+    return `b${uidSeq++}`;
+  }
+
+  /** 保证后续自动编号不与已恢复的 uid 冲突 */
+  function bumpUidSeqFrom(uid) {
+    if (typeof uid !== "string") return;
+    const m = /^b(\d+)$/.exec(uid);
+    if (m) uidSeq = Math.max(uidSeq, Number(m[1]) + 1);
+  }
+
   function spawnPlacement(typeId, x, z, yaw = 0, extra = {}) {
     const def = getBuildingDef(typeId);
     if (!def) {
@@ -410,7 +421,8 @@ export function createMapEditor({
     const object = createCatalogObject(typeId, factoryOpts);
     if (!object) return null;
     object.userData.mapEditable = true;
-    const uid = `b${uidSeq++}`;
+    const uid = extra.uid || nextUid();
+    bumpUidSeqFrom(uid);
     object.userData.mapUid = uid;
     scene.add(object);
 
@@ -639,7 +651,9 @@ export function createMapEditor({
    */
   function registerExisting(typeId, object, x, z, yaw = 0, collider = null) {
     const def = getBuildingDef(typeId);
-    const uid = object.userData.mapUid || `b${uidSeq++}`;
+    // 优先沿用物体上的稳定 uid（场景可设 world-bookshop）；否则自动编号
+    const uid = object.userData.mapUid || nextUid();
+    bumpUidSeqFrom(uid);
     object.userData.mapEditable = true;
     object.userData.mapType = typeId;
     object.userData.mapUid = uid;
@@ -830,49 +844,113 @@ export function createMapEditor({
     }
   }
 
+  /**
+   * 从 localStorage 完整恢复布局（有存档时存档为唯一真相，覆盖初始化布局）。
+   * - 复用已登记物体（uid → 同类型最近），改到存档坐标/朝向/招牌
+   * - 缺的生成，多余的（含未保存的默认建筑）删除
+   * @param {Set<string>} [skipUids]
+   * @returns {boolean} 是否应用了存档
+   */
   function loadPersisted(skipUids = new Set()) {
     let raw;
     try {
       raw = localStorage.getItem(STORAGE_KEY);
     } catch {
-      return;
+      return false;
     }
-    if (!raw) return;
+    // 无键 = 从未保存，保留场景初始化布局
+    if (raw == null || raw === "") return false;
     let list;
     try {
       list = JSON.parse(raw);
     } catch {
-      return;
+      return false;
     }
-    if (!Array.isArray(list)) return;
+    if (!Array.isArray(list)) return false;
+
+    /** @type {Set<object>} 被存档复用的 placement 引用 */
+    const reused = new Set();
+
     for (const item of list) {
-      if (!item?.type || skipUids.has(item.uid)) continue;
-      // 已登记的同类型同位置：只同步招牌/朝向，不重复生成
-      const existing = placements.find(
-        (p) => p.type === item.type && Math.hypot(p.x - item.x, p.z - item.z) < 0.4
-      );
-      if (existing) {
-        if (item.yaw != null) {
-          existing.yaw = item.yaw;
-          applyPose(existing);
+      if (!item?.type || (item.uid && skipUids.has(item.uid))) continue;
+      if (!getBuildingDef(item.type)) continue;
+
+      // 1) 精确 uid
+      let match =
+        item.uid != null
+          ? placements.find((p) => p.uid === item.uid && !reused.has(p))
+          : null;
+
+      // 2) 同类型优先复用（场景默认书店等：uid 可能从 b1 变成 world-bookshop）
+      if (!match) {
+        const sameType = placements.filter((p) => p.type === item.type && !reused.has(p));
+        if (sameType.length === 1) {
+          match = sameType[0];
+        } else if (sameType.length > 1) {
+          let best = sameType[0];
+          let bestD = Math.hypot(best.x - item.x, best.z - item.z);
+          for (let i = 1; i < sameType.length; i++) {
+            const p = sameType[i];
+            const d = Math.hypot(p.x - item.x, p.z - item.z);
+            if (d < bestD) {
+              bestD = d;
+              best = p;
+            }
+          }
+          match = best;
         }
+      }
+
+      if (match) {
+        reused.add(match);
+        // 与存档 uid 对齐，保证下次仍能精确命中
+        if (item.uid && item.uid !== match.uid) {
+          match.uid = item.uid;
+          if (match.object) match.object.userData.mapUid = item.uid;
+        }
+        bumpUidSeqFrom(match.uid);
+        match.x = Number(item.x) || 0;
+        match.z = Number(item.z) || 0;
+        match.yaw = Number.isFinite(item.yaw) ? item.yaw : 0;
         if (item.signLine1 != null || item.signLine2 != null) {
-          existing.signLine1 = item.signLine1 ?? existing.signLine1;
-          existing.signLine2 = item.signLine2 ?? existing.signLine2;
-          if (typeof existing.object?.userData?.setSignText === "function") {
-            existing.object.userData.setSignText(existing.signLine1, existing.signLine2);
+          match.signLine1 = item.signLine1 ?? match.signLine1;
+          match.signLine2 = item.signLine2 ?? match.signLine2;
+          if (typeof match.object?.userData?.setSignText === "function") {
+            match.object.userData.setSignText(match.signLine1, match.signLine2);
           }
         }
+        if (item.seed != null || item.scale != null || item.hue != null) {
+          match.factoryOpts = {
+            ...(match.factoryOpts || {}),
+            seed: item.seed ?? match.factoryOpts?.seed,
+            scale: item.scale ?? match.factoryOpts?.scale,
+            hue: item.hue ?? match.factoryOpts?.hue,
+          };
+        }
+        applyPose(match);
         continue;
       }
-      spawnPlacement(item.type, item.x, item.z, item.yaw ?? 0, {
+
+      const spawned = spawnPlacement(item.type, Number(item.x) || 0, Number(item.z) || 0, item.yaw ?? 0, {
+        uid: item.uid || undefined,
         signLine1: item.signLine1,
         signLine2: item.signLine2,
         seed: item.seed ?? undefined,
         scale: item.scale ?? undefined,
         hue: item.hue ?? undefined,
       });
+      if (spawned) reused.add(spawned);
     }
+
+    // 存档未包含的已登记物（含被用户删掉的默认建筑）：从场景移除
+    for (const p of placements.slice()) {
+      if (!reused.has(p)) removePlacement(p.uid);
+    }
+
+    redraw();
+    refreshList();
+    syncTools();
+    return true;
   }
 
   function setOpen(next) {
