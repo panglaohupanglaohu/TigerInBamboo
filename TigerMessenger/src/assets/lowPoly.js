@@ -20,13 +20,15 @@ export function facet(geo) {
 export function createLowPolyTree() {
   const g = new THREE.Group();
   const GOLDEN = Math.PI * (3 - Math.sqrt(5));
-  const bark = toonMat(0x8a5a3a);
+  // 水墨：焦褐干 + 沉绿冠（远侧与宣纸底相称）
+  const barkInk = toonMat(0x3a322c);
+  const greens = [0x1a3024, 0x243828, 0x2c4030, 0x344838, 0x3c5040, 0x465848];
 
   // 基干
   const trunkH = 0.85;
   const trunk = new THREE.Mesh(
     facet(new THREE.CylinderGeometry(0.1, 0.16, trunkH, 5)),
-    bark
+    barkInk
   );
   trunk.position.y = trunkH / 2;
   trunk.castShadow = true;
@@ -35,7 +37,6 @@ export function createLowPolyTree() {
 
   // 5~6 层圆锥，自下而上半径/高度按比例收缩（自相似）
   const layerN = 5 + ((Math.random() * 2) | 0);
-  const greens = [0x2f7a48, 0x3f8f5a, 0x4aa566, 0x55b06e, 0x5cba72, 0x6bc87e];
   let yCursor = trunkH * 0.72;
   let phase = Math.random() * Math.PI * 2;
   let prevR = 0.72;
@@ -53,7 +54,7 @@ export function createLowPolyTree() {
       const gap = 0.12 + (1 - t) * 0.06;
       const bridge = new THREE.Mesh(
         facet(new THREE.CylinderGeometry(0.04 * (1 - t * 0.4), 0.055 * (1 - t * 0.3), gap, 5)),
-        bark
+        barkInk
       );
       bridge.position.y = yCursor + gap / 2;
       bridge.castShadow = true;
@@ -88,7 +89,7 @@ export function createLowPolyTree() {
             4
           )
         ),
-        bark
+        barkInk
       );
       stem.position.y = armLen / 2;
       stem.castShadow = true;
@@ -115,12 +116,15 @@ export function createLowPolyTree() {
   return g;
 }
 
-/** 低多边房子 */
+/**
+ * 低多边房子 · 水墨化：
+ * 墙宣纸白、瓦黛青/墨灰、门焦褐、窗淡墨青（备用工厂，布局 count 可为 0）
+ */
 export function createLowPolyHouse() {
   const g = new THREE.Group();
   const body = new THREE.Mesh(
     facet(new THREE.BoxGeometry(1.6, 1.0, 1.4)),
-    toonMat(0xe8d8b0)
+    toonMat(0xf2ebe0) // 宣纸白墙
   );
   body.position.y = 0.5;
   body.castShadow = true;
@@ -129,7 +133,7 @@ export function createLowPolyHouse() {
 
   const roof = new THREE.Mesh(
     facet(new THREE.ConeGeometry(1.25, 0.7, 4)),
-    toonMat(0xc45a4a)
+    toonMat(0x4a5560) // 黛青瓦
   );
   roof.rotation.y = Math.PI / 4;
   roof.position.y = 1.0 + 0.35;
@@ -139,21 +143,21 @@ export function createLowPolyHouse() {
 
   const door = new THREE.Mesh(
     facet(new THREE.BoxGeometry(0.4, 0.62, 0.06)),
-    toonMat(0x6a4a3a)
+    toonMat(0x3a322c) // 焦褐门
   );
   door.position.set(0, 0.31, 0.71);
   g.add(door);
 
   const win = new THREE.Mesh(
     facet(new THREE.BoxGeometry(0.3, 0.3, 0.05)),
-    toonMat(0x9ec5ff)
+    toonMat(0x8a9aaa) // 淡墨窗
   );
   win.position.set(0.48, 0.6, 0.71);
   g.add(win);
 
   const chimney = new THREE.Mesh(
     facet(new THREE.BoxGeometry(0.18, 0.45, 0.18)),
-    toonMat(0x8a8a96)
+    toonMat(0x5a5854) // 墨灰烟囱
   );
   chimney.position.set(0.45, 1.25, 0);
   chimney.castShadow = true;
@@ -178,7 +182,7 @@ export function createLowPolyRock() {
     v.multiplyScalar(jitterCache.get(key));
     pos.setXYZ(i, v.x, v.y, v.z);
   }
-  const rock = new THREE.Mesh(facet(geo), toonMat(0x7a8494));
+  const rock = new THREE.Mesh(facet(geo), toonMat(0x3a3834)); // 焦墨岩
   rock.scale.set(1, 0.7, 0.9);
   rock.position.y = 0.28; // 底部贴地
   rock.castShadow = true;
@@ -190,13 +194,13 @@ export function createLowPolyRock() {
   return g;
 }
 
-/** 低空日系软云：乳白软球簇（不描边、不 Cel 硬阴影，避免夜景感） */
+/** 低空软云：宣纸米色软球簇（不描边、不 Cel 硬阴影） */
 export function createLowPolyCloud() {
   const g = new THREE.Group();
   const mat = new THREE.MeshBasicMaterial({
-    color: 0xfffaf5,
+    color: 0xf5efe4,
     transparent: true,
-    opacity: 0.92,
+    opacity: 0.88,
   });
   const puffs = [
     { r: 0.6, x: 0, y: 0.55, z: 0 },
@@ -215,12 +219,20 @@ export function createLowPolyCloud() {
   return g;
 }
 
-/** 花草：细茎 + 小花瓣盘 */
-export function createLowPolyFlower(hue = 0xff88aa) {
+/** 水墨花色默认盘（低饱和） */
+export const INK_FLOWER_COLORS = Object.freeze([
+  0xc4a090, // 淡赭
+  0xb8a878, // 枯黄
+  0x9a8ab0, // 浅紫
+  0x8a9aaa, // 淡墨青
+]);
+
+/** 花草：细茎 + 小花瓣盘（默认水墨低饱和） */
+export function createLowPolyFlower(hue = 0xc4a090) {
   const g = new THREE.Group();
   const stem = new THREE.Mesh(
     facet(new THREE.CylinderGeometry(0.03, 0.04, 0.55, 4)),
-    toonMat(0x3d8f4a)
+    toonMat(0x2c4030)
   );
   stem.position.y = 0.28;
   g.add(stem);
@@ -235,7 +247,7 @@ export function createLowPolyFlower(hue = 0xff88aa) {
 
   const leaf = new THREE.Mesh(
     facet(new THREE.ConeGeometry(0.12, 0.25, 4)),
-    toonMat(0x4aa55a)
+    toonMat(0x344838)
   );
   leaf.rotation.z = 0.9;
   leaf.position.set(0.1, 0.25, 0);
@@ -254,7 +266,7 @@ export function createLowPolySignpost() {
   const g = new THREE.Group();
   const post = new THREE.Mesh(
     facet(new THREE.CylinderGeometry(0.07, 0.09, 1.6, 6)),
-    toonMat(0xb8956a)
+    toonMat(0x3a322c) // 焦墨立柱
   );
   post.position.y = 0.8;
   post.castShadow = true;
@@ -263,17 +275,17 @@ export function createLowPolySignpost() {
 
   const board = new THREE.Mesh(
     facet(new THREE.BoxGeometry(0.7, 0.28, 0.06)),
-    toonMat(0xfff6e8)
+    toonMat(0xf2ebe0) // 宣纸牌面
   );
   board.position.set(0.28, 1.25, 0);
   board.rotation.z = -0.08;
   outlineAs(board, "street");
   g.add(board);
 
-  // 小箭头
+  // 小箭头 · 朱砂点缀（低饱和）
   const arrow = new THREE.Mesh(
     facet(new THREE.ConeGeometry(0.08, 0.16, 4)),
-    toonMat(0xe76f51)
+    toonMat(0xa63a2e)
   );
   arrow.rotation.z = -Math.PI / 2;
   arrow.position.set(0.58, 1.25, 0.02);
@@ -290,7 +302,7 @@ export function createLowPolyStreetLamp() {
   const g = new THREE.Group();
   const post = new THREE.Mesh(
     facet(new THREE.CylinderGeometry(0.06, 0.08, 2.2, 6)),
-    toonMat(0x6a7580)
+    toonMat(0x3a3834) // 墨石柱
   );
   post.position.y = 1.1;
   post.castShadow = true;
@@ -299,7 +311,7 @@ export function createLowPolyStreetLamp() {
 
   const arm = new THREE.Mesh(
     facet(new THREE.BoxGeometry(0.55, 0.06, 0.06)),
-    toonMat(0x5a6570)
+    toonMat(0x2a2824)
   );
   arm.position.set(0.25, 2.05, 0);
   outlineAs(arm, "street");
@@ -307,7 +319,7 @@ export function createLowPolyStreetLamp() {
 
   const lamp = new THREE.Mesh(
     facet(new THREE.SphereGeometry(0.14, 8, 6)),
-    toonMat(0xfff4d0, { emissive: 0xffe08a, emissiveIntensity: 0.25 })
+    toonMat(0xf0e6d0, { emissive: 0xd8c8a0, emissiveIntensity: 0.12 }) // 弱暖纸灯
   );
   lamp.position.set(0.48, 1.95, 0);
   g.add(lamp);
@@ -323,7 +335,7 @@ export function createLowPolyUtilityPole() {
   const g = new THREE.Group();
   const post = new THREE.Mesh(
     facet(new THREE.CylinderGeometry(0.1, 0.12, 3.2, 6)),
-    toonMat(0x8a8070)
+    toonMat(0x3a322c) // 焦墨杆
   );
   post.position.y = 1.6;
   post.castShadow = true;
@@ -332,7 +344,7 @@ export function createLowPolyUtilityPole() {
 
   const cross = new THREE.Mesh(
     facet(new THREE.BoxGeometry(1.1, 0.07, 0.07)),
-    toonMat(0x7a7060)
+    toonMat(0x2a2824)
   );
   cross.position.y = 2.85;
   outlineAs(cross, "street");
@@ -341,7 +353,7 @@ export function createLowPolyUtilityPole() {
   for (const x of [-0.4, 0, 0.4]) {
     const ins = new THREE.Mesh(
       facet(new THREE.CylinderGeometry(0.05, 0.05, 0.12, 5)),
-      toonMat(0xd8e8f0)
+      toonMat(0xc8c0b0) // 淡墨绝缘子
     );
     ins.position.set(x, 2.72, 0);
     g.add(ins);

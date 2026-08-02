@@ -1,16 +1,15 @@
 // =====================================================================
-//  环境：日系白天插画风光照 + 薄荷天空 + 轻柔日光点缀
-//  （已清除月亮 / 星点 / 夜色漂浮光点）
+//  环境：东方水墨风 · 宣纸米色 + 留白雾霭 + 暖白光照（已清除夜景残留）
 // =====================================================================
 import * as THREE from "three";
 import { P } from "../core/params.js";
 
 export function setupEnvironment(scene) {
-  // ---------- 光照：清爽高亮 ----------
-  const ambient = new THREE.AmbientLight(0xf2fffb, P.ambientIntensity ?? 1.0);
+  // ---------- 光照：暖白明亮（水墨色块，无塑料反光） ----------
+  const ambient = new THREE.AmbientLight(0xfffdf6, P.ambientIntensity ?? 0.9);
   scene.add(ambient);
 
-  const hemi = new THREE.HemisphereLight(0xd6fff2, 0x3d9a5f, 0.5);
+  const hemi = new THREE.HemisphereLight(0xf5efe0, 0x5a6b52, 0.45);
   scene.add(hemi);
 
   const dir = new THREE.DirectionalLight(0xfff6e0, P.sunIntensity ?? 1.6);
@@ -26,20 +25,20 @@ export function setupEnvironment(scene) {
   dir.shadow.bias = -0.001;
   scene.add(dir);
 
-  const fill = new THREE.DirectionalLight(0xbfe8ff, 0.2);
+  const fill = new THREE.DirectionalLight(0xe8dcc4, 0.2);
   fill.position.set(-10, 6, -8);
   scene.add(fill);
 
-  // ---------- 天空球：薄荷青渐变 ----------
+  // ---------- 天空球：宣纸米色渐变（下缘微沉，似绢本底色） ----------
   {
     const skyGeo = new THREE.SphereGeometry(220, 24, 16);
     const skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
       uniforms: {
-        topColor: { value: new THREE.Color(0x6ac7b9) },
-        midColor: { value: new THREE.Color(0x79d2c4) },
-        botColor: { value: new THREE.Color(0x8fe0d2) },
+        topColor: { value: new THREE.Color(0xe6dcca) },
+        midColor: { value: new THREE.Color(0xdfd5c3) },
+        botColor: { value: new THREE.Color(0xcfc4ae) },
       },
       vertexShader: /* glsl */ `
         varying vec3 vWorldPos;

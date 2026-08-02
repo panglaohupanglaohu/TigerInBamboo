@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { toonMat } from "../assets/toon.js";
 
 export const PLANET_RADIUS = 40;
-export const PLANET_COLOR = 0x3d9a5f; // 偏深青绿（与薄荷天空形成插画对比）
+export const PLANET_COLOR = 0x3f7a58; // 沉绿（水墨调，与宣纸米色相称）
 
 /**
  * 场景中心星球：玩法在球「外表面」行走（平台/NPC 贴球面）。

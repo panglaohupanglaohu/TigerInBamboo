@@ -10,23 +10,10 @@ import { toonMat, outlineAs } from "../assets/toon.js";
 /**
  * 平台定义（平面设计坐标）：pos=[x, yHeight, z]，size=半尺寸
  * yHeight = 台面相对星球表面的抬升
- * rock=true 的山石平台：暖灰岩色 + 侧壁/底面噪点（台面保持平整）
+ * 原浮空岩石平台已全部改为 hills.js 的连绵土坡（高度场，视觉=碰撞）
  */
 export const PLATFORM_DEFS = [
-  { pos: [0, 0.6, 0], size: [18, 0.35, 18], color: 0x4aa76c }, // 主岛草地（青绿，硬伤一）
-  { pos: [6, 1.2, -4], size: [3.2, 0.3, 3.2], color: 0x8d8880, rock: true },
-  { pos: [10, 2.4, -7], size: [2.8, 0.3, 2.8], color: 0x837d75, rock: true },
-  { pos: [13, 3.6, -3], size: [2.6, 0.3, 2.6], color: 0x79736c, rock: true },
-  { pos: [-7, 1.5, -2], size: [3.0, 0.3, 3.0], color: 0x8d8880, rock: true },
-  { pos: [-11, 2.8, 2], size: [2.6, 0.3, 2.6], color: 0x837d75, rock: true },
-  { pos: [-9, 4.2, 7], size: [3.4, 0.3, 3.4], color: 0x79736c, rock: true },
-  { pos: [0, 2.0, -12], size: [5.0, 0.35, 4.0], color: 0x8a847c, rock: true },
-  { pos: [4, 3.4, -15], size: [2.5, 0.3, 2.5], color: 0x7b756d, rock: true },
-  { pos: [8, 1.0, 5], size: [2.4, 0.25, 2.4], color: 0x938d84, rock: true },
-  { pos: [12, 2.2, 8], size: [2.4, 0.25, 2.4], color: 0x87817a, rock: true },
-  { pos: [7, 3.5, 11], size: [3.0, 0.3, 3.0], color: 0x7b756d, rock: true },
-  { pos: [-4, 4.8, -18], size: [3.2, 0.3, 3.2], color: 0x6f6a63, rock: true },
-  { pos: [1, 5.6, -20], size: [2.4, 0.25, 2.4], color: 0x67625c, rock: true },
+  { pos: [0, 0.6, 0], size: [18, 0.35, 18], color: 0x55875f }, // 主岛草地（沉绿，水墨调）
 ];
 
 const _dir = new THREE.Vector3();
@@ -126,7 +113,7 @@ export function buildWorld(scene) {
     const group = new THREE.Group();
     const post = new THREE.Mesh(
       new THREE.CylinderGeometry(0.08, 0.1, h, 6),
-      toonMat(0xc4a06a)
+      toonMat(0x3a322c) // 焦墨木
     );
     post.position.y = h / 2;
     post.castShadow = true;
@@ -135,7 +122,7 @@ export function buildWorld(scene) {
     // 小横板招牌
     const board = new THREE.Mesh(
       new THREE.BoxGeometry(0.55, 0.28, 0.06),
-      toonMat(0xfff0d6)
+      toonMat(0xf2ebe0) // 宣纸牌
     );
     board.position.set(0.2, h * 0.75, 0);
     outlineAs(board, "street");

@@ -5,9 +5,9 @@ import * as THREE from "three";
 
 export function createStage() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x79d2c4); // 薄荷青天空（日系白天插画风）
-  // 同色系薄雾：远景微微融入天空，绝不死黑
-  scene.fog = new THREE.FogExp2(0x79d2c4, 0.006);
+  scene.background = new THREE.Color(0xdfd5c3); // 古风宣纸米色（绢本质感）
+  // 留白雾霭：同色系淡雾，模拟国画远山
+  scene.fog = new THREE.FogExp2(0xdfd5c3, 0.015);
 
   const camera = new THREE.PerspectiveCamera(
     60,

@@ -4,7 +4,7 @@
 import * as THREE from "three";
 import { flatToWorld, quatYToDir, surfaceNormal } from "../world/sphereMath.js";
 import { PLANET_RADIUS } from "../world/planet.js";
-import { findPlatformTopAtFlat } from "../world/platforms.js";
+import { groundLiftAt } from "../world/hills.js";
 import { toonMat, outlineAs } from "../assets/toon.js";
 
 const _dir = new THREE.Vector3();
@@ -69,11 +69,9 @@ export function createNpc(scene, platforms, def, role) {
   orb.position.y = 2.35;
   g.add(orb);
 
-  // 平面设计坐标 → 球面：优先落在匹配平台顶面高度
+  // 平面设计坐标 → 球面：落在岛面+土坡的真实地面高度（高度场，与碰撞一致）
   const [fx, fy, fz] = def.pos;
-  const plat = findPlatformTopAtFlat(platforms, fx, fz);
-  const height = plat ? plat.flatPos[1] : fy;
-  flatToWorld(fx, height, fz, PLANET_RADIUS, g.position);
+  flatToWorld(fx, groundLiftAt(fx, fz), fz, PLANET_RADIUS, g.position);
   surfaceNormal(g.position, _dir);
   quatYToDir(_dir, _quat);
   g.quaternion.copy(_quat);

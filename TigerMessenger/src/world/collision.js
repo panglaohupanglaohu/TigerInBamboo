@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { PLAYER_RADIUS, PLAYER_HEIGHT } from "../core/constants.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { flatToWorld } from "./sphereMath.js";
+import { groundLiftAt, worldToFlatXZ } from "./hills.js";
 
 const _up = new THREE.Vector3();
 const _tmp = new THREE.Vector3();
@@ -36,12 +37,35 @@ function inFootprint(pos, p, margin = 0) {
  * @param {object[]} platforms
  * @param {object} player
  * @param {() => void} onVoidFall
+ * @param {object|null} [hills] buildHills 返回对象；存在时山区地面按高度场吸附
  */
-export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall) {
+export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, hills = null) {
   pos.addScaledVector(vel, dt);
 
   let grounded = false;
   let groundR = PLANET_RADIUS;
+
+  // ---- 山区高度场（连绵土坡）：视觉与碰撞共用 groundLiftAt，斜坡平滑吸附 ----
+  if (hills) {
+    const flat = worldToFlatXZ(pos, PLANET_RADIUS);
+    if (flat) {
+      const surfaceR = PLANET_RADIUS + groundLiftAt(flat.x, flat.z);
+      const r = pos.length();
+      if (r < surfaceR + 0.1 && r > surfaceR - 1.5) {
+        const n0 = _up.copy(pos).normalize();
+        const vr0 = n0.dot(vel);
+        // 下落/贴地行走/已贴坡面（低速）时可吸附；正向上起跳（径向速度大）不拦截
+        if (vr0 <= 0.6 || (vr0 < 1.5 && (player.onGround || Math.abs(r - surfaceR) < 0.3))) {
+          pos.setLength(surfaceR);
+          const n = _up.copy(pos).normalize();
+          const vr = n.dot(vel);
+          if (vr < 0) vel.addScaledVector(n, -vr);
+          grounded = true;
+          groundR = surfaceR;
+        }
+      }
+    }
+  }
 
   // ---- 曲面平台：登台步升 / 高台阻挡 / 下方顶头 ----
   // 判定分两步：
@@ -63,8 +87,8 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall) {
       if (rNow < topR - STEP_UP || rNow > topR + 0.65) continue;
       const n = _up.copy(pos).normalize();
       const vr = n.dot(vel);
-      // 下落、贴地行走、或已贴台面时可吸附；正从下方高速上升则交给 ② 顶头
-      if (!(vr <= 0.6 || player.onGround || Math.abs(rNow - topR) < 0.3)) continue;
+      // 下落、贴地行走、或已贴台面（低速）时可吸附；正向上起跳（径向速度大）则放行
+      if (!(vr <= 0.6 || (vr < 1.5 && (player.onGround || Math.abs(rNow - topR) < 0.3)))) continue;
       if (!landing || topR > landing.topHeight) landing = p;
     }
     if (!landing) break;

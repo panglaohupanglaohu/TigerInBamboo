@@ -50,7 +50,8 @@ export function updatePlayerControl({ player, keys, camera, dt, gameStarted, onJ
   }
 
   const sprinting = gameStarted && (keys["ShiftLeft"] || keys["ShiftRight"]);
-  const speed = P.moveSpeed * (sprinting ? P.sprintMult : 1);
+  const speed =
+    P.moveSpeed * (sprinting ? P.sprintMult : 1) * (player.wadeFactor || 1); // 涉水减速
   _target.copy(_wish).multiplyScalar(gameStarted ? speed : 0);
 
   // 分离径向 / 切向速度

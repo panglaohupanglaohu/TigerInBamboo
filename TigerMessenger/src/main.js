@@ -9,9 +9,10 @@ import { createDevPanel } from "./core/devPanel.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { buildWorld, updatePlatformPulse } from "./world/platforms.js";
+import { buildHills } from "./world/hills.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing } from "./world/nature.js";
-import { createMoonLake, updateLakeWade, LAKE } from "./world/lake.js";
+import { createMoonLake, updateLakeWade, updateLakeFx, createGreatLake, updateGreatLakeWade, LAKE } from "./world/lake.js";
 import { updateClouds } from "./assets/lowPoly.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
@@ -34,8 +35,9 @@ const { lanterns, ambient, sun } = setupEnvironment(scene);
 // ---------- 星球（先放，平台贴其表面） ----------
 createPlanet(scene);
 
-// ---------- 世界：球面平台 + 装饰 ----------
+// ---------- 世界：球面平台 + 连绵土坡（高度场，视觉=碰撞） ----------
 const platforms = buildWorld(scene);
+const hills = buildHills(scene, PLANET_RADIUS);
 
 // ---------- 玩家 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
@@ -66,6 +68,9 @@ const assetColliders = [...playZone.colliders, ...farSide.colliders];
 // ---------- 月亮湖：浅水可涉、深水阻挡、环湖小径 ----------
 const lake = createMoonLake(scene, PLANET_RADIUS);
 assetColliders.push(lake.deepCollider); // 深水区切向阻挡
+
+// ---------- 背侧大湖：球冠水域，全浅可涉 ----------
+const greatLake = createGreatLake(scene, PLANET_RADIUS);
 
 const quest = createQuestSystem({
   scene,
@@ -130,11 +135,12 @@ function animate() {
   updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
   resolveCollisions(player.position, player.velocity, dt, platforms, player, () => {
     showToast("掉下去了… 已回到检查点");
-  });
+  }, hills);
   // 树/房/岩资产碰撞：切向推开，防止穿模
   resolveAssetColliders(player.position, assetColliders);
-  // 月亮湖：浅水涉水减速（深水已被阻挡）
+  // 月亮湖：浅水涉水减速 + 涟漪/水花/倒影（深水已被阻挡）
   updateLakeWade(player, lake);
+  updateLakeFx(lake, player, t, dt);
   syncPlayerVisual(player, playerGroup);
 
   const upLen = player.position.length() || 1;
@@ -162,4 +168,4 @@ function animate() {
 animate();
 
 // 调试
-window.__tm = { player, quest, cameraRig, P, scene, clouds, assetColliders, lake };
+window.__tm = { player, quest, cameraRig, P, scene, clouds, assetColliders, lake, hills };
