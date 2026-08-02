@@ -4,7 +4,7 @@
 //        主体件附黑边描边；Group 底部中心在局部 (0,0,0)
 // =====================================================================
 import * as THREE from "three";
-import { toonMat, addOutline, OUTLINE } from "./toon.js";
+import { toonMat, outlineAs } from "./toon.js";
 
 /** 平直化：非索引 + 逐面法线 */
 function facet(geo) {
@@ -22,7 +22,7 @@ export function createLowPolyTree() {
   );
   trunk.position.y = 0.4;
   trunk.castShadow = true;
-  addOutline(trunk, OUTLINE.treeTrunk);
+  outlineAs(trunk, "treeTrunk");
   g.add(trunk);
 
   const layers = [
@@ -34,10 +34,11 @@ export function createLowPolyTree() {
     const cone = new THREE.Mesh(facet(new THREE.ConeGeometry(r, h, 6)), toonMat(c));
     cone.position.y = y;
     cone.castShadow = true;
-    addOutline(cone, OUTLINE.treeCrown);
+    outlineAs(cone, "treeCrown");
     g.add(cone);
   }
-  g.userData.collideRadius = 0.38;
+  g.scale.setScalar(1.6); // 小世界量纲：~4.3m ≈ 玩家 2.5 倍
+  g.userData.collideRadius = 0.38; // 局部值，世界半径随总缩放
   return g;
 }
 
@@ -50,7 +51,7 @@ export function createLowPolyHouse() {
   );
   body.position.y = 0.5;
   body.castShadow = true;
-  addOutline(body, OUTLINE.house);
+  outlineAs(body, "house");
   g.add(body);
 
   const roof = new THREE.Mesh(
@@ -60,14 +61,14 @@ export function createLowPolyHouse() {
   roof.rotation.y = Math.PI / 4;
   roof.position.y = 1.0 + 0.35;
   roof.castShadow = true;
-  addOutline(roof, OUTLINE.house);
+  outlineAs(roof, "house");
   g.add(roof);
 
   const door = new THREE.Mesh(
-    facet(new THREE.BoxGeometry(0.32, 0.52, 0.06)),
+    facet(new THREE.BoxGeometry(0.4, 0.62, 0.06)),
     toonMat(0x6a4a3a)
   );
-  door.position.set(0, 0.26, 0.71);
+  door.position.set(0, 0.31, 0.71);
   g.add(door);
 
   const win = new THREE.Mesh(
@@ -85,6 +86,7 @@ export function createLowPolyHouse() {
   chimney.castShadow = true;
   g.add(chimney);
 
+  g.scale.setScalar(2.4); // 小世界量纲：墙 ~2.4m ≈ 玩家 1.4 倍
   g.userData.collideRadius = 0.95;
   return g;
 }
@@ -107,9 +109,10 @@ export function createLowPolyRock() {
   rock.scale.set(1, 0.7, 0.9);
   rock.position.y = 0.28; // 底部贴地
   rock.castShadow = true;
-  addOutline(rock, OUTLINE.rock);
+  outlineAs(rock, "rock");
   rock.receiveShadow = true;
   g.add(rock);
+  g.scale.setScalar(1.6);
   g.userData.collideRadius = 0.5;
   return g;
 }
@@ -165,7 +168,113 @@ export function createLowPolyFlower(hue = 0xff88aa) {
   leaf.position.set(0.1, 0.25, 0);
   g.add(leaf);
 
+  g.scale.setScalar(1.2);
   g.userData.collideRadius = 0.15; // 几乎可穿过
+  return g;
+}
+
+/**
+ * 木制路牌（街拍感）：立柱 + 斜向指路牌
+ * 底部原点、Cel + 描边、collideRadius
+ */
+export function createLowPolySignpost() {
+  const g = new THREE.Group();
+  const post = new THREE.Mesh(
+    facet(new THREE.CylinderGeometry(0.07, 0.09, 1.6, 6)),
+    toonMat(0xb8956a)
+  );
+  post.position.y = 0.8;
+  post.castShadow = true;
+  outlineAs(post, "street");
+  g.add(post);
+
+  const board = new THREE.Mesh(
+    facet(new THREE.BoxGeometry(0.7, 0.28, 0.06)),
+    toonMat(0xfff6e8)
+  );
+  board.position.set(0.28, 1.25, 0);
+  board.rotation.z = -0.08;
+  outlineAs(board, "street");
+  g.add(board);
+
+  // 小箭头
+  const arrow = new THREE.Mesh(
+    facet(new THREE.ConeGeometry(0.08, 0.16, 4)),
+    toonMat(0xe76f51)
+  );
+  arrow.rotation.z = -Math.PI / 2;
+  arrow.position.set(0.58, 1.25, 0.02);
+  g.add(arrow);
+
+  g.userData.collideRadius = 0.28;
+  return g;
+}
+
+/**
+ * 街灯柱：细柱 + 弯臂 + 灯罩（日间关闭，造型点缀）
+ */
+export function createLowPolyStreetLamp() {
+  const g = new THREE.Group();
+  const post = new THREE.Mesh(
+    facet(new THREE.CylinderGeometry(0.06, 0.08, 2.2, 6)),
+    toonMat(0x6a7580)
+  );
+  post.position.y = 1.1;
+  post.castShadow = true;
+  outlineAs(post, "street");
+  g.add(post);
+
+  const arm = new THREE.Mesh(
+    facet(new THREE.BoxGeometry(0.55, 0.06, 0.06)),
+    toonMat(0x5a6570)
+  );
+  arm.position.set(0.25, 2.05, 0);
+  outlineAs(arm, "street");
+  g.add(arm);
+
+  const lamp = new THREE.Mesh(
+    facet(new THREE.SphereGeometry(0.14, 8, 6)),
+    toonMat(0xfff4d0, { emissive: 0xffe08a, emissiveIntensity: 0.25 })
+  );
+  lamp.position.set(0.48, 1.95, 0);
+  g.add(lamp);
+
+  g.userData.collideRadius = 0.22;
+  return g;
+}
+
+/**
+ * 电线杆：高柱 + 横担 + 绝缘子（街拍感，非夜景霓虹）
+ */
+export function createLowPolyUtilityPole() {
+  const g = new THREE.Group();
+  const post = new THREE.Mesh(
+    facet(new THREE.CylinderGeometry(0.1, 0.12, 3.2, 6)),
+    toonMat(0x8a8070)
+  );
+  post.position.y = 1.6;
+  post.castShadow = true;
+  outlineAs(post, "street");
+  g.add(post);
+
+  const cross = new THREE.Mesh(
+    facet(new THREE.BoxGeometry(1.1, 0.07, 0.07)),
+    toonMat(0x7a7060)
+  );
+  cross.position.y = 2.85;
+  outlineAs(cross, "street");
+  g.add(cross);
+
+  for (const x of [-0.4, 0, 0.4]) {
+    const ins = new THREE.Mesh(
+      facet(new THREE.CylinderGeometry(0.05, 0.05, 0.12, 5)),
+      toonMat(0xd8e8f0)
+    );
+    ins.position.set(x, 2.72, 0);
+    g.add(ins);
+  }
+
+  g.userData.collideRadius = 0.3;
   return g;
 }
 

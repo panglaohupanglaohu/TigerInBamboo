@@ -9,6 +9,9 @@ import {
   createLowPolyRock,
   createLowPolyFlower,
   createLowPolyCloud,
+  createLowPolySignpost,
+  createLowPolyStreetLamp,
+  createLowPolyUtilityPole,
   placeOnSphere,
 } from "../assets/lowPoly.js";
 import { placeObjectOnSphere } from "./sphereMath.js";
@@ -45,7 +48,7 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
       const lon = rnd() * 360 - 180;
       const obj = placeOnSphere(make(), lat, lon, planetRadius);
       obj.rotateY(rnd() * Math.PI * 2);
-      obj.scale.setScalar(0.85 + rnd() * 0.4);
+      obj.scale.multiplyScalar(0.85 + rnd() * 0.4);
       scene.add(obj);
       meshes.push(obj);
       pushCollider(colliders, obj);
@@ -71,7 +74,7 @@ export function createCloudRing(scene, planetRadius, { count = 10, height = 8, s
     const lon = rnd() * 360 - 180;
     const obj = placeOnSphere(createLowPolyCloud(), lat, lon, planetRadius + height);
     obj.rotateY(rnd() * Math.PI * 2);
-    obj.scale.setScalar(0.8 + rnd() * 0.8);
+    obj.scale.multiplyScalar(0.8 + rnd() * 0.8);
     obj.userData.drift = {
       axis: new THREE.Vector3(rnd() - 0.5, rnd() * 0.4 + 0.6, rnd() - 0.5).normalize(),
       speed: 0.04 + rnd() * 0.08, // rad/s
@@ -87,9 +90,42 @@ export function createCloudRing(scene, planetRadius, { count = 10, height = 8, s
 }
 
 /**
- * 游玩区可见范围点缀：直接撒在主岛台面（平面设计坐标），
- * 避让 NPC 与出生点；玩家出生即可见植物/房屋。
+ * 游玩区场景布局（手工排布，非随机）：主岛小村庄。
+ *  - 房子 ×3 聚在出生点东北成村；树沿岛缘成环 + 院内点缀
+ *  - 花草沿路成簇；岩石点缀；全部避开 NPC 收发点与出生点
+ *  - 平台/任务布局不动（关卡本体）
  */
+const ISLAND_LAYOUT = {
+  houses: [
+    [6.5, 7.5], // 村东
+    [-5, 8.5], // 村西北
+    [9, -1], // 村南
+  ],
+  trees: [
+    [-2, 14.5], [4, 13.8], [10.5, 10], // 北缘
+    [13.5, 4], [15, -6], [11, -9], // 东缘
+    [-13, 6], [-14, 0], [-12, -7], // 西缘
+    [-6, -11], [3, -14], // 南缘
+    [-3, 11], // 院内点缀
+  ],
+  rocks: [
+    [-9, 12], [12, 8], [-14.5, -3],
+  ],
+  flowers: [
+    [5.5, 6.5], [7.2, 6.2], [-4, 7], [-6, 9.5], [8.5, 1.5],
+    [3, 12], [-8, 3], [1, -9], [-4, -6], [10, -5],
+  ],
+  // 街拍感：路牌 / 街灯 / 电线杆（主岛路边）
+  street: [
+    { make: "sign", xz: [2.5, 9.5] },
+    { make: "sign", xz: [-7.5, 4] },
+    { make: "lamp", xz: [8, 5] },
+    { make: "lamp", xz: [-5, -8] },
+    { make: "pole", xz: [12, -2] },
+    { make: "pole", xz: [-11, 9] },
+  ],
+};
+
 export function decoratePlayZone(scene, planetRadius, seed = 11) {
   const rnd = lcg(seed);
   const meshes = [];
@@ -106,43 +142,60 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
     keepClear.every((k) => Math.hypot(x - k.x, z - k.z) > k.r);
 
   const flowerCols = [0xff88aa, 0xffe08a, 0xc9a8ff, 0x9ec5ff];
-  const defs = [
-    [createLowPolyTree, 10],
-    [createLowPolyHouse, 3],
-    [createLowPolyRock, 6],
-    [() => createLowPolyFlower(flowerCols[(rnd() * 4) | 0]), 10],
+  const groups = [
+    [createLowPolyHouse, ISLAND_LAYOUT.houses, 0.95],
+    [createLowPolyTree, ISLAND_LAYOUT.trees, 1.0],
+    [createLowPolyRock, ISLAND_LAYOUT.rocks, 0.95],
+    [() => createLowPolyFlower(flowerCols[(rnd() * 4) | 0]), ISLAND_LAYOUT.flowers, 1.0],
   ];
-  for (const [make, count] of defs) {
-    for (let i = 0; i < count; i++) {
-      for (let attempt = 0; attempt < 40; attempt++) {
-        const ang = rnd() * Math.PI * 2;
-        const rad = 3.5 + rnd() * 12.5; // 主岛半径 ~16.5，留边缘余量
-        const x = Math.cos(ang) * rad;
-        const z = Math.sin(ang) * rad;
-        if (!isClear(x, z)) continue;
-        const obj = make();
-        placeObjectOnSphere(obj, x, z, 0.6, planetRadius); // 主岛台面抬升 0.6
-        obj.rotateY(rnd() * Math.PI * 2);
-        obj.scale.setScalar(0.85 + rnd() * 0.35);
-        scene.add(obj);
-        meshes.push(obj);
-        pushCollider(colliders, obj);
-        break;
-      }
+
+  for (const [make, spots, scaleBase] of groups) {
+    for (const [sx, sz] of spots) {
+      // 小幅抖动避免机械感；越界/压点则跳过该点
+      const x = sx + (rnd() - 0.5) * 0.8;
+      const z = sz + (rnd() - 0.5) * 0.8;
+      if (!isClear(x, z)) continue;
+      const obj = make();
+      placeObjectOnSphere(obj, x, z, 0.6, planetRadius); // 主岛台面抬升 0.6
+      obj.rotateY(rnd() * Math.PI * 2);
+      obj.scale.multiplyScalar(scaleBase * (0.9 + rnd() * 0.2));
+      scene.add(obj);
+      meshes.push(obj);
+      pushCollider(colliders, obj);
     }
   }
 
   // 驿站高台（[0,2,-12]，5x4）上再来几棵，引导视线
-  for (let i = 0; i < 3; i++) {
-    const x = -1.8 + rnd() * 3.6;
-    const z = -13.4 + rnd() * 2.8;
+  for (const [x, z] of [[-1.5, -13.2], [1.6, -11.4], [0.2, -13.6]]) {
     if (!isClear(x, z)) continue;
     const obj = createLowPolyTree();
     placeObjectOnSphere(obj, x, z, 2.0, planetRadius);
-    obj.scale.setScalar(0.8 + rnd() * 0.3);
+    obj.scale.multiplyScalar(0.55 + rnd() * 0.15); // 高台树稍小，避免压迫
     scene.add(obj);
     meshes.push(obj);
     pushCollider(colliders, obj);
   }
+
+  // 街道资产：路牌 / 街灯 / 电线杆
+  const streetMake = {
+    sign: createLowPolySignpost,
+    lamp: createLowPolyStreetLamp,
+    pole: createLowPolyUtilityPole,
+  };
+  for (const { make, xz } of ISLAND_LAYOUT.street) {
+    const [sx, sz] = xz;
+    const x = sx + (rnd() - 0.5) * 0.4;
+    const z = sz + (rnd() - 0.5) * 0.4;
+    if (!isClear(x, z)) continue;
+    const factory = streetMake[make];
+    if (!factory) continue;
+    const obj = factory();
+    placeObjectOnSphere(obj, x, z, 0.6, planetRadius);
+    obj.rotateY(rnd() * Math.PI * 2);
+    scene.add(obj);
+    meshes.push(obj);
+    pushCollider(colliders, obj);
+  }
+
   return { meshes, colliders };
 }

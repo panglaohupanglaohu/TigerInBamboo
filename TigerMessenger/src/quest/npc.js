@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { flatToWorld, quatYToDir, surfaceNormal } from "../world/sphereMath.js";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { findPlatformTopAtFlat } from "../world/platforms.js";
-import { toonMat, addOutline, OUTLINE } from "../assets/toon.js";
+import { toonMat, outlineAs } from "../assets/toon.js";
 
 const _dir = new THREE.Vector3();
 const _quat = new THREE.Quaternion();
@@ -16,7 +16,7 @@ export function createNpc(scene, platforms, def, role) {
   const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.35, 0.9, 6), bodyMat);
   body.position.y = 0.55;
   body.castShadow = true;
-  addOutline(body, OUTLINE.character);
+  outlineAs(body, "character");
   g.add(body);
 
   const head = new THREE.Mesh(
@@ -25,7 +25,7 @@ export function createNpc(scene, platforms, def, role) {
   );
   head.position.y = 1.2;
   head.castShadow = true;
-  addOutline(head, OUTLINE.characterDetail);
+  outlineAs(head, "characterDetail");
   g.add(head);
 
   const ring = new THREE.Mesh(

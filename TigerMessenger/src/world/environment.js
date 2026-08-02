@@ -65,7 +65,7 @@ export function setupEnvironment(scene) {
     scene.add(new THREE.Mesh(skyGeo, skyMat));
   }
 
-  // ---------- 日轮（替代月亮）：远景暖阳圆盘 ----------
+  // ---------- 日轮 ----------
   {
     const sunDisc = new THREE.Mesh(
       new THREE.SphereGeometry(4.5, 16, 12),
@@ -78,20 +78,112 @@ export function setupEnvironment(scene) {
     scene.add(sunHalo);
   }
 
-  // 不再放置星点 / 夜色漂浮光点；lanterns 保留空数组以兼容主循环
-  const lanterns = [];
+  // ---------- 白天氛围：远景飞鸟剪影 + 暖色光尘（替代夜色 lanterns） ----------
+  const lanterns = []; // 复用主循环 updateLanterns 驱动
+  {
+    // 飞鸟：简单 V 字双翼，绕球外圈缓飞
+    for (let i = 0; i < 6; i++) {
+      const bird = new THREE.Group();
+      const wingMat = new THREE.MeshBasicMaterial({
+        color: 0x3a4a55,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.55,
+      });
+      const wingL = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 0.12), wingMat);
+      wingL.position.set(-0.22, 0, 0);
+      wingL.rotation.z = 0.35;
+      const wingR = wingL.clone();
+      wingR.position.x = 0.22;
+      wingR.rotation.z = -0.35;
+      bird.add(wingL, wingR);
+      const body = new THREE.Mesh(
+        new THREE.SphereGeometry(0.08, 6, 4),
+        new THREE.MeshBasicMaterial({ color: 0x2a3844, transparent: true, opacity: 0.6 })
+      );
+      bird.add(body);
+      const ang = (i / 6) * Math.PI * 2;
+      const elev = 0.35 + (i % 3) * 0.08;
+      const rr = 52 + (i % 3) * 4;
+      const base = new THREE.Vector3(
+        Math.cos(ang) * Math.cos(elev) * rr,
+        Math.sin(elev) * rr + 12,
+        Math.sin(ang) * Math.cos(elev) * rr
+      );
+      bird.position.copy(base);
+      bird.userData = {
+        base: base.clone(),
+        phase: Math.random() * Math.PI * 2,
+        amp: 0.8,
+        speed: 0.25 + Math.random() * 0.15,
+        kind: "bird",
+        wingL,
+        wingR,
+      };
+      scene.add(bird);
+      lanterns.push(bird);
+    }
+    // 光尘：暖白小点，近地面空气感
+    for (let i = 0; i < 18; i++) {
+      const m = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06 + Math.random() * 0.04, 5, 4),
+        new THREE.MeshBasicMaterial({
+          color: 0xfff6e0,
+          transparent: true,
+          opacity: 0.35,
+        })
+      );
+      const ang = Math.random() * Math.PI * 2;
+      const elev = 0.15 + Math.random() * 0.45;
+      const rr = 44 + Math.random() * 14;
+      const base = new THREE.Vector3(
+        Math.cos(ang) * Math.cos(elev) * rr,
+        Math.sin(elev) * rr + 6,
+        Math.sin(ang) * Math.cos(elev) * rr
+      );
+      m.position.copy(base);
+      m.userData = {
+        base: base.clone(),
+        phase: Math.random() * Math.PI * 2,
+        amp: 0.35 + Math.random() * 0.4,
+        speed: 0.35 + Math.random() * 0.4,
+        kind: "dust",
+      };
+      scene.add(m);
+      lanterns.push(m);
+    }
+  }
 
   return { lanterns, ambient, sun: dir };
 }
 
-/** 兼容旧 API：无夜色光点时为空操作 */
+/** 白天飞鸟 / 光尘动画 */
 export function updateLanterns(lanterns, t) {
   if (!lanterns || !lanterns.length) return;
   for (const m of lanterns) {
-    const { base, phase, amp, speed } = m.userData || {};
+    const ud = m.userData || {};
+    const { base, phase = 0, amp = 0.4, speed = 0.5, kind } = ud;
     if (!base) continue;
-    m.position.y = base.y + Math.sin(t * speed + phase) * amp;
-    m.position.x = base.x + Math.cos(t * speed * 0.6 + phase) * amp * 0.35;
-    m.position.z = base.z + Math.sin(t * speed * 0.5 + phase * 1.3) * amp * 0.35;
+    if (kind === "bird") {
+      // 缓慢绕极漂移 + 振翅
+      const yaw = t * speed * 0.35 + phase;
+      m.position.set(
+        base.x * Math.cos(yaw * 0.15) - base.z * Math.sin(yaw * 0.15),
+        base.y + Math.sin(t * speed + phase) * amp,
+        base.x * Math.sin(yaw * 0.15) + base.z * Math.cos(yaw * 0.15)
+      );
+      if (ud.wingL && ud.wingR) {
+        const flap = Math.sin(t * 8 + phase) * 0.45;
+        ud.wingL.rotation.z = 0.35 + flap;
+        ud.wingR.rotation.z = -0.35 - flap;
+      }
+    } else {
+      m.position.y = base.y + Math.sin(t * speed + phase) * amp;
+      m.position.x = base.x + Math.cos(t * speed * 0.6 + phase) * amp * 0.35;
+      m.position.z = base.z + Math.sin(t * speed * 0.5 + phase * 1.3) * amp * 0.35;
+      if (m.material) {
+        m.material.opacity = 0.22 + 0.2 * (0.5 + 0.5 * Math.sin(t * speed * 1.2 + phase));
+      }
+    }
   }
 }

@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { PLANET_RADIUS } from "./planet.js";
 import { flatXZToLatLon, latLonToDir, quatYToDir } from "./sphereMath.js";
 import { createSphericalShellPatch } from "./sphereShell.js";
-import { toonMat, addOutline, OUTLINE } from "../assets/toon.js";
+import { toonMat, outlineAs } from "../assets/toon.js";
 
 /**
  * 平台定义（平面设计坐标）：pos=[x, yHeight, z]，size=半尺寸
@@ -121,7 +121,7 @@ export function buildWorld(scene) {
 
   for (const def of PLATFORM_DEFS) addPlatform(def);
 
-  // 日系木路标（替代旧深色「电线杆」）
+  // 日系木路标（与 street 资产同档描边）
   function addWoodPost(x, z, h = 1.5) {
     const group = new THREE.Group();
     const post = new THREE.Mesh(
@@ -130,7 +130,7 @@ export function buildWorld(scene) {
     );
     post.position.y = h / 2;
     post.castShadow = true;
-    addOutline(post, OUTLINE.prop);
+    outlineAs(post, "street");
     group.add(post);
     // 小横板招牌
     const board = new THREE.Mesh(
@@ -138,7 +138,7 @@ export function buildWorld(scene) {
       toonMat(0xfff0d6)
     );
     board.position.set(0.2, h * 0.75, 0);
-    addOutline(board, OUTLINE.prop);
+    outlineAs(board, "street");
     group.add(board);
 
     const { lat, lon } = flatXZToLatLon(x, z, PLANET_RADIUS);
