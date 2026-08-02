@@ -919,15 +919,15 @@ cache_put("sculpt", key, result, elapsed)
 
 ## 8. 验收总表（给 Grok 的 Definition of Done）
 
-- [ ] SculptSpec schema + 映射 + 校验（TODO-1）  
-- [ ] catalog 含 sculptTemplates（TODO-2）  
-- [ ] 默认路由为 sculpt，可配置回点云/GLB（TODO-3）  
-- [ ] sculpt_worker + 后端代理 + start.sh（TODO-5/7）  
-- [ ] builders 写 sculptRuntime（TODO-6）  
-- [ ] confirm 主路径 + 降级链（TODO-8）  
-- [ ] 至少竹/荷/禽三条 subject 端到端：识别 → 确认 → 回装 → runtime 可见  
-- [ ] metrics 可区分 sculpt / fallback  
-- [ ] 文档与代码中的「明确不做」未被违反  
+- [x] SculptSpec schema + 映射 + 校验（TODO-1）— `backend/schemas/sculpt_spec.schema.json` + `tools/sculpt/`  
+- [x] catalog 含 sculptTemplates（TODO-2）— `object_reference.json` + catalog API  
+- [x] 默认路由为 sculpt，可配置回点云/GLB（TODO-3）— `environmentModel`/`biologyModel` + `generation.js`  
+- [x] sculpt_worker + 后端代理 + start.sh（TODO-5/7）— `:7864` + `/api/sculpt/*`  
+- [x] builders 写 sculptRuntime（TODO-6）— `frontend/js/sculpt/runtime.js`  
+- [x] confirm 主路径 + 降级链（TODO-8）— wall-workspace + generation 路由  
+- [ ] 至少竹/荷/禽三条 subject 端到端：识别 → 确认 → 回装 → runtime 可见（**人工点验**）  
+- [x] metrics 可区分 sculpt / fallback — `api_metrics` workers.sculpt  
+- [x] 文档与代码中的「明确不做」未被违反（按当前集成边界）
 
 ---
 
