@@ -13,6 +13,8 @@ import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createDayNight } from "./world/dayNight.js";
 import { createTramRide } from "./player/tramRide.js";
+import { createWeatherSystem } from "./world/weather.js";
+import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
@@ -131,6 +133,8 @@ if (messenger?.landmarks?.bookshop) {
 }
 // 恢复本机保存的额外放置（跳过已在场内的近重复）
 mapEditor.loadPersisted();
+// 地图打开时：3D 左键点选模型 → 地图同步选中高亮
+mapEditor.bindScenePick({ camera, domElement: renderer.domElement });
 
 const devPanel = createDevPanel({
   sun,
@@ -159,6 +163,14 @@ const tramRide = createTramRide({
     sfxWaterTrain();
     showToast("已上车 · 坐在窗边向外看风景 · 再按 F 下车", 3.2);
   },
+});
+
+// ---------- 弹琴老人（近身 E 键播放 / 停止八音盒） ----------
+const elderMusic = createElderMusicInteraction({
+  player,
+  elder: messenger?.landmarks?.camp?.landmarks?.elder || null,
+  elHint: document.getElementById("elder-hint"),
+  isGameStarted: () => gameStarted,
 });
 
 // ---------- 开场 ----------
@@ -208,6 +220,7 @@ function animate() {
 
   updateToast(dt);
   dayNight.update(dt);
+  mapEditor.tickHighlight?.();
 
   // 电车搭乘接管：上车动画/乘坐时跳过移动与碰撞
   const riding = tramRide.update(dt);
@@ -242,6 +255,7 @@ function animate() {
   updatePlayerAnim(player, messengerMesh, dt, moving);
   cameraRig.update(dt);
   quest.updateInteraction(dt);
+  elderMusic.update(dt, t);
   quest.updateCompass();
   quest.animateMarkers(t);
   updateLanterns(lanterns, t);
@@ -268,4 +282,5 @@ window.__tm = {
   hills,
   mapEditor,
   tramRide,
+  elderMusic,
 };

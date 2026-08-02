@@ -2,6 +2,7 @@
 //  地图编辑器（开发者 🤖 菜单 · Map）
 //  - 顶视平面图选中 / 拖动建筑
 //  - 复制实例、从目录放置到任意位置
+//  - 3D 场景点选 → 地图同步高亮选中
 //  - 贴球面 + 高度场；碰撞体同步；布局写 localStorage
 // =====================================================================
 import * as THREE from "three";
@@ -37,6 +38,10 @@ export function createMapEditor({
   let uidSeq = 1;
   const _yawQ = new THREE.Quaternion();
   const _yAxis = new THREE.Vector3(0, 1, 0);
+  const _raycaster = new THREE.Raycaster();
+  const _ndc = new THREE.Vector2();
+  /** @type {THREE.Object3D|null} 3D 选中高亮环 */
+  let worldHighlight = null;
 
   // ---------- UI ----------
   const overlay = document.createElement("div");
@@ -289,7 +294,7 @@ export function createMapEditor({
       // 所有放置类型统一使用当前角度控件的朝向
       const p = spawnPlacement(placeModeType, x, z, degToYaw(placeYawDeg));
       if (p) {
-        selectedUid = p.uid;
+        selectByUid(p.uid);
         placeModeType = null;
         [...elPalette.querySelectorAll(".map-palette-item")].forEach((el) =>
           el.classList.remove("active")
@@ -297,18 +302,12 @@ export function createMapEditor({
         toast(`已放置 ${p.label} · ${yawToDeg(p.yaw)}°`, 1.4);
         persist();
       }
-      redraw();
-      refreshList();
-      syncTools();
       return;
     }
     const hit = pickNearest(x, z, 1.6);
-    selectedUid = hit ? hit.uid : null;
+    selectByUid(hit ? hit.uid : null);
     dragging = !!hit;
     if (hit) canvas.setPointerCapture(e.pointerId);
-    redraw();
-    refreshList();
-    syncTools();
   });
 
   canvas.addEventListener("pointermove", (e) => {
@@ -472,6 +471,148 @@ export function createMapEditor({
     return best;
   }
 
+  /** 地图 + 3D 共用选中：高亮列表/地图点 + 世界光环 */
+  function selectByUid(uid, { toastPick = false } = {}) {
+    selectedUid = uid || null;
+    placeModeType = null;
+    [...elPalette.querySelectorAll(".map-palette-item")].forEach((el) =>
+      el.classList.remove("active")
+    );
+    redraw();
+    refreshList();
+    syncTools();
+    updateWorldHighlight();
+    if (toastPick && uid) {
+      const p = getSelected();
+      if (p) toast(`已选中 ${p.label}`, 1.1);
+    }
+  }
+
+  function clearWorldHighlight() {
+    if (worldHighlight?.parent) worldHighlight.parent.remove(worldHighlight);
+    worldHighlight = null;
+  }
+
+  function updateWorldHighlight() {
+    clearWorldHighlight();
+    const p = getSelected();
+    if (!p?.object) return;
+    const cr = Math.max(0.6, (p.object.userData.collideRadius ?? 0.8) * 1.15);
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(cr * 0.75, cr * 1.05, 40),
+      new THREE.MeshBasicMaterial({
+        color: 0xffe08a,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.9,
+        depthWrite: false,
+      })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = 0.06;
+    ring.name = "map-select-highlight";
+    ring.userData.isMapHighlight = true;
+    // 脉冲层
+    const pulse = new THREE.Mesh(
+      new THREE.RingGeometry(cr * 1.05, cr * 1.22, 40),
+      new THREE.MeshBasicMaterial({
+        color: 0xfff6c8,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.45,
+        depthWrite: false,
+      })
+    );
+    pulse.rotation.x = -Math.PI / 2;
+    pulse.position.y = 0.04;
+    pulse.userData.isMapHighlight = true;
+    const wrap = new THREE.Group();
+    wrap.name = "map-select-wrap";
+    wrap.userData.isMapHighlight = true;
+    wrap.add(ring, pulse);
+    wrap.userData.pulse = pulse;
+    wrap.userData.t0 = performance.now();
+    p.object.add(wrap);
+    worldHighlight = wrap;
+  }
+
+  /** 从点击网格向上找带 mapUid 的可编辑根 */
+  function findPlacementRoot(obj) {
+    let o = obj;
+    while (o) {
+      if (o.userData?.isMapHighlight) {
+        o = o.parent;
+        continue;
+      }
+      if (o.userData?.mapUid) return o;
+      o = o.parent;
+    }
+    return null;
+  }
+
+  /**
+   * 3D 场景点选：地图打开时，左键点模型 → 地图同步选中高亮
+   * @param {{ camera: THREE.Camera, domElement: HTMLElement }} deps
+   */
+  function bindScenePick({ camera, domElement }) {
+    if (!camera || !domElement) return;
+
+    const onPointerDown = (e) => {
+      if (!open || e.button !== 0) return;
+      // 点在 UI 上则忽略
+      const t = e.target;
+      if (
+        t instanceof Element &&
+        (t.closest("#map-editor") ||
+          t.closest("#dev-panel") ||
+          t.closest("#dev-toggle") ||
+          t.closest("#quest-panel") ||
+          t.closest("#intro") ||
+          t.closest("#journal-panel"))
+      ) {
+        return;
+      }
+      // 若在地图放置模式，3D 点击不抢（仍用地图落点）
+      // 允许 3D 点选切换选中
+      const rect = domElement.getBoundingClientRect();
+      if (rect.width < 1 || rect.height < 1) return;
+      _ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      _ndc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      _raycaster.setFromCamera(_ndc, camera);
+      // 扩大一点阈值，小花也好点
+      _raycaster.params.Line = { threshold: 0.2 };
+      _raycaster.params.Points = { threshold: 0.3 };
+
+      const roots = placements.map((p) => p.object).filter(Boolean);
+      if (!roots.length) return;
+      const hits = _raycaster.intersectObjects(roots, true);
+      if (!hits.length) {
+        // 点空地：取消选中（放置模式保留）
+        if (!placeModeType) selectByUid(null);
+        return;
+      }
+      const root = findPlacementRoot(hits[0].object);
+      if (!root?.userData?.mapUid) return;
+      selectByUid(root.userData.mapUid, { toastPick: true });
+      // 阻止与其它 UI 冲突
+      e.stopPropagation();
+    };
+
+    domElement.addEventListener("pointerdown", onPointerDown);
+    return () => domElement.removeEventListener("pointerdown", onPointerDown);
+  }
+
+  /** 主循环可调：高亮环轻微呼吸 */
+  function tickHighlight() {
+    if (!worldHighlight?.userData?.pulse) return;
+    const t = (performance.now() - (worldHighlight.userData.t0 || 0)) * 0.003;
+    const s = 1 + 0.06 * Math.sin(t);
+    worldHighlight.userData.pulse.scale.set(s, s, s);
+    if (worldHighlight.userData.pulse.material) {
+      worldHighlight.userData.pulse.material.opacity = 0.35 + 0.2 * (0.5 + 0.5 * Math.sin(t));
+    }
+  }
+
   /**
    * 登记场景里已有的建筑（如书店），纳入编辑器
    * @param {string} typeId
@@ -602,11 +743,7 @@ export function createMapEditor({
       li.className = p.uid === selectedUid ? "active" : "";
       li.textContent = `${p.label}  (${p.x.toFixed(1)}, ${p.z.toFixed(1)}) · ${yawToDeg(p.yaw)}°`;
       li.addEventListener("click", () => {
-        selectedUid = p.uid;
-        placeModeType = null;
-        redraw();
-        refreshList();
-        syncTools();
+        selectByUid(p.uid);
       });
       elList.appendChild(li);
     }
@@ -731,6 +868,10 @@ export function createMapEditor({
       redraw();
       refreshList();
       syncTools();
+      updateWorldHighlight();
+      toast("地图已开：可在 3D 场景左键点选建筑，地图同步高亮", 2.2);
+    } else {
+      clearWorldHighlight();
     }
   }
 
@@ -748,6 +889,9 @@ export function createMapEditor({
     registerExisting,
     loadPersisted,
     getPlacements: () => placements.slice(),
+    selectByUid,
+    bindScenePick,
+    tickHighlight,
     /** 从世界物体反推 flat 并登记 */
     registerFromWorld(typeId, object, yaw = 0, collider = null) {
       const flat = worldToFlatXZ(object.position, planetRadius);
