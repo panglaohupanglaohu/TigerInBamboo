@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { facet } from "../assets/lowPoly.js";
 import { createChristchurchTram } from "../assets/tram.js";
-import { flatToWorld } from "./sphereMath.js";
+import { flatToWorld, latLonToDir } from "./sphereMath.js";
 import { groundLiftAt, worldToFlatXZ, ISLAND_BASE_LIFT, hillHeightAt } from "./hills.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { P } from "../core/params.js";
@@ -29,6 +29,7 @@ const _right = new THREE.Vector3();
 const _m = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
 const _tramWorld = new THREE.Vector3();
+const _tmp = new THREE.Vector3();
 
 /** 轨道用地形抬升：封顶，避免爬上书店山/北脊等 */
 export function trackLiftAt(x, z) {
@@ -271,16 +272,44 @@ function surfacePoint(dir, R, out = new THREE.Vector3()) {
  * 构建环形轨道 + 电车。
  * @returns {{ group, curve, tram, update, waypointsFlat }}
  */
-export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS) {
+export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {}) {
   const group = new THREE.Group();
   group.name = "christchurch-tram-system";
 
   const loopFlat = buildSmoothLoopFlat();
-  const controls = loopFlat.map(({ x, z }) => {
+
+  // ---------- 南延：西端离岛 → 跨赤道 → 绕莫比斯主晶塔 → 回北 ----------
+  // 保留 Grok 岛内避障环的北弧（营地→书店→码头→西端），
+  // 在西端点岔出南半球远足段，闭环回西北角。
+  const toWorld = (x, z) => {
     const p = new THREE.Vector3();
     surfacePointFromFlat(x, z, R, p);
     return p;
-  });
+  };
+  let iW = 0;
+  let iNW = 0;
+  for (let i = 0; i < loopFlat.length; i++) {
+    if (loopFlat[i].x < loopFlat[iW].x) iW = i; // 最西
+    const dNW = Math.hypot(loopFlat[i].x + 6, loopFlat[i].z - 8);
+    const dBest = Math.hypot(loopFlat[iNW].x + 6, loopFlat[iNW].z - 8);
+    if (dNW < dBest) iNW = i; // 最贴近西北角 (-6,8)
+  }
+  const northArc = [];
+  for (let i = iNW; ; i = (i + 1) % loopFlat.length) {
+    northArc.push(loopFlat[i]);
+    if (i === iW) break;
+  }
+  const southExcursion = [
+    latLonToDir(-10, -60).multiplyScalar(R + SURFACE_EPS), // 跨赤道
+    latLonToDir(-38, -95).multiplyScalar(R + SURFACE_EPS), // 水晶城东
+    latLonToDir(-55, -122).multiplyScalar(R + SURFACE_EPS), // 主晶塔南
+    latLonToDir(-38, -140).multiplyScalar(R + SURFACE_EPS), // 水晶城西
+    latLonToDir(-12, 165).multiplyScalar(R + SURFACE_EPS), // 回北折返
+  ];
+  const controls = [
+    ...northArc.map(({ x, z }) => toWorld(x, z)),
+    ...southExcursion,
+  ];
 
   // centripetal：间距不均时也不过冲/尖角
   const curve = new THREE.CatmullRomCurve3(controls, true, "centripetal", 0.5);
@@ -338,6 +367,20 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS) {
   const tram = createChristchurchTram();
   group.add(tram);
 
+  // ---------- 集电弓能量束（仅南半球：连接太空水环） ----------
+  const beamTarget = (opts.beamTarget || new THREE.Vector3(40, 85, -70)).clone();
+  const beamGeo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(),
+    new THREE.Vector3(),
+  ]);
+  const beam = new THREE.Line(
+    beamGeo,
+    new THREE.LineBasicMaterial({ color: 0x9fe0f0, transparent: true, opacity: 0 })
+  );
+  beam.frustumCulled = false;
+  group.add(beam);
+  let beamTime = 0;
+
   let progress = 0;
   const bodyLift = 0.06;
 
@@ -354,6 +397,18 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS) {
     tram.quaternion.copy(_q);
     tram.rotateY(-Math.PI / 2);
     tram.position.copy(_p).addScaledVector(_up, bodyLift);
+
+    // 能量束：进入南半球（y<0）集电弓射出淡蓝光束连到太空水环
+    const inSouth = tram.position.y < 0;
+    beamTime += dt;
+    if (inSouth) {
+      _tmp.set(-0.5, 1.85, 0).applyQuaternion(tram.quaternion).add(tram.position);
+      beamGeo.setFromPoints([_tmp, beamTarget]);
+      beam.material.opacity = 0.45 + 0.25 * Math.sin(beamTime * 5);
+    } else {
+      beam.material.opacity = Math.max(0, beam.material.opacity - dt * 2);
+    }
+
     if (listenerPosition) {
       tram.getWorldPosition(_tramWorld);
       updateTramSound(_tramWorld, listenerPosition);

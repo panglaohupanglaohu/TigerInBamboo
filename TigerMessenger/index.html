@@ -981,29 +981,25 @@
   </div>
 
   <!--
-    启动：优先 CDN three@0.172，失败则回退 vendor/ 本地副本。
-    importmap 必须在任何 ES module 解析前注入。
+    启动策略（可靠优先）：
+    1. 默认静态 importmap → 本地 vendor/（离线、GitHub Pages、CDN 被墙均可）
+    2. ?cdn=1 时尝试 CDN；失败则提示改回默认本地
+    importmap 必须写在任何 type=module 之前（不可在 module 内动态注入）。
   -->
+  <script type="importmap" id="tm-importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.js",
+      "three/addons/": "./vendor/jsm/"
+    }
+  }
+  </script>
   <script type="module">
     const CDN_THREE = "https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.module.js";
     const CDN_ADDONS = "https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/";
-    const LOCAL_THREE = "./vendor/three.module.js";
-    const LOCAL_ADDONS = "./vendor/jsm/";
-    const forceLocal =
-      /[?&]local=1\b/.test(location.search) ||
-      sessionStorage.getItem("tm_use_local") === "1";
-
-    function injectImportMap(threeUrl, addonsUrl) {
-      const el = document.createElement("script");
-      el.type = "importmap";
-      el.textContent = JSON.stringify({
-        imports: {
-          three: threeUrl,
-          "three/addons/": addonsUrl,
-        },
-      });
-      document.head.appendChild(el);
-    }
+    const LOCAL_THREE = new URL("./vendor/three.module.js", import.meta.url).href;
+    const LOCAL_TIMER = new URL("./vendor/jsm/misc/Timer.js", import.meta.url).href;
+    const wantCdn = /[?&]cdn=1\b/.test(location.search);
 
     function showLoadError(msg) {
       const box = document.getElementById("load-error");
@@ -1013,40 +1009,78 @@
       const btn = document.getElementById("load-error-retry");
       if (btn) {
         btn.onclick = () => {
-          sessionStorage.removeItem("tm_use_local");
-          location.reload();
+          // 清掉 cdn 参数，强制本地
+          const u = new URL(location.href);
+          u.searchParams.delete("cdn");
+          u.searchParams.set("local", "1");
+          location.replace(u.toString());
         };
+        btn.textContent = "用本地 vendor 重试";
       }
     }
 
-    async function boot(source) {
-      const threeUrl = source === "cdn" ? CDN_THREE : LOCAL_THREE;
-      const addonsUrl = source === "cdn" ? CDN_ADDONS : LOCAL_ADDONS;
-      injectImportMap(threeUrl, addonsUrl);
-      console.info(`[TigerMessenger] three.js source: ${source}`);
-      await import("./src/main.js");
+    /** 直接 URL 探测（不依赖 bare specifier） */
+    async function probe(url, label) {
+      try {
+        await import(url);
+        return null;
+      } catch (e) {
+        return `${label}: ${e && e.message ? e.message : e}`;
+      }
     }
 
     try {
-      if (forceLocal) {
-        await boot("local");
+      // file:// 协议下 ES module / importmap 常被浏览器拦截
+      if (location.protocol === "file:") {
+        showLoadError(
+          "请勿用 file:// 直接打开。请在 TigerMessenger 目录启动本地服务，例如：\n" +
+            "  npx serve .\n" +
+            "或：python3 -m http.server 8080\n" +
+            "然后访问 http://localhost:8080/index.html"
+        );
       } else {
-        try {
-          await boot("cdn");
-        } catch (cdnErr) {
-          console.warn("[TigerMessenger] CDN 失败，回退 vendor/", cdnErr);
-          sessionStorage.setItem("tm_use_local", "1");
-          // importmap 只能注册一次：整页重载走本地
-          const u = new URL(location.href);
-          u.searchParams.set("local", "1");
-          location.replace(u.toString());
+        // 探测本地 vendor 是否可读
+        const localThreeErr = await probe(LOCAL_THREE, "vendor/three.module.js");
+        const localTimerErr = await probe(LOCAL_TIMER, "vendor/jsm/misc/Timer.js");
+
+        if (localThreeErr || localTimerErr) {
+          console.warn("[TigerMessenger] 本地 vendor 探测失败", localThreeErr, localTimerErr);
+          if (wantCdn) {
+            // 仅当用户显式要求 CDN 且本地坏了时再试 CDN（需先改 importmap，只能整页静态已指向 local）
+            // 静态 map 已绑定 local；CDN 需用户部署时改 map。这里给出明确指引。
+            showLoadError(
+              "本地 vendor 缺失或路径不对，且当前 importmap 指向 ./vendor/。\n" +
+                (localThreeErr || "") +
+                "\n" +
+                (localTimerErr || "") +
+                "\n请确认 vendor/three.module.js、vendor/three.core.js、vendor/jsm/misc/Timer.js 存在，" +
+                "并用静态服务器打开 TigerMessenger 目录（不是仓库根目录上一级）。"
+            );
+          } else {
+            showLoadError(
+              "本地 Three.js 资源加载失败。\n" +
+                (localThreeErr || "") +
+                "\n" +
+                (localTimerErr || "") +
+                "\n请确认：\n" +
+                "1) 用本地 HTTP 服务打开 TigerMessenger 目录（非 file://）\n" +
+                "2) vendor/ 下有 three.module.js、three.core.js、jsm/misc/Timer.js"
+            );
+          }
+        } else {
+          console.info(
+            "[TigerMessenger] three.js source: local vendor" +
+              (wantCdn ? "（已忽略 ?cdn=1，默认本地更稳）" : "")
+          );
+          await import("./src/main.js");
         }
       }
     } catch (err) {
-      console.error(err);
+      console.error("[TigerMessenger] 启动失败", err);
       showLoadError(
-        "无法启动游戏（CDN 与本地 vendor 可能均不可用）。" +
-          (err && err.message ? "\n" + err.message : "")
+        "游戏脚本启动失败（Three 已加载，但 main 报错）：\n" +
+          (err && err.message ? err.message : String(err)) +
+          (err && err.stack ? "\n" + String(err.stack).split("\n").slice(0, 4).join("\n") : "")
       );
     }
   </script>
