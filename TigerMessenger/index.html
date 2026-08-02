@@ -342,6 +342,180 @@
       transition: opacity 0.2s ease;
     }
     #npc-hint.show, #tram-hint.show, #elder-hint.show, #fox-hint.show { opacity: 1; }
+    /* 遥控杆展开时：收起中央按键提示（避免挡操作） */
+    body.touch-pad-open #npc-hint,
+    body.touch-pad-open #tram-hint,
+    body.touch-pad-open #elder-hint,
+    body.touch-pad-open #fox-hint {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* ---------- 触控遥控杆 ---------- */
+    #touch-controls {
+      position: fixed;
+      inset: 0;
+      z-index: 16;
+      pointer-events: none;
+      font-family: inherit;
+    }
+    #touch-toggle {
+      pointer-events: auto;
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      z-index: 17;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border: 1px solid rgba(140, 180, 255, 0.35);
+      border-radius: 999px;
+      background: rgba(8, 12, 22, 0.78);
+      color: #cfe0ff;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      font-size: 13px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    #touch-toggle.is-active {
+      background: rgba(47, 143, 122, 0.35);
+      border-color: rgba(121, 210, 196, 0.55);
+      color: #e8fff8;
+    }
+    #touch-toggle-label, .touch-toggle-label { letter-spacing: 0.04em; }
+    #touch-pad {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    #touch-pad[hidden] { display: none !important; }
+    .touch-zone {
+      position: absolute;
+      bottom: 18px;
+      pointer-events: none;
+    }
+    .touch-zone-left { left: 12px; }
+    .touch-zone-right {
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      bottom: 64px; /* 给右下角开关留空 */
+    }
+    .touch-stick {
+      pointer-events: auto;
+      position: relative;
+      width: min(42vw, 148px);
+      height: min(42vw, 148px);
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .touch-stick-base {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(8, 12, 22, 0.35);
+      border: 2px solid rgba(158, 197, 255, 0.35);
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.25);
+    }
+    .touch-stick-knob {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 42%;
+      height: 42%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle at 35% 30%, rgba(200, 230, 255, 0.95), rgba(90, 140, 200, 0.75));
+      border: 2px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      will-change: transform;
+    }
+    .touch-stick-hint, .touch-look-hint {
+      position: absolute;
+      left: 50%;
+      bottom: 10%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: rgba(232, 238, 248, 0.55);
+      pointer-events: none;
+    }
+    .touch-look {
+      pointer-events: auto;
+      width: min(36vw, 128px);
+      height: min(28vw, 100px);
+      border-radius: 18px;
+      background: rgba(8, 12, 22, 0.32);
+      border: 2px dashed rgba(158, 197, 255, 0.32);
+      touch-action: none;
+      position: relative;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .touch-look.is-dragging {
+      border-style: solid;
+      border-color: rgba(121, 210, 196, 0.55);
+      background: rgba(47, 143, 122, 0.18);
+    }
+    .touch-btns {
+      pointer-events: auto;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .touch-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 224, 138, 0.4);
+      background: rgba(8, 12, 22, 0.72);
+      color: #ffe08a;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .touch-btn.is-down, .touch-btn:active {
+      transform: scale(0.94);
+      background: rgba(90, 70, 20, 0.75);
+    }
+    .touch-btn-e {
+      border-color: rgba(233, 106, 54, 0.55);
+      color: #ffb08a;
+    }
+    .touch-btn-f {
+      border-color: rgba(121, 210, 196, 0.5);
+      color: #9eefe0;
+    }
+    #touch-pad-collapse {
+      pointer-events: auto;
+      position: absolute;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(140, 180, 255, 0.28);
+      background: rgba(8, 12, 22, 0.65);
+      color: #9ec5ff;
+      font-size: 12px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    @media (min-width: 900px) and (pointer: fine) {
+      /* 桌面：遥控钮略透明，减少干扰 */
+      #touch-toggle { opacity: 0.72; }
+      #touch-toggle:hover { opacity: 1; }
+    }
     #npc-hint kbd, #tram-hint kbd, #elder-hint kbd, #fox-hint kbd {
       display: inline-block;
       min-width: 1.4em;

@@ -17,6 +17,7 @@ import { createTramRide } from "./player/tramRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
+import { createTouchControls } from "./ui/touchControls.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
@@ -105,6 +106,16 @@ const keys = createInput({
   onOrbitPitch: (dy) => cameraRig.orbitPitchBy(dy),
   onMidDrag: (on) => cameraRig.setMidDrag(on),
   onRightDrag: (on) => cameraRig.setRightDrag(on),
+});
+
+// ---------- 触控遥控杆（手机 / 平板；可收起） ----------
+const touchControls = createTouchControls({
+  keys,
+  isGameStarted: () => gameStarted,
+  onOrbit: (dx) => cameraRig.orbitBy(dx),
+  onOrbitPitch: (dy) => cameraRig.orbitPitchBy(dy),
+  onRightDrag: (on) => cameraRig.setRightDrag(on),
+  toast: showToast,
 });
 
 // ---------- 任务（依赖平台；无 messenger 场景时任务仍可创建但不贴台） ----------
@@ -240,6 +251,7 @@ elStartBtn.addEventListener("click", () => {
       : `去找发光的寄件人接信吧 · ${sceneHint}`
   );
   quest.updateQuestUI();
+  touchControls.onGameStart?.();
 });
 
 // ---------- 主循环 ----------
@@ -269,6 +281,7 @@ function animate() {
 
   updateToast(dt);
   dayNight.update(dt);
+  updateMoebiusBarrier(dt);
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   mapEditor.tickHighlight?.();
 
@@ -337,4 +350,5 @@ window.__tm = {
   elderMusic,
   foxNpc,
   weather,
+  touchControls,
 };
