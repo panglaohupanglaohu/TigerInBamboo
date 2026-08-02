@@ -23,13 +23,27 @@ export function createInput(hooks = {}) {
     isActive = () => true,
   } = hooks;
 
+  function isTypingTarget(el) {
+    if (!el || !(el instanceof Element)) return false;
+    const tag = el.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return true;
+    return !!el.closest?.("[contenteditable='true']");
+  }
+
   window.addEventListener("keydown", (e) => {
+    // 聊天/输入框聚焦时不驱动 WASD 等游戏键
+    if (isTypingTarget(e.target) || isTypingTarget(document.activeElement)) return;
     keys[e.code] = true;
     if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
       e.preventDefault();
     }
   });
   window.addEventListener("keyup", (e) => {
+    if (isTypingTarget(e.target) || isTypingTarget(document.activeElement)) {
+      // 松键时清掉，避免输入前按住的键卡住
+      keys[e.code] = false;
+      return;
+    }
     keys[e.code] = false;
   });
 

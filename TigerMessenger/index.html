@@ -355,6 +355,120 @@
       color: #ffe08a;
     }
 
+    /* 阿狸对话面板 */
+    .fox-chat {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      z-index: 18;
+      width: min(420px, 92vw);
+      padding: 12px 14px 12px;
+      border-radius: 14px;
+      background: rgba(255, 252, 247, 0.94);
+      color: #1a2638;
+      box-shadow: 0 12px 36px rgba(26, 38, 56, 0.22);
+      border: 1px solid rgba(233, 106, 54, 0.28);
+      pointer-events: auto;
+      font-size: 14px;
+    }
+    .fox-chat[hidden] { display: none !important; }
+    .fox-chat-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .fox-chat-head strong {
+      color: #e96a36;
+      font-size: 15px;
+    }
+    .fox-chat-sub {
+      flex: 1;
+      font-size: 12px;
+      color: #6a7585;
+    }
+    #fox-chat-close {
+      border: none;
+      background: rgba(26, 38, 56, 0.08);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #1a2638;
+      font-size: 14px;
+    }
+    #fox-chat-close:hover { background: rgba(233, 106, 54, 0.18); }
+    .fox-chat-log {
+      max-height: 160px;
+      overflow-y: auto;
+      padding: 6px 4px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .fox-chat-row {
+      display: flex;
+      gap: 8px;
+      line-height: 1.45;
+    }
+    .fox-chat-who {
+      flex: 0 0 auto;
+      font-weight: 600;
+      font-size: 12px;
+      min-width: 2.2em;
+    }
+    .fox-chat-row.you .fox-chat-who { color: #2f8f7a; }
+    .fox-chat-row.ali .fox-chat-who { color: #e96a36; }
+    .fox-chat-msg { color: #1a2638; }
+    .fox-chat-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .fox-chat-actions button {
+      border: 1px solid rgba(233, 106, 54, 0.35);
+      background: rgba(233, 106, 54, 0.1);
+      color: #c24e22;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .fox-chat-actions button:hover {
+      background: rgba(233, 106, 54, 0.2);
+    }
+    .fox-chat-form {
+      display: flex;
+      gap: 8px;
+    }
+    .fox-chat-form input {
+      flex: 1;
+      border: 1px solid rgba(26, 38, 56, 0.15);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+      color: #1a2638;
+    }
+    .fox-chat-form input:focus {
+      border-color: rgba(233, 106, 54, 0.55);
+      box-shadow: 0 0 0 3px rgba(233, 106, 54, 0.12);
+    }
+    .fox-chat-form button[type="submit"] {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 14px;
+      background: #e96a36;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .fox-chat-form button[type="submit"]:hover { filter: brightness(1.05); }
+
     #intro {
       position: fixed;
       inset: 0;
