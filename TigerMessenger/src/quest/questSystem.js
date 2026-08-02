@@ -18,6 +18,8 @@ import {
   showToast,
   showBubble,
   hideBubble,
+  showNpcHint,
+  hideNpcHint,
 } from "../ui/hud.js";
 import { sfxPickup, sfxDeliver, sfxWin } from "../audio/sfx.js";
 import {
@@ -314,37 +316,44 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
     }
   }
 
-  // 靠近自动交互（无需按键）；气泡每帧更新，交互有冷却防连触
-  let interactCooldown = 0;
+  // E 键交互（规格对齐实验页）：靠近显示「[E] 与居民交谈」，按 E 接信/送达
   const _bubbleWorld = new THREE.Vector3();
 
-  function updateInteraction(dt) {
-    interactCooldown = Math.max(0, interactCooldown - dt);
-    if (!isGameStarted()) return;
+  /** 当前可交互的目标 NPC（在对话距离内才返回） */
+  function currentTarget() {
+    const q = QUEST_DEFS[questIndex];
+    if (!q) return null;
+    const key = questPhase === "idle" ? `${q.id}-sender` : `${q.id}-receiver`;
+    const g = npcGroups.get(key);
+    return g && horizontalDist(player.position, g.position) <= P.talkRange ? g : null;
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.code !== "KeyE" || e.repeat || !isGameStarted()) return;
+    if (currentTarget()) tryInteract();
+  });
+
+  function updateInteraction() {
+    if (!isGameStarted()) {
+      hideBubble();
+      hideNpcHint();
+      return;
+    }
 
     const q = QUEST_DEFS[questIndex];
     if (!q) {
       hideBubble();
+      hideNpcHint();
       return;
     }
 
-    let near = null;
+    const near = currentTarget();
     let text = "";
-    if (questPhase === "idle") {
-      const s = npcGroups.get(`${q.id}-sender`);
-      if (horizontalDist(player.position, s.position) <= P.talkRange) {
-        near = s;
-        text = `${q.sender.name}：这封「${q.letter}」拜托你了`;
-      }
-    } else {
-      const r = npcGroups.get(`${q.id}-receiver`);
-      if (horizontalDist(player.position, r.position) <= P.talkRange) {
-        near = r;
-        text = `${q.receiver.name}：是给我的信吗？`;
-      }
-    }
-
     if (near) {
+      text =
+        questPhase === "idle"
+          ? `${q.sender.name}：这封「${q.letter}」拜托你了`
+          : `${q.receiver.name}：是给我的信吗？`;
       _bubbleWorld.copy(near.position);
       _bubbleWorld.y += 2.6;
       _bubbleWorld.project(camera);
@@ -357,13 +366,10 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
       } else {
         hideBubble();
       }
-      if (interactCooldown <= 0) {
-        const before = questIndex + ":" + questPhase;
-        tryInteract();
-        if (questIndex + ":" + questPhase !== before) interactCooldown = 0.9;
-      }
+      showNpcHint();
     } else {
       hideBubble();
+      hideNpcHint();
     }
   }
 

@@ -299,3 +299,74 @@ B 送达文案+状态清除+投递成功 1 ✓ / 右键环视生效+回弹 ✓ /
 - [x] 13 项综合验收（Kimi，07:51）
 - [x] 云朵漂移动画（**Grok**，2026-08-02）：绕轴公转 + 径向起伏 `updateClouds`
 - [x] 开发者面板持久化（**Grok**，2026-08-02）：`tm.planet.devParams.v1` 读写
+
+---
+
+## 实验页并入主游戏（2026-08-02 08:28 起，主人定夺：合并）
+
+> 负责人标注：双线并行——**Kimi**：`core/params.js`、`player/controller.js` 参数化、
+> `core/camera.js` 右键环视+回弹、`core/input.js` 右键钩子、`world/nature.js`（云环+远侧资产）、
+> 消重（input.js 钩子统一，去掉 main.js 本地右键块防 2x yaw）、合并验收。
+> **Grok**（并行）：`core/devPanel.js`、`questSystem` talkRange 参数化、
+> `environment.js` 返回灯光引用、`index.html` 面板样式、main.js 面板接线。
+
+### 背景
+
+主人指出 `/TigerMessenger/`（夜色成熟版）与 `/planet.html`（白天教学版）场景差距过大。
+成因：教程式需求全部长在隔离沙盒（怕冲坏主游戏），同期 Grok 把主游戏也球面化，
+两条线各自演进。主人选择：**实验页并入主游戏，home 入口即完整版**。
+
+### 移植清单（实验页 → 主游戏）
+
+| 项 | 落地 | 负责 |
+|---|------|------|
+| 开发者菜单 | `core/params.js`（P + `tm.devParams.v1` 持久化）+ `core/devPanel.js` + index.html 样式；controller/camera/questSystem 参数化 | Kimi + Grok |
+| 右键环视 yaw/pitch + 松手回弹 | `core/camera.js`（camOrbit/camPitch + SPRING_BACK）+ `core/input.js` 右键钩子 | Kimi |
+| 云朵 | `world/nature.js` `createCloudRing`（10 朵、距球面 8、`updateClouds` 漂移） | Kimi |
+| toon 资产点缀 | `world/nature.js` `decorateFarSide`（远侧 lat -20°..45°：24 树/10 岩/16 花/3 房，纯装饰无碰撞，避让游玩区北纬 55°+） | Kimi |
+| 提示文案 | hint 栏加「右键拖拽 环视」 | Kimi |
+
+### 验收（2026-08-02 08:40）
+
+- 主游戏三件套：语法 ✓ / 截图 ✓ / 控制台零告警 ✓
+- 自定义断言 6 项全过：云环 10 朵全漂移 ✓ / 远侧 Toon 网格 209 个 ✓ /
+  右键环视 yaw=-1.00 pitch=0.44 ✓ / 松手回弹 yaw=-0.03 ✓ / 面板呼出+调参 ✓
+- 截图：`tools/e2e/e2e-merge-main.png`
+- 实验页 `planet.html` 保留为教学沙盒（页内已有「← 主游戏」回链）
+
+### Todos
+
+- [x] 主游戏参数化 + devPanel 移植（Kimi + Grok，08:30–08:34）
+- [x] 右键环视 + 回弹（Kimi，08:32；消重 08:36）
+- [x] 云环 + 远侧资产（Kimi，08:37）
+- [x] 合并验收（Kimi，08:40）
+- [ ] 主游戏部署更新（push 最新合并版到 Pages）（**Kimi**，需主人 PAT）
+
+---
+
+## 配色明亮化 + 游玩区植被（主人 2026-08-02 08:45 反馈）
+
+> 负责人标注：**Kimi** 实现并验收。
+
+### 主人反馈
+
+1. 实验页配色没调到游戏页；2. 游戏页看不到植物和房屋。
+
+### 根因与修复
+
+| 问题 | 根因 | 修复 |
+|------|------|------|
+| 画面暗黑 | 夜色系光照/天空/雾；且站立面是深藏青平台（0x1a2740 系），不是淡青星球 | `environment.js` 暖阳 0xfff2d8 + 足量环境光/半球光；`stage.js` 亮雾低密度；`platforms.js` 全部改青色系（主岛 0x9adfd6）；`params.js` 默认 sun 1.4 / ambient 0.5 |
+| 看不到植被 | 首版「避让游玩区」撒球另一面；次版「避平台足迹」按主岛外接圆 ~27 单位排斥，全部被拒 | `nature.js` `decoratePlayZone` 重写：直接按平面设计坐标撒在**主岛台面**（半径 3.5–16），只避 NPC 收发点（3.2）与出生点（4）；高台再放 3 棵 |
+
+### 验收（2026-08-02 08:59）
+
+- 三件套通过（语法/截图/控制台零告警）
+- 出生点截图即见：淡青主岛、红顶房 ×2、绿树、花草、岩石、白云
+  （`tools/e2e/e2e-messenger-gameplay.png`）
+
+### Todos
+
+- [x] 配色明亮化（Kimi，08:52）
+- [x] 主岛植被房屋可见化（Kimi，08:56）
+- [x] 验收截图（Kimi，08:59）

@@ -7,6 +7,7 @@ export const elScoreTotal = document.getElementById("score-total");
 export const elLetterList = document.getElementById("letter-list");
 export const elToast = document.getElementById("toast");
 export const elBubble = document.getElementById("bubble");
+export const elNpcHint = document.getElementById("npc-hint");
 export const elIntro = document.getElementById("intro");
 export const elStartBtn = document.getElementById("start-btn");
 export const elCompassNeedle = document.getElementById("compass-needle");
@@ -42,4 +43,12 @@ export function showBubble(text, leftPx, topPx) {
 
 export function hideBubble() {
   elBubble.classList.remove("visible");
+}
+
+// NPC 交谈提示（[E] 与居民交谈）
+export function showNpcHint() {
+  elNpcHint.classList.add("show");
+}
+export function hideNpcHint() {
+  elNpcHint.classList.remove("show");
 }

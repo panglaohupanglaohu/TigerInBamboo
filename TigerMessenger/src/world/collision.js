@@ -3,7 +3,7 @@
 //  曲面平台：同心球壳台面（半径 topHeight），足迹用中心切平面投影判定
 // =====================================================================
 import * as THREE from "three";
-import { PLAYER_RADIUS } from "../core/constants.js";
+import { PLAYER_RADIUS, PLAYER_HEIGHT } from "../core/constants.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { flatToWorld } from "./sphereMath.js";
 
@@ -13,12 +13,16 @@ const _delta = new THREE.Vector3();
 
 /**
  * 点是否落在曲面平台足迹内（相对平台中心的切向 u/v）
+ * 注意：切向投影只在同一半球有效——球面对跖点附近投影会重新变小，
+ * 形成"幽灵足迹"，必须用角距守卫排除。
  */
 function inFootprint(pos, p, margin = 0) {
+  // 半球守卫：与平台中心角距超过 ~87° 时一律判为足迹外
+  _tmp.copy(pos).normalize();
+  if (_tmp.dot(p.normal) <= 0.05) return false;
   // 从球心看：用位置与平台中心方向夹角 + 切向分解
   _delta.copy(pos).sub(p.center);
   // 投影到切平面（去掉沿平台中心法线分量 —— 对曲面用位置的径向）
-  const n = p.normal;
   const u = _delta.dot(p.right);
   const v = _delta.dot(p.forward);
   const hx = p.half.x + margin;
@@ -39,28 +43,82 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall) {
   let grounded = false;
   let groundR = PLANET_RADIUS;
 
-  // ---- 曲面平台：足迹内 → 脚底贴到同心球壳半径 topHeight ----
+  // ---- 曲面平台：登台步升 / 高台阻挡 / 下方顶头 ----
+  // 判定分两步：
+  // ① 收集所有可着陆平台（足迹内 + 脚底在台面 STEP_UP 高差内），取最高台面
+  //    —— 支持 岛(0.6) → 石(1.2) → 石(2.4) 的链式登台；
+  // ② 对其余台体：台面太高迈不上且身体与台体相交 → 侧向推出或下方顶头。
+  const STEP_UP = 0.75;   // 可直接迈上的台面高差上限
+
+  // ① 着陆选择：最高优先；吸附后用新高度重选，直到没有更高台面
+  //    —— 单帧内即可完成 岛(0.6) → 石(1.2) 的链式登台
+  for (let pass = 0; pass < 3; pass++) {
+    let landing = null;
+    const rNow = pos.length();
+    for (const p of platforms) {
+      if (!p.center || !p.normal || p.topHeight == null) continue;
+      const topR = p.topHeight;
+      if (landing && topR <= (landing.topHeight ?? 0)) continue;
+      if (!inFootprint(pos, p, PLAYER_RADIUS * 0.35)) continue;
+      if (rNow < topR - STEP_UP || rNow > topR + 0.65) continue;
+      const n = _up.copy(pos).normalize();
+      const vr = n.dot(vel);
+      // 下落、贴地行走、或已贴台面时可吸附；正从下方高速上升则交给 ② 顶头
+      if (!(vr <= 0.6 || player.onGround || Math.abs(rNow - topR) < 0.3)) continue;
+      if (!landing || topR > landing.topHeight) landing = p;
+    }
+    if (!landing) break;
+    pos.setLength(landing.topHeight); // 保持角向位置，只改径向
+    const n2 = _up.copy(pos).normalize();
+    const vr2 = n2.dot(vel);
+    if (vr2 < 0) vel.addScaledVector(n2, -vr2);
+    grounded = true;
+    groundR = landing.topHeight;
+  }
+
+  // ② 台体阻挡：足迹内（含身体半径余量）且身体与台体厚度相交
   for (const p of platforms) {
     if (!p.center || !p.normal || p.topHeight == null) continue;
-    if (!inFootprint(pos, p, PLAYER_RADIUS * 0.35)) continue;
-
     const topR = p.topHeight;
+    const botR = topR - p.half.y * 2;
     const r = pos.length();
-    // 在台面附近（上方可落下，下方可顶）
-    if (r < topR + 0.65 && r > topR - p.half.y - 0.9) {
-      const n = _up.copy(pos).normalize();
-      const radialVel = n.dot(vel);
-      if (radialVel <= 0.55 || player.onGround || Math.abs(r - topR) < 0.25) {
-        // 保持足迹内的角向位置，只改径向
-        pos.setLength(topR);
-        const n2 = _up.copy(pos).normalize();
-        const vr = n2.dot(vel);
-        if (vr < 0) vel.addScaledVector(n2, -vr);
-        grounded = true;
-        groundR = topR;
-        break;
+    if (!inFootprint(pos, p, PLAYER_RADIUS)) continue;
+
+    const bodyTop = r + PLAYER_HEIGHT;
+    const tooTallToStep = r < topR - STEP_UP;
+    const intersectsSlab = tooTallToStep && bodyTop > botR + 0.05;
+    if (!intersectsSlab) continue;
+
+    const n = _up.copy(pos).normalize();
+    const vr = n.dot(vel);
+    if (vr > 0.5 && r < botR) {
+      // 从下方跳起顶头：压回壳底之下，消去向外径向速度
+      pos.setLength(botR - PLAYER_HEIGHT);
+      vel.addScaledVector(n, -vr);
+    } else {
+      // 侧面走入：沿最近边推出足迹外，并抵消继续侵入的切向分量
+      _delta.copy(pos).sub(p.center);
+      const u = _delta.dot(p.right);
+      const v = _delta.dot(p.forward);
+      const hx = p.half.x + PLAYER_RADIUS;
+      const hz = p.half.z + PLAYER_RADIUS;
+      const du = hx - Math.abs(u);
+      const dv = hz - Math.abs(v);
+      const rKeep = pos.length();
+      if (du < dv) {
+        const s = u >= 0 ? 1 : -1;
+        pos.addScaledVector(p.right, s * du);
+        const va = vel.dot(p.right);
+        if (va * s < 0) vel.addScaledVector(p.right, -va);
+      } else {
+        const s = v >= 0 ? 1 : -1;
+        pos.addScaledVector(p.forward, s * dv);
+        const va = vel.dot(p.forward);
+        if (va * s < 0) vel.addScaledVector(p.forward, -va);
       }
+      pos.setLength(rKeep); // 只推切向，保持当前径向高度
     }
+    break;
   }
 
   // ---- 星球表面 ----
@@ -76,37 +134,6 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall) {
     }
   }
 
-  // ---- 侧向：贴在曲面足迹边缘时轻微推出（避免穿进壳侧）----
-  if (!grounded) {
-    for (const p of platforms) {
-      if (!p.center || !p.normal) continue;
-      const r = pos.length();
-      const topR = p.topHeight;
-      const botR = topR - p.half.y * 2;
-      if (r < botR - 0.2 || r > topR + 0.5) continue;
-
-      _delta.copy(pos).sub(p.center);
-      const u = _delta.dot(p.right);
-      const v = _delta.dot(p.forward);
-      const hx = p.half.x + PLAYER_RADIUS;
-      const hz = p.half.z + PLAYER_RADIUS;
-      if (Math.abs(u) < hx && Math.abs(v) < hz) {
-        // 在壳厚度内：推到足迹外最近边
-        const du = hx - Math.abs(u);
-        const dv = hz - Math.abs(v);
-        if (du < dv) {
-          const sign = u >= 0 ? 1 : -1;
-          pos.addScaledVector(p.right, sign * du);
-        } else {
-          const sign = v >= 0 ? 1 : -1;
-          pos.addScaledVector(p.forward, sign * dv);
-        }
-        // 保持当前半径
-        pos.setLength(r);
-      }
-    }
-  }
-
   // ---- 虚空 / 穿心复位 ----
   const rNow = pos.length();
   if (rNow < PLANET_RADIUS * 0.5 || rNow > PLANET_RADIUS + 80) {
@@ -119,4 +146,31 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall) {
 
   player.onGround = grounded;
   player.groundR = groundR;
+}
+
+/**
+ * 场景资产（树/房/岩）切向推开：防止玩家走进模型内部。
+ * 与实验页 resolveSphericalColliders 同一手法：只推切向，不改径向高度。
+ * @param {THREE.Vector3} pos 玩家位置（会被原地修改）
+ * @param {{ position: THREE.Vector3, radius: number }[]} colliders
+ * @param {number} [radius] 玩家碰撞半径
+ */
+export function resolveAssetColliders(pos, colliders, radius = PLAYER_RADIUS) {
+  if (!colliders || !colliders.length) return;
+  _up.copy(pos).normalize();
+  for (const c of colliders) {
+    _delta.copy(pos).sub(c.position);
+    _delta.addScaledVector(_up, -_delta.dot(_up)); // 去掉径向 → 切向分离向量
+    const d = _delta.length();
+    const min = radius + (c.radius || 0.4);
+    if (d < 1e-6) {
+      // 完全重合：沿任意切向推开
+      _delta.set(1, 0, 0).addScaledVector(_up, -_up.x);
+      if (_delta.lengthSq() < 1e-6) _delta.set(0, 0, 1).addScaledVector(_up, -_up.z);
+      _delta.normalize().multiplyScalar(min);
+      pos.add(_delta);
+    } else if (d < min) {
+      pos.addScaledVector(_delta, (min - d) / d);
+    }
+  }
 }

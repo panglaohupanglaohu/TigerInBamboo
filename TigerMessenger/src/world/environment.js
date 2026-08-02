@@ -6,21 +6,21 @@ import * as THREE from "three";
 import { P } from "../core/params.js";
 
 export function setupEnvironment(scene) {
-  // ---------- 光照：环境光 + 太阳平行光（带阴影） + 半球光/补光 ----------
-  // 弱环境光：全局基础亮度，避免背光面死黑（强度可被 dev 面板覆盖）
-  const ambient = new THREE.AmbientLight(0x8899bb, P.ambientIntensity ?? 0.22);
+  // ---------- 光照：日系白天插画风（清爽高亮，杜绝死黑） ----------
+  // 强环境光：极浅青白色，暗部也保持干净
+  const ambient = new THREE.AmbientLight(0xf2fffb, P.ambientIntensity ?? 1.0);
   scene.add(ambient);
 
-  const hemi = new THREE.HemisphereLight(0x6a8fd4, 0x1a1428, 0.55);
+  const hemi = new THREE.HemisphereLight(0xd6fff2, 0x3d9a5f, 0.5);
   scene.add(hemi);
 
-  // 太阳平行光：主光源，开启阴影（shadowMap 已在 core/stage.js 开启）
-  const dir = new THREE.DirectionalLight(0xc8d8ff, P.sunIntensity ?? 1.15);
-  dir.position.set(12, 22, 8);
+  // 太阳平行光：从侧上方斜射向球心，硬边定型投影
+  const dir = new THREE.DirectionalLight(0xfff6e0, P.sunIntensity ?? 1.6);
+  dir.position.set(20, 28, 16);
   dir.castShadow = true;
   dir.shadow.mapSize.set(2048, 2048);
   dir.shadow.camera.near = 1;
-  dir.shadow.camera.far = 60;
+  dir.shadow.camera.far = 90;
   dir.shadow.camera.left = -25;
   dir.shadow.camera.right = 25;
   dir.shadow.camera.top = 25;
@@ -28,20 +28,20 @@ export function setupEnvironment(scene) {
   dir.shadow.bias = -0.001;
   scene.add(dir);
 
-  const fill = new THREE.DirectionalLight(0x8866cc, 0.25);
+  const fill = new THREE.DirectionalLight(0xbfe8ff, 0.2);
   fill.position.set(-10, 6, -8);
   scene.add(fill);
 
-  // ---------- 天空球：竖直渐变（夜色二次元） ----------
+  // ---------- 天空球：薄荷青渐变（与背景同族，略带地平线层次） ----------
   {
     const skyGeo = new THREE.SphereGeometry(220, 24, 16);
     const skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
       uniforms: {
-        topColor: { value: new THREE.Color(0x1a2a55) },
-        midColor: { value: new THREE.Color(0x0c1428) },
-        botColor: { value: new THREE.Color(0x05080f) },
+        topColor: { value: new THREE.Color(0x6ac7b9) },
+        midColor: { value: new THREE.Color(0x79d2c4) },
+        botColor: { value: new THREE.Color(0x8fe0d2) },
       },
       vertexShader: /* glsl */ `
         varying vec3 vWorldPos;

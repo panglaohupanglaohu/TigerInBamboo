@@ -280,6 +280,39 @@
       transform: translateX(-50%) rotate(45deg);
     }
 
+    /* NPC 交谈提示（屏幕中央，E 键触发） */
+    #npc-hint {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 12px 24px;
+      font-size: 16px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      background: rgba(8, 12, 22, 0.82);
+      border: 1px solid rgba(255, 224, 138, 0.45);
+      border-radius: 12px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    #npc-hint.show { opacity: 1; }
+    #npc-hint kbd {
+      display: inline-block;
+      min-width: 1.4em;
+      padding: 1px 8px;
+      margin: 0 2px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 224, 138, 0.6);
+      background: rgba(70, 55, 20, 0.85);
+      font-size: 14px;
+      text-align: center;
+      color: #ffe08a;
+    }
+
     #intro {
       position: fixed;
       inset: 0;
@@ -430,12 +463,14 @@
       · <kbd>Shift</kbd> 疾跑
       · <kbd>Space</kbd> 跳跃
       · 滚轮/中键 缩放
-      · 靠近发光点 接信 / 送达
+      · 右键拖拽 环视
+      · <kbd>E</kbd> 接信 / 送达
       · <kbd>L</kbd> 信袋
       · <kbd>M</kbd> 静音
     </div>
     <div id="toast" class="panel"></div>
     <div id="bubble"></div>
+    <div id="npc-hint">[<kbd>E</kbd>] 与居民交谈</div>
   </div>
 
   <div id="intro">

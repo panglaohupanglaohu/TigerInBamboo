@@ -21,10 +21,19 @@ export function createSphericalShellPatch({
   thickness,
   segsW = 12,
   segsD = 12,
+  rockAmp = 0, // >0 时侧壁与底面加径向噪点，台面保持平整（碰撞不受影响）
 }) {
   const innerR = Math.max(0.05, outerR - thickness * 2);
   const nw = segsW + 1;
   const nd = segsD + 1;
+
+  // 确定性伪随机（同一 u,v 永远同值，角点在相邻面间连续）
+  function rockHash(u, v) {
+    const s = Math.sin(u * 12.9898 + v * 78.233) * 43758.5453;
+    return s - Math.floor(s);
+  }
+  // 噪声半径：围绕 innerR 起伏，仅用于底面与侧壁内圈
+  const rocky = (u, v) => innerR + (rockHash(u, v) - 0.5) * 2 * rockAmp;
 
   // 每格：顶面 + 底面 各 nw*nd 点
   const topCount = nw * nd;
@@ -80,7 +89,7 @@ export function createSphericalShellPatch({
     for (let i = 0; i < nw; i++) {
       const u = (i / segsW) * 2 * halfW - halfW;
       const v = (j / segsD) * 2 * halfD - halfD;
-      sample(u, v, innerR, p, n);
+      sample(u, v, rocky(u, v), p, n);
       positions.push(p.x, p.y, p.z);
       // 底面法线朝内（-径向）
       normals.push(-n.x, -n.y, -n.z);
@@ -119,7 +128,7 @@ export function createSphericalShellPatch({
       sn.normalize();
       normals.push(sn.x, sn.y, sn.z);
 
-      sample(u, v, innerR, p, n);
+      sample(u, v, rocky(u, v), p, n);
       positions.push(p.x, p.y, p.z);
       normals.push(sn.x, sn.y, sn.z);
     }

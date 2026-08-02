@@ -9,8 +9,10 @@ import { createDevPanel } from "./core/devPanel.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { buildWorld, updatePlatformPulse } from "./world/platforms.js";
-import { createPlanet } from "./world/planet.js";
-import { resolveCollisions } from "./world/collision.js";
+import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
+import { decorateFarSide, decoratePlayZone, createCloudRing } from "./world/nature.js";
+import { updateClouds } from "./assets/lowPoly.js";
+import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
 import { updatePlayerControl } from "./player/controller.js";
 import { updatePlayerAnim } from "./player/animation.js";
@@ -40,44 +42,22 @@ const cameraRig = createCameraRig(camera, player);
 // ---------- 任务系统 / 开局状态 ----------
 let gameStarted = false;
 
-// ---------- 输入：键盘 + 滚轮/中键缩放 ----------
+// ---------- 输入：键盘 + 滚轮/中键缩放 + 右键环视（yaw/pitch，松手回弹） ----------
 const keys = createInput({
   isActive: () => gameStarted,
   onZoom: (d) => cameraRig.zoomBy(d),
   onOrbit: (dx) => cameraRig.orbitBy(dx),
+  onOrbitPitch: (dy) => cameraRig.orbitPitchBy(dy),
   onMidDrag: (on) => cameraRig.setMidDrag(on),
+  onRightDrag: (on) => cameraRig.setRightDrag(on),
 });
 
-// 右键拖拽环视（yaw + pitch，松手回弹）
-{
-  let dragging = false;
-  let lastX = 0;
-  let lastY = 0;
-  window.addEventListener("contextmenu", (e) => e.preventDefault());
-  window.addEventListener("mousedown", (e) => {
-    if (e.button !== 2 || !gameStarted) return;
-    dragging = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    cameraRig.setRightDrag(true);
-  });
-  window.addEventListener("mousemove", (e) => {
-    if (!dragging) return;
-    cameraRig.orbitBy((e.clientX - lastX) * 0.005);
-    cameraRig.orbitPitchBy((e.clientY - lastY) * 0.004);
-    lastX = e.clientX;
-    lastY = e.clientY;
-  });
-  const endDrag = () => {
-    if (!dragging) return;
-    dragging = false;
-    cameraRig.setRightDrag(false);
-  };
-  window.addEventListener("mouseup", (e) => {
-    if (e.button === 2) endDrag();
-  });
-  window.addEventListener("blur", endDrag);
-}
+// ---------- 自然点缀：游玩区植被房屋 + 远侧资产 + 云环（实验页并入） ----------
+const clouds = createCloudRing(scene, PLANET_RADIUS);
+const playZone = decoratePlayZone(scene, PLANET_RADIUS);
+const farSide = decorateFarSide(scene, PLANET_RADIUS);
+// 树/房/岩碰撞体（防穿模，与实验页"树石房可挡路"一致）
+const assetColliders = [...playZone.colliders, ...farSide.colliders];
 
 const quest = createQuestSystem({
   scene,
@@ -143,6 +123,8 @@ function animate() {
   resolveCollisions(player.position, player.velocity, dt, platforms, player, () => {
     showToast("掉下去了… 已回到检查点");
   });
+  // 树/房/岩资产碰撞：切向推开，防止穿模
+  resolveAssetColliders(player.position, assetColliders);
   syncPlayerVisual(player, playerGroup);
 
   const upLen = player.position.length() || 1;
@@ -161,6 +143,7 @@ function animate() {
   quest.animateMarkers(t);
   updateLanterns(lanterns, t);
   updatePlatformPulse(platforms, t);
+  updateClouds(clouds, dt, t);
   devPanel.tick(dt);
 
   renderer.render(scene, camera);
@@ -169,4 +152,4 @@ function animate() {
 animate();
 
 // 调试
-window.__tm = { player, quest, cameraRig, P };
+window.__tm = { player, quest, cameraRig, P, scene, clouds, assetColliders };

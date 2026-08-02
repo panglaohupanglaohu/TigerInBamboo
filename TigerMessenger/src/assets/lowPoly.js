@@ -1,12 +1,10 @@
 // =====================================================================
 //  程序化 Low-Poly 资产：树 / 房 / 石 / 花 / 栅栏 / 桥（纯基础几何体）
-//  约定：MeshToonMaterial + facet() 平直法线；Group 底部中心在局部 (0,0,0)
+//  约定：Cel 卡通材质（2 阶梯 gradientMap）+ facet() 平直法线；
+//        主体件附黑边描边；Group 底部中心在局部 (0,0,0)
 // =====================================================================
 import * as THREE from "three";
-
-function toonMat(color) {
-  return new THREE.MeshToonMaterial({ color });
-}
+import { toonMat, addOutline } from "./toon.js";
 
 /** 平直化：非索引 + 逐面法线 */
 function facet(geo) {
@@ -24,6 +22,7 @@ export function createLowPolyTree() {
   );
   trunk.position.y = 0.4;
   trunk.castShadow = true;
+  addOutline(trunk, 0.015);
   g.add(trunk);
 
   const layers = [
@@ -37,7 +36,7 @@ export function createLowPolyTree() {
     cone.castShadow = true;
     g.add(cone);
   }
-  g.userData.collideRadius = 0.55;
+  g.userData.collideRadius = 0.38;
   return g;
 }
 
@@ -83,7 +82,7 @@ export function createLowPolyHouse() {
   chimney.castShadow = true;
   g.add(chimney);
 
-  g.userData.collideRadius = 1.1;
+  g.userData.collideRadius = 0.95;
   return g;
 }
 
@@ -107,7 +106,7 @@ export function createLowPolyRock() {
   rock.castShadow = true;
   rock.receiveShadow = true;
   g.add(rock);
-  g.userData.collideRadius = 0.6;
+  g.userData.collideRadius = 0.5;
   return g;
 }
 

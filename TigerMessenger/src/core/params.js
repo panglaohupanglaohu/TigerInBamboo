@@ -13,8 +13,8 @@ export const P_DEFAULTS = Object.freeze({
   upLerp: 4.0,
   camDist: 7.5,
   talkRange: 3.2,
-  sunIntensity: 1.15,
-  ambientIntensity: 0.22,
+  sunIntensity: 1.6, // 日系白天（硬伤一纠偏）
+  ambientIntensity: 1.0,
 });
 
 /** 运行时可变参数（每帧被玩家/相机/交互读取） */
