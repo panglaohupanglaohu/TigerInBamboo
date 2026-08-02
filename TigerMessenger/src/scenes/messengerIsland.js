@@ -18,6 +18,7 @@ import {
   HARBOR,
 } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
+import { buildMoebiusCity } from "../world/moebiusCity.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import { groundLiftAt } from "../world/hills.js";
@@ -73,8 +74,13 @@ export const messengerIslandScene = {
       },
     ];
 
-    // 基督城有轨电车：营地→书店→天桥→西芳寺 环形轨道
-    const tramSystem = buildChristchurchTramSystem(scene, R);
+    // 基督城有轨电车：北岛环线 + 跨赤道绕莫比斯主晶塔
+    const tramSystem = buildChristchurchTramSystem(scene, R, {
+      beamTarget: camp.landmarks?.skyRing?.position,
+    });
+
+    // 莫比斯水晶异星城市（南半球，让开轨道走廊）
+    const moebius = buildMoebiusCity(scene, R, { trackCurve: tramSystem.curve });
 
     // Hard To Find Bookshop：与地图共用 createCatalogObject（同一工厂/参数）
     const bookshopX = 11.5;
