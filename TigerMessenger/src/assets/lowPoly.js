@@ -6,37 +6,110 @@
 import * as THREE from "three";
 import { toonMat, outlineAs } from "./toon.js";
 
-/** 平直化：非索引 + 逐面法线 */
-function facet(geo) {
+/** 平直化：非索引 + 逐面法线（flatShading 的几何等价物，硬边水墨色块） */
+export function facet(geo) {
   const g = geo.index ? geo.toNonIndexed() : geo;
   g.computeVertexNormals();
   return g;
 }
 
-/** 低多边树：圆柱树干 + 三层圆锥树冠（总高约 2.7） */
+/**
+ * 低多边松树：基干 + 多层圆锥松冠，
+ * 层与层之间用分形侧枝（黄金角螺旋 + 自相似收缩）连接。
+ */
 export function createLowPolyTree() {
   const g = new THREE.Group();
+  const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+  const bark = toonMat(0x8a5a3a);
+
+  // 基干
+  const trunkH = 0.85;
   const trunk = new THREE.Mesh(
-    facet(new THREE.CylinderGeometry(0.12, 0.18, 0.8, 5)),
-    toonMat(0x8a5a3a)
+    facet(new THREE.CylinderGeometry(0.1, 0.16, trunkH, 5)),
+    bark
   );
-  trunk.position.y = 0.4;
+  trunk.position.y = trunkH / 2;
   trunk.castShadow = true;
   outlineAs(trunk, "treeTrunk");
   g.add(trunk);
 
-  const layers = [
-    { r: 0.7, h: 1.0, y: 1.1, c: 0x3f8f5a },
-    { r: 0.55, h: 0.9, y: 1.7, c: 0x4aa566 },
-    { r: 0.38, h: 0.75, y: 2.25, c: 0x5cba72 },
-  ];
-  for (const { r, h, y, c } of layers) {
-    const cone = new THREE.Mesh(facet(new THREE.ConeGeometry(r, h, 6)), toonMat(c));
-    cone.position.y = y;
+  // 5~6 层圆锥，自下而上半径/高度按比例收缩（自相似）
+  const layerN = 5 + ((Math.random() * 2) | 0);
+  const greens = [0x2f7a48, 0x3f8f5a, 0x4aa566, 0x55b06e, 0x5cba72, 0x6bc87e];
+  let yCursor = trunkH * 0.72;
+  let phase = Math.random() * Math.PI * 2;
+  let prevR = 0.72;
+
+  for (let L = 0; L < layerN; L++) {
+    const t = layerN <= 1 ? 0 : L / (layerN - 1);
+    // 自相似：半径 / 高度按 ratio^L 收缩
+    const ratio = 0.78;
+    const r = 0.72 * Math.pow(ratio, L) * (0.92 + Math.random() * 0.12);
+    const h = 0.55 * Math.pow(ratio, L * 0.85) * (0.9 + Math.random() * 0.15);
+    const col = greens[Math.min(L, greens.length - 1)];
+
+    // 层间主轴短枝（连接上下冠层）
+    if (L > 0) {
+      const gap = 0.12 + (1 - t) * 0.06;
+      const bridge = new THREE.Mesh(
+        facet(new THREE.CylinderGeometry(0.04 * (1 - t * 0.4), 0.055 * (1 - t * 0.3), gap, 5)),
+        bark
+      );
+      bridge.position.y = yCursor + gap / 2;
+      bridge.castShadow = true;
+      outlineAs(bridge, "treeTrunk");
+      g.add(bridge);
+      yCursor += gap;
+    }
+
+    // 本层圆锥松叶
+    const cone = new THREE.Mesh(facet(new THREE.ConeGeometry(r, h, 6)), toonMat(col));
+    cone.position.y = yCursor + h * 0.38; // 层间重叠，松树塔状
     cone.castShadow = true;
     outlineAs(cone, "treeCrown");
     g.add(cone);
+
+    // 分形侧枝：从层腰螺旋伸出，连接相邻冠缘
+    const arms = Math.max(2, 5 - L);
+    const armLen = prevR * 0.55 * (0.85 + Math.random() * 0.2);
+    for (let a = 0; a < arms; a++) {
+      const yaw = phase + a * GOLDEN + L * 0.3;
+      const branch = new THREE.Group();
+      branch.position.y = yCursor + h * 0.2;
+      branch.rotation.order = "YXZ";
+      branch.rotation.y = yaw;
+      branch.rotation.x = 0.85 - t * 0.35; // 下倾
+      const stem = new THREE.Mesh(
+        facet(
+          new THREE.CylinderGeometry(
+            0.02 * (1 - t * 0.4),
+            0.035 * (1 - t * 0.3),
+            armLen,
+            4
+          )
+        ),
+        bark
+      );
+      stem.position.y = armLen / 2;
+      stem.castShadow = true;
+      outlineAs(stem, "treeTrunk");
+      branch.add(stem);
+      // 枝端小圆锥（二级自相似）
+      const tipR = r * 0.28;
+      const tipH = h * 0.35;
+      const tip = new THREE.Mesh(facet(new THREE.ConeGeometry(tipR, tipH, 5)), toonMat(col));
+      tip.position.y = armLen + tipH * 0.25;
+      tip.castShadow = true;
+      outlineAs(tip, "treeCrown");
+      branch.add(tip);
+      g.add(branch);
+    }
+
+    yCursor += h * 0.42;
+    prevR = r;
+    phase += GOLDEN * 1.5;
   }
+
   g.scale.setScalar(1.6); // 小世界量纲：~4.3m ≈ 玩家 2.5 倍
   g.userData.collideRadius = 0.38; // 局部值，世界半径随总缩放
   return g;
