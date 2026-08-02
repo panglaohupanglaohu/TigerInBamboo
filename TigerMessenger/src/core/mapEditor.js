@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { placeObjectOnSphere } from "../world/sphereMath.js";
 import { groundLiftAt, ISLAND_BASE_LIFT, worldToFlatXZ } from "../world/hills.js";
 import { PLANET_RADIUS } from "../world/planet.js";
-import { getBuildingDef, listBuildingTypes } from "./buildingCatalog.js";
+import { createCatalogObject, getBuildingDef, listBuildingTypes } from "./buildingCatalog.js";
 
 const STORAGE_KEY = "tm.mapEditor.placements.v1";
 const MAP_EXTENT = 20; // 平面图半宽（世界 flat 单位）
@@ -186,9 +186,14 @@ export function createMapEditor({
   btnCopy.addEventListener("click", () => {
     const p = getSelected();
     if (!p) return;
+    // 复制时带上工厂参数（种子/缩放/招牌），保证与原件一致
+    const fo = p.factoryOpts || p.object?.userData?.factoryOpts || {};
     const copy = spawnPlacement(p.type, p.x + 1.2, p.z + 1.2, p.yaw + 0.2, {
-      signLine1: p.signLine1,
-      signLine2: p.signLine2,
+      ...fo,
+      signLine1: p.signLine1 ?? fo.signLine1,
+      signLine2: p.signLine2 ?? fo.signLine2,
+      seed: fo.seed,
+      scale: fo.scale,
     });
     if (copy) {
       selectedUid = copy.uid;
@@ -395,23 +400,27 @@ export function createMapEditor({
       toast(`未知建筑类型：${typeId}`, 1.5);
       return null;
     }
-    const signLine1 = extra.signLine1 ?? def.defaultSignLine1;
-    const signLine2 = extra.signLine2 ?? def.defaultSignLine2;
-    const object =
-      typeof def.create === "function"
-        ? def.create({ signLine1, signLine2 })
-        : null;
+    // 与场景程序创建完全同一入口 createCatalogObject → assets 工厂
+    const factoryOpts = {
+      signLine1: extra.signLine1 ?? def.defaultSignLine1,
+      signLine2: extra.signLine2 ?? def.defaultSignLine2,
+      seed: extra.seed,
+      scale: extra.scale,
+      hue: extra.hue,
+    };
+    const object = createCatalogObject(typeId, factoryOpts);
     if (!object) return null;
     object.userData.mapEditable = true;
-    object.userData.mapType = typeId;
     const uid = `b${uidSeq++}`;
     object.userData.mapUid = uid;
     scene.add(object);
 
     let collider = null;
+    // 碰撞半径以工厂 userData 为准（与 nature.pushCollider 一致）
     const cr = object.userData.collideRadius ?? def.collideRadius ?? 0;
     if (cr >= 0.15 && colliders) {
-      collider = { position: object.position.clone(), radius: cr * (object.scale?.x || 1) };
+      const worldR = cr * Math.abs(object.scale?.x || 1);
+      collider = { position: object.position.clone(), radius: worldR };
       colliders.push(collider);
     }
 
@@ -425,8 +434,9 @@ export function createMapEditor({
       yaw,
       object,
       collider,
-      signLine1: object.userData.signLine1 ?? signLine1 ?? null,
-      signLine2: object.userData.signLine2 ?? signLine2 ?? null,
+      signLine1: object.userData.signLine1 ?? factoryOpts.signLine1 ?? null,
+      signLine2: object.userData.signLine2 ?? factoryOpts.signLine2 ?? null,
+      factoryOpts: { ...factoryOpts },
     };
     applyPose(p);
     placements.push(p);
@@ -657,6 +667,9 @@ export function createMapEditor({
       uid: p.uid,
       signLine1: p.signLine1 ?? null,
       signLine2: p.signLine2 ?? null,
+      seed: p.factoryOpts?.seed ?? p.object?.userData?.factorySeed ?? null,
+      scale: p.factoryOpts?.scale ?? p.object?.userData?.factoryScale ?? null,
+      hue: p.factoryOpts?.hue ?? null,
     }));
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -703,6 +716,9 @@ export function createMapEditor({
       spawnPlacement(item.type, item.x, item.z, item.yaw ?? 0, {
         signLine1: item.signLine1,
         signLine2: item.signLine2,
+        seed: item.seed ?? undefined,
+        scale: item.scale ?? undefined,
+        hue: item.hue ?? undefined,
       });
     }
   }

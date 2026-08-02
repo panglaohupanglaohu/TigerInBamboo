@@ -36,9 +36,9 @@ export function setupEnvironment(scene) {
       side: THREE.BackSide,
       depthWrite: false,
       uniforms: {
-        topColor: { value: new THREE.Color(0xe6dcca) },
-        midColor: { value: new THREE.Color(0xdfd5c3) },
-        botColor: { value: new THREE.Color(0xcfc4ae) },
+        topColor: { value: new THREE.Color(0x58b9bd) },
+        midColor: { value: new THREE.Color(0x76cdc7) },
+        botColor: { value: new THREE.Color(0xa8e1d4) },
         cloudColor: { value: new THREE.Color(0xc2eee0) },
       },
       vertexShader: /* glsl */ `

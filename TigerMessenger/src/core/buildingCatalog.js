@@ -1,9 +1,20 @@
 // =====================================================================
-//  地图编辑器 · 可放置建筑目录
-//  每种建筑：id / 显示名 / 工厂 / 默认朝向 / 碰撞半径 / 地图标记色
+//  地图编辑器 · 可放置资产目录（与场景程序创建共用同一工厂）
+//  约定：
+//    - create 只调用 assets/* 已有工厂，不另写几何
+//    - 默认参数与 messengerIsland / nature 等场景一致
+//    - collideRadius 优先读 object.userData（工厂写入）
 // =====================================================================
 import { createHardToFindBookshop } from "../assets/bookshop.js";
-import { createLowPolyHouse, createLowPolySignpost, createLowPolyStreetLamp, createLowPolyUtilityPole, createLowPolyRock } from "../assets/lowPoly.js";
+import {
+  createLowPolyHouse,
+  createLowPolySignpost,
+  createLowPolyStreetLamp,
+  createLowPolyUtilityPole,
+  createLowPolyRock,
+  createLowPolyFlower,
+  INK_FLOWER_COLORS,
+} from "../assets/lowPoly.js";
 import { createAncientPineTree } from "../assets/ancient.js";
 import { createLowPolyHydrangeaBush } from "../assets/hydrangea.js";
 
@@ -11,10 +22,13 @@ import { createLowPolyHydrangeaBush } from "../assets/hydrangea.js";
  * @typedef {object} BuildingDef
  * @property {string} id
  * @property {string} label
- * @property {() => import("three").Object3D} create
+ * @property {(opts?: object) => import("three").Object3D} create
  * @property {number} [defaultYaw]
- * @property {number} [collideRadius]
+ * @property {number} [collideRadius] 工厂未写 userData 时的兜底
  * @property {string} [color] 地图标记色
+ * @property {boolean} [hasSign]
+ * @property {string} [defaultSignLine1]
+ * @property {string} [defaultSignLine2]
  */
 
 /** @type {Record<string, BuildingDef>} */
@@ -22,11 +36,12 @@ export const BUILDING_CATALOG = {
   bookshop: {
     id: "bookshop",
     label: "Hard To Find 书店",
+    // 与 messengerIsland 一致：bermEdgeY 0.02
     create: (opts = {}) =>
       createHardToFindBookshop({
         bermEdgeY: 0.02,
-        signLine1: opts.signLine1,
-        signLine2: opts.signLine2,
+        signLine1: opts.signLine1 ?? "HARD TO FIND",
+        signLine2: opts.signLine2 ?? "BOOKSHOP",
       }),
     defaultYaw: -0.5,
     collideRadius: 3.2,
@@ -46,9 +61,10 @@ export const BUILDING_CATALOG = {
   pine: {
     id: "pine",
     label: "古松",
-    create: () => createAncientPineTree(),
+    // 与 nature / startingCamp 相同工厂；可选 seed
+    create: (opts = {}) => createAncientPineTree(opts.seed),
     defaultYaw: 0,
-    collideRadius: 0.55,
+    collideRadius: 0.58,
     color: "#2a4030",
   },
   signpost: {
@@ -86,20 +102,52 @@ export const BUILDING_CATALOG = {
   hydrangea: {
     id: "hydrangea",
     label: "绣球花丛",
-    create: () => {
-      // 每次随机种子，花球疏密与色相略有变化
-      const seed = (Math.random() * 1e6) | 0;
-      const scale = 0.85 + Math.random() * 0.35;
-      const bush = createLowPolyHydrangeaBush(scale, seed);
-      // 可踩踏，几乎不挡路
-      if (bush.userData.collideRadius == null) bush.userData.collideRadius = 0.2;
-      return bush;
+    // 与 hydrangea.js / 书店周边一致：scale=1 半人高量级；seed 可复现
+    create: (opts = {}) => {
+      const scale = opts.scale ?? 1;
+      const seed = opts.seed ?? 7;
+      return createLowPolyHydrangeaBush(scale, seed);
     },
     defaultYaw: 0,
-    collideRadius: 0.2,
+    collideRadius: 0.35,
     color: "#9ec5ff",
   },
+  flower: {
+    id: "flower",
+    label: "水墨小花",
+    create: (opts = {}) => {
+      const cols = INK_FLOWER_COLORS;
+      const hue =
+        opts.hue ?? cols[((opts.seed ?? 0) >>> 0) % cols.length] ?? cols[0];
+      return createLowPolyFlower(hue);
+    },
+    defaultYaw: 0,
+    collideRadius: 0.15,
+    color: "#c4a090",
+  },
 };
+
+/**
+ * 程序与地图共用的创建入口：工厂 + 统一 assetType 标记。
+ * @param {string} typeId
+ * @param {object} [opts]
+ * @returns {import("three").Object3D | null}
+ */
+export function createCatalogObject(typeId, opts = {}) {
+  const def = BUILDING_CATALOG[typeId];
+  if (!def?.create) return null;
+  const object = def.create(opts);
+  if (!object) return null;
+  object.userData.assetType = typeId;
+  object.userData.mapType = typeId;
+  // 工厂未写碰撞时用目录兜底
+  if (object.userData.collideRadius == null && def.collideRadius != null) {
+    object.userData.collideRadius = def.collideRadius;
+  }
+  // 记录工厂参数，便于复制时一致
+  object.userData.factoryOpts = { ...opts };
+  return object;
+}
 
 export function getBuildingDef(typeId) {
   return BUILDING_CATALOG[typeId] || null;

@@ -14,8 +14,10 @@ import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import { groundLiftAt } from "../world/hills.js";
 import { placeObjectOnSphere } from "../world/sphereMath.js";
-import { createHardToFindBookshop, createGrassTuft } from "../assets/bookshop.js";
+import { createGrassTuft } from "../assets/bookshop.js";
+import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
+import { createCatalogObject } from "../core/buildingCatalog.js";
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const messengerIslandScene = {
@@ -37,15 +39,19 @@ export const messengerIslandScene = {
     const farSide = decorateFarSide(scene, R);
     const greatLake = createGreatLake(scene, R);
 
-    // Hard To Find Bookshop：主岛东侧坡脚贴地（平面足迹内，出生点可见）
-    // 先前累加位移到 (52,18) 已离开主岛/视野；收回地面并贴 height 场
+    // Hard To Find Bookshop：与地图共用 createCatalogObject（同一工厂/参数）
     const bookshopX = 11.5;
     const bookshopZ = 5.5;
     const bookshopLift = groundLiftAt(bookshopX, bookshopZ);
-    const bookshop = createHardToFindBookshop({ bermEdgeY: 0.02 });
-    // 底部原点 = 球面 R+lift，土坡外缘贴地面
+    const bookshop = createCatalogObject("bookshop", {
+      signLine1: "HARD TO FIND",
+      signLine2: "BOOKSHOP",
+    });
+    // 底部原点 = 球面 R+lift（与 mapEditor.applyPose 同序：place + rotateY）
     placeObjectOnSphere(bookshop, bookshopX, bookshopZ, bookshopLift, R);
     bookshop.rotateY(-0.5); // 立面朝向街道
+    // 绣球花丛围绕书店（程序布局；单丛仍可用地图放置 hydrangea）
+    bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
 
     // 坡下草地：草簇 + 小花环带（围绕书店山坡）

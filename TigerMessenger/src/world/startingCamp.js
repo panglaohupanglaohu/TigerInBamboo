@@ -129,21 +129,38 @@ export function buildStartingCamp(scene, R) {
   put(cave, HILL.x + 0.1, HILL.z + 1.05, groundLiftAt(HILL.x, HILL.z) + 0.05, 0.15);
 
   // ---------- 3. 崖壁叠瀑 + 太空水环 ----------
-  // 叠瀑：荒山与海岸线之间，翠蓝扁平片逐级下探，底部没入浅海
-  const fallMat = toonMat(FALL, { emissive: FALL_LIGHT, emissiveIntensity: 0.25 });
-  const fallMat2 = toonMat(FALL_LIGHT, { emissive: FALL, emissiveIntensity: 0.2 });
+  // 旧版这里用 BoxGeometry 做四块“水板”，从侧面看会变成悬空绿板。
+  // 改为多股窄而有厚度的水流，沿崖壁逐级下落，不再出现矩形占位面。
+  const fallMat = toonMat(FALL, {
+    emissive: FALL_LIGHT,
+    emissiveIntensity: 0.25,
+    transparent: true,
+    opacity: 0.78,
+    depthWrite: false,
+  });
+  const fallMat2 = toonMat(FALL_LIGHT, {
+    emissive: FALL,
+    emissiveIntensity: 0.2,
+    transparent: true,
+    opacity: 0.68,
+    depthWrite: false,
+  });
   const FALL_X = -11.2;
   for (let i = 0; i < 4; i++) {
-    const sheet = new THREE.Mesh(
-      facet(new THREE.BoxGeometry(1.05 - i * 0.08, 1.15, 0.07)),
-      i % 2 ? fallMat2 : fallMat
-    );
-    sheet.castShadow = false;
-    addOutline(sheet, 0.015);
     const y = 2.75 - i * 0.95;
     const z = 8.2 + i * 1.1;
-    put(sheet, FALL_X + i * 0.45, z, groundLiftAt(FALL_X, z) + y, 0.12);
-    sheet.rotation.x += 0.12; // 微前倾，贴壁下泻
+    const height = 1.15 - i * 0.06;
+    const streamMat = i % 2 ? fallMat2 : fallMat;
+    for (let streamIndex = -1; streamIndex <= 1; streamIndex++) {
+      const stream = new THREE.Mesh(
+        facet(new THREE.CylinderGeometry(0.075, 0.15, height, 6)),
+        streamMat,
+      );
+      stream.position.set(streamIndex * 0.22, -height * 0.5, 0);
+      stream.rotation.z = streamIndex * 0.07;
+      stream.castShadow = false;
+      put(stream, FALL_X + i * 0.45, z, groundLiftAt(FALL_X, z) + y, 0.12);
+    }
   }
   // 瀑底入水泡沫
   for (const [dx, dz, s] of [[0.3, 12.4, 0.34], [0.9, 12.9, 0.26], [-0.2, 13.1, 0.22]]) {

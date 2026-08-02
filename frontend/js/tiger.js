@@ -102,6 +102,20 @@ export function paintGeometry(geo, dim, anat, rendering) {
   paintTiger(geo, { rendering, contrast: 1 });
 }
 
+/**
+ * 虎的世界坐标硬地板：飞扑可高于地面，但任何状态都不能低于当前位置地表。
+ * 返回 true 表示本帧发生过纠正，供测试/调试判断。
+ */
+export function enforceTigerGroundFloor(position, heightAt = groundHeight) {
+  const floorY = heightAt(position.x, position.z);
+  if (!Number.isFinite(floorY)) return false;
+  if (!Number.isFinite(position.y) || position.y < floorY) {
+    position.y = floorY;
+    return true;
+  }
+  return false;
+}
+
 
 export class Tiger {
   constructor(scene, config, physics) {
@@ -572,7 +586,7 @@ export class Tiger {
         this._resolveRocksPoint(gp); // 岩石刚体：绕石而行
         gp.y = groundHeight(gp.x, gp.z);
       }
-      gp.y -= (huntCtl.crouch ?? 0) * 0.16; // 潜行深压身位（匍匐）
+      // 匍匐深压由骨骼控制器处理；根节点不再下沉，避免虎身穿入地表。
       targetYaw = Math.atan2(huntCtl.dir.x, huntCtl.dir.z);
       this.group.rotation.x = THREE.MathUtils.lerp(this.group.rotation.x, 0, 0.1);
       this._syncPathT(gp); // 巡游相位跟到最近点，收兵回归时不瞬移
@@ -621,6 +635,10 @@ export class Tiger {
       && huntPrey.state !== "被获" && !["ponder", "carry"].includes(this._hunt.stage);
     if (trackPrey) targetYaw = Math.atan2(huntPrey.pos.x - gp.x, huntPrey.pos.z - gp.z);
     this.group.rotation.y += shortestAngle(this.group.rotation.y, targetYaw) * Math.min(dt * (trackPrey ? 7 : 4), 1);
+
+    // 全状态最终裁决：成功捕获、扑空、献获、进食、思量、觅母和巡游均不得低于地表。
+    // 飞扑弧线的 y 高于 floorY 时保持原高度，落地时恰好钳回地面。
+    enforceTigerGroundFloor(gp);
 
     // 物理刚体随动：kinematic 体需要速度量才能正确推挤竹竿（限速防脉冲）
     if (this.body) {

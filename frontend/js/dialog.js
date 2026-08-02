@@ -18,6 +18,30 @@ const MOTHER_FOLLOWS = ["乖，妈妈在这里。", "慢慢走，别急。", "�
 const _pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const _v = new THREE.Vector3();
 
+/**
+ * 对话出口规范：删除括号内的动作/语气说明，并把母亲称谓统一成“妈妈”。
+ * 同时用于气泡与 TTS，避免仅靠提示词约束模型。
+ */
+export function sanitizeDialogueText(input) {
+  let text = String(input ?? "");
+  // 连做两轮，兼容模型偶尔输出的简单嵌套括号。
+  for (let i = 0; i < 2; i++) {
+    text = text
+      .replace(/（[^（）]*）/g, "")
+      .replace(/\([^()]*\)/g, "")
+      .replace(/【[^【】]*】/g, "")
+      .replace(/\[[^\[\]]*\]/g, "");
+  }
+  text = text
+    .replace(/娘亲|阿娘|额娘|娘娘|母亲|妈咪|阿母/g, "妈妈")
+    .replace(/(^|[\s，。！？、：；“”"'])娘(?=$|[\s，。！？、：；“”"'])/g, "$1妈妈")
+    .replace(/妈妈(?:[\s、，]*妈妈)+/g, "妈妈")
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/\s+([，。！？、：；])/g, "$1")
+    .trim();
+  return text;
+}
+
 export class DialogSystem {
   /**
    * @param {Tiger} tiger - 女儿
@@ -123,13 +147,15 @@ export class DialogSystem {
 
   _playLine() {
     const line = this._convo.lines[this._convo.i];
+    const text = sanitizeDialogueText(line.text) || (line.who === "tiger" ? "妈妈。" : "妈妈在呢。");
+    line.text = text;
     const el = this._bubbles[line.who];
     if (el) {
-      el.textContent = line.text;
+      el.textContent = text;
       el.classList.add("show");
     }
-    this._speak(line.text, line.who);
-    this._convo.left = THREE.MathUtils.clamp(1.6 + line.text.length * 0.14, 2.5, 6.5);
+    this._speak(text, line.who);
+    this._convo.left = THREE.MathUtils.clamp(1.6 + text.length * 0.14, 2.5, 6.5);
   }
 
   _hideAll() {
@@ -182,17 +208,22 @@ export class DialogSystem {
 
   /** 每个生物用自己的 AgentMind 调统一模型；失败由调用方回落内置文本。 */
   async _agentLine(agent, system, user) {
-    return agent?.mind?.chat([
-      { role: "system", content: system },
+    const raw = await agent?.mind?.chat([
+      { role: "system", content: system +
+        "最终只输出角色真正说出口的台词，不得使用圆括号、方括号或任何括号补充动作和语气。" +
+        "涉及母亲称谓时只能说‘妈妈’，禁止使用‘娘亲’‘娘’‘母亲’‘妈咪’等同义称呼。" },
       { role: "user", content: user },
-    ], { maxTokens: 256, temperature: 0.8 }) ?? null;
+    ], { maxTokens: 256, temperature: 0.8 });
+    return sanitizeDialogueText(raw) || null;
   }
 
   /** 语音朗读：母女各自的中文女声配置（嗓音/语速/音高/音量） */
   _speak(text, who) {
     if (!("speechSynthesis" in window)) return;
+    const spoken = sanitizeDialogueText(text);
+    if (!spoken) return;
     const rc = (who === "rabbit" ? this.cfg.mother : this.cfg.daughter) ?? {};
-    const u = new SpeechSynthesisUtterance(text);
+    const u = new SpeechSynthesisUtterance(spoken);
     u.lang = "zh-CN";
     const v = this._pickVoice(rc.voiceName);
     if (v) u.voice = v;
