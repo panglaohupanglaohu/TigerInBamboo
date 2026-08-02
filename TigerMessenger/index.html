@@ -435,6 +435,106 @@
       cursor: pointer;
     }
     #dev-reset:hover { filter: brightness(1.15); }
+
+    /* ================= 日系极简 UI 主题（硬伤四纠偏，覆盖上方暗色规则） ================= */
+    html, body {
+      background: #79d2c4;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #1a2638;
+    }
+    /* 乳白半透明面板 + 柔和扩散阴影 + 8px 圆角 */
+    #hud .panel, #compass, #journal-panel, #dev-panel {
+      background: rgba(255, 255, 255, 0.85);
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(26, 38, 56, 0.14);
+      backdrop-filter: blur(10px);
+      color: #1a2638;
+    }
+    #quest-panel h1 { color: #2f8f7a; }
+    #quest-panel .subtitle { opacity: 0.65; }
+    #quest-status strong { color: #d98a2b; }
+    #quest-status .done { color: #3d9a5f; }
+    #letter-list li { border-top-color: rgba(26, 38, 56, 0.08); }
+    #letter-list .dot { background: #b9c6d4; }
+    #letter-list .dot.active { background: #e8b54a; box-shadow: 0 0 8px rgba(232, 181, 74, 0.6); }
+    #letter-list .dot.done { background: #4aa76c; }
+    #score-badge {
+      background: rgba(61, 154, 95, 0.12);
+      border: 1px solid rgba(61, 154, 95, 0.35);
+      color: #2a6b44;
+    }
+    #journal-toggle {
+      background: rgba(47, 143, 122, 0.1);
+      border: 1px solid rgba(47, 143, 122, 0.35);
+      color: #2f8f7a;
+    }
+    #journal-panel h2 { color: #2f8f7a; }
+    #journal-list li { border-top-color: rgba(26, 38, 56, 0.08); }
+    #journal-list .dot { background: #4aa76c; }
+    #journal-status, .journal-status { color: #6a7b92; }
+    #journal-status[data-bridge="on"] { color: #3d9a5f; }
+    #journal-status[data-bridge="off"] { color: #96a5b8; }
+    #journal-clear { color: #96a5b8; }
+    #compass-needle {
+      border-bottom-color: #2f8f7a;
+      filter: drop-shadow(0 0 5px rgba(47, 143, 122, 0.4));
+    }
+    #compass-label { color: #4a5b70; }
+    #hint-panel kbd {
+      border: 1px solid rgba(26, 38, 56, 0.22);
+      background: rgba(255, 255, 255, 0.9);
+      color: #1a2638;
+    }
+    #bubble {
+      background: rgba(255, 255, 255, 0.92);
+      border: none;
+      border-radius: 8px;
+      color: #1a2638;
+      box-shadow: 0 6px 18px rgba(26, 38, 56, 0.14);
+    }
+    #bubble::after { border: none; box-shadow: 3px 3px 6px rgba(26, 38, 56, 0.08); }
+    #npc-hint {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 8px;
+      color: #1a2638;
+      box-shadow: 0 8px 24px rgba(26, 38, 56, 0.16);
+    }
+    #npc-hint kbd {
+      border: 1px solid rgba(47, 143, 122, 0.45);
+      background: rgba(47, 143, 122, 0.12);
+      color: #2f8f7a;
+    }
+    #intro {
+      background: radial-gradient(ellipse at 50% 40%, rgba(121, 210, 196, 0.55), rgba(106, 199, 185, 0.92));
+    }
+    #intro .card {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(26, 38, 56, 0.16);
+      color: #1a2638;
+    }
+    #intro h2 { color: #2f8f7a; }
+    #intro button {
+      background: linear-gradient(135deg, #6ac7b9, #4aa76c);
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(61, 154, 95, 0.35);
+    }
+    #dev-toggle {
+      background: rgba(255, 255, 255, 0.85);
+      border: none;
+      box-shadow: 0 4px 14px rgba(26, 38, 56, 0.14);
+    }
+    .dev-head { color: #2f8f7a; }
+    .dev-group { color: #d98a2b; }
+    .dev-row input[type="range"] { accent-color: #4aa76c; }
+    #dev-reset {
+      background: rgba(47, 143, 122, 0.12);
+      border: 1px solid rgba(47, 143, 122, 0.35);
+      color: #2f8f7a;
+    }
   </style>
 </head>
 <body>
@@ -442,7 +542,7 @@
   <div id="hud">
     <div id="quest-panel" class="panel">
       <h1>TigerMessenger</h1>
-      <p class="subtitle">夜色信使 · 把信送到对的人手上</p>
+      <p class="subtitle">小星球信使 · 把信送到对的人手上</p>
       <p id="quest-status">准备出发…</p>
       <ul id="letter-list"></ul>
       <div id="score-badge">本局 <span id="score-num">0</span> / <span id="score-total">0</span></div>
@@ -477,7 +577,7 @@
     <div class="card">
       <h2>进入二次元</h2>
       <p>
-        你是夜色中的信使。<br />
+        你是小星球上的信使。<br />
         从发光的寄件人处接过信件，再送到收件人手中。<br />
         平台之间跳跃，完成所有投递。
       </p>

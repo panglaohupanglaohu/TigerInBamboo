@@ -35,7 +35,24 @@ const _outlineMatCache = new Map();
  * 纯黑（深藏青）不受光 MeshBasicMaterial + BackSide 只渲染背面。
  * 作为 mesh 子节点，自动继承位移/旋转/缩放。
  */
-export function addOutline(mesh, thickness = 0.02, color = 0x14202c) {
+/** 按资产类型推荐的描边厚度（远景略细，减抖动） */
+export const OUTLINE = Object.freeze({
+  character: 0.02,
+  characterDetail: 0.012,
+  house: 0.016,
+  treeTrunk: 0.012,
+  treeCrown: 0.01,
+  rock: 0.011,
+  prop: 0.01,
+  far: 0.008, // 远景缩放后仍够看、不抖
+});
+
+/**
+ * @param {THREE.Mesh} mesh
+ * @param {number} [thickness]
+ * @param {number} [color]
+ */
+export function addOutline(mesh, thickness = OUTLINE.prop, color = 0x1a2a38) {
   const key = `${thickness.toFixed(4)}_${color.toString(16)}`;
   let mat = _outlineMatCache.get(key);
   if (!mat) {
@@ -50,6 +67,7 @@ export function addOutline(mesh, thickness = 0.02, color = 0x14202c) {
   }
   const outline = new THREE.Mesh(mesh.geometry, mat);
   outline.raycast = () => {}; // 不参与拾取
+  outline.userData.isOutline = true;
   mesh.add(outline);
   return outline;
 }

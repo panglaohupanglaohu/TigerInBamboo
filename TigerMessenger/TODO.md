@@ -115,6 +115,12 @@
   - 原 Grok「靠近自动交互」改为规格 E 键触发：`index.html` #npc-hint 中央提示层
   - `questSystem`：靠近当前目标 NPC 显示提示，按 E 才接信/送达；气泡保留
   - 验证：出生隐藏 → 靠近浮现 → 不按 E 不接信 → 按 E 接信 → 提示切换收起；三件套回归 ✓
+- [x] 31. 日系动漫画风纠偏（四硬伤，Kimi 2026-08-02 09:53，见 `PLAN-sphere-player.md`）
+  - 薄荷青天空 #79D2C4 + 极浅青白环境光 1.0 + 青绿大地（星球 #3D9A5F / 主岛 #4AA76C）
+  - Cel 硬边光影：`assets/toon.js` 2 阶梯 gradientMap DataTexture + BasicShadowMap + 侧上方暖阳
+  - Inverse Hull 黑边描边：信使/NPC/树/房/岩
+  - 日系极简 UI：乳白半透明面板 + 深藏青文字 + 8px 圆角 + 柔影；文案去夜色残留
+  - 三件套 ×3 轮通过；Grok 并行保留阶梯平台暖灰岩材质
 - [x] 17b. 球面实验页增强 **验收**（Kimi 2026-08-02 07:12 通过）
   - 无头截图 ×3（散布全景 / 跳跃离地 / 落地续行），控制台零告警
   - review 纪要见 `PLAN-sphere-player.md`；可选优化（面积加权散布 / 碰撞死代码）已由 Grok 清掉

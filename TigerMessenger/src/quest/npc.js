@@ -5,34 +5,27 @@ import * as THREE from "three";
 import { flatToWorld, quatYToDir, surfaceNormal } from "../world/sphereMath.js";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { findPlatformTopAtFlat } from "../world/platforms.js";
+import { toonMat, addOutline, OUTLINE } from "../assets/toon.js";
 
 const _dir = new THREE.Vector3();
 const _quat = new THREE.Quaternion();
 
 export function createNpc(scene, platforms, def, role) {
   const g = new THREE.Group();
-  const bodyMat = new THREE.MeshStandardMaterial({
-    color: def.color,
-    roughness: 0.65,
-    flatShading: true,
-    emissive: def.color,
-    emissiveIntensity: 0.15,
-  });
+  const bodyMat = toonMat(def.color, { emissive: def.color, emissiveIntensity: 0.15 });
   const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.35, 0.9, 6), bodyMat);
   body.position.y = 0.55;
   body.castShadow = true;
+  addOutline(body, OUTLINE.character);
   g.add(body);
 
   const head = new THREE.Mesh(
     new THREE.SphereGeometry(0.28, 8, 6),
-    new THREE.MeshStandardMaterial({
-      color: 0xf5d0b0,
-      roughness: 0.7,
-      flatShading: true,
-    })
+    toonMat(0xf5d0b0)
   );
   head.position.y = 1.2;
   head.castShadow = true;
+  addOutline(head, OUTLINE.characterDetail);
   g.add(head);
 
   const ring = new THREE.Mesh(
@@ -49,17 +42,18 @@ export function createNpc(scene, platforms, def, role) {
   ring.position.y = 0.05;
   g.add(ring);
 
+  // 日系轻量顶标：短光柱（弱化夜景「光柱」感）
   const beam = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.06, 0.2, 2.2, 8, 1, true),
+    new THREE.CylinderGeometry(0.05, 0.14, 1.2, 8, 1, true),
     new THREE.MeshBasicMaterial({
       color: def.color,
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.28,
       side: THREE.DoubleSide,
       depthWrite: false,
     })
   );
-  beam.position.y = 2.0;
+  beam.position.y = 1.85;
   g.add(beam);
 
   const orb = new THREE.Mesh(

@@ -1,20 +1,18 @@
 // =====================================================================
-//  环境：光照 / 天空球 / 月亮星点 / 漂浮光点（夜色低多边氛围）
+//  环境：日系白天插画风光照 + 薄荷天空 + 轻柔日光点缀
+//  （已清除月亮 / 星点 / 夜色漂浮光点）
 // =====================================================================
 import * as THREE from "three";
-
 import { P } from "../core/params.js";
 
 export function setupEnvironment(scene) {
-  // ---------- 光照：日系白天插画风（清爽高亮，杜绝死黑） ----------
-  // 强环境光：极浅青白色，暗部也保持干净
+  // ---------- 光照：清爽高亮 ----------
   const ambient = new THREE.AmbientLight(0xf2fffb, P.ambientIntensity ?? 1.0);
   scene.add(ambient);
 
   const hemi = new THREE.HemisphereLight(0xd6fff2, 0x3d9a5f, 0.5);
   scene.add(hemi);
 
-  // 太阳平行光：从侧上方斜射向球心，硬边定型投影
   const dir = new THREE.DirectionalLight(0xfff6e0, P.sunIntensity ?? 1.6);
   dir.position.set(20, 28, 16);
   dir.castShadow = true;
@@ -32,7 +30,7 @@ export function setupEnvironment(scene) {
   fill.position.set(-10, 6, -8);
   scene.add(fill);
 
-  // ---------- 天空球：薄荷青渐变（与背景同族，略带地平线层次） ----------
+  // ---------- 天空球：薄荷青渐变 ----------
   {
     const skyGeo = new THREE.SphereGeometry(220, 24, 16);
     const skyMat = new THREE.ShaderMaterial({
@@ -67,86 +65,33 @@ export function setupEnvironment(scene) {
     scene.add(new THREE.Mesh(skyGeo, skyMat));
   }
 
-  // ---------- 月亮 + 星点 ----------
+  // ---------- 日轮（替代月亮）：远景暖阳圆盘 ----------
   {
-    const moon = new THREE.Mesh(
-      new THREE.SphereGeometry(3.2, 16, 12),
-      new THREE.MeshBasicMaterial({ color: 0xd8e6ff })
+    const sunDisc = new THREE.Mesh(
+      new THREE.SphereGeometry(4.5, 16, 12),
+      new THREE.MeshBasicMaterial({ color: 0xfff0c2 })
     );
-    moon.position.set(-60, 90, -80);
-    scene.add(moon);
-    const moonGlow = new THREE.PointLight(0xb0c8ff, 0.55, 120, 2);
-    moonGlow.position.copy(moon.position);
-    scene.add(moonGlow);
-
-    const starCount = 500;
-    const positions = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-      const r = 140 + Math.random() * 60;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(0.05 + Math.random() * 0.85);
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = r * Math.cos(phi);
-      positions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
-      color: 0xc8d8ff,
-      size: 0.2,
-      sizeAttenuation: true,
-      transparent: true,
-      opacity: 0.9,
-      depthWrite: false,
-    })));
+    sunDisc.position.set(55, 70, 40);
+    scene.add(sunDisc);
+    const sunHalo = new THREE.PointLight(0xffe8b0, 0.35, 100, 2);
+    sunHalo.position.copy(sunDisc.position);
+    scene.add(sunHalo);
   }
 
-  // ---------- 漂浮光点（二次元夜色氛围） ----------
+  // 不再放置星点 / 夜色漂浮光点；lanterns 保留空数组以兼容主循环
   const lanterns = [];
-  {
-    const n = 28;
-    for (let i = 0; i < n; i++) {
-      const m = new THREE.Mesh(
-        new THREE.SphereGeometry(0.08 + Math.random() * 0.06, 6, 4),
-        new THREE.MeshBasicMaterial({
-          color: i % 3 === 0 ? 0xffe08a : i % 3 === 1 ? 0x9ec5ff : 0xc9a8ff,
-          transparent: true,
-          opacity: 0.75,
-        })
-      );
-      // 球外附近漂浮，围绕赤道带
-      const ang = Math.random() * Math.PI * 2;
-      const elev = (Math.random() - 0.3) * 0.8;
-      const rr = 42 + Math.random() * 18;
-      const base = new THREE.Vector3(
-        Math.cos(ang) * Math.cos(elev) * rr,
-        Math.sin(elev) * rr + 8,
-        Math.sin(ang) * Math.cos(elev) * rr
-      );
-      m.position.copy(base);
-      m.userData = {
-        base,
-        phase: Math.random() * Math.PI * 2,
-        amp: 0.4 + Math.random() * 0.6,
-        speed: 0.4 + Math.random() * 0.6,
-      };
-      scene.add(m);
-      lanterns.push(m);
-    }
-  }
 
   return { lanterns, ambient, sun: dir };
 }
 
-/** 每帧推进漂浮光点 */
+/** 兼容旧 API：无夜色光点时为空操作 */
 export function updateLanterns(lanterns, t) {
+  if (!lanterns || !lanterns.length) return;
   for (const m of lanterns) {
-    const { base, phase, amp, speed } = m.userData;
+    const { base, phase, amp, speed } = m.userData || {};
+    if (!base) continue;
     m.position.y = base.y + Math.sin(t * speed + phase) * amp;
     m.position.x = base.x + Math.cos(t * speed * 0.6 + phase) * amp * 0.35;
     m.position.z = base.z + Math.sin(t * speed * 0.5 + phase * 1.3) * amp * 0.35;
-    if (m.material) {
-      m.material.opacity = 0.55 + 0.35 * (0.5 + 0.5 * Math.sin(t * speed * 1.4 + phase));
-    }
   }
 }

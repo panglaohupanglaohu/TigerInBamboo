@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { PLANET_RADIUS } from "./planet.js";
 import { flatXZToLatLon, latLonToDir, quatYToDir } from "./sphereMath.js";
 import { createSphericalShellPatch } from "./sphereShell.js";
-import { toonMat } from "../assets/toon.js";
+import { toonMat, addOutline, OUTLINE } from "../assets/toon.js";
 
 /**
  * 平台定义（平面设计坐标）：pos=[x, yHeight, z]，size=半尺寸
@@ -121,46 +121,46 @@ export function buildWorld(scene) {
 
   for (const def of PLATFORM_DEFS) addPlatform(def);
 
-  function addPillar(x, z, h = 1.8, color = 0x3a5078) {
-    const mesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18, 0.28, h, 6),
-      new THREE.MeshStandardMaterial({
-        color,
-        emissive: color,
-        emissiveIntensity: 0.12,
-        roughness: 0.75,
-        flatShading: true,
-      })
+  // 日系木路标（替代旧深色「电线杆」）
+  function addWoodPost(x, z, h = 1.5) {
+    const group = new THREE.Group();
+    const post = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.08, 0.1, h, 6),
+      toonMat(0xc4a06a)
     );
+    post.position.y = h / 2;
+    post.castShadow = true;
+    addOutline(post, OUTLINE.prop);
+    group.add(post);
+    // 小横板招牌
+    const board = new THREE.Mesh(
+      new THREE.BoxGeometry(0.55, 0.28, 0.06),
+      toonMat(0xfff0d6)
+    );
+    board.position.set(0.2, h * 0.75, 0);
+    addOutline(board, OUTLINE.prop);
+    group.add(board);
+
     const { lat, lon } = flatXZToLatLon(x, z, PLANET_RADIUS);
     latLonToDir(lat, lon, _dir);
-    mesh.position.copy(_dir).multiplyScalar(PLANET_RADIUS + h / 2);
+    group.position.copy(_dir).multiplyScalar(PLANET_RADIUS);
     quatYToDir(_dir, _quat);
-    mesh.quaternion.copy(_quat);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    scene.add(mesh);
+    group.quaternion.copy(_quat);
+    scene.add(group);
   }
-  addPillar(-3, -3, 1.4);
-  addPillar(4, 2, 1.1, 0x4a6088);
-  addPillar(-2, 6, 1.6, 0x355070);
-  addPillar(10, -6, 1.2, 0x406088);
+  addWoodPost(-3, -3, 1.35);
+  addWoodPost(4, 2, 1.15);
+  addWoodPost(-2, 6, 1.45);
+  addWoodPost(10, -6, 1.2);
 
-  // 主岛曲面光环：小纬度环贴在 R+0.65
+  // 主岛浅青绿光环（白天感，弱 emissive）
   const ringR = PLANET_RADIUS + 0.65;
   const ringTheta = 17.2 / PLANET_RADIUS;
-  const ringGeo = new THREE.TorusGeometry(ringR * Math.sin(ringTheta), 0.14, 8, 64);
+  const ringGeo = new THREE.TorusGeometry(ringR * Math.sin(ringTheta), 0.12, 8, 64);
   const islandRing = new THREE.Mesh(
     ringGeo,
-    new THREE.MeshStandardMaterial({
-      color: 0x4a6a9a,
-      emissive: 0x2a5088,
-      emissiveIntensity: 0.55,
-      roughness: 0.6,
-      flatShading: true,
-    })
+    toonMat(0x7ed9b8, { emissive: 0x3aaa7a, emissiveIntensity: 0.18 })
   );
-  // 环中心在北极轴上，环平面水平 → 贴在北极附近球带
   islandRing.position.set(0, ringR * Math.cos(ringTheta), 0);
   islandRing.rotation.x = Math.PI / 2;
   scene.add(islandRing);

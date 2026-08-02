@@ -4,7 +4,7 @@
 //        主体件附黑边描边；Group 底部中心在局部 (0,0,0)
 // =====================================================================
 import * as THREE from "three";
-import { toonMat, addOutline } from "./toon.js";
+import { toonMat, addOutline, OUTLINE } from "./toon.js";
 
 /** 平直化：非索引 + 逐面法线 */
 function facet(geo) {
@@ -22,7 +22,7 @@ export function createLowPolyTree() {
   );
   trunk.position.y = 0.4;
   trunk.castShadow = true;
-  addOutline(trunk, 0.015);
+  addOutline(trunk, OUTLINE.treeTrunk);
   g.add(trunk);
 
   const layers = [
@@ -34,6 +34,7 @@ export function createLowPolyTree() {
     const cone = new THREE.Mesh(facet(new THREE.ConeGeometry(r, h, 6)), toonMat(c));
     cone.position.y = y;
     cone.castShadow = true;
+    addOutline(cone, OUTLINE.treeCrown);
     g.add(cone);
   }
   g.userData.collideRadius = 0.38;
@@ -49,6 +50,7 @@ export function createLowPolyHouse() {
   );
   body.position.y = 0.5;
   body.castShadow = true;
+  addOutline(body, OUTLINE.house);
   g.add(body);
 
   const roof = new THREE.Mesh(
@@ -58,6 +60,7 @@ export function createLowPolyHouse() {
   roof.rotation.y = Math.PI / 4;
   roof.position.y = 1.0 + 0.35;
   roof.castShadow = true;
+  addOutline(roof, OUTLINE.house);
   g.add(roof);
 
   const door = new THREE.Mesh(
@@ -104,28 +107,35 @@ export function createLowPolyRock() {
   rock.scale.set(1, 0.7, 0.9);
   rock.position.y = 0.28; // 底部贴地
   rock.castShadow = true;
+  addOutline(rock, OUTLINE.rock);
   rock.receiveShadow = true;
   g.add(rock);
   g.userData.collideRadius = 0.5;
   return g;
 }
 
-/** 低空卡通云朵：4 个大小不一、互相重叠的低面数球体 */
+/** 低空日系软云：乳白软球簇（不描边、不 Cel 硬阴影，避免夜景感） */
 export function createLowPolyCloud() {
   const g = new THREE.Group();
-  const mat = toonMat(0xf4f8ff);
+  const mat = new THREE.MeshBasicMaterial({
+    color: 0xfffaf5,
+    transparent: true,
+    opacity: 0.92,
+  });
   const puffs = [
-    { r: 0.55, x: 0, y: 0.5, z: 0 },
-    { r: 0.42, x: 0.52, y: 0.42, z: 0.1 },
-    { r: 0.38, x: -0.48, y: 0.4, z: -0.06 },
-    { r: 0.3, x: 0.14, y: 0.32, z: 0.36 },
+    { r: 0.6, x: 0, y: 0.55, z: 0 },
+    { r: 0.48, x: 0.55, y: 0.48, z: 0.08 },
+    { r: 0.44, x: -0.52, y: 0.46, z: -0.05 },
+    { r: 0.36, x: 0.12, y: 0.38, z: 0.4 },
+    { r: 0.32, x: -0.1, y: 0.72, z: -0.08 },
   ];
   for (const p of puffs) {
-    const m = new THREE.Mesh(facet(new THREE.SphereGeometry(p.r, 6, 5)), mat);
+    const m = new THREE.Mesh(facet(new THREE.SphereGeometry(p.r, 7, 5)), mat);
     m.position.set(p.x, p.y, p.z);
     g.add(m);
   }
-  g.userData.isCloud = true; // 验收计数标记
+  g.userData.isCloud = true;
+  g.userData.collideRadius = 0; // 不挡路
   return g;
 }
 
