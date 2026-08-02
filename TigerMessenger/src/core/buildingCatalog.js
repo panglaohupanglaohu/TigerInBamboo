@@ -13,6 +13,7 @@ import {
   createLowPolyUtilityPole,
   createLowPolyRock,
   createLowPolyFlower,
+  createLowPolyLawnHill,
   INK_FLOWER_COLORS,
 } from "../assets/lowPoly.js";
 import { createAncientPineTree } from "../assets/ancient.js";
@@ -124,6 +125,19 @@ export const BUILDING_CATALOG = {
     defaultYaw: 0,
     collideRadius: 0.15,
     color: "#c4a090",
+  },
+  lawnHill: {
+    id: "lawnHill",
+    label: "草坪山丘",
+    // 与 hills 草绿/土褐色系一致的可贴地草丘
+    create: (opts = {}) =>
+      createLowPolyLawnHill({
+        scale: opts.scale ?? 1,
+        seed: opts.seed ?? 11,
+      }),
+    defaultYaw: 0,
+    collideRadius: 2.0,
+    color: "#55875f",
   },
 };
 

@@ -4,7 +4,7 @@
 //        主体件附黑边描边；Group 底部中心在局部 (0,0,0)
 // =====================================================================
 import * as THREE from "three";
-import { toonMat, outlineAs } from "./toon.js";
+import { toonMat, outlineAs, getToonGradient } from "./toon.js";
 
 /** 平直化：非索引 + 逐面法线（flatShading 的几何等价物，硬边水墨色块） */
 export function facet(geo) {
@@ -191,6 +191,97 @@ export function createLowPolyRock() {
   g.add(rock);
   g.scale.setScalar(1.6);
   g.userData.collideRadius = 0.5;
+  return g;
+}
+
+/**
+ * 草坪山丘：可贴地的低多边草丘（与 hills 色系一致：草绿 + 坡顶土褐）
+ * 底部中心在局部 (0,0,0)，地图/场景 placeObjectOnSphere 即可。
+ * @param {{ scale?: number, seed?: number }} [opts]
+ */
+export function createLowPolyLawnHill(opts = {}) {
+  const scale = opts.scale ?? 1;
+  const seed = (opts.seed ?? 11) >>> 0;
+  // 简易 LCG，保证同 seed 外形可复现
+  let s = seed || 1;
+  const rnd = () => {
+    s = (Math.imul(1664525, s) + 1013904223) >>> 0;
+    return s / 0x100000000;
+  };
+
+  const g = new THREE.Group();
+  g.name = "lawn-hill";
+
+  // 半球丘体：phi 0→π/2，底面在 y=0 圆盘
+  const geo = new THREE.SphereGeometry(1, 14, 9, 0, Math.PI * 2, 0, Math.PI * 0.52);
+  const pos = geo.attributes.position;
+  const v = new THREE.Vector3();
+  const cache = new Map();
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i);
+    // 极点附近少扰动，山脚略起伏
+    const h = Math.max(0, v.y);
+    const key = `${v.x.toFixed(3)},${v.y.toFixed(3)},${v.z.toFixed(3)}`;
+    if (!cache.has(key)) {
+      const j = 0.92 + rnd() * 0.16 + h * 0.08;
+      cache.set(key, j);
+    }
+    v.multiplyScalar(cache.get(key));
+    // 压扁成缓丘
+    v.y *= 0.72;
+    pos.setXYZ(i, v.x, v.y, v.z);
+  }
+  const faceted = facet(geo);
+  // 顶点色：低处草绿、高处土褐（同 hills.js）
+  const grass = new THREE.Color(0x55875f);
+  const soil = new THREE.Color(0x8a7a56);
+  const c = new THREE.Color();
+  const colors = new Float32Array(faceted.attributes.position.count * 3);
+  const p2 = faceted.attributes.position;
+  let maxY = 0.001;
+  for (let i = 0; i < p2.count; i++) maxY = Math.max(maxY, p2.getY(i));
+  for (let i = 0; i < p2.count; i++) {
+    const t = THREE.MathUtils.clamp(p2.getY(i) / maxY, 0, 1);
+    c.copy(grass).lerp(soil, t * t * 0.85);
+    colors[i * 3] = c.r;
+    colors[i * 3 + 1] = c.g;
+    colors[i * 3 + 2] = c.b;
+  }
+  faceted.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+  const mound = new THREE.Mesh(
+    faceted,
+    new THREE.MeshToonMaterial({
+      color: 0xffffff,
+      gradientMap: getToonGradient(),
+      vertexColors: true,
+    })
+  );
+  mound.scale.set(2.8 * scale, 1.35 * scale, 2.6 * scale);
+  mound.castShadow = true;
+  mound.receiveShadow = true;
+  outlineAs(mound, "rock");
+  g.add(mound);
+
+  // 坡脚一圈青苔扁斑，软化与地面交界
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + rnd() * 0.2;
+    const rr = (2.1 + rnd() * 0.35) * scale;
+    const patch = new THREE.Mesh(
+      facet(new THREE.SphereGeometry(0.35 + rnd() * 0.15, 6, 4)),
+      toonMat(0x4e8849)
+    );
+    patch.scale.set(1.4, 0.22, 1.2);
+    patch.position.set(Math.cos(a) * rr, 0.06 * scale, Math.sin(a) * rr);
+    patch.receiveShadow = true;
+    g.add(patch);
+  }
+
+  g.userData.kind = "lawnHill";
+  g.userData.assetType = "lawnHill";
+  g.userData.factoryScale = scale;
+  g.userData.factorySeed = seed;
+  g.userData.collideRadius = 2.0 * scale;
   return g;
 }
 
