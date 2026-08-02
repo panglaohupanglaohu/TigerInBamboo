@@ -332,78 +332,72 @@ export function createFoxNpc({
 
   function animatePose(dt, t, moving) {
     const p = parts;
-    if (!p?.body || !p.base) return;
-    const b = p.base;
+    if (!p?.base) return;
     const following = isFollowing();
-    // 步频：与腿一致，走路稍慢更自然
-    const gait = t * (moving ? 8.5 : 2.2);
-    const breath =
-      Math.sin(t * (following ? 3.2 : 1.6)) * (following ? 0.01 : 0.012);
-    const walkBob = moving ? Math.sin(gait) * 0.02 : 0;
-    p.body.position.y = b.bodyY + breath + walkBob;
-    p.body.rotation.x = b.bodyRotX + (moving ? Math.sin(gait) * 0.04 : 0);
+    const elapsed = t; // 与 clock.getElapsedTime() 等价（主循环秒）
+    // 规范：hips.rotation.y = sin(t * 10) * 0.15（行走时扭臀带动大尾巴）
+    const gait = elapsed * (moving ? 10 : 3.5);
 
-    if (p.head && following) {
-      p.head.rotation.x = b.headRot.x + Math.sin(t * 2.2) * 0.03;
-      p.head.rotation.y = b.headRot.y + Math.sin(t * 1.5) * 0.05;
-    }
+    if (following && p.hips && p.chest) {
+      // ---- 行走形态：扭屁股 + 胸腔反相微摆 ----
+      if (moving) {
+        p.hips.rotation.y = Math.sin(gait) * 0.15;
+        p.chest.rotation.y = Math.sin(gait + Math.PI) * 0.06; // 反相更灵动
+        p.hips.position.y = Math.sin(gait * 2) * 0.012; // 轻弹
+      } else {
+        // 站立待机：很轻的呼吸扭
+        p.hips.rotation.y = Math.sin(elapsed * 2.2) * 0.04;
+        p.chest.rotation.y = Math.sin(elapsed * 2.2 + 1) * 0.02;
+        p.hips.position.y = 0;
+      }
 
-    // ---- 尾巴：关节链相位滞后（根小摆、尖大摆），避免整坨乱转 ----
-    if (following && p.tailJoint0 && p.tailJoint1 && p.tailJoint2) {
-      const rest = b.tailStand || {
-        j0: { x: 0, y: 0, z: 0 },
-        j1: { x: 0.12, y: 0, z: 0.08 },
-        j2: { x: 0.1, y: 0, z: 0.06 },
-        g: { x: 0, y: 0, z: 0.95 },
-      };
-      // 侧向甩（绕局部 Y）：根节小、尖节滞后放大 → 像柔软蓬松尾
-      const amp = moving ? 1 : 0.35;
-      const side0 = Math.sin(gait) * 0.11 * amp;
-      const side1 = Math.sin(gait - 0.55) * 0.16 * amp;
-      const side2 = Math.sin(gait - 1.1) * 0.22 * amp;
-      // 上下轻点：与步态反相，平衡身体弹跳
-      const bob0 = Math.sin(gait * 2 + 0.4) * (moving ? 0.05 : 0.02);
-      const bob1 = Math.sin(gait * 2 - 0.3) * (moving ? 0.07 : 0.025);
-      const bob2 = Math.sin(gait * 2 - 0.9) * (moving ? 0.09 : 0.03);
-
+      // 舒展双锥尾：在扭臀基础上再叠加一点滞后摆动
       if (p.tail) {
-        p.tail.rotation.x = rest.g.x;
-        p.tail.rotation.y = rest.g.y + side0 * 0.35;
-        p.tail.rotation.z = rest.g.z;
+        const baseX = THREE.MathUtils.degToRad(15);
+        // tailG 已 z=90° + x=15°；再绕局部 Y 轻甩（随步态）
+        const wag = Math.sin(gait - 0.4) * (moving ? 0.12 : 0.05);
+        const bob = Math.sin(gait * 2 - 0.8) * (moving ? 0.06 : 0.02);
+        p.tail.rotation.order = "ZYX";
+        p.tail.rotation.z = Math.PI / 2;
+        p.tail.rotation.x = baseX + bob;
+        p.tail.rotation.y = wag;
       }
-      p.tailJoint0.rotation.x = rest.j0.x + bob0;
-      p.tailJoint0.rotation.y = rest.j0.y + side0;
-      p.tailJoint0.rotation.z = rest.j0.z;
-      p.tailJoint1.rotation.x = rest.j1.x + bob1;
-      p.tailJoint1.rotation.y = rest.j1.y + side1;
-      p.tailJoint1.rotation.z = rest.j1.z;
-      p.tailJoint2.rotation.x = rest.j2.x + bob2;
-      p.tailJoint2.rotation.y = rest.j2.y + side2;
-      p.tailJoint2.rotation.z = rest.j2.z;
-    } else if (p.tail && !following) {
-      // 睡姿：极轻呼吸感
-      p.tail.rotation.y = Math.sin(t * 1.1) * 0.04;
-      p.tail.rotation.z = Math.sin(t * 0.9) * 0.03;
+
+      // 头轻点
+      if (p.walkHead) {
+        p.walkHead.rotation.x = Math.sin(elapsed * 2.5) * 0.04;
+        p.walkHead.rotation.y = Math.sin(elapsed * 1.7) * 0.05;
+      }
+
+      // 耳朵
+      if (p.walkHead) {
+        p.walkHead.traverse((o) => {
+          if (!o.userData?.baseRot) return;
+          const br = o.userData.baseRot;
+          o.rotation.x = br.x + Math.sin(elapsed * 5) * 0.08;
+        });
+      }
+
+      // 四短腿对角步态
+      const legs = p.legMeshes || p.legs?.children || [];
+      if (moving && legs.length) {
+        for (let i = 0; i < legs.length; i++) {
+          const phase = i === 0 || i === 3 ? 0 : Math.PI;
+          legs[i].rotation.x = Math.sin(gait + phase) * 0.45;
+        }
+      } else {
+        for (const leg of legs) leg.rotation.x = 0;
+      }
+      return;
     }
 
-    if (p.ears) {
-      for (let i = 0; i < p.ears.length; i++) {
-        const ear = p.ears[i];
-        const br = ear.userData.baseRot || { x: 0, y: 0, z: 0 };
-        const flick = Math.sin(t * 5 + i) * (following ? 0.1 : 0.04);
-        ear.rotation.x = br.x + flick;
-      }
+    // ---- 睡姿微动 ----
+    if (p.body) {
+      const breath = Math.sin(elapsed * 1.6) * 0.012;
+      p.body.position.y = (p.base.bodyY || 0.19) + breath;
     }
-    // 短腿小跑：与 gait 同步
-    if (p.legs?.visible && moving) {
-      for (let i = 0; i < p.legs.children.length; i++) {
-        const leg = p.legs.children[i];
-        // 对角步态：0+3 / 1+2
-        const phase = (i === 0 || i === 3) ? 0 : Math.PI;
-        leg.rotation.x = Math.sin(gait + phase) * 0.42;
-      }
-    } else if (p.legs) {
-      for (const leg of p.legs.children) leg.rotation.x = 0;
+    if (p.tail && p.sleepG?.visible !== false) {
+      p.tail.rotation.y = Math.sin(elapsed * 1.1) * 0.04;
     }
   }
 
