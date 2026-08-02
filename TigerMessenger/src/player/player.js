@@ -36,7 +36,7 @@ export function createPlayer(scene) {
   playerGroup.add(messengerMesh);
 
   const holdAura = new THREE.PointLight(0xffe08a, 0, 4, 2);
-  holdAura.position.set(0, 1.6, 0);
+  holdAura.position.set(0, 1.25, 0.35); // 虎头/信袋高度
   playerGroup.add(holdAura);
 
   syncPlayerVisual(player, playerGroup);
