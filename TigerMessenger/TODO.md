@@ -90,6 +90,10 @@
 
 ## 已完成（续）
 
+- [x] 39. 场景模块化（Grok 2026-08-02）
+  - `src/scenes/`：`messenger` 信使主岛 / `saihoji` 西芳寺苔寺，registry 按需加载
+  - `main.js` 薄装配；URL `?scene=messenger,saihoji`（默认两者）
+  - 西芳寺 `buildSaihojiPlanet` 北苔南砂 + 赤道茶室 + 螺旋参道
 - [x] 38. 水墨收尾 + 湖面动效（Grok 2026-08-02）
   - 房屋/街道/远侧资产水墨色（宣纸墙·黛青瓦·焦墨杆·沉绿树）
   - 湖：涟漪环 + 涉水水花粒子 + 廉价水下倒影剪影

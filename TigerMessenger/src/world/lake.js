@@ -21,6 +21,15 @@ export const LAKE = {
   wadeFactor: 0.55, // 涉水减速系数
 };
 
+/** 背侧大湖：球冠水域（纬度/经度中心 + 角半径），全浅可涉 */
+export const GREAT_LAKE = {
+  lat: -15, // 偏南/背侧
+  lon: 160,
+  angR: 0.42, // 角半径（弧度），约 24°
+  waterLift: 0.12, // 相对球面抬升
+  wadeFactor: 0.6,
+};
+
 const _dir = new THREE.Vector3();
 const _up = new THREE.Vector3();
 const _d = new THREE.Vector3();
@@ -149,17 +158,76 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
 /**
  * 涉水判定：玩家在主岛台面高度、且切向进入湖缘内 → 减速（写 player.wadeFactor）。
  * 深水区由碰撞体直接阻挡，到不了。
+ * 若已在大湖涉水，取更小 factor。
  */
 export function updateLakeWade(player, lake) {
-  let factor = 1;
+  let factor = player.wadeFactor || 1;
+  if (factor > LAKE.wadeFactor) factor = 1; // 本帧由大湖写过则保留较小值
   const r = player.position.length();
   if (Math.abs(r - lake.surfaceR) < 0.6) {
     _up.copy(player.position).normalize();
     _d.copy(player.position).sub(lake.centerWorld);
     _d.addScaledVector(_up, -_d.dot(_up)); // 切向距离
-    if (_d.length() < lake.rOuter) factor = LAKE.wadeFactor;
+    if (_d.length() < lake.rOuter) factor = Math.min(factor, LAKE.wadeFactor);
   }
   player.wadeFactor = factor;
+}
+
+/**
+ * 背侧大湖：贴球面的大圆盘水域，全浅可涉（无深水阻挡）。
+ * 供远侧净空与漫游节奏用。
+ */
+export function createGreatLake(scene, planetRadius = PLANET_RADIUS) {
+  const g = new THREE.Group();
+  latLonToDir(GREAT_LAKE.lat, GREAT_LAKE.lon, _dir);
+  const topR = planetRadius + GREAT_LAKE.waterLift;
+  g.position.copy(_dir).multiplyScalar(topR);
+  g.quaternion.copy(quatYToDir(_dir, new THREE.Quaternion()));
+
+  // 角半径 → 弦长半径（切平面近似）
+  const r = planetRadius * Math.sin(GREAT_LAKE.angR);
+  const water = new THREE.Mesh(
+    new THREE.CircleGeometry(r, 48),
+    toonMat(0x4a7a8a, { transparent: true, opacity: 0.8, side: THREE.DoubleSide })
+  );
+  water.rotation.x = -Math.PI / 2;
+  water.receiveShadow = true;
+  g.add(water);
+
+  // 岸边浅砂环
+  const rim = new THREE.Mesh(
+    new THREE.RingGeometry(r * 0.96, r * 1.06, 48),
+    toonMat(0xcbb896, { side: THREE.DoubleSide })
+  );
+  rim.rotation.x = -Math.PI / 2;
+  rim.position.y = -0.03;
+  g.add(rim);
+
+  scene.add(g);
+  return {
+    group: g,
+    centerWorld: _dir.clone().multiplyScalar(planetRadius),
+    centerDir: _dir.clone(),
+    angR: GREAT_LAKE.angR,
+    surfaceR: planetRadius + GREAT_LAKE.waterLift,
+    rFlat: r,
+  };
+}
+
+/** 背侧大湖涉水：与湖心夹角 < angR 且贴近球面 → 减速 */
+export function updateGreatLakeWade(player, greatLake) {
+  if (!greatLake) return;
+  _up.copy(player.position).normalize();
+  const ang = _up.angleTo(greatLake.centerDir);
+  if (ang < greatLake.angR) {
+    const r = player.position.length();
+    if (Math.abs(r - greatLake.surfaceR) < 1.2 || Math.abs(r - PLANET_RADIUS) < 1.4) {
+      const cur = player.wadeFactor || 1;
+      player.wadeFactor = Math.min(cur, GREAT_LAKE.wadeFactor);
+      return;
+    }
+  }
+  // 不在大湖内时不强制写 1（留给月亮湖判定）
 }
 
 /**

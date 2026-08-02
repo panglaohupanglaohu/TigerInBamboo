@@ -1,5 +1,7 @@
 // =====================================================================
-//  TigerMessenger 装配入口：创建各系统、接线、启动主循环
+//  TigerMessenger 运行时入口（薄装配）
+//  - 舞台 / 玩家 / 相机 / 输入 / 任务 / 音频 / 主循环
+//  - 世界内容由 scenes/* 模块按需加载（?scene=messenger,saihoji）
 // =====================================================================
 import { Timer } from "three/addons/misc/Timer.js";
 import { createStage } from "./core/stage.js";
@@ -8,47 +10,62 @@ import { createCameraRig } from "./core/camera.js";
 import { createDevPanel } from "./core/devPanel.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
-import { buildWorld, updatePlatformPulse } from "./world/platforms.js";
-import { buildHills } from "./world/hills.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
-import { decorateFarSide, decoratePlayZone, createCloudRing } from "./world/nature.js";
-import { createMoonLake, updateLakeWade, updateLakeFx, createGreatLake, updateGreatLakeWade, LAKE } from "./world/lake.js";
-import { updateClouds } from "./assets/lowPoly.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
 import { updatePlayerControl } from "./player/controller.js";
 import { updatePlayerAnim } from "./player/animation.js";
 import { createQuestSystem } from "./quest/questSystem.js";
-import { elIntro, elStartBtn, showToast, updateToast, initQuestPanelCollapse } from "./ui/hud.js";
+import {
+  elIntro,
+  elStartBtn,
+  showToast,
+  updateToast,
+  initQuestPanelCollapse,
+} from "./ui/hud.js";
 import { ensureAudio, startAmbience, sfxJump } from "./audio/sfx.js";
 import { journalCount } from "./quest/letterJournal.js";
+import {
+  resolveSceneIdsFromUrl,
+  loadScenes,
+  listScenes,
+} from "./scenes/registry.js";
+import { mergeColliders, updateScenes } from "./scenes/sceneApi.js";
 
-// ---------- 场景 / 相机 / 渲染器 ----------
+// ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
-
-// ---------- 任务面板可收起 ----------
 initQuestPanelCollapse();
 
-// ---------- 环境：光照 / 天空 / 星月 / 漂浮光点 ----------
+// ---------- 环境光 / 天空（跨场景共享） ----------
 const { lanterns, ambient, sun } = setupEnvironment(scene);
 
-// ---------- 星球（先放，平台贴其表面） ----------
-createPlanet(scene);
+// ---------- 星球壳（各场景可在其上贴装） ----------
+const planet = createPlanet(scene);
 
-// ---------- 世界：球面平台 + 连绵土坡（高度场，视觉=碰撞） ----------
-const platforms = buildWorld(scene);
-const hills = buildHills(scene, PLANET_RADIUS);
+// ---------- 按 URL 加载场景模块 ----------
+// 例：?scene=messenger  |  ?scene=saihoji  |  ?scene=messenger,saihoji
+const sceneIds = resolveSceneIdsFromUrl(location.search);
+const sceneHandles = loadScenes(sceneIds, {
+  scene,
+  planetRadius: PLANET_RADIUS,
+  planet,
+  options: {
+    // 可按场景覆盖：options.saihoji = { mossCount: 200 }
+    saihoji: { seed: 884, mossCount: 120, rockCount: 20 },
+  },
+});
 
-// ---------- 玩家 ----------
+// 从已加载场景中取玩法依赖（平台/土坡）；若未加载 messenger 则为空
+const messenger = sceneHandles.find((h) => h.id === "messenger") || null;
+const platforms = messenger?.platforms || [];
+const hills = messenger?.hills || null;
+const assetColliders = mergeColliders(sceneHandles);
+
+// ---------- 玩家 / 相机 / 输入 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
-
-// ---------- 第三人称相机 ----------
 const cameraRig = createCameraRig(camera, player);
 
-// ---------- 任务系统 / 开局状态 ----------
 let gameStarted = false;
-
-// ---------- 输入：键盘 + 滚轮/中键缩放 + 右键环视（yaw/pitch，松手回弹） ----------
 const keys = createInput({
   isActive: () => gameStarted,
   onZoom: (d) => cameraRig.zoomBy(d),
@@ -58,20 +75,7 @@ const keys = createInput({
   onRightDrag: (on) => cameraRig.setRightDrag(on),
 });
 
-// ---------- 自然点缀：游玩区植被房屋 + 远侧资产 + 云环（实验页并入） ----------
-const clouds = createCloudRing(scene, PLANET_RADIUS);
-const playZone = decoratePlayZone(scene, PLANET_RADIUS);
-const farSide = decorateFarSide(scene, PLANET_RADIUS);
-// 树/房/岩碰撞体（防穿模，与实验页"树石房可挡路"一致）
-const assetColliders = [...playZone.colliders, ...farSide.colliders];
-
-// ---------- 月亮湖：浅水可涉、深水阻挡、环湖小径 ----------
-const lake = createMoonLake(scene, PLANET_RADIUS);
-assetColliders.push(lake.deepCollider); // 深水区切向阻挡
-
-// ---------- 背侧大湖：球冠水域，全浅可涉 ----------
-const greatLake = createGreatLake(scene, PLANET_RADIUS);
-
+// ---------- 任务（依赖平台；无 messenger 场景时任务仍可创建但不贴台） ----------
 const quest = createQuestSystem({
   scene,
   platforms,
@@ -82,31 +86,32 @@ const quest = createQuestSystem({
   isGameStarted: () => gameStarted,
 });
 
-// ---------- 开发者菜单（🤖） ----------
 const devPanel = createDevPanel({
   sun,
   ambient,
   onCamDist: (d) => cameraRig.setDist(d),
 });
 
-// ---------- 开始按钮 ----------
+// ---------- 开场 ----------
 elStartBtn.addEventListener("click", () => {
   gameStarted = true;
   elIntro.classList.add("hidden");
   ensureAudio();
   startAmbience();
   const past = journalCount();
+  const sceneHint =
+    sceneIds.length === 1
+      ? `场景 · ${listScenes().find((s) => s.id === sceneIds[0])?.name || sceneIds[0]}`
+      : `场景 · ${sceneIds.join(" + ")}`;
   showToast(
     past > 0
-      ? `信袋里已有 ${past} 封往事 · 去找发光的寄件人接信吧`
-      : "去找发光的寄件人接信吧"
+      ? `信袋里已有 ${past} 封往事 · ${sceneHint}`
+      : `去找发光的寄件人接信吧 · ${sceneHint}`
   );
   quest.updateQuestUI();
 });
 
-// =====================================================================
-//  主循环
-// =====================================================================
+// ---------- 主循环 ----------
 const timer = new Timer();
 cameraRig.snapToPlayer();
 playerGroup.position.copy(player.position);
@@ -133,14 +138,20 @@ function animate() {
 
   updateToast(dt);
   updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
-  resolveCollisions(player.position, player.velocity, dt, platforms, player, () => {
-    showToast("掉下去了… 已回到检查点");
-  }, hills);
-  // 树/房/岩资产碰撞：切向推开，防止穿模
+  resolveCollisions(
+    player.position,
+    player.velocity,
+    dt,
+    platforms,
+    player,
+    () => showToast("掉下去了… 已回到检查点"),
+    hills
+  );
   resolveAssetColliders(player.position, assetColliders);
-  // 月亮湖：浅水涉水减速 + 涟漪/水花/倒影（深水已被阻挡）
-  updateLakeWade(player, lake);
-  updateLakeFx(lake, player, t, dt);
+
+  // 场景模块自更新（湖、云、平台脉动等）
+  updateScenes(sceneHandles, dt, t, { player, gameStarted });
+
   syncPlayerVisual(player, playerGroup);
 
   const upLen = player.position.length() || 1;
@@ -158,8 +169,6 @@ function animate() {
   quest.updateCompass();
   quest.animateMarkers(t);
   updateLanterns(lanterns, t);
-  updatePlatformPulse(platforms, t);
-  updateClouds(clouds, dt, t);
   devPanel.tick(dt);
 
   renderer.render(scene, camera);
@@ -167,5 +176,18 @@ function animate() {
 
 animate();
 
-// 调试
-window.__tm = { player, quest, cameraRig, P, scene, clouds, assetColliders, lake, hills };
+// 调试：场景列表与句柄
+window.__tm = {
+  player,
+  quest,
+  cameraRig,
+  P,
+  scene,
+  planet,
+  sceneIds,
+  sceneHandles,
+  listScenes,
+  assetColliders,
+  platforms,
+  hills,
+};

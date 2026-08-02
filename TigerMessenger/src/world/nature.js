@@ -15,9 +15,9 @@ import {
   placeOnSphere,
   INK_FLOWER_COLORS,
 } from "../assets/lowPoly.js";
-import { placeObjectOnSphere } from "./sphereMath.js";
+import { placeObjectOnSphere, latLonToDir } from "./sphereMath.js";
 import { createAncientPineTree, createCraneOnRock } from "../assets/ancient.js";
-import { LAKE } from "./lake.js";
+import { LAKE, GREAT_LAKE } from "./lake.js";
 import { QUEST_DEFS } from "../quest/questSystem.js";
 import { groundLiftAt } from "./hills.js";
 
@@ -29,11 +29,15 @@ function lcg(seed) {
   };
 }
 
-/** 远侧（lat -20°..45°）点缀树/岩/花/房：装饰 + 碰撞体 */
+/** 远侧（lat -20°..45°）点缀树/岩/花/房：装饰 + 碰撞体（背侧大湖水域净空） */
 export function decorateFarSide(scene, planetRadius, seed = 20260802) {
   const rnd = lcg(seed);
   const meshes = [];
   const colliders = [];
+  // 背侧大湖方向（水域不放资产）
+  const lakeDir = latLonToDir(GREAT_LAKE.lat, GREAT_LAKE.lon, new THREE.Vector3());
+  const lakeClear = GREAT_LAKE.angR + 0.1;
+  const _d = new THREE.Vector3();
   // 远侧同步水墨色系（沉绿树 / 焦墨岩 / 低饱和花）
   const defs = [
     [createLowPolyTree, 24],
@@ -46,14 +50,19 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
   ];
   for (const [make, count] of defs) {
     for (let i = 0; i < count; i++) {
-      const lat = -20 + rnd() * 65;
-      const lon = rnd() * 360 - 180;
-      const obj = placeOnSphere(make(), lat, lon, planetRadius);
-      obj.rotateY(rnd() * Math.PI * 2);
-      obj.scale.multiplyScalar(0.85 + rnd() * 0.4);
-      scene.add(obj);
-      meshes.push(obj);
-      pushCollider(colliders, obj);
+      for (let attempt = 0; attempt < 30; attempt++) {
+        const lat = -20 + rnd() * 65;
+        const lon = rnd() * 360 - 180;
+        latLonToDir(lat, lon, _d);
+        if (_d.angleTo(lakeDir) < lakeClear) continue; // 落在湖里，重采
+        const obj = placeOnSphere(make(), lat, lon, planetRadius);
+        obj.rotateY(rnd() * Math.PI * 2);
+        obj.scale.multiplyScalar(0.85 + rnd() * 0.4);
+        scene.add(obj);
+        meshes.push(obj);
+        pushCollider(colliders, obj);
+        break;
+      }
     }
   }
   return { meshes, colliders };
