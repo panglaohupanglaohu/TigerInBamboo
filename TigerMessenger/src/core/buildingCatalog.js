@@ -19,6 +19,12 @@ import {
 import { createAncientPineTree } from "../assets/ancient.js";
 import { createLowPolyHydrangeaBush } from "../assets/hydrangea.js";
 import { createLowPolyFox } from "../assets/fox.js";
+import {
+  createFisherBoat,
+  createHarborCrane,
+  createStackedCrates,
+  buildOldHarborScene,
+} from "../assets/harbor.js";
 
 /**
  * @typedef {object} BuildingDef
@@ -147,6 +153,38 @@ export const BUILDING_CATALOG = {
     defaultYaw: 0.9,
     collideRadius: 0.55,
     color: "#E96A36",
+  },
+  fisherBoat: {
+    id: "fisherBoat",
+    label: "小渔船",
+    create: () => createFisherBoat(),
+    defaultYaw: 0.35,
+    collideRadius: 1.4,
+    color: "#2C96B4",
+  },
+  harborCrane: {
+    id: "harborCrane",
+    label: "港口起重机",
+    create: () => createHarborCrane(),
+    defaultYaw: -0.55,
+    collideRadius: 1.2,
+    color: "#37474F",
+  },
+  stackedCrates: {
+    id: "stackedCrates",
+    label: "货柜木箱堆",
+    create: (opts = {}) => createStackedCrates({ seed: opts.seed ?? 11 }),
+    defaultYaw: 0,
+    collideRadius: 1.6,
+    color: "#A2B5CD",
+  },
+  oldHarbor: {
+    id: "oldHarbor",
+    label: "修船厂码头",
+    create: (opts = {}) => buildOldHarborScene({ seed: opts.seed ?? 8844 }).group,
+    defaultYaw: 0.85,
+    collideRadius: 4.0,
+    color: "#8B7355",
   },
 };
 

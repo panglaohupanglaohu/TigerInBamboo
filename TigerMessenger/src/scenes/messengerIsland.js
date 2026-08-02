@@ -2,15 +2,21 @@
 //  场景：信使主岛（可玩关卡）
 //  - 球面平台 / 土坡 / 云环
 //  - 游玩区 + 远侧自然点缀
-//  - 背侧大湖（月亮湖已按主人指示删除）
+//  - 月牙湖 + 湖畔老旧修船厂码头 + 背侧大湖
 //  不包含西芳寺景观（见 saihojiGarden.js）
 // =====================================================================
+import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { P } from "../core/params.js";
 import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
 import { buildHills } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing } from "../world/nature.js";
-import { createGreatLake, updateGreatLakeWade } from "../world/lake.js";
+import {
+  createGreatLake,
+  createMoonLake,
+  updateGreatLakeWade,
+  LAKE,
+} from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
@@ -20,12 +26,13 @@ import { createGrassTuft } from "../assets/bookshop.js";
 import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
+import { buildOldHarborScene } from "../assets/harbor.js";
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const messengerIslandScene = {
   id: "messenger",
   name: "信使主岛",
-  description: "送信玩法关卡：平台、土坡、背侧大湖、植被与云环",
+  description: "送信玩法关卡：平台、土坡、月牙湖码头、背侧大湖、植被与云环",
 
   load(ctx) {
     const scene = ctx.scene;
@@ -39,7 +46,33 @@ export const messengerIslandScene = {
     // 多层海岸 / 左侧荒山山洞 / 崖壁叠瀑 / 太空水环 / 弹琴老人
     const camp = buildStartingCamp(scene, R);
     const farSide = decorateFarSide(scene, R);
+    // 月牙湖（主岛动线交汇）
+    const moonLake = createMoonLake(scene, R);
     const greatLake = createGreatLake(scene, R);
+
+    // ---------- 月牙湖旁 · 老旧修船厂码头 ----------
+    // 湖心 LAKE(4,-1)，环湖小径外侧偏南岸落栈桥
+    const harborBuilt = buildOldHarborScene({ seed: 8844 });
+    const harbor = harborBuilt.group;
+    const harborX = LAKE.x + 5.4;
+    const harborZ = LAKE.z - 2.6;
+    const harborLift = groundLiftAt(harborX, harborZ);
+    placeObjectOnSphere(harbor, harborX, harborZ, harborLift, R);
+    harbor.rotateY(0.85);
+    scene.add(harbor);
+    harbor.updateMatrixWorld(true);
+    const _wp = new THREE.Vector3();
+    const harborColliders = [
+      { position: harbor.position.clone(), radius: 3.8 },
+      {
+        position: harborBuilt.landmarks.crane.getWorldPosition(_wp.clone()),
+        radius: 1.15,
+      },
+      {
+        position: harborBuilt.landmarks.boat.getWorldPosition(_wp.clone()),
+        radius: 1.45,
+      },
+    ];
 
     // 基督城有轨电车：营地→书店→天桥→西芳寺 环形轨道
     const tramSystem = buildChristchurchTramSystem(scene, R);
@@ -95,8 +128,10 @@ export const messengerIslandScene = {
       ...playZone.colliders,
       ...camp.colliders,
       ...farSide.colliders,
+      ...harborColliders,
       { position: bookshop.position.clone(), radius: bookshop.userData.collideRadius },
     ];
+    if (moonLake?.deepCollider) colliders.push(moonLake.deepCollider);
 
     return {
       id: "messenger",
@@ -104,6 +139,7 @@ export const messengerIslandScene = {
       hills,
       clouds,
       greatLake,
+      moonLake,
       colliders,
       landmarks: {
         playZone,
@@ -111,6 +147,8 @@ export const messengerIslandScene = {
         farSide,
         bookshop,
         tramSystem,
+        harbor,
+        oldHarbor: harborBuilt,
       },
       update(dt, t, runtime) {
         updatePlatformPulse(platforms, t);
@@ -123,7 +161,7 @@ export const messengerIslandScene = {
           updateGreatLakeWade(player, greatLake);
         }
       },
-      debug: { playZone, camp, farSide },
+      debug: { playZone, camp, farSide, harbor },
     };
   },
 };
