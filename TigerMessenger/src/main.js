@@ -4,6 +4,7 @@
 //  - 世界内容由 scenes/* 模块按需加载（?scene=messenger,saihoji）
 // =====================================================================
 import { Timer } from "three/addons/misc/Timer.js";
+import * as THREE from "three";
 import { createStage } from "./core/stage.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js";
@@ -178,6 +179,32 @@ const elderMusic = createElderMusicInteraction({
   elHint: document.getElementById("elder-hint"),
   isGameStarted: () => gameStarted,
 });
+
+// ---------- 莫比斯结界：电车跨赤道时 2s 平滑过渡天空 ----------
+// 北半球保持昼夜循环本色；电车入南（y<0）环境光/天色渐变为莫比斯粉紫
+const MOEBIUS_SKY = new THREE.Color(0xebb9b6); // 莫比斯黄昏粉紫
+const MOEBIUS_SUN = new THREE.Color(0xf0c294); // 暖橙日光
+let moebiusFactor = 0;
+function updateMoebiusBarrier(dt) {
+  const tram = messenger?.landmarks?.tramSystem?.tram;
+  const target = tram && tram.position.y < 0 ? 1 : 0;
+  moebiusFactor += (target - moebiusFactor) * Math.min(1, dt / 2); // 2 秒时间常数
+  if (moebiusFactor < 0.001) return;
+  const cur = dayNight.getCurrent();
+  if (!cur) return;
+  const f = THREE.MathUtils.smoothstep(moebiusFactor, 0, 1);
+  if (scene.background && scene.background.isColor) {
+    scene.background.copy(cur.skyMid).lerp(MOEBIUS_SKY, f);
+  }
+  if (scene.fog) scene.fog.color.copy(cur.skyMid).lerp(MOEBIUS_SKY, f);
+  if (skyMat) {
+    skyMat.uniforms.topColor.value.copy(cur.skyTop).lerp(MOEBIUS_SKY, f);
+    skyMat.uniforms.midColor.value.copy(cur.skyMid).lerp(MOEBIUS_SKY, f);
+    skyMat.uniforms.botColor.value.copy(cur.skyBot).lerp(MOEBIUS_SUN, f);
+  }
+  sun.color.copy(cur.sunColor).lerp(MOEBIUS_SUN, f);
+  ambient.color.setHex(0xf3fff7).lerp(MOEBIUS_SKY, f);
+}
 
 // ---------- 阿狸（E 站立跟随 · 球面 lerp 尾随 · 对话） ----------
 const foxAli = messenger?.landmarks?.camp?.landmarks?.foxAli || null;

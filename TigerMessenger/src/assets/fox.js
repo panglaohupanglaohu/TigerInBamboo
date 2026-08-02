@@ -66,30 +66,71 @@ export function createLowPolyFox(opts = {}) {
   belly.position.set(0.22, 0.1, 0.04);
   rig.add(belly);
 
-  // ========== 2. 大尾巴 ==========
-  const tailRoot = part(new THREE.IcosahedronGeometry(0.42, 1), orange);
-  tailRoot.name = "fox-tail-root";
-  tailRoot.scale.set(1.35, 0.95, 1.15);
-  tailRoot.position.set(-0.42, 0.28, 0.38);
-  tailRoot.rotation.set(0.25, -0.55, 0.35);
+  // ========== 2. 大尾巴（关节链：根→中→尖，便于自然甩尾） ==========
+  // 睡姿：尾环抱身侧；站姿：整条链翘向后上方（-X / +Y）
   const tailG = new THREE.Group();
   tailG.name = "fox-tail";
-  tailG.add(tailRoot);
   rig.add(tailG);
 
-  const tailMid = part(new THREE.IcosahedronGeometry(0.32, 1), orange, 0.026);
-  tailMid.name = "fox-tail-mid";
-  tailMid.scale.set(1.2, 0.9, 1.05);
-  tailMid.position.set(-0.18, 0.36, 0.62);
-  tailMid.rotation.set(0.4, -0.2, 0.15);
-  tailG.add(tailMid);
+  // joint0 在髋部；子关节沿局部 +Y 串联（旋转后 +Y ≈ 后上）
+  const tailJoint0 = new THREE.Group();
+  tailJoint0.name = "fox-tail-j0";
+  tailG.add(tailJoint0);
+  const tailJoint1 = new THREE.Group();
+  tailJoint1.name = "fox-tail-j1";
+  tailJoint0.add(tailJoint1);
+  const tailJoint2 = new THREE.Group();
+  tailJoint2.name = "fox-tail-j2";
+  tailJoint1.add(tailJoint2);
 
-  const tailTip = part(new THREE.IcosahedronGeometry(0.26, 1), cream, 0.024);
+  const tailRoot = part(new THREE.IcosahedronGeometry(0.36, 1), orange);
+  tailRoot.name = "fox-tail-root";
+  tailRoot.scale.set(1.25, 1.05, 1.1);
+  tailJoint0.add(tailRoot);
+
+  const tailMid = part(new THREE.IcosahedronGeometry(0.28, 1), orange, 0.026);
+  tailMid.name = "fox-tail-mid";
+  tailMid.scale.set(1.15, 1.0, 1.05);
+  tailJoint1.add(tailMid);
+
+  const tailTip = part(new THREE.IcosahedronGeometry(0.22, 1), cream, 0.024);
   tailTip.name = "fox-tail-tip";
-  tailTip.scale.set(1.15, 0.85, 1.1);
-  tailTip.position.set(0.22, 0.22, 0.72);
-  tailTip.rotation.set(0.55, 0.35, -0.1);
-  tailG.add(tailTip);
+  tailTip.scale.set(1.1, 0.95, 1.0);
+  tailJoint2.add(tailTip);
+
+  /** 睡姿：蓬松尾绕到身体右侧 */
+  function applySleepTailPose() {
+    tailG.position.set(0, 0, 0);
+    tailG.rotation.set(0, 0, 0);
+    tailJoint0.position.set(-0.42, 0.28, 0.28);
+    tailJoint0.rotation.set(0.2, -0.45, 0.3);
+    tailJoint1.position.set(0.12, 0.08, 0.22);
+    tailJoint1.rotation.set(0.15, -0.2, 0.1);
+    tailJoint2.position.set(0.14, 0.06, 0.18);
+    tailJoint2.rotation.set(0.2, 0.15, -0.05);
+    tailRoot.position.set(0, 0, 0);
+    tailMid.position.set(0, 0, 0);
+    tailTip.position.set(0, 0, 0);
+  }
+
+  /** 站姿：尾从臀后斜斜翘起，关节沿 +Y 串成弧 */
+  function applyStandTailPose() {
+    // 附着点：身体后臀
+    tailG.position.set(-0.4, 0.36, 0);
+    // 整链朝后上方（局部 +Y 指向 -X/+Y 世界向）
+    tailG.rotation.set(0, 0, 0.95);
+    tailJoint0.position.set(0, 0, 0);
+    tailJoint0.rotation.set(0, 0, 0);
+    tailJoint1.position.set(0, 0.28, 0);
+    tailJoint1.rotation.set(0.12, 0, 0.08); // 略弯
+    tailJoint2.position.set(0, 0.24, 0);
+    tailJoint2.rotation.set(0.1, 0, 0.06);
+    tailRoot.position.set(0, 0.08, 0);
+    tailMid.position.set(0, 0.06, 0);
+    tailTip.position.set(0, 0.08, 0);
+  }
+
+  applySleepTailPose();
 
   // ========== 3. 头部 ==========
   const headG = new THREE.Group();
@@ -217,16 +258,17 @@ export function createLowPolyFox(opts = {}) {
     bellyY: belly.position.y,
     headPos: headG.position.clone(),
     headRot: headG.rotation.clone(),
-    tailRot: {
-      x: tailG.rotation.x,
-      y: tailG.rotation.y,
-      z: tailG.rotation.z,
-    },
-    tailRootRot: tailRoot.rotation.clone(),
-    tailRootPos: tailRoot.position.clone(),
   };
 
-  // 动画叠加用 base（与 sleepPose 同步一份）
+  // 站姿关节零点（动画在此之上叠加）
+  const standTailRest = {
+    j0: { x: 0, y: 0, z: 0 },
+    j1: { x: 0.12, y: 0, z: 0.08 },
+    j2: { x: 0.1, y: 0, z: 0.06 },
+    g: { x: 0, y: 0, z: 0.95 },
+  };
+
+  // 动画叠加用 base
   const base = {
     bodyY: sleepPose.bodyY,
     bodyRotX: sleepPose.bodyRotX,
@@ -235,7 +277,8 @@ export function createLowPolyFox(opts = {}) {
       y: sleepPose.headRot.y,
       z: sleepPose.headRot.z,
     },
-    tailRot: { ...sleepPose.tailRot },
+    tailRot: { x: 0, y: 0, z: 0 },
+    tailStand: standTailRest,
   };
 
   /** @type {FoxState} */
@@ -284,12 +327,8 @@ export function createLowPolyFox(opts = {}) {
     headG.position.set(0.58, 0.48, 0);
     headG.rotation.set(-0.05, 0, 0);
 
-    // 尾巴斜斜翘向后上方（-X 后 +Y 上）
-    tailG.rotation.set(-0.15, 0.1, 0.55);
-    tailRoot.position.set(-0.48, 0.35, 0.05);
-    tailRoot.rotation.set(0.1, 0.2, 0.85);
-    tailMid.position.set(-0.55, 0.55, 0.02);
-    tailTip.position.set(-0.62, 0.72, 0);
+    // 尾巴：关节链斜斜翘向后上方
+    applyStandTailPose();
 
     // 腿挂在抬高后的身体下
     legsG.position.y = 0;
@@ -298,7 +337,12 @@ export function createLowPolyFox(opts = {}) {
     base.bodyY = body.position.y;
     base.bodyRotX = body.rotation.x;
     base.headRot = { x: headG.rotation.x, y: headG.rotation.y, z: headG.rotation.z };
-    base.tailRot = { x: tailG.rotation.x, y: tailG.rotation.y, z: tailG.rotation.z };
+    base.tailStand = {
+      j0: { x: tailJoint0.rotation.x, y: tailJoint0.rotation.y, z: tailJoint0.rotation.z },
+      j1: { x: tailJoint1.rotation.x, y: tailJoint1.rotation.y, z: tailJoint1.rotation.z },
+      j2: { x: tailJoint2.rotation.x, y: tailJoint2.rotation.y, z: tailJoint2.rotation.z },
+      g: { x: tailG.rotation.x, y: tailG.rotation.y, z: tailG.rotation.z },
+    };
 
     glowRing.visible = false;
     g.userData.sleeping = false;
@@ -319,11 +363,7 @@ export function createLowPolyFox(opts = {}) {
     headG.position.copy(sleepPose.headPos);
     headG.rotation.copy(sleepPose.headRot);
 
-    tailG.rotation.set(sleepPose.tailRot.x, sleepPose.tailRot.y, sleepPose.tailRot.z);
-    tailRoot.position.copy(sleepPose.tailRootPos);
-    tailRoot.rotation.copy(sleepPose.tailRootRot);
-    tailMid.position.set(-0.18, 0.36, 0.62);
-    tailTip.position.set(0.22, 0.22, 0.72);
+    applySleepTailPose();
 
     base.bodyY = sleepPose.bodyY;
     base.bodyRotX = sleepPose.bodyRotX;
@@ -332,7 +372,6 @@ export function createLowPolyFox(opts = {}) {
       y: sleepPose.headRot.y,
       z: sleepPose.headRot.z,
     };
-    base.tailRot = { ...sleepPose.tailRot };
 
     glowRing.visible = true;
     g.userData.sleeping = true;
@@ -381,6 +420,9 @@ export function createLowPolyFox(opts = {}) {
     belly,
     head: headG,
     tail: tailG,
+    tailJoint0,
+    tailJoint1,
+    tailJoint2,
     tailRoot,
     tailMid,
     tailTip,
