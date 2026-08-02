@@ -78,23 +78,49 @@ function pushCollider(colliders, obj) {
   }
 }
 
-/** 云环：距球面 height 的低空，updateClouds 驱动绕心公转 + 径向起伏 */
-export function createCloudRing(scene, planetRadius, { count = 10, height = 8, seed = 7 } = {}) {
+/**
+ * 云环：多样形态/色调/高度层，updateClouds 驱动漂移
+ * @param {number} [opts.count=16] 朵数（比原先更密一点）
+ * @param {number} [opts.height=8] 基准离地高度
+ */
+export function createCloudRing(scene, planetRadius, { count = 16, height = 8, seed = 7 } = {}) {
   const rnd = lcg(seed);
   const clouds = [];
+  const styles = ["puff", "streak", "wispy", "stack", "anvil"];
   for (let i = 0; i < count; i++) {
-    const lat = 20 + rnd() * 65; // 覆盖游玩区上空，抬头可见
+    // 多层高度：低掠云 / 中层 / 高薄云
+    const band = rnd();
+    const hOff =
+      band < 0.35 ? -2 + rnd() * 2 : band < 0.75 ? 1 + rnd() * 4 : 5 + rnd() * 6;
+    const lat = 12 + rnd() * 72; // 更宽纬度带
     const lon = rnd() * 360 - 180;
-    const obj = placeOnSphere(createLowPolyCloud(), lat, lon, planetRadius + height);
+    const style = styles[i % styles.length]; // 轮转保证五形态都出现
+    const cloudSeed = (seed * 997 + i * 131) >>> 0;
+    const obj = placeOnSphere(
+      createLowPolyCloud({ seed: cloudSeed, style }),
+      lat,
+      lon,
+      planetRadius + height + hOff
+    );
     obj.rotateY(rnd() * Math.PI * 2);
-    obj.scale.multiplyScalar(0.8 + rnd() * 0.8);
+    // 尺度跨度更大：小絮 → 大积云
+    const sc =
+      style === "wispy"
+        ? 0.55 + rnd() * 0.55
+        : style === "anvil" || style === "stack"
+          ? 1.1 + rnd() * 1.1
+          : style === "streak"
+            ? 0.9 + rnd() * 1.2
+            : 0.7 + rnd() * 0.95;
+    obj.scale.multiplyScalar(sc);
     obj.userData.drift = {
       axis: new THREE.Vector3(rnd() - 0.5, rnd() * 0.4 + 0.6, rnd() - 0.5).normalize(),
-      speed: 0.04 + rnd() * 0.08, // rad/s
-      bobAmp: 0.25 + rnd() * 0.35,
-      bobSpeed: 0.4 + rnd() * 0.6,
+      speed: 0.03 + rnd() * 0.1,
+      bobAmp: 0.2 + rnd() * 0.55,
+      bobSpeed: 0.3 + rnd() * 0.75,
       phase: rnd() * Math.PI * 2,
-      baseR: planetRadius + height,
+      baseR: planetRadius + height + hOff,
+      style,
     };
     scene.add(obj);
     clouds.push(obj);

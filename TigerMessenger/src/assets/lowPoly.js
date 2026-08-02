@@ -285,27 +285,132 @@ export function createLowPolyLawnHill(opts = {}) {
   return g;
 }
 
-/** 低空软云：宣纸米色软球簇（不描边、不 Cel 硬阴影） */
-export function createLowPolyCloud() {
+/** 云色盘：暖白 / 宣纸米 / 冷白 / 淡紫灰 / 淡青白 */
+const CLOUD_PALETTE = Object.freeze([
+  0xfaf6ef, 0xf5efe4, 0xeef4f8, 0xe8e4f0, 0xe4f2ee, 0xf8f0e6,
+]);
+
+/**
+ * 低空软云（多样形态，不描边、不 Cel）
+ * @param {{ seed?: number, style?: string }} [opts]
+ *   style: "puff" 团絮 | "streak" 长条 | "wispy" 稀薄 | "stack" 层叠 | "anvil" 砧状
+ */
+export function createLowPolyCloud(opts = {}) {
+  let s = ((opts.seed ?? (Math.random() * 1e9) | 0) >>> 0) || 1;
+  const rnd = () => {
+    s = (Math.imul(1664525, s) + 1013904223) >>> 0;
+    return s / 0x100000000;
+  };
+  const styles = ["puff", "streak", "wispy", "stack", "anvil"];
+  const style = opts.style || styles[(rnd() * styles.length) | 0];
+
   const g = new THREE.Group();
+  g.name = `cloud-${style}`;
+  const color = CLOUD_PALETTE[(rnd() * CLOUD_PALETTE.length) | 0];
+  const opacity =
+    style === "wispy" ? 0.55 + rnd() * 0.2 : style === "streak" ? 0.72 + rnd() * 0.15 : 0.8 + rnd() * 0.15;
   const mat = new THREE.MeshBasicMaterial({
-    color: 0xf5efe4,
+    color,
     transparent: true,
-    opacity: 0.88,
+    opacity,
+    depthWrite: false,
   });
-  const puffs = [
-    { r: 0.6, x: 0, y: 0.55, z: 0 },
-    { r: 0.48, x: 0.55, y: 0.48, z: 0.08 },
-    { r: 0.44, x: -0.52, y: 0.46, z: -0.05 },
-    { r: 0.36, x: 0.12, y: 0.38, z: 0.4 },
-    { r: 0.32, x: -0.1, y: 0.72, z: -0.08 },
-  ];
+
+  /** @type {{ r: number, x: number, y: number, z: number, sx?: number, sy?: number, sz?: number }[]} */
+  let puffs = [];
+  if (style === "puff") {
+    // 经典圆团：5~8 球
+    const n = 5 + ((rnd() * 4) | 0);
+    for (let i = 0; i < n; i++) {
+      const a = rnd() * Math.PI * 2;
+      const d = rnd() * 0.55;
+      puffs.push({
+        r: 0.28 + rnd() * 0.38,
+        x: Math.cos(a) * d,
+        y: 0.35 + rnd() * 0.45,
+        z: Math.sin(a) * d * 0.7,
+      });
+    }
+  } else if (style === "streak") {
+    // 长条风云：沿 X 拉开
+    const n = 6 + ((rnd() * 4) | 0);
+    for (let i = 0; i < n; i++) {
+      const t = i / (n - 1);
+      puffs.push({
+        r: 0.22 + rnd() * 0.28,
+        x: (t - 0.5) * 2.4 + (rnd() - 0.5) * 0.2,
+        y: 0.3 + rnd() * 0.25 + Math.sin(t * Math.PI) * 0.15,
+        z: (rnd() - 0.5) * 0.35,
+        sx: 1.2 + rnd() * 0.6,
+        sy: 0.55 + rnd() * 0.25,
+        sz: 0.7 + rnd() * 0.3,
+      });
+    }
+  } else if (style === "wispy") {
+    // 稀薄丝缕：小球、散开
+    const n = 4 + ((rnd() * 4) | 0);
+    for (let i = 0; i < n; i++) {
+      puffs.push({
+        r: 0.14 + rnd() * 0.2,
+        x: (rnd() - 0.5) * 1.8,
+        y: 0.25 + rnd() * 0.5,
+        z: (rnd() - 0.5) * 1.0,
+        sx: 1.4 + rnd(),
+        sy: 0.4 + rnd() * 0.25,
+        sz: 0.8 + rnd() * 0.4,
+      });
+    }
+  } else if (style === "stack") {
+    // 积云层叠：下大上小
+    const layers = 3 + ((rnd() * 2) | 0);
+    for (let L = 0; L < layers; L++) {
+      const t = L / (layers - 1 || 1);
+      const n = 4 - L;
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2 + rnd() * 0.4;
+        const d = (0.15 + (1 - t) * 0.4) * (0.7 + rnd() * 0.4);
+        puffs.push({
+          r: (0.5 - t * 0.22) * (0.85 + rnd() * 0.25),
+          x: Math.cos(a) * d,
+          y: 0.28 + t * 0.7 + rnd() * 0.08,
+          z: Math.sin(a) * d * 0.85,
+        });
+      }
+    }
+  } else {
+    // anvil：砧状——宽底 + 顶层横展
+    for (let i = 0; i < 5; i++) {
+      const a = rnd() * Math.PI * 2;
+      puffs.push({
+        r: 0.35 + rnd() * 0.25,
+        x: Math.cos(a) * 0.35 * rnd(),
+        y: 0.35 + rnd() * 0.3,
+        z: Math.sin(a) * 0.3 * rnd(),
+      });
+    }
+    for (let i = 0; i < 5; i++) {
+      puffs.push({
+        r: 0.22 + rnd() * 0.18,
+        x: (i - 2) * 0.45 + (rnd() - 0.5) * 0.15,
+        y: 0.85 + rnd() * 0.15,
+        z: (rnd() - 0.5) * 0.4,
+        sx: 1.3 + rnd() * 0.5,
+        sy: 0.45 + rnd() * 0.2,
+        sz: 0.9 + rnd() * 0.3,
+      });
+    }
+  }
+
   for (const p of puffs) {
     const m = new THREE.Mesh(facet(new THREE.SphereGeometry(p.r, 7, 5)), mat);
     m.position.set(p.x, p.y, p.z);
+    if (p.sx || p.sy || p.sz) {
+      m.scale.set(p.sx ?? 1, p.sy ?? 1, p.sz ?? 1);
+    }
     g.add(m);
   }
   g.userData.isCloud = true;
+  g.userData.cloudStyle = style;
   g.userData.collideRadius = 0; // 不挡路
   return g;
 }
@@ -633,22 +738,30 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
     void placedOk; // 放不下就跳过该实例
   }
 
-  // 云朵：低空空飘（不进碰撞、不做间距检查）；附带漂移参数
+  // 云朵：多样形态/色调/高度；低空空飘（不进碰撞）
   /** @type {THREE.Object3D[]} */
   const cloudList = [];
+  const cloudStyles = ["puff", "streak", "wispy", "stack", "anvil"];
   for (let i = 0; i < clouds; i++) {
     const { lat, lon } = sampleLatLon();
-    const obj = placeOnSphere(createLowPolyCloud(), lat, lon, planetRadius + cloudHeight);
+    const style = cloudStyles[i % cloudStyles.length];
+    const hOff = (rnd() - 0.3) * 6;
+    const obj = placeOnSphere(
+      createLowPolyCloud({ seed: (seed + i * 97) >>> 0, style }),
+      lat,
+      lon,
+      planetRadius + cloudHeight + hOff
+    );
     obj.rotateY(rnd() * Math.PI * 2);
-    obj.scale.setScalar(0.8 + rnd() * 0.8);
-    // 绕球心缓慢公转 + 轻微径向起伏
+    obj.scale.setScalar(0.6 + rnd() * 1.1);
     obj.userData.drift = {
       axis: new THREE.Vector3(rnd() - 0.5, rnd() * 0.4 + 0.6, rnd() - 0.5).normalize(),
-      speed: 0.04 + rnd() * 0.08, // rad/s
-      bobAmp: 0.25 + rnd() * 0.35,
-      bobSpeed: 0.4 + rnd() * 0.6,
+      speed: 0.03 + rnd() * 0.1,
+      bobAmp: 0.2 + rnd() * 0.5,
+      bobSpeed: 0.3 + rnd() * 0.7,
       phase: rnd() * Math.PI * 2,
-      baseR: planetRadius + cloudHeight,
+      baseR: planetRadius + cloudHeight + hOff,
+      style,
     };
     scene.add(obj);
     meshes.push(obj);
@@ -662,18 +775,53 @@ const _cloudSpin = new THREE.Quaternion();
 const _cloudAxis = new THREE.Vector3();
 
 /** 云朵漂移动画：绕球心缓慢公转 + 径向起伏 */
-export function updateClouds(clouds, dt, t) {
+/**
+ * 云与风：风向决定漂移方向与拉伸轴向，风速决定漂移速度与拉伸/压扁程度
+ * （风切变效应：云沿风向拉长，风越大云体越扁）。
+ * @param {number} dt 帧间隔
+ * @param {number} t 累计时间
+ * @param {{ speed: number, dirDeg: number }} wind 风速（世界单位/秒）/ 风向（度）
+ */
+const _windDir = new THREE.Vector3();
+const _windTan = new THREE.Vector3();
+const _windRight = new THREE.Vector3();
+const _windUp = new THREE.Vector3();
+const _windBasis = new THREE.Matrix4();
+
+export function updateClouds(clouds, dt, t, wind = { speed: 0.8, dirDeg: 45 }) {
   if (!clouds || !clouds.length) return;
+  const dirRad = THREE.MathUtils.degToRad(wind.dirDeg);
+  _windDir.set(Math.cos(dirRad), 0, Math.sin(dirRad)); // 世界 XZ 风向
+  const stretch = Math.min(0.6, wind.speed * 0.22); // 轴向拉伸上限
+  const flatten = Math.min(0.25, wind.speed * 0.07); // 高速压扁
+
   for (const c of clouds) {
     const d = c.userData.drift;
     if (!d) continue;
-    _cloudAxis.copy(d.axis);
-    _cloudSpin.setFromAxisAngle(_cloudAxis, d.speed * dt);
+    // 风向投影到该云的切平面 → 本地漂移方向
+    _windUp.copy(c.position).normalize();
+    _windTan.copy(_windDir).addScaledVector(_windUp, -_windDir.dot(_windUp));
+    if (_windTan.lengthSq() < 1e-6) _windTan.set(1, 0, 0).addScaledVector(_windUp, -_windUp.x);
+    _windTan.normalize();
+    // 绕 (up × windTan) 轴推进，速率 ∝ 风速
+    _cloudAxis.crossVectors(_windUp, _windTan).normalize();
+    _cloudSpin.setFromAxisAngle(_cloudAxis, (wind.speed * 0.6 * dt) / 40);
     c.position.applyQuaternion(_cloudSpin);
     // 径向起伏（保持大致云高）
     const r = d.baseR + Math.sin(t * d.bobSpeed + d.phase) * d.bobAmp;
     c.position.setLength(r);
-    // 自转一点点
-    c.rotateY(dt * 0.15);
+    // 形状随风：局部 +X 对齐风向拉伸、-Y 压扁、-Z 略收
+    if (d.baseScale === undefined) d.baseScale = c.scale.x; // 保留初始随机缩放
+    _windRight.copy(_windTan);
+    _windUp.copy(c.position).normalize();
+    const zAxis = new THREE.Vector3().crossVectors(_windRight, _windUp).normalize();
+    _windBasis.makeBasis(_windRight, _windUp, zAxis);
+    c.quaternion.setFromRotationMatrix(_windBasis);
+    const base = d.baseScale;
+    c.scale.set(
+      base * (1 + stretch),
+      base * (1 - flatten),
+      base * (1 - stretch * 0.35)
+    );
   }
 }
