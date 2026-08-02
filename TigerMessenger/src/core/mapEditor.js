@@ -550,61 +550,76 @@ export function createMapEditor({
     return null;
   }
 
+  /** @type {{ camera: THREE.Camera, domElement: HTMLElement }|null} */
+  let scenePickCtx = null;
+  let scenePickBound = false;
+
+  function onScenePointerDown(e) {
+    // 双重保险：地图关闭时绝不拾取
+    if (!open || !scenePickCtx || e.button !== 0) return;
+    const { camera, domElement } = scenePickCtx;
+    // 点在 UI 上则忽略
+    const t = e.target;
+    if (
+      t instanceof Element &&
+      (t.closest("#map-editor") ||
+        t.closest("#dev-panel") ||
+        t.closest("#dev-toggle") ||
+        t.closest("#quest-panel") ||
+        t.closest("#intro") ||
+        t.closest("#journal-panel"))
+    ) {
+      return;
+    }
+    const rect = domElement.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    _ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    _ndc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    _raycaster.setFromCamera(_ndc, camera);
+    _raycaster.params.Line = { threshold: 0.2 };
+    _raycaster.params.Points = { threshold: 0.3 };
+
+    const roots = placements.map((p) => p.object).filter(Boolean);
+    if (!roots.length) return;
+    const hits = _raycaster.intersectObjects(roots, true);
+    if (!hits.length) {
+      if (!placeModeType) selectByUid(null);
+      return;
+    }
+    const root = findPlacementRoot(hits[0].object);
+    if (!root?.userData?.mapUid) return;
+    selectByUid(root.userData.mapUid, { toastPick: true });
+    e.stopPropagation();
+  }
+
+  function enableScenePick() {
+    if (!scenePickCtx?.domElement || scenePickBound) return;
+    scenePickCtx.domElement.addEventListener("pointerdown", onScenePointerDown);
+    scenePickBound = true;
+  }
+
+  function disableScenePick() {
+    if (!scenePickCtx?.domElement || !scenePickBound) return;
+    scenePickCtx.domElement.removeEventListener("pointerdown", onScenePointerDown);
+    scenePickBound = false;
+  }
+
   /**
-   * 3D 场景点选：地图打开时，左键点模型 → 地图同步选中高亮
+   * 注册 3D 拾取目标（仅地图打开时挂监听）
    * @param {{ camera: THREE.Camera, domElement: HTMLElement }} deps
    */
   function bindScenePick({ camera, domElement }) {
     if (!camera || !domElement) return;
-
-    const onPointerDown = (e) => {
-      if (!open || e.button !== 0) return;
-      // 点在 UI 上则忽略
-      const t = e.target;
-      if (
-        t instanceof Element &&
-        (t.closest("#map-editor") ||
-          t.closest("#dev-panel") ||
-          t.closest("#dev-toggle") ||
-          t.closest("#quest-panel") ||
-          t.closest("#intro") ||
-          t.closest("#journal-panel"))
-      ) {
-        return;
-      }
-      // 若在地图放置模式，3D 点击不抢（仍用地图落点）
-      // 允许 3D 点选切换选中
-      const rect = domElement.getBoundingClientRect();
-      if (rect.width < 1 || rect.height < 1) return;
-      _ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      _ndc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      _raycaster.setFromCamera(_ndc, camera);
-      // 扩大一点阈值，小花也好点
-      _raycaster.params.Line = { threshold: 0.2 };
-      _raycaster.params.Points = { threshold: 0.3 };
-
-      const roots = placements.map((p) => p.object).filter(Boolean);
-      if (!roots.length) return;
-      const hits = _raycaster.intersectObjects(roots, true);
-      if (!hits.length) {
-        // 点空地：取消选中（放置模式保留）
-        if (!placeModeType) selectByUid(null);
-        return;
-      }
-      const root = findPlacementRoot(hits[0].object);
-      if (!root?.userData?.mapUid) return;
-      selectByUid(root.userData.mapUid, { toastPick: true });
-      // 阻止与其它 UI 冲突
-      e.stopPropagation();
-    };
-
-    domElement.addEventListener("pointerdown", onPointerDown);
-    return () => domElement.removeEventListener("pointerdown", onPointerDown);
+    // 若曾绑定过，先卸掉
+    disableScenePick();
+    scenePickCtx = { camera, domElement };
+    // 仅当地图已打开时立即启用
+    if (open) enableScenePick();
   }
 
-  /** 主循环可调：高亮环轻微呼吸 */
+  /** 主循环可调：高亮环轻微呼吸（地图关闭时无事可做） */
   function tickHighlight() {
-    if (!worldHighlight?.userData?.pulse) return;
+    if (!open || !worldHighlight?.userData?.pulse) return;
     const t = (performance.now() - (worldHighlight.userData.t0 || 0)) * 0.003;
     const s = 1 + 0.06 * Math.sin(t);
     worldHighlight.userData.pulse.scale.set(s, s, s);
@@ -865,13 +880,22 @@ export function createMapEditor({
     // 右侧栏：block 贴右，不遮罩全屏
     overlay.style.display = open ? "block" : "none";
     if (open) {
+      enableScenePick(); // 仅打开地图时允许 3D 点选
       redraw();
       refreshList();
       syncTools();
       updateWorldHighlight();
       toast("地图已开：可在 3D 场景左键点选建筑，地图同步高亮", 2.2);
     } else {
+      // 收起地图：立刻关闭 3D 选择能力，并清掉选中/高亮
+      disableScenePick();
+      selectedUid = null;
+      placeModeType = null;
+      dragging = false;
       clearWorldHighlight();
+      redraw();
+      refreshList();
+      syncTools();
     }
   }
 
