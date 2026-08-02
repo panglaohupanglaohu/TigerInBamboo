@@ -15,7 +15,7 @@ import {
   createGreatLake,
   createMoonLake,
   updateGreatLakeWade,
-  LAKE,
+  HARBOR,
 } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { updateClouds } from "../assets/lowPoly.js";
@@ -50,15 +50,14 @@ export const messengerIslandScene = {
     const moonLake = createMoonLake(scene, R);
     const greatLake = createGreatLake(scene, R);
 
-    // ---------- 月牙湖旁 · 老旧修船厂码头 ----------
-    // 湖心 LAKE(4,-1)，环湖小径外侧偏南岸落栈桥
+    // ---------- 月牙湖旁 · 老旧修船厂码头（坐标与电车避障 HARBOR 共用） ----------
     const harborBuilt = buildOldHarborScene({ seed: 8844 });
     const harbor = harborBuilt.group;
-    const harborX = LAKE.x + 5.4;
-    const harborZ = LAKE.z - 2.6;
+    const harborX = HARBOR.x;
+    const harborZ = HARBOR.z;
     const harborLift = groundLiftAt(harborX, harborZ);
     placeObjectOnSphere(harbor, harborX, harborZ, harborLift, R);
-    harbor.rotateY(0.85);
+    harbor.rotateY(HARBOR.yaw);
     scene.add(harbor);
     harbor.updateMatrixWorld(true);
     const _wp = new THREE.Vector3();

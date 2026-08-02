@@ -21,6 +21,18 @@ export const LAKE = {
   wadeFactor: 0.55, // 涉水减速系数
 };
 
+/**
+ * 修船厂码头落点（平面坐标，与 messengerIsland / 电车避障共用）
+ * 栈桥中心在环湖小径南外侧；clearR 含渔船/吊车/桩柱
+ */
+export const HARBOR = {
+  x: 4 + 5.4, // LAKE.x + 5.4
+  z: -1 - 2.6, // LAKE.z - 2.6
+  yaw: 0.85,
+  /** 轨道/建筑净空半径（勿穿模） */
+  clearR: 6.5,
+};
+
 /** 背侧大湖：球冠水域（纬度/经度中心 + 角半径），全浅可涉 */
 export const GREAT_LAKE = {
   lat: -15, // 偏南/背侧

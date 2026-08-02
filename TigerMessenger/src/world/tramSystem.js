@@ -12,6 +12,7 @@ import { groundLiftAt, worldToFlatXZ, ISLAND_BASE_LIFT, hillHeightAt } from "./h
 import { PLANET_RADIUS } from "./planet.js";
 import { P } from "../core/params.js";
 import { updateTramSound } from "../audio/sfx.js";
+import { LAKE, HARBOR } from "./lake.js";
 
 const SLEEPER = 0x3e2723;
 const RAIL = 0x757575;
@@ -36,8 +37,8 @@ export function trackLiftAt(x, z) {
 }
 
 /**
- * 选线避障：山丘核、书店、池塘、出生点
- * 迭代推开，保证落在平缓地面走廊。
+ * 选线避障：山丘核、书店、池塘、出生点、月牙湖、修船厂码头
+ * 迭代推开，保证落在平缓地面走廊、不穿模码头。
  */
 function clearForTrack(x, z) {
   // 山丘：与 HILL_DEFS 对齐（hills.js），核半径略放大作禁区
@@ -54,6 +55,11 @@ function clearForTrack(x, z) {
     { x: 5.8, z: 6.8, r: 3.0 },
     { x: 11.5, z: 5.5, r: 5.5 }, // 书店山 + 建筑体
   ];
+  // 圆禁区：月牙湖水域 + 修船厂码头（栈桥/船/吊车）
+  const hardCircles = [
+    { x: LAKE.x, z: LAKE.z, r: LAKE.pathOuter + 1.4 }, // 湖+小径
+    { x: HARBOR.x, z: HARBOR.z, r: HARBOR.clearR }, // 码头整景
+  ];
   // 池塘椭圆
   const pond = { x: 0, z: 9.1, rx: 10.5, rz: 5.8 };
   // 出生点净空
@@ -61,7 +67,7 @@ function clearForTrack(x, z) {
 
   let px = x;
   let pz = z;
-  for (let iter = 0; iter < 12; iter++) {
+  for (let iter = 0; iter < 16; iter++) {
     let moved = false;
     for (const h of hills) {
       const dx = px - h.x;
@@ -74,6 +80,23 @@ function clearForTrack(x, z) {
         moved = true;
       } else if (d < 1e-4) {
         px += h.r;
+        moved = true;
+      }
+    }
+    // 月牙湖 + 码头：硬推开
+    for (const c of hardCircles) {
+      const dx = px - c.x;
+      const dz = pz - c.z;
+      const d = Math.hypot(dx, dz);
+      if (d < c.r && d > 1e-4) {
+        const k = (c.r - d) / d;
+        px += dx * k;
+        pz += dz * k;
+        moved = true;
+      } else if (d < 1e-4) {
+        // 卡在圆心：默认推向码头南侧外缘（远离栈桥主体）
+        px = c.x + 0.2;
+        pz = c.z - c.r;
         moved = true;
       }
     }
@@ -125,22 +148,51 @@ function clearForTrack(x, z) {
  * 密集采样 + 避障 + 再做角点平滑，保证无锐角
  */
 function buildSmoothLoopFlat() {
-  // 基础椭圆环（逆时针）：营地南侧 → 东（绕书店南）→ 南 → 西 → 北回
-  // 点数多、相邻角自然钝
+  // 基础椭圆环（逆时针）：营地 → 东绕书店 → 南绕码头外侧 → 西 → 北回
+  // 故意从月牙湖/修船厂南侧外缘走，避免穿栈桥与渔船
   const raw = [];
-  const N = 28;
+  const N = 32;
   for (let i = 0; i < N; i++) {
     const t = (i / N) * Math.PI * 2;
-    // 略扁椭圆，东侧外扩给书店让路、北侧躲开池塘
-    const rx = 11.2 + 0.6 * Math.cos(2 * t);
-    const rz = 10.0 + 0.4 * Math.sin(2 * t);
-    // 圆心略偏南，远离池塘 (0,9)
-    let x = rx * Math.cos(t) + 1.2;
-    let z = rz * Math.sin(t) - 1.5;
-    // 东侧额外外推，书店在 (11.5,5.5)
+    // 略扁椭圆；圆心偏西南，给东南码头让出走廊
+    const rx = 11.6 + 0.55 * Math.cos(2 * t);
+    const rz = 10.4 + 0.45 * Math.sin(2 * t);
+    let x = rx * Math.cos(t) + 0.6;
+    let z = rz * Math.sin(t) - 2.2;
+    // 东侧外推，书店 (11.5,5.5)
     if (x > 6 && z > 0) {
-      x += 1.2;
-      z -= 0.8;
+      x += 1.4;
+      z -= 0.9;
+    }
+    // 东南象限：强制走码头南/外侧（HARBOR 约 9.4,-3.6）
+    if (x > 4 && z < 2 && z > -11) {
+      const dx = x - HARBOR.x;
+      const dz = z - HARBOR.z;
+      const d = Math.hypot(dx, dz);
+      if (d < HARBOR.clearR + 2.5) {
+        // 优先推向南侧外缘，其次东侧
+        const preferSouth = z > HARBOR.z - 1.5;
+        if (preferSouth) {
+          x = HARBOR.x + Math.max(dx, 0.5);
+          z = HARBOR.z - (HARBOR.clearR + 1.2);
+        } else {
+          const k = (HARBOR.clearR + 1.4) / Math.max(d, 1e-3);
+          x = HARBOR.x + dx * k;
+          z = HARBOR.z + dz * k;
+        }
+      }
+    }
+    // 月牙湖：环线不进湖面
+    {
+      const dx = x - LAKE.x;
+      const dz = z - LAKE.z;
+      const d = Math.hypot(dx, dz);
+      const lakeR = LAKE.pathOuter + 1.6;
+      if (d < lakeR) {
+        const k = lakeR / Math.max(d, 1e-3);
+        x = LAKE.x + dx * k;
+        z = LAKE.z + dz * k;
+      }
     }
     // 北侧（z 大）再压南，远离池
     if (z > 5) z = 5 - (z - 5) * 0.35;
