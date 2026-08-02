@@ -323,7 +323,7 @@
     }
 
     /* NPC 交谈提示（屏幕中央，E 键触发） */
-    #npc-hint {
+    #npc-hint, #tram-hint {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -341,8 +341,8 @@
       opacity: 0;
       transition: opacity 0.2s ease;
     }
-    #npc-hint.show { opacity: 1; }
-    #npc-hint kbd {
+    #npc-hint.show, #tram-hint.show { opacity: 1; }
+    #npc-hint kbd, #tram-hint kbd {
       display: inline-block;
       min-width: 1.4em;
       padding: 1px 8px;
@@ -756,14 +756,14 @@
       box-shadow: 0 6px 18px rgba(26, 38, 56, 0.14);
     }
     #bubble::after { border: none; box-shadow: 3px 3px 6px rgba(26, 38, 56, 0.08); }
-    #npc-hint {
+    #npc-hint, #tram-hint {
       background: rgba(255, 255, 255, 0.9);
       border: none;
       border-radius: 8px;
       color: #1a2638;
       box-shadow: 0 8px 24px rgba(26, 38, 56, 0.16);
     }
-    #npc-hint kbd {
+    #npc-hint kbd, #tram-hint kbd {
       border: 1px solid rgba(47, 143, 122, 0.45);
       background: rgba(47, 143, 122, 0.12);
       color: #2f8f7a;
@@ -840,6 +840,7 @@
     <div id="toast" class="panel"></div>
     <div id="bubble"></div>
     <div id="npc-hint">[<kbd>E</kbd>] 与居民交谈</div>
+    <div id="tram-hint">[<kbd>F</kbd>] 上车 · 窗边看风景</div>
   </div>
 
   <div id="intro">

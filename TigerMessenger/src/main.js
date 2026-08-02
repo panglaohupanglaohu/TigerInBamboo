@@ -11,6 +11,8 @@ import { createDevPanel } from "./core/devPanel.js";
 import { createMapEditor } from "./core/mapEditor.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
+import { createDayNight } from "./world/dayNight.js";
+import { createTramRide } from "./player/tramRide.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
@@ -24,7 +26,13 @@ import {
   updateToast,
   initQuestPanelCollapse,
 } from "./ui/hud.js";
-import { ensureAudio, startAmbience, sfxJump } from "./audio/sfx.js";
+import {
+  ensureAudio,
+  startAmbience,
+  startTramSound,
+  sfxJump,
+  sfxWaterTrain,
+} from "./audio/sfx.js";
 import { journalCount } from "./quest/letterJournal.js";
 import {
   resolveSceneIdsFromUrl,
@@ -38,7 +46,7 @@ const { scene, camera, renderer } = createStage();
 initQuestPanelCollapse();
 
 // ---------- 环境光 / 天空（跨场景共享） ----------
-const { lanterns, ambient, sun } = setupEnvironment(scene);
+const { lanterns, ambient, sun, skyMat, hemi } = setupEnvironment(scene);
 
 // ---------- 星球壳（各场景可在其上贴装） ----------
 const planet = createPlanet(scene);
@@ -131,12 +139,35 @@ const devPanel = createDevPanel({
   onOpenMap: () => mapEditor.setOpen(true),
 });
 
+// ---------- 昼夜循环（朝霞/暮云重点过渡；面板可拖时刻与速度） ----------
+const dayNight = createDayNight({
+  scene,
+  skyMat,
+  sun,
+  ambient,
+  hemi,
+  clouds: messenger?.clouds || [],
+});
+
+// ---------- 电车搭乘（近车 [F] 上车 · 窗边乘坐看风景） ----------
+const tramRide = createTramRide({
+  player,
+  getTram: () => messenger?.landmarks?.tramSystem?.tram || null,
+  cameraRig,
+  elHint: document.getElementById("tram-hint"),
+  onBoard: () => {
+    sfxWaterTrain();
+    showToast("已上车 · 坐在窗边向外看风景 · 再按 F 下车", 3.2);
+  },
+});
+
 // ---------- 开场 ----------
 elStartBtn.addEventListener("click", () => {
   gameStarted = true;
   elIntro.classList.add("hidden");
   ensureAudio();
   startAmbience();
+  startTramSound();
   const past = journalCount();
   const sceneHint =
     sceneIds.length === 1
@@ -176,17 +207,23 @@ function animate() {
   }
 
   updateToast(dt);
-  updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
-  resolveCollisions(
-    player.position,
-    player.velocity,
-    dt,
-    platforms,
-    player,
-    () => showToast("掉下去了… 已回到检查点"),
-    hills
-  );
-  resolveAssetColliders(player.position, assetColliders);
+  dayNight.update(dt);
+
+  // 电车搭乘接管：上车动画/乘坐时跳过移动与碰撞
+  const riding = tramRide.update(dt);
+  if (!riding) {
+    updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
+    resolveCollisions(
+      player.position,
+      player.velocity,
+      dt,
+      platforms,
+      player,
+      () => showToast("掉下去了… 已回到检查点"),
+      hills
+    );
+    resolveAssetColliders(player.position, assetColliders);
+  }
 
   // 场景模块自更新（湖、云、平台脉动等）
   updateScenes(sceneHandles, dt, t, { player, gameStarted });
@@ -230,4 +267,5 @@ window.__tm = {
   platforms,
   hills,
   mapEditor,
+  tramRide,
 };

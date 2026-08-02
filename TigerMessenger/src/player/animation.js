@@ -18,6 +18,22 @@ export function updatePlayerAnim(player, messengerMesh, dt, moving) {
 
   // —— 智能体：无四肢，用悬浮起伏 + 头环自转表达运动 ——
   if (isAgent) {
+    // 乘电车时安静坐窗边：微起伏、头环慢转（面朝窗外由 tramRide 设 forward）
+    if (player.riding) {
+      player.animPhase += dt * 1.2;
+      const bob = Math.sin(player.animPhase) * 0.012;
+      if (u.body) u.body.position.y = bodyBase + bob;
+      if (u.head) {
+        u.head.rotation.z += dt * 0.35;
+        u.head.position.y = 2.0 + bob * 0.4;
+        // 略微前倾，像贴近车窗向外看
+        u.head.rotation.x = THREE.MathUtils.lerp(u.head.rotation.x || 0, 0.18, 0.12);
+      }
+      if (u.letter?.visible) {
+        u.letter.position.y = letterBase + bob * 0.5;
+      }
+      return;
+    }
     player.animPhase += dt * (moving ? 8 * speedScale : 2.2);
     const bob = moving
       ? 0.04 + Math.abs(Math.sin(player.animPhase * 1.6)) * 0.05
@@ -27,6 +43,7 @@ export function updatePlayerAnim(player, messengerMesh, dt, moving) {
     if (u.head) {
       u.head.rotation.z += dt * (moving ? 2.4 : 0.9);
       u.head.position.y = 2.0 + bob * 0.5 + hover;
+      u.head.rotation.x = THREE.MathUtils.lerp(u.head.rotation.x || 0, 0, 0.1);
     }
     if (u.letter?.visible) {
       u.letter.position.y = letterBase + Math.sin(performance.now() * 0.006) * 0.04;
