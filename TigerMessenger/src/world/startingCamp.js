@@ -8,6 +8,7 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { facet, createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
 import { createAncientPineTree } from "../assets/ancient.js";
+import { createLowPolyFox } from "../assets/fox.js";
 import { placeObjectOnSphere } from "./sphereMath.js";
 import { groundLiftAt } from "./hills.js";
 
@@ -220,11 +221,20 @@ export function buildStartingCamp(scene, R) {
   elder.add(qin);
   const keys = new THREE.Mesh(facet(new THREE.BoxGeometry(0.5, 0.05, 0.12)), beardMat);
   keys.position.set(0, 0.6, 0.38);
+  keys.name = "elder-music-keys";
   addOutline(keys, 0.006);
   elder.add(keys);
+  elder.userData.musicKeys = keys;
   const ELDER = { x: -12.3, z: 4.5 }; // 距荒山中心 ~3.4、距松 >3
   put(elder, ELDER.x, ELDER.z, groundLiftAt(ELDER.x, ELDER.z), 2.6); // 面转向营地
   colliders.push({ position: elder.position.clone(), radius: 0.8 });
+
+  // ---------- 4b. 阿狸：蜷缩熟睡的小狐狸（老人附近草坡） ----------
+  const ali = createLowPolyFox();
+  // 略靠营地内侧，避开老人 3 单位净空
+  const ALI = { x: -8.6, z: 7.2 };
+  put(ali, ALI.x, ALI.z, groundLiftAt(ALI.x, ALI.z), 0.9);
+  colliders.push({ position: ali.position.clone(), radius: 0.55 });
 
   // ---------- 5. 营地周边：古松两株 + 花草点缀 ----------
   for (const [x, z] of [[7, 2], [-7, 13]]) {
@@ -247,6 +257,6 @@ export function buildStartingCamp(scene, R) {
   return {
     group: g,
     colliders,
-    landmarks: { elder, skyRing, hillCenter: HILL },
+    landmarks: { elder, foxAli: ali, skyRing, hillCenter: HILL },
   };
 }

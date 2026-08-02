@@ -18,6 +18,7 @@ import {
 } from "../assets/lowPoly.js";
 import { createAncientPineTree } from "../assets/ancient.js";
 import { createLowPolyHydrangeaBush } from "../assets/hydrangea.js";
+import { createLowPolyFox } from "../assets/fox.js";
 
 /**
  * @typedef {object} BuildingDef
@@ -138,6 +139,14 @@ export const BUILDING_CATALOG = {
     defaultYaw: 0,
     collideRadius: 2.0,
     color: "#55875f",
+  },
+  fox: {
+    id: "fox",
+    label: "阿狸（熟睡）",
+    create: () => createLowPolyFox(),
+    defaultYaw: 0.9,
+    collideRadius: 0.55,
+    color: "#E96A36",
   },
 };
 
