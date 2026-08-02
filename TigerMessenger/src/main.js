@@ -179,7 +179,7 @@ const elderMusic = createElderMusicInteraction({
   isGameStarted: () => gameStarted,
 });
 
-// ---------- 阿狸（缩放对齐送信人 · 漫步 · [E] 对话） ----------
+// ---------- 阿狸（E 站立跟随 · 球面 lerp 尾随 · 对话） ----------
 const foxAli = messenger?.landmarks?.camp?.landmarks?.foxAli || null;
 const foxNpc = createFoxNpc({
   player,
@@ -189,7 +189,6 @@ const foxNpc = createFoxNpc({
   elHint: document.getElementById("fox-hint"),
   planetRadius: PLANET_RADIUS,
   isElderNear: () => elderMusic.isNear?.() ?? false,
-  // 任务 NPC 交互中时不抢气泡（粗判：npc-hint 是否显示）
   isQuestNear: () => {
     const el = document.getElementById("npc-hint");
     return !!(el && el.classList.contains("show"));

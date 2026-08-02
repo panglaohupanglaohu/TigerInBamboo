@@ -1,23 +1,24 @@
 // =====================================================================
-//  阿狸 · 蜷缩熟睡的低多边形卡通小狐狸（Sleeping Low-Poly Fox）
-//  积木拼接 + MeshToonMaterial 三色分块 + 全件 addOutline 墨线
-//  约定：肚皮 / 尾巴接触面贴齐局部 Y=0，便于 placeObjectOnSphere
+//  阿狸 · 低多边形卡通小狐狸
+//  SLEEPING / FOLLOWING 状态 · standUp 四短腿 · 球面尾随由 foxNpc 驱动
+//  约定：底部贴局部 Y=0；世界朝向由 Group 四元数控制（+Y 法线，+X 正脸）
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
 
-/** 动漫橙 · 主体 / 耳根 / 尾根 */
-const FOX_ORANGE = 0xe96a36;
+/** 动漫橙 · 主体 / 耳根 / 尾根 / 腿 */
+export const FOX_ORANGE = 0xe96a36;
 /** 乳白 · 下巴脸颊 / 逗号眉 / 尾尖 */
 const FOX_CREAM = 0xf4f7ed;
 /** 焦黑 · 鼻尖 / 耳尖 / 小爪 */
 const FOX_INK = 0x2a2a2a;
 
-const OUT = 0.03; // 手绘细描边（规范要求）
+const OUT = 0.03;
+
+/** @typedef {'SLEEPING'|'FOLLOWING'} FoxState */
 
 /**
- * 带描边的网格：卡通 toon + flat 硬边 + Inverse Hull
  * @param {THREE.BufferGeometry} geo
  * @param {THREE.Material} mat
  * @param {number} [outline=OUT]
@@ -32,55 +33,50 @@ function part(geo, mat, outline = OUT) {
 
 /**
  * 蜷缩熟睡的低多边形小狐狸「阿狸」。
- * 面向局部 +Z（头略朝 +Z、尾环抱右侧），底部 Y=0。
- * 默认缩放到与送信人（智能体）体量相当（约 0.52 倍原稿）。
  * @param {{ scale?: number }} [opts]
- * @returns {THREE.Group}
+ * @returns {THREE.Group & {
+ *   switchState: (s: FoxState) => void,
+ *   standUp: () => void,
+ *   lieDown: () => void,
+ *   getState: () => FoxState,
+ * }}
  */
 export function createLowPolyFox(opts = {}) {
   const g = new THREE.Group();
   g.name = "fox-ali";
 
-  // MeshToonMaterial 无 flatShading 属性；硬边靠 facet() 非索引 + 逐面法线
   const orange = toonMat(FOX_ORANGE);
   const cream = toonMat(FOX_CREAM);
   const ink = toonMat(FOX_INK);
 
-  // 可动画部件容器（本地姿势，不直接改世界）
   const rig = new THREE.Group();
   rig.name = "fox-rig";
   g.add(rig);
 
   // ========== 1. 身体主体：拉长扁平盒，趴卧 ==========
-  // 尺寸约 1.15 × 0.38 × 0.68；中心抬起半高 → 肚皮贴 Y=0
   const body = part(new THREE.BoxGeometry(1.15, 0.38, 0.68), orange);
   body.name = "fox-body";
   body.position.set(0.05, 0.19, 0.02);
-  // 轻微前倾蜷缩感
   body.rotation.z = -0.08;
   body.rotation.x = 0.04;
   rig.add(body);
 
-  // 腹部乳白软垫（下巴延伸到胸腹的一块）
   const belly = part(new THREE.BoxGeometry(0.55, 0.16, 0.42), cream, 0.022);
   belly.name = "fox-belly-cream";
   belly.position.set(0.22, 0.1, 0.04);
   rig.add(belly);
 
-  // ========== 2. 环抱身侧的蓬松大尾巴 ==========
-  // 尾根：偏大、圆润多面体，贴身右侧后方
+  // ========== 2. 大尾巴 ==========
   const tailRoot = part(new THREE.IcosahedronGeometry(0.42, 1), orange);
   tailRoot.name = "fox-tail-root";
   tailRoot.scale.set(1.35, 0.95, 1.15);
   tailRoot.position.set(-0.42, 0.28, 0.38);
   tailRoot.rotation.set(0.25, -0.55, 0.35);
-  // 尾巴整组便于摇摆
   const tailG = new THREE.Group();
   tailG.name = "fox-tail";
   tailG.add(tailRoot);
   rig.add(tailG);
 
-  // 尾中段（仍为橙，略弯）
   const tailMid = part(new THREE.IcosahedronGeometry(0.32, 1), orange, 0.026);
   tailMid.name = "fox-tail-mid";
   tailMid.scale.set(1.2, 0.9, 1.05);
@@ -88,7 +84,6 @@ export function createLowPolyFox(opts = {}) {
   tailMid.rotation.set(0.4, -0.2, 0.15);
   tailG.add(tailMid);
 
-  // 尾尖：乳白色蓬松端，略贴地
   const tailTip = part(new THREE.IcosahedronGeometry(0.26, 1), cream, 0.024);
   tailTip.name = "fox-tail-tip";
   tailTip.scale.set(1.15, 0.85, 1.1);
@@ -96,37 +91,29 @@ export function createLowPolyFox(opts = {}) {
   tailTip.rotation.set(0.55, 0.35, -0.1);
   tailG.add(tailTip);
 
-  // 保证尾接触面贴地：若 tip 底低于 0 则整体上推已在设计时贴齐
-  // 尾根下缘约 y≈0.05，tip 下缘约 y≈0.05
-
-  // ========== 3. 头部：向前收尖的锥状多面体 ==========
+  // ========== 3. 头部 ==========
   const headG = new THREE.Group();
   headG.name = "fox-head";
   headG.position.set(0.62, 0.28, 0.06);
-  // 睡姿：头略埋向身前、下巴贴近前爪
   headG.rotation.set(0.35, 0.15, -0.12);
 
-  // 主头壳：icosa 拉尖（scale.x 向前）
   const head = part(new THREE.IcosahedronGeometry(0.28, 0), orange);
   head.name = "fox-head-shell";
   head.scale.set(1.35, 0.95, 0.95);
   head.position.set(0.06, 0.02, 0);
   headG.add(head);
 
-  // 下颌 / 脸颊乳白
   const muzzle = part(new THREE.BoxGeometry(0.28, 0.16, 0.32), cream, 0.022);
   muzzle.name = "fox-muzzle";
   muzzle.position.set(0.22, -0.06, 0);
   muzzle.rotation.z = -0.15;
   headG.add(muzzle);
 
-  // 小黑鼻头
   const nose = part(new THREE.BoxGeometry(0.07, 0.055, 0.07), ink, 0.016);
   nose.name = "fox-nose";
   nose.position.set(0.38, -0.02, 0);
   headG.add(nose);
 
-  // 逗号眉毛贴片（两团乳白）
   for (const side of [-1, 1]) {
     const brow = part(new THREE.BoxGeometry(0.1, 0.045, 0.06), cream, 0.014);
     brow.name = side < 0 ? "fox-brow-L" : "fox-brow-R";
@@ -136,7 +123,6 @@ export function createLowPolyFox(opts = {}) {
     headG.add(brow);
   }
 
-  // 闭眼睡线（焦黑细条）；醒来时可隐藏
   const lids = [];
   for (const side of [-1, 1]) {
     const lid = part(new THREE.BoxGeometry(0.09, 0.02, 0.035), ink, 0.01);
@@ -147,32 +133,21 @@ export function createLowPolyFox(opts = {}) {
     lids.push(lid);
   }
 
-  // ========== 4. 耳朵：巨大三角锥，向上向外倾 ==========
   const ears = [];
   for (const side of [-1, 1]) {
     const earG = new THREE.Group();
     earG.name = side < 0 ? "fox-ear-L" : "fox-ear-R";
-    // 径向分段 3–4（低多边形切面）
     const earOuter = part(new THREE.ConeGeometry(0.14, 0.36, 4), orange, 0.026);
-    earOuter.name = "fox-ear-outer";
     earOuter.position.y = 0.16;
     earG.add(earOuter);
-
-    // 耳尖焦黑小帽
     const earTip = part(new THREE.ConeGeometry(0.07, 0.12, 3), ink, 0.016);
-    earTip.name = "fox-ear-tip";
     earTip.position.y = 0.32;
     earG.add(earTip);
-
-    // 耳内侧乳白薄片
     const earIn = part(new THREE.ConeGeometry(0.08, 0.22, 3), cream, 0.014);
-    earIn.name = "fox-ear-inner";
     earIn.position.set(0.02, 0.12, 0);
     earIn.scale.set(0.7, 0.85, 0.55);
     earG.add(earIn);
-
     earG.position.set(-0.02, 0.18, side * 0.16);
-    // 向上向外倾斜
     earG.rotation.order = "YXZ";
     earG.rotation.x = -0.25;
     earG.rotation.z = side * -0.55;
@@ -185,54 +160,221 @@ export function createLowPolyFox(opts = {}) {
     headG.add(earG);
     ears.push(earG);
   }
-
   rig.add(headG);
 
-  // ========== 5. 卧在头下方的微型爪子（焦黑小方块） ==========
-  const paws = [];
+  // ========== 5. 睡姿爪垫（站立后隐藏） ==========
+  const sleepPaws = [];
   for (const side of [-1, 1]) {
     const paw = part(new THREE.BoxGeometry(0.14, 0.08, 0.12), ink, 0.016);
-    paw.name = side < 0 ? "fox-paw-L" : "fox-paw-R";
-    // 头下、贴地
     paw.position.set(0.48, 0.04, side * 0.14);
     paw.rotation.y = side * 0.25;
     rig.add(paw);
-    paws.push(paw);
+    sleepPaws.push(paw);
   }
-
-  // 后爪蜷在身下（隐约两块）
   for (const side of [-1, 1]) {
     const hind = part(new THREE.BoxGeometry(0.12, 0.07, 0.1), orange, 0.014);
-    hind.name = side < 0 ? "fox-hind-L" : "fox-hind-R";
     hind.position.set(-0.28, 0.04, side * 0.22);
     rig.add(hind);
-    paws.push(hind);
+    sleepPaws.push(hind);
   }
 
-  // ========== 6. 底部对齐：扫描包围盒，整体下移使最低点 = 0 ==========
-  // 与送信人（智能体身高约 2）体量相当：原稿偏大，默认缩到 ~0.52
+  // ========== 地面淡蓝光圈（跟随后隐藏） ==========
+  const glowRing = new THREE.Mesh(
+    new THREE.RingGeometry(0.55, 0.78, 28),
+    new THREE.MeshBasicMaterial({
+      color: 0x72d7e7,
+      transparent: true,
+      opacity: 0.42,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    })
+  );
+  glowRing.name = "fox-glow-ring";
+  glowRing.rotation.x = -Math.PI / 2;
+  glowRing.position.y = 0.04;
+  g.add(glowRing);
+
+  // 站立短腿容器（standUp 时生成）
+  const legsG = new THREE.Group();
+  legsG.name = "fox-legs";
+  legsG.visible = false;
+  rig.add(legsG);
+
+  // 缩放与贴地
   const worldScale = opts.scale ?? 0.52;
   rig.scale.setScalar(worldScale);
-
   g.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(g);
   if (Number.isFinite(box.min.y) && Math.abs(box.min.y) > 1e-4) {
     rig.position.y -= box.min.y;
   }
 
-  // 记录睡姿基线，供动画叠加
-  const base = {
+  // 睡姿基线（standUp / lieDown 读写）
+  const sleepPose = {
     bodyY: body.position.y,
     bodyRotX: body.rotation.x,
-    headRot: { x: headG.rotation.x, y: headG.rotation.y, z: headG.rotation.z },
-    tailRot: { x: tailG.rotation.x, y: tailG.rotation.y, z: tailG.rotation.z },
+    bodyRotZ: body.rotation.z,
+    bellyY: belly.position.y,
+    headPos: headG.position.clone(),
+    headRot: headG.rotation.clone(),
+    tailRot: {
+      x: tailG.rotation.x,
+      y: tailG.rotation.y,
+      z: tailG.rotation.z,
+    },
+    tailRootRot: tailRoot.rotation.clone(),
+    tailRootPos: tailRoot.position.clone(),
   };
+
+  // 动画叠加用 base（与 sleepPose 同步一份）
+  const base = {
+    bodyY: sleepPose.bodyY,
+    bodyRotX: sleepPose.bodyRotX,
+    headRot: {
+      x: sleepPose.headRot.x,
+      y: sleepPose.headRot.y,
+      z: sleepPose.headRot.z,
+    },
+    tailRot: { ...sleepPose.tailRot },
+  };
+
+  /** @type {FoxState} */
+  let foxState = "SLEEPING";
+  let legsBuilt = false;
+
+  /**
+   * 极简四短腿：细长 BoxGeometry + 橙色 toon + addOutline
+   */
+  function buildLegs() {
+    if (legsBuilt) return;
+    legsBuilt = true;
+    // 局部：身体下方，前二后二
+    const legGeo = new THREE.BoxGeometry(0.08, 0.28, 0.08);
+    const spots = [
+      [0.28, 0.14, 0.18],
+      [0.28, 0.14, -0.18],
+      [-0.22, 0.14, 0.2],
+      [-0.22, 0.14, -0.2],
+    ];
+    for (let i = 0; i < 4; i++) {
+      const leg = part(legGeo, orange, OUT);
+      leg.name = `fox-leg-${i}`;
+      leg.position.set(spots[i][0], spots[i][1], spots[i][2]);
+      legsG.add(leg);
+    }
+  }
+
+  /**
+   * 站立：抬高身体、显短腿、尾巴斜斜翘向后上方
+   */
+  function standUp() {
+    buildLegs();
+    legsG.visible = true;
+    for (const p of sleepPaws) p.visible = false;
+    for (const lid of lids) lid.visible = false;
+
+    // 身体上抬（局部 Y）
+    body.position.y = sleepPose.bodyY + 0.22;
+    body.rotation.x = -0.08;
+    body.rotation.z = 0;
+    belly.position.y = sleepPose.bellyY + 0.18;
+    belly.position.x = 0.12;
+
+    // 头抬起朝前（+X 正脸）
+    headG.position.set(0.58, 0.48, 0);
+    headG.rotation.set(-0.05, 0, 0);
+
+    // 尾巴斜斜翘向后上方（-X 后 +Y 上）
+    tailG.rotation.set(-0.15, 0.1, 0.55);
+    tailRoot.position.set(-0.48, 0.35, 0.05);
+    tailRoot.rotation.set(0.1, 0.2, 0.85);
+    tailMid.position.set(-0.55, 0.55, 0.02);
+    tailTip.position.set(-0.62, 0.72, 0);
+
+    // 腿挂在抬高后的身体下
+    legsG.position.y = 0;
+
+    // 动画基线切到站姿
+    base.bodyY = body.position.y;
+    base.bodyRotX = body.rotation.x;
+    base.headRot = { x: headG.rotation.x, y: headG.rotation.y, z: headG.rotation.z };
+    base.tailRot = { x: tailG.rotation.x, y: tailG.rotation.y, z: tailG.rotation.z };
+
+    glowRing.visible = false;
+    g.userData.sleeping = false;
+    g.userData.following = true;
+  }
+
+  /** 躺回睡姿 */
+  function lieDown() {
+    legsG.visible = false;
+    for (const p of sleepPaws) p.visible = true;
+    for (const lid of lids) lid.visible = true;
+
+    body.position.y = sleepPose.bodyY;
+    body.rotation.x = sleepPose.bodyRotX;
+    body.rotation.z = sleepPose.bodyRotZ;
+    belly.position.set(0.22, sleepPose.bellyY, 0.04);
+
+    headG.position.copy(sleepPose.headPos);
+    headG.rotation.copy(sleepPose.headRot);
+
+    tailG.rotation.set(sleepPose.tailRot.x, sleepPose.tailRot.y, sleepPose.tailRot.z);
+    tailRoot.position.copy(sleepPose.tailRootPos);
+    tailRoot.rotation.copy(sleepPose.tailRootRot);
+    tailMid.position.set(-0.18, 0.36, 0.62);
+    tailTip.position.set(0.22, 0.22, 0.72);
+
+    base.bodyY = sleepPose.bodyY;
+    base.bodyRotX = sleepPose.bodyRotX;
+    base.headRot = {
+      x: sleepPose.headRot.x,
+      y: sleepPose.headRot.y,
+      z: sleepPose.headRot.z,
+    };
+    base.tailRot = { ...sleepPose.tailRot };
+
+    glowRing.visible = true;
+    g.userData.sleeping = true;
+    g.userData.following = false;
+  }
+
+  /**
+   * 状态切换：SLEEPING ↔ FOLLOWING
+   * @param {FoxState} next
+   */
+  function switchState(next) {
+    if (next !== "SLEEPING" && next !== "FOLLOWING") return;
+    if (foxState === next) {
+      // 仍同步姿势
+      if (next === "FOLLOWING") standUp();
+      else lieDown();
+      return;
+    }
+    foxState = next;
+    g.userData.foxState = next;
+    if (next === "FOLLOWING") standUp();
+    else lieDown();
+  }
+
+  function getState() {
+    return foxState;
+  }
+
+  // 绑到 Group，便于外部 fox.switchState / standUp
+  g.switchState = switchState;
+  g.standUp = standUp;
+  g.lieDown = lieDown;
+  g.getState = getState;
 
   g.userData.kind = "fox";
   g.userData.displayName = "阿狸";
   g.userData.collideRadius = 0.38;
   g.userData.sleeping = true;
+  g.userData.following = false;
+  g.userData.foxState = "SLEEPING";
   g.userData.worldScale = worldScale;
+  g.userData.glowRing = glowRing;
   g.userData.parts = {
     rig,
     body,
@@ -244,9 +386,111 @@ export function createLowPolyFox(opts = {}) {
     tailTip,
     ears,
     lids,
-    paws,
+    paws: sleepPaws,
+    legs: legsG,
+    glowRing,
     base,
   };
 
   return g;
+}
+
+// ---------------------------------------------------------------------------
+//  球面尾随 + 双轴朝向（可从主循环直接调用）
+// ---------------------------------------------------------------------------
+
+const _up = new THREE.Vector3();
+const _fwd = new THREE.Vector3();
+const _right = new THREE.Vector3();
+const _target = new THREE.Vector3();
+const _prev = new THREE.Vector3();
+const _m = new THREE.Matrix4();
+const _q = new THREE.Quaternion();
+const _qCur = new THREE.Quaternion();
+
+/** 跟随时与玩家的最小距离（大于此才 lerp 靠近） */
+export const FOX_FOLLOW_GAP = 3.5;
+/** lerp 系数 · 空气感滑行 */
+export const FOX_FOLLOW_LERP = 0.05;
+/** 贴地高度偏移（相对球半径） */
+export const FOX_SURFACE_LIFT = 0.12;
+/** 朝向 slerp 速度 */
+export const FOX_TURN_SLERP = 0.14;
+
+/**
+ * 每帧：FOLLOWING 时球面平滑尾随 + 四元数朝向纠偏。
+ * 模型约定：本地 +Y 为上，+X 为正脸（头在 +X）。
+ *
+ * @param {THREE.Object3D} fox
+ * @param {THREE.Vector3} playerPos
+ * @param {number} planetRadius
+ * @param {{ gap?: number, lerp?: number, lift?: number, turn?: number }} [opts]
+ * @returns {boolean} 本帧是否在移动
+ */
+export function updateFoxFollow(fox, playerPos, planetRadius, opts = {}) {
+  if (!fox || !playerPos) return false;
+  const state = fox.getState?.() ?? fox.userData?.foxState;
+  if (state !== "FOLLOWING") return false;
+
+  const gap = opts.gap ?? FOX_FOLLOW_GAP;
+  const lerpK = opts.lerp ?? FOX_FOLLOW_LERP;
+  const lift = opts.lift ?? FOX_SURFACE_LIFT;
+  const turnK = opts.turn ?? FOX_TURN_SLERP;
+  const R = planetRadius + lift;
+
+  _prev.copy(fox.position);
+  const dist = fox.position.distanceTo(playerPos);
+  let moving = false;
+
+  if (dist > gap) {
+    // 带空气感的平滑靠近
+    fox.position.lerp(playerPos, lerpK);
+    moving = true;
+  }
+
+  // 确保贴合球面：归一化 × (R+lift)
+  const len = fox.position.length();
+  if (len > 1e-6) {
+    fox.position.multiplyScalar(R / len);
+  } else {
+    fox.position.copy(playerPos).normalize().multiplyScalar(R);
+  }
+
+  // ---- 双轴朝向 ----
+  // Up：球心 → 狐狸
+  _up.copy(fox.position).normalize();
+
+  // Forward：优先本帧位移切线，否则朝向玩家的切向投影
+  _fwd.subVectors(fox.position, _prev);
+  _fwd.addScaledVector(_up, -_fwd.dot(_up));
+  if (_fwd.lengthSq() < 1e-8) {
+    _fwd.subVectors(playerPos, fox.position);
+    _fwd.addScaledVector(_up, -_fwd.dot(_up));
+  }
+  if (_fwd.lengthSq() < 1e-8) {
+    // 退化：任意切向
+    _fwd.set(0, 0, 1).addScaledVector(_up, -_up.z);
+    if (_fwd.lengthSq() < 1e-8) _fwd.set(1, 0, 0).addScaledVector(_up, -_up.x);
+  }
+  _fwd.normalize();
+
+  // 模型 +X = 正脸前进，+Y = 上，+Z = 右侧
+  _right.crossVectors(_up, _fwd).normalize();
+  // 重正交：fwd = right × up?  want X=fwd, Y=up, Z=right
+  // right = up × fwd  →  makeBasis(fwd, up, right) 需要 right = fwd × up
+  _right.crossVectors(_fwd, _up).normalize();
+  _fwd.crossVectors(_up, _right).normalize(); // 再正交
+
+  _m.makeBasis(_fwd, _up, _right);
+  _q.setFromRotationMatrix(_m);
+  _qCur.copy(fox.quaternion);
+  _qCur.slerp(_q, turnK);
+  fox.quaternion.copy(_qCur);
+
+  // 碰撞球
+  if (fox.userData?.collider?.position) {
+    fox.userData.collider.position.copy(fox.position);
+  }
+
+  return moving;
 }
