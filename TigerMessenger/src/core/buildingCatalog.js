@@ -5,6 +5,7 @@
 import { createHardToFindBookshop } from "../assets/bookshop.js";
 import { createLowPolyHouse, createLowPolySignpost, createLowPolyStreetLamp, createLowPolyUtilityPole, createLowPolyRock } from "../assets/lowPoly.js";
 import { createAncientPineTree } from "../assets/ancient.js";
+import { createLowPolyHydrangeaBush } from "../assets/hydrangea.js";
 
 /**
  * @typedef {object} BuildingDef
@@ -81,6 +82,22 @@ export const BUILDING_CATALOG = {
     defaultYaw: 0,
     collideRadius: 0.5,
     color: "#4a4844",
+  },
+  hydrangea: {
+    id: "hydrangea",
+    label: "绣球花丛",
+    create: () => {
+      // 每次随机种子，花球疏密与色相略有变化
+      const seed = (Math.random() * 1e6) | 0;
+      const scale = 0.85 + Math.random() * 0.35;
+      const bush = createLowPolyHydrangeaBush(scale, seed);
+      // 可踩踏，几乎不挡路
+      if (bush.userData.collideRadius == null) bush.userData.collideRadius = 0.2;
+      return bush;
+    },
+    defaultYaw: 0,
+    collideRadius: 0.2,
+    color: "#9ec5ff",
   },
 };
 
