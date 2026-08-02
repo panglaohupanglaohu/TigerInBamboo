@@ -16,6 +16,7 @@ import { updateTramSound } from "../audio/sfx.js";
 const SLEEPER = 0x3e2723;
 const RAIL = 0x757575;
 const SURFACE_EPS = 0.08;
+const BOARDING_RADIUS = 3.6;
 
 // 轨道只贴岛面/缓坡，不随山丘抬升（禁止“上山坡”）
 const TRACK_LIFT_CAP = ISLAND_BASE_LIFT + 0.1;
@@ -307,7 +308,22 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS) {
     }
   }
 
+  /** 玩家按 E 时使用：仅在电车车身附近才算登车，避免路过误触发。 */
+  function isNearTram(position, radius = BOARDING_RADIUS) {
+    if (!position) return false;
+    tram.getWorldPosition(_tramWorld);
+    return _tramWorld.distanceTo(position) <= radius;
+  }
+
   scene.add(group);
   update(0);
-  return { group, curve, tram, update, waypointsFlat: loopFlat };
+  return {
+    group,
+    curve,
+    tram,
+    update,
+    isNearTram,
+    boardingRadius: BOARDING_RADIUS,
+    waypointsFlat: loopFlat,
+  };
 }

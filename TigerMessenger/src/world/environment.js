@@ -30,9 +30,10 @@ export function setupEnvironment(scene) {
   scene.add(fill);
 
   // ---------- 天空球：参考图4的青蓝/薄荷双色，并加入漫画式大块云带 ----------
+  let skyMat = null; // 昼夜循环要改 uniforms，提到函数作用域
   {
     const skyGeo = new THREE.SphereGeometry(220, 24, 16);
-    const skyMat = new THREE.ShaderMaterial({
+    skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
       uniforms: {
@@ -164,7 +165,7 @@ export function setupEnvironment(scene) {
     }
   }
 
-  return { lanterns, ambient, sun: dir };
+  return { lanterns, ambient, sun: dir, skyMat, hemi };
 }
 
 /** 白天飞鸟 / 光尘动画 */

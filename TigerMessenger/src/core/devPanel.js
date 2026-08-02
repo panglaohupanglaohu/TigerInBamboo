@@ -12,6 +12,12 @@ const SLIDERS = [
   { key: "upLerp", label: "Up 翻转平滑", min: 0.5, max: 10, step: 0.1, group: "相机" },
   { key: "camDist", label: "相机距离", min: 5, max: 28, step: 0.5, group: "相机" },
   { key: "talkRange", label: "对话距离", min: 2, max: 10, step: 0.5, group: "交互" },
+  { key: "tramSpeed", label: "电车速度", min: 0, max: 10, step: 0.2, group: "交通" },
+  { key: "windSpeed", label: "风速", min: 0, max: 4, step: 0.1, group: "交通" },
+  { key: "windDir", label: "风向", min: 0, max: 360, step: 5, group: "交通" },
+  { key: "daySpeed", label: "昼夜速度", min: 0, max: 2, step: 0.05, group: "天空" },
+  { key: "timeOfDay", label: "时刻", min: 0, max: 1, step: 0.01, group: "天空" },
+  { key: "weather", label: "天气 0晴1雨2雪", min: 0, max: 2, step: 1, group: "天空" },
 ];
 
 /**

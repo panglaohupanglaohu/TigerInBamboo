@@ -13,6 +13,12 @@ export const P_DEFAULTS = Object.freeze({
   upLerp: 4.0,
   camDist: 7.5,
   talkRange: 3.2,
+  tramSpeed: 3.2, // 电车行驶速度（开发者菜单可调）
+  windSpeed: 0.8, // 风速（云漂移与拉伸）
+  windDir: 45, // 风向（度，世界 XZ 平面方位角）
+  daySpeed: 0.4, // 昼夜速度（0=暂停，1=90 秒一昼夜）
+  timeOfDay: 0.5, // 时刻（0 午夜 / 0.28 朝霞 / 0.5 正午 / 0.75 暮云）
+  weather: 0, // 天气：0 晴 / 1 雨（带闪电） / 2 雪
   sunIntensity: 1.6,
   ambientIntensity: 0.9, // 水墨：暖白环境光
 });

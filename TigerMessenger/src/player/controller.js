@@ -42,6 +42,10 @@ export function updatePlayerControl({ player, keys, camera, dt, gameStarted, onJ
   _wish.set(0, 0, 0);
   if (ix !== 0 || iz !== 0) {
     _wish.addScaledVector(_camF, -iz).addScaledVector(_camR, ix);
+    if (iz === 0 && ix !== 0) {
+      // A/D 纯横移：转向角收敛到 ~58°（主人要求镜头摆动小一些）
+      _wish.lerp(_camF, 0.35);
+    }
     if (_wish.lengthSq() > 0) {
       _wish.normalize();
       // 记录朝向：用切向 wish 在本地构建 yaw 近似（视觉用 quaternion）
