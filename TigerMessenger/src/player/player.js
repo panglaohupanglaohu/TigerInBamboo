@@ -2,7 +2,7 @@
 //  玩家：状态 + 信使网格；球面视觉同步（法线对齐）
 // =====================================================================
 import * as THREE from "three";
-import { buildMessenger } from "./messenger.js";
+import { buildAgentMessenger } from "./agentMessenger.js";
 import { flatToWorld, surfaceNormal } from "../world/sphereMath.js";
 import { PLANET_RADIUS } from "../world/planet.js";
 
@@ -32,11 +32,12 @@ export function createPlayer(scene) {
   const playerGroup = new THREE.Group();
   scene.add(playerGroup);
 
-  const messengerMesh = buildMessenger();
+  // 主人规格：送信人 = AgentsGroup2026 数字孪生智能体（非竹虎）
+  const messengerMesh = buildAgentMessenger();
   playerGroup.add(messengerMesh);
 
-  const holdAura = new THREE.PointLight(0xffe08a, 0, 4, 2);
-  holdAura.position.set(0, 1.25, 0.35); // 虎头/信袋高度
+  const holdAura = new THREE.PointLight(0x72d7e7, 0, 4, 2);
+  holdAura.position.set(0, 0.75, 0); // 智能体工作核心高度（缩放后）
   playerGroup.add(holdAura);
 
   syncPlayerVisual(player, playerGroup);
