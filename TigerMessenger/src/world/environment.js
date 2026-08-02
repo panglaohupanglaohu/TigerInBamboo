@@ -1,18 +1,18 @@
 // =====================================================================
-//  环境：东方水墨风 · 宣纸米色 + 留白雾霭 + 暖白光照（已清除夜景残留）
+//  环境：青绿二次元天空 + 暖日照 + 苔海反光
 // =====================================================================
 import * as THREE from "three";
 import { P } from "../core/params.js";
 
 export function setupEnvironment(scene) {
-  // ---------- 光照：暖白明亮（水墨色块，无塑料反光） ----------
-  const ambient = new THREE.AmbientLight(0xfffdf6, P.ambientIntensity ?? 0.9);
+  // ---------- 光照：暖日光配青绿天光，保持 Cel 色块 ----------
+  const ambient = new THREE.AmbientLight(0xf3fff7, P.ambientIntensity ?? 0.9);
   scene.add(ambient);
 
-  const hemi = new THREE.HemisphereLight(0xf5efe0, 0x5a6b52, 0.45);
+  const hemi = new THREE.HemisphereLight(0xa7eee4, 0x315840, 0.58);
   scene.add(hemi);
 
-  const dir = new THREE.DirectionalLight(0xfff6e0, P.sunIntensity ?? 1.6);
+  const dir = new THREE.DirectionalLight(0xfff1c9, P.sunIntensity ?? 1.6);
   dir.position.set(20, 28, 16);
   dir.castShadow = true;
   dir.shadow.mapSize.set(2048, 2048);
@@ -25,11 +25,11 @@ export function setupEnvironment(scene) {
   dir.shadow.bias = -0.001;
   scene.add(dir);
 
-  const fill = new THREE.DirectionalLight(0xe8dcc4, 0.2);
+  const fill = new THREE.DirectionalLight(0x75cfc3, 0.28);
   fill.position.set(-10, 6, -8);
   scene.add(fill);
 
-  // ---------- 天空球：宣纸米色渐变（下缘微沉，似绢本底色） ----------
+  // ---------- 天空球：参考图4的青蓝/薄荷双色，并加入漫画式大块云带 ----------
   {
     const skyGeo = new THREE.SphereGeometry(220, 24, 16);
     const skyMat = new THREE.ShaderMaterial({
@@ -39,6 +39,7 @@ export function setupEnvironment(scene) {
         topColor: { value: new THREE.Color(0xe6dcca) },
         midColor: { value: new THREE.Color(0xdfd5c3) },
         botColor: { value: new THREE.Color(0xcfc4ae) },
+        cloudColor: { value: new THREE.Color(0xc2eee0) },
       },
       vertexShader: /* glsl */ `
         varying vec3 vWorldPos;
@@ -52,11 +53,21 @@ export function setupEnvironment(scene) {
         uniform vec3 topColor;
         uniform vec3 midColor;
         uniform vec3 botColor;
+        uniform vec3 cloudColor;
         varying vec3 vWorldPos;
         void main() {
-          float h = normalize(vWorldPos).y;
-          vec3 col = mix(botColor, midColor, smoothstep(-0.2, 0.25, h));
-          col = mix(col, topColor, smoothstep(0.15, 0.85, h));
+          vec3 d = normalize(vWorldPos);
+          float h = d.y;
+          float lon = atan(d.z, d.x);
+          vec3 col = mix(botColor, midColor, smoothstep(-0.35, 0.18, h));
+          col = mix(col, topColor, smoothstep(0.08, 0.86, h));
+
+          // 低频宽带 + 高频破边，形成参考图中大片、不规则的薄荷云纹。
+          float broad = sin(lon * 1.35 + h * 8.0) + 0.45 * sin(lon * 3.1 - h * 13.0);
+          float torn = sin(lon * 7.0 + h * 24.0) * 0.18;
+          float cloud = smoothstep(0.48, 0.7, broad * 0.5 + 0.5 + torn);
+          cloud *= smoothstep(-0.5, -0.05, h) * (1.0 - smoothstep(0.72, 0.94, h));
+          col = mix(col, cloudColor, cloud * 0.58);
           gl_FragColor = vec4(col, 1.0);
         }
       `,
@@ -68,7 +79,7 @@ export function setupEnvironment(scene) {
   {
     const sunDisc = new THREE.Mesh(
       new THREE.SphereGeometry(4.5, 16, 12),
-      new THREE.MeshBasicMaterial({ color: 0xfff0c2 })
+      new THREE.MeshBasicMaterial({ color: 0xffe6a5 })
     );
     sunDisc.position.set(55, 70, 40);
     scene.add(sunDisc);

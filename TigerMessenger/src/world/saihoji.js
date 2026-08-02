@@ -1,68 +1,38 @@
 // =====================================================================
-//  西芳寺（苔寺）· 东方景观架构
-//  微型星球 R=40 上的上下二庭：
-//    北半球 Phi∈[0, π/2]  — 下层苔藓庭园 + 黄金池 + 北极「黄金阁」
-//    南半球 Phi∈[π/2, π]  — 上层洪隐山枯山水 + 三尊石组
-//    赤道 Phi=π/2         — 湘南亭茶室（视觉分界）
-//    参道                 — 螺旋青石阶：黄金池 → 跨越赤道 → 指东庵石组
-//
-//  坐标约定（与用户规格一致）：
-//    Phi = 自 +Y（北极）的天顶角 / 余纬度
-//      Phi=0     → 北极
-//      Phi=π/2   → 赤道
-//      Phi=π     → 南极
-//    Theta = 方位角（绕 +Y）
-//    局部 +Y 始终对齐球心外法线（四元数贴地）
+//  西芳寺 · 苔海六景
+//  不把庭园摊成两个半球，而是把石组、枯瀑、苔海和留白拆成六座环绕主岛的球面景区。
+//  每座景区使用确定性构图；随机仅用于石面和苔斑细节。
 // =====================================================================
 import * as THREE from "three";
-import { createLowPolyHouse, facet } from "../assets/lowPoly.js";
+import { facet } from "../assets/lowPoly.js";
+import { createAncientPineTree } from "../assets/ancient.js";
 import { toonMat, addOutline, INK_COLOR } from "../assets/toon.js";
 import { PLANET_RADIUS } from "./planet.js";
 
-/** 玩家基准身高（世界单位） */
-const PLAYER_H = 1.7;
-
-/** 结构物最小间距（防穿模：房/巨石/茶室） */
-export const SAIHOJI_MIN_DISTANCE = 5;
-
-/** 苔藓地毯允许更密（仍保持不叠穿） */
-const MOSS_MIN_DISTANCE = 1.6;
-
-/** 苔藓三色 · 墨绿色系 */
-const MOSS_COLORS = Object.freeze([0x1a331e, 0x2d5434, 0x1f4025]);
-
-/** 枯山水砂色 */
-const SAND_COLOR = 0xd9d9d9;
-
-/** 焦墨乱石 */
-const KARE_ROCK = 0x222222;
-
-/** 重墨描边厚度 */
-const HEAVY_INK = 0.038;
-
-// ---------- 球面工具：Phi/Theta ↔ 方向/贴地 ----------
-
+const MOSS_COLORS = Object.freeze([0x3e704f, 0x477f58, 0x548c60, 0x5c9767]);
+const STONE_COLORS = Object.freeze([0x706b61, 0x625f58, 0x4f514b]);
+const SAND_COLOR = 0xc8bea8;
+const PATH_COLOR = 0x8e887d;
+const HEAVY_INK = 0.022;
+const _yUp = new THREE.Vector3(0, 1, 0);
+const _base = new THREE.Vector3();
+const _east = new THREE.Vector3();
+const _north = new THREE.Vector3();
 const _dir = new THREE.Vector3();
 const _quat = new THREE.Quaternion();
-const _yUp = new THREE.Vector3(0, 1, 0);
 
-/** Phi(余纬) + Theta(方位) → 单位外法线 */
-export function phiThetaToDir(phi, theta, out = new THREE.Vector3()) {
-  const sp = Math.sin(phi);
-  return out.set(sp * Math.cos(theta), Math.cos(phi), sp * Math.sin(theta));
-}
+/** 固定的“苔海六景”：半径为各景区需要留出的球面距离（世界单位）。 */
+export const SAIHOJI_ZONES = Object.freeze([
+  // 六景从全球散点收拢到信使主岛北半球外围，成为同一座球形庭园的环形游线。
+  { id: "moss-entry", name: "入口苔径", lat: 58, lon: -150, radius: 5.5, heading: -0.25, path: [-0.2, -2.4] },
+  { id: "master-stones", name: "主石之庭", lat: 54, lon: -90, radius: 7.5, heading: 0.35, path: [-3.6, -1.8] },
+  { id: "dry-cascade", name: "枯瀑之庭", lat: 52, lon: -30, radius: 7.0, heading: -0.2, path: [3.35, 0.2] },
+  { id: "moss-islands", name: "苔海岛群", lat: 52, lon: 30, radius: 8.5, heading: 0.5, path: [0.2, 4.1] },
+  { id: "empty-court", name: "空庭", lat: 54, lon: 90, radius: 9.0, heading: -0.45, path: [-3.2, -1.7] },
+  { id: "return-view", name: "回望石组", lat: 58, lon: 150, radius: 7.0, heading: 0.2, path: [0.1, -3.35] },
+]);
 
-/**
- * 贴球面：底部在 R+lift，局部 +Y = 径向法线。
- * @returns {THREE.Object3D}
- */
-export function placeByPhiTheta(obj, phi, theta, radius = PLANET_RADIUS, lift = 0) {
-  phiThetaToDir(phi, theta, _dir);
-  obj.position.copy(_dir).multiplyScalar(radius + lift);
-  _quat.setFromUnitVectors(_yUp, _dir);
-  obj.quaternion.copy(_quat);
-  return obj;
-}
+export const SAIHOJI_MIN_DISTANCE = 5;
 
 function lcg(seed) {
   let s = seed >>> 0;
@@ -72,505 +42,486 @@ function lcg(seed) {
   };
 }
 
-/** 弦长距离是否与已放置点足够远 */
-function farEnough(pos, placed, minD) {
-  const m2 = minD * minD;
-  for (const p of placed) {
-    if (pos.distanceToSquared(p) < m2) return false;
-  }
-  return true;
+export function latLonToGardenDir(latDeg, lonDeg, out = new THREE.Vector3()) {
+  const lat = THREE.MathUtils.degToRad(latDeg);
+  const lon = THREE.MathUtils.degToRad(lonDeg);
+  return out.set(
+    Math.cos(lat) * Math.cos(lon),
+    Math.sin(lat),
+    Math.cos(lat) * Math.sin(lon)
+  );
+}
+
+/** 兼容旧调试接口：Phi/Theta → 球面方向。 */
+export function phiThetaToDir(phi, theta, out = new THREE.Vector3()) {
+  const sp = Math.sin(phi);
+  return out.set(sp * Math.cos(theta), Math.cos(phi), sp * Math.sin(theta));
+}
+
+/** 兼容旧调试接口：把对象以 Phi/Theta 贴到球面。 */
+export function placeByPhiTheta(obj, phi, theta, radius = PLANET_RADIUS, lift = 0) {
+  phiThetaToDir(phi, theta, _dir);
+  return placeOnDirection(obj, _dir, radius, lift);
+}
+
+function placeOnDirection(obj, direction, radius, lift = 0, yaw = 0) {
+  _dir.copy(direction).normalize();
+  obj.position.copy(_dir).multiplyScalar(radius + lift);
+  _quat.setFromUnitVectors(_yUp, _dir);
+  obj.quaternion.copy(_quat);
+  if (yaw) obj.rotateY(yaw);
+  return obj;
+}
+
+/**
+ * 景区局部米制坐标 → 球面位置。
+ * x 为东西向、z 为南北向；归一化投影保证每个物件都真正贴球面。
+ */
+function directionAtLocal(zone, x, z, radius, out = new THREE.Vector3()) {
+  latLonToGardenDir(zone.lat, zone.lon, _base);
+  _east.crossVectors(_yUp, _base).normalize();
+  _north.crossVectors(_base, _east).normalize();
+  return out
+    .copy(_base)
+    .addScaledVector(_east, x / radius)
+    .addScaledVector(_north, z / radius)
+    .normalize();
+}
+
+function placeAtLocal(obj, zone, x, z, radius, lift = 0, yaw = 0) {
+  directionAtLocal(zone, x, z, radius, _dir);
+  return placeOnDirection(obj, _dir, radius, lift, zone.heading + yaw);
+}
+
+function angularDistanceMeters(aLat, aLon, bLat, bLon, radius = PLANET_RADIUS) {
+  const a = latLonToGardenDir(aLat, aLon, new THREE.Vector3());
+  const b = latLonToGardenDir(bLat, bLon, new THREE.Vector3());
+  return a.angleTo(b) * radius;
+}
+
+/** 给其他随机场景使用：命中六景预留区时必须重新采样。 */
+export function isInsideSaihojiReserve(lat, lon, padding = 1.5) {
+  return SAIHOJI_ZONES.some(
+    (zone) => angularDistanceMeters(lat, lon, zone.lat, zone.lon) < zone.radius + padding
+  );
 }
 
 function pushCollider(colliders, obj, radiusOverride) {
-  const cr = radiusOverride ?? obj.userData.collideRadius ?? 0.4;
-  if (cr >= 0.15) {
-    colliders.push({
-      position: obj.position.clone(),
-      radius: cr * (obj.scale?.x || 1),
-    });
+  const radius = radiusOverride ?? obj.userData.collideRadius ?? 0;
+  if (radius < 0.15) return;
+  colliders.push({ position: obj.position.clone(), radius });
+}
+
+function makeIrregularPatch(rnd, rx, rz, color, segments = 12) {
+  const vertices = [0, 0.015, 0];
+  const indices = [];
+  for (let i = 0; i < segments; i++) {
+    const a = (i / segments) * Math.PI * 2;
+    const jitter = 0.82 + rnd() * 0.3;
+    vertices.push(
+      Math.cos(a) * rx * jitter,
+      0.005 + rnd() * 0.022,
+      Math.sin(a) * rz * jitter
+    );
   }
+  for (let i = 0; i < segments; i++) {
+    indices.push(0, i + 1, ((i + 1) % segments) + 1);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  const mesh = new THREE.Mesh(geometry, toonMat(color, { side: THREE.DoubleSide }));
+  mesh.receiveShadow = true;
+  mesh.userData.kind = color === SAND_COLOR ? "drySand" : "mossPatch";
+  mesh.userData.collideRadius = 0;
+  return mesh;
 }
 
-// ---------- 地标工厂 ----------
-
-/**
- * 北极「黄金阁」：双层古风木屋 + 金箔色屋顶点缀（视觉终点）
- */
-function createGoldenPavilion() {
-  const g = createLowPolyHouse();
-  // 屋顶改鎏金/枯金
-  g.traverse((m) => {
-    if (!m.isMesh || m.userData.isOutline) return;
-    // 屋顶锥在 y 较高处
-    if (m.geometry?.type === "ConeGeometry" || (m.position && m.position.y > 0.9)) {
-      m.material = toonMat(0xc9a227, { emissive: 0x8a7010, emissiveIntensity: 0.18 });
-    }
-  });
-  // 二层小楼：再叠一层缩略屋顶感
-  const upper = new THREE.Mesh(
-    facet(new THREE.BoxGeometry(1.1, 0.55, 1.0)),
-    toonMat(0xf2ebe0)
-  );
-  upper.position.y = 1.55;
-  upper.castShadow = true;
-  addOutline(upper, 0.016, INK_COLOR, 0.05);
-  g.add(upper);
-  const upperRoof = new THREE.Mesh(
-    facet(new THREE.ConeGeometry(0.95, 0.45, 4)),
-    toonMat(0xc9a227, { emissive: 0x8a7010, emissiveIntensity: 0.22 })
-  );
-  upperRoof.rotation.y = Math.PI / 4;
-  upperRoof.position.y = 2.0;
-  upperRoof.castShadow = true;
-  addOutline(upperRoof, 0.016, INK_COLOR, 0.05);
-  g.add(upperRoof);
-
-  g.scale.setScalar(1.15);
-  g.userData.collideRadius = 1.2;
-  g.userData.kind = "goldenPavilion";
-  return g;
-}
-
-/**
- * 赤道「湘南亭」：克制小巧 Low-Poly 茅草屋
- */
-function createShonanTei() {
-  const g = new THREE.Group();
-  // 矮墙 · 宣纸白
-  const body = new THREE.Mesh(
-    facet(new THREE.BoxGeometry(1.1, 0.55, 0.95)),
-    toonMat(0xf0e8dc)
-  );
-  body.position.y = 0.28;
-  body.castShadow = true;
-  addOutline(body, 0.014, INK_COLOR, 0.05);
-  g.add(body);
-  // 茅草顶 · 枯黄扁锥
-  const thatch = new THREE.Mesh(
-    facet(new THREE.ConeGeometry(0.95, 0.55, 5)),
-    toonMat(0x8a7a4a)
-  );
-  thatch.position.y = 0.85;
-  thatch.castShadow = true;
-  addOutline(thatch, 0.014, INK_COLOR, 0.06);
-  g.add(thatch);
-  // 门洞暗示
-  const door = new THREE.Mesh(
-    facet(new THREE.BoxGeometry(0.28, 0.4, 0.05)),
-    toonMat(0x3a322c)
-  );
-  door.position.set(0, 0.22, 0.48);
-  g.add(door);
-
-  g.scale.setScalar(0.95);
-  g.userData.collideRadius = 0.7;
-  g.userData.kind = "shonanTei";
-  return g;
-}
-
-/**
- * 洪隐山焦墨乱石（flat 硬边 + 重墨线）
- * @param {number} heightWorld 目标世界高度（玩家 1~2 倍）
- */
-function createKaresansuiRock(heightWorld, color = KARE_ROCK) {
-  // 直接建乱石（避免 createLowPolyRock 二次描边开销）
-  const g = new THREE.Group();
-  const geo = new THREE.IcosahedronGeometry(0.5, 1);
-  const pos = geo.attributes.position;
-  const v = new THREE.Vector3();
+function createGardenStone(style, height, rnd, colorIndex = 0) {
+  const geometry = new THREE.IcosahedronGeometry(0.5, 1);
+  const pos = geometry.attributes.position;
   const cache = new Map();
+  const v = new THREE.Vector3();
   for (let i = 0; i < pos.count; i++) {
     v.fromBufferAttribute(pos, i);
-    const key = `${v.x.toFixed(3)},${v.y.toFixed(3)},${v.z.toFixed(3)}`;
-    if (!cache.has(key)) cache.set(key, 0.72 + Math.random() * 0.56);
+    const key = `${v.x.toFixed(4)},${v.y.toFixed(4)},${v.z.toFixed(4)}`;
+    if (!cache.has(key)) cache.set(key, 0.78 + rnd() * 0.42);
     v.multiplyScalar(cache.get(key));
     pos.setXYZ(i, v.x, v.y, v.z);
   }
-  const rock = new THREE.Mesh(facet(geo), toonMat(color));
-  rock.scale.set(1, 0.75, 0.92);
-  rock.position.y = 0.32;
-  rock.castShadow = true;
-  rock.receiveShadow = true;
-  addOutline(rock, HEAVY_INK, 0x111111, 0.04);
-  g.add(rock);
-  // 基准高度约 0.9 → 缩放到玩家 1~2 倍
-  const s = heightWorld / 0.9;
-  g.scale.set(s * 0.95, s, s * 0.9);
-  g.userData.collideRadius = 0.45 * s;
-  g.userData.kind = "karesansuiRock";
-  return g;
+
+  const proportions = {
+    standing: [0.62, 1.0, 0.58],
+    attendant: [0.78, 0.72, 0.68],
+    reclining: [1.3, 0.42, 0.78],
+    bridge: [1.6, 0.28, 0.56],
+    cascade: [1.0, 0.5, 0.86],
+    seat: [1.35, 0.3, 1.0],
+  }[style] || [0.8, 0.7, 0.7];
+
+  const mesh = new THREE.Mesh(
+    facet(geometry),
+    toonMat(STONE_COLORS[colorIndex % STONE_COLORS.length])
+  );
+  mesh.scale.set(proportions[0] * height, proportions[1] * height, proportions[2] * height);
+  mesh.position.y = proportions[1] * height * 0.48;
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  addOutline(mesh, HEAVY_INK, INK_COLOR, 0.045);
+
+  const group = new THREE.Group();
+  group.add(mesh);
+  group.userData.kind = `gardenStone:${style}`;
+  group.userData.collideRadius = Math.max(proportions[0], proportions[2]) * height * 0.46;
+  return group;
 }
 
-// 苔藓共享几何/材质（密铺时避免每块岩+描边拖垮帧）
-let _mossGeo = null;
-const _mossMats = new Map();
-function mossGeo() {
-  if (!_mossGeo) {
-    // 低分段扁圆盘感：压扁的八面体
-    _mossGeo = facet(new THREE.IcosahedronGeometry(0.55, 0));
-  }
-  return _mossGeo;
+function createStoneStep(rnd, scale = 1) {
+  const mesh = new THREE.Mesh(
+    facet(new THREE.CylinderGeometry(0.42, 0.48, 0.1, 7)),
+    toonMat(PATH_COLOR)
+  );
+  mesh.scale.set(scale * (0.82 + rnd() * 0.24), 1, scale * (0.68 + rnd() * 0.22));
+  mesh.position.y = 0.05;
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  addOutline(mesh, 0.009, INK_COLOR, 0.035);
+  const group = new THREE.Group();
+  group.add(mesh);
+  group.userData.kind = "stoneStep";
+  group.userData.collideRadius = 0;
+  return group;
 }
-function mossMat(color) {
-  let m = _mossMats.get(color);
-  if (!m) {
-    m = toonMat(color);
-    _mossMats.set(color, m);
+
+const STONE_LAYOUTS = Object.freeze({
+  "moss-entry": [
+    { x: -2.7, z: -0.8, style: "standing", h: 1.45, yaw: 0.15 },
+    { x: 2.45, z: 1.0, style: "attendant", h: 1.25, yaw: -0.35 },
+  ],
+  "master-stones": [
+    { x: 0, z: 0.2, style: "standing", h: 3.0, yaw: -0.15 },
+    { x: -1.65, z: -0.55, style: "attendant", h: 1.7, yaw: 0.42 },
+    { x: 1.45, z: 0.75, style: "reclining", h: 1.5, yaw: -0.3 },
+    { x: -0.35, z: 2.0, style: "attendant", h: 1.2, yaw: 0.1 },
+    { x: 2.65, z: -1.25, style: "reclining", h: 0.95, yaw: 0.55 },
+  ],
+  "dry-cascade": [
+    { x: -0.15, z: 3.0, style: "standing", h: 2.15, yaw: 0.05, lift: 0.2 },
+    { x: -0.75, z: 1.55, style: "cascade", h: 1.35, yaw: -0.2, lift: 0.14 },
+    { x: 0.5, z: 0.15, style: "cascade", h: 1.25, yaw: 0.28, lift: 0.09 },
+    { x: -0.25, z: -1.35, style: "bridge", h: 1.15, yaw: -0.1, lift: 0.04 },
+    { x: 1.15, z: -2.65, style: "reclining", h: 1.05, yaw: 0.45 },
+  ],
+  "moss-islands": [
+    { x: -3.2, z: 1.2, style: "standing", h: 1.8, yaw: -0.2 },
+    { x: -2.1, z: 0.35, style: "attendant", h: 1.15, yaw: 0.35 },
+    { x: -3.65, z: -0.45, style: "reclining", h: 0.9, yaw: -0.5 },
+    { x: 0.25, z: -1.4, style: "standing", h: 2.2, yaw: 0.18 },
+    { x: 1.35, z: -0.65, style: "attendant", h: 1.25, yaw: -0.4 },
+    { x: -0.65, z: -2.45, style: "reclining", h: 0.95, yaw: 0.28 },
+    { x: 3.25, z: 1.8, style: "standing", h: 1.45, yaw: -0.12 },
+    { x: 4.1, z: 0.9, style: "attendant", h: 1.0, yaw: 0.5 },
+    { x: 2.55, z: 0.35, style: "bridge", h: 0.9, yaw: -0.35 },
+  ],
+  "empty-court": [
+    { x: 0.7, z: 0.4, style: "seat", h: 1.0, yaw: -0.18 },
+  ],
+  "return-view": [
+    { x: -2.8, z: 0.8, style: "reclining", h: 1.25, yaw: 0.3 },
+    { x: -1.25, z: -0.2, style: "attendant", h: 1.55, yaw: -0.2 },
+    { x: 0.25, z: 0.25, style: "standing", h: 2.2, yaw: 0.1 },
+    { x: 1.75, z: -0.5, style: "attendant", h: 1.35, yaw: 0.4 },
+    { x: 3.0, z: 0.65, style: "reclining", h: 1.0, yaw: -0.45 },
+  ],
+});
+
+const PINE_LAYOUTS = Object.freeze({
+  "moss-entry": [
+    { x: -4.2, z: 2.4, scale: 1.02, yaw: 0.35, seed: 811 },
+  ],
+  "master-stones": [
+    { x: 4.4, z: 2.8, scale: 1.1, yaw: -0.5, seed: 1229 },
+  ],
+  "moss-islands": [
+    { x: -5.15, z: -2.8, scale: 0.9, yaw: 0.2, seed: 1997 },
+    { x: 4.7, z: -2.45, scale: 0.82, yaw: -0.4, seed: 2153 },
+  ],
+  "empty-court": [
+    { x: -5.1, z: 2.9, scale: 1.08, yaw: 0.5, seed: 3011 },
+  ],
+});
+
+function addZoneMoss(root, zone, count, radius, rnd) {
+  let placed = 0;
+  let attempts = 0;
+  while (placed < count && attempts < count * 10) {
+    attempts++;
+    const a = rnd() * Math.PI * 2;
+    const d = Math.sqrt(rnd()) * zone.radius * 0.88;
+    const x = Math.cos(a) * d;
+    const z = Math.sin(a) * d;
+    const rx = 0.48 + rnd() * 0.52;
+    const rz = 0.45 + rnd() * 0.5;
+    const patch = makeIrregularPatch(
+      rnd,
+      rx,
+      rz,
+      MOSS_COLORS[(rnd() * MOSS_COLORS.length) | 0],
+      12
+    );
+    placeAtLocal(patch, zone, x, z, radius, 0.025, rnd() * Math.PI);
+    root.add(patch);
+    placed++;
   }
-  return m;
+  return placed;
+}
+
+function addDryCascadeSand(root, zone, radius, rnd) {
+  const ribbon = [
+    { x: 0.2, z: 2.5, rx: 1.15, rz: 1.35 },
+    { x: -0.15, z: 0.65, rx: 1.35, rz: 1.4 },
+    { x: 0.35, z: -1.25, rx: 1.5, rz: 1.3 },
+    { x: 0.8, z: -2.85, rx: 1.7, rz: 1.0 },
+  ];
+  for (const p of ribbon) {
+    const sand = makeIrregularPatch(rnd, p.rx, p.rz, SAND_COLOR, 12);
+    placeAtLocal(sand, zone, p.x, p.z, radius, 0.045, -0.08);
+    root.add(sand);
+  }
+}
+
+/** 石底苔裙：双圈极扁苔斑，模糊石地交界（六景统一） */
+function addStoneMossSkirt(root, zone, cx, cz, radius, rnd, ringR = 0.9) {
+  const colors = MOSS_COLORS;
+  for (const ring of [
+    { r: ringR, n: 8 },
+    { r: ringR * 0.55, n: 5 },
+  ]) {
+    for (let i = 0; i < ring.n; i++) {
+      const a = (i / ring.n) * Math.PI * 2 + rnd() * 0.25;
+      const d = ring.r * (0.75 + rnd() * 0.35);
+      const patch = makeIrregularPatch(
+        rnd,
+        0.28 + rnd() * 0.22,
+        0.22 + rnd() * 0.16,
+        colors[(rnd() * colors.length) | 0],
+        10
+      );
+      placeAtLocal(
+        patch,
+        zone,
+        cx + Math.cos(a) * d,
+        cz + Math.sin(a) * d,
+        radius,
+        0.02 + rnd() * 0.015,
+        rnd() * Math.PI
+      );
+      root.add(patch);
+    }
+  }
+}
+
+/** 主石脚嵌小石：垂直层叠（基座 → 中垫 → 主体） */
+function addNestedFooting(root, zone, spec, radius, rnd) {
+  const tiers = [
+    { dx: -0.35, dz: 0.2, h: spec.h * 0.28, style: "attendant" },
+    { dx: 0.4, dz: -0.15, h: spec.h * 0.22, style: "reclining" },
+  ];
+  for (const t of tiers) {
+    const foot = createGardenStone(t.style, Math.max(0.45, t.h), rnd, 3);
+    placeAtLocal(
+      foot,
+      zone,
+      spec.x + t.dx,
+      spec.z + t.dz,
+      radius,
+      (spec.lift ?? 0) * 0.4,
+      (spec.yaw ?? 0) + (rnd() - 0.5) * 0.4
+    );
+    root.add(foot);
+  }
+}
+
+/** 枯瀑阶梯唇：浅蓝薄块沿石组落差排列 */
+function addDryCascadeTiers(root, zone, radius, rnd) {
+  const waterMat = toonMat(0x9fd8e8, {
+    transparent: true,
+    opacity: 0.82,
+    emissive: 0x2a5a68,
+    emissiveIntensity: 0.22,
+  });
+  for (let i = 0; i < 5; i++) {
+    const t = i / 4;
+    const lip = new THREE.Mesh(
+      facet(new THREE.BoxGeometry(0.55 - t * 0.12, 0.045, 0.7 - t * 0.08)),
+      waterMat
+    );
+    const g = new THREE.Group();
+    g.add(lip);
+    placeAtLocal(g, zone, -0.1 + t * 0.15, 2.4 - i * 1.05, radius, 0.12 + (1 - t) * 0.35, -0.1);
+    root.add(g);
+  }
+  void rnd;
+}
+
+function slerpDirection(a, b, t, out = new THREE.Vector3()) {
+  const omega = a.angleTo(b);
+  if (omega < 1e-5) return out.copy(a);
+  const sinOmega = Math.sin(omega);
+  return out
+    .copy(a)
+    .multiplyScalar(Math.sin((1 - t) * omega) / sinOmega)
+    .addScaledVector(b, Math.sin(t * omega) / sinOmega)
+    .normalize();
+}
+
+function addPilgrimagePath(root, radius, rnd) {
+  const directions = SAIHOJI_ZONES.map((zone) =>
+    directionAtLocal(zone, zone.path?.[0] ?? 0, zone.path?.[1] ?? 0, radius, new THREE.Vector3())
+  );
+  const route = [];
+  for (let segment = 0; segment < directions.length - 1; segment++) {
+    const a = directions[segment];
+    const b = directions[segment + 1];
+    const arcLength = a.angleTo(b) * radius;
+    const steps = Math.max(8, Math.floor(arcLength / 1.35));
+    for (let i = 1; i < steps; i++) {
+      const t = i / steps;
+      const dir = slerpDirection(a, b, t, new THREE.Vector3());
+      const step = createStoneStep(rnd, i % 3 === 0 ? 0.86 : 1);
+      placeOnDirection(step, dir, radius, 0.04, (rnd() - 0.5) * 0.35);
+      root.add(step);
+      route.push(step);
+    }
+  }
+  return route;
 }
 
 /**
- * 苔藓毯：极扁墨绿斑块（共享几何，无描边，可踩）
- * 规格要求「createLowPolyRock 压扁」的视觉等价：不规则低多边 + 厚度 0.1
- */
-function createMossPatch(color) {
-  const g = new THREE.Group();
-  const m = new THREE.Mesh(mossGeo(), mossMat(color));
-  m.scale.set(1, 0.18, 1); // 局部先扁
-  m.position.y = 0.04;
-  m.castShadow = false;
-  m.receiveShadow = true;
-  g.add(m);
-  // 世界厚度 ~0.1：水平 2~4，纵 0.1
-  const hx = 2.2 + Math.random() * 1.6;
-  const hz = 2.2 + Math.random() * 1.6;
-  g.scale.set(hx, 0.1 / 0.18, hz);
-  g.userData.collideRadius = 0;
-  g.userData.kind = "moss";
-  return g;
-}
-
-/**
- * 黄金池：扁平镜面淡蓝多边形（贴北半球球面）
- */
-function createGoldenPond(radius = 4.2) {
-  const g = new THREE.Group();
-  // 不规则多边形（7 边）
-  const shape = new THREE.Shape();
-  const n = 7;
-  for (let i = 0; i < n; i++) {
-    const a = (i / n) * Math.PI * 2;
-    const rr = radius * (0.82 + (i % 3) * 0.06);
-    const x = Math.cos(a) * rr;
-    const y = Math.sin(a) * rr;
-    if (i === 0) shape.moveTo(x, y);
-    else shape.lineTo(x, y);
-  }
-  shape.closePath();
-  const water = new THREE.Mesh(
-    new THREE.ShapeGeometry(shape, 12),
-    new THREE.MeshBasicMaterial({
-      color: 0x8ec8e0,
-      transparent: true,
-      opacity: 0.82,
-      side: THREE.DoubleSide,
-    })
-  );
-  water.rotation.x = -Math.PI / 2;
-  water.receiveShadow = true;
-  g.add(water);
-  // 池缘一圈浅墨砂
-  const rim = new THREE.Mesh(
-    new THREE.RingGeometry(radius * 0.95, radius * 1.12, 28),
-    toonMat(0xb8a888, { side: THREE.DoubleSide })
-  );
-  rim.rotation.x = -Math.PI / 2;
-  rim.position.y = -0.02;
-  g.add(rim);
-
-  g.userData.collideRadius = 0;
-  g.userData.kind = "goldenPond";
-  g.userData.pondRadius = radius;
-  return g;
-}
-
-/** 青石阶：扁平灰色短圆柱 */
-function createStoneStep() {
-  const m = new THREE.Mesh(
-    facet(new THREE.CylinderGeometry(0.42, 0.48, 0.1, 6)),
-    toonMat(0x8a8a8a)
-  );
-  m.castShadow = true;
-  m.receiveShadow = true;
-  addOutline(m, 0.01, INK_COLOR, 0.04);
-  const g = new THREE.Group();
-  m.position.y = 0.05;
-  g.add(m);
-  g.userData.collideRadius = 0; // 可走
-  g.userData.kind = "stoneStep";
-  return g;
-}
-
-// ---------- 主构建 ----------
-
-/**
- * 在半径 40 的微型星球上部署西芳寺（苔寺）景观。
- *
- * @param {THREE.Scene} scene
- * @param {object} [opts]
- * @param {number} [opts.radius=40]
- * @param {THREE.Mesh} [opts.planet] 已创建的星球网格（用于南/北半球换色）
- * @param {number} [opts.seed=884]
- * @param {number} [opts.mossCount=220] 北半球苔藓块数
- * @param {number} [opts.rockCount=20] 南半球乱石数（含 3 尊坐禅石）
- * @returns {{
- *   group: THREE.Group,
- *   colliders: {position:THREE.Vector3,radius:number}[],
- *   landmarks: object,
- *   placed: THREE.Vector3[],
- * }}
+ * 在二次元球形世界中建立“苔海六景”。
+ * @returns {{group:THREE.Group,colliders:object[],landmarks:object,placed:THREE.Vector3[],mossCount:number}}
  */
 export function buildSaihojiPlanet(scene, opts = {}) {
   const radius = opts.radius ?? PLANET_RADIUS;
   const rnd = lcg(opts.seed ?? 884);
-  const mossCount = opts.mossCount ?? 220;
-  const rockCount = opts.rockCount ?? 20;
+  const mossTarget = Math.max(72, opts.mossCount ?? 132);
+  void opts.rockCount; // 保留旧调用兼容；六景石组数量由构图固定。
 
   const root = new THREE.Group();
-  root.name = "SaihojiPlanet";
+  root.name = "SaihojiSixScenes";
   const colliders = [];
-  /** @type {THREE.Vector3[]} 结构物中心（minDistance=5） */
-  const structurePts = [];
-  /** @type {THREE.Vector3[]} 苔藓中心（更密） */
-  const mossPts = [];
+  const placed = [];
+  const zones = {};
+  let mossCount = 0;
 
-  const landmarks = {
-    goldenPavilion: null,
-    goldenPond: null,
-    shonanTei: null,
-    threeStones: [],
-    pondPhi: 0.28,
-    pondTheta: 0.35,
-    threePhi: (2 * Math.PI) / 3, // ~120° 南半球
-    threeTheta: Math.PI * 0.85,
-  };
+  if (opts.planet?.isMesh) paintPlanetMossSea(opts.planet);
 
-  // =================================================================
-  //  0. 星球双半球着色：北沉绿苔地 / 南枯山水砂灰 #D9D9D9
-  // =================================================================
-  if (opts.planet && opts.planet.isMesh) {
-    paintPlanetHemispheres(opts.planet);
-  }
+  const totalArea = SAIHOJI_ZONES.reduce((sum, zone) => sum + zone.radius * zone.radius, 0);
+  for (let zi = 0; zi < SAIHOJI_ZONES.length; zi++) {
+    const zone = SAIHOJI_ZONES[zi];
+    const group = new THREE.Group();
+    group.name = `Saihoji:${zone.name}`;
+    root.add(group);
+    zones[zone.id] = {
+      definition: zone,
+      group,
+      stones: [],
+      pines: [],
+      pathDirection: directionAtLocal(
+        zone,
+        zone.path?.[0] ?? 0,
+        zone.path?.[1] ?? 0,
+        radius,
+        new THREE.Vector3()
+      ),
+    };
 
-  // =================================================================
-  //  1. 北半球 · 黄金池（随机方位，纬度偏高）
-  // =================================================================
-  {
-    // Phi ∈ (0.18, 0.45) 避免压北极阁，又在北半球
-    landmarks.pondPhi = 0.2 + rnd() * 0.22;
-    landmarks.pondTheta = rnd() * Math.PI * 2;
-    const pond = createGoldenPond(3.8 + rnd() * 0.8);
-    placeByPhiTheta(pond, landmarks.pondPhi, landmarks.pondTheta, radius, 0.06);
-    pond.rotateY(rnd() * Math.PI * 2);
-    root.add(pond);
-    landmarks.goldenPond = pond;
-    // 池心占位（结构间距）
-    structurePts.push(pond.position.clone());
-  }
+    const share = (zone.radius * zone.radius) / totalArea;
+    const count = Math.max(10, Math.round(mossTarget * share));
+    mossCount += addZoneMoss(group, zone, count, radius, rnd);
+    if (zone.id === "dry-cascade") addDryCascadeSand(group, zone, radius, rnd);
 
-  // =================================================================
-  //  1b. 北极点 · 黄金阁（Phi=0）
-  // =================================================================
-  {
-    const pavilion = createGoldenPavilion();
-    placeByPhiTheta(pavilion, 0, 0, radius, 0);
-    pavilion.rotateY(rnd() * Math.PI * 2);
-    root.add(pavilion);
-    landmarks.goldenPavilion = pavilion;
-    structurePts.push(pavilion.position.clone());
-    pushCollider(colliders, pavilion, 1.35);
-  }
+    const stones = STONE_LAYOUTS[zone.id] || [];
+    for (let i = 0; i < stones.length; i++) {
+      const spec = stones[i];
+      const stone = createGardenStone(spec.style, spec.h, rnd, zi + i);
+      placeAtLocal(stone, zone, spec.x, spec.z, radius, spec.lift ?? 0, spec.yaw ?? 0);
+      group.add(stone);
+      zones[zone.id].stones.push(stone);
+      placed.push(stone.position.clone());
+      pushCollider(colliders, stone);
+      // 垂直层叠语言：石底苔裙 + 主石脚嵌小石（与起始庭园洪隐山一致）
+      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 0.55 + spec.h * 0.22);
+      if (spec.style === "standing" || spec.style === "cascade") {
+        addNestedFooting(group, zone, spec, radius, rnd);
+      }
+    }
 
-  // =================================================================
-  //  1c. 北半球 · 苔藓地毯（极扁墨绿岩）
-  // =================================================================
-  {
-    let placed = 0;
-    let attempts = 0;
-    const maxAttempts = mossCount * 40;
-    while (placed < mossCount && attempts < maxAttempts) {
-      attempts++;
-      // Phi ∈ (0.08, π/2 - 0.05)，避开极点建筑与赤道茶室
-      const phi = 0.08 + rnd() * (Math.PI / 2 - 0.14);
-      const theta = rnd() * Math.PI * 2;
-      phiThetaToDir(phi, theta, _dir);
-      const pos = _dir.clone().multiplyScalar(radius);
-      // 避开黄金池水面
-      if (pos.distanceTo(landmarks.goldenPond.position) < 5.5) continue;
-      if (!farEnough(pos, structurePts, SAIHOJI_MIN_DISTANCE * 0.55)) continue;
-      if (!farEnough(pos, mossPts, MOSS_MIN_DISTANCE)) continue;
+    const pines = PINE_LAYOUTS[zone.id] || [];
+    for (const spec of pines) {
+      const pine = createAncientPineTree(spec.seed);
+      pine.scale.multiplyScalar(spec.scale);
+      placeAtLocal(pine, zone, spec.x, spec.z, radius, 0, spec.yaw);
+      group.add(pine);
+      zones[zone.id].pines.push(pine);
+      placed.push(pine.position.clone());
+      pushCollider(colliders, pine, 0.72 * spec.scale);
+      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 0.85 * spec.scale);
+    }
 
-      const col = MOSS_COLORS[(rnd() * MOSS_COLORS.length) | 0];
-      const moss = createMossPatch(col);
-      placeByPhiTheta(moss, phi, theta, radius, 0.02);
-      moss.rotateY(rnd() * Math.PI * 2);
-      root.add(moss);
-      mossPts.push(pos);
-      placed++;
+    if (zone.id === "moss-entry") {
+      for (let i = 0; i < 7; i++) {
+        const step = createStoneStep(rnd, 0.95);
+        placeAtLocal(step, zone, -1.7 + i * 0.58, -2.8 + i * 0.75, radius, 0.04, i * 0.08);
+        group.add(step);
+      }
+    }
+
+    // 枯瀑之庭：补阶梯式浅蓝跌水唇（垂直层叠）
+    if (zone.id === "dry-cascade") {
+      addDryCascadeTiers(group, zone, radius, rnd);
     }
   }
 
-  // =================================================================
-  //  2. 南半球 · 三尊石组（坐禅石）+ 洪隐山乱石
-  // =================================================================
-  {
-    landmarks.threePhi = Math.PI / 2 + 0.35 + rnd() * 0.55; // 赤道以南
-    landmarks.threeTheta = rnd() * Math.PI * 2;
-
-    // 三尊：3 块特别巨大、靠在一起（玩家 1.8~2.2 倍高）
-    const clusterOffsets = [
-      { dPhi: 0, dTh: 0, h: PLAYER_H * 2.15 },
-      { dPhi: 0.055, dTh: 0.07, h: PLAYER_H * 1.95 },
-      { dPhi: 0.02, dTh: -0.08, h: PLAYER_H * 1.85 },
-    ];
-    for (const off of clusterOffsets) {
-      const phi = landmarks.threePhi + off.dPhi;
-      const theta = landmarks.threeTheta + off.dTh;
-      const rock = createKaresansuiRock(off.h);
-      placeByPhiTheta(rock, phi, theta, radius, 0);
-      rock.rotateY(rnd() * Math.PI * 2);
-      root.add(rock);
-      landmarks.threeStones.push(rock);
-      structurePts.push(rock.position.clone());
-      pushCollider(colliders, rock);
-    }
-
-    // 其余乱石：共 rockCount，已放 3 尊 → 再种 17
-    const rest = Math.max(0, rockCount - 3);
-    let placed = 0;
-    let attempts = 0;
-    while (placed < rest && attempts < rest * 60) {
-      attempts++;
-      const phi = Math.PI / 2 + 0.12 + rnd() * (Math.PI / 2 - 0.2); // 南半球
-      const theta = rnd() * Math.PI * 2;
-      phiThetaToDir(phi, theta, _dir);
-      const pos = _dir.clone().multiplyScalar(radius);
-      if (!farEnough(pos, structurePts, SAIHOJI_MIN_DISTANCE)) continue;
-
-      const h = PLAYER_H * (1.0 + rnd() * 1.0); // 1~2× 玩家
-      const rock = createKaresansuiRock(h);
-      placeByPhiTheta(rock, phi, theta, radius, 0);
-      rock.rotateY(rnd() * Math.PI * 2);
-      root.add(rock);
-      structurePts.push(pos);
-      pushCollider(colliders, rock);
-      placed++;
-    }
-  }
-
-  // =================================================================
-  //  3. 赤道 · 湘南亭茶室（枯实 / 绿苔视觉分界）
-  // =================================================================
-  {
-    // 放在参道螺旋中段附近的赤道点
-    const midTheta =
-      landmarks.pondTheta +
-      0.5 * shortestAngle(landmarks.pondTheta, landmarks.threeTheta) +
-      Math.PI * 0.15;
-    const tei = createShonanTei();
-    // 略偏北/南尝试找到空位
-    let ok = false;
-    for (let k = 0; k < 24 && !ok; k++) {
-      const phi = Math.PI / 2 + (rnd() - 0.5) * 0.08;
-      const theta = midTheta + (rnd() - 0.5) * 0.6;
-      phiThetaToDir(phi, theta, _dir);
-      const pos = _dir.clone().multiplyScalar(radius);
-      if (!farEnough(pos, structurePts, SAIHOJI_MIN_DISTANCE)) continue;
-      placeByPhiTheta(tei, phi, theta, radius, 0);
-      tei.rotateY(rnd() * Math.PI * 2);
-      root.add(tei);
-      structurePts.push(pos);
-      pushCollider(colliders, tei, 0.85);
-      landmarks.shonanTei = tei;
-      ok = true;
-    }
-    if (!ok) {
-      // 兜底：赤道固定方位
-      placeByPhiTheta(tei, Math.PI / 2, midTheta, radius, 0);
-      root.add(tei);
-      landmarks.shonanTei = tei;
-      structurePts.push(tei.position.clone());
-      pushCollider(colliders, tei, 0.85);
-    }
-  }
-
-  // =================================================================
-  //  3b. 朝圣石阶 · 螺旋参道
-  //      黄金池 → 盘旋跨赤道 → 南半球三尊石组（指东庵）
-  //      φ(t) = lerp(φ0, φ1, t)
-  //      θ(t) = θ0 + Δθ·t + 2π·turns·t   （阿基米德式球面螺旋）
-  // =================================================================
-  {
-    const steps = 48;
-    const turns = 1.15; // 盘旋约一圈多
-    const phi0 = landmarks.pondPhi + 0.06;
-    const phi1 = landmarks.threePhi - 0.04;
-    const theta0 = landmarks.pondTheta + 0.25;
-    const dTheta = shortestAngle(theta0, landmarks.threeTheta);
-
-    for (let i = 0; i < steps; i++) {
-      const t = i / (steps - 1);
-      // 平滑起步：靠近池与石组时略加密感（位置仍均匀 t）
-      const phi = phi0 + (phi1 - phi0) * t;
-      const theta = theta0 + dTheta * t + turns * Math.PI * 2 * t;
-      const step = createStoneStep();
-      placeByPhiTheta(step, phi, theta, radius, 0.04);
-      // 朝向路径切线：粗略用下一步方位
-      step.rotateY(theta + Math.PI / 2);
-      root.add(step);
-    }
-  }
-
+  const route = addPilgrimagePath(root, radius, rnd);
   scene.add(root);
 
   return {
     group: root,
     colliders,
-    landmarks,
-    placed: structurePts,
-    mossCount: mossPts.length,
+    landmarks: { zones, route, reservedCaps: SAIHOJI_ZONES },
+    placed,
+    mossCount,
   };
 }
 
-/** 最短有符号角差 θ1-θ0 ∈ (-π, π] */
-function shortestAngle(from, to) {
-  let d = to - from;
-  while (d > Math.PI) d -= Math.PI * 2;
-  while (d < -Math.PI) d += Math.PI * 2;
-  return d;
+/** 整颗星球保持苔海基底；用宽色阶制造截图参考中的青绿卡通块面。 */
+export function paintPlanetMossSea(planetMesh) {
+  const geometry = planetMesh.geometry;
+  const pos = geometry.attributes.position;
+  const colors = new Float32Array(pos.count * 3);
+  const dark = new THREE.Color(0x315b43);
+  const mid = new THREE.Color(0x4d9b69);
+  const light = new THREE.Color(0x58aa72);
+  const color = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const z = pos.getZ(i);
+    const band = Math.sin(x * 0.13 + z * 0.09) * 0.5 + 0.5;
+    color.copy(dark).lerp(mid, 0.38 + band * 0.38);
+    if (y > 8) color.lerp(light, Math.min(0.25, (y - 8) / 100));
+    colors[i * 3] = color.r;
+    colors[i * 3 + 1] = color.g;
+    colors[i * 3 + 2] = color.b;
+  }
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  planetMesh.material = toonMat(0xffffff, { vertexColors: true });
+  planetMesh.material.needsUpdate = true;
 }
 
-/**
- * 星球顶点色：y≥0 沉绿苔地，y<0 枯山水砂灰 #D9D9D9
- * 赤道带做窄过渡，避免硬切。
- */
+/** 旧名称保留给外部调试脚本，但不再把南半球刷成白砂。 */
 export function paintPlanetHemispheres(planetMesh) {
-  const geo = planetMesh.geometry;
-  const pos = geo.attributes.position;
-  const colors = new Float32Array(pos.count * 3);
-  const north = new THREE.Color(0x3f7a58); // 与既有沉绿呼应
-  const south = new THREE.Color(SAND_COLOR);
-  const c = new THREE.Color();
-  for (let i = 0; i < pos.count; i++) {
-    const y = pos.getY(i);
-    const r = Math.hypot(pos.getX(i), y, pos.getZ(i)) || 1;
-    const ny = y / r; // [-1,1]
-    // 赤道过渡带 |ny| < 0.06
-    let t = 0.5 - ny * 0.5; // 0 北 → 1 南
-    if (ny > 0.06) t = 0;
-    else if (ny < -0.06) t = 1;
-    else t = (0.06 - ny) / 0.12;
-    c.copy(north).lerp(south, t);
-    colors[i * 3] = c.r;
-    colors[i * 3 + 1] = c.g;
-    colors[i * 3 + 2] = c.b;
-  }
-  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  // MeshToonMaterial 支持 vertexColors
-  if (planetMesh.material) {
-    planetMesh.material = toonMat(0xffffff);
-    planetMesh.material.vertexColors = true;
-    planetMesh.material.needsUpdate = true;
-  }
+  paintPlanetMossSea(planetMesh);
 }

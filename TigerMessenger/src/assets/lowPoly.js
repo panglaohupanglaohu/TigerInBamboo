@@ -461,6 +461,7 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
     houses = 4,
     bridges = 2,
     clouds = 10,
+    treeMaker = createLowPolyTree,
     cloudHeight = 5, // 云朵距球面的低空高度
     latMax = 72,
     latMin = -40,
@@ -486,7 +487,7 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
   }
 
   const makers = [];
-  for (let i = 0; i < trees; i++) makers.push(createLowPolyTree);
+  for (let i = 0; i < trees; i++) makers.push(treeMaker);
   for (let i = 0; i < rocks; i++) makers.push(createLowPolyRock);
   for (let i = 0; i < flowers; i++) {
     makers.push(() =>

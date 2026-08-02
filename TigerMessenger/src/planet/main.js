@@ -6,12 +6,12 @@ import { Timer } from "three/addons/misc/Timer.js";
 import { createPlanet, PLANET_RADIUS } from "../world/planet.js";
 import { createSphericalPlayer, updateSphericalPlayer } from "./sphericalPlayer.js";
 import {
-  createLowPolyTree,
   createLowPolyHouse,
   placeOnSphere,
   scatterOnSphere,
   updateClouds,
 } from "../assets/lowPoly.js";
+import { createAncientPineTree } from "../assets/ancient.js";
 import { createInput } from "../core/input.js";
 import { createNpcs, findNearbyNpc } from "./npcs.js";
 import { createLetterQuest, createCarryLetterVisual } from "./letterQuest.js";
@@ -67,8 +67,8 @@ const carryVisual = createCarryLetterVisual(player.mesh);
 // ---------- 固定演示 + 散布 ----------
 {
   const spots = [
-    { make: createLowPolyTree, lat: 84, lon: -30 },
-    { make: createLowPolyTree, lat: 82, lon: 20 },
+    { make: createAncientPineTree, lat: 84, lon: -30 },
+    { make: createAncientPineTree, lat: 82, lon: 20 },
     { make: createLowPolyHouse, lat: 80, lon: -10 },
   ];
   for (const { make, lat, lon } of spots) {
@@ -79,6 +79,7 @@ const carryVisual = createCarryLetterVisual(player.mesh);
 const { colliders, clouds } = scatterOnSphere(scene, PLANET_RADIUS, {
   seed: 20260802,
   trees: 50,   // 规格：50 棵树
+  treeMaker: createAncientPineTree,
   houses: 10,  // 规格：10 栋房子
   rocks: 30,   // 规格：30 块岩石
   clouds: 10,  // 规格：低空云朵（距球面 5）

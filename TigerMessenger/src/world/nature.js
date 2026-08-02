@@ -4,7 +4,6 @@
 // =====================================================================
 import * as THREE from "three";
 import {
-  createLowPolyTree,
   createLowPolyHouse,
   createLowPolyRock,
   createLowPolyFlower,
@@ -16,10 +15,11 @@ import {
   INK_FLOWER_COLORS,
 } from "../assets/lowPoly.js";
 import { placeObjectOnSphere, latLonToDir } from "./sphereMath.js";
-import { createAncientPineTree, createCraneOnRock } from "../assets/ancient.js";
-import { LAKE, GREAT_LAKE } from "./lake.js";
+import { createAncientPineTree } from "../assets/ancient.js";
+import { GREAT_LAKE } from "./lake.js";
 import { QUEST_DEFS } from "../quest/questSystem.js";
 import { groundLiftAt } from "./hills.js";
+import { isInsideSaihojiReserve } from "./saihoji.js";
 
 function lcg(seed) {
   let s = seed >>> 0;
@@ -40,7 +40,8 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
   const _d = new THREE.Vector3();
   // 远侧同步水墨色系（沉绿树 / 焦墨岩 / 低饱和花）
   const defs = [
-    [createLowPolyTree, 24],
+    // 远侧也统一使用截图 1 的横向云片古松，避免再出现截图 2 的锥形树。
+    [createAncientPineTree, 12],
     [createLowPolyRock, 10],
     [
       () => createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]),
@@ -53,6 +54,7 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
       for (let attempt = 0; attempt < 30; attempt++) {
         const lat = -20 + rnd() * 65;
         const lon = rnd() * 360 - 180;
+        if (isInsideSaihojiReserve(lat, lon, 2.2)) continue;
         latLonToDir(lat, lon, _d);
         if (_d.angleTo(lakeDir) < lakeClear) continue; // 落在湖里，重采
         const obj = placeOnSphere(make(), lat, lon, planetRadius);
@@ -109,21 +111,14 @@ export function createCloudRing(scene, planetRadius, { count = 10, height = 8, s
  */
 const LAYOUT_RULES = {
   houses: { count: 0, minGap: 8.0, gapVsHouse: 8.0, ring: [5, 12], scale: [0.9, 1.05] }, // 房屋已删除（主人 2026-08-02）
-  trees: { count: 12, minGap: 4.0, gapVsHouse: 4.5, ring: [3.5, 15.5], scale: [0.85, 1.15] },
+  trees: { count: 8, minGap: 4.0, gapVsHouse: 4.5, ring: [3.5, 15.5], scale: [0.85, 1.15] },
   rocks: { count: 4, minGap: 5.0, gapVsHouse: 3.5, ring: [5, 15], scale: [0.8, 1.2] },
   flowers: { count: 12, minGap: 2.5, gapVsHouse: 2.5, ring: [3, 14], scale: [0.9, 1.2] },
 };
 
-// 街道资产点位（Grok）：路牌 / 街灯 / 电线杆
+// 起始视角改为庭园构图，主岛不再随机生成街灯、电线杆等现代街道资产。
 const ISLAND_LAYOUT = {
-  street: [
-    { make: "sign", xz: [2.5, 9.5] },
-    { make: "sign", xz: [-7.5, 4] },
-    { make: "lamp", xz: [8, 5] },
-    { make: "lamp", xz: [-5, -8] },
-    { make: "pole", xz: [12, -2] },
-    { make: "pole", xz: [-11, 9] },
-  ],
+  street: [],
 };
 
 export function decoratePlayZone(scene, planetRadius, seed = 11) {
@@ -138,7 +133,8 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
     keepClear.push({ x: q.receiver.pos[0], z: q.receiver.pos[2], r: 3.2 });
   }
   keepClear.push({ x: 0, z: 6, r: 4 }); // 出生点
-  keepClear.push({ x: LAKE.x, z: LAKE.z, r: LAKE.pathOuter + 0.6 }); // 月亮湖及小径净空
+  // 起始庭园由 startGarden.js 提供固定景物；随机资产不得穿进池水/瀑布构图。
+  keepClear.push({ x: 0, z: 9.5, r: 7.0 });
   const isClear = (x, z) =>
     keepClear.every((k) => Math.hypot(x - k.x, z - k.z) > k.r);
 
@@ -182,23 +178,8 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
     }
   }
 
-  // 水墨点缀：仙鹤立黑岩 ×2 —— 月亮湖水域旁边（湖心沿小径外侧两点）
-  const craneAngles = [0.6, 3.4]; // 湖心方位角：东南岸 / 西岸
-  const craneR = LAKE.pathOuter + 0.8; // 紧贴小径外缘，临水而立
-  for (const a of craneAngles) {
-    const x = LAKE.x + Math.cos(a) * craneR + (rnd() - 0.5) * 0.4;
-    const z = LAKE.z + Math.sin(a) * craneR + (rnd() - 0.5) * 0.4;
-    if (!isClear(x, z)) continue;
-    const obj = createCraneOnRock();
-    placeObjectOnSphere(obj, x, z, groundLiftAt(x, z), planetRadius);
-    obj.rotateY(rnd() * Math.PI * 2);
-    scene.add(obj);
-    meshes.push(obj);
-    pushCollider(colliders, obj);
-  }
-
   // 驿站山脊（北脊土坡）上再来几棵古松，引导视线
-  for (const [x, z] of [[-1.5, -13.2], [1.6, -11.4], [0.2, -13.6]]) {
+  for (const [x, z] of [[-1.5, -13.2], [1.6, -11.4]]) {
     if (!isClear(x, z)) continue;
     const obj = createAncientPineTree();
     placeObjectOnSphere(obj, x, z, groundLiftAt(x, z), planetRadius);

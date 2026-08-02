@@ -6,6 +6,7 @@ import { PLANET_RADIUS } from "./planet.js";
 import { flatXZToLatLon, latLonToDir, quatYToDir } from "./sphereMath.js";
 import { createSphericalShellPatch } from "./sphereShell.js";
 import { toonMat, outlineAs } from "../assets/toon.js";
+import { groundLiftAt, pondDepressionAt } from "./hills.js";
 
 /**
  * 平台定义（平面设计坐标）：pos=[x, yHeight, z]，size=半尺寸
@@ -13,13 +14,22 @@ import { toonMat, outlineAs } from "../assets/toon.js";
  * 原浮空岩石平台已全部改为 hills.js 的连绵土坡（高度场，视觉=碰撞）
  */
 export const PLATFORM_DEFS = [
-  { pos: [0, 0.6, 0], size: [18, 0.35, 18], color: 0x55875f }, // 主岛草地（沉绿，水墨调）
+  {
+    pos: [0, 0.6, 0],
+    size: [18, 0.35, 18],
+    color: 0x55875f,
+    // 主岛壳体和 hills.js 使用同一池盆高度场，水下不会再有一层平板地面。
+    heightOffsetAt: pondDepressionAt,
+    // 台面外缘向球面地面连续摊开，禁止出现垂直平台断墙。
+    rampWidth: 4.5,
+  },
 ];
 
 const _dir = new THREE.Vector3();
 const _quat = new THREE.Quaternion();
 const _right = new THREE.Vector3();
 const _fwd = new THREE.Vector3();
+const _tmpPlatformDelta = new THREE.Vector3();
 
 /**
  * 按平台半宽选择细分：大岛更密，小台够用即可
@@ -36,6 +46,7 @@ export function buildWorld(scene) {
     const [sx, sy, sz] = def.size;
     const [fx, fy, fz] = def.pos;
     const rock = def.rock === true;
+    const rampWidth = Math.max(0, def.rampWidth ?? 0);
     const { lat, lon } = flatXZToLatLon(fx, fz, PLANET_RADIUS);
     latLonToDir(lat, lon, _dir);
     quatYToDir(_dir, _quat);
@@ -58,8 +69,14 @@ export function buildWorld(scene) {
       thickness,
       segsW,
       segsD,
-      // 山石：侧壁/底面径向起伏，台面保持平整
+      // 山石：底面径向起伏；普通台面边缘统一使用土坡收口
       rockAmp: rock ? Math.max(0.08, thickness * 0.55) : 0,
+      heightOffsetAt: def.heightOffsetAt || null,
+      rampWidth,
+      // 先给出岛面/土坡基础高度，再由 sphereShell 叠加池盆下挖量。
+      rampRadiusAt: rampWidth > 0
+        ? (u, v) => PLANET_RADIUS + groundLiftAt(u, v) - (def.heightOffsetAt?.(u, v) ?? 0)
+        : null,
     });
 
     // Cel 卡通材质（2 阶梯渐变，明暗硬分界）；草地保留微光呼吸
@@ -94,11 +111,30 @@ export function buildWorld(scene) {
       right: _right.clone(),
       forward: _fwd.clone(),
       quat: _quat.clone(),
-      half: new THREE.Vector3(sx, thickness, sz),
+      surfaceHalf: new THREE.Vector3(sx, thickness, sz),
+      half: new THREE.Vector3(sx + rampWidth, thickness, sz + rampWidth),
+      rampWidth,
       topHeight: topR,
+      heightOffsetAt: def.heightOffsetAt || null,
+      topHeightAt(pos) {
+        const delta = _tmpPlatformDelta.copy(pos).sub(this.center);
+        const u = delta.dot(this.right);
+        const v = delta.dot(this.forward);
+        const innerU = this.surfaceHalf.x;
+        const innerV = this.surfaceHalf.z;
+        const edgeU = THREE.MathUtils.clamp(u, -innerU, innerU);
+        const edgeV = THREE.MathUtils.clamp(v, -innerV, innerV);
+        const edgeHeight = this.topHeight + (this.heightOffsetAt?.(edgeU, edgeV) ?? 0);
+        const outside = Math.max(Math.abs(u) - innerU, Math.abs(v) - innerV);
+        if (outside <= 0 || this.rampWidth <= 0) return edgeHeight;
+        const t = THREE.MathUtils.clamp(outside / this.rampWidth, 0, 1);
+        const eased = t * t * (3 - 2 * t);
+        const groundHeight = PLANET_RADIUS + groundLiftAt(u, v);
+        return THREE.MathUtils.lerp(edgeHeight, groundHeight, eased);
+      },
       curved: true,
-      min: new THREE.Vector3(fx - sx, fy - sy, fz - sz),
-      max: new THREE.Vector3(fx + sx, fy + sy, fz + sz),
+      min: new THREE.Vector3(fx - sx - rampWidth, fy - sy, fz - sz - rampWidth),
+      max: new THREE.Vector3(fx + sx + rampWidth, fy + sy, fz + sz + rampWidth),
       flatPos: [fx, fy, fz],
       pulsePhase: Math.random() * Math.PI * 2,
       baseEmissive: rock ? 0.015 : 0.06,
@@ -108,51 +144,6 @@ export function buildWorld(scene) {
 
   for (const def of PLATFORM_DEFS) addPlatform(def);
 
-  // 日系木路标（与 street 资产同档描边）
-  function addWoodPost(x, z, h = 1.5) {
-    const group = new THREE.Group();
-    const post = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08, 0.1, h, 6),
-      toonMat(0x3a322c) // 焦墨木
-    );
-    post.position.y = h / 2;
-    post.castShadow = true;
-    outlineAs(post, "street");
-    group.add(post);
-    // 小横板招牌
-    const board = new THREE.Mesh(
-      new THREE.BoxGeometry(0.55, 0.28, 0.06),
-      toonMat(0xf2ebe0) // 宣纸牌
-    );
-    board.position.set(0.2, h * 0.75, 0);
-    outlineAs(board, "street");
-    group.add(board);
-
-    const { lat, lon } = flatXZToLatLon(x, z, PLANET_RADIUS);
-    latLonToDir(lat, lon, _dir);
-    group.position.copy(_dir).multiplyScalar(PLANET_RADIUS);
-    quatYToDir(_dir, _quat);
-    group.quaternion.copy(_quat);
-    scene.add(group);
-  }
-  addWoodPost(-3, -3, 1.35);
-  addWoodPost(4, 2, 1.15);
-  addWoodPost(-2, 6, 1.45);
-  addWoodPost(10, -6, 1.2);
-
-  // 主岛浅青绿光环（白天感，弱 emissive）
-  const ringR = PLANET_RADIUS + 0.65;
-  const ringTheta = 17.2 / PLANET_RADIUS;
-  const ringGeo = new THREE.TorusGeometry(ringR * Math.sin(ringTheta), 0.12, 8, 64);
-  const islandRing = new THREE.Mesh(
-    ringGeo,
-    toonMat(0x7ed9b8, { emissive: 0x3aaa7a, emissiveIntensity: 0.18 })
-  );
-  islandRing.position.set(0, ringR * Math.cos(ringTheta), 0);
-  islandRing.rotation.x = Math.PI / 2;
-  scene.add(islandRing);
-
-  platforms._islandRing = islandRing;
   platforms.planetRadius = PLANET_RADIUS;
 
   return platforms;
@@ -165,10 +156,6 @@ export function updatePlatformPulse(platforms, t) {
     const base = p.baseEmissive ?? 0.06;
     const amp = p.pulseAmp ?? 0.05;
     p.mat.emissiveIntensity = base + amp * (0.5 + 0.5 * Math.sin(t * 1.2 + phase));
-  }
-  const ring = platforms._islandRing;
-  if (ring && ring.material) {
-    ring.material.emissiveIntensity = 0.4 + 0.25 * (0.5 + 0.5 * Math.sin(t * 0.9));
   }
 }
 

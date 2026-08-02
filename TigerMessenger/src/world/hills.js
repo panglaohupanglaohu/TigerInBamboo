@@ -28,16 +28,37 @@ const HILL_DEFS = [
   { x: 4.6, z: -9.8, r: 2.2, peak: 0.6 },
   // —— 东南微丘（和缓草丘，远观层次；避开出生点与湖岸）
   { x: 5.8, z: 6.8, r: 2.4, peak: 0.45 },
+  // —— 书店山坡（Hard To Find Bookshop 所在，坡下草地）
+  { x: 11, z: 5, r: 4.5, peak: 1.6 },
 ];
 
 const ISLAND_FLAT_R = 18; // 主岛平面足迹半径（platforms.js 主岛 size 18）
 export const ISLAND_BASE_LIFT = 0.6; // 岛面厚度（原平台顶高）
 
+// 起始庭园的池水不是贴在岛面上的透明平板，而是球面岛上的一个浅盆。
+// 这些参数同时供地形、平台壳体、碰撞和水面使用，避免四套坐标各算各的。
+export const POND_CENTER_X = 0;
+export const POND_CENTER_Z = 9.1;
+export const POND_RADIUS_X = 9.2;
+export const POND_RADIUS_Z = 4.9;
+export const POND_DEPTH = 0.48;
+
+/** 池塘位置的下挖量（椭圆边缘为 0，中心最深）。 */
+export function pondDepressionAt(x, z) {
+  const nx = (x - POND_CENTER_X) / POND_RADIUS_X;
+  const nz = (z - POND_CENTER_Z) / POND_RADIUS_Z;
+  const d2 = nx * nx + nz * nz;
+  if (d2 >= 1) return 0;
+  const rim = 1 - d2;
+  // 中心较平、岸边柔和收口，避免出现硬切圆洞。
+  return -POND_DEPTH * rim * (0.72 + 0.28 * rim);
+}
+
 // 山区包围盒（网格覆盖范围，含裙边余量）
 const GRID_MIN_X = -11.5;
 const GRID_MAX_X = 12.5;
 const GRID_MIN_Z = -15.5;
-const GRID_MAX_Z = 9.0;
+const GRID_MAX_Z = 15.5;
 const GRID_STEP = 0.7; // 平面网格间距
 
 /** 所有土丘在该点的联合抬升（余弦剖面，多丘取 max，保证连绵无叠加尖峰） */
@@ -53,10 +74,10 @@ export function hillHeightAt(x, z) {
   return h;
 }
 
-/** 地面真实抬升：岛内 = 岛面 0.6 + 丘高；岛外 = 0（星球裸面） */
+/** 地面真实抬升：岛内 = 岛面 + 丘高 + 池盆下挖；岛外 = 0（星球裸面） */
 export function groundLiftAt(x, z) {
   if (Math.hypot(x, z) > ISLAND_FLAT_R) return 0;
-  return ISLAND_BASE_LIFT + hillHeightAt(x, z);
+  return ISLAND_BASE_LIFT + hillHeightAt(x, z) + pondDepressionAt(x, z);
 }
 
 // —— 世界坐标 → 山区平面坐标（半球守卫：只在小岛所在半球有意义，防对跖幽灵吸附）
@@ -94,7 +115,7 @@ export function buildHills(scene, R) {
     for (let ix = 0; ix < nx; ix++, vi++) {
       const x = GRID_MIN_X + ix * GRID_STEP;
       const z = GRID_MIN_Z + iz * GRID_STEP;
-      const lift = ISLAND_BASE_LIFT + hillHeightAt(x, z);
+      const lift = groundLiftAt(x, z);
       flatToWorld(x, lift, z, R, tmp);
       positions[vi * 3 + 0] = tmp.x;
       positions[vi * 3 + 1] = tmp.y;
@@ -139,5 +160,95 @@ export function buildHills(scene, R) {
   mesh.name = "hills";
   scene.add(mesh);
 
-  return { mesh };
+  // 高度场原先只有顶面，远处观看时边界会变成一条悬空薄片。
+  // 给四条边补向外摊开的土坡，向星球表面收口；不再生成垂直黑色裙墙。
+  const skirtPositions = [];
+  const skirtIndices = [];
+  let skirtVertex = 0;
+  const skirtBottomHeight = 0.04;
+  const skirtRampWidth = 4.5;
+  const edgePoint = (ix, iz) => ({
+    x: GRID_MIN_X + ix * GRID_STEP,
+    z: GRID_MIN_Z + iz * GRID_STEP,
+    index: iz * nx + ix,
+  });
+  const addSkirtEdge = (edge, side) => {
+    const isHorizontal = side === "north" || side === "south";
+    const outerMin = isHorizontal ? GRID_MIN_X - skirtRampWidth : GRID_MIN_Z - skirtRampWidth;
+    const outerSpan = isHorizontal
+      ? (GRID_MAX_X - GRID_MIN_X) + skirtRampWidth * 2
+      : (GRID_MAX_Z - GRID_MIN_Z) + skirtRampWidth * 2;
+    const outerFixed = side === "north"
+      ? GRID_MIN_Z - skirtRampWidth
+      : side === "south"
+        ? GRID_MAX_Z + skirtRampWidth
+        : side === "west"
+          ? GRID_MIN_X - skirtRampWidth
+          : GRID_MAX_X + skirtRampWidth;
+    for (let i = 0; i < edge.length - 1; i++) {
+      const a = edge[i];
+      const b = edge[i + 1];
+      const ai = a.index * 3;
+      const bi = b.index * 3;
+      // 顶边复用高度场已计算出的世界坐标；底边落回球面地表。
+      skirtPositions.push(
+        positions[ai], positions[ai + 1], positions[ai + 2],
+        positions[bi], positions[bi + 1], positions[bi + 2],
+      );
+      const outerA = outerMin + (i / (edge.length - 1)) * outerSpan;
+      const outerB = outerMin + ((i + 1) / (edge.length - 1)) * outerSpan;
+      const bottomA = isHorizontal
+        ? { x: outerA, z: outerFixed }
+        : { x: outerFixed, z: outerA };
+      const bottomB = isHorizontal
+        ? { x: outerB, z: outerFixed }
+        : { x: outerFixed, z: outerB };
+      flatToWorld(bottomA.x, skirtBottomHeight, bottomA.z, R, tmp);
+      skirtPositions.push(tmp.x, tmp.y, tmp.z);
+      flatToWorld(bottomB.x, skirtBottomHeight, bottomB.z, R, tmp);
+      skirtPositions.push(tmp.x, tmp.y, tmp.z);
+      skirtIndices.push(
+        skirtVertex, skirtVertex + 2, skirtVertex + 1,
+        skirtVertex + 1, skirtVertex + 2, skirtVertex + 3,
+      );
+      skirtVertex += 4;
+    }
+  };
+
+  const northEdge = [];
+  const southEdge = [];
+  const westEdge = [];
+  const eastEdge = [];
+  for (let ix = 0; ix < nx; ix++) {
+    northEdge.push(edgePoint(ix, 0));
+    southEdge.push(edgePoint(ix, nz - 1));
+  }
+  for (let iz = 0; iz < nz; iz++) {
+    westEdge.push(edgePoint(0, iz));
+    eastEdge.push(edgePoint(nx - 1, iz));
+  }
+  addSkirtEdge(northEdge, "north");
+  addSkirtEdge(southEdge, "south");
+  addSkirtEdge(westEdge, "west");
+  addSkirtEdge(eastEdge, "east");
+
+  const skirtGeometry = new THREE.BufferGeometry();
+  skirtGeometry.setAttribute("position", new THREE.Float32BufferAttribute(skirtPositions, 3));
+  skirtGeometry.setIndex(skirtIndices);
+  skirtGeometry.computeVertexNormals();
+  const skirt = new THREE.Mesh(
+    skirtGeometry,
+    new THREE.MeshStandardMaterial({
+      color: 0x75664b,
+      roughness: 0.96,
+      metalness: 0,
+      side: THREE.DoubleSide,
+    }),
+  );
+  skirt.castShadow = true;
+  skirt.receiveShadow = true;
+  skirt.name = "hills-closed-skirt";
+  scene.add(skirt);
+
+  return { mesh, skirt };
 }

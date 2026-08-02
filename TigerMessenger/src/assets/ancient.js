@@ -6,8 +6,11 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
 
-const BARK = 0x2a2621; // 焦黑
-const PINE = 0x1c3024; // 墨绿
+const BARK = 0x665d52; // 老松灰褐树皮
+const BARK_DARK = 0x453f37;
+const PINE = 0x2f6947; // 修剪松冠主色
+const PINE_DARK = 0x1e4a33;
+const PINE_LIGHT = 0x4a8055;
 const CRANE_WHITE = 0xf2ede2; // 乳白
 const INK = 0x1c1a17; // 墨黑
 const CINNABAR = 0xa63a2e; // 丹红
@@ -15,235 +18,156 @@ const BLACK_ROCK = 0x23211d; // 黑岩
 
 const O_BOLD = 0.032; // 古风加粗勾线
 
-// 黄金角：层间螺旋错开侧枝，避免正对重叠
-const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+let pineSerial = 0;
+
+function pineRng(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (Math.imul(1664525, s) + 1013904223) >>> 0;
+    return s / 0x100000000;
+  };
+}
 
 /**
- * 分形古松（自相似递归）：
- *  - 主轴分节上长，层与层之间用枝干圆柱连接
- *  - 每层按黄金角螺旋发出一级侧枝；侧枝再分叉二级小枝
- *  - 枝端 / 层节点挂多层扁平松针团（墨绿云片）
- *  - 加粗水墨描边；mesh 预算封顶，避免同屏过重
+ * 日式造型松：弯曲粗干、少量横向骨枝、层层修剪成云片的松冠。
+ * 形态依据真实庭园松而不是递归分形树；随机只改变姿态，不改变树的骨架语法。
  */
-export function createAncientPineTree() {
+export function createAncientPineTree(seed = 7301 + pineSerial++ * 97) {
   const g = new THREE.Group();
+  const rnd = pineRng(seed);
   const barkMat = toonMat(BARK);
-  const leafMat = toonMat(PINE);
+  const barkDarkMat = toonMat(BARK_DARK);
+  const leafMats = [toonMat(PINE_DARK), toonMat(PINE), toonMat(PINE_LIGHT)];
+  const yAxis = new THREE.Vector3(0, 1, 0);
 
-  let meshBudget = 0;
-  const MAX_MESH = 96;
-
-  function ink(mesh, thick = O_BOLD) {
+  function segment(a, b, r0, r1, material = barkMat, outline = O_BOLD * 0.72) {
+    const delta = new THREE.Vector3().subVectors(b, a);
+    const len = delta.length();
+    const mesh = new THREE.Mesh(
+      facet(new THREE.CylinderGeometry(r1, r0, len, 7, 1, false)),
+      material
+    );
+    mesh.position.copy(a).addScaledVector(delta, 0.5);
+    mesh.quaternion.setFromUnitVectors(yAxis, delta.normalize());
     mesh.castShadow = true;
-    if (meshBudget < MAX_MESH) {
-      addOutline(mesh, thick);
-      meshBudget++;
-    }
+    addOutline(mesh, outline, 0x2b2823, 0.045);
+    g.add(mesh);
     return mesh;
   }
 
-  /** 沿局部 +Y 的树干/枝干段，底部贴在 parent 原点 */
-  function addStem(parent, len, rBot, rTop, thick = O_BOLD) {
-    const m = new THREE.Mesh(
-      facet(
-        new THREE.CylinderGeometry(
-          Math.max(0.018, rTop),
-          Math.max(0.022, rBot),
-          len,
-          5
-        )
-      ),
-      barkMat
-    );
-    m.position.y = len / 2;
-    ink(m, thick);
-    parent.add(m);
-    return len;
-  }
-
-  /**
-   * 松针团：多片扁平二十面体叠层（叶子「层」）
-   * scale 控制团大小；layers 控制片数
-   */
-  function addNeedleTuft(parent, scale = 1, y0 = 0, layers = 2) {
-    const n = Math.max(1, layers);
-    for (let i = 0; i < n && meshBudget < MAX_MESH; i++) {
-      const r = 0.2 * scale * (0.88 + Math.random() * 0.28);
-      const b = new THREE.Mesh(facet(new THREE.IcosahedronGeometry(r, 0)), leafMat);
-      // 压扁成云片状松冠
-      b.scale.set(1.2, 0.34 + Math.random() * 0.1, 1.2);
-      b.position.set(
-        (Math.random() - 0.5) * 0.26 * scale,
-        y0 + i * 0.09 * scale + (Math.random() - 0.5) * 0.03,
-        (Math.random() - 0.5) * 0.26 * scale
+  function branch(points, r0, r1) {
+    for (let i = 0; i < points.length - 1; i++) {
+      const t = i / Math.max(1, points.length - 2);
+      segment(
+        points[i],
+        points[i + 1],
+        THREE.MathUtils.lerp(r0, r1, t),
+        THREE.MathUtils.lerp(r0, r1, Math.min(1, t + 0.45)),
+        i === 0 ? barkMat : barkDarkMat,
+        O_BOLD * (i === 0 ? 0.64 : 0.48)
       );
-      b.rotation.set(
-        (Math.random() - 0.5) * 0.35,
-        Math.random() * Math.PI,
-        (Math.random() - 0.5) * 0.35
+    }
+  }
+
+  /** 修剪后的云片冠：宽、扁、下暗上亮，外轮廓有少量不规则起伏。 */
+  function crown(center, width, depth, thickness, yaw = 0, fullness = 1) {
+    const pad = new THREE.Group();
+    pad.position.copy(center);
+    pad.rotation.y = yaw;
+    const blobs = Math.max(4, Math.round(4 * fullness));
+    for (let i = 0; i < blobs; i++) {
+      const edge = blobs === 1 ? 0 : i / (blobs - 1) - 0.5;
+      const mesh = new THREE.Mesh(
+        facet(new THREE.IcosahedronGeometry(0.5, 1)),
+        leafMats[i === blobs - 1 ? 2 : i === 0 ? 0 : 1]
       );
-      ink(b, O_BOLD * 0.72);
-      parent.add(b);
+      mesh.position.set(
+        edge * width * 0.62 + (rnd() - 0.5) * width * 0.08,
+        (i % 2) * thickness * 0.2 + (rnd() - 0.5) * 0.04,
+        (rnd() - 0.5) * depth * 0.34
+      );
+      const taper = 1 - Math.abs(edge) * 0.35;
+      mesh.scale.set(
+        width * 0.48 * taper,
+        thickness * (1.15 + rnd() * 0.15),
+        depth * (0.58 + rnd() * 0.1)
+      );
+      mesh.rotation.set((rnd() - 0.5) * 0.12, rnd() * Math.PI, (rnd() - 0.5) * 0.08);
+      mesh.castShadow = true;
+      addOutline(mesh, O_BOLD * 0.38, 0x173227, 0.035);
+      pad.add(mesh);
     }
+    g.add(pad);
   }
 
-  /**
-   * 分形侧枝：depth=0 一级，再递归到 maxDepth。
-   * parent 局部 +Y 为父枝延伸方向；本枝先 yaw 再 pitch 下倾。
-   */
-  function fractalBranch(parent, opts) {
-    const {
-      length,
-      rBot,
-      depth,
-      maxDepth,
-      pitch,
-      yaw,
-    } = opts;
-    if (meshBudget >= MAX_MESH || length < 0.08) return;
-
-    const joint = new THREE.Group();
-    joint.rotation.order = "YXZ";
-    joint.rotation.y = yaw;
-    joint.rotation.x = pitch;
-    // 同层轻微扭转，增加苍劲感
-    joint.rotation.z = (Math.random() - 0.5) * 0.18;
-    parent.add(joint);
-
-    const rTop = rBot * (0.58 + Math.random() * 0.1);
-    const stemThick = depth === 0 ? O_BOLD * 0.9 : O_BOLD * 0.65;
-    addStem(joint, length, rBot, rTop, stemThick);
-
-    // 枝端松针（高层 depth 更小更密）
-    const tip = new THREE.Group();
-    tip.position.y = length;
-    joint.add(tip);
-    const tuftScale = (0.95 - depth * 0.22) * (0.85 + Math.random() * 0.25);
-    addNeedleTuft(tip, tuftScale, 0, depth === 0 ? 3 : 2);
-
-    // 一级枝中段再挂一层松针，强化「层」感
-    if (depth === 0 && length > 0.35 && Math.random() > 0.3) {
-      const mid = new THREE.Group();
-      mid.position.y = length * (0.45 + Math.random() * 0.15);
-      joint.add(mid);
-      addNeedleTuft(mid, tuftScale * 0.62, 0, 2);
-    }
-
-    if (depth >= maxDepth) return;
-
-    // 自相似分叉：2~3 枝，长度/半径按比例收缩
-    const kids = 2 + ((Math.random() * 1.5) | 0);
-    for (let k = 0; k < kids; k++) {
-      fractalBranch(tip, {
-        length: length * (0.38 + Math.random() * 0.2),
-        rBot: rTop * (0.65 + Math.random() * 0.12),
-        depth: depth + 1,
-        maxDepth,
-        pitch: 0.4 + Math.random() * 0.55,
-        yaw: (k / kids) * Math.PI * 2 + Math.random() * 0.5,
-      });
-    }
+  const lean = (rnd() > 0.5 ? 1 : -1) * (0.52 + rnd() * 0.5);
+  const depthLean = (rnd() - 0.5) * 0.5;
+  const trunk = [
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(0.04 + lean * 0.12, 0.7, depthLean * 0.1),
+    new THREE.Vector3(-0.12 + lean * 0.3, 1.45, 0.1 + depthLean * 0.25),
+    new THREE.Vector3(0.08 + lean * 0.55, 2.25, -0.04 + depthLean * 0.5),
+    new THREE.Vector3(-0.04 + lean * 0.8, 3.08, 0.12 + depthLean * 0.72),
+    new THREE.Vector3(0.2 + lean, 3.82, 0.02 + depthLean),
+    new THREE.Vector3(0.08 + lean * 1.12, 4.45, 0.12 + depthLean * 1.1),
+  ];
+  for (let i = 0; i < trunk.length - 1; i++) {
+    const t = i / (trunk.length - 2);
+    segment(trunk[i], trunk[i + 1], 0.3 - t * 0.19, 0.265 - t * 0.19);
   }
 
-  // —— 主轴：基干 + 多层冠层（层间枝干连接）——
-  const layerCount = 5 + ((Math.random() * 2) | 0); // 5~6 层松冠
-  let cursor = g;
-  let attachY = 0;
-  let trunkR = 0.17 + Math.random() * 0.02;
+  // 外露根盘让树真正“抓”在球面上，呼应参考照片中的老松根势。
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + rnd() * 0.35;
+    const end = new THREE.Vector3(Math.cos(a) * (0.62 + rnd() * 0.25), 0.03, Math.sin(a) * (0.62 + rnd() * 0.25));
+    const mid = end.clone().multiplyScalar(0.46);
+    mid.y = 0.12 + rnd() * 0.06;
+    branch([trunk[0], mid, end], 0.16, 0.035);
+  }
 
-  // 基干（无侧枝，略扭曲）
-  {
-    const baseH = 0.5 + Math.random() * 0.22;
-    const joint = new THREE.Group();
-    joint.rotation.set(
-      (Math.random() - 0.5) * 0.22,
-      Math.random() * Math.PI * 2,
-      (Math.random() - 0.5) * 0.22
+  const flip = rnd() > 0.5 ? 1 : -1;
+  const arms = [
+    { at: 2, side: -1, len: 1.75, rise: 0.16, z: 0.35, crown: [1.75, 0.82, 0.3] },
+    { at: 2, side: 1, len: 1.35, rise: 0.08, z: -0.45, crown: [1.35, 0.72, 0.28] },
+    { at: 3, side: 1, len: 1.9, rise: 0.2, z: 0.28, crown: [1.85, 0.85, 0.3] },
+    { at: 4, side: -1, len: 1.45, rise: 0.28, z: -0.28, crown: [1.5, 0.76, 0.3] },
+    { at: 5, side: 1, len: 1.22, rise: 0.34, z: 0.2, crown: [1.3, 0.7, 0.31] },
+  ];
+
+  for (let i = 0; i < arms.length; i++) {
+    const spec = arms[i];
+    const start = trunk[spec.at].clone();
+    const side = spec.side * flip;
+    const bend = new THREE.Vector3(
+      start.x + side * spec.len * 0.48,
+      start.y + spec.rise * 0.25 - 0.05,
+      start.z + spec.z * 0.45
     );
-    g.add(joint);
-    addStem(joint, baseH, trunkR + 0.035, trunkR, O_BOLD);
-    cursor = joint;
-    attachY = baseH;
-  }
-
-  let spiral = Math.random() * Math.PI * 2;
-  for (let L = 0; L < layerCount; L++) {
-    const t = layerCount <= 1 ? 0 : L / (layerCount - 1); // 0 底 → 1 顶
-    const segH = 0.38 + (1 - t) * 0.2 + Math.random() * 0.08;
-    const rBot = trunkR * (1 - t * 0.52);
-    const rTop = Math.max(0.035, rBot * 0.76);
-
-    // 层间主轴连接段（分节微弯）
-    const joint = new THREE.Group();
-    joint.position.y = attachY;
-    joint.rotation.set(
-      (Math.random() - 0.5) * 0.32,
-      (Math.random() - 0.5) * 0.7,
-      (Math.random() - 0.5) * 0.32
+    const tip = new THREE.Vector3(
+      start.x + side * spec.len,
+      start.y + spec.rise,
+      start.z + spec.z
     );
-    cursor.add(joint);
-    addStem(joint, segH, rBot, rTop, O_BOLD);
+    const upTip = tip.clone();
+    upTip.y += 0.14 + rnd() * 0.12;
+    branch([start, bend, tip, upTip], 0.13 - i * 0.011, 0.035);
+    const yaw = Math.atan2(spec.z, side * spec.len);
+    crown(upTip, spec.crown[0], spec.crown[1], spec.crown[2], yaw, i === 2 ? 1.2 : 1);
 
-    // 侧枝挂在段中部，形成层与层之间的「枝盘」
-    const ring = new THREE.Group();
-    ring.position.y = segH * (0.35 + Math.random() * 0.15);
-    joint.add(ring);
-
-    // 下层枝多且长、下倾大；上层枝少且短、略上收
-    const arms = Math.max(3, 6 - ((L * 3) / 4) | 0);
-    const armLenBase = (1.05 - t * 0.58) * (0.88 + Math.random() * 0.22);
-    const armR = rBot * (0.38 + Math.random() * 0.08);
-    const droop = 0.95 - t * 0.5; // 下倾角
-    // 下层可分二级枝；顶两层只一级，避免过密
-    const maxDepth = L < layerCount - 2 ? 1 : 0;
-
-    for (let a = 0; a < arms; a++) {
-      const yaw = spiral + a * GOLDEN_ANGLE + L * 0.41;
-      fractalBranch(ring, {
-        length: armLenBase * (0.72 + Math.random() * 0.4),
-        rBot: armR * (0.85 + Math.random() * 0.25),
-        depth: 0,
-        maxDepth,
-        pitch: droop + (Math.random() - 0.5) * 0.22,
-        yaw,
-      });
-    }
-
-    // 主轴节点再补一团松针，层心更饱满
-    if (Math.random() > 0.25) {
-      const nodeTuft = new THREE.Group();
-      nodeTuft.position.y = segH * 0.7;
-      joint.add(nodeTuft);
-      addNeedleTuft(nodeTuft, 0.55 + (1 - t) * 0.35, 0, 2);
-    }
-
-    cursor = joint;
-    attachY = segH;
-    trunkR = rTop;
-    spiral += GOLDEN_ANGLE * 1.65;
   }
 
-  // 顶梢：短主干 + 双层针簇收尖
-  {
-    const tipH = 0.32 + Math.random() * 0.14;
-    const tip = new THREE.Group();
-    tip.position.y = attachY;
-    tip.rotation.set(
-      (Math.random() - 0.5) * 0.2,
-      Math.random() * Math.PI,
-      (Math.random() - 0.5) * 0.2
-    );
-    cursor.add(tip);
-    addStem(tip, tipH, trunkR, trunkR * 0.35, O_BOLD * 0.8);
-    const apex = new THREE.Group();
-    apex.position.y = tipH;
-    tip.add(apex);
-    addNeedleTuft(apex, 0.72, 0, 3);
-    addNeedleTuft(apex, 0.42, 0.14, 2);
+  // 顶端分成两束，避免圣诞树式尖顶，形成参考图中的横向“伞盖”。
+  const top = trunk[trunk.length - 1];
+  for (const side of [-1, 1]) {
+    const tip = top.clone().add(new THREE.Vector3(side * 0.52, 0.42 + (side > 0 ? 0.12 : 0), side * 0.12));
+    branch([top, top.clone().lerp(tip, 0.52).add(new THREE.Vector3(0, 0.08, 0)), tip], 0.085, 0.03);
+    crown(tip, side > 0 ? 1.35 : 1.05, 0.78, 0.34, side * 0.16, 1.05);
   }
 
-  g.scale.setScalar(1.15); // 全树约 4m 量级（小世界）
-  g.userData.collideRadius = 0.42;
+  g.rotation.y = (rnd() - 0.5) * 0.55;
+  g.scale.setScalar(1.02);
+  g.userData.collideRadius = 0.58;
+  g.userData.kind = "gardenPine";
   return g;
 }
 

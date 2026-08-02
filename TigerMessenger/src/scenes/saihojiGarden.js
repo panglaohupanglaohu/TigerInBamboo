@@ -1,8 +1,7 @@
 // =====================================================================
 //  场景：西芳寺（苔寺）景观
-//  - 北半球苔庭 + 黄金池 + 北极黄金阁
-//  - 南半球枯山水 + 三尊石组
-//  - 赤道湘南亭 + 螺旋参道
+//  - 六座沿球面展开的苔海石庭
+//  - 入口苔径 / 主石 / 枯瀑 / 岛群 / 空庭 / 回望
 //  构建逻辑在 world/saihoji.js，本文件只做场景模块外壳。
 // =====================================================================
 import { PLANET_RADIUS } from "../world/planet.js";
@@ -12,7 +11,7 @@ import { buildSaihojiPlanet } from "../world/saihoji.js";
 export const saihojiGardenScene = {
   id: "saihoji",
   name: "西芳寺 · 苔寺",
-  description: "京都西芳寺上下二庭：北苔南砂、赤道茶室、螺旋参道",
+  description: "西芳寺苔海六景：石组如岛，沿球面参道逐景展开",
 
   load(ctx) {
     const scene = ctx.scene;
@@ -25,7 +24,7 @@ export const saihojiGardenScene = {
       seed: opt.seed ?? 884,
       // 默认略降密度，避免同屏过重；可用 options 拉高
       mossCount: opt.mossCount ?? 120,
-      rockCount: opt.rockCount ?? 20,
+      rockCount: opt.rockCount ?? 28,
     });
 
     return {

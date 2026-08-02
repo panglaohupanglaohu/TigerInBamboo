@@ -50,8 +50,8 @@ const sceneHandles = loadScenes(sceneIds, {
   planetRadius: PLANET_RADIUS,
   planet,
   options: {
-    // 可按场景覆盖：options.saihoji = { mossCount: 200 }
-    saihoji: { seed: 884, mossCount: 120, rockCount: 20 },
+    // 苔海六景密度；石组位置与数量由庭园构图固定。
+    saihoji: { seed: 884, mossCount: 132 },
   },
 });
 
@@ -63,6 +63,24 @@ const assetColliders = mergeColliders(sceneHandles);
 
 // ---------- 玩家 / 相机 / 输入 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
+
+// 庭园视觉验收/漫游入口：?tour=saihoji 从第一景开始，不影响默认出生点。
+if (new URLSearchParams(location.search).get("tour") === "saihoji") {
+  const saihoji = sceneHandles.find((handle) => handle.id === "saihoji");
+  const entry = saihoji?.landmarks?.zones?.["moss-entry"];
+  const next = saihoji?.landmarks?.zones?.["master-stones"];
+  if (entry?.pathDirection) {
+    player.position.copy(entry.pathDirection).multiplyScalar(PLANET_RADIUS + 2);
+    player.checkpoint.copy(player.position);
+    player.groundR = PLANET_RADIUS + 2;
+    if (next?.pathDirection) {
+      player.forward.copy(next.pathDirection);
+      const up = player.position.clone().normalize();
+      player.forward.addScaledVector(up, -player.forward.dot(up)).normalize();
+      player.facing.copy(player.forward);
+    }
+  }
+}
 const cameraRig = createCameraRig(camera, player);
 
 let gameStarted = false;

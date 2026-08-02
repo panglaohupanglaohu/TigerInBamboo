@@ -1,6 +1,6 @@
 // =====================================================================
 //  球面物理：切向移动 + 径向重力 + 曲面平台 / 星球表面着陆
-//  曲面平台：同心球壳台面（半径 topHeight），足迹用中心切平面投影判定
+//  曲面平台：同心球壳台面 + 外扩土坡（半径按位置变化），足迹用中心切平面投影判定
 // =====================================================================
 import * as THREE from "three";
 import { PLAYER_RADIUS, PLAYER_HEIGHT } from "../core/constants.js";
@@ -29,6 +29,10 @@ function inFootprint(pos, p, margin = 0) {
   const hx = p.half.x + margin;
   const hz = p.half.z + margin;
   return Math.abs(u) <= hx && Math.abs(v) <= hz;
+}
+
+function platformTopAt(p, pos) {
+  return typeof p.topHeightAt === "function" ? p.topHeightAt(pos) : p.topHeight;
 }
 
 /**
@@ -78,32 +82,36 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
   //    —— 单帧内即可完成 岛(0.6) → 石(1.2) 的链式登台
   for (let pass = 0; pass < 3; pass++) {
     let landing = null;
+    let landingTopR = -Infinity;
     const rNow = pos.length();
     for (const p of platforms) {
       if (!p.center || !p.normal || p.topHeight == null) continue;
-      const topR = p.topHeight;
-      if (landing && topR <= (landing.topHeight ?? 0)) continue;
+      const topR = platformTopAt(p, pos);
+      if (landing && topR <= landingTopR) continue;
       if (!inFootprint(pos, p, PLAYER_RADIUS * 0.35)) continue;
       if (rNow < topR - STEP_UP || rNow > topR + 0.65) continue;
       const n = _up.copy(pos).normalize();
       const vr = n.dot(vel);
       // 下落、贴地行走、或已贴台面（低速）时可吸附；正向上起跳（径向速度大）则放行
       if (!(vr <= 0.6 || (vr < 1.5 && (player.onGround || Math.abs(rNow - topR) < 0.3)))) continue;
-      if (!landing || topR > landing.topHeight) landing = p;
+      if (!landing || topR > landingTopR) {
+        landing = p;
+        landingTopR = topR;
+      }
     }
     if (!landing) break;
-    pos.setLength(landing.topHeight); // 保持角向位置，只改径向
+    pos.setLength(landingTopR); // 保持角向位置，只改径向
     const n2 = _up.copy(pos).normalize();
     const vr2 = n2.dot(vel);
     if (vr2 < 0) vel.addScaledVector(n2, -vr2);
     grounded = true;
-    groundR = landing.topHeight;
+    groundR = landingTopR;
   }
 
   // ② 台体阻挡：足迹内（含身体半径余量）且身体与台体厚度相交
   for (const p of platforms) {
     if (!p.center || !p.normal || p.topHeight == null) continue;
-    const topR = p.topHeight;
+    const topR = platformTopAt(p, pos);
     const botR = topR - p.half.y * 2;
     const r = pos.length();
     if (!inFootprint(pos, p, PLAYER_RADIUS)) continue;
@@ -183,10 +191,21 @@ export function resolveAssetColliders(pos, colliders, radius = PLAYER_RADIUS) {
   if (!colliders || !colliders.length) return;
   _up.copy(pos).normalize();
   for (const c of colliders) {
+    const colliderRadius = c.radius || 0.4;
+    const min = radius + colliderRadius;
+    const colliderLen = c.position?.length?.() || 0;
+    if (colliderLen < 1e-6) continue;
+
+    // 球面近场守卫：只允许角距在碰撞半径附近的资产参与。
+    // 旧算法直接投影世界差向量；对跖点附近的远端资产会投影为 0，
+    // 因而产生“走到某处就被无形墙推回”的幽灵碰撞。
+    _tmp.copy(c.position).multiplyScalar(1 / colliderLen);
+    const angularReach = Math.min(Math.PI / 2, (min + 1.0) / PLANET_RADIUS);
+    if (_up.dot(_tmp) < Math.cos(angularReach)) continue;
+
     _delta.copy(pos).sub(c.position);
     _delta.addScaledVector(_up, -_delta.dot(_up)); // 去掉径向 → 切向分离向量
     const d = _delta.length();
-    const min = radius + (c.radius || 0.4);
     if (d < 1e-6) {
       // 完全重合：沿任意切向推开
       _delta.set(1, 0, 0).addScaledVector(_up, -_up.x);

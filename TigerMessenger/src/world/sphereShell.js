@@ -1,13 +1,15 @@
 // =====================================================================
-//  球面壳段网格：同心球台面（曲面贴合）+ 厚度 + 侧壁
+//  球面壳段网格：同心球台面（曲面贴合）+ 土坡收口 + 壳体厚度
 // =====================================================================
 import * as THREE from "three";
 
 /**
  * 在以 centerDir 为中心、right/forward 为切向轴的球面上，
  * 生成半宽 halfW×halfD、外半径 outerR、厚度 thickness 的曲面平台。
+ * rampWidth > 0 时，边缘不再下拉成垂直侧壁，而是向外扩成连续土坡。
  *
  * 顶点：先在切平面偏移再 setLength → 贴合球面。
+ * heightOffsetAt(u,v) 可让整块壳体沿径向形成连续凹坑（或隆起）。
  *
  * @returns {{ geometry: THREE.BufferGeometry, edgeGeometry: THREE.BufferGeometry }}
  */
@@ -22,6 +24,9 @@ export function createSphericalShellPatch({
   segsW = 12,
   segsD = 12,
   rockAmp = 0, // >0 时侧壁与底面加径向噪点，台面保持平整（碰撞不受影响）
+  heightOffsetAt = null, // 可选：按切平面坐标对整块壳体做径向下挖/抬升
+  rampWidth = 0, // >0 时把台面边缘向外摊成土坡，替代垂直断墙
+  rampRadiusAt = null, // 土坡外缘的基础半径（heightOffsetAt 仍会叠加）
 }) {
   const innerR = Math.max(0.05, outerR - thickness * 2);
   const nw = segsW + 1;
@@ -48,13 +53,14 @@ export function createSphericalShellPatch({
   const fwd = forward.clone().normalize();
 
   function sample(u, v, radius, outP, outN) {
+    const sampledRadius = radius + (heightOffsetAt ? heightOffsetAt(u, v) : 0);
     // 切平面偏移后投影到球面（曲面贴合关键）
     outP
       .copy(c)
-      .multiplyScalar(radius)
+      .multiplyScalar(sampledRadius)
       .addScaledVector(rgt, u)
       .addScaledVector(fwd, v);
-    outP.setLength(radius);
+    outP.setLength(sampledRadius);
     outN.copy(outP).normalize();
   }
 
@@ -107,11 +113,13 @@ export function createSphericalShellPatch({
   }
 
   // ---- 侧壁：四条边 ----
-  function addSide(getUV, segs) {
+  function addSide(getTopUV, getRampUV, segs) {
     const base = positions.length / 3;
     for (let i = 0; i <= segs; i++) {
       const t = i / segs;
-      const { u, v } = getUV(t);
+      const topUV = getTopUV(t);
+      const rampUV = rampWidth > 0 ? getRampUV(t) : topUV;
+      const { u, v } = topUV;
       sample(u, v, outerR, p, n);
       positions.push(p.x, p.y, p.z);
       // 侧壁近似法线：切向外指
@@ -128,7 +136,10 @@ export function createSphericalShellPatch({
       sn.normalize();
       normals.push(sn.x, sn.y, sn.z);
 
-      sample(u, v, rocky(u, v), p, n);
+      const bottomRadius = rampRadiusAt
+        ? rampRadiusAt(rampUV.u, rampUV.v)
+        : rocky(rampUV.u, rampUV.v);
+      sample(rampUV.u, rampUV.v, bottomRadius, p, n);
       positions.push(p.x, p.y, p.z);
       normals.push(sn.x, sn.y, sn.z);
     }
@@ -141,10 +152,28 @@ export function createSphericalShellPatch({
     }
   }
 
-  addSide((t) => ({ u: -halfW + t * 2 * halfW, v: -halfD }), segsW); // -D
-  addSide((t) => ({ u: -halfW + t * 2 * halfW, v: halfD }), segsW); // +D
-  addSide((t) => ({ u: -halfW, v: -halfD + t * 2 * halfD }), segsD); // -W
-  addSide((t) => ({ u: halfW, v: -halfD + t * 2 * halfD }), segsD); // +W
+  const outerW = halfW + rampWidth;
+  const outerD = halfD + rampWidth;
+  addSide(
+    (t) => ({ u: -halfW + t * 2 * halfW, v: -halfD }),
+    (t) => ({ u: -outerW + t * 2 * outerW, v: -outerD }),
+    segsW,
+  ); // -D
+  addSide(
+    (t) => ({ u: -halfW + t * 2 * halfW, v: halfD }),
+    (t) => ({ u: -outerW + t * 2 * outerW, v: outerD }),
+    segsW,
+  ); // +D
+  addSide(
+    (t) => ({ u: -halfW, v: -halfD + t * 2 * halfD }),
+    (t) => ({ u: -outerW, v: -outerD + t * 2 * outerD }),
+    segsD,
+  ); // -W
+  addSide(
+    (t) => ({ u: halfW, v: -halfD + t * 2 * halfD }),
+    (t) => ({ u: outerW, v: -outerD + t * 2 * outerD }),
+    segsD,
+  ); // +W
 
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));

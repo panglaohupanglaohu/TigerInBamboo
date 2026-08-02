@@ -5,7 +5,7 @@ import * as THREE from "three";
 
 export function createStage() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xdfd5c3); // 古风宣纸米色（绢本质感）
+  scene.background = new THREE.Color(0xdfd5c3); // 古风宣纸米色（主人水墨规格 #DFD5C3）
   // 留白雾霭：同色系淡雾，模拟国画远山
   scene.fog = new THREE.FogExp2(0xdfd5c3, 0.015);
 
