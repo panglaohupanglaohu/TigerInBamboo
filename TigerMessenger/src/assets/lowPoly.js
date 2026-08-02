@@ -242,7 +242,11 @@ export function placeOnSphere(obj, latDeg, lonDeg, radius) {
  * - 纬度按面积元加权：pdf ∝ cos(lat)（高纬不再偏密）
  * - minSpacing：与已放置点的最小弦长（失败重试 maxAttempts）
  *
- * @returns {{ meshes: THREE.Object3D[], colliders: { position: THREE.Vector3, radius: number }[] }}
+ * @returns {{
+ *   meshes: THREE.Object3D[],
+ *   colliders: { position: THREE.Vector3, radius: number }[],
+ *   clouds: THREE.Object3D[],
+ * }}
  */
 export function scatterOnSphere(scene, planetRadius, opts = {}) {
   const {
@@ -334,15 +338,47 @@ export function scatterOnSphere(scene, planetRadius, opts = {}) {
     void placedOk; // 放不下就跳过该实例
   }
 
-  // 云朵：低空空飘（不进碰撞、不做间距检查）
+  // 云朵：低空空飘（不进碰撞、不做间距检查）；附带漂移参数
+  /** @type {THREE.Object3D[]} */
+  const cloudList = [];
   for (let i = 0; i < clouds; i++) {
     const { lat, lon } = sampleLatLon();
     const obj = placeOnSphere(createLowPolyCloud(), lat, lon, planetRadius + cloudHeight);
     obj.rotateY(rnd() * Math.PI * 2);
     obj.scale.setScalar(0.8 + rnd() * 0.8);
+    // 绕球心缓慢公转 + 轻微径向起伏
+    obj.userData.drift = {
+      axis: new THREE.Vector3(rnd() - 0.5, rnd() * 0.4 + 0.6, rnd() - 0.5).normalize(),
+      speed: 0.04 + rnd() * 0.08, // rad/s
+      bobAmp: 0.25 + rnd() * 0.35,
+      bobSpeed: 0.4 + rnd() * 0.6,
+      phase: rnd() * Math.PI * 2,
+      baseR: planetRadius + cloudHeight,
+    };
     scene.add(obj);
     meshes.push(obj);
+    cloudList.push(obj);
   }
 
-  return { meshes, colliders };
+  return { meshes, colliders, clouds: cloudList };
+}
+
+const _cloudSpin = new THREE.Quaternion();
+const _cloudAxis = new THREE.Vector3();
+
+/** 云朵漂移动画：绕球心缓慢公转 + 径向起伏 */
+export function updateClouds(clouds, dt, t) {
+  if (!clouds || !clouds.length) return;
+  for (const c of clouds) {
+    const d = c.userData.drift;
+    if (!d) continue;
+    _cloudAxis.copy(d.axis);
+    _cloudSpin.setFromAxisAngle(_cloudAxis, d.speed * dt);
+    c.position.applyQuaternion(_cloudSpin);
+    // 径向起伏（保持大致云高）
+    const r = d.baseR + Math.sin(t * d.bobSpeed + d.phase) * d.bobAmp;
+    c.position.setLength(r);
+    // 自转一点点
+    c.rotateY(dt * 0.15);
+  }
 }

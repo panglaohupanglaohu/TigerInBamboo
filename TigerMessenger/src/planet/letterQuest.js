@@ -33,9 +33,10 @@ export function createLetterQuest({ player, npcs, onScore, onCarryChange }) {
     receiver = npcs[b];
   }
 
-  // 首局：红方发、绿方收（与验收一致）；之后随机
+  // 首局（规格对齐）：红方发、蓝方（小蓝）收，使用规格原文文案；之后随机链式
+  let firstRound = true;
   giver = npcs.find((n) => n.def.name === "红方") || npcs[0] || null;
-  receiver = npcs.find((n) => n.def.name === "绿方") || npcs[1] || null;
+  receiver = npcs.find((n) => n.def.name === "蓝方") || npcs[1] || null;
   if (giver && receiver && giver === receiver) pickPair();
 
   function setCarry(on) {
@@ -54,23 +55,27 @@ export function createLetterQuest({ player, npcs, onScore, onCarryChange }) {
       setCarry(true);
       const toName = receiver?.def?.name || "对方";
       return {
-        text: `请把这封信送给 ${toName}`,
+        text: firstRound
+          ? "你能帮我把这封信送给岛对面的小蓝吗？" // 规格原文（首局）
+          : `请把这封信送给 ${toName}`,
         completed: false,
       };
     }
     if (state === "carry" && receiver && near.def === receiver.def) {
       setCarry(false);
       if (onScore) onScore();
-      const fromName = giver?.def?.name || "寄件人";
+      const doneText = firstRound ? "哇，谢谢你的信！" : "谢谢你！任务完成"; // 规格原文（首局）
+      const wasFirst = firstRound;
+      firstRound = false;
       // 下一对：排除刚当过收件人的，尽量换新鲜组合
       const prevReceiver = receiver;
       pickPair(prevReceiver);
       const nextHint =
-        giver && receiver
+        !wasFirst && giver && receiver // 首局送达文案保持规格原文，不附加链式提示
           ? `下一封：去找 ${giver.def.name} 接信 → 送给 ${receiver.def.name}`
           : "";
       return {
-        text: nextHint ? `谢谢你！任务完成。${nextHint}` : "谢谢你！任务完成",
+        text: nextHint ? `${doneText}。${nextHint}` : doneText,
         completed: true,
       };
     }

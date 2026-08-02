@@ -6,13 +6,11 @@
 //    - 贴地时半径锁定在 R + half；空中自由径向，再落回
 // =====================================================================
 import * as THREE from "three";
+import { P } from "./params.js";
 
 export const CUBE_SIZE = 1.2;
-export const MOVE_SPEED = 6.0;
-export const SPRINT_MULT = 1.4;
-export const GRAVITY = 22.0;
-export const JUMP_VELOCITY = 9.0;
 export const PLAYER_COLLIDE_R = 0.65;
+// 移动/引力/跳跃参数运行时每帧读 P（开发者面板实时可调）
 
 // 模块级临时变量（避免每帧分配）
 const _up = new THREE.Vector3();
@@ -115,7 +113,7 @@ export function updateSphericalPlayer(player, keys, camera, dt, planetRadius, co
   }
 
   const sprint = keys["ShiftLeft"] || keys["ShiftRight"];
-  const speed = MOVE_SPEED * (sprint ? SPRINT_MULT : 1);
+  const speed = P.moveSpeed * (sprint ? P.sprintMult : 1);
 
   // 切向速度：贴地时强跟手，空中弱控制
   _targetVel.copy(_wish).multiplyScalar(speed);
@@ -132,12 +130,12 @@ export function updateSphericalPlayer(player, keys, camera, dt, planetRadius, co
     // 先清内向径向，再给外向冲量
     const vr = up.dot(player.velocity);
     if (vr < 0) player.velocity.addScaledVector(up, -vr);
-    player.velocity.addScaledVector(up, JUMP_VELOCITY);
+    player.velocity.addScaledVector(up, P.jumpV);
     player.onGround = false;
   }
 
   // 引力：永远指向球心
-  player.velocity.addScaledVector(up, -GRAVITY * dt);
+  player.velocity.addScaledVector(up, -P.gravity * dt);
 
   // 位置积分（空中不锁半径）
   player.position.addScaledVector(player.velocity, dt);

@@ -245,3 +245,57 @@ NPC B 处按 E → 显示「谢谢你！任务完成」、状态清除、加一�
 - [x] 无头全链路断言（Kimi，2026-08-02 07:28）
 - [x] 携信中的视觉表现（玩家头顶信件图标/光环）（**Grok**，2026-08-02）
 - [x] 任务链化：送达后随机指派下一对 NPC（**Grok**，2026-08-02）
+
+---
+
+## 全套规格（10 步）对照检查 + 缺口修复（2026-08-02 07:32 起）
+
+> 负责人标注：**Kimi** 主导检查与修复；期间 **Grok** 并行完成了任务链化、
+> 相机模块化（followCamera.js）、散布 cos(lat) 加权与最小间距，已保留合并。
+
+### 原版调研（补第 1 步欠账）
+
+- [游侠网](https://www.ali213.net/news/html/2025-10/971123.html)、[游民星空](https://www.gamersky.com/news/202510/2032184.shtml)、
+  [cosine.ren FE Bits](https://news.cosine.ren/p/vol-15)：Abeto《Messenger》= 小星球邮递员、
+  Low-fi 卡通、约 5 个送信任务、自由探索（坠落绕球到另一侧）、多人 emoji 轻社交、
+  Awwwards SOTD。我们的复刻方向（球面世界 + 低多边 + 送信任务链）与之对齐 ✅
+
+### 十步合规表
+
+| # | 规格 | 状态 | 说明 |
+|---|------|------|------|
+| 1 | 单文件 index.html + CDN Three.js + 场景/相机/渲染器/循环 | ✅（演进） | 已从单文件演进为模块化 `index.html` + `src/`； vendor 兜底 |
+| 2 | 星球 r=40 淡青 + 弱环境光 + 太阳平行光阴影 + shadowMap | ✅ | `world/planet.js` + 实验页光源组 |
+| 3 | 球面玩家：WASD / 引力向球心 / Up⊥球面 / 滑行不脱离 | ✅ | `planet/sphericalPlayer.js` |
+| 4 | createLowPolyTree/House，Group 底部对齐原点 | ✅（有偏差记录） | r172 MeshToonMaterial 不支持 flatShading → `facet()` 平直法线等效 |
+| 5 | createLowPolyRock（顶点扰动）+ createLowPolyCloud | ✅ 本轮修复 | 岩石改为二十面体顶点扰动（坐标哈希共享扰动防裂缝）；新增 4 球云朵 |
+| 6 | populatePlanet：50 树/10 房/30 岩 + 经纬度四元数贴合 + 云高 5 | ✅ 本轮对齐 | `scatterOnSphere`（即 populate 实现）数量改 50/10/30，clouds:10 高度 +5；花/栅栏/桥为规格外点缀 |
+| 7 | 相机 lerp 斜后方 + lookAt + Up 平滑翻转 | ✅ | `followCamera.js`（`_upSmooth`） |
+| 8 | 右键拖拽 yaw/pitch 环视 + 松手平滑回弹 | ✅ 本轮实现 | 原为中键仅 yaw 无回弹；现右键 yaw+pitch，松手指数回弹（实测 yaw -1.0 → -0.03） |
+| 9 | 3 个不同颜色独特几何体 NPC + 距离<5 中央提示「[E] 与居民交谈」 | ✅ 本轮修复 | 原为三方块+旧文案；现 红=立方体/绿=圆锥/蓝=球体，文案对齐 |
+| 10 | 对话 UI + 状态机：A 接信「你能帮我把这封信送给岛对面的小蓝吗？」→ 携信中；B（小蓝）送达「哇，谢谢你的信！」→ 投递成功 +1 | ✅ 本轮对齐 | 首局固定 红方→蓝方 且用规格原文；后续保留 Grok 随机任务链 |
+
+### 新增：隐藏开发者菜单（主人 07:32 要求）
+
+- `src/planet/params.js`：可调参数对象 `P`（移动/疾跑/引力/跳跃/相机三率/对话距离），运行时每帧读取
+- `src/planet/devPanel.js`：右上角 🤖 图标呼出面板；分组滑杆（玩家/相机/交互/光照）+
+  FPS 读数 + 重置全部；光照直调 `sun/ambient.intensity`
+- `planet.html` 面板样式；`main.js` 接线（`onCamDist` 回调、`devPanel.tick(dt)`）
+
+### 验收（无头 Chrome 13 项全过，2026-08-02 07:51）
+
+云朵 10 朵高度 ✓ / NPC 三种几何体 ✓ / 提示文案 ✓ / A 接信文案+携信中 ✓ /
+B 送达文案+状态清除+投递成功 1 ✓ / 右键环视生效+回弹 ✓ / 面板呼出+调参+FPS ✓ /
+控制台零 error/warning ✓。截图：`e2e-spec-quest.png`、`e2e-spec-devpanel.png`。
+
+### Todos
+
+- [x] 原版调研（Kimi，07:33）
+- [x] Rock 顶点扰动 + Cloud（Kimi，07:37）
+- [x] 散布 50/10/30 + 云高 5（Kimi，07:44）
+- [x] 右键 yaw/pitch + 回弹（Kimi，07:46）
+- [x] NPC 独特几何体 + 文案对齐（Kimi，07:44）
+- [x] 开发者菜单（Kimi，07:41–07:48）
+- [x] 13 项综合验收（Kimi，07:51）
+- [x] 云朵漂移动画（**Grok**，2026-08-02）：绕轴公转 + 径向起伏 `updateClouds`
+- [x] 开发者面板持久化（**Grok**，2026-08-02）：`tm.planet.devParams.v1` 读写

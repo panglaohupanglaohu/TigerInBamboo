@@ -10,11 +10,14 @@ import {
   createLowPolyHouse,
   placeOnSphere,
   scatterOnSphere,
+  updateClouds,
 } from "../assets/lowPoly.js";
 import { createInput } from "../core/input.js";
 import { createNpcs, findNearbyNpc } from "./npcs.js";
 import { createLetterQuest, createCarryLetterVisual } from "./letterQuest.js";
 import { createFollowCamera } from "./followCamera.js";
+import { createDevPanel } from "./devPanel.js";
+import { P } from "./params.js";
 
 // ---------- 场景 / 相机 / 渲染器 ----------
 const scene = new THREE.Scene();
@@ -41,7 +44,8 @@ window.addEventListener("resize", () => {
 });
 
 // ---------- 光源 ----------
-scene.add(new THREE.AmbientLight(0x8899bb, 0.35));
+const ambient = new THREE.AmbientLight(0x8899bb, 0.35);
+scene.add(ambient);
 const sun = new THREE.DirectionalLight(0xfff2d8, 1.3);
 sun.position.set(60, 80, 40);
 sun.castShadow = true;
@@ -72,13 +76,14 @@ const carryVisual = createCarryLetterVisual(player.mesh);
   }
 }
 
-const { colliders } = scatterOnSphere(scene, PLANET_RADIUS, {
+const { colliders, clouds } = scatterOnSphere(scene, PLANET_RADIUS, {
   seed: 20260802,
-  trees: 32,
-  rocks: 22,
-  flowers: 48,
-  fences: 10,
-  houses: 5,
+  trees: 50,   // 规格：50 棵树
+  houses: 10,  // 规格：10 栋房子
+  rocks: 30,   // 规格：30 块岩石
+  clouds: 10,  // 规格：低空云朵（距球面 5）
+  flowers: 24, // 以下为规格外点缀
+  fences: 6,
   bridges: 2,
   latMax: 78,
   latMin: -35,
@@ -119,7 +124,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
-window.__lab = { player, npcs, quest, carryVisual };
+// 调试句柄在文件末尾（followCam 等初始化之后）统一挂载
 
 // ---------- 相机 ----------
 const followCam = createFollowCamera(camera, player);
@@ -130,6 +135,48 @@ const keys = createInput({
   onMidDrag: (on) => followCam.setMidDrag(on),
 });
 followCam.snap();
+
+// ---------- 右键拖拽环视（yaw + pitch，松手回弹） ----------
+{
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+  window.addEventListener("contextmenu", (e) => e.preventDefault()); // 屏蔽右键菜单
+  window.addEventListener("mousedown", (e) => {
+    if (e.button !== 2) return;
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    followCam.setOrbitDrag(true);
+  });
+  window.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    followCam.orbitBy((e.clientX - lastX) * 0.005); // 水平偏航
+    followCam.orbitPitchBy((e.clientY - lastY) * 0.004); // 俯仰
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    followCam.setOrbitDrag(false); // 触发平滑回弹
+  };
+  window.addEventListener("mouseup", (e) => {
+    if (e.button === 2) endDrag();
+  });
+  window.addEventListener("blur", endDrag);
+}
+
+// ---------- 开发者菜单（右上角 🤖 呼出） ----------
+const devPanel = createDevPanel({
+  sun,
+  ambient,
+  onCamDist: (d) => followCam.setDist(d),
+});
+void P; // 相机/玩家/交互参数已在各模块内运行时读取
+
+// 调试句柄（无头验收用；须在所有引用对象初始化之后挂载）
+window.__lab = { player, npcs, quest, carryVisual, followCam, scene, P };
 
 // ---------- 主循环 ----------
 const timer = new Timer();
@@ -142,6 +189,8 @@ function animate() {
   updateSphericalPlayer(player, keys, camera, dt, PLANET_RADIUS, colliders);
   followCam.update(dt);
   carryVisual.update(t);
+  updateClouds(clouds, dt, t);
+  devPanel.tick(dt);
 
   elNpcHint.classList.toggle("show", !!findNearbyNpc(player, npcs));
 
