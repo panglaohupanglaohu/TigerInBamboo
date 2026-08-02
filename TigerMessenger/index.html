@@ -466,7 +466,7 @@
     }
     .dev-row input[type="range"] { width: 100%; accent-color: #7eb0ff; }
     .dev-row em { font-style: normal; text-align: right; opacity: 0.8; font-variant-numeric: tabular-nums; }
-    #dev-reset {
+    #dev-reset, .dev-action {
       margin-top: 10px;
       width: 100%;
       padding: 6px 0;
@@ -476,7 +476,153 @@
       color: #cfe0ff;
       cursor: pointer;
     }
-    #dev-reset:hover { filter: brightness(1.15); }
+    #dev-reset:hover, .dev-action:hover { filter: brightness(1.15); }
+    .dev-action { margin-top: 6px; background: rgba(47, 143, 122, 0.25); }
+
+    /* ---------- 地图编辑器 ---------- */
+    #map-editor {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 14, 20, 0.45);
+      pointer-events: auto;
+    }
+    .map-editor-card {
+      width: min(420px, 94vw);
+      max-height: min(92vh, 720px);
+      overflow: auto;
+      padding: 14px 16px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 16px 48px rgba(26, 38, 56, 0.22);
+      color: #1a2638;
+      font-size: 12px;
+    }
+    .map-editor-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #2f8f7a;
+      margin-bottom: 6px;
+    }
+    #map-editor-close {
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      cursor: pointer;
+      color: #6a7b92;
+    }
+    .map-editor-hint {
+      margin: 0 0 8px;
+      font-size: 11px;
+      opacity: 0.7;
+      line-height: 1.45;
+    }
+    #map-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid rgba(26, 38, 56, 0.12);
+      cursor: crosshair;
+      touch-action: none;
+      background: #e8f0e8;
+    }
+    .map-editor-coords {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0 8px;
+      font-variant-numeric: tabular-nums;
+      opacity: 0.8;
+    }
+    .map-editor-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .map-editor-tools button, .map-editor-foot button {
+      border: 1px solid rgba(47, 143, 122, 0.35);
+      background: rgba(47, 143, 122, 0.12);
+      color: #2f8f7a;
+      border-radius: 8px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .map-editor-tools button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .map-yaw {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 140px;
+    }
+    .map-yaw input { flex: 1; accent-color: #4aa76c; }
+    .map-editor-group {
+      margin: 8px 0 4px;
+      font-weight: 600;
+      color: #d98a2b;
+      letter-spacing: 0.04em;
+    }
+    .map-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .map-palette-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(26, 38, 56, 0.15);
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 999px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 11px;
+      color: #1a2638;
+    }
+    .map-palette-item i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .map-palette-item.active {
+      border-color: #2f8f7a;
+      background: rgba(47, 143, 122, 0.15);
+      font-weight: 600;
+    }
+    .map-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      max-height: 120px;
+      overflow: auto;
+      border: 1px solid rgba(26, 38, 56, 0.08);
+      border-radius: 8px;
+    }
+    .map-list li {
+      padding: 5px 8px;
+      border-top: 1px solid rgba(26, 38, 56, 0.06);
+      cursor: pointer;
+    }
+    .map-list li:first-child { border-top: none; }
+    .map-list li.active { background: rgba(47, 143, 122, 0.12); }
+    .map-list li.muted { opacity: 0.5; cursor: default; }
+    .map-editor-foot {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .map-editor-foot button { flex: 1; }
 
     /* ================= 日系极简 UI 主题（硬伤四纠偏，覆盖上方暗色规则） ================= */
     html, body {

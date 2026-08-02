@@ -19,8 +19,9 @@ const SLIDERS = [
  * @param {import("three").DirectionalLight} deps.sun
  * @param {import("three").AmbientLight} deps.ambient
  * @param {(d: number) => void} [deps.onCamDist]
+ * @param {() => void} [deps.onOpenMap] 打开地图编辑器
  */
-export function createDevPanel({ sun, ambient, onCamDist }) {
+export function createDevPanel({ sun, ambient, onCamDist, onOpenMap }) {
   // 应用已持久化的光照
   if (Number.isFinite(P.sunIntensity)) sun.intensity = P.sunIntensity;
   if (Number.isFinite(P.ambientIntensity)) ambient.intensity = P.ambientIntensity;
@@ -60,12 +61,23 @@ export function createDevPanel({ sun, ambient, onCamDist }) {
     `<label class="dev-row"><span>环境光强</span>` +
     `<input type="range" data-light="ambient" min="0" max="1" step="0.02" value="${ambient.intensity}">` +
     `<em data-lval="ambient">${ambient.intensity.toFixed(2)}</em></label>`;
-  html += `<button type="button" id="dev-reset">重置全部</button>`;
+  html += `<div class="dev-group">地图</div>`;
+  html += `<button type="button" id="dev-open-map" class="dev-action">🗺️ 打开地图编辑</button>`;
+  html += `<p class="dev-hint">选中建筑可拖动、复制、放置到平面任意位置</p>`;
+  html += `<button type="button" id="dev-reset">重置全部参数</button>`;
   panel.innerHTML = html;
 
   toggle.addEventListener("click", () => {
     panel.style.display = panel.style.display === "none" ? "block" : "none";
   });
+
+  const mapBtn = panel.querySelector("#dev-open-map");
+  if (mapBtn && onOpenMap) {
+    mapBtn.addEventListener("click", () => {
+      onOpenMap();
+      panel.style.display = "none";
+    });
+  }
 
   panel.addEventListener("input", (e) => {
     const t = e.target;

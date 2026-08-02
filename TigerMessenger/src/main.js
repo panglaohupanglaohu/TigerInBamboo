@@ -8,6 +8,7 @@ import { createStage } from "./core/stage.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js";
 import { createDevPanel } from "./core/devPanel.js";
+import { createMapEditor } from "./core/mapEditor.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
@@ -59,6 +60,7 @@ const sceneHandles = loadScenes(sceneIds, {
 const messenger = sceneHandles.find((h) => h.id === "messenger") || null;
 const platforms = messenger?.platforms || [];
 const hills = messenger?.hills || null;
+// 可写碰撞列表（地图编辑器会 push / 改 position）
 const assetColliders = mergeColliders(sceneHandles);
 
 // ---------- 玩家 / 相机 / 输入 ----------
@@ -104,10 +106,29 @@ const quest = createQuestSystem({
   isGameStarted: () => gameStarted,
 });
 
+// ---------- 地图编辑器（🤖 菜单 · 建筑放置/移动/复制） ----------
+const mapEditor = createMapEditor({
+  scene,
+  planetRadius: PLANET_RADIUS,
+  colliders: assetColliders,
+  toast: showToast,
+});
+// 登记场景内置书店
+if (messenger?.landmarks?.bookshop) {
+  const shop = messenger.landmarks.bookshop;
+  const col = assetColliders.find(
+    (c) => c.position.distanceToSquared(shop.position) < 0.01
+  );
+  mapEditor.registerFromWorld("bookshop", shop, -0.5, col || null);
+}
+// 恢复本机保存的额外放置（跳过已在场内的近重复）
+mapEditor.loadPersisted();
+
 const devPanel = createDevPanel({
   sun,
   ambient,
   onCamDist: (d) => cameraRig.setDist(d),
+  onOpenMap: () => mapEditor.setOpen(true),
 });
 
 // ---------- 开场 ----------
@@ -208,4 +229,5 @@ window.__tm = {
   assetColliders,
   platforms,
   hills,
+  mapEditor,
 };
