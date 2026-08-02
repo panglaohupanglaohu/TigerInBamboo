@@ -22,6 +22,9 @@ export function ensureAudio() {
   return audioCtx;
 }
 
+// 全局响度倍率（相对原先偏小的默认值）
+const VOL = 2.4;
+
 function playTone({ freq = 440, dur = 0.12, type = "sine", gain = 0.08, slide = 0 }) {
   const ctx = ensureAudio();
   if (!ctx) return;
@@ -31,7 +34,8 @@ function playTone({ freq = 440, dur = 0.12, type = "sine", gain = 0.08, slide = 
   osc.type = type;
   osc.frequency.setValueAtTime(freq, t0);
   if (slide) osc.frequency.exponentialRampToValueAtTime(Math.max(40, freq + slide), t0 + dur);
-  g.gain.setValueAtTime(gain, t0);
+  const peak = Math.min(0.28, gain * VOL); // 硬顶，防削波刺耳
+  g.gain.setValueAtTime(peak, t0);
   g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
   osc.connect(g);
   g.connect(ctx.destination);
@@ -40,20 +44,20 @@ function playTone({ freq = 440, dur = 0.12, type = "sine", gain = 0.08, slide = 
 }
 
 export function sfxJump() {
-  playTone({ freq: 280, dur: 0.1, type: "square", gain: 0.04, slide: 160 });
+  playTone({ freq: 280, dur: 0.1, type: "square", gain: 0.055, slide: 160 });
 }
 export function sfxPickup() {
-  playTone({ freq: 520, dur: 0.14, type: "sine", gain: 0.07, slide: 200 });
-  setTimeout(() => playTone({ freq: 780, dur: 0.12, type: "sine", gain: 0.05 }), 70);
+  playTone({ freq: 520, dur: 0.14, type: "sine", gain: 0.09, slide: 200 });
+  setTimeout(() => playTone({ freq: 780, dur: 0.12, type: "sine", gain: 0.07 }), 70);
 }
 export function sfxDeliver() {
-  playTone({ freq: 392, dur: 0.1, type: "triangle", gain: 0.07 });
-  setTimeout(() => playTone({ freq: 523, dur: 0.12, type: "triangle", gain: 0.07 }), 90);
-  setTimeout(() => playTone({ freq: 659, dur: 0.18, type: "triangle", gain: 0.06 }), 180);
+  playTone({ freq: 392, dur: 0.1, type: "triangle", gain: 0.09 });
+  setTimeout(() => playTone({ freq: 523, dur: 0.12, type: "triangle", gain: 0.09 }), 90);
+  setTimeout(() => playTone({ freq: 659, dur: 0.18, type: "triangle", gain: 0.08 }), 180);
 }
 export function sfxWin() {
   [523, 659, 784, 1046].forEach((f, i) => {
-    setTimeout(() => playTone({ freq: f, dur: 0.2, type: "sine", gain: 0.06 }), i * 120);
+    setTimeout(() => playTone({ freq: f, dur: 0.2, type: "sine", gain: 0.085 }), i * 120);
   });
 }
 
@@ -66,23 +70,23 @@ export function startAmbience() {
   if (!ctx) return;
   padStarted = true;
 
-  // 风铃：中高音区、更疏、音量压低
+  // 风铃：中高音区；音量加大，间隔略缩短
   const chime = () => {
     if (muted || !audioCtx) return;
     const notes = [659, 784, 880, 988, 1046, 1175]; // E5–D6，无低音
     const f = notes[(Math.random() * notes.length) | 0];
-    playTone({ freq: f, dur: 1.1, type: "sine", gain: 0.012, slide: -30 });
+    playTone({ freq: f, dur: 1.2, type: "sine", gain: 0.035, slide: -30 });
     // 偶发双音，仍保持高音
-    if (Math.random() < 0.35) {
+    if (Math.random() < 0.45) {
       const f2 = notes[(Math.random() * notes.length) | 0];
       setTimeout(
-        () => playTone({ freq: f2, dur: 0.85, type: "sine", gain: 0.008, slide: -20 }),
+        () => playTone({ freq: f2, dur: 0.95, type: "sine", gain: 0.025, slide: -20 }),
         90
       );
     }
-    padTimer = setTimeout(chime, 4500 + Math.random() * 5500);
+    padTimer = setTimeout(chime, 3200 + Math.random() * 3800);
   };
-  padTimer = setTimeout(chime, 2200);
+  padTimer = setTimeout(chime, 1200);
 }
 
 function stopAmbienceNodes() {
