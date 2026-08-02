@@ -725,7 +725,8 @@ export function createMapEditor({
 
   function setOpen(next) {
     open = !!next;
-    overlay.style.display = open ? "flex" : "none";
+    // 右侧栏：block 贴右，不遮罩全屏
+    overlay.style.display = open ? "block" : "none";
     if (open) {
       redraw();
       refreshList();
