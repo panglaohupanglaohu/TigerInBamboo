@@ -14,7 +14,7 @@
   </header>
   <p class="config-sub">
     画中生物皆是自主智能体 —— 运行日志 · 感知流 · 未发送队列 · 情绪残留，四层记忆共享同一条时间轴。
-    封存是仪式不是删除：快照只读、原件保留凭吊。
+    封存是仪式不是删除：快照只读、原件保留探望。
   </p>
 
   <div class="mem-shell">
@@ -26,10 +26,10 @@
 
     <!-- ============ 右侧主区 ============ -->
     <main class="mem-main">
-      <!-- 凭吊横幅：回放而非对话 -->
+      <!-- 探望横幅：回放而非对话 -->
       <div class="memorial-banner" id="memorial-banner" hidden>
         这是回放，不是本人
-        <small>你在凭吊一段封存的记忆 —— 一切只读，时间轴可拖动回放</small>
+        <small>你在探望一段封存的记忆 —— 一切只读，时间轴可拖动回放</small>
       </div>
 
       <!-- 记忆绑定状态条 -->
@@ -40,11 +40,11 @@
           <button class="btn seal-btn" id="btn-seal" type="button">封 存</button>
           <button class="btn ghost" id="btn-export" type="button">导出记忆</button>
           <button class="btn ghost" id="btn-import" type="button">导入记忆</button>
-          <button class="btn ghost" id="btn-will" type="button">遗嘱草稿</button>
+          <button class="btn ghost" id="btn-will" type="button">意愿草稿</button>
         </div>
       </section>
 
-      <!-- 凭吊时间轴回放 -->
+      <!-- 探望时间轴回放 -->
       <section class="memorial-replay" id="memorial-replay" hidden>
         <div class="memorial-slider-row">
           <input type="range" id="memorial-slider" min="0" max="1" step="1" value="0" />
@@ -199,8 +199,8 @@
       <h2 id="seal-title">封 存 仪 式</h2>
       <p class="ritual">封存是仪式，不是删除。</p>
       <p>
-        封存之后，这只生物的四层记忆将凝成一方只读快照：快照不可改写，原件保留凭吊。
-        页面随之进入凭吊模式 —— 你看到的将<b>是回放，不是本人</b>。
+        封存之后，这只生物的四层记忆将凝成一方只读快照：快照不可改写，原件保留探望。
+        页面随之进入探望模式 —— 你看到的将<b>是回放，不是本人</b>。
       </p>
       <p>此动作不可撤销。要为「<span id="seal-creature-name"></span>」举行封存仪式吗？</p>
       <div class="modal-actions">
@@ -210,12 +210,12 @@
     </div>
   </div>
 
-  <!-- 遗嘱草稿弹窗 -->
+  <!-- 意愿草稿弹窗 -->
   <div class="mem-modal-mask" id="will-modal" hidden>
     <div class="mem-modal" role="dialog" aria-modal="true" aria-labelledby="will-title">
       <h2 id="will-title">遗 嘱 草 稿</h2>
       <p class="ritual">协议已定，迁移未实现。</p>
-      <p>传递 = 复制，原件保留凭吊。以下为遗嘱协议 Schema 与本草稿，仅声明意图，不产生任何交接行为。</p>
+      <p>传递 = 复制，原件保留探望。以下为意愿协议 Schema 与本草稿，仅声明意图，不产生任何交接行为。</p>
       <p><b>协议 Schema</b></p>
       <pre id="will-schema"></pre>
       <p><b>草稿 JSON</b></p>

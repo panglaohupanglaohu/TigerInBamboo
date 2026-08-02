@@ -2,13 +2,8 @@
 //  球面玩家控制：切向 WASD + 法线跳跃 + 球心重力
 // =====================================================================
 import * as THREE from "three";
-import {
-  MOVE_SPEED,
-  SPRINT_MULT,
-  AIR_CONTROL,
-  JUMP_VELOCITY,
-  GRAVITY,
-} from "../core/constants.js";
+import { AIR_CONTROL } from "../core/constants.js";
+import { P } from "../core/params.js";
 
 const _up = new THREE.Vector3();
 const _camF = new THREE.Vector3();
@@ -55,7 +50,7 @@ export function updatePlayerControl({ player, keys, camera, dt, gameStarted, onJ
   }
 
   const sprinting = gameStarted && (keys["ShiftLeft"] || keys["ShiftRight"]);
-  const speed = MOVE_SPEED * (sprinting ? SPRINT_MULT : 1);
+  const speed = P.moveSpeed * (sprinting ? P.sprintMult : 1);
   _target.copy(_wish).multiplyScalar(gameStarted ? speed : 0);
 
   // 分离径向 / 切向速度
@@ -71,13 +66,13 @@ export function updatePlayerControl({ player, keys, camera, dt, gameStarted, onJ
   if (gameStarted && (keys["Space"] || keys["KeyJ"]) && player.onGround) {
     const vr = up.dot(player.velocity);
     if (vr < 0) player.velocity.addScaledVector(up, -vr);
-    player.velocity.addScaledVector(up, JUMP_VELOCITY);
+    player.velocity.addScaledVector(up, P.jumpV);
     player.onGround = false;
     onJump();
   }
 
   // 重力：指向球心
-  player.velocity.addScaledVector(up, -GRAVITY * dt);
+  player.velocity.addScaledVector(up, -P.gravity * dt);
 
   // 维护 forward 供相机/动画
   if (player.facing && player.facing.lengthSq() > 0) {

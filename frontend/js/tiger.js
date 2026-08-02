@@ -7,6 +7,7 @@ import { groundHeight } from "./environment.js";
 import { GROUP } from "./physics.js";
 import { BIOLOGICAL_TAXONOMY } from "./bio/BiologicalTaxonomyRegistry.js";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";
+import { attachAgentMind } from "./agentMind.js";
 
 const ORANGE = new THREE.Color(0xd27a24);
 const ORANGE_DEEP = new THREE.Color(0xb5621a);
@@ -125,6 +126,14 @@ export class Tiger {
       paintGeometry: (geo) => paintTiger(geo, { contrast: config.tiger.stripeContrast }),
     });
     this.group = this.entity; // 兼容旧接口：group 即实体
+    attachAgentMind(this, {
+      id: "tiger-banlan",
+      speciesId: "tiger",
+      species: species.scientificName,
+      role: "daughter",
+      name: "斑阑",
+    }, config);
+    this._dialogIntentCd = 0;
     this._buildHeadDetails();
     scene.add(this.group);
 
@@ -500,8 +509,10 @@ export class Tiger {
     // 近身相伴片刻后回归巡游，跟丢了也放弃 ——
     this._approachCd = Math.max(0, (this._approachCd ?? 0) - dt);
     let stalk = null;
+    let motherDistance = Infinity;
     if (!huntCtl && rabbit && rabbit.group.visible !== false) {
       const rd = this.group.position.distanceTo(rabbit.group.position);
+      motherDistance = rd;
       if ((this._with ?? 0) > 0) {
         this._with -= dt;
         stalk = "stay";
@@ -510,6 +521,14 @@ export class Tiger {
         stalk = rd < 2.0 ? "stay" : "approach";
         if (stalk === "stay") this._with = 6;
       }
+    }
+    this._dialogIntentCd = Math.max(0, this._dialogIntentCd - dt);
+    if (!huntCtl && stalk === "stay" && motherDistance < 2.8 && this._dialogIntentCd <= 0) {
+      this.mind.signal("dialog", {
+        target: rabbit?.mind?.identity?.id || "rabbit-mother",
+        context: this._hunt ? "献获后陪伴" : "竹林里与母亲相伴",
+      });
+      this._dialogIntentCd = 4;
     }
 
     // —— 行为层：捕食 / 觅母 / 巡游 / 驻足观望（内驱力计时器） ——

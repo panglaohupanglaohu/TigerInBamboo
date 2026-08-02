@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tib-sculpt-1",
+  "title": "TigerInBamboo SculptSpec",
+  "type": "object",
+  "required": ["version", "subjectKey", "components", "qualityContract"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "specVersion": { "type": "string" },
+    "name": { "type": "string" },
+    "primaryDomain": { "type": "string", "enum": ["object", "character", "hybrid"] },
+    "subjectKey": { "type": "string", "minLength": 1 },
+    "qualityContract": {
+      "type": "object",
+      "properties": {
+        "complexity": { "type": "string" },
+        "style": { "type": "string" },
+        "minComponents": { "type": "integer", "minimum": 0 },
+        "requireAttachments": { "type": "boolean" },
+        "constraints": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "reference": { "type": "object" },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "role": { "type": "string" },
+          "count": { "type": "integer" },
+          "params": { "type": "object" },
+          "attachment": { "type": "object" }
+        }
+      }
+    },
+    "materials": { "type": "array" },
+    "sockets": { "type": "array" },
+    "detailInventory": { "type": "array" },
+    "runtime": { "type": "object" },
+    "build": { "type": "object" }
+  }
+}

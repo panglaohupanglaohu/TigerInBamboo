@@ -1,5 +1,5 @@
-// 遗存 / 传递协议：封存快照（只读化）、凭吊只读视图、遗嘱协议（define-only）
-// 封存是仪式不是删除：快照只读、原件保留凭吊
+// 遗存 / 传递协议：封存快照（只读化）、探望只读视图、意愿协议（define-only）
+// 封存是仪式不是删除：快照只读、原件保留探望
 import { storageGet, storageSet, storageKeys, deepFreeze } from "./memory-core.js";
 
 export const LEGACY_PREFIX = "tib.legacy.";
@@ -40,7 +40,7 @@ export function seal(creatureId, core, now = Date.now()) {
 }
 
 /**
- * 凭吊：返回只读视图数据（深冻结的深拷贝）
+ * 探望：返回只读视图数据（深冻结的深拷贝）
  * 回放而非对话 —— 调用方须披露"这是回放，不是本人"
  */
 export function memorial(creatureId) {
@@ -55,7 +55,7 @@ export function memorial(creatureId) {
 export const WILL_SCHEMA = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "https://tigerinbamboo.local/schemas/will.schema.json",
-  title: "画中生物记忆遗嘱协议",
+  title: "画中生物记忆意愿协议",
   type: "object",
   required: ["will"],
   properties: {
@@ -76,7 +76,7 @@ export const WILL_SCHEMA = {
         keep_memorial: {
           type: "boolean",
           default: true,
-          description: "传递后原件是否保留凭吊（传递 = 复制，原件保留）",
+          description: "传递后原件是否保留探望（传递 = 复制，原件保留）",
         },
       },
       additionalProperties: false,
@@ -85,7 +85,7 @@ export const WILL_SCHEMA = {
 };
 
 /**
- * 生成遗嘱草稿 JSON（协议已定，迁移未实现）
+ * 生成意愿草稿 JSON（协议已定，迁移未实现）
  */
 export function draftWill(creatureId, now = Date.now()) {
   return {

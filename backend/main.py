@@ -36,6 +36,29 @@ CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 SPECIES_PATH = Path(__file__).resolve().parent / "species.json"
 OBJECT_REFERENCE_PATH = Path(__file__).resolve().parent / "object_reference.json"
 
+
+def _load_local_env() -> None:
+    """开发机直启 uvicorn 时也加载被 git 忽略的 .env.local；不覆盖显式进程环境。"""
+    path = ROOT / ".env.local"
+    if not path.exists():
+        return
+    try:
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            if line.startswith("export "):
+                line = line[7:].strip()
+            key, value = line.split("=", 1)
+            key = key.strip()
+            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", key):
+                os.environ.setdefault(key, value.strip().strip("'\""))
+    except OSError:
+        pass
+
+
+_load_local_env()
+
 _PROXY_TIMEOUT = httpx.Timeout(connect=5.0, read=900.0, write=30.0, pool=5.0)
 _proxy_client: httpx.AsyncClient | None = None
 
@@ -111,7 +134,12 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "cooldown": 15.0,       # 捕食间隔（秒）
         "sfxVolume": 0.8,       # 虎啸音效音量（0~1）
     },
-    "dialog": {                 # 母女对话（虎为女、兔为母）：语音与大模型接口各自独立
+    "agentLlm": {               # 所有生物智能体共用；密钥由后端进程环境持有
+        "enabled": True,
+        "endpoint": "/api/llm/chat",
+        "model": "glm-5.1",
+    },
+    "dialog": {                 # 母女对话（虎为女、兔为母）：由智能体意图触发
         "enabled": True,
         "interval": 26,         # 触发间隔（秒）
         "daughter": {           # 虎（女儿）
@@ -119,23 +147,33 @@ DEFAULT_CONFIG: dict[str, Any] = {
             "voiceRate": 1.0,       # 语速
             "voicePitch": 1.05,     # 音高（略低嫩）
             "voiceVolume": 0.9,     # 音量 0~1
-            "llmEndpoint": "",      # 大模型接口：留空用内置问安脚本
-            "llmApiKey": "",        # 大模型 API Key
-            "llmModel": "",         # 大模型模型名
+            "llmEndpoint": "/api/llm/chat",  # 走同源后端，浏览器不接触密钥
+            "llmApiKey": "",
+            "llmModel": "glm-5.1",
         },
         "mother": {             # 兔（母亲）
             "voiceName": "auto",
             "voiceRate": 1.0,
             "voicePitch": 1.2,      # 音高（偏高柔）
             "voiceVolume": 0.9,
-            "llmEndpoint": "",      # 留空用内置应答脚本
+            "llmEndpoint": "/api/llm/chat",
             "llmApiKey": "",
-            "llmModel": "",
+            "llmModel": "glm-5.1",
         },
+    },
+    "sceneEdit": {
+        "llmEndpoint": "/api/llm/chat",
+        "llmApiKey": "",
+        "llmModel": "glm-5.1",
     },
     # 物种关系矩阵：参考 Tu & Terzopoulos《Artificial Fishes》的
     # predator-prey / 内驱力（fear, hunger）模型
     "ecology": {
+        # 逻辑接口预留：目前只标记，不强行改变捕食状态机。
+        "agentMarks": {
+            "tiger": {"displayName": "斑阑", "foodChainLevel": "apex", "tags": ["food-chain-apex"]},
+            "rabbit": {"displayName": "母亲", "foodChainLevel": "apex", "tags": ["food-chain-apex"]},
+        },
         "relations": [
             {"a": "tiger", "b": "pheasant", "type": "predator-prey", "drive": "fear",
              "strength": 0.7, "note": "锦鸡对虎保持警戒，进入警戒距离即惊飞"},
@@ -180,7 +218,10 @@ DEFAULT_CONFIG: dict[str, Any] = {
             ],
         },
     },
-    "environmentModel": "pointcloud",  # pointcloud | mesh | auto — 环境物象 3D 路径（TODO-7）
+    # sculpt | pointcloud | mesh | auto — 环境物象 3D 主路径（img2threejs 集成：默认 sculpt）
+    "environmentModel": "sculpt",
+    # sculpt | procedural | mesh — 生物物象 3D 主路径
+    "biologyModel": "sculpt",
     "bgm": {
         "volume": 0.5,            # 背景音乐音量 0~1
         "playlist": [             # 歌单（顺序循环）
@@ -200,6 +241,26 @@ def _merge(base: dict, override: dict) -> dict:
         elif k in out:
             out[k] = v
     return out
+
+
+def _with_agent_llm_defaults(config: dict[str, Any]) -> dict[str, Any]:
+    """让旧存档中的空 LLM 字段继承统一智能体代理，且不把服务端密钥下发给浏览器。"""
+    shared = config.get("agentLlm") or {}
+    endpoint = str(shared.get("endpoint") or "/api/llm/chat")
+    model = str(shared.get("model") or os.environ.get("LLM_MODEL") or "glm-5.1")
+    dialog = config.get("dialog") or {}
+    for role in ("daughter", "mother"):
+        role_config = dialog.get(role)
+        if isinstance(role_config, dict):
+            role_config["llmEndpoint"] = role_config.get("llmEndpoint") or endpoint
+            role_config["llmModel"] = role_config.get("llmModel") or model
+            role_config["llmApiKey"] = ""
+    scene_edit = config.get("sceneEdit")
+    if isinstance(scene_edit, dict):
+        scene_edit["llmEndpoint"] = scene_edit.get("llmEndpoint") or endpoint
+        scene_edit["llmModel"] = scene_edit.get("llmModel") or model
+        scene_edit["llmApiKey"] = ""
+    return config
 
 
 def load_config() -> dict:
@@ -227,10 +288,10 @@ def load_config() -> dict:
                     for k in voice_keys + llm_keys:
                         dlg.pop(k, None)
                 saved["dialog"] = dlg
-            return _merge(DEFAULT_CONFIG, saved)
+            return _with_agent_llm_defaults(_merge(DEFAULT_CONFIG, saved))
         except (json.JSONDecodeError, OSError):
             pass
-    return copy.deepcopy(DEFAULT_CONFIG)
+    return _with_agent_llm_defaults(copy.deepcopy(DEFAULT_CONFIG))
 
 
 app = FastAPI(title="世界古典美术拟生平台", version="0.1.0")
@@ -245,13 +306,14 @@ async def _close_proxy_client() -> None:
 
 @app.get("/api/object-reference/catalog")
 def object_reference_catalog() -> JSONResponse:
-    """Single source of truth for archetypes + morphology plans."""
+    """Single source of truth for archetypes + morphology plans + sculpt templates."""
     store = _load_object_reference_store()
     return JSONResponse(
         {
             "version": store.get("version", 1),
             "archetypes": store.get("archetypes") or {},
             "morphologyPlans": store.get("morphologyPlans") or {},
+            "sculptTemplates": store.get("sculptTemplates") or {},
             "subjectKeys": store.get("subjectKeys") or OBJECT_REFERENCE_SUBJECT_KEYS,
             "biologyKeys": store.get("biologyKeys") or OBJECT_REFERENCE_BIOLOGY_KEYS,
         }
@@ -264,6 +326,7 @@ def api_metrics() -> dict:
     snap["workers"] = {
         "trellis2": _trellis2_server_url() or None,
         "sceneLift": _scene_lift_server_url() or None,
+        "sculpt": _sculpt_server_url() or None,
     }
     return snap
 
@@ -295,7 +358,7 @@ def get_config() -> JSONResponse:
 
 @app.put("/api/config")
 def put_config(payload: dict = Body(...)) -> JSONResponse:
-    merged = _merge(DEFAULT_CONFIG, payload)
+    merged = _with_agent_llm_defaults(_merge(DEFAULT_CONFIG, payload))
     CONFIG_PATH.write_text(json.dumps(merged, ensure_ascii=False, indent=2), "utf-8")
     return JSONResponse({"ok": True, "config": merged})
 
@@ -349,6 +412,79 @@ def list_audio() -> dict:
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/api/llm/status")
+def llm_status() -> dict:
+    """统一智能体 LLM 状态；永不返回 API Key。"""
+    return {
+        "available": bool(str(get_runtime("LLM_API_KEY", "") or "").strip()),
+        "provider": _llm_base_url(),
+        "model": str(get_runtime("LLM_MODEL", "glm-5.1") or "glm-5.1"),
+        "proxy": "/api/llm/chat",
+    }
+
+
+@app.post("/api/llm/chat")
+async def llm_chat(payload: dict = Body(...)) -> JSONResponse:
+    """同源 OpenAI 兼容代理：所有智能体共用，浏览器端不保存供应商密钥。"""
+    api_key = str(get_runtime("LLM_API_KEY", "") or "").strip()
+    if not api_key:
+        raise HTTPException(status_code=503, detail="统一智能体 LLM 未配置：服务端缺少 LLM_API_KEY")
+    raw_messages = payload.get("messages")
+    if not isinstance(raw_messages, list) or not raw_messages:
+        raise HTTPException(status_code=400, detail="messages 必须是非空数组")
+    messages: list[dict[str, str]] = []
+    for item in raw_messages[:24]:
+        if not isinstance(item, dict):
+            continue
+        role = str(item.get("role") or "user")
+        content = item.get("content")
+        if role not in {"system", "user", "assistant"} or not isinstance(content, str):
+            continue
+        messages.append({"role": role, "content": content[:12000]})
+    if not messages:
+        raise HTTPException(status_code=400, detail="messages 中没有可用消息")
+
+    model = str(get_runtime("LLM_MODEL", "glm-5.1") or "glm-5.1")
+    max_tokens = max(32, min(int(payload.get("max_tokens") or 400), 1600))
+    temperature = max(0.0, min(float(payload.get("temperature") or 0.75), 1.5))
+    upstream_body = {
+        "model": model,
+        "messages": messages,
+        "max_tokens": max_tokens,
+        "temperature": temperature,
+    }
+    try:
+        upstream = await get_proxy_client().post(
+            _llm_chat_url(),
+            json=upstream_body,
+            headers={"Authorization": f"Bearer {api_key}", "Accept": "application/json"},
+            timeout=httpx.Timeout(connect=8.0, read=90.0, write=20.0, pool=5.0),
+        )
+    except httpx.ConnectError as exc:
+        raise HTTPException(status_code=503, detail="智能体 LLM 服务不可达") from exc
+    except httpx.TimeoutException as exc:
+        raise HTTPException(status_code=504, detail="智能体 LLM 响应超时") from exc
+    if upstream.status_code >= 400:
+        detail = upstream.text[:600]
+        raise HTTPException(status_code=upstream.status_code, detail=detail or "智能体 LLM 请求失败")
+    try:
+        data = upstream.json()
+    except ValueError as exc:
+        raise HTTPException(status_code=502, detail="智能体 LLM 返回的不是 JSON") from exc
+    choices = data.get("choices") if isinstance(data, dict) else None
+    if not isinstance(choices, list):
+        raise HTTPException(status_code=502, detail="智能体 LLM 返回缺少 choices")
+    return JSONResponse(
+        {
+            "id": data.get("id"),
+            "model": data.get("model") or model,
+            "choices": choices,
+            "usage": data.get("usage"),
+            "agent": payload.get("agent"),
+        }
+    )
 
 
 SCENES_DIR = FRONTEND / "scenes"
@@ -415,9 +551,24 @@ def _scene_lift_server_url() -> str:
     return _auto_connect("SCENE_LIFT_SERVER_URL", 7863)
 
 
+def _sculpt_server_url() -> str:
+    """SculptSpec worker (static-builder plan for procedural Three.js)."""
+    return _auto_connect("SCULPT_SERVER_URL", 7864)
+
+
 def _object_reference_server_url() -> str:
     """Optional LLM/RAG lookup that describes the real-world object before 2D→3D generation."""
     return str(get_runtime("LLM_OBJECT_REFERENCE_URL", "") or "").strip().rstrip("/")
+
+
+def _llm_base_url() -> str:
+    """OpenAI-compatible provider base URL; credentials remain server-side."""
+    return str(get_runtime("LLM_BASE_URL", "https://models.sjtu.edu.cn/api/v1") or "").strip().rstrip("/")
+
+
+def _llm_chat_url() -> str:
+    base = _llm_base_url()
+    return base if base.endswith("/chat/completions") else f"{base}/chat/completions"
 
 
 async def _proxy_request(
@@ -547,6 +698,9 @@ def _local_object_reference(subject: dict[str, Any], profile: dict[str, Any] | N
             "morphologyPlan": _morphology_plan_for_key(key, subject, profile),
         }
     )
+    template = (_OBJECT_REF_STORE.get("sculptTemplates") or {}).get(key)
+    if template:
+        base["sculptTemplate"] = copy.deepcopy(template)
     return base
 
 
@@ -960,6 +1114,81 @@ async def scene_lift_embed(payload: dict = Body(...)) -> JSONResponse:
         detail = upstream.content.decode("utf-8", errors="replace")[:600]
         raise HTTPException(status_code=upstream.status_code, detail=detail or "视觉特征提取失败")
     return JSONResponse(json.loads(upstream.content.decode("utf-8")))
+
+
+@app.get("/api/sculpt/status")
+def sculpt_status() -> dict:
+    server = _sculpt_server_url()
+    if not server:
+        return {
+            "available": False,
+            "engine": "tib-sculpt",
+            "reason": "未设置 SCULPT_SERVER_URL；塑形服务未连接",
+        }
+    try:
+        req = urllib.request.Request(f"{server}/health", headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=3) as upstream:
+            info = json.loads(upstream.read().decode("utf-8"))
+        available = info.get("status") == "ok"
+        return {
+            "available": available,
+            "engine": info.get("engine", "tib-sculpt"),
+            "specVersion": info.get("specVersion"),
+            "reason": None if available else info.get("reason") or "塑形 worker 未就绪",
+        }
+    except (OSError, ValueError, urllib.error.URLError) as exc:
+        return {"available": False, "engine": "tib-sculpt", "reason": f"塑形服务未就绪：{exc}"}
+
+
+@app.post("/api/sculpt/from-crop")
+async def sculpt_from_crop_proxy(request: Request) -> Response:
+    server = _sculpt_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="塑形服务未连接；请设置 SCULPT_SERVER_URL 或启动 sculpt_worker")
+    body = await request.body()
+    if len(body) > 12 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="请求超过 12 MB")
+    t0 = time.perf_counter()
+    try:
+        upstream = await _proxy_request(
+            "POST",
+            server,
+            "/sculpt/from-crop",
+            body=body,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            timeout=httpx.Timeout(connect=5.0, read=60.0, write=30.0, pool=5.0),
+        )
+    except HTTPException:
+        raise
+    if upstream.status_code >= 400:
+        detail = upstream.content.decode("utf-8", errors="replace")[:800]
+        raise HTTPException(status_code=upstream.status_code, detail=detail or "塑形失败")
+    metrics.observe("proxy.sculpt.from_crop", time.perf_counter() - t0)
+    metrics.count("proxy.sculpt.from_crop")
+    return Response(content=upstream.content, media_type="application/json")
+
+
+@app.post("/api/sculpt/gate")
+async def sculpt_gate_proxy(request: Request) -> Response:
+    server = _sculpt_server_url()
+    if not server:
+        raise HTTPException(status_code=503, detail="塑形服务未连接")
+    body = await request.body()
+    try:
+        upstream = await _proxy_request(
+            "POST",
+            server,
+            "/sculpt/gate",
+            body=body,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            timeout=httpx.Timeout(connect=5.0, read=30.0, write=10.0, pool=5.0),
+        )
+    except HTTPException:
+        raise
+    if upstream.status_code >= 400:
+        detail = upstream.content.decode("utf-8", errors="replace")[:600]
+        raise HTTPException(status_code=upstream.status_code, detail=detail or "gate failed")
+    return Response(content=upstream.content, media_type="application/json")
 
 
 @app.get("/")

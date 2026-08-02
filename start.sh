@@ -7,13 +7,23 @@ ROOT="$PWD"
 OUT="$ROOT/tools/out"
 mkdir -p "$OUT"
 
-PORTS="8931 7862 7863"
+# 本机统一 LLM 配置。密钥只存在被 git 忽略的 .env.local 或进程环境中。
+if [ -f "$ROOT/.env.local" ]; then
+  set -a
+  . "$ROOT/.env.local"
+  set +a
+fi
+export LLM_BASE_URL="${LLM_BASE_URL:-https://models.sjtu.edu.cn/api/v1}"
+export LLM_MODEL="${LLM_MODEL:-glm-5.1}"
+
+PORTS="8931 7862 7863 7864"
 
 echo "== 清理旧进程 =="
 # 先按启动命令的模式杀（覆盖 --reload 产生的父子进程树）
 pkill -f "uvicorn backend.main:app" 2>/dev/null || true
 pkill -f "trellis2_worker" 2>/dev/null || true
 pkill -f "scene_lift_worker" 2>/dev/null || true
+pkill -f "sculpt_worker" 2>/dev/null || true
 # 再按端口杀残留
 for port in $PORTS; do
   pids=$(lsof -ti tcp:"$port" 2>/dev/null || true)
@@ -73,6 +83,12 @@ nohup "$PY_IMG" -m uvicorn tools.scene_lift_worker:app --host 127.0.0.1 --port 7
 PID_SCENE=$!
 echo "  识别/深度 :7863  pid $PID_SCENE  日志 tools/out/scene_lift_worker.log  grounding=$GROUNDING_MODEL"
 
+# 塑形 SculptSpec（程序化 Three.js 主路径；可用主 venv）
+nohup "$PY_MAIN" -m uvicorn tools.sculpt_worker:app --host 127.0.0.1 --port 7864 \
+  > "$OUT/sculpt_worker.log" 2>&1 &
+PID_SCULPT=$!
+echo "  塑形      :7864  pid $PID_SCULPT  日志 tools/out/sculpt_worker.log"
+
 echo "== 等待就绪 =="
 wait_health() {
   local name="$1" url="$2" log="$3" i
@@ -90,6 +106,7 @@ wait_health() {
 wait_health "后端      :8931" "http://127.0.0.1:8931/api/health" "$OUT/backend.log"
 wait_health "图生3D    :7862" "http://127.0.0.1:7862/health" "$OUT/trellis2_worker.log"
 wait_health "识别/深度 :7863" "http://127.0.0.1:7863/health" "$OUT/scene_lift_worker.log"
+wait_health "塑形      :7864" "http://127.0.0.1:7864/health" "$OUT/sculpt_worker.log"
 
 echo ""
 echo "打开 http://localhost:8931/wall-workspace.html"
@@ -99,15 +116,15 @@ echo "== 日志输出中（Ctrl+C 停止全部服务）=="
 cleanup() {
   echo ""
   echo "== 停止服务 =="
-  kill "$PID_BACKEND" "$PID_TRELLIS" "$PID_SCENE" 2>/dev/null || true
+  kill "$PID_BACKEND" "$PID_TRELLIS" "$PID_SCENE" "$PID_SCULPT" 2>/dev/null || true
   sleep 1
-  kill -9 "$PID_BACKEND" "$PID_TRELLIS" "$PID_SCENE" 2>/dev/null || true
+  kill -9 "$PID_BACKEND" "$PID_TRELLIS" "$PID_SCENE" "$PID_SCULPT" 2>/dev/null || true
   echo "  已全部停止"
   exit 0
 }
 trap cleanup INT TERM
 
-# 常驻前台，持续输出三个服务的日志；tail 放后台 + wait，保证 Ctrl+C 能立即触发清理
-tail -F "$OUT/backend.log" "$OUT/trellis2_worker.log" "$OUT/scene_lift_worker.log" &
+# 常驻前台，持续输出各服务日志；tail 放后台 + wait，保证 Ctrl+C 能立即触发清理
+tail -F "$OUT/backend.log" "$OUT/trellis2_worker.log" "$OUT/scene_lift_worker.log" "$OUT/sculpt_worker.log" &
 TAIL_PID=$!
 wait $TAIL_PID

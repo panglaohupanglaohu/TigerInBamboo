@@ -3,17 +3,19 @@
 // =====================================================================
 import * as THREE from "three";
 
+import { P } from "../core/params.js";
+
 export function setupEnvironment(scene) {
   // ---------- 光照：环境光 + 太阳平行光（带阴影） + 半球光/补光 ----------
-  // 弱环境光：全局基础亮度，避免背光面死黑
-  const ambient = new THREE.AmbientLight(0x8899bb, 0.22);
+  // 弱环境光：全局基础亮度，避免背光面死黑（强度可被 dev 面板覆盖）
+  const ambient = new THREE.AmbientLight(0x8899bb, P.ambientIntensity ?? 0.22);
   scene.add(ambient);
 
   const hemi = new THREE.HemisphereLight(0x6a8fd4, 0x1a1428, 0.55);
   scene.add(hemi);
 
   // 太阳平行光：主光源，开启阴影（shadowMap 已在 core/stage.js 开启）
-  const dir = new THREE.DirectionalLight(0xc8d8ff, 1.15);
+  const dir = new THREE.DirectionalLight(0xc8d8ff, P.sunIntensity ?? 1.15);
   dir.position.set(12, 22, 8);
   dir.castShadow = true;
   dir.shadow.mapSize.set(2048, 2048);
@@ -133,7 +135,7 @@ export function setupEnvironment(scene) {
     }
   }
 
-  return { lanterns };
+  return { lanterns, ambient, sun: dir };
 }
 
 /** 每帧推进漂浮光点 */

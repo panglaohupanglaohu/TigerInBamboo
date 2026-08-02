@@ -1065,5 +1065,445 @@
     "avian": "bird",
     "fish": "fish",
     "insect": "insect"
+  },
+  "sculptTemplates": {
+    "lotus": {
+      "builderKey": "lotus",
+      "sockets": [
+        {
+          "id": "waterline",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "env-water"
+        },
+        {
+          "id": "sway-root",
+          "position": [
+            0,
+            0.1,
+            0
+          ],
+          "purpose": "wind"
+        }
+      ],
+      "ecologyTags": [
+        "plant",
+        "aquatic"
+      ],
+      "runtimeTick": "sway"
+    },
+    "bamboo": {
+      "builderKey": "bamboo",
+      "sockets": [
+        {
+          "id": "ground",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "ground"
+        },
+        {
+          "id": "sway-root",
+          "position": [
+            0,
+            0.15,
+            0
+          ],
+          "purpose": "wind"
+        }
+      ],
+      "ecologyTags": [
+        "plant"
+      ],
+      "runtimeTick": "sway"
+    },
+    "pine": {
+      "builderKey": "pine",
+      "sockets": [
+        {
+          "id": "ground",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "ground"
+        },
+        {
+          "id": "sway-root",
+          "position": [
+            0,
+            0.2,
+            0
+          ],
+          "purpose": "wind"
+        }
+      ],
+      "ecologyTags": [
+        "plant"
+      ],
+      "runtimeTick": "sway"
+    },
+    "plum": {
+      "builderKey": "plum",
+      "sockets": [
+        {
+          "id": "ground",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "ground"
+        },
+        {
+          "id": "sway-root",
+          "position": [
+            0,
+            0.12,
+            0
+          ],
+          "purpose": "wind"
+        }
+      ],
+      "ecologyTags": [
+        "plant"
+      ],
+      "runtimeTick": "sway"
+    },
+    "reed": {
+      "builderKey": "reed",
+      "sockets": [
+        {
+          "id": "ground",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "ground"
+        },
+        {
+          "id": "sway-root",
+          "position": [
+            0,
+            0.1,
+            0
+          ],
+          "purpose": "wind"
+        }
+      ],
+      "ecologyTags": [
+        "plant"
+      ],
+      "runtimeTick": "sway"
+    },
+    "vine": {
+      "builderKey": "vine",
+      "sockets": [
+        {
+          "id": "anchor",
+          "position": [
+            0,
+            0.5,
+            0
+          ],
+          "purpose": "attach"
+        },
+        {
+          "id": "sway-root",
+          "position": [
+            0,
+            0.3,
+            0
+          ],
+          "purpose": "wind"
+        }
+      ],
+      "ecologyTags": [
+        "plant"
+      ],
+      "runtimeTick": "sway"
+    },
+    "flower": {
+      "builderKey": "generic-plant",
+      "sockets": [
+        {
+          "id": "ground",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "ground"
+        },
+        {
+          "id": "sway-root",
+          "position": [
+            0,
+            0.08,
+            0
+          ],
+          "purpose": "wind"
+        }
+      ],
+      "ecologyTags": [
+        "plant"
+      ],
+      "runtimeTick": "sway"
+    },
+    "bird": {
+      "builderKey": "avian",
+      "sockets": [
+        {
+          "id": "root",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "locomotion"
+        },
+        {
+          "id": "beak",
+          "position": [
+            0.12,
+            0.06,
+            0
+          ],
+          "purpose": "interact"
+        },
+        {
+          "id": "wing-L",
+          "position": [
+            0,
+            0.05,
+            0.08
+          ],
+          "purpose": "wing"
+        },
+        {
+          "id": "wing-R",
+          "position": [
+            0,
+            0.05,
+            -0.08
+          ],
+          "purpose": "wing"
+        }
+      ],
+      "ecologyTags": [
+        "prey",
+        "avian",
+        "biology"
+      ],
+      "anatomyProfile": "avian",
+      "runtimeTick": null
+    },
+    "quadruped": {
+      "builderKey": "quadruped",
+      "sockets": [
+        {
+          "id": "root",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "locomotion"
+        },
+        {
+          "id": "head",
+          "position": [
+            0.18,
+            0.1,
+            0
+          ],
+          "purpose": "interact"
+        },
+        {
+          "id": "tail",
+          "position": [
+            -0.2,
+            0.05,
+            0
+          ],
+          "purpose": "balance"
+        }
+      ],
+      "ecologyTags": [
+        "predator",
+        "biology"
+      ],
+      "anatomyProfile": "digitigrade",
+      "runtimeTick": null
+    },
+    "ungulate": {
+      "builderKey": "quadruped",
+      "sockets": [
+        {
+          "id": "root",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "locomotion"
+        },
+        {
+          "id": "head",
+          "position": [
+            0.2,
+            0.14,
+            0
+          ],
+          "purpose": "interact"
+        }
+      ],
+      "ecologyTags": [
+        "prey",
+        "biology"
+      ],
+      "anatomyProfile": "unguligrade",
+      "runtimeTick": null
+    },
+    "rabbit": {
+      "builderKey": "quadruped",
+      "sockets": [
+        {
+          "id": "root",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "locomotion"
+        },
+        {
+          "id": "head",
+          "position": [
+            0.1,
+            0.08,
+            0
+          ],
+          "purpose": "interact"
+        }
+      ],
+      "ecologyTags": [
+        "prey",
+        "biology"
+      ],
+      "anatomyProfile": "saltatorial",
+      "runtimeTick": null
+    },
+    "fish": {
+      "builderKey": "fish",
+      "sockets": [
+        {
+          "id": "root",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "locomotion"
+        },
+        {
+          "id": "tail",
+          "position": [
+            -0.15,
+            0,
+            0
+          ],
+          "purpose": "swim"
+        }
+      ],
+      "ecologyTags": [
+        "prey",
+        "aquatic",
+        "biology"
+      ],
+      "anatomyProfile": "fish",
+      "runtimeTick": null
+    },
+    "insect": {
+      "builderKey": "insect",
+      "sockets": [
+        {
+          "id": "root",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "locomotion"
+        },
+        {
+          "id": "wing-L",
+          "position": [
+            0,
+            0.02,
+            0.06
+          ],
+          "purpose": "wing"
+        },
+        {
+          "id": "wing-R",
+          "position": [
+            0,
+            0.02,
+            -0.06
+          ],
+          "purpose": "wing"
+        }
+      ],
+      "ecologyTags": [
+        "prey",
+        "biology"
+      ],
+      "anatomyProfile": "insect",
+      "runtimeTick": null
+    },
+    "water": {
+      "builderKey": "water",
+      "sockets": [
+        {
+          "id": "waterline",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "env-water"
+        }
+      ],
+      "ecologyTags": [
+        "water"
+      ],
+      "runtimeTick": "flow"
+    },
+    "terrain": {
+      "builderKey": "terrain",
+      "sockets": [
+        {
+          "id": "ground",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "purpose": "ground"
+        }
+      ],
+      "ecologyTags": [
+        "terrain"
+      ],
+      "runtimeTick": null
+    }
   }
 }

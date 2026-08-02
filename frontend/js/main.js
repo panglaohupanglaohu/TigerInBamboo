@@ -179,7 +179,10 @@ async function boot() {
     who: "tiger",
     avesForage: [-5, 8],
     avesPerch: [-8.5, 3.5],
-  }, { pheasant: { enabled: true, fleeDistance: 6, returnDistance: 14, drinkInterval: 25, perchTime: 4 } }) : null;
+  }, {
+    config,
+    pheasant: { enabled: true, fleeDistance: 6, returnDistance: 14, drinkInterval: 25, perchTime: 4 },
+  }) : null;
   if (custom) {
     const el = document.getElementById("agent-custom");
     if (el) {

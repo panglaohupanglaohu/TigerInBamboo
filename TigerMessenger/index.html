@@ -331,6 +331,77 @@
       box-shadow: 0 6px 20px rgba(100, 150, 255, 0.35);
     }
     #intro button:hover { filter: brightness(1.06); }
+
+    /* 开发者菜单 */
+    #dev-toggle {
+      position: fixed;
+      top: 16px;
+      right: 96px;
+      z-index: 30;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(140, 180, 255, 0.35);
+      background: rgba(8, 12, 22, 0.8);
+      font-size: 18px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      pointer-events: auto;
+    }
+    #dev-toggle:hover { filter: brightness(1.2); }
+    #dev-panel {
+      position: fixed;
+      top: 60px;
+      right: 16px;
+      z-index: 30;
+      width: 280px;
+      max-height: min(70vh, 560px);
+      overflow-y: auto;
+      padding: 12px 14px;
+      font-size: 12px;
+      background: rgba(8, 12, 22, 0.92);
+      border: 1px solid rgba(140, 180, 255, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+      color: #e8eef8;
+    }
+    .dev-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      color: #9ec5ff;
+    }
+    .dev-fps { opacity: 0.75; font-variant-numeric: tabular-nums; }
+    .dev-hint { margin: 0 0 8px; font-size: 10px; opacity: 0.65; color: #a8c4ff; }
+    .dev-group {
+      margin: 8px 0 4px;
+      font-weight: 600;
+      color: #ffe08a;
+      letter-spacing: 0.06em;
+    }
+    .dev-row {
+      display: grid;
+      grid-template-columns: 76px 1fr 34px;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 0;
+    }
+    .dev-row input[type="range"] { width: 100%; accent-color: #7eb0ff; }
+    .dev-row em { font-style: normal; text-align: right; opacity: 0.8; font-variant-numeric: tabular-nums; }
+    #dev-reset {
+      margin-top: 10px;
+      width: 100%;
+      padding: 6px 0;
+      border: 1px solid rgba(140, 180, 255, 0.35);
+      border-radius: 8px;
+      background: rgba(30, 40, 70, 0.85);
+      color: #cfe0ff;
+      cursor: pointer;
+    }
+    #dev-reset:hover { filter: brightness(1.15); }
   </style>
 </head>
 <body>

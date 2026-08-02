@@ -3,14 +3,17 @@
 // =====================================================================
 import * as THREE from "three";
 import {
-  CAMERA_DIST,
   CAMERA_DIST_MIN,
   CAMERA_DIST_MAX,
   CAMERA_HEIGHT,
   CAMERA_LOOK_Y,
-  CAMERA_LERP,
 } from "./constants.js";
+import { P } from "./params.js";
 import { surfaceNormal } from "../world/sphereMath.js";
+
+const PITCH_MIN = -0.8;
+const PITCH_MAX = 1.0;
+const SPRING_BACK = 3; // 松手后环绕/俯仰回弹速率
 
 export function createCameraRig(camera, player) {
   const camTarget = new THREE.Vector3();
@@ -20,9 +23,12 @@ export function createCameraRig(camera, player) {
   const _upSmooth = new THREE.Vector3(); // 平滑翻转的相机 Up（snapToPlayer 时初始化）
   const _back = new THREE.Vector3();
   const _right = new THREE.Vector3();
-  let camOrbit = 0; // 绕法线的环绕角
-  let camDist = CAMERA_DIST;
+  const _offset = new THREE.Vector3();
+  let camOrbit = 0; // 绕法线的环绕角（yaw）
+  let camPitch = 0; // 俯仰角（pitch）
+  let camDist = P.camDist;
   let midDrag = false;
+  let rightDrag = false;
 
   function clampDist(d) {
     return Math.min(CAMERA_DIST_MAX, Math.max(CAMERA_DIST_MIN, d));
@@ -36,17 +42,32 @@ export function createCameraRig(camera, player) {
   function setMidDrag(on) {
     midDrag = !!on;
   }
+  function setRightDrag(on) {
+    rightDrag = !!on;
+  }
   function orbitBy(dx) {
     camOrbit -= dx;
   }
+  function orbitPitchBy(dy) {
+    camPitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, camPitch + dy));
+  }
 
   function update(dt) {
+    const orbiting = midDrag || rightDrag;
+
+    // 松手后 yaw / pitch 平滑回弹到默认斜后方视角
+    if (!orbiting) {
+      const k = 1 - Math.exp(-SPRING_BACK * dt);
+      camOrbit -= camOrbit * k;
+      camPitch -= camPitch * k;
+    }
+
     const up = surfaceNormal(player.position, _up);
 
     // 相机 Up 平滑追踪球面法线：玩家绕到侧面/底部时姿态渐进翻转，
     // 屏幕上玩家始终"头顶朝上"（硬拷贝会跨半球瞬间跳变）
     if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up); // 未初始化则直接就位
-    _upSmooth.lerp(up, 1 - Math.exp(-4 * dt));
+    _upSmooth.lerp(up, 1 - Math.exp(-P.upLerp * dt));
     if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up); // 过对跖点兜底
     _upSmooth.normalize();
 
@@ -65,13 +86,20 @@ export function createCameraRig(camera, player) {
     const bz = _back.z * c + _right.z * s;
     _back.set(bx, by, bz).normalize();
 
-    const height = CAMERA_HEIGHT * (0.45 + 0.55 * (camDist / CAMERA_DIST));
+    const height = CAMERA_HEIGHT * (0.45 + 0.55 * (camDist / 7.5));
     camDesired
       .copy(player.position)
       .addScaledVector(up, height)
       .addScaledVector(_back, camDist);
 
-    const t = 1 - Math.exp(-(midDrag ? 12 : CAMERA_LERP) * dt);
+    // pitch：相机偏移绕切平面右向轴俯仰
+    if (camPitch !== 0) {
+      _offset.copy(camDesired).sub(player.position);
+      _offset.applyAxisAngle(_right, camPitch);
+      camDesired.copy(player.position).add(_offset);
+    }
+
+    const t = 1 - Math.exp(-(orbiting ? 12 : P.camLerp) * dt);
     camera.position.lerp(camDesired, t);
     camera.up.copy(_upSmooth);
 
@@ -103,8 +131,11 @@ export function createCameraRig(camera, player) {
     setDist,
     zoomBy,
     setMidDrag,
+    setRightDrag,
     orbitBy,
+    orbitPitchBy,
     getDist: () => camDist,
     getYaw: () => camOrbit,
+    getOrbit: () => ({ yaw: camOrbit, pitch: camPitch }), // 验收用
   };
 }

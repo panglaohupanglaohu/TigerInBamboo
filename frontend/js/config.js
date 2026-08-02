@@ -69,6 +69,11 @@ export const DEFAULT_CONFIG = {
     speed: 0.7,        // 蹦跳速度
     roamRadius: 6.0,   // 环游半径（米）
   },
+  agentLlm: {             // 所有生物智能体共用；供应商密钥只保存在后端
+    enabled: true,
+    endpoint: "/api/llm/chat",
+    model: "glm-5.1",
+  },
   dialog: {
     enabled: true,
     interval: 26,          // 母女对话触发间隔（秒）
@@ -77,26 +82,31 @@ export const DEFAULT_CONFIG = {
       voiceRate: 1.0,      // 语速
       voicePitch: 1.05,    // 音高（略低嫩）
       voiceVolume: 0.9,    // 音量 0~1
-      llmEndpoint: "",     // 大模型接口：留空用内置问安脚本
-      llmApiKey: "",       // 大模型 API Key
-      llmModel: "",        // 大模型模型名
+      llmEndpoint: "/api/llm/chat", // 走同源后端代理，浏览器不接触密钥
+      llmApiKey: "",
+      llmModel: "glm-5.1",
     },
     mother: {              // 兔（母亲）
       voiceName: "auto",
       voiceRate: 1.0,
       voicePitch: 1.2,     // 音高（偏高柔）
       voiceVolume: 0.9,
-      llmEndpoint: "",     // 留空用内置应答脚本
+      llmEndpoint: "/api/llm/chat",
       llmApiKey: "",
-      llmModel: "",
+      llmModel: "glm-5.1",
     },
   },
   sceneEdit: {           // 拟生场景 · 对话编辑（大模型，OpenAI 兼容接口）
-    llmEndpoint: "",     // 留空则用内置指令解析（离线可用）
+    llmEndpoint: "/api/llm/chat", // 与所有智能体共用同源代理
     llmApiKey: "",
-    llmModel: "",
+    llmModel: "glm-5.1",
   },
   ecology: {
+    // 逻辑接口预留：标记不在此处强行改变捕食状态机，由后续规则查询。
+    agentMarks: {
+      tiger: { displayName: "斑阑", foodChainLevel: "apex", tags: ["food-chain-apex"] },
+      rabbit: { displayName: "母亲", foodChainLevel: "apex", tags: ["food-chain-apex"] },
+    },
     relations: [
       { a: "tiger", b: "pheasant", type: "predator-prey", drive: "fear", strength: 0.7,
         note: "锦鸡对虎保持警戒，进入警戒距离即惊飞" },
@@ -141,8 +151,10 @@ export const DEFAULT_CONFIG = {
       ],
     },
   },
-  // 环境物象 3D 路径：pointcloud（默认伪 4DGS）| mesh（图生 3D GLB）| auto（无形态构建器时走 mesh）
-  environmentModel: "pointcloud",
+  // 环境物象 3D：sculpt（默认，SculptSpec 程序化）| pointcloud | mesh | auto
+  environmentModel: "sculpt",
+  // 生物物象 3D：sculpt（默认）| procedural | mesh
+  biologyModel: "sculpt",
   bgm: {
     volume: 0.5,         // 背景音乐音量 0~1
     playlist: [          // 歌单（顺序循环）
@@ -165,6 +177,19 @@ function merge(base, override) {
     }
   }
   return out;
+}
+
+function withAgentLlmDefaults(config) {
+  const shared = config.agentLlm || DEFAULT_CONFIG.agentLlm;
+  const endpoint = shared.endpoint || "/api/llm/chat";
+  const model = shared.model || "glm-5.1";
+  for (const role of [config.dialog?.daughter, config.dialog?.mother, config.sceneEdit]) {
+    if (!role) continue;
+    role.llmEndpoint ||= endpoint;
+    role.llmModel ||= model;
+    role.llmApiKey = "";
+  }
+  return config;
 }
 
 export async function loadConfig() {
@@ -200,11 +225,11 @@ export async function loadConfig() {
       for (const k of [...voiceKeys, ...llmKeys]) delete d[k];
     }
   }
-  return merge(DEFAULT_CONFIG, cfg);
+  return withAgentLlmDefaults(merge(DEFAULT_CONFIG, cfg));
 }
 
 export async function saveConfig(config) {
-  const merged = merge(DEFAULT_CONFIG, config);
+  const merged = withAgentLlmDefaults(merge(DEFAULT_CONFIG, config));
   try {
     const res = await fetch("api/config", {
       method: "PUT",

@@ -5,6 +5,7 @@ import * as THREE from "../assets/vendor/three/three.module.js";
 import { groundHeight, streamQuery } from "./environment.js";
 import { BIOLOGICAL_TAXONOMY } from "./bio/BiologicalTaxonomyRegistry.js";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";
+import { attachAgentMind } from "./agentMind.js";
 
 const CREAM = 0xf5f0e6;   // 耳内/绒尾
 const PINK = 0xc98a8a;    // 鼻
@@ -29,6 +30,14 @@ export class Rabbit {
     const species = family.LEPUS.TIMIDUS;
     this.entity = new BioEntityMesh(family, species);
     this.group = this.entity;
+    attachAgentMind(this, {
+      id: "rabbit-mother",
+      speciesId: "rabbit",
+      species: species.scientificName,
+      role: "mother",
+      name: "母亲",
+    }, config);
+    this._dialogIntentCd = 2;
     this.group.position.set(this.home.x, groundHeight(this.home.x, this.home.z), this.home.z);
     this._buildDetails();
     scene.add(this.group);
@@ -104,10 +113,19 @@ export class Rabbit {
     // 虎近身 5m 内：母亲察觉动静，停下等候（不逃、不再起跳）
     const tigerNear = tiger && tiger.group.visible !== false &&
       tiger.group.position.distanceTo(this.group.position) < 5.0;
+    const tigerDistance = tigerNear ? tiger.group.position.distanceTo(this.group.position) : Infinity;
     if (tigerNear) {
       this._target = null;
       this.state = "IDLE";
       this._timer = Math.max(this._timer, 0.5);
+    }
+    this._dialogIntentCd = Math.max(0, this._dialogIntentCd - dt);
+    if (tigerDistance < 2.8 && this._dialogIntentCd <= 0) {
+      this.mind.signal("dialog", {
+        target: tiger?.mind?.identity?.id || "tiger-banlan",
+        context: "女儿来到身边，母亲想问候她",
+      });
+      this._dialogIntentCd = 5;
     }
 
     this._timer -= dt;

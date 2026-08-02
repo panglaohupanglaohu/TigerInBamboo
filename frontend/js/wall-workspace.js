@@ -14,9 +14,11 @@ import { loadConfig } from "./config.js";
 import {
   runWithConcurrency,
   requestGenerateWithProgress,
+  requestSculptFromCrop,
   resolveGenerationRoute,
   trackRouteHit,
-} from "./generation.js?v=1";
+} from "./generation.js?v=2";
+import { attachSculptRuntime, tickSculptEntity, collectBuiltTypesFromPlan } from "./sculpt/runtime.js?v=1";
 
 const WALL_KEY = "living-classical-art-wall-source";
 const SCENE_VIEW = typeof document !== "undefined" && document.body?.classList.contains("scene-view-page");
@@ -155,7 +157,9 @@ const state = {
   trellisOnline: false,
   imageTo3dLabel: "图生 3D",
   generationBusy: false,
-  environmentModel: "pointcloud", // pointcloud | mesh | auto
+  environmentModel: "sculpt", // sculpt | pointcloud | mesh | auto
+  biologyModel: "sculpt", // sculpt | procedural | mesh
+  sculptOnline: false,
   remoteCatalog: null,           // /api/object-reference/catalog
   sceneLiftTier: null,           // grounded-sam2 | dino+grabcut
   metricsSnapshot: null,
@@ -1474,7 +1478,17 @@ async function loadWorkspaceConfig() {
   try {
     const cfg = await loadConfig();
     if (cfg?.environmentModel) state.environmentModel = cfg.environmentModel;
+    if (cfg?.biologyModel) state.biologyModel = cfg.biologyModel;
   } catch (_) { /* keep default */ }
+  try {
+    const res = await fetch("/api/sculpt/status", { cache: "no-store" });
+    if (res.ok) {
+      const info = await res.json();
+      state.sculptOnline = Boolean(info.available);
+    }
+  } catch (_) {
+    state.sculptOnline = false;
+  }
 }
 
 async function initObjectReference() {
@@ -1578,9 +1592,14 @@ function shouldUseProceduralMorphologyModel(subject, layer, profile) {
 }
 
 function createProceduralMorphologyModel(subject, layer, profile, objectReference = {}) {
-  const plan = objectReference.morphologyPlan || buildFallbackMorphologyPlan(subject, profile);
+  const sculptSpec = objectReference.sculptSpec || null;
+  const plan = sculptSpec || objectReference.morphologyPlan || buildFallbackMorphologyPlan(subject, profile);
   const key = objectReference.key || subject.id || profile.kind;
-  const builderKey = resolveProceduralBuilderKey(subject, profile, objectReference);
+  // Prefer explicit builder from sculpt API / template
+  let builderKey = sculptSpec?.build?.builderKey
+    || objectReference.sculptTemplate?.builderKey
+    || resolveProceduralBuilderKey(subject, profile, objectReference);
+  if (builderKey === "generic-plant") builderKey = null; // fall through to generic
   const builders = {
     lotus: createLotusMorphologyModel,
     pine: createPineMorphologyModel,
@@ -1595,16 +1614,38 @@ function createProceduralMorphologyModel(subject, layer, profile, objectReferenc
     quadruped: createQuadrupedMorphologyModel,
     terrain: createTerrainMorphologyModel,
   };
-  const root = (builders[builderKey] || createGenericPlantMorphologyModel)(plan, subject, layer);
-  root.name = `llm-threejs-${subject.id || key}-${layer.id}`;
+  const morphologyPlan = sculptSpec
+    ? { ...(objectReference.morphologyPlan || {}), components: (sculptSpec.components || []).map((c) => ({ type: c.type, role: c.role, count: c.count, ...(c.params || {}) })), archetype: sculptSpec.archetype }
+    : plan;
+  const root = (builders[builderKey] || createGenericPlantMorphologyModel)(morphologyPlan, subject, layer);
+  root.name = `tib-sculpt-${subject.id || key}-${layer.id}`;
   root.userData = {
     ...root.userData,
-    generatedBy: "llm-morphology-threejs",
-    engineLabel: "LLM 形态 Three.js",
-    morphologyPlan: plan,
+    generatedBy: sculptSpec ? "tib-sculpt" : "llm-morphology-threejs",
+    engineLabel: sculptSpec ? "Sculpt 程序化" : "LLM 形态 Three.js",
+    morphologyPlan: morphologyPlan,
     objectReference,
     reconstructionProfile: profile,
+    builtTypes: collectBuiltTypesFromPlan(morphologyPlan),
   };
+  if (sculptSpec) {
+    attachSculptRuntime(root, {
+      ...sculptSpec,
+      sockets: sculptSpec.sockets || objectReference.sculptTemplate?.sockets,
+    });
+  } else if (objectReference.sculptTemplate) {
+    attachSculptRuntime(root, {
+      subjectKey: objectReference.key || key,
+      specVersion: "tib-sculpt-1",
+      sockets: objectReference.sculptTemplate.sockets || [],
+      runtime: {
+        tick: objectReference.sculptTemplate.runtimeTick,
+        ecologyTags: objectReference.sculptTemplate.ecologyTags || [],
+        anatomyProfile: objectReference.sculptTemplate.anatomyProfile || null,
+      },
+      build: { builderKey: objectReference.sculptTemplate.builderKey },
+    });
+  }
   return root;
 }
 
@@ -4963,10 +5004,13 @@ function renderCandidateReview(scope) {
       subject: review.subject,
       profile: layer.reconstructionProfile,
       environmentModel: state.environmentModel,
+      biologyModel: state.biologyModel,
       hasProceduralBuilder: shouldUseProceduralMorphologyModel(review.subject, layer, layer.reconstructionProfile || {}),
+      hasSculptTemplate: Boolean(layer.objectReference?.sculptTemplate?.builderKey || layer.objectReference?.key),
     });
     const routeOptions = [
       ["", `自动 · ${autoRoute}`],
+      ["sculpt", "塑形 Sculpt"],
       ["gaussian-splat", "点云"],
       ["procedural", "形态部件"],
       ["mesh-generate", "图生3D GLB"],
@@ -5195,6 +5239,114 @@ function transparentPixel() {
   return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mP8z8BQDwAFgwJ/l9gdrwAAAABJRU5ErkJggg==";
 }
 
+
+async function installSculptOrFallback(scope, review, layer, profile, ref, anchorEntity, line, requestedRoute) {
+  const crop = createLayerCropDataUrl(layer, ref, { reconstruction: true, profile });
+  let sculpt = null;
+  try {
+    if (line) line.textContent = `Sculpt · 正在生成规格“${review.subject.label}”…`;
+    sculpt = await requestSculptFromCrop({
+      image: crop,
+      subject: {
+        id: review.subject.id,
+        label: review.subject.label,
+        domain: review.subject.domain,
+        kind: review.subject.kind,
+        prompt: review.subject.prompt,
+      },
+      layerId: layer.id,
+      bbox: layer.bbox,
+      objectReference: layer.objectReference,
+      morphologyPlan: layer.objectReference?.morphologyPlan,
+      sculptTemplate: layer.objectReference?.sculptTemplate,
+    });
+  } catch (err) {
+    console.warn("[wall-workspace] sculpt API failed", err);
+    sculpt = { ok: false, errors: [err?.message || String(err)] };
+  }
+
+  if (sculpt?.ok && (sculpt.builderKey || sculpt.spec?.components?.length)) {
+    const objectReference = {
+      ...layer.objectReference,
+      morphologyPlan: layer.objectReference?.morphologyPlan,
+      sculptSpec: sculpt.spec,
+      sculptTemplate: layer.objectReference?.sculptTemplate || {
+        builderKey: sculpt.builderKey,
+        sockets: sculpt.spec?.sockets,
+      },
+    };
+    const procedural = createProceduralMorphologyModel(review.subject, layer, profile, objectReference);
+    // optional structural gate
+    try {
+      const builtTypes = procedural.userData.builtTypes || collectBuiltTypesFromPlan(objectReference.morphologyPlan || sculpt.spec);
+      const gateRes = await fetch("/api/sculpt/gate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ spec: sculpt.spec, builtTypes }),
+      });
+      if (gateRes.ok) {
+        const gate = await gateRes.json();
+        if (!gate.ok) {
+          console.warn("[wall-workspace] sculpt gate", gate);
+          if (line) line.textContent = `塑形结构门提示：缺 ${ (gate.missingTypes || []).join(",") || "部件" } · 仍安装`;
+        }
+      }
+    } catch (_) { /* gate optional */ }
+    installGeneratedLayer(procedural, layer, anchorEntity, profile);
+    registerLivingFromSculpt(procedural);
+    return;
+  }
+
+  // Fallback: local procedural builders
+  if (shouldUseProceduralMorphologyModel(review.subject, layer, profile)) {
+    trackRouteHit("sculpt.fallback.procedural");
+    if (line) line.textContent = `Sculpt 服务不可用 · 降级本地形态构建器…`;
+    const procedural = createProceduralMorphologyModel(review.subject, layer, profile, layer.objectReference);
+    installGeneratedLayer(procedural, layer, anchorEntity, profile);
+    registerLivingFromSculpt(procedural);
+    return;
+  }
+
+  // Fallback: mesh GLB
+  await checkTrellisStatus();
+  if (!state.trellisOnline) {
+    throw new Error(sculpt?.errors?.join("; ") || "塑形失败且无可用形态构建器/图生 3D");
+  }
+  trackRouteHit("sculpt.fallback.mesh");
+  if (line) line.textContent = `Sculpt 失败 · 降级 ${imageTo3dLabel()} …`;
+  const buffer = await requestGenerateWithProgress(
+    {
+      image: crop,
+      name: `${state.source?.name || "artwork"}-${scope}-${layer.id}`,
+      domain: review.subject.domain,
+      subject: review.subject.id,
+      layerId: layer.id,
+      reconstructionProfile: profile,
+      objectReference: layer.objectReference || profile.objectReference || null,
+      seed: (scope === "biology" ? 4126 : 2026) + review.generatedIds.size,
+    },
+    (stage, pct) => {
+      if (line) line.textContent = `${imageTo3dLabel()} · ${stage || "生成中"} ${Math.round(pct || 0)}% · “${review.subject.label}”`;
+    },
+  );
+  const gltf = await parseGeneratedGlb(buffer);
+  installGeneratedLayer(gltf.scene, layer, anchorEntity, profile);
+}
+
+function registerLivingFromSculpt(root) {
+  const rt = root?.userData?.sculptRuntime;
+  if (!rt) return;
+  root.userData.living = {
+    anatomyProfile: rt.anatomyProfile,
+    ecologyTags: rt.ecologyTags || [],
+    sockets: rt.sockets,
+  };
+  if (!state.preyEntities) state.preyEntities = [];
+  if ((rt.ecologyTags || []).includes("prey") && !state.preyEntities.includes(root)) {
+    state.preyEntities.push(root);
+  }
+}
+
 async function confirmReviewLayer(scope, layerId) {
   const review = candidateReview[scope];
   const layer = reviewLayerList(scope).find((candidate) => candidate.id === layerId);
@@ -5207,12 +5359,15 @@ async function confirmReviewLayer(scope, layerId) {
   if (!layer.objectReference) layer.objectReference = localObjectReferenceFallback(review.subject, profile);
   applyObjectReferenceToProfile(profile, layer.objectReference);
   const hasProceduralBuilder = shouldUseProceduralMorphologyModel(review.subject, layer, profile);
+  const hasSculptTemplate = Boolean(layer.objectReference?.sculptTemplate?.builderKey || layer.objectReference?.key);
   const route = resolveGenerationRoute(layer, {
     scope,
     subject: review.subject,
     profile,
     environmentModel: state.environmentModel,
+    biologyModel: state.biologyModel,
     hasProceduralBuilder,
+    hasSculptTemplate,
   });
   trackRouteHit(route);
   if (route === "mesh-generate") {
@@ -5230,8 +5385,8 @@ async function confirmReviewLayer(scope, layerId) {
   if (line) {
     line.textContent = route === "gaussian-splat"
       ? `正在以 4D 高斯点云重建“${review.subject.label}”（本机轻量近似）…`
-      : route === "procedural"
-      ? `正在经 LLM 物象方案计算“${review.subject.label}”Three.js 部件模型…`
+      : route === "sculpt" || route === "procedural"
+      ? `正在以 SculptSpec 塑形“${review.subject.label}”Three.js 部件…`
       : `正在把“${review.subject.label}”候选送入 ${imageTo3dLabel()} 图生 3D…`;
   }
   try {
@@ -5239,9 +5394,8 @@ async function confirmReviewLayer(scope, layerId) {
     if (!anchorEntity) throw new Error("候选锚点不存在，无法回装 3D 模型");
     if (route === "gaussian-splat") {
       installGaussianSplatLayer(ref, layer, anchorEntity, review.subject);
-    } else if (route === "procedural") {
-      const procedural = createProceduralMorphologyModel(review.subject, layer, profile, layer.objectReference);
-      installGeneratedLayer(procedural, layer, anchorEntity, profile);
+    } else if (route === "sculpt" || route === "procedural") {
+      await installSculptOrFallback(scope, review, layer, profile, ref, anchorEntity, line, route);
     } else {
       const crop = createLayerCropDataUrl(layer, ref, { reconstruction: true, profile });
       const buffer = await requestGenerateWithProgress(
@@ -5275,11 +5429,11 @@ async function confirmReviewLayer(scope, layerId) {
       updateIndependentModelState(review.subject);
     }
     if (line) {
-      const engineLabel = route === "gaussian-splat" ? "4D 高斯点云" : route === "procedural" ? "LLM 形态 Three.js 模型" : `${imageTo3dLabel()} GLB`;
+      const engineLabel = route === "gaussian-splat" ? "4D 高斯点云" : (route === "sculpt" || route === "procedural") ? "Sculpt 程序化" : `${imageTo3dLabel()} GLB`;
       line.textContent = `${review.subject.label} · ${review.generatedIds.size} 个 ${engineLabel} 已回装原画锚点`;
     }
     updatePlacementPanel(scope);
-    showToast(route === "gaussian-splat" ? "已用 4D 高斯点云重建并回装原画锚点" : route === "procedural" ? "LLM 物象方案已计算成 Three.js 部件模型" : "确认裁剪已生成 3D 模型，并回装到原画位置");
+    showToast(route === "gaussian-splat" ? "已用 4D 高斯点云重建并回装原画锚点" : (route === "sculpt" || route === "procedural") ? "Sculpt 塑形模型已回装原画锚点" : "确认裁剪已生成 3D 模型，并回装到原画位置");
   } catch (err) {
     console.error("[wall-workspace] confirmed image-to-3d failed", err);
     if (line) line.textContent = `3D 化失败 · ${err?.message || "未知错误"}`;
@@ -7039,7 +7193,7 @@ function updateReadout() {
         .map(([k, v]) => `${k.replace("route.", "")}:${v}`)
         .join(" ")
     : "";
-  const envMode = state.environmentModel && state.environmentModel !== "pointcloud" ? ` · env=${state.environmentModel}` : "";
+  const envMode = state.environmentModel ? ` · env=${state.environmentModel}` : "";
   if (readout) readout.textContent = `${envLabel} · ${generator} · ${bio} · ${behavior}${envMode}${routeStats ? ` · ${routeStats}` : ""}`;
   const meta = el("source-meta");
   if (meta) meta.textContent = state.estimate
@@ -7051,6 +7205,11 @@ function updateEnvironmentMotion(time) {
   for (const water of waterSurfaces) {
     if (water.material?.uniforms?.uTime) water.material.uniforms.uTime.value = time;
   }
+  // Sculpt runtime wind sway
+  try {
+    for (const entity of independentLayerMeshes.values()) tickSculptEntity(entity, time, state.wind);
+    for (const entity of bioLayerMeshes.values()) tickSculptEntity(entity, time, state.wind);
+  } catch (_) { /* ignore */ }
   // 4D 高斯点云：推进时间形变场与投影参数
   const pointScale = renderer && camera
     ? renderer.domElement.height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2))

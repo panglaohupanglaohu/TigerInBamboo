@@ -14,6 +14,7 @@ export const BIOLOGICAL_TAXONOMY = {
       PANTHERA: {
         TIGRIS: {
           scientificName: "Panthera tigris",
+          agent: { displayName: "斑阑", foodChainLevel: "apex", tags: ["food-chain-apex"] },
           // 空间生存边界盒：X 宽 / Y 总高(含昂起的头颈) / Z 总长(含头尾)
           dimensions: { width: 0.72, height: 1.24, length: 3.1 },
           // 生物学参考：肩高决定四肢长度与躯干倾斜；尾长 1.0m（独立锥形细分尾管）
@@ -57,6 +58,7 @@ export const BIOLOGICAL_TAXONOMY = {
       LEPUS: {
         TIMIDUS: {
           scientificName: "Lepus timidus",
+          agent: { displayName: "母亲", foodChainLevel: "apex", tags: ["food-chain-apex"] },
           // 空间生存边界盒：宽 0.2m / 躯干高 0.30m（竖耳另由骨骼延伸，总高约 0.45m）/ 总长 0.5m
           dimensions: { width: 0.2, height: 0.30, length: 0.5 },
           anatomicalRef: { withersHeight: 0.22, earLength: 0.13, tailLength: 0.06 },

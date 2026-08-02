@@ -5,6 +5,7 @@
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { BioEntityMesh } from "./bio/BioEntityMesh.js";
 import { BirdAgent } from "./bird.js";
+import { attachAgentMind } from "./agentMind.js";
 
 /** 读取用户在实验室保存的物种记录；无保存则返回 null（场景不生成） */
 export async function loadSavedSpecies() {
@@ -51,6 +52,8 @@ export class CustomAgent {
     // 禽类：托管给锦鸡行为状态机（觅食/饮水/惊飞/栖止/归飞），躯体配色取物种记录
     if (record.anatomyType === "AVES") {
       this._bird = new BirdAgent(scene, {
+        agentLlm: opts.config?.agentLlm,
+        ecology: opts.config?.ecology,
         pheasant: opts.pheasant ?? {
           enabled: true, fleeDistance: 6, returnDistance: 14, drinkInterval: 25, perchTime: 4,
         },
@@ -61,6 +64,12 @@ export class CustomAgent {
         perch: adapter.avesPerch ?? [this.home.x, this.home.z + 3.5],
       });
       this.group = this._bird.group;
+      attachAgentMind(this, {
+        speciesId: record.id || "custom",
+        species: record.scientificName || "Species nova",
+        role: "custom-species",
+        name: this.cnName,
+      }, opts.config || {});
       const hs = (record.dimensions?.height ?? 0.42) / 0.42;
       if (Math.abs(hs - 1) > 0.05) this.group.scale.setScalar(hs);
       return;
@@ -76,6 +85,12 @@ export class CustomAgent {
     const family = { anatomyType: record.anatomyType };
     this.entity = new BioEntityMesh(family, structuredClone(record));
     this.group = this.entity;
+    attachAgentMind(this, {
+      speciesId: record.id || "custom",
+      species: record.scientificName || "Species nova",
+      role: "custom-species",
+      name: this.cnName,
+    }, opts.config || {});
     this.group.position.set(this.home.x, adapter.groundHeight(this.home.x, this.home.z), this.home.z);
     this._buildDetails();
     scene.add(this.group);

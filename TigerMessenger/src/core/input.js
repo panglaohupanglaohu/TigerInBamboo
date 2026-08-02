@@ -6,7 +6,9 @@
  * @param {{
  *   onZoom?: (delta: number) => void,
  *   onOrbit?: (dx: number) => void,
+ *   onOrbitPitch?: (dy: number) => void,
  *   onMidDrag?: (on: boolean) => void,
+ *   onRightDrag?: (on: boolean) => void,
  *   isActive?: () => boolean,
  * }} [hooks]
  */
@@ -15,7 +17,9 @@ export function createInput(hooks = {}) {
   const {
     onZoom = () => {},
     onOrbit = () => {},
+    onOrbitPitch = () => {},
     onMidDrag = () => {},
+    onRightDrag = () => {},
     isActive = () => true,
   } = hooks;
 
@@ -77,6 +81,39 @@ export function createInput(hooks = {}) {
   });
   window.addEventListener("blur", endMidDrag);
   window.addEventListener("mouseleave", endMidDrag);
+
+  // 右键拖拽环视：左右 yaw + 上下 pitch（松开后由相机侧回弹）
+  let rightDrag = false;
+  let rLastX = 0;
+  let rLastY = 0;
+
+  window.addEventListener("contextmenu", (e) => e.preventDefault()); // 屏蔽右键菜单
+  window.addEventListener("mousedown", (e) => {
+    if (!isActive() || e.button !== 2) return;
+    e.preventDefault();
+    rightDrag = true;
+    rLastX = e.clientX;
+    rLastY = e.clientY;
+    onRightDrag(true);
+  });
+  window.addEventListener("mousemove", (e) => {
+    if (!rightDrag) return;
+    const dx = e.clientX - rLastX;
+    const dy = e.clientY - rLastY;
+    rLastX = e.clientX;
+    rLastY = e.clientY;
+    if (dx !== 0) onOrbit(dx * 0.005);
+    if (dy !== 0) onOrbitPitch(dy * 0.004);
+  });
+  function endRightDrag() {
+    if (!rightDrag) return;
+    rightDrag = false;
+    onRightDrag(false);
+  }
+  window.addEventListener("mouseup", (e) => {
+    if (e.button === 2) endRightDrag();
+  });
+  window.addEventListener("blur", endRightDrag);
 
   // 禁止中键默认的自动滚动（autoscroll）
   window.addEventListener("auxclick", (e) => {

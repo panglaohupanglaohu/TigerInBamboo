@@ -2,7 +2,7 @@
 //  任务系统：接信 → 送达
 // =====================================================================
 import * as THREE from "three";
-import { INTERACT_RANGE } from "../core/constants.js";
+import { P } from "../core/params.js";
 import { createNpc, setNpcMarker, animateMarkers } from "./npc.js";
 import {
   elQuestStatus,
@@ -263,7 +263,7 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
 
     if (questPhase === "idle") {
       const s = npcGroups.get(`${q.id}-sender`);
-      if (horizontalDist(player.position, s.position) <= INTERACT_RANGE) {
+      if (horizontalDist(player.position, s.position) <= P.talkRange) {
         questPhase = "carry";
         player.holdingLetter = true;
         messengerMesh.userData.letter.visible = true;
@@ -282,7 +282,7 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
       }
     } else {
       const r = npcGroups.get(`${q.id}-receiver`);
-      if (horizontalDist(player.position, r.position) <= INTERACT_RANGE) {
+      if (horizontalDist(player.position, r.position) <= P.talkRange) {
         player.holdingLetter = false;
         messengerMesh.userData.letter.visible = false;
         holdAura.intensity = 0;
@@ -332,13 +332,13 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
     let text = "";
     if (questPhase === "idle") {
       const s = npcGroups.get(`${q.id}-sender`);
-      if (horizontalDist(player.position, s.position) <= INTERACT_RANGE) {
+      if (horizontalDist(player.position, s.position) <= P.talkRange) {
         near = s;
         text = `${q.sender.name}：这封「${q.letter}」拜托你了`;
       }
     } else {
       const r = npcGroups.get(`${q.id}-receiver`);
-      if (horizontalDist(player.position, r.position) <= INTERACT_RANGE) {
+      if (horizontalDist(player.position, r.position) <= P.talkRange) {
         near = r;
         text = `${q.receiver.name}：是给我的信吗？`;
       }

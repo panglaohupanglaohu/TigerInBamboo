@@ -4,6 +4,7 @@
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
 import { makeRandom, groundHeight, waterLevelAt, landField, shorePoint, waterPoint, POND, PLUM_TREE_POS } from "./environment-plum.js";
+import { attachAgentMind } from "./agentMind.js";
 
 // 白额雁造型：灰褐羽、长颈、阔翼（比例经 shape 覆写，雉科默认不受影响）
 const GOOSE_STYLE = {
@@ -45,6 +46,12 @@ class Goose {
       : GOOSE_STYLE;
     const { group, head, headBone, headGroup, wings, tail, legs } = buildAvianBody(style);
     this.group = group;
+    attachAgentMind(this, {
+      speciesId: "goose",
+      species: "Anser albifrons",
+      role: opts.slotIdx === 0 ? "flock-leader" : "flock-member",
+      name: opts.slotIdx === 0 ? "领头雁" : "大雁",
+    }, opts.config || {});
     this.head = head;            // 中段颈骨 (Neck_Lower)
     this.headBone = headBone;    // 颈顶骨 (Neck_Upper)
     this.headGroup = headGroup;  // 头部几何载体
@@ -434,7 +441,7 @@ export class GooseFlock {
     this.modeT = 0;
     this.alt = this.circuitAlt;
     for (let i = 0; i < nFly; i++) {
-      const g = new Goose(scene, { airborne: true, seed: 100 + i, slotIdx: i, scale, sfx: this.sfx });
+      const g = new Goose(scene, { airborne: true, seed: 100 + i, slotIdx: i, scale, sfx: this.sfx, config });
       const a = this.theta - i * 0.16;
       const R = this._radius();
       g.pos.set(POND.cx + Math.cos(a) * R, this.alt - (i % 2) * 0.5, POND.cz + Math.sin(a) * R);
@@ -448,7 +455,7 @@ export class GooseFlock {
       [-10.6, 2.8], [8.8, 3.2], [-13.4, 3.6], [11.6, 4.0],
     ];
     for (let i = 0; i < nRest; i++) {
-      const g = new Goose(scene, { airborne: false, seed: 200 + i, slotIdx: nFly + i, scale, sfx: this.sfx });
+      const g = new Goose(scene, { airborne: false, seed: 200 + i, slotIdx: nFly + i, scale, sfx: this.sfx, config });
       const [dx, dz] = anchors[i % anchors.length];
       let x = T.x + dx + (g.rand() - 0.5) * 1.2;
       let z = T.z + dz + (g.rand() - 0.5) * 1.2;

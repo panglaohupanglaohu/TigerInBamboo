@@ -4,6 +4,7 @@
 import * as THREE from "../assets/vendor/three/three.module.js";
 import { groundHeight, streamCurve, distToStream } from "./environment.js";
 import { buildAvianBody } from "./bio/AvianBodyBuilder.js";
+import { attachAgentMind } from "./agentMind.js";
 
 const PHEASANT_CLEARINGS = [
   { x: -30, z: -18, r: 7.5 },
@@ -81,6 +82,12 @@ export class BirdAgent {
       opts
     );
     this.group = new THREE.Group();
+    attachAgentMind(this, {
+      speciesId: "pheasant",
+      species: "Chrysolophus pictus",
+      role: "wildlife",
+      name: this.opts.name,
+    }, config);
     this.state = S.FORAGE;
     this.stateLabel = S.FORAGE;
 

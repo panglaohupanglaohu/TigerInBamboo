@@ -69,6 +69,7 @@ async function boot() {
       avesPerch: [PLUM_TREE_POS.x, PLUM_TREE_POS.z + 4],
     };
     custom = new CustomAgent(scene, rec, plumAdapter, {
+      config,
       pheasant: { enabled: true, fleeDistance: 6, returnDistance: 14, drinkInterval: 25, perchTime: 4 },
     });
     window.__dbg.custom = custom;

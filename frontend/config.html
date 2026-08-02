@@ -203,7 +203,28 @@
         </fieldset>
 
         <fieldset>
-          <legend>女 儿 · 虎（语音与模型）</legend>
+          <legend>统 一 智 能 体 · LLM</legend>
+          <div class="field">
+            <label>启用统一模型</label>
+            <input type="checkbox" id="agentLlm.enabled" />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>同源代理</label>
+            <input type="text" id="agentLlm.endpoint" readonly />
+            <span class="value"></span>
+          </div>
+          <div class="field">
+            <label>默认模型</label>
+            <input type="text" id="agentLlm.model" readonly />
+            <span class="value"></span>
+          </div>
+          <p id="agent-llm-status">正在检查后端 LLM 配置……</p>
+          <small>虎、兔、锦鸡、大雁与自定义生物共用此配置；API Key 仅由后端环境持有，不下发浏览器。</small>
+        </fieldset>
+
+        <fieldset>
+          <legend>女 儿 · 虎（语音）</legend>
           <div class="field">
             <label>嗓音</label>
             <input type="text" id="dialog.daughter.voiceName" placeholder="auto（自动选中文女声）" />
@@ -224,25 +245,11 @@
             <input type="range" id="dialog.daughter.voiceVolume" min="0" max="1" step="0.05" />
             <span class="value"></span>
           </div>
-          <div class="field">
-            <label>大模型接口</label>
-            <input type="text" id="dialog.daughter.llmEndpoint" placeholder="留空则使用内置问安脚本" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>API Key</label>
-            <input type="password" id="dialog.daughter.llmApiKey" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>模型名</label>
-            <input type="text" id="dialog.daughter.llmModel" placeholder="如 gpt-4o-mini" />
-            <span class="value"></span>
-          </div>
+          <small>话语由虎智能体发起并通过统一 LLM 生成人格化内容。</small>
         </fieldset>
 
         <fieldset>
-          <legend>母 亲 · 兔（语音与模型）</legend>
+          <legend>母 亲 · 兔（语音）</legend>
           <div class="field">
             <label>嗓音</label>
             <input type="text" id="dialog.mother.voiceName" placeholder="auto（自动选中文女声）" />
@@ -263,40 +270,12 @@
             <input type="range" id="dialog.mother.voiceVolume" min="0" max="1" step="0.05" />
             <span class="value"></span>
           </div>
-          <div class="field">
-            <label>大模型接口</label>
-            <input type="text" id="dialog.mother.llmEndpoint" placeholder="留空则使用内置应答脚本" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>API Key</label>
-            <input type="password" id="dialog.mother.llmApiKey" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>模型名</label>
-            <input type="text" id="dialog.mother.llmModel" placeholder="如 gpt-4o-mini" />
-            <span class="value"></span>
-          </div>
+          <small>话语由兔智能体发起或响应，并通过统一 LLM 生成人格化内容。</small>
         </fieldset>
 
         <fieldset>
           <legend>拟生场景 · 对话编辑（大模型）</legend>
-          <div class="field">
-            <label>大模型接口</label>
-            <input type="text" id="sceneEdit.llmEndpoint" placeholder="留空则用内置指令解析" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>API Key</label>
-            <input type="password" id="sceneEdit.llmApiKey" />
-            <span class="value"></span>
-          </div>
-          <div class="field">
-            <label>模型名</label>
-            <input type="text" id="sceneEdit.llmModel" placeholder="如 gpt-4o-mini" />
-            <span class="value"></span>
-          </div>
+          <small>场景编辑也走统一模型代理；服务不可用时自动回落到本地指令解析。</small>
         </fieldset>
       </div>
 
@@ -424,12 +403,24 @@
   <div class="toast" id="toast"></div>
 
   <script type="module">
-    import { loadConfig, saveConfig, resetConfig, DEFAULT_CONFIG } from "js/config.js";
+    import { loadConfig, saveConfig, resetConfig, DEFAULT_CONFIG } from "./js/config.js";
 
     const RELATION_TYPES = ["predator-prey", "physical", "resource", "mutualism", "competition"];
     const DRIVES = ["fear", "hunger", "thirst", "libido", "none"];
 
     let config = await loadConfig();
+
+    try {
+      const response = await fetch("api/llm/status");
+      const status = response.ok ? await response.json() : null;
+      const line = document.getElementById("agent-llm-status");
+      if (line) line.textContent = status?.available
+        ? `已连接 · ${status.model}`
+        : "后端密钥未加载 · 当前使用内置回落";
+    } catch (_) {
+      const line = document.getElementById("agent-llm-status");
+      if (line) line.textContent = "后端暂不可达 · 当前使用内置回落";
+    }
 
     // ---- 标量字段绑定 ----
     const fields = document.querySelectorAll("[id]");

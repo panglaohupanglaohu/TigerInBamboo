@@ -9,7 +9,7 @@
 > 为世界古典美术中的人、动物与环境进行生态模拟 —— 画中的生物与植物都是**自主智能体（Autonomous Agents）**，
 > 平台吸收当代最强的拟生（Artificial Life / Behavioral Animation）技术，让古画"活"过来。
 
-首个场景：**《竹虎溪涧图》**（`tiger.html`）—— 以狩野山乐《竹虎图》的斑斓猛虎为主角，
+首个场景：**《竹虎溪涧图》**（`tiger.html`）—— 以狩野山乐《竹虎图》中名为“斑阑”的猛虎为主角，
 竹林与雪景溪涧的环境取自东京国立博物馆藏·雪舟《四季花鸟图》屏风的溪涧意趣。
 
 第二幅：**《寒梅归雁图》**（`plum.html`）—— 五层纵深布景：前景山石与石径 → 繁花古梅及伴生小竹芦苇 →
@@ -37,7 +37,9 @@ WASD / Shift 疾跑 / 空格跳 / 滚轮缩放。零构建 ES modules，Three.js
 - **雪兔**：兔形目 SALTATORIAL 跳跃行（蛋形弓背、后肢折叠、双腿同频蹬跃），竹林环游，虎近身则驻足等候
 - **锦鸡**：fear 内驱力状态机（觅食 → 饮水 → 警觉冻结 → 拍翅奔逃 → 惊飞滑翔 → 栖止归飞），数量可配
 - **捕食（音乐触发）**：BGM 切至《短歌行》时虎开启狩猎 —— 潜行压低 → 爆发冲刺 → 抛物线飞扑（中途劫获）→ 进食归位，全参数配置页可调
-- **母女对话**：虎为女、兔为母 —— 中国传统式问安，溺爱应答（内置脚本 / 可接 LLM），中文女声 TTS + 头顶气泡
+- **母女对话**：虎为女、兔为母 —— 虎、兔各自的智能体先产生开口意图，再由统一 LLM 生成人格化问安或应答；服务失败自动回落内置脚本，中文女声 TTS + 头顶气泡
+- **统一智能体 LLM**：虎、兔、锦鸡、大雁与自定义生物都挂载 `AgentMind`，默认经后端 `/api/llm/chat` 使用 `glm-5.1`；供应商 API Key 仅存在服务端环境中
+- **食物链标记接口**：斑阑（虎）和母亲（兔）均标为 `foodChainLevel: "apex"` / `food-chain-apex`，由 `relationGate()` 暴露给后续生态规则；当前仅标记，不擅自改写既有捕食状态机
 - **竹林**：Cannon.js 刚体 + 竹脚球铰约束 —— 虎身经过时被撞开，弹性回正；风扭矩按风向摇摆
 - **天气**：温度决定雨雪（>0℃ 雨丝 / ≤0℃ 落雪），风向统一驱动雨雪飘移与竹摆
 - **物种关系矩阵**：在配置页以"捕食 / 警戒回避 / 互利 / 竞争"等关系配置智能体间作用（对应论文中的 predator–prey、fear/hunger 驱动模型）
@@ -54,7 +56,7 @@ WASD / Shift 疾跑 / 空格跳 / 滚轮缩放。零构建 ES modules，Three.js
 - **状态机动画驱动器**（`bio/FelineLocomotionController.js`）：运行期只操纵骨骼旋转矩阵 —— IDLE（呼吸/扫视）/ WALK（猫科对角步态 / 兔科双后肢同频蹬跃 + 弓背 + 兔耳惯性摆动）/ ROAR（昂首张嘴）；尾五节链按相位延迟甩鞭
 - **聚合实体**（`bio/BioEntityMesh.js`）：壳层皮毛 Shell Texturing 在构建期用 `onBeforeCompile` **一次编译** N 层壳（沿法线逐层膨胀、噪声 `alphaMap` 逐层稀疏），运行期零着色器改动，杜绝 WebGL 报错
 - **行为层**（`tiger.js` / `rabbit.js`）：虎巡游路径/驻足状态机、觅母缓步接近（发现雪兔 7m 内减速靠近、相伴片刻）、Cannon kinematic 刚体、缠竹尾、虎斑顶点色注入；兔竹林环游（逐竹蹦跳目标点）、虎近身驻足等候
-- **母女对话**（`dialog.js`）：虎（女儿）中国传统式问安 → 兔（母亲）溺爱应答；母女**各自独立配置**大模型接口（OpenAI 兼容，留空走内置脚本）与语音（嗓音/语速/音高/音量，浏览器 speechSynthesis 中文女声），气泡投影跟随头顶；触发条件为母女相距 2.8m 内
+- **母女对话**（`dialog.js` + `agentMind.js`）：母女相距 2.8m 内时，虎或兔自己的行为层写入 `dialog` 意图；协调器消费意图后调用各自 `AgentMind`，气泡投影跟随头顶。对话共享后端 LLM 代理，语音参数仍按角色独立配置
 
 ### 禽：连续蒙皮长颈 + 探头顿挫运动学
 - **连续蒙皮长颈**（`bio/AvianBodyBuilder.js`）：长颈为沿中心曲线生成的 `TubeGeometry` 蒙皮管（可烘焙 S 型弯曲），
@@ -434,6 +436,9 @@ pip install -r backend/requirements.txt
 
 # 2. Start the server
 cd backend && uvicorn main:app --port 8931
+
+# Or start the backend and all three 3D/recognition workers
+cd .. && ./start.sh
 ```
 
 - Gallery: <http://localhost:8931/> (original-artwork cards + "Awaiting Your Brush" + lab entry, 中文/EN toggle)
@@ -442,11 +447,19 @@ cd backend && uvicorn main:app --port 8931
 - System config: <http://localhost:8931/config.html> (refresh the scene page after saving)
 - Metrics snapshot: <http://localhost:8931/api/metrics>
 - Object-reference catalog (single source): <http://localhost:8931/api/object-reference/catalog>
+- Sculpt status: <http://localhost:8931/api/sculpt/status>
+- Unified agent LLM status: <http://localhost:8931/api/llm/status>
 
 **Config priority** (worker URLs etc.): explicit process environment variable → `backend/runtime.json` → localhost auto-probe.  
 Scene knobs still live in `backend/config.json` (merged over frontend `DEFAULT_CONFIG`).
 
-**Environment 3D path** (`environmentModel` in config): `pointcloud` (default pseudo-4DGS) | `mesh` (image-to-3D GLB) | `auto` (mesh when no procedural builder).
+All creature agents use the same server-side OpenAI-compatible LLM proxy. Copy `.env.example` to the git-ignored
+`.env.local`, put the real key there, then launch with `./start.sh`. The browser receives only `/api/llm/chat` and
+the model name; it never receives `LLM_API_KEY`.
+
+**Environment 3D path** (`environmentModel`): `sculpt` (default, SculptSpec → procedural Three.js) | `pointcloud` | `mesh` | `auto`.  
+**Biology 3D path** (`biologyModel`): `sculpt` (default) | `procedural` | `mesh`.  
+Integration plan: `docs/img2threejs-integration-plan.md`. Sculpt worker port **7864**.
 
 > No backend handy? The frontend also runs fully static (e.g. on GitHub Pages): config and species records
 > automatically fall back to `localStorage`.
@@ -513,6 +526,7 @@ The lookup result never changes mask pixels, bounding boxes, or anchors. It only
 | Pheasant | enable, alert distance, return distance, drink interval, shelter stay (reserved, offstage for now) |
 | Visuals & music | initial camera (panorama/follow/stream), ink outline (reserved), BGM volume |
 | Species relations | subject–object–relation–drive–strength matrix |
+| Agent LLM | shared same-origin proxy, model, enable/disable; provider key is server-side only |
 | Plum & geese (separate page plum-config.html) | roosting/flying geese counts, goose size, circling duration/altitude, roost duration, blossom count, falling petals, reed clusters, mist, light snow, wind, initial camera, rock position/sink/tilt near the plum, bamboo cluster positions/counts/max tilt, playlist |
 
 ## Tech Stack & Roadmap

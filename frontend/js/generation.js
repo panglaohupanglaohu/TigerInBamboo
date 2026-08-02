@@ -1,6 +1,6 @@
 /**
  * Image-to-3D generation helpers (extracted from wall-workspace).
- * Progress-aware task API + limited concurrency for multi-layer generation.
+ * Progress-aware task API + limited concurrency + sculpt route.
  */
 
 /** Run async workers over items with a concurrency limit. */
@@ -101,12 +101,8 @@ export async function requestGenerateWithProgress(body, onStage) {
       }
     };
     es.onerror = () => {
-      // EventSource errors on normal close too; only fail if not settled after done
-      if (!settled) {
-        // keep waiting a bit — backend may reconnect; hard-fail after silence via timeout below
-      }
+      // EventSource errors on normal close too
     };
-    // Safety timeout: 15 minutes
     setTimeout(() => {
       if (!settled) finish(reject, new Error("生成超时（15 分钟）"));
     }, 15 * 60 * 1000);
@@ -124,19 +120,62 @@ export async function cancelGenerateTask(taskId) {
 }
 
 /**
- * Decide generation route for a confirmed review layer.
- * @returns {"gaussian-splat"|"procedural"|"mesh-generate"}
+ * Request SculptSpec from sculpt worker via backend proxy.
+ * @returns {Promise<object>}
  */
-export function resolveGenerationRoute(layer, { scope, subject, profile, environmentModel, hasProceduralBuilder }) {
-  if (layer?.userRouteOverride) return layer.userRouteOverride;
-  if (hasProceduralBuilder) return "procedural";
-  if (scope === "environment") {
-    const mode = environmentModel || "pointcloud";
-    if (mode === "pointcloud") return "gaussian-splat";
-    // "mesh" and "auto" (no builder) → mesh generate
-    return "mesh-generate";
+export async function requestSculptFromCrop(body) {
+  const response = await fetch("/api/sculpt/from-crop", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    let message = `塑形 ${response.status}`;
+    try {
+      const detail = (await response.json()).detail;
+      if (detail) message = typeof detail === "string" ? detail : JSON.stringify(detail);
+    } catch (_) {
+      /* ignore */
+    }
+    throw new Error(message);
   }
-  return "mesh-generate";
+  return response.json();
+}
+
+/**
+ * Decide generation route for a confirmed review layer.
+ * @returns {"sculpt"|"gaussian-splat"|"procedural"|"mesh-generate"}
+ */
+export function resolveGenerationRoute(layer, {
+  scope,
+  subject,
+  profile,
+  environmentModel,
+  biologyModel,
+  hasProceduralBuilder,
+  hasSculptTemplate,
+}) {
+  if (layer?.userRouteOverride) return layer.userRouteOverride;
+
+  // Legacy alias: procedural → sculpt when builder exists
+  const canSculpt = Boolean(hasProceduralBuilder || hasSculptTemplate);
+
+  if (scope === "environment") {
+    const mode = environmentModel || "sculpt";
+    if (mode === "pointcloud") return "gaussian-splat";
+    if (mode === "mesh") return "mesh-generate";
+    if (mode === "auto") {
+      return canSculpt ? "sculpt" : "mesh-generate";
+    }
+    // sculpt (default)
+    return "sculpt";
+  }
+
+  // biology
+  const bioMode = biologyModel || "sculpt";
+  if (bioMode === "mesh") return "mesh-generate";
+  if (bioMode === "procedural") return canSculpt ? "sculpt" : "mesh-generate";
+  return "sculpt";
 }
 
 /** Fire-and-forget route hit counter for backend metrics. */

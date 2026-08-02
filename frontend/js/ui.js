@@ -88,8 +88,24 @@ export function updateAgentPanel(tiger, rabbit, custom, pheasants) {
   const r = document.getElementById("rabbit-state");
   const u = document.getElementById("custom-state");
   const p = document.getElementById("pheasant-state");
-  if (t) t.textContent = tiger.state;
-  if (r && rabbit) r.textContent = rabbit.stateLabel;
+  if (t) {
+    t.textContent = tiger.state;
+    const row = t.closest(".agent");
+    if (row && tiger.agentProfile) {
+      row.dataset.agentId = tiger.agentProfile.id;
+      row.dataset.foodChainLevel = tiger.agentProfile.foodChainLevel;
+      row.dataset.llm = tiger.mind?.llm?.model || "";
+    }
+  }
+  if (r && rabbit) {
+    r.textContent = rabbit.stateLabel;
+    const row = r.closest(".agent");
+    if (row && rabbit.agentProfile) {
+      row.dataset.agentId = rabbit.agentProfile.id;
+      row.dataset.foodChainLevel = rabbit.agentProfile.foodChainLevel;
+      row.dataset.llm = rabbit.mind?.llm?.model || "";
+    }
+  }
   if (u && custom) u.textContent = custom.stateLabel;
   if (p && pheasants) {
     const list = Array.isArray(pheasants) ? pheasants : [pheasants];

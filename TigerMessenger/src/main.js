@@ -5,6 +5,8 @@ import { Timer } from "three/addons/misc/Timer.js";
 import { createStage } from "./core/stage.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js";
+import { createDevPanel } from "./core/devPanel.js";
+import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { buildWorld, updatePlatformPulse } from "./world/platforms.js";
 import { createPlanet } from "./world/planet.js";
@@ -21,7 +23,7 @@ import { journalCount } from "./quest/letterJournal.js";
 const { scene, camera, renderer } = createStage();
 
 // ---------- 环境：光照 / 天空 / 星月 / 漂浮光点 ----------
-const { lanterns } = setupEnvironment(scene);
+const { lanterns, ambient, sun } = setupEnvironment(scene);
 
 // ---------- 星球（先放，平台贴其表面） ----------
 createPlanet(scene);
@@ -32,10 +34,10 @@ const platforms = buildWorld(scene);
 // ---------- 玩家 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
 
-// ---------- 第三人称相机（先建 rig，输入钩子要调用 zoom/orbit） ----------
+// ---------- 第三人称相机 ----------
 const cameraRig = createCameraRig(camera, player);
 
-// ---------- 任务系统 / 开局状态（输入 isActive 依赖） ----------
+// ---------- 任务系统 / 开局状态 ----------
 let gameStarted = false;
 
 // ---------- 输入：键盘 + 滚轮/中键缩放 ----------
@@ -45,6 +47,37 @@ const keys = createInput({
   onOrbit: (dx) => cameraRig.orbitBy(dx),
   onMidDrag: (on) => cameraRig.setMidDrag(on),
 });
+
+// 右键拖拽环视（yaw + pitch，松手回弹）
+{
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+  window.addEventListener("contextmenu", (e) => e.preventDefault());
+  window.addEventListener("mousedown", (e) => {
+    if (e.button !== 2 || !gameStarted) return;
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    cameraRig.setRightDrag(true);
+  });
+  window.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    cameraRig.orbitBy((e.clientX - lastX) * 0.005);
+    cameraRig.orbitPitchBy((e.clientY - lastY) * 0.004);
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    cameraRig.setRightDrag(false);
+  };
+  window.addEventListener("mouseup", (e) => {
+    if (e.button === 2) endDrag();
+  });
+  window.addEventListener("blur", endDrag);
+}
 
 const quest = createQuestSystem({
   scene,
@@ -56,7 +89,14 @@ const quest = createQuestSystem({
   isGameStarted: () => gameStarted,
 });
 
-// ---------- 开始按钮（用户手势内解锁 AudioContext） ----------
+// ---------- 开发者菜单（🤖） ----------
+const devPanel = createDevPanel({
+  sun,
+  ambient,
+  onCamDist: (d) => cameraRig.setDist(d),
+});
+
+// ---------- 开始按钮 ----------
 elStartBtn.addEventListener("click", () => {
   gameStarted = true;
   elIntro.classList.add("hidden");
@@ -75,10 +115,9 @@ elStartBtn.addEventListener("click", () => {
 //  主循环
 // =====================================================================
 const timer = new Timer();
-cameraRig.snapToPlayer(); // 初始相机目标
+cameraRig.snapToPlayer();
 playerGroup.position.copy(player.position);
 
-// 简易帧率巡检（控制台每 5s；?fps=1 时在 title 显示）
 let fpsFrames = 0;
 let fpsAccum = 0;
 const showFps = /[?&]fps=1\b/.test(location.search);
@@ -86,7 +125,7 @@ const showFps = /[?&]fps=1\b/.test(location.search);
 function animate() {
   requestAnimationFrame(animate);
   timer.update();
-  const dt = Math.min(timer.getDelta(), 0.05); // 防止切后台后大跳
+  const dt = Math.min(timer.getDelta(), 0.05);
   const t = performance.now() * 0.001;
 
   fpsFrames += 1;
@@ -100,19 +139,12 @@ function animate() {
   }
 
   updateToast(dt);
-
-  // 输入 → 移动 / 跳跃 / 重力
   updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
-
-  // 平台碰撞 + 坠落复位（检查点）
   resolveCollisions(player.position, player.velocity, dt, platforms, player, () => {
     showToast("掉下去了… 已回到检查点");
   });
-
-  // 同步视觉
   syncPlayerVisual(player, playerGroup);
 
-  // 切向速率（去掉径向）判断是否在移动
   const upLen = player.position.length() || 1;
   const ux = player.position.x / upLen;
   const uy = player.position.y / upLen;
@@ -129,8 +161,12 @@ function animate() {
   quest.animateMarkers(t);
   updateLanterns(lanterns, t);
   updatePlatformPulse(platforms, t);
+  devPanel.tick(dt);
 
   renderer.render(scene, camera);
 }
 
 animate();
+
+// 调试
+window.__tm = { player, quest, cameraRig, P };

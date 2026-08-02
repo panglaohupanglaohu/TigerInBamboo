@@ -1,4 +1,4 @@
-// 记忆绑定页：四层记忆的查看 / 写入 / 封存 / 凭吊 / 导入导出 / 遗嘱草稿
+// 记忆绑定页：四层记忆的查看 / 写入 / 封存 / 探望 / 导入导出 / 意愿草稿
 // 零依赖原生 ES Module；物种清单读取模式参考 js/config.js、js/species.js（只读参考，未改动）
 import { MemoryCore, listCreatureIds } from "./memory-core.js";
 import {
@@ -12,7 +12,7 @@ import {
 
 /* ---------- 内置兜底生物列表（虎 / 兔 / 锦鸡 / 大雁） ---------- */
 const BUILTIN_CREATURES = [
-  { id: "tiger", name: "虎 · 斑斓" },
+  { id: "tiger", name: "虎 · 斑阑" },
   { id: "rabbit", name: "兔 · 母亲" },
   { id: "bird", name: "锦鸡" },
   { id: "goose", name: "大雁" },
@@ -73,7 +73,7 @@ const state = {
   creatures: [],
   current: null, // {id, name}
   core: null, // MemoryCore（活体）
-  frozen: null, // memorial 快照（凭吊）
+  frozen: null, // memorial 快照（探望）
   sealed: false,
   tab: "pane-log",
 };
@@ -114,7 +114,7 @@ function renderBindBar() {
   bar.hidden = false;
   $("#bind-name").textContent = state.current.name;
   $("#bind-status").innerHTML = state.sealed
-    ? `状态：<em>已封存</em> · 封于 ${fmtT(state.frozen?.sealedAt)} · 凭吊模式`
+    ? `状态：<em>已封存</em> · 封于 ${fmtT(state.frozen?.sealedAt)} · 探望模式`
     : "状态：存活 · 记忆持续写入中";
   $("#btn-seal").disabled = state.sealed;
   $("#btn-import").disabled = state.sealed;
@@ -135,7 +135,7 @@ $("#mem-tabs").addEventListener("click", (e) => {
 
 function renderTab() {
   document.querySelectorAll(".mem-pane").forEach((p) => p.classList.toggle("active", p.id === state.tab));
-  // 凭吊模式：隐藏一切写入控件
+  // 探望模式：隐藏一切写入控件
   document.querySelectorAll("[data-live]").forEach((el) => {
     el.style.display = state.sealed ? "none" : "";
   });
@@ -370,7 +370,7 @@ function renderAffect() {
     barRow("唤醒", arousal, 1, true) +
     `<p class="pane-note" style="margin-top:10px">效价 −1（沉）→ +1（暖）· 唤醒 0（定）→ 1（激）· 衰减 η = 72h</p>`;
   $("#affect-tone").textContent = state.sealed
-    ? `（封存定格）${r && Object.keys(r.labels ?? {}).length ? "语气里还凝着当时的余温 —— 凭吊只读，不再注入。" : "语气平静，没有明显的情绪残留。"}`
+    ? `（封存定格）${r && Object.keys(r.labels ?? {}).length ? "语气里还凝着当时的余温 —— 探望只读，不再注入。" : "语气平静，没有明显的情绪残留。"}`
     : state.core.affect.toneHint();
 }
 
@@ -398,7 +398,7 @@ $("#af-add").addEventListener("click", () => {
   renderAffect();
 });
 
-/* ---------- 凭吊时间轴回放 ---------- */
+/* ---------- 探望时间轴回放 ---------- */
 function setupMemorialReplay() {
   const f = state.frozen;
   const slider = $("#memorial-slider");
@@ -430,7 +430,7 @@ function setupMemorialReplay() {
   show();
 }
 
-/* ---------- 封存 / 导出 / 导入 / 遗嘱 ---------- */
+/* ---------- 封存 / 导出 / 导入 / 意愿 ---------- */
 $("#btn-seal").addEventListener("click", () => {
   if (state.sealed) return;
   $("#seal-creature-name").textContent = state.current.name;

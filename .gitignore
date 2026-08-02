@@ -36,3 +36,6 @@ video_xiaoman/
 tools/e2e/
 frontend/scenes/*.json
 backend/runtime.json
+
+# 本机大模型凭据（只在 start.sh 启动时加载，禁止入库）
+.env.local
