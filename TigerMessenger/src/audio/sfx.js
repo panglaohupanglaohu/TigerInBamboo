@@ -305,6 +305,130 @@ export function sfxWin() {
   });
 }
 
+/** 雷鸣噪声缓冲缓存（按采样率） */
+let thunderNoiseCache = null;
+
+function getThunderNoiseBuffer(ctx) {
+  if (thunderNoiseCache && thunderNoiseCache.sampleRate === ctx.sampleRate) {
+    return thunderNoiseCache;
+  }
+  // ~2.4s 粉红/棕色噪声，供炸裂 + 滚雷共用
+  const dur = 2.4;
+  const length = Math.floor(ctx.sampleRate * dur);
+  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  let b0 = 0;
+  let b1 = 0;
+  let b2 = 0;
+  for (let i = 0; i < length; i++) {
+    const white = Math.random() * 2 - 1;
+    // Paul Kellet 近似粉红噪声
+    b0 = 0.99886 * b0 + white * 0.0555179;
+    b1 = 0.99332 * b1 + white * 0.0750759;
+    b2 = 0.969 * b2 + white * 0.153852;
+    const pink = b0 + b1 + b2 + white * 0.15;
+    data[i] = pink * 0.22;
+  }
+  thunderNoiseCache = buffer;
+  return buffer;
+}
+
+/**
+ * 雷鸣：先近炸裂（短噪声裂响），再低频滚雷衰减。
+ * 距离越远越晚、越闷、越轻（光先到、声后到）。
+ * @param {{ distance?: number }} [opts] 与听者水平距离（世界单位）
+ */
+export function sfxThunder(opts = {}) {
+  const ctx = ensureAudio();
+  if (!ctx || muted) return;
+
+  const distance = Math.max(0, Number(opts.distance) || 8);
+  // 声速近似：游戏单位约 0.04s/单位，夹在 0.04–1.0s
+  const delay = Math.min(1.0, Math.max(0.04, 0.05 + distance * 0.038));
+  // 近雷更响更亮，远雷闷而轻
+  const near = Math.max(0, Math.min(1, 1 - distance / 28));
+  const crackPeak = 0.12 + near * 0.2;
+  const rumblePeak = 0.1 + near * 0.16;
+  const t0 = ctx.currentTime + delay;
+  const noiseBuf = getThunderNoiseBuffer(ctx);
+
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(1, t0);
+  master.connect(ctx.destination);
+
+  // ---- 1) 炸裂：中高频噪声裂响（1～2 次） ----
+  const crackCount = near > 0.55 && Math.random() < 0.55 ? 2 : 1;
+  for (let c = 0; c < crackCount; c++) {
+    const tc = t0 + c * (0.04 + Math.random() * 0.06);
+    const src = ctx.createBufferSource();
+    src.buffer = noiseBuf;
+    const hp = ctx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.value = 280 + near * 220;
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = 900 + Math.random() * 1400;
+    bp.Q.value = 0.7;
+    const g = ctx.createGain();
+    const peak = crackPeak * (c === 0 ? 1 : 0.55);
+    g.gain.setValueAtTime(0.0001, tc);
+    g.gain.exponentialRampToValueAtTime(peak, tc + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, tc + 0.12 + Math.random() * 0.08);
+    src.connect(hp);
+    hp.connect(bp);
+    bp.connect(g);
+    g.connect(master);
+    src.start(tc, 0, 0.25);
+  }
+
+  // ---- 2) 滚雷：低频长噪声 + 缓慢低通下滑 ----
+  {
+    const src = ctx.createBufferSource();
+    src.buffer = noiseBuf;
+    const lp = ctx.createBiquadFilter();
+    lp.type = "lowpass";
+    const fStart = 420 + near * 380;
+    const fEnd = 80 + near * 60;
+    lp.frequency.setValueAtTime(fStart, t0);
+    lp.frequency.exponentialRampToValueAtTime(fEnd, t0 + 1.8);
+    lp.Q.value = 0.4;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(rumblePeak, t0 + 0.06);
+    g.gain.setValueAtTime(rumblePeak * 0.75, t0 + 0.35);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.9 + near * 0.5);
+    src.connect(lp);
+    lp.connect(g);
+    g.connect(master);
+    src.start(t0, 0.05, 2.2);
+  }
+
+  // ---- 3) 远雷额外闷响（很轻的低频包络，非持续嗡嗡） ----
+  if (near < 0.7) {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(55 + Math.random() * 25, t0);
+    osc.frequency.exponentialRampToValueAtTime(38, t0 + 1.4);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.04 + (1 - near) * 0.03, t0 + 0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.5);
+    osc.connect(g);
+    g.connect(master);
+    osc.start(t0);
+    osc.stop(t0 + 1.55);
+  }
+
+  // 结束后断开 master，避免节点堆积
+  window.setTimeout(() => {
+    try {
+      master.disconnect();
+    } catch {
+      /* 已回收 */
+    }
+  }, (delay + 2.8) * 1000);
+}
+
 /** 八音盒总增益峰值（相对 destination；略高便于压过环境点缀） */
 const MUSIC_BOX_MASTER = 0.42;
 

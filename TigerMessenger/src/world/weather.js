@@ -1,8 +1,9 @@
 // =====================================================================
-//  天气系统：雨（雨丝 + 闪电） / 雪（慢飘 + 湍流）
-//  雨落与雪飘均受风速/风向影响（斜落、漂移）；闪电仅雨天出现
+//  天气系统：雨（雨丝 + 闪电 + 雷鸣） / 雪（慢飘 + 湍流）
+//  雨落与雪飘均受风速/风向影响（斜落、漂移）；闪电仅雨天出现，并触发雷鸣
 // =====================================================================
 import * as THREE from "three";
+import { sfxThunder } from "../audio/sfx.js";
 
 const RAIN_COUNT = 550;
 const SNOW_COUNT = 380;
@@ -252,9 +253,15 @@ export function createWeatherSystem(scene, R) {
     boltGeo.setDrawRange(0, boltSegCount * 2);
     bolt.visible = boltSegCount > 0;
     // 闪光中心取中上段
-    flash.position.set((sx + gx) * 0.5, center.y + 10, (sz + gz) * 0.5);
+    const flashX = (sx + gx) * 0.5;
+    const flashZ = (sz + gz) * 0.5;
+    flash.position.set(flashX, center.y + 10, flashZ);
     boltAnimDur = 0.28 + Math.random() * 0.12;
     boltAnim = boltAnimDur;
+
+    // 雷鸣：距听者（玩家）越远越晚、越闷
+    const dist = Math.hypot(flashX - center.x, flashZ - center.z);
+    sfxThunder({ distance: dist });
   }
 
   /**
