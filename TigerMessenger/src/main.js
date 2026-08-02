@@ -15,6 +15,7 @@ import { createDayNight } from "./world/dayNight.js";
 import { createTramRide } from "./player/tramRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
+import { createFoxNpc } from "./world/foxNpc.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
@@ -178,6 +179,23 @@ const elderMusic = createElderMusicInteraction({
   isGameStarted: () => gameStarted,
 });
 
+// ---------- 阿狸（缩放对齐送信人 · 漫步 · [E] 对话） ----------
+const foxAli = messenger?.landmarks?.camp?.landmarks?.foxAli || null;
+const foxNpc = createFoxNpc({
+  player,
+  fox: foxAli,
+  camera,
+  isGameStarted: () => gameStarted,
+  elHint: document.getElementById("fox-hint"),
+  planetRadius: PLANET_RADIUS,
+  isElderNear: () => elderMusic.isNear?.() ?? false,
+  // 任务 NPC 交互中时不抢气泡（粗判：npc-hint 是否显示）
+  isQuestNear: () => {
+    const el = document.getElementById("npc-hint");
+    return !!(el && el.classList.contains("show"));
+  },
+});
+
 // ---------- 开场 ----------
 elStartBtn.addEventListener("click", () => {
   gameStarted = true;
@@ -262,6 +280,8 @@ function animate() {
   cameraRig.update(dt);
   quest.updateInteraction(dt);
   elderMusic.update(dt, t);
+  // 阿狸在任务气泡之后更新，避免被 hideBubble 冲掉
+  foxNpc.update(dt, t);
   quest.updateCompass();
   quest.animateMarkers(t);
   updateLanterns(lanterns, t);
@@ -289,5 +309,6 @@ window.__tm = {
   mapEditor,
   tramRide,
   elderMusic,
+  foxNpc,
   weather,
 };

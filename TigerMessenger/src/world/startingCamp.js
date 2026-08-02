@@ -229,12 +229,18 @@ export function buildStartingCamp(scene, R) {
   put(elder, ELDER.x, ELDER.z, groundLiftAt(ELDER.x, ELDER.z), 2.6); // 面转向营地
   colliders.push({ position: elder.position.clone(), radius: 0.8 });
 
-  // ---------- 4b. 阿狸：蜷缩熟睡的小狐狸（老人附近草坡） ----------
-  const ali = createLowPolyFox();
+  // ---------- 4b. 阿狸：与送信人体量相当的小狐狸（可互动 / 漫步） ----------
+  const ali = createLowPolyFox({ scale: 0.52 });
   // 略靠营地内侧，避开老人 3 单位净空
   const ALI = { x: -8.6, z: 7.2 };
   put(ali, ALI.x, ALI.z, groundLiftAt(ALI.x, ALI.z), 0.9);
-  colliders.push({ position: ali.position.clone(), radius: 0.55 });
+  ali.userData.homeFlat = { x: ALI.x, z: ALI.z };
+  ali.userData.flatX = ALI.x;
+  ali.userData.flatZ = ALI.z;
+  ali.userData.yaw = 0.9;
+  const foxCol = { position: ali.position.clone(), radius: 0.38 };
+  ali.userData.collider = foxCol;
+  colliders.push(foxCol);
 
   // ---------- 5. 营地周边：古松两株 + 花草点缀 ----------
   for (const [x, z] of [[7, 2], [-7, 13]]) {

@@ -33,9 +33,11 @@ function part(geo, mat, outline = OUT) {
 /**
  * 蜷缩熟睡的低多边形小狐狸「阿狸」。
  * 面向局部 +Z（头略朝 +Z、尾环抱右侧），底部 Y=0。
+ * 默认缩放到与送信人（智能体）体量相当（约 0.52 倍原稿）。
+ * @param {{ scale?: number }} [opts]
  * @returns {THREE.Group}
  */
-export function createLowPolyFox() {
+export function createLowPolyFox(opts = {}) {
   const g = new THREE.Group();
   g.name = "fox-ali";
 
@@ -43,6 +45,11 @@ export function createLowPolyFox() {
   const orange = toonMat(FOX_ORANGE);
   const cream = toonMat(FOX_CREAM);
   const ink = toonMat(FOX_INK);
+
+  // 可动画部件容器（本地姿势，不直接改世界）
+  const rig = new THREE.Group();
+  rig.name = "fox-rig";
+  g.add(rig);
 
   // ========== 1. 身体主体：拉长扁平盒，趴卧 ==========
   // 尺寸约 1.15 × 0.38 × 0.68；中心抬起半高 → 肚皮贴 Y=0
@@ -52,13 +59,13 @@ export function createLowPolyFox() {
   // 轻微前倾蜷缩感
   body.rotation.z = -0.08;
   body.rotation.x = 0.04;
-  g.add(body);
+  rig.add(body);
 
   // 腹部乳白软垫（下巴延伸到胸腹的一块）
   const belly = part(new THREE.BoxGeometry(0.55, 0.16, 0.42), cream, 0.022);
   belly.name = "fox-belly-cream";
   belly.position.set(0.22, 0.1, 0.04);
-  g.add(belly);
+  rig.add(belly);
 
   // ========== 2. 环抱身侧的蓬松大尾巴 ==========
   // 尾根：偏大、圆润多面体，贴身右侧后方
@@ -67,7 +74,11 @@ export function createLowPolyFox() {
   tailRoot.scale.set(1.35, 0.95, 1.15);
   tailRoot.position.set(-0.42, 0.28, 0.38);
   tailRoot.rotation.set(0.25, -0.55, 0.35);
-  g.add(tailRoot);
+  // 尾巴整组便于摇摆
+  const tailG = new THREE.Group();
+  tailG.name = "fox-tail";
+  tailG.add(tailRoot);
+  rig.add(tailG);
 
   // 尾中段（仍为橙，略弯）
   const tailMid = part(new THREE.IcosahedronGeometry(0.32, 1), orange, 0.026);
@@ -75,7 +86,7 @@ export function createLowPolyFox() {
   tailMid.scale.set(1.2, 0.9, 1.05);
   tailMid.position.set(-0.18, 0.36, 0.62);
   tailMid.rotation.set(0.4, -0.2, 0.15);
-  g.add(tailMid);
+  tailG.add(tailMid);
 
   // 尾尖：乳白色蓬松端，略贴地
   const tailTip = part(new THREE.IcosahedronGeometry(0.26, 1), cream, 0.024);
@@ -83,7 +94,7 @@ export function createLowPolyFox() {
   tailTip.scale.set(1.15, 0.85, 1.1);
   tailTip.position.set(0.22, 0.22, 0.72);
   tailTip.rotation.set(0.55, 0.35, -0.1);
-  g.add(tailTip);
+  tailG.add(tailTip);
 
   // 保证尾接触面贴地：若 tip 底低于 0 则整体上推已在设计时贴齐
   // 尾根下缘约 y≈0.05，tip 下缘约 y≈0.05
@@ -125,16 +136,19 @@ export function createLowPolyFox() {
     headG.add(brow);
   }
 
-  // 闭眼睡线（焦黑细条，可选灵魂细节）
+  // 闭眼睡线（焦黑细条）；醒来时可隐藏
+  const lids = [];
   for (const side of [-1, 1]) {
     const lid = part(new THREE.BoxGeometry(0.09, 0.02, 0.035), ink, 0.01);
     lid.name = side < 0 ? "fox-lid-L" : "fox-lid-R";
     lid.position.set(0.18, 0.06, side * 0.11);
     lid.rotation.z = 0.1;
     headG.add(lid);
+    lids.push(lid);
   }
 
   // ========== 4. 耳朵：巨大三角锥，向上向外倾 ==========
+  const ears = [];
   for (const side of [-1, 1]) {
     const earG = new THREE.Group();
     earG.name = side < 0 ? "fox-ear-L" : "fox-ear-R";
@@ -163,19 +177,27 @@ export function createLowPolyFox() {
     earG.rotation.x = -0.25;
     earG.rotation.z = side * -0.55;
     earG.rotation.y = side * 0.2;
+    earG.userData.baseRot = {
+      x: earG.rotation.x,
+      y: earG.rotation.y,
+      z: earG.rotation.z,
+    };
     headG.add(earG);
+    ears.push(earG);
   }
 
-  g.add(headG);
+  rig.add(headG);
 
   // ========== 5. 卧在头下方的微型爪子（焦黑小方块） ==========
+  const paws = [];
   for (const side of [-1, 1]) {
     const paw = part(new THREE.BoxGeometry(0.14, 0.08, 0.12), ink, 0.016);
     paw.name = side < 0 ? "fox-paw-L" : "fox-paw-R";
     // 头下、贴地
     paw.position.set(0.48, 0.04, side * 0.14);
     paw.rotation.y = side * 0.25;
-    g.add(paw);
+    rig.add(paw);
+    paws.push(paw);
   }
 
   // 后爪蜷在身下（隐约两块）
@@ -183,20 +205,48 @@ export function createLowPolyFox() {
     const hind = part(new THREE.BoxGeometry(0.12, 0.07, 0.1), orange, 0.014);
     hind.name = side < 0 ? "fox-hind-L" : "fox-hind-R";
     hind.position.set(-0.28, 0.04, side * 0.22);
-    g.add(hind);
+    rig.add(hind);
+    paws.push(hind);
   }
 
   // ========== 6. 底部对齐：扫描包围盒，整体下移使最低点 = 0 ==========
+  // 与送信人（智能体身高约 2）体量相当：原稿偏大，默认缩到 ~0.52
+  const worldScale = opts.scale ?? 0.52;
+  rig.scale.setScalar(worldScale);
+
   g.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(g);
   if (Number.isFinite(box.min.y) && Math.abs(box.min.y) > 1e-4) {
-    g.position.y -= box.min.y;
+    rig.position.y -= box.min.y;
   }
+
+  // 记录睡姿基线，供动画叠加
+  const base = {
+    bodyY: body.position.y,
+    bodyRotX: body.rotation.x,
+    headRot: { x: headG.rotation.x, y: headG.rotation.y, z: headG.rotation.z },
+    tailRot: { x: tailG.rotation.x, y: tailG.rotation.y, z: tailG.rotation.z },
+  };
 
   g.userData.kind = "fox";
   g.userData.displayName = "阿狸";
-  g.userData.collideRadius = 0.55;
+  g.userData.collideRadius = 0.38;
   g.userData.sleeping = true;
+  g.userData.worldScale = worldScale;
+  g.userData.parts = {
+    rig,
+    body,
+    belly,
+    head: headG,
+    tail: tailG,
+    tailRoot,
+    tailMid,
+    tailTip,
+    ears,
+    lids,
+    paws,
+    base,
+  };
 
   return g;
 }
