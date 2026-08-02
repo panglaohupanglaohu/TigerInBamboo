@@ -30,9 +30,13 @@ export function createMapEditor({
   const placements = [];
   let selectedUid = null;
   let placeModeType = null; // 点击地图放置的类型
+  /** 放置模式默认朝向（度）；选中物体时控件改选中项，未选中时改此值 */
+  let placeYawDeg = 0;
   let dragging = false;
   let open = false;
   let uidSeq = 1;
+  const _yawQ = new THREE.Quaternion();
+  const _yAxis = new THREE.Vector3(0, 1, 0);
 
   // ---------- UI ----------
   const overlay = document.createElement("div");
@@ -45,7 +49,7 @@ export function createMapEditor({
         <button type="button" id="map-editor-close" title="关闭">✕</button>
       </div>
       <p class="map-editor-hint">
-        点选拖动 · 复制/删除 · 下方选类型点地图放置 · 可贴地 · 可改朝向与招牌
+        点选拖动 · 复制/删除 · 所有放置类型均可旋转朝向（滑杆/度数/预设/滚轮）· 可贴地 · 书店可改招牌
       </p>
       <canvas id="map-canvas" width="360" height="360" aria-label="主岛平面图"></canvas>
       <div class="map-editor-coords"><span id="map-cursor">x: —  z: —</span>
@@ -116,19 +120,29 @@ export function createMapEditor({
     d = ((d % 360) + 360) % 360;
     return (d * Math.PI) / 180;
   }
-  function setYawUI(yawRad) {
-    const d = yawToDeg(yawRad);
-    yawSlider.value = String(d);
-    yawDegInput.value = String(d);
+  function setYawUI(yawRadOrDeg, isDeg = false) {
+    const d = isDeg ? (((Number(yawRadOrDeg) % 360) + 360) % 360) : yawToDeg(yawRadOrDeg);
+    const rounded = Math.round(d);
+    yawSlider.value = String(rounded);
+    yawDegInput.value = String(rounded);
   }
+  /** 所有放置类型通用：有选中则改选中；放置模式无选中则改下次落点朝向 */
   function applyYawFromDeg(deg) {
+    let d = Number(deg);
+    if (!Number.isFinite(d)) d = 0;
+    d = ((d % 360) + 360) % 360;
     const p = getSelected();
-    if (!p) return;
-    p.yaw = degToYaw(deg);
-    setYawUI(p.yaw);
-    applyPose(p);
+    if (p) {
+      p.yaw = degToYaw(d);
+      applyPose(p);
+      setYawUI(d, true);
+      persist();
+    } else {
+      placeYawDeg = d;
+      setYawUI(d, true);
+    }
     redraw();
-    persist();
+    syncTools();
   }
 
   // 调色板
@@ -142,10 +156,13 @@ export function createMapEditor({
     b.addEventListener("click", () => {
       placeModeType = def.id;
       selectedUid = null;
+      // 用类型默认朝向作为放置起始角（仍可在落点前用角度控件改）
+      placeYawDeg = yawToDeg(def.defaultYaw ?? 0);
+      setYawUI(placeYawDeg, true);
       [...elPalette.querySelectorAll(".map-palette-item")].forEach((el) =>
         el.classList.toggle("active", el.dataset.type === def.id)
       );
-      toast(`放置模式：${def.label}（点地图落点）`, 1.6);
+      toast(`放置：${def.label} · 朝向 ${placeYawDeg}° · 点地图落点`, 1.8);
       redraw();
       refreshList();
       syncTools();
@@ -211,14 +228,29 @@ export function createMapEditor({
   }
   overlay.querySelector("#map-yaw-ccw")?.addEventListener("click", () => {
     const p = getSelected();
-    if (!p) return;
-    applyYawFromDeg(yawToDeg(p.yaw) - 15);
+    const cur = p ? yawToDeg(p.yaw) : placeYawDeg;
+    applyYawFromDeg(cur - 15);
   });
   overlay.querySelector("#map-yaw-cw")?.addEventListener("click", () => {
     const p = getSelected();
-    if (!p) return;
-    applyYawFromDeg(yawToDeg(p.yaw) + 15);
+    const cur = p ? yawToDeg(p.yaw) : placeYawDeg;
+    applyYawFromDeg(cur + 15);
   });
+
+  // 地图上滚轮：旋转当前选中（任意放置类型）
+  canvas.addEventListener(
+    "wheel",
+    (e) => {
+      if (!open) return;
+      const p = getSelected();
+      if (!p && !placeModeType) return;
+      e.preventDefault();
+      const step = e.shiftKey ? 5 : 15;
+      const cur = p ? yawToDeg(p.yaw) : placeYawDeg;
+      applyYawFromDeg(cur + (e.deltaY > 0 ? step : -step));
+    },
+    { passive: false }
+  );
 
   btnSignApply.addEventListener("click", () => {
     const p = getSelected();
@@ -249,14 +281,15 @@ export function createMapEditor({
   canvas.addEventListener("pointerdown", (e) => {
     const { x, z } = canvasToFlat(e);
     if (placeModeType) {
-      const p = spawnPlacement(placeModeType, x, z, getBuildingDef(placeModeType)?.defaultYaw ?? 0);
+      // 所有放置类型统一使用当前角度控件的朝向
+      const p = spawnPlacement(placeModeType, x, z, degToYaw(placeYawDeg));
       if (p) {
         selectedUid = p.uid;
         placeModeType = null;
         [...elPalette.querySelectorAll(".map-palette-item")].forEach((el) =>
           el.classList.remove("active")
         );
-        toast(`已放置 ${p.label}`, 1.3);
+        toast(`已放置 ${p.label} · ${yawToDeg(p.yaw)}°`, 1.4);
         persist();
       }
       redraw();
@@ -338,10 +371,19 @@ export function createMapEditor({
     }
   }
 
+  /**
+   * 贴球面后再绕局部 +Y（表面法线）旋转 yaw。
+   * 所有放置类型共用：书店/房/松/花/杆/岩…
+   */
   function applyPose(p) {
+    if (!p?.object) return;
     const lift = liftAt(p.x, p.z);
     placeObjectOnSphere(p.object, p.x, p.z, lift, planetRadius);
-    p.object.rotateY(p.yaw);
+    // 用四元数绕局部 Y 转，避免部分 Group 对 rotateY 不直观
+    const yaw = Number.isFinite(p.yaw) ? p.yaw : 0;
+    _yawQ.setFromAxisAngle(_yAxis, yaw);
+    p.object.quaternion.multiply(_yawQ);
+    p.object.userData.mapYaw = yaw;
     if (p.collider) {
       p.collider.position.copy(p.object.position);
     }
@@ -522,10 +564,11 @@ export function createMapEditor({
       ctx.stroke();
     }
 
-    // 放置预览
+    // 放置预览（含朝向箭头，所有类型）
     if (placeModeType != null && hoverX != null) {
       const { px, py } = flatToCanvas(hoverX, hoverZ);
       const def = getBuildingDef(placeModeType);
+      const yaw = degToYaw(placeYawDeg);
       ctx.beginPath();
       ctx.arc(px, py, 8, 0, Math.PI * 2);
       ctx.strokeStyle = def?.color || "#fff";
@@ -533,6 +576,12 @@ export function createMapEditor({
       ctx.setLineDash([4, 3]);
       ctx.stroke();
       ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(px + Math.sin(yaw) * 14, py - Math.cos(yaw) * 14);
+      ctx.strokeStyle = def?.color || "#333";
+      ctx.lineWidth = 2;
+      ctx.stroke();
     }
   }
 
@@ -541,7 +590,7 @@ export function createMapEditor({
     for (const p of placements) {
       const li = document.createElement("li");
       li.className = p.uid === selectedUid ? "active" : "";
-      li.textContent = `${p.label}  (${p.x.toFixed(1)}, ${p.z.toFixed(1)})`;
+      li.textContent = `${p.label}  (${p.x.toFixed(1)}, ${p.z.toFixed(1)}) · ${yawToDeg(p.yaw)}°`;
       li.addEventListener("click", () => {
         selectedUid = p.uid;
         placeModeType = null;
@@ -560,7 +609,8 @@ export function createMapEditor({
     const p = getSelected();
     btnCopy.disabled = !p;
     btnDelete.disabled = !p;
-    const canAngle = !!p;
+    // 选中任意类型 或 放置模式：都可调角度
+    const canAngle = !!p || !!placeModeType;
     yawSlider.disabled = !canAngle;
     yawDegInput.disabled = !canAngle;
     for (const btn of anglePresetBtns) btn.disabled = !canAngle;
@@ -585,10 +635,14 @@ export function createMapEditor({
         signL1.value = "";
         signL2.value = "";
       }
+    } else if (placeModeType) {
+      setYawUI(placeYawDeg, true);
+      const name = getBuildingDef(placeModeType)?.label || placeModeType;
+      elSelected.textContent = `放置中：${name} · 朝向 ${placeYawDeg}°`;
+      signL1.value = "";
+      signL2.value = "";
     } else {
-      elSelected.textContent = placeModeType
-        ? `放置中：${getBuildingDef(placeModeType)?.label || placeModeType}`
-        : "未选中";
+      elSelected.textContent = "未选中 · 选类型或点地图上的物体";
       signL1.value = "";
       signL2.value = "";
     }
