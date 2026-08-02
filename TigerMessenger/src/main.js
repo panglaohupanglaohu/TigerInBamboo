@@ -11,18 +11,22 @@ import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { buildWorld, updatePlatformPulse } from "./world/platforms.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing } from "./world/nature.js";
+import { createMoonLake, updateLakeWade, LAKE } from "./world/lake.js";
 import { updateClouds } from "./assets/lowPoly.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
 import { updatePlayerControl } from "./player/controller.js";
 import { updatePlayerAnim } from "./player/animation.js";
 import { createQuestSystem } from "./quest/questSystem.js";
-import { elIntro, elStartBtn, showToast, updateToast } from "./ui/hud.js";
+import { elIntro, elStartBtn, showToast, updateToast, initQuestPanelCollapse } from "./ui/hud.js";
 import { ensureAudio, startAmbience, sfxJump } from "./audio/sfx.js";
 import { journalCount } from "./quest/letterJournal.js";
 
 // ---------- 场景 / 相机 / 渲染器 ----------
 const { scene, camera, renderer } = createStage();
+
+// ---------- 任务面板可收起 ----------
+initQuestPanelCollapse();
 
 // ---------- 环境：光照 / 天空 / 星月 / 漂浮光点 ----------
 const { lanterns, ambient, sun } = setupEnvironment(scene);
@@ -58,6 +62,10 @@ const playZone = decoratePlayZone(scene, PLANET_RADIUS);
 const farSide = decorateFarSide(scene, PLANET_RADIUS);
 // 树/房/岩碰撞体（防穿模，与实验页"树石房可挡路"一致）
 const assetColliders = [...playZone.colliders, ...farSide.colliders];
+
+// ---------- 月亮湖：浅水可涉、深水阻挡、环湖小径 ----------
+const lake = createMoonLake(scene, PLANET_RADIUS);
+assetColliders.push(lake.deepCollider); // 深水区切向阻挡
 
 const quest = createQuestSystem({
   scene,
@@ -125,6 +133,8 @@ function animate() {
   });
   // 树/房/岩资产碰撞：切向推开，防止穿模
   resolveAssetColliders(player.position, assetColliders);
+  // 月亮湖：浅水涉水减速（深水已被阻挡）
+  updateLakeWade(player, lake);
   syncPlayerVisual(player, playerGroup);
 
   const upLen = player.position.length() || 1;
@@ -152,4 +162,4 @@ function animate() {
 animate();
 
 // 调试
-window.__tm = { player, quest, cameraRig, P, scene, clouds, assetColliders };
+window.__tm = { player, quest, cameraRig, P, scene, clouds, assetColliders, lake };

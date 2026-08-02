@@ -37,14 +37,56 @@
       min-width: 240px;
       max-width: min(360px, 42vw);
       padding: 14px 16px 12px;
+      pointer-events: auto;
+      transition: min-width 0.18s ease, padding 0.18s ease;
+    }
+    #quest-panel .quest-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 6px;
     }
     #quest-panel h1 {
-      margin: 0 0 6px;
+      margin: 0;
       font-size: 15px;
       font-weight: 600;
       letter-spacing: 0.04em;
       color: #9ec5ff;
+      flex: 1;
+      min-width: 0;
     }
+    #quest-collapse {
+      pointer-events: auto;
+      cursor: pointer;
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 1px solid rgba(140, 180, 255, 0.28);
+      border-radius: 8px;
+      background: rgba(30, 40, 70, 0.55);
+      color: #cfe0ff;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s ease, background 0.15s ease;
+    }
+    #quest-collapse:hover { filter: brightness(1.12); }
+    #quest-collapse .chev {
+      display: block;
+      transition: transform 0.18s ease;
+    }
+    #quest-panel.collapsed {
+      min-width: 0;
+      max-width: none;
+      padding: 8px 10px;
+    }
+    #quest-panel.collapsed .quest-head { margin: 0; }
+    #quest-panel.collapsed #quest-body { display: none; }
+    #quest-panel.collapsed #quest-collapse .chev { transform: rotate(-90deg); }
     #quest-panel .subtitle {
       margin: 0 0 10px;
       font-size: 12px;
@@ -452,6 +494,11 @@
       color: #1a2638;
     }
     #quest-panel h1 { color: #2f8f7a; }
+    #quest-collapse {
+      background: rgba(47, 143, 122, 0.1);
+      border: 1px solid rgba(47, 143, 122, 0.35);
+      color: #2f8f7a;
+    }
     #quest-panel .subtitle { opacity: 0.65; }
     #quest-status strong { color: #d98a2b; }
     #quest-status .done { color: #3d9a5f; }
@@ -541,12 +588,19 @@
   <!-- HUD 层 -->
   <div id="hud">
     <div id="quest-panel" class="panel">
-      <h1>TigerMessenger</h1>
-      <p class="subtitle">小星球信使 · 把信送到对的人手上</p>
-      <p id="quest-status">准备出发…</p>
-      <ul id="letter-list"></ul>
-      <div id="score-badge">本局 <span id="score-num">0</span> / <span id="score-total">0</span></div>
-      <button type="button" id="journal-toggle" title="信使记忆（L）">信袋</button>
+      <div class="quest-head">
+        <h1>TigerMessenger</h1>
+        <button type="button" id="quest-collapse" title="收起/展开任务面板（Tab）" aria-label="收起任务面板" aria-expanded="true" aria-controls="quest-body">
+          <span class="chev" aria-hidden="true">▾</span>
+        </button>
+      </div>
+      <div id="quest-body">
+        <p class="subtitle">小星球信使 · 把信送到对的人手上</p>
+        <p id="quest-status">准备出发…</p>
+        <ul id="letter-list"></ul>
+        <div id="score-badge">本局 <span id="score-num">0</span> / <span id="score-total">0</span></div>
+        <button type="button" id="journal-toggle" title="信使记忆（L）">信袋</button>
+      </div>
     </div>
     <div id="journal-panel" class="panel" aria-label="信使记忆">
       <h2>信使记忆 · 送达过的信</h2>
