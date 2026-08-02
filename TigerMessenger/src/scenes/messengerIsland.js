@@ -37,12 +37,14 @@ export const messengerIslandScene = {
     const farSide = decorateFarSide(scene, R);
     const greatLake = createGreatLake(scene, R);
 
-    // Hard To Find Bookshop：平面坐标再向右 30、向下（+z）8
-    // 前序 (22.4, 10.2) → (52.4, 18.2)
-    const bookshopX = 52.4;
-    const bookshopZ = 18.2;
+    // Hard To Find Bookshop：主岛东侧坡脚贴地（平面足迹内，出生点可见）
+    // 先前累加位移到 (52,18) 已离开主岛/视野；收回地面并贴 height 场
+    const bookshopX = 11.5;
+    const bookshopZ = 5.5;
+    const bookshopLift = groundLiftAt(bookshopX, bookshopZ);
     const bookshop = createHardToFindBookshop({ bermEdgeY: 0.02 });
-    placeObjectOnSphere(bookshop, bookshopX, bookshopZ, groundLiftAt(bookshopX, bookshopZ) + 0.02, R);
+    // 底部原点 = 球面 R+lift，土坡外缘贴地面
+    placeObjectOnSphere(bookshop, bookshopX, bookshopZ, bookshopLift, R);
     bookshop.rotateY(-0.5); // 立面朝向街道
     scene.add(bookshop);
 

@@ -28,12 +28,11 @@ const HILL_DEFS = [
   { x: 4.6, z: -9.8, r: 2.2, peak: 0.6 },
   // —— 东南微丘（和缓草丘，远观层次；避开出生点与湖岸）
   { x: 5.8, z: 6.8, r: 2.4, peak: 0.45 },
-  // —— 书店山坡（Hard To Find Bookshop 所在，坡下草地）
-  // 与书店同步：再右 +30 / 下 +8 → 中心约 (51, 16)
-  { x: 51, z: 16, r: 4.5, peak: 1.6 },
+  // —— 书店山坡（Hard To Find Bookshop，主岛东侧可见）
+  { x: 11.5, z: 5.5, r: 4.5, peak: 1.4 },
 ];
 
-const ISLAND_FLAT_R = 56; // 覆盖书店远位 (52,18)
+const ISLAND_FLAT_R = 18; // 主岛平面足迹（platforms 主岛半宽 18）
 export const ISLAND_BASE_LIFT = 0.6; // 岛面厚度（原平台顶高）
 
 // 起始庭园的池水不是贴在岛面上的透明平板，而是球面岛上的一个浅盆。
@@ -57,9 +56,9 @@ export function pondDepressionAt(x, z) {
 
 // 山区包围盒（网格覆盖范围，含裙边余量）
 const GRID_MIN_X = -11.5;
-const GRID_MAX_X = 56.5;
+const GRID_MAX_X = 16.5;
 const GRID_MIN_Z = -15.5;
-const GRID_MAX_Z = 22.5;
+const GRID_MAX_Z = 12.5;
 const GRID_STEP = 0.7; // 平面网格间距
 
 /** 所有土丘在该点的联合抬升（余弦剖面，多丘取 max，保证连绵无叠加尖峰） */
