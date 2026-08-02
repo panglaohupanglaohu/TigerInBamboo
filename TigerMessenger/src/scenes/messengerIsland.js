@@ -37,10 +37,10 @@ export const messengerIslandScene = {
     const farSide = decorateFarSide(scene, R);
     const greatLake = createGreatLake(scene, R);
 
-    // Hard To Find Bookshop：从东坡顶移到右下方坡脚，建筑不再压住坡脊。
-    // 这个位置避开池盆，并给左侧招牌留出完整的视线。
-    const bookshopX = 12.4;
-    const bookshopZ = 7.2;
+    // Hard To Find Bookshop：平面坐标再向右 10、向下（+z）3
+    // 原 (12.4, 7.2) → (22.4, 10.2)
+    const bookshopX = 22.4;
+    const bookshopZ = 10.2;
     const bookshop = createHardToFindBookshop({ bermEdgeY: 0.02 });
     placeObjectOnSphere(bookshop, bookshopX, bookshopZ, groundLiftAt(bookshopX, bookshopZ) + 0.02, R);
     bookshop.rotateY(-0.5); // 立面朝向街道
