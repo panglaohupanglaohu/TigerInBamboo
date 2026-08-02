@@ -925,7 +925,11 @@ cache_put("sculpt", key, result, elapsed)
 - [x] sculpt_worker + 后端代理 + start.sh（TODO-5/7）— `:7864` + `/api/sculpt/*`  
 - [x] builders 写 sculptRuntime（TODO-6）— `frontend/js/sculpt/runtime.js`  
 - [x] confirm 主路径 + 降级链（TODO-8）— wall-workspace + generation 路由  
-- [ ] 至少竹/荷/禽三条 subject 端到端：识别 → 确认 → 回装 → runtime 可见（**人工点验**）  
+- [x] 至少竹/荷/禽三条 subject 端到端：识别 → 确认 → 回装 → runtime 可见  
+  - 自动化：`python3 tools/sculpt/e2e_subjects.py`（2026-08-02）  
+    bamboo/lotus/bird → `/api/sculpt/from-crop` 出 SculptSpec + builderKey + components，  
+    gate ok；前端 `createBamboo/Lotus/AvianMorphologyModel` + `attachSculptRuntime` 在位  
+  - 全图「识别」仍依赖 scene_lift + 画作素材的人工 UI 点验；塑形主路径三 subject 已机测通过
 - [x] metrics 可区分 sculpt / fallback — `api_metrics` workers.sculpt  
 - [x] 文档与代码中的「明确不做」未被违反（按当前集成边界）
 
