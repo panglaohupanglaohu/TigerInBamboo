@@ -165,8 +165,10 @@ const tramRide = createTramRide({
   },
 });
 
-// ---------- 天气（雨/雪/闪电，受风速风向影响） ----------
-const weather = createWeatherSystem(scene, PLANET_RADIUS);
+// ---------- 天气（雨/雪/闪电/停雨彩虹，受风速风向影响） ----------
+const weather = createWeatherSystem(scene, PLANET_RADIUS, {
+  skyRing: messenger?.landmarks?.camp?.landmarks?.skyRing || null,
+});
 
 // ---------- 弹琴老人（近身 E 键播放 / 停止八音盒） ----------
 const elderMusic = createElderMusicInteraction({
@@ -287,4 +289,5 @@ window.__tm = {
   mapEditor,
   tramRide,
   elderMusic,
+  weather,
 };
