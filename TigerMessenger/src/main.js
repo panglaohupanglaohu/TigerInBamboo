@@ -175,10 +175,11 @@ const tramRide = createTramRide({
     null,
   cameraRig,
   elHint: document.getElementById("tram-hint"),
+  toast: showToast,
   onBoard: (tram) => {
     sfxWaterTrain();
     const color = tram?.userData?.variant === "blue" ? "蓝色" : "红色";
-    showToast(`已登上${color}电车 · 坐在窗边看风景 · 再按 F 下车`, 3.2);
+    showToast(`已登上${color}电车 · 窗边乘客 · [C] 司机视野 · [F] 下车`, 3.4);
   },
 });
 

@@ -411,6 +411,7 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
 
   // centripetal：间距不均时也不过冲/尖角
   const curve = new THREE.CatmullRomCurve3(controls, true, "centripetal", 0.5);
+  const trackLen = curve.getLength();
   // 中心线两侧各铺一条完整线路（每线 = 枕木 + 两根钢轨）。
   const redCurve = buildParallelCurve(curve, -LANE_OFFSET, R);
   const blueCurve = buildParallelCurve(curve, LANE_OFFSET, R);
