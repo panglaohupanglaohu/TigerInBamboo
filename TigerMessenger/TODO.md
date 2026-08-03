@@ -292,6 +292,16 @@
   - 能量束目标改接中央母皇塔顶（GRAND_CRYSTAL 导出常量驱动）
   - 验收：晶林全景（双塔+密林）✓ 电车穿梭（光束+天空渐变中）✓ 三件套通过
   - 注：无头满环 ~46s+，入南轮询需放宽（环境慢速 artifact）
+- [x] 53. 玻璃晶林 + 大峡谷 + 悬空高架桥（Kimi 2026-08-03，主人命题）
+  - `world/canyon.js`：谷心 (-50°,-112°) 缘 0.55rad 深 11、5 级阶梯塌陷；
+    `applyCanyonToGeometry` 供 planet 顶点改造（computeVertexNormals 重算）
+  - 晶林全换 MeshPhysicalMaterial：transmission 0.9 / roughness 0.05 / ior 1.7 /
+    thickness 2.0 / 色 #D6EAF8 / 内光 #1F3A4B；母皇塔金珀玻璃同款；描边保留
+  - 晶体/母塔/能量海全部按 canyonOffsetDir 扎根谷底与峭壁；贴轨晶体削顶让行高架
+  - `tramSystem.js`：南半球轨道固定 R+0.2 悬空跨谷；每 ~3 单位灰桥墩落到谷底
+    （长短随谷深变化）；双车四元数对齐照常
+  - 验证：谷心顶点半径 31.2 ✓（目标 ~29，顶点采样误差内）；玻璃晶+金塔+谷底视差 ✓
+  - 注：transmission 透射渲染在 SwiftShader 无头下偏慢，真机 GPU 正常
 - [x] 52. 红蓝双电车 + 双线相向运行（Codex 2026-08-03，主人指示）
   - `assets/tram.js`：红/蓝参数化配色，补驾驶室双窗、双侧门、前后灯、保险杠、
     屋顶电气箱与双菱形集电弓；红 11 路 CITY TOUR / 蓝 12 路 COAST LINE
