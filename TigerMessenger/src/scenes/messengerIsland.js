@@ -18,11 +18,11 @@ import {
   HARBOR,
 } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
-import { buildMoebiusCity } from "../world/moebiusCity.js";
+import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import { groundLiftAt } from "../world/hills.js";
-import { placeObjectOnSphere } from "../world/sphereMath.js";
+import { placeObjectOnSphere, latLonToDir } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
 import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
@@ -75,12 +75,15 @@ export const messengerIslandScene = {
     ];
 
     // 基督城有轨电车：北岛环线 + 跨赤道绕莫比斯主晶塔
+    // 能量束目标：中央母体晶皇塔顶
+    const grandTopTarget = latLonToDir(GRAND_CRYSTAL.lat, GRAND_CRYSTAL.lon, new THREE.Vector3())
+      .multiplyScalar(R + GRAND_CRYSTAL.h * 0.92);
     const tramSystem = buildChristchurchTramSystem(scene, R, {
-      beamTarget: camp.landmarks?.skyRing?.position,
+      beamTarget: grandTopTarget,
     });
 
-    // 莫比斯水晶异星城市（南半球，让开轨道走廊）
-    const moebius = buildMoebiusCity(scene, R, { trackCurve: tramSystem.curve });
+    // 莫比斯水晶大都会（南半球千座晶林，让开轨道走廊）
+    const moebius = buildMoebiusCrystalMetropolis(scene, R, { trackCurve: tramSystem.curve });
 
     // Hard To Find Bookshop：与地图共用 createCatalogObject（同一工厂/参数）
     const bookshopX = 11.5;
@@ -154,6 +157,7 @@ export const messengerIslandScene = {
         tramSystem,
         harbor,
         oldHarbor: harborBuilt,
+        moebius,
       },
       update(dt, t, runtime) {
         updatePlatformPulse(platforms, t);

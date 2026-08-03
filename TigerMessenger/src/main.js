@@ -169,12 +169,16 @@ const dayNight = createDayNight({
 // ---------- 电车搭乘（近车 [F] 上车 · 窗边乘坐看风景） ----------
 const tramRide = createTramRide({
   player,
-  getTram: () => messenger?.landmarks?.tramSystem?.tram || null,
+  getTram: () =>
+    messenger?.landmarks?.tramSystem?.getNearestTram?.(player.position) ||
+    messenger?.landmarks?.tramSystem?.tram ||
+    null,
   cameraRig,
   elHint: document.getElementById("tram-hint"),
-  onBoard: () => {
+  onBoard: (tram) => {
     sfxWaterTrain();
-    showToast("已上车 · 坐在窗边向外看风景 · 再按 F 下车", 3.2);
+    const color = tram?.userData?.variant === "blue" ? "蓝色" : "红色";
+    showToast(`已登上${color}电车 · 坐在窗边看风景 · 再按 F 下车`, 3.2);
   },
 });
 
@@ -197,7 +201,8 @@ const MOEBIUS_SKY = new THREE.Color(0xebb9b6); // 莫比斯黄昏粉紫
 const MOEBIUS_SUN = new THREE.Color(0xf0c294); // 暖橙日光
 let moebiusFactor = 0;
 function updateMoebiusBarrier(dt) {
-  const tram = messenger?.landmarks?.tramSystem?.tram;
+  const tramSystem = messenger?.landmarks?.tramSystem;
+  const tram = tramSystem?.tram;
   const target = tram && tram.position.y < 0 ? 1 : 0;
   moebiusFactor += (target - moebiusFactor) * Math.min(1, dt / 2); // 2 秒时间常数
   if (moebiusFactor < 0.001) return;

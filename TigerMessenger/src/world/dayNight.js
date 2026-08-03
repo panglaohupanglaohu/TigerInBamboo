@@ -53,6 +53,7 @@ function sample(t) {
 export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds }) {
   let phase = P.timeOfDay ?? 0.5;
   let lastWritten = phase;
+  let current = null; // 最近一帧采样（供莫比斯结界二次调色）
 
   // 收集云材质（染色用）
   const cloudMats = new Set();
@@ -75,6 +76,7 @@ export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds }) {
     P.timeOfDay = phase; // 面板同步显示当前时刻
 
     const s = sample(phase);
+    current = s;
     if (skyMat) {
       skyMat.uniforms.topColor.value.copy(s.skyTop);
       skyMat.uniforms.midColor.value.copy(s.skyMid);
@@ -91,5 +93,5 @@ export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds }) {
     for (const m of cloudMats) m.color.copy(s.cloud);
   }
 
-  return { update, getPhase: () => phase };
+  return { update, getPhase: () => phase, getCurrent: () => current };
 }

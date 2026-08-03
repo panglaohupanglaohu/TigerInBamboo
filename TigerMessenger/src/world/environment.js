@@ -9,7 +9,7 @@ export function setupEnvironment(scene) {
   const ambient = new THREE.AmbientLight(0xf3fff7, P.ambientIntensity ?? 0.9);
   scene.add(ambient);
 
-  const hemi = new THREE.HemisphereLight(0xa7eee4, 0x315840, 0.58);
+  const hemi = new THREE.HemisphereLight(0xa7eee4, 0x4a4a44, 0.58);
   scene.add(hemi);
 
   const dir = new THREE.DirectionalLight(0xfff1c9, P.sunIntensity ?? 1.6);

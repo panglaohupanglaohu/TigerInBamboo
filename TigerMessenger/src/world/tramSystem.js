@@ -1,23 +1,26 @@
 // =====================================================================
 //  基督城有轨电车环形轨道系统
 //  平面设计坐标上的平滑环线：不爬坡、不进建筑、无锐角弯
-//  CatmullRomCurve3 闭合环；枕木 + 双钢轨贴球面；电车 up=法线、forward=切线
+//  CatmullRomCurve3 闭合环；双线四钢轨贴球面；红/蓝电车相向运行
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { facet } from "../assets/lowPoly.js";
 import { createChristchurchTram } from "../assets/tram.js";
-import { flatToWorld, latLonToDir } from "./sphereMath.js";
-import { groundLiftAt, worldToFlatXZ, ISLAND_BASE_LIFT, hillHeightAt } from "./hills.js";
+import { flatToWorld, latLonToDir, quatYToDir } from "./sphereMath.js";
+import { groundLiftAt, worldToFlatXZ, ISLAND_BASE_LIFT } from "./hills.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { P } from "../core/params.js";
 import { updateTramSound } from "../audio/sfx.js";
 import { LAKE, HARBOR } from "./lake.js";
+import { canyonOffsetDir } from "./canyon.js";
 
 const SLEEPER = 0x3e2723;
 const RAIL = 0x757575;
 const SURFACE_EPS = 0.08;
 const BOARDING_RADIUS = 3.6;
+const LANE_OFFSET = 0.9; // 两条线路中心距 1.8，车辆交会保留约 0.7 净空
+const RAIL_GAUGE_HALF = 0.32;
 
 // 轨道只贴岛面/缓坡，不随山丘抬升（禁止“上山坡”）
 const TRACK_LIFT_CAP = ISLAND_BASE_LIFT + 0.1;
@@ -259,18 +262,113 @@ function surfacePointFromFlat(x, z, R, out = new THREE.Vector3()) {
   return flatToWorld(x, lift + SURFACE_EPS, z, R, out);
 }
 
-/** 曲线采样点贴轨面（封顶抬升） */
+/** 曲线采样点贴轨面（封顶抬升）；南半球 = 悬空高架（固定半径跨越深渊） */
 function surfacePoint(dir, R, out = new THREE.Vector3()) {
   const flat = worldToFlatXZ(dir, R);
   if (flat) {
     return surfacePointFromFlat(flat.x, flat.z, R, out);
   }
-  return out.copy(dir).normalize().multiplyScalar(R + SURFACE_EPS);
+  // 南半球（y<0 且无平面归属）：高架桥模式，保持恒定半径直跨大峡谷
+  const fixed = dir.y < -0.05 ? R + 0.2 : R + SURFACE_EPS;
+  return out.copy(dir).normalize().multiplyScalar(fixed);
+}
+
+/** 高架桥墩落点（谷底/裸面） */
+function pierFootRadius(dir, R) {
+  return R + canyonOffsetDir(dir);
+}
+
+/** 基于中心曲线沿球面横向偏移，生成一条完整的平行线路。 */
+function buildParallelCurve(centerCurve, offset, R) {
+  const points = [];
+  const SEG = 240;
+  for (let i = 0; i < SEG; i++) {
+    const t = i / SEG;
+    centerCurve.getPointAt(t, _p);
+    surfacePoint(_p, R, _p);
+    centerCurve.getTangentAt(t, _fwd).normalize();
+    _up.copy(_p).normalize();
+    _right.crossVectors(_up, _fwd).normalize();
+    const radius = _p.length();
+    points.push(
+      _p.clone().addScaledVector(_right, offset).normalize().multiplyScalar(radius)
+    );
+  }
+  return new THREE.CatmullRomCurve3(points, true, "centripetal", 0.5);
+}
+
+function addTrackLane(group, curve, R, sleeperMat, railMat) {
+  const trackLen = curve.getLength();
+  const sleeperCount = Math.max(32, Math.floor(trackLen / 1.35));
+  for (let i = 0; i < sleeperCount; i++) {
+    const t = i / sleeperCount;
+    curve.getPointAt(t, _p);
+    surfacePoint(_p, R, _p);
+    curve.getTangentAt(t, _fwd).normalize();
+    _up.copy(_p).normalize();
+    _right.crossVectors(_up, _fwd).normalize();
+    _fwd.crossVectors(_right, _up).normalize();
+    _m.makeBasis(_right, _up, _fwd);
+    const sleeper = new THREE.Mesh(
+      facet(new THREE.BoxGeometry(0.88, 0.06, 0.24)),
+      sleeperMat
+    );
+    sleeper.quaternion.setFromRotationMatrix(_m);
+    sleeper.position.copy(_p);
+    sleeper.receiveShadow = true;
+    group.add(sleeper);
+  }
+
+  for (const railSide of [-1, 1]) {
+    const railPoints = [];
+    const SEG = 180;
+    for (let i = 0; i < SEG; i++) {
+      const t = i / SEG;
+      curve.getPointAt(t, _p);
+      surfacePoint(_p, R, _p);
+      curve.getTangentAt(t, _fwd).normalize();
+      _up.copy(_p).normalize();
+      _right.crossVectors(_up, _fwd).normalize();
+      const radius = _p.length();
+      railPoints.push(
+        _p.clone()
+          .addScaledVector(_right, railSide * RAIL_GAUGE_HALF)
+          .normalize()
+          .multiplyScalar(radius + 0.06)
+      );
+    }
+    const railCurve = new THREE.CatmullRomCurve3(railPoints, true, "centripetal", 0.5);
+    const rail = new THREE.Mesh(
+      new THREE.TubeGeometry(railCurve, 260, 0.035, 5, true),
+      railMat
+    );
+    rail.castShadow = true;
+    addOutline(rail, 0.01);
+    group.add(rail);
+  }
+}
+
+function makeEnergyBeam(group, color) {
+  const geometry = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(),
+    new THREE.Vector3(),
+  ]);
+  const beam = new THREE.Line(
+    geometry,
+    new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0 })
+  );
+  beam.frustumCulled = false;
+  group.add(beam);
+  return beam;
+}
+
+function wrap01(value) {
+  return ((value % 1) + 1) % 1;
 }
 
 /**
- * 构建环形轨道 + 电车。
- * @returns {{ group, curve, tram, update, waypointsFlat }}
+ * 构建双线环形轨道 + 红蓝相向电车。
+ * @returns {{ group, curve, curves, tram, trams, redTram, blueTram, update, waypointsFlat }}
  */
 export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {}) {
   const group = new THREE.Group();
@@ -313,112 +411,143 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
 
   // centripetal：间距不均时也不过冲/尖角
   const curve = new THREE.CatmullRomCurve3(controls, true, "centripetal", 0.5);
-  const trackLen = curve.getLength();
-
-  // ---------- 枕木 ----------
+  // 中心线两侧各铺一条完整线路（每线 = 枕木 + 两根钢轨）。
+  const redCurve = buildParallelCurve(curve, -LANE_OFFSET, R);
+  const blueCurve = buildParallelCurve(curve, LANE_OFFSET, R);
   const sleeperMat = toonMat(SLEEPER);
-  const count = Math.max(32, Math.floor(trackLen / 1.35));
-  for (let i = 0; i < count; i++) {
-    const t = i / count;
-    curve.getPointAt(t, _p);
-    surfacePoint(_p, R, _p);
-    // 二次确认：若仍落在高丘上，压回 cap 高度
-    const flat = worldToFlatXZ(_p, R);
-    if (flat && hillHeightAt(flat.x, flat.z) > 0.35) {
-      surfacePointFromFlat(flat.x, flat.z, R, _p);
-    }
-    const sleeper = new THREE.Mesh(facet(new THREE.BoxGeometry(0.85, 0.06, 0.24)), sleeperMat);
-    curve.getTangentAt(t, _fwd).normalize();
-    _up.copy(_p).normalize();
-    _right.crossVectors(_up, _fwd).normalize();
-    _fwd.crossVectors(_right, _up).normalize();
-    _m.makeBasis(_right, _up, _fwd);
-    sleeper.quaternion.setFromRotationMatrix(_m);
-    sleeper.position.copy(_p);
-    sleeper.receiveShadow = true;
-    group.add(sleeper);
-  }
-
-  // ---------- 双钢轨 ----------
   const railMat = toonMat(RAIL);
-  for (const side of [-1, 1]) {
-    const pts = [];
-    const SEG = 120;
-    for (let i = 0; i < SEG; i++) {
-      const t = i / SEG;
+  addTrackLane(group, redCurve, R, sleeperMat, railMat);
+  addTrackLane(group, blueCurve, R, sleeperMat, railMat);
+
+  // ---------- 悬空高架桥墩（南半球大峡谷段：每 ~3 单位一根灰立柱） ----------
+  {
+    const pierMat = toonMat(0x8a8f94);
+    const count = Math.floor(trackLen / 3);
+    for (let i = 0; i < count; i++) {
+      const t = i / count;
       curve.getPointAt(t, _p);
-      surfacePoint(_p, R, _p);
-      curve.getTangentAt(t, _fwd).normalize();
+      surfacePoint(_p, R, _p); // 南半球 = 固定 40.2 悬空
+      if (_p.y > -0.05) continue; // 只在南半球深渊段架桥墩
       _up.copy(_p).normalize();
-      _right.crossVectors(_up, _fwd).normalize();
-      pts.push(_p.clone().addScaledVector(_right, side * 0.32).addScaledVector(_up, 0.06));
+      const footR = pierFootRadius(_up, R);
+      const topR = _p.length();
+      const len = topR - footR;
+      if (len < 0.6) continue; // 谷缘浅处不需要墩
+      const pier = new THREE.Mesh(
+        facet(new THREE.BoxGeometry(0.55, len, 0.55)),
+        pierMat
+      );
+      pier.position.copy(_up).multiplyScalar(footR + len / 2);
+      pier.quaternion.copy(quatYToDir(_up, new THREE.Quaternion()));
+      pier.castShadow = true;
+      addOutline(pier, 0.012);
+      group.add(pier);
     }
-    const railCurve = new THREE.CatmullRomCurve3(pts, true, "centripetal", 0.5);
-    const rail = new THREE.Mesh(
-      new THREE.TubeGeometry(railCurve, 200, 0.035, 5, true),
-      railMat
-    );
-    rail.castShadow = true;
-    addOutline(rail, 0.01);
-    group.add(rail);
   }
 
-  // ---------- 电车 ----------
-  const tram = createChristchurchTram();
-  group.add(tram);
+  // ---------- 红 / 蓝双车：同站并排、方向相反 ----------
+  const redTram = createChristchurchTram({
+    variant: "red",
+    routeNumber: "11",
+    destination: "CITY TOUR",
+  });
+  const blueTram = createChristchurchTram({
+    variant: "blue",
+    routeNumber: "12",
+    destination: "COAST LINE",
+  });
+  group.add(redTram, blueTram);
 
-  // ---------- 集电弓能量束（仅南半球：连接太空水环） ----------
+  // ---------- 集电弓能量束（两车进入南半球时分别连接太空水环） ----------
   const beamTarget = (opts.beamTarget || new THREE.Vector3(40, 85, -70)).clone();
-  const beamGeo = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(),
-    new THREE.Vector3(),
-  ]);
-  const beam = new THREE.Line(
-    beamGeo,
-    new THREE.LineBasicMaterial({ color: 0x9fe0f0, transparent: true, opacity: 0 })
-  );
-  beam.frustumCulled = false;
-  group.add(beam);
-  let beamTime = 0;
-
-  let progress = 0;
+  const services = [
+    {
+      tram: redTram,
+      curve: redCurve,
+      direction: 1,
+      progress: 0,
+      trackLen: redCurve.getLength(),
+      beam: makeEnergyBeam(group, 0xffb6a8),
+      beamTime: 0,
+    },
+    {
+      tram: blueTram,
+      curve: blueCurve,
+      direction: -1,
+      progress: 0,
+      trackLen: blueCurve.getLength(),
+      beam: makeEnergyBeam(group, 0x8fdcff),
+      beamTime: Math.PI * 0.5,
+    },
+  ];
   const bodyLift = 0.06;
 
   function update(dt, listenerPosition) {
-    progress = (progress + (P.tramSpeed * dt) / trackLen) % 1;
-    curve.getPointAt(progress, _p);
-    surfacePoint(_p, R, _p);
-    curve.getTangentAt(progress, _fwd).normalize();
-    _up.copy(_p).normalize();
-    _right.crossVectors(_up, _fwd).normalize();
-    _fwd.crossVectors(_right, _up).normalize();
-    _m.makeBasis(_right, _up, _fwd);
-    _q.setFromRotationMatrix(_m);
-    tram.quaternion.copy(_q);
-    tram.rotateY(-Math.PI / 2);
-    tram.position.copy(_p).addScaledVector(_up, bodyLift);
+    let nearest = null;
+    let nearestDistance = Infinity;
+    for (const service of services) {
+      service.progress = wrap01(
+        service.progress + (service.direction * P.tramSpeed * dt) / service.trackLen
+      );
+      service.curve.getPointAt(service.progress, _p);
+      surfacePoint(_p, R, _p);
+      service.curve.getTangentAt(service.progress, _fwd).normalize();
+      _fwd.multiplyScalar(service.direction);
+      _up.copy(_p).normalize();
+      _right.crossVectors(_up, _fwd).normalize();
+      _fwd.crossVectors(_right, _up).normalize();
+      _m.makeBasis(_right, _up, _fwd);
+      _q.setFromRotationMatrix(_m);
+      service.tram.quaternion.copy(_q);
+      service.tram.rotateY(-Math.PI / 2);
+      service.tram.position.copy(_p).addScaledVector(_up, bodyLift);
 
-    // 能量束：进入南半球（y<0）集电弓射出淡蓝光束连到太空水环
-    const inSouth = tram.position.y < 0;
-    beamTime += dt;
-    if (inSouth) {
-      _tmp.set(-0.5, 1.85, 0).applyQuaternion(tram.quaternion).add(tram.position);
-      beamGeo.setFromPoints([_tmp, beamTarget]);
-      beam.material.opacity = 0.45 + 0.25 * Math.sin(beamTime * 5);
-    } else {
-      beam.material.opacity = Math.max(0, beam.material.opacity - dt * 2);
+      service.beamTime += dt;
+      if (service.tram.position.y < 0) {
+        _tmp.set(-0.5, 1.9, 0)
+          .applyQuaternion(service.tram.quaternion)
+          .add(service.tram.position);
+        service.beam.geometry.setFromPoints([_tmp, beamTarget]);
+        service.beam.material.opacity = 0.42 + 0.22 * Math.sin(service.beamTime * 5);
+      } else {
+        service.beam.material.opacity = Math.max(0, service.beam.material.opacity - dt * 2);
+      }
+
+      if (listenerPosition) {
+        service.tram.getWorldPosition(_tramWorld);
+        const distance = _tramWorld.distanceTo(listenerPosition);
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearest = service.tram;
+        }
+      }
     }
 
-    if (listenerPosition) {
-      tram.getWorldPosition(_tramWorld);
+    if (listenerPosition && nearest) {
+      nearest.getWorldPosition(_tramWorld);
       updateTramSound(_tramWorld, listenerPosition);
     }
   }
 
-  /** 玩家按 E 时使用：仅在电车车身附近才算登车，避免路过误触发。 */
+  function getNearestTram(position) {
+    if (!position) return redTram;
+    let nearest = redTram;
+    let best = Infinity;
+    for (const service of services) {
+      service.tram.getWorldPosition(_tramWorld);
+      const distance = _tramWorld.distanceTo(position);
+      if (distance < best) {
+        best = distance;
+        nearest = service.tram;
+      }
+    }
+    return nearest;
+  }
+
+  /** 两辆车都可搭乘；以最近车辆做距离判定。 */
   function isNearTram(position, radius = BOARDING_RADIUS) {
     if (!position) return false;
-    tram.getWorldPosition(_tramWorld);
+    getNearestTram(position).getWorldPosition(_tramWorld);
     return _tramWorld.distanceTo(position) <= radius;
   }
 
@@ -427,8 +556,13 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
   return {
     group,
     curve,
-    tram,
+    curves: { red: redCurve, blue: blueCurve },
+    tram: redTram,
+    trams: [redTram, blueTram],
+    redTram,
+    blueTram,
     update,
+    getNearestTram,
     isNearTram,
     boardingRadius: BOARDING_RADIUS,
     waypointsFlat: loopFlat,

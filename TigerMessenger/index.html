@@ -249,16 +249,36 @@
       color: #cfe0ff;
     }
 
-    #hint-panel {
-      bottom: 18px;
+    #controls-dock {
+      position: absolute;
       left: 50%;
+      bottom: 18px;
       transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: max-content;
+      max-width: calc(100vw - 32px);
+      pointer-events: none;
+    }
+    #touch-toggle-slot {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      pointer-events: none;
+    }
+    #hint-panel {
+      position: relative !important;
+      inset: auto;
+      transform: none;
       padding: 10px 18px;
       font-size: 13px;
       letter-spacing: 0.02em;
       white-space: nowrap;
       opacity: 0.92;
     }
+    body.touch-pad-open #hint-panel { display: none; }
     @media (max-width: 640px) {
       #hint-panel { font-size: 11px; white-space: normal; text-align: center; max-width: 92vw; }
       #quest-panel { max-width: calc(100vw - 32px); }
@@ -361,9 +381,7 @@
     }
     #touch-toggle {
       pointer-events: auto;
-      position: absolute;
-      right: 14px;
-      bottom: 14px;
+      position: relative;
       z-index: 17;
       display: flex;
       align-items: center;
@@ -495,21 +513,6 @@
     .touch-btn-f {
       border-color: rgba(121, 210, 196, 0.5);
       color: #9eefe0;
-    }
-    #touch-pad-collapse {
-      pointer-events: auto;
-      position: absolute;
-      left: 50%;
-      bottom: 12px;
-      transform: translateX(-50%);
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(140, 180, 255, 0.28);
-      background: rgba(8, 12, 22, 0.65);
-      color: #9ec5ff;
-      font-size: 12px;
-      cursor: pointer;
-      touch-action: manipulation;
     }
     @media (min-width: 900px) and (pointer: fine) {
       /* 桌面：遥控钮略透明，减少干扰 */
@@ -1115,15 +1118,18 @@
       <div id="compass-needle"></div>
       <div id="compass-label">目标</div>
     </div>
-    <div id="hint-panel" class="panel">
-      <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动
-      · <kbd>Shift</kbd> 疾跑
-      · <kbd>Space</kbd> 跳跃
-      · 滚轮/中键 缩放
-      · 右键拖拽 环视
-      · <kbd>E</kbd> 接信 / 送达 / 聆听
-      · <kbd>L</kbd> 信袋
-      · <kbd>M</kbd> 静音
+    <div id="controls-dock">
+      <div id="touch-toggle-slot"></div>
+      <div id="hint-panel" class="panel">
+        <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动
+        · <kbd>Shift</kbd> 疾跑
+        · <kbd>Space</kbd> 跳跃
+        · 滚轮/中键 缩放
+        · 右键拖拽 环视
+        · <kbd>E</kbd> 接信 / 送达 / 聆听
+        · <kbd>L</kbd> 信袋
+        · <kbd>M</kbd> 静音
+      </div>
     </div>
     <div id="toast" class="panel"></div>
     <div id="bubble"></div>

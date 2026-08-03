@@ -75,7 +75,7 @@ export function createTouchControls({
   const root = document.createElement("div");
   root.id = "touch-controls";
   root.innerHTML = `
-    <button type="button" id="touch-toggle" aria-label="遥控杆开关" title="遥控杆">
+    <button type="button" id="touch-toggle" aria-label="展开遥控杆" title="遥控杆" aria-pressed="false">
       <span class="touch-toggle-icon">🕹️</span>
       <span class="touch-toggle-label">遥控</span>
     </button>
@@ -97,17 +97,16 @@ export function createTouchControls({
           <button type="button" class="touch-btn touch-btn-f" data-action="tram" aria-label="电车 F">F</button>
         </div>
       </div>
-      <button type="button" id="touch-pad-collapse" aria-label="收起遥控杆">收起</button>
     </div>
   `;
   document.body.appendChild(root);
 
   const elToggle = root.querySelector("#touch-toggle");
+  document.querySelector("#touch-toggle-slot")?.appendChild(elToggle);
   const elPad = root.querySelector("#touch-pad");
   const elMove = root.querySelector("#touch-move");
   const elKnob = root.querySelector("#touch-move-knob");
   const elLook = root.querySelector("#touch-look");
-  const elCollapse = root.querySelector("#touch-pad-collapse");
 
   let open = false;
   let moveId = null;
@@ -135,6 +134,7 @@ export function createTouchControls({
     elPad.hidden = !open;
     elToggle.classList.toggle("is-active", open);
     elToggle.setAttribute("aria-pressed", open ? "true" : "false");
+    elToggle.setAttribute("aria-label", open ? "收起遥控杆并显示操作提示" : "展开遥控杆并收起操作提示");
     document.body.classList.toggle("touch-pad-open", open);
     writeOpenPref(open);
     if (!open) {
@@ -315,12 +315,6 @@ export function createTouchControls({
     e.stopPropagation();
     setOpen(!open);
   });
-  elCollapse.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setOpen(false);
-  });
-
   // 开场后按偏好展开
   const preferOpen = readOpenPref();
   // 先不 toast，等用户点开始再提示一次可选
@@ -349,6 +343,7 @@ export function createTouchControls({
     dispose() {
       clearMoveKeys();
       keys.Space = false;
+      elToggle.remove();
       root.remove();
       document.body.classList.remove("touch-pad-open");
     },
