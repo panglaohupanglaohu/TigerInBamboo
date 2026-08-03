@@ -95,11 +95,11 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
     const lon = rnd() * 360 - 180;
     const dir = latLonToDir(lat, lon, new THREE.Vector3());
     const dC = dir.angleTo(grandDir); // 距母塔角距（rad）
-    // 密度向母塔聚集，向赤道退化
-    const density = Math.max(0.1, 1 - dC / 1.35);
+    // 密度与高度向母塔急剧收拢（主人：城市围绕母塔汇聚）
+    const density = Math.max(0.06, 1 - dC / 0.45);
     if (rnd() > density) continue;
     // 高度梯队：近母塔 ~8× 玩家，远 ~3×
-    let h = (5.1 + Math.max(0, 1 - dC / 1.35) * 8.5) * (0.75 + rnd() * 0.5);
+    let h = (5.1 + Math.max(0, 1 - dC / 0.45) * 8.5) * (0.75 + rnd() * 0.5);
     const r = 0.45 + rnd() * 0.9;
     // 扎根谷底/峭壁：叠加峡谷沉降
     const root = R + canyonOffsetDir(dir);

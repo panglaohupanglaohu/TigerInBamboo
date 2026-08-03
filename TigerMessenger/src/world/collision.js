@@ -7,6 +7,7 @@ import { PLAYER_RADIUS, PLAYER_HEIGHT } from "../core/constants.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { flatToWorld } from "./sphereMath.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
+import { canyonOffsetDir } from "./canyon.js";
 
 const _up = new THREE.Vector3();
 const _tmp = new THREE.Vector3();
@@ -153,16 +154,17 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
     break;
   }
 
-  // ---- 星球表面 ----
+  // ---- 星球表面（南半球叠加峡谷地形，谷底可行走） ----
   if (!grounded) {
     const r = pos.length();
-    if (r < PLANET_RADIUS + 0.1) {
-      pos.setLength(PLANET_RADIUS);
+    const surfR = PLANET_RADIUS + canyonOffsetDir(_up.copy(pos).normalize());
+    if (r < surfR + 0.1) {
+      pos.setLength(surfR);
       const n = _up.copy(pos).normalize();
       const vr = n.dot(vel);
       if (vr < 0) vel.addScaledVector(n, -vr);
       grounded = true;
-      groundR = PLANET_RADIUS;
+      groundR = surfR;
     }
   }
 

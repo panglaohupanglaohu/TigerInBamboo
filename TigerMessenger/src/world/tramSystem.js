@@ -398,11 +398,11 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
     if (i === iW) break;
   }
   const southExcursion = [
-    latLonToDir(-10, -60).multiplyScalar(R + SURFACE_EPS), // 跨赤道
-    latLonToDir(-38, -95).multiplyScalar(R + SURFACE_EPS), // 水晶城东
-    latLonToDir(-55, -122).multiplyScalar(R + SURFACE_EPS), // 主晶塔南
-    latLonToDir(-38, -140).multiplyScalar(R + SURFACE_EPS), // 水晶城西
-    latLonToDir(-12, 165).multiplyScalar(R + SURFACE_EPS), // 回北折返
+    latLonToDir(-10, -60).multiplyScalar(R + SURFACE_EPS), // G 跨赤道
+    latLonToDir(-22, -78).multiplyScalar(R + SURFACE_EPS), // H 谷缘东北（远眺城市）
+    latLonToDir(-34, -104).multiplyScalar(R + SURFACE_EPS), // I 跨谷空桥段
+    latLonToDir(-30, -132).multiplyScalar(R + SURFACE_EPS), // J 谷缘西南
+    latLonToDir(-12, 165).multiplyScalar(R + SURFACE_EPS), // K 回北折返
   ];
   const controls = [
     ...northArc.map(({ x, z }) => toWorld(x, z)),

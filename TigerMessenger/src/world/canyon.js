@@ -8,8 +8,8 @@ export const CANYON = Object.freeze({
   lat: -50, // 谷心纬度
   lon: -112, // 谷心经度
   rim: 0.55, // 谷缘角半径（rad）
-  depth: 11, // 最大塌陷深度
-  steps: 5, // 阶梯层数（刀劈斧凿切面）
+  depth: 19, // 最大塌陷深度（加深：高架俯瞰纵深）
+  steps: 7, // 阶梯层数（刀劈斧凿切面）
 });
 
 const _cLat = THREE.MathUtils.degToRad(CANYON.lat);
