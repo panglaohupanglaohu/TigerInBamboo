@@ -230,7 +230,8 @@ export function buildStartingCamp(scene, R) {
   colliders.push({ position: elder.position.clone(), radius: 0.8 });
 
   // ---------- 4b. 阿狸：与送信人体量相当的小狐狸（可互动 / 漫步） ----------
-  const ali = createLowPolyFox({ scale: 0.52 });
+  // 经典四足阿狸（头大身小 + 火焰尾）；scale 在 createLowPolyFox 内默认 0.28
+  const ali = createLowPolyFox({ scale: 0.28 });
   // 略靠营地内侧，避开老人 3 单位净空
   const ALI = { x: -8.6, z: 7.2 };
   put(ali, ALI.x, ALI.z, groundLiftAt(ALI.x, ALI.z), 0.9);

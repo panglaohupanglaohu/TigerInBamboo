@@ -149,9 +149,9 @@ export const BUILDING_CATALOG = {
   fox: {
     id: "fox",
     label: "阿狸（小狐狸）",
-    create: () => createLowPolyFox({ scale: 0.52 }),
+    create: () => createLowPolyFox({ scale: 0.28 }),
     defaultYaw: 0.9,
-    collideRadius: 0.38,
+    collideRadius: 0.55,
     color: "#E96A36",
   },
   fisherBoat: {
