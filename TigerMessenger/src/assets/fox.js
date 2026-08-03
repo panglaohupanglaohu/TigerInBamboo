@@ -64,10 +64,14 @@ export function createWalkingFox(mats) {
   const root = new THREE.Group();
   root.name = "fox-walk-root";
 
-  // ---- 后臀（扭动主体，尾巴挂在这里）----
+  // 躯干离地：腿高 + 半身，脚底落在 y≈0
+  const bodyY = LEG_H + BODY_H * 0.5;
+  const legLocalY = -BODY_H * 0.5 - LEG_H * 0.5 + 0.02;
+
+  // ---- 后臀（扭动主体，尾巴+后腿挂在这里）----
   const hips = new THREE.Group();
   hips.name = "fox-hips";
-  hips.position.set(-HIPS_LEN * 0.35, BODY_H * 0.5 + LEG_H * 0.15, 0);
+  hips.position.set(-HIPS_LEN * 0.35, bodyY, 0);
   root.add(hips);
 
   const hipsMesh = part(
@@ -86,10 +90,10 @@ export function createWalkingFox(mats) {
   hipsBelly.position.set(0.05, -BODY_H * 0.22, 0);
   hips.add(hipsBelly);
 
-  // ---- 前胸（紧挨后臀前方）----
+  // ---- 前胸（紧挨后臀前方，前腿挂在这里）----
   const chest = new THREE.Group();
   chest.name = "fox-chest";
-  chest.position.set(CHEST_LEN * 0.4, BODY_H * 0.5 + LEG_H * 0.15, 0);
+  chest.position.set(CHEST_LEN * 0.4, bodyY, 0);
   root.add(chest);
 
   const chestMesh = part(
@@ -183,81 +187,72 @@ export function createWalkingFox(mats) {
     earG.userData.isEar = true;
   }
 
-  // ---- 火炬火焰尾：5 节极扁 Cone 链式嵌套（身体→j1→j2→j3→j4→j5）----
-  // 每节是 Group（旋转枢轴）+ 扁锥 mesh；局部 +Y 为尾向延伸
-  // 根部：hips 后方；整链指向 -X（身后）并略上抬
+  // ---- 火炬火焰尾：5 节 Cone 链式嵌套 hips → j1 → j2 → j3 → j4 → j5(乳白) ----
+  // 局部 +Y 为尾向；整链转到身后 -X，像一簇向上蹿、向后飘的火苗
   const tailRoot = new THREE.Group();
   tailRoot.name = "fox-flame-tail-root";
-  tailRoot.position.set(-HIPS_LEN * 0.5, BODY_H * 0.12, 0);
-  // +Y → -X（身后），再微抬火苗
+  tailRoot.position.set(-HIPS_LEN * 0.48, BODY_H * 0.05, 0);
   tailRoot.rotation.order = "ZYX";
-  tailRoot.rotation.z = Math.PI / 2;
-  tailRoot.rotation.x = THREE.MathUtils.degToRad(12);
+  tailRoot.rotation.z = Math.PI / 2; // +Y → -X（身后）
+  tailRoot.rotation.x = THREE.MathUtils.degToRad(18); // 火苗上抬
   hips.add(tailRoot);
 
-  /**
-   * 火焰剖面半径（先略粗再收尖）· 归一化 s∈[0,1]
-   * 火炬感：根 0.55 → 最粗 1.0@0.28 → 尖 0.12
-   */
+  /** 火焰剖面：根细 → 中段鼓 → 尖细长 */
   function flameRadiusAt(s) {
     const peak = 1.0;
-    const root = 0.55;
-    const tip = 0.12;
-    if (s < 0.28) {
-      const k = s / 0.28;
-      return root + (peak - root) * (k * (2 - k)); // ease out 变粗
+    const rootR = 0.62;
+    const tip = 0.1;
+    if (s < 0.3) {
+      const k = s / 0.3;
+      return rootR + (peak - rootR) * (1 - (1 - k) * (1 - k));
     }
-    const k = (s - 0.28) / 0.72;
-    return peak + (tip - peak) * (k * k); // ease in 收尖
+    const k = (s - 0.3) / 0.7;
+    return peak + (tip - peak) * (k * k);
   }
 
-  // 5 节长度占比（后段更修长）
-  const SEG_W = [0.14, 0.18, 0.2, 0.22, 0.26];
+  // 5 节：后段更修长，总长 ≈ 半个身长
+  const SEG_W = [0.16, 0.18, 0.2, 0.22, 0.24];
   const SEG_N = 5;
   /** @type {THREE.Group[]} */
   const tailJoints = [];
   /** @type {THREE.Mesh[]} */
   const tailMeshes = [];
+  /** 每节实际高度，供下一节挂点 */
+  const segH = SEG_W.map((w) => TAIL_TOTAL * w);
 
   let parent = tailRoot;
   let s0 = 0;
   for (let i = 0; i < SEG_N; i++) {
     const s1 = s0 + SEG_W[i];
     const sMid = (s0 + s1) * 0.5;
-    const h = TAIL_TOTAL * SEG_W[i];
-    // 极扁：径向压扁 scale.x/z，像飘带火焰截面
-    const r = flameRadiusAt(sMid) * BODY_W * 0.38;
+    const h = segH[i];
+    const r = Math.max(0.035, flameRadiusAt(sMid) * BODY_W * 0.42);
     const isTip = i === SEG_N - 1;
     const mat = isTip ? cream : orange;
 
     const joint = new THREE.Group();
     joint.name = `fox-tail-j${i + 1}`;
-    // 第一节挂在 root 原点；后续挂在上一节 +Y 末端
-    joint.position.set(0, i === 0 ? 0 : 0, 0);
-    if (i > 0) {
-      // 接在上一节长度处
-      joint.position.y = TAIL_TOTAL * SEG_W[i - 1] * 0.92;
-    }
+    // 挂在上一节末端（沿局部 +Y）
+    joint.position.set(0, i === 0 ? 0 : segH[i - 1] * 0.95, 0);
     parent.add(joint);
 
-    // Cone 尖朝 +Y；平移使底在 y=0、尖在 y=h
-    const geo = new THREE.ConeGeometry(Math.max(0.02, r), h, 5);
+    const geo = new THREE.ConeGeometry(r, h, 5);
     geo.translate(0, h * 0.5, 0);
-    const mesh = part(geo, mat, isTip ? 0.022 : OUT);
+    const mesh = part(geo, mat, isTip ? 0.02 : OUT);
     mesh.name = isTip ? "fox-tail-flame-tip" : `fox-tail-flame-${i + 1}`;
-    // 极扁火苗截面（侧向压扁，厚度薄）
-    mesh.scale.set(0.55, 1, 0.38);
-    // 根段略鼓、尖段更扁长
-    if (i === 0) mesh.scale.set(0.7, 1, 0.5);
-    if (isTip) mesh.scale.set(0.4, 1.15, 0.28);
+    // 火焰截面：略扁，但保留体积（勿压成纸片棉花糖）
+    if (i === 0) mesh.scale.set(0.85, 1, 0.72);
+    else if (isTip) mesh.scale.set(0.55, 1.2, 0.42);
+    else mesh.scale.set(0.72, 1, 0.58);
     joint.add(mesh);
 
-    // 基线姿态：轻微 S 预弯（静止时也有火焰弧度）
+    // 静止预弯：轻微 S，像火苗定格
     joint.userData.baseRot = {
-      x: THREE.MathUtils.degToRad(i === 0 ? 4 : i === 1 ? 2 : i === 3 ? -2 : 0),
+      x: THREE.MathUtils.degToRad([6, 3, 0, -3, -5][i]),
       y: 0,
-      z: THREE.MathUtils.degToRad(i % 2 === 0 ? 3 : -2),
+      z: THREE.MathUtils.degToRad([4, -3, 3, -2, 1][i]),
     };
+    joint.userData.segLen = h;
     joint.rotation.x = joint.userData.baseRot.x;
     joint.rotation.z = joint.userData.baseRot.z;
 
@@ -267,33 +262,27 @@ export function createWalkingFox(mats) {
     s0 = s1;
   }
 
-  // ---- 四条小短腿 ----
-  const legsG = new THREE.Group();
-  legsG.name = "fox-walk-legs";
-  root.add(legsG);
-
+  // ---- 四条小短腿：前→chest，后→hips（扭臀时后腿一起甩）----
   const legGeo = new THREE.BoxGeometry(LEG_T, LEG_H, LEG_T);
-  // 前腿挂 chest 相对 root 坐标；后腿挂 hips
   const legDefs = [
-    { x: 0.28, z: 0.18, front: true },
-    { x: 0.28, z: -0.18, front: true },
-    { x: -0.22, z: 0.2, front: false },
-    { x: -0.22, z: -0.2, front: false },
+    { x: 0.12, z: 0.18, front: true },
+    { x: 0.12, z: -0.18, front: true },
+    { x: -0.08, z: 0.2, front: false },
+    { x: -0.08, z: -0.2, front: false },
   ];
   const legMeshes = [];
   for (let i = 0; i < 4; i++) {
     const d = legDefs[i];
     const leg = part(legGeo, orange);
     leg.name = `fox-walk-leg-${i}`;
-    const y = LEG_H * 0.5;
-    if (d.front) {
-      leg.position.set(d.x + CHEST_LEN * 0.15, y, d.z);
-    } else {
-      leg.position.set(d.x - HIPS_LEN * 0.1, y, d.z);
-    }
-    legsG.add(leg);
+    leg.position.set(d.x, legLocalY, d.z);
+    leg.userData.baseY = legLocalY;
+    if (d.front) chest.add(leg);
+    else hips.add(leg);
     legMeshes.push(leg);
   }
+  // 兼容旧代码：legs 指向数组容器感
+  const legsG = { children: legMeshes, visible: true };
 
   // 贴地：整体最低点 → 0
   root.updateMatrixWorld(true);

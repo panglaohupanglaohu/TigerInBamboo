@@ -414,15 +414,23 @@ export function createFoxNpc({
         });
       }
 
-      // 四短腿对角步态
-      const legs = p.legMeshes || p.legs?.children || [];
+      // 四短腿对角步态（腿已挂在 chest/hips 上，扭臀会带动后腿）
+      const legs = p.legMeshes || [];
       if (moving && legs.length) {
         for (let i = 0; i < legs.length; i++) {
           const phase = i === 0 || i === 3 ? 0 : Math.PI;
-          legs[i].rotation.x = Math.sin(gait + phase) * 0.45;
+          legs[i].rotation.x = Math.sin(gait + phase) * 0.5;
+          // 微抬脚，增强「在地上跑」的节奏
+          const baseY = legs[i].userData.baseY;
+          if (baseY == null) legs[i].userData.baseY = legs[i].position.y;
+          const lift = Math.max(0, Math.sin(gait + phase)) * 0.04;
+          legs[i].position.y = (legs[i].userData.baseY ?? legs[i].position.y) + lift;
         }
-      } else {
-        for (const leg of legs) leg.rotation.x = 0;
+      } else if (legs.length) {
+        for (const leg of legs) {
+          leg.rotation.x = 0;
+          if (leg.userData.baseY != null) leg.position.y = leg.userData.baseY;
+        }
       }
       return;
     }
@@ -495,14 +503,14 @@ export function createFoxNpc({
         lerp: FOX_FOLLOW_LERP,
         turn: 0.16,
       });
-      // 同步 flat 缓存（供回家用）
       if (fox.userData.flatX != null) {
         flatX = fox.userData.flatX;
         flatZ = fox.userData.flatZ;
       }
     } else if (isFollowing() && idleMode === "stay") {
-      // 原地等待也贴地（坡上不悬空）
+      // 原地等待：仍贴地 + 播放待机动画（火苗尾轻摇）
       placeFoxFlat();
+      movingAnim = false;
     } else if (!isFollowing() && idleMode === "wander") {
       // 未跟随的闲逛（仅 SLEEPING 前的 wake 路径已弱化；保留回家后安静）
       const dx = walkTarget.x - flatX;
