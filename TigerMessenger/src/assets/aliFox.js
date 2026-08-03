@@ -6,4 +6,5 @@ export {
   createLowPolyFox,
   updateFoxFollow,
   animateClassicRun,
+  animateFoxCompanion,
 } from "./fox.js";

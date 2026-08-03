@@ -7,8 +7,19 @@ import { showToast } from "../ui/hud.js";
 let audioCtx = null;
 let muted = false;
 
-// 弹琴老人：一次只允许一段八音盒旋律，便于再次互动时停止。
+// 弹琴老人八音盒：播放《風之傳說》2:16–2:49 片段
 let musicBoxSession = null;
+/** @type {HTMLAudioElement|null} */
+let musicBoxEl = null;
+const MUSIC_BOX_BGM_URL = new URL(
+  "../../music/Gwenan Gibbard-風之傳說.mp3",
+  import.meta.url
+).href;
+/** 2 分 16 秒 */
+const MUSIC_BOX_START_SEC = 2 * 60 + 16;
+/** 2 分 49 秒（到此结束） */
+const MUSIC_BOX_END_SEC = 2 * 60 + 49;
+const MUSIC_BOX_VOLUME = 0.48;
 
 // 有轨电车声：轮轨「哐啷」+ 到站铃/风铃感高音（禁止持续低频嗡嗡）
 // 音量由 updateTramSound() 按距离衰减；近处才响
@@ -21,12 +32,30 @@ let tramProximity = 0;
 const TRAM_MAX_DISTANCE = 22;
 const TRAM_PEAK_GAIN = 0.42;
 
-// 环境点缀（风铃）；八音盒播放时 duck 压低
+// 环境点缀（风铃）；八音盒 / 峡谷 BGM 播放时 duck 压低
 let padTimer = null;
 let padStarted = false;
 /** 1 = 正常环境音量；八音盒播放时降到 AMBIENCE_DUCK_MUSIC_BOX */
 let ambienceDuck = 1;
 const AMBIENCE_DUCK_MUSIC_BOX = 0.22;
+const AMBIENCE_DUCK_CANYON_BGM = 0;
+
+// 峡谷进谷 BGM（Gwenan Gibbard · 風之傳說）：进谷前 10s 起播，替换默认环境音
+/** @type {HTMLAudioElement|null} */
+let canyonBgmEl = null;
+/** 场景仍要求播放（在谷内 / 进谷前 10s） */
+let canyonBgmWanted = false;
+/** 场景已离开，但当前 21–57s 这一整段必须播完再停 */
+let canyonBgmPendingStop = false;
+let canyonBgmFading = false;
+const CANYON_BGM_URL = new URL(
+  "../../music/Gwenan Gibbard-風之傳說.mp3",
+  import.meta.url
+).href;
+const CANYON_BGM_VOLUME = 0.42;
+/** 进谷 BGM 循环区间：第 21 秒 → 第 57 秒（约 36s 一整段） */
+const CANYON_BGM_START_SEC = 21;
+const CANYON_BGM_END_SEC = 57;
 
 export function ensureAudio() {
   if (muted) return null;
@@ -429,9 +458,6 @@ export function sfxThunder(opts = {}) {
   }, (delay + 2.8) * 1000);
 }
 
-/** 八音盒总增益峰值（相对 destination；略高便于压过环境点缀） */
-const MUSIC_BOX_MASTER = 0.42;
-
 /**
  * 环境音 duck：八音盒播放时压低风铃等背景点缀，结束后恢复。
  * @param {number} level 0..1
@@ -440,10 +466,106 @@ function setAmbienceDuck(level) {
   ambienceDuck = Math.max(0, Math.min(1, level));
 }
 
+function ensureMusicBoxEl() {
+  if (musicBoxEl) return musicBoxEl;
+  const el = new Audio();
+  el.preload = "auto";
+  el.loop = false;
+  el.volume = 0; // 定位完成前静音，防止从 0s 漏出
+  el.crossOrigin = "anonymous";
+  el.src = MUSIC_BOX_BGM_URL;
+  el.addEventListener("timeupdate", () => {
+    if (!musicBoxSession || muted || el.paused) return;
+    // 未定位成功时若仍在前奏，强制拉回 2:16
+    if (el.currentTime < MUSIC_BOX_START_SEC - 0.25) {
+      el.currentTime = MUSIC_BOX_START_SEC;
+      return;
+    }
+    // 播到 2:49 结束
+    if (el.currentTime >= MUSIC_BOX_END_SEC - 0.04) {
+      finishMusicBox(musicBoxSession);
+    }
+  });
+  el.addEventListener("ended", () => {
+    if (musicBoxSession) finishMusicBox(musicBoxSession);
+  });
+  musicBoxEl = el;
+  return el;
+}
+
 /**
- * 原创八音盒旋律：正弦基音叠加轻微高次泛音，模拟金属簧片的清脆衰减。
+ * 等元数据就绪后 seek 到 startSec，并等待 seeked（避免 play 从 0s 起）。
+ * @param {HTMLAudioElement} el
+ * @param {number} startSec
+ */
+function seekAudioWhenReady(el, startSec) {
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      resolve(el);
+    };
+
+    const applySeek = () => {
+      const dur = el.duration;
+      let t = startSec;
+      if (Number.isFinite(dur) && dur > 0) {
+        t = Math.min(startSec, Math.max(0, dur - 0.05));
+      }
+      const onSeeked = () => {
+        el.removeEventListener("seeked", onSeeked);
+        // 再校验一次
+        if (el.currentTime < startSec - 1) {
+          try {
+            el.currentTime = t;
+          } catch {
+            /* ignore */
+          }
+        }
+        done();
+      };
+      el.addEventListener("seeked", onSeeked);
+      try {
+        el.currentTime = t;
+      } catch {
+        done();
+        return;
+      }
+      // 部分浏览器已在目标附近不会触发 seeked
+      window.setTimeout(() => {
+        if (Math.abs(el.currentTime - t) < 1.5 || el.readyState >= 2) {
+          el.removeEventListener("seeked", onSeeked);
+          done();
+        }
+      }, 400);
+    };
+
+    if (el.readyState >= 1 && Number.isFinite(el.duration) && el.duration > 0) {
+      applySeek();
+      return;
+    }
+    const onMeta = () => {
+      el.removeEventListener("loadedmetadata", onMeta);
+      applySeek();
+    };
+    el.addEventListener("loadedmetadata", onMeta);
+    try {
+      el.load();
+    } catch {
+      /* ignore */
+    }
+    // 超时兜底：仍尝试 seek + play
+    window.setTimeout(() => {
+      el.removeEventListener("loadedmetadata", onMeta);
+      applySeek();
+    }, 2500);
+  });
+}
+
+/**
+ * 弹琴老人八音盒：播放《風之傳說》2:16–2:49。
  * 返回 true 表示开始播放；正在播放时再次调用会停止并返回 false。
- * 播放期间会自动压低环境点缀音量。
  * @param {{onNote?:(index:number)=>void, onEnded?:()=>void}} hooks
  */
 export function toggleMusicBox(hooks = {}) {
@@ -451,95 +573,68 @@ export function toggleMusicBox(hooks = {}) {
     stopMusicBox();
     return false;
   }
-  const ctx = ensureAudio();
-  if (!ctx || muted) return false;
+  if (muted) return false;
+  ensureAudio();
 
-  // 八音盒上台：压低背景环境音
+  // 压低默认环境点缀
   setAmbienceDuck(AMBIENCE_DUCK_MUSIC_BOX);
 
-  const tempo = 104;
-  const beat = 60 / tempo;
-  // 原创八小节短旋律（MIDI 音高 / 八分音符数量），温柔而略带怀旧感。
-  const melody = [
-    [76, 1], [79, 1], [83, 2], [79, 1], [76, 1], [74, 2],
-    [72, 1], [76, 1], [79, 2], [76, 1], [74, 1], [71, 2],
-    [69, 1], [72, 1], [76, 2], [74, 1], [72, 1], [69, 2],
-    [71, 1], [74, 1], [79, 2], [76, 1], [74, 1], [72, 2],
-    [76, 1], [79, 1], [84, 2], [83, 1], [79, 1], [76, 2],
-    [74, 1], [76, 1], [79, 2], [76, 1], [72, 1], [69, 2],
-    [71, 1], [72, 1], [74, 2], [76, 1], [74, 1], [71, 2],
-    [69, 1], [72, 1], [76, 2], [74, 1], [71, 1], [69, 4],
-  ];
+  const el = ensureMusicBoxEl();
+  el.volume = 0; // seek 完成前保持静音
 
-  const t0 = ctx.currentTime + 0.04;
-  const master = ctx.createGain();
-  const shimmer = ctx.createBiquadFilter();
-  shimmer.type = "highpass";
-  shimmer.frequency.value = 480;
-  master.gain.setValueAtTime(0.0001, t0);
-  master.gain.exponentialRampToValueAtTime(MUSIC_BOX_MASTER, t0 + 0.08);
-  shimmer.connect(master);
-  master.connect(ctx.destination);
+  // 键位动画：约按节拍脉冲 onNote
+  let noteIndex = 0;
+  const pulseTimer = window.setInterval(() => {
+    if (!musicBoxSession) return;
+    hooks.onNote?.(noteIndex++);
+  }, 420);
 
   const session = {
-    master,
-    shimmer,
-    sources: [],
-    timers: [],
+    el,
+    pulseTimer,
     onEnded: hooks.onEnded,
+    timers: [pulseTimer],
+    sources: [],
+    master: null,
+    shimmer: null,
+    generation: (musicBoxSession?.generation || 0) + 1,
   };
   musicBoxSession = session;
 
-  let cursor = 0;
-  melody.forEach(([midi, units], index) => {
-    const start = t0 + cursor * beat * 0.5;
-    const freq = 440 * Math.pow(2, (midi - 69) / 12);
-    const noteLength = Math.max(0.7, units * beat * 0.58);
-
-    // 每个音由基音 + 偏弱泛音；音量提高以突出八音盒
-    [
-      { ratio: 1, gain: 0.16, type: "sine" },
-      { ratio: 2.01, gain: 0.048, type: "triangle" },
-      { ratio: 3.02, gain: 0.016, type: "sine" },
-    ].forEach((voice) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = voice.type;
-      osc.frequency.setValueAtTime(freq * voice.ratio, start);
-      osc.detune.setValueAtTime((index % 3) - 1, start);
-      gain.gain.setValueAtTime(0.0001, start);
-      gain.gain.exponentialRampToValueAtTime(voice.gain, start + 0.012);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + noteLength);
-      osc.connect(gain);
-      gain.connect(shimmer);
-      osc.start(start);
-      osc.stop(start + noteLength + 0.03);
-      session.sources.push(osc);
+  // 必须先 seek 到 2:16，再 play，否则会从头响
+  seekAudioWhenReady(el, MUSIC_BOX_START_SEC).then(() => {
+    if (musicBoxSession !== session) return;
+    // 双保险
+    try {
+      if (el.currentTime < MUSIC_BOX_START_SEC - 0.5) {
+        el.currentTime = MUSIC_BOX_START_SEC;
+      }
+    } catch {
+      /* ignore */
+    }
+    el.volume = MUSIC_BOX_VOLUME;
+    el.play()?.catch?.(() => {
+      if (musicBoxSession === session) finishMusicBox(session);
     });
-
-    const delayMs = Math.max(0, (start - ctx.currentTime) * 1000);
-    session.timers.push(window.setTimeout(() => {
-      if (musicBoxSession === session) hooks.onNote?.(index);
-    }, delayMs));
-    cursor += units;
   });
 
-  const endTime = t0 + cursor * beat * 0.5 + 0.85;
-  master.gain.setValueAtTime(MUSIC_BOX_MASTER, Math.max(t0 + 0.08, endTime - 0.65));
-  master.gain.exponentialRampToValueAtTime(0.0001, endTime);
-  session.timers.push(window.setTimeout(() => finishMusicBox(session), Math.max(0, (endTime - ctx.currentTime) * 1000)));
   return true;
 }
 
 function finishMusicBox(session) {
-  if (musicBoxSession !== session) return;
+  if (!session || musicBoxSession !== session) return;
   musicBoxSession = null;
   setAmbienceDuck(1);
-  try {
-    session.master.disconnect();
-    session.shimmer.disconnect();
-  } catch {
-    /* 已由浏览器回收 */
+  for (const timer of session.timers || []) clearTimeout(timer);
+  clearInterval(session.pulseTimer);
+  const el = session.el || musicBoxEl;
+  if (el) {
+    try {
+      el.pause();
+      el.currentTime = MUSIC_BOX_START_SEC;
+    } catch {
+      /* ignore */
+    }
   }
   session.onEnded?.();
 }
@@ -547,26 +642,7 @@ function finishMusicBox(session) {
 export function stopMusicBox() {
   const session = musicBoxSession;
   if (!session) return;
-  musicBoxSession = null;
-  setAmbienceDuck(1);
-  for (const timer of session.timers) clearTimeout(timer);
-  if (audioCtx) {
-    const now = audioCtx.currentTime;
-    session.master.gain.cancelScheduledValues(now);
-    session.master.gain.setTargetAtTime(0.0001, now, 0.035);
-  }
-  window.setTimeout(() => {
-    for (const source of session.sources) {
-      try { source.stop(); } catch { /* 已停止 */ }
-    }
-    try {
-      session.master.disconnect();
-      session.shimmer.disconnect();
-    } catch {
-      /* 已由浏览器回收 */
-    }
-  }, 140);
-  session.onEnded?.();
+  finishMusicBox(session);
 }
 
 export function isMusicBoxPlaying() {
@@ -677,11 +753,245 @@ function stopAmbienceNodes() {
   padStarted = false;
 }
 
+/** 默认风铃环境是否在播 */
+export function isAmbiencePlaying() {
+  return padStarted && !muted;
+}
+
+/**
+ * 暂停默认环境音（进谷 BGM / 特殊场景用）
+ */
+export function pauseDefaultAmbience() {
+  ambienceDuck = AMBIENCE_DUCK_CANYON_BGM;
+  stopAmbienceNodes();
+}
+
+/**
+ * 恢复默认环境音（离开峡谷场景且未静音时）
+ */
+export function resumeDefaultAmbience() {
+  if (muted) return;
+  ambienceDuck = 1;
+  if (!padStarted) startAmbience();
+}
+
+function ensureCanyonBgmEl() {
+  if (canyonBgmEl) return canyonBgmEl;
+  const el = new Audio(CANYON_BGM_URL);
+  // 不用原生 loop（会回到 0 秒）；在 21s–57s 区间内自循环
+  el.loop = false;
+  el.preload = "auto";
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  el.addEventListener("timeupdate", () => {
+    if (muted || el.paused) return;
+    if (el.currentTime < CANYON_BGM_END_SEC - 0.04) return;
+    // 到达 57s：仍在场景内则循环；已驶出则播完这一段后停
+    onCanyonBgmSegmentEnd(el);
+  });
+  el.addEventListener("ended", () => {
+    if (muted) return;
+    onCanyonBgmSegmentEnd(el);
+  });
+  canyonBgmEl = el;
+  return el;
+}
+
+/**
+ * 区间终点处理：在谷内 → 回 21s 再循环；已请求停止 → 淡出结束（保证整段 21–57 播完）
+ */
+function onCanyonBgmSegmentEnd(el) {
+  if (canyonBgmWanted && !canyonBgmPendingStop) {
+    seekCanyonBgmToStart(el);
+    if (el.paused) el.play()?.catch?.(() => {});
+    return;
+  }
+  // 场景已离开（pending stop）或不再需要：本段结束，真正停掉
+  canyonBgmPendingStop = false;
+  canyonBgmWanted = false;
+  fadeOutCanyonBgm(1.2);
+}
+
+/** 定位到循环起点 21s（元数据未就绪时等 loadedmetadata） */
+function seekCanyonBgmToStart(el) {
+  if (!el) return;
+  const apply = () => {
+    try {
+      const dur = el.duration;
+      let start = CANYON_BGM_START_SEC;
+      if (Number.isFinite(dur) && dur > 0) {
+        start = Math.min(CANYON_BGM_START_SEC, Math.max(0, dur - 0.05));
+      }
+      el.currentTime = start;
+    } catch {
+      /* 部分浏览器 seek 中会抛 */
+    }
+  };
+  if (el.readyState >= 1 /* HAVE_METADATA */) apply();
+  else el.addEventListener("loadedmetadata", apply, { once: true });
+}
+
+function isCanyonBgmAudible() {
+  return !!(canyonBgmEl && !canyonBgmEl.paused && canyonBgmEl.volume > 0.001);
+}
+
+/**
+ * 峡谷进谷背景音乐：进谷前约 10 秒起播。
+ * 幂等：状态未变则不重复 fade / play。
+ * 关闭时：若本段 21–57s 未播完，会播完再停（驶出水晶城不打断）。
+ * @param {boolean} active 是否应播放
+ * @param {{ fade?: number }} [opts] fade 秒数
+ */
+export function setCanyonApproachBgm(active, opts = {}) {
+  const fade = opts.fade ?? 1.2;
+  const next = !!active && !muted;
+
+  if (next) {
+    // 重新进入谷区：取消「播完即停」，继续循环
+    const wasPendingOnly = canyonBgmPendingStop && !canyonBgmWanted;
+    canyonBgmPendingStop = false;
+
+    if (canyonBgmWanted && isCanyonBgmAudible()) {
+      // 已在播，仅防暂停
+      if (canyonBgmEl?.paused) {
+        ensureAudio();
+        canyonBgmEl.play()?.catch?.(() => {});
+      }
+      return;
+    }
+
+    // pending 收尾过程中又进谷：接上当前进度继续播，不从头 seek（避免跳播）
+    if (wasPendingOnly && isCanyonBgmAudible()) {
+      canyonBgmWanted = true;
+      return;
+    }
+
+    canyonBgmWanted = true;
+    pauseDefaultAmbience();
+    if (musicBoxSession) stopMusicBox();
+
+    ensureAudio();
+    const el = ensureCanyonBgmEl();
+    // 新开一段：从 21s 起
+    seekCanyonBgmToStart(el);
+    el.play()?.catch?.(() => {});
+    fadeAudioTo(el, CANYON_BGM_VOLUME, fade);
+    return;
+  }
+
+  // ---- 请求停止 ----
+  if (!canyonBgmWanted && !canyonBgmPendingStop) {
+    // 本来就没在播
+    return;
+  }
+
+  canyonBgmWanted = false;
+
+  // 本段 21–57 尚未走完：标记 pending，播到 57s 再停
+  const el = canyonBgmEl;
+  if (
+    el &&
+    !el.paused &&
+    el.currentTime >= CANYON_BGM_START_SEC - 0.5 &&
+    el.currentTime < CANYON_BGM_END_SEC - 0.15
+  ) {
+    canyonBgmPendingStop = true;
+    return;
+  }
+
+  // 已在终点附近或未真正在播：直接淡出
+  canyonBgmPendingStop = false;
+  fadeOutCanyonBgm(fade);
+}
+
+export function isCanyonBgmPlaying() {
+  return !!(
+    canyonBgmEl &&
+    !canyonBgmEl.paused &&
+    (canyonBgmWanted || canyonBgmPendingStop)
+  );
+}
+
+/** 已驶离触发区，正在把当前 21–57s 整段播完（鸟群伴飞窗口） */
+export function isCanyonBgmFinishing() {
+  return !!(
+    canyonBgmPendingStop &&
+    canyonBgmEl &&
+    !canyonBgmEl.paused
+  );
+}
+
+function fadeAudioTo(el, targetVol, seconds) {
+  if (!el) return;
+  const start = el.volume;
+  const end = THREE_CLAMP(targetVol, 0, 1);
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  canyonBgmFading = true;
+  const step = () => {
+    if (!canyonBgmEl || canyonBgmEl !== el) return;
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1 && canyonBgmFading) requestAnimationFrame(step);
+    else {
+      el.volume = end;
+      canyonBgmFading = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
+function fadeOutCanyonBgm(seconds = 1.4) {
+  const el = canyonBgmEl;
+  canyonBgmWanted = false;
+  canyonBgmPendingStop = false;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    if (!muted) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : CANYON_BGM_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  canyonBgmFading = true;
+  const step = () => {
+    if (!canyonBgmEl || canyonBgmEl !== el) return;
+    // 若中途又要求播放，中止淡出
+    if (canyonBgmWanted) {
+      canyonBgmFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      // 停在起点标记，下次 play 仍从 21s
+      el.currentTime = CANYON_BGM_START_SEC;
+    } catch {
+      /* ignore */
+    }
+    canyonBgmFading = false;
+    if (!muted && !canyonBgmWanted) resumeDefaultAmbience();
+  };
+  requestAnimationFrame(step);
+}
+
+function THREE_CLAMP(v, a, b) {
+  return Math.max(a, Math.min(b, v));
+}
+
 function setMuted(next) {
   muted = next;
   if (muted) {
     stopMusicBox();
     stopAmbienceNodes();
+    canyonBgmPendingStop = false;
+    canyonBgmWanted = false;
+    fadeOutCanyonBgm(0.2);
     tramProximity = 0;
     if (tramNodes?.master && audioCtx) {
       tramNodes.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);

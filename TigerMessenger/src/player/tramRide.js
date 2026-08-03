@@ -9,6 +9,7 @@ export const TRAM_BOARD_RANGE = 3.0;
 const BOARD_TIME = 0.85;
 const RIDE_DIST = 9.5; // 乘客第三人称：略远，好看见窗外
 const DRIVER_DIST = 0.35; // 司机视野：贴驾驶室，近乎第一人称
+const DRIVER_FOV = 78; // 深峡谷进城段使用广角，强化城市揭幕与桥面速度感
 
 // 窗边座位：车内、贴右侧窗（local +Z 为窗外方向）
 const SEAT_LOCAL = new THREE.Vector3(0.35, 0.78, 0.36);
@@ -44,6 +45,7 @@ export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, to
   let viewMode = "passenger";
   let boardT = 0;
   let prevDist = 0;
+  let prevFov = 60;
   let lookPhase = 0;
   let activeTram = null;
 
@@ -82,8 +84,13 @@ export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, to
 
   function applyCameraForView() {
     if (!cameraRig?.setDist) return;
-    if (viewMode === "driver") cameraRig.setDist(DRIVER_DIST);
-    else cameraRig.setDist(RIDE_DIST);
+    if (viewMode === "driver") {
+      cameraRig.setDist(DRIVER_DIST);
+      cameraRig.setFov?.(DRIVER_FOV);
+    } else {
+      cameraRig.setDist(RIDE_DIST);
+      cameraRig.setFov?.(prevFov);
+    }
   }
 
   function setViewMode(mode) {
@@ -123,6 +130,7 @@ export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, to
     viewMode = "passenger";
     player.riding = false;
     if (cameraRig.setDist && prevDist) cameraRig.setDist(prevDist);
+    cameraRig.setFov?.(prevFov);
     if (t) {
       _up.copy(t.position).normalize();
       _tmp.copy(DOOR_LOCAL).applyQuaternion(t.quaternion).add(t.position);
@@ -158,6 +166,7 @@ export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, to
       boardT = 0;
       viewMode = "passenger";
       prevDist = cameraRig.getDist ? cameraRig.getDist() : 0;
+      prevFov = cameraRig.getFov?.() ?? cameraRig.getDefaultFov?.() ?? 60;
       if (cameraRig.setDist) cameraRig.setDist(RIDE_DIST);
       player.riding = true;
       onBoard?.(activeTram);

@@ -2,14 +2,14 @@
 //  阿狸互动：E 叫醒跟随 · 聊天 · 经典四足碎步由 updateFoxFollow 驱动
 // =====================================================================
 import * as THREE from "three";
-import { placeObjectOnSphere } from "./sphereMath.js";
+import { flatToWorld } from "./sphereMath.js";
 import { groundLiftAt } from "./hills.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { P } from "../core/params.js";
 import { showBubble, hideBubble, showToast } from "../ui/hud.js";
 import {
   updateFoxFollow,
-  animateClassicRun,
+  animateFoxCompanion,
   FOX_FOLLOW_GAP,
   FOX_FOLLOW_LERP,
 } from "../assets/fox.js";
@@ -157,10 +157,35 @@ export function createFoxNpc({
     return (fox.getState?.() ?? fox.userData.foxState) === "FOLLOWING";
   }
 
+  const _placePos = new THREE.Vector3();
+  const _placeUp = new THREE.Vector3();
+  const _placeFwd = new THREE.Vector3();
+  const _placeRight = new THREE.Vector3();
+  const _placeM = new THREE.Matrix4();
+  const _placeQ = new THREE.Quaternion();
+
+  /**
+   * 贴地放置：只写位置 + 一次合成朝向（不 placeObjectOnSphere 重置再 rotateY，防抖）
+   */
   function placeFoxFlat() {
-    const lift = groundLiftAt(flatX, flatZ) + 0.02;
-    placeObjectOnSphere(fox, flatX, flatZ, lift, planetRadius);
-    fox.rotateY(yaw);
+    const lift = groundLiftAt(flatX, flatZ) + 0.03;
+    flatToWorld(flatX, lift, flatZ, planetRadius, _placePos);
+    fox.position.copy(_placePos);
+    // +Y 法线；yaw 绕法线：本地 +X 朝向
+    _placeUp.copy(_placePos).normalize();
+    // 平面 yaw：0 朝 +X 切向
+    _placeFwd.set(Math.cos(yaw), 0, Math.sin(yaw));
+    // 把平面前向投到切平面
+    _placeFwd.addScaledVector(_placeUp, -_placeFwd.dot(_placeUp));
+    if (_placeFwd.lengthSq() < 1e-8) {
+      _placeFwd.set(0, 0, 1).addScaledVector(_placeUp, -_placeUp.z);
+    }
+    _placeFwd.normalize();
+    _placeRight.crossVectors(_placeFwd, _placeUp).normalize();
+    _placeFwd.crossVectors(_placeUp, _placeRight).normalize();
+    _placeM.makeBasis(_placeFwd, _placeUp, _placeRight);
+    _placeQ.setFromRotationMatrix(_placeM);
+    fox.quaternion.copy(_placeQ);
     fox.userData.flatX = flatX;
     fox.userData.flatZ = flatZ;
     fox.userData.yaw = yaw;
@@ -365,6 +390,7 @@ export function createFoxNpc({
         lerp: FOX_FOLLOW_LERP,
         turn: 0.18,
         time: t,
+        dt,
       });
       if (fox.userData.flatX != null) {
         flatX = fox.userData.flatX;
@@ -372,8 +398,13 @@ export function createFoxNpc({
       }
     } else if (isFollowing() && idleMode === "stay") {
       placeFoxFlat();
-      // 待机仍轻摇尾巴
-      animateClassicRun(fox, t, false);
+      // 原地待命：优雅坐姿 + 头部灵动追视玩家 + 尾浪
+      animateFoxCompanion(fox, {
+        time: t,
+        dt,
+        moving: false,
+        playerPos: player.position,
+      });
       movingAnim = false;
     } else if (!isFollowing() && idleMode === "wander") {
       const dx = walkTarget.x - flatX;

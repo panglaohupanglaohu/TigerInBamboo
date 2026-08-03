@@ -12,7 +12,9 @@ import { PLANET_RADIUS } from "../world/planet.js";
 import { createCatalogObject, getBuildingDef, listBuildingTypes } from "./buildingCatalog.js";
 
 const STORAGE_KEY = "tm.mapEditor.placements.v1";
-const MAP_EXTENT = 20; // 平面图半宽（世界 flat 单位）
+const MAP_EXTENT = 20; // 平面图默认半宽（世界 flat 单位，zoom=1）
+const MAP_ZOOM_MIN = 0.35;
+const MAP_ZOOM_MAX = 5;
 
 /**
  * @param {object} opts
@@ -36,12 +38,21 @@ export function createMapEditor({
   let dragging = false;
   let open = false;
   let uidSeq = 1;
+  /** 平面图缩放：1 = 半宽 MAP_EXTENT；越大越近 */
+  let mapZoom = 1;
+  /** 平面图平移中心（flat x/z） */
+  let mapPanX = 0;
+  let mapPanZ = 0;
   const _yawQ = new THREE.Quaternion();
   const _yAxis = new THREE.Vector3(0, 1, 0);
   const _raycaster = new THREE.Raycaster();
   const _ndc = new THREE.Vector2();
   /** @type {THREE.Object3D|null} 3D 选中高亮环 */
   let worldHighlight = null;
+
+  function viewHalf() {
+    return MAP_EXTENT / Math.max(MAP_ZOOM_MIN, mapZoom);
+  }
 
   // ---------- UI ----------
   const overlay = document.createElement("div");
@@ -54,7 +65,7 @@ export function createMapEditor({
         <button type="button" id="map-editor-close" title="关闭">✕</button>
       </div>
       <p class="map-editor-hint">
-        点选拖动 · 复制/删除 · 所有放置类型均可旋转朝向（滑杆/度数/预设/滚轮）· 可贴地 · 书店可改招牌
+        点选拖动 · 滚轮缩放地图 · Alt+滚轮旋转朝向 · 复制/删除 · 可贴地 · 书店可改招牌
       </p>
       <canvas id="map-canvas" width="360" height="360" aria-label="主岛平面图"></canvas>
       <div class="map-editor-coords"><span id="map-cursor">x: —  z: —</span>
@@ -247,20 +258,66 @@ export function createMapEditor({
     applyYawFromDeg(cur + 15);
   });
 
-  // 地图上滚轮：旋转当前选中（任意放置类型）
+  // 地图滚轮：默认缩放；Alt+滚轮旋转朝向
   canvas.addEventListener(
     "wheel",
     (e) => {
       if (!open) return;
-      const p = getSelected();
-      if (!p && !placeModeType) return;
       e.preventDefault();
-      const step = e.shiftKey ? 5 : 15;
-      const cur = p ? yawToDeg(p.yaw) : placeYawDeg;
-      applyYawFromDeg(cur + (e.deltaY > 0 ? step : -step));
+
+      // Alt：旋转选中 / 放置朝向
+      if (e.altKey) {
+        const p = getSelected();
+        if (!p && !placeModeType) return;
+        const step = e.shiftKey ? 5 : 15;
+        const cur = p ? yawToDeg(p.yaw) : placeYawDeg;
+        applyYawFromDeg(cur + (e.deltaY > 0 ? step : -step));
+        return;
+      }
+
+      // 相对光标缩放：光标下的 flat 点尽量不动
+      const rect = canvas.getBoundingClientRect();
+      const px = ((e.clientX - rect.left) / rect.width) * canvas.width;
+      const py = ((e.clientY - rect.top) / rect.height) * canvas.height;
+      const half0 = viewHalf();
+      const flatX0 = ((px / canvas.width) * 2 - 1) * half0 + mapPanX;
+      const flatZ0 = (1 - (py / canvas.height) * 2) * half0 + mapPanZ;
+
+      const factor = e.deltaY > 0 ? 0.9 : 1.12;
+      mapZoom = Math.min(MAP_ZOOM_MAX, Math.max(MAP_ZOOM_MIN, mapZoom * factor));
+
+      const half1 = viewHalf();
+      const flatX1 = ((px / canvas.width) * 2 - 1) * half1 + mapPanX;
+      const flatZ1 = (1 - (py / canvas.height) * 2) * half1 + mapPanZ;
+      mapPanX += flatX0 - flatX1;
+      mapPanZ += flatZ0 - flatZ1;
+
+      // 轻微限制平移，避免拖飞太远
+      const lim = MAP_EXTENT * 1.5;
+      mapPanX = Math.min(lim, Math.max(-lim, mapPanX));
+      mapPanZ = Math.min(lim, Math.max(-lim, mapPanZ));
+
+      if (elCursor) {
+        elCursor.textContent = `x: ${flatX0.toFixed(1)}  z: ${flatZ0.toFixed(1)}  ·  ${mapZoom.toFixed(2)}×`;
+      }
+      redraw();
     },
     { passive: false }
   );
+
+  // 双击地图空白：重置缩放与平移
+  canvas.addEventListener("dblclick", (e) => {
+    if (!open) return;
+    const { x, z } = canvasToFlat(e);
+    // 点在物体上则不重置（交给选中）
+    const hit = pickNearest(x, z, 1.2 / mapZoom);
+    if (hit) return;
+    mapZoom = 1;
+    mapPanX = 0;
+    mapPanZ = 0;
+    toast("地图视图已重置", 1.2);
+    redraw();
+  });
 
   btnSignApply.addEventListener("click", () => {
     const p = getSelected();
@@ -355,15 +412,17 @@ export function createMapEditor({
     const rect = canvas.getBoundingClientRect();
     const px = ((e.clientX - rect.left) / rect.width) * canvas.width;
     const py = ((e.clientY - rect.top) / rect.height) * canvas.height;
-    // 画布中心 = 原点；y 向下 → z 向上（地图常用）
-    const x = ((px / canvas.width) * 2 - 1) * MAP_EXTENT;
-    const z = (1 - (py / canvas.height) * 2) * MAP_EXTENT;
+    const half = viewHalf();
+    // 画布中心 = 平移中心；y 向下 → z 向上（地图常用）
+    const x = ((px / canvas.width) * 2 - 1) * half + mapPanX;
+    const z = (1 - (py / canvas.height) * 2) * half + mapPanZ;
     return { x, z };
   }
 
   function flatToCanvas(x, z) {
-    const px = ((x / MAP_EXTENT + 1) / 2) * canvas.width;
-    const py = ((1 - z / MAP_EXTENT) / 2) * canvas.height;
+    const half = viewHalf();
+    const px = (((x - mapPanX) / half + 1) / 2) * canvas.width;
+    const py = ((1 - (z - mapPanZ) / half) / 2) * canvas.height;
     return { px, py };
   }
 
@@ -681,8 +740,9 @@ export function createMapEditor({
     ctx.fillStyle = "#e8f0e8";
     ctx.fillRect(0, 0, w, h);
     // 主岛圆
+    const half = viewHalf();
     const c = flatToCanvas(0, 0);
-    const rPx = (18 / MAP_EXTENT) * (w / 2);
+    const rPx = Math.max(2, (18 / half) * (w / 2));
     ctx.beginPath();
     ctx.arc(c.px, c.py, rPx, 0, Math.PI * 2);
     ctx.fillStyle = "#7db88a";
@@ -690,18 +750,25 @@ export function createMapEditor({
     ctx.strokeStyle = "#3d6b48";
     ctx.lineWidth = 2;
     ctx.stroke();
-    // 网格
+    // 网格（随缩放自适应步长）
     ctx.strokeStyle = "rgba(26,38,56,0.12)";
     ctx.lineWidth = 1;
-    for (let i = -MAP_EXTENT; i <= MAP_EXTENT; i += 5) {
-      const a = flatToCanvas(i, -MAP_EXTENT);
-      const b = flatToCanvas(i, MAP_EXTENT);
+    const gridStep = half > 25 ? 10 : half > 12 ? 5 : half > 5 ? 2 : 1;
+    const gridMin = Math.floor((-half + mapPanX) / gridStep) * gridStep - gridStep;
+    const gridMax = Math.ceil((half + mapPanX) / gridStep) * gridStep + gridStep;
+    const gridMinZ = Math.floor((-half + mapPanZ) / gridStep) * gridStep - gridStep;
+    const gridMaxZ = Math.ceil((half + mapPanZ) / gridStep) * gridStep + gridStep;
+    for (let i = gridMin; i <= gridMax; i += gridStep) {
+      const a = flatToCanvas(i, gridMinZ);
+      const b = flatToCanvas(i, gridMaxZ);
       ctx.beginPath();
       ctx.moveTo(a.px, a.py);
       ctx.lineTo(b.px, b.py);
       ctx.stroke();
-      const c0 = flatToCanvas(-MAP_EXTENT, i);
-      const c1 = flatToCanvas(MAP_EXTENT, i);
+    }
+    for (let i = gridMinZ; i <= gridMaxZ; i += gridStep) {
+      const c0 = flatToCanvas(gridMin, i);
+      const c1 = flatToCanvas(gridMax, i);
       ctx.beginPath();
       ctx.moveTo(c0.px, c0.py);
       ctx.lineTo(c1.px, c1.py);

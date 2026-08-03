@@ -21,11 +21,17 @@ export function getToonGradient() {
 
 /** 统一卡通材质（硬边 Cel-shading） */
 export function toonMat(color, opts = {}) {
-  return new THREE.MeshToonMaterial({
+  const { flatShading, ...materialOptions } = opts;
+  const material = new THREE.MeshToonMaterial({
     color,
     gradientMap: getToonGradient(),
-    ...opts,
+    ...materialOptions,
   });
+  if (flatShading !== undefined) {
+    material.flatShading = flatShading;
+    material.needsUpdate = true;
+  }
+  return material;
 }
 
 const _outlineMatCache = new Map();

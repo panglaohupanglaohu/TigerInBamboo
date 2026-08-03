@@ -27,6 +27,7 @@ export function createCameraRig(camera, player) {
   let camOrbit = 0; // 绕法线的环绕角（yaw）
   let camPitch = 0; // 俯仰角（pitch）
   let camDist = P.camDist;
+  const defaultFov = camera.fov;
   let midDrag = false;
   let rightDrag = false;
 
@@ -38,6 +39,10 @@ export function createCameraRig(camera, player) {
   }
   function zoomBy(delta) {
     camDist = clampDist(camDist + delta);
+  }
+  function setFov(fov) {
+    camera.fov = THREE.MathUtils.clamp(fov, 35, 90);
+    camera.updateProjectionMatrix();
   }
   function setMidDrag(on) {
     midDrag = !!on;
@@ -134,6 +139,9 @@ export function createCameraRig(camera, player) {
     setRightDrag,
     orbitBy,
     orbitPitchBy,
+    setFov,
+    getFov: () => camera.fov,
+    getDefaultFov: () => defaultFov,
     getDist: () => camDist,
     getYaw: () => camOrbit,
     getOrbit: () => ({ yaw: camOrbit, pitch: camPitch }), // 验收用

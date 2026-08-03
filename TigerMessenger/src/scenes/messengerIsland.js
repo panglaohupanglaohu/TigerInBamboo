@@ -19,15 +19,21 @@ import {
 } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
+import { isCanyonBgmPlaying, isCanyonBgmFinishing } from "../audio/sfx.js";
+import { canyonOffsetDir, CANYON } from "../world/canyon.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import { groundLiftAt } from "../world/hills.js";
-import { placeObjectOnSphere, latLonToDir } from "../world/sphereMath.js";
+import { placeObjectOnSphere, latLonToDir, flatXZToLatLon } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
 import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
+import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
+
+/** 飞艇锚定用临时向量 */
+const _asTmp = new THREE.Vector3();
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const messengerIslandScene = {
@@ -76,8 +82,14 @@ export const messengerIslandScene = {
 
     // 基督城有轨电车：北岛环线 + 跨赤道绕莫比斯主晶塔
     // 能量束目标：中央母体晶皇塔顶
-    const grandTopTarget = latLonToDir(GRAND_CRYSTAL.lat, GRAND_CRYSTAL.lon, new THREE.Vector3())
-      .multiplyScalar(R + GRAND_CRYSTAL.h * 0.92);
+    const grandDir = latLonToDir(
+      GRAND_CRYSTAL.lat,
+      GRAND_CRYSTAL.lon,
+      new THREE.Vector3()
+    );
+    const grandTopTarget = grandDir
+      .clone()
+      .multiplyScalar(R + canyonOffsetDir(grandDir) + GRAND_CRYSTAL.h * 0.96);
     const tramSystem = buildChristchurchTramSystem(scene, R, {
       beamTarget: grandTopTarget,
     });
@@ -101,6 +113,27 @@ export const messengerIslandScene = {
     // 绣球花丛围绕书店（程序布局；单丛仍可用地图放置 hydrangea）
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
+
+    // 莫比斯湖沼：请用地图编辑器放置「莫比斯湖沼」(moebiusSwamp)
+    // createMoebiusSwampPlacement / createCatalogObject("moebiusSwamp")
+
+    // ---------- 莫比斯蒸汽航空艇：悬停在湖沼正上方 ----------
+    const airship = createMoebiusAirship();
+    airship.scale.setScalar(1.25);
+    scene.add(airship);
+    // 初始兜底锚点：湖沼默认方位（书店→水晶城中点再偏向书店 25%）
+    {
+      const { lat, lon } = flatXZToLatLon(bookshopX, bookshopZ, R);
+      const bookDir = latLonToDir(lat, lon, new THREE.Vector3());
+      const cityDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
+      const mid = bookDir.clone().add(cityDir);
+      if (mid.lengthSq() > 1e-8) mid.normalize();
+      else mid.copy(cityDir);
+      const dir = bookDir.lerp(mid, 0.25).normalize();
+      placeMoebiusAirshipAbove(airship, dir, R, 20);
+    }
+    // 湖沼懒查找锚定状态（地图编辑器放置/移动后飞艇跟随）
+    const airshipAnchor = { swamp: null, lastPos: new THREE.Vector3(), locked: false };
 
     // 坡下草地：草簇 + 小花环带（围绕书店山坡）
     {
@@ -158,11 +191,52 @@ export const messengerIslandScene = {
         harbor,
         oldHarbor: harborBuilt,
         moebius,
+        airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
       },
       update(dt, t, runtime) {
         updatePlatformPulse(platforms, t);
         updateClouds(clouds, dt, t, { speed: P.windSpeed, dirDeg: P.windDir });
         tramSystem.update(dt, runtime?.player?.position);
+
+        // 地图放置的湖沼/飞艇动效（鲸/舟/悬浮艇）
+        scene.traverse((o) => {
+          const kind = o.userData?.kind;
+          if ((kind === "moebius-swamp" || kind === "moebius-airship") && o.userData.update) {
+            o.userData.update(dt, t);
+          }
+        });
+
+        // 飞艇跟随湖沼：找到地图放置的 moebiusSwamp 后锚到其正上方；
+        // 地图编辑器移动湖沼时（位置变化）自动重新锚定。
+        // 玩家已驾驶过（flown）或正在驾驶（flying）时不再回锚，飞艇归玩家支配。
+        if (!airship.userData.flown && !airship.userData.flying) {
+          let sw = airshipAnchor.swamp;
+          if (!sw || !sw.parent) {
+            sw = null;
+            scene.traverse((o) => {
+              if (!sw && o.userData?.kind === "moebius-swamp") sw = o;
+            });
+            airshipAnchor.swamp = sw;
+            airshipAnchor.locked = false;
+          }
+          if (sw) {
+            _asTmp.copy(sw.position);
+            if (!airshipAnchor.locked || airshipAnchor.lastPos.distanceToSquared(_asTmp) > 0.25) {
+              airshipAnchor.lastPos.copy(_asTmp);
+              placeMoebiusAirshipAbove(airship, _asTmp.normalize(), R, 20, airship.userData.yaw ?? 0.7);
+              airshipAnchor.locked = true;
+            }
+          }
+        }
+
+        // 鸟群：花厅巡航；电车驶出水晶城 → 送别伴飞（红车优先，不依赖是否乘车）
+        {
+          const bgmHold = isCanyonBgmPlaying() || isCanyonBgmFinishing();
+          const escortTram =
+            tramSystem.getFarewellEscortTram?.({ bgmHold }) || null;
+          moebius.update?.(dt, t, { escortTram });
+        }
+
         const player = runtime?.player;
         if (player) {
           // 先重置，再由大湖写 factor

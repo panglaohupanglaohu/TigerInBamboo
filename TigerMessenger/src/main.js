@@ -14,6 +14,7 @@ import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createDayNight } from "./world/dayNight.js";
 import { createTramRide } from "./player/tramRide.js";
+import { createAirshipRide } from "./player/airshipRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
@@ -37,6 +38,8 @@ import {
   startTramSound,
   sfxJump,
   sfxWaterTrain,
+  setCanyonApproachBgm,
+  isCanyonBgmPlaying,
 } from "./audio/sfx.js";
 import { journalCount } from "./quest/letterJournal.js";
 import {
@@ -177,10 +180,29 @@ const tramRide = createTramRide({
   elHint: document.getElementById("tram-hint"),
   toast: showToast,
   onBoard: (tram) => {
-    sfxWaterTrain();
+    // 若已近峡谷 / 在谷内：直接切峡谷 BGM，不再播默认登车氛围
+    const tramSystem = messenger?.landmarks?.tramSystem;
+    const cue = tramSystem?.getCanyonAudioCue?.(tram);
+    const nearCanyon = cue && (cue.inCanyon || cue.secondsToEntry <= 10);
+    if (nearCanyon) {
+      setCanyonApproachBgm(true, { fade: 0.8 });
+    } else {
+      sfxWaterTrain();
+    }
     const color = tram?.userData?.variant === "blue" ? "蓝色" : "红色";
     showToast(`已登上${color}电车 · 窗边乘客 · [C] 司机视野 · [F] 下车`, 3.4);
   },
+});
+
+// ---------- 莫比斯航空艇搭乘（垂绳 [F] 攀爬 · WASD 驾驶） ----------
+const airshipRide = createAirshipRide({
+  player,
+  getAirship: () => messenger?.landmarks?.airship || null,
+  cameraRig,
+  keys,
+  planetRadius: PLANET_RADIUS,
+  elHint: document.getElementById("airship-hint"),
+  toast: showToast,
 });
 
 // ---------- 天气（雨/雪/闪电/停雨彩虹，受风速风向影响） ----------
@@ -291,8 +313,8 @@ function animate() {
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   mapEditor.tickHighlight?.();
 
-  // 电车搭乘接管：上车动画/乘坐时跳过移动与碰撞
-  const riding = tramRide.update(dt);
+  // 搭乘接管：电车上车动画/乘坐 或 航空艇攀爬/驾驶时跳过移动与碰撞
+  const riding = tramRide.update(dt) || airshipRide.update(dt);
   if (!riding) {
     updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
     resolveCollisions(
@@ -305,6 +327,26 @@ function animate() {
       hills
     );
     resolveAssetColliders(player.position, assetColliders);
+  }
+
+  // 峡谷进谷 BGM：乘车且距进谷 ≤10s（或已在谷内）→ 播風之傳說，关默认环境音
+  {
+    const tramSystem = messenger?.landmarks?.tramSystem;
+    let wantCanyonBgm = false;
+    if (riding && tramSystem?.getCanyonAudioCue) {
+      const tram =
+        tramSystem.getNearestTram?.(player.position) || tramSystem.tram || null;
+      const cue = tramSystem.getCanyonAudioCue(tram);
+      if (cue && (cue.inCanyon || cue.secondsToEntry <= 10)) wantCanyonBgm = true;
+    }
+    // 滞回：已在播则离谷后再关，避免边界闪断（出谷后 seconds>12 才关）
+    if (isCanyonBgmPlaying() && riding && tramSystem?.getCanyonAudioCue) {
+      const tram =
+        tramSystem.getNearestTram?.(player.position) || tramSystem.tram || null;
+      const cue = tramSystem.getCanyonAudioCue(tram);
+      if (cue && (cue.inCanyon || cue.secondsToEntry <= 12)) wantCanyonBgm = true;
+    }
+    setCanyonApproachBgm(wantCanyonBgm, { fade: wantCanyonBgm ? 1.4 : 1.8 });
   }
 
   // 场景模块自更新（湖、云、平台脉动等）
@@ -353,6 +395,7 @@ window.__tm = {
   hills,
   mapEditor,
   tramRide,
+  airshipRide,
   elderMusic,
   foxNpc,
   weather,

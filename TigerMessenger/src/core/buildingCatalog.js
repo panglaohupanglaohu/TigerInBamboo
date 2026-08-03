@@ -25,6 +25,7 @@ import {
   createStackedCrates,
   buildOldHarborScene,
 } from "../assets/harbor.js";
+import { createMoebiusSwampPlacement } from "../world/moebiusSwamp.js";
 
 /**
  * @typedef {object} BuildingDef
@@ -149,7 +150,7 @@ export const BUILDING_CATALOG = {
   fox: {
     id: "fox",
     label: "阿狸（小狐狸）",
-    create: () => createLowPolyFox({ scale: 0.28 }),
+    create: () => createLowPolyFox({ scale: 0.52 }),
     defaultYaw: 0.9,
     collideRadius: 0.55,
     color: "#E96A36",
@@ -185,6 +186,20 @@ export const BUILDING_CATALOG = {
     defaultYaw: 0.85,
     collideRadius: 4.0,
     color: "#8B7355",
+  },
+  moebiusSwamp: {
+    id: "moebiusSwamp",
+    label: "莫比斯湖沼",
+    // 坑口地表（局部 Y=40）贴原点，向球心深挖 30 单位至湖底；水面 Y=25
+    // 可选 seed / scale（默认 0.5）
+    create: (opts = {}) =>
+      createMoebiusSwampPlacement({
+        seed: opts.seed ?? 7711,
+        scale: opts.scale ?? 0.5,
+      }),
+    defaultYaw: 0.6,
+    collideRadius: 0, // 可走入：不设碰撞墙，送信人可直接进入坑缘/跳入湖沼
+    color: "#48C9B0",
   },
 };
 
