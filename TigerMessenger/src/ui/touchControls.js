@@ -95,6 +95,7 @@ export function createTouchControls({
           <button type="button" class="touch-btn" data-action="jump" aria-label="跳跃">跳</button>
           <button type="button" class="touch-btn touch-btn-e" data-action="interact" aria-label="交互 E">E</button>
           <button type="button" class="touch-btn touch-btn-f" data-action="tram" aria-label="电车 F">F</button>
+          <button type="button" class="touch-btn touch-btn-c" data-action="driver" aria-label="司机视野 C">C</button>
         </div>
       </div>
     </div>
@@ -290,6 +291,9 @@ export function createTouchControls({
         fireKey("KeyE", "keydown");
       } else if (action === "tram") {
         fireKey("KeyF", "keydown");
+      } else if (action === "driver") {
+        // 电车司机/乘客视野切换
+        fireKey("KeyC", "keydown");
       }
     });
     const end = (e) => {
@@ -301,6 +305,8 @@ export function createTouchControls({
         fireKey("KeyE", "keyup");
       } else if (action === "tram") {
         fireKey("KeyF", "keyup");
+      } else if (action === "driver") {
+        fireKey("KeyC", "keyup");
       }
     };
     btn.addEventListener("pointerup", end);
