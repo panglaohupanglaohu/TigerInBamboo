@@ -54,11 +54,8 @@ export function createWalkingFox(mats) {
   const CHEST_LEN = 0.55;
   const HIPS_LEN = 0.45;
   const BODY_H = 0.42;
-  const TAIL_ROOT_D = BODY_W * 0.6; // 根部直径
-  const TAIL_ROOT_R = TAIL_ROOT_D * 0.5;
-  const TAIL_LEN = BODY_LEN * 0.8; // 总长
-  const TAIL_LEN_A = TAIL_LEN * 0.55; // 橙段
-  const TAIL_LEN_B = TAIL_LEN * 0.45; // 乳白尖段
+  // 火焰尾：体量约身体 1/2，5 节链式串联
+  const TAIL_TOTAL = BODY_LEN * 0.55; // 约半个身长，修长火苗感
   const LEG_H = 0.3;
   const LEG_T = 0.075;
 
@@ -184,43 +181,89 @@ export function createWalkingFox(mats) {
     earG.userData.isEar = true;
   }
 
-  // ---- 舒展大尾巴：2 个 radialSegments=5 的圆锥串联 ----
-  // Cone 默认 +Y；整组转到 -X（身后）并上翘 15°
-  const tailG = new THREE.Group();
-  tailG.name = "fox-flowing-tail";
-  // 挂在后臀后方
-  tailG.position.set(-HIPS_LEN * 0.48, BODY_H * 0.08, 0);
-  // 先 -Z 90° 使 +Y→-X，再 rotation.x = +15° 上翘（绕前进轴侧倾感用 z）
-  // 模型 +X 前：身后 = -X。Cone +Y → -X：rotation.z = +π/2
-  // 上翘 15°：再绕局部 X（此时约世界 -Z）或直接：
-  tailG.rotation.order = "ZYX";
-  tailG.rotation.z = Math.PI / 2; // +Y → -X
-  tailG.rotation.x = THREE.MathUtils.degToRad(15); // 微翘
-  hips.add(tailG);
+  // ---- 火炬火焰尾：5 节极扁 Cone 链式嵌套（身体→j1→j2→j3→j4→j5）----
+  // 每节是 Group（旋转枢轴）+ 扁锥 mesh；局部 +Y 为尾向延伸
+  // 根部：hips 后方；整链指向 -X（身后）并略上抬
+  const tailRoot = new THREE.Group();
+  tailRoot.name = "fox-flame-tail-root";
+  tailRoot.position.set(-HIPS_LEN * 0.5, BODY_H * 0.12, 0);
+  // +Y → -X（身后），再微抬火苗
+  tailRoot.rotation.order = "ZYX";
+  tailRoot.rotation.z = Math.PI / 2;
+  tailRoot.rotation.x = THREE.MathUtils.degToRad(12);
+  hips.add(tailRoot);
 
-  // 橙段：根粗 → 尖
-  const tailOrange = part(
-    new THREE.ConeGeometry(TAIL_ROOT_R, TAIL_LEN_A, 5),
-    orange
-  );
-  tailOrange.name = "fox-tail-orange";
-  // Cone 底在 -height/2… 默认原点在几何中心；移到从 0 向 +Y 延伸
-  tailOrange.geometry.translate(0, TAIL_LEN_A * 0.5, 0);
-  tailG.add(tailOrange);
+  /**
+   * 火焰剖面半径（先略粗再收尖）· 归一化 s∈[0,1]
+   * 火炬感：根 0.55 → 最粗 1.0@0.28 → 尖 0.12
+   */
+  function flameRadiusAt(s) {
+    const peak = 1.0;
+    const root = 0.55;
+    const tip = 0.12;
+    if (s < 0.28) {
+      const k = s / 0.28;
+      return root + (peak - root) * (k * (2 - k)); // ease out 变粗
+    }
+    const k = (s - 0.28) / 0.72;
+    return peak + (tip - peak) * (k * k); // ease in 收尖
+  }
 
-  // 乳白尖：接在橙段末端，根径 ≈ 橙段中段
-  const tipR = TAIL_ROOT_R * 0.42;
-  const tailCream = part(
-    new THREE.ConeGeometry(tipR, TAIL_LEN_B, 5),
-    cream
-  );
-  tailCream.name = "fox-tail-cream";
-  tailCream.geometry.translate(0, TAIL_LEN_B * 0.5, 0);
-  tailCream.position.y = TAIL_LEN_A * 0.92; // 与橙段无缝衔接
-  tailG.add(tailCream);
+  // 5 节长度占比（后段更修长）
+  const SEG_W = [0.14, 0.18, 0.2, 0.22, 0.26];
+  const SEG_N = 5;
+  /** @type {THREE.Group[]} */
+  const tailJoints = [];
+  /** @type {THREE.Mesh[]} */
+  const tailMeshes = [];
 
-  // 尾巴关节：用于轻柔二次摆动（挂在 hips 下的 tailG 整体已随扭臀）
-  const tailSway = tailG; // 动画可再叠加 tailG.rotation
+  let parent = tailRoot;
+  let s0 = 0;
+  for (let i = 0; i < SEG_N; i++) {
+    const s1 = s0 + SEG_W[i];
+    const sMid = (s0 + s1) * 0.5;
+    const h = TAIL_TOTAL * SEG_W[i];
+    // 极扁：径向压扁 scale.x/z，像飘带火焰截面
+    const r = flameRadiusAt(sMid) * BODY_W * 0.38;
+    const isTip = i === SEG_N - 1;
+    const mat = isTip ? cream : orange;
+
+    const joint = new THREE.Group();
+    joint.name = `fox-tail-j${i + 1}`;
+    // 第一节挂在 root 原点；后续挂在上一节 +Y 末端
+    joint.position.set(0, i === 0 ? 0 : 0, 0);
+    if (i > 0) {
+      // 接在上一节长度处
+      joint.position.y = TAIL_TOTAL * SEG_W[i - 1] * 0.92;
+    }
+    parent.add(joint);
+
+    // Cone 尖朝 +Y；平移使底在 y=0、尖在 y=h
+    const geo = new THREE.ConeGeometry(Math.max(0.02, r), h, 5);
+    geo.translate(0, h * 0.5, 0);
+    const mesh = part(geo, mat, isTip ? 0.022 : OUT);
+    mesh.name = isTip ? "fox-tail-flame-tip" : `fox-tail-flame-${i + 1}`;
+    // 极扁火苗截面（侧向压扁，厚度薄）
+    mesh.scale.set(0.55, 1, 0.38);
+    // 根段略鼓、尖段更扁长
+    if (i === 0) mesh.scale.set(0.7, 1, 0.5);
+    if (isTip) mesh.scale.set(0.4, 1.15, 0.28);
+    joint.add(mesh);
+
+    // 基线姿态：轻微 S 预弯（静止时也有火焰弧度）
+    joint.userData.baseRot = {
+      x: THREE.MathUtils.degToRad(i === 0 ? 4 : i === 1 ? 2 : i === 3 ? -2 : 0),
+      y: 0,
+      z: THREE.MathUtils.degToRad(i % 2 === 0 ? 3 : -2),
+    };
+    joint.rotation.x = joint.userData.baseRot.x;
+    joint.rotation.z = joint.userData.baseRot.z;
+
+    tailJoints.push(joint);
+    tailMeshes.push(mesh);
+    parent = joint;
+    s0 = s1;
+  }
 
   // ---- 四条小短腿 ----
   const legsG = new THREE.Group();
@@ -262,13 +305,15 @@ export function createWalkingFox(mats) {
     hips,
     chest,
     head: headG,
-    tail: tailSway,
-    tailOrange,
-    tailCream,
+    /** 火焰尾根（hips 子节点，含链式 5 节） */
+    tail: tailRoot,
+    /** @type {THREE.Group[]} 链式关节 j1…j5，动画相位延迟用 */
+    tailJoints,
+    tailMeshes,
     legs: legsG,
     legMeshes,
     lids,
-    dims: { BODY_W, BODY_LEN, BODY_H, TAIL_LEN, LEG_H },
+    dims: { BODY_W, BODY_LEN, BODY_H, TAIL_TOTAL, LEG_H },
   };
 }
 
@@ -485,8 +530,8 @@ export function createLowPolyFox(opts = {}) {
     chest: walk.chest,
     walkHead: walk.head,
     tail: walk.tail,
-    tailOrange: walk.tailOrange,
-    tailCream: walk.tailCream,
+    tailJoints: walk.tailJoints,
+    tailMeshes: walk.tailMeshes,
     legs: walk.legs,
     legMeshes: walk.legMeshes,
     lids: walk.lids,

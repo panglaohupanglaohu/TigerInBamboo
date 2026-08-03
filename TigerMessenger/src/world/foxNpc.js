@@ -351,16 +351,43 @@ export function createFoxNpc({
         p.hips.position.y = 0;
       }
 
-      // 舒展双锥尾：在扭臀基础上再叠加一点滞后摆动
-      if (p.tail) {
-        const baseX = THREE.MathUtils.degToRad(15);
-        // tailG 已 z=90° + x=15°；再绕局部 Y 轻甩（随步态）
-        const wag = Math.sin(gait - 0.4) * (moving ? 0.12 : 0.05);
-        const bob = Math.sin(gait * 2 - 0.8) * (moving ? 0.06 : 0.02);
-        p.tail.rotation.order = "ZYX";
-        p.tail.rotation.z = Math.PI / 2;
-        p.tail.rotation.x = baseX + bob;
-        p.tail.rotation.y = wag;
+      // ---- 火炬火焰尾：多级链式相位延迟（S 形蛇行 + 火苗上蹿）----
+      // 不整根 sin；j1…j5 逐级 time-phase offset，像随风拉伸的灵动火焰
+      const joints = p.tailJoints;
+      if (joints && joints.length) {
+        // 奔跑更快更烈；待机仍保持轻柔火苗感
+        const freq = moving ? 15 : 6.5;
+        const ampScale = moving ? 1 : 0.38;
+        const time = elapsed * freq;
+        // 规范相位：0, -0.3, -0.6, -0.9,（第5节再滞后）
+        const phaseY = [0, 0.3, 0.6, 0.9, 1.2];
+        const ampY = [0.2, 0.25, 0.3, 0.35, 0.4];
+        // 垂直火苗：交错 cos，尾尖更跳
+        const phaseX = [0.2, 0.55, 0.9, 1.25, 1.6];
+        const ampX = [0.06, 0.09, 0.12, 0.16, 0.2];
+
+        for (let i = 0; i < joints.length; i++) {
+          const j = joints[i];
+          const br = j.userData.baseRot || { x: 0, y: 0, z: 0 };
+          const py = phaseY[i] ?? i * 0.3;
+          const px = phaseX[i] ?? i * 0.35;
+          const ay = (ampY[i] ?? 0.25) * ampScale;
+          const ax = (ampX[i] ?? 0.1) * ampScale;
+          // S 形蛇摆（左右）
+          j.rotation.y = br.y + Math.sin(time - py) * ay;
+          // 火焰蹿动（上下微翘 / 起伏）
+          j.rotation.x = br.x + Math.cos(time - px) * ax;
+          // 轻微侧倾，避免平面纸片感
+          j.rotation.z = br.z + Math.sin(time * 0.85 - py * 0.7) * ax * 0.45;
+        }
+        // 尾根附着：保持指向身后 + 微抬，整体不另加硬 sin
+        if (p.tail) {
+          p.tail.rotation.order = "ZYX";
+          p.tail.rotation.z = Math.PI / 2;
+          p.tail.rotation.x =
+            THREE.MathUtils.degToRad(12) + Math.sin(time * 0.5) * (moving ? 0.04 : 0.02);
+          p.tail.rotation.y = Math.sin(time * 0.35) * (moving ? 0.05 : 0.02);
+        }
       }
 
       // 头轻点
