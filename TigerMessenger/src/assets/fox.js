@@ -8,6 +8,8 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
+import { placeObjectOnSphere } from "../world/sphereMath.js";
+import { groundLiftAt, worldToFlatXZ } from "../world/hills.js";
 
 /** 动漫橙 */
 export const FOX_ORANGE = 0xe96a36;
@@ -553,17 +555,23 @@ const _prev = new THREE.Vector3();
 const _m = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
 const _qCur = new THREE.Quaternion();
+const _flatTmp = { x: 0, z: 0 };
 
-export const FOX_FOLLOW_GAP = 3.5;
-export const FOX_FOLLOW_LERP = 0.05;
-export const FOX_SURFACE_LIFT = 0.12;
-export const FOX_TURN_SLERP = 0.14;
+export const FOX_FOLLOW_GAP = 2.2; // 地面跟随时距（平面单位）
+export const FOX_FOLLOW_LERP = 0.12; // 地面插值（贴地走更跟手）
+/** 脚底相对地面高度场的额外抬升（避免陷草） */
+export const FOX_FOOT_LIFT = 0.03;
+export const FOX_TURN_SLERP = 0.16;
 
 /**
+ * 在「地面」上尾随玩家：平面坐标插值 + groundLiftAt 贴地 + 双轴朝向。
+ * （不再用固定球半径 normalize，避免悬空/穿地）
+ *
  * @param {THREE.Object3D} fox
  * @param {THREE.Vector3} playerPos
  * @param {number} planetRadius
- * @param {{ gap?: number, lerp?: number, lift?: number, turn?: number }} [opts]
+ * @param {{ gap?: number, lerp?: number, footLift?: number, turn?: number }} [opts]
+ * @returns {boolean} 本帧是否在走
  */
 export function updateFoxFollow(fox, playerPos, planetRadius, opts = {}) {
   if (!fox || !playerPos) return false;
@@ -572,28 +580,53 @@ export function updateFoxFollow(fox, playerPos, planetRadius, opts = {}) {
 
   const gap = opts.gap ?? FOX_FOLLOW_GAP;
   const lerpK = opts.lerp ?? FOX_FOLLOW_LERP;
-  const lift = opts.lift ?? FOX_SURFACE_LIFT;
+  const footLift = opts.footLift ?? FOX_FOOT_LIFT;
   const turnK = opts.turn ?? FOX_TURN_SLERP;
-  const R = planetRadius + lift;
 
   _prev.copy(fox.position);
-  const dist = fox.position.distanceTo(playerPos);
+
+  // ---- 平面坐标：与岛面高度场同一套 (x,z) ----
+  let flatFox = worldToFlatXZ(fox.position, planetRadius);
+  let flatPl = worldToFlatXZ(playerPos, planetRadius);
+
+  // 岛外 / 半球守卫失败时用简易经纬反推
+  if (!flatFox) flatFox = approxFlatFromWorld(fox.position, planetRadius);
+  if (!flatPl) flatPl = approxFlatFromWorld(playerPos, planetRadius);
+
+  let fx = flatFox.x;
+  let fz = flatFox.z;
   let moving = false;
 
+  const dx = flatPl.x - fx;
+  const dz = flatPl.z - fz;
+  const dist = Math.hypot(dx, dz);
+
   if (dist > gap) {
-    fox.position.lerp(playerPos, lerpK);
-    moving = true;
+    // 目标：落在玩家身后约 gap 处，再向该点 lerp（地面走，非空中飞）
+    const ux = dx / dist;
+    const uz = dz / dist;
+    const tx = flatPl.x - ux * gap * 0.9;
+    const tz = flatPl.z - uz * gap * 0.9;
+    // 距离越远追得越快一点，仍保持平滑
+    const k = Math.min(1, lerpK * (1 + (dist - gap) * 0.08));
+    fx += (tx - fx) * k;
+    fz += (tz - fz) * k;
+    moving = dist > gap + 0.12;
   }
 
-  const len = fox.position.length();
-  if (len > 1e-6) fox.position.multiplyScalar(R / len);
-  else fox.position.copy(playerPos).normalize().multiplyScalar(R);
+  // ---- 贴真实地面：R + groundLiftAt + 脚底微抬 ----
+  const groundY = groundLiftAt(fx, fz) + footLift;
+  placeObjectOnSphere(fox, fx, fz, groundY, planetRadius);
 
+  // ---- 朝向：法线 = 球心外向；正脸 +X 沿地面切向朝移动/玩家 ----
   _up.copy(fox.position).normalize();
   _fwd.subVectors(fox.position, _prev);
   _fwd.addScaledVector(_up, -_fwd.dot(_up));
   if (_fwd.lengthSq() < 1e-8) {
-    _fwd.subVectors(playerPos, fox.position);
+    // 静止时看向玩家的地面投影
+    _fwd.set(dx, 0, dz); // 平面差不够，用世界切向
+    // 从 flat 差重建切向：近似用位置差投影
+    _fwd.copy(playerPos).sub(fox.position);
     _fwd.addScaledVector(_up, -_fwd.dot(_up));
   }
   if (_fwd.lengthSq() < 1e-8) {
@@ -606,12 +639,28 @@ export function updateFoxFollow(fox, playerPos, planetRadius, opts = {}) {
 
   _m.makeBasis(_fwd, _up, _right);
   _q.setFromRotationMatrix(_m);
+  // placeObjectOnSphere 已写过一次朝向；用 slerp 平滑转向
   _qCur.copy(fox.quaternion);
+  // 若 place 刚重置，从当前 slerp 到目标
   _qCur.slerp(_q, turnK);
   fox.quaternion.copy(_qCur);
 
+  fox.userData.flatX = fx;
+  fox.userData.flatZ = fz;
   if (fox.userData?.collider?.position) {
     fox.userData.collider.position.copy(fox.position);
   }
   return moving;
+}
+
+/** worldToFlatXZ 失败时的简易反推（与 mapEditor 半球外逻辑同类） */
+function approxFlatFromWorld(worldPos, R) {
+  const dir = worldPos.clone().normalize();
+  const latDeg = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(dir.y, -1, 1)));
+  const theta = THREE.MathUtils.degToRad(90 - latDeg);
+  const phi = Math.atan2(dir.z, dir.x);
+  const dist = theta * R;
+  _flatTmp.x = Math.cos(phi) * dist;
+  _flatTmp.z = Math.sin(phi) * dist;
+  return _flatTmp;
 }

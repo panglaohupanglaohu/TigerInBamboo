@@ -10,7 +10,7 @@ import { groundLiftAt } from "./hills.js";
 import { PLANET_RADIUS } from "./planet.js";
 import { P } from "../core/params.js";
 import { showBubble, hideBubble, showToast } from "../ui/hud.js";
-import { updateFoxFollow, FOX_FOLLOW_GAP } from "../assets/fox.js";
+import { updateFoxFollow, FOX_FOLLOW_GAP, FOX_FOLLOW_LERP } from "../assets/fox.js";
 
 const TALK_RANGE = 3.2;
 const HOME_RADIUS = 2.8;
@@ -180,6 +180,15 @@ export function createFoxNpc({
     fox.switchState?.("FOLLOWING");
     hideInteractionUI();
     idleMode = "follow";
+    // 立刻贴当前地面，避免第一帧悬空
+    {
+      const f = worldApproxFlat(fox.position, planetRadius);
+      if (f) {
+        flatX = f.x;
+        flatZ = f.z;
+        placeFoxFlat();
+      }
+    }
     if (elStatus) elStatus.textContent = "跟着你走中";
     if (toast) {
       const line = greet
@@ -480,19 +489,20 @@ export function createFoxNpc({
     movingAnim = false;
 
     if (isFollowing() && idleMode !== "stay") {
-      // ---------- 球面平滑尾随（规范算法） ----------
+      // ---------- 地面贴地尾随（平面插值 + groundLiftAt） ----------
       movingAnim = updateFoxFollow(fox, player.position, planetRadius, {
         gap: FOX_FOLLOW_GAP,
-        lerp: 0.05,
-        lift: 0.12 + (groundLiftAtApprox(fox) || 0) * 0, // 高度用固定 lift
-        turn: 0.14,
+        lerp: FOX_FOLLOW_LERP,
+        turn: 0.16,
       });
       // 同步 flat 缓存（供回家用）
-      const flat = worldApproxFlat(fox.position, planetRadius);
-      if (flat) {
-        flatX = flat.x;
-        flatZ = flat.z;
+      if (fox.userData.flatX != null) {
+        flatX = fox.userData.flatX;
+        flatZ = fox.userData.flatZ;
       }
+    } else if (isFollowing() && idleMode === "stay") {
+      // 原地等待也贴地（坡上不悬空）
+      placeFoxFlat();
     } else if (!isFollowing() && idleMode === "wander") {
       // 未跟随的闲逛（仅 SLEEPING 前的 wake 路径已弱化；保留回家后安静）
       const dx = walkTarget.x - flatX;
@@ -544,6 +554,4 @@ function worldApproxFlat(worldPos, R) {
   return { x: Math.cos(phi) * dist, z: Math.sin(phi) * dist };
 }
 
-function groundLiftAtApprox() {
-  return 0;
-}
+
