@@ -1,28 +1,30 @@
 // =====================================================================
-//  赤道风暴积雨云墙 · createDynamicMoebiusClouds()（暴风雨重构版）
+//  赤道风暴积雨云墙 · createDynamicMoebiusClouds()（风起云涌重构版）
 //
-//  1) 高频流体顶点形变（Vertex-level Fluid Morphing）：
-//     每帧遍历每颗 Icosahedron(细分 2 → 焊接 92 顶点) 的顶点，
-//     用时间高频加权的 3D 噪声沿法线暴力推拉：
-//       noiseVal = sin(v.x·0.4 + t·2.5) · cos(v.z·0.4 + t·2.5) · sin(v.y·0.2 + t·1.5)
-//     + 次级撕裂八度 → 形体快速撕裂、拉伸、翻滚，彻底击碎岩石感。
-//     （CPU 形变 → addOutline 描边共享同一几何体，墨线随撕扯同步甩动，
-//       零延迟、绝不穿模。）
-//  2) 阴雨暗流材质：逐切面 dot(flatNormal, sunDir)——
-//     凹陷背光 = 乌云深蓝灰(#2C3E50/#34495E)，受光突起 = 浅灰(#BDC3C7)
-//     + 闪电发光脉冲（随机频闪的自发光暖白），高频交错闪烁。
-//  3) 云底倾泻雨带：嵌套绑定在云墙组内的手绘斜向雨丝粒子带，
-//     从云体底部直接砸向地表（与全局天气系统同一视觉语言，云锚定）。
-//  4) 赤道环形锚定：Phi = π/2 每 15° 一座火山口积雨云塔，高低错落。
+//  彻底废弃"高频发抖"顶点噪声——改为"大跨度低频 3D 噪声"宏观形变：
+//  1) 大尺寸低频 3D 噪声形变（Vertex-level Macro Morphing）：
+//     时间乘数降到 timeScale = time * 0.4（丝滑厚重），
+//     空间频率降到 v.x * 0.15（大跨度海浪级），振幅放大，
+//     整团云像巨大海浪一样整体上升膨胀 / 向内塌陷，绝不再原地哆嗦。
+//  2) 切线环形滚动（Tangential Rolling）：
+//     每座云墙的 30+ 颗多面体球体组件，本地 rotation.x = time * 0.15
+//     持续向前大范围翻滚，叠加 rotation.z = sin(time*0.2)*0.1 侧向弱摇摆，
+//     整座云墙像滚筒一样排山倒海朝玩家视线涌动。
+//  3) 阴雨暗流冷暖对冲材质：凹陷背光沉淀乌云深蓝灰(#2C3E50)，
+//     迎光突起 lerp 浅橘灰(#BDC3C7)，唐伯虎水墨描边随法线硬朗交错闪烁。
+//  4) 云底阴雨粒子带：嵌套绑定在云墙组 Y=22..32 局部高空，
+//     黑色斜向手绘雨丝从乌云底"喷涌倾泻"砸向草地山丘。
+//  5) 赤道环形锚定：Phi = π/2 每 15° 一座火山口积雨云塔，高低错落。
 // =====================================================================
 import * as THREE from "three";
 import { addOutline, INK_COLOR } from "../assets/toon.js";
 import { quatYToDir } from "./sphereMath.js";
 
 /* ---------------- 暴风雨调色板 ---------------- */
-const STORM_DARK = 0x2c3e50; // 阴雨核心：乌云深蓝灰
-const STORM_MID = 0x34495e; // 云体主体蓝灰
+const STORM_DARK = 0x2c3e50; // 阴雨核心：乌云深蓝灰（凹陷暗流）
+const STORM_MID = 0x34495e; // 云体主体蓝灰（过渡）
 const STORM_LIT = 0xbdc3c7; // 受光突起：闪电感光浅灰
+const STORM_WARM = 0xd9b38c; // 迎光暖橘（滚动迎向太阳时的浅暖灰/浅橘）
 const STORM_FLASH = 0xd8dee6; // 闪电自发光色（微暖白）
 const OUTLINE_THICK = 0.02;
 const OUTLINE_DRY = 0.06;
@@ -35,11 +37,12 @@ const RADIUS_MAX = 50; // （距球面 10）
 
 /* ---------------- 形变 / 雨带参数 ---------------- */
 const CLOUD_DETAIL = 2; // 细分（焊接后 92 唯一顶点）
-const DEFORM_STRIDE = 1; // 风暴模式：全群每帧形变（高频撕扯需要 60Hz）
-const RAIN_COUNT = 800; // 雨丝数量
-const RAIN_TOP = 45.2; // 雨带顶（云底）
-const RAIN_FLOOR = 40.3; // 雨带底（地表之上）
-const RAIN_BAND_Y = 2.3; // 雨带在赤道面上下厚度
+const DEFORM_STRIDE = 1; // 风暴模式：全群每帧形变
+const RAIN_COUNT = 1400; // 雨丝数量（密密麻麻）
+const RAIN_TOP = 45.0; // 雨带顶（紧贴滚动乌云底）
+const RAIN_FLOOR = 39.0; // 雨带底（砸向高低起伏草地山丘之上）
+const RAIN_BAND_Y = 2.6; // 雨带在赤道面上下厚度
+const RAIN_COLOR = 0x10141a; // 近黑手绘雨丝（云里暗藏阴雨）
 
 /* ---------------- 龙卷风（随机吹开云墙） ---------------- */
 const TORNADO_CHANCE = 1 / 3; // 每次生成判定的概率（主人指定 1/3）
@@ -84,6 +87,7 @@ function getStormCloudMaterial() {
     shader.uniforms.uStormDark = { value: new THREE.Color(STORM_DARK) };
     shader.uniforms.uStormMid = { value: new THREE.Color(STORM_MID) };
     shader.uniforms.uStormLit = { value: new THREE.Color(STORM_LIT) };
+    shader.uniforms.uStormWarm = { value: new THREE.Color(STORM_WARM) };
     shader.uniforms.uFlashColor = { value: new THREE.Color(STORM_FLASH) };
     shader.uniforms.uCloudGlow = { value: 0.07 };
     _cloudUniforms = shader.uniforms;
@@ -95,19 +99,22 @@ function getStormCloudMaterial() {
 uniform vec3 uStormDark;
 uniform vec3 uStormMid;
 uniform vec3 uStormLit;
+uniform vec3 uStormWarm;
 uniform vec3 uFlashColor;
 uniform float uCloudGlow;
 void main() {`
       )
-      // flat 法线就绪后：两段式对冲 —— 凹陷背光沉淀为乌云深蓝灰，
-      // 受光突起 lerp 向闪电感光浅灰；形变令法线高频变化 → 切面闪烁
+      // flat 法线就绪后：阴雨冷暖对冲 ——
+      // 凹陷背光沉淀乌云深蓝灰(#2C3E50)，中段蓝灰，
+      // 受光突起先 lerp 浅灰再叠暖橘，翻滚迎光时明暗硬朗交错闪烁
       .replace(
         "#include <normal_fragment_begin>",
         `#include <normal_fragment_begin>
   vec3 cSunV = normalize((viewMatrix * vec4(uCloudSunDir, 0.0)).xyz);
   float cNdL = dot(normal, cSunV);
-  vec3 cStorm = mix(uStormDark, uStormMid, smoothstep(-0.62, -0.08, cNdL));
-  cStorm = mix(cStorm, uStormLit, smoothstep(0.06, 0.58, cNdL));
+  vec3 cStorm = mix(uStormDark, uStormMid, smoothstep(-0.7, -0.1, cNdL));
+  cStorm = mix(cStorm, uStormLit, smoothstep(0.04, 0.42, cNdL));
+  cStorm = mix(cStorm, uStormWarm, smoothstep(0.42, 0.74, cNdL));
   diffuseColor.rgb = cStorm;`
       )
       // 闪电发光：受光面自发光脉冲（uCloudGlow 由主循环随机频闪驱动）
@@ -172,9 +179,13 @@ function puff(tower, material, blobs, radius, squash, x, y, z, rnd) {
   blob.userData.deform = {
     orig: geo.attributes.position.array.slice(), // 静止形态快照
     seed: rnd() * 100, // 相位去同步：塔内颗颗不同频
-    // 振幅随半径缩放（规格 0.35 基准）：大云团翻涌、小云团暴烈
-    amp: 0.35 * (0.5 + radius * 0.28),
-    speed: 0.85 + rnd() * 0.3, // time 乘数微扰，防整塔同步脉动
+    // 宏观形变振幅（大跨度低频 → 放大，制造海浪级整体起伏）
+    amp: 1.1 + radius * 0.42,
+    speed: 0.9 + rnd() * 0.2, // 仅做极轻微时间微扰，防整塔完全同步
+    // 切线环形滚动：每颗独立相位，使整座云墙像滚筒翻涌
+    rollX: 0.12 + rnd() * 0.06, // rotation.x 滚动速率（≈ time*0.15 量级）
+    rollZPhase: rnd() * Math.PI * 2, // rotation.z 摇摆相位
+    rollZSeed: 0.08 + rnd() * 0.05, // rotation.z 摇摆幅度（≈ 0.1 量级）
   };
   // 描边共享同一几何引用 → 随高频形变同步甩动，绝不延迟穿模
   addOutline(blob, OUTLINE_THICK, INK_COLOR, OUTLINE_DRY);
@@ -264,7 +275,7 @@ function buildStormRain(group, rnd) {
   geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   const rain = new THREE.LineSegments(
     geo,
-    new THREE.LineBasicMaterial({ color: 0x7d95ad, transparent: true, opacity: 0.5 })
+    new THREE.LineBasicMaterial({ color: RAIN_COLOR, transparent: true, opacity: 0.62 })
   );
   rain.name = "storm-rain";
   rain.frustumCulled = false; // 环带横跨视锥，禁误裁
@@ -355,9 +366,13 @@ export function createDynamicMoebiusClouds(scene, planetRadius = 40) {
  * ===================================================================== */
 
 /**
- * 单颗云球流体形变：时间高频加权 3D 噪声沿法线暴力推拉。
- * 主项 = 规格公式 sin(x·0.4+t·2.5)·cos(z·0.4+t·2.5)·sin(y·0.2+t·1.5)，
- * 次级撕裂八度制造快速撕扯凹陷。
+ * 单颗云球宏观形变：大跨度低频 3D 噪声沿法线推拉。
+ * —— 彻底废弃"高频发抖 + 撕裂八度"。改用：
+ *    timeScale = time * 0.4   （时间频率调低 → 丝滑厚重）
+ *    Math.sin(v.x*0.15 + timeScale) * Math.cos(v.z*0.15 + timeScale) * 1.5  （大跨度空间波浪）
+ *  + 一个更低频的 y 向呼吸项让云团整体向内塌陷/向外膨胀。
+ * 空间频率从 0.4~0.9 降到 0.15，振幅大幅放大 → 多面体大块大块整体起伏，
+ * 像巨大海浪一样翻涌，绝不再原地哆嗦。
  */
 export function deformBlob(blob, t) {
   const d = blob.userData.deform;
@@ -366,26 +381,39 @@ export function deformBlob(blob, t) {
   const orig = d.orig;
   const na = blob.geometry.attributes.normal.array;
   const T = t * d.speed + d.seed;
+  const timeScale = T * 0.4; // 调低时间频率：丝滑、厚重、平缓
   const amp = d.amp;
 
   for (let i = 0; i < arr.length; i += 3) {
     const ox = orig[i];
     const oy = orig[i + 1];
     const oz = orig[i + 2];
-    // 高频流体噪声（规格公式）：沸腾撕扯的主形变场
-    const noiseVal =
-      Math.sin(ox * 0.4 + T * 2.5) *
-      Math.cos(oz * 0.4 + T * 2.5) *
-      Math.sin(oy * 0.2 + T * 1.5);
-    // 次级撕裂八度：短波长高频，制造快速拉伸与凹陷
-    const tear =
-      Math.sin(ox * 0.9 + oz * 0.7 + T * 3.4) * Math.sin(oy * 0.8 - T * 2.9) * 0.38;
-    const disp = (noiseVal + tear) * amp;
+    // 大跨度空间波浪（规格公式指标：v.x*0.15 / v.z*0.15 / 时间 0.4）
+    const wave =
+      Math.sin(ox * 0.15 + timeScale) *
+      Math.cos(oz * 0.15 + timeScale) *
+      1.5;
+    // 极低频 y 向呼吸：整团云向内塌陷 / 向外膨胀（宏观体量感）
+    const breathe = Math.sin(oy * 0.12 + timeScale * 0.7) * 0.9;
+    const disp = (wave + breathe) * amp;
     arr[i] = ox + na[i] * disp;
     arr[i + 1] = oy + na[i + 1] * disp;
     arr[i + 2] = oz + na[i + 2] * disp;
   }
   attr.needsUpdate = true;
+}
+
+/**
+ * 切线环形滚动：让每颗云球像滚筒一样不断向前大范围翻滚，
+ * 叠加侧向微弱摇摆，制造流体阻力感。
+ *   rotation.x = time * rollX        （≈ time*0.15 量级，朝玩家视线涌动）
+ *   rotation.z = sin(time*0.2 + phase) * rollZSeed  （≈ 0.1 量级弱摇摆）
+ * 整座由数十颗多面体拼成的云墙会排山倒海般层层翻滚。
+ */
+export function rollBlob(blob, t) {
+  const d = blob.userData.deform;
+  blob.rotation.x = t * d.rollX;
+  blob.rotation.z = Math.sin(t * 0.2 + d.rollZPhase) * d.rollZSeed;
 }
 
 /* =====================================================================
@@ -561,11 +589,11 @@ export function updateDynamicMoebiusClouds(group, t, sun) {
   // ---------- 雨带倾泻 ----------
   updateStormRain(group, t);
 
-  // ---------- 高频流体形变（风暴模式全群每帧） ----------
+  // ---------- 大跨度低频形变 + 切线环形滚动（全群每帧） ----------
   const blobs = group.userData.blobs;
-  const frame = ++group.userData.frame;
   for (let bi = 0; bi < blobs.length; bi++) {
-    if ((bi + frame) % DEFORM_STRIDE !== 0) continue;
-    deformBlob(blobs[bi], t);
+    const blob = blobs[bi];
+    deformBlob(blob, t); // 宏观海浪级起伏（不再高频发抖）
+    rollBlob(blob, t); // 滚筒式向前大范围翻滚 + 侧向弱摇摆
   }
 }

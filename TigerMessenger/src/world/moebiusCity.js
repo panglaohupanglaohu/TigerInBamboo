@@ -25,23 +25,25 @@ export const CITY_FOOTPRINT_RADIUS = Math.min(
   ORIGINAL_CITY_RADIUS * 3
 );
 
-/** 玻璃物理材质（主人指定参数：透射 0.9 / ior 1.7 / 壁厚 2.0） */
+/**
+ * 玻璃材质（性能修复版）：原 transmission 0.92 物理透射会触发
+ * three.js 每帧「全场景二次渲染到透射缓冲」，直视水晶城时帧率
+ * 46.9 → 10.8 fps（最坏帧 475ms 卡死）。改为透明 + clearcoat 高光 +
+ * 自发光的手绘风玻璃，观感接近、成本只剩一次正向渲染。
+ */
 function crystalPhysical(color = 0xd6eaf8, emissive = 0x1f3a4b) {
   return new THREE.MeshPhysicalMaterial({
-    transmission: 0.92,
-    opacity: 1.0,
+    transmission: 0,
+    opacity: 0.7,
     transparent: true,
-    roughness: 0.02,
+    roughness: 0.06,
     metalness: 0.0,
-    ior: 1.74,
-    thickness: 2.5,
     color: new THREE.Color(color),
     emissive: new THREE.Color(emissive),
-    emissiveIntensity: 0.42,
+    emissiveIntensity: 0.5,
     clearcoat: 1,
-    clearcoatRoughness: 0.02,
-    attenuationColor: new THREE.Color(0x9bd8ea),
-    attenuationDistance: 7,
+    clearcoatRoughness: 0.04,
+    specularIntensity: 1,
     flatShading: true,
     depthWrite: false,
   });

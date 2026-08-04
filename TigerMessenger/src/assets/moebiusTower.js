@@ -85,26 +85,28 @@ function rodBetween(parent, a, b, radius, material, outline = 0.01) {
 }
 
 /**
- * 高透冰川蓝物理玻璃（外罩 / 观景平台）
+ * 冰川蓝玻璃（外罩 / 观景平台）
+ * 性能修复：原 transmission 物理透射每帧把整个星球场景再渲一遍到
+ * 透射缓冲，直视水晶城时帧率降到 10 fps 以下（卡死）。改用
+ * 透明 + clearcoat 高光 + 自发光的手绘风玻璃，观感接近、无二次渲染。
+ * opts.transmission 参数保留兼容（内部映射为不透明度）。
  * @param {number} [color]
- * @param {{ transmission?: number, ior?: number, opacity?: number, thickness?: number }} [opts]
+ * @param {{ transmission?: number, ior?: number, opacity?: number, thickness?: number, roughness?: number, emissiveIntensity?: number }} [opts]
  */
 function glassMat(color = GLASS_SHELL, opts = {}) {
+  const trans = opts.transmission ?? 0.92;
   return new THREE.MeshPhysicalMaterial({
-    transmission: opts.transmission ?? 0.92,
-    opacity: opts.opacity ?? 1.0,
+    transmission: 0,
+    opacity: opts.opacity ?? Math.min(0.78, 0.42 + trans * 0.34),
     transparent: true,
-    roughness: opts.roughness ?? 0.04,
+    roughness: opts.roughness ?? 0.06,
     metalness: 0.0,
-    ior: opts.ior ?? 1.72,
-    thickness: opts.thickness ?? 2.2,
     color: new THREE.Color(color),
     emissive: new THREE.Color(0x1a3344),
-    emissiveIntensity: opts.emissiveIntensity ?? 0.28,
+    emissiveIntensity: opts.emissiveIntensity ?? 0.34,
     clearcoat: 1,
-    clearcoatRoughness: 0.04,
-    attenuationColor: new THREE.Color(0x9bd8ea),
-    attenuationDistance: 8,
+    clearcoatRoughness: 0.05,
+    specularIntensity: 1,
     flatShading: true,
     side: THREE.DoubleSide,
     depthWrite: false,
