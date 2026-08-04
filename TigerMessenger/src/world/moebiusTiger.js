@@ -237,16 +237,22 @@ export function createMoebiusTiger(rnd = Math.random, roam = null) {
  *  roam: { rim: Vector3[], steps: Vector3[], drink: Vector3, speed? }
  * ------------------------------------------------------------------- */
 function attachRoamBehavior(tiger, roam) {
+  if (!roam.rim?.length || !roam.steps?.length) return;
   const speed = roam.speed ?? 2.4;
   const rim = roam.rim;
-  const down = roam.steps;
-  const up = [...down].reverse();
+  const steps = roam.steps; // 只读引用：绝不原地修改传入路线数组
+  const up = [...steps].reverse();
   let mode = "patrol";
   let wp = 0;
   let pause = 0;
   let drinkT = 0;
+  // 下坑/上坑路线游标（旧版 down.shift() 原地修改，ascend 走完留空数组，
+  // 下一圈 to-steps 读 down[0] 为 undefined 直接抛异常冻屏）
+  let queue = steps;
+  let qi = 0;
 
   const seek = (target, dt, arrive) => {
+    if (!target) return true;
     const dx = target.x - tiger.position.x;
     const dz = target.z - tiger.position.z;
     const d = Math.hypot(dx, dz);
@@ -280,20 +286,23 @@ function attachRoamBehavior(tiger, roam) {
       } else tiger.userData._walking = true;
       tiger.userData._baseY = rim[0].y;
     } else if (mode === "to-steps") {
-      if (seek(down[0], dt, 0.7)) mode = "descend";
-      else tiger.userData._walking = true;
-      tiger.userData._baseY = down[0].y;
+      if (seek(steps[0], dt, 0.7)) {
+        mode = "descend";
+        queue = steps;
+        qi = 0;
+      } else tiger.userData._walking = true;
+      tiger.userData._baseY = steps[0].y;
     } else if (mode === "descend") {
       tiger.userData._walking = true;
-      const cur = down[0];
-      if (seek(cur, dt, 0.6)) down.shift();
+      if (qi < queue.length && seek(queue[qi], dt, 0.6)) qi++;
       // 高度沿石阶平滑下探
-      const ty = down.length ? down[0].y : roam.drink.y;
+      const ty = qi < queue.length ? queue[qi].y : roam.drink.y;
       tiger.userData._baseY += (ty - tiger.userData._baseY) * Math.min(1, dt * 3);
-      if (!down.length) {
+      if (qi >= queue.length) {
         mode = "drink";
         drinkT = 5 + Math.random() * 3;
-        down.push(...up); // 复原上行路线
+        queue = up; // 饮毕切换上行路线
+        qi = 0;
       }
     } else if (mode === "drink") {
       tiger.userData._drinking = true;
@@ -301,12 +310,14 @@ function attachRoamBehavior(tiger, roam) {
       if (drinkT <= 0) mode = "ascend";
     } else if (mode === "ascend") {
       tiger.userData._walking = true;
-      if (down.length && seek(down[0], dt, 0.6)) down.shift();
-      const ty = down.length ? down[0].y : rim[0].y;
+      if (qi < queue.length && seek(queue[qi], dt, 0.6)) qi++;
+      const ty = qi < queue.length ? queue[qi].y : rim[0].y;
       tiger.userData._baseY += (ty - tiger.userData._baseY) * Math.min(1, dt * 3);
-      if (!down.length) {
+      if (qi >= queue.length) {
         mode = "patrol";
         wp = 1;
+        queue = steps;
+        qi = 0;
       }
     }
     tiger.userData._mode = mode;

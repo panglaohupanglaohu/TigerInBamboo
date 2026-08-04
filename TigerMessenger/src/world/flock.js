@@ -404,11 +404,13 @@ export class FlockManager {
       const pos = b.group.position;
 
       // 朝向：沿速度方向平滑转向（up = 球面径向 = 本地天顶）
+      // 鸟身体锥尖（头）在局部 -Z；Matrix4.lookAt 的 -Z 指向 (target - eye)，
+      // 故 eye=原点、target=速度方向 → -Z 指向 _fwd，鸟头（尖处）朝前主飞。
       if (b.vel.lengthSq() > 0.09) {
         _up.copy(pos).normalize();
         _fwd.copy(b.vel).normalize();
         if (Math.abs(_fwd.dot(_up)) < 0.99) {
-          _m4.lookAt(_fwd, _origin, _up); // +Z → 速度方向
+          _m4.lookAt(_origin, _fwd, _up); // 修正：鸟头(-Z) → 速度方向
           _q.setFromRotationMatrix(_m4);
           b.group.quaternion.slerp(_q, 1 - Math.exp(-6.5 * dt));
         }

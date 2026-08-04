@@ -20,6 +20,7 @@ import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
 import { createTouchControls } from "./ui/touchControls.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
+import { FlockManager } from "./world/flock.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import {
   createDynamicMoebiusClouds,
@@ -159,6 +160,25 @@ mapEditor.loadPersisted();
 // 地图打开时：3D 左键点选模型 → 地图同步选中高亮
 mapEditor.bindScenePick({ camera, domElement: renderer.domElement });
 
+// ---------- 书店上方忽聚忽散的鸟群 ----------
+// 取书店在世界中的球面位置（法线方向）→ 在其正上方低空小空域盘旋聚散。
+let bookshopFlock = null;
+{
+  const shopPos = messenger?.landmarks?.bookshop?.position;
+  if (shopPos && shopPos.lengthSq() > 1e-6) {
+    const centerDir = shopPos.clone().normalize();
+    bookshopFlock = new FlockManager(scene, {
+      count: 16, // 一群手绘小鸟
+      planetRadius: PLANET_RADIUS,
+      centerDir, // 书店正上方
+      altMin: 8, // 书店顶上空 8 单位起
+      altMax: 16, // 上界 16 单位（低空小空域）
+      homeRadius: 7, // 家域收紧在书店上空
+      homeWeight: 1.2, // 较强回拉 → 围绕书店忽聚忽散
+    });
+  }
+}
+
 const devPanel = createDevPanel({
   sun,
   ambient,
@@ -208,6 +228,7 @@ const airshipRide = createAirshipRide({
   cameraRig,
   keys,
   planetRadius: PLANET_RADIUS,
+  scene,
   elHint: document.getElementById("airship-hint"),
   toast: showToast,
 });
@@ -379,7 +400,8 @@ function animate() {
   quest.updateCompass();
   quest.animateMarkers(t);
   updateLanterns(lanterns, t);
-  updateDynamicMoebiusClouds(equatorialClouds, t, sun);
+  updateDynamicMoebiusClouds(equatorialClouds, t, sun, camera);
+  bookshopFlock?.update(dt, t); // 书店上方鸟群忽聚忽散
   devPanel.tick(dt);
 
   renderer.render(scene, camera);

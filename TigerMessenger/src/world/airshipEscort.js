@@ -24,9 +24,16 @@ const BOOST_SPEED = 1.65; // 外环外加速追赶（尾随不掉队）
 const RING_SOFT = 0.8; // 硬结界软边
 const RING_HARD_K = 0.6; // 硬结界位置回压比例（强行约束）
 const WAKE_WEIGHT = 1.9; // 尾流点（飞艇后方）吸引
-const SWIRL_WEIGHT = 0.95; // 环绕飞艇的漩涡环飞
-const K_AHEAD_PUSH = 2.4; // 不在艇头正前方逗留（伴飞后方与侧面）
+const SWIRL_WEIGHT = 0.95; // 环绕飞艇的漩涡环飞（ORBIT 模式生效）
+const K_AHEAD_PUSH = 2.4; // 不在艇头正前方逗留（ORBIT 模式生效）
 const PLANE_WEIGHT = 0.35; // 压向飞艇赤道面 → 圆柱形分布
+
+// ---------- 探路/环绕节奏状态机 ----------
+const LEAD_SEC = 5.0; // LEAD：整群飞到艇头前方探路时长
+const ORBIT_SEC = 8.0; // ORBIT：环绕伴飞时长
+const LEAD_AHEAD = 10; // 艇头前方探路距离
+const LEAD_RADIUS = 3.2; // 前方目标点散布半径（松散探路队形）
+const LEAD_WEIGHT = 3.0; // 朝前方目标点的强吸引
 const PLANE_SOFT = 4.2; // 垂直偏移软上限（不太低，避开登艇垂绳区）
 const PLANE_HARD_PUSH = 2.0;
 
@@ -70,6 +77,8 @@ const _fwd = new THREE.Vector3();
 const _tan = new THREE.Vector3();
 const _cross = new THREE.Vector3();
 const _origin = new THREE.Vector3();
+const _shipFwd = new THREE.Vector3(); // 飞艇切向前进方向
+const _leadPoint = new THREE.Vector3(); // LEAD 模式前方目标点
 const _m4 = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
 
@@ -215,6 +224,8 @@ export class AirshipEscortManager {
     this._prevShipPos = new THREE.Vector3();
     this._shipVel = new THREE.Vector3();
     this._trailDir = new THREE.Vector3(0, 0, 1); // 尾迹方向兜底
+    this._mode = "lead"; // 行为状态机：先飞到艇头前方探路
+    this._modeT = 0;
     airship.getWorldPosition(this._prevShipPos);
 
     // 出生：飞艇四周 8–12 单位环带、近赤道面散布
@@ -282,6 +293,25 @@ export class AirshipEscortManager {
     _wake.copy(_shipPos).addScaledVector(this._trailDir, 3 + Math.min(6, shipSpeed * 0.9));
     const shipR = Math.max(_shipPos.length(), 1);
     _shipUp.copy(_shipPos).divideScalar(shipR);
+
+    // ---------- 探路/环绕节奏状态机 ----------
+    this._modeT += dt;
+    const modeDur = this._mode === "lead" ? LEAD_SEC : ORBIT_SEC;
+    if (this._modeT >= modeDur) {
+      this._modeT = 0;
+      this._mode = this._mode === "lead" ? "orbit" : "lead";
+    }
+    const leading = this._mode === "lead";
+    // 飞艇切向前进方向（球面切线分量）
+    _shipFwd
+      .copy(this._shipVel)
+      .addScaledVector(_shipUp, -this._shipVel.dot(_shipUp));
+    if (_shipFwd.lengthSq() > 1e-6) _shipFwd.normalize();
+    else _shipFwd.copy(this._trailDir).multiplyScalar(-1); // 静止 → 用尾迹反向
+    // LEAD 前方目标点：艇头前方 + 松散散布（每帧基于当前艇位，队形随艇走）
+    _leadPoint.copy(_shipPos).addScaledVector(_shipFwd, LEAD_AHEAD);
+    // 让目标点也在赤道面附近，避免绕到艇顶/底部
+    _leadPoint.addScaledVector(_shipUp, -_leadPoint.clone().sub(_shipPos).dot(_shipUp) * 0.6);
 
     for (let i = 0; i < n; i++) {
       const b = this.birds[i];

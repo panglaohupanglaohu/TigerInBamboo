@@ -62,7 +62,7 @@ const CANYON_BGM_END_SEC = 57;
 let swampBgmEl = null;
 /** 场景仍要求播放（玩家在湖沼内） */
 let swampBgmWanted = false;
-/** 场景已离开，但当前 1:36–1:54 这一整段必须播完再停 */
+/** 场景已离开，但当前 2:50–3:08 这一整段必须播完再停 */
 let swampBgmPendingStop = false;
 let swampBgmFading = false;
 const SWAMP_BGM_URL = new URL(
@@ -70,9 +70,9 @@ const SWAMP_BGM_URL = new URL(
   import.meta.url
 ).href;
 const SWAMP_BGM_VOLUME = 0.46;
-/** 湖沼 BGM 循环区间：1 分 36 秒 → 1 分 54 秒 */
-const SWAMP_BGM_START_SEC = 1 * 60 + 36;
-const SWAMP_BGM_END_SEC = 1 * 60 + 54;
+/** 湖沼 BGM 循环区间：2 分 50 秒 → 3 分 08 秒（尾奏情绪区，与水晶城 21–57s 前段明显区分） */
+const SWAMP_BGM_START_SEC = 2 * 60 + 50;
+const SWAMP_BGM_END_SEC = 3 * 60 + 8;
 
 export function ensureAudio() {
   if (muted) return null;
@@ -1002,8 +1002,8 @@ function fadeOutCanyonBgm(seconds = 1.4) {
 }
 
 // =====================================================================
-//  湖沼 BGM：进入莫比斯原初湖沼 → 循环《風之傳說》1:36–1:54
-//  与峡谷 BGM 同构：整段播完才停，离开不打断；两者互斥（先停对方）
+//  湖沼 BGM：进入莫比斯原初湖沼 → 循环《風之傳說》2:50–3:08（尾奏区）
+//  与峡谷 BGM（前段 21–57s）明显区分；同构：整段播完才停，离开不打断；两者互斥（先停对方）
 // =====================================================================
 
 /** 任一区段 BGM（峡谷 / 湖沼）仍在占用声道时，默认环境音不得恢复 */
@@ -1019,7 +1019,7 @@ function anySegmentBgmEngaged() {
 function ensureSwampBgmEl() {
   if (swampBgmEl) return swampBgmEl;
   const el = new Audio(SWAMP_BGM_URL);
-  // 不用原生 loop（会回到 0 秒）；在 1:36–1:54 区间内自循环
+  // 不用原生 loop（会回到 0 秒）；在 2:50–3:08 区间内自循环
   el.loop = false;
   el.preload = "auto";
   el.volume = 0;
@@ -1037,7 +1037,7 @@ function ensureSwampBgmEl() {
   return el;
 }
 
-/** 区间终点：仍在湖沼内 → 回 1:36 再循环；已请求停止 → 本段播完淡出 */
+/** 区间终点：仍在湖沼内 → 回 2:50 再循环；已请求停止 → 本段播完淡出 */
 function onSwampBgmSegmentEnd(el) {
   if (swampBgmWanted && !swampBgmPendingStop) {
     seekSwampBgmToStart(el);
@@ -1049,7 +1049,7 @@ function onSwampBgmSegmentEnd(el) {
   fadeOutSwampBgm(1.2);
 }
 
-/** 定位到循环起点 1:36（元数据未就绪时等 loadedmetadata） */
+/** 定位到循环起点 2:50（元数据未就绪时等 loadedmetadata） */
 function seekSwampBgmToStart(el) {
   if (!el) return;
   const apply = () => {
@@ -1075,7 +1075,7 @@ function isSwampBgmAudible() {
 /**
  * 湖沼背景音乐：进入莫比斯原初湖沼起播，区间内循环。
  * 幂等：状态未变则不重复 fade / play。
- * 离开时：若本段 1:36–1:54 未播完，播完再停（不打断乐句）。
+ * 离开时：若本段 2:50–3:08 未播完，播完再停（不打断乐句）。
  * @param {boolean} active 是否应播放（玩家是否在湖沼内）
  * @param {{ fade?: number }} [opts] fade 秒数
  */
@@ -1145,7 +1145,7 @@ export function isSwampBgmPlaying() {
   );
 }
 
-/** 已离开湖沼，正在把当前 1:36–1:54 整段播完 */
+/** 已离开湖沼，正在把当前 2:50–3:08 整段播完 */
 export function isSwampBgmFinishing() {
   return !!(swampBgmPendingStop && swampBgmEl && !swampBgmEl.paused);
 }
@@ -1198,7 +1198,7 @@ function fadeOutSwampBgm(seconds = 1.4) {
     el.volume = 0;
     try {
       el.pause();
-      // 停在起点标记，下次 play 仍从 1:36
+      // 停在起点标记，下次 play 仍从 2:50
       el.currentTime = SWAMP_BGM_START_SEC;
     } catch {
       /* ignore */

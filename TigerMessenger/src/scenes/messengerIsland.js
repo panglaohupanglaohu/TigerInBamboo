@@ -284,7 +284,7 @@ export const messengerIslandScene = {
         scene.traverse((o) => {
           const kind = o.userData?.kind;
           if ((kind === "moebius-swamp" || kind === "moebius-airship") && o.userData.update) {
-            o.userData.update(dt, t);
+            o.userData.update(dt, t, runtime);
           }
         });
 

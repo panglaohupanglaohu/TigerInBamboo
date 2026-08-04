@@ -597,6 +597,12 @@ function buildSwampBird(rnd, color) {
   return g;
 }
 
+/* 玩家入沼交互（萤火环绕/尾随 + 长尾猴投果） */
+const FRUIT_G = 12; // 果实弹道重力
+const _ffP = new THREE.Vector3(); // 玩家局部坐标
+const _ffF = new THREE.Vector3(); // 玩家局部朝向（水平）
+const _ffQ = new THREE.Quaternion();
+
 /** 长尾猴：暗毛浅脸 + S 形长尾，树冠间跳跃 */
 function buildLongTailMonkey(rnd) {
   const g = new THREE.Group();
@@ -626,6 +632,12 @@ function buildLongTailMonkey(rnd) {
     limb.rotation.z = sx * 0.5;
     limb.rotation.x = -sz * 0.3;
     g.add(limb);
+    if (sz === 1) {
+      // 前肢：玩家入沼投果时高举
+      if (sx === -1) g.userData.armL = limb;
+      else g.userData.armR = limb;
+      limb.userData.baseRotX = limb.rotation.x;
+    }
   }
   // 长尾：比身体更长的 S 形垂尾
   const pts = [];
@@ -1091,6 +1103,13 @@ export function createMoebiusSwampZone(opts = {}) {
     sp.userData.flicker = 2 + rnd() * 3;
     sp.userData.phase = rnd() * Math.PI * 2;
     sp.userData.op = 0.5 + rnd() * 0.5;
+    // 玩家入沼时的环绕/尾随参数
+    sp.userData.followK = 0;
+    sp.userData.orbitR = 1.4 + rnd() * 2.4;
+    sp.userData.orbitH = 0.6 + rnd() * 2.2;
+    sp.userData.orbitSpd = (0.8 + rnd() * 1.4) * (rnd() < 0.5 ? -1 : 1);
+    sp.userData.orbitPh = rnd() * Math.PI * 2;
+    sp.userData.trail = i % 3 === 0; // 1/3 尾随身后，其余环绕
     swampZone.add(sp);
     fireflies.push(sp);
   }
@@ -1402,6 +1421,21 @@ export function createMoebiusSwampZone(opts = {}) {
     monkeys.push(mk);
   }
 
+  // 投掷果实池（玩家入沼时长尾猴朝他投果；固定 10 枚池化复用，无增长）
+  const fruitGeo = facet(new THREE.SphereGeometry(0.17, 6, 5));
+  const fruitMats = [
+    toonMat(0xff9a4d, { flatShading: true }), // 橙果
+    toonMat(0xe8708f, { flatShading: true }), // 浆果
+  ];
+  const fruits = [];
+  for (let i = 0; i < 10; i++) {
+    const fr = new THREE.Mesh(fruitGeo, fruitMats[i % 2]);
+    fr.visible = false;
+    fr.userData = { active: false, vel: new THREE.Vector3(), life: 0 };
+    swampZone.add(fr);
+    fruits.push(fr);
+  }
+
   // 发光蜥蜴：坑缘草甸缓爬 ×2 + 湖底 ×1
   /** @type {THREE.Group[]} */
   const lizards = [];
@@ -1497,7 +1531,22 @@ export function createMoebiusSwampZone(opts = {}) {
     fov: 62,
   };
 
-  swampZone.update = function updateSwamp(_dt, t) {
+  swampZone.update = function updateSwamp(_dt, t, runtime) {
+    /* ---------- 玩家入沼判定：萤火环绕/尾随 + 长尾猴投果 ---------- */
+    const player = runtime?.player;
+    let playerIn = false;
+    if (player) {
+      swampZone.updateWorldMatrix(true, false);
+      _ffP.copy(player.position);
+      swampZone.worldToLocal(_ffP);
+      const horiz = Math.hypot(_ffP.x, _ffP.z);
+      playerIn = horiz < 30 && _ffP.y > 12 && _ffP.y < 52;
+      swampZone.getWorldQuaternion(_ffQ).invert();
+      _ffF.copy(player.facing).applyQuaternion(_ffQ);
+      _ffF.y = 0;
+      if (_ffF.lengthSq() < 1e-6) _ffF.set(0, 0, 1);
+      _ffF.normalize();
+    }
     // 荷叶小舟随水起伏
     for (const lotus of lotuses) {
       const ph = lotus.userData.bobPhase || 0;
@@ -1571,6 +1620,54 @@ export function createMoebiusSwampZone(opts = {}) {
         mk.position.y += Math.sin(k * Math.PI) * u.arc;
         mk.lookAt(B.x, mk.position.y, B.z);
       }
+      // 玩家入沼：冷却到了就朝他投一枚果（抛物线弹道），投时高举前肢
+      u.throwCd = (u.throwCd || 0) - _dt;
+      if (u.poseT > 0) {
+        u.poseT -= _dt;
+        if (player) mk.lookAt(_ffP.x, mk.position.y + 0.2, _ffP.z);
+        const k = Math.sin(Math.min(1, 1 - u.poseT / 0.55) * Math.PI);
+        for (const arm of [u.armL, u.armR]) {
+          if (arm) arm.rotation.x = arm.userData.baseRotX - 2.4 * k;
+        }
+      } else {
+        for (const arm of [u.armL, u.armR]) {
+          if (arm) arm.rotation.x = arm.userData.baseRotX;
+        }
+        if (playerIn && u.throwCd <= 0 && lt < u.sitDur) {
+          const fr = fruits.find((x) => !x.userData.active);
+          if (fr) {
+            u.throwCd = 1.6 + Math.random() * 2.8;
+            u.poseT = 0.55;
+            const fu = fr.userData;
+            fu.active = true;
+            fu.life = 4;
+            fr.visible = true;
+            fr.position.set(mk.position.x, mk.position.y + 1.2, mk.position.z);
+            // 解弹道：T 秒后恰好砸到送信人
+            const T = 0.8 + Math.random() * 0.35;
+            fu.vel.set(
+              (_ffP.x - fr.position.x) / T,
+              (_ffP.y + 1.0 - fr.position.y) / T + 0.5 * FRUIT_G * T,
+              (_ffP.z - fr.position.z) / T
+            );
+          }
+        }
+      }
+    }
+    // 果实弹道：重力抛物线，砸中送信人或落水即收（池化复用）
+    for (const fr of fruits) {
+      const fu = fr.userData;
+      if (!fu.active) continue;
+      fu.life -= _dt;
+      fu.vel.y -= FRUIT_G * _dt;
+      fr.position.addScaledVector(fu.vel, _dt);
+      fr.rotation.x += _dt * 6;
+      fr.rotation.z += _dt * 4;
+      if (player && fr.position.distanceToSquared(_ffP) < 0.8) fu.life = Math.min(fu.life, 0.1);
+      if (fu.life <= 0 || fr.position.y < WATER_Y + 0.15) {
+        fu.active = false;
+        fr.visible = false;
+      }
     }
     // 发光蜥蜴：贴地缓爬，头朝行进向微摆
     for (const lz of lizards) {
@@ -1616,15 +1713,34 @@ export function createMoebiusSwampZone(opts = {}) {
       b.position.y = b.userData.baseY + Math.sin(t * 1.5 + b.userData.phase) * 0.5;
       b.material.opacity = 0.22 + 0.22 * (0.5 + 0.5 * Math.sin(t * 2.1 + b.userData.phase));
     }
-    // 萤火虫漂移 + 闪烁（月夜主呼吸感）
+    // 萤火虫：玩家入沼 → 大部分环绕/尾随送信人，离开后平滑回归环境漂移
     for (const f of fireflies) {
       const u = f.userData;
       const tt = t * u.speed + u.phase;
-      f.position.set(
-        u.baseX + Math.sin(tt * 0.9) * u.range + Math.sin(tt * 0.37 + 1.7) * u.range * 0.6,
-        u.baseY + Math.sin(tt * 0.7 + u.phase) * 1.2,
-        u.baseZ + Math.cos(tt * 0.8) * u.range
-      );
+      const ax = u.baseX + Math.sin(tt * 0.9) * u.range + Math.sin(tt * 0.37 + 1.7) * u.range * 0.6;
+      const ay = u.baseY + Math.sin(tt * 0.7 + u.phase) * 1.2;
+      const az = u.baseZ + Math.cos(tt * 0.8) * u.range;
+      u.followK += ((playerIn ? 1 : 0) - u.followK) * Math.min(1, _dt * 1.5);
+      if (u.followK > 0.002 && player) {
+        let tx, ty, tz;
+        if (u.trail) {
+          // 尾随：身后 1~3 单位拖尾
+          const back = 1.8 + Math.sin(tt * 0.7 + u.orbitPh) * 0.8;
+          tx = _ffP.x - _ffF.x * back + Math.sin(tt * 1.3 + u.orbitPh) * 0.6;
+          ty = _ffP.y + 1.2 + Math.sin(tt * 0.9 + u.orbitPh) * 0.5;
+          tz = _ffP.z - _ffF.z * back + Math.cos(tt * 1.1 + u.orbitPh) * 0.6;
+        } else {
+          // 环绕：绕玩家水平圆周 + 头顶浮动
+          const oa = t * u.orbitSpd + u.orbitPh;
+          tx = _ffP.x + Math.cos(oa) * u.orbitR;
+          ty = _ffP.y + u.orbitH + Math.sin(t * 1.3 + u.orbitPh) * 0.45;
+          tz = _ffP.z + Math.sin(oa) * u.orbitR;
+        }
+        const k = u.followK;
+        f.position.set(ax + (tx - ax) * k, ay + (ty - ay) * k, az + (tz - az) * k);
+      } else {
+        f.position.set(ax, ay, az);
+      }
       const tw = 0.5 + 0.5 * Math.sin(t * u.flicker + u.phase * 3);
       f.material.opacity = u.op * (0.3 + 0.7 * tw);
     }
@@ -1712,7 +1828,7 @@ export function createMoebiusSwampPlacement(opts = {}) {
   wrap.userData.factoryScale = scale;
   wrap.userData.seed = seed;
   wrap.userData.inner = inner;
-  wrap.userData.update = (dt, t) => inner.update?.(dt, t);
+  wrap.userData.update = (dt, t, runtime) => inner.update?.(dt, t, runtime);
 
   return wrap;
 }

@@ -96,6 +96,15 @@ async function isJsModuleUrl(url) {
  * @returns {Promise<{ ok: boolean, source: string, core?: any, error?: string }>}
  */
 export function ensureMemoryBridge() {
+  // 默认关闭：四层记忆桥接是实验性跨站集成，游戏本体（本机信袋）不依赖它。
+  // 需 ?memory=1 显式启用，避免常规游玩时的额外 fetch 探测与模块加载。
+  if (!/[?&]memory=1\b/.test(location.search)) {
+    return Promise.resolve({
+      ok: false,
+      source: "disabled",
+      error: "未启用（?memory=1 可开启四层记忆桥接）",
+    });
+  }
   if (bridgeState) return Promise.resolve(bridgeState);
   if (loadPromise) return loadPromise;
 
