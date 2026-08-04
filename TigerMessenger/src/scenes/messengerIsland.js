@@ -19,8 +19,13 @@ import {
 } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
-import { isCanyonBgmPlaying, isCanyonBgmFinishing } from "../audio/sfx.js";
+import { isCanyonBgmPlaying, isCanyonBgmFinishing, setSwampBgm } from "../audio/sfx.js";
 import { canyonOffsetDir, CANYON } from "../world/canyon.js";
+import { FlockManager } from "../world/flock.js";
+import { AirshipEscortManager } from "../world/airshipEscort.js";
+import { buildImpastoMossyGround } from "../world/mossyGround.js";
+import { swampMidwayDir } from "../world/moebiusSwamp.js";
+import { SAIHOJI_ZONES } from "../world/saihoji.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import { groundLiftAt } from "../world/hills.js";
@@ -34,6 +39,13 @@ import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiu
 
 /** 飞艇锚定用临时向量 */
 const _asTmp = new THREE.Vector3();
+
+/** 湖沼 BGM 进入判定（局部坐标：坑口半径 34，坑缘 y=0） */
+const _swampLocal = new THREE.Vector3();
+const SWAMP_BGM_ENTER_R = 33; // 进入判定半径（略收口，跨过坑缘才算进）
+const SWAMP_BGM_EXIT_R = 37; // 离开判定半径（滞回，防坑缘抖动反复切歌）
+const SWAMP_BGM_CEILING = 28; // 高于此局部高度视为飞越树冠，不算进入
+let swampBgmInside = false;
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const messengerIslandScene = {
@@ -97,6 +109,32 @@ export const messengerIslandScene = {
     // 莫比斯水晶大都会（南半球千座晶林，让开轨道走廊）
     const moebius = buildMoebiusCrystalMetropolis(scene, R, { trackCurve: tramSystem.curve });
 
+    // Boids 鸟群：低多边形手绘风群飞，漫游南半球大峡谷高空（35–45 高度带）
+    // 三大定律 + 相位差扑翅 + 球心重力锁；晶塔柱体作避障障碍
+    const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
+    const flock = new FlockManager(scene, {
+      count: 18,
+      planetRadius: R,
+      centerDir: canyonDir,
+      windDir: new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), canyonDir).normalize(),
+      obstacles: moebius.crystals,
+    });
+
+    // 水晶城花厅鸟群：忽聚忽散，环绕在母皇塔花厅楼顶（塔尖上空 8 为家域中心）
+    const grandTower = moebius.grand;
+    const roofAlt = grandTower.root + grandTower.h - R; // 花厅楼顶海拔（谷心台阶根基 + 塔高）
+    const hallFlock = new FlockManager(scene, {
+      count: 12,
+      planetRadius: R,
+      centerDir: grandTower.dir,
+      altMin: roofAlt - 2,
+      altMax: roofAlt + 18,
+      homeRadius: 12,
+      homeWeight: 1.3, // 楼顶小空域：收紧家域缰绳
+      windDir: new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), grandTower.dir).normalize(),
+      obstacles: moebius.crystals,
+    });
+
     // Hard To Find Bookshop：与地图共用 createCatalogObject（同一工厂/参数）
     const bookshopX = 11.5;
     const bookshopZ = 5.5;
@@ -135,6 +173,12 @@ export const messengerIslandScene = {
     // 湖沼懒查找锚定状态（地图编辑器放置/移动后飞艇跟随）
     const airshipAnchor = { swamp: null, lastPos: new THREE.Vector3(), locked: false };
 
+    // 航空艇护航队：异星滑翔长翼鸟（尾流伴飞 · 6–15 环形圆柱结界 · 两级折叠长翼）
+    const escort = new AirshipEscortManager(scene, airship, {
+      count: 9,
+      obstacles: moebius.crystals,
+    });
+
     // 坡下草地：草簇 + 小花环带（围绕书店山坡）
     {
       let s = 41;
@@ -165,6 +209,39 @@ export const messengerIslandScene = {
       }
     }
 
+    // ---------- 厚涂苔丘草地（Impasto Mossy Knolls）：西芳寺缘 + 湖沼边缘 ----------
+    // 安全阻尼：电车铁轨采样点 / 书店大门（minDistance = 4，见 mossyGround.js）
+    const mossAvoidCommon = tramSystem.curve.getPoints(60).map((p) => ({
+      position: p,
+      radius: 1.2,
+    }));
+    mossAvoidCommon.push({
+      position: bookshop.position,
+      radius: bookshop.userData.collideRadius || 3,
+    });
+    // ① 西芳寺缘：入口苔径 ↔ 主石之庭 的路线间隙；草丛避开六景石组庭园
+    const zoneAvoid = SAIHOJI_ZONES.map((z) => ({
+      position: latLonToDir(z.lat, z.lon, new THREE.Vector3()).multiplyScalar(R),
+      radius: z.radius + 1,
+    }));
+    const mossSaihoji = buildImpastoMossyGround({
+      dir: latLonToDir(56, -120, new THREE.Vector3()),
+      planetRadius: R,
+      seed: 9101,
+      yaw: 0.6,
+      avoidWorld: [...mossAvoidCommon, ...zoneAvoid],
+    });
+    scene.add(mossSaihoji);
+    // ② 湖沼边缘：湖沼默认锚地方向（书店 → 水晶城中点）
+    const mossSwamp = buildImpastoMossyGround({
+      dir: swampMidwayDir(bookshopX, bookshopZ, R),
+      planetRadius: R,
+      seed: 7743,
+      yaw: 1.9,
+      avoidWorld: mossAvoidCommon,
+    });
+    scene.add(mossSwamp);
+
     const colliders = [
       ...playZone.colliders,
       ...camp.colliders,
@@ -192,6 +269,11 @@ export const messengerIslandScene = {
         oldHarbor: harborBuilt,
         moebius,
         airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
+        flock, // Boids 低多边形手绘鸟群（南半球高空）
+        hallFlock, // 花厅楼顶 Boids 鸟群（母皇塔尖环绕）
+        escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
+        mossSaihoji, // 厚涂苔丘 · 西芳寺缘
+        mossSwamp, // 厚涂苔丘 · 湖沼边缘
       },
       update(dt, t, runtime) {
         updatePlatformPulse(platforms, t);
@@ -235,6 +317,43 @@ export const messengerIslandScene = {
           const escortTram =
             tramSystem.getFarewellEscortTram?.({ bgmHold }) || null;
           moebius.update?.(dt, t, { escortTram });
+        }
+
+        // Boids 鸟群：三大定律 + 相位差扑翅 + 高度带锁 + 晶塔避障
+        flock.update(dt, t);
+
+        // 花厅楼顶鸟群：环绕母皇塔尖忽聚忽散
+        hallFlock.update(dt, t);
+
+        // 航空艇护航队：尾流场吸引 + 6–15 环形圆柱结界 + 两级折叠滑翔
+        escort.update(dt, t);
+
+        // 湖沼 BGM：进入莫比斯原初湖沼 → 《風之傳說》1:36–1:54（滞回防抖）
+        {
+          const p = runtime?.player;
+          let swamp = null;
+          if (p) {
+            scene.traverse((o) => {
+              if (!swamp && o.userData?.kind === "moebius-swamp") swamp = o;
+            });
+          }
+          if (p && swamp) {
+            // 湖沼可能刚被地图编辑器移动 → 强制刷新世界矩阵再逆变换
+            swamp.updateWorldMatrix(true, false);
+            _swampLocal.copy(p.position);
+            swamp.worldToLocal(_swampLocal);
+            const horiz = Math.hypot(_swampLocal.x, _swampLocal.z);
+            if (swampBgmInside) {
+              if (horiz > SWAMP_BGM_EXIT_R || _swampLocal.y > SWAMP_BGM_CEILING + 6) {
+                swampBgmInside = false;
+              }
+            } else if (horiz < SWAMP_BGM_ENTER_R && _swampLocal.y < SWAMP_BGM_CEILING) {
+              swampBgmInside = true;
+            }
+          } else {
+            swampBgmInside = false;
+          }
+          setSwampBgm(swampBgmInside);
         }
 
         const player = runtime?.player;

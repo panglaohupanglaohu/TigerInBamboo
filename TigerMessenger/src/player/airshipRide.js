@@ -15,9 +15,11 @@ const CLIMB_TIME = 1.7;    // 攀爬动画时长
 const FLY_DIST = 16;       // 驾驶时相机拉远
 const SPEED = 9.0;         // 前后推进速度
 const TURN_SPEED = 1.5;    // 转向角速度 rad/s
-const VERT_SPEED = 7.0;    // 升降速度
+const VERT_SPEED = 8.0;    // 升降速度
 const HOVER_MIN = 8;
-const HOVER_MAX = 55;
+// 水晶城晶皇塔尖约在半径 121（峡谷台阶根基 33.6 + 塔高 87.2）；
+// 升限必须越过塔顶才能真正"飞过"水晶城 → R+90 = 130
+const HOVER_MAX = 90;
 
 const FWD_LOCAL = new THREE.Vector3(0, 0, 1); // 艇首方向
 

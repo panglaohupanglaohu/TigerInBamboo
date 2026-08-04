@@ -57,6 +57,23 @@ const CANYON_BGM_VOLUME = 0.42;
 const CANYON_BGM_START_SEC = 21;
 const CANYON_BGM_END_SEC = 57;
 
+// 湖沼 BGM（同一首《風之傳說》）：进入莫比斯原初湖沼起播
+/** @type {HTMLAudioElement|null} */
+let swampBgmEl = null;
+/** 场景仍要求播放（玩家在湖沼内） */
+let swampBgmWanted = false;
+/** 场景已离开，但当前 1:36–1:54 这一整段必须播完再停 */
+let swampBgmPendingStop = false;
+let swampBgmFading = false;
+const SWAMP_BGM_URL = new URL(
+  "../../music/Gwenan Gibbard-風之傳說.mp3",
+  import.meta.url
+).href;
+const SWAMP_BGM_VOLUME = 0.46;
+/** 湖沼 BGM 循环区间：1 分 36 秒 → 1 分 54 秒 */
+const SWAMP_BGM_START_SEC = 1 * 60 + 36;
+const SWAMP_BGM_END_SEC = 1 * 60 + 54;
+
 export function ensureAudio() {
   if (muted) return null;
   if (!audioCtx) {
@@ -869,6 +886,10 @@ export function setCanyonApproachBgm(active, opts = {}) {
     canyonBgmWanted = true;
     pauseDefaultAmbience();
     if (musicBoxSession) stopMusicBox();
+    // 与湖沼 BGM 互斥：进谷时压掉可能仍在播的湖沼段
+    if (swampBgmWanted || swampBgmPendingStop || isSwampBgmAudible()) {
+      fadeOutSwampBgm(0.6);
+    }
 
     ensureAudio();
     const el = ensureCanyonBgmEl();
@@ -946,7 +967,7 @@ function fadeOutCanyonBgm(seconds = 1.4) {
   canyonBgmWanted = false;
   canyonBgmPendingStop = false;
   if (!el || (el.paused && el.volume <= 0.001)) {
-    if (!muted) resumeDefaultAmbience();
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
     return;
   }
   const start = el.volume > 0 ? el.volume : CANYON_BGM_VOLUME;
@@ -975,7 +996,215 @@ function fadeOutCanyonBgm(seconds = 1.4) {
       /* ignore */
     }
     canyonBgmFading = false;
-    if (!muted && !canyonBgmWanted) resumeDefaultAmbience();
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+  };
+  requestAnimationFrame(step);
+}
+
+// =====================================================================
+//  湖沼 BGM：进入莫比斯原初湖沼 → 循环《風之傳說》1:36–1:54
+//  与峡谷 BGM 同构：整段播完才停，离开不打断；两者互斥（先停对方）
+// =====================================================================
+
+/** 任一区段 BGM（峡谷 / 湖沼）仍在占用声道时，默认环境音不得恢复 */
+function anySegmentBgmEngaged() {
+  return (
+    canyonBgmWanted ||
+    canyonBgmPendingStop ||
+    swampBgmWanted ||
+    swampBgmPendingStop
+  );
+}
+
+function ensureSwampBgmEl() {
+  if (swampBgmEl) return swampBgmEl;
+  const el = new Audio(SWAMP_BGM_URL);
+  // 不用原生 loop（会回到 0 秒）；在 1:36–1:54 区间内自循环
+  el.loop = false;
+  el.preload = "auto";
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  el.addEventListener("timeupdate", () => {
+    if (muted || el.paused) return;
+    if (el.currentTime < SWAMP_BGM_END_SEC - 0.04) return;
+    onSwampBgmSegmentEnd(el);
+  });
+  el.addEventListener("ended", () => {
+    if (muted) return;
+    onSwampBgmSegmentEnd(el);
+  });
+  swampBgmEl = el;
+  return el;
+}
+
+/** 区间终点：仍在湖沼内 → 回 1:36 再循环；已请求停止 → 本段播完淡出 */
+function onSwampBgmSegmentEnd(el) {
+  if (swampBgmWanted && !swampBgmPendingStop) {
+    seekSwampBgmToStart(el);
+    if (el.paused) el.play()?.catch?.(() => {});
+    return;
+  }
+  swampBgmPendingStop = false;
+  swampBgmWanted = false;
+  fadeOutSwampBgm(1.2);
+}
+
+/** 定位到循环起点 1:36（元数据未就绪时等 loadedmetadata） */
+function seekSwampBgmToStart(el) {
+  if (!el) return;
+  const apply = () => {
+    try {
+      const dur = el.duration;
+      let start = SWAMP_BGM_START_SEC;
+      if (Number.isFinite(dur) && dur > 0) {
+        start = Math.min(SWAMP_BGM_START_SEC, Math.max(0, dur - 0.05));
+      }
+      el.currentTime = start;
+    } catch {
+      /* 部分浏览器 seek 中会抛 */
+    }
+  };
+  if (el.readyState >= 1 /* HAVE_METADATA */) apply();
+  else el.addEventListener("loadedmetadata", apply, { once: true });
+}
+
+function isSwampBgmAudible() {
+  return !!(swampBgmEl && !swampBgmEl.paused && swampBgmEl.volume > 0.001);
+}
+
+/**
+ * 湖沼背景音乐：进入莫比斯原初湖沼起播，区间内循环。
+ * 幂等：状态未变则不重复 fade / play。
+ * 离开时：若本段 1:36–1:54 未播完，播完再停（不打断乐句）。
+ * @param {boolean} active 是否应播放（玩家是否在湖沼内）
+ * @param {{ fade?: number }} [opts] fade 秒数
+ */
+export function setSwampBgm(active, opts = {}) {
+  const fade = opts.fade ?? 1.2;
+  const next = !!active && !muted;
+
+  if (next) {
+    const wasPendingOnly = swampBgmPendingStop && !swampBgmWanted;
+    swampBgmPendingStop = false;
+
+    if (swampBgmWanted && isSwampBgmAudible()) {
+      if (swampBgmEl?.paused) {
+        ensureAudio();
+        swampBgmEl.play()?.catch?.(() => {});
+      }
+      return;
+    }
+
+    // 收尾过程中又回到湖沼：接上当前进度继续播，不重新 seek
+    if (wasPendingOnly && isSwampBgmAudible()) {
+      swampBgmWanted = true;
+      return;
+    }
+
+    swampBgmWanted = true;
+    pauseDefaultAmbience();
+    if (musicBoxSession) stopMusicBox();
+    // 与峡谷 BGM 互斥：进湖沼时压掉可能尚在收尾的峡谷段
+    if (canyonBgmWanted || canyonBgmPendingStop || isCanyonBgmAudible()) {
+      fadeOutCanyonBgm(0.6);
+    }
+
+    ensureAudio();
+    const el = ensureSwampBgmEl();
+    seekSwampBgmToStart(el);
+    el.play()?.catch?.(() => {});
+    fadeSwampAudioTo(el, SWAMP_BGM_VOLUME, fade);
+    return;
+  }
+
+  // ---- 请求停止 ----
+  if (!swampBgmWanted && !swampBgmPendingStop) return;
+
+  swampBgmWanted = false;
+
+  const el = swampBgmEl;
+  if (
+    el &&
+    !el.paused &&
+    el.currentTime >= SWAMP_BGM_START_SEC - 0.5 &&
+    el.currentTime < SWAMP_BGM_END_SEC - 0.15
+  ) {
+    swampBgmPendingStop = true;
+    return;
+  }
+
+  swampBgmPendingStop = false;
+  fadeOutSwampBgm(fade);
+}
+
+export function isSwampBgmPlaying() {
+  return !!(
+    swampBgmEl &&
+    !swampBgmEl.paused &&
+    (swampBgmWanted || swampBgmPendingStop)
+  );
+}
+
+/** 已离开湖沼，正在把当前 1:36–1:54 整段播完 */
+export function isSwampBgmFinishing() {
+  return !!(swampBgmPendingStop && swampBgmEl && !swampBgmEl.paused);
+}
+
+function fadeSwampAudioTo(el, targetVol, seconds) {
+  if (!el) return;
+  const start = el.volume;
+  const end = THREE_CLAMP(targetVol, 0, 1);
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  swampBgmFading = true;
+  const step = () => {
+    if (!swampBgmEl || swampBgmEl !== el) return;
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1 && swampBgmFading) requestAnimationFrame(step);
+    else {
+      el.volume = end;
+      swampBgmFading = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
+function fadeOutSwampBgm(seconds = 1.4) {
+  const el = swampBgmEl;
+  swampBgmWanted = false;
+  swampBgmPendingStop = false;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : SWAMP_BGM_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  swampBgmFading = true;
+  const step = () => {
+    if (!swampBgmEl || swampBgmEl !== el) return;
+    // 若中途又要求播放，中止淡出
+    if (swampBgmWanted) {
+      swampBgmFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      // 停在起点标记，下次 play 仍从 1:36
+      el.currentTime = SWAMP_BGM_START_SEC;
+    } catch {
+      /* ignore */
+    }
+    swampBgmFading = false;
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
   };
   requestAnimationFrame(step);
 }
@@ -992,6 +1221,9 @@ function setMuted(next) {
     canyonBgmPendingStop = false;
     canyonBgmWanted = false;
     fadeOutCanyonBgm(0.2);
+    swampBgmPendingStop = false;
+    swampBgmWanted = false;
+    fadeOutSwampBgm(0.2);
     tramProximity = 0;
     if (tramNodes?.master && audioCtx) {
       tramNodes.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);

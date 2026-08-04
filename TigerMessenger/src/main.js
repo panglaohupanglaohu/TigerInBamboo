@@ -21,6 +21,10 @@ import { createFoxNpc } from "./world/foxNpc.js";
 import { createTouchControls } from "./ui/touchControls.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
+import {
+  createDynamicMoebiusClouds,
+  updateDynamicMoebiusClouds,
+} from "./world/equatorialClouds.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
 import { updatePlayerControl } from "./player/controller.js";
 import { updatePlayerAnim } from "./player/animation.js";
@@ -58,6 +62,9 @@ const { lanterns, ambient, sun, skyMat, hemi } = setupEnvironment(scene);
 
 // ---------- 星球壳（各场景可在其上贴装） ----------
 const planet = createPlanet(scene);
+
+// ---------- 赤道风暴积雨云墙（乌云涌动 · 随机龙卷风吹开云墙，概率 1/3） ----------
+const equatorialClouds = createDynamicMoebiusClouds(scene, PLANET_RADIUS);
 
 // ---------- 按 URL 加载场景模块 ----------
 // 例：?scene=messenger  |  ?scene=saihoji  |  ?scene=messenger,saihoji
@@ -372,6 +379,7 @@ function animate() {
   quest.updateCompass();
   quest.animateMarkers(t);
   updateLanterns(lanterns, t);
+  updateDynamicMoebiusClouds(equatorialClouds, t, sun);
   devPanel.tick(dt);
 
   renderer.render(scene, camera);
@@ -391,6 +399,7 @@ window.__tm = {
   sceneHandles,
   listScenes,
   assetColliders,
+  equatorialClouds,
   platforms,
   hills,
   mapEditor,
