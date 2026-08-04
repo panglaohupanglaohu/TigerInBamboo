@@ -1,25 +1,26 @@
 // =====================================================================
-//  莫比斯原初湖沼 · createMoebiusSwampZone()  —— 彻底重写版
+//  莫比斯原初湖沼 · createMoebiusSwampZone()  —— 月夜重构版（对照参考截屏）
 //
-//  概念：玩家不是在「浮空大盘子」上走，而是在正常球体地表（Y=40）行走时，
-//  突然遇到一个向球心方向深深塌陷、刀劈斧凿般的「原始深渊大坑洞」，
-//  从草地边缘一跃而下，砸入地下 15 单位的半透明玻璃湖沼。
+//  概念：湖沼被四周苍天大树环抱，树冠在坑口上方交织成顶棚，
+//  水面不见阳光，整片湖沼有如月夜 —— 仅借萤火虫与发光花蕊两种光。
+//  因此全沼使用不受光平涂材质（不接收全局昼夜光照），以深蓝绿月夜
+//  色板还原参考图的扁平插画感；鲸豚/花蕊为画面亮色主体。
 //
 //  Y 轴绝对坐标分层（局部 Group 内锁死）：
-//    Y = 40.0  正常球体地面高度（玩家行走的绿色草地 / 坑口缘）
+//    Y = 40.0  正常球体地面高度（玩家行走的草地 / 坑口缘）
 //    Y = 25.0  地下半透明湖沼水面（比地表低整整 15 个单位）
 //    Y = 10.0  坑洞最深处湖底沙地（总水深 15：从 Y=10 到 Y=25）
-//    Y = 21.0  珍珠瓷感异星白鲸躯干中心（头破水出，身沉水底）
+//    Y = 50~60 树冠顶棚（苍天大树枝冠交织遮天）
 //
 //  核心资产：
-//    - 50×50 PlaneGeometry 玻璃水面（transmission 0.96 / ior 1.333 / #79D2C4）
-//    - 程序拼装「珍珠瓷感异星白鲸」NPC（卵形身 + 鼻头 + 双鳍 + 翘尾分叉）
-//    - 扎根 Y=10 的焦黑墨绿六棱柱原始世界树 + 蛇形缠绕藤蔓
-//    - 3~4 朵 ConeGeometry 翻转 180° 的内凹荷叶小舟 + 焦黑土著人偶
-//    - 全件 addOutline() 唐伯虎水墨描边；纯白环境光 1.2 消灭死黑阴影
+//    - 自发光半透明青绿水面 + 深蓝水下剖面（月夜不见阳光）
+//    - 珍珠瓷感异星白鲸 / 焦黑土著人偶 / 内凹荷叶小舟（载粉色发光花蕊）
+//    - 树冠顶棚 + 巨叶垂吊 / 萤火虫群 / 发光花蕊 / 微弱月光柱
+//    - 全件 addOutline() 墨线描边，莫比斯插画感
 // =====================================================================
 import * as THREE from "three";
-import { addOutline, toonMat, INK_COLOR } from "../assets/toon.js";
+import { addOutline, INK_COLOR } from "../assets/toon.js";
+import { createMoebiusTiger } from "./moebiusTiger.js";
 import { facet } from "../assets/lowPoly.js";
 import { quatYToDir, latLonToDir, flatXZToLatLon } from "./sphereMath.js";
 import { CANYON } from "./canyon.js";
@@ -32,41 +33,57 @@ export const SWAMP_GROUND_Y = 40.0;
 export const SWAMP_WATER_Y = 25.0;
 /** 坑洞最深处湖底沙地：巨树根部与河床乱石扎根于此 */
 export const SWAMP_FLOOR_Y = 10.0;
-/** 白鲸躯干中心：头破水出，身沉水下 */
-const WHALE_Y = 21.0;
+/** 白鲸躯干中心：昂首破水（月夜里水面的亮色主体） */
+const WHALE_Y = 24.0;
 
 const WATER_Y = SWAMP_WATER_Y;
 
-/* ---------------- 莫比斯插画色板（蓝绿主导 + 局部暖色提亮） ---------------- */
-const WATER_COLOR = 0x6ecfc4; // 青绿玻璃水（浅青蓝）
-const WATER_DEEP = 0x2a7a8f;  // 深水衰减（深海军蓝）
-const WALL_COLOR = 0x3f8f8a;  // 坑壁苔青蓝绿（湿润岩壁）
-const WALL_MOSS = 0x4fae9c;   // 坑壁苔藓亮斑
-const FLOOR_COLOR = 0x5fa89f; // 湖底青沙
-const GRASS_COLOR = 0x4fbd8a; // 地表青绿草
-const TRUNK_COLOR = 0x2d6e5e; // 墨青巨干
-const VINE_COLOR = 0x3fae7a;  // 青绿藤蔓
-const ROCK_COLOR = 0x2f7a72;  // 水下青绿乱石
-const ROOT_COLOR = 0x14524a;  // 水下焦青树根
-const LOTUS_LEAF = 0x4fcf8e;  // 荷叶青绿
-const WHALE_SKIN = 0xe3ead6;  // 米白/浅绿鲸豚肤（儒艮感）
-const WHALE_BELLY = 0xf2f0e2; // 鲸腹更浅的米白
-const DOLL_SKIN = 0x5c3a28;   // 土著深肤色
-const DOLL_HAIR = 0xe8b64c;   // 土著金色卷发
-const TOWER_TRUNK = 0x3a6b5c; // 坑边苍天巨干（青褐）
-const TOWER_LEAF = 0x2f9d6e;  // 巨树冠叶绿
-const PALM_LEAF = 0x35b07f;   // 棕榈/芭蕉叶青绿
+/* ---------------- 月夜色板（深蓝绿主导 + 萤火/花蕊辉光提亮） ---------------- */
+const WATER_COLOR = 0x59c4bd; // 水面自发光青绿（参考图亮水线，月夜略压暗）
+const WATER_DEEP = 0x1c5a6e;  // 深水衰减（暗蓝）
+const WALL_COLOR = 0x1b4f5e;  // 坑壁湿暗青蓝
+const WALL_MOSS = 0x2a6b70;   // 坑壁苔藓亮斑（月夜微光）
+const FLOOR_COLOR = 0x173f52; // 湖底暗蓝沙
+const GRASS_COLOR = 0x1d5a50; // 坑缘暗青绿草
+const TRUNK_COLOR = 0x16454e; // 墨暗巨干
+const VINE_COLOR = 0x2f8f7a;  // 青绿藤蔓
+const ROCK_COLOR = 0x1f5664;  // 水下暗蓝乱石
+const ROOT_COLOR = 0x10333c;  // 水下焦暗树根
+const LOTUS_LEAF = 0x5cb868;  // 荷叶绿（夜色中略亮）
+const WHALE_SKIN = 0xd9e6c4;  // 米白浅绿鲸豚肤（画面亮色主体）
+const WHALE_BELLY = 0xeef0da; // 鲸腹更浅的米白
+const DOLL_SKIN = 0x3a2a24;   // 土著深肤色
+const DOLL_HAIR = 0xe5953f;   // 土著橙焰发（夜色暖亮）
+const TOWER_TRUNK = 0x1a4a52; // 坑边苍天巨干（暗青蓝）
+const TOWER_LEAF = 0x17505e;  // 巨树冠暗叶
+const PALM_LEAF = 0x1d5a68;   // 棕榈/芭蕉叶暗青蓝
 /* 暖色点缀生物 */
-const EEL_COLOR = 0xb8c94f;   // 黄绿鳗形生物
-const WORM_COLOR = 0xe05a3a;  // 橙红管状蠕虫
-const MUSHROOM_CAP = 0x9b6bb3;// 紫色蘑菇/珊瑚
-const MUSHROOM_STEM = 0xe8e0d0;
-const PINK_HANG = 0xf2a6b8;   // 粉色长尾垂挂生物
+const EEL_COLOR = 0x9fb84f;   // 黄绿鳗形生物
+const WORM_COLOR = 0xd75a3a;  // 橙红管状蠕虫
+const MUSHROOM_CAP = 0x8f5fa8;// 紫色蘑菇/珊瑚
+const MUSHROOM_STEM = 0xcfd8cf;
+const PINK_HANG = 0xe88fa2;   // 粉色长尾垂挂生物
 const BIRD_PINK = 0xf5c6d0;   // 粉白飞鸟
 const BIRD_PURPLE = 0x9a8fb8; // 紫灰飞鸟
-const SHELL_COLOR = 0xf0e6d2; // 米白贝壳
-const FISH_GREEN = 0x3aa87a;  // 绿黑斑纹鱼
-const FISH_DARK = 0x123c33;   // 鱼身黑斑/剪影
+const GLOW_BIRD_A = 0xd8ffe0; // 发光飞鸟：薄荷白
+const GLOW_BIRD_B = 0xfff0b8; // 发光飞鸟：暖杏黄
+const MONKEY_FUR = 0x463a4e;  // 长尾猴：暗紫褐毛
+const MONKEY_FACE = 0xe8c8a8; // 长尾猴：浅色脸
+const LIZARD_GLOW = 0x8fffc0; // 发光蜥蜴：薄荷绿
+const RIBBON_GLOW = 0xc8e860; // 发光带鱼：黄绿
+const SHELL_COLOR = 0xe8dcc4; // 米白贝壳
+const FISH_GREEN = 0x2f8f6e;  // 绿黑斑纹鱼
+const FISH_DARK = 0x0e2f2a;   // 鱼身黑斑/剪影
+/* 月夜光源：萤火虫 / 花蕊 / 月光柱 / 树冠分层 */
+const FIREFLY_A = 0xd8ff9a;   // 萤火虫黄绿
+const FIREFLY_B = 0x9fffe0;   // 萤火虫青蓝
+const STAMEN_PINK = 0xffd9e8; // 发光花蕊粉白
+const STAMEN_MINT = 0xc8ffe8; // 发光花蕊薄荷
+const PETAL_DEEP = 0xb8486a;  // 花瓣深粉
+const MOON_SHAFT = 0x9fd4e8;  // 微弱冷月光柱
+const CANOPY_DARK = 0x123c4c; // 树冠深色
+const CANOPY_MID = 0x17505e;  // 树冠中色
+const CANOPY_LIT = 0x1d5f6e;  // 树冠亮色（受月边缘）
 
 /** 通用描边件工厂 */
 function part(geo, mat, outline = 0.03) {
@@ -92,6 +109,50 @@ function jitter(geo, amp, rnd) {
   return geo;
 }
 
+/**
+ * 月夜平涂材质：湖沼不接收全局昼夜光照（树冠遮挡阳光），
+ * 用不受光 MeshBasicMaterial 还原参考插画配色（flatShading 对不受光材质无效，忽略）。
+ * 沿用 toonMat 之名，最小化调用点改动。
+ */
+function toonMat(color, opts = {}) {
+  const { flatShading, ...rest } = opts || {};
+  return new THREE.MeshBasicMaterial({ color, fog: false, ...rest });
+}
+
+let _glowTex = null;
+/** 径向辉光贴图（单例）：萤火虫 / 花蕊光晕 */
+function getGlowTexture() {
+  if (_glowTex) return _glowTex;
+  const c = document.createElement("canvas");
+  c.width = c.height = 64;
+  const g = c.getContext("2d");
+  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grad.addColorStop(0, "rgba(255,255,255,1)");
+  grad.addColorStop(0.28, "rgba(255,255,255,0.55)");
+  grad.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 64, 64);
+  _glowTex = new THREE.CanvasTexture(c);
+  return _glowTex;
+}
+
+/** 加色辉光 sprite：萤火虫 / 光晕 / 光池 */
+function glowSprite(color, scale, opacity) {
+  const m = new THREE.SpriteMaterial({
+    map: getGlowTexture(),
+    color,
+    transparent: true,
+    opacity,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    fog: false,
+  });
+  const s = new THREE.Sprite(m);
+  s.scale.setScalar(scale);
+  s.raycast = () => {};
+  return s;
+}
+
 /* =====================================================================
  *  2. 地下半透明 PBR 水体剖面（Y = 25.0）
  *  50×50 PlaneGeometry，高级物理玻璃：水上 / 水下分层透视
@@ -99,21 +160,14 @@ function jitter(geo, amp, rnd) {
 function createWaterSurface() {
   const geo = new THREE.PlaneGeometry(50, 50, 6, 6);
   geo.rotateX(-Math.PI / 2);
-  const mat = new THREE.MeshPhysicalMaterial({
-    transmission: 0.96,
+  // 月夜：水面不见阳光，自发光半透明青绿（参考图亮水线），水下透出深蓝剖面
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(WATER_COLOR),
     transparent: true,
-    opacity: 1.0,
-    roughness: 0.03,
-    metalness: 0.0,
-    ior: 1.333, // 水的真实折射率
-    thickness: 1.5,
-    color: new THREE.Color(WATER_COLOR), // 浅青蓝玻璃水
-    attenuationColor: new THREE.Color(WATER_DEEP), // 深处渐入深海军蓝
-    attenuationDistance: 18,
-    clearcoat: 0.35,
-    clearcoatRoughness: 0.06,
+    opacity: 0.62,
     side: THREE.DoubleSide,
     depthWrite: false,
+    fog: false,
   });
   const water = new THREE.Mesh(geo, mat);
   water.name = "swamp-underground-waterline";
@@ -144,15 +198,8 @@ function buildBelugaWhale(rnd) {
   const whale = new THREE.Group();
   whale.name = "moebius-beluga-whale";
 
-  // 温润异星皮肤：儒艮/海牛般的米白浅绿温润瓷感
-  const skin = new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color(WHALE_SKIN), // 米白浅绿
-    roughness: 0.1,
-    metalness: 0.0,
-    clearcoat: 0.55,
-    clearcoatRoughness: 0.28,
-    emissive: new THREE.Color("#1c3a36"), // 淡淡青蓝内发光
-  });
+  // 月夜里的画面亮色主体：不受光米白浅绿瓷感
+  const skin = new THREE.MeshBasicMaterial({ color: new THREE.Color(WHALE_SKIN), fog: false });
 
   /** @type {THREE.Mesh[]} */
   const parts = [];
@@ -174,11 +221,11 @@ function buildBelugaWhale(rnd) {
   nose.position.set(0, 0.12, 3.25);
   addPart(nose);
 
-  // 眼睛：刚好破水而出的黑豆眼（局部 y≈+1.45 → 世界 Y≈22.5，水线之上）
+  // 眼睛：刚好破水而出的黑豆眼（贴头顶面，昂首后仍嵌在头上）
   const eyeMat = toonMat(0x1a1a1a);
   for (const side of [-1, 1]) {
-    const eye = new THREE.Mesh(facet(new THREE.SphereGeometry(0.13, 6, 5)), eyeMat);
-    eye.position.set(side * 1.02, 1.45, 2.45);
+    const eye = new THREE.Mesh(facet(new THREE.SphereGeometry(0.16, 6, 5)), eyeMat);
+    eye.position.set(side * 0.95, 0.42, 2.9);
     addPart(eye);
   }
 
@@ -267,7 +314,7 @@ function buildWorldTree(rnd, swampZone) {
   for (let i = 0; i < 7; i++) {
     const canopy = part(
       new THREE.IcosahedronGeometry(2.4 + rnd() * 2.0, 0),
-      toonMat(0x196f3d, { flatShading: true }),
+      toonMat(CANOPY_MID, { flatShading: true }),
       0.03
     );
     const a = rnd() * Math.PI * 2;
@@ -347,8 +394,13 @@ function createLotusLeafBoat(rnd, radius = 4.2) {
   g.name = "swamp-lotus-leaf-boat";
 
   // 开放圆锥沿 X 轴翻转 180° → 向内凹陷的浅碗状巨型荷叶小舟
+  // （不加描边壳：碗内要保持参考图的亮绿叶面，双面渲染）
   const leafGeo = new THREE.ConeGeometry(radius, radius * 0.42, 8, 1, true);
-  const leaf = part(leafGeo, toonMat(LOTUS_LEAF, { flatShading: true }), 0.04);
+  const leaf = new THREE.Mesh(
+    facet(leafGeo),
+    toonMat(LOTUS_LEAF, { flatShading: true, side: THREE.DoubleSide })
+  );
+  leaf.castShadow = leaf.receiveShadow = true;
   leaf.rotation.x = Math.PI; // 口朝上，内凹
   leaf.position.y = 0.08;
   g.add(leaf);
@@ -382,6 +434,13 @@ function createLotusLeafBoat(rnd, radius = 4.2) {
   pole.rotation.z = Math.PI / 2 - 0.35;
   pole.position.set(radius * 0.4, 0.7, radius * 0.2);
   g.add(pole);
+
+  // 参考图叶舟中的粉色发光花蕊尖锥
+  const spike = buildStamenSpike(rnd);
+  spike.position.set(-radius * 0.25, 0.12, radius * 0.1);
+  spike.rotation.z = 0.12;
+  g.add(spike);
+  g.userData.halo = spike.userData.halo;
 
   return g;
 }
@@ -505,7 +564,7 @@ function buildPinkHanger(rnd) {
   return g;
 }
 
-/** 飞鸟：粉白 / 紫灰，坑口上空盘旋 */
+/** 发光飞鸟：薄荷白 / 暖杏黄 + 加色光晕，枝头间来回穿梭 */
 function buildSwampBird(rnd, color) {
   const g = new THREE.Group();
   g.name = "swamp-bird";
@@ -526,9 +585,115 @@ function buildSwampBird(rnd, color) {
   beak.rotation.x = Math.PI / 2;
   beak.position.set(0, 0.04, 0.6);
   g.add(beak);
-  g.userData.orbitR = 20 + rnd() * 12;
-  g.userData.orbitY = SWAMP_GROUND_Y + 7 + rnd() * 9;
-  g.userData.speed = 0.18 + rnd() * 0.16;
+  // 月夜里飞鸟自带微光
+  const halo = glowSprite(color, 2.2, 0.45);
+  g.add(halo);
+  g.userData.halo = halo;
+  g.userData.orbitR = 15 + rnd() * 11;
+  g.userData.orbitY = 44 + rnd() * 7; // 枝头高度：树冠/垂叶之间
+  g.userData.dart = 2.5 + rnd() * 3.5; // 径向穿梭幅度（枝头间来回）
+  g.userData.speed = 0.22 + rnd() * 0.18;
+  g.userData.phase = rnd() * Math.PI * 2;
+  return g;
+}
+
+/** 长尾猴：暗毛浅脸 + S 形长尾，树冠间跳跃 */
+function buildLongTailMonkey(rnd) {
+  const g = new THREE.Group();
+  g.name = "swamp-longtail-monkey";
+  const fur = toonMat(MONKEY_FUR, { flatShading: true });
+  const body = part(new THREE.SphereGeometry(0.42, 6, 5), fur, 0.014);
+  body.scale.set(0.9, 1.15, 0.9);
+  body.position.y = 0.5;
+  g.add(body);
+  const head = part(new THREE.SphereGeometry(0.26, 6, 5), fur, 0.012);
+  head.position.y = 1.02;
+  g.add(head);
+  const face = part(new THREE.SphereGeometry(0.16, 6, 5), toonMat(MONKEY_FACE, { flatShading: true }), 0.008);
+  face.scale.set(1, 0.85, 0.6);
+  face.position.set(0, 1.0, 0.18);
+  g.add(face);
+  for (const s of [-1, 1]) {
+    const ear = part(new THREE.SphereGeometry(0.09, 5, 4), fur, 0.006);
+    ear.position.set(s * 0.24, 1.1, 0);
+    g.add(ear);
+  }
+  // 四肢短棍
+  const limbGeo = new THREE.CylinderGeometry(0.06, 0.05, 0.5, 4);
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+    const limb = part(limbGeo, fur, 0.008);
+    limb.position.set(sx * 0.28, 0.22, sz * 0.2);
+    limb.rotation.z = sx * 0.5;
+    limb.rotation.x = -sz * 0.3;
+    g.add(limb);
+  }
+  // 长尾：比身体更长的 S 形垂尾
+  const pts = [];
+  for (let i = 0; i <= 8; i++) {
+    const tt = i / 8;
+    pts.push(new THREE.Vector3(Math.sin(tt * 3.0) * 0.35, 0.45 - tt * 0.9 - tt * tt * 0.6, -0.35 - tt * 1.7));
+  }
+  const tail = part(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, 0.05, 4, false), fur, 0.008);
+  g.add(tail);
+  g.userData.phase = rnd() * Math.PI * 2;
+  return g;
+}
+
+/** 发光蜥蜴：薄荷绿平涂 + 细尾四足 + 微光晕，地面缓爬 */
+function buildGlowLizard(rnd) {
+  const g = new THREE.Group();
+  g.name = "swamp-glow-lizard";
+  const mat = toonMat(LIZARD_GLOW, { flatShading: true });
+  const body = part(new THREE.SphereGeometry(0.3, 6, 5), mat, 0.012);
+  body.scale.set(0.8, 0.5, 1.6);
+  body.position.y = 0.18;
+  g.add(body);
+  const head = part(new THREE.SphereGeometry(0.16, 6, 5), mat, 0.008);
+  head.scale.set(0.9, 0.6, 1.2);
+  head.position.set(0, 0.16, 0.55);
+  g.add(head);
+  const tail = part(new THREE.ConeGeometry(0.09, 1.1, 4), mat, 0.006);
+  tail.rotation.x = -Math.PI / 2 + 0.15;
+  tail.position.set(0, 0.14, -0.95);
+  g.add(tail);
+  for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+    const leg = part(new THREE.ConeGeometry(0.05, 0.3, 4), mat, 0.005);
+    leg.rotation.z = sx * 1.9;
+    leg.position.set(sx * 0.28, 0.1, sz * 0.3);
+    g.add(leg);
+  }
+  const halo = glowSprite(LIZARD_GLOW, 1.5, 0.4);
+  halo.position.y = 0.3;
+  g.add(halo);
+  g.userData.halo = halo;
+  g.userData.phase = rnd() * Math.PI * 2;
+  return g;
+}
+
+/** 发光带鱼：侧扁长带 + 顶点波动摆尾，水下环游 */
+function buildRibbonFish(rnd) {
+  const g = new THREE.Group();
+  g.name = "swamp-glow-ribbonfish";
+  const geo = new THREE.PlaneGeometry(3.8, 0.6, 16, 1);
+  const pos = geo.attributes.position;
+  const baseX = new Float32Array(pos.count);
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const taper = 0.3 + 0.7 * (0.5 + x / 3.8); // 头宽尾细
+    baseX[i] = x;
+    pos.setY(i, pos.getY(i) * taper);
+  }
+  geo.computeVertexNormals();
+  const bodyMesh = new THREE.Mesh(geo, toonMat(RIBBON_GLOW, { flatShading: true, side: THREE.DoubleSide }));
+  g.add(bodyMesh);
+  const head = part(new THREE.SphereGeometry(0.16, 5, 4), toonMat(RIBBON_GLOW, { flatShading: true }), 0.008);
+  head.position.set(1.9, 0.05, 0);
+  g.add(head);
+  const halo = glowSprite(RIBBON_GLOW, 2.4, 0.35);
+  g.add(halo);
+  g.userData.halo = halo;
+  g.userData.bodyMesh = bodyMesh;
+  g.userData.baseX = baseX;
   g.userData.phase = rnd() * Math.PI * 2;
   return g;
 }
@@ -577,7 +742,7 @@ function buildRimPalm(rnd) {
 function buildToweringTree(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-towering-tree";
-  const h = 18 + rnd() * 14;
+  const h = 26 + rnd() * 14; // 苍天大树：更高，树冠参与坑口遮天
   const trunk = part(
     new THREE.CylinderGeometry(0.5 + rnd() * 0.3, 1.05 + rnd() * 0.4, h, 6),
     toonMat(TOWER_TRUNK, { flatShading: true }),
@@ -588,18 +753,131 @@ function buildToweringTree(rnd) {
   g.add(trunk);
   // 顶部低多边叶簇（莫比斯式圆冠）
   const leafMat = toonMat(TOWER_LEAF, { flatShading: true });
-  const crownN = 4 + ((rnd() * 3) | 0);
+  const crownN = 5 + ((rnd() * 4) | 0);
   for (let i = 0; i < crownN; i++) {
     const canopy = part(
-      new THREE.IcosahedronGeometry(1.8 + rnd() * 2.2, 0),
+      new THREE.IcosahedronGeometry(2.6 + rnd() * 2.8, 0),
       leafMat,
       0.024
     );
     const a = rnd() * Math.PI * 2;
-    const d = rnd() * 2.6;
-    canopy.position.set(Math.cos(a) * d, h - 1 + rnd() * 4.5, Math.sin(a) * d);
+    const d = rnd() * 3.4;
+    canopy.position.set(Math.cos(a) * d, h + rnd() * 6, Math.sin(a) * d);
+    canopy.scale.set(1.2, 0.7, 1.2); // 摊平成冠
     g.add(canopy);
   }
+  return g;
+}
+
+/* =====================================================================
+ *  4d. 月夜氛围：树冠顶棚 / 巨叶垂吊 / 发光花蕊 / 粉色花蕊尖锥
+ * ===================================================================== */
+/** 树冠顶棚：三圈扁叶簇向内收拢 + 垂吊巨叶，交织遮天（水面不见阳光） */
+function buildCanopyCeiling(rnd, swampZone) {
+  const g = new THREE.Group();
+  g.name = "swamp-canopy-ceiling";
+  const blobMats = [CANOPY_DARK, CANOPY_MID, CANOPY_LIT].map((c) => toonMat(c, { flatShading: true }));
+  const rings = [
+    { r: 27, y: 50, n: 11, s: 8.0 },
+    { r: 17, y: 52, n: 8, s: 7.0 },
+    { r: 7, y: 54, n: 5, s: 6.0 },
+  ];
+  for (const ring of rings) {
+    for (let i = 0; i < ring.n; i++) {
+      const a = (i / ring.n) * Math.PI * 2 + rnd() * 0.5;
+      const blob = part(
+        new THREE.IcosahedronGeometry(ring.s * (0.8 + rnd() * 0.5), 0),
+        blobMats[(rnd() * 3) | 0],
+        0.02
+      );
+      blob.scale.set(1.25, 0.6, 1.25); // 摊平成「冠」
+      blob.position.set(
+        Math.cos(a) * ring.r * (0.85 + rnd() * 0.3),
+        ring.y + (rnd() - 0.5) * 3,
+        Math.sin(a) * ring.r * (0.85 + rnd() * 0.3)
+      );
+      blob.rotation.y = rnd() * Math.PI;
+      g.add(blob);
+    }
+  }
+  // 巨叶垂吊：芭蕉式大叶自冠缘垂向坑心（参考图顶部大叶前景）
+  const frondMats = [
+    toonMat(0x16455a, { flatShading: true, side: THREE.DoubleSide }),
+    toonMat(CANOPY_LIT, { flatShading: true, side: THREE.DoubleSide }),
+  ];
+  for (let i = 0; i < 12; i++) {
+    const len = 7 + rnd() * 5;
+    const frond = part(new THREE.PlaneGeometry(2.6 + rnd() * 2.2, len, 1, 3), frondMats[i % 2], 0.016);
+    frond.geometry.translate(0, -len / 2, 0); // 顶边为悬挂轴
+    const fp = frond.geometry.attributes.position;
+    for (let k = 0; k < fp.count; k++) {
+      const yy = -fp.getY(k); // 0..len 向下
+      fp.setZ(k, fp.getZ(k) + yy * yy * 0.05); // 叶尖外弧
+    }
+    frond.geometry.computeVertexNormals();
+    const a = rnd() * Math.PI * 2;
+    const rr = 18 + rnd() * 14;
+    frond.position.set(Math.cos(a) * rr, 45 + rnd() * 5, Math.sin(a) * rr);
+    frond.rotation.order = "YXZ";
+    frond.rotation.y = a + Math.PI / 2;
+    frond.rotation.x = 0.55 + rnd() * 0.5; // 垂吊
+    g.add(frond);
+  }
+  swampZone.add(g);
+  return g;
+}
+
+/** 发光花蕊花：深色花瓣 + 明亮花蕊 + 加色光晕（月夜光源之二） */
+function buildGlowFlower(rnd, hue) {
+  const g = new THREE.Group();
+  g.name = "swamp-glow-flower";
+  const h = 0.5 + rnd() * 0.9;
+  const stem = part(new THREE.CylinderGeometry(0.035, 0.05, h, 4), toonMat(0x1d5a5a, { flatShading: true }), 0.008);
+  stem.position.y = h / 2;
+  g.add(stem);
+  const petalMat = toonMat(hue ? 0x2a7a80 : PETAL_DEEP, { flatShading: true, side: THREE.DoubleSide });
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
+    const petal = part(new THREE.PlaneGeometry(0.16, 0.3), petalMat, 0.006);
+    petal.position.set(Math.cos(a) * 0.12, h + 0.02, Math.sin(a) * 0.12);
+    petal.rotation.order = "YXZ";
+    petal.rotation.y = -a;
+    petal.rotation.x = -0.9;
+    g.add(petal);
+  }
+  const coreColor = hue ? STAMEN_MINT : STAMEN_PINK;
+  const core = new THREE.Mesh(
+    facet(new THREE.SphereGeometry(0.09 + rnd() * 0.05, 6, 5)),
+    new THREE.MeshBasicMaterial({ color: coreColor, fog: false })
+  );
+  core.position.y = h + 0.06;
+  g.add(core);
+  const halo = glowSprite(coreColor, 1.5 + rnd() * 0.8, 0.55);
+  halo.position.y = h + 0.06;
+  halo.userData.pulse = rnd() * Math.PI * 2;
+  g.add(halo);
+  g.userData.halo = halo;
+  return g;
+}
+
+/** 粉色发光花蕊尖锥：圆锥 + 亮尖 + 光晕（参考图叶舟中的粉锥） */
+function buildStamenSpike(rnd) {
+  const g = new THREE.Group();
+  g.name = "swamp-stamen-spike";
+  const spike = part(new THREE.ConeGeometry(0.42, 1.7, 6), toonMat(PINK_HANG, { flatShading: true }), 0.014);
+  spike.position.y = 0.85;
+  g.add(spike);
+  const tip = new THREE.Mesh(
+    facet(new THREE.SphereGeometry(0.12, 6, 5)),
+    new THREE.MeshBasicMaterial({ color: STAMEN_PINK, fog: false })
+  );
+  tip.position.y = 1.72;
+  g.add(tip);
+  const halo = glowSprite(STAMEN_PINK, 2.2, 0.5);
+  halo.position.y = 1.5;
+  halo.userData.pulse = rnd() * Math.PI * 2;
+  g.add(halo);
+  g.userData.halo = halo;
   return g;
 }
 
@@ -624,13 +902,9 @@ export function createMoebiusSwampZone(opts = {}) {
   const swampZone = new THREE.Group();
   swampZone.name = "moebius-swamp-zone";
 
-  /* ---------- 5. 纯白环境光 1.2：彻底消灭 realistic 死黑阴影 ---------- */
-  const amb = new THREE.AmbientLight(0xffffff, 1.2);
-  amb.name = "swamp-ambient-white";
-  swampZone.add(amb);
-  const hemi = new THREE.HemisphereLight(0xf5fffb, 0xa5cad6, 0.5);
-  hemi.position.set(0, SWAMP_GROUND_Y + 20, 0);
-  swampZone.add(hemi);
+  /* ---------- 5. 月夜：不放置任何全局光源 ----------
+   * 旧版纯白环境光 1.2 会照亮整个星球；现全沼改为不受光平涂材质，
+   * 湖沼与昼夜循环彻底解耦（树冠遮挡阳光，仅萤火/花蕊作光源）。 */
 
   /* ---------- 坑洞外壳：上宽下窄的刀劈斧凿深渊碗壁 ---------- */
   // 坑壁：顶口 r≈34（Y=40）→ 底 r≈13（Y=10），内视碗壁
@@ -639,9 +913,27 @@ export function createMoebiusSwampZone(opts = {}) {
     2.2,
     rnd
   );
+  const wallFacet = facet(wallGeo);
+  // 月夜坑壁：顶亮底暗的深蓝绿渐变 + 苔藓亮斑（顶点色，不受光）
+  const wp = wallFacet.attributes.position;
+  const wcol = new Float32Array(wp.count * 3);
+  const cTop = new THREE.Color(0x24606c);
+  const cBot = new THREE.Color(0x0c2a3a);
+  const cMoss = new THREE.Color(WALL_MOSS);
+  const cTmp = new THREE.Color();
+  for (let i = 0; i < wp.count; i++) {
+    const hgt = THREE.MathUtils.clamp((wp.getY(i) + 15) / 30, 0, 1);
+    cTmp.copy(cBot).lerp(cTop, Math.pow(hgt, 1.35));
+    const n = 0.5 + 0.5 * Math.sin(wp.getX(i) * 1.9 + wp.getZ(i) * 1.4) * Math.sin(wp.getY(i) * 0.8 + wp.getX(i) * 0.6);
+    if (n > 0.72) cTmp.lerp(cMoss, Math.min(1, (n - 0.72) * 2.2));
+    wcol[i * 3] = cTmp.r;
+    wcol[i * 3 + 1] = cTmp.g;
+    wcol[i * 3 + 2] = cTmp.b;
+  }
+  wallFacet.setAttribute("color", new THREE.BufferAttribute(wcol, 3));
   const wall = new THREE.Mesh(
-    facet(wallGeo),
-    toonMat(WALL_COLOR, { flatShading: true, side: THREE.BackSide })
+    wallFacet,
+    toonMat(0xffffff, { side: THREE.BackSide, vertexColors: true })
   );
   wall.name = "swamp-sinkhole-wall";
   wall.position.y = (SWAMP_GROUND_Y + SWAMP_FLOOR_Y) / 2; // 25
@@ -654,7 +946,7 @@ export function createMoebiusSwampZone(opts = {}) {
   const angDiff = (a) => Math.atan2(Math.sin(a - ENTRANCE_A), Math.cos(a - ENTRANCE_A));
 
   // 低矮断崖碎石：沿坑缘不连续散布（高度≤ 0.9，不拦路），入口处留豁口
-  const screeMat = toonMat(0x7fa08a, { flatShading: true });
+  const screeMat = toonMat(0x275a58, { flatShading: true });
   for (let i = 0; i < 18; i++) {
     const a = rnd() * Math.PI * 2;
     if (Math.abs(angDiff(a)) < 0.66) continue; // 入口不设石
@@ -667,7 +959,7 @@ export function createMoebiusSwampZone(opts = {}) {
   }
 
   // 入口缓坡石阶：8 级宽石板从草地 Y=40 一路下行没入水下 Y≈22，可直接走入
-  const stepMat = toonMat(0x8fae9e, { flatShading: true });
+  const stepMat = toonMat(0x2f6a66, { flatShading: true });
   for (let i = 0; i < 8; i++) {
     const t = i / 7;
     const step = part(jitter(new THREE.BoxGeometry(8.5, 1.2, 3.2), 0.35, rnd), stepMat, 0.026);
@@ -760,6 +1052,91 @@ export function createMoebiusSwampZone(opts = {}) {
     swampZone.add(vine);
   }
 
+  /* ---------- 树冠顶棚：苍天大树枝冠交织遮天（水面不见阳光） ---------- */
+  buildCanopyCeiling(rnd, swampZone);
+
+  /* ---------- 月光柱：树冠隙缝漏下几缕微弱冷光柱（「月夜」暗示） ---------- */
+  const shafts = [];
+  const shaftMat = new THREE.MeshBasicMaterial({
+    color: MOON_SHAFT, transparent: true, opacity: 0.08,
+    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: false,
+  });
+  for (let i = 0; i < 3; i++) {
+    const a = ENTRANCE_A + (i - 1) * 2.1 + rnd() * 0.4;
+    const d = 6 + rnd() * 10;
+    const h = 30;
+    const shaft = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.5 + rnd() * 0.3, 2.0 + rnd() * 0.8, h, 8, 1, true),
+      shaftMat
+    );
+    shaft.position.set(Math.cos(a) * d, WATER_Y + h / 2 - 2, Math.sin(a) * d);
+    shaft.rotation.z = (rnd() - 0.5) * 0.16;
+    shaft.raycast = () => {};
+    swampZone.add(shaft);
+    shafts.push(shaft);
+  }
+
+  /* ---------- 萤火虫：水面与坑壁间漂移闪烁（月夜光源之一） ---------- */
+  const fireflies = [];
+  for (let i = 0; i < 46; i++) {
+    const sp = glowSprite(i % 3 === 2 ? FIREFLY_B : FIREFLY_A, 0.5 + rnd() * 0.7, 0.8);
+    const a = rnd() * Math.PI * 2;
+    const d = rnd() * 26;
+    sp.position.set(Math.cos(a) * d, WATER_Y + 1 + rnd() * 12, Math.sin(a) * d);
+    sp.userData.baseX = sp.position.x;
+    sp.userData.baseY = sp.position.y;
+    sp.userData.baseZ = sp.position.z;
+    sp.userData.range = 1.5 + rnd() * 2.5;
+    sp.userData.speed = 0.25 + rnd() * 0.4;
+    sp.userData.flicker = 2 + rnd() * 3;
+    sp.userData.phase = rnd() * Math.PI * 2;
+    sp.userData.op = 0.5 + rnd() * 0.5;
+    swampZone.add(sp);
+    fireflies.push(sp);
+  }
+  // 光池：数个大而极淡的光晕，模拟萤群/花蕊光在水面的铺展
+  const pools = [];
+  for (let i = 0; i < 6; i++) {
+    const pool = glowSprite(i % 2 ? 0x9fffd8 : 0xffc9dd, 7 + rnd() * 5, 0.07);
+    const a = rnd() * Math.PI * 2;
+    const d = 4 + rnd() * 18;
+    pool.position.set(Math.cos(a) * d, WATER_Y + 1.5 + rnd() * 4, Math.sin(a) * d);
+    pool.userData.phase = rnd() * Math.PI * 2;
+    swampZone.add(pool);
+    pools.push(pool);
+  }
+
+  /* ---------- 发光花蕊（月夜光源之二）：坑缘 / 壁架 / 水下 ---------- */
+  const glowHalos = [];
+  for (let i = 0; i < 8; i++) {
+    const a = rnd() * Math.PI * 2;
+    if (Math.abs(angDiff(a)) < 0.5) continue;
+    const flower = buildGlowFlower(rnd, i % 2);
+    const d = 34 + rnd() * 6;
+    flower.position.set(Math.cos(a) * d, SWAMP_GROUND_Y - 0.1, Math.sin(a) * d);
+    flower.userData.baseY = SWAMP_GROUND_Y - 0.1;
+    swampZone.add(flower);
+    rimDecor.push(flower);
+    glowHalos.push(flower.userData.halo);
+  }
+  for (let i = 0; i < 6; i++) {
+    const flower = buildGlowFlower(rnd, i % 2);
+    const a = rnd() * Math.PI * 2;
+    const d = 24 + rnd() * 7;
+    flower.position.set(Math.cos(a) * d, WATER_Y + 1 + rnd() * 8, Math.sin(a) * d);
+    flower.scale.setScalar(1.2 + rnd() * 0.8);
+    swampZone.add(flower);
+    glowHalos.push(flower.userData.halo);
+  }
+  for (let i = 0; i < 3; i++) {
+    const flower = buildGlowFlower(rnd, 0);
+    const a = rnd() * Math.PI * 2;
+    const d = 6 + rnd() * 6;
+    flower.position.set(Math.cos(a) * d, SWAMP_FLOOR_Y + 0.4, Math.sin(a) * d);
+    swampZone.add(flower);
+    glowHalos.push(flower.userData.halo);
+  }
+
   /* ---------- 湖底沙地（Y = 10.0）+ 河床乱石 ---------- */
   const floor = part(
     jitter(new THREE.CylinderGeometry(13.5, 15, 1.2, 12), 0.8, rnd),
@@ -828,24 +1205,72 @@ export function createMoebiusSwampZone(opts = {}) {
   const whales = [];
   const whale = buildBelugaWhale(rnd);
   whale.position.set(7, WHALE_Y, 4);
-  whale.rotation.y = -2.35; // 昂首朝向坑心水面之上
+  whale.rotation.order = "YXZ";
+  whale.rotation.x = -1.32; // 直立：头胸破水，尾沉水下
+  whale.rotation.y = 0.85; // 朝向喂食木筏
   whale.userData.baseY = WHALE_Y;
   swampZone.add(whale);
   whales.push(whale);
 
   const whalePup = buildBelugaWhale(rnd);
   whalePup.scale.setScalar(0.55); // 小一号的幼体，伴随游弋
-  whalePup.position.set(-6, WHALE_Y - 2.5, -6);
+  whalePup.position.set(-6, WHALE_Y - 1.4, -6);
+  whalePup.rotation.order = "YXZ";
+  whalePup.rotation.x = -1.15;
   whalePup.rotation.y = 0.85;
-  whalePup.userData.baseY = WHALE_Y - 2.5;
+  whalePup.userData.baseY = WHALE_Y - 1.4;
   whalePup.userData.bobPhase = 2.1;
   swampZone.add(whalePup);
   whales.push(whalePup);
 
+  /* ---------- 黑人孩子喂食白鲸：小木筏 + 举臂孩子 + 食物碎屑 ---------- */
+  const feedRaft = createLotusLeafBoat(rnd, 2.3);
+  feedRaft.position.set(10.2, WATER_Y + 0.1, 6.8);
+  feedRaft.rotation.y = 0.2;
+  feedRaft.userData.bobPhase = 1.3;
+  feedRaft.userData.baseY = WATER_Y + 0.1;
+  swampZone.add(feedRaft);
+  if (feedRaft.userData.halo) glowHalos.push(feedRaft.userData.halo);
+
+  // 喂食孩子：立于筏缘，双臂高举向白鲸口边递食
+  const feeder = buildNativeDoll(1.05);
+  const feedArmGeo = new THREE.CylinderGeometry(0.06, 0.05, 0.62, 4);
+  for (const s of [-1, 1]) {
+    const arm = part(feedArmGeo, toonMat(DOLL_SKIN, { flatShading: true }), 0.006);
+    arm.position.set(s * 0.17, 0.66, 0.12);
+    arm.rotation.x = 1.15; // 前上举
+    arm.rotation.z = -s * 0.5;
+    feeder.add(arm);
+  }
+  feeder.position.set(-0.95, 0.12, -0.85); // 筏缘靠鲸一侧
+  feeder.rotation.y = -2.3; // 面向白鲸头
+  feedRaft.add(feeder);
+
+  // 食物碎屑：手与鲸口之间的弧线上几点暖光
+  const foodBits = [];
+  const handW = new THREE.Vector3(9.1, 26.0, 5.8);
+  const mouthW = new THREE.Vector3(7.6, 27.5, 4.5);
+  for (let i = 0; i < 4; i++) {
+    const k = 0.15 + i * 0.22;
+    const bit = glowSprite(0xffe08a, 0.42, 0.85);
+    bit.position.lerpVectors(handW, mouthW, k);
+    bit.position.y += Math.sin(k * Math.PI) * 0.5 + 0.6;
+    bit.userData.phase = i * 1.7;
+    swampZone.add(bit);
+    foodBits.push(bit);
+  }
+
+  // 水下泅游的黑人孩子：玻璃水下的暗色剪影，绕鲸缓游
+  const swimmer = buildNativeDoll(0.95);
+  swimmer.rotation.order = "YXZ";
+  swimmer.rotation.x = 1.35; // 俯身水平泅游
+  swimmer.position.set(2.5, 20.8, 9.5);
+  swampZone.add(swimmer);
+
   // 荷叶水下茎秆的锚点先记着（荷叶生成后补茎）
   /* ---------- 4b. 内凹荷叶小舟（Y = 25.0）3~4 朵 ---------- */
   /** @type {THREE.Group[]} */
-  const lotuses = [];
+  const lotuses = [feedRaft]; // 喂食木筏一并随水起伏
   const lotusSlots = [
     { x: -13, z: 9, r: 4.4, yaw: 0.4 },
     { x: 12, z: -12, r: 3.8, yaw: -0.9 },
@@ -862,6 +1287,7 @@ export function createMoebiusSwampZone(opts = {}) {
     lotus.userData.baseY = WATER_Y + 0.1;
     swampZone.add(lotus);
     lotuses.push(lotus);
+    if (lotus.userData.halo) glowHalos.push(lotus.userData.halo);
 
     // 水下茎秆：从湖底 Y=10 一路连到荷叶
     const stemH = WATER_Y - SWAMP_FLOOR_Y;
@@ -880,7 +1306,7 @@ export function createMoebiusSwampZone(opts = {}) {
     const bubble = new THREE.Mesh(
       new THREE.SphereGeometry(0.1 + rnd() * 0.09, 5, 4),
       new THREE.MeshBasicMaterial({
-        color: 0xd5f5e3,
+        color: 0x9fe8e0,
         transparent: true,
         opacity: 0.4,
         depthWrite: false,
@@ -940,14 +1366,95 @@ export function createMoebiusSwampZone(opts = {}) {
     hangers.push(hanger);
   }
 
-  // 飞鸟：粉白 + 紫灰，坑口上空盘旋（4 只）
+  // 发光飞鸟：薄荷白 + 暖杏黄，枝头间来回穿梭（4 只）
   /** @type {THREE.Group[]} */
   const birds = [];
   for (let i = 0; i < 4; i++) {
-    const bird = buildSwampBird(rnd, i % 2 ? BIRD_PINK : BIRD_PURPLE);
+    const bird = buildSwampBird(rnd, i % 2 ? GLOW_BIRD_A : GLOW_BIRD_B);
+    bird.scale.setScalar(1.25); // 枝头发光鸟更醒目
     swampZone.add(bird);
     birds.push(bird);
+    if (bird.userData.halo) glowHalos.push(bird.userData.halo);
   }
+
+  // 长尾猴：树冠/垂叶间坐望→弧线跳跃（3 只）
+  /** @type {THREE.Group[]} */
+  const monkeys = [];
+  for (let i = 0; i < 3; i++) {
+    const mk = buildLongTailMonkey(rnd);
+    mk.scale.setScalar(1.3);
+    const perches = [];
+    const n = 3 + ((rnd() * 2) | 0);
+    for (let k = 0; k < n; k++) {
+      const a = rnd() * Math.PI * 2;
+      const d = 14 + rnd() * 14;
+      perches.push(new THREE.Vector3(Math.cos(a) * d, 43 + rnd() * 6, Math.sin(a) * d));
+    }
+    mk.userData.perches = perches;
+    mk.userData.idx = 0;
+    mk.userData.next = 1 % n;
+    mk.userData.sitDur = 1.4 + rnd() * 1.4;
+    mk.userData.jumpDur = 0.7 + rnd() * 0.3;
+    mk.userData.arc = 2.2 + rnd() * 1.6;
+    mk.userData.phase = rnd() * 7;
+    mk.userData.lastCi = Math.floor(mk.userData.phase / (mk.userData.sitDur + mk.userData.jumpDur));
+    swampZone.add(mk);
+    monkeys.push(mk);
+  }
+
+  // 发光蜥蜴：坑缘草甸缓爬 ×2 + 湖底 ×1
+  /** @type {THREE.Group[]} */
+  const lizards = [];
+  for (let i = 0; i < 3; i++) {
+    const lz = buildGlowLizard(rnd);
+    lz.scale.setScalar(1.35);
+    if (i < 2) {
+      lz.userData.baseY = SWAMP_GROUND_Y + 0.12;
+      lz.userData.orbitR = 33 + rnd() * 5;
+    } else {
+      lz.userData.baseY = SWAMP_FLOOR_Y + 0.3;
+      lz.userData.orbitR = 8 + rnd() * 4;
+    }
+    lz.userData.speed = 0.1 + rnd() * 0.08;
+    lz.position.y = lz.userData.baseY;
+    swampZone.add(lz);
+    lizards.push(lz);
+    if (lz.userData.halo) glowHalos.push(lz.userData.halo);
+  }
+
+  // 发光带鱼：水下摆尾环游（3 条）
+  /** @type {THREE.Group[]} */
+  const ribbons = [];
+  for (let i = 0; i < 3; i++) {
+    const rf = buildRibbonFish(rnd);
+    rf.userData.orbitR = 7 + rnd() * 9;
+    rf.userData.orbitY = 15 + rnd() * 6;
+    rf.userData.speed = 0.16 + rnd() * 0.12;
+    rf.userData.wave = 5 + rnd() * 3;
+    swampZone.add(rf);
+    ribbons.push(rf);
+    if (rf.userData.halo) glowHalos.push(rf.userData.halo);
+  }
+
+  /* ---------- 赛博水墨虎：大树间巡游 + 沿石阶下坑饮水 ---------- */
+  const tigerRim = [0.5, 1.6, 2.7, 3.9, 5.1].map(
+    (a) => new THREE.Vector3(Math.cos(a) * 37.4, SWAMP_GROUND_Y, Math.sin(a) * 37.4)
+  );
+  const tigerSteps = [0.15, 0.4, 0.65, 0.9].map((tt) =>
+    new THREE.Vector3(
+      Math.cos(ENTRANCE_A) * (37 - 12 * tt),
+      SWAMP_GROUND_Y - 17.5 * tt,
+      Math.sin(ENTRANCE_A) * (37 - 12 * tt)
+    )
+  );
+  const tiger = createMoebiusTiger(rnd, {
+    rim: tigerRim,
+    steps: tigerSteps,
+    drink: tigerSteps[3],
+    speed: 2.6,
+  });
+  swampZone.add(tiger);
+  swampZone.userData.tiger = tiger;
 
   // 米白贝壳：坑缘草甸散落（3 枚，与苔石相伴）
   for (let i = 0; i < 3; i++) {
@@ -984,8 +1491,9 @@ export function createMoebiusSwampZone(opts = {}) {
   // 不设大型碰撞体：送信人可直接走入 / 跳入湖沼（无隐形围墙）
   swampZone.userData.collideRadius = 0;
   swampZone.userData.cameraHint = {
-    localPosition: new THREE.Vector3(30, 46, 34),
-    localLookAt: new THREE.Vector3(0, WATER_Y, 0),
+    // 月夜：机位入坑内仰俯树冠/水面
+    localPosition: new THREE.Vector3(17, 31.5, 19),
+    localLookAt: new THREE.Vector3(0, 29, 0),
     fov: 62,
   };
 
@@ -1025,24 +1533,111 @@ export function createMoebiusSwampZone(opts = {}) {
       h.rotation.z = Math.sin(t * 0.8 + ph) * 0.14;
       h.rotation.x = Math.cos(t * 0.6 + ph) * 0.1;
     }
-    // 飞鸟：坑口上空盘旋 + 拍翅
+    // 发光飞鸟：枝头间穿梭（径向往返）+ 拍翅
     for (const bird of birds) {
       const a = t * bird.userData.speed + bird.userData.phase;
+      const rr = bird.userData.orbitR + Math.sin(t * 0.55 + bird.userData.phase * 2) * bird.userData.dart;
       bird.position.set(
-        Math.cos(a) * bird.userData.orbitR,
+        Math.cos(a) * rr,
         bird.userData.orbitY + Math.sin(t * 0.8 + bird.userData.phase) * 0.8,
-        Math.sin(a) * bird.userData.orbitR
+        Math.sin(a) * rr
       );
-      bird.rotation.y = -a + Math.PI / 2;
+      bird.rotation.y = -a; // 头朝行进切向
       const flap = Math.sin(t * 7 + bird.userData.phase) * 0.5;
       if (bird.userData.wingL) bird.userData.wingL.rotation.z = -0.5 - flap;
       if (bird.userData.wingR) bird.userData.wingR.rotation.z = 0.5 + flap;
     }
+    // 长尾猴：坐望一阵→弧线跳向下一枝头
+    for (const mk of monkeys) {
+      const u = mk.userData;
+      const cyc = u.sitDur + u.jumpDur;
+      const local = t + u.phase;
+      const ci = Math.floor(local / cyc);
+      if (ci !== u.lastCi) {
+        u.lastCi = ci;
+        u.idx = u.next;
+        u.next = (u.next + 1) % u.perches.length;
+      }
+      const lt = local - ci * cyc;
+      const A = u.perches[u.idx];
+      const B = u.perches[u.next];
+      if (lt < u.sitDur) {
+        mk.position.copy(A);
+        mk.position.y += Math.sin(t * 3.1 + u.phase) * 0.06;
+        mk.lookAt(B.x, mk.position.y + 0.3, B.z);
+      } else {
+        const k = (lt - u.sitDur) / u.jumpDur;
+        mk.position.lerpVectors(A, B, k);
+        mk.position.y += Math.sin(k * Math.PI) * u.arc;
+        mk.lookAt(B.x, mk.position.y, B.z);
+      }
+    }
+    // 发光蜥蜴：贴地缓爬，头朝行进向微摆
+    for (const lz of lizards) {
+      const u = lz.userData;
+      const a = t * u.speed + u.phase;
+      const r = u.orbitR + Math.sin(a * 3.1) * 1.4;
+      lz.position.set(Math.cos(a) * r, u.baseY, Math.sin(a) * r);
+      lz.rotation.y = -a + Math.sin(t * 2.2 + u.phase) * 0.25;
+    }
+    // 发光带鱼：环游 + 带状身体波动摆尾
+    for (const rf of ribbons) {
+      const u = rf.userData;
+      const a = t * u.speed + u.phase;
+      rf.position.set(
+        Math.cos(a) * u.orbitR,
+        u.orbitY + Math.sin(t * 0.8 + u.phase) * 0.5,
+        Math.sin(a) * u.orbitR
+      );
+      rf.rotation.y = -a - Math.PI / 2; // 头(+X)朝行进向
+      const rp = u.bodyMesh.geometry.attributes.position;
+      for (let i = 0; i < rp.count; i++) {
+        const x = u.baseX[i];
+        const tailK = 0.5 - x / 3.8; // 头 0 → 尾 1
+        rp.setZ(i, Math.sin(x * 2.0 - t * u.wave + u.phase) * 0.3 * (0.15 + 0.85 * tailK));
+      }
+      rp.needsUpdate = true;
+    }
+    // 水下泅游的孩子：绕鲸缓游 + 打腿摆
+    {
+      const a = t * 0.1 + 2.4;
+      swimmer.position.set(7 + Math.cos(a) * 6.5, 20.6 + Math.sin(t * 0.9) * 0.4, 4 + Math.sin(a) * 6.5);
+      swimmer.rotation.y = -a;
+      swimmer.rotation.z = Math.sin(t * 2.6) * 0.18;
+    }
+    // 食物碎屑微光闪烁
+    for (const b of foodBits) {
+      b.material.opacity = 0.45 + 0.45 * (0.5 + 0.5 * Math.sin(t * 3 + b.userData.phase));
+    }
+    // 赛博水墨虎巡游/饮水
+    tiger.userData.update?.(_dt, t);
     // 气泡
     for (const b of bubbles) {
       b.position.y = b.userData.baseY + Math.sin(t * 1.5 + b.userData.phase) * 0.5;
       b.material.opacity = 0.22 + 0.22 * (0.5 + 0.5 * Math.sin(t * 2.1 + b.userData.phase));
     }
+    // 萤火虫漂移 + 闪烁（月夜主呼吸感）
+    for (const f of fireflies) {
+      const u = f.userData;
+      const tt = t * u.speed + u.phase;
+      f.position.set(
+        u.baseX + Math.sin(tt * 0.9) * u.range + Math.sin(tt * 0.37 + 1.7) * u.range * 0.6,
+        u.baseY + Math.sin(tt * 0.7 + u.phase) * 1.2,
+        u.baseZ + Math.cos(tt * 0.8) * u.range
+      );
+      const tw = 0.5 + 0.5 * Math.sin(t * u.flicker + u.phase * 3);
+      f.material.opacity = u.op * (0.3 + 0.7 * tw);
+    }
+    // 花蕊光晕呼吸
+    for (const h of glowHalos) {
+      h.material.opacity = 0.38 + 0.26 * (0.5 + 0.5 * Math.sin(t * 1.6 + (h.userData.pulse || 0)));
+    }
+    // 光池微闪
+    for (const p of pools) {
+      p.material.opacity = 0.05 + 0.04 * (0.5 + 0.5 * Math.sin(t * 0.7 + p.userData.phase));
+    }
+    // 月光柱微弱呼吸
+    shaftMat.opacity = 0.022 + 0.012 * (0.5 + 0.5 * Math.sin(t * 0.4));
     // 水面微漾（玻璃顶点轻晃）
     const p = water.geometry.attributes.position;
     for (let i = 0; i < p.count; i++) {
