@@ -14,6 +14,9 @@ export const P_DEFAULTS = Object.freeze({
   camDist: 7.5,
   talkRange: 3.2,
   tramSpeed: 3.2, // 电车行驶速度（开发者菜单可调）
+  aircraftSpeed: 3.1, // 飞船巡航线速度（世界单位/秒，开发者菜单单独可调；约原飞艇3倍速度的1/5）
+  aircraftScale: 1.25, // 飞船体积倍数（默认1.25，与飞艇(scale 1.25)等长同体量；开发者菜单可调）
+  aircraftHoldSec: 30, // 飞船在站点（书店/水晶城）上方停留秒数（开发者菜单可调）
   windSpeed: 0.8, // 风速（云漂移与拉伸）
   windDir: 45, // 风向（度，世界 XZ 平面方位角）
   daySpeed: 0.4, // 昼夜速度（0=暂停，1=90 秒一昼夜）
@@ -34,7 +37,11 @@ export function loadParams() {
     const data = JSON.parse(raw);
     if (!data || typeof data !== "object") return false;
     for (const k of Object.keys(P_DEFAULTS)) {
-      if (Number.isFinite(+data[k])) P[k] = +data[k];
+      const value = +data[k];
+      // 缩放为 0 或负数会让整支 aircraft 编队不可见，忽略这类旧存档值。
+      if (!Number.isFinite(value)) continue;
+      if (k === "aircraftScale" && value <= 0) continue;
+      P[k] = value;
     }
     return true;
   } catch {

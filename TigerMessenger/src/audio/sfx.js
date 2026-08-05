@@ -7,7 +7,7 @@ import { showToast } from "../ui/hud.js";
 let audioCtx = null;
 let muted = false;
 
-// 弹琴老人八音盒：播放《風之傳說》2:16–2:49 片段
+// 弹琴老人八音盒：播放《風之傳說》18–53 秒片段（与水晶城、湖沼统一区间）
 let musicBoxSession = null;
 /** @type {HTMLAudioElement|null} */
 let musicBoxEl = null;
@@ -15,10 +15,10 @@ const MUSIC_BOX_BGM_URL = new URL(
   "../../music/Gwenan Gibbard-風之傳說.mp3",
   import.meta.url
 ).href;
-/** 2 分 16 秒 */
-const MUSIC_BOX_START_SEC = 2 * 60 + 16;
-/** 2 分 49 秒（到此结束） */
-const MUSIC_BOX_END_SEC = 2 * 60 + 49;
+/** 第 18 秒 */
+const MUSIC_BOX_START_SEC = 18;
+/** 第 53 秒（到此结束） */
+const MUSIC_BOX_END_SEC = 53;
 const MUSIC_BOX_VOLUME = 0.48;
 
 // 有轨电车声：轮轨「哐啷」+ 到站铃/风铃感高音（禁止持续低频嗡嗡）
@@ -45,7 +45,7 @@ const AMBIENCE_DUCK_CANYON_BGM = 0;
 let canyonBgmEl = null;
 /** 场景仍要求播放（在谷内 / 进谷前 10s） */
 let canyonBgmWanted = false;
-/** 场景已离开，但当前 21–57s 这一整段必须播完再停 */
+/** 场景已离开，但当前 18–53s 这一整段必须播完再停 */
 let canyonBgmPendingStop = false;
 let canyonBgmFading = false;
 const CANYON_BGM_URL = new URL(
@@ -53,16 +53,16 @@ const CANYON_BGM_URL = new URL(
   import.meta.url
 ).href;
 const CANYON_BGM_VOLUME = 0.42;
-/** 进谷 BGM 循环区间：第 21 秒 → 第 57 秒（约 36s 一整段） */
-const CANYON_BGM_START_SEC = 21;
-const CANYON_BGM_END_SEC = 57;
+/** 进谷/水晶城 BGM 循环区间：第 18 秒 → 第 53 秒（约 35s 一整段） */
+const CANYON_BGM_START_SEC = 18;
+const CANYON_BGM_END_SEC = 53;
 
 // 湖沼 BGM（同一首《風之傳說》）：进入莫比斯原初湖沼起播
 /** @type {HTMLAudioElement|null} */
 let swampBgmEl = null;
 /** 场景仍要求播放（玩家在湖沼内） */
 let swampBgmWanted = false;
-/** 场景已离开，但当前 2:50–3:08 这一整段必须播完再停 */
+/** 场景已离开，但当前 18–53s 这一整段必须播完再停 */
 let swampBgmPendingStop = false;
 let swampBgmFading = false;
 const SWAMP_BGM_URL = new URL(
@@ -70,9 +70,9 @@ const SWAMP_BGM_URL = new URL(
   import.meta.url
 ).href;
 const SWAMP_BGM_VOLUME = 0.46;
-/** 湖沼 BGM 循环区间：2 分 50 秒 → 3 分 08 秒（尾奏情绪区，与水晶城 21–57s 前段明显区分） */
-const SWAMP_BGM_START_SEC = 2 * 60 + 50;
-const SWAMP_BGM_END_SEC = 3 * 60 + 8;
+/** 湖沼 BGM 循环区间：第 18 秒 → 第 53 秒（与水晶城、八音盒统一为同一情绪段） */
+const SWAMP_BGM_START_SEC = 18;
+const SWAMP_BGM_END_SEC = 53;
 
 export function ensureAudio() {
   if (muted) return null;
@@ -493,12 +493,12 @@ function ensureMusicBoxEl() {
   el.src = MUSIC_BOX_BGM_URL;
   el.addEventListener("timeupdate", () => {
     if (!musicBoxSession || muted || el.paused) return;
-    // 未定位成功时若仍在前奏，强制拉回 2:16
+    // 未定位成功时若仍在前奏，强制拉回 18s
     if (el.currentTime < MUSIC_BOX_START_SEC - 0.25) {
       el.currentTime = MUSIC_BOX_START_SEC;
       return;
     }
-    // 播到 2:49 结束
+    // 播到 53s 结束
     if (el.currentTime >= MUSIC_BOX_END_SEC - 0.04) {
       finishMusicBox(musicBoxSession);
     }
@@ -581,7 +581,7 @@ function seekAudioWhenReady(el, startSec) {
 }
 
 /**
- * 弹琴老人八音盒：播放《風之傳說》2:16–2:49。
+ * 弹琴老人八音盒：播放《風之傳說》18–53s。
  * 返回 true 表示开始播放；正在播放时再次调用会停止并返回 false。
  * @param {{onNote?:(index:number)=>void, onEnded?:()=>void}} hooks
  */
@@ -618,7 +618,7 @@ export function toggleMusicBox(hooks = {}) {
   };
   musicBoxSession = session;
 
-  // 必须先 seek 到 2:16，再 play，否则会从头响
+  // 必须先 seek 到 18s，再 play，否则会从头响
   seekAudioWhenReady(el, MUSIC_BOX_START_SEC).then(() => {
     if (musicBoxSession !== session) return;
     // 双保险
@@ -815,7 +815,7 @@ function ensureCanyonBgmEl() {
 }
 
 /**
- * 区间终点处理：在谷内 → 回 21s 再循环；已请求停止 → 淡出结束（保证整段 21–57 播完）
+ * 区间终点处理：在谷内 → 回 18s 再循环；已请求停止 → 淡出结束（保证整段 18–53 播完）
  */
 function onCanyonBgmSegmentEnd(el) {
   if (canyonBgmWanted && !canyonBgmPendingStop) {
@@ -855,7 +855,7 @@ function isCanyonBgmAudible() {
 /**
  * 峡谷进谷背景音乐：进谷前约 10 秒起播。
  * 幂等：状态未变则不重复 fade / play。
- * 关闭时：若本段 21–57s 未播完，会播完再停（驶出水晶城不打断）。
+ * 关闭时：若本段 18–53s 未播完，会播完再停（驶出水晶城不打断）。
  * @param {boolean} active 是否应播放
  * @param {{ fade?: number }} [opts] fade 秒数
  */
@@ -908,7 +908,7 @@ export function setCanyonApproachBgm(active, opts = {}) {
 
   canyonBgmWanted = false;
 
-  // 本段 21–57 尚未走完：标记 pending，播到 57s 再停
+  // 本段 18–53 尚未走完：标记 pending，播到 53s 再停
   const el = canyonBgmEl;
   if (
     el &&
@@ -933,7 +933,7 @@ export function isCanyonBgmPlaying() {
   );
 }
 
-/** 已驶离触发区，正在把当前 21–57s 整段播完（鸟群伴飞窗口） */
+/** 已驶离触发区，正在把当前 18–53s 整段播完（鸟群伴飞窗口） */
 export function isCanyonBgmFinishing() {
   return !!(
     canyonBgmPendingStop &&
@@ -1002,8 +1002,8 @@ function fadeOutCanyonBgm(seconds = 1.4) {
 }
 
 // =====================================================================
-//  湖沼 BGM：进入莫比斯原初湖沼 → 循环《風之傳說》2:50–3:08（尾奏区）
-//  与峡谷 BGM（前段 21–57s）明显区分；同构：整段播完才停，离开不打断；两者互斥（先停对方）
+//  湖沼 BGM：进入莫比斯原初湖沼 → 循环《風之傳說》18–53s（与水晶城、八音盒统一区间）
+//  同构：整段播完才停，离开不打断；与峡谷/八音盒互斥（先停对方）
 // =====================================================================
 
 /** 任一区段 BGM（峡谷 / 湖沼）仍在占用声道时，默认环境音不得恢复 */
@@ -1019,7 +1019,7 @@ function anySegmentBgmEngaged() {
 function ensureSwampBgmEl() {
   if (swampBgmEl) return swampBgmEl;
   const el = new Audio(SWAMP_BGM_URL);
-  // 不用原生 loop（会回到 0 秒）；在 2:50–3:08 区间内自循环
+  // 不用原生 loop（会回到 0 秒）；在 18–53s 区间内自循环
   el.loop = false;
   el.preload = "auto";
   el.volume = 0;
@@ -1037,7 +1037,7 @@ function ensureSwampBgmEl() {
   return el;
 }
 
-/** 区间终点：仍在湖沼内 → 回 2:50 再循环；已请求停止 → 本段播完淡出 */
+/** 区间终点：仍在湖沼内 → 回 18s 再循环；已请求停止 → 本段播完淡出 */
 function onSwampBgmSegmentEnd(el) {
   if (swampBgmWanted && !swampBgmPendingStop) {
     seekSwampBgmToStart(el);
@@ -1049,7 +1049,7 @@ function onSwampBgmSegmentEnd(el) {
   fadeOutSwampBgm(1.2);
 }
 
-/** 定位到循环起点 2:50（元数据未就绪时等 loadedmetadata） */
+/** 定位到循环起点 18s（元数据未就绪时等 loadedmetadata） */
 function seekSwampBgmToStart(el) {
   if (!el) return;
   const apply = () => {
@@ -1075,7 +1075,7 @@ function isSwampBgmAudible() {
 /**
  * 湖沼背景音乐：进入莫比斯原初湖沼起播，区间内循环。
  * 幂等：状态未变则不重复 fade / play。
- * 离开时：若本段 2:50–3:08 未播完，播完再停（不打断乐句）。
+ * 离开时：若本段 18–53s 未播完，播完再停（不打断乐句）。
  * @param {boolean} active 是否应播放（玩家是否在湖沼内）
  * @param {{ fade?: number }} [opts] fade 秒数
  */
@@ -1145,7 +1145,7 @@ export function isSwampBgmPlaying() {
   );
 }
 
-/** 已离开湖沼，正在把当前 2:50–3:08 整段播完 */
+/** 已离开湖沼，正在把当前 18–53s 整段播完 */
 export function isSwampBgmFinishing() {
   return !!(swampBgmPendingStop && swampBgmEl && !swampBgmEl.paused);
 }
@@ -1198,7 +1198,7 @@ function fadeOutSwampBgm(seconds = 1.4) {
     el.volume = 0;
     try {
       el.pause();
-      // 停在起点标记，下次 play 仍从 2:50
+      // 停在起点标记，下次 play 仍从 18s
       el.currentTime = SWAMP_BGM_START_SEC;
     } catch {
       /* ignore */

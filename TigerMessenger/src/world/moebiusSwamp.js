@@ -38,9 +38,22 @@ const WHALE_Y = 24.0;
 
 const WATER_Y = SWAMP_WATER_Y;
 
-/* ---------------- 月夜色板（深蓝绿主导 + 萤火/花蕊辉光提亮） ---------------- */
-const WATER_COLOR = 0x59c4bd; // 水面自发光青绿（参考图亮水线，月夜略压暗）
-const WATER_DEEP = 0x1c5a6e;  // 深水衰减（暗蓝）
+/**
+ * 植物树叶相对坑口地面的高度倍率。
+ * 2 = 树冠/巨叶距地面高度升为原来的 2 倍（仅抬叶冠，不改水面/盆地）。
+ */
+const LEAF_HEIGHT_MUL = 2;
+
+/** 把「高于地面」的 Y 按 LEAF_HEIGHT_MUL 抬高 */
+function leafHeightY(y) {
+  if (y <= SWAMP_GROUND_Y) return y;
+  return SWAMP_GROUND_Y + (y - SWAMP_GROUND_Y) * LEAF_HEIGHT_MUL;
+}
+
+/* ---------------- 月夜色板（深蓝主导 + 萤火/花蕊辉光提亮） ---------------- */
+const WATER_COLOR = 0x4aa8ff; // 水面亮蓝（月夜自发光，明确可读为湖水）
+const WATER_MID = 0x147acc;   // 水体中段饱和蓝（向下渐深）
+const WATER_DEEP = 0x052a6b;  // 深水衰减（暗蓝，越往下越深）
 const WALL_COLOR = 0x1b4f5e;  // 坑壁湿暗青蓝
 const WALL_MOSS = 0x2a6b70;   // 坑壁苔藓亮斑（月夜微光）
 const FLOOR_COLOR = 0x173f52; // 湖底暗蓝沙
@@ -155,16 +168,18 @@ function glowSprite(color, scale, opacity) {
 
 /* =====================================================================
  *  2. 地下半透明 PBR 水体剖面（Y = 25.0）
- *  50×50 PlaneGeometry，高级物理玻璃：水上 / 水下分层透视
+ *  圆形水面（R=33，贴合坑口）+ 边缘亮圈/高光环，强化“湖”的边界与深邃感
  * ===================================================================== */
 function createWaterSurface() {
-  const geo = new THREE.PlaneGeometry(50, 50, 6, 6);
+  // 圆形水面（贴合坑口半径 ~33），而非无限大平面，强化“湖”的边界
+  const R = 33;
+  const geo = new THREE.CircleGeometry(R, 48);
   geo.rotateX(-Math.PI / 2);
-  // 月夜：水面不见阳光，自发光半透明青绿（参考图亮水线），水下透出深蓝剖面
+  // 月夜：水面不见阳光，自发光半透明浅蓝；下方透出上浅下深的水体剖面
   const mat = new THREE.MeshBasicMaterial({
     color: new THREE.Color(WATER_COLOR),
     transparent: true,
-    opacity: 0.62,
+    opacity: 0.72,
     side: THREE.DoubleSide,
     depthWrite: false,
     fog: false,
@@ -175,19 +190,99 @@ function createWaterSurface() {
   water.receiveShadow = true;
   addOutline(water, 0.014, INK_COLOR, 0.05);
 
-  // 一圈闭合刚劲黑色细墨线（水面边框）
-  const ring = new THREE.LineLoop(
-    new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(-25, 0.04, -25),
-      new THREE.Vector3(25, 0.04, -25),
-      new THREE.Vector3(25, 0.04, 25),
-      new THREE.Vector3(-25, 0.04, 25),
-    ]),
-    new THREE.LineBasicMaterial({ color: INK_COLOR })
+  // 水面边缘亮圈：明确的水/陆分界线，让“湖面”成为可读的视觉基准
+  const rimPts = [];
+  for (let i = 0; i <= 64; i++) {
+    const a = (i / 64) * Math.PI * 2;
+    rimPts.push(new THREE.Vector3(Math.cos(a) * R, 0.05, Math.sin(a) * R));
+  }
+  const rim = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(rimPts),
+    new THREE.LineBasicMaterial({ color: 0x6fd8ff, transparent: true, opacity: 0.65, fog: false })
   );
-  ring.raycast = () => {};
-  water.add(ring);
+  rim.raycast = () => {};
+  water.add(rim);
+
+  // 微弱高光环（加色发光），增强水面反光与深邃感
+  const glowRing = new THREE.Mesh(
+    new THREE.RingGeometry(R - 1.2, R + 0.4, 64),
+    new THREE.MeshBasicMaterial({
+      color: 0x33a8ff, transparent: true, opacity: 0.28,
+      side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending, fog: false,
+    })
+  );
+  glowRing.rotation.x = -Math.PI / 2;
+  glowRing.position.y = 0.06;
+  glowRing.raycast = () => {};
+  water.add(glowRing);
   return water;
+}
+
+/* =====================================================================
+ *  2b. 水体体积剖面（Y = 10 → 25）：上浅蓝、下深蓝的垂直渐变
+ *  让“水面向下蓝色越深”可读：透过浅蓝半透明水面，可见充填整湖的
+ *  水体圆柱，顶=浅蓝(WATER_COLOR) → 中=WATER_MID → 底=深蓝(WATER_DEEP)
+ * ===================================================================== */
+function createWaterVolume() {
+  // 半径略小于坑壁，避免 z-fighting；上口 r≈31、底 r≈14，随坑壁上宽下窄
+  const R_TOP = 32.5; // 贴近水面边缘，减少边缘漏出绿色坑壁/草地
+  const R_BOT = 14;
+  const H = SWAMP_WATER_Y - SWAMP_FLOOR_Y; // 15
+  const geo = new THREE.CylinderGeometry(R_TOP, R_BOT, H, 32, 8, true);
+  geo.rotateX(0); // 默认 Y 轴向，无需旋转
+  // 顶点色：按高度归一化（顶=1，底=0）从浅蓝渐变到深蓝
+  const pos = geo.attributes.position;
+  const col = new Float32Array(pos.count * 3);
+  const cTop = new THREE.Color(WATER_COLOR);
+  const cMid = new THREE.Color(WATER_MID);
+  const cBot = new THREE.Color(WATER_DEEP);
+  const cTmp = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const hgt = THREE.MathUtils.clamp((pos.getY(i) + H / 2) / H, 0, 1); // 0 底 → 1 顶
+    if (hgt > 0.5) cTmp.copy(cMid).lerp(cTop, (hgt - 0.5) * 2);
+    else cTmp.copy(cBot).lerp(cMid, hgt * 2);
+    col[i * 3] = cTmp.r;
+    col[i * 3 + 1] = cTmp.g;
+    col[i * 3 + 2] = cTmp.b;
+  }
+  geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+  const mat = new THREE.MeshBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.58,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    fog: false,
+  });
+  const vol = new THREE.Mesh(geo, mat);
+  vol.name = "swamp-water-volume";
+  vol.position.y = (SWAMP_WATER_Y + SWAMP_FLOOR_Y) / 2; // 17.5
+  vol.raycast = () => {};
+  return vol;
+}
+
+/* =====================================================================
+ *  2c. 水面涟漪波纹：花朵/落叶触水时扩散的细环（加色发光，外扩淡出）
+ * ===================================================================== */
+function createRipple() {
+  // 细环：内半径 0.82、外半径 1.0，靠整体 scale 放大表现扩散
+  const geo = new THREE.RingGeometry(0.82, 1.0, 40);
+  geo.rotateX(-Math.PI / 2);
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(0xbfeaff),
+    transparent: true,
+    opacity: 0,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    fog: false,
+  });
+  const ring = new THREE.Mesh(geo, mat);
+  ring.name = "swamp-ripple";
+  ring.raycast = () => {};
+  ring.visible = false;
+  ring.userData = { active: false, age: 0, life: 2.2 };
+  return ring;
 }
 
 /* =====================================================================
@@ -321,7 +416,7 @@ function buildWorldTree(rnd, swampZone) {
     const d = 0.8 + rnd() * 4.2;
     canopy.position.set(
       trunk.position.x + Math.cos(a) * d,
-      52 + rnd() * 12,
+      leafHeightY(52 + rnd() * 12),
       trunk.position.z + Math.sin(a) * d
     );
     g.add(canopy);
@@ -597,11 +692,16 @@ function buildSwampBird(rnd, color) {
   return g;
 }
 
-/* 玩家入沼交互（萤火环绕/尾随 + 长尾猴投果） */
+/* 玩家入沼交互（萤火环绕/尾随 + 长尾猴投果 / 送信人回扔 / 猴躲避） */
 const FRUIT_G = 12; // 果实弹道重力
+const FRUIT_CATCH_R2 = 1.35; // 接住半径²
+const FRUIT_HIT_MONKEY_R2 = 1.8; // 砸中猴半径²
+const FRUIT_DODGE_R = 7.5; // 猴开始躲避的距离
 const _ffP = new THREE.Vector3(); // 玩家局部坐标
 const _ffF = new THREE.Vector3(); // 玩家局部朝向（水平）
 const _ffQ = new THREE.Quaternion();
+const _ffAim = new THREE.Vector3();
+const _ffTmp = new THREE.Vector3();
 
 /** 长尾猴：暗毛浅脸 + S 形长尾，树冠间跳跃 */
 function buildLongTailMonkey(rnd) {
@@ -728,7 +828,8 @@ function buildShell(rnd) {
 function buildRimPalm(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-rim-palm";
-  const h = 7 + rnd() * 6;
+  // 叶冠距地面高度 ×2
+  const h = (7 + rnd() * 6) * LEAF_HEIGHT_MUL;
   const trunkGeo = new THREE.CylinderGeometry(0.28, 0.5, h, 6);
   trunkGeo.translate(0, h / 2, 0);
   trunkGeo.rotateZ(0.12 + rnd() * 0.14); // 微微弯向坑心
@@ -754,21 +855,22 @@ function buildRimPalm(rnd) {
 function buildToweringTree(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-towering-tree";
-  const h = 26 + rnd() * 14; // 苍天大树：更高，树冠参与坑口遮天
+  // 苍天大树：叶冠距地面高度 ×2（原 40~58 → 80~116），树干加长以承接树冠
+  const h = (40 + rnd() * 18) * LEAF_HEIGHT_MUL;
   const trunk = part(
-    new THREE.CylinderGeometry(0.5 + rnd() * 0.3, 1.05 + rnd() * 0.4, h, 6),
+    new THREE.CylinderGeometry(0.5 + rnd() * 0.3, 1.15 + rnd() * 0.45, h, 6),
     toonMat(TOWER_TRUNK, { flatShading: true }),
     0.028
   );
   trunk.position.y = h / 2;
-  trunk.rotation.z = (rnd() - 0.5) * 0.08;
+  trunk.rotation.z = (rnd() - 0.5) * 0.06;
   g.add(trunk);
   // 顶部低多边叶簇（莫比斯式圆冠）
   const leafMat = toonMat(TOWER_LEAF, { flatShading: true });
   const crownN = 5 + ((rnd() * 4) | 0);
   for (let i = 0; i < crownN; i++) {
     const canopy = part(
-      new THREE.IcosahedronGeometry(2.6 + rnd() * 2.8, 0),
+      new THREE.IcosahedronGeometry(3.0 + rnd() * 3.0, 0),
       leafMat,
       0.024
     );
@@ -777,6 +879,41 @@ function buildToweringTree(rnd) {
     canopy.position.set(Math.cos(a) * d, h + rnd() * 6, Math.sin(a) * d);
     canopy.scale.set(1.2, 0.7, 1.2); // 摊平成冠
     g.add(canopy);
+  }
+  // 相机距离内：每棵大树树干缠绕蔓藤（多圈螺旋 + 垂挂）
+  const vineMat = toonMat(VINE_COLOR, { flatShading: true });
+  const coils = 4 + ((rnd() * 3) | 0);
+  for (let c = 0; c < coils; c++) {
+    const y0 = 2 + rnd() * (h - 12);
+    const len = 6 + rnd() * (h * 0.4);
+    const r = 0.9 + rnd() * 0.4;
+    const turns = 1.2 + rnd() * 1.6;
+    const pts = [];
+    const seg = 14;
+    for (let j = 0; j <= seg; j++) {
+      const tt = j / seg;
+      const yy = y0 + len * tt;
+      const ang = tt * turns * Math.PI * 2 + c * 1.7;
+      pts.push(new THREE.Vector3(Math.cos(ang) * r, yy, Math.sin(ang) * r));
+    }
+    const vine = part(
+      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 28, 0.1 + rnd() * 0.05, 4, false),
+      vineMat,
+      0.012
+    );
+    g.add(vine);
+    // 藤上小叶
+    if (rnd() < 0.6) {
+      const leaf = part(
+        new THREE.PlaneGeometry(0.9 + rnd() * 0.6, 0.5 + rnd() * 0.3),
+        toonMat(PALM_LEAF, { flatShading: true, side: THREE.DoubleSide }),
+        0.01
+      );
+      const mid = pts[(seg / 2) | 0];
+      leaf.position.copy(mid);
+      leaf.rotation.set(rnd() * 0.6, rnd() * Math.PI, rnd() * 0.6);
+      g.add(leaf);
+    }
   }
   return g;
 }
@@ -789,10 +926,11 @@ function buildCanopyCeiling(rnd, swampZone) {
   const g = new THREE.Group();
   g.name = "swamp-canopy-ceiling";
   const blobMats = [CANOPY_DARK, CANOPY_MID, CANOPY_LIT].map((c) => toonMat(c, { flatShading: true }));
+  // 树冠环：相对坑口地面高度 ×2（原 50/52/54 → 60/64/68）
   const rings = [
-    { r: 27, y: 50, n: 11, s: 8.0 },
-    { r: 17, y: 52, n: 8, s: 7.0 },
-    { r: 7, y: 54, n: 5, s: 6.0 },
+    { r: 27, y: leafHeightY(50), n: 11, s: 8.0 },
+    { r: 17, y: leafHeightY(52), n: 8, s: 7.0 },
+    { r: 7, y: leafHeightY(54), n: 5, s: 6.0 },
   ];
   for (const ring of rings) {
     for (let i = 0; i < ring.n; i++) {
@@ -827,9 +965,38 @@ function buildCanopyCeiling(rnd, swampZone) {
       fp.setZ(k, fp.getZ(k) + yy * yy * 0.05); // 叶尖外弧
     }
     frond.geometry.computeVertexNormals();
+    // 叶脉：沿叶面中轴与两侧放射的暗色细线（设计原稿要求宽大叶有清晰脉络）
+    const veinMat = new THREE.LineBasicMaterial({ color: 0x0c2a33, transparent: true, opacity: 0.7 });
+    const veinPts = [];
+    const mid = len; // 主脉
+    const vSeg = 6;
+    for (let s = 0; s <= vSeg; s++) {
+      const tt = s / vSeg;
+      veinPts.push(new THREE.Vector3(0, -len * tt, len * len * tt * tt * 0.05));
+    }
+    const mainVein = new THREE.Line(new THREE.BufferGeometry().setFromPoints(veinPts), veinMat);
+    mainVein.raycast = () => {};
+    frond.add(mainVein);
+    for (let s = 1; s <= 4; s++) {
+      const tt = s / 5;
+      const yY = -len * tt;
+      const zZ = len * len * tt * tt * 0.05;
+      for (const side of [-1, 1]) {
+        const sideVein = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, yY, zZ),
+            new THREE.Vector3(side * (1.0 + len * 0.12) * (1 - tt), yY - len * 0.12, zZ),
+          ]),
+          veinMat
+        );
+        sideVein.raycast = () => {};
+        frond.add(sideVein);
+      }
+    }
     const a = rnd() * Math.PI * 2;
     const rr = 18 + rnd() * 14;
-    frond.position.set(Math.cos(a) * rr, 45 + rnd() * 5, Math.sin(a) * rr);
+    // 巨叶悬挂点同步抬高到 2 倍离地高度
+    frond.position.set(Math.cos(a) * rr, leafHeightY(45 + rnd() * 5), Math.sin(a) * rr);
     frond.rotation.order = "YXZ";
     frond.rotation.y = a + Math.PI / 2;
     frond.rotation.x = 0.55 + rnd() * 0.5; // 垂吊
@@ -869,6 +1036,40 @@ function buildGlowFlower(rnd, hue) {
   halo.userData.pulse = rnd() * Math.PI * 2;
   g.add(halo);
   g.userData.halo = halo;
+  return g;
+}
+
+/**
+ * 巨型发光花朵：宽大花瓣朝空中开放，花蕊发光（设计原稿）。
+ * 用于湖沼“5 朵大大花朵轮换飘落湖面”的效果。返回 group，含可动画的 userData。
+ */
+function buildGiantFlower(rnd) {
+  const g = new THREE.Group();
+  g.name = "swamp-giant-flower";
+  const petalMat = toonMat(0xf2d6e6, { flatShading: true, side: THREE.DoubleSide }); // 浅粉花瓣
+  const petalN = 7;
+  const pr = 2.4; // 花瓣半径（巨型）
+  for (let i = 0; i < petalN; i++) {
+    const a = (i / petalN) * Math.PI * 2;
+    const petal = part(new THREE.PlaneGeometry(1.4, 2.6, 1, 2), petalMat, 0.02);
+    petal.position.set(Math.cos(a) * pr, 0.2, Math.sin(a) * pr);
+    petal.rotation.order = "YXZ";
+    petal.rotation.y = -a;
+    petal.rotation.x = -1.05; // 朝天空开放
+    g.add(petal);
+  }
+  // 花蕊：发光球 + 加色光晕（如同设计原稿亮芯）
+  const core = new THREE.Mesh(
+    facet(new THREE.SphereGeometry(0.7, 8, 6)),
+    new THREE.MeshBasicMaterial({ color: 0xfff0a0, fog: false })
+  );
+  core.position.y = 0.4;
+  g.add(core);
+  const halo = glowSprite(0xffe6a0, 7.0, 0.75);
+  halo.position.y = 0.5;
+  g.add(halo);
+  g.userData.halo = halo;
+  g.userData.core = core;
   return g;
 }
 
@@ -986,38 +1187,8 @@ export function createMoebiusSwampZone(opts = {}) {
     swampZone.add(step);
   }
 
-  // Y=40 地表草地：低平草皮断片（非围墙）+ 草簇，玩家起跳处
-  // 注：星球弯曲导致的地表下沉由 applySwampSphereFit 在放置时按真实缩放修正
-  const grassMat = toonMat(GRASS_COLOR, { flatShading: true });
-  /** @type {THREE.Mesh[]} 坑缘地表装饰（放置时贴球面） */
-  const rimDecor = [];
-  for (let i = 0; i < 14; i++) {
-    const a = (i / 14) * Math.PI * 2 + rnd() * 0.3;
-    const patch = part(
-      new THREE.CylinderGeometry(2.4 + rnd() * 2.2, 2.8 + rnd() * 2.4, 0.45, 6),
-      grassMat,
-      0.024
-    );
-    const gd = 37 + rnd() * 8;
-    patch.position.set(Math.cos(a) * gd, SWAMP_GROUND_Y - 0.22, Math.sin(a) * gd);
-    patch.userData.baseY = SWAMP_GROUND_Y - 0.22;
-    swampZone.add(patch);
-    rimDecor.push(patch);
-  }
-  for (let i = 0; i < 22; i++) {
-    const a = rnd() * Math.PI * 2;
-    const tuft = part(new THREE.ConeGeometry(0.32 + rnd() * 0.3, 1.1 + rnd() * 0.9, 4), grassMat, 0.014);
-    const gd = 35 + rnd() * 8;
-    tuft.position.set(
-      Math.cos(a) * gd,
-      SWAMP_GROUND_Y + 0.5,
-      Math.sin(a) * gd
-    );
-    tuft.rotation.z = (rnd() - 0.5) * 0.3;
-    tuft.userData.baseY = SWAMP_GROUND_Y + 0.5;
-    swampZone.add(tuft);
-    rimDecor.push(tuft);
-  }
+  // 注：放置区「地表草地」已按需求移除——湖沼先挖坑，不展示坑口地面，
+  // 坑缘只保留塌陷断崖碎石、入口石阶与环湖苍天大树，玩家自坑口直接踏入深渊。
 
   /* ---------- 坑边苍天大树：环湖沼四周，沿球面贴地扎根 ---------- */
   const treeCount = 10 + ((rnd() * 3) | 0);
@@ -1038,7 +1209,129 @@ export function createMoebiusSwampZone(opts = {}) {
   // 星球是弯曲的：平坦切平面之外地表下沉，树/草皮需沿球面下探并朝法线生长，
   // 否则悬浮。缩放在放置时才确定，故由 applySwampSphereFit 统一修正。
   swampZone.userData.towerTrees = towerTrees;
-  swampZone.userData.rimDecor = rimDecor;
+  const rimDecor = (swampZone.userData.rimDecor = []); // 地表草地已移除，坑缘不再有草皮/草簇
+
+  /* ---------- 相机距离外：树与树之间随机跨树蔓藤（丛林密网） ---------- */
+  // 仅在大树两两之间按概率连一条悬垂的跨树藤蔓，营造密林缠绕感
+  {
+    const crossVineMat = toonMat(VINE_COLOR, { flatShading: true });
+    const used = new Set();
+    const tries = towerTrees.length * 2;
+    for (let k = 0; k < tries; k++) {
+      const i = (rnd() * towerTrees.length) | 0;
+      let j = (rnd() * towerTrees.length) | 0;
+      if (j === i) j = (j + 1) % towerTrees.length;
+      const key = i < j ? `${i}-${j}` : `${j}-${i}`;
+      if (used.has(key)) continue;
+      used.add(key);
+      if (rnd() > 0.55) continue; // 随机跳过部分组合
+      const A = towerTrees[i].position;
+      const B = towerTrees[j].position;
+      const baseY = SWAMP_GROUND_Y - 0.3;
+      const yA = baseY + 14 + rnd() * 18; // 相机距离外高处连接
+      const yB = baseY + 14 + rnd() * 18;
+      const sag = 4 + rnd() * 6; // 自然下垂
+      const pts = [];
+      const seg = 16;
+      for (let s = 0; s <= seg; s++) {
+        const tt = s / seg;
+        const x = A.x + (B.x - A.x) * tt;
+        const z = A.z + (B.z - A.z) * tt;
+        const y = (yA + (yB - yA) * tt) - Math.sin(tt * Math.PI) * sag;
+        pts.push(new THREE.Vector3(x, y, z));
+      }
+      const vine = part(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 32, 0.12 + rnd() * 0.05, 4, false),
+        crossVineMat,
+        0.014
+      );
+      swampZone.add(vine);
+    }
+  }
+
+  /* ---------- 5 朵巨型发光花朵：宽大叶上方朝空中开放，轮换飘落湖面 ---------- */
+  const giantFlowers = [];
+  for (let i = 0; i < 5; i++) {
+    const f = buildGiantFlower(rnd);
+    const a = (i / 5) * Math.PI * 2 + rnd() * 0.4;
+    const d = 20 + rnd() * 10; // 宽大叶丛上方（坑缘棕榈带内侧）
+    const baseY = SWAMP_GROUND_Y + 6 + rnd() * 8; // 在叶面之上朝天空开放
+    f.position.set(Math.cos(a) * d, baseY, Math.sin(a) * d);
+    f.userData.baseY = baseY;
+    f.userData.fallOrder = i;        // 轮换次序
+    f.userData.falling = false;      // 是否正在飘落
+    f.userData.fallT = 0;            // 飘落计时
+    f.userData.restT = 0;            // 湖面停留计时
+    swampZone.add(f);
+    giantFlowers.push(f);
+  }
+  swampZone.userData.giantFlowers = giantFlowers;
+
+  /* ---------- 水面涟漪池：花朵触水时扩散 ---------- */
+  const ripples = [];
+  for (let i = 0; i < 12; i++) {
+    const rp = createRipple();
+    swampZone.add(rp);
+    ripples.push(rp);
+  }
+  function spawnRipple(x, z, strength = 1) {
+    const rp = ripples.find((r) => !r.userData.active);
+    if (!rp) return;
+    rp.userData.active = true;
+    rp.userData.age = 0;
+    rp.userData.life = 2.2 * strength;
+    rp.position.set(x, WATER_Y + 0.07, z);
+    rp.visible = true;
+    rp.scale.setScalar(0.4);
+    rp.material.opacity = 0.7 * strength;
+  }
+  function updateRipples(dt) {
+    for (const rp of ripples) {
+      if (!rp.userData.active) continue;
+      rp.userData.age += dt;
+      const k = rp.userData.age / rp.userData.life;
+      if (k >= 1) {
+        rp.userData.active = false;
+        rp.visible = false;
+        rp.material.opacity = 0;
+        continue;
+      }
+      // 外扩（0.4 → 5.5）并淡出
+      rp.scale.setScalar(0.4 + k * 5.1);
+      rp.material.opacity = (1 - k) * 0.7;
+    }
+  }
+
+  /* ---------- 落叶系统：参天大树落叶飘落，湖面漂浮落叶/花瓣 ---------- */
+  const fallingLeaves = [];
+  const LEAF_POOL = 60;
+  for (let i = 0; i < LEAF_POOL; i++) {
+    const leaf = part(
+      new THREE.PlaneGeometry(0.6 + rnd() * 0.4, 0.32 + rnd() * 0.2),
+      toonMat(PALM_LEAF, { flatShading: true, side: THREE.DoubleSide }),
+      0.006
+    );
+    leaf.visible = false;
+    leaf.userData = { active: false };
+    swampZone.add(leaf);
+    fallingLeaves.push(leaf);
+  }
+  // 在湖面漂浮的落叶（静态漂浮物，强化“湖面”可读）
+  for (let i = 0; i < 18; i++) {
+    const a = rnd() * Math.PI * 2;
+    const d = 3 + rnd() * 28;
+    const fl = part(
+      new THREE.PlaneGeometry(0.7 + rnd() * 0.5, 0.38 + rnd() * 0.25),
+      toonMat(PALM_LEAF, { flatShading: true, side: THREE.DoubleSide }),
+      0.006
+    );
+    fl.position.set(Math.cos(a) * d, WATER_Y + 0.08, Math.sin(a) * d);
+    fl.rotation.set(-Math.PI / 2 + (rnd() - 0.5) * 0.2, rnd() * Math.PI, 0);
+    fl.userData.drift = rnd() * Math.PI * 2;
+    fl.userData.dRadius = d;
+    swampZone.add(fl);
+  }
+  swampZone.userData.fallingLeaves = fallingLeaves;
 
   // 坑壁垂挂藤蔓（从 Y=40 坑口一路垂到水面附近）
   const hangVineMat = toonMat(VINE_COLOR, { flatShading: true });
@@ -1156,16 +1449,42 @@ export function createMoebiusSwampZone(opts = {}) {
     glowHalos.push(flower.userData.halo);
   }
 
-  /* ---------- 湖底沙地（Y = 10.0）+ 河床乱石 ---------- */
+  /* ---------- 湖底：蓝色藻类地面（非草皮）+ 河床乱石 ---------- */
+  // 坑底不是草皮，而是幽蓝发光的藻类植物铺地，强化“深邃湖水”的纵深感
+  const ALGAE_COLOR = 0x1f6fb0;       // 湖底蓝藻主色
+  const ALGAE_GLOW = 0x3fa8e0;        // 藻类受光亮斑（微发光感）
   const floor = part(
     jitter(new THREE.CylinderGeometry(13.5, 15, 1.2, 12), 0.8, rnd),
-    toonMat(FLOOR_COLOR, { flatShading: true }),
+    toonMat(ALGAE_COLOR, { flatShading: true }),
     0.032
   );
   floor.name = "swamp-lake-floor";
   floor.position.y = SWAMP_FLOOR_Y - 0.2;
   swampZone.add(floor);
 
+  // 藻类簇：湖底散布的蓝绿发光藻团（高低起伏，营造水下植被层）
+  const algaeTuftMat = toonMat(ALGAE_GLOW, { flatShading: true });
+  const algaeDarkMat = toonMat(0x16527e, { flatShading: true });
+  for (let i = 0; i < 26; i++) {
+    const a = rnd() * Math.PI * 2;
+    const d = 1.5 + rnd() * 11;
+    const clump = new THREE.Group();
+    const blades = 3 + ((rnd() * 4) | 0);
+    for (let b = 0; b < blades; b++) {
+      const blade = part(
+        new THREE.ConeGeometry(0.12 + rnd() * 0.1, 1.0 + rnd() * 1.8, 4),
+        rnd() < 0.5 ? algaeTuftMat : algaeDarkMat,
+        0.008
+      );
+      blade.position.set((rnd() - 0.5) * 0.6, (0.5 + rnd() * 0.9), (rnd() - 0.5) * 0.6);
+      blade.rotation.z = (rnd() - 0.5) * 0.4;
+      clump.add(blade);
+    }
+    clump.position.set(Math.cos(a) * d, SWAMP_FLOOR_Y + 0.2, Math.sin(a) * d);
+    swampZone.add(clump);
+  }
+
+  // 河床暗蓝乱石（置于藻类之间，不喧宾夺主）
   for (let i = 0; i < 14; i++) {
     const rock = part(
       new THREE.IcosahedronGeometry(0.5 + rnd() * 1.2, 0),
@@ -1183,6 +1502,10 @@ export function createMoebiusSwampZone(opts = {}) {
   /* ---------- 2. 玻璃水面（Y = 25.0）---------- */
   const water = createWaterSurface();
   swampZone.add(water);
+
+  /* ---------- 2b. 水体体积剖面（Y = 10 → 25）：上浅蓝、下深蓝 ---------- */
+  const waterVolume = createWaterVolume();
+  swampZone.add(waterVolume);
 
   /* ---------- 水下游鱼：绿黑斑纹小鱼群（玻璃剖面下的生灵） ---------- */
   /** @type {THREE.Group[]} */
@@ -1228,6 +1551,7 @@ export function createMoebiusSwampZone(opts = {}) {
   whale.rotation.x = -1.32; // 直立：头胸破水，尾沉水下
   whale.rotation.y = 0.85; // 朝向喂食木筏
   whale.userData.baseY = WHALE_Y;
+  whale.userData.baseRotX = -1.32;
   swampZone.add(whale);
   whales.push(whale);
 
@@ -1238,6 +1562,7 @@ export function createMoebiusSwampZone(opts = {}) {
   whalePup.rotation.x = -1.15;
   whalePup.rotation.y = 0.85;
   whalePup.userData.baseY = WHALE_Y - 1.4;
+  whalePup.userData.baseRotX = -1.15;
   whalePup.userData.bobPhase = 2.1;
   swampZone.add(whalePup);
   whales.push(whalePup);
@@ -1417,24 +1742,38 @@ export function createMoebiusSwampZone(opts = {}) {
     mk.userData.arc = 2.2 + rnd() * 1.6;
     mk.userData.phase = rnd() * 7;
     mk.userData.lastCi = Math.floor(mk.userData.phase / (mk.userData.sitDur + mk.userData.jumpDur));
+    mk.userData.dodgeT = 0; // >0 时强制躲避跳
+    mk.userData.dodgeFrom = new THREE.Vector3();
+    mk.userData.dodgeTo = new THREE.Vector3();
     swampZone.add(mk);
     monkeys.push(mk);
   }
 
-  // 投掷果实池（玩家入沼时长尾猴朝他投果；固定 10 枚池化复用，无增长）
+  // 投掷果实池（猴砸送信人 → 送信人接住回扔 → 猴躲避）
   const fruitGeo = facet(new THREE.SphereGeometry(0.17, 6, 5));
   const fruitMats = [
     toonMat(0xff9a4d, { flatShading: true }), // 橙果
     toonMat(0xe8708f, { flatShading: true }), // 浆果
   ];
   const fruits = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 12; i++) {
     const fr = new THREE.Mesh(fruitGeo, fruitMats[i % 2]);
     fr.visible = false;
-    fr.userData = { active: false, vel: new THREE.Vector3(), life: 0 };
+    fr.userData = {
+      active: false,
+      /** @type {'inbound'|'held'|'return'} */
+      phase: "inbound",
+      vel: new THREE.Vector3(),
+      life: 0,
+      holdT: 0,
+      owner: null, // 投出的猴
+      targetMk: null, // 回扔目标猴
+    };
     swampZone.add(fr);
     fruits.push(fr);
   }
+  /** @type {THREE.Mesh|null} 送信人手中暂存的果 */
+  let heldFruit = null;
 
   // 发光蜥蜴：坑缘草甸缓爬 ×2 + 湖底 ×1
   /** @type {THREE.Group[]} */
@@ -1553,11 +1892,112 @@ export function createMoebiusSwampZone(opts = {}) {
       lotus.position.y = (lotus.userData.baseY || WATER_Y) + Math.sin(t * 1.05 + ph) * 0.09;
       lotus.rotation.z = Math.sin(t * 0.8 + ph) * 0.028;
     }
-    // 鲸豚们缓缓浮沉，鼻头始终破水
+    // 鲸豚们缓缓浮沉 + 哺乳动物换气：周期性昂首将鼻头破水而出（头露出水面 Y=25 以上）
     for (const w of whales) {
       const ph = w.userData.bobPhase || 0;
       w.position.y = w.userData.baseY + Math.sin(t * 0.6 + ph) * 0.35;
+      // 换气节律：缓慢昂首→维持→没入，鼻头周期性露出水面
+      const breathe = Math.sin(t * 0.32 + ph);
+      // baseRotX 为静态倾斜（-1.32 大鲸 / -1.15 幼鲸），在此基础上叠加昂首
+      const baseRx = w.userData.baseRotX ?? -1.32;
+      w.rotation.x = baseRx + breathe * 0.5; // 昂首时鼻头抬高破水
       w.rotation.z = Math.sin(t * 0.45 + ph) * 0.03;
+    }
+
+    /* ---------- 5 朵巨型发光花朵：轮换飘落湖面（花蕊发光） ---------- */
+    const giantFlowers = swampZone.userData.giantFlowers || [];
+    for (let i = 0; i < giantFlowers.length; i++) {
+      const f = giantFlowers[i];
+      const cyc = (t * 0.05 + i * 0.37) % 1; // 每朵独立相位，轮换有一朵在飘落
+      // 花蕊发光脉动
+      if (f.userData.core) {
+        const pulse = 0.7 + Math.sin(t * 1.6 + i) * 0.3;
+        f.userData.core.material.color.setRGB(pulse, pulse * 0.92, 0.55);
+      }
+      if (!f.userData.falling) {
+        // 正常开放：在叶面之上朝天空轻微摇曳
+        f.position.y = f.userData.baseY + Math.sin(t * 0.5 + i) * 0.3;
+        f.rotation.y += _dt * 0.05;
+        // 触发飘落：每朵按各自周期落下一次
+        if (cyc > 0.82) {
+          f.userData.falling = true;
+          f.userData.fallT = 0;
+        }
+      } else {
+        // 飘落：从叶面高度缓慢下落至湖面（旋转飘摆）
+        f.userData.fallT += _dt;
+        const k = Math.min(1, f.userData.fallT / 6.0); // 6 秒落至水面
+        const startY = f.userData.baseY;
+        const targetY = WATER_Y + 0.3;
+        f.position.y = startY + (targetY - startY) * k;
+        f.rotation.x += _dt * 0.4;
+        f.rotation.z += _dt * 0.3;
+        if (k >= 1) {
+          // 首次触水 → 在落点激起涟漪
+          if (!f.userData.splashed) {
+            f.userData.splashed = true;
+            spawnRipple(f.position.x, f.position.z, 1.3);
+          }
+          // 落湖面后停留一阵，再复位重新开放
+          f.userData.restT += _dt;
+          if (f.userData.restT > 5.0) {
+            f.userData.falling = false;
+            f.userData.splashed = false;
+            f.userData.restT = 0;
+            f.rotation.set(0, f.rotation.y, 0);
+            // 复位到原开放高度（瞬时，玩家不易察觉，因在水下远处）
+            f.position.y = f.userData.baseY;
+          }
+        }
+      }
+    }
+
+    // 水面涟漪扩散淡出
+    updateRipples(_dt);
+
+    /* ---------- 落叶系统：参天大树落叶飘落 + 湖面漂浮落叶 ---------- */
+    const fallingLeaves = swampZone.userData.fallingLeaves || [];
+    // 周期性从随机大树顶部生成落叶
+    if (Math.random() < _dt * 6) {
+      const free = fallingLeaves.find((l) => !l.userData.active);
+      if (free && towerTrees.length) {
+        const src = towerTrees[(Math.random() * towerTrees.length) | 0];
+        free.position.copy(src.position);
+        // 树冠已抬高 2 倍：从冠顶附近飘落
+        free.position.y += (30 + Math.random() * 20) * LEAF_HEIGHT_MUL;
+        free.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+        free.userData.active = true;
+        free.userData.vy = -(1.2 + Math.random() * 1.2);
+        free.userData.spin = (Math.random() - 0.5) * 2;
+        free.userData.sway = Math.random() * Math.PI * 2;
+        free.visible = true;
+      }
+    }
+    for (const l of fallingLeaves) {
+      if (!l.userData.active) continue;
+      l.userData.sway += _dt * 2;
+      l.position.y += l.userData.vy * _dt;
+      l.position.x += Math.sin(l.userData.sway) * _dt * 0.6;
+      l.position.z += Math.cos(l.userData.sway) * _dt * 0.6;
+      l.rotation.x += l.userData.spin * _dt;
+      l.rotation.z += l.userData.spin * 0.7 * _dt;
+      if (l.position.y <= WATER_Y + 0.1) {
+        // 落到水面：转为漂浮（停在水面，缓慢漂）
+        l.position.y = WATER_Y + 0.1;
+        l.userData.active = false;
+        l.rotation.set(-Math.PI / 2 + (Math.random() - 0.5) * 0.2, Math.random() * Math.PI, 0);
+        l.userData.drift = Math.random() * Math.PI * 2;
+        l.userData.dRadius = Math.hypot(l.position.x, l.position.z) || 5;
+      }
+    }
+    // 湖面漂浮落叶缓慢旋转漂移
+    for (const l of swampZone.children) {
+      if (l.userData && l.userData.drift !== undefined) {
+        l.userData.drift += _dt * 0.15;
+        const r = l.userData.dRadius;
+        l.position.x = Math.cos(l.userData.drift) * r + Math.sin(t + l.userData.drift) * 0.3;
+        l.position.z = Math.sin(l.userData.drift) * r + Math.cos(t + l.userData.drift) * 0.3;
+      }
     }
     // 游鱼环游
     for (const f of fishes) {
@@ -1596,16 +2036,54 @@ export function createMoebiusSwampZone(opts = {}) {
       if (bird.userData.wingL) bird.userData.wingL.rotation.z = -0.5 - flap;
       if (bird.userData.wingR) bird.userData.wingR.rotation.z = 0.5 + flap;
     }
-    // 长尾猴：坐望一阵→弧线跳向下一枝头
+    // 长尾猴：坐望→跳枝；遇回扔果则侧跃躲避
     for (const mk of monkeys) {
       const u = mk.userData;
+      const nPerch = u.perches.length;
+
+      // ---- 躲避跳：回扔果逼近时强制弧线跃到更远枝头 ----
+      if (u.dodgeT > 0) {
+        u.dodgeT += _dt;
+        const k = Math.min(1, u.dodgeT / 0.55);
+        mk.position.lerpVectors(u.dodgeFrom, u.dodgeTo, k);
+        mk.position.y += Math.sin(k * Math.PI) * (u.arc + 2.2);
+        mk.lookAt(u.dodgeTo.x, mk.position.y, u.dodgeTo.z);
+        // 躲避时前肢张开
+        for (const arm of [u.armL, u.armR]) {
+          if (arm) arm.rotation.x = arm.userData.baseRotX - 1.2;
+        }
+        if (k >= 1) {
+          u.dodgeT = 0;
+          // 对齐到最近 perch 索引，继续常规循环
+          let bestI = 0;
+          let bestD = Infinity;
+          for (let i = 0; i < nPerch; i++) {
+            const d = u.perches[i].distanceToSquared(u.dodgeTo);
+            if (d < bestD) {
+              bestD = d;
+              bestI = i;
+            }
+          }
+          u.idx = bestI;
+          u.next = (bestI + 1 + ((Math.random() * (nPerch - 1)) | 0)) % nPerch;
+          if (u.next === u.idx) u.next = (u.idx + 1) % nPerch;
+          // 重置为「刚坐下」：避免落地立刻再投果
+          const cyc = u.sitDur + u.jumpDur;
+          const ciNow = Math.floor((t + u.phase) / cyc);
+          u.phase = ciNow * cyc + 0.12 - t;
+          u.lastCi = ciNow;
+          u.throwCd = Math.max(u.throwCd || 0, 1.4);
+        }
+        continue;
+      }
+
       const cyc = u.sitDur + u.jumpDur;
       const local = t + u.phase;
       const ci = Math.floor(local / cyc);
       if (ci !== u.lastCi) {
         u.lastCi = ci;
         u.idx = u.next;
-        u.next = (u.next + 1) % u.perches.length;
+        u.next = (u.next + 1) % nPerch;
       }
       const lt = local - ci * cyc;
       const A = u.perches[u.idx];
@@ -1620,7 +2098,36 @@ export function createMoebiusSwampZone(opts = {}) {
         mk.position.y += Math.sin(k * Math.PI) * u.arc;
         mk.lookAt(B.x, mk.position.y, B.z);
       }
-      // 玩家入沼：冷却到了就朝他投一枚果（抛物线弹道），投时高举前肢
+
+      // 侦测回扔果：逼近则躲避
+      for (const fr of fruits) {
+        const fu = fr.userData;
+        if (!fu.active || fu.phase !== "return") continue;
+        const dist = fr.position.distanceTo(mk.position);
+        if (dist > FRUIT_DODGE_R) continue;
+        _ffTmp.subVectors(mk.position, fr.position);
+        // 果朝猴飞来（速度与相对位置同向）
+        if (fu.vel.dot(_ffTmp) < 0.5) continue;
+        // 挑一个离当前与来果方向都较远的枝头
+        u.dodgeFrom.copy(mk.position);
+        let best = u.perches[(u.idx + 1) % nPerch];
+        let bestScore = -Infinity;
+        for (const p of u.perches) {
+          const awayFruit = p.distanceTo(fr.position);
+          const awaySelf = p.distanceTo(mk.position);
+          const score = awayFruit * 1.2 + awaySelf * 0.5 + Math.random();
+          if (awaySelf > 2.5 && score > bestScore) {
+            bestScore = score;
+            best = p;
+          }
+        }
+        u.dodgeTo.copy(best);
+        u.dodgeT = 0.001;
+        u.poseT = 0;
+        break;
+      }
+
+      // 玩家入沼：冷却到了朝送信人投果
       u.throwCd = (u.throwCd || 0) - _dt;
       if (u.poseT > 0) {
         u.poseT -= _dt;
@@ -1633,18 +2140,21 @@ export function createMoebiusSwampZone(opts = {}) {
         for (const arm of [u.armL, u.armR]) {
           if (arm) arm.rotation.x = arm.userData.baseRotX;
         }
-        if (playerIn && u.throwCd <= 0 && lt < u.sitDur) {
+        if (playerIn && u.throwCd <= 0 && lt < u.sitDur && u.dodgeT <= 0) {
           const fr = fruits.find((x) => !x.userData.active);
           if (fr) {
-            u.throwCd = 1.6 + Math.random() * 2.8;
+            u.throwCd = 1.8 + Math.random() * 2.6;
             u.poseT = 0.55;
             const fu = fr.userData;
             fu.active = true;
-            fu.life = 4;
+            fu.phase = "inbound";
+            fu.owner = mk;
+            fu.targetMk = null;
+            fu.holdT = 0;
+            fu.life = 5;
             fr.visible = true;
             fr.position.set(mk.position.x, mk.position.y + 1.2, mk.position.z);
-            // 解弹道：T 秒后恰好砸到送信人
-            const T = 0.8 + Math.random() * 0.35;
+            const T = 0.85 + Math.random() * 0.35;
             fu.vel.set(
               (_ffP.x - fr.position.x) / T,
               (_ffP.y + 1.0 - fr.position.y) / T + 0.5 * FRUIT_G * T,
@@ -1654,19 +2164,108 @@ export function createMoebiusSwampZone(opts = {}) {
         }
       }
     }
-    // 果实弹道：重力抛物线，砸中送信人或落水即收（池化复用）
+
+    // 手中果：跟送信人；按 R / 点击 / 自动 0.35s 后回扔
+    if (heldFruit && player) {
+      const fu = heldFruit.userData;
+      fu.holdT += _dt;
+      heldFruit.position.set(_ffP.x + _ffF.x * 0.35, _ffP.y + 1.15, _ffP.z + _ffF.z * 0.35);
+      const keys = runtime?.keys;
+      // 接住约 0.35s 自动回扔，或按 R 立刻扔
+      const wantThrow = fu.holdT >= 0.35 || !!keys?.KeyR;
+      if (wantThrow) {
+        // 瞄准：原投出的猴，否则最近猴
+        let target = fu.owner;
+        if (!target || !target.parent) {
+          let bestD = Infinity;
+          for (const mk of monkeys) {
+            const d = mk.position.distanceToSquared(_ffP);
+            if (d < bestD) {
+              bestD = d;
+              target = mk;
+            }
+          }
+        }
+        if (target) {
+          fu.phase = "return";
+          fu.targetMk = target;
+          fu.life = 4;
+          fu.holdT = 0;
+          const aim = target.position;
+          const T = 0.75 + Math.random() * 0.2;
+          // 预判：朝猴当前位偏高一点，猴会躲开
+          fu.vel.set(
+            (aim.x - heldFruit.position.x) / T,
+            (aim.y + 0.8 - heldFruit.position.y) / T + 0.5 * FRUIT_G * T,
+            (aim.z - heldFruit.position.z) / T
+          );
+        } else {
+          // 无目标：朝面朝方向抛出
+          fu.phase = "return";
+          fu.life = 3;
+          fu.vel.set(_ffF.x * 8, 6, _ffF.z * 8);
+        }
+        heldFruit = null;
+      }
+    }
+
+    // 果实弹道
     for (const fr of fruits) {
       const fu = fr.userData;
       if (!fu.active) continue;
+
+      if (fu.phase === "held") {
+        // 由 heldFruit 分支驱动位置
+        continue;
+      }
+
       fu.life -= _dt;
       fu.vel.y -= FRUIT_G * _dt;
       fr.position.addScaledVector(fu.vel, _dt);
       fr.rotation.x += _dt * 6;
       fr.rotation.z += _dt * 4;
-      if (player && fr.position.distanceToSquared(_ffP) < 0.8) fu.life = Math.min(fu.life, 0.1);
+
+      // 入站果：送信人接住
+      if (fu.phase === "inbound" && player && fr.position.distanceToSquared(_ffP) < FRUIT_CATCH_R2) {
+        if (!heldFruit) {
+          fu.phase = "held";
+          fu.holdT = 0;
+          fu.vel.set(0, 0, 0);
+          fu.life = 6;
+          heldFruit = fr;
+        } else {
+          // 已有果在手：弹开消失
+          fu.active = false;
+          fr.visible = false;
+        }
+        continue;
+      }
+
+      // 回扔：砸中猴（若未躲开）
+      if (fu.phase === "return") {
+        for (const mk of monkeys) {
+          if (fr.position.distanceToSquared(mk.position) < FRUIT_HIT_MONKEY_R2) {
+            // 命中：吓一跳，强制短躲避
+            const u = mk.userData;
+            if (u.dodgeT <= 0) {
+              u.dodgeFrom.copy(mk.position);
+              u.dodgeTo.copy(u.perches[(u.idx + 1 + ((Math.random() * 2) | 0)) % u.perches.length]);
+              u.dodgeT = 0.001;
+            }
+            fu.active = false;
+            fr.visible = false;
+            break;
+          }
+        }
+      }
+
+      if (!fu.active) continue;
       if (fu.life <= 0 || fr.position.y < WATER_Y + 0.15) {
+        if (heldFruit === fr) heldFruit = null;
         fu.active = false;
         fr.visible = false;
+        fu.owner = null;
+        fu.targetMk = null;
       }
     }
     // 发光蜥蜴：贴地缓爬，头朝行进向微摆

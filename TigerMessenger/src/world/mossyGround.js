@@ -165,14 +165,33 @@ export function buildImpastoMossyGround(opts = {}) {
   group.position.copy(center).multiplyScalar(R);
   group.updateWorldMatrix(true, false);
 
-  // 世界避障体 → 补丁局部坐标
+  // 世界避障体 → 补丁局部坐标（flatten 标记：需要压平地形走廊的避障体，如轨道/书店）
   const avoid = avoidWorld.map((a) => {
     const p = a.position.clone();
     group.worldToLocal(p);
-    return { x: p.x, z: p.z, y: p.y, r: a.radius ?? 0 };
+    return { x: p.x, z: p.z, y: p.y, r: a.radius ?? 0, flatten: !!a.flatten };
   });
 
-  const { knolls, bump } = createTerrainNoise(rnd, size);
+  let { knolls, bump } = createTerrainNoise(rnd, size);
+  // 轨道走廊压平：苔丘 bump 会穿轨/穿车体，避障点附近把地形隆起衰减到 0
+  // （苔藓块本身已有 MIN_DISTANCE 避让，这里只处理连续地形）
+  const flatteners = avoid.filter((a) => a.flatten);
+  if (flatteners.length) {
+    const bumpBase = bump;
+    bump = (x, z) => {
+      let f = 1;
+      for (const a of flatteners) {
+        const d = Math.hypot(x - a.x, z - a.z);
+        const inner = a.r + 1.6; // 全压平半径（轨面以上不得有丘）
+        const outer = a.r + 5.0; // 过渡带外缘
+        if (d < outer) {
+          const w = d <= inner ? 0 : smoothstepJS(inner, outer, d);
+          if (w < f) f = w;
+        }
+      }
+      return bumpBase(x, z) * f;
+    };
+  }
 
   // ---------- 地形网格：平面贴球弯曲 + 噪声隆起 ----------
   // 球面下陷量：局部系中球面随距中心距离向下弯曲（切平面 → 球面），

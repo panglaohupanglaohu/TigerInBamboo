@@ -133,7 +133,6 @@ function updateSmoke(smoke, dt, up) {
     let fade;
     // 淡红核心与灰白烟统一淡入淡出，融入整体浓烟
     fade = k < 0.25 ? k / 0.25 : 1 - (k - 0.25) / 0.75;
-    }
     m.material.opacity = u.maxOpacity * Math.max(0, fade);
     alive = true;
   }
@@ -297,7 +296,7 @@ export function createAirshipRide({
       _pos.copy(a.position).addScaledVector(_fwd, 1.0).addScaledVector(_bombUp, -2.0);
       _bombVel.copy(_bombUp).multiplyScalar(-BOMB_SPEED * 0.55);
     }
-    bombs.push(SmombThrowFix(scene, _pos.clone(), _bombVel));
+    bombs.push(SmokeBomb(scene, _pos.clone(), _bombVel));
     toast("投掷烟雾弹！", 1.2);
   });
 
@@ -447,8 +446,21 @@ export function createAirshipRide({
     return true;
   }
 
+  function forceExit() {
+    if (state === "idle") return;
+    const a = airship();
+    state = "idle";
+    player.riding = false;
+    if (a) {
+      a.userData.flying = false;
+      a.userData.ropeState = "idle";
+    }
+    setHint(null);
+  }
+
   return {
     update,
+    forceExit,
     isFlying: () => state === "flying",
     getState: () => state,
   };

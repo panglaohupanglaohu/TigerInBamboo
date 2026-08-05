@@ -58,6 +58,7 @@ function clearForTrack(x, z) {
     { x: 4.6, z: -9.8, r: 2.8 },
     { x: 5.8, z: 6.8, r: 3.0 },
     { x: 11.5, z: 5.5, r: 5.5 }, // 书店山 + 建筑体
+    { x: -18.1, z: 6.2, r: 3.6 }, // 营地荒山岩群（悬崖瀑布山洞，已西移让轨）
   ];
   // 圆禁区：月牙湖水域 + 修船厂码头（栈桥/船/吊车）
   const hardCircles = [
@@ -697,7 +698,8 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
       farewellT: 0,
     },
   ];
-  const bodyLift = 0.06;
+  // 车体抬升：车底最低件相对轨面留净空，防岛面/草坡缘剃车底（原 0.06 会擦地）
+  const bodyLift = 0.12;
   /** 离城送别最短/最长时长（秒）；BGM 未结束时会延长到 BGM 完 */
   const FAREWELL_MIN = 12;
   const FAREWELL_MAX = 48;

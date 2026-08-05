@@ -44,6 +44,7 @@ function flatPatch(rnd, rx, rz, color, lift) {
   geo.computeVertexNormals();
   const mesh = new THREE.Mesh(geo, toonMat(color, { side: THREE.DoubleSide }));
   mesh.receiveShadow = true;
+  mesh.name = "camp-flat-patch"; // 薄装饰色块（沙滩/浅海），沉降 pass 不作地表
   mesh.userData.lift = lift;
   return mesh;
 }
@@ -93,6 +94,8 @@ export function buildStartingCamp(scene, R) {
   for (const [x, z, rx, rz] of seaSpots) {
     put(flatPatch(rnd, rx, rz, SHALLOW, 0.18), x, z, 0.18, rnd() * Math.PI);
   }
+  // 叠瀑落水口浅海（随级流反向）
+  put(flatPatch(rnd, 2.8, 2.0, SHALLOW, 0.18), -15.4, 13, 0.18, rnd() * Math.PI);
 
   // 下海小台阶（草坡 → 沙滩）
   for (let i = 0; i < 3; i++) {
@@ -105,9 +108,9 @@ export function buildStartingCamp(scene, R) {
     put(step, 5.2 + i * 0.6, 9.2 + i * 0.7, 0.58 - i * 0.05, 0.3);
   }
 
-  // ---------- 2. 左侧荒山与山洞（约 -15 处，玩家 3 倍高） ----------
+  // ---------- 2. 左侧荒山与山洞（约 -18.1 处，玩家 3 倍高；整组西移让开电车轨道走廊，岩块不再压车体） ----------
   const rockMat = toonMat(ROCK);
-  const HILL = { x: -15, z: 6 };
+  const HILL = { x: -18.1, z: 6.2 };
   // 底座三块围出缺口（山洞），顶部两块收拢
   const crags = [
     [HILL.x - 1.1, HILL.z + 0.2, 2.2, 1.1],
@@ -132,6 +135,7 @@ export function buildStartingCamp(scene, R) {
   // ---------- 3. 崖壁叠瀑 + 太空水环 ----------
   // 旧版这里用 BoxGeometry 做四块“水板”，从侧面看会变成悬空绿板。
   // 改为多股窄而有厚度的水流，沿崖壁逐级下落，不再出现矩形占位面。
+  // 随荒山岩群西移让开电车轨道走廊（原 -11.2 会被轨道穿过瀑布）
   const fallMat = toonMat(FALL, {
     emissive: FALL_LIGHT,
     emissiveIntensity: 0.25,
@@ -146,7 +150,7 @@ export function buildStartingCamp(scene, R) {
     opacity: 0.68,
     depthWrite: false,
   });
-  const FALL_X = -11.2;
+  const FALL_X = -13.9;
   for (let i = 0; i < 4; i++) {
     const y = 2.75 - i * 0.95;
     const z = 8.2 + i * 1.1;
@@ -160,14 +164,14 @@ export function buildStartingCamp(scene, R) {
       stream.position.set(streamIndex * 0.22, -height * 0.5, 0);
       stream.rotation.z = streamIndex * 0.07;
       stream.castShadow = false;
-      put(stream, FALL_X + i * 0.45, z, groundLiftAt(FALL_X, z) + y, 0.12);
+      put(stream, FALL_X - i * 0.45, z, groundLiftAt(FALL_X, z) + y, 0.12); // 级流向山西侧斜落，避开电车车道
     }
   }
-  // 瀑底入水泡沫
+  // 瀑底入水泡沫（随级流反向）
   for (const [dx, dz, s] of [[0.3, 12.4, 0.34], [0.9, 12.9, 0.26], [-0.2, 13.1, 0.22]]) {
     const foam = new THREE.Mesh(facet(new THREE.IcosahedronGeometry(0.3, 0)), toonMat(0xd8f2ec));
     foam.scale.set(s * 1.7, s * 0.4, s);
-    put(foam, FALL_X + dx, dz, 0.24, rnd() * Math.PI);
+    put(foam, FALL_X - dx, dz, 0.24, rnd() * Math.PI);
   }
   // 太空水环（远景高空，半透明青绿巨环）
   const skyRing = new THREE.Mesh(
@@ -225,7 +229,7 @@ export function buildStartingCamp(scene, R) {
   addOutline(keys, 0.006);
   elder.add(keys);
   elder.userData.musicKeys = keys;
-  const ELDER = { x: -12.3, z: 4.5 }; // 距荒山中心 ~3.4、距松 >3
+  const ELDER = { x: -17, z: 9 }; // 原 (-12.3,4.5) 被轨道穿过，移到山洞旁（距轨道 4.33）
   put(elder, ELDER.x, ELDER.z, groundLiftAt(ELDER.x, ELDER.z), 2.6); // 面转向营地
   colliders.push({ position: elder.position.clone(), radius: 0.8 });
 
@@ -244,12 +248,15 @@ export function buildStartingCamp(scene, R) {
   colliders.push(foxCol);
 
   // ---------- 5. 营地周边：古松两株 + 花草点缀 ----------
-  for (const [x, z] of [[7, 2], [-7, 13]]) {
+  // 原 (-7,13) 古松树冠压电车车体（全程扫描 d=2.88），移到 (-2,12.5)（轨道净空 7.26）
+  for (const [x, z] of [[7, 2], [-2, 12.5]]) {
     const pine = createAncientPineTree();
     pine.scale.multiplyScalar(0.85);
+    pine.userData.settle = true; // 后建地形（沙滩/苔丘）不得埋树，收尾沉降 pass 抬回地表
     put(pine, x, z, groundLiftAt(x, z), rnd() * Math.PI * 2);
     colliders.push({ position: pine.position.clone(), radius: 0.5 });
   }
+  const campFlowers = [];
   for (let i = 0; i < 8; i++) {
     const a = rnd() * Math.PI * 2;
     const d = 3 + rnd() * 5;
@@ -258,12 +265,13 @@ export function buildStartingCamp(scene, R) {
     if (Math.hypot(x - ELDER.x, z - ELDER.z) < 3) continue; // 老人净空 3 单位
     const flower = createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]);
     put(flower, x, z, groundLiftAt(x, z) + 0.01, rnd() * Math.PI * 2);
+    campFlowers.push(flower); // 收尾由场景层修剪贴轨花（轨道后建，此处未知）
   }
 
   scene.add(g);
   return {
     group: g,
     colliders,
-    landmarks: { elder, foxAli: ali, skyRing, hillCenter: HILL },
+    landmarks: { elder, foxAli: ali, skyRing, hillCenter: HILL, campFlowers },
   };
 }

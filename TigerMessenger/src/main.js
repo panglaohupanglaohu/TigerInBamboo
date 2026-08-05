@@ -15,6 +15,7 @@ import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createDayNight } from "./world/dayNight.js";
 import { createTramRide } from "./player/tramRide.js";
 import { createAirshipRide } from "./player/airshipRide.js";
+import { createAircraftRide } from "./player/aircraftRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
@@ -36,6 +37,8 @@ import {
   showToast,
   updateToast,
   initQuestPanelCollapse,
+  showBubble,
+  hideBubble,
 } from "./ui/hud.js";
 import {
   ensureAudio,
@@ -233,6 +236,21 @@ const airshipRide = createAirshipRide({
   toast: showToast,
 });
 
+// ---------- 水晶城巡逻飞行器 · 第一人称驾驶舱（[V] 进入/退出） ----------
+const aircraftRide = createAircraftRide({
+  camera,
+  cameraRig,
+  getSquad: () => messenger?.landmarks?.aircraftSquad || null,
+  exitAirshipRide: () => airshipRide.forceExit(),
+});
+
+// [V] 进入/退出飞行器驾驶舱
+window.addEventListener("keydown", (e) => {
+  if (e.repeat || e.code !== "KeyV") return;
+  const on = aircraftRide.toggle();
+  showToast(on ? "已进入飞行器驾驶舱 · [V] 退出" : "已退出飞行器驾驶舱", 2.4);
+});
+
 // ---------- 天气（雨/雪/闪电/停雨彩虹，受风速风向影响） ----------
 const weather = createWeatherSystem(scene, PLANET_RADIUS, {
   skyRing: messenger?.landmarks?.camp?.landmarks?.skyRing || null,
@@ -251,6 +269,46 @@ const elderMusic = createElderMusicInteraction({
 const MOEBIUS_SKY = new THREE.Color(0xebb9b6); // 莫比斯黄昏粉紫
 const MOEBIUS_SUN = new THREE.Color(0xf0c294); // 暖橙日光
 let moebiusFactor = 0;
+
+// ---------- 送信人感叹气泡（暮云眺望云墙、手持信件时） ----------
+let poemBubbleActive = false; // “烽火连三月，家书抵万金”是否已弹出
+
+/**
+ * 玩家是否“面对云墙”：取最近的赤道云墙塔，判断水平视线是否投向该塔。
+ * 云墙为绕赤道的环，临近赤道、抬头/平视望向塔身即视为面对云墙。
+ */
+const _vToTower = new THREE.Vector3();
+const _camFwd = new THREE.Vector3();
+const _up = new THREE.Vector3();
+const _fwdH = new THREE.Vector3();
+const _towerH = new THREE.Vector3();
+function isFacingCloudWall(p, cam, cloudWall) {
+  const towers = cloudWall?.userData?.towers;
+  if (!towers || !towers.length) return false;
+  // 最近的一根云墙塔
+  let best = null;
+  let bestD = Infinity;
+  for (const tw of towers) {
+    const d = p.position.distanceToSquared(tw.position);
+    if (d < bestD) {
+      bestD = d;
+      best = tw;
+    }
+  }
+  if (!best) return false;
+  _vToTower.copy(best.position).sub(p.position);
+  // 仅取水平（切平面）分量：玩家“面对”云墙是朝向切向，而非纯抬头
+  _up.copy(p.position).normalize();
+  _towerH.copy(_vToTower).addScaledVector(_up, -_vToTower.dot(_up));
+  if (_towerH.lengthSq() < 1e-4) return false; // 正下方/正上方，不计入
+  _towerH.normalize();
+  cam.getWorldDirection(_camFwd);
+  _fwdH.copy(_camFwd).addScaledVector(_up, -_camFwd.dot(_up));
+  if (_fwdH.lengthSq() < 1e-4) return false;
+  _fwdH.normalize();
+  return _fwdH.dot(_towerH) > 0.5; // 视线与指向云墙的切向夹角 < 60°
+}
+
 function updateMoebiusBarrier(dt) {
   const tramSystem = messenger?.landmarks?.tramSystem;
   const tram = tramSystem?.tram;
@@ -315,25 +373,11 @@ const timer = new Timer();
 cameraRig.snapToPlayer();
 playerGroup.position.copy(player.position);
 
-let fpsFrames = 0;
-let fpsAccum = 0;
-const showFps = /[?&]fps=1\b/.test(location.search);
-
 function animate() {
   requestAnimationFrame(animate);
   timer.update();
   const dt = Math.min(timer.getDelta(), 0.05);
   const t = performance.now() * 0.001;
-
-  fpsFrames += 1;
-  fpsAccum += dt;
-  if (fpsAccum >= 5) {
-    const fps = fpsFrames / fpsAccum;
-    if (showFps) document.title = `TigerMessenger · ${fps.toFixed(0)} fps`;
-    if (fps < 25) console.warn(`[TigerMessenger] 帧率偏低: ${fps.toFixed(1)} fps`);
-    fpsFrames = 0;
-    fpsAccum = 0;
-  }
 
   updateToast(dt);
   dayNight.update(dt);
@@ -341,8 +385,8 @@ function animate() {
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   mapEditor.tickHighlight?.();
 
-  // 搭乘接管：电车上车动画/乘坐 或 航空艇攀爬/驾驶时跳过移动与碰撞
-  const riding = tramRide.update(dt) || airshipRide.update(dt);
+  // 搭乘接管：飞行器驾驶舱优先（[V]）；否则电车/航空艇
+  const riding = aircraftRide.update() || tramRide.update(dt) || airshipRide.update(dt);
   if (!riding) {
     updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
     resolveCollisions(
@@ -378,7 +422,7 @@ function animate() {
   }
 
   // 场景模块自更新（湖、云、平台脉动等）
-  updateScenes(sceneHandles, dt, t, { player, gameStarted });
+  updateScenes(sceneHandles, dt, t, { player, gameStarted, keys });
 
   syncPlayerVisual(player, playerGroup);
 
@@ -404,6 +448,27 @@ function animate() {
   bookshopFlock?.update(dt, t); // 书店上方鸟群忽聚忽散
   devPanel.tick(dt);
 
+  // ---------- 送信人念诗歌：手持信件 + 视野里有云墙即触发（不限时段） ----------
+  {
+    const hasLetter = !!player.holdingLetter;        // 1) 手持信件
+    const facingWall = isFacingCloudWall(player, camera, equatorialClouds); // 2) 视野里有云墙
+
+    // 只要手持信件且看到云墙，就触发念诗气泡
+    if (!poemBubbleActive && hasLetter && facingWall) {
+      showBubble(
+        "烽火连三月，家书抵万金",
+        window.innerWidth / 2,
+        window.innerHeight * 0.7
+      );
+      poemBubbleActive = true;
+    }
+    // 失去信件或离开云墙则收起
+    if (poemBubbleActive && (!hasLetter || !facingWall)) {
+      hideBubble();
+      poemBubbleActive = false;
+    }
+  }
+
   renderer.render(scene, camera);
 }
 
@@ -414,6 +479,7 @@ window.__tm = {
   player,
   quest,
   cameraRig,
+  camera, // 调试/验收截图用
   P,
   scene,
   planet,

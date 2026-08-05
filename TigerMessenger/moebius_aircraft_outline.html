@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>莫比斯复古科幻飞船 · 卡通描边 + 青柠内饰光源</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #0d1117; }
+  canvas { display: block; }
+  #info {
+    position: fixed; top: 12px; left: 12px; z-index: 10;
+    color: #c9d1d9; font: 13px/1.6 -apple-system, "Helvetica Neue", sans-serif;
+    background: rgba(13,17,23,.55); padding: 8px 12px; border-radius: 8px;
+    pointer-events: none; user-select: none;
+  }
+</style>
+</head>
+<body>
+<div id="info">莫比斯复古科幻飞船 · 卡通黑色描边 + 青柠内饰光源<br/>拖拽旋转 · 滚轮缩放</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+// =====================================================================
+//  通用描边 Helper：EdgesGeometry + LineSegments 黑色硬描边
+// =====================================================================
+function addOutline(mesh, color = 0x000000) {
+  if (!mesh.geometry) return null;
+  const edges = new THREE.EdgesGeometry(mesh.geometry);
+  const line = new THREE.LineSegments(
+    edges,
+    new THREE.LineBasicMaterial({ color, linewidth: 2 })
+  );
+  mesh.add(line);
+  return line;
+}
+
+// =====================================================================
+//  外壳剖面半径函数：前端尖细 -> 中段膨胀 -> 尾部收窄（钟形流线）
+//  u: 0(尾) .. 1(头)
+// =====================================================================
+function hullRadiusAt(u, MIDR = 1.35) {
+  return Math.sin(Math.PI * (u * 0.92 + 0.04)) * MIDR * (0.55 + 0.45 * Math.sin(Math.PI * u));
+}
+const LEN = 7.0;
+
+// =====================================================================
+//  创建莫比斯飞船（拉长玻璃灯泡造型 · 全部件描边 · 青柠内饰光源）
+//  机身长轴沿 +Z（机头朝 +Z）
+// =====================================================================
+function createMoebiusAircraft() {
+  const g = new THREE.Group();
+  g.name = "moebius-aircraft";
+
+  // ---------- 1. 外层半透明玻璃外壳（淡青柠绿） ----------
+  const seg = 30;
+  const profile = [];
+  for (let i = 0; i <= seg; i++) {
+    const u = i / seg;
+    const z = (u - 0.5) * LEN;
+    profile.push(new THREE.Vector2(Math.max(hullRadiusAt(u), 0.02), z));
+  }
+  const hullGeo = new THREE.LatheGeometry(profile, 48);
+  hullGeo.rotateX(Math.PI / 2); // 机头朝 +Z
+
+  const hull = new THREE.Mesh(hullGeo, new THREE.MeshPhysicalMaterial({
+    color: 0xa8ffb2,          // 淡青柠绿玻璃
+    transparent: true,
+    opacity: 0.4,
+    roughness: 0.1,
+    metalness: 0.1,
+    transmission: 0.7,
+    ior: 1.4,
+    thickness: 0.6,
+    emissive: 0x113311,       // 弱自发光青柠，确保轮廓清晰
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.2,
+  }));
+  addOutline(hull);
+  g.add(hull);
+
+  // ---------- 2. 机身骨架环（黑/深灰金属环） ----------
+  const ringMat = new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.55, metalness: 0.7 });
+  const ringZs = [-2.4, -0.6, 1.2, 2.6];
+  for (const rz of ringZs) {
+    const u = rz / LEN + 0.5;
+    const r = Math.max(hullRadiusAt(u), 0.12) + 0.05;
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.06, 12, 40), ringMat);
+    ring.rotation.y = Math.PI / 2;
+    ring.position.z = rz;
+    addOutline(ring);
+    g.add(ring);
+  }
+
+  // ---------- 3. 内部青柠色核心光源与引擎 ----------
+  // 3a. 青柠色强点光源（彻底照亮内部）
+  const coreLight = new THREE.PointLight(0x32cd32, 5, 20, 2);
+  coreLight.position.z = 1.3;
+  g.add(coreLight);
+
+  // 3b. 发光青柠色能量球
+  const core = new THREE.Mesh(
+    new THREE.SphereGeometry(0.7, 32, 24),
+    new THREE.MeshStandardMaterial({
+      color: 0x32cd32, emissive: 0x32cd32, emissiveIntensity: 2,
+      roughness: 0.4, metalness: 0,
+    })
+  );
+  core.scale.set(1, 1, 1.2);
+  core.position.z = 1.3;
+  addOutline(core);
+  g.add(core);
+
+  // 3c. 拧麻花状能量管（青柠渐变浅绿）
+  const tubePts = [];
+  const tubeLen = 4.2;
+  for (let i = 0; i <= 40; i++) {
+    const t = i / 40;
+    const z = 1.2 - t * tubeLen;
+    const ang = t * Math.PI * 5.0;
+    const rad = 0.18 * (1 - t * 0.55);
+    tubePts.push(new THREE.Vector3(Math.sin(ang) * rad, Math.cos(ang) * rad, z));
+  }
+  const tubeCurve = new THREE.CatmullRomCurve3(tubePts);
+  const tubeGeo = new THREE.TubeGeometry(tubeCurve, 80, 0.16, 12, false);
+  {
+    const pos = tubeGeo.attributes.position;
+    const colors = new Float32Array(pos.count * 3);
+    const cFront = new THREE.Color(0x32cd32);
+    const cBack = new THREE.Color(0xa8ffb2);
+    for (let i = 0; i < pos.count; i++) {
+      const t = i / (pos.count - 1);
+      const c = cFront.clone().lerp(cBack, t);
+      colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
+    }
+    tubeGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  }
+  const tube = new THREE.Mesh(tubeGeo, new THREE.MeshStandardMaterial({
+    vertexColors: true, emissive: 0x32cd32, emissiveIntensity: 0.6,
+    roughness: 0.5, metalness: 0.1,
+  }));
+  addOutline(tube);
+  g.add(tube);
+
+  // 3d. 尾部喷口（灰黑机械喷罩）
+  const nozzleMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2e, roughness: 0.45, metalness: 0.85 });
+  const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.32, 0.9, 24, 1, true), nozzleMat);
+  nozzle.rotation.x = Math.PI / 2;
+  nozzle.position.z = -3.2;
+  addOutline(nozzle);
+  g.add(nozzle);
+  const nozzleRing = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.07, 10, 24), nozzleMat);
+  nozzleRing.rotation.y = Math.PI / 2;
+  nozzleRing.position.z = -2.75;
+  addOutline(nozzleRing);
+  g.add(nozzleRing);
+
+  // ---------- 4. 头部鼻锥（灰白锥 + 黑圈纹 + 金属探针） ----------
+  const nose = new THREE.Mesh(
+    new THREE.ConeGeometry(0.42, 1.6, 28),
+    new THREE.MeshStandardMaterial({ color: 0xd9d4c8, roughness: 0.6, metalness: 0.2 })
+  );
+  nose.rotation.x = Math.PI / 2;
+  nose.position.z = 3.9;
+  addOutline(nose);
+  g.add(nose);
+  const noseBandMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5, metalness: 0.4 });
+  for (const bz of [3.5, 3.9, 4.3]) {
+    const band = new THREE.Mesh(new THREE.TorusGeometry(0.40, 0.035, 8, 24), noseBandMat);
+    band.rotation.y = Math.PI / 2;
+    band.position.z = bz;
+    addOutline(band);
+    g.add(band);
+  }
+  const probe = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.02, 0.05, 0.7, 8),
+    new THREE.MeshStandardMaterial({ color: 0xbfc4cc, roughness: 0.3, metalness: 0.9 })
+  );
+  probe.rotation.x = Math.PI / 2;
+  probe.position.z = 5.2;
+  addOutline(probe);
+  g.add(probe);
+
+  // ---------- 5. 尾翼（4 片鱼鳍，浅灰 + 棕色条纹拼色） ----------
+  const finGray = new THREE.MeshStandardMaterial({ color: 0xcabfa8, roughness: 0.7, metalness: 0.1, side: THREE.DoubleSide });
+  const finBrown = new THREE.MeshStandardMaterial({ color: 0x7a5a3a, roughness: 0.75, metalness: 0.1, side: THREE.DoubleSide });
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2;
+    const fin = new THREE.Group();
+    const base = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.6, 0.08), finGray);
+    base.position.y = 0.8;
+    addOutline(base);
+    fin.add(base);
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.7, 0.1), finBrown);
+    stripe.position.y = 0.5;
+    addOutline(stripe);
+    fin.add(stripe);
+    fin.position.z = -2.6;
+    fin.rotation.z = a;
+    g.add(fin);
+  }
+
+  // ---------- 6. 驾驶舱青柠色辅助光源 ----------
+  const cockpitLight = new THREE.PointLight(0x9cff5e, 2.4, 26, 1.6);
+  cockpitLight.position.set(0, 0.55, 1.9);
+  g.add(cockpitLight);
+
+  // 喷焰（机尾，向后脉动）
+  const flames = [];
+  const flameMat = new THREE.MeshBasicMaterial({ color: 0xff8a3c, transparent: true, opacity: 0.6 });
+  for (const sx of [-1, 1]) {
+    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.3, 1.3, 6), flameMat);
+    flame.rotation.x = -Math.PI / 2;
+    flame.position.set(sx * 0.32, 0, -3.7);
+    g.add(flame);
+    flames.push(flame);
+  }
+
+  g.userData.thrusters = [core];
+  g.userData.flames = flames;
+  return g;
+}
+
+// =====================================================================
+//  场景 / 相机 / 渲染器
+// =====================================================================
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1f2e);
+scene.fog = new THREE.Fog(0x1a1f2e, 30, 90);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 500);
+camera.position.set(14, 8, 18);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.target.set(0, 0, 0);
+controls.minDistance = 8;
+controls.maxDistance = 60;
+
+// ---------- 灯光 ----------
+scene.add(new THREE.AmbientLight(0x4a5568, 0.7));
+const keyLight = new THREE.DirectionalLight(0xfff4e0, 1.2);
+keyLight.position.set(10, 15, 8);
+scene.add(keyLight);
+const rimLight = new THREE.DirectionalLight(0x6b8cff, 0.5);
+rimLight.position.set(-8, 4, -10);
+scene.add(rimLight);
+
+// ---------- 飞船 ----------
+const aircraft = createMoebiusAircraft();
+scene.add(aircraft);
+
+// ---------- 动画循环：微微悬停浮动 ----------
+const clock = new THREE.Clock();
+function animate() {
+  const t = clock.getElapsedTime();
+  const dt = clock.getDelta();
+
+  // 悬停浮动
+  aircraft.position.y = Math.sin(t * 0.8) * 0.4;
+  aircraft.rotation.z = Math.sin(t * 0.5) * 0.03;
+
+  // 喷焰脉动
+  const pulse = 0.8 + Math.sin(t * 14) * 0.25;
+  for (const f of aircraft.userData.flames) f.scale.set(1, pulse, 1);
+
+  // 内核发光脉动
+  const glow = 1.6 + Math.sin(t * 10) * 0.5;
+  for (const c of aircraft.userData.thrusters) {
+    if (c.material.emissiveIntensity !== undefined) c.material.emissiveIntensity = glow;
+  }
+
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+animate();
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>

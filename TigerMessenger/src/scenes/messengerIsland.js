@@ -9,8 +9,8 @@ import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { P } from "../core/params.js";
 import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
-import { buildHills } from "../world/hills.js";
-import { decorateFarSide, decoratePlayZone, createCloudRing } from "../world/nature.js";
+import { buildHills, carveHillsForTrack } from "../world/hills.js";
+import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
 import {
   createGreatLake,
   createMoonLake,
@@ -28,6 +28,11 @@ import { swampMidwayDir } from "../world/moebiusSwamp.js";
 import { SAIHOJI_ZONES } from "../world/saihoji.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
+import {
+  createMoebiusAircraftSquad,
+  updateAircraftHover,
+} from "../assets/moebiusAircraft.js";
+import { createBubblePodsAroundFlowerBuildings, updateBubblePodPatrol } from "../assets/bubblePod.js";
 import { groundLiftAt } from "../world/hills.js";
 import { placeObjectOnSphere, latLonToDir, flatXZToLatLon } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
@@ -106,8 +111,27 @@ export const messengerIslandScene = {
       beamTarget: grandTopTarget,
     });
 
+    // 轨道走廊压平丘陵：轨道在岛面平铺不爬山，走廊上山体高于轨面会穿轨/穿车体
+    carveHillsForTrack(hills.mesh, [tramSystem.curve, ...Object.values(tramSystem.curves || {})], R);
+
+    // 营地花草不得长在电车轨道上：贴近车道采样点的花直接修剪
+    {
+      const trackPts = [tramSystem.curve, ...Object.values(tramSystem.curves || {})].flatMap((c) =>
+        c.getPoints(320)
+      );
+      for (const flower of camp.landmarks.campFlowers || []) {
+        if (trackPts.some((p) => p.distanceToSquared(flower.position) < 2.2 * 2.2)) {
+          flower.removeFromParent();
+        }
+      }
+    }
+
     // 莫比斯水晶大都会（南半球千座晶林，让开轨道走廊）
     const moebius = buildMoebiusCrystalMetropolis(scene, R, { trackCurve: tramSystem.curve });
+
+    // 3 艘气泡座舱分别围绕水晶城 3 座含花厅的建筑巡游。
+    const bubblePods = createBubblePodsAroundFlowerBuildings(scene, moebius.crystals, { count: 3 });
+
 
     // Boids 鸟群：低多边形手绘风群飞，漫游南半球大峡谷高空（35–45 高度带）
     // 三大定律 + 相位差扑翅 + 球心重力锁；晶塔柱体作避障障碍
@@ -151,6 +175,25 @@ export const messengerIslandScene = {
     // 绣球花丛围绕书店（程序布局；单丛仍可用地图放置 hydrangea）
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
+
+    // 水晶城母塔 ↔ 书店低速往返：从水晶城出发，抵达书店后停留再折返。
+    // 航线锚点取母塔方向与书店当前初始化方向；速度上限 1.2，避免飞行过快。
+    const cityDir = grandDir.clone().normalize();
+    const bookshopDir = bookshop.position.clone().normalize();
+    const aircraftHeight = 20;
+    const aircraftSquad = createMoebiusAircraftSquad(cityDir, R, {
+      count: 10, // 5 → 10 艘，人字阵更壮观
+      height: aircraftHeight,
+      radius: 13, // 编队变大，配合双倍机数拉开翼展
+      spin: 0.06,
+      formation: "v",
+      patrol: {
+        dirA: cityDir,
+        dirB: bookshopDir,
+        maxSpeed: 1.2,
+      },
+    });
+    scene.add(aircraftSquad);
 
     // 莫比斯湖沼：请用地图编辑器放置「莫比斯湖沼」(moebiusSwamp)
     // createMoebiusSwampPlacement / createCatalogObject("moebiusSwamp")
@@ -211,13 +254,16 @@ export const messengerIslandScene = {
 
     // ---------- 厚涂苔丘草地（Impasto Mossy Knolls）：西芳寺缘 + 湖沼边缘 ----------
     // 安全阻尼：电车铁轨采样点 / 书店大门（minDistance = 4，见 mossyGround.js）
+    // flatten = true：苔丘连续地形在走廊内衰减为 0，防 bump 穿轨/穿车体
     const mossAvoidCommon = tramSystem.curve.getPoints(60).map((p) => ({
       position: p,
       radius: 1.2,
+      flatten: true,
     }));
     mossAvoidCommon.push({
       position: bookshop.position,
       radius: bookshop.userData.collideRadius || 3,
+      flatten: true,
     });
     // ① 西芳寺缘：入口苔径 ↔ 主石之庭 的路线间隙；草丛避开六景石组庭园
     const zoneAvoid = SAIHOJI_ZONES.map((z) => ({
@@ -251,6 +297,10 @@ export const messengerIslandScene = {
     ];
     if (moonLake?.deepCollider) colliders.push(moonLake.deepCollider);
 
+    // 安置沉降 pass（全部地形建完后）：被苔丘/土坡/营地埋住的树/石抬回地表，
+    // 走廊压平后悬空的岩石落回地面——树木种在草坡上，而不是被埋
+    settleBuriedAssets(scene, colliders);
+
     return {
       id: "messenger",
       platforms,
@@ -268,10 +318,12 @@ export const messengerIslandScene = {
         harbor,
         oldHarbor: harborBuilt,
         moebius,
+        bubblePods, // 围绕水晶城 3 座花厅建筑巡游的气泡座舱
         airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
         flock, // Boids 低多边形手绘鸟群（南半球高空）
         hallFlock, // 花厅楼顶 Boids 鸟群（母皇塔尖环绕）
         escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
+        aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
         mossSaihoji, // 厚涂苔丘 · 西芳寺缘
         mossSwamp, // 厚涂苔丘 · 湖沼边缘
       },
@@ -279,6 +331,11 @@ export const messengerIslandScene = {
         updatePlatformPulse(platforms, t);
         updateClouds(clouds, dt, t, { speed: P.windSpeed, dirDeg: P.windDir });
         tramSystem.update(dt, runtime?.player?.position);
+
+        // 水晶城母塔 ↔ 书店低速往返：更新航线位置、姿态、喷焰和青柠驾驶舱脉动。
+        updateAircraftHover(aircraftSquad, t, dt);
+        // 3 艘气泡座舱分别围绕 3 座花厅建筑巡游
+        updateBubblePodPatrol(bubblePods, t);
 
         // 地图放置的湖沼/飞艇动效（鲸/舟/悬浮艇）
         scene.traverse((o) => {

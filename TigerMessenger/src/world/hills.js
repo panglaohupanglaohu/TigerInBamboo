@@ -80,6 +80,63 @@ export function groundLiftAt(x, z) {
   return ISLAND_BASE_LIFT + hillHeightAt(x, z) + pondDepressionAt(x, z);
 }
 
+/**
+ * 沿电车轨道走廊压平丘陵：轨道在岛面保持平铺（不爬山），
+ * 若走廊上山体高于轨道会穿轨/穿车体，故把走廊内顶点降到 capLift。
+ * 只改视觉网格（groundLiftAt 不变）；走廊内树/石由 settle pass 重新落地。
+ * @param {THREE.Mesh} hillsMesh buildHills 返回的主网格
+ * @param {THREE.Curve[]} trackCurves 电车曲线数组（中心线 + 双线，世界坐标）
+ * @param {number} R 星球半径
+ * @param {number} [capLift=0.62] 压平目标高度（低于轨面 0.78，留枕木净空）
+ */
+export function carveHillsForTrack(hillsMesh, trackCurves, R, capLift = 0.62) {
+  if (!hillsMesh || !trackCurves?.length) return;
+  const pts = [];
+  for (const curve of trackCurves) {
+    for (const p of curve.getPoints(160)) {
+      const f = worldToFlatXZ(p, R);
+      if (f) pts.push(f);
+    }
+  }
+  if (!pts.length) return;
+  const nx = Math.round((GRID_MAX_X - GRID_MIN_X) / GRID_STEP) + 1;
+  const nz = Math.round((GRID_MAX_Z - GRID_MIN_Z) / GRID_STEP) + 1;
+  const pos = hillsMesh.geometry.attributes.position;
+  const tmp = new THREE.Vector3();
+  // 全压平半径：车道中心 ±0.9 + 车体半宽 ~1.3 + 余量；车体底角不得压山
+  const CORRIDOR_R = 4.4;
+  const FADE_R = 6.0; // 过渡带外缘，平滑接回原山体
+  let vi = 0;
+  let changed = false;
+  for (let iz = 0; iz < nz; iz++) {
+    for (let ix = 0; ix < nx; ix++, vi++) {
+      const x = GRID_MIN_X + ix * GRID_STEP;
+      const z = GRID_MIN_Z + iz * GRID_STEP;
+      const lift = groundLiftAt(x, z);
+      if (lift <= capLift + 1e-3) continue;
+      let dMin = Infinity;
+      for (const p of pts) {
+        const dx = x - p.x;
+        const dz = z - p.z;
+        if (dx > FADE_R || dx < -FADE_R || dz > FADE_R || dz < -FADE_R) continue;
+        const d = Math.sqrt(dx * dx + dz * dz);
+        if (d < dMin) dMin = d;
+      }
+      if (dMin >= FADE_R) continue;
+      const t = THREE.MathUtils.clamp((dMin - CORRIDOR_R) / (FADE_R - CORRIDOR_R), 0, 1);
+      const w = t * t * (3 - 2 * t); // smoothstep：走廊心 = 全压平，过渡缘 = 不变
+      const newLift = THREE.MathUtils.lerp(capLift, lift, w);
+      flatToWorld(x, newLift, z, R, tmp);
+      pos.setXYZ(vi, tmp.x, tmp.y, tmp.z);
+      changed = true;
+    }
+  }
+  if (changed) {
+    pos.needsUpdate = true;
+    hillsMesh.geometry.computeVertexNormals();
+  }
+}
+
 // —— 世界坐标 → 山区平面坐标（半球守卫：只在小岛所在半球有意义，防对跖幽灵吸附）
 // 与 flatXZToLatLon/latLonToDir 的经纬度约定互为逆变换（角度单位为度）。
 const _islandDir = latLonToDir(90, 0);

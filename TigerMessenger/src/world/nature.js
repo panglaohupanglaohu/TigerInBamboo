@@ -39,17 +39,18 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
   const lakeClear = GREAT_LAKE.angR + 0.1;
   const _d = new THREE.Vector3();
   // 远侧同步水墨色系（沉绿树 / 焦墨岩 / 低饱和花）
+  // 第三位 = settle 标记：地形后建（苔丘等）可能埋住资产，加载收尾时重新落地
   const defs = [
     // 远侧也统一使用截图 1 的横向云片古松，避免再出现截图 2 的锥形树。
-    [createAncientPineTree, 12],
-    [createLowPolyRock, 10],
+    [createAncientPineTree, 12, true],
+    [createLowPolyRock, 10, true],
     [
       () => createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]),
       16,
     ],
     [createLowPolyHouse, 0], // 房屋已删除；工厂已水墨化备用
   ];
-  for (const [make, count] of defs) {
+  for (const [make, count, settle] of defs) {
     for (let i = 0; i < count; i++) {
       for (let attempt = 0; attempt < 30; attempt++) {
         const lat = -20 + rnd() * 65;
@@ -60,6 +61,7 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
         const obj = placeOnSphere(make(), lat, lon, planetRadius);
         obj.rotateY(rnd() * Math.PI * 2);
         obj.scale.multiplyScalar(0.85 + rnd() * 0.4);
+        if (settle) obj.userData.settle = true;
         scene.add(obj);
         meshes.push(obj);
         pushCollider(colliders, obj);
@@ -194,6 +196,7 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
         placeObjectOnSphere(obj, x, z, groundLiftAt(x, z), planetRadius); // 岛面+土坡真实抬升
         obj.rotateY(rnd() * Math.PI * 2);
         obj.scale.multiplyScalar(rule.scale[0] + rnd() * (rule.scale[1] - rule.scale[0]));
+        if (kind === "trees" || kind === "rocks") obj.userData.settle = true;
         scene.add(obj);
         meshes.push(obj);
         pushCollider(colliders, obj);
@@ -210,6 +213,7 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
     const obj = createAncientPineTree();
     placeObjectOnSphere(obj, x, z, groundLiftAt(x, z), planetRadius);
     obj.scale.multiplyScalar(0.55 + rnd() * 0.15); // 高台树稍小，避免压迫
+    obj.userData.settle = true;
     scene.add(obj);
     meshes.push(obj);
     pushCollider(colliders, obj);
@@ -237,4 +241,71 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
   }
 
   return { meshes, colliders };
+}
+
+/**
+ * 安置沉降 pass（全部地形建完后调用）：把标记 userData.settle 的资产
+ * （树/石）沿径向射线找回真实地表，被埋的抬到面上、悬空的下落到面上。
+ * 修复：苔丘/书店土坡/营地等后建地形埋住先种的树；丘陵被轨道走廊
+ * 压平后岩石悬空。只认地形类网格，不会把树抬到电车/建筑上。
+ * @param {THREE.Scene} scene
+ * @param {{position: THREE.Vector3, radius: number}[]} [colliders] 同步更新的碰撞体列表
+ * @returns {number} 移动的资产数
+ */
+export function settleBuriedAssets(scene, colliders = []) {
+  const targets = [];
+  scene.traverse((o) => {
+    if (o.userData?.settle) targets.push(o);
+  });
+  if (!targets.length) return 0;
+  scene.updateMatrixWorld(true);
+  const ray = new THREE.Raycaster();
+  const _up = new THREE.Vector3();
+  const _origin = new THREE.Vector3();
+  const _down = new THREE.Vector3();
+  const TERRAIN_RE = /hill|mossy|berm|soil|ground|island|camp|platform|skirt|terrain/;
+  let moved = 0;
+  for (const obj of targets) {
+    _up.copy(obj.position).normalize();
+    const baseR = obj.position.length();
+    _origin.copy(_up).multiplyScalar(baseR + 14);
+    _down.copy(_up).negate();
+    ray.set(_origin, _down);
+    ray.far = 20;
+    const hits = ray.intersectObjects(scene.children, true);
+    let surfaceR = null;
+    for (const h of hits) {
+      let o = h.object;
+      let self = false;
+      let nm = "";
+      while (o) {
+        if (o === obj) { self = true; break; }
+        if (o.name && !nm) nm = o.name;
+        o = o.parent;
+      }
+      if (self) continue;
+      if (!TERRAIN_RE.test(nm.toLowerCase())) continue;
+      // 营地薄装饰色块（沙滩/浅海，lift 低于岛面）不作地表，否则会把树压到色块下
+      if (h.object.name === "camp-flat-patch") continue;
+      surfaceR = h.point.length(); // 径向最高地表 = 该处的“地面”
+      break;
+    }
+    if (surfaceR === null) continue;
+    const delta = surfaceR + 0.02 - baseR;
+    if (Math.abs(delta) < 0.06) continue; // 已贴地，不动
+    if (delta > 6 || delta < -3) continue; // 异常值安全网（防误抬上高空/沉入球体）
+    const oldPos = obj.position.clone();
+    obj.position.addScaledVector(_up, delta);
+    obj.updateMatrixWorld(true);
+    // 同步最近的碰撞体（碰撞表在 load 早期已克隆坐标）
+    let best = null;
+    let bestD = 0.8;
+    for (const c of colliders) {
+      const d = c.position.distanceTo(oldPos);
+      if (d < bestD) { bestD = d; best = c; }
+    }
+    if (best) best.position.copy(obj.position);
+    moved++;
+  }
+  return moved;
 }

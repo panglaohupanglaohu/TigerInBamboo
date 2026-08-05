@@ -22,6 +22,10 @@ export function getToonGradient() {
 /** 统一卡通材质（硬边 Cel-shading） */
 export function toonMat(color, opts = {}) {
   const { flatShading, ...materialOptions } = opts;
+  // MeshToonMaterial 不是 PBR 材质，不支持 metalness / roughness；
+  // 过滤掉兼容 StandardMaterial 的遗留参数，避免 Three.js 控制台告警。
+  delete materialOptions.metalness;
+  delete materialOptions.roughness;
   const material = new THREE.MeshToonMaterial({
     color,
     gradientMap: getToonGradient(),
