@@ -13,8 +13,8 @@ import { createCatalogObject, getBuildingDef, listBuildingTypes } from "./buildi
 
 const STORAGE_KEY = "tm.mapEditor.placements.v1";
 const MAP_EXTENT = 20; // 平面图默认半宽（世界 flat 单位，zoom=1）
-const MAP_ZOOM_MIN = 0.35;
-const MAP_ZOOM_MAX = 5;
+const MAP_ZOOM_MIN = 0.12; // 缩到最小可览整个半球（半宽 ≈ 167，覆盖 ±63 flat）
+const MAP_ZOOM_MAX = 10; // 放到最大看细节
 
 /**
  * @param {object} opts
@@ -292,8 +292,8 @@ export function createMapEditor({
       mapPanX += flatX0 - flatX1;
       mapPanZ += flatZ0 - flatZ1;
 
-      // 轻微限制平移，避免拖飞太远
-      const lim = MAP_EXTENT * 1.5;
+      // 轻微限制平移，避免拖飞太远（允许浏览整个半球，flat 范围约 ±63）
+      const lim = MAP_EXTENT * 4;
       mapPanX = Math.min(lim, Math.max(-lim, mapPanX));
       mapPanZ = Math.min(lim, Math.max(-lim, mapPanZ));
 
@@ -484,6 +484,19 @@ export function createMapEditor({
     bumpUidSeqFrom(uid);
     object.userData.mapUid = uid;
     scene.add(object);
+
+    // 场景结构类(diorama)：半透明展示，避免大型地形遮挡底下实体物体
+    if (def.diorama) {
+      object.userData.isDiorama = true;
+      object.traverse((o) => {
+        if (!o.material) return;
+        const mats = Array.isArray(o.material) ? o.material : [o.material];
+        for (const m of mats) {
+          m.transparent = true;
+          m.opacity = (m.opacity ?? 1) * 0.3;
+        }
+      });
+    }
 
     let collider = null;
     // 碰撞半径以工厂 userData 为准（与 nature.pushCollider 一致）
@@ -753,7 +766,7 @@ export function createMapEditor({
     // 网格（随缩放自适应步长）
     ctx.strokeStyle = "rgba(26,38,56,0.12)";
     ctx.lineWidth = 1;
-    const gridStep = half > 25 ? 10 : half > 12 ? 5 : half > 5 ? 2 : 1;
+    const gridStep = half > 60 ? 20 : half > 25 ? 10 : half > 12 ? 5 : half > 5 ? 2 : 1;
     const gridMin = Math.floor((-half + mapPanX) / gridStep) * gridStep - gridStep;
     const gridMax = Math.ceil((half + mapPanX) / gridStep) * gridStep + gridStep;
     const gridMinZ = Math.floor((-half + mapPanZ) / gridStep) * gridStep - gridStep;
@@ -789,18 +802,36 @@ export function createMapEditor({
       const def = getBuildingDef(p.type);
       const { px, py } = flatToCanvas(p.x, p.z);
       const sel = p.uid === selectedUid;
-      ctx.beginPath();
-      ctx.arc(px, py, sel ? 9 : 7, 0, Math.PI * 2);
-      ctx.fillStyle = def?.color || "#555";
-      ctx.fill();
-      if (sel) {
-        ctx.strokeStyle = "#ffe08a";
-        ctx.lineWidth = 3;
+      const isDiorama = !!def?.diorama;
+      const r = sel ? 9 : 7;
+
+      if (isDiorama) {
+        // 场景结构类：虚线圆 + 半透明填充，区别于实体物体
+        ctx.beginPath();
+        ctx.arc(px, py, r + 2, 0, Math.PI * 2);
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = def?.color || "#555";
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = sel ? "#ffe08a" : def?.color || "#555";
+        ctx.lineWidth = sel ? 2 : 1.5;
         ctx.stroke();
+        ctx.setLineDash([]);
       } else {
-        ctx.strokeStyle = "rgba(0,0,0,0.35)";
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(px, py, r, 0, Math.PI * 2);
+        ctx.fillStyle = def?.color || "#555";
+        ctx.fill();
+        if (sel) {
+          ctx.strokeStyle = "#ffe08a";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        } else {
+          ctx.strokeStyle = "rgba(0,0,0,0.35)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
       }
       // 朝向小刺
       ctx.beginPath();

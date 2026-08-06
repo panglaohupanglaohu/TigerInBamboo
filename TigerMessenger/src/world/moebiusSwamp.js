@@ -2563,3 +2563,102 @@ export function placeMoebiusSwampOnSphere(
   swampZone.position.copy(surface);
   return swampZone;
 }
+
+// =====================================================================
+//  独立工厂：绿黑斑纹小鱼群 / 萤火虫群
+//  从 createMoebiusSwampZone 内部逻辑提取，收拢为紧凑可放置组件。
+//  不改动 zone 原有 inline 生成逻辑（zone 内仍用大范围散布）。
+// =====================================================================
+
+/** 绿黑斑纹小鱼群（9条，圆形排布，可独立放置） */
+function buildFishSchool(rnd = Math.random) {
+  const g = new THREE.Group();
+  g.name = "swamp-fish-school";
+  const fishGreenMat = toonMat(FISH_GREEN, { flatShading: true });
+  const fishAltMat = toonMat(0x2e8f6e, { flatShading: true });
+  const spotMat = toonMat(FISH_DARK, { flatShading: true });
+  for (let i = 0; i < 9; i++) {
+    const fish = new THREE.Group();
+    fish.name = `swamp-fish-${i}`;
+    const fMat = i % 2 ? fishGreenMat : fishAltMat;
+    const fBody = part(new THREE.ConeGeometry(0.32, 1.3, 4), fMat, 0.014);
+    fBody.rotation.x = Math.PI / 2;
+    fish.add(fBody);
+    const fTail = part(new THREE.ConeGeometry(0.22, 0.5, 3), fMat, 0.01);
+    fTail.rotation.x = -Math.PI / 2;
+    fTail.position.z = -0.85;
+    fish.add(fTail);
+    for (let k = 0; k < 2 + (i % 2); k++) {
+      const spot = new THREE.Mesh(facet(new THREE.SphereGeometry(0.06, 4, 3)), spotMat);
+      spot.position.set((k - 1) * 0.22, 0.12, (rnd() - 0.5) * 0.5);
+      fish.add(spot);
+    }
+    // 独立放置：紧凑圆形排布（zone 内用 ±15 大范围，这里收拢到半径 ~1.5）
+    const a = (i / 9) * Math.PI * 2;
+    const d = 1.0 + (rnd() - 0.5) * 0.6;
+    fish.position.set(Math.cos(a) * d, (rnd() - 0.5) * 1.2, Math.sin(a) * d);
+    fish.userData.orbitR = d;
+    fish.userData.orbitY = fish.position.y;
+    fish.userData.phase = rnd() * Math.PI * 2;
+    fish.userData.speed = 0.25 + rnd() * 0.3;
+    g.add(fish);
+  }
+  return g;
+}
+
+/** 萤火虫群（46点辉光，球形散布，可独立放置） */
+function buildFireflies(rnd = Math.random) {
+  const g = new THREE.Group();
+  g.name = "swamp-fireflies";
+  for (let i = 0; i < 46; i++) {
+    const sp = glowSprite(i % 3 === 2 ? FIREFLY_B : FIREFLY_A, 0.5 + rnd() * 0.7, 0.8);
+    const a = rnd() * Math.PI * 2;
+    const d = rnd() * 5;
+    const y = rnd() * 6;
+    sp.position.set(Math.cos(a) * d, y, Math.sin(a) * d);
+    sp.userData.baseX = sp.position.x;
+    sp.userData.baseY = sp.position.y;
+    sp.userData.baseZ = sp.position.z;
+    sp.userData.range = 1.5 + rnd() * 2.5;
+    sp.userData.speed = 0.25 + rnd() * 0.4;
+    sp.userData.flicker = 2 + rnd() * 3;
+    sp.userData.phase = rnd() * Math.PI * 2;
+    sp.userData.op = 0.5 + rnd() * 0.5;
+    sp.userData.followK = 0;
+    sp.userData.orbitR = 1.4 + rnd() * 2.4;
+    sp.userData.orbitH = 0.6 + rnd() * 2.2;
+    sp.userData.orbitSpd = (0.8 + rnd() * 1.4) * (rnd() < 0.5 ? -1 : 1);
+    sp.userData.orbitPh = rnd() * Math.PI * 2;
+    sp.userData.trail = i % 3 === 0;
+    g.add(sp);
+  }
+  return g;
+}
+
+// =====================================================================
+//  生态组件集中导出（不影响上面任何逻辑）：供截图 harness / 地图编辑器
+//  单独实例化。仅新增导出，未改动任何现有函数的实现。
+// =====================================================================
+export const SWAMP_COMPONENT_BUILDERS = {
+  whale: buildBelugaWhale,
+  worldTree: buildWorldTree,
+  nativeDoll: buildNativeDoll,
+  lotusLeafBoat: createLotusLeafBoat,
+  swampEel: buildSwampEel,
+  tubeWormCluster: buildTubeWormCluster,
+  moebiusMushroom: buildMoebiusMushroom,
+  pinkHanger: buildPinkHanger,
+  swampBird: buildSwampBird,
+  longTailMonkey: buildLongTailMonkey,
+  glowLizard: buildGlowLizard,
+  ribbonFish: buildRibbonFish,
+  shell: buildShell,
+  rimPalm: buildRimPalm,
+  toweringTree: buildToweringTree,
+  canopyCeiling: buildCanopyCeiling,
+  glowFlower: buildGlowFlower,
+  giantFlower: buildGiantFlower,
+  stamenSpike: buildStamenSpike,
+  fishSchool: buildFishSchool,
+  fireflies: buildFireflies,
+};

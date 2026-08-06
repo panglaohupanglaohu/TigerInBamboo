@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>TigerMessenger 清单截图 Harness</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #e9eef3; }
+  #c { display: block; width: 512px; height: 512px; }
+  #status { position: fixed; left: 8px; top: 8px; font: 12px/1.4 monospace; color: #333; }
+</style>
+<!-- 与 index.html 一致的 importmap，复用本地 vendor/three -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/": "./vendor/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="c" width="512" height="512"></canvas>
+<div id="status">init…</div>
+
+<script type="module">
+import * as THREE from "three";
+
+// ---------- 资产 / 世界工厂 ----------
+import { toonMat, addOutline } from "./src/assets/toon.js";
+import { createHardToFindBookshop, createGrassTuft } from "./src/assets/bookshop.js";
+import {
+  createLowPolyHouse, createLowPolySignpost, createLowPolyStreetLamp,
+  createLowPolyUtilityPole, createLowPolyRock, createLowPolyFlower,
+  createLowPolyLawnHill, createLowPolyTree, createLowPolyFence,
+  createLowPolyBridge, createLowPolyCloud, INK_FLOWER_COLORS, facet,
+} from "./src/assets/lowPoly.js";
+import {
+  createAncientPineTree, createCraneNPC, createBlackRock, createCraneOnRock,
+} from "./src/assets/ancient.js";
+import {
+  createLowPolyHydrangeaBush, createBookshopHydrangeas,
+} from "./src/assets/hydrangea.js";
+import {
+  createLowPolyFox, createClassicAliFox,
+} from "./src/assets/fox.js";
+import {
+  createFisherBoat, createHarborCrane, createStackedCrates, buildOldHarborScene,
+} from "./src/assets/harbor.js";
+import { createDetailedMoebiusTower } from "./src/assets/moebiusTower.js";
+import { createMoebiusAirship } from "./src/assets/moebiusAirship.js";
+import { createMoebiusAircraft } from "./src/assets/moebiusAircraft.js";
+import { createChristchurchTram } from "./src/assets/tram.js";
+import { createBubblePod } from "./src/assets/bubblePod.js";
+
+import { createMoebiusTiger } from "./src/world/moebiusTiger.js";
+import { createLowPolyBird } from "./src/world/flock.js";
+import { createLongWingGlider } from "./src/world/airshipEscort.js";
+import {
+  createMoebiusSwampPlacement, createMoebiusSwampZone, SWAMP_COMPONENT_BUILDERS,
+} from "./src/world/moebiusSwamp.js";
+import { buildMoebiusCrystalMetropolis } from "./src/world/moebiusCity.js";
+import { buildStartingCamp } from "./src/world/startingCamp.js";
+import { buildSaihojiPlanet } from "./src/world/saihoji.js";
+import { createPlanet } from "./src/world/planet.js";
+import { buildHills } from "./src/world/hills.js";
+import { createMoonLake, createGreatLake } from "./src/world/lake.js";
+import { buildChristchurchTramSystem } from "./src/world/tramSystem.js";
+import { createDynamicMoebiusClouds } from "./src/world/equatorialClouds.js";
+import { buildImpastoMossyGround } from "./src/world/mossyGround.js";
+import { buildWorld } from "./src/world/platforms.js";
+
+import { buildMessenger } from "./src/player/messenger.js";
+import { buildAgentMessenger } from "./src/player/agentMessenger.js";
+
+import { createCatalogObject } from "./src/core/buildingCatalog.js";
+
+const STATUS = document.getElementById("status");
+const R_DEFAULT = 40;
+
+// =====================================================================
+//  清单项注册表
+//  build(ctx) -> Object3D | void（void 表示工厂已自行 add 进 ctx.scene）
+//  R: 覆盖默认星球半径（世界级 diorama 用较小 R 压缩到可框范围）
+//  cat: 器物 / 生物 / 植物 / 场景结构
+// =====================================================================
+const REGISTRY = [
+  // ---------------- 器物（建筑/道具/载具/结构）----------------
+  { id: "bookshop", cat: "器物", label: "Hard To Find 书店",
+    build: () => createHardToFindBookshop({ bermEdgeY: 0.02, signLine1: "HARD TO FIND", signLine2: "BOOKSHOP" }) },
+  { id: "house", cat: "器物", label: "水墨小房", build: () => createLowPolyHouse() },
+  { id: "signpost", cat: "器物", label: "路牌", build: () => createLowPolySignpost() },
+  { id: "lamp", cat: "器物", label: "街灯", build: () => createLowPolyStreetLamp() },
+  { id: "pole", cat: "器物", label: "电线杆", build: () => createLowPolyUtilityPole() },
+  { id: "rock", cat: "器物", label: "焦墨岩", build: () => createLowPolyRock() },
+  { id: "fisherBoat", cat: "器物", label: "小渔船", build: () => createFisherBoat() },
+  { id: "harborCrane", cat: "器物", label: "港口起重机", build: () => createHarborCrane() },
+  { id: "stackedCrates", cat: "器物", label: "货柜木箱堆", build: () => createStackedCrates({ seed: 11 }) },
+  { id: "oldHarbor", cat: "器物", label: "修船厂码头", build: () => buildOldHarborScene({ seed: 8844 }).group },
+  { id: "moebiusSwamp", cat: "器物", label: "莫比斯湖沼（地形）", build: () => createMoebiusSwampPlacement({ seed: 7711, scale: 0.5 }) },
+  { id: "moebiusTower", cat: "器物", label: "莫比斯塔", build: () => createDetailedMoebiusTower({ stages: 3, goldScales: false }) },
+  { id: "moebiusAirship", cat: "器物", label: "莫比斯航空艇", build: () => createMoebiusAirship() },
+  { id: "moebiusAircraft", cat: "器物", label: "莫比斯飞船/飞行器", build: () => createMoebiusAircraft() },
+  { id: "tram", cat: "器物", label: "基督城电车", build: () => createChristchurchTram({ variant: "red" }) },
+  { id: "bubblePod", cat: "器物", label: "气泡座舱", build: () => createBubblePod({}) },
+  { id: "fence", cat: "器物", label: "木栅栏", build: () => createLowPolyFence() },
+  { id: "bridge", cat: "器物", label: "桥", build: () => createLowPolyBridge() },
+  { id: "lowPolyTree", cat: "器物", label: "低多边形树", build: () => createLowPolyTree() },
+  { id: "cloud", cat: "器物", label: "云朵", build: () => createLowPolyCloud({}) },
+  { id: "blackRock", cat: "器物", label: "黑岩", build: () => createBlackRock() },
+  { id: "craneOnRock", cat: "器物", label: "岩上鹤", build: () => createCraneOnRock() },
+
+  // ---------------- 生物（动物 / 角色 NPC）----------------
+  { id: "fox", cat: "生物", label: "阿狸·小狐狸", build: () => createLowPolyFox({ scale: 0.52 }) },
+  { id: "classicAliFox", cat: "生物", label: "阿狸（经典版）", build: () => createClassicAliFox() },
+  { id: "moebiusTiger", cat: "生物", label: "赛博水墨虎", build: () => createMoebiusTiger() },
+  { id: "bird", cat: "生物", label: "Boids 小鸟", build: () => createLowPolyBird() },
+  { id: "longWingGlider", cat: "生物", label: "异星滑翔长翼鸟", build: () => createLongWingGlider() },
+  { id: "craneNPC", cat: "生物", label: "丹顶鹤 NPC", build: () => createCraneNPC() },
+  { id: "messenger", cat: "生物", label: "送信人（玩家）", build: () => buildMessenger() },
+  { id: "agentMessenger", cat: "生物", label: "数字孪生送信人", build: () => buildAgentMessenger({}) },
+
+  // ---------------- 植物 ----------------
+  { id: "pine", cat: "植物", label: "古松", build: () => createAncientPineTree(7301) },
+  { id: "hydrangea", cat: "植物", label: "绣球花丛", build: () => createLowPolyHydrangeaBush(1, 7) },
+  { id: "bookshopHydrangeas", cat: "植物", label: "书店绣球", build: () => createBookshopHydrangeas() },
+  { id: "flower", cat: "植物", label: "水墨小花", build: () => createLowPolyFlower(0xc4a090) },
+  { id: "lawnHill", cat: "植物", label: "草坪山丘", build: () => createLowPolyLawnHill({ scale: 1, seed: 11 }) },
+  { id: "grassTuft", cat: "植物", label: "草丛", build: () => createGrassTuft() },
+  { id: "mossyGround", cat: "植物", label: "厚涂苔藓地被", build: () => buildImpastoMossyGround({ size: 8, seed: 5 }) },
+
+  // ---------------- 场景结构（世界级 diorama，R 压缩）----------------
+  { id: "swampZone", cat: "场景结构", label: "莫比斯湖沼生态区", R: 40,
+    build: (ctx) => createMoebiusSwampZone({ seed: 20260804 }) },
+  { id: "moebiusCity", cat: "场景结构", label: "莫比斯水晶城", R: 6,
+    build: (ctx) => buildMoebiusCrystalMetropolis(ctx.scene, ctx.R, {}) },
+  { id: "startingCamp", cat: "场景结构", label: "起始营地",
+    build: (ctx) => buildStartingCampThumbnail() },
+  { id: "saihoji", cat: "场景结构", label: "西芳寺·苔海", R: 40,
+    build: (ctx) => buildSaihojiPlanet(ctx.scene, {}) },
+  { id: "planet", cat: "场景结构", label: "小星球本体", R: 40,
+    build: (ctx) => createPlanet(ctx.scene) },
+  { id: "hills", cat: "场景结构", label: "岛丘地形", R: 40,
+    build: (ctx) => buildHills(ctx.scene, ctx.R) },
+  { id: "moonLake", cat: "场景结构", label: "月牙湖", R: 40,
+    build: (ctx) => createMoonLake(ctx.scene, ctx.R) },
+  { id: "tramSystem", cat: "场景结构", label: "电车轨道系统", R: 6,
+    build: (ctx) => buildChristchurchTramSystem(ctx.scene, ctx.R, {}) },
+  { id: "equatorialClouds", cat: "场景结构", label: "赤道风暴云墙", R: 6,
+    build: (ctx) => createDynamicMoebiusClouds(ctx.scene, ctx.R) },
+  { id: "platforms", cat: "场景结构", label: "平台土坡", R: 40,
+    build: (ctx) => buildWorld(ctx.scene) },
+
+  // ---------------- 莫比斯湖沼内部生态组件（单独实例化截屏）----------------
+  { id: "swamp_whale", cat: "沼泽生物", label: "白鲸", build: () => SWAMP_COMPONENT_BUILDERS.whale(Math.random) },
+  { id: "swamp_worldTree", cat: "沼泽植物", label: "世界树", build: () => SWAMP_COMPONENT_BUILDERS.worldTree(Math.random, new THREE.Group()) },
+  { id: "swamp_nativeDoll", cat: "沼泽器物", label: "原住民人偶", build: () => SWAMP_COMPONENT_BUILDERS.nativeDoll(0.9) },
+  { id: "swamp_lotusLeafBoat", cat: "沼泽器物", label: "莲叶舟", build: () => SWAMP_COMPONENT_BUILDERS.lotusLeafBoat(Math.random) },
+  { id: "swamp_eel", cat: "沼泽生物", label: "黄绿鳗", build: () => SWAMP_COMPONENT_BUILDERS.swampEel(Math.random) },
+  { id: "swamp_tubeWorm", cat: "沼泽生物", label: "橙红管虫丛", build: () => SWAMP_COMPONENT_BUILDERS.tubeWormCluster(Math.random) },
+  { id: "swamp_mushroom", cat: "沼泽植物", label: "紫蘑菇/珊瑚", build: () => SWAMP_COMPONENT_BUILDERS.moebiusMushroom(Math.random) },
+  { id: "swamp_pinkHanger", cat: "沼泽生物", label: "粉垂生物", build: () => SWAMP_COMPONENT_BUILDERS.pinkHanger(Math.random) },
+  { id: "swamp_bird", cat: "沼泽生物", label: "沼泽鸟", build: () => SWAMP_COMPONENT_BUILDERS.swampBird(Math.random, 0xeaf6ff) },
+  { id: "swamp_monkey", cat: "沼泽生物", label: "长尾猴", build: () => SWAMP_COMPONENT_BUILDERS.longTailMonkey(Math.random) },
+  { id: "swamp_lizard", cat: "沼泽生物", label: "发光蜥蜴", build: () => SWAMP_COMPONENT_BUILDERS.glowLizard(Math.random) },
+  { id: "swamp_ribbonFish", cat: "沼泽生物", label: "发光带鱼", build: () => SWAMP_COMPONENT_BUILDERS.ribbonFish(Math.random) },
+  { id: "swamp_shell", cat: "沼泽器物", label: "贝壳", build: () => SWAMP_COMPONENT_BUILDERS.shell(Math.random) },
+  { id: "swamp_rimPalm", cat: "沼泽植物", label: "坑缘棕榈", build: () => SWAMP_COMPONENT_BUILDERS.rimPalm(Math.random) },
+  { id: "swamp_toweringTree", cat: "沼泽植物", label: "苍天巨树", build: () => SWAMP_COMPONENT_BUILDERS.toweringTree(Math.random) },
+  { id: "swamp_canopy", cat: "沼泽植物", label: "树冠顶棚", build: () => SWAMP_COMPONENT_BUILDERS.canopyCeiling(Math.random, new THREE.Group()) },
+  { id: "swamp_glowFlower", cat: "沼泽植物", label: "发光花蕊花", build: () => SWAMP_COMPONENT_BUILDERS.glowFlower(Math.random) },
+  { id: "swamp_giantFlower", cat: "沼泽植物", label: "巨花", build: () => SWAMP_COMPONENT_BUILDERS.giantFlower(Math.random) },
+  { id: "swamp_stamenSpike", cat: "沼泽植物", label: "花蕊尖锥", build: () => SWAMP_COMPONENT_BUILDERS.stamenSpike(Math.random) },
+  { id: "swamp_fishSchool", cat: "沼泽生物", label: "绿黑斑纹小鱼群", build: () => SWAMP_COMPONENT_BUILDERS.fishSchool(Math.random) },
+  { id: "swamp_fireflies", cat: "沼泽生物", label: "萤火虫群", build: () => SWAMP_COMPONENT_BUILDERS.fireflies(Math.random) },
+];
+
+const BY_ID = Object.fromEntries(REGISTRY.map((e) => [e.id, e]));
+window.__REGISTRY_IDS = REGISTRY.map((e) => e.id);
+
+// =====================================================================
+//  场景结构缩略图：起始营地一隅
+// =====================================================================
+function buildStartingCampThumbnail() {
+  const g = new THREE.Group();
+  const rnd = () => Math.random();
+
+  // 小沙滩地面
+  const sand = new THREE.Mesh(
+    new THREE.CircleGeometry(4.2, 48),
+    toonMat(0xd2c4a7, { side: THREE.DoubleSide })
+  );
+  sand.rotation.x = -Math.PI / 2;
+  sand.position.y = -0.02;
+  sand.receiveShadow = true;
+  g.add(sand);
+
+  // 浅海斑块
+  const sea = new THREE.Mesh(
+    new THREE.CircleGeometry(6.0, 48),
+    toonMat(0x2e8b9a, { transparent: true, opacity: 0.72, side: THREE.DoubleSide, depthWrite: false })
+  );
+  sea.rotation.x = -Math.PI / 2;
+  sea.position.y = -0.05;
+  g.add(sea);
+
+  // 下海小台阶
+  for (let i = 0; i < 3; i++) {
+    const step = new THREE.Mesh(
+      facet(new THREE.BoxGeometry(1.2 - i * 0.15, 0.12, 0.5)),
+      toonMat(0xb8ad96)
+    );
+    step.position.set(2.2 + i * 0.6, 0.06 - i * 0.02, 2.4 + i * 0.7);
+    step.rotation.y = 0.3;
+    step.castShadow = true;
+    addOutline(step, 0.012);
+    g.add(step);
+  }
+
+  // 左侧荒山 + 山洞
+  const rockMat = toonMat(0x8b8579);
+  const cragPos = [[-3.6, -1.8, 2.2], [-2.8, -2.4, 1.9], [-3.0, -0.9, 1.7], [-3.2, -1.6, 1.3], [-2.6, -1.4, 0.9]];
+  for (const [x, z, s] of cragPos) {
+    const c = new THREE.Mesh(facet(new THREE.IcosahedronGeometry(s, 0)), rockMat);
+    c.position.set(x, s * 0.55, z);
+    c.rotation.set(Math.random() * 0.6, Math.random() * Math.PI, Math.random() * 0.5);
+    c.castShadow = true;
+    addOutline(c, 0.03);
+    g.add(c);
+  }
+  const cave = new THREE.Mesh(facet(new THREE.BoxGeometry(1.4, 1.0, 0.9)), toonMat(0x2a2521));
+  cave.position.set(-2.9, 0.55, -1.0);
+  addOutline(cave, 0.02);
+  g.add(cave);
+
+  // 叠瀑
+  const fallMat = toonMat(0x00a896, { emissive: 0x50c878, emissiveIntensity: 0.25, transparent: true, opacity: 0.78, depthWrite: false });
+  for (let i = 0; i < 3; i++) {
+    const h = 1.2 - i * 0.15;
+    const stream = new THREE.Mesh(facet(new THREE.CylinderGeometry(0.07, 0.14, h, 6)), fallMat);
+    stream.position.set(-2.9 - i * 0.35, 1.6 - i * 0.55, -1.6 + i * 0.45);
+    stream.rotation.z = 0.08;
+    g.add(stream);
+  }
+
+  // 太空水环
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(3.8, 4.2, 64),
+    new THREE.MeshBasicMaterial({ color: 0xa3e4d7, transparent: true, opacity: 0.4, side: THREE.DoubleSide, depthWrite: false })
+  );
+  ring.position.set(3, 4.5, -4);
+  ring.lookAt(0, 0, 0);
+  g.add(ring);
+
+  // 弹琴老人
+  const elder = new THREE.Group();
+  const cloth = toonMat(0x3a3f46);
+  const skin = toonMat(0xe8c39a);
+  const beardMat = toonMat(0xf0ede6);
+  const torso = new THREE.Mesh(facet(new THREE.BoxGeometry(0.5, 0.55, 0.4)), cloth);
+  torso.position.y = 0.55;
+  torso.castShadow = true;
+  addOutline(torso, 0.018);
+  elder.add(torso);
+  for (const side of [-1, 1]) {
+    const leg = new THREE.Mesh(facet(new THREE.BoxGeometry(0.15, 0.16, 0.5)), cloth);
+    leg.position.set(side * 0.14, 0.14, 0.3);
+    addOutline(leg, 0.012);
+    elder.add(leg);
+  }
+  const head = new THREE.Mesh(facet(new THREE.BoxGeometry(0.34, 0.32, 0.32)), skin);
+  head.position.y = 1.05;
+  head.castShadow = true;
+  addOutline(head, 0.015);
+  elder.add(head);
+  const beard = new THREE.Mesh(facet(new THREE.BoxGeometry(0.28, 0.22, 0.1)), beardMat);
+  beard.position.set(0, 0.9, 0.18);
+  addOutline(beard, 0.01);
+  elder.add(beard);
+  const qin = new THREE.Mesh(facet(new THREE.BoxGeometry(0.58, 0.16, 0.3)), toonMat(0x8a5a3a));
+  qin.position.set(0, 0.52, 0.34);
+  qin.castShadow = true;
+  addOutline(qin, 0.012);
+  elder.add(qin);
+  const keys = new THREE.Mesh(facet(new THREE.BoxGeometry(0.5, 0.05, 0.12)), beardMat);
+  keys.position.set(0, 0.6, 0.38);
+  addOutline(keys, 0.006);
+  elder.add(keys);
+  elder.position.set(-0.8, 0, 0.4);
+  elder.rotation.y = 2.6;
+  g.add(elder);
+
+  // 阿狸
+  const ali = createLowPolyFox({ scale: 0.52 });
+  ali.position.set(0.9, 0, 1.1);
+  ali.rotation.y = -0.9;
+  g.add(ali);
+
+  // 古松
+  const pine = createAncientPineTree();
+  pine.scale.multiplyScalar(0.85);
+  pine.position.set(2.6, 0, -1.6);
+  g.add(pine);
+
+  // 野花
+  for (let i = 0; i < 6; i++) {
+    const a = rnd() * Math.PI * 2;
+    const d = 1.5 + rnd() * 2.2;
+    const x = -0.8 + Math.cos(a) * d;
+    const z = 0.4 + Math.sin(a) * d;
+    const flower = createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]);
+    flower.position.set(x, 0, z);
+    flower.rotation.y = rnd() * Math.PI * 2;
+    g.add(flower);
+  }
+
+  return g;
+}
+
+// =====================================================================
+//  渲染器 / 场景 / 相机 / 灯光
+// =====================================================================
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(512, 512, false);
+renderer.setClearColor(0xe9eef3, 1);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 5000);
+
+// 灯光（toon 材质需要光照）
+const hemi = new THREE.HemisphereLight(0xffffff, 0xb4bcc6, 0.95);
+scene.add(hemi);
+const dir = new THREE.DirectionalLight(0xffffff, 1.15);
+dir.position.set(6, 12, 8);
+scene.add(dir);
+const dir2 = new THREE.DirectionalLight(0xdfe8ff, 0.35);
+dir2.position.set(-8, 4, -6);
+scene.add(dir2);
+scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+
+let dynamic = null;
+
+function disposeObject(obj) {
+  obj.traverse((o) => {
+    if (o.geometry) o.geometry.dispose();
+    if (o.material) {
+      const mats = Array.isArray(o.material) ? o.material : [o.material];
+      for (const m of mats) {
+        if (m.map) m.map.dispose();
+        m.dispose();
+      }
+    }
+  });
+}
+
+function frameCamera(box, mode = "bbox") {
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z, 0.001);
+  const fov = THREE.MathUtils.degToRad(camera.fov);
+  let dist = (maxDim / 2) / Math.tan(fov / 2);
+  dist *= 1.7; // 留白
+  dist = Math.max(dist, 1.2);
+  // 35° 仰角、约 30° 方位
+  const az = THREE.MathUtils.degToRad(32);
+  const el = THREE.MathUtils.degToRad(26);
+  const off = new THREE.Vector3(
+    Math.cos(el) * Math.sin(az),
+    Math.sin(el),
+    Math.cos(el) * Math.cos(az)
+  ).multiplyScalar(dist);
+  camera.position.copy(center).add(off);
+  camera.near = Math.max(dist / 100, 0.05);
+  camera.far = dist * 100 + maxDim * 10;
+  camera.updateProjectionMatrix();
+  camera.lookAt(center);
+}
+
+async function renderItem(id) {
+  const entry = BY_ID[id];
+  if (!entry) return { ok: false, error: "no such id: " + id };
+  try {
+    if (dynamic) {
+      scene.remove(dynamic);
+      disposeObject(dynamic);
+      dynamic = null;
+    }
+    dynamic = new THREE.Group();
+    scene.add(dynamic);
+    const ctx = { THREE, scene: dynamic, R: entry.R ?? R_DEFAULT };
+    const obj = entry.build(ctx);
+    if (obj) dynamic.add(obj);
+
+    // 透射/玻璃材质在 SwiftShader 下会卡死：降级为普通半透明标准材质
+    dynamic.traverse((o) => {
+      if (!o.material) return;
+      const mats = Array.isArray(o.material) ? o.material : [o.material];
+      for (let i = 0; i < mats.length; i++) {
+        const m = mats[i];
+        if (m && m.isMeshPhysicalMaterial && m.transmission && m.transmission > 0) {
+          const repl = new THREE.MeshStandardMaterial({
+            color: m.color ? m.color.clone() : new THREE.Color(0xbfe0ff),
+            transparent: true,
+            opacity: 0.5,
+            roughness: 0.25,
+            metalness: 0.0,
+            emissive: m.emissive ? m.emissive.clone() : new THREE.Color(0x000000),
+            emissiveIntensity: m.emissiveIntensity || 0,
+            side: m.side,
+          });
+          if (Array.isArray(o.material)) o.material[i] = repl; else o.material = repl;
+        }
+      }
+    });
+
+    let box;
+    if (entry.frameMode === "cluster" && dynamic.children.length) {
+      box = new THREE.Box3();
+      for (const c of dynamic.children) {
+        box.expandByPoint(c.position.clone());
+      }
+      // 给每个中心留一点半径缓冲
+      const pad = 1.2;
+      const min = box.min.clone().addScalar(-pad);
+      const max = box.max.clone().addScalar(pad);
+      box.set(min, max);
+    } else {
+      box = new THREE.Box3().setFromObject(dynamic);
+    }
+    if (box.isEmpty()) return { ok: false, error: "empty bounds" };
+    frameCamera(box, entry.frameMode);
+    renderer.render(scene, camera);
+    const dataUrl = canvas.toDataURL("image/png");
+    return { ok: true, dataUrl, label: entry.label, cat: entry.cat };
+  } catch (e) {
+    return { ok: false, error: (e && e.stack) ? e.stack.split("\n").slice(0, 3).join(" | ") : String(e) };
+  }
+}
+
+window.renderItem = renderItem;
+window.__ready = true;
+STATUS.textContent = "ready · " + REGISTRY.length + " items";
+</script>
+</body>
+</html>

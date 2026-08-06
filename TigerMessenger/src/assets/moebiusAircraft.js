@@ -5,7 +5,54 @@
 //  - 机身长轴沿 +Z（机头朝 +Z），局部中心在原点附近（与编队/航线逻辑约定一致）
 // =====================================================================
 import * as THREE from "three";
+import { toonMat, addOutline } from "./toon.js";
+import { facet } from "./lowPoly.js";
 import { P, P_DEFAULTS } from "../core/params.js";
+
+/* ---------------- 3 阶硬边缘 Toon 渐变贴图（纯代码生成） ----------------
+ * 三阶灰度阶梯 [0, 127, 255]：暗部 / 中间调 / 亮部，
+ * Nearest 采样锁死边缘，产生干净的二次元色块切面，无模糊渐变。
+ * RedFormat 兼容当前 Three.js（LuminanceFormat 已废弃）。
+ */
+const _gradient3 = (() => {
+  const data = new Uint8Array([0, 127, 255]);
+  const tex = new THREE.DataTexture(data, 3, 1, THREE.RedFormat);
+  tex.minFilter = THREE.NearestFilter;
+  tex.magFilter = THREE.NearestFilter;
+  tex.generateMipmaps = false;
+  tex.needsUpdate = true;
+  return tex;
+})();
+
+/**
+ * 卡通水晶材质（MeshToonMaterial · 3 阶渐变 + flatShading）。
+ * 废除物理玻璃 transmission，改用基础 opacity 半透明 —— 不触发 SwiftShader
+ * 屏幕空间回读，无头测试 100% 友好。
+ * @param {number} color  色块
+ * @param {object} [opts]  transparent / opacity / side / emissive / vertexColors
+ */
+function crystalToon(color, opts = {}) {
+  return new THREE.MeshToonMaterial({
+    color,
+    gradientMap: _gradient3,
+    flatShading: true,
+    transparent: opts.transparent ?? true,
+    opacity: opts.opacity ?? 0.85,
+    side: opts.side ?? THREE.FrontSide,
+    emissive: opts.emissive ?? 0x000000,
+    emissiveIntensity: opts.emissiveIntensity ?? 0,
+    vertexColors: opts.vertexColors ?? false,
+  });
+}
+
+/** 通用描边件工厂：facet 扁平分面 + castShadow + addOutline 墨线描边 */
+function part(geo, mat, outline = 0.04) {
+  const m = new THREE.Mesh(facet(geo), mat);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  addOutline(m, outline);
+  return m;
+}
 
 /**
  * 外壳剖面半径函数：前端尖细 -> 中段膨胀 -> 尾部收窄（钟形流线）。
@@ -25,7 +72,9 @@ export function createMoebiusAircraft() {
   const g = new THREE.Group();
   g.name = "moebius-aircraft";
 
-  // ---------- 1. 外层半透明玻璃外壳 (LatheGeometry 流线旋转体 · 淡琥珀黄) ----------
+  // ---------- 1. 外层卡通水晶外壳 (LatheGeometry · 12 棱低多边形 · 复古橙红) ----------
+  // 废除 MeshPhysicalMaterial transmission，改用 MeshToonMaterial + opacity 半透明。
+  // LatheGeometry 段数 48→12：配合 flatShading 产生干净的多面体硬朗棱角。
   const seg = 30;
   const profile = [];
   for (let i = 0; i <= seg; i++) {
@@ -33,35 +82,27 @@ export function createMoebiusAircraft() {
     const z = (u - 0.5) * LEN;    // -3.5(尾) .. 3.5(头)
     profile.push(new THREE.Vector2(Math.max(hullRadiusAt(u), 0.02), z));
   }
-  const hullGeo = new THREE.LatheGeometry(profile, 48);
+  const hullGeo = new THREE.LatheGeometry(profile, 12);
   hullGeo.rotateX(Math.PI / 2); // 旋转轴 Y -> Z，机头朝 +Z
 
-  const glassMat = new THREE.MeshPhysicalMaterial({
-    color: 0xf4d08b,        // 淡琥珀黄 / 浅金黄
+  const hullMat = crystalToon(0xD35400, {
     transparent: true,
-    opacity: 0.45,
-    roughness: 0.1,
-    metalness: 0.1,
-    transmission: 0.8,      // 物理透光
-    ior: 1.4,               // 玻璃折射率
-    thickness: 0.6,
-    emissive: 0xf4d08b,     // 弱自发光琥珀，确保外壳在任何光照下可见
-    emissiveIntensity: 0.15,
+    opacity: 0.85,
     side: THREE.DoubleSide,
-    depthWrite: false,
-    clearcoat: 0.6,
-    clearcoatRoughness: 0.2,
+    emissive: 0xD35400,
+    emissiveIntensity: 0.12,
   });
-  const hull = new THREE.Mesh(hullGeo, glassMat);
+  const hull = part(hullGeo, hullMat, 0.04);
+  hull.name = "aircraft-hull";
   g.add(hull);
 
   // ---------- 2. 机身结构环 (黑色细圆环，沿外壳穿插) ----------
-  const ringMat = new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.55, metalness: 0.7 });
+  const ringMat = crystalToon(0x141414, { transparent: false });
   const ringZs = [-2.4, -0.6, 1.2, 2.6];
   for (const rz of ringZs) {
     const u = rz / LEN + 0.5;
     const r = Math.max(hullRadiusAt(u), 0.12) + 0.05;
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.06, 12, 40), ringMat);
+    const ring = part(new THREE.TorusGeometry(r, 0.06, 8, 16), ringMat, 0.04);
     ring.rotation.y = Math.PI / 2; // 环面法线朝 Z
     ring.position.z = rz;
     g.add(ring);
@@ -69,14 +110,12 @@ export function createMoebiusAircraft() {
 
   // ---------- 3. 内部核心引擎与能量管 ----------
   // 3a. 前段：发光橘红能量球
-  const coreMat = new THREE.MeshStandardMaterial({
-    color: 0xff7a2a,
+  const coreMat = crystalToon(0xff7a2a, {
+    transparent: false,
     emissive: 0xff6600,
     emissiveIntensity: 2.0,
-    roughness: 0.4,
-    metalness: 0.0,
   });
-  const core = new THREE.Mesh(new THREE.SphereGeometry(0.7, 32, 24), coreMat);
+  const core = part(new THREE.SphereGeometry(0.7, 12, 8), coreMat, 0.04);
   core.scale.set(1.0, 1.0, 1.2); // 沿 Z 略拉长
   core.position.z = 1.3;
   g.add(core);
@@ -97,14 +136,13 @@ export function createMoebiusAircraft() {
     tubePts.push(new THREE.Vector3(Math.sin(ang) * rad, Math.cos(ang) * rad, z));
   }
   const tubeCurve = new THREE.CatmullRomCurve3(tubePts);
-  const tubeMat = new THREE.MeshStandardMaterial({
+  const tubeMat = crystalToon(0xffd24a, {
+    transparent: false,
     vertexColors: true,
     emissive: 0x88ff99,
     emissiveIntensity: 0.5,
-    roughness: 0.5,
-    metalness: 0.1,
   });
-  const tubeGeo = new THREE.TubeGeometry(tubeCurve, 80, 0.16, 12, false);
+  const tubeGeo = new THREE.TubeGeometry(tubeCurve, 60, 0.16, 8, false);
   {
     const pos = tubeGeo.attributes.position;
     const colors = new Float32Array(pos.count * 3);
@@ -117,51 +155,53 @@ export function createMoebiusAircraft() {
     }
     tubeGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   }
-  g.add(new THREE.Mesh(tubeGeo, tubeMat));
+  const tube = part(tubeGeo, tubeMat, 0.04);
+  g.add(tube);
 
   // 3c. 尾部喷口：灰黑机械喷罩
-  const nozzleMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2e, roughness: 0.45, metalness: 0.85 });
-  const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.32, 0.9, 24, 1, true), nozzleMat);
+  const nozzleMat = crystalToon(0x2a2a2e, { transparent: false });
+  const nozzle = part(new THREE.CylinderGeometry(0.55, 0.32, 0.9, 12, 1, true), nozzleMat, 0.04);
   nozzle.rotation.x = Math.PI / 2; // 轴朝 Z
   nozzle.position.z = -3.2;
   g.add(nozzle);
-  const nozzleRing = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.07, 10, 24), nozzleMat);
+  const nozzleRing = part(new THREE.TorusGeometry(0.55, 0.07, 8, 16), nozzleMat, 0.04);
   nozzleRing.rotation.y = Math.PI / 2;
   nozzleRing.position.z = -2.75;
   g.add(nozzleRing);
 
   // ---------- 4. 头部鼻锥 (灰白锥 + 黑色圈纹 + 金属探针) ----------
-  const noseMat = new THREE.MeshStandardMaterial({ color: 0xd9d4c8, roughness: 0.6, metalness: 0.2 });
-  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1.6, 28), noseMat);
+  const noseMat = crystalToon(0xd9d4c8, { transparent: false });
+  const nose = part(new THREE.ConeGeometry(0.42, 1.6, 12), noseMat, 0.04);
   nose.rotation.x = Math.PI / 2; // 尖朝 +Z
   nose.position.z = 3.9;
   g.add(nose);
-  const noseBandMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5, metalness: 0.4 });
+  const noseBandMat = crystalToon(0x1a1a1a, { transparent: false });
   for (const bz of [3.5, 3.9, 4.3]) {
-    const band = new THREE.Mesh(new THREE.TorusGeometry(0.40, 0.035, 8, 24), noseBandMat);
+    const band = part(new THREE.TorusGeometry(0.40, 0.035, 6, 12), noseBandMat, 0.04);
     band.rotation.y = Math.PI / 2;
     band.position.z = bz;
     g.add(band);
   }
-  const probe = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.02, 0.05, 0.7, 8),
-    new THREE.MeshStandardMaterial({ color: 0xbfc4cc, roughness: 0.3, metalness: 0.9 })
+  const probe = part(
+    new THREE.CylinderGeometry(0.02, 0.05, 0.7, 6),
+    crystalToon(0xbfc4cc, { transparent: false }),
+    0.04
   );
   probe.rotation.x = Math.PI / 2;
   probe.position.z = 5.2;
   g.add(probe);
 
   // ---------- 5. 尾翼 (4 片鱼鳍，浅灰 + 棕色条纹拼色) ----------
-  const finGray = new THREE.MeshStandardMaterial({ color: 0xcabfa8, roughness: 0.7, metalness: 0.1, side: THREE.DoubleSide });
-  const finBrown = new THREE.MeshStandardMaterial({ color: 0x7a5a3a, roughness: 0.75, metalness: 0.1, side: THREE.DoubleSide });
+  const finGray = crystalToon(0xcabfa8, { transparent: false, side: THREE.DoubleSide });
+  const finBrown = crystalToon(0x7a5a3a, { transparent: false, side: THREE.DoubleSide });
   const finCount = 4;
   for (let i = 0; i < finCount; i++) {
     const a = (i / finCount) * Math.PI * 2;
     const fin = new THREE.Group();
-    const base = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.6, 0.08), finGray);
+    const base = part(new THREE.BoxGeometry(1.0, 1.6, 0.08), finGray, 0.04);
     base.position.y = 0.8; // 沿 +Y 伸出
     fin.add(base);
-    const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.7, 0.1), finBrown);
+    const stripe = part(new THREE.BoxGeometry(0.72, 0.7, 0.1), finBrown, 0.04);
     stripe.position.y = 0.5;
     fin.add(stripe);
     fin.position.z = -2.6;   // 尾部
@@ -176,6 +216,7 @@ export function createMoebiusAircraft() {
   g.add(cockpitAnchor);
 
   // 可见的青柠驾驶室核心：实心高亮内核 + 加色混合外辉光晕，远处/雨天也醒目。
+  // MeshBasicMaterial 不受光、不触发 SwiftShader 回读，保留原样。
   const cockpitCore = new THREE.Mesh(
     new THREE.SphereGeometry(0.24, 16, 12),
     new THREE.MeshBasicMaterial({
@@ -211,6 +252,7 @@ export function createMoebiusAircraft() {
   g.add(cockpitLight);
 
   // 喷焰（机尾，向后脉动），保留 userData.flames 供 updateAircraftHover 脉动
+  // MeshBasicMaterial 不受光，保留原样。
   const flames = [];
   const flameMat = new THREE.MeshBasicMaterial({ color: 0xff8a3c, transparent: true, opacity: 0.6 });
   for (const sx of [-1, 1]) {
@@ -220,6 +262,9 @@ export function createMoebiusAircraft() {
     g.add(flame);
     flames.push(flame);
   }
+
+  // part() 已对全部实体网格设置 castShadow = true + addOutline 描边，
+  // 无需再 traverse。驾驶舱核心/光晕/喷焰为特效件不投影。
 
   g.userData.kind = "moebius-aircraft";
   g.userData.thrusters = [core]; // 内核发光件，供脉动
