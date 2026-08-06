@@ -261,10 +261,19 @@ export function createBubblePod(opts = {}) {
   cockpitAnchor.position.set(0, 0.1, 2.15);
   group.add(cockpitAnchor);
 
+  // 炮口：泡泡前缘，气泡弹从此射出
+  const muzzle = new THREE.Object3D();
+  muzzle.name = "bubble-muzzle";
+  muzzle.position.set(0, 0.15, 2.55);
+  group.add(muzzle);
+
   group.userData.kind = "moebius-bubble-pod";
   group.userData.cockpitAnchor = cockpitAnchor;
+  group.userData.muzzle = muzzle;
+  group.userData.accentColor = accent;
   group.userData.basePosition = new THREE.Vector3();
   group.userData.hoverPhase = 0;
+  group.userData.piloted = false; // 玩家驾驶时暂停花厅巡游
   return group;
 }
 
@@ -348,12 +357,185 @@ function applyBubblePodOrbitPose(pod, t) {
   pod.rotateZ(Math.sin(t * 0.8 + orbit.phase) * 0.025);
 }
 
-/** 更新 3 艘气泡飞艇围绕 3 座花厅建筑的巡游。 */
+/** 更新 3 艘气泡飞艇围绕 3 座花厅建筑的巡游（被驾驶的不跟巡游）。 */
 export function updateBubblePodPatrol(fleet, t) {
   if (!fleet) return;
   fleet.traverse((pod) => {
     if (pod.userData?.kind !== "moebius-bubble-pod") return;
+    if (pod.userData.piloted) {
+      // 驾驶中：原地轻微漂浮
+      const bob = Math.sin(t * 1.4 + (pod.userData.hoverPhase || 0)) * 0.06;
+      if (pod.userData._pilotBase) {
+        _up.copy(pod.userData._pilotBase).normalize();
+        pod.position.copy(pod.userData._pilotBase).addScaledVector(_up, bob);
+      }
+      return;
+    }
     applyBubblePodOrbitPose(pod, t);
     pod.rotateY(Math.sin(t * 0.35 + (pod.userData.hoverPhase || 0)) * 0.12);
   });
+}
+
+// ---------- 气泡弹（半透明泡泡弹，沿瞄准方向飞行） ----------
+const _bbUp = new THREE.Vector3();
+const BUBBLE_SHOT_SPEED = 32;
+const BUBBLE_SHOT_LIFE = 2.8;
+const BUBBLE_SHOT_GRAVITY = 3.5; // 轻微朝球心下坠，弧线更有泡感
+
+/**
+ * 创建一枚气泡弹
+ * @param {THREE.Scene} scene
+ * @param {THREE.Vector3} origin
+ * @param {THREE.Vector3} dir 单位方向
+ * @param {number} [accent=0x8effd8]
+ */
+export function createBubbleShot(scene, origin, dir, accent = 0x8effd8) {
+  const group = new THREE.Group();
+  group.name = "bubble-shot";
+  group.position.copy(origin);
+
+  const shell = new THREE.Mesh(
+    new THREE.SphereGeometry(0.38, 20, 16),
+    new THREE.MeshPhysicalMaterial({
+      color: accent,
+      transparent: true,
+      opacity: 0.45,
+      transmission: 0.65,
+      roughness: 0.08,
+      metalness: 0.05,
+      ior: 1.2,
+      thickness: 0.25,
+      depthWrite: false,
+    })
+  );
+  shell.renderOrder = 20;
+  group.add(shell);
+
+  const core = new THREE.Mesh(
+    new THREE.SphereGeometry(0.16, 12, 10),
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.7,
+      depthWrite: false,
+    })
+  );
+  group.add(core);
+
+  // 拖尾小泡
+  const trail = [];
+  for (let i = 0; i < 4; i++) {
+    const p = new THREE.Mesh(
+      new THREE.SphereGeometry(0.1 - i * 0.015, 8, 6),
+      new THREE.MeshBasicMaterial({
+        color: accent,
+        transparent: true,
+        opacity: 0.35 - i * 0.06,
+        depthWrite: false,
+      })
+    );
+    p.position.set(0, 0, -0.25 - i * 0.22);
+    group.add(p);
+    trail.push(p);
+  }
+
+  if (scene) scene.add(group);
+
+  const vel = dir.clone().normalize().multiplyScalar(BUBBLE_SHOT_SPEED);
+  return {
+    group,
+    shell,
+    core,
+    trail,
+    vel,
+    age: 0,
+    life: BUBBLE_SHOT_LIFE,
+    dead: false,
+    accent,
+  };
+}
+
+/**
+ * 推进气泡弹；触地或超时则破灭
+ * @returns {boolean} 是否仍存活
+ */
+export function updateBubbleShot(shot, dt, planetRadius = 40) {
+  if (!shot || shot.dead) return false;
+  shot.age += dt;
+  if (shot.age >= shot.life) {
+    disposeBubbleShot(shot);
+    return false;
+  }
+
+  // 轻微朝球心下坠
+  _bbUp.copy(shot.group.position).normalize();
+  shot.vel.addScaledVector(_bbUp, -BUBBLE_SHOT_GRAVITY * dt);
+  shot.group.position.addScaledVector(shot.vel, dt);
+
+  // 朝飞行方向
+  if (shot.vel.lengthSq() > 1e-6) {
+    const fwd = shot.vel.clone().normalize();
+    const up = _bbUp;
+    const side = new THREE.Vector3().crossVectors(up, fwd).normalize();
+    if (side.lengthSq() > 1e-6) {
+      const realUp = new THREE.Vector3().crossVectors(fwd, side).normalize();
+      const m = new THREE.Matrix4().makeBasis(side, realUp, fwd);
+      shot.group.quaternion.setFromRotationMatrix(m);
+    }
+  }
+
+  // 脉动
+  const pulse = 1 + Math.sin(shot.age * 14) * 0.08;
+  shot.shell.scale.setScalar(pulse);
+  const fade = 1 - shot.age / shot.life;
+  if (shot.shell.material) shot.shell.material.opacity = 0.25 + fade * 0.35;
+  if (shot.core.material) shot.core.material.opacity = 0.35 + fade * 0.4;
+
+  // 触地
+  const r = shot.group.position.length();
+  if (r <= planetRadius + 0.6) {
+    disposeBubbleShot(shot, true);
+    return false;
+  }
+  return true;
+}
+
+/** 破灭并清理 */
+export function disposeBubbleShot(shot, pop = false) {
+  if (!shot || shot.dead) return;
+  shot.dead = true;
+  if (pop && shot.group?.parent) {
+    // 简易破泡：瞬间放大淡出由调用方可选；此处直接移除
+  }
+  if (shot.group?.parent) shot.group.parent.remove(shot.group);
+  shot.group?.traverse((o) => {
+    if (o.geometry) o.geometry.dispose();
+    if (o.material) {
+      if (Array.isArray(o.material)) o.material.forEach((m) => m.dispose());
+      else o.material.dispose();
+    }
+  });
+}
+
+/**
+ * 从舰队中取最近的气泡艇
+ * @param {THREE.Object3D} fleet
+ * @param {THREE.Vector3} worldPos
+ * @param {number} [maxDist=5]
+ */
+export function findNearestBubblePod(fleet, worldPos, maxDist = 5) {
+  if (!fleet || !worldPos) return null;
+  let best = null;
+  let bestD = maxDist * maxDist;
+  const _p = new THREE.Vector3();
+  fleet.traverse((o) => {
+    if (o.userData?.kind !== "moebius-bubble-pod") return;
+    o.getWorldPosition(_p);
+    const d = _p.distanceToSquared(worldPos);
+    if (d < bestD) {
+      bestD = d;
+      best = o;
+    }
+  });
+  return best;
 }

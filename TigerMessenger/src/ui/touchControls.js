@@ -62,6 +62,8 @@ function fireKey(code, type = "keydown") {
  * @param {(dy: number) => void} deps.onOrbitPitch
  * @param {(on: boolean) => void} [deps.onRightDrag]
  * @param {(msg: string, dur?: number) => void} [deps.toast]
+ * @param {() => boolean} [deps.isBubbleRiding] 气泡艇驾驶中：环视改瞄准
+ * @param {(dx: number, dy: number) => void} [deps.onBubbleAim] 触控挪准星
  */
 export function createTouchControls({
   keys,
@@ -70,6 +72,8 @@ export function createTouchControls({
   onOrbitPitch,
   onRightDrag = () => {},
   toast = () => {},
+  isBubbleRiding = () => false,
+  onBubbleAim = null,
 }) {
   // ---------- DOM ----------
   const root = document.createElement("div");
@@ -96,6 +100,7 @@ export function createTouchControls({
           <button type="button" class="touch-btn touch-btn-e" data-action="interact" aria-label="交互 E">E</button>
           <button type="button" class="touch-btn touch-btn-f" data-action="tram" aria-label="电车 F">F</button>
           <button type="button" class="touch-btn touch-btn-c" data-action="driver" aria-label="司机视野 C">C</button>
+          <button type="button" class="touch-btn touch-btn-g" data-action="fire" aria-label="气泡弹 G">G</button>
         </div>
       </div>
     </div>
@@ -251,6 +256,11 @@ export function createTouchControls({
     const dy = cy - lookLastY;
     lookLastX = cx;
     lookLastY = cy;
+    // 气泡艇驾驶：环视板挪十字准星；否则正常相机环视
+    if (isBubbleRiding?.() && onBubbleAim) {
+      onBubbleAim(dx * 0.004, dy * 0.004);
+      return;
+    }
     // 略放大触控灵敏度
     if (dx !== 0) onOrbit(dx * 0.008);
     if (dy !== 0) onOrbitPitch(dy * 0.006);
@@ -294,6 +304,8 @@ export function createTouchControls({
       } else if (action === "driver") {
         // 电车司机/乘客视野切换
         fireKey("KeyC", "keydown");
+      } else if (action === "fire") {
+        fireKey("KeyG", "keydown");
       }
     });
     const end = (e) => {
@@ -307,6 +319,8 @@ export function createTouchControls({
         fireKey("KeyF", "keyup");
       } else if (action === "driver") {
         fireKey("KeyC", "keyup");
+      } else if (action === "fire") {
+        fireKey("KeyG", "keyup");
       }
     };
     btn.addEventListener("pointerup", end);

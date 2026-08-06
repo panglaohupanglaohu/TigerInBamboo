@@ -1861,6 +1861,7 @@ export function createMoebiusSwampZone(opts = {}) {
   swampZone.userData.whale = whale;
   swampZone.userData.whales = whales;
   swampZone.userData.lotuses = lotuses;
+  swampZone.userData.nectarTargets = [];
   // 不设大型碰撞体：送信人可直接走入 / 跳入湖沼（无隐形围墙）
   swampZone.userData.collideRadius = 0;
   swampZone.userData.cameraHint = {
@@ -1915,13 +1916,17 @@ export function createMoebiusSwampZone(opts = {}) {
         f.userData.core.material.color.setRGB(pulse, pulse * 0.92, 0.55);
       }
       if (!f.userData.falling) {
-        // 正常开放：在叶面之上朝天空轻微摇曳
+        // 正常开放：在叶面之上朝天空轻微摇曳（非水面蜜源）
+        f.userData.onWater = false;
+        f.userData.feeding = false;
         f.position.y = f.userData.baseY + Math.sin(t * 0.5 + i) * 0.3;
         f.rotation.y += _dt * 0.05;
         // 触发飘落：每朵按各自周期落下一次
         if (cyc > 0.82) {
           f.userData.falling = true;
           f.userData.fallT = 0;
+          f.userData.restT = 0;
+          f.userData.splashed = false;
         }
       } else {
         // 飘落：从叶面高度缓慢下落至湖面（旋转飘摆）
@@ -1933,22 +1938,56 @@ export function createMoebiusSwampZone(opts = {}) {
         f.rotation.x += _dt * 0.4;
         f.rotation.z += _dt * 0.3;
         if (k >= 1) {
-          // 首次触水 → 在落点激起涟漪
+          // 首次触水 → 在落点激起涟漪；可供 aircraft 蜂鸟吸食
           if (!f.userData.splashed) {
             f.userData.splashed = true;
+            f.userData.onWater = true;
+            f.userData.nectar = 1; // 1=满蜜，被吸食后衰减
+            f.userData.restT = 0;
             spawnRipple(f.position.x, f.position.z, 1.3);
           }
-          // 落湖面后停留一阵，再复位重新开放
+          // 落湖面后停留；被吸食时花蕊更亮、蜜量衰减
           f.userData.restT += _dt;
-          if (f.userData.restT > 5.0) {
+          if (f.userData.feeding && f.userData.core) {
+            const p2 = 0.85 + Math.sin(t * 8 + i) * 0.15;
+            f.userData.core.material.color.setRGB(p2, p2 * 0.5, 0.9);
+            f.userData.nectar = Math.max(0, (f.userData.nectar ?? 1) - _dt * 0.22);
+          }
+          // 蜜尽或停留超时 → 复位重新开放
+          // 水面停留稍长，给空中「巨蜂鸟」编队赶路吸蜜的时间
+          const restLimit = f.userData.feeding ? 16.0 : 14.0;
+          if (f.userData.restT > restLimit || (f.userData.nectar ?? 0) <= 0.05) {
             f.userData.falling = false;
             f.userData.splashed = false;
+            f.userData.onWater = false;
+            f.userData.feeding = false;
+            f.userData.nectar = 0;
             f.userData.restT = 0;
             f.rotation.set(0, f.rotation.y, 0);
-            // 复位到原开放高度（瞬时，玩家不易察觉，因在水下远处）
             f.position.y = f.userData.baseY;
           }
         }
+      }
+    }
+
+    // 暴露蜜源（世界坐标）供 aircraft 寻觅吸食
+    {
+      const nectar = [];
+      const _nw = new THREE.Vector3();
+      for (const f of giantFlowers) {
+        if (f.userData.onWater && (f.userData.nectar ?? 0) > 0.08) {
+          f.getWorldPosition(_nw);
+          nectar.push({
+            flower: f,
+            worldPos: _nw.clone(),
+            nectar: f.userData.nectar ?? 1,
+          });
+        }
+      }
+      swampZone.userData.nectarTargets = nectar;
+      // placement 包装也挂一份
+      if (swampZone.parent?.userData?.kind === "moebius-swamp") {
+        swampZone.parent.userData.nectarTargets = nectar;
       }
     }
 
@@ -2427,7 +2466,12 @@ export function createMoebiusSwampPlacement(opts = {}) {
   wrap.userData.factoryScale = scale;
   wrap.userData.seed = seed;
   wrap.userData.inner = inner;
-  wrap.userData.update = (dt, t, runtime) => inner.update?.(dt, t, runtime);
+  wrap.userData.nectarTargets = []; // 由 inner.update 同步：水面落花蜜源（世界坐标）
+  wrap.userData.update = (dt, t, runtime) => {
+    inner.update?.(dt, t, runtime);
+    // 镜像蜜源列表，方便外部只拿 wrap（地图放置根）
+    wrap.userData.nectarTargets = inner.userData.nectarTargets || [];
+  };
 
   return wrap;
 }

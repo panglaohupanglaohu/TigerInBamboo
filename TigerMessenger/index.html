@@ -343,7 +343,7 @@
     }
 
     /* NPC 交谈提示（屏幕中央，E 键触发） */
-    #npc-hint, #tram-hint, #airship-hint, #elder-hint, #fox-hint {
+    #npc-hint, #tram-hint, #airship-hint, #elder-hint, #fox-hint, #bubble-hint {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -361,15 +361,113 @@
       opacity: 0;
       transition: opacity 0.2s ease;
     }
-    #npc-hint.show, #tram-hint.show, #airship-hint.show, #elder-hint.show, #fox-hint.show { opacity: 1; }
+    #npc-hint.show, #tram-hint.show, #airship-hint.show, #elder-hint.show, #fox-hint.show, #bubble-hint.show { opacity: 1; }
     /* 遥控杆展开时：收起中央按键提示（避免挡操作） */
     body.touch-pad-open #npc-hint,
     body.touch-pad-open #tram-hint,
     body.touch-pad-open #airship-hint,
     body.touch-pad-open #elder-hint,
-    body.touch-pad-open #fox-hint {
+    body.touch-pad-open #fox-hint,
+    body.touch-pad-open #bubble-hint {
       opacity: 0 !important;
       pointer-events: none !important;
+    }
+
+    /* 气泡艇潜行：海水青蓝滤镜 */
+    #dive-tint {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 11;
+      background:
+        radial-gradient(ellipse at 50% 45%, rgba(20, 90, 120, 0.15) 0%, rgba(8, 40, 70, 0.55) 70%, rgba(4, 20, 40, 0.75) 100%),
+        linear-gradient(180deg, rgba(40, 140, 170, 0.12), rgba(10, 50, 80, 0.35));
+      box-shadow: inset 0 0 80px rgba(0, 40, 70, 0.55);
+      transition: opacity 0.35s ease;
+    }
+    #dive-tint.show {
+      /* opacity 由 JS 按潜深写入 */
+    }
+    #dive-tint .bubbles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      opacity: 0.45;
+    }
+    #dive-tint .bubbles span {
+      position: absolute;
+      bottom: -20px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(180, 240, 255, 0.35);
+      border: 1px solid rgba(200, 250, 255, 0.4);
+      animation: dive-bubble-rise 4s linear infinite;
+    }
+    #dive-tint .bubbles span:nth-child(1) { left: 12%; animation-duration: 3.2s; animation-delay: 0s; width: 6px; height: 6px; }
+    #dive-tint .bubbles span:nth-child(2) { left: 28%; animation-duration: 4.1s; animation-delay: 0.6s; width: 10px; height: 10px; }
+    #dive-tint .bubbles span:nth-child(3) { left: 47%; animation-duration: 3.6s; animation-delay: 1.1s; }
+    #dive-tint .bubbles span:nth-child(4) { left: 63%; animation-duration: 4.5s; animation-delay: 0.3s; width: 7px; height: 7px; }
+    #dive-tint .bubbles span:nth-child(5) { left: 81%; animation-duration: 3.8s; animation-delay: 1.5s; width: 9px; height: 9px; }
+    @keyframes dive-bubble-rise {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      12% { opacity: 0.7; }
+      100% { transform: translateY(-110vh) scale(1.3); opacity: 0; }
+    }
+
+    /* 气泡艇瞄准十字光标 */
+    #bubble-crosshair {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 36px;
+      height: 36px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 12;
+      transition: opacity 0.15s ease;
+    }
+    #bubble-crosshair.show { opacity: 1; }
+    #bubble-crosshair::before,
+    #bubble-crosshair::after {
+      content: "";
+      position: absolute;
+      background: rgba(160, 255, 240, 0.92);
+      box-shadow: 0 0 8px rgba(100, 240, 220, 0.85);
+    }
+    #bubble-crosshair::before {
+      left: 50%;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      transform: translateX(-50%);
+    }
+    #bubble-crosshair::after {
+      top: 50%;
+      left: 4px;
+      right: 4px;
+      height: 2px;
+      transform: translateY(-50%);
+    }
+    #bubble-crosshair .ring {
+      position: absolute;
+      inset: 6px;
+      border: 2px solid rgba(160, 255, 240, 0.75);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(100, 240, 220, 0.45);
+    }
+    #bubble-crosshair .dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 4px;
+      height: 4px;
+      margin: -2px 0 0 -2px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 6px #8effd8;
     }
 
     /* ---------- 触控遥控杆 ---------- */
@@ -519,6 +617,10 @@
       border-color: rgba(180, 160, 255, 0.55);
       color: #d4c8ff;
     }
+    .touch-btn-g {
+      border-color: rgba(100, 230, 210, 0.6);
+      color: #8effd8;
+    }
     .touch-btns {
       flex-wrap: wrap;
       max-width: 140px;
@@ -529,7 +631,7 @@
       #touch-toggle { opacity: 0.72; }
       #touch-toggle:hover { opacity: 1; }
     }
-    #npc-hint kbd, #tram-hint kbd, #airship-hint kbd, #elder-hint kbd, #fox-hint kbd {
+    #npc-hint kbd, #tram-hint kbd, #airship-hint kbd, #elder-hint kbd, #fox-hint kbd, #bubble-hint kbd {
       display: inline-block;
       min-width: 1.4em;
       padding: 1px 8px;
@@ -1057,14 +1159,14 @@
       box-shadow: 0 6px 18px rgba(26, 38, 56, 0.14);
     }
     #bubble::after { border: none; box-shadow: 3px 3px 6px rgba(26, 38, 56, 0.08); }
-    #npc-hint, #tram-hint, #airship-hint, #elder-hint, #fox-hint {
+    #npc-hint, #tram-hint, #airship-hint, #elder-hint, #fox-hint, #bubble-hint {
       background: rgba(255, 255, 255, 0.9);
       border: none;
       border-radius: 8px;
       color: #1a2638;
       box-shadow: 0 8px 24px rgba(26, 38, 56, 0.16);
     }
-    #npc-hint kbd, #tram-hint kbd, #airship-hint kbd, #elder-hint kbd, #fox-hint kbd {
+    #npc-hint kbd, #tram-hint kbd, #airship-hint kbd, #elder-hint kbd, #fox-hint kbd, #bubble-hint kbd {
       border: 1px solid rgba(47, 143, 122, 0.45);
       background: rgba(47, 143, 122, 0.12);
       color: #2f8f7a;
@@ -1146,6 +1248,13 @@
     <div id="npc-hint">[<kbd>E</kbd>] 与居民交谈</div>
     <div id="tram-hint">[<kbd>F</kbd>] 上车 · 窗边看风景 · 车上 [<kbd>C</kbd>] 司机视野</div>
     <div id="airship-hint">[<kbd>F</kbd>] 抓住垂绳 · 攀爬登上航空艇</div>
+    <div id="bubble-hint">[<kbd>F</kbd>] 登上气泡艇 · 海水湖可潜行 · [<kbd>G</kbd>] 气泡弹</div>
+    <div id="bubble-crosshair" aria-hidden="true"><span class="ring"></span><span class="dot"></span></div>
+    <div id="dive-tint" aria-hidden="true">
+      <div class="bubbles">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
     <div id="elder-hint">[<kbd>E</kbd>] 聆听八音盒</div>
     <div id="fox-hint">[<kbd>E</kbd>] 与阿狸交谈</div>
   </div>

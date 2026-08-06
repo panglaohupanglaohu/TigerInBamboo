@@ -14,9 +14,9 @@ export const P_DEFAULTS = Object.freeze({
   camDist: 7.5,
   talkRange: 3.2,
   tramSpeed: 3.2, // 电车行驶速度（开发者菜单可调）
-  aircraftSpeed: 3.1, // 飞船巡航线速度（世界单位/秒，开发者菜单单独可调；约原飞艇3倍速度的1/5）
-  aircraftScale: 1.25, // 飞船体积倍数（默认1.25，与飞艇(scale 1.25)等长同体量；开发者菜单可调）
-  aircraftHoldSec: 30, // 飞船在站点（书店/水晶城）上方停留秒数（开发者菜单可调）
+  aircraftSpeed: 1.65, // 空中鲸群：沉重缓巡（世界单位/秒）
+  aircraftScale: 2.6, // 宏大压迫感体量（约原飞艇两倍以上）
+  aircraftHoldSec: 36, // 站点上空滞空更久，像鲸群盘桓
   windSpeed: 0.8, // 风速（云漂移与拉伸）
   windDir: 45, // 风向（度，世界 XZ 平面方位角）
   daySpeed: 0.4, // 昼夜速度（0=暂停，1=90 秒一昼夜）

@@ -41,6 +41,7 @@ import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
+import { createCitySeaLake } from "../world/citySeaLake.js";
 
 /** 飞艇锚定用临时向量 */
 const _asTmp = new THREE.Vector3();
@@ -132,6 +133,8 @@ export const messengerIslandScene = {
     // 3 艘气泡座舱分别围绕水晶城 3 座含花厅的建筑巡游。
     const bubblePods = createBubblePodsAroundFlowerBuildings(scene, moebius.crystals, { count: 3 });
 
+    // 水晶城旁大型海水湖：培育湖沼水生生物，气泡艇可在此潜行
+    const citySeaLake = createCitySeaLake(scene, R, { seed: 5521 });
 
     // Boids 鸟群：低多边形手绘风群飞，漫游南半球大峡谷高空（35–45 高度带）
     // 三大定律 + 相位差扑翅 + 球心重力锁；晶塔柱体作避障障碍
@@ -176,21 +179,22 @@ export const messengerIslandScene = {
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
 
-    // 水晶城母塔 ↔ 书店低速往返：从水晶城出发，抵达书店后停留再折返。
-    // 航线锚点取母塔方向与书店当前初始化方向；速度上限 1.2，避免飞行过快。
+    // 水晶城母塔 ↔ 书店：空中搜寻航线（途经湖沼）
+    // 目的：像巨大蜂鸟一样发现湖沼水面落花，脱离阵型俯冲悬停吸蜜
     const cityDir = grandDir.clone().normalize();
     const bookshopDir = bookshop.position.clone().normalize();
-    const aircraftHeight = 20;
+    const aircraftHeight = 32; // 高空压迫感
     const aircraftSquad = createMoebiusAircraftSquad(cityDir, R, {
-      count: 10, // 5 → 10 艘，人字阵更壮观
+      count: 5,
       height: aircraftHeight,
-      radius: 13, // 编队变大，配合双倍机数拉开翼展
-      spin: 0.06,
+      radius: 18, // 翼展拉开，像鲸群列阵
+      spin: 0.03,
       formation: "v",
+      whaleFlight: true,
       patrol: {
         dirA: cityDir,
         dirB: bookshopDir,
-        maxSpeed: 1.2,
+        maxSpeed: 1.65, // 与 P.aircraftSpeed 同级，沉重缓行
       },
     });
     scene.add(aircraftSquad);
@@ -319,6 +323,7 @@ export const messengerIslandScene = {
         oldHarbor: harborBuilt,
         moebius,
         bubblePods, // 围绕水晶城 3 座花厅建筑巡游的气泡座舱
+        citySeaLake, // 水晶城旁海水湖 · 湖沼生物培育 · 气泡艇潜行
         airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
         flock, // Boids 低多边形手绘鸟群（南半球高空）
         hallFlock, // 花厅楼顶 Boids 鸟群（母皇塔尖环绕）
@@ -332,12 +337,14 @@ export const messengerIslandScene = {
         updateClouds(clouds, dt, t, { speed: P.windSpeed, dirDeg: P.windDir });
         tramSystem.update(dt, runtime?.player?.position);
 
-        // 水晶城母塔 ↔ 书店低速往返：更新航线位置、姿态、喷焰和青柠驾驶舱脉动。
-        updateAircraftHover(aircraftSquad, t, dt);
         // 3 艘气泡座舱分别围绕 3 座花厅建筑巡游
         updateBubblePodPatrol(bubblePods, t);
 
+        // 水晶城海水湖：涟漪 + 培育白鲸/鳗/带鱼
+        citySeaLake.update?.(dt, t);
+
         // 地图放置的湖沼/飞艇动效（鲸/舟/悬浮艇）
+        // 必须先于 aircraft：湖沼更新水面落花蜜源列表，供巨蜂鸟寻觅
         scene.traverse((o) => {
           const kind = o.userData?.kind;
           if ((kind === "moebius-swamp" || kind === "moebius-airship") && o.userData.update) {
@@ -345,19 +352,25 @@ export const messengerIslandScene = {
           }
         });
 
+        // 缓存湖沼根节点（地图放置 wrap）
+        let swampRoot = airshipAnchor.swamp;
+        if (!swampRoot || !swampRoot.parent) {
+          swampRoot = null;
+          scene.traverse((o) => {
+            if (!swampRoot && o.userData?.kind === "moebius-swamp") swampRoot = o;
+          });
+          airshipAnchor.swamp = swampRoot;
+          airshipAnchor.locked = false;
+        }
+
+        // 沿城↔书店航迹扫描近区：有概率发现湖沼 → 再蜂鸟吸蜜
+        updateAircraftHover(aircraftSquad, t, dt, { swamp: swampRoot });
+
         // 飞艇跟随湖沼：找到地图放置的 moebiusSwamp 后锚到其正上方；
         // 地图编辑器移动湖沼时（位置变化）自动重新锚定。
         // 玩家已驾驶过（flown）或正在驾驶（flying）时不再回锚，飞艇归玩家支配。
         if (!airship.userData.flown && !airship.userData.flying) {
-          let sw = airshipAnchor.swamp;
-          if (!sw || !sw.parent) {
-            sw = null;
-            scene.traverse((o) => {
-              if (!sw && o.userData?.kind === "moebius-swamp") sw = o;
-            });
-            airshipAnchor.swamp = sw;
-            airshipAnchor.locked = false;
-          }
+          const sw = swampRoot;
           if (sw) {
             _asTmp.copy(sw.position);
             if (!airshipAnchor.locked || airshipAnchor.lastPos.distanceToSquared(_asTmp) > 0.25) {

@@ -16,6 +16,7 @@ import { createDayNight } from "./world/dayNight.js";
 import { createTramRide } from "./player/tramRide.js";
 import { createAirshipRide } from "./player/airshipRide.js";
 import { createAircraftRide } from "./player/aircraftRide.js";
+import { createBubblePodRide } from "./player/bubblePodRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
@@ -122,6 +123,9 @@ const keys = createInput({
   onRightDrag: (on) => cameraRig.setRightDrag(on),
 });
 
+// bubblePodRide 稍后创建；触控环视在驾驶气泡艇时改为挪准星
+let bubblePodRide = null;
+
 // ---------- 触控遥控杆（手机 / 平板；可收起） ----------
 const touchControls = createTouchControls({
   keys,
@@ -130,6 +134,8 @@ const touchControls = createTouchControls({
   onOrbitPitch: (dy) => cameraRig.orbitPitchBy(dy),
   onRightDrag: (on) => cameraRig.setRightDrag(on),
   toast: showToast,
+  isBubbleRiding: () => bubblePodRide?.isRiding?.() ?? false,
+  onBubbleAim: (dx, dy) => bubblePodRide?.aimByDelta?.(dx, dy),
 });
 
 // ---------- 任务（依赖平台；无 messenger 场景时任务仍可创建但不贴台） ----------
@@ -241,12 +247,37 @@ const aircraftRide = createAircraftRide({
   camera,
   cameraRig,
   getSquad: () => messenger?.landmarks?.aircraftSquad || null,
-  exitAirshipRide: () => airshipRide.forceExit(),
+  exitAirshipRide: () => {
+    airshipRide.forceExit();
+    bubblePodRide?.forceExit?.();
+  },
+});
+
+// ---------- 气泡艇：驾驶 / 瞄准气泡弹 / 水晶城海水湖潜行 ----------
+bubblePodRide = createBubblePodRide({
+  camera,
+  cameraRig,
+  player,
+  playerGroup,
+  getFleet: () => messenger?.landmarks?.bubblePods || null,
+  getSeaLake: () => messenger?.landmarks?.citySeaLake || null,
+  scene,
+  planetRadius: PLANET_RADIUS,
+  keys,
+  elHint: document.getElementById("bubble-hint"),
+  elCrosshair: document.getElementById("bubble-crosshair"),
+  elDiveTint: document.getElementById("dive-tint"),
+  toast: showToast,
+  exitOtherRides: () => {
+    airshipRide.forceExit?.();
+    if (aircraftRide.isRiding?.()) aircraftRide.toggle();
+  },
 });
 
 // [V] 进入/退出飞行器驾驶舱
 window.addEventListener("keydown", (e) => {
   if (e.repeat || e.code !== "KeyV") return;
+  bubblePodRide?.forceExit?.();
   const on = aircraftRide.toggle();
   showToast(on ? "已进入飞行器驾驶舱 · [V] 退出" : "已退出飞行器驾驶舱", 2.4);
 });
@@ -385,8 +416,12 @@ function animate() {
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   mapEditor.tickHighlight?.();
 
-  // 搭乘接管：飞行器驾驶舱优先（[V]）；否则电车/航空艇
-  const riding = aircraftRide.update() || tramRide.update(dt) || airshipRide.update(dt);
+  // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
+  const riding =
+    aircraftRide.update() ||
+    bubblePodRide.update(dt) ||
+    tramRide.update(dt) ||
+    airshipRide.update(dt);
   if (!riding) {
     updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
     resolveCollisions(
@@ -436,7 +471,9 @@ function animate() {
   const tz = player.velocity.z - vr * uz;
   const moving = Math.hypot(tx, ty, tz) > 0.3;
   updatePlayerAnim(player, messengerMesh, dt, moving);
-  cameraRig.update(dt);
+  // 驾驶舱第一人称（飞行器 / 气泡艇）由各自 update 写相机，跳过第三人称跟随
+  const cockpitView = aircraftRide.isRiding?.() || bubblePodRide.isRiding?.();
+  if (!cockpitView) cameraRig.update(dt);
   quest.updateInteraction(dt);
   elderMusic.update(dt, t);
   // 阿狸在任务气泡之后更新，避免被 hideBubble 冲掉
