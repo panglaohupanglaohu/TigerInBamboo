@@ -47,8 +47,9 @@ export function createAircraftRide({ camera, cameraRig, getSquad, exitAirshipRid
     anchor.getWorldPosition(_anchorW);
 
     // 飞船局部坐标系在世界中的旋转
+    // 机头 = 局部 +Z（尾焰在 -Z，推力沿 +Z 推船向前）
     _m.extractRotation(lead.matrixWorld);
-    _fwdW.set(1, 0, 0).applyMatrix4(_m).normalize(); // 机头 = 局部 +X
+    _fwdW.set(0, 0, 1).applyMatrix4(_m).normalize();
     _upW.set(0, 1, 0).applyMatrix4(_m).normalize(); // 上 = 局部 +Y
 
     // 相机贴到眼位

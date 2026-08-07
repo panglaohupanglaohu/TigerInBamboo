@@ -99,7 +99,7 @@ const REGISTRY = [
   { id: "moebiusSwamp", cat: "器物", label: "莫比斯湖沼（地形）", build: () => createMoebiusSwampPlacement({ seed: 7711, scale: 0.5 }) },
   { id: "moebiusTower", cat: "器物", label: "莫比斯塔", build: () => createDetailedMoebiusTower({ stages: 3, goldScales: false }) },
   { id: "moebiusAirship", cat: "器物", label: "莫比斯航空艇", build: () => createMoebiusAirship() },
-  { id: "moebiusAircraft", cat: "器物", label: "莫比斯飞船/飞行器", build: () => createMoebiusAircraft() },
+  { id: "moebiusAircraft", cat: "器物", label: "莫比斯磁悬浮飞碟", build: () => createMoebiusAircraft() },
   { id: "tram", cat: "器物", label: "基督城电车", build: () => createChristchurchTram({ variant: "red" }) },
   { id: "bubblePod", cat: "器物", label: "气泡座舱", build: () => createBubblePod({}) },
   { id: "fence", cat: "器物", label: "木栅栏", build: () => createLowPolyFence() },
@@ -323,21 +323,25 @@ const canvas = document.getElementById("c");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1);
 renderer.setSize(512, 512, false);
-renderer.setClearColor(0xe9eef3, 1);
+// 莫比斯黄昏结界淡粉紫底（禁止纯黑背景把 Toon 色块压脏）
+const SKY_MOEBIUS = 0xebb9b6;
+renderer.setClearColor(SKY_MOEBIUS, 1);
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(SKY_MOEBIUS);
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 5000);
 
-// 灯光（toon 材质需要光照）
-const hemi = new THREE.HemisphereLight(0xffffff, 0xb4bcc6, 0.95);
+// 强白光：Ambient 1.35 把橙红/奶黄色块彻底照亮，无死黑面
+const hemi = new THREE.HemisphereLight(0xffffff, 0xf5e6e0, 1.05);
 scene.add(hemi);
-const dir = new THREE.DirectionalLight(0xffffff, 1.15);
+const dir = new THREE.DirectionalLight(0xffffff, 1.25);
 dir.position.set(6, 12, 8);
 scene.add(dir);
-const dir2 = new THREE.DirectionalLight(0xdfe8ff, 0.35);
+const dir2 = new THREE.DirectionalLight(0xfff5e8, 0.55);
 dir2.position.set(-8, 4, -6);
 scene.add(dir2);
-scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+const ambient = new THREE.AmbientLight(0xffffff, 1.35);
+scene.add(ambient);
 
 let dynamic = null;
 

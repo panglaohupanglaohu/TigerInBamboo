@@ -5,9 +5,10 @@ import * as THREE from "three";
 
 export function createStage() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x7fcfc8); // 青绿二次元天空底色（主人指定，Grok 版）
-  // 远景使用浅薄荷雾
-  scene.fog = new THREE.FogExp2(0xa9ded3, 0.009);
+  // 莫比斯黄昏结界淡粉紫底（#EBB9B6）；昼夜循环会再 lerp 天空色
+  scene.background = new THREE.Color(0xebb9b6);
+  // 远景雾与背景同色相，避免纯黑/水泥灰吞没高空飞艇
+  scene.fog = new THREE.FogExp2(0xebb9b6, 0.007);
 
   const camera = new THREE.PerspectiveCamera(
     60,

@@ -263,11 +263,11 @@ export const BUILDING_CATALOG = {
   },
   moebiusAircraft: {
     id: "moebiusAircraft",
-    label: "莫比斯飞船",
+    label: "莫比斯飞碟",
     create: () => createMoebiusAircraft(),
     defaultYaw: 0,
     collideRadius: 2.0,
-    color: "#778899",
+    color: "#E5EFF2",
   },
   tram: {
     id: "tram",

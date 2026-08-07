@@ -32,10 +32,9 @@ const _gradient3 = (() => {
  * @param {object} [opts]  transparent / opacity / side / emissive / vertexColors
  */
 function crystalToon(color, opts = {}) {
-  return new THREE.MeshToonMaterial({
+  const material = new THREE.MeshToonMaterial({
     color,
     gradientMap: _gradient3,
-    flatShading: true,
     transparent: opts.transparent ?? true,
     opacity: opts.opacity ?? 0.85,
     side: opts.side ?? THREE.FrontSide,
@@ -43,6 +42,12 @@ function crystalToon(color, opts = {}) {
     emissiveIntensity: opts.emissiveIntensity ?? 0,
     vertexColors: opts.vertexColors ?? false,
   });
+  // flatShading 必须构造后赋值：MeshToonMaterial 未声明该字段，
+  // 写在构造参数里会被 setValues() 告警并丢弃（分面硬边直接失效）。
+  // WebGLPrograms 仍会读取 material.flatShading，与 toon.js 的 toonMat 同做法。
+  material.flatShading = true;
+  material.needsUpdate = true;
+  return material;
 }
 
 /** 通用描边件工厂：facet 扁平分面 + castShadow + addOutline 墨线描边 */
@@ -366,7 +371,7 @@ export function createMoebiusAircraft() {
  * @param {number} R 星球半径
  * @param {number} [height] 离地表高度
  */
-export function placeAircraftAbove(aircraft, dir, R, height = 22) {
+export function placeAircraftAbove(aircraft, dir, R, height = 20) {
   const d = dir.clone().normalize();
   aircraft.position.copy(d).multiplyScalar(R + height);
   orientAircraftToDir(aircraft, d);
@@ -381,7 +386,7 @@ export function placeAircraftAbove(aircraft, dir, R, height = 22) {
  * @param {number} R 星球半径
  * @param {number} height 离地表高度
  */
-export function syncAircraftSquadToAnchor(squad, anchor, R, height = 24) {
+export function syncAircraftSquadToAnchor(squad, anchor, R, height = 20) {
   if (!squad || !anchor) return;
   if (!anchor.parent) {
     squad.visible = false;
@@ -417,7 +422,7 @@ export function syncAircraftSquadToAnchor(squad, anchor, R, height = 24) {
  * @param {number} R 星球半径
  * @param {object} [opts]
  * @param {number} [opts.count=5]
- * @param {number} [opts.height=24]  编队中心离地表高度
+ * @param {number} [opts.height=20]  编队中心离地表高度（默认与航空艇 hover=20 同高）
  * @param {number} [opts.radius=10]  环形半径（切平面内）
  * @param {number} [opts.spin=0.06]  编队绕法线自旋角速度（无航线时生效）
  * @param {object} [opts.patrol]     航线 { dirA:Vector3, dirB:Vector3 }
@@ -426,7 +431,7 @@ export function syncAircraftSquadToAnchor(squad, anchor, R, height = 24) {
 export function createMoebiusAircraftSquad(centerDir, R, opts = {}) {
   const {
     count = 5,
-    height = 32,
+    height = 20,
     radius = 18,
     spin = 0.03,
     patrol = null,
@@ -783,7 +788,16 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
   const thrusterLights = aircraft.userData.thrusterLights || [];
   for (const tl of thrusterLights) tl.intensity = 1.8 + Math.sin(t * 18) * 1.1;
 
-  updateAircraftScanLasers(members, t, laserActive, aircraft.userData.patrol?.R, laserMode, scan);
+  updateAircraftScanLasers(
+    members,
+    t,
+    laserActive,
+    aircraft.userData.patrol?.R,
+    laserMode,
+    scan,
+    nectarList,
+    dt
+  );
 }
 
 /**
@@ -982,13 +996,14 @@ function updateHummingbirdForage(members, nectarList, ctx) {
       if (formationUp && formationTan) {
         orientAircraftToDir(member, formationUp, formationTan);
         member.rotateY(member.userData.formationHeading || 0);
+        // 机头 = +Z：俯仰绕右舷 +X，滚转绕机头 +Z
         const bodyRoll = formationBank + Math.sin(wph * 0.9) * 0.06;
         const bodyPitch = formationPitch + Math.sin(wph * 0.55) * 0.05;
         member.quaternion.multiply(
-          new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), bodyPitch)
+          new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), bodyPitch)
         );
         member.quaternion.multiply(
-          new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), bodyRoll)
+          new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), bodyRoll)
         );
       }
 
@@ -1056,10 +1071,10 @@ function updateHummingbirdForage(members, nectarList, ctx) {
       }
       tan.normalize();
       orientAircraftToDir(member, up, tan);
-      // 俯冲俯仰
+      // 俯冲俯仰（绕右舷 +X）
       const divePitch = -0.35 * THREE.MathUtils.clamp(dist / 40, 0.2, 1);
       member.quaternion.multiply(
-        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), divePitch)
+        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), divePitch)
       );
 
       if (dist < 3.2 || fg.t > 14) {
@@ -1101,11 +1116,11 @@ function updateHummingbirdForage(members, nectarList, ctx) {
       if (face.lengthSq() < 1e-8) face.copy(_acFeedTan);
       face.normalize();
       orientAircraftToDir(member, _acFeedUp, face);
-      // 悬停俯角 + 轻微左右摆
+      // 悬停俯角（绕 +X）+ 轻微左右偏航（绕 +Y）
       const sipPitch = -0.48 + Math.sin(t * 9 + i) * 0.06;
       const sipYaw = Math.sin(t * 3.2 + i) * 0.12;
       member.quaternion.multiply(
-        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), sipPitch)
+        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), sipPitch)
       );
       member.quaternion.multiply(
         new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), sipYaw)
@@ -1146,10 +1161,10 @@ function updateHummingbirdForage(members, nectarList, ctx) {
       if (tan.lengthSq() < 1e-8) tan.set(1, 0, 0);
       tan.normalize();
       orientAircraftToDir(member, up, tan);
-      // 爬升抬头
+      // 爬升抬头（绕右舷 +X）
       member.quaternion.multiply(
         new THREE.Quaternion().setFromAxisAngle(
-          new THREE.Vector3(0, 0, 1),
+          new THREE.Vector3(1, 0, 0),
           0.28 * THREE.MathUtils.clamp(dist / 30, 0.15, 1)
         )
       );
@@ -1201,16 +1216,221 @@ function alignVecTo(from, to, outQ) {
   return outQ.setFromUnitVectors(from, to);
 }
 
+/** 扫描吸力落点池（避免每帧 new Vector3） */
+const _scanHitPool = [];
+const _scanObjPos = new THREE.Vector3();
+const _scanCraftPos = new THREE.Vector3();
+const _scanLocalTarget = new THREE.Vector3();
+const _scanWaveSide = new THREE.Vector3();
+const _scanWaveFwd = new THREE.Vector3();
+
+// 仅湖沼「发光花朵」可被吸入 aircraft
+const SCAN_PULL_RADIUS = 5.5; // 光斑锁定半径
+const SCAN_SUCK_SPEED = 11; // 沿光束吸入速度（世界单位/秒）
+const SCAN_WAVE_AMP = 0.42; // 吸入途中正弦横向颤
+const SCAN_WAVE_FREQ = 8.5;
+const SCAN_ABSORB_DIST = 1.35; // 距机腹多近算吸入
+
+/**
+ * 是否为湖沼水面发光蜜源花（唯一可被扫描吸入的物体）。
+ * 树冠上的花 / 落叶 / 其它道具一律不吸。
+ */
+function isSwampGlowFlower(f) {
+  if (!f?.userData) return false;
+  // 必须已落水且仍有蜜（巨型发光花的蜜源态）
+  if (f.userData.onWater !== true) return false;
+  if ((f.userData.nectar ?? 0) <= 0.05) return false;
+  // 发光花蕊 core 作为发光花身份标记
+  if (!f.userData.core && f.userData.kind !== "swamp-giant-flower") return false;
+  // 正在被吸完则跳过
+  if (f.userData._scanAbsorbed) return false;
+  return true;
+}
+
+/**
+ * 激光扫到湖沼发光花 → 沿光束向上吸入最近的 aircraft 机腹。
+ * 吸入途中带正弦横向波动；抵达机腹后吸收复位。
+ */
+function applyScanSuction(hits, nectarList, t, dt) {
+  const flowers = [];
+  if (nectarList?.length) {
+    for (const n of nectarList) {
+      if (n?.flower && isSwampGlowFlower(n.flower)) flowers.push(n.flower);
+    }
+  }
+
+  // 无激光：未锁定的花回落；已锁定的继续吸完
+  const activeHits = hits?.length ? hits : [];
+
+  for (let i = 0; i < flowers.length; i++) {
+    const f = flowers[i];
+    f.getWorldPosition(_scanObjPos);
+
+    // 找最近光斑 / 已锁定的机
+    let best = 0;
+    let bestHit = null;
+    for (let h = 0; h < activeHits.length; h++) {
+      const hit = activeHits[h];
+      const d = _scanObjPos.distanceTo(hit.pos);
+      const r = hit.r || SCAN_PULL_RADIUS;
+      if (d < r) {
+        const s = 1 - d / r;
+        if (s > best) {
+          best = s;
+          bestHit = hit;
+        }
+      }
+    }
+
+    // 首次进入光斑 → 锁定吸入目标机
+    if (!f.userData._scanSuckLock && bestHit && best > 0.12) {
+      f.userData._scanSuckLock = {
+        craft: bestHit.craft,
+        phase: i * 1.91 + t * 0.01,
+      };
+      f.userData._scanPullRestY = f.position.y;
+      f.userData._scanPullRestPos = f.position.clone();
+      // 延长水面停留，防止湖沼逻辑中途复位
+      f.userData.restT = Math.min(f.userData.restT ?? 0, 2);
+      f.userData.scanSucking = true;
+    }
+
+    const lock = f.userData._scanSuckLock;
+    if (!lock?.craft) {
+      // 未锁定：光斑上仅轻微托起 + 正弦波（尚未吸入机腹）
+      if (best > 0.05 && f.userData._scanPullRestY != null) {
+        const phase = i * 1.7;
+        const wave = Math.sin(t * SCAN_WAVE_FREQ + phase) * SCAN_WAVE_AMP * best;
+        const lift = 0.85 * best + wave;
+        f.position.y = f.userData._scanPullRestY + lift;
+      } else if (f.userData._scanPullRestY != null && !lock) {
+        // 离开光斑回落
+        const rest = f.userData._scanPullRestY;
+        f.position.y += (rest - f.position.y) * (1 - Math.exp(-6 * Math.max(dt, 1e-4)));
+        if (Math.abs(f.position.y - rest) < 0.03) {
+          f.position.y = rest;
+          f.userData._scanPullRestY = undefined;
+          f.scale.setScalar(1);
+        }
+      }
+      continue;
+    }
+
+    // —— 已锁定：沿世界直线吸入机腹发射口 ——
+    const craft = lock.craft;
+    if (!craft?.parent) {
+      releaseScanSuck(f, true);
+      continue;
+    }
+    craft.updateWorldMatrix(true, false);
+    const emitter =
+      craft.userData?.scanBeam?.userData?.emitterLocal ||
+      new THREE.Vector3(0, -0.85, 0.35);
+    _scanCraftPos.copy(emitter).applyMatrix4(craft.matrixWorld);
+
+    f.getWorldPosition(_scanObjPos);
+    const dist = _scanObjPos.distanceTo(_scanCraftPos);
+    if (dist < SCAN_ABSORB_DIST) {
+      absorbGlowFlowerIntoAircraft(f, craft);
+      continue;
+    }
+
+    // 目标点：机腹 + 正弦横向波动（沿光束路径颤动）
+    const phase = lock.phase ?? 0;
+    _scanWaveSide.set(1, 0, 0).transformDirection(craft.matrixWorld);
+    _scanWaveFwd.set(0, 0, 1).transformDirection(craft.matrixWorld);
+    const w = Math.sin(t * SCAN_WAVE_FREQ + phase) * SCAN_WAVE_AMP;
+    const w2 = Math.cos(t * SCAN_WAVE_FREQ * 0.73 + phase) * SCAN_WAVE_AMP * 0.55;
+    _scanLocalTarget
+      .copy(_scanCraftPos)
+      .addScaledVector(_scanWaveSide, w)
+      .addScaledVector(_scanWaveFwd, w2);
+
+    // 世界目标 → 父节点本地坐标，再 lerp
+    const parent = f.parent;
+    if (parent) {
+      parent.worldToLocal(_scanLocalTarget);
+      const step = 1 - Math.exp(-SCAN_SUCK_SPEED * 0.22 * Math.max(dt, 1e-4));
+      // 距离越近吸得越快
+      const boost = THREE.MathUtils.clamp(1.2 + (8 / Math.max(dist, 1)) * 0.35, 1, 2.2);
+      f.position.lerp(_scanLocalTarget, Math.min(1, step * boost));
+    } else {
+      f.position.lerp(_scanLocalTarget, 0.15);
+    }
+
+    // 吸入途中缩小 + 自旋
+    const shrink = THREE.MathUtils.clamp(dist / 18, 0.25, 1);
+    f.scale.setScalar(shrink);
+    f.rotation.y += dt * 4.5;
+    f.rotation.x += dt * 2.2;
+    // 阻止湖沼超时复位
+    f.userData.restT = Math.min(f.userData.restT ?? 0, 1);
+    f.userData.scanSucking = true;
+  }
+}
+
+/** 发光花被吸入机腹：消耗蜜源并复位回树冠开放态 */
+function absorbGlowFlowerIntoAircraft(f, craft) {
+  if (!f?.userData) return;
+  f.userData.nectar = 0;
+  f.userData.onWater = false;
+  f.userData.falling = false;
+  f.userData.splashed = false;
+  f.userData.feeding = false;
+  f.userData.restT = 0;
+  f.userData.scanSucking = false;
+  f.userData._scanAbsorbed = false;
+  f.userData._scanSuckLock = null;
+  f.userData._scanPullRestY = undefined;
+  f.userData._scanPullRestPos = undefined;
+  // 回树冠高度重新开放
+  if (Number.isFinite(f.userData.baseY)) f.position.y = f.userData.baseY;
+  f.rotation.set(0, f.rotation.y, 0);
+  f.scale.setScalar(1);
+  f.visible = true;
+  // 可选：机腹闪一下（若有 thruster light）
+  if (craft?.userData?.thrusterLight) {
+    craft.userData.thrusterLight.intensity = Math.max(
+      craft.userData.thrusterLight.intensity,
+      4.5
+    );
+  }
+}
+
+function releaseScanSuck(f, snap = false) {
+  if (!f?.userData) return;
+  f.userData._scanSuckLock = null;
+  f.userData.scanSucking = false;
+  const rest = f.userData._scanPullRestY;
+  if (snap && Number.isFinite(rest)) f.position.y = rest;
+  f.userData._scanPullRestY = undefined;
+  f.scale.setScalar(1);
+}
+
 /**
  * 地面扫描激光：从机腹发出，打到星球球面并扫掠。
  * 世界空间求射线-球面交点，再写回机身局部（光束为子物体）。
+ * 扫到的物体：向上吸力 + 正弦波动。
  * mode: patrol | search | lock
  */
-function updateAircraftScanLasers(members, t, flying, R = 40, mode = "patrol", scan = null) {
-  if (!members?.length) return;
+function updateAircraftScanLasers(
+  members,
+  t,
+  flying,
+  R = 40,
+  mode = "patrol",
+  scan = null,
+  nectarList = null,
+  dt = 0.016
+) {
+  if (!members?.length) {
+    applyScanSuction([], nectarList, t, dt);
+    return;
+  }
   const heat = scan?.heat ?? 0;
   const prox = scan?.proximity ?? 0;
   const planetR = Math.max(8, R);
+  let hitCount = 0;
 
   for (let i = 0; i < members.length; i++) {
     const m = members[i];
@@ -1347,16 +1567,44 @@ function updateAircraftScanLasers(members, t, flying, R = 40, mode = "patrol", s
       else if (mode === "search") spot.material.color.setRGB(0.6, 0.95, 1.0);
       else spot.material.color.setRGB(0.45, 1.0, 0.75);
     }
+
+    // 记录世界落点 + 所属飞机：仅湖沼发光花会被吸入该机机腹
+    if (!_scanHitPool[hitCount]) {
+      _scanHitPool[hitCount] = {
+        pos: new THREE.Vector3(),
+        r: SCAN_PULL_RADIUS,
+        craft: null,
+      };
+    }
+    const rec = _scanHitPool[hitCount++];
+    rec.pos.copy(_scanHit);
+    rec.r = SCAN_PULL_RADIUS * (0.85 + spotSc * 0.35);
+    rec.craft = m;
   }
+
+  // 激光扫到的物体：向上吸 + 正弦波
+  const hits = flying ? _scanHitPool.slice(0, hitCount) : [];
+  applyScanSuction(hits, nectarList, t, dt);
 }
 
-/** 让飞行器机身 +Z 朝给定切向 tangent、局部 +Y 对齐球面法线 dir */
+/**
+ * 机身朝向：局部 +Z = 机头前向（与尾焰在 -Z 一致，尾焰推力推船向前），
+ * 局部 +Y = 球面外法线 up，局部 +X = 右舷。
+ * 注意：旧实现误把 +X 当机头，导致船身横着飞、尾焰朝侧面。
+ */
 function orientAircraftToDir(aircraft, d, tangentHint = null) {
-  const up = d.clone();
-  let tangent = tangentHint ? tangentHint.clone() : new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), up);
+  const up = d.clone().normalize();
+  let tangent = tangentHint
+    ? tangentHint.clone()
+    : new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), up);
+  if (tangent.lengthSq() < 1e-6) tangent.set(1, 0, 0);
+  // 切向必须垂直于 up（球面切平面内的前向）
+  tangent.addScaledVector(up, -tangent.dot(up));
   if (tangent.lengthSq() < 1e-6) tangent.set(1, 0, 0);
   tangent.normalize();
+  // 右手系：X = Y × Z = up × forward → 右舷
   const side = new THREE.Vector3().crossVectors(up, tangent).normalize();
-  const m = new THREE.Matrix4().makeBasis(tangent, up, side);
+  // makeBasis(x, y, z)：局部 +Z 对齐飞行切向（机头），+Y 对齐法线
+  const m = new THREE.Matrix4().makeBasis(side, up, tangent);
   aircraft.quaternion.setFromRotationMatrix(m);
 }

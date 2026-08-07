@@ -1,8 +1,16 @@
 // =====================================================================
 //  墨比斯气泡座舱飞行器
-//  球形透明泡泡 + 紫蓝色下半舱 + 米金赤道环 + 单人驾驶舱
+//  球形卡通水晶泡泡 + 紫蓝色下半舱 + 米金赤道环 + 单人驾驶舱
+//
+//  材质策略（无头 SwiftShader 硬性约束）：
+//  - 彻底废除 MeshPhysicalMaterial / transmission 物理透射
+//  - 全件 MeshToonMaterial + 3 阶硬边 gradientMap + flatShading
+//  - 玻璃罩半透明仅用 opacity（底层 alpha，不触发屏幕空间回读）
+//  - 主体网格 addOutline 唐伯虎水墨细描边 + castShadow
 // =====================================================================
 import * as THREE from "three";
+import { addOutline } from "./toon.js";
+import { facet } from "./lowPoly.js";
 
 const _worldQuat = new THREE.Quaternion();
 const _up = new THREE.Vector3();
@@ -13,20 +21,63 @@ const _orientation = new THREE.Matrix4();
 const _orbitTangent = new THREE.Vector3();
 const _orbitSide = new THREE.Vector3();
 
-function standardMaterial(options, flatShading = false) {
-  const mat = new THREE.MeshStandardMaterial(options);
-  if (flatShading) {
-    mat.flatShading = true;
-    mat.needsUpdate = true;
-  }
-  return mat;
+/* ---------------- 3 阶硬边缘 Toon 渐变贴图（纯代码生成） ----------------
+ * 三阶灰度阶梯 [0, 127, 255]：暗部 / 中间调 / 亮部，
+ * Nearest 采样锁死边缘 → 干净二次元色块切面。
+ * RedFormat 兼容当前 Three.js（LuminanceFormat 已废弃）。
+ */
+const _gradient3 = (() => {
+  const data = new Uint8Array([0, 127, 255]);
+  const tex = new THREE.DataTexture(data, 3, 1, THREE.RedFormat);
+  tex.minFilter = THREE.NearestFilter;
+  tex.magFilter = THREE.NearestFilter;
+  tex.generateMipmaps = false;
+  tex.needsUpdate = true;
+  return tex;
+})();
+
+/**
+ * 卡通水晶材质（MeshToonMaterial · 3 阶渐变 + 分面着色）。
+ * 废除物理玻璃 transmission，改用基础 opacity 半透明。
+ * flatShading 须构造后赋值（构造参数会触发 setValues 告警）。
+ * @param {number|string|THREE.Color} color
+ * @param {object} [opts]
+ */
+function crystalToon(color, opts = {}) {
+  const material = new THREE.MeshToonMaterial({
+    color: color instanceof THREE.Color ? color : new THREE.Color(color),
+    gradientMap: _gradient3,
+    transparent: opts.transparent ?? false,
+    opacity: opts.opacity ?? 1,
+    side: opts.side ?? THREE.FrontSide,
+    depthWrite: opts.depthWrite ?? true,
+    emissive: opts.emissive ?? 0x000000,
+    emissiveIntensity: opts.emissiveIntensity ?? 0,
+  });
+  material.flatShading = true;
+  material.needsUpdate = true;
+  return material;
 }
 
-function addMesh(group, geometry, material, name, castShadow = true) {
-  const mesh = new THREE.Mesh(geometry, material);
+/**
+ * 描边件工厂：可选 facet 扁平分面 + castShadow + addOutline。
+ * @param {THREE.Group} group
+ * @param {THREE.BufferGeometry} geometry
+ * @param {THREE.Material} material
+ * @param {string} name
+ * @param {{ castShadow?: boolean, outline?: number|false, doFacet?: boolean }} [opts]
+ */
+function addMesh(group, geometry, material, name, opts = {}) {
+  const castShadow = opts.castShadow !== false;
+  const doFacet = opts.doFacet !== false;
+  const geo = doFacet ? facet(geometry) : geometry;
+  const mesh = new THREE.Mesh(geo, material);
   mesh.name = name;
   mesh.castShadow = castShadow;
   mesh.receiveShadow = true;
+  if (opts.outline !== false) {
+    addOutline(mesh, opts.outline ?? 0.04);
+  }
   group.add(mesh);
   return mesh;
 }
@@ -43,42 +94,37 @@ export function createBubblePod(opts = {}) {
   group.name = "moebius-bubble-pod";
   group.scale.setScalar(scale);
 
-  // ---------- 透明球形泡泡外罩 ----------
+  // ---------- 卡通水晶球形泡泡外罩（废除物理透射） ----------
+  // 低多边形 12×10 + flatShading → 莫比斯多面体硬边；opacity 半透明无 transmission
   const bubble = addMesh(
     group,
-    new THREE.SphereGeometry(2.7, 48, 32),
-    new THREE.MeshPhysicalMaterial({
-      color: 0x9edcff,
+    new THREE.SphereGeometry(2.7, 12, 10),
+    crystalToon(0x9edcff, {
       transparent: true,
-      opacity: 0.25,
-      transmission: 0.9,
-      roughness: 0.05,
-      metalness: 0.1,
-      ior: 1.45,
-      thickness: 0.28,
-      clearcoat: 1,
-      clearcoatRoughness: 0.05,
+      opacity: 0.55,
       side: THREE.DoubleSide,
       depthWrite: false,
+      emissive: 0x4aa8d8,
+      emissiveIntensity: 0.12,
     }),
     "bubble-shell",
-    false
+    { castShadow: true, outline: 0.04 }
   );
   bubble.renderOrder = 10;
 
-  // 玻璃高光弧线与顶部亮环
+  // 玻璃高光弧线与顶部亮环（Basic 不参与光照，仅装饰描边感）
   const highlightMaterial = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.55,
     depthWrite: false,
   });
   const highlightRing = addMesh(
     group,
-    new THREE.TorusGeometry(2.71, 0.025, 8, 72),
+    new THREE.TorusGeometry(2.71, 0.025, 6, 24),
     highlightMaterial,
     "bubble-highlight-ring",
-    false
+    { castShadow: false, outline: false, doFacet: false }
   );
   highlightRing.rotation.x = Math.PI / 2;
   highlightRing.position.y = 0.72;
@@ -95,7 +141,7 @@ export function createBubblePod(opts = {}) {
     0
   );
   const arcGeometry = new THREE.BufferGeometry().setFromPoints(
-    arc.getPoints(32).map((p) => new THREE.Vector3(p.x, p.y, 2.53))
+    arc.getPoints(24).map((p) => new THREE.Vector3(p.x, p.y, 2.53))
   );
   const arcLine = new THREE.Line(arcGeometry, highlightMaterial);
   arcLine.name = "bubble-highlight-arc";
@@ -107,70 +153,62 @@ export function createBubblePod(opts = {}) {
   // ---------- 紫蓝色下半部底座 ----------
   const base = addMesh(
     group,
-    new THREE.SphereGeometry(2.5, 36, 20, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2),
-    standardMaterial(
-      {
-        color: 0x625792,
-        roughness: 0.8,
-        metalness: 0.05,
-        side: THREE.DoubleSide,
-      },
-      true
-    ),
-    "purple-lower-cabin"
+    new THREE.SphereGeometry(2.5, 12, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2),
+    crystalToon(0x625792, { transparent: false, side: THREE.DoubleSide }),
+    "purple-lower-cabin",
+    { outline: 0.04 }
   );
   base.position.y = -0.08;
 
   // ---------- 赤道环 ----------
   const equatorialRing = addMesh(
     group,
-    new THREE.TorusGeometry(2.72, 0.105, 10, 80),
-    standardMaterial({ color: 0xf8f3d4, roughness: 0.62, metalness: 0.12 }),
-    "equatorial-ring"
+    new THREE.TorusGeometry(2.72, 0.105, 8, 28),
+    crystalToon(0xf8f3d4, {
+      transparent: false,
+      emissive: 0xf8f3d4,
+      emissiveIntensity: 0.08,
+    }),
+    "equatorial-ring",
+    { outline: 0.03 }
   );
   equatorialRing.rotation.x = Math.PI / 2;
 
   const bottomRing = addMesh(
     group,
-    new THREE.TorusGeometry(1.72, 0.05, 8, 56),
-    standardMaterial({ color: 0xf8f3d4, roughness: 0.58, metalness: 0.12 }),
-    "bottom-ring"
+    new THREE.TorusGeometry(1.72, 0.05, 6, 20),
+    crystalToon(0xf8f3d4, { transparent: false }),
+    "bottom-ring",
+    { outline: 0.02 }
   );
   bottomRing.rotation.x = Math.PI / 2;
   bottomRing.position.y = -2.45;
 
-  // ---------- 驾驶座 ----------
-  const seatMaterial = standardMaterial(
-    { color: 0xc85f76, roughness: 0.78, metalness: 0.02 },
-    true
-  );
-  addMesh(
-    group,
-    new THREE.BoxGeometry(0.9, 0.18, 0.78),
-    seatMaterial,
-    "pilot-seat-base"
-  ).position.set(0, -1.55, -0.42);
+  // ---------- 驾驶座（略抬高，配合驾驶员视线） ----------
+  const seatMaterial = crystalToon(0xc85f76, { transparent: false });
+  addMesh(group, new THREE.BoxGeometry(0.9, 0.18, 0.78), seatMaterial, "pilot-seat-base", {
+    outline: 0.02,
+  }).position.set(0, -1.35, -0.42);
   const seatBack = addMesh(
     group,
     new THREE.BoxGeometry(0.9, 1.15, 0.18),
     seatMaterial,
-    "pilot-seat-back"
+    "pilot-seat-back",
+    { outline: 0.02 }
   );
-  seatBack.position.set(0, -1.05, -0.78);
+  seatBack.position.set(0, -0.85, -0.78);
   seatBack.rotation.x = THREE.MathUtils.degToRad(-8);
 
   // ---------- 灰白控制台与双操纵杆 ----------
-  const consoleMaterial = standardMaterial(
-    { color: 0xd9dde3, roughness: 0.58, metalness: 0.18 },
-    true
-  );
+  const consoleMaterial = crystalToon(0xd9dde3, { transparent: false });
   const console = addMesh(
     group,
     new THREE.BoxGeometry(1.3, 0.32, 0.56),
     consoleMaterial,
-    "cockpit-console"
+    "cockpit-console",
+    { outline: 0.02 }
   );
-  console.position.set(0, -0.95, 0.72);
+  console.position.set(0, -0.75, 0.72);
   console.rotation.x = THREE.MathUtils.degToRad(-12);
 
   const panel = addMesh(
@@ -178,87 +216,89 @@ export function createBubblePod(opts = {}) {
     new THREE.BoxGeometry(0.5, 0.018, 0.13),
     new THREE.MeshBasicMaterial({ color: accent }),
     "cockpit-panel",
-    false
+    { castShadow: false, outline: false, doFacet: false }
   );
-  panel.position.set(0, -0.72, 0.59);
+  panel.position.set(0, -0.52, 0.59);
   panel.rotation.x = THREE.MathUtils.degToRad(-12);
 
-  const handleMaterial = standardMaterial({
-    color: 0xc3cad1,
-    roughness: 0.45,
-    metalness: 0.35,
-  });
-  const gripMaterial = standardMaterial({
-    color: 0xff807d,
-    roughness: 0.5,
-    metalness: 0.1,
-  });
+  const handleMaterial = crystalToon(0xc3cad1, { transparent: false });
+  const gripMaterial = crystalToon(0xff807d, { transparent: false });
   for (const side of [-1, 1]) {
     const handle = addMesh(
       group,
-      new THREE.CylinderGeometry(0.055, 0.08, 0.48, 10),
+      new THREE.CylinderGeometry(0.055, 0.08, 0.48, 8),
       handleMaterial,
-      `control-stick-${side}`
+      `control-stick-${side}`,
+      { outline: 0.012 }
     );
-    handle.position.set(side * 0.38, -0.52, 0.75);
+    handle.position.set(side * 0.38, -0.32, 0.75);
     handle.rotation.z = side * THREE.MathUtils.degToRad(12);
 
     const grip = addMesh(
       group,
-      new THREE.SphereGeometry(0.1, 12, 8),
+      new THREE.SphereGeometry(0.1, 8, 6),
       gripMaterial,
-      `control-grip-${side}`
+      `control-grip-${side}`,
+      { outline: 0.01 }
     );
-    grip.position.set(side * 0.43, -0.27, 0.75);
+    grip.position.set(side * 0.43, -0.07, 0.75);
   }
 
-  // ---------- 简化飞行员 ----------
-  const uniformMaterial = standardMaterial({ color: 0x4775ba, roughness: 0.82 }, true);
-  const helmetMaterial = standardMaterial(
-    { color: 0xd94d62, roughness: 0.48, metalness: 0.16 },
-    true
-  );
+  // ---------- 简化飞行员（头部抬高，便于透过泡罩看向窗外） ----------
+  // 原头部位于 y≈-0.23，视线被下半舱与控制台遮挡；整体上抬约 0.45，
+  // 使头盔接近赤道环高度，从座舱内能清楚看到窗外巡游景色。
+  const uniformMaterial = crystalToon(0x4775ba, { transparent: false });
+  const helmetMaterial = crystalToon(0xd94d62, {
+    transparent: false,
+    emissive: 0xd94d62,
+    emissiveIntensity: 0.1,
+  });
   const pilotBody = addMesh(
     group,
-    new THREE.CylinderGeometry(0.32, 0.4, 0.82, 12),
+    new THREE.CylinderGeometry(0.32, 0.4, 0.82, 10),
     uniformMaterial,
-    "pilot-body"
+    "pilot-body",
+    { outline: 0.025 }
   );
-  pilotBody.position.set(0, -0.9, -0.18);
+  pilotBody.position.set(0, -0.55, -0.18);
+
   const pilotHead = addMesh(
     group,
-    new THREE.SphereGeometry(0.3, 18, 12),
+    new THREE.SphereGeometry(0.3, 10, 8),
     helmetMaterial,
-    "pilot-helmet"
+    "pilot-helmet",
+    { outline: 0.025 }
   );
-  pilotHead.position.set(0, -0.23, -0.16);
+  // 头部中心抬至 y≈0.22（原 -0.23），约升高 0.45，越过控制台顶沿
+  pilotHead.position.set(0, 0.22, -0.16);
 
   const visor = addMesh(
     group,
-    new THREE.SphereGeometry(0.22, 16, 10, 0, Math.PI, 0, Math.PI / 2),
-    new THREE.MeshStandardMaterial({
-      color: 0x7ee5ff,
+    new THREE.SphereGeometry(0.22, 10, 8, 0, Math.PI, 0, Math.PI / 2),
+    crystalToon(0x7ee5ff, {
       transparent: true,
       opacity: 0.72,
-      roughness: 0.08,
-      metalness: 0.2,
       side: THREE.DoubleSide,
+      depthWrite: false,
+      emissive: 0x3ec8e8,
+      emissiveIntensity: 0.2,
     }),
     "pilot-visor",
-    false
+    { castShadow: false, outline: 0.012 }
   );
-  visor.position.set(0, -0.2, 0.08);
+  visor.position.set(0, 0.25, 0.08);
   visor.rotation.x = Math.PI;
 
   // 座舱内部青绿色补光
   const interiorLight = new THREE.PointLight(accent, 1.7, 5, 2);
   interiorLight.name = "bubble-interior-light";
-  interiorLight.position.set(0, -0.35, 0.5);
+  interiorLight.position.set(0, -0.15, 0.5);
   group.add(interiorLight);
 
+  // 驾驶相机锚点：略抬高，与飞行员视线对齐
   const cockpitAnchor = new THREE.Object3D();
   cockpitAnchor.name = "cockpit-anchor";
-  cockpitAnchor.position.set(0, 0.1, 2.15);
+  cockpitAnchor.position.set(0, 0.35, 2.15);
   group.add(cockpitAnchor);
 
   // 炮口：泡泡前缘，气泡弹从此射出
@@ -376,14 +416,14 @@ export function updateBubblePodPatrol(fleet, t) {
   });
 }
 
-// ---------- 气泡弹（半透明泡泡弹，沿瞄准方向飞行） ----------
+// ---------- 气泡弹（半透明卡通泡泡弹，沿瞄准方向飞行） ----------
 const _bbUp = new THREE.Vector3();
 const BUBBLE_SHOT_SPEED = 32;
 const BUBBLE_SHOT_LIFE = 2.8;
 const BUBBLE_SHOT_GRAVITY = 3.5; // 轻微朝球心下坠，弧线更有泡感
 
 /**
- * 创建一枚气泡弹
+ * 创建一枚气泡弹（MeshToonMaterial，无物理透射）
  * @param {THREE.Scene} scene
  * @param {THREE.Vector3} origin
  * @param {THREE.Vector3} dir 单位方向
@@ -395,24 +435,22 @@ export function createBubbleShot(scene, origin, dir, accent = 0x8effd8) {
   group.position.copy(origin);
 
   const shell = new THREE.Mesh(
-    new THREE.SphereGeometry(0.38, 20, 16),
-    new THREE.MeshPhysicalMaterial({
-      color: accent,
+    facet(new THREE.SphereGeometry(0.38, 10, 8)),
+    crystalToon(accent, {
       transparent: true,
-      opacity: 0.45,
-      transmission: 0.65,
-      roughness: 0.08,
-      metalness: 0.05,
-      ior: 1.2,
-      thickness: 0.25,
+      opacity: 0.55,
       depthWrite: false,
+      emissive: accent,
+      emissiveIntensity: 0.25,
     })
   );
+  shell.castShadow = false;
   shell.renderOrder = 20;
+  addOutline(shell, 0.02);
   group.add(shell);
 
   const core = new THREE.Mesh(
-    new THREE.SphereGeometry(0.16, 12, 10),
+    new THREE.SphereGeometry(0.16, 8, 6),
     new THREE.MeshBasicMaterial({
       color: 0xffffff,
       transparent: true,
@@ -426,7 +464,7 @@ export function createBubbleShot(scene, origin, dir, accent = 0x8effd8) {
   const trail = [];
   for (let i = 0; i < 4; i++) {
     const p = new THREE.Mesh(
-      new THREE.SphereGeometry(0.1 - i * 0.015, 8, 6),
+      new THREE.SphereGeometry(0.1 - i * 0.015, 6, 5),
       new THREE.MeshBasicMaterial({
         color: accent,
         transparent: true,

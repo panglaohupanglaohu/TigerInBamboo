@@ -851,70 +851,191 @@ function buildRimPalm(rnd) {
   return g;
 }
 
-/** 坑边苍天巨树：扎根 Y=40 地面，高耸入云（低于地表的湖沼被它环抱） */
+/**
+ * 坑边苍天巨树（有机整容版）
+ * - 六棱主干下粗上细收分 + 露根
+ * - 树枝斜向外上 25°~45°，根部嵌进主干 ≥0.3（消灭 90° 直角插接）
+ * - 枝端扁平 Icosahedron 树冠 · 深松绿
+ * - Toon flatShading + outline 0.045
+ */
 function buildToweringTree(rnd) {
   const g = new THREE.Group();
   g.name = "swamp-towering-tree";
-  // 苍天大树：叶冠距地面高度 ×2（原 40~58 → 80~116），树干加长以承接树冠
-  const h = (40 + rnd() * 18) * LEAF_HEIGHT_MUL;
-  const trunk = part(
-    new THREE.CylinderGeometry(0.5 + rnd() * 0.3, 1.15 + rnd() * 0.45, h, 6),
-    toonMat(TOWER_TRUNK, { flatShading: true }),
-    0.028
-  );
-  trunk.position.y = h / 2;
-  trunk.rotation.z = (rnd() - 0.5) * 0.06;
-  g.add(trunk);
-  // 顶部低多边叶簇（莫比斯式圆冠）
-  const leafMat = toonMat(TOWER_LEAF, { flatShading: true });
-  const crownN = 5 + ((rnd() * 4) | 0);
-  for (let i = 0; i < crownN; i++) {
-    const canopy = part(
-      new THREE.IcosahedronGeometry(3.0 + rnd() * 3.0, 0),
-      leafMat,
-      0.024
+  const OUT = 0.045;
+  const barkMat = toonMat(0x654321, { flatShading: true });
+  const barkDark = toonMat(TOWER_TRUNK, { flatShading: true });
+  const canopyMats = [
+    toonMat(0x1c3024, { flatShading: true }),
+    toonMat(0x243a2c, { flatShading: true }),
+    toonMat(0x16261c, { flatShading: true }),
+  ];
+  const yAxis = new THREE.Vector3(0, 1, 0);
+  const _d = new THREE.Vector3();
+
+  const h = (40 + rnd() * 18) * LEAF_HEIGHT_MUL; // 高耸
+  const R_BOT = 1.2 + rnd() * 0.35;
+  const R_TOP = 0.55 + rnd() * 0.2;
+  const lean = (rnd() - 0.5) * 0.14;
+
+  function cylSeg(a, b, r0, r1, mat, outline = OUT) {
+    _d.subVectors(b, a);
+    const len = Math.max(0.05, _d.length());
+    const mesh = part(
+      new THREE.CylinderGeometry(r1, r0, len, 6, 1, false),
+      mat,
+      outline
     );
-    const a = rnd() * Math.PI * 2;
-    const d = rnd() * 3.4;
-    canopy.position.set(Math.cos(a) * d, h + rnd() * 6, Math.sin(a) * d);
-    canopy.scale.set(1.2, 0.7, 1.2); // 摊平成冠
-    g.add(canopy);
+    mesh.position.copy(a).addScaledVector(_d.normalize(), len * 0.5);
+    mesh.quaternion.setFromUnitVectors(yAxis, _d);
+    g.add(mesh);
+    return mesh;
   }
-  // 相机距离内：每棵大树树干缠绕蔓藤（多圈螺旋 + 垂挂）
+
+  // —— 主干分段收分（微弯）——
+  const trunkPts = [];
+  const nSeg = 6;
+  for (let i = 0; i <= nSeg; i++) {
+    const t = i / nSeg;
+    const y = t * h;
+    const bend = Math.sin(t * Math.PI) * lean * h * 0.08;
+    trunkPts.push(new THREE.Vector3(bend, y, bend * 0.4));
+  }
+  for (let i = 0; i < trunkPts.length - 1; i++) {
+    const t0 = i / (trunkPts.length - 1);
+    const t1 = (i + 1) / (trunkPts.length - 1);
+    cylSeg(
+      trunkPts[i],
+      trunkPts[i + 1],
+      THREE.MathUtils.lerp(R_BOT, R_TOP, t0),
+      THREE.MathUtils.lerp(R_BOT, R_TOP, t1),
+      barkMat,
+      OUT
+    );
+  }
+
+  // 露根
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + rnd() * 0.4;
+    const len = 1.6 + rnd() * 1.4;
+    const root = part(
+      new THREE.BoxGeometry(len, 0.35 + rnd() * 0.2, 0.5 + rnd() * 0.25),
+      barkDark,
+      OUT * 0.85
+    );
+    root.position.set(Math.cos(a) * R_BOT * 0.45, 0.12, Math.sin(a) * R_BOT * 0.45);
+    root.rotation.y = a + Math.PI / 2;
+    root.rotation.z = (rnd() - 0.5) * 0.3;
+    g.add(root);
+  }
+
+  function plumeCanopy(at, dir, size) {
+    const n = 2 + ((rnd() * 2) | 0);
+    for (let k = 0; k < n; k++) {
+      const blob = part(
+        new THREE.IcosahedronGeometry(0.55, 0),
+        canopyMats[k % canopyMats.length],
+        OUT * 0.8
+      );
+      blob.position.copy(at).addScaledVector(dir, 0.4 + k * 0.35);
+      blob.position.y += (k - 0.4) * 0.5 * size;
+      blob.scale.set(
+        (2.0 + rnd() * 0.8) * size,
+        (0.35 + rnd() * 0.12) * size,
+        (1.5 + rnd() * 0.6) * size
+      );
+      blob.rotation.set((rnd() - 0.5) * 0.3, rnd() * Math.PI, (rnd() - 0.5) * 0.25);
+      g.add(blob);
+    }
+  }
+
+  // —— 斜向外上树枝（嵌套进主干）——
+  const arms = 7 + ((rnd() * 4) | 0);
+  for (let i = 0; i < arms; i++) {
+    const t = 0.22 + (i / arms) * 0.62 + (rnd() - 0.5) * 0.04;
+    const yi = Math.min(trunkPts.length - 2, Math.floor(t * (trunkPts.length - 1)));
+    const tf = t * (trunkPts.length - 1) - yi;
+    const attach = trunkPts[yi].clone().lerp(trunkPts[yi + 1], tf);
+    const trunkR = THREE.MathUtils.lerp(R_BOT, R_TOP, t);
+
+    const elev = 0.45 + rnd() * 0.35; // 25°~45°+ 斜上
+    const yaw = (i / arms) * Math.PI * 2 + rnd() * 0.5;
+    const dir = new THREE.Vector3(
+      Math.cos(yaw) * Math.cos(elev),
+      Math.sin(elev),
+      Math.sin(yaw) * Math.cos(elev)
+    ).normalize();
+
+    const nest = 0.4 + rnd() * 0.35; // ≥0.3 嵌进主干
+    const start = attach.clone().addScaledVector(dir, trunkR * 0.1 - nest);
+    const len = 8 + rnd() * 10 + (1 - t) * 6;
+    const mid = start
+      .clone()
+      .addScaledVector(dir, len * 0.5)
+      .add(new THREE.Vector3((rnd() - 0.5) * 1.2, 0.8 + rnd(), (rnd() - 0.5) * 1.2));
+    const tip = start
+      .clone()
+      .addScaledVector(dir, len)
+      .add(new THREE.Vector3((rnd() - 0.5) * 0.8, 1.2 + rnd(), (rnd() - 0.5) * 0.8));
+
+    const r0 = 0.45 + rnd() * 0.2 + (1 - t) * 0.25;
+    cylSeg(start, mid, r0, r0 * 0.55, barkMat, OUT * 0.9);
+    cylSeg(mid, tip, r0 * 0.55, r0 * 0.22, barkDark, OUT * 0.75);
+    plumeCanopy(tip, dir, 2.2 + rnd() * 1.4 + (1 - t) * 0.8);
+
+    // 二级斜枝
+    if (rnd() > 0.4) {
+      const sub = dir
+        .clone()
+        .applyAxisAngle(yAxis, (rnd() > 0.5 ? 1 : -1) * (0.55 + rnd() * 0.5));
+      sub.y += 0.25;
+      sub.normalize();
+      const s0 = mid.clone().addScaledVector(sub, -0.35);
+      const s1 = mid.clone().addScaledVector(sub, 4 + rnd() * 4);
+      cylSeg(s0, s1, r0 * 0.4, r0 * 0.15, barkDark, OUT * 0.65);
+      plumeCanopy(s1, sub, 1.4 + rnd() * 0.8);
+    }
+  }
+
+  // 顶冠两簇
+  const top = trunkPts[trunkPts.length - 1];
+  for (const side of [-1, 1]) {
+    const elev = 0.72 + rnd() * 0.12;
+    const yaw = side * (0.8 + rnd() * 0.5);
+    const dir = new THREE.Vector3(
+      Math.cos(yaw) * Math.cos(elev),
+      Math.sin(elev),
+      Math.sin(yaw) * Math.cos(elev)
+    ).normalize();
+    const start = top.clone().addScaledVector(dir, -0.5);
+    const tip = top.clone().addScaledVector(dir, 6 + rnd() * 4);
+    cylSeg(start, tip, R_TOP * 0.9, 0.2, barkDark, OUT * 0.7);
+    plumeCanopy(tip, dir, 2.8 + rnd() * 1.2);
+  }
+
+  // 少量缠藤（保留月夜氛围，不抢有机骨架）
   const vineMat = toonMat(VINE_COLOR, { flatShading: true });
-  const coils = 4 + ((rnd() * 3) | 0);
+  const coils = 2 + ((rnd() * 2) | 0);
   for (let c = 0; c < coils; c++) {
-    const y0 = 2 + rnd() * (h - 12);
-    const len = 6 + rnd() * (h * 0.4);
-    const r = 0.9 + rnd() * 0.4;
-    const turns = 1.2 + rnd() * 1.6;
+    const y0 = 4 + rnd() * (h * 0.5);
+    const len = 8 + rnd() * 12;
+    const r = R_BOT * 0.7 + rnd() * 0.4;
     const pts = [];
-    const seg = 14;
+    const seg = 12;
     for (let j = 0; j <= seg; j++) {
       const tt = j / seg;
       const yy = y0 + len * tt;
-      const ang = tt * turns * Math.PI * 2 + c * 1.7;
+      const ang = tt * 2.2 * Math.PI + c * 1.9;
       pts.push(new THREE.Vector3(Math.cos(ang) * r, yy, Math.sin(ang) * r));
     }
-    const vine = part(
-      new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 28, 0.1 + rnd() * 0.05, 4, false),
-      vineMat,
-      0.012
+    g.add(
+      part(
+        new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, 0.08, 4, false),
+        vineMat,
+        0.012
+      )
     );
-    g.add(vine);
-    // 藤上小叶
-    if (rnd() < 0.6) {
-      const leaf = part(
-        new THREE.PlaneGeometry(0.9 + rnd() * 0.6, 0.5 + rnd() * 0.3),
-        toonMat(PALM_LEAF, { flatShading: true, side: THREE.DoubleSide }),
-        0.01
-      );
-      const mid = pts[(seg / 2) | 0];
-      leaf.position.copy(mid);
-      leaf.rotation.set(rnd() * 0.6, rnd() * Math.PI, rnd() * 0.6);
-      g.add(leaf);
-    }
   }
+
   return g;
 }
 
@@ -1915,6 +2036,11 @@ export function createMoebiusSwampZone(opts = {}) {
         const pulse = 0.7 + Math.sin(t * 1.6 + i) * 0.3;
         f.userData.core.material.color.setRGB(pulse, pulse * 0.92, 0.55);
       }
+      // 被 aircraft 扫描激光吸入中：跳过本花位置逻辑，避免抢位移
+      if (f.userData.scanSucking) {
+        f.userData.restT = Math.min(f.userData.restT ?? 0, 1);
+        continue;
+      }
       if (!f.userData.falling) {
         // 正常开放：在叶面之上朝天空轻微摇曳（非水面蜜源）
         f.userData.onWater = false;
@@ -2344,8 +2470,8 @@ export function createMoebiusSwampZone(opts = {}) {
     for (const b of foodBits) {
       b.material.opacity = 0.45 + 0.45 * (0.5 + 0.5 * Math.sin(t * 3 + b.userData.phase));
     }
-    // 赛博水墨虎巡游/饮水
-    tiger.userData.update?.(_dt, t);
+    // 赛博水墨虎巡游/饮水；传入 player 以便见送信人跳下相见
+    tiger.userData.update?.(_dt, t, runtime);
     // 气泡
     for (const b of bubbles) {
       b.position.y = b.userData.baseY + Math.sin(t * 1.5 + b.userData.phase) * 0.5;

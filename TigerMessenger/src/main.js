@@ -9,6 +9,8 @@ import { createStage } from "./core/stage.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js";
 import { createDevPanel } from "./core/devPanel.js";
+import { createStoryEngine } from "./story/storyEngine.js";
+import { requestStoryboard } from "./story/storyLLM.js";
 import { createMapEditor } from "./core/mapEditor.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
@@ -20,6 +22,10 @@ import { createBubblePodRide } from "./player/bubblePodRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
+import {
+  updateSwampTigerDialog,
+  findSwampTiger,
+} from "./world/moebiusTiger.js";
 import { createTouchControls } from "./ui/touchControls.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { FlockManager } from "./world/flock.js";
@@ -155,6 +161,8 @@ const mapEditor = createMapEditor({
   planetRadius: PLANET_RADIUS,
   colliders: assetColliders,
   toast: showToast,
+  // 地图以送信人为锚：打开先定位，再按相对位置放物品
+  getPlayer: () => player,
 });
 // 登记场景内置书店（无存档时作为默认布局；有存档则由 loadPersisted 整表覆盖）
 if (messenger?.landmarks?.bookshop) {
@@ -188,11 +196,26 @@ let bookshopFlock = null;
   }
 }
 
+// ---------- 故事板引擎（开发者菜单：文本 → LLM → 临时场景 + 时间线） ----------
+const storyEngine = createStoryEngine({
+  scene,
+  player,
+  planetRadius: PLANET_RADIUS,
+  colliders: assetColliders,
+  camera,
+  cameraRig,
+});
+
 const devPanel = createDevPanel({
   sun,
   ambient,
   onCamDist: (d) => cameraRig.setDist(d),
   onOpenMap: () => mapEditor.setOpen(true),
+  onStoryboard: async (text) => {
+    const rawSpec = await requestStoryboard(text);
+    return storyEngine.play(rawSpec);
+  },
+  onStoryClear: () => storyEngine.dispose(),
 });
 
 // ---------- 昼夜循环（朝霞/暮云重点过渡；面板可拖时刻与速度） ----------
@@ -414,7 +437,7 @@ function animate() {
   dayNight.update(dt);
   updateMoebiusBarrier(dt);
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
-  mapEditor.tickHighlight?.();
+  mapEditor.tickHighlight?.(dt);
 
   // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
   const riding =
@@ -458,6 +481,8 @@ function animate() {
 
   // 场景模块自更新（湖、云、平台脉动等）
   updateScenes(sceneHandles, dt, t, { player, gameStarted, keys });
+  // 故事板时间线（无故事板时内部直接返回）
+  storyEngine.update(dt);
 
   syncPlayerVisual(player, playerGroup);
 
@@ -506,6 +531,22 @@ function animate() {
     }
   }
 
+  // ---------- 湖沼墨虎遇送信人：灯谜对答气泡 ----------
+  {
+    if (!window.__tmSwampTiger || !window.__tmSwampTiger.parent) {
+      window.__tmSwampTiger = findSwampTiger(scene);
+    }
+    updateSwampTigerDialog({
+      tiger: window.__tmSwampTiger,
+      player,
+      camera,
+      dt,
+      isGameStarted: () => gameStarted,
+      // 念诗气泡占用时不抢
+      isBlocked: () => poemBubbleActive,
+    });
+  }
+
   renderer.render(scene, camera);
 }
 
@@ -528,6 +569,7 @@ window.__tm = {
   platforms,
   hills,
   mapEditor,
+  storyEngine, // 故事板引擎（验收/调试用）
   tramRide,
   airshipRide,
   elderMusic,

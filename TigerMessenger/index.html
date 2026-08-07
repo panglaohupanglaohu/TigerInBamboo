@@ -329,6 +329,18 @@
       pointer-events: none;
     }
     #bubble.visible { opacity: 1; }
+    /* 湖沼虎灯谜：加大字号便于阅读 */
+    #bubble.bubble-lg {
+      padding: 12px 18px;
+      font-size: 18px;
+      line-height: 1.45;
+      border-radius: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      max-width: min(92vw, 420px);
+      white-space: normal;
+      text-align: center;
+    }
     #bubble::after {
       content: "";
       position: absolute;
@@ -881,6 +893,42 @@
     }
     #dev-reset:hover, .dev-action:hover { filter: brightness(1.15); }
     .dev-action { margin-top: 6px; background: rgba(47, 143, 122, 0.25); }
+    /* ---------- 故事板输入 + 实体标记 ---------- */
+    .dev-story-input {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 4px;
+      padding: 6px 8px;
+      font: inherit;
+      font-size: 11px;
+      line-height: 1.5;
+      color: #e8eef8;
+      background: rgba(12, 18, 32, 0.9);
+      border: 1px solid rgba(140, 180, 255, 0.3);
+      border-radius: 8px;
+      resize: vertical;
+    }
+    .dev-story-input:focus { outline: none; border-color: rgba(140, 180, 255, 0.7); }
+    .dev-story-marks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 5px;
+      min-height: 0;
+    }
+    .dev-story-chip {
+      padding: 1px 6px;
+      font-size: 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .dev-story-chip.cat-animal { background: rgba(233, 106, 54, 0.22); border-color: rgba(233, 106, 54, 0.5); color: #ffcbb0; }
+    .dev-story-chip.cat-plant  { background: rgba(46, 143, 110, 0.22); border-color: rgba(46, 143, 110, 0.5); color: #b6f0d6; }
+    .dev-story-chip.cat-build  { background: rgba(126, 176, 255, 0.18); border-color: rgba(126, 176, 255, 0.45); color: #cfe0ff; }
+    .dev-story-chip.cat-env    { background: rgba(72, 201, 176, 0.18); border-color: rgba(72, 201, 176, 0.45); color: #b4f2e6; }
+    .dev-story-chip.cat-prop   { background: rgba(160, 160, 170, 0.18); border-color: rgba(160, 160, 170, 0.4); color: #dcdce4; }
+    .dev-story-chip.miss       { background: rgba(200, 80, 80, 0.16); border-color: rgba(200, 80, 80, 0.45); color: #ffc2c2; }
 
     /* ---------- 地图编辑器（固定页面右侧） ---------- */
     #map-editor {
@@ -1157,6 +1205,11 @@
       border-radius: 8px;
       color: #1a2638;
       box-shadow: 0 6px 18px rgba(26, 38, 56, 0.14);
+    }
+    #bubble.bubble-lg {
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 10px 28px rgba(26, 38, 56, 0.18);
+      color: #1a2638;
     }
     #bubble::after { border: none; box-shadow: 3px 3px 6px rgba(26, 38, 56, 0.08); }
     #npc-hint, #tram-hint, #airship-hint, #elder-hint, #fox-hint, #bubble-hint {

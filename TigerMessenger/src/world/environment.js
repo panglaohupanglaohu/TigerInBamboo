@@ -6,13 +6,14 @@ import { P } from "../core/params.js";
 
 export function setupEnvironment(scene) {
   // ---------- 光照：暖日光配青绿天光，保持 Cel 色块 ----------
-  const ambient = new THREE.AmbientLight(0xf3fff7, P.ambientIntensity ?? 0.9);
+  // 纯白强环境光（默认 1.35）：Cel/Toon 高饱和色块全亮，禁止死黑面
+  const ambient = new THREE.AmbientLight(0xffffff, P.ambientIntensity ?? 1.35);
   scene.add(ambient);
 
-  const hemi = new THREE.HemisphereLight(0xa7eee4, 0x4a4a44, 0.58);
+  const hemi = new THREE.HemisphereLight(0xffffff, 0xf0e6e0, 0.72);
   scene.add(hemi);
 
-  const dir = new THREE.DirectionalLight(0xfff1c9, P.sunIntensity ?? 1.6);
+  const dir = new THREE.DirectionalLight(0xffffff, P.sunIntensity ?? 1.6);
   dir.position.set(20, 28, 16);
   dir.castShadow = true;
   dir.shadow.mapSize.set(2048, 2048);

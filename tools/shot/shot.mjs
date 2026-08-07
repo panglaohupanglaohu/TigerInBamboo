@@ -5,8 +5,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
-const ROOT = path.resolve("D:/TigerInBamnoo/TigerMessenger");
-const OUT = path.resolve("D:/TigerInBamnoo/tools/shot/images");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO = path.resolve(__dirname, "../..");
+const ROOT = path.resolve(REPO, "TigerMessenger");
+const OUT = path.resolve(__dirname, "images");
 const PORT = 8799;
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -56,9 +58,14 @@ const withTimeout = (p, ms, tag) =>
     new Promise((_, rej) => setTimeout(() => rej(new Error("timeout " + ms + "ms (" + tag + ")")), ms)),
   ]);
 
+const CHROME =
+  process.env.CHROME_PATH ||
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+
 async function renderOne(id) {
   // 每项独立启动浏览器，彻底隔离 GPU 状态（避免某项卡死拖垮后续）
   const browser = await chromium.launch({
+    executablePath: fs.existsSync(CHROME) ? CHROME : undefined,
     headless: true,
     args: [
       "--no-sandbox",
@@ -96,7 +103,11 @@ const report = [];
 // 先开一页读取注册表 id 列表（仅读取，不渲染，快速）
 let ids = [];
 {
-  const b0 = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+  const b0 = await chromium.launch({
+    executablePath: fs.existsSync(CHROME) ? CHROME : undefined,
+    headless: true,
+    args: ["--no-sandbox"],
+  });
   const p0 = await b0.newPage({ viewport: { width: 512, height: 512 } });
   await p0.goto(URL, { waitUntil: "load", timeout: 30000 });
   await p0.waitForFunction(() => window.__ready === true, { timeout: 30000 }).catch(() => {});

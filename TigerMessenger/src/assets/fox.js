@@ -262,8 +262,9 @@ export function createWalkingFox(mats) {
   // 臀后上方，链向上竖
   tailRoot.position.set(-0.12, BODY_H * 0.18, 0);
   tailRoot.rotation.order = "ZYX";
-  // 后仰 45°：链 +Y 竖直为 0，z=-45° 指向身后斜上（非 90° 直立）
-  const TAIL_LEAN_BACK = THREE.MathUtils.degToRad(-45);
+  // 向后斜上 30°：链 +Y 竖直为 0；与水平成 30° 朝身后上扬
+  // → 自竖直后仰 60°（z=-60°，-X 身后 / +Y 上）
+  const TAIL_LEAN_BACK = THREE.MathUtils.degToRad(-60);
   tailRoot.rotation.z = TAIL_LEAN_BACK;
   tailRoot.rotation.x = 0; // 左右中立
   tailRoot.rotation.y = 0;
@@ -894,8 +895,8 @@ export function animateFoxCompanion(fox, opts = {}) {
   const t = gait;
   const wind = 0.4 + 0.6 * moveAmt;
   const baseLean =
-    p.tail?.userData?.baseLeanZ ?? THREE.MathUtils.degToRad(-45);
-  // 保持约 45° 后仰，仅随步轻微点动（不拉回 90° 直立）
+    p.tail?.userData?.baseLeanZ ?? THREE.MathUtils.degToRad(-60);
+  // 保持向后斜上 30°（竖直后仰 60°），仅随步轻微点动
   const leanZAnim = baseLean + Math.cos(t * 2) * 0.035 * moveAmt;
   // 左右主摆：纯 sin，振幅够大，肉眼可见双边
   const sway = Math.sin(t) * 0.42 * wind;

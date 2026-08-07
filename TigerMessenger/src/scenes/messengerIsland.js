@@ -183,7 +183,7 @@ export const messengerIslandScene = {
     // 目的：像巨大蜂鸟一样发现湖沼水面落花，脱离阵型俯冲悬停吸蜜
     const cityDir = grandDir.clone().normalize();
     const bookshopDir = bookshop.position.clone().normalize();
-    const aircraftHeight = 32; // 高空压迫感
+    const aircraftHeight = 20; // 与莫比斯航空艇 placeMoebiusAirshipAbove(..., 20) 同高
     const aircraftSquad = createMoebiusAircraftSquad(cityDir, R, {
       count: 5,
       height: aircraftHeight,

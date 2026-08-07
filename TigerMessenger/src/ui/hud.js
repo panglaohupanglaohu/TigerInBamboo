@@ -99,15 +99,20 @@ export function updateToast(dt) {
 }
 
 // 气泡：由调用方把世界坐标投影成屏幕像素后传入
-export function showBubble(text, leftPx, topPx) {
+// opts.large：放大字号（湖沼虎灯谜等）
+export function showBubble(text, leftPx, topPx, opts = {}) {
+  if (!elBubble) return;
   elBubble.style.left = `${leftPx}px`;
   elBubble.style.top = `${topPx}px`;
   elBubble.textContent = text;
+  elBubble.classList.toggle("bubble-lg", !!opts.large);
   elBubble.classList.add("visible");
 }
 
 export function hideBubble() {
+  if (!elBubble) return;
   elBubble.classList.remove("visible");
+  elBubble.classList.remove("bubble-lg");
 }
 
 // NPC 交谈提示（[E] 与居民交谈）

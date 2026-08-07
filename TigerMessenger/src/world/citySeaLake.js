@@ -221,7 +221,13 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   group.position.copy(centerDir).multiplyScalar(surfaceR);
   group.quaternion.copy(quatYToDir(centerDir, new THREE.Quaternion()));
 
-  // ---- 海水面（PBR 透光 · 深蓝青） ----
+  // ---- 海水面（深蓝青 · clearcoat 高光，无物理透射） ----
+  // 性能硬约束：transmission > 0 会让 three.js 走 renderTransmissionPass，
+  // 每帧把全部不透明物体二次渲染到 4x MSAA + 完整 mipmap 的 render target，
+  // 再在片元里做屏幕空间采样。本湖水面是 rFlat≈13 的大圆盘（占屏面积极大），
+  // 无头 SwiftShader（纯 CPU 光栅化）会直接 Context Lost / GPU 超时死锁。
+  // 观感用 opacity 半透明 + clearcoat 高光复现，成本只剩一次正向渲染。
+  // 同理去掉 ior / thickness（仅在 transmission > 0 时生效，留着是误导）。
   const water = new THREE.Mesh(
     new THREE.CircleGeometry(rFlat, 64),
     new THREE.MeshPhysicalMaterial({
@@ -230,9 +236,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
       opacity: 0.72,
       roughness: 0.12,
       metalness: 0.05,
-      transmission: 0.45,
-      ior: 1.33,
-      thickness: 1.2,
+      transmission: 0,
       clearcoat: 0.55,
       clearcoatRoughness: 0.2,
       side: THREE.DoubleSide,

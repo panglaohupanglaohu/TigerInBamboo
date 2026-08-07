@@ -98,6 +98,71 @@ mp3 已随仓库分发，在线展厅开箱即有音乐。浏览器自动播放�
 `physics.js` 统一 Cannon 世界：地形由解析高度场采样为 64×64 `Heightfield`，
 竹、虎、（预留的）岩石统一在同一物理时空解算；雨雪落地复用同一高度数据。
 
+### 故事板引擎（TigerMessenger · 自然语言生成场景）
+开发者菜单（右上角 🤖）里输入一段中文故事板，经大模型解析成受限 JSON，
+再由引擎在当前星球上组装出一个临时场景并按时间线演出。
+
+```text
+[开发者菜单] --文本--> [storyLLM.js] --HTTP--> [/api/llm/chat 同源代理] --> glm-5.1
+                            │
+                            ▼ (受限 JSON，只允许引用白名单 id)
+                     [StoryboardSpec]
+                            │ 校验 + 兜底
+                            ▼
+                     [storyEngine.js] ──创建 Group──> scene
+                            │            (复用 createCatalogObject)
+                            ├─ 布置资产：环境 / 物品 / 动植物
+                            ├─ 推入 assetColliders（保持球面物理一致）
+                            └─ 时间线执行器（update(dt) 里驱动）
+                                  spawn / say / moveTo / wait / focusCamera / toast / weather
+```
+
+三个新增文件，不改动既有场景系统契约：
+
+| 文件 | 职责 |
+| --- | --- |
+| `TigerMessenger/src/story/storyCatalog.js` | 从 `BUILDING_CATALOG` 派生故事板白名单（58 项）+ 中文分类；排除 `diorama` 整景类（城市/星球本体/轨道系统等不适合当道具） |
+| `TigerMessenger/src/story/storyLLM.js` | 组 system prompt（注入白名单 id + 动作表）、调用同源 `/api/llm/chat`、从返回里抠出严格 JSON |
+| `TigerMessenger/src/story/storyEngine.js` | `validateSpec()` 白名单二次校验 + spec → 3D 场景 + 时间线执行器 |
+
+**Spec 结构（受限 JSON）**
+
+```json
+{
+  "title": "竹林邀请函·夜谈",
+  "entities": [
+    { "uid": "e1", "type": "pine", "count": 3 },
+    { "uid": "e2", "type": "moebiusTiger" },
+    { "uid": "e3", "type": "swamp_glowFlower", "count": 6 }
+  ],
+  "timeline": [
+    { "type": "spawn", "uid": "e1" },
+    { "type": "spawn", "uid": "e2" },
+    { "type": "focusCamera", "target": "e2", "seconds": 1.5 },
+    { "type": "say", "actor": "e2", "text": "月色正好，信使。" },
+    { "type": "wait", "seconds": 1 },
+    { "type": "weather", "value": "rain" },
+    { "type": "toast", "text": "新场景「竹林夜谈」已生成" }
+  ]
+}
+```
+
+**双重白名单锁**：prompt 里告知模型可用 id；`validateSpec()` 再本地二次过滤。
+即使模型幻觉出 `dragon` 这类不存在的 id、或用了 `teleport` 这种引擎不支持的动作，
+也只会被静默丢弃并记 `warnings`，不会抛错崩游戏——与 `memoryBridge.js`
+"桥接失败静默退回"的既有风格一致。资产工厂本身抛错（例如缺少 2D canvas）同样被捕获跳过。
+
+**不污染存档**：故事板生成物挂在独立 `THREE.Group`（`story:<标题>`）下，
+不写 `localStorage`、不进 `tm.mapEditor.placements.v1`，刷新即消失；
+`dispose()` 会精确回收自己推入 `assetColliders` 的条目，不留隐形碰撞墙。
+重复生成会自动清理上一个故事板，不叠加。
+
+**输入框实体标记**：输入时实时把命中的系统实体显示为彩色 chips（动物/植物/建筑载具/环境/物品分色），
+文本里没有任何系统内实体时给出提示，避免写了一堆系统里并不存在的东西。
+
+验收：`node tools/test_story_engine.mjs`（20 项断言组，覆盖白名单派生、幻觉剔除、
+时间线推进、weather 生效、碰撞体精确回收、重复 play 不叠加）。
+
 ## 项目结构
 
 ```
@@ -368,6 +433,48 @@ mute toggle and the config page sets volume (takes effect after refresh).
 `physics.js` hosts one Cannon world: terrain sampled from an analytic height function into a 64×64 `Heightfield`;
 bamboo, tiger and (reserved) rocks all solve in the same physical space-time; rain and snow reuse the same height
 data for landing.
+
+### Storyboard engine (TigerMessenger · scenes from natural language)
+Type a Chinese storyboard into the developer menu (🤖, top-right). An LLM turns it into constrained JSON, and the
+engine assembles a temporary scene on the current planet, then plays it back along a timeline.
+
+```text
+[dev menu] --text--> [storyLLM.js] --HTTP--> [/api/llm/chat same-origin proxy] --> glm-5.1
+                          │
+                          ▼ (constrained JSON, whitelisted ids only)
+                   [StoryboardSpec]
+                          │ validate + fallback
+                          ▼
+                   [storyEngine.js] ──creates Group──> scene
+                          ├─ places assets: environment / props / flora & fauna
+                          ├─ pushes into assetColliders (keeps spherical physics consistent)
+                          └─ timeline runner (driven from update(dt))
+                                spawn / say / moveTo / wait / focusCamera / toast / weather
+```
+
+Three new files, no changes to the existing scene-module contract:
+
+| File | Responsibility |
+| --- | --- |
+| `TigerMessenger/src/story/storyCatalog.js` | Derives the storyboard whitelist (58 entries) from `BUILDING_CATALOG` with Chinese categories; excludes `diorama` whole-scene types (city, planet body, tram network) that make poor individual props |
+| `TigerMessenger/src/story/storyLLM.js` | Builds the system prompt (injecting whitelisted ids + the action table), calls the same-origin `/api/llm/chat`, extracts strict JSON from the reply |
+| `TigerMessenger/src/story/storyEngine.js` | `validateSpec()` second-pass whitelist check + spec → 3D scene + timeline runner |
+
+**Double whitelist lock**: the prompt tells the model which ids exist, and `validateSpec()` filters again locally.
+Hallucinated ids (`dragon`) or unsupported verbs (`teleport`) are dropped silently into `warnings` instead of
+throwing — matching the existing "fail quietly" style of `memoryBridge.js`. Asset factories that throw (e.g. no 2D
+canvas available) are caught and skipped too.
+
+**No save-file pollution**: everything spawns under its own `THREE.Group` (`story:<title>`), never touches
+`localStorage` or `tm.mapEditor.placements.v1`, and vanishes on refresh. `dispose()` removes exactly the collider
+entries it pushed into `assetColliders`, so no invisible walls are left behind. Re-running replaces the previous
+storyboard rather than stacking.
+
+**Live entity markers**: recognised system entities appear as colour-coded chips as you type (animal / plant /
+building-vehicle / environment / prop), and the panel warns when the text contains nothing the system actually has.
+
+Verify with `node tools/test_story_engine.mjs` (20 assertion groups: whitelist derivation, hallucination
+rejection, timeline progression, weather application, precise collider cleanup, no stacking on repeat play).
 
 ## Project Structure
 

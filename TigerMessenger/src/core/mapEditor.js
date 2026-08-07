@@ -22,12 +22,15 @@ const MAP_ZOOM_MAX = 10; // 放到最大看细节
  * @param {number} [opts.planetRadius]
  * @param {object[]} opts.colliders  可写数组（push / 改 position）
  * @param {(msg: string, dur?: number) => void} [opts.toast]
+ * @param {() => { position?: THREE.Vector3, facing?: THREE.Vector3 }|null|undefined} [opts.getPlayer]
+ *   送信人实时位置（平面图锚点：先看人、再按相对位置放东西）
  */
 export function createMapEditor({
   scene,
   planetRadius = PLANET_RADIUS,
   colliders,
   toast = () => {},
+  getPlayer = null,
 }) {
   /** @type {MapPlacement[]} */
   const placements = [];
@@ -65,12 +68,15 @@ export function createMapEditor({
         <button type="button" id="map-editor-close" title="关闭">✕</button>
       </div>
       <p class="map-editor-hint">
-        点选拖动 · 滚轮缩放地图 · Alt+滚轮旋转朝向 · 复制/删除 · 可贴地 · 书店可改招牌
+        <strong>橙点 = 送信人</strong> · 打开地图会先居中到人 · 再按相对位置放置物品 ·
+        点选拖动 · 滚轮缩放 · Alt+滚轮旋转朝向 · 复制/删除
       </p>
       <canvas id="map-canvas" width="360" height="360" aria-label="主岛平面图"></canvas>
       <div class="map-editor-coords"><span id="map-cursor">x: —  z: —</span>
         <span id="map-selected">未选中</span></div>
+      <div class="map-editor-coords" id="map-messenger-coords">送信人：定位中…</div>
       <div class="map-editor-tools">
+        <button type="button" id="map-btn-focus-player" title="把地图中心移到送信人">定位送信人</button>
         <button type="button" id="map-btn-copy" disabled>复制</button>
         <button type="button" id="map-btn-delete" disabled>删除</button>
       </div>
@@ -113,8 +119,10 @@ export function createMapEditor({
   const ctx = canvas.getContext("2d");
   const elCursor = overlay.querySelector("#map-cursor");
   const elSelected = overlay.querySelector("#map-selected");
+  const elMessenger = overlay.querySelector("#map-messenger-coords");
   const elList = overlay.querySelector("#map-list");
   const elPalette = overlay.querySelector("#map-palette");
+  const btnFocusPlayer = overlay.querySelector("#map-btn-focus-player");
   const btnCopy = overlay.querySelector("#map-btn-copy");
   const btnDelete = overlay.querySelector("#map-btn-delete");
   const yawSlider = overlay.querySelector("#map-yaw");
@@ -198,6 +206,53 @@ export function createMapEditor({
     persist();
     toast("布局已保存到本机", 1.5);
   });
+
+  /** 读取送信人在平面图上的 flat 坐标（与放置用同一套 x/z） */
+  function getMessengerFlat() {
+    if (typeof getPlayer !== "function") return null;
+    const pl = getPlayer();
+    if (!pl?.position) return null;
+    const flat = worldToFlatXZ(pl.position, planetRadius);
+    if (!flat) return null;
+    let yaw = 0;
+    if (pl.facing && pl.facing.lengthSq?.() > 1e-8) {
+      // facing 世界切向 → 平面图 yaw（与建筑 yaw 同约定：0 = -Z 屏幕上）
+      const f = pl.facing.clone();
+      const up = pl.position.clone().normalize();
+      f.addScaledVector(up, -f.dot(up));
+      if (f.lengthSq() > 1e-8) {
+        f.normalize();
+        // 粗略：用世界 XZ 投影到 flat 近似朝向
+        yaw = Math.atan2(f.x, f.z);
+      }
+    } else if (Number.isFinite(pl.yaw)) {
+      yaw = pl.yaw;
+    }
+    return { x: flat.x, z: flat.z, yaw };
+  }
+
+  /** 地图平移中心移到送信人，便于「先看人再放东西」 */
+  function focusMessenger({ toastMsg = true } = {}) {
+    const m = getMessengerFlat();
+    if (!m) {
+      if (toastMsg) toast("尚无送信人位置（开始游戏后即可定位）", 1.8);
+      return false;
+    }
+    mapPanX = m.x;
+    mapPanZ = m.z;
+    // 默认给一个能看清周围几单位的缩放
+    if (mapZoom < 0.8) mapZoom = 1.4;
+    redraw();
+    if (elMessenger) {
+      elMessenger.textContent = `送信人：x ${m.x.toFixed(2)}  z ${m.z.toFixed(2)}`;
+    }
+    if (toastMsg) {
+      toast(`已定位送信人 · (${m.x.toFixed(1)}, ${m.z.toFixed(1)})`, 1.8);
+    }
+    return true;
+  }
+
+  btnFocusPlayer?.addEventListener("click", () => focusMessenger());
 
   btnCopy.addEventListener("click", () => {
     const p = getSelected();
@@ -701,9 +756,17 @@ export function createMapEditor({
     if (open) enableScenePick();
   }
 
-  /** 主循环可调：高亮环轻微呼吸（地图关闭时无事可做） */
-  function tickHighlight() {
-    if (!open || !worldHighlight?.userData?.pulse) return;
+  /** 主循环可调：高亮环轻微呼吸 + 送信人位置刷新 */
+  let _playerRedrawAcc = 0;
+  function tickHighlight(dt = 0.016) {
+    if (!open) return;
+    // 送信人走动时定期重绘平面图（约 8fps，够用且省）
+    _playerRedrawAcc += dt;
+    if (_playerRedrawAcc >= 0.12) {
+      _playerRedrawAcc = 0;
+      redraw();
+    }
+    if (!worldHighlight?.userData?.pulse) return;
     const t = (performance.now() - (worldHighlight.userData.t0 || 0)) * 0.003;
     const s = 1 + 0.06 * Math.sin(t);
     worldHighlight.userData.pulse.scale.set(s, s, s);
@@ -787,7 +850,7 @@ export function createMapEditor({
       ctx.lineTo(c1.px, c1.py);
       ctx.stroke();
     }
-    // 出生点
+    // 出生点（固定参考）
     const spawn = flatToCanvas(0, 6);
     ctx.fillStyle = "#2f8f7a";
     ctx.beginPath();
@@ -796,6 +859,42 @@ export function createMapEditor({
     ctx.fillStyle = "#1a2638";
     ctx.font = "10px sans-serif";
     ctx.fillText("出生", spawn.px + 7, spawn.py + 3);
+
+    // —— 送信人实时位置（优先参照：先看人，再放物品）——
+    const messenger = getMessengerFlat();
+    if (messenger) {
+      const { px, py } = flatToCanvas(messenger.x, messenger.z);
+      // 外圈光晕
+      ctx.beginPath();
+      ctx.arc(px, py, 11, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 140, 40, 0.22)";
+      ctx.fill();
+      // 实心橙点
+      ctx.beginPath();
+      ctx.arc(px, py, 7, 0, Math.PI * 2);
+      ctx.fillStyle = "#ff8c28";
+      ctx.fill();
+      ctx.strokeStyle = "#fff6e8";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // 朝向箭头
+      const yaw = messenger.yaw || 0;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(px + Math.sin(yaw) * 16, py - Math.cos(yaw) * 16);
+      ctx.strokeStyle = "#e85d04";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      // 标注
+      ctx.fillStyle = "#9a3412";
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillText("送信人", px + 10, py - 8);
+      if (elMessenger) {
+        elMessenger.textContent = `送信人：x ${messenger.x.toFixed(2)}  z ${messenger.z.toFixed(2)}`;
+      }
+    } else if (elMessenger) {
+      elMessenger.textContent = "送信人：未开始游戏 / 无法投影到平面";
+    }
 
     // 建筑
     for (const p of placements) {
@@ -1057,11 +1156,21 @@ export function createMapEditor({
     overlay.style.display = open ? "block" : "none";
     if (open) {
       enableScenePick(); // 仅打开地图时允许 3D 点选
+      // 打开时先定位到送信人，再按人周围科学布置
+      focusMessenger({ toastMsg: false });
       redraw();
       refreshList();
       syncTools();
       updateWorldHighlight();
-      toast("地图已开：可在 3D 场景左键点选建筑，地图同步高亮", 2.2);
+      const m = getMessengerFlat();
+      if (m) {
+        toast(
+          `地图已开 · 已定位送信人 (${m.x.toFixed(1)}, ${m.z.toFixed(1)}) · 请按相对位置放置`,
+          2.6
+        );
+      } else {
+        toast("地图已开：可在 3D 点选建筑；开始游戏后可定位送信人", 2.2);
+      }
     } else {
       // 收起地图：立刻关闭 3D 选择能力，并清掉选中/高亮
       disableScenePick();
@@ -1092,6 +1201,8 @@ export function createMapEditor({
     selectByUid,
     bindScenePick,
     tickHighlight,
+    focusMessenger,
+    getMessengerFlat,
     /** 从世界物体反推 flat 并登记 */
     registerFromWorld(typeId, object, yaw = 0, collider = null) {
       const flat = worldToFlatXZ(object.position, planetRadius);
