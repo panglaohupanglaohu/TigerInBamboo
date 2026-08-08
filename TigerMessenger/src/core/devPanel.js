@@ -2,48 +2,7 @@
 //  开发者菜单：右上角 🤖；滑杆调参 + FPS；改动写入 localStorage
 // =====================================================================
 import { P, P_DEFAULTS, saveParams, resetParams } from "./params.js";
-import { getStoryCatalog } from "../story/storyCatalog.js";
-
-/** 分类 → CSS 后缀（配色用） */
-const CAT_KEY = { "动物": "animal", "植物": "plant", "建筑/载具": "build", "环境": "env", "物品": "prop" };
-
-/**
- * 故事板输入框实体标记：按中文 label 在文本里做最长优先匹配。
- * 只用于「给开发者看命中了什么」，真正的白名单校验在 storyEngine.validateSpec()。
- */
-function matchStoryCatalog(text) {
-  const s = String(text || "");
-  if (!s.trim()) return [];
-  const catalog = getStoryCatalog();
-  // label 去掉「沼泽·」等前缀后的短名也参与匹配
-  const probes = [];
-  for (const c of catalog) {
-    const names = new Set([c.label]);
-    const short = c.label.replace(/^[^·]*·/, "").trim();
-    if (short) names.add(short);
-    for (const n of names) if (n) probes.push({ ...c, probe: n });
-  }
-  probes.sort((a, b) => b.probe.length - a.probe.length);
-  const claimed = new Array(s.length).fill(false);
-  const out = [];
-  const seen = new Set();
-  for (const p of probes) {
-    let from = 0;
-    for (;;) {
-      const i = s.indexOf(p.probe, from);
-      if (i < 0) break;
-      if (!claimed.slice(i, i + p.probe.length).some(Boolean)) {
-        for (let k = i; k < i + p.probe.length; k++) claimed[k] = true;
-        if (!seen.has(p.id)) {
-          seen.add(p.id);
-          out.push({ id: p.id, label: p.label, categoryKey: CAT_KEY[p.category] || "prop", index: i });
-        }
-      }
-      from = i + p.probe.length;
-    }
-  }
-  return out.sort((a, b) => a.index - b.index);
-}
+import { makePanelDraggable } from "../ui/dragPanel.js";
 
 const SLIDERS = [
   { key: "moveSpeed", label: "移动速度", min: 1, max: 15, step: 0.1, group: "玩家" },
@@ -71,10 +30,27 @@ const SLIDERS = [
  * @param {import("three").AmbientLight} deps.ambient
  * @param {(d: number) => void} [deps.onCamDist]
  * @param {() => void} [deps.onOpenMap] 打开地图编辑器
- * @param {(text: string) => Promise<object>} [deps.onStoryboard] 故事板文本 → 生成场景，返回校验后的 spec
- * @param {() => void} [deps.onStoryClear] 清除当前故事板场景
+ * @param {() => void} [deps.onOpenStoryboard] 打开并列的故事板工作台
+ * @param {() => string} [deps.onGateHere] 把三重门/云墙搬到玩家当前轨道位置，返回状态文字
+ * @param {() => string} [deps.onGateReset] 恢复三重门/云墙的默认位置，返回状态文字
+ * @param {() => string} [deps.onLakeHere] 把白鲸湖搬到玩家当前位置，返回状态文字
+ * @param {() => string} [deps.onLakeReset] 恢复白鲸湖的默认位置，返回状态文字
+ * @param {boolean} [deps.cloudWallEnabled] 城头云墙当前是否显示
+ * @param {(on: boolean) => string} [deps.onCloudWallToggle] 开关城头云墙，返回状态文字
  */
-export function createDevPanel({ sun, ambient, onCamDist, onOpenMap, onStoryboard, onStoryClear }) {
+export function createDevPanel({
+  sun,
+  ambient,
+  onCamDist,
+  onOpenMap,
+  onOpenStoryboard,
+  onGateHere,
+  onGateReset,
+  onLakeHere,
+  onLakeReset,
+  cloudWallEnabled = false,
+  onCloudWallToggle,
+}) {
   // 应用已持久化的光照
   if (Number.isFinite(P.sunIntensity)) sun.intensity = P.sunIntensity;
   if (Number.isFinite(P.ambientIntensity)) ambient.intensity = P.ambientIntensity;
@@ -92,8 +68,8 @@ export function createDevPanel({ sun, ambient, onCamDist, onOpenMap, onStoryboar
   panel.style.display = "none";
   document.body.appendChild(panel);
 
-  let html = `<div class="dev-head"><strong>开发者菜单</strong><span class="dev-fps" id="dev-fps">-- fps</span></div>`;
-  html += `<div class="dev-hint">参数自动保存到本机</div>`;
+  let html = `<div class="dev-head" id="dev-drag-handle" title="拖动摆放面板"><strong>开发者菜单</strong><span class="dev-fps" id="dev-fps">-- fps</span></div>`;
+  html += `<div class="dev-hint">拖标题栏可摆放 · 参数自动保存到本机</div>`;
   let lastGroup = "";
   for (const s of SLIDERS) {
     if (s.group !== lastGroup) {
@@ -114,20 +90,33 @@ export function createDevPanel({ sun, ambient, onCamDist, onOpenMap, onStoryboar
     `<label class="dev-row"><span>环境光强</span>` +
     `<input type="range" data-light="ambient" min="0" max="1" step="0.02" value="${ambient.intensity}">` +
     `<em data-lval="ambient">${ambient.intensity.toFixed(2)}</em></label>`;
-  html += `<div class="dev-group">地图</div>`;
+  html += `<div class="dev-group">地图 / 故事板</div>`;
   html += `<button type="button" id="dev-open-map" class="dev-action">🗺️ 打开地图编辑</button>`;
-  html += `<p class="dev-hint">选中建筑可拖动、复制、放置到平面任意位置</p>`;
-  // ---------- 故事板：文本 → 大模型解析 → 生成临时场景 + 时间线 ----------
-  html += `<div class="dev-group">故事板</div>`;
+  html += `<button type="button" id="dev-open-storyboard" class="dev-action">🎬 打开故事板工作台</button>`;
+  html += `<p class="dev-hint">故事板已独立为并列面板（左上 🎬），支持分镜拖拽与 LLM 执行</p>`;
+  // ---------- 三重门 / 云墙 ----------
+  html += `<div class="dev-group">三重门 · 云墙</div>`;
   html +=
-    `<textarea id="dev-story-input" class="dev-story-input" rows="3" ` +
-    `placeholder="描述一个场景，比如：在竹林边放三棵古松和一只莫比斯虎，虎对信使说一句晚安"></textarea>`;
-  html += `<div class="dev-story-marks" id="dev-story-marks"></div>`;
-  html += `<button type="button" id="dev-story-run" class="dev-action">📖 生成故事场景</button>`;
-  html += `<button type="button" id="dev-story-clear" class="dev-action">🧹 清除故事场景</button>`;
-  html += `<p class="dev-hint" id="dev-story-status">仅解析系统内已有的环境/物品/动植物</p>`;
+    `<label class="dev-row dev-check"><span>城头云墙（搁置）</span>` +
+    `<input type="checkbox" id="dev-cloud-wall" ${cloudWallEnabled ? "checked" : ""}>` +
+    `<em id="dev-cloud-wall-em">${cloudWallEnabled ? "显示中" : "已关闭"}</em></label>`;
+  html += `<p class="dev-hint">云墙设计未定稿：默认不进场景；勾选才生成在城头</p>`;
+  html += `<button type="button" id="dev-gate-here" class="dev-action">📍 搬到我当前位置</button>`;
+  html += `<button type="button" id="dev-gate-reset" class="dev-action">↩︎ 恢复默认（入谷口）</button>`;
+  html += `<p class="dev-hint" id="dev-gate-status">站到想要的位置再点；位置存本机，刷新后保留</p>`;
+  html += `<div class="dev-group">白鲸湖（搬离水晶城可提性能）</div>`;
+  html += `<button type="button" id="dev-lake-here" class="dev-action">📍 湖搬到我当前位置</button>`;
+  html += `<button type="button" id="dev-lake-reset" class="dev-action">↩︎ 湖恢复默认（花厅塔下）</button>`;
+  html += `<p class="dev-hint" id="dev-lake-status">湖含 283 个可绘制对象（面数比水晶城还多），搬远可减少同屏负担</p>`;
   html += `<button type="button" id="dev-reset">重置全部参数</button>`;
   panel.innerHTML = html;
+
+  // 标题栏拖拽摆放（位置记入 localStorage）
+  makePanelDraggable(
+    panel,
+    panel.querySelector("#dev-drag-handle"),
+    "tm.ui.devPanel.pos"
+  );
 
   toggle.addEventListener("click", () => {
     panel.style.display = panel.style.display === "none" ? "block" : "none";
@@ -140,60 +129,69 @@ export function createDevPanel({ sun, ambient, onCamDist, onOpenMap, onStoryboar
       panel.style.display = "none";
     });
   }
+  const sbBtn = panel.querySelector("#dev-open-storyboard");
+  if (sbBtn && onOpenStoryboard) {
+    sbBtn.addEventListener("click", () => {
+      onOpenStoryboard();
+      panel.style.display = "none";
+    });
+  }
 
-  // ---------- 故事板交互 ----------
+  // ---------- 三重门 / 云墙 开关 + 定位 ----------
   {
-    const input = panel.querySelector("#dev-story-input");
-    const marks = panel.querySelector("#dev-story-marks");
-    const status = panel.querySelector("#dev-story-status");
-    const runBtn = panel.querySelector("#dev-story-run");
-    const clearBtn = panel.querySelector("#dev-story-clear");
-
-    /** 实体标记：文本里命中的系统资产 → 彩色 chips */
-    function renderMarks(text) {
-      if (!marks) return;
-      const hits = matchStoryCatalog(text);
-      if (!hits.length) {
-        marks.innerHTML = text.trim()
-          ? `<span class="dev-story-chip miss">未识别到系统内实体</span>`
-          : "";
-        return;
-      }
-      marks.innerHTML = hits
-        .map((h) => `<span class="dev-story-chip cat-${h.categoryKey}" title="${h.id}">${h.label}</span>`)
-        .join("");
-    }
-
-    input?.addEventListener("input", () => renderMarks(input.value));
-
-    runBtn?.addEventListener("click", async () => {
-      const text = input?.value.trim() || "";
-      if (!text) {
-        if (status) status.textContent = "请先输入故事板内容";
-        return;
-      }
-      if (!onStoryboard) return;
-      runBtn.disabled = true;
-      if (status) status.textContent = "解析中…";
+    const gateStatus = panel.querySelector("#dev-gate-status");
+    const setStatus = (msg) => {
+      if (gateStatus && msg) gateStatus.textContent = msg;
+    };
+    const cloudCb = panel.querySelector("#dev-cloud-wall");
+    const cloudEm = panel.querySelector("#dev-cloud-wall-em");
+    cloudCb?.addEventListener("change", () => {
+      if (!onCloudWallToggle) return;
       try {
-        const spec = await onStoryboard(text);
-        const dropped = spec?.warnings?.length || 0;
-        if (status) {
-          status.textContent =
-            `已生成「${spec?.title || "故事板"}」：${spec?.entities?.length || 0} 个实体 / ` +
-            `${spec?.timeline?.length || 0} 步动作` +
-            (dropped ? `（丢弃 ${dropped} 条非法项，详见控制台）` : "");
-        }
-      } catch (err) {
-        if (status) status.textContent = `失败：${err.message}`;
-      } finally {
-        runBtn.disabled = false;
+        const msg = onCloudWallToggle(!!cloudCb.checked);
+        if (cloudEm) cloudEm.textContent = cloudCb.checked ? "显示中" : "已关闭";
+        setStatus(msg || (cloudCb.checked ? "云墙已开" : "云墙已关"));
+      } catch (e) {
+        setStatus(`云墙开关失败：${e.message}`);
+        cloudCb.checked = !cloudCb.checked;
+      }
+    });
+    panel.querySelector("#dev-gate-here")?.addEventListener("click", () => {
+      if (!onGateHere) return;
+      try {
+        setStatus(onGateHere() || "已搬到当前位置");
+      } catch (e) {
+        setStatus(`失败：${e.message}`);
+      }
+    });
+    panel.querySelector("#dev-gate-reset")?.addEventListener("click", () => {
+      if (!onGateReset) return;
+      try {
+        setStatus(onGateReset() || "已恢复默认位置");
+      } catch (e) {
+        setStatus(`失败：${e.message}`);
       }
     });
 
-    clearBtn?.addEventListener("click", () => {
-      onStoryClear?.();
-      if (status) status.textContent = "已清除故事场景";
+    const lakeStatus = panel.querySelector("#dev-lake-status");
+    const setLake = (msg) => {
+      if (lakeStatus && msg) lakeStatus.textContent = msg;
+    };
+    panel.querySelector("#dev-lake-here")?.addEventListener("click", () => {
+      if (!onLakeHere) return;
+      try {
+        setLake(onLakeHere() || "湖已搬到当前位置");
+      } catch (e) {
+        setLake(`失败：${e.message}`);
+      }
+    });
+    panel.querySelector("#dev-lake-reset")?.addEventListener("click", () => {
+      if (!onLakeReset) return;
+      try {
+        setLake(onLakeReset() || "湖已恢复默认位置");
+      } catch (e) {
+        setLake(`失败：${e.message}`);
+      }
     });
   }
 

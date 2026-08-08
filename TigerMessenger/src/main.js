@@ -11,6 +11,7 @@ import { createCameraRig } from "./core/camera.js";
 import { createDevPanel } from "./core/devPanel.js";
 import { createStoryEngine } from "./story/storyEngine.js";
 import { requestStoryboard } from "./story/storyLLM.js";
+import { createStoryboardPanel } from "./story/storyboardPanel.js";
 import { createMapEditor } from "./core/mapEditor.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
@@ -19,6 +20,7 @@ import { createTramRide } from "./player/tramRide.js";
 import { createAirshipRide } from "./player/airshipRide.js";
 import { createAircraftRide } from "./player/aircraftRide.js";
 import { createBubblePodRide } from "./player/bubblePodRide.js";
+import { createBoatRide } from "./player/boatRide.js";
 import { createWeatherSystem } from "./world/weather.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
@@ -27,6 +29,7 @@ import {
   findSwampTiger,
 } from "./world/moebiusTiger.js";
 import { createTouchControls } from "./ui/touchControls.js";
+import { createMinimap } from "./ui/minimap.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { FlockManager } from "./world/flock.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
@@ -34,6 +37,8 @@ import {
   createDynamicMoebiusClouds,
   updateDynamicMoebiusClouds,
 } from "./world/equatorialClouds.js";
+// 城头云盖要和三重门严格对齐：高度/锚点/沿轨跨度全部取自城门模块，不再各自硬编码
+import { GATE, GATE_DEPTH, findGateSeatU } from "./world/abandonedGate.js";
 import { createPlayer, syncPlayerVisual } from "./player/player.js";
 import { updatePlayerControl } from "./player/controller.js";
 import { updatePlayerAnim } from "./player/animation.js";
@@ -74,9 +79,6 @@ const { lanterns, ambient, sun, skyMat, hemi } = setupEnvironment(scene);
 // ---------- 星球壳（各场景可在其上贴装） ----------
 const planet = createPlanet(scene);
 
-// ---------- 赤道风暴积雨云墙（乌云涌动 · 随机龙卷风吹开云墙，概率 1/3） ----------
-const equatorialClouds = createDynamicMoebiusClouds(scene, PLANET_RADIUS);
-
 // ---------- 按 URL 加载场景模块 ----------
 // 例：?scene=messenger  |  ?scene=saihoji  |  ?scene=messenger,saihoji
 const sceneIds = resolveSceneIdsFromUrl(location.search);
@@ -92,6 +94,35 @@ const sceneHandles = loadScenes(sceneIds, {
 
 // 从已加载场景中取玩法依赖（平台/土坡）；若未加载 messenger 则为空
 const messenger = sceneHandles.find((h) => h.id === "messenger") || null;
+
+// ---------- 城头云墙（搁置中：默认不进场景，开发者菜单可开关） ----------
+const CLOUD_WALL_KEY = "tm.equatorialClouds.enabled";
+const trackCurve = messenger?.landmarks?.tramSystem?.curve ?? null;
+const equatorialClouds = createDynamicMoebiusClouds(scene, PLANET_RADIUS, {
+  trackCurve,
+  anchorU: trackCurve ? findGateSeatU(trackCurve, PLANET_RADIUS) : null,
+  crownY: GATE.wallTop,
+  spanX: GATE_DEPTH,
+});
+/** 云墙是否在场景中显示并更新（默认关，设计未定稿） */
+function isCloudWallEnabled() {
+  return localStorage.getItem(CLOUD_WALL_KEY) === "1";
+}
+function setCloudWallEnabled(on) {
+  const want = !!on;
+  localStorage.setItem(CLOUD_WALL_KEY, want ? "1" : "0");
+  if (!equatorialClouds) return want;
+  equatorialClouds.visible = want;
+  equatorialClouds.userData.enabled = want;
+  if (want) {
+    if (!equatorialClouds.parent) scene.add(equatorialClouds);
+  } else if (equatorialClouds.parent) {
+    equatorialClouds.parent.remove(equatorialClouds);
+  }
+  return want;
+}
+// 默认：从场景删除（仅代码仍创建，方便以后菜单打开）
+setCloudWallEnabled(isCloudWallEnabled());
 const platforms = messenger?.platforms || [];
 const hills = messenger?.hills || null;
 // 可写碰撞列表（地图编辑器会 push / 改 position）
@@ -177,6 +208,47 @@ mapEditor.loadPersisted();
 // 地图打开时：3D 左键点选模型 → 地图同步选中高亮
 mapEditor.bindScenePick({ camera, domElement: renderer.domElement });
 
+// ---------- 小地图（左上角 · 经典场景标注 + 送信人位置/视野框） ----------
+// getDir 惰性求值：三重门/白鲸湖可被开发者菜单搬迁，每次绘制取最新方向
+const _mmViewFwd = new THREE.Vector3();
+const minimap = createMinimap({
+  planetRadius: PLANET_RADIUS,
+  getPlayer: () => player,
+  // 相机实时位姿：视野扇形框（第三人称跟随 / 驾驶舱第一人称均适用）
+  getView: () => {
+    camera.getWorldDirection(_mmViewFwd);
+    return {
+      position: camera.position,
+      forward: _mmViewFwd,
+      fov: camera.fov,
+      aspect: camera.aspect,
+    };
+  },
+  toast: showToast,
+  landmarks: [
+    { id: "bookshop", name: "书店镇", color: "#d98a2b",
+      getDir: () => messenger?.landmarks?.bookshop?.position },
+    { id: "camp", name: "出发营地", color: "#4aa76c",
+      getDir: () => messenger?.landmarks?.camp?.landmarks?.elder?.position },
+    { id: "gate", name: "叹息之门", color: "#b85a42",
+      getDir: () => messenger?.landmarks?.abandonedGate?.userData?.seatRoot?.position },
+    { id: "citadel", name: "高山圣城", color: "#d4af37",
+      getDir: () => messenger?.landmarks?.odysseyCitadel?.position },
+    { id: "city", name: "水晶城", color: "#7eb0ff",
+      getDir: () => messenger?.landmarks?.moebius?.grand?.dir },
+    { id: "lake", name: "白鲸海水湖", color: "#48c9b0",
+      getDir: () => messenger?.landmarks?.citySeaLake?.centerDir },
+    { id: "harbor", name: "旧港码头", color: "#8a9bb8",
+      getDir: () => messenger?.landmarks?.boat?.position },
+    { id: "moon", name: "月亮湖", color: "#c9a8ff",
+      getDir: () => messenger?.landmarks?.moonLake?.centerWorld },
+    { id: "saihoji", name: "西芳寺苔庭", color: "#2f8f7a",
+      getDir: () =>
+        sceneHandles.find((h) => h.id === "saihoji")?.landmarks?.zones?.["moss-entry"]
+          ?.pathDirection },
+  ],
+});
+
 // ---------- 书店上方忽聚忽散的鸟群 ----------
 // 取书店在世界中的球面位置（法线方向）→ 在其正上方低空小空域盘旋聚散。
 let bookshopFlock = null;
@@ -196,7 +268,7 @@ let bookshopFlock = null;
   }
 }
 
-// ---------- 故事板引擎（开发者菜单：文本 → LLM → 临时场景 + 时间线） ----------
+// ---------- 故事板引擎 + 并列工作台（🎬，与开发者菜单并列） ----------
 const storyEngine = createStoryEngine({
   scene,
   player,
@@ -206,16 +278,156 @@ const storyEngine = createStoryEngine({
   cameraRig,
 });
 
+async function executeStoryboardText(text) {
+  const rawSpec = await requestStoryboard(text);
+  return storyEngine.play(rawSpec);
+}
+
+const storyboardPanel = createStoryboardPanel({
+  onExecute: executeStoryboardText,
+  onClear: () => storyEngine.dispose(),
+  toast: showToast,
+});
+
+// ---------- 三重门 / 云墙：可交互定位（存 localStorage，刷新后保留） ----------
+const GATE_ANCHOR_KEY = "tm.gateAnchorU.v1";
+
+/** 找轨道上距给定世界位置最近的参数 u（弧长参数化，采样 1200 点足够） */
+function nearestTrackU(worldPos) {
+  const curve = messenger?.landmarks?.tramSystem?.curve;
+  if (!curve || !worldPos) return null;
+  const probe = new THREE.Vector3();
+  let bestU = 0;
+  let bestD = Infinity;
+  for (let i = 0; i <= 1200; i++) {
+    const u = i / 1200;
+    curve.getPointAt(u, probe);
+    const d = probe.distanceToSquared(worldPos);
+    if (d < bestD) {
+      bestD = d;
+      bestU = u;
+    }
+  }
+  return { u: bestU, dist: Math.sqrt(bestD), curve };
+}
+
+/** 同步搬迁三重门 + 城头云墙到轨道参数 u */
+function moveGateAndCloudsTo(u) {
+  const gate = messenger?.landmarks?.abandonedGate;
+  const birdVortex = messenger?.landmarks?.birdVortex;
+  const okGate = gate?.userData?.relocate?.(u) ?? false;
+  const okBird = okGate ? (birdVortex?.syncToGate?.(gate) ?? false) : false;
+  const okCloud =
+    isCloudWallEnabled() && equatorialClouds?.parent
+      ? equatorialClouds?.userData?.relocate?.(u) ?? false
+      : false;
+  return { okGate, okBird, okCloud };
+}
+
+// 启动时套用上次保存的位置
+{
+  const saved = Number(localStorage.getItem(GATE_ANCHOR_KEY));
+  if (Number.isFinite(saved) && saved > 0 && saved < 1) {
+    moveGateAndCloudsTo(saved);
+  }
+}
+
+// ---------- 白鲸湖：可交互定位（搬离水晶城以减轻同屏渲染负担） ----------
+// 实测该湖 283 个可绘制对象 / 15556 三角面，分别是水晶城的 45% 与 105%，
+// 且原湖心与花厅塔重合 —— 看城市时必然连带渲染整片湖。
+const LAKE_ANCHOR_KEY = "tm.seaLakeDir.v1";
+
+function moveSeaLakeTo(dir, baseRadius) {
+  const lake = messenger?.landmarks?.citySeaLake;
+  return lake?.relocate?.(dir, baseRadius) ?? false;
+}
+
+{
+  const raw = localStorage.getItem(LAKE_ANCHOR_KEY);
+  if (raw) {
+    try {
+      const d = JSON.parse(raw);
+      if (Number.isFinite(d?.x) && Number.isFinite(d?.y) && Number.isFinite(d?.z)) {
+        moveSeaLakeTo(new THREE.Vector3(d.x, d.y, d.z));
+      }
+    } catch {
+      /* 存档损坏：忽略，用默认位置 */
+    }
+  }
+}
+
 const devPanel = createDevPanel({
   sun,
   ambient,
   onCamDist: (d) => cameraRig.setDist(d),
   onOpenMap: () => mapEditor.setOpen(true),
-  onStoryboard: async (text) => {
-    const rawSpec = await requestStoryboard(text);
-    return storyEngine.play(rawSpec);
+  onOpenStoryboard: () => storyboardPanel.setOpen(true),
+  cloudWallEnabled: isCloudWallEnabled(),
+  onCloudWallToggle: (on) => {
+    const enabled = setCloudWallEnabled(on);
+    // 打开时：若有保存的门锚点，云墙跟着对齐
+    if (enabled) {
+      const saved = Number(localStorage.getItem(GATE_ANCHOR_KEY));
+      if (Number.isFinite(saved) && saved > 0 && saved < 1) {
+        equatorialClouds?.userData?.relocate?.(saved);
+      } else {
+        const defU = messenger?.landmarks?.abandonedGate?.userData?.anchor?.defaultGateU;
+        if (Number.isFinite(defU)) equatorialClouds?.userData?.relocate?.(defU);
+      }
+    }
+    return enabled
+      ? "城头云墙已显示（设计搁置中，可随时关掉）"
+      : "城头云墙已从场景移除";
   },
-  onStoryClear: () => storyEngine.dispose(),
+  onGateHere: () => {
+    const hit = nearestTrackU(player.position);
+    if (!hit) return "找不到电车轨道，无法定位";
+    const { okGate, okBird, okCloud } = moveGateAndCloudsTo(hit.u);
+    if (!okGate && !okBird && !okCloud) return "三重门/鸟群/云墙未就绪";
+    localStorage.setItem(GATE_ANCHOR_KEY, String(hit.u));
+    const s = hit.u * hit.curve.getLength();
+    return (
+      `已搬到轨道 s=${s.toFixed(1)}（距你 ${hit.dist.toFixed(1)}）` +
+      `${okGate ? " · 三重门✓" : " · 三重门✗"}${okBird ? " · 鸟群✓" : " · 鸟群✗"}${okCloud ? " · 云墙✓" : " · 云墙✗"}`
+    );
+  },
+  onGateReset: () => {
+    localStorage.removeItem(GATE_ANCHOR_KEY);
+    const gate = messenger?.landmarks?.abandonedGate;
+    // 必须用 defaultGateU（出厂值）；gateU 会被上一次搬迁覆盖
+    const defU = gate?.userData?.anchor?.defaultGateU;
+    if (Number.isFinite(defU)) {
+      moveGateAndCloudsTo(defU);
+      return "已恢复默认位置（入谷口），刷新后完全复位";
+    }
+    return "已清除保存位置，刷新后复位";
+  },
+  onLakeHere: () => {
+    const lake = messenger?.landmarks?.citySeaLake;
+    if (!lake?.relocate) return "白鲸湖未就绪";
+    const dir = player.position.clone().normalize();
+    if (!moveSeaLakeTo(dir)) return "搬迁失败";
+    localStorage.setItem(
+      LAKE_ANCHOR_KEY,
+      JSON.stringify({ x: dir.x, y: dir.y, z: dir.z })
+    );
+    // 报告与水晶城的新距离，直观说明减负效果
+    const cityDir = messenger?.landmarks?.moebius?.grand?.dir;
+    const away = cityDir ? dir.angleTo(cityDir) * PLANET_RADIUS : NaN;
+    return (
+      `湖已搬到你脚下（水面 R=${lake.surfaceR.toFixed(1)}）` +
+      (Number.isFinite(away) ? ` · 距母塔 ${away.toFixed(1)}（原 0，同屏负担已移除）` : "")
+    );
+  },
+  onLakeReset: () => {
+    localStorage.removeItem(LAKE_ANCHOR_KEY);
+    const lake = messenger?.landmarks?.citySeaLake;
+    if (lake?.defaultCenterDir) {
+      moveSeaLakeTo(lake.defaultCenterDir, lake.defaultBaseRadius);
+      return "湖已回到花厅塔下（水晶城会重新变重）";
+    }
+    return "已清除保存位置，刷新后复位";
+  },
 });
 
 // ---------- 昼夜循环（朝霞/暮云重点过渡；面板可拖时刻与速度） ----------
@@ -249,7 +461,12 @@ const tramRide = createTramRide({
       sfxWaterTrain();
     }
     const color = tram?.userData?.variant === "blue" ? "蓝色" : "红色";
-    showToast(`已登上${color}电车 · 窗边乘客 · [C] 司机视野 · [F] 下车`, 3.4);
+    const foxHint =
+      foxNpc?.isFollowing?.() ? " · 阿狸卧在身旁" : "";
+    showToast(
+      `已登上${color}电车 · 窗边乘客 · [C] 司机视野 · [F] 下车${foxHint}`,
+      3.4
+    );
   },
 });
 
@@ -297,6 +514,23 @@ bubblePodRide = createBubblePodRide({
   },
 });
 
+// ---------- 渔船驾驶（靠近船体 [F] 上船 · WASD 驾驶） ----------
+const boatRide = createBoatRide({
+  scene,
+  player,
+  playerGroup,
+  getBoat: () => messenger?.landmarks?.boat || null,
+  cameraRig,
+  keys,
+  elHint: document.getElementById("boat-hint"),
+  toast: showToast,
+  exitOtherRides: () => {
+    airshipRide.forceExit?.();
+    bubblePodRide?.forceExit?.();
+    if (aircraftRide.isRiding?.()) aircraftRide.toggle();
+  },
+});
+
 // [V] 进入/退出飞行器驾驶舱
 window.addEventListener("keydown", (e) => {
   if (e.repeat || e.code !== "KeyV") return;
@@ -328,8 +562,8 @@ let moebiusFactor = 0;
 let poemBubbleActive = false; // “烽火连三月，家书抵万金”是否已弹出
 
 /**
- * 玩家是否“面对云墙”：取最近的赤道云墙塔，判断水平视线是否投向该塔。
- * 云墙为绕赤道的环，临近赤道、抬头/平视望向塔身即视为面对云墙。
+ * 玩家是否“面对云墙”：取最近的轨道云墙塔，判断水平视线是否投向该塔。
+ * 云墙沿书店→峡谷高架两侧，望向塔身即视为面对云墙。
  */
 const _vToTower = new THREE.Vector3();
 const _camFwd = new THREE.Vector3();
@@ -385,7 +619,7 @@ function updateMoebiusBarrier(dt) {
   ambient.color.setHex(0xf3fff7).lerp(MOEBIUS_SKY, f);
 }
 
-// ---------- 阿狸（E 站立跟随 · 球面 lerp 尾随 · 对话） ----------
+// ---------- 阿狸（E 站立跟随 · 球面 lerp 尾随 · 对话 · 随电车卧姿） ----------
 const foxAli = messenger?.landmarks?.camp?.landmarks?.foxAli || null;
 const foxNpc = createFoxNpc({
   player,
@@ -399,6 +633,10 @@ const foxNpc = createFoxNpc({
     const el = document.getElementById("npc-hint");
     return !!(el && el.classList.contains("show"));
   },
+  // 跟随中玩家上电车 → 阿狸上车卧在身旁
+  isPlayerOnTram: () => tramRide.isRiding?.() ?? false,
+  getActiveTram: () => tramRide.getActiveTram?.() ?? null,
+  getFoxTramSeatLocal: () => tramRide.getFoxSeatLocal?.() ?? null,
 });
 
 // ---------- 开场 ----------
@@ -443,6 +681,7 @@ function animate() {
   const riding =
     aircraftRide.update() ||
     bubblePodRide.update(dt) ||
+    boatRide.update(dt) ||
     tramRide.update(dt) ||
     airshipRide.update(dt);
   if (!riding) {
@@ -505,17 +744,22 @@ function animate() {
   foxNpc.update(dt, t);
   quest.updateCompass();
   quest.animateMarkers(t);
+  minimap?.update();
   updateLanterns(lanterns, t);
-  updateDynamicMoebiusClouds(equatorialClouds, t, sun, camera);
+  // 云墙搁置：仅在菜单开启时更新（含雷雨动画）
+  if (isCloudWallEnabled() && equatorialClouds?.parent) {
+    updateDynamicMoebiusClouds(equatorialClouds, t, sun, camera);
+  }
   bookshopFlock?.update(dt, t); // 书店上方鸟群忽聚忽散
   devPanel.tick(dt);
 
-  // ---------- 送信人念诗歌：手持信件 + 视野里有云墙即触发（不限时段） ----------
+  // ---------- 送信人念诗歌：手持信件 + 视野里有云墙即触发（云墙开启时） ----------
   {
-    const hasLetter = !!player.holdingLetter;        // 1) 手持信件
-    const facingWall = isFacingCloudWall(player, camera, equatorialClouds); // 2) 视野里有云墙
+    const hasLetter = !!player.holdingLetter;
+    const facingWall =
+      isCloudWallEnabled() &&
+      isFacingCloudWall(player, camera, equatorialClouds);
 
-    // 只要手持信件且看到云墙，就触发念诗气泡
     if (!poemBubbleActive && hasLetter && facingWall) {
       showBubble(
         "烽火连三月，家书抵万金",
@@ -524,7 +768,6 @@ function animate() {
       );
       poemBubbleActive = true;
     }
-    // 失去信件或离开云墙则收起
     if (poemBubbleActive && (!hasLetter || !facingWall)) {
       hideBubble();
       poemBubbleActive = false;
@@ -566,10 +809,13 @@ window.__tm = {
   listScenes,
   assetColliders,
   equatorialClouds,
+  setCloudWallEnabled,
+  isCloudWallEnabled,
   platforms,
   hills,
   mapEditor,
   storyEngine, // 故事板引擎（验收/调试用）
+  storyboardPanel,
   tramRide,
   airshipRide,
   elderMusic,

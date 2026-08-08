@@ -8,10 +8,12 @@
  */
 import * as THREE from "three";
 import { latLonToDir, flatToWorld } from "./sphereMath.js";
+import { WORLD_SCALE } from "./worldScale.js";
 
+// 土丘的 x/z/r 是世界布局量；peak/lift/depth 是玩家局部高度，保持不变。
 // 土丘定义：flatX / flatZ / 半径 r / 峰高 peak。
 // 两条山脊：北脊包住驿站方向（峰 2.0，替代旧高台地标），东西两列沿岛缘展开。
-const HILL_DEFS = [
+const HILL_DEFS_BASE = [
   // —— 北脊（驿站山，连续重叠的三丘）
   { x: -1.8, z: -12.6, r: 3.0, peak: 1.15 },
   { x: 0.4, z: -12.4, r: 3.4, peak: 2.0 },
@@ -32,15 +34,22 @@ const HILL_DEFS = [
   { x: 11.5, z: 5.5, r: 4.5, peak: 1.4 },
 ];
 
-const ISLAND_FLAT_R = 18; // 主岛平面足迹（platforms 主岛半宽 18）
+const HILL_DEFS = HILL_DEFS_BASE.map((def) => ({
+  ...def,
+  x: def.x * WORLD_SCALE,
+  z: def.z * WORLD_SCALE,
+  r: def.r * WORLD_SCALE,
+}));
+
+export const ISLAND_FLAT_R = 18 * WORLD_SCALE; // 主岛平面足迹
 export const ISLAND_BASE_LIFT = 0.6; // 岛面厚度（原平台顶高）
 
 // 起始庭园的池水不是贴在岛面上的透明平板，而是球面岛上的一个浅盆。
 // 这些参数同时供地形、平台壳体、碰撞和水面使用，避免四套坐标各算各的。
 export const POND_CENTER_X = 0;
-export const POND_CENTER_Z = 9.1;
-export const POND_RADIUS_X = 9.2;
-export const POND_RADIUS_Z = 4.9;
+export const POND_CENTER_Z = 9.1 * WORLD_SCALE;
+export const POND_RADIUS_X = 9.2 * WORLD_SCALE;
+export const POND_RADIUS_Z = 4.9 * WORLD_SCALE;
 export const POND_DEPTH = 0.48;
 
 /** 池塘位置的下挖量（椭圆边缘为 0，中心最深）。 */
@@ -55,11 +64,11 @@ export function pondDepressionAt(x, z) {
 }
 
 // 山区包围盒（网格覆盖范围，含裙边余量）
-const GRID_MIN_X = -11.5;
-const GRID_MAX_X = 16.5;
-const GRID_MIN_Z = -15.5;
-const GRID_MAX_Z = 12.5;
-const GRID_STEP = 0.7; // 平面网格间距
+const GRID_MIN_X = -11.5 * WORLD_SCALE;
+const GRID_MAX_X = 16.5 * WORLD_SCALE;
+const GRID_MIN_Z = -15.5 * WORLD_SCALE;
+const GRID_MAX_Z = 12.5 * WORLD_SCALE;
+const GRID_STEP = 0.7 * WORLD_SCALE; // 保持网格细分密度，随布局覆盖扩大
 
 /** 所有土丘在该点的联合抬升（余弦剖面，多丘取 max，保证连绵无叠加尖峰） */
 export function hillHeightAt(x, z) {
@@ -104,8 +113,8 @@ export function carveHillsForTrack(hillsMesh, trackCurves, R, capLift = 0.62) {
   const pos = hillsMesh.geometry.attributes.position;
   const tmp = new THREE.Vector3();
   // 全压平半径：车道中心 ±0.9 + 车体半宽 ~1.3 + 余量；车体底角不得压山
-  const CORRIDOR_R = 4.4;
-  const FADE_R = 6.0; // 过渡带外缘，平滑接回原山体
+  const CORRIDOR_R = 4.4 * WORLD_SCALE;
+  const FADE_R = 6.0 * WORLD_SCALE; // 过渡带外缘，平滑接回原山体
   let vi = 0;
   let changed = false;
   for (let iz = 0; iz < nz; iz++) {

@@ -69,6 +69,11 @@ const _cross = new THREE.Vector3();
 const _origin = new THREE.Vector3();
 const _m4 = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
+const _corO = new THREE.Vector3();
+const _corR = new THREE.Vector3();
+const _corU = new THREE.Vector3();
+const _corF = new THREE.Vector3();
+const _corRel = new THREE.Vector3();
 
 function clampLen(v, max) {
   const l = v.length();
@@ -203,6 +208,12 @@ export class FlockManager {
     } = opts;
     this.homeRadius = homeRadius;
     this.homeWeight = homeWeight;
+    /** @type {null | {
+     *   origin: THREE.Vector3, right: THREE.Vector3, up: THREE.Vector3, forward: THREE.Vector3,
+     *   halfWidth: number, halfLength: number, yMin: number, yMax: number,
+     *   cloudCeilY?: number
+     * }} */
+    this.corridor = null;
 
     this.scene = scene;
     this.R = planetRadius;
@@ -231,41 +242,255 @@ export class FlockManager {
     this.root.name = "flock-root";
     scene.add(this.root);
 
-    // 出生：家域中心附近切平面散布，初速顺风
-    const t1 = new THREE.Vector3(0, 1, 0).cross(center);
-    if (t1.lengthSq() < 1e-6) t1.set(1, 0, 0);
-    t1.normalize();
-    const t2 = new THREE.Vector3().crossVectors(center, t1).normalize();
-
     /** @type {{ group: THREE.Group, wingL: THREE.Mesh, wingR: THREE.Mesh, vel: THREE.Vector3, phaseOffset: number, maxSpeed: number, bank: number, prevTan: THREE.Vector3 }[]} */
     this.birds = [];
     for (let i = 0; i < count; i++) {
       const bird = createLowPolyBird(BIRD_COLORS[i % BIRD_COLORS.length], this.geos);
       bird.scale.setScalar(0.85 + Math.random() * 0.4);
-      bird.position
-        .copy(this.home)
-        .addScaledVector(t1, (Math.random() - 0.5) * 12)
-        .addScaledVector(t2, (Math.random() - 0.5) * 12)
-        .addScaledVector(center, (Math.random() - 0.5) * 6);
       this.root.add(bird);
-
-      const vel = this.wind
-        .clone()
-        .multiplyScalar(2.6 + Math.random() * 1.6)
-        .addScaledVector(t1, (Math.random() - 0.5) * 2)
-        .addScaledVector(t2, (Math.random() - 0.5) * 2);
 
       this.birds.push({
         group: bird,
         model: bird.userData.model,
         wingL: bird.userData.wingL,
         wingR: bird.userData.wingR,
-        vel,
+        vel: new THREE.Vector3(),
         phaseOffset: Math.random() * Math.PI * 2, // 随机相位偏置：扑翅参差有灵气
         maxSpeed: MAX_SPEED * (0.9 + Math.random() * 0.25),
         bank: 0,
-        prevTan: vel.clone(),
+        prevTan: new THREE.Vector3(1, 0, 0),
       });
+    }
+    // 出生散布到家域
+    this._scatterNearHome();
+  }
+
+  /**
+   * 迁移家域：用于把峡谷/城周鸟群整群搬到新地标（如叹息之门城头）。
+   * @param {THREE.Vector3} centerDir 单位球面方向
+   * @param {{
+   *   altMin?: number, altMax?: number,
+   *   windDir?: THREE.Vector3|null,
+   *   homeRadius?: number, homeWeight?: number,
+   *   obstacles?: { dir: THREE.Vector3, root: number, h: number, r: number }[],
+   *   corridor?: {
+   *     origin: THREE.Vector3, right: THREE.Vector3, up: THREE.Vector3, forward: THREE.Vector3,
+   *     halfWidth: number, halfLength: number, yMin: number, yMax: number, cloudCeilY?: number
+   *   }|null,
+   *   respawn?: boolean,
+   * }} [opts]
+   */
+  setHome(centerDir, opts = {}) {
+    if (!centerDir || centerDir.lengthSq() < 1e-10) return this;
+    const center = centerDir.clone().normalize();
+    this.centerDir = center;
+    if (Number.isFinite(opts.altMin) || Number.isFinite(opts.altMax)) {
+      const a0 = Number.isFinite(opts.altMin) ? opts.altMin : this.rMin - this.R;
+      const a1 = Number.isFinite(opts.altMax) ? opts.altMax : this.rMax - this.R;
+      this.rMin = this.R + Math.min(a0, a1);
+      this.rMax = this.R + Math.max(a0, a1);
+      this.rMid = (this.rMin + this.rMax) / 2;
+    }
+    this.home.copy(center).multiplyScalar(this.rMid);
+    if (opts.windDir && opts.windDir.lengthSq() > 1e-8) {
+      this.wind.copy(opts.windDir).normalize();
+    } else {
+      this.wind.set(0, 1, 0).cross(center);
+      if (this.wind.lengthSq() < 1e-8) this.wind.set(1, 0, 0).cross(center);
+      this.wind.normalize();
+    }
+    if (Number.isFinite(opts.homeRadius)) this.homeRadius = opts.homeRadius;
+    if (Number.isFinite(opts.homeWeight)) this.homeWeight = opts.homeWeight;
+    if (Array.isArray(opts.obstacles)) {
+      this.obstacles = opts.obstacles.map((o) => ({
+        dir: o.dir.clone().normalize(),
+        root: o.root,
+        h: o.h,
+        r: o.r,
+      }));
+    }
+    if (opts.corridor !== undefined) {
+      this.setCorridor(opts.corridor);
+    }
+    if (opts.respawn !== false) this._scatterNearHome();
+    return this;
+  }
+
+  /**
+   * 门廊走廊：鸟只在三重门夹道内穿行（宽/高/沿轨长），并硬限云墙高度以下。
+   * 坐标系与 abandonedGate seatRoot 一致：+X 右、+Y 上、+Z 前进。
+   * @param {null | {
+   *   origin: THREE.Vector3, right: THREE.Vector3, up: THREE.Vector3, forward: THREE.Vector3,
+   *   halfWidth: number, halfLength: number, yMin: number, yMax: number, cloudCeilY?: number
+   * }} corridor
+   */
+  setCorridor(corridor) {
+    if (!corridor) {
+      this.corridor = null;
+      return this;
+    }
+    const yMin = Number(corridor.yMin) || 0;
+    let yMax = Number(corridor.yMax) || 12;
+    // 云墙底缘（默认 wallTop≈44）以下留安全距
+    const cloudCeil =
+      Number.isFinite(corridor.cloudCeilY) ? corridor.cloudCeilY : yMax;
+    yMax = Math.min(yMax, cloudCeil - 0.5);
+    this.corridor = {
+      origin: corridor.origin.clone(),
+      right: corridor.right.clone().normalize(),
+      up: corridor.up.clone().normalize(),
+      forward: corridor.forward.clone().normalize(),
+      halfWidth: Math.max(0.8, Number(corridor.halfWidth) || 3),
+      halfLength: Math.max(2, Number(corridor.halfLength) || 16),
+      yMin,
+      yMax: Math.max(yMin + 0.5, yMax),
+      cloudCeilY: cloudCeil,
+    };
+    // 家域中心改到走廊中点高度
+    const midY = (this.corridor.yMin + this.corridor.yMax) * 0.5;
+    this.home
+      .copy(this.corridor.origin)
+      .addScaledVector(this.corridor.up, midY);
+    // 高度带与走廊对齐（径向近似）
+    const baseR = this.corridor.origin.length();
+    this.rMin = baseR + this.corridor.yMin - 0.4;
+    this.rMax = baseR + this.corridor.yMax + 0.4;
+    this.rMid = (this.rMin + this.rMax) / 2;
+    this.wind.copy(this.corridor.forward);
+    return this;
+  }
+
+  /** 在当前 home / 走廊内散布，初速顺风 */
+  _scatterNearHome() {
+    const cor = this.corridor;
+    if (cor) {
+      for (let i = 0; i < this.birds.length; i++) {
+        const b = this.birds[i];
+        const lx = (Math.random() - 0.5) * 2 * cor.halfWidth * 0.75;
+        const ly =
+          cor.yMin +
+          Math.random() * Math.max(0.2, cor.yMax - cor.yMin) * 0.9 +
+          (cor.yMax - cor.yMin) * 0.05;
+        // 沿轨：偏向前半，便于穿三重门
+        const lz = (Math.random() - 0.5) * 2 * cor.halfLength * 0.85;
+        b.group.position
+          .copy(cor.origin)
+          .addScaledVector(cor.right, lx)
+          .addScaledVector(cor.up, ly)
+          .addScaledVector(cor.forward, lz);
+        b.vel
+          .copy(this.wind)
+          .multiplyScalar(2.8 + Math.random() * 1.8)
+          .addScaledVector(cor.right, (Math.random() - 0.5) * 1.2)
+          .addScaledVector(cor.up, (Math.random() - 0.5) * 0.6);
+        b.prevTan.copy(b.vel);
+        b.bank = 0;
+      }
+      return;
+    }
+    const center = this.centerDir;
+    const t1 = new THREE.Vector3(0, 1, 0).cross(center);
+    if (t1.lengthSq() < 1e-6) t1.set(1, 0, 0);
+    t1.normalize();
+    const t2 = new THREE.Vector3().crossVectors(center, t1).normalize();
+    const spread = Math.min(12, Math.max(4, this.homeRadius * 0.55));
+    for (let i = 0; i < this.birds.length; i++) {
+      const b = this.birds[i];
+      b.group.position
+        .copy(this.home)
+        .addScaledVector(t1, (Math.random() - 0.5) * spread)
+        .addScaledVector(t2, (Math.random() - 0.5) * spread)
+        .addScaledVector(center, (Math.random() - 0.5) * (this.rMax - this.rMin) * 0.4);
+      b.vel
+        .copy(this.wind)
+        .multiplyScalar(2.6 + Math.random() * 1.6)
+        .addScaledVector(t1, (Math.random() - 0.5) * 2)
+        .addScaledVector(t2, (Math.random() - 0.5) * 2);
+      b.prevTan.copy(b.vel);
+      b.bank = 0;
+    }
+  }
+
+  /**
+   * 走廊软约束 + 云墙硬顶：把鸟压回三重门夹道。
+   * @param {THREE.Vector3} pos
+   * @param {THREE.Vector3} vel
+   * @param {THREE.Vector3} force
+   */
+  _applyCorridor(pos, vel, force) {
+    const c = this.corridor;
+    if (!c) return;
+    _corRel.copy(pos).sub(c.origin);
+    const lx = _corRel.dot(c.right);
+    const ly = _corRel.dot(c.up);
+    const lz = _corRel.dot(c.forward);
+
+    const hw = c.halfWidth;
+    const hl = c.halfLength;
+    // 横向：超出夹道 → 强推回（双子塔之间）
+    if (Math.abs(lx) > hw * 0.82) {
+      const over = Math.abs(lx) - hw * 0.82;
+      force.addScaledVector(c.right, -Math.sign(lx) * over * 14);
+      const vr = vel.dot(c.right);
+      if (vr * lx > 0) vel.addScaledVector(c.right, -vr * 0.85);
+    }
+    // 沿轨：门廊前后环回拉力
+    if (Math.abs(lz) > hl * 0.9) {
+      const over = Math.abs(lz) - hl * 0.9;
+      force.addScaledVector(c.forward, -Math.sign(lz) * over * 8);
+    }
+    // 高度：券洞带内；接近云墙硬顶则强下压
+    if (ly < c.yMin + 0.4) {
+      force.addScaledVector(c.up, (c.yMin + 0.4 - ly) * 12);
+    }
+    if (ly > c.yMax - 0.5) {
+      force.addScaledVector(c.up, -(ly - (c.yMax - 0.5)) * 18);
+      const vu = vel.dot(c.up);
+      if (vu > 0) vel.addScaledVector(c.up, -vu * 1.2);
+    }
+    // 云墙禁飞：本地 Y 或径向高度任一触顶都压下
+    const cloudY = c.cloudCeilY ?? c.yMax;
+    if (ly > cloudY - 1.2) {
+      force.addScaledVector(c.up, -(ly - (cloudY - 1.2)) * 28);
+      const vu = vel.dot(c.up);
+      if (vu > 0) vel.addScaledVector(c.up, -vu * 1.6);
+    }
+  }
+
+  /** 积分后硬夹在走廊盒内（绝不钻进云墙） */
+  _clampToCorridor(pos, vel) {
+    const c = this.corridor;
+    if (!c) return;
+    _corRel.copy(pos).sub(c.origin);
+    let lx = _corRel.dot(c.right);
+    let ly = _corRel.dot(c.up);
+    let lz = _corRel.dot(c.forward);
+    const cloudY = c.cloudCeilY ?? c.yMax;
+    const yHi = Math.min(c.yMax, cloudY - 0.8);
+    const nx = THREE.MathUtils.clamp(lx, -c.halfWidth, c.halfWidth);
+    const ny = THREE.MathUtils.clamp(ly, c.yMin, yHi);
+    const nz = THREE.MathUtils.clamp(lz, -c.halfLength, c.halfLength);
+    if (nx !== lx || ny !== ly || nz !== lz) {
+      pos
+        .copy(c.origin)
+        .addScaledVector(c.right, nx)
+        .addScaledVector(c.up, ny)
+        .addScaledVector(c.forward, nz);
+      // 撞壁速度阻尼
+      if (nx !== lx) {
+        const vr = vel.dot(c.right);
+        if (vr * lx > 0) vel.addScaledVector(c.right, -vr);
+      }
+      if (ny !== ly) {
+        const vu = vel.dot(c.up);
+        if ((ny <= c.yMin && vu < 0) || (ny >= yHi && vu > 0)) {
+          vel.addScaledVector(c.up, -vu);
+        }
+      }
+      if (nz !== lz) {
+        const vf = vel.dot(c.forward);
+        if (vf * lz > 0) vel.addScaledVector(c.forward, -vf * 0.5);
+      }
     }
   }
 
@@ -356,6 +581,9 @@ export class FlockManager {
       // ================= 莫比斯晶塔避障（共享逻辑） =================
       avoidCrystalPillars(pos, b.vel, _force, this.obstacles, _radial);
 
+      // ================= 三重门走廊 / 云墙禁飞 =================
+      this._applyCorridor(pos, b.vel, _force);
+
       // ================= 积分 + 限速 =================
       b.vel.addScaledVector(_force, dt);
       const sp = b.vel.length();
@@ -381,6 +609,8 @@ export class FlockManager {
         const sp2 = b.vel.length();
         if (sp2 < MIN_SPEED && sp2 > 1e-5) b.vel.multiplyScalar(MIN_SPEED / sp2);
       }
+      // 走廊硬夹：绝不钻进云墙 / 双子塔墙体
+      this._clampToCorridor(pos, b.vel);
     }
 
     // ================= 硬分离兜底：绝对不穿模 =================

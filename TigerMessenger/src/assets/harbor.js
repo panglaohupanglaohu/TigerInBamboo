@@ -436,6 +436,21 @@ export function buildOldHarborScene(opts = {}) {
   finger.position.set(deckW / 2 + 0.9, deckY - 0.02, -0.4);
   g.add(finger);
 
+  // 栈桥外的可见水面：从 finger 末端外开始，直接覆盖船底视觉层。
+  const harborWater = new THREE.Mesh(
+    new THREE.BoxGeometry(9.5, 0.08, 6.5),
+    new THREE.MeshBasicMaterial({
+      color: 0x247f99,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    })
+  );
+  harborWater.name = "harbor-water";
+  harborWater.position.set(9.0, deckY + 0.15, -0.4);
+  harborWater.renderOrder = 1;
+  harborWater.receiveShadow = true;
+  g.add(harborWater);
+
   // 桩柱
   const pilePositions = [
     [-3.2, -1.8],
@@ -459,11 +474,11 @@ export function buildOldHarborScene(opts = {}) {
   berm.position.set(-0.2, 0.08, 0.15);
   g.add(berm);
 
-  // ---------- 渔船：码头中央，略倾斜架起 ----------
+  // ---------- 渔船：栈桥尽头水面系泊，船底贴水 ----------
   const boat = createFisherBoat();
-  boat.position.set(0.2, deckY + 0.12, -0.15);
-  // 斜着微调：略倾、略偏航
-  boat.rotation.set(0.06, 0.35, 0.12);
+  boat.position.set(8.0, deckY + 0.19, -0.4);
+  // 停泊姿态保持平稳；驾驶时 boatRide 会按球面法线和船头方向重建姿态。
+  boat.rotation.set(0.01, 0.35, 0.01);
   g.add(boat);
 
   // 垫木（船架）
@@ -522,7 +537,6 @@ export function buildOldHarborScene(opts = {}) {
     { x: 0, z: 0, r: 3.6 },
     { x: 2.6, z: -1.35, r: 1.1 },
     { x: -1.6, z: 1.15, r: 1.4 },
-    { x: 0.2, z: -0.15, r: 1.5 },
   ];
 
   g.userData.kind = "oldHarbor";

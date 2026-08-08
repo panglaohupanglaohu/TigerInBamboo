@@ -17,6 +17,11 @@ const SEAT_LOCAL = new THREE.Vector3(0.35, 0.78, 0.36);
 const DRIVER_SEAT_LOCAL = new THREE.Vector3(1.72, 1.02, 0.0);
 // 侧门上车点（右舷）
 const DOOR_LOCAL = new THREE.Vector3(0.7, 0.28, 0.9);
+/**
+ * 阿狸同伴卧位：乘客座旁地板/长椅（比乘客略低、略靠车心）
+ * 导出供 foxNpc 挂接。
+ */
+export const FOX_TRAM_SEAT_LOCAL = new THREE.Vector3(0.05, 0.5, 0.14);
 // 窗外方向（车体右侧）
 const LOOK_OUT = new THREE.Vector3(0, 0, 1);
 // 车头前进方向
@@ -36,9 +41,18 @@ const _look = new THREE.Vector3();
  * @param {object} deps.cameraRig
  * @param {HTMLElement|null} deps.elHint
  * @param {(tram:import("three").Object3D) => void} [deps.onBoard]
+ * @param {(tram:import("three").Object3D|null) => void} [deps.onAlight]
  * @param {(msg: string, dur?: number) => void} [deps.toast]
  */
-export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, toast = () => {} }) {
+export function createTramRide({
+  player,
+  getTram,
+  cameraRig,
+  elHint,
+  onBoard,
+  onAlight,
+  toast = () => {},
+}) {
   /** @type {'idle'|'boarding'|'riding'} */
   let state = "idle";
   /** @type {'passenger'|'driver'} 乘客窗景 / 司机视野 */
@@ -145,6 +159,7 @@ export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, to
     player.velocity.set(0, 0, 0);
     activeTram = null;
     if (elHint) elHint.classList.remove("show");
+    onAlight?.(t || null);
   }
 
   window.addEventListener("keydown", (e) => {
@@ -195,11 +210,13 @@ export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, to
     }
 
     if (!t) {
+      const lost = activeTram;
       state = "idle";
       viewMode = "passenger";
       player.riding = false;
       activeTram = null;
       if (elHint) elHint.classList.remove("show");
+      onAlight?.(lost || null);
       return false;
     }
 
@@ -283,6 +300,9 @@ export function createTramRide({ player, getTram, cameraRig, elHint, onBoard, to
     getState: () => state,
     getViewMode: () => viewMode,
     isDriverView: () => viewMode === "driver" && state !== "idle",
+    getActiveTram: () => (state !== "idle" ? activeTram || tram() : null),
+    getPassengerSeatLocal: () => SEAT_LOCAL.clone(),
+    getFoxSeatLocal: () => FOX_TRAM_SEAT_LOCAL.clone(),
     toggleDriverView,
   };
 }

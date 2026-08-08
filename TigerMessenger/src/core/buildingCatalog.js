@@ -694,10 +694,12 @@ export const BUILDING_CATALOG = {
   },
   equatorialClouds: {
     id: "equatorialClouds",
-    label: "赤道风暴云墙",
+    label: "轨道云墙（书店→峡谷）",
     create: (opts = {}) => {
       const g = new THREE.Group();
-      createDynamicMoebiusClouds(g, opts.R ?? 6);
+      createDynamicMoebiusClouds(g, opts.R ?? 6, {
+        trackCurve: opts.trackCurve ?? null,
+      });
       return g;
     },
     defaultYaw: 0,

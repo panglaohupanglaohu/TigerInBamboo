@@ -704,6 +704,8 @@ export function createMapEditor({
       (t.closest("#map-editor") ||
         t.closest("#dev-panel") ||
         t.closest("#dev-toggle") ||
+        t.closest("#storyboard-panel") ||
+        t.closest("#storyboard-toggle") ||
         t.closest("#quest-panel") ||
         t.closest("#intro") ||
         t.closest("#journal-panel"))

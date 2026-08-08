@@ -5,8 +5,9 @@
 import * as THREE from "three";
 import { toonMat } from "../assets/toon.js";
 import { CANYON, applyCanyonToGeometry, canyonOffsetDir } from "./canyon.js";
+import { WORLD_RADIUS } from "./worldScale.js";
 
-export const PLANET_RADIUS = 40;
+export const PLANET_RADIUS = WORLD_RADIUS;
 export const PLANET_COLOR = 0x3f7a58; // 北半球：沉绿
 export const SOUTH_COLOR = 0xa5cad6; // 南半球：莫比斯荒漠淡蓝
 

@@ -3,12 +3,14 @@
 //  同一套数学供三方使用：planet 顶点改造 / 晶林扎根 / 高架桥墩落点
 // =====================================================================
 import * as THREE from "three";
+import { BASE_WORLD_RADIUS, WORLD_RADIUS, WORLD_SCALE } from "./worldScale.js";
 
 export const CANYON = Object.freeze({
   lat: -50, // 谷心纬度
   lon: -112, // 谷心经度
   rim: 0.85, // 广袤谷缘角半径（rad）；给三倍巨构与环城螺旋留足水平空间
-  depth: 15, // 最大塌陷深度（主人指定 10~15；取上限保持高架纵深）
+  // 峡谷深度是世界尺度量：R=80 时保持与旧 R=40 相同的相对纵深。
+  depth: 15 * WORLD_SCALE, // 最大塌陷深度
   steps: 7, // 阶梯层数（刀劈斧凿切面）
 });
 

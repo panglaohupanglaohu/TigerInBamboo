@@ -16,10 +16,11 @@ import {
 } from "../assets/lowPoly.js";
 import { placeObjectOnSphere, latLonToDir } from "./sphereMath.js";
 import { createAncientPineTree } from "../assets/ancient.js";
-import { GREAT_LAKE } from "./lake.js";
+
 import { QUEST_DEFS } from "../quest/questSystem.js";
 import { groundLiftAt } from "./hills.js";
 import { isInsideSaihojiReserve } from "./saihoji.js";
+import { WORLD_SCALE } from "./worldScale.js";
 
 function lcg(seed) {
   let s = seed >>> 0;
@@ -29,14 +30,12 @@ function lcg(seed) {
   };
 }
 
-/** 远侧（lat -20°..45°）点缀树/岩/花/房：装饰 + 碰撞体（背侧大湖水域净空） */
+/** 远侧（lat -20°..45°）点缀树/岩/花/房：装饰 + 碰撞体 */
 export function decorateFarSide(scene, planetRadius, seed = 20260802) {
   const rnd = lcg(seed);
   const meshes = [];
   const colliders = [];
-  // 背侧大湖方向（水域不放资产）
-  const lakeDir = latLonToDir(GREAT_LAKE.lat, GREAT_LAKE.lon, new THREE.Vector3());
-  const lakeClear = GREAT_LAKE.angR + 0.1;
+  // 原「背侧大湖水域净空」判定已移除：该湖已删除，此处不再需要避让水面。
   const _d = new THREE.Vector3();
   // 远侧同步水墨色系（沉绿树 / 焦墨岩 / 低饱和花）
   // 第三位 = settle 标记：地形后建（苔丘等）可能埋住资产，加载收尾时重新落地
@@ -57,7 +56,6 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
         const lon = rnd() * 360 - 180;
         if (isInsideSaihojiReserve(lat, lon, 2.2)) continue;
         latLonToDir(lat, lon, _d);
-        if (_d.angleTo(lakeDir) < lakeClear) continue; // 落在湖里，重采
         const obj = placeOnSphere(make(), lat, lon, planetRadius);
         obj.rotateY(rnd() * Math.PI * 2);
         obj.scale.multiplyScalar(0.85 + rnd() * 0.4);
@@ -138,10 +136,10 @@ export function createCloudRing(scene, planetRadius, { count = 16, height = 8, s
  * 参考：主人转述 Sujal Talreja 对《Messenger》的设计拆解（Medium）
  */
 const LAYOUT_RULES = {
-  houses: { count: 0, minGap: 8.0, gapVsHouse: 8.0, ring: [5, 12], scale: [0.9, 1.05] }, // 房屋已删除（主人 2026-08-02）
-  trees: { count: 8, minGap: 4.0, gapVsHouse: 4.5, ring: [3.5, 15.5], scale: [0.85, 1.15] },
-  rocks: { count: 4, minGap: 5.0, gapVsHouse: 3.5, ring: [5, 15], scale: [0.8, 1.2] },
-  flowers: { count: 12, minGap: 2.5, gapVsHouse: 2.5, ring: [3, 14], scale: [0.9, 1.2] },
+  houses: { count: 0, minGap: 8.0 * WORLD_SCALE, gapVsHouse: 8.0 * WORLD_SCALE, ring: [5 * WORLD_SCALE, 12 * WORLD_SCALE], scale: [0.9, 1.05] },
+  trees: { count: 8, minGap: 4.0 * WORLD_SCALE, gapVsHouse: 4.5 * WORLD_SCALE, ring: [3.5 * WORLD_SCALE, 15.5 * WORLD_SCALE], scale: [0.85, 1.15] },
+  rocks: { count: 4, minGap: 5.0 * WORLD_SCALE, gapVsHouse: 3.5 * WORLD_SCALE, ring: [5 * WORLD_SCALE, 15 * WORLD_SCALE], scale: [0.8, 1.2] },
+  flowers: { count: 12, minGap: 2.5 * WORLD_SCALE, gapVsHouse: 2.5 * WORLD_SCALE, ring: [3 * WORLD_SCALE, 14 * WORLD_SCALE], scale: [0.9, 1.2] },
 };
 
 // 起始视角改为庭园构图，主岛不再随机生成街灯、电线杆等现代街道资产。
@@ -160,9 +158,9 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
     keepClear.push({ x: q.sender.pos[0], z: q.sender.pos[2], r: 3.2 });
     keepClear.push({ x: q.receiver.pos[0], z: q.receiver.pos[2], r: 3.2 });
   }
-  keepClear.push({ x: 0, z: 6, r: 4 }); // 出生点
+  keepClear.push({ x: 0, z: 6 * WORLD_SCALE, r: 4 * WORLD_SCALE }); // 出生点
   // 起始庭园由 startGarden.js 提供固定景物；随机资产不得穿进池水/瀑布构图。
-  keepClear.push({ x: 0, z: 9.5, r: 7.0 });
+  keepClear.push({ x: 0, z: 9.5 * WORLD_SCALE, r: 7.0 * WORLD_SCALE });
   const isClear = (x, z) =>
     keepClear.every((k) => Math.hypot(x - k.x, z - k.z) > k.r);
 
@@ -208,7 +206,7 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
   }
 
   // 驿站山脊（北脊土坡）上再来几棵古松，引导视线
-  for (const [x, z] of [[-1.5, -13.2], [1.6, -11.4]]) {
+  for (const [x, z] of [[-1.5 * WORLD_SCALE, -13.2 * WORLD_SCALE], [1.6 * WORLD_SCALE, -11.4 * WORLD_SCALE]]) {
     if (!isClear(x, z)) continue;
     const obj = createAncientPineTree();
     placeObjectOnSphere(obj, x, z, groundLiftAt(x, z), planetRadius);

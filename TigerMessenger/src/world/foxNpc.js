@@ -1,5 +1,6 @@
 // =====================================================================
 //  阿狸互动：E 叫醒跟随 · 聊天 · 经典四足碎步由 updateFoxFollow 驱动
+//  跟随中玩家上电车：挂到车内、卧在送信人旁边；下车后落地继续尾随
 // =====================================================================
 import * as THREE from "three";
 import { flatToWorld } from "./sphereMath.js";
@@ -13,6 +14,7 @@ import {
   FOX_FOLLOW_GAP,
   FOX_FOLLOW_LERP,
 } from "../assets/fox.js";
+import { FOX_TRAM_SEAT_LOCAL } from "../player/tramRide.js";
 
 const TALK_RANGE = 3.2;
 const HOME_RADIUS = 2.8;
@@ -35,6 +37,12 @@ const DEFAULT_REPLIES = [
 /**
  * @param {object} deps
  */
+/**
+ * @param {object} deps
+ * @param {() => boolean} [deps.isPlayerOnTram] 送信人是否在电车上
+ * @param {() => import("three").Object3D|null} [deps.getActiveTram] 当前乘坐的电车
+ * @param {() => import("three").Vector3|null} [deps.getFoxTramSeatLocal] 车内卧位（可选）
+ */
 export function createFoxNpc({
   player,
   fox,
@@ -44,6 +52,9 @@ export function createFoxNpc({
   planetRadius = PLANET_RADIUS,
   isElderNear = () => false,
   isQuestNear = () => false,
+  isPlayerOnTram = () => false,
+  getActiveTram = () => null,
+  getFoxTramSeatLocal = null,
 }) {
   if (!fox) {
     return {
@@ -52,6 +63,7 @@ export function createFoxNpc({
       isNear: () => false,
       isChatOpen: () => false,
       isFollowing: () => false,
+      isOnTram: () => false,
     };
   }
 
@@ -75,8 +87,17 @@ export function createFoxNpc({
   let bubbleText = "";
   let stateT = 0;
   let movingAnim = false;
+  /** @type {import("three").Object3D|null} 上车前的父节点（营地 group） */
+  let homeParent = fox.parent || null;
+  /** 是否已挂到电车卧在送信人旁 */
+  let onTram = false;
+  /** @type {import("three").Object3D|null} */
+  let tramHost = null;
   const _bubble = new THREE.Vector3();
   const _look = new THREE.Vector3();
+  const _worldPos = new THREE.Vector3();
+  const _worldQuat = new THREE.Quaternion();
+  const _seatLocal = new THREE.Vector3();
 
   // ---------- 对话面板 ----------
   const panel = document.createElement("div");
@@ -216,7 +237,118 @@ export function createFoxNpc({
     }
   }
 
+  function foxSeatLocal() {
+    const custom = getFoxTramSeatLocal?.();
+    if (custom && Number.isFinite(custom.x)) return custom;
+    return FOX_TRAM_SEAT_LOCAL;
+  }
+
+  /**
+   * 跟随中 → 挂到电车，卧在送信人旁边。
+   * 车体约定：+X 车头，+Y 上，+Z 窗外；阿狸局部 +X 为正脸。
+   */
+  function boardTram(tram) {
+    if (!tram || !fox || onTram) return false;
+    if (!homeParent) homeParent = fox.parent || null;
+    tramHost = tram;
+    // 卧姿（仍保持 FOLLOWING 状态）
+    if (typeof fox.setCompanionRest === "function") fox.setCompanionRest(true);
+    else {
+      // 兼容：无 API 时直接切睡姿层
+      if (fox.userData?.parts?.sleepG) fox.userData.parts.sleepG.visible = true;
+      if (fox.userData?.parts?.walkRoot) fox.userData.parts.walkRoot.visible = false;
+      fox.userData.companionResting = true;
+    }
+    tram.add(fox);
+    _seatLocal.copy(foxSeatLocal());
+    fox.position.copy(_seatLocal);
+    // 脸朝窗外（车体 +Z）：阿狸 +X 脸 → 绕 Y 转 +90°
+    fox.rotation.set(0, Math.PI / 2, 0);
+    fox.updateMatrixWorld(true);
+    onTram = true;
+    idleMode = "tram";
+    if (elStatus) elStatus.textContent = "卧在电车里陪你";
+    if (fox.userData?.collider?.position) {
+      fox.getWorldPosition(fox.userData.collider.position);
+    }
+    return true;
+  }
+
+  /**
+   * 下车：恢复父节点、站起、贴地落在送信人旁继续跟随。
+   */
+  function alightTram(opts = {}) {
+    const { toast = true, keepFollow = true } = opts;
+    if (!onTram && fox.parent !== tramHost) {
+      onTram = false;
+      tramHost = null;
+      return false;
+    }
+    fox.getWorldPosition(_worldPos);
+    fox.getWorldQuaternion(_worldQuat);
+    const parent = homeParent && homeParent.isObject3D ? homeParent : null;
+    if (parent) parent.add(fox);
+    else if (fox.parent) fox.parent.remove(fox);
+    // parent 切换后 position/quaternion 是局部坐标；先写世界量再 placeFoxFlat 贴地
+    fox.position.copy(_worldPos);
+    fox.quaternion.copy(_worldQuat);
+
+    onTram = false;
+    tramHost = null;
+
+    if (keepFollow && isFollowing()) {
+      fox.setCompanionRest?.(false);
+      // 贴到玩家身旁落地
+      const f = worldApproxFlat(player.position, planetRadius);
+      const ff = worldApproxFlat(_worldPos, planetRadius);
+      if (f) {
+        // 略偏玩家外侧，避免叠模
+        const ox = (ff?.x ?? f.x) - f.x;
+        const oz = (ff?.z ?? f.z) - f.z;
+        const ol = Math.hypot(ox, oz) || 1;
+        flatX = f.x - (ox / ol) * 0.9;
+        flatZ = f.z - (oz / ol) * 0.9;
+        // 朝向玩家
+        yaw = Math.atan2(f.x - flatX, f.z - flatZ);
+        placeFoxFlat();
+      }
+      idleMode = "follow";
+      if (elStatus) elStatus.textContent = "跟着你走中";
+      if (toast) showToast("阿狸跳下电车，继续跟着你～", 2.0);
+    } else {
+      fox.setCompanionRest?.(false);
+      fox.switchState?.("SLEEPING");
+      idleMode = "home";
+      flatX = home.x;
+      flatZ = home.z;
+      placeFoxFlat();
+    }
+    return true;
+  }
+
+  function syncTramPose(tram) {
+    if (!tram || !fox) return;
+    if (fox.parent !== tram) {
+      tram.add(fox);
+    }
+    _seatLocal.copy(foxSeatLocal());
+    fox.position.copy(_seatLocal);
+    // 卧姿略贴地呼吸由 animateFoxCompanion 处理；朝向保持窗外
+    fox.rotation.set(0, Math.PI / 2, 0);
+    if (fox.userData?.collider?.position) {
+      fox.getWorldPosition(fox.userData.collider.position);
+    }
+    // 轻呼吸（睡姿层）
+    animateFoxCompanion(fox, {
+      time: stateT,
+      dt: 1 / 60,
+      moving: false,
+      playerPos: player.position,
+    });
+  }
+
   function goHomeRest() {
+    if (onTram) alightTram({ toast: false, keepFollow: false });
     fox.switchState?.("SLEEPING");
     hideInteractionUI();
     idleMode = "home";
@@ -372,7 +504,8 @@ export function createFoxNpc({
   }
 
   function update(dt, t) {
-    if (!fox?.parent) return;
+    // 车上时 parent 是 tram；地面时 parent 是营地。都允许更新。
+    if (!fox) return;
     stateT += dt;
     if (bubbleTimer > 0) {
       bubbleTimer -= dt;
@@ -384,7 +517,27 @@ export function createFoxNpc({
 
     movingAnim = false;
 
-    if (isFollowing() && idleMode !== "stay") {
+    // ---- 电车：跟随中的阿狸尾随上车、卧在送信人旁 ----
+    const playerRiding = !!isPlayerOnTram?.();
+    const tram = getActiveTram?.() || null;
+
+    if (isFollowing() && playerRiding && tram && idleMode !== "stay") {
+      if (!onTram) {
+        if (boardTram(tram)) {
+          showToast("阿狸跳上电车，卧在你旁边～", 2.4);
+        }
+      } else {
+        // 可能换了最近的一辆车
+        if (tramHost && tramHost !== tram) {
+          alightTram({ toast: false, keepFollow: true });
+          boardTram(tram);
+        }
+        syncTramPose(tram);
+      }
+    } else if (onTram && (!playerRiding || !isFollowing())) {
+      // 玩家下车，或阿狸被遣散
+      alightTram({ toast: isFollowing(), keepFollow: isFollowing() });
+    } else if (isFollowing() && idleMode !== "stay" && idleMode !== "tram") {
       movingAnim = updateFoxFollow(fox, player.position, planetRadius, {
         gap: FOX_FOLLOW_GAP,
         lerp: FOX_FOLLOW_LERP,
@@ -432,7 +585,11 @@ export function createFoxNpc({
     isNear: nearTalk,
     isChatOpen: () => chatOpen,
     isFollowing,
+    isOnTram: () => onTram,
+    boardTram,
+    alightTram,
     dispose() {
+      if (onTram) alightTram({ toast: false, keepFollow: false });
       window.removeEventListener("keydown", onKeyDown, { capture: true });
       if (elHint) elHint.classList.remove("show");
       hideBubble();

@@ -11,6 +11,7 @@ import { createAncientPineTree } from "../assets/ancient.js";
 import { createLowPolyFox } from "../assets/fox.js";
 import { placeObjectOnSphere } from "./sphereMath.js";
 import { groundLiftAt } from "./hills.js";
+import { WORLD_SCALE } from "./worldScale.js";
 
 const SAND = 0xd2c4a7; // 沙滩浅米
 const SHALLOW = 0x2e8b9a; // 浅海水色
@@ -29,6 +30,8 @@ function lcg(seed) {
 
 /** 扁平不规则多边形（海岸过渡带用），底部中心贴地 */
 function flatPatch(rnd, rx, rz, color, lift) {
+  rx *= WORLD_SCALE;
+  rz *= WORLD_SCALE;
   const segments = 10;
   const vertices = [0, 0.02, 0];
   const indices = [];
@@ -69,11 +72,14 @@ export function buildStartingCamp(scene, R) {
   g.name = "starting-camp";
   const colliders = [];
   const put = (obj, x, z, lift, yaw = 0) => {
-    placeObjectOnSphere(obj, x, z, lift, R);
+    const sx = x * WORLD_SCALE;
+    const sz = z * WORLD_SCALE;
+    placeObjectOnSphere(obj, sx, sz, lift, R);
     if (yaw) obj.rotateY(yaw);
     g.add(obj);
     return obj;
   };
+  const layoutGroundLiftAt = (x, z) => groundLiftAt(x * WORLD_SCALE, z * WORLD_SCALE);
 
   // ---------- 1. 多层海岸线：沙滩（右/前，略低）→ 浅海（更低） ----------
   // 沙滩带：岛内缘 r13~19，lift 0.52（略低于草坡 0.6，阶梯下探）
@@ -121,7 +127,7 @@ export function buildStartingCamp(scene, R) {
   ];
   for (const [x, z, size, lift] of crags) {
     const c = crag(size, rockMat);
-    put(c, x, z, groundLiftAt(x, z) + lift * 0.55, rnd() * Math.PI);
+    put(c, x, z, layoutGroundLiftAt(x, z) + lift * 0.55, rnd() * Math.PI);
     colliders.push({ position: c.position.clone(), radius: size * 0.9 });
   }
   // 山洞：底两块之间的暗色内凹口（朝营地开）
@@ -130,7 +136,7 @@ export function buildStartingCamp(scene, R) {
     toonMat(0x2a2521)
   );
   addOutline(cave, 0.02);
-  put(cave, HILL.x + 0.1, HILL.z + 1.05, groundLiftAt(HILL.x, HILL.z) + 0.05, 0.15);
+  put(cave, HILL.x + 0.1, HILL.z + 1.05, layoutGroundLiftAt(HILL.x, HILL.z) + 0.05, 0.15);
 
   // ---------- 3. 崖壁叠瀑 + 太空水环 ----------
   // 旧版这里用 BoxGeometry 做四块“水板”，从侧面看会变成悬空绿板。
@@ -164,7 +170,7 @@ export function buildStartingCamp(scene, R) {
       stream.position.set(streamIndex * 0.22, -height * 0.5, 0);
       stream.rotation.z = streamIndex * 0.07;
       stream.castShadow = false;
-      put(stream, FALL_X - i * 0.45, z, groundLiftAt(FALL_X, z) + y, 0.12); // 级流向山西侧斜落，避开电车车道
+      put(stream, FALL_X - i * 0.45, z, layoutGroundLiftAt(FALL_X, z) + y, 0.12); // 级流向山西侧斜落，避开电车车道
     }
   }
   // 瀑底入水泡沫（随级流反向）
@@ -230,7 +236,7 @@ export function buildStartingCamp(scene, R) {
   elder.add(keys);
   elder.userData.musicKeys = keys;
   const ELDER = { x: -17, z: 9 }; // 原 (-12.3,4.5) 被轨道穿过，移到山洞旁（距轨道 4.33）
-  put(elder, ELDER.x, ELDER.z, groundLiftAt(ELDER.x, ELDER.z), 2.6); // 面转向营地
+  put(elder, ELDER.x, ELDER.z, layoutGroundLiftAt(ELDER.x, ELDER.z), 2.6); // 面转向营地
   colliders.push({ position: elder.position.clone(), radius: 0.8 });
 
   // ---------- 4b. 阿狸：与送信人体量相当的小狐狸（可互动 / 漫步） ----------
@@ -238,14 +244,16 @@ export function buildStartingCamp(scene, R) {
   const ali = createLowPolyFox({ scale: 0.52 });
   // 略靠营地内侧，避开老人 3 单位净空
   const ALI = { x: -8.6, z: 7.2 };
-  put(ali, ALI.x, ALI.z, groundLiftAt(ALI.x, ALI.z), 0.9);
+  put(ali, ALI.x, ALI.z, layoutGroundLiftAt(ALI.x, ALI.z), 0.9);
   ali.userData.homeFlat = { x: ALI.x, z: ALI.z };
   ali.userData.flatX = ALI.x;
   ali.userData.flatZ = ALI.z;
   ali.userData.yaw = 0.9;
-  const foxCol = { position: ali.position.clone(), radius: 0.38 };
+  // 阿狸是可跟随 NPC，不参与玩家静态资产推挤；否则她追上玩家后，
+  // resolveAssetColliders 会反复把送信人推出去，形成“阿狸带着人乱跑”。
+  // 保留 userData.collider 供 NPC 自身同步/调试使用，但不加入 camp.colliders。
+  const foxCol = { position: ali.position.clone(), radius: 0.38, kind: "npc" };
   ali.userData.collider = foxCol;
-  colliders.push(foxCol);
 
   // ---------- 5. 营地周边：古松两株 + 花草点缀 ----------
   // 原 (-7,13) 古松树冠压电车车体（全程扫描 d=2.88），移到 (-2,12.5)（轨道净空 7.26）
@@ -253,7 +261,7 @@ export function buildStartingCamp(scene, R) {
     const pine = createAncientPineTree();
     pine.scale.multiplyScalar(0.85);
     pine.userData.settle = true; // 后建地形（沙滩/苔丘）不得埋树，收尾沉降 pass 抬回地表
-    put(pine, x, z, groundLiftAt(x, z), rnd() * Math.PI * 2);
+    put(pine, x, z, layoutGroundLiftAt(x, z), rnd() * Math.PI * 2);
     colliders.push({ position: pine.position.clone(), radius: 0.5 });
   }
   const campFlowers = [];
@@ -264,7 +272,7 @@ export function buildStartingCamp(scene, R) {
     const z = ELDER.z + Math.sin(a) * d;
     if (Math.hypot(x - ELDER.x, z - ELDER.z) < 3) continue; // 老人净空 3 单位
     const flower = createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]);
-    put(flower, x, z, groundLiftAt(x, z) + 0.01, rnd() * Math.PI * 2);
+    put(flower, x, z, layoutGroundLiftAt(x, z) + 0.01, rnd() * Math.PI * 2);
     campFlowers.push(flower); // 收尾由场景层修剪贴轨花（轨道后建，此处未知）
   }
 

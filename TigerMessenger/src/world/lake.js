@@ -7,10 +7,12 @@ import * as THREE from "three";
 import { toonMat } from "../assets/toon.js";
 import { flatToWorld, quatYToDir, latLonToDir, flatXZToLatLon } from "./sphereMath.js";
 import { PLANET_RADIUS } from "./planet.js";
+import { canyonOffsetDir } from "./canyon.js";
+import { WORLD_SCALE } from "./worldScale.js";
 
 export const LAKE = {
-  x: 4,
-  z: -1, // 主岛低洼处（平面设计坐标）
+  x: 4 * WORLD_SCALE,
+  z: -1 * WORLD_SCALE, // 主岛低洼处（平面设计坐标）
   rOuter: 3.5, // 湖缘（浅水界）
   rDeep: 1.6, // 深水界（阻挡；圆心在月牙实体一侧）
   deepDX: -0.5,
@@ -26,21 +28,16 @@ export const LAKE = {
  * 栈桥中心在环湖小径南外侧；clearR 含渔船/吊车/桩柱
  */
 export const HARBOR = {
-  x: 4 + 5.4, // LAKE.x + 5.4
-  z: -1 - 2.6, // LAKE.z - 2.6
+  x: LAKE.x + 5.4 * WORLD_SCALE, // LAKE.x + 5.4
+  z: LAKE.z - 2.6 * WORLD_SCALE, // LAKE.z - 2.6
   yaw: 0.85,
   /** 轨道/建筑净空半径（勿穿模） */
   clearR: 6.5,
 };
 
-/** 背侧大湖：球冠水域（纬度/经度中心 + 角半径），全浅可涉 */
-export const GREAT_LAKE = {
-  lat: -15, // 偏南/背侧
-  lon: 160,
-  angR: 0.42, // 角半径（弧度），约 24°
-  waterLift: 0.12, // 相对球面抬升
-  wadeFactor: 0.6,
-};
+// 背侧大湖（GREAT_LAKE / createGreatLake / updateGreatLakeWade）已删除：
+// 原址距电车轨道仅 4.0，正压在叹息之门前方的框景视线上；
+// 峡谷内现只保留一个带白鲸的湖（见 world/citySeaLake.js）。
 
 const _dir = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -183,63 +180,6 @@ export function updateLakeWade(player, lake) {
     if (_d.length() < lake.rOuter) factor = Math.min(factor, LAKE.wadeFactor);
   }
   player.wadeFactor = factor;
-}
-
-/**
- * 背侧大湖：贴球面的大圆盘水域，全浅可涉（无深水阻挡）。
- * 供远侧净空与漫游节奏用。
- */
-export function createGreatLake(scene, planetRadius = PLANET_RADIUS) {
-  const g = new THREE.Group();
-  latLonToDir(GREAT_LAKE.lat, GREAT_LAKE.lon, _dir);
-  const topR = planetRadius + GREAT_LAKE.waterLift;
-  g.position.copy(_dir).multiplyScalar(topR);
-  g.quaternion.copy(quatYToDir(_dir, new THREE.Quaternion()));
-
-  // 角半径 → 弦长半径（切平面近似）
-  const r = planetRadius * Math.sin(GREAT_LAKE.angR);
-  const water = new THREE.Mesh(
-    new THREE.CircleGeometry(r, 48),
-    toonMat(0x4a7a8a, { transparent: true, opacity: 0.8, side: THREE.DoubleSide })
-  );
-  water.rotation.x = -Math.PI / 2;
-  water.receiveShadow = true;
-  g.add(water);
-
-  // 岸边浅砂环
-  const rim = new THREE.Mesh(
-    new THREE.RingGeometry(r * 0.96, r * 1.06, 48),
-    toonMat(0xcbb896, { side: THREE.DoubleSide })
-  );
-  rim.rotation.x = -Math.PI / 2;
-  rim.position.y = -0.03;
-  g.add(rim);
-
-  scene.add(g);
-  return {
-    group: g,
-    centerWorld: _dir.clone().multiplyScalar(planetRadius),
-    centerDir: _dir.clone(),
-    angR: GREAT_LAKE.angR,
-    surfaceR: planetRadius + GREAT_LAKE.waterLift,
-    rFlat: r,
-  };
-}
-
-/** 背侧大湖涉水：与湖心夹角 < angR 且贴近球面 → 减速 */
-export function updateGreatLakeWade(player, greatLake) {
-  if (!greatLake) return;
-  _up.copy(player.position).normalize();
-  const ang = _up.angleTo(greatLake.centerDir);
-  if (ang < greatLake.angR) {
-    const r = player.position.length();
-    if (Math.abs(r - greatLake.surfaceR) < 1.2 || Math.abs(r - PLANET_RADIUS) < 1.4) {
-      const cur = player.wadeFactor || 1;
-      player.wadeFactor = Math.min(cur, GREAT_LAKE.wadeFactor);
-      return;
-    }
-  }
-  // 不在大湖内时不强制写 1（留给月亮湖判定）
 }
 
 /**

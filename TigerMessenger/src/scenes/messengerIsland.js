@@ -11,17 +11,14 @@ import { P } from "../core/params.js";
 import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
 import { buildHills, carveHillsForTrack } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
-import {
-  createGreatLake,
-  createMoonLake,
-  updateGreatLakeWade,
-  HARBOR,
-} from "../world/lake.js";
+import { createMoonLake, HARBOR } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
+import { buildAbandonedGate } from "../world/abandonedGate.js";
 import { isCanyonBgmPlaying, isCanyonBgmFinishing, setSwampBgm } from "../audio/sfx.js";
 import { canyonOffsetDir, CANYON } from "../world/canyon.js";
 import { FlockManager } from "../world/flock.js";
+import { BirdVortexManager } from "../world/birdVortex.js";
 import { AirshipEscortManager } from "../world/airshipEscort.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { swampMidwayDir } from "../world/moebiusSwamp.js";
@@ -42,13 +39,20 @@ import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
 import { createCitySeaLake } from "../world/citySeaLake.js";
+import { buildOdysseyCitadel } from "../world/odysseyCitadel.js";
+import {
+  buildCitadelRange,
+  citadelRangeLiftDir,
+  citadelSiteDir,
+} from "../world/citadelRange.js";
+import { WORLD_SCALE } from "../world/worldScale.js";
 
 /** 飞艇锚定用临时向量 */
 const _asTmp = new THREE.Vector3();
 
 /** 湖沼 BGM 进入判定（局部坐标：坑口半径 34，坑缘 y=0） */
 const _swampLocal = new THREE.Vector3();
-const SWAMP_BGM_ENTER_R = 33; // 进入判定半径（略收口，跨过坑缘才算进）
+const SWAMP_BGM_ENTER_R = 33; // 进入判定半径（湖沼局部资产单位，不随世界半径放大）
 const SWAMP_BGM_EXIT_R = 37; // 离开判定半径（滞回，防坑缘抖动反复切歌）
 const SWAMP_BGM_CEILING = 28; // 高于此局部高度视为飞越树冠，不算进入
 let swampBgmInside = false;
@@ -73,7 +77,8 @@ export const messengerIslandScene = {
     const farSide = decorateFarSide(scene, R);
     // 月牙湖（主岛动线交汇）
     const moonLake = createMoonLake(scene, R);
-    const greatLake = createGreatLake(scene, R);
+    // 峡谷白鲸湖在水晶城建好后创建（见下方「花厅塔下方白鲸湖」），
+    // 因为要拿到运行时算出的花厅塔方向与塔基高度。
 
     // ---------- 月牙湖旁 · 老旧修船厂码头（坐标与电车避障 HARBOR 共用） ----------
     const harborBuilt = buildOldHarborScene({ seed: 8844 });
@@ -91,10 +96,6 @@ export const messengerIslandScene = {
       {
         position: harborBuilt.landmarks.crane.getWorldPosition(_wp.clone()),
         radius: 1.15,
-      },
-      {
-        position: harborBuilt.landmarks.boat.getWorldPosition(_wp.clone()),
-        radius: 1.45,
       },
     ];
 
@@ -133,11 +134,38 @@ export const messengerIslandScene = {
     // 3 艘气泡座舱分别围绕水晶城 3 座含花厅的建筑巡游。
     const bubblePods = createBubblePodsAroundFlowerBuildings(scene, moebius.crystals, { count: 3 });
 
-    // 水晶城旁大型海水湖：培育湖沼水生生物，气泡艇可在此潜行
-    const citySeaLake = createCitySeaLake(scene, R, { seed: 5521 });
+    // ---------- 花厅塔下方双湖：沉在峡谷底，塔身自湖心拔起 ----------
+    // 塔位是运行时从轨道曲线算出来的（computeTracksideGoldSites），
+    // 所以这里用实际塔的 dir/root 定位，而不是硬编码经纬度（否则改线就漂移）。
+    // 水面取塔基高度 root，电车在十余单位上方的高架桥凌空掠过，纵深拉满。
+    const hallTowers = moebius.crystals.filter((c) => c.group?.userData?.bioLayers?.length);
+    // 只保留这一个带白鲸的湖：湖心取母塔（花厅塔中体量最大者），塔身自湖心拔起
+    const lakeHall = hallTowers[0] || null;
+    const citySeaLake = createCitySeaLake(scene, R, {
+      seed: 5521,
+      centerDir: lakeHall?.dir,
+      baseRadius: lakeHall?.root,
+    });
 
-    // Boids 鸟群：低多边形手绘风群飞，漫游南半球大峡谷高空（35–45 高度带）
-    // 三大定律 + 相位差扑翅 + 球心重力锁；晶塔柱体作避障障碍
+    // ---------- 太古高山圣城要塞 + 圣城山脉（双峰对望 + 前望峡谷） ----------
+    // 选址：lat 24.1 / lon 36.05（主岛东南旷野，三边测量定位的用户指定点）。
+    // 山脉：圣城主峰（+16 平顶）托举圣城；前望看台峰（+10.5，lz+36 朝岛侧）
+    // 略低 —— 「这山望着那山高」；两峰之间鞍部深谷凸显圣城体量。
+    // 视觉=碰撞共用 citadelRangeLiftDir（collision.js 已接入）。
+    // 主建筑重构版：三层马斯塔巴 + 黄金瓜棱穹顶 + 宣礼塔/红砖角楼；
+    // 四级清透水帘连接五座白石梯湖；底部雾气与涟漪落入下一级水面。
+    const citadelRange = buildCitadelRange(scene, R);
+    const citadelDir = citadelSiteDir(new THREE.Vector3());
+    const odysseyCitadel = buildOdysseyCitadel({
+      dir: citadelDir,
+      faceDir: moonLake?.centerWorld || null,
+      groundRadius: R + citadelRangeLiftDir(citadelDir), // 主峰平顶
+      planetRadius: R,
+      seed: 20260808,
+    });
+    scene.add(odysseyCitadel);
+
+    // Boids 鸟群：先在峡谷方向占位，建门后整群迁移到叹息之门城头（见下方 migrate）
     const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
     const flock = new FlockManager(scene, {
       count: 18,
@@ -147,7 +175,7 @@ export const messengerIslandScene = {
       obstacles: moebius.crystals,
     });
 
-    // 水晶城花厅鸟群：忽聚忽散，环绕在母皇塔花厅楼顶（塔尖上空 8 为家域中心）
+    // 水晶城花厅「忽聚忽散」鸟群：保留在母皇塔楼顶（不迁移）
     const grandTower = moebius.grand;
     const roofAlt = grandTower.root + grandTower.h - R; // 花厅楼顶海拔（谷心台阶根基 + 塔高）
     const hallFlock = new FlockManager(scene, {
@@ -163,8 +191,8 @@ export const messengerIslandScene = {
     });
 
     // Hard To Find Bookshop：与地图共用 createCatalogObject（同一工厂/参数）
-    const bookshopX = 11.5;
-    const bookshopZ = 5.5;
+    const bookshopX = 11.5 * WORLD_SCALE;
+    const bookshopZ = 5.5 * WORLD_SCALE;
     const bookshopLift = groundLiftAt(bookshopX, bookshopZ);
     const bookshop = createCatalogObject("bookshop", {
       signLine1: "HARD TO FIND",
@@ -298,8 +326,81 @@ export const messengerIslandScene = {
       ...farSide.colliders,
       ...harborColliders,
       { position: bookshop.position.clone(), radius: bookshop.userData.collideRadius },
+      // 太古高山圣城要塞主殿足域（L1 半宽 10 + 宣礼塔/角楼 13.5 + 乱石余量）
+      { position: odysseyCitadel.position.clone(), radius: 18 },
     ];
     if (moonLake?.deepCollider) colliders.push(moonLake.deepCollider);
+
+    // ---------- 太古双子要塞巨门：轨道离开草地、即将入谷 ----------
+    // 三重圆拱形状不变 + 左右阶梯巨塔夹道（通道 10）陶土赤红
+    const abandonedGate = buildAbandonedGate({
+      curve: tramSystem.curve,
+      planetRadius: R,
+      setback: 6,
+    });
+    scene.add(abandonedGate);
+
+    // ---------- 万鸟归巢 · 十二组群任务系统（3面×4组 ≈ 1000 只 · 观者可见侧聚群） ----------
+    // A 盘旋双子塔 · B 墙→地觅食 · C 地→墙攀附（B/C 随机交换）· D 面↔面通勤
+    let birdVortex = null;
+    {
+      const seat = abandonedGate.userData?.seatRoot;
+      const gateDir = seat
+        ? new THREE.Vector3(0, 1, 0).applyQuaternion(seat.quaternion).normalize()
+        : (() => {
+            const u = abandonedGate.userData?.anchor?.gateU;
+            if (Number.isFinite(u) && tramSystem.curve) {
+              return tramSystem.curve.getPointAt(u, new THREE.Vector3()).normalize();
+            }
+            return canyonDir.clone();
+          })();
+      const gateRight = seat
+        ? new THREE.Vector3(1, 0, 0).applyQuaternion(seat.quaternion).normalize()
+        : new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), gateDir).normalize();
+      const gateUp = seat
+        ? new THREE.Vector3(0, 1, 0).applyQuaternion(seat.quaternion).normalize()
+        : gateDir.clone();
+      const gateFwd = seat
+        ? new THREE.Vector3(0, 0, 1).applyQuaternion(seat.quaternion).normalize()
+        : new THREE.Vector3().crossVectors(gateDir, gateRight).normalize();
+      const gateOrigin = seat
+        ? seat.position.clone()
+        : gateDir.clone().multiplyScalar(R + canyonOffsetDir(gateDir));
+
+      birdVortex = new BirdVortexManager(scene, {
+        count: 1000,
+        origin: gateOrigin,
+        up: gateUp,
+        right: gateRight,
+        forward: gateFwd,
+        // 双螺旋长河：水面(Y≈25) → 高架桥(Y≈40) → 飞艇层(Y≈60) 盘旋爬升
+        yFloor: 15,
+        yCeil: 62,
+        // 硬性指标：环绕半径 6.0–15.0 随机波动（松散包裹双子要塞夹道）
+        rMin: 6,
+        rMax: 15,
+        getTram: () =>
+          tramSystem.getNearestTram?.(gateOrigin) || tramSystem.tram || null,
+      });
+      birdVortex.setGateFrame({
+        origin: gateOrigin,
+        up: gateUp,
+        right: gateRight,
+        forward: gateFwd,
+        respawn: true,
+      });
+
+      // 旧 Boids 仍锚在门周作为「近景可读」备份层（旋涡是主体）
+      flock.setHome?.(gateDir, {
+        altMin: 10,
+        altMax: 36,
+        homeRadius: 22,
+        homeWeight: 1.1,
+        windDir: gateFwd,
+        respawn: true,
+      });
+      if (flock?.root) flock.root.visible = true;
+    }
 
     // 安置沉降 pass（全部地形建完后）：被苔丘/土坡/营地埋住的树/石抬回地表，
     // 走廊压平后悬空的岩石落回地面——树木种在草坡上，而不是被埋
@@ -310,7 +411,6 @@ export const messengerIslandScene = {
       platforms,
       hills,
       clouds,
-      greatLake,
       moonLake,
       colliders,
       landmarks: {
@@ -321,12 +421,17 @@ export const messengerIslandScene = {
         tramSystem,
         harbor,
         oldHarbor: harborBuilt,
+        boat: harborBuilt.landmarks.boat,
         moebius,
+        abandonedGate, // 太古双子要塞：三重圆拱 + 左右阶梯塔（入谷门槛）
         bubblePods, // 围绕水晶城 3 座花厅建筑巡游的气泡座舱
         citySeaLake, // 水晶城旁海水湖 · 湖沼生物培育 · 气泡艇潜行
+        citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布
+        odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
         airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
-        flock, // Boids 低多边形手绘鸟群（南半球高空）
-        hallFlock, // 花厅楼顶 Boids 鸟群（母皇塔尖环绕）
+        flock, // 旧峡谷 Boids（已让位给旋涡，root 隐藏）
+        birdVortex, // 万鸟归巢 · InstancedMesh 垂直旋涡风暴（叹息之门）
+        hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
         escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
         aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
         mossSaihoji, // 厚涂苔丘 · 西芳寺缘
@@ -342,6 +447,10 @@ export const messengerIslandScene = {
 
         // 水晶城海水湖：涟漪 + 培育白鲸/鳗/带鱼
         citySeaLake.update?.(dt, t);
+
+        // 圣城梯湖：四段水帘、雾气与涟漪；城堡本体保持静态。
+        citadelRange.pilgrimageCascades.update?.(dt, t);
+        odysseyCitadel.update?.(dt, t);
 
         // 地图放置的湖沼/飞艇动效（鲸/舟/悬浮艇）
         // 必须先于 aircraft：湖沼更新水面落花蜜源列表，供巨蜂鸟寻觅
@@ -389,10 +498,22 @@ export const messengerIslandScene = {
           moebius.update?.(dt, t, { escortTram });
         }
 
-        // Boids 鸟群：三大定律 + 相位差扑翅 + 高度带锁 + 晶塔避障
-        flock.update(dt, t);
+        // 万鸟旋涡：螺旋 + 光暗实例色 + 电车排斥 + 观者可见侧聚群
+        if (birdVortex) {
+          const tram =
+            tramSystem.getNearestTram?.(runtime?.player?.position) ||
+            tramSystem.tram ||
+            null;
+          // 观者 = 送信人位置（步行/乘车均是视角所在），驱动盘旋鸟河向可见面聚拢
+          birdVortex.update(dt, t, {
+            tram,
+            viewer: runtime?.player?.position || null,
+          });
+        }
+        // 门周 Boids 备份层（近景可辨）
+        if (flock?.root?.visible) flock.update(dt, t);
 
-        // 花厅楼顶鸟群：环绕母皇塔尖忽聚忽散
+        // 花厅楼顶忽聚忽散：仍环绕母皇塔尖
         hallFlock.update(dt, t);
 
         // 航空艇护航队：尾流场吸引 + 6–15 环形圆柱结界 + 两级折叠滑翔
@@ -428,9 +549,8 @@ export const messengerIslandScene = {
 
         const player = runtime?.player;
         if (player) {
-          // 先重置，再由大湖写 factor
+          // 重置涉水系数（月牙湖判定在自己的 update 里写）
           player.wadeFactor = 1;
-          updateGreatLakeWade(player, greatLake);
         }
       },
       debug: { playZone, camp, farSide, harbor },

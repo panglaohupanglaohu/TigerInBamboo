@@ -23,7 +23,7 @@ export const P_DEFAULTS = Object.freeze({
   timeOfDay: 0.5, // 时刻（0 午夜 / 0.28 朝霞 / 0.5 正午 / 0.75 暮云）
   weather: 0, // 天气：0 晴 / 1 雨（带闪电） / 2 雪
   sunIntensity: 1.6,
-  ambientIntensity: 1.35, // 纯白强环境光：Toon 色块不掉死黑（1.2~1.5）
+  ambientIntensity: 1.4, // 纯白强环境光：Toon 色块不掉死黑（1.2~1.5）
 });
 
 /** 运行时可变参数（每帧被玩家/相机/交互读取） */

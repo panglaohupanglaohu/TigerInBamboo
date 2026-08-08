@@ -7,14 +7,23 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { latLonToDir, quatYToDir } from "./sphereMath.js";
 import { PLANET_RADIUS } from "./planet.js";
-import { CANYON } from "./canyon.js";
-import { GRAND_CRYSTAL } from "./moebiusCity.js";
+import { canyonOffsetDir } from "./canyon.js";
+import { groundLiftAt, worldToFlatXZ } from "./hills.js";
 
-/** 海水湖选址：水晶城旁侧大湾（经度偏开城心，纬度略靠赤道） */
+
+/**
+ * 海水湖选址：沉入莫比斯大峡谷底、位于花厅塔正下方。
+ * 原址 (lat -16.5, lon -88) 水面平贴海平面，且距轨道仅 8.3、距最近拱门 3。
+ * 现改为随花厅塔运行时定位（见 createCitySeaLake 的 centerDir/baseRadius）：
+ * 水面沉到塔基高度，母塔自湖心拔起，电车在十余单位上方的高架桥凌空掠过。
+ * 下方 lat/lon 仅作无塔可用时的兜底（= 母塔方位）。
+ */
 export const CITY_SEA_LAKE = Object.freeze({
-  lat: GRAND_CRYSTAL.lat + 7.5, // 约 -16.5°，城缘偏北
-  lon: CANYON.lon + 24, // 城心东侧，避开塔林最密处
-  angR: 0.34, // 角半径 ~19.5°，体量明显大于月牙湖
+  lat: -24, // 母塔纬度
+  lon: -112, // 母塔经度（= CANYON.lon）
+  // 角半径 0.34→0.22（r 13.3→8.7）：花厅塔两两间距实测仅 21.3，
+  // 两湖半径之和必须小于该值才不重叠，同时避免湖面漫过阶梯谷壁。
+  angR: 0.22,
   waterLift: 0.14, // 水面相对球面抬升
   maxDive: 10, // 最大潜深（径向向球心，世界单位）
   shoreW: 0.045, // 岸带宽（角）
@@ -211,9 +220,18 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   const rnd = lcg(seed);
   const cfg = { ...CITY_SEA_LAKE, ...opts };
 
-  latLonToDir(cfg.lat, cfg.lon, _dir);
+  // 湖心：优先用调用方给的花厅塔方向，否则用 lat/lon 兜底
+  if (opts.centerDir) _dir.copy(opts.centerDir).normalize();
+  else latLonToDir(cfg.lat, cfg.lon, _dir);
   const centerDir = _dir.clone().normalize();
-  const surfaceR = planetRadius + cfg.waterLift;
+  // 水底基准：优先用花厅塔 root（水面与塔基齐平），否则按峡谷阶梯沉降落到谷底。
+  // 若仍用 planetRadius，水面会平贴海平面、悬在谷底上方约 15 单位。
+  const baseR = Number.isFinite(opts.baseRadius)
+    ? opts.baseRadius
+    : planetRadius + canyonOffsetDir(centerDir);
+  // let 而非 const：relocate() 需要改写它，且 containsWorldPos / diveDepthAt
+  // 等闭包要能读到新值（否则搬迁后潜水判定仍按旧水面高度算）
+  let surfaceR = baseR + cfg.waterLift;
   const rFlat = planetRadius * Math.sin(cfg.angR);
 
   const group = new THREE.Group();
@@ -393,6 +411,37 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
 
   const centerWorld = centerDir.clone().multiplyScalar(planetRadius);
 
+  /**
+   * 把整片湖（水面 / 深水盘 / 体积柱 / 白鲸鳗鱼等全部生物）搬到新方向。
+   * 只改 group 位姿 + 水面高度，不重建任何几何。
+   *
+   * 搬离水晶城可显著减负：实测本湖 283 个可绘制对象、15556 三角面，
+   * 分别是水晶城的 45% 与 105%（面数比整座城还多），且原湖心与花厅塔重合，
+   * 看城市时必然同屏渲染。
+   *
+   * @param {THREE.Vector3} dir 新湖心方向
+   * @param {number} [baseRadius] 水底基准半径；缺省按新位置地形自动求（岛面/峡谷）
+   */
+  function relocate(dir, baseRadius) {
+    if (!dir) return false;
+    centerDir.copy(dir).normalize(); // 原地改写 → 闭包看到新值
+    let nextBase = baseRadius;
+    if (!Number.isFinite(nextBase)) {
+      const flat = worldToFlatXZ(centerDir, planetRadius);
+      nextBase = flat
+        ? planetRadius + groundLiftAt(flat.x, flat.z)
+        : planetRadius + canyonOffsetDir(centerDir);
+    }
+    surfaceR = nextBase + cfg.waterLift;
+    group.position.copy(centerDir).multiplyScalar(surfaceR);
+    group.quaternion.copy(quatYToDir(centerDir, new THREE.Quaternion()));
+    centerWorld.copy(centerDir).multiplyScalar(planetRadius);
+    // 同步给外部快照字段：bubblePodRide 每帧读 sea.surfaceR 判定潜水
+    api.surfaceR = surfaceR;
+    api.baseRadius = nextBase;
+    return true;
+  }
+
   function containsWorldPos(p) {
     if (!p) return false;
     _up.copy(p).normalize();
@@ -481,12 +530,16 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
     }
   }
 
-  return {
+  // 具名对象：relocate() 要改写 api.surfaceR，外部（bubblePodRide）持有同一引用
+  const api = {
     group,
     centerDir,
     centerWorld,
     angR: cfg.angR,
     surfaceR,
+    baseRadius: baseR,
+    defaultCenterDir: centerDir.clone(), // 出厂位置，供「恢复默认」回退
+    defaultBaseRadius: baseR,
     maxDive: cfg.maxDive,
     rFlat,
     waterLift: cfg.waterLift,
@@ -495,5 +548,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
     surfaceHeightAt,
     diveDepthAt,
     update,
+    relocate,
   };
+  return api;
 }

@@ -27,8 +27,10 @@ import { CANYON } from "./canyon.js";
 import { PLANET_RADIUS } from "./planet.js";
 
 /* ---------------- Y 轴绝对坐标分层（锁死，勿动） ---------------- */
-/** 正常球体地面高度：玩家行走的草地 / 坑口缘 */
-export const SWAMP_GROUND_Y = 40.0;
+/** 正常球体地面高度：玩家行走的草地 / 坑口缘（湖沼局部坐标，不随 R 放大） */
+export const SWAMP_LOCAL_GROUND_Y = 40.0;
+/** 兼容旧调用方；语义上仍是局部坐标。 */
+export const SWAMP_GROUND_Y = SWAMP_LOCAL_GROUND_Y;
 /** 地下半透明湖沼水面高度：比地表低整整 15 单位 */
 export const SWAMP_WATER_Y = 25.0;
 /** 坑洞最深处湖底沙地：巨树根部与河床乱石扎根于此 */
@@ -46,8 +48,8 @@ const LEAF_HEIGHT_MUL = 2;
 
 /** 把「高于地面」的 Y 按 LEAF_HEIGHT_MUL 抬高 */
 function leafHeightY(y) {
-  if (y <= SWAMP_GROUND_Y) return y;
-  return SWAMP_GROUND_Y + (y - SWAMP_GROUND_Y) * LEAF_HEIGHT_MUL;
+  if (y <= SWAMP_LOCAL_GROUND_Y) return y;
+  return SWAMP_LOCAL_GROUND_Y + (y - SWAMP_LOCAL_GROUND_Y) * LEAF_HEIGHT_MUL;
 }
 
 /* ---------------- 月夜色板（深蓝主导 + 萤火/花蕊辉光提亮） ---------------- */
@@ -1243,7 +1245,7 @@ export function createMoebiusSwampZone(opts = {}) {
   /* ---------- 坑洞外壳：上宽下窄的刀劈斧凿深渊碗壁 ---------- */
   // 坑壁：顶口 r≈34（Y=40）→ 底 r≈13（Y=10），内视碗壁
   const wallGeo = jitter(
-    new THREE.CylinderGeometry(34, 13, SWAMP_GROUND_Y - SWAMP_FLOOR_Y, 14, 4, true),
+    new THREE.CylinderGeometry(34, 13, SWAMP_LOCAL_GROUND_Y - SWAMP_FLOOR_Y, 14, 4, true),
     2.2,
     rnd
   );
@@ -1270,7 +1272,7 @@ export function createMoebiusSwampZone(opts = {}) {
     toonMat(0xffffff, { side: THREE.BackSide, vertexColors: true })
   );
   wall.name = "swamp-sinkhole-wall";
-  wall.position.y = (SWAMP_GROUND_Y + SWAMP_FLOOR_Y) / 2; // 25
+  wall.position.y = (SWAMP_LOCAL_GROUND_Y + SWAMP_FLOOR_Y) / 2; // 25
   wall.receiveShadow = true;
   addOutline(wall, 0.045);
   swampZone.add(wall);
@@ -1286,7 +1288,7 @@ export function createMoebiusSwampZone(opts = {}) {
     if (Math.abs(angDiff(a)) < 0.66) continue; // 入口不设石
     const rock = part(jitter(new THREE.IcosahedronGeometry(0.9 + rnd() * 1.1, 0), 0.3, rnd), screeMat, 0.02);
     const d = 33.5 + rnd() * 2.5;
-    rock.position.set(Math.cos(a) * d, SWAMP_GROUND_Y + 0.15, Math.sin(a) * d);
+    rock.position.set(Math.cos(a) * d, SWAMP_LOCAL_GROUND_Y + 0.15, Math.sin(a) * d);
     rock.scale.set(1.3, 0.3 + rnd() * 0.3, 1.1);
     rock.rotation.y = rnd() * Math.PI;
     swampZone.add(rock);
@@ -1300,7 +1302,7 @@ export function createMoebiusSwampZone(opts = {}) {
     const rr = 37 - t * 12;
     step.position.set(
       Math.cos(ENTRANCE_A) * rr,
-      SWAMP_GROUND_Y - 0.6 - t * 17.5,
+      SWAMP_LOCAL_GROUND_Y - 0.6 - t * 17.5,
       Math.sin(ENTRANCE_A) * rr
     );
     step.rotation.y = -ENTRANCE_A;
@@ -1322,7 +1324,7 @@ export function createMoebiusSwampZone(opts = {}) {
     // 注意：星球半径仅 40（局部有效半径 = 40/scale），坑缘平坦切平面在
     // 局部水平 ≈ Rs/√2 之外急剧下沉，树环必须收在坑缘附近才能贴地。
     const d = 36.5 + rnd() * 5;
-    tree.position.set(Math.cos(a) * d, SWAMP_GROUND_Y - 0.3, Math.sin(a) * d);
+    tree.position.set(Math.cos(a) * d, SWAMP_LOCAL_GROUND_Y - 0.3, Math.sin(a) * d);
     tree.userData.yaw = rnd() * Math.PI * 2; // 放置时贴球面后再绕法线自转
     swampZone.add(tree);
     towerTrees.push(tree);
@@ -1348,7 +1350,7 @@ export function createMoebiusSwampZone(opts = {}) {
       if (rnd() > 0.55) continue; // 随机跳过部分组合
       const A = towerTrees[i].position;
       const B = towerTrees[j].position;
-      const baseY = SWAMP_GROUND_Y - 0.3;
+      const baseY = SWAMP_LOCAL_GROUND_Y - 0.3;
       const yA = baseY + 14 + rnd() * 18; // 相机距离外高处连接
       const yB = baseY + 14 + rnd() * 18;
       const sag = 4 + rnd() * 6; // 自然下垂
@@ -1376,7 +1378,7 @@ export function createMoebiusSwampZone(opts = {}) {
     const f = buildGiantFlower(rnd);
     const a = (i / 5) * Math.PI * 2 + rnd() * 0.4;
     const d = 20 + rnd() * 10; // 宽大叶丛上方（坑缘棕榈带内侧）
-    const baseY = SWAMP_GROUND_Y + 6 + rnd() * 8; // 在叶面之上朝天空开放
+    const baseY = SWAMP_LOCAL_GROUND_Y + 6 + rnd() * 8; // 在叶面之上朝天空开放
     f.position.set(Math.cos(a) * d, baseY, Math.sin(a) * d);
     f.userData.baseY = baseY;
     f.userData.fallOrder = i;        // 轮换次序
@@ -1466,7 +1468,7 @@ export function createMoebiusSwampZone(opts = {}) {
       const rr = rTop + (rBot - rTop) * t;
       pts.push(new THREE.Vector3(
         Math.cos(a + t * 0.35) * rr,
-        SWAMP_GROUND_Y - 1 + (y1 - (SWAMP_GROUND_Y - 1)) * t,
+        SWAMP_LOCAL_GROUND_Y - 1 + (y1 - (SWAMP_LOCAL_GROUND_Y - 1)) * t,
         Math.sin(a + t * 0.35) * rr
       ));
     }
@@ -1546,8 +1548,8 @@ export function createMoebiusSwampZone(opts = {}) {
     if (Math.abs(angDiff(a)) < 0.5) continue;
     const flower = buildGlowFlower(rnd, i % 2);
     const d = 34 + rnd() * 6;
-    flower.position.set(Math.cos(a) * d, SWAMP_GROUND_Y - 0.1, Math.sin(a) * d);
-    flower.userData.baseY = SWAMP_GROUND_Y - 0.1;
+    flower.position.set(Math.cos(a) * d, SWAMP_LOCAL_GROUND_Y - 0.1, Math.sin(a) * d);
+    flower.userData.baseY = SWAMP_LOCAL_GROUND_Y - 0.1;
     swampZone.add(flower);
     rimDecor.push(flower);
     glowHalos.push(flower.userData.halo);
@@ -1663,28 +1665,50 @@ export function createMoebiusSwampZone(opts = {}) {
   /* ---------- 4a. 原始世界树（Y=10 扎根，穿水上天）---------- */
   buildWorldTree(rnd, swampZone);
 
-  /* ---------- 3. 米白浅绿鲸豚（儒艮/海牛感）：一大一小两只，Y = 21.0 ---------- */
+  /* ---------- 3. 米白浅绿鲸豚：暂时游回湖心（离开喂食木筏） ---------- */
   /** @type {THREE.Group[]} */
   const whales = [];
+  // 成鲸：湖心偏深一带缓慢绕游（不贴喂食筏）
   const whale = buildBelugaWhale(rnd);
-  whale.position.set(7, WHALE_Y, 4);
+  whale.position.set(-4, WHALE_Y - 0.6, -8);
   whale.rotation.order = "YXZ";
-  whale.rotation.x = -1.32; // 直立：头胸破水，尾沉水下
-  whale.rotation.y = 0.85; // 朝向喂食木筏
-  whale.userData.baseY = WHALE_Y;
-  whale.userData.baseRotX = -1.32;
+  whale.rotation.x = -1.05; // 略平，更像在游而非直立讨食
+  whale.rotation.y = 2.4;
+  whale.userData.baseY = WHALE_Y - 0.6;
+  whale.userData.baseRotX = -1.05;
+  whale.userData.bobPhase = 0.4;
+  // 绕湖心椭圆巡游（本地 XZ）
+  whale.userData.swim = {
+    cx: -2,
+    cz: -5,
+    rx: 9,
+    rz: 7,
+    speed: 0.11,
+    phase: 0.2,
+    yawOffset: Math.PI * 0.5, // 切向朝向
+  };
   swampZone.add(whale);
   whales.push(whale);
 
+  // 幼鲸：跟随成鲸外侧稍浅处
   const whalePup = buildBelugaWhale(rnd);
-  whalePup.scale.setScalar(0.55); // 小一号的幼体，伴随游弋
-  whalePup.position.set(-6, WHALE_Y - 1.4, -6);
+  whalePup.scale.setScalar(0.55);
+  whalePup.position.set(-10, WHALE_Y - 1.2, -3);
   whalePup.rotation.order = "YXZ";
-  whalePup.rotation.x = -1.15;
-  whalePup.rotation.y = 0.85;
-  whalePup.userData.baseY = WHALE_Y - 1.4;
-  whalePup.userData.baseRotX = -1.15;
+  whalePup.rotation.x = -0.95;
+  whalePup.rotation.y = 2.1;
+  whalePup.userData.baseY = WHALE_Y - 1.2;
+  whalePup.userData.baseRotX = -0.95;
   whalePup.userData.bobPhase = 2.1;
+  whalePup.userData.swim = {
+    cx: -2,
+    cz: -5,
+    rx: 11.5,
+    rz: 9,
+    speed: 0.13,
+    phase: 1.8,
+    yawOffset: Math.PI * 0.5,
+  };
   swampZone.add(whalePup);
   whales.push(whalePup);
 
@@ -1805,8 +1829,8 @@ export function createMoebiusSwampZone(opts = {}) {
     const a = rnd() * Math.PI * 2;
     if (Math.abs(angDiff(a)) < 0.55) continue;
     const d = 34.5 + rnd() * 4;
-    mush.position.set(Math.cos(a) * d, SWAMP_GROUND_Y + 0.1, Math.sin(a) * d);
-    mush.userData.baseY = SWAMP_GROUND_Y + 0.1;
+    mush.position.set(Math.cos(a) * d, SWAMP_LOCAL_GROUND_Y + 0.1, Math.sin(a) * d);
+    mush.userData.baseY = SWAMP_LOCAL_GROUND_Y + 0.1;
     swampZone.add(mush);
     rimDecor.push(mush);
   }
@@ -1825,7 +1849,7 @@ export function createMoebiusSwampZone(opts = {}) {
     const hanger = buildPinkHanger(rnd);
     const a = (i / 3) * Math.PI * 2 + 0.9;
     const r = 28 + rnd() * 3;
-    hanger.position.set(Math.cos(a) * r, SWAMP_GROUND_Y - 3 - rnd() * 5, Math.sin(a) * r);
+    hanger.position.set(Math.cos(a) * r, SWAMP_LOCAL_GROUND_Y - 3 - rnd() * 5, Math.sin(a) * r);
     hanger.lookAt(0, hanger.position.y, 0);
     swampZone.add(hanger);
     hangers.push(hanger);
@@ -1903,7 +1927,7 @@ export function createMoebiusSwampZone(opts = {}) {
     const lz = buildGlowLizard(rnd);
     lz.scale.setScalar(1.35);
     if (i < 2) {
-      lz.userData.baseY = SWAMP_GROUND_Y + 0.12;
+      lz.userData.baseY = SWAMP_LOCAL_GROUND_Y + 0.12;
       lz.userData.orbitR = 33 + rnd() * 5;
     } else {
       lz.userData.baseY = SWAMP_FLOOR_Y + 0.3;
@@ -1932,12 +1956,12 @@ export function createMoebiusSwampZone(opts = {}) {
 
   /* ---------- 赛博水墨虎：大树间巡游 + 沿石阶下坑饮水 ---------- */
   const tigerRim = [0.5, 1.6, 2.7, 3.9, 5.1].map(
-    (a) => new THREE.Vector3(Math.cos(a) * 37.4, SWAMP_GROUND_Y, Math.sin(a) * 37.4)
+    (a) => new THREE.Vector3(Math.cos(a) * 37.4, SWAMP_LOCAL_GROUND_Y, Math.sin(a) * 37.4)
   );
   const tigerSteps = [0.15, 0.4, 0.65, 0.9].map((tt) =>
     new THREE.Vector3(
       Math.cos(ENTRANCE_A) * (37 - 12 * tt),
-      SWAMP_GROUND_Y - 17.5 * tt,
+      SWAMP_LOCAL_GROUND_Y - 17.5 * tt,
       Math.sin(ENTRANCE_A) * (37 - 12 * tt)
     )
   );
@@ -1955,9 +1979,9 @@ export function createMoebiusSwampZone(opts = {}) {
     const shell = buildShell(rnd);
     const a = rnd() * Math.PI * 2;
     const d = 34 + rnd() * 6;
-    shell.position.set(Math.cos(a) * d, SWAMP_GROUND_Y + 0.15, Math.sin(a) * d);
+    shell.position.set(Math.cos(a) * d, SWAMP_LOCAL_GROUND_Y + 0.15, Math.sin(a) * d);
     shell.rotation.y = rnd() * Math.PI * 2;
-    shell.userData.baseY = SWAMP_GROUND_Y + 0.15;
+    shell.userData.baseY = SWAMP_LOCAL_GROUND_Y + 0.15;
     swampZone.add(shell);
     rimDecor.push(shell);
   }
@@ -1968,7 +1992,7 @@ export function createMoebiusSwampZone(opts = {}) {
     if (Math.abs(angDiff(a)) < 0.5) continue;
     const palm = buildRimPalm(rnd);
     const d = 36 + rnd() * 4.5;
-    palm.position.set(Math.cos(a) * d, SWAMP_GROUND_Y - 0.2, Math.sin(a) * d);
+    palm.position.set(Math.cos(a) * d, SWAMP_LOCAL_GROUND_Y - 0.2, Math.sin(a) * d);
     palm.userData.yaw = rnd() * Math.PI * 2;
     swampZone.add(palm);
     towerTrees.push(palm); // 一并交给 applySwampSphereFit 贴球面
@@ -1976,7 +2000,7 @@ export function createMoebiusSwampZone(opts = {}) {
 
   /* ---------- userData / 实时动画 ---------- */
   swampZone.userData.kind = "moebius-swamp";
-  swampZone.userData.groundY = SWAMP_GROUND_Y;
+  swampZone.userData.groundY = SWAMP_LOCAL_GROUND_Y;
   swampZone.userData.waterY = WATER_Y;
   swampZone.userData.floorY = SWAMP_FLOOR_Y;
   swampZone.userData.whale = whale;
@@ -2014,16 +2038,27 @@ export function createMoebiusSwampZone(opts = {}) {
       lotus.position.y = (lotus.userData.baseY || WATER_Y) + Math.sin(t * 1.05 + ph) * 0.09;
       lotus.rotation.z = Math.sin(t * 0.8 + ph) * 0.028;
     }
-    // 鲸豚们缓缓浮沉 + 哺乳动物换气：周期性昂首将鼻头破水而出（头露出水面 Y=25 以上）
+    // 鲸豚：暂时游回湖心椭圆巡游（离开喂食筏）+ 轻柔浮沉换气
     for (const w of whales) {
       const ph = w.userData.bobPhase || 0;
-      w.position.y = w.userData.baseY + Math.sin(t * 0.6 + ph) * 0.35;
-      // 换气节律：缓慢昂首→维持→没入，鼻头周期性露出水面
-      const breathe = Math.sin(t * 0.32 + ph);
-      // baseRotX 为静态倾斜（-1.32 大鲸 / -1.15 幼鲸），在此基础上叠加昂首
-      const baseRx = w.userData.baseRotX ?? -1.32;
-      w.rotation.x = baseRx + breathe * 0.5; // 昂首时鼻头抬高破水
-      w.rotation.z = Math.sin(t * 0.45 + ph) * 0.03;
+      const sw = w.userData.swim;
+      if (sw) {
+        const ang = sw.phase + t * sw.speed;
+        const x = sw.cx + Math.cos(ang) * sw.rx;
+        const z = sw.cz + Math.sin(ang) * sw.rz;
+        w.position.x = x;
+        w.position.z = z;
+        // 切向朝向（沿轨道前进）
+        const tx = -Math.sin(ang) * sw.rx;
+        const tz = Math.cos(ang) * sw.rz;
+        w.rotation.y = Math.atan2(tx, tz) + (sw.yawOffset || 0);
+      }
+      w.position.y = (w.userData.baseY ?? WHALE_Y) + Math.sin(t * 0.55 + ph) * 0.4;
+      const breathe = Math.sin(t * 0.28 + ph);
+      const baseRx = w.userData.baseRotX ?? -1.05;
+      // 换气时略抬头，幅度比贴筏讨食时小
+      w.rotation.x = baseRx + breathe * 0.28;
+      w.rotation.z = Math.sin(t * 0.4 + ph) * 0.04;
     }
 
     /* ---------- 5 朵巨型发光花朵：轮换飘落湖面（花蕊发光） ---------- */
@@ -2551,7 +2586,7 @@ export function applySwampSphereFit(swampZone, scale, surfaceR = PLANET_RADIUS) 
   for (const tree of trees) {
     const d = Math.hypot(tree.position.x, tree.position.z);
     // 多埋 0.8 局部单位：树干底部扎进土里，兼补生成/放置地表半径的小偏差
-    tree.position.y = SWAMP_GROUND_Y - 0.3 - drop(d) - 0.8;
+    tree.position.y = SWAMP_LOCAL_GROUND_Y - 0.3 - drop(d) - 0.8;
     // 局部 +Y 对齐该点球面法线（树朝外倾斜，根部埋土）再绕法线自转
     _swT.set(tree.position.x, Rs - drop(d), tree.position.z).normalize();
     tree.quaternion.copy(quatYToDir(_swT, _swQ));
@@ -2560,7 +2595,7 @@ export function applySwampSphereFit(swampZone, scale, surfaceR = PLANET_RADIUS) 
   const decor = swampZone.userData.rimDecor || [];
   for (const m of decor) {
     const d = Math.hypot(m.position.x, m.position.z);
-    m.position.y = (m.userData.baseY ?? SWAMP_GROUND_Y) - drop(d);
+    m.position.y = (m.userData.baseY ?? SWAMP_LOCAL_GROUND_Y) - drop(d);
   }
   return swampZone;
 }
@@ -2577,7 +2612,7 @@ export function createMoebiusSwampPlacement(opts = {}) {
   const seed = opts.seed ?? 7711;
   const inner = createMoebiusSwampZone({ seed });
   // 将局部 Y=40 的地表对齐包装原点：inner.y = -40
-  inner.position.y = -SWAMP_GROUND_Y;
+  inner.position.y = -SWAMP_LOCAL_GROUND_Y;
 
   const wrap = new THREE.Group();
   wrap.name = "moebius-swamp-placement";
@@ -2715,7 +2750,7 @@ export function placeMoebiusSwampOnTrack(
  * 球面贴放：坑口草地精确贴齐星球地表，整个湖沼向球心方向深挖塌陷，
  * 玩家从草地边缘一跃而下。
  * （inner 已内移 -40：坑缘 = 包装原点，故直接定位到 R + surfaceLift，
- * 切勿再减 SWAMP_GROUND_Y×scale，否则会双重下移埋入地下。）
+ * 切勿再减 SWAMP_LOCAL_GROUND_Y×scale，否则会双重下移埋入地下。）
  */
 export function placeMoebiusSwampOnSphere(
   swampZone,

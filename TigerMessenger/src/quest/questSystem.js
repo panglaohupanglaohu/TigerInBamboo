@@ -22,6 +22,7 @@ import {
   hideNpcHint,
 } from "../ui/hud.js";
 import { sfxPickup, sfxDeliver, sfxWin } from "../audio/sfx.js";
+import { WORLD_SCALE } from "../world/worldScale.js";
 import {
   recordDelivery,
   recordPickup,
@@ -35,7 +36,7 @@ import {
  * 信件任务：寄件人 → 收件人
  * pos 的 y 会被贴到平台顶面
  */
-export const QUEST_DEFS = [
+const QUEST_DEFS_BASE = [
   {
     id: "q1",
     letter: "竹林邀请函",
@@ -61,6 +62,19 @@ export const QUEST_DEFS = [
     receiver: { name: "月影", pos: [-4, 4.8, -18], color: 0xa8d4ff },
   },
 ];
+
+/** 任务 NPC 是主岛布局锚点：缩放 x/z，保留 y 高度与交互半径。 */
+export const QUEST_DEFS = QUEST_DEFS_BASE.map((q) => ({
+  ...q,
+  sender: {
+    ...q.sender,
+    pos: [q.sender.pos[0] * WORLD_SCALE, q.sender.pos[1], q.sender.pos[2] * WORLD_SCALE],
+  },
+  receiver: {
+    ...q.receiver,
+    pos: [q.receiver.pos[0] * WORLD_SCALE, q.receiver.pos[1], q.receiver.pos[2] * WORLD_SCALE],
+  },
+}));
 
 /**
  * @param {object} deps

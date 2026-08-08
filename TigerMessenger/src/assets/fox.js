@@ -607,6 +607,7 @@ export function createLowPolyFox(opts = {}) {
     walk.chest.position.y = base.chestY;
     g.userData.sleeping = false;
     g.userData.following = true;
+    g.userData.companionResting = false;
   }
 
   function lieDown() {
@@ -617,6 +618,27 @@ export function createLowPolyFox(opts = {}) {
     walk.chest.rotation.set(0, 0, 0);
     g.userData.sleeping = true;
     g.userData.following = false;
+    g.userData.companionResting = false;
+  }
+
+  /**
+   * 跟随中的卧姿（电车/歇脚）：显示睡姿层，但状态仍为 FOLLOWING。
+   * @param {boolean} resting
+   */
+  function setCompanionRest(resting) {
+    if (resting) {
+      if (foxState !== "FOLLOWING") switchState("FOLLOWING");
+      sleepG.visible = true;
+      walk.root.visible = false;
+      glowRing.visible = false;
+      g.userData.companionResting = true;
+      g.userData.sleeping = false;
+      g.userData.following = true;
+    } else if (foxState === "FOLLOWING") {
+      standUp();
+    } else {
+      g.userData.companionResting = false;
+    }
   }
 
   function switchState(next) {
@@ -630,6 +652,7 @@ export function createLowPolyFox(opts = {}) {
   g.switchState = switchState;
   g.standUp = standUp;
   g.lieDown = lieDown;
+  g.setCompanionRest = setCompanionRest;
   g.getState = () => foxState;
 
   g.userData.kind = "fox";
@@ -637,6 +660,7 @@ export function createLowPolyFox(opts = {}) {
   g.userData.collideRadius = 0.4;
   g.userData.sleeping = true;
   g.userData.following = false;
+  g.userData.companionResting = false;
   g.userData.foxState = "SLEEPING";
   g.userData.worldScale = worldScale;
   g.userData.glowRing = glowRing;

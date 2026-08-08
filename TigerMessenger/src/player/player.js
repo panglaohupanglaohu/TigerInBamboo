@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { buildAgentMessenger } from "./agentMessenger.js";
 import { flatToWorld, surfaceNormal } from "../world/sphereMath.js";
 import { PLANET_RADIUS } from "../world/planet.js";
+import { WORLD_SCALE } from "../world/worldScale.js";
 
 const _up = new THREE.Vector3();
 const _fwd = new THREE.Vector3();
@@ -14,7 +15,7 @@ const _quat = new THREE.Quaternion();
 
 export function createPlayer(scene) {
   // 出生：旧平面 (0, 2, 6) → 球面
-  const spawn = flatToWorld(0, 2, 6, PLANET_RADIUS);
+  const spawn = flatToWorld(0, 2, 6 * WORLD_SCALE, PLANET_RADIUS);
 
   const player = {
     position: spawn.clone(),

@@ -409,7 +409,7 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
   sea.instanceMatrix.needsUpdate = true;
   group.add(sea);
 
-  // ---------- 4. 花厅塔群之间的鸟群（穿梭霓虹穹顶走廊） ----------
+  // ---------- 4. 塔间鸟群（可迁移到叹息之门；花厅「忽聚忽散」Boids 另见 hallFlock） ----------
   const birdFlocks = createMoebiusHallBirdFlocks(group, crystals, rnd);
 
   group.userData.cityFootprintAngularRadius = CITY_FOOTPRINT_RADIUS;
@@ -643,6 +643,114 @@ function createMoebiusHallBirdFlocks(parent, crystals, rnd) {
   }
 
   /**
+   * 把巡航鸟群迁到地标。
+   * - 默认：绕 center 圆圈
+   * - opts.corridor：穿行三重门夹道（不进云墙）
+   * @param {THREE.Vector3} centerWorld
+   * @param {{
+   *   span?: number, altSpread?: number, includeFarewell?: boolean,
+   *   corridor?: {
+   *     origin: THREE.Vector3, right: THREE.Vector3, up: THREE.Vector3, forward: THREE.Vector3,
+   *     halfWidth: number, halfLength: number, yMin: number, yMax: number, cloudCeilY?: number
+   *   }
+   * }} [opts]
+   */
+  function migratePatrolHome(centerWorld, opts = {}) {
+    if (!centerWorld || centerWorld.lengthSq() < 1e-8) return false;
+    const includeFarewell = opts.includeFarewell !== false;
+    const cor = opts.corridor || null;
+
+    for (const flock of flocks) {
+      if (flock.escortOnly && !includeFarewell) continue;
+      /** @type {THREE.Vector3[]} */
+      let path = [];
+
+      if (cor?.origin && cor.forward && cor.right && cor.up) {
+        // 沿轨穿三重门的长环：门前 → 中拱 → 门后 → 回穿
+        // 高度锁在券洞带；横向略摆但不越双子夹道 / 不进云墙
+        const o = cor.origin;
+        const Rgt = cor.right.clone().normalize();
+        const Up = cor.up.clone().normalize();
+        const Fwd = cor.forward.clone().normalize();
+        const hw = Math.max(0.6, (cor.halfWidth || 3) * 0.72);
+        const hl = Math.max(4, cor.halfLength || 16);
+        const y0 = cor.yMin ?? 3;
+        const y1 = Math.min(cor.yMax ?? 12, (cor.cloudCeilY ?? 40) - 2);
+        const yMid = (y0 + y1) * 0.5;
+        const yLo = y0 + (y1 - y0) * 0.25;
+        const yHi = y0 + (y1 - y0) * 0.75;
+        const side = flock.escortOnly ? hw * 0.55 : hw * (0.35 + rnd() * 0.55);
+        const s = (rnd() > 0.5 ? 1 : -1) * side;
+        // 6 点闭合：穿门两次（去程 + 回程对侧）
+        path = [
+          o.clone().addScaledVector(Fwd, -hl * 0.95).addScaledVector(Up, yMid).addScaledVector(Rgt, s * 0.3),
+          o.clone().addScaledVector(Fwd, -hl * 0.25).addScaledVector(Up, yHi).addScaledVector(Rgt, s * 0.7),
+          o.clone().addScaledVector(Fwd, hl * 0.15).addScaledVector(Up, yLo).addScaledVector(Rgt, -s * 0.4),
+          o.clone().addScaledVector(Fwd, hl * 0.95).addScaledVector(Up, yMid).addScaledVector(Rgt, -s * 0.25),
+          o.clone().addScaledVector(Fwd, hl * 0.2).addScaledVector(Up, yHi).addScaledVector(Rgt, s * 0.55),
+          o.clone().addScaledVector(Fwd, -hl * 0.35).addScaledVector(Up, yLo).addScaledVector(Rgt, s * 0.15),
+        ];
+        // 收窄横向：lane 偏移会再加，路径本身保持在夹道内
+        flock.speed = flock.escortOnly ? 0.045 : 0.038 + rnd() * 0.02;
+      } else {
+        const center = centerWorld.clone();
+        const up = center.clone().normalize();
+        const t1 = new THREE.Vector3(0, 1, 0).cross(up);
+        if (t1.lengthSq() < 1e-8) t1.set(1, 0, 0);
+        t1.normalize();
+        const t2 = new THREE.Vector3().crossVectors(up, t1).normalize();
+        const span = Number.isFinite(opts.span) ? opts.span : 16;
+        const altSpread = Number.isFinite(opts.altSpread) ? opts.altSpread : 7;
+        const pickN = flock.escortOnly ? 4 : 3 + ((rnd() * 2) | 0);
+        const phase0 = rnd() * Math.PI * 2;
+        for (let k = 0; k < pickN; k++) {
+          const a = phase0 + (k / pickN) * Math.PI * 2 + (rnd() - 0.5) * 0.35;
+          const rad = span * (0.72 + rnd() * 0.4);
+          path.push(
+            center
+              .clone()
+              .addScaledVector(t1, Math.cos(a) * rad)
+              .addScaledVector(t2, Math.sin(a) * rad)
+              .addScaledVector(up, (rnd() - 0.5) * altSpread)
+          );
+        }
+        const centroid = new THREE.Vector3();
+        for (const p of path) centroid.add(p);
+        centroid.multiplyScalar(1 / path.length);
+        for (const p of path) p.lerp(centroid, -0.08);
+      }
+
+      flock.path = path;
+      flock.phase = rnd();
+
+      // 立即落到新航线
+      if (path.length) {
+        for (let b = 0; b < flock.birds.length; b++) {
+          const bird = flock.birds[b];
+          const u = (b / Math.max(1, flock.birds.length)) % 1;
+          sampleLoop(path, u, _patrolPos, _patrolTan);
+          if (cor) {
+            // 走廊模式：lane 限幅，避免摆出双子塔/云墙
+            const maxLane = Math.max(0.4, (cor.halfWidth || 3) * 0.45);
+            bird.userData.lane = THREE.MathUtils.clamp(bird.userData.lane || 0, -maxLane, maxLane);
+            _patrolUp.copy(cor.up).normalize();
+            _patrolRight.copy(cor.right).normalize();
+          } else {
+            _patrolUp.copy(_patrolPos).normalize();
+            _patrolRight.crossVectors(_patrolUp, _patrolTan).normalize();
+          }
+          const lane = bird.userData.lane || 0;
+          bird.position
+            .copy(_patrolPos)
+            .addScaledVector(_patrolRight, lane)
+            .addScaledVector(_patrolUp, Math.abs(lane) * 0.08);
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
    * @param {number} dt
    * @param {number} t
    * @param {{ escortTram?: import("three").Object3D|null }} [opts]
@@ -762,6 +870,7 @@ function createMoebiusHallBirdFlocks(parent, crystals, rnd) {
     group: root,
     flocks,
     update,
+    migratePatrolHome,
   };
 }
 

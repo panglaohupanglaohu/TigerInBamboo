@@ -514,7 +514,31 @@ function attachRoamBehavior(tiger, roam) {
     return pathY - drop;
   }
 
-  const seek = (target, dt, arrive, spd = speed) => {
+  /**
+   * 坑面设计高度（脚底 pathY，不含球面 drop）。
+   * 按径向在坑缘 ↔ 饮水点之间插值；更靠内则沿同坡度外推。
+   * 切勿用送信人 pl.y：那是角色原点/身体高度，会导致跟随悬空。
+   */
+  function surfacePathY(x, z) {
+    const d = Math.hypot(x, z);
+    const rimY = rim[0].y;
+    const drink = roam.drink;
+    const rimR = Math.hypot(rim[0].x, rim[0].z) || 1;
+    const drinkR = drink ? Math.hypot(drink.x, drink.z) : rimR * 0.7;
+    const drinkY = drink && Number.isFinite(drink.y) ? drink.y : rimY - 17.5;
+    if (d >= rimR) return rimY;
+    const denom = drinkR - rimR;
+    if (Math.abs(denom) < 1e-4) return rimY;
+    // y(d) = rimY + (d - rimR) * slope；向坑内 d↓ 时 y↓
+    return rimY + (d - rimR) * ((drinkY - rimY) / denom);
+  }
+
+  /** 当前脚底贴地高度 */
+  function feetOnGround(x = tiger.position.x, z = tiger.position.z) {
+    return groundY(x, z, surfacePathY(x, z));
+  }
+
+  const seek = (target, dt, arrive, spd = speed, pathY) => {
     if (!target) return true;
     const dx = target.x - tiger.position.x;
     const dz = target.z - tiger.position.z;
@@ -524,10 +548,13 @@ function attachRoamBehavior(tiger, roam) {
     tiger.position.x += (dx / d) * step;
     tiger.position.z += (dz / d) * step;
     tiger.rotation.y = Math.atan2(dx, dz);
-    // 水平移动时同步贴地高度（path 点自带 y 时用目标 y）
-    if (Number.isFinite(target.y)) {
-      tiger.userData._baseY = groundY(tiger.position.x, tiger.position.z, target.y);
-    }
+    // 水平移动时同步贴地：优先显式 pathY，否则用目标设计 y（路径点），再不则径向地表
+    const py = Number.isFinite(pathY)
+      ? pathY
+      : Number.isFinite(target.y)
+        ? target.y
+        : surfacePathY(tiger.position.x, tiger.position.z);
+    tiger.userData._baseY = groundY(tiger.position.x, tiger.position.z, py);
     return false;
   };
 
@@ -543,14 +570,14 @@ function attachRoamBehavior(tiger, roam) {
   function beginGreetJump(pl) {
     _greetFrom.copy(tiger.position);
     _greetFrom.y = tiger.userData._baseY ?? tiger.position.y;
-    // 落点：送信人身前约 2.8，贴地高度
+    // 落点：送信人身前约 2.8，脚底贴坑面（不用 pl.y）
     const dx = pl.x - tiger.position.x;
     const dz = pl.z - tiger.position.z;
     const d = Math.hypot(dx, dz) || 1;
     const stop = Math.max(0, d - 2.8);
     const tx = tiger.position.x + (dx / d) * stop;
     const tz = tiger.position.z + (dz / d) * stop;
-    _greetTo.set(tx, groundY(tx, tz, pl.y), tz);
+    _greetTo.set(tx, feetOnGround(tx, tz), tz);
     jump = { t: 0, dur: GREET_JUMP_DUR, peak: GREET_JUMP_PEAK * TIGER_SCALE * 2.2 };
     mode = "greet-jump";
     tiger.userData._greeting = true;
@@ -629,17 +656,21 @@ function attachRoamBehavior(tiger, roam) {
         mode = "ascend";
         queue = up;
         qi = 0;
-      } else if (seek(pl, dt, GREET_MEET_R, speed * 1.35)) {
-        // 到面前：面向送信人
-        const dx = pl.x - tiger.position.x;
-        const dz = pl.z - tiger.position.z;
-        if (dx * dx + dz * dz > 1e-6) tiger.rotation.y = Math.atan2(dx, dz);
-        tiger.userData._baseY += (pl.y - tiger.userData._baseY) * Math.min(1, dt * 4);
-        mode = "greet-stay";
-        greetStayT = GREET_STAY;
       } else {
-        tiger.userData._walking = true;
-        tiger.userData._baseY += (pl.y - tiger.userData._baseY) * Math.min(1, dt * 3);
+        // 只水平跟随送信人；高度始终用坑面贴地，不用 pl.y
+        const pathY = surfacePathY(tiger.position.x, tiger.position.z);
+        _greetTo.set(pl.x, pathY, pl.z);
+        if (seek(_greetTo, dt, GREET_MEET_R, speed * 1.35, pathY)) {
+          const dx = pl.x - tiger.position.x;
+          const dz = pl.z - tiger.position.z;
+          if (dx * dx + dz * dz > 1e-6) tiger.rotation.y = Math.atan2(dx, dz);
+          tiger.userData._baseY = feetOnGround();
+          mode = "greet-stay";
+          greetStayT = GREET_STAY;
+        } else {
+          tiger.userData._walking = true;
+          tiger.userData._baseY = feetOnGround();
+        }
       }
     } else if (mode === "greet-stay") {
       tiger.userData._greeting = true;
@@ -648,11 +679,19 @@ function attachRoamBehavior(tiger, roam) {
         const dx = pl.x - tiger.position.x;
         const dz = pl.z - tiger.position.z;
         if (dx * dx + dz * dz > 1e-6) tiger.rotation.y = Math.atan2(dx, dz);
-        // 轻轻贴着送信人高度
-        tiger.userData._baseY += (pl.y - tiger.userData._baseY) * Math.min(1, dt * 2);
-        // 人跑远则提前结束
+        // 人若缓步走动：贴地跟几步，保持脚在地面
         const horiz = Math.hypot(dx, dz);
+        if (horiz > GREET_MEET_R * 1.15 && horiz < GREET_SEE_R * 0.85) {
+          const pathY = surfacePathY(tiger.position.x, tiger.position.z);
+          _greetTo.set(pl.x, pathY, pl.z);
+          seek(_greetTo, dt, GREET_MEET_R, speed * 1.1, pathY);
+          tiger.userData._walking = true;
+        }
+        tiger.userData._baseY = feetOnGround();
+        // 人跑远则提前结束
         if (horiz > GREET_SEE_R * 0.85) greetStayT = 0;
+      } else {
+        tiger.userData._baseY = feetOnGround();
       }
       greetStayT -= dt;
       if (greetStayT <= 0) {

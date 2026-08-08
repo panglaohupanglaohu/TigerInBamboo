@@ -8,6 +8,7 @@ import { PLANET_RADIUS } from "./planet.js";
 import { flatToWorld } from "./sphereMath.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
 import { canyonOffsetDir } from "./canyon.js";
+import { citadelRangeLiftDir } from "./citadelRange.js";
 
 const _up = new THREE.Vector3();
 const _tmp = new THREE.Vector3();
@@ -154,10 +155,13 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
     break;
   }
 
-  // ---- 星球表面（南半球叠加峡谷地形，谷底可行走） ----
+  // ---- 星球表面（南半球叠加峡谷地形 + 圣城山脉双峰，谷底/山坡可行走） ----
   if (!grounded) {
     const r = pos.length();
-    const surfR = PLANET_RADIUS + canyonOffsetDir(_up.copy(pos).normalize());
+    const surfR =
+      PLANET_RADIUS +
+      canyonOffsetDir(_up.copy(pos).normalize()) +
+      citadelRangeLiftDir(_up);
     if (r < surfR + 0.1) {
       pos.setLength(surfR);
       const n = _up.copy(pos).normalize();

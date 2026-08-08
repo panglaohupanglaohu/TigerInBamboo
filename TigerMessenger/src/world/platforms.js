@@ -7,13 +7,14 @@ import { flatXZToLatLon, latLonToDir, quatYToDir } from "./sphereMath.js";
 import { createSphericalShellPatch } from "./sphereShell.js";
 import { toonMat, outlineAs } from "../assets/toon.js";
 import { groundLiftAt, pondDepressionAt } from "./hills.js";
+import { WORLD_SCALE } from "./worldScale.js";
 
 /**
  * 平台定义（平面设计坐标）：pos=[x, yHeight, z]，size=半尺寸
  * yHeight = 台面相对星球表面的抬升
  * 原浮空岩石平台已全部改为 hills.js 的连绵土坡（高度场，视觉=碰撞）
  */
-export const PLATFORM_DEFS = [
+const PLATFORM_DEFS_BASE = [
   {
     pos: [0, 0.6, 0],
     size: [18, 0.35, 18],
@@ -24,6 +25,14 @@ export const PLATFORM_DEFS = [
     rampWidth: 4.5,
   },
 ];
+
+/** 主岛平面足迹随世界布局扩大；厚度、抬升和池盆深度仍是局部资产量。 */
+export const PLATFORM_DEFS = PLATFORM_DEFS_BASE.map((def) => ({
+  ...def,
+  pos: [def.pos[0] * WORLD_SCALE, def.pos[1], def.pos[2] * WORLD_SCALE],
+  size: [def.size[0] * WORLD_SCALE, def.size[1], def.size[2] * WORLD_SCALE],
+  rampWidth: def.rampWidth * WORLD_SCALE,
+}));
 
 const _dir = new THREE.Vector3();
 const _quat = new THREE.Quaternion();

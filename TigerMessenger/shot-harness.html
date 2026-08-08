@@ -63,11 +63,18 @@ import { buildStartingCamp } from "./src/world/startingCamp.js";
 import { buildSaihojiPlanet } from "./src/world/saihoji.js";
 import { createPlanet } from "./src/world/planet.js";
 import { buildHills } from "./src/world/hills.js";
-import { createMoonLake, createGreatLake } from "./src/world/lake.js";
+import { createMoonLake } from "./src/world/lake.js";
 import { buildChristchurchTramSystem } from "./src/world/tramSystem.js";
 import { createDynamicMoebiusClouds } from "./src/world/equatorialClouds.js";
 import { buildImpastoMossyGround } from "./src/world/mossyGround.js";
 import { buildWorld } from "./src/world/platforms.js";
+import { buildOdysseyCitadel } from "./src/world/odysseyCitadel.js";
+import { createMangaWaterfall } from "./src/world/mangaWaterfall.js";
+import {
+  buildCitadelRange,
+  citadelRangeLiftDir,
+  citadelSiteDir,
+} from "./src/world/citadelRange.js";
 
 import { buildMessenger } from "./src/player/messenger.js";
 import { buildAgentMessenger } from "./src/player/agentMessenger.js";
@@ -145,10 +152,158 @@ const REGISTRY = [
     build: (ctx) => createMoonLake(ctx.scene, ctx.R) },
   { id: "tramSystem", cat: "场景结构", label: "电车轨道系统", R: 6,
     build: (ctx) => buildChristchurchTramSystem(ctx.scene, ctx.R, {}) },
-  { id: "equatorialClouds", cat: "场景结构", label: "赤道风暴云墙", R: 6,
+  { id: "equatorialClouds", cat: "场景结构", label: "轨道云墙（书店→峡谷）", R: 6,
     build: (ctx) => createDynamicMoebiusClouds(ctx.scene, ctx.R) },
   { id: "platforms", cat: "场景结构", label: "平台土坡", R: 40,
     build: (ctx) => buildWorld(ctx.scene) },
+  { id: "odysseyCitadel", cat: "场景结构", label: "太古高山圣城要塞",
+    build: () => buildOdysseyCitadel({ place: false, seed: 20260808 }) },
+  { id: "mangaWaterfall", cat: "场景结构", label: "多层清透水帘与雾气瀑布",
+    build: () => createMangaWaterfall({ seed: 20260809 }) },
+  { id: "citadelRange", cat: "场景结构", label: "圣城山脉（双峰峡谷）", manualFrame: true,
+    build: (ctx) => {
+      const r = buildCitadelRange(ctx.scene, 160);
+      // 球面贴片通用对角取景会侧视成细条：沿站点法向拉开、岛侧俯看双峰峡谷
+      const target = r.siteDir.clone().multiplyScalar(168);
+      ctx.camera.position.copy(r.siteDir).multiplyScalar(160 + 45)
+        .addScaledVector(r.fwd, 105); // 岛侧低位远景：双峰 + 峡谷体量
+      ctx.camera.near = 1;
+      ctx.camera.far = 800;
+      ctx.camera.updateProjectionMatrix();
+      ctx.camera.lookAt(target);
+      return r.mesh;
+    } },
+  { id: "citadelEnsemble", cat: "场景结构", label: "圣城·前哨塔·雪山组合", R: 160,
+    manualFrame: true,
+    build: (ctx) => {
+      const range = buildCitadelRange(ctx.scene, 160);
+      const site = citadelSiteDir(new THREE.Vector3());
+      const castle = buildOdysseyCitadel({
+        dir: site,
+        faceDir: range.fwd,
+        groundRadius: 160 + citadelRangeLiftDir(site),
+        planetRadius: 160,
+        seed: 20260808,
+      });
+      ctx.scene.add(castle);
+      const target = site.clone().multiplyScalar(188)
+        .addScaledVector(range.fwd, -1);
+      ctx.camera.up.copy(site);
+      ctx.camera.position.copy(site).multiplyScalar(176)
+        .addScaledVector(range.fwd, 118)
+        .addScaledVector(range.right, 34);
+      ctx.camera.near = 1;
+      ctx.camera.far = 900;
+      ctx.camera.updateProjectionMatrix();
+      ctx.camera.lookAt(target);
+      return null;
+    } },
+  { id: "citadelPilgrimageVista", cat: "场景结构", label: "送信人·白石梯湖·圣城远眺", R: 160,
+    manualFrame: true,
+    build: (ctx) => {
+      const range = buildCitadelRange(ctx.scene, 160);
+      const site = citadelSiteDir(new THREE.Vector3());
+      const castle = buildOdysseyCitadel({
+        dir: site,
+        faceDir: range.fwd,
+        groundRadius: 160 + citadelRangeLiftDir(site),
+        planetRadius: 160,
+        seed: 20260808,
+      });
+      ctx.scene.add(castle);
+
+      const messenger = buildMessenger();
+      const viewpoint = range.pilgrimageLookout.userData.viewpoint.clone();
+      const viewForward = range.pilgrimageLookout.userData.lookDirection.clone()
+        .addScaledVector(site, -range.pilgrimageLookout.userData.lookDirection.dot(site))
+        .normalize();
+      const viewRight = new THREE.Vector3().crossVectors(site, viewForward).normalize();
+      messenger.position.copy(viewpoint);
+      messenger.quaternion.setFromRotationMatrix(
+        new THREE.Matrix4().makeBasis(viewRight, site, viewForward)
+      );
+      messenger.scale.setScalar(1.55);
+      ctx.scene.add(messenger);
+
+      ctx.camera.up.copy(site);
+      ctx.camera.position.copy(site).multiplyScalar(176)
+        .addScaledVector(range.fwd, 137)
+        .addScaledVector(range.right, 18);
+      const target = site.clone().multiplyScalar(181)
+        .addScaledVector(range.fwd, 18);
+      ctx.camera.fov = 38;
+      ctx.camera.near = 1;
+      ctx.camera.far = 900;
+      ctx.camera.updateProjectionMatrix();
+      ctx.camera.lookAt(target);
+      return null;
+    } },
+  { id: "citadelCascadeAudit", cat: "场景结构", label: "圣城瀑布2-3连接近景", R: 160,
+    manualFrame: true,
+    build: (ctx) => {
+      const auditGround = new THREE.Mesh(
+        new THREE.SphereGeometry(160, 64, 40),
+        toonMat(0x6d8a63, { flatShading: true })
+      );
+      auditGround.name = "citadel-cascade-audit-global-ground";
+      ctx.scene.add(auditGround);
+      const range = buildCitadelRange(ctx.scene, 160);
+      const site = citadelSiteDir(new THREE.Vector3());
+      const castle = buildOdysseyCitadel({
+        dir: site,
+        faceDir: range.fwd,
+        groundRadius: 160 + citadelRangeLiftDir(site),
+        planetRadius: 160,
+        seed: 20260808,
+      });
+      ctx.scene.add(castle);
+      ctx.scene.updateMatrixWorld(true);
+      const target = new THREE.Box3()
+        .setFromObject(range.interCascadeBridgePool)
+        .getCenter(new THREE.Vector3());
+      ctx.camera.up.copy(site);
+      ctx.camera.position.copy(target)
+        .addScaledVector(site, 5.5)
+        .addScaledVector(range.fwd, 34)
+        .addScaledVector(range.right, 4.5);
+      ctx.camera.fov = 34;
+      ctx.camera.near = 0.5;
+      ctx.camera.far = 500;
+      ctx.camera.updateProjectionMatrix();
+      ctx.camera.lookAt(target);
+      return null;
+    } },
+  { id: "citadelSideAudit", cat: "场景结构", label: "圣城侧视接地验收", R: 160,
+    manualFrame: true,
+    build: (ctx) => {
+      const auditGround = new THREE.Mesh(
+        new THREE.SphereGeometry(160, 64, 40),
+        toonMat(0x6d8a63, { flatShading: true })
+      );
+      auditGround.name = "citadel-side-audit-global-ground";
+      ctx.scene.add(auditGround);
+      const range = buildCitadelRange(ctx.scene, 160);
+      const site = citadelSiteDir(new THREE.Vector3());
+      const castle = buildOdysseyCitadel({
+        dir: site,
+        faceDir: range.fwd,
+        groundRadius: 160 + citadelRangeLiftDir(site),
+        planetRadius: 160,
+        seed: 20260808,
+      });
+      ctx.scene.add(castle);
+      ctx.camera.up.copy(site);
+      ctx.camera.position.copy(site).multiplyScalar(170)
+        .addScaledVector(range.right, 118)
+        .addScaledVector(range.fwd, 30);
+      const target = site.clone().multiplyScalar(184)
+        .addScaledVector(range.fwd, -3);
+      ctx.camera.near = 1;
+      ctx.camera.far = 900;
+      ctx.camera.updateProjectionMatrix();
+      ctx.camera.lookAt(target);
+      return null;
+    } },
 
   // ---------------- 莫比斯湖沼内部生态组件（单独实例化截屏）----------------
   { id: "swamp_whale", cat: "沼泽生物", label: "白鲸", build: () => SWAMP_COMPONENT_BUILDERS.whale(Math.random) },
@@ -392,7 +547,7 @@ async function renderItem(id) {
     }
     dynamic = new THREE.Group();
     scene.add(dynamic);
-    const ctx = { THREE, scene: dynamic, R: entry.R ?? R_DEFAULT };
+    const ctx = { THREE, scene: dynamic, camera, R: entry.R ?? R_DEFAULT };
     const obj = entry.build(ctx);
     if (obj) dynamic.add(obj);
 
@@ -433,7 +588,7 @@ async function renderItem(id) {
       box = new THREE.Box3().setFromObject(dynamic);
     }
     if (box.isEmpty()) return { ok: false, error: "empty bounds" };
-    frameCamera(box, entry.frameMode);
+    if (!entry.manualFrame) frameCamera(box, entry.frameMode);
     renderer.render(scene, camera);
     const dataUrl = canvas.toDataURL("image/png");
     return { ok: true, dataUrl, label: entry.label, cat: entry.cat };

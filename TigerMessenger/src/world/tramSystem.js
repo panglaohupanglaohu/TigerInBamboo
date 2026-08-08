@@ -14,6 +14,9 @@ import { P } from "../core/params.js";
 import { updateTramSound } from "../audio/sfx.js";
 import { LAKE, HARBOR } from "./lake.js";
 import { CANYON, canyonOffsetDir, canyonOffsetDirSmooth } from "./canyon.js";
+import { WORLD_SCALE } from "./worldScale.js";
+
+const WORLD_LAYOUT_SCALE = WORLD_SCALE;
 
 const SLEEPER = 0x3e2723;
 const RAIL = 0x757575;
@@ -47,18 +50,18 @@ export function trackLiftAt(x, z) {
 function clearForTrack(x, z) {
   // 山丘：与 HILL_DEFS 对齐（hills.js），核半径略放大作禁区
   const hills = [
-    { x: -1.8, z: -12.6, r: 3.6 },
-    { x: 0.4, z: -12.4, r: 4.0 },
-    { x: 2.2, z: -11.2, r: 3.2 },
-    { x: -5.2, z: -8.6, r: 3.8 },
-    { x: -7.6, z: -5.4, r: 3.4 },
-    { x: -6.2, z: 1.6, r: 4.0 },
-    { x: 8.8, z: 4.8, r: 3.6 },
-    { x: 6.6, z: -7.6, r: 3.2 },
-    { x: 4.6, z: -9.8, r: 2.8 },
-    { x: 5.8, z: 6.8, r: 3.0 },
-    { x: 11.5, z: 5.5, r: 5.5 }, // 书店山 + 建筑体
-    { x: -18.1, z: 6.2, r: 3.6 }, // 营地荒山岩群（悬崖瀑布山洞，已西移让轨）
+    { x: -1.8 * WORLD_LAYOUT_SCALE, z: -12.6 * WORLD_LAYOUT_SCALE, r: 3.6 * WORLD_LAYOUT_SCALE },
+    { x: 0.4 * WORLD_LAYOUT_SCALE, z: -12.4 * WORLD_LAYOUT_SCALE, r: 4.0 * WORLD_LAYOUT_SCALE },
+    { x: 2.2 * WORLD_LAYOUT_SCALE, z: -11.2 * WORLD_LAYOUT_SCALE, r: 3.2 * WORLD_LAYOUT_SCALE },
+    { x: -5.2 * WORLD_LAYOUT_SCALE, z: -8.6 * WORLD_LAYOUT_SCALE, r: 3.8 * WORLD_LAYOUT_SCALE },
+    { x: -7.6 * WORLD_LAYOUT_SCALE, z: -5.4 * WORLD_LAYOUT_SCALE, r: 3.4 * WORLD_LAYOUT_SCALE },
+    { x: -6.2 * WORLD_LAYOUT_SCALE, z: 1.6 * WORLD_LAYOUT_SCALE, r: 4.0 * WORLD_LAYOUT_SCALE },
+    { x: 8.8 * WORLD_LAYOUT_SCALE, z: 4.8 * WORLD_LAYOUT_SCALE, r: 3.6 * WORLD_LAYOUT_SCALE },
+    { x: 6.6 * WORLD_LAYOUT_SCALE, z: -7.6 * WORLD_LAYOUT_SCALE, r: 3.2 * WORLD_LAYOUT_SCALE },
+    { x: 4.6 * WORLD_LAYOUT_SCALE, z: -9.8 * WORLD_LAYOUT_SCALE, r: 2.8 * WORLD_LAYOUT_SCALE },
+    { x: 5.8 * WORLD_LAYOUT_SCALE, z: 6.8 * WORLD_LAYOUT_SCALE, r: 3.0 * WORLD_LAYOUT_SCALE },
+    { x: 11.5 * WORLD_LAYOUT_SCALE, z: 5.5 * WORLD_LAYOUT_SCALE, r: 5.5 * WORLD_LAYOUT_SCALE },
+    { x: -18.1 * WORLD_LAYOUT_SCALE, z: 6.2 * WORLD_LAYOUT_SCALE, r: 3.6 * WORLD_LAYOUT_SCALE },
   ];
   // 圆禁区：月牙湖水域 + 修船厂码头（栈桥/船/吊车）
   const hardCircles = [
@@ -66,9 +69,9 @@ function clearForTrack(x, z) {
     { x: HARBOR.x, z: HARBOR.z, r: HARBOR.clearR }, // 码头整景
   ];
   // 池塘椭圆
-  const pond = { x: 0, z: 9.1, rx: 10.5, rz: 5.8 };
+  const pond = { x: 0, z: 9.1 * WORLD_LAYOUT_SCALE, rx: 10.5 * WORLD_LAYOUT_SCALE, rz: 5.8 * WORLD_LAYOUT_SCALE };
   // 出生点净空
-  const spawn = { x: 0, z: 6, r: 3.2 };
+  const spawn = { x: 0, z: 6 * WORLD_LAYOUT_SCALE, r: 3.2 };
 
   let px = x;
   let pz = z;
@@ -109,14 +112,14 @@ function clearForTrack(x, z) {
     softPush(spawn.x, spawn.z, spawn.r, 0.9);
     // 岛缘环带（软收束，轨道主要在岛面走廊 r≈9~14）
     const rr = Math.hypot(px, pz) || 1e-4;
-    if (rr > 15.2) {
-      const k = ((rr - 15.2) / rr) * 0.3;
+    if (rr > 15.2 * WORLD_LAYOUT_SCALE) {
+      const k = ((rr - 15.2 * WORLD_LAYOUT_SCALE) / rr) * 0.3;
       px -= px * k;
       pz -= pz * k;
       moved = true;
     }
-    if (rr < 8.2) {
-      const k = ((8.2 - rr) / rr) * 0.3;
+    if (rr < 8.2 * WORLD_LAYOUT_SCALE) {
+      const k = ((8.2 * WORLD_LAYOUT_SCALE - rr) / rr) * 0.3;
       px += px * k;
       pz += pz * k;
       moved = true;
@@ -138,17 +141,17 @@ function buildSmoothLoopFlat() {
   for (let i = 0; i < N; i++) {
     const t = (i / N) * Math.PI * 2;
     // 略扁椭圆；圆心偏西南，给东南码头让出走廊
-    const rx = 11.6 + 0.55 * Math.cos(2 * t);
-    const rz = 10.4 + 0.45 * Math.sin(2 * t);
-    let x = rx * Math.cos(t) + 0.6;
-    let z = rz * Math.sin(t) - 2.2;
+    const rx = (11.6 + 0.55 * Math.cos(2 * t)) * WORLD_LAYOUT_SCALE;
+    const rz = (10.4 + 0.45 * Math.sin(2 * t)) * WORLD_LAYOUT_SCALE;
+    let x = rx * Math.cos(t) + 0.6 * WORLD_LAYOUT_SCALE;
+    let z = rz * Math.sin(t) - 2.2 * WORLD_LAYOUT_SCALE;
     // 东侧外推，书店 (11.5,5.5)
-    if (x > 6 && z > 0) {
-      x += 1.4;
-      z -= 0.9;
+    if (x > 6 * WORLD_LAYOUT_SCALE && z > 0) {
+      x += 1.4 * WORLD_LAYOUT_SCALE;
+      z -= 0.9 * WORLD_LAYOUT_SCALE;
     }
-    // 东南象限：强制走码头南/外侧（HARBOR 约 9.4,-3.6）
-    if (x > 4 && z < 2 && z > -11) {
+    // 东南象限：强制走码头南/外侧
+    if (x > 4 * WORLD_LAYOUT_SCALE && z < 2 * WORLD_LAYOUT_SCALE && z > -11 * WORLD_LAYOUT_SCALE) {
       const dx = x - HARBOR.x;
       const dz = z - HARBOR.z;
       const d = Math.hypot(dx, dz);
@@ -178,7 +181,7 @@ function buildSmoothLoopFlat() {
       }
     }
     // 北侧（z 大）再压南，远离池
-    if (z > 5) z = 5 - (z - 5) * 0.35;
+    if (z > 5 * WORLD_LAYOUT_SCALE) z = 5 * WORLD_LAYOUT_SCALE - (z - 5 * WORLD_LAYOUT_SCALE) * 0.35;
     const c = clearForTrack(x, z);
     raw.push(c);
   }
@@ -265,7 +268,7 @@ function surfacePointFromFlat(x, z, R, out = new THREE.Vector3()) {
 }
 
 const VIADUCT_HEIGHT = 0.3; // 高架恒高（裸面之上）
-const ISLAND_EDGE_DIST = 18; // 主岛平面足迹半径（与 hills.groundLiftAt 一致）
+const ISLAND_EDGE_DIST = 18 * WORLD_LAYOUT_SCALE; // 主岛平面足迹半径（与 hills.groundLiftAt 一致）
 
 function smooth01(x) {
   const t = THREE.MathUtils.clamp(x, 0, 1);
@@ -567,20 +570,20 @@ export function buildChristchurchTramSystem(scene, R = PLANET_RADIUS, opts = {})
   };
   // 岛内行驶段：NW 岸 → 西海岸平缓南下 → SW 离岸（全部钝角缓弯）
   const islandRideFlat = [
-    { x: -12.0, z: 6.5 }, // W0 起点（池塘西侧外，回程接驳点）
-    { x: -13.0, z: 2.0 },
-    { x: -12.4, z: -2.5 },
-    { x: -11.0, z: -7.0 }, // W3 西南角
-    { x: -9.5, z: -11.0 },
-    { x: -5.5, z: -16.5 }, // 南岸离岸，接入 G 引桥
-  ];
-  // 回程：K → 池塘西北缘外开敞水面 → 与 W0 处岸线切线对齐（零转角接驳）
+    [-12.0, 6.5],
+    [-13.0, 2.0],
+    [-12.4, -2.5],
+    [-11.0, -7.0],
+    [-9.5, -11.0],
+    [-5.5, -16.5],
+  ].map(([x, z]) => ({ x: x * WORLD_LAYOUT_SCALE, z: z * WORLD_LAYOUT_SCALE }));
+  // 回程：K → 池塘西北缘外开敞水面 → 与 W0 处岸线切线对齐
   const islandApproachFlat = [
-    { x: -7.6, z: 25.9 }, // 远端引导点：让 K 引桥顺着接驳射线进弯，衔接更顺
-    { x: -8.9, z: 20.1 },
-    { x: -10.2, z: 14.3 },
-    { x: -11.1, z: 10.4 },
-  ];
+    [-7.6, 25.9],
+    [-8.9, 20.1],
+    [-10.2, 14.3],
+    [-11.1, 10.4],
+  ].map(([x, z]) => ({ x: x * WORLD_LAYOUT_SCALE, z: z * WORLD_LAYOUT_SCALE }));
   const controls = [
     ...islandRideFlat.map(({ x, z }) => toWorld(x, z)),
     latLonToDir(-10, -60).multiplyScalar(R + 0.3), // G 跨赤道，进入长距离悬空引桥

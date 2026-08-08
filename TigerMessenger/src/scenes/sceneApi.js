@@ -27,7 +27,7 @@
  * @property {object} [hills]
  * @property {object} [clouds]
  * @property {object} [lake]
- * @property {object} [greatLake]
+
  * @property {object} [landmarks]
  * @property {object} [group]     根 Group，便于 dispose
  * @property {(dt:number, t:number, runtime:object) => void} [update]

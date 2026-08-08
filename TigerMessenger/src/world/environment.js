@@ -7,7 +7,7 @@ import { P } from "../core/params.js";
 export function setupEnvironment(scene) {
   // ---------- 光照：暖日光配青绿天光，保持 Cel 色块 ----------
   // 纯白强环境光（默认 1.35）：Cel/Toon 高饱和色块全亮，禁止死黑面
-  const ambient = new THREE.AmbientLight(0xffffff, P.ambientIntensity ?? 1.35);
+  const ambient = new THREE.AmbientLight(0xffffff, P.ambientIntensity ?? 1.4);
   scene.add(ambient);
 
   const hemi = new THREE.HemisphereLight(0xffffff, 0xf0e6e0, 0.72);
