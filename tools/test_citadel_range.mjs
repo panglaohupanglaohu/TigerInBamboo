@@ -129,6 +129,17 @@ assert(moatSpec?.outerRadius > moatSpec.innerRadius, "护城河外径应大于�
 // 护城河外径必须覆盖旧港码头（码头在 range 局部 ~(-14.7,42.7)，距圆心半径约 45）
 assert(moatSpec?.outerRadius >= 45, "护城河外径必须放大到覆盖旧港码头（半径≈45）");
 assert(range.moat.userData.harborPadLocal?.lx != null, "护城河应提供港口垫局部坐标");
+// 低多边形特洛伊木马：护城河内径瀑布右侧广场
+assert(range.trojanHorse?.isGroup, "特洛伊木马组缺失");
+assert.equal(range.trojanHorse.name, "citadel-trojan-horse");
+let troyParts = 0;
+range.trojanHorse.traverse((o) => { if (o.isMesh) troyParts++; });
+assert(troyParts >= 30, "木马应由 30+ 个低模积木拼块构成");
+const troyRadius = Math.hypot(range.trojanHorse.userData.rangeLocal.lx,
+  range.trojanHorse.userData.rangeLocal.lz);
+assert(troyRadius < moatSpec.innerRadius, "木马必须落在护城河内径以内");
+assert(range.trojanHorse.userData.rangeLocal.lx > 8,
+  "木马必须位于朝圣水阶(瀑布)的右侧(+lx)");
 assert.equal(range.vegetation, null, "山坡散灌木必须删除");
 assert.equal(range.loessGroundSeal, null, "近地面的旧黄土封口层必须删除");
 assert.equal(range.castleFooting, null, "近地面的旧城堡承台层必须删除");
