@@ -1,17 +1,19 @@
 // ============================================================================
-//  Odyssey Citadel — five-layer, native Three.js landmark asset factory
+//  Odyssey Citadel — Townscaper 式规则生成的高山圣城
 //
 //  Local convention: +Y = sky / planet normal, +Z = the player-facing facade.
-//  Every visible primitive is assembled below `citadelAssembly`, outlined once,
-//  and only then attached to the returned `castleContainer`.
+//  建筑本体由 citadelTown.js 的单元格地图 + 邻接规则生成；本文件负责
+//  断崖基岩、五层台地/折返石阶外围地势、水墨描边与球面放置。
 // ============================================================================
 import * as THREE from "three";
 import { addOutline } from "../assets/toon.js";
 import { PLAYER_HEIGHT } from "../core/constants.js";
 import { canyonOffsetDir } from "./canyon.js";
+import { CITADEL_TOWN_SPEC, buildCitadelTown } from "./citadelTown.js";
 
 const PALETTE = Object.freeze({
-  cliff: 0x4a4a4a,
+  // 浅色系基岩与土坡：与黄土坡/白石梯湖的暖色盘统一，弃用深灰。
+  cliff: 0xcfc5a2,
   stone: 0xe5eff2,
   weatherStone: 0xb8c5c9,
   ink: 0x2a2b2d,
@@ -22,34 +24,42 @@ const PALETTE = Object.freeze({
   domeShade: 0xbdc6c4,
   towerStone: 0xd6d8d4,
   towerShade: 0xaeb8b7,
+  // 小镇字符配色：W 白石（stone）/ L 浅砂石 / B 淡砖角塔 / D 棕色正门。
+  sandStone: 0xd9cfac,
+  paleBrick: 0xcaa88c,
+  roofTile: 0xb4694e, // 坡屋顶/尖顶瓦红（Townscaper 式暖陶瓦）
+  water: 0x8fc7d6, // 水道水面（与梯湖水帘同色系）
   foliageDark: 0x365c3b,
   foliageLight: 0x628253,
   bark: 0x59452d,
-  contour: 0x555555,
-  pilgrimageStone: 0x9aa4a6,
+  contour: 0xcfc49a,
+  pilgrimageStone: 0xe3ddc7,
 });
 
 export const CITADEL = Object.freeze({
-  layer0: { rockRadius: 6.5, rockCount: 7, centerY: 4.0 },
-  layer1: { width: 24.0, height: 12.0, depth: 24.0, y: 10.0, z: 0.0 },
-  layer2: { width: 16.0, height: 10.0, depth: 16.0, y: 21.0, z: -4.0 },
-  layer3: { width: 9.0, height: 8.0, depth: 9.0, y: 30.0, z: -7.5 },
-  bastion: { width: 4.5, height: 16.0, depth: 4.5, x: 9.0, y: 16.0, z: 5.0 },
-  mainDome: { radius: 3.5, y: 34.0, z: -7.5, stretchY: 1.35 },
-  secondaryDome: { radius: 2.2, localX: 6.5, localY: 5.0, localZ: 6.5 },
+  layer0: { rockRadius: 2.3, rockCount: 7, centerY: 11.2 },
   outline: 0.055,
   finialHeight: PLAYER_HEIGHT * 2.0,
-  mainCastleScale: 0.5,
-  mainCastleLift: 12.0,
+  // 规则生成的小镇按最终尺寸直接落地：基座底面咬入顶层台地（Y=12）0.06。
+  townBaseY: 11.94,
+  // 布局包围盒加深（后排离墙附屋 + 水巷）后 cz 居中让前排面/正门前移 1 格；
+  // 整体 −2 补偿，保持正门与门廊平桥/折返石阶的原有对齐。
+  townOffsetZ: -2.0,
   contourTerrain: {
     layerCount: 5,
     layerHeight: 2.0,
     baseRadius: 24.0,
     shrink: 0.9,
     radialSegments: 12,
+    // 瀑布缺口：前四层台地在朝向梯湖/水帘的方位角扇区开槽，露出瀑布；
+    // 缺口不切入 coreRadius 实心核，城堡基座始终落在实土上。
+    coreRadius: 9.0,
+    notchCenter: 0.17, // 方位角 φ（从 +z 朝 +x 量）≈ 10°，正对梯湖水道
+    notchHalf: 0.56, // 半角 ≈ 32°，完整覆盖两座上级梯湖与水帘落点
+    notchedLayers: 4, // 仅前四层开槽；顶层台地完整，托住城堡与门廊平桥
   },
-  // Sink the complete five-layer assembly deeper into the loess summit so
-  // cliff claws, gatehouse and flanking towers share one grounded datum.
+  // Sink the complete town assembly deeper into the loess summit so
+  // cliff claws and the gate threshold share one grounded datum.
   groundEmbed: 9.25,
 });
 
@@ -58,6 +68,14 @@ const _up = new THREE.Vector3();
 const _forward = new THREE.Vector3();
 const _right = new THREE.Vector3();
 const _basis = new THREE.Matrix4();
+
+/** 地形编辑器（圣城搭建面板）与主场景启动共用的台地参数存档键。 */
+export const CITADEL_TERRAIN_KEY = "tm.citadel.terrain.v1";
+
+/** 台地参数 → 镇体基座高度：顶层台面（Y = 2 + 层高×层数）咬入 0.06。 */
+export function contourTownBaseY(contourSpec = CITADEL.contourTerrain) {
+  return 2 + contourSpec.layerHeight * contourSpec.layerCount - 0.06;
+}
 
 function lcg(seed) {
   let state = seed >>> 0;
@@ -120,20 +138,6 @@ function makeArchedWindowGeometry() {
   return geometry;
 }
 
-function addBifora(parent, geometry, material, x, y, z, rotationY = 0, name = "bifora") {
-  const pair = new THREE.Group();
-  pair.name = `${name}-pair`;
-  pair.position.set(x, y, z);
-  pair.rotation.y = rotationY;
-  for (const sx of [-0.27, 0.27]) {
-    const arch = mesh(geometry, material, `${name}-arch`, 0.022);
-    arch.position.x = sx;
-    pair.add(arch);
-  }
-  parent.add(pair);
-  return pair;
-}
-
 function buildHalfDome(radius, material, name, stretchY = 1.0) {
   const dome = mesh(
     new THREE.SphereGeometry(
@@ -150,72 +154,6 @@ function buildHalfDome(radius, material, name, stretchY = 1.0) {
   );
   dome.scale.set(1.0, stretchY, 1.0);
   return dome;
-}
-
-function addCrenellatedRim(
-  parent,
-  material,
-  { halfX, halfZ, baseY, name = "crenel", size = 0.5, height = 0.8, step = 1.0 }
-) {
-  const geometry = new THREE.BoxGeometry(size, height, size);
-  let count = 0;
-  // Four edges × unit stepping. The 0.5-wide merlon followed by 0.5 of air
-  // creates the requested continuous solid/gap rhythm.
-  for (let side = 0; side < 4; side++) {
-    const alongX = side < 2;
-    const sign = side % 2 === 0 ? 1 : -1;
-    const halfRun = alongX ? halfX : halfZ;
-    const units = Math.round((halfRun * 2) / step);
-    for (let i = 0; i <= units; i++) {
-      const u = -halfRun + i * step;
-      const merlon = mesh(geometry, material, name, 0.032);
-      merlon.position.set(
-        alongX ? u : sign * halfX,
-        baseY + height / 2,
-        alongX ? sign * halfZ : u
-      );
-      parent.add(merlon);
-      count++;
-    }
-  }
-  return count;
-}
-
-function buildMinaret(name, x, z, materials) {
-  const tower = new THREE.Group();
-  tower.name = name;
-  tower.position.set(x, 0, z);
-
-  const lower = mesh(
-    new THREE.CylinderGeometry(1.2, 1.45, 20.0, 6),
-    materials.stone,
-    `${name}-lower`
-  );
-  lower.position.y = 16.0;
-  tower.add(lower);
-
-  const balcony = mesh(
-    new THREE.CylinderGeometry(1.9, 1.9, 0.55, 6),
-    materials.stone,
-    `${name}-balcony`,
-    0.04
-  );
-  balcony.position.y = 26.25;
-  tower.add(balcony);
-
-  const needle = mesh(
-    new THREE.CylinderGeometry(0.42, 0.58, 7.0, 6),
-    materials.stone,
-    `${name}-upper`
-  );
-  needle.position.y = 30.0;
-  tower.add(needle);
-
-  const cap = buildHalfDome(1.05, materials.gold, `${name}-gold-cap`, 1.25);
-  cap.position.y = 33.5;
-  tower.add(cap);
-
-  return tower;
 }
 
 function buildCitadelShrub(name, scale, materials, random) {
@@ -272,31 +210,8 @@ function buildCitadelRoundTopiary(name, scale, materials, random) {
   return topiary;
 }
 
-function addDomeRibs(parent, material, radius, stretchY) {
-  for (let i = 0; i < 10; i++) {
-    const angle = (i / 10) * Math.PI * 2;
-    const radial = new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
-    const curve = new THREE.QuadraticBezierCurve3(
-      radial.clone().multiplyScalar(radius * 0.985),
-      new THREE.Vector3(
-        radial.x * radius * 0.72,
-        radius * stretchY * 0.78,
-        radial.z * radius * 0.72
-      ),
-      new THREE.Vector3(0, radius * stretchY, 0)
-    );
-    const rib = mesh(
-      new THREE.TubeGeometry(curve, 8, 0.025, 4, false),
-      material,
-      "main-dome-rib",
-      0.014
-    );
-    parent.add(rib);
-  }
-}
-
-/** Add inverse-hull ink only after the complete five-layer assembly exists. */
-function applyInkOutlines(assembly) {
+/** Add inverse-hull ink only after the complete town assembly exists. */
+export function applyInkOutlines(assembly) {
   const surfaces = [];
   assembly.traverse((object) => {
     if (object.isMesh && !object.userData.isOutline) surfaces.push(object);
@@ -313,81 +228,204 @@ function applyInkOutlines(assembly) {
 }
 
 /**
- * Full-scale terrain apron around the half-scale sacred city. This remains a
- * sibling of the five architectural layers so the contour mountain and its
- * exposed pilgrimage stair keep their full dimensions when the city is 1/2.
+ * Annular terrace sector: a flat-topped ring slab from `innerRadius` to
+ * `radius`, missing the waterfall notch wedge centered at
+ * `notchCenter ± notchHalf`. Azimuth convention matches cylinder placement:
+ * x = r·sinφ, z = r·cosφ (φ = 0 faces the facade / cascade channel).
  */
-function buildOuterCitadelTerrain(materials) {
+function makeTerraceRingGeometry(radius, innerRadius, height, notchCenter, notchHalf) {
+  // Shape angle α relates to φ by α = φ - π/2 (extrude plane maps (sx, sy)
+  // onto world (x, -z) after rotateX(-π/2)).
+  const aStart = notchCenter + notchHalf - Math.PI / 2;
+  const aEnd = notchCenter - notchHalf + Math.PI * 1.5;
+  const shape = new THREE.Shape();
+  shape.moveTo(radius * Math.cos(aStart), radius * Math.sin(aStart));
+  shape.absarc(0, 0, radius, aStart, aEnd, false);
+  shape.lineTo(innerRadius * Math.cos(aEnd), innerRadius * Math.sin(aEnd));
+  shape.absarc(0, 0, innerRadius, aEnd, aStart, true);
+  shape.closePath();
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: height,
+    bevelEnabled: false,
+    curveSegments: 18,
+  });
+  geometry.rotateX(-Math.PI / 2); // 挤出方向转为 +Y，台板厚 [0, height]
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+/**
+ * Full-scale terrain apron around the sacred city shrunk to 4/5 of its former
+ * size. This remains a sibling of the five architectural layers so the
+ * contour mountain and its exposed pilgrimage stair keep their full
+ * dimensions when the city is scaled down.
+ *
+ * @param {Record<string, THREE.Material>} materials
+ * @param {typeof CITADEL.contourTerrain} contourSpec 台地参数（地形编辑器可调）
+ */
+function buildOuterCitadelTerrain(materials, contourSpec = CITADEL.contourTerrain) {
   const terrainSystem = new THREE.Group();
   terrainSystem.name = "citadel-outer-terrain-system";
 
-  // Five hard-edged, twelve-sided contour shelves. Their two-unit slabs touch
-  // exactly, avoiding both z-fighting and daylight gaps through the mountain.
+  // Five hard-edged, twelve-sided contour shelves. The lower four are ring
+  // sectors with a front wedge notch toward the stepped lakes, so the four
+  // waterfall curtains stay exposed instead of being buried under the slope;
+  // a solid core (and the un-notched top shelf) keeps the citadel grounded.
   const contourGroup = new THREE.Group();
   contourGroup.name = "contour-step-terrain";
-  const contourSpec = CITADEL.contourTerrain;
   for (let i = 0; i < contourSpec.layerCount; i++) {
     const radius = contourSpec.baseRadius * contourSpec.shrink ** i;
+    const shelfBottom = 2.0 + contourSpec.layerHeight * i;
+    const notched = i < contourSpec.notchedLayers;
     const shelf = mesh(
-      new THREE.CylinderGeometry(
-        radius,
-        radius,
-        contourSpec.layerHeight,
-        contourSpec.radialSegments
-      ),
+      notched
+        ? makeTerraceRingGeometry(
+            radius,
+            contourSpec.coreRadius,
+            contourSpec.layerHeight,
+            contourSpec.notchCenter,
+            contourSpec.notchHalf
+          )
+        : new THREE.CylinderGeometry(
+            radius,
+            radius,
+            contourSpec.layerHeight,
+            contourSpec.radialSegments
+          ),
       materials.contour,
       `contour-step-${i}`
     );
     // The castleContainer is already buried into the summit. Starting these
     // shelves two units higher keeps their lower mass underground while the
-    // fifth shelf lands exactly at Y=12 beneath the exposed pilgrimage route.
-    shelf.position.y = 2.0 + contourSpec.layerHeight * (i + 0.5);
-    shelf.rotation.y = (i % 2) * (Math.PI / contourSpec.radialSegments);
+    // fifth shelf lands exactly at Y=12 beneath the citadel gate threshold.
+    shelf.position.y = notched ? shelfBottom : shelfBottom + contourSpec.layerHeight / 2;
+    if (!notched) shelf.rotation.y = (i % 2) * (Math.PI / contourSpec.radialSegments);
     shelf.userData.contourIndex = i;
     shelf.userData.contourRadius = radius;
     contourGroup.add(shelf);
+    if (notched) {
+      // Solid core fills the notch's inner end: the castle footing and the
+      // gate causeway always rest on real soil, never over the slot.
+      const core = mesh(
+        new THREE.CylinderGeometry(
+          contourSpec.coreRadius,
+          contourSpec.coreRadius,
+          contourSpec.layerHeight,
+          contourSpec.radialSegments
+        ),
+        materials.contour,
+        `contour-step-${i}-core`
+      );
+      core.position.y = shelfBottom + contourSpec.layerHeight / 2;
+      core.userData.contourIndex = i;
+      core.userData.contourRadius = contourSpec.coreRadius;
+      contourGroup.add(core);
+    }
   }
   terrainSystem.add(contourGroup);
 
-  // Three legs create two explicit right-angle switchbacks. The stair blocks
-  // climb continuously from the outer wall datum to the scaled main gate.
+  // 之字形朝圣石阶：五段梯段一一对应五层台地，在左前坡（负方位角，避开
+  // 瀑布缺口）左右折返，各段弧长不同 → 坡度各不相同，绝非直上直下。
+  // 每级踏步向下落梁嵌入下层台面，顶段经平桥直抵棕色木门廊（正门）。
   const pilgrimageRamp = new THREE.Group();
   pilgrimageRamp.name = "winding-pilgrimage-ramp";
-  const route = [
-    new THREE.Vector2(-13.0, 12.2),
-    new THREE.Vector2(-4.0, 12.2),
-    new THREE.Vector2(-4.0, 4.8),
-    new THREE.Vector2(0.0, 4.8),
+  const shelfTop = (k) => 2.0 + contourSpec.layerHeight * (k + 1); // 第 k 层台面
+  const shelfRadius = (k) => contourSpec.baseRadius * contourSpec.shrink ** k;
+  // φ：从 +z（正门/瀑布方向）朝 +x 量；负角 = 左前坡。
+  const flights = [
+    { from: -0.87, to: -1.5, shelf: 0, groundY: 1.0 },   // 山脚缓坡长段
+    { from: -1.5, to: -0.91, shelf: 1 },                 // 折返
+    { from: -0.91, to: -1.47, shelf: 2 },                // 折返
+    { from: -1.47, to: -0.94, shelf: 3 },                // 折返
+    { from: -0.94, to: -1.4, shelf: 4 },                 // 顶层较短较陡
   ];
-  const stepsPerLeg = [12, 10, 10];
-  const stepGeometry = new THREE.BoxGeometry(1.85, 0.24, 0.9);
-  const totalSteps = stepsPerLeg.reduce((sum, count) => sum + count, 0);
+  const stepGeometry = new THREE.BoxGeometry(1.85, 1, 1.45);
   let stepIndex = 0;
-  for (let leg = 0; leg < stepsPerLeg.length; leg++) {
-    const from = route[leg];
-    const to = route[leg + 1];
-    const count = stepsPerLeg[leg];
-    const dx = to.x - from.x;
-    const dz = to.y - from.y;
-    const yaw = Math.atan2(dx, dz);
+  for (const flight of flights) {
+    const k = flight.shelf;
+    const rho = shelfRadius(k) + 1.05; // 沿第 k 层立面外侧、下层台面的暴露环带
+    const yTop = shelfTop(k) + 0.06;
+    const yBottom = k === 0 ? flight.groundY : shelfTop(k - 1) + 0.06;
+    const supportY = k === 0 ? -0.6 : shelfTop(k - 1) - 0.35; // 落梁嵌入下层台面
+    const arc = rho * Math.abs(flight.to - flight.from);
+    // 踏面沿行进方向互相交叠：整段读作实心石梯，而不是一排悬空立柱。
+    const count = Math.max(6, Math.round(arc / 0.78));
+    const sweep = Math.sign(flight.to - flight.from);
     for (let i = 0; i < count; i++, stepIndex++) {
-      const legT = count === 1 ? 0 : i / (count - 1);
-      const climbT = stepIndex / (totalSteps - 1);
+      const t = count === 1 ? 0 : i / (count - 1);
+      const phi = THREE.MathUtils.lerp(flight.from, flight.to, t);
+      const treadY = THREE.MathUtils.lerp(yBottom, yTop, t);
+      const height = treadY - supportY;
       const step = mesh(
         stepGeometry,
         materials.pilgrimageStone,
         `pilgrimage-step-${stepIndex}`,
-        0.035
+        0.02
       );
+      step.scale.y = height;
       step.position.set(
-        THREE.MathUtils.lerp(from.x, to.x, legT),
-        THREE.MathUtils.lerp(12.0, 21.0, climbT),
-        THREE.MathUtils.lerp(from.y, to.y, legT)
+        rho * Math.sin(phi),
+        supportY + height / 2,
+        rho * Math.cos(phi)
       );
-      step.rotation.y = yaw;
+      // 踏步长边垂直于行进方向（沿圆弧切向行走）
+      step.rotation.y = Math.atan2(Math.cos(phi) * sweep, -Math.sin(phi) * sweep);
       pilgrimageRamp.add(step);
     }
+    // 梯口平台：横跨台地边缘，把梯段端头接上本层台面。
+    const landing = mesh(
+      new THREE.BoxGeometry(2.7, 0.55, 2.8),
+      materials.pilgrimageStone,
+      `pilgrimage-landing-${k}`,
+      0.04
+    );
+    landing.position.set(
+      (rho - 1.15) * Math.sin(flight.to),
+      yTop - 0.22,
+      (rho - 1.15) * Math.cos(flight.to)
+    );
+    landing.rotation.y = flight.to;
+    pilgrimageRamp.add(landing);
   }
+  // 顶端平桥：从末段梯口跨越顶层台面；末端收窄成门槛条，穿过瓮城双塔
+  // 直抵棕色木门廊柱前（门廊柱 z = 15.72×0.4 ≈ 6.29，门槛 ≈ Y 12.0）。
+  const causewayFrom = new THREE.Vector2(
+    15.4 * Math.sin(-1.4),
+    15.4 * Math.cos(-1.4)
+  );
+  const causewayTo = new THREE.Vector2(0, 7.9);
+  const causewayYaw = Math.atan2(
+    causewayTo.x - causewayFrom.x,
+    causewayTo.y - causewayFrom.y
+  );
+  const causewayLength = causewayFrom.distanceTo(causewayTo);
+  const causewayCount = Math.round(causewayLength / 1.9);
+  const causewayGeometry = new THREE.BoxGeometry(1.9, 0.55, 2.05);
+  for (let i = 0; i < causewayCount; i++, stepIndex++) {
+    const t = causewayCount === 1 ? 0 : i / (causewayCount - 1);
+    const slab = mesh(
+      causewayGeometry,
+      materials.pilgrimageStone,
+      `pilgrimage-step-${stepIndex}`,
+      0.025
+    );
+    slab.position.set(
+      THREE.MathUtils.lerp(causewayFrom.x, causewayTo.x, t),
+      shelfTop(4) + 0.02,
+      THREE.MathUtils.lerp(causewayFrom.y, causewayTo.y, t)
+    );
+    slab.rotation.y = causewayYaw;
+    pilgrimageRamp.add(slab);
+  }
+  // 门槛条：宽 1.3 < 瓮城双塔喉道（±0.68），把平桥接到门廊柱跟前。
+  const threshold = mesh(
+    new THREE.BoxGeometry(1.3, 0.55, 1.5),
+    materials.pilgrimageStone,
+    `pilgrimage-step-${stepIndex++}`,
+    0.025
+  );
+  threshold.position.set(0, shelfTop(4) + 0.02, 7.05);
+  pilgrimageRamp.add(threshold);
   terrainSystem.add(pilgrimageRamp);
 
   terrainSystem.userData.contourLayerCount = contourSpec.layerCount;
@@ -395,9 +433,95 @@ function buildOuterCitadelTerrain(materials) {
   terrainSystem.userData.buttressCount = 0;
   terrainSystem.userData.watchtowerCount = 0;
   terrainSystem.userData.watchtowerCrenelCount = 0;
-  terrainSystem.userData.pilgrimageStepCount = totalSteps;
-  terrainSystem.userData.rampTurnCount = route.length - 2;
+  terrainSystem.userData.pilgrimageStepCount = stepIndex;
+  terrainSystem.userData.pilgrimageFlightCount = flights.length;
+  terrainSystem.userData.rampTurnCount = flights.length - 1;
+  terrainSystem.userData.waterfallNotchLayers = contourSpec.notchedLayers;
   return terrainSystem;
+}
+
+/**
+ * Townscaper 规则小镇的独立装配：创建全套 toon 材质与 gradientMap，按
+ * `CITADEL.townBaseY` 摆好各 level 组（未做水墨描边——由调用方在装配
+ * 完成后统一 `applyInkOutlines`，避免重复描边）。
+ *
+ * `buildOdysseyCitadel` 与 Townscaper 编辑器（townscaper.html）共用本函数，
+ * 保证编辑器预览与主场景渲染走同一份材质/规则代码。
+ *
+ * @param {typeof CITADEL_TOWN_SPEC} spec 逐层 ASCII 布局
+ * @param {{
+ *   random?: () => number,
+ *   materials?: Record<string, THREE.Material>, // 传入则复用，不再自建
+ *   gradientMap?: THREE.DataTexture,
+ *   baseY?: number, // 镇体基座高度（默认 CITADEL.townBaseY；地形改层高后跟随顶层台面）
+ * }} [options]
+ * @returns {{
+ *   group: THREE.Group,      // 全部 level 组的容器（y 已就位）
+ *   levels: THREE.Group[],   // 未归物理层的 level 组
+ *   stats: object,
+ *   materials: Record<string, THREE.Material>,
+ *   gradientMap: THREE.DataTexture,
+ * }}
+ */
+export function buildCitadelTownAssembly(spec, options = {}) {
+  const random = options.random ?? lcg(20260808);
+  const gradientMap = options.gradientMap ?? makeThreeStepGradient();
+
+  const materials = options.materials ?? {
+    cliff: makeToon(PALETTE.cliff, gradientMap),
+    stone: makeToon(PALETTE.stone, gradientMap),
+    weatherStone: makeToon(PALETTE.weatherStone, gradientMap),
+    ink: makeToon(PALETTE.ink, gradientMap),
+    wood: makeToon(PALETTE.wood, gradientMap),
+    gold: makeToon(PALETTE.domeIvory, gradientMap),
+    goldShade: makeToon(PALETTE.domeShade, gradientMap),
+    sand: makeToon(PALETTE.sandStone, gradientMap),
+    brickPale: makeToon(PALETTE.paleBrick, gradientMap),
+    roofTile: makeToon(PALETTE.roofTile, gradientMap),
+    water: makeToon(PALETTE.water, gradientMap),
+    foliageDark: makeToon(PALETTE.foliageDark, gradientMap),
+    foliageLight: makeToon(PALETTE.foliageLight, gradientMap),
+    bark: makeToon(PALETTE.bark, gradientMap),
+    contour: makeToon(PALETTE.contour, gradientMap),
+    pilgrimageStone: makeToon(PALETTE.pilgrimageStone, gradientMap),
+  };
+  if (materials.water) {
+    materials.water.transparent = true;
+    materials.water.opacity = 0.82;
+  }
+
+  const town = buildCitadelTown(spec, {
+    mesh,
+    materials: {
+      W: materials.stone,
+      L: materials.sand,
+      B: materials.brickPale,
+      D: materials.stone,
+      gold: materials.gold,
+      wood: materials.wood,
+      ink: materials.ink,
+      roofTile: materials.roofTile,
+      water: materials.water,
+    },
+    shrubMaterials: materials,
+    random,
+    archWindowGeometry: makeArchedWindowGeometry(),
+    buildHalfDome,
+    buildShrub: buildCitadelShrub,
+    buildTopiary: buildCitadelRoundTopiary,
+    finialHeight: CITADEL.finialHeight,
+  });
+
+  const group = new THREE.Group();
+  group.name = "citadel-town-assembly";
+  const baseY = options.baseY ?? CITADEL.townBaseY;
+  town.levels.forEach((levelGroup) => {
+    levelGroup.position.y = baseY;
+    levelGroup.position.z = CITADEL.townOffsetZ; // 正门对齐补偿（见 CITADEL 注释）
+    group.add(levelGroup);
+  });
+
+  return { group, levels: town.levels, stats: town.stats, materials, gradientMap };
 }
 
 /**
@@ -410,11 +534,16 @@ function buildOuterCitadelTerrain(materials) {
  *   groundRadius?: number,
  *   seed?: number,
  *   place?: boolean,
+ *   spec?: typeof CITADEL_TOWN_SPEC, // 小镇布局覆盖（编辑器存档）；缺省用内置 SPEC
+ *   contour?: typeof CITADEL.contourTerrain, // 台地参数覆盖（地形编辑器存档）
  * }} [options]
  * @returns {THREE.Group & {update(dt:number, t:number):void}}
  */
 export function buildOdysseyCitadel(options = {}) {
   const random = lcg(options.seed ?? 20260808);
+  const townSpec = options.spec ?? CITADEL_TOWN_SPEC;
+  const contourSpec = options.contour ?? CITADEL.contourTerrain;
+  const townBaseY = contourTownBaseY(contourSpec);
   const planetRadius = Number.isFinite(options.planetRadius) ? options.planetRadius : 160;
   const gradientMap = makeThreeStepGradient();
 
@@ -426,8 +555,10 @@ export function buildOdysseyCitadel(options = {}) {
     wood: makeToon(PALETTE.wood, gradientMap),
     gold: makeToon(PALETTE.domeIvory, gradientMap),
     goldShade: makeToon(PALETTE.domeShade, gradientMap),
-    brick: makeToon(PALETTE.towerStone, gradientMap),
-    brickShade: makeToon(PALETTE.towerShade, gradientMap),
+    sand: makeToon(PALETTE.sandStone, gradientMap),
+    brickPale: makeToon(PALETTE.paleBrick, gradientMap),
+    roofTile: makeToon(PALETTE.roofTile, gradientMap),
+    water: makeToon(PALETTE.water, gradientMap),
     foliageDark: makeToon(PALETTE.foliageDark, gradientMap),
     foliageLight: makeToon(PALETTE.foliageLight, gradientMap),
     bark: makeToon(PALETTE.bark, gradientMap),
@@ -455,7 +586,7 @@ export function buildOdysseyCitadel(options = {}) {
   for (let i = 0; i < CITADEL.layer0.rockCount; i++) {
     const rock = mesh(rockGeometry, materials.cliff, `primordial-cliff-rock-${i}`);
     const angle = (i / CITADEL.layer0.rockCount) * Math.PI * 2 + (random() - 0.5) * 0.45;
-    const spread = i === 0 ? 0 : 5.2 + random() * 2.3;
+    const spread = i === 0 ? 0 : 2.2 + random() * 1.5;
     rock.position.set(
       Math.cos(angle) * spread,
       CITADEL.layer0.centerY + (random() - 0.5) * 0.8,
@@ -471,627 +602,27 @@ export function buildOdysseyCitadel(options = {}) {
   }
 
   // --------------------------------------------------------------------------
-  // Layer 1 — 24 × 12 × 24 mega bastion, crenels, gate and timber portico
+  // Layers 1–4 —— Townscaper 式规则生成小镇（citadelTown.js）
+  // 布局只由 CITADEL_TOWN_SPEC 的逐层 ASCII 决定；体块/穹顶/城垛/拱窗/
+  // 悬空拱/塔楼金顶/屋顶花园/棕色正门全部由邻接规则自动生成。
   // --------------------------------------------------------------------------
-  const L1 = CITADEL.layer1;
-  const bastionBase = mesh(
-    new THREE.BoxGeometry(L1.width, L1.height, L1.depth),
-    materials.stone,
-    "mega-bastion-box"
-  );
-  bastionBase.position.set(0.0, 10.0, 0.0);
-  layers[1].add(bastionBase);
-
-  // Native-geometry masonry relief: shallow course bands, alternating corner
-  // quoins and chipped scars break the otherwise perfectly smooth box without
-  // textures, normal maps or global shader state.
-  // Tall vertical buttresses replace the previous horizontal stripe courses.
-  // Their uninterrupted rise gives the enceinte the reference image's load-
-  // bearing rhythm instead of reading as stacked modern concrete slabs.
-  for (const x of [-10.2, -7.3, -4.4, 4.4, 7.3, 10.2]) {
-    const frontPilaster = mesh(
-      new THREE.BoxGeometry(0.24, 10.4, 0.16),
-      materials.weatherStone,
-      "bastion-vertical-pilaster",
-      0.018
-    );
-    frontPilaster.position.set(x, 10.0, 12.085);
-    layers[1].add(frontPilaster);
-  }
-  for (const side of [-1, 1]) {
-    for (const z of [-9.5, -5.5, -1.5, 2.5, 6.5, 10.0]) {
-      const sidePilaster = mesh(
-        new THREE.BoxGeometry(0.16, 10.4, 0.24),
-        materials.weatherStone,
-        "bastion-vertical-pilaster",
-        0.018
-      );
-      sidePilaster.position.set(side * 12.085, 10.0, z);
-      layers[1].add(sidePilaster);
-    }
-  }
-  for (const side of [-1, 1]) {
-    for (let row = 0; row < 9; row++) {
-      const wide = row % 2 === 0;
-      const quoin = mesh(
-        new THREE.BoxGeometry(wide ? 1.15 : 0.82, 0.62, 0.16),
-        materials.stone,
-        "bastion-corner-quoin",
-        0.022
-      );
-      quoin.position.set(side * (wide ? 11.48 : 11.62), 5.0 + row * 1.22, 12.09);
-      layers[1].add(quoin);
-    }
-  }
-  for (let i = 0; i < 9; i++) {
-    const scar = mesh(
-      new THREE.BoxGeometry(0.48 + random() * 0.58, 0.09, 0.08),
-      materials.weatherStone,
-      "bastion-erosion-scar",
-      0.012
-    );
-    scar.position.set(-8.8 + random() * 17.6, 6.0 + random() * 8.6, 12.088);
-    scar.rotation.z = (random() - 0.5) * 0.7;
-    layers[1].add(scar);
-  }
-
-  const merlonCount = addCrenellatedRim(layers[1], materials.stone, {
-    halfX: 11.75,
-    halfZ: 11.75,
-    baseY: 16.0,
-    name: "bastion-crenel",
-    size: 0.5,
-    height: 1.4,
-    step: 1.0,
+  // 复用与编辑器（townscaper.html）相同的装配入口；random 已被 Layer 0
+  // 断崖消耗过，此处继续同一序列，保证渲染结果与重构前逐位一致。
+  const townAssembly = buildCitadelTownAssembly(townSpec, {
+    random,
+    materials,
+    gradientMap,
+    baseY: townBaseY,
   });
-
-  const gateRecess = mesh(
-    new THREE.BoxGeometry(3.0, 4.8, 0.12),
-    materials.ink,
-    "gate-recess",
-    0.03
-  );
-  gateRecess.position.set(0.0, 6.85, 14.826);
-  layers[1].add(gateRecess);
-
-  const lowerGatehouse = mesh(
-    new THREE.BoxGeometry(5.4, 7.5, 4.0),
-    materials.stone,
-    "lower-ceremonial-gatehouse"
-  );
-  lowerGatehouse.position.set(0, 8.0, 12.78);
-  layers[1].add(lowerGatehouse);
-  const gatehouseCornice = mesh(
-    new THREE.BoxGeometry(5.75, 0.28, 4.35),
-    materials.weatherStone,
-    "lower-gatehouse-cornice",
-    0.024
-  );
-  gatehouseCornice.position.set(0, 11.68, 12.78);
-  layers[1].add(gatehouseCornice);
-
-  // Twin forward octagonal capped towers form the barbican (瓮城). They sit
-  // proud of the curtain wall and leave a protected central gate throat.
-  const barbicanTowerGeometry = new THREE.CylinderGeometry(2.35, 2.35, 9.2, 8);
-  for (const side of [-1, 1]) {
-    const x = side * 4.05;
-    const tower = mesh(
-      barbicanTowerGeometry,
-      materials.stone,
-      `barbican-${side < 0 ? "left" : "right"}-tower`
-    );
-    tower.position.set(x, 8.6, 14.0);
-    tower.rotation.y = Math.PI / 8;
-    layers[1].add(tower);
-
-    const collar = mesh(
-      new THREE.CylinderGeometry(2.5, 2.5, 0.34, 8),
-      materials.weatherStone,
-      "barbican-tower-collar",
-      0.028
-    );
-    collar.position.set(x, 13.18, 14.0);
-    collar.rotation.y = Math.PI / 8;
-    layers[1].add(collar);
-
-    const cap = buildHalfDome(2.28, materials.gold, "barbican-golden-cap", 1.16);
-    cap.position.set(x, 13.32, 14.0);
-    layers[1].add(cap);
-
-    const lookout = mesh(
-      new THREE.BoxGeometry(0.72, 1.55, 0.08),
-      materials.ink,
-      "barbican-lookout-window",
-      0.018
-    );
-    lookout.position.set(x, 10.4, 16.31);
-    layers[1].add(lookout);
-  }
-
-  for (const x of [-1.35, 1.35]) {
-    const column = mesh(
-      new THREE.CylinderGeometry(0.22, 0.25, 4.2, 5),
-      materials.wood,
-      "portico-column",
-      0.035
-    );
-    column.position.set(x, 6.95, 15.72);
-    layers[1].add(column);
-  }
-
-  const pediment = mesh(
-    new THREE.ConeGeometry(2.2, 1.0, 4, 1, true),
-    materials.wood,
-    "inverted-portico-pediment",
-    0.04
-  );
-  pediment.position.set(0.0, 9.45, 15.72);
-  pediment.rotation.x = Math.PI;
-  pediment.rotation.y = Math.PI / 4;
-  layers[1].add(pediment);
-
-  // A pair of shallow lintels makes the open four-sided pediment read as a
-  // deliberately cantilevered wooden porch instead of a floating cone.
-  for (const z of [15.12, 16.32]) {
-    const lintel = mesh(
-      new THREE.BoxGeometry(4.7, 0.22, 0.22),
-      materials.wood,
-      "portico-lintel",
-      0.025
-    );
-    lintel.position.set(0, 8.95, z);
-    layers[1].add(lintel);
-  }
-
-  // --------------------------------------------------------------------------
-  // Layer 2 — recessed grand hall, half-hexagonal bays and bifora windows
-  // --------------------------------------------------------------------------
-  const L2 = CITADEL.layer2;
-  const grandHall = mesh(
-    new THREE.BoxGeometry(L2.width, L2.height, L2.depth),
-    materials.stone,
-    "grand-hall"
-  );
-  grandHall.position.set(0.0, 21.0, -4.0);
-  layers[2].add(grandHall);
-
-  for (const [y, width, depth] of [
-    [16.18, 16.55, 16.55],
-    [25.82, 16.35, 16.35],
-  ]) {
-    const cornice = mesh(
-      new THREE.BoxGeometry(width, 0.32, depth),
-      materials.weatherStone,
-      "grand-hall-cornice",
-      0.025
-    );
-    cornice.position.set(0, y, -4);
-    layers[2].add(cornice);
-  }
-
-  const bayGeometry = new THREE.CylinderGeometry(
-    1.2,
-    1.2,
-    8.0,
-    6,
-    1,
-    false,
-    -Math.PI / 2,
-    Math.PI
-  );
-  for (const x of [-6.0, 6.0]) {
-    const bay = mesh(bayGeometry, materials.stone, "ribbed-bay");
-    bay.position.set(x, 21.0, 4.65);
-    layers[2].add(bay);
-  }
-
-  const archGeometry = makeArchedWindowGeometry();
-  let biforaCount = 0;
-  for (const x of [-3.8, 0, 3.8]) {
-    addBifora(layers[2], archGeometry, materials.ink, x, 19.0, 4.026);
-    addBifora(layers[2], archGeometry, materials.ink, x, 22.4, 4.026);
-    biforaCount += 2;
-  }
-  for (const x of [-6.0, 6.0]) {
-    addBifora(layers[2], archGeometry, materials.ink, x, 19.1, 5.87, 0, "bay-bifora");
-    addBifora(layers[2], archGeometry, materials.ink, x, 22.2, 5.87, 0, "bay-bifora");
-    biforaCount += 2;
-  }
-
-  // Exact requested local (6.5, 5.0, 6.5) offset, nested under a terrace
-  // datum whose world/local assembly base is Y=11; the dome therefore seats
-  // onto the first-layer terrace at world-local Y=16.
-  const terraceDatum = new THREE.Group();
-  terraceDatum.name = "secondary-dome-terrace-datum";
-  terraceDatum.position.y = 11.0;
-  const secondaryDome = new THREE.Group();
-  secondaryDome.name = "secondary-golden-dome";
-  secondaryDome.position.set(
-    CITADEL.secondaryDome.localX,
-    CITADEL.secondaryDome.localY,
-    CITADEL.secondaryDome.localZ
-  );
-  const secondaryDrum = mesh(
-    new THREE.CylinderGeometry(1.85, 2.05, 0.65, 10),
-    materials.stone,
-    "secondary-dome-drum",
-    0.04
-  );
-  secondaryDrum.position.y = 0.325;
-  secondaryDome.add(secondaryDrum);
-  const secondaryCap = buildHalfDome(2.2, materials.gold, "secondary-dome-cap", 1.12);
-  secondaryCap.position.y = 0.65;
-  secondaryDome.add(secondaryCap);
-  terraceDatum.add(secondaryDome);
-  layers[2].add(terraceDatum);
-
-  // Asymmetric front chapel: a separate lower volume and dome establish the
-  // reference painting's stepped near/mid/far silhouette instead of a single
-  // centered wedding-cake stack.
-  const frontChapel = mesh(
-    new THREE.BoxGeometry(6.0, 7.0, 5.2),
-    materials.stone,
-    "front-chapel"
-  );
-  frontChapel.position.set(-4.9, 19.5, 5.35);
-  layers[2].add(frontChapel);
-  const frontChapelCornice = mesh(
-    new THREE.BoxGeometry(6.35, 0.28, 5.55),
-    materials.weatherStone,
-    "front-chapel-cornice",
-    0.024
-  );
-  frontChapelCornice.position.set(-4.9, 22.9, 5.35);
-  layers[2].add(frontChapelCornice);
-  const frontChapelDome = buildHalfDome(
-    2.05,
-    materials.gold,
-    "front-chapel-dome",
-    1.18
-  );
-  frontChapelDome.position.set(-4.9, 23.0, 5.35);
-  layers[2].add(frontChapelDome);
-  addBifora(
-    layers[2],
-    archGeometry,
-    materials.ink,
-    -4.9,
-    19.25,
-    7.976,
-    0,
-    "front-chapel-bifora"
-  );
-  biforaCount++;
-
-  // A narrower right-rear gallery climbs between the grand hall and the
-  // sanctuary, creating a second setback plane visible beside the red tower.
-  const steppedGallery = mesh(
-    new THREE.BoxGeometry(5.2, 7.0, 6.0),
-    materials.stone,
-    "stepped-upper-gallery"
-  );
-  steppedGallery.position.set(4.7, 27.0, -6.25);
-  layers[2].add(steppedGallery);
-  const galleryCornice = mesh(
-    new THREE.BoxGeometry(5.55, 0.25, 6.35),
-    materials.weatherStone,
-    "stepped-upper-gallery-cornice",
-    0.022
-  );
-  galleryCornice.position.set(4.7, 30.42, -6.25);
-  layers[2].add(galleryCornice);
-
-  // Greenery on the cliff claws and exposed terraces. All foliage remains
-  // inside the asset and therefore follows the planet tangent frame.
-  const shrubSpots = [
-    { p: [-9.7, 9.0, 8.6], s: 2.15, layer: 0 },
-    { p: [10.6, 8.2, -2.5], s: 1.9, layer: 0 },
-    { p: [-8.7, 16.05, 2.2], s: 1.65, layer: 2 },
-    { p: [7.8, 16.05, -3.8], s: 1.45, layer: 2 },
-    { p: [-1.2, 16.05, 8.6], s: 1.3, layer: 2 },
-    { p: [6.6, 24.05, -0.8], s: 1.1, layer: 2 },
-    { p: [-8.5, 16.05, 7.2], s: 1.75, layer: 2 },
-    { p: [7.2, 16.05, 7.6], s: 1.25, layer: 2 },
-  ];
-  shrubSpots.forEach(({ p, s, layer }, index) => {
-    const shrub = buildCitadelShrub(`citadel-shrub-${index}`, s, materials, random);
-    shrub.position.set(...p);
-    layers[layer].add(shrub);
+  // 小镇两级并入一个物理层级分组（Layer 0 = 断崖基岩）
+  townAssembly.levels.forEach((levelGroup, iy) => {
+    layers[Math.min(4, 1 + Math.floor(iy / 2))].add(levelGroup);
   });
-
-  const topiarySpots = [
-    { p: [-9.2, 16.12, 7.4], s: 1.0, layer: 1 },
-    { p: [-6.3, 16.12, 9.6], s: 0.9, layer: 1 },
-    { p: [6.4, 16.12, 8.8], s: 1.08, layer: 1 },
-    { p: [9.4, 16.12, 1.2], s: 0.92, layer: 1 },
-    { p: [-6.5, 26.1, -0.6], s: 0.95, layer: 2 },
-    { p: [6.4, 26.1, -0.8], s: 1.0, layer: 2 },
-    { p: [-7.4, 23.12, 6.4], s: 0.84, layer: 2 },
-    { p: [2.3, 26.1, 1.8], s: 0.78, layer: 2 },
-  ];
-  topiarySpots.forEach(({ p, s, layer }, index) => {
-    const topiary = buildCitadelRoundTopiary(
-      `citadel-round-topiary-${index}`,
-      s,
-      materials,
-      random
-    );
-    topiary.position.set(...p);
-    layers[layer].add(topiary);
-  });
-
-  // --------------------------------------------------------------------------
-  // Layer 3 — holy sanctuary and the warm-red rectangular brick bastion
-  // --------------------------------------------------------------------------
-  const L3 = CITADEL.layer3;
-  const sanctuary = mesh(
-    new THREE.BoxGeometry(L3.width, L3.height, L3.depth),
-    materials.stone,
-    "holy-sanctuary"
-  );
-  sanctuary.position.set(0.0, 30.0, -7.5);
-  layers[3].add(sanctuary);
-
-  const sanctuaryCornice = mesh(
-    new THREE.BoxGeometry(9.45, 0.28, 9.45),
-    materials.weatherStone,
-    "sanctuary-roof-cornice",
-    0.024
-  );
-  sanctuaryCornice.position.set(0, 33.88, -7.5);
-  layers[3].add(sanctuaryCornice);
-
-  const leftUpperKeep = mesh(
-    new THREE.BoxGeometry(4.8, 7.4, 5.2),
-    materials.stone,
-    "left-upper-keep"
-  );
-  leftUpperKeep.position.set(-5.65, 28.9, -7.2);
-  layers[3].add(leftUpperKeep);
-  const leftKeepCornice = mesh(
-    new THREE.BoxGeometry(5.15, 0.25, 5.55),
-    materials.weatherStone,
-    "left-upper-keep-cornice",
-    0.022
-  );
-  leftKeepCornice.position.set(-5.65, 32.52, -7.2);
-  layers[3].add(leftKeepCornice);
-  const leftKeepDome = buildHalfDome(1.55, materials.gold, "left-upper-keep-dome", 1.2);
-  leftKeepDome.position.set(-5.65, 32.62, -7.2);
-  layers[3].add(leftKeepDome);
-
-  const slitGeometry = new THREE.BoxGeometry(0.28, 1.65, 0.055);
-  for (const x of [-2.2, 0, 2.2]) {
-    const front = mesh(slitGeometry, materials.ink, "sanctuary-slit", 0.018);
-    front.position.set(x, 30.0, -2.972);
-    layers[3].add(front);
-    const back = mesh(slitGeometry, materials.ink, "sanctuary-slit", 0.018);
-    back.position.set(x, 30.0, -12.028);
-    back.rotation.y = Math.PI;
-    layers[3].add(back);
-  }
-  for (const z of [-9.7, -5.3]) {
-    for (const side of [-1, 1]) {
-      const slit = mesh(slitGeometry, materials.ink, "sanctuary-slit", 0.018);
-      slit.position.set(side * 4.528, 30.0, z);
-      slit.rotation.y = side > 0 ? Math.PI / 2 : -Math.PI / 2;
-      layers[3].add(slit);
-    }
-  }
-
-  const B = CITADEL.bastion;
-  const brickBastion = mesh(
-    new THREE.BoxGeometry(B.width, B.height, B.depth),
-    materials.brick,
-    "brick-bastion"
-  );
-  brickBastion.position.set(9.0, 16.0, 5.0);
-  layers[3].add(brickBastion);
-
-  const bastionWindow = mesh(
-    new THREE.BoxGeometry(2.6, 2.6, 0.12),
-    materials.ink,
-    "bastion-high-window",
-    0.03
-  );
-  bastionWindow.position.set(9.0, 20.4, 7.256);
-  layers[3].add(bastionWindow);
-
-  const bastionBalcony = mesh(
-    new THREE.BoxGeometry(3.6, 0.35, 1.25),
-    materials.brick,
-    "bastion-window-balcony",
-    0.035
-  );
-  bastionBalcony.position.set(9.0, 18.92, 7.72);
-  layers[3].add(bastionBalcony);
-
-  // Shallow fired-brick course marks and damaged corner blocks create age
-  // without adding textures or shader branches.
-  for (let row = 0; row < 6; row++) {
-    const course = mesh(
-      new THREE.BoxGeometry(4.56, 0.08, 0.07),
-      materials.brickShade,
-      "bastion-brick-course",
-      0.012
-    );
-    course.position.set(9.0, 10.7 + row * 2.25, 7.281);
-    layers[3].add(course);
-  }
-  addCrenellatedRim(layers[3], materials.brick, {
-    halfX: 2.0,
-    halfZ: 2.0,
-    baseY: 24.0,
-    name: "brick-bastion-crenel",
-    size: 0.48,
-    height: 1.25,
-    step: 1.0,
-  });
-  // The helper is centered on the origin; translate only these top merlons to
-  // the locked bastion position after creation.
-  layers[3].children
-    .filter((child) => child.name === "brick-bastion-crenel")
-    .forEach((child) => {
-      child.position.x += B.x;
-      child.position.z += B.z;
-    });
-
-  for (const [index, p] of [
-    [topiarySpots.length, [9.0, 24.18, 5.0]],
-    [topiarySpots.length + 1, [-3.7, 34.12, -6.2]],
-    [topiarySpots.length + 2, [3.8, 34.12, -8.8]],
-  ]) {
-    const topiary = buildCitadelRoundTopiary(
-      `citadel-round-topiary-${index}`,
-      0.82,
-      materials,
-      random
-    );
-    topiary.position.set(...p);
-    layers[3].add(topiary);
-  }
-
-  // Left-side octagonal defense tower: upright stone shaft, wider lookout
-  // drum, three dark observation windows and an ivory cap. It balances the
-  // right outwork without introducing a sunset-orange material accent.
-  const leftDefense = new THREE.Group();
-  leftDefense.name = "left-octagonal-defense-tower";
-  leftDefense.position.set(-11.2, 0, 2.4);
-  const leftDefenseShaft = mesh(
-    new THREE.CylinderGeometry(2.65, 2.65, 17.0, 8),
-    materials.stone,
-    "left-defense-tower-shaft"
-  );
-  leftDefenseShaft.position.y = 13.0;
-  leftDefenseShaft.rotation.y = Math.PI / 8;
-  leftDefense.add(leftDefenseShaft);
-  const leftDefenseDrum = mesh(
-    new THREE.CylinderGeometry(2.9, 2.9, 3.8, 8),
-    materials.stone,
-    "left-defense-tower-lookout-drum"
-  );
-  leftDefenseDrum.position.y = 23.35;
-  leftDefenseDrum.rotation.y = Math.PI / 8;
-  leftDefense.add(leftDefenseDrum);
-  const leftWindowGeometry = new THREE.BoxGeometry(0.72, 1.45, 0.08);
-  for (const [x, z, rotationY] of [
-    [0, 2.93, 0],
-    [-2.93, 0, -Math.PI / 2],
-    [2.93, 0, Math.PI / 2],
-  ]) {
-    const window = mesh(
-      leftWindowGeometry,
-      materials.ink,
-      "left-defense-lookout-window",
-      0.017
-    );
-    window.position.set(x, 23.35, z);
-    window.rotation.y = rotationY;
-    leftDefense.add(window);
-  }
-  const leftDefenseCollar = mesh(
-    new THREE.CylinderGeometry(3.08, 3.08, 0.32, 8),
-    materials.weatherStone,
-    "left-defense-tower-collar",
-    0.028
-  );
-  leftDefenseCollar.position.y = 25.25;
-  leftDefense.add(leftDefenseCollar);
-  const leftDefenseCap = buildHalfDome(
-    2.85,
-    materials.gold,
-    "left-defense-tower-ivory-cap",
-    1.16
-  );
-  leftDefenseCap.position.y = 25.42;
-  leftDefense.add(leftDefenseCap);
-  layers[3].add(leftDefense);
-
-  // Two slender flanking minarets remain subordinate to the central crown.
-  layers[3].add(buildMinaret("minaret-left", -12.5, -6.5, materials));
-  layers[3].add(buildMinaret("minaret-right", 12.5, -6.5, materials));
-
-  // --------------------------------------------------------------------------
-  // Layer 4 — three-step Byzantine crown, ink ribs and needle finial
-  // --------------------------------------------------------------------------
-  const domeCrown = new THREE.Group();
-  domeCrown.name = "royal-dome-crown";
-  domeCrown.position.set(0.0, 34.0, -7.5);
-
-  // Open-looking dark drum with pale columns gives the crown a separate
-  // architectural tier, matching the reference rotunda rather than placing a
-  // dome directly on a plain cube.
-  const rotundaCore = mesh(
-    new THREE.CylinderGeometry(2.82, 2.95, 2.6, 12),
-    materials.ink,
-    "main-dome-rotunda-core",
-    0.035
-  );
-  rotundaCore.position.y = 1.3;
-  domeCrown.add(rotundaCore);
-  for (let i = 0; i < 12; i++) {
-    const angle = (i / 12) * Math.PI * 2;
-    const column = mesh(
-      new THREE.CylinderGeometry(0.13, 0.16, 2.45, 5),
-      materials.stone,
-      "main-dome-rotunda-column",
-      0.018
-    );
-    column.position.set(Math.cos(angle) * 2.72, 1.3, Math.sin(angle) * 2.72);
-    domeCrown.add(column);
-  }
-  for (const y of [0.12, 2.5]) {
-    const rotundaRing = mesh(
-      new THREE.CylinderGeometry(3.12, 3.2, 0.3, 16),
-      materials.stone,
-      "main-dome-rotunda-ring",
-      0.035
-    );
-    rotundaRing.position.y = y;
-    domeCrown.add(rotundaRing);
-  }
-
-  const domeShell = new THREE.Group();
-  domeShell.name = "main-dome-shell";
-  domeShell.position.y = 2.62;
-
-  const mainDome = buildHalfDome(
-    CITADEL.mainDome.radius,
-    materials.gold,
-    "main-onion-dome",
-    CITADEL.mainDome.stretchY
-  );
-  mainDome.position.y = 0.0;
-  domeShell.add(mainDome);
-  addDomeRibs(domeShell, materials.goldShade, 3.5, 1.35);
-  domeCrown.add(domeShell);
-
-  const finialBase = mesh(
-    new THREE.SphereGeometry(0.22, 8, 6),
-    materials.gold,
-    "finial-golden-knot",
-    0.025
-  );
-  finialBase.position.y = 7.24;
-  domeCrown.add(finialBase);
-  layers[4].add(domeCrown);
-
-  const finial = mesh(
-    new THREE.CylinderGeometry(0.025, 0.025, CITADEL.finialHeight, 6),
-    materials.ink,
-    "needle-finial",
-    0.018
-  );
-  const finialStartY = 41.12;
-  finial.position.set(0.0, finialStartY + CITADEL.finialHeight / 2, -7.5);
-  layers[4].add(finial);
 
   for (const layer of layers) citadelAssembly.add(layer);
-  citadelAssembly.scale.setScalar(CITADEL.mainCastleScale);
-  citadelAssembly.position.y = CITADEL.mainCastleLift;
   const mainOutlinedSurfaceCount = applyInkOutlines(citadelAssembly);
 
-  const outerTerrainSystem = buildOuterCitadelTerrain(materials);
+  const outerTerrainSystem = buildOuterCitadelTerrain(materials, contourSpec);
   const terrainOutlinedSurfaceCount = applyInkOutlines(outerTerrainSystem);
   castleContainer.add(outerTerrainSystem);
   castleContainer.add(citadelAssembly);
@@ -1128,16 +659,151 @@ export function buildOdysseyCitadel(options = {}) {
 
   castleContainer.userData.kind = "odyssey-citadel";
   castleContainer.userData.spec = CITADEL;
+  castleContainer.userData.contourSpec = contourSpec;
+  castleContainer.userData.townBaseY = townBaseY;
+  castleContainer.userData.terrainMaterials = {
+    contour: materials.contour,
+    pilgrimageStone: materials.pilgrimageStone,
+  };
   castleContainer.userData.layers = layers;
   castleContainer.userData.mainCastle = citadelAssembly;
   castleContainer.userData.outerTerrainSystem = outerTerrainSystem;
-  castleContainer.userData.merlonCount = merlonCount;
-  castleContainer.userData.biforaCount = biforaCount;
+  castleContainer.userData.townSpec = townSpec;
+  castleContainer.userData.townStats = townAssembly.stats;
   castleContainer.userData.mainOutlinedSurfaceCount = mainOutlinedSurfaceCount;
   castleContainer.userData.terrainOutlinedSurfaceCount = terrainOutlinedSurfaceCount;
   castleContainer.userData.outlinedSurfaceCount =
     mainOutlinedSurfaceCount + terrainOutlinedSurfaceCount;
-  castleContainer.userData.gradientMap = gradientMap;
+  castleContainer.userData.gradientMap = townAssembly.gradientMap;
 
   return castleContainer;
+}
+
+/** 释放一组 town-level 组的几何与材质（描边材质在 toon.js 全局缓存，不动）。 */
+function disposeTownLevels(levelGroups) {
+  const geometries = new Set();
+  const materials = new Set();
+  for (const group of levelGroups) {
+    group.traverse((o) => {
+      if (!o.isMesh || o.userData.isOutline) return;
+      if (o.geometry) geometries.add(o.geometry);
+      if (o.material) materials.add(o.material);
+    });
+  }
+  for (const g of geometries) g.dispose();
+  for (const m of materials) m.dispose();
+}
+
+/**
+ * 游戏内热重建：拆掉 castleContainer 物理层里的旧小镇，按新布局重新生成
+ * （断崖基岩、外围台地/石阶/瀑布不动）。供圣城搭建面板（citadelEditorPanel）
+ * 在编辑时即时刷新场景。
+ *
+ * @param {THREE.Group} castleContainer buildOdysseyCitadel 的返回值
+ * @param {typeof CITADEL_TOWN_SPEC} spec 新布局
+ * @returns {object|null} 新 stats；非圣城容器返回 null
+ */
+export function rebuildCitadelTown(castleContainer, spec) {
+  const layers = castleContainer?.userData?.layers;
+  if (!layers?.length) return null;
+
+  const oldLevels = [];
+  for (const layer of layers) {
+    for (const child of [...layer.children]) {
+      if (child.name?.startsWith("town-level-")) {
+        layer.remove(child);
+        oldLevels.push(child);
+      }
+    }
+  }
+  disposeTownLevels(oldLevels);
+
+  // 新装配自带材质/gradientMap：旧小镇材质随旧组释放，断崖与外围地势的
+  // 材质实例（cliff/contour/pilgrimageStone）仍归初始构建所有，不受影响。
+  // 基座高度跟随当前台地参数（地形编辑器可能改过层高）。
+  const assembly = buildCitadelTownAssembly(spec, {
+    baseY: castleContainer.userData.townBaseY ?? CITADEL.townBaseY,
+  });
+  applyInkOutlines(assembly.group);
+  assembly.levels.forEach((levelGroup, iy) => {
+    layers[Math.min(4, 1 + Math.floor(iy / 2))].add(levelGroup);
+  });
+  castleContainer.userData.townStats = assembly.stats;
+  castleContainer.userData.townSpec = spec;
+  return assembly.stats;
+}
+
+/**
+ * 游戏内地形热重建：按新参数整体替换外围台地/石阶（断崖基岩与小镇体块
+ * 不动），并把镇体基座抬放到新顶层台面。供圣城搭建面板的「地形地貌」
+ * 编辑器即时刷新场景。
+ *
+ * @param {THREE.Group} castleContainer buildOdysseyCitadel 的返回值
+ * @param {typeof CITADEL.contourTerrain} contourSpec 新台地参数
+ * @returns {THREE.Group|null} 新外围地势系统；非圣城容器返回 null
+ */
+export function rebuildCitadelTerrain(castleContainer, contourSpec) {
+  const old = castleContainer?.userData?.outerTerrainSystem;
+  if (!old) return null;
+
+  // 只释放几何：contour / pilgrimageStone 材质归初始构建共享，不能 dispose
+  const geometries = new Set();
+  old.traverse((o) => {
+    if (!o.isMesh || o.userData.isOutline) return;
+    if (o.geometry) geometries.add(o.geometry);
+  });
+  castleContainer.remove(old);
+  for (const g of geometries) g.dispose();
+
+  const system = buildOuterCitadelTerrain(
+    castleContainer.userData.terrainMaterials,
+    contourSpec
+  );
+  const outlined = applyInkOutlines(system);
+  castleContainer.add(system);
+  castleContainer.userData.outerTerrainSystem = system;
+  castleContainer.userData.contourSpec = contourSpec;
+  castleContainer.userData.terrainOutlinedSurfaceCount = outlined;
+  castleContainer.userData.outlinedSurfaceCount =
+    castleContainer.userData.mainOutlinedSurfaceCount + outlined;
+
+  // 镇体基座跟随新顶层台面
+  const baseY = contourTownBaseY(contourSpec);
+  castleContainer.userData.townBaseY = baseY;
+  castleContainer.traverse((o) => {
+    if (o.name?.startsWith("town-level-")) o.position.y = baseY;
+  });
+  return system;
+}
+
+const _supportOrigin = new THREE.Vector3();
+const _supportDown = new THREE.Vector3();
+const _supportRay = new THREE.Raycaster();
+
+/**
+ * 土坡支撑探测：从小镇局部坐标 (localX, localZ) 的高处竖直向下打射线，
+ * 命中外围地势（台地/石阶/平桥）的最高面 → 换算成可放置的层级 iy
+ * （该层体块底面 ≈ 台面）。无土坡支撑返回 -1（不可放置）。
+ * 供搭建面板「落地」堆叠：只有土坡承重的柱位才允许落建筑块。
+ *
+ * @param {THREE.Group} castleContainer
+ * @param {number} localX 小镇局部 x（level 组坐标系）
+ * @param {number} localZ 小镇局部 z
+ * @param {number} cellHeight 每层层高（默认 2）
+ * @returns {number} 层级 iy（可为负 = 台地低于镇基，不可放置）；无支撑 -1
+ */
+export function terrainSupportLevel(castleContainer, localX, localZ, cellHeight = 2) {
+  const terrain = castleContainer?.userData?.outerTerrainSystem;
+  const ref = castleContainer?.getObjectByName?.("town-level-0");
+  if (!terrain || !ref) return -1;
+  ref.updateWorldMatrix(true, false);
+  terrain.updateWorldMatrix(true, true); // 热重建后/无头环境下矩阵可能未刷新
+  _supportOrigin.set(localX, 80, localZ);
+  ref.localToWorld(_supportOrigin);
+  _supportDown.set(0, -1, 0).transformDirection(ref.matrixWorld);
+  _supportRay.set(_supportOrigin, _supportDown);
+  const hits = _supportRay.intersectObject(terrain, true);
+  if (!hits.length) return -1;
+  const localY = ref.worldToLocal(hits[0].point.clone()).y;
+  return Math.round(localY / cellHeight);
 }

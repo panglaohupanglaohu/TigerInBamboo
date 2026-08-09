@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" href="data:," />
+<title>高山圣城 Townscaper 编辑器</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #e9eef3;
+    font: 13px/1.5 -apple-system, "PingFang SC", sans-serif; }
+  #c { display: block; width: 100%; height: 100%; }
+  #bar { position: fixed; left: 12px; top: 10px; z-index: 5; display: flex; gap: 6px;
+    align-items: center; flex-wrap: wrap; max-width: calc(100% - 470px); }
+  #bar select, #bar button, #bar .chip { border: 1px solid #9aa4ad; background: #fff;
+    color: #2a2b2d; border-radius: 6px; padding: 4px 10px; cursor: pointer; font: inherit; }
+  #bar select { font-weight: 600; }
+  #bar button:hover { background: #f0f4f7; }
+  #bar button.on { background: #2a2b2d; color: #fff; }
+  #bar .chip { cursor: default; background: #f6f8fa; }
+  .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px;
+    margin-right: 5px; vertical-align: -1px; border: 1px solid rgba(0,0,0,.25); }
+  #stats { position: fixed; left: 12px; bottom: 10px; z-index: 5; color: #4a5560;
+    font: 12px/1.5 monospace; background: rgba(255,255,255,.8); padding: 4px 8px;
+    border-radius: 6px; }
+  #help { position: fixed; left: 12px; bottom: 44px; z-index: 5; color: #6a7683;
+    font: 11px/1.6 monospace; background: rgba(255,255,255,.75);
+    padding: 4px 8px; border-radius: 6px; }
+  #placeholder { position: fixed; inset: 0; z-index: 4; display: none;
+    align-items: center; justify-content: center; pointer-events: none;
+    color: #6a7683; font-size: 15px; }
+  #gridPanel { position: fixed; right: 12px; top: 10px; z-index: 5; width: 442px;
+    background: rgba(255,255,255,.92); border: 1px solid #c3ccd4; border-radius: 10px;
+    padding: 10px 12px 12px; display: none; }
+  #gridPanel .head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  #gridPanel .head strong { flex: 1; }
+  #gridPanel button { border: 1px solid #9aa4ad; background: #fff; border-radius: 6px;
+    padding: 2px 10px; cursor: pointer; font: inherit; }
+  #layerCanvas { display: block; border: 1px solid #d5dce2; border-radius: 6px;
+    cursor: crosshair; }
+  #gridPanel .hint { margin-top: 6px; color: #6a7683; font: 11px/1.5 monospace; }
+  #io { position: fixed; inset: 0; z-index: 9; display: none; background: rgba(20,24,28,.45); }
+  #io .panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: min(560px, 90vw); background: #fff; border-radius: 10px; padding: 14px; }
+  #io textarea { width: 100%; height: 300px; box-sizing: border-box; font: 12px/1.45 monospace;
+    white-space: pre; }
+  #io .row { display: flex; gap: 8px; margin-top: 8px; justify-content: flex-end; }
+  #io .row button { border: 1px solid #9aa4ad; background: #fff; border-radius: 6px;
+    padding: 4px 12px; cursor: pointer; font: inherit; }
+</style>
+<!-- 与 index.html / shot-harness.html 一致的 importmap，复用本地 vendor/three -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/": "./vendor/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="bar">
+  <select id="objectSelect" title="选择要编辑的世界对象">
+    <option value="">选择对象…</option>
+    <option value="citadel">高山圣城</option>
+  </select>
+  <span id="editTools" style="display:none; gap:6px; align-items:center; flex-wrap:wrap;">
+    <span class="chip">材质</span>
+    <button data-char="W" class="pal on"><span class="swatch" style="background:#e5eff2"></span>白石 1</button>
+    <button data-char="L" class="pal"><span class="swatch" style="background:#d9cfac"></span>浅砂石 2</button>
+    <button data-char="B" class="pal"><span class="swatch" style="background:#caa88c"></span>淡砖 3</button>
+    <button data-char="D" class="pal"><span class="swatch" style="background:#8b5a2b"></span>正门 4</button>
+    <span class="chip">层 <b id="layerLabel">0</b>（Q/E 换层）</span>
+    <button id="hideAbove">隐藏更高层</button>
+    <button id="undo">撤销</button>
+    <button id="redo">重做</button>
+    <button id="resetSpec">重置为 SPEC</button>
+    <button id="clearAll">清空</button>
+    <button id="exportBtn">导出 ASCII</button>
+    <button id="importBtn">导入</button>
+  </span>
+</div>
+
+<div id="placeholder">← 先在左上角选择「高山圣城」，编辑界面才会出现</div>
+
+<div id="gridPanel">
+  <div class="head">
+    <strong>当前层平面图</strong>
+    <button id="layerPrev" title="上一层（Q）">◀</button>
+    <span>第 <b id="panelLayerLabel">0</b> 层</span>
+    <button id="layerNext" title="下一层（E）">▶</button>
+  </div>
+  <canvas id="layerCanvas" width="416" height="416"></canvas>
+  <div class="hint">左键 放块/改色 · 右键 删块 · 行 0 = 后排，末行 = 前排（朝正门）· 列 0 = 左</div>
+</div>
+
+<div id="stats" style="display:none">…</div>
+<div id="help" style="display:none">
+  3D：左键 空地加块 · 点块顶面向上叠 · 点块侧面改色 · 右键单击 删块<br/>
+  中键 / 空格+左键拖动 旋转 · 右键拖动 平移 · 滚轮 缩放<br/>
+  1–4 材质 · Q/E 层 · H 隐藏高层 · Ctrl+Z 撤销
+</div>
+
+<div id="io">
+  <div class="panel">
+    <div id="ioTitle" style="margin-bottom:6px;font-weight:600">导出</div>
+    <textarea id="ioText" spellcheck="false"></textarea>
+    <div class="row">
+      <button id="ioCopy">复制</button>
+      <button id="ioApply" style="display:none">应用导入</button>
+      <button id="ioClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import {
+  CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY, levelsToGrid, gridToLevels, setCell, clearCell,
+} from "./src/world/citadelTown.js";
+import {
+  buildCitadelTownAssembly, applyInkOutlines, CITADEL,
+} from "./src/world/odysseyCitadel.js";
+
+// ---------------------------------------------------------------------------
+// 状态：编辑界面只有选择了高山圣城才会出现
+// ---------------------------------------------------------------------------
+const CELL = CITADEL_TOWN_SPEC.cellSize;
+const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
+const MAX_COORD = 15;   // ix/iz ∈ [0, 15]，iy ∈ [0, 9]
+const MAX_LEVEL = 9;
+const STORE_KEY = CITADEL_LEVELS_KEY; // 与游戏内搭建面板、主场景启动共用同一存档
+const CHAR_COLORS = { W: 0xe5eff2, L: 0xd9cfac, B: 0xcaa88c, D: 0x8b5a2b };
+const GRID_PX = 26;     // 平面图每格像素（16×26 = 416）
+
+let grid = loadInitialGrid();
+let selectedObject = null; // null = 未选择，编辑界面隐藏
+let activeChar = "W";
+let activeLayer = 0;
+let hideAbove = false;
+let townGroup = null;   // 当前城镇装配（含描边）
+let townLevels = [];    // 各 level 组（隐藏高层用）
+let undoStack = [];
+let redoStack = [];
+
+function loadInitialGrid() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    if (Array.isArray(saved) && saved.length) return levelsToGrid(saved);
+  } catch { /* 损坏的存档回落到 SPEC */ }
+  return levelsToGrid(CITADEL_TOWN_SPEC.levels);
+}
+function saveGrid() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(gridToLevels(grid))); } catch {}
+}
+
+// ---------------------------------------------------------------------------
+// 渲染器 / 场景 / 灯光
+// ---------------------------------------------------------------------------
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xe9eef3);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c4cc, 1.15));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+sun.position.set(18, 30, 14);
+scene.add(sun);
+
+// 地面参考圆盘：示意顶层台地（与主场景 coreRadius 量级一致）
+const disc = new THREE.Mesh(
+  new THREE.CylinderGeometry(12, 12, 0.5, 24),
+  new THREE.MeshToonMaterial({ color: 0xcfc49a })
+);
+disc.position.y = -0.25;
+scene.add(disc);
+
+// 悬停幽灵块
+const ghost = new THREE.Mesh(
+  new THREE.BoxGeometry(CELL, CELL_H, CELL),
+  new THREE.MeshBasicMaterial({ color: CHAR_COLORS.W, transparent: true, opacity: 0.45 })
+);
+ghost.visible = false;
+scene.add(ghost);
+
+// 当前层地面线框
+const layerFrame = new THREE.GridHelper(16 * CELL, 16, 0x7a8894, 0xb6c1c9);
+layerFrame.position.y = 0.01;
+scene.add(layerFrame);
+
+// ---------------------------------------------------------------------------
+// 自定义极简轨道相机（vendor 无 OrbitControls）
+//   中键 / 空格+左键拖动 = 旋转 · 右键拖动 = 平移 · 滚轮 = 缩放
+// ---------------------------------------------------------------------------
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 500);
+const orbit = {
+  theta: Math.PI / 5, phi: 1.05, radius: 34,
+  target: new THREE.Vector3(0, 5.5, 0),
+};
+function applyOrbit() {
+  const { theta, phi, radius, target } = orbit;
+  camera.position.set(
+    target.x + radius * Math.sin(phi) * Math.sin(theta),
+    target.y + radius * Math.cos(phi),
+    target.z + radius * Math.sin(phi) * Math.cos(theta)
+  );
+  camera.lookAt(target);
+}
+
+let dragButton = -1;
+let spaceDown = false;
+let downX = 0, downY = 0, moved = 0;
+canvas.addEventListener("pointerdown", (e) => {
+  dragButton = e.button;
+  downX = e.clientX; downY = e.clientY; moved = 0;
+  canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener("pointermove", (e) => {
+  const dx = e.clientX - downX, dy = e.clientY - downY;
+  moved += Math.abs(dx) + Math.abs(dy);
+  downX = e.clientX; downY = e.clientY;
+  if (dragButton === 1 || (dragButton === 0 && spaceDown)) {
+    orbit.theta -= dx * 0.006;
+    orbit.phi = THREE.MathUtils.clamp(orbit.phi - dy * 0.006, 0.15, Math.PI / 2 - 0.02);
+    applyOrbit();
+  } else if (dragButton === 2 && moved > 6) {
+    panBy(dx, dy);
+  }
+  if (dragButton === -1 && selectedObject) updateGhost(e);
+});
+canvas.addEventListener("pointerup", (e) => {
+  const wasClick = moved < 6;
+  const button = dragButton;
+  dragButton = -1;
+  if (!wasClick || !selectedObject) return;
+  if (button === 0 && !spaceDown) onLeftClick(e);
+  else if (button === 2) onRightClick(e);
+});
+canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  orbit.radius = THREE.MathUtils.clamp(orbit.radius * (e.deltaY > 0 ? 1.1 : 0.9), 8, 120);
+  applyOrbit();
+}, { passive: false });
+
+function panBy(dx, dy) {
+  const scale = orbit.radius * 0.0016;
+  const right = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0);
+  const up = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1);
+  orbit.target.addScaledVector(right, -dx * scale).addScaledVector(up, dy * scale);
+  applyOrbit();
+}
+
+// ---------------------------------------------------------------------------
+// 拾取：先打体块（顶面叠块 / 侧面改色 / 右键删），落空则打当前层平面加块
+// ---------------------------------------------------------------------------
+const raycaster = new THREE.Raycaster();
+const pointerNdc = new THREE.Vector2();
+const layerPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+function castAt(e) {
+  const rect = canvas.getBoundingClientRect();
+  pointerNdc.set(
+    ((e.clientX - rect.left) / rect.width) * 2 - 1,
+    -((e.clientY - rect.top) / rect.height) * 2 + 1
+  );
+  raycaster.setFromCamera(pointerNdc, camera);
+  if (townGroup) {
+    const hits = raycaster.intersectObject(townGroup, true);
+    for (const hit of hits) {
+      const cell = hit.object.userData.cell;
+      if (!cell) continue; // 装饰件不算命中，继续找体块
+      return { kind: "cell", cell, top: hit.face?.normal?.y > 0.9 };
+    }
+  }
+  const point = new THREE.Vector3();
+  layerPlane.constant = -activeLayer * CELL_H; // 当前层地板平面
+  if (raycaster.ray.intersectPlane(layerPlane, point)) {
+    return { kind: "plane", point };
+  }
+  return null;
+}
+
+// 栅格坐标 ⇄ 世界坐标（与 citadelTown.js 的 cx/cz 居中约定一致）
+function gridDims() {
+  let cols = 0, rows = 0;
+  for (const key of grid.keys()) {
+    const [ix, , iz] = key.split(",").map(Number);
+    cols = Math.max(cols, ix + 1);
+    rows = Math.max(rows, iz + 1);
+  }
+  return { cols: Math.max(cols, 1), rows: Math.max(rows, 1) };
+}
+function cellWorld(ix, iy, iz) {
+  const { cols, rows } = gridDims();
+  return {
+    x: (ix - (cols - 1) / 2) * CELL,
+    y: (iy + 0.5) * CELL_H,
+    z: (iz - (rows - 1) / 2) * CELL,
+  };
+}
+function planeCell(point) {
+  const { cols, rows } = gridDims();
+  const ix = Math.round(point.x / CELL + (cols - 1) / 2);
+  const iz = Math.round(point.z / CELL + (rows - 1) / 2);
+  if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return null;
+  return { ix, iy: activeLayer, iz };
+}
+
+function updateGhost(e) {
+  const hit = castAt(e);
+  let target = null;
+  if (hit?.kind === "cell") {
+    target = hit.top
+      ? { ix: hit.cell.ix, iy: Math.min(hit.cell.iy + 1, MAX_LEVEL), iz: hit.cell.iz }
+      : { ix: hit.cell.ix, iy: hit.cell.iy, iz: hit.cell.iz };
+  } else if (hit?.kind === "plane") {
+    target = planeCell(hit.point);
+  }
+  if (!target) { ghost.visible = false; return; }
+  const pos = cellWorld(target.ix, target.iy, target.iz);
+  ghost.position.set(pos.x, pos.y, pos.z);
+  ghost.material.color.setHex(CHAR_COLORS[activeChar]);
+  ghost.visible = true;
+}
+
+function pushUndo() {
+  undoStack.push(JSON.stringify([...grid]));
+  if (undoStack.length > 100) undoStack.shift();
+  redoStack = [];
+}
+
+function onLeftClick(e) {
+  const hit = castAt(e);
+  if (!hit) return;
+  pushUndo();
+  if (hit.kind === "cell") {
+    if (hit.top && hit.cell.iy < MAX_LEVEL) {
+      setCell(grid, hit.cell.ix, hit.cell.iy + 1, hit.cell.iz, activeChar); // 顶面向上叠
+    } else if (hit.cell.char !== activeChar) {
+      setCell(grid, hit.cell.ix, hit.cell.iy, hit.cell.iz, activeChar); // 侧面改色
+    } else {
+      undoStack.pop(); // 无变化
+      return;
+    }
+  } else {
+    const target = planeCell(hit.point);
+    if (!target) { undoStack.pop(); return; }
+    setCell(grid, target.ix, target.iy, target.iz, activeChar);
+  }
+  rebuild();
+}
+
+function onRightClick(e) {
+  const hit = castAt(e);
+  if (hit?.kind !== "cell") return;
+  pushUndo();
+  clearCell(grid, hit.cell.ix, hit.cell.iy, hit.cell.iz);
+  rebuild();
+}
+
+// ---------------------------------------------------------------------------
+// 重建：grid → levels → 规则装配 → 描边；旧组整体 dispose
+// ---------------------------------------------------------------------------
+function disposeGroup(root) {
+  const geometries = new Set();
+  const materials = new Set();
+  root.traverse((o) => {
+    if (!o.isMesh) return;
+    if (o.userData.isOutline) return; // 描边材质来自 toon.js 全局缓存，不可 dispose
+    if (o.geometry) geometries.add(o.geometry);
+    if (o.material) materials.add(o.material);
+  });
+  for (const g of geometries) g.dispose();
+  for (const m of materials) m.dispose();
+}
+
+function rebuild() {
+  if (!selectedObject) return;
+  if (townGroup) {
+    scene.remove(townGroup);
+    disposeGroup(townGroup);
+  }
+  const spec = { cellSize: CELL, cellHeight: CELL_H, levels: gridToLevels(grid) };
+  const assembly = buildCitadelTownAssembly(spec);
+  applyInkOutlines(assembly.group);
+  assembly.group.position.y = -CITADEL.townBaseY; // 让 0 层坐在地面参考盘上
+  townGroup = assembly.group;
+  townLevels = assembly.levels;
+  scene.add(townGroup);
+  applyLayerVisibility();
+  saveGrid();
+  updateStats(assembly.stats);
+  drawLayerPanel();
+}
+
+function applyLayerVisibility() {
+  townLevels.forEach((level, iy) => {
+    level.visible = !hideAbove || iy <= activeLayer;
+  });
+  layerFrame.position.y = activeLayer * CELL_H + 0.01;
+  document.getElementById("layerLabel").textContent = String(activeLayer);
+  document.getElementById("panelLayerLabel").textContent = String(activeLayer);
+  drawLayerPanel();
+}
+
+function updateStats(s) {
+  document.getElementById("stats").textContent =
+    `格 ${s.cellCount} · 穹顶 ${s.domeCount} · 塔顶 ${s.towerCount} · 拱 ${s.archCount}` +
+    ` · 拱窗 ${s.windowCount} · 城垛 ${s.crenelCount} · 绿植 ${s.shrubCount}` +
+    (s.gate ? " · 正门✓" : "");
+}
+
+// ---------------------------------------------------------------------------
+// 当前层 2D 平面图（右侧嵌板）：左键放块/改色 · 右键删块
+// ---------------------------------------------------------------------------
+const layerCanvas = document.getElementById("layerCanvas");
+const layerCtx = layerCanvas.getContext("2d");
+const PANEL_CHARS = { W: "#e5eff2", L: "#d9cfac", B: "#caa88c", D: "#8b5a2b" };
+
+function drawLayerPanel() {
+  if (!selectedObject) return;
+  const n = MAX_COORD + 1;
+  layerCtx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
+  layerCtx.fillStyle = "#f2f5f7";
+  layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
+  for (let iz = 0; iz < n; iz++) {
+    for (let ix = 0; ix < n; ix++) {
+      const char = grid.get(`${ix},${activeLayer},${iz}`);
+      if (char) {
+        layerCtx.fillStyle = PANEL_CHARS[char] ?? PANEL_CHARS.W;
+        layerCtx.fillRect(ix * GRID_PX + 1, iz * GRID_PX + 1, GRID_PX - 2, GRID_PX - 2);
+        if (char === "D") { // 正门格标出门扇
+          layerCtx.fillStyle = "#3a2412";
+          layerCtx.fillRect(ix * GRID_PX + GRID_PX / 2 - 2, iz * GRID_PX + 4, 4, GRID_PX - 8);
+        }
+      }
+      layerCtx.strokeStyle = "#c9d2d9";
+      layerCtx.strokeRect(ix * GRID_PX + 0.5, iz * GRID_PX + 0.5, GRID_PX, GRID_PX);
+    }
+  }
+  // 行 0 = 后排（z−，图顶）；末行 = 前排（朝正门，图底）
+  layerCtx.fillStyle = "#8a96a1";
+  layerCtx.font = "10px monospace";
+  layerCtx.fillText("后", 4, 12);
+  layerCtx.fillText("前 · 正门", 4, layerCanvas.height - 6);
+}
+
+function panelCellFromEvent(e) {
+  const rect = layerCanvas.getBoundingClientRect();
+  const ix = Math.floor((e.clientX - rect.left) / GRID_PX);
+  const iz = Math.floor((e.clientY - rect.top) / GRID_PX);
+  if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return null;
+  return { ix, iz };
+}
+
+layerCanvas.addEventListener("pointerdown", (e) => {
+  if (!selectedObject) return;
+  const target = panelCellFromEvent(e);
+  if (!target) return;
+  const existing = grid.get(`${target.ix},${activeLayer},${target.iz}`);
+  if (e.button === 2) {
+    if (!existing) return;
+    pushUndo();
+    clearCell(grid, target.ix, activeLayer, target.iz);
+  } else if (e.button === 0) {
+    if (existing === activeChar) return;
+    pushUndo();
+    setCell(grid, target.ix, activeLayer, target.iz, activeChar);
+  } else {
+    return;
+  }
+  rebuild();
+});
+layerCanvas.addEventListener("contextmenu", (e) => e.preventDefault());
+
+document.getElementById("layerPrev").onclick = () => stepLayer(-1);
+document.getElementById("layerNext").onclick = () => stepLayer(1);
+
+// ---------------------------------------------------------------------------
+// 对象选择门控：只有选择了高山圣城，编辑界面才出现
+// ---------------------------------------------------------------------------
+const objectSelect = document.getElementById("objectSelect");
+const editTools = document.getElementById("editTools");
+const gridPanel = document.getElementById("gridPanel");
+const placeholder = document.getElementById("placeholder");
+const statsEl = document.getElementById("stats");
+const helpEl = document.getElementById("help");
+
+function applySelection() {
+  const on = selectedObject === "citadel";
+  editTools.style.display = on ? "inline-flex" : "none";
+  gridPanel.style.display = on ? "block" : "none";
+  statsEl.style.display = on ? "" : "none";
+  helpEl.style.display = on ? "" : "none";
+  placeholder.style.display = on ? "none" : "flex";
+  disc.visible = on;
+  layerFrame.visible = on;
+  ghost.visible = false;
+  if (!on && townGroup) {
+    scene.remove(townGroup);
+    disposeGroup(townGroup);
+    townGroup = null;
+    townLevels = [];
+  }
+  if (on && !townGroup) rebuild();
+}
+
+objectSelect.onchange = () => {
+  selectedObject = objectSelect.value || null;
+  applySelection();
+};
+
+// ---------------------------------------------------------------------------
+// 导出 / 导入
+// ---------------------------------------------------------------------------
+const io = document.getElementById("io");
+const ioText = document.getElementById("ioText");
+const ioTitle = document.getElementById("ioTitle");
+const ioCopy = document.getElementById("ioCopy");
+const ioApply = document.getElementById("ioApply");
+
+function exportText() {
+  const levels = gridToLevels(grid);
+  const blocks = levels.map((rows, iy) => {
+    const body = rows.map((r) => `      "${r}",`).join("\n");
+    return `    // Level ${iy}\n    Object.freeze([\n${body}\n    ]),`;
+  });
+  return `levels: Object.freeze([\n${blocks.join("\n")}\n  ]),`;
+}
+
+function parseImport(text) {
+  // 优先解析导出的 Object.freeze([...]) 块；否则按空行分块、每块逐行 ASCII。
+  const levels = [];
+  const blocks = [...text.matchAll(/Object\.freeze\(\s*\[([\s\S]*?)\]\s*\)/g)];
+  if (blocks.length) {
+    for (const b of blocks) {
+      const rows = [...b[1].matchAll(/"([.A-Za-z]+)"/g)].map((m) => m[1]);
+      if (rows.length) levels.push(rows);
+    }
+  } else {
+    for (const chunk of text.split(/\n\s*\n/)) {
+      const rows = chunk.split("\n").map((l) => l.trim()).filter((l) => /^[.A-Za-z]+$/.test(l));
+      if (rows.length) levels.push(rows);
+    }
+  }
+  if (!levels.length) throw new Error("未识别到任何 ASCII 层");
+  return levels;
+}
+
+document.getElementById("exportBtn").onclick = () => {
+  ioTitle.textContent = "导出 —— 粘贴替换 citadelTown.js 中 CITADEL_TOWN_SPEC 的 levels";
+  ioText.value = exportText();
+  ioText.readOnly = true;
+  ioCopy.style.display = "";
+  ioApply.style.display = "none";
+  io.style.display = "block";
+};
+document.getElementById("importBtn").onclick = () => {
+  ioTitle.textContent = "导入 —— 粘贴逐层 ASCII（或导出的 levels 字面量）";
+  ioText.value = "";
+  ioText.readOnly = false;
+  ioCopy.style.display = "none";
+  ioApply.style.display = "";
+  io.style.display = "block";
+};
+ioCopy.onclick = async () => {
+  try { await navigator.clipboard.writeText(ioText.value); }
+  catch { ioText.select(); document.execCommand("copy"); }
+};
+ioApply.onclick = () => {
+  try {
+    const levels = parseImport(ioText.value);
+    pushUndo();
+    grid = levelsToGrid(levels);
+    io.style.display = "none";
+    rebuild();
+  } catch (err) {
+    ioTitle.textContent = `导入失败：${err.message}`;
+  }
+};
+document.getElementById("ioClose").onclick = () => { io.style.display = "none"; };
+
+// ---------------------------------------------------------------------------
+// 工具条 / 快捷键
+// ---------------------------------------------------------------------------
+document.querySelectorAll(".pal").forEach((btn) => {
+  btn.onclick = () => selectChar(btn.dataset.char);
+});
+function selectChar(char) {
+  activeChar = char;
+  document.querySelectorAll(".pal").forEach((b) => b.classList.toggle("on", b.dataset.char === char));
+}
+document.getElementById("hideAbove").onclick = (e) => {
+  hideAbove = !hideAbove;
+  e.target.classList.toggle("on", hideAbove);
+  applyLayerVisibility();
+};
+document.getElementById("undo").onclick = undo;
+document.getElementById("redo").onclick = redo;
+document.getElementById("resetSpec").onclick = () => {
+  pushUndo();
+  grid = levelsToGrid(CITADEL_TOWN_SPEC.levels);
+  rebuild();
+};
+document.getElementById("clearAll").onclick = () => {
+  pushUndo();
+  grid = new Map();
+  rebuild();
+};
+
+function undo() {
+  if (!undoStack.length) return;
+  redoStack.push(JSON.stringify([...grid]));
+  grid = new Map(JSON.parse(undoStack.pop()));
+  rebuild();
+}
+function redo() {
+  if (!redoStack.length) return;
+  undoStack.push(JSON.stringify([...grid]));
+  grid = new Map(JSON.parse(redoStack.pop()));
+  rebuild();
+}
+
+function stepLayer(delta) {
+  if (!selectedObject) return;
+  activeLayer = THREE.MathUtils.clamp(activeLayer + delta, 0, MAX_LEVEL);
+  applyLayerVisibility();
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") return;
+  if (e.code === "Space") { spaceDown = true; e.preventDefault(); return; }
+  if (!selectedObject) return;
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+    e.preventDefault();
+    if (e.shiftKey) redo(); else undo();
+    return;
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") { e.preventDefault(); redo(); return; }
+  const palette = { Digit1: "W", Digit2: "L", Digit3: "B", Digit4: "D" };
+  if (palette[e.code]) selectChar(palette[e.code]);
+  else if (e.code === "KeyQ" || e.code === "ArrowDown") stepLayer(-1);
+  else if (e.code === "KeyE" || e.code === "ArrowUp") stepLayer(1);
+  else if (e.code === "KeyH") document.getElementById("hideAbove").click();
+});
+window.addEventListener("keyup", (e) => {
+  if (e.code === "Space") spaceDown = false;
+});
+
+// ---------------------------------------------------------------------------
+// 主循环
+// ---------------------------------------------------------------------------
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize);
+
+resize();
+applyOrbit();
+applySelection(); // 初始未选择：只显示占位提示
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+</script>
+</body>
+</html>

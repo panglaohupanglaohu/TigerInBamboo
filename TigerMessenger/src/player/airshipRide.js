@@ -10,6 +10,7 @@
 import * as THREE from "three";
 import { quatYToDir } from "../world/sphereMath.js";
 import { canyonOffsetDir } from "../world/canyon.js";
+import { groundLiftAt } from "../world/hills.js";
 
 const BOARD_RANGE = 5.0;   // 绳尾感应半径（可跳起抓绳）
 const CLIMB_TIME = 1.7;    // 攀爬动画时长
@@ -166,6 +167,7 @@ export function createAirshipRide({
   scene,
   elHint,
   toast = () => {},
+  getObstacle = null, // () => ({ dir, topRadial, angularRadius }) 建筑净空区（圣城）
 }) {
   /** @type {'idle'|'climbing'|'flying'} */
   let state = "idle";
@@ -250,6 +252,47 @@ export function createAirshipRide({
     if (cameraRig?.setDist && prevDist) cameraRig.setDist(prevDist);
     setHint(null);
     toast("已滑下航空艇 · 抓稳绳子，落地小心！", 2.6);
+  }
+
+  /** 飞艇方向正下方的地形抬升（岛内丘高，岛外 0）——球面方向 → 平面 (x,z) 反解 */
+  function terrainLiftUnder(dir) {
+    const lat = Math.asin(THREE.MathUtils.clamp(dir.y, -1, 1));
+    const flatDist = (Math.PI / 2 - lat) * planetRadius;
+    if (flatDist < 1e-6) return groundLiftAt(0, 0);
+    const lon = Math.atan2(dir.z, dir.x);
+    return groundLiftAt(Math.cos(lon) * flatDist, Math.sin(lon) * flatDist);
+  }
+
+  /** 期望艇首指向 target 的驾驶偏航角（与 captureYaw 同一套基准） */
+  function yawToFace(pos, target) {
+    _up.copy(_dir);
+    quatYToDir(_dir, _q0);
+    _f0.copy(FWD_LOCAL).applyQuaternion(_q0);
+    _f0.addScaledVector(_up, -_f0.dot(_up)).normalize();
+    _fwd.copy(target).sub(pos);
+    _fwd.addScaledVector(_up, -_fwd.dot(_up));
+    if (_fwd.lengthSq() < 1e-6) return yaw;
+    _fwd.normalize();
+    _tmp.crossVectors(_f0, _fwd);
+    return Math.atan2(_tmp.dot(_up), _f0.dot(_fwd));
+  }
+
+  /**
+   * 视角控制（面板「居中/环视/到顶」）：飞行中把飞艇摆到指定方向与高度，
+   * 艇首转向 lookTarget。返回是否成功（仅 flying 状态可用）。
+   */
+  function setPose(dir, hoverAlt, lookTarget) {
+    if (state !== "flying") return false;
+    const a = airship();
+    if (!a) return false;
+    _dir.copy(dir).normalize();
+    hover = THREE.MathUtils.clamp(hoverAlt, HOVER_FLOOR, HOVER_MAX);
+    a.position.copy(_dir).multiplyScalar(planetRadius + hover);
+    if (lookTarget) yaw = yawToFace(a.position, lookTarget);
+    quatYToDir(_dir, _q0);
+    _qYaw.setFromAxisAngle(_yAxis, yaw);
+    a.quaternion.copy(_q0).multiply(_qYaw);
+    return true;
   }
 
   window.addEventListener("keydown", (e) => {
@@ -406,7 +449,18 @@ export function createAirshipRide({
       ((keys?.ShiftLeft || keys?.ShiftRight) ? 1 : 0);
     // 当地地表高度 = 基础半径 + 峡谷沉降量（谷外为 0）→ hover 下限随地形下沉
     const groundDrop = canyonOffsetDir(_dir);
-    const hoverMin = Math.max(HOVER_FLOOR, groundDrop + GROUND_CLEAR);
+    let hoverMin = Math.max(HOVER_FLOOR, groundDrop + GROUND_CLEAR);
+    // 地形跟随：山体抬升处自动抬高下限，飞越山脊不再穿坡
+    const lift = terrainLiftUnder(_dir);
+    if (lift > 0) hoverMin = Math.max(hoverMin, lift + GROUND_CLEAR);
+    // 建筑绝对净空：进入圣城上空时自动升到建筑顶端之上（可飞到建筑顶端）
+    const obs = getObstacle?.();
+    if (obs) {
+      const ang = _dir.angleTo(obs.dir);
+      if (ang < obs.angularRadius) {
+        hoverMin = Math.max(hoverMin, obs.topRadial - planetRadius + GROUND_CLEAR);
+      }
+    }
     hover = THREE.MathUtils.clamp(hover + vert * VERT_SPEED * dt, hoverMin, HOVER_MAX);
     a.userData.hover = hover;
 
@@ -461,6 +515,7 @@ export function createAirshipRide({
   return {
     update,
     forceExit,
+    setPose,
     isFlying: () => state === "flying",
     getState: () => state,
   };

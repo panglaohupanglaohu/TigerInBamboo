@@ -39,7 +39,7 @@ const SKIRT_BAND = 6; // 裙边过渡带宽
 const INTER_CASCADE_NOTCH = Object.freeze({
   cx: 3.5,
   halfWidth: 5.2,
-  zMin: 26.6,
+  zMin: 23.8,
   zMax: 34.2,
 });
 
@@ -129,6 +129,70 @@ export function rangeLocalToWorld(lx, lz, R, out) {
   const lift = citadelRangeLiftLocal(lx, lz);
   return out.normalize().multiplyScalar(R + lift);
 }
+
+/* ---------------- 可行走高程：台地台面 + 朝圣台阶（仅碰撞，视觉网格不变） ----------------
+   与 odysseyCitadel.js 的 contourTerrain / 折返石阶同参数（那边管视觉，这边管
+   碰撞；两者共用站点局部坐标系）。送信人可沿五段折返石阶从山脚一路走上顶层
+   台地，经平桥抵达棕色正门门廊。 */
+const WALK_BASE_LIFT = BASE_LIFT + CITADEL_PEAK.h - 9.25; // 城堡容器基准（顶 16.4 − 下嵌 9.25）
+const WALK_SHELF_TOP = (k) => WALK_BASE_LIFT + 4 + 2 * k; // 第 k 层台面世界抬升
+const WALK_SHELF_RADIUS = (k) => 24 * 0.9 ** k;
+const WALK_NOTCH = Object.freeze({ center: 0.17, half: 0.56, innerR: 9.0 });
+// φ：从 +lz（正门/瀑布方向）朝 +lx 量；ρ 为梯段圆弧半径，yA/yB 为容器局部踏面高。
+const WALK_FLIGHTS = Object.freeze([
+  { from: -0.87, to: -1.5, rho: 25.05, yA: 1.0, yB: 4.06 },
+  { from: -1.5, to: -0.91, rho: 22.65, yA: 4.06, yB: 6.06 },
+  { from: -0.91, to: -1.47, rho: 20.49, yA: 6.06, yB: 8.06 },
+  { from: -1.47, to: -0.94, rho: 18.55, yA: 8.06, yB: 10.06 },
+  { from: -0.94, to: -1.4, rho: 16.8, yA: 10.06, yB: 12.06 },
+]);
+
+/** 台地/台阶附加抬升（局部坐标；无支撑处返回 -Infinity） */
+function citadelTerraceWalkLiftLocal(lx, lz) {
+  const r = Math.hypot(lx, lz);
+  if (r > 27) return -Infinity;
+  const phi = Math.atan2(lx, lz);
+  let best = -Infinity;
+  // 台面：最高（半径最小）的包含层即脚下台面；瀑布缺口扇区内前四层不存在
+  const inNotch =
+    r > WALK_NOTCH.innerR && Math.abs(phi - WALK_NOTCH.center) < WALK_NOTCH.half;
+  for (let k = 4; k >= 0; k--) {
+    if (r > WALK_SHELF_RADIUS(k)) continue;
+    if (k < 4 && inNotch) continue;
+    best = WALK_SHELF_TOP(k);
+    break;
+  }
+  // 石阶梯段：沿圆弧的连续坡道（覆盖踏面 ±0.1 的离散起伏）
+  for (const f of WALK_FLIGHTS) {
+    if (Math.abs(r - f.rho) > 1.35) continue;
+    const lo = Math.min(f.from, f.to);
+    const hi = Math.max(f.from, f.to);
+    if (phi < lo - 0.06 || phi > hi + 0.06) continue;
+    const t = THREE.MathUtils.clamp((phi - f.from) / (f.to - f.from), 0, 1);
+    best = Math.max(best, WALK_BASE_LIFT + f.yA + (f.yB - f.yA) * t);
+  }
+  return best;
+}
+
+/** 局部坐标 → 可行走高程（自然坡面与台地/台阶取高者） */
+export function citadelWalkLiftLocal(lx, lz) {
+  return Math.max(citadelRangeLiftLocal(lx, lz), citadelTerraceWalkLiftLocal(lx, lz));
+}
+
+/**
+ * 世界方向 → 可行走高程（域外恒 0）。仅供 collision.js 落脚判定；
+ * 视觉网格与选址仍用 citadelRangeLiftDir，不受台地/台阶影响。
+ */
+export function citadelWalkLiftDir(dir) {
+  if (dir.dot(_site) < 0.76) return 0;
+  _o.copy(dir).addScaledVector(_site, -dir.dot(_site)); // 切向偏移（单位球近似）
+  const k = 160; // WORLD_RADIUS：切向偏移放大为世界单位
+  const lx = _o.dot(_right) * k;
+  const lz = _o.dot(_fwd) * k;
+  if (lx < LX_MIN || lx > LX_MAX || lz < LZ_MIN || lz > LZ_MAX) return 0;
+  return citadelWalkLiftLocal(lx, lz);
+}
+
 
 /** 站点方向（单位向量，拷贝进 out；不传则返回新向量） */
 export function citadelSiteDir(out = new THREE.Vector3()) {
@@ -728,40 +792,41 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
     waterfall.add(receivingWater);
     waterfall.userData.receivingPool = lower.name;
 
-    // From the ground upward, cascades 1–3 are sequences 3, 2 and 1. Rebuild
-    // their loess as paired side shoulders instead of allowing the continuous
-    // heightfield sheet to cross in front of the water curtain.
+    // From the ground upward, cascades 1–3 are sequences 3, 2 and 1. Keep only
+    // small flanking stones well clear of the curtain: the notched contour
+    // shelves now frame the falls, so bulky soil shoulders would again cover
+    // the water the notch was cut to expose.
     if (i >= 1) {
       const shoulderGroup = new THREE.Group();
       shoulderGroup.name = `citadel-waterfall-soil-shoulders-${i}`;
       for (const side of [-1, 1]) {
         const upperShoulder = rangePart(
-          new THREE.IcosahedronGeometry(2.45 + i * 0.16, 0),
+          new THREE.IcosahedronGeometry(1.55 + i * 0.1, 0),
           materials.loessSeal,
           "citadel-waterfall-upper-soil-shoulder",
           0.022
         );
         upperShoulder.position.set(
-          side * 4.7,
-          Math.max(1.6, drop * 0.58),
-          -0.72
+          side * 6.3,
+          Math.max(1.3, drop * 0.52),
+          -0.85
         );
         upperShoulder.scale.set(
-          0.85,
-          Math.max(0.9, drop / 4.8),
-          1.12
+          0.8,
+          Math.max(0.7, drop / 6.5),
+          1.0
         );
         upperShoulder.rotation.set(0.12 * side, 0.35 * side + i * 0.08, -0.08 * side);
         shoulderGroup.add(upperShoulder);
 
         const lowerShoulder = rangePart(
-          new THREE.IcosahedronGeometry(2.05 + i * 0.12, 0),
+          new THREE.IcosahedronGeometry(1.35 + i * 0.08, 0),
           materials.loessSealShade,
           "citadel-waterfall-lower-soil-shoulder",
           0.02
         );
-        lowerShoulder.position.set(side * 4.3, 0.65, -0.34);
-        lowerShoulder.scale.set(0.8, 0.62, 1.08);
+        lowerShoulder.position.set(side * 5.8, 0.55, -0.4);
+        lowerShoulder.scale.set(0.75, 0.5, 0.95);
         lowerShoulder.rotation.set(-0.1 * side, -0.28 * side, 0.06 * side);
         shoulderGroup.add(lowerShoulder);
       }

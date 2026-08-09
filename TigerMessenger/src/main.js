@@ -13,6 +13,12 @@ import { createStoryEngine } from "./story/storyEngine.js";
 import { requestStoryboard } from "./story/storyLLM.js";
 import { createStoryboardPanel } from "./story/storyboardPanel.js";
 import { createMapEditor } from "./core/mapEditor.js";
+import { createCitadelEditorPanel } from "./ui/citadelEditorPanel.js";
+import { createCitadelSceneEdit } from "./ui/citadelSceneEdit.js";
+import { createCrystalCityEditorPanel } from "./ui/crystalCityEditorPanel.js";
+import { rebuildCitadelTown, rebuildCitadelTerrain, terrainSupportLevel } from "./world/odysseyCitadel.js";
+import { CITADEL_TOWN_SPEC } from "./world/citadelTown.js";
+import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createDayNight } from "./world/dayNight.js";
@@ -471,6 +477,29 @@ const tramRide = createTramRide({
 });
 
 // ---------- 莫比斯航空艇搭乘（垂绳 [F] 攀爬 · WASD 驾驶） ----------
+// 圣城净空区：飞临上空时 hover 下限自动抬到建筑顶端之上（缓存，圣城重建后失效重算）
+let citadelObstacle = null;
+function getCitadelObstacle() {
+  if (citadelObstacle) return citadelObstacle;
+  const c = messenger?.landmarks?.odysseyCitadel;
+  if (!c) return null;
+  // 只取建筑本体（断崖+规则小镇），不含外围台地/石阶，净空区才贴建筑
+  const body = c.userData.mainCastle || c;
+  const box = new THREE.Box3().setFromObject(body);
+  const sphere = box.getBoundingSphere(new THREE.Sphere());
+  let topRadial = 0;
+  for (const x of [box.min.x, box.max.x])
+    for (const y of [box.min.y, box.max.y])
+      for (const z of [box.min.z, box.max.z])
+        topRadial = Math.max(topRadial, Math.hypot(x, y, z));
+  citadelObstacle = {
+    dir: sphere.center.clone().normalize(),
+    topRadial,
+    angularRadius: Math.atan2(sphere.radius, sphere.center.length()) * 1.15,
+  };
+  return citadelObstacle;
+}
+
 const airshipRide = createAirshipRide({
   player,
   getAirship: () => messenger?.landmarks?.airship || null,
@@ -480,6 +509,7 @@ const airshipRide = createAirshipRide({
   scene,
   elHint: document.getElementById("airship-hint"),
   toast: showToast,
+  getObstacle: getCitadelObstacle,
 });
 
 // ---------- 水晶城巡逻飞行器 · 第一人称驾驶舱（[V] 进入/退出） ----------
@@ -530,6 +560,205 @@ const boatRide = createBoatRide({
     if (aircraftRide.isRiding?.()) aircraftRide.toggle();
   },
 });
+
+// ---------- 高山圣城 · Townscaper 搭建面板 ----------
+// 乘坐航空艇（热气球）时用鼠标左键点选圣城 → 弹出可拖拽/可收起的搭建面板；
+// 面板编辑（2D 平面图 / 场景 3D 直编辑）→ rebuildCitadelTown 即时重建场景圣城
+// → 布局写 localStorage。隐藏高层通过物理层里的 town-level-N 组开关可见性。
+function applyTownLayerVisibility(activeLayer, hideAbove) {
+  const layers = messenger?.landmarks?.odysseyCitadel?.userData?.layers;
+  if (!layers) return;
+  for (const layer of layers) {
+    for (const child of layer.children) {
+      const m = /^town-level-(\d+)$/.exec(child.name || "");
+      if (m) child.visible = !hideAbove || Number(m[1]) <= activeLayer;
+    }
+  }
+}
+
+// 土坡支撑缓存：键 "ix,iz" → 层级（-1 = 无承重土坡）；布局/地形变更即失效
+const citadelSupportCache = new Map();
+function citadelSupportAt(ix, iz) {
+  const key = `${ix},${iz}`;
+  if (citadelSupportCache.has(key)) return citadelSupportCache.get(key);
+  const citadel = messenger?.landmarks?.odysseyCitadel;
+  if (!citadel || !citadelEditorPanel) return -1;
+  const c = citadelEditorPanel.cellCenter(ix, 0, iz); // 格 → level 组局部坐标
+  const level = terrainSupportLevel(citadel, c.x, c.z, CITADEL_TOWN_SPEC.cellHeight);
+  citadelSupportCache.set(key, level);
+  return level;
+}
+
+const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
+  ? createCitadelEditorPanel({
+      toast: showToast,
+      onLayerVisibility: applyTownLayerVisibility,
+      onViewAction: citadelViewAction,
+      getSupportLevel: citadelSupportAt,
+      onTerrainChange: (contour) => {
+        rebuildCitadelTerrain(messenger.landmarks.odysseyCitadel, contour);
+        citadelSupportCache.clear();
+        citadelObstacle = null; // 净空区下帧重算
+      },
+      onApply: (levels) => {
+        const stats = rebuildCitadelTown(messenger.landmarks.odysseyCitadel, {
+          ...CITADEL_TOWN_SPEC,
+          levels,
+        });
+        citadelObstacle = null; // 建筑体量变了，净空区下帧重算
+        citadelSupportCache.clear(); // 包围盒可能变，支撑缓存失效
+        // 重建后 level 组全部换新，按面板状态重新断言一次可见性
+        const st = citadelEditorPanel?.getState?.();
+        if (st) applyTownLayerVisibility(st.activeLayer, st.hideAbove);
+        return stats;
+      },
+    })
+  : null;
+
+// 点击落在 UI 面板上则忽略（圣城点选与 3D 直编辑共用同一判定）
+function isCitadelUiEvent(e) {
+  const t = e.target;
+  return (
+    t instanceof Element &&
+    (t.closest("#citadel-editor") ||
+      t.closest("#ce-io") ||
+      t.closest("#crystal-city-editor") ||
+      t.closest("#map-editor") ||
+      t.closest("#dev-panel") ||
+      t.closest("#dev-toggle") ||
+      t.closest("#storyboard-panel") ||
+      t.closest("#quest-panel") ||
+      t.closest("#journal-panel") ||
+      t.closest("#intro"))
+  );
+}
+
+// ---------- 水晶城 · 搭建面板（对齐圣城面板交互） ----------
+const crystalCityEditorPanel = messenger?.landmarks?.moebius
+  ? createCrystalCityEditorPanel({
+      toast: showToast,
+      onApply: (layout) => {
+        const api = messenger.landmarks.moebius;
+        rebuildMoebiusCrystalMetropolis(api, scene, PLANET_RADIUS, {
+          trackCurve: messenger.landmarks.tramSystem?.curve,
+          layout,
+          useStorage: false,
+        });
+        // 海水湖跟到新母皇塔基
+        const lake = messenger.landmarks.citySeaLake;
+        const grand = api.grand;
+        if (lake?.relocate && grand?.dir) {
+          lake.relocate(grand.dir, grand.root);
+        }
+        return { halls: layout.halls?.length ?? 0, crystals: layout.crystals?.length ?? 0 };
+      },
+    })
+  : null;
+
+// 航空艇飞行中左键点选水晶城建筑 → 打开搭建面板
+{
+  const cityPickRay = new THREE.Raycaster();
+  const cityPickNdc = new THREE.Vector2();
+  renderer.domElement.addEventListener("pointerdown", (e) => {
+    if (!crystalCityEditorPanel || e.button !== 0) return;
+    if (!gameStarted || !airshipRide.isFlying?.()) return;
+    if (isCitadelUiEvent(e)) return;
+    if (crystalCityEditorPanel.isOpen()) return;
+    if (citadelEditorPanel?.isOpen?.()) return;
+    const city = messenger?.landmarks?.moebius?.group;
+    if (!city) return;
+    const rect = renderer.domElement.getBoundingClientRect();
+    cityPickNdc.set(
+      ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      -((e.clientY - rect.top) / rect.height) * 2 + 1
+    );
+    cityPickRay.setFromCamera(cityPickNdc, camera);
+    const hits = cityPickRay.intersectObject(city, true);
+    if (!hits.length) return;
+    crystalCityEditorPanel.open();
+    showToast("水晶城搭建 · 左键放置 / 右键删除 / 汇聚高地", 2.8);
+  });
+}
+
+// ---------- 圣城视角控制（面板「视角」行：居中 / 环视四周 / 到顶） ----------
+// 以圣城为锚点摆放飞行中的飞艇：保持当前方位角，90° 步进环视，或升到顶端。
+let citadelViewState = null; // { bearing, dist, height } —— 相对圣城的观察位
+function citadelViewAction(action) {
+  const citadel = messenger?.landmarks?.odysseyCitadel;
+  const airship = messenger?.landmarks?.airship;
+  if (!citadel || !airship) return;
+  if (!airshipRide.isFlying?.()) {
+    showToast("先乘坐航空艇，再调整圣城视角", 2);
+    return;
+  }
+  const center = citadel.getWorldPosition(new THREE.Vector3());
+  const up = center.clone().normalize();
+  const obs = getCitadelObstacle();
+  const topH = obs ? Math.max(10, obs.topRadial - center.length()) : 32; // 建筑净高
+  if (!citadelViewState) {
+    const b = airship.position.clone().sub(center);
+    b.addScaledVector(up, -b.dot(up)); // 切平面方位
+    citadelViewState = {
+      bearing: b.lengthSq() > 1e-6 ? b.normalize() : new THREE.Vector3(1, 0, 0),
+      dist: 40, // 艇身离圣城足够远，气囊不挡城堡
+      height: topH * 0.55,
+    };
+  }
+  const st = citadelViewState;
+  if (action === "orbitL") st.bearing.applyAxisAngle(up, Math.PI / 2);
+  else if (action === "orbitR") st.bearing.applyAxisAngle(up, -Math.PI / 2);
+  else if (action === "top") st.height = topH + 6;
+  else if (action === "center") st.height = topH * 0.55;
+  const target = center
+    .clone()
+    .addScaledVector(up, action === "top" ? topH : st.height * 0.8);
+  const pos = center
+    .clone()
+    .addScaledVector(st.bearing, st.dist)
+    .addScaledVector(up, st.height);
+  airshipRide.setPose?.(pos.clone().normalize(), pos.length() - PLANET_RADIUS, target);
+}
+
+// 场景 3D 直编辑：面板打开且乘坐航空艇时，点块顶面叠块 / 侧面改色 /
+// 当前层空地加块 / 右键删块，悬停出幽灵块（townscaper.html 同款交互）。
+const citadelSceneEdit = citadelEditorPanel
+  ? createCitadelSceneEdit({
+      dom: renderer.domElement,
+      camera,
+      scene,
+      getCitadel: () => messenger?.landmarks?.odysseyCitadel || null,
+      panel: citadelEditorPanel,
+      canEdit: () => gameStarted && !!airshipRide.isFlying?.(),
+      isUiEvent: isCitadelUiEvent,
+      toast: showToast,
+    })
+  : null;
+
+{
+  const citadelPickRay = new THREE.Raycaster();
+  const citadelPickNdc = new THREE.Vector2();
+  renderer.domElement.addEventListener("pointerdown", (e) => {
+    if (!citadelEditorPanel || e.button !== 0) return;
+    // 只有乘坐航空艇时才能点选圣城
+    if (!gameStarted || !airshipRide.isFlying?.()) return;
+    if (isCitadelUiEvent(e)) return;
+    // 面板已打开时左键归 3D 直编辑，不再重复弹面板
+    if (citadelEditorPanel.isOpen()) return;
+    if (crystalCityEditorPanel?.isOpen?.()) return;
+    const citadel = messenger?.landmarks?.odysseyCitadel;
+    if (!citadel) return;
+    const rect = renderer.domElement.getBoundingClientRect();
+    citadelPickNdc.set(
+      ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      -((e.clientY - rect.top) / rect.height) * 2 + 1
+    );
+    citadelPickRay.setFromCamera(citadelPickNdc, camera);
+    const hits = citadelPickRay.intersectObject(citadel, true);
+    if (!hits.length) return;
+    citadelEditorPanel.open();
+    showToast("已选中高山圣城 · 搭建面板已打开", 2.2);
+  });
+}
 
 // [V] 进入/退出飞行器驾驶舱
 window.addEventListener("keydown", (e) => {
@@ -676,6 +905,7 @@ function animate() {
   updateMoebiusBarrier(dt);
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   mapEditor.tickHighlight?.(dt);
+  citadelSceneEdit?.tick();
 
   // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
   const riding =

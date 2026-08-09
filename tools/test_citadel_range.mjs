@@ -81,9 +81,9 @@ assert(scene.children.includes(range.mesh), "网格应入场景");
 assert.deepEqual(range.mesh.userData.interCascadeNotch, {
   cx: 3.5,
   halfWidth: 5.2,
-  zMin: 26.6,
+  zMin: 23.8,
   zMax: 34.2,
-}, "瀑布 2、3 之间必须从黄土视觉网格切出中央水道缺口");
+}, "瀑布 1–3 之间必须从黄土视觉网格切出中央水道缺口（完整露出水帘）");
 const pos = range.mesh.geometry.attributes.position;
 assert(pos.count > 3000, `顶点数 ${pos.count} 过少`);
 let minR = Infinity, maxR = 0;
@@ -359,8 +359,37 @@ const collision = fs.readFileSync(
   fileURLToPath(new URL("src/world/collision.js", BASE)),
   "utf8"
 );
-assert(collision.includes("citadelRangeLiftDir"), "物理地面应叠加山脉高程");
+assert(collision.includes("citadelWalkLiftDir"), "物理地面应叠加台地/石阶可行走高程");
 ok("messengerIsland + collision 接线完成");
+
+console.log("[4b] 可行走高程：台地台面 + 折返石阶 + 瀑布缺口");
+const {
+  citadelWalkLiftLocal,
+  citadelWalkLiftDir,
+} = await import(new URL("src/world/citadelRange.js", BASE).href);
+const walkBase = 0.4 + CITADEL_PEAK.h - 9.25; // 城堡容器基准 7.15
+// 顶层台面（城堡脚下）：自然坡面之上抬到 19.15
+assert(Math.abs(citadelWalkLiftLocal(0, 0) - (walkBase + 12)) < 1e-9,
+  "城堡脚下应为顶层台面");
+// 缺口水道内（瀑布正下方）：前四层台地失效，不得出现隐形地板
+const channelLift = citadelWalkLiftLocal(3.5, 21.5);
+assert(channelLift < walkBase + 4,
+  `瀑布水道内不得被台地封盖，实际抬升 ${channelLift.toFixed(2)}`);
+// 石阶坡道沿程单调爬升、坡度可行走（每段高差 2，弧长 ≥ 7.7）
+let prevWalk = -Infinity;
+for (let i = 0; i <= 20; i++) {
+  const phi = -0.94 + (-1.4 - -0.94) * (i / 20);
+  const lift = citadelWalkLiftLocal(16.8 * Math.sin(phi), 16.8 * Math.cos(phi));
+  assert(lift >= prevWalk - 1e-9, "顶层梯段沿程不得下坠");
+  prevWalk = lift;
+}
+assert(Math.abs(prevWalk - (walkBase + 12.06)) < 1e-9, "顶层梯段末端必须接上台面");
+// dir 路径一致：正门门廊前（平桥门槛条处）可站立
+assert(Math.abs(citadelWalkLiftLocal(0, 7.05) - (walkBase + 12)) < 1e-9,
+  "正门门廊前必须为可站立台面");
+assert(citadelWalkLiftDir(siteDir) >= citadelRangeLiftDir(siteDir),
+  "可行走高程不得劣于自然坡面");
+ok("台面 19.15 · 缺口无封盖 · 顶层梯段单调至台面 · 门廊前可站立");
 
 console.log("[5] 独立多层水帘、雾气与涟漪工厂");
 // 轻量 DOM 桩（odysseyCitadel → toon.js 需要）

@@ -8,7 +8,7 @@ import { PLANET_RADIUS } from "./planet.js";
 import { flatToWorld } from "./sphereMath.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
 import { canyonOffsetDir } from "./canyon.js";
-import { citadelRangeLiftDir } from "./citadelRange.js";
+import { citadelWalkLiftDir } from "./citadelRange.js";
 
 const _up = new THREE.Vector3();
 const _tmp = new THREE.Vector3();
@@ -156,12 +156,14 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
   }
 
   // ---- 星球表面（南半球叠加峡谷地形 + 圣城山脉双峰，谷底/山坡可行走） ----
+  // 圣城区域用 citadelWalkLiftDir：自然坡面之上再叠加五层台地与折返石阶，
+  // 送信人可沿石阶一路走上圣城正门门廊。
   if (!grounded) {
     const r = pos.length();
     const surfR =
       PLANET_RADIUS +
       canyonOffsetDir(_up.copy(pos).normalize()) +
-      citadelRangeLiftDir(_up);
+      citadelWalkLiftDir(_up);
     if (r < surfR + 0.1) {
       pos.setLength(surfR);
       const n = _up.copy(pos).normalize();

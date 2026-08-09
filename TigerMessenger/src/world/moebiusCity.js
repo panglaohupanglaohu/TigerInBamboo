@@ -5,6 +5,7 @@
 //  - 三倍占地疏散布局，同时给 8 字高架留出完整净空
 //  - 根部金黄能量海（万家灯火，冷暖对冲）
 //  - 实例化水墨描边（BackSide 法线外扩，共用实例矩阵）
+//  - 每座建筑落在绿色丘垫上：按基座足迹取峡谷阶地最高面，避免被邻阶山壁掩埋
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
@@ -12,11 +13,34 @@ import { facet } from "../assets/lowPoly.js";
 import { createDetailedMoebiusTower } from "../assets/moebiusTower.js";
 import { latLonToDir, quatYToDir } from "./sphereMath.js";
 import { CANYON, canyonOffsetDir } from "./canyon.js";
+import {
+  cityLocalToDir,
+  dirToCityLocal,
+  generateHighRidgeLayout,
+  loadCrystalLayoutFromStorage,
+  normalizeCrystalLayout,
+} from "./crystalCityLayout.js";
 
 const GOLD = 0xffd700; // 能量海金
+const GRASS = 0x55875f; // 绿色丘垫 · 草绿
+const SOIL = 0x7a6b48; // 绿色丘垫 · 土褐坡脚
 const CITY_ENTRY_DROP = CANYON.depth / CANYON.steps;
 const CITY_APPROACH_DISTANCE_MULTIPLIER = 5;
 const CITY_BUILDING_SCALE = 3;
+/** 普通晶塔：底面相对绿色山丘顶面的净空。 */
+const BUILDING_SURFACE_CLEARANCE = 0.15;
+/** 花厅塔（母皇/金鳞）：更大净空，塔脚必须明显露在丘顶台面之上。 */
+const HALL_SURFACE_CLEARANCE = 0.55;
+/** 绿色山丘相对建筑底径的高度比例；上限压低，禁止高柱把塔身包埋。 */
+const GREEN_HILL_HEIGHT_RATIO = 0.3;
+const GREEN_HILL_HEIGHT_MIN = 1.0;
+const GREEN_HILL_HEIGHT_MAX = 2.8;
+/** 花厅塔专用丘：略高一点，丘顶做平台托住花厅塔基。 */
+const HALL_HILL_HEIGHT_RATIO = 0.38;
+const HALL_HILL_HEIGHT_MIN = 1.6;
+const HALL_HILL_HEIGHT_MAX = 3.6;
+/** 丘脚略咬入阶地，避免与峡谷面留缝。 */
+const GREEN_HILL_EMBED = 0.45;
 // 原城市只占峡谷第五级以内；线性半径扩大 3 倍，而非把楼继续挤在谷心。
 const ORIGINAL_CITY_RADIUS =
   CANYON.rim * (1 - CITY_APPROACH_DISTANCE_MULTIPLIER / CANYON.steps);
@@ -85,21 +109,218 @@ function outlineMatInstanced(thickness) {
   return mat;
 }
 
+const _footEast = new THREE.Vector3();
+const _footNorth = new THREE.Vector3();
+const _footDir = new THREE.Vector3();
+
+/**
+ * 建筑圆盘足迹下的峡谷地表范围。
+ * 峡谷是离散阶梯：足迹边缘常踩在更高一阶上，若只按中心落点会把塔身埋进邻阶山壁。
+ * @returns {{ minS: number, maxS: number, centerS: number }}
+ */
+export function footprintSurfaceRange(dir, radiusWorld, R, samples = 16) {
+  _footEast.crossVectors(new THREE.Vector3(0, 1, 0), dir);
+  if (_footEast.lengthSq() < 1e-8) _footEast.set(1, 0, 0);
+  _footEast.normalize();
+  _footNorth.crossVectors(dir, _footEast).normalize();
+
+  const centerS = R + canyonOffsetDir(dir);
+  let minS = centerS;
+  let maxS = centerS;
+  // 用足迹中心附近地表半径换算角距，避免深谷处用裸 R 低估跨阶宽度。
+  const surfR = Math.max(24, Math.abs(centerS));
+  for (let i = 0; i < samples; i++) {
+    const a = (i / samples) * Math.PI * 2;
+    for (const frac of [0.55, 1.0, 1.12]) {
+      const ang = (radiusWorld * frac) / surfR;
+      _footDir
+        .copy(dir)
+        .addScaledVector(_footEast, Math.cos(a) * ang)
+        .addScaledVector(_footNorth, Math.sin(a) * ang)
+        .normalize();
+      const s = R + canyonOffsetDir(_footDir);
+      if (s < minS) minS = s;
+      if (s > maxS) maxS = s;
+    }
+  }
+  return { minS, maxS, centerS };
+}
+
+/**
+ * 建筑落地高程：
+ *  1) 足迹内最高峡谷阶地 = 绿色山丘的「地基」
+ *  2) 其上起一座矮绿丘，建筑底落在丘顶面之上
+ *  不得把建筑埋进绿丘，也不得埋进邻阶山壁。
+ *
+ * @param {{ hall?: boolean, meshBottomLocal?: number }} [opts]
+ *   hall: 花厅塔（母皇/金鳞）用更大净空与丘高
+ *   meshBottomLocal: 缩放后网格最低点（通常 ≤0）；用于把真实塔脚抬到丘顶之上
+ */
+export function buildingPlacementOnTerrain(dir, radiusWorld, R, opts = {}) {
+  const hall = !!opts.hall;
+  const { minS, maxS, centerS } = footprintSurfaceRange(dir, radiusWorld, R);
+  const hillHeight = THREE.MathUtils.clamp(
+    radiusWorld * (hall ? HALL_HILL_HEIGHT_RATIO : GREEN_HILL_HEIGHT_RATIO),
+    hall ? HALL_HILL_HEIGHT_MIN : GREEN_HILL_HEIGHT_MIN,
+    hall ? HALL_HILL_HEIGHT_MAX : GREEN_HILL_HEIGHT_MAX
+  );
+  // 丘脚落在足迹最高阶地，邻阶墙不会再压住绿丘/塔脚
+  const hillBase = maxS;
+  const hillCrest = hillBase + hillHeight;
+  const clearance = hall ? HALL_SURFACE_CLEARANCE : BUILDING_SURFACE_CLEARANCE;
+  // 真实网格底 = root + meshBottomLocal；令其 = hillCrest + clearance
+  const meshBottomLocal = Number.isFinite(opts.meshBottomLocal) ? opts.meshBottomLocal : 0;
+  const root = hillCrest + clearance - meshBottomLocal;
+  const padHeight = hillHeight + GREEN_HILL_EMBED;
+  return {
+    root,
+    minS,
+    maxS,
+    centerS,
+    hillBase,
+    hillHeight,
+    hillCrest,
+    padHeight,
+    clearance,
+    hall,
+  };
+}
+
+/**
+ * 绿色山丘：上半球草丘，底圆在 y=0、丘顶在 y=meshHeight。
+ * meshHeight = hillHeight + embed；放置后丘顶对齐 hillCrest，建筑在其上方。
+ */
+function buildGreenHillPad(radiusWorld, meshHeight, seed = 1) {
+  let s = seed >>> 0;
+  const rnd = () => {
+    s = (Math.imul(1664525, s) + 1013904223) >>> 0;
+    return s / 0x100000000;
+  };
+
+  const pad = new THREE.Group();
+  pad.name = "moebius-green-hill-pad";
+
+  // 上半球：phi 0→π/2 时 y∈[0,1]；压成缓丘
+  const geo = facet(
+    new THREE.SphereGeometry(1, 12, 8, 0, Math.PI * 2, 0, Math.PI * 0.52)
+  );
+  const footR = radiusWorld * 1.38;
+  const pos = geo.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i);
+    const h = Math.max(0, v.y);
+    const radial = Math.hypot(v.x, v.z) || 1e-6;
+    const flare = 1 + (1 - h) * 0.12;
+    v.x = (v.x / radial) * radial * flare;
+    v.z = (v.z / radial) * radial * flare;
+    const j = 0.96 + rnd() * 0.08;
+    v.x *= footR * j;
+    v.y *= meshHeight;
+    v.z *= footR * j;
+    pos.setXYZ(i, v.x, v.y, v.z);
+  }
+  pos.needsUpdate = true;
+  geo.computeVertexNormals();
+
+  const grass = new THREE.Color(GRASS);
+  const soil = new THREE.Color(SOIL);
+  const c = new THREE.Color();
+  const colors = new Float32Array(pos.count * 3);
+  for (let i = 0; i < pos.count; i++) {
+    const t = 1 - THREE.MathUtils.clamp(pos.getY(i) / Math.max(1e-3, meshHeight), 0, 1);
+    c.copy(grass).lerp(soil, t * t * 0.88);
+    const g = 0.94 + rnd() * 0.1;
+    colors[i * 3] = Math.min(1, c.r * g);
+    colors[i * 3 + 1] = Math.min(1, c.g * g);
+    colors[i * 3 + 2] = Math.min(1, c.b * g);
+  }
+  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+  const mound = new THREE.Mesh(
+    geo,
+    toonMat(0xffffff, { vertexColors: true, flatShading: true })
+  );
+  mound.name = "moebius-green-hill-body";
+  mound.castShadow = true;
+  mound.receiveShadow = true;
+  mound.position.y = 0;
+  addOutline(mound, 0.03, 0x1c2523, 0);
+  pad.add(mound);
+
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + rnd() * 0.18;
+    const rr = footR * (0.78 + rnd() * 0.16);
+    const patch = new THREE.Mesh(
+      facet(new THREE.SphereGeometry(0.26 + rnd() * 0.12, 6, 4)),
+      toonMat(0x4e8849, { flatShading: true })
+    );
+    patch.scale.set(1.45, 0.2, 1.2);
+    patch.position.set(Math.cos(a) * rr, 0.06, Math.sin(a) * rr);
+    patch.receiveShadow = true;
+    pad.add(patch);
+  }
+
+  pad.userData.kind = "moebius-green-hill-pad";
+  pad.userData.padHeight = meshHeight;
+  pad.userData.topRadius = footR * 0.55;
+  return pad;
+}
+
+/**
+ * 底缘在 hillBase - embed，丘顶在 hillCrest；建筑 root 在丘顶之上。
+ * 花厅塔额外加一层丘顶圆台，塔基明确站在绿色台面上。
+ */
+function placeGreenHillPad(parent, dir, place, radiusWorld, seed) {
+  const meshHeight = place.padHeight; // hillHeight + embed
+  const pad = buildGreenHillPad(radiusWorld, meshHeight, seed);
+  // 本地 y=0 → 世界 hillBase - embed；本地 y=meshHeight → hillCrest
+  const baseR = place.hillBase - GREEN_HILL_EMBED;
+  pad.position.copy(dir).multiplyScalar(baseR);
+  pad.quaternion.copy(quatYToDir(dir, new THREE.Quaternion()));
+
+  if (place.hall) {
+    // 丘顶绿色圆台：半径略大于塔基，厚度薄，托住花厅塔脚
+    const terraceR = radiusWorld * 1.12;
+    const terraceH = 0.28;
+    const terrace = new THREE.Mesh(
+      facet(new THREE.CylinderGeometry(terraceR * 0.92, terraceR, terraceH, 12)),
+      toonMat(GRASS, { flatShading: true })
+    );
+    terrace.name = "moebius-hall-hill-terrace";
+    terrace.castShadow = true;
+    terrace.receiveShadow = true;
+    // 圆台顶面与丘顶齐平（本地 meshHeight 为丘顶）
+    terrace.position.y = meshHeight - terraceH * 0.5;
+    addOutline(terrace, 0.028, 0x1c2523, 0);
+    pad.add(terrace);
+  }
+
+  parent.add(pad);
+  return pad;
+}
+
+/** 缩放后塔网格在本地 Y 的最低点（含描边/平台下探）。 */
+function towerMeshBottomLocal(tower) {
+  tower.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(tower);
+  if (!Number.isFinite(box.min.y)) return 0;
+  return box.min.y;
+}
+
 /**
  * 构建莫比斯水晶大都会。
- * @param {THREE.CatmullRomCurve3} [trackCurve] 轨道让行走廊
+ * @param {THREE.CatmullRomCurve3} [options.trackCurve] 轨道让行走廊
+ * @param {object} [options.layout] 搭建面板布局；缺省读 localStorage 或高地汇聚默认
+ * @param {boolean} [options.useStorage=true] 是否读取存档布局
  */
-export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
+export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
+  const { trackCurve = null, useStorage = true } = options;
   const rnd = lcg(20260803);
   const group = new THREE.Group();
   group.name = "moebius-metropolis";
 
   const cityCenterDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
-  const cityEast = new THREE.Vector3()
-    .crossVectors(new THREE.Vector3(0, 1, 0), cityCenterDir)
-    .normalize();
-  const cityNorth = new THREE.Vector3().crossVectors(cityCenterDir, cityEast).normalize();
-  const grandDir = latLonToDir(GRAND_CRYSTAL.lat, GRAND_CRYSTAL.lon, new THREE.Vector3());
   const _dir = new THREE.Vector3();
   const _pos = new THREE.Vector3();
   const _quat = new THREE.Quaternion();
@@ -110,22 +331,15 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
   const _facing = new THREE.Vector3();
   const _basisX = new THREE.Vector3();
 
-  /** 峡谷谷心的切平面坐标 → 球面方向（x=东西，z=南北；单位为弧度）。 */
-  function cityDirFromLocal(x, z, out = new THREE.Vector3()) {
-    const d = Math.hypot(x, z);
-    if (d < 1e-6) return out.copy(cityCenterDir);
-    return out
-      .copy(cityCenterDir)
-      .multiplyScalar(Math.cos(d))
-      .addScaledVector(cityEast, (x / d) * Math.sin(d))
-      .addScaledVector(cityNorth, (z / d) * Math.sin(d))
-      .normalize();
-  }
+  /** 布局：显式 > 存档 > 高地汇聚默认 */
+  let layout = options.layout
+    ? normalizeCrystalLayout(options.layout)
+    : useStorage
+      ? loadCrystalLayoutFromStorage()
+      : null;
+  if (!layout) layout = generateHighRidgeLayout(20260803);
+  layout = normalizeCrystalLayout(layout);
 
-  /**
-   * 三倍占地城市覆盖峡谷第一层以下；谷缘之外仍保持完全无建筑。
-   * 进城方向的长距离空桥由 trackClear 继续保持净空。
-   */
   function insideCanyon(dir, minDrop = CITY_ENTRY_DROP) {
     return canyonOffsetDir(dir) <= -minDrop + 1e-5;
   }
@@ -139,140 +353,76 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
     return true;
   }
 
-  // 带花厅塔只保留 3 座（性能）：1 座母皇主塔 + 2 座沿轨金鳞塔。
-  // 移除西北侧母皇塔（贴轨道左侧、遮挡视线且占地），保留主地标。
-  const grandSites = [
-    { dir: grandDir.clone(), scale: 1, seed: 701 },
-  ];
-  // 金鳞沿轨塔：从 S 型轨道城市段取样，向两侧垂直偏移 ~0.24 rad，交替分列高架两旁。
-  // （轨道改线后塔位自动跟随，避免固定坐标挡路/穿模）
-  function computeTracksideGoldSites() {
-    if (!trackCurve) return [];
-    const ts = [];
-    for (let i = 0; i < 720; i++) {
-      const t = i / 720;
-      trackCurve.getPointAt(t, _pos);
-      _dir.copy(_pos).normalize();
-      if (_dir.angleTo(cityCenterDir) < 0.55) ts.push(t);
-    }
-    if (ts.length < 8) return [];
-    const sites = [];
-    // 2 座均匀分列：前段放一侧、后段放另一侧，形成左右交替；
-    // 目标点若被净空过滤，在附近微调位置直至落位，保证不被吞掉。
-    const targets = [
-      { f: 0.2, side: -1 }, // 前段 → 右侧
-      { f: 0.7, side: 1 }, // 后段 → 左侧
-    ];
-    for (let k = 0; k < targets.length; k++) {
-      const preferSide = targets[k].side;
-      let placed = false;
-      for (const df of [0, -0.03, 0.03, -0.06, 0.06, -0.1, 0.1]) {
-        for (const side of [preferSide, -preferSide]) {
-          const idx = Math.floor(
-            ts.length * THREE.MathUtils.clamp(targets[k].f + df, 0.02, 0.98)
-          );
-          const t = ts[idx];
-          trackCurve.getPointAt(t, _pos);
-          trackCurve.getTangentAt(t, _facing);
-          _dir.copy(_pos).normalize();
-          // 轨道横向（切平面内垂直于切线）
-          _basisX.crossVectors(_dir, _facing).normalize();
-          const siteDir = _dir.clone().addScaledVector(_basisX, side * 0.245).normalize();
-          // 不落在母皇塔脚下（塔身约 0.17 rad，0.22 仍有余量）
-          if (grandSites.some((gs) => siteDir.angleTo(gs.dir) < 0.22)) continue;
-          if (!trackClear(siteDir, 0.15)) continue;
-          sites.push({ dir: siteDir, seed: 4107 + k * 31 });
-          placed = true;
-          break;
-        }
-        if (placed) break;
-      }
-    }
-    return sites;
+  // ---------- 从布局装配：花厅 + 晶体全部汇聚高地环带 ----------
+  const grandSites = [];
+  const tracksideGoldSites = [];
+  for (const h of layout.halls) {
+    const dir = cityLocalToDir(h.lx, h.lz, new THREE.Vector3());
+    if (h.kind === "grand") grandSites.push({ dir, scale: h.scale ?? 1, seed: h.seed ?? 701, lx: h.lx, lz: h.lz });
+    else tracksideGoldSites.push({ dir, seed: h.seed ?? 4107, scale: h.scale ?? 0.45, lx: h.lx, lz: h.lz });
   }
-  const tracksideGoldSites = computeTracksideGoldSites();
+  // 布局无 grand 时兜底一座，避免下游崩溃
+  if (!grandSites.length) {
+    const fallback = generateHighRidgeLayout().halls.find((x) => x.kind === "grand");
+    grandSites.push({
+      dir: cityLocalToDir(fallback.lx, fallback.lz, new THREE.Vector3()),
+      scale: 1,
+      seed: 701,
+      lx: fallback.lx,
+      lz: fallback.lz,
+    });
+  }
+  const grandDir = grandSites[0].dir.clone();
   const reservedLandmarkDirs = [
-    ...grandSites.map((site) => site.dir),
-    ...tracksideGoldSites.map((site) => site.dir),
+    ...grandSites.map((s) => s.dir),
+    ...tracksideGoldSites.map((s) => s.dir),
   ];
 
-  // ---------- 1. 实例化三倍晶体巨构群（错落非等比缩放） ----------
-  // 水晶建筑再减半（32→16，性能）；约 55% 向轨道靠拢（沿街峡谷感），
-  // 净空按底径换算，保证与轨道/地标/彼此都不重叠。
-  const TOTAL = 16;
+  // ---------- 1. 实例化晶体（布局坐标） ----------
   const buckets = { 4: [], 5: [], 6: [] };
   const placedDirs = [];
   const placedBuildings = [];
-  // 轨道城市段采样（方向 + 横向右向量），供“向轨道靠拢”布点
-  const trackCitySamples = [];
-  if (trackCurve) {
-    for (let i = 0; i < 720; i++) {
-      const t = i / 720;
-      trackCurve.getPointAt(t, _pos);
-      _dir.copy(_pos).normalize();
-      if (_dir.angleTo(cityCenterDir) < 0.55) {
-        trackCurve.getTangentAt(t, _facing);
-        trackCitySamples.push({
-          dir: _dir.clone(),
-          right: new THREE.Vector3().crossVectors(_dir, _facing).normalize(),
-        });
-      }
-    }
-  }
-  let attempts = 0;
-  while (placedDirs.length < TOTAL && attempts < TOTAL * 180) {
-    attempts++;
-    const r = (0.45 + rnd() * 0.9) * CITY_BUILDING_SCALE;
-    // 不重叠轨道的最小角距：塔底半径 + 桥面半宽(1.7) + 余量(0.6)，按 R 换算
-    const minAngle = (r + 2.3) / R;
-    let dir;
-    if (trackCitySamples.length && rnd() < 0.55) {
-      // 向轨道靠拢：取轨道城市段一点，向一侧偏移「净空 + 少量随机」后落定
-      const tp = trackCitySamples[(rnd() * trackCitySamples.length) | 0];
-      const side = rnd() < 0.5 ? 1 : -1;
-      const off = minAngle + 0.02 + rnd() * 0.06;
-      dir = tp.dir.clone().addScaledVector(tp.right, side * off).normalize();
-    } else {
-      const a = rnd() * Math.PI * 2;
-      const cityRadius = Math.sqrt(rnd()) * CITY_FOOTPRINT_RADIUS;
-      dir = cityDirFromLocal(
-        Math.cos(a) * cityRadius,
-        Math.sin(a) * cityRadius,
-        new THREE.Vector3()
-      );
-    }
-    const canyonDrop = canyonOffsetDir(dir);
-    if (!insideCanyon(dir)) continue;
+  for (const c of layout.crystals) {
+    const dir = cityLocalToDir(c.lx, c.lz, new THREE.Vector3());
+    const r = c.r;
     const centrality = 1 - cityCenterDir.angleTo(dir) / CITY_FOOTPRINT_RADIUS;
     const h =
       (4.8 + Math.max(0, centrality) * 7.5) *
-      (0.75 + rnd() * 0.5) *
-      CITY_BUILDING_SCALE;
-    // 地标净空：塔身 0.17 rad + 自身底径，避免与地标重叠
-    if (reservedLandmarkDirs.some((reserved) => dir.angleTo(reserved) < 0.17 + r / R)) continue;
-    // 按建筑实际底径做球面间距检测，避免“三倍建筑”彼此堆成一堵墙。
-    const root = R + canyonDrop;
+      (c.hMul ?? 1) *
+      CITY_BUILDING_SCALE *
+      0.55;
+    // 只躲开花厅塔心，允许环绕成簇（高地汇聚）
+    if (reservedLandmarkDirs.some((reserved) => dir.angleTo(reserved) < 0.055 + r / (2 * R))) {
+      continue;
+    }
+    if (!trackClear(dir, (r + 2.0) / R)) continue;
+    const place = buildingPlacementOnTerrain(dir, r, R);
+    const root = place.root;
     const tooClose = placedBuildings.some((other) => {
-      // 塔身向上快速收尖，底座允许轻微错叠；视觉中心仍保持明显分离。
       const needed =
         ((r + other.r + 0.2) * 0.42) / Math.max(24, Math.min(root, other.root));
       return dir.angleTo(other.dir) < needed;
     });
     if (tooClose) continue;
-    // 不重叠轨道：按底径换算净空（塔顶再高也只与轨道保持水平间隔）
-    if (!trackClear(dir, minAngle)) continue;
-    const seg = 4 + ((rnd() * 3) | 0); // 4~6 段生硬棱角
+    const seg = c.seg || 5;
     buckets[seg].push({
       dir: dir.clone(),
-      h,
+      h: Math.max(6, h),
       r,
       root,
-      tx: (rnd() - 0.5) * 0.22, // 顶部斜切/凌乱生长
-      tz: (rnd() - 0.5) * 0.22,
+      place,
+      tx: c.tx ?? 0,
+      tz: c.tz ?? 0,
+      lx: c.lx,
+      lz: c.lz,
     });
     placedDirs.push(dir.clone());
     placedBuildings.push({ dir: dir.clone(), r, root });
   }
+
+  const greenHillPads = new THREE.Group();
+  greenHillPads.name = "moebius-green-hill-pads";
+  group.add(greenHillPads);
 
   for (const seg of [4, 5, 6]) {
     const list = buckets[seg];
@@ -284,6 +434,7 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
     // 透明体必须用极细壳线；过厚反向壳会被玻璃透射成“灰色钢筋”。
     const outInst = new THREE.InstancedMesh(geo, outlineMatInstanced(0.012), list.length);
     list.forEach((c, i) => {
+      placeGreenHillPad(greenHillPads, c.dir, c.place, c.r, 8200 + seg * 100 + i);
       _pos.copy(c.dir).multiplyScalar(c.root);
       _quat.copy(quatYToDir(c.dir, new THREE.Quaternion()));
       _tiltQ.setFromEuler(_e.set(c.tx, 0, c.tz));
@@ -299,9 +450,28 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
     group.add(inst, outInst);
   }
 
-  /** 把复合塔扎进峡谷地表，并让 local +Z 朝指定方向。 */
-  function placeDetailedTower(tower, dir, facing = null) {
-    const rootR = R + canyonOffsetDir(dir);
+  /**
+   * 花厅塔（母皇/金鳞）落在绿色山丘顶面：
+   *  - 先 scale，再量真实网格底
+   *  - 塔脚抬到丘顶圆台之上，不被绿丘掩埋
+   * @returns {{ root: number, padHeight: number, hillCrest: number }}
+   */
+  function placeDetailedTower(tower, dir, facing = null, radiusWorld = 2.3 * CITY_BUILDING_SCALE) {
+    // 足迹略放大：花厅平台/生物层外挑，避免邻阶/丘坡仍切到塔脚
+    const footR = radiusWorld * 1.15;
+    const meshBottomLocal = towerMeshBottomLocal(tower);
+    const place = buildingPlacementOnTerrain(dir, footR, R, {
+      hall: true,
+      meshBottomLocal,
+    });
+    const rootR = place.root;
+    placeGreenHillPad(
+      greenHillPads,
+      dir,
+      place,
+      footR,
+      9100 + ((Math.abs(dir.x) * 1e4) | 0)
+    );
     tower.position.copy(dir).multiplyScalar(rootR);
     if (facing) {
       _facing.copy(facing).addScaledVector(dir, -facing.dot(dir));
@@ -317,10 +487,10 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
       tower.quaternion.copy(quatYToDir(dir, new THREE.Quaternion()));
     }
     group.add(tower);
-    return rootR;
+    return { root: rootR, padHeight: place.padHeight, hillCrest: place.hillCrest };
   }
 
-  // ---------- 2. 三座母皇塔移到 8 字线路外侧，形成分散的城市地标 ----------
+  // ---------- 2. 花厅母皇塔（带 Bio-Dome 暖光花厅）----------
   const crystals = [];
   for (const gd of grandSites) {
     const dir = gd.dir;
@@ -331,38 +501,55 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
       seed: gd.seed,
     });
     tower.name = "moebius-grand-community-tower";
+    // 必须先 scale 再量底/落位，否则花厅塔脚仍按未缩放高度埋进绿丘
     tower.scale.setScalar(gd.scale * CITY_BUILDING_SCALE);
     tower.rotateY((gd.seed % 11) * 0.19);
-    const root = placeDetailedTower(tower, dir);
+    const baseR = 2.3 * gd.scale * CITY_BUILDING_SCALE;
+    const { root } = placeDetailedTower(tower, dir, null, baseR);
     const h = tower.userData.height * gd.scale * CITY_BUILDING_SCALE;
     crystals.push({
       group: tower,
       dir: dir.clone(),
       h,
-      r: 2.3 * gd.scale * CITY_BUILDING_SCALE,
+      r: baseR,
       root,
+      hall: true,
+      lx: gd.lx,
+      lz: gd.lz,
     });
   }
 
-  // ---------- 2b. 8 字两叶外侧的金鳞建筑：分列高架两旁，位置固定且预留净空 ----------
+  // ---------- 2b. 金鳞花厅塔（高地环带，布局驱动） ----------
   const corridorTowers = [];
   for (const [siteIndex, site] of tracksideGoldSites.entries()) {
     if (trackCurve && !trackClear(site.dir, 0.15)) continue;
-    const scale = 0.45 * CITY_BUILDING_SCALE;
+    const scaleMul = site.scale ?? 0.45;
+    const scale = scaleMul * CITY_BUILDING_SCALE;
     const tower = createDetailedMoebiusTower({
-      stages: siteIndex === 1 ? 3 : 2,
+      stages: siteIndex === 0 ? 3 : 2,
       balcony: true,
       goldScales: true,
       seed: site.seed,
     });
     tower.scale.setScalar(scale);
-    tower.name = siteIndex === 1
-      ? "moebius-trackside-gold-right"
-      : "moebius-trackside-gold-left";
+    tower.name =
+      siteIndex === 0
+        ? "moebius-trackside-gold-right"
+        : "moebius-trackside-gold-left";
     _facing.copy(cityCenterDir).sub(site.dir);
-    const root = placeDetailedTower(tower, site.dir, _facing);
+    const baseR = 2.2 * scale;
+    const { root } = placeDetailedTower(tower, site.dir, _facing, baseR);
     const h = tower.userData.height * scale;
-    const record = { group: tower, dir: site.dir.clone(), h, r: 2.2 * scale, root };
+    const record = {
+      group: tower,
+      dir: site.dir.clone(),
+      h,
+      r: baseR,
+      root,
+      hall: true,
+      lx: site.lx,
+      lz: site.lz,
+    };
     corridorTowers.push(record);
     crystals.push(record);
   }
@@ -414,7 +601,9 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
 
   group.userData.cityFootprintAngularRadius = CITY_FOOTPRINT_RADIUS;
   group.userData.backgroundBuildingCount = placedDirs.length;
+  group.userData.greenHillPadCount = greenHillPads.children.length;
   group.userData.birdFlocks = birdFlocks;
+  group.userData.layout = layout;
   scene.add(group);
   const grandTop = grandDir
     .clone()
@@ -426,6 +615,7 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
     grand: crystals[0],
     grandTop,
     birdFlocks,
+    layout,
     /**
      * @param {number} dt
      * @param {number} t
@@ -436,6 +626,55 @@ export function buildMoebiusCrystalMetropolis(scene, R, { trackCurve } = {}) {
     },
   };
 }
+
+/** 释放 moebius 组几何（材质可能与 toon 缓存共用，只丢 geometry） */
+function disposeMoebiusGroup(root) {
+  if (!root) return;
+  const geos = new Set();
+  root.traverse((o) => {
+    if (!o.isMesh || o.userData?.isOutline) return;
+    if (o.geometry) geos.add(o.geometry);
+  });
+  for (const g of geos) g.dispose();
+}
+
+/**
+ * 热重建水晶城（保持 api 对象引用，供 messengerIsland 闭包继续 update）。
+ * @param {ReturnType<typeof buildMoebiusCrystalMetropolis>} api
+ * @param {THREE.Scene} scene
+ * @param {number} R
+ * @param {{ trackCurve?: THREE.CatmullRomCurve3, layout?: object, useStorage?: boolean }} options
+ */
+export function rebuildMoebiusCrystalMetropolis(api, scene, R, options = {}) {
+  if (!api) return null;
+  const parent = api.group?.parent || scene;
+  if (api.group) {
+    parent.remove(api.group);
+    disposeMoebiusGroup(api.group);
+  }
+  // 重建时不要再读 storage 覆盖刚传入的 layout
+  const next = buildMoebiusCrystalMetropolis(scene, R, {
+    ...options,
+    useStorage: options.layout ? false : options.useStorage !== false,
+  });
+  // 原地改写数组，保留 flock.obstacles 等对 crystals 的引用
+  if (Array.isArray(api.crystals)) {
+    api.crystals.length = 0;
+    api.crystals.push(...next.crystals);
+  } else {
+    api.crystals = next.crystals;
+  }
+  api.group = next.group;
+  api.corridorTowers = next.corridorTowers;
+  api.grand = next.grand;
+  api.grandTop = next.grandTop;
+  api.birdFlocks = next.birdFlocks;
+  api.layout = next.layout;
+  api.update = next.update;
+  return api;
+}
+
+export { cityLocalToDir, dirToCityLocal, generateHighRidgeLayout };
 
 // ---------------------------------------------------------------------------
 //  花厅之间鸟群：低多边剪影，沿塔间航线穿梭

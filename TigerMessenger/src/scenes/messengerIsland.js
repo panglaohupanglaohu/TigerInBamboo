@@ -14,6 +14,7 @@ import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets 
 import { createMoonLake, HARBOR } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
+import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
 import { buildAbandonedGate } from "../world/abandonedGate.js";
 import { isCanyonBgmPlaying, isCanyonBgmFinishing, setSwampBgm } from "../audio/sfx.js";
 import { canyonOffsetDir, CANYON } from "../world/canyon.js";
@@ -39,7 +40,8 @@ import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
 import { createCitySeaLake } from "../world/citySeaLake.js";
-import { buildOdysseyCitadel } from "../world/odysseyCitadel.js";
+import { buildOdysseyCitadel, CITADEL_TERRAIN_KEY } from "../world/odysseyCitadel.js";
+import { CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY } from "../world/citadelTown.js";
 import {
   buildCitadelRange,
   citadelRangeLiftDir,
@@ -128,8 +130,12 @@ export const messengerIslandScene = {
       }
     }
 
-    // 莫比斯水晶大都会（南半球千座晶林，让开轨道走廊）
-    const moebius = buildMoebiusCrystalMetropolis(scene, R, { trackCurve: tramSystem.curve });
+    // 莫比斯水晶大都会：花厅+晶体汇聚较高山峦环带；布局可读搭建面板存档
+    const moebius = buildMoebiusCrystalMetropolis(scene, R, {
+      trackCurve: tramSystem.curve,
+      layout: loadCrystalLayoutFromStorage() || undefined,
+      useStorage: true,
+    });
 
     // 3 艘气泡座舱分别围绕水晶城 3 座含花厅的建筑巡游。
     const bubblePods = createBubblePodsAroundFlowerBuildings(scene, moebius.crystals, { count: 3 });
@@ -156,12 +162,29 @@ export const messengerIslandScene = {
     // 四级清透水帘连接五座白石梯湖；底部雾气与涟漪落入下一级水面。
     const citadelRange = buildCitadelRange(scene, R);
     const citadelDir = citadelSiteDir(new THREE.Vector3());
+    // 圣城搭建面板/编辑器（citadelEditorPanel / townscaper.html）保存的布局优先；
+    // 无存档时回落到内置 CITADEL_TOWN_SPEC。
+    let citadelSpec;
+    try {
+      const saved = JSON.parse(localStorage.getItem(CITADEL_LEVELS_KEY) || "null");
+      if (Array.isArray(saved) && saved.length) {
+        citadelSpec = { ...CITADEL_TOWN_SPEC, levels: saved };
+      }
+    } catch { /* 损坏存档回落内置 SPEC */ }
+    // 地形编辑器保存的台地参数优先；无存档回落内置 contourTerrain。
+    let citadelContour;
+    try {
+      const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
+      if (saved && Number.isFinite(saved.baseRadius)) citadelContour = saved;
+    } catch { /* 损坏存档回落内置台地参数 */ }
     const odysseyCitadel = buildOdysseyCitadel({
       dir: citadelDir,
       faceDir: moonLake?.centerWorld || null,
       groundRadius: R + citadelRangeLiftDir(citadelDir), // 主峰平顶
       planetRadius: R,
       seed: 20260808,
+      spec: citadelSpec,
+      contour: citadelContour,
     });
     scene.add(odysseyCitadel);
 
@@ -326,8 +349,9 @@ export const messengerIslandScene = {
       ...farSide.colliders,
       ...harborColliders,
       { position: bookshop.position.clone(), radius: bookshop.userData.collideRadius },
-      // 太古高山圣城要塞主殿足域（L1 半宽 10 + 宣礼塔/角楼 13.5 + 乱石余量）
-      { position: odysseyCitadel.position.clone(), radius: 18 },
+      // 太古高山圣城要塞主殿墙体足域（0.4 缩放后基座半宽 4.8 + 余量）：
+      // 仅挡穿墙，送信人可沿折返石阶走上顶层台地、经平桥抵达棕色正门门廊。
+      { position: odysseyCitadel.position.clone(), radius: 6.0 },
     ];
     if (moonLake?.deepCollider) colliders.push(moonLake.deepCollider);
 
