@@ -12,17 +12,32 @@
 import {
   CITADEL_TOWN_SPEC,
   CITADEL_LEVELS_KEY,
+  CITADEL_TERRACE_COUNT,
+  CITADEL_CASTLE_FLOORS,
+  CITADEL_GRID_SIZE,
+  normalizeCitadelTerraceLayout,
   levelsToGrid,
   gridToLevels,
   setCell,
   clearCell,
+  resolveCitadelDropTarget,
+  citadelGridCellCenter,
 } from "../world/citadelTown.js";
-import { CITADEL, CITADEL_TERRAIN_KEY } from "../world/odysseyCitadel.js";
+import {
+  CITADEL,
+  CITADEL_TERRAIN_KEY,
+  CITADEL_TERRAIN_OBJECTS_KEY,
+  CITADEL_MIN_TERRACE_HEIGHT,
+  normalizeCitadelTerrain,
+  citadelTerraceMetrics,
+  normalizeCitadelTerrainObjects,
+  citadelTerrainPointSupported,
+} from "../world/odysseyCitadel.js";
 import { makePanelDraggable } from "./dragPanel.js";
 
-const MAX_COORD = 23; // ix/iz ∈ [0, 23]（24×24 网格，滚轮缩放平面图）
-const MAX_LEVEL = 9;
-const DEFAULT_GRID_PX = 13; // 平面图默认每格像素（24×13 = 312）
+const MAX_COORD = CITADEL_GRID_SIZE - 1;
+const MAX_LEVEL = CITADEL_CASTLE_FLOORS - 1;
+const DEFAULT_GRID_PX = 12;
 const POS_KEY = "tm.citadelEditor.pos";
 const COLLAPSE_KEY = "tm.citadelEditor.collapsed";
 const DROP_KEY = "tm.citadelEditor.dropToGround";
@@ -31,24 +46,38 @@ const CHAR_NAMES = { W: "白石", L: "浅砂石", B: "淡砖", D: "正门" };
 const CELL = CITADEL_TOWN_SPEC.cellSize;
 const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
 
+/** Immutable removal helper shared by map/3D right-click paths and tests. */
+export function removeCitadelTerrainObjectPlacement(objects, id) {
+  const source = Array.isArray(objects) ? objects : [];
+  const index = source.findIndex((object) => object?.id === id);
+  if (index < 0) return { objects: source, removed: null };
+  return {
+    objects: [...source.slice(0, index), ...source.slice(index + 1)],
+    removed: source[index],
+  };
+}
+
 /**
  * @param {object} opts
  * @param {(levels: string[][], stats?: object) => void} opts.onApply 布局变更回调
- * @param {(activeLayer: number, hideAbove: boolean) => void} [opts.onLayerVisibility]
+ * @param {(activeTerrace: number, activeLayer: number, hideAbove: boolean) => void} [opts.onLayerVisibility]
  *        当前层 / 隐藏高层变化（开关面板时也会回调，关闭时强制全部可见）
  * @param {(action: "center"|"orbitL"|"orbitR"|"top") => void} [opts.onViewAction]
  *        视角行按钮：居中 / 绕圣城 90° / 到顶
  * @param {(contour: object) => void} [opts.onTerrainChange] 台地参数变更（地形地貌编辑器）
- * @param {(ix: number, iz: number) => number} [opts.getSupportLevel]
+ * @param {(objects: object[]) => void} [opts.onTerrainObjectsChange] 瞭望塔/参天树变更
+ * @param {(ix: number, iz: number, terraceIndex: number) => number} [opts.getSupportLevel]
  *        土坡支撑探测：返回该柱可落块的层级，-1 = 无承重土坡（默认 0 = 全可放）
  * @param {(msg: string, dur?: number) => void} [opts.toast]
  * @returns {{
  *   open(): void, close(): void, toggle(): void, isOpen(): boolean, element: HTMLElement,
- *   getState(): { activeChar: string, activeLayer: number, hideAbove: boolean, dropToGround: boolean },
+ *   getState(): { activeChar: string, activeTerrace: number, activeLayer: number, hideAbove: boolean, dropToGround: boolean },
  *   applySceneEdit(target: {ix:number,iy:number,iz:number}, mode: "place"|"erase"): boolean,
  *   cellCenter(ix: number, iy: number, iz: number): {x:number,y:number,z:number},
  *   cellAtLocal(x: number, z: number, iy: number): {ix:number,iy:number,iz:number}|null,
  *   dropTarget(ix: number, iz: number): {ix:number,iy:number,iz:number}|null, // null = 无土坡承重
+   *   supportsCell(ix: number, iz: number, terraceIndex?: number): boolean,
+   *   deleteTerrainObject(id: string): boolean,
  *   maxLevel: number, maxCoord: number,
  * }}
  */
@@ -57,11 +86,14 @@ export function createCitadelEditorPanel({
   onLayerVisibility = () => {},
   onViewAction = () => {},
   onTerrainChange = () => {},
+  onTerrainObjectsChange = () => {},
   getSupportLevel = () => 0,
   toast = () => {},
 }) {
   // ---------- 状态 ----------
-  let grid = loadGrid();
+  let terraceGrids = loadTerraceGrids();
+  let activeTerrace = 0; // 0 = 台地 1（最高）
+  let grid = terraceGrids[activeTerrace];
   let activeChar = "W";
   let activeLayer = 0;
   let hideAbove = false;
@@ -71,16 +103,75 @@ export function createCitadelEditorPanel({
   let redoStack = [];
   let open = false;
   let dirty = false; // 有未保存改动（编辑实时进 3D，保存才落盘）
+  let terrainObjects = loadTerrainObjects();
+  let terrainObjectTool = null;
+  let terrainObjectSequence = terrainObjects.length;
   try {
     dropToGround = localStorage.getItem(DROP_KEY) !== "0";
   } catch { /* private mode */ }
 
-  function loadGrid() {
+  function loadTerraceGrids() {
     try {
       const saved = JSON.parse(localStorage.getItem(CITADEL_LEVELS_KEY) || "null");
-      if (Array.isArray(saved) && saved.length) return levelsToGrid(saved);
+      if (saved) {
+        return normalizeCitadelTerraceLayout(saved).terraces.map((entry) =>
+          levelsToGrid(entry.levels)
+        );
+      }
     } catch { /* 损坏存档回落 SPEC */ }
-    return levelsToGrid(CITADEL_TOWN_SPEC.levels);
+    return normalizeCitadelTerraceLayout(CITADEL_TOWN_SPEC).terraces.map((entry) =>
+      levelsToGrid(entry.levels)
+    );
+  }
+
+  function loadTerrainObjects() {
+    try {
+      return normalizeCitadelTerrainObjects(
+        JSON.parse(localStorage.getItem(CITADEL_TERRAIN_OBJECTS_KEY) || "[]")
+      );
+    } catch {
+      return [];
+    }
+  }
+
+  function persistTerrainObjects() {
+    try {
+      localStorage.setItem(CITADEL_TERRAIN_OBJECTS_KEY, JSON.stringify(terrainObjects));
+    } catch { /* private mode */ }
+  }
+
+  /** Delete one tower/tree, persist immediately, and hot-rebuild the 3D group. */
+  function deleteTerrainObject(id) {
+    const result = removeCitadelTerrainObjectPlacement(terrainObjects, id);
+    if (!result.removed) return false;
+    terrainObjects = result.objects;
+    persistTerrainObjects();
+    onTerrainObjectsChange([...terrainObjects]);
+    drawTerrainMap();
+    return true;
+  }
+
+  function gridToFixedLevels(sourceGrid) {
+    return Array.from({ length: CITADEL_CASTLE_FLOORS }, (_, floor) =>
+      Array.from({ length: CITADEL_GRID_SIZE }, (_, iz) => {
+        let row = "";
+        for (let ix = 0; ix < CITADEL_GRID_SIZE; ix++) {
+          row += sourceGrid.get(`${ix},${floor},${iz}`) ?? ".";
+        }
+        return row;
+      })
+    );
+  }
+
+  function serializeLayout() {
+    return {
+      version: 2,
+      gridSize: CITADEL_GRID_SIZE,
+      terraces: terraceGrids.map((terraceGrid, terraceIndex) => ({
+        terraceIndex,
+        levels: gridToFixedLevels(terraceGrid),
+      })),
+    };
   }
 
   // ---------- DOM ----------
@@ -100,11 +191,30 @@ export function createCitadelEditorPanel({
       <button type="button" id="ce-close" title="关闭"
         style="background:none;border:none;color:#fff;cursor:pointer;font-size:13px;">✕</button>
     </div>
-    <div id="ce-body" style="padding:10px 12px 12px;">
+    <div id="ce-body" style="padding:10px 12px 12px;max-height:calc(100vh - 118px);overflow-y:auto;">
+      <div style="font-weight:700;margin-bottom:5px;">1）台地层 · 地形地貌</div>
+      <div id="ce-terrace-tabs" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;"></div>
+      <canvas id="ce-terrain-map" width="312" height="190"
+        style="display:block;border:1px solid #d5dce2;border-radius:6px;background:#f7f4ea;cursor:pointer;margin-bottom:6px;"></canvas>
+      <div id="ce-terrain-sliders"></div>
+      <div style="display:flex;gap:6px;margin:5px 0 9px;align-items:center;">
+        <button type="button" id="ce-terrain-reset" title="恢复内置台地参数">重置台地</button>
+        <span style="color:#5d7569;font:10px/1.4 monospace;">✓ 层间楼梯/瀑布默认生成　✓ 相邻台地至少相差 1 个建筑层</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:-2px 0 9px;">
+        <strong style="font-size:12px;color:#4a5560;">地貌对象</strong>
+        <button type="button" id="ce-object-watchtower" title="选择后在上方鸟瞰图点击落点">瞭望塔</button>
+        <button type="button" id="ce-object-tree" title="选择后在上方鸟瞰图点击落点">参天树</button>
+        <button type="button" id="ce-object-delete" title="选择后点击鸟瞰图中的对象标记删除">删除对象</button>
+        <span style="font:10px monospace;color:#71808a;">选择对象 → 点击鸟瞰图放置</span>
+      </div>
+      <div style="border-top:1px solid #dbe2e8;padding-top:7px;font-weight:700;margin-bottom:5px;">
+        2）城堡层 <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
+      </div>
       <div style="display:flex;gap:5px;align-items:center;margin-bottom:8px;" id="ce-palette"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
         <button type="button" id="ce-prev" title="上一层（Q）">◀</button>
-        <span>第 <b id="ce-layer">0</b> 层</span>
+        <span>城堡第 <b id="ce-layer">1</b> / 5 层</span>
         <button type="button" id="ce-next" title="下一层（E）">▶</button>
         <button type="button" id="ce-hide" title="隐藏更高层（H）">隐藏高层</button>
         <button type="button" id="ce-drop"
@@ -114,13 +224,13 @@ export function createCitadelEditorPanel({
         <button type="button" id="ce-redo" title="重做">重做</button>
       </div>
       <div style="max-width:100%;overflow:auto;">
-        <canvas id="ce-canvas" width="312" height="312"
+        <canvas id="ce-canvas" width="300" height="300"
           style="display:block;border:1px solid #d5dce2;border-radius:6px;cursor:crosshair;"></canvas>
       </div>
       <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;">
         <button type="button" id="ce-save" title="保存布局到存档（Ctrl+S）">保存</button>
         <button type="button" id="ce-reset" title="恢复内置布局">重置为 SPEC</button>
-        <button type="button" id="ce-clear" title="清空全部体块">清空</button>
+        <button type="button" id="ce-clear" title="清空当前台地的五层城堡">清空当前台地</button>
         <button type="button" id="ce-export" title="导出 ASCII 布局">导出</button>
         <button type="button" id="ce-import" title="导入 ASCII 布局">导入</button>
       </div>
@@ -131,22 +241,11 @@ export function createCitadelEditorPanel({
         <button type="button" id="ce-view-r" title="绕圣城右转 90°（环视四周）">⟳</button>
         <button type="button" id="ce-view-top" title="升到圣城顶端俯瞰">到顶</button>
       </div>
-      <div style="margin-top:8px;border-top:1px solid #dbe2e8;padding-top:6px;">
-        <div id="ce-terrain-head" style="cursor:pointer;user-select:none;font-weight:600;">
-          <span id="ce-terrain-arrow">▸</span> 地形地貌（台地土坡）
-        </div>
-        <div id="ce-terrain-body" style="display:none;margin-top:6px;">
-          <div id="ce-terrain-sliders"></div>
-          <div style="display:flex;gap:6px;margin-top:5px;align-items:center;">
-            <button type="button" id="ce-terrain-reset" title="恢复内置台地参数">重置地形</button>
-            <span style="color:#8a96a1;font:10px/1.4 monospace;">层数固定 5（石阶为五段手工布局）· 改动即时重建并自动保存</span>
-          </div>
-        </div>
-      </div>
       <div id="ce-stats" style="margin-top:7px;color:#4a5560;font:11px/1.5 monospace;"></div>
       <div style="margin-top:4px;color:#8a96a1;font:10px/1.5 monospace;">
         平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>
         3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>
+        台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>
         改动即时重建到 3D 场景 · 点「保存」（Ctrl+S）写入存档
       </div>
     </div>`;
@@ -264,6 +363,7 @@ export function createCitadelEditorPanel({
       const levels = parseImport(ioText.value);
       pushUndo();
       grid = levelsToGrid(levels);
+      terraceGrids[activeTerrace] = grid;
       io.style.display = "none";
       commit();
       toast("已导入圣城布局", 1.6);
@@ -298,7 +398,7 @@ export function createCitadelEditorPanel({
   function applyHideAbove() {
     btnHide.style.background = hideAbove ? "#2a2b2d" : "#fff";
     btnHide.style.color = hideAbove ? "#fff" : "#2a2b2d";
-    onLayerVisibility(activeLayer, hideAbove);
+    onLayerVisibility(activeTerrace, activeLayer, hideAbove);
   }
   btnHide.onclick = () => {
     hideAbove = !hideAbove;
@@ -327,37 +427,285 @@ export function createCitadelEditorPanel({
   panel.querySelector("#ce-view-r").onclick = () => onViewAction("orbitR");
   panel.querySelector("#ce-view-top").onclick = () => onViewAction("top");
 
-  // ---------- 地形地貌编辑器（台地土坡参数 → 即时重建外围地势） ----------
-  const TERRAIN_DEFAULTS = { ...CITADEL.contourTerrain };
+  // ---------- 台地层：五层独立半径 / 层高，台地 1 永远是最高层 ----------
+  const TERRAIN_DEFAULTS = normalizeCitadelTerrain(CITADEL.contourTerrain);
   let terrain = loadTerrain();
   function loadTerrain() {
     try {
       const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
-      if (saved && Number.isFinite(saved.baseRadius)) return { ...TERRAIN_DEFAULTS, ...saved };
+      if (saved) return normalizeCitadelTerrain(saved);
     } catch { /* 损坏存档回落默认 */ }
-    return { ...TERRAIN_DEFAULTS };
+    return normalizeCitadelTerrain(TERRAIN_DEFAULTS);
   }
   function persistTerrain() {
     try {
       localStorage.setItem(CITADEL_TERRAIN_KEY, JSON.stringify(terrain));
     } catch { /* private mode */ }
   }
-  const terrainHead = panel.querySelector("#ce-terrain-head");
-  const terrainBody = panel.querySelector("#ce-terrain-body");
-  const terrainArrow = panel.querySelector("#ce-terrain-arrow");
-  terrainHead.onclick = () => {
-    const show = terrainBody.style.display === "none";
-    terrainBody.style.display = show ? "block" : "none";
-    terrainArrow.textContent = show ? "▾" : "▸";
-  };
   const TERRAIN_FIELDS = [
-    { key: "baseRadius", label: "基底半径", min: 16, max: 32, step: 1 },
-    { key: "layerHeight", label: "层高", min: 1.4, max: 2.6, step: 0.1 },
-    { key: "shrink", label: "收分", min: 0.78, max: 0.95, step: 0.01 },
-    { key: "coreRadius", label: "核心半径", min: 6, max: 12, step: 0.5 },
+    { key: "radius", label: "本层半径", min: 4, max: 36, step: 0.25 },
+    {
+      key: "height",
+      label: "本层层高",
+      min: CITADEL_MIN_TERRACE_HEIGHT,
+      max: 5,
+      step: 0.1,
+    },
   ];
   const slidersEl = panel.querySelector("#ce-terrain-sliders");
+  const terrainMapEl = panel.querySelector("#ce-terrain-map");
+  const terrainMapCtx = terrainMapEl.getContext("2d");
+  const terraceTabsEl = panel.querySelector("#ce-terrace-tabs");
+  const castleContextEl = panel.querySelector("#ce-castle-context");
+  const terrainObjectButtons = new Map([
+    ["watchtower", panel.querySelector("#ce-object-watchtower")],
+    ["elderTree", panel.querySelector("#ce-object-tree")],
+    ["delete", panel.querySelector("#ce-object-delete")],
+  ]);
+
+  function selectTerrainObjectTool(tool) {
+    terrainObjectTool = terrainObjectTool === tool ? null : tool;
+    for (const [type, button] of terrainObjectButtons) {
+      const active = type === terrainObjectTool;
+      button.style.background = active ? "#2a2b2d" : "#fff";
+      button.style.color = active ? "#fff" : "#2a2b2d";
+    }
+    terrainMapEl.style.cursor = terrainObjectTool ? "crosshair" : "pointer";
+  }
+  for (const [type, button] of terrainObjectButtons) {
+    button.onclick = () => selectTerrainObjectTool(type);
+  }
+
+  function selectTerrace(index) {
+    activeTerrace = Math.min(CITADEL_TERRACE_COUNT - 1, Math.max(0, index));
+    grid = terraceGrids[activeTerrace];
+    drawTerraceTabs();
+    refreshTerrainInputs();
+    drawTerrainMap();
+    draw();
+    onLayerVisibility(activeTerrace, activeLayer, hideAbove);
+  }
+
+  function drawTerraceTabs() {
+    terraceTabsEl.querySelectorAll("button").forEach((button) => {
+      const selected = Number(button.dataset.terrace) === activeTerrace;
+      button.style.background = selected ? "#2a2b2d" : "#fff";
+      button.style.color = selected ? "#fff" : "#2a2b2d";
+    });
+    castleContextEl.textContent = `— 台地 ${activeTerrace + 1}${activeTerrace === 0 ? "（最高）" : ""}`;
+  }
+  for (let index = 0; index < CITADEL_TERRACE_COUNT; index++) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.terrace = String(index);
+    button.textContent = index === 0 ? "台地1·最高" : `台地${index + 1}`;
+    button.title = `编辑台地 ${index + 1} 的地貌和五层城堡`;
+    button.onclick = () => selectTerrace(index);
+    terraceTabsEl.appendChild(button);
+  }
+
+  /**
+   * 鸟瞰顺序严格等于菜单顺序：台地 1 是最高、最内层；台地 5 最低、最外层。
+   */
+  function drawTerrainMap() {
+    const ctx = terrainMapCtx;
+    const W = terrainMapEl.width;
+    const H = terrainMapEl.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#f7f4ea";
+    ctx.fillRect(0, 0, W, H);
+    const cx = W / 2;
+    const cy = H / 2 + 8;
+    const maxRadius = terrain.terraces.at(-1).radius;
+    const maxDrawR = Math.min(W / 2 - 50, H / 2 - 16);
+    const scale = maxDrawR / maxRadius;
+    if (terrain.notchedLayers > 0) {
+      ctx.save();
+      ctx.fillStyle = "rgba(143,199,214,0.20)";
+      ctx.beginPath();
+      const a0 = terrain.notchCenter - terrain.notchHalf - Math.PI / 2;
+      const a1 = terrain.notchCenter + terrain.notchHalf - Math.PI / 2;
+      ctx.arc(cx, cy, maxRadius * scale, a0, a1, false);
+      ctx.arc(cx, cy, terrain.terraces[0].radius * scale, a1, a0, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    const fills = [
+      "rgba(226,220,183,0.94)",
+      "rgba(216,207,166,0.88)",
+      "rgba(205,196,150,0.82)",
+      "rgba(193,185,140,0.76)",
+      "rgba(178,174,132,0.70)",
+    ];
+    const metrics = citadelTerraceMetrics(terrain);
+    for (let i = CITADEL_TERRACE_COUNT - 1; i >= 0; i--) {
+      const radius = terrain.terraces[i].radius;
+      const isActive = i === activeTerrace;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * scale, 0, Math.PI * 2);
+      ctx.fillStyle = fills[i];
+      ctx.fill();
+      ctx.strokeStyle = isActive ? "#e8862a" : "rgba(80,68,52,0.7)";
+      ctx.lineWidth = isActive ? 3 : 1;
+      ctx.stroke();
+      const ang = -Math.PI / 4;
+      const lx = cx + Math.cos(ang) * radius * scale + 7;
+      const ly = cy + Math.sin(ang) * radius * scale;
+      ctx.font = (isActive ? "bold " : "") + "10px monospace";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = isActive ? "#c05e10" : "#3a3026";
+      ctx.fillText(`台地${i + 1}${i === 0 ? "·最高" : ""}`, lx, ly);
+      ctx.fillStyle = "#8a7a64";
+      ctx.font = "9px monospace";
+      ctx.fillText(`R${radius.toFixed(1)} H${metrics[i].top.toFixed(1)}`, lx + 48, ly);
+    }
+    // Editable terrain-object markers share the same local x/z origin as 3D.
+    for (const object of terrainObjects) {
+      const selected = object.terraceIndex === activeTerrace;
+      const px = cx + object.x * scale;
+      const py = cy + object.z * scale;
+      ctx.beginPath();
+      ctx.arc(px, py, selected ? 6 : 4, 0, Math.PI * 2);
+      ctx.fillStyle = object.type === "watchtower" ? "#687985" : "#385e3e";
+      ctx.fill();
+      ctx.strokeStyle = selected ? "#ffffff" : "rgba(255,255,255,.55)";
+      ctx.lineWidth = selected ? 2 : 1;
+      ctx.stroke();
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 8px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(object.type === "watchtower" ? "塔" : "树", px, py);
+    }
+    // 城堡居中标记
+    ctx.save();
+    ctx.fillStyle = "#2a2b2d";
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 9px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("城", cx, cy);
+    ctx.restore();
+    ctx.fillStyle = "#4a5560";
+    ctx.font = "10px monospace";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("鸟瞰 · 台地1最高 · 点选圆环切换台地", 6, 4);
+    ctx.save();
+    ctx.translate(W - 22, 18);
+    ctx.fillStyle = "#6a7683";
+    ctx.font = "10px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("N", 0, 0);
+    ctx.beginPath();
+    ctx.moveTo(0, 4);
+    ctx.lineTo(-4, 14);
+    ctx.lineTo(4, 14);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /** 鸟瞰图点击圆环 → 切换该台地及其五层城堡。 */
+  terrainMapEl.addEventListener("click", (e) => {
+    const rect = terrainMapEl.getBoundingClientRect();
+    const px = (e.clientX - rect.left) * (terrainMapEl.width / rect.width);
+    const py = (e.clientY - rect.top) * (terrainMapEl.height / rect.height);
+    const cx = terrainMapEl.width / 2;
+    const cy = terrainMapEl.height / 2 + 8;
+    const maxRadius = terrain.terraces.at(-1).radius;
+    const maxDrawR = Math.min(terrainMapEl.width / 2 - 50, terrainMapEl.height / 2 - 16);
+    const scale = maxDrawR / maxRadius;
+    const rWorld = Math.hypot(px - cx, py - cy) / scale;
+    if (terrainObjectTool) {
+      const localX = (px - cx) / scale;
+      const localZ = (py - cy) / scale;
+      if (terrainObjectTool === "delete") {
+        let nearestIndex = -1;
+        let nearestDistance = Infinity;
+        terrainObjects.forEach((object, index) => {
+          if (object.terraceIndex !== activeTerrace) return;
+          const distance = Math.hypot(object.x - localX, object.z - localZ);
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestIndex = index;
+          }
+        });
+        if (nearestIndex >= 0 && nearestDistance <= 4) {
+          const object = terrainObjects[nearestIndex];
+          if (deleteTerrainObject(object.id)) toast("已删除地貌对象", 1.3);
+        }
+        return;
+      }
+      if (!citadelTerrainPointSupported(terrain, localX, localZ, activeTerrace)) {
+        toast("请在当前台地的可见顶面内放置", 1.5);
+        return;
+      }
+      const type = terrainObjectTool;
+      const placement = {
+        id: `${type}-${activeTerrace}-${++terrainObjectSequence}`,
+        type,
+        terraceIndex: activeTerrace,
+        x: Number(localX.toFixed(3)),
+        z: Number(localZ.toFixed(3)),
+        yaw: 0,
+        scale: type === "watchtower" ? 0.42 : 0.45,
+      };
+      // One terrain object per immediate footprint; replacing a nearby marker
+      // avoids interpenetrating towers/trees on the small upper terraces.
+      terrainObjects = terrainObjects.filter((object) =>
+        object.terraceIndex !== activeTerrace
+        || Math.hypot(object.x - localX, object.z - localZ) > 4
+      );
+      terrainObjects.push(placement);
+      persistTerrainObjects();
+      onTerrainObjectsChange([...terrainObjects]);
+      drawTerrainMap();
+      toast(type === "watchtower" ? "已放置瞭望塔" : "已放置参天树", 1.3);
+      return;
+    }
+    const terraceIndex = terrain.terraces.findIndex((entry) => rWorld <= entry.radius);
+    if (terraceIndex < 0) return;
+    selectTerrace(terraceIndex);
+    toast(`已切到台地 ${terraceIndex + 1}${terraceIndex === 0 ? "（最高）" : ""}`, 1.4);
+  });
+
+  // 鸟瞰图无需先切换“删除对象”工具：右键任意当前台地的塔/树标记即删。
+  terrainMapEl.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    const rect = terrainMapEl.getBoundingClientRect();
+    const px = (e.clientX - rect.left) * (terrainMapEl.width / rect.width);
+    const py = (e.clientY - rect.top) * (terrainMapEl.height / rect.height);
+    const cx = terrainMapEl.width / 2;
+    const cy = terrainMapEl.height / 2 + 8;
+    const maxRadius = terrain.terraces.at(-1).radius;
+    const maxDrawR = Math.min(terrainMapEl.width / 2 - 50, terrainMapEl.height / 2 - 16);
+    const scale = maxDrawR / maxRadius;
+    const localX = (px - cx) / scale;
+    const localZ = (py - cy) / scale;
+    let nearest = null;
+    let nearestDistance = Infinity;
+    for (const object of terrainObjects) {
+      if (object.terraceIndex !== activeTerrace) continue;
+      const distance = Math.hypot(object.x - localX, object.z - localZ);
+      if (distance < nearestDistance) {
+        nearest = object;
+        nearestDistance = distance;
+      }
+    }
+    if (nearest && nearestDistance <= 4 && deleteTerrainObject(nearest.id)) {
+      toast(nearest.type === "watchtower" ? "已删除瞭望塔" : "已删除参天树", 1.3);
+    }
+  });
+
   let terrainTimer = 0;
+  const terrainInputs = new Map();
   for (const f of TERRAIN_FIELDS) {
     const row = document.createElement("div");
     row.style.cssText = "display:flex;gap:6px;align-items:center;margin-bottom:4px;";
@@ -369,35 +717,75 @@ export function createCitadelEditorPanel({
     input.min = f.min;
     input.max = f.max;
     input.step = f.step;
-    input.value = terrain[f.key];
+    input.value = terrain.terraces[activeTerrace][f.key];
     input.style.flex = "1";
     input.dataset.terrainKey = f.key;
     const val = document.createElement("span");
     val.style.cssText = "width:34px;text-align:right;font:11px monospace;";
-    val.textContent = String(terrain[f.key]);
+    val.textContent = String(terrain.terraces[activeTerrace][f.key]);
     input.addEventListener("input", () => {
-      terrain = { ...terrain, [f.key]: Number(input.value) };
-      val.textContent = input.value;
+      const terraces = terrain.terraces.map((entry) => ({ ...entry }));
+      let value = Number(input.value);
+      if (f.key === "radius") {
+        const min = activeTerrace === 0 ? 4 : terraces[activeTerrace - 1].radius + 0.5;
+        const max = activeTerrace === CITADEL_TERRACE_COUNT - 1
+          ? 36
+          : terraces[activeTerrace + 1].radius - 0.5;
+        value = Math.min(max, Math.max(min, value));
+      }
+      terraces[activeTerrace][f.key] = value;
+      terrain = normalizeCitadelTerrain({ ...terrain, terraces });
+      terrainObjects = terrainObjects.filter((object) => citadelTerrainPointSupported(
+        terrain,
+        object.x,
+        object.z,
+        object.terraceIndex
+      ));
+      persistTerrainObjects();
+      onTerrainObjectsChange([...terrainObjects]);
+      input.value = String(value);
+      val.textContent = value.toFixed(f.key === "radius" ? 2 : 1);
       persistTerrain();
+      drawTerrainMap();
+      draw(); // 网格面板上的等高线叠随地形参数实时更新
       clearTimeout(terrainTimer); // 拖动防抖，松手 150ms 后重建
       terrainTimer = setTimeout(() => onTerrainChange({ ...terrain }), 150);
     });
     row.append(label, input, val);
     slidersEl.appendChild(row);
+    terrainInputs.set(f.key, { input, val });
+  }
+  function refreshTerrainInputs() {
+    for (const f of TERRAIN_FIELDS) {
+      const refs = terrainInputs.get(f.key);
+      if (!refs) continue;
+      const value = terrain.terraces[activeTerrace][f.key];
+      refs.input.value = String(value);
+      refs.val.textContent = value.toFixed(f.key === "radius" ? 2 : 1);
+    }
   }
   panel.querySelector("#ce-terrain-reset").onclick = () => {
-    terrain = { ...TERRAIN_DEFAULTS };
-    slidersEl.querySelectorAll("input").forEach((input) => {
-      input.value = terrain[input.dataset.terrainKey];
-      input.nextElementSibling.textContent = input.value;
-    });
+    terrain = normalizeCitadelTerrain(TERRAIN_DEFAULTS);
+    refreshTerrainInputs();
     try {
       localStorage.removeItem(CITADEL_TERRAIN_KEY);
     } catch { /* private mode */ }
     clearTimeout(terrainTimer);
+    drawTerrainMap();
     onTerrainChange({ ...terrain });
+    terrainObjects = terrainObjects.filter((object) => citadelTerrainPointSupported(
+      terrain,
+      object.x,
+      object.z,
+      object.terraceIndex
+    ));
+    persistTerrainObjects();
+    onTerrainObjectsChange([...terrainObjects]);
     toast("已恢复内置台地地形", 1.6);
   };
+  drawTerraceTabs();
+  refreshTerrainInputs();
+  drawTerrainMap();
 
   // ---------- 保存（编辑实时进 3D，点保存才写存档） ----------
   function applyDirty() {
@@ -408,7 +796,7 @@ export function createCitadelEditorPanel({
   }
   function save() {
     try {
-      localStorage.setItem(CITADEL_LEVELS_KEY, JSON.stringify(gridToLevels(grid)));
+      localStorage.setItem(CITADEL_LEVELS_KEY, JSON.stringify(serializeLayout()));
     } catch { /* private mode */ }
     dirty = false;
     applyDirty();
@@ -429,15 +817,18 @@ export function createCitadelEditorPanel({
   selectChar("W");
 
   function pushUndo() {
-    undoStack.push(JSON.stringify([...grid]));
+    undoStack.push(JSON.stringify({
+      activeTerrace,
+      terraces: terraceGrids.map((terraceGrid) => [...terraceGrid]),
+    }));
     if (undoStack.length > 100) undoStack.shift();
     redoStack = [];
   }
 
   /** 布局变更统一出口：回调上层即时重建 3D → 重画面板 → 标脏（保存才落盘） */
   function commit(markDirty = true) {
-    const levels = gridToLevels(grid);
-    const stats = onApply(levels);
+    terraceGrids[activeTerrace] = grid;
+    const stats = onApply(serializeLayout());
     if (markDirty) {
       dirty = true;
       applyDirty();
@@ -458,9 +849,66 @@ export function createCitadelEditorPanel({
     ctx2d.clearRect(0, 0, canvasEl.width, canvasEl.height);
     ctx2d.fillStyle = "#f2f5f7";
     ctx2d.fillRect(0, 0, canvasEl.width, canvasEl.height);
+    // 五层台地背景：所有城堡网格共享同一个固定中心。
+    {
+      // The terrain origin is the centre of grid cell (12, 12), not that
+      // cell's top-left corner. The old MAX_COORD/2 formula shifted every
+      // contour by half a cell and made map-edge cells disagree with 3D.
+      const cx = (n * gridPx) / 2;
+      const cy = cx;
+      const scale = gridPx / CELL; // 世界单位→像素
+      // 缺口扇区铺底
+      if (terrain.notchedLayers > 0) {
+        ctx2d.save();
+        ctx2d.fillStyle = "rgba(143,199,214,0.20)";
+        ctx2d.beginPath();
+        const a0 = terrain.notchCenter - terrain.notchHalf - Math.PI / 2;
+        const a1 = terrain.notchCenter + terrain.notchHalf - Math.PI / 2;
+        ctx2d.arc(cx, cy, terrain.terraces.at(-1).radius * scale, a0, a1, false);
+        ctx2d.arc(cx, cy, terrain.terraces[0].radius * scale, a1, a0, true);
+        ctx2d.closePath();
+        ctx2d.fill();
+        ctx2d.restore();
+      }
+      for (let i = CITADEL_TERRACE_COUNT - 1; i >= 0; i--) {
+        const rOuter = terrain.terraces[i].radius * scale;
+        const rInner = i === 0 ? 0 : terrain.terraces[i - 1].radius * scale;
+        ctx2d.beginPath();
+        if (i > 0) {
+          ctx2d.arc(cx, cy, rOuter, 0, Math.PI * 2);
+          ctx2d.arc(cx, cy, rInner, 0, Math.PI * 2, true);
+        } else {
+          ctx2d.arc(cx, cy, rOuter, 0, Math.PI * 2);
+        }
+        ctx2d.closePath();
+        ctx2d.fillStyle = i === activeTerrace
+          ? "rgba(232,134,42,0.25)"
+          : `rgba(196,196,148,${0.22 + i * 0.04})`;
+        ctx2d.fill();
+        const isActive = i === activeTerrace;
+        ctx2d.strokeStyle = isActive ? "#e8862a" : "rgba(80,68,52,0.55)";
+        ctx2d.lineWidth = isActive ? 2.4 : (i === CITADEL_TERRACE_COUNT - 1 ? 1.2 : 0.8);
+        ctx2d.stroke();
+      }
+      // 城堡居中标记（"+城"）
+      ctx2d.fillStyle = "rgba(42,43,45,0.7)";
+      ctx2d.beginPath();
+      ctx2d.arc(cx, cy, 5, 0, Math.PI * 2);
+      ctx2d.fill();
+      ctx2d.fillStyle = "#fff";
+      ctx2d.font = "bold 8px monospace";
+      ctx2d.textAlign = "center";
+      ctx2d.textBaseline = "middle";
+      ctx2d.fillText("城", cx, cy);
+    }
     for (let iz = 0; iz < n; iz++) {
       for (let ix = 0; ix < n; ix++) {
         const char = grid.get(`${ix},${activeLayer},${iz}`);
+        const supported = supportsCell(ix, iz, activeTerrace);
+        if (!supported) {
+          ctx2d.fillStyle = "rgba(86,107,122,0.12)";
+          ctx2d.fillRect(ix * gridPx + 1, iz * gridPx + 1, gridPx - 2, gridPx - 2);
+        }
         if (char) {
           ctx2d.fillStyle = PANEL_CHARS[char] ?? PANEL_CHARS.W;
           ctx2d.fillRect(ix * gridPx + 1, iz * gridPx + 1, gridPx - 2, gridPx - 2);
@@ -473,7 +921,7 @@ export function createCitadelEditorPanel({
         ctx2d.strokeRect(ix * gridPx + 0.5, iz * gridPx + 0.5, gridPx, gridPx);
       }
     }
-    layerLabel.textContent = String(activeLayer);
+    layerLabel.textContent = String(activeLayer + 1);
   }
 
   canvasEl.addEventListener("pointerdown", (e) => {
@@ -488,6 +936,13 @@ export function createCitadelEditorPanel({
       clearCell(grid, ix, activeLayer, iz);
     } else if (e.button === 0) {
       if (existing === activeChar) return;
+      // The map and 3D editor share the same support test. In particular,
+      // after clearing a terrace its first block can be placed in every cell
+      // whose centre lies on the selected terrace, and nowhere else.
+      if (!existing && !supportsCell(ix, iz, activeTerrace)) {
+        toast("该格不在当前台地的可建面内", 1.6);
+        return;
+      }
       pushUndo();
       setCell(grid, ix, activeLayer, iz, activeChar);
     } else {
@@ -514,34 +969,52 @@ export function createCitadelEditorPanel({
   function stepLayer(delta) {
     activeLayer = Math.min(MAX_LEVEL, Math.max(0, activeLayer + delta));
     draw();
-    onLayerVisibility(activeLayer, hideAbove);
+    onLayerVisibility(activeTerrace, activeLayer, hideAbove);
   }
   panel.querySelector("#ce-prev").onclick = () => stepLayer(-1);
   panel.querySelector("#ce-next").onclick = () => stepLayer(1);
 
   function undo() {
     if (!undoStack.length) return;
-    redoStack.push(JSON.stringify([...grid]));
-    grid = new Map(JSON.parse(undoStack.pop()));
+    redoStack.push(JSON.stringify({
+      activeTerrace,
+      terraces: terraceGrids.map((terraceGrid) => [...terraceGrid]),
+    }));
+    const snapshot = JSON.parse(undoStack.pop());
+    terraceGrids = snapshot.terraces.map((entries) => new Map(entries));
+    activeTerrace = snapshot.activeTerrace;
+    grid = terraceGrids[activeTerrace];
+    drawTerraceTabs();
     commit();
   }
   function redo() {
     if (!redoStack.length) return;
-    undoStack.push(JSON.stringify([...grid]));
-    grid = new Map(JSON.parse(redoStack.pop()));
+    undoStack.push(JSON.stringify({
+      activeTerrace,
+      terraces: terraceGrids.map((terraceGrid) => [...terraceGrid]),
+    }));
+    const snapshot = JSON.parse(redoStack.pop());
+    terraceGrids = snapshot.terraces.map((entries) => new Map(entries));
+    activeTerrace = snapshot.activeTerrace;
+    grid = terraceGrids[activeTerrace];
+    drawTerraceTabs();
     commit();
   }
   panel.querySelector("#ce-undo").onclick = undo;
   panel.querySelector("#ce-redo").onclick = redo;
   panel.querySelector("#ce-reset").onclick = () => {
     pushUndo();
-    grid = levelsToGrid(CITADEL_TOWN_SPEC.levels);
+    terraceGrids = normalizeCitadelTerraceLayout(CITADEL_TOWN_SPEC).terraces.map((entry) =>
+      levelsToGrid(entry.levels)
+    );
+    grid = terraceGrids[activeTerrace];
     commit();
     toast("已恢复内置圣城布局", 1.6);
   };
   panel.querySelector("#ce-clear").onclick = () => {
     pushUndo();
     grid = new Map();
+    terraceGrids[activeTerrace] = grid;
     commit();
   };
   panel.querySelector("#ce-close").onclick = () => api.close();
@@ -575,24 +1048,13 @@ export function createCitadelEditorPanel({
   // ---------- 场景 3D 直编辑 API（citadelSceneEdit.js 使用） ----------
   /** 栅格包围盒（与 citadelTown.js 的 cx/cz 居中约定一致，至少 1×1）。 */
   function gridDims() {
-    let cols = 0;
-    let rows = 0;
-    for (const key of grid.keys()) {
-      const [ix, , iz] = key.split(",").map(Number);
-      if (ix + 1 > cols) cols = ix + 1;
-      if (iz + 1 > rows) rows = iz + 1;
-    }
-    return { cols: Math.max(cols, 1), rows: Math.max(rows, 1) };
+    return { cols: CITADEL_GRID_SIZE, rows: CITADEL_GRID_SIZE };
   }
 
   /** 格中心在 level 组局部坐标（未含 townBaseY 抬升，由调用方按参考组变换）。 */
   function cellCenter(ix, iy, iz) {
-    const { cols, rows } = gridDims();
-    return {
-      x: (ix - (cols - 1) / 2) * CELL,
-      y: (iy + 0.5) * CELL_H,
-      z: (iz - (rows - 1) / 2) * CELL,
-    };
+    const { cols } = gridDims();
+    return citadelGridCellCenter(ix, iy, iz, CELL, CELL_H, cols);
   }
 
   /** level 组局部 x/z → 格坐标（越界返回 null）。 */
@@ -609,19 +1071,21 @@ export function createCitadelEditorPanel({
    * 有承重土坡落在其台面层级，无支撑（或台地超出可达层）返回 null = 不可放置。
    */
   function dropTarget(ix, iz) {
-    for (let iy = MAX_LEVEL - 1; iy >= 0; iy--) {
-      if (grid.has(`${ix},${iy},${iz}`)) return { ix, iy: iy + 1, iz };
-    }
-    const support = getSupportLevel(ix, iz);
-    if (support < 0 || support > MAX_LEVEL) return null;
-    return { ix, iy: support, iz };
+    const support = getSupportLevel(ix, iz, activeTerrace);
+    return resolveCitadelDropTarget(grid, ix, iz, support, MAX_LEVEL);
+  }
+
+  /** Single source of truth for 2D tinting/clicks and 3D plane placement. */
+  function supportsCell(ix, iz, terraceIndex = activeTerrace) {
+    return getSupportLevel(ix, iz, terraceIndex) >= 0;
   }
 
   /**
    * 场景直编辑统一入口：place = 放块/改色（用当前材质），erase = 删块。
    * 无变化返回 false（不进撤销栈）；有变化走 commit 即时重建。
    */
-  function applySceneEdit({ ix, iy, iz }, mode) {
+  function applySceneEdit({ ix, iy, iz, terraceIndex = activeTerrace }, mode) {
+    if (terraceIndex !== activeTerrace) return false;
     if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return false;
     if (iy < 0 || iy > MAX_LEVEL) return false;
     const existing = grid.get(`${ix},${iy},${iz}`);
@@ -630,6 +1094,7 @@ export function createCitadelEditorPanel({
       pushUndo();
       clearCell(grid, ix, iy, iz);
     } else {
+      if (!existing && !supportsCell(ix, iz, terraceIndex)) return false;
       if (existing === activeChar) return false;
       pushUndo();
       setCell(grid, ix, iy, iz, activeChar);
@@ -645,28 +1110,44 @@ export function createCitadelEditorPanel({
       if (open) return;
       open = true;
       panel.style.display = "block";
-      commit(false); // 初次打开：同步一次当前布局与统计（不算未保存改动）
-      applyHideAbove(); // 重新断言一次层可见性
+      // 打开面板只改变 UI，不得重建或修改 3D 城堡。布局在每次真正编辑时
+      // 已由 commit() 即时同步；这里调用 commit 会让一次普通点选变成场景写入。
+      hideAbove = false;
+      applyHideAbove(); // 每次打开先完整显示五座台地上的全部城堡层
+      drawTerrainMap(); // 等高线高亮与当前层同步
     },
     close() {
       open = false;
       panel.style.display = "none";
       io.style.display = "none";
-      onLayerVisibility(activeLayer, false); // 关面板恢复全楼可见
+      onLayerVisibility(activeTerrace, activeLayer, false); // 关面板恢复全楼可见
     },
     toggle() {
       if (open) api.close();
       else api.open();
     },
     isOpen: () => open,
-    getState: () => ({ activeChar, activeLayer, hideAbove, dropToGround }),
+    getState: () => ({
+      activeChar,
+      activeTerrace,
+      activeLayer,
+      hideAbove,
+      dropToGround,
+      terrainObjectTool,
+    }),
     applySceneEdit,
     cellCenter,
     cellAtLocal,
     dropTarget,
+    supportsCell,
+    deleteTerrainObject,
     maxLevel: MAX_LEVEL,
     maxCoord: MAX_COORD,
   };
+  // Keep the backing canvas exactly equal to the fixed 25×25 building grid.
+  // This makes its visual centre identical to cellCenter(12, *, 12).
+  canvasEl.width = Math.round((MAX_COORD + 1) * gridPx);
+  canvasEl.height = canvasEl.width;
   draw();
   return api;
 }

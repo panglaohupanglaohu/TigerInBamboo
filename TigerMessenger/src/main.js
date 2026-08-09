@@ -16,8 +16,13 @@ import { createMapEditor } from "./core/mapEditor.js";
 import { createCitadelEditorPanel } from "./ui/citadelEditorPanel.js";
 import { createCitadelSceneEdit } from "./ui/citadelSceneEdit.js";
 import { createCrystalCityEditorPanel } from "./ui/crystalCityEditorPanel.js";
-import { rebuildCitadelTown, rebuildCitadelTerrain, terrainSupportLevel } from "./world/odysseyCitadel.js";
-import { CITADEL_TOWN_SPEC } from "./world/citadelTown.js";
+import {
+  rebuildCitadelTown,
+  rebuildCitadelTerrain,
+  rebuildCitadelTerrainObjects,
+  terrainSupportLevel,
+} from "./world/odysseyCitadel.js";
+import { CITADEL_TOWN_SPEC, citadelGridCellCenter } from "./world/citadelTown.js";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P } from "./core/params.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
@@ -235,7 +240,7 @@ const minimap = createMinimap({
     { id: "bookshop", name: "书店镇", color: "#d98a2b",
       getDir: () => messenger?.landmarks?.bookshop?.position },
     { id: "camp", name: "出发营地", color: "#4aa76c",
-      getDir: () => messenger?.landmarks?.camp?.landmarks?.elder?.position },
+      getDir: () => messenger?.landmarks?.camp?.landmarks?.anchor?.position },
     { id: "gate", name: "叹息之门", color: "#b85a42",
       getDir: () => messenger?.landmarks?.abandonedGate?.userData?.seatRoot?.position },
     { id: "citadel", name: "高山圣城", color: "#d4af37",
@@ -564,27 +569,39 @@ const boatRide = createBoatRide({
 // ---------- 高山圣城 · Townscaper 搭建面板 ----------
 // 乘坐航空艇（热气球）时用鼠标左键点选圣城 → 弹出可拖拽/可收起的搭建面板；
 // 面板编辑（2D 平面图 / 场景 3D 直编辑）→ rebuildCitadelTown 即时重建场景圣城
-// → 布局写 localStorage。隐藏高层通过物理层里的 town-level-N 组开关可见性。
-function applyTownLayerVisibility(activeLayer, hideAbove) {
+// → v2 布局写 localStorage。每座台地拥有五个 town-terrace-T-level-N 组。
+function applyTownLayerVisibility(activeTerrace, activeLayer, hideAbove) {
   const layers = messenger?.landmarks?.odysseyCitadel?.userData?.layers;
   if (!layers) return;
   for (const layer of layers) {
     for (const child of layer.children) {
-      const m = /^town-level-(\d+)$/.exec(child.name || "");
-      if (m) child.visible = !hideAbove || Number(m[1]) <= activeLayer;
+      const m = /^town-terrace-(\d+)-level-(\d+)$/.exec(child.name || "");
+      if (m) {
+        const terrace = Number(m[1]);
+        const floor = Number(m[2]);
+        child.visible = !hideAbove || terrace !== activeTerrace || floor <= activeLayer;
+      }
     }
   }
 }
 
 // 土坡支撑缓存：键 "ix,iz" → 层级（-1 = 无承重土坡）；布局/地形变更即失效
 const citadelSupportCache = new Map();
-function citadelSupportAt(ix, iz) {
-  const key = `${ix},${iz}`;
+function citadelSupportAt(ix, iz, terraceIndex = 0) {
+  const key = `${terraceIndex}:${ix},${iz}`;
   if (citadelSupportCache.has(key)) return citadelSupportCache.get(key);
   const citadel = messenger?.landmarks?.odysseyCitadel;
-  if (!citadel || !citadelEditorPanel) return -1;
-  const c = citadelEditorPanel.cellCenter(ix, 0, iz); // 格 → level 组局部坐标
-  const level = terrainSupportLevel(citadel, c.x, c.z, CITADEL_TOWN_SPEC.cellHeight);
+  if (!citadel) return -1;
+  // Pure canonical transform: safe even while the panel is still being
+  // constructed, and exactly identical to both the 2D map and 3D generator.
+  const c = citadelGridCellCenter(ix, 0, iz);
+  const level = terrainSupportLevel(
+    citadel,
+    c.x,
+    c.z,
+    CITADEL_TOWN_SPEC.cellHeight,
+    terraceIndex
+  );
   citadelSupportCache.set(key, level);
   return level;
 }
@@ -597,19 +614,23 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
       getSupportLevel: citadelSupportAt,
       onTerrainChange: (contour) => {
         rebuildCitadelTerrain(messenger.landmarks.odysseyCitadel, contour);
+        messenger.landmarks.citadelRange?.rebuildWaterTerraces?.(contour);
         citadelSupportCache.clear();
         citadelObstacle = null; // 净空区下帧重算
       },
-      onApply: (levels) => {
-        const stats = rebuildCitadelTown(messenger.landmarks.odysseyCitadel, {
-          ...CITADEL_TOWN_SPEC,
-          levels,
-        });
+      onTerrainObjectsChange: (objects) => {
+        rebuildCitadelTerrainObjects(messenger.landmarks.odysseyCitadel, objects);
+        citadelObstacle = null;
+      },
+      onApply: (layout) => {
+        // 编辑器提交的是 v2 五台地布局对象（{ terraces: [...] }），不能再包进
+        // 旧版单城堡的 `levels` 字段；否则归一化时会得到五座空城堡。
+        const stats = rebuildCitadelTown(messenger.landmarks.odysseyCitadel, layout);
         citadelObstacle = null; // 建筑体量变了，净空区下帧重算
         citadelSupportCache.clear(); // 包围盒可能变，支撑缓存失效
         // 重建后 level 组全部换新，按面板状态重新断言一次可见性
         const st = citadelEditorPanel?.getState?.();
-        if (st) applyTownLayerVisibility(st.activeLayer, st.hideAbove);
+        if (st) applyTownLayerVisibility(st.activeTerrace, st.activeLayer, st.hideAbove);
         return stats;
       },
     })
@@ -766,6 +787,23 @@ window.addEventListener("keydown", (e) => {
   bubblePodRide?.forceExit?.();
   const on = aircraftRide.toggle();
   showToast(on ? "已进入飞行器驾驶舱 · [V] 退出" : "已退出飞行器驾驶舱", 2.4);
+});
+
+// [Q] 召唤航空艇飞到玩家正上方（idle 状态可用；面板编辑时 Q 归面板换层）
+window.addEventListener("keydown", (e) => {
+  if (e.repeat || e.code !== "KeyQ") return;
+  // 圣城/水晶城编辑面板打开时 Q 归面板使用（换层）
+  if (citadelEditorPanel?.isOpen?.()) return;
+  if (crystalCityEditorPanel?.isOpen?.()) return;
+  if (!gameStarted) return;
+  // 飞行中/攀爬中不可召唤
+  if (airshipRide.getState?.() !== "idle") return;
+  const ok = airshipRide.summon?.();
+  if (ok) {
+    showToast("航空艇已降临到面前 · 走到绳下按 [F] 登艇", 2.6);
+  } else {
+    showToast("航空艇暂不可召唤", 1.6);
+  }
 });
 
 // ---------- 天气（雨/雪/闪电/停雨彩虹，受风速风向影响） ----------

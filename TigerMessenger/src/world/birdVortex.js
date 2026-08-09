@@ -22,7 +22,7 @@ export const VORTEX_LIT = new THREE.Color(0xfad7a0);
 export const VORTEX_SHADE = new THREE.Color(0x2c3e50);
 
 const DEFAULT_COUNT = 1000;
-const COUNT_MIN = 500;
+const COUNT_MIN = 50; // 允许圣城小群旋涡；门体仍默认 1000
 const COUNT_MAX = 2400;
 
 // ---------- 分组 ----------
@@ -203,6 +203,8 @@ export function createVortexBirdTemplate(color = 0xfad7a0) {
  *   right?: THREE.Vector3, forward?: THREE.Vector3, sunDir?: THREE.Vector3,
  *   getTram?: () => THREE.Object3D|null,
  *   yFloor?: number, yCeil?: number, rMin?: number, rMax?: number,
+ *   spiralOnly?: boolean, // true = 全体 A 组双螺旋长河（圣城等非门体锚点）
+ *   name?: string,
  * }} [opts]
  */
 export class BirdVortexManager {
@@ -215,6 +217,8 @@ export class BirdVortexManager {
     this.count = count;
     this.scene = scene;
     this.getTram = opts.getTram || null;
+    /** 全体走双螺旋盘旋，不攀附门体假想墙（用于高山圣城等） */
+    this.spiralOnly = !!opts.spiralOnly;
 
     this.origin = (opts.origin || new THREE.Vector3(0, 40, 0)).clone();
     this.up = (opts.up || new THREE.Vector3(0, 1, 0)).clone().normalize();
@@ -236,7 +240,7 @@ export class BirdVortexManager {
     this._viewK = 0;
 
     this.root = new THREE.Group();
-    this.root.name = "bird-vortex-maelstrom";
+    this.root.name = opts.name || (this.spiralOnly ? "bird-vortex-spiral-river" : "bird-vortex-maelstrom");
     this.root.frustumCulled = false;
     scene.add(this.root);
 
@@ -562,19 +566,27 @@ export class BirdVortexManager {
     const H = Math.max(this.yCeil - this.yFloor, 1);
     const gs = Math.max(1, Math.round(n / GROUP_COUNT));
     // 组级集结点：每面 4 组共用面，但 B/C 各有独立「一点散落」集结点与地面食堂
-    for (let g = 0; g < GROUP_COUNT; g++) {
-      const face = (g / GROUPS_PER_FACE) | 0;
-      this._groups[g] = {
-        face,
-        rally: this._spotOnFace(face), // B/C 墙面集结点（一点）
-        ground: this._groundSpot(face), // B/C 地面食堂中心
-      };
+    // spiralOnly 不需要墙面/食堂锚点
+    if (!this.spiralOnly) {
+      for (let g = 0; g < GROUP_COUNT; g++) {
+        const face = (g / GROUPS_PER_FACE) | 0;
+        this._groups[g] = {
+          face,
+          rally: this._spotOnFace(face), // B/C 墙面集结点（一点）
+          ground: this._groundSpot(face), // B/C 地面食堂中心
+        };
+      }
+    } else {
+      for (let g = 0; g < GROUP_COUNT; g++) {
+        this._groups[g] = { face: 0, rally: null, ground: null };
+      }
     }
 
     for (let i = 0; i < n; i++) {
       const g = Math.min(GROUP_COUNT - 1, (i / gs) | 0);
-      const role = g % GROUPS_PER_FACE;
-      const face = this._groups[g].face;
+      // 圣城等：全体 A 组双螺旋长河
+      const role = this.spiralOnly ? ROLE_A : g % GROUPS_PER_FACE;
+      const face = this.spiralOnly ? 0 : this._groups[g].face;
       this.role[i] = role;
       this.faceOf[i] = face;
       this.phase[i] = Math.random() * Math.PI * 2;
@@ -786,9 +798,9 @@ export class BirdVortexManager {
           .multiplyScalar(r * w)
           .addScaledVector(this.up, dH)
           .addScaledVector(_rad, dR);
-        // 盘旋组墙体避障：低空掠过拱顶/塔身时自动向外扩大环绕半径
+        // 盘旋组墙体避障（门体模式）；螺旋长河模式跳过假想门墙
         _vel.normalize();
-        this._avoidWalls(_p, _vel, i);
+        if (!this.spiralOnly) this._avoidWalls(_p, _vel, i);
         this.px[i] = _p.x;
         this.py[i] = _p.y;
         this.pz[i] = _p.z;

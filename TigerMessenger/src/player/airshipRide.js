@@ -512,10 +512,52 @@ export function createAirshipRide({
     setHint(null);
   }
 
+  /**
+   * [Q] 召唤飞艇：飞艇降临到玩家**面朝方向前方 ~10 单位、低空**——
+   * 绳尾恰好触地，玩家平视即可看见、走到绳下按 [F] 抓绳。
+   * （旧版放头顶 hover=20 高空：绳尾离地 7.1 米够不着，且飞出视锥外，
+   *   体感像"召唤无效"。）
+   * 仅 idle 状态可用（飞行中/攀爬中不可召唤）。召唤后标记 flown，防止回锚。
+   */
+  function summon() {
+    if (state !== "idle") return false;
+    const a = airship();
+    if (!a) return false;
+    // 玩家面朝方向（切平面投影）
+    _up.copy(player.position).normalize();
+    _fwd.copy(player.forward);
+    _fwd.addScaledVector(_up, -_fwd.dot(_up));
+    if (_fwd.lengthSq() < 1e-6) _fwd.set(0, 0, 1);
+    _fwd.normalize();
+    // 锚点 = 玩家球面位置沿面朝方向前移 10 单位（球面小范围弦≈弧）
+    _dir.copy(player.position).addScaledVector(_fwd, 10).normalize();
+    // 低空：绳尾在艇心下 12.9（吊舱 -3.5 + 绳挂点 -0.4 + 绳长 9），
+    // hover 13.2 → 绳尾离地 0.3，玩家头部 dy≈1.3 落入抓绳判定窗。
+    hover = 13.2;
+    // 艇首朝玩家（玩家看到艇首正面与右前侧的登艇绳）
+    _fwd.negate();
+    // 反推偏航角：基准前向（局部+Z 经 quatYToDir）与期望前向的夹角
+    quatYToDir(_dir, _q0);
+    _f0.copy(FWD_LOCAL).applyQuaternion(_q0);
+    _f0.addScaledVector(_up, -_f0.dot(_up)).normalize();
+    _tmp.crossVectors(_f0, _fwd);
+    yaw = Math.atan2(_tmp.dot(_up), _f0.dot(_fwd));
+    // 定位飞艇
+    a.position.copy(_dir).multiplyScalar(planetRadius + hover);
+    a.quaternion.copy(_q0).multiply(_qYaw.setFromAxisAngle(_yAxis, yaw));
+    a.userData.anchorDir = _dir.clone();
+    a.userData.hover = hover;
+    a.userData.yaw = yaw;
+    // 标记已飞行：防止 messengerIsland 回锚逻辑把飞艇拉回湖沼
+    a.userData.flown = true;
+    return true;
+  }
+
   return {
     update,
     forceExit,
     setPose,
+    summon,
     isFlying: () => state === "flying",
     getState: () => state,
   };

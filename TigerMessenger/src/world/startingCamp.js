@@ -237,7 +237,13 @@ export function buildStartingCamp(scene, R) {
   elder.userData.musicKeys = keys;
   const ELDER = { x: -17, z: 9 }; // 原 (-12.3,4.5) 被轨道穿过，移到山洞旁（距轨道 4.33）
   put(elder, ELDER.x, ELDER.z, layoutGroundLiftAt(ELDER.x, ELDER.z), 2.6); // 面转向营地
-  colliders.push({ position: elder.position.clone(), radius: 0.8 });
+  // kind 标记：messengerIsland 会在圣城建成后把老人搬到第一层瀑布旁，
+  // 并同步更新此碰撞体位置。
+  colliders.push({ position: elder.position.clone(), radius: 0.8, kind: "elder" });
+  // 营地锚点：小地图「出发营地」标记用。老人搬到圣城瀑布旁后，
+  // 锚点仍指向营地（老人原位置）。
+  const campAnchor = new THREE.Object3D();
+  put(campAnchor, ELDER.x, ELDER.z, layoutGroundLiftAt(ELDER.x, ELDER.z));
 
   // ---------- 4b. 阿狸：与送信人体量相当的小狐狸（可互动 / 漫步） ----------
   // 插画风尖脸阿狸（V 眼 + 火焰大尾）；默认 scale 0.52
@@ -280,6 +286,6 @@ export function buildStartingCamp(scene, R) {
   return {
     group: g,
     colliders,
-    landmarks: { elder, foxAli: ali, skyRing, hillCenter: HILL, campFlowers },
+    landmarks: { elder, anchor: campAnchor, foxAli: ali, skyRing, hillCenter: HILL, campFlowers },
   };
 }

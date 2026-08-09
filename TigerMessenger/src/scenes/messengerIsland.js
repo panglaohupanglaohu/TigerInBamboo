@@ -11,7 +11,7 @@ import { P } from "../core/params.js";
 import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
 import { buildHills, carveHillsForTrack } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
-import { createMoonLake, HARBOR } from "../world/lake.js";
+import { createMoonLake } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
@@ -40,12 +40,17 @@ import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
 import { createCitySeaLake } from "../world/citySeaLake.js";
-import { buildOdysseyCitadel, CITADEL_TERRAIN_KEY } from "../world/odysseyCitadel.js";
+import {
+  buildOdysseyCitadel,
+  CITADEL_TERRAIN_KEY,
+  CITADEL_TERRAIN_OBJECTS_KEY,
+} from "../world/odysseyCitadel.js";
 import { CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY } from "../world/citadelTown.js";
 import {
   buildCitadelRange,
   citadelRangeLiftDir,
   citadelSiteDir,
+  rangeLocalToWorld,
 } from "../world/citadelRange.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
 
@@ -82,24 +87,13 @@ export const messengerIslandScene = {
     // 峡谷白鲸湖在水晶城建好后创建（见下方「花厅塔下方白鲸湖」），
     // 因为要拿到运行时算出的花厅塔方向与塔基高度。
 
-    // ---------- 月牙湖旁 · 老旧修船厂码头（坐标与电车避障 HARBOR 共用） ----------
+    // ---------- 旧港码头 · 圣城深潭参天树下 ----------
+    // 摆放依赖 rangeLocalToWorld（需圣城山脉先建），统一在圣城段落执行。
+    // world/lake.js 的 HARBOR 常量仍被电车避障引用（tramSystem.js），不改动。
     const harborBuilt = buildOldHarborScene({ seed: 8844 });
     const harbor = harborBuilt.group;
-    const harborX = HARBOR.x;
-    const harborZ = HARBOR.z;
-    const harborLift = groundLiftAt(harborX, harborZ);
-    placeObjectOnSphere(harbor, harborX, harborZ, harborLift, R);
-    harbor.rotateY(HARBOR.yaw);
     scene.add(harbor);
-    harbor.updateMatrixWorld(true);
-    const _wp = new THREE.Vector3();
-    const harborColliders = [
-      { position: harbor.position.clone(), radius: 3.8 },
-      {
-        position: harborBuilt.landmarks.crane.getWorldPosition(_wp.clone()),
-        radius: 1.15,
-      },
-    ];
+    let harborColliders = [];
 
     // 基督城有轨电车：北岛环线 + 跨赤道绕莫比斯主晶塔
     // 能量束目标：中央母体晶皇塔顶
@@ -153,30 +147,81 @@ export const messengerIslandScene = {
       baseRadius: lakeHall?.root,
     });
 
-    // ---------- 太古高山圣城要塞 + 圣城山脉（双峰对望 + 前望峡谷） ----------
+    // ---------- 太古高山圣城要塞 + 五层贴地台地 ----------
     // 选址：lat 24.1 / lon 36.05（主岛东南旷野，三边测量定位的用户指定点）。
-    // 山脉：圣城主峰（+16 平顶）托举圣城；前望看台峰（+10.5，lz+36 朝岛侧）
-    // 略低 —— 「这山望着那山高」；两峰之间鞍部深谷凸显圣城体量。
-    // 视觉=碰撞共用 citadelRangeLiftDir（collision.js 已接入）。
+    // 旧 +16 黄土主峰与前景土坡均已取消；第五层台地直接贴住全球地表。
+    // 五座台地湖泊由四道相邻层瀑布连接，不允许跨层跌落。
     // 主建筑重构版：三层马斯塔巴 + 黄金瓜棱穹顶 + 宣礼塔/红砖角楼；
     // 四级清透水帘连接五座白石梯湖；底部雾气与涟漪落入下一级水面。
-    const citadelRange = buildCitadelRange(scene, R);
+    // 地形编辑器保存的台地参数同时驱动台地和梯湖，确保两者永远同层。
+    let citadelContour;
+    try {
+      const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
+      if (saved && (Number.isFinite(saved.baseRadius) || Array.isArray(saved.terraces))) {
+        citadelContour = saved;
+      }
+    } catch { /* 损坏存档回落内置台地参数 */ }
+    const citadelRange = buildCitadelRange(scene, R, citadelContour);
     const citadelDir = citadelSiteDir(new THREE.Vector3());
+
+    // ---------- 旧港码头 + 古战船 · 圣城深潭参天大树下（贴地） ----------
+    // 参天树 (-15.2, 42)；深潭水面椭圆左缘约 x≈-11.5。码头必须整组落在
+    // 岸地树荫下（不悬空、不埋进土），栈桥仍朝向潭心，船停在栈桥甲板高度。
+    {
+      const TREE_LX = -15.2;
+      const TREE_LZ = 42.0;
+      const POOL_LX = 1.0;
+      const POOL_LZ = 43.0;
+      // 树根旁偏潭约 1.0：仍在岸上（< -11.5），树冠正下方
+      const toPoolFlatX = POOL_LX - TREE_LX;
+      const toPoolFlatZ = POOL_LZ - TREE_LZ;
+      const flatLen = Math.hypot(toPoolFlatX, toPoolFlatZ) || 1;
+      const harborLx = TREE_LX + (toPoolFlatX / flatLen) * 1.0;
+      const harborLz = TREE_LZ + (toPoolFlatZ / flatLen) * 1.0;
+      // 与 placeRangeAsset(siteUpright) 同构：落在高度场表面 + 站点法向
+      rangeLocalToWorld(harborLx, harborLz, R, harbor.position);
+      const siteUp = citadelSiteDir(new THREE.Vector3());
+      // 桩底 y=0 对齐地表；微抬 0.04 防与高度场 z-fight，不悬空
+      harbor.position.addScaledVector(siteUp, 0.04);
+      const poolC = rangeLocalToWorld(POOL_LX, POOL_LZ, R, new THREE.Vector3());
+      const toPool = poolC.sub(harbor.position);
+      toPool.addScaledVector(siteUp, -toPool.dot(siteUp)).normalize();
+      const zAxis = new THREE.Vector3().crossVectors(toPool, siteUp).normalize();
+      // 局部 +Y = 站点法向（贴地），+X 朝潭，栈桥沿地面伸向深潭
+      harbor.quaternion.setFromRotationMatrix(
+        new THREE.Matrix4().makeBasis(toPool, siteUp, zAxis)
+      );
+      harbor.updateMatrixWorld(true);
+      const harborWater = harbor.getObjectByName("harbor-water");
+      if (harborWater) harborWater.visible = false;
+      // 船保持建造时的甲板高度（约 0.61），与栈桥同高、坐在码头上；
+      // 勿再压到 y=-0.2（那是旧「深潭吃水」校准，岸地会整船埋土）。
+      const boat = harborBuilt.landmarks.boat;
+      if (boat && boat.position.y < 0.3) boat.position.y = 0.61;
+      harborColliders = [
+        { position: harbor.position.clone(), radius: 3.8 },
+        {
+          position: harborBuilt.landmarks.crane.getWorldPosition(new THREE.Vector3()),
+          radius: 1.15,
+        },
+      ];
+    }
     // 圣城搭建面板/编辑器（citadelEditorPanel / townscaper.html）保存的布局优先；
     // 无存档时回落到内置 CITADEL_TOWN_SPEC。
     let citadelSpec;
     try {
       const saved = JSON.parse(localStorage.getItem(CITADEL_LEVELS_KEY) || "null");
-      if (Array.isArray(saved) && saved.length) {
-        citadelSpec = { ...CITADEL_TOWN_SPEC, levels: saved };
+      if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) {
+        citadelSpec = saved;
       }
     } catch { /* 损坏存档回落内置 SPEC */ }
-    // 地形编辑器保存的台地参数优先；无存档回落内置 contourTerrain。
-    let citadelContour;
+    let citadelTerrainObjects;
     try {
-      const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
-      if (saved && Number.isFinite(saved.baseRadius)) citadelContour = saved;
-    } catch { /* 损坏存档回落内置台地参数 */ }
+      const saved = JSON.parse(
+        localStorage.getItem(CITADEL_TERRAIN_OBJECTS_KEY) || "[]"
+      );
+      if (Array.isArray(saved)) citadelTerrainObjects = saved;
+    } catch { /* 损坏存档回落空地貌对象 */ }
     const odysseyCitadel = buildOdysseyCitadel({
       dir: citadelDir,
       faceDir: moonLake?.centerWorld || null,
@@ -185,6 +230,7 @@ export const messengerIslandScene = {
       seed: 20260808,
       spec: citadelSpec,
       contour: citadelContour,
+      terrainObjects: citadelTerrainObjects,
     });
     scene.add(odysseyCitadel);
 

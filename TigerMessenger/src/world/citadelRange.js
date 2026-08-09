@@ -1,11 +1,10 @@
 // =====================================================================
-//  圣城山脉（Citadel Range）：旷野双峰 + 前望峡谷
+//  圣城外围地表（Citadel Range）：五层台地的贴地承接面
 //
 //  布局（站点局部切平面，lz+ 指向主岛）：
-//    lz≈0   圣城主峰：顶面抬升 16，椭圆平顶（半轴 30×26），圣城坐落其上
-//    lz≈36  前望看台峰：抬升 10.5（半轴 17×14），略低于主峰 ——
-//           「这山望着那山高」：站在看台峰仰望圣城
-//    lz≈18  两峰之间的鞍部深谷（高程 ≈ 主峰一半），凸显圣城体量
+//    lz≈0   不再生成旧 +16 黄土主峰；城堡只由五层可编辑台地承托
+//    lz≈36  不再生成独立前景土坡；第五层台地直接咬入全球地表
+//    水系    五座台地湖泊 + 四道相邻层瀑布，严禁跨越两层
 //
 //  关键约束：星球网格 48×32 段太粗（顶点间距 ~20 单位），无法直接
 //  顶点位移造山 → 独立高度场网格，视觉与碰撞共用同一高程函数
@@ -16,13 +15,20 @@ import * as THREE from "three";
 import { latLonToDir } from "./sphereMath.js";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { createMangaWaterfall } from "./mangaWaterfall.js";
+import {
+  CITADEL,
+  citadelCurvatureDrop,
+  citadelTerraceMetrics,
+  normalizeCitadelTerrain,
+} from "./odysseyCitadel.js";
+import { createSnowMassif } from "../assets/snowMassif.js";
 
 /* ---------------- 选址与山体参数（锁死） ---------------- */
 export const RANGE_SITE = Object.freeze({ lat: 24.1, lon: 36.05 });
 export const CITADEL_PEAK = Object.freeze({
-  // Broad footing sized beyond the 24×24 enceinte, twin barbican and rock
-  // claws. The soil now wraps the castle instead of ending under its walls.
-  cx: 0, cz: 0, rx: 44, rz: 38, h: 16,
+  // The former +16 broad soil mountain is gone. The five editable contour
+  // terraces are now the entire citadel landform and terrace 5 meets ground.
+  cx: 0, cz: 0, rx: 44, rz: 38, h: 0,
 });
 export const VIEW_PEAK = Object.freeze({
   // The former foreground soil mound is removed; architecture replaces it.
@@ -36,19 +42,6 @@ export const OUTPOST_CUT = Object.freeze({
 const BASE_LIFT = 0.4; // 域内基线：压住粗网格球面弦高差
 const SKIRT_DEPTH = 0.7; // 域缘裙边下沉，扎进球面遮接缝
 const SKIRT_BAND = 6; // 裙边过渡带宽
-const INTER_CASCADE_NOTCH = Object.freeze({
-  cx: 3.5,
-  halfWidth: 5.2,
-  zMin: 23.8,
-  zMax: 34.2,
-});
-
-function insideInterCascadeNotch(lx, lz) {
-  return Math.abs(lx - INTER_CASCADE_NOTCH.cx) < INTER_CASCADE_NOTCH.halfWidth
-    && lz > INTER_CASCADE_NOTCH.zMin
-    && lz < INTER_CASCADE_NOTCH.zMax;
-}
-
 // 局部基架：up = 站点方向，lz+ 指向主岛，lx = 右
 const _site = latLonToDir(RANGE_SITE.lat, RANGE_SITE.lon, new THREE.Vector3());
 const _island = latLonToDir(90, 0, new THREE.Vector3());
@@ -82,16 +75,9 @@ export function citadelRangeLiftLocal(lx, lz) {
     peakLift(lx, lz, CITADEL_PEAK, 0.42, 0.8) +
     peakLift(lx, lz, VIEW_PEAK, 0.4, 0.8);
 
-  // Direct terrain replacement, not an object placed on top of a mound:
-  // flatten the exact right-front shoulder under the defense tower and blend
-  // the cut into the remaining cliff over a narrow annulus.
-  const outpostDx = (lx - OUTPOST_CUT.cx) / OUTPOST_CUT.rx;
-  const outpostDz = (lz - OUTPOST_CUT.cz) / OUTPOST_CUT.rz;
-  const outpostD = Math.hypot(outpostDx, outpostDz);
-  if (outpostD < 1.18) {
-    const blend = THREE.MathUtils.smoothstep(outpostD, 0.72, 1.18);
-    lift = THREE.MathUtils.lerp(BASE_LIFT + OUTPOST_CUT.floor, lift, blend);
-  }
+  // The former foreground-defense-tower pad deliberately no longer carves a
+  // flat pit into the slope.  The citadel range now stays a continuous landform
+  // except for the explicit staircase / cascade watercourse.
   // 域缘裙边：距矩形域边 < SKIRT_BAND 时平滑扎进球面
   const ex = Math.min(lx - LX_MIN, LX_MAX - lx);
   const ez = Math.min(lz - LZ_MIN, LZ_MAX - lz);
@@ -130,46 +116,86 @@ export function rangeLocalToWorld(lx, lz, R, out) {
   return out.normalize().multiplyScalar(R + lift);
 }
 
+/** 局部坐标 → 指定绝对地表抬升；供五层台地水系使用，禁止再借旧土坡取高。 */
+function rangeLocalToWorldAtElevation(lx, lz, R, elevation, out) {
+  return out
+    .copy(_site)
+    .multiplyScalar(R + elevation)
+    .addScaledVector(_right, lx)
+    .addScaledVector(_fwd, lz);
+}
+
 /* ---------------- 可行走高程：台地台面 + 朝圣台阶（仅碰撞，视觉网格不变） ----------------
    与 odysseyCitadel.js 的 contourTerrain / 折返石阶同参数（那边管视觉，这边管
    碰撞；两者共用站点局部坐标系）。送信人可沿五段折返石阶从山脚一路走上顶层
    台地，经平桥抵达棕色正门门廊。 */
-const WALK_BASE_LIFT = BASE_LIFT + CITADEL_PEAK.h - 9.25; // 城堡容器基准（顶 16.4 − 下嵌 9.25）
-const WALK_SHELF_TOP = (k) => WALK_BASE_LIFT + 4 + 2 * k; // 第 k 层台面世界抬升
-const WALK_SHELF_RADIUS = (k) => 24 * 0.9 ** k;
-const WALK_NOTCH = Object.freeze({ center: 0.17, half: 0.56, innerR: 9.0 });
-// φ：从 +lz（正门/瀑布方向）朝 +lx 量；ρ 为梯段圆弧半径，yA/yB 为容器局部踏面高。
-const WALK_FLIGHTS = Object.freeze([
-  { from: -0.87, to: -1.5, rho: 25.05, yA: 1.0, yB: 4.06 },
-  { from: -1.5, to: -0.91, rho: 22.65, yA: 4.06, yB: 6.06 },
-  { from: -0.91, to: -1.47, rho: 20.49, yA: 6.06, yB: 8.06 },
-  { from: -1.47, to: -0.94, rho: 18.55, yA: 8.06, yB: 10.06 },
-  { from: -0.94, to: -1.4, rho: 16.8, yA: 10.06, yB: 12.06 },
+const WALK_ANGLES = Object.freeze([
+  Object.freeze([-0.87, -1.5]),
+  Object.freeze([-1.5, -0.91]),
+  Object.freeze([-0.91, -1.47]),
+  Object.freeze([-1.47, -0.94]),
+  Object.freeze([-0.94, -1.4]),
 ]);
+let walkPlanetRadius = 160;
+let walkContour = normalizeCitadelTerrain(CITADEL.contourTerrain);
+let walkMetrics = citadelTerraceMetrics(walkContour);
+let walkCurvatureDrop = citadelCurvatureDrop(
+  walkPlanetRadius + BASE_LIFT,
+  walkContour
+);
+let walkBaseLift = BASE_LIFT - CITADEL.groundEmbed - walkCurvatureDrop;
+let walkFlights = [];
+
+function configureCitadelWalkTerrain(R, contourSpec) {
+  walkPlanetRadius = Number.isFinite(R) ? R : 160;
+  walkContour = normalizeCitadelTerrain(contourSpec);
+  walkMetrics = citadelTerraceMetrics(walkContour);
+  walkCurvatureDrop = citadelCurvatureDrop(walkPlanetRadius + BASE_LIFT, walkContour);
+  walkBaseLift = BASE_LIFT - CITADEL.groundEmbed - walkCurvatureDrop;
+  walkFlights = WALK_ANGLES.map(([from, to], flightIndex) => {
+    const terraceIndex = walkMetrics.length - 1 - flightIndex;
+    const metric = walkMetrics[terraceIndex];
+    const lowerMetric = walkMetrics[terraceIndex + 1];
+    return {
+      from,
+      to,
+      rho: metric.radius + 1.05,
+      yA: lowerMetric ? lowerMetric.top + 0.06 : metric.bottom,
+      yB: metric.top + 0.06,
+    };
+  });
+}
+configureCitadelWalkTerrain(walkPlanetRadius, walkContour);
+
+/** Tangent-frame local Y at radius r → actual radial lift above the planet. */
+function curvedWalkLift(localY, r) {
+  return Math.hypot(walkPlanetRadius + walkBaseLift + localY, r) - walkPlanetRadius;
+}
 
 /** 台地/台阶附加抬升（局部坐标；无支撑处返回 -Infinity） */
 function citadelTerraceWalkLiftLocal(lx, lz) {
   const r = Math.hypot(lx, lz);
-  if (r > 27) return -Infinity;
+  if (r > walkMetrics.at(-1).radius + 3) return -Infinity;
   const phi = Math.atan2(lx, lz);
   let best = -Infinity;
   // 台面：最高（半径最小）的包含层即脚下台面；瀑布缺口扇区内前四层不存在
-  const inNotch =
-    r > WALK_NOTCH.innerR && Math.abs(phi - WALK_NOTCH.center) < WALK_NOTCH.half;
-  for (let k = 4; k >= 0; k--) {
-    if (r > WALK_SHELF_RADIUS(k)) continue;
-    if (k < 4 && inNotch) continue;
-    best = WALK_SHELF_TOP(k);
+  const inNotch = r > walkContour.coreRadius
+    && Math.abs(phi - walkContour.notchCenter) < walkContour.notchHalf;
+  for (let terraceIndex = 0; terraceIndex < walkMetrics.length; terraceIndex++) {
+    const metric = walkMetrics[terraceIndex];
+    if (r > metric.radius) continue;
+    if (terraceIndex > 0 && terraceIndex <= walkContour.notchedLayers && inNotch) continue;
+    best = curvedWalkLift(metric.top, r);
     break;
   }
   // 石阶梯段：沿圆弧的连续坡道（覆盖踏面 ±0.1 的离散起伏）
-  for (const f of WALK_FLIGHTS) {
+  for (const f of walkFlights) {
     if (Math.abs(r - f.rho) > 1.35) continue;
     const lo = Math.min(f.from, f.to);
     const hi = Math.max(f.from, f.to);
     if (phi < lo - 0.06 || phi > hi + 0.06) continue;
     const t = THREE.MathUtils.clamp((phi - f.from) / (f.to - f.from), 0, 1);
-    best = Math.max(best, WALK_BASE_LIFT + f.yA + (f.yB - f.yA) * t);
+    best = Math.max(best, curvedWalkLift(f.yA + (f.yB - f.yA) * t, r));
   }
   return best;
 }
@@ -224,388 +250,19 @@ function placeRangeAsset(asset, lx, lz, R, lift = 0, siteUpright = false) {
   return asset;
 }
 
-function makeMountainGeometry(radius, height, seed, segments = 10) {
-  let state = seed >>> 0;
-  const random = () => {
-    state = (Math.imul(1664525, state) + 1013904223) >>> 0;
-    return state / 0x100000000;
-  };
-  // Truncated ridge profile: never collapse the last ring to a single apex.
-  // This removes the oversized cone/needle silhouette while retaining a
-  // weathered alpine wall behind the citadel.
-  const levels = [0, 0.3, 0.57, 0.76, 0.9];
-  const positions = [];
-  for (let ring = 0; ring < levels.length; ring++) {
-    const t = levels[ring];
-    for (let i = 0; i < segments; i++) {
-      const angle = (i / segments) * Math.PI * 2;
-      const taper = Math.max(0.2, Math.pow(1 - t, 0.72));
-      const jag = 0.82 + random() * 0.34;
-      const r = radius * taper * jag;
-      positions.push(
-        Math.cos(angle) * r,
-        height * t * (0.96 + random() * 0.06),
-        Math.sin(angle) * r
-      );
-    }
-  }
-  const indices = [];
-  for (let ring = 0; ring < levels.length - 1; ring++) {
-    for (let i = 0; i < segments; i++) {
-      const next = (i + 1) % segments;
-      const a = ring * segments + i;
-      const b = ring * segments + next;
-      const c = (ring + 1) * segments + i;
-      const d = (ring + 1) * segments + next;
-      indices.push(a, c, b, b, c, d);
-    }
-  }
-  // Close the broad summit with a shallow, irregular cap instead of an apex.
-  const topCenter = positions.length / 3;
-  positions.push(0, height * 0.88, 0);
-  const topRing = levels.length - 1;
-  for (let i = 0; i < segments; i++) {
-    indices.push(topRing * segments + i, topCenter, topRing * segments + (i + 1) % segments);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  return geometry;
-}
-
-function makeSnowCapGeometry(radius, height, seed, segments = 10) {
-  let state = seed >>> 0;
-  const random = () => {
-    state = (Math.imul(1103515245, state) + 12345) >>> 0;
-    return state / 0x100000000;
-  };
-  const positions = [];
-  const topRing = [];
-  for (let i = 0; i < segments; i++) {
-    const angle = (i / segments) * Math.PI * 2;
-    const t = 0.58 + random() * 0.13;
-    const r = radius * Math.pow(1 - t, 0.72) * 1.04;
-    positions.push(Math.cos(angle) * r, height * t, Math.sin(angle) * r);
-    const topAngle = angle + 0.08 * Math.sin(i * 2.3);
-    const topRadius = radius * (0.16 + random() * 0.05);
-    topRing.push(
-      Math.cos(topAngle) * topRadius,
-      height * (0.875 + random() * 0.035),
-      Math.sin(topAngle) * topRadius
-    );
-  }
-  positions.push(...topRing);
-  const indices = [];
-  for (let i = 0; i < segments; i++) {
-    const next = (i + 1) % segments;
-    indices.push(i, segments + i, next, next, segments + i, segments + next);
-  }
-  const summitCenter = positions.length / 3;
-  positions.push(0, height * 0.89, 0);
-  for (let i = 0; i < segments; i++) {
-    indices.push(segments + i, summitCenter, segments + (i + 1) % segments);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  return geometry;
-}
-
-function buildSnowMountain(name, radius, height, seed, materials) {
-  const mountain = new THREE.Group();
-  mountain.name = name;
-  mountain.add(
-    rangePart(
-      makeMountainGeometry(radius, height, seed),
-      materials.mountain,
-      `${name}-rock`,
-      0.075
-    )
+function placeRangeAssetAtElevation(asset, lx, lz, R, elevation) {
+  rangeLocalToWorldAtElevation(lx, lz, R, elevation, asset.position);
+  const surfaceUp = _site.clone();
+  const surfaceForward = _fwd.clone()
+    .addScaledVector(surfaceUp, -_fwd.dot(surfaceUp))
+    .normalize();
+  const surfaceRight = new THREE.Vector3().crossVectors(surfaceUp, surfaceForward).normalize();
+  asset.quaternion.setFromRotationMatrix(
+    new THREE.Matrix4().makeBasis(surfaceRight, surfaceUp, surfaceForward)
   );
-  mountain.add(
-    rangePart(
-      makeSnowCapGeometry(radius, height, seed + 91),
-      materials.snow,
-      `${name}-snow-cap`,
-      0.055
-    )
-  );
-  return mountain;
-}
-
-function makeConnectedSaddleGeometry(length, width, height) {
-  // Three cross-sections form a broad M-shaped saddle between two peaks.
-  const xs = [-length / 2, 0, length / 2];
-  const ridgeY = [height * 0.82, height * 0.58, height * 0.9];
-  const positions = [];
-  for (let i = 0; i < xs.length; i++) {
-    positions.push(xs[i], 0, -width / 2, xs[i], 0, width / 2);
-    positions.push(xs[i], ridgeY[i], -width * 0.22, xs[i], ridgeY[i], width * 0.22);
-  }
-  const indices = [];
-  for (let section = 0; section < 2; section++) {
-    const a = section * 4;
-    const b = (section + 1) * 4;
-    // front/back cliff faces
-    indices.push(a, b, a + 2, a + 2, b, b + 2);
-    indices.push(a + 1, a + 3, b + 1, a + 3, b + 3, b + 1);
-    // two upper shoulders and closed bottom
-    indices.push(a + 2, b + 2, a + 3, a + 3, b + 2, b + 3);
-    indices.push(a, a + 1, b, a + 1, b + 1, b);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  return geometry;
-}
-
-function buildConnectedSnowSaddle(materials) {
-  const saddle = new THREE.Group();
-  saddle.name = "connected-central-snow-saddle";
-  saddle.userData.connectsMountainIndices = [2, 3];
-  const rock = rangePart(
-    makeConnectedSaddleGeometry(28, 15, 48),
-    materials.mountain,
-    "connected-central-snow-saddle-rock",
-    0.055
-  );
-  saddle.add(rock);
-  const snow = rangePart(
-    makeConnectedSaddleGeometry(28.4, 6.8, 48.6),
-    materials.snow,
-    "connected-central-snow-saddle-cap",
-    0.035
-  );
-  snow.position.y = 0.22;
-  saddle.add(snow);
-  return saddle;
-}
-
-function buildForegroundDefenseTower(materials) {
-  const tower = new THREE.Group();
-  tower.name = "citadel-foreground-defense-tower";
-
-  const lower = rangePart(
-    new THREE.CylinderGeometry(4.9, 4.9, 13.5, 8),
-    materials.outpost,
-    "foreground-tower-lower"
-  );
-  lower.position.y = 6.75;
-  lower.rotation.y = Math.PI / 8;
-  tower.add(lower);
-  const upper = rangePart(
-    new THREE.CylinderGeometry(4.45, 4.45, 4.6, 8),
-    materials.outpost,
-    "foreground-tower-upper"
-  );
-  upper.position.y = 15.8;
-  upper.rotation.y = Math.PI / 8;
-  tower.add(upper);
-
-  const windowGeometry = new THREE.BoxGeometry(1.35, 1.85, 0.12);
-  for (const [x, z, rotationY] of [
-    [0, 4.43, 0],
-    [-4.43, 0, -Math.PI / 2],
-    [4.43, 0, Math.PI / 2],
-  ]) {
-    const window = rangePart(
-      windowGeometry,
-      materials.ink,
-      "foreground-tower-lookout-window",
-      0.022
-    );
-    window.position.set(x, 15.8, z);
-    window.rotation.y = rotationY;
-    tower.add(window);
-  }
-
-  const parapet = rangePart(
-    new THREE.CylinderGeometry(4.72, 4.72, 0.42, 8),
-    materials.outpost,
-    "foreground-tower-octagonal-parapet",
-    0.03
-  );
-  parapet.position.y = 18.18;
-  parapet.rotation.y = Math.PI / 8;
-  tower.add(parapet);
-
-  const merlonGeo = new THREE.BoxGeometry(0.82, 0.95, 0.82);
-  for (let i = 0; i < 8; i++) {
-    const angle = (i / 8) * Math.PI * 2 + Math.PI / 8;
-    const merlon = rangePart(
-      merlonGeo,
-      materials.outpost,
-      "foreground-tower-crenel",
-      0.024
-    );
-    merlon.position.set(Math.cos(angle) * 4.15, 18.82, Math.sin(angle) * 4.15);
-    merlon.rotation.y = -angle;
-    tower.add(merlon);
-  }
-  return tower;
-}
-
-function buildCastleSoilFooting(materials) {
-  const footing = new THREE.Group();
-  footing.name = "citadel-solid-soil-footing";
-
-  // A closed, broad truncated low-poly mesa. Its top fully covers the castle,
-  // barbican and cliff-rock footprint; its wider base intersects the existing
-  // heightfield so no viewing angle can reveal sky beneath the citadel.
-  const body = rangePart(
-    new THREE.CylinderGeometry(19.0, 32.0, 12.0, 14, 2, false),
-    materials.footing,
-    "citadel-solid-soil-footing-body",
-    0.045
-  );
-  body.position.y = -5.92; // top is +0.08 in group-local space
-  body.rotation.y = Math.PI / 14;
-  footing.add(body);
-
-  // Irregular apron blocks merge the geometric footing into the hand-cut
-  // surrounding slope instead of leaving a perfectly mechanical cylinder.
-  for (let i = 0; i < 10; i++) {
-    const angle = (i / 10) * Math.PI * 2 + (i % 2) * 0.13;
-    const apron = rangePart(
-      new THREE.IcosahedronGeometry(4.2 + (i % 3) * 0.45, 0),
-      materials.footing,
-      "citadel-soil-apron-rock",
-      0.025
-    );
-    apron.position.set(
-      Math.cos(angle) * (21.5 + (i % 2) * 1.8),
-      -7.0 - (i % 3) * 0.55,
-      Math.sin(angle) * (21.5 + (i % 2) * 1.8)
-    );
-    apron.scale.set(1.4, 0.65, 1.15);
-    footing.add(apron);
-  }
-  return footing;
-}
-
-function makeLoessGroundSealGeometry(R, segments = 20) {
-  const peakTop = BASE_LIFT + CITADEL_PEAK.h;
-  const ringDistances = [0.24, 0.42, 0.52, 0.62, 0.72, 0.8];
-  const clearance = 0.22;
-  const positions = [0, -clearance, 0];
-  const rings = [];
-  for (const distance of ringDistances) {
-    const ring = [];
-    const peakAtRing = peakLift(
-      CITADEL_PEAK.cx + CITADEL_PEAK.rx * distance,
-      CITADEL_PEAK.cz,
-      CITADEL_PEAK,
-      0.42,
-      0.8
-    );
-    const liftAtRing = BASE_LIFT + peakAtRing;
-    for (let i = 0; i < segments; i++) {
-      const angle = (i / segments) * Math.PI * 2;
-      const tangentX = Math.cos(angle) * CITADEL_PEAK.rx * distance;
-      const tangentZ = Math.sin(angle) * CITADEL_PEAK.rz * distance;
-      const tangentLength = Math.hypot(R, tangentX, tangentZ);
-      const projectedScale = (R + liftAtRing) / tangentLength;
-      ring.push(positions.length / 3);
-      positions.push(
-        tangentX * projectedScale,
-        R * projectedScale - (R + peakTop) - clearance,
-        tangentZ * projectedScale
-      );
-    }
-    rings.push(ring);
-  }
-
-  const bottomCenter = positions.length / 3;
-  positions.push(0, -18.2, 0);
-  const bottomRing = [];
-  for (let i = 0; i < segments; i++) {
-    const outerTopIndex = rings.at(-1)[i] * 3;
-    bottomRing.push(positions.length / 3);
-    positions.push(
-      positions[outerTopIndex] * 1.025,
-      -18.2,
-      positions[outerTopIndex + 2] * 1.025
-    );
-  }
-
-  const indices = [];
-  for (let i = 0; i < segments; i++) {
-    const next = (i + 1) % segments;
-    indices.push(0, rings[0][next], rings[0][i]);
-  }
-  for (let ringIndex = 0; ringIndex < rings.length - 1; ringIndex++) {
-    const inner = rings[ringIndex];
-    const outer = rings[ringIndex + 1];
-    for (let i = 0; i < segments; i++) {
-      const next = (i + 1) % segments;
-      const quadX = (
-        positions[inner[i] * 3]
-        + positions[inner[next] * 3]
-        + positions[outer[i] * 3]
-        + positions[outer[next] * 3]
-      ) * 0.25;
-      const quadZ = (
-        positions[inner[i] * 3 + 2]
-        + positions[inner[next] * 3 + 2]
-        + positions[outer[i] * 3 + 2]
-        + positions[outer[next] * 3 + 2]
-      ) * 0.25;
-      if (insideInterCascadeNotch(quadX, quadZ)) continue;
-      indices.push(
-        inner[i], inner[next], outer[next],
-        inner[i], outer[next], outer[i]
-      );
-    }
-  }
-  const outerTop = rings.at(-1);
-  for (let i = 0; i < segments; i++) {
-    const next = (i + 1) % segments;
-    const sideX = (
-      positions[outerTop[i] * 3]
-      + positions[outerTop[next] * 3]
-    ) * 0.5;
-    const sideZ = (
-      positions[outerTop[i] * 3 + 2]
-      + positions[outerTop[next] * 3 + 2]
-    ) * 0.5;
-    if (insideInterCascadeNotch(sideX, sideZ)) {
-      indices.push(bottomCenter, bottomRing[i], bottomRing[next]);
-      continue;
-    }
-    indices.push(
-      outerTop[i], outerTop[next], bottomRing[i],
-      outerTop[next], bottomRing[next], bottomRing[i],
-      bottomCenter, bottomRing[i], bottomRing[next]
-    );
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  geometry.computeBoundingBox();
-  return geometry;
-}
-
-function buildLoessGroundSeal(R, materials) {
-  const seal = new THREE.Group();
-  seal.name = "citadel-loess-ground-seal";
-
-  // The visible heightfield is a surface sheet. This closed, tapered volume
-  // backs the entire summit and penetrates below planet radius, eliminating
-  // the low-angle air gap between yellow slope and spherical ground.
-  const body = rangePart(
-    makeLoessGroundSealGeometry(R),
-    materials.loessSeal,
-    "citadel-loess-ground-seal-body",
-    0.028
-  );
-  seal.add(body);
-
-  return seal;
+  asset.userData.rangeLocal = { lx, lz };
+  asset.userData.absoluteElevation = elevation;
+  return asset;
 }
 
 function makeIrregularTerraceGeometry(rx, rz, depth, seed, segments = 16) {
@@ -719,26 +376,93 @@ function buildWhiteStoneLakeStage(spec, materials) {
   return stage;
 }
 
-function buildPilgrimageWaterSteps(R, materials) {
+/**
+ * Solve the highest site-axis elevation at which every bottom vertex of a
+ * tangent-plane footprint is on or below the spherical ground. The strictest
+ * (furthest/lowest) vertex touches exactly; all other underside vertices bite
+ * into the terrain instead of floating above it.
+ */
+export function curvedFootprintGroundElevation(
+  geometry,
+  lx,
+  lz,
+  R,
+  surfaceLift = BASE_LIFT
+) {
+  const position = geometry?.attributes?.position;
+  const surfaceRadius = R + surfaceLift;
+  if (!position) {
+    return { elevation: surfaceLift, contactRadius: Math.hypot(lx, lz), surfaceRadius };
+  }
+  let elevation = Infinity;
+  let contactRadius = 0;
+  for (let index = 0; index < position.count; index++) {
+    const localY = position.getY(index);
+    if (localY >= -0.05) continue; // underside only; never sink to a top rim
+    const tx = lx + position.getX(index);
+    const tz = lz + position.getZ(index);
+    const tangentRadius = Math.hypot(tx, tz);
+    const surfaceAxis = Math.sqrt(Math.max(
+      0,
+      surfaceRadius * surfaceRadius - tangentRadius * tangentRadius
+    ));
+    const allowed = surfaceAxis - R - localY;
+    if (allowed < elevation) {
+      elevation = allowed;
+      contactRadius = tangentRadius;
+    }
+  }
+  return Number.isFinite(elevation)
+    ? { elevation, contactRadius, surfaceRadius }
+    : { elevation: surfaceLift, contactRadius: Math.hypot(lx, lz), surfaceRadius };
+}
+
+function buildPilgrimageWaterSteps(R, materials, contourSpec) {
   const waterSteps = new THREE.Group();
   waterSteps.name = "citadel-pilgrimage-water-steps";
+  const metrics = citadelTerraceMetrics(contourSpec);
   const stageSpecs = [
-    { name: "upper-courtyard-pool", x: 3.0, z: 17.0, rx: 5.8, rz: 3.5, depth: 0.9, lift: 0.16, seed: 9300 },
-    { name: "upper-slope-pool", x: 4.3, z: 21.5, rx: 6.3, rz: 3.8, depth: 1.0, lift: 0.14, seed: 9301 },
-    { name: "middle-slope-pool", x: 3.2, z: 26.0, rx: 6.9, rz: 4.2, depth: 1.15, lift: 0.12, seed: 9302 },
-    { name: "lower-slope-pool", x: 4.5, z: 31.0, rx: 7.8, rz: 4.8, depth: 1.3, lift: 0.1, seed: 9303 },
-    { name: "ground-deep-pool", x: 1.0, z: 43.0, rx: 12.5, rz: 8.2, depth: 1.75, lift: 0.08, seed: 9304 },
+    { name: "terrace-1-pool", x: 3.0, z: 17.0, rx: 5.8, rz: 3.5, depth: 0.9, seed: 9300 },
+    { name: "terrace-2-pool", x: 4.3, z: 21.5, rx: 6.3, rz: 3.8, depth: 1.0, seed: 9301 },
+    { name: "terrace-3-pool", x: 3.2, z: 26.0, rx: 6.9, rz: 4.2, depth: 1.15, seed: 9302 },
+    { name: "terrace-4-pool", x: 4.5, z: 31.0, rx: 7.8, rz: 4.8, depth: 1.3, seed: 9303 },
+    { name: "terrace-5-pool", x: 1.0, z: 38.0, rx: 10.5, rz: 6.8, depth: 1.75, seed: 9304 },
   ];
+  const stages = stageSpecs.map((spec) => buildWhiteStoneLakeStage(spec, materials));
+  const lowestIndex = stages.length - 1;
+  const lowestSpec = stageSpecs[lowestIndex];
+  const lowestBank = stages[lowestIndex].getObjectByName(
+    `citadel-${lowestSpec.name}-white-stone-bank`
+  );
+  const grounding = curvedFootprintGroundElevation(
+    lowestBank.geometry,
+    lowestSpec.x,
+    lowestSpec.z,
+    R
+  );
+  // One common base offset preserves all authored adjacent lake drops while
+  // lowering the complete five-pool/four-waterfall system until the lowest
+  // white-stone underside actually meets the curved ground.
+  const containerBaseLift = grounding.elevation - metrics[lowestIndex].top;
+  waterSteps.userData.curvatureGrounding = {
+    contactRadius: grounding.contactRadius,
+    contactElevation: grounding.elevation,
+    surfaceRadius: grounding.surfaceRadius,
+    containerBaseLift,
+  };
   for (let i = 0; i < stageSpecs.length; i++) {
     const spec = stageSpecs[i];
-    const stage = buildWhiteStoneLakeStage(spec, materials);
-    placeRangeAsset(stage, spec.x, spec.z, R, spec.lift, true);
+    const stage = stages[i];
+    const elevation = containerBaseLift + metrics[i].top;
+    placeRangeAssetAtElevation(stage, spec.x, spec.z, R, elevation);
     stage.userData.composition = {
       sequence: i,
-      kind: i === stageSpecs.length - 1 ? "deep-pool" : "stepped-pool",
-      localElevation: citadelRangeLiftLocal(spec.x, spec.z) + spec.lift + 0.09,
+      terraceIndex: i,
+      kind: i === stageSpecs.length - 1 ? "lowest-terrace-pool" : "stepped-pool",
+      localElevation: elevation + 0.09,
       rx: spec.rx,
       rz: spec.rz,
+      curvatureGrounded: true,
     };
     waterSteps.add(stage);
   }
@@ -753,7 +477,7 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
     const lower = waterSteps.children[i + 1];
     const upperWaterY = upper.position.dot(_site) + 0.09;
     const lowerWaterY = lower.position.dot(_site) + 0.09;
-    const drop = Math.max(0.8, upperWaterY - lowerWaterY);
+    const drop = upperWaterY - lowerWaterY;
     const connectorX = (upper.userData.rangeLocal.lx + lower.userData.rangeLocal.lx) * 0.5;
     const connectorZ = (upper.userData.rangeLocal.lz + lower.userData.rangeLocal.lz) * 0.5 + 0.3;
 
@@ -792,49 +516,7 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
     waterfall.add(receivingWater);
     waterfall.userData.receivingPool = lower.name;
 
-    // From the ground upward, cascades 1–3 are sequences 3, 2 and 1. Keep only
-    // small flanking stones well clear of the curtain: the notched contour
-    // shelves now frame the falls, so bulky soil shoulders would again cover
-    // the water the notch was cut to expose.
-    if (i >= 1) {
-      const shoulderGroup = new THREE.Group();
-      shoulderGroup.name = `citadel-waterfall-soil-shoulders-${i}`;
-      for (const side of [-1, 1]) {
-        const upperShoulder = rangePart(
-          new THREE.IcosahedronGeometry(1.55 + i * 0.1, 0),
-          materials.loessSeal,
-          "citadel-waterfall-upper-soil-shoulder",
-          0.022
-        );
-        upperShoulder.position.set(
-          side * 6.3,
-          Math.max(1.3, drop * 0.52),
-          -0.85
-        );
-        upperShoulder.scale.set(
-          0.8,
-          Math.max(0.7, drop / 6.5),
-          1.0
-        );
-        upperShoulder.rotation.set(0.12 * side, 0.35 * side + i * 0.08, -0.08 * side);
-        shoulderGroup.add(upperShoulder);
-
-        const lowerShoulder = rangePart(
-          new THREE.IcosahedronGeometry(1.35 + i * 0.08, 0),
-          materials.loessSealShade,
-          "citadel-waterfall-lower-soil-shoulder",
-          0.02
-        );
-        lowerShoulder.position.set(side * 5.8, 0.55, -0.4);
-        lowerShoulder.scale.set(0.75, 0.5, 0.95);
-        lowerShoulder.rotation.set(-0.1 * side, -0.28 * side, 0.06 * side);
-        shoulderGroup.add(lowerShoulder);
-      }
-      waterfall.add(shoulderGroup);
-      waterfall.userData.rebuiltSoilShoulders = 4;
-    } else {
-      waterfall.userData.rebuiltSoilShoulders = 0;
-    }
+    waterfall.userData.rebuiltSoilShoulders = 0;
     const connectorBase = rangeLocalToWorld(
       connectorX,
       connectorZ,
@@ -849,7 +531,7 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
       lowerWaterY - connectorBase,
       true
     );
-    const facadeClearance = [1.4, 2.8, 3.5, 4.2][i];
+    const facadeClearance = [1.2, 1.6, 2.0, 2.4][i];
     waterfall.translateZ(facadeClearance);
     waterfall.scale.x = 1.16;
     // Re-center the receiving extension between the shifted impact point and
@@ -859,6 +541,9 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
     waterfall.userData.upperPool = upper.name;
     waterfall.userData.lowerPool = lower.name;
     waterfall.userData.actualDrop = drop;
+    waterfall.userData.spansTerraceCount = 1;
+    waterfall.userData.upperTerraceIndex = i;
+    waterfall.userData.lowerTerraceIndex = i + 1;
     waterfall.userData.facadeClearance = facadeClearance;
     waterfall.userData.deployedCurtainWidth = 4.5 * waterfall.scale.x;
     waterfall.userData.waterlinePenetration = 0.5;
@@ -869,71 +554,9 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
   };
   cascades.update = update;
   cascades.userData.update = update;
+  cascades.userData.waterfallCount = cascades.children.length;
+  cascades.userData.spansTerraceCount = 1;
   return cascades;
-}
-
-function buildInterCascadeBridgePool(waterSteps, cascades, materials) {
-  // Pool index 2 is shared by waterfall sequences 1 and 2. Construct the
-  // bridge from their real world-space endpoints, not from an approximate
-  // ellipse, so the water and white basin cover every centimetre between them.
-  const bridgePool = new THREE.Group();
-  bridgePool.name = "citadel-waterfall-2-3-bridge-pool";
-  cascades.updateWorldMatrix(true, true);
-
-  const upperFall = cascades.children[1];
-  const lowerFall = cascades.children[2];
-  const start = upperFall
-    .getObjectByName("citadel-cascade-receiving-water")
-    .getWorldPosition(new THREE.Vector3());
-  const lowerCurtain = lowerFall.getObjectByName("manga-waterfall-curtain-0");
-  const end = new THREE.Vector3(0, 8, 0).applyMatrix4(lowerCurtain.matrixWorld);
-  const targetWaterY = waterSteps.children[2].position.dot(_site) + 0.09;
-  start.addScaledVector(_site, targetWaterY - start.dot(_site));
-  end.addScaledVector(_site, targetWaterY - end.dot(_site));
-
-  const channelDirection = end.clone().sub(start);
-  channelDirection.addScaledVector(_site, -channelDirection.dot(_site));
-  const channelLength = channelDirection.length();
-  channelDirection.normalize();
-  const channelRight = new THREE.Vector3()
-    .crossVectors(channelDirection, _site)
-    .normalize();
-  const channelBasis = new THREE.Matrix4().makeBasis(
-    channelRight,
-    channelDirection,
-    _site
-  );
-  const channelQuaternion = new THREE.Quaternion().setFromRotationMatrix(channelBasis);
-  const center = start.clone().add(end).multiplyScalar(0.5);
-
-  const basin = rangePart(
-    new THREE.BoxGeometry(7.0, channelLength + 1.6, 1.15),
-    materials.whiteStone,
-    "citadel-waterfall-2-3-white-stone-basin",
-    0.026
-  );
-  basin.position.copy(center).addScaledVector(_site, -0.54);
-  basin.quaternion.copy(channelQuaternion);
-  bridgePool.add(basin);
-
-  const water = new THREE.Mesh(
-    new THREE.PlaneGeometry(6.2, channelLength + 1.35),
-    materials.water
-  );
-  water.name = "citadel-waterfall-2-3-channel-water";
-  water.position.copy(center).addScaledVector(_site, 0.02);
-  water.quaternion.copy(channelQuaternion);
-  water.castShadow = false;
-  water.renderOrder = 9;
-  bridgePool.add(water);
-
-  bridgePool.userData.connectsCascadeSequences = [1, 2];
-  bridgePool.userData.waterLevel = targetWaterY;
-  bridgePool.userData.channelLength = channelLength;
-  bridgePool.userData.replacesLoessBand = true;
-  bridgePool.userData.start = start;
-  bridgePool.userData.end = end;
-  return bridgePool;
 }
 
 function buildPilgrimageLookout(R, materials) {
@@ -1135,7 +758,8 @@ function buildLakeBallShrub(name, scale, materials, seed) {
  * 构建山脉高度场网格（视觉=碰撞共用 citadelRangeLiftLocal）。
  * 顶点色：谷地草绿 → 坡面土褐 → 峰顶岩灰；flatShading 硬切面。
  */
-export function buildCitadelRange(scene, R) {
+export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain) {
+  configureCitadelWalkTerrain(R, contourSpec);
   const nx = Math.round((LX_MAX - LX_MIN) / STEP) + 1;
   const nz = Math.round((LZ_MAX - LZ_MIN) / STEP) + 1;
   const positions = new Float32Array(nx * nz * 3);
@@ -1178,9 +802,6 @@ export function buildCitadelRange(scene, R) {
   const indices = [];
   for (let iz = 0; iz < nz - 1; iz++) {
     for (let ix = 0; ix < nx - 1; ix++) {
-      const cellX = LX_MIN + (ix + 0.5) * STEP;
-      const cellZ = LZ_MIN + (iz + 0.5) * STEP;
-      if (insideInterCascadeNotch(cellX, cellZ)) continue;
       const a = iz * nx + ix;
       const b = a + 1;
       const c = a + nx;
@@ -1197,7 +818,8 @@ export function buildCitadelRange(scene, R) {
   const rangeMaterial = toonMat(0xffffff, { vertexColors: true, flatShading: true });
   const mesh = new THREE.Mesh(geo, rangeMaterial);
   mesh.name = "citadel-range";
-  mesh.userData.interCascadeNotch = INTER_CASCADE_NOTCH;
+  mesh.userData.baseLift = BASE_LIFT;
+  mesh.userData.formerSoilMoundRemoved = true;
   mesh.receiveShadow = true;
   scene.add(mesh);
 
@@ -1209,9 +831,6 @@ export function buildCitadelRange(scene, R) {
     leaf: toonMat(0x385e3e, { flatShading: true }),
     leafLight: toonMat(0x6f8b55, { flatShading: true }),
     bark: toonMat(0x57462f, { flatShading: true }),
-    footing: toonMat(0xb5ad82, { flatShading: true }),
-    loessSeal: toonMat(0xc9c096, { flatShading: true }),
-    loessSealShade: toonMat(0xa9a180, { flatShading: true }),
     whiteStone: toonMat(0xdde3df, { flatShading: true }),
     whiteStoneShade: toonMat(0xbcc8c6, { flatShading: true }),
     water: new THREE.MeshBasicMaterial({
@@ -1223,39 +842,24 @@ export function buildCitadelRange(scene, R) {
     }),
   };
 
-  const loessGroundSeal = buildLoessGroundSeal(R, materials);
-  placeRangeAsset(loessGroundSeal, 0, 0, R, -0.18, true);
-  scene.add(loessGroundSeal);
-
-  const castleFooting = buildCastleSoilFooting(materials);
-  // Two units below the heightfield top: enough to reveal the gate threshold
-  // while the closed body still seals every underside viewing angle.
-  placeRangeAsset(castleFooting, 0, 0, R, -2.0, true);
-  scene.add(castleFooting);
-
-  // Foreground mound replacement: the old soil volume is carved out by
-  // OUTPOST_CUT, and this tower rises from that same low footprint.
-  const foregroundTower = buildForegroundDefenseTower(materials);
-  // Right-front shoulder in the gameplay camera, matching the lower outwork
-  // position in the painting instead of sitting directly on the view axis.
-  placeRangeAsset(foregroundTower, OUTPOST_CUT.cx, OUTPOST_CUT.cz, R, -0.25, true);
-  scene.add(foregroundTower);
-
   // A continuous white-stone pilgrimage slope descends from the gate through
   // four shallow pools into a broad ground-level tarn. Wide flat stones on
   // the near bank form a safe visual overlook toward the citadel and massif.
-  const pilgrimageWaterSteps = buildPilgrimageWaterSteps(R, materials);
+  let normalizedContour = normalizeCitadelTerrain(contourSpec);
+  let pilgrimageWaterSteps = buildPilgrimageWaterSteps(R, materials, normalizedContour);
   scene.add(pilgrimageWaterSteps);
-  const pilgrimageCascades = buildPilgrimageCascades(R, pilgrimageWaterSteps, materials);
+  let pilgrimageCascades = buildPilgrimageCascades(R, pilgrimageWaterSteps, materials);
   scene.add(pilgrimageCascades);
-  const interCascadeBridgePool = buildInterCascadeBridgePool(
-    pilgrimageWaterSteps,
-    pilgrimageCascades,
-    materials
-  );
-  scene.add(interCascadeBridgePool);
-  const pilgrimageLookout = buildPilgrimageLookout(R, materials);
-  scene.add(pilgrimageLookout);
+  // Preserve the old shot-harness camera datum without retaining its four
+  // visible lookout-stone props in the live scene.
+  const pilgrimageLookout = new THREE.Group();
+  pilgrimageLookout.name = "citadel-pilgrimage-lookout-camera-datum";
+  const lookoutViewpoint = rangeLocalToWorld(-0.6, 54.2, R, new THREE.Vector3())
+    .addScaledVector(_site, 0.86);
+  pilgrimageLookout.userData.viewpoint = lookoutViewpoint;
+  pilgrimageLookout.userData.lookDirection = rangeLocalToWorld(0, 0, R, new THREE.Vector3())
+    .sub(lookoutViewpoint)
+    .normalize();
 
   // One dominant marsh elder anchors the deep tarn's left bank. Its broad
   // crown remains offset from the central sightline between messenger and
@@ -1264,100 +868,69 @@ export function buildCitadelRange(scene, R) {
   placeRangeAsset(sacredTarnTree, -15.2, 42.0, R, -0.15, true);
   scene.add(sacredTarnTree);
 
-  const lakeBallShrubs = new THREE.Group();
-  lakeBallShrubs.name = "citadel-lake-ball-shrubs";
-  const lakeShrubSpots = [
-    [-6.6, 17.4, 1.05], [9.6, 18.8, 1.0],
-    [-6.8, 22.7, 1.15], [11.5, 24.2, 1.2],
-    [11.7, 29.4, 1.32], [-6.4, 31.8, 1.12],
-    [-10.5, 36.8, 1.28], [13.0, 38.4, 1.34],
-    [-11.7, 46.3, 1.06], [14.4, 46.7, 1.16],
-  ];
-  lakeShrubSpots.forEach(([x, z, scale], index) => {
-    const shrub = buildLakeBallShrub(
-      `citadel-lake-ball-shrub-${index}`,
-      scale,
-      materials,
-      9600 + index
-    );
-    placeRangeAsset(shrub, x, z, R, -0.06, true);
-    lakeBallShrubs.add(shrub);
-  });
-  scene.add(lakeBallShrubs);
-
-  // Snowy massif sits on the negative local-Z side: always behind the main
-  // citadel when the facade faces the island/observer.
+  // ---------- 城堡背后雪山：面对城堡时左右各一组 ----------
+  // 站点局部：lz+ = 主岛/正门朝向；站在正门前看城堡时，-lx 为左、+lx 为右，
+  // -lz 为城堡背后。两组雪山落在后侧左右翼，环抱城堡。
   const snowMountains = new THREE.Group();
   snowMountains.name = "citadel-background-snow-massif";
-  const mountainSpecs = [
-    // Four independent flank peaks deliberately avoid mirrored silhouettes:
-    // their height, footprint and depth alternate to form far/mid mountain
-    // planes around the connected central double summit (indices 2 and 3).
-    { x: -58, z: -88, r: 11, h: 52, lift: -1.4, seed: 7100 },
-    { x: -34, z: -62, r: 16, h: 74, lift: -1.6, seed: 7101 },
-    { x: -11, z: -72, r: 15, h: 86, lift: -1.8, seed: 7102 },
-    { x: 10, z: -68, r: 20, h: 98, lift: -1.8, seed: 7103 },
-    { x: 35, z: -64, r: 18, h: 88, lift: -1.7, seed: 7104 },
-    { x: 59, z: -84, r: 12, h: 61, lift: -1.5, seed: 7105 },
-  ];
-  for (let i = 0; i < mountainSpecs.length; i++) {
-    const spec = mountainSpecs[i];
-    const mountain = buildSnowMountain(
-      `background-snow-mountain-${i}`,
-      spec.r,
-      spec.h,
-      spec.seed,
-      materials
-    );
-    // Architectural composition uses the citadel's common vertical datum;
-    // negative lift buries the mountain foot into the ground instead of
-    // floating it above the curved planet surface.
-    placeRangeAsset(mountain, spec.x, spec.z, R, spec.lift, true);
-    mountain.userData.composition = {
-      height: spec.h,
-      radius: spec.r,
-      depth: spec.z,
-      connectedCentralPeak: i === 2 || i === 3,
-    };
-    snowMountains.add(mountain);
-  }
-  // Central peaks 2 and 3 share one physical rock-and-snow saddle, making
-  // them a single continuous massif while the other four peaks stay separate.
-  const connectedSnowSaddle = buildConnectedSnowSaddle(materials);
-  placeRangeAsset(connectedSnowSaddle, -0.5, -70, R, -1.8, true);
-  snowMountains.add(connectedSnowSaddle);
+  const snowLeft = createSnowMassif({
+    name: "citadel-snow-massif-left",
+    seed: 7200,
+  });
+  snowLeft.scale.setScalar(0.88);
+  placeRangeAsset(snowLeft, -54, -56, R, -1.2, true);
+  // 略外旋，让峰群向左翼展开
+  snowLeft.rotateY(0.45);
+  snowMountains.add(snowLeft);
+
+  const snowRight = createSnowMassif({
+    name: "citadel-snow-massif-right",
+    seed: 7300,
+  });
+  snowRight.scale.setScalar(0.88);
+  placeRangeAsset(snowRight, 54, -56, R, -1.2, true);
+  snowRight.rotateY(-0.45);
+  snowMountains.add(snowRight);
   scene.add(snowMountains);
 
-  const vegetation = new THREE.Group();
-  vegetation.name = "citadel-range-vegetation";
-  const shrubSpots = [
-    [-23, 4, 1.5], [-20, 12, 1.2], [-17, -6, 1.35], [-13, 18, 1.1],
-    [16, 8, 1.35], [20, -4, 1.55], [23, 14, 1.2], [11, 22, 1.0],
-    [-8, 24, 1.25], [16, 27, 1.15], [-7, 34, 1.25], [18, 38, 1.35],
-    [1, 45, 1.2], [-14, 42, 1.05],
-  ];
-  shrubSpots.forEach(([x, z, scale], index) => {
-    const shrub = buildRangeShrub(`range-shrub-${index}`, scale, materials, 8200 + index);
-    placeRangeAsset(shrub, x, z, R, -0.1);
-    vegetation.add(shrub);
-  });
-  scene.add(vegetation);
-
-  return {
+  const rangeSystem = {
     mesh,
-    loessGroundSeal,
-    castleFooting,
-    foregroundTower,
+    loessGroundSeal: null,
+    castleFooting: null,
+    foregroundTower: null,
     pilgrimageWaterSteps,
     pilgrimageCascades,
-    interCascadeBridgePool,
+    interCascadeBridgePool: null,
     pilgrimageLookout,
     sacredTarnTree,
-    lakeBallShrubs,
+    lakeBallShrubs: null,
     snowMountains,
-    vegetation,
+    snowMassifLeft: snowLeft,
+    snowMassifRight: snowRight,
+    vegetation: null,
     siteDir: _site.clone(),
     fwd: _fwd.clone(),
     right: _right.clone(),
   };
+
+  // The terrain editor can change any terrace radius/height at runtime. Rebuild
+  // only the five lakes and four adjacent drops so a stale waterfall can never
+  // span two edited terraces.
+  rangeSystem.rebuildWaterTerraces = (nextContour = CITADEL.contourTerrain) => {
+    normalizedContour = normalizeCitadelTerrain(nextContour);
+    configureCitadelWalkTerrain(R, normalizedContour);
+    scene.remove(pilgrimageWaterSteps, pilgrimageCascades);
+    for (const group of [pilgrimageWaterSteps, pilgrimageCascades]) {
+      group.traverse((object) => object.geometry?.dispose?.());
+    }
+    pilgrimageWaterSteps = buildPilgrimageWaterSteps(R, materials, normalizedContour);
+    pilgrimageCascades = buildPilgrimageCascades(R, pilgrimageWaterSteps, materials);
+    scene.add(pilgrimageWaterSteps, pilgrimageCascades);
+    rangeSystem.pilgrimageWaterSteps = pilgrimageWaterSteps;
+    rangeSystem.pilgrimageCascades = pilgrimageCascades;
+    rangeSystem.contourSpec = normalizedContour;
+    return rangeSystem;
+  };
+  rangeSystem.contourSpec = normalizedContour;
+  return rangeSystem;
 }

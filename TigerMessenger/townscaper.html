@@ -132,6 +132,8 @@ const MAX_LEVEL = 9;
 const STORE_KEY = CITADEL_LEVELS_KEY; // 与游戏内搭建面板、主场景启动共用同一存档
 const CHAR_COLORS = { W: 0xe5eff2, L: 0xd9cfac, B: 0xcaa88c, D: 0x8b5a2b };
 const GRID_PX = 26;     // 平面图每格像素（16×26 = 416）
+// 台地等高线参数（与游戏内编辑器共用 CITADEL.contourTerrain）
+const TERRAIN = CITADEL.contourTerrain;
 
 let grid = loadInitialGrid();
 let selectedObject = null; // null = 未选择，编辑界面隐藏
@@ -424,6 +426,62 @@ function drawLayerPanel() {
   layerCtx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
   layerCtx.fillStyle = "#f2f5f7";
   layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
+  // 等高线背景叠加：城堡居中（圆心 = 网格中心），同心圆=同心台地
+  {
+    const cx = (n / 2) * GRID_PX;
+    const cy = cx;
+    const scale = GRID_PX / CELL; // 世界单位 → 像素
+    // 缺口扇区铺底
+    if (TERRAIN.notchedLayers > 0) {
+      layerCtx.save();
+      layerCtx.fillStyle = "rgba(143,199,214,0.20)";
+      layerCtx.beginPath();
+      const a0 = TERRAIN.notchCenter - TERRAIN.notchHalf - Math.PI / 2;
+      const a1 = TERRAIN.notchCenter + TERRAIN.notchHalf - Math.PI / 2;
+      layerCtx.arc(cx, cy, TERRAIN.baseRadius * scale, a0, a1, false);
+      layerCtx.arc(cx, cy, TERRAIN.coreRadius * scale, a1, a0, true);
+      layerCtx.closePath();
+      layerCtx.fill();
+      layerCtx.restore();
+    }
+    const fills = [
+      "rgba(176,196,140,0.30)",
+      "rgba(196,196,148,0.34)",
+      "rgba(216,196,148,0.38)",
+      "rgba(220,196,144,0.42)",
+      "rgba(220,196,144,0.48)",
+    ];
+    const layerCount = TERRAIN.layerCount;
+    for (let i = 0; i < layerCount; i++) {
+      const rOuter = TERRAIN.baseRadius * TERRAIN.shrink ** i * scale;
+      const rInner = i < layerCount - 1
+        ? TERRAIN.baseRadius * TERRAIN.shrink ** (i + 1) * scale
+        : 0;
+      layerCtx.beginPath();
+      if (i < layerCount - 1) {
+        layerCtx.arc(cx, cy, rOuter, 0, Math.PI * 2);
+        layerCtx.arc(cx, cy, rInner, 0, Math.PI * 2, true);
+      } else {
+        layerCtx.arc(cx, cy, rOuter, 0, Math.PI * 2);
+      }
+      layerCtx.closePath();
+      layerCtx.fillStyle = fills[Math.min(i, fills.length - 1)];
+      layerCtx.fill();
+      layerCtx.strokeStyle = "rgba(80,68,52,0.55)";
+      layerCtx.lineWidth = i === layerCount - 1 ? 1.2 : 0.8;
+      layerCtx.stroke();
+    }
+    // 城堡居中标记
+    layerCtx.fillStyle = "rgba(42,43,45,0.7)";
+    layerCtx.beginPath();
+    layerCtx.arc(cx, cy, 6, 0, Math.PI * 2);
+    layerCtx.fill();
+    layerCtx.fillStyle = "#fff";
+    layerCtx.font = "bold 9px monospace";
+    layerCtx.textAlign = "center";
+    layerCtx.textBaseline = "middle";
+    layerCtx.fillText("城", cx, cy);
+  }
   for (let iz = 0; iz < n; iz++) {
     for (let ix = 0; ix < n; ix++) {
       const char = grid.get(`${ix},${activeLayer},${iz}`);

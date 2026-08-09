@@ -1,4 +1,4 @@
-// 圣城山脉验收：主峰 + 前置防御塔基台 + 背景雪山 + 山坡绿植
+// 圣城山脉验收：仅保留台地、梯湖/瀑布与参天树等核心构成
 // 运行：node tools/test_citadel_range.mjs
 import fs from "node:fs";
 import assert from "node:assert/strict";
@@ -26,12 +26,18 @@ const {
   buildCitadelRange,
   citadelRangeLiftDir,
   citadelRangeLiftLocal,
+  citadelWalkLiftLocal,
+  citadelWalkLiftDir,
   citadelSiteDir,
   CITADEL_PEAK,
   VIEW_PEAK,
-  OUTPOST_CUT,
   RANGE_SITE,
 } = await import(new URL("src/world/citadelRange.js", BASE).href);
+const {
+  CITADEL,
+  citadelCurvatureDrop,
+  citadelTerraceMetrics,
+} = await import(new URL("src/world/odysseyCitadel.js", BASE).href);
 
 let pass = 0;
 const ok = (m) => {
@@ -40,25 +46,23 @@ const ok = (m) => {
 };
 const R = 160;
 
-console.log("[1] 高程函数：主峰 + 压低的前哨基台");
+console.log("[1] 高程函数：旧黄土主峰已删除");
 const peakTop = citadelRangeLiftLocal(0, 0);
 assert(Math.abs(peakTop - (0.4 + CITADEL_PEAK.h)) < 1e-9, `主峰顶应 ${0.4 + CITADEL_PEAK.h}，实际 ${peakTop}`);
 const viewTop = citadelRangeLiftLocal(VIEW_PEAK.cx, VIEW_PEAK.cz);
 assert(Math.abs(viewTop - (0.4 + VIEW_PEAK.h)) < 1e-9, `看台峰顶应 ${0.4 + VIEW_PEAK.h}，实际 ${viewTop}`);
-assert(viewTop < 4, "前景土丘必须压低，避免遮挡城堡");
-const outpostFloor = citadelRangeLiftLocal(OUTPOST_CUT.cx, OUTPOST_CUT.cz);
-assert(Math.abs(outpostFloor - (0.4 + OUTPOST_CUT.floor)) < 1e-9,
-  `防御塔脚下必须直接挖平，实际 ${outpostFloor}`);
-ok(`圣城峰 +${peakTop.toFixed(1)} · 前哨基台 +${viewTop.toFixed(1)}`);
+assert.equal(CITADEL_PEAK.h, 0, "旧 +16 黄土主峰必须彻底删除");
+assert.equal(VIEW_PEAK.h, 0, "旧前景土坡必须彻底删除");
+ok(`旧主峰与前坡均归零，仅保留 +${peakTop.toFixed(1)} 接缝基线`);
 
 // 扩大后的主峰必须完整包住 24×24 城墙、瓮城和外围乱石。
 const castleShoulder = citadelRangeLiftLocal(16, 14);
-assert(castleShoulder > peakTop * 0.8,
-  `城堡外围土坡过低：+${castleShoulder.toFixed(1)}`);
+assert(Math.abs(castleShoulder - peakTop) < 1e-9,
+  `城堡外围不得残留独立土坡：+${castleShoulder.toFixed(1)}`);
 const outerSlope = citadelRangeLiftLocal(25, 15);
-assert(outerSlope > 0.4 && outerSlope < peakTop,
-  "扩大土坡外缘仍应保留可读坡面");
-ok(`城堡足域土坡 +${castleShoulder.toFixed(1)} · 外缘缓坡 +${outerSlope.toFixed(1)}`);
+assert(Math.abs(outerSlope - peakTop) < 1e-9,
+  "第五层台地之外不得生成额外黄土缓坡");
+ok(`城堡足域与外缘同为贴地基线 +${outerSlope.toFixed(1)}`);
 
 // 域外恒 0；域缘裙边沉入球面遮缝
 assert.equal(citadelRangeLiftLocal(200, 200) > -1 && citadelRangeLiftLocal(200, 200) <= 0.7, true);
@@ -68,22 +72,19 @@ assert.equal(citadelRangeLiftDir(farDir), 0, "背向域外应恒 0");
 assert(Math.abs(citadelRangeLiftDir(siteDir) - peakTop) < 1e-6, "站点方向高程 = 主峰顶");
 ok("域外归零 · 站点高程与局部一致（dir 路径无损）");
 
-console.log("[2] 前置防御塔基台在主峰朝岛一侧（lz+ 向岛）");
-const elev = Math.atan2(peakTop - viewTop, VIEW_PEAK.cz - CITADEL_PEAK.cz);
-assert(elev > 0, "从看台望主峰必须是仰视");
-ok(`仰望角 ${(elev * 180 / Math.PI).toFixed(1)}°（前哨低、主堡高）`);
+console.log("[2] 五层台地独立承担全部高差");
+assert.equal(peakTop, viewTop, "旧主峰与前坡都应退化为同一地面承接层");
+ok("外部地表不再偷偷增加第六层土坡");
 
 console.log("[3] 地形网格：视觉=碰撞");
 const scene = new THREE.Scene();
 const range = buildCitadelRange(scene, R);
 assert(range.mesh?.isMesh, "应返回网格");
 assert(scene.children.includes(range.mesh), "网格应入场景");
-assert.deepEqual(range.mesh.userData.interCascadeNotch, {
-  cx: 3.5,
-  halfWidth: 5.2,
-  zMin: 23.8,
-  zMax: 34.2,
-}, "瀑布 1–3 之间必须从黄土视觉网格切出中央水道缺口（完整露出水帘）");
+assert.equal(range.mesh.userData.formerSoilMoundRemoved, true,
+  "地表网格必须显式标记旧黄土坡已删除");
+assert.equal(range.mesh.userData.interCascadeNotch, undefined,
+  "不得残留跨越瀑布 2、3 的旧地表缺口");
 const pos = range.mesh.geometry.attributes.position;
 assert(pos.count > 3000, `顶点数 ${pos.count} 过少`);
 let minR = Infinity, maxR = 0;
@@ -95,8 +96,8 @@ for (let i = 0; i < pos.count; i++) {
   if (r > maxR) maxR = r;
 }
 assert(minR >= R - 0.71, `裙边最深 ${minR.toFixed(2)} 不应低于 R-0.7`);
-assert(maxR <= R + 16.41, `峰顶最高 ${maxR.toFixed(2)} 不应超过 R+16.4`);
-assert(maxR > R + 16, "峰顶必须达到主峰高度");
+assert(maxR <= R + 0.41, `贴地层最高 ${maxR.toFixed(2)} 不应超过 R+0.4`);
+assert(maxR >= R + 0.39, "贴地承接面必须覆盖全球球面弦差");
 ok(`网格 ${pos.count} 顶点 · 半径域 [${minR.toFixed(1)}, ${maxR.toFixed(1)}] 吻合高程函数`);
 
 // 顶点色：峰顶岩灰、谷地草绿
@@ -104,64 +105,24 @@ const col = range.mesh.geometry.attributes.color;
 assert(col && col.count === pos.count, "顶点色与顶点一一对应");
 ok("顶点色渐变（草绿→土褐→岩灰）就位");
 
-assert(range.foregroundTower?.isGroup, "前景防御塔缺失");
-assert.deepEqual(range.foregroundTower.userData.rangeLocal, {
-  lx: OUTPOST_CUT.cx,
-  lz: OUTPOST_CUT.cz,
-});
-assert(range.foregroundTower.userData.rangeLocal.lz > 16,
-  "防御塔必须位于城堡最前沿 Z≈16 之外");
-const towerUp = new THREE.Vector3(0, 1, 0)
-  .applyQuaternion(range.foregroundTower.quaternion)
-  .normalize();
-assert(towerUp.dot(siteDir) > 0.999999, "防御塔竖轴必须与主城竖轴平行，不得随坡倾斜");
-assert(range.snowMountains?.isGroup, "背景雪山群缺失");
-assert(range.vegetation?.isGroup, "山坡绿植缺失");
-assert(range.loessGroundSeal?.isGroup, "黄土坡闭合接地体缺失");
-assert(range.castleFooting?.isGroup, "城堡实体土质承台缺失");
+assert.equal(range.foregroundTower, null, "前景防御塔必须删除");
+assert.equal(range.snowMountains, null, "背景雪山必须删除");
+assert.equal(range.vegetation, null, "山坡散灌木必须删除");
+assert.equal(range.loessGroundSeal, null, "近地面的旧黄土封口层必须删除");
+assert.equal(range.castleFooting, null, "近地面的旧城堡承台层必须删除");
 assert(range.pilgrimageWaterSteps?.isGroup, "城堡前白石梯湖缺失");
 assert(range.pilgrimageCascades?.isGroup, "梯湖之间的多层瀑布缺失");
-assert(range.interCascadeBridgePool?.isGroup, "瀑布 2、3 之间的连续湖盆缺失");
-assert(range.pilgrimageLookout?.isGroup, "深潭前观景石缺失");
+assert.equal(range.interCascadeBridgePool, null,
+  "必须删除曾经跨接瀑布 2、3 的长湖盆");
+assert.equal(scene.getObjectByName("citadel-waterfall-2-3-bridge-pool"), undefined,
+  "场景中不得残留跨两层的桥接水体");
+assert(range.pilgrimageLookout?.isGroup, "远眺相机基准数据缺失");
 assert(range.sacredTarnTree?.isGroup, "深潭旁湖沼参天树缺失");
-assert(range.lakeBallShrubs?.isGroup, "白石湖岸球形灌木缺失");
-const loessSealBody = range.loessGroundSeal
-  .getObjectByName("citadel-loess-ground-seal-body");
-const buriedLoessCollar = range.loessGroundSeal
-  .getObjectByName("citadel-loess-buried-collar");
-assert(loessSealBody?.isMesh, "黄土坡闭合主土体缺失");
-assert.equal(buriedLoessCollar, undefined,
-  "重复埋地圆环会横穿瀑布 2、3，必须彻底删除");
-assert.equal(loessSealBody.geometry.type, "BufferGeometry",
-  "黄土坡封层必须使用贴合高程曲线的自定义闭合网格");
-const sealBounds = loessSealBody.geometry.boundingBox;
-assert(sealBounds.max.y <= -0.21,
-  "黄土封层必须始终位于可见坡面下方，禁止遮挡梯湖");
-assert(sealBounds.min.y <= -18,
-  "黄土坡主土体必须深入全球地面");
-assert(sealBounds.max.x >= 34 && sealBounds.max.z >= 29,
-  "黄土坡封层必须覆盖完整椭圆峰体");
-scene.updateMatrixWorld(true);
-const sealAnchorR = range.loessGroundSeal.position.dot(siteDir);
-assert(sealAnchorR + sealBounds.min.y < R,
-  "黄土坡封层底部必须穿入全球地面，禁止残留空气层");
-const footingBody = range.castleFooting.getObjectByName("citadel-solid-soil-footing-body");
-assert(footingBody?.isMesh, "土质承台主体缺失");
-assert.equal(footingBody.geometry.parameters.radiusTop, 19,
-  "承台顶面必须覆盖城堡与瓮城足印");
-assert.equal(footingBody.geometry.parameters.radiusBottom, 32,
-  "承台底部必须向外扩张并插入山坡");
-assert.equal(footingBody.geometry.parameters.openEnded, false,
-  "承台必须是闭合实体，禁止从侧面看穿");
-let apronRocks = 0;
-range.castleFooting.traverse((o) => {
-  if (o.name === "citadel-soil-apron-rock") apronRocks++;
-});
-assert.equal(apronRocks, 10);
-const footingUp = new THREE.Vector3(0, 1, 0)
-  .applyQuaternion(range.castleFooting.quaternion)
-  .normalize();
-assert(footingUp.dot(siteDir) > 0.999999, "承台必须与城堡同轴直立");
+assert.equal(range.lakeBallShrubs, null, "湖岸球形灌木必须删除");
+assert.equal(scene.getObjectByName("citadel-loess-ground-seal"), undefined,
+  "场景中不得残留第 6 层黄土封口");
+assert.equal(scene.getObjectByName("citadel-solid-soil-footing"), undefined,
+  "场景中不得残留第 7 层城堡承台");
 const waterStages = range.pilgrimageWaterSteps.children;
 assert.equal(waterStages.length, 5, "必须由四座高低浅湖和一座地面深潭组成");
 const waterElevations = waterStages.map((stage) => stage.userData.composition.localElevation);
@@ -178,46 +139,61 @@ range.pilgrimageWaterSteps.traverse((o) => {
 assert.equal(whiteStoneBanks, 5, "每级湖泊都必须有独立白石岸台");
 assert.equal(waterSurfaces, 5, "四座浅湖与地面深潭都必须有水面");
 const upperWater = range.pilgrimageWaterSteps
-  .getObjectByName("citadel-upper-courtyard-pool-water");
+  .getObjectByName("citadel-terrace-1-pool-water");
 assert(upperWater.geometry.attributes.normal.getY(0) > 0.9,
   "梯湖水面法线必须朝上，避免卡通光照渲染成黑色");
 const upperBank = range.pilgrimageWaterSteps
-  .getObjectByName("citadel-upper-courtyard-pool-white-stone-bank");
+  .getObjectByName("citadel-terrace-1-pool-white-stone-bank");
 assert(upperBank.geometry.attributes.normal.getY(0) > 0.9,
   "白石岸台顶面法线必须朝上，禁止露出黑色反向描边壳");
-assert.equal(waterStages.at(-1).userData.composition.kind, "deep-pool",
-  "最低一级必须是地面深潭");
+assert.equal(waterStages.at(-1).userData.composition.kind, "lowest-terrace-pool",
+  "最低一级必须绑定第五层台地，而不是额外地貌层");
+const defaultMetrics = citadelTerraceMetrics(range.contourSpec);
+const defaultCurvatureDrop = citadelCurvatureDrop(R + 0.4, range.contourSpec);
+const waterGrounding = range.pilgrimageWaterSteps.userData.curvatureGrounding;
+assert(waterGrounding.contactRadius > 44,
+  `最低湖岸应按真实远端半径约 45 计算曲率，实际 ${waterGrounding.contactRadius}`);
+assert(waterGrounding.containerBaseLift < 0.4 - CITADEL.groundEmbed - defaultCurvatureDrop,
+  "梯湖/瀑布必须比城堡 R24 基座进一步下降，不能继续复用城堡弦高");
+const lowestBank = range.pilgrimageWaterSteps
+  .getObjectByName("citadel-terrace-5-pool-white-stone-bank");
+range.pilgrimageWaterSteps.updateMatrixWorld(true);
+const lowestBankPosition = lowestBank.geometry.attributes.position;
+let maxUndersideRadius = -Infinity;
+for (let index = 0; index < lowestBankPosition.count; index++) {
+  if (lowestBankPosition.getY(index) >= -0.05) continue;
+  const point = new THREE.Vector3().fromBufferAttribute(lowestBankPosition, index);
+  lowestBank.localToWorld(point);
+  maxUndersideRadius = Math.max(maxUndersideRadius, point.length());
+}
+assert(maxUndersideRadius <= R + 0.4 + 1e-6,
+  "最低湖泊白石台阶的全部底部顶点都不得悬在球面之上");
+assert(Math.abs(maxUndersideRadius - (R + 0.4)) < 1e-5,
+  "最低湖泊白石台阶必须至少有一个真实底部顶点接触地面");
+const oldFlatWaterElevation = 0.4 - CITADEL.groundEmbed
+  - defaultCurvatureDrop + defaultMetrics[4].top + 0.09;
+assert(waterElevations.at(-1) < oldFlatWaterElevation - 2,
+  "最低湖面与整套瀑布必须显著低于旧 R24 平面定位");
+const outerTopLift = citadelWalkLiftLocal(defaultMetrics[4].radius, 0);
+const expectedOuterTopLift = Math.hypot(
+  R + 0.4 - CITADEL.groundEmbed - defaultCurvatureDrop + defaultMetrics[4].top,
+  defaultMetrics[4].radius
+) - R;
+assert(Math.abs(outerTopLift - expectedOuterTopLift) < 1e-6,
+  "玩家碰撞台面必须使用同一球面曲率，不能沿用平面高程");
 assert.equal(range.pilgrimageCascades.children.length, 4,
   "五级梯湖之间必须部署四道瀑布");
-assert.deepEqual(
-  range.interCascadeBridgePool.userData.connectsCascadeSequences,
-  [1, 2],
-  "加长湖盆必须连接瀑布 2 与瀑布 3"
-);
-assert.equal(range.interCascadeBridgePool.userData.replacesLoessBand, true,
-  "瀑布 2、3 之间必须以湖盆替换横向黄土带");
-const bridgeWater = range.interCascadeBridgePool
-  .getObjectByName("citadel-waterfall-2-3-channel-water");
-const bridgeBank = range.interCascadeBridgePool
-  .getObjectByName("citadel-waterfall-2-3-white-stone-basin");
-assert(bridgeWater?.isMesh && bridgeBank?.isMesh,
-  "连接区必须同时具有连续水面与闭合白石盆壁");
-assert.equal(bridgeWater.geometry.type, "PlaneGeometry");
-assert.equal(bridgeBank.geometry.type, "BoxGeometry");
-const middlePoolWaterY = waterStages[2].position.dot(siteDir) + 0.09;
-assert(Math.abs(range.interCascadeBridgePool.userData.waterLevel - middlePoolWaterY) < 1e-6,
-  "连接湖盆必须与中层湖保持完全相同的水位");
-assert(range.interCascadeBridgePool.userData.channelLength > 4,
-  "连接水道必须覆盖瀑布 2 落点到瀑布 3 起水口的完整间距");
-assert.equal(
-  bridgeWater.geometry.parameters.height,
-  range.interCascadeBridgePool.userData.channelLength + 1.35
-);
 for (const [index, waterfall] of range.pilgrimageCascades.children.entries()) {
   assert.equal(waterfall.name, "waterfallGroup", "瀑布工厂必须返回统一 waterfallGroup");
   assert.equal(waterfall.userData.sequence, index);
-  assert(waterfall.userData.actualDrop >= 0.8, "每道瀑布都必须形成明确跌水落差");
-  assert(waterfall.userData.facadeClearance >= 1.4,
+  const adjacentDrop = waterElevations[index] - waterElevations[index + 1];
+  assert(Math.abs(waterfall.userData.actualDrop - adjacentDrop) < 1e-6,
+    "每道瀑布高差必须严格等于相邻两层湖泊水位差");
+  assert.equal(waterfall.userData.spansTerraceCount, 1,
+    "任何瀑布都只能跌落一个台面");
+  assert.equal(waterfall.userData.upperTerraceIndex, index);
+  assert.equal(waterfall.userData.lowerTerraceIndex, index + 1);
+  assert(waterfall.userData.facadeClearance >= 1.2,
     "瀑布必须前移离开黄土坡切面，禁止被地形吞没");
   assert.equal(waterfall.userData.deployedCurtainWidth, 5.22,
     "实际梯湖水帘必须横向扩宽，接近参考图宽瀑比例");
@@ -238,13 +214,9 @@ for (const [index, waterfall] of range.pilgrimageCascades.children.entries()) {
       soilShoulders++;
     }
   });
-  assert.equal(soilShoulders, index === 0 ? 0 : 4,
-    "从地面向上的瀑布 1、2、3 必须各有四块重堆黄土肩坡");
+  assert.equal(soilShoulders, 0,
+    "瀑布周围不得重建遮挡水帘的黄土坡");
   assert.equal(waterfall.userData.rebuiltSoilShoulders, soilShoulders);
-  if (index >= 1) {
-    assert(waterfall.userData.facadeClearance >= 2.8,
-      "下方三道瀑布必须大幅前移，完整露出水帘");
-  }
   const curtains = [];
   const mist = [];
   const ripples = [];
@@ -262,15 +234,55 @@ for (const [index, waterfall] of range.pilgrimageCascades.children.entries()) {
     assert(Math.abs(bottom + 0.5) < 1e-6,
       "部署水帘底端必须切入下游水面 0.5 单位");
   }
+  if (index === range.pilgrimageCascades.children.length - 1) {
+    scene.updateMatrixWorld(true);
+    const bottomCurtain = curtains[0];
+    const curtainPositions = bottomCurtain.geometry.attributes.position;
+    let waterfallBottomMaxRadius = -Infinity;
+    for (let vertex = 0; vertex < curtainPositions.count; vertex++) {
+      if (curtainPositions.getY(vertex) >= 0) continue;
+      const point = new THREE.Vector3().fromBufferAttribute(curtainPositions, vertex);
+      bottomCurtain.localToWorld(point);
+      waterfallBottomMaxRadius = Math.max(waterfallBottomMaxRadius, point.length());
+    }
+    assert(waterfallBottomMaxRadius <= R + 0.4 + 0.05,
+      "最底层瀑布水帘落水端必须切入曲面地表/最低湖，不得悬空");
+  }
+}
+const oldWaterSteps = range.pilgrimageWaterSteps;
+const oldCascades = range.pilgrimageCascades;
+const editedContour = {
+  ...range.contourSpec,
+  terraces: [
+    { radius: 15.7, height: 4 },
+    { radius: 17.5, height: 2 },
+    { radius: 19.5, height: 3 },
+    { radius: 22.0, height: 2 },
+    { radius: 25.0, height: 3 },
+  ],
+};
+range.rebuildWaterTerraces(editedContour);
+assert.equal(scene.children.includes(oldWaterSteps), false,
+  "编辑台地后必须卸载旧湖泊，禁止双层叠加");
+assert.equal(scene.children.includes(oldCascades), false,
+  "编辑台地后必须卸载旧瀑布，禁止跨层残影");
+assert.equal(range.pilgrimageWaterSteps.children.length, 5);
+assert.equal(range.pilgrimageCascades.children.length, 4);
+const editedWaterY = range.pilgrimageWaterSteps.children
+  .map((stage) => stage.userData.composition.localElevation);
+for (const [index, waterfall] of range.pilgrimageCascades.children.entries()) {
+  assert.equal(waterfall.userData.spansTerraceCount, 1);
+  assert(Math.abs(
+    waterfall.userData.actualDrop - (editedWaterY[index] - editedWaterY[index + 1])
+  ) < 1e-6, "热重建后每道瀑布仍须只跨一个相邻台面");
 }
 let flatLookoutStones = 0;
-let messengerViewpoints = 0;
 range.pilgrimageLookout.traverse((o) => {
   if (o.name === "citadel-lookout-flat-stone") flatLookoutStones++;
-  if (o.userData.isMessengerViewpoint) messengerViewpoints++;
 });
-assert.equal(flatLookoutStones, 4, "深潭前必须有四块宽缓观景石");
-assert.equal(messengerViewpoints, 1, "必须预留唯一的送信人远眺落脚点");
+assert.equal(flatLookoutStones, 0, "深潭前观景石必须删除");
+assert.equal(scene.children.includes(range.pilgrimageLookout), false,
+  "只读相机基准组不得进入可见场景");
 assert(range.pilgrimageLookout.userData.lookDirection?.isVector3,
   "远眺点必须记录面向圣城的方向");
 assert(range.sacredTarnTree.userData.canopyHeight >= 30,
@@ -285,67 +297,17 @@ range.sacredTarnTree.traverse((o) => {
 });
 assert.equal(tarnTreeCrowns, 8, "湖沼参天树冠层数量不足");
 assert.equal(tarnTreeBranches, 5, "湖沼参天树必须呈现清晰分叉结构");
-const ballShrubs = range.lakeBallShrubs.children;
-assert.equal(ballShrubs.length, 10, "五级湖岸必须配置十组球形灌木");
-for (const shrub of ballShrubs) {
-  const crowns = [];
-  shrub.traverse((o) => {
-    if (/-ball-crown$/.test(o.name || "")) crowns.push(o);
-  });
-  assert.equal(crowns.length, 3, "每组湖岸灌木必须由三个圆球冠层构成");
-  assert(crowns.every((crown) => crown.geometry.type === "SphereGeometry"),
-    "湖岸灌木冠层必须使用球形几何体");
+const removedNames = [
+  "citadel-foreground-defense-tower",
+  "citadel-background-snow-massif",
+  "citadel-range-vegetation",
+  "citadel-lake-ball-shrubs",
+  "citadel-pilgrimage-lookout-stones",
+];
+for (const name of removedNames) {
+  assert.equal(scene.getObjectByName(name), undefined, `${name} 不得残留在场景`);
 }
-let snowCaps = 0;
-let towerBoxes = 0;
-let rangeShrubs = 0;
-range.snowMountains.traverse((o) => { if (/snow-cap/.test(o.name || "")) snowCaps++; });
-range.foregroundTower.traverse((o) => { if (/foreground-tower-(lower|upper)/.test(o.name || "")) towerBoxes++; });
-range.vegetation.traverse((o) => { if (/^range-shrub-\d+$/.test(o.name || "")) rangeShrubs++; });
-assert.equal(snowCaps, 6, "六座雪山都必须有独立积雪冠层");
-const flankMountainIndices = [0, 1, 4, 5];
-const flankCompositions = flankMountainIndices.map((index) => {
-  const mountain = range.snowMountains.getObjectByName(`background-snow-mountain-${index}`);
-  assert(mountain?.isGroup, `外围雪山 ${index} 缺失`);
-  return mountain.userData.composition;
-});
-assert.equal(new Set(flankCompositions.map(({ height }) => height)).size, 4,
-  "其余四座雪山必须使用四种不同高度形成错落层次");
-assert.equal(new Set(flankCompositions.map(({ depth }) => depth)).size, 4,
-  "其余四座雪山必须错开前后纵深，禁止排成平面背景板");
-const connectedSaddle = range.snowMountains.getObjectByName("connected-central-snow-saddle");
-assert(connectedSaddle?.isGroup, "中间两座雪山缺少实体连接鞍部");
-assert.deepEqual(connectedSaddle.userData.connectsMountainIndices, [2, 3]);
-assert(connectedSaddle.getObjectByName("connected-central-snow-saddle-rock")?.isMesh);
-assert(connectedSaddle.getObjectByName("connected-central-snow-saddle-cap")?.isMesh,
-  "连接山脊顶部必须覆盖连续积雪层");
-for (const mountain of range.snowMountains.children) {
-  assert(mountain.userData.rangeLocal.lz < -40,
-    "雪山必须完整退到城堡后方 Z<-40");
-  const mountainUp = new THREE.Vector3(0, 1, 0)
-    .applyQuaternion(mountain.quaternion)
-    .normalize();
-  assert(mountainUp.dot(siteDir) > 0.999999,
-    "雪山竖轴必须与圣城竖轴平行，不得随球面倾斜");
-}
-assert.equal(towerBoxes, 2, "前景哨塔必须为两级建筑体");
-const outpostLower = range.foregroundTower.getObjectByName("foreground-tower-lower");
-const outpostUpper = range.foregroundTower.getObjectByName("foreground-tower-upper");
-assert.equal(outpostLower.geometry.type, "CylinderGeometry");
-assert.equal(outpostUpper.geometry.type, "CylinderGeometry");
-assert.equal(outpostLower.geometry.parameters.radialSegments, 8);
-assert.equal(outpostUpper.geometry.parameters.radialSegments, 8);
-assert.equal(outpostLower.geometry.parameters.radiusTop, outpostLower.geometry.parameters.radiusBottom,
-  "防御塔下层八面墙必须完全垂直");
-assert.equal(outpostUpper.geometry.parameters.radiusTop, outpostUpper.geometry.parameters.radiusBottom,
-  "防御塔上层八面墙必须完全垂直");
-let lookoutWindows = 0;
-range.foregroundTower.traverse((o) => {
-  if (o.name === "foreground-tower-lookout-window") lookoutWindows++;
-});
-assert.equal(lookoutWindows, 3, "八角防御塔必须有三面瞭望窗");
-assert(rangeShrubs >= 14, "山坡灌木数量不足");
-ok(`梯湖×${waterSurfaces} · 参天树×1 · 湖岸球灌木×${ballShrubs.length} · 雪山×${snowCaps} · 山坡灌木×${rangeShrubs}`);
+ok(`梯湖×${waterSurfaces} · 瀑布×4 · 参天树×1 · 非保留器物全部清空`);
 
 console.log("[4] 场景与物理接线");
 const island = fs.readFileSync(
@@ -355,6 +317,12 @@ const island = fs.readFileSync(
 assert(island.includes("buildCitadelRange"), "场景应构建山脉");
 assert(island.includes("citadelRangeLiftDir"), "圣城 groundRadius 应取山脉高程");
 assert(island.includes("pilgrimageCascades.update"), "圣城梯湖瀑布动效必须接入主更新循环");
+const main = fs.readFileSync(
+  fileURLToPath(new URL("src/main.js", BASE)),
+  "utf8"
+);
+assert(main.includes("rebuildWaterTerraces?.(contour)"),
+  "台地编辑器必须同步热重建逐级水系");
 const collision = fs.readFileSync(
   fileURLToPath(new URL("src/world/collision.js", BASE)),
   "utf8"
@@ -363,17 +331,17 @@ assert(collision.includes("citadelWalkLiftDir"), "物理地面应叠加台地/�
 ok("messengerIsland + collision 接线完成");
 
 console.log("[4b] 可行走高程：台地台面 + 折返石阶 + 瀑布缺口");
-const {
-  citadelWalkLiftLocal,
-  citadelWalkLiftDir,
-} = await import(new URL("src/world/citadelRange.js", BASE).href);
-const walkBase = 0.4 + CITADEL_PEAK.h - 9.25; // 城堡容器基准 7.15
-// 顶层台面（城堡脚下）：自然坡面之上抬到 19.15
-assert(Math.abs(citadelWalkLiftLocal(0, 0) - (walkBase + 12)) < 1e-9,
+const activeWalkMetrics = citadelTerraceMetrics(range.contourSpec);
+const activeWalkDrop = citadelCurvatureDrop(R + 0.4, range.contourSpec);
+const walkBase = 0.4 + CITADEL_PEAK.h - CITADEL.groundEmbed - activeWalkDrop;
+const highestTop = activeWalkMetrics[0].top;
+const lowestTop = activeWalkMetrics.at(-1).top;
+// 顶层台面（城堡脚下）：五层台地累计高差，旧黄土峰不再参与。
+assert(Math.abs(citadelWalkLiftLocal(0, 0) - (walkBase + highestTop)) < 1e-9,
   "城堡脚下应为顶层台面");
 // 缺口水道内（瀑布正下方）：前四层台地失效，不得出现隐形地板
 const channelLift = citadelWalkLiftLocal(3.5, 21.5);
-assert(channelLift < walkBase + 4,
+assert(channelLift < walkBase + lowestTop,
   `瀑布水道内不得被台地封盖，实际抬升 ${channelLift.toFixed(2)}`);
 // 石阶坡道沿程单调爬升、坡度可行走（每段高差 2，弧长 ≥ 7.7）
 let prevWalk = -Infinity;
@@ -383,13 +351,15 @@ for (let i = 0; i <= 20; i++) {
   assert(lift >= prevWalk - 1e-9, "顶层梯段沿程不得下坠");
   prevWalk = lift;
 }
-assert(Math.abs(prevWalk - (walkBase + 12.06)) < 1e-9, "顶层梯段末端必须接上台面");
+const expectedRampEnd = Math.hypot(R + walkBase + highestTop + 0.06, 16.8) - R;
+assert(Math.abs(prevWalk - expectedRampEnd) < 2e-3, "顶层梯段末端必须接上曲面台面");
 // dir 路径一致：正门门廊前（平桥门槛条处）可站立
-assert(Math.abs(citadelWalkLiftLocal(0, 7.05) - (walkBase + 12)) < 1e-9,
+const expectedDoorLift = Math.hypot(R + walkBase + highestTop, 7.05) - R;
+assert(Math.abs(citadelWalkLiftLocal(0, 7.05) - expectedDoorLift) < 1e-9,
   "正门门廊前必须为可站立台面");
 assert(citadelWalkLiftDir(siteDir) >= citadelRangeLiftDir(siteDir),
   "可行走高程不得劣于自然坡面");
-ok("台面 19.15 · 缺口无封盖 · 顶层梯段单调至台面 · 门廊前可站立");
+ok("第五层贴地 · 缺口无封盖 · 顶层梯段单调至台面 · 门廊前可站立");
 
 console.log("[5] 独立多层水帘、雾气与涟漪工厂");
 // 轻量 DOM 桩（odysseyCitadel → toon.js 需要）

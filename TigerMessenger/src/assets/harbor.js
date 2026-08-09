@@ -10,12 +10,6 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
 
-/** 船体下半 · 亮蓝 */
-const HULL_BLUE = 0x2c96b4;
-/** 船体上半 / 船舱 · 乳白 */
-const HULL_CREAM = 0xf3f5f0;
-/** 救生圈橙 */
-const BUOY_ORANGE = 0xe86a2a;
 /** 货柜青灰 */
 const CRATE_STEEL = 0xa2b5cd;
 /** 原木色 */
@@ -55,124 +49,282 @@ function lcg(seed) {
 }
 
 // =====================================================================
-//  1. 低多边形小渔船
+//  1. 古战船（三列桨战船 trireme 造型）
 // =====================================================================
 
 /**
- * 前端收尖小渔船：蓝底乳白舷、侧救生圈、带窗船舱、桅杆。
- * 底部约在 Y=0。
+ * 截屏形制：长尾翘艏柱 + 青铜撞角 + 船眼 + 单桅绗缝大方帆（红回纹边、
+ * 红蛇纹）+ 两侧长桨 + 甲板货箱栏杆。局部 +X = 船头，底部约 Y=0。
  * @returns {THREE.Group}
  */
 export function createFisherBoat() {
   const g = new THREE.Group();
   g.name = "fisher-boat";
 
-  const blue = toonMat(HULL_BLUE);
-  const cream = toonMat(HULL_CREAM);
-  const orange = toonMat(BUOY_ORANGE);
-  const dark = toonMat(0x2a3238);
-  const wood = toonMat(CRATE_WOOD);
+  const hullDark = toonMat(0x3f4a3c); // 船底暗绿灰
+  const hullRed = toonMat(0xb0492c); // 红橙舷带
+  const stripeWhite = toonMat(0xe8e0cc); // 回纹白带
+  const ink = toonMat(0x2a2620); // 回纹深方
+  const wood = toonMat(0xb8956a); // 甲板
+  const woodDark = toonMat(0x6a5340); // 栏杆 / 艏柱
+  const bronze = toonMat(0x9a7434); // 撞角
+  const sailTan = toonMat(0xe6dcc0, { side: THREE.DoubleSide }); // 帆
+  const sailRed = toonMat(0xb03a2a, { side: THREE.DoubleSide }); // 帆边 / 蛇纹
+  const rope = toonMat(0x8a7a5c); // 帆索 / 支索
 
-  // ---- 船体下半：亮蓝，前端收尖（锥 + 盒拼接）----
-  const hullLow = part(new THREE.BoxGeometry(2.4, 0.42, 0.95), blue);
-  hullLow.name = "hull-low";
-  hullLow.position.set(0, 0.22, 0);
-  g.add(hullLow);
+  // ---- 船体：侧面轮廓挤出（船尾上翘）----
+  const hullShape = new THREE.Shape();
+  hullShape.moveTo(-2.42, 0.3); // 船尾底
+  hullShape.lineTo(2.02, 0.14); // 龙骨微前倾
+  hullShape.lineTo(2.3, 0.62); // 船头柱
+  hullShape.lineTo(2.08, 0.78); // 船头舷缘
+  hullShape.lineTo(-1.5, 0.82); // 舷缘中部
+  hullShape.lineTo(-2.14, 1.0); // 舷缘上翘
+  hullShape.lineTo(-2.46, 1.18); // 船尾舷缘最高
+  hullShape.lineTo(-2.52, 0.86); // 船尾柱内侧
+  hullShape.closePath();
+  const hullGeo = new THREE.ExtrudeGeometry(hullShape, {
+    depth: 1.0,
+    bevelEnabled: false,
+    curveSegments: 6,
+  });
+  hullGeo.translate(0, 0, -0.5);
+  const hull = part(hullGeo, hullDark);
+  hull.name = "hull-low";
+  g.add(hull);
 
-  // 船头尖（蓝）
-  const prow = part(new THREE.ConeGeometry(0.48, 0.9, 5), blue, 0.032);
-  prow.name = "hull-prow";
-  prow.rotation.z = -Math.PI / 2;
-  prow.position.set(1.5, 0.24, 0);
-  prow.scale.set(1, 1, 0.72);
-  g.add(prow);
-
-  // 船尾略收
-  const stern = part(new THREE.BoxGeometry(0.35, 0.38, 0.72), blue, 0.032);
-  stern.position.set(-1.25, 0.22, 0);
-  g.add(stern);
-
-  // ---- 船体上半：乳白舷墙 ----
-  const hullUp = part(new THREE.BoxGeometry(2.15, 0.22, 0.88), cream);
-  hullUp.name = "hull-up";
-  hullUp.position.set(-0.05, 0.5, 0);
-  g.add(hullUp);
-
-  const gunwale = part(new THREE.BoxGeometry(2.0, 0.08, 0.94), cream, 0.028);
-  gunwale.position.set(-0.05, 0.62, 0);
-  g.add(gunwale);
-
-  // 甲板木色
-  const deck = part(new THREE.BoxGeometry(1.9, 0.05, 0.72), wood, 0.028);
-  deck.position.set(-0.08, 0.44, 0);
-  g.add(deck);
-
-  // ---- 船舱：白色长方体 + 连续深色方窗 ----
-  const cabin = part(new THREE.BoxGeometry(0.85, 0.48, 0.7), cream);
-  cabin.name = "cabin";
-  cabin.position.set(-0.35, 0.88, 0);
-  g.add(cabin);
-
-  // 连续车窗（深色方块）
+  // ---- 红橙舷带（两侧：平直段 + 船尾上翘段）----
   for (const side of [-1, 1]) {
-    for (let i = 0; i < 3; i++) {
-      const win = part(new THREE.BoxGeometry(0.16, 0.14, 0.04), dark, 0.018);
-      win.position.set(-0.55 + i * 0.22, 0.92, side * 0.36);
-      g.add(win);
+    const bandFlat = part(new THREE.BoxGeometry(3.6, 0.15, 0.05), hullRed, 0.02);
+    bandFlat.position.set(0.26, 0.66, side * 0.51);
+    g.add(bandFlat);
+    const bandUp = part(new THREE.BoxGeometry(1.0, 0.15, 0.05), hullRed, 0.02);
+    bandUp.position.set(-1.85, 0.88, side * 0.51);
+    bandUp.rotation.z = 2.83; // 随舷缘上翘
+    g.add(bandUp);
+    // 白色回纹带 + 深色回纹方块
+    const stripe = part(new THREE.BoxGeometry(2.6, 0.09, 0.045), stripeWhite, 0.016);
+    stripe.position.set(0.28, 0.5, side * 0.51);
+    g.add(stripe);
+    for (let i = 0; i < 7; i++) {
+      const key = part(new THREE.BoxGeometry(0.12, 0.045, 0.05), ink, 0.01);
+      key.position.set(-0.85 + i * 0.36, 0.5, side * 0.515);
+      g.add(key);
+    }
+    // ---- 船眼（白底黑瞳）----
+    const eye = part(new THREE.CylinderGeometry(0.13, 0.13, 0.04, 10), stripeWhite, 0.018);
+    eye.rotation.x = Math.PI / 2;
+    eye.position.set(1.78, 0.52, side * 0.5);
+    g.add(eye);
+    const pupil = part(new THREE.CylinderGeometry(0.055, 0.055, 0.05, 8), ink, 0.012);
+    pupil.rotation.x = Math.PI / 2;
+    pupil.position.set(1.8, 0.52, side * 0.51);
+    g.add(pupil);
+  }
+
+  // ---- 青铜撞角：主尖 + 上翘副尖 + 两片鳍 ----
+  const ram = part(new THREE.ConeGeometry(0.16, 1.15, 6), bronze, 0.028);
+  ram.name = "hull-prow";
+  ram.rotation.z = -Math.PI / 2 + 0.06;
+  ram.position.set(2.78, 0.3, 0);
+  g.add(ram);
+  const ramUp = part(new THREE.ConeGeometry(0.1, 0.55, 5), bronze, 0.022);
+  ramUp.rotation.z = -Math.PI / 2 + 0.5;
+  ramUp.position.set(2.42, 0.62, 0);
+  g.add(ramUp);
+  for (const side of [-1, 1]) {
+    const fin = part(new THREE.BoxGeometry(0.5, 0.22, 0.04), bronze, 0.018);
+    fin.position.set(2.3, 0.3, side * 0.16);
+    fin.rotation.y = side * 0.5;
+    g.add(fin);
+  }
+
+  // ---- 凤尾艏柱：弯弧 + 顶饰 ----
+  const sternpost = part(
+    new THREE.TorusGeometry(0.62, 0.075, 6, 10, 1.9),
+    woodDark,
+    0.03
+  );
+  sternpost.position.set(-2.62, 1.1, 0);
+  sternpost.rotation.z = 0.35; // 自船尾向上向前弯成天鹅颈
+  g.add(sternpost);
+  const finial = part(new THREE.BoxGeometry(0.2, 0.16, 0.2), hullRed, 0.022);
+  finial.position.set(-2.28, 1.82, 0);
+  g.add(finial);
+
+  // ---- 长桨：两侧各 13 支，根在舷缘、尖向下外入水（略向后拖）----
+  const _oarA = new THREE.Vector3();
+  const _oarB = new THREE.Vector3();
+  for (const side of [-1, 1]) {
+    for (let i = 0; i < 13; i++) {
+      const x = -1.7 + i * 0.27;
+      _oarA.set(x, 0.68, side * 0.5); // 桨根：舷缘
+      _oarB.set(x - 0.5, -0.1, side * 1.72); // 桨尖：下外后方
+      const len = _oarA.distanceTo(_oarB);
+      const oar = part(new THREE.CylinderGeometry(0.022, 0.028, len, 5), woodDark, 0.012);
+      oar.position.copy(_oarA).lerp(_oarB, 0.5);
+      oar.lookAt(_oarB);
+      oar.rotateX(Math.PI / 2); // 圆柱 +Y → 指向桨尖
+      g.add(oar);
+      const blade = part(new THREE.BoxGeometry(0.32, 0.1, 0.03), woodDark, 0.012);
+      blade.position.copy(_oarB);
+      blade.rotation.set(0, side * 0.35, -0.25);
+      g.add(blade);
     }
   }
-  // 前窗
-  const frontWin = part(new THREE.BoxGeometry(0.04, 0.16, 0.42), dark, 0.018);
-  frontWin.position.set(0.08, 0.94, 0);
-  g.add(frontWin);
 
-  // 舱顶
-  const roof = part(new THREE.BoxGeometry(0.92, 0.08, 0.76), cream, 0.028);
-  roof.position.set(-0.35, 1.14, 0);
-  g.add(roof);
+  // ---- 甲板 + 栏杆 + 货箱 + 船尾楼 ----
+  const deck = part(new THREE.BoxGeometry(3.9, 0.06, 0.86), wood, 0.026);
+  deck.position.set(0.05, 0.8, 0);
+  g.add(deck);
+  for (const side of [-1, 1]) {
+    const rail = part(new THREE.BoxGeometry(3.7, 0.04, 0.05), woodDark, 0.014);
+    rail.position.set(0.0, 1.08, side * 0.42);
+    g.add(rail);
+    for (let i = 0; i < 9; i++) {
+      const post = part(new THREE.BoxGeometry(0.045, 0.26, 0.045), woodDark, 0.012);
+      post.position.set(-1.75 + i * 0.45, 0.95, side * 0.42);
+      g.add(post);
+    }
+  }
+  // 甲板货箱
+  const crateSpots = [
+    [-0.7, 0.2, 0.32],
+    [0.05, -0.22, 0.26],
+    [1.15, 0.12, 0.3],
+    [-1.25, -0.15, 0.24],
+  ];
+  for (const [cx, cz, s] of crateSpots) {
+    const crate = part(new THREE.BoxGeometry(s, s, s), wood, 0.02);
+    crate.position.set(cx, 0.86 + s / 2, cz);
+    crate.rotation.y = cx * 0.6;
+    g.add(crate);
+  }
+  // 船尾小楼（舱棚 + 顶台栏杆）
+  const aftCabin = part(new THREE.BoxGeometry(0.9, 0.4, 0.7), wood, 0.026);
+  aftCabin.position.set(-1.85, 1.02, 0);
+  g.add(aftCabin);
+  const aftRoof = part(new THREE.BoxGeometry(1.0, 0.06, 0.78), woodDark, 0.02);
+  aftRoof.position.set(-1.85, 1.25, 0);
+  g.add(aftRoof);
 
-  // ---- 桅杆：白色细圆柱 ----
-  const mast = part(new THREE.CylinderGeometry(0.035, 0.045, 1.35, 6), cream, 0.022);
+  // ---- 桅杆 + 横桁 ----
+  const mast = part(new THREE.CylinderGeometry(0.045, 0.065, 2.9, 7), woodDark, 0.024);
   mast.name = "mast";
-  mast.position.set(0.35, 1.45, 0);
+  mast.position.set(0.55, 2.2, 0);
   g.add(mast);
-
-  // 横桁
-  const yard = part(new THREE.CylinderGeometry(0.025, 0.025, 0.9, 5), cream, 0.016);
-  yard.rotation.z = Math.PI / 2;
-  yard.position.set(0.35, 1.85, 0);
+  const mastTop = part(new THREE.CylinderGeometry(0.03, 0.04, 0.5, 6), woodDark, 0.018);
+  mastTop.position.set(0.55, 3.8, 0);
+  g.add(mastTop);
+  const yard = part(new THREE.CylinderGeometry(0.035, 0.035, 2.7, 6), woodDark, 0.02);
+  yard.rotation.x = Math.PI / 2;
+  yard.position.set(0.55, 3.32, 0);
   g.add(yard);
 
-  // ---- 舷侧救生圈：Torus + 橙白相间块 ----
-  const buoyG = new THREE.Group();
-  buoyG.name = "lifebuoy";
-  // 主环（乳白）
-  const ring = part(new THREE.TorusGeometry(0.16, 0.045, 6, 14), cream, 0.022);
-  ring.rotation.y = Math.PI / 2;
-  buoyG.add(ring);
-  // 橙白相间条带（4 段）
-  for (let i = 0; i < 4; i++) {
-    const a = (i / 4) * Math.PI * 2 + 0.2;
-    const isOrange = i % 2 === 0;
-    const band = part(
-      new THREE.BoxGeometry(0.1, 0.1, 0.08),
-      isOrange ? orange : cream,
-      0.014
-    );
-    band.position.set(0, Math.cos(a) * 0.16, Math.sin(a) * 0.16);
-    buoyG.add(band);
+  // ---- 大方帆：鼓起 + 红边衬底 + 横向帆索（绗缝鼓起）----
+  const SAIL_W = 2.5;
+  const SAIL_H = 2.05;
+  const sailGeo = new THREE.PlaneGeometry(SAIL_W, SAIL_H, 8, 7);
+  const sailPos = sailGeo.attributes.position;
+  for (let i = 0; i < sailPos.count; i++) {
+    const u = sailPos.getX(i) / SAIL_W + 0.5; // 0..1 横
+    const v = sailPos.getY(i) / SAIL_H + 0.5; // 0..1 纵
+    // max(0,·)：边界顶点浮点微超界会让 sin 出现极小负数，小数次幂得 NaN
+    const bulge =
+      Math.max(0, Math.sin(Math.PI * u)) ** 0.8 *
+      Math.max(0, Math.sin(Math.PI * v)) ** 0.9 * 0.52;
+    sailPos.setZ(i, bulge);
   }
-  buoyG.position.set(0.55, 0.72, 0.52);
-  buoyG.rotation.x = 0.15;
-  g.add(buoyG);
+  sailGeo.computeVertexNormals();
+  const sail = part(sailGeo, sailTan, 0.03);
+  sail.name = "sail";
+  sail.rotation.y = Math.PI / 2; // 鼓起朝船头 +X
+  sail.position.set(0.55, 2.28, 0);
+  g.add(sail);
+  // 红回纹边：4 条窄红带沿帆四边，跟随鼓起曲线、贴在帆面前 0.008
+  const sailBulge = (u, v) =>
+    Math.max(0, Math.sin(Math.PI * u)) ** 0.8 *
+    Math.max(0, Math.sin(Math.PI * v)) ** 0.9 * 0.52;
+  function sailBand(u0, u1, v0, v1) {
+    const w = (u1 - u0) * SAIL_W;
+    const h = (v1 - v0) * SAIL_H;
+    const geo = new THREE.PlaneGeometry(w, h, 6, 6);
+    const pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const u = u0 + (pos.getX(i) / w + 0.5) * (u1 - u0);
+      const v = v0 + (pos.getY(i) / h + 0.5) * (v1 - v0);
+      pos.setZ(i, sailBulge(u, v) + 0.008);
+    }
+    geo.computeVertexNormals();
+    const band = part(geo, sailRed, 0.014);
+    band.rotation.y = Math.PI / 2;
+    band.position.set(
+      0.55,
+      2.28 + ((v0 + v1) / 2 - 0.5) * SAIL_H,
+      ((u0 + u1) / 2 - 0.5) * SAIL_W
+    );
+    return band;
+  }
+  g.add(sailBand(0.0, 0.055, 0, 1)); // 左边
+  g.add(sailBand(0.945, 1.0, 0, 1)); // 右边
+  g.add(sailBand(0, 1, 0.93, 1.0)); // 顶边
+  g.add(sailBand(0, 1, 0.0, 0.07)); // 底边
+  // 横向帆索（6 根，跟随鼓起 → 绗缝分带）
+  for (let b = 1; b <= 6; b++) {
+    const v = b / 7;
+    const yLocal = (v - 0.5) * SAIL_H;
+    const bulge = Math.sin(Math.PI * 0.5) ** 0.8 * Math.sin(Math.PI * v) ** 0.9 * 0.52;
+    const brail = part(new THREE.CylinderGeometry(0.016, 0.016, SAIL_W * 0.98, 5), rope, 0.01);
+    brail.rotation.x = Math.PI / 2;
+    brail.position.set(0.55 + bulge + 0.02, 2.28 + yLocal, 0);
+    g.add(brail);
+  }
+  // 红蛇纹（帆面 S 形红条 = 简化龙纹），跟随鼓起贴帆面前 0.02
+  const serpentCurve = [
+    [0.62, 0.28, 0.55],
+    [0.66, 0.36, 0.15],
+    [0.7, 0.44, -0.25],
+    [0.68, 0.52, -0.6],
+    [0.74, 0.6, -0.35],
+  ];
+  for (const [v, u, rot] of serpentCurve) {
+    const seg = part(new THREE.BoxGeometry(0.1, 0.3, 0.05), sailRed, 0.012);
+    seg.position.set(
+      0.55 + sailBulge(u, v) + 0.02,
+      2.28 + (v - 0.5) * SAIL_H,
+      (u - 0.5) * SAIL_W
+    );
+    seg.rotation.x = rot;
+    g.add(seg);
+  }
 
-  // 另一侧小锚钩装饰
-  const cleat = part(new THREE.BoxGeometry(0.12, 0.06, 0.08), dark, 0.014);
-  cleat.position.set(0.9, 0.66, -0.42);
-  g.add(cleat);
+  // ---- 支索 + 旗帜绳（艏柱顶 → 桅顶，挂小三角旗）----
+  function rigLine(ax, ay, az, bx, by, bz, thick = 0.014) {
+    const len = Math.hypot(bx - ax, by - ay, bz - az);
+    const line = part(new THREE.CylinderGeometry(thick, thick, len, 4), rope, 0.008);
+    line.position.set((ax + bx) / 2, (ay + by) / 2, (az + bz) / 2);
+    line.lookAt(bx, by, bz);
+    line.rotateX(Math.PI / 2);
+    return line;
+  }
+  g.add(rigLine(0.55, 3.95, 0, -2.28, 1.86, 0)); // 后支索（兼旗绳）
+  g.add(rigLine(0.55, 3.95, 0, 2.18, 0.82, 0)); // 前支索
+  // 小三角旗 5 面（沿后支索均布）
+  for (let i = 1; i <= 5; i++) {
+    const t = i / 6;
+    const fx = 0.55 + (-2.28 - 0.55) * t;
+    const fy = 3.95 + (1.86 - 3.95) * t;
+    const flag = part(new THREE.ConeGeometry(0.09, 0.24, 3), i % 2 ? sailRed : stripeWhite, 0.01);
+    flag.position.set(fx, fy - 0.13, 0);
+    flag.rotation.z = Math.PI; // 尖朝下
+    g.add(flag);
+  }
+
+  // 船体吃水：整体下移，让龙骨（局部 y≈0.14）贴到原点水线之下
+  for (const child of g.children) child.position.y -= 0.18;
 
   g.userData.kind = "fisherBoat";
-  g.userData.collideRadius = 1.4;
+  g.userData.collideRadius = 3.4;
   return g;
 }
 

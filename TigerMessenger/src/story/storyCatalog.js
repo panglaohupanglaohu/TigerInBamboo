@@ -32,7 +32,7 @@ const BUILDINGS = new Set([
   "bookshop", "house", "oldHarbor", "moebiusTower", "tram", "moebiusAirship",
   "moebiusAircraft", "bridge", "fence", "signpost", "lamp", "pole",
   "bubblePod", "fisherBoat", "harborCrane", "stackedCrates", "moebiusSwamp",
-  "mossyGround", "lawnHill",
+  "mossyGround", "lawnHill", "citadelWatchtower", "snowMassif", "snowMountainPeak",
 ]);
 
 function categoryOf(id) {

@@ -7,10 +7,80 @@
 //    与 2D 平面图共用同一份撤销栈 / 存档 / 即时重建。
 // =====================================================================
 import * as THREE from "three";
-import { CITADEL_TOWN_SPEC } from "../world/citadelTown.js";
+import {
+  CITADEL_TOWN_SPEC,
+  citadelGridCellCenter,
+} from "../world/citadelTown.js";
+
+/** Resolve a ray hit on any nested mesh/outline back to its tower/tree root. */
+export function citadelTerrainObjectFromHits(hits = []) {
+  for (const hit of hits) {
+    let object = hit?.object;
+    while (object) {
+      if (object.userData?.terrainObjectId) {
+        return {
+          id: object.userData.terrainObjectId,
+          type: object.userData.terrainObjectType,
+          object,
+        };
+      }
+      object = object.parent;
+    }
+  }
+  return null;
+}
 
 const CHAR_COLORS = { W: 0xe5eff2, L: 0xd9cfac, B: 0xcaa88c, D: 0x8b5a2b };
 const CLICK_SLOP_PX = 6; // 按下到抬起位移小于此值才算点击（区分相机拖拽）
+
+/** Current selected terrace's local build-plane elevation. */
+export function citadelEditBaseY(citadel, terraceIndex = 0) {
+  const value = citadel?.userData?.townBaseYs?.[terraceIndex]
+    ?? citadel?.userData?.townBaseY;
+  return Number.isFinite(value) ? value : null;
+}
+
+/** Canonical local centre of a 3D editor ghost/building cell. */
+export function citadelEditCellLocalPosition(
+  citadel,
+  terraceIndex,
+  target,
+  out = new THREE.Vector3()
+) {
+  const baseY = citadelEditBaseY(citadel, terraceIndex);
+  if (baseY == null) return null;
+  const c = citadelGridCellCenter(target.ix, target.iy, target.iz);
+  return out.set(c.x, baseY + c.y, c.z);
+}
+
+/**
+ * Intersect only one selected terrace's true upward-facing surface. This is
+ * intentionally independent of all generated town/decorative objects.
+ */
+export function raycastCitadelTerraceTop(
+  citadel,
+  terraceIndex,
+  raycaster,
+  out = new THREE.Vector3()
+) {
+  const terrain = citadel?.userData?.outerTerrainSystem;
+  if (!terrain || !raycaster) return null;
+  const roots = [
+    terrain.getObjectByName(`contour-step-${terraceIndex}`),
+    terrain.getObjectByName(`contour-step-${terraceIndex}-core`),
+  ].filter(Boolean);
+  if (!roots.length) return null;
+  citadel.updateWorldMatrix(true, true);
+  const up = new THREE.Vector3(0, 1, 0).applyQuaternion(
+    citadel.getWorldQuaternion(new THREE.Quaternion())
+  );
+  for (const hit of raycaster.intersectObjects(roots, false)) {
+    if (!hit.face || !hit.object.userData.isCitadelTerrace) continue;
+    const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
+    if (normal.dot(up) > 0.75) return out.copy(hit.point);
+  }
+  return null;
+}
 
 /**
  * @param {object} opts
@@ -42,8 +112,6 @@ export function createCitadelSceneEdit({
   const upLocal = new THREE.Vector3(0, 1, 0);
   const tmpQ = new THREE.Quaternion();
   const tmpV = new THREE.Vector3();
-  const tmpM = new THREE.Matrix4();
-  const layerPlane = new THREE.Plane(upLocal, 0);
 
   // 悬停幽灵块
   const ghost = new THREE.Mesh(
@@ -63,9 +131,18 @@ export function createCitadelSceneEdit({
     return panel.isOpen() && canEdit();
   }
 
-  /** 参考 level 组：体块局部坐标 → 世界坐标的变换基准（每次现取，重建后不失效）。 */
-  function refGroup() {
-    return getCitadel()?.getObjectByName("town-level-0") || null;
+  /**
+   * Current terrace edit frame. It is derived from castleContainer itself,
+   * never from a generated town-level group: an entirely cleared terrace must
+   * retain exactly the same editable plane and coordinate origin.
+   */
+  function editFrame() {
+    const state = panel.getState();
+    const citadel = getCitadel();
+    if (!citadel) return null;
+    const baseY = citadelEditBaseY(citadel, state.activeTerrace);
+    if (baseY == null) return null;
+    return { citadel, baseY };
   }
 
   function castRay(e) {
@@ -85,33 +162,53 @@ export function createCitadelSceneEdit({
     const ray = castRay(e);
     const citadel = getCitadel();
     if (!ray || !citadel) return null;
-    const ref = refGroup();
-    if (!ref) return null;
+    const frame = editFrame();
+    if (!frame) return null;
     const hits = ray.intersectObject(citadel, true);
+    const activeTerrace = panel.getState().activeTerrace;
     for (const hit of hits) {
       const cell = hit.object.userData.cell;
-      if (!cell || !hit.face) continue;
-      const up = upLocal.clone().applyQuaternion(ref.getWorldQuaternion(tmpQ));
-      const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
-      return { cell, top: normal.dot(up) > 0.9 };
+      if (cell && hit.face && cell.terraceIndex === activeTerrace) {
+        const up = upLocal.clone().applyQuaternion(frame.citadel.getWorldQuaternion(tmpQ));
+        const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
+        return { cell, top: normal.dot(up) > 0.9 };
+      }
+      // A visible terrace surface is an occluder, not transparent picking
+      // space. Stop here so a town cell hidden behind it cannot steal the
+      // click; castPlane() will then resolve the selected terrace/grid cell.
+      if (hit.object.userData.isCitadelTerrace) return null;
     }
     return null;
   }
 
-  /** 拾取地板平面（level 组局部空间），落空返回 null。
-   *  落地堆叠开启时打 0 层地面、落点自动堆到柱顶；关闭时打当前层平面。 */
+  /** Pick a nested tower/tree mesh before the generic building-cell eraser. */
+  function castTerrainObject(e) {
+    const ray = castRay(e);
+    const citadel = getCitadel();
+    if (!ray || !citadel) return null;
+    return citadelTerrainObjectFromHits(ray.intersectObject(citadel, true));
+  }
+
+  /** 拾取当前台地真实顶面，落空返回 null。
+   *  落地堆叠开启时自动堆到柱顶；关闭时仍用真实台面确定 x/z。 */
   function castPlane(e) {
     const ray = castRay(e);
-    const ref = refGroup();
-    if (!ray || !ref) return null;
-    ref.updateWorldMatrix(true, false);
-    tmpM.copy(ref.matrixWorld).invert();
-    const localRay = ray.ray.clone().applyMatrix4(tmpM);
+    const frame = editFrame();
+    if (!ray || !frame) return null;
     const st = panel.getState();
-    layerPlane.constant = -(st.dropToGround ? 0 : st.activeLayer) * CELL_H;
-    if (!localRay.intersectPlane(layerPlane, tmpV)) return null;
+    const surfacePoint = raycastCitadelTerraceTop(
+      frame.citadel,
+      st.activeTerrace,
+      ray,
+      tmpV
+    );
+    if (!surfacePoint) return null;
+    frame.citadel.worldToLocal(tmpV.copy(surfacePoint));
     const hit = panel.cellAtLocal(tmpV.x, tmpV.z, st.activeLayer);
     if (!hit) return null;
+    if (!panel.supportsCell(hit.ix, hit.iz, st.activeTerrace)) {
+      return { ...hit, iy: 0, unsupported: true };
+    }
     if (st.dropToGround) {
       const t = panel.dropTarget(hit.ix, hit.iz);
       return t ?? { ...hit, iy: 0, unsupported: true }; // 无土坡承重的柱位
@@ -132,15 +229,26 @@ export function createCitadelSceneEdit({
   }
 
   function showGhost(target) {
-    const ref = refGroup();
-    if (!target || !ref) {
+    const frame = editFrame();
+    if (!target || !frame) {
       ghost.visible = false;
       return;
     }
-    const c = panel.cellCenter(target.ix, target.iy, target.iz);
-    ref.updateWorldMatrix(true, false);
-    ghost.position.copy(ref.localToWorld(tmpV.set(c.x, c.y, c.z)));
-    ghost.quaternion.copy(ref.getWorldQuaternion(tmpQ));
+    frame.citadel.updateWorldMatrix(true, false);
+    const localPosition = citadelEditCellLocalPosition(
+      frame.citadel,
+      panel.getState().activeTerrace,
+      target,
+      tmpV
+    );
+    if (!localPosition) {
+      ghost.visible = false;
+      return;
+    }
+    ghost.position.copy(
+      frame.citadel.localToWorld(localPosition)
+    );
+    ghost.quaternion.copy(frame.citadel.getWorldQuaternion(tmpQ));
     ghost.material.color.setHex(CHAR_COLORS[panel.getState().activeChar] ?? CHAR_COLORS.W);
     ghost.visible = true;
   }
@@ -175,7 +283,12 @@ export function createCitadelSceneEdit({
 
     const hit = castCell(e);
     if (button === 2) {
-      if (hit && panel.applySceneEdit(hit.cell, "erase")) toast("已删除体块", 1.2);
+      const terrainObject = castTerrainObject(e);
+      if (terrainObject && panel.deleteTerrainObject?.(terrainObject.id)) {
+        toast(terrainObject.type === "watchtower" ? "已删除瞭望塔" : "已删除参天树", 1.2);
+      } else if (hit && panel.applySceneEdit(hit.cell, "erase")) {
+        toast("已删除体块", 1.2);
+      }
     } else if (hit) {
       if (hit.top && hit.cell.iy < panel.maxLevel) {
         panel.applySceneEdit(

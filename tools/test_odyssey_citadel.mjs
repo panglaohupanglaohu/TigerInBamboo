@@ -69,7 +69,19 @@ globalThis.document = {
 globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
 
 const THREE = await import(new URL("vendor/three.module.js", BASE).href);
-const { buildOdysseyCitadel, CITADEL, rebuildCitadelTerrain, terrainSupportLevel } = await import(
+const {
+  buildOdysseyCitadel,
+  citadelCurvatureDrop,
+  CITADEL,
+  rebuildCitadelTerrain,
+  rebuildCitadelTerrainObjects,
+  terrainSupportLevel,
+  citadelTerraceMetrics,
+  normalizeCitadelTerrain,
+  CITADEL_MIN_TERRACE_HEIGHT,
+  normalizeCitadelTerrainObjects,
+  citadelTerrainPointSupported,
+} = await import(
   new URL("src/world/odysseyCitadel.js", BASE).href
 );
 const { PLAYER_HEIGHT } = await import(new URL("src/core/constants.js", BASE).href);
@@ -110,44 +122,56 @@ assert.deepEqual(mainCastle.scale.toArray(), [1, 1, 1], "规则小镇按最终�
 assert.equal(mainCastle.position.y, 0);
 const townSpec = citadel.userData.townSpec;
 const townStats = citadel.userData.townStats;
-assert(townSpec?.levels?.length >= 5, "小镇必须提供逐层 ASCII 布局");
+assert.equal(townSpec?.terraces?.length, 5, "必须提供五座台地的城堡布局");
 let specFilled = 0;
-for (const rows of townSpec.levels) {
-  for (const row of rows) specFilled += [...row].filter((ch) => ch !== ".").length;
+for (const terrace of townSpec.terraces) {
+  assert.equal(terrace.levels.length, 5, "每座台地必须恰有五层城堡编辑层");
+  for (const rows of terrace.levels) {
+    for (const row of rows) specFilled += [...row].filter((ch) => ch !== ".").length;
+  }
 }
 assert.equal(townStats.cellCount, specFilled, "体块数必须等于 ASCII 地图填充格数");
+assert.equal(allByName(citadel, "town-terrace-").filter((x) => x.isGroup).length, 25);
 assert.equal(CITADEL.townBaseY, 11.94, "小镇基座咬入顶层台地（Y=12）0.06");
-ok(`单一容器 · Layer 0–4 · ASCII 地图 ${specFilled} 格全部成块`);
+ok(`单一容器 · 台地×5 · 每台地城堡层×5 · ASCII ${specFilled} 格全部成块`);
 
 console.log("[1b] 外围五级台地（瀑布缺口）与折返石阶");
 const outerTerrain = byName(citadel, "citadel-outer-terrain-system");
 assert(outerTerrain?.isGroup, "外围地势系统缺失");
 assert.equal(outerTerrain.parent, citadel, "外围系统必须是 castleContainer 的全尺寸直属子组");
+assert.equal(outerTerrain.userData.terrainLayerCount, 5,
+  "地貌层级必须严格锁死为五层");
+assert.equal(outerTerrain.userData.exclusiveTerrainLayers, true,
+  "五层台地必须是唯一可见的地貌分层来源");
 assert.equal(mainCastle.parent, citadel, "缩放主城必须与外围地势互为兄弟组");
 const contourShelves = [];
+const defaultMetrics = citadelTerraceMetrics(CITADEL.contourTerrain);
 for (let i = 0; i < 5; i++) {
   const shelf = byName(outerTerrain, `contour-step-${i}`);
   assert(shelf?.isMesh, `台地 ${i} 缺失`);
   contourShelves.push(shelf);
-  const expectedRadius = 24 * 0.9 ** i;
+  const expectedRadius = CITADEL.contourTerrain.terraces[i].radius;
   assert.equal(shelf.userData.contourIndex, i);
+  assert.equal(shelf.userData.isCitadelTerrace, true,
+    `台地 ${i + 1} 必须标记为可拾取承重面`);
   assert.equal(shelf.userData.contourRadius, expectedRadius);
   assert.equal(shelf.material.color.getHex(), 0xcfc49a, "台地必须为浅色黄土，弃用深灰");
-  if (i < 4) {
-    // 前四层：环形扇区开槽露出瀑布 + 实心核托住城堡
+  if (i > 0) {
+    // 台地 2–5：环形扇区开槽露出默认层间瀑布 + 实心核托住高层
     assert.equal(shelf.geometry.type, "ExtrudeGeometry", `台地 ${i} 必须为开槽环形扇区`);
-    assert.equal(shelf.position.y, 2 + i * 2);
+    assert.equal(shelf.position.y, defaultMetrics[i].bottom);
     const core = byName(outerTerrain, `contour-step-${i}-core`);
     assert(core?.isMesh, `台地 ${i} 实心核缺失`);
-    assert.equal(core.geometry.parameters.radiusTop, 9);
+    assert.equal(core.geometry.parameters.radiusTop, defaultMetrics[i - 1].radius);
   } else {
-    // 顶层完整圆柱：托住城堡与门廊平桥
+    // 台地 1 是鸟瞰第一层、最高完整圆柱
     assert.equal(shelf.geometry.type, "CylinderGeometry");
     assert.equal(shelf.geometry.parameters.radiusTop, expectedRadius);
     assert.equal(shelf.position.y, 11);
+    assert.equal(shelf.userData.isHighestTerrace, true);
   }
 }
-assert.equal(outerTerrain.userData.waterfallNotchLayers, 4, "前四层台地必须开瀑布缺口");
+assert.equal(outerTerrain.userData.waterfallNotchLayers, 4, "台地 2–5 必须保留默认层间瀑布缺口");
 assert.equal(allByName(outerTerrain, "ring-").length, 0, "砖红色环墙与卫楼必须完全移除");
 assert.equal(outerTerrain.userData.rampartSegmentCount, 0);
 assert.equal(outerTerrain.userData.watchtowerCount, 0);
@@ -165,7 +189,7 @@ assert(
   Math.abs(lastStep.position.y - 12.02) < 1e-9,
   `顶端平桥必须抵达顶层台面（门廊门槛），实际 Y=${lastStep.position.y}`
 );
-assert(Math.hypot(lastStep.position.x, lastStep.position.z - 7.05) < 1e-9,
+assert(Math.hypot(lastStep.position.x, lastStep.position.z - 9.05) < 1e-9,
   "平桥门槛条必须停在棕色正门门廊柱前");
 ok(`等高台地×5（前四层开槽露瀑）· ${pilgrimageSteps.length} 级五段折返石阶直抵正门`);
 
@@ -200,9 +224,9 @@ const domes = allByName(citadel, "town-dome").filter((x) => x.isGroup);
 assert.equal(domes.length, townStats.domeCount);
 assert.equal(townStats.domeCount, 1, "默认布局应只有顶层 3×3 屋顶出一座主穹顶");
 assert(Math.abs(domes[0].position.x) < 1e-9, "主穹顶必须位于 3×3 屋顶中心 x=0");
-assert(Math.abs(domes[0].position.z + CITADEL.townOffsetZ) < 1e-9,
-  "主穹顶经 townOffsetZ 补偿后必须居中于 z=0");
-assert.equal(domes[0].position.y, 6 * 2 + 2, "主穹顶落在顶层屋面"); // (by+1)*ch
+// 穹顶 z = cz(iz) ：3×3 屋顶在 iz=5，cz = (5-(9-1)/2)*2 = 2（网格局部坐标）
+assert.equal(domes[0].position.z, 2, "主穹顶 z = cz(5) = 2（3×3 屋顶中心行）");
+assert.equal(domes[0].position.y, 5 * 2, "五层制主穹顶必须落在城堡第 5 层屋面");
 assert(byName(domes[0], "town-dome-cap"), "穹顶必须有黄金半球帽");
 const finial = byName(citadel, "town-dome-finial");
 assert.equal(finial.geometry.parameters.height, PLAYER_HEIGHT * 2, "避雷针 = 2× 玩家身高");
@@ -255,8 +279,8 @@ assert.equal(
 // 正门：棕色双开门 + 木门廊，位于前排中央、朝向 +z
 assert(townStats.gate, "必须存在 D 正门格");
 assert.equal(townStats.gate.x, 0);
-assert.equal(townStats.gate.z + CITADEL.townOffsetZ, 7,
-  "门脸经 townOffsetZ 补偿后必须在前排 z=7（与石阶平桥门槛条相接）");
+assert.equal(townStats.gate.z + CITADEL.townOffsetZ, 9,
+  "门脸经 townOffsetZ 补偿后必须在前排 z=9（与石阶平桥门槛条 z=9.05 相接）");
 const gateDoors = allByName(citadel, "town-gate-door");
 assert.equal(gateDoors.length, 2);
 for (const door of gateDoors) {
@@ -312,11 +336,11 @@ assert.equal(materialFailures, 0);
 assert.equal(surfaceCount, citadel.userData.outlinedSurfaceCount);
 ok(`${surfaceCount}/${surfaceCount} 可见网格描边 · 全 Toon flatShading`);
 
-console.log("[8] 规则小镇、全尺寸外围地势、静态更新契约与半径 160 峰顶定位");
+console.log("[8] 规则小镇、五层贴地台地、静态更新契约与半径 160 定位");
 citadel.updateMatrixWorld(true);
 const bounds = new THREE.Box3().setFromObject(citadel);
 const totalHeight = bounds.max.y - bounds.min.y;
-assert(totalHeight > 30 && totalHeight < 35, `规则小镇总高应在 30–35，实际 ${totalHeight.toFixed(2)}`);
+assert(totalHeight > 27 && totalHeight < 30, `五层制规则小镇总高应在 27–30，实际 ${totalHeight.toFixed(2)}`);
 for (let i = 0; i < 60; i++) citadel.update(1 / 60, i / 60);
 const { citadelRangeLiftDir, citadelSiteDir } = await import(
   new URL("src/world/citadelRange.js", BASE).href
@@ -325,10 +349,49 @@ const radius = 160;
 const siteDir = citadelSiteDir(new THREE.Vector3());
 const groundRadius = radius + citadelRangeLiftDir(siteDir);
 const placed = buildOdysseyCitadel({ dir: siteDir, groundRadius, planetRadius: radius, seed: 7 });
-assert.equal(CITADEL.groundEmbed, 9.25, "城堡整体必须进一步下沉并咬入黄土坡");
-assert(Math.abs(placed.position.length() - (groundRadius - CITADEL.groundEmbed)) < 1e-6);
-assert(groundRadius > radius + 15);
-ok(`总高 ${totalHeight.toFixed(1)} · update 稳定 · 峰顶半径 ${placed.position.length().toFixed(1)}`);
+const placedMetrics = citadelTerraceMetrics(placed.userData.contourSpec);
+const curvatureDrop = citadelCurvatureDrop(groundRadius, placed.userData.contourSpec);
+assert.equal(CITADEL.groundEmbed, 2, "第五层局部底面仍从 Y=2 开始");
+assert(curvatureDrop > 1.7 && curvatureDrop < 1.9,
+  `半径 160 / 台地 R24 的球面弦高应约 1.8，实际 ${curvatureDrop}`);
+assert(Math.abs(
+  placed.position.length() - (groundRadius - CITADEL.groundEmbed - curvatureDrop)
+) < 1e-6, "城堡容器必须额外下降球面弦高");
+assert(Math.abs(
+  placed.position.length() + placedMetrics[4].bottom - (groundRadius - curvatureDrop)
+) < 1e-6, "最低台地中心必须埋入地面，消除外缘悬空");
+placed.updateMatrixWorld(true);
+const outerGroundPoint = placed.localToWorld(new THREE.Vector3(
+  placedMetrics[4].radius,
+  placedMetrics[4].bottom,
+  0
+));
+assert(Math.abs(outerGroundPoint.length() - groundRadius) < 1e-6,
+  "最低第五层台地最外缘必须按球面曲率与地面精确相接");
+assert(Math.abs(groundRadius - (radius + 0.4)) < 1e-6,
+  "旧 +16 黄土主峰删除后只能保留 +0.4 地表接缝基线");
+ok(`总高 ${totalHeight.toFixed(1)} · 曲率下沉 ${curvatureDrop.toFixed(2)} · 外缘贴地 R${groundRadius.toFixed(1)}`);
+
+const widerContour = {
+  ...placed.userData.contourSpec,
+  terraces: placed.userData.contourSpec.terraces.map((entry, index) => ({
+    ...entry,
+    radius: entry.radius + index * 0.8,
+  })),
+};
+rebuildCitadelTerrain(placed, widerContour);
+const widerMetrics = citadelTerraceMetrics(placed.userData.contourSpec);
+const widerDrop = citadelCurvatureDrop(groundRadius, placed.userData.contourSpec);
+assert(widerDrop > curvatureDrop, "扩大台地后应自动增加曲率下沉量");
+placed.updateMatrixWorld(true);
+const widerOuterPoint = placed.localToWorld(new THREE.Vector3(
+  widerMetrics[4].radius,
+  widerMetrics[4].bottom,
+  0
+));
+assert(Math.abs(widerOuterPoint.length() - groundRadius) < 1e-6,
+  "热编辑台地半径后，外缘仍必须自动重算并贴住球面");
+ok(`台地热编辑后曲率下沉自动更新 ${curvatureDrop.toFixed(2)}→${widerDrop.toFixed(2)}`);
 
 console.log("[9] 场景接线 + 纯白 AmbientLight 1.4");
 const island = fs.readFileSync(fileURLToPath(new URL("src/scenes/messengerIsland.js", BASE)), "utf8");
@@ -342,23 +405,129 @@ assert(/ambientIntensity:\s*1\.4/.test(params));
 ok("主场景完成接线 · 环境光 #FFFFFF / 1.4");
 
 console.log("[10] 地形编辑器：台地参数热重建 + 土坡支撑探测");
-const newContour = { ...CITADEL.contourTerrain, layerHeight: 2.4, baseRadius: 28 };
+const newContour = {
+  ...CITADEL.contourTerrain,
+  terraces: [
+    { radius: 14, height: 3.0 },   // 台地 1：最高
+    { radius: 17.5, height: 2.5 },
+    { radius: 21, height: 2.0 },
+    { radius: 24.5, height: 1.5 },
+    { radius: 28, height: 1.2 },   // 台地 5：最低
+  ],
+};
+const normalizedNewContour = normalizeCitadelTerrain(newContour);
 const terrain2 = rebuildCitadelTerrain(citadel, newContour);
 assert(terrain2?.isGroup, "地形热重建必须返回新外围地势系统");
 assert.equal(citadel.userData.outerTerrainSystem, terrain2, "容器必须换挂新地势");
-const expectBaseY = 2 + 2.4 * 5 - 0.06; // 顶层台面 14 咬入 0.06
+const editedMetrics = citadelTerraceMetrics(normalizedNewContour);
+const expectBaseY = editedMetrics[0].top - 0.06;
 assert(Math.abs(citadel.userData.townBaseY - expectBaseY) < 1e-9, "townBaseY 必须跟随新台地");
-const rebuiltLv0 = byName(citadel, "town-level-0");
-assert(Math.abs(rebuiltLv0.position.y - expectBaseY) < 1e-9, "镇体基座必须抬到新顶层台面");
-assert.equal(byName(terrain2, "contour-step-0").userData.contourRadius, 28, "台地必须采用新基底半径");
+for (let terraceIndex = 0; terraceIndex < 5; terraceIndex++) {
+  const level = byName(citadel, `town-terrace-${terraceIndex}-level-0`);
+  assert(Math.abs(level.position.y - (editedMetrics[terraceIndex].top - 0.06)) < 1e-9,
+    `台地 ${terraceIndex + 1} 城堡基座必须跟随本台地顶面`);
+  const shelf = byName(terrain2, `contour-step-${terraceIndex}`);
+  assert.equal(shelf.userData.contourRadius, normalizedNewContour.terraces[terraceIndex].radius);
+  assert.equal(shelf.userData.terraceHeight, normalizedNewContour.terraces[terraceIndex].height);
+}
+for (let terraceIndex = 0; terraceIndex < editedMetrics.length - 1; terraceIndex++) {
+  const worldHeightDifference = editedMetrics[terraceIndex].top
+    - editedMetrics[terraceIndex + 1].top;
+  assert(worldHeightDifference >= CITADEL_MIN_TERRACE_HEIGHT,
+    `台地 ${terraceIndex + 1}/${terraceIndex + 2} 的建筑基准高差必须至少一层`);
+  const upperBuildingBase = byName(citadel, `town-terrace-${terraceIndex}-level-0`).position.y;
+  const lowerBuildingBase = byName(citadel, `town-terrace-${terraceIndex + 1}-level-0`).position.y;
+  assert(upperBuildingBase - lowerBuildingBase >= CITADEL_MIN_TERRACE_HEIGHT,
+    "同一城堡层放到相邻台地后，世界高度必须天然错开至少一层");
+}
+assert.equal(byName(terrain2, "contour-step-0").userData.isHighestTerrace, true,
+  "鸟瞰第一层必须是最高台地");
 assert.equal(terrain2.userData.pilgrimageStepCount > 0, true, "石阶必须随地形重建");
-// 支撑探测：镇中心有顶层台面承重；远处无土坡
-const sCenter = terrainSupportLevel(citadel, 0, 0, 2);
-assert(sCenter >= 0 && sCenter <= 1, `镇中心必须有台地支撑（0 层附近），实际 ${sCenter}`);
+assert.equal(terrain2.userData.pilgrimageFlightCount, 5, "默认楼梯必须连接地面与五座台地");
+assert.equal(terrain2.userData.waterfallNotchLayers, 4, "四个层间瀑布缺口必须默认保留");
+// 支撑探测按当前台地独立判定：五层台地各取一个可见落点，必须全部可建。
+const phiOk = 2.5;
+for (let terraceIndex = 0; terraceIndex < editedMetrics.length; terraceIndex++) {
+  const outer = editedMetrics[terraceIndex].radius;
+  const inner = terraceIndex === 0 ? 0 : editedMetrics[terraceIndex - 1].radius;
+  const radius = terraceIndex === 0 ? outer * 0.45 : (inner + outer) * 0.5;
+  const support = terrainSupportLevel(
+    citadel,
+    radius * Math.sin(phiOk),
+    radius * Math.cos(phiOk),
+    2,
+    terraceIndex
+  );
+  assert.equal(support, 0,
+    `台地 ${terraceIndex + 1} 可见台面必须允许城堡第 1 层落地，实际 ${support}`);
+}
 assert.equal(terrainSupportLevel(citadel, 200, 200, 2), -1, "远处无土坡支撑必须返回 -1");
+assert.equal(terrainSupportLevel(citadel, 16 * Math.sin(phiOk), 16 * Math.cos(phiOk), 2, 1), 0,
+  "台地 2 的可见环带必须允许其城堡第 1 层落地");
+assert.equal(terrainSupportLevel(citadel, 16 * Math.sin(phiOk), 16 * Math.cos(phiOk), 2, 0), -1,
+  "台地 2 环带不得误写进台地 1 城堡");
+assert.equal(terrainSupportLevel(citadel, 26 * Math.sin(phiOk), 26 * Math.cos(phiOk), 2, 4), 0,
+  "台地 5 外环必须允许独立五层城堡");
+// 默认瀑布缺口内没有承重面。
+const phiNotch = 0.17; // 缺口中心方位角
+const rNotch = 16;
+const nxNotch = rNotch * Math.sin(phiNotch);
+const nzNotch = rNotch * Math.cos(phiNotch);
+assert.equal(terrainSupportLevel(citadel, nxNotch, nzNotch, 2, 1), -1,
+  "缺口扇区内柱位无承重，必须返回 -1");
 // 恢复默认参数：可逆
 rebuildCitadelTerrain(citadel, CITADEL.contourTerrain);
 assert(Math.abs(citadel.userData.townBaseY - CITADEL.townBaseY) < 1e-9, "重置后基座必须复原");
 ok("台地参数热重建 · 镇体基座跟随顶层台面 · 土坡支撑探测（中心可放/远处不可放）");
+
+console.log("[11] 地貌对象：瞭望塔 + 参天树放置、描边、存档归一化与贴地热重建");
+const terrainObjectSpec = [
+  { id: "tower-a", type: "watchtower", terraceIndex: 0, x: -5, z: 0, yaw: 0.2, scale: 0.42 },
+  { id: "tree-a", type: "elderTree", terraceIndex: 0, x: 5, z: 0, yaw: -0.1, scale: 0.45 },
+];
+assert.equal(normalizeCitadelTerrainObjects(terrainObjectSpec).length, 2);
+assert.equal(citadelTerrainPointSupported(CITADEL.contourTerrain, -5, 0, 0), true);
+const objectCitadel = buildOdysseyCitadel({
+  place: false,
+  seed: 7,
+  terrainObjects: terrainObjectSpec,
+});
+const objectGroup = objectCitadel.userData.terrainObjects;
+assert.equal(objectGroup?.name, "citadel-terrain-objects");
+assert.equal(objectGroup.children.length, 2, "必须生成一座瞭望塔和一棵参天树");
+const placedTower = objectGroup.getObjectByName("citadel-terrain-object-tower-a");
+const placedTree = objectGroup.getObjectByName("citadel-terrain-object-tree-a");
+assert(placedTower?.getObjectByName("watchtower-lookout-window"), "瞭望塔必须带瞭望窗口");
+assert.equal(placedTree?.getObjectsByProperty("name", "citadel-elder-tree-crown").length, 8,
+  "参天树必须具有八团低多边形云冠");
+const objectTopY = citadelTerraceMetrics(CITADEL.contourTerrain)[0].top;
+assert.equal(placedTower.position.y, objectTopY);
+assert.equal(placedTree.position.y, objectTopY);
+let terrainObjectMeshes = 0;
+let terrainObjectOutlined = 0;
+objectGroup.traverse((object) => {
+  if (!object.isMesh || object.userData.isOutline) return;
+  terrainObjectMeshes++;
+  if (object.children.some((child) => child.userData.isOutline)) terrainObjectOutlined++;
+});
+assert.equal(terrainObjectOutlined, terrainObjectMeshes, "两个地貌对象的全部网格都必须带墨线");
+const tallerContour = {
+  ...CITADEL.contourTerrain,
+  terraces: CITADEL.contourTerrain.terraces.map((entry, index) => ({
+    ...entry,
+    height: index === 0 ? 4 : 2,
+  })),
+};
+rebuildCitadelTerrain(objectCitadel, tallerContour);
+const rebuiltObjects = objectCitadel.userData.terrainObjects;
+assert.equal(rebuiltObjects.children.length, 2);
+assert.equal(
+  rebuiltObjects.getObjectByName("citadel-terrain-object-tower-a").position.y,
+  citadelTerraceMetrics(tallerContour)[0].top,
+  "修改台地层高后瞭望塔必须重新贴到台面"
+);
+const onlyTree = rebuildCitadelTerrainObjects(objectCitadel, [terrainObjectSpec[1]]);
+assert.equal(onlyTree.children.length, 1, "删除工具必须能热重建为仅保留参天树");
+ok(`瞭望塔×1 · 参天树×1 · 网格描边 ${terrainObjectMeshes}/${terrainObjectMeshes} · 台地变高自动贴地`);
 
 console.log(`\n全部通过：${pass} 组验收`);

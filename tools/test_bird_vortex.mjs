@@ -188,7 +188,11 @@ const island = fs.readFileSync(
 );
 assert(island.includes("BirdVortexManager"), "场景应导入 BirdVortexManager");
 assert(island.includes("birdVortex"), "场景应挂 landmarks.birdVortex");
-ok("messengerIsland 已接入万鸟旋涡");
+assert(!island.includes("citadelBirdVortex"),
+  "圣城鸟群对象和 landmarks 槽位必须一并删除");
+assert(!island.includes('name: "citadel-bird-vortex-river"'),
+  "圣城区域不得实例化鸟群旋涡");
+ok("messengerIsland 保留叹息之门鸟群 · 圣城鸟群已清空");
 
 vortex.dispose();
 ok("dispose 无异常");

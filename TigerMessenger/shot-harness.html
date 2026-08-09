@@ -238,7 +238,7 @@ const REGISTRY = [
       ctx.camera.lookAt(target);
       return null;
     } },
-  { id: "citadelCascadeAudit", cat: "场景结构", label: "圣城瀑布2-3连接近景", R: 160,
+  { id: "citadelCascadeAudit", cat: "场景结构", label: "圣城四段逐级瀑布近景", R: 160,
     manualFrame: true,
     build: (ctx) => {
       const auditGround = new THREE.Mesh(
@@ -259,7 +259,7 @@ const REGISTRY = [
       ctx.scene.add(castle);
       ctx.scene.updateMatrixWorld(true);
       const target = new THREE.Box3()
-        .setFromObject(range.interCascadeBridgePool)
+        .setFromObject(range.pilgrimageCascades)
         .getCenter(new THREE.Vector3());
       ctx.camera.up.copy(site);
       ctx.camera.position.copy(target)

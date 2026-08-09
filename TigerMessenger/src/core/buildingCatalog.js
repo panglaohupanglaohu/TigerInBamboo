@@ -38,6 +38,9 @@ import {
   createStackedCrates,
   buildOldHarborScene,
 } from "../assets/harbor.js";
+import { createCitadelWatchtower } from "../assets/citadelWatchtower.js";
+import { createCitadelElderTree } from "../assets/citadelElderTree.js";
+import { createSnowMassif, createSnowMountainPeak } from "../assets/snowMassif.js";
 import { createDetailedMoebiusTower } from "../assets/moebiusTower.js";
 import { createMoebiusAirship } from "../assets/moebiusAirship.js";
 import { createMoebiusAircraft } from "../assets/moebiusAircraft.js";
@@ -195,11 +198,11 @@ export const BUILDING_CATALOG = {
   },
   fisherBoat: {
     id: "fisherBoat",
-    label: "小渔船",
+    label: "古战船",
     create: () => createFisherBoat(),
     defaultYaw: 0.35,
-    collideRadius: 1.4,
-    color: "#2C96B4",
+    collideRadius: 3.4,
+    color: "#B0492C",
   },
   harborCrane: {
     id: "harborCrane",
@@ -224,6 +227,50 @@ export const BUILDING_CATALOG = {
     defaultYaw: 0.85,
     collideRadius: 4.0,
     color: "#8B7355",
+  },
+  citadelWatchtower: {
+    id: "citadelWatchtower",
+    label: "圣城瞭望塔",
+    create: (opts = {}) => createCitadelWatchtower({ seed: opts.seed ?? 0 }),
+    defaultYaw: Math.PI / 8,
+    collideRadius: 5.2,
+    color: "#D6DCD9",
+  },
+  citadelElderTree: {
+    id: "citadelElderTree",
+    label: "圣城参天树",
+    create: (opts = {}) => createCitadelElderTree({
+      seed: opts.seed ?? 0,
+      scale: opts.scale ?? 0.45,
+    }),
+    defaultYaw: 0,
+    collideRadius: 3.2,
+    color: "#385E3E",
+  },
+  snowMassif: {
+    id: "snowMassif",
+    label: "雪山组",
+    create: (opts = {}) =>
+      createSnowMassif({
+        seed: opts.seed ?? 7100,
+        name: "snow-massif",
+      }),
+    defaultYaw: 0,
+    collideRadius: 45,
+    color: "#F1F4ED",
+  },
+  snowMountainPeak: {
+    id: "snowMountainPeak",
+    label: "单座雪峰",
+    create: (opts = {}) =>
+      createSnowMountainPeak({
+        radius: opts.radius ?? 16,
+        height: opts.height ?? 74,
+        seed: opts.seed ?? 7101,
+      }),
+    defaultYaw: 0,
+    collideRadius: 18,
+    color: "#C8D4DC",
   },
   moebiusSwamp: {
     id: "moebiusSwamp",

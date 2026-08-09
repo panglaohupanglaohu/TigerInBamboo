@@ -18,6 +18,29 @@ import * as THREE from "three";
 
 /** 编辑器（citadelEditorPanel / townscaper.html）与主场景共用的布局存档键。 */
 export const CITADEL_LEVELS_KEY = "tm.citadel.levels.v1";
+export const CITADEL_TERRACE_COUNT = 5;
+export const CITADEL_CASTLE_FLOORS = 5;
+export const CITADEL_GRID_SIZE = 25;
+
+/**
+ * Canonical 2D-map/3D-town grid transform. Every editor surface, support
+ * query and generated mesh must use this function so cell (12, *, 12) stays
+ * exactly on the shared citadel origin.
+ */
+export function citadelGridCellCenter(
+  ix,
+  iy,
+  iz,
+  cellSize = CITADEL_TOWN_SPEC.cellSize,
+  cellHeight = CITADEL_TOWN_SPEC.cellHeight,
+  gridSize = CITADEL_GRID_SIZE
+) {
+  return {
+    x: (ix - (gridSize - 1) / 2) * cellSize,
+    y: (iy + 0.5) * cellHeight,
+    z: (iz - (gridSize - 1) / 2) * cellSize,
+  };
+}
 
 export const CITADEL_TOWN_SPEC = Object.freeze({
   cellSize: 2.0,
@@ -114,6 +137,73 @@ export const CITADEL_TOWN_SPEC = Object.freeze({
   ]),
 });
 
+const EMPTY_CASTLE_FLOOR = Object.freeze(
+  Array.from({ length: CITADEL_GRID_SIZE }, () => ".".repeat(CITADEL_GRID_SIZE))
+);
+
+function centerFloor(rows, size = CITADEL_GRID_SIZE) {
+  const source = Array.isArray(rows) && rows.length ? rows.map(String) : ["."];
+  const sourceWidth = Math.max(1, ...source.map((row) => row.length));
+  const offsetX = Math.floor((size - sourceWidth) / 2);
+  const offsetZ = Math.floor((size - source.length) / 2);
+  const output = Array.from({ length: size }, () => ".".repeat(size));
+  for (let iz = 0; iz < source.length; iz++) {
+    const targetZ = offsetZ + iz;
+    if (targetZ < 0 || targetZ >= size) continue;
+    const chars = [...output[targetZ]];
+    for (let ix = 0; ix < source[iz].length; ix++) {
+      const targetX = offsetX + ix;
+      if (targetX >= 0 && targetX < size) chars[targetX] = source[iz][ix];
+    }
+    output[targetZ] = chars.join("");
+  }
+  return Object.freeze(output);
+}
+
+function normalizeFiveFloors(levels, useLegacyCrown = false) {
+  const source = Array.isArray(levels) ? levels : [];
+  const selected = useLegacyCrown && source.length > CITADEL_CASTLE_FLOORS
+    ? [...source.slice(0, CITADEL_CASTLE_FLOORS - 1), source[source.length - 1]]
+    : source.slice(0, CITADEL_CASTLE_FLOORS);
+  return Object.freeze(
+    Array.from({ length: CITADEL_CASTLE_FLOORS }, (_, floor) =>
+      selected[floor] ? centerFloor(selected[floor]) : EMPTY_CASTLE_FLOOR
+    )
+  );
+}
+
+/**
+ * Normalize legacy single-stack saves and the v2 five-terrace layout into:
+ * terrace 0 = 台地 1（最高）, each terrace owns exactly five castle floors.
+ * Every floor is padded to a common 25×25 centered grid, so editing one
+ * terrace can never shift the shared sacred-city origin.
+ */
+export function normalizeCitadelTerraceLayout(input = CITADEL_TOWN_SPEC) {
+  const rawTerraces = input?.terraces;
+  let terraces;
+  if (Array.isArray(rawTerraces)) {
+    terraces = rawTerraces.map((entry) =>
+      normalizeFiveFloors(Array.isArray(entry) ? entry : entry?.levels)
+    );
+  } else {
+    const legacy = Array.isArray(input) ? input : input?.levels;
+    terraces = [normalizeFiveFloors(legacy, true)];
+  }
+  while (terraces.length < CITADEL_TERRACE_COUNT) {
+    terraces.push(normalizeFiveFloors([]));
+  }
+  terraces.length = CITADEL_TERRACE_COUNT;
+  return Object.freeze({
+    version: 2,
+    gridSize: CITADEL_GRID_SIZE,
+    terraces: Object.freeze(
+      terraces.map((levels, terraceIndex) =>
+        Object.freeze({ terraceIndex, levels })
+      )
+    ),
+  });
+}
+
 const DIRS = Object.freeze([
   Object.freeze([1, 0]), // +x
   Object.freeze([-1, 0]), // -x
@@ -185,6 +275,26 @@ export function clearCell(grid, ix, iy, iz) {
 }
 
 /**
+ * 求一根城堡柱的下一放置层。空柱落到当前台地承重面；非空柱叠到
+ * 最高块上；五层已满或无承重面时返回 null。保持为纯函数，供 UI 与
+ * headless 测试共用，避免最高层被误判成可重复放置。
+ */
+export function resolveCitadelDropTarget(
+  grid,
+  ix,
+  iz,
+  supportLevel,
+  maxLevel = CITADEL_CASTLE_FLOORS - 1
+) {
+  for (let iy = maxLevel; iy >= 0; iy--) {
+    if (!grid.has(`${ix},${iy},${iz}`)) continue;
+    return iy < maxLevel ? { ix, iy: iy + 1, iz } : null;
+  }
+  if (supportLevel < 0 || supportLevel > maxLevel) return null;
+  return { ix, iy: supportLevel, iz };
+}
+
+/**
  * 人字坡屋顶棱柱（非索引三角面）：屋脊沿 +x，两坡落水、檐口略出挑，
  * 两端山墙封三角。沿 z 成条时 clone 后 rotateY(π/2)。
  */
@@ -231,8 +341,8 @@ export function buildCitadelTown(spec, ctx) {
 
   // ---------- 栅格索引 ----------
   const grid = new Map();
-  let cols = 0;
-  let rows = 0;
+  let cols = Number.isInteger(spec.gridSize) ? spec.gridSize : 0;
+  let rows = Number.isInteger(spec.gridSize) ? spec.gridSize : 0;
   spec.levels.forEach((rowsArr, iy) => {
     rows = Math.max(rows, rowsArr.length);
     rowsArr.forEach((row, iz) => {
@@ -243,9 +353,9 @@ export function buildCitadelTown(spec, ctx) {
     });
   });
   const at = (ix, iy, iz) => grid.get(`${ix},${iy},${iz}`) ?? ".";
-  const cx = (ix) => (ix - (cols - 1) / 2) * cs;
-  const cz = (iz) => (iz - (rows - 1) / 2) * cs;
-  const cy = (iy) => (iy + 0.5) * ch;
+  const cx = (ix) => citadelGridCellCenter(ix, 0, 0, cs, ch, cols).x;
+  const cz = (iz) => citadelGridCellCenter(0, 0, iz, cs, ch, rows).z;
+  const cy = (iy) => citadelGridCellCenter(0, iy, 0, cs, ch, cols).y;
 
   const levelGroups = spec.levels.map((_, iy) => {
     const group = new THREE.Group();
@@ -346,7 +456,7 @@ export function buildCitadelTown(spec, ctx) {
       const cap = ctx.buildHalfDome(cs * 0.78, materials.gold, "town-dome-cap", 1.28);
       cap.position.y = 0.5;
       dome.add(cap);
-      if (by >= 5) {
+      if (by >= Math.min(4, spec.levels.length - 1)) {
         // 主穹顶避雷针（2× 玩家身高）
         const finial = mesh(
           new THREE.CylinderGeometry(0.03, 0.03, ctx.finialHeight, 6),
