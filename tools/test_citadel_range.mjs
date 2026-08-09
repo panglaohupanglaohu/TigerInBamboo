@@ -138,6 +138,8 @@ assert(troyParts >= 30, "木马应由 30+ 个低模积木拼块构成");
 const troyRadius = Math.hypot(range.trojanHorse.userData.rangeLocal.lx,
   range.trojanHorse.userData.rangeLocal.lz);
 assert(troyRadius < moatSpec.innerRadius, "木马必须落在护城河内径以内");
+// 护城河内径在第5层台面(radius=24)落地处：木马应贴在该落地圈外侧(半径≥24)
+assert(troyRadius >= 24, "木马应落在第5层台面外缘(radius=24)落地处附近");
 assert(range.trojanHorse.userData.rangeLocal.lx > 8,
   "木马必须位于朝圣水阶(瀑布)的右侧(+lx)");
 assert.equal(range.vegetation, null, "山坡散灌木必须删除");

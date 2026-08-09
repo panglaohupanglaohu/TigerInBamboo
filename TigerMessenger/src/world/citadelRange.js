@@ -932,13 +932,14 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   scene.add(moat);
   moat.userData.harborPadLocal = { lx: -22.8, lz: 24.6, toWaterX: 0.66, toWaterZ: -0.75 };
 
-  // ---------- 低多边形特洛伊木马：护城河内径、瀑布右侧广场 ----------
-  // 朝圣水阶沿 z≈17~38 铺在 x≈1~4.5；站在正门朝圣城时 +lx 为右。木马放在
-  // 内径(38)以内的右侧开阔广场（lx≈13.5,lz≈28.5，半径≈31.5），面朝瀑布方向。
+  // ---------- 低多边形特洛伊木马：护城河内径 · 第5层台面落地处 · 瀑布右侧 ----------
+  // 第5层台面(terraceIndex=4)外缘半径 baseRadius=24，是护城河内径(38)以内
+  // 最外圈的落地台地。木马放在第5层台面外缘落地处、朝圣水阶(瀑布)右侧(+lx)，
+  // 即 lx≈23,lz≈11(半径≈25.5)：台面刚落地、护城河环带内，面朝瀑布方向。
   // placeRangeAsset(...,false) 让其 +Y 对齐该点星球径向（随曲率贴地）。
   const trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
   trojanHorse.scale.setScalar(0.72);
-  placeRangeAsset(trojanHorse, 13.5, 28.5, R, 0.08, false);
+  placeRangeAsset(trojanHorse, 23, 11, R, 0.08, false);
   // 面向瀑布/朝圣水阶（z 减小方向即朝正门/瀑布），略向右偏展示轮车侧面
   trojanHorse.rotateY(Math.PI * 1.12);
   scene.add(trojanHorse);
