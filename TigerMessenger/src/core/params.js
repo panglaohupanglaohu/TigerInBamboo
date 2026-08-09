@@ -13,7 +13,7 @@ export const P_DEFAULTS = Object.freeze({
   upLerp: 4.0,
   camDist: 7.5,
   talkRange: 3.2,
-  tramSpeed: 3.2, // 电车行驶速度（开发者菜单可调）
+  tramSpeed: 7, // 电车行驶速度（地图扩大后默认 7；开发者菜单可调）
   aircraftSpeed: 1.65, // 空中鲸群：沉重缓巡（世界单位/秒）
   aircraftScale: 2.6, // 宏大压迫感体量（约原飞艇两倍以上）
   aircraftHoldSec: 36, // 站点上空滞空更久，像鲸群盘桓

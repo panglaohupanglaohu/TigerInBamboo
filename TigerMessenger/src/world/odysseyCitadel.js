@@ -183,6 +183,8 @@ export function normalizeCitadelTerrainObjects(input = []) {
       yaw: Number(entry.yaw) || 0,
       scale: Math.max(0.2, Math.min(1.5, Number(entry.scale)
         || (entry.type === "watchtower" ? 0.42 : 0.45))),
+      // 参天树默认扎根地面；瞭望塔默认立在台面。
+      grounded: entry.grounded !== undefined ? Boolean(entry.grounded) : entry.type === "elderTree",
     }];
   });
 }
@@ -751,7 +753,14 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
   };
 }
 
-function buildCitadelTerrainObjects(placements, contourSpec) {
+function localSphericalGroundY(x, z, anchor) {
+  const r2 = x * x + z * z;
+  const planetCenterY = -(anchor.groundR - anchor.radialEmbed);
+  const dy = Math.sqrt(Math.max(0, anchor.groundR * anchor.groundR - r2));
+  return planetCenterY + dy;
+}
+
+function buildCitadelTerrainObjects(placements, contourSpec, anchor = null) {
   const normalizedPlacements = normalizeCitadelTerrainObjects(placements);
   const metrics = citadelTerraceMetrics(contourSpec);
   const group = new THREE.Group();
@@ -772,12 +781,36 @@ function buildCitadelTerrainObjects(placements, contourSpec) {
       object.userData.height *= placement.scale;
     }
     object.name = `citadel-terrain-object-${placement.id}`;
-    object.position.set(
-      placement.x,
-      metrics[placement.terraceIndex].top,
-      placement.z
-    );
-    object.rotation.y = placement.yaw;
+    const topY = metrics[placement.terraceIndex].top;
+    let baseY = topY;
+    if (
+      placement.grounded
+      && anchor?.dir?.isVector3
+      && Number.isFinite(anchor.groundR)
+      && Number.isFinite(anchor.radialEmbed)
+    ) {
+      baseY = localSphericalGroundY(placement.x, placement.z, anchor);
+    }
+    object.position.set(placement.x, baseY, placement.z);
+    if (anchor?.dir?.isVector3 && Number.isFinite(anchor.groundR)) {
+      const planetCenterY = -(anchor.groundR - anchor.radialEmbed);
+      const up = new THREE.Vector3(
+        placement.x,
+        baseY - planetCenterY,
+        placement.z
+      ).normalize();
+      const tiltQ = new THREE.Quaternion().setFromUnitVectors(
+        new THREE.Vector3(0, 1, 0),
+        up
+      );
+      const yawQ = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        placement.yaw
+      );
+      object.quaternion.copy(tiltQ).multiply(yawQ);
+    } else {
+      object.rotation.y = placement.yaw;
+    }
     object.userData.terrainObjectId = placement.id;
     object.userData.terrainObjectType = placement.type;
     object.userData.terraceIndex = placement.terraceIndex;
@@ -890,9 +923,7 @@ export function buildOdysseyCitadel(options = {}) {
 
   const outerTerrainSystem = buildOuterCitadelTerrain(materials, contourSpec);
   const terrainOutlinedSurfaceCount = applyInkOutlines(outerTerrainSystem);
-  const terrainObjects = buildCitadelTerrainObjects(options.terrainObjects, contourSpec);
   castleContainer.add(outerTerrainSystem);
-  castleContainer.add(terrainObjects);
   castleContainer.add(citadelAssembly);
 
   // Preserve the scene's update contract while keeping this architectural
@@ -932,6 +963,13 @@ export function buildOdysseyCitadel(options = {}) {
     };
     castleContainer.userData.curvatureDrop = curvatureDrop;
   }
+
+  const terrainObjects = buildCitadelTerrainObjects(
+    options.terrainObjects,
+    contourSpec,
+    castleContainer.userData.anchor
+  );
+  castleContainer.add(terrainObjects);
 
   castleContainer.userData.kind = "odyssey-citadel";
   castleContainer.userData.spec = CITADEL;
@@ -1102,7 +1140,8 @@ export function rebuildCitadelTerrainObjects(castleContainer, placements) {
   const normalized = normalizeCitadelTerrainObjects(placements);
   const group = buildCitadelTerrainObjects(
     normalized,
-    castleContainer.userData.contourSpec
+    castleContainer.userData.contourSpec,
+    castleContainer.userData.anchor
   );
   castleContainer.add(group);
   castleContainer.userData.terrainObjects = group;

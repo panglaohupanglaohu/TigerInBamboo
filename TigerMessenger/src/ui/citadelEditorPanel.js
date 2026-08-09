@@ -568,7 +568,11 @@ export function createCitadelEditorPanel({
       const py = cy + object.z * scale;
       ctx.beginPath();
       ctx.arc(px, py, selected ? 6 : 4, 0, Math.PI * 2);
-      ctx.fillStyle = object.type === "watchtower" ? "#687985" : "#385e3e";
+      ctx.fillStyle = object.type === "watchtower"
+        ? "#687985"
+        : object.grounded
+          ? "#2d5a2d"
+          : "#385e3e";
       ctx.fill();
       ctx.strokeStyle = selected ? "#ffffff" : "rgba(255,255,255,.55)";
       ctx.lineWidth = selected ? 2 : 1;
@@ -656,6 +660,7 @@ export function createCitadelEditorPanel({
         z: Number(localZ.toFixed(3)),
         yaw: 0,
         scale: type === "watchtower" ? 0.42 : 0.45,
+        grounded: type === "elderTree",
       };
       // One terrain object per immediate footprint; replacing a nearby marker
       // avoids interpenetrating towers/trees on the small upper terraces.
@@ -667,7 +672,7 @@ export function createCitadelEditorPanel({
       persistTerrainObjects();
       onTerrainObjectsChange([...terrainObjects]);
       drawTerrainMap();
-      toast(type === "watchtower" ? "已放置瞭望塔" : "已放置参天树", 1.3);
+      toast(type === "watchtower" ? "已放置瞭望塔" : "已放置参天树（落地 + 随曲率倾斜）", 1.3);
       return;
     }
     const terraceIndex = terrain.terraces.findIndex((entry) => rWorld <= entry.radius);
