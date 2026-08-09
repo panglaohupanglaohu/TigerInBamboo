@@ -484,8 +484,9 @@ console.log("[11] 地貌对象：瞭望塔 + 参天树放置、描边、存档�
 const terrainObjectSpec = [
   { id: "tower-a", type: "watchtower", terraceIndex: 0, x: -5, z: 0, yaw: 0.2, scale: 0.42 },
   { id: "tree-a", type: "elderTree", terraceIndex: 0, x: 5, z: 0, yaw: -0.1, scale: 0.45 },
+  { id: "horse-a", type: "trojanHorse", terraceIndex: 0, x: 0, z: 6, yaw: 0.6, scale: 0.9 },
 ];
-assert.equal(normalizeCitadelTerrainObjects(terrainObjectSpec).length, 2);
+assert.equal(normalizeCitadelTerrainObjects(terrainObjectSpec).length, 3);
 assert.equal(citadelTerrainPointSupported(CITADEL.contourTerrain, -5, 0, 0), true);
 const objectCitadel = buildOdysseyCitadel({
   place: false,
@@ -494,12 +495,17 @@ const objectCitadel = buildOdysseyCitadel({
 });
 const objectGroup = objectCitadel.userData.terrainObjects;
 assert.equal(objectGroup?.name, "citadel-terrain-objects");
-assert.equal(objectGroup.children.length, 2, "必须生成一座瞭望塔和一棵参天树");
+assert.equal(objectGroup.children.length, 3, "必须生成瞭望塔、参天树与特洛伊木马");
 const placedTower = objectGroup.getObjectByName("citadel-terrain-object-tower-a");
 const placedTree = objectGroup.getObjectByName("citadel-terrain-object-tree-a");
+const placedHorse = objectGroup.getObjectByName("citadel-terrain-object-horse-a");
 assert(placedTower?.getObjectByName("watchtower-lookout-window"), "瞭望塔必须带瞭望窗口");
 assert.equal(placedTree?.getObjectsByProperty("name", "citadel-elder-tree-crown").length, 8,
   "参天树必须具有八团低多边形云冠");
+assert(placedHorse?.getObjectByName("troy-torso"), "特洛伊木马必须带躯干拼块");
+// 木马 yaw 应被正确应用（绕 +Y 旋转）
+assert(placedHorse?.rotation.y !== 0 || placedHorse?.quaternion.y > 0.2,
+  "特洛伊木马应应用 yaw 角度旋转");
 const objectTopY = citadelTerraceMetrics(CITADEL.contourTerrain)[0].top;
 assert.equal(placedTower.position.y, objectTopY);
 assert.equal(placedTree.position.y, objectTopY);
@@ -510,7 +516,7 @@ objectGroup.traverse((object) => {
   terrainObjectMeshes++;
   if (object.children.some((child) => child.userData.isOutline)) terrainObjectOutlined++;
 });
-assert.equal(terrainObjectOutlined, terrainObjectMeshes, "两个地貌对象的全部网格都必须带墨线");
+assert.equal(terrainObjectOutlined, terrainObjectMeshes, "全部地貌对象的网格都必须带墨线");
 const tallerContour = {
   ...CITADEL.contourTerrain,
   terraces: CITADEL.contourTerrain.terraces.map((entry, index) => ({
@@ -520,7 +526,7 @@ const tallerContour = {
 };
 rebuildCitadelTerrain(objectCitadel, tallerContour);
 const rebuiltObjects = objectCitadel.userData.terrainObjects;
-assert.equal(rebuiltObjects.children.length, 2);
+assert.equal(rebuiltObjects.children.length, 3);
 assert.equal(
   rebuiltObjects.getObjectByName("citadel-terrain-object-tower-a").position.y,
   citadelTerraceMetrics(tallerContour)[0].top,
@@ -528,6 +534,6 @@ assert.equal(
 );
 const onlyTree = rebuildCitadelTerrainObjects(objectCitadel, [terrainObjectSpec[1]]);
 assert.equal(onlyTree.children.length, 1, "删除工具必须能热重建为仅保留参天树");
-ok(`瞭望塔×1 · 参天树×1 · 网格描边 ${terrainObjectMeshes}/${terrainObjectMeshes} · 台地变高自动贴地`);
+ok(`瞭望塔×1 · 参天树×1 · 木马×1 · 网格描边 ${terrainObjectMeshes}/${terrainObjectMeshes} · 台地变高自动贴地`);
 
 console.log(`\n全部通过：${pass} 组验收`);

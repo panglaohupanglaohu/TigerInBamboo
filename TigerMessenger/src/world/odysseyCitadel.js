@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { addOutline } from "../assets/toon.js";
 import { createCitadelWatchtower } from "../assets/citadelWatchtower.js";
 import { createCitadelElderTree } from "../assets/citadelElderTree.js";
+import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
 import { PLAYER_HEIGHT } from "../core/constants.js";
 import { canyonOffsetDir } from "./canyon.js";
 import {
@@ -161,7 +162,7 @@ export function citadelCurvatureDrop(
   return R - Math.sqrt(Math.max(0, R * R - r * r));
 }
 
-const CITADEL_TERRAIN_OBJECT_TYPES = new Set(["watchtower", "elderTree"]);
+const CITADEL_TERRAIN_OBJECT_TYPES = new Set(["watchtower", "elderTree", "trojanHorse"]);
 
 /** Normalize persisted terrain-object placements into a deterministic list. */
 export function normalizeCitadelTerrainObjects(input = []) {
@@ -182,8 +183,9 @@ export function normalizeCitadelTerrainObjects(input = []) {
       z: Number(entry.z) || 0,
       yaw: Number(entry.yaw) || 0,
       scale: Math.max(0.2, Math.min(1.5, Number(entry.scale)
-        || (entry.type === "watchtower" ? 0.42 : 0.45))),
-      // 参天树默认扎根地面；瞭望塔默认立在台面。
+        || (entry.type === "watchtower" ? 0.42
+          : entry.type === "trojanHorse" ? 0.9 : 0.45))),
+      // 参天树默认扎根地面；瞭望塔/木马默认立在台面。
       grounded: entry.grounded !== undefined ? Boolean(entry.grounded) : entry.type === "elderTree",
     }];
   });
@@ -774,11 +776,15 @@ function buildCitadelTerrainObjects(placements, contourSpec, anchor = null) {
     )) continue;
     const object = placement.type === "watchtower"
       ? createCitadelWatchtower({ seed: placement.id.length })
-      : createCitadelElderTree({ seed: placement.id.length, scale: placement.scale });
+      : placement.type === "trojanHorse"
+        ? createCitadelTrojanHorse({ seed: placement.id.length, scale: placement.scale })
+        : createCitadelElderTree({ seed: placement.id.length, scale: placement.scale });
     if (placement.type === "watchtower") {
       object.scale.setScalar(placement.scale);
       object.userData.collideRadius *= placement.scale;
       object.userData.height *= placement.scale;
+    } else if (placement.type === "trojanHorse") {
+      object.scale.setScalar(placement.scale);
     }
     object.name = `citadel-terrain-object-${placement.id}`;
     const topY = metrics[placement.terraceIndex].top;

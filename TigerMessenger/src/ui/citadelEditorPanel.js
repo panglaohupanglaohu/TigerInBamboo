@@ -46,6 +46,13 @@ const CHAR_NAMES = { W: "白石", L: "浅砂石", B: "淡砖", D: "正门" };
 const CELL = CITADEL_TOWN_SPEC.cellSize;
 const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
 
+/** Human-readable name for a terrain-object type. */
+export function objectTypeName(type) {
+  return type === "watchtower" ? "瞭望塔"
+    : type === "trojanHorse" ? "特洛伊木马"
+    : "参天树";
+}
+
 /** Immutable removal helper shared by map/3D right-click paths and tests. */
 export function removeCitadelTerrainObjectPlacement(objects, id) {
   const source = Array.isArray(objects) ? objects : [];
@@ -205,8 +212,9 @@ export function createCitadelEditorPanel({
         <strong style="font-size:12px;color:#4a5560;">地貌对象</strong>
         <button type="button" id="ce-object-watchtower" title="选择后在上方鸟瞰图点击落点">瞭望塔</button>
         <button type="button" id="ce-object-tree" title="选择后在上方鸟瞰图点击落点">参天树</button>
+        <button type="button" id="ce-object-horse" title="选择后在上方鸟瞰图点击落点">木马</button>
         <button type="button" id="ce-object-delete" title="选择后点击鸟瞰图中的对象标记删除">删除对象</button>
-        <span style="font:10px monospace;color:#71808a;">选择对象 → 点击鸟瞰图放置</span>
+        <span style="font:10px monospace;color:#71808a;">选对象 → 点击鸟瞰图放置；选中标记后输入角度回车旋转</span>
       </div>
       <div style="border-top:1px solid #dbe2e8;padding-top:7px;font-weight:700;margin-bottom:5px;">
         2）城堡层 <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
@@ -460,8 +468,29 @@ export function createCitadelEditorPanel({
   const terrainObjectButtons = new Map([
     ["watchtower", panel.querySelector("#ce-object-watchtower")],
     ["elderTree", panel.querySelector("#ce-object-tree")],
+    ["trojanHorse", panel.querySelector("#ce-object-horse")],
     ["delete", panel.querySelector("#ce-object-delete")],
   ]);
+  // 地貌对象角度旋转：选中某对象标记后，输入角度（度）回车即绕 +Y 旋转。
+  let selectedObjectId = null;
+  const angleWrapEl = document.createElement("div");
+  angleWrapEl.style.cssText = "display:flex;gap:5px;align-items:center;margin-top:4px;";
+  const angleLabel = document.createElement("span");
+  angleLabel.textContent = "角度°";
+  angleLabel.style.cssText = "font:11px monospace;color:#4a5560;";
+  const angleInput = document.createElement("input");
+  angleInput.type = "number";
+  angleInput.value = "0";
+  angleInput.style.cssText = "width:58px;font:11px monospace;";
+  angleInput.title = "选中地貌对象标记后输入朝向角度（绕 +Y 旋转），回车应用";
+  const applyAngleBtn = document.createElement("button");
+  applyAngleBtn.type = "button";
+  applyAngleBtn.textContent = "应用";
+  applyAngleBtn.style.cssText = "font-size:11px;";
+  applyAngleBtn.title = "把当前角度应用到选中的地貌对象";
+  angleWrapEl.append(angleLabel, angleInput, applyAngleBtn);
+  // 插入到“地貌对象”行之后（delete 按钮所在行的父容器）
+  document.querySelector("#ce-object-delete")?.closest("div")?.after(angleWrapEl);
 
   function selectTerrainObjectTool(tool) {
     terrainObjectTool = terrainObjectTool === tool ? null : tool;
@@ -471,10 +500,37 @@ export function createCitadelEditorPanel({
       button.style.color = active ? "#fff" : "#2a2b2d";
     }
     terrainMapEl.style.cursor = terrainObjectTool ? "crosshair" : "pointer";
+    // 切换工具时清掉选中
+    if (tool !== null && tool !== "delete") selectedObjectId = null;
   }
   for (const [type, button] of terrainObjectButtons) {
     button.onclick = () => selectTerrainObjectTool(type);
   }
+
+  /** 把角度输入应用到选中的地貌对象并重建 3D。 */
+  function applySelectedYaw() {
+    const target = selectedObjectId
+      ? terrainObjects.find((object) => object.id === selectedObjectId)
+      : null;
+    if (!target) {
+      toast("请先在鸟瞰图点击选中一个地貌对象标记", 1.4);
+      return;
+    }
+    const deg = Number(angleInput.value);
+    if (!Number.isFinite(deg)) {
+      toast("请输入有效角度", 1.4);
+      return;
+    }
+    target.yaw = (deg * Math.PI) / 180;
+    persistTerrainObjects();
+    onTerrainObjectsChange([...terrainObjects]);
+    drawTerrainMap();
+    toast(`${objectTypeName(target.type)} 已旋转 ${deg}°`, 1.3);
+  }
+  angleInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); applySelectedYaw(); }
+  });
+  applyAngleBtn.onclick = applySelectedYaw;
 
   function selectTerrace(index) {
     activeTerrace = Math.min(CITADEL_TERRACE_COUNT - 1, Math.max(0, index));
@@ -564,24 +620,28 @@ export function createCitadelEditorPanel({
     // Editable terrain-object markers share the same local x/z origin as 3D.
     for (const object of terrainObjects) {
       const selected = object.terraceIndex === activeTerrace;
+      const picked = object.id === selectedObjectId;
       const px = cx + object.x * scale;
       const py = cy + object.z * scale;
       ctx.beginPath();
-      ctx.arc(px, py, selected ? 6 : 4, 0, Math.PI * 2);
+      ctx.arc(px, py, picked ? 7 : selected ? 6 : 4, 0, Math.PI * 2);
       ctx.fillStyle = object.type === "watchtower"
         ? "#687985"
-        : object.grounded
-          ? "#2d5a2d"
-          : "#385e3e";
+        : object.type === "trojanHorse"
+          ? "#8b5a2b"
+          : object.grounded
+            ? "#2d5a2d"
+            : "#385e3e";
       ctx.fill();
-      ctx.strokeStyle = selected ? "#ffffff" : "rgba(255,255,255,.55)";
-      ctx.lineWidth = selected ? 2 : 1;
+      ctx.strokeStyle = picked ? "#ffd27a" : selected ? "#ffffff" : "rgba(255,255,255,.55)";
+      ctx.lineWidth = picked ? 2.5 : selected ? 2 : 1;
       ctx.stroke();
       ctx.fillStyle = "#fff";
       ctx.font = "bold 8px monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(object.type === "watchtower" ? "塔" : "树", px, py);
+      ctx.fillText(object.type === "watchtower" ? "塔"
+        : object.type === "trojanHorse" ? "马" : "树", px, py);
     }
     // 城堡居中标记
     ctx.save();
@@ -659,7 +719,7 @@ export function createCitadelEditorPanel({
         x: Number(localX.toFixed(3)),
         z: Number(localZ.toFixed(3)),
         yaw: 0,
-        scale: type === "watchtower" ? 0.42 : 0.45,
+        scale: type === "watchtower" ? 0.42 : type === "trojanHorse" ? 0.9 : 0.45,
         grounded: type === "elderTree",
       };
       // One terrain object per immediate footprint; replacing a nearby marker
@@ -672,8 +732,35 @@ export function createCitadelEditorPanel({
       persistTerrainObjects();
       onTerrainObjectsChange([...terrainObjects]);
       drawTerrainMap();
-      toast(type === "watchtower" ? "已放置瞭望塔" : "已放置参天树（落地 + 随曲率倾斜）", 1.3);
+      // 放置木马后自动选中，便于立刻用“角度°”输入旋转
+      if (type === "trojanHorse") {
+        selectedObjectId = placement.id;
+        angleInput.value = "0";
+      }
+      toast(type === "watchtower" ? "已放置瞭望塔"
+        : type === "trojanHorse" ? "已放置特洛伊木马（可输入角度旋转）"
+        : "已放置参天树（落地 + 随曲率倾斜）", 1.5);
       return;
+    }
+    // 未选任何放置工具时：点击已有地貌对象标记 → 选中（供“角度°”旋转）
+    if (!terrainObjectTool) {
+      const localX = (px - cx) / scale;
+      const localZ = (py - cy) / scale;
+      let picked = null;
+      let nearest = Infinity;
+      for (const object of terrainObjects) {
+        if (object.terraceIndex !== activeTerrace) continue;
+        const d = Math.hypot(object.x - localX, object.z - localZ);
+        if (d < nearest) { nearest = d; picked = object; }
+      }
+      if (picked && nearest <= 4) {
+        selectedObjectId = picked.id;
+        angleInput.value = String(Math.round(((picked.yaw * 180) / Math.PI) * 10) / 10);
+        drawTerrainMap();
+        toast(`已选中${objectTypeName(picked.type)}，可输入角度旋转`, 1.3);
+        return;
+      }
+      selectedObjectId = null;
     }
     const terraceIndex = terrain.terraces.findIndex((entry) => rWorld <= entry.radius);
     if (terraceIndex < 0) return;
@@ -705,7 +792,8 @@ export function createCitadelEditorPanel({
       }
     }
     if (nearest && nearestDistance <= 4 && deleteTerrainObject(nearest.id)) {
-      toast(nearest.type === "watchtower" ? "已删除瞭望塔" : "已删除参天树", 1.3);
+      if (selectedObjectId === nearest.id) selectedObjectId = null;
+      toast(`已删除${objectTypeName(nearest.type)}`, 1.3);
     }
   });
 
