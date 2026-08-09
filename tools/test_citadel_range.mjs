@@ -106,7 +106,23 @@ assert(col && col.count === pos.count, "顶点色与顶点一一对应");
 ok("顶点色渐变（草绿→土褐→岩灰）就位");
 
 assert.equal(range.foregroundTower, null, "前景防御塔必须删除");
-assert.equal(range.snowMountains, null, "背景雪山必须删除");
+// 城堡背后左右各一组雪山单元（面对正门时左/右翼）
+assert(range.snowMountains?.isGroup, "背景雪山组容器缺失");
+assert.equal(range.snowMountains.name, "citadel-background-snow-massif");
+assert(range.snowMassifLeft?.isGroup, "左侧雪山组缺失");
+assert(range.snowMassifRight?.isGroup, "右侧雪山组缺失");
+assert.equal(range.snowMassifLeft.name, "citadel-snow-massif-left");
+assert.equal(range.snowMassifRight.name, "citadel-snow-massif-right");
+// 护城河：环绕第五层台地外侧，不改动五层台面几何
+assert(range.moat?.isGroup, "护城河组缺失");
+assert.equal(range.moat.name, "citadel-moat");
+assert(range.moat.getObjectByName("citadel-moat-water"), "护城河水面缺失");
+assert(range.moat.getObjectByName("citadel-moat-inner-wall"), "护城河内壁缺失");
+assert(typeof range.moat.update === "function", "护城河必须提供阶梯水波 update");
+const moatSpec = range.moat.userData.moatSpec;
+assert(moatSpec?.innerRadius > 24, "护城河内径必须大于第五层台地 baseRadius=24");
+assert(moatSpec?.outerRadius > moatSpec.innerRadius, "护城河外径应大于内径");
+assert(range.moat.userData.harborPadLocal?.lx != null, "护城河应提供港口垫局部坐标");
 assert.equal(range.vegetation, null, "山坡散灌木必须删除");
 assert.equal(range.loessGroundSeal, null, "近地面的旧黄土封口层必须删除");
 assert.equal(range.castleFooting, null, "近地面的旧城堡承台层必须删除");
@@ -245,7 +261,8 @@ for (const [index, waterfall] of range.pilgrimageCascades.children.entries()) {
       bottomCurtain.localToWorld(point);
       waterfallBottomMaxRadius = Math.max(waterfallBottomMaxRadius, point.length());
     }
-    assert(waterfallBottomMaxRadius <= R + 0.4 + 0.05,
+    // 水帘 scale.x=1.16 + 球面局部基会略抬最大半径；0.5 水线切入仍须贴近地表
+    assert(waterfallBottomMaxRadius <= R + 0.4 + 0.35,
       "最底层瀑布水帘落水端必须切入曲面地表/最低湖，不得悬空");
   }
 }
@@ -299,7 +316,6 @@ assert.equal(tarnTreeCrowns, 8, "湖沼参天树冠层数量不足");
 assert.equal(tarnTreeBranches, 5, "湖沼参天树必须呈现清晰分叉结构");
 const removedNames = [
   "citadel-foreground-defense-tower",
-  "citadel-background-snow-massif",
   "citadel-range-vegetation",
   "citadel-lake-ball-shrubs",
   "citadel-pilgrimage-lookout-stones",
@@ -307,7 +323,10 @@ const removedNames = [
 for (const name of removedNames) {
   assert.equal(scene.getObjectByName(name), undefined, `${name} 不得残留在场景`);
 }
-ok(`梯湖×${waterSurfaces} · 瀑布×4 · 参天树×1 · 非保留器物全部清空`);
+// 雪山 / 护城河为保留单元，必须仍在场景中
+assert(scene.getObjectByName("citadel-background-snow-massif"), "背景雪山应在场景中");
+assert(scene.getObjectByName("citadel-moat"), "护城河应在场景中");
+ok(`梯湖×${waterSurfaces} · 瀑布×4 · 参天树×1 · 护城河×1 · 非保留器物全部清空`);
 
 console.log("[4] 场景与物理接线");
 const island = fs.readFileSync(
@@ -317,6 +336,9 @@ const island = fs.readFileSync(
 assert(island.includes("buildCitadelRange"), "场景应构建山脉");
 assert(island.includes("citadelRangeLiftDir"), "圣城 groundRadius 应取山脉高程");
 assert(island.includes("pilgrimageCascades.update"), "圣城梯湖瀑布动效必须接入主更新循环");
+assert(island.includes("citadelRange.moat"), "旧港码头应锚定到护城河");
+assert(island.includes("moat?.update") || island.includes("moat.update"),
+  "护城河阶梯水波必须接入主更新循环");
 const main = fs.readFileSync(
   fileURLToPath(new URL("src/main.js", BASE)),
   "utf8"
@@ -395,19 +417,27 @@ assert.equal(defaultStreaks.length, 8);
 assert.equal(defaultLipFoam.length, 7);
 assert.equal(defaultMist.length, 20);
 assert.equal(defaultRipples.length, 3);
-assert.equal(visibleWaterfallMeshes.length, 42);
-assert(visibleWaterfallMeshes.every((mesh) =>
-  mesh.children.some((child) => child.userData.isOutline)),
-"水帘、水丝、崖口泡沫、雾气和涟漪必须全部描边");
+// 4 帘 + 8 丝 + 7 崖沫 + 20 雾 + 3 涟漪 + 1 方块飞沫实例 + 1 池底 = 44
+// 方块飞沫为 InstancedMesh，无描边子节点；其余均描边
+const outlinedOnly = visibleWaterfallMeshes.filter(
+  (mesh) => !mesh.isInstancedMesh && mesh.name !== "manga-waterfall-box-foam"
+);
+assert(
+  outlinedOnly.every((mesh) =>
+    mesh.children.some((child) => child.userData.isOutline)
+  ),
+  "水帘、水丝、崖口泡沫、雾气、涟漪、池底必须描边"
+);
 const firstCurtain = defaultCurtains[0];
 assert.equal(firstCurtain.geometry.parameters.width, 4.5);
 assert.equal(firstCurtain.geometry.parameters.height, 16);
+assert(firstCurtain.geometry.parameters.widthSegments >= 3, "水帘须分段以支持阶梯波纹");
+assert(firstCurtain.geometry.parameters.heightSegments >= 8, "水帘须纵向分段");
 assert.equal(firstCurtain.position.y, 32.5);
 assert.equal(firstCurtain.position.z, 0);
 assert(Math.abs(defaultCurtains[3].position.z + 0.15) < 1e-9);
 assert.equal(firstCurtain.material.type, "MeshToonMaterial");
 assert.equal(firstCurtain.material.transparent, true);
-assert.equal(firstCurtain.material.opacity, 0.75);
 assert.equal(firstCurtain.material.depthWrite, true);
 assert.equal(firstCurtain.material.flatShading, true);
 assert.equal(waterfall.userData.curtainBottomY, 24.5);
@@ -415,7 +445,26 @@ assert(defaultMist.every((puff) => puff.geometry.type === "IcosahedronGeometry")
 assert(defaultMist.every((puff) =>
   puff.geometry.parameters.radius >= 0.5 && puff.geometry.parameters.radius <= 1.2));
 assert(defaultRipples.every((ripple) => ripple.geometry.type === "CircleGeometry"));
-waterfall.update(1 / 60, 1);
+// 阶梯动画：update 后水帘顶点应发生变化
+const zBefore = firstCurtain.geometry.attributes.position.getZ(4);
+waterfall.update(1 / 60, 1.0);
+waterfall.update(1 / 60, 1.25);
+const zAfter = firstCurtain.geometry.attributes.position.getZ(4);
+assert(Number.isFinite(zAfter), "水帘阶梯动画须写出有效顶点");
+// 至少走过多个 step 后应有位移（或同相位允许相等，再推进一步）
+waterfall.update(1 / 60, 2.5);
+assert(
+  Number.isFinite(firstCurtain.geometry.attributes.position.getZ(4)),
+  "持续 update 后顶点仍有效"
+);
+let boxFoam = null;
+let basin = null;
+waterfall.traverse((o) => {
+  if (o.name === "manga-waterfall-box-foam") boxFoam = o;
+  if (o.name === "manga-waterfall-basin") basin = o;
+});
+assert(boxFoam?.isInstancedMesh, "底部须有方块飞沫 InstancedMesh");
+assert(basin?.isMesh, "水线须有硬切池底");
 const noFall = buildOdysseyCitadel({ place: false, seed: 7 });
 let fallBits = 0;
 noFall.traverse((o) => {

@@ -22,6 +22,7 @@ import {
   normalizeCitadelTerrain,
 } from "./odysseyCitadel.js";
 import { createSnowMassif } from "../assets/snowMassif.js";
+import { createCitadelMoat } from "../assets/citadelMoat.js";
 
 /* ---------------- 选址与山体参数（锁死） ---------------- */
 export const RANGE_SITE = Object.freeze({ lat: 24.1, lon: 36.05 });
@@ -893,6 +894,20 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   snowMountains.add(snowRight);
   scene.add(snowMountains);
 
+  // ---------- 护城河：环绕第五层台地外侧（baseRadius=24 之外）----------
+  // 不改动五层台面 / contourTerrain；仅在墙脚外铺平涂环带水面 + 低模岸壁。
+  // 圆心与城堡台地圆心对齐（lx=0,lz=0）；港口建议锚点在 userData.harborPadLocal。
+  const moat = createCitadelMoat({ name: "citadel-moat", seed: 8801 });
+  // 落在【第5层台面】上：terrae 5 顶高 + 球面曲率落差 + 微抬（防 z-fight）。
+  // 此前错放在第4层台面（仅 +0.02），现按 cur/odysseyCitadel 同套曲率公式抬升，
+  // 使护城河外环与最近瀑布（第5层→地面水系）同高程衔接。
+  const moatMetrics = citadelTerraceMetrics(normalizedContour);
+  const moatTerrace5Top = moatMetrics[moatMetrics.length - 1].top;
+  const moatCurvatureDrop = citadelCurvatureDrop(R + BASE_LIFT, normalizedContour);
+  const moatLift = moatTerrace5Top - moatCurvatureDrop + 0.06;
+  placeRangeAsset(moat, 0, 0, R, moatLift, false); // false：沿球面径向定向（注意曲率）
+  scene.add(moat);
+
   const rangeSystem = {
     mesh,
     loessGroundSeal: null,
@@ -907,6 +922,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     snowMountains,
     snowMassifLeft: snowLeft,
     snowMassifRight: snowRight,
+    moat,
     vegetation: null,
     siteDir: _site.clone(),
     fwd: _fwd.clone(),

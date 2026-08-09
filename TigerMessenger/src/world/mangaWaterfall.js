@@ -1,3 +1,7 @@
+// =====================================================================
+//  低模漫画瀑布（Manga Waterfall）
+//  flatShading 硬切面 · 分段顶点抖动 · 阶梯式时间量化动画 · 方块泡沫 InstancedMesh
+// =====================================================================
 import * as THREE from "three";
 import { addOutline, toonMat } from "../assets/toon.js";
 
@@ -6,12 +10,18 @@ const WATERFALL_SPEC = Object.freeze({
   curtainWidth: 4.5,
   curtainHeight: 16.0,
   curtainDepthStep: 0.05,
+  /** 横向 / 纵向分段：多面硬切，便于阶梯波纹 */
+  curtainSegW: 3,
+  curtainSegH: 10,
   defaultTopY: 40.5,
   defaultWaterlineY: 25.0,
   waterlinePenetration: 0.5,
   mistCount: 20,
   rippleCount: 3,
   outline: 0.04,
+  /** 动画步进频率（Hz）→ Math.floor(t * stepHz) / stepHz */
+  stepHz: 8,
+  foamCount: 28,
 });
 
 function lcg(seed) {
@@ -29,6 +39,42 @@ function outlinedMesh(geometry, material, name, outline = WATERFALL_SPEC.outline
   result.receiveShadow = true;
   addOutline(result, outline);
   return result;
+}
+
+/**
+ * 分段水帘平面：边缘锁定、内部顶点抖动，形成有机低模切面。
+ * 缓存 baseX/baseY/baseZ 供阶梯动画还原。
+ */
+function makeFacetedCurtainGeometry(width, height, segW, segH, random) {
+  const geometry = new THREE.PlaneGeometry(width, height, segW, segH);
+  const pos = geometry.attributes.position;
+  const halfW = width * 0.5;
+  const halfH = height * 0.5;
+  const baseX = new Float32Array(pos.count);
+  const baseY = new Float32Array(pos.count);
+  const baseZ = new Float32Array(pos.count);
+  for (let i = 0; i < pos.count; i++) {
+    let x = pos.getX(i);
+    const y = pos.getY(i);
+    let z = pos.getZ(i);
+    // 顶/底边与左右边锁死：落水端不得因抖动/波纹悬空出地表
+    const edgeX = Math.abs(x) >= halfW - 1e-4;
+    const edgeY = Math.abs(y) >= halfH - 1e-4;
+    if (!edgeX && !edgeY) {
+      x += (random() - 0.5) * 0.18;
+      z += (random() - 0.5) * 0.12;
+    }
+    pos.setXYZ(i, x, y, z);
+    baseX[i] = x;
+    baseY[i] = y;
+    baseZ[i] = z;
+  }
+  pos.needsUpdate = true;
+  geometry.computeVertexNormals();
+  geometry.userData.baseX = baseX;
+  geometry.userData.baseY = baseY;
+  geometry.userData.baseZ = baseZ;
+  return geometry;
 }
 
 /**
@@ -56,23 +102,39 @@ export function createMangaWaterfall(options = {}) {
   const waterfallGroup = new THREE.Group();
   waterfallGroup.name = "waterfallGroup";
 
+  // ---------- 多层水帘（分段 + 硬切面 + 阶梯波纹） ----------
   const curtainGroup = new THREE.Group();
   curtainGroup.name = "manga-waterfall-layered-curtains";
-  const curtainMaterial = toonMat(0x93cfca, {
-    flatShading: true,
-    transparent: true,
-    opacity: 0.75,
-    depthWrite: true,
-    side: THREE.DoubleSide,
-  });
-  const curtainGeometry = new THREE.PlaneGeometry(
-    WATERFALL_SPEC.curtainWidth,
-    WATERFALL_SPEC.curtainHeight
-  );
+  // 深/浅两层色：后深前浅，增强低模水对比
+  const curtainMats = [
+    toonMat(0x4f9bb8, {
+      flatShading: true,
+      transparent: true,
+      opacity: 0.82,
+      depthWrite: true,
+      side: THREE.DoubleSide,
+    }),
+    toonMat(0x93cfca, {
+      flatShading: true,
+      transparent: true,
+      opacity: 0.75,
+      depthWrite: true,
+      side: THREE.DoubleSide,
+    }),
+  ];
+  const animatedCurtains = [];
   for (let i = 0; i < WATERFALL_SPEC.curtainCount; i++) {
+    // 每层独立几何，动画互不抢顶点
+    const curtainGeometry = makeFacetedCurtainGeometry(
+      WATERFALL_SPEC.curtainWidth,
+      WATERFALL_SPEC.curtainHeight,
+      WATERFALL_SPEC.curtainSegW,
+      WATERFALL_SPEC.curtainSegH,
+      random
+    );
     const curtain = outlinedMesh(
       curtainGeometry,
-      curtainMaterial,
+      curtainMats[i % 2],
       `manga-waterfall-curtain-${i}`
     );
     curtain.position.set(
@@ -83,40 +145,53 @@ export function createMangaWaterfall(options = {}) {
     curtain.scale.y = curtainScaleY;
     curtain.renderOrder = 2 + i;
     curtain.userData.depthOffset = i === 0 ? 0 : -i * WATERFALL_SPEC.curtainDepthStep;
+    curtain.userData.layerPhase = i * 0.7;
+    animatedCurtains.push(curtain);
     curtainGroup.add(curtain);
   }
   waterfallGroup.add(curtainGroup);
 
+  // ---------- 书法水丝（阶梯下落） ----------
   const streakGroup = new THREE.Group();
   streakGroup.name = "manga-waterfall-calligraphic-flow-streaks";
-  const streakMaterial = toonMat(0xdff7ed, {
-    flatShading: true,
-    transparent: true,
-    opacity: 0.62,
-    depthWrite: true,
-    side: THREE.DoubleSide,
-  });
+  const streaks = [];
   for (let i = 0; i < 8; i++) {
     const width = 0.12 + random() * 0.2;
     const lengthRatio = 0.7 + random() * 0.28;
+    // 每丝独立材质：阶梯下落时透明度各自变化
+    const streakMaterial = toonMat(0xdff7ed, {
+      flatShading: true,
+      transparent: true,
+      opacity: 0.62,
+      depthWrite: true,
+      side: THREE.DoubleSide,
+    });
     const streak = outlinedMesh(
-      new THREE.PlaneGeometry(width, WATERFALL_SPEC.curtainHeight),
+      new THREE.PlaneGeometry(width, WATERFALL_SPEC.curtainHeight, 1, 6),
       streakMaterial,
       `manga-waterfall-flow-streak-${i}`,
       0.012
     );
     streak.scale.y = curtainScaleY * lengthRatio;
+    const baseY =
+      topY -
+      WATERFALL_SPEC.curtainHeight * streak.scale.y * 0.5 -
+      random() * Math.min(0.34, fallHeight * 0.06);
     streak.position.set(
       -1.82 + (i / 7) * 3.64 + (random() - 0.5) * 0.16,
-      topY - WATERFALL_SPEC.curtainHeight * streak.scale.y * 0.5
-        - random() * Math.min(0.34, fallHeight * 0.06),
+      baseY,
       0.035 + i * 0.002
     );
     streak.renderOrder = 7;
+    streak.userData.baseY = baseY;
+    streak.userData.phase = random() * Math.PI * 2;
+    streak.userData.fallSpan = Math.min(1.2, fallHeight * 0.12);
+    streaks.push(streak);
     streakGroup.add(streak);
   }
   waterfallGroup.add(streakGroup);
 
+  // ---------- 崖口泡沫 ----------
   const lipFoamGroup = new THREE.Group();
   lipFoamGroup.name = "manga-waterfall-cliff-lip-foam";
   const lipFoamMaterial = toonMat(0xf0fdf4, { flatShading: true });
@@ -134,6 +209,32 @@ export function createMangaWaterfall(options = {}) {
   }
   waterfallGroup.add(lipFoamGroup);
 
+  // ---------- 底部几何方块飞沫（InstancedMesh · 阶梯重置） ----------
+  const foamCount = WATERFALL_SPEC.foamCount;
+  const foamGeo = new THREE.BoxGeometry(0.18, 0.18, 0.18);
+  const foamMat = toonMat(0xffffff, { flatShading: true });
+  const foamInstanced = new THREE.InstancedMesh(foamGeo, foamMat, foamCount);
+  foamInstanced.name = "manga-waterfall-box-foam";
+  foamInstanced.castShadow = false;
+  foamInstanced.receiveShadow = false;
+  foamInstanced.frustumCulled = false;
+  foamInstanced.count = foamCount;
+  const foamDummy = new THREE.Object3D();
+  const foamData = [];
+  for (let i = 0; i < foamCount; i++) {
+    foamData.push({
+      x: (random() - 0.5) * 3.2,
+      y: random() * 0.8,
+      z: 0.25 + (random() - 0.5) * 0.9,
+      speedY: 0.6 + random() * 1.4,
+      speedX: (random() - 0.5) * 0.55,
+      scale: 0.35 + random() * 0.75,
+      phase: random() * Math.PI * 2,
+    });
+  }
+  waterfallGroup.add(foamInstanced);
+
+  // ---------- 雾气 ----------
   const mistGroup = new THREE.Group();
   mistGroup.name = "manga-waterfall-billowing-mist";
   const mistMaterial = toonMat(0xf4f7ed, { flatShading: true });
@@ -165,6 +266,7 @@ export function createMangaWaterfall(options = {}) {
   }
   waterfallGroup.add(mistGroup);
 
+  // ---------- 水线涟漪 ----------
   const rippleGroup = new THREE.Group();
   rippleGroup.name = "manga-waterfall-waterline-ripples";
   const rippleMaterial = toonMat(0xa9dfbf, {
@@ -177,7 +279,7 @@ export function createMangaWaterfall(options = {}) {
   const ripples = [];
   [2.7, 3.8, 5.0].forEach((radius, index) => {
     const ripple = outlinedMesh(
-      new THREE.CircleGeometry(radius, 28),
+      new THREE.CircleGeometry(radius, 12), // 少段硬切圆
       rippleMaterial,
       `manga-waterfall-ripple-${index}`
     );
@@ -191,18 +293,129 @@ export function createMangaWaterfall(options = {}) {
   });
   waterfallGroup.add(rippleGroup);
 
-  const update = (_dt = 0, t = 0) => {
+  // 池底硬切八边形：缓慢阶梯起伏
+  const basinGeo = new THREE.CylinderGeometry(2.6, 2.9, 0.12, 8);
+  basinGeo.translate(0, 0, 0);
+  const basinPos = basinGeo.attributes.position;
+  const basinBaseY = new Float32Array(basinPos.count);
+  for (let i = 0; i < basinPos.count; i++) {
+    basinBaseY[i] = basinPos.getY(i);
+  }
+  basinGeo.userData.baseY = basinBaseY;
+  const basin = outlinedMesh(
+    basinGeo,
+    toonMat(0x6f9ea5, { flatShading: true, transparent: true, opacity: 0.55 }),
+    "manga-waterfall-basin",
+    0.02
+  );
+  basin.position.y = waterlineY - 0.04;
+  basin.renderOrder = 1;
+  waterfallGroup.add(basin);
+
+  const stepHz = WATERFALL_SPEC.stepHz;
+  let lastStep = -1;
+
+  const update = (dt = 0, t = 0) => {
+    // 阶梯时间：离散帧感，非流体平滑
+    const stepTime = Math.floor(t * stepHz) / stepHz;
+    const stepped = stepTime !== lastStep;
+    lastStep = stepTime;
+
+    // 水帘：沿下落方向推进的硬切波纹
+    if (stepped) {
+      for (const curtain of animatedCurtains) {
+        const geo = curtain.geometry;
+        const pos = geo.attributes.position;
+        const { baseX, baseY, baseZ } = geo.userData;
+        const phase = curtain.userData.layerPhase || 0;
+        const halfH = WATERFALL_SPEC.curtainHeight * 0.5;
+        for (let i = 0; i < pos.count; i++) {
+          const y = baseY[i];
+          // 底边锁死：落水端保持部署姿态，不参与纵深波纹
+          const edgeY = Math.abs(y) >= halfH - 1e-4;
+          if (edgeY) {
+            pos.setXYZ(i, baseX[i], baseY[i], baseZ[i]);
+            continue;
+          }
+          // 波纹沿 -Y 流动（stepTime 增加时相位向下）
+          const wave =
+            Math.sin(y * 1.35 + stepTime * 5.2 + phase) * 0.07 +
+            Math.sin(y * 3.1 - stepTime * 3.4 + phase * 1.3) * 0.03;
+          pos.setX(i, baseX[i] + wave * 0.35);
+          pos.setY(i, baseY[i]);
+          pos.setZ(i, baseZ[i] + wave);
+        }
+        pos.needsUpdate = true;
+        // flatShading 主要看面法线；每 2 步重算一次以省 CPU
+        if ((Math.floor(t * stepHz) & 1) === 0) geo.computeVertexNormals();
+      }
+
+      // 池底慢波
+      const bPos = basin.geometry.attributes.position;
+      const bBase = basin.geometry.userData.baseY;
+      for (let i = 0; i < bPos.count; i++) {
+        const x = bPos.getX(i);
+        const z = bPos.getZ(i);
+        const wobble =
+          Math.sin(x * 1.2 + stepTime * 1.6) * 0.025 +
+          Math.cos(z * 1.4 - stepTime * 1.1) * 0.02;
+        bPos.setY(i, bBase[i] + wobble);
+      }
+      bPos.needsUpdate = true;
+      if ((Math.floor(t * stepHz) & 1) === 0) basin.geometry.computeVertexNormals();
+    }
+
+    // 水丝：阶梯式下落循环
+    const streakStep = Math.floor(t * (stepHz * 1.25)) / (stepHz * 1.25);
+    for (const streak of streaks) {
+      const cycle = (streakStep * 0.9 + streak.userData.phase) % 1;
+      streak.position.y =
+        streak.userData.baseY - cycle * streak.userData.fallSpan;
+      streak.material.opacity = 0.35 + (1 - cycle) * 0.35;
+    }
+
+    // 方块泡沫：重力 + 水线下重置
+    const dtClamped = Math.min(0.05, Math.max(0, dt || 1 / 60));
+    for (let i = 0; i < foamCount; i++) {
+      const data = foamData[i];
+      data.y += data.speedY * dtClamped;
+      data.x += data.speedX * dtClamped;
+      data.speedY -= 4.2 * dtClamped;
+      if (data.y < -0.15) {
+        data.x = (random() - 0.5) * 3.0;
+        data.y = 0.05 + random() * 0.35;
+        data.z = 0.2 + (random() - 0.5) * 0.85;
+        data.speedY = 0.7 + random() * 1.5;
+        data.speedX = (random() - 0.5) * 0.55;
+        data.scale = 0.35 + random() * 0.75;
+      }
+      const sc = data.scale * Math.max(0.15, Math.min(1.2, data.speedY * 0.55 + 0.35));
+      foamDummy.position.set(data.x, waterlineY + data.y, data.z);
+      foamDummy.scale.setScalar(sc);
+      foamDummy.rotation.set(data.phase, data.phase * 0.7, data.phase * 0.3);
+      foamDummy.updateMatrix();
+      foamInstanced.setMatrixAt(i, foamDummy.matrix);
+    }
+    foamInstanced.instanceMatrix.needsUpdate = true;
+
+    // 雾气 / 涟漪：用阶梯时间，观感更「咔哒」
+    const mistT = stepTime;
     mistParticles.forEach((puff, index) => {
-      puff.position.y = puff.userData.baseY
-        + Math.sin(t * 1.35 + puff.userData.phase) * (0.06 + (index % 3) * 0.015);
+      puff.position.y =
+        puff.userData.baseY +
+        Math.sin(mistT * 1.35 + puff.userData.phase) *
+          (0.08 + (index % 3) * 0.02);
+      puff.rotation.y += dtClamped * (0.4 + (index % 4) * 0.1);
     });
     ripples.forEach((ripple, index) => {
-      const pulse = ripple.userData.baseScale
-        + 0.035 * Math.sin(t * 1.15 - index * 0.9);
+      const pulse =
+        ripple.userData.baseScale +
+        0.05 * Math.sin(mistT * 1.15 - index * 0.9);
       ripple.scale.x = pulse;
       ripple.scale.y = pulse;
     });
   };
+
   waterfallGroup.update = update;
   waterfallGroup.userData.update = update;
   waterfallGroup.userData.spec = WATERFALL_SPEC;

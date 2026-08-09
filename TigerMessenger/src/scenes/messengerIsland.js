@@ -164,40 +164,44 @@ export const messengerIslandScene = {
     const citadelRange = buildCitadelRange(scene, R, citadelContour);
     const citadelDir = citadelSiteDir(new THREE.Vector3());
 
-    // ---------- 旧港码头 + 古战船 · 圣城深潭参天大树下（贴地） ----------
-    // 参天树 (-15.2, 42)；深潭水面椭圆左缘约 x≈-11.5。码头必须整组落在
-    // 岸地树荫下（不悬空、不埋进土），栈桥仍朝向潭心，船停在栈桥甲板高度。
+    // ---------- 旧港码头 + 古战船 · 护城河外岸（贴地） ----------
+    // 码头落在护城河外岸前侧偏左（避开正前瀑布水道）；栈桥 +X 朝河心，
+    // 古战船系泊在环带水面上。自带 harbor-water 隐藏，水面由护城河承担。
     {
-      const TREE_LX = -15.2;
-      const TREE_LZ = 42.0;
-      const POOL_LX = 1.0;
-      const POOL_LZ = 43.0;
-      // 树根旁偏潭约 1.0：仍在岸上（< -11.5），树冠正下方
-      const toPoolFlatX = POOL_LX - TREE_LX;
-      const toPoolFlatZ = POOL_LZ - TREE_LZ;
-      const flatLen = Math.hypot(toPoolFlatX, toPoolFlatZ) || 1;
-      const harborLx = TREE_LX + (toPoolFlatX / flatLen) * 1.0;
-      const harborLz = TREE_LZ + (toPoolFlatZ / flatLen) * 1.0;
+      const pad = citadelRange.moat?.userData?.harborPadLocal ?? {
+        lx: -22.8,
+        lz: 24.6,
+        toWaterX: 0.66,
+        toWaterZ: -0.75,
+      };
+      const harborLx = pad.lx;
+      const harborLz = pad.lz;
       // 与 placeRangeAsset(siteUpright) 同构：落在高度场表面 + 站点法向
       rangeLocalToWorld(harborLx, harborLz, R, harbor.position);
       const siteUp = citadelSiteDir(new THREE.Vector3());
       // 桩底 y=0 对齐地表；微抬 0.04 防与高度场 z-fight，不悬空
       harbor.position.addScaledVector(siteUp, 0.04);
-      const poolC = rangeLocalToWorld(POOL_LX, POOL_LZ, R, new THREE.Vector3());
-      const toPool = poolC.sub(harbor.position);
-      toPool.addScaledVector(siteUp, -toPool.dot(siteUp)).normalize();
-      const zAxis = new THREE.Vector3().crossVectors(toPool, siteUp).normalize();
-      // 局部 +Y = 站点法向（贴地），+X 朝潭，栈桥沿地面伸向深潭
+      // 朝向河心：用护城河局部切平面上的 toWater 向量投到世界切向
+      const toWater = new THREE.Vector3()
+        .addScaledVector(citadelRange.right, pad.toWaterX)
+        .addScaledVector(citadelRange.fwd, pad.toWaterZ)
+        .normalize();
+      toWater.addScaledVector(siteUp, -toWater.dot(siteUp)).normalize();
+      const zAxis = new THREE.Vector3().crossVectors(toWater, siteUp).normalize();
+      // 局部 +Y = 站点法向（贴地），+X 朝护城河水面，栈桥伸入环带
       harbor.quaternion.setFromRotationMatrix(
-        new THREE.Matrix4().makeBasis(toPool, siteUp, zAxis)
+        new THREE.Matrix4().makeBasis(toWater, siteUp, zAxis)
       );
       harbor.updateMatrixWorld(true);
       const harborWater = harbor.getObjectByName("harbor-water");
       if (harborWater) harborWater.visible = false;
-      // 船保持建造时的甲板高度（约 0.61），与栈桥同高、坐在码头上；
-      // 勿再压到 y=-0.2（那是旧「深潭吃水」校准，岸地会整船埋土）。
+      // 船坐在护城河水面上：甲板仍高，船体略低于甲板、贴水吃水
       const boat = harborBuilt.landmarks.boat;
-      if (boat && boat.position.y < 0.3) boat.position.y = 0.61;
+      if (boat) {
+        const moatWaterY = citadelRange.moat?.userData?.moatSpec?.waterY ?? 0.16;
+        // 码头局部 y：水面高度 + 船底浮力余量（相对桩脚 Y=0）
+        boat.position.y = Math.max(moatWaterY + 0.12, 0.28);
+      }
       harborColliders = [
         { position: harbor.position.clone(), radius: 3.8 },
         {
@@ -520,6 +524,8 @@ export const messengerIslandScene = {
 
         // 圣城梯湖：四段水帘、雾气与涟漪；城堡本体保持静态。
         citadelRange.pilgrimageCascades.update?.(dt, t);
+        // 护城河：阶梯量化水波 + 方块浪花
+        citadelRange.moat?.update?.(dt, t);
         odysseyCitadel.update?.(dt, t);
 
         // 地图放置的湖沼/飞艇动效（鲸/舟/悬浮艇）
