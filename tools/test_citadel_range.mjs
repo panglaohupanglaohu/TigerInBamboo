@@ -38,6 +38,10 @@ const {
   citadelCurvatureDrop,
   citadelTerraceMetrics,
 } = await import(new URL("src/world/odysseyCitadel.js", BASE).href);
+const {
+  createCitadelMoat,
+  CITADEL_MOAT_SPEC,
+} = await import(new URL("src/assets/citadelMoat.js", BASE).href);
 
 let pass = 0;
 const ok = (m) => {
@@ -113,16 +117,18 @@ assert(range.snowMassifLeft?.isGroup, "左侧雪山组缺失");
 assert(range.snowMassifRight?.isGroup, "右侧雪山组缺失");
 assert.equal(range.snowMassifLeft.name, "citadel-snow-massif-left");
 assert.equal(range.snowMassifRight.name, "citadel-snow-massif-right");
-// 护城河：环绕第五层台地外侧，不改动五层台面几何
-assert(range.moat?.isGroup, "护城河组缺失");
-assert.equal(range.moat.name, "citadel-moat");
-assert(range.moat.getObjectByName("citadel-moat-water"), "护城河水面缺失");
-assert(range.moat.getObjectByName("citadel-moat-inner-wall"), "护城河内壁缺失");
-assert(typeof range.moat.update === "function", "护城河必须提供阶梯水波 update");
-const moatSpec = range.moat.userData.moatSpec;
+// 护城河已移出山脉系统：现作为圣城容器的子物体，放在第一颗落地参天大树旁。
+assert.equal(range.moat, null, "护城河不再由 buildCitadelRange 创建");
+// 独立验证护城河资产仍可按规格构造
+const moat = createCitadelMoat({ name: "citadel-moat", seed: 8801 });
+assert(moat?.isGroup, "护城河组缺失");
+assert.equal(moat.name, "citadel-moat");
+assert(moat.getObjectByName("citadel-moat-water"), "护城河水面缺失");
+assert(moat.getObjectByName("citadel-moat-inner-wall"), "护城河内壁缺失");
+assert(typeof moat.update === "function", "护城河必须提供阶梯水波 update");
+const moatSpec = CITADEL_MOAT_SPEC;
 assert(moatSpec?.innerRadius > 24, "护城河内径必须大于第五层台地 baseRadius=24");
 assert(moatSpec?.outerRadius > moatSpec.innerRadius, "护城河外径应大于内径");
-assert(range.moat.userData.harborPadLocal?.lx != null, "护城河应提供港口垫局部坐标");
 assert.equal(range.vegetation, null, "山坡散灌木必须删除");
 assert.equal(range.loessGroundSeal, null, "近地面的旧黄土封口层必须删除");
 assert.equal(range.castleFooting, null, "近地面的旧城堡承台层必须删除");
@@ -323,9 +329,8 @@ const removedNames = [
 for (const name of removedNames) {
   assert.equal(scene.getObjectByName(name), undefined, `${name} 不得残留在场景`);
 }
-// 雪山 / 护城河为保留单元，必须仍在场景中
+// 雪山为保留单元，必须仍在场景中；护城河已移入圣城容器（messengerIsland 内挂载）
 assert(scene.getObjectByName("citadel-background-snow-massif"), "背景雪山应在场景中");
-assert(scene.getObjectByName("citadel-moat"), "护城河应在场景中");
 ok(`梯湖×${waterSurfaces} · 瀑布×4 · 参天树×1 · 护城河×1 · 非保留器物全部清空`);
 
 console.log("[4] 场景与物理接线");
@@ -336,7 +341,8 @@ const island = fs.readFileSync(
 assert(island.includes("buildCitadelRange"), "场景应构建山脉");
 assert(island.includes("citadelRangeLiftDir"), "圣城 groundRadius 应取山脉高程");
 assert(island.includes("pilgrimageCascades.update"), "圣城梯湖瀑布动效必须接入主更新循环");
-assert(island.includes("citadelRange.moat"), "旧港码头应锚定到护城河");
+assert(island.includes("citadelGroundPlacement"), "旧港/战船/护城河应放到落地参天树旁（共用球面地表）");
+assert(island.includes("createCitadelMoat"), "护城河应在圣城处构建");
 assert(island.includes("moat?.update") || island.includes("moat.update"),
   "护城河阶梯水波必须接入主更新循环");
 const main = fs.readFileSync(

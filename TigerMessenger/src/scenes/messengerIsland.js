@@ -42,9 +42,11 @@ import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiu
 import { createCitySeaLake } from "../world/citySeaLake.js";
 import {
   buildOdysseyCitadel,
+  citadelGroundPlacement,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
 } from "../world/odysseyCitadel.js";
+import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY } from "../world/citadelTown.js";
 import {
   buildCitadelRange,
@@ -166,54 +168,9 @@ export const messengerIslandScene = {
     const citadelRange = buildCitadelRange(scene, R, citadelContour);
     const citadelDir = citadelSiteDir(new THREE.Vector3());
 
-    // ---------- 旧港码头 + 古战船 · 护城河外岸（贴地） ----------
-    // 码头落在护城河外岸前侧偏左（避开正前瀑布水道）；栈桥 +X 朝河心，
-    // 古战船系泊在环带水面上。自带 harbor-water 隐藏，水面由护城河承担。
-    {
-      const pad = citadelRange.moat?.userData?.harborPadLocal ?? {
-        lx: -22.8,
-        lz: 24.6,
-        toWaterX: 0.66,
-        toWaterZ: -0.75,
-      };
-      const harborLx = pad.lx;
-      const harborLz = pad.lz;
-      // 落在“第一颗参天大树”所扎根的同一球面地表：以球面真实半径取该切向处
-      // 的地表 Y，并随站点法向对齐（注意曲率），与护城河、古战船齐平。
-      rangeLocalToWorld(harborLx, harborLz, R, harbor.position);
-      const siteUp = citadelSiteDir(new THREE.Vector3());
-      const groundLift = sphericalGroundLift(harborLx, harborLz, R);
-      // 从高度场表面重投到球面地表（两者差 = 高度场基线 - 球面弦高差）
-      harbor.position.addScaledVector(siteUp, groundLift - citadelRangeLiftLocal(harborLx, harborLz) + 0.04);
-      // 朝向河心：用护城河局部切平面上的 toWater 向量投到世界切向
-      const toWater = new THREE.Vector3()
-        .addScaledVector(citadelRange.right, pad.toWaterX)
-        .addScaledVector(citadelRange.fwd, pad.toWaterZ)
-        .normalize();
-      toWater.addScaledVector(siteUp, -toWater.dot(siteUp)).normalize();
-      const zAxis = new THREE.Vector3().crossVectors(toWater, siteUp).normalize();
-      // 局部 +Y = 站点法向（贴地），+X 朝护城河水面，栈桥伸入环带
-      harbor.quaternion.setFromRotationMatrix(
-        new THREE.Matrix4().makeBasis(toWater, siteUp, zAxis)
-      );
-      harbor.updateMatrixWorld(true);
-      const harborWater = harbor.getObjectByName("harbor-water");
-      if (harborWater) harborWater.visible = false;
-      // 船坐在护城河水面上：甲板仍高，船体略低于甲板、贴水吃水
-      const boat = harborBuilt.landmarks.boat;
-      if (boat) {
-        const moatWaterY = citadelRange.moat?.userData?.moatSpec?.waterY ?? 0.16;
-        // 码头局部 y：水面高度 + 船底浮力余量（相对桩脚 Y=0）
-        boat.position.y = Math.max(moatWaterY + 0.12, 0.28);
-      }
-      harborColliders = [
-        { position: harbor.position.clone(), radius: 3.8 },
-        {
-          position: harborBuilt.landmarks.crane.getWorldPosition(new THREE.Vector3()),
-          radius: 1.15,
-        },
-      ];
-    }
+    // ---------- 旧港码头 + 古战船 + 护城河：放在第一颗落地参天大树旁 ----------
+    // 见下方 odysseyCitadel 构建之后（需要大树局部坐标与圣城锚点）。
+
     // 圣城搭建面板/编辑器（citadelEditorPanel / townscaper.html）保存的布局优先；
     // 无存档时回落到内置 CITADEL_TOWN_SPEC。
     let citadelSpec;
@@ -241,6 +198,58 @@ export const messengerIslandScene = {
       terrainObjects: citadelTerrainObjects,
     });
     scene.add(odysseyCitadel);
+
+    // ---------- 旧港码头 + 古战船 + 护城河：放在第一颗落地参天大树旁 ----------
+    // 大树在圣城局部坐标系（castleContainer）里；港口/战船/护城河作为圣城子物体，
+    // 用 citadelGroundPlacement 取大树所在球面地表 Y + 径向定向（与大树的
+    // localSphericalGroundY 同构），从而保证三者紧贴大树、随曲率倾斜。
+    {
+      const anchor = odysseyCitadel.userData.anchor;
+      const placements = odysseyCitadel.userData.terrainObjectsSpec ?? [];
+      // 第一颗【落地】参天大树
+      const tree = placements.find(
+        (p) => p.type === "elderTree" && p.grounded
+      ) || placements.find((p) => p.type === "elderTree");
+      // 大树局部坐标；无存档兜底到圣城前方
+      const treeX = tree ? Number(tree.x) : 18;
+      const treeZ = tree ? Number(tree.z) : 18;
+      // 港口/战船落在大树右侧前方一点（同球面地表）
+      const harborDX = 16, harborDZ = 6;
+      const hx = treeX + harborDX, hz = treeZ + harborDZ;
+      const place = citadelGroundPlacement(hx, hz, anchor, 0);
+      harbor.position.set(hx, place.y + 0.04, hz);
+      harbor.quaternion.copy(place.quaternion);
+      odysseyCitadel.add(harbor);
+      // 栈桥 +X 朝大树一侧（即 -harborDX,-harborDZ 方向）
+      harbor.updateMatrixWorld(true);
+      const harborWater = harbor.getObjectByName("harbor-water");
+      if (harborWater) harborWater.visible = false;
+      // 古战船系泊在码头旁水面（同球面地表），略偏向大树外缘
+      const boat = harborBuilt.landmarks.boat;
+      if (boat) {
+        const bx = hx - 4, bz = hz + 5;
+        const bplace = citadelGroundPlacement(bx, bz, anchor, 0.6);
+        boat.position.set(bx, bplace.y + 0.12, bz);
+        boat.quaternion.copy(bplace.quaternion);
+      }
+      // 护城河：环带水面 + 低模岸壁，圆心与大树对齐（环绕大树/港口这片地）
+      const moat = createCitadelMoat({ name: "citadel-moat", seed: 8801 });
+      const moatPlace = citadelGroundPlacement(treeX, treeZ, anchor, 0);
+      moat.position.set(treeX, moatPlace.y + 0.04, treeZ);
+      moat.quaternion.copy(moatPlace.quaternion);
+      odysseyCitadel.add(moat);
+      // 碰撞体跟随（世界坐标）
+      harborColliders = [
+        {
+          position: harbor.getWorldPosition(new THREE.Vector3()),
+          radius: 3.8,
+        },
+        {
+          position: harborBuilt.landmarks.crane.getWorldPosition(new THREE.Vector3()),
+          radius: 1.15,
+        },
+      ];
+    }
 
     // Boids 鸟群：先在峡谷方向占位，建门后整群迁移到叹息之门城头（见下方 migrate）
     const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
