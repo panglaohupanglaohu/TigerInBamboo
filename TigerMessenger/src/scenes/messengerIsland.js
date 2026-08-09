@@ -51,6 +51,8 @@ import {
   citadelRangeLiftDir,
   citadelSiteDir,
   rangeLocalToWorld,
+  sphericalGroundLift,
+  citadelRangeLiftLocal,
 } from "../world/citadelRange.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
 
@@ -176,11 +178,13 @@ export const messengerIslandScene = {
       };
       const harborLx = pad.lx;
       const harborLz = pad.lz;
-      // 与 placeRangeAsset(siteUpright) 同构：落在高度场表面 + 站点法向
+      // 落在“第一颗参天大树”所扎根的同一球面地表：以球面真实半径取该切向处
+      // 的地表 Y，并随站点法向对齐（注意曲率），与护城河、古战船齐平。
       rangeLocalToWorld(harborLx, harborLz, R, harbor.position);
       const siteUp = citadelSiteDir(new THREE.Vector3());
-      // 桩底 y=0 对齐地表；微抬 0.04 防与高度场 z-fight，不悬空
-      harbor.position.addScaledVector(siteUp, 0.04);
+      const groundLift = sphericalGroundLift(harborLx, harborLz, R);
+      // 从高度场表面重投到球面地表（两者差 = 高度场基线 - 球面弦高差）
+      harbor.position.addScaledVector(siteUp, groundLift - citadelRangeLiftLocal(harborLx, harborLz) + 0.04);
       // 朝向河心：用护城河局部切平面上的 toWater 向量投到世界切向
       const toWater = new THREE.Vector3()
         .addScaledVector(citadelRange.right, pad.toWaterX)

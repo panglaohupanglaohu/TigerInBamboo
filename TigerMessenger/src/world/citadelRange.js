@@ -13,6 +13,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { latLonToDir } from "./sphereMath.js";
+import { canyonOffsetDir } from "./canyon.js";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { createMangaWaterfall } from "./mangaWaterfall.js";
 import {
@@ -124,6 +125,22 @@ function rangeLocalToWorldAtElevation(lx, lz, R, elevation, out) {
     .multiplyScalar(R + elevation)
     .addScaledVector(_right, lx)
     .addScaledVector(_fwd, lz);
+}
+
+/**
+ * 球面地表抬升：让物体落在“第一颗参天大树”所扎根的同一颗星球曲面之上。
+ * 与 odysseyCitadel.js 中 grounded 参天树的 localSphericalGroundY 同构——
+ * 以站点地表真实半径 groundR = R + canyonOffsetDir(_site) 为球心半径，
+ * 在切向半径 r = hypot(lx,lz) 处取球面 Y（怪兽网格弦高差已含在其中）。
+ * 这样护城河/港口/战船都贴着球面落地，自然随曲率倾斜、与落地树齐平。
+ */
+export function sphericalGroundLift(lx, lz, R) {
+  const groundR = R + canyonOffsetDir(_site);
+  const r = Math.hypot(lx, lz);
+  const sagitta = groundR - Math.sqrt(Math.max(0, groundR * groundR - r * r));
+  // 站点处地表抬升 = groundR - R；减去该切向半径处的弦高差即得沿“R+抬升”基准的
+  // 相对抬升量（与 placeRangeAsset 的 R + lift 同构）。
+  return (groundR - R) - sagitta;
 }
 
 /* ---------------- 可行走高程：台地台面 + 朝圣台阶（仅碰撞，视觉网格不变） ----------------
@@ -898,11 +915,10 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 不改动五层台面 / contourTerrain；仅在墙脚外铺平涂环带水面 + 低模岸壁。
   // 圆心与城堡台地圆心对齐（lx=0,lz=0）；港口建议锚点在 userData.harborPadLocal。
   const moat = createCitadelMoat({ name: "citadel-moat", seed: 8801 });
-  // 落到【与港口同一高度】——即高度场地表在护城河半径处的值（与码头 placeRangeAsset
-  // 同构 + 同 +0.04 防 z-fight），而非第5层台面顶。这样护城河与旧港码头/古战船贴齐，
-  // 外环仍按球面径向定向（注意曲率）。
+  // 落到【与第一颗参天大树同一球面地表】：以球面真实半径取该切向半径处的地表 Y，
+  // 外环随球面径向定向（注意曲率），与落地参天树、港口、古战船齐平。
   const moatR = CITADEL_MOAT_SPEC.outerRadius; // ≈33.2，与 CITADEL_MOAT_SPEC 一致
-  const moatLift = citadelRangeLiftLocal(moatR, 0) + 0.04;
+  const moatLift = sphericalGroundLift(moatR, 0, R) + 0.04;
   placeRangeAsset(moat, 0, 0, R, moatLift, false); // false：沿球面径向定向（注意曲率）
   scene.add(moat);
 
