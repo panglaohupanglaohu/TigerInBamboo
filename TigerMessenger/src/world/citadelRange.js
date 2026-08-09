@@ -22,7 +22,7 @@ import {
   normalizeCitadelTerrain,
 } from "./odysseyCitadel.js";
 import { createSnowMassif } from "../assets/snowMassif.js";
-import { createCitadelMoat } from "../assets/citadelMoat.js";
+import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 
 /* ---------------- 选址与山体参数（锁死） ---------------- */
 export const RANGE_SITE = Object.freeze({ lat: 24.1, lon: 36.05 });
@@ -898,13 +898,11 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 不改动五层台面 / contourTerrain；仅在墙脚外铺平涂环带水面 + 低模岸壁。
   // 圆心与城堡台地圆心对齐（lx=0,lz=0）；港口建议锚点在 userData.harborPadLocal。
   const moat = createCitadelMoat({ name: "citadel-moat", seed: 8801 });
-  // 落在【第5层台面】上：terrae 5 顶高 + 球面曲率落差 + 微抬（防 z-fight）。
-  // 此前错放在第4层台面（仅 +0.02），现按 cur/odysseyCitadel 同套曲率公式抬升，
-  // 使护城河外环与最近瀑布（第5层→地面水系）同高程衔接。
-  const moatMetrics = citadelTerraceMetrics(normalizedContour);
-  const moatTerrace5Top = moatMetrics[moatMetrics.length - 1].top;
-  const moatCurvatureDrop = citadelCurvatureDrop(R + BASE_LIFT, normalizedContour);
-  const moatLift = moatTerrace5Top - moatCurvatureDrop + 0.06;
+  // 落到【与港口同一高度】——即高度场地表在护城河半径处的值（与码头 placeRangeAsset
+  // 同构 + 同 +0.04 防 z-fight），而非第5层台面顶。这样护城河与旧港码头/古战船贴齐，
+  // 外环仍按球面径向定向（注意曲率）。
+  const moatR = CITADEL_MOAT_SPEC.outerRadius; // ≈33.2，与 CITADEL_MOAT_SPEC 一致
+  const moatLift = citadelRangeLiftLocal(moatR, 0) + 0.04;
   placeRangeAsset(moat, 0, 0, R, moatLift, false); // false：沿球面径向定向（注意曲率）
   scene.add(moat);
 
