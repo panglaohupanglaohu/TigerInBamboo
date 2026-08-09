@@ -760,32 +760,6 @@ function localSphericalGroundY(x, z, anchor) {
   return planetCenterY + dy;
 }
 
-/**
- * 在圣城局部坐标系里，给定 (x,z) 与锚点，返回该点【球面地表】的局部 Y，
- * 以及让物体 +Y 对齐该点星球径向的四元数（含 yaw 旋转）。
- * 与 grounded 参天树落地逻辑完全同构——港口/战船/护城河据此紧贴大树所在曲面。
- *
- * @param {number} x 圣城局部 x
- * @param {number} z 圣城局部 z
- * @param {object} anchor castleContainer.userData.anchor
- * @param {number} [yaw=0] 绕径向（局部 +Y）的偏航
- * @returns {{ y:number, quaternion:THREE.Quaternion }}
- */
-export function citadelGroundPlacement(x, z, anchor, yaw = 0) {
-  const y = localSphericalGroundY(x, z, anchor);
-  const planetCenterY = -(anchor.groundR - anchor.radialEmbed);
-  const up = new THREE.Vector3(x, y - planetCenterY, z).normalize();
-  const tiltQ = new THREE.Quaternion().setFromUnitVectors(
-    new THREE.Vector3(0, 1, 0),
-    up
-  );
-  const yawQ = new THREE.Quaternion().setFromAxisAngle(
-    new THREE.Vector3(0, 1, 0),
-    yaw
-  );
-  return { y, quaternion: tiltQ.multiply(yawQ) };
-}
-
 function buildCitadelTerrainObjects(placements, contourSpec, anchor = null) {
   const normalizedPlacements = normalizeCitadelTerrainObjects(placements);
   const metrics = citadelTerraceMetrics(contourSpec);

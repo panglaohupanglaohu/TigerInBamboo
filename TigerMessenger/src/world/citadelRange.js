@@ -911,8 +911,16 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   snowMountains.add(snowRight);
   scene.add(snowMountains);
 
-  // 护城河不再在此处创建：改由 messengerIsland 在“第一颗落地参天大树”旁
-  // 作为圣城容器的子物体放置（与大树共用 localSphericalGroundY 球面地表 + 曲率定向）。
+  // ---------- 护城河：环绕圣城墙脚，落在星球曲面地表 ----------
+  // 以“第一颗落地参天大树/深潭”同款球面地表抬升（sphericalGroundLift）铺环带水面
+  // + 低模岸壁：贴合当前地貌、与地面/潭缘衔接，随曲率径向定向。
+  const moat = createCitadelMoat({ name: "citadel-moat", seed: 8801 });
+  const moatR = CITADEL_MOAT_SPEC.outerRadius; // ≈33.2，与 CITADEL_MOAT_SPEC 一致
+  // 外环落在地表；水面略高 +0.04 防 z-fight。false：沿球面径向定向（注意曲率）。
+  const moatLift = sphericalGroundLift(moatR, 0, R) + 0.04;
+  placeRangeAsset(moat, 0, 0, R, moatLift, false);
+  scene.add(moat);
+  moat.userData.harborPadLocal = { lx: -22.8, lz: 24.6, toWaterX: 0.66, toWaterZ: -0.75 };
 
   const rangeSystem = {
     mesh,
@@ -928,7 +936,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     snowMountains,
     snowMassifLeft: snowLeft,
     snowMassifRight: snowRight,
-    moat: null,
+    moat,
     vegetation: null,
     siteDir: _site.clone(),
     fwd: _fwd.clone(),
