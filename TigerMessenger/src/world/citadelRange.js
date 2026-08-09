@@ -914,8 +914,17 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // ---------- 护城河：环绕圣城墙脚，落在星球曲面地表 ----------
   // 以“第一颗落地参天大树/深潭”同款球面地表抬升（sphericalGroundLift）铺环带水面
   // + 低模岸壁：贴合当前地貌、与地面/潭缘衔接，随曲率径向定向。
-  const moat = createCitadelMoat({ name: "citadel-moat", seed: 8801 });
-  const moatR = CITADEL_MOAT_SPEC.outerRadius; // ≈33.2，与 CITADEL_MOAT_SPEC 一致
+  // 外径放大到覆盖旧港码头：码头在 range 局部 ~(-14.7,42.7)，距圆心半径约 45，
+  // 故外径取 46、内径相应放大到 38，让整圈水面/岸壁把港口纳入环带内。
+  const MOAT_INNER = 38;
+  const MOAT_OUTER = 46;
+  const moat = createCitadelMoat({
+    name: "citadel-moat",
+    seed: 8801,
+    innerRadius: MOAT_INNER,
+    outerRadius: MOAT_OUTER,
+  });
+  const moatR = MOAT_OUTER; // ≈46，覆盖旧港码头（半径~45）
   // 外环落在地表；水面略高 +0.04 防 z-fight。false：沿球面径向定向（注意曲率）。
   const moatLift = sphericalGroundLift(moatR, 0, R) + 0.04;
   placeRangeAsset(moat, 0, 0, R, moatLift, false);

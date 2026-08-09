@@ -126,6 +126,8 @@ assert(typeof range.moat.update === "function", "护城河必须提供阶梯水�
 const moatSpec = range.moat.userData.moatSpec ?? CITADEL_MOAT_SPEC;
 assert(moatSpec?.innerRadius > 24, "护城河内径必须大于第五层台地 baseRadius=24");
 assert(moatSpec?.outerRadius > moatSpec.innerRadius, "护城河外径应大于内径");
+// 护城河外径必须覆盖旧港码头（码头在 range 局部 ~(-14.7,42.7)，距圆心半径约 45）
+assert(moatSpec?.outerRadius >= 45, "护城河外径必须放大到覆盖旧港码头（半径≈45）");
 assert(range.moat.userData.harborPadLocal?.lx != null, "护城河应提供港口垫局部坐标");
 assert.equal(range.vegetation, null, "山坡散灌木必须删除");
 assert.equal(range.loessGroundSeal, null, "近地面的旧黄土封口层必须删除");
