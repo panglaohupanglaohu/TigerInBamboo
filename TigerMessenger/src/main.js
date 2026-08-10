@@ -549,12 +549,32 @@ bubblePodRide = createBubblePodRide({
   },
 });
 
-// ---------- 渔船驾驶（靠近船体 [F] 上船 · WASD 驾驶） ----------
+// ---------- 战船驾驶（码头古战船 + 运河巡游战船；靠近 [F] 上船 · WASD 驾驶） ----------
+const _boatPick = new THREE.Vector3();
+function pickNearestBoat() {
+  const candidates = [];
+  const dockBoat = messenger?.landmarks?.boat;
+  if (dockBoat) candidates.push(dockBoat);
+  const patrol = messenger?.landmarks?.canalBoats?.boats;
+  if (Array.isArray(patrol)) candidates.push(...patrol);
+  let best = null;
+  let bestD = 5.2;
+  for (const b of candidates) {
+    if (!b) continue;
+    b.getWorldPosition(_boatPick);
+    const d = player.position.distanceTo(_boatPick);
+    if (d < bestD) {
+      bestD = d;
+      best = b;
+    }
+  }
+  return best;
+}
 const boatRide = createBoatRide({
   scene,
   player,
   playerGroup,
-  getBoat: () => messenger?.landmarks?.boat || null,
+  getBoat: pickNearestBoat,
   cameraRig,
   keys,
   elHint: document.getElementById("boat-hint"),
@@ -563,6 +583,10 @@ const boatRide = createBoatRide({
     airshipRide.forceExit?.();
     bubblePodRide?.forceExit?.();
     if (aircraftRide.isRiding?.()) aircraftRide.toggle();
+  },
+  onDismount: (left) => {
+    // 运河船下船后吸附回航道继续巡游
+    messenger?.landmarks?.canalBoats?.markNeedsSnap?.(left);
   },
 });
 
@@ -615,6 +639,8 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
       onTerrainChange: (contour) => {
         rebuildCitadelTerrain(messenger.landmarks.odysseyCitadel, contour);
         messenger.landmarks.citadelRange?.rebuildWaterTerraces?.(contour);
+        // 护城河内径/外径：实时重建环带几何（注意曲率贴合）
+        messenger.landmarks.citadelRange?.rebuildMoat?.(contour?.moat);
         citadelSupportCache.clear();
         citadelObstacle = null; // 净空区下帧重算
       },
@@ -796,8 +822,10 @@ window.addEventListener("keydown", (e) => {
   if (citadelEditorPanel?.isOpen?.()) return;
   if (crystalCityEditorPanel?.isOpen?.()) return;
   if (!gameStarted) return;
-  // 飞行中/攀爬中不可召唤
-  if (airshipRide.getState?.() !== "idle") return;
+  // 若飞艇状态卡在非 idle（异常未退出/刷新残留），先强制复位再召唤，避免 Q 失效
+  if (airshipRide.getState?.() !== "idle") {
+    airshipRide.forceExit?.();
+  }
   const ok = airshipRide.summon?.();
   if (ok) {
     showToast("航空艇已降临到面前 · 走到绳下按 [F] 登艇", 2.6);

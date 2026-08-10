@@ -19,8 +19,8 @@ export const CITADEL_MOAT_SPEC = Object.freeze({
   /** 阶梯动画：每秒跳动次数（插画定格感） */
   stepHz: 3.5,
   foamCount: 18,
-  /** 莫兰迪淡青（可偏粉紫以贴合黄昏天空） */
-  waterColor: 0xa3cbd2,
+  /** 与星海运河统一的水面蓝（SHARED_WATER_COLOR = 0x3a86a0） */
+  waterColor: 0x3a86a0,
   borderColor: 0xb8c0c2,
   foamColor: 0xf2f5f3,
 });

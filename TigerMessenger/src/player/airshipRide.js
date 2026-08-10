@@ -453,14 +453,7 @@ export function createAirshipRide({
     // 地形跟随：山体抬升处自动抬高下限，飞越山脊不再穿坡
     const lift = terrainLiftUnder(_dir);
     if (lift > 0) hoverMin = Math.max(hoverMin, lift + GROUND_CLEAR);
-    // 建筑绝对净空：进入圣城上空时自动升到建筑顶端之上（可飞到建筑顶端）
-    const obs = getObstacle?.();
-    if (obs) {
-      const ang = _dir.angleTo(obs.dir);
-      if (ang < obs.angularRadius) {
-        hoverMin = Math.max(hoverMin, obs.topRadial - planetRadius + GROUND_CLEAR);
-      }
-    }
+    // 注：圣城上空不再强制抬升到建筑顶端之上——由玩家用 Space/Shift 自行控制升降。
     hover = THREE.MathUtils.clamp(hover + vert * VERT_SPEED * dt, hoverMin, HOVER_MAX);
     a.userData.hover = hover;
 

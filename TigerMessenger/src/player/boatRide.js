@@ -1,10 +1,11 @@
 // =====================================================================
-//  渔船驾驶：靠近船体按 [F] 上船 · WASD 驾驶 · [F] 下船
-//  船体初始挂在码头场景下；第一次上船时转为世界根节点，之后可停在任意水面位置。
+//  战船/渔船驾驶：靠近船体按 [F] 上船 · WASD 驾驶 · [F] 下船
+//  - 码头古战船：第一次上船时从码头层级 attach 到场景根
+//  - 运河巡游战船：上船暂停巡游（piloted），下船后继续沿运河巡航
 // =====================================================================
 import * as THREE from "three";
 
-const BOARD_RANGE = 4.2;
+const BOARD_RANGE = 5.2;
 const SPEED = 6.5;
 const TURN_SPEED = 1.45;
 const CAMERA_DIST = 6.2;
@@ -25,12 +26,13 @@ const _seat = new THREE.Vector3();
  * @param {THREE.Scene} deps.scene
  * @param {object} deps.player
  * @param {THREE.Object3D|null} [deps.playerGroup]
- * @param {() => THREE.Object3D|null} deps.getBoat
+ * @param {() => THREE.Object3D|null} deps.getBoat 返回最近可登之船（码头 + 运河巡游）
  * @param {object} deps.cameraRig
  * @param {Record<string, boolean>} deps.keys
  * @param {HTMLElement|null} [deps.elHint]
  * @param {(msg: string, dur?: number) => void} [deps.toast]
  * @param {() => void} [deps.exitOtherRides]
+ * @param {(boat: THREE.Object3D) => void} [deps.onDismount] 下船回调（运河船吸附回航道）
  */
 export function createBoatRide({
   scene,
@@ -42,6 +44,7 @@ export function createBoatRide({
   elHint = null,
   toast = () => {},
   exitOtherRides = () => {},
+  onDismount = () => {},
 }) {
   let riding = false;
   let boat = null;
@@ -58,6 +61,12 @@ export function createBoatRide({
   function nearBoat() {
     const b = getWorldPosition(_boatWorld);
     return !!b && player.position.distanceTo(_boatWorld) <= BOARD_RANGE;
+  }
+
+  function boatLabel(target) {
+    if (target?.userData?.canalPatrol) return "运河战船";
+    if (target?.name === "fisher-boat") return "古战船";
+    return "战船";
   }
 
   function setHint(html) {
@@ -95,8 +104,8 @@ export function createBoatRide({
     if (!target || riding || player.riding) return false;
     exitOtherRides();
     boat = target;
-    // 保持当前世界姿态，把船从码头层级中解出，之后开到哪里都不会被码头变换限制。
-    scene.attach(boat);
+    // 保持当前世界姿态；码头船从 pier 层级解出，运河船已在场景根下。
+    if (boat.parent !== scene) scene.attach(boat);
     boat.userData.piloted = true;
     surfaceRadius = boat.position.length();
     captureForward();
@@ -111,12 +120,13 @@ export function createBoatRide({
     player.forward.copy(_fwd);
     player.facing.copy(_fwd);
     setHint("[<kbd>WASD</kbd>] 驾驶 · [<kbd>F</kbd>] 下船");
-    toast("已登上渔船 · WASD 驾驶 · F 下船", 3.2);
+    toast(`已登上${boatLabel(boat)} · WASD 驾驶 · F 下船`, 3.2);
     return true;
   }
 
   function dismount() {
     if (!boat) return;
+    const left = boat;
     _up.copy(boat.position).normalize();
     _fwd.set(1, 0, 0).applyQuaternion(boat.quaternion);
     projectTangent(_fwd, _up);
@@ -136,7 +146,8 @@ export function createBoatRide({
     if (playerGroup) playerGroup.visible = true;
     if (prevCamDist) cameraRig?.setDist?.(prevCamDist);
     setHint(null);
-    toast("已离开渔船", 1.8);
+    onDismount(left);
+    toast(`已离开${boatLabel(left)}`, 1.8);
   }
 
   window.addEventListener("keydown", (e) => {

@@ -308,6 +308,15 @@ assert.equal(scene.children.includes(oldCascades), false,
   "编辑台地后必须卸载旧瀑布，禁止跨层残影");
 assert.equal(range.pilgrimageWaterSteps.children.length, 5);
 assert.equal(range.pilgrimageCascades.children.length, 4);
+// 层叠瀑布可编辑开关：关闭后水系清空，再开启恢复五湖四帘
+range.rebuildWaterTerraces({ ...editedContour, cascadeEnabled: false });
+assert.equal(range.cascadeEnabled, false, "cascadeEnabled=false 必须关闭层叠瀑布");
+assert.equal(range.pilgrimageWaterSteps.children.length, 0, "关闭后不得残留梯湖");
+assert.equal(range.pilgrimageCascades.children.length, 0, "关闭后不得残留瀑布");
+range.rebuildWaterTerraces({ ...editedContour, cascadeEnabled: true });
+assert.equal(range.cascadeEnabled, true);
+assert.equal(range.pilgrimageWaterSteps.children.length, 5, "重新开启应恢复五级梯湖");
+assert.equal(range.pilgrimageCascades.children.length, 4, "重新开启应恢复四道瀑布");
 const editedWaterY = range.pilgrimageWaterSteps.children
   .map((stage) => stage.userData.composition.localElevation);
 for (const [index, waterfall] of range.pilgrimageCascades.children.entries()) {

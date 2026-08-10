@@ -71,11 +71,14 @@ export const CITADEL = Object.freeze({
       Object.freeze({ radius: 21.6, height: 2.0 }),
       Object.freeze({ radius: 24.0, height: 2.0 }),
     ]),
-    // 瀑布缺口：前四层台地在朝向梯湖/水帘的方位角扇区开槽，露出瀑布；
+    // 瀑布缺口：仅当 cascadeEnabled 时，前四层台地在朝向梯湖的窄扇区开槽；
     // 缺口不切入 coreRadius 实心核，城堡基座始终落在实土上。
+    // 半角从旧 0.56（≈±32°，占台面约 1/6 环带）收窄到 0.30（≈±17°），
+    // 只让出梯湖水道与水帘宽度，避免整块前缘台地被水系吃掉。
+    cascadeEnabled: true, // 层叠瀑布+梯湖总开关（编辑器可删/加）
     coreRadius: 9.0,
     notchCenter: 0.17, // 方位角 φ（从 +z 朝 +x 量）≈ 10°，正对梯湖水道
-    notchHalf: 0.56, // 半角 ≈ 32°，完整覆盖两座上级梯湖与水帘落点
+    notchHalf: 0.30, // 半角 ≈ 17°，刚好覆盖收窄后的梯湖水道
     notchedLayers: 4, // 仅前四层开槽；顶层台地完整，托住城堡与门廊平桥
   },
   // Terrace 5 starts at local Y=2. This removes the local construction offset;
@@ -119,16 +122,39 @@ export function normalizeCitadelTerrain(contourSpec = CITADEL.contourTerrain) {
   for (let i = 1; i < terraces.length; i++) {
     terraces[i].radius = Math.max(terraces[i].radius, terraces[i - 1].radius + 0.5);
   }
+  // 层叠瀑布总开关：关则不占台地缺口（notchedLayers=0），开才开窄扇区。
+  // 注意：关闭时会把 notchedLayers/notchHalf 写成 0；再次开启时若仍读到 0
+  // 必须回落到默认 4 / 0.30，否则前缘缺口永远不会恢复。
+  const cascadeEnabled = contourSpec?.cascadeEnabled !== false;
+  const notchHalfRaw = Number(contourSpec?.notchHalf);
+  const notchHalf = cascadeEnabled
+    ? (Number.isFinite(notchHalfRaw) && notchHalfRaw > 0
+      ? Math.min(0.8, Math.max(0.08, notchHalfRaw))
+      : 0.30)
+    : 0;
+  const notchedRaw = Number(contourSpec?.notchedLayers);
+  const notchedLayers = cascadeEnabled
+    ? Math.min(
+      terraces.length - 1,
+      Number.isFinite(notchedRaw) && notchedRaw > 0 ? notchedRaw : 4
+    )
+    : 0;
   return {
     ...contourSpec,
     layerCount: terraces.length,
     terraces,
     radialSegments: contourSpec?.radialSegments ?? 12,
+    cascadeEnabled,
     coreRadius: contourSpec?.coreRadius ?? 9,
     notchCenter: contourSpec?.notchCenter ?? 0.17,
-    notchHalf: contourSpec?.notchHalf ?? 0.56,
-    notchedLayers: Math.min(terraces.length - 1, contourSpec?.notchedLayers ?? 4),
+    notchHalf,
+    notchedLayers,
   };
+}
+
+/** 层叠瀑布（五湖四帘）是否启用。 */
+export function isCitadelCascadeEnabled(contourSpec = CITADEL.contourTerrain) {
+  return normalizeCitadelTerrain(contourSpec).cascadeEnabled;
 }
 
 /** 台地 1–5 的底/顶高程；数组顺序保持“最高层优先”。 */

@@ -14,6 +14,7 @@ import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets 
 import { createMoonLake } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildWorldCanal } from "../world/canalSystem.js";
+import { createCanalBoatPatrol } from "../world/canalBoats.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
 import { buildAbandonedGate } from "../world/abandonedGate.js";
@@ -74,7 +75,8 @@ export const messengerIslandScene = {
   load(ctx) {
     const scene = ctx.scene;
     const R = ctx.planetRadius ?? PLANET_RADIUS;
-    let canalSys = null; // 星海运河环线（连通各场景，沉到地表下）
+    let canalSys = null; // 星海运河环线（连通各场景，地面浅沟）
+    let canalBoats = null; // 运河巡游古战船（可 F 登船 WASD 驾驶）
 
     const platforms = buildWorld(scene);
     const hills = buildHills(scene, R);
@@ -235,34 +237,6 @@ export const messengerIslandScene = {
     });
     scene.add(odysseyCitadel);
 
-    // ---------- 星海运河环线：连通各主要场景，沉到球面地表以下 ----------
-    // 控制点取各场景方向（世界位 normalize），用 CatmullRom 闭合样条稍曲折绕行，
-    // 整条河道沿径向下挖到 R - CANAL_DEPTH（不在球面上），随球面曲率逐点倾斜。
-    // 场景锚点动态取运行时方向（门在轨道上、海湖可搬迁、圣城在峡谷侧）。
-    const canalAnchors = [];
-    const canalNames = [];
-    const canalPush = (dir, name) => {
-      if (dir?.isVector3 && dir.lengthSq() > 1e-6) {
-        canalAnchors.push(dir.clone());
-        canalNames.push(name);
-      }
-    };
-    canalPush(bookshop?.position, "书店镇");
-    canalPush(camp?.landmarks?.anchor?.position, "出发营地");
-    canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖");
-    canalPush(odysseyCitadel?.position, "高山圣城");
-    canalPush(moebius?.grand?.dir, "水晶城");
-    canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon), "白鲸海湖");
-    // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
-    canalPush(canyonDir, "叹息之门");
-    if (canalAnchors.length >= 3) {
-      const canal = buildWorldCanal(scene, R, {
-        anchors: canalAnchors,
-        names: canalNames,
-      });
-      canalSys = canal;
-    }
-
     // Boids 鸟群：先在峡谷方向占位，建门后整群迁移到叹息之门城头（见下方 migrate）
     const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
     const flock = new FlockManager(scene, {
@@ -304,6 +278,37 @@ export const messengerIslandScene = {
     // 绣球花丛围绕书店（程序布局；单丛仍可用地图放置 hydrangea）
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
+
+    // ---------- 星海运河环线：连通各主要场景，在地面挖出的浅沟 ----------
+    // 控制点取各场景方向（世界位 normalize），用 CatmullRom 闭合样条稍曲折绕行；
+    // 形态是贴地沟渠（河床/水面/两侧立壁/岸顶土埂），不是埋进球心的地下通道。
+    // 场景锚点动态取运行时方向（门在轨道上、海湖可搬迁、圣城在峡谷侧）。
+    // 注意：bookshop / canyonDir 在本段之上才初始化，必须置于其后以避免暂时性死区。
+    const canalAnchors = [];
+    const canalNames = [];
+    const canalPush = (dir, name) => {
+      if (dir?.isVector3 && dir.lengthSq() > 1e-6) {
+        canalAnchors.push(dir.clone());
+        canalNames.push(name);
+      }
+    };
+    canalPush(bookshop?.position, "书店镇");
+    canalPush(camp?.landmarks?.anchor?.position, "出发营地");
+    canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖");
+    canalPush(odysseyCitadel?.position, "高山圣城");
+    canalPush(moebius?.grand?.dir, "水晶城");
+    canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon), "白鲸海湖");
+    // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
+    canalPush(canyonDir, "叹息之门");
+    if (canalAnchors.length >= 3) {
+      const canal = buildWorldCanal(scene, R, {
+        anchors: canalAnchors,
+        names: canalNames,
+      });
+      canalSys = canal;
+      // 复制 3 艘古战船沿运河环线巡游，送信人可靠近 [F] 登船驾驶
+      canalBoats = createCanalBoatPatrol(scene, canal, { count: 3, scale: 0.92 });
+    }
 
     // 水晶城母塔 ↔ 书店：空中搜寻航线（途经湖沼）
     // 目的：像巨大蜂鸟一样发现湖沼水面落花，脱离阵型俯冲悬停吸蜜
@@ -534,13 +539,17 @@ export const messengerIslandScene = {
         escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
         aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
         mossSaihoji, // 厚涂苔丘 · 西芳寺缘
-        canal: canalSys, // 星海运河环线 · 沉到地表以下 · 连通各场景
+        canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
+        canalBoats, // 运河巡游古战船 ×3 · 可 F 登船
         mossSwamp, // 厚涂苔丘 · 湖沼边缘
       },
       update(dt, t, runtime) {
         updatePlatformPulse(platforms, t);
         updateClouds(clouds, dt, t, { speed: P.windSpeed, dirDeg: P.windDir });
         tramSystem.update(dt, runtime?.player?.position);
+
+        // 运河战船巡游（已搭乘的船跳过，由 boatRide 接管）
+        canalBoats?.update?.(dt);
 
         // 3 艘气泡座舱分别围绕 3 座花厅建筑巡游
         updateBubblePodPatrol(bubblePods, t);

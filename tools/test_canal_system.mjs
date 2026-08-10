@@ -29,21 +29,27 @@ assert(canal.curve.getPoints(64).length > 30, "路径采样点充足");
 assert(canal.sinks.length === anchors.length, `登岸湾数量 = 场景数(${anchors.length})`);
 assert(scene.getObjectByName("canal-water"), "运河水面存在");
 assert(scene.getObjectByName("canal-bed"), "运河河床存在");
-assert(scene.getObjectByName("canal-banks"), "运河堤壁存在");
+assert(scene.getObjectByName("canal-wall-L") && scene.getObjectByName("canal-wall-R"), "左右立壁存在");
+assert(scene.getObjectByName("canal-lip-L") && scene.getObjectByName("canal-lip-R"), "两岸土埂存在");
 
-// 路径必须沉到地表以下（径向 < R）
-let allSunk = true;
+// 地面沟：河床应略高于实心球面（可见），不是埋进球心
+let allOnSurface = true;
 let minR = Infinity, maxR = -Infinity;
 for (const p of canal.curve.getPoints(200)) {
   const r = p.length();
   minR = Math.min(minR, r);
   maxR = Math.max(maxR, r);
-  if (r >= R - 0.01) allSunk = false;
+  // 河床曲线应贴近地表（R ~ R+0.2），绝不深埋
+  if (r < R - 0.01 || r > R + 1.0) allOnSurface = false;
 }
-assert(allSunk, `整条运河沉到地表以下（maxR=${maxR.toFixed(2)} < R=${R}）`);
-assert(minR > R - CANAL_DEPTH - 3, `河道不深过河床+余量（minR=${minR.toFixed(2)}）`);
+assert(allOnSurface, `河床贴地（minR=${minR.toFixed(2)}, maxR=${maxR.toFixed(2)}, R=${R}）`);
+assert(canal.bedR > R, `河床半径 bedR=${canal.bedR.toFixed(3)} > R（略抬防遮挡）`);
+assert(canal.waterR > canal.bedR, `水面高于河床（waterR=${canal.waterR.toFixed(3)} > bedR）`);
+assert(canal.lipR > canal.waterR, `岸顶高于水面（lipR=${canal.lipR.toFixed(3)}）`);
+assert(Math.abs(canal.depth - CANAL_DEPTH) < 1e-6, `沟深 = CANAL_DEPTH(${CANAL_DEPTH})`);
+assert(canal.depth < 2.5, `沟深是地面浅沟而非地下隧道（depth=${canal.depth}）`);
 
-// 水面在河床上方（比河床径向高 WATER_LIFT）
+// 水面几何有足够顶点
 const water = scene.getObjectByName("canal-water");
 assert(water?.geometry?.attributes?.position?.count > 100, "水面几何有足够顶点");
 

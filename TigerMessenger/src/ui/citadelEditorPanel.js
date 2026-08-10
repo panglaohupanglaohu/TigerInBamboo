@@ -6,8 +6,9 @@
 //  - 场景 3D 直编辑：点块顶面叠块 / 侧面改色 / 空地加块 / 右键删块
 //    （由 citadelSceneEdit.js 通过 applySceneEdit / cellCenter 接入）
 //  - 隐藏更高层（H）· 导出 / 导入 ASCII 布局
-//  - 编辑即时重建 3D 场景；「保存」按钮（Ctrl+S）才写 localStorage
-//    （CITADEL_LEVELS_KEY，下次进游戏自动套用），有未保存改动时按钮带 ● 标记
+//  - 编辑即时预览 3D；「保存台地配置」/「保存全部」（Ctrl+S）才写 localStorage
+//    （城堡 CITADEL_LEVELS_KEY · 台地/护城河 CITADEL_TERRAIN_KEY · 地貌对象），
+//    有未保存改动时两个保存按钮都带 ● 标记
 // =====================================================================
 import {
   CITADEL_TOWN_SPEC,
@@ -32,7 +33,9 @@ import {
   citadelTerraceMetrics,
   normalizeCitadelTerrainObjects,
   citadelTerrainPointSupported,
+  isCitadelCascadeEnabled,
 } from "../world/odysseyCitadel.js";
+import { CITADEL_CASCADE_MARKER } from "../world/citadelRange.js";
 import { makePanelDraggable } from "./dragPanel.js";
 
 const MAX_COORD = CITADEL_GRID_SIZE - 1;
@@ -50,6 +53,7 @@ const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
 export function objectTypeName(type) {
   return type === "watchtower" ? "瞭望塔"
     : type === "trojanHorse" ? "特洛伊木马"
+    : type === "cascade" ? "层叠瀑布"
     : "参天树";
 }
 
@@ -204,17 +208,41 @@ export function createCitadelEditorPanel({
       <canvas id="ce-terrain-map" width="312" height="190"
         style="display:block;border:1px solid #d5dce2;border-radius:6px;background:#f7f4ea;cursor:pointer;margin-bottom:6px;"></canvas>
       <div id="ce-terrain-sliders"></div>
-      <div style="display:flex;gap:6px;margin:5px 0 9px;align-items:center;">
-        <button type="button" id="ce-terrain-reset" title="恢复内置台地参数">重置台地</button>
-        <span style="color:#5d7569;font:10px/1.4 monospace;">✓ 层间楼梯/瀑布默认生成　✓ 相邻台地至少相差 1 个建筑层</span>
+      <div style="border:1px solid #d5dce2;border-radius:7px;padding:6px 8px;margin-bottom:7px;background:#f3f7fa;">
+        <div style="display:flex;align-items:center;gap:6px;font-weight:700;margin-bottom:5px;">
+          护城河等高线
+          <span id="ce-moat-readout" style="font:10px monospace;color:#3a6ea5;font-weight:400;"></span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <label style="font:11px monospace;color:#4a5560;">内径
+            <input id="ce-moat-inner" type="number" min="10" max="60" step="0.5" style="width:54px;font:11px monospace;">
+          </label>
+          <label style="font:11px monospace;color:#4a5560;">外径
+            <input id="ce-moat-outer" type="number" min="12" max="80" step="0.5" style="width:54px;font:11px monospace;">
+          </label>
+          <label style="font:11px monospace;color:#4a5560;">高度
+            <input id="ce-moat-watery" type="number" min="-10" max="10" step="0.05" style="width:54px;font:11px monospace;">
+          </label>
+          <label style="font:11px monospace;color:#4a5560;" title="0=平面环带 · 1=完全贴合球面曲率 · &gt;1 略夸张下弯">曲率
+            <input id="ce-moat-curvature" type="number" min="0" max="2" step="0.05" style="width:54px;font:11px monospace;">
+          </label>
+          <button type="button" id="ce-moat-reset" title="恢复内置护城河 内38/外46/高0.16/曲率1（需再点保存才写入存档）">重置</button>
+          <span style="font:10px monospace;color:#71808a;">环带环绕圣城墙脚 · 曲率控制贴球面强度 · 改完请点「保存台地配置」</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin:5px 0 9px;align-items:center;flex-wrap:wrap;">
+        <button type="button" id="ce-terrain-save" title="保存台地层 / 地形地貌 / 护城河等高线到存档（Ctrl+S）">保存台地配置</button>
+        <button type="button" id="ce-terrain-reset" title="恢复内置台地参数（需再点保存才写入存档）">重置台地</button>
+        <span style="color:#5d7569;font:10px/1.4 monospace;">✓ 层间楼梯默认生成　✓ 层叠瀑布可删可加　✓ 相邻台地至少相差 1 个建筑层 · 改动先预览，点保存落盘</span>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:-2px 0 9px;">
         <strong style="font-size:12px;color:#4a5560;">地貌对象</strong>
+        <button type="button" id="ce-object-cascade" title="层叠瀑布+梯湖：点一次添加/已有则提示；用删除工具点蓝色瀑布标记可移除（移除后台地缺口关闭，前缘可建城堡）">层叠瀑布</button>
         <button type="button" id="ce-object-watchtower" title="选择后在上方鸟瞰图点击落点">瞭望塔</button>
         <button type="button" id="ce-object-tree" title="选择后在上方鸟瞰图点击落点">参天树</button>
         <button type="button" id="ce-object-horse" title="选择后在上方鸟瞰图点击落点">木马</button>
-        <button type="button" id="ce-object-delete" title="选择后点击鸟瞰图中的对象标记删除">删除对象</button>
-        <span style="font:10px monospace;color:#71808a;">选对象 → 点击鸟瞰图放置；选中标记后输入角度回车旋转</span>
+        <button type="button" id="ce-object-delete" title="选择后点击鸟瞰图中的对象标记删除（含层叠瀑布）">删除对象</button>
+        <span style="font:10px monospace;color:#71808a;">层叠瀑布=五湖四帘+窄扇区缺口；删掉后完整台面可建 · 其他对象点鸟瞰图放置</span>
       </div>
       <div style="border-top:1px solid #dbe2e8;padding-top:7px;font-weight:700;margin-bottom:5px;">
         2）城堡层 <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
@@ -236,7 +264,7 @@ export function createCitadelEditorPanel({
           style="display:block;border:1px solid #d5dce2;border-radius:6px;cursor:crosshair;"></canvas>
       </div>
       <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;">
-        <button type="button" id="ce-save" title="保存布局到存档（Ctrl+S）">保存</button>
+        <button type="button" id="ce-save" title="保存城堡布局 + 台地/护城河配置到存档（Ctrl+S）">保存全部</button>
         <button type="button" id="ce-reset" title="恢复内置布局">重置为 SPEC</button>
         <button type="button" id="ce-clear" title="清空当前台地的五层城堡">清空当前台地</button>
         <button type="button" id="ce-export" title="导出 ASCII 布局">导出</button>
@@ -254,7 +282,7 @@ export function createCitadelEditorPanel({
         平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>
         3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>
         台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>
-        改动即时重建到 3D 场景 · 点「保存」（Ctrl+S）写入存档
+        台地/护城河/城堡改动都即时预览 3D · 必须点「保存台地配置」或「保存全部」（Ctrl+S）才写入存档
       </div>
     </div>`;
   document.body.appendChild(panel);
@@ -268,6 +296,7 @@ export function createCitadelEditorPanel({
   const btnCollapse = panel.querySelector("#ce-collapse");
   const btnHide = panel.querySelector("#ce-hide");
   const btnSave = panel.querySelector("#ce-save");
+  const btnTerrainSave = panel.querySelector("#ce-terrain-save");
 
   const btnCss =
     "border:1px solid #9aa4ad;background:#fff;border-radius:6px;padding:2px 9px;cursor:pointer;font:inherit;";
@@ -441,9 +470,57 @@ export function createCitadelEditorPanel({
   function loadTerrain() {
     try {
       const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
-      if (saved) return normalizeCitadelTerrain(saved);
+      if (saved) {
+        const normalized = normalizeCitadelTerrain(saved);
+        normalized.moat = normalizeMoatSpec(saved.moat);
+        // cascadeEnabled 由 normalize 规范化（缺省 true；显式 false 保留）
+        return normalized;
+      }
     } catch { /* 损坏存档回落默认 */ }
-    return normalizeCitadelTerrain(TERRAIN_DEFAULTS);
+    const fallback = normalizeCitadelTerrain(TERRAIN_DEFAULTS);
+    fallback.moat = normalizeMoatSpec(null);
+    return fallback;
+  }
+
+  /** 护城河规格归一化：内径/外径/高度/曲率。 */
+  function normalizeMoatSpec(raw) {
+    const defaults = { inner: 38, outer: 46, waterY: 0.16, curvature: 1 };
+    if (!raw || !Number.isFinite(raw.inner) || !Number.isFinite(raw.outer)) {
+      return { ...defaults };
+    }
+    let inner = Math.min(60, Math.max(10, Number(raw.inner)));
+    let outer = Math.min(80, Math.max(12, Number(raw.outer)));
+    if (outer <= inner) outer = inner + 2;
+    const waterY = Math.min(10, Math.max(-10, Number.isFinite(raw.waterY) ? Number(raw.waterY) : 0.16));
+    const curvature = Math.min(2, Math.max(0, Number.isFinite(raw.curvature) ? Number(raw.curvature) : 1));
+    return { inner, outer, waterY, curvature };
+  }
+
+  /** 开关层叠瀑布：写 contour、重建台地缺口 + 水系，标脏待保存。 */
+  function setCascadeEnabled(enabled) {
+    const next = normalizeCitadelTerrain({
+      ...terrain,
+      cascadeEnabled: Boolean(enabled),
+    });
+    if (terrain.moat) next.moat = terrain.moat;
+    terrain = next;
+    markDirty();
+    clearTimeout(terrainTimer);
+    drawTerrainMap();
+    draw();
+    onTerrainChange({ ...terrain });
+    refreshCascadeButton();
+  }
+
+  function refreshCascadeButton() {
+    const btn = terrainObjectButtons.get("cascade");
+    if (!btn) return;
+    const on = isCitadelCascadeEnabled(terrain);
+    // 工具选中态由 selectTerrainObjectTool 管；这里只标「水系已存在」提示色边
+    btn.style.outline = on ? "2px solid #3a8fd0" : "none";
+    btn.title = on
+      ? "层叠瀑布已启用（蓝框）。选「删除对象」后点鸟瞰图蓝色瀑布标记可移除，前缘台地缺口会关闭"
+      : "层叠瀑布未启用。点此工具再点鸟瞰图即可添加（会开窄扇区缺口 + 五湖四帘）";
   }
   function persistTerrain() {
     try {
@@ -465,7 +542,56 @@ export function createCitadelEditorPanel({
   const terrainMapCtx = terrainMapEl.getContext("2d");
   const terraceTabsEl = panel.querySelector("#ce-terrace-tabs");
   const castleContextEl = panel.querySelector("#ce-castle-context");
+  const moatInnerEl = panel.querySelector("#ce-moat-inner");
+  const moatOuterEl = panel.querySelector("#ce-moat-outer");
+  const moatWaterYEl = panel.querySelector("#ce-moat-watery");
+  const moatCurvatureEl = panel.querySelector("#ce-moat-curvature");
+  const moatReadoutEl = panel.querySelector("#ce-moat-readout");
+  const moatResetBtn = panel.querySelector("#ce-moat-reset");
+
+  function refreshMoatInputs() {
+    const moat = normalizeMoatSpec(terrain.moat);
+    terrain.moat = moat;
+    moatInnerEl.value = String(moat.inner);
+    moatOuterEl.value = String(moat.outer);
+    moatWaterYEl.value = String(moat.waterY);
+    moatCurvatureEl.value = String(moat.curvature);
+    moatReadoutEl.textContent =
+      `内 ${moat.inner} / 外 ${moat.outer} / 高 ${moat.waterY} / 曲率 ${moat.curvature}`;
+  }
+  function commitMoat() {
+    let inner = Number(moatInnerEl.value);
+    let outer = Number(moatOuterEl.value);
+    let waterY = Number(moatWaterYEl.value);
+    let curvature = Number(moatCurvatureEl.value);
+    if (!Number.isFinite(inner) || !Number.isFinite(outer) || !Number.isFinite(waterY)) return;
+    if (!Number.isFinite(curvature)) curvature = 1;
+    terrain.moat = normalizeMoatSpec({ inner, outer, waterY, curvature });
+    moatInnerEl.value = String(terrain.moat.inner);
+    moatOuterEl.value = String(terrain.moat.outer);
+    moatWaterYEl.value = String(terrain.moat.waterY);
+    moatCurvatureEl.value = String(terrain.moat.curvature);
+    moatReadoutEl.textContent =
+      `内 ${terrain.moat.inner} / 外 ${terrain.moat.outer} / 高 ${terrain.moat.waterY} / 曲率 ${terrain.moat.curvature}`;
+    // 即时预览 3D，不落盘；点「保存台地配置」/「保存全部」才写存档
+    markDirty();
+    onTerrainChange(terrain);
+    drawTerrainMap();
+  }
+  moatInnerEl.addEventListener("input", commitMoat);
+  moatOuterEl.addEventListener("input", commitMoat);
+  moatWaterYEl.addEventListener("input", commitMoat);
+  moatCurvatureEl.addEventListener("input", commitMoat);
+  moatResetBtn.onclick = () => {
+    terrain.moat = normalizeMoatSpec(null);
+    refreshMoatInputs();
+    markDirty();
+    onTerrainChange(terrain);
+    drawTerrainMap();
+  };
+  refreshMoatInputs();
   const terrainObjectButtons = new Map([
+    ["cascade", panel.querySelector("#ce-object-cascade")],
     ["watchtower", panel.querySelector("#ce-object-watchtower")],
     ["elderTree", panel.querySelector("#ce-object-tree")],
     ["trojanHorse", panel.querySelector("#ce-object-horse")],
@@ -502,9 +628,24 @@ export function createCitadelEditorPanel({
     terrainMapEl.style.cursor = terrainObjectTool ? "crosshair" : "pointer";
     // 切换工具时清掉选中
     if (tool !== null && tool !== "delete") selectedObjectId = null;
+    refreshCascadeButton();
   }
   for (const [type, button] of terrainObjectButtons) {
-    button.onclick = () => selectTerrainObjectTool(type);
+    button.onclick = () => {
+      // 层叠瀑布：按钮本身即可添加；已存在时进入工具态，方便配合删除
+      if (type === "cascade") {
+        if (!isCitadelCascadeEnabled(terrain)) {
+          setCascadeEnabled(true);
+          selectTerrainObjectTool(null);
+          toast("已添加层叠瀑布：窄扇区缺口 + 五湖四帘（请保存台地配置）", 2.0);
+          return;
+        }
+        toast("层叠瀑布已存在。选「删除对象」点蓝色标记，或右键蓝色标记可移除", 1.8);
+        selectTerrainObjectTool("delete");
+        return;
+      }
+      selectTerrainObjectTool(type);
+    };
   }
 
   /** 把角度输入应用到选中的地貌对象并重建 3D。 */
@@ -572,7 +713,9 @@ export function createCitadelEditorPanel({
     ctx.fillRect(0, 0, W, H);
     const cx = W / 2;
     const cy = H / 2 + 8;
-    const maxRadius = terrain.terraces.at(-1).radius;
+    const moat = terrain.moat ?? { inner: 38, outer: 46 };
+    // 缩放基准同时容纳护城河外径，确保环带不裁切出画布
+    const maxRadius = Math.max(terrain.terraces.at(-1).radius, moat.outer);
     const maxDrawR = Math.min(W / 2 - 50, H / 2 - 16);
     const scale = maxDrawR / maxRadius;
     if (terrain.notchedLayers > 0) {
@@ -616,6 +759,62 @@ export function createCitadelEditorPanel({
       ctx.fillStyle = "#8a7a64";
       ctx.font = "9px monospace";
       ctx.fillText(`R${radius.toFixed(1)} H${metrics[i].top.toFixed(1)}`, lx + 48, ly);
+    }
+    // ---------- 护城河等高线环带（蓝）：环绕台地层之外的地表水圈 ----------
+    if (moat.outer > moat.inner) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, moat.outer * scale, 0, Math.PI * 2);
+      ctx.arc(cx, cy, moat.inner * scale, 0, Math.PI * 2, true);
+      ctx.fillStyle = "rgba(86,156,214,0.42)";
+      ctx.fill("evenodd");
+      ctx.strokeStyle = "rgba(40,92,150,0.85)";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, moat.outer * scale, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx, cy, moat.inner * scale, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.font = "9px monospace";
+      ctx.fillStyle = "#1f5b8f";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const curv = Number.isFinite(moat.curvature) ? moat.curvature : 1;
+      ctx.fillText(
+        `护城河 内${moat.inner}/外${moat.outer}/高${moat.waterY}/曲率${curv}`,
+        cx,
+        cy - moat.outer * scale - 7
+      );
+      ctx.restore();
+    }
+    // 层叠瀑布标记（系统对象，不占 terrainObjects 列表；删/加走 cascadeEnabled）
+    if (isCitadelCascadeEnabled(terrain)) {
+      const cpx = cx + CITADEL_CASCADE_MARKER.x * scale;
+      const cpy = cy + CITADEL_CASCADE_MARKER.z * scale;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cpx, cpy, 8, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(58,143,208,0.92)";
+      ctx.fill();
+      ctx.strokeStyle = "#e8f4ff";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // 简易水帘示意：三条竖线
+      ctx.strokeStyle = "rgba(255,255,255,0.85)";
+      ctx.lineWidth = 1.2;
+      for (const dx of [-3, 0, 3]) {
+        ctx.beginPath();
+        ctx.moveTo(cpx + dx, cpy - 5);
+        ctx.lineTo(cpx + dx, cpy + 5);
+        ctx.stroke();
+      }
+      ctx.font = "9px monospace";
+      ctx.fillStyle = "#1f5b8f";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText("层叠瀑布", cpx + 10, cpy);
+      ctx.restore();
     }
     // Editable terrain-object markers share the same local x/z origin as 3D.
     for (const object of terrainObjects) {
@@ -690,7 +889,17 @@ export function createCitadelEditorPanel({
     if (terrainObjectTool) {
       const localX = (px - cx) / scale;
       const localZ = (py - cy) / scale;
+      const cascadeDist = Math.hypot(
+        localX - CITADEL_CASCADE_MARKER.x,
+        localZ - CITADEL_CASCADE_MARKER.z
+      );
       if (terrainObjectTool === "delete") {
+        // 优先删层叠瀑布（系统对象）
+        if (isCitadelCascadeEnabled(terrain) && cascadeDist <= 5) {
+          setCascadeEnabled(false);
+          toast("已删除层叠瀑布：台地前缘缺口关闭，五湖四帘已移除", 2.0);
+          return;
+        }
         let nearestIndex = -1;
         let nearestDistance = Infinity;
         terrainObjects.forEach((object, index) => {
@@ -705,6 +914,16 @@ export function createCitadelEditorPanel({
           const object = terrainObjects[nearestIndex];
           if (deleteTerrainObject(object.id)) toast("已删除地貌对象", 1.3);
         }
+        return;
+      }
+      // 层叠瀑布：整套系统对象，点击鸟瞰图任意处即可添加（不占单格台面）
+      if (terrainObjectTool === "cascade") {
+        if (isCitadelCascadeEnabled(terrain)) {
+          toast("层叠瀑布已存在。用「删除对象」点蓝色瀑布标记可移除", 1.8);
+          return;
+        }
+        setCascadeEnabled(true);
+        toast("已添加层叠瀑布：窄扇区缺口 + 五湖四帘（请保存台地配置）", 2.0);
         return;
       }
       if (!citadelTerrainPointSupported(terrain, localX, localZ, activeTerrace)) {
@@ -768,7 +987,7 @@ export function createCitadelEditorPanel({
     toast(`已切到台地 ${terraceIndex + 1}${terraceIndex === 0 ? "（最高）" : ""}`, 1.4);
   });
 
-  // 鸟瞰图无需先切换“删除对象”工具：右键任意当前台地的塔/树标记即删。
+  // 鸟瞰图右键：优先删层叠瀑布，否则删当前台地的塔/树/木马标记。
   terrainMapEl.addEventListener("contextmenu", (e) => {
     e.preventDefault();
     const rect = terrainMapEl.getBoundingClientRect();
@@ -781,6 +1000,15 @@ export function createCitadelEditorPanel({
     const scale = maxDrawR / maxRadius;
     const localX = (px - cx) / scale;
     const localZ = (py - cy) / scale;
+    const cascadeDist = Math.hypot(
+      localX - CITADEL_CASCADE_MARKER.x,
+      localZ - CITADEL_CASCADE_MARKER.z
+    );
+    if (isCitadelCascadeEnabled(terrain) && cascadeDist <= 5) {
+      setCascadeEnabled(false);
+      toast("已删除层叠瀑布：台地前缘缺口关闭", 1.8);
+      return;
+    }
     let nearest = null;
     let nearestDistance = Infinity;
     for (const object of terrainObjects) {
@@ -827,18 +1055,21 @@ export function createCitadelEditorPanel({
         value = Math.min(max, Math.max(min, value));
       }
       terraces[activeTerrace][f.key] = value;
+      // 保留 moat 等附属字段：normalize 只规范 terraces
+      const keptMoat = terrain.moat;
       terrain = normalizeCitadelTerrain({ ...terrain, terraces });
+      if (keptMoat) terrain.moat = keptMoat;
       terrainObjects = terrainObjects.filter((object) => citadelTerrainPointSupported(
         terrain,
         object.x,
         object.z,
         object.terraceIndex
       ));
-      persistTerrainObjects();
       onTerrainObjectsChange([...terrainObjects]);
       input.value = String(value);
       val.textContent = value.toFixed(f.key === "radius" ? 2 : 1);
-      persistTerrain();
+      // 即时预览，不落盘（与城堡布局一致：保存按钮才写 localStorage）
+      markDirty();
       drawTerrainMap();
       draw(); // 网格面板上的等高线叠随地形参数实时更新
       clearTimeout(terrainTimer); // 拖动防抖，松手 150ms 后重建
@@ -859,10 +1090,13 @@ export function createCitadelEditorPanel({
   }
   panel.querySelector("#ce-terrain-reset").onclick = () => {
     terrain = normalizeCitadelTerrain(TERRAIN_DEFAULTS);
+    terrain.moat = normalizeMoatSpec(null);
+    // 重置台地默认带回层叠瀑布（cascadeEnabled=true）
     refreshTerrainInputs();
-    try {
-      localStorage.removeItem(CITADEL_TERRAIN_KEY);
-    } catch { /* private mode */ }
+    refreshMoatInputs();
+    refreshCascadeButton();
+    // 仅预览默认值，不立刻清存档；点保存后才覆盖 localStorage
+    markDirty();
     clearTimeout(terrainTimer);
     drawTerrainMap();
     onTerrainChange({ ...terrain });
@@ -872,30 +1106,60 @@ export function createCitadelEditorPanel({
       object.z,
       object.terraceIndex
     ));
-    persistTerrainObjects();
     onTerrainObjectsChange([...terrainObjects]);
-    toast("已恢复内置台地地形", 1.6);
+    toast("已恢复内置台地/护城河/层叠瀑布（点保存后写入存档）", 1.8);
   };
   drawTerraceTabs();
   refreshTerrainInputs();
+  refreshCascadeButton();
   drawTerrainMap();
 
   // ---------- 保存（编辑实时进 3D，点保存才写存档） ----------
+  // 台地层 / 地形地貌 / 护城河 / 城堡布局 共用同一套 dirty + 落盘。
+  function styleSaveButton(btn, dirtyLabel, cleanLabel, dirtyTitle, cleanTitle) {
+    if (!btn) return;
+    btn.textContent = dirty ? dirtyLabel : cleanLabel;
+    btn.style.background = dirty ? "#2a2b2d" : "#fff";
+    btn.style.color = dirty ? "#fff" : "#2a2b2d";
+    btn.title = dirty ? dirtyTitle : cleanTitle;
+  }
   function applyDirty() {
-    btnSave.textContent = dirty ? "保存 ●" : "保存";
-    btnSave.style.background = dirty ? "#2a2b2d" : "#fff";
-    btnSave.style.color = dirty ? "#fff" : "#2a2b2d";
-    btnSave.title = dirty ? "有未保存改动（Ctrl+S 保存）" : "布局已保存（Ctrl+S）";
+    styleSaveButton(
+      btnSave,
+      "保存全部 ●",
+      "保存全部",
+      "有未保存改动（Ctrl+S：城堡+台地+护城河）",
+      "城堡布局与台地/护城河已保存（Ctrl+S）"
+    );
+    styleSaveButton(
+      btnTerrainSave,
+      "保存台地配置 ●",
+      "保存台地配置",
+      "台地/护城河有未保存改动（Ctrl+S 也可保存全部）",
+      "台地层 · 地形地貌 · 护城河已写入存档"
+    );
+  }
+  function markDirty() {
+    dirty = true;
+    applyDirty();
   }
   function save() {
     try {
       localStorage.setItem(CITADEL_LEVELS_KEY, JSON.stringify(serializeLayout()));
-    } catch { /* private mode */ }
+      // 台地层半径/层高 + 护城河等高线（内径/外径/高度）
+      persistTerrain();
+      // 瞭望塔 / 参天树 / 木马
+      persistTerrainObjects();
+    } catch {
+      toast("保存失败：浏览器存档不可用", 2.0);
+      return;
+    }
     dirty = false;
     applyDirty();
-    toast("圣城布局已保存", 1.6);
+    toast("已保存：城堡布局 · 台地层 · 地形地貌 · 护城河", 1.8);
   }
   btnSave.onclick = save;
+  btnTerrainSave.onclick = save;
   applyDirty();
 
   // ---------- 编辑操作 ----------
@@ -919,13 +1183,10 @@ export function createCitadelEditorPanel({
   }
 
   /** 布局变更统一出口：回调上层即时重建 3D → 重画面板 → 标脏（保存才落盘） */
-  function commit(markDirty = true) {
+  function commit(shouldMarkDirty = true) {
     terraceGrids[activeTerrace] = grid;
     const stats = onApply(serializeLayout());
-    if (markDirty) {
-      dirty = true;
-      applyDirty();
-    }
+    if (shouldMarkDirty) markDirty();
     draw();
     if (stats) {
       statsEl.textContent =
