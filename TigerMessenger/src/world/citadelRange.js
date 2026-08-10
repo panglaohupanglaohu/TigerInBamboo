@@ -92,18 +92,17 @@ export function citadelRangeLiftLocal(lx, lz) {
     const s = t * t * (3 - 2 * t);
     lift = THREE.MathUtils.lerp(-SKIRT_DEPTH, lift, s);
   }
-  // 护城河内岸绿地相对护城河水面下沉：城堡台地外缘(radius=24)与护城河内径(38)
-  // 之间的环带绿地整体下潜 CITADEL_SINK，让城堡前方绿地浸在护城河水面下；
-  // 城堡台地核心(r<24)不动（台面仍露出），环带两端平滑过渡避免棱边。
-  // 与域缘裙边互斥：裙边扎进球面的区域不再叠加环带下沉，避免过深。
+  // 护城河内岸绿地相对护城河水面下沉：城堡台地外缘(radius=24)到护城河内径(38)
+  // 的环带绿地全额下潜 CITADEL_SINK，让城堡前方绿地浸在护城河水面下；
+  // 城堡台地外缘(24)处即达到全额，与城堡台地外缘(随容器下沉)曲率对齐；
+  // 护城河内径(38)处仍全额（前方绿地浸入），护城河外(>38)不降（与护城河水面齐平）。
+  // 城堡核心(r<24)不降（台面仍露出），被城堡台地实体覆盖；护城河内侧壁由
+  // 加深 wallDepth 遮住 38 处阶跃。与域缘裙边互斥，避免过深。
   const innerR = Math.hypot(lx, lz);
   const CASTLE_RADIUS = 24;
   const inSkirt = edge < SKIRT_BAND ? edge / SKIRT_BAND : 1;
   if (innerR > CASTLE_RADIUS && innerR < MOAT_INNER && inSkirt > 0) {
-    const edgeIn = THREE.MathUtils.clamp((innerR - CASTLE_RADIUS) / 6, 0, 1);
-    const edgeOut = THREE.MathUtils.clamp((MOAT_INNER - innerR) / 6, 0, 1);
-    const s = edgeIn * edgeOut * (3 - 2 * Math.min(edgeIn, edgeOut));
-    lift -= CITADEL_SINK * s * inSkirt;
+    lift -= CITADEL_SINK * inSkirt;
   }
   return lift;
 }
@@ -933,11 +932,14 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 外径放大到覆盖旧港码头：码头在 range 局部 ~(-14.7,42.7)，距圆心半径约 45，
   // 故外径取 46、内径取 38（模块级 MOAT_INNER），让整圈水面/岸壁把港口纳入环带内。
   const MOAT_OUTER = 46;
+  // wallDepth 加深：护城河内岸壁向下延伸，盖住前方浸水区(24~38, 下沉 0.6)，
+  // 让护城河环带内缘贴合随曲率下沉的绿地，避免内缘悬空。
   const moat = createCitadelMoat({
     name: "citadel-moat",
     seed: 8801,
     innerRadius: MOAT_INNER,
     outerRadius: MOAT_OUTER,
+    wallDepth: 0.95,
   });
   const moatR = MOAT_OUTER; // ≈46，覆盖旧港码头（半径~45）
   // 护城河【放在地面】：水面落回圣城域内地表高度（BASE_LIFT=+0.4），不再额外抬升。
