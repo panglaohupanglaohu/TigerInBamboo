@@ -940,11 +940,11 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     outerRadius: MOAT_OUTER,
   });
   const moatR = MOAT_OUTER; // ≈46，覆盖旧港码头（半径~45）
-  // 护城河水面上浮到贴近圣城域内地表（BASE_LIFT=+0.4 之上 0.05），成为环绕圣城
-  // 的浅水道；不再用 sphericalGroundLift(46) 深陷到星球表面下（那是曲率弦高差，
-  // 会让护城河远低于内岸绿地）。水面比内岸绿地略高 → 前方绿地浸在水面下。
+  // 护城河【放在地面】：水面落回圣城域内地表高度（BASE_LIFT=+0.4），不再额外抬升。
+  // 护城河环绕圣城，水面高于下降后的内岸绿地 → 城堡台地外缘/前方绿地浸在水面下。
+  // 建筑与台面由 CITADEL_SINK 负责下沉，护城河本身保持在地面高度。
   // false：沿球面径向定向（注意曲率）。
-  const moatLift = BASE_LIFT + 0.05;
+  const moatLift = BASE_LIFT;
   placeRangeAsset(moat, 0, 0, R, moatLift, false);
   scene.add(moat);
   moat.userData.harborPadLocal = { lx: -22.8, lz: 24.6, toWaterX: 0.66, toWaterZ: -0.75 };
