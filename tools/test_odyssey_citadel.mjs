@@ -73,6 +73,7 @@ const {
   buildOdysseyCitadel,
   citadelCurvatureDrop,
   CITADEL,
+  CITADEL_SINK,
   rebuildCitadelTerrain,
   rebuildCitadelTerrainObjects,
   terrainSupportLevel,
@@ -354,11 +355,13 @@ const curvatureDrop = citadelCurvatureDrop(groundRadius, placed.userData.contour
 assert.equal(CITADEL.groundEmbed, 2, "第五层局部底面仍从 Y=2 开始");
 assert(curvatureDrop > 1.7 && curvatureDrop < 1.9,
   `半径 160 / 台地 R24 的球面弦高应约 1.8，实际 ${curvatureDrop}`);
+// 城堡容器相对护城河水面上浮并整体下沉 CITADEL_SINK（前方绿地浸水）
+const sinkDrop = curvatureDrop + CITADEL_SINK;
 assert(Math.abs(
-  placed.position.length() - (groundRadius - CITADEL.groundEmbed - curvatureDrop)
-) < 1e-6, "城堡容器必须额外下降球面弦高");
+  placed.position.length() - (groundRadius - CITADEL.groundEmbed - sinkDrop)
+) < 1e-6, "城堡容器必须额外下降球面弦高 + 护城河下沉量");
 assert(Math.abs(
-  placed.position.length() + placedMetrics[4].bottom - (groundRadius - curvatureDrop)
+  placed.position.length() + placedMetrics[4].bottom - (groundRadius - sinkDrop)
 ) < 1e-6, "最低台地中心必须埋入地面，消除外缘悬空");
 placed.updateMatrixWorld(true);
 const outerGroundPoint = placed.localToWorld(new THREE.Vector3(
@@ -366,8 +369,8 @@ const outerGroundPoint = placed.localToWorld(new THREE.Vector3(
   placedMetrics[4].bottom,
   0
 ));
-assert(Math.abs(outerGroundPoint.length() - groundRadius) < 1e-6,
-  "最低第五层台地最外缘必须按球面曲率与地面精确相接");
+assert(Math.abs(outerGroundPoint.length() - (groundRadius - CITADEL_SINK)) < 0.02,
+  "最低第五层台地最外缘必须整体下沉 CITADEL_SINK，浸入护城河水面下");
 assert(Math.abs(groundRadius - (radius + 0.4)) < 1e-6,
   "旧 +16 黄土主峰删除后只能保留 +0.4 地表接缝基线");
 ok(`总高 ${totalHeight.toFixed(1)} · 曲率下沉 ${curvatureDrop.toFixed(2)} · 外缘贴地 R${groundRadius.toFixed(1)}`);
@@ -389,8 +392,8 @@ const widerOuterPoint = placed.localToWorld(new THREE.Vector3(
   widerMetrics[4].bottom,
   0
 ));
-assert(Math.abs(widerOuterPoint.length() - groundRadius) < 1e-6,
-  "热编辑台地半径后，外缘仍必须自动重算并贴住球面");
+assert(Math.abs(widerOuterPoint.length() - (groundRadius - CITADEL_SINK)) < 0.02,
+  "热编辑台地半径后，外缘仍必须自动重算并整体下沉 CITADEL_SINK");
 ok(`台地热编辑后曲率下沉自动更新 ${curvatureDrop.toFixed(2)}→${widerDrop.toFixed(2)}`);
 
 console.log("[9] 场景接线 + 纯白 AmbientLight 1.4");

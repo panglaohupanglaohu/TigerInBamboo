@@ -43,6 +43,10 @@ const PALETTE = Object.freeze({
   pilgrimageStone: 0xe3ddc7,
 });
 
+// 城堡连同前方绿地相对护城河水面的下沉量：与 citadelRange.js 的 CITADEL_SINK 一致，
+// 让城堡台地外缘/前方绿地浸入护城河水面下，台面仍露出。
+export const CITADEL_SINK = 0.6;
+
 export const CITADEL = Object.freeze({
   layer0: { rockRadius: 2.3, rockCount: 7, centerY: 11.2 },
   outline: 0.055,
@@ -959,7 +963,8 @@ export function buildOdysseyCitadel(options = {}) {
       ? options.groundRadius
       : planetRadius + canyonOffsetDir(_dir);
     const curvatureDrop = citadelCurvatureDrop(groundRadius, contourSpec);
-    const radialEmbed = CITADEL.groundEmbed + curvatureDrop;
+    // 城堡相对护城河水面上浮并整体下沉 CITADEL_SINK，使台地外缘/前方绿地浸入水面下
+    const radialEmbed = CITADEL.groundEmbed + curvatureDrop + CITADEL_SINK;
     castleContainer.position.copy(_dir).multiplyScalar(groundRadius - radialEmbed);
     castleContainer.userData.anchor = {
       dir: _dir.clone(),
@@ -1100,7 +1105,7 @@ export function rebuildCitadelTerrain(castleContainer, contourSpec) {
   const anchor = castleContainer.userData.anchor;
   if (anchor?.dir?.isVector3 && Number.isFinite(anchor.groundR)) {
     const curvatureDrop = citadelCurvatureDrop(anchor.groundR, normalized);
-    const radialEmbed = CITADEL.groundEmbed + curvatureDrop;
+    const radialEmbed = CITADEL.groundEmbed + curvatureDrop + CITADEL_SINK;
     castleContainer.position.copy(anchor.dir).multiplyScalar(anchor.groundR - radialEmbed);
     anchor.curvatureDrop = curvatureDrop;
     anchor.radialEmbed = radialEmbed;

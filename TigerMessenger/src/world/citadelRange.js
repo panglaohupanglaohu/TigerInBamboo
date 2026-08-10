@@ -45,6 +45,8 @@ export const OUTPOST_CUT = Object.freeze({
 const BASE_LIFT = 0.4; // 域内基线：压住粗网格球面弦高差
 const SKIRT_DEPTH = 0.7; // 域缘裙边下沉，扎进球面遮接缝
 const SKIRT_BAND = 6; // 裙边过渡带宽
+const MOAT_INNER = 38; // 护城河内径：内岸绿地低于护城河水面（城堡前方浸水）
+const CITADEL_SINK = 0.6; // 城堡 + 护城河内岸绿地相对护城河水面的下沉量
 // 局部基架：up = 站点方向，lz+ 指向主岛，lx = 右
 const _site = latLonToDir(RANGE_SITE.lat, RANGE_SITE.lon, new THREE.Vector3());
 const _island = latLonToDir(90, 0, new THREE.Vector3());
@@ -89,6 +91,19 @@ export function citadelRangeLiftLocal(lx, lz) {
     const t = THREE.MathUtils.clamp(edge / SKIRT_BAND, 0, 1);
     const s = t * t * (3 - 2 * t);
     lift = THREE.MathUtils.lerp(-SKIRT_DEPTH, lift, s);
+  }
+  // 护城河内岸绿地相对护城河水面下沉：城堡台地外缘(radius=24)与护城河内径(38)
+  // 之间的环带绿地整体下潜 CITADEL_SINK，让城堡前方绿地浸在护城河水面下；
+  // 城堡台地核心(r<24)不动（台面仍露出），环带两端平滑过渡避免棱边。
+  // 与域缘裙边互斥：裙边扎进球面的区域不再叠加环带下沉，避免过深。
+  const innerR = Math.hypot(lx, lz);
+  const CASTLE_RADIUS = 24;
+  const inSkirt = edge < SKIRT_BAND ? edge / SKIRT_BAND : 1;
+  if (innerR > CASTLE_RADIUS && innerR < MOAT_INNER && inSkirt > 0) {
+    const edgeIn = THREE.MathUtils.clamp((innerR - CASTLE_RADIUS) / 6, 0, 1);
+    const edgeOut = THREE.MathUtils.clamp((MOAT_INNER - innerR) / 6, 0, 1);
+    const s = edgeIn * edgeOut * (3 - 2 * Math.min(edgeIn, edgeOut));
+    lift -= CITADEL_SINK * s * inSkirt;
   }
   return lift;
 }
@@ -916,8 +931,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 以“第一颗落地参天大树/深潭”同款球面地表抬升（sphericalGroundLift）铺环带水面
   // + 低模岸壁：贴合当前地貌、与地面/潭缘衔接，随曲率径向定向。
   // 外径放大到覆盖旧港码头：码头在 range 局部 ~(-14.7,42.7)，距圆心半径约 45，
-  // 故外径取 46、内径相应放大到 38，让整圈水面/岸壁把港口纳入环带内。
-  const MOAT_INNER = 38;
+  // 故外径取 46、内径取 38（模块级 MOAT_INNER），让整圈水面/岸壁把港口纳入环带内。
   const MOAT_OUTER = 46;
   const moat = createCitadelMoat({
     name: "citadel-moat",
@@ -926,8 +940,11 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     outerRadius: MOAT_OUTER,
   });
   const moatR = MOAT_OUTER; // ≈46，覆盖旧港码头（半径~45）
-  // 外环落在地表；水面略高 +0.04 防 z-fight。false：沿球面径向定向（注意曲率）。
-  const moatLift = sphericalGroundLift(moatR, 0, R) + 0.04;
+  // 护城河水面上浮到贴近圣城域内地表（BASE_LIFT=+0.4 之上 0.05），成为环绕圣城
+  // 的浅水道；不再用 sphericalGroundLift(46) 深陷到星球表面下（那是曲率弦高差，
+  // 会让护城河远低于内岸绿地）。水面比内岸绿地略高 → 前方绿地浸在水面下。
+  // false：沿球面径向定向（注意曲率）。
+  const moatLift = BASE_LIFT + 0.05;
   placeRangeAsset(moat, 0, 0, R, moatLift, false);
   scene.add(moat);
   moat.userData.harborPadLocal = { lx: -22.8, lz: 24.6, toWaterX: 0.66, toWaterZ: -0.75 };

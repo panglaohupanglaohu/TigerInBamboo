@@ -52,21 +52,26 @@ const R = 160;
 
 console.log("[1] 高程函数：旧黄土主峰已删除");
 const peakTop = citadelRangeLiftLocal(0, 0);
-assert(Math.abs(peakTop - (0.4 + CITADEL_PEAK.h)) < 1e-9, `主峰顶应 ${0.4 + CITADEL_PEAK.h}，实际 ${peakTop}`);
+assert(Math.abs(peakTop - (0.4 + CITADEL_PEAK.h)) < 1e-9, `城堡核心(主峰)顶应 ${0.4 + CITADEL_PEAK.h}，实际 ${peakTop}`);
+// 看台峰(cz=36)位于护城河内岸环带绿地(24~38)：随绿地下沉，应低于护城河水面。
+const moatWaterY = 0.4 + 0.05; // BASE_LIFT + 0.05
 const viewTop = citadelRangeLiftLocal(VIEW_PEAK.cx, VIEW_PEAK.cz);
-assert(Math.abs(viewTop - (0.4 + VIEW_PEAK.h)) < 1e-9, `看台峰顶应 ${0.4 + VIEW_PEAK.h}，实际 ${viewTop}`);
+assert(viewTop < moatWaterY - 0.2,
+  `前方绿地(看台峰)必须沉到护城河水面下：水面 ${moatWaterY.toFixed(2)}，实际 ${viewTop.toFixed(2)}`);
 assert.equal(CITADEL_PEAK.h, 0, "旧 +16 黄土主峰必须彻底删除");
 assert.equal(VIEW_PEAK.h, 0, "旧前景土坡必须彻底删除");
-ok(`旧主峰与前坡均归零，仅保留 +${peakTop.toFixed(1)} 接缝基线`);
+ok(`旧主峰与前坡归零；城堡核心保持 +${peakTop.toFixed(1)}，前方绿地沉到护城河水下(${viewTop.toFixed(2)})`);
 
 // 扩大后的主峰必须完整包住 24×24 城墙、瓮城和外围乱石。
 const castleShoulder = citadelRangeLiftLocal(16, 14);
 assert(Math.abs(castleShoulder - peakTop) < 1e-9,
   `城堡外围不得残留独立土坡：+${castleShoulder.toFixed(1)}`);
 const outerSlope = citadelRangeLiftLocal(25, 15);
-assert(Math.abs(outerSlope - peakTop) < 1e-9,
-  "第五层台地之外不得生成额外黄土缓坡");
-ok(`城堡足域与外缘同为贴地基线 +${outerSlope.toFixed(1)}`);
+// 台地外缘(24~38)是护城河内岸浸水环带：不再是凸起的黄土缓坡，而是低于城堡核心、
+// 沉到护城河水面下的平地（无凸起）。
+assert(outerSlope < peakTop - 0.1,
+  `台地外应为下沉浸水环带而非凸起缓坡：核心 ${peakTop.toFixed(2)}，外缘 ${outerSlope.toFixed(2)}`);
+ok(`城堡足域为贴地基线 +${peakTop.toFixed(1)}，台地外缘浸水下沉 ${outerSlope.toFixed(2)}`);
 
 // 域外恒 0；域缘裙边沉入球面遮缝
 assert.equal(citadelRangeLiftLocal(200, 200) > -1 && citadelRangeLiftLocal(200, 200) <= 0.7, true);
@@ -77,8 +82,9 @@ assert(Math.abs(citadelRangeLiftDir(siteDir) - peakTop) < 1e-6, "站点方向高
 ok("域外归零 · 站点高程与局部一致（dir 路径无损）");
 
 console.log("[2] 五层台地独立承担全部高差");
-assert.equal(peakTop, viewTop, "旧主峰与前坡都应退化为同一地面承接层");
-ok("外部地表不再偷偷增加第六层土坡");
+assert(viewTop < peakTop - 0.1,
+  "前坡(护城河内岸绿地)应低于城堡核心——不再退化为同一凸起承接层");
+ok("外部地表不再偷偷增加第六层土坡；前方绿地浸水、城堡核心保持");
 
 console.log("[3] 地形网格：视觉=碰撞");
 const scene = new THREE.Scene();
