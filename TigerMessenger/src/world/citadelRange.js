@@ -952,25 +952,28 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   moat.userData.harborPadLocal = { lx: -22.8, lz: 24.6, toWaterX: 0.66, toWaterZ: -0.75 };
 
   // ---------- 护城河环带随球面曲率贴合网格高度场（注意曲率）----------
-  // 护城河水面原是平环带（RingGeometry 局部 XZ 平面 + waterY），放在固定 R+moatLift
-  // 沿中心径向后，环带内缘(38)与下沉的前方浸水区(-0.2)之间出现 0.6 空气空隙。
-  // 这里把护城河水面的每个顶点，沿该点的星球径向（=护城河 Group 局部 +Y），调整
-  // 到「网格高度 + 水位」贴合前方绿地与外侧地面，使整个环带沿径向弯曲覆盖地面。
-  const waterMesh = moat.getObjectByName("citadel-moat-water");
-  const moatWaterY = 0.16; // 护城河水面相对河床的偏移（CITADEL_MOAT_SPEC.waterY）
-  if (waterMesh?.geometry?.attributes?.position) {
-    const pos = waterMesh.geometry.attributes.position;
-    const baseR = R + moatLift; // 护城河 Group 当前位置的径向距离
+  // 护城河原是一组平环带/圆柱放在固定 R+moatLift 沿中心径向后，环带内缘(38)与
+  // 下沉的前方浸水区(-0.2)之间出现 0.6 空气空隙，且白色岸壁顶端浮在护城河水面上方。
+  // 这里把护城河 Group 内所有部件（水面、内/外岸壁、河床、浪花）的每个顶点，
+  // 沿该点的星球径向（=护城河 Group 局部 +Y），调整到
+  //   「网格高度 + 该顶点原本相对 Group 原点的局部 Y」
+  // 也就是保留部件内部相对位置（壁厚、水位、河床深），但整体沿径向弯曲贴合网格，
+  // 使环带、岸壁与河床都贴合下沉的绿地与外侧地面，消除空中浮环。
+  const baseR = R + moatLift; // 护城河 Group 当前位置的径向距离
+  moat.traverse((obj) => {
+    const pos = obj?.geometry?.attributes?.position;
+    if (!pos) return;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const z = pos.getZ(i);
+      const y = pos.getY(i);
       const gridH = citadelRangeLiftLocal(x, z); // 该 (lx,lz) 处网格高程（含下沉区）
-      // 顶点世界径向 = baseR + 局部 Y（沿径向）。令其 = 网格 + moatWaterY：
-      const newLocalY = (gridH + moatWaterY) - baseR;
+      // 顶点世界径向 = baseR + 局部 Y。令其 = 网格 + 原始局部 Y：
+      const newLocalY = gridH + y - baseR;
       pos.setY(i, newLocalY);
     }
     pos.needsUpdate = true;
-  }
+  });
 
   // ---------- 低多边形特洛伊木马：放在地面第一个湖泊（terrace-5-pool）水面上 ----------
   // “地面第一个湖泊”即朝圣水阶里最低的地面深潭 terrace-5-pool（range 局部 x=1,z=38，
