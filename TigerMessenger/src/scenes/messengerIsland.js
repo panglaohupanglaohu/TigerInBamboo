@@ -13,6 +13,7 @@ import { buildHills, carveHillsForTrack } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
 import { createMoonLake } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
+import { buildWorldCanal } from "../world/canalSystem.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
 import { buildAbandonedGate } from "../world/abandonedGate.js";
@@ -39,7 +40,7 @@ import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
-import { createCitySeaLake } from "../world/citySeaLake.js";
+import { createCitySeaLake, CITY_SEA_LAKE } from "../world/citySeaLake.js";
 import {
   buildOdysseyCitadel,
   CITADEL_TERRAIN_KEY,
@@ -73,6 +74,7 @@ export const messengerIslandScene = {
   load(ctx) {
     const scene = ctx.scene;
     const R = ctx.planetRadius ?? PLANET_RADIUS;
+    let canalSys = null; // 星海运河环线（连通各场景，沉到地表下）
 
     const platforms = buildWorld(scene);
     const hills = buildHills(scene, R);
@@ -232,6 +234,34 @@ export const messengerIslandScene = {
       terrainObjects: citadelTerrainObjects,
     });
     scene.add(odysseyCitadel);
+
+    // ---------- 星海运河环线：连通各主要场景，沉到球面地表以下 ----------
+    // 控制点取各场景方向（世界位 normalize），用 CatmullRom 闭合样条稍曲折绕行，
+    // 整条河道沿径向下挖到 R - CANAL_DEPTH（不在球面上），随球面曲率逐点倾斜。
+    // 场景锚点动态取运行时方向（门在轨道上、海湖可搬迁、圣城在峡谷侧）。
+    const canalAnchors = [];
+    const canalNames = [];
+    const canalPush = (dir, name) => {
+      if (dir?.isVector3 && dir.lengthSq() > 1e-6) {
+        canalAnchors.push(dir.clone());
+        canalNames.push(name);
+      }
+    };
+    canalPush(bookshop?.position, "书店镇");
+    canalPush(camp?.landmarks?.anchor?.position, "出发营地");
+    canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖");
+    canalPush(odysseyCitadel?.position, "高山圣城");
+    canalPush(moebius?.grand?.dir, "水晶城");
+    canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon), "白鲸海湖");
+    // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
+    canalPush(canyonDir, "叹息之门");
+    if (canalAnchors.length >= 3) {
+      const canal = buildWorldCanal(scene, R, {
+        anchors: canalAnchors,
+        names: canalNames,
+      });
+      canalSys = canal;
+    }
 
     // Boids 鸟群：先在峡谷方向占位，建门后整群迁移到叹息之门城头（见下方 migrate）
     const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
@@ -504,6 +534,7 @@ export const messengerIslandScene = {
         escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
         aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
         mossSaihoji, // 厚涂苔丘 · 西芳寺缘
+        canal: canalSys, // 星海运河环线 · 沉到地表以下 · 连通各场景
         mossSwamp, // 厚涂苔丘 · 湖沼边缘
       },
       update(dt, t, runtime) {
