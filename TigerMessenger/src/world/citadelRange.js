@@ -951,6 +951,27 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   scene.add(moat);
   moat.userData.harborPadLocal = { lx: -22.8, lz: 24.6, toWaterX: 0.66, toWaterZ: -0.75 };
 
+  // ---------- 护城河环带随球面曲率贴合网格高度场（注意曲率）----------
+  // 护城河水面原是平环带（RingGeometry 局部 XZ 平面 + waterY），放在固定 R+moatLift
+  // 沿中心径向后，环带内缘(38)与下沉的前方浸水区(-0.2)之间出现 0.6 空气空隙。
+  // 这里把护城河水面的每个顶点，沿该点的星球径向（=护城河 Group 局部 +Y），调整
+  // 到「网格高度 + 水位」贴合前方绿地与外侧地面，使整个环带沿径向弯曲覆盖地面。
+  const waterMesh = moat.getObjectByName("citadel-moat-water");
+  const moatWaterY = 0.16; // 护城河水面相对河床的偏移（CITADEL_MOAT_SPEC.waterY）
+  if (waterMesh?.geometry?.attributes?.position) {
+    const pos = waterMesh.geometry.attributes.position;
+    const baseR = R + moatLift; // 护城河 Group 当前位置的径向距离
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      const gridH = citadelRangeLiftLocal(x, z); // 该 (lx,lz) 处网格高程（含下沉区）
+      // 顶点世界径向 = baseR + 局部 Y（沿径向）。令其 = 网格 + moatWaterY：
+      const newLocalY = (gridH + moatWaterY) - baseR;
+      pos.setY(i, newLocalY);
+    }
+    pos.needsUpdate = true;
+  }
+
   // ---------- 低多边形特洛伊木马：放在地面第一个湖泊（terrace-5-pool）水面上 ----------
   // “地面第一个湖泊”即朝圣水阶里最低的地面深潭 terrace-5-pool（range 局部 x=1,z=38，
   // rx=10.5,rz=6.8）。木马站在湖面中央，轮车基座略浸入水面、马身/马头露出，像从湖上
