@@ -53,7 +53,6 @@ import { CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY } from "../world/citadelTown.js";
 import {
   buildCitadelRange,
   citadelRangeLiftDir,
-  citadelRangeEdgeDist,
   citadelSiteDir,
   rangeLocalToWorld,
 } from "../world/citadelRange.js";
@@ -386,74 +385,18 @@ export const messengerIslandScene = {
         groundLift: citadelRangeLiftDir,
       });
       canalSys = canal;
-      // ---------- 纳沃纳广场延迟摆放：沿运河走出土坡、在平地侧向避开 ----------
-      // 运河环线斜穿圣城黄土坡（中心线几乎过站心）：坡上摆广场必被山体吞没。
-      // 故沿运河曲线向较平一侧步行，走出 lift 域后再沿长轴多走 22（半长 19 全落平地），
-      // 在该处按切向对齐、法线推离 23（运河半展7.9+广场半展11.1+缓冲4），河道全程露出。
+      // ---------- 纳沃纳广场延迟摆放：港口及参天大树正前方 ----------
+      // 港口栈桥/参天大树在 range 局部 (-15.2,42)/(1,43) 一带；广场置于其正前方
+      // （北缘域外平地），长轴横陈作前景舞台、木马回望港口。运河北段自此以东
+      // ~24 处南北贯通：广场东缘与河道留 5+ 净空，河道全程露出、两者零重叠。
       {
         let plazaGroup = null;
         scene.traverse((o) => {
           if (!plazaGroup && o.name === "citadel-navona-canal-plaza") plazaGroup = o;
         });
-        if (!plazaGroup && canal.curve) {
-          const curve = canal.curve;
-          const rg = citadelRange.right, fw = citadelRange.fwd;
-          const localOf = (p) => [
-            p.x * rg.x + p.y * rg.y + p.z * rg.z,
-            p.x * fw.x + p.y * fw.y + p.z * fw.z,
-          ];
-          const edgeAt = (p) => {
-            const [lx, lz] = localOf(p);
-            return citadelRangeEdgeDist(lx, lz);
-          };
-          const N = 480, du = 1 / N;
-          // 1) 离圣城最近的曲线参数 u0
-          let u0 = 0, best = 1e9;
-          for (let i = 0; i < N; i++) {
-            const [lx, lz] = localOf(curve.getPointAt(i * du));
-            const d = lx * lx + lz * lz;
-            if (d < best) { best = d; u0 = i * du; }
-          }
-          // 2) 向较平一侧步行，走出黄土坡域+裙边（edgeDist > 6.5）
-          const sgn = edgeAt(curve.getPointAt((u0 + du) % 1)) >= edgeAt(curve.getPointAt((u0 - du + 1) % 1)) ? 1 : -1;
-          let u = u0;
-          for (let s = 0; s < N; s++) {
-            u = (u + sgn * du + 1) % 1;
-            if (edgeAt(curve.getPointAt(u)) > 6.5) break;
-          }
-          // 3) 再沿曲线走 22，让广场半长完全落在平地
-          let acc = 0;
-          const prev = curve.getPointAt(u).clone();
-          while (acc < 22) {
-            u = (u + sgn * du + 1) % 1;
-            const p = curve.getPointAt(u);
-            acc += p.distanceTo(prev);
-            prev.copy(p);
-          }
-          // 4) 该处中心线/切向 → 法线侧移摆放
-          const c = curve.getPointAt(u);
-          const t = curve.getTangentAt(u);
-          const [cLx, cLz] = localOf(c);
-          const rl = Math.hypot(c.x, c.y, c.z) || 1;
-          const ux = c.x / rl, uy = c.y / rl, uz = c.z / rl;
-          const rd = t.x * ux + t.y * uy + t.z * uz;
-          const tx = t.x - ux * rd, ty = t.y - uy * rd, tz = t.z - uz * rd;
-          const tl = Math.hypot(tx, ty, tz) || 1;
-          const tLx = (tx * rg.x + ty * rg.y + tz * rg.z) / tl;
-          const tLz = (tx * fw.x + ty * fw.y + tz * fw.z) / tl;
-          const tn = Math.hypot(tLx, tLz) || 1;
-          const nx0 = tLz / tn, nz0 = -tLx / tn;
-          // 法线两侧各生成候选中心：先要求中心充分出域（不压回坡体/裙边），
-          // 再取局部范数更小者——雪山夹峙的出口走廊中央，避开两侧山体
-          const CENTER_DIST = 23;
-          const cands = [
-            { lx: cLx + nx0 * CENTER_DIST, lz: cLz + nz0 * CENTER_DIST },
-            { lx: cLx - nx0 * CENTER_DIST, lz: cLz - nz0 * CENTER_DIST },
-          ].filter((q) => citadelRangeEdgeDist(q.lx, q.lz) > 6);
-          const pick = (cands.length ? cands : [{ lx: cLx + nx0 * CENTER_DIST, lz: cLz + nz0 * CENTER_DIST }])
-            .reduce((a, b) => (a.lx * a.lx + a.lz * a.lz <= b.lx * b.lx + b.lz * b.lz ? a : b));
-          const yaw = Math.atan2(tLx / tn, tLz / tn); // 长轴(+Z)对齐运河切向
-          citadelRange.placeNavonaPlaza(pick.lx, pick.lz, yaw);
+        if (!plazaGroup) {
+          // yaw=π/2：长轴(+Z)转沿 +right（东西横陈）；木马 yaw=π 朝南回望港口/大树
+          citadelRange.placeNavonaPlaza(-10, 75, Math.PI / 2);
         }
       }
       // 复制 10 艘古战船沿运河环线巡游（整体放大一倍），送信人可靠近 [F] 登船驾驶
