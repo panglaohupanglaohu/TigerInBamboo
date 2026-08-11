@@ -118,6 +118,11 @@ export function citadelRangeLiftLocal(lx, lz) {
  * 世界方向 → 山脉高程（域外恒 0，无分配）。
  * 供物理/选址合成：surfR = R + canyonOffsetDir(dir) + citadelRangeLiftDir(dir)
  */
+/* 站心局部坐标 → 矩形域边界的有符号距离（正=域外；> SKIRT_BAND 即裙边过渡走完、纯平地） */
+export function citadelRangeEdgeDist(lx, lz) {
+  return -Math.min(lx - LX_MIN, LX_MAX - lx, lz - LZ_MIN, LZ_MAX - lz);
+}
+
 export function citadelRangeLiftDir(dir) {
   // 粗守卫：与站点角距 > ~40° 直接归零
   if (dir.dot(_site) < 0.76) return 0;
@@ -1186,78 +1191,55 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   };
   buildMoat(contourSpec?.moat);
 
-  // ---------- 低多边形特洛伊木马 ----------
-  // 放在「护城河 × 瀑布水道」交汇旁侧、最外层台地（台地 5 / 一层台面）的干地面上：
-  // 瀑布中轴 φ≈notchCenter，偏右避开水道与梯湖；r 落在台地 5 外缘环带（土坡台面）。
-  const trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
-  trojanHorse.scale.setScalar(0.72);
-  {
-    const notchC = normalizedContour.notchCenter ?? 0.17;
-    const notchH = normalizedContour.notchHalf ?? 0.30;
-    const t5R = normalizedContour.terraces?.at(-1)?.radius ?? 24;
-    // 水道右缘外再偏 0.2 rad，保证在缺口外的实土台面上
-    const horsePhi = notchC + notchH + 0.2;
-    // 台地 5 外缘内侧约 1.4：站在一层台面地面，靠近护城河方向
-    const horseR = Math.max(10, t5R - 1.4);
-    const horseLx = horseR * Math.sin(horsePhi);
-    const horseLz = horseR * Math.cos(horsePhi);
-    // 面朝瀑布/护城河交汇（略朝 -φ，看向水道中轴）
-    const horseYaw = -horsePhi + Math.PI * 0.5;
-    // 贴高度场地表，微抬防 z-fight；siteUpright 与台地同轴
-    placeRangeAsset(trojanHorse, horseLx, horseLz, R, 0.06, true);
-    trojanHorse.rotateY(horseYaw);
-    trojanHorse.userData.placement = {
-      kind: "moat-cascade-junction",
-      terraceIndex: 4,
-      phi: horsePhi,
-      r: horseR,
-      yaw: horseYaw,
-    };
-  }
-  scene.add(trojanHorse);
-
   // ---------- 纳沃纳式双栖水利广场：运河进入城堡前 ----------
-  // 放在护城河外缘、瀑布中轴（+z）上：旱季下凹石材广场+三喷泉+台阶座椅；
-  // 汛期同一槽体蓄水，与运河/护城河同水色。雨天自动蓄洪，晴天泄回广场。
-  const moatOuterR = normalizedContour.moat?.outer ?? 46;
-  const notchC = normalizedContour.notchCenter ?? 0.17;
-  // 护城河外约 8 单位：运河入城前的狭长广场
-  const plazaR = moatOuterR + 10;
-  const plazaLx = plazaR * Math.sin(notchC);
-  const plazaLz = plazaR * Math.cos(notchC);
-  const navonaPlaza = createNavonaCanalPlaza({
-    name: "citadel-navona-canal-plaza",
-    seed: 7701,
-    flooded: false,
-  });
-  // 长轴沿径向（朝城/运河走向）：先 place 再绕 +Y 把 +Z 转到指向城心（-径向切向）
-  placeRangeAsset(navonaPlaza, plazaLx, plazaLz, R, CANAL_WATER_LIFT * 0.15, true);
-  // 广场局部 +Z 默认切向 forward；转到沿「城心→外」的径向，使长轴对齐运河入城
-  navonaPlaza.rotateY(Math.PI); // 短端朝城 / 朝外
-  // 顶点融合：边界顶点平滑对齐起伏地形（内部保持平整），
-  // 消除狭长广场斜插山坡的生硬穿模。sampleDelta = 地形面 − 顶点 沿“上”高差。
-  {
-    const _pt = new THREE.Vector3();
-    conformPlazaToTerrain(navonaPlaza, {
-      sampleDelta: (worldPos) => {
-        // {_site,_right,_fwd} 为正交归一基架：切向分量即 range 局部坐标
-        // （不可再乘 R/dot(worldPos,_site) 缩放——顶点半径 >R 会把采样点
-        // 向站心压扁，陡坡上产生系统性高差残留）。
-        const lx = worldPos.dot(_right);
-        const lz = worldPos.dot(_fwd);
-        rangeLocalToWorld(lx, lz, R, _pt); // 已含地形 lift
-        return _pt.sub(worldPos).dot(_site);
-      },
+  // 运河环线在圣城附近的具体走向要等 buildWorldCanal 后才能确定，
+  // 广场位置/朝向改为延迟摆放：rangeSystem.placeNavonaPlaza(lx, lz, yaw)，
+  // 由 messengerIsland 按运河真实切向沿法线推离，保证河道全程露出、两者零重叠。
+  // 旱季下凹石材广场+对称喷泉+运河同款围边；汛期同一槽体蓄水，与运河/护城河同水色。
+  let navonaPlaza = null;
+  let trojanHorse = null;
+  const placeNavonaPlaza = (lx, lz, yaw) => {
+    if (navonaPlaza) return navonaPlaza; // 幂等：只摆一次（conform 会永久改写顶点）
+    navonaPlaza = createNavonaCanalPlaza({
+      name: "citadel-navona-canal-plaza",
+      seed: 7701,
+      flooded: false,
     });
-  }
-  navonaPlaza.userData.placement = {
-    kind: "canal-citadel-approach",
-    lx: plazaLx,
-    lz: plazaLz,
-    r: plazaR,
-    phi: notchC,
+    // 长轴（局部 +Z）沿传入 yaw 对齐运河切向，围边与运河同语言
+    placeRangeAsset(navonaPlaza, lx, lz, R, CANAL_WATER_LIFT * 0.15, true);
+    navonaPlaza.rotateY(yaw);
+    // 顶点融合：边界顶点平滑对齐起伏地形（内部保持平整），
+    // 消除狭长广场斜插山坡的生硬穿模。sampleDelta = 地形面 − 顶点 沿“上”高差。
+    {
+      const _pt = new THREE.Vector3();
+      conformPlazaToTerrain(navonaPlaza, {
+        sampleDelta: (worldPos) => {
+          // {_site,_right,_fwd} 为正交归一基架：切向分量即 range 局部坐标
+          // （不可再乘 R/dot(worldPos,_site) 缩放——顶点半径 >R 会把采样点
+          // 向站心压扁，陡坡上产生系统性高差残留）。
+          const vlx = worldPos.dot(_right);
+          const vlz = worldPos.dot(_fwd);
+          rangeLocalToWorld(vlx, vlz, R, _pt); // 已含地形 lift
+          return _pt.sub(worldPos).dot(_site);
+        },
+      });
+    }
+    navonaPlaza.userData.placement = { kind: "canal-citadel-approach", lx, lz, yaw };
+    scene.add(navonaPlaza);
+
+    // 低多边形特洛伊木马：广场中间焦点
+    trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
+    trojanHorse.scale.setScalar(0.72);
+    // 站在广场中心槽底（conform 后槽面约地形+0.1），微抬防 z-fight
+    placeRangeAsset(trojanHorse, lx, lz, R, 0.12, true);
+    trojanHorse.rotateY(yaw + Math.PI / 2); // 马头转向运河一侧（长轴法向）
+    trojanHorse.userData.placement = { kind: "navona-plaza-center", lx, lz, yaw: yaw + Math.PI / 2 };
+    scene.add(trojanHorse);
+
+    rangeSystem.navonaPlaza = navonaPlaza;
+    rangeSystem.trojanHorse = trojanHorse;
+    return navonaPlaza;
   };
-  scene.add(navonaPlaza);
 
   const rangeSystem = {
     mesh,
@@ -1276,6 +1258,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     moat: moatMesh,
     trojanHorse,
     navonaPlaza,
+    placeNavonaPlaza,
     vegetation: null,
     siteDir: _site.clone(),
     fwd: _fwd.clone(),

@@ -16,7 +16,6 @@ import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildWorldCanal } from "../world/canalSystem.js";
 import { buildCanalLakeLink } from "../world/canalLakeLink.js";
 import { createCanalBoatPatrol } from "../world/canalBoats.js";
-import { getNavonaPlazaCanalExcludeZone } from "../world/navonaPlaza.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
 import { buildAbandonedGate } from "../world/abandonedGate.js";
@@ -46,6 +45,7 @@ import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiu
 import { createCitySeaLake, CITY_SEA_LAKE } from "../world/citySeaLake.js";
 import {
   buildOdysseyCitadel,
+  citadelTerraceMetrics,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
 } from "../world/odysseyCitadel.js";
@@ -53,6 +53,7 @@ import { CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY } from "../world/citadelTown.js";
 import {
   buildCitadelRange,
   citadelRangeLiftDir,
+  citadelRangeEdgeDist,
   citadelSiteDir,
   rangeLocalToWorld,
 } from "../world/citadelRange.js";
@@ -204,10 +205,40 @@ export const messengerIslandScene = {
       // 船保持建造时的甲板高度（约 0.61），与栈桥同高、坐在码头上
       const boat = harborBuilt.landmarks.boat;
       if (boat && boat.position.y < 0.3) boat.position.y = 0.61;
+
+      // 弹琴老人：从出生营地迁到码头，坐在起重机旁货柜叠边（码头局部坐标）
+      // 营地小地图锚点仍留原处；碰撞 / elderMusic 跟老人世界位。
+      const elder = camp?.landmarks?.elder;
+      const crane = harborBuilt.landmarks.crane;
+      const cratesByCrane = harborBuilt.landmarks.cratesByCrane;
+      if (elder && crane) {
+        elder.removeFromParent();
+        harbor.add(elder);
+        // 靠起重机与 cratesByCrane 之间、甲板面坐姿；略偏岸侧不挡搬运动线
+        const deckTop =
+          cratesByCrane?.position?.y ?? crane.position.y ?? 0.51;
+        const seat = new THREE.Vector3(
+          (crane.position.x + (cratesByCrane?.position.x ?? 2.2)) * 0.5 - 0.75,
+          deckTop,
+          (crane.position.z + (cratesByCrane?.position.z ?? 1.0)) * 0.5 + 0.15
+        );
+        elder.position.copy(seat);
+        // 坐姿面朝栈桥活动：船 / 搬运班组 / 起重机
+        elder.rotation.set(0, Math.PI * 0.55, 0);
+        elder.updateMatrixWorld(true);
+        const elderWorld = elder.getWorldPosition(new THREE.Vector3());
+        const elderCol = camp.colliders?.find((c) => c.kind === "elder");
+        if (elderCol) elderCol.position.copy(elderWorld);
+        else camp.colliders?.push({ position: elderWorld.clone(), radius: 0.8, kind: "elder" });
+        harborBuilt.landmarks.elder = elder;
+      }
+
       harborColliders = [
         { position: harbor.position.clone(), radius: 3.8 },
         {
-          position: harborBuilt.landmarks.crane.getWorldPosition(new THREE.Vector3()),
+          position: (crane || harborBuilt.landmarks.crane).getWorldPosition(
+            new THREE.Vector3()
+          ),
           radius: 1.15,
         },
       ];
@@ -239,6 +270,50 @@ export const messengerIslandScene = {
       terrainObjects: citadelTerrainObjects,
     });
     scene.add(odysseyCitadel);
+    odysseyCitadel.updateMatrixWorld(true);
+
+    // ---------- 千鸟漩涡 · 高山圣城台地 1（最高层台面）上空双螺旋飞旋 ----------
+    // 50 只 · spiralOnly（不攀附门体假想墙）· 半径贴合台地 1 足迹
+    const t1Metric = citadelTerraceMetrics(citadelContour)[0];
+    const vortexOrigin = new THREE.Vector3(0, t1Metric.top + 0.35, 0);
+    odysseyCitadel.localToWorld(vortexOrigin);
+    const vortexUp = new THREE.Vector3(0, 1, 0)
+      .applyQuaternion(odysseyCitadel.quaternion)
+      .normalize();
+    const vortexRight = new THREE.Vector3(1, 0, 0)
+      .applyQuaternion(odysseyCitadel.quaternion)
+      .normalize();
+    const vortexFwd = new THREE.Vector3(0, 0, 1)
+      .applyQuaternion(odysseyCitadel.quaternion)
+      .normalize();
+    const birdVortex = new BirdVortexManager(scene, {
+      count: 50,
+      origin: vortexOrigin,
+      up: vortexUp,
+      right: vortexRight,
+      forward: vortexFwd,
+      spiralOnly: true,
+      // 台面 1 上方：略高于镇屋檐，柱状爬升仍贴主峰可读
+      yFloor: 5,
+      yCeil: 18,
+      rMin: Math.max(3, t1Metric.radius * 0.28),
+      rMax: Math.max(6.5, t1Metric.radius * 0.9),
+      name: "bird-vortex-citadel-terrace-1",
+      getTram: () => tramSystem?.getNearestTram?.(vortexOrigin) || tramSystem?.tram || null,
+    });
+    birdVortex.setGateFrame({
+      origin: vortexOrigin,
+      up: vortexUp,
+      right: vortexRight,
+      forward: vortexFwd,
+      respawn: true,
+    });
+    birdVortex.root.userData.anchor = {
+      kind: "citadel-terrace-1",
+      terraceIndex: 0,
+      radius: t1Metric.radius,
+      topY: t1Metric.top,
+    };
 
     // Boids 鸟群：先在峡谷方向占位，建门后整群迁移到叹息之门城头（见下方 migrate）
     const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
@@ -304,17 +379,83 @@ export const messengerIslandScene = {
     // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
     canalPush(canyonDir, "叹息之门");
     if (canalAnchors.length >= 3) {
-      // 纳沃纳广场处运河断开：广场即入城前双栖水道，河道网格不得与之重叠
-      const plazaExclude = getNavonaPlazaCanalExcludeZone(
-        citadelRange?.navonaPlaza
-      );
+      // 运河全程不断开：纳沃纳广场已横向偏离运河中线，河道完整露出
       const canal = buildWorldCanal(scene, R, {
         anchors: canalAnchors,
         names: canalNames,
         groundLift: citadelRangeLiftDir,
-        excludeZones: plazaExclude ? [plazaExclude] : [],
       });
       canalSys = canal;
+      // ---------- 纳沃纳广场延迟摆放：沿运河走出土坡、在平地侧向避开 ----------
+      // 运河环线斜穿圣城黄土坡（中心线几乎过站心）：坡上摆广场必被山体吞没。
+      // 故沿运河曲线向较平一侧步行，走出 lift 域后再沿长轴多走 22（半长 19 全落平地），
+      // 在该处按切向对齐、法线推离 23（运河半展7.9+广场半展11.1+缓冲4），河道全程露出。
+      {
+        let plazaGroup = null;
+        scene.traverse((o) => {
+          if (!plazaGroup && o.name === "citadel-navona-canal-plaza") plazaGroup = o;
+        });
+        if (!plazaGroup && canal.curve) {
+          const curve = canal.curve;
+          const rg = citadelRange.right, fw = citadelRange.fwd;
+          const localOf = (p) => [
+            p.x * rg.x + p.y * rg.y + p.z * rg.z,
+            p.x * fw.x + p.y * fw.y + p.z * fw.z,
+          ];
+          const edgeAt = (p) => {
+            const [lx, lz] = localOf(p);
+            return citadelRangeEdgeDist(lx, lz);
+          };
+          const N = 480, du = 1 / N;
+          // 1) 离圣城最近的曲线参数 u0
+          let u0 = 0, best = 1e9;
+          for (let i = 0; i < N; i++) {
+            const [lx, lz] = localOf(curve.getPointAt(i * du));
+            const d = lx * lx + lz * lz;
+            if (d < best) { best = d; u0 = i * du; }
+          }
+          // 2) 向较平一侧步行，走出黄土坡域+裙边（edgeDist > 6.5）
+          const sgn = edgeAt(curve.getPointAt((u0 + du) % 1)) >= edgeAt(curve.getPointAt((u0 - du + 1) % 1)) ? 1 : -1;
+          let u = u0;
+          for (let s = 0; s < N; s++) {
+            u = (u + sgn * du + 1) % 1;
+            if (edgeAt(curve.getPointAt(u)) > 6.5) break;
+          }
+          // 3) 再沿曲线走 22，让广场半长完全落在平地
+          let acc = 0;
+          const prev = curve.getPointAt(u).clone();
+          while (acc < 22) {
+            u = (u + sgn * du + 1) % 1;
+            const p = curve.getPointAt(u);
+            acc += p.distanceTo(prev);
+            prev.copy(p);
+          }
+          // 4) 该处中心线/切向 → 法线侧移摆放
+          const c = curve.getPointAt(u);
+          const t = curve.getTangentAt(u);
+          const [cLx, cLz] = localOf(c);
+          const rl = Math.hypot(c.x, c.y, c.z) || 1;
+          const ux = c.x / rl, uy = c.y / rl, uz = c.z / rl;
+          const rd = t.x * ux + t.y * uy + t.z * uz;
+          const tx = t.x - ux * rd, ty = t.y - uy * rd, tz = t.z - uz * rd;
+          const tl = Math.hypot(tx, ty, tz) || 1;
+          const tLx = (tx * rg.x + ty * rg.y + tz * rg.z) / tl;
+          const tLz = (tx * fw.x + ty * fw.y + tz * fw.z) / tl;
+          const tn = Math.hypot(tLx, tLz) || 1;
+          const nx0 = tLz / tn, nz0 = -tLx / tn;
+          // 法线两侧各生成候选中心：先要求中心充分出域（不压回坡体/裙边），
+          // 再取局部范数更小者——雪山夹峙的出口走廊中央，避开两侧山体
+          const CENTER_DIST = 23;
+          const cands = [
+            { lx: cLx + nx0 * CENTER_DIST, lz: cLz + nz0 * CENTER_DIST },
+            { lx: cLx - nx0 * CENTER_DIST, lz: cLz - nz0 * CENTER_DIST },
+          ].filter((q) => citadelRangeEdgeDist(q.lx, q.lz) > 6);
+          const pick = (cands.length ? cands : [{ lx: cLx + nx0 * CENTER_DIST, lz: cLz + nz0 * CENTER_DIST }])
+            .reduce((a, b) => (a.lx * a.lx + a.lz * a.lz <= b.lx * b.lx + b.lz * b.lz ? a : b));
+          const yaw = Math.atan2(tLx / tn, tLz / tn); // 长轴(+Z)对齐运河切向
+          citadelRange.placeNavonaPlaza(pick.lx, pick.lz, yaw);
+        }
+      }
       // 复制 10 艘古战船沿运河环线巡游（整体放大一倍），送信人可靠近 [F] 登船驾驶
       canalBoats = createCanalBoatPatrol(scene, canal, { count: 10, scale: 1.84 });
       // 利用落差互联互通：运河水沿阶梯瀑布船道跌入大湖，战船顺梯入湖巡游，
@@ -457,9 +598,7 @@ export const messengerIslandScene = {
     });
     scene.add(abandonedGate);
 
-    // ---------- 万鸟归巢 · 十二组群任务系统（3面×4组 ≈ 1000 只 · 观者可见侧聚群） ----------
-    // A 盘旋双子塔 · B 墙→地觅食 · C 地→墙攀附（B/C 随机交换）· D 面↔面通勤
-    let birdVortex = null;
+    // ---------- 叹息之门城头：小群 Boids 近景备份（千鸟漩涡已迁到圣城台地 1） ----------
     {
       const seat = abandonedGate.userData?.seatRoot;
       const gateDir = seat
@@ -474,40 +613,9 @@ export const messengerIslandScene = {
       const gateRight = seat
         ? new THREE.Vector3(1, 0, 0).applyQuaternion(seat.quaternion).normalize()
         : new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), gateDir).normalize();
-      const gateUp = seat
-        ? new THREE.Vector3(0, 1, 0).applyQuaternion(seat.quaternion).normalize()
-        : gateDir.clone();
       const gateFwd = seat
         ? new THREE.Vector3(0, 0, 1).applyQuaternion(seat.quaternion).normalize()
         : new THREE.Vector3().crossVectors(gateDir, gateRight).normalize();
-      const gateOrigin = seat
-        ? seat.position.clone()
-        : gateDir.clone().multiplyScalar(R + canyonOffsetDir(gateDir));
-
-      birdVortex = new BirdVortexManager(scene, {
-        count: 1000,
-        origin: gateOrigin,
-        up: gateUp,
-        right: gateRight,
-        forward: gateFwd,
-        // 双螺旋长河：水面(Y≈25) → 高架桥(Y≈40) → 飞艇层(Y≈60) 盘旋爬升
-        yFloor: 15,
-        yCeil: 62,
-        // 硬性指标：环绕半径 6.0–15.0 随机波动（松散包裹双子要塞夹道）
-        rMin: 6,
-        rMax: 15,
-        getTram: () =>
-          tramSystem.getNearestTram?.(gateOrigin) || tramSystem.tram || null,
-      });
-      birdVortex.setGateFrame({
-        origin: gateOrigin,
-        up: gateUp,
-        right: gateRight,
-        forward: gateFwd,
-        respawn: true,
-      });
-
-      // 旧 Boids 仍锚在门周作为「近景可读」备份层（旋涡是主体）
       flock.setHome?.(gateDir, {
         altMin: 10,
         altMax: 36,
@@ -546,8 +654,8 @@ export const messengerIslandScene = {
         citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布 · 纳沃纳双栖广场
         odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
         airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
-        flock, // 旧峡谷 Boids（已让位给旋涡，root 隐藏）
-        birdVortex, // 万鸟归巢 · InstancedMesh 垂直旋涡风暴（叹息之门）
+        flock, // 叹息之门城头小群 Boids 近景备份
+        birdVortex, // 千鸟漩涡 · 圣城台地1 上空双螺旋（50 只 · spiralOnly）
         hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
         escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
         aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
@@ -631,13 +739,12 @@ export const messengerIslandScene = {
           moebius.update?.(dt, t, { escortTram });
         }
 
-        // 万鸟旋涡：螺旋 + 光暗实例色 + 电车排斥 + 观者可见侧聚群
+        // 千鸟漩涡（圣城台地 1）：双螺旋飞旋 + 光暗色 + 近身惊飞
         if (birdVortex) {
           const tram =
             tramSystem.getNearestTram?.(runtime?.player?.position) ||
             tramSystem.tram ||
             null;
-          // 观者 = 送信人位置（步行/乘车均是视角所在），驱动盘旋鸟河向可见面聚拢
           birdVortex.update(dt, t, {
             tram,
             viewer: runtime?.player?.position || null,

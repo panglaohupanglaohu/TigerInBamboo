@@ -326,9 +326,9 @@ function nearestTrackU(worldPos) {
 /** 同步搬迁三重门 + 城头云墙到轨道参数 u */
 function moveGateAndCloudsTo(u) {
   const gate = messenger?.landmarks?.abandonedGate;
-  const birdVortex = messenger?.landmarks?.birdVortex;
   const okGate = gate?.userData?.relocate?.(u) ?? false;
-  const okBird = okGate ? (birdVortex?.syncToGate?.(gate) ?? false) : false;
+  // 千鸟漩涡已锚定圣城台地 1，不随叹息之门搬迁
+  const okBird = false;
   const okCloud =
     isCloudWallEnabled() && equatorialClouds?.parent
       ? equatorialClouds?.userData?.relocate?.(u) ?? false

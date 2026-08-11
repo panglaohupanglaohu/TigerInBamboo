@@ -1,6 +1,8 @@
 // =====================================================================
 //  弹琴老人互动：靠近按 E 播放 / 停止原创八音盒旋律
+//  老人现坐在圣城旧港码头起重机旁；距离用世界坐标（可能挂在码头子树下）
 // =====================================================================
+import * as THREE from "three";
 import { toggleMusicBox, isMusicBoxPlaying, isMuted } from "../audio/sfx.js";
 import { showToast } from "../ui/hud.js";
 
@@ -17,9 +19,13 @@ export function createElderMusicInteraction({ player, elder, elHint, isGameStart
   let notePulse = 0;
   const keys = elder?.userData?.musicKeys || null;
   const baseKeysY = keys?.position.y ?? 0;
+  const _elderWorld = new THREE.Vector3();
 
   function nearElder() {
-    return !!elder && player.position.distanceTo(elder.position) <= ELDER_MUSIC_RANGE;
+    // 老人可能挂在码头等子节点下，须用世界坐标判断近身
+    if (!elder) return false;
+    elder.getWorldPosition(_elderWorld);
+    return player.position.distanceTo(_elderWorld) <= ELDER_MUSIC_RANGE;
   }
 
   function refreshHint() {

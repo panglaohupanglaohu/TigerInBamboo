@@ -1025,13 +1025,14 @@ export function buildOldHarborScene(opts = {}) {
   crates.rotation.y = -0.15;
   g.add(crates);
 
-  // 第二小堆（船尾侧）
+  // 第二小堆（起重机旁 · 弹琴老人落座邻侧）
   const crates2 = createStackedCrates({
     count: 6,
     seed: seed + 99,
     areaX: 1.8,
     areaZ: 1.4,
   });
+  crates2.name = "harbor-crates-by-crane";
   crates2.position.set(2.2, deckY + deckH / 2, 1.0);
   crates2.scale.setScalar(0.85);
   g.add(crates2);
@@ -1086,7 +1087,7 @@ export function buildOldHarborScene(opts = {}) {
 
   return {
     group: g,
-    landmarks: { boat, crane, crates, porterSquads: [squadA, squadB] },
+    landmarks: { boat, crane, crates, cratesByCrane: crates2, porterSquads: [squadA, squadB] },
     /** 贴球后由调用方转为世界碰撞 */
     collidersLocal,
     /** 逐帧驱动搬运班组往返动画 */

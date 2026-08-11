@@ -1,52 +1,37 @@
 // =====================================================================
 //  纳沃纳式双栖水利广场（Amphibious Canal Plaza）
-//  运河进入高山圣城前的景观型水利节点：
-//    旱季 isFlooded=false → 下凹石材广场 + 三大喷泉 + 巴洛克亲水台阶（市民座椅）
-//    汛期 isFlooded=true  → 同一槽体蓄水 0.5–1m，台阶变码头，喷泉半浸
-//  设计参照：纳沃纳广场三喷泉轴线 · 微凹 U 断面 · 边缘阶梯界面
+//  运河进入高山圣城前的景观型水利节点（广场横向偏离运河，河道全程露出不重叠）：
+//    旱季 isFlooded=false → 下凹石材广场 + 对称喷泉 + 运河同款围边（立壁/岸顶土埂）
+//    汛期 isFlooded=true  → 同一槽体蓄水 0.5–1m，广场变水池，喷泉半浸
+//  中轴留空作木马焦点；围边与星海运河同一套立壁+土埂语言。
 //  局部约定：+Y 向上，+Z 长轴（朝城 / 运河走向），+X 横宽，原点为广场中心槽底。
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
-import { SHARED_WATER_COLOR, createCanalWaterMaterial, CANAL_WATER_LIFT } from "./canalSystem.js";
+import {
+  SHARED_WATER_COLOR,
+  createCanalWaterMaterial,
+  CANAL_WATER_LIFT,
+  CANAL_DEPTH,
+  CANAL_WALL_THICK,
+  CANAL_LIP_WIDTH,
+  CANAL_LIP_THICK,
+  CANAL_BANK_COLOR,
+  CANAL_LIP_COLOR,
+} from "./canalSystem.js";
 
 export const NAVONA_PLAZA_SPEC = Object.freeze({
   length: 38, // 长轴（运河走向）
-  halfWidth: 9.5, // 半宽（建筑界面内缘）
+  halfWidth: 9.5, // 半宽（槽缘内缘）
   basinDepth: 0.85, // 槽心相对台沿下凹
   floodDepth: 0.72, // 蓄水目标深度（0.5–1m 带）
   segsL: 28,
   segsW: 14,
-  stepCount: 4,
-  stepTread: 0.55,
-  stepRise: 0.2,
-  fountainCount: 3,
-  /** 运河网格排除半径余量（切向单位）：半对角 + 台阶 + 缓冲，避免与河道重叠 */
-  canalGapPadding: 4.5,
+  fountainCount: 2, // 对称双喷泉：中轴留空作木马焦点
 });
-
-/**
- * 运河排除区参数：以广场中心为球冠，半径覆盖广场槽体+台阶，使河道在此断开。
- * @param {THREE.Object3D} plaza createNavonaCanalPlaza 返回值（已放置）
- * @param {object} [spec]
- * @returns {{ center: THREE.Vector3, radius: number }|null}
- */
-export function getNavonaPlazaCanalExcludeZone(plaza, spec = NAVONA_PLAZA_SPEC) {
-  if (!plaza?.position) return null;
-  const halfL = (spec.length ?? NAVONA_PLAZA_SPEC.length) * 0.5;
-  const halfW = (spec.halfWidth ?? NAVONA_PLAZA_SPEC.halfWidth)
-    + (spec.stepCount ?? 0) * (spec.stepTread ?? 0);
-  const pad = spec.canalGapPadding ?? NAVONA_PLAZA_SPEC.canalGapPadding;
-  const radius = Math.hypot(halfL, halfW) + pad;
-  return {
-    center: plaza.position.clone().normalize(),
-    radius,
-  };
-}
 
 const STONE_DARK = 0x3a4550; // 深青灰火山岩心
 const STONE_MID = 0x5a6670; // 弧线铺装
-const STONE_PALE = 0x9aa6ad; // 台阶 / 栏
 const STONE_WARM = 0xc4b49a; // 喷泉基座暖石
 const BRONZE = 0x8a6a3a;
 const FOAM = 0xe8f4f0;
@@ -264,68 +249,50 @@ export function createNavonaCanalPlaza(opts = {}) {
   water.userData.conform = "basin"; // 水面同槽体一起顺地形曲率
   group.add(water);
 
-  // ---- 3. 两侧巴洛克亲水台阶（旱=座椅，汛=码头/挡水）----
-  const stepMat = toonMat(STONE_PALE, { flatShading: true });
-  const stepsGroup = new THREE.Group();
-  stepsGroup.name = "navona-plaza-baroque-steps";
+  // ---- 3. 运河同款围边：四面立壁 + 岸顶土埂（与星海运河同材质同断面，替换原巴洛克台阶围边）----
+  const bankMat = toonMat(CANAL_BANK_COLOR, { flatShading: true });
+  const lipMat = toonMat(CANAL_LIP_COLOR, { flatShading: true });
+  const rimGroup = new THREE.Group();
+  rimGroup.name = "navona-plaza-canal-rim";
+  const wallH = CANAL_DEPTH; // 与运河立壁同高（壁顶略高于台沿）
+  const lipHgt = CANAL_LIP_THICK * 1.2; // 与运河土埂同厚
+  const lipCy = wallH + CANAL_LIP_THICK * 0.4;
+  const addRim = (sx, sz, px, pz, name, mat, h, cy) => {
+    const m = part(
+      new THREE.BoxGeometry(sx, h, sz, segOf(sx), 1, segOf(sz)),
+      mat,
+      name,
+      0.016
+    );
+    m.position.set(px, cy, pz);
+    m.userData.conform = "solid"; // 底边顺地形，壁顶/埂顶保持平整
+    rimGroup.add(m);
+  };
+  const lipW = CANAL_LIP_WIDTH - CANAL_WALL_THICK * 0.5;
+  const lipX = halfW + (CANAL_WALL_THICK * 0.5 + CANAL_LIP_WIDTH) * 0.5;
+  const lipZ = halfL + (CANAL_WALL_THICK * 0.5 + CANAL_LIP_WIDTH) * 0.5;
   for (const side of [-1, 1]) {
-    for (let s = 0; s < spec.stepCount; s++) {
-      const tread = spec.stepTread;
-      const rise = spec.stepRise;
-      const step = part(
-        new THREE.BoxGeometry(tread, rise, halfL * 1.85, 1, 1, segOf(halfL * 1.85)),
-        stepMat,
-        `navona-step-${side > 0 ? "R" : "L"}-${s}`,
-        0.016
-      );
-      // 外侧更高：从槽缘向外爬升
-      const x = side * (halfW + tread * (s + 0.5));
-      const y = depth + rise * (s + 0.5);
-      step.position.set(x, y, 0);
-      step.userData.conform = "solid"; // 底边顺地形，踏面保持平整
-      stepsGroup.add(step);
-    }
-    // 建筑界面矮墙
-    const facade = part(
-      new THREE.BoxGeometry(0.35, 1.1, halfL * 1.9, 1, 2, segOf(halfL * 1.9)),
-      toonMat(STONE_MID, { flatShading: true }),
-      `navona-facade-${side > 0 ? "R" : "L"}`,
-      0.02
-    );
-    facade.position.set(
-      side * (halfW + spec.stepTread * spec.stepCount + 0.4),
-      depth + 0.55,
-      0
-    );
-    facade.userData.conform = "solid";
-    stepsGroup.add(facade);
+    // 立壁：贴槽缘四面
+    addRim(CANAL_WALL_THICK, halfL * 2 + CANAL_WALL_THICK, side * (halfW + CANAL_WALL_THICK * 0.5), 0,
+      `navona-rim-wall-${side > 0 ? "R" : "L"}`, bankMat, wallH, wallH * 0.5);
+    addRim(halfW * 2 + CANAL_WALL_THICK, CANAL_WALL_THICK, 0, side * (halfL + CANAL_WALL_THICK * 0.5),
+      `navona-rim-wall-${side > 0 ? "N" : "S"}`, bankMat, wallH, wallH * 0.5);
+    // 岸顶土埂：立壁外侧、略高于壁顶
+    addRim(lipW, halfL * 2 + CANAL_WALL_THICK, side * lipX, 0,
+      `navona-rim-lip-${side > 0 ? "R" : "L"}`, lipMat, lipHgt, lipCy);
+    addRim(halfW * 2 + CANAL_WALL_THICK, lipW, 0, side * lipZ,
+      `navona-rim-lip-${side > 0 ? "N" : "S"}`, lipMat, lipHgt, lipCy);
   }
-  group.add(stepsGroup);
+  group.add(rimGroup);
 
-  // 短端入口台阶（运河接入 / 城堡方向）
-  for (const end of [-1, 1]) {
-    for (let s = 0; s < 3; s++) {
-      const step = part(
-        new THREE.BoxGeometry(halfW * 1.5, 0.18, 0.5, segOf(halfW * 1.5), 1, 1),
-        stepMat,
-        `navona-end-step-${end > 0 ? "N" : "S"}-${s}`,
-        0.014
-      );
-      step.position.set(0, depth + 0.18 * (s + 0.5), end * (halfL + 0.35 + s * 0.48));
-      step.userData.conform = "solid"; // 相对台沿高度保持，整体顺地形曲率
-      group.add(step);
-    }
-  }
-
-  // ---- 4. 三大轴线喷泉（中轴泄洪/景观节点）----
+  // ---- 4. 对称轴线喷泉（中轴留空作木马焦点）----
   const fountains = new THREE.Group();
   fountains.name = "navona-plaza-fountains";
   const fountainNodes = [];
   for (let i = 0; i < spec.fountainCount; i++) {
-    const t = (i + 1) / (spec.fountainCount + 1);
-    const z = -halfL * 0.72 + t * halfL * 1.44;
-    const isCenter = i === 1;
-    const f = makeFountain(`navona-fountain-${i}`, isCenter ? 1.15 : 0.88, isCenter, random);
+    const fr = (i + 0.5) / spec.fountainCount; // count=2 → 0.25 / 0.75
+    const z = (fr * 2 - 1) * halfL; // ±0.5·halfL，对称夹持中轴木马
+    const f = makeFountain(`navona-fountain-${i}`, 0.95, false, random);
     // 座落在槽心略抬：旱季基座露出，汛期半浸
     f.position.set(0, depth * 0.08, z);
     f.userData.conform = "lift"; // 逐座随槽底曲率抬升，基座/碑体/水柱不脱节

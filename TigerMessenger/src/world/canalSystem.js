@@ -32,6 +32,12 @@ const LIP_WIDTH = 1.4;
 const LIP_THICK = 0.1;
 // 立壁厚度（横向，避免纸片闪烁）
 const WALL_THICK = 0.22;
+// 围边样式对外公开：纳沃纳广场等节点复用同一套立壁/土埂语言
+export const CANAL_LIP_WIDTH = LIP_WIDTH;
+export const CANAL_LIP_THICK = LIP_THICK;
+export const CANAL_WALL_THICK = WALL_THICK;
+export const CANAL_BANK_COLOR = 0x6b563f; // 立壁土色
+export const CANAL_LIP_COLOR = 0x7a6548; // 岸顶土埂
 // 场景登岸浅湾半径（数据预留）
 const DOCK_RADIUS = 8.4;
 // 运河水面色：护城河/交接水系以此为准（不再用护城河旧淡青）
@@ -244,8 +250,8 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
 
   const half = CANAL_HALF_WIDTH;
   const bedMat = toonMat(0x3a2f26, { flatShading: true });
-  const bankMat = toonMat(0x6b563f, { flatShading: true });
-  const lipMat = toonMat(0x7a6548, { flatShading: true });
+  const bankMat = toonMat(CANAL_BANK_COLOR, { flatShading: true });
+  const lipMat = toonMat(CANAL_LIP_COLOR, { flatShading: true });
   const waterMat = createCanalWaterMaterial();
 
   // 1) 河床：沟底薄板（整条贴地浅沟底）

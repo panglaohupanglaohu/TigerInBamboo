@@ -195,8 +195,11 @@ export function buildStartingCamp(scene, R) {
   skyRing.renderOrder = 2;
   g.add(skyRing);
 
-  // ---------- 4. 弹琴老人（山洞石旁，与树/岩保持 3 单位） ----------
+  // ---------- 4. 弹琴老人（模型在此创建；世界位由 messengerIsland 迁到旧港码头） ----------
+  // 坐姿：深灰衣 + 白须 + 膝上八音盒琴。建造时暂放营地洞旁作锚点参考，
+  // 圣城码头贴地后会 reparent 到起重机旁货柜叠边（见 messengerIsland 港口段）。
   const elder = new THREE.Group();
+  elder.name = "music-elder";
   const cloth = toonMat(0x3a3f46); // 深灰衣
   const skin = toonMat(0xe8c39a);
   const beardMat = toonMat(0xf0ede6); // 白须
@@ -235,13 +238,11 @@ export function buildStartingCamp(scene, R) {
   addOutline(keys, 0.006);
   elder.add(keys);
   elder.userData.musicKeys = keys;
-  const ELDER = { x: -17, z: 9 }; // 原 (-12.3,4.5) 被轨道穿过，移到山洞旁（距轨道 4.33）
-  put(elder, ELDER.x, ELDER.z, layoutGroundLiftAt(ELDER.x, ELDER.z), 2.6); // 面转向营地
-  // kind 标记：messengerIsland 会在圣城建成后把老人搬到第一层瀑布旁，
-  // 并同步更新此碰撞体位置。
+  // 暂置营地（小地图锚点仍用此位）；正式落点在圣城旧港起重机旁
+  const ELDER = { x: -17, z: 9 };
+  put(elder, ELDER.x, ELDER.z, layoutGroundLiftAt(ELDER.x, ELDER.z), 2.6);
   colliders.push({ position: elder.position.clone(), radius: 0.8, kind: "elder" });
-  // 营地锚点：小地图「出发营地」标记用。老人搬到圣城瀑布旁后，
-  // 锚点仍指向营地（老人原位置）。
+  // 营地锚点：小地图「出发营地」——老人迁港后仍指向此处
   const campAnchor = new THREE.Object3D();
   put(campAnchor, ELDER.x, ELDER.z, layoutGroundLiftAt(ELDER.x, ELDER.z));
 
