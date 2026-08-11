@@ -1961,6 +1961,7 @@ export function createMoebiusSwampZone(opts = {}) {
   // 船A：进坞维修的战船（桅杆帆索已拆下待换），长尾猴负责吊装备用桅
   const shipA = createFisherBoat();
   shipA.name = "swamp-warship-repair";
+  shipA.scale.setScalar(2); // 战船整体放大一倍（剪纸桨手/维修工位随船同步）
   for (const child of [...shipA.children]) {
     // 桅杆/帆/横桁/支索/旗组 = 中线高位件，拆除待修（露出无桅战船）
     if (child.position.y > 1.1) child.visible = false;
@@ -2071,6 +2072,7 @@ export function createMoebiusSwampZone(opts = {}) {
   // 船B：修毕待发的战船 —— 泊稳 → 划桨驶向入口豁口 → 爬上石阶出沼（循环）
   const shipB = createFisherBoat();
   shipB.name = "swamp-warship-depart";
+  const SHIPB_SCALE = 2; // 战船整体放大一倍
   swampZone.add(shipB);
   let shipyardWakeT = 0; // 尾流涟漪计时
 
@@ -2729,7 +2731,7 @@ export function createMoebiusSwampZone(opts = {}) {
         shipB.position.y += Math.sin(t * 1.1) * 0.05;
         // 泊稳时船头已对准出口豁口
         shipB.rotation.y = Math.atan2(-(Math.sin(0.3) * 22 - shipB.position.z), Math.cos(0.3) * 22 - shipB.position.x);
-        shipB.scale.setScalar(1);
+        shipB.scale.setScalar(SHIPB_SCALE);
         updateWarshipOars(shipB, dt, 0);
       } else if (bPhase === "sail") {
         const k = (bt - DUR_DOCK) / DUR_SAIL;
@@ -2738,7 +2740,7 @@ export function createMoebiusSwampZone(opts = {}) {
         shipB.position.copy(_syV1);
         shipB.position.y += Math.sin(t * 1.3) * 0.04;
         shipB.rotation.y = Math.atan2(-(_syV2.z - _syV1.z), _syV2.x - _syV1.x);
-        shipB.scale.setScalar(1);
+        shipB.scale.setScalar(SHIPB_SCALE);
         updateWarshipOars(shipB, dt, 1); // 全速划桨，纸兵齐动
         shipyardWakeT -= dt; // 船首尾流涟漪
         if (shipyardWakeT <= 0) {
@@ -2755,7 +2757,7 @@ export function createMoebiusSwampZone(opts = {}) {
         shipB.position.copy(_syV1);
         shipB.position.y += k * 1.3; // 顺入口石阶抬升，驶出湖沼
         shipB.rotation.y = Math.atan2(-(_syV2.z - _syV1.z), _syV2.x - _syV1.x);
-        shipB.scale.setScalar(1 - k * 0.42);
+        shipB.scale.setScalar(SHIPB_SCALE * (1 - k * 0.42));
         shipB.visible = k < 0.97;
         updateWarshipOars(shipB, dt, 1 - k);
       }

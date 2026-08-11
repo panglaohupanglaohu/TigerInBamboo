@@ -26,7 +26,7 @@ const DRAFT_LIFT = 0.12;
  * @param {{ curve: THREE.CatmullRomCurve3, waterR: number, bedR?: number }|null} canal
  * @param {object} [opts]
  * @param {number} [opts.count=10]
- * @param {number} [opts.scale=0.92]
+ * @param {number} [opts.scale=1.84] 战船整体放大一倍（含剪纸桨手）
  * @returns {{
  *   boats: THREE.Group[],
  *   update(dt: number): void,
@@ -46,7 +46,7 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
   }
 
   const count = Math.max(1, Math.min(12, opts.count ?? CANAL_BOAT_COUNT));
-  const scale = opts.scale ?? 0.92;
+  const scale = opts.scale ?? 1.84;
   const waterR = canal.waterR;
   const curve = canal.curve;
   const baseSpeed = 1 / LAP_SECONDS; // 参数 u 每秒增量

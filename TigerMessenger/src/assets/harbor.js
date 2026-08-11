@@ -353,7 +353,7 @@ export function createFisherBoat() {
   for (const child of g.children) child.position.y -= 0.18;
 
   g.userData.kind = "fisherBoat";
-  g.userData.collideRadius = 3.4;
+  g.userData.collideRadius = 6.8;
   return g;
 }
 
@@ -562,6 +562,142 @@ function updateWarshipCrew(boat, phase = 0, speed = 0) {
     parts.legR.setMatrixAt(i, _cMat);
   }
   for (const name in parts) parts[name].instanceMatrix.needsUpdate = true;
+}
+
+// =====================================================================
+//  码头搬运班组：剪纸士兵（与战船桨手同款几何，同步放大一倍）
+//  在货堆与战船之间往返：扛木箱到船边 → 箱子触船即视为装船消失 → 空手返回
+// =====================================================================
+
+/** 纸士兵与战船同步放大一倍 */
+const PORTER_SCALE = 2;
+/** 站立髋点高（腿长 0.16，脚恰好落地） */
+const PORTER_HIP = 0.17;
+
+const _ptA = new THREE.Vector3();
+const _ptB = new THREE.Vector3();
+const _ptSide = new THREE.Vector3();
+const easeIO = (s) => s * s * (3 - 2 * s);
+
+/** 单个搬运纸士兵：髋枢轴躯干链 + 双臂抱箱 + 双腿摆动。 */
+function buildPorter(m, geo) {
+  const root = new THREE.Group();
+  root.name = "porter";
+  const fig = new THREE.Group();
+  fig.scale.setScalar(PORTER_SCALE);
+  root.add(fig);
+
+  // 躯干链（髋枢轴）：躯干/皮裙/头/盔/鬃冠 同姿态
+  const body = new THREE.Group();
+  body.name = "porter-body";
+  body.position.y = PORTER_HIP;
+  fig.add(body);
+  body.add(part(geo.torso, m.leather, 0.01));
+  body.add(part(geo.skirt, m.leatherDark, 0.01));
+  body.add(part(geo.head, m.skin, 0.008));
+  body.add(part(geo.helmet, m.bronze, 0.008));
+  body.add(part(geo.crest, m.crest, 0.008));
+
+  // 双臂：肩枢轴，抱箱时前平举
+  const armL = new THREE.Group();
+  armL.position.set(0, PORTER_HIP + 0.135, 0.018);
+  armL.add(part(geo.arm, m.skin, 0.008));
+  fig.add(armL);
+  const armR = new THREE.Group();
+  armR.position.set(0, PORTER_HIP + 0.135, -0.018);
+  armR.add(part(geo.arm, m.skin, 0.008));
+  fig.add(armR);
+
+  // 双腿：髋枢轴，行走时反向摆动
+  const legL = new THREE.Group();
+  legL.position.set(0.03, PORTER_HIP, 0.012);
+  legL.add(part(geo.leg, m.skin, 0.008));
+  fig.add(legL);
+  const legR = new THREE.Group();
+  legR.position.set(-0.03, PORTER_HIP, -0.012);
+  legR.add(part(geo.leg, m.skin, 0.008));
+  fig.add(legR);
+
+  // 肩扛/怀抱的木箱（触船即视为装船，visible 控制）
+  const crate = part(new THREE.BoxGeometry(0.15, 0.11, 0.12), toonMat(CRATE_WOOD), 0.01);
+  crate.name = "porter-crate";
+  crate.position.set(0.24, PORTER_HIP + 0.1, 0);
+  crate.rotation.z = -0.1;
+  fig.add(crate);
+
+  root.userData.parts = { body, armL, armR, legL, legR, crate };
+  return root;
+}
+
+/**
+ * 搬运班组：count 名纸士兵沿 from→to 往返搬箱，相位错开不撞车。
+ * @param {{ from: THREE.Vector3, to: THREE.Vector3, count?: number, period?: number, offset?: number }} opts
+ * @returns {THREE.Group & { userData: { update(t: number): void } }}
+ */
+export function createPorterSquad(opts) {
+  const { m, geo } = crewShared();
+  const squad = new THREE.Group();
+  squad.name = "porter-squad";
+  const count = opts.count ?? 2;
+  const porters = [];
+  for (let i = 0; i < count; i++) {
+    const porter = buildPorter(m, geo);
+    // 横向车道错开，避免同线重叠
+    porter.userData.lane = (i - (count - 1) / 2) * 0.46;
+    squad.add(porter);
+    porters.push(porter);
+  }
+  squad.userData.from = opts.from.clone();
+  squad.userData.to = opts.to.clone();
+  squad.userData.period = opts.period ?? 12;
+  squad.userData.offset = opts.offset ?? 0;
+  squad.userData.porters = porters;
+  squad.userData.update = (t) => updatePorterSquad(squad, t);
+  return squad;
+}
+
+/** 班组循环动画：去程扛箱 → 船边卸货（箱子消失=装船）→ 空手返回。 */
+function updatePorterSquad(squad, t) {
+  const { from, to, period, offset, porters } = squad.userData;
+  _ptA.copy(to).sub(from);
+  _ptA.y = 0;
+  _ptSide.set(-_ptA.z, 0, _ptA.x).normalize();
+  const CARRY_END = 0.46;
+  const PAUSE_END = 0.56;
+  for (let i = 0; i < porters.length; i++) {
+    const p = porters[i];
+    const { body, armL, armR, legL, legR, crate } = p.userData.parts;
+    const u = ((((t + offset + (i * period) / porters.length) % period) + period) % period) / period;
+    let carrying = false;
+    let moving = true;
+    if (u < CARRY_END) {
+      const s = easeIO(u / CARRY_END);
+      _ptB.lerpVectors(from, to, s);
+      carrying = true;
+    } else if (u < PAUSE_END) {
+      _ptB.copy(to);
+      carrying = u < CARRY_END + 0.04; // 触船一瞬后箱子即装船消失
+      moving = false;
+    } else {
+      const s = easeIO((u - PAUSE_END) / (1 - PAUSE_END));
+      _ptB.lerpVectors(to, from, s);
+    }
+    _ptB.addScaledVector(_ptSide, p.userData.lane);
+    p.position.copy(_ptB);
+    const step = t * 9 + i * 2.3;
+    p.position.y += moving ? Math.abs(Math.sin(step)) * 0.035 : 0;
+    // 纸偶面法线朝侧，前进向 = 局部 +X：yaw 把 +X 转到移动方向
+    const hx = moving ? (carrying ? to.x - from.x : from.x - to.x) : 1;
+    const hz = moving ? (carrying ? to.z - from.z : from.z - to.z) : 0;
+    p.rotation.y = Math.atan2(-hz, hx);
+    const swing = moving ? Math.sin(step) * 0.5 : 0;
+    legL.rotation.z = swing;
+    legR.rotation.z = -swing;
+    body.rotation.z = moving ? -0.1 : 0; // 行进中微前倾
+    armL.rotation.z = carrying ? 1.22 : 0.35 + swing * 0.5;
+    armR.rotation.z = carrying ? 1.22 : 0.35 - swing * 0.5;
+    crate.visible = carrying;
+  }
 }
 
 // =====================================================================
@@ -826,7 +962,7 @@ export function buildOldHarborScene(opts = {}) {
 
   // 栈桥外的可见水面：从 finger 末端外开始，直接覆盖船底视觉层。
   const harborWater = new THREE.Mesh(
-    new THREE.BoxGeometry(9.5, 0.08, 6.5),
+    new THREE.BoxGeometry(14.5, 0.08, 9.5),
     new THREE.MeshBasicMaterial({
       color: 0x247f99,
       side: THREE.DoubleSide,
@@ -834,7 +970,7 @@ export function buildOldHarborScene(opts = {}) {
     })
   );
   harborWater.name = "harbor-water";
-  harborWater.position.set(9.0, deckY + 0.15, -0.4);
+  harborWater.position.set(10.6, deckY + 0.15, -1.3);
   harborWater.renderOrder = 1;
   harborWater.receiveShadow = true;
   g.add(harborWater);
@@ -862,9 +998,10 @@ export function buildOldHarborScene(opts = {}) {
   berm.position.set(-0.2, 0.08, 0.15);
   g.add(berm);
 
-  // ---------- 渔船：栈桥尽头水面系泊，船底贴水 ----------
+  // ---------- 战船：栈桥尽头水面系泊，船体放大一倍（剪纸桨手随船同比例放大）----------
   const boat = createFisherBoat();
-  boat.position.set(8.0, deckY + 0.19, -0.4);
+  boat.scale.setScalar(2);
+  boat.position.set(9.4, deckY + 0.19, -1.0);
   // 停泊姿态保持平稳；驾驶时 boatRide 会按球面法线和船头方向重建姿态。
   boat.rotation.set(0.01, 0.35, 0.01);
   g.add(boat);
@@ -913,6 +1050,23 @@ export function buildOldHarborScene(opts = {}) {
     g.add(bollard);
   }
 
+  // ---------- 两组剪纸士兵搬运货物上船：货堆 → 战船舷边往返 ----------
+  const deckTop = deckY + deckH / 2;
+  const squadA = createPorterSquad({
+    from: new THREE.Vector3(-1.7, deckTop, 1.75),
+    to: new THREE.Vector3(4.3, deckTop, 0.2),
+    period: 12,
+    offset: 0,
+  });
+  const squadB = createPorterSquad({
+    from: new THREE.Vector3(2.2, deckTop, 1.55),
+    to: new THREE.Vector3(5.1, deckTop, -0.25),
+    period: 12,
+    offset: 6, // 与 A 组错半周期，两组交替上货
+  });
+  g.add(squadA);
+  g.add(squadB);
+
   // 底部对齐 Y=0
   g.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(g);
@@ -932,8 +1086,13 @@ export function buildOldHarborScene(opts = {}) {
 
   return {
     group: g,
-    landmarks: { boat, crane, crates },
+    landmarks: { boat, crane, crates, porterSquads: [squadA, squadB] },
     /** 贴球后由调用方转为世界碰撞 */
     collidersLocal,
+    /** 逐帧驱动搬运班组往返动画 */
+    update: (_dt, t) => {
+      squadA.userData.update(t);
+      squadB.userData.update(t);
+    },
   };
 }

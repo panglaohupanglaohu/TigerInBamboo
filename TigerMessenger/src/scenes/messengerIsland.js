@@ -315,8 +315,8 @@ export const messengerIslandScene = {
         excludeZones: plazaExclude ? [plazaExclude] : [],
       });
       canalSys = canal;
-      // 复制 10 艘古战船沿运河环线巡游，送信人可靠近 [F] 登船驾驶
-      canalBoats = createCanalBoatPatrol(scene, canal, { count: 10, scale: 0.92 });
+      // 复制 10 艘古战船沿运河环线巡游（整体放大一倍），送信人可靠近 [F] 登船驾驶
+      canalBoats = createCanalBoatPatrol(scene, canal, { count: 10, scale: 1.84 });
       // 利用落差互联互通：运河水沿阶梯瀑布船道跌入大湖，战船顺梯入湖巡游，
       // 归来时由出口升船机整厢抬回运河水位，形成闭环通航
       canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake);
@@ -564,6 +564,9 @@ export const messengerIslandScene = {
 
         // 运河战船巡游（已搭乘的船跳过，由 boatRide 接管）
         canalBoats?.update?.(dt);
+
+        // 旧港码头：两组剪纸士兵搬运货物上船的往返动画
+        harborBuilt?.update?.(dt, t);
 
         // 运河↔大湖落差互联：升船机吊厢/配重 + 瀑布浪花动画
         canalLakeLink?.update?.(dt, t);
