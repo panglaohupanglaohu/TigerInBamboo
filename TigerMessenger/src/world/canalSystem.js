@@ -95,9 +95,11 @@ export function insertWindingPoints(a, b, k, wiggle, getR, out) {
 /**
  * 沿采样扫掠一条“四棱柱条带”：横向 [side0, side1]，径向高度 [h0, h1]（相对河床 p）。
  * 用于河床薄板、水面薄板、单侧立壁、岸顶土埂。
- * sample.gap === true 的区段不生成面（给广场等节点让路，避免重叠）。
+ * skipKey（'gap'|'embankGap'）为 true 的区段不生成面：
+ *  - gap      整段断开（给广场等节点让路）；
+ *  - embankGap 仅护堤（立壁/土埂）断开——水系打通处护堤不可交叉。
  */
-function sweepPrism(samplesArr, side0, side1, h0, h1, mat) {
+export function sweepPrism(samplesArr, side0, side1, h0, h1, mat, skipKey = "gap") {
   const n = samplesArr.length;
   const positions = new Float32Array(n * 4 * 3);
   const v = new THREE.Vector3();
@@ -117,8 +119,8 @@ function sweepPrism(samplesArr, side0, side1, h0, h1, mat) {
   }
   const idx = [];
   for (let i = 0; i < n - 1; i++) {
-    // 两端任一点在缺口内则跳过该段，广场/节点处运河断开
-    if (samplesArr[i].gap || samplesArr[i + 1].gap) continue;
+    // 两端任一点在缺口内则跳过该段（embankGap 仅用于护堤条带）
+    if (samplesArr[i][skipKey] || samplesArr[i + 1][skipKey]) continue;
     const a = i * 4;
     const b = (i + 1) * 4;
     idx.push(a, b, a + 1, a + 1, b, b + 1); // 顶
@@ -240,7 +242,14 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
       fwd: _fwd.clone(),
       t,
       gap: inExclude(_up, pBed),
+      // 护堤缺口：水系打通处（护城河环带）立壁/土埂断开，水面/河床保持连续
+      embankGap: false,
     });
+  }
+  if (typeof opts.embankGapTest === "function") {
+    for (const s of samples) {
+      if (!s.gap && opts.embankGapTest(s.up, s.p)) s.embankGap = true;
+    }
   }
 
   const group = new THREE.Group();
@@ -269,20 +278,20 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
   // 3) 左右立壁：只做两侧墙，不再用整宽实心条盖住水面
   const wallH0 = 0;
   const wallH1 = depth;
-  const leftWall = sweepPrism(samples, -half - WALL_THICK, -half, wallH0, wallH1, bankMat);
+  const leftWall = sweepPrism(samples, -half - WALL_THICK, -half, wallH0, wallH1, bankMat, "embankGap");
   leftWall.name = "canal-wall-L";
   group.add(leftWall);
-  const rightWall = sweepPrism(samples, half, half + WALL_THICK, wallH0, wallH1, bankMat);
+  const rightWall = sweepPrism(samples, half, half + WALL_THICK, wallH0, wallH1, bankMat, "embankGap");
   rightWall.name = "canal-wall-R";
   group.add(rightWall);
 
   // 4) 岸顶土埂：挖沟堆在两岸，略高出沟沿，让“地面沟”轮廓可读
   const lipH0 = depth - LIP_THICK * 0.2;
   const lipH1 = depth + LIP_THICK;
-  const leftLip = sweepPrism(samples, -half - LIP_WIDTH, -half - WALL_THICK * 0.5, lipH0, lipH1, lipMat);
+  const leftLip = sweepPrism(samples, -half - LIP_WIDTH, -half - WALL_THICK * 0.5, lipH0, lipH1, lipMat, "embankGap");
   leftLip.name = "canal-lip-L";
   group.add(leftLip);
-  const rightLip = sweepPrism(samples, half + WALL_THICK * 0.5, half + LIP_WIDTH, lipH0, lipH1, lipMat);
+  const rightLip = sweepPrism(samples, half + WALL_THICK * 0.5, half + LIP_WIDTH, lipH0, lipH1, lipMat, "embankGap");
   rightLip.name = "canal-lip-R";
   group.add(rightLip);
 

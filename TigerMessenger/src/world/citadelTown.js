@@ -564,6 +564,10 @@ export function buildCitadelTown(spec, ctx) {
         );
         window.rotation.y = Math.atan2(dx, dz);
         window.userData.citadelWindow = true;
+        // 房屋单元 id 用格坐标；台地号在挂到 town-terrace-T 后由 refresh 补齐
+        window.userData.cellIx = ix;
+        window.userData.cellIz = iz;
+        window.userData.cellIy = iy;
         levelGroups[iy].add(window);
         stats.windowCount++;
       }

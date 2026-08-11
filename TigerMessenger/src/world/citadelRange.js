@@ -14,6 +14,7 @@
 import * as THREE from "three";
 import { latLonToDir } from "./sphereMath.js";
 import { canyonOffsetDir } from "./canyon.js";
+import { P } from "../core/params.js";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { createMangaWaterfall } from "./mangaWaterfall.js";
 import {
@@ -31,7 +32,8 @@ import { createSnowMassif } from "../assets/snowMassif.js";
 import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
 import { createTieSoldier } from "../assets/harbor.js";
-import { CANAL_WATER_LIFT } from "./canalSystem.js";
+import { createCitadelNightInfiltration } from "./citadelInfiltration.js";
+import { CANAL_WATER_LIFT, CANAL_HALF_WIDTH, CANAL_LIP_WIDTH } from "./canalSystem.js";
 import { createNavonaCanalPlaza, conformPlazaToTerrain } from "./navonaPlaza.js";
 
 /* ---------------- 选址与山体参数（锁死） ---------------- */
@@ -55,6 +57,11 @@ const SKIRT_DEPTH = 0.7; // 域缘裙边下沉，扎进球面遮接缝
 const SKIRT_BAND = 6; // 裙边过渡带宽
 const MOAT_INNER = 38; // 护城河内径：内岸绿地低于护城河水面（城堡前方浸水）
 const CITADEL_SINK = 0.6; // 城堡 + 护城河内岸绿地相对护城河水面的下沉量
+// 第一层瀑布右侧草地的相对落点：从港口朝城堡观看时，画面右侧对应 -lx；
+// 同时把中心推到外缘绿色草地，避开瀑布白石台地与水帘。
+const HORSE_WATERFALL_RIGHT_OFFSET = Object.freeze({ lx: -17.5, lz: 3.0 });
+// 位置被台地/城堡遮挡时，强制把木马抬到草地上方，确保它是场景焦点。
+const HORSE_GRASS_LIFT = 1.05;
 // 局部基架：up = 站点方向，lz+ 指向主岛，lx = 右
 const _site = latLonToDir(RANGE_SITE.lat, RANGE_SITE.lon, new THREE.Vector3());
 const _island = latLonToDir(90, 0, new THREE.Vector3());
@@ -133,6 +140,11 @@ export function citadelRangeLiftDir(dir) {
   const lz = _o.dot(_fwd) * k;
   if (lx < LX_MIN || lx > LX_MAX || lz < LZ_MIN || lz > LZ_MAX) return 0;
   return citadelRangeLiftLocal(lx, lz);
+}
+
+/** 局部坐标是否落在高度场有效域内（域外为裙边下潜/星球曲面，运河保持浮空）。 */
+export function citadelRangeInBounds(lx, lz) {
+  return lx >= LX_MIN && lx <= LX_MAX && lz >= LZ_MIN && lz <= LZ_MAX;
 }
 
 /** 站点局部坐标 → 世界坐标（出参 out） */
@@ -1107,6 +1119,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 取高度场 + 结构高度重建，与运河 groundLift 同源。
   let moat = null;
   let moatMesh = null; // 前置声明，供 buildMoat 在 rangeSystem 初始化前写入
+  let moatCanalPts = null; // 运河中心线 range 局部折线，供护城河护堤缺口
   const buildMoat = (spec) => {
     if (moat) {
       scene.remove(moat);
@@ -1115,6 +1128,23 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     }
     const moatInner = spec?.inner ?? MOAT_INNER;
     const moatOuter = spec?.outer ?? 46;
+    const moatHalf = (moatOuter - moatInner) * 0.5;
+    // 护堤缺口：运河走廊内的弧段仅护堤断开，水面/河床连续 →
+    // 护城河与运河打通且护堤不交叉。走廊半宽 = 运河护堤外缘(半宽+壁+埂≈8.1)
+    // + 本环扫护堤自身径向展幅(half+埂≈5.4) + 余量，保证断开后无残体侵入走廊。
+    // 南北两个交接点都开缺：北点齐平接通，南点（域缘裙边）水面随贴地
+    // 形成小跌水，两侧护堤均断开、绝不交叉。
+    const gapHalf = CANAL_HALF_WIDTH + CANAL_LIP_WIDTH + moatHalf + CANAL_LIP_WIDTH + 0.6;
+    const embankGapAt = moatCanalPts
+      ? (lx, lz) => {
+          for (let i = 0; i < moatCanalPts.length; i++) {
+            const dx = lx - moatCanalPts[i][0];
+            const dz = lz - moatCanalPts[i][1];
+            if (dx * dx + dz * dz < gapHalf * gapHalf) return true;
+          }
+          return false;
+        }
+      : undefined;
     // 网格几何内水面局部 Y（createCitadelMoat 固定结构，不随编辑器高度改）
     const meshWaterY = CITADEL_MOAT_SPEC.waterY;
     // 水面相对当地地表抬升：默认 = 运河 CANAL_WATER_LIFT，保证交接同水平面
@@ -1134,6 +1164,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       outerRadius: moatOuter,
       wallDepth: 0.95,
       waterY: meshWaterY,
+      embankGapAt,
     });
     // 组原点放在地表；水面在局部 y=meshWaterY。
     // 平铺时额外抬升 (waterSurfaceLift - meshWaterY)，使水面 = 地表 + waterSurfaceLift。
@@ -1186,6 +1217,15 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
         }
         pos.needsUpdate = true;
       });
+      // 水面动画以 baseY 为基高（createCitadelMoat 在平铺态捕获）：
+      // 贴合后必须重捕，否则 update() 每帧把球面下凹的水面拉回平盘、浮离槽体。
+      moat.traverse((obj) => {
+        if (obj.name !== "citadel-moat-water" || !obj.geometry?.attributes?.position) return;
+        const wp = obj.geometry.attributes.position;
+        const baseY = new Float32Array(wp.count);
+        for (let i = 0; i < wp.count; i++) baseY[i] = wp.getY(i);
+        obj.geometry.userData.baseY = baseY;
+      });
     }
     moatMesh = moat;
     return moat;
@@ -1199,7 +1239,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 旱季下凹石材广场+对称喷泉+运河同款围边；汛期同一槽体蓄水，与运河/护城河同水色。
   let navonaPlaza = null;
   let trojanHorse = null;
-  const placeNavonaPlaza = (lx, lz, yaw) => {
+  let nightInfiltration = null;
+  const placeNavonaPlaza = (lx, lz, yaw, patrolCastle = null) => {
     if (navonaPlaza) return navonaPlaza; // 幂等：只摆一次（conform 会永久改写顶点）
     navonaPlaza = createNavonaCanalPlaza({
       name: "citadel-navona-canal-plaza",
@@ -1225,18 +1266,58 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     navonaPlaza.userData.placement = { kind: "canal-citadel-approach", lx, lz, yaw };
     scene.add(navonaPlaza);
 
-    // 低多边形特洛伊木马：广场中间焦点
+    // 低多边形特洛伊木马：第一层瀑布右侧草地焦点（不与港口/石槽重叠）
     trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
     trojanHorse.scale.setScalar(0.72);
-    // 站在广场中心槽底（conform 后槽面约地形+0.1），微抬防 z-fight
-    placeRangeAsset(trojanHorse, lx, lz, R, 0.12, true);
-    trojanHorse.rotateY(yaw + Math.PI / 2); // 马头转向运河一侧（长轴法向）
-    trojanHorse.userData.placement = { kind: "navona-plaza-center", lx, lz, yaw: yaw + Math.PI / 2 };
+
+    // 马头朝向第一层瀑布：优先读取真实瀑布节点的位置，瀑布关闭时用同一水道标记兜底。
+    const firstWaterfall = pilgrimageCascades?.children?.[0];
+    const firstWaterfallPos = new THREE.Vector3();
+    if (firstWaterfall) {
+      firstWaterfall.updateWorldMatrix(true, false);
+      firstWaterfall.getWorldPosition(firstWaterfallPos);
+    } else {
+      rangeLocalToWorld(
+        CITADEL_CASCADE_MARKER.x,
+        CITADEL_CASCADE_MARKER.z,
+        R,
+        firstWaterfallPos
+      );
+    }
+    // 将瀑布世界位置反解到圣城局部平面，再向截图中的右侧草地偏移。
+    // 这样即使台地参数被编辑器调整，木马仍会跟着第一层瀑布落位。
+    const waterfallLocalScale = R / Math.max(1e-6, firstWaterfallPos.dot(_site));
+    const firstWaterfallLx = firstWaterfallPos.dot(_right) * waterfallLocalScale;
+    const firstWaterfallLz = firstWaterfallPos.dot(_fwd) * waterfallLocalScale;
+    const horseLx = firstWaterfallLx + HORSE_WATERFALL_RIGHT_OFFSET.lx;
+    const horseLz = firstWaterfallLz + HORSE_WATERFALL_RIGHT_OFFSET.lz;
+    // 右侧草地地形高程约+0.4；抬高到草地上方，避免被台地/建筑遮住。
+    placeRangeAsset(trojanHorse, horseLx, horseLz, R, HORSE_GRASS_LIFT, true);
+
+    const toFirstWaterfall = firstWaterfallPos.sub(trojanHorse.position);
+    toFirstWaterfall.addScaledVector(
+      _site,
+      -toFirstWaterfall.dot(_site)
+    ).normalize();
+    const horseYaw = Math.atan2(
+      -toFirstWaterfall.dot(_right),
+      toFirstWaterfall.dot(_fwd)
+    );
+    trojanHorse.rotateY(horseYaw);
+    trojanHorse.userData.placement = {
+      kind: "citadel-foregrass",
+      surface: "grass",
+      lx: horseLx,
+      lz: horseLz,
+      lift: HORSE_GRASS_LIFT,
+      yaw: horseYaw,
+      facing: "first-waterfall",
+    };
     scene.add(trojanHorse);
 
     // ---- 系绳班组：一组纸士兵围马后仰、绳索绷直固定木马 ----
     // 士兵/绳索挂为木马子级（继承编辑器拖拽/右键删除）；站高用 sampleDelta
-    // 逐人反解到广场石面（地形+0.1）。布局在木马局部系（马头 +Z）。
+    // 逐人反解到城堡前草地（地形+0.1）。布局在木马局部系（马头 +Z）。
     trojanHorse.updateMatrixWorld(true);
     const HORSE_S = 0.72;
     const squad = new THREE.Group();
@@ -1285,8 +1366,72 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     }
     trojanHorse.add(squad);
 
+    // ---- 夜间潜入路线：瀑布组沿四道水帘逐级上攀，阶梯组沿五段折返石阶 ----
+    // 所有路径点直接取当前台地/瀑布几何的位置，避免把纸兵放到旧土坡或平面高度上。
+    const waterfallRoute = [];
+    const waterfallNodes = [...(pilgrimageCascades?.children || [])].sort(
+      (a, b) => (b.userData?.sequence ?? 0) - (a.userData?.sequence ?? 0)
+    );
+    const waterfallPos = new THREE.Vector3();
+    for (const waterfall of waterfallNodes) {
+      waterfall.updateWorldMatrix(true, false);
+      waterfall.getWorldPosition(waterfallPos);
+      const drop = Math.max(1.2, Number(waterfall.userData?.actualDrop) || 4);
+      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.22));
+      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop * 0.46));
+      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop + 0.28));
+    }
+    const upperPool = pilgrimageWaterSteps?.children?.[0];
+    if (upperPool) {
+      upperPool.updateWorldMatrix(true, false);
+      upperPool.getWorldPosition(waterfallPos);
+      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.24));
+    }
+
+    const stairRoute = [];
+    const stairPoint = (rho, phi) => {
+      const stairLx = rho * Math.sin(phi);
+      const stairLz = rho * Math.cos(phi);
+      let elevation = citadelTerraceWalkLiftLocal(stairLx, stairLz);
+      if (!Number.isFinite(elevation)) elevation = citadelRangeLiftLocal(stairLx, stairLz);
+      return rangeLocalToWorldAtElevation(
+        stairLx,
+        stairLz,
+        R,
+        elevation,
+        new THREE.Vector3()
+      ).addScaledVector(_site, 0.18);
+    };
+    for (const flight of walkFlights) {
+      stairRoute.push(stairPoint(flight.rho, flight.from));
+      stairRoute.push(stairPoint(flight.rho, flight.to));
+    }
+    stairRoute.push(
+      rangeLocalToWorldAtElevation(
+        0,
+        0,
+        R,
+        walkMetrics[0]?.top ?? 0,
+        new THREE.Vector3()
+      ).addScaledVector(_site, 0.2)
+    );
+
+    nightInfiltration = createCitadelNightInfiltration({
+      scene,
+      horse: trojanHorse,
+      staticSquad: squad,
+      siteUp: _site,
+      siteRight: _right,
+      horseGround: trojanHorse.position.clone().addScaledVector(_site, 0.24),
+      waterfallRoute,
+      stairRoute,
+      patrolCastle,
+    });
+    trojanHorse.userData.nightInfiltration = nightInfiltration.root;
+
     rangeSystem.navonaPlaza = navonaPlaza;
     rangeSystem.trojanHorse = trojanHorse;
+    rangeSystem.nightInfiltration = nightInfiltration;
     return navonaPlaza;
   };
 
@@ -1307,7 +1452,11 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     moat: moatMesh,
     trojanHorse,
     navonaPlaza,
+    nightInfiltration,
     placeNavonaPlaza,
+    update(dt, t) {
+      nightInfiltration?.update(dt, t, P.timeOfDay);
+    },
     vegetation: null,
     siteDir: _site.clone(),
     fwd: _fwd.clone(),
@@ -1319,6 +1468,19 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     const next = buildMoat(spec);
     rangeSystem.moat = moatMesh; // 同步引用（旧 moat 已从场景移除并 dispose）
     return next;
+  };
+
+  // 运河建成后接入：存中心线局部折线 → 重建护城河（护堤在交接处开缺口、水系打通）。
+  rangeSystem.linkCanalToMoat = (curve) => {
+    if (!curve) return;
+    const pts = [];
+    const N = 480;
+    for (let i = 0; i < N; i++) {
+      curve.getPointAt(i / N, _o);
+      pts.push([_o.dot(_right), _o.dot(_fwd)]);
+    }
+    moatCanalPts = pts;
+    rangeSystem.rebuildMoat(contourSpec?.moat);
   };
 
   // 台地半径/层高/层叠瀑布开关变更时热重建水系。

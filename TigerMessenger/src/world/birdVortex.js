@@ -329,9 +329,53 @@ export class BirdVortexManager {
     this.scale = new Float32Array(count);
     this.spinSign = new Float32Array(count);
 
+    // 夜间屋顶栖息点（世界坐标）；behavior: vortex 白天漩涡 / roost 夜栖 / flush 惊飞
+    this.roostX = new Float32Array(count);
+    this.roostY = new Float32Array(count);
+    this.roostZ = new Float32Array(count);
+    this.hasRoost = false;
+    this.behavior = "vortex";
+    this.flushTimer = 0;
+
     this._groups = new Array(GROUP_COUNT).fill(null);
     this._seedBirds();
     this.update(0, 0, {});
+  }
+
+  /**
+   * 绑定屋顶栖息点（世界坐标）。每只鸟分配一点并微抖动。
+   * @param {THREE.Vector3[]} points
+   */
+  setRoostPoints(points) {
+    if (!Array.isArray(points) || !points.length) {
+      this.hasRoost = false;
+      return this;
+    }
+    const n = this.count;
+    for (let i = 0; i < n; i++) {
+      const p = points[i % points.length];
+      const j = Math.random() * Math.PI * 2;
+      const r = 0.15 + Math.random() * 0.55;
+      this.roostX[i] = p.x + Math.cos(j) * r;
+      this.roostY[i] = p.y + 0.12 + Math.random() * 0.28;
+      this.roostZ[i] = p.z + Math.sin(j) * r;
+    }
+    this.hasRoost = true;
+    return this;
+  }
+
+  /**
+   * @param {'vortex'|'roost'|'flush'} mode
+   */
+  setBehavior(mode) {
+    if (mode !== "vortex" && mode !== "roost" && mode !== "flush") return this;
+    if (mode === this.behavior) {
+      if (mode === "flush") this.flushTimer = Math.max(this.flushTimer, 1.2);
+      return this;
+    }
+    this.behavior = mode;
+    if (mode === "flush") this.flushTimer = 3.5;
+    return this;
   }
 
   /** 从三重门 seatRoot 读取最新世界坐标系并重锚鸟群 */
@@ -736,13 +780,58 @@ export class BirdVortexManager {
     const n = this.count;
     const H = Math.max(this.yCeil - this.yFloor, 1);
 
+    // 惊飞计时：无威胁时倒计时结束后由外部切回 roost；此处仅维护计时
+    if (this.behavior === "flush") {
+      this.flushTimer = Math.max(0, this.flushTimer - dt);
+    }
+
     for (let i = 0; i < n; i++) {
       const role = this.role[i];
 
-      // ================= A 组：双子塔双螺旋盘旋 =================
+      // ================= A 组：双子塔双螺旋盘旋 / 夜栖屋顶 / 惊飞 =================
       if (role === ROLE_A) {
+        // ---- 夜栖：落到屋顶点，收翼微颤 ----
+        if (this.behavior === "roost" && this.hasRoost) {
+          const tx = this.roostX[i];
+          const ty = this.roostY[i];
+          const tz = this.roostZ[i];
+          const cx = this.px[i] || tx;
+          const cy = this.py[i] || ty;
+          const cz = this.pz[i] || tz;
+          const dx = tx - cx;
+          const dy = ty - cy;
+          const dz = tz - cz;
+          const dSq = dx * dx + dy * dy + dz * dz;
+          if (dSq > 0.35 * 0.35) {
+            // 飞向栖息点
+            const d = Math.sqrt(dSq);
+            const step = Math.min(d, 7.5 * dt);
+            _p.set(cx + (dx / d) * step, cy + (dy / d) * step, cz + (dz / d) * step);
+            _vel.set(dx / d, dy / d, dz / d);
+            this.bcMode[i] = 1;
+          } else {
+            // 栖息：微颤
+            const bob = Math.sin(t * 2.2 + i * 0.7) * 0.03;
+            _p.set(tx, ty + bob, tz);
+            // 朝外（离开旋涡中心）
+            _vel.copy(_p).sub(this.origin);
+            _vel.addScaledVector(this.up, -_vel.dot(this.up));
+            if (_vel.lengthSq() < 1e-6) _vel.copy(this.forward);
+            _vel.normalize();
+            this.bcMode[i] = 0;
+          }
+          this.px[i] = _p.x;
+          this.py[i] = _p.y;
+          this.pz[i] = _p.z;
+          this.vx[i] = _vel.x;
+          this.vy[i] = _vel.y;
+          this.vz[i] = _vel.z;
+          continue;
+        }
+
+        // ---- 白天漩涡 / 夜间惊飞：双螺旋 ----
         const spin = this.spinSign[i];
-        const w = this.omega[i];
+        const w = this.omega[i] * (this.behavior === "flush" ? 1.35 : 1);
         const angRaw = this.theta0[i] + spin * w * t;
         // 可见侧聚群：盘旋角向观者方位压缩（观者近时可见面密度约 ×3）
         const ang =
@@ -801,6 +890,7 @@ export class BirdVortexManager {
         // 盘旋组墙体避障（门体模式）；螺旋长河模式跳过假想门墙
         _vel.normalize();
         if (!this.spiralOnly) this._avoidWalls(_p, _vel, i);
+        this.bcMode[i] = 1;
         this.px[i] = _p.x;
         this.py[i] = _p.y;
         this.pz[i] = _p.z;

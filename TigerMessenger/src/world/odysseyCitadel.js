@@ -375,6 +375,20 @@ export const CITADEL_WINDOW_LIT_CHANCE = 0.7;
  * 收集古堡拱窗并绑定昼夜材质（热重建后须重调）。
  * @param {THREE.Object3D} castleContainer
  */
+const _winWorld = new THREE.Vector3();
+
+/** 从父链解析台地索引（town-terrace-T-level-N 或 userData.terraceIndex） */
+function resolveWindowTerraceIndex(mesh) {
+  let p = mesh;
+  while (p) {
+    if (Number.isFinite(p.userData?.terraceIndex)) return p.userData.terraceIndex | 0;
+    const m = /^town-terrace-(\d+)/.exec(p.name || "");
+    if (m) return Number(m[1]) | 0;
+    p = p.parent;
+  }
+  return 0;
+}
+
 export function refreshCitadelWindowLights(castleContainer) {
   if (!castleContainer) return [];
   const gradientMap = castleContainer.userData.gradientMap ?? makeThreeStepGradient();
@@ -387,6 +401,12 @@ export function refreshCitadelWindowLights(castleContainer) {
     o.material = castleContainer.userData.windowDarkMat;
     o.userData.citadelWindow = true;
     o.userData.litTonight = false;
+    o.userData.extinguishedBySoldiers = false;
+    const tIdx = resolveWindowTerraceIndex(o);
+    const ix = Number.isFinite(o.userData.cellIx) ? o.userData.cellIx : 0;
+    const iz = Number.isFinite(o.userData.cellIz) ? o.userData.cellIz : 0;
+    o.userData.terraceIndex = tIdx;
+    o.userData.houseId = `${tIdx}:${ix},${iz}`;
     windows.push(o);
   });
   castleContainer.userData.townWindows = windows;
@@ -396,10 +416,12 @@ export function refreshCitadelWindowLights(castleContainer) {
 
 /**
  * 古堡窗口夜景：入夜时每扇窗以 70% 概率点亮，天亮熄灭；每夜重新抽签。
+ * 夜间纸士兵靠近房屋时，该屋灯光熄灭，直到第二天夜晚再重新点亮。
  * @param {THREE.Object3D} castleContainer
  * @param {number} phase 昼夜相位 0..1（P.timeOfDay / dayNight.getPhase）
+ * @param {{ threats?: THREE.Vector3[], threatRadius?: number }} [opts]
  */
-export function updateCitadelNightWindows(castleContainer, phase) {
+export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
   if (!castleContainer) return;
   let windows = castleContainer.userData.townWindows;
   if (!Array.isArray(windows) || !windows.length) {
@@ -414,12 +436,49 @@ export function updateCitadelNightWindows(castleContainer, phase) {
   if (night) {
     if (!castleContainer.userData.windowNightRolled) {
       for (const w of windows) {
+        w.userData.extinguishedBySoldiers = false;
         w.userData.litTonight = Math.random() < CITADEL_WINDOW_LIT_CHANCE;
       }
       castleContainer.userData.windowNightRolled = true;
     }
+    // 纸士兵经过：整屋熄灯，当夜不再亮起
+    const threats = opts.threats;
+    if (Array.isArray(threats) && threats.length) {
+      const r = Number.isFinite(opts.threatRadius) ? opts.threatRadius : 3.6;
+      const r2 = r * r;
+      const snuffed = new Set();
+      for (const w of windows) {
+        if (!w.userData.litTonight || w.userData.extinguishedBySoldiers) continue;
+        if (snuffed.has(w.userData.houseId)) continue;
+        w.getWorldPosition(_winWorld);
+        let near = false;
+        for (let i = 0; i < threats.length; i++) {
+          const s = threats[i];
+          if (!s) continue;
+          const dx = _winWorld.x - s.x;
+          const dy = _winWorld.y - s.y;
+          const dz = _winWorld.z - s.z;
+          if (dx * dx + dy * dy + dz * dz <= r2) {
+            near = true;
+            break;
+          }
+        }
+        if (!near) continue;
+        snuffed.add(w.userData.houseId);
+      }
+      if (snuffed.size) {
+        for (const w of windows) {
+          if (!snuffed.has(w.userData.houseId)) continue;
+          w.userData.litTonight = false;
+          w.userData.extinguishedBySoldiers = true;
+        }
+      }
+    }
   } else if (castleContainer.userData.windowNightRolled) {
-    for (const w of windows) w.userData.litTonight = false;
+    for (const w of windows) {
+      w.userData.litTonight = false;
+      w.userData.extinguishedBySoldiers = false;
+    }
     castleContainer.userData.windowNightRolled = false;
   }
 
@@ -427,7 +486,7 @@ export function updateCitadelNightWindows(castleContainer, phase) {
   const lit = castleContainer.userData.windowLitMat;
   if (!dark || !lit) return;
   for (const w of windows) {
-    const on = night && w.userData.litTonight;
+    const on = night && w.userData.litTonight && !w.userData.extinguishedBySoldiers;
     if (w.material !== (on ? lit : dark)) w.material = on ? lit : dark;
   }
 }

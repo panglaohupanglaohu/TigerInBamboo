@@ -7,7 +7,18 @@
 //  默认内径略大于 baseRadius(24)，外径约 33，环绕最外层台地墙脚。
 // =====================================================================
 import * as THREE from "three";
-import { SHARED_WATER_COLOR, createCanalWaterMaterial } from "../world/canalSystem.js";
+import { toonMat } from "./toon.js";
+import {
+  SHARED_WATER_COLOR,
+  createCanalWaterMaterial,
+  sweepPrism,
+  CANAL_DEPTH,
+  CANAL_WALL_THICK,
+  CANAL_LIP_WIDTH,
+  CANAL_LIP_THICK,
+  CANAL_BANK_COLOR,
+  CANAL_LIP_COLOR,
+} from "../world/canalSystem.js";
 
 /** 默认尺寸：紧贴第五层台地外侧，不侵入台面 */
 export const CITADEL_MOAT_SPEC = Object.freeze({
@@ -108,68 +119,70 @@ export function createCitadelMoat(opts = {}) {
   const borderMat = makeBorderMaterial(borderColor);
   const foamMat = new THREE.MeshBasicMaterial({ color: foamColor });
 
-  // ---------- 1. 多边形环状水面 ----------
-  const moatGeo = new THREE.RingGeometry(innerR, outerR, segs, radialSegs);
-  const pos = moatGeo.attributes.position;
-  const baseZ = new Float32Array(pos.count);
-  for (let i = 0; i < pos.count; i++) {
-    // RingGeometry 在 XY 面，Z 为厚度向；先记原始 Z，再在平面内抖动折线
-    baseZ[i] = pos.getZ(i);
-    const x = pos.getX(i);
-    const y = pos.getY(i);
-    const r = Math.hypot(x, y);
-    // 内/外缘少抖，保持可辨的环带；中间折线更手绘
-    const edge =
-      Math.abs(r - innerR) < 0.35 || Math.abs(r - outerR) < 0.35 ? 0.06 : 0.22;
-    pos.setX(i, x + (random() - 0.5) * edge);
-    pos.setY(i, y + (random() - 0.5) * edge);
+  // ---------- 1. 运河同款剖面环扫：河床/水面/内外立壁/岸顶土埂 ----------
+  // 与星海运河同一套护堤语言（立壁土色+岸顶土埂）；水系打通处
+  // （opts.embankGapAt(lx,lz) 为 true 的弧段）仅护堤断开，水面/河床连续。
+  const half = (outerR - innerR) * 0.5;
+  const midR = (innerR + outerR) * 0.5;
+  const ringSegs = Math.max(96, opts.thetaSegments ?? 240);
+  // 河床基准局部高：水面 = waterY-0.035（略低于运河水面防共面闪），
+  // 水深 0.585 与运河 WATER_FILL 同量级
+  const bedLocalY = waterY - 0.62;
+  const waterH = waterY - 0.035 - bedLocalY;
+  const samples = [];
+  for (let i = 0; i <= ringSegs; i++) {
+    const th = (i / ringSegs) * Math.PI * 2;
+    const sx = Math.sin(th), cz = Math.cos(th);
+    const gapAt = typeof opts.embankGapAt === "function"
+      ? opts.embankGapAt(sx * midR, cz * midR)
+      : false;
+    samples.push({
+      p: new THREE.Vector3(sx * midR, bedLocalY, cz * midR),
+      up: new THREE.Vector3(0, 1, 0),
+      right: new THREE.Vector3(sx, 0, cz), // 朝环外
+      gap: false,
+      embankGap: !!gapAt,
+    });
   }
-  moatGeo.computeVertexNormals();
-  moatGeo.userData.baseZ = baseZ;
 
-  const water = new THREE.Mesh(moatGeo, waterMat);
-  water.name = "citadel-moat-water";
-  water.rotation.x = -Math.PI / 2;
-  water.position.y = waterY;
-  water.receiveShadow = true;
-  water.castShadow = false;
-  water.renderOrder = 2;
-  group.add(water);
+  const bedMat = toonMat(0x3a2f26, { flatShading: true });
+  const bankMat = toonMat(CANAL_BANK_COLOR, { flatShading: true });
+  const lipMat = toonMat(CANAL_LIP_COLOR, { flatShading: true });
 
-  // ---------- 2. 内/外垂直岸壁（无顶盖低模圆柱）----------
-  const innerWall = new THREE.Mesh(
-    new THREE.CylinderGeometry(innerR, innerR, wallDepth, segs, 1, true),
-    borderMat
-  );
-  innerWall.name = "citadel-moat-inner-wall";
-  innerWall.position.y = waterY - wallDepth * 0.35;
-  innerWall.receiveShadow = true;
-  group.add(innerWall);
-
-  const outerWall = new THREE.Mesh(
-    new THREE.CylinderGeometry(outerR, outerR, wallDepth, segs, 1, true),
-    borderMat
-  );
-  outerWall.name = "citadel-moat-outer-wall";
-  outerWall.position.y = waterY - wallDepth * 0.35;
-  outerWall.receiveShadow = true;
-  group.add(outerWall);
-
-  // 河床底面（沉在水面下，避免“纸片水”）
-  const bed = new THREE.Mesh(
-    new THREE.RingGeometry(innerR * 0.995, outerR * 1.005, segs, 1),
-    new THREE.MeshStandardMaterial({
-      color: 0x7a8f8c,
-      flatShading: true,
-      roughness: 1.0,
-      metalness: 0.0,
-    })
-  );
+  const bed = sweepPrism(samples, -half, half, -0.02, 0.02, bedMat);
   bed.name = "citadel-moat-bed";
-  bed.rotation.x = -Math.PI / 2;
-  bed.position.y = waterY - wallDepth * 0.72;
   bed.receiveShadow = true;
   group.add(bed);
+
+  const water = sweepPrism(samples, -half + 0.04, half - 0.04, waterH - 0.02, waterH + 0.02, waterMat);
+  water.name = "citadel-moat-water";
+  water.renderOrder = 2;
+  water.castShadow = false;
+  water.receiveShadow = true;
+  // 阶梯水波动画基高
+  {
+    const wp = water.geometry.attributes.position;
+    const baseY = new Float32Array(wp.count);
+    for (let i = 0; i < wp.count; i++) baseY[i] = wp.getY(i);
+    water.geometry.userData.baseY = baseY;
+  }
+  group.add(water);
+
+  // 内外立壁 + 岸顶土埂（护堤，打通处断开）
+  const innerWall = sweepPrism(samples, -half - CANAL_WALL_THICK, -half, 0, CANAL_DEPTH, bankMat, "embankGap");
+  innerWall.name = "citadel-moat-inner-wall";
+  innerWall.receiveShadow = true;
+  group.add(innerWall);
+  const outerWall = sweepPrism(samples, half, half + CANAL_WALL_THICK, 0, CANAL_DEPTH, bankMat, "embankGap");
+  outerWall.name = "citadel-moat-outer-wall";
+  outerWall.receiveShadow = true;
+  group.add(outerWall);
+  const innerLip = sweepPrism(samples, -half - CANAL_LIP_WIDTH, -half - CANAL_WALL_THICK * 0.5, CANAL_DEPTH - CANAL_LIP_THICK * 0.2, CANAL_DEPTH + CANAL_LIP_THICK, lipMat, "embankGap");
+  innerLip.name = "citadel-moat-inner-lip";
+  group.add(innerLip);
+  const outerLip = sweepPrism(samples, half + CANAL_WALL_THICK * 0.5, half + CANAL_LIP_WIDTH, CANAL_DEPTH - CANAL_LIP_THICK * 0.2, CANAL_DEPTH + CANAL_LIP_THICK, lipMat, "embankGap");
+  outerLip.name = "citadel-moat-outer-lip";
+  group.add(outerLip);
 
   // ---------- 3. 白色块状浪花（压扁方块，零星漂浮）----------
   const foams = new THREE.Group();
@@ -202,15 +215,15 @@ export function createCitadelMoat(opts = {}) {
     const time = Number.isFinite(t) ? t : 0;
     const stepped = Math.floor(time * stepHz) / stepHz;
     const moatPos = water.geometry.attributes.position;
-    const initial = water.geometry.userData.baseZ;
+    const initial = water.geometry.userData.baseY;
     for (let i = 0; i < moatPos.count; i++) {
       const x = moatPos.getX(i);
-      const y = moatPos.getY(i);
-      const radius = Math.sqrt(x * x + y * y);
+      const z = moatPos.getZ(i);
+      const radius = Math.sqrt(x * x + z * z);
       const wave =
         Math.sin(radius * 1.45 - stepped * 1.5) * 0.045 +
         Math.cos(x * 0.48 + stepped) * 0.028;
-      moatPos.setZ(i, (initial?.[i] ?? 0) + wave);
+      moatPos.setY(i, (initial?.[i] ?? 0) + wave);
     }
     moatPos.needsUpdate = true;
     // 阶梯帧下偶发重算法线，维持块状明暗；每帧算太贵且会抹掉硬边感

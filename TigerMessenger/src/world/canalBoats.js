@@ -107,6 +107,10 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
         // 驾驶中由 boatRide 负责桨动画
         continue;
       }
+      // 旧港物流接管：离港入河 / 护城河进港途中，位置由 harborLogistics 写
+      if (boat.userData.harborMission || boat.userData.harborDocked) {
+        continue;
+      }
       // 运河—大湖落差互联（瀑布船道/升船机）接管：自驱动巡航与绕湖通航
       if (boat.userData.lakeLinkStep) {
         boat.userData.lakeLinkStep(boat, dt, { curve, waterR, place: placeOnCurve });
@@ -144,6 +148,8 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
     update,
     getNearestBoat,
     getBoardableBoats: () => boats,
+    /** 世界位置 → 曲线最近参数 u（旧港离港汇入运河用） */
+    nearestU,
     /** 下船时调用，下一帧巡游从当前位置吸附回航道 */
     markNeedsSnap(boat) {
       if (boat?.userData?.canalPatrol) boat.userData.needsSnap = true;

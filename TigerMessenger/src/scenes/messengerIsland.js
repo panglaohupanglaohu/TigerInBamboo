@@ -22,7 +22,10 @@ import { buildAbandonedGate } from "../world/abandonedGate.js";
 import { isCanyonBgmPlaying, isCanyonBgmFinishing, setSwampBgm } from "../audio/sfx.js";
 import { canyonOffsetDir, CANYON } from "../world/canyon.js";
 import { FlockManager } from "../world/flock.js";
-import { BirdVortexManager } from "../world/birdVortex.js";
+import {
+  createCitadelTerraceBirds,
+  collectInfiltrationThreats,
+} from "../world/citadelTerraceBirds.js";
 import { AirshipEscortManager } from "../world/airshipEscort.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { swampMidwayDir } from "../world/moebiusSwamp.js";
@@ -41,11 +44,11 @@ import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
+import { createHarborLogistics } from "../assets/harborLogistics.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
 import { createCitySeaLake, CITY_SEA_LAKE } from "../world/citySeaLake.js";
 import {
   buildOdysseyCitadel,
-  citadelTerraceMetrics,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
 } from "../world/odysseyCitadel.js";
@@ -101,6 +104,8 @@ export const messengerIslandScene = {
     const harbor = harborBuilt.group;
     scene.add(harbor);
     let harborColliders = [];
+    /** 装船物流换船时写回 landmarks.boat（return 前赋值） */
+    let messengerLandmarks = null;
 
     // 基督城有轨电车：北岛环线 + 跨赤道绕莫比斯主晶塔
     // 能量束目标：中央母体晶皇塔顶
@@ -271,48 +276,14 @@ export const messengerIslandScene = {
     scene.add(odysseyCitadel);
     odysseyCitadel.updateMatrixWorld(true);
 
-    // ---------- 千鸟漩涡 · 高山圣城台地 1（最高层台面）上空双螺旋飞旋 ----------
-    // 50 只 · spiralOnly（不攀附门体假想墙）· 半径贴合台地 1 足迹
-    const t1Metric = citadelTerraceMetrics(citadelContour)[0];
-    const vortexOrigin = new THREE.Vector3(0, t1Metric.top + 0.35, 0);
-    odysseyCitadel.localToWorld(vortexOrigin);
-    const vortexUp = new THREE.Vector3(0, 1, 0)
-      .applyQuaternion(odysseyCitadel.quaternion)
-      .normalize();
-    const vortexRight = new THREE.Vector3(1, 0, 0)
-      .applyQuaternion(odysseyCitadel.quaternion)
-      .normalize();
-    const vortexFwd = new THREE.Vector3(0, 0, 1)
-      .applyQuaternion(odysseyCitadel.quaternion)
-      .normalize();
-    const birdVortex = new BirdVortexManager(scene, {
-      count: 50,
-      origin: vortexOrigin,
-      up: vortexUp,
-      right: vortexRight,
-      forward: vortexFwd,
-      spiralOnly: true,
-      // 台面 1 上方：略高于镇屋檐，柱状爬升仍贴主峰可读
-      yFloor: 5,
-      yCeil: 18,
-      rMin: Math.max(3, t1Metric.radius * 0.28),
-      rMax: Math.max(6.5, t1Metric.radius * 0.9),
-      name: "bird-vortex-citadel-terrace-1",
-      getTram: () => tramSystem?.getNearestTram?.(vortexOrigin) || tramSystem?.tram || null,
+    // ---------- 各台地鸟群 ×50：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞 ----------
+    const terraceBirds = createCitadelTerraceBirds(scene, odysseyCitadel, {
+      contour: citadelContour,
+      getTram: () => tramSystem?.tram || null,
+      getInfiltration: () => citadelRange?.nightInfiltration || null,
     });
-    birdVortex.setGateFrame({
-      origin: vortexOrigin,
-      up: vortexUp,
-      right: vortexRight,
-      forward: vortexFwd,
-      respawn: true,
-    });
-    birdVortex.root.userData.anchor = {
-      kind: "citadel-terrace-1",
-      terraceIndex: 0,
-      radius: t1Metric.radius,
-      topY: t1Metric.top,
-    };
+    // 兼容旧引用：台地 1 旋涡
+    const birdVortex = terraceBirds.primary;
 
     // Boids 鸟群：先在峡谷方向占位，建门后整群迁移到叹息之门城头（见下方 migrate）
     const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
@@ -383,11 +354,24 @@ export const messengerIslandScene = {
         anchors: canalAnchors,
         names: canalNames,
         groundLift: citadelRangeLiftDir,
+        // 护城河环带处护堤缺口：立壁/土埂断开、水面/河床连续（水系打通）。
+        // 余量须盖住运河自身护堤横向展幅（半宽 6.3 + 壁/埂 ≈ 8.1），
+        // 否则中心线在带外、壁体仍会伸入环带造成护堤交叉。
+        embankGapTest: ((_dir, worldP) => {
+          const ms = citadelRange.moat?.userData?.spec;
+          if (!ms) return false;
+          const lx = worldP.dot(citadelRange.right);
+          const lz = worldP.dot(citadelRange.fwd);
+          const r = Math.hypot(lx, lz);
+          return r > ms.inner - 8.4 && r < ms.outer + 8.4;
+        }),
       });
       canalSys = canal;
+      // 护城河接入运河：护城河护堤在运河走廊开弧缺（两者护堤不交叉）
+      citadelRange.linkCanalToMoat?.(canal.curve);
       // ---------- 纳沃纳广场延迟摆放：港口及参天大树正前方 ----------
       // 港口栈桥/参天大树在 range 局部 (-15.2,42)/(1,43) 一带；广场置于其正前方
-      // （北缘域外平地），长轴横陈作前景舞台、木马回望港口。运河北段自此以东
+      // （北缘域外平地），长轴横陈作前景舞台；木马另置城堡前方草地。运河北段自此以东
       // ~24 处南北贯通：广场东缘与河道留 5+ 净空，河道全程露出、两者零重叠。
       {
         let plazaGroup = null;
@@ -395,8 +379,8 @@ export const messengerIslandScene = {
           if (!plazaGroup && o.name === "citadel-navona-canal-plaza") plazaGroup = o;
         });
         if (!plazaGroup) {
-          // yaw=π/2：长轴(+Z)转沿 +right（东西横陈）；木马 yaw=π 朝南回望港口/大树
-          citadelRange.placeNavonaPlaza(-10, 75, Math.PI / 2);
+          // yaw=π/2：长轴(+Z)转沿 +right（东西横陈）；木马落在第一层瀑布右侧草地
+          citadelRange.placeNavonaPlaza(-10, 75, Math.PI / 2, odysseyCitadel);
         }
       }
       // 复制 10 艘古战船沿运河环线巡游（整体放大一倍），送信人可靠近 [F] 登船驾驶
@@ -405,6 +389,35 @@ export const messengerIslandScene = {
       // 归来时由出口升船机整厢抬回运河水位，形成闭环通航
       canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake);
       canalLakeLink?.attachAll?.(canalBoats.boats);
+
+      // 旧港装船物流：纸士兵计数装货 → 满载离港入运河 →
+      // 城堡雪山附近运河船走护城河进港继续装船
+      {
+        const dockBoat = harborBuilt.landmarks.boat;
+        const dockCrane = harborBuilt.landmarks.crane;
+        const squads = harborBuilt.squads || harborBuilt.landmarks.porterSquads || [];
+        if (dockBoat && dockCrane && squads.length) {
+          const logistics = createHarborLogistics({
+            harbor,
+            boat: dockBoat,
+            crane: dockCrane,
+            squads,
+            scene,
+          });
+          logistics.bindWorld({
+            canal,
+            canalBoats,
+            moat: citadelRange.moat,
+          });
+          // boatRide / 小地图等通过 landmarks.boat 取当前泊位船
+          logistics.setOnBoatChange((b) => {
+            harborBuilt.landmarks.boat = b;
+            if (messengerLandmarks) messengerLandmarks.boat = b;
+          });
+          harbor.userData.logistics = logistics;
+          harborBuilt.logistics = logistics;
+        }
+      }
     }
 
     // 水晶城母塔 ↔ 书店：空中搜寻航线（途经湖沼）
@@ -574,6 +587,37 @@ export const messengerIslandScene = {
     // 走廊压平后悬空的岩石落回地面——树木种在草坡上，而不是被埋
     settleBuriedAssets(scene, colliders);
 
+    // 可变 landmarks：装船物流换船时更新 boat 引用
+    messengerLandmarks = {
+      playZone,
+      camp,
+      farSide,
+      bookshop,
+      tramSystem,
+      harbor,
+      oldHarbor: harborBuilt,
+      boat: harborBuilt.landmarks.boat,
+      moebius,
+      abandonedGate, // 太古双子要塞：三重圆拱 + 左右阶梯塔（入谷门槛）
+      bubblePods, // 围绕水晶城 3 座花厅建筑巡游的气泡座舱
+      citySeaLake, // 水晶城旁海水湖 · 湖沼生物培育 · 气泡艇潜行
+      citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布 · 纳沃纳双栖广场
+      odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
+      airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
+      flock, // 叹息之门城头小群 Boids 近景备份
+      birdVortex, // 兼容：台地 1 旋涡
+      terraceBirds, // 五级台地各 50 只 · 昼夜栖飞 · 纸士兵惊飞
+      hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
+      escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
+      aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
+      mossSaihoji, // 厚涂苔丘 · 西芳寺缘
+      canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
+      canalBoats, // 运河巡游古战船 · 可 F 登船
+      canalLakeLink, // 运河↔大湖落差互联（瀑布船道/升船机）
+      mossSwamp, // 厚涂苔丘 · 湖沼边缘
+      harborLogistics: harborBuilt.logistics || null,
+    };
+
     return {
       id: "messenger",
       platforms,
@@ -581,33 +625,7 @@ export const messengerIslandScene = {
       clouds,
       moonLake,
       colliders,
-      landmarks: {
-        playZone,
-        camp,
-        farSide,
-        bookshop,
-        tramSystem,
-        harbor,
-        oldHarbor: harborBuilt,
-        boat: harborBuilt.landmarks.boat,
-        moebius,
-        abandonedGate, // 太古双子要塞：三重圆拱 + 左右阶梯塔（入谷门槛）
-        bubblePods, // 围绕水晶城 3 座花厅建筑巡游的气泡座舱
-        citySeaLake, // 水晶城旁海水湖 · 湖沼生物培育 · 气泡艇潜行
-        citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布 · 纳沃纳双栖广场
-        odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
-        airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
-        flock, // 叹息之门城头小群 Boids 近景备份
-        birdVortex, // 千鸟漩涡 · 圣城台地1 上空双螺旋（50 只 · spiralOnly）
-        hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
-        escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
-        aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
-        mossSaihoji, // 厚涂苔丘 · 西芳寺缘
-        canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
-        canalBoats, // 运河巡游古战船 ×3 · 可 F 登船
-        canalLakeLink, // 运河↔大湖落差互联（瀑布船道/升船机）
-        mossSwamp, // 厚涂苔丘 · 湖沼边缘
-      },
+      landmarks: messengerLandmarks,
       update(dt, t, runtime) {
         updatePlatformPulse(platforms, t);
         updateClouds(clouds, dt, t, { speed: P.windSpeed, dirDeg: P.windDir });
@@ -630,6 +648,8 @@ export const messengerIslandScene = {
 
         // 圣城梯湖：四段水帘、雾气与涟漪；城堡本体保持静态。
         citadelRange.pilgrimageCascades.update?.(dt, t);
+        // 夜幕降临：木马腹舱开启，两组纸士兵分别潜入瀑布与城堡阶梯。
+        citadelRange.update?.(dt, t);
         // 护城河：阶梯量化水波 + 方块浪花
         citadelRange.moat?.update?.(dt, t);
         // 纳沃纳双栖广场：喷泉动画 + 旱/汛水面插值
@@ -682,15 +702,17 @@ export const messengerIslandScene = {
           moebius.update?.(dt, t, { escortTram });
         }
 
-        // 千鸟漩涡（圣城台地 1）：双螺旋飞旋 + 光暗色 + 近身惊飞
-        if (birdVortex) {
+        // 五级台地鸟群：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞后落下
+        if (terraceBirds) {
           const tram =
             tramSystem.getNearestTram?.(runtime?.player?.position) ||
             tramSystem.tram ||
             null;
-          birdVortex.update(dt, t, {
+          terraceBirds.update(dt, t, {
+            phase: P.timeOfDay,
             tram,
             viewer: runtime?.player?.position || null,
+            infiltration: citadelRange?.nightInfiltration || null,
           });
         }
         // 门周 Boids 备份层（近景可辨）

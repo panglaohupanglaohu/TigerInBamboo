@@ -3,7 +3,7 @@
 //  运河进入高山圣城前的景观型水利节点（广场横向偏离运河，河道全程露出不重叠）：
 //    旱季 isFlooded=false → 下凹石材广场 + 对称喷泉 + 运河同款围边（立壁/岸顶土埂）
 //    汛期 isFlooded=true  → 同一槽体蓄水 0.5–1m，广场变水池，喷泉半浸
-//  中轴留空作木马焦点；围边与星海运河同一套立壁+土埂语言。
+//  中轴留空作广场视觉轴线；木马另置城堡前方草地，围边与星海运河同一套立壁+土埂语言。
 //  局部约定：+Y 向上，+Z 长轴（朝城 / 运河走向），+X 横宽，原点为广场中心槽底。
 // =====================================================================
 import * as THREE from "three";
@@ -27,7 +27,7 @@ export const NAVONA_PLAZA_SPEC = Object.freeze({
   floodDepth: 0.72, // 蓄水目标深度（0.5–1m 带）
   segsL: 28,
   segsW: 14,
-  fountainCount: 2, // 对称双喷泉：中轴留空作木马焦点
+  fountainCount: 2, // 对称双喷泉：中轴留空，木马置于城堡前草地
 });
 
 const STONE_DARK = 0x3a4550; // 深青灰火山岩心
@@ -285,7 +285,7 @@ export function createNavonaCanalPlaza(opts = {}) {
   }
   group.add(rimGroup);
 
-  // ---- 4. 对称轴线喷泉（中轴留空作木马焦点）----
+  // ---- 4. 对称轴线喷泉（中轴留空，木马另置城堡前草地）----
   const fountains = new THREE.Group();
   fountains.name = "navona-plaza-fountains";
   const fountainNodes = [];

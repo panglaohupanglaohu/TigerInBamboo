@@ -117,20 +117,20 @@ export function createCitadelTrojanHorse({
   }
 
   // ============ 3. 躯干 (Torso) ============
-  // 拉长的马身：长宽比更接近真马，Z 轴(长) > X 轴(宽)
+  // 拉长且略加厚的马身：给头部留出稳定的身体基准，Z 轴(长) > X 轴(宽)
   const body = part(
-    new THREE.BoxGeometry(2.7 * S, 2.3 * S, 4.9 * S),
+    new THREE.BoxGeometry(2.85 * S, 2.45 * S, 4.9 * S),
     wood,
     "troy-torso",
     0.03
   );
-  body.position.set(0, 3.7 * S, 0);
+  body.position.set(0, 3.78 * S, 0);
   g.add(body);
 
   // 马腹补丁木块：错落拼板感
   for (let i = 0; i < 22; i++) {
     const bx = (rand() - 0.5) * 2.2 * S;
-    const by = (2.7 + rand() * 1.8) * S;
+    const by = (2.72 + rand() * 1.92) * S;
     const bz = (rand() - 0.5) * 4.5 * S;
     const patch = part(
       new THREE.BoxGeometry((0.25 + rand() * 0.35) * S, 0.035 * S, (0.4 + rand() * 0.5) * S),
@@ -166,7 +166,7 @@ export function createCitadelTrojanHorse({
     seam.position.set(sx, sy, sz);
     // 法向朝外：沿侧面的 -X 或 +X 对齐，制造“钉在木板上的横缝”
     seam.rotation.set((rand() - 0.5) * 0.06, (rand() - 0.5) * 0.3, 0);
-    seam.position.x = ring === 0 ? 1.38 * S : -1.38 * S;
+    seam.position.x = ring === 0 ? 1.45 * S : -1.45 * S;
     seam.rotation.y += ring === 0 ? Math.PI / 2 : -Math.PI / 2;
     g.add(seam);
   }
@@ -181,63 +181,101 @@ export function createCitadelTrojanHorse({
     );
     rib.rotation.x = Math.PI / 2;
     rib.rotation.z = Math.PI / 4;
-    rib.position.set((i - 1) * 1.0 * S, 3.6 * S, 0);
+    rib.position.set((i - 1) * 1.0 * S, 3.68 * S, 0);
     g.add(rib);
   }
 
+  // ============ 3.6 夜间潜入舱门 (Belly Hatch) ==========
+  // 舱口压在马腹最低处，白天闭合；夜晚由两扇木板向下分开，
+  // 让绳索和纸士兵从腹部中央明确露出来。
+  const bellyHatch = new THREE.Group();
+  bellyHatch.name = "troy-belly-hatch";
+  const cavity = part(
+    new THREE.BoxGeometry(1.7 * S, 0.08 * S, 1.9 * S),
+    darkWood,
+    "troy-belly-cavity",
+    0.014
+  );
+  cavity.position.set(0, 2.48 * S, 0);
+  bellyHatch.add(cavity);
+  const doors = [];
+  for (const side of [-1, 1]) {
+    const door = part(
+      new THREE.BoxGeometry(0.82 * S, 0.08 * S, 1.82 * S),
+      baseWood,
+      side < 0 ? "troy-belly-door-left" : "troy-belly-door-right",
+      0.018
+    );
+    door.position.set(side * 0.43 * S, 2.53 * S, 0);
+    bellyHatch.add(door);
+    doors.push(door);
+  }
+  g.add(bellyHatch);
+  const setBellyOpen = (amount = 0) => {
+    const open = THREE.MathUtils.clamp(Number(amount) || 0, 0, 1);
+    doors[0].rotation.z = 0.92 * open;
+    doors[1].rotation.z = -0.92 * open;
+    cavity.visible = open > 0.01;
+    bellyHatch.userData.open = open;
+  };
+  bellyHatch.userData = { cavity, doors, setOpen: setBellyOpen, open: 0 };
+  g.userData.bellyHatch = bellyHatch.userData;
+  g.userData.setBellyOpen = setBellyOpen;
+  setBellyOpen(0);
+
   // ============ 4. 倾斜的脖子 (Animated Neck) ============
-  // 关键：沿 X 轴向前倾斜约 25°(0.45)，做出向前奔跑/警戒的动态。
+  // 脖子随躯干加厚，并让连接段更宽，避免头部像单独插在身体上。
   const neck = part(
-    new THREE.BoxGeometry(0.72 * S, 1.5 * S, 0.78 * S),
+    new THREE.BoxGeometry(0.9 * S, 1.68 * S, 0.9 * S),
     wood,
     "troy-neck",
     0.026
   );
-  neck.position.set(0, 5.05 * S, 1.55 * S);
-  neck.rotation.x = 0.45; // 前倾约 25°
+  neck.position.set(0, 5.1 * S, 1.52 * S);
+  neck.rotation.x = 0.42; // 前倾约 24°
   g.add(neck);
 
   // 脖子侧面的木板缝隙
   for (let i = 0; i < 3; i++) {
     const nseam = part(
-      new THREE.BoxGeometry(0.02 * S, 0.72 * S, 0.02 * S),
+      new THREE.BoxGeometry(0.02 * S, 0.84 * S, 0.02 * S),
       darkWood,
       "troy-neck-seam",
       0.005
     );
-    nseam.position.set((i % 2 === 0 ? 1 : -1) * 0.36 * S, 5.0 * S, 1.55 * S);
+    nseam.position.set((i % 2 === 0 ? 1 : -1) * 0.45 * S, 5.08 * S, 1.52 * S);
     g.add(nseam);
   }
 
-  // ============ 5. 微低、拉长的马头 (Dynamic Head) ============
-  // Z 轴(长) > X 轴(宽)，突显马嘴；叠在脖子顶端并向下低头，与脖子错开夹角。
+  // ============ 5. 与躯干协调的马头 (Dynamic Head) ============
+  // 头部相对身体适度加宽加高，仍保持 Z 轴拉长；与加宽后的脖子自然重叠。
   const head = part(
-    new THREE.BoxGeometry(0.62 * S, 0.62 * S, 1.35 * S),
+    new THREE.BoxGeometry(0.82 * S, 0.78 * S, 1.5 * S),
     wood,
     "troy-head",
     0.028
   );
-  head.position.set(0, 5.95 * S, 1.85 * S);
-  head.rotation.x = -0.3; // 向下低头约 17°，打破呆板
+  head.position.set(0, 6.02 * S, 1.86 * S);
+  head.rotation.x = -0.28; // 向下低头约 16°，打破呆板
   g.add(head);
 
-  // 马鼻更细一点，突出马嘴（用更窄的一块叠在头部前下方）
+  // 马鼻保持比头部略窄，但同步放大，避免头身比例调整后鼻部过小。
   const snout = part(
-    new THREE.BoxGeometry(0.5 * S, 0.42 * S, 0.6 * S),
+    new THREE.BoxGeometry(0.6 * S, 0.5 * S, 0.72 * S),
     darkWood,
     "troy-snout",
     0.024
   );
-  snout.position.set(0, 5.7 * S, 2.45 * S);
-  snout.rotation.x = -0.28;
+  snout.position.set(0, 5.73 * S, 2.53 * S);
+  snout.rotation.x = -0.25;
   g.add(snout);
 
   // 灵魂装饰：三角耳朵（3 面圆锥，稍微朝后抿）
-  const earGeo = new THREE.ConeGeometry(0.14 * S, 0.42 * S, 3);
+  const earGeo = new THREE.ConeGeometry(0.16 * S, 0.46 * S, 3);
   earGeo.rotateX(0.2);
   for (const side of [-1, 1]) {
     const ear = part(earGeo, darkWood, "troy-ear", 0.014);
-    ear.position.set(side * 0.24 * S, 6.45 * S, 1.6 * S);
+    ear.position.set(side * 0.3 * S, 6.56 * S, 1.6 * S);
     ear.rotation.set(-0.15, 0, side * 0.1);
     g.add(ear);
   }

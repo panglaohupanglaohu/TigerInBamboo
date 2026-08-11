@@ -668,8 +668,28 @@ function buildPorter(m, geo) {
 }
 
 /**
+ * 船上剪纸桨手人数（= 桨数 = 装船容量）。
+ * @param {THREE.Object3D|null|undefined} boat
+ */
+export function boatCrewCount(boat) {
+  const oars = boat?.userData?.oars;
+  return Array.isArray(oars) ? oars.length : 0;
+}
+
+/**
  * 搬运班组：count 名纸士兵沿 from→to 往返搬箱，相位错开不撞车。
- * @param {{ from: THREE.Vector3, to: THREE.Vector3, count?: number, period?: number, offset?: number }} opts
+ * 可选 cranePos：随机走起重机，一次装 4 件（加快装船）。
+ * @param {{
+ *   from: THREE.Vector3,
+ *   to: THREE.Vector3,
+ *   count?: number,
+ *   period?: number,
+ *   offset?: number,
+ *   cranePos?: THREE.Vector3,
+ *   crane?: THREE.Object3D,
+ *   craneChance?: number,
+ *   onDeliver?: (n: number) => void,
+ * }} opts
  * @returns {THREE.Group & { userData: { update(t: number): void } }}
  */
 export function createPorterSquad(opts) {
@@ -682,6 +702,9 @@ export function createPorterSquad(opts) {
     const porter = buildPorter(m, geo);
     // 横向车道错开，避免同线重叠
     porter.userData.lane = (i - (count - 1) / 2) * 0.46;
+    porter.userData.prevU = 0;
+    porter.userData.useCrane = false;
+    porter.userData.delivered = false;
     squad.add(porter);
     porters.push(porter);
   }
@@ -690,52 +713,312 @@ export function createPorterSquad(opts) {
   squad.userData.period = opts.period ?? 12;
   squad.userData.offset = opts.offset ?? 0;
   squad.userData.porters = porters;
+  squad.userData.cranePos = opts.cranePos ? opts.cranePos.clone() : null;
+  squad.userData.crane = opts.crane || null;
+  squad.userData.craneChance = opts.craneChance ?? 0.32;
+  squad.userData.onDeliver = opts.onDeliver || null;
+  /** false 时停在货堆旁待命（船离港/进港中） */
+  squad.userData.loading = true;
   squad.userData.update = (t) => updatePorterSquad(squad, t);
   return squad;
 }
 
-/** 班组循环动画：去程扛箱 → 船边卸货（箱子消失=装船）→ 空手返回。 */
+/** 手工搬运时间轴 */
+const HAND_CARRY_END = 0.46;
+const HAND_DROP = 0.5;
+const HAND_PAUSE_END = 0.56;
+/** 起重机作业时间轴：货堆→起重机→吊运→回堆 */
+const CRANE_WALK = 0.22;
+const CRANE_DROP = 0.52;
+const CRANE_DONE = 0.72;
+
+/**
+ * 班组循环：去程扛箱 → 船边卸货（+1）→ 空手返回；
+ * 或随机使用起重机一次吊 4 件（+4）。
+ */
 function updatePorterSquad(squad, t) {
-  const { from, to, period, offset, porters } = squad.userData;
+  const { from, to, period, offset, porters, cranePos, crane, loading } = squad.userData;
+  const onDeliver = squad.userData.onDeliver;
   _ptA.copy(to).sub(from);
   _ptA.y = 0;
   _ptSide.set(-_ptA.z, 0, _ptA.x).normalize();
-  const CARRY_END = 0.46;
-  const PAUSE_END = 0.56;
+
   for (let i = 0; i < porters.length; i++) {
     const p = porters[i];
     const { body, armL, armR, legL, legR, crate } = p.userData.parts;
-    const u = ((((t + offset + (i * period) / porters.length) % period) + period) % period) / period;
+
+    // 无船装货时：在货堆旁待命
+    if (loading === false) {
+      _ptB.copy(from).addScaledVector(_ptSide, p.userData.lane);
+      p.position.copy(_ptB);
+      p.rotation.y = Math.atan2(-(to.z - from.z), to.x - from.x);
+      legL.rotation.z = 0;
+      legR.rotation.z = 0;
+      body.rotation.z = 0;
+      armL.rotation.z = 0.25;
+      armR.rotation.z = 0.25;
+      crate.visible = false;
+      p.userData.prevU = -1; // 哨兵：恢复装货时对齐相位，避免误计数
+      p.userData.delivered = true;
+      p.userData.useCrane = false;
+      continue;
+    }
+
+    const u =
+      ((((t + offset + (i * period) / porters.length) % period) + period) % period) / period;
+    // 从待命恢复：对齐 prevU，本帧不触发交付
+    if (p.userData.prevU < 0) {
+      p.userData.prevU = u;
+      p.userData.delivered = true;
+      p.userData.useCrane = false;
+    }
+    const prevU = p.userData.prevU ?? u;
+
+    // 周期回绕：决定本趟是否使用起重机（全班组共用一台，busy 时改手工）
+    if (prevU > 0.8 && u < 0.2) {
+      p.userData.delivered = false;
+      const canCrane =
+        !!cranePos &&
+        !!crane &&
+        !crane.userData.busy &&
+        Math.random() < (squad.userData.craneChance ?? 0.32);
+      p.userData.useCrane = canCrane;
+      if (canCrane) {
+        startHarborCraneJob(crane, period * (CRANE_DONE - CRANE_WALK) * 0.95);
+      }
+    }
+
+    const useCrane = p.userData.useCrane && cranePos;
     let carrying = false;
     let moving = true;
-    if (u < CARRY_END) {
-      const s = easeIO(u / CARRY_END);
-      _ptB.lerpVectors(from, to, s);
-      carrying = true;
-    } else if (u < PAUSE_END) {
-      _ptB.copy(to);
-      carrying = u < CARRY_END + 0.04; // 触船一瞬后箱子即装船消失
-      moving = false;
+    let hx = 1;
+    let hz = 0;
+
+    if (useCrane) {
+      // 货堆 → 起重机操作位 → 等候吊运完成 → 空手回堆
+      if (u < CRANE_WALK) {
+        const s = easeIO(u / CRANE_WALK);
+        _ptB.lerpVectors(from, cranePos, s);
+        carrying = true;
+        hx = cranePos.x - from.x;
+        hz = cranePos.z - from.z;
+      } else if (u < CRANE_DONE) {
+        _ptB.copy(cranePos);
+        moving = false;
+        carrying = u < CRANE_DROP; // 把货挂上吊钩后空手等候
+        hx = to.x - cranePos.x;
+        hz = to.z - cranePos.z;
+      } else {
+        const s = easeIO((u - CRANE_DONE) / (1 - CRANE_DONE));
+        _ptB.lerpVectors(cranePos, from, s);
+        hx = from.x - cranePos.x;
+        hz = from.z - cranePos.z;
+      }
+      // 吊钩放货瞬间计 4 件
+      if (!p.userData.delivered && prevU < CRANE_DROP && u >= CRANE_DROP) {
+        p.userData.delivered = true;
+        onDeliver?.(4);
+      }
     } else {
-      const s = easeIO((u - PAUSE_END) / (1 - PAUSE_END));
-      _ptB.lerpVectors(to, from, s);
+      // 手工：货堆 → 舷边卸 1 件 → 空手返回
+      if (u < HAND_CARRY_END) {
+        const s = easeIO(u / HAND_CARRY_END);
+        _ptB.lerpVectors(from, to, s);
+        carrying = true;
+        hx = to.x - from.x;
+        hz = to.z - from.z;
+      } else if (u < HAND_PAUSE_END) {
+        _ptB.copy(to);
+        carrying = u < HAND_DROP;
+        moving = false;
+        hx = to.x - from.x;
+        hz = to.z - from.z;
+      } else {
+        const s = easeIO((u - HAND_PAUSE_END) / (1 - HAND_PAUSE_END));
+        _ptB.lerpVectors(to, from, s);
+        hx = from.x - to.x;
+        hz = from.z - to.z;
+      }
+      if (!p.userData.delivered && prevU < HAND_DROP && u >= HAND_DROP) {
+        p.userData.delivered = true;
+        onDeliver?.(1);
+      }
     }
-    _ptB.addScaledVector(_ptSide, p.userData.lane);
+
+    _ptB.addScaledVector(_ptSide, p.userData.lane * (useCrane ? 0.35 : 1));
     p.position.copy(_ptB);
     const step = t * 9 + i * 2.3;
     p.position.y += moving ? Math.abs(Math.sin(step)) * 0.035 : 0;
-    // 纸偶面法线朝侧，前进向 = 局部 +X：yaw 把 +X 转到移动方向
-    const hx = moving ? (carrying ? to.x - from.x : from.x - to.x) : 1;
-    const hz = moving ? (carrying ? to.z - from.z : from.z - to.z) : 0;
-    p.rotation.y = Math.atan2(-hz, hx);
+    p.rotation.y = Math.atan2(-hz, hx || 1);
     const swing = moving ? Math.sin(step) * 0.5 : 0;
     legL.rotation.z = swing;
     legR.rotation.z = -swing;
-    body.rotation.z = moving ? -0.1 : 0; // 行进中微前倾
-    armL.rotation.z = carrying ? 1.22 : 0.35 + swing * 0.5;
-    armR.rotation.z = carrying ? 1.22 : 0.35 - swing * 0.5;
+    body.rotation.z = moving ? -0.1 : useCrane && u >= CRANE_WALK && u < CRANE_DONE ? 0.05 : 0;
+    armL.rotation.z = carrying ? 1.22 : useCrane && u >= CRANE_WALK && u < CRANE_DONE ? 1.05 : 0.35 + swing * 0.5;
+    armR.rotation.z = carrying ? 1.22 : useCrane && u >= CRANE_WALK && u < CRANE_DONE ? 1.05 : 0.35 - swing * 0.5;
     crate.visible = carrying;
+    p.userData.prevU = u;
   }
+}
+
+// =====================================================================
+//  码头起重机吊运动画（纸士兵随机调用，一次 4 件货）
+// =====================================================================
+
+/**
+ * 触发一次起重机吊运：吊钩挂 4 箱 → 摆向船 → 卸下 → 回位。
+ * @param {THREE.Object3D} crane
+ * @param {number} [duration=3.6]
+ */
+export function startHarborCraneJob(crane, duration = 3.6) {
+  if (!crane || crane.userData.busy) return false;
+  const rope = crane.getObjectByName("crane-rope");
+  // 吊钩是无名 mesh：rope 下方、靠悬臂前端
+  let hookMesh = null;
+  let hookRing = null;
+  crane.traverse((o) => {
+    if (o.name === "crane-rope" || o.name === "crane-boom" || o.name === "crane-winch") return;
+    if (!o.isMesh) return;
+    if (o.position.y < 1.2 && o.position.x > 2) {
+      if (!hookMesh) hookMesh = o;
+      else if (!hookRing) hookRing = o;
+    }
+  });
+
+  // 4 件货挂在吊钩下
+  const payload = new THREE.Group();
+  payload.name = "crane-payload";
+  const wood = toonMat(CRATE_WOOD);
+  for (let i = 0; i < 4; i++) {
+    const box = new THREE.Mesh(facet(new THREE.BoxGeometry(0.2, 0.16, 0.2)), wood);
+    box.position.set((i % 2) * 0.22 - 0.11, -0.28 - Math.floor(i / 2) * 0.18, i < 2 ? 0.1 : -0.1);
+    box.castShadow = true;
+    payload.add(box);
+  }
+  const tipX = rope?.position.x ?? 3.0;
+  const ropeLen = rope?.geometry?.parameters?.height ?? 1.85;
+  payload.position.set(tipX, (rope?.position.y ?? 2) - ropeLen / 2 - 0.2, 0);
+  crane.add(payload);
+
+  crane.userData.busy = true;
+  crane.userData.anim = {
+    t: 0,
+    duration: Math.max(1.5, duration),
+    baseYaw: crane.rotation.y,
+    rope,
+    ropeBaseY: rope?.position.y ?? 0,
+    ropeBaseScaleY: rope?.scale.y ?? 1,
+    hookMesh,
+    hookRing,
+    hookBaseY: hookMesh?.position.y ?? 0,
+    ringBaseY: hookRing?.position.y ?? 0,
+    payload,
+    payloadBaseY: payload.position.y,
+  };
+  return true;
+}
+
+/** 逐帧更新起重机吊运动画。 */
+export function updateHarborCrane(crane, dt) {
+  const anim = crane?.userData?.anim;
+  if (!anim) return;
+  const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
+  anim.t += d;
+  const k = Math.min(1, anim.t / anim.duration);
+  // 0–0.2 微降挂钩 · 0.2–0.45 提起 · 0.45–0.7 回转向船 · 0.7–0.88 放下卸货 · 0.88–1 回位
+  let ropeMul = 1;
+  let yawOff = 0;
+  let payloadVis = true;
+  if (k < 0.2) {
+    ropeMul = 1 + (k / 0.2) * 0.25;
+  } else if (k < 0.45) {
+    ropeMul = 1.25 - ((k - 0.2) / 0.25) * 0.45;
+  } else if (k < 0.7) {
+    ropeMul = 0.8;
+    yawOff = easeIO((k - 0.45) / 0.25) * 0.55;
+  } else if (k < 0.88) {
+    ropeMul = 0.8 + ((k - 0.7) / 0.18) * 0.5;
+    yawOff = 0.55;
+    if (k > 0.8) payloadVis = false;
+  } else {
+    const u = (k - 0.88) / 0.12;
+    ropeMul = 1.3 - u * 0.3;
+    yawOff = 0.55 * (1 - easeIO(u));
+    payloadVis = false;
+  }
+  crane.rotation.y = anim.baseYaw + yawOff;
+  if (anim.rope) {
+    // 伸长绳 = 放大 Y 并下移中心
+    anim.rope.scale.y = anim.ropeBaseScaleY * ropeMul;
+    const half = (anim.rope.geometry?.parameters?.height ?? 1.85) * 0.5;
+    // 保持顶端不动：中心随 scale 下移
+    const tipY = anim.ropeBaseY + half * anim.ropeBaseScaleY;
+    anim.rope.position.y = tipY - half * anim.rope.scale.y;
+  }
+  const drop = (ropeMul - 1) * 0.9;
+  if (anim.hookMesh) anim.hookMesh.position.y = anim.hookBaseY - drop;
+  if (anim.hookRing) anim.hookRing.position.y = anim.ringBaseY - drop;
+  if (anim.payload) {
+    anim.payload.visible = payloadVis;
+    anim.payload.position.y = anim.payloadBaseY - drop;
+  }
+  if (k >= 1) {
+    if (anim.payload) {
+      crane.remove(anim.payload);
+      anim.payload.traverse((o) => {
+        o.geometry?.dispose?.();
+        if (o.material && !o.material.userData?.shared) o.material.dispose?.();
+      });
+    }
+    if (anim.rope) {
+      anim.rope.scale.y = anim.ropeBaseScaleY;
+      anim.rope.position.y = anim.ropeBaseY;
+    }
+    if (anim.hookMesh) anim.hookMesh.position.y = anim.hookBaseY;
+    if (anim.hookRing) anim.hookRing.position.y = anim.ringBaseY;
+    crane.rotation.y = anim.baseYaw;
+    crane.userData.busy = false;
+    crane.userData.anim = null;
+  }
+}
+
+/**
+ * 甲板上的装船进度货箱（随 cargo/capacity 显隐）。
+ * @param {THREE.Object3D} boat
+ * @param {number} [slots=8]
+ */
+export function ensureDeckCargoMarkers(boat, slots = 8) {
+  if (!boat || boat.userData.deckCargo) return boat?.userData?.deckCargo;
+  const group = new THREE.Group();
+  group.name = "deck-cargo";
+  const wood = toonMat(CRATE_WOOD);
+  for (let i = 0; i < slots; i++) {
+    const c = new THREE.Mesh(facet(new THREE.BoxGeometry(0.24, 0.2, 0.24)), wood);
+    c.position.set(-1.15 + (i % 4) * 0.55, 0.95, i < 4 ? 0.14 : -0.14);
+    c.rotation.y = (i * 0.37) % 1;
+    c.visible = false;
+    c.castShadow = true;
+    group.add(c);
+  }
+  boat.add(group);
+  boat.userData.deckCargo = group;
+  return group;
+}
+
+/**
+ * @param {THREE.Object3D} boat
+ * @param {number} cargo
+ * @param {number} capacity
+ */
+export function updateDeckCargoMarkers(boat, cargo, capacity) {
+  const g = boat?.userData?.deckCargo;
+  if (!g) return;
+  const slots = g.children.length;
+  const filled = Math.min(
+    slots,
+    Math.ceil((Math.max(0, cargo) / Math.max(1, capacity)) * slots)
+  );
+  for (let i = 0; i < slots; i++) g.children[i].visible = i < filled;
 }
 
 /**
@@ -754,6 +1037,92 @@ export function createTieSoldier() {
   armR.rotation.z = 1.32;
   legL.rotation.z = 0.5; // 前后弓步蹬地
   legR.rotation.z = -0.42;
+  return root;
+}
+
+/**
+ * 夜间潜入城堡的纸士兵：左手持盾或火炬，右手持短剑。
+ *
+ * 仍复用码头班组的剪纸罗马士兵几何，装备单独挂在 fig 上，
+ * 因而不会改变已有搬运兵/系绳兵的尺寸与动画。
+ * @param {{ torchLeft?: boolean }} [opts]
+ * @returns {THREE.Group}
+ */
+export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
+  const { m, geo } = crewShared();
+  const root = buildPorter(m, geo);
+  root.name = torchLeft ? "night-torch-soldier" : "night-shield-soldier";
+  const { body, armL, armR, legL, legR, crate } = root.userData.parts;
+  const fig = root.children[0];
+  crate.visible = false;
+
+  // 立定突进姿态：两只手分别留在身体两侧，装备会贴到手前。
+  body.rotation.z = 0.02;
+  armL.rotation.z = -0.38;
+  armR.rotation.z = 0.38;
+  legL.rotation.z = 0.08;
+  legR.rotation.z = -0.08;
+
+  const bronze = m.bronze;
+  const shieldMat = toonMat(0xb8c4c7, { flatShading: true });
+  const shieldRimMat = toonMat(0x65777a, { flatShading: true });
+  const swordDark = toonMat(0x4b3523, { flatShading: true });
+  const flameMat = new THREE.MeshBasicMaterial({ color: 0xffb22e });
+  const equipment = new THREE.Group();
+  equipment.name = "infiltration-equipment";
+
+  let shield = null;
+  let torch = null;
+  let torchLight = null;
+  if (torchLeft) {
+    torch = new THREE.Group();
+    torch.name = "left-hand-torch";
+    const shaft = part(new THREE.CylinderGeometry(0.012, 0.015, 0.18, 5), swordDark, 0.005);
+    shaft.position.y = 0.09;
+    torch.add(shaft);
+    const flame = part(new THREE.ConeGeometry(0.035, 0.09, 5), flameMat, 0.006);
+    flame.name = "torch-flame";
+    flame.position.y = 0.225;
+    torch.add(flame);
+    torch.position.set(-0.15, PORTER_HIP + 0.12, 0.11);
+    torchLight = new THREE.PointLight(0xff8a32, 0.75, 3.2, 2);
+    torchLight.name = "infiltration-torch-light";
+    torchLight.position.set(0, 0.2, 0.03);
+    torch.add(torchLight);
+    equipment.add(torch);
+  } else {
+    shield = new THREE.Group();
+    shield.name = "left-hand-shield";
+    const face = part(new THREE.CylinderGeometry(0.095, 0.095, 0.026, 8), shieldMat, 0.008);
+    face.rotation.x = Math.PI / 2;
+    shield.add(face);
+    const rim = part(new THREE.TorusGeometry(0.096, 0.012, 4, 8), shieldRimMat, 0.006);
+    rim.rotation.x = Math.PI / 2;
+    rim.position.z = 0.018;
+    shield.add(rim);
+    shield.position.set(-0.15, PORTER_HIP + 0.14, 0.11);
+    equipment.add(shield);
+  }
+
+  // 右手短剑：深色握柄、横护手与青铜色短刃，比例保持在纸偶手臂附近。
+  const sword = new THREE.Group();
+  sword.name = "right-hand-short-sword";
+  const grip = part(new THREE.BoxGeometry(0.025, 0.055, 0.025), swordDark, 0.005);
+  grip.position.y = -0.005;
+  sword.add(grip);
+  const guard = part(new THREE.BoxGeometry(0.085, 0.018, 0.03), bronze, 0.006);
+  guard.position.y = 0.035;
+  sword.add(guard);
+  const blade = part(new THREE.BoxGeometry(0.032, 0.17, 0.018), shieldMat, 0.006);
+  blade.position.y = 0.13;
+  sword.add(blade);
+  sword.position.set(0.15, PORTER_HIP + 0.12, 0.11);
+  sword.rotation.z = -0.08;
+  equipment.add(sword);
+
+  fig.add(equipment);
+  root.userData.equipment = { equipment, shield, sword, torch, torchLight };
+  root.userData.torchBearer = !!torchLeft;
   return root;
 }
 
@@ -1109,18 +1478,30 @@ export function buildOldHarborScene(opts = {}) {
   }
 
   // ---------- 两组剪纸士兵搬运货物上船：货堆 → 战船舷边往返 ----------
+  // 随机使用起重机：一次吊 4 件，加快装船（装船次数累加到船上士兵人数后离港）
   const deckTop = deckY + deckH / 2;
+  const cranePos = new THREE.Vector3(
+    crane.position.x + 0.35,
+    deckTop,
+    crane.position.z + 0.55
+  );
   const squadA = createPorterSquad({
     from: new THREE.Vector3(-1.7, deckTop, 1.75),
     to: new THREE.Vector3(4.3, deckTop, 0.2),
     period: 12,
     offset: 0,
+    cranePos,
+    crane,
+    craneChance: 0.3,
   });
   const squadB = createPorterSquad({
     from: new THREE.Vector3(2.2, deckTop, 1.55),
     to: new THREE.Vector3(5.1, deckTop, -0.25),
     period: 12,
     offset: 6, // 与 A 组错半周期，两组交替上货
+    cranePos,
+    crane,
+    craneChance: 0.34,
   });
   g.add(squadA);
   g.add(squadB);
@@ -1142,13 +1523,28 @@ export function buildOldHarborScene(opts = {}) {
   g.userData.kind = "oldHarbor";
   g.userData.collideRadius = 4.0;
 
+  // 泊位船：装货计数初始状态（物流系统 bind 后接管离港/进港）
+  boat.userData.harborDocked = true;
+  boat.userData.cargoLoaded = 0;
+  boat.userData.cargoCapacity = boatCrewCount(boat);
+  ensureDeckCargoMarkers(boat);
+
   return {
     group: g,
     landmarks: { boat, crane, crates, cratesByCrane: crates2, porterSquads: [squadA, squadB] },
     /** 贴球后由调用方转为世界碰撞 */
     collidersLocal,
-    /** 逐帧驱动搬运班组往返动画 */
-    update: (_dt, t) => {
+    squads: [squadA, squadB],
+    /**
+     * 逐帧驱动。若已挂 logistics（装船计数/离港/护城河进港），走物流；
+     * 否则仅班组往返 + 起重机动画。
+     */
+    update: (dt, t) => {
+      if (g.userData.logistics?.update) {
+        g.userData.logistics.update(dt, t);
+        return;
+      }
+      updateHarborCrane(crane, dt);
       squadA.userData.update(t);
       squadB.userData.update(t);
     },

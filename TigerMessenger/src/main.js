@@ -23,6 +23,7 @@ import {
   citadelTerrainCellSupported,
   updateCitadelNightWindows,
 } from "./world/odysseyCitadel.js";
+import { collectInfiltrationThreats } from "./world/citadelTerraceBirds.js";
 import { CITADEL_TOWN_SPEC, citadelGridCellCenter } from "./world/citadelTown.js";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P } from "./core/params.js";
@@ -980,10 +981,16 @@ function animate() {
   updateToast(dt);
   dayNight.update(dt);
   // 古堡拱窗：夜晚 70% 概率点亮，天亮熄灭，每夜重新抽签
-  updateCitadelNightWindows(
-    messenger?.landmarks?.odysseyCitadel,
-    dayNight.getPhase?.() ?? P.timeOfDay
-  );
+  // 古堡拱窗：夜亮；纸士兵经过房屋时熄灯，次夜再点亮
+  {
+    const phase = dayNight.getPhase?.() ?? P.timeOfDay;
+    const inf = messenger?.landmarks?.citadelRange?.nightInfiltration;
+    const threats = collectInfiltrationThreats(inf);
+    updateCitadelNightWindows(messenger?.landmarks?.odysseyCitadel, phase, {
+      threats,
+      threatRadius: 3.8,
+    });
+  }
   updateMoebiusBarrier(dt);
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   // 纳沃纳双栖广场：雨天蓄洪 / 晴雪泄回旱季广场（与天气联动）
