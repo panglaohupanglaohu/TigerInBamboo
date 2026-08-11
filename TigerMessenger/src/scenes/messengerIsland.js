@@ -14,6 +14,7 @@ import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets 
 import { createMoonLake } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildWorldCanal } from "../world/canalSystem.js";
+import { buildCanalLakeLink } from "../world/canalLakeLink.js";
 import { createCanalBoatPatrol } from "../world/canalBoats.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
@@ -77,6 +78,7 @@ export const messengerIslandScene = {
     const R = ctx.planetRadius ?? PLANET_RADIUS;
     let canalSys = null; // 星海运河环线（连通各场景，地面浅沟）
     let canalBoats = null; // 运河巡游古战船（可 F 登船 WASD 驾驶）
+    let canalLakeLink = null; // 运河↔大湖落差互联（瀑布船道+升船机）
 
     const platforms = buildWorld(scene);
     const hills = buildHills(scene, R);
@@ -304,10 +306,15 @@ export const messengerIslandScene = {
       const canal = buildWorldCanal(scene, R, {
         anchors: canalAnchors,
         names: canalNames,
+        groundLift: citadelRangeLiftDir,
       });
       canalSys = canal;
-      // 复制 3 艘古战船沿运河环线巡游，送信人可靠近 [F] 登船驾驶
-      canalBoats = createCanalBoatPatrol(scene, canal, { count: 3, scale: 0.92 });
+      // 复制 10 艘古战船沿运河环线巡游，送信人可靠近 [F] 登船驾驶
+      canalBoats = createCanalBoatPatrol(scene, canal, { count: 10, scale: 0.92 });
+      // 利用落差互联互通：运河水沿阶梯瀑布船道跌入大湖，战船顺梯入湖巡游，
+      // 归来时由出口升船机整厢抬回运河水位，形成闭环通航
+      canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake);
+      canalLakeLink?.attachAll?.(canalBoats.boats);
     }
 
     // 水晶城母塔 ↔ 书店：空中搜寻航线（途经湖沼）
@@ -530,7 +537,7 @@ export const messengerIslandScene = {
         abandonedGate, // 太古双子要塞：三重圆拱 + 左右阶梯塔（入谷门槛）
         bubblePods, // 围绕水晶城 3 座花厅建筑巡游的气泡座舱
         citySeaLake, // 水晶城旁海水湖 · 湖沼生物培育 · 气泡艇潜行
-        citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布
+        citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布 · 纳沃纳双栖广场
         odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
         airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
         flock, // 旧峡谷 Boids（已让位给旋涡，root 隐藏）
@@ -541,6 +548,7 @@ export const messengerIslandScene = {
         mossSaihoji, // 厚涂苔丘 · 西芳寺缘
         canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
         canalBoats, // 运河巡游古战船 ×3 · 可 F 登船
+        canalLakeLink, // 运河↔大湖落差互联（瀑布船道/升船机）
         mossSwamp, // 厚涂苔丘 · 湖沼边缘
       },
       update(dt, t, runtime) {
@@ -550,6 +558,9 @@ export const messengerIslandScene = {
 
         // 运河战船巡游（已搭乘的船跳过，由 boatRide 接管）
         canalBoats?.update?.(dt);
+
+        // 运河↔大湖落差互联：升船机吊厢/配重 + 瀑布浪花动画
+        canalLakeLink?.update?.(dt, t);
 
         // 3 艘气泡座舱分别围绕 3 座花厅建筑巡游
         updateBubblePodPatrol(bubblePods, t);
@@ -561,6 +572,8 @@ export const messengerIslandScene = {
         citadelRange.pilgrimageCascades.update?.(dt, t);
         // 护城河：阶梯量化水波 + 方块浪花
         citadelRange.moat?.update?.(dt, t);
+        // 纳沃纳双栖广场：喷泉动画 + 旱/汛水面插值
+        citadelRange.navonaPlaza?.update?.(dt, t);
         odysseyCitadel.update?.(dt, t);
 
         // 地图放置的湖沼/飞艇动效（鲸/舟/悬浮艇）

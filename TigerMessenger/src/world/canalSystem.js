@@ -22,6 +22,8 @@ export const CANAL_DEPTH = 0.95;
 const BED_BIAS = 0.05;
 // 水面相对河床的抬升（约占沟深 2/3，像灌了水的沟）
 const WATER_FILL = 0.62;
+/** 运河水面相对当地地表抬升（= 河床偏置 + 水深）。护城河交接必须用同一值。 */
+export const CANAL_WATER_LIFT = BED_BIAS + WATER_FILL;
 // 运河半宽（沟内缘到中线）：原 2.1 × 3 = 6.3（全宽约 12.6）
 export const CANAL_HALF_WIDTH = 6.3;
 // 岸顶土埂外延宽度（随河道加宽略放大，仍明显窄于河面）
@@ -32,8 +34,23 @@ const LIP_THICK = 0.1;
 const WALL_THICK = 0.22;
 // 场景登岸浅湾半径（数据预留）
 const DOCK_RADIUS = 8.4;
-// 运河/护城河统一水面色（介于旧运河 0x1a6a88 与旧护城河 0xa3cbd2 之间）
+// 运河水面色：护城河/交接水系以此为准（不再用护城河旧淡青）
 export const SHARED_WATER_COLOR = 0x3a86a0;
+
+/** 运河水面材质；护城河水面复用，保证色相+质感一致。 */
+export function createCanalWaterMaterial() {
+  return new THREE.MeshPhysicalMaterial({
+    color: SHARED_WATER_COLOR,
+    transparent: true,
+    opacity: 0.78,
+    roughness: 0.14,
+    metalness: 0.04,
+    clearcoat: 0.5,
+    clearcoatRoughness: 0.22,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+}
 
 const _p = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -49,7 +66,7 @@ const _right = new THREE.Vector3();
  * @param {number} wiggle 横向摆动幅度（弧度）
  * @param {number} r 径向半径（球面 R）
  */
-export function insertWindingPoints(a, b, k, wiggle, r, out) {
+export function insertWindingPoints(a, b, k, wiggle, getR, out) {
   const ad = a.clone().normalize();
   const bd = b.clone().normalize();
   for (let i = 1; i <= k; i++) {
@@ -64,7 +81,8 @@ export function insertWindingPoints(a, b, k, wiggle, r, out) {
     }
     const sway = Math.sin(t * Math.PI) * wiggle;
     dir.addScaledVector(_right, sway).normalize();
-    out.push(dir.multiplyScalar(r));
+    // 按当前方向查询地表抬升后得到河床半径（在圣城区域贴合高度场）
+    out.push(dir.multiplyScalar(getR(dir)));
   }
 }
 
@@ -121,44 +139,48 @@ function sweepPrism(samplesArr, side0, side1, h0, h1, mat) {
  */
 export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) {
   const depth = opts.depth ?? CANAL_DEPTH;
-  const bedR = planetRadius + BED_BIAS; // 河床径向半径（贴地、略抬）
-  const waterR = bedR + WATER_FILL; // 水面径向半径
-  const lipR = bedR + depth; // 岸顶径向半径
+  // 地表抬升查询：在圣城等区域贴合高度场；默认 0（普通球面）
+  const groundLift = opts.groundLift ?? (() => 0);
+  const bedRAt = (dir) => planetRadius + groundLift(dir) + BED_BIAS;
+  // 返回给外部的基准半径（不含动态抬升），实际几何与曲线按每点抬升计算
+  const bedR = planetRadius + BED_BIAS;
+  const waterR = bedR + WATER_FILL;
+  const lipR = bedR + depth;
 
   const anchors = (opts.anchors || []).map((a) => a.clone().normalize());
 
-  // ---- 组装控制点：每个场景锚点 + 场景间曲折中间点（落在地表半径） ----
+  // ---- 组装控制点：每个场景锚点 + 场景间曲折中间点（按方向贴合地表） ----
   const controls = [];
   const count = anchors.length;
   for (let i = 0; i < count; i++) {
     const a = anchors[i];
     const b = anchors[(i + 1) % count];
-    controls.push(a.clone().multiplyScalar(bedR));
+    controls.push(a.clone().multiplyScalar(bedRAt(a)));
     const dist = a.angleTo(b);
     const wiggle = THREE.MathUtils.clamp(dist * 0.16, 0.015, 0.11);
-    insertWindingPoints(a, b, 3, wiggle, bedR, controls);
+    insertWindingPoints(a, b, 3, wiggle, bedRAt, controls);
   }
 
   // ---- 初始 CatmullRom 闭合样条 ----
   const rawCurve = new THREE.CatmullRomCurve3(controls, true, "centripetal", 0.5);
 
-  // ---- 高密度重采样 + 投影回河床半径 + 滑动平均抹角 ----
+  // ---- 高密度重采样 + 投影回当前方向河床半径 + 滑动平均抹角 ----
   const N = 1400;
   const projected = [];
   for (let i = 0; i < N; i++) {
     rawCurve.getPointAt(i / N, _p);
-    projected.push(_p.clone().normalize().multiplyScalar(bedR));
+    projected.push(_p.clone().normalize().multiplyScalar(bedRAt(_p.clone().normalize())));
   }
   for (let pass = 0; pass < 2; pass++) {
     const src = projected.map((v) => v.clone());
     for (let i = 0; i < N; i++) {
       const a = src[(i - 1 + N) % N];
       const b = src[i];
-      const c = src[(i + 1) % N];
+      const c = src[(i + 1 + N) % N];
       projected[i]
         .set((a.x + 2 * b.x + c.x) / 4, (a.y + 2 * b.y + c.y) / 4, (a.z + 2 * b.z + c.z) / 4)
         .normalize()
-        .multiplyScalar(bedR);
+        .multiplyScalar(bedRAt(projected[i].clone().normalize()));
     }
   }
   const curve = new THREE.CatmullRomCurve3(projected, true, "centripetal", 0.5);
@@ -175,7 +197,7 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
       _right.set(1, 0, 0).addScaledVector(_up, -_up.x).normalize();
     }
     samples.push({
-      p: _up.clone().multiplyScalar(bedR),
+      p: _up.clone().multiplyScalar(bedRAt(_up)),
       up: _up.clone(),
       right: _right.clone(),
       fwd: _fwd.clone(),
@@ -190,17 +212,7 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
   const bedMat = toonMat(0x3a2f26, { flatShading: true });
   const bankMat = toonMat(0x6b563f, { flatShading: true });
   const lipMat = toonMat(0x7a6548, { flatShading: true });
-  const waterMat = new THREE.MeshPhysicalMaterial({
-    color: SHARED_WATER_COLOR,
-    transparent: true,
-    opacity: 0.78,
-    roughness: 0.14,
-    metalness: 0.04,
-    clearcoat: 0.5,
-    clearcoatRoughness: 0.22,
-    side: THREE.DoubleSide,
-    depthWrite: false,
-  });
+  const waterMat = createCanalWaterMaterial();
 
   // 1) 河床：沟底薄板（整条贴地浅沟底）
   const bed = sweepPrism(samples, -half, half, -0.02, 0.02, bedMat);

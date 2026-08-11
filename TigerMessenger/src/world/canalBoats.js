@@ -5,7 +5,7 @@
 //  - 下船后：从当前位置吸附回曲线最近点，继续巡游
 // =====================================================================
 import * as THREE from "three";
-import { createFisherBoat } from "../assets/harbor.js";
+import { createFisherBoat, updateWarshipOars } from "../assets/harbor.js";
 
 const _p = new THREE.Vector3();
 const _t = new THREE.Vector3();
@@ -15,7 +15,7 @@ const _z = new THREE.Vector3();
 const _basis = new THREE.Matrix4();
 
 /** 默认巡航艘数 */
-export const CANAL_BOAT_COUNT = 3;
+export const CANAL_BOAT_COUNT = 10;
 /** 闭合环一周基准耗时（秒）；各船略有速度差 */
 const LAP_SECONDS = 180;
 /** 略高于水面，避免与 canal-water z-fight */
@@ -25,7 +25,7 @@ const DRAFT_LIFT = 0.12;
  * @param {THREE.Scene} scene
  * @param {{ curve: THREE.CatmullRomCurve3, waterR: number, bedR?: number }|null} canal
  * @param {object} [opts]
- * @param {number} [opts.count=3]
+ * @param {number} [opts.count=10]
  * @param {number} [opts.scale=0.92]
  * @returns {{
  *   boats: THREE.Group[],
@@ -45,7 +45,7 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
     };
   }
 
-  const count = Math.max(1, Math.min(8, opts.count ?? CANAL_BOAT_COUNT));
+  const count = Math.max(1, Math.min(12, opts.count ?? CANAL_BOAT_COUNT));
   const scale = opts.scale ?? 0.92;
   const waterR = canal.waterR;
   const curve = canal.curve;
@@ -103,7 +103,15 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
   function update(dt) {
     if (!Number.isFinite(dt) || dt <= 0) return;
     for (const boat of boats) {
-      if (boat.userData.piloted) continue;
+      if (boat.userData.piloted) {
+        // 驾驶中由 boatRide 负责桨动画
+        continue;
+      }
+      // 运河—大湖落差互联（瀑布船道/升船机）接管：自驱动巡航与绕湖通航
+      if (boat.userData.lakeLinkStep) {
+        boat.userData.lakeLinkStep(boat, dt, { curve, waterR, place: placeOnCurve });
+        continue;
+      }
       // 若刚下船，从当前位置重新吸附到航道
       if (boat.userData.needsSnap) {
         boat.userData.u = nearestU(boat.position);
@@ -111,6 +119,9 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
       }
       boat.userData.u = (boat.userData.u + boat.userData.speed * dt) % 1;
       placeOnCurve(boat, curve, waterR, boat.userData.u);
+      // 巡航中双侧船桨划水（强度随船速）
+      const rowStrength = Math.min(1, (boat.userData.speed / baseSpeed) * 0.95);
+      updateWarshipOars(boat, dt, rowStrength);
     }
   }
 

@@ -83,6 +83,64 @@ export function raycastCitadelTerraceTop(
 }
 
 /**
+ * 射线穿过的最近一层台地顶面（不限当前选中台地）。
+ * 3D 直编辑据此「点到哪层编辑哪层」，避免点其它台地空地毫无反应。
+ */
+export function raycastNearestCitadelTerraceTop(citadel, raycaster, out = new THREE.Vector3()) {
+  if (!citadel || !raycaster) return null;
+  const p = new THREE.Vector3();
+  let best = -1;
+  let bestD = Infinity;
+  for (let i = 0; i < 5; i++) {
+    if (!raycastCitadelTerraceTop(citadel, i, raycaster, p)) continue;
+    const d = raycaster.ray.origin.distanceTo(p);
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+      out.copy(p);
+    }
+  }
+  return best < 0 ? null : { terraceIndex: best, point: out };
+}
+
+/**
+ * 射线落在层叠梯湖（白石岸/水面）上时，返回归属落点。
+ * 湖椭圆是逻辑承重面（isCitadelCascadePoolSupported），但其下台地顶面被
+ * 瀑布缺口切掉，真实顶面拾取永远落空——这里用湖体网格补上拾取；
+ * 落点不取网格命中点（斜视角命中的常是湖岸壁面，x/z 会偏到邻层），
+ * 而是取射线与「池归属台地建块平面」的交点：即用户视线里看到的湖面处。
+ */
+export function raycastCascadePoolTop(scene, raycaster, out = new THREE.Vector3(), terraceFilter = null) {
+  const waterSteps = scene?.getObjectByName?.("citadel-pilgrimage-water-steps");
+  if (!waterSteps || !raycaster) return null;
+  for (const hit of raycaster.intersectObjects(waterSteps.children, true)) {
+    let o = hit.object;
+    while (o && !o.userData?.composition) o = o.parent;
+    const comp = o?.userData?.composition;
+    if (!Number.isFinite(comp?.terraceIndex)) continue;
+    // 选中台地优先拾取：跳过归属邻层的梯湖，继续找选中台地自己的湖面；
+    // 无过滤时维持原行为（首个命中即返回）
+    if (Number.isFinite(terraceFilter) && comp.terraceIndex !== terraceFilter) continue;
+    let citadel = o.parent;
+    while (citadel && !citadel.userData?.townBaseYs) citadel = citadel.parent;
+    if (citadel) {
+      // 当地“上”方向与建块平面高：射线与该平面的交点即逻辑落点
+      const q = citadel.getWorldQuaternion(new THREE.Quaternion());
+      const localUp = new THREE.Vector3(0, 1, 0).applyQuaternion(q);
+      const baseY = citadelEditBaseY(citadel, comp.terraceIndex) ?? 0;
+      const planePt = citadel.localToWorld(new THREE.Vector3(0, baseY, 0));
+      const denom = raycaster.ray.direction.dot(localUp);
+      if (Math.abs(denom) > 1e-6) {
+        const t = planePt.sub(raycaster.ray.origin).dot(localUp) / denom;
+        if (t > 0) return { terraceIndex: comp.terraceIndex, point: out.copy(raycaster.ray.at(t, out)) };
+      }
+    }
+    return { terraceIndex: comp.terraceIndex, point: out.copy(hit.point) };
+  }
+  return null;
+}
+
+/**
  * @param {object} opts
  * @param {HTMLElement} opts.dom 渲染画布
  * @param {THREE.Camera} opts.camera
@@ -112,6 +170,7 @@ export function createCitadelSceneEdit({
   const upLocal = new THREE.Vector3(0, 1, 0);
   const tmpQ = new THREE.Quaternion();
   const tmpV = new THREE.Vector3();
+  const tmpV2 = new THREE.Vector3();
 
   // 悬停幽灵块
   const ghost = new THREE.Mesh(
@@ -166,6 +225,10 @@ export function createCitadelSceneEdit({
     if (!frame) return null;
     const hits = ray.intersectObject(citadel, true);
     const activeTerrace = panel.getState().activeTerrace;
+    // 选中台地归属梯湖的命中距离：水面在台壁之前时，台壁不得拦截拾取
+    // （缺口内的梯湖本就压在邻层台壁后方，否则水面永远点不到）
+    const poolSel = raycastCascadePoolTop(scene, ray, tmpV2, activeTerrace);
+    const dPoolSel = poolSel ? ray.ray.origin.distanceTo(poolSel.point) : Infinity;
     for (const hit of hits) {
       const cell = hit.object.userData.cell;
       if (cell && hit.face && cell.terraceIndex === activeTerrace) {
@@ -176,7 +239,10 @@ export function createCitadelSceneEdit({
       // A visible terrace surface is an occluder, not transparent picking
       // space. Stop here so a town cell hidden behind it cannot steal the
       // click; castPlane() will then resolve the selected terrace/grid cell.
-      if (hit.object.userData.isCitadelTerrace) return null;
+      if (hit.object.userData.isCitadelTerrace) {
+        if (dPoolSel < hit.distance) break; // 选中台地的水面更近 → 交给 castPlane
+        return null;
+      }
     }
     return null;
   }
@@ -189,31 +255,69 @@ export function createCitadelSceneEdit({
     return citadelTerrainObjectFromHits(ray.intersectObject(citadel, true));
   }
 
-  /** 拾取当前台地真实顶面，落空返回 null。
+  /** 拾取落块平面：选中台地优先（顶面 → 归属梯湖 → 建块平面交点），
+   *  全都接不住才退回最近面裁决（点击邻层台面自动切换）。
    *  落地堆叠开启时自动堆到柱顶；关闭时仍用真实台面确定 x/z。 */
   function castPlane(e) {
     const ray = castRay(e);
     const frame = editFrame();
     if (!ray || !frame) return null;
     const st = panel.getState();
-    const surfacePoint = raycastCitadelTerraceTop(
-      frame.citadel,
-      st.activeTerrace,
-      ray,
-      tmpV
-    );
-    if (!surfacePoint) return null;
-    frame.citadel.worldToLocal(tmpV.copy(surfacePoint));
+    // 选中台地优先：射线只要碰到选中台地顶面或其归属梯湖，
+    // 提示与落块都归选中台地（选台地 5 就给台地 5 的提示）；
+    // 完全碰不到时才退回最近面裁决（点击邻层台面自动切换）。
+    const poolV = new THREE.Vector3();
+    const topSel = raycastCitadelTerraceTop(frame.citadel, st.activeTerrace, ray, tmpV2);
+    const dTopSel = topSel ? ray.ray.origin.distanceTo(topSel) : Infinity;
+    const poolSel = raycastCascadePoolTop(scene, ray, poolV, st.activeTerrace);
+    const dPoolSel = poolSel ? ray.ray.origin.distanceTo(poolSel.point) : Infinity;
+    let resolved = null;
+    if (topSel || poolSel) {
+      resolved = poolSel && dPoolSel < dTopSel
+        ? poolSel
+        : { terraceIndex: st.activeTerrace, point: topSel };
+    } else {
+      // 选中台地的顶面/梯湖都接不住射线（瀑布缺口水道无几何）：
+      // 用射线与选中台地建块平面的交点作为落点补充，交点落在可建格内才接受。
+      const q = frame.citadel.getWorldQuaternion(tmpQ);
+      const localUp = upLocal.clone().applyQuaternion(q);
+      const denom = ray.ray.direction.dot(localUp);
+      if (Math.abs(denom) > 1e-6) {
+        const planePt = frame.citadel.localToWorld(new THREE.Vector3(0, frame.baseY, 0));
+        const tt = planePt.sub(ray.ray.origin).dot(localUp) / denom;
+        if (tt > 0) {
+          const p = ray.ray.at(tt, poolV);
+          frame.citadel.worldToLocal(tmpV.copy(p));
+          const c = panel.cellAtLocal(tmpV.x, tmpV.z, st.activeLayer);
+          if (c && panel.supportsCell(c.ix, c.iz, st.activeTerrace)) {
+            resolved = { terraceIndex: st.activeTerrace, point: p };
+          }
+        }
+      }
+      if (!resolved) {
+        const top = raycastNearestCitadelTerraceTop(frame.citadel, ray, tmpV);
+        const dTop = top ? ray.ray.origin.distanceTo(top.point) : Infinity;
+        const pool = raycastCascadePoolTop(scene, ray, poolV);
+        const dPool = pool ? ray.ray.origin.distanceTo(pool.point) : Infinity;
+        if (top && pool) resolved = dPool < dTop ? pool : top;
+        else resolved = top || pool;
+      }
+    }
+    if (!resolved) return null;
+    frame.citadel.worldToLocal(tmpV.copy(resolved.point));
     const hit = panel.cellAtLocal(tmpV.x, tmpV.z, st.activeLayer);
     if (!hit) return null;
-    if (!panel.supportsCell(hit.ix, hit.iz, st.activeTerrace)) {
-      return { ...hit, iy: 0, unsupported: true };
+    const terrace = resolved.terraceIndex;
+    if (!panel.supportsCell(hit.ix, hit.iz, terrace)) {
+      return { ...hit, iy: 0, terraceIndex: terrace, unsupported: true };
     }
     if (st.dropToGround) {
-      const t = panel.dropTarget(hit.ix, hit.iz);
-      return t ?? { ...hit, iy: 0, unsupported: true }; // 无土坡承重的柱位
+      const t = panel.dropTarget(hit.ix, hit.iz, terrace);
+      return t
+        ? { ...t, terraceIndex: terrace }
+        : { ...hit, iy: 0, terraceIndex: terrace, unsupported: true }; // 无土坡承重的柱位
     }
-    return hit;
+    return { ...hit, terraceIndex: terrace };
   }
 
   /** 悬停目标：体块（顶面→上一格，侧面→本格）或地面落点（无支撑不出幽灵块）。 */
@@ -237,7 +341,7 @@ export function createCitadelSceneEdit({
     frame.citadel.updateWorldMatrix(true, false);
     const localPosition = citadelEditCellLocalPosition(
       frame.citadel,
-      panel.getState().activeTerrace,
+      target.terraceIndex ?? panel.getState().activeTerrace,
       target,
       tmpV
     );
@@ -303,7 +407,15 @@ export function createCitadelSceneEdit({
       if (target?.unsupported) {
         toast("此处没有可承重的土坡，不可放置", 1.6);
       } else if (target) {
-        panel.applySceneEdit(target, "place");
+        const st = panel.getState();
+        if (Number.isFinite(target.terraceIndex) && target.terraceIndex !== st.activeTerrace) {
+          // 点到其它台地台面/梯湖：自动切换编辑台地再落块
+          panel.setActiveTerrace(target.terraceIndex);
+          toast(`已切换到台地 ${target.terraceIndex + 1} · 放置体块`, 1.6);
+        }
+        // 兜底：切换未生效时对齐当前台地，避免 applySceneEdit 静默拒绝
+        const terraceIndex = panel.getState().activeTerrace;
+        panel.applySceneEdit({ ...target, terraceIndex }, "place");
       }
     }
     showGhost(pickTarget(e)); // 重建后立刻刷新预览

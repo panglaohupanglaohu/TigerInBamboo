@@ -16,7 +16,12 @@ const WATERFALL_SPEC = Object.freeze({
   defaultTopY: 40.5,
   defaultWaterlineY: 25.0,
   waterlinePenetration: 0.5,
-  mistCount: 20,
+  /** 落水水气粒子数（小颗粒 InstancedMesh，替代旧大块 icosa 云团） */
+  mistCount: 96,
+  /** 单粒子基础半径 */
+  mistParticleRadius: 0.055,
+  /** 粒子平均寿命（秒） */
+  mistLife: 1.35,
   rippleCount: 3,
   outline: 0.04,
   /** 动画步进频率（Hz）→ Math.floor(t * stepHz) / stepHz */
@@ -234,37 +239,50 @@ export function createMangaWaterfall(options = {}) {
   }
   waterfallGroup.add(foamInstanced);
 
-  // ---------- 雾气 ----------
-  const mistGroup = new THREE.Group();
-  mistGroup.name = "manga-waterfall-billowing-mist";
-  const mistMaterial = toonMat(0xf4f7ed, { flatShading: true });
-  const mistParticles = [];
-  for (let i = 0; i < WATERFALL_SPEC.mistCount; i++) {
-    const radius = 0.5 + random() * 0.7;
-    const puff = outlinedMesh(
-      new THREE.IcosahedronGeometry(radius, 0),
-      mistMaterial,
-      `manga-waterfall-mist-${i}`
-    );
+  // ---------- 落水水气：小粒子系统（InstancedMesh）----------
+  // 旧版为 20 个大块 icosa「云团」，观感像漂浮云朵；改为细小颗粒在水线
+  // 冲击区冒出、上漂、外散、衰减，模拟瀑布落湖溅起的水气。
+  const mistCount = WATERFALL_SPEC.mistCount;
+  const mistGeo = new THREE.SphereGeometry(WATERFALL_SPEC.mistParticleRadius, 5, 4);
+  const mistMat = new THREE.MeshBasicMaterial({
+    color: 0xeef6f2,
+    transparent: true,
+    opacity: 0.55,
+    depthWrite: false,
+  });
+  const mistInstanced = new THREE.InstancedMesh(mistGeo, mistMat, mistCount);
+  mistInstanced.name = "manga-waterfall-mist-particles";
+  mistInstanced.castShadow = false;
+  mistInstanced.receiveShadow = false;
+  mistInstanced.frustumCulled = false;
+  mistInstanced.renderOrder = 6;
+  mistInstanced.count = mistCount;
+  const mistDummy = new THREE.Object3D();
+  const mistData = [];
+  const mistLifeBase = WATERFALL_SPEC.mistLife;
+  function respawnMist(data, birthOffset = 0) {
+    // 冲击区：水帘落点附近窄带，略向前（+z 下游）
     const angle = random() * Math.PI * 2;
-    const spread = 0.35 + random() * 2.9;
-    puff.position.set(
-      Math.cos(angle) * spread * 1.2,
-      waterlineY + 0.12 + random() * 1.4,
-      Math.sin(angle) * spread * 0.42
-    );
-    puff.rotation.set(random() * Math.PI, random() * Math.PI, random() * Math.PI);
-    puff.scale.set(
-      1.05 + random() * 0.75,
-      0.48 + random() * 0.52,
-      0.8 + random() * 0.55
-    );
-    puff.userData.baseY = puff.position.y;
-    puff.userData.phase = random() * Math.PI * 2;
-    mistParticles.push(puff);
-    mistGroup.add(puff);
+    const r = 0.15 + random() * 1.6;
+    data.x = Math.cos(angle) * r * 1.15;
+    data.y = 0.02 + random() * 0.18;
+    data.z = 0.15 + Math.sin(angle) * r * 0.45 + random() * 0.35;
+    data.vx = (random() - 0.5) * 0.55;
+    data.vy = 0.55 + random() * 1.15; // 上漂
+    data.vz = 0.12 + random() * 0.45; // 略向下游吹散
+    data.life = mistLifeBase * (0.65 + random() * 0.7);
+    data.age = birthOffset * data.life; // 错相，避免齐喷
+    data.size = 0.55 + random() * 1.1;
   }
-  waterfallGroup.add(mistGroup);
+  for (let i = 0; i < mistCount; i++) {
+    const data = {
+      x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, life: 1, age: 0, size: 1,
+    };
+    respawnMist(data, random()); // 初始均匀分布在生命周期内
+    mistData.push(data);
+  }
+  waterfallGroup.add(mistInstanced);
+  waterfallGroup.userData.mistParticleCount = mistCount;
 
   // ---------- 水线涟漪 ----------
   const rippleGroup = new THREE.Group();
@@ -398,15 +416,33 @@ export function createMangaWaterfall(options = {}) {
     }
     foamInstanced.instanceMatrix.needsUpdate = true;
 
-    // 雾气 / 涟漪：用阶梯时间，观感更「咔哒」
+    // 水气粒子：从水线冲击区冒出 → 上漂外散 → 寿命结束重生
+    for (let i = 0; i < mistCount; i++) {
+      const data = mistData[i];
+      data.age += dtClamped;
+      if (data.age >= data.life) {
+        respawnMist(data, 0);
+      }
+      const tLife = data.age / data.life; // 0..1
+      // 轻微减速上漂，横向扩散
+      data.x += data.vx * dtClamped;
+      data.y += data.vy * dtClamped;
+      data.z += data.vz * dtClamped;
+      data.vy *= 1 - 0.55 * dtClamped; // 阻力
+      data.vx *= 1 - 0.25 * dtClamped;
+      // 前半膨胀、后半收缩消散
+      const grow = tLife < 0.35 ? tLife / 0.35 : 1 - (tLife - 0.35) / 0.65;
+      const sc = data.size * (0.35 + grow * 0.95) * (1 - tLife * 0.35);
+      mistDummy.position.set(data.x, waterlineY + data.y, data.z);
+      mistDummy.scale.setScalar(Math.max(0.05, sc));
+      mistDummy.rotation.set(0, data.age * 1.2, data.age * 0.7);
+      mistDummy.updateMatrix();
+      mistInstanced.setMatrixAt(i, mistDummy.matrix);
+    }
+    mistInstanced.instanceMatrix.needsUpdate = true;
+
+    // 涟漪：阶梯时间脉冲
     const mistT = stepTime;
-    mistParticles.forEach((puff, index) => {
-      puff.position.y =
-        puff.userData.baseY +
-        Math.sin(mistT * 1.35 + puff.userData.phase) *
-          (0.08 + (index % 3) * 0.02);
-      puff.rotation.y += dtClamped * (0.4 + (index % 4) * 0.1);
-    });
     ripples.forEach((ripple, index) => {
       const pulse =
         ripple.userData.baseScale +

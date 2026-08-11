@@ -25,6 +25,7 @@ import { facet } from "../assets/lowPoly.js";
 import { quatYToDir, latLonToDir, flatXZToLatLon } from "./sphereMath.js";
 import { CANYON } from "./canyon.js";
 import { PLANET_RADIUS } from "./planet.js";
+import { createFisherBoat, updateWarshipOars } from "../assets/harbor.js";
 
 /* ---------------- Y 轴绝对坐标分层（锁死，勿动） ---------------- */
 /** 正常球体地面高度：玩家行走的草地 / 坑口缘（湖沼局部坐标，不随 R 放大） */
@@ -704,6 +705,8 @@ const _ffF = new THREE.Vector3(); // 玩家局部朝向（水平）
 const _ffQ = new THREE.Quaternion();
 const _ffAim = new THREE.Vector3();
 const _ffTmp = new THREE.Vector3();
+const _syV1 = new THREE.Vector3(); // 战船维修厂动画临时向量
+const _syV2 = new THREE.Vector3();
 
 /** 长尾猴：暗毛浅脸 + S 形长尾，树冠间跳跃 */
 function buildLongTailMonkey(rnd) {
@@ -1954,6 +1957,139 @@ export function createMoebiusSwampZone(opts = {}) {
     if (rf.userData.halo) glowHalos.push(rf.userData.halo);
   }
 
+  /* ---------- 战船维修厂：长尾猴换桅杆 / 蜥蜴送水 / 白鲸陪伴战船驶出湖沼 ---------- */
+  // 船A：进坞维修的战船（桅杆帆索已拆下待换），长尾猴负责吊装备用桅
+  const shipA = createFisherBoat();
+  shipA.name = "swamp-warship-repair";
+  for (const child of [...shipA.children]) {
+    // 桅杆/帆/横桁/支索/旗组 = 中线高位件，拆除待修（露出无桅战船）
+    if (child.position.y > 1.1) child.visible = false;
+  }
+  const angA = 2.05;
+  const rA = 14;
+  shipA.position.set(Math.cos(angA) * rA, WATER_Y + 0.02, Math.sin(angA) * rA);
+  shipA.rotation.y = Math.atan2(Math.sin(angA), -Math.cos(angA)); // 船头朝湖心
+  swampZone.add(shipA);
+
+  // 备用桅：枢轴立于甲板桅座，平躺 → 被长尾猴立起就位（周而复始的换桅作业）
+  const MAST_LEN = 3.4;
+  const yardWood = toonMat(0x7a6248, { flatShading: true });
+  const mastPivot = new THREE.Group();
+  mastPivot.position.set(0.55, 0.66, 0.3);
+  mastPivot.rotation.z = Math.PI / 2; // 沿甲板平躺朝船尾
+  shipA.add(mastPivot);
+  const spareMast = part(new THREE.CylinderGeometry(0.05, 0.07, MAST_LEN, 7), yardWood, 0.024);
+  spareMast.position.y = MAST_LEN * 0.5;
+  mastPivot.add(spareMast);
+  const spareYard = part(new THREE.CylinderGeometry(0.035, 0.035, 2.3, 6), yardWood, 0.018);
+  spareYard.rotation.x = Math.PI / 2;
+  spareYard.position.y = MAST_LEN * 0.82;
+  mastPivot.add(spareYard);
+
+  // 吊装三脚架：三根斜撑聚于桅座上方 + 顶点暖灯（月夜维修工位的标志）
+  const poleMat = toonMat(0x5a4632, { flatShading: true });
+  for (let i = 0; i < 3; i++) {
+    const pa = Math.PI / 2 + (i * Math.PI * 2) / 3;
+    const bx = 0.55 + Math.cos(pa) * 0.58;
+    const bz = Math.sin(pa) * 0.58;
+    const pole = part(new THREE.CylinderGeometry(0.045, 0.06, Math.hypot(0.58, 4.06), 5), poleMat, 0.014);
+    pole.position.set((bx + 0.55) / 2, (0.62 + 4.72) / 2, bz / 2);
+    pole.lookAt(0.55, 4.72, 0);
+    pole.rotateX(Math.PI / 2);
+    shipA.add(pole);
+  }
+  const dockLantern = glowSprite(0xffd98a, 1.6, 0.8);
+  dockLantern.position.set(0.55, 4.8, 0);
+  shipA.add(dockLantern);
+  glowHalos.push(dockLantern);
+
+  // 两只工猴：甲板推举者 + 骑桅顶挂钩者（随桅杆起落，立起时挥手）
+  const mkLift = buildLongTailMonkey(rnd);
+  mkLift.scale.setScalar(0.5);
+  mkLift.position.set(-0.2, 0.66, 0.34);
+  mkLift.rotation.y = Math.PI / 2; // 面向桅杆
+  shipA.add(mkLift);
+  const mkTop = buildLongTailMonkey(rnd);
+  mkTop.scale.setScalar(0.46);
+  mkTop.position.set(0.14, MAST_LEN * 0.62, 0.1);
+  mkTop.rotation.y = Math.PI * 0.3;
+  mastPivot.add(mkTop);
+
+  // 送水蜥蜴：沿甲板右舷走道巡游，水珠弧抛向两列剪纸士兵的头
+  const waterLizard = buildGlowLizard(rnd);
+  waterLizard.scale.setScalar(0.42);
+  waterLizard.position.set(-1.2, 0.66, 0.28);
+  shipA.add(waterLizard);
+  if (waterLizard.userData.halo) glowHalos.push(waterLizard.userData.halo);
+  const gourd = part(new THREE.SphereGeometry(0.09, 5, 4), toonMat(0x3f7fa8, { flatShading: true }), 0.006);
+  gourd.position.set(0, 0.3, -0.16); // 背上的水葫芦
+  waterLizard.add(gourd);
+  const waterDrops = [];
+  for (let i = 0; i < 5; i++) {
+    const drop = glowSprite(0xa8e8ff, 0.22, 0.9);
+    drop.visible = false;
+    drop.userData.seed = i;
+    shipA.add(drop);
+    waterDrops.push(drop);
+  }
+
+  // 维修浮台：木质筏排泊在船侧 + 备用圆木/水桶；水面另漂两根备用桁杆
+  const fwdA = new THREE.Vector3(Math.cos(shipA.rotation.y), 0, -Math.sin(shipA.rotation.y));
+  const rightA = new THREE.Vector3(-fwdA.z, 0, fwdA.x);
+  const barge = new THREE.Group();
+  barge.name = "swamp-repair-barge";
+  barge.position.copy(shipA.position).addScaledVector(rightA, 1.9);
+  barge.position.y = WATER_Y + 0.1;
+  barge.rotation.y = shipA.rotation.y;
+  swampZone.add(barge);
+  const plankMat = toonMat(0x8a6f4d, { flatShading: true });
+  for (let i = 0; i < 3; i++) {
+    const plank = part(new THREE.BoxGeometry(4.8, 0.14, 0.55), plankMat, 0.02);
+    plank.position.set(0, 0, (i - 1) * 0.58);
+    barge.add(plank);
+  }
+  const spareLog = part(new THREE.CylinderGeometry(0.09, 0.11, 3.4, 6), yardWood, 0.016);
+  spareLog.rotation.z = Math.PI / 2;
+  spareLog.position.set(-0.4, 0.18, -0.42);
+  barge.add(spareLog);
+  const barrel = part(new THREE.CylinderGeometry(0.24, 0.2, 0.5, 7), poleMat, 0.014);
+  barrel.position.set(1.6, 0.32, 0.3);
+  barge.add(barrel);
+  /** @type {THREE.Mesh[]} */
+  const spars = [];
+  for (let i = 0; i < 2; i++) {
+    const spar = part(new THREE.CylinderGeometry(0.07, 0.09, 2.6, 5), yardWood, 0.014);
+    spar.rotation.z = Math.PI / 2;
+    spar.rotation.y = 0.6 + i * 1.7;
+    const sa = angA + 0.34 + i * 0.22;
+    spar.position.set(Math.cos(sa) * (rA + 2.2), WATER_Y + 0.05, Math.sin(sa) * (rA + 2.2));
+    spar.userData.bobPhase = i * 2.1;
+    swampZone.add(spar);
+    spars.push(spar);
+  }
+
+  // 船B：修毕待发的战船 —— 泊稳 → 划桨驶向入口豁口 → 爬上石阶出沼（循环）
+  const shipB = createFisherBoat();
+  shipB.name = "swamp-warship-depart";
+  swampZone.add(shipB);
+  let shipyardWakeT = 0; // 尾流涟漪计时
+
+  // 护送白鲸：泊位绕游 / 并游护航 / 出口破水领航后潜回
+  const escortWhale = buildBelugaWhale(rnd);
+  escortWhale.scale.setScalar(0.5);
+  escortWhale.rotation.order = "YXZ";
+  swampZone.add(escortWhale);
+
+  swampZone.userData.shipyard = {
+    dock: shipA,
+    barge,
+    mastPivot,
+    workers: [mkLift, mkTop],
+    waterLizard,
+    departure: shipB,
+    escort: escortWhale,
+  };
+
   /* ---------- 赛博水墨虎：大树间巡游 + 沿石阶下坑饮水 ---------- */
   const tigerRim = [0.5, 1.6, 2.7, 3.9, 5.1].map(
     (a) => new THREE.Vector3(Math.cos(a) * 37.4, SWAMP_LOCAL_GROUND_Y, Math.sin(a) * 37.4)
@@ -2507,6 +2643,156 @@ export function createMoebiusSwampZone(opts = {}) {
     }
     // 赛博水墨虎巡游/饮水；传入 player 以便见送信人跳下相见
     tiger.userData.update?.(_dt, t, runtime);
+
+    /* ---------- 战船维修厂动画：猴吊桅杆 / 蜥蜴送水 / 船B 出沼 + 白鲸护送 ---------- */
+    {
+      const dt = Math.min(0.05, Math.max(0.001, Number(_dt) || 1 / 60));
+      // 船A 泊稳微浮（随水呼吸），桨兵静坐待命
+      shipA.position.y = WATER_Y + 0.02 + Math.sin(t * 0.9) * 0.05;
+      shipA.rotation.z = Math.sin(t * 0.7) * 0.012;
+      updateWarshipOars(shipA, dt, 0);
+      for (const spar of spars) {
+        spar.position.y = WATER_Y + 0.05 + Math.sin(t * 0.85 + spar.userData.bobPhase) * 0.06;
+      }
+
+      // -- 长尾猴换桅杆循环：静候(2.5s) → 吊起(4s) → 就位(5.5s) → 放下(4s)
+      const cyc = (t + 1.5) % 16;
+      let liftK = 0; // 0 = 平躺待吊 → 1 = 竖直就位
+      if (cyc < 2.5) liftK = 0;
+      else if (cyc < 6.5) liftK = (cyc - 2.5) / 4;
+      else if (cyc < 12) liftK = 1;
+      else liftK = 1 - (cyc - 12) / 4;
+      liftK = liftK * liftK * (3 - 2 * liftK);
+      mastPivot.rotation.z = Math.PI / 2 * (1 - liftK) + Math.sin(t * 2.2) * 0.02 * liftK;
+      mastPivot.position.z = 0.3 * (1 - liftK);
+      // 甲板推举猴：随吊起进度举臂发力（手臂高举 + 微颤）
+      const lifting = liftK > 0.02 && liftK < 0.98;
+      const armBase = mkLift.userData.armL.userData.baseRotX ?? -0.3;
+      mkLift.userData.armL.rotation.x = armBase - 1.55 * liftK + (lifting ? Math.sin(t * 9.5) * 0.06 : 0);
+      mkLift.userData.armR.rotation.x = armBase - 1.65 * liftK + (lifting ? Math.sin(t * 9.5 + 1.2) * 0.06 : 0);
+      mkLift.rotation.x = -0.18 * liftK;
+      // 桅顶工猴：反向自旋保持直立；就位后在桅顶挥手
+      mkTop.rotation.z = -mastPivot.rotation.z;
+      const topArmBase = mkTop.userData.armR.userData.baseRotX ?? -0.3;
+      mkTop.userData.armR.rotation.x =
+        liftK > 0.96 ? topArmBase - 1.2 + Math.sin(t * 3.1) * 0.5 : topArmBase - 0.9 * liftK;
+
+      // -- 送水蜥蜴：沿甲板右舷走道往返，水珠逐个弧抛到两列纸兵头顶
+      const lzX = Math.sin(t * 0.32) * 1.25;
+      const lzDir = Math.cos(t * 0.32) >= 0 ? 1 : -1;
+      waterLizard.position.set(lzX, 0.66, 0.28);
+      waterLizard.rotation.y = lzDir > 0 ? Math.PI / 2 : -Math.PI / 2;
+      waterLizard.rotation.z = Math.sin(t * 6.2) * 0.07;
+      const crewRows = shipA.userData.crew?.userData?.rows || [];
+      for (const drop of waterDrops) {
+        const seed = drop.userData.seed;
+        const ph = (t * 0.55 + seed * 0.48) % 2.4; // 每 2.4s 抛一珠，5 珠错相
+        if (ph < 0.85 && crewRows.length) {
+          const row = crewRows[(seed + Math.floor(t * 0.6)) % crewRows.length];
+          const k = ph / 0.85;
+          drop.visible = true;
+          drop.position.set(
+            lzX + (row.x - lzX) * k,
+            1.12 + (1.32 - 1.12) * k + Math.sin(k * Math.PI) * 0.42,
+            0.28 + (row.side * 0.28 - 0.28) * k
+          );
+          drop.material.opacity = 0.2 + 0.75 * Math.sin(k * Math.PI);
+        } else {
+          drop.visible = false;
+        }
+      }
+
+      // -- 船B：泊稳(9s) → 全桨驶向入口豁口(11s) → 爬阶出沼渐隐(6s)
+      const DUR_DOCK = 9, DUR_SAIL = 11, DUR_FADE = 6;
+      const DUR_ALL = DUR_DOCK + DUR_SAIL + DUR_FADE;
+      const bt = (t + 4) % DUR_ALL;
+      /** 出航路径：k∈[0,1] 泊位→出口；k>1 沿出口继续外推 */
+      const sailPos = (k, out) => {
+        let ang, r;
+        if (k <= 1) {
+          const kk = k * k * (3 - 2 * k);
+          ang = 1.1 + (0.3 - 1.1) * kk;
+          r = 16 + 6 * kk;
+        } else {
+          ang = 0.3 + (k - 1) * 0.05;
+          r = 22 + (k - 1) * 9;
+        }
+        out.set(Math.cos(ang) * r, WATER_Y + 0.02, Math.sin(ang) * r);
+      };
+      let bPhase = "dock";
+      if (bt >= DUR_DOCK + DUR_SAIL) bPhase = "fade";
+      else if (bt >= DUR_DOCK) bPhase = "sail";
+      shipB.visible = true;
+      if (bPhase === "dock") {
+        sailPos(0, _syV1);
+        shipB.position.copy(_syV1);
+        shipB.position.y += Math.sin(t * 1.1) * 0.05;
+        // 泊稳时船头已对准出口豁口
+        shipB.rotation.y = Math.atan2(-(Math.sin(0.3) * 22 - shipB.position.z), Math.cos(0.3) * 22 - shipB.position.x);
+        shipB.scale.setScalar(1);
+        updateWarshipOars(shipB, dt, 0);
+      } else if (bPhase === "sail") {
+        const k = (bt - DUR_DOCK) / DUR_SAIL;
+        sailPos(k, _syV1);
+        sailPos(k + 0.05, _syV2);
+        shipB.position.copy(_syV1);
+        shipB.position.y += Math.sin(t * 1.3) * 0.04;
+        shipB.rotation.y = Math.atan2(-(_syV2.z - _syV1.z), _syV2.x - _syV1.x);
+        shipB.scale.setScalar(1);
+        updateWarshipOars(shipB, dt, 1); // 全速划桨，纸兵齐动
+        shipyardWakeT -= dt; // 船首尾流涟漪
+        if (shipyardWakeT <= 0) {
+          shipyardWakeT = 0.5;
+          shipB.updateWorldMatrix(true, false);
+          _syV2.set(2.5, 0, 0);
+          shipB.localToWorld(_syV2);
+          spawnRipple(_syV2.x, _syV2.z, 0.7);
+        }
+      } else {
+        const k = (bt - DUR_DOCK - DUR_SAIL) / DUR_FADE;
+        sailPos(1 + k, _syV1);
+        sailPos(1 + k + 0.05, _syV2);
+        shipB.position.copy(_syV1);
+        shipB.position.y += k * 1.3; // 顺入口石阶抬升，驶出湖沼
+        shipB.rotation.y = Math.atan2(-(_syV2.z - _syV1.z), _syV2.x - _syV1.x);
+        shipB.scale.setScalar(1 - k * 0.42);
+        shipB.visible = k < 0.97;
+        updateWarshipOars(shipB, dt, 1 - k);
+      }
+
+      // -- 护送白鲸：泊位绕游 → 左舷并游 → 出口破水领航，随后潜回泊位
+      const bDirX = Math.cos(shipB.rotation.y);
+      const bDirZ = -Math.sin(shipB.rotation.y);
+      escortWhale.visible = true;
+      if (bPhase === "dock") {
+        const wa = t * 0.4;
+        escortWhale.position.set(
+          shipB.position.x + Math.cos(wa) * 4.2,
+          WATER_Y - 0.7 + Math.sin(t * 1.1) * 0.18,
+          shipB.position.z + Math.sin(wa) * 3.4
+        );
+        escortWhale.rotation.y = Math.atan2(-Math.sin(wa), Math.cos(wa));
+        escortWhale.rotation.x = -0.12 + Math.sin(t * 0.9) * 0.06;
+      } else if (bPhase === "sail") {
+        escortWhale.position.set(
+          shipB.position.x - Math.sin(shipB.rotation.y) * 2.6 + bDirX * 0.8,
+          WATER_Y - 0.6 + Math.sin(t * 1.4) * 0.2,
+          shipB.position.z - Math.cos(shipB.rotation.y) * 2.6 + bDirZ * 0.8
+        );
+        escortWhale.rotation.y = Math.atan2(bDirX, bDirZ);
+        escortWhale.rotation.x = -0.16 + Math.sin(t * 1.2) * 0.08;
+      } else {
+        const k = (bt - DUR_DOCK - DUR_SAIL) / DUR_FADE;
+        escortWhale.position.set(
+          shipB.position.x + bDirX * 3.5,
+          WATER_Y - 0.7 + Math.sin(k * Math.PI) * 2.3, // 破水跃起再落回
+          shipB.position.z + bDirZ * 3.5
+        );
+        escortWhale.rotation.y = Math.atan2(bDirX, bDirZ);
+        escortWhale.rotation.x = -0.2 - Math.sin(k * Math.PI) * 0.45;
+        escortWhale.visible = k < 0.92;
+      }
+    }
     // 气泡
     for (const b of bubbles) {
       b.position.y = b.userData.baseY + Math.sin(t * 1.5 + b.userData.phase) * 0.5;

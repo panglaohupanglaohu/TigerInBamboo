@@ -135,7 +135,7 @@ assert(moatSpec?.outerRadius > moatSpec.innerRadius, "护城河外径应大于�
 // 护城河外径必须覆盖旧港码头（码头在 range 局部 ~(-14.7,42.7)，距圆心半径约 45）
 assert(moatSpec?.outerRadius >= 45, "护城河外径必须放大到覆盖旧港码头（半径≈45）");
 assert(range.moat.userData.harborPadLocal?.lx != null, "护城河应提供港口垫局部坐标");
-// 低多边形特洛伊木马：放在地面第一个湖泊(terrace-5-pool)水面上
+// 低多边形特洛伊木马：护城河×瀑布交汇旁、台地 5 一层台面干地
 assert(range.trojanHorse?.isGroup, "特洛伊木马组缺失");
 assert.equal(range.trojanHorse.name, "citadel-trojan-horse");
 let troyParts = 0;
@@ -143,9 +143,17 @@ range.trojanHorse.traverse((o) => { if (o.isMesh) troyParts++; });
 assert(troyParts >= 30, "木马应由 30+ 个低模积木拼块构成");
 const troyLx = range.trojanHorse.userData.rangeLocal.lx;
 const troyLz = range.trojanHorse.userData.rangeLocal.lz;
-// 地面第一个湖泊 = terrace-5-pool，range 局部 (1.0, 38.0)
-assert(Math.abs(troyLx - 1.0) < 2, "木马应放在地面第一个湖泊(terrace-5-pool)处");
-assert(Math.abs(troyLz - 38.0) < 2, "木马应放在地面第一个湖泊(terrace-5-pool)处");
+const troyR = Math.hypot(troyLx, troyLz);
+const troyPhi = Math.atan2(troyLx, troyLz);
+const t5R = range.contourSpec?.terraces?.at(-1)?.radius ?? 24;
+const notchC = range.contourSpec?.notchCenter ?? 0.17;
+const notchH = range.contourSpec?.notchHalf ?? 0.30;
+assert(troyR < t5R && troyR > t5R - 4,
+  `木马应站在台地 5 一层台面外缘环带（r≈${t5R}），实际 r=${troyR.toFixed(2)}`);
+assert(troyPhi > notchC + notchH,
+  "木马应在瀑布水道旁侧（缺口扇区外），不站在水中");
+assert.equal(range.trojanHorse.userData.placement?.kind, "moat-cascade-junction",
+  "木马落点语义：护城河与瀑布交汇旁");
 assert.equal(range.vegetation, null, "山坡散灌木必须删除");
 assert.equal(range.loessGroundSeal, null, "近地面的旧黄土封口层必须删除");
 assert.equal(range.castleFooting, null, "近地面的旧城堡承台层必须删除");
@@ -257,15 +265,16 @@ for (const [index, waterfall] of range.pilgrimageCascades.children.entries()) {
     "瀑布周围不得重建遮挡水帘的黄土坡");
   assert.equal(waterfall.userData.rebuiltSoilShoulders, soilShoulders);
   const curtains = [];
-  const mist = [];
   const ripples = [];
+  let mistParticles = null;
   waterfall.traverse((o) => {
     if (/^manga-waterfall-curtain-\d+$/.test(o.name || "")) curtains.push(o);
-    if (/^manga-waterfall-mist-\d+$/.test(o.name || "")) mist.push(o);
+    if (o.name === "manga-waterfall-mist-particles") mistParticles = o;
     if (/^manga-waterfall-ripple-\d+$/.test(o.name || "")) ripples.push(o);
   });
   assert.equal(curtains.length, 4, "每道瀑布必须有四层纵深水帘");
-  assert.equal(mist.length, 20, "每道瀑布必须有二十团低面数雾气");
+  assert(mistParticles?.isInstancedMesh, "每道瀑布必须有落水水气粒子系统");
+  assert(mistParticles.count >= 64, "水气粒子数须足够细密（≥64）");
   assert.equal(ripples.length, 3, "每道瀑布必须有三层水面涟漪");
   for (const curtain of curtains) {
     const bottom = curtain.position.y
@@ -357,7 +366,20 @@ for (const name of removedNames) {
 }
 // 雪山为保留单元，必须仍在场景中；护城河已移入圣城容器（messengerIsland 内挂载）
 assert(scene.getObjectByName("citadel-background-snow-massif"), "背景雪山应在场景中");
-ok(`梯湖×${waterSurfaces} · 瀑布×4 · 参天树×1 · 护城河×1 · 非保留器物全部清空`);
+// 纳沃纳双栖广场：运河入城前
+assert(range.navonaPlaza?.isGroup, "纳沃纳双栖广场缺失");
+assert.equal(range.navonaPlaza.name, "citadel-navona-canal-plaza");
+assert(range.navonaPlaza.getObjectByName("navona-plaza-basin-stone"), "广场下凹石材槽缺失");
+assert(range.navonaPlaza.getObjectByName("navona-plaza-flood-water"), "双栖水面缺失");
+assert(range.navonaPlaza.getObjectByName("navona-plaza-fountains"), "三喷泉轴线缺失");
+assert.equal(typeof range.navonaPlaza.setFlooded, "function", "须支持旱/汛切换");
+range.navonaPlaza.setFlooded(true);
+for (let i = 0; i < 30; i++) range.navonaPlaza.update(0.05, i * 0.05);
+assert(range.navonaPlaza.getFlooded() > 0.4, "蓄洪后 floodAmount 应上升");
+range.navonaPlaza.setFlooded(false);
+for (let i = 0; i < 40; i++) range.navonaPlaza.update(0.05, i * 0.05);
+assert(range.navonaPlaza.getFlooded() < 0.05, "泄洪后应回到旱季广场");
+ok(`梯湖×${waterSurfaces} · 瀑布×4 · 参天树×1 · 护城河×1 · 纳沃纳广场 · 非保留器物全部清空`);
 
 console.log("[4] 场景与物理接线");
 const island = fs.readFileSync(
@@ -434,32 +456,37 @@ assert.equal(waterfall.name, "waterfallGroup");
 const defaultCurtains = [];
 const defaultStreaks = [];
 const defaultLipFoam = [];
-const defaultMist = [];
 const defaultRipples = [];
+let defaultMistParticles = null;
 const visibleWaterfallMeshes = [];
 waterfall.traverse((o) => {
   if (o.isMesh && !o.userData.isOutline) visibleWaterfallMeshes.push(o);
   if (/^manga-waterfall-curtain-\d+$/.test(o.name || "")) defaultCurtains.push(o);
   if (/^manga-waterfall-flow-streak-\d+$/.test(o.name || "")) defaultStreaks.push(o);
   if (/^manga-waterfall-lip-foam-\d+$/.test(o.name || "")) defaultLipFoam.push(o);
-  if (/^manga-waterfall-mist-\d+$/.test(o.name || "")) defaultMist.push(o);
+  if (o.name === "manga-waterfall-mist-particles") defaultMistParticles = o;
   if (/^manga-waterfall-ripple-\d+$/.test(o.name || "")) defaultRipples.push(o);
 });
 assert.equal(defaultCurtains.length, 4);
 assert.equal(defaultStreaks.length, 8);
 assert.equal(defaultLipFoam.length, 7);
-assert.equal(defaultMist.length, 20);
+assert(defaultMistParticles?.isInstancedMesh, "落水水气须为粒子 InstancedMesh");
+assert.equal(defaultMistParticles.count, 96, "默认 96 颗水气粒子");
+assert.equal(waterfall.userData.mistParticleCount, 96);
 assert.equal(defaultRipples.length, 3);
-// 4 帘 + 8 丝 + 7 崖沫 + 20 雾 + 3 涟漪 + 1 方块飞沫实例 + 1 池底 = 44
-// 方块飞沫为 InstancedMesh，无描边子节点；其余均描边
+// 4 帘 + 8 丝 + 7 崖沫 + 3 涟漪 + 1 池底 须描边；
+// 方块飞沫 + 水气粒子为 InstancedMesh，无描边子节点
 const outlinedOnly = visibleWaterfallMeshes.filter(
-  (mesh) => !mesh.isInstancedMesh && mesh.name !== "manga-waterfall-box-foam"
+  (mesh) =>
+    !mesh.isInstancedMesh
+    && mesh.name !== "manga-waterfall-box-foam"
+    && mesh.name !== "manga-waterfall-mist-particles"
 );
 assert(
   outlinedOnly.every((mesh) =>
     mesh.children.some((child) => child.userData.isOutline)
   ),
-  "水帘、水丝、崖口泡沫、雾气、涟漪、池底必须描边"
+  "水帘、水丝、崖口泡沫、涟漪、池底必须描边"
 );
 const firstCurtain = defaultCurtains[0];
 assert.equal(firstCurtain.geometry.parameters.width, 4.5);
@@ -474,9 +501,11 @@ assert.equal(firstCurtain.material.transparent, true);
 assert.equal(firstCurtain.material.depthWrite, true);
 assert.equal(firstCurtain.material.flatShading, true);
 assert.equal(waterfall.userData.curtainBottomY, 24.5);
-assert(defaultMist.every((puff) => puff.geometry.type === "IcosahedronGeometry"));
-assert(defaultMist.every((puff) =>
-  puff.geometry.parameters.radius >= 0.5 && puff.geometry.parameters.radius <= 1.2));
+assert.equal(defaultMistParticles.geometry.type, "SphereGeometry");
+assert(
+  defaultMistParticles.geometry.parameters.radius <= 0.12,
+  "水气单粒子须为细小球体（半径 ≤ 0.12）"
+);
 assert(defaultRipples.every((ripple) => ripple.geometry.type === "CircleGeometry"));
 // 阶梯动画：update 后水帘顶点应发生变化
 const zBefore = firstCurtain.geometry.attributes.position.getZ(4);
@@ -505,6 +534,6 @@ noFall.traverse((o) => {
 });
 assert.equal(fallBits, 0, "工厂默认构建不得出现任何瀑布/飞沫构件");
 noFall.update(1 / 60, 1);
-ok("4 层水帘 · 20 团雾气 · 3 层涟漪 · 全描边 · 城堡工厂无全局污染");
+ok("4 层水帘 · 96 水气粒子 · 3 层涟漪 · 全描边 · 城堡工厂无全局污染");
 
 console.log(`\n全部通过：${pass} 项断言`);

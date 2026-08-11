@@ -471,13 +471,20 @@ assert.equal(terrainSupportLevel(citadel, 16 * Math.sin(phiOk), 16 * Math.cos(ph
   "台地 2 环带不得误写进台地 1 城堡");
 assert.equal(terrainSupportLevel(citadel, 26 * Math.sin(phiOk), 26 * Math.cos(phiOk), 2, 4), 0,
   "台地 5 外环必须允许独立五层城堡");
-// 默认瀑布缺口内没有承重面。
-const phiNotch = 0.17; // 缺口中心方位角
-const rNotch = 16;
-const nxNotch = rNotch * Math.sin(phiNotch);
-const nzNotch = rNotch * Math.cos(phiNotch);
-assert.equal(terrainSupportLevel(citadel, nxNotch, nzNotch, 2, 1), -1,
-  "缺口扇区内柱位无承重，必须返回 -1");
+// 默认瀑布缺口内：不在梯湖椭圆上的柱位无承重；梯湖椭圆上可安放城堡。
+const phiNotchBare = -0.11; // 缺口扇区内、避开梯湖椭圆
+const rNotchBare = 16;
+const nxBare = rNotchBare * Math.sin(phiNotchBare);
+const nzBare = rNotchBare * Math.cos(phiNotchBare);
+assert.equal(terrainSupportLevel(citadel, nxBare, nzBare, 2, 1), -1,
+  "缺口扇区且不在梯湖上的柱位无承重，必须返回 -1");
+// 台地 2 对应的层叠梯湖中心必须可建
+const { CITADEL_CASCADE_POOL_SPECS } = await import(
+  new URL("src/world/odysseyCitadel.js", BASE).href
+);
+const pool1 = CITADEL_CASCADE_POOL_SPECS[1];
+assert.equal(terrainSupportLevel(citadel, pool1.x, pool1.z, 2, 1), 0,
+  "层叠梯湖上必须允许安放城堡体块");
 // 恢复默认参数：可逆
 rebuildCitadelTerrain(citadel, CITADEL.contourTerrain);
 assert(Math.abs(citadel.userData.townBaseY - CITADEL.townBaseY) < 1e-9, "重置后基座必须复原");

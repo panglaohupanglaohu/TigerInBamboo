@@ -262,6 +262,16 @@ export function settleBuriedAssets(scene, colliders = []) {
   const _origin = new THREE.Vector3();
   const _down = new THREE.Vector3();
   const TERRAIN_RE = /hill|mossy|berm|soil|ground|island|camp|platform|skirt|terrain/;
+  // 只对 Mesh 射线：Sprite 在无 camera 时 raycast 会抛
+  // 「Raycaster.camera needs to be set」并读 null.matrixWorld 导致启动失败。
+  const meshCandidates = [];
+  scene.traverse((o) => {
+    if (!o.isMesh || o.isSprite) return;
+    if (!o.visible) return;
+    // 跳过描边壳 / 半透明特效，减少误命中
+    if (o.userData?.isOutline) return;
+    meshCandidates.push(o);
+  });
   let moved = 0;
   for (const obj of targets) {
     _up.copy(obj.position).normalize();
@@ -270,7 +280,7 @@ export function settleBuriedAssets(scene, colliders = []) {
     _down.copy(_up).negate();
     ray.set(_origin, _down);
     ray.far = 20;
-    const hits = ray.intersectObjects(scene.children, true);
+    const hits = ray.intersectObjects(meshCandidates, false);
     let surfaceR = null;
     for (const h of hits) {
       let o = h.object;

@@ -7,6 +7,7 @@
 //  默认内径略大于 baseRadius(24)，外径约 33，环绕最外层台地墙脚。
 // =====================================================================
 import * as THREE from "three";
+import { SHARED_WATER_COLOR, createCanalWaterMaterial } from "../world/canalSystem.js";
 
 /** 默认尺寸：紧贴第五层台地外侧，不侵入台面 */
 export const CITADEL_MOAT_SPEC = Object.freeze({
@@ -19,8 +20,8 @@ export const CITADEL_MOAT_SPEC = Object.freeze({
   /** 阶梯动画：每秒跳动次数（插画定格感） */
   stepHz: 3.5,
   foamCount: 18,
-  /** 与星海运河统一的水面蓝（SHARED_WATER_COLOR = 0x3a86a0） */
-  waterColor: 0x3a86a0,
+  /** 与星海运河同一水色（createCanalWaterMaterial） */
+  waterColor: SHARED_WATER_COLOR,
   borderColor: 0xb8c0c2,
   foamColor: 0xf2f5f3,
 });
@@ -98,7 +99,12 @@ export function createCitadelMoat(opts = {}) {
   const group = new THREE.Group();
   group.name = opts.name ?? "citadel-moat";
 
-  const waterMat = makeWaterMaterial(waterColor, { useBasic: true });
+  // 水面：与运河同一套 Physical 材质（色相+透明度+清漆），不再用 Basic 平涂
+  const waterMat =
+    opts.waterMaterial
+    ?? (waterColor === SHARED_WATER_COLOR
+      ? createCanalWaterMaterial()
+      : makeWaterMaterial(waterColor, { useBasic: false }));
   const borderMat = makeBorderMaterial(borderColor);
   const foamMat = new THREE.MeshBasicMaterial({ color: foamColor });
 

@@ -75,6 +75,7 @@ export const CITADEL = Object.freeze({
     // 缺口不切入 coreRadius 实心核，城堡基座始终落在实土上。
     // 半角从旧 0.56（≈±32°，占台面约 1/6 环带）收窄到 0.30（≈±17°），
     // 只让出梯湖水道与水帘宽度，避免整块前缘台地被水系吃掉。
+    // 梯湖椭圆本身仍可作为城堡承重面（见 citadelTerrainPointSupported）。
     cascadeEnabled: true, // 层叠瀑布+梯湖总开关（编辑器可删/加）
     coreRadius: 9.0,
     notchCenter: 0.17, // 方位角 φ（从 +z 朝 +x 量）≈ 10°，正对梯湖水道
@@ -86,6 +87,21 @@ export const CITADEL = Object.freeze({
   // the centre—meets the radius-160 spherical ground.
   groundEmbed: 2.0,
 });
+
+/**
+ * 层叠梯湖足迹（站点/城堡局部 xz，与 citadelRange 水系同坐标）。
+ * 每座湖对应一座台地；椭圆内（含略放宽的白石岸）允许安放城堡体块。
+ */
+export const CITADEL_CASCADE_POOL_SPECS = Object.freeze([
+  Object.freeze({ name: "terrace-1-pool", x: 2.2, z: 15.2, rx: 3.5, rz: 2.1, depth: 0.7, seed: 9300 }),
+  Object.freeze({ name: "terrace-2-pool", x: 2.6, z: 18.0, rx: 3.8, rz: 2.3, depth: 0.75, seed: 9301 }),
+  Object.freeze({ name: "terrace-3-pool", x: 2.3, z: 21.2, rx: 4.0, rz: 2.5, depth: 0.85, seed: 9302 }),
+  Object.freeze({ name: "terrace-4-pool", x: 2.5, z: 25.0, rx: 4.4, rz: 2.7, depth: 0.95, seed: 9303 }),
+  Object.freeze({ name: "terrace-5-pool", x: 1.0, z: 38.0, rx: 10.5, rz: 6.8, depth: 1.75, seed: 9304 }),
+]);
+
+/** 鸟瞰图 / 编辑器上的层叠瀑布标记落点（水道中段）。 */
+export const CITADEL_CASCADE_MARKER = Object.freeze({ x: 2.4, z: 22.0 });
 
 const _dir = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -221,6 +237,28 @@ export function normalizeCitadelTerrainObjects(input = []) {
   });
 }
 
+/**
+ * 点是否落在对应台地的层叠梯湖椭圆上（含白石岸放宽）。
+ * 坐标系与城堡体块 / 台地足迹相同（局部 x/z）。
+ */
+export function isCitadelCascadePoolSupported(
+  localX,
+  localZ,
+  terraceIndex = 0,
+  contourSpec = CITADEL.contourTerrain
+) {
+  const normalized = normalizeCitadelTerrain(contourSpec);
+  if (!normalized.cascadeEnabled) return false;
+  const index = THREE.MathUtils.clamp(Math.round(terraceIndex), 0, 4);
+  const spec = CITADEL_CASCADE_POOL_SPECS[index];
+  if (!spec) return false;
+  // 岸台略放大，方便在湖缘落块
+  const pad = 1.12;
+  const dx = (localX - spec.x) / (spec.rx * pad);
+  const dz = (localZ - spec.z) / (spec.rz * pad);
+  return dx * dx + dz * dz <= 1;
+}
+
 /** True when a local x/z point lies on the selected terrace's exposed top. */
 export function citadelTerrainPointSupported(
   contourSpec,
@@ -230,17 +268,55 @@ export function citadelTerrainPointSupported(
 ) {
   const normalized = normalizeCitadelTerrain(contourSpec);
   const index = THREE.MathUtils.clamp(Math.round(terraceIndex), 0, 4);
+
+  // 层叠梯湖：允许在对应台地的湖面/白石岸上安放城堡（缺口扇区不再一刀切禁建）
+  if (isCitadelCascadePoolSupported(localX, localZ, index, normalized)) {
+    return true;
+  }
+
   const r = Math.hypot(localX, localZ);
   const outerR = normalized.terraces[index].radius;
   const innerR = index === 0 ? 0 : normalized.terraces[index - 1].radius;
   if (r > outerR + 0.01 || r < innerR - 0.01) return false;
-  if (index > 0 && index <= normalized.notchedLayers) {
-    const phi = Math.atan2(localX, localZ);
-    if (Math.abs(wrapPi(phi - normalized.notchCenter)) < normalized.notchHalf) {
-      return false;
+  // 瀑布缺口扇区不再禁建：湖泊与瀑布也是城堡台地的一部分，
+  // 允许在其上搭建（体块会盖住水帘/水道，属预期效果）。
+  return true;
+}
+
+/**
+ * 格级承重判定：中心点或格内任一采样点在可见顶面即承重。
+ * 瀑布缺口沿角度切扇区，缺口边缘格的中心会落入切掉区、
+ * 但格体部分仍坐在顶面上——8 点采样让这条空台地可放置。
+ */
+export function citadelTerrainCellSupported(
+  contourSpec,
+  localX,
+  localZ,
+  terraceIndex = 0,
+  halfExtent = 0.6
+) {
+  if (citadelTerrainPointSupported(contourSpec, localX, localZ, terraceIndex)) return true;
+  const normalized = normalizeCitadelTerrain(contourSpec);
+  const index = THREE.MathUtils.clamp(Math.round(terraceIndex), 0, 4);
+  const r = Math.hypot(localX, localZ);
+  const outerR = normalized.terraces[index].radius;
+  const innerR = index === 0 ? 0 : normalized.terraces[index - 1].radius;
+  // 中心骑在环带边界上（几厘米误差）不应被拒；采样点本身仍走严格点判定
+  if (r > outerR + 0.15 || r < innerR - 0.15) return false;
+  // 采样点 = 格内 3×3 去中心（四角 + 四边中点）；
+  // 缺口边缘格中心虽在切掉扇区内，任一采样点落在顶面即承重。
+  for (const fx of [-1, 0, 1]) {
+    for (const fz of [-1, 0, 1]) {
+      if (!fx && !fz) continue;
+      if (citadelTerrainPointSupported(
+        contourSpec,
+        localX + fx * halfExtent,
+        localZ + fz * halfExtent,
+        terraceIndex
+      )) return true;
     }
   }
-  return true;
+  return false;
 }
 
 /** 台地参数 → 镇体基座高度：最高台地台面咬入 0.06。 */
@@ -1188,7 +1264,7 @@ export function rebuildCitadelTerrainObjects(castleContainer, placements) {
 
 /**
  * 当前台地的土坡支撑探测。台地 1 接受中心圆盘内的城堡，台地 2–5
- * 只接受各自暴露环带内的城堡；默认瀑布缺口与台地外均不可放置。
+ * 只接受各自暴露环带内的城堡；瀑布缺口默认不可放，但层叠梯湖椭圆可放。
  * 返回 0 表示该台地城堡第 1 层可落地，-1 表示无承重面。
  *
  * @param {THREE.Group} castleContainer
@@ -1210,11 +1286,4 @@ export function terrainSupportLevel(
   return citadelTerrainPointSupported(contour, localX, localZ, terraceIndex)
     ? 0
     : -1;
-}
-
-/** 把弧度差收敛到 [-π, π]，便于缺口扇区判定。 */
-function wrapPi(a) {
-  while (a > Math.PI) a -= Math.PI * 2;
-  while (a < -Math.PI) a += Math.PI * 2;
-  return a;
 }

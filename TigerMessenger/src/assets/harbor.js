@@ -152,26 +152,55 @@ export function createFisherBoat() {
   finial.position.set(-2.28, 1.82, 0);
   g.add(finial);
 
-  // ---- 长桨：两侧各 13 支，根在舷缘、尖向下外入水（略向后拖）----
+  // ---- 长桨：两侧各 13 支，枢轴在舷缘（可动画划水）----
+  // 每支桨是 Group：原点=桨根；局部 +Y 指向桨尖；绕局部 X 俯仰、Z 前后扫。
+  const oars = [];
   const _oarA = new THREE.Vector3();
   const _oarB = new THREE.Vector3();
+  const _oarDir = new THREE.Vector3();
+  const _oarQuat = new THREE.Quaternion();
+  const _oarUp = new THREE.Vector3(0, 1, 0);
   for (const side of [-1, 1]) {
     for (let i = 0; i < 13; i++) {
       const x = -1.7 + i * 0.27;
       _oarA.set(x, 0.68, side * 0.5); // 桨根：舷缘
-      _oarB.set(x - 0.5, -0.1, side * 1.72); // 桨尖：下外后方
-      const len = _oarA.distanceTo(_oarB);
-      const oar = part(new THREE.CylinderGeometry(0.022, 0.028, len, 5), woodDark, 0.012);
-      oar.position.copy(_oarA).lerp(_oarB, 0.5);
-      oar.lookAt(_oarB);
-      oar.rotateX(Math.PI / 2); // 圆柱 +Y → 指向桨尖
-      g.add(oar);
+      _oarB.set(x - 0.5, -0.2, side * 1.72); // 桨尖：下外后方（叶端入水划动）
+      _oarDir.copy(_oarB).sub(_oarA);
+      const len = _oarDir.length();
+      _oarDir.normalize();
+
+      const oarRig = new THREE.Group();
+      oarRig.name = side < 0 ? `oar-L-${i}` : `oar-R-${i}`;
+      oarRig.position.copy(_oarA);
+      // 局部 +Y → 桨尖方向；基准姿态存 baseQuat，
+      // 划水动画在其上叠加局部偏移（直接写 rotation 会丢基准、桨指天）
+      _oarQuat.setFromUnitVectors(_oarUp, _oarDir);
+      oarRig.quaternion.copy(_oarQuat);
+      oarRig.userData.baseQuat = _oarQuat.clone();
+
+      const shaft = part(new THREE.CylinderGeometry(0.022, 0.028, len, 5), woodDark, 0.012);
+      shaft.name = "oar-shaft";
+      shaft.position.y = len * 0.5; // 沿局部 +Y 伸出
+      oarRig.add(shaft);
+
       const blade = part(new THREE.BoxGeometry(0.32, 0.1, 0.03), woodDark, 0.012);
-      blade.position.copy(_oarB);
-      blade.rotation.set(0, side * 0.35, -0.25);
-      g.add(blade);
+      blade.name = "oar-blade";
+      blade.position.y = len;
+      // 桨叶面朝前后，略偏
+      blade.rotation.set(0, side * 0.35, Math.PI / 2);
+      oarRig.add(blade);
+
+      oarRig.userData.side = side;
+      oarRig.userData.index = i;
+      oarRig.userData.phase = i * 0.22 + (side > 0 ? 0.11 : 0); // 错开相位，波浪式
+      g.add(oarRig);
+      oars.push(oarRig);
     }
   }
+  g.userData.oars = oars;
+  g.userData.oarPhase = 0;
+  g.userData.oarSpeed = 0; // 0..1 划水强度，由 updateWarshipOars 平滑
+  buildWarshipCrew(g); // 每支桨配一名剪纸罗马士兵，肢随桨动
 
   // ---- 甲板 + 栏杆 + 货箱 + 船尾楼 ----
   const deck = part(new THREE.BoxGeometry(3.9, 0.06, 0.86), wood, 0.026);
@@ -196,15 +225,15 @@ export function createFisherBoat() {
   ];
   for (const [cx, cz, s] of crateSpots) {
     const crate = part(new THREE.BoxGeometry(s, s, s), wood, 0.02);
-    crate.position.set(cx, 0.86 + s / 2, cz);
+    crate.position.set(cx, 0.86 + s / 2, cz * 0.2); // 中线堆放，给两列划桨纸人让位
     crate.rotation.y = cx * 0.6;
     g.add(crate);
   }
   // 船尾小楼（舱棚 + 顶台栏杆）
-  const aftCabin = part(new THREE.BoxGeometry(0.9, 0.4, 0.7), wood, 0.026);
+  const aftCabin = part(new THREE.BoxGeometry(0.9, 0.4, 0.56), wood, 0.026);
   aftCabin.position.set(-1.85, 1.02, 0);
   g.add(aftCabin);
-  const aftRoof = part(new THREE.BoxGeometry(1.0, 0.06, 0.78), woodDark, 0.02);
+  const aftRoof = part(new THREE.BoxGeometry(1.0, 0.06, 0.6), woodDark, 0.02);
   aftRoof.position.set(-1.85, 1.25, 0);
   g.add(aftRoof);
 
@@ -326,6 +355,213 @@ export function createFisherBoat() {
   g.userData.kind = "fisherBoat";
   g.userData.collideRadius = 3.4;
   return g;
+}
+
+/**
+ * 战船双侧船桨划水动画。
+ * @param {THREE.Object3D} boat createFisherBoat 返回值
+ * @param {number} dt
+ * @param {number|boolean} moving 是否在前进（true/1=全速划，0=停桨回落）
+ */
+const _oarEuler = new THREE.Euler();
+const _oarOffQ = new THREE.Quaternion();
+export function updateWarshipOars(boat, dt = 1 / 60, moving = false) {
+  const oars = boat?.userData?.oars;
+  if (!Array.isArray(oars) || !oars.length) return;
+  const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
+  const target = moving === true ? 1 : Math.max(0, Math.min(1, Number(moving) || 0));
+  // 强度平滑，避免启停突变
+  let speed = boat.userData.oarSpeed ?? 0;
+  speed += (target - speed) * Math.min(1, d * 5.5);
+  if (speed < 0.02 && target < 0.02) speed = 0;
+  boat.userData.oarSpeed = speed;
+
+  // 推进时加快桨频；停泊时相位冻结在最近位置
+  if (speed > 0.01) {
+    boat.userData.oarPhase = (boat.userData.oarPhase || 0) + d * (3.8 + speed * 2.4);
+  }
+  const phase = boat.userData.oarPhase || 0;
+
+  for (const oar of oars) {
+    const side = oar.userData.side || 1;
+    const p = phase + (oar.userData.phase || 0);
+    // 周期：sin 为推水主拍；方波感用 sin^3 加强「抓水」
+    const stroke = Math.sin(p);
+    const power = stroke * stroke * stroke; // 保号立方
+    const catchLift = Math.max(0, -Math.cos(p)); // 回桨抬起
+    // 前后扫（绕局部 Z）：推水时桨柄向后（-X 船尾）
+    const sweep = power * 0.55 * speed;
+    // 入水俯仰（绕局部 X）：推水沉、回桨抬；左右舷镜像
+    const dip = (-0.22 * power + 0.28 * catchLift) * speed * side;
+    // 微微外展
+    const flare = (0.06 + 0.1 * catchLift) * speed * side;
+
+    // 在基准姿态（桨尖下外指水）上叠加局部偏移；
+    // 无 baseQuat 的旧数据退回纯偏移
+    _oarEuler.set(dip, flare * 0.35, sweep);
+    _oarOffQ.setFromEuler(_oarEuler);
+    const base = oar.userData.baseQuat;
+    if (base) oar.quaternion.copy(base).multiply(_oarOffQ);
+    else oar.quaternion.copy(_oarOffQ);
+  }
+
+  // 剪纸士兵随桨同步划动
+  updateWarshipCrew(boat, phase, speed);
+}
+
+// =====================================================================
+//  战船剪纸罗马士兵：每支桨配一名，四肢关节随桨相位划动
+//  - 剪纸人：扁平薄片（Z 向薄），所有关节绕面法线旋转（2D 纸偶动画）
+//  - 皮甲（躯干 cuirass + 皮裙 pteruges）+ 青铜头盔 + 红鬃冠
+//  - 每船 9 个 InstancedMesh（躯干/皮裙/头/盔/鬃冠/双臂/双腿），尺寸
+//    定义在船局部坐标系内，随战船 scale 自然成比例
+// =====================================================================
+
+/** 共享几何/材质（全部船共用，懒加载） */
+let CREW_SHARED = null;
+function crewShared() {
+  if (CREW_SHARED) return CREW_SHARED;
+  const m = {
+    leather: toonMat(0x8a5a33), // 皮甲
+    leatherDark: toonMat(0x5c3a22), // 皮裙
+    skin: toonMat(0xd9a06b), // 头/四肢
+    bronze: toonMat(0xb08d4a), // 头盔
+    crest: toonMat(0xb03a2a), // 红鬃冠
+  };
+  // 部件原点均在关节处；头/盔/冠的颈部位移直接烘焙进几何
+  const box = (w, h, t, ox, oy) => {
+    const geo = new THREE.BoxGeometry(w, h, t);
+    geo.translate(ox, oy, 0);
+    return facet(geo);
+  };
+  const geo = {
+    torso: box(0.13, 0.17, 0.03, 0, 0.085), // 关节=髋
+    skirt: box(0.15, 0.08, 0.026, 0, -0.04), // 关节=髋（下垂）
+    head: box(0.078, 0.085, 0.026, 0, 0.197), // 烘焙在躯干链上
+    helmet: box(0.102, 0.06, 0.034, 0, 0.235),
+    crest: box(0.15, 0.05, 0.04, 0, 0.272),
+    arm: box(0.042, 0.15, 0.02, 0, -0.07), // 关节=肩
+    leg: box(0.048, 0.16, 0.02, 0, -0.075), // 关节=髋
+  };
+  CREW_SHARED = { m, geo };
+  return CREW_SHARED;
+}
+
+/**
+ * 为战船配置剪纸罗马士兵：每支桨一名，坐姿面对舷侧。
+ * @param {THREE.Group} g createFisherBoat 的船组（需已填充 userData.oars）
+ */
+function buildWarshipCrew(g) {
+  const oars = g.userData.oars;
+  if (!Array.isArray(oars) || !oars.length) return;
+  const { m, geo } = crewShared();
+  const n = oars.length;
+  const crew = new THREE.Group();
+  crew.name = "warship-crew";
+  const parts = {};
+  const defs = [
+    ["torso", geo.torso, m.leather],
+    ["skirt", geo.skirt, m.leatherDark],
+    ["head", geo.head, m.skin],
+    ["helmet", geo.helmet, m.bronze],
+    ["crest", geo.crest, m.crest],
+    ["armL", geo.arm, m.skin],
+    ["armR", geo.arm, m.skin],
+    ["legL", geo.leg, m.skin],
+    ["legR", geo.leg, m.skin],
+  ];
+  for (const [name, gmm, mat] of defs) {
+    const im = new THREE.InstancedMesh(gmm, mat, n);
+    im.name = `crew-${name}`;
+    im.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    im.frustumCulled = false; // 实例散布全船，几何包围球盖不住
+    im.castShadow = true;
+    im.receiveShadow = true;
+    crew.add(im);
+    parts[name] = im;
+  }
+  // 与桨一一对应：同 x、同舷、同相位 → 手臂跟桨同步
+  crew.userData.rows = oars.map((oar) => ({
+    x: oar.position.x,
+    side: oar.userData.side || 1,
+    phase: oar.userData.phase || 0,
+  }));
+  crew.userData.parts = parts;
+  g.add(crew);
+  g.userData.crew = crew;
+  updateWarshipCrew(g, 0, 0); // 静坐姿态
+}
+
+const _cMat = new THREE.Matrix4();
+const _cQBase = new THREE.Quaternion();
+const _cQBody = new THREE.Quaternion();
+const _cQLimb = new THREE.Quaternion();
+const _cRz = new THREE.Quaternion();
+const _cPos = new THREE.Vector3();
+const _cOff = new THREE.Vector3();
+const _cScale = new THREE.Vector3(1, 1, 1);
+const _CZ = new THREE.Vector3(0, 0, 1);
+const _CY = new THREE.Vector3(0, 1, 0);
+/** 坐姿髋点高度（甲板面 0.83 之上，脚恰好落在甲板上） */
+const CREW_HIP_Y = 0.99;
+
+/**
+ * 剪纸士兵划桨动画（由 updateWarshipOars 内部调用，与桨同相位）。
+ * @param {THREE.Object3D} boat
+ * @param {number} phase 全船桨相位 boat.userData.oarPhase
+ * @param {number} speed 0..1 划水强度
+ */
+function updateWarshipCrew(boat, phase = 0, speed = 0) {
+  const crew = boat?.userData?.crew;
+  if (!crew) return;
+  const rows = crew.userData.rows;
+  const parts = crew.userData.parts;
+  const sp = Math.max(0, Math.min(1, Number(speed) || 0));
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const s = r.side;
+    const p = phase + r.phase;
+    const stroke = Math.sin(p);
+    const power = stroke * stroke * stroke; // 与桨的抓水主拍一致
+    const lift = Math.max(0, -Math.cos(p)); // 回桨
+    // 纸偶关节全部绕面法线（局部 Z）；左舷法线朝 -Z，角度乘 side 镜像
+    const lean = s * sp * (0.24 * power - 0.14); // 躯干：拉桨后仰、回桨前倾
+    const arm = s * (0.24 + sp * (-0.62 * power + 0.44 * lift)); // 臂随桨前后摆
+    const leg = s * (0.42 + sp * 0.16 * power); // 坐姿腿前伸，蹬踏微动
+
+    _cQBase.identity();
+    if (s < 0) _cQBase.setFromAxisAngle(_CY, Math.PI); // 左舷面朝外翻面
+    _cQBody.copy(_cQBase).multiply(_cRz.setFromAxisAngle(_CZ, lean));
+    _cPos.set(r.x, CREW_HIP_Y, s * 0.28);
+
+    // 躯干链（髋枢轴）：躯干/皮裙/头/盔/冠 同姿态
+    _cMat.compose(_cPos, _cQBody, _cScale);
+    parts.torso.setMatrixAt(i, _cMat);
+    parts.skirt.setMatrixAt(i, _cMat);
+    parts.head.setMatrixAt(i, _cMat);
+    parts.helmet.setMatrixAt(i, _cMat);
+    parts.crest.setMatrixAt(i, _cMat);
+
+    // 双臂：肩点随躯干前倾，再叠加自身摆动；Z 向微错开防共面
+    _cQLimb.copy(_cQBase).multiply(_cRz.setFromAxisAngle(_CZ, lean + arm));
+    _cOff.set(0, 0.135, 0).applyQuaternion(_cQBody).add(_cPos);
+    _cOff.z += 0.016;
+    _cMat.compose(_cOff, _cQLimb, _cScale);
+    parts.armL.setMatrixAt(i, _cMat);
+    _cOff.z -= 0.032;
+    _cMat.compose(_cOff, _cQLimb, _cScale);
+    parts.armR.setMatrixAt(i, _cMat);
+
+    // 双腿：髋枢轴坐姿前伸；Z 向微错开防共面
+    _cQLimb.copy(_cQBase).multiply(_cRz.setFromAxisAngle(_CZ, leg));
+    _cOff.set(0.035, 0.01, 0.014).applyQuaternion(_cQBase).add(_cPos);
+    _cMat.compose(_cOff, _cQLimb, _cScale);
+    parts.legL.setMatrixAt(i, _cMat);
+    _cOff.set(-0.035, 0.01, -0.014).applyQuaternion(_cQBase).add(_cPos);
+    _cMat.compose(_cOff, _cQLimb, _cScale);
+    parts.legR.setMatrixAt(i, _cMat);
+  }
+  for (const name in parts) parts[name].instanceMatrix.needsUpdate = true;
 }
 
 // =====================================================================

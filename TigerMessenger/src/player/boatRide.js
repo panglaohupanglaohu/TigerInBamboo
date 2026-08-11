@@ -4,6 +4,7 @@
 //  - 运河巡游战船：上船暂停巡游（piloted），下船后继续沿运河巡航
 // =====================================================================
 import * as THREE from "three";
+import { updateWarshipOars } from "../assets/harbor.js";
 
 const BOARD_RANGE = 5.2;
 const SPEED = 6.5;
@@ -194,6 +195,9 @@ export function createBoatRide({
       boat.position.copy(_next);
     }
     orientBoat();
+    // 有前进/后退推力时双侧船桨划水；仅转向时轻划
+    const row = thrust ? 1 : turn ? 0.35 : 0;
+    updateWarshipOars(boat, dt, row);
 
     _up.copy(boat.position).normalize();
     player.position.copy(boat.position).addScaledVector(_up, BOAT_EYE_HEIGHT);

@@ -21,10 +21,17 @@ import {
   citadelCurvatureDrop,
   citadelTerraceMetrics,
   normalizeCitadelTerrain,
+  CITADEL_CASCADE_POOL_SPECS,
+  CITADEL_CASCADE_MARKER,
 } from "./odysseyCitadel.js";
+
+// 再导出，供编辑器等沿用 citadelRange 路径
+export { CITADEL_CASCADE_POOL_SPECS, CITADEL_CASCADE_MARKER };
 import { createSnowMassif } from "../assets/snowMassif.js";
 import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
+import { CANAL_WATER_LIFT } from "./canalSystem.js";
+import { createNavonaCanalPlaza, conformPlazaToTerrain } from "./navonaPlaza.js";
 
 /* ---------------- 选址与山体参数（锁死） ---------------- */
 export const RANGE_SITE = Object.freeze({ lat: 24.1, lon: 36.05 });
@@ -504,24 +511,6 @@ export function curvedFootprintGroundElevation(
     : { elevation: surfaceLift, contactRadius: Math.hypot(lx, lz), surfaceRadius };
 }
 
-/**
- * 默认梯湖足迹（站点局部 xz）。
- * 上层湖向城门方向收紧、体量缩小，只占瀑布水道窄带；
- * 最低深潭仍在地面远端（z≈38），保证曲率贴地与木马落点。
- * 旧版上层湖 rx≈6–8 且 z 一直铺到 31，与 ±32° 缺口一起吃掉大半前缘台地。
- */
-export const CITADEL_CASCADE_POOL_SPECS = Object.freeze([
-  Object.freeze({ name: "terrace-1-pool", x: 2.2, z: 15.2, rx: 3.5, rz: 2.1, depth: 0.7, seed: 9300 }),
-  Object.freeze({ name: "terrace-2-pool", x: 2.6, z: 18.0, rx: 3.8, rz: 2.3, depth: 0.75, seed: 9301 }),
-  Object.freeze({ name: "terrace-3-pool", x: 2.3, z: 21.2, rx: 4.0, rz: 2.5, depth: 0.85, seed: 9302 }),
-  Object.freeze({ name: "terrace-4-pool", x: 2.5, z: 25.0, rx: 4.4, rz: 2.7, depth: 0.95, seed: 9303 }),
-  // 地面深潭保持大足迹与 z≈38，保证球面曲率贴地与木马落点；不占台地圆环
-  Object.freeze({ name: "terrace-5-pool", x: 1.0, z: 38.0, rx: 10.5, rz: 6.8, depth: 1.75, seed: 9304 }),
-]);
-
-/** 鸟瞰图 / 编辑器上的层叠瀑布标记落点（水道中段）。 */
-export const CITADEL_CASCADE_MARKER = Object.freeze({ x: 2.4, z: 22.0 });
-
 function buildEmptyWaterGroup(name) {
   const group = new THREE.Group();
   group.name = name;
@@ -932,7 +921,9 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       const b = a + 1;
       const c = a + nx;
       const d = c + 1;
-      indices.push(a, c, b, b, c, d);
+      // 缠绕须朝球心外侧（与其余网格一致）：原 (a,c,b) 朝内，
+      // 导致向下 Raycast 全部命中背面被剔除、flatShading 光照反向。
+      indices.push(a, b, c, b, d, c);
     }
   }
   const geo = new THREE.BufferGeometry();
@@ -997,19 +988,97 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // ---------- 城堡背后雪山：面对城堡时左右各一组 ----------
   // 站点局部：lz+ = 主岛/正门朝向；站在正门前看城堡时，-lx 为左、+lx 为右，
   // -lz 为城堡背后。两组雪山落在后侧左右翼，环抱城堡。
-  // 放大足迹后按球面曲率把山脚整圈压进地面（外缘不再悬空）。
+  // 放大足迹后按球面曲率把山脚整圈压进地面；再径向外推，
+  // 使山脚完全退出台地空间（range-r ≥ 台地5 外缘 + 净空）。
   const snowMountains = new THREE.Group();
   snowMountains.name = "citadel-background-snow-massif";
-  const SNOW_MASSIF_SCALE = 1.35; // 原 0.88 → 约 1.5 倍体积感
-  const SNOW_MASSIF_BURY = 2.4; // 山脚再下埋，确保曲率外缘全进球面
+  const SNOW_MASSIF_SCALE = 1.35;
+  const SNOW_MASSIF_BURY = 2.4;
+  // 山脚净空：雪山整体退出台地空间（台地 5 外缘之外），台面留给搭建
+  const SNOW_TERRACE_CLEARANCE = 4;
+
+  /**
+   * 临时贴地+朝向后，用 place 逆变换测山脚最小 range 径向。
+   * footR = 峰心 range-r − 峰底半径×scale（不在埋脚后的世界位上测）。
+   */
+  function measureMassifMinFootR(massif, lxA, lzA, yaw) {
+    placeRangeAsset(massif, lxA, lzA, R, 0, true);
+    massif.rotateY(yaw);
+    massif.updateMatrixWorld(true);
+    const s = massif.scale?.x || 1;
+    const wp = new THREE.Vector3();
+    let minFoot = Infinity;
+    for (const child of massif.children) {
+      const rad = child.userData?.composition?.radius;
+      if (!Number.isFinite(rad)) continue;
+      child.getWorldPosition(wp);
+      // place 逆：site*R + right*lx + fwd*lz ∥ worldPos
+      const k = R / Math.max(1e-6, wp.dot(_site));
+      const plx = k * wp.dot(_right);
+      const plz = k * wp.dot(_fwd);
+      const peakR = Math.hypot(plx, plz);
+      const footR = peakR - rad * s * 0.92;
+      if (footR < minFoot) minFoot = footR;
+    }
+    return Number.isFinite(minFoot) ? minFoot : Math.hypot(lxA, lzA);
+  }
+
+  /**
+   * 将雪山组沿 range 平面径向外推，使山脚完全退出台地空间。
+   * 目标山脚径向 ≥ 台地 5 外缘 + 净空（落在护城河外绿带），
+   * 任何台地环带都不再被山体侵占。
+   */
+  function retreatSnowMassifFromInnerTerraces(massif, yaw, lx0, lz0, contour) {
+    const terraces = contour?.terraces ?? CITADEL.contourTerrain.terraces;
+    const t4 = terraces[3]?.radius ?? 21.6;
+    const t5 = terraces[4]?.radius ?? 24.0;
+    const targetMinFootR = t5 + SNOW_TERRACE_CLEARANCE;
+
+    const minFootBefore = measureMassifMinFootR(massif, lx0, lz0, yaw);
+    let lx = lx0;
+    let lz = lz0;
+    let push = 0;
+    let minFoot = minFootBefore;
+
+    for (let pass = 0; pass < 6; pass++) {
+      minFoot = measureMassifMinFootR(massif, lx, lz, yaw);
+      if (minFoot >= targetMinFootR - 0.08) break;
+      const need = (targetMinFootR - minFoot) * 1.12 + 0.25;
+      push += need;
+      const r0 = Math.hypot(lx, lz) || 1;
+      const r1 = r0 + need;
+      lx = (lx / r0) * r1;
+      lz = (lz / r0) * r1;
+    }
+
+    // 最终贴地 + 埋脚
+    placeRangeAsset(massif, lx, lz, R, 0, true);
+    massif.rotateY(yaw);
+    embedSnowMassifBase(massif, R, SNOW_MASSIF_BURY);
+
+    massif.userData.terraceClearance = {
+      t4,
+      t5,
+      targetMinFootR,
+      minFootRBefore: minFootBefore,
+      minFootRAfter: minFoot,
+      push,
+      lx,
+      lz,
+    };
+    return massif;
+  }
+
   const snowLeft = createSnowMassif({
     name: "citadel-snow-massif-left",
     seed: 7200,
   });
   snowLeft.scale.setScalar(SNOW_MASSIF_SCALE);
+  const leftYaw = 0.45;
   placeRangeAsset(snowLeft, -54, -56, R, 0, true);
-  snowLeft.rotateY(0.45); // 略外旋，峰群向左翼展开
+  snowLeft.rotateY(leftYaw);
   embedSnowMassifBase(snowLeft, R, SNOW_MASSIF_BURY);
+  retreatSnowMassifFromInnerTerraces(snowLeft, leftYaw, -54, -56, normalizedContour);
   snowMountains.add(snowLeft);
 
   const snowRight = createSnowMassif({
@@ -1017,16 +1086,19 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     seed: 7300,
   });
   snowRight.scale.setScalar(SNOW_MASSIF_SCALE);
+  const rightYaw = -0.45;
   placeRangeAsset(snowRight, 54, -56, R, 0, true);
-  snowRight.rotateY(-0.45);
+  snowRight.rotateY(rightYaw);
   embedSnowMassifBase(snowRight, R, SNOW_MASSIF_BURY);
+  retreatSnowMassifFromInnerTerraces(snowRight, rightYaw, 54, -56, normalizedContour);
   snowMountains.add(snowRight);
   scene.add(snowMountains);
 
   // ---------- 护城河：环绕圣城墙脚，落在星球曲面地表 ----------
-  // 以“第一颗落地参天大树/深潭”同款球面地表抬升（sphericalGroundLift）铺环带水面
-  // + 低模岸壁：贴合当前地貌、与地面/潭缘衔接，随曲率径向定向。
-  // 内径/外径可由地貌菜单配置（contourSpec.moat），默认 38/46 覆盖旧港码头。
+  // 水面高度必须与运河一致（CANAL_WATER_LIFT），交接处同一水平面。
+  // 旧曲率算法用 |worldPos| 当径向高度，把环带切向半径(~42)算进高度，
+  // 外缘被抬高 ~5 单位，与运河水面严重错层——这里改为按足迹 (lx,lz)
+  // 取高度场 + 结构高度重建，与运河 groundLift 同源。
   let moat = null;
   let moatMesh = null; // 前置声明，供 buildMoat 在 rangeSystem 初始化前写入
   const buildMoat = (spec) => {
@@ -1037,67 +1109,73 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     }
     const moatInner = spec?.inner ?? MOAT_INNER;
     const moatOuter = spec?.outer ?? 46;
-    // 水面相对地表（网格）的抬升：可配置护城河高度（默认 0.16 ≈ 浅水位）
-    const moatWaterY = spec?.waterY ?? 0.16;
-    // 球面曲率贴合强度：0=平面环带（仅径向定向），1=完全贴合球面/高度场（默认）
-    // 可 >1 略夸张下弯，或 <1 减弱贴地（外缘略抬）。
+    // 网格几何内水面局部 Y（createCitadelMoat 固定结构，不随编辑器高度改）
+    const meshWaterY = CITADEL_MOAT_SPEC.waterY;
+    // 水面相对当地地表抬升：默认 = 运河 CANAL_WATER_LIFT，保证交接同水平面
+    // 编辑器「高度」写入 waterY，语义即相对地表（与运河同）
+    const waterSurfaceLift = Number.isFinite(spec?.waterY)
+      ? spec.waterY
+      : CANAL_WATER_LIFT;
+    // 球面曲率贴合强度：0=切平面平铺，1=完全贴高度场（默认）
     const moatCurvature = Number.isFinite(spec?.curvature)
       ? THREE.MathUtils.clamp(spec.curvature, 0, 2)
       : 1;
-    // wallDepth 加深：护城河内岸壁向下延伸，盖住前方浸水区(24~38, 下沉 0.6)，
-    // 让护城河环带内缘贴合随曲率下沉的绿地，避免内缘悬空。
+    // wallDepth 加深：内岸壁盖住前方浸水区
     moat = createCitadelMoat({
       name: "citadel-moat",
       seed: 8801,
       innerRadius: moatInner,
       outerRadius: moatOuter,
       wallDepth: 0.95,
-      waterY: moatWaterY,
+      waterY: meshWaterY,
     });
-    // 护城河【放在地面】：水面落回圣城域内地表高度（BASE_LIFT=+0.4），不再额外抬升。
-    // 护城河环绕圣城，水面高于下降后的内岸绿地 → 城堡台地外缘/前方绿地浸在水面下。
-    // 建筑与台面由 CITADEL_SINK 负责下沉，护城河本身保持在地面高度。
-    // false：沿球面径向定向（注意曲率）。
-    const moatLift = BASE_LIFT;
-    placeRangeAsset(moat, 0, 0, R, moatLift, false);
+    // 组原点放在地表；水面在局部 y=meshWaterY。
+    // 平铺时额外抬升 (waterSurfaceLift - meshWaterY)，使水面 = 地表 + waterSurfaceLift。
+    // siteUpright：与圣城同轴，足迹 (lx,lz) 对齐高度场查询。
+    const flatLift = waterSurfaceLift - meshWaterY;
+    placeRangeAsset(moat, 0, 0, R, flatLift, true);
     scene.add(moat);
     moat.userData.harborPadLocal = { lx: -22.8, lz: 24.6, toWaterX: 0.66, toWaterZ: -0.75 };
     moat.userData.spec = {
       inner: moatInner,
       outer: moatOuter,
-      waterY: moatWaterY,
+      waterY: waterSurfaceLift, // 相对地表（与运河 CANAL_WATER_LIFT 同语义）
       curvature: moatCurvature,
     };
 
-    // ---------- 护城河环带随球面曲率贴合网格高度场（注意曲率）----------
-    // 护城河原是一组平环带/圆柱放在固定 R+moatLift 沿中心径向后，环带内缘与
-    // 下沉的前方浸水区之间出现空气空隙，且白色岸壁顶端浮在护城河水面上方。
-    // 这里把护城河 Group 内所有部件（水面、内/外岸壁、河床、浪花）的每个顶点，
-    // 沿该点的星球径向调整；强度由 moat.curvature 控制：
-    //   curvature=0 → 保持平面环带（worldR 不变）
-    //   curvature=1 → 完全贴合：newR = R + gridH + radialOffset
-    //   curvature 在两者之间线性插值；>1 可略夸张下弯。
-    // （RingGeometry 在 XY 面、CylinderGeometry 沿 Y 轴，mesh 还各自带 rotation，
-    // 直接读 attributes 的 (x,z) 会取到错误的轴向，故在世界空间处理。）
+    // ---------- 曲率贴合：按足迹 (lx,lz) 重建到球面+高度场 ----------
+    // 对每个顶点：世界→组局部 → 取 (lx,lz) 与结构高度 structural=localY-meshWaterY
+    // 目标半径 = R + citadelRangeLiftLocal(lx,lz) + waterSurfaceLift + structural
+    // 与运河 groundLift/water 使用同一套高度源 → 交接处同水平面。
     if (moatCurvature > 1e-6) {
       moat.updateMatrixWorld(true);
       const _mv = new THREE.Vector3();
+      const _local = new THREE.Vector3();
+      const _flat = new THREE.Vector3();
+      const _mwInv = new THREE.Matrix4().copy(moat.matrixWorld).invert();
       moat.traverse((obj) => {
         const pos = obj?.geometry?.attributes?.position;
         if (!pos) return;
         for (let i = 0; i < pos.count; i++) {
           _mv.fromBufferAttribute(pos, i);
-          obj.localToWorld(_mv); // 世界坐标
-          const worldR = _mv.length();
-          if (worldR < 1e-8) continue;
-          _mv.multiplyScalar(1 / worldR); // 球面方向 dir
-          const gridH = citadelRangeLiftDir(_mv); // 该方向相对 R 的抬升（含下沉区）
-          const radialOffset = worldR - (R + moatLift); // 顶点相对护城河基准面的径向偏移
-          const curvedR = R + gridH + radialOffset; // 全贴合目标半径
-          // 相对当前平面位的径向修正量 × 曲率强度
-          const newR = worldR + moatCurvature * (curvedR - worldR);
-          _mv.multiplyScalar(newR); // 新世界坐标
-          obj.worldToLocal(_mv); // 回到局部坐标
+          obj.localToWorld(_mv);
+          _flat.copy(_mv);
+          _local.copy(_mv).applyMatrix4(_mwInv);
+          const lx = _local.x;
+          const lz = _local.z;
+          const structural = _local.y - meshWaterY;
+          const gridH = citadelRangeLiftLocal(lx, lz);
+          const targetR = R + gridH + waterSurfaceLift + structural;
+          rangeLocalToWorld(lx, lz, R, _mv);
+          _mv.normalize().multiplyScalar(targetR);
+          if (moatCurvature < 1 - 1e-6) {
+            _mv.lerp(_flat, 1 - Math.min(1, moatCurvature));
+          } else if (moatCurvature > 1 + 1e-6) {
+            const up = _mv.clone().normalize();
+            const over = (moatCurvature - 1) * (targetR - _flat.length());
+            _mv.addScaledVector(up, over);
+          }
+          obj.worldToLocal(_mv);
           pos.setXYZ(i, _mv.x, _mv.y, _mv.z);
         }
         pos.needsUpdate = true;
@@ -1108,31 +1186,78 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   };
   buildMoat(contourSpec?.moat);
 
-  // ---------- 低多边形特洛伊木马：默认落在地面深潭（terrace-5-pool）上 ----------
-  // 层叠瀑布关闭时仍保留木马（地貌对象也可另放），只是不再对齐湖面高程。
+  // ---------- 低多边形特洛伊木马 ----------
+  // 放在「护城河 × 瀑布水道」交汇旁侧、最外层台地（台地 5 / 一层台面）的干地面上：
+  // 瀑布中轴 φ≈notchCenter，偏右避开水道与梯湖；r 落在台地 5 外缘环带（土坡台面）。
   const trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
   trojanHorse.scale.setScalar(0.72);
-  const horseMat = { lx: 1.0, lz: 38.0, yaw: Math.PI }; // 面朝 z 减小（正门/瀑布）
-  const lowestPool = pilgrimageWaterSteps.children[pilgrimageWaterSteps.children.length - 1];
-  const lowestComp = lowestPool?.userData?.composition ?? null;
-  placeRangeAsset(trojanHorse, horseMat.lx, horseMat.lz, R, 0, false);
-  if (lowestComp && Number.isFinite(lowestComp.localElevation)) {
-    // 轮车基座 y=0 对齐水面：微沉 0.12 让车轮沾水，马身主体露出水面
-    trojanHorse.position.setLength(lowestComp.localElevation + 0.12);
-    const radialUp = trojanHorse.position.clone().normalize();
-    const q = new THREE.Quaternion().setFromUnitVectors(
-      new THREE.Vector3(0, 1, 0),
-      radialUp
-    );
-    const yawQ = new THREE.Quaternion().setFromAxisAngle(
-      new THREE.Vector3(0, 1, 0),
-      horseMat.yaw
-    );
-    trojanHorse.quaternion.copy(q).multiply(yawQ);
-  } else {
-    trojanHorse.rotateY(Math.PI);
+  {
+    const notchC = normalizedContour.notchCenter ?? 0.17;
+    const notchH = normalizedContour.notchHalf ?? 0.30;
+    const t5R = normalizedContour.terraces?.at(-1)?.radius ?? 24;
+    // 水道右缘外再偏 0.2 rad，保证在缺口外的实土台面上
+    const horsePhi = notchC + notchH + 0.2;
+    // 台地 5 外缘内侧约 1.4：站在一层台面地面，靠近护城河方向
+    const horseR = Math.max(10, t5R - 1.4);
+    const horseLx = horseR * Math.sin(horsePhi);
+    const horseLz = horseR * Math.cos(horsePhi);
+    // 面朝瀑布/护城河交汇（略朝 -φ，看向水道中轴）
+    const horseYaw = -horsePhi + Math.PI * 0.5;
+    // 贴高度场地表，微抬防 z-fight；siteUpright 与台地同轴
+    placeRangeAsset(trojanHorse, horseLx, horseLz, R, 0.06, true);
+    trojanHorse.rotateY(horseYaw);
+    trojanHorse.userData.placement = {
+      kind: "moat-cascade-junction",
+      terraceIndex: 4,
+      phi: horsePhi,
+      r: horseR,
+      yaw: horseYaw,
+    };
   }
   scene.add(trojanHorse);
+
+  // ---------- 纳沃纳式双栖水利广场：运河进入城堡前 ----------
+  // 放在护城河外缘、瀑布中轴（+z）上：旱季下凹石材广场+三喷泉+台阶座椅；
+  // 汛期同一槽体蓄水，与运河/护城河同水色。雨天自动蓄洪，晴天泄回广场。
+  const moatOuterR = normalizedContour.moat?.outer ?? 46;
+  const notchC = normalizedContour.notchCenter ?? 0.17;
+  // 护城河外约 8 单位：运河入城前的狭长广场
+  const plazaR = moatOuterR + 10;
+  const plazaLx = plazaR * Math.sin(notchC);
+  const plazaLz = plazaR * Math.cos(notchC);
+  const navonaPlaza = createNavonaCanalPlaza({
+    name: "citadel-navona-canal-plaza",
+    seed: 7701,
+    flooded: false,
+  });
+  // 长轴沿径向（朝城/运河走向）：先 place 再绕 +Y 把 +Z 转到指向城心（-径向切向）
+  placeRangeAsset(navonaPlaza, plazaLx, plazaLz, R, CANAL_WATER_LIFT * 0.15, true);
+  // 广场局部 +Z 默认切向 forward；转到沿「城心→外」的径向，使长轴对齐运河入城
+  navonaPlaza.rotateY(Math.PI); // 短端朝城 / 朝外
+  // 顶点融合：边界顶点平滑对齐起伏地形（内部保持平整），
+  // 消除狭长广场斜插山坡的生硬穿模。sampleDelta = 地形面 − 顶点 沿“上”高差。
+  {
+    const _pt = new THREE.Vector3();
+    conformPlazaToTerrain(navonaPlaza, {
+      sampleDelta: (worldPos) => {
+        // {_site,_right,_fwd} 为正交归一基架：切向分量即 range 局部坐标
+        // （不可再乘 R/dot(worldPos,_site) 缩放——顶点半径 >R 会把采样点
+        // 向站心压扁，陡坡上产生系统性高差残留）。
+        const lx = worldPos.dot(_right);
+        const lz = worldPos.dot(_fwd);
+        rangeLocalToWorld(lx, lz, R, _pt); // 已含地形 lift
+        return _pt.sub(worldPos).dot(_site);
+      },
+    });
+  }
+  navonaPlaza.userData.placement = {
+    kind: "canal-citadel-approach",
+    lx: plazaLx,
+    lz: plazaLz,
+    r: plazaR,
+    phi: notchC,
+  };
+  scene.add(navonaPlaza);
 
   const rangeSystem = {
     mesh,
@@ -1150,6 +1275,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     snowMassifRight: snowRight,
     moat: moatMesh,
     trojanHorse,
+    navonaPlaza,
     vegetation: null,
     siteDir: _site.clone(),
     fwd: _fwd.clone(),

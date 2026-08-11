@@ -20,7 +20,7 @@ import {
   rebuildCitadelTown,
   rebuildCitadelTerrain,
   rebuildCitadelTerrainObjects,
-  terrainSupportLevel,
+  citadelTerrainCellSupported,
 } from "./world/odysseyCitadel.js";
 import { CITADEL_TOWN_SPEC, citadelGridCellCenter } from "./world/citadelTown.js";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
@@ -619,13 +619,19 @@ function citadelSupportAt(ix, iz, terraceIndex = 0) {
   // Pure canonical transform: safe even while the panel is still being
   // constructed, and exactly identical to both the 2D map and 3D generator.
   const c = citadelGridCellCenter(ix, 0, iz);
-  const level = terrainSupportLevel(
-    citadel,
+  const contour = citadel.userData?.contourSpec;
+  if (!contour) return -1;
+  // 格级承重：瀑布缺口边缘格的中心可能落在被切掉的扇区里，
+  // 但格体仍坐在台地顶面上——任一角点（格半宽处）支撑即允许放置。
+  const level = citadelTerrainCellSupported(
+    contour,
     c.x,
     c.z,
-    CITADEL_TOWN_SPEC.cellHeight,
-    terraceIndex
-  );
+    terraceIndex,
+    CITADEL_TOWN_SPEC.cellSize * 0.5
+  )
+    ? 0
+    : -1;
   citadelSupportCache.set(key, level);
   return level;
 }
@@ -801,7 +807,11 @@ const citadelSceneEdit = citadelEditorPanel
     );
     citadelPickRay.setFromCamera(citadelPickNdc, camera);
     const hits = citadelPickRay.intersectObject(citadel, true);
-    if (!hits.length) return;
+    // 梯湖/瀑布水系挂在场景根而非圣城容器：点湖面也应能开面板
+    if (!hits.length) {
+      const waterSteps = scene.getObjectByName("citadel-pilgrimage-water-steps");
+      if (!waterSteps || !citadelPickRay.intersectObject(waterSteps, true).length) return;
+    }
     citadelEditorPanel.open();
     showToast("已选中高山圣城 · 搭建面板已打开", 2.2);
   });
@@ -970,6 +980,14 @@ function animate() {
   dayNight.update(dt);
   updateMoebiusBarrier(dt);
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
+  // 纳沃纳双栖广场：雨天蓄洪 / 晴雪泄回旱季广场（与天气联动）
+  {
+    const plaza = messenger?.landmarks?.citadelRange?.navonaPlaza;
+    if (plaza?.setFlooded) {
+      // weather mode: 0 晴 / 1 雨 / 2 雪 → 仅雨天 isFlooded
+      plaza.setFlooded((P.weather | 0) === 1);
+    }
+  }
   mapEditor.tickHighlight?.(dt);
   citadelSceneEdit?.tick();
 
@@ -1110,6 +1128,7 @@ window.__tm = {
   platforms,
   hills,
   mapEditor,
+  citadelEditorPanel, // 圣城搭建面板（验收/调试用）
   storyEngine, // 故事板引擎（验收/调试用）
   storyboardPanel,
   tramRide,

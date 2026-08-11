@@ -36,6 +36,7 @@ import {
   isCitadelCascadeEnabled,
 } from "../world/odysseyCitadel.js";
 import { CITADEL_CASCADE_MARKER } from "../world/citadelRange.js";
+import { CANAL_WATER_LIFT } from "../world/canalSystem.js";
 import { makePanelDraggable } from "./dragPanel.js";
 
 const MAX_COORD = CITADEL_GRID_SIZE - 1;
@@ -220,14 +221,14 @@ export function createCitadelEditorPanel({
           <label style="font:11px monospace;color:#4a5560;">外径
             <input id="ce-moat-outer" type="number" min="12" max="80" step="0.5" style="width:54px;font:11px monospace;">
           </label>
-          <label style="font:11px monospace;color:#4a5560;">高度
+          <label style="font:11px monospace;color:#4a5560;" title="水面相对当地地表抬升；默认与运河齐平">高度
             <input id="ce-moat-watery" type="number" min="-10" max="10" step="0.05" style="width:54px;font:11px monospace;">
           </label>
           <label style="font:11px monospace;color:#4a5560;" title="0=平面环带 · 1=完全贴合球面曲率 · &gt;1 略夸张下弯">曲率
             <input id="ce-moat-curvature" type="number" min="0" max="2" step="0.05" style="width:54px;font:11px monospace;">
           </label>
-          <button type="button" id="ce-moat-reset" title="恢复内置护城河 内38/外46/高0.16/曲率1（需再点保存才写入存档）">重置</button>
-          <span style="font:10px monospace;color:#71808a;">环带环绕圣城墙脚 · 曲率控制贴球面强度 · 改完请点「保存台地配置」</span>
+          <button type="button" id="ce-moat-reset" title="恢复内置护城河 内38/外46/高=运河水位/曲率1（需再点保存才写入存档）">重置</button>
+          <span style="font:10px monospace;color:#71808a;">高度默认对齐运河水面 · 曲率控制贴地 · 改完请点「保存台地配置」</span>
         </div>
       </div>
       <div style="display:flex;gap:6px;margin:5px 0 9px;align-items:center;flex-wrap:wrap;">
@@ -482,16 +483,20 @@ export function createCitadelEditorPanel({
     return fallback;
   }
 
-  /** 护城河规格归一化：内径/外径/高度/曲率。 */
+  /** 护城河规格归一化：内径/外径/高度/曲率。高度=相对地表，默认与运河齐平。 */
   function normalizeMoatSpec(raw) {
-    const defaults = { inner: 38, outer: 46, waterY: 0.16, curvature: 1 };
+    // 默认高度 = 运河水面抬升，保证护城河/运河交接同一水平面
+    const defaults = { inner: 38, outer: 46, waterY: CANAL_WATER_LIFT, curvature: 1 };
     if (!raw || !Number.isFinite(raw.inner) || !Number.isFinite(raw.outer)) {
       return { ...defaults };
     }
     let inner = Math.min(60, Math.max(10, Number(raw.inner)));
     let outer = Math.min(80, Math.max(12, Number(raw.outer)));
     if (outer <= inner) outer = inner + 2;
-    const waterY = Math.min(10, Math.max(-10, Number.isFinite(raw.waterY) ? Number(raw.waterY) : 0.16));
+    // 旧存档 waterY=0.16 是错误的「浅水位」默认；若仍是 0.16 则升级为运河水位
+    let waterY = Number.isFinite(raw.waterY) ? Number(raw.waterY) : CANAL_WATER_LIFT;
+    if (Math.abs(waterY - 0.16) < 1e-6) waterY = CANAL_WATER_LIFT;
+    waterY = Math.min(10, Math.max(-10, waterY));
     const curvature = Math.min(2, Math.max(0, Number.isFinite(raw.curvature) ? Number(raw.curvature) : 1));
     return { inner, outer, waterY, curvature };
   }
@@ -1294,7 +1299,7 @@ export function createCitadelEditorPanel({
       // after clearing a terrace its first block can be placed in every cell
       // whose centre lies on the selected terrace, and nowhere else.
       if (!existing && !supportsCell(ix, iz, activeTerrace)) {
-        toast("该格不在当前台地的可建面内", 1.6);
+        toast("该格不在当前台地可建面（土坡环带或层叠梯湖）内", 1.6);
         return;
       }
       pushUndo();
@@ -1424,8 +1429,8 @@ export function createCitadelEditorPanel({
    * 落地堆叠目标：该柱最高块之上（封顶于 MAX_LEVEL）；空柱探测土坡支撑——
    * 有承重土坡落在其台面层级，无支撑（或台地超出可达层）返回 null = 不可放置。
    */
-  function dropTarget(ix, iz) {
-    const support = getSupportLevel(ix, iz, activeTerrace);
+  function dropTarget(ix, iz, terraceIndex = activeTerrace) {
+    const support = getSupportLevel(ix, iz, terraceIndex);
     return resolveCitadelDropTarget(grid, ix, iz, support, MAX_LEVEL);
   }
 
@@ -1494,6 +1499,7 @@ export function createCitadelEditorPanel({
     cellAtLocal,
     dropTarget,
     supportsCell,
+    setActiveTerrace: (index) => selectTerrace(index),
     deleteTerrainObject,
     maxLevel: MAX_LEVEL,
     maxCoord: MAX_COORD,
