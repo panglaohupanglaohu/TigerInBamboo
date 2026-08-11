@@ -355,6 +355,83 @@ function makeToon(color, gradientMap) {
   return material;
 }
 
+/** 古堡窗口夜灯材质：暖黄透光 + 自发光 */
+function makeWindowLitMat(gradientMap) {
+  const material = new THREE.MeshToonMaterial({
+    color: 0xffc878,
+    gradientMap,
+    emissive: new THREE.Color(0xff8a33),
+    emissiveIntensity: 1.15,
+  });
+  material.flatShading = true;
+  material.needsUpdate = true;
+  return material;
+}
+
+/** 夜间窗口点亮概率 */
+export const CITADEL_WINDOW_LIT_CHANCE = 0.7;
+
+/**
+ * 收集古堡拱窗并绑定昼夜材质（热重建后须重调）。
+ * @param {THREE.Object3D} castleContainer
+ */
+export function refreshCitadelWindowLights(castleContainer) {
+  if (!castleContainer) return [];
+  const gradientMap = castleContainer.userData.gradientMap ?? makeThreeStepGradient();
+  // 重建后旧材质可能已 dispose，始终新建一对共享昼夜材质
+  castleContainer.userData.windowDarkMat = makeToon(PALETTE.ink, gradientMap);
+  castleContainer.userData.windowLitMat = makeWindowLitMat(gradientMap);
+  const windows = [];
+  castleContainer.traverse((o) => {
+    if (!o.isMesh || o.name !== "town-window") return;
+    o.material = castleContainer.userData.windowDarkMat;
+    o.userData.citadelWindow = true;
+    o.userData.litTonight = false;
+    windows.push(o);
+  });
+  castleContainer.userData.townWindows = windows;
+  castleContainer.userData.windowNightRolled = false;
+  return windows;
+}
+
+/**
+ * 古堡窗口夜景：入夜时每扇窗以 70% 概率点亮，天亮熄灭；每夜重新抽签。
+ * @param {THREE.Object3D} castleContainer
+ * @param {number} phase 昼夜相位 0..1（P.timeOfDay / dayNight.getPhase）
+ */
+export function updateCitadelNightWindows(castleContainer, phase) {
+  if (!castleContainer) return;
+  let windows = castleContainer.userData.townWindows;
+  if (!Array.isArray(windows) || !windows.length) {
+    windows = refreshCitadelWindowLights(castleContainer);
+  }
+  if (!windows.length) return;
+
+  const p = ((Number(phase) % 1) + 1) % 1;
+  // 入夜 ≈0.82，整夜至黎明 ≈0.22（与 dayNight KEYS 一致）
+  const night = p >= 0.82 || p < 0.22;
+
+  if (night) {
+    if (!castleContainer.userData.windowNightRolled) {
+      for (const w of windows) {
+        w.userData.litTonight = Math.random() < CITADEL_WINDOW_LIT_CHANCE;
+      }
+      castleContainer.userData.windowNightRolled = true;
+    }
+  } else if (castleContainer.userData.windowNightRolled) {
+    for (const w of windows) w.userData.litTonight = false;
+    castleContainer.userData.windowNightRolled = false;
+  }
+
+  const dark = castleContainer.userData.windowDarkMat;
+  const lit = castleContainer.userData.windowLitMat;
+  if (!dark || !lit) return;
+  for (const w of windows) {
+    const on = night && w.userData.litTonight;
+    if (w.material !== (on ? lit : dark)) w.material = on ? lit : dark;
+  }
+}
+
 function mesh(geometry, material, name, outlineThickness = CITADEL.outline) {
   const result = new THREE.Mesh(geometry, material);
   result.name = name;
@@ -751,6 +828,9 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     materials.water.transparent = true;
     materials.water.opacity = 0.82;
   }
+  // 窗口昼夜材质（可被 options 注入共享实例）
+  if (!materials.windowDark) materials.windowDark = makeToon(PALETTE.ink, gradientMap);
+  if (!materials.windowLit) materials.windowLit = makeWindowLitMat(gradientMap);
 
   const town = buildCitadelTown(spec, {
     mesh,
@@ -764,6 +844,8 @@ export function buildCitadelTownAssembly(spec, options = {}) {
       ink: materials.ink,
       roofTile: materials.roofTile,
       water: materials.water,
+      windowDark: materials.windowDark,
+      windowLit: materials.windowLit,
     },
     shrubMaterials: materials,
     random,
@@ -1105,6 +1187,8 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.outlinedSurfaceCount =
     mainOutlinedSurfaceCount + terrainOutlinedSurfaceCount;
   castleContainer.userData.gradientMap = townAssembly.gradientMap;
+  // 拱窗夜景：收集 town-window 并绑定昼夜材质
+  refreshCitadelWindowLights(castleContainer);
 
   return castleContainer;
 }
@@ -1167,6 +1251,10 @@ export function rebuildCitadelTown(castleContainer, spec) {
   castleContainer.userData.townStats = assembly.stats;
   castleContainer.userData.townSpec = assembly.layout;
   castleContainer.userData.townBaseYs = assembly.baseYs;
+  // 布局热重建后窗口列表与夜灯材质需刷新
+  castleContainer.userData.gradientMap =
+    castleContainer.userData.gradientMap ?? assembly.gradientMap ?? makeThreeStepGradient();
+  refreshCitadelWindowLights(castleContainer);
   return assembly.stats;
 }
 

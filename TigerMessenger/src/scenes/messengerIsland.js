@@ -16,6 +16,7 @@ import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { buildWorldCanal } from "../world/canalSystem.js";
 import { buildCanalLakeLink } from "../world/canalLakeLink.js";
 import { createCanalBoatPatrol } from "../world/canalBoats.js";
+import { getNavonaPlazaCanalExcludeZone } from "../world/navonaPlaza.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
 import { buildAbandonedGate } from "../world/abandonedGate.js";
@@ -303,10 +304,15 @@ export const messengerIslandScene = {
     // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
     canalPush(canyonDir, "叹息之门");
     if (canalAnchors.length >= 3) {
+      // 纳沃纳广场处运河断开：广场即入城前双栖水道，河道网格不得与之重叠
+      const plazaExclude = getNavonaPlazaCanalExcludeZone(
+        citadelRange?.navonaPlaza
+      );
       const canal = buildWorldCanal(scene, R, {
         anchors: canalAnchors,
         names: canalNames,
         groundLift: citadelRangeLiftDir,
+        excludeZones: plazaExclude ? [plazaExclude] : [],
       });
       canalSys = canal;
       // 复制 10 艘古战船沿运河环线巡游，送信人可靠近 [F] 登船驾驶

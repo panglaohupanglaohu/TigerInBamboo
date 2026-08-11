@@ -241,9 +241,9 @@ export function createCitadelEditorPanel({
         <button type="button" id="ce-object-cascade" title="层叠瀑布+梯湖：点一次添加/已有则提示；用删除工具点蓝色瀑布标记可移除（移除后台地缺口关闭，前缘可建城堡）">层叠瀑布</button>
         <button type="button" id="ce-object-watchtower" title="选择后在上方鸟瞰图点击落点">瞭望塔</button>
         <button type="button" id="ce-object-tree" title="选择后在上方鸟瞰图点击落点">参天树</button>
-        <button type="button" id="ce-object-horse" title="选择后在上方鸟瞰图点击落点">木马</button>
+        <button type="button" id="ce-object-horse" title="选择后在上方鸟瞰图点击落点；放好后按住木马标记左键拖拽平移，右键删除">木马</button>
         <button type="button" id="ce-object-delete" title="选择后点击鸟瞰图中的对象标记删除（含层叠瀑布）">删除对象</button>
-        <span style="font:10px monospace;color:#71808a;">层叠瀑布=五湖四帘+窄扇区缺口；删掉后完整台面可建 · 其他对象点鸟瞰图放置</span>
+        <span style="font:10px monospace;color:#71808a;">层叠瀑布=五湖四帘+窄扇区缺口；删掉后完整台面可建 · 其他对象点鸟瞰图放置 · 木马：左键拖拽平移 / 右键删除</span>
       </div>
       <div style="border-top:1px solid #dbe2e8;padding-top:7px;font-weight:700;margin-bottom:5px;">
         2）城堡层 <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
@@ -880,20 +880,88 @@ export function createCitadelEditorPanel({
     ctx.restore();
   }
 
-  /** 鸟瞰图点击圆环 → 切换该台地及其五层城堡。 */
-  terrainMapEl.addEventListener("click", (e) => {
+  // ---------- 木马左键拖拽平移：按住鸟瞰图上的木马标记拖动，落点实时预览 3D ----------
+  let dragObjectId = null;
+  let dragMoved = false;
+  let suppressMapClick = false;
+  let lastDragSync = 0;
+
+  /** 画布像素 → 局部 x/z（与 drawTerrainMap 同一缩放基准，保证命中/拖拽贴合视觉）。 */
+  function terrainMapToLocal(e) {
     const rect = terrainMapEl.getBoundingClientRect();
     const px = (e.clientX - rect.left) * (terrainMapEl.width / rect.width);
     const py = (e.clientY - rect.top) * (terrainMapEl.height / rect.height);
     const cx = terrainMapEl.width / 2;
     const cy = terrainMapEl.height / 2 + 8;
-    const maxRadius = terrain.terraces.at(-1).radius;
+    const moat = terrain.moat ?? { inner: 38, outer: 46 };
+    const maxRadius = Math.max(terrain.terraces.at(-1).radius, moat.outer);
     const maxDrawR = Math.min(terrainMapEl.width / 2 - 50, terrainMapEl.height / 2 - 16);
     const scale = maxDrawR / maxRadius;
-    const rWorld = Math.hypot(px - cx, py - cy) / scale;
+    return { x: (px - cx) / scale, z: (py - cy) / scale, rWorld: Math.hypot(px - cx, py - cy) / scale };
+  }
+
+  terrainMapEl.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
+    const { x, z } = terrainMapToLocal(e);
+    let horse = null;
+    let nearest = Infinity;
+    for (const object of terrainObjects) {
+      if (object.type !== "trojanHorse" || object.terraceIndex !== activeTerrace) continue;
+      const d = Math.hypot(object.x - x, object.z - z);
+      if (d < nearest) { nearest = d; horse = object; }
+    }
+    if (!horse || nearest > 4) return;
+    dragObjectId = horse.id;
+    dragMoved = false;
+    selectedObjectId = horse.id;
+    angleInput.value = String(Math.round(((horse.yaw * 180) / Math.PI) * 10) / 10);
+    terrainMapEl.setPointerCapture(e.pointerId);
+    drawTerrainMap();
+  });
+
+  terrainMapEl.addEventListener("pointermove", (e) => {
+    if (!dragObjectId) return;
+    const object = terrainObjects.find((o) => o.id === dragObjectId);
+    if (!object) { dragObjectId = null; return; }
+    const { x, z } = terrainMapToLocal(e);
+    if (Math.hypot(x - object.x, z - object.z) < 0.05) return;
+    // 拖出当前台地可见顶面的落点直接丢弃，木马停留在最后一个合法位置
+    if (!citadelTerrainPointSupported(terrain, x, z, activeTerrace)) return;
+    object.x = Number(x.toFixed(3));
+    object.z = Number(z.toFixed(3));
+    dragMoved = true;
+    drawTerrainMap();
+    const now = performance.now();
+    if (now - lastDragSync > 60) {
+      lastDragSync = now;
+      onTerrainObjectsChange([...terrainObjects]);
+    }
+  });
+
+  function finishTerrainObjectDrag(e, cancelled) {
+    if (!dragObjectId) return;
+    dragObjectId = null;
+    try { terrainMapEl.releasePointerCapture(e.pointerId); } catch { /* 已释放 */ }
+    if (cancelled) return;
+    if (dragMoved) {
+      suppressMapClick = true; // 拖拽后的 click 不再触发放置/选中/切台地
+      persistTerrainObjects();
+      onTerrainObjectsChange([...terrainObjects]);
+      drawTerrainMap();
+      toast("木马已移动到新位置", 1.2);
+    } else {
+      toast("已选中特洛伊木马：按住左键拖拽平移 · 右键删除 · 角度°旋转", 1.8);
+    }
+    dragMoved = false;
+  }
+  terrainMapEl.addEventListener("pointerup", finishTerrainObjectDrag);
+  terrainMapEl.addEventListener("pointercancel", (e) => finishTerrainObjectDrag(e, true));
+
+  /** 鸟瞰图点击圆环 → 切换该台地及其五层城堡。 */
+  terrainMapEl.addEventListener("click", (e) => {
+    if (suppressMapClick) { suppressMapClick = false; return; }
+    const { x: localX, z: localZ, rWorld } = terrainMapToLocal(e);
     if (terrainObjectTool) {
-      const localX = (px - cx) / scale;
-      const localZ = (py - cy) / scale;
       const cascadeDist = Math.hypot(
         localX - CITADEL_CASCADE_MARKER.x,
         localZ - CITADEL_CASCADE_MARKER.z
@@ -962,14 +1030,12 @@ export function createCitadelEditorPanel({
         angleInput.value = "0";
       }
       toast(type === "watchtower" ? "已放置瞭望塔"
-        : type === "trojanHorse" ? "已放置特洛伊木马（可输入角度旋转）"
+        : type === "trojanHorse" ? "已放置特洛伊木马（左键拖拽平移 · 右键删除 · 角度°旋转）"
         : "已放置参天树（落地 + 随曲率倾斜）", 1.5);
       return;
     }
     // 未选任何放置工具时：点击已有地貌对象标记 → 选中（供“角度°”旋转）
     if (!terrainObjectTool) {
-      const localX = (px - cx) / scale;
-      const localZ = (py - cy) / scale;
       let picked = null;
       let nearest = Infinity;
       for (const object of terrainObjects) {
@@ -995,16 +1061,7 @@ export function createCitadelEditorPanel({
   // 鸟瞰图右键：优先删层叠瀑布，否则删当前台地的塔/树/木马标记。
   terrainMapEl.addEventListener("contextmenu", (e) => {
     e.preventDefault();
-    const rect = terrainMapEl.getBoundingClientRect();
-    const px = (e.clientX - rect.left) * (terrainMapEl.width / rect.width);
-    const py = (e.clientY - rect.top) * (terrainMapEl.height / rect.height);
-    const cx = terrainMapEl.width / 2;
-    const cy = terrainMapEl.height / 2 + 8;
-    const maxRadius = terrain.terraces.at(-1).radius;
-    const maxDrawR = Math.min(terrainMapEl.width / 2 - 50, terrainMapEl.height / 2 - 16);
-    const scale = maxDrawR / maxRadius;
-    const localX = (px - cx) / scale;
-    const localZ = (py - cy) / scale;
+    const { x: localX, z: localZ } = terrainMapToLocal(e);
     const cascadeDist = Math.hypot(
       localX - CITADEL_CASCADE_MARKER.x,
       localZ - CITADEL_CASCADE_MARKER.z

@@ -21,7 +21,28 @@ export const NAVONA_PLAZA_SPEC = Object.freeze({
   stepTread: 0.55,
   stepRise: 0.2,
   fountainCount: 3,
+  /** 运河网格排除半径余量（切向单位）：半对角 + 台阶 + 缓冲，避免与河道重叠 */
+  canalGapPadding: 4.5,
 });
+
+/**
+ * 运河排除区参数：以广场中心为球冠，半径覆盖广场槽体+台阶，使河道在此断开。
+ * @param {THREE.Object3D} plaza createNavonaCanalPlaza 返回值（已放置）
+ * @param {object} [spec]
+ * @returns {{ center: THREE.Vector3, radius: number }|null}
+ */
+export function getNavonaPlazaCanalExcludeZone(plaza, spec = NAVONA_PLAZA_SPEC) {
+  if (!plaza?.position) return null;
+  const halfL = (spec.length ?? NAVONA_PLAZA_SPEC.length) * 0.5;
+  const halfW = (spec.halfWidth ?? NAVONA_PLAZA_SPEC.halfWidth)
+    + (spec.stepCount ?? 0) * (spec.stepTread ?? 0);
+  const pad = spec.canalGapPadding ?? NAVONA_PLAZA_SPEC.canalGapPadding;
+  const radius = Math.hypot(halfL, halfW) + pad;
+  return {
+    center: plaza.position.clone().normalize(),
+    radius,
+  };
+}
 
 const STONE_DARK = 0x3a4550; // 深青灰火山岩心
 const STONE_MID = 0x5a6670; // 弧线铺装

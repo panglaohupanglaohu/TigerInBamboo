@@ -550,17 +550,20 @@ export function buildCitadelTown(spec, ctx) {
     const isGate = char === "D";
 
     // 暴露立面出拱窗（底层为台基不开窗；门面留给正门）
+    // 材质用 windowDark（夜间可切换为 windowLit，见 updateCitadelNightWindows）
     if (iy >= 1) {
+      const winMat = materials.windowDark || materials.ink;
       for (const [dx, dz] of DIRS) {
         if (at(ix + dx, iy, iz + dz) !== ".") continue;
         if (isGate && dz === 1) continue;
-        const window = mesh(ctx.archWindowGeometry, materials.ink, "town-window", 0.022);
+        const window = mesh(ctx.archWindowGeometry, winMat, "town-window", 0.022);
         window.position.set(
           cx(ix) + dx * (cs / 2 + 0.028),
           cy(iy) - ch * 0.08,
           cz(iz) + dz * (cs / 2 + 0.028)
         );
         window.rotation.y = Math.atan2(dx, dz);
+        window.userData.citadelWindow = true;
         levelGroups[iy].add(window);
         stats.windowCount++;
       }

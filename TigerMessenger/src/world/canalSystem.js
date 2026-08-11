@@ -89,6 +89,7 @@ export function insertWindingPoints(a, b, k, wiggle, getR, out) {
 /**
  * 沿采样扫掠一条“四棱柱条带”：横向 [side0, side1]，径向高度 [h0, h1]（相对河床 p）。
  * 用于河床薄板、水面薄板、单侧立壁、岸顶土埂。
+ * sample.gap === true 的区段不生成面（给广场等节点让路，避免重叠）。
  */
 function sweepPrism(samplesArr, side0, side1, h0, h1, mat) {
   const n = samplesArr.length;
@@ -110,6 +111,8 @@ function sweepPrism(samplesArr, side0, side1, h0, h1, mat) {
   }
   const idx = [];
   for (let i = 0; i < n - 1; i++) {
+    // 两端任一点在缺口内则跳过该段，广场/节点处运河断开
+    if (samplesArr[i].gap || samplesArr[i + 1].gap) continue;
     const a = i * 4;
     const b = (i + 1) * 4;
     idx.push(a, b, a + 1, a + 1, b, b + 1); // 顶
@@ -119,7 +122,7 @@ function sweepPrism(samplesArr, side0, side1, h0, h1, mat) {
   }
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  geo.setIndex(idx);
+  if (idx.length) geo.setIndex(idx);
   geo.computeVertexNormals();
   const mesh = new THREE.Mesh(geo, mat);
   mesh.castShadow = true;
@@ -135,6 +138,9 @@ function sweepPrism(samplesArr, side0, side1, h0, h1, mat) {
  * @param {Array<THREE.Vector3>} opts.anchors 各场景锚点方向/位置（World 或单位 dir）
  * @param {string[]} [opts.names] 锚点名称
  * @param {number} [opts.depth=CANAL_DEPTH] 沟深
+ * @param {Array<{center:THREE.Vector3, radius:number}>} [opts.excludeZones]
+ *        排除区：center 为世界方向/位置，radius 为切向半宽（世界单位）。
+ *        落在区内的采样不生成河道网格（给纳沃纳广场等让路）。
  * @returns {{ group:THREE.Group, curve:THREE.CatmullRomCurve3, sinks:Array, planetRadius:number, waterR:number, bedR:number, depth:number }}
  */
 export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) {
@@ -142,6 +148,30 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
   // 地表抬升查询：在圣城等区域贴合高度场；默认 0（普通球面）
   const groundLift = opts.groundLift ?? (() => 0);
   const bedRAt = (dir) => planetRadius + groundLift(dir) + BED_BIAS;
+  // 排除区：优先用世界距离（覆盖河道半宽偏移）；并辅以角半径
+  const excludeZones = (opts.excludeZones || [])
+    .map((z) => {
+      if (!(z?.radius > 0)) return null;
+      const dir = (z.center?.isVector3 ? z.center : z.worldCenter)?.clone?.();
+      if (!dir || dir.lengthSq() < 1e-12) return null;
+      const worldCenter = z.worldCenter?.isVector3
+        ? z.worldCenter.clone()
+        : dir.clone().normalize().multiplyScalar(planetRadius);
+      return {
+        dir: dir.normalize(),
+        worldCenter,
+        radius: z.radius,
+        ang: z.radius / Math.max(1, planetRadius),
+      };
+    })
+    .filter(Boolean);
+  const inExclude = (dir, worldP) => {
+    for (const z of excludeZones) {
+      if (worldP && worldP.distanceTo(z.worldCenter) <= z.radius) return true;
+      if (dir.angleTo(z.dir) <= z.ang) return true;
+    }
+    return false;
+  };
   // 返回给外部的基准半径（不含动态抬升），实际几何与曲线按每点抬升计算
   const bedR = planetRadius + BED_BIAS;
   const waterR = bedR + WATER_FILL;
@@ -196,17 +226,21 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
     if (_right.lengthSq() < 1e-8) {
       _right.set(1, 0, 0).addScaledVector(_up, -_up.x).normalize();
     }
+    const pBed = _up.clone().multiplyScalar(bedRAt(_up));
     samples.push({
-      p: _up.clone().multiplyScalar(bedRAt(_up)),
+      p: pBed,
       up: _up.clone(),
       right: _right.clone(),
       fwd: _fwd.clone(),
       t,
+      gap: inExclude(_up, pBed),
     });
   }
 
   const group = new THREE.Group();
   group.name = "world-canal";
+  group.userData.excludeZones = excludeZones.length;
+  group.userData.gapSampleCount = samples.filter((s) => s.gap).length;
 
   const half = CANAL_HALF_WIDTH;
   const bedMat = toonMat(0x3a2f26, { flatShading: true });
