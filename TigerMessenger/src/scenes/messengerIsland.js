@@ -276,7 +276,7 @@ export const messengerIslandScene = {
     scene.add(odysseyCitadel);
     odysseyCitadel.updateMatrixWorld(true);
 
-    // ---------- 各台地鸟群 ×50：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞 ----------
+    // ---------- 各台地鸟群 ×20：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞后立刻落下 ----------
     const terraceBirds = createCitadelTerraceBirds(scene, odysseyCitadel, {
       contour: citadelContour,
       getTram: () => tramSystem?.tram || null,
@@ -606,7 +606,7 @@ export const messengerIslandScene = {
       airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
       flock, // 叹息之门城头小群 Boids 近景备份
       birdVortex, // 兼容：台地 1 旋涡
-      terraceBirds, // 五级台地各 50 只 · 昼夜栖飞 · 纸士兵惊飞
+      terraceBirds, // 五级台地各 20 只 · 随机栖顶 · 昼夜栖飞 · 纸士兵惊飞
       hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
       escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
       aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
@@ -648,7 +648,7 @@ export const messengerIslandScene = {
 
         // 圣城梯湖：四段水帘、雾气与涟漪；城堡本体保持静态。
         citadelRange.pilgrimageCascades.update?.(dt, t);
-        // 夜幕降临：木马腹舱开启，两组纸士兵分别潜入瀑布与城堡阶梯。
+        // 深夜天空变黑：木马腹舱开启，两组纸士兵分别潜入瀑布与城堡阶梯。
         citadelRange.update?.(dt, t);
         // 护城河：阶梯量化水波 + 方块浪花
         citadelRange.moat?.update?.(dt, t);
@@ -702,7 +702,7 @@ export const messengerIslandScene = {
           moebius.update?.(dt, t, { escortTram });
         }
 
-        // 五级台地鸟群：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞后落下
+        // 五级台地鸟群：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞、离开立刻落下
         if (terraceBirds) {
           const tram =
             tramSystem.getNearestTram?.(runtime?.player?.position) ||

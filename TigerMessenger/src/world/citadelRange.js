@@ -57,11 +57,9 @@ const SKIRT_DEPTH = 0.7; // 域缘裙边下沉，扎进球面遮接缝
 const SKIRT_BAND = 6; // 裙边过渡带宽
 const MOAT_INNER = 38; // 护城河内径：内岸绿地低于护城河水面（城堡前方浸水）
 const CITADEL_SINK = 0.6; // 城堡 + 护城河内岸绿地相对护城河水面的下沉量
-// 第一层瀑布右侧草地的相对落点：从港口朝城堡观看时，画面右侧对应 -lx；
-// 同时把中心推到外缘绿色草地，避开瀑布白石台地与水帘。
-const HORSE_WATERFALL_RIGHT_OFFSET = Object.freeze({ lx: -17.5, lz: 3.0 });
-// 位置被台地/城堡遮挡时，强制把木马抬到草地上方，确保它是场景焦点。
-const HORSE_GRASS_LIFT = 1.05;
+// 木马固定落在第一层瀑布正下方的接水湖面，不再回退到港口前草地。
+// 该净空对应模型车轮/底座离水面的微小间隙，保证“停在水面上”而不是沉入水体。
+const HORSE_LAKE_CLEARANCE = 0.12;
 // 局部基架：up = 站点方向，lz+ 指向主岛，lx = 右
 const _site = latLonToDir(RANGE_SITE.lat, RANGE_SITE.lon, new THREE.Vector3());
 const _island = latLonToDir(90, 0, new THREE.Vector3());
@@ -1266,7 +1264,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     navonaPlaza.userData.placement = { kind: "canal-citadel-approach", lx, lz, yaw };
     scene.add(navonaPlaza);
 
-    // 低多边形特洛伊木马：第一层瀑布右侧草地焦点（不与港口/石槽重叠）
+    // 低多边形特洛伊木马：第一层瀑布正下方的接水湖面。
     trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
     trojanHorse.scale.setScalar(0.72);
 
@@ -1284,17 +1282,48 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
         firstWaterfallPos
       );
     }
-    // 将瀑布世界位置反解到圣城局部平面，再向截图中的右侧草地偏移。
-    // 这样即使台地参数被编辑器调整，木马仍会跟着第一层瀑布落位。
-    const waterfallLocalScale = R / Math.max(1e-6, firstWaterfallPos.dot(_site));
-    const firstWaterfallLx = firstWaterfallPos.dot(_right) * waterfallLocalScale;
-    const firstWaterfallLz = firstWaterfallPos.dot(_fwd) * waterfallLocalScale;
-    const horseLx = firstWaterfallLx + HORSE_WATERFALL_RIGHT_OFFSET.lx;
-    const horseLz = firstWaterfallLz + HORSE_WATERFALL_RIGHT_OFFSET.lz;
-    // 右侧草地地形高程约+0.4；抬高到草地上方，避免被台地/建筑遮住。
-    placeRangeAsset(trojanHorse, horseLx, horseLz, R, HORSE_GRASS_LIFT, true);
+    // 接水湖是瀑布节点实际生成的水面，优先使用它而不是手写局部坐标；
+    // 这样瀑布/台地被编辑后，木马仍会贴着第一层瀑布下方的湖面移动。
+    const receivingWater = firstWaterfall?.getObjectByName("citadel-cascade-receiving-water");
+    const lowerPool = pilgrimageWaterSteps?.children?.[1];
+    const lowerPoolWater = lowerPool?.getObjectByName("citadel-terrace-2-pool-water");
+    const lakeSurfacePos = new THREE.Vector3();
+    let lakeWaterObject = "citadel-cascade-receiving-water";
+    if (receivingWater) {
+      receivingWater.updateWorldMatrix(true, false);
+      receivingWater.getWorldPosition(lakeSurfacePos);
+    } else if (lowerPoolWater) {
+      lakeWaterObject = lowerPoolWater.name;
+      lowerPoolWater.updateWorldMatrix(true, false);
+      lowerPoolWater.getWorldPosition(lakeSurfacePos);
+    } else if (lowerPool) {
+      lakeWaterObject = lowerPool.name;
+      lowerPool.updateWorldMatrix(true, false);
+      lowerPool.getWorldPosition(lakeSurfacePos);
+      lakeSurfacePos.addScaledVector(_site, 0.09);
+    } else {
+      lakeWaterObject = "first-waterfall-fallback-surface";
+      lakeSurfacePos.copy(firstWaterfallPos);
+    }
+    lakeSurfacePos.addScaledVector(_site, HORSE_LAKE_CLEARANCE);
 
-    const toFirstWaterfall = firstWaterfallPos.sub(trojanHorse.position);
+    const surfaceUp = _site.clone();
+    const surfaceForward = _fwd.clone()
+      .addScaledVector(surfaceUp, -_fwd.dot(surfaceUp))
+      .normalize();
+    const surfaceRight = new THREE.Vector3()
+      .crossVectors(surfaceUp, surfaceForward)
+      .normalize();
+    trojanHorse.position.copy(lakeSurfacePos);
+    trojanHorse.quaternion.setFromRotationMatrix(
+      new THREE.Matrix4().makeBasis(surfaceRight, surfaceUp, surfaceForward)
+    );
+    const lakeLocalScale = R / Math.max(1e-6, lakeSurfacePos.dot(_site));
+    const horseLx = lakeSurfacePos.dot(_right) * lakeLocalScale;
+    const horseLz = lakeSurfacePos.dot(_fwd) * lakeLocalScale;
+    trojanHorse.userData.rangeLocal = { lx: horseLx, lz: horseLz };
+
+    const toFirstWaterfall = firstWaterfallPos.clone().sub(trojanHorse.position);
     toFirstWaterfall.addScaledVector(
       _site,
       -toFirstWaterfall.dot(_site)
@@ -1305,13 +1334,16 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     );
     trojanHorse.rotateY(horseYaw);
     trojanHorse.userData.placement = {
-      kind: "citadel-foregrass",
-      surface: "grass",
+      kind: "citadel-cascade-lake",
+      surface: "water",
       lx: horseLx,
       lz: horseLz,
-      lift: HORSE_GRASS_LIFT,
+      lift: HORSE_LAKE_CLEARANCE,
       yaw: horseYaw,
       facing: "first-waterfall",
+      lake: true,
+      waterfall: "first",
+      waterObject: lakeWaterObject,
     };
     scene.add(trojanHorse);
 
@@ -1366,7 +1398,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     }
     trojanHorse.add(squad);
 
-    // ---- 夜间潜入路线：瀑布组沿四道水帘逐级上攀，阶梯组沿五段折返石阶 ----
+    // ---- 夜间潜入路线：瀑布组沿四道水帘逐级上攀，阶梯组沿外侧三段石阶 ----
     // 所有路径点直接取当前台地/瀑布几何的位置，避免把纸兵放到旧土坡或平面高度上。
     const waterfallRoute = [];
     const waterfallNodes = [...(pilgrimageCascades?.children || [])].sort(
@@ -1402,19 +1434,12 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
         new THREE.Vector3()
       ).addScaledVector(_site, 0.18);
     };
-    for (const flight of walkFlights) {
+    // 阶梯组只走到台面 3 层：外侧三段分别对应台面 5→4→3，
+    // 不再继续爬到台面 2/1，那两层交给瀑布组。
+    for (const flight of walkFlights.slice(0, 3)) {
       stairRoute.push(stairPoint(flight.rho, flight.from));
       stairRoute.push(stairPoint(flight.rho, flight.to));
     }
-    stairRoute.push(
-      rangeLocalToWorldAtElevation(
-        0,
-        0,
-        R,
-        walkMetrics[0]?.top ?? 0,
-        new THREE.Vector3()
-      ).addScaledVector(_site, 0.2)
-    );
 
     nightInfiltration = createCitadelNightInfiltration({
       scene,
@@ -1422,7 +1447,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       staticSquad: squad,
       siteUp: _site,
       siteRight: _right,
-      horseGround: trojanHorse.position.clone().addScaledVector(_site, 0.24),
+      horseGround: trojanHorse.position.clone(),
       waterfallRoute,
       stairRoute,
       patrolCastle,

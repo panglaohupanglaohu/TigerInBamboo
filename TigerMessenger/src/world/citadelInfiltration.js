@@ -2,15 +2,19 @@ import * as THREE from "three";
 import { createNightInfiltrationSoldier } from "../assets/harbor.js";
 import { citadelTerraceMetrics } from "./odysseyCitadel.js";
 
-const NIGHT_OPEN = 0.82;
+// 0.93 已越过暮色，天空进入接近午夜的深蓝/黑色后才触发潜入。
+const NIGHT_OPEN = 0.93;
 const NIGHT_CLOSE = 0.22;
 const DROP_DURATION = 2.8;
-// 同一根主绳：上一名落地后，下一名才从腹舱开始下降。
+// 每组一根下降绳：组内上一名落地后，下一名才从该组绳索下降。
 const DROP_SEQUENCE_GAP = 3.15;
 const MOVE_DELAY = 0.45;
 const WATERFALL_MOVE_DURATION = 19;
-const STAIR_MOVE_DURATION = 22;
-const PATROL_LOOP_DURATION = 32;
+const STAIR_MOVE_DURATION = 28;
+const WATERFALL_PATROL_DURATION = 32;
+const STAIR_PATROL_DURATION = 48;
+// PORTER_SCALE=2 的纸士兵，从脚到头约 0.7 个场景单位；队列按一个身长留空。
+const SOLDIER_BODY_LENGTH = 0.72;
 const RETURN_APPROACH_DURATION = 4.5;
 const RETURN_DURATION = 2.6;
 const RETURN_SEQUENCE_GAP = 3.0;
@@ -21,7 +25,6 @@ const _forward = new THREE.Vector3();
 const _tmpA = new THREE.Vector3();
 const _tmpB = new THREE.Vector3();
 const _tmpC = new THREE.Vector3();
-const _tmpD = new THREE.Vector3();
 const _tmpE = new THREE.Vector3();
 const _tmpQ = new THREE.Quaternion();
 const _basis = new THREE.Matrix4();
@@ -59,6 +62,16 @@ function samplePath(path, amount, out) {
   return out.copy(a).lerp(b, (distance - start) / span);
 }
 
+function samplePathDistance(path, distance, out) {
+  if (!path.total) return out.copy(path.points[0] || _tmpA.set(0, 0, 0));
+  return samplePath(path, distance / path.total, out);
+}
+
+function wrapPathDistance(distance, total) {
+  if (total < 1e-5) return 0;
+  return ((distance % total) + total) % total;
+}
+
 function setHeading(object, direction, up) {
   _forward.copy(direction).addScaledVector(up, -direction.dot(up));
   if (_forward.lengthSq() < 1e-8) return;
@@ -76,10 +89,6 @@ function updateRope(rope, start, end) {
   rope.position.copy(start).addScaledVector(_tmpA, 0.5);
   rope.scale.set(1, length, 1);
   rope.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), _tmpA.normalize());
-}
-
-function shiftedPath(points, offset, side) {
-  return points.map((point) => point.clone().addScaledVector(side, offset));
 }
 
 /** 收集指定台地的建筑旁巡游点，目标高度落在对应台面而不是建筑体内。 */
@@ -130,9 +139,10 @@ function collectPatrolTargets(castle, terraceIndices, up) {
 /**
  * 木马夜间潜入事件。
  *
- * 两组各四名纸士兵共用一根主绳，按顺序从腹舱下降：每组两名持盾、两名左手持火炬，
- * 全员落地后再分别沿瀑布和城堡折返阶梯向上。路线点已经由 citadelRange 按
- * 当前台地/瀑布几何计算为世界坐标，因此动画不会依赖旧的平面高度。
+ * 两组各四名纸士兵各用一根腹舱下降绳，按组内顺序依次下降：每组队首、队尾左手持火炬，
+ * 中间两名左手持盾、右手持短剑。落地后保持一个士兵身长的队列间距，分别沿
+ * 瀑布和城堡折返阶梯向上；攀爬时以拉、推、搀扶的姿态连接相邻队员。路线点已经
+ * 由 citadelRange 按当前台地/瀑布几何计算为世界坐标，因此动画不会依赖旧的平面高度。
  */
 export function createCitadelNightInfiltration({
   scene,
@@ -168,13 +178,10 @@ export function createCitadelNightInfiltration({
     [0, 1, 2, 3, 4],
     _up
   );
-  const descentAnchor = horse.localToWorld(new THREE.Vector3(0, 2.46, 0));
-  const descentRope = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.032, 0.032, 1, 5),
-    ropeMat
+  // 腹舱两侧各开一个绳降点：左侧给瀑布组，右侧给阶梯组。
+  const descentAnchors = [-0.58, 0.58].map((x) =>
+    horse.localToWorld(new THREE.Vector3(x, 2.46, 0))
   );
-  descentRope.name = "single-descent-rope";
-  root.add(descentRope);
 
   const groups = [];
   const records = [];
@@ -184,20 +191,30 @@ export function createCitadelNightInfiltration({
       routeKey: "waterfall",
       route: baseRoutes.waterfall,
       moveDuration: WATERFALL_MOVE_DURATION,
-      patrolDuration: PATROL_LOOP_DURATION,
+      patrolDuration: WATERFALL_PATROL_DURATION,
       patrolTerraces: [1, 0], // 台面 2、1 层
-      lateralOffsets: [-0.34, -0.11, 0.11, 0.34],
     },
     {
       name: "stair-infiltration-group",
       routeKey: "stairs",
       route: baseRoutes.stairs,
       moveDuration: STAIR_MOVE_DURATION,
-      patrolDuration: PATROL_LOOP_DURATION,
+      patrolDuration: STAIR_PATROL_DURATION,
       patrolTerraces: [4, 3, 2], // 台面 5、4、3 层
-      lateralOffsets: [-0.46, -0.15, 0.15, 0.46],
     },
   ];
+
+  const descentRopes = groupSpecs.map((spec, index) => {
+    const rope = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.032, 0.032, 1, 5),
+      ropeMat
+    );
+    rope.name = `${spec.routeKey}-descent-rope`;
+    rope.userData.groupIndex = index;
+    rope.visible = false;
+    root.add(rope);
+    return rope;
+  });
 
   for (let groupIndex = 0; groupIndex < groupSpecs.length; groupIndex++) {
     const spec = groupSpecs[groupIndex];
@@ -212,31 +229,24 @@ export function createCitadelNightInfiltration({
     root.add(group);
     groups.push(group);
 
+    const groupRecords = [];
     for (let i = 0; i < 4; i++) {
-      const torchLeft = i === 0 || i === 2;
+      // 队首和队尾举火把；中间两名持盾，形成首尾照明、中段防护的队形。
+      const torchLeft = i === 0 || i === 3;
       const soldier = createNightInfiltrationSoldier({ torchLeft });
       soldier.userData.group = spec.routeKey;
       soldier.userData.equipmentRole = torchLeft ? "torch" : "shield";
+      soldier.userData.queueIndex = i;
+      soldier.userData.queueSpacing = SOLDIER_BODY_LENGTH;
       group.add(soldier);
 
-      const dropTarget = baseGround
-        .clone()
-        .addScaledVector(_right, spec.lateralOffsets[i])
-        .addScaledVector(_up, 0.02);
-      const routePoints = shiftedPath(
-        spec.route.points,
-        spec.lateralOffsets[i],
-        _right
-      );
+      const dropTarget = baseGround.clone().addScaledVector(_up, 0.02);
+      const routePoints = spec.route.points.map((point) => point.clone());
       routePoints[0].copy(dropTarget);
       const patrolTargets = spec.patrolTerraces.flatMap(
         (terraceIndex) => terraceTargets.get(terraceIndex) || []
       );
-      const shiftedPatrolTargets = shiftedPath(
-        patrolTargets,
-        spec.lateralOffsets[i],
-        _right
-      );
+      const shiftedPatrolTargets = patrolTargets.map((point) => point.clone());
       const approachPath = makePath(routePoints);
       const approachEnd = routePoints.at(-1)?.clone() || dropTarget.clone();
       const record = {
@@ -244,15 +254,48 @@ export function createCitadelNightInfiltration({
         group,
         groupIndex,
         index: i,
-        anchor: descentAnchor.clone(),
+        anchor: descentAnchors[groupIndex].clone(),
         dropTarget,
         path: approachPath,
         patrolPath: makePath([approachEnd, ...shiftedPatrolTargets, approachEnd]),
+        queueDistance: i * SOLDIER_BODY_LENGTH,
+        queueSpacing: SOLDIER_BODY_LENGTH,
         moveDuration: spec.moveDuration,
         patrolDuration: spec.patrolDuration,
         patrolTerraces: spec.patrolTerraces,
       };
       records.push(record);
+      groupRecords.push(record);
+    }
+    group.userData.queueSpacing = SOLDIER_BODY_LENGTH;
+    group.userData.queueOrder = groupRecords.map((record) => record.soldier.name);
+    group.userData.records = groupRecords;
+  }
+
+  // 攀爬时用细绳/扶带把相邻士兵的肩背连接起来：队首向上拉、队尾向上推，
+  // 中间队员彼此搀扶。辅助绳放在独立节点，避免污染每组的四名士兵计数。
+  const assistanceRoot = new THREE.Group();
+  assistanceRoot.name = "citadel-climbing-assistance";
+  assistanceRoot.visible = false;
+  root.add(assistanceRoot);
+  const assistanceLinks = [];
+  const assistanceMat = new THREE.MeshStandardMaterial({
+    color: 0x705137,
+    roughness: 0.95,
+    flatShading: true,
+  });
+  for (const group of groups) {
+    const groupRecords = group.userData.records || [];
+    for (let i = 1; i < groupRecords.length; i++) {
+      const link = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.018, 0.018, 1, 5),
+        assistanceMat
+      );
+      link.name = `${group.userData.route}-climbing-assist-link-${i}`;
+      link.userData.front = groupRecords[i - 1];
+      link.userData.rear = groupRecords[i];
+      assistanceRoot.add(link);
+      assistanceLinks.push(link);
     }
   }
 
@@ -262,10 +305,125 @@ export function createCitadelNightInfiltration({
   let elapsed = 0;
   let returnElapsed = 0;
   let returnRecords = [];
+  let returnRecordsByGroup = [];
 
   const setRecordPose = (record, position, lookDirection) => {
     record.soldier.position.copy(position);
     setHeading(record.soldier, lookDirection, _up);
+  };
+
+  const setMovementPose = (record, moving, climbing, clock) => {
+    const parts = record.soldier.userData.parts;
+    if (!parts) return;
+    record.soldier.userData.climbing = !!climbing;
+    const gait = moving ? Math.sin(clock * 4.6 + record.index * 0.9) : 0;
+    const torchBearer = !!record.soldier.userData.torchBearer;
+    if (climbing) {
+      // 队首右手拉住前方岩点，队尾右手推举前方队员，中间两人展开双臂搀扶。
+      const action = record.index === 0
+        ? "pull"
+        : record.index === 3
+          ? "push"
+          : "support";
+      record.soldier.userData.assistAction = action;
+      parts.body.rotation.z = -0.16 + gait * 0.025;
+      parts.armL.rotation.z = torchBearer
+        ? 0.34 + gait * 0.06
+        : 0.92 + gait * 0.08;
+      parts.armR.rotation.z = action === "pull"
+        ? 1.12 + gait * 0.05
+        : action === "push"
+          ? 0.98 + gait * 0.05
+          : 0.78 + gait * 0.07;
+      parts.legL.rotation.z = 0.28 + gait * 0.25;
+      parts.legR.rotation.z = -0.24 - gait * 0.25;
+      return;
+    }
+    record.soldier.userData.assistAction = "march";
+    parts.body.rotation.z = moving ? -0.1 : 0;
+    parts.armL.rotation.z = moving ? 0.35 + gait * 0.16 : 0.35;
+    parts.armR.rotation.z = moving ? 0.35 - gait * 0.16 : 0.35;
+    parts.legL.rotation.z = moving ? gait * 0.5 : 0;
+    parts.legR.rotation.z = moving ? -gait * 0.5 : 0;
+  };
+
+  const assistA = new THREE.Vector3();
+  const assistB = new THREE.Vector3();
+  const assistDir = new THREE.Vector3();
+  const assistUp = new THREE.Vector3(0, 1, 0);
+  const updateClimbingAssistance = (climbing) => {
+    let visible = false;
+    for (const link of assistanceLinks) {
+      const front = link.userData.front;
+      const rear = link.userData.rear;
+      if (!climbing || !front?.soldier.visible || !rear?.soldier.visible) {
+        link.visible = false;
+        continue;
+      }
+      front.soldier.getWorldPosition(assistA).addScaledVector(_up, 0.35);
+      rear.soldier.getWorldPosition(assistB).addScaledVector(_up, 0.30);
+      assistDir.copy(assistA).sub(assistB);
+      const length = assistDir.length();
+      if (length < 0.02) {
+        link.visible = false;
+        continue;
+      }
+      link.visible = true;
+      visible = true;
+      link.position.copy(assistA).add(assistB).multiplyScalar(0.5);
+      link.scale.set(1, length, 1);
+      link.quaternion.setFromUnitVectors(assistUp, assistDir.normalize());
+    }
+    assistanceRoot.visible = visible;
+  };
+
+  const hideDescentRopes = () => {
+    for (const rope of descentRopes) rope.visible = false;
+  };
+
+  const updateDescentRopes = (dropElapsed) => {
+    const allDropEnd = Math.max(
+      0,
+      ...groups.map((group) =>
+        Math.max(0, (group.userData.records?.length || 0) - 1) * DROP_SEQUENCE_GAP
+        + DROP_DURATION
+      )
+    );
+    for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
+      const rope = descentRopes[groupIndex];
+      const groupRecords = groups[groupIndex].userData.records || [];
+      let activeRecord = null;
+      let activeLocalTime = 0;
+      for (const record of groupRecords) {
+        const localTime = dropElapsed - record.index * DROP_SEQUENCE_GAP;
+        if (localTime > 0 && localTime < DROP_DURATION) {
+          activeRecord = record;
+          activeLocalTime = localTime;
+          break;
+        }
+      }
+      if (activeRecord) {
+        const t = smoothstep01(activeLocalTime / DROP_DURATION);
+        const ropeEnd = activeRecord.anchor.clone().lerp(activeRecord.dropTarget, t);
+        ropeEnd.addScaledVector(_up, 0.34);
+        updateRope(rope, activeRecord.anchor, ropeEnd);
+        continue;
+      }
+      if (dropElapsed > DROP_DURATION && dropElapsed < allDropEnd + MOVE_DELAY) {
+        const landedIndex = Math.min(
+          groupRecords.length - 1,
+          Math.max(0, Math.floor((dropElapsed - DROP_DURATION) / DROP_SEQUENCE_GAP))
+        );
+        const landed = groupRecords[landedIndex];
+        updateRope(
+          rope,
+          landed.anchor,
+          landed.dropTarget.clone().addScaledVector(_up, 0.34)
+        );
+        continue;
+      }
+      rope.visible = false;
+    }
   };
 
   const resetForDay = () => {
@@ -273,13 +431,16 @@ export function createCitadelNightInfiltration({
     returning = false;
     returnElapsed = 0;
     returnRecords = [];
+    returnRecordsByGroup = [];
     elapsed = 0;
     root.visible = false;
     staticSquad.visible = true;
     horse.userData.setBellyOpen?.(0);
-    descentRope.visible = false;
+    hideDescentRopes();
+    assistanceRoot.visible = false;
     for (const record of records) {
       record.soldier.visible = false;
+      setMovementPose(record, false, false, 0);
       setRecordPose(record, record.anchor, _tmpA.copy(record.dropTarget).sub(record.anchor));
     }
   };
@@ -289,12 +450,15 @@ export function createCitadelNightInfiltration({
     returning = false;
     returnElapsed = 0;
     returnRecords = [];
+    returnRecordsByGroup = groups.map(() => []);
     elapsed = 0;
     root.visible = true;
     staticSquad.visible = false;
-    descentRope.visible = false;
+    hideDescentRopes();
+    assistanceRoot.visible = false;
     for (const record of records) {
       record.soldier.visible = false;
+      setMovementPose(record, false, false, 0);
       setRecordPose(record, record.anchor, _tmpA.copy(record.dropTarget).sub(record.anchor));
     }
   };
@@ -305,7 +469,8 @@ export function createCitadelNightInfiltration({
     returnElapsed = 0;
     root.visible = true;
     staticSquad.visible = false;
-    descentRope.visible = false;
+    hideDescentRopes();
+    assistanceRoot.visible = false;
     horse.userData.setBellyOpen?.(1);
     returnRecords = [];
     for (const record of records) {
@@ -315,7 +480,9 @@ export function createCitadelNightInfiltration({
         ? record.soldier.getWorldPosition(new THREE.Vector3())
         : record.anchor.clone();
       if (deployed) {
-        record.returnIndex = returnRecords.length;
+        const groupReturnRecords = returnRecordsByGroup[record.groupIndex];
+        record.returnIndex = groupReturnRecords.length;
+        groupReturnRecords.push(record);
         returnRecords.push(record);
       } else {
         record.returnIndex = -1;
@@ -327,11 +494,14 @@ export function createCitadelNightInfiltration({
 
   const updateReturn = (dt) => {
     returnElapsed += Math.max(0, Number(dt) || 0);
+    const maxGroupReturnCount = Math.max(
+      0,
+      ...returnRecordsByGroup.map((groupRecords) => groupRecords.length)
+    );
     horse.userData.setBellyOpen?.(1);
     const allReturnEnd = RETURN_APPROACH_DURATION
-      + Math.max(0, returnRecords.length - 1) * RETURN_SEQUENCE_GAP
+      + Math.max(0, maxGroupReturnCount - 1) * RETURN_SEQUENCE_GAP
       + RETURN_DURATION;
-    let ascending = false;
 
     for (const record of records) {
       if (record.returnSkip) {
@@ -355,35 +525,59 @@ export function createCitadelNightInfiltration({
         continue;
       }
       if (localTime < RETURN_DURATION) {
-        ascending = true;
         record.soldier.visible = true;
         const t = smoothstep01(localTime / RETURN_DURATION);
         _tmpA.copy(record.dropTarget).lerp(record.anchor, t);
         setRecordPose(record, _tmpA, _tmpB.copy(record.anchor).sub(record.dropTarget));
-        _tmpD.copy(_tmpA).addScaledVector(_up, 0.34);
         continue;
       }
       record.soldier.visible = false;
       setRecordPose(record, record.anchor, _tmpA.copy(record.anchor).sub(record.dropTarget));
     }
 
-    if (ascending) {
-      updateRope(descentRope, descentAnchor, _tmpD);
-    } else if (returnElapsed >= RETURN_APPROACH_DURATION && returnElapsed < allReturnEnd + 0.35) {
-      const returnedIndex = Math.min(
-        returnRecords.length - 1,
-        Math.max(
-          0,
-          Math.floor((returnElapsed - RETURN_APPROACH_DURATION - RETURN_DURATION) / RETURN_SEQUENCE_GAP)
-        )
-      );
-      updateRope(
-        descentRope,
-        descentAnchor,
-        _tmpD.copy(returnRecords[returnedIndex].dropTarget).addScaledVector(_up, 0.34)
-      );
-    } else {
-      descentRope.visible = false;
+    const returnRopeEnd = new THREE.Vector3();
+    for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
+      const rope = descentRopes[groupIndex];
+      const groupReturnRecords = returnRecordsByGroup[groupIndex] || [];
+      const ascendingRecord = groupReturnRecords.find((record) => {
+        const localTime = returnElapsed
+          - RETURN_APPROACH_DURATION
+          - record.returnIndex * RETURN_SEQUENCE_GAP;
+        return localTime > 0 && localTime < RETURN_DURATION;
+      });
+      if (ascendingRecord) {
+        const localTime = returnElapsed
+          - RETURN_APPROACH_DURATION
+          - ascendingRecord.returnIndex * RETURN_SEQUENCE_GAP;
+        const t = smoothstep01(localTime / RETURN_DURATION);
+        returnRopeEnd
+          .copy(ascendingRecord.dropTarget)
+          .lerp(ascendingRecord.anchor, t)
+          .addScaledVector(_up, 0.34);
+        updateRope(rope, ascendingRecord.anchor, returnRopeEnd);
+      } else if (
+        returnElapsed >= RETURN_APPROACH_DURATION
+        && returnElapsed < allReturnEnd + 0.35
+        && groupReturnRecords.length
+      ) {
+        const returnedIndex = Math.min(
+          groupReturnRecords.length - 1,
+          Math.max(
+            0,
+            Math.floor(
+              (returnElapsed - RETURN_APPROACH_DURATION - RETURN_DURATION)
+              / RETURN_SEQUENCE_GAP
+            )
+          )
+        );
+        updateRope(
+          rope,
+          groupReturnRecords[returnedIndex].anchor,
+          groupReturnRecords[returnedIndex].dropTarget.clone().addScaledVector(_up, 0.34)
+        );
+      } else {
+        rope.visible = false;
+      }
     }
 
     if (returnElapsed >= allReturnEnd + 0.45) resetForDay();
@@ -402,82 +596,96 @@ export function createCitadelNightInfiltration({
 
     elapsed += Math.max(0, Number(dt) || 0);
     horse.userData.setBellyOpen?.(smoothstep01(elapsed / 2.8));
-    const allDropEnd = (records.length - 1) * DROP_SEQUENCE_GAP + DROP_DURATION;
-    let descending = false;
-
     for (const record of records) {
       const localTime = elapsed - record.index * DROP_SEQUENCE_GAP;
       const dropT = THREE.MathUtils.clamp(localTime / DROP_DURATION, 0, 1);
       if (localTime <= 0) {
         record.soldier.visible = false;
+        setMovementPose(record, false, false, elapsed);
         setRecordPose(record, record.anchor, _tmpA.copy(record.dropTarget).sub(record.anchor));
         continue;
       }
 
       record.soldier.visible = true;
       if (localTime < DROP_DURATION) {
-        descending = true;
         const eased = smoothstep01(dropT);
         _tmpA.copy(record.anchor).lerp(record.dropTarget, eased);
+        setMovementPose(record, false, false, elapsed);
         setRecordPose(record, _tmpA, _tmpB.copy(record.dropTarget).sub(record.anchor));
-        _tmpD.copy(_tmpA).addScaledVector(_up, 0.34);
         continue;
       }
 
       // 所有人落地前，已经完成下降的士兵在木马旁等待，不提前分路行进。
       if (elapsed < allDropEnd + MOVE_DELAY) {
         _tmpB.copy(record.path.points[1] || record.dropTarget).sub(record.dropTarget);
+        setMovementPose(record, false, false, elapsed);
         setRecordPose(record, record.dropTarget, _tmpB);
         continue;
       }
 
       const sortieElapsed = elapsed - allDropEnd - MOVE_DELAY;
-      const approachT = THREE.MathUtils.clamp(
-        sortieElapsed / record.moveDuration,
-        0,
-        1
+      // 用队首的行进距离减去“一个士兵身长 × 队列序号”，让每人沿同一条路线
+      // 保持前后间隔；队尾会自然晚于队首抵达台面，避免四人挤成一团。
+      const frontApproachDistance = Math.min(
+        record.path.total,
+        Math.max(0, sortieElapsed / record.moveDuration) * record.path.total
       );
-      if (approachT < 1 || record.patrolPath.total < 1e-5) {
-        samplePath(record.path, smoothstep01(approachT), _tmpA);
-        if (approachT < 1) {
-          samplePath(record.path, Math.min(1, approachT + 0.015), _tmpB);
-        } else {
-          samplePath(record.path, Math.max(0, approachT - 0.015), _tmpB);
-        }
+      const ownApproachDistance = frontApproachDistance - record.queueDistance;
+      let climbing = false;
+      if (ownApproachDistance < record.path.total || record.patrolPath.total < 1e-5) {
+        const approachDistance = Math.max(0, ownApproachDistance);
+        samplePathDistance(record.path, approachDistance, _tmpA);
+        samplePathDistance(
+          record.path,
+          Math.min(record.path.total, approachDistance + 0.24),
+          _tmpB
+        );
+        climbing = ownApproachDistance >= 0 && ownApproachDistance < record.path.total;
+        setMovementPose(record, true, climbing, sortieElapsed);
       } else {
-        const patrolElapsed = sortieElapsed - record.moveDuration;
-        const patrolT = (patrolElapsed / record.patrolDuration) % 1;
-        samplePath(record.patrolPath, patrolT, _tmpA);
-        samplePath(record.patrolPath, (patrolT + 0.015) % 1, _tmpB);
+        const patrolLeaderDistance =
+          Math.max(0, sortieElapsed - record.moveDuration)
+          / record.patrolDuration
+          * record.patrolPath.total;
+        const ownPatrolDistance = patrolLeaderDistance - record.queueDistance;
+        const patrolDistance = wrapPathDistance(
+          ownPatrolDistance,
+          record.patrolPath.total
+        );
+        samplePathDistance(record.patrolPath, patrolDistance, _tmpA);
+        samplePathDistance(
+          record.patrolPath,
+          wrapPathDistance(patrolDistance + 0.24, record.patrolPath.total),
+          _tmpB
+        );
+        setMovementPose(record, true, false, sortieElapsed);
       }
       setRecordPose(record, _tmpA, _tmpC.copy(_tmpB).sub(_tmpA));
+      record.soldier.userData.climbing = climbing;
     }
 
-    if (descending) {
-      updateRope(descentRope, descentAnchor, _tmpD);
-    } else if (elapsed > 0 && elapsed < allDropEnd + MOVE_DELAY) {
-      const landedIndex = Math.min(
-        records.length - 1,
-        Math.max(0, Math.floor((elapsed - DROP_DURATION) / DROP_SEQUENCE_GAP))
-      );
-      updateRope(
-        descentRope,
-        descentAnchor,
-        _tmpD.copy(records[landedIndex].dropTarget).addScaledVector(_up, 0.34)
-      );
-    } else {
-      descentRope.visible = false;
-    }
+    updateClimbingAssistance(
+      records.some((record) => record.soldier.visible && record.soldier.userData.climbing)
+    );
+
+    updateDescentRopes(elapsed);
   };
 
   resetForDay();
   root.userData.groups = groups;
   root.userData.soldiers = records.map((record) => record.soldier);
-  root.userData.descentRope = descentRope;
+  // 保留单数别名兼容旧调试入口；实际运行使用两根组绳。
+  root.userData.descentRope = descentRopes[0];
+  root.userData.descentRopes = descentRopes;
+  root.userData.assistance = assistanceRoot;
+  root.userData.activationPhase = NIGHT_OPEN;
+  root.userData.queueSpacing = SOLDIER_BODY_LENGTH;
   root.userData.getState = () => ({
     active,
     returning,
     night: previousNight,
+    activationPhase: NIGHT_OPEN,
+    queueSpacing: SOLDIER_BODY_LENGTH,
     elapsed,
     returnElapsed,
     insideHorse: records.filter((record) => !record.soldier.visible).length,
@@ -486,10 +694,19 @@ export function createCitadelNightInfiltration({
       count: group.children.length,
       patrolTerraces: group.userData.patrolTerraces,
       patrolTargetCount: group.userData.patrolTargetCount,
+      queueSpacing: group.userData.queueSpacing,
+      queueOrder: group.userData.queueOrder,
+      patrolDuration: group.userData.records?.[0]?.patrolDuration || 0,
     })),
     torchBearers: records.filter((record) => record.soldier.userData.torchBearer).length,
-    ropesVisible: descentRope.visible ? 1 : 0,
-    descentRopes: descentRope.visible ? 1 : 0,
+    torchQueueIndices: records
+      .filter((record) => record.soldier.userData.torchBearer)
+      .map((record) => `${record.group.userData.route}:${record.index}`),
+    assistanceLinksVisible: assistanceRoot.visible
+      ? assistanceLinks.filter((link) => link.visible).length
+      : 0,
+    ropesVisible: descentRopes.filter((rope) => rope.visible).length,
+    descentRopes: descentRopes.filter((rope) => rope.visible).length,
     descentOrder: records.map((record) => record.soldier.name),
   });
 

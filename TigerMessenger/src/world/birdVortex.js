@@ -343,7 +343,7 @@ export class BirdVortexManager {
   }
 
   /**
-   * 绑定屋顶栖息点（世界坐标）。每只鸟分配一点并微抖动。
+   * 绑定屋顶栖息点（世界坐标）。每只鸟随机选一屋面点并微抖动，分散到各房屋。
    * @param {THREE.Vector3[]} points
    */
   setRoostPoints(points) {
@@ -352,12 +352,24 @@ export class BirdVortexManager {
       return this;
     }
     const n = this.count;
+    // Fisher–Yates 洗牌副本，前 n 个尽量不重复屋面；不足时再随机回填
+    const order = points.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      const tmp = order[i];
+      order[i] = order[j];
+      order[j] = tmp;
+    }
     for (let i = 0; i < n; i++) {
-      const p = points[i % points.length];
+      const idx =
+        i < order.length
+          ? order[i]
+          : order[(Math.random() * order.length) | 0];
+      const p = points[idx];
       const j = Math.random() * Math.PI * 2;
-      const r = 0.15 + Math.random() * 0.55;
+      const r = 0.08 + Math.random() * 0.4;
       this.roostX[i] = p.x + Math.cos(j) * r;
-      this.roostY[i] = p.y + 0.12 + Math.random() * 0.28;
+      this.roostY[i] = p.y + 0.1 + Math.random() * 0.22;
       this.roostZ[i] = p.z + Math.sin(j) * r;
     }
     this.hasRoost = true;
@@ -369,12 +381,10 @@ export class BirdVortexManager {
    */
   setBehavior(mode) {
     if (mode !== "vortex" && mode !== "roost" && mode !== "flush") return this;
-    if (mode === this.behavior) {
-      if (mode === "flush") this.flushTimer = Math.max(this.flushTimer, 1.2);
-      return this;
-    }
+    if (mode === this.behavior) return this;
     this.behavior = mode;
-    if (mode === "flush") this.flushTimer = 3.5;
+    // 落下立刻生效，不保留惊飞计时
+    this.flushTimer = mode === "flush" ? 0.5 : 0;
     return this;
   }
 

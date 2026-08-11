@@ -1,21 +1,19 @@
 // =====================================================================
-//  圣城各台地鸟群：每台 50 只
+//  圣城各台地鸟群：每台 20 只，随机栖于各房屋屋顶
 //  · 白天：双螺旋漩涡起舞
-//  · 夜晚：栖息屋顶；纸士兵经过房屋时惊飞，离去后再落下
+//  · 夜晚：栖息屋顶；纸士兵经过时惊飞，离开后立刻落下
 // =====================================================================
 import * as THREE from "three";
 import { BirdVortexManager } from "./birdVortex.js";
 import { citadelTerraceMetrics } from "./odysseyCitadel.js";
 import { P } from "../core/params.js";
 
-const BIRDS_PER_TERRACE = 50;
+const BIRDS_PER_TERRACE = 20;
 /** 与 citadelInfiltration / dayNight 一致：入夜 0.82 → 黎明 0.22 */
 const NIGHT_OPEN = 0.82;
 const NIGHT_CLOSE = 0.22;
 /** 士兵靠近台地中心多少距离算「经过」 */
 const TERRACE_THREAT_R = 14;
-/** 士兵离开后继续盘旋再落下的秒数 */
-const FLUSH_HOLD = 2.4;
 
 const _up = new THREE.Vector3();
 const _right = new THREE.Vector3();
@@ -31,7 +29,8 @@ function isNight(phase) {
 }
 
 /**
- * 收集某台地屋顶栖息点（世界坐标）。
+ * 收集某台地房屋屋顶栖息点（世界坐标）。
+ * 优先人字坡/尖顶/穹顶，其次城垛与围栏，保证多屋随机可落。
  * @param {THREE.Object3D} castle
  * @param {number} terraceIndex
  * @param {THREE.Vector3} up 台地法向
@@ -39,6 +38,7 @@ function isNight(phase) {
 export function collectTerraceRoofPerches(castle, terraceIndex, up) {
   const pts = [];
   if (!castle) return pts;
+  // 权重：真屋顶优先（多采样），城垛/围栏次之
   const roofName = /town-roof|town-spire|town-dome|town-fence|town-crenel/;
   castle.updateMatrixWorld(true);
   castle.traverse((o) => {
@@ -59,7 +59,21 @@ export function collectTerraceRoofPerches(castle, terraceIndex, up) {
     }
     if (tIdx !== terraceIndex) return;
     o.getWorldPosition(_tmp);
-    pts.push(_tmp.clone().addScaledVector(up, 0.22));
+    const base = _tmp.clone().addScaledVector(up, 0.22);
+    const isPrimary =
+      o.name === "town-roof" || o.name === "town-spire" || o.name === "town-dome";
+    // 每块屋顶撒 2–4 个点，便于 20 只鸟分散到不同屋面
+    const samples = isPrimary ? 3 : 1;
+    for (let s = 0; s < samples; s++) {
+      const j = Math.random() * Math.PI * 2;
+      const r = isPrimary ? 0.15 + Math.random() * 0.7 : Math.random() * 0.25;
+      pts.push(
+        base
+          .clone()
+          .addScaledVector(_right, Math.cos(j) * r)
+          .addScaledVector(_fwd, Math.sin(j) * r)
+      );
+    }
   });
   return pts;
 }
@@ -105,7 +119,7 @@ function anyThreatNear(threats, origin, radius, up, bandH = 5.5) {
 }
 
 /**
- * 在五级台地各布 50 只鸟，昼夜切换漩涡/栖顶/惊飞。
+ * 在五级台地各布 20 只鸟，随机栖于各房屋屋顶；昼夜切换漩涡/栖顶/惊飞。
  * @param {THREE.Scene} scene
  * @param {THREE.Object3D} odysseyCitadel
  * @param {object} [opts]
@@ -178,7 +192,6 @@ export function createCitadelTerraceBirds(scene, odysseyCitadel, opts = {}) {
       vortex,
       origin: _origin.clone(),
       threatR: Math.max(TERRACE_THREAT_R, m.radius * 1.15),
-      flushHold: 0,
       night: false,
     });
   }
@@ -211,24 +224,17 @@ export function createCitadelTerraceBirds(scene, odysseyCitadel, opts = {}) {
 
       if (!night) {
         // 白天：漩涡起舞
-        flock.flushHold = 0;
         flock.vortex.setBehavior("vortex");
       } else {
-        // 入夜瞬间：落到屋顶
+        // 入夜 / 士兵离开：立刻栖顶；士兵经过：惊飞
         if (!wasNight) {
-          flock.flushHold = 0;
           flock.vortex.setBehavior("roost");
         }
         const threat = anyThreatNear(threats, flock.origin, flock.threatR, _up);
         if (threat) {
-          flock.flushHold = FLUSH_HOLD;
           flock.vortex.setBehavior("flush");
-        } else if (flock.vortex.behavior === "flush") {
-          flock.flushHold = Math.max(0, flock.flushHold - d);
-          if (flock.flushHold <= 0 && flock.vortex.flushTimer <= 0) {
-            flock.vortex.setBehavior("roost");
-          }
         } else {
+          // 士兵一离开马上落下（不再等待 flushTimer）
           flock.vortex.setBehavior("roost");
         }
       }
