@@ -412,10 +412,38 @@ export function updateWarshipOars(boat, dt = 1 / 60, moving = false) {
 // =====================================================================
 //  战船剪纸罗马士兵：每支桨配一名，四肢关节随桨相位划动
 //  - 剪纸人：扁平薄片（Z 向薄），所有关节绕面法线旋转（2D 纸偶动画）
-//  - 皮甲（躯干 cuirass + 皮裙 pteruges）+ 青铜头盔 + 红鬃冠
+//  - 皮甲（躯干 cuirass + 皮裙 pteruges）+ 罗马青铜盔（galea）+ 红鬃冠
 //  - 每船 9 个 InstancedMesh（躯干/皮裙/头/盔/鬃冠/双臂/双腿），尺寸
 //    定义在船局部坐标系内，随战船 scale 自然成比例
 // =====================================================================
+
+/**
+ * 多块方盒合并为单一 BufferGeometry（剪纸罗马盔等复合轮廓）。
+ * @param {Array<[number, number, number, number, number, number?]>} defs
+ *   每项 [w, h, t, ox, oy, oz?]
+ */
+function mergeBoxes(defs) {
+  const positions = [];
+  const normals = [];
+  for (let i = 0; i < defs.length; i++) {
+    const [w, h, t, ox, oy, oz = 0] = defs[i];
+    const g = new THREE.BoxGeometry(w, h, t);
+    g.translate(ox, oy, oz);
+    const f = facet(g);
+    const p = f.attributes.position.array;
+    const n = f.attributes.normal.array;
+    for (let j = 0; j < p.length; j++) {
+      positions.push(p[j]);
+      normals.push(n[j]);
+    }
+    f.dispose();
+  }
+  const merged = new THREE.BufferGeometry();
+  merged.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  merged.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  merged.computeBoundingSphere();
+  return merged;
+}
 
 /** 共享几何/材质（全部船共用，懒加载） */
 let CREW_SHARED = null;
@@ -425,8 +453,8 @@ function crewShared() {
     leather: toonMat(0x8a5a33), // 皮甲
     leatherDark: toonMat(0x5c3a22), // 皮裙
     skin: toonMat(0xd9a06b), // 头/四肢
-    bronze: toonMat(0xb08d4a), // 头盔
-    crest: toonMat(0xb03a2a), // 红鬃冠
+    bronze: toonMat(0xd4a84a), // 罗马盔 — 亮青铜
+    crest: toonMat(0xc62828), // 红鬃冠
   };
   // 部件原点均在关节处；头/盔/冠的颈部位移直接烘焙进几何
   const box = (w, h, t, ox, oy) => {
@@ -437,9 +465,19 @@ function crewShared() {
   const geo = {
     torso: box(0.13, 0.17, 0.03, 0, 0.085), // 关节=髋
     skirt: box(0.15, 0.08, 0.026, 0, -0.04), // 关节=髋（下垂）
-    head: box(0.078, 0.085, 0.026, 0, 0.197), // 烘焙在躯干链上
-    helmet: box(0.102, 0.06, 0.034, 0, 0.235),
-    crest: box(0.15, 0.05, 0.04, 0, 0.272),
+    // 脸从颊护之间露出
+    head: box(0.064, 0.07, 0.024, 0, 0.188),
+    // 罗马 galea 剪纸轮廓：盔碗 + 额檐 + 颈护 + 双颊护 + 鬃冠座
+    helmet: mergeBoxes([
+      [0.118, 0.07, 0.05, 0, 0.252], // 盔碗 calotte
+      [0.136, 0.022, 0.058, 0, 0.218], // 额檐 brow peak
+      [0.108, 0.032, 0.052, 0, 0.198], // 颈护 neck guard
+      [0.032, 0.062, 0.044, -0.06, 0.182], // 左颊护
+      [0.032, 0.062, 0.044, 0.06, 0.182], // 右颊护
+      [0.036, 0.028, 0.042, 0, 0.296], // 鬃冠座 crest holder
+    ]),
+    // 横贯红鬃冠（百夫长式 transverse crista）
+    crest: box(0.2, 0.072, 0.052, 0, 0.34),
     arm: box(0.042, 0.15, 0.02, 0, -0.07), // 关节=肩
     leg: box(0.048, 0.16, 0.02, 0, -0.075), // 关节=髋
   };
@@ -698,6 +736,25 @@ function updatePorterSquad(squad, t) {
     armR.rotation.z = carrying ? 1.22 : 0.35 - swing * 0.5;
     crate.visible = carrying;
   }
+}
+
+/**
+ * 固定木马的系绳纸士兵：与搬运兵同款几何，静态拉绳姿态——
+ * 躯干后仰、双臂前上握绳、双腿前后弓步蹬地；不持木箱。
+ * @returns {THREE.Group}
+ */
+export function createTieSoldier() {
+  const { m, geo } = crewShared();
+  const root = buildPorter(m, geo);
+  root.name = "tie-soldier";
+  const { body, armL, armR, legL, legR, crate } = root.userData.parts;
+  crate.visible = false;
+  body.rotation.z = 0.3; // 后仰拽绳（行进前倾为 -0.1）
+  armL.rotation.z = 1.32; // 双臂前上握绳
+  armR.rotation.z = 1.32;
+  legL.rotation.z = 0.5; // 前后弓步蹬地
+  legR.rotation.z = -0.42;
+  return root;
 }
 
 // =====================================================================

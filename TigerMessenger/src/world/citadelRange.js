@@ -30,6 +30,7 @@ export { CITADEL_CASCADE_POOL_SPECS, CITADEL_CASCADE_MARKER };
 import { createSnowMassif } from "../assets/snowMassif.js";
 import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
+import { createTieSoldier } from "../assets/harbor.js";
 import { CANAL_WATER_LIFT } from "./canalSystem.js";
 import { createNavonaCanalPlaza, conformPlazaToTerrain } from "./navonaPlaza.js";
 
@@ -1210,20 +1211,17 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     navonaPlaza.rotateY(yaw);
     // 顶点融合：边界顶点平滑对齐起伏地形（内部保持平整），
     // 消除狭长广场斜插山坡的生硬穿模。sampleDelta = 地形面 − 顶点 沿“上”高差。
-    {
-      const _pt = new THREE.Vector3();
-      conformPlazaToTerrain(navonaPlaza, {
-        sampleDelta: (worldPos) => {
-          // {_site,_right,_fwd} 为正交归一基架：切向分量即 range 局部坐标
-          // （不可再乘 R/dot(worldPos,_site) 缩放——顶点半径 >R 会把采样点
-          // 向站心压扁，陡坡上产生系统性高差残留）。
-          const vlx = worldPos.dot(_right);
-          const vlz = worldPos.dot(_fwd);
-          rangeLocalToWorld(vlx, vlz, R, _pt); // 已含地形 lift
-          return _pt.sub(worldPos).dot(_site);
-        },
-      });
-    }
+    const _pt = new THREE.Vector3();
+    const sampleDelta = (worldPos) => {
+      // {_site,_right,_fwd} 为正交归一基架：切向分量即 range 局部坐标
+      // （不可再乘 R/dot(worldPos,_site) 缩放——顶点半径 >R 会把采样点
+      // 向站心压扁，陡坡上产生系统性高差残留）。
+      const vlx = worldPos.dot(_right);
+      const vlz = worldPos.dot(_fwd);
+      rangeLocalToWorld(vlx, vlz, R, _pt); // 已含地形 lift
+      return _pt.sub(worldPos).dot(_site);
+    };
+    conformPlazaToTerrain(navonaPlaza, { sampleDelta });
     navonaPlaza.userData.placement = { kind: "canal-citadel-approach", lx, lz, yaw };
     scene.add(navonaPlaza);
 
@@ -1235,6 +1233,57 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     trojanHorse.rotateY(yaw + Math.PI / 2); // 马头转向运河一侧（长轴法向）
     trojanHorse.userData.placement = { kind: "navona-plaza-center", lx, lz, yaw: yaw + Math.PI / 2 };
     scene.add(trojanHorse);
+
+    // ---- 系绳班组：一组纸士兵围马后仰、绳索绷直固定木马 ----
+    // 士兵/绳索挂为木马子级（继承编辑器拖拽/右键删除）；站高用 sampleDelta
+    // 逐人反解到广场石面（地形+0.1）。布局在木马局部系（马头 +Z）。
+    trojanHorse.updateMatrixWorld(true);
+    const HORSE_S = 0.72;
+    const squad = new THREE.Group();
+    squad.name = "horse-tiedown-squad";
+    const ropeMat = toonMat(0x33261a, { flatShading: true });
+    const TIE_SPOTS = [
+      { a: [0, 4.6, 2.0], s: [0, 6.9] }, // 正面迎头拽（颈绳）
+      { a: [1.3, 3.6, 1.3], s: [4.7, 2.7] }, // 前胸两侧
+      { a: [-1.3, 3.6, 1.3], s: [-4.7, 2.7] },
+      { a: [1.2, 3.4, -2.0], s: [4.5, -4.8] }, // 后躯两侧
+      { a: [-1.2, 3.4, -2.0], s: [-4.5, -4.8] },
+      { a: [0, 4.4, -2.4], s: [0, -7.0] }, // 尾部锚定
+    ];
+    const _w = new THREE.Vector3();
+    const _hand = new THREE.Vector3();
+    const _att = new THREE.Vector3();
+    const _dir = new THREE.Vector3();
+    const _upY = new THREE.Vector3(0, 1, 0);
+    for (const spot of TIE_SPOTS) {
+      const [sx, sz] = spot.s;
+      const soldier = createTieSoldier();
+      // 站高反解：木马局部 y=0 面采样世界高差 d0 = 地形 − 该面 → 脚底 = 地形+0.07
+      _w.set(sx, 0, sz);
+      trojanHorse.localToWorld(_w);
+      const d0 = sampleDelta(_w);
+      const feetY = (d0 + 0.07) / HORSE_S;
+      soldier.position.set(sx, feetY, sz);
+      // 纸偶 +X 朝向马心（拽绳方向）
+      const dl = Math.hypot(sx, sz) || 1;
+      soldier.rotation.y = Math.atan2(sz / dl, -sx / dl);
+      squad.add(soldier);
+      // 绳索：士兵双手前上 → 马身锚点（向躯干中心混入 0.3 埋端遮差）
+      const hx = -sx / dl, hz = -sz / dl;
+      _hand.set(sx + hx * 0.55, feetY + 0.85, sz + hz * 0.55);
+      _att.set(spot.a[0], spot.a[1], spot.a[2]).lerp(_w.set(0, 3.4, 0), 0.3);
+      _dir.copy(_att).sub(_hand);
+      const ropeLen = _dir.length();
+      const rope = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.05, 0.05, ropeLen, 5),
+        ropeMat
+      );
+      rope.name = "tiedown-rope";
+      rope.position.copy(_hand).addScaledVector(_dir, 0.5);
+      rope.quaternion.setFromUnitVectors(_upY, _dir.normalize());
+      squad.add(rope);
+    }
+    trojanHorse.add(squad);
 
     rangeSystem.navonaPlaza = navonaPlaza;
     rangeSystem.trojanHorse = trojanHorse;
