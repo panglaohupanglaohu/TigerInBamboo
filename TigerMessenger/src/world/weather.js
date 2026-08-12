@@ -17,6 +17,13 @@ const RAIN_SPAN_MAX = 15 * 60;
 /** 停雨（彩虹）时长（秒）：约 1.5–4 分钟 */
 const CLEAR_SPAN_MIN = 90;
 const CLEAR_SPAN_MAX = 240;
+/** 下雨时电闪雷鸣间隔（秒）：约 4 分钟一次，带随机抖动 */
+const BOLT_INTERVAL_MIN = 3.5 * 60;
+const BOLT_INTERVAL_MAX = 4.5 * 60;
+
+function nextBoltDelay() {
+  return BOLT_INTERVAL_MIN + Math.random() * (BOLT_INTERVAL_MAX - BOLT_INTERVAL_MIN);
+}
 
 /** 闪电基准半宽（世界单位）；实际半宽 = 基准 × (2..6) × 角色系数 */
 const BOLT_BASE_HALF_W = 0.038;
@@ -205,7 +212,7 @@ export function createWeatherSystem(scene, R, opts = {}) {
   let rainPhase = "raining";
   let rainPhaseT = 0;
   let rainPhaseDur = randRange(RAIN_SPAN_MIN, RAIN_SPAN_MAX);
-  let nextBoltAt = 3;
+  let nextBoltAt = nextBoltDelay();
   let boltAnim = 0;
   let boltAnimDur = 0.32;
   let time = 0;
@@ -256,7 +263,8 @@ export function createWeatherSystem(scene, R, opts = {}) {
     rain.visible = true;
     for (let i = 0; i < RAIN_COUNT; i++) respawnRainDrop(i, center);
     setSkyRingRainbow(false);
-    nextBoltAt = 2 + Math.random() * 3;
+    // 入雨后先等约一整段间隔再响，避免刚下雨就连闪
+    nextBoltAt = nextBoltDelay();
   }
 
   function beginRainClear() {
@@ -552,12 +560,12 @@ export function createWeatherSystem(scene, R, opts = {}) {
       snowGeo.attributes.position.needsUpdate = true;
     }
 
-    // ---------- 闪电（仅正在下雨时） ----------
+    // ---------- 闪电（仅正在下雨时 · 约每 4 分钟一次） ----------
     if (rainingNow) {
       nextBoltAt -= dt;
       if (nextBoltAt <= 0) {
         strikeBolt(center);
-        nextBoltAt = 4 + Math.random() * 5;
+        nextBoltAt = nextBoltDelay();
       }
     }
     if (boltAnim > 0) {

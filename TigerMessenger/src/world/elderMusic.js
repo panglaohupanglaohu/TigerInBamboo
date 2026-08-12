@@ -1,12 +1,12 @@
 // =====================================================================
-//  弹琴老人互动：靠近按 E 播放 / 停止原创八音盒旋律
+//  弹琴老人互动：靠近按 E 播放 / 停止八音盒（黄昏屁.mp3 · 0–4:33）
 //  老人现坐在圣城旧港码头起重机旁；距离用世界坐标（可能挂在码头子树下）
 // =====================================================================
 import * as THREE from "three";
 import { toggleMusicBox, isMusicBoxPlaying, isMuted } from "../audio/sfx.js";
 import { showToast } from "../ui/hud.js";
 
-export const ELDER_MUSIC_RANGE = 3.2;
+export const ELDER_MUSIC_RANGE = 4.5;
 
 /**
  * @param {object} deps
@@ -15,10 +15,11 @@ export const ELDER_MUSIC_RANGE = 3.2;
  * @param {HTMLElement|null} deps.elHint
  * @param {() => boolean} deps.isGameStarted
  */
-export function createElderMusicInteraction({ player, elder, elHint, isGameStarted }) {
+export function createElderMusicInteraction({ player, elder: elderInit, elHint, isGameStarted }) {
+  let elder = elderInit || null;
   let notePulse = 0;
-  const keys = elder?.userData?.musicKeys || null;
-  const baseKeysY = keys?.position.y ?? 0;
+  let keys = elder?.userData?.musicKeys || null;
+  let baseKeysY = keys?.position.y ?? 0;
   const _elderWorld = new THREE.Vector3();
 
   function nearElder() {
@@ -40,8 +41,9 @@ export function createElderMusicInteraction({ player, elder, elHint, isGameStart
   }
 
   function onKeyDown(event) {
-    if (event.code !== "KeyE" || event.repeat || !isGameStarted?.() || !nearElder()) return;
-    // 捕获阶段接管老人附近的 E，避免与送信 NPC 同时触发。
+    if (event.code !== "KeyE" || event.repeat || !isGameStarted?.()) return;
+    if (!nearElder()) return;
+    // 捕获阶段接管老人附近的 E，避免与送信 NPC / 阿狸同时触发。
     event.preventDefault();
     event.stopImmediatePropagation();
 
@@ -51,14 +53,18 @@ export function createElderMusicInteraction({ player, elder, elHint, isGameStart
       return;
     }
 
+    const wasPlaying = isMusicBoxPlaying();
     const started = toggleMusicBox({
       onNote: () => { notePulse = 1; },
       onEnded: refreshHint,
     });
-    showToast(
-      started ? "老人轻轻转动发条，八音盒响了起来……" : "八音盒安静下来",
-      started ? 3 : 1.8
-    );
+    if (started) {
+      showToast("老人轻轻转动发条，八音盒响了起来……", 3);
+    } else if (wasPlaying) {
+      showToast("八音盒安静下来", 1.8);
+    } else {
+      showToast("八音盒此刻无法响起（可能被其他音乐占用）", 2.2);
+    }
     notePulse = started ? 1 : 0;
     refreshHint();
   }
@@ -66,6 +72,11 @@ export function createElderMusicInteraction({ player, elder, elHint, isGameStart
   window.addEventListener("keydown", onKeyDown, { capture: true });
 
   function update(dt, t) {
+    // 热更新 keys（老人晚挂载时）
+    if (!keys && elder?.userData?.musicKeys) {
+      keys = elder.userData.musicKeys;
+      baseKeysY = keys.position.y ?? 0;
+    }
     refreshHint();
     if (!keys) return;
     notePulse = Math.max(0, notePulse - dt * 5.5);
@@ -78,6 +89,12 @@ export function createElderMusicInteraction({ player, elder, elHint, isGameStart
   return {
     update,
     isNear: nearElder,
+    /** 老人迁到码头后可热绑定 */
+    setElder(next) {
+      elder = next || null;
+      keys = elder?.userData?.musicKeys || null;
+      baseKeysY = keys?.position.y ?? 0;
+    },
     dispose() {
       window.removeEventListener("keydown", onKeyDown, { capture: true });
       if (elHint) elHint.classList.remove("show");

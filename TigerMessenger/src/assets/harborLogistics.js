@@ -1,15 +1,20 @@
 // =====================================================================
 //  旧港装船物流：纸士兵计数装货 → 满载离港入运河 →
 //  城堡雪山附近运河船沿护城河进港继续装船
+//  太鼓敲击期间：进港战船船员下船 → 运河侧 → 台地 5→4→3→2→1 快步巡查
+//  （忽聚忽散、1–3 人身距、矛头向前）；鼓声结束原路经运河回港上船
 // =====================================================================
 import * as THREE from "three";
 import {
   boatCrewCount,
+  createHarborPatrolSoldier,
   ensureDeckCargoMarkers,
   updateDeckCargoMarkers,
   updateHarborCrane,
   updateWarshipOars,
 } from "./harbor.js";
+import { isInfiltrationMissionActive } from "../audio/sfx.js";
+import { citadelTerraceMetrics } from "../world/odysseyCitadel.js";
 
 const _v = new THREE.Vector3();
 const _v2 = new THREE.Vector3();
@@ -19,12 +24,31 @@ const _z = new THREE.Vector3();
 const _basis = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
 const _q2 = new THREE.Quaternion();
+const _pt = new THREE.Vector3();
+const _pt2 = new THREE.Vector3();
+const _local = new THREE.Vector3();
+const _da = new THREE.Vector3();
+const _db = new THREE.Vector3();
 
 const DRAFT = 0.12;
 const DEPART_SEC = 16;
 const ARRIVE_SEC = 24;
 const CANAL_SCALE = 1.84;
 const DOCK_SCALE = 2;
+/** 下船巡查人数上限 */
+const PATROL_MAX = 16;
+/** 纸士兵身位（放大后约 0.55） */
+const BODY_LEN = 0.55;
+/** 攀登全路径耗时（秒）· 放慢以便看清上城过程 */
+const CLIMB_SEC = 90;
+/** 回程耗时 · 放慢以便看清回港上船 */
+const RETURN_SEC = 80;
+/** 忽聚忽散周期（秒） */
+const FLOCK_PERIOD = 5.5;
+/** 运河水面站立抬升（相对河床采样点，≈水深 + 浅履） */
+const CANAL_STAND_LIFT = 0.72;
+/** 路径段球面插值密度（越大越贴地、越不易穿山） */
+const SURFACE_SEGS = 8;
 
 /**
  * @param {{
@@ -72,6 +96,377 @@ export function createHarborLogistics(opts) {
   ensureDeckCargoMarkers(activeBoat);
   updateDeckCargoMarkers(activeBoat, 0, capacity);
 
+  // ---------- 太鼓巡查：下船 → 运河侧 → 台地 5→1 →（鼓停）原路回船 ----------
+  /** @type {'idle'|'march'|'return'} */
+  let drumPhase = "idle";
+  let drumT = 0;
+  /** @type {THREE.Group|null} */
+  let patrolRoot = null;
+  /** @type {THREE.Group[]} */
+  let patrolSquad = [];
+  /** @type {THREE.Vector3[]} 世界坐标攀登路径（港口→运河→台5…台1） */
+  let climbPath = [];
+  /** 路径累计长度 */
+  let climbLengths = [0];
+  let climbTotal = 0;
+  /** 队伍前端沿路径距离 */
+  let columnFrontDist = 0;
+  /** 回程时前端距离（从 climbTotal 减到 0） */
+  let returnFrontDist = 0;
+  /** @type {THREE.Object3D|null} */
+  let citadel = null;
+  const deckY = dockLocalPos.y;
+
+  function drumsHoldShips() {
+    return isInfiltrationMissionActive();
+  }
+
+  function setCrewVisible(boat, visible) {
+    const crew = boat?.getObjectByName?.("warship-crew");
+    if (crew) crew.visible = !!visible;
+  }
+
+  function clearPatrolSquad() {
+    for (const s of patrolSquad) {
+      s.removeFromParent();
+    }
+    patrolSquad = [];
+    if (patrolRoot) patrolRoot.visible = false;
+  }
+
+  function ensurePatrolRoot() {
+    if (patrolRoot) return patrolRoot;
+    patrolRoot = new THREE.Group();
+    patrolRoot.name = "harbor-drum-patrol";
+    // 世界空间：要走上台地，不能挂在码头局部
+    scene.add(patrolRoot);
+    return patrolRoot;
+  }
+
+  function boatSideWorld() {
+    // 船舷落在码头甲板面上（脚踩港口地面）
+    _local.set(dockLocalPos.x - 2.4, deckY + 0.02, dockLocalPos.z);
+    return harbor.localToWorld(_local.clone());
+  }
+
+  /**
+   * 运河水面站立点：曲线采样在河床，沿法线抬到水面之上，士兵走在水面上。
+   */
+  function canalWaterPointAt(u, out = new THREE.Vector3()) {
+    const uu = ((u % 1) + 1) % 1;
+    canal.curve.getPointAt(uu, out);
+    const bedLen = out.length();
+    if (bedLen < 1e-6) return out.set(0, canal.waterR || 160, 0);
+    out.multiplyScalar((bedLen + CANAL_STAND_LIFT) / bedLen);
+    return out;
+  }
+
+  /** 台地前缘（朝港口方向）世界点；index 0=最高台1，4=台5 */
+  function terraceFrontWorld(terraceIndex, radiusScale = 0.88) {
+    if (!citadel) return null;
+    const metrics = citadelTerraceMetrics(citadel.userData?.contourSpec);
+    const m = metrics[terraceIndex];
+    if (!m) return null;
+    citadel.updateMatrixWorld(true);
+    harbor.updateMatrixWorld(true);
+    const harborW = harbor.getWorldPosition(_v2);
+    citadel.worldToLocal(_local.copy(harborW));
+    _local.y = 0;
+    if (_local.lengthSq() < 1e-6) _local.set(0, 0, 1);
+    _local.normalize().multiplyScalar(Math.max(2.4, m.radius * radiusScale));
+    _local.y = m.top + 0.14;
+    return citadel.localToWorld(_local.clone());
+  }
+
+  /**
+   * 球面插值两点（沿地表/水面弧，避免弦线穿进星球内部导致看不见）。
+   */
+  function surfaceLerp(a, b, t, out) {
+    const ra = a.length();
+    const rb = b.length();
+    _da.copy(a).normalize();
+    _db.copy(b).normalize();
+    let dot = THREE.MathUtils.clamp(_da.dot(_db), -1, 1);
+    const omega = Math.acos(dot);
+    if (omega < 1e-4) {
+      out.copy(a).lerp(b, t);
+      return out;
+    }
+    const s0 = Math.sin((1 - t) * omega) / Math.sin(omega);
+    const s1 = Math.sin(t * omega) / Math.sin(omega);
+    out.copy(_da).multiplyScalar(s0).addScaledVector(_db, s1).normalize();
+    out.multiplyScalar(THREE.MathUtils.lerp(ra, rb, t));
+    return out;
+  }
+
+  /** 把稀疏锚点加密为贴地路径 */
+  function densifySurfacePath(anchors) {
+    const dense = [];
+    if (!anchors.length) return dense;
+    dense.push(anchors[0].clone());
+    for (let i = 1; i < anchors.length; i++) {
+      const a = anchors[i - 1];
+      const b = anchors[i];
+      const segs = Math.max(
+        2,
+        Math.ceil(a.distanceTo(b) / 3.5) // 约每 3.5 单位一个点
+      );
+      for (let s = 1; s <= segs; s++) {
+        surfaceLerp(a, b, s / segs, _pt);
+        dense.push(_pt.clone());
+      }
+    }
+    return dense;
+  }
+
+  function rebuildClimbPath() {
+    const anchors = [];
+    harbor.updateMatrixWorld(true);
+
+    // ---- 1) 港口地面：船舷 → 栈桥甲板 → 岸缘（脚踩码头） ----
+    anchors.push(boatSideWorld());
+    anchors.push(harbor.localToWorld(new THREE.Vector3(1.5, deckY + 0.02, 0.9)));
+    anchors.push(harbor.localToWorld(new THREE.Vector3(3.8, deckY + 0.02, 0.2)));
+    anchors.push(harbor.localToWorld(new THREE.Vector3(6.2, deckY + 0.02, -0.6)));
+    anchors.push(harbor.localToWorld(new THREE.Vector3(8.5, deckY + 0.04, -1.1)));
+
+    // ---- 2) 运河水面：从码头附近沿运河走向城堡（脚踩水面） ----
+    if (canal?.curve) {
+      const start = anchors[anchors.length - 1];
+      const u0 = nearestCanalU(start);
+      const citadelAnchor = citadel?.position || moat?.position || start;
+      const u1 = nearestCanalU(citadelAnchor);
+      let du = u1 - u0;
+      while (du > 0.5) du -= 1;
+      while (du < -0.5) du += 1;
+      // 先过渡到运河水面
+      canalWaterPointAt(u0, _v);
+      anchors.push(_v.clone());
+      const steps = 12;
+      for (let i = 1; i <= steps; i++) {
+        const u = u0 + du * (i / steps);
+        canalWaterPointAt(u, _v);
+        anchors.push(_v.clone());
+      }
+    }
+
+    // ---- 3) 台地 5→4→3→2→1：外缘登台 → 台面（可见逐层上冲） ----
+    if (citadel) {
+      for (let ti = 4; ti >= 0; ti--) {
+        // 略外侧一点（下一级/坡缘）再上台面，形成“冲上台面”的可见折线
+        const outer = terraceFrontWorld(ti, 0.98);
+        const onTop = terraceFrontWorld(ti, 0.78);
+        if (outer) anchors.push(outer);
+        if (onTop) anchors.push(onTop);
+      }
+    }
+
+    // 贴地加密，避免段间弦线钻进山体
+    climbPath = densifySurfacePath(anchors);
+    climbLengths = [0];
+    for (let i = 1; i < climbPath.length; i++) {
+      // 用球面弧长近似
+      const a = climbPath[i - 1];
+      const b = climbPath[i];
+      const ra = (a.length() + b.length()) * 0.5;
+      _da.copy(a).normalize();
+      _db.copy(b).normalize();
+      const ang = Math.acos(THREE.MathUtils.clamp(_da.dot(_db), -1, 1));
+      climbLengths.push(climbLengths[i - 1] + Math.max(ang * ra, a.distanceTo(b) * 0.5));
+    }
+    climbTotal = climbLengths[climbLengths.length - 1] || 1;
+  }
+
+  function sampleClimbPath(dist, outPos, outFwd) {
+    const d = THREE.MathUtils.clamp(dist, 0, climbTotal);
+    if (climbPath.length < 2) {
+      outPos.copy(climbPath[0] || _v.set(0, 1, 0));
+      outFwd.set(1, 0, 0);
+      return;
+    }
+    let i = 1;
+    while (i < climbLengths.length && climbLengths[i] < d) i++;
+    const i0 = Math.max(0, i - 1);
+    const i1 = Math.min(climbPath.length - 1, i);
+    const d0 = climbLengths[i0];
+    const d1 = climbLengths[i1];
+    const t = d1 > d0 + 1e-6 ? (d - d0) / (d1 - d0) : 0;
+    // 段内也走球面，防止穿地
+    surfaceLerp(climbPath[i0], climbPath[i1], t, outPos);
+    if (t < 0.98) {
+      surfaceLerp(climbPath[i0], climbPath[i1], Math.min(1, t + 0.04), outFwd);
+      outFwd.sub(outPos);
+    } else if (i1 + 1 < climbPath.length) {
+      outFwd.copy(climbPath[i1 + 1]).sub(climbPath[i1]);
+    } else {
+      outFwd.copy(climbPath[i1]).sub(climbPath[i0]);
+    }
+    if (outFwd.lengthSq() < 1e-8) outFwd.set(1, 0, 0);
+  }
+
+  /** 局部 +X 朝行进方向，+Y 贴球面法线 */
+  function orientSoldier(soldier, dir) {
+    _up.copy(soldier.position).normalize();
+    _fwd.copy(dir).addScaledVector(_up, -dir.dot(_up));
+    if (_fwd.lengthSq() < 1e-8) {
+      _fwd.set(1, 0, 0).addScaledVector(_up, -_up.x);
+    }
+    _fwd.normalize();
+    _z.crossVectors(_fwd, _up).normalize();
+    _basis.makeBasis(_fwd, _up, _z);
+    soldier.quaternion.setFromRotationMatrix(_basis);
+  }
+
+  function poseFastMarch(soldier, moving, clock) {
+    const parts = soldier.userData.parts;
+    if (!parts) return;
+    // 快步：高频大步幅
+    const step = clock * 16 + (soldier.userData.patrolIndex || 0) * 1.3;
+    const swing = moving ? Math.sin(step) * 0.62 : 0;
+    parts.legL.rotation.z = swing;
+    parts.legR.rotation.z = -swing;
+    parts.body.rotation.z = moving ? -0.16 : -0.1;
+    // 左火把 / 右持枪前指，仅微振
+    parts.armL.rotation.z = -0.55 + (moving ? swing * 0.08 : 0);
+    parts.armR.rotation.z = 1.28 - (moving ? Math.abs(swing) * 0.05 : 0);
+    if (parts.crate) parts.crate.visible = false;
+  }
+
+  /**
+   * 忽聚忽散：间距在 1–3 人身之间脉动，并带侧向散开。
+   * @returns {{ spacing: number, lateral: number }}
+   */
+  function flockSpacing(i, n, clock) {
+    // 0=聚 1=散
+    const pulse = 0.5 + 0.5 * Math.sin((clock * Math.PI * 2) / FLOCK_PERIOD + 0.4);
+    const spacingMul = THREE.MathUtils.lerp(1.0, 3.0, pulse);
+    const spacing = BODY_LEN * spacingMul;
+    // 侧向：聚时贴中线，散时左右拉开
+    const rank = i - (n - 1) * 0.5;
+    const lateral = rank * BODY_LEN * THREE.MathUtils.lerp(0.15, 0.85, pulse);
+    return { spacing, lateral, pulse };
+  }
+
+  function placeSoldierOnPath(soldier, pathDist, clock, moving) {
+    const i = soldier.userData.patrolIndex || 0;
+    const n = soldier.userData.patrolN || 1;
+    const { spacing, lateral } = flockSpacing(i, n, clock);
+    // 队列：越靠前 pathDist 越大；身后按 spacing 拉开
+    const dist = Math.max(0, pathDist - i * spacing);
+    sampleClimbPath(dist, _pt, _fwd);
+    // 侧向：贴球面切向错开，再投影回同半径壳（防侧移钻地）
+    const shellR = _pt.length();
+    _up.copy(_pt).normalize();
+    _z.crossVectors(_fwd, _up).normalize();
+    if (_z.lengthSq() < 1e-8) {
+      _z.set(0, 1, 0).cross(_up).normalize();
+    }
+    _pt.addScaledVector(_z, lateral);
+    if (_pt.lengthSq() > 1e-8) _pt.normalize().multiplyScalar(shellR);
+    // 微步频起伏（沿法线，始终“站”在壳上）
+    _pt.addScaledVector(
+      _up,
+      Math.abs(Math.sin(clock * 16 + i * 1.1)) * 0.045
+    );
+    soldier.position.copy(_pt);
+    soldier.visible = true;
+    orientSoldier(soldier, _fwd);
+    poseFastMarch(soldier, moving, clock);
+  }
+
+  function spawnDisembark(boat) {
+    if (!boat) return;
+    rebuildClimbPath();
+    if (climbPath.length < 2) {
+      console.warn("[harborLogistics] climbPath too short", climbPath.length);
+      return;
+    }
+    const root = ensurePatrolRoot();
+    root.visible = true;
+    clearPatrolSquad();
+    const n = Math.min(PATROL_MAX, Math.max(6, boatCrewCount(boat) || 8));
+    for (let i = 0; i < n; i++) {
+      const soldier = createHarborPatrolSoldier();
+      soldier.userData.patrolIndex = i;
+      soldier.userData.patrolN = n;
+      soldier.castShadow = true;
+      soldier.traverse((o) => {
+        if (o.isMesh) {
+          o.castShadow = true;
+          o.frustumCulled = false;
+        }
+      });
+      root.add(soldier);
+      patrolSquad.push(soldier);
+      // 从船舷起排，立刻看得见在港口地面上
+      placeSoldierOnPath(soldier, (n - 1 - i) * BODY_LEN * 1.4, 0, false);
+    }
+    setCrewVisible(boat, false);
+    drumPhase = "march";
+    drumT = 0;
+    // 前端略出列，整队从港口甲板开拔
+    columnFrontDist = Math.min(climbTotal * 0.02, (n - 1) * BODY_LEN * 2.2);
+  }
+
+  function updateDrumPatrol(dt, t) {
+    const hold = drumsHoldShips();
+    const docked =
+      activeBoat &&
+      (phase === "loading" || phase === "readyToDepart") &&
+      activeBoat.userData.harborDocked;
+
+    if (hold && docked && drumPhase === "idle") {
+      spawnDisembark(activeBoat);
+    }
+
+    // 鼓声结束 → 原路返回（经运河回港上船）
+    if (!hold && drumPhase === "march") {
+      drumPhase = "return";
+      drumT = 0;
+      returnFrontDist = columnFrontDist;
+    }
+
+    if (drumPhase === "idle") return;
+    if (climbPath.length < 2) {
+      rebuildClimbPath();
+      if (climbPath.length < 2) return;
+    }
+
+    drumT += dt;
+
+    if (drumPhase === "march") {
+      // 快步推进到台顶（台5→1）；到顶后钉在终点踏步待命，队形仍忽聚忽散
+      const speed = climbTotal / CLIMB_SEC;
+      columnFrontDist = Math.min(climbTotal, columnFrontDist + speed * dt);
+      const atTop = columnFrontDist >= climbTotal - 0.05;
+      if (atTop) columnFrontDist = climbTotal;
+      for (const s of patrolSquad) {
+        // 到顶仍保持快步踏步感（果断、不停顿发呆）
+        placeSoldierOnPath(s, columnFrontDist, t, true);
+      }
+      return;
+    }
+
+    if (drumPhase === "return") {
+      const speed = climbTotal / RETURN_SEC;
+      returnFrontDist = Math.max(0, returnFrontDist - speed * dt);
+      for (const s of patrolSquad) {
+        placeSoldierOnPath(s, returnFrontDist, t, returnFrontDist > 0.2);
+      }
+      // 全队回到起点附近 → 上船
+      const n = patrolSquad.length;
+      const tailDist = returnFrontDist - (n - 1) * BODY_LEN * 3.0;
+      if (returnFrontDist <= 0.15 || tailDist < -BODY_LEN) {
+        clearPatrolSquad();
+        if (activeBoat) setCrewVisible(activeBoat, true);
+        drumPhase = "idle";
+        drumT = 0;
+        columnFrontDist = 0;
+        returnFrontDist = 0;
+      }
+    }
+  }
+
   function setLoading(on) {
     for (const s of squads) s.userData.loading = !!on;
   }
@@ -88,7 +483,8 @@ export function createHarborLogistics(opts) {
     activeBoat.userData.cargoCapacity = capacity;
     updateDeckCargoMarkers(activeBoat, cargo, capacity);
     if (cargo >= capacity) {
-      if (activeBoat.userData.piloted) {
+      if (activeBoat.userData.piloted || drumsHoldShips()) {
+        // 太鼓期间满载也不得离港，只进入待发
         phase = "readyToDepart";
         setLoading(false);
       } else {
@@ -275,7 +671,19 @@ export function createHarborLogistics(opts) {
 
   function beginDepart() {
     if (!activeBoat || (phase !== "loading" && phase !== "readyToDepart")) return;
+    // 太鼓敲击 / 潜入任务期间：战船不得驶离港口
+    if (drumsHoldShips() || drumPhase !== "idle") {
+      phase = "readyToDepart";
+      setLoading(false);
+      return;
+    }
     if (activeBoat.userData.piloted) {
+      phase = "readyToDepart";
+      setLoading(false);
+      return;
+    }
+    // 船员仍在岸上巡查时不可离港
+    if (patrolSquad.length) {
       phase = "readyToDepart";
       setLoading(false);
       return;
@@ -290,6 +698,7 @@ export function createHarborLogistics(opts) {
     pathPts = buildDepartPath(activeBoat);
     // 离港途中略缩到运河尺度
     activeBoat.scale.setScalar(DOCK_SCALE);
+    setCrewVisible(activeBoat, true);
   }
 
   function releaseToCanal(boat) {
@@ -389,15 +798,24 @@ export function createHarborLogistics(opts) {
     phase = "loading";
     setLoading(true);
     notifyBoat();
+    // 进港时若太鼓仍在敲：船员立刻下船巡查
+    if (drumsHoldShips()) {
+      spawnDisembark(boat);
+    } else {
+      setCrewVisible(boat, true);
+    }
   }
 
   function bindWorld(ctx = {}) {
     if (ctx.canal) canal = ctx.canal;
     if (ctx.canalBoats) canalBoats = ctx.canalBoats;
     if (ctx.moat) moat = ctx.moat;
+    if (ctx.citadel) citadel = ctx.citadel;
     if (ctx.scene) {
       // scene already held
     }
+    // 绑定后重建攀登路径（运河/城堡已就绪）
+    rebuildClimbPath();
   }
 
   function setOnBoatChange(fn) {
@@ -411,26 +829,49 @@ export function createHarborLogistics(opts) {
     // 班组动画（含装货计数回调）
     for (const s of squads) s.userData.update?.(t);
 
-    if (phase === "readyToDepart" && activeBoat && !activeBoat.userData.piloted) {
+    // 太鼓期间：船员下船巡查；结束后回船；期间不得离港
+    updateDrumPatrol(d, t);
+
+    if (
+      phase === "readyToDepart" &&
+      activeBoat &&
+      !activeBoat.userData.piloted &&
+      !drumsHoldShips() &&
+      drumPhase === "idle"
+    ) {
       beginDepart();
     }
 
     if (phase === "departing" && activeBoat) {
-      pathT += d;
-      const k = Math.min(1, pathT / DEPART_SEC);
-      samplePath(pathPts, k, _v, _v2);
-      orientOnSphere(activeBoat, _v, _v2);
-      // 离港中平滑缩到运河尺度
-      const sc = THREE.MathUtils.lerp(DOCK_SCALE, CANAL_SCALE, Math.min(1, k * 1.2));
-      activeBoat.scale.setScalar(sc);
-      updateWarshipOars(activeBoat, d, 0.95);
-      if (k >= 1) {
-        const gone = activeBoat;
-        releaseToCanal(gone);
-        activeBoat = null;
-        cargo = 0;
-        notifyBoat();
-        requestArrival();
+      // 若离港途中潜入任务开始：拉回泊位锁船（鼓声期间不驶离）
+      if (drumsHoldShips() && pathT < DEPART_SEC * 0.45) {
+        harbor.attach(activeBoat);
+        activeBoat.position.copy(dockLocalPos);
+        activeBoat.quaternion.copy(dockLocalQuat);
+        activeBoat.scale.setScalar(DOCK_SCALE);
+        activeBoat.userData.harborMission = null;
+        activeBoat.userData.harborDocked = true;
+        activeBoat.userData.canalPatrol = false;
+        phase = "readyToDepart";
+        pathT = 0;
+        spawnDisembark(activeBoat);
+      } else {
+        pathT += d;
+        const k = Math.min(1, pathT / DEPART_SEC);
+        samplePath(pathPts, k, _v, _v2);
+        orientOnSphere(activeBoat, _v, _v2);
+        // 离港中平滑缩到运河尺度
+        const sc = THREE.MathUtils.lerp(DOCK_SCALE, CANAL_SCALE, Math.min(1, k * 1.2));
+        activeBoat.scale.setScalar(sc);
+        updateWarshipOars(activeBoat, d, 0.95);
+        if (k >= 1) {
+          const gone = activeBoat;
+          releaseToCanal(gone);
+          activeBoat = null;
+          cargo = 0;
+          notifyBoat();
+          requestArrival();
+        }
       }
     } else if (phase === "arriving" && transitBoat) {
       pathT += d;
@@ -449,8 +890,11 @@ export function createHarborLogistics(opts) {
         waitAcc = 0;
         requestArrival();
       }
-    } else if (phase === "loading" && activeBoat) {
-      // 泊位微荡 + 停桨
+    } else if (
+      (phase === "loading" || phase === "readyToDepart") &&
+      activeBoat
+    ) {
+      // 泊位微荡 + 停桨（船员下船巡查时甲板上无人划桨）
       if (!activeBoat.userData.piloted && activeBoat.parent === harbor) {
         activeBoat.position.y = dockLocalPos.y + Math.sin(t * 1.1) * 0.02;
         updateWarshipOars(activeBoat, d, 0);
@@ -465,6 +909,11 @@ export function createHarborLogistics(opts) {
       capacity,
       boat: activeBoat,
       transitBoat,
+      drumPhase,
+      patrolCount: patrolSquad.length,
+      drumsHold: drumsHoldShips(),
+      climbTotal,
+      columnFrontDist,
     };
   }
 

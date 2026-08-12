@@ -70,7 +70,7 @@ import {
   startAmbience,
   startTramSound,
   sfxJump,
-  sfxWaterTrain,
+  setTramRideBgm,
   setCanyonApproachBgm,
   isCanyonBgmPlaying,
 } from "./audio/sfx.js";
@@ -464,14 +464,16 @@ const tramRide = createTramRide({
   elHint: document.getElementById("tram-hint"),
   toast: showToast,
   onBoard: (tram) => {
-    // 若已近峡谷 / 在谷内：直接切峡谷 BGM，不再播默认登车氛围
+    // 若已近峡谷 / 在谷内：直接切峡谷 BGM；否则登车曲 Tram 头 16s → 城南花已开
     const tramSystem = messenger?.landmarks?.tramSystem;
     const cue = tramSystem?.getCanyonAudioCue?.(tram);
     const nearCanyon = cue && (cue.inCanyon || cue.secondsToEntry <= 10);
     if (nearCanyon) {
       setCanyonApproachBgm(true, { fade: 0.8 });
+      // 仍标记搭乘 wanted，离谷后可接主曲
+      setTramRideBgm(true, { fade: 0.1 });
     } else {
-      sfxWaterTrain();
+      setTramRideBgm(true, { fade: 0.7 });
     }
     const color = tram?.userData?.variant === "blue" ? "蓝色" : "红色";
     const foxHint =
@@ -480,6 +482,9 @@ const tramRide = createTramRide({
       `已登上${color}电车 · 窗边乘客 · [C] 司机视野 · [F] 下车${foxHint}`,
       3.4
     );
+  },
+  onAlight: () => {
+    setTramRideBgm(false, { fade: 0.9 });
   },
 });
 
@@ -851,13 +856,31 @@ const weather = createWeatherSystem(scene, PLANET_RADIUS, {
   skyRing: messenger?.landmarks?.camp?.landmarks?.skyRing || null,
 });
 
-// ---------- 弹琴老人（近身 E 键播放 / 停止八音盒） ----------
+// ---------- 弹琴老人（近身 E 键播放 / 停止八音盒；老人已迁到旧港码头） ----------
 const elderMusic = createElderMusicInteraction({
   player,
-  elder: messenger?.landmarks?.camp?.landmarks?.elder || null,
+  // 优先码头上的老人（harbor 迁移后），回落营地引用
+  elder:
+    messenger?.landmarks?.oldHarbor?.landmarks?.elder ||
+    messenger?.landmarks?.camp?.landmarks?.elder ||
+    null,
   elHint: document.getElementById("elder-hint"),
   isGameStarted: () => gameStarted,
 });
+// 双保险：按名称在场景里再绑一次（避免 landmarks 路径漏引用）
+{
+  let found = null;
+  const harborRoot = messenger?.landmarks?.harbor;
+  harborRoot?.traverse?.((o) => {
+    if (!found && (o.name === "music-elder" || o.userData?.musicKeys)) found = o;
+  });
+  if (!found) {
+    scene.traverse((o) => {
+      if (!found && o.name === "music-elder") found = o;
+    });
+  }
+  if (found) elderMusic.setElder?.(found);
+}
 
 // ---------- 莫比斯结界：电车跨赤道时 2s 平滑过渡天空 ----------
 // 北半球保持昼夜循环本色；电车入南（y<0）环境光/天色渐变为莫比斯粉紫

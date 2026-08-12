@@ -408,6 +408,7 @@ export const messengerIslandScene = {
             canal,
             canalBoats,
             moat: citadelRange.moat,
+            citadel: odysseyCitadel,
           });
           // boatRide / 小地图等通过 landmarks.boat 取当前泊位船
           logistics.setOnBoatChange((b) => {
@@ -648,8 +649,10 @@ export const messengerIslandScene = {
 
         // 圣城梯湖：四段水帘、雾气与涟漪；城堡本体保持静态。
         citadelRange.pilgrimageCascades.update?.(dt, t);
-        // 深夜天空变黑：木马腹舱开启，两组纸士兵分别潜入瀑布与城堡阶梯。
-        citadelRange.update?.(dt, t);
+        // 深夜：木马腹舱开启，纸士兵潜入；太鼓按玩家与木马距离启停。
+        citadelRange.update?.(dt, t, {
+          listener: runtime?.player?.position || null,
+        });
         // 护城河：阶梯量化水波 + 方块浪花
         citadelRange.moat?.update?.(dt, t);
         // 纳沃纳双栖广场：喷泉动画 + 旱/汛水面插值

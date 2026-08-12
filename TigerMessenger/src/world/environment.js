@@ -74,7 +74,11 @@ export function setupEnvironment(scene) {
         }
       `,
     });
-    scene.add(new THREE.Mesh(skyGeo, skyMat));
+    // 城堡区域的天空背景沿 Y 轴再旋转 90°，调整天空纹理/云带的方位。
+    const sky = new THREE.Mesh(skyGeo, skyMat);
+    sky.name = "sky-background";
+    sky.rotation.y = Math.PI / 2;
+    scene.add(sky);
   }
 
   // ---------- 日轮 ----------

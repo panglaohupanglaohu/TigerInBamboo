@@ -9,7 +9,7 @@ import { citadelTerraceMetrics } from "./odysseyCitadel.js";
 import { P } from "../core/params.js";
 
 const BIRDS_PER_TERRACE = 20;
-/** 与 citadelInfiltration / dayNight 一致：入夜 0.82 → 黎明 0.22 */
+/** 与 citadelInfiltration / 窗户夜景一致：一入夜 0.82 → 黎明 0.22 */
 const NIGHT_OPEN = 0.82;
 const NIGHT_CLOSE = 0.22;
 /** 士兵靠近台地中心多少距离算「经过」 */

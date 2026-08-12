@@ -31,9 +31,9 @@ const WEATHER_PHASES = Object.freeze({
   storm: { next: "clearing", min: 24, span: 26 },      // 阴云密布 + 电闪雷鸣
   clearing: { next: "clear", min: 11, span: 8 },       // 云开雨收
 });
-/** 风暴期落雷间隔（秒） */
-const STRIKE_MIN = 1.6;
-const STRIKE_SPAN = 3.6;
+/** 风暴期落雷间隔（秒）：约 4 分钟一次，避免电闪雷鸣过于频繁 */
+const STRIKE_MIN = 3.5 * 60;
+const STRIKE_SPAN = 1.0 * 60;
 
 /* ---------------- 云墙密度（轨道两侧） ---------------- */
 const BOOKSHOP_FLAT = { x: 11.5 * WORLD_SCALE, z: 5.5 * WORLD_SCALE }; // 与 messengerIsland 一致
@@ -990,7 +990,8 @@ function updateCloudWallWeather(group, t, dt, camera) {
     w.phase = cfg.next;
     const nextCfg = WEATHER_PHASES[w.phase];
     w.phaseEnd = t + nextCfg.min + Math.random() * nextCfg.span;
-    if (w.phase === "storm") w.nextStrike = t + 0.6 + Math.random() * 1.4;
+    // 入风暴后先等一小段再可能响一次；之后按约 4 分钟间隔（本段风暴通常只闪 0–1 次）
+    if (w.phase === "storm") w.nextStrike = t + 12 + Math.random() * 18;
   }
 
   // ---- 阴云程度：向目标值平滑逼近（避免天气突变） ----

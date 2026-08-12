@@ -7,19 +7,19 @@ import { showToast } from "../ui/hud.js";
 let audioCtx = null;
 let muted = false;
 
-// 弹琴老人八音盒：播放《風之傳說》18–53 秒片段（与水晶城、湖沼统一区间）
+// 弹琴老人八音盒：music/黄昏屁.mp3，从头播到 4:33，不循环
 let musicBoxSession = null;
 /** @type {HTMLAudioElement|null} */
 let musicBoxEl = null;
 const MUSIC_BOX_BGM_URL = new URL(
-  "../../music/Gwenan Gibbard-風之傳說.mp3",
+  "../../music/黄昏屁.mp3",
   import.meta.url
 ).href;
-/** 第 18 秒 */
-const MUSIC_BOX_START_SEC = 18;
-/** 第 53 秒（到此结束） */
-const MUSIC_BOX_END_SEC = 53;
-const MUSIC_BOX_VOLUME = 0.48;
+/** 从曲头开始 */
+const MUSIC_BOX_START_SEC = 0;
+/** 4 分 33 秒结束（不循环） */
+const MUSIC_BOX_END_SEC = 4 * 60 + 33;
+const MUSIC_BOX_VOLUME = 0.5;
 
 // 有轨电车声：轮轨「哐啷」+ 到站铃/风铃感高音（禁止持续低频嗡嗡）
 // 音量由 updateTramSound() 按距离衰减；近处才响
@@ -31,6 +31,28 @@ let tramBellTimer = null;
 let tramProximity = 0;
 const TRAM_MAX_DISTANCE = 22;
 const TRAM_PEAK_GAIN = 0.42;
+
+// 电车搭乘 BGM：先 Tram.mp3 头 16 秒，再接《城南花已开》循环
+/** @type {HTMLAudioElement|null} */
+let tramIntroEl = null;
+/** @type {HTMLAudioElement|null} */
+let tramMainEl = null;
+/** 玩家仍在车上，应保持搭乘 BGM */
+let tramRideWanted = false;
+/** @type {'idle'|'intro'|'main'} */
+let tramRidePhase = "idle";
+let tramRideFading = false;
+const TRAM_INTRO_URL = new URL(
+  "../../music/Various Artists-Tram.mp3",
+  import.meta.url
+).href;
+const TRAM_MAIN_URL = new URL(
+  "../../music/sophia Fang-城南花已开 (纯音纯享版).mp3",
+  import.meta.url
+).href;
+/** Tram 采样只播开头 16 秒 */
+const TRAM_INTRO_END_SEC = 16;
+const TRAM_RIDE_VOLUME = 0.44;
 
 // 环境点缀（风铃）；八音盒 / 峡谷 BGM 播放时 duck 压低
 let padTimer = null;
@@ -73,6 +95,29 @@ const SWAMP_BGM_VOLUME = 0.46;
 /** 湖沼 BGM 循环区间：第 18 秒 → 第 53 秒（与水晶城、八音盒统一为同一情绪段） */
 const SWAMP_BGM_START_SEC = 18;
 const SWAMP_BGM_END_SEC = 53;
+
+// 木马夜间潜入 BGM（鬼太鼓座 · 大太鼓）：
+// 士兵行动中 + 玩家靠近场景才播；远离不启播；近距独占声道
+/** @type {HTMLAudioElement|null} */
+let infiltrationBgmEl = null;
+/** 士兵是否在行动（任务进行中） */
+let infiltrationMissionActive = false;
+/** 当前是否因近距而占用声道 / 播放中 */
+let infiltrationBgmWanted = false;
+/** 距离滞回：已在听距内 */
+let infiltrationInRange = false;
+let infiltrationBgmFading = false;
+const INFILTRATION_BGM_URL = new URL(
+  "../../music/鬼太鼓座-大太鼓.mp3",
+  import.meta.url
+).href;
+const INFILTRATION_BGM_VOLUME = 0.55;
+/** 进入听距（看不到场景就别响） */
+const INFILTRATION_BGM_ENTER_R = 42;
+/** 离开听距（略大，防边界闪断） */
+const INFILTRATION_BGM_EXIT_R = 52;
+/** 此距离内满音量 */
+const INFILTRATION_BGM_FULL_R = 16;
 
 export function ensureAudio() {
   if (muted) return null;
@@ -295,6 +340,12 @@ export function startTramSound() {
  */
 export function updateTramSound(tramPosition, listenerPosition) {
   if (!tramNodes || !tramPosition || !listenerPosition || !audioCtx) return;
+  // 潜入太鼓播放时电车静音
+  if (infiltrationBgmWanted) {
+    tramProximity = 0;
+    tramNodes.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+    return;
+  }
   const now = audioCtx.currentTime;
   if (now - tramLastUpdate < 0.04) return;
   tramLastUpdate = now;
@@ -351,128 +402,60 @@ export function sfxWin() {
   });
 }
 
-/** 雷鸣噪声缓冲缓存（按采样率） */
-let thunderNoiseCache = null;
+// 雷声闪电：外部采样 music/纯音乐-雷声闪电.mp3（不再用合成噪声）
+const THUNDER_SFX_URL = new URL(
+  "../../music/纯音乐-雷声闪电.mp3",
+  import.meta.url
+).href;
+/** 可重叠落雷的播放池 */
+const THUNDER_POOL_SIZE = 4;
+/** @type {HTMLAudioElement[]} */
+const thunderPool = [];
+let thunderPoolIdx = 0;
 
-function getThunderNoiseBuffer(ctx) {
-  if (thunderNoiseCache && thunderNoiseCache.sampleRate === ctx.sampleRate) {
-    return thunderNoiseCache;
+function ensureThunderPool() {
+  if (thunderPool.length) return thunderPool;
+  for (let i = 0; i < THUNDER_POOL_SIZE; i++) {
+    const el = new Audio(THUNDER_SFX_URL);
+    el.preload = "auto";
+    el.loop = false;
+    el.volume = 0;
+    el.crossOrigin = "anonymous";
+    thunderPool.push(el);
   }
-  // ~2.4s 粉红/棕色噪声，供炸裂 + 滚雷共用
-  const dur = 2.4;
-  const length = Math.floor(ctx.sampleRate * dur);
-  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  let b0 = 0;
-  let b1 = 0;
-  let b2 = 0;
-  for (let i = 0; i < length; i++) {
-    const white = Math.random() * 2 - 1;
-    // Paul Kellet 近似粉红噪声
-    b0 = 0.99886 * b0 + white * 0.0555179;
-    b1 = 0.99332 * b1 + white * 0.0750759;
-    b2 = 0.969 * b2 + white * 0.153852;
-    const pink = b0 + b1 + b2 + white * 0.15;
-    data[i] = pink * 0.22;
-  }
-  thunderNoiseCache = buffer;
-  return buffer;
+  return thunderPool;
 }
 
 /**
- * 雷鸣：先近炸裂（短噪声裂响），再低频滚雷衰减。
- * 距离越远越晚、越闷、越轻（光先到、声后到）。
+ * 雷鸣 / 闪电声：播放 `music/纯音乐-雷声闪电.mp3`。
+ * 距离越远越晚、越轻（光先到、声后到）；不再使用合成噪声。
  * @param {{ distance?: number }} [opts] 与听者水平距离（世界单位）
  */
 export function sfxThunder(opts = {}) {
-  const ctx = ensureAudio();
-  if (!ctx || muted) return;
+  if (muted) return;
+  ensureAudio(); // 用户手势后恢复，便于 HTMLAudio 播放
 
   const distance = Math.max(0, Number(opts.distance) || 8);
   // 声速近似：游戏单位约 0.04s/单位，夹在 0.04–1.0s
-  const delay = Math.min(1.0, Math.max(0.04, 0.05 + distance * 0.038));
-  // 近雷更响更亮，远雷闷而轻
+  const delayMs = Math.min(1000, Math.max(40, (0.05 + distance * 0.038) * 1000));
+  // 近雷更响，远雷更轻
   const near = Math.max(0, Math.min(1, 1 - distance / 28));
-  const crackPeak = 0.12 + near * 0.2;
-  const rumblePeak = 0.1 + near * 0.16;
-  const t0 = ctx.currentTime + delay;
-  const noiseBuf = getThunderNoiseBuffer(ctx);
+  const volume = THREE_CLAMP(0.22 + near * 0.58, 0.08, 0.85);
 
-  const master = ctx.createGain();
-  master.gain.setValueAtTime(1, t0);
-  master.connect(ctx.destination);
-
-  // ---- 1) 炸裂：中高频噪声裂响（1～2 次） ----
-  const crackCount = near > 0.55 && Math.random() < 0.55 ? 2 : 1;
-  for (let c = 0; c < crackCount; c++) {
-    const tc = t0 + c * (0.04 + Math.random() * 0.06);
-    const src = ctx.createBufferSource();
-    src.buffer = noiseBuf;
-    const hp = ctx.createBiquadFilter();
-    hp.type = "highpass";
-    hp.frequency.value = 280 + near * 220;
-    const bp = ctx.createBiquadFilter();
-    bp.type = "bandpass";
-    bp.frequency.value = 900 + Math.random() * 1400;
-    bp.Q.value = 0.7;
-    const g = ctx.createGain();
-    const peak = crackPeak * (c === 0 ? 1 : 0.55);
-    g.gain.setValueAtTime(0.0001, tc);
-    g.gain.exponentialRampToValueAtTime(peak, tc + 0.008);
-    g.gain.exponentialRampToValueAtTime(0.0001, tc + 0.12 + Math.random() * 0.08);
-    src.connect(hp);
-    hp.connect(bp);
-    bp.connect(g);
-    g.connect(master);
-    src.start(tc, 0, 0.25);
-  }
-
-  // ---- 2) 滚雷：低频长噪声 + 缓慢低通下滑 ----
-  {
-    const src = ctx.createBufferSource();
-    src.buffer = noiseBuf;
-    const lp = ctx.createBiquadFilter();
-    lp.type = "lowpass";
-    const fStart = 420 + near * 380;
-    const fEnd = 80 + near * 60;
-    lp.frequency.setValueAtTime(fStart, t0);
-    lp.frequency.exponentialRampToValueAtTime(fEnd, t0 + 1.8);
-    lp.Q.value = 0.4;
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(rumblePeak, t0 + 0.06);
-    g.gain.setValueAtTime(rumblePeak * 0.75, t0 + 0.35);
-    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.9 + near * 0.5);
-    src.connect(lp);
-    lp.connect(g);
-    g.connect(master);
-    src.start(t0, 0.05, 2.2);
-  }
-
-  // ---- 3) 远雷额外闷响（很轻的低频包络，非持续嗡嗡） ----
-  if (near < 0.7) {
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(55 + Math.random() * 25, t0);
-    osc.frequency.exponentialRampToValueAtTime(38, t0 + 1.4);
-    g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(0.04 + (1 - near) * 0.03, t0 + 0.12);
-    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.5);
-    osc.connect(g);
-    g.connect(master);
-    osc.start(t0);
-    osc.stop(t0 + 1.55);
-  }
-
-  // 结束后断开 master，避免节点堆积
   window.setTimeout(() => {
+    if (muted) return;
+    const pool = ensureThunderPool();
+    const el = pool[thunderPoolIdx % pool.length];
+    thunderPoolIdx += 1;
     try {
-      master.disconnect();
+      el.pause();
+      el.currentTime = 0;
     } catch {
-      /* 已回收 */
+      /* ignore */
     }
-  }, (delay + 2.8) * 1000);
+    el.volume = volume;
+    el.play()?.catch?.(() => {});
+  }, delayMs);
 }
 
 /**
@@ -484,21 +467,26 @@ function setAmbienceDuck(level) {
 }
 
 function ensureMusicBoxEl() {
-  if (musicBoxEl) return musicBoxEl;
-  const el = new Audio();
+  if (musicBoxEl) {
+    // 曲目若已切换，刷新 src
+    if (musicBoxEl.src !== MUSIC_BOX_BGM_URL && !musicBoxEl.src.endsWith(encodeURI("黄昏屁.mp3")) && !musicBoxEl.src.includes("%E9%BB%84%E6%98%8F%E5%B1%81")) {
+      try {
+        musicBoxEl.src = MUSIC_BOX_BGM_URL;
+        musicBoxEl.load();
+      } catch {
+        /* ignore */
+      }
+    }
+    return musicBoxEl;
+  }
+  const el = new Audio(MUSIC_BOX_BGM_URL);
   el.preload = "auto";
-  el.loop = false;
-  el.volume = 0; // 定位完成前静音，防止从 0s 漏出
+  el.loop = false; // 不循环
+  el.volume = MUSIC_BOX_VOLUME;
   el.crossOrigin = "anonymous";
-  el.src = MUSIC_BOX_BGM_URL;
   el.addEventListener("timeupdate", () => {
     if (!musicBoxSession || muted || el.paused) return;
-    // 未定位成功时若仍在前奏，强制拉回 18s
-    if (el.currentTime < MUSIC_BOX_START_SEC - 0.25) {
-      el.currentTime = MUSIC_BOX_START_SEC;
-      return;
-    }
-    // 播到 53s 结束
+    // 播到 4:33 停止，不循环
     if (el.currentTime >= MUSIC_BOX_END_SEC - 0.04) {
       finishMusicBox(musicBoxSession);
     }
@@ -511,77 +499,8 @@ function ensureMusicBoxEl() {
 }
 
 /**
- * 等元数据就绪后 seek 到 startSec，并等待 seeked（避免 play 从 0s 起）。
- * @param {HTMLAudioElement} el
- * @param {number} startSec
- */
-function seekAudioWhenReady(el, startSec) {
-  return new Promise((resolve) => {
-    let settled = false;
-    const done = () => {
-      if (settled) return;
-      settled = true;
-      resolve(el);
-    };
-
-    const applySeek = () => {
-      const dur = el.duration;
-      let t = startSec;
-      if (Number.isFinite(dur) && dur > 0) {
-        t = Math.min(startSec, Math.max(0, dur - 0.05));
-      }
-      const onSeeked = () => {
-        el.removeEventListener("seeked", onSeeked);
-        // 再校验一次
-        if (el.currentTime < startSec - 1) {
-          try {
-            el.currentTime = t;
-          } catch {
-            /* ignore */
-          }
-        }
-        done();
-      };
-      el.addEventListener("seeked", onSeeked);
-      try {
-        el.currentTime = t;
-      } catch {
-        done();
-        return;
-      }
-      // 部分浏览器已在目标附近不会触发 seeked
-      window.setTimeout(() => {
-        if (Math.abs(el.currentTime - t) < 1.5 || el.readyState >= 2) {
-          el.removeEventListener("seeked", onSeeked);
-          done();
-        }
-      }, 400);
-    };
-
-    if (el.readyState >= 1 && Number.isFinite(el.duration) && el.duration > 0) {
-      applySeek();
-      return;
-    }
-    const onMeta = () => {
-      el.removeEventListener("loadedmetadata", onMeta);
-      applySeek();
-    };
-    el.addEventListener("loadedmetadata", onMeta);
-    try {
-      el.load();
-    } catch {
-      /* ignore */
-    }
-    // 超时兜底：仍尝试 seek + play
-    window.setTimeout(() => {
-      el.removeEventListener("loadedmetadata", onMeta);
-      applySeek();
-    }, 2500);
-  });
-}
-
-/**
- * 弹琴老人八音盒：播放《風之傳說》18–53s。
+ * 弹琴老人八音盒：播放 `music/黄昏屁.mp3`（0 → 4:33，不循环）。
+ * 必须在用户按键手势里同步调用 play()，避免浏览器拦截异步播放。
  * 返回 true 表示开始播放；正在播放时再次调用会停止并返回 false。
  * @param {{onNote?:(index:number)=>void, onEnded?:()=>void}} hooks
  */
@@ -591,14 +510,14 @@ export function toggleMusicBox(hooks = {}) {
     return false;
   }
   if (muted) return false;
+  // 潜入太鼓独占时不播八音盒
+  if (infiltrationBgmWanted) return false;
   ensureAudio();
 
   // 压低默认环境点缀
   setAmbienceDuck(AMBIENCE_DUCK_MUSIC_BOX);
 
   const el = ensureMusicBoxEl();
-  el.volume = 0; // seek 完成前保持静音
-
   // 键位动画：约按节拍脉冲 onNote
   let noteIndex = 0;
   const pulseTimer = window.setInterval(() => {
@@ -618,22 +537,21 @@ export function toggleMusicBox(hooks = {}) {
   };
   musicBoxSession = session;
 
-  // 必须先 seek 到 18s，再 play，否则会从头响
-  seekAudioWhenReady(el, MUSIC_BOX_START_SEC).then(() => {
-    if (musicBoxSession !== session) return;
-    // 双保险
-    try {
-      if (el.currentTime < MUSIC_BOX_START_SEC - 0.5) {
-        el.currentTime = MUSIC_BOX_START_SEC;
-      }
-    } catch {
-      /* ignore */
-    }
-    el.volume = MUSIC_BOX_VOLUME;
-    el.play()?.catch?.(() => {
+  // 同步在用户手势中 play（不可放到 await/then，否则会被浏览器拦截）
+  try {
+    el.pause();
+    el.currentTime = MUSIC_BOX_START_SEC;
+  } catch {
+    /* ignore */
+  }
+  el.volume = MUSIC_BOX_VOLUME;
+  const playP = el.play?.();
+  if (playP && typeof playP.then === "function") {
+    playP.catch((err) => {
+      console.warn("[musicBox] play failed", err);
       if (musicBoxSession === session) finishMusicBox(session);
     });
-  });
+  }
 
   return true;
 }
@@ -735,7 +653,7 @@ export function sfxWaterTrain() {
  * 白天环境点缀：仅稀疏高音风铃，无持续低频垫音（旧版 110Hz 和弦会嗡嗡响）
  */
 export function startAmbience() {
-  if (padStarted || muted) return;
+  if (padStarted || muted || infiltrationBgmWanted) return;
   const ctx = ensureAudio();
   if (!ctx) return;
   padStarted = true;
@@ -787,7 +705,7 @@ export function pauseDefaultAmbience() {
  * 恢复默认环境音（离开峡谷场景且未静音时）
  */
 export function resumeDefaultAmbience() {
-  if (muted) return;
+  if (muted || infiltrationBgmWanted) return;
   ambienceDuck = 1;
   if (!padStarted) startAmbience();
 }
@@ -861,7 +779,8 @@ function isCanyonBgmAudible() {
  */
 export function setCanyonApproachBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
-  const next = !!active && !muted;
+  // 木马潜入太鼓独占时不抢播
+  const next = !!active && !muted && !infiltrationBgmWanted;
 
   if (next) {
     // 重新进入谷区：取消「播完即停」，继续循环
@@ -889,6 +808,18 @@ export function setCanyonApproachBgm(active, opts = {}) {
     // 与湖沼 BGM 互斥：进谷时压掉可能仍在播的湖沼段
     if (swampBgmWanted || swampBgmPendingStop || isSwampBgmAudible()) {
       fadeOutSwampBgm(0.6);
+    }
+    // 峡谷优先：暂停电车搭乘曲（下车 wanted 仍保留，离谷后可恢复）
+    if (tramRidePhase !== "idle") {
+      for (const el of [tramIntroEl, tramMainEl]) {
+        if (!el) continue;
+        try {
+          el.pause();
+          el.volume = 0;
+        } catch {
+          /* ignore */
+        }
+      }
     }
 
     ensureAudio();
@@ -923,6 +854,8 @@ export function setCanyonApproachBgm(active, opts = {}) {
   // 已在终点附近或未真正在播：直接淡出
   canyonBgmPendingStop = false;
   fadeOutCanyonBgm(fade);
+  // 离谷后若仍在电车上，恢复搭乘主曲
+  resumeTramRideBgmIfWanted();
 }
 
 export function isCanyonBgmPlaying() {
@@ -968,6 +901,7 @@ function fadeOutCanyonBgm(seconds = 1.4) {
   canyonBgmPendingStop = false;
   if (!el || (el.paused && el.volume <= 0.001)) {
     if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    else resumeTramRideBgmIfWanted();
     return;
   }
   const start = el.volume > 0 ? el.volume : CANYON_BGM_VOLUME;
@@ -997,6 +931,7 @@ function fadeOutCanyonBgm(seconds = 1.4) {
     }
     canyonBgmFading = false;
     if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    else resumeTramRideBgmIfWanted();
   };
   requestAnimationFrame(step);
 }
@@ -1006,14 +941,528 @@ function fadeOutCanyonBgm(seconds = 1.4) {
 //  同构：整段播完才停，离开不打断；与峡谷/八音盒互斥（先停对方）
 // =====================================================================
 
-/** 任一区段 BGM（峡谷 / 湖沼）仍在占用声道时，默认环境音不得恢复 */
+/** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘）仍在占用声道时，默认环境音不得恢复 */
 function anySegmentBgmEngaged() {
   return (
     canyonBgmWanted ||
     canyonBgmPendingStop ||
     swampBgmWanted ||
-    swampBgmPendingStop
+    swampBgmPendingStop ||
+    infiltrationBgmWanted ||
+    tramRideWanted
   );
+}
+
+// =====================================================================
+//  电车搭乘 BGM：Various Artists-Tram.mp3（0–16s）→ 城南花已开（循环）
+// =====================================================================
+
+function ensureTramIntroEl() {
+  if (tramIntroEl) return tramIntroEl;
+  const el = new Audio(TRAM_INTRO_URL);
+  el.preload = "auto";
+  el.loop = false;
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  el.addEventListener("timeupdate", () => {
+    if (!tramRideWanted || tramRidePhase !== "intro" || muted) return;
+    if (el.currentTime < TRAM_INTRO_END_SEC - 0.05) return;
+    // 头 16 秒播完 → 切主曲
+    advanceTramRideToMain();
+  });
+  el.addEventListener("ended", () => {
+    if (!tramRideWanted || tramRidePhase !== "intro" || muted) return;
+    advanceTramRideToMain();
+  });
+  tramIntroEl = el;
+  return el;
+}
+
+function ensureTramMainEl() {
+  if (tramMainEl) return tramMainEl;
+  const el = new Audio(TRAM_MAIN_URL);
+  el.preload = "auto";
+  el.loop = true;
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  tramMainEl = el;
+  return el;
+}
+
+function stopTramRideElements() {
+  tramRidePhase = "idle";
+  tramRideFading = false;
+  for (const el of [tramIntroEl, tramMainEl]) {
+    if (!el) continue;
+    try {
+      el.pause();
+      el.volume = 0;
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+function advanceTramRideToMain() {
+  if (!tramRideWanted || muted) return;
+  // 峡谷 / 潜入独占时不抢播
+  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted) {
+    if (tramIntroEl) {
+      try {
+        tramIntroEl.pause();
+        tramIntroEl.volume = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+    tramRidePhase = "main"; // 记住应播主曲，等独占结束后恢复
+    return;
+  }
+  const intro = tramIntroEl;
+  if (intro) {
+    try {
+      intro.pause();
+      intro.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+  tramRidePhase = "main";
+  ensureAudio();
+  const main = ensureTramMainEl();
+  try {
+    main.currentTime = 0;
+  } catch {
+    /* ignore */
+  }
+  main.volume = TRAM_RIDE_VOLUME;
+  main.play()?.catch?.(() => {});
+}
+
+/**
+ * 电车搭乘背景音乐。
+ * 上车：先播 Tram.mp3 头 16 秒，再循环《城南花已开》；下车：停止。
+ * 近峡谷时由峡谷 BGM 优先，离谷后若仍在车上则恢复主曲。
+ * @param {boolean} active
+ * @param {{ fade?: number, skipIntro?: boolean }} [opts]
+ */
+export function setTramRideBgm(active, opts = {}) {
+  const fade = opts.fade ?? 0.7;
+  const next = !!active && !muted;
+
+  if (next) {
+    tramRideWanted = true;
+    // 峡谷 / 潜入独占：只记 wanted，不抢播
+    if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted) {
+      return;
+    }
+    if (tramRidePhase === "intro" || tramRidePhase === "main") {
+      // 已在播：确保未暂停
+      const el = tramRidePhase === "intro" ? tramIntroEl : tramMainEl;
+      if (el?.paused) {
+        ensureAudio();
+        el.play()?.catch?.(() => {});
+      }
+      return;
+    }
+    pauseDefaultAmbience();
+    if (musicBoxSession) stopMusicBox();
+    // 与湖沼互斥
+    if (swampBgmWanted || swampBgmPendingStop) {
+      fadeOutSwampBgm(0.5);
+    }
+
+    ensureAudio();
+    if (opts.skipIntro) {
+      advanceTramRideToMain();
+      return;
+    }
+    tramRidePhase = "intro";
+    const intro = ensureTramIntroEl();
+    try {
+      intro.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+    intro.volume = 0;
+    intro.play()?.catch?.(() => {});
+    fadeTramRideAudioTo(intro, TRAM_RIDE_VOLUME, fade);
+    // 预加载主曲
+    ensureTramMainEl();
+    return;
+  }
+
+  // ---- 下车 / 关闭 ----
+  if (!tramRideWanted && tramRidePhase === "idle") return;
+  tramRideWanted = false;
+  fadeOutTramRideBgm(fade);
+}
+
+/** 峡谷/潜入结束后，若仍在车上则恢复搭乘曲 */
+export function resumeTramRideBgmIfWanted() {
+  if (!tramRideWanted || muted) return;
+  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted) return;
+  if (tramRidePhase === "intro" && tramIntroEl && !tramIntroEl.paused) return;
+  if (tramRidePhase === "main" && tramMainEl && !tramMainEl.paused) return;
+  pauseDefaultAmbience();
+  // intro 未播完：从断点续播；否则接主曲
+  if (
+    tramRidePhase === "intro" &&
+    tramIntroEl &&
+    tramIntroEl.currentTime < TRAM_INTRO_END_SEC - 0.12
+  ) {
+    ensureAudio();
+    tramIntroEl.volume = TRAM_RIDE_VOLUME;
+    tramIntroEl.play()?.catch?.(() => {});
+    return;
+  }
+  advanceTramRideToMain();
+}
+
+export function isTramRideBgmPlaying() {
+  return !!(
+    tramRideWanted &&
+    ((tramIntroEl && !tramIntroEl.paused) || (tramMainEl && !tramMainEl.paused))
+  );
+}
+
+function fadeTramRideAudioTo(el, targetVol, seconds) {
+  if (!el) return;
+  const start = el.volume;
+  const end = THREE_CLAMP(targetVol, 0, 1);
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  tramRideFading = true;
+  const step = () => {
+    if (el !== tramIntroEl && el !== tramMainEl) return;
+    if (!tramRideWanted && end > 0) {
+      tramRideFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1 && tramRideFading) requestAnimationFrame(step);
+    else {
+      el.volume = end;
+      tramRideFading = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
+function fadeOutTramRideBgm(seconds = 0.9) {
+  tramRideWanted = false;
+  const el =
+    tramRidePhase === "intro"
+      ? tramIntroEl
+      : tramRidePhase === "main"
+        ? tramMainEl
+        : tramIntroEl || tramMainEl;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    stopTramRideElements();
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : TRAM_RIDE_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  tramRideFading = true;
+  const step = () => {
+    if (tramRideWanted) {
+      tramRideFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    stopTramRideElements();
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+  };
+  requestAnimationFrame(step);
+}
+
+// =====================================================================
+//  木马夜间潜入 BGM：鬼太鼓座 · 大太鼓
+//  士兵开始行动起播，返回木马腹内停止；播放时暂停其他音响
+// =====================================================================
+
+function ensureInfiltrationBgmEl() {
+  if (infiltrationBgmEl) return infiltrationBgmEl;
+  const el = new Audio(INFILTRATION_BGM_URL);
+  el.loop = true;
+  el.preload = "auto";
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  infiltrationBgmEl = el;
+  return el;
+}
+
+function isInfiltrationBgmAudible() {
+  return !!(
+    infiltrationBgmEl &&
+    !infiltrationBgmEl.paused &&
+    infiltrationBgmEl.volume > 0.001
+  );
+}
+
+/** 强制暂停其他 BGM / 环境 / 电车（潜入太鼓独占） */
+function pauseOthersForInfiltration() {
+  pauseDefaultAmbience();
+  if (musicBoxSession) stopMusicBox();
+  // 峡谷 / 湖沼：立刻掐掉，不播完收尾（潜入优先）
+  canyonBgmPendingStop = false;
+  canyonBgmWanted = false;
+  if (canyonBgmEl && !canyonBgmEl.paused) {
+    try {
+      canyonBgmEl.pause();
+      canyonBgmEl.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+  swampBgmPendingStop = false;
+  swampBgmWanted = false;
+  if (swampBgmEl && !swampBgmEl.paused) {
+    try {
+      swampBgmEl.pause();
+      swampBgmEl.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+  // 电车搭乘曲：暂停声道（tramRideWanted 保留，任务结束后可恢复）
+  for (const el of [tramIntroEl, tramMainEl]) {
+    if (!el) continue;
+    try {
+      el.pause();
+      el.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+  tramProximity = 0;
+  if (tramNodes?.master && audioCtx) {
+    tramNodes.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.04);
+  }
+}
+
+/**
+ * 标记潜入任务是否进行中（士兵出动 / 回腹）。
+ * 真正起播由 updateInfiltrationBgm 按玩家距离决定——看不到场景不响。
+ * @param {boolean} active
+ * @param {{ fade?: number }} [opts]
+ */
+export function setInfiltrationBgm(active, opts = {}) {
+  const fade = opts.fade ?? 0.8;
+  const next = !!active && !muted;
+  if (next) {
+    infiltrationMissionActive = true;
+    // 不立即 play：等本帧/后续 updateInfiltrationBgm 判定距离
+    return;
+  }
+  // 任务结束（回腹）：无论远近都停
+  infiltrationMissionActive = false;
+  infiltrationInRange = false;
+  if (!infiltrationBgmWanted && !isInfiltrationBgmAudible()) return;
+  infiltrationBgmWanted = false;
+  fadeOutInfiltrationBgm(fade);
+}
+
+/**
+ * 按玩家与木马/圣城场景的距离更新潜入太鼓。
+ * 士兵行动中 + 进入听距才播放并独占声道；离开听距暂停并恢复其他音响。
+ * @param {THREE.Vector3|{x:number,y:number,z:number}|null|undefined} listenerPos
+ * @param {THREE.Vector3|{x:number,y:number,z:number}|null|undefined} sourcePos 木马/场景锚点
+ */
+export function updateInfiltrationBgm(listenerPos, sourcePos) {
+  if (!infiltrationMissionActive || muted) {
+    if (infiltrationBgmWanted || isInfiltrationBgmAudible()) {
+      infiltrationBgmWanted = false;
+      infiltrationInRange = false;
+      fadeOutInfiltrationBgm(0.6);
+    }
+    return;
+  }
+  if (
+    !listenerPos ||
+    !sourcePos ||
+    !Number.isFinite(listenerPos.x) ||
+    !Number.isFinite(sourcePos.x)
+  ) {
+    return;
+  }
+
+  const dx = listenerPos.x - sourcePos.x;
+  const dy = listenerPos.y - sourcePos.y;
+  const dz = listenerPos.z - sourcePos.z;
+  const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+  // 滞回：进 ENTER 才开听，出 EXIT 才关
+  if (infiltrationInRange) {
+    if (dist > INFILTRATION_BGM_EXIT_R) infiltrationInRange = false;
+  } else if (dist <= INFILTRATION_BGM_ENTER_R) {
+    infiltrationInRange = true;
+  }
+
+  if (!infiltrationInRange) {
+    // 离得远：不播 / 停播，让出声道
+    if (infiltrationBgmWanted || isInfiltrationBgmAudible()) {
+      infiltrationBgmWanted = false;
+      silenceInfiltrationBgmKeepMission(0.7);
+    }
+    return;
+  }
+
+  // 近距：满音量 → 边缘衰减
+  let gain = 1;
+  if (dist > INFILTRATION_BGM_FULL_R) {
+    const span = Math.max(
+      0.001,
+      INFILTRATION_BGM_ENTER_R - INFILTRATION_BGM_FULL_R
+    );
+    gain = THREE_CLAMP(1 - (dist - INFILTRATION_BGM_FULL_R) / span, 0, 1);
+  }
+  const targetVol = INFILTRATION_BGM_VOLUME * gain;
+
+  if (!infiltrationBgmWanted || !isInfiltrationBgmAudible()) {
+    infiltrationBgmWanted = true;
+    pauseOthersForInfiltration();
+    ensureAudio();
+    const el = ensureInfiltrationBgmEl();
+    // 仅首次进入听距时从头播，避免反复 seek 打断鼓点
+    if (!isInfiltrationBgmAudible()) {
+      try {
+        if (el.currentTime < 0.05 || el.paused) el.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+      el.play()?.catch?.(() => {});
+    }
+    el.volume = targetVol;
+    return;
+  }
+
+  // 已在播：只跟距离改音量（不每帧重 fade 动画，避免抢）
+  if (infiltrationBgmEl && !infiltrationBgmFading) {
+    infiltrationBgmEl.volume = targetVol;
+  }
+}
+
+/**
+ * 仍在任务中但玩家走远：暂停太鼓并恢复其他音响（任务标记保留）。
+ */
+function silenceInfiltrationBgmKeepMission(seconds = 0.7) {
+  const el = infiltrationBgmEl;
+  infiltrationBgmWanted = false;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : INFILTRATION_BGM_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  infiltrationBgmFading = true;
+  const step = () => {
+    if (!infiltrationBgmEl || infiltrationBgmEl !== el) return;
+    // 又靠近了：中止静音
+    if (infiltrationBgmWanted) {
+      infiltrationBgmFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      // 保留进度，回来接着听（比每次从头更自然）
+    } catch {
+      /* ignore */
+    }
+    infiltrationBgmFading = false;
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+  };
+  requestAnimationFrame(step);
+}
+
+export function isInfiltrationBgmPlaying() {
+  return !!(
+    infiltrationBgmEl &&
+    !infiltrationBgmEl.paused &&
+    infiltrationBgmWanted
+  );
+}
+
+/** 潜入任务是否仍在进行（不论玩家远近） */
+export function isInfiltrationMissionActive() {
+  return !!infiltrationMissionActive;
+}
+
+function fadeInfiltrationAudioTo(el, targetVol, seconds) {
+  if (!el) return;
+  const start = el.volume;
+  const end = THREE_CLAMP(targetVol, 0, 1);
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  infiltrationBgmFading = true;
+  const step = () => {
+    if (!infiltrationBgmEl || infiltrationBgmEl !== el) return;
+    if (!infiltrationBgmWanted && end > 0) {
+      infiltrationBgmFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1 && infiltrationBgmFading) requestAnimationFrame(step);
+    else {
+      el.volume = end;
+      infiltrationBgmFading = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
+function fadeOutInfiltrationBgm(seconds = 1.0) {
+  const el = infiltrationBgmEl;
+  infiltrationBgmWanted = false;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : INFILTRATION_BGM_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  infiltrationBgmFading = true;
+  const step = () => {
+    if (!infiltrationBgmEl || infiltrationBgmEl !== el) return;
+    if (infiltrationBgmWanted) {
+      infiltrationBgmFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+    infiltrationBgmFading = false;
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+  };
+  requestAnimationFrame(step);
 }
 
 function ensureSwampBgmEl() {
@@ -1081,7 +1530,8 @@ function isSwampBgmAudible() {
  */
 export function setSwampBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
-  const next = !!active && !muted;
+  // 木马潜入太鼓独占时不抢播
+  const next = !!active && !muted && !infiltrationBgmWanted;
 
   if (next) {
     const wasPendingOnly = swampBgmPendingStop && !swampBgmWanted;
@@ -1224,6 +1674,29 @@ function setMuted(next) {
     swampBgmPendingStop = false;
     swampBgmWanted = false;
     fadeOutSwampBgm(0.2);
+    infiltrationMissionActive = false;
+    infiltrationBgmWanted = false;
+    infiltrationInRange = false;
+    if (infiltrationBgmEl) {
+      try {
+        infiltrationBgmEl.pause();
+        infiltrationBgmEl.volume = 0;
+        infiltrationBgmEl.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+    for (const el of thunderPool) {
+      try {
+        el.pause();
+        el.volume = 0;
+        el.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+    tramRideWanted = false;
+    stopTramRideElements();
     tramProximity = 0;
     if (tramNodes?.master && audioCtx) {
       tramNodes.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);

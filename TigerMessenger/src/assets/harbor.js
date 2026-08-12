@@ -412,8 +412,8 @@ export function updateWarshipOars(boat, dt = 1 / 60, moving = false) {
 // =====================================================================
 //  战船剪纸罗马士兵：每支桨配一名，四肢关节随桨相位划动
 //  - 剪纸人：扁平薄片（Z 向薄），所有关节绕面法线旋转（2D 纸偶动画）
-//  - 皮甲（躯干 cuirass + 皮裙 pteruges）+ 罗马青铜盔（galea）+ 红鬃冠
-//  - 每船 9 个 InstancedMesh（躯干/皮裙/头/盔/鬃冠/双臂/双腿），尺寸
+//  - 皮甲（躯干 cuirass + 皮裙 pteruges）+ 罗马青铜盔（galea）+ 大型红羽冠
+//  - 每船 11 个 InstancedMesh（躯干/皮裙/头/盔/羽冠/羽片/羽轴/双臂/双腿），尺寸
 //    定义在船局部坐标系内，随战船 scale 自然成比例
 // =====================================================================
 
@@ -449,12 +449,16 @@ function mergeBoxes(defs) {
 let CREW_SHARED = null;
 function crewShared() {
   if (CREW_SHARED) return CREW_SHARED;
+  const CREST_SCALE = 1 / 3;
+  const CREST_BASE_Y = 0.292;
   const m = {
     leather: toonMat(0x8a5a33), // 皮甲
     leatherDark: toonMat(0x5c3a22), // 皮裙
     skin: toonMat(0xd9a06b), // 头/四肢
     bronze: toonMat(0xd4a84a), // 罗马盔 — 亮青铜
-    crest: toonMat(0xc62828), // 红鬃冠
+    crest: toonMat(0xc62828), // 红色羽冠主体
+    crestDark: toonMat(0x7f1d1d), // 羽毛分层暗部
+    crestLight: toonMat(0xef5350), // 羽轴高光
   };
   // 部件原点均在关节处；头/盔/冠的颈部位移直接烘焙进几何
   const box = (w, h, t, ox, oy) => {
@@ -462,22 +466,134 @@ function crewShared() {
     geo.translate(ox, oy, 0);
     return facet(geo);
   };
+  /** XY 面剪纸轮廓，Z 向薄挤出；z 用于把羽毛细节叠到羽冠前面。 */
+  const extrudeShape = (shape, depth, z = 0) => {
+    const geo = new THREE.ExtrudeGeometry(shape, {
+      depth,
+      bevelEnabled: false,
+      curveSegments: 2,
+    });
+    geo.translate(0, 0, z - depth * 0.5);
+    return facet(geo);
+  };
+
+  // 以羽冠与头盔的连接线为锚点缩放，避免羽冠缩小后悬空或下沉。
+  const scaleCrestFromHelmet = (geo) => {
+    geo.translate(0, -CREST_BASE_Y, 0);
+    geo.scale(CREST_SCALE, CREST_SCALE, CREST_SCALE);
+    geo.translate(0, CREST_BASE_Y, 0);
+    return geo;
+  };
+
+  /** 多个独立羽片合并为一个共享几何，减少每名纸士兵的 draw call。 */
+  const mergeExtrudedShapes = (shapes, depth, z = 0) => {
+    const positions = [];
+    const normals = [];
+    for (const shape of shapes) {
+      const geo = new THREE.ExtrudeGeometry(shape, {
+        depth,
+        bevelEnabled: false,
+        curveSegments: 1,
+      });
+      geo.translate(0, 0, z - depth * 0.5);
+      const f = facet(geo);
+      const p = f.attributes.position.array;
+      const n = f.attributes.normal.array;
+      for (let i = 0; i < p.length; i++) {
+        positions.push(p[i]);
+        normals.push(n[i]);
+      }
+      f.dispose();
+      geo.dispose();
+    }
+    const merged = new THREE.BufferGeometry();
+    merged.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    merged.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+    merged.computeBoundingSphere();
+    return merged;
+  };
+
+  /**
+   * 大型扇形红羽冠：底部横跨头盔前额至后颈，顶部高高展开。
+   * 纸士兵是侧向剪纸轮廓，因此羽冠也沿 XY 面展开，保留清晰的扇形剪影。
+   */
+  const crestFan = () => {
+    const shape = new THREE.Shape();
+    shape.moveTo(-0.205, 0.292);
+    shape.lineTo(-0.245, 0.405);
+    shape.lineTo(-0.232, 0.515);
+    shape.lineTo(-0.17, 0.625);
+    shape.lineTo(-0.082, 0.695);
+    shape.lineTo(0.0, 0.725);
+    shape.lineTo(0.092, 0.702);
+    shape.lineTo(0.18, 0.64);
+    shape.lineTo(0.235, 0.535);
+    shape.lineTo(0.25, 0.42);
+    shape.lineTo(0.198, 0.292);
+    shape.closePath();
+    return scaleCrestFromHelmet(extrudeShape(shape, 0.04));
+  };
+
+  /** 单片细羽毛：从盔顶向外上方倾斜，形成层层排列的羽冠。 */
+  const crestFeathers = () => {
+    const feathers = [];
+    const stems = [];
+    const count = 15;
+    for (let i = 0; i < count; i++) {
+      const u = i / (count - 1);
+      const baseX = -0.19 + u * 0.38;
+      const edge = Math.abs(u - 0.5) * 2;
+      const tipX = baseX * (1.12 + edge * 0.14);
+      const tipY = 0.47 + 0.255 * (1 - Math.pow(edge, 1.45));
+      const width = 0.023 - edge * 0.004;
+
+      const feather = new THREE.Shape();
+      feather.moveTo(baseX - width, 0.296);
+      feather.lineTo(baseX + width, 0.296);
+      feather.lineTo(tipX + width * 0.22, tipY - 0.04);
+      feather.lineTo(tipX, tipY);
+      feather.lineTo(tipX - width * 0.22, tipY - 0.04);
+      feather.closePath();
+      feathers.push(feather);
+
+      const dx = tipX - baseX;
+      const dy = tipY - 0.304;
+      const length = Math.max(0.001, Math.hypot(dx, dy));
+      const nx = -dy / length;
+      const ny = dx / length;
+      const half = 0.0042;
+      const stem = new THREE.Shape();
+      stem.moveTo(baseX + nx * half, 0.304 + ny * half);
+      stem.lineTo(tipX + nx * half * 0.55, tipY + ny * half * 0.55);
+      stem.lineTo(tipX - nx * half * 0.55, tipY - ny * half * 0.55);
+      stem.lineTo(baseX - nx * half, 0.304 - ny * half);
+      stem.closePath();
+      stems.push(stem);
+    }
+    return {
+      feathers: scaleCrestFromHelmet(mergeExtrudedShapes(feathers, 0.012, 0.022)),
+      stems: scaleCrestFromHelmet(mergeExtrudedShapes(stems, 0.014, 0.029)),
+    };
+  };
+  const crestDetail = crestFeathers();
   const geo = {
     torso: box(0.13, 0.17, 0.03, 0, 0.085), // 关节=髋
     skirt: box(0.15, 0.08, 0.026, 0, -0.04), // 关节=髋（下垂）
     // 脸从颊护之间露出
     head: box(0.064, 0.07, 0.024, 0, 0.188),
-    // 罗马 galea 剪纸轮廓：盔碗 + 额檐 + 颈护 + 双颊护 + 鬃冠座
+    // 罗马 galea 剪纸轮廓：盔碗 + 额檐 + 颈护 + 双颊护 + 羽冠座
     helmet: mergeBoxes([
       [0.118, 0.07, 0.05, 0, 0.252], // 盔碗 calotte
       [0.136, 0.022, 0.058, 0, 0.218], // 额檐 brow peak
       [0.108, 0.032, 0.052, 0, 0.198], // 颈护 neck guard
       [0.032, 0.062, 0.044, -0.06, 0.182], // 左颊护
       [0.032, 0.062, 0.044, 0.06, 0.182], // 右颊护
-      [0.036, 0.028, 0.042, 0, 0.296], // 鬃冠座 crest holder
+      [0.04, 0.022, 0.04, 0, 0.292], // 羽冠座（托住红羽冠底边）
     ]),
-    // 横贯红鬃冠（百夫长式 transverse crista）
-    crest: box(0.2, 0.072, 0.052, 0, 0.34),
+    // 大型红色扇形羽冠，以及分层羽片/羽轴细节
+    crest: crestFan(),
+    crestFeathers: crestDetail.feathers,
+    crestStems: crestDetail.stems,
     arm: box(0.042, 0.15, 0.02, 0, -0.07), // 关节=肩
     leg: box(0.048, 0.16, 0.02, 0, -0.075), // 关节=髋
   };
@@ -503,6 +619,8 @@ function buildWarshipCrew(g) {
     ["head", geo.head, m.skin],
     ["helmet", geo.helmet, m.bronze],
     ["crest", geo.crest, m.crest],
+    ["crestFeathers", geo.crestFeathers, m.crestDark],
+    ["crestStems", geo.crestStems, m.crestLight],
     ["armL", geo.arm, m.skin],
     ["armR", geo.arm, m.skin],
     ["legL", geo.leg, m.skin],
@@ -579,6 +697,8 @@ function updateWarshipCrew(boat, phase = 0, speed = 0) {
     parts.head.setMatrixAt(i, _cMat);
     parts.helmet.setMatrixAt(i, _cMat);
     parts.crest.setMatrixAt(i, _cMat);
+    parts.crestFeathers.setMatrixAt(i, _cMat);
+    parts.crestStems.setMatrixAt(i, _cMat);
 
     // 双臂：肩点随躯干前倾，再叠加自身摆动；Z 向微错开防共面
     _cQLimb.copy(_cQBase).multiply(_cRz.setFromAxisAngle(_CZ, lean + arm));
@@ -635,6 +755,8 @@ function buildPorter(m, geo) {
   body.add(part(geo.head, m.skin, 0.008));
   body.add(part(geo.helmet, m.bronze, 0.008));
   body.add(part(geo.crest, m.crest, 0.008));
+  body.add(part(geo.crestFeathers, m.crestDark, 0.004));
+  body.add(part(geo.crestStems, m.crestLight, 0.003));
 
   // 双臂：肩枢轴，抱箱时前平举
   const armL = new THREE.Group();
@@ -1041,7 +1163,35 @@ export function createTieSoldier() {
 }
 
 /**
- * 夜间潜入城堡的纸士兵：左手持盾或火炬，右手持短剑。
+ * 港口鼓声巡查兵：左手火把、右手长枪（矛头向前），快步行进姿态。
+ * 默认关闭点光，避免十余名士兵同时点亮拖垮帧率。
+ * @returns {THREE.Group}
+ */
+export function createHarborPatrolSoldier() {
+  const root = createNightInfiltrationSoldier({ torchLeft: true });
+  root.name = "harbor-patrol-soldier";
+  const { body, armL, armR, crate } = root.userData.parts || {};
+  if (crate) crate.visible = false;
+  // 前倾突击：矛头朝局部 +X（行进方向）
+  if (body) body.rotation.z = -0.14;
+  if (armL) armL.rotation.z = -0.55;
+  if (armR) armR.rotation.z = 1.28;
+  const spear = root.userData.equipment?.spear;
+  if (spear) {
+    spear.position.set(0.28, 0.22, 0.02);
+    // 枪杆沿 +X 前指
+    spear.rotation.set(0, 0, -Math.PI / 2 - 0.08);
+  }
+  const light = root.userData.equipment?.torchLight;
+  if (light) {
+    light.intensity = 0;
+    light.visible = false;
+  }
+  return root;
+}
+
+/**
+ * 夜间潜入城堡的纸士兵：左手持盾或火炬，右手持长枪。
  *
  * 仍复用码头班组的剪纸罗马士兵几何，装备单独挂在 fig 上，
  * 因而不会改变已有搬运兵/系绳兵的尺寸与动画。
@@ -1066,7 +1216,7 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   const bronze = m.bronze;
   const shieldMat = toonMat(0xb8c4c7, { flatShading: true });
   const shieldRimMat = toonMat(0x65777a, { flatShading: true });
-  const swordDark = toonMat(0x4b3523, { flatShading: true });
+  const spearWood = toonMat(0x4b3523, { flatShading: true });
   const flameMat = new THREE.MeshBasicMaterial({ color: 0xffb22e });
   const equipment = new THREE.Group();
   equipment.name = "infiltration-equipment";
@@ -1077,7 +1227,7 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   if (torchLeft) {
     torch = new THREE.Group();
     torch.name = "left-hand-torch";
-    const shaft = part(new THREE.CylinderGeometry(0.012, 0.015, 0.18, 5), swordDark, 0.005);
+    const shaft = part(new THREE.CylinderGeometry(0.012, 0.015, 0.18, 5), spearWood, 0.005);
     shaft.position.y = 0.09;
     torch.add(shaft);
     const flame = part(new THREE.ConeGeometry(0.035, 0.09, 5), flameMat, 0.006);
@@ -1104,24 +1254,28 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
     equipment.add(shield);
   }
 
-  // 右手短剑：深色握柄、横护手与青铜色短刃，比例保持在纸偶手臂附近。
-  const sword = new THREE.Group();
-  sword.name = "right-hand-short-sword";
-  const grip = part(new THREE.BoxGeometry(0.025, 0.055, 0.025), swordDark, 0.005);
-  grip.position.y = -0.005;
-  sword.add(grip);
-  const guard = part(new THREE.BoxGeometry(0.085, 0.018, 0.03), bronze, 0.006);
-  guard.position.y = 0.035;
-  sword.add(guard);
-  const blade = part(new THREE.BoxGeometry(0.032, 0.17, 0.018), shieldMat, 0.006);
-  blade.position.y = 0.13;
-  sword.add(blade);
-  sword.position.set(0.15, PORTER_HIP + 0.12, 0.11);
-  sword.rotation.z = -0.08;
-  equipment.add(sword);
+  // 右手长枪：木质长杆、青铜枪领、锥形枪尖，长度明显超过纸士兵身高。
+  const spear = new THREE.Group();
+  spear.name = "right-hand-long-spear";
+  const shaft = part(new THREE.CylinderGeometry(0.012, 0.016, 0.62, 6), spearWood, 0.004);
+  shaft.position.y = 0.11;
+  spear.add(shaft);
+  const butt = part(new THREE.CylinderGeometry(0.018, 0.012, 0.045, 6), bronze, 0.004);
+  butt.position.y = -0.21;
+  spear.add(butt);
+  const collar = part(new THREE.CylinderGeometry(0.025, 0.025, 0.035, 6), bronze, 0.004);
+  collar.position.y = 0.415;
+  spear.add(collar);
+  const spearhead = part(new THREE.ConeGeometry(0.052, 0.17, 6), bronze, 0.006);
+  spearhead.name = "long-spear-head";
+  spearhead.position.y = 0.515;
+  spear.add(spearhead);
+  spear.position.set(0.15, PORTER_HIP + 0.12, 0.11);
+  spear.rotation.z = -0.08;
+  equipment.add(spear);
 
   fig.add(equipment);
-  root.userData.equipment = { equipment, shield, sword, torch, torchLight };
+  root.userData.equipment = { equipment, shield, spear, torch, torchLight };
   root.userData.torchBearer = !!torchLeft;
   return root;
 }
