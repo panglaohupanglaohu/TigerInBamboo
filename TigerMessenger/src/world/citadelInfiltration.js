@@ -84,11 +84,6 @@ function samplePathDistance(path, distance, out) {
   return samplePath(path, distance / path.total, out);
 }
 
-function wrapPathDistance(distance, total) {
-  if (total < 1e-5) return 0;
-  return ((distance % total) + total) % total;
-}
-
 function setHeading(object, direction, up) {
   _forward.copy(direction).addScaledVector(up, -direction.dot(up));
   if (_forward.lengthSq() < 1e-8) return;
@@ -476,32 +471,13 @@ export function createCitadelNightInfiltration({
     group.userData.records = groupRecords;
   }
 
-  // 攀爬时用细绳/扶带把相邻士兵的肩背连接起来：队首向上拉、队尾向上推，
-  // 中间队员彼此搀扶。辅助绳放在独立节点，避免污染每组的四名士兵计数。
+  // 攀爬时只通过手臂姿势表现队首拉、队尾推和中间搀扶，
+  // 不创建任何连接士兵的可见绳索，避免火炬手被“牵着走”。
   const assistanceRoot = new THREE.Group();
-  assistanceRoot.name = "citadel-climbing-assistance";
+  assistanceRoot.name = "citadel-climbing-hand-support";
+  assistanceRoot.userData.mode = "hand-to-hand-no-rope";
   assistanceRoot.visible = false;
   root.add(assistanceRoot);
-  const assistanceLinks = [];
-  const assistanceMat = new THREE.MeshStandardMaterial({
-    color: 0x705137,
-    roughness: 0.95,
-    flatShading: true,
-  });
-  for (const group of groups) {
-    const groupRecords = group.userData.records || [];
-    for (let i = 1; i < groupRecords.length; i++) {
-      const link = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.018, 0.018, 1, 5),
-        assistanceMat
-      );
-      link.name = `${group.userData.route}-climbing-assist-link-${i}`;
-      link.userData.front = groupRecords[i - 1];
-      link.userData.rear = groupRecords[i];
-      assistanceRoot.add(link);
-      assistanceLinks.push(link);
-    }
-  }
 
   let active = false;
   let returning = false;
@@ -551,34 +527,9 @@ export function createCitadelNightInfiltration({
     parts.legR.rotation.z = moving ? -gait * 0.5 : 0;
   };
 
-  const assistA = new THREE.Vector3();
-  const assistB = new THREE.Vector3();
-  const assistDir = new THREE.Vector3();
-  const assistUp = new THREE.Vector3(0, 1, 0);
-  const updateClimbingAssistance = (climbing) => {
-    let visible = false;
-    for (const link of assistanceLinks) {
-      const front = link.userData.front;
-      const rear = link.userData.rear;
-      if (!climbing || !front?.soldier.visible || !rear?.soldier.visible) {
-        link.visible = false;
-        continue;
-      }
-      front.soldier.getWorldPosition(assistA).addScaledVector(_up, 0.35);
-      rear.soldier.getWorldPosition(assistB).addScaledVector(_up, 0.30);
-      assistDir.copy(assistA).sub(assistB);
-      const length = assistDir.length();
-      if (length < 0.02) {
-        link.visible = false;
-        continue;
-      }
-      link.visible = true;
-      visible = true;
-      link.position.copy(assistA).add(assistB).multiplyScalar(0.5);
-      link.scale.set(1, length, 1);
-      link.quaternion.setFromUnitVectors(assistUp, assistDir.normalize());
-    }
-    assistanceRoot.visible = visible;
+  const updateClimbingAssistance = () => {
+    // 手臂动作由 setMovementPose 驱动；这里明确保持空节点隐藏。
+    assistanceRoot.visible = false;
   };
 
   const hideDescentRopes = () => {
@@ -928,6 +879,17 @@ export function createCitadelNightInfiltration({
       patrolTerraces: group.userData.patrolTerraces,
       patrolTargetCount: group.userData.patrolTargetCount,
       patrolTargetSource: group.userData.patrolTargetSource,
+      patrolMode: group.userData.patrolMode,
+      patrolTransferCount: group.userData.patrolTransferCount,
+      patrolSegments: group.userData.patrolPlan?.segments.map((segment) => ({
+        kind: segment.kind,
+        terraceIndex: segment.terraceIndex,
+        fromTerrace: segment.fromTerrace,
+        toTerrace: segment.toTerrace,
+        duration: segment.duration,
+        stair: segment.stair,
+        coverageCount: segment.coverageCount,
+      })),
       queueSpacing: group.userData.queueSpacing,
       queueOrder: group.userData.queueOrder,
       patrolDuration: group.userData.records?.[0]?.patrolDuration || 0,
@@ -936,9 +898,7 @@ export function createCitadelNightInfiltration({
     torchQueueIndices: records
       .filter((record) => record.soldier.userData.torchBearer)
       .map((record) => `${record.group.userData.route}:${record.index}`),
-    assistanceLinksVisible: assistanceRoot.visible
-      ? assistanceLinks.filter((link) => link.visible).length
-      : 0,
+    assistanceLinksVisible: 0,
     ropesVisible: descentRopes.filter((rope) => rope.visible).length,
     descentRopes: descentRopes.filter((rope) => rope.visible).length,
     descentOrder: records.map((record) => record.soldier.name),
