@@ -213,6 +213,7 @@ function configureCitadelWalkTerrain(R, contourSpec) {
     const metric = walkMetrics[terraceIndex];
     const lowerMetric = walkMetrics[terraceIndex + 1];
     return {
+      terraceIndex,
       from,
       to,
       rho: metric.radius + 1.05,
@@ -1268,16 +1269,25 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
     trojanHorse.scale.setScalar(0.72);
 
-    // 马头朝向第一层瀑布：优先读取真实瀑布节点的位置，瀑布关闭时用同一水道标记兜底。
-    const firstWaterfall = pilgrimageCascades?.children?.[0];
+    // 马头朝向从地面向城堡数的第一层瀑布：
+    // 台面数组是鸟瞰顺序（高→低），所以真实瀑布节点要取最后一个（低→高的第 1 层）。
+    const firstWaterfall = pilgrimageCascades?.children?.at(-1);
     const firstWaterfallPos = new THREE.Vector3();
     if (firstWaterfall) {
       firstWaterfall.updateWorldMatrix(true, false);
       firstWaterfall.getWorldPosition(firstWaterfallPos);
     } else {
+      const firstCascadeUpper = CITADEL_CASCADE_POOL_SPECS.at(-2);
+      const firstCascadeLower = CITADEL_CASCADE_POOL_SPECS.at(-1);
+      const fallbackX = firstCascadeUpper && firstCascadeLower
+        ? (firstCascadeUpper.x + firstCascadeLower.x) * 0.5
+        : CITADEL_CASCADE_MARKER.x;
+      const fallbackZ = firstCascadeUpper && firstCascadeLower
+        ? (firstCascadeUpper.z + firstCascadeLower.z) * 0.5 + 0.3 + 2.4
+        : CITADEL_CASCADE_MARKER.z;
       rangeLocalToWorld(
-        CITADEL_CASCADE_MARKER.x,
-        CITADEL_CASCADE_MARKER.z,
+        fallbackX,
+        fallbackZ,
         R,
         firstWaterfallPos
       );
@@ -1285,8 +1295,12 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     // 接水湖是瀑布节点实际生成的水面，优先使用它而不是手写局部坐标；
     // 这样瀑布/台地被编辑后，木马仍会贴着第一层瀑布下方的湖面移动。
     const receivingWater = firstWaterfall?.getObjectByName("citadel-cascade-receiving-water");
-    const lowerPool = pilgrimageWaterSteps?.children?.[1];
-    const lowerPoolWater = lowerPool?.getObjectByName("citadel-terrace-2-pool-water");
+    const lowerPool = firstWaterfall?.userData?.lowerPool
+      ? pilgrimageWaterSteps?.children?.find(
+          (pool) => pool.name === firstWaterfall.userData.lowerPool
+        )
+      : pilgrimageWaterSteps?.children?.at(-1);
+    const lowerPoolWater = lowerPool?.getObjectByName(`${lowerPool.name}-water`);
     const lakeSurfacePos = new THREE.Vector3();
     let lakeWaterObject = "citadel-cascade-receiving-water";
     if (receivingWater) {
@@ -1328,10 +1342,12 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       _site,
       -toFirstWaterfall.dot(_site)
     ).normalize();
-    const horseYaw = Math.atan2(
+    const waterfallYaw = Math.atan2(
       -toFirstWaterfall.dot(_right),
       toFirstWaterfall.dot(_fwd)
     );
+    // 以瀑布朝向为基准逆时针旋转 90°，使马头转向港口侧运河。
+    const horseYaw = waterfallYaw - Math.PI / 2;
     trojanHorse.rotateY(horseYaw);
     trojanHorse.userData.placement = {
       kind: "citadel-cascade-lake",
@@ -1340,10 +1356,15 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       lz: horseLz,
       lift: HORSE_LAKE_CLEARANCE,
       yaw: horseYaw,
-      facing: "first-waterfall",
+      waterfallYaw,
+      rotationOffset: -Math.PI / 2,
+      facing: "canal",
+      facingReference: "first-ground-level-waterfall",
       lake: true,
-      waterfall: "first",
+      waterfall: "first-ground-level",
       waterObject: lakeWaterObject,
+      cascadeSequence: firstWaterfall?.userData?.sequence ?? 3,
+      waterfallOrder: "ground-to-castle",
     };
     scene.add(trojanHorse);
 
@@ -1405,7 +1426,10 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       (a, b) => (b.userData?.sequence ?? 0) - (a.userData?.sequence ?? 0)
     );
     const waterfallPos = new THREE.Vector3();
-    for (const waterfall of waterfallNodes) {
+    // 瀑布组先从木马攀到台面 2，台面 2→1 的跨台面移动改走石阶。
+    // sequence 3、2、1 对应从最低处到台面 2 的三道水帘；不再把队伍
+    // 直接送到台面 1 后再“回头巡查”。
+    for (const waterfall of waterfallNodes.slice(0, 3)) {
       waterfall.updateWorldMatrix(true, false);
       waterfall.getWorldPosition(waterfallPos);
       const drop = Math.max(1.2, Number(waterfall.userData?.actualDrop) || 4);
@@ -1413,14 +1437,17 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop * 0.46));
       waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop + 0.28));
     }
-    const upperPool = pilgrimageWaterSteps?.children?.[0];
-    if (upperPool) {
-      upperPool.updateWorldMatrix(true, false);
-      upperPool.getWorldPosition(waterfallPos);
+    const terraceTwoPool = pilgrimageWaterSteps?.children?.find(
+      (pool) => pool.name === "terrace-2-pool"
+    ) || pilgrimageWaterSteps?.children?.[1];
+    if (terraceTwoPool) {
+      terraceTwoPool.updateWorldMatrix(true, false);
+      terraceTwoPool.getWorldPosition(waterfallPos);
       waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.24));
     }
 
     const stairRoute = [];
+    const stairTransferRoutes = [];
     const stairPoint = (rho, phi) => {
       const stairLx = rho * Math.sin(phi);
       const stairLz = rho * Math.cos(phi);
@@ -1440,6 +1467,48 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       stairRoute.push(stairPoint(flight.rho, flight.from));
       stairRoute.push(stairPoint(flight.rho, flight.to));
     }
+    // 每一段跨台面移动都必须落在真实石阶踏面上。这里保留完整的
+    // 台地索引，供夜间事件在“巡查完成 → 走阶梯 → 下一台面”之间切换。
+    for (const flight of walkFlights) {
+      const fromTerrace = flight.terraceIndex + 1;
+      const toTerrace = flight.terraceIndex;
+      if (fromTerrace >= walkMetrics.length) continue; // 地面 → 台面 5，不是台面间转场
+      const midPhi = (flight.from + flight.to) * 0.5;
+      stairTransferRoutes.push({
+        fromTerrace,
+        toTerrace,
+        points: [
+          stairPoint(flight.rho, flight.from),
+          stairPoint(flight.rho, midPhi),
+          stairPoint(flight.rho, flight.to),
+        ],
+      });
+    }
+
+    // 城堡本地门口坐标先转换回圣城 range 局部系，再用可行走高程重建；
+    // 这样门外巡游点落在真实台面表面，而不是城堡切平面上方的空气中。
+    const patrolSurfacePoint = patrolCastle
+      ? ({ x, z, terraceIndex }, out = new THREE.Vector3()) => {
+          const gateWorld = patrolCastle.localToWorld(
+            new THREE.Vector3(x, 0, z)
+          );
+          const surfaceScale = R / Math.max(1e-6, gateWorld.dot(_site));
+          const rangeLx = gateWorld.dot(_right) * surfaceScale;
+          const rangeLz = gateWorld.dot(_fwd) * surfaceScale;
+          let elevation = citadelWalkLiftLocal(rangeLx, rangeLz);
+          if (!Number.isFinite(elevation)) {
+            const metric = citadelTerraceMetrics(contourSpec)[terraceIndex];
+            elevation = metric?.top ?? citadelRangeLiftLocal(rangeLx, rangeLz);
+          }
+          return rangeLocalToWorldAtElevation(
+            rangeLx,
+            rangeLz,
+            R,
+            elevation + 0.08,
+            out
+          );
+        }
+      : null;
 
     nightInfiltration = createCitadelNightInfiltration({
       scene,
@@ -1450,7 +1519,9 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       horseGround: trojanHorse.position.clone(),
       waterfallRoute,
       stairRoute,
+      stairTransferRoutes,
       patrolCastle,
+      patrolSurfacePoint,
     });
     trojanHorse.userData.nightInfiltration = nightInfiltration.root;
 

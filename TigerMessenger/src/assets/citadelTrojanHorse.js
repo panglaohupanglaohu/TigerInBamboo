@@ -117,21 +117,22 @@ export function createCitadelTrojanHorse({
   }
 
   // ============ 3. 躯干 (Torso) ============
-  // 拉长且略加厚的马身：给头部留出稳定的身体基准，Z 轴(长) > X 轴(宽)
+  // 拉长且厚重的马身：参考图中躯干是主要体量，Z 轴(长) > X 轴(宽)。
+  // 头部会按这个基准同步放大，避免出现“小头木马”。
   const body = part(
-    new THREE.BoxGeometry(2.85 * S, 2.45 * S, 4.9 * S),
+    new THREE.BoxGeometry(3.05 * S, 2.55 * S, 5.15 * S),
     wood,
     "troy-torso",
     0.03
   );
-  body.position.set(0, 3.78 * S, 0);
+  body.position.set(0, 3.9 * S, 0);
   g.add(body);
 
   // 马腹补丁木块：错落拼板感
   for (let i = 0; i < 22; i++) {
     const bx = (rand() - 0.5) * 2.2 * S;
     const by = (2.72 + rand() * 1.92) * S;
-    const bz = (rand() - 0.5) * 4.5 * S;
+    const bz = (rand() - 0.5) * 4.75 * S;
     const patch = part(
       new THREE.BoxGeometry((0.25 + rand() * 0.35) * S, 0.035 * S, (0.4 + rand() * 0.5) * S),
       i % 4 === 0 ? rope : i % 3 === 0 ? darkWood : wood,
@@ -174,14 +175,14 @@ export function createCitadelTrojanHorse({
   // 马身纵向木肋（深炭色细棱柱），加强拼接线
   for (let i = 0; i < 3; i++) {
     const rib = part(
-      new THREE.CylinderGeometry(0.05 * S, 0.05 * S, 4.9 * S, 4),
+      new THREE.CylinderGeometry(0.05 * S, 0.05 * S, 5.1 * S, 4),
       rope,
       "troy-body-rib",
       0.012
     );
     rib.rotation.x = Math.PI / 2;
     rib.rotation.z = Math.PI / 4;
-    rib.position.set((i - 1) * 1.0 * S, 3.68 * S, 0);
+    rib.position.set((i - 1) * 1.0 * S, 3.8 * S, 0);
     g.add(rib);
   }
 
@@ -224,58 +225,60 @@ export function createCitadelTrojanHorse({
   setBellyOpen(0);
 
   // ============ 4. 倾斜的脖子 (Animated Neck) ============
-  // 脖子随躯干加厚，并让连接段更宽，避免头部像单独插在身体上。
+  // 参考图里的脖子与肩胸连成一个厚重的前躯，不能做成细长立柱。
+  // 这里把宽度、深度和高度同时提高，让头部的尺寸有真实的承托关系。
   const neck = part(
-    new THREE.BoxGeometry(0.9 * S, 1.68 * S, 0.9 * S),
+    new THREE.BoxGeometry(1.2 * S, 2.05 * S, 1.25 * S),
     wood,
     "troy-neck",
     0.026
   );
-  neck.position.set(0, 5.1 * S, 1.52 * S);
+  neck.position.set(0, 5.3 * S, 1.45 * S);
   neck.rotation.x = 0.42; // 前倾约 24°
   g.add(neck);
 
   // 脖子侧面的木板缝隙
   for (let i = 0; i < 3; i++) {
     const nseam = part(
-      new THREE.BoxGeometry(0.02 * S, 0.84 * S, 0.02 * S),
+      new THREE.BoxGeometry(0.02 * S, 1.15 * S, 0.02 * S),
       darkWood,
       "troy-neck-seam",
       0.005
     );
-    nseam.position.set((i % 2 === 0 ? 1 : -1) * 0.45 * S, 5.08 * S, 1.52 * S);
+    nseam.position.set((i % 2 === 0 ? 1 : -1) * 0.61 * S, 5.3 * S, 1.45 * S);
     g.add(nseam);
   }
 
   // ============ 5. 与躯干协调的马头 (Dynamic Head) ============
-  // 头部相对身体适度加宽加高，仍保持 Z 轴拉长；与加宽后的脖子自然重叠。
+  // 头部按参考图重新校准：头长约为躯干长度的三分之一，宽高也随厚颈
+  // 增加，保证头、颈、胸是连续的大体块，而不是细颈接小方块。
   const head = part(
-    new THREE.BoxGeometry(0.82 * S, 0.78 * S, 1.5 * S),
+    new THREE.BoxGeometry(1.08 * S, 0.98 * S, 1.72 * S),
     wood,
     "troy-head",
     0.028
   );
-  head.position.set(0, 6.02 * S, 1.86 * S);
-  head.rotation.x = -0.28; // 向下低头约 16°，打破呆板
+  head.position.set(0, 6.18 * S, 1.95 * S);
+  head.rotation.x = -0.24; // 向下低头约 14°，保持参考图的厚重侧脸
   g.add(head);
 
-  // 马鼻保持比头部略窄，但同步放大，避免头身比例调整后鼻部过小。
+  // 口鼻与头部保持约 7:10 的宽度，并拉出足够长度形成清晰的马脸。
   const snout = part(
-    new THREE.BoxGeometry(0.6 * S, 0.5 * S, 0.72 * S),
+    new THREE.BoxGeometry(0.76 * S, 0.64 * S, 0.96 * S),
     darkWood,
     "troy-snout",
     0.024
   );
-  snout.position.set(0, 5.73 * S, 2.53 * S);
-  snout.rotation.x = -0.25;
+  snout.position.set(0, 5.9 * S, 2.83 * S);
+  snout.rotation.x = -0.2;
   g.add(snout);
 
   // 灵魂装饰：三角耳朵（3 面圆锥，稍微朝后抿）
-  const earGeo = new THREE.ConeGeometry(0.16 * S, 0.46 * S, 3);
+  const earGeo = new THREE.ConeGeometry(0.19 * S, 0.52 * S, 3);
   earGeo.rotateX(0.2);
   for (const side of [-1, 1]) {
     const ear = part(earGeo, darkWood, "troy-ear", 0.014);
-    ear.position.set(side * 0.3 * S, 6.56 * S, 1.6 * S);
+    ear.position.set(side * 0.38 * S, 6.75 * S, 1.7 * S);
     ear.rotation.set(-0.15, 0, side * 0.1);
     g.add(ear);
   }
@@ -283,9 +286,9 @@ export function createCitadelTrojanHorse({
   // 锯齿状马鬃：一排渐小方块叠在脖子后，平替木片鬃毛
   const maneCount = 5;
   for (let i = 0; i < maneCount; i++) {
-    const maneGeo = new THREE.BoxGeometry(0.34 * S, (0.66 - i * 0.09) * S, 0.66 * S);
+    const maneGeo = new THREE.BoxGeometry(0.42 * S, (0.74 - i * 0.1) * S, 0.78 * S);
     const maneUnit = part(maneGeo, darkWood, "troy-mane", 0.018);
-    maneUnit.position.set(0, (5.5 - i * 0.42) * S, (1.42 - i * 0.24) * S);
+    maneUnit.position.set(0, (5.82 - i * 0.45) * S, (1.34 - i * 0.26) * S);
     maneUnit.rotation.x = 0.42;
     g.add(maneUnit);
   }

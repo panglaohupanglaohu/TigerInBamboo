@@ -6,13 +6,30 @@ import { citadelTerraceMetrics } from "./odysseyCitadel.js";
 const NIGHT_OPEN = 0.93;
 const NIGHT_CLOSE = 0.22;
 const DROP_DURATION = 2.8;
-// 每组一根下降绳：组内上一名落地后，下一名才从该组绳索下降。
+// 每组两根下降绳：两批各两名士兵同时下降，完成两批后全组落地。
 const DROP_SEQUENCE_GAP = 3.15;
+const DESCENT_BATCH_SIZE = 2;
 const MOVE_DELAY = 0.45;
-const WATERFALL_MOVE_DURATION = 19;
+// 瀑布攀爬要留出完整的拉扯、推举、搀扶表现，再进入台面分散巡查。
+const WATERFALL_MOVE_DURATION = 32;
 const STAIR_MOVE_DURATION = 28;
 const WATERFALL_PATROL_DURATION = 32;
 const STAIR_PATROL_DURATION = 48;
+const STAIR_TRANSFER_DURATION = 28;
+const PATROL_COVERAGE_DIRECTIONS = Object.freeze([
+  [0.0, -2.4],
+  [1.8, -1.8],
+  [2.8, -0.6],
+  [3.1, 0.8],
+  [2.3, 1.8],
+  [0.8, 2.4],
+  [-0.8, 2.4],
+  [-2.3, 1.8],
+  [-3.1, 0.8],
+  [-2.8, -0.6],
+  [-1.8, -1.8],
+  [0.0, -2.4],
+]);
 // PORTER_SCALE=2 的纸士兵，从脚到头约 0.7 个场景单位；队列按一个身长留空。
 const SOLDIER_BODY_LENGTH = 0.72;
 const RETURN_APPROACH_DURATION = 4.5;
@@ -91,49 +108,197 @@ function updateRope(rope, start, end) {
   rope.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), _tmpA.normalize());
 }
 
-/** 收集指定台地的建筑旁巡游点，目标高度落在对应台面而不是建筑体内。 */
-function collectPatrolTargets(castle, terraceIndices, up) {
+/**
+ * 收集指定台地的正门巡游点。目标由真实 town-gate 节点确定，再通过
+ * surfacePoint 贴回对应台地表面，避免使用建筑中心或固定高度造成悬空。
+ */
+function collectPatrolTargets(castle, terraceIndices, up, surfacePoint = null) {
   const targetsByTerrace = new Map(terraceIndices.map((index) => [index, []]));
   if (!castle) return targetsByTerrace;
   const metrics = citadelTerraceMetrics(castle.userData?.contourSpec);
   castle.updateWorldMatrix(true, false);
   const local = new THREE.Vector3();
   const candidate = new THREE.Vector3();
+  const placeOnTerraceSurface = (x, z, terraceIndex) => {
+    if (surfacePoint) {
+      return surfacePoint({ x, z, terraceIndex }, candidate)
+        .clone()
+        .addScaledVector(up, 0.1);
+    }
+    local.set(x, (metrics[terraceIndex]?.top ?? 0) + 0.14, z);
+    return castle.localToWorld(local.clone()).addScaledVector(up, 0.08);
+  };
+
+  // 每个台地只认真正的正门节点；门外一点即为士兵的巡游/集合点。
   castle.traverse((object) => {
-    if (!object.isMesh || object.name !== "town-cell") return;
-    const terraceIndex = object.userData?.cell?.terraceIndex;
+    if (object.name !== "town-gate") return;
+    let parent = object;
+    let terraceIndex = null;
+    while (parent) {
+      if (Number.isFinite(parent.userData?.terraceIndex)) {
+        terraceIndex = parent.userData.terraceIndex | 0;
+        break;
+      }
+      parent = parent.parent;
+    }
     if (!targetsByTerrace.has(terraceIndex)) return;
     object.getWorldPosition(candidate);
     castle.worldToLocal(local.copy(candidate));
-    const radial = Math.hypot(local.x, local.z) || 1;
-    // 建筑中心外推一个半单元，士兵巡游在建筑旁而不是穿过墙体。
-    local.x += (local.x / radial) * 1.25;
-    local.z += (local.z / radial) * 1.25;
-    local.y = (metrics[terraceIndex]?.top ?? local.y) + 0.22;
-    const target = castle.localToWorld(local.clone()).addScaledVector(up, 0.08);
+    local.z += 1.35; // town-gate 正面朝 castle-local +Z
+    const target = placeOnTerraceSurface(local.x, local.z, terraceIndex);
     const points = targetsByTerrace.get(terraceIndex);
     if (points.some((point) => point.distanceToSquared(target) < 8.0)) return;
     points.push(target);
   });
-  // 默认旧布局可能只在台面 1 有建筑，台面 5–3 会是空的；仍为这些台面
-  // 生成贴着台面外圈的巡游点，确保分组路线不会跳过用户指定的层级。
+
+  // 编辑器可能保存没有正门的空台地；用该台地前缘的表面点兜底，仍不允许悬空。
   for (const terraceIndex of terraceIndices) {
     const points = targetsByTerrace.get(terraceIndex);
     if (points?.length) continue;
     const metric = metrics[terraceIndex];
     if (!metric) continue;
-    const radius = Math.max(3, metric.radius - 1.4);
-    for (let i = 0; i < 4; i++) {
-      const phi = -2.35 + i * 1.25;
-      local.set(
-        radius * Math.sin(phi),
-        metric.top + 0.22,
-        radius * Math.cos(phi)
-      );
-      points.push(castle.localToWorld(local.clone()).addScaledVector(up, 0.08));
-    }
+    const frontZ = Math.max(2.5, metric.radius - 1.5);
+    points.push(placeOnTerraceSurface(0, frontZ, terraceIndex));
   }
   return targetsByTerrace;
+}
+
+/**
+ * 把每个台地的门口扩展为一圈逐步覆盖点。四名士兵各取一段不同方向，
+ * 进入台地后不再保持队列，也不再沿同一条闭合巡游线重叠。
+ */
+function buildDistributedCoverageTargets(targetsByTerrace, terraceIndices, up, right) {
+  const forward = new THREE.Vector3().crossVectors(right, up).normalize();
+  const coverageByTerrace = new Map();
+  for (const terraceIndex of terraceIndices) {
+    const gateTargets = targetsByTerrace.get(terraceIndex) || [];
+    const coverage = [];
+    for (const gateTarget of gateTargets) {
+      for (const [rightOffset, forwardOffset] of PATROL_COVERAGE_DIRECTIONS) {
+        coverage.push(
+          gateTarget.clone()
+            .addScaledVector(right, rightOffset)
+            .addScaledVector(forward, forwardOffset)
+            .addScaledVector(up, 0.02)
+        );
+      }
+    }
+    coverageByTerrace.set(terraceIndex, coverage);
+  }
+  return coverageByTerrace;
+}
+
+function getStairTransfer(stairTransferRoutes, fromTerrace, toTerrace) {
+  return (Array.isArray(stairTransferRoutes) ? stairTransferRoutes : []).find(
+    (transfer) => transfer?.fromTerrace === fromTerrace
+      && transfer?.toTerrace === toTerrace
+      && Array.isArray(transfer.points)
+      && transfer.points.length >= 2
+  ) || null;
+}
+
+/**
+ * 为每名士兵生成独立的台面覆盖段，并在相邻台面之间插入真实石阶段。
+ * patrolPath 不闭合：一个台面覆盖完成后才会进入下一段阶梯，不会在当前台面
+ * 无限绕圈，也不会把四人继续绑成一列。
+ */
+function buildDistributedPatrolPlan({
+  groupRecords,
+  patrolTerraces,
+  terraceTargets,
+  stairTransferRoutes,
+  approachEnd,
+  up,
+  right,
+  patrolDuration,
+}) {
+  const coverageByTerrace = buildDistributedCoverageTargets(
+    terraceTargets,
+    patrolTerraces,
+    up,
+    right
+  );
+  const segments = [];
+  let previousExit = groupRecords.map(() => approachEnd.clone());
+
+  for (let terraceOrder = 0; terraceOrder < patrolTerraces.length; terraceOrder++) {
+    const terraceIndex = patrolTerraces[terraceOrder];
+    const coverage = coverageByTerrace.get(terraceIndex) || [];
+    const safeCoverage = coverage.length
+      ? coverage
+      : [approachEnd.clone()];
+    const patrolPaths = groupRecords.map((record, recordIndex) => {
+      const assigned = [];
+      // 每名士兵从不同扇区开始，并以队伍人数为步长分担整个台面。
+      for (let pointIndex = recordIndex; pointIndex < safeCoverage.length; pointIndex += groupRecords.length) {
+        assigned.push(
+          safeCoverage[(pointIndex + terraceOrder * 2) % safeCoverage.length].clone()
+        );
+      }
+      return makePath([previousExit[recordIndex], ...assigned]);
+    });
+    segments.push({
+      kind: "terrace-patrol",
+      terraceIndex,
+      duration: patrolDuration,
+      paths: patrolPaths,
+      coverageCount: coverage.length,
+    });
+    previousExit = patrolPaths.map((path) => path.points.at(-1)?.clone() || approachEnd.clone());
+
+    const nextTerrace = patrolTerraces[terraceOrder + 1];
+    if (!Number.isFinite(nextTerrace)) continue;
+    const transfer = getStairTransfer(stairTransferRoutes, terraceIndex, nextTerrace);
+    const stairPoints = transfer?.points?.map((point) => point.clone()) || [];
+    const transferPaths = groupRecords.map((record, recordIndex) => {
+      const start = previousExit[recordIndex];
+      // 正常场景一定有 stairTransferRoutes；兜底只避免编辑器删掉阶梯时崩溃。
+      return makePath([start, ...stairPoints]);
+    });
+    segments.push({
+      kind: "stair-transfer",
+      fromTerrace: terraceIndex,
+      toTerrace: nextTerrace,
+      duration: STAIR_TRANSFER_DURATION,
+      paths: transferPaths,
+      stair: !!transfer,
+    });
+    previousExit = transferPaths.map((path, recordIndex) =>
+      path.points.at(-1)?.clone() || previousExit[recordIndex].clone()
+    );
+  }
+
+  return {
+    segments,
+    coverageByTerrace,
+    totalDuration: segments.reduce((sum, segment) => sum + segment.duration, 0),
+    terminalPoints: previousExit,
+  };
+}
+
+function samplePatrolPlan(plan, elapsed, recordIndex, position, lookAhead) {
+  if (!plan?.segments?.length) {
+    position.set(0, 0, 0);
+    lookAhead.copy(position);
+    return null;
+  }
+  let remaining = Math.max(0, elapsed);
+  for (const segment of plan.segments) {
+    const duration = Math.max(0.001, segment.duration);
+    if (remaining <= duration) {
+      const path = segment.paths[recordIndex];
+      const progress = THREE.MathUtils.clamp(remaining / duration, 0, 1);
+      samplePath(path, progress, position);
+      samplePathDistance(path, Math.min(path.total, progress * path.total + 0.28), lookAhead);
+      return segment;
+    }
+    remaining -= duration;
+  }
+  const last = plan.segments.at(-1);
+  const path = last.paths[recordIndex];
+  samplePath(path, 1, position);
+  lookAhead.copy(position);
+  return last;
 }
 
 /**
@@ -142,7 +307,7 @@ function collectPatrolTargets(castle, terraceIndices, up) {
  * 两组各四名纸士兵各用一根腹舱下降绳，按组内顺序依次下降：每组队首、队尾左手持火炬，
  * 中间两名左手持盾、右手持短剑。落地后保持一个士兵身长的队列间距，分别沿
  * 瀑布和城堡折返阶梯向上；攀爬时以拉、推、搀扶的姿态连接相邻队员。路线点已经
- * 由 citadelRange 按当前台地/瀑布几何计算为世界坐标，因此动画不会依赖旧的平面高度。
+ * 由 citadelRange 按当前台地/瀑布/石阶几何计算为世界坐标，因此动画不会依赖旧的平面高度。
  */
 export function createCitadelNightInfiltration({
   scene,
@@ -153,7 +318,9 @@ export function createCitadelNightInfiltration({
   horseGround,
   waterfallRoute,
   stairRoute,
+  stairTransferRoutes = [],
   patrolCastle = null,
+  patrolSurfacePoint = null,
 }) {
   _up.copy(siteUp).normalize();
   _right.copy(siteRight).normalize();
@@ -176,13 +343,9 @@ export function createCitadelNightInfiltration({
   const terraceTargets = collectPatrolTargets(
     patrolCastle,
     [0, 1, 2, 3, 4],
-    _up
+    _up,
+    patrolSurfacePoint
   );
-  // 腹舱两侧各开一个绳降点：左侧给瀑布组，右侧给阶梯组。
-  const descentAnchors = [-0.58, 0.58].map((x) =>
-    horse.localToWorld(new THREE.Vector3(x, 2.46, 0))
-  );
-
   const groups = [];
   const records = [];
   const groupSpecs = [
@@ -204,13 +367,21 @@ export function createCitadelNightInfiltration({
     },
   ];
 
-  const descentRopes = groupSpecs.map((spec, index) => {
+  const descentRopeSpecs = groupSpecs.flatMap((spec, groupIndex) =>
+    [0, 1].map((slot) => ({ spec, groupIndex, slot }))
+  );
+  // 腹舱左右两侧各两个绳降点：左侧给瀑布组，右侧给阶梯组。
+  const descentAnchors = [-0.72, -0.24, 0.24, 0.72].map((x) =>
+    horse.localToWorld(new THREE.Vector3(x, 2.46, 0))
+  );
+  const descentRopes = descentRopeSpecs.map(({ spec, groupIndex, slot }, ropeIndex) => {
     const rope = new THREE.Mesh(
       new THREE.CylinderGeometry(0.032, 0.032, 1, 5),
       ropeMat
     );
-    rope.name = `${spec.routeKey}-descent-rope`;
-    rope.userData.groupIndex = index;
+    rope.name = `${spec.routeKey}-descent-rope-${slot + 1}`;
+    rope.userData.groupIndex = groupIndex;
+    rope.userData.ropeIndex = ropeIndex;
     rope.visible = false;
     root.add(rope);
     return rope;
@@ -222,10 +393,9 @@ export function createCitadelNightInfiltration({
     group.name = spec.name;
     group.userData.route = spec.routeKey;
     group.userData.patrolTerraces = spec.patrolTerraces.slice();
-    group.userData.patrolTargetCount = spec.patrolTerraces.reduce(
-      (count, terraceIndex) => count + (terraceTargets.get(terraceIndex)?.length || 0),
-      0
-    );
+    group.userData.patrolTargetCount = 0;
+    group.userData.patrolTargetSource = "town-gate-terrace-surface-distributed";
+    group.userData.patrolMode = "distributed-coverage";
     root.add(group);
     groups.push(group);
 
@@ -240,13 +410,17 @@ export function createCitadelNightInfiltration({
       soldier.userData.queueSpacing = SOLDIER_BODY_LENGTH;
       group.add(soldier);
 
-      const dropTarget = baseGround.clone().addScaledVector(_up, 0.02);
+      const ropeSlot = i % DESCENT_BATCH_SIZE;
+      const groupSide = groupIndex === 0 ? -1 : 1;
+      const dropTarget = baseGround
+        .clone()
+        .addScaledVector(
+          _right,
+          groupSide * 0.38 + (ropeSlot === 0 ? -0.16 : 0.16)
+        )
+        .addScaledVector(_up, 0.02);
       const routePoints = spec.route.points.map((point) => point.clone());
       routePoints[0].copy(dropTarget);
-      const patrolTargets = spec.patrolTerraces.flatMap(
-        (terraceIndex) => terraceTargets.get(terraceIndex) || []
-      );
-      const shiftedPatrolTargets = patrolTargets.map((point) => point.clone());
       const approachPath = makePath(routePoints);
       const approachEnd = routePoints.at(-1)?.clone() || dropTarget.clone();
       const record = {
@@ -254,19 +428,49 @@ export function createCitadelNightInfiltration({
         group,
         groupIndex,
         index: i,
-        anchor: descentAnchors[groupIndex].clone(),
+        ropeIndex: groupIndex * DESCENT_BATCH_SIZE + ropeSlot,
+        batchIndex: Math.floor(i / DESCENT_BATCH_SIZE),
+        anchor: descentAnchors[groupIndex * DESCENT_BATCH_SIZE + ropeSlot].clone(),
         dropTarget,
         path: approachPath,
-        patrolPath: makePath([approachEnd, ...shiftedPatrolTargets, approachEnd]),
         queueDistance: i * SOLDIER_BODY_LENGTH,
         queueSpacing: SOLDIER_BODY_LENGTH,
         moveDuration: spec.moveDuration,
         patrolDuration: spec.patrolDuration,
         patrolTerraces: spec.patrolTerraces,
+        patrolPlan: null,
       };
       records.push(record);
       groupRecords.push(record);
     }
+    const approachEnd = groupRecords[0]?.path.points.at(-1)?.clone()
+      || baseGround.clone();
+    const patrolPlan = buildDistributedPatrolPlan({
+      groupRecords,
+      patrolTerraces: spec.patrolTerraces,
+      terraceTargets,
+      stairTransferRoutes,
+      approachEnd,
+      up: _up,
+      right: _right,
+      patrolDuration: spec.patrolDuration,
+    });
+    for (const record of groupRecords) record.patrolPlan = patrolPlan;
+    group.userData.patrolPlan = patrolPlan;
+    group.userData.patrolTargetCount = [...patrolPlan.coverageByTerrace.values()]
+      .reduce((count, targets) => count + targets.length, 0);
+    group.userData.patrolTransferCount = patrolPlan.segments
+      .filter((segment) => segment.kind === "stair-transfer")
+      .length;
+    group.userData.approachEndTime = Math.max(
+      0,
+      ...groupRecords.map((record) => {
+        const speed = record.path.total / Math.max(0.001, record.moveDuration);
+        return speed > 1e-5
+          ? (record.path.total + record.queueDistance) / speed
+          : record.moveDuration;
+      })
+    );
     group.userData.queueSpacing = SOLDIER_BODY_LENGTH;
     group.userData.queueOrder = groupRecords.map((record) => record.soldier.name);
     group.userData.records = groupRecords;
@@ -305,7 +509,7 @@ export function createCitadelNightInfiltration({
   let elapsed = 0;
   let returnElapsed = 0;
   let returnRecords = [];
-  let returnRecordsByGroup = [];
+  let returnRecordsByRope = [];
 
   const setRecordPose = (record, position, lookDirection) => {
     record.soldier.position.copy(position);
@@ -385,44 +589,56 @@ export function createCitadelNightInfiltration({
     const allDropEnd = Math.max(
       0,
       ...groups.map((group) =>
-        Math.max(0, (group.userData.records?.length || 0) - 1) * DROP_SEQUENCE_GAP
+        Math.max(
+          0,
+          Math.ceil((group.userData.records?.length || 0) / DESCENT_BATCH_SIZE) - 1
+        ) * DROP_SEQUENCE_GAP
         + DROP_DURATION
       )
     );
     for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
-      const rope = descentRopes[groupIndex];
       const groupRecords = groups[groupIndex].userData.records || [];
-      let activeRecord = null;
-      let activeLocalTime = 0;
-      for (const record of groupRecords) {
-        const localTime = dropElapsed - record.index * DROP_SEQUENCE_GAP;
-        if (localTime > 0 && localTime < DROP_DURATION) {
-          activeRecord = record;
-          activeLocalTime = localTime;
-          break;
+      for (let ropeSlot = 0; ropeSlot < DESCENT_BATCH_SIZE; ropeSlot++) {
+        const rope = descentRopes[groupIndex * DESCENT_BATCH_SIZE + ropeSlot];
+        const activeRecord = groupRecords.find(
+          (record) => record.index % DESCENT_BATCH_SIZE === ropeSlot
+        );
+        if (!activeRecord) {
+          rope.visible = false;
+          continue;
         }
+        const localTime = dropElapsed - activeRecord.batchIndex * DROP_SEQUENCE_GAP;
+        if (localTime > 0 && localTime < DROP_DURATION) {
+          const t = smoothstep01(localTime / DROP_DURATION);
+          const ropeEnd = activeRecord.anchor.clone().lerp(activeRecord.dropTarget, t);
+          ropeEnd.addScaledVector(_up, 0.34);
+          updateRope(rope, activeRecord.anchor, ropeEnd);
+          continue;
+        }
+        if (dropElapsed > DROP_DURATION && dropElapsed < allDropEnd + MOVE_DELAY) {
+          const landedBatch = Math.min(
+            Math.ceil(groupRecords.length / DESCENT_BATCH_SIZE) - 1,
+            Math.max(
+              0,
+              Math.floor((dropElapsed - DROP_DURATION) / DROP_SEQUENCE_GAP)
+            )
+          );
+          const landed = groupRecords.find(
+            (record) =>
+              record.batchIndex === landedBatch
+              && record.index % DESCENT_BATCH_SIZE === ropeSlot
+          );
+          if (landed) {
+            updateRope(
+              rope,
+              landed.anchor,
+              landed.dropTarget.clone().addScaledVector(_up, 0.34)
+            );
+            continue;
+          }
+        }
+        rope.visible = false;
       }
-      if (activeRecord) {
-        const t = smoothstep01(activeLocalTime / DROP_DURATION);
-        const ropeEnd = activeRecord.anchor.clone().lerp(activeRecord.dropTarget, t);
-        ropeEnd.addScaledVector(_up, 0.34);
-        updateRope(rope, activeRecord.anchor, ropeEnd);
-        continue;
-      }
-      if (dropElapsed > DROP_DURATION && dropElapsed < allDropEnd + MOVE_DELAY) {
-        const landedIndex = Math.min(
-          groupRecords.length - 1,
-          Math.max(0, Math.floor((dropElapsed - DROP_DURATION) / DROP_SEQUENCE_GAP))
-        );
-        const landed = groupRecords[landedIndex];
-        updateRope(
-          rope,
-          landed.anchor,
-          landed.dropTarget.clone().addScaledVector(_up, 0.34)
-        );
-        continue;
-      }
-      rope.visible = false;
     }
   };
 
@@ -431,7 +647,7 @@ export function createCitadelNightInfiltration({
     returning = false;
     returnElapsed = 0;
     returnRecords = [];
-    returnRecordsByGroup = [];
+    returnRecordsByRope = [];
     elapsed = 0;
     root.visible = false;
     staticSquad.visible = true;
@@ -450,7 +666,7 @@ export function createCitadelNightInfiltration({
     returning = false;
     returnElapsed = 0;
     returnRecords = [];
-    returnRecordsByGroup = groups.map(() => []);
+    returnRecordsByRope = descentRopes.map(() => []);
     elapsed = 0;
     root.visible = true;
     staticSquad.visible = false;
@@ -480,9 +696,9 @@ export function createCitadelNightInfiltration({
         ? record.soldier.getWorldPosition(new THREE.Vector3())
         : record.anchor.clone();
       if (deployed) {
-        const groupReturnRecords = returnRecordsByGroup[record.groupIndex];
-        record.returnIndex = groupReturnRecords.length;
-        groupReturnRecords.push(record);
+        const ropeReturnRecords = returnRecordsByRope[record.ropeIndex];
+        record.returnIndex = ropeReturnRecords.length;
+        ropeReturnRecords.push(record);
         returnRecords.push(record);
       } else {
         record.returnIndex = -1;
@@ -496,7 +712,7 @@ export function createCitadelNightInfiltration({
     returnElapsed += Math.max(0, Number(dt) || 0);
     const maxGroupReturnCount = Math.max(
       0,
-      ...returnRecordsByGroup.map((groupRecords) => groupRecords.length)
+      ...returnRecordsByRope.map((ropeRecords) => ropeRecords.length)
     );
     horse.userData.setBellyOpen?.(1);
     const allReturnEnd = RETURN_APPROACH_DURATION
@@ -536,10 +752,10 @@ export function createCitadelNightInfiltration({
     }
 
     const returnRopeEnd = new THREE.Vector3();
-    for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
-      const rope = descentRopes[groupIndex];
-      const groupReturnRecords = returnRecordsByGroup[groupIndex] || [];
-      const ascendingRecord = groupReturnRecords.find((record) => {
+    for (let ropeIndex = 0; ropeIndex < descentRopes.length; ropeIndex++) {
+      const rope = descentRopes[ropeIndex];
+      const ropeReturnRecords = returnRecordsByRope[ropeIndex] || [];
+      const ascendingRecord = ropeReturnRecords.find((record) => {
         const localTime = returnElapsed
           - RETURN_APPROACH_DURATION
           - record.returnIndex * RETURN_SEQUENCE_GAP;
@@ -558,10 +774,10 @@ export function createCitadelNightInfiltration({
       } else if (
         returnElapsed >= RETURN_APPROACH_DURATION
         && returnElapsed < allReturnEnd + 0.35
-        && groupReturnRecords.length
+        && ropeReturnRecords.length
       ) {
         const returnedIndex = Math.min(
-          groupReturnRecords.length - 1,
+          ropeReturnRecords.length - 1,
           Math.max(
             0,
             Math.floor(
@@ -572,8 +788,8 @@ export function createCitadelNightInfiltration({
         );
         updateRope(
           rope,
-          groupReturnRecords[returnedIndex].anchor,
-          groupReturnRecords[returnedIndex].dropTarget.clone().addScaledVector(_up, 0.34)
+          ropeReturnRecords[returnedIndex].anchor,
+          ropeReturnRecords[returnedIndex].dropTarget.clone().addScaledVector(_up, 0.34)
         );
       } else {
         rope.visible = false;
@@ -596,8 +812,18 @@ export function createCitadelNightInfiltration({
 
     elapsed += Math.max(0, Number(dt) || 0);
     horse.userData.setBellyOpen?.(smoothstep01(elapsed / 2.8));
+    const allDropEnd = Math.max(
+      0,
+      ...groups.map((group) =>
+        Math.max(
+          0,
+          Math.ceil((group.userData.records?.length || 0) / DESCENT_BATCH_SIZE) - 1
+        ) * DROP_SEQUENCE_GAP
+        + DROP_DURATION
+      )
+    );
     for (const record of records) {
-      const localTime = elapsed - record.index * DROP_SEQUENCE_GAP;
+      const localTime = elapsed - record.batchIndex * DROP_SEQUENCE_GAP;
       const dropT = THREE.MathUtils.clamp(localTime / DROP_DURATION, 0, 1);
       if (localTime <= 0) {
         record.soldier.visible = false;
@@ -624,15 +850,16 @@ export function createCitadelNightInfiltration({
       }
 
       const sortieElapsed = elapsed - allDropEnd - MOVE_DELAY;
-      // 用队首的行进距离减去“一个士兵身长 × 队列序号”，让每人沿同一条路线
-      // 保持前后间隔；队尾会自然晚于队首抵达台面，避免四人挤成一团。
-      const frontApproachDistance = Math.min(
-        record.path.total,
-        Math.max(0, sortieElapsed / record.moveDuration) * record.path.total
-      );
+      // 进场阶段仍保持一个士兵身长的纵向间距；队尾到达后，全队才同时
+      // 分散进入台面覆盖段。frontApproachDistance 不截断，才能让队尾
+      // 真正走完自己的间距后抵达台面。
+      const frontApproachDistance =
+        Math.max(0, sortieElapsed / record.moveDuration) * record.path.total;
       const ownApproachDistance = frontApproachDistance - record.queueDistance;
       let climbing = false;
-      if (ownApproachDistance < record.path.total || record.patrolPath.total < 1e-5) {
+      const groupApproachEndTime = record.group.userData.approachEndTime
+        ?? record.moveDuration;
+      if (ownApproachDistance < record.path.total) {
         const approachDistance = Math.max(0, ownApproachDistance);
         samplePathDistance(record.path, approachDistance, _tmpA);
         samplePathDistance(
@@ -640,25 +867,30 @@ export function createCitadelNightInfiltration({
           Math.min(record.path.total, approachDistance + 0.24),
           _tmpB
         );
-        climbing = ownApproachDistance >= 0 && ownApproachDistance < record.path.total;
+        climbing = record.group.userData.route === "waterfall"
+          && ownApproachDistance >= 0
+          && ownApproachDistance < record.path.total;
         setMovementPose(record, true, climbing, sortieElapsed);
+      } else if (sortieElapsed < groupApproachEndTime) {
+        // 最后一名士兵落位前，已到台面的队员在入口等待，不抢先巡查。
+        samplePath(record.path, 1, _tmpA);
+        _tmpB.copy(_tmpA);
+        setMovementPose(record, false, false, sortieElapsed);
       } else {
-        const patrolLeaderDistance =
-          Math.max(0, sortieElapsed - record.moveDuration)
-          / record.patrolDuration
-          * record.patrolPath.total;
-        const ownPatrolDistance = patrolLeaderDistance - record.queueDistance;
-        const patrolDistance = wrapPathDistance(
-          ownPatrolDistance,
-          record.patrolPath.total
-        );
-        samplePathDistance(record.patrolPath, patrolDistance, _tmpA);
-        samplePathDistance(
-          record.patrolPath,
-          wrapPathDistance(patrolDistance + 0.24, record.patrolPath.total),
+        const segment = samplePatrolPlan(
+          record.patrolPlan,
+          sortieElapsed - groupApproachEndTime,
+          record.index,
+          _tmpA,
           _tmpB
         );
-        setMovementPose(record, true, false, sortieElapsed);
+        const moving = segment?.kind === "terrace-patrol"
+          || segment?.kind === "stair-transfer";
+        setMovementPose(record, moving, false, sortieElapsed);
+        record.soldier.userData.patrolStage = segment?.kind || "patrol-complete";
+        record.soldier.userData.patrolTerrace = segment?.terraceIndex
+          ?? segment?.toTerrace
+          ?? null;
       }
       setRecordPose(record, _tmpA, _tmpC.copy(_tmpB).sub(_tmpA));
       record.soldier.userData.climbing = climbing;
@@ -678,6 +910,7 @@ export function createCitadelNightInfiltration({
   root.userData.descentRope = descentRopes[0];
   root.userData.descentRopes = descentRopes;
   root.userData.assistance = assistanceRoot;
+  root.userData.patrolTargetsByTerrace = terraceTargets;
   root.userData.activationPhase = NIGHT_OPEN;
   root.userData.queueSpacing = SOLDIER_BODY_LENGTH;
   root.userData.getState = () => ({
@@ -694,6 +927,7 @@ export function createCitadelNightInfiltration({
       count: group.children.length,
       patrolTerraces: group.userData.patrolTerraces,
       patrolTargetCount: group.userData.patrolTargetCount,
+      patrolTargetSource: group.userData.patrolTargetSource,
       queueSpacing: group.userData.queueSpacing,
       queueOrder: group.userData.queueOrder,
       patrolDuration: group.userData.records?.[0]?.patrolDuration || 0,

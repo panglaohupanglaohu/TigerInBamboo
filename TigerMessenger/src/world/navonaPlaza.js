@@ -271,15 +271,32 @@ export function createNavonaCanalPlaza(opts = {}) {
   const lipW = CANAL_LIP_WIDTH - CANAL_WALL_THICK * 0.5;
   const lipX = halfW + (CANAL_WALL_THICK * 0.5 + CANAL_LIP_WIDTH) * 0.5;
   const lipZ = halfL + (CANAL_WALL_THICK * 0.5 + CANAL_LIP_WIDTH) * 0.5;
+  // 门洞：指定侧（默认 R=局部 +X）立壁/土埂中段断开，供外部步道接入；
+  // 该侧墙/埂各拆成南北两段（探针计数 5/5）。
+  const gate = opts.gate ?? null;
+  const fullLenX = halfL * 2 + CANAL_WALL_THICK;
   for (const side of [-1, 1]) {
-    // 立壁：贴槽缘四面
-    addRim(CANAL_WALL_THICK, halfL * 2 + CANAL_WALL_THICK, side * (halfW + CANAL_WALL_THICK * 0.5), 0,
-      `navona-rim-wall-${side > 0 ? "R" : "L"}`, bankMat, wallH, wallH * 0.5);
+    const isGateSide = !!gate && (gate.side === "R") === (side > 0);
+    if (isGateSide) {
+      const gw = THREE.MathUtils.clamp(gate.width, 2, fullLenX - 2);
+      const segLen = (fullLenX - gw) * 0.5;
+      const zc = gw * 0.5 + segLen * 0.5;
+      for (const s2 of [-1, 1]) {
+        const tag = s2 > 0 ? "N" : "S";
+        addRim(CANAL_WALL_THICK, segLen, side * (halfW + CANAL_WALL_THICK * 0.5), s2 * zc,
+          `navona-rim-wall-${side > 0 ? "R" : "L"}-${tag}`, bankMat, wallH, wallH * 0.5);
+        addRim(lipW, segLen, side * lipX, s2 * zc,
+          `navona-rim-lip-${side > 0 ? "R" : "L"}-${tag}`, lipMat, lipHgt, lipCy);
+      }
+    } else {
+      // 立壁：贴槽缘
+      addRim(CANAL_WALL_THICK, fullLenX, side * (halfW + CANAL_WALL_THICK * 0.5), 0,
+        `navona-rim-wall-${side > 0 ? "R" : "L"}`, bankMat, wallH, wallH * 0.5);
+      addRim(lipW, fullLenX, side * lipX, 0,
+        `navona-rim-lip-${side > 0 ? "R" : "L"}`, lipMat, lipHgt, lipCy);
+    }
     addRim(halfW * 2 + CANAL_WALL_THICK, CANAL_WALL_THICK, 0, side * (halfL + CANAL_WALL_THICK * 0.5),
       `navona-rim-wall-${side > 0 ? "N" : "S"}`, bankMat, wallH, wallH * 0.5);
-    // 岸顶土埂：立壁外侧、略高于壁顶
-    addRim(lipW, halfL * 2 + CANAL_WALL_THICK, side * lipX, 0,
-      `navona-rim-lip-${side > 0 ? "R" : "L"}`, lipMat, lipHgt, lipCy);
     addRim(halfW * 2 + CANAL_WALL_THICK, lipW, 0, side * lipZ,
       `navona-rim-lip-${side > 0 ? "N" : "S"}`, lipMat, lipHgt, lipCy);
   }
