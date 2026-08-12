@@ -56,6 +56,7 @@ export function createPlanet(scene) {
     geo,
     toonMat(0xffffff, { vertexColors: true, flatShading: true })
   );
+  planet.name = "planet-surface";
   planet.position.set(0, 0, 0);
   planet.receiveShadow = true;
   scene.add(planet);

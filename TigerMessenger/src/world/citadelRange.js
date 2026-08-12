@@ -13,7 +13,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { latLonToDir } from "./sphereMath.js";
-import { canyonOffsetDir } from "./canyon.js";
+import { canyonOffsetDir, canyonOffsetDirSmooth } from "./canyon.js";
 import { P } from "../core/params.js";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { createMangaWaterfall } from "./mangaWaterfall.js";
@@ -33,8 +33,8 @@ import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
 import { createTieSoldier } from "../assets/harbor.js";
 import { createCitadelNightInfiltration } from "./citadelInfiltration.js";
-import { CANAL_WATER_LIFT, CANAL_HALF_WIDTH, CANAL_LIP_WIDTH } from "./canalSystem.js";
-import { createNavonaCanalPlaza, conformPlazaToTerrain } from "./navonaPlaza.js";
+import { CANAL_WATER_LIFT, CANAL_HALF_WIDTH, CANAL_LIP_WIDTH, CANAL_BANK_COLOR, CANAL_LIP_COLOR, sweepPrism } from "./canalSystem.js";
+import { createNavonaCanalPlaza } from "./navonaPlaza.js";
 
 /* ---------------- 选址与山体参数（锁死） ---------------- */
 export const RANGE_SITE = Object.freeze({ lat: 24.1, lon: 36.05 });
@@ -118,6 +118,44 @@ export function citadelRangeLiftLocal(lx, lz) {
     lift -= CITADEL_SINK * inSkirt;
   }
   return lift;
+}
+
+/** 局部坐标 → 可见地面抬升：山脉高度场网格只覆盖矩形域，域缘裙边（-0.7）
+ *  是扎进球面遮缝的、在域外不可见；域外可见地面是星球网格的三角面。
+ *  低分段球面的弦面比解析球面低 0.3~0.4（弦高差），单个三角面横跨 ~20m，
+ *  稀疏采样插值追不上弦面，必须逐方向精确射线实测（峡谷位移已烘焙在
+ *  网格内）。广场重建是一次性开销，按方向量化（~0.2m）缓存去重。 */
+let _planetMesh = null;
+let _groundRay = null;
+const _groundLiftCache = new Map();
+const _ro = new THREE.Vector3();
+const _rd = new THREE.Vector3();
+function planetSurfaceLiftDir(dir) {
+  if (!_planetMesh || !_groundRay) return canyonOffsetDirSmooth(dir);
+  // 强制逐三角求交：rebuild 发生在 scene.add 之前，几何 boundingSphere 可能陈旧，
+  // Raycaster 默认包围球剪枝会误判 MISS → 回落解析值把广场埋进弦面。
+  if (_planetMesh.geometry.boundingSphere) _planetMesh.geometry.boundingSphere = null;
+  _ro.copy(dir).multiplyScalar(160 + 40);
+  _groundRay.set(_ro, _rd.copy(dir).negate());
+  const hit = _groundRay.intersectObject(_planetMesh, false)[0];
+  return hit ? 40 - hit.distance : canyonOffsetDirSmooth(dir);
+}
+export function visibleGroundLiftLocal(lx, lz) {
+  _o
+    .copy(_site)
+    .multiplyScalar(160)
+    .addScaledVector(_right, lx)
+    .addScaledVector(_fwd, lz)
+    .normalize();
+  const key =
+    ((Math.round(_o.x * 500) + 500) * 1001 + (Math.round(_o.y * 500) + 500)) * 1001 +
+    (Math.round(_o.z * 500) + 500);
+  let lift = _groundLiftCache.get(key);
+  if (lift === undefined) {
+    lift = planetSurfaceLiftDir(_o);
+    _groundLiftCache.set(key, lift);
+  }
+  return Math.max(citadelRangeLiftLocal(lx, lz), lift);
 }
 
 /**
@@ -891,6 +929,16 @@ function buildLakeBallShrub(name, scale, materials, seed) {
  * 顶点色：谷地草绿 → 坡面土褐 → 峰顶岩灰；flatShading 硬切面。
  */
 export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain) {
+  // 射线基准需要星球网格；重建前先就位，供 visibleGroundLiftLocal 实测弦面
+  _planetMesh = null;
+  scene.traverse((o) => {
+    if (!_planetMesh && o.name === "planet-surface") _planetMesh = o;
+  });
+  if (_planetMesh) {
+    _planetMesh.updateWorldMatrix(true, false);
+    _groundRay = new THREE.Raycaster();
+    _groundRay.far = 60;
+  }
   configureCitadelWalkTerrain(R, contourSpec);
   const nx = Math.round((LX_MAX - LX_MIN) / STEP) + 1;
   const nz = Math.round((LZ_MAX - LZ_MIN) / STEP) + 1;
@@ -1119,6 +1167,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   let moat = null;
   let moatMesh = null; // 前置声明，供 buildMoat 在 rangeSystem 初始化前写入
   let moatCanalPts = null; // 运河中心线 range 局部折线，供护城河护堤缺口
+  let moatWalkPts = null; // 广场连港步道中线折线（range 局部），供护城河护堤开缺
   const buildMoat = (spec) => {
     if (moat) {
       scene.remove(moat);
@@ -1134,12 +1183,19 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     // 南北两个交接点都开缺：北点齐平接通，南点（域缘裙边）水面随贴地
     // 形成小跌水，两侧护堤均断开、绝不交叉。
     const gapHalf = CANAL_HALF_WIDTH + CANAL_LIP_WIDTH + moatHalf + CANAL_LIP_WIDTH + 0.6;
-    const embankGapAt = moatCanalPts
+    // 步道跨护城河处：仅护堤断开，水面/河床连续；缺口半宽盖住步道半宽(1.95)
+    const gapWalkHalf = 2.6;
+    const embankGapAt = (moatCanalPts || moatWalkPts)
       ? (lx, lz) => {
-          for (let i = 0; i < moatCanalPts.length; i++) {
+          for (let i = 0; moatCanalPts && i < moatCanalPts.length; i++) {
             const dx = lx - moatCanalPts[i][0];
             const dz = lz - moatCanalPts[i][1];
             if (dx * dx + dz * dz < gapHalf * gapHalf) return true;
+          }
+          for (let i = 0; moatWalkPts && i < moatWalkPts.length; i++) {
+            const dx = lx - moatWalkPts[i][0];
+            const dz = lz - moatWalkPts[i][1];
+            if (dx * dx + dz * dz < gapWalkHalf * gapWalkHalf) return true;
           }
           return false;
         }
@@ -1236,6 +1292,126 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 广场位置/朝向改为延迟摆放：rangeSystem.placeNavonaPlaza(lx, lz, yaw)，
   // 由 messengerIsland 按运河真实切向沿法线推离，保证河道全程露出、两者零重叠。
   // 旱季下凹石材广场+对称喷泉+运河同款围边；汛期同一槽体蓄水，与运河/护城河同水色。
+
+  // 径向重建：把切平面构建的组逐顶点重建到 R + structural 的球面径向位置。
+  // 组基架是站点切平面（Y=_site），但大足迹资产的顶点离站点越远，
+  // 球面法向与 _site 夹角越大（广场中心处约 25°）——切平面 delta 类贴合
+  // 会系统性错位，只有按顶点足迹 (lx,lz) 取真实径向才能严丝合缝。
+  // 足迹用世界坐标径向投影回 range 切平面系（组可能带 yaw/偏移，
+  // 组局部坐标只在原点无 yaw 摆放时才等于 range 局部）；
+  // structural 的高度分量仍取组局部 y（组 up 即 _site）。
+  const radialRebuild = (group, structuralAt) => {
+    // 无父节点时 updateMatrixWorld 不会重算自身 matrixWorld（position 刚被
+    // placeRangeAsset 改过会拿到旧值），必须先强制重组，否则逆变换错位。
+    group.updateMatrix();
+    group.updateMatrixWorld(true);
+    const _rv = new THREE.Vector3();
+    const _rl = new THREE.Vector3();
+    const _rInv = new THREE.Matrix4().copy(group.matrixWorld).invert();
+    group.traverse((obj) => {
+      const pos = obj?.geometry?.attributes?.position;
+      // 描边壳子网格与父网格共享 geometry：若参与重建会把同一份顶点
+      // 按壳子自身 matrixWorld 二次改写，造成整块几何径向错位（悬浮/下沉）。
+      if (!pos || obj.userData?.isOutline) return;
+      for (let i = 0; i < pos.count; i++) {
+        _rv.fromBufferAttribute(pos, i);
+        obj.localToWorld(_rv);
+        _rl.copy(_rv).applyMatrix4(_rInv);
+        // 世界坐标径向投影到 R 切平面 → range 局部足迹
+        const sScale = R / Math.max(1e-6, _rv.dot(_site));
+        const flx = _rv.dot(_right) * sScale;
+        const flz = _rv.dot(_fwd) * sScale;
+        rangeLocalToWorld(flx, flz, R, _rv); // 取足迹径向（其 lift 归一化后无关）
+        _rv.normalize().multiplyScalar(R + structuralAt(flx, flz, _rl.y));
+        obj.worldToLocal(_rv);
+        pos.setXYZ(i, _rv.x, _rv.y, _rv.z);
+      }
+      pos.needsUpdate = true;
+      obj.geometry.computeVertexNormals?.();
+    });
+    return group;
+  };
+
+  // 连港步道：广场 R 侧门洞 → 旧港码头陆侧，运河同款护堤语言。
+  // 剖面：石板路面 + 两侧矮埂；纵断面 门侧地面 → 跨护城河桥面 → 港口砂基，
+  // 跨护城河处护堤开弧缺（仅壁/埂断开，水面/河床连续），与运河交接同语义。
+  const buildHarborCauseway = (plaza) => {
+    let harbor = null;
+    scene.traverse((o) => { if (!harbor && o.name === "old-harbor-scene") harbor = o; });
+    if (!harbor || !plaza) return null;
+    harbor.updateWorldMatrix(true, false);
+    // 起点：广场 R 侧门洞中心（广场局部 +X 侧 wall 位）；终点：港口陆侧砂基外缘
+    // 注意：广场组带 25° 切平面倾角，局部点 (9.7,0.85,0) 不是地表点；
+    // 取其径向方向后拉回「地表 + 槽沿高 0.15」作为步道贴地起点。
+    const gateRaw = new THREE.Vector3(9.7, 0.85, 0).applyMatrix4(plaza.matrixWorld);
+    const gScale = R / Math.max(1e-6, gateRaw.dot(_site));
+    const gfx = gateRaw.dot(_right) * gScale, gfz = gateRaw.dot(_fwd) * gScale;
+    const gateGroundLift = visibleGroundLiftLocal(gfx, gfz);
+    const gateW = gateRaw.clone().normalize().multiplyScalar(R + gateGroundLift + 0.97);
+    const hx = new THREE.Vector3(1, 0, 0).applyQuaternion(harbor.quaternion);
+    hx.addScaledVector(_site, -hx.dot(_site)).normalize();
+    const endW = harbor.getWorldPosition(new THREE.Vector3()).addScaledVector(hx, -4.4);
+    const gx = gateW.dot(_right) * gScale, gz = gateW.dot(_fwd) * gScale;
+    const eScale = R / Math.max(1e-6, endW.dot(_site));
+    const ex = endW.dot(_right) * eScale, ez = endW.dot(_fwd) * eScale;
+    const dx = ex - gx, dz = ez - gz;
+    const len = Math.hypot(dx, dz);
+    if (!Number.isFinite(len) || len < 4) return null;
+    // 断面横向（水平）；注意 placeRangeAsset 基架 X 轴 = _site×_fwd = -_right，
+    // 组内几何的 x 分量需镜像后才能与 range 局部系对齐
+    const rx = dz / len, rz = -dx / len;
+    const N = 48;
+    const smooth01 = (t) => t * t * (3 - 2 * t);
+    const samples = [];
+    for (let i = 0; i <= N; i++) {
+      const t = i / N;
+      const px = gx + dx * t, pz = gz + dz * t;
+      // 纵断面：门侧 +0.97（与广场铺装顶面 structural≈0.97 齐平，无台阶）
+      // → 跨护城河桥面 1.55（盖过护堤埂顶 1.47）→ 港口贴当地可见地面
+      const a = smooth01(THREE.MathUtils.clamp(t / 0.72, 0, 1));
+      const b = smooth01(THREE.MathUtils.clamp((t - 0.72) / 0.28, 0, 1));
+      // 全程至少高于可见地面 0.25，取高者保证不埋进地表（域内地形 +0.4，
+      // 域外为星球弦面）。
+      const deckTop = Math.max(
+        THREE.MathUtils.lerp(THREE.MathUtils.lerp(0.97, 1.55, a), visibleGroundLiftLocal(ex, ez) + 0.3, b),
+        visibleGroundLiftLocal(px, pz) + 0.25
+      );
+      samples.push({
+        p: new THREE.Vector3(-px, deckTop - 0.35, pz), // x 取负：镜像进组局部系
+        up: new THREE.Vector3(0, 1, 0),
+        right: new THREE.Vector3(-rx, 0, rz),
+        deckTop,
+      });
+    }
+    const walk = new THREE.Group();
+    walk.name = "navona-harbor-causeway";
+    const deckMat = toonMat(CANAL_BANK_COLOR, { flatShading: true });
+    const lipMat = toonMat(CANAL_LIP_COLOR, { flatShading: true });
+    const deck = sweepPrism(samples, -1.7, 1.7, 0, 0.35, deckMat);
+    deck.name = "causeway-deck";
+    walk.add(deck);
+    for (const side of [-1, 1]) {
+      const curb = sweepPrism(samples,
+        side > 0 ? 1.7 : -1.95, side > 0 ? 1.95 : -1.7, 0.35, 0.5, lipMat);
+      curb.name = `causeway-curb-${side > 0 ? "R" : "L"}`;
+      walk.add(curb);
+    }
+    placeRangeAsset(walk, 0, 0, R, 0, true);
+    scene.add(walk);
+    // 径向重建：localY 即设计绝对抬升（已含离地间隙），直接当径向高度
+    radialRebuild(walk, (_lx, _lz, y) => y);
+    walk.userData.placement = { kind: "plaza-harbor-causeway", gate: [gx, gz], end: [ex, ez] };
+    // 护城河护堤在步道跨越处开缺：折线（range 局部系，供 embankGapAt）
+    moatWalkPts = samples
+      .filter((s) => {
+        const r = Math.hypot(s.p.x, s.p.z);
+        return r > 36 && r < 52;
+      })
+      .map((s) => [-s.p.x, s.p.z]); // 还原回 range 局部系
+    rangeSystem.rebuildMoat?.(contourSpec?.moat);
+    return walk;
+  };
+
   let navonaPlaza = null;
   let trojanHorse = null;
   let nightInfiltration = null;
@@ -1245,25 +1421,31 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       name: "citadel-navona-canal-plaza",
       seed: 7701,
       flooded: false,
+      // R 侧（局部 +X，yaw=π/2 后朝港口/护城河一侧）开 5.2 宽门洞，连港步道由此接入
+      gate: { side: "R", width: 5.2 },
     });
     // 长轴（局部 +Z）沿传入 yaw 对齐运河切向，围边与运河同语言
     placeRangeAsset(navonaPlaza, lx, lz, R, CANAL_WATER_LIFT * 0.15, true);
     navonaPlaza.rotateY(yaw);
-    // 顶点融合：边界顶点平滑对齐起伏地形（内部保持平整），
-    // 消除狭长广场斜插山坡的生硬穿模。sampleDelta = 地形面 − 顶点 沿“上”高差。
+    // 与地面贴合：径向重建。广场足迹在矩形域外，可见地面 = 星球网格弦面
+    // （低分段球面三角面，比解析球面低 0.3~0.4 且逐面变化）。
+    // 抬升式座山：槽底（y=0）逐顶点坐在弦面 +0.12 上——严丝合缝不悬浮、
+    // 不被弦面盖住；凹槽美学保留在围边之内（槽心仍比埂顶低 0.85）。
+    radialRebuild(navonaPlaza, (rlx, rlz, y) => visibleGroundLiftLocal(rlx, rlz) + y + 0.12);
+    // 切平面高差采样（供系绳班组士兵站高反解）：地形面 − 顶点沿 _site 的高差
     const _pt = new THREE.Vector3();
     const sampleDelta = (worldPos) => {
-      // {_site,_right,_fwd} 为正交归一基架：切向分量即 range 局部坐标
-      // （不可再乘 R/dot(worldPos,_site) 缩放——顶点半径 >R 会把采样点
-      // 向站心压扁，陡坡上产生系统性高差残留）。
       const vlx = worldPos.dot(_right);
       const vlz = worldPos.dot(_fwd);
       rangeLocalToWorld(vlx, vlz, R, _pt); // 已含地形 lift
       return _pt.sub(worldPos).dot(_site);
     };
-    conformPlazaToTerrain(navonaPlaza, { sampleDelta });
     navonaPlaza.userData.placement = { kind: "canal-citadel-approach", lx, lz, yaw };
+    navonaPlaza.updateMatrixWorld(true);
     scene.add(navonaPlaza);
+
+    // ---------- 连港步道：广场 R 侧门洞 → 旧港码头陆侧（贴地石堤，跨护城河处护堤开缺） ----------
+    buildHarborCauseway(navonaPlaza);
 
     // 低多边形特洛伊木马：第一层瀑布正下方的接水湖面。
     trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
@@ -1461,9 +1643,10 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
         new THREE.Vector3()
       ).addScaledVector(_site, 0.18);
     };
-    // 阶梯组只走到台面 3 层：外侧三段分别对应台面 5→4→3，
-    // 不再继续爬到台面 2/1，那两层交给瀑布组。
-    for (const flight of walkFlights.slice(0, 3)) {
+    // 阶梯组先只走地面→台面 5 的第一段石阶，抵达台面 5 后再由
+    // stairTransferRoutes 按“巡查完成→走下一段石阶”逐层转移到台面 4、3。
+    // 不能把三段石阶串在初始路线里，否则队伍会越过台面 5、4 直接落到台面 3。
+    for (const flight of walkFlights.slice(0, 1)) {
       stairRoute.push(stairPoint(flight.rho, flight.from));
       stairRoute.push(stairPoint(flight.rho, flight.to));
     }
@@ -1488,23 +1671,55 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     // 城堡本地门口坐标先转换回圣城 range 局部系，再用可行走高程重建；
     // 这样门外巡游点落在真实台面表面，而不是城堡切平面上方的空气中。
     const patrolSurfacePoint = patrolCastle
-      ? ({ x, z, terraceIndex }, out = new THREE.Vector3()) => {
-          const gateWorld = patrolCastle.localToWorld(
-            new THREE.Vector3(x, 0, z)
-          );
-          const surfaceScale = R / Math.max(1e-6, gateWorld.dot(_site));
-          const rangeLx = gateWorld.dot(_right) * surfaceScale;
-          const rangeLz = gateWorld.dot(_fwd) * surfaceScale;
-          let elevation = citadelWalkLiftLocal(rangeLx, rangeLz);
-          if (!Number.isFinite(elevation)) {
-            const metric = citadelTerraceMetrics(contourSpec)[terraceIndex];
-            elevation = metric?.top ?? citadelRangeLiftLocal(rangeLx, rangeLz);
+      ? ({ x, z, world, terraceIndex }, out = new THREE.Vector3()) => {
+          const metrics = citadelTerraceMetrics(normalizedContour);
+          const metric = metrics[terraceIndex];
+          if (!metric) return null;
+
+          // 门口点来自城堡本地坐标；覆盖点来自世界切线偏移。两者统一
+          // 反解为 range 局部 (lx,lz)，再按目标台地的环带和顶面重建。
+          const source = world?.isVector3
+            ? world
+            : patrolCastle.localToWorld(new THREE.Vector3(x, 0, z));
+          const surfaceScale = R / Math.max(1e-6, source.dot(_site));
+          let rangeLx = source.dot(_right) * surfaceScale;
+          let rangeLz = source.dot(_fwd) * surfaceScale;
+
+          // 约束在指定台地环带内：不能因为覆盖偏移而掉进上层台地、
+          // 外圈斜坡或瀑布缺口。这样每个巡查点都有明确承重台面。
+          const innerRadius = terraceIndex > 0
+            ? metrics[terraceIndex - 1].radius + 0.72
+            : 0;
+          const outerRadius = Math.max(innerRadius + 0.5, metric.radius - 0.72);
+          let radius = Math.hypot(rangeLx, rangeLz);
+          if (radius < 1e-5) {
+            rangeLx = 0;
+            rangeLz = Math.min(outerRadius, Math.max(innerRadius, 1));
+            radius = Math.hypot(rangeLx, rangeLz);
           }
+          radius = THREE.MathUtils.clamp(radius, innerRadius, outerRadius);
+          let phi = Math.atan2(rangeLx, rangeLz);
+          if (
+            terraceIndex > 0
+            && terraceIndex <= normalizedContour.notchedLayers
+          ) {
+            const delta = Math.atan2(
+              Math.sin(phi - normalizedContour.notchCenter),
+              Math.cos(phi - normalizedContour.notchCenter)
+            );
+            const safeNotchEdge = normalizedContour.notchHalf + 0.14;
+            if (Math.abs(delta) < safeNotchEdge) {
+              phi = normalizedContour.notchCenter
+                + (delta < 0 ? -safeNotchEdge : safeNotchEdge);
+            }
+          }
+          rangeLx = radius * Math.sin(phi);
+          rangeLz = radius * Math.cos(phi);
           return rangeLocalToWorldAtElevation(
             rangeLx,
             rangeLz,
             R,
-            elevation + 0.08,
+            metric.top + 0.08,
             out
           );
         }
@@ -1550,8 +1765,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     navonaPlaza,
     nightInfiltration,
     placeNavonaPlaza,
-    update(dt, t) {
-      nightInfiltration?.update(dt, t, P.timeOfDay);
+    update(dt, t, ctx = {}) {
+      nightInfiltration?.update(dt, t, P.timeOfDay, ctx);
     },
     vegetation: null,
     siteDir: _site.clone(),
