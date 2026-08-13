@@ -113,6 +113,8 @@ export function createHarborLogistics(opts) {
   let columnFrontDist = 0;
   /** 回程时前端距离（从 climbTotal 减到 0） */
   let returnFrontDist = 0;
+  /** 巡查结束后必须先装货再离港 */
+  let loadAfterPatrol = false;
   /** @type {THREE.Object3D|null} */
   let citadel = null;
   const deckY = dockLocalPos.y;
@@ -402,10 +404,32 @@ export function createHarborLogistics(opts) {
       placeSoldierOnPath(soldier, (n - 1 - i) * BODY_LEN * 1.4, 0, false);
     }
     setCrewVisible(boat, false);
+    // 巡查期间暂停码头装货；士兵回船后再装
+    setLoading(false);
+    loadAfterPatrol = true;
     drumPhase = "march";
     drumT = 0;
     // 前端略出列，整队从港口甲板开拔
     columnFrontDist = Math.min(climbTotal * 0.02, (n - 1) * BODY_LEN * 2.2);
+  }
+
+  /** 士兵回船完毕：恢复/重新开始装货，装满后再离港 */
+  function beginLoadingAfterPatrol() {
+    if (!activeBoat) {
+      loadAfterPatrol = false;
+      return;
+    }
+    setCrewVisible(activeBoat, true);
+    // 回船后重新装货（清空进度，保证能看到完整装货过程）
+    cargo = 0;
+    capacity = Math.max(1, boatCrewCount(activeBoat) || capacity);
+    activeBoat.userData.cargoLoaded = 0;
+    activeBoat.userData.cargoCapacity = capacity;
+    ensureDeckCargoMarkers(activeBoat);
+    updateDeckCargoMarkers(activeBoat, 0, capacity);
+    phase = "loading";
+    setLoading(true);
+    loadAfterPatrol = false;
   }
 
   function updateDrumPatrol(dt, t) {
@@ -458,11 +482,12 @@ export function createHarborLogistics(opts) {
       const tailDist = returnFrontDist - (n - 1) * BODY_LEN * 3.0;
       if (returnFrontDist <= 0.15 || tailDist < -BODY_LEN) {
         clearPatrolSquad();
-        if (activeBoat) setCrewVisible(activeBoat, true);
         drumPhase = "idle";
         drumT = 0;
         columnFrontDist = 0;
         returnFrontDist = 0;
+        // 回船 → 立刻开始装货（纸士兵往返搬箱），装满再驶离
+        beginLoadingAfterPatrol();
       }
     }
   }
@@ -477,17 +502,20 @@ export function createHarborLogistics(opts) {
 
   function onDeliver(n) {
     if (phase !== "loading" || !activeBoat) return;
+    // 巡查未结束（人还在岸上）不计入装货
+    if (drumPhase !== "idle" || loadAfterPatrol) return;
     // 驾驶中仍可装货，但满载后等下船再离港
     cargo = Math.min(capacity, cargo + Math.max(0, n | 0));
     activeBoat.userData.cargoLoaded = cargo;
     activeBoat.userData.cargoCapacity = capacity;
     updateDeckCargoMarkers(activeBoat, cargo, capacity);
     if (cargo >= capacity) {
-      if (activeBoat.userData.piloted || drumsHoldShips()) {
-        // 太鼓期间满载也不得离港，只进入待发
+      if (activeBoat.userData.piloted || drumsHoldShips() || patrolSquad.length) {
+        // 太鼓期间 / 船员未归队：满载也不得离港
         phase = "readyToDepart";
         setLoading(false);
       } else {
+        // 装满 → 离港
         beginDepart();
       }
     }
@@ -677,6 +705,18 @@ export function createHarborLogistics(opts) {
       setLoading(false);
       return;
     }
+    // 巡查刚结束必须先装货，不能空船/半船就走
+    if (loadAfterPatrol) {
+      phase = "loading";
+      setLoading(true);
+      return;
+    }
+    // 未装满不得离港
+    if (cargo < capacity) {
+      phase = "loading";
+      setLoading(true);
+      return;
+    }
     if (activeBoat.userData.piloted) {
       phase = "readyToDepart";
       setLoading(false);
@@ -798,11 +838,14 @@ export function createHarborLogistics(opts) {
     phase = "loading";
     setLoading(true);
     notifyBoat();
-    // 进港时若太鼓仍在敲：船员立刻下船巡查
+    // 进港时若太鼓仍在敲：船员立刻下船巡查（装货等回船后再做）
     if (drumsHoldShips()) {
       spawnDisembark(boat);
     } else {
       setCrewVisible(boat, true);
+      // 正常进港：立刻装货
+      phase = "loading";
+      setLoading(true);
     }
   }
 
@@ -837,7 +880,10 @@ export function createHarborLogistics(opts) {
       activeBoat &&
       !activeBoat.userData.piloted &&
       !drumsHoldShips() &&
-      drumPhase === "idle"
+      drumPhase === "idle" &&
+      !loadAfterPatrol &&
+      cargo >= capacity &&
+      !patrolSquad.length
     ) {
       beginDepart();
     }
