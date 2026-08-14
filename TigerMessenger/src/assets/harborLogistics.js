@@ -12,9 +12,11 @@ import {
   updateDeckCargoMarkers,
   updateHarborCrane,
   updateWarshipOars,
+  applyBoatOarWobble,
 } from "./harbor.js";
 import { isInfiltrationMissionActive } from "../audio/sfx.js";
 import { citadelTerraceMetrics } from "../world/odysseyCitadel.js";
+import { tickObjectSedation } from "../world/tranquilizer.js";
 
 const _v = new THREE.Vector3();
 const _v2 = new THREE.Vector3();
@@ -163,21 +165,26 @@ export function createHarborLogistics(opts) {
     return out;
   }
 
-  /** 台地前缘（朝港口方向）世界点；index 0=最高台1，4=台5 */
-  function terraceFrontWorld(terraceIndex, radiusScale = 0.88) {
+  /** 城堡本地「朝港口方向」的切平面方向（一次性算好，复用向量）。 */
+  function citadelHarborDir() {
     if (!citadel) return null;
-    const metrics = citadelTerraceMetrics(citadel.userData?.contourSpec);
-    const m = metrics[terraceIndex];
-    if (!m) return null;
     citadel.updateMatrixWorld(true);
     harbor.updateMatrixWorld(true);
     const harborW = harbor.getWorldPosition(_v2);
     citadel.worldToLocal(_local.copy(harborW));
     _local.y = 0;
     if (_local.lengthSq() < 1e-6) _local.set(0, 0, 1);
-    _local.normalize().multiplyScalar(Math.max(2.4, m.radius * radiusScale));
-    _local.y = m.top + 0.14;
-    return citadel.localToWorld(_local.clone());
+    _local.normalize();
+    return _local;
+  }
+
+  /** 城堡本地 (radius, elevation) → 世界坐标（贴真实台地，用城堡自身变换）。 */
+  function terracePoint(radius, elevation) {
+    const dir = citadelHarborDir();
+    if (!dir) return null;
+    const local = dir.clone().multiplyScalar(Math.max(2.4, radius));
+    local.y = elevation + 0.14;
+    return citadel.localToWorld(local);
   }
 
   /**
@@ -252,14 +259,23 @@ export function createHarborLogistics(opts) {
       }
     }
 
-    // ---- 3) 台地 5→4→3→2→1：外缘登台 → 台面（可见逐层上冲） ----
+    // ---- 3) 台地 5→4→3→2→1：按真实台阶几何逐级攀登 ----
+    // 每级三折：面底(外缘,底) → 面顶(外缘,顶) 垂直攀缘 → 台面内缘(内缘,顶) 水平走过台面。
+    // 用 citadelTerraceMetrics 的 radius/bottom/top（与小地图/编辑器同源），
+    // 保证士兵踏点与真实台地一致。
     if (citadel) {
+      const metrics = citadelTerraceMetrics(citadel.userData?.contourSpec);
       for (let ti = 4; ti >= 0; ti--) {
-        // 略外侧一点（下一级/坡缘）再上台面，形成“冲上台面”的可见折线
-        const outer = terraceFrontWorld(ti, 0.98);
-        const onTop = terraceFrontWorld(ti, 0.78);
-        if (outer) anchors.push(outer);
-        if (onTop) anchors.push(onTop);
+        const m = metrics[ti];
+        if (!m) continue;
+        const inner = ti > 0 ? metrics[ti - 1].radius : 0;
+        const outer = m.radius;
+        const faceBase = terracePoint(outer, m.bottom);
+        const faceTop = terracePoint(outer, m.top);
+        const surfaceInner = terracePoint(inner, m.top);
+        if (faceBase) anchors.push(faceBase);
+        if (faceTop) anchors.push(faceTop);
+        if (surfaceInner) anchors.push(surfaceInner);
       }
     }
 
@@ -350,6 +366,8 @@ export function createHarborLogistics(opts) {
   }
 
   function placeSoldierOnPath(soldier, pathDist, clock, moving) {
+    // 麻醉中：保持卧倒，不重算行军位姿
+    if (soldier.userData?.sedated && (soldier.userData.sedateT ?? 0) > 0) return;
     const i = soldier.userData.patrolIndex || 0;
     const n = soldier.userData.patrolN || 1;
     const { spacing, lateral } = flockSpacing(i, n, clock);
@@ -465,6 +483,7 @@ export function createHarborLogistics(opts) {
       const atTop = columnFrontDist >= climbTotal - 0.05;
       if (atTop) columnFrontDist = climbTotal;
       for (const s of patrolSquad) {
+        if (tickObjectSedation(s, dt)) continue;
         // 到顶仍保持快步踏步感（果断、不停顿发呆）
         placeSoldierOnPath(s, columnFrontDist, t, true);
       }
@@ -475,6 +494,7 @@ export function createHarborLogistics(opts) {
       const speed = climbTotal / RETURN_SEC;
       returnFrontDist = Math.max(0, returnFrontDist - speed * dt);
       for (const s of patrolSquad) {
+        if (tickObjectSedation(s, dt)) continue;
         placeSoldierOnPath(s, returnFrontDist, t, returnFrontDist > 0.2);
       }
       // 全队回到起点附近 → 上船
@@ -910,6 +930,7 @@ export function createHarborLogistics(opts) {
         const sc = THREE.MathUtils.lerp(DOCK_SCALE, CANAL_SCALE, Math.min(1, k * 1.2));
         activeBoat.scale.setScalar(sc);
         updateWarshipOars(activeBoat, d, 0.95);
+        applyBoatOarWobble(activeBoat, d);
         if (k >= 1) {
           const gone = activeBoat;
           releaseToCanal(gone);
@@ -927,6 +948,7 @@ export function createHarborLogistics(opts) {
       const sc = THREE.MathUtils.lerp(CANAL_SCALE, DOCK_SCALE, Math.min(1, Math.max(0, (k - 0.55) / 0.45)));
       transitBoat.scale.setScalar(sc);
       updateWarshipOars(transitBoat, d, 0.85);
+      applyBoatOarWobble(transitBoat, d);
       if (k >= 1) {
         finishArrival(transitBoat);
       }
@@ -968,6 +990,8 @@ export function createHarborLogistics(opts) {
     bindWorld,
     setOnBoatChange,
     getState,
+    /** 鼓声巡逻中的纸士兵（麻醉弹索敌） */
+    getPatrolSoldiers: () => patrolSquad.slice(),
     onDeliver,
     /** 测试/调试：强制当前装货数 */
     debugSetCargo(n) {

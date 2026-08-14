@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { facet } from "../assets/lowPoly.js";
 import { createAncientPineTree } from "../assets/ancient.js";
 import { toonMat, addOutline, INK_COLOR } from "../assets/toon.js";
+import { mergeStaticGroup } from "./geometryMerge.js";
 import { PLANET_RADIUS } from "./planet.js";
 
 const MOSS_COLORS = Object.freeze([0x3e704f, 0x477f58, 0x548c60, 0x5c9767]);
@@ -238,17 +239,17 @@ const STONE_LAYOUTS = Object.freeze({
 
 const PINE_LAYOUTS = Object.freeze({
   "moss-entry": [
-    { x: -4.2, z: 2.4, scale: 1.02, yaw: 0.35, seed: 811 },
+    { x: -4.2, z: 2.4, scale: 0.16, yaw: 0.35, seed: 811 },
   ],
   "master-stones": [
-    { x: 4.4, z: 2.8, scale: 1.1, yaw: -0.5, seed: 1229 },
+    { x: 4.4, z: 2.8, scale: 0.17, yaw: -0.5, seed: 1229 },
   ],
   "moss-islands": [
-    { x: -5.15, z: -2.8, scale: 0.9, yaw: 0.2, seed: 1997 },
-    { x: 4.7, z: -2.45, scale: 0.82, yaw: -0.4, seed: 2153 },
+    { x: -5.15, z: -2.8, scale: 0.14, yaw: 0.2, seed: 1997 },
+    { x: 4.7, z: -2.45, scale: 0.13, yaw: -0.4, seed: 2153 },
   ],
   "empty-court": [
-    { x: -5.1, z: 2.9, scale: 1.08, yaw: 0.5, seed: 3011 },
+    { x: -5.1, z: 2.9, scale: 0.16, yaw: 0.5, seed: 3011 },
   ],
 });
 
@@ -466,8 +467,19 @@ export function buildSaihojiPlanet(scene, opts = {}) {
       group.add(pine);
       zones[zone.id].pines.push(pine);
       placed.push(pine.position.clone());
-      pushCollider(colliders, pine, 0.72 * spec.scale);
-      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 0.85 * spec.scale);
+      pushCollider(colliders, pine, 2.4 * spec.scale);
+      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 2.2 * spec.scale);
+    }
+
+    // 参天巨松地标：主石之庭单株（西芳寺核心地标资产，完整尺寸不缩放；
+    // 第二株已移往圣城港口参天大树旁——两株巨松分处两地遥相呼应）
+    if (zone.id === "master-stones") {
+      const giantA = createAncientPineTree(5566);
+      placeAtLocal(giantA, zone, -3.6, 0.8, radius, 0, 0.55);
+      group.add(giantA);
+      zones[zone.id].pines.push(giantA);
+      pushCollider(colliders, giantA, 2.6);
+      addStoneMossSkirt(group, zone, -3.6, 0.8, radius, rnd, 2.6);
     }
 
     if (zone.id === "moss-entry") {
@@ -486,6 +498,15 @@ export function buildSaihojiPlanet(scene, opts = {}) {
 
   const route = addPilgrimagePath(root, radius, rnd);
   scene.add(root);
+
+  // 性能：每景 ~130 片苔藓/苔裙（makeIrregularPatch 直接子网格）→
+  // 按材质合并成每区 ~6 个绘制调用。石头/松树是嵌套组（含碰撞与
+  // 地标引用），保持原样不合并；苔藓无拾取/无运行时切换，安全。
+  for (const zone of Object.values(zones)) {
+    mergeStaticGroup(zone.group, {
+      skip: (mesh) => mesh.parent !== zone.group,
+    });
+  }
 
   return {
     group: root,

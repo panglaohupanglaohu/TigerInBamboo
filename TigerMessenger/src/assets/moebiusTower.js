@@ -95,8 +95,7 @@ function rodBetween(parent, a, b, radius, material, outline = 0.01) {
  */
 function glassMat(color = GLASS_SHELL, opts = {}) {
   const trans = opts.transmission ?? 0.92;
-  return new THREE.MeshPhysicalMaterial({
-    transmission: 0,
+  return new THREE.MeshStandardMaterial({
     opacity: opts.opacity ?? Math.min(0.78, 0.42 + trans * 0.34),
     transparent: true,
     roughness: opts.roughness ?? 0.06,
@@ -104,9 +103,6 @@ function glassMat(color = GLASS_SHELL, opts = {}) {
     color: new THREE.Color(color),
     emissive: new THREE.Color(0x1a3344),
     emissiveIntensity: opts.emissiveIntensity ?? 0.34,
-    clearcoat: 1,
-    clearcoatRoughness: 0.05,
-    specularIntensity: 1,
     flatShading: true,
     side: THREE.DoubleSide,
     depthWrite: false,

@@ -248,15 +248,12 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   // 同理去掉 ior / thickness（仅在 transmission > 0 时生效，留着是误导）。
   const water = new THREE.Mesh(
     new THREE.CircleGeometry(rFlat, 64),
-    new THREE.MeshPhysicalMaterial({
+    new THREE.MeshStandardMaterial({
       color: 0x1a6a88,
       transparent: true,
       opacity: 0.72,
-      roughness: 0.12,
+      roughness: 0.14,
       metalness: 0.05,
-      transmission: 0,
-      clearcoat: 0.55,
-      clearcoatRoughness: 0.2,
       side: THREE.DoubleSide,
       depthWrite: false,
     })

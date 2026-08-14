@@ -41,15 +41,18 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
   // 第三位 = settle 标记：地形后建（苔丘等）可能埋住资产，加载收尾时重新落地
   const defs = [
     // 远侧也统一使用截图 1 的横向云片古松，避免再出现截图 2 的锥形树。
-    [createAncientPineTree, 12, true],
-    [createLowPolyRock, 10, true],
+    // 第四位 = 额外缩放：巨松资产缩成远侧点缀松（约 2.6~3.6 单位）。
+    [createAncientPineTree, 12, true, 0.12],
+    [createLowPolyRock, 10, true, 1],
     [
       () => createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]),
       16,
+      undefined,
+      1,
     ],
-    [createLowPolyHouse, 0], // 房屋已删除；工厂已水墨化备用
+    [createLowPolyHouse, 0, undefined, 1], // 房屋已删除；工厂已水墨化备用
   ];
-  for (const [make, count, settle] of defs) {
+  for (const [make, count, settle, extraScale = 1] of defs) {
     for (let i = 0; i < count; i++) {
       for (let attempt = 0; attempt < 30; attempt++) {
         const lat = -20 + rnd() * 65;
@@ -59,6 +62,7 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
         const obj = placeOnSphere(make(), lat, lon, planetRadius);
         obj.rotateY(rnd() * Math.PI * 2);
         obj.scale.multiplyScalar(0.85 + rnd() * 0.4);
+        obj.scale.multiplyScalar(extraScale);
         if (settle) obj.userData.settle = true;
         scene.add(obj);
         meshes.push(obj);
@@ -137,7 +141,7 @@ export function createCloudRing(scene, planetRadius, { count = 16, height = 8, s
  */
 const LAYOUT_RULES = {
   houses: { count: 0, minGap: 8.0 * WORLD_SCALE, gapVsHouse: 8.0 * WORLD_SCALE, ring: [5 * WORLD_SCALE, 12 * WORLD_SCALE], scale: [0.9, 1.05] },
-  trees: { count: 8, minGap: 4.0 * WORLD_SCALE, gapVsHouse: 4.5 * WORLD_SCALE, ring: [3.5 * WORLD_SCALE, 15.5 * WORLD_SCALE], scale: [0.85, 1.15] },
+  trees: { count: 8, minGap: 4.0 * WORLD_SCALE, gapVsHouse: 4.5 * WORLD_SCALE, ring: [3.5 * WORLD_SCALE, 15.5 * WORLD_SCALE], scale: [0.12, 0.17] },
   rocks: { count: 4, minGap: 5.0 * WORLD_SCALE, gapVsHouse: 3.5 * WORLD_SCALE, ring: [5 * WORLD_SCALE, 15 * WORLD_SCALE], scale: [0.8, 1.2] },
   flowers: { count: 12, minGap: 2.5 * WORLD_SCALE, gapVsHouse: 2.5 * WORLD_SCALE, ring: [3 * WORLD_SCALE, 14 * WORLD_SCALE], scale: [0.9, 1.2] },
 };
@@ -210,7 +214,7 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
     if (!isClear(x, z)) continue;
     const obj = createAncientPineTree();
     placeObjectOnSphere(obj, x, z, groundLiftAt(x, z), planetRadius);
-    obj.scale.multiplyScalar(0.55 + rnd() * 0.15); // 高台树稍小，避免压迫
+    obj.scale.multiplyScalar(0.12 + rnd() * 0.04); // 高台树稍小，避免压迫
     obj.userData.settle = true;
     scene.add(obj);
     meshes.push(obj);

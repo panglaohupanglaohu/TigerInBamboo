@@ -22,10 +22,12 @@ import { buildAbandonedGate } from "../world/abandonedGate.js";
 import { isCanyonBgmPlaying, isCanyonBgmFinishing, setSwampBgm } from "../audio/sfx.js";
 import { canyonOffsetDir, CANYON } from "../world/canyon.js";
 import { FlockManager } from "../world/flock.js";
+import { BirdVortexManager } from "../world/birdVortex.js";
 import {
   createCitadelTerraceBirds,
   collectInfiltrationThreats,
 } from "../world/citadelTerraceBirds.js";
+import { GATE, GATE_DEPTH } from "../world/abandonedGate.js";
 import { AirshipEscortManager } from "../world/airshipEscort.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { swampMidwayDir } from "../world/moebiusSwamp.js";
@@ -36,7 +38,7 @@ import {
   createMoebiusAircraftSquad,
   updateAircraftHover,
 } from "../assets/moebiusAircraft.js";
-import { createBubblePodsAroundFlowerBuildings, updateBubblePodPatrol } from "../assets/bubblePod.js";
+import { createBubblePod, createBubblePodsAroundFlowerBuildings, updateBubblePodPatrol } from "../assets/bubblePod.js";
 import { groundLiftAt } from "../world/hills.js";
 import { placeObjectOnSphere, latLonToDir, flatXZToLatLon } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
@@ -327,6 +329,29 @@ export const messengerIslandScene = {
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
 
+    // ---------- 书店镇气泡艇：停泊在书店上空、绕店轻缓巡游，可 [F] 登艇驾驶 ----------
+    // 加入花厅巡游舰队，复用同一套驾驶/潜行/气泡弹逻辑（updateBubblePodPatrol 会遍历舰队）。
+    {
+      const shopPod = createBubblePod({ scale: 0.72, accent: 0xffd98e });
+      const shopUp = bookshop.position.clone().normalize();
+      const shopRight = new THREE.Vector3(1, 0, 0).applyQuaternion(bookshop.quaternion).normalize();
+      const shopFront = new THREE.Vector3(0, 0, 1).applyQuaternion(bookshop.quaternion).normalize();
+      shopPod.userData.orbit = {
+        center: bookshop.position.clone(),
+        up: shopUp,
+        right: shopRight,
+        front: shopFront,
+        radius: 4.5,   // 绕书店外缘（collideRadius 3.2 之外）轻缓环绕
+        altitude: 3.2, // 书店上空约 3.2 单位悬浮
+        phase: 0.7,
+        speed: 0.3,
+      };
+      shopPod.userData.hoverPhase = 0.7;
+      shopPod.userData.anchorDirection = shopUp.clone();
+      shopPod.userData.bookshopPod = true;
+      bubblePods.add(shopPod);
+    }
+
     // ---------- 星海运河环线：连通各主要场景，在地面挖出的浅沟 ----------
     // 控制点取各场景方向（世界位 normalize），用 CatmullRom 闭合样条稍曲折绕行；
     // 形态是贴地沟渠（河床/水面/两侧立壁/岸顶土埂），不是埋进球心的地下通道。
@@ -555,31 +580,56 @@ export const messengerIslandScene = {
     });
     scene.add(abandonedGate);
 
-    // ---------- 叹息之门城头：小群 Boids 近景备份（千鸟漩涡已迁到圣城台地 1） ----------
+    // ---------- 三重门千鸟漩涡（门廊 A/B/C/D 组群 · 随门搬迁） ----------
+    const gateBirdVortex = new BirdVortexManager(scene, {
+      // 默认约 1000 只 InstancedMesh；非 spiralOnly = 攀附门墙 + 双螺旋
+      name: "bird-vortex-triple-gate",
+      getTram: () =>
+        tramSystem?.getNearestTram?.(abandonedGate.position) ||
+        tramSystem?.tram ||
+        null,
+    });
+    gateBirdVortex.syncToGate(abandonedGate, { respawn: true });
+    gateBirdVortex.root.userData.anchor = { kind: "triple-gate" };
+
+    // ---------- 叹息之门城头：小群 Boids 近景备份（穿门夹道） ----------
     {
       const seat = abandonedGate.userData?.seatRoot;
-      const gateDir = seat
-        ? new THREE.Vector3(0, 1, 0).applyQuaternion(seat.quaternion).normalize()
-        : (() => {
-            const u = abandonedGate.userData?.anchor?.gateU;
-            if (Number.isFinite(u) && tramSystem.curve) {
-              return tramSystem.curve.getPointAt(u, new THREE.Vector3()).normalize();
-            }
-            return canyonDir.clone();
-          })();
+      seat?.updateWorldMatrix?.(true, false);
+      const gateOrigin = new THREE.Vector3();
+      const gateQ = new THREE.Quaternion();
+      if (seat) {
+        seat.getWorldPosition(gateOrigin);
+        seat.getWorldQuaternion(gateQ);
+      }
+      const gateUp = seat
+        ? new THREE.Vector3(0, 1, 0).applyQuaternion(gateQ).normalize()
+        : canyonDir.clone();
       const gateRight = seat
-        ? new THREE.Vector3(1, 0, 0).applyQuaternion(seat.quaternion).normalize()
-        : new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), gateDir).normalize();
+        ? new THREE.Vector3(1, 0, 0).applyQuaternion(gateQ).normalize()
+        : new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), gateUp).normalize();
       const gateFwd = seat
-        ? new THREE.Vector3(0, 0, 1).applyQuaternion(seat.quaternion).normalize()
-        : new THREE.Vector3().crossVectors(gateDir, gateRight).normalize();
-      flock.setHome?.(gateDir, {
-        altMin: 10,
-        altMax: 36,
-        homeRadius: 22,
-        homeWeight: 1.1,
+        ? new THREE.Vector3(0, 0, 1).applyQuaternion(gateQ).normalize()
+        : new THREE.Vector3().crossVectors(gateUp, gateRight).normalize();
+      flock.setHome?.(gateUp, {
+        altMin: 8,
+        altMax: 32,
+        homeRadius: 18,
+        homeWeight: 1.15,
         windDir: gateFwd,
         respawn: true,
+      });
+      // 限制在三重门夹道内穿行
+      flock.setCorridor?.({
+        origin: gateOrigin.lengthSq() > 1e-6 ? gateOrigin : gateUp.clone().multiplyScalar(R),
+        right: gateRight,
+        up: gateUp,
+        forward: gateFwd,
+        halfWidth: Math.max(3.2, (GATE.channelWidth || 10) * 0.48),
+        halfLength: Math.max(14, (GATE_DEPTH || 18) * 0.95),
+        yMin: 3,
+        yMax: 30,
+        cloudCeilY: 40,
       });
       if (flock?.root) flock.root.visible = true;
     }
@@ -606,7 +656,8 @@ export const messengerIslandScene = {
       odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
       airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
       flock, // 叹息之门城头小群 Boids 近景备份
-      birdVortex, // 兼容：台地 1 旋涡
+      gateBirdVortex, // 三重门千鸟漩涡（门廊攀附 + 双螺旋）
+      birdVortex: gateBirdVortex, // 兼容旧引用：门体漩涡
       terraceBirds, // 五级台地各 20 只 · 随机栖顶 · 昼夜栖飞 · 纸士兵惊飞
       hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
       escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
@@ -705,6 +756,17 @@ export const messengerIslandScene = {
           moebius.update?.(dt, t, { escortTram });
         }
 
+        // 三重门千鸟漩涡 + 门廊 Boids
+        if (gateBirdVortex) {
+          const tram =
+            tramSystem.getNearestTram?.(runtime?.player?.position) ||
+            tramSystem.tram ||
+            null;
+          gateBirdVortex.update(dt, t, {
+            tram,
+            viewer: runtime?.player?.position || null,
+          });
+        }
         // 五级台地鸟群：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞、离开立刻落下
         if (terraceBirds) {
           const tram =
@@ -718,7 +780,7 @@ export const messengerIslandScene = {
             infiltration: citadelRange?.nightInfiltration || null,
           });
         }
-        // 门周 Boids 备份层（近景可辨）
+        // 门周 Boids 备份层（近景可辨 · 夹道穿行）
         if (flock?.root?.visible) flock.update(dt, t);
 
         // 花厅楼顶忽聚忽散：仍环绕母皇塔尖

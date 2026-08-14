@@ -324,12 +324,45 @@ function nearestTrackU(worldPos) {
   return { u: bestU, dist: Math.sqrt(bestD), curve };
 }
 
-/** 同步搬迁三重门 + 城头云墙到轨道参数 u */
+/** 同步搬迁三重门 + 门体鸟群 + 城头云墙到轨道参数 u */
 function moveGateAndCloudsTo(u) {
   const gate = messenger?.landmarks?.abandonedGate;
   const okGate = gate?.userData?.relocate?.(u) ?? false;
-  // 千鸟漩涡已锚定圣城台地 1，不随叹息之门搬迁
-  const okBird = false;
+  // 三重门千鸟漩涡随门重锚
+  const vortex =
+    messenger?.landmarks?.gateBirdVortex || messenger?.landmarks?.birdVortex;
+  const okBird = okGate ? vortex?.syncToGate?.(gate, { respawn: true }) ?? false : false;
+  // 小群 Boids 家域也跟着门走
+  if (okGate && messenger?.landmarks?.flock?.setHome) {
+    const seat = gate.userData?.seatRoot;
+    if (seat) {
+      seat.updateWorldMatrix(true, false);
+      const up = new THREE.Vector3(0, 1, 0).applyQuaternion(seat.quaternion).normalize();
+      const fwd = new THREE.Vector3(0, 0, 1).applyQuaternion(seat.quaternion).normalize();
+      const right = new THREE.Vector3(1, 0, 0).applyQuaternion(seat.quaternion).normalize();
+      const origin = new THREE.Vector3();
+      seat.getWorldPosition(origin);
+      messenger.landmarks.flock.setHome(up, {
+        altMin: 8,
+        altMax: 32,
+        homeRadius: 18,
+        homeWeight: 1.15,
+        windDir: fwd,
+        respawn: true,
+      });
+      messenger.landmarks.flock.setCorridor?.({
+        origin,
+        right,
+        up,
+        forward: fwd,
+        halfWidth: 5,
+        halfLength: 18,
+        yMin: 3,
+        yMax: 30,
+        cloudCeilY: 40,
+      });
+    }
+  }
   const okCloud =
     isCloudWallEnabled() && equatorialClouds?.parent
       ? equatorialClouds?.userData?.relocate?.(u) ?? false
@@ -522,6 +555,7 @@ const airshipRide = createAirshipRide({
   elHint: document.getElementById("airship-hint"),
   toast: showToast,
   getObstacle: getCitadelObstacle,
+  playerGroup, // 驾驶员视角隐藏角色，避免挡视野
 });
 
 // ---------- 水晶城巡逻飞行器 · 第一人称驾驶舱（[V] 进入/退出） ----------
@@ -543,6 +577,7 @@ bubblePodRide = createBubblePodRide({
   playerGroup,
   getFleet: () => messenger?.landmarks?.bubblePods || null,
   getSeaLake: () => messenger?.landmarks?.citySeaLake || null,
+  getLandmarks: () => messenger?.landmarks || null,
   scene,
   planetRadius: PLANET_RADIUS,
   keys,

@@ -24,9 +24,12 @@ export function createCameraRig(camera, player) {
   const _back = new THREE.Vector3();
   const _right = new THREE.Vector3();
   const _offset = new THREE.Vector3();
+  const _fwd = new THREE.Vector3();
   let camOrbit = 0; // 绕法线的环绕角（yaw）
   let camPitch = 0; // 俯仰角（pitch）
   let camDist = P.camDist;
+  /** 第一人称：贴眼向前看（飞艇驾驶员等），不走身后高位俯视 */
+  let firstPerson = false;
   const defaultFov = camera.fov;
   let midDrag = false;
   let rightDrag = false;
@@ -34,10 +37,31 @@ export function createCameraRig(camera, player) {
   function clampDist(d) {
     return Math.min(CAMERA_DIST_MAX, Math.max(CAMERA_DIST_MIN, d));
   }
-  function setDist(d) {
-    camDist = clampDist(d);
+  /**
+   * @param {number} d
+   * @param {{ force?: boolean }} [opts] force=true 时允许低于 CAMERA_DIST_MIN（驾驶员第一人称）
+   */
+  function setDist(d, opts = {}) {
+    if (opts?.force) {
+      camDist = Math.max(0.05, Math.min(CAMERA_DIST_MAX, Number(d) || 0.05));
+    } else {
+      camDist = clampDist(d);
+    }
+  }
+  /**
+   * 第一人称模式：相机在眼位，沿 player.forward 看向远方（不看地面）。
+   * @param {boolean} on
+   */
+  function setFirstPerson(on) {
+    firstPerson = !!on;
+    if (firstPerson) {
+      camOrbit = 0;
+      camPitch = 0;
+      camDist = 0.08;
+    }
   }
   function zoomBy(delta) {
+    if (firstPerson) return; // 第一人称不滚轮拉距
     camDist = clampDist(camDist + delta);
   }
   function setFov(fov) {
@@ -59,22 +83,47 @@ export function createCameraRig(camera, player) {
 
   function update(dt) {
     const orbiting = midDrag || rightDrag;
+    const up = surfaceNormal(player.position, _up);
 
+    // 相机 Up 平滑追踪球面法线
+    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up);
+    _upSmooth.lerp(up, 1 - Math.exp(-P.upLerp * dt));
+    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up);
+    _upSmooth.normalize();
+
+    const t = 1 - Math.exp(-(orbiting ? 12 : P.camLerp) * dt);
+
+    // ---------- 第一人称：贴眼、沿 forward 看向远方（飞艇驾驶员） ----------
+    if (firstPerson) {
+      const rawFwd = player.forward || player.facing || new THREE.Vector3(0, 0, 1);
+      _fwd.copy(rawFwd);
+      // 压到切平面：水平向前，不朝球心/地面
+      _fwd.addScaledVector(up, -_fwd.dot(up));
+      if (_fwd.lengthSq() < 1e-6) {
+        _fwd.set(0, 0, 1).addScaledVector(up, -up.z);
+      }
+      _fwd.normalize();
+      // 极轻抬头，地平线略低于画面中心
+      _fwd.addScaledVector(_upSmooth, 0.04).normalize();
+
+      // 眼位 = 玩家位置（已是驾驶员眼高）
+      camDesired.copy(player.position);
+      camera.position.lerp(camDesired, Math.min(1, t * 1.4));
+      camera.up.copy(_upSmooth);
+      // 看向正前方远处
+      lookAtPoint.copy(player.position).addScaledVector(_fwd, 40);
+      camTarget.lerp(lookAtPoint, Math.min(1, t * 1.4));
+      camera.lookAt(camTarget);
+      return;
+    }
+
+    // ---------- 第三人称：身后跟随 ----------
     // 松手后 yaw / pitch 平滑回弹到默认斜后方视角
     if (!orbiting) {
       const k = 1 - Math.exp(-SPRING_BACK * dt);
       camOrbit -= camOrbit * k;
       camPitch -= camPitch * k;
     }
-
-    const up = surfaceNormal(player.position, _up);
-
-    // 相机 Up 平滑追踪球面法线：玩家绕到侧面/底部时姿态渐进翻转，
-    // 屏幕上玩家始终"头顶朝上"（硬拷贝会跨半球瞬间跳变）
-    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up); // 未初始化则直接就位
-    _upSmooth.lerp(up, 1 - Math.exp(-P.upLerp * dt));
-    if (_upSmooth.lengthSq() < 1e-6) _upSmooth.copy(up); // 过对跖点兜底
-    _upSmooth.normalize();
 
     // 背后：-forward 切向，再绕 up 旋转 camOrbit
     const fwd = player.forward || player.facing || new THREE.Vector3(0, 0, 1);
@@ -104,7 +153,6 @@ export function createCameraRig(camera, player) {
       camDesired.copy(player.position).add(_offset);
     }
 
-    const t = 1 - Math.exp(-(orbiting ? 12 : P.camLerp) * dt);
     camera.position.lerp(camDesired, t);
     camera.up.copy(_upSmooth);
 
@@ -134,6 +182,8 @@ export function createCameraRig(camera, player) {
     update,
     snapToPlayer,
     setDist,
+    setFirstPerson,
+    isFirstPerson: () => firstPerson,
     zoomBy,
     setMidDrag,
     setRightDrag,

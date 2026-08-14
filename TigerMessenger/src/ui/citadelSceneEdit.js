@@ -30,6 +30,25 @@ export function citadelTerrainObjectFromHits(hits = []) {
   return null;
 }
 
+/**
+ * 合并几何上的体块反查：town 体块按材质合并后（geometryMerge），
+ * 命中合并网格时用 hit.faceIndex（非索引几何 = 三角形序号）查
+ * userData.faceToCell 面区间映射，还原 cell 数据。
+ * @returns {object|null} cell（含 ix/iy/iz/char/terraceIndex）或 null
+ */
+export function lookupMergedCell(hit) {
+  const obj = hit?.object;
+  const map = obj?.userData?.faceToCell;
+  if (!map || !Number.isFinite(hit.faceIndex)) return null;
+  const tri = hit.faceIndex;
+  for (const entry of map) {
+    if (tri >= entry.triStart && tri < entry.triStart + entry.triCount) {
+      return entry.cell;
+    }
+  }
+  return null;
+}
+
 const CHAR_COLORS = { W: 0xe5eff2, L: 0xd9cfac, B: 0xcaa88c, D: 0x8b5a2b };
 const CLICK_SLOP_PX = 6; // 按下到抬起位移小于此值才算点击（区分相机拖拽）
 
@@ -216,7 +235,9 @@ export function createCitadelSceneEdit({
     return raycaster;
   }
 
-  /** 拾取体块：跳过窗/垛/穹顶等装饰件，返回格坐标与是否顶面命中。 */
+  /** 拾取体块：跳过窗/垛/穹顶等装饰件，返回格坐标与是否顶面命中。
+   *  兼容合并几何：town 体块按材质合并后，cell 通过 userData.faceToCell
+   *  （面区间 → cell）按 hit.faceIndex 反查。 */
   function castCell(e) {
     const ray = castRay(e);
     const citadel = getCitadel();
@@ -230,7 +251,7 @@ export function createCitadelSceneEdit({
     const poolSel = raycastCascadePoolTop(scene, ray, tmpV2, activeTerrace);
     const dPoolSel = poolSel ? ray.ray.origin.distanceTo(poolSel.point) : Infinity;
     for (const hit of hits) {
-      const cell = hit.object.userData.cell;
+      const cell = hit.object.userData?.cell ?? lookupMergedCell(hit);
       if (cell && hit.face && cell.terraceIndex === activeTerrace) {
         const up = upLocal.clone().applyQuaternion(frame.citadel.getWorldQuaternion(tmpQ));
         const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);

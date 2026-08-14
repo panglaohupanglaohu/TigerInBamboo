@@ -56,8 +56,7 @@ export const CITY_FOOTPRINT_RADIUS = Math.min(
  * 自发光的手绘风玻璃，观感接近、成本只剩一次正向渲染。
  */
 function crystalPhysical(color = 0xd6eaf8, emissive = 0x1f3a4b) {
-  return new THREE.MeshPhysicalMaterial({
-    transmission: 0,
+  return new THREE.MeshStandardMaterial({
     opacity: 0.7,
     transparent: true,
     roughness: 0.06,
@@ -65,9 +64,6 @@ function crystalPhysical(color = 0xd6eaf8, emissive = 0x1f3a4b) {
     color: new THREE.Color(color),
     emissive: new THREE.Color(emissive),
     emissiveIntensity: 0.5,
-    clearcoat: 1,
-    clearcoatRoughness: 0.04,
-    specularIntensity: 1,
     flatShading: true,
     depthWrite: false,
   });

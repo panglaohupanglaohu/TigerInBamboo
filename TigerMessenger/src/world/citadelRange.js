@@ -29,10 +29,12 @@ import {
 // 再导出，供编辑器等沿用 citadelRange 路径
 export { CITADEL_CASCADE_POOL_SPECS, CITADEL_CASCADE_MARKER };
 import { createSnowMassif } from "../assets/snowMassif.js";
+import { createAncientPineTree } from "../assets/ancient.js";
 import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
 import { createTieSoldier } from "../assets/harbor.js";
 import { createCitadelNightInfiltration } from "./citadelInfiltration.js";
+import { tickObjectSedation } from "./tranquilizer.js";
 import { CANAL_WATER_LIFT, CANAL_HALF_WIDTH, CANAL_LIP_WIDTH, CANAL_BANK_COLOR, CANAL_LIP_COLOR, sweepPrism } from "./canalSystem.js";
 import { createNavonaCanalPlaza } from "./navonaPlaza.js";
 
@@ -327,6 +329,63 @@ function rangePart(geometry, material, name, outline = 0.04) {
   part.receiveShadow = true;
   addOutline(part, outline, 0x1c2523, 0);
   return part;
+}
+
+const _horseTipQ = new THREE.Quaternion();
+const _horseTipAxis = new THREE.Vector3(0, 0, 1);
+
+/**
+ * 木马倾倒：只看「白天拉扯绳索」的系绳班组（horse-tiedown-squad / tie-soldier）。
+ * 夜潜行动士兵（citadelInfiltration）与倾倒判定完全无关。
+ * @param {THREE.Object3D|null} horse
+ * @param {number} dt
+ */
+function updateTrojanHorseTiedown(horse, dt) {
+  if (!horse?.isObject3D) return;
+  const squad =
+    horse.userData.tiedownSquad || horse.getObjectByName("horse-tiedown-squad");
+  if (!squad) return;
+  if (!horse.userData.baseQuat) {
+    horse.userData.baseQuat = horse.quaternion.clone();
+  }
+  const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
+
+  // 夜潜期间系绳班组会被隐藏：此时不倾倒、不读夜潜兵状态，木马回正
+  const dayTiedownActive = squad.visible !== false;
+  let n = 0;
+  let sed = 0;
+  let sumX = 0;
+  if (dayTiedownActive) {
+    for (const child of squad.children) {
+      // 仅白天系绳兵：name=tie-soldier；跳过绳索网格与其它子节点
+      if (child.name !== "tie-soldier" && child.userData?.kind !== "tieSoldier") {
+        continue;
+      }
+      n++;
+      if (child.userData.sedated) tickObjectSedation(child, d);
+      if (child.userData.sedated && (child.userData.sedateT ?? 0) > 0) {
+        sed++;
+        sumX += child.position.x;
+      }
+    }
+  }
+
+  const ratio = n > 0 ? sed / n : 0;
+  const targetTip = dayTiedownActive ? ratio * 0.58 : 0; // 最多约 33°；夜间强制 0
+  let tip = horse.userData.tipAmount ?? 0;
+  tip += (targetTip - tip) * Math.min(1, d * 2.6);
+  if (tip < 0.001 && targetTip < 0.001) {
+    // 系绳班全员清醒（或夜潜中）：跟手编辑器拖拽后的姿态，作为新基准
+    horse.userData.tipAmount = 0;
+    horse.userData.baseQuat.copy(horse.quaternion);
+    return;
+  }
+  horse.userData.tipAmount = tip;
+  if (sed > 0) horse.userData.tipSign = sumX >= 0 ? 1 : -1;
+  const sign = horse.userData.tipSign || 1;
+  // 局部滚转倾倒（Z 轴），保留放置朝向
+  _horseTipQ.setFromAxisAngle(_horseTipAxis, tip * sign);
+  horse.quaternion.copy(horse.userData.baseQuat).multiply(_horseTipQ);
 }
 
 function placeRangeAsset(asset, lx, lz, R, lift = 0, siteUpright = false) {
@@ -795,103 +854,192 @@ function buildRangeShrub(name, scale, materials, seed) {
   return shrub;
 }
 
-function addTarnTreeLimb(parent, start, end, radiusBottom, radiusTop, material, name) {
-  const direction = end.clone().sub(start);
-  const length = direction.length();
-  const limb = rangePart(
-    new THREE.CylinderGeometry(radiusTop, radiusBottom, length, 7),
-    material,
-    name,
-    0.035
-  );
-  limb.position.copy(start).add(end).multiplyScalar(0.5);
-  limb.quaternion.setFromUnitVectors(
-    new THREE.Vector3(0, 1, 0),
-    direction.normalize()
-  );
-  parent.add(limb);
-  return limb;
-}
+/**
+ * 港口深潭参天巨松（士兵装货栈桥旁 · The Colossal Primordial Pine）
+ * 金字塔收分虯干 · 乳白剥落芯 · 斜向嵌套龙枝 · 极端拍扁云片冠 · 全网格 0.05 墨线
+ * 设计单位 1:1（高约 30，约玩家 20–25 倍）；底部原点。
+ */
+function buildSacredTarnTree(_materials) {
+  // 锁死色盘（不随 range 通用 materials 漂移）
+  const barkMat = toonMat(0x7d6b5d, { flatShading: true });
+  const coreMat = toonMat(0xf4efeb, { flatShading: true });
+  const canopyMats = [
+    toonMat(0x1a3326, { flatShading: true }),
+    toonMat(0x112219, { flatShading: true }),
+  ];
+  const INK = 0.05;
 
-function buildSacredTarnTree(materials) {
-  const tree = new THREE.Group();
-  tree.name = "citadel-sacred-tarn-elder-tree";
+  const giantTreeGroup = new THREE.Group();
+  giantTreeGroup.name = "citadel-sacred-tarn-elder-tree";
 
-  addTarnTreeLimb(
-    tree,
-    new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(-0.45, 15.5, 0.35),
-    1.45,
-    0.72,
-    materials.bark,
-    "tarn-elder-tree-trunk"
-  );
-  addTarnTreeLimb(
-    tree,
-    new THREE.Vector3(-0.45, 14.2, 0.35),
-    new THREE.Vector3(-1.2, 24.2, -0.4),
-    0.76,
-    0.34,
-    materials.bark,
-    "tarn-elder-tree-trunk"
-  );
+  // ---------- 1. 金字塔收分 + 左倾虯干 ----------
+  const trunkRoot = new THREE.Group();
+  trunkRoot.name = "tarn-elder-tree-trunk-root";
+  trunkRoot.rotation.z = 0.18; // ~10° 左倾
 
+  const trunkSpecs = [
+    { bottom: 1.8, top: 1.15, h: 10, x: 0.0, y0: 0.0 },
+    { bottom: 1.05, top: 0.62, h: 8, x: -0.5, y0: 9.0 },
+    { bottom: 0.58, top: 0.28, h: 8, x: -1.2, y0: 15.8 },
+  ];
+  for (let i = 0; i < trunkSpecs.length; i++) {
+    const s = trunkSpecs[i];
+    const mesh = rangePart(
+      new THREE.CylinderGeometry(s.top, s.bottom, s.h, 6, 1, false),
+      barkMat,
+      "tarn-elder-tree-trunk",
+      INK
+    );
+    mesh.position.set(s.x, s.y0 + s.h * 0.5, 0);
+    trunkRoot.add(mesh);
+  }
+
+  // 树皮剥落乳白内芯（下半干朝 +Z）
+  const peel = rangePart(
+    new THREE.BoxGeometry(1.35, 5.2, 0.09, 1, 4, 1),
+    coreMat,
+    "tarn-elder-tree-bark-peel",
+    INK
+  );
+  peel.position.set(0.15, 4.1, 1.55);
+  peel.rotation.set(-0.04, 0.08, 0.06);
+  trunkRoot.add(peel);
+  const peel2 = rangePart(
+    new THREE.BoxGeometry(0.72, 2.6, 0.07, 1, 3, 1),
+    coreMat,
+    "tarn-elder-tree-bark-peel",
+    INK
+  );
+  peel2.position.set(-0.35, 8.6, 1.05);
+  peel2.rotation.set(-0.05, -0.12, 0.1);
+  trunkRoot.add(peel2);
+
+  // 根盘爪
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + i * 0.11;
+    const len = 1.4 + (i % 3) * 0.18;
+    const dig = 0.45;
+    const root = rangePart(
+      new THREE.CylinderGeometry(0.08, 0.4, len, 6, 1, false),
+      barkMat,
+      "tarn-elder-tree-root",
+      INK
+    );
+    const dir = new THREE.Vector3(Math.cos(a), -0.22, Math.sin(a)).normalize();
+    root.position.copy(dir).multiplyScalar(len * 0.5 - dig);
+    root.position.y = 0.12;
+    root.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+    trunkRoot.add(root);
+  }
+  giantTreeGroup.add(trunkRoot);
+
+  // ---------- 2. 斜向外上方嵌套主枝（消灭 90° 直角） ----------
+  const branchRoot = new THREE.Group();
+  branchRoot.name = "tarn-elder-tree-branches";
+  branchRoot.rotation.z = 0.18;
+
+  const canopyAnchors = [];
+
+  function addSCurveBranch(spec) {
+    const dig = Math.max(0.35, spec.dig ?? 0.42);
+    const attach = new THREE.Vector3(spec.ax, spec.ay, spec.az);
+    const mainLen = spec.len;
+    const main = rangePart(
+      new THREE.CylinderGeometry(spec.r1 * 1.15, spec.r0, mainLen, 6, 1, false),
+      barkMat,
+      "tarn-elder-tree-branch",
+      INK
+    );
+    main.rotation.order = "YZX";
+    main.rotation.y = spec.yaw ?? 0;
+    main.rotation.z = spec.rotZ ?? 0.6;
+    const mainDir = new THREE.Vector3(0, 1, 0).applyEuler(main.rotation);
+    main.position.copy(attach).addScaledVector(mainDir, mainLen * 0.5 - dig);
+    branchRoot.add(main);
+
+    // 梢段下弯
+    const mid = attach.clone().addScaledVector(mainDir, mainLen - dig);
+    const tipLen = mainLen * 0.42;
+    const tipMesh = rangePart(
+      new THREE.CylinderGeometry(spec.r1 * 0.55, spec.r1 * 1.05, tipLen, 6, 1, false),
+      barkMat,
+      "tarn-elder-tree-branch-tip",
+      INK
+    );
+    tipMesh.rotation.order = "YZX";
+    tipMesh.rotation.y = (spec.yaw ?? 0) * 0.9;
+    tipMesh.rotation.z = (spec.rotZ ?? 0.6) * 0.35 - 0.18;
+    const tipDir = new THREE.Vector3(0, 1, 0).applyEuler(tipMesh.rotation);
+    tipMesh.position.copy(mid).addScaledVector(tipDir, tipLen * 0.5 - 0.38);
+    branchRoot.add(tipMesh);
+
+    const tip = mid.clone().addScaledVector(tipDir, tipLen - 0.38);
+    canopyAnchors.push({
+      tip,
+      yaw: Math.atan2(tip.z - attach.z, tip.x - attach.x),
+      size: spec.canopySize ?? 1,
+    });
+  }
+
+  // Y≈12 / Y≈18 共 5 根主枝（测试/剪影要求清晰分叉）
   const branchSpecs = [
-    [[-0.2, 10.2, 0.2], [-6.4, 17.7, 0.8], 0.6, 0.2],
-    [[-0.4, 12.4, 0.1], [5.9, 19.6, -1.4], 0.58, 0.19],
-    [[-0.7, 15.4, 0.0], [-5.0, 22.3, 3.4], 0.48, 0.16],
-    [[-0.8, 16.8, -0.1], [4.5, 23.7, 2.8], 0.46, 0.15],
-    [[-1.0, 19.8, -0.25], [-1.6, 27.0, -0.8], 0.38, 0.12],
+    { ax: -0.15, ay: 12.0, az: 0.15, len: 7.2, r0: 0.48, r1: 0.18, rotZ: 0.62, yaw: 0.12, dig: 0.48, canopySize: 1.05 },
+    { ax: -0.25, ay: 11.4, az: -0.55, len: 5.6, r0: 0.36, r1: 0.14, rotZ: 0.55, yaw: -0.48, dig: 0.42, canopySize: 0.92 },
+    { ax: -0.85, ay: 18.0, az: 0.08, len: 8.4, r0: 0.4, r1: 0.15, rotZ: 0.68, yaw: 0.05, dig: 0.45, canopySize: 1.2 },
+    { ax: -0.7, ay: 17.4, az: 0.55, len: 6.1, r0: 0.3, r1: 0.11, rotZ: 0.58, yaw: 0.42, dig: 0.4, canopySize: 1.0 },
+    { ax: -1.15, ay: 22.5, az: 0.0, len: 4.2, r0: 0.26, r1: 0.1, rotZ: 0.48, yaw: -0.1, dig: 0.4, canopySize: 1.1 },
   ];
-  for (const [from, to, bottom, top] of branchSpecs) {
-    addTarnTreeLimb(
-      tree,
-      new THREE.Vector3(...from),
-      new THREE.Vector3(...to),
-      bottom,
-      top,
-      materials.bark,
-      "tarn-elder-tree-branch"
-    );
+  for (const spec of branchSpecs) addSCurveBranch(spec);
+  giantTreeGroup.add(branchRoot);
+
+  // ---------- 3. 极端非等比拍扁云片树冠 ----------
+  const canopyRoot = new THREE.Group();
+  canopyRoot.name = "tarn-elder-tree-canopy";
+  canopyRoot.rotation.z = 0.18;
+
+  let crownCount = 0;
+  function addCanopyMat(center, yaw, size = 1) {
+    const cluster = 3 + (crownCount % 2); // 3–4 片
+    for (let i = 0; i < cluster; i++) {
+      const useIco = (crownCount + i) % 3 !== 0;
+      const geo = useIco
+        ? new THREE.IcosahedronGeometry(1, 0)
+        : new THREE.SphereGeometry(1, 5, 3);
+      const crown = rangePart(
+        geo,
+        canopyMats[(crownCount + i) % canopyMats.length],
+        "tarn-elder-tree-crown",
+        INK
+      );
+      const s = size * (0.78 + ((crownCount * 3 + i) % 5) * 0.06);
+      // 核心视觉：X 横向 3.8 · Y 拍扁 0.45 · Z 2.2
+      crown.scale.set(3.8 * s, 0.45 * s, 2.2 * s);
+      crown.position.set(
+        center.x + ((i % 3) - 1) * 0.9 * size,
+        center.y + (i % 2) * 0.28 * size,
+        center.z + ((i % 2) - 0.5) * 0.7 * size
+      );
+      crown.rotation.set(
+        ((i * 0.37) % 1) * 0.3 - 0.15,
+        yaw + i * 1.1,
+        ((i * 0.53) % 1) * 0.24 - 0.12
+      );
+      canopyRoot.add(crown);
+      crownCount++;
+    }
   }
 
-  const crownSpecs = [
-    [-6.2, 18.2, 0.8, 3.7, 1.2, 0.85],
-    [-4.0, 21.2, 2.7, 3.4, 1.15, 0.9],
-    [5.5, 20.1, -1.2, 4.0, 1.25, 0.88],
-    [4.0, 23.3, 2.5, 3.35, 1.1, 0.92],
-    [-1.8, 26.2, -0.6, 4.1, 1.05, 0.95],
-    [1.7, 25.0, -1.0, 3.35, 1.1, 0.86],
-    [-3.4, 23.6, -2.2, 3.15, 1.2, 0.82],
-    [0.2, 28.2, 0.5, 3.25, 1.0, 0.92],
-  ];
-  crownSpecs.forEach(([x, y, z, radius, sx, sy], index) => {
-    const crown = rangePart(
-      new THREE.SphereGeometry(radius, 9, 6),
-      index % 3 === 0 ? materials.leafLight : materials.leaf,
-      "tarn-elder-tree-crown",
-      0.028
-    );
-    crown.position.set(x, y, z);
-    crown.scale.set(sx, sy, 1.0 + (index % 2) * 0.12);
-    tree.add(crown);
-  });
+  for (const a of canopyAnchors) addCanopyMat(a.tip, a.yaw, a.size);
+  // 补两团横向流云墙，形成压迫分量
+  addCanopyMat(new THREE.Vector3(-4.5, 16.5, 0.4), 0.2, 1.05);
+  addCanopyMat(new THREE.Vector3(-6.2, 20.8, -0.6), -0.15, 1.2);
 
-  // Sparse hanging strands give the tree a humid lake-marsh character without
-  // turning the silhouette into a dense curtain in front of the citadel.
-  for (let i = 0; i < 5; i++) {
-    const strand = rangePart(
-      new THREE.CylinderGeometry(0.045, 0.065, 4.8 + (i % 2) * 1.7, 5),
-      materials.leaf,
-      "tarn-elder-tree-hanging-vine",
-      0.012
-    );
-    strand.position.set(-5.2 + i * 2.6, 17.4 + (i % 3) * 1.4, 1.0 + (i % 2) * 1.6);
-    strand.rotation.z = (i - 2) * 0.035;
-    tree.add(strand);
-  }
-  tree.userData.canopyHeight = 31.5;
-  return tree;
+  giantTreeGroup.add(canopyRoot);
+
+  giantTreeGroup.userData.canopyHeight = 31.5;
+  giantTreeGroup.userData.kind = "sacredTarnElderTree";
+  giantTreeGroup.userData.designHeight = 30;
+  return giantTreeGroup;
 }
 
 function buildLakeBallShrub(name, scale, materials, seed) {
@@ -1049,6 +1197,15 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   const sacredTarnTree = buildSacredTarnTree(materials);
   placeRangeAsset(sacredTarnTree, -15.2, 42.0, R, -0.15, true);
   scene.add(sacredTarnTree);
+
+  // 第二棵参天巨松：港口深潭参天大树旁（交错对生，双株成景）。
+  // 与 saihoji 主石之庭保留的单株同款资产（createAncientPineTree），
+  // 不同种籽 + 绕地表法向 ~1.05 rad 偏转，树冠与第一棵交错穿插。
+  const tarnCompanionPine = createAncientPineTree(7788);
+  tarnCompanionPine.name = "citadel-tarn-companion-pine";
+  placeRangeAsset(tarnCompanionPine, -19.8, 44.2, R, -0.15, true);
+  tarnCompanionPine.rotateY(1.05);
+  scene.add(tarnCompanionPine);
 
   // ---------- 城堡背后雪山：面对城堡时左右各一组 ----------
   // 站点局部：lz+ = 主岛/正门朝向；站在正门前看城堡时，-lx 为左、+lx 为右，
@@ -1415,6 +1572,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   let navonaPlaza = null;
   let trojanHorse = null;
   let nightInfiltration = null;
+  let _patrolCastle = null; // 供地形热重建后重新计算潜入路线使用
+  let computeInfiltrationRoutes = null; // 提升到本作用域，供 rebuildWaterTerraces 复用
   const placeNavonaPlaza = (lx, lz, yaw, patrolCastle = null) => {
     if (navonaPlaza) return navonaPlaza; // 幂等：只摆一次（conform 会永久改写顶点）
     navonaPlaza = createNavonaCanalPlaza({
@@ -1600,131 +1759,133 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       squad.add(rope);
     }
     trojanHorse.add(squad);
+    // 白天系绳班组（拉绳固定木马）——倾倒判定只认这组，与夜潜士兵无关
+    squad.userData.role = "day-tiedown";
+    trojanHorse.userData.tiedownSquad = squad;
+    trojanHorse.userData.baseQuat = trojanHorse.quaternion.clone();
+    trojanHorse.userData.tipAmount = 0;
+    trojanHorse.userData.tipSign = 1;
 
     // ---- 夜间潜入路线：瀑布组沿四道水帘逐级上攀，阶梯组沿外侧三段石阶 ----
-    // 所有路径点直接取当前台地/瀑布几何的位置，避免把纸兵放到旧土坡或平面高度上。
-    const waterfallRoute = [];
-    const waterfallNodes = [...(pilgrimageCascades?.children || [])].sort(
-      (a, b) => (b.userData?.sequence ?? 0) - (a.userData?.sequence ?? 0)
-    );
-    const waterfallPos = new THREE.Vector3();
-    // 瀑布组先从木马攀到台面 2，台面 2→1 的跨台面移动改走石阶。
-    // sequence 3、2、1 对应从最低处到台面 2 的三道水帘；不再把队伍
-    // 直接送到台面 1 后再“回头巡查”。
-    for (const waterfall of waterfallNodes.slice(0, 3)) {
-      waterfall.updateWorldMatrix(true, false);
-      waterfall.getWorldPosition(waterfallPos);
-      const drop = Math.max(1.2, Number(waterfall.userData?.actualDrop) || 4);
-      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.22));
-      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop * 0.46));
-      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop + 0.28));
-    }
-    const terraceTwoPool = pilgrimageWaterSteps?.children?.find(
-      (pool) => pool.name === "terrace-2-pool"
-    ) || pilgrimageWaterSteps?.children?.[1];
-    if (terraceTwoPool) {
-      terraceTwoPool.updateWorldMatrix(true, false);
-      terraceTwoPool.getWorldPosition(waterfallPos);
-      waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.24));
-    }
+    // 所有路径点直接取当前台地/瀑布/石阶几何；抽出成函数，供地形热重建后
+    // 重新计算并回灌 nightInfiltration，避免士兵继续沿旧几何走空中。
+    computeInfiltrationRoutes = (castle) => {
+      // 城堡台地/石阶/正门都在城堡本地切平面；路线用城堡自身变换贴地，
+      // 避免 range 坐标系（R+elevation）与城堡径向下沉(radialEmbed≈4)之间的偏移导致走空中。
+      castle.updateMatrixWorld(true);
+      const waterfallRoute = [];
+      const waterfallNodes = [...(pilgrimageCascades?.children || [])].sort(
+        (a, b) => (b.userData?.sequence ?? 0) - (a.userData?.sequence ?? 0)
+      );
+      const waterfallPos = new THREE.Vector3();
+      // 瀑布组先从木马攀到台面 2（sequence 3、2、1 = 从最低处到台面 2 的三道水帘）。
+      for (const waterfall of waterfallNodes.slice(0, 3)) {
+        waterfall.updateWorldMatrix(true, false);
+        waterfall.getWorldPosition(waterfallPos);
+        const drop = Math.max(1.2, Number(waterfall.userData?.actualDrop) || 4);
+        waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.22));
+        waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop * 0.46));
+        waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, drop + 0.28));
+      }
+      const terraceTwoPool = pilgrimageWaterSteps?.children?.find(
+        (pool) => pool.name === "terrace-2-pool"
+      ) || pilgrimageWaterSteps?.children?.[1];
+      if (terraceTwoPool) {
+        terraceTwoPool.updateWorldMatrix(true, false);
+        terraceTwoPool.getWorldPosition(waterfallPos);
+        waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.24));
+      }
 
-    const stairRoute = [];
-    const stairTransferRoutes = [];
-    const stairPoint = (rho, phi) => {
-      const stairLx = rho * Math.sin(phi);
-      const stairLz = rho * Math.cos(phi);
-      let elevation = citadelTerraceWalkLiftLocal(stairLx, stairLz);
-      if (!Number.isFinite(elevation)) elevation = citadelRangeLiftLocal(stairLx, stairLz);
-      return rangeLocalToWorldAtElevation(
-        stairLx,
-        stairLz,
-        R,
-        elevation,
-        new THREE.Vector3()
-      ).addScaledVector(_site, 0.18);
-    };
-    // 阶梯组先只走地面→台面 5 的第一段石阶，抵达台面 5 后再由
-    // stairTransferRoutes 按“巡查完成→走下一段石阶”逐层转移到台面 4、3。
-    // 不能把三段石阶串在初始路线里，否则队伍会越过台面 5、4 直接落到台面 3。
-    for (const flight of walkFlights.slice(0, 1)) {
-      stairRoute.push(stairPoint(flight.rho, flight.from));
-      stairRoute.push(stairPoint(flight.rho, flight.to));
-    }
-    // 每一段跨台面移动都必须落在真实石阶踏面上。这里保留完整的
-    // 台地索引，供夜间事件在“巡查完成 → 走阶梯 → 下一台面”之间切换。
-    for (const flight of walkFlights) {
-      const fromTerrace = flight.terraceIndex + 1;
-      const toTerrace = flight.terraceIndex;
-      if (fromTerrace >= walkMetrics.length) continue; // 地面 → 台面 5，不是台面间转场
-      const midPhi = (flight.from + flight.to) * 0.5;
-      stairTransferRoutes.push({
-        fromTerrace,
-        toTerrace,
-        points: [
-          stairPoint(flight.rho, flight.from),
-          stairPoint(flight.rho, midPhi),
-          stairPoint(flight.rho, flight.to),
-        ],
-      });
-    }
+      const stairRoute = [];
+      const stairTransferRoutes = [];
+      // 石阶踏面直接取城堡本地的 walkFlights 高程（yA→yB），经 castle.localToWorld
+      // 贴回真实踏步，不再走 range 坐标系。
+      const stairPoint = (flight, phi) => {
+        const t = THREE.MathUtils.clamp(
+          (phi - flight.from) / (flight.to - flight.from),
+          0,
+          1
+        );
+        const localY = THREE.MathUtils.lerp(flight.yA, flight.yB, t);
+        const local = new THREE.Vector3(
+          flight.rho * Math.sin(phi),
+          localY + 0.18,
+          flight.rho * Math.cos(phi)
+        );
+        return local.applyMatrix4(castle.matrixWorld);
+      };
+      // 阶梯组先只走地面→台面 5 的第一段石阶，抵达台面 5 后再由
+      // stairTransferRoutes 按“巡查完成→走下一段石阶”逐层转移到台面 4、3。
+      for (const flight of walkFlights.slice(0, 1)) {
+        stairRoute.push(stairPoint(flight, flight.from));
+        stairRoute.push(stairPoint(flight, flight.to));
+      }
+      for (const flight of walkFlights) {
+        const fromTerrace = flight.terraceIndex + 1;
+        const toTerrace = flight.terraceIndex;
+        if (fromTerrace >= walkMetrics.length) continue; // 地面 → 台面 5，不是台面间转场
+        const midPhi = (flight.from + flight.to) * 0.5;
+        stairTransferRoutes.push({
+          fromTerrace,
+          toTerrace,
+          points: [
+            stairPoint(flight, flight.from),
+            stairPoint(flight, midPhi),
+            stairPoint(flight, flight.to),
+          ],
+        });
+      }
 
-    // 城堡本地门口坐标先转换回圣城 range 局部系，再用可行走高程重建；
-    // 这样门外巡游点落在真实台面表面，而不是城堡切平面上方的空气中。
-    const patrolSurfacePoint = patrolCastle
-      ? ({ x, z, world, terraceIndex }, out = new THREE.Vector3()) => {
-          const metrics = citadelTerraceMetrics(normalizedContour);
-          const metric = metrics[terraceIndex];
-          if (!metric) return null;
-
-          // 门口点来自城堡本地坐标；覆盖点来自世界切线偏移。两者统一
-          // 反解为 range 局部 (lx,lz)，再按目标台地的环带和顶面重建。
-          const source = world?.isVector3
-            ? world
-            : patrolCastle.localToWorld(new THREE.Vector3(x, 0, z));
-          const surfaceScale = R / Math.max(1e-6, source.dot(_site));
-          let rangeLx = source.dot(_right) * surfaceScale;
-          let rangeLz = source.dot(_fwd) * surfaceScale;
-
-          // 约束在指定台地环带内：不能因为覆盖偏移而掉进上层台地、
-          // 外圈斜坡或瀑布缺口。这样每个巡查点都有明确承重台面。
-          const innerRadius = terraceIndex > 0
-            ? metrics[terraceIndex - 1].radius + 0.72
-            : 0;
-          const outerRadius = Math.max(innerRadius + 0.5, metric.radius - 0.72);
-          let radius = Math.hypot(rangeLx, rangeLz);
-          if (radius < 1e-5) {
-            rangeLx = 0;
-            rangeLz = Math.min(outerRadius, Math.max(innerRadius, 1));
-            radius = Math.hypot(rangeLx, rangeLz);
-          }
-          radius = THREE.MathUtils.clamp(radius, innerRadius, outerRadius);
-          let phi = Math.atan2(rangeLx, rangeLz);
-          if (
-            terraceIndex > 0
-            && terraceIndex <= normalizedContour.notchedLayers
-          ) {
-            const delta = Math.atan2(
-              Math.sin(phi - normalizedContour.notchCenter),
-              Math.cos(phi - normalizedContour.notchCenter)
-            );
-            const safeNotchEdge = normalizedContour.notchHalf + 0.14;
-            if (Math.abs(delta) < safeNotchEdge) {
-              phi = normalizedContour.notchCenter
-                + (delta < 0 ? -safeNotchEdge : safeNotchEdge);
+      // 门外巡游点统一转城堡本地切平面，再按 target 台地环带约束后用
+      // castle.localToWorld 贴回真实台面，避免 range 坐标系造成悬空。
+      const patrolSurfacePoint = castle
+        ? ({ x, z, world, terraceIndex }, out = new THREE.Vector3()) => {
+            const metrics = citadelTerraceMetrics(normalizedContour);
+            const metric = metrics[terraceIndex];
+            if (!metric) return null;
+            const source = world?.isVector3
+              ? world
+              : castle.localToWorld(new THREE.Vector3(x, 0, z));
+            const local = castle.worldToLocal(source.clone());
+            local.y = 0;
+            const innerRadius = terraceIndex > 0
+              ? metrics[terraceIndex - 1].radius + 0.72
+              : 0;
+            const outerRadius = Math.max(innerRadius + 0.5, metric.radius - 0.72);
+            let radius = Math.hypot(local.x, local.z);
+            if (radius < 1e-5) {
+              local.x = 0;
+              local.z = Math.min(outerRadius, Math.max(innerRadius, 1));
+              radius = Math.hypot(local.x, local.z);
             }
+            radius = THREE.MathUtils.clamp(radius, innerRadius, outerRadius);
+            let phi = Math.atan2(local.x, local.z);
+            if (
+              terraceIndex > 0
+              && terraceIndex <= normalizedContour.notchedLayers
+            ) {
+              const delta = Math.atan2(
+                Math.sin(phi - normalizedContour.notchCenter),
+                Math.cos(phi - normalizedContour.notchCenter)
+              );
+              const safeNotchEdge = normalizedContour.notchHalf + 0.14;
+              if (Math.abs(delta) < safeNotchEdge) {
+                phi = normalizedContour.notchCenter
+                  + (delta < 0 ? -safeNotchEdge : safeNotchEdge);
+              }
+            }
+            local.x = radius * Math.sin(phi);
+            local.z = radius * Math.cos(phi);
+            local.y = metric.top + 0.08;
+            return out.copy(local).applyMatrix4(castle.matrixWorld);
           }
-          rangeLx = radius * Math.sin(phi);
-          rangeLz = radius * Math.cos(phi);
-          return rangeLocalToWorldAtElevation(
-            rangeLx,
-            rangeLz,
-            R,
-            metric.top + 0.08,
-            out
-          );
-        }
-      : null;
+        : null;
 
+      return { waterfallRoute, stairRoute, stairTransferRoutes, patrolSurfacePoint };
+    };
+
+    _patrolCastle = patrolCastle;
+    const infiltrationRoutes = computeInfiltrationRoutes(patrolCastle);
     nightInfiltration = createCitadelNightInfiltration({
       scene,
       horse: trojanHorse,
@@ -1732,11 +1893,11 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       siteUp: _site,
       siteRight: _right,
       horseGround: trojanHorse.position.clone(),
-      waterfallRoute,
-      stairRoute,
-      stairTransferRoutes,
+      waterfallRoute: infiltrationRoutes.waterfallRoute,
+      stairRoute: infiltrationRoutes.stairRoute,
+      stairTransferRoutes: infiltrationRoutes.stairTransferRoutes,
       patrolCastle,
-      patrolSurfacePoint,
+      patrolSurfacePoint: infiltrationRoutes.patrolSurfacePoint,
     });
     trojanHorse.userData.nightInfiltration = nightInfiltration.root;
 
@@ -1756,6 +1917,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     interCascadeBridgePool: null,
     pilgrimageLookout,
     sacredTarnTree,
+    tarnCompanionPine,
     lakeBallShrubs: null,
     snowMountains,
     snowMassifLeft: snowLeft,
@@ -1767,6 +1929,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     placeNavonaPlaza,
     update(dt, t, ctx = {}) {
       nightInfiltration?.update(dt, t, P.timeOfDay, ctx);
+      // 木马系绳兵麻醉 → 木马倾倒；全员苏醒后复位
+      updateTrojanHorseTiedown(rangeSystem.trojanHorse || trojanHorse, dt);
     },
     vegetation: null,
     siteDir: _site.clone(),
@@ -1810,6 +1974,10 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     rangeSystem.pilgrimageCascades = pilgrimageCascades;
     rangeSystem.contourSpec = normalizedContour;
     rangeSystem.cascadeEnabled = normalizedContour.cascadeEnabled;
+    // 台地半径/层高/瀑布石阶已重算：同步刷新夜间潜入路线，避免士兵沿旧几何走空中。
+    if (nightInfiltration?.setRoutes && computeInfiltrationRoutes) {
+      nightInfiltration.setRoutes(computeInfiltrationRoutes(_patrolCastle));
+    }
     return rangeSystem;
   };
   rangeSystem.cascadeEnabled = normalizedContour.cascadeEnabled;

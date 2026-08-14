@@ -10,6 +10,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, addOutline, INK_COLOR } from "../assets/toon.js";
+import { sedateBirdRecord, tickBirdSedation, TRANQ_DURATION_BIRD } from "./tranquilizer.js";
 
 // ---------- Boids 三大定律调参 ----------
 const NEIGHBOR_RADIUS = 6; // 邻居感知半径（规格：6 单位内）
@@ -499,14 +500,39 @@ export class FlockManager {
    * @param {number} dt
    * @param {number} t 全局时间（秒）
    */
+  /**
+   * 麻醉弹命中：坠落贴地，duration 秒后苏醒。
+   * @returns {{ kind: 'object', object: THREE.Object3D, duration: number }|null}
+   */
+  sedateNearest(worldPos, radius = 2.4, duration = TRANQ_DURATION_BIRD) {
+    if (!worldPos) return null;
+    const r2 = radius * radius;
+    let best = null;
+    let bestD = r2;
+    for (const b of this.birds) {
+      if ((b.sedateT ?? 0) > 0) continue;
+      const d = b.group.position.distanceToSquared(worldPos);
+      if (d < bestD) {
+        bestD = d;
+        best = b;
+      }
+    }
+    if (!best || !sedateBirdRecord(best, duration)) return null;
+    return { kind: "object", object: best.group, duration };
+  }
+
   update(dt, t) {
     if (!dt || dt <= 0) return;
     dt = Math.min(dt, 0.05);
     const n = this.birds.length;
     if (!n) return;
 
+    const groundR = this.R + 0.45;
+
     for (let i = 0; i < n; i++) {
       const b = this.birds[i];
+      // 麻醉中：坠落，跳过 Boids
+      if (tickBirdSedation(b, dt, groundR)) continue;
       const pos = b.group.position;
 
       // ================= Boids 三大定律 =================
@@ -631,6 +657,7 @@ export class FlockManager {
     // ================= 朝向 / 侧倾 / 扑翅 =================
     for (let i = 0; i < n; i++) {
       const b = this.birds[i];
+      if ((b.sedateT ?? 0) > 0) continue;
       const pos = b.group.position;
 
       // 朝向：沿速度方向平滑转向（up = 球面径向 = 本地天顶）

@@ -266,10 +266,10 @@ export function buildStartingCamp(scene, R) {
   // 原 (-7,13) 古松树冠压电车车体（全程扫描 d=2.88），移到 (-2,12.5)（轨道净空 7.26）
   for (const [x, z] of [[7, 2], [-2, 12.5]]) {
     const pine = createAncientPineTree();
-    pine.scale.multiplyScalar(0.85);
+    pine.scale.multiplyScalar(0.12); // 巨松资产缩小为营地点缀松
     pine.userData.settle = true; // 后建地形（沙滩/苔丘）不得埋树，收尾沉降 pass 抬回地表
     put(pine, x, z, layoutGroundLiftAt(x, z), rnd() * Math.PI * 2);
-    colliders.push({ position: pine.position.clone(), radius: 0.5 });
+    colliders.push({ position: pine.position.clone(), radius: 0.3 });
   }
   const campFlowers = [];
   for (let i = 0; i < 8; i++) {

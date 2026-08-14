@@ -19,21 +19,54 @@ export function getToonGradient() {
   return _gradient;
 }
 
-/** 统一卡通材质（硬边 Cel-shading） */
+const _toonMatCache = new Map();
+
+function _toonColorKey(color) {
+  if (color == null) return "null";
+  if (typeof color === "number") return color.toString(16);
+  if (color && typeof color.getHexString === "function") return color.getHexString();
+  return String(color);
+}
+
+function _toonOptsKey(opts) {
+  return Object.keys(opts)
+    .sort()
+    .map((k) => {
+      const v = opts[k];
+      if (v == null) return "";
+      if (v && v.isColor) return `${k}=${v.getHexString()}`;
+      if (v && v.isTexture) return `${k}=tex:${v.uuid}`; // 贴图按实例缓存（罕见）
+      const t = typeof v;
+      if (t === "number" || t === "string" || t === "boolean") return `${k}=${v}`;
+      return `${k}=${String(v)}`;
+    })
+    .join("|");
+}
+
+/** 统一卡通材质（硬边 Cel-shading）· 按 (颜色,选项) 缓存，避免数千个重复 MeshToonMaterial 实例 */
 export function toonMat(color, opts = {}) {
   const { flatShading, ...materialOptions } = opts;
   // MeshToonMaterial 不是 PBR 材质，不支持 metalness / roughness；
   // 过滤掉兼容 StandardMaterial 的遗留参数，避免 Three.js 控制台告警。
   delete materialOptions.metalness;
   delete materialOptions.roughness;
-  const material = new THREE.MeshToonMaterial({
-    color,
-    gradientMap: getToonGradient(),
-    ...materialOptions,
-  });
-  if (flatShading !== undefined) {
-    material.flatShading = flatShading;
-    material.needsUpdate = true;
+  const key = `${_toonColorKey(color)}|${flatShading ? "flat" : "smooth"}|${_toonOptsKey(materialOptions)}`;
+  let material = _toonMatCache.get(key);
+  if (!material) {
+    material = new THREE.MeshToonMaterial({
+      color,
+      gradientMap: getToonGradient(),
+      ...materialOptions,
+    });
+    if (flatShading !== undefined) {
+      material.flatShading = flatShading;
+      material.needsUpdate = true;
+    }
+    // 共享材质：多处复用，禁止被 dispose 释放（否则圣城重建/场景卸载会
+    // 把仍在缓存里、之后还要复用的材质 GPU 资源释放掉，导致白模）。
+    material.userData.shared = true;
+    material.dispose = () => {};
+    _toonMatCache.set(key, material);
   }
   return material;
 }

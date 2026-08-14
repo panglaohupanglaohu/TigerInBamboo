@@ -4,6 +4,34 @@ import fs from "node:fs";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 
+// node 直跑需要 DOM 桩：citadelRange 经 citadelInfiltration→sfx→hud 引用 DOM
+if (!globalThis.document) {
+  const el = () => ({ classList: { toggle() {} }, setAttribute() {}, addEventListener() {} });
+  globalThis.document = { getElementById: el, querySelector: el, createElement: el };
+  globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
+  globalThis.window = globalThis;
+  globalThis.window.addEventListener = () => {};
+  // 护城河水纹 bump 贴图需要 canvas 2D 上下文（node 下给空桩）
+  globalThis.document.createElement = (tag) => {
+    if (tag === "canvas") {
+      const ctx2d = new Proxy({}, {
+        get(t, k) {
+          if (k === "canvas") return { width: 256, height: 256 };
+          if (k === "createLinearGradient" || k === "createRadialGradient") {
+            return () => ({ addColorStop() {} });
+          }
+          if (k === "measureText") return () => ({ width: 0 });
+          if (k === "getImageData") return () => ({ data: new Uint8ClampedArray(4) });
+          if (k === "createImageData") return () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 });
+          return typeof k === "string" ? () => {} : undefined;
+        },
+      });
+      return { width: 256, height: 256, getContext: () => ctx2d };
+    }
+    return el();
+  };
+}
+
 const BASE = new URL("../TigerMessenger/", import.meta.url);
 const bridgePkg = new URL("../TigerMessenger/node_modules/three/package.json", import.meta.url);
 if (!fs.existsSync(bridgePkg)) {
@@ -89,6 +117,14 @@ ok("外部地表不再偷偷增加第六层土坡；前方绿地浸水、城堡�
 console.log("[3] 地形网格：视觉=碰撞");
 const scene = new THREE.Scene();
 const range = buildCitadelRange(scene, R);
+// 木马/夜间潜入在 placeNavonaPlaza（延迟摆放，由 messengerIsland 按运河走向调用）内构建；
+// 测试用单位城堡桩复刻该调用，使后续木马断言可运行。
+{
+  const castleStub = new THREE.Object3D();
+  castleStub.name = "test-castle-stub";
+  scene.add(castleStub);
+  range.placeNavonaPlaza(-10, 75, Math.PI / 2, castleStub);
+}
 assert(range.mesh?.isMesh, "应返回网格");
 assert(scene.children.includes(range.mesh), "网格应入场景");
 assert.equal(range.mesh.userData.formerSoilMoundRemoved, true,
@@ -148,12 +184,15 @@ const troyPhi = Math.atan2(troyLx, troyLz);
 const t5R = range.contourSpec?.terraces?.at(-1)?.radius ?? 24;
 const notchC = range.contourSpec?.notchCenter ?? 0.17;
 const notchH = range.contourSpec?.notchHalf ?? 0.30;
-assert(troyR < t5R && troyR > t5R - 4,
-  `木马应站在台地 5 一层台面外缘环带（r≈${t5R}），实际 r=${troyR.toFixed(2)}`);
-assert(troyPhi > notchC + notchH,
-  "木马应在瀑布水道旁侧（缺口扇区外），不站在水中");
-assert.equal(range.trojanHorse.userData.placement?.kind, "moat-cascade-junction",
-  "木马落点语义：护城河与瀑布交汇旁");
+// 木马固定落在第一层瀑布正下方的接水湖面（台地 5 之外、瀑布缺口扇区内）
+assert(troyR > t5R && troyR < 46,
+  `木马应落在第一层瀑布接水湖面（r>${t5R}、<46），实际 r=${troyR.toFixed(2)}`);
+assert(Math.abs(troyPhi - notchC) < notchH + 0.25,
+  "木马应在瀑布水道缺口扇区内（第一层瀑布正下方）");
+assert.equal(range.trojanHorse.userData.placement?.kind, "citadel-cascade-lake",
+  "木马落点语义：第一层瀑布正下方接水湖面");
+assert.equal(range.trojanHorse.userData.placement?.surface, "water",
+  "木马应站在接水湖面上");
 assert.equal(range.vegetation, null, "山坡散灌木必须删除");
 assert.equal(range.loessGroundSeal, null, "近地面的旧黄土封口层必须删除");
 assert.equal(range.castleFooting, null, "近地面的旧城堡承台层必须删除");
@@ -165,6 +204,23 @@ assert.equal(scene.getObjectByName("citadel-waterfall-2-3-bridge-pool"), undefin
   "场景中不得残留跨两层的桥接水体");
 assert(range.pilgrimageLookout?.isGroup, "远眺相机基准数据缺失");
 assert(range.sacredTarnTree?.isGroup, "深潭旁湖沼参天树缺失");
+assert.equal(range.sacredTarnTree.name, "citadel-sacred-tarn-elder-tree");
+// 第二棵参天巨松：港口深潭参天大树旁（双株交错对生）
+assert(range.tarnCompanionPine?.isGroup, "港口第二棵参天巨松缺失");
+assert.equal(range.tarnCompanionPine.name, "citadel-tarn-companion-pine");
+{
+  const a = range.sacredTarnTree.userData.rangeLocal;
+  const b = range.tarnCompanionPine.userData.rangeLocal;
+  const d = Math.hypot(a.lx - b.lx, a.lz - b.lz);
+  assert(d > 3 && d < 10, `两棵参天巨松间距应 3~10（实际 ${d.toFixed(2)}）`);
+  const qa = new THREE.Quaternion();
+  const qb = new THREE.Quaternion();
+  range.sacredTarnTree.getWorldQuaternion(qa);
+  range.tarnCompanionPine.getWorldQuaternion(qb);
+  const ang = qa.angleTo(qb);
+  assert(ang > 0.4, `第二棵树应绕地表法向偏转交错（实际 ${ang.toFixed(2)} rad）`);
+}
+ok("港口深潭参天大树 + 第二棵巨松（间距/偏转交错）就位");
 assert.equal(range.lakeBallShrubs, null, "湖岸球形灌木必须删除");
 assert.equal(scene.getObjectByName("citadel-loess-ground-seal"), undefined,
   "场景中不得残留第 6 层黄土封口");
@@ -349,12 +405,19 @@ assert.deepEqual(range.sacredTarnTree.userData.rangeLocal, { lx: -15.2, lz: 42 }
   "参天树必须位于深潭侧岸并避开中央远眺视线");
 let tarnTreeCrowns = 0;
 let tarnTreeBranches = 0;
+let tarnTreeTrunks = 0;
+let tarnTreePeels = 0;
 range.sacredTarnTree.traverse((o) => {
   if (o.name === "tarn-elder-tree-crown") tarnTreeCrowns++;
   if (o.name === "tarn-elder-tree-branch") tarnTreeBranches++;
+  if (o.name === "tarn-elder-tree-trunk") tarnTreeTrunks++;
+  if (o.name === "tarn-elder-tree-bark-peel") tarnTreePeels++;
 });
-assert.equal(tarnTreeCrowns, 8, "湖沼参天树冠层数量不足");
+// 云片冠：每枝 3–4 片 + 补团，极端拍扁 scale(3.8,0.45,2.2)
+assert(tarnTreeCrowns >= 15, `湖沼参天树云片冠不足（${tarnTreeCrowns}）`);
 assert.equal(tarnTreeBranches, 5, "湖沼参天树必须呈现清晰分叉结构");
+assert.equal(tarnTreeTrunks, 3, "主树干应为三段级联收分");
+assert(tarnTreePeels >= 1, "须有乳白树皮剥落拼色");
 const removedNames = [
   "citadel-foreground-defense-tower",
   "citadel-range-vegetation",

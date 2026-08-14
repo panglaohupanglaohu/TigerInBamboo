@@ -16,6 +16,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, INK_COLOR } from "../assets/toon.js";
+import { TRANQ_DURATION_BIRD } from "./tranquilizer.js";
 
 /** 迎光碎金 / 背光藏青 */
 export const VORTEX_LIT = new THREE.Color(0xfad7a0);
@@ -327,6 +328,8 @@ export class BirdVortexManager {
     // 通用
     this.phase = new Float32Array(count);
     this.scale = new Float32Array(count);
+    /** 麻醉剩余时间（秒）；>0 时坠落贴地、收翼 */
+    this.sedateT = new Float32Array(count);
     this.spinSign = new Float32Array(count);
 
     // 夜间屋顶栖息点（世界坐标）；behavior: vortex 白天漩涡 / roost 夜栖 / flush 惊飞
@@ -796,6 +799,30 @@ export class BirdVortexManager {
     }
 
     for (let i = 0; i < n; i++) {
+      // ================= 麻醉弹：坠落贴地，跳过盘旋/通勤 =================
+      if (this.sedateT[i] > 0) {
+        this.sedateT[i] = Math.max(0, this.sedateT[i] - dt);
+        _p.set(this.px[i], this.py[i], this.pz[i]);
+        const r = Math.max(_p.length(), 1e-6);
+        const ground = this._groundR + 0.9;
+        if (r > ground + 0.15) {
+          const next = Math.max(ground, r - 22 * dt);
+          _p.multiplyScalar(next / r);
+        }
+        this.px[i] = _p.x;
+        this.py[i] = _p.y;
+        this.pz[i] = _p.z;
+        // 朝向：侧倒（速度取切向，扑翼收为栖息态）
+        _vel.crossVectors(this.up, _p.clone().normalize());
+        if (_vel.lengthSq() < 1e-8) _vel.copy(this.forward);
+        _vel.normalize();
+        this.vx[i] = _vel.x;
+        this.vy[i] = _vel.y;
+        this.vz[i] = _vel.z;
+        this.bcMode[i] = 0;
+        continue;
+      }
+
       const role = this.role[i];
 
       // ================= A 组：双子塔双螺旋盘旋 / 夜栖屋顶 / 惊飞 =================
@@ -1269,6 +1296,31 @@ export class BirdVortexManager {
   getBirdPosition(i, out = new THREE.Vector3()) {
     const j = ((i % this.count) + this.count) % this.count;
     return out.set(this.px[j], this.py[j], this.pz[j]);
+  }
+
+  /**
+   * 麻醉弹命中最近一只未麻醉的鸟。
+   * @returns {{ kind: 'vortex', vortex: BirdVortexManager, index: number, duration: number }|null}
+   */
+  sedateNearest(worldPos, radius = 2.4, duration = TRANQ_DURATION_BIRD) {
+    if (!worldPos) return null;
+    const r2 = radius * radius;
+    let best = -1;
+    let bestD = r2;
+    for (let i = 0; i < this.count; i++) {
+      if (this.sedateT[i] > 0) continue;
+      const dx = this.px[i] - worldPos.x;
+      const dy = this.py[i] - worldPos.y;
+      const dz = this.pz[i] - worldPos.z;
+      const d = dx * dx + dy * dy + dz * dz;
+      if (d < bestD) {
+        bestD = d;
+        best = i;
+      }
+    }
+    if (best < 0) return null;
+    this.sedateT[best] = duration;
+    return { kind: "vortex", vortex: this, index: best, duration };
   }
 
   /** 统计：平均高度 / 半径（门局部） */

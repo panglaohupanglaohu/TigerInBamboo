@@ -5,7 +5,11 @@
 //  - 下船后：从当前位置吸附回曲线最近点，继续巡游
 // =====================================================================
 import * as THREE from "three";
-import { createFisherBoat, updateWarshipOars } from "../assets/harbor.js";
+import {
+  createFisherBoat,
+  updateWarshipOars,
+  applyBoatOarWobble,
+} from "../assets/harbor.js";
 
 const _p = new THREE.Vector3();
 const _t = new THREE.Vector3();
@@ -126,6 +130,8 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
       // 巡航中双侧船桨划水（强度随船速）
       const rowStrength = Math.min(1, (boat.userData.speed / baseSpeed) * 0.95);
       updateWarshipOars(boat, dt, rowStrength);
+      // 部分桨手被麻醉 → 船身歪扭
+      applyBoatOarWobble(boat, dt);
     }
   }
 

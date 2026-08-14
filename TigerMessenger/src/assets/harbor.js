@@ -382,8 +382,35 @@ export function updateWarshipOars(boat, dt = 1 / 60, moving = false) {
   }
   const phase = boat.userData.oarPhase || 0;
 
-  for (const oar of oars) {
-    const side = oar.userData.side || 1;
+  const rows = boat.userData.crew?.userData?.rows || [];
+  let leftN = 0;
+  let leftSed = 0;
+  let rightN = 0;
+  let rightSed = 0;
+
+  for (let i = 0; i < oars.length; i++) {
+    const oar = oars[i];
+    const row = rows[i];
+    const side = oar.userData.side || row?.side || 1;
+    if (side < 0) {
+      leftN++;
+      if ((row?.sedateT ?? 0) > 0) leftSed++;
+    } else {
+      rightN++;
+      if ((row?.sedateT ?? 0) > 0) rightSed++;
+    }
+
+    // 麻醉桨手：桨无力下垂，不跟拍
+    if ((row?.sedateT ?? 0) > 0) {
+      const base = oar.userData.baseQuat;
+      if (base) {
+        _oarEuler.set(0.35 * side, 0.08 * side, 0.12);
+        _oarOffQ.setFromEuler(_oarEuler);
+        oar.quaternion.copy(base).multiply(_oarOffQ);
+      }
+      continue;
+    }
+
     const p = phase + (oar.userData.phase || 0);
     // 周期：sin 为推水主拍；方波感用 sin^3 加强「抓水」
     const stroke = Math.sin(p);
@@ -405,8 +432,77 @@ export function updateWarshipOars(boat, dt = 1 / 60, moving = false) {
     else oar.quaternion.copy(_oarOffQ);
   }
 
+  // 左右舷有效划力差 → 船身歪扭（左强右弱则偏右）
+  const leftPower = leftN ? 1 - leftSed / leftN : 1;
+  const rightPower = rightN ? 1 - rightSed / rightN : 1;
+  boat.userData.oarImbalance = leftPower - rightPower; // -1..1
+  boat.userData.oarSedatedCount = leftSed + rightSed;
+
   // 剪纸士兵随桨同步划动
-  updateWarshipCrew(boat, phase, speed);
+  updateWarshipCrew(boat, phase, speed, d);
+}
+
+/**
+ * 部分桨手被麻醉时船向歪扭：绕当地法线偏航。
+ * 在 placeOnCurve / orient 之后调用。
+ * @param {THREE.Object3D} boat
+ * @param {number} dt
+ */
+export function applyBoatOarWobble(boat, dt = 1 / 60) {
+  if (!boat) return;
+  const imb = boat.userData.oarImbalance || 0;
+  const speed = boat.userData.oarSpeed ?? 0;
+  if (Math.abs(imb) < 0.04 || speed < 0.05) return;
+  const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
+  // 歪扭幅度：左右差 × 划速；累积一点再衰减，像失控偏航
+  let yaw = boat.userData.wobbleYaw || 0;
+  yaw += imb * 0.55 * speed * d;
+  yaw *= Math.exp(-d * 0.35); // 缓缓回正，但有差就持续灌
+  boat.userData.wobbleYaw = yaw;
+  // 局部 +Y = 法线：偏航
+  boat.rotateY(yaw * d * 2.8 + imb * 0.22 * speed * d);
+}
+
+/**
+ * 麻醉弹命中战船最近桨手。
+ * @returns {{ kind: 'object', object: THREE.Object3D, duration: number, boat: THREE.Object3D, index: number }|null}
+ */
+export function sedateWarshipCrewNearest(boat, worldPos, radius = 2.9, duration = 5) {
+  const rows = boat?.userData?.crew?.userData?.rows;
+  if (!Array.isArray(rows) || !worldPos) return null;
+  boat.updateWorldMatrix(true, false);
+  const r2 = radius * radius;
+  let best = -1;
+  let bestD = r2;
+  const _wp = new THREE.Vector3();
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    if ((r.sedateT ?? 0) > 0) continue;
+    if (r.attach) {
+      r.attach.getWorldPosition(_wp);
+    } else {
+      _wp.set(r.x, CREW_HIP_Y, r.side * 0.28).applyMatrix4(boat.matrixWorld);
+    }
+    const d = _wp.distanceToSquared(worldPos);
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  }
+  if (best < 0) return null;
+  rows[best].sedateT = duration;
+  const attach = rows[best].attach;
+  if (attach) {
+    attach.userData.sedated = true;
+    attach.userData.sedateT = duration;
+  }
+  return {
+    kind: "object",
+    object: attach || boat,
+    duration,
+    boat,
+    index: best,
+  };
 }
 
 // =====================================================================
@@ -637,15 +733,26 @@ function buildWarshipCrew(g) {
     parts[name] = im;
   }
   // 与桨一一对应：同 x、同舷、同相位 → 手臂跟桨同步
-  crew.userData.rows = oars.map((oar) => ({
-    x: oar.position.x,
-    side: oar.userData.side || 1,
-    phase: oar.userData.phase || 0,
-  }));
+  crew.userData.rows = oars.map((oar, i) => {
+    // 粘附点：麻醉弹可贴在桨手身上
+    const attach = new THREE.Object3D();
+    attach.name = `crew-attach-${i}`;
+    attach.position.set(oar.position.x, CREW_HIP_Y, (oar.userData.side || 1) * 0.28);
+    g.add(attach);
+    return {
+      x: oar.position.x,
+      side: oar.userData.side || 1,
+      phase: oar.userData.phase || 0,
+      sedateT: 0,
+      attach,
+      oar,
+    };
+  });
   crew.userData.parts = parts;
   g.add(crew);
   g.userData.crew = crew;
-  updateWarshipCrew(g, 0, 0); // 静坐姿态
+  g.userData.oarImbalance = 0;
+  updateWarshipCrew(g, 0, 0, 0); // 静坐姿态
 }
 
 const _cMat = new THREE.Matrix4();
@@ -666,16 +773,57 @@ const CREW_HIP_Y = 0.99;
  * @param {THREE.Object3D} boat
  * @param {number} phase 全船桨相位 boat.userData.oarPhase
  * @param {number} speed 0..1 划水强度
+ * @param {number} [dt]
  */
-function updateWarshipCrew(boat, phase = 0, speed = 0) {
+function updateWarshipCrew(boat, phase = 0, speed = 0, dt = 1 / 60) {
   const crew = boat?.userData?.crew;
   if (!crew) return;
   const rows = crew.userData.rows;
   const parts = crew.userData.parts;
   const sp = Math.max(0, Math.min(1, Number(speed) || 0));
+  const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
     const s = r.side;
+    // 麻醉：倒计时 + 瘫软坐姿，不划桨
+    if ((r.sedateT ?? 0) > 0) {
+      r.sedateT = Math.max(0, r.sedateT - d);
+      if (r.attach) {
+        r.attach.userData.sedated = r.sedateT > 0;
+        r.attach.userData.sedateT = r.sedateT;
+      }
+      _cQBase.identity();
+      if (s < 0) _cQBase.setFromAxisAngle(_CY, Math.PI);
+      // 瘫倒：躯干侧倾、手臂垂落
+      const limpLean = s * 0.85;
+      _cQBody.copy(_cQBase).multiply(_cRz.setFromAxisAngle(_CZ, limpLean));
+      _cPos.set(r.x, CREW_HIP_Y - 0.04, s * 0.28);
+      _cMat.compose(_cPos, _cQBody, _cScale);
+      parts.torso.setMatrixAt(i, _cMat);
+      parts.skirt.setMatrixAt(i, _cMat);
+      parts.head.setMatrixAt(i, _cMat);
+      parts.helmet.setMatrixAt(i, _cMat);
+      parts.crest.setMatrixAt(i, _cMat);
+      parts.crestFeathers.setMatrixAt(i, _cMat);
+      parts.crestStems.setMatrixAt(i, _cMat);
+      _cQLimb.copy(_cQBase).multiply(_cRz.setFromAxisAngle(_CZ, limpLean + s * 0.9));
+      _cOff.set(0, 0.08, 0).applyQuaternion(_cQBody).add(_cPos);
+      _cOff.z += 0.016;
+      _cMat.compose(_cOff, _cQLimb, _cScale);
+      parts.armL.setMatrixAt(i, _cMat);
+      _cOff.z -= 0.032;
+      _cMat.compose(_cOff, _cQLimb, _cScale);
+      parts.armR.setMatrixAt(i, _cMat);
+      _cQLimb.copy(_cQBase).multiply(_cRz.setFromAxisAngle(_CZ, s * 0.2));
+      _cOff.set(0.035, 0.01, 0.014).applyQuaternion(_cQBase).add(_cPos);
+      _cMat.compose(_cOff, _cQLimb, _cScale);
+      parts.legL.setMatrixAt(i, _cMat);
+      _cOff.set(-0.035, 0.01, -0.014).applyQuaternion(_cQBase).add(_cPos);
+      _cMat.compose(_cOff, _cQLimb, _cScale);
+      parts.legR.setMatrixAt(i, _cMat);
+      continue;
+    }
+
     const p = phase + r.phase;
     const stroke = Math.sin(p);
     const power = stroke * stroke * stroke; // 与桨的抓水主拍一致
@@ -841,7 +989,15 @@ export function createPorterSquad(opts) {
   squad.userData.onDeliver = opts.onDeliver || null;
   /** false 时停在货堆旁待命（船离港/进港中） */
   squad.userData.loading = true;
-  squad.userData.update = (t) => updatePorterSquad(squad, t);
+  squad.userData.update = (t) => {
+    const prev = squad.userData._lastT;
+    const dt =
+      Number.isFinite(prev) && t > prev
+        ? Math.min(0.1, Math.max(0.001, t - prev))
+        : 1 / 60;
+    squad.userData._lastT = t;
+    updatePorterSquad(squad, t, dt);
+  };
   return squad;
 }
 
@@ -858,7 +1014,7 @@ const CRANE_DONE = 0.72;
  * 班组循环：去程扛箱 → 船边卸货（+1）→ 空手返回；
  * 或随机使用起重机一次吊 4 件（+4）。
  */
-function updatePorterSquad(squad, t) {
+function updatePorterSquad(squad, t, dt = 1 / 60) {
   const { from, to, period, offset, porters, cranePos, crane, loading } = squad.userData;
   const onDeliver = squad.userData.onDeliver;
   _ptA.copy(to).sub(from);
@@ -867,6 +1023,24 @@ function updatePorterSquad(squad, t) {
 
   for (let i = 0; i < porters.length; i++) {
     const p = porters[i];
+    // 麻醉弹：卧倒僵直，跳过搬货循环
+    if (p.userData?.sedated) {
+      p.userData.sedateT = (p.userData.sedateT ?? 0) - dt;
+      if (p.userData.sedateT > 0) {
+        const parts = p.userData.parts;
+        if (parts) {
+          if (parts.legL) parts.legL.rotation.z = 0.1;
+          if (parts.legR) parts.legR.rotation.z = -0.08;
+          if (parts.armL) parts.armL.rotation.z = 0.3;
+          if (parts.armR) parts.armR.rotation.z = 0.3;
+          if (parts.body) parts.body.rotation.z = 0;
+          if (parts.crate) parts.crate.visible = false;
+        }
+        continue;
+      }
+      p.userData.sedated = false;
+      p.userData.sedateT = 0;
+    }
     const { body, armL, armR, legL, legR, crate } = p.userData.parts;
 
     // 无船装货时：在货堆旁待命
@@ -1144,57 +1318,64 @@ export function updateDeckCargoMarkers(boat, cargo, capacity) {
 }
 
 /**
- * 固定木马的系绳纸士兵：与搬运兵同款几何，静态拉绳姿态——
- * 躯干后仰、双臂前上握绳、双腿前后弓步蹬地；不持木箱。
+ * 固定木马的系绳纸士兵：左手盾、右手长枪；后仰弓步拽绳姿态。
  * @returns {THREE.Group}
  */
 export function createTieSoldier() {
-  const { m, geo } = crewShared();
-  const root = buildPorter(m, geo);
+  const root = createNightInfiltrationSoldier({ torchLeft: false });
   root.name = "tie-soldier";
-  const { body, armL, armR, legL, legR, crate } = root.userData.parts;
-  crate.visible = false;
-  body.rotation.z = 0.3; // 后仰拽绳（行进前倾为 -0.1）
-  armL.rotation.z = 1.32; // 双臂前上握绳
-  armR.rotation.z = 1.32;
-  legL.rotation.z = 0.5; // 前后弓步蹬地
-  legR.rotation.z = -0.42;
+  // 白天系绳专用标记：木马倾倒只统计这类士兵，与夜潜兵无关
+  root.userData.kind = "tieSoldier";
+  root.userData.role = "day-tiedown";
+  const { body, armL, armR, legL, legR, crate } = root.userData.parts || {};
+  if (crate) crate.visible = false;
+  // 后仰拽绳 + 弓步蹬地（盾/枪仍在左右手）
+  if (body) body.rotation.z = 0.3;
+  if (armL) armL.rotation.z = 1.05; // 左臂前上（盾随臂）
+  if (armR) armR.rotation.z = 1.15; // 右臂前上（枪随臂）
+  if (legL) legL.rotation.z = 0.5;
+  if (legR) legR.rotation.z = -0.42;
+  const eq = root.userData.equipment;
+  if (eq?.shield) eq.shield.position.set(-0.16, PORTER_HIP + 0.18, 0.14);
+  if (eq?.spear) {
+    eq.spear.position.set(0.22, PORTER_HIP + 0.2, 0.12);
+    eq.spear.rotation.set(0.2, 0, -Math.PI / 2 - 0.2);
+  }
   return root;
 }
 
 /**
- * 港口鼓声巡查兵：左手火把、右手长枪（矛头向前），快步行进姿态。
- * 默认关闭点光，避免十余名士兵同时点亮拖垮帧率。
+ * 港口鼓声巡查兵：左手盾牌、右手长枪（矛头向前），快步行进姿态。
  * @returns {THREE.Group}
  */
 export function createHarborPatrolSoldier() {
-  const root = createNightInfiltrationSoldier({ torchLeft: true });
+  const root = createNightInfiltrationSoldier({ torchLeft: false });
   root.name = "harbor-patrol-soldier";
   const { body, armL, armR, crate } = root.userData.parts || {};
   if (crate) crate.visible = false;
   // 前倾突击：矛头朝局部 +X（行进方向）
   if (body) body.rotation.z = -0.14;
-  if (armL) armL.rotation.z = -0.55;
-  if (armR) armR.rotation.z = 1.28;
+  if (armL) armL.rotation.z = -0.45; // 左盾微前
+  if (armR) armR.rotation.z = 1.28; // 右枪前指
   const spear = root.userData.equipment?.spear;
   if (spear) {
     spear.position.set(0.28, 0.22, 0.02);
     // 枪杆沿 +X 前指
     spear.rotation.set(0, 0, -Math.PI / 2 - 0.08);
   }
-  const light = root.userData.equipment?.torchLight;
-  if (light) {
-    light.intensity = 0;
-    light.visible = false;
+  const shield = root.userData.equipment?.shield;
+  if (shield) {
+    shield.position.set(-0.16, PORTER_HIP + 0.14, 0.12);
   }
   return root;
 }
 
 /**
- * 夜间潜入城堡的纸士兵：左手持盾或火炬，右手持长枪。
+ * 夜间潜入城堡的纸士兵：默认左手盾牌、右手长枪。
+ * torchLeft=true 时左手改火炬（夜探照明），右手仍持长枪。
  *
  * 仍复用码头班组的剪纸罗马士兵几何，装备单独挂在 fig 上，
- * 因而不会改变已有搬运兵/系绳兵的尺寸与动画。
+ * 因而不会改变已有搬运兵的尺寸与动画。
  * @param {{ torchLeft?: boolean }} [opts]
  * @returns {THREE.Group}
  */
@@ -1206,10 +1387,10 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   const fig = root.children[0];
   crate.visible = false;
 
-  // 立定突进姿态：两只手分别留在身体两侧，装备会贴到手前。
+  // 立定突进姿态：左手持盾前挡，右手持枪
   body.rotation.z = 0.02;
-  armL.rotation.z = -0.38;
-  armR.rotation.z = 0.38;
+  armL.rotation.z = -0.42; // 左臂微前 → 盾面朝前
+  armR.rotation.z = 0.55; // 右臂抬枪
   legL.rotation.z = 0.08;
   legR.rotation.z = -0.08;
 
@@ -1241,16 +1422,18 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
     torch.add(torchLight);
     equipment.add(torch);
   } else {
+    // 左手圆盾：面朝 +X 前（行进方向）
     shield = new THREE.Group();
     shield.name = "left-hand-shield";
-    const face = part(new THREE.CylinderGeometry(0.095, 0.095, 0.026, 8), shieldMat, 0.008);
-    face.rotation.x = Math.PI / 2;
+    const face = part(new THREE.CylinderGeometry(0.1, 0.1, 0.028, 8), shieldMat, 0.008);
+    face.rotation.z = Math.PI / 2; // 盾面朝左右？→ 改朝前
+    face.rotation.y = Math.PI / 2;
     shield.add(face);
-    const rim = part(new THREE.TorusGeometry(0.096, 0.012, 4, 8), shieldRimMat, 0.006);
-    rim.rotation.x = Math.PI / 2;
-    rim.position.z = 0.018;
+    const rim = part(new THREE.TorusGeometry(0.102, 0.012, 4, 8), shieldRimMat, 0.006);
+    rim.rotation.y = Math.PI / 2;
+    rim.position.x = 0.02;
     shield.add(rim);
-    shield.position.set(-0.15, PORTER_HIP + 0.14, 0.11);
+    shield.position.set(-0.16, PORTER_HIP + 0.14, 0.1);
     equipment.add(shield);
   }
 
@@ -1270,8 +1453,10 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   spearhead.name = "long-spear-head";
   spearhead.position.y = 0.515;
   spear.add(spearhead);
-  spear.position.set(0.15, PORTER_HIP + 0.12, 0.11);
-  spear.rotation.z = -0.08;
+  // 长枪沿局部 +X 前指（行进方向）；与 createHarborPatrolSoldier 保持一致，
+  // 避免默认竖直摆放导致“矛尖向天”。
+  spear.position.set(0.28, PORTER_HIP + 0.12, 0.11);
+  spear.rotation.set(0, 0, -Math.PI / 2 - 0.08);
   equipment.add(spear);
 
   fig.add(equipment);

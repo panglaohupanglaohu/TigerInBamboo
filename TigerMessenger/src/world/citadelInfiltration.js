@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { createNightInfiltrationSoldier } from "../assets/harbor.js";
 import { citadelTerraceMetrics } from "./odysseyCitadel.js";
 import { setInfiltrationBgm, updateInfiltrationBgm } from "../audio/sfx.js";
+import { tickObjectSedation } from "./tranquilizer.js";
 
 // 一入夜即行动（与 dayNight 入夜≈0.85、窗户/鸟群夜栖≈0.82 对齐），
 // 不再等到 0.93 深夜，留给攀爬/巡查更长时间。
@@ -35,6 +36,8 @@ const PATROL_COVERAGE_DIRECTIONS = Object.freeze([
 ]);
 // PORTER_SCALE=2 的纸士兵，从脚到头约 0.7 个场景单位；队列按一个身长留空。
 const SOLDIER_BODY_LENGTH = 0.72;
+// 进场/攀爬纵队的士兵间距（身位）：2.5 个身长，前后不贴身、可看清拉/推/搀扶分工。
+const APPROACH_SPACING = SOLDIER_BODY_LENGTH * 2.5;
 const SOLDIER_BASE_PACE = 2.4;
 const RETURN_APPROACH_DURATION = 4.5;
 const RETURN_DURATION = 2.6;
@@ -127,8 +130,10 @@ function setHeading(object, direction, up) {
   _forward.copy(direction).addScaledVector(up, -direction.dot(up));
   if (_forward.lengthSq() < 1e-8) return;
   _forward.normalize();
-  _right.crossVectors(up, _forward).normalize();
-  _basis.makeBasis(_right, up, _forward);
+  // 局部 +X 朝向行进方向（与 harborLogistics.orientSoldier 同一约定），
+  // 让 buildPorter 的 rotation.z 摆腿/前倾正好落在前后向，而不是侧向平移。
+  _right.crossVectors(_forward, up).normalize();
+  _basis.makeBasis(_forward, up, _right);
   object.quaternion.setFromRotationMatrix(_basis);
 }
 
@@ -272,11 +277,16 @@ function buildDistributedPatrolPlan({
       : [approachEnd.clone()];
     const patrolPaths = groupRecords.map((record, recordIndex) => {
       const assigned = [];
-      // 每名士兵从不同扇区开始，并以队伍人数为步长分担整个台面。
-      for (let pointIndex = recordIndex; pointIndex < safeCoverage.length; pointIndex += groupRecords.length) {
-        assigned.push(
-          safeCoverage[(pointIndex + terraceOrder * 2) % safeCoverage.length].clone()
-        );
+      // 每名士兵领一段「连续扇区」而非跨步取样：连续的点让路径贴着台面
+      // 外缘走道顺序前进，避免跨扇区连线穿过建筑夹缝、走进死胡同。
+      const perSoldier = Math.max(1, Math.ceil(safeCoverage.length / groupRecords.length));
+      const offset = (recordIndex * perSoldier + terraceOrder * 2) % safeCoverage.length;
+      for (let k = 0; k < perSoldier; k++) {
+        const idx = (offset + k) % safeCoverage.length;
+        const point = safeCoverage[idx];
+        if (point && (!assigned.length || assigned[assigned.length - 1].distanceToSquared(point) > 1e-6)) {
+          assigned.push(point.clone());
+        }
       }
       return makeSurfacePath(
         [previousExit[recordIndex], ...assigned],
@@ -383,6 +393,9 @@ export function createCitadelNightInfiltration({
 }) {
   _up.copy(siteUp).normalize();
   _right.copy(siteRight).normalize();
+  // 站点右向量：build/rebuild 巡查计划专用。_right 会被 setHeading 当作
+  // scratch 覆盖（见下），不能在下一次 rebuildPlans 时再依赖它。
+  const _siteRight = _right.clone();
 
   const root = new THREE.Group();
   root.name = "citadel-night-infiltration";
@@ -399,7 +412,13 @@ export function createCitadelNightInfiltration({
     waterfall: makePath([baseGround, ...(waterfallRoute || [])]),
     stairs: makePath([baseGround, ...(stairRoute || [])]),
   };
-  const terraceTargets = collectPatrolTargets(
+  // 可热重建的路线状态：地形编辑器改台地半径/瀑布/石阶后，由 citadelRange
+  // 调 setRoutes() 刷新，避免士兵继续沿旧几何走空中。
+  let _waterfallRoute = (waterfallRoute || []).slice();
+  let _stairRoute = (stairRoute || []).slice();
+  let _stairTransferRoutes = (stairTransferRoutes || []).slice();
+  let _patrolSurfacePoint = patrolSurfacePoint || null;
+  let terraceTargets = collectPatrolTargets(
     patrolCastle,
     [0, 1, 2, 3, 4],
     _up,
@@ -516,7 +535,7 @@ export function createCitadelNightInfiltration({
       stairTransferRoutes,
       approachEnd,
       up: _up,
-      right: _right,
+      right: _siteRight,
       surfacePoint: patrolSurfacePoint,
       patrolDuration: spec.patrolDuration,
     });
@@ -541,6 +560,63 @@ export function createCitadelNightInfiltration({
     group.userData.queueOrder = groupRecords.map((record) => record.soldier.name);
     group.userData.records = groupRecords;
   }
+
+  /** 用当前路线状态重建各组的进场路径与分散巡查计划（地形热重建）。 */
+  const rebuildPlans = () => {
+    baseRoutes.waterfall = makePath([baseGround, ..._waterfallRoute]);
+    baseRoutes.stairs = makePath([baseGround, ..._stairRoute]);
+    terraceTargets = collectPatrolTargets(
+      patrolCastle,
+      [0, 1, 2, 3, 4],
+      _up,
+      _patrolSurfacePoint
+    );
+    for (const group of groups) {
+      const route = baseRoutes[group.userData.route];
+      const groupRecords = group.userData.records || [];
+      if (!route || !groupRecords.length) continue;
+      const patrolDuration = groupRecords[0].patrolDuration;
+      const patrolTerraces = group.userData.patrolTerraces;
+      for (const record of groupRecords) {
+        const routePoints = route.points.map((point) => point.clone());
+        routePoints[0].copy(record.dropTarget);
+        record.path = makePath(routePoints);
+      }
+      const approachEnd = groupRecords[0].path.points.at(-1)?.clone()
+        || baseGround.clone();
+      const patrolPlan = buildDistributedPatrolPlan({
+        groupRecords,
+        patrolTerraces,
+        terraceTargets,
+        stairTransferRoutes: _stairTransferRoutes,
+        approachEnd,
+        up: _up,
+        right: _siteRight,
+        surfacePoint: _patrolSurfacePoint,
+        patrolDuration,
+      });
+      for (const record of groupRecords) record.patrolPlan = patrolPlan;
+      group.userData.patrolPlan = patrolPlan;
+      group.userData.patrolTargetCount = [...patrolPlan.coverageByTerrace.values()]
+        .reduce((count, targets) => count + targets.length, 0);
+      group.userData.patrolTransferCount = patrolPlan.segments
+        .filter((segment) => segment.kind === "stair-transfer")
+        .length;
+    }
+  };
+
+  /** 地形编辑器热重建后刷新路线（citadelRange 在 rebuildWaterTerraces 里调用）。 */
+  const setRoutes = (next = {}) => {
+    if (Array.isArray(next.waterfallRoute)) _waterfallRoute = next.waterfallRoute.slice();
+    if (Array.isArray(next.stairRoute)) _stairRoute = next.stairRoute.slice();
+    if (Array.isArray(next.stairTransferRoutes)) {
+      _stairTransferRoutes = next.stairTransferRoutes.slice();
+    }
+    if (typeof next.patrolSurfacePoint === "function") {
+      _patrolSurfacePoint = next.patrolSurfacePoint;
+    }
+    rebuildPlans();
+  };
 
   // 攀爬时只通过手臂姿势表现队首拉、队尾推和中间搀扶，
   // 不创建任何连接士兵的可见绳索，避免火炬手被“牵着走”。
@@ -583,24 +659,30 @@ export function createCitadelNightInfiltration({
     // 几何被路径平移，而是形成纸偶式的小跑节奏。
     parts.body.position.y = 0.17 + (moving ? 0.012 * (0.5 - 0.5 * Math.cos(stridePhase * 2)) : 0);
     if (climbing) {
-      // 队首右手拉住前方岩点，队尾右手推举前方队员，中间两人展开双臂搀扶。
+      // 队首拉、队尾推、中间搀扶：手臂大幅上伸 + 身体前倾，配合纵队间距
+      // 让“拉-搀-推”的协作分工清晰可见，而不是挤成一团往上挪。
       const action = record.index === 0
         ? "pull"
         : record.index === 3
           ? "push"
           : "support";
       record.soldier.userData.assistAction = action;
-      parts.body.rotation.z = -0.16 + gait * 0.025;
+      // 攀爬节奏：身体沿行进方向（+X）前倾，随步频起伏，模拟向上蹬踏
+      parts.body.rotation.z = -0.26 + gait * 0.03;
+      // 双臂上举：队首最高（拉岩点），队尾次之（推前方），中间平伸（搀扶）
       parts.armL.rotation.z = torchBearer
-        ? 0.34 + gait * 0.06
-        : 0.92 + gait * 0.08;
+        ? 0.5 + gait * 0.08
+        : action === "support"
+          ? 1.0 + gait * 0.1
+          : 0.92 + gait * 0.08;
       parts.armR.rotation.z = action === "pull"
-        ? 1.12 + gait * 0.05
+        ? 1.28 + gait * 0.06
         : action === "push"
-          ? 0.98 + gait * 0.05
-          : 0.78 + gait * 0.07;
-      parts.legL.rotation.z = 0.28 + gait * 0.25;
-      parts.legR.rotation.z = -0.24 - gait * 0.25;
+          ? 1.1 + gait * 0.06
+          : 0.86 + gait * 0.08;
+      // 双腿交替蹬踏（比跑步略收），贴合岩壁
+      parts.legL.rotation.z = 0.34 + gait * 0.28;
+      parts.legR.rotation.z = -0.3 - gait * 0.28;
       return;
     }
     record.soldier.userData.assistAction = "march";
@@ -876,6 +958,11 @@ export function createCitadelNightInfiltration({
     elapsed += Math.max(0, Number(dt) || 0);
     horse.userData.setBellyOpen?.(smoothstep01(elapsed / 2.8));
     for (const record of records) {
+      // 麻醉弹：卧倒僵直，跳过绳降/行军（倒计时结束后苏醒继续）
+      if (record.soldier.visible && tickObjectSedation(record.soldier, dt)) {
+        record.soldier.userData.motionMode = "sedated";
+        continue;
+      }
       const localTime = elapsed - record.batchIndex * DROP_SEQUENCE_GAP;
       const dropT = THREE.MathUtils.clamp(localTime / DROP_DURATION, 0, 1);
       if (localTime <= 0) {
@@ -907,11 +994,17 @@ export function createCitadelNightInfiltration({
         continue;
       }
 
-      // 进场阶段不再用 queueDistance 把士兵锁成纵向队列；各人沿自己的
-      // 路径进度前进，抵达台面后立即切换到分散的屋门/扇区排查路线。
-      const ownApproachDistance =
-        THREE.MathUtils.clamp(sortieElapsed / Math.max(0.001, record.moveDuration), 0, 1)
-        * record.path.total;
+      // 进场/攀爬阶段恢复纵向间距：队首（index 0）领先，其余按 2-3 身位依次跟进。
+      // 用「独立进度 + 时间延迟」而非固定距离偏移：尾兵虽然落后，但最终也走完全程
+      // 进入巡查；否则 leaderDistance 到终点后被钳制，尾兵永远差 index*间距到不了终点、
+      // 卡死在瀑布/石阶前。抵达台面后再切换到分散排查（巡查阶段不排队）。
+      const ownProgress = THREE.MathUtils.clamp(
+        sortieElapsed / Math.max(0.001, record.moveDuration)
+          - record.index * APPROACH_SPACING / Math.max(1e-5, record.path.total),
+        0,
+        1
+      );
+      const ownApproachDistance = ownProgress * record.path.total;
       let climbing = false;
       if (ownApproachDistance < record.path.total) {
         const approachDistance = Math.max(0, ownApproachDistance);
@@ -1030,5 +1123,5 @@ export function createCitadelNightInfiltration({
     descentOrder: records.map((record) => record.soldier.name),
   });
 
-  return { root, update, reset: resetForDay, getState: root.userData.getState };
+  return { root, update, reset: resetForDay, setRoutes, getState: root.userData.getState };
 }

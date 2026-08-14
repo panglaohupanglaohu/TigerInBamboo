@@ -7,6 +7,7 @@
 // ============================================================================
 import * as THREE from "three";
 import { addOutline } from "../assets/toon.js";
+import { mergeStaticGroup } from "./geometryMerge.js";
 import { createCitadelWatchtower } from "../assets/citadelWatchtower.js";
 import { createCitadelElderTree } from "../assets/citadelElderTree.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
@@ -608,6 +609,56 @@ export function applyInkOutlines(assembly) {
     );
   }
   return surfaces.length;
+}
+
+/**
+ * 圣城静态几何合并：Townscaper 小镇 ~1264 网格 → 按材质 ~30 组。
+ * 运行时依赖全部保留（skip 不合并）：
+ *   - town-window 夜间逐窗切换材质；
+ *   - contour-step* / pilgrimage-step* 台地石阶——3D 直编辑按名字
+ *     getObjectByName("contour-step-N") 拾取台地顶面；
+ *   - 瞭望塔/参天树（userData.terrainObjectId）——右键删除拾取依赖。
+ * cell 体块供 3D 直编辑拾取 → 合并网格 userData.faceToCell =
+ * [{ triStart, triCount, cell }]（面区间跨全部合并几何累计），
+ * citadelSceneEdit 命中合并网格时按 faceIndex 反查。
+ * 可重复调用（rebuildCitadelTown 热重建后再次合并，幂等清旧）。
+ */
+export function mergeCitadelTownStatic(assemblyRoot) {
+  // 幂等：先移除上次合并产生的网格
+  const stale = [];
+  assemblyRoot.traverse((o) => {
+    if (o.isMesh && o.userData.mergedGeometry) stale.push(o);
+  });
+  for (const mesh of stale) {
+    mesh.geometry?.dispose?.();
+    mesh.removeFromParent();
+  }
+
+  mergeStaticGroup(assemblyRoot, {
+    skip: (mesh) =>
+      mesh.name === "town-window" ||
+      mesh.userData.citadelWindow === true ||
+      mesh.userData.terrainObjectId != null ||
+      mesh.name?.startsWith("contour-step-"),
+    onSurface: (merged, _material, segments, groupTriStart) => {
+      // 只给含 cell 数据的体块组建立面区间映射
+      const faceToCell = [];
+      for (const seg of segments) {
+        if (!seg.mesh.userData?.cell) continue;
+        faceToCell.push({
+          triStart: groupTriStart + seg.triStart,
+          triCount: seg.triCount,
+          cell: seg.mesh.userData.cell,
+        });
+      }
+      if (faceToCell.length) {
+        merged.userData.faceToCell = faceToCell;
+        // 合并网格本身也携带 cell 引用（供 castCell 判定「这是体块网格」）
+        merged.userData.hasMergedCells = true;
+      }
+    },
+  });
+  return assemblyRoot;
 }
 
 /**
@@ -1246,6 +1297,9 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.outlinedSurfaceCount =
     mainOutlinedSurfaceCount + terrainOutlinedSurfaceCount;
   castleContainer.userData.gradientMap = townAssembly.gradientMap;
+  // 性能：Townscaper 小镇按材质静态合并（窗口/台地拾取/塔树拾取跳过；
+  // cell 面映射供 3D 直编辑）。在窗口灯绑定前执行，合并不动窗口网格。
+  mergeCitadelTownStatic(castleContainer);
   // 拱窗夜景：收集 town-window 并绑定昼夜材质
   refreshCitadelWindowLights(castleContainer);
 
@@ -1307,6 +1361,8 @@ export function rebuildCitadelTown(castleContainer, spec) {
       layers[floorIndex].add(levelGroup);
     });
   });
+  // 热重建后再次静态合并（幂等：先清旧合并网格）；窗口/拾取依赖同上
+  mergeCitadelTownStatic(castleContainer);
   castleContainer.userData.townStats = assembly.stats;
   castleContainer.userData.townSpec = assembly.layout;
   castleContainer.userData.townBaseYs = assembly.baseYs;

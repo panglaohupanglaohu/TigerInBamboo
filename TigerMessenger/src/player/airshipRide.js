@@ -1,5 +1,6 @@
 // =====================================================================
-//  航空艇搭乘与驾驶：垂绳 [F] 攀爬登艇 · WASD 驾驶 · Space/Shift 升降
+//  航空艇搭乘与驾驶：垂绳 [F] 攀爬登艇 · WASD 驾驶 · Space 升 / Ctrl 降
+//  [C] 驾驶员第一人称（隐藏艇体，眼前无自身遮挡）/ 舱外跟拍
 //  模式参考 tramRide：接管期间 update 返回 true，主循环跳过移动与碰撞。
 //
 //  约定（createMoebiusAirship）：
@@ -14,7 +15,9 @@ import { groundLiftAt } from "../world/hills.js";
 
 const BOARD_RANGE = 5.0;   // 绳尾感应半径（可跳起抓绳）
 const CLIMB_TIME = 1.7;    // 攀爬动画时长
-const FLY_DIST = 16;       // 驾驶时相机拉远
+const FLY_DIST = 16;       // 乘客第三人称：舱外跟拍
+const PILOT_DIST = 0.12;   // 驾驶员第一人称：贴眼，几乎无身后拉距
+const PILOT_FOV = 82;      // 驾驶员广角，开阔远景
 const SPEED = 9.0;         // 前后推进速度
 const TURN_SPEED = 1.5;    // 转向角速度 rad/s
 const VERT_SPEED = 8.0;    // 升降速度
@@ -26,6 +29,8 @@ const GROUND_CLEAR = 2.0; // 距当地地表的最小净空
 const HOVER_FLOOR = -15 + GROUND_CLEAR; // 绝对下限（谷心地表 -15）
 
 const FWD_LOCAL = new THREE.Vector3(0, 0, 1); // 艇首方向
+/** 驾驶员眼位：吊舱前端内侧，面朝艇首 +Z（相对飞艇原点=气囊中心） */
+const PILOT_SEAT_LOCAL = new THREE.Vector3(0, -3.32, 1.72);
 
 const _up = new THREE.Vector3();
 const _tmp = new THREE.Vector3();
@@ -168,11 +173,15 @@ export function createAirshipRide({
   elHint,
   toast = () => {},
   getObstacle = null, // () => ({ dir, topRadial, angularRadius }) 建筑净空区（圣城）
+  playerGroup = null, // 驾驶员视角时隐藏角色模型，避免挡视野
 }) {
   /** @type {'idle'|'climbing'|'flying'} */
   let state = "idle";
+  /** @type {'passenger'|'pilot'} 舱外跟拍 / 驾驶员第一人称 */
+  let viewMode = "passenger";
   let climbT = 0;
   let prevDist = 0;
+  let prevFov = 60;
   let yaw = 0;      // 绕局部 +Y（星球法线）的驾驶偏航
   let hover = 20;   // 当前悬浮高度
   let bombCd = 0;   // 投掷冷却计时
@@ -236,20 +245,85 @@ export function createAirshipRide({
     }
   }
 
+  function refreshFlyHint() {
+    if (state !== "flying") return;
+    if (viewMode === "pilot") {
+      setHint(
+        "[<kbd>C</kbd>] 舱外视角 · [<kbd>W</kbd>][<kbd>S</kbd>] 进退 · [<kbd>A</kbd>][<kbd>D</kbd>] 转向 · " +
+          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>F</kbd>] 下艇"
+      );
+    } else {
+      setHint(
+        "[<kbd>C</kbd>] 驾驶员视角 · [<kbd>W</kbd>][<kbd>S</kbd>] 进退 · [<kbd>A</kbd>][<kbd>D</kbd>] 转向 · " +
+          "[<kbd>Space</kbd>/<kbd>Ctrl</kbd>] 升/降 · [<kbd>F</kbd>] 下艇"
+      );
+    }
+  }
+
+  /** 驾驶员视角：隐藏飞艇与角色自身，避免气囊/吊舱挡在眼前 */
+  function applyViewVisibility() {
+    const a = airship();
+    if (viewMode === "pilot" && state === "flying") {
+      if (a) a.visible = false;
+      if (playerGroup) playerGroup.visible = false;
+    } else {
+      if (a) a.visible = true;
+      if (playerGroup) playerGroup.visible = true;
+    }
+  }
+
+  function applyCameraForView() {
+    if (viewMode === "pilot") {
+      // 第一人称：贴眼、沿艇首向前看（不走身后高位俯视，避免看向地面）
+      cameraRig?.setFirstPerson?.(true);
+      cameraRig?.setFov?.(PILOT_FOV);
+    } else {
+      cameraRig?.setFirstPerson?.(false);
+      cameraRig?.setDist?.(FLY_DIST);
+      cameraRig?.setFov?.(prevFov);
+    }
+    applyViewVisibility();
+  }
+
+  function setViewMode(mode) {
+    if (mode !== "passenger" && mode !== "pilot") return;
+    if (viewMode === mode) return;
+    viewMode = mode;
+    applyCameraForView();
+    refreshFlyHint();
+    if (mode === "pilot") {
+      toast("驾驶员视角 · 眼前无艇体遮挡 · 再按 C 回到舱外", 2.6);
+    } else {
+      toast("舱外跟拍 · 再按 C 切换驾驶员视角", 2.2);
+    }
+  }
+
+  function pilotSeat(out) {
+    const a = airship();
+    if (!a) return null;
+    out.copy(PILOT_SEAT_LOCAL).applyQuaternion(a.quaternion).add(a.position);
+    return out;
+  }
+
   function dismount() {
     const a = airship();
     state = "idle";
+    viewMode = "passenger";
     player.riding = false;
     if (a) {
       a.userData.flying = false;
+      a.visible = true;
       // 从绳尾滑落：站在绳尾末端，交还重力（自由落体回地面）
       const rb = ropeBottom(_tmp);
       if (rb) {
         player.position.copy(rb).addScaledVector(_up, 0.2);
       }
     }
+    if (playerGroup) playerGroup.visible = true;
     player.velocity.set(0, 0, 0);
+    cameraRig?.setFirstPerson?.(false);
     if (cameraRig?.setDist && prevDist) cameraRig.setDist(prevDist);
+    cameraRig?.setFov?.(prevFov);
     setHint(null);
     toast("已滑下航空艇 · 抓稳绳子，落地小心！", 2.6);
   }
@@ -296,7 +370,17 @@ export function createAirshipRide({
   }
 
   window.addEventListener("keydown", (e) => {
-    if (e.repeat || e.code !== "KeyF") return;
+    if (e.repeat) return;
+
+    // C：飞行中切换驾驶员 / 舱外视角
+    if (e.code === "KeyC") {
+      if (state !== "flying") return;
+      e.preventDefault();
+      setViewMode(viewMode === "pilot" ? "passenger" : "pilot");
+      return;
+    }
+
+    if (e.code !== "KeyF") return;
     if (state === "idle") {
       const a = airship();
       if (!a || !nearRope()) return;
@@ -306,7 +390,9 @@ export function createAirshipRide({
       climbFrom.copy(player.position);
       player.riding = true;
       player.velocity.set(0, 0, 0);
+      viewMode = "passenger";
       prevDist = cameraRig?.getDist ? cameraRig.getDist() : 0;
+      prevFov = cameraRig?.getFov?.() ?? cameraRig?.getDefaultFov?.() ?? 60;
       if (cameraRig?.setDist) cameraRig.setDist(FLY_DIST);
       toast("抓住垂绳，登上航空艇…", 1.8);
     } else if (state === "flying") {
@@ -421,16 +507,15 @@ export function createAirshipRide({
       }
       if (climbT >= CLIMB_TIME) {
         state = "flying";
+        viewMode = "passenger";
         _dir.copy(a.position).normalize();
         hover = a.userData.hover ?? 20;
         yaw = captureYaw(a);
         a.userData.flying = true;
         a.userData.flown = true; // 飞过后不再自动回锚湖沼上空
-        setHint(
-          "[<kbd>W</kbd>][<kbd>S</kbd>] 前进/后退 · [<kbd>A</kbd>][<kbd>D</kbd>] 转向 · " +
-            "[<kbd>Space</kbd>/<kbd>Shift</kbd>] 升降 · [<kbd>F</kbd>] 下艇"
-        );
-        toast("已登上航空艇 · WASD 驾驶 · F 下艇", 3.2);
+        applyCameraForView();
+        refreshFlyHint();
+        toast("已登上航空艇 · WASD 驾驶 · C 驾驶员视角 · F 下艇", 3.4);
       }
       return true;
     }
@@ -439,21 +524,22 @@ export function createAirshipRide({
     a.userData.flying = true;
     player.riding = true;
     player.velocity.set(0, 0, 0);
+    refreshFlyHint();
 
     // 转向（A 左转 / D 右转，绕星球法线）
     const turn = (keys?.KeyA ? 1 : 0) - (keys?.KeyD ? 1 : 0);
     yaw += turn * TURN_SPEED * dt;
-    // 升降（Space 升 / Shift 降）
+    // 升降（Space 升 / Ctrl 降；不用 Shift，避免和系统截图 Cmd+Shift+4 冲突）
     const vert =
       (keys?.Space ? 1 : 0) -
-      ((keys?.ShiftLeft || keys?.ShiftRight) ? 1 : 0);
+      ((keys?.ControlLeft || keys?.ControlRight) ? 1 : 0);
     // 当地地表高度 = 基础半径 + 峡谷沉降量（谷外为 0）→ hover 下限随地形下沉
     const groundDrop = canyonOffsetDir(_dir);
     let hoverMin = Math.max(HOVER_FLOOR, groundDrop + GROUND_CLEAR);
     // 地形跟随：山体抬升处自动抬高下限，飞越山脊不再穿坡
     const lift = terrainLiftUnder(_dir);
     if (lift > 0) hoverMin = Math.max(hoverMin, lift + GROUND_CLEAR);
-    // 注：圣城上空不再强制抬升到建筑顶端之上——由玩家用 Space/Shift 自行控制升降。
+    // 注：圣城上空不再强制抬升到建筑顶端之上——由玩家用 Space/Ctrl 自行控制升降。
     hover = THREE.MathUtils.clamp(hover + vert * VERT_SPEED * dt, hoverMin, HOVER_MAX);
     a.userData.hover = hover;
 
@@ -484,11 +570,21 @@ export function createAirshipRide({
       a.position.copy(_dir).multiplyScalar(planetRadius + hover);
     }
 
-    // 玩家站在舱顶甲板上，面朝艇首
-    const seat = deckSeat(_seat);
-    if (seat) player.position.copy(seat);
-    player.forward.copy(_fwd);
-    player.facing.copy(_fwd);
+    // 乘客：舱顶甲板；驾驶员：吊舱前端，面朝艇首水平向前
+    if (viewMode === "pilot") {
+      const seat = pilotSeat(_seat);
+      if (seat) player.position.copy(seat);
+      // 严格水平朝向艇首（切平面内），相机据此向前看，不朝地面
+      player.forward.copy(_fwd);
+      player.facing.copy(_fwd);
+      applyViewVisibility();
+    } else {
+      const seat = deckSeat(_seat);
+      if (seat) player.position.copy(seat);
+      player.forward.copy(_fwd);
+      player.facing.copy(_fwd);
+      applyViewVisibility();
+    }
 
     return true;
   }
@@ -497,11 +593,17 @@ export function createAirshipRide({
     if (state === "idle") return;
     const a = airship();
     state = "idle";
+    viewMode = "passenger";
     player.riding = false;
     if (a) {
       a.userData.flying = false;
       a.userData.ropeState = "idle";
+      a.visible = true;
     }
+    if (playerGroup) playerGroup.visible = true;
+    cameraRig?.setFirstPerson?.(false);
+    if (cameraRig?.setDist && prevDist) cameraRig.setDist(prevDist);
+    cameraRig?.setFov?.(prevFov);
     setHint(null);
   }
 
@@ -552,6 +654,7 @@ export function createAirshipRide({
     setPose,
     summon,
     isFlying: () => state === "flying",
+    isPilotView: () => viewMode === "pilot" && state === "flying",
     getState: () => state,
   };
 }

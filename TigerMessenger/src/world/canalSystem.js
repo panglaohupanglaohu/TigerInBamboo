@@ -43,18 +43,67 @@ const DOCK_RADIUS = 8.4;
 // 运河水面色：护城河/交接水系以此为准（不再用护城河旧淡青）
 export const SHARED_WATER_COLOR = 0x3a86a0;
 
-/** 运河水面材质；护城河水面复用，保证色相+质感一致。 */
+let _waterBumpTex = null;
+
+/** 程序化卡通波纹高度图（灰度 bumpMap）：2D 正弦波纹，可无缝平铺。
+ *  用 bumpMap 扰动法线做出波纹光影，不替换水色、不做写实法线贴图，保住 low-poly 硬边气质。 */
+export function getWaterBumpTexture() {
+  if (_waterBumpTex) return _waterBumpTex;
+  const size = 128;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const img = ctx.createImageData(size, size);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4;
+      // 双轴正弦叠加 + 一点径向涟漪，形成水面波纹感
+      const v = 128
+        + Math.sin(x * 0.16) * 28
+        + Math.sin(y * 0.16) * 28
+        + Math.sin((x + y) * 0.08) * 14;
+      const c = v | 0;
+      img.data[i] = c;
+      img.data[i + 1] = c;
+      img.data[i + 2] = c;
+      img.data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  _waterBumpTex = new THREE.CanvasTexture(canvas);
+  _waterBumpTex.wrapS = THREE.RepeatWrapping;
+  _waterBumpTex.wrapT = THREE.RepeatWrapping;
+  _waterBumpTex.repeat.set(6, 6);
+  _waterBumpTex.minFilter = THREE.LinearFilter;
+  _waterBumpTex.magFilter = THREE.LinearFilter;
+  _waterBumpTex.generateMipmaps = false;
+  _waterBumpTex.needsUpdate = true;
+  return _waterBumpTex;
+}
+
+/** 滚动波纹：随 time 缓慢漂移 offset，让水面看起来在流动（共享一张纹理，全水系一致）。 */
+export function scrollWaterBumpTexture(time) {
+  const tex = getWaterBumpTexture();
+  tex.offset.x = (time * 0.018) % 1;
+  tex.offset.y = (time * 0.011) % 1;
+}
+
+/** 运河水面材质；护城河/纳沃纳水面复用，保证色相+质感一致。
+ *  性能：MeshPhysicalMaterial 的 clearcoat 会额外加一层高光着色，且透明+DoubleSide
+ *  成倍放大透明 pass 开销；改为 MeshStandardMaterial（无 clearcoat）+ FrontSide。
+ *  注：不做单例——纳沃纳广场会每帧改自身水面 opacity（蓄洪动画），共享单例会互相污染。 */
 export function createCanalWaterMaterial() {
-  return new THREE.MeshPhysicalMaterial({
+  return new THREE.MeshStandardMaterial({
     color: SHARED_WATER_COLOR,
     transparent: true,
     opacity: 0.78,
-    roughness: 0.14,
-    metalness: 0.04,
-    clearcoat: 0.5,
-    clearcoatRoughness: 0.22,
-    side: THREE.DoubleSide,
+    roughness: 0.18,
+    metalness: 0.05,
+    side: THREE.FrontSide,
     depthWrite: false,
+    bumpMap: getWaterBumpTexture(),
+    bumpScale: 0.6,
   });
 }
 

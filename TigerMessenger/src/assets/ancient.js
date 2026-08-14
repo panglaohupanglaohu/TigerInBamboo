@@ -5,6 +5,7 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
+import { mergeStaticGroup } from "../world/geometryMerge.js";
 
 const BARK = 0x665d52; // 老松灰褐树皮
 const BARK_DARK = 0x453f37;
@@ -29,144 +30,160 @@ function pineRng(seed) {
 }
 
 /**
- * 日式造型松：弯曲粗干、少量横向骨枝、层层修剪成云片的松冠。
- * 形态依据真实庭园松而不是递归分形树；随机只改变姿态，不改变树的骨架语法。
+ * 东方参天古树巨松（The Colossal Primordial Pine）· 日本新版画（吉田博风）硬边造型。
+ * 全程序化基础几何体实时拼装：
+ *   1) 主干：三级六棱柱级联收分（底层 r1.8 / 中层 r1.0 / 顶层 r0.5）+ X 偏置弯曲 + 整体左倾 10°
+ *   2) 树皮剥落乳白内芯贴片（#F4EFEB）附着在底层主干前侧表面（#7D6B5D 消光灰褐）
+ *   3) 主树枝：Y=12 / Y=18 处 4 根六棱柱斜向外上 30~45°，根部深嵌主干 >0.35
+ *   4) 树冠：极端非等比拍扁云片 scale(3.8, 0.45, 2.2)，多层堆叠成流云墙（#1A3326/#112219）
+ *   5) 全网格 addOutline(mesh, 0.05) 唐伯虎水墨描边
  */
 export function createAncientPineTree(seed = 7301 + pineSerial++ * 97) {
   const g = new THREE.Group();
+  g.name = "giantTreeGroup";
   const rnd = pineRng(seed);
-  const barkMat = toonMat(BARK);
-  const barkDarkMat = toonMat(BARK_DARK);
-  const leafMats = [toonMat(PINE_DARK), toonMat(PINE), toonMat(PINE_LIGHT)];
-  const yAxis = new THREE.Vector3(0, 1, 0);
 
-  function segment(a, b, r0, r1, material = barkMat, outline = O_BOLD * 0.72) {
-    const delta = new THREE.Vector3().subVectors(b, a);
-    const len = delta.length();
+  // ---------- 材质（toonMat 有缓存，同色复用） ----------
+  const barkMat = toonMat(0x7d6b5d, { flatShading: true }); // 消光灰褐树皮
+  const barkDarkMat = toonMat(0x6a5a4e, { flatShading: true });
+  const innerMat = toonMat(0xf4efeb, { flatShading: true }); // 乳白内芯
+  const canopyMatA = toonMat(0x1a3326, { flatShading: true }); // 水墨深松绿
+  const canopyMatB = toonMat(0x112219, { flatShading: true });
+  const OUT = 0.05; // 唐伯虎水墨细描边厚度
+
+  // ---------- 1. 主干：三级级联收分 + 斜向偏置（Conical Twisted Trunk） ----------
+  const trunk = new THREE.Group();
+  g.add(trunk);
+
+  function trunkSeg(rTop, rBottom, height, xOff, yCenter) {
     const mesh = new THREE.Mesh(
-      facet(new THREE.CylinderGeometry(r1, r0, len, 7, 1, false)),
-      material
+      facet(new THREE.CylinderGeometry(rTop, rBottom, height, 6)),
+      barkMat
     );
-    mesh.position.copy(a).addScaledVector(delta, 0.5);
-    mesh.quaternion.setFromUnitVectors(yAxis, delta.normalize());
+    mesh.position.set(xOff, yCenter, 0);
     mesh.castShadow = true;
-    addOutline(mesh, outline, 0x2b2823, 0.045);
-    g.add(mesh);
+    addOutline(mesh, OUT);
+    trunk.add(mesh);
     return mesh;
   }
 
-  function branch(points, r0, r1) {
-    for (let i = 0; i < points.length - 1; i++) {
-      const t = i / Math.max(1, points.length - 2);
-      segment(
-        points[i],
-        points[i + 1],
-        THREE.MathUtils.lerp(r0, r1, t),
-        THREE.MathUtils.lerp(r0, r1, Math.min(1, t + 0.45)),
-        i === 0 ? barkMat : barkDarkMat,
-        O_BOLD * (i === 0 ? 0.64 : 0.48)
-      );
-    }
+  // 底层：基部 r1.8 → 顶 1.15，高 10（0~10）
+  trunkSeg(1.15, 1.8, 10, 0, 5);
+  // 中层：r1.15 → 0.55，高 8（7~15），X -0.5（与底层重叠消除截断）
+  trunkSeg(0.55, 1.15, 8, -0.5, 8);
+  // 顶层：r0.55 → 0.25，高 8（13~21），X -1.2
+  trunkSeg(0.25, 0.55, 8, -1.2, 12.5);
+  // 整体左倾 10 度
+  trunk.rotation.z = 0.18;
+
+  // 树皮剥落乳白内芯贴片：附着在底层主干前侧（+Z 面）表面
+  {
+    const patch = new THREE.Mesh(
+      facet(new THREE.BoxGeometry(1.7, 4.6, 0.2)),
+      innerMat
+    );
+    // 底层主干 y=3.6 处半径 ≈1.57，六棱柱 +Z 面 ≈1.36；贴片后缘嵌入表面，前缘凸出
+    patch.position.set(-0.12, 3.6, 1.42);
+    patch.rotation.z = -0.14;
+    patch.rotation.x = 0.05;
+    patch.castShadow = true;
+    addOutline(patch, OUT);
+    trunk.add(patch);
   }
 
-  /** 修剪后的云片冠：宽、扁、下暗上亮，外轮廓有少量不规则起伏。 */
-  function crown(center, width, depth, thickness, yaw = 0, fullness = 1) {
+  // ---------- 2. 主树枝：斜向外上 30~45°，根部深嵌主干（Organic Branches） ----------
+  const branchSpecs = [
+    { y: 11.5, x: -0.5, rRoot: 0.52, rTip: 0.15, len: 6.0, yaw: 0.06, tilt: 0.52, mat: barkMat },
+    { y: 12.6, x: -0.55, rRoot: 0.4, rTip: 0.11, len: 5.0, yaw: -0.55, tilt: 0.62, mat: barkDarkMat },
+    { y: 17.5, x: -1.15, rRoot: 0.36, rTip: 0.1, len: 4.4, yaw: 0.4, tilt: 0.48, mat: barkMat },
+    { y: 18.6, x: -1.2, rRoot: 0.28, rTip: 0.08, len: 3.6, yaw: -0.42, tilt: 0.62, mat: barkDarkMat },
+  ];
+  const branchTips = [];
+  for (const spec of branchSpecs) {
+    const bg = new THREE.Group();
+    bg.position.set(spec.x, spec.y, 0);
+    bg.rotation.y = spec.yaw;
+    bg.rotation.z = spec.tilt;
+    const mesh = new THREE.Mesh(
+      facet(new THREE.CylinderGeometry(spec.rTip, spec.rRoot, spec.len, 6)),
+      spec.mat
+    );
+    mesh.position.y = spec.len / 2; // 根部在组原点 = 主干内部（深嵌 > 0.35）
+    mesh.castShadow = true;
+    addOutline(mesh, OUT);
+    bg.add(mesh);
+    trunk.add(bg);
+    // 树枝末端（trunk 局部系）：RZ(tilt)*RY(yaw) 作用于局部 +Y*len
+    branchTips.push(
+      new THREE.Vector3(
+        spec.x - spec.len * Math.sin(spec.tilt) * Math.cos(spec.yaw),
+        spec.y + spec.len * Math.cos(spec.tilt),
+        spec.len * Math.sin(spec.tilt) * Math.sin(spec.yaw)
+      )
+    );
+  }
+
+  // ---------- 3. 层叠巨型树冠（Cloud-like Canopy Mats） ----------
+  // 云片拍扁矩阵：X 横拉 3.8 / Y 拍扁 0.45 / Z 拉伸 2.2 —— 流云墙般的压迫分量感
+  function cloudPad(center, width, depth, thick, blobCount, yaw) {
     const pad = new THREE.Group();
     pad.position.copy(center);
     pad.rotation.y = yaw;
-    const blobs = Math.max(4, Math.round(4 * fullness));
-    for (let i = 0; i < blobs; i++) {
-      const edge = blobs === 1 ? 0 : i / (blobs - 1) - 0.5;
+    const n = Math.max(3, blobCount ?? 4);
+    for (let i = 0; i < n; i++) {
       const mesh = new THREE.Mesh(
         facet(new THREE.IcosahedronGeometry(0.5, 1)),
-        leafMats[i === blobs - 1 ? 2 : i === 0 ? 0 : 1]
+        i % 2 === 0 ? canopyMatA : canopyMatB
       );
+      const edge = n === 1 ? 0 : i / (n - 1) - 0.5;
       mesh.position.set(
-        edge * width * 0.62 + (rnd() - 0.5) * width * 0.08,
-        (i % 2) * thickness * 0.2 + (rnd() - 0.5) * 0.04,
-        (rnd() - 0.5) * depth * 0.34
+        edge * width * 0.6 + (rnd() - 0.5) * width * 0.22,
+        (i % 2) * thick * 0.4 + (rnd() - 0.5) * thick,
+        (rnd() - 0.5) * depth * 0.32
       );
-      const taper = 1 - Math.abs(edge) * 0.35;
       mesh.scale.set(
-        width * 0.48 * taper,
-        thickness * (1.15 + rnd() * 0.15),
-        depth * (0.58 + rnd() * 0.1)
+        3.8 * (0.5 + rnd() * 0.55) * (1 - Math.abs(edge) * 0.18),
+        0.45 * (0.8 + rnd() * 0.5),
+        2.2 * (0.45 + rnd() * 0.5)
       );
-      mesh.rotation.set((rnd() - 0.5) * 0.12, rnd() * Math.PI, (rnd() - 0.5) * 0.08);
+      mesh.rotation.set((rnd() - 0.5) * 0.3, rnd() * Math.PI, (rnd() - 0.5) * 0.2);
       mesh.castShadow = true;
-      addOutline(mesh, O_BOLD * 0.38, 0x173227, 0.035);
+      addOutline(mesh, OUT);
       pad.add(mesh);
     }
-    g.add(pad);
+    trunk.add(pad);
+    return pad;
   }
 
-  const lean = (rnd() > 0.5 ? 1 : -1) * (0.52 + rnd() * 0.5);
-  const depthLean = (rnd() - 0.5) * 0.5;
-  const trunk = [
-    new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(0.04 + lean * 0.12, 0.7, depthLean * 0.1),
-    new THREE.Vector3(-0.12 + lean * 0.3, 1.45, 0.1 + depthLean * 0.25),
-    new THREE.Vector3(0.08 + lean * 0.55, 2.25, -0.04 + depthLean * 0.5),
-    new THREE.Vector3(-0.04 + lean * 0.8, 3.08, 0.12 + depthLean * 0.72),
-    new THREE.Vector3(0.2 + lean, 3.82, 0.02 + depthLean),
-    new THREE.Vector3(0.08 + lean * 1.12, 4.45, 0.12 + depthLean * 1.1),
-  ];
-  for (let i = 0; i < trunk.length - 1; i++) {
-    const t = i / (trunk.length - 2);
-    segment(trunk[i], trunk[i + 1], 0.3 - t * 0.19, 0.265 - t * 0.19);
+  // 枝端云片（各 5 粒）
+  for (const tip of branchTips) {
+    cloudPad(tip, 3.4 + rnd() * 1.2, 2.0 + rnd() * 0.8, 1.6, 5, (rnd() - 0.5) * 0.9);
   }
 
-  // 外露根盘让树真正“抓”在球面上，呼应参考照片中的老松根势。
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 6) * Math.PI * 2 + rnd() * 0.35;
-    const end = new THREE.Vector3(Math.cos(a) * (0.62 + rnd() * 0.25), 0.03, Math.sin(a) * (0.62 + rnd() * 0.25));
-    const mid = end.clone().multiplyScalar(0.46);
-    mid.y = 0.12 + rnd() * 0.06;
-    branch([trunk[0], mid, end], 0.16, 0.035);
-  }
-
-  const flip = rnd() > 0.5 ? 1 : -1;
-  const arms = [
-    { at: 2, side: -1, len: 1.75, rise: 0.16, z: 0.35, crown: [1.75, 0.82, 0.3] },
-    { at: 2, side: 1, len: 1.35, rise: 0.08, z: -0.45, crown: [1.35, 0.72, 0.28] },
-    { at: 3, side: 1, len: 1.9, rise: 0.2, z: 0.28, crown: [1.85, 0.85, 0.3] },
-    { at: 4, side: -1, len: 1.45, rise: 0.28, z: -0.28, crown: [1.5, 0.76, 0.3] },
-    { at: 5, side: 1, len: 1.22, rise: 0.34, z: 0.2, crown: [1.3, 0.7, 0.31] },
-  ];
-
-  for (let i = 0; i < arms.length; i++) {
-    const spec = arms[i];
-    const start = trunk[spec.at].clone();
-    const side = spec.side * flip;
-    const bend = new THREE.Vector3(
-      start.x + side * spec.len * 0.48,
-      start.y + spec.rise * 0.25 - 0.05,
-      start.z + spec.z * 0.45
+  // 顶部巨型云墙：三层横铺（Y≈16 / 19 / 22），越往上越收窄，形成流云塔
+  for (let layer = 0; layer < 3; layer++) {
+    const y = 15.6 + layer * 2.7 + (rnd() - 0.5) * 0.5;
+    const w = 8.6 - layer * 1.7;
+    cloudPad(
+      new THREE.Vector3(-1.6 + (rnd() - 0.5) * 1.3, y, (rnd() - 0.5) * 1.2),
+      w,
+      3.2,
+      1.8,
+      7,
+      layer * 0.45 + (rnd() - 0.5) * 0.3
     );
-    const tip = new THREE.Vector3(
-      start.x + side * spec.len,
-      start.y + spec.rise,
-      start.z + spec.z
-    );
-    const upTip = tip.clone();
-    upTip.y += 0.14 + rnd() * 0.12;
-    branch([start, bend, tip, upTip], 0.13 - i * 0.011, 0.035);
-    const yaw = Math.atan2(spec.z, side * spec.len);
-    crown(upTip, spec.crown[0], spec.crown[1], spec.crown[2], yaw, i === 2 ? 1.2 : 1);
-
   }
+  // 云顶压层 + 中段补密度
+  cloudPad(new THREE.Vector3(-1.9, 21.6, 0.4), 4.6, 2.2, 1.4, 6, 0.3);
+  cloudPad(new THREE.Vector3(-1.1, 13.9, 0.7), 3.8, 1.8, 1.4, 5, 0.9);
+  cloudPad(new THREE.Vector3(-1.5, 20.3, -0.6), 3.4, 1.8, 1.4, 5, -0.7);
 
-  // 顶端分成两束，避免圣诞树式尖顶，形成参考图中的横向“伞盖”。
-  const top = trunk[trunk.length - 1];
-  for (const side of [-1, 1]) {
-    const tip = top.clone().add(new THREE.Vector3(side * 0.52, 0.42 + (side > 0 ? 0.12 : 0), side * 0.12));
-    branch([top, top.clone().lerp(tip, 0.52).add(new THREE.Vector3(0, 0.08, 0)), tip], 0.085, 0.03);
-    crown(tip, side > 0 ? 1.35 : 1.05, 0.78, 0.34, side * 0.16, 1.05);
-  }
-
-  g.rotation.y = (rnd() - 0.5) * 0.55;
-  g.scale.setScalar(1.02);
-  g.userData.collideRadius = 0.58;
+  g.rotation.y = (rnd() - 0.5) * 0.5;
+  // 性能：单株 ~130 网格（57 云片 + 描边）→ 按材质合并成 ~6 个绘制调用。
+  // 全树静态（无逐帧变换/无运行时材质切换），合并后外观逐顶点一致。
+  mergeStaticGroup(g);
+  g.userData.collideRadius = 2.4;
+  g.userData.topY = 24;
   g.userData.kind = "gardenPine";
   return g;
 }

@@ -14,6 +14,7 @@
 import * as THREE from "three";
 import { toonMat, addOutline, INK_COLOR } from "../assets/toon.js";
 import { avoidCrystalPillars } from "./flock.js";
+import { sedateBirdRecord, tickBirdSedation, TRANQ_DURATION_BIRD } from "./tranquilizer.js";
 
 // ---------- 尾流结界（环形圆柱空间） ----------
 const RING_IN = 6; // 内环：<6 触发排斥，避免撞击气囊
@@ -275,6 +276,27 @@ export class AirshipEscortManager {
    * @param {number} dt
    * @param {number} t 全局时间（秒）
    */
+  /**
+   * 麻醉弹命中最近护航鸟
+   * @returns {{ kind: 'object', object: THREE.Object3D, duration: number }|null}
+   */
+  sedateNearest(worldPos, radius = 2.4, duration = TRANQ_DURATION_BIRD) {
+    if (!worldPos) return null;
+    const r2 = radius * radius;
+    let best = null;
+    let bestD = r2;
+    for (const b of this.birds) {
+      if ((b.sedateT ?? 0) > 0) continue;
+      const d = b.group.position.distanceToSquared(worldPos);
+      if (d < bestD) {
+        bestD = d;
+        best = b;
+      }
+    }
+    if (!best || !sedateBirdRecord(best, duration)) return null;
+    return { kind: "object", object: best.group, duration };
+  }
+
   update(dt, t) {
     if (!dt || dt <= 0) return;
     dt = Math.min(dt, 0.05);
@@ -313,8 +335,12 @@ export class AirshipEscortManager {
     // 让目标点也在赤道面附近，避免绕到艇顶/底部
     _leadPoint.addScaledVector(_shipUp, -_leadPoint.clone().sub(_shipPos).dot(_shipUp) * 0.6);
 
+    const groundR = Math.max(_shipPos.length() - 8, 1);
+
     for (let i = 0; i < n; i++) {
       const b = this.birds[i];
+      // 麻醉坠落
+      if (tickBirdSedation(b, dt, groundR)) continue;
       const pos = b.group.position;
       _offset.copy(pos).sub(_shipPos);
       const d = _offset.length();
@@ -433,6 +459,7 @@ export class AirshipEscortManager {
     // ---------- 朝向 / 侧倾 / 两级折叠滑翔 ----------
     for (let i = 0; i < n; i++) {
       const b = this.birds[i];
+      if ((b.sedateT ?? 0) > 0) continue;
       const pos = b.group.position;
 
       if (b.vel.lengthSq() > 0.04) {

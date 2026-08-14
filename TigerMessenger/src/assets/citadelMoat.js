@@ -11,6 +11,7 @@ import { toonMat } from "./toon.js";
 import {
   SHARED_WATER_COLOR,
   createCanalWaterMaterial,
+  scrollWaterBumpTexture,
   sweepPrism,
   CANAL_DEPTH,
   CANAL_WALL_THICK,
@@ -211,30 +212,39 @@ export function createCitadelMoat(opts = {}) {
   group.add(foams);
 
   // ---------- 4. 阶梯量化水波动画 ----------
+  // 性能：wave 只随「阶跃时刻」变化，无需每帧重写整块顶点缓冲 + needsUpdate + 重算法线。
+  // 用 lastStepped 缓存，阶跃未变直接跳过（约 stepHz≈3.5 次/秒才更新一次）。
+  let lastStepped = null;
+  let lastFoamStep = null;
   const update = (_dt, t) => {
     const time = Number.isFinite(t) ? t : 0;
+    // 波纹贴图滚动（每帧，共享纹理驱动全水系：运河/护城河/纳沃纳一起流动）
+    scrollWaterBumpTexture(time);
     const stepped = Math.floor(time * stepHz) / stepHz;
-    const moatPos = water.geometry.attributes.position;
-    const initial = water.geometry.userData.baseY;
-    for (let i = 0; i < moatPos.count; i++) {
-      const x = moatPos.getX(i);
-      const z = moatPos.getZ(i);
-      const radius = Math.sqrt(x * x + z * z);
-      const wave =
-        Math.sin(radius * 1.45 - stepped * 1.5) * 0.045 +
-        Math.cos(x * 0.48 + stepped) * 0.028;
-      moatPos.setY(i, (initial?.[i] ?? 0) + wave);
-    }
-    moatPos.needsUpdate = true;
-    // 阶梯帧下偶发重算法线，维持块状明暗；每帧算太贵且会抹掉硬边感
-    if (Math.floor(time * stepHz) !== Math.floor((time - (_dt || 0.016)) * stepHz)) {
+    if (stepped !== lastStepped) {
+      lastStepped = stepped;
+      const moatPos = water.geometry.attributes.position;
+      const initial = water.geometry.userData.baseY;
+      for (let i = 0; i < moatPos.count; i++) {
+        const x = moatPos.getX(i);
+        const z = moatPos.getZ(i);
+        const radius = Math.sqrt(x * x + z * z);
+        const wave =
+          Math.sin(radius * 1.45 - stepped * 1.5) * 0.045 +
+          Math.cos(x * 0.48 + stepped) * 0.028;
+        moatPos.setY(i, (initial?.[i] ?? 0) + wave);
+      }
+      moatPos.needsUpdate = true;
       water.geometry.computeVertexNormals();
     }
-    // 浪花极慢阶梯起伏
+    // 浪花极慢阶梯起伏（2Hz 阶跃，未变跳过）
     const foamStep = Math.floor(time * 2) / 2;
-    for (const entry of foamMeta) {
-      entry.mesh.position.y =
-        entry.baseY + Math.sin(foamStep * 1.1 + entry.phase) * entry.amp;
+    if (foamStep !== lastFoamStep) {
+      lastFoamStep = foamStep;
+      for (const entry of foamMeta) {
+        entry.mesh.position.y =
+          entry.baseY + Math.sin(foamStep * 1.1 + entry.phase) * entry.amp;
+      }
     }
   };
 
