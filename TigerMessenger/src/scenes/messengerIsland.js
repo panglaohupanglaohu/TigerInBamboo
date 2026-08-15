@@ -401,7 +401,9 @@ export const messengerIslandScene = {
       try {
         const saved = JSON.parse(localStorage.getItem(cjsLevelsKey) || "null");
         if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) cjSpec = saved;
-      } catch { /* 回落 SPEC */ }
+      } catch { /* 回落空布局 */ }
+      // 运河交汇处初始不建城堡：堤岸方框 = 空地基（无存档时），由玩家自己搭建。
+      if (!cjSpec) cjSpec = { terraces: [] };
       let cjContour;
       try {
         const saved = JSON.parse(localStorage.getItem(cjsTerrainKey) || "null");

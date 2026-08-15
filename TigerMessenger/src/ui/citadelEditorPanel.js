@@ -165,6 +165,11 @@ export function createCitadelEditorPanel({
     dropToGround = localStorage.getItem(DROP_KEY) !== "0";
   } catch { /* private mode */ }
 
+  /** 无存档时各实例的默认布局：高山圣城用内置 SPEC；运河交汇古堡为空地基（玩家自建）。 */
+  function defaultGridSpec() {
+    return getInstanceId() === "canal-junction" ? { terraces: [] } : CITADEL_TOWN_SPEC;
+  }
+
   function loadTerraceGrids() {
     try {
       const saved = JSON.parse(localStorage.getItem(instanceStorageKeys().levels) || "null");
@@ -173,8 +178,8 @@ export function createCitadelEditorPanel({
           levelsToGrid(entry.levels)
         );
       }
-    } catch { /* 损坏存档回落 SPEC */ }
-    return normalizeCitadelTerraceLayout(CITADEL_TOWN_SPEC).terraces.map((entry) =>
+    } catch { /* 损坏存档回落默认布局 */ }
+    return normalizeCitadelTerraceLayout(defaultGridSpec()).terraces.map((entry) =>
       levelsToGrid(entry.levels)
     );
   }
@@ -1514,12 +1519,14 @@ export function createCitadelEditorPanel({
   panel.querySelector("#ce-redo").onclick = redo;
   panel.querySelector("#ce-reset").onclick = () => {
     pushUndo();
-    terraceGrids = normalizeCitadelTerraceLayout(CITADEL_TOWN_SPEC).terraces.map((entry) =>
-      levelsToGrid(entry.levels)
-    );
+    // 按实例重置：高山圣城恢复内置 SPEC；运河交汇古堡清空为堤岸空地基（玩家自建）
+    const isCanal = getInstanceId() === "canal-junction";
+    terraceGrids = normalizeCitadelTerraceLayout(
+      isCanal ? { terraces: [] } : CITADEL_TOWN_SPEC
+    ).terraces.map((entry) => levelsToGrid(entry.levels));
     grid = terraceGrids[activeTerrace];
     commit();
-    toast("已恢复内置圣城布局", 1.6);
+    toast(isCanal ? "已清空运河古堡（堤岸方框即地基，可自由搭建）" : "已恢复内置圣城布局", 1.6);
   };
   panel.querySelector("#ce-clear").onclick = () => {
     pushUndo();
