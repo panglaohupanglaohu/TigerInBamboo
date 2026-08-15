@@ -1348,7 +1348,8 @@ export function createCitadelEditorPanel({
     if (stats) {
       statsEl.textContent =
         `格 ${stats.cellCount} · 穹顶 ${stats.domeCount} · 塔顶 ${stats.towerCount}` +
-        ` · 坡顶 ${stats.roofCount} · 教堂 ${stats.steepleCount ?? 0} · 旗杆 ${stats.flagCount ?? 0}` +
+        ` · 坡顶 ${stats.roofCount} · 教堂 ${stats.steepleCount ?? 0} · 柱 ${stats.pilasterCount ?? 0}` +
+        ` · 支架 ${stats.supportCount ?? 0}` +
         ` · 拱 ${stats.archCount} · 拱窗 ${stats.windowCount} · 门 ${stats.doorCount ?? 0}` +
         ` · 城垛 ${stats.crenelCount} · 围栏 ${stats.fenceCount} · 绿植 ${stats.shrubCount}` +
         ` · 花园 ${stats.gardenCount ?? 0} · 广场 ${stats.plazaCount ?? 0}` +

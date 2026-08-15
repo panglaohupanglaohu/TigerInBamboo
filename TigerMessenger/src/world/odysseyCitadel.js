@@ -727,12 +727,16 @@ export function mergeCitadelTownStatic(assemblyRoot) {
     mesh.name?.startsWith("contour-step-");
 
   const onSurface = (merged, _material, segments, groupTriStart) => {
-    // 只给含 cell 数据的体块组建立面区间映射
+    // 只给含 cell 数据的体块组建立面区间映射。
+    // triStart 必须用「相对该合并网格自身」的段起点（seg.triStart）——
+    // raycaster 命中的 hit.faceIndex 是网格局部索引；groupTriStart 是跨
+    // 材质组累计的全局游标，若写入全局值，多材质组下映射会整体错位，
+    // 3D 直编辑点块/悬停拾取随机失败（扭曲网格引入多组后暴露）。
     const faceToCell = [];
     for (const seg of segments) {
       if (!seg.mesh.userData?.cell) continue;
       faceToCell.push({
-        triStart: groupTriStart + seg.triStart,
+        triStart: seg.triStart,
         triCount: seg.triCount,
         cell: seg.mesh.userData.cell,
       });
@@ -1123,7 +1127,6 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     waterGateCount: 0,
     doorCount: 0,
     steepleCount: 0,
-    flagCount: 0,
     gardenCount: 0,
     plazaCount: 0,
     boatCount: 0,
@@ -1136,6 +1139,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     ridgeCount: 0,
     eaveCount: 0,
     oculusCount: 0,
+    supportCount: 0, // 悬空支撑支架（flying buildings）
     gate: null,
     gates: [],
   };
