@@ -169,6 +169,7 @@ TigerMessenger/
 ├── index.html            # 入口 / HUD / 启动脚本（importmap → 本地 vendor）
 ├── planet.html           # 旧球面实验页存根：现仅跳转主游戏（旧链接不 404）
 ├── townscaper.html       # 高山圣城 Townscaper 编辑器独立页（开发用）
+├── townscaper-building.html # buildTownscaperBuilding 模块化要塞演示页（开发用）
 ├── shot-harness.html     # 资产清单截图 Harness（开发用）
 ├── aircraft*.html / retro_spaceship*.html / moebius_aircraft_outline.html
 │                         # 飞船 / 飞行器实验页（开发用）
@@ -199,6 +200,9 @@ TigerMessenger/
     │                     # harborLogistics(装船物流) · lowPoly · toon(Cel 基础设施)
     │                     # citadelWatchtower · citadelElderTree · citadelMoat · citadelTrojanHorse
     │                     # snowMassif(雪山单元) · moebiusTower
+    │                     # townscaperBuilding(Townscaper 画风模块化要塞：双层撞色退缩主屋/
+    │                     #   薄荷绿+珊瑚橙斜顶+奶黄主殿+白护栏 / 悬空外骨骼焦黑交叉支架 /
+    │                     #   青灰巨石六棱柱地基下切水体+白涟漪 / 全网格 0.05 墨描边)
     ├── story/            # storyboardPanel(🎬 分镜工作台) · storyCatalog(白名单) · storyLLM · storyEngine
     ├── ui/               # hud(toast/气泡/提示/面板折叠) · touchControls(手机遥控杆) · minimap(小地图)
     │                     # dragPanel(通用拖拽) · citadelEditorPanel · citadelSceneEdit · crystalCityEditorPanel

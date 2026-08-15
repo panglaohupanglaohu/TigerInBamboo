@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Townscaper Modular Citadel 演示</title>
+<style>
+  html,body{margin:0;height:100%;background:#1a1c22;overflow:hidden;font-family:system-ui,sans-serif}
+  canvas{display:block}
+  #info{position:fixed;left:12px;top:10px;color:#dfe6f0;font:12px/1.6 monospace;background:rgba(0,0,0,.5);
+        padding:10px 14px;border-radius:8px;pointer-events:none}
+  #info b{color:#ffd966}
+</style>
+</head>
+<body>
+<div id="info"><b>buildTownscaperBuilding()</b><br>
+左栋：贴地（lift=0）· 右栋：悬空（lift=3.2 → 外骨骼支架）<br>
+撞色：薄荷绿 #2ECC71 · 珊瑚橙红 #E74C3C · 奶黄 #F4D03F · 白护栏 · 焦黑支架 · 青灰地基 · 白涟漪</div>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { buildTownscaperBuilding, addTownscaperAmbient } from "./src/assets/townscaperBuilding.js";
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(1);
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xbfe8ff);
+addTownscaperAmbient(scene, 1.4);
+const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+dir.position.set(6, 10, 5);
+scene.add(dir);
+const dir2 = new THREE.DirectionalLight(0xffffff, 0.35);
+dir2.position.set(-4, 3, -6);
+scene.add(dir2);
+
+// 水面（地基下切的水体）
+const water = new THREE.Mesh(
+  new THREE.CircleGeometry(30, 40),
+  new THREE.MeshBasicMaterial({ color: 0x8fd8c8, transparent: true, opacity: 0.6, side: THREE.DoubleSide })
+);
+water.rotation.x = -Math.PI / 2;
+water.position.y = -0.55;
+scene.add(water);
+
+// 贴地版（左）
+const a = buildTownscaperBuilding({ seed: 11, lift: 0 });
+a.position.set(-3.5, 0, 0);
+scene.add(a);
+// 悬空版（右）：lift=3.2 → 4 柱 + X 桁架支架
+const b = buildTownscaperBuilding({ seed: 29, lift: 3.2 });
+b.position.set(3.5, 0, 0);
+scene.add(b);
+
+const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
+camera.position.set(0, 5.5, 13);
+camera.lookAt(0, 2.2, 0);
+
+const animate = () => {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+};
+animate();
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
