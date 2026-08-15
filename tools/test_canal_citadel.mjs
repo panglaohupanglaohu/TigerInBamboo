@@ -119,23 +119,41 @@ const ok = (m) => { console.log(`  ✓ ${m}`); pass++; };
     halfWidth: 18,
   });
   let glow = 0, lamps = 0, walls = 0, water = 0, solid = 0, zone = 0;
+  // 平台顶面高度与球面贴合校验：直接用平台网格顶点沿 up 投影取最大/最小
+  let solidTopH = null;
+  let solidBottomH = null;
+  const _upDir = dir.clone();
+  const _v3 = new THREE.Vector3();
   box.group.traverse((o) => {
     if (!o.isMesh) return;
     if (o.name === "canal-junction-glow") glow++;
     if (o.name === "canal-junction-corner-lamp") lamps++;
     if (/^canal-junction-wall-\d+$/.test(o.name)) walls++;
     if (o.name === "canal-junction-water") water++;
-    if (o.name === "canal-junction-solid-platform") solid++;
+    if (o.name === "canal-junction-solid-platform") {
+      solid++;
+      o.updateWorldMatrix(true, false);
+      const pos = o.geometry.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        _v3.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld);
+        const h = _v3.dot(_upDir);
+        if (solidTopH == null || h > solidTopH) solidTopH = h;
+        if (solidBottomH == null || h < solidBottomH) solidBottomH = h;
+      }
+    }
     if (o.name === "canal-junction-build-zone") zone++;
   });
   assert.equal(glow, 4, "四边高亮描边");
   assert.equal(lamps, 4, "四角灯塔");
   assert.equal(walls, 4, "四边立壁");
-  assert.equal(water, 1, "内部水面");
+  assert.equal(water, 0, "内部水面已移除（平台为干台面）");
   assert.equal(solid, 1, "实心平台垫层（盖住原地貌）");
   assert(zone >= 15, `高亮构建区（光罩+双亮线+空中方框 4 光柱+4 角球+4 顶线，实际 ${zone}）`);
   assert(Math.abs(box.position.length() - 160) < 1, "方框贴球面");
-  ok(`运河堤岸方框：4 立壁 + 4 高亮 + 4 角灯 + 实心平台 + 空中高亮方框（r=${box.position.length().toFixed(1)}）`);
+  // 平台顶面 = 水平平面（R + waterLift + 0.3 ≈ 160.9），底面深入球面以下（贴合）
+  assert(solidTopH != null && Math.abs(solidTopH - 160.9) < 0.5, `平台顶面水平（${solidTopH?.toFixed(2)} ≈ 160.9）`);
+  assert(solidBottomH != null && solidBottomH < 158.5, `平台底面深入球面（${solidBottomH?.toFixed(2)} < 158.5，边缘不悬空）`);
+  ok(`运河堤岸方框：4 立壁 + 4 高亮 + 4 角灯 + 平顶贴球平台 + 空中高亮方框（r=${box.position.length().toFixed(1)}）`);
 }
 
 // ---------- 6. 无台地模式（skipOuterTerrain：堤岸方框即地基） ----------

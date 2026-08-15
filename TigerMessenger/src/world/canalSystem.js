@@ -412,8 +412,7 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
 
   const bankMat = toonMat(CANAL_BANK_COLOR, { flatShading: true });
   const lipMat = toonMat(CANAL_LIP_COLOR, { flatShading: true });
-  const waterMat = createCanalWaterMaterial();
-  const waterY = R + waterLift;
+  const waterY = R + waterLift; // 空中高亮方框的基准高度（水面/平台参考线）
   const wallH = CANAL_DEPTH;
 
   const cornerPts = [
@@ -429,6 +428,10 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
     [cornerPts[2], cornerPts[3]],
     [cornerPts[3], cornerPts[0]],
   ];
+  // 四角在球面上的径向（光柱/灯塔共用：几何沿各自角点径向竖立，贴球面）
+  const cornerRadials = cornerPts.map((p) =>
+    up.clone().multiplyScalar(R).add(p).normalize()
+  );
 
   // 立壁 + 土埂：沿边扫出双坡条带（切平面局部坐标 → 逐点贴球面曲率）。
   // 球面在方框边缘（距中心 18~22 单位）法线已偏转 ~8°，若全部沿用
@@ -469,30 +472,33 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
     }
   }
 
-  // 内部实心平台（Townscaper 干坞地基）：从球面到水面填实心方块，
-  // 盖住任何原地貌（山体/湖/沟），交汇处不穿地、不悬空。
+  // 内部实心平台（Townscaper 干坞地基）：顶面是**水平平面**（城堡/建筑平放），
+  // 平台本体向下深埋进球面——球面在平台边缘（半宽 ~21.5）比中心低 ~1.45、
+  // 四角低 ~2.45，所以底面必须沉到 R-3 以下才能与球面贴合（不悬空、不穿地）。
+  // 视觉上平台像从球面「长出来」的平顶干坞，四边立壁沿球面曲率收口。
+  // 注意：Box 必须旋转对齐 up（setFromUnitVectors Y→up），否则顶面是
+  // 世界水平面，在球面局部是斜的（用户反馈的「斜插」根因之一）。
   {
-    const solidGeo = new THREE.BoxGeometry(halfLength * 2 - 0.9, waterLift + 0.6, halfWidth * 2 - 0.9);
+    const topLift = waterLift + 0.3; // 平台顶面（R + topLift），与城堡基座对齐
+    const bottomLift = -3.0; // 底面深入球面以下（边缘/四角均被球面包住）
+    const solidGeo = new THREE.BoxGeometry(
+      halfLength * 2 - 0.9,
+      topLift - bottomLift,
+      halfWidth * 2 - 0.9
+    );
     const solid = new THREE.Mesh(solidGeo, toonMat(0x8a7a5c, { flatShading: true }));
     solid.name = "canal-junction-solid-platform";
-    solid.position.copy(up).multiplyScalar(R + (waterLift + 0.6) * 0.5 - 0.3);
+    solid.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
+    solid.position.copy(up).multiplyScalar(R + (topLift + bottomLift) * 0.5);
     group.add(solid);
   }
 
-  // 内部水面（方框中央平台视觉）
-  {
-    const waterGeo = new THREE.PlaneGeometry(halfLength * 2 - 0.8, halfWidth * 2 - 0.8);
-    const water = new THREE.Mesh(waterGeo, waterMat);
-    water.name = "canal-junction-water";
-    water.rotation.x = -Math.PI / 2;
-    water.position.copy(up).multiplyScalar(waterY + 0.03);
-    water.renderOrder = 2;
-    water.castShadow = false;
-    group.add(water);
-  }
+  // 内部水面已移除：平台顶面是干的水平台面（城堡地基），
+  // 内部水面原在平台顶之下不可见且多余（清理）。
 
   if (highlight) {
-    // 高亮罩：水面之上半透明金色光罩 + 对角亮线——「高亮区域即可构建」
+    // 高亮罩：平台顶面之上半透明金色光罩 + 十字亮线——「高亮区域即可构建」
+    const zoneLift = waterLift + 0.42; // 平台顶（+0.3）上方 ~0.12，浮在台面上
     const overlayGeo = new THREE.PlaneGeometry(halfLength * 2 - 0.8, halfWidth * 2 - 0.8);
     const overlay = new THREE.Mesh(
       overlayGeo,
@@ -505,21 +511,26 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
       })
     );
     overlay.name = "canal-junction-build-zone";
-    overlay.rotation.x = -Math.PI / 2;
-    overlay.position.copy(up).multiplyScalar(waterY + 0.09);
+    // PlaneGeometry 默认法线 +Z → 对齐球面径向 up（顶面平行于平台顶）
+    overlay.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), up);
+    overlay.position.copy(up).multiplyScalar(R + zoneLift);
     overlay.renderOrder = 3;
     group.add(overlay);
-    // 对角亮线（X）：强化「可建区」视觉
+    // 对角亮线（X）：强化「可建区」视觉（沿 fwd/right 切平面，厚度贴 up）
     const diagLine = new THREE.Mesh(
       new THREE.BoxGeometry(halfLength * 2 - 0.8, 0.04, 0.08),
       new THREE.MeshBasicMaterial({ color: 0xffd966 })
     );
     diagLine.name = "canal-junction-build-zone";
-    diagLine.position.copy(up).multiplyScalar(waterY + 0.1);
+    diagLine.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
+    diagLine.position.copy(up).multiplyScalar(R + zoneLift + 0.01);
     group.add(diagLine);
     const diagLineZ = diagLine.clone();
     diagLineZ.scale.set(1, 1, (halfWidth * 2 - 0.8) / (halfLength * 2 - 0.8));
-    diagLineZ.rotation.y = Math.PI / 2;
+    // 绕 up 转 90°（沿 fwd→right）：在 quaternion 对齐后的局部系里做
+    diagLineZ.quaternion.multiply(
+      new THREE.Quaternion().setFromAxisAngle(up, Math.PI / 2)
+    );
     group.add(diagLineZ);
     // 空中金色方框：四角光柱 + 顶部四边亮线——高过城堡（12 层塔约 13.8 高），
     // 从任何角度（含湖沼侧、远处）都能看到「高亮构建区」轮廓
@@ -536,47 +547,54 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
       opacity: 0.85,
       depthWrite: false,
     });
-    const cornerBase = cornerPts.map((p) => up.clone().multiplyScalar(waterY).add(p));
+    // 四角光柱/角球：CylinderGeometry 默认沿 Y → 对齐角点径向（球面贴合）
     for (let c = 0; c < 4; c++) {
-      // 四角光柱：自水面竖立到 AIR_H
+      const radial = cornerRadials[c];
       const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.24, AIR_H, 6, 1, true), airMat);
       pillar.name = "canal-junction-build-zone";
-      pillar.position.copy(cornerBase[c]).addScaledVector(up, AIR_H / 2);
+      pillar.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), radial);
+      pillar.position.copy(radial).multiplyScalar(waterY + AIR_H / 2);
       pillar.renderOrder = 4;
       group.add(pillar);
       // 顶部角球（四角更醒目）
       const tip = new THREE.Mesh(new THREE.SphereGeometry(0.3, 8, 6), airLineMat);
       tip.name = "canal-junction-build-zone";
-      tip.position.copy(cornerBase[c]).addScaledVector(up, AIR_H);
+      tip.position.copy(radial).multiplyScalar(waterY + AIR_H);
       tip.renderOrder = 4;
       group.add(tip);
     }
-    // 顶部四边亮线：连接四角光柱顶端
+    // 顶部四边亮线：连接四角光柱顶端（两端点在各自角点径向上）
     for (let e = 0; e < edges.length; e++) {
       const [a, b] = edges[e];
-      const mid = a.clone().add(b).multiplyScalar(0.5);
-      const len = a.distanceTo(b);
-      const dirEdge = b.clone().sub(a).normalize();
+      const pa = up.clone().multiplyScalar(R).add(a).normalize();
+      const pb = up.clone().multiplyScalar(R).add(b).normalize();
+      const pA = pa.clone().multiplyScalar(waterY + AIR_H);
+      const pB = pb.clone().multiplyScalar(waterY + AIR_H);
+      const mid = pA.clone().add(pB).multiplyScalar(0.5);
+      const dirEdge = pB.clone().sub(pA).normalize();
+      const len = pA.distanceTo(pB);
       const bar = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, len), airLineMat);
       bar.name = "canal-junction-build-zone";
-      bar.position.copy(up).multiplyScalar(waterY + AIR_H).add(mid);
-      // 细条长轴（X）对齐边方向（cornerPts 在 up 切平面内）
+      bar.position.copy(mid);
+      // 细条长轴（X）对齐边方向（两端点都在各自球面径向上）
       bar.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), dirEdge);
       bar.renderOrder = 4;
       group.add(bar);
     }
   }
 
-  // 四角灯塔标记（可放置提示）
+  // 四角灯塔标记（可放置提示）：柱子沿角点径向竖立，底部贴球面
   const postMat = toonMat(0x2a2b2d, { flatShading: true });
   const lampMat = new THREE.MeshBasicMaterial({ color: 0xffb84d });
   for (let c = 0; c < 4; c++) {
+    const radial = cornerRadials[c];
     const post = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 2.2, 6), postMat);
-    post.position.copy(up).multiplyScalar(R).add(cornerPts[c]).addScaledVector(up, wallH + 1.1);
+    post.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), radial);
+    post.position.copy(radial).multiplyScalar(R + wallH + 1.1);
     post.name = "canal-junction-corner-post";
     group.add(post);
     const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.22, 8, 6), lampMat);
-    lamp.position.copy(post.position).addScaledVector(up, 1.25);
+    lamp.position.copy(post.position).addScaledVector(radial, 1.25);
     lamp.name = "canal-junction-corner-lamp";
     group.add(lamp);
   }
