@@ -430,22 +430,26 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
     [cornerPts[3], cornerPts[0]],
   ];
 
-  // 立壁 + 土埂：沿边扫出双坡条带（切平面局部坐标 → 球面贴附）
+  // 立壁 + 土埂：沿边扫出双坡条带（切平面局部坐标 → 逐点贴球面曲率）。
+  // 球面在方框边缘（距中心 18~22 单位）法线已偏转 ~8°，若全部沿用
+  // 中心 up 竖立会斜插地面/悬空——每个采样点用该点径向做局部 up。
   for (let e = 0; e < edges.length; e++) {
     const [a, b] = edges[e];
     const seg = b.clone().sub(a);
     const len = seg.length();
     const dir = seg.normalize();
-    const outward = new THREE.Vector3().crossVectors(dir, up).normalize();
     const segSamples = [];
     const N = Math.max(2, Math.round(len / 2));
     for (let i = 0; i <= N; i++) {
       const t = i / N;
       const p = a.clone().addScaledVector(seg, t);
+      // 该点的球面径向 = (中心方向*R + 切平面偏移) 归一化
+      const radial = up.clone().multiplyScalar(R).add(p).normalize();
+      const outward = new THREE.Vector3().crossVectors(dir, radial).normalize();
       segSamples.push({
-        p: up.clone().multiplyScalar(R).add(p),
-        up: up.clone(),
-        right: outward.clone(),
+        p: radial.clone().multiplyScalar(R),
+        up: radial.clone(),
+        right: outward,
       });
     }
     // 立壁：内缘 -0.3 → 外缘 -0.3-WALL_THICK

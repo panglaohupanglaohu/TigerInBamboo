@@ -17,6 +17,14 @@ import {
   CITADEL_TOWN_SPEC,
   buildCitadelTown,
   normalizeCitadelTerraceLayout,
+  trimCitadelGridToTerrain,
+  citadelGridCellCenter,
+  CITADEL_PALETTE,
+  CITADEL_GATE_CHAR,
+  CITADEL_GATE_COLOR,
+  citadelShadeStep,
+  citadelPaletteIndexOfChar,
+  CITADEL_CASTLE_FLOORS,
 } from "./citadelTown.js";
 
 const PALETTE = Object.freeze({
@@ -113,6 +121,18 @@ const _basis = new THREE.Matrix4();
 /** 地形编辑器（圣城搭建面板）与主场景启动共用的台地参数存档键。 */
 export const CITADEL_TERRAIN_KEY = "tm.citadel.terrain.v1";
 export const CITADEL_TERRAIN_OBJECTS_KEY = "tm.citadel.terrainObjects.v1";
+
+/**
+ * 城堡实例化：台地/地貌对象存档键按实例隔离。
+ * 默认实例（高山圣城）用兼容旧档的键；其他实例（如运河交汇古堡）带 id 后缀。
+ */
+export function citadelTerrainKey(instanceId = null) {
+  return instanceId ? `tm.citadel.terrain.${instanceId}.v1` : CITADEL_TERRAIN_KEY;
+}
+export function citadelTerrainObjectsKey(instanceId = null) {
+  return instanceId ? `tm.citadel.terrainObjects.${instanceId}.v1` : CITADEL_TERRAIN_OBJECTS_KEY;
+}
+
 /** 相邻台地的最小高差 = 一个城堡建筑层，确保同层建筑天然错落。 */
 export const CITADEL_MIN_TERRACE_HEIGHT = CITADEL_TOWN_SPEC.cellHeight;
 
@@ -143,6 +163,9 @@ export function normalizeCitadelTerrain(contourSpec = CITADEL.contourTerrain) {
   // 注意：关闭时会把 notchedLayers/notchHalf 写成 0；再次开启时若仍读到 0
   // 必须回落到默认 4 / 0.30，否则前缘缺口永远不会恢复。
   const cascadeEnabled = contourSpec?.cascadeEnabled !== false;
+  // 梯湖开关（瀑布独立化）：关 = 瀑布独立挂帘（不建湖），台面全部让给建筑。
+  // 与 cascadeEnabled 正交：瀑布可独立存在而不占用台地（无白石梯湖/水面）。
+  const cascadePoolsEnabled = contourSpec?.cascadePoolsEnabled !== false;
   const notchHalfRaw = Number(contourSpec?.notchHalf);
   const notchHalf = cascadeEnabled
     ? (Number.isFinite(notchHalfRaw) && notchHalfRaw > 0
@@ -162,6 +185,7 @@ export function normalizeCitadelTerrain(contourSpec = CITADEL.contourTerrain) {
     terraces,
     radialSegments: contourSpec?.radialSegments ?? 12,
     cascadeEnabled,
+    cascadePoolsEnabled,
     coreRadius: contourSpec?.coreRadius ?? 9,
     notchCenter: contourSpec?.notchCenter ?? 0.17,
     notchHalf,
@@ -172,6 +196,11 @@ export function normalizeCitadelTerrain(contourSpec = CITADEL.contourTerrain) {
 /** 层叠瀑布（五湖四帘）是否启用。 */
 export function isCitadelCascadeEnabled(contourSpec = CITADEL.contourTerrain) {
   return normalizeCitadelTerrain(contourSpec).cascadeEnabled;
+}
+
+/** 梯湖是否启用（瀑布独立化：关 = 瀑布独立挂帘、台面无湖）。 */
+export function isCitadelCascadePoolsEnabled(contourSpec = CITADEL.contourTerrain) {
+  return normalizeCitadelTerrain(contourSpec).cascadePoolsEnabled;
 }
 
 /** 台地 1–5 的底/顶高程；数组顺序保持“最高层优先”。 */
@@ -241,6 +270,8 @@ export function normalizeCitadelTerrainObjects(input = []) {
 /**
  * 点是否落在对应台地的层叠梯湖椭圆上（含白石岸放宽）。
  * 坐标系与城堡体块 / 台地足迹相同（局部 x/z）。
+ * 梯湖开关 cascadePoolsEnabled=false 时恒 false：湖不存在，
+ * 台面全部让给建筑（放置判定回到纯台地环带）。
  */
 export function isCitadelCascadePoolSupported(
   localX,
@@ -249,7 +280,7 @@ export function isCitadelCascadePoolSupported(
   contourSpec = CITADEL.contourTerrain
 ) {
   const normalized = normalizeCitadelTerrain(contourSpec);
-  if (!normalized.cascadeEnabled) return false;
+  if (!normalized.cascadeEnabled || !normalized.cascadePoolsEnabled) return false;
   const index = THREE.MathUtils.clamp(Math.round(terraceIndex), 0, 4);
   const spec = CITADEL_CASCADE_POOL_SPECS[index];
   if (!spec) return false;
@@ -270,7 +301,8 @@ export function citadelTerrainPointSupported(
   const normalized = normalizeCitadelTerrain(contourSpec);
   const index = THREE.MathUtils.clamp(Math.round(terraceIndex), 0, 4);
 
-  // 层叠梯湖：允许在对应台地的湖面/白石岸上安放城堡（缺口扇区不再一刀切禁建）
+  // 层叠梯湖：允许在对应台地的湖面/白石岸上安放城堡（缺口扇区不再一刀切禁建）。
+  // 湖开关关闭时（cascadePoolsEnabled=false）湖区不存在 → 恒 false，走纯环带判定。
   if (isCitadelCascadePoolSupported(localX, localZ, index, normalized)) {
     return true;
   }
@@ -354,6 +386,59 @@ function makeToon(color, gradientMap) {
   material.flatShading = true;
   material.needsUpdate = true;
   return material;
+}
+
+// ---------------------------------------------------------------------------
+//  Townscaper 15 色调色板材质（含明度微抖缓存）
+// ---------------------------------------------------------------------------
+
+const _citadelPaletteMats = new Map(); // "hex|step" -> material
+const _citadelPaletteColor = new THREE.Color();
+
+/**
+ * 调色板字符 → 基色材质表：buildCitadelTown 的 materials[char] 直接可用。
+ * 每个装配调用共享同一份缓存（材质复用，避免重建 15+ 个 MeshToonMaterial）。
+ */
+function buildCitadelPaletteMaterials(gradientMap) {
+  const table = {};
+  for (const entry of CITADEL_PALETTE) {
+    table[entry.char] = makeToon(entry.color, gradientMap);
+  }
+  // 正门字符：木褐专用材质（门廊语义，非调色板色）
+  table[CITADEL_GATE_CHAR] = makeToon(CITADEL_GATE_COLOR, gradientMap);
+  // 旧档兼容键（normalize 已迁移字符，这里兜底面板/编辑器直传旧字符）
+  table.W = table["0"];
+  table.L = table["2"];
+  table.B = table["6"];
+  table.D = table[CITADEL_GATE_CHAR];
+  return table;
+}
+
+/**
+ * 明度微抖材质：citadelShadeStep 给出 -2..+2 档（±4% 亮度），按
+ * (char, 档位) 缓存——15 色 × 5 档 = 至多 75 个实例，全城堡共享。
+ */
+function makeCitadelShadeMaterialFactory(gradientMap) {
+  return function makeCitadelShadeMaterial(char, ix, iz) {
+    const base = CITADEL_PALETTE[citadelPaletteIndexOfChar(char)] ?? CITADEL_PALETTE[0];
+    const step = citadelShadeStep(ix, iz, char);
+    const key = `${gradientMap.uuid}|${base.char}|${step}`;
+    let material = _citadelPaletteMats.get(key);
+    if (!material) {
+      _citadelPaletteColor.setHex(base.color);
+      // 只动明度：hue/saturation 保持，lightness 微调（+/-4%）
+      const hsl = {};
+      _citadelPaletteColor.getHSL(hsl);
+      hsl.l = THREE.MathUtils.clamp(hsl.l + step * 0.02, 0.02, 0.98);
+      _citadelPaletteColor.setHSL(hsl.h, hsl.s, hsl.l);
+      material = new THREE.MeshToonMaterial({ color: _citadelPaletteColor.clone(), gradientMap });
+      material.flatShading = true;
+      material.needsUpdate = true;
+      material.userData.shared = true;
+      _citadelPaletteMats.set(key, material);
+    }
+    return material;
+  };
 }
 
 /** 古堡窗口夜灯材质：暖黄透光 + 自发光 */
@@ -612,15 +697,16 @@ export function applyInkOutlines(assembly) {
 }
 
 /**
- * 圣城静态几何合并：Townscaper 小镇 ~1264 网格 → 按材质 ~30 组。
+ * 圣城静态几何合并：Townscaper 小镇 ~1264 网格 → 按「层组 × 材质」合并。
  * 运行时依赖全部保留（skip 不合并）：
  *   - town-window 夜间逐窗切换材质；
- *   - contour-step* / pilgrimage-step* 台地石阶——3D 直编辑按名字
- *     getObjectByName("contour-step-N") 拾取台地顶面；
+ *   - contour-step* 台地顶面——3D 直编辑按名字 getObjectByName 拾取；
  *   - 瞭望塔/参天树（userData.terrainObjectId）——右键删除拾取依赖。
- * cell 体块供 3D 直编辑拾取 → 合并网格 userData.faceToCell =
- * [{ triStart, triCount, cell }]（面区间跨全部合并几何累计），
- * citadelSceneEdit 命中合并网格时按 faceIndex 反查。
+ * 合并锚点 = 每个 town-terrace-N-level-M 组：合并网格挂回组内，隐藏高层
+ * （组 visible 切换）与层语义保持不变。cell 体块供 3D 直编辑拾取 →
+ * 合并网格 userData.faceToCell = [{ triStart, triCount, cell }]（面区间
+ * 相对该合并网格自身，citadelSceneEdit 按 hit.faceIndex 反查）。
+ * pilgrimage-step / pilgrimage-landing 无拾取依赖，随组合并。
  * 可重复调用（rebuildCitadelTown 热重建后再次合并，幂等清旧）。
  */
 export function mergeCitadelTownStatic(assemblyRoot) {
@@ -634,30 +720,57 @@ export function mergeCitadelTownStatic(assemblyRoot) {
     mesh.removeFromParent();
   }
 
-  mergeStaticGroup(assemblyRoot, {
-    skip: (mesh) =>
-      mesh.name === "town-window" ||
-      mesh.userData.citadelWindow === true ||
-      mesh.userData.terrainObjectId != null ||
-      mesh.name?.startsWith("contour-step-"),
-    onSurface: (merged, _material, segments, groupTriStart) => {
-      // 只给含 cell 数据的体块组建立面区间映射
-      const faceToCell = [];
-      for (const seg of segments) {
-        if (!seg.mesh.userData?.cell) continue;
-        faceToCell.push({
-          triStart: groupTriStart + seg.triStart,
-          triCount: seg.triCount,
-          cell: seg.mesh.userData.cell,
-        });
+  const skip = (mesh) =>
+    mesh.name === "town-window" ||
+    mesh.userData.citadelWindow === true ||
+    mesh.userData.terrainObjectId != null ||
+    mesh.name?.startsWith("contour-step-");
+
+  const onSurface = (merged, _material, segments, groupTriStart) => {
+    // 只给含 cell 数据的体块组建立面区间映射
+    const faceToCell = [];
+    for (const seg of segments) {
+      if (!seg.mesh.userData?.cell) continue;
+      faceToCell.push({
+        triStart: groupTriStart + seg.triStart,
+        triCount: seg.triCount,
+        cell: seg.mesh.userData.cell,
+      });
+    }
+    if (faceToCell.length) {
+      merged.userData.faceToCell = faceToCell;
+      // 合并网格本身也携带 cell 引用（供 castCell 判定「这是体块网格」）
+      merged.userData.hasMergedCells = true;
+    }
+  };
+
+  // 按层组合并：每层一个锚点，隐藏高层的组 visible 语义保持有效
+  const layers = assemblyRoot.userData?.layers;
+  const levelGroups = [];
+  if (Array.isArray(layers)) {
+    for (const layer of layers) {
+      for (const child of layer.children) {
+        if (/^town-(terrace-)?\d+-level-\d+$/.test(child.name || "")) {
+          levelGroups.push(child);
+        }
       }
-      if (faceToCell.length) {
-        merged.userData.faceToCell = faceToCell;
-        // 合并网格本身也携带 cell 引用（供 castCell 判定「这是体块网格」）
-        merged.userData.hasMergedCells = true;
-      }
-    },
-  });
+    }
+  }
+  if (levelGroups.length) {
+    for (const level of levelGroups) {
+      mergeStaticGroup(level, { skip, onSurface });
+    }
+  } else {
+    // 兜底：无分层信息时整体合并（编辑器外部直用）
+    mergeStaticGroup(assemblyRoot, { skip, onSurface });
+  }
+
+  // 外围台地石阶（无层语义）单独合并：contour-step 仍按名字拾取，跳过
+  const terrain = assemblyRoot.userData?.outerTerrainSystem;
+  if (terrain && terrain !== assemblyRoot) {
+    mergeStaticGroup(terrain, { skip });
+  }
+
   return assemblyRoot;
 }
 
@@ -920,6 +1033,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     cliff: makeToon(PALETTE.cliff, gradientMap),
     stone: makeToon(PALETTE.stone, gradientMap),
     weatherStone: makeToon(PALETTE.weatherStone, gradientMap),
+    plazaStone: makeToon(0xbfc9cd, gradientMap), // 石板广场铺装
     ink: makeToon(PALETTE.ink, gradientMap),
     wood: makeToon(PALETTE.wood, gradientMap),
     gold: makeToon(PALETTE.domeIvory, gradientMap),
@@ -945,17 +1059,23 @@ export function buildCitadelTownAssembly(spec, options = {}) {
   const town = buildCitadelTown(spec, {
     mesh,
     materials: {
-      W: materials.stone,
-      L: materials.sand,
-      B: materials.brickPale,
-      D: materials.stone,
+      // Townscaper 15 色调色板：字符 "0"–"9A"–"E" → 基色材质（含旧 4 色兼容键）
+      ...buildCitadelPaletteMaterials(gradientMap),
       gold: materials.gold,
       wood: materials.wood,
       ink: materials.ink,
       roofTile: materials.roofTile,
       water: materials.water,
+      steepleStone: materials.stone, // 教堂尖塔白石塔身
+      foliageDark: materials.foliageDark,
+      foliageLight: materials.foliageLight,
+      plazaStone: materials.plazaStone ?? materials.weatherStone, // 石板广场
+      // 建筑构件统一深色盘：檐口线/墙裙/窗台窗楣/阳台栏杆/屋脊瓦/山墙圆窗/风向标
+      trim: materials.trim ?? makeToon(0x333a42, gradientMap),
       windowDark: materials.windowDark,
       windowLit: materials.windowLit,
+      // 明度微抖：shade(char, ix, iz) 按格坐标哈希到 5 档明度材质（缓存）
+      shade: makeCitadelShadeMaterialFactory(gradientMap),
     },
     shrubMaterials: materials,
     random,
@@ -980,7 +1100,10 @@ export function buildCitadelTownAssembly(spec, options = {}) {
 
 /** 五座台地 × 每台地五层城堡的统一装配。台地 1 为最高层和共享中心。 */
 function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
-  const layout = normalizeCitadelTerraceLayout(spec);
+  const layout = normalizeCitadelTerraceLayout(
+    spec,
+    options.floors ?? spec?.floors ?? CITADEL_CASTLE_FLOORS
+  );
   const metrics = citadelTerraceMetrics(contourSpec);
   const group = new THREE.Group();
   group.name = "citadel-terrace-town-assembly";
@@ -998,6 +1121,21 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     roofCount: 0,
     canalCount: 0,
     waterGateCount: 0,
+    doorCount: 0,
+    steepleCount: 0,
+    flagCount: 0,
+    gardenCount: 0,
+    plazaCount: 0,
+    boatCount: 0,
+    birdCount: 0,
+    corniceCount: 0,
+    plinthCount: 0,
+    balconyCount: 0,
+    pilasterCount: 0,
+    arcadeColumnCount: 0,
+    ridgeCount: 0,
+    eaveCount: 0,
+    oculusCount: 0,
     gate: null,
     gates: [],
   };
@@ -1012,7 +1150,8 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
       },
       {
         ...options,
-        baseY: metrics[terraceIndex].top - 0.06,
+        // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升
+        baseY: options.baseYOverride ?? metrics[terraceIndex].top - 0.06,
       }
     );
     terraceLevels[terraceIndex] = [];
@@ -1138,13 +1277,21 @@ function buildCitadelTerrainObjects(placements, contourSpec, anchor = null) {
  *   spec?: typeof CITADEL_TOWN_SPEC, // 小镇布局覆盖（编辑器存档）；缺省用内置 SPEC
  *   contour?: typeof CITADEL.contourTerrain, // 台地参数覆盖（地形编辑器存档）
  *   terrainObjects?: object[], // 瞭望塔/参天树地貌对象
+ *   skipOuterTerrain?: boolean, // 不建外围台地/石阶/地貌对象（运河交汇古堡：堤岸方框即地基）
  * }} [options]
  * @returns {THREE.Group & {update(dt:number, t:number):void}}
  */
 export function buildOdysseyCitadel(options = {}) {
   const random = lcg(options.seed ?? 20260808);
-  const townSpec = normalizeCitadelTerraceLayout(options.spec ?? CITADEL_TOWN_SPEC);
+  const castleFloors = Number.isFinite(options.floors)
+    ? Math.min(20, Math.max(1, Math.round(options.floors)))
+    : (options.spec?.floors ?? CITADEL_CASTLE_FLOORS);
+  const townSpec = normalizeCitadelTerraceLayout(
+    options.spec ?? CITADEL_TOWN_SPEC,
+    castleFloors
+  );
   const contourSpec = normalizeCitadelTerrain(options.contour ?? CITADEL.contourTerrain);
+  const skipOuterTerrain = options.skipOuterTerrain === true;
   const townBaseY = contourTownBaseY(contourSpec);
   const planetRadius = Number.isFinite(options.planetRadius) ? options.planetRadius : 160;
   const gradientMap = makeThreeStepGradient();
@@ -1153,6 +1300,7 @@ export function buildOdysseyCitadel(options = {}) {
     cliff: makeToon(PALETTE.cliff, gradientMap),
     stone: makeToon(PALETTE.stone, gradientMap),
     weatherStone: makeToon(PALETTE.weatherStone, gradientMap),
+    plazaStone: makeToon(0xbfc9cd, gradientMap), // 石板广场铺装
     ink: makeToon(PALETTE.ink, gradientMap),
     wood: makeToon(PALETTE.wood, gradientMap),
     gold: makeToon(PALETTE.domeIvory, gradientMap),
@@ -1169,12 +1317,18 @@ export function buildOdysseyCitadel(options = {}) {
   };
 
   const castleContainer = new THREE.Group();
-  castleContainer.name = "castleContainer";
+  // 多实例：名字带实例 id，避免 getObjectByName("castleContainer") 在双城堡时歧义。
+  // 默认实例保留旧名兼容既有引用（e2e / 编辑器）。
+  castleContainer.name = options.instanceId
+    ? `castleContainer-${options.instanceId}`
+    : "castleContainer";
 
   const citadelAssembly = new THREE.Group();
   citadelAssembly.name = "odyssey-citadel-five-layer-assembly";
 
-  const layers = Array.from({ length: 5 }, (_, index) => {
+  // 物理层组数跟随城堡层数（高山 5 层 / 运河交汇古堡 12 层）
+  const layerCount = Math.max(castleFloors, 5);
+  const layers = Array.from({ length: layerCount }, (_, index) => {
     const layer = new THREE.Group();
     layer.name = `citadel-layer-${index}`;
     layer.userData.layerIndex = index;
@@ -1183,24 +1337,28 @@ export function buildOdysseyCitadel(options = {}) {
 
   // --------------------------------------------------------------------------
   // Layer 0 — primordial rocky understructure
+  // 无台地模式（运河交汇古堡）：堤岸方框即地基，跳过断崖岩石——
+  // 否则岩石按高山台地高度（centerY 11.2）悬浮在方框平台上方。
   // --------------------------------------------------------------------------
-  const rockGeometry = new THREE.IcosahedronGeometry(CITADEL.layer0.rockRadius, 0);
-  for (let i = 0; i < CITADEL.layer0.rockCount; i++) {
-    const rock = mesh(rockGeometry, materials.cliff, `primordial-cliff-rock-${i}`);
-    const angle = (i / CITADEL.layer0.rockCount) * Math.PI * 2 + (random() - 0.5) * 0.45;
-    const spread = i === 0 ? 0 : 2.2 + random() * 1.5;
-    rock.position.set(
-      Math.cos(angle) * spread,
-      CITADEL.layer0.centerY + (random() - 0.5) * 0.8,
-      Math.sin(angle) * spread
-    );
-    rock.scale.set(
-      1.0 + random() * 0.4,
-      0.8 + random() * 0.3,
-      1.0 + random() * 0.4
-    );
-    rock.rotation.y = random() * Math.PI * 2;
-    layers[0].add(rock);
+  if (!skipOuterTerrain) {
+    const rockGeometry = new THREE.IcosahedronGeometry(CITADEL.layer0.rockRadius, 0);
+    for (let i = 0; i < CITADEL.layer0.rockCount; i++) {
+      const rock = mesh(rockGeometry, materials.cliff, `primordial-cliff-rock-${i}`);
+      const angle = (i / CITADEL.layer0.rockCount) * Math.PI * 2 + (random() - 0.5) * 0.45;
+      const spread = i === 0 ? 0 : 2.2 + random() * 1.5;
+      rock.position.set(
+        Math.cos(angle) * spread,
+        CITADEL.layer0.centerY + (random() - 0.5) * 0.8,
+        Math.sin(angle) * spread
+      );
+      rock.scale.set(
+        1.0 + random() * 0.4,
+        0.8 + random() * 0.3,
+        1.0 + random() * 0.4
+      );
+      rock.rotation.y = random() * Math.PI * 2;
+      layers[0].add(rock);
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -1211,9 +1369,13 @@ export function buildOdysseyCitadel(options = {}) {
   // 复用与编辑器（townscaper.html）相同的装配入口；random 已被 Layer 0
   // 断崖消耗过，此处继续同一序列，保证渲染结果与重构前逐位一致。
   const townAssembly = buildCitadelTerraceTownAssembly(townSpec, contourSpec, {
+    floors: castleFloors,
     random,
     materials,
     gradientMap,
+    // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升。
+    // 不传则回落台地 metrics 顶（≈7.5 局部），城堡会悬空在平台上方。
+    baseYOverride: skipOuterTerrain ? options.townBaseLift ?? 0.6 : undefined,
   });
   // 每个台地都有独立的城堡 1–5 层；同楼层归入同一物理层级组。
   townAssembly.terraceLevels.forEach((terrace, terraceIndex) => {
@@ -1225,8 +1387,15 @@ export function buildOdysseyCitadel(options = {}) {
   for (const layer of layers) citadelAssembly.add(layer);
   const mainOutlinedSurfaceCount = applyInkOutlines(citadelAssembly);
 
-  const outerTerrainSystem = buildOuterCitadelTerrain(materials, contourSpec);
-  const terrainOutlinedSurfaceCount = applyInkOutlines(outerTerrainSystem);
+  const outerTerrainSystem = skipOuterTerrain
+    ? new THREE.Group()
+    : buildOuterCitadelTerrain(materials, contourSpec);
+  outerTerrainSystem.name = skipOuterTerrain
+    ? "citadel-skip-outer-terrain"
+    : "citadel-outer-terrain-system";
+  const terrainOutlinedSurfaceCount = skipOuterTerrain
+    ? 0
+    : applyInkOutlines(outerTerrainSystem);
   castleContainer.add(outerTerrainSystem);
   castleContainer.add(citadelAssembly);
 
@@ -1269,18 +1438,30 @@ export function buildOdysseyCitadel(options = {}) {
     castleContainer.userData.curvatureDrop = curvatureDrop;
   }
 
-  const terrainObjects = buildCitadelTerrainObjects(
-    options.terrainObjects,
-    contourSpec,
-    castleContainer.userData.anchor
-  );
+  const terrainObjects = skipOuterTerrain
+    ? new THREE.Group()
+    : buildCitadelTerrainObjects(
+      options.terrainObjects,
+      contourSpec,
+      castleContainer.userData.anchor
+    );
+  terrainObjects.name = skipOuterTerrain
+    ? "citadel-skip-terrain-objects"
+    : "citadel-terrain-objects";
   castleContainer.add(terrainObjects);
 
   castleContainer.userData.kind = "odyssey-citadel";
+  castleContainer.userData.instanceId = options.instanceId ?? null; // 多城堡实例标识（null=高山圣城默认）
+  castleContainer.userData.floors = castleFloors; // 城堡层数（高山 5 / 运河古堡 12）
+  castleContainer.userData.skipOuterTerrain = skipOuterTerrain; // 无台地模式（堤岸方框即地基）
+  castleContainer.userData.townBaseLift = options.townBaseLift ?? 0.6;
   castleContainer.userData.spec = CITADEL;
   castleContainer.userData.contourSpec = contourSpec;
   castleContainer.userData.townBaseY = townBaseY;
-  castleContainer.userData.townBaseYs = townAssembly.baseYs;
+  // 无台地模式：所有台地基座统一 = 方框水面平台抬升
+  castleContainer.userData.townBaseYs = skipOuterTerrain
+    ? townAssembly.baseYs.map(() => options.townBaseLift ?? 0.6)
+    : townAssembly.baseYs;
   castleContainer.userData.terrainMaterials = {
     contour: materials.contour,
     pilgrimageStone: materials.pilgrimageStone,
@@ -1289,7 +1470,7 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.mainCastle = citadelAssembly;
   castleContainer.userData.outerTerrainSystem = outerTerrainSystem;
   castleContainer.userData.terrainObjects = terrainObjects;
-  castleContainer.userData.terrainObjectsSpec = terrainObjects.userData.placements;
+  castleContainer.userData.terrainObjectsSpec = terrainObjects.userData?.placements ?? [];
   castleContainer.userData.townSpec = townAssembly.layout;
   castleContainer.userData.townStats = townAssembly.stats;
   castleContainer.userData.mainOutlinedSurfaceCount = mainOutlinedSurfaceCount;
@@ -1353,7 +1534,14 @@ export function rebuildCitadelTown(castleContainer, spec) {
   // 基座高度跟随当前台地参数（地形编辑器可能改过层高）。
   const assembly = buildCitadelTerraceTownAssembly(
     spec,
-    castleContainer.userData.contourSpec ?? CITADEL.contourTerrain
+    castleContainer.userData.contourSpec ?? CITADEL.contourTerrain,
+    {
+      floors: castleContainer.userData.floors ?? CITADEL_CASTLE_FLOORS,
+      // 无台地模式：基座保持方框水面平台抬升（防热重建后城堡悬空）
+      baseYOverride: castleContainer.userData.skipOuterTerrain
+        ? castleContainer.userData.townBaseLift ?? 0.6
+        : undefined,
+    }
   );
   applyInkOutlines(assembly.group);
   assembly.terraceLevels.forEach((terrace) => {
@@ -1374,6 +1562,48 @@ export function rebuildCitadelTown(castleContainer, spec) {
 }
 
 /**
+ * 台地-建筑放置有效性闭环：台地半径/层高缩放后，把不再被新台地支撑的
+ * 建筑格从镇体布局中剔除并重建，保证「建筑单元始终可放置」。
+ * 供地形编辑器 onTerrainChange 调用（radius 滑杆缩小时自动裁剪悬空格）。
+ *
+ * @param {THREE.Group} castleContainer buildOdysseyCitadel 的返回值
+ * @param {typeof CITADEL.contourTerrain} contourSpec 新台地参数
+ * @param {object} [spec] 当前镇体布局（缺省用 castleContainer.userData.townSpec）
+ * @returns {{ trimmed: number, stats: object|null }}
+ */
+export function trimCitadelTownToTerrain(castleContainer, contourSpec, spec = null) {
+  // 无台地模式（运河交汇古堡）：方框内全部可放置，不裁剪
+  if (castleContainer?.userData?.skipOuterTerrain) {
+    return { trimmed: 0, stats: castleContainer?.userData?.townStats ?? null };
+  }
+  const contour = normalizeCitadelTerrain(contourSpec);
+  const current = normalizeCitadelTerraceLayout(
+    spec ?? castleContainer?.userData?.townSpec ?? CITADEL_TOWN_SPEC,
+    castleContainer?.userData?.floors ?? CITADEL_CASTLE_FLOORS
+  );
+  let totalTrimmed = 0;
+  const trimmedTerraces = current.terraces.map((terrace, terraceIndex) => {
+    const result = trimCitadelGridToTerrain(terrace.levels, (ix, iz) => {
+      const c = citadelGridCellCenter(ix, 0, iz);
+      return citadelTerrainCellSupported(
+        contour,
+        c.x,
+        c.z,
+        terraceIndex,
+        CITADEL_TOWN_SPEC.cellSize * 0.5
+      );
+    });
+    totalTrimmed += result.trimmed;
+    return { terraceIndex, levels: result.levels };
+  });
+  if (!totalTrimmed) return { trimmed: 0, stats: castleContainer?.userData?.townStats ?? null };
+  const nextSpec = { ...current, terraces: trimmedTerraces };
+  const stats = rebuildCitadelTown(castleContainer, nextSpec);
+  castleContainer.userData.townSpec = nextSpec;
+  return { trimmed: totalTrimmed, stats };
+}
+
+/**
  * 游戏内地形热重建：按新参数整体替换外围台地/石阶（断崖基岩与小镇体块
  * 不动），并把镇体基座抬放到新顶层台面。供圣城搭建面板的「地形地貌」
  * 编辑器即时刷新场景。
@@ -1383,6 +1613,13 @@ export function rebuildCitadelTown(castleContainer, spec) {
  * @returns {THREE.Group|null} 新外围地势系统；非圣城容器返回 null
  */
 export function rebuildCitadelTerrain(castleContainer, contourSpec) {
+  // 无台地模式（运河交汇古堡）：不重建外围台地，只更新镇体基座
+  if (castleContainer?.userData?.skipOuterTerrain) {
+    const baseY = castleContainer.userData.townBaseLift ?? 0.6;
+    castleContainer.userData.townBaseY = baseY;
+    castleContainer.userData.townBaseYs = [baseY];
+    return null;
+  }
   const old = castleContainer?.userData?.outerTerrainSystem;
   if (!old) return null;
 

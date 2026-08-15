@@ -1610,15 +1610,18 @@ export function createCitadelEditorPanel({
    * 无变化返回 false（不进撤销栈）；有变化走 commit 即时重建。
    */
   function applySceneEdit({ ix, iy, iz, terraceIndex = activeTerrace }, mode) {
-    if (terraceIndex !== activeTerrace) return false;
     if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return false;
     if (iy < 0 || iy > currentMaxLevel()) return false;
-    const existing = grid.get(`${ix},${iy},${iz}`);
     if (mode === "erase") {
-      if (!existing) return false;
+      // 拆除：不做台地条件判断，直接删目标格的块（跨台地也删对应台地网格）。
+      // 不要求 terraceIndex === activeTerrace——点哪拆哪，台地切换由 castCell 处理。
+      const targetGrid = terraceGrids[terraceIndex] ?? grid;
+      if (!targetGrid.get(`${ix},${iy},${iz}`)) return false;
       pushUndo();
-      clearCell(grid, ix, iy, iz);
+      clearCell(targetGrid, ix, iy, iz);
     } else {
+      if (terraceIndex !== activeTerrace) return false;
+      const existing = grid.get(`${ix},${iy},${iz}`);
       if (!existing && !supportsCell(ix, iz, terraceIndex)) return false;
       if (existing === activeChar) return false;
       pushUndo();
