@@ -219,6 +219,15 @@ if (messenger?.landmarks?.bookshop) {
   );
   mapEditor.registerFromWorld("bookshop", shop, -0.5, col || null);
 }
+// 登记场景内置莫比斯湖沼（默认在书店镇中心；地图编辑器可拖动/存档/删除）
+if (messenger?.landmarks?.moebiusSwamp) {
+  mapEditor.registerFromWorld(
+    "moebiusSwamp",
+    messenger.landmarks.moebiusSwamp,
+    0.6,
+    null
+  );
+}
 // 有本机布局时完整恢复（位置/朝向/招牌/增删），不再回落到初始化布局
 mapEditor.loadPersisted();
 // 地图打开时：3D 左键点选模型 → 地图同步选中高亮

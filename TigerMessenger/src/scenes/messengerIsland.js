@@ -30,7 +30,7 @@ import {
 import { GATE, GATE_DEPTH } from "../world/abandonedGate.js";
 import { AirshipEscortManager } from "../world/airshipEscort.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
-import { swampMidwayDir } from "../world/moebiusSwamp.js";
+import { swampMidwayDir, placeMoebiusSwampOnSphere } from "../world/moebiusSwamp.js";
 import { SAIHOJI_ZONES } from "../world/saihoji.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
@@ -335,6 +335,26 @@ export const messengerIslandScene = {
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
 
+    // ---------- 莫比斯湖沼：挪到书店镇中心（湖边书店）----------
+    // 湖沼坑口半径 34×scale≈17 世界单位：中心取书店旁 21 单位，
+    // 坑缘恰好擦书店门前草地（书店在湖边，可走入坑缘/跳入湖沼）。
+    // 注册 mapUid → 地图编辑器可选中/拖动/存档（无存档时默认在此）。
+    let moebiusSwamp = null;
+    {
+      const swampScale = 0.5;
+      const swamp = createCatalogObject("moebiusSwamp", { seed: 7711, scale: swampScale });
+      swamp.userData.mapUid = "world-swamp";
+      const bookUp = bookshop.position.clone().normalize();
+      const tang = new THREE.Vector3(1, 0, 0)
+        .addScaledVector(bookUp, -bookUp.x)
+        .normalize();
+      const target = bookshop.position.clone().addScaledVector(tang, 21);
+      const lift = Math.max(0, target.length() - R);
+      placeMoebiusSwampOnSphere(swamp, target.clone().normalize(), R, swampScale, lift);
+      scene.add(swamp);
+      moebiusSwamp = swamp;
+    }
+
     // ---------- 书店镇气泡艇：停泊在书店上空、绕店轻缓巡游，可 [F] 登艇驾驶 ----------
     // 加入花厅巡游舰队，复用同一套驾驶/潜行/气泡弹逻辑（updateBubblePodPatrol 会遍历舰队）。
     {
@@ -633,9 +653,11 @@ export const messengerIslandScene = {
       avoidWorld: [...mossAvoidCommon, ...zoneAvoid],
     });
     scene.add(mossSaihoji);
-    // ② 湖沼边缘：湖沼默认锚地方向（书店 → 水晶城中点）
+    // ② 湖沼边缘：跟随湖沼新位置（书店镇中心旁），湖沼挪动后苔丘不再留在原锚地
     const mossSwamp = buildImpastoMossyGround({
-      dir: swampMidwayDir(bookshopX, bookshopZ, R),
+      dir: moebiusSwamp
+        ? moebiusSwamp.position.clone().normalize()
+        : swampMidwayDir(bookshopX, bookshopZ, R),
       planetRadius: R,
       seed: 7743,
       yaw: 1.9,
@@ -750,6 +772,7 @@ export const messengerIslandScene = {
       escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
       aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
       mossSaihoji, // 厚涂苔丘 · 西芳寺缘
+      moebiusSwamp, // 莫比斯湖沼（默认在书店镇中心 · 地图编辑器可拖动）
       canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
       canalBoats, // 运河巡游古战船 · 可 F 登船
       canalLakeLink, // 运河↔大湖落差互联（瀑布船道/升船机）

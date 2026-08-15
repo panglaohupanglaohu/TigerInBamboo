@@ -517,6 +517,50 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
     diagLineZ.scale.set(1, 1, (halfWidth * 2 - 0.8) / (halfLength * 2 - 0.8));
     diagLineZ.rotation.y = Math.PI / 2;
     group.add(diagLineZ);
+    // 空中金色方框：四角光柱 + 顶部四边亮线——高过城堡（12 层塔约 13.8 高），
+    // 从任何角度（含湖沼侧、远处）都能看到「高亮构建区」轮廓
+    const AIR_H = 17.5; // 光柱顶高（水面之上），超过城堡顶
+    const airMat = new THREE.MeshBasicMaterial({
+      color: 0xffd966,
+      transparent: true,
+      opacity: 0.42,
+      depthWrite: false,
+    });
+    const airLineMat = new THREE.MeshBasicMaterial({
+      color: 0xffd966,
+      transparent: true,
+      opacity: 0.85,
+      depthWrite: false,
+    });
+    const cornerBase = cornerPts.map((p) => up.clone().multiplyScalar(waterY).add(p));
+    for (let c = 0; c < 4; c++) {
+      // 四角光柱：自水面竖立到 AIR_H
+      const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.24, AIR_H, 6, 1, true), airMat);
+      pillar.name = "canal-junction-build-zone";
+      pillar.position.copy(cornerBase[c]).addScaledVector(up, AIR_H / 2);
+      pillar.renderOrder = 4;
+      group.add(pillar);
+      // 顶部角球（四角更醒目）
+      const tip = new THREE.Mesh(new THREE.SphereGeometry(0.3, 8, 6), airLineMat);
+      tip.name = "canal-junction-build-zone";
+      tip.position.copy(cornerBase[c]).addScaledVector(up, AIR_H);
+      tip.renderOrder = 4;
+      group.add(tip);
+    }
+    // 顶部四边亮线：连接四角光柱顶端
+    for (let e = 0; e < edges.length; e++) {
+      const [a, b] = edges[e];
+      const mid = a.clone().add(b).multiplyScalar(0.5);
+      const len = a.distanceTo(b);
+      const dirEdge = b.clone().sub(a).normalize();
+      const bar = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, len), airLineMat);
+      bar.name = "canal-junction-build-zone";
+      bar.position.copy(up).multiplyScalar(waterY + AIR_H).add(mid);
+      // 细条长轴（X）对齐边方向（cornerPts 在 up 切平面内）
+      bar.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), dirEdge);
+      bar.renderOrder = 4;
+      group.add(bar);
+    }
   }
 
   // 四角灯塔标记（可放置提示）
