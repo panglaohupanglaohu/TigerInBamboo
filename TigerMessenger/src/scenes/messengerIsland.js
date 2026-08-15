@@ -11,9 +11,9 @@ import { P } from "../core/params.js";
 import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
 import { buildHills, carveHillsForTrack } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
-import { createMoonLake } from "../world/lake.js";
+import { createMoonLake, LAKE } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
-import { buildWorldCanal } from "../world/canalSystem.js";
+import { buildWorldCanal, buildCanalJunctionBox } from "../world/canalSystem.js";
 import { buildCanalLakeLink } from "../world/canalLakeLink.js";
 import { createCanalBoatPatrol } from "../world/canalBoats.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
@@ -53,8 +53,14 @@ import {
   buildOdysseyCitadel,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
+  citadelTerrainKey,
+  citadelTerrainObjectsKey,
 } from "../world/odysseyCitadel.js";
-import { CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY } from "../world/citadelTown.js";
+import {
+  CITADEL_TOWN_SPEC,
+  CITADEL_LEVELS_KEY,
+  citadelLevelsKey,
+} from "../world/citadelTown.js";
 import {
   buildCitadelRange,
   citadelRangeLiftDir,
@@ -352,6 +358,83 @@ export const messengerIslandScene = {
       bubblePods.add(shopPod);
     }
 
+    // ---------- 运河交汇古堡（第二城堡实例）----------
+    // 摆脱「只能在高山圣城建古堡」：运河环线经过月亮湖侧畔，此处放置
+    // 同款可编辑古堡（独立存档键 tm.citadel.levels.canal-junction.v1），
+    // 运河在它身边交汇；搭建面板可切换目标实例编辑。
+    // 选址：月亮湖 → 白鲸海湖航段中点方向（开阔水面，不与其他场景重叠）。
+    const moonLakeLatLon = flatXZToLatLon(LAKE.x, LAKE.z, R);
+    const canalJunctionDir = latLonToDir(
+      (moonLakeLatLon.lat + CITY_SEA_LAKE.lat) * 0.5,
+      (moonLakeLatLon.lon + CITY_SEA_LAKE.lon) * 0.5,
+      new THREE.Vector3()
+    );
+    let canalJunctionCitadel = null;
+    let canalJunctionStorage = null;
+    let canalJunctionBox = null;
+    {
+      const cjsLevelsKey = citadelLevelsKey("canal-junction");
+      const cjsTerrainKey = citadelTerrainKey("canal-junction");
+      const cjsObjectsKey = citadelTerrainObjectsKey("canal-junction");
+      canalJunctionStorage = { levels: cjsLevelsKey, terrain: cjsTerrainKey, objects: cjsObjectsKey };
+      let cjSpec;
+      try {
+        const saved = JSON.parse(localStorage.getItem(cjsLevelsKey) || "null");
+        if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) cjSpec = saved;
+      } catch { /* 回落 SPEC */ }
+      let cjContour;
+      try {
+        const saved = JSON.parse(localStorage.getItem(cjsTerrainKey) || "null");
+        if (saved) cjContour = saved;
+      } catch { /* 回落默认 */ }
+      let cjObjects;
+      try {
+        const saved = JSON.parse(localStorage.getItem(cjsObjectsKey) || "[]");
+        if (Array.isArray(saved)) cjObjects = saved;
+      } catch { /* 空 */ }
+      // 朝向运河切向（月亮湖方向）：古堡正门对着运河流向
+      const faceDir = moonLake?.centerWorld || canalJunctionDir;
+      // ---------- 运河交汇堤岸方框（Townscaper 式城堡地基）----------
+      // 运河在此交汇：堤岸围出的矩形方框 = 城堡建立之处（高亮四边 + 角灯）。
+      // 方框中心即古堡台地中心，古堡正门朝向运河切向。
+      const junctionBox = buildCanalJunctionBox(scene, R, {
+        centerDir: canalJunctionDir,
+        forwardDir: moonLake?.centerWorld || canalJunctionDir,
+        halfLength: 22,
+        halfWidth: 18,
+        waterLift: 0.6,
+        highlight: true,
+      });
+      scene.add(junctionBox.group);
+      canalJunctionBox = junctionBox.group; // 高亮构建区：点选/切换目标用
+
+      canalJunctionCitadel = buildOdysseyCitadel({
+        dir: canalJunctionDir,
+        faceDir,
+        groundRadius: R,
+        planetRadius: R,
+        seed: 918273,
+        spec: cjSpec,
+        contour: cjContour,
+        terrainObjects: cjObjects,
+        instanceId: "canal-junction",
+        floors: 12, // 运河交汇古堡：Townscaper 式高塔，12 层（高山为 5 层）
+        skipOuterTerrain: true, // 不建外围台地：运河堤岸方框就是地基
+        townBaseLift: 0.62, // 镇体基座落在方框水面平台（约 CANAL_WATER_LIFT）
+      });
+      scene.add(canalJunctionCitadel);
+      canalJunctionCitadel.updateMatrixWorld(true);
+
+      // 镇体基座对齐方框实心平台顶面（水面 + 微抬），不嵌入平台
+      const platformTop = canalJunctionDir
+        .clone()
+        .multiplyScalar(R + (junctionBox.group.userData.waterLift ?? 0.6) + 0.1);
+      canalJunctionCitadel.position.copy(platformTop);
+      canalJunctionCitadel.quaternion.copy(junctionBox.quaternion);
+      canalJunctionCitadel.updateMatrixWorld(true);
+      junctionBox.group.userData.citadel = canalJunctionCitadel;
+    }
+
     // ---------- 星海运河环线：连通各主要场景，在地面挖出的浅沟 ----------
     // 控制点取各场景方向（世界位 normalize），用 CatmullRom 闭合样条稍曲折绕行；
     // 形态是贴地沟渠（河床/水面/两侧立壁/岸顶土埂），不是埋进球心的地下通道。
@@ -369,6 +452,7 @@ export const messengerIslandScene = {
     canalPush(camp?.landmarks?.anchor?.position, "出发营地");
     canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖");
     canalPush(odysseyCitadel?.position, "高山圣城");
+    canalPush(canalJunctionCitadel?.position, "运河交汇古堡");
     canalPush(moebius?.grand?.dir, "水晶城");
     canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon), "白鲸海湖");
     // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
@@ -654,6 +738,9 @@ export const messengerIslandScene = {
       citySeaLake, // 水晶城旁海水湖 · 湖沼生物培育 · 气泡艇潜行
       citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布 · 纳沃纳双栖广场
       odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
+      canalJunctionCitadel, // 运河交汇古堡（第二城堡实例，独立存档键）
+      canalJunctionBox, // 运河交汇高亮构建方框（堤岸 + 实心平台 + 高亮区）
+      canalJunctionStorage, // { levels, terrain, objects } 存档键（编辑器切换目标用）
       airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
       flock, // 叹息之门城头小群 Boids 近景备份
       gateBirdVortex, // 三重门千鸟漩涡（门廊攀附 + 双螺旋）

@@ -1,6 +1,6 @@
 // =====================================================================
 //  高山圣城 · 游戏内 3D 直编辑（townscaper.html 的场景编辑能力搬进主场景）
-//  - 搭建面板打开且满足 canEdit（乘坐航空艇）时生效：
+//  - 搭建面板打开且满足 canEdit（已开局）时生效：
 //      左键点体块顶面 → 向上叠块 · 点侧面 → 改色 · 点当前层空地 → 加块
 //      右键点体块 → 删块 · 悬停显示幽灵块预览
 //  - 只负责射线拾取与坐标换算，布局读写全部走面板的 applySceneEdit，
@@ -10,6 +10,10 @@ import * as THREE from "three";
 import {
   CITADEL_TOWN_SPEC,
   citadelGridCellCenter,
+  CITADEL_PALETTE,
+  CITADEL_GATE_CHAR,
+  CITADEL_GATE_COLOR,
+  citadelPaletteIndexOfChar,
 } from "../world/citadelTown.js";
 
 /** Resolve a ray hit on any nested mesh/outline back to its tower/tree root. */
@@ -49,7 +53,17 @@ export function lookupMergedCell(hit) {
   return null;
 }
 
-const CHAR_COLORS = { W: 0xe5eff2, L: 0xd9cfac, B: 0xcaa88c, D: 0x8b5a2b };
+/**
+ * 3D 编辑幽灵块颜色：Townscaper 15 色 + 正门 G。
+ * 与 citadelTown.js 的 CITADEL_PALETTE 同源（编辑器/主场景单一真相）。
+ */
+const CHAR_COLORS = {};
+for (const entry of CITADEL_PALETTE) CHAR_COLORS[entry.char] = entry.color;
+CHAR_COLORS[CITADEL_GATE_CHAR] = CITADEL_GATE_COLOR;
+CHAR_COLORS.W = CHAR_COLORS["0"];
+CHAR_COLORS.L = CHAR_COLORS["2"];
+CHAR_COLORS.B = CHAR_COLORS["6"];
+CHAR_COLORS.D = CHAR_COLORS[CITADEL_GATE_CHAR];
 const CLICK_SLOP_PX = 6; // 按下到抬起位移小于此值才算点击（区分相机拖拽）
 
 /** Current selected terrace's local build-plane elevation. */
@@ -166,7 +180,7 @@ export function raycastCascadePoolTop(scene, raycaster, out = new THREE.Vector3(
  * @param {THREE.Scene} opts.scene
  * @param {() => THREE.Group|null} opts.getCitadel 圣城 castleContainer
  * @param {ReturnType<import("./citadelEditorPanel.js").createCitadelEditorPanel>} opts.panel
- * @param {() => boolean} opts.canEdit 是否允许编辑（已开局且乘坐航空艇）
+ * @param {() => boolean} opts.canEdit 是否允许编辑（已开局即可）
  * @param {(e: PointerEvent) => boolean} opts.isUiEvent 点击落在 UI 上则忽略
  * @param {(msg: string, dur?: number) => void} [opts.toast]
  * @returns {{ tick(): void }}
@@ -237,7 +251,8 @@ export function createCitadelSceneEdit({
 
   /** 拾取体块：跳过窗/垛/穹顶等装饰件，返回格坐标与是否顶面命中。
    *  兼容合并几何：town 体块按材质合并后，cell 通过 userData.faceToCell
-   *  （面区间 → cell）按 hit.faceIndex 反查。 */
+   *  （面区间 → cell）按 hit.faceIndex 反查。
+   *  台地约束解除：命中任意台地的体块都自动切换编辑台地（不再只认当前台地）。 */
   function castCell(e) {
     const ray = castRay(e);
     const citadel = getCitadel();
@@ -252,7 +267,12 @@ export function createCitadelSceneEdit({
     const dPoolSel = poolSel ? ray.ray.origin.distanceTo(poolSel.point) : Infinity;
     for (const hit of hits) {
       const cell = hit.object.userData?.cell ?? lookupMergedCell(hit);
-      if (cell && hit.face && cell.terraceIndex === activeTerrace) {
+      if (cell && hit.face) {
+        // 点击其它台地已建体块：自动切换编辑台地（不弹回 castPlane）
+        if (cell.terraceIndex !== activeTerrace) {
+          panel.setActiveTerrace(cell.terraceIndex);
+          toast(`已切换到台地 ${cell.terraceIndex + 1}`, 1.0);
+        }
         const up = upLocal.clone().applyQuaternion(frame.citadel.getWorldQuaternion(tmpQ));
         const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
         return { cell, top: normal.dot(up) > 0.9 };
@@ -450,6 +470,8 @@ export function createCitadelSceneEdit({
   });
 
   return {
+    /** 当前是否处于 3D 直编辑态（面板打开且可编辑）。 */
+    isEditing: () => editing(),
     /** 每帧兜底：面板关闭/落地后强制收起幽灵块。 */
     tick() {
       if (ghost.visible && !editing()) ghost.visible = false;

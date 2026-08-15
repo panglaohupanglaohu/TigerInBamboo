@@ -371,3 +371,177 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
     depth,
   };
 }
+
+/**
+ * 运河交汇堤岸方框（Townscaper 式「堤岸围合的城堡地基」）。
+ *
+ * 在运河交汇点以该处切平面为基准，用运河同款立壁/土埂语言围出一个
+ * 矩形「干坞」——四边立壁 + 岸顶土埂 + 内部水面/平台，四角灯塔标记。
+ * 方框即城堡建立之处（高亮描边 + 角标），内部供放置可编辑城堡。
+ *
+ * @param {THREE.Scene} scene
+ * @param {number} planetRadius
+ * @param {{
+ *   centerDir: THREE.Vector3,      // 方框中心方向（世界单位 dir）
+ *   forwardDir: THREE.Vector3,     // 方框长轴方向（运河切向）
+ *   halfLength?: number,           // 长半轴（默认 24）
+ *   halfWidth?: number,            // 宽半轴（默认 20）
+ *   waterLift?: number,            // 内部水面相对地表抬升（默认 CANAL_WATER_LIFT）
+ *   highlight?: boolean,           // 是否高亮四边（默认 true）
+ * }} [opts]
+ * @returns {{ group: THREE.Group, position: THREE.Vector3,
+ *             quaternion: THREE.Quaternion, halfLength: number, halfWidth: number }}
+ */
+export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
+  const R = Number(planetRadius) || PLANET_RADIUS;
+  const halfLength = opts.halfLength ?? 24;
+  const halfWidth = opts.halfWidth ?? 20;
+  const waterLift = opts.waterLift ?? CANAL_WATER_LIFT;
+  const highlight = opts.highlight !== false;
+
+  const up = opts.centerDir.clone().normalize();
+  const fwd = opts.forwardDir
+    .clone()
+    .addScaledVector(up, -opts.forwardDir.dot(up))
+    .normalize();
+  if (fwd.lengthSq() < 1e-8) fwd.set(1, 0, 0).addScaledVector(up, -up.x).normalize();
+  const right = new THREE.Vector3().crossVectors(up, fwd).normalize();
+
+  const group = new THREE.Group();
+  group.name = "canal-junction-box";
+
+  const bankMat = toonMat(CANAL_BANK_COLOR, { flatShading: true });
+  const lipMat = toonMat(CANAL_LIP_COLOR, { flatShading: true });
+  const waterMat = createCanalWaterMaterial();
+  const waterY = R + waterLift;
+  const wallH = CANAL_DEPTH;
+
+  const cornerPts = [
+    fwd.clone().multiplyScalar(halfLength).add(right.clone().multiplyScalar(halfWidth)),
+    fwd.clone().multiplyScalar(halfLength).add(right.clone().multiplyScalar(-halfWidth)),
+    fwd.clone().multiplyScalar(-halfLength).add(right.clone().multiplyScalar(-halfWidth)),
+    fwd.clone().multiplyScalar(-halfLength).add(right.clone().multiplyScalar(halfWidth)),
+  ];
+  // 各边 = [起点, 终点]（首尾相接成环）
+  const edges = [
+    [cornerPts[0], cornerPts[1]],
+    [cornerPts[1], cornerPts[2]],
+    [cornerPts[2], cornerPts[3]],
+    [cornerPts[3], cornerPts[0]],
+  ];
+
+  // 立壁 + 土埂：沿边扫出双坡条带（切平面局部坐标 → 球面贴附）
+  for (let e = 0; e < edges.length; e++) {
+    const [a, b] = edges[e];
+    const seg = b.clone().sub(a);
+    const len = seg.length();
+    const dir = seg.normalize();
+    const outward = new THREE.Vector3().crossVectors(dir, up).normalize();
+    const segSamples = [];
+    const N = Math.max(2, Math.round(len / 2));
+    for (let i = 0; i <= N; i++) {
+      const t = i / N;
+      const p = a.clone().addScaledVector(seg, t);
+      segSamples.push({
+        p: up.clone().multiplyScalar(R).add(p),
+        up: up.clone(),
+        right: outward.clone(),
+      });
+    }
+    // 立壁：内缘 -0.3 → 外缘 -0.3-WALL_THICK
+    const wall = sweepPrism(segSamples, -0.3 - WALL_THICK, -0.3, 0, wallH, bankMat);
+    wall.name = `canal-junction-wall-${e}`;
+    group.add(wall);
+    // 土埂：壁顶外延
+    const lip = sweepPrism(segSamples, -0.3 - WALL_THICK - LIP_WIDTH, -0.3 - WALL_THICK * 0.5, wallH - LIP_THICK * 0.2, wallH + LIP_THICK, lipMat);
+    lip.name = `canal-junction-lip-${e}`;
+    group.add(lip);
+    if (highlight) {
+      // 高亮：土埂顶面加一条亮色描边条
+      const glow = sweepPrism(segSamples, -0.3 - WALL_THICK - LIP_WIDTH * 0.7, -0.3 - WALL_THICK - LIP_WIDTH * 0.3, wallH + LIP_THICK + 0.06, wallH + LIP_THICK + 0.1,
+        new THREE.MeshBasicMaterial({ color: 0xffd966 }));
+      glow.name = "canal-junction-glow";
+      group.add(glow);
+    }
+  }
+
+  // 内部实心平台（Townscaper 干坞地基）：从球面到水面填实心方块，
+  // 盖住任何原地貌（山体/湖/沟），交汇处不穿地、不悬空。
+  {
+    const solidGeo = new THREE.BoxGeometry(halfLength * 2 - 0.9, waterLift + 0.6, halfWidth * 2 - 0.9);
+    const solid = new THREE.Mesh(solidGeo, toonMat(0x8a7a5c, { flatShading: true }));
+    solid.name = "canal-junction-solid-platform";
+    solid.position.copy(up).multiplyScalar(R + (waterLift + 0.6) * 0.5 - 0.3);
+    group.add(solid);
+  }
+
+  // 内部水面（方框中央平台视觉）
+  {
+    const waterGeo = new THREE.PlaneGeometry(halfLength * 2 - 0.8, halfWidth * 2 - 0.8);
+    const water = new THREE.Mesh(waterGeo, waterMat);
+    water.name = "canal-junction-water";
+    water.rotation.x = -Math.PI / 2;
+    water.position.copy(up).multiplyScalar(waterY + 0.03);
+    water.renderOrder = 2;
+    water.castShadow = false;
+    group.add(water);
+  }
+
+  if (highlight) {
+    // 高亮罩：水面之上半透明金色光罩 + 对角亮线——「高亮区域即可构建」
+    const overlayGeo = new THREE.PlaneGeometry(halfLength * 2 - 0.8, halfWidth * 2 - 0.8);
+    const overlay = new THREE.Mesh(
+      overlayGeo,
+      new THREE.MeshBasicMaterial({
+        color: 0xffd966,
+        transparent: true,
+        opacity: 0.16,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      })
+    );
+    overlay.name = "canal-junction-build-zone";
+    overlay.rotation.x = -Math.PI / 2;
+    overlay.position.copy(up).multiplyScalar(waterY + 0.09);
+    overlay.renderOrder = 3;
+    group.add(overlay);
+    // 对角亮线（X）：强化「可建区」视觉
+    const diagLine = new THREE.Mesh(
+      new THREE.BoxGeometry(halfLength * 2 - 0.8, 0.04, 0.08),
+      new THREE.MeshBasicMaterial({ color: 0xffd966 })
+    );
+    diagLine.name = "canal-junction-build-zone";
+    diagLine.position.copy(up).multiplyScalar(waterY + 0.1);
+    group.add(diagLine);
+    const diagLineZ = diagLine.clone();
+    diagLineZ.scale.set(1, 1, (halfWidth * 2 - 0.8) / (halfLength * 2 - 0.8));
+    diagLineZ.rotation.y = Math.PI / 2;
+    group.add(diagLineZ);
+  }
+
+  // 四角灯塔标记（可放置提示）
+  const postMat = toonMat(0x2a2b2d, { flatShading: true });
+  const lampMat = new THREE.MeshBasicMaterial({ color: 0xffb84d });
+  for (let c = 0; c < 4; c++) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 2.2, 6), postMat);
+    post.position.copy(up).multiplyScalar(R).add(cornerPts[c]).addScaledVector(up, wallH + 1.1);
+    post.name = "canal-junction-corner-post";
+    group.add(post);
+    const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.22, 8, 6), lampMat);
+    lamp.position.copy(post.position).addScaledVector(up, 1.25);
+    lamp.name = "canal-junction-corner-lamp";
+    group.add(lamp);
+  }
+
+  group.userData.halfLength = halfLength;
+  group.userData.halfWidth = halfWidth;
+  group.userData.waterLift = waterLift;
+
+  return {
+    group,
+    position: up.clone().multiplyScalar(R),
+    quaternion: new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), fwd),
+    halfLength,
+    halfWidth,
+  };
+}

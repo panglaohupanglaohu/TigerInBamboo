@@ -20,6 +20,7 @@ import {
   rebuildCitadelTown,
   rebuildCitadelTerrain,
   rebuildCitadelTerrainObjects,
+  trimCitadelTownToTerrain,
   citadelTerrainCellSupported,
   updateCitadelNightWindows,
 } from "./world/odysseyCitadel.js";
@@ -171,6 +172,8 @@ const keys = createInput({
   onOrbitPitch: (dy) => cameraRig.orbitPitchBy(dy),
   onMidDrag: (on) => cameraRig.setMidDrag(on),
   onRightDrag: (on) => cameraRig.setRightDrag(on),
+  // 3D 直编辑（搭建面板打开且可编辑）时右键用于删除体块，不触发相机平移
+  isRightClickEditor: () => citadelSceneEdit?.isEditing?.() === true,
 });
 
 // bubblePodRide 稍后创建；触控环视在驾驶气泡艇时改为挪准星
@@ -497,7 +500,7 @@ const tramRide = createTramRide({
   elHint: document.getElementById("tram-hint"),
   toast: showToast,
   onBoard: (tram) => {
-    // 若已近峡谷 / 在谷内：直接切峡谷 BGM；否则登车曲 Tram 头 16s → 城南花已开
+    // 若已近峡谷 / 在谷内：直接切峡谷 BGM；否则登车曲 Tram 头 16s → 三亩地-城南花已开
     const tramSystem = messenger?.landmarks?.tramSystem;
     const cue = tramSystem?.getCanyonAudioCue?.(tram);
     const nearCanyon = cue && (cue.inCanyon || cue.secondsToEntry <= 10);
@@ -526,7 +529,7 @@ const tramRide = createTramRide({
 let citadelObstacle = null;
 function getCitadelObstacle() {
   if (citadelObstacle) return citadelObstacle;
-  const c = messenger?.landmarks?.odysseyCitadel;
+  const c = getCitadelTarget();
   if (!c) return null;
   // 只取建筑本体（断崖+规则小镇），不含外围台地/石阶，净空区才贴建筑
   const body = c.userData.mainCastle || c;
@@ -633,11 +636,11 @@ const boatRide = createBoatRide({
 });
 
 // ---------- 高山圣城 · Townscaper 搭建面板 ----------
-// 乘坐航空艇（热气球）时用鼠标左键点选圣城 → 弹出可拖拽/可收起的搭建面板；
+// 已开局时用鼠标左键点选圣城 → 弹出可拖拽/可收起的搭建面板；
 // 面板编辑（2D 平面图 / 场景 3D 直编辑）→ rebuildCitadelTown 即时重建场景圣城
 // → v2 布局写 localStorage。每座台地拥有五个 town-terrace-T-level-N 组。
 function applyTownLayerVisibility(activeTerrace, activeLayer, hideAbove) {
-  const layers = messenger?.landmarks?.odysseyCitadel?.userData?.layers;
+  const layers = getCitadelTarget()?.userData?.layers;
   if (!layers) return;
   for (const layer of layers) {
     for (const child of layer.children) {
@@ -656,8 +659,13 @@ const citadelSupportCache = new Map();
 function citadelSupportAt(ix, iz, terraceIndex = 0) {
   const key = `${terraceIndex}:${ix},${iz}`;
   if (citadelSupportCache.has(key)) return citadelSupportCache.get(key);
-  const citadel = messenger?.landmarks?.odysseyCitadel;
+  const citadel = getCitadelTarget();
   if (!citadel) return -1;
+  // 无台地模式（运河交汇古堡）：堤岸方框内全部可放置
+  if (citadel.userData?.skipOuterTerrain) {
+    citadelSupportCache.set(key, 0);
+    return 0;
+  }
   // Pure canonical transform: safe even while the panel is still being
   // constructed, and exactly identical to both the 2D map and 3D generator.
   const c = citadelGridCellCenter(ix, 0, iz);
@@ -678,28 +686,91 @@ function citadelSupportAt(ix, iz, terraceIndex = 0) {
   return level;
 }
 
+/** 设计城堡层时收起圣城台地鸟群，关闭面板后恢复 */
+function setCitadelDesignBirdsHidden(hidden) {
+  const birds = messenger?.landmarks?.terraceBirds;
+  birds?.setVisible?.(!hidden);
+}
+
+// 城堡实例注册表：目标切换（高山圣城 ⇄ 运河交汇古堡等）时，编辑/拾取/
+// 重建全部指向当前目标实例。id=null 为高山圣城（默认，兼容旧档键）。
+let citadelTargetId = null;
+const citadelTargets = [];
+if (messenger?.landmarks?.odysseyCitadel) {
+  citadelTargets.push({
+    id: null,
+    name: "高山圣城",
+    floors: messenger.landmarks.odysseyCitadel.userData.floors ?? 5,
+    get: () => messenger.landmarks.odysseyCitadel,
+    // 点选命中对象：城堡本体 + 圣城水系（梯湖/瀑布挂在场景根，单独兜底）
+    pick: () => [messenger.landmarks.odysseyCitadel],
+  });
+}
+if (messenger?.landmarks?.canalJunctionCitadel) {
+  citadelTargets.push({
+    id: "canal-junction",
+    name: "运河交汇古堡",
+    floors: messenger.landmarks.canalJunctionCitadel.userData.floors ?? 12,
+    get: () => messenger.landmarks.canalJunctionCitadel,
+    // 点选命中对象：古堡本体 + 运河堤岸高亮方框（方框即构建区，点框也能开面板）
+    pick: () =>
+      [messenger.landmarks.canalJunctionCitadel, messenger.landmarks.canalJunctionBox].filter(
+        Boolean
+      ),
+  });
+}
+const getCitadelTarget = () => {
+  const t = citadelTargets.find((x) => (x.id ?? null) === citadelTargetId) || citadelTargets[0];
+  return t ? t.get() : null;
+};
+
 const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
   ? createCitadelEditorPanel({
       toast: showToast,
+      onOpen: () => setCitadelDesignBirdsHidden(true),
+      onClose: () => setCitadelDesignBirdsHidden(false),
       onLayerVisibility: applyTownLayerVisibility,
       onViewAction: citadelViewAction,
       getSupportLevel: citadelSupportAt,
+      getInstanceId: () => citadelTargetId,
+      getTargets: () => citadelTargets.map((t) => ({ id: t.id, name: t.name, floors: t.floors })),
+      onTargetChange: (id) => {
+        citadelTargetId = id ?? null;
+        citadelSupportCache.clear();
+        citadelObstacle = null;
+        showToast(
+          citadelTargetId
+            ? `已切换到「${citadelTargets.find((t) => t.id === id)?.name ?? id}」`
+            : "已切换回「高山圣城」",
+          1.4
+        );
+      },
       onTerrainChange: (contour) => {
-        rebuildCitadelTerrain(messenger.landmarks.odysseyCitadel, contour);
-        messenger.landmarks.citadelRange?.rebuildWaterTerraces?.(contour);
-        // 护城河内径/外径：实时重建环带几何（注意曲率贴合）
-        messenger.landmarks.citadelRange?.rebuildMoat?.(contour?.moat);
+        const citadel = getCitadelTarget();
+        rebuildCitadelTerrain(citadel, contour);
+        // 高山实例才接护城河/梯湖/运河（第二实例是平地运河畔，无圣城水系）
+        if (!citadelTargetId) {
+          messenger.landmarks.citadelRange?.rebuildWaterTerraces?.(contour);
+          messenger.landmarks.citadelRange?.rebuildMoat?.(contour?.moat);
+        }
         citadelSupportCache.clear();
         citadelObstacle = null; // 净空区下帧重算
+        // 台地-建筑放置有效性闭环：半径/层高缩放后，越界建筑自动裁剪并重建。
+        const trim = trimCitadelTownToTerrain(citadel, contour);
+        if (trim.trimmed > 0) {
+          citadelEditorPanel?.syncTrimmedLayout?.(citadel.userData.townSpec);
+          showToast(`台地缩放：已自动移除 ${trim.trimmed} 个越界建筑格`, 2.4);
+        }
       },
       onTerrainObjectsChange: (objects) => {
-        rebuildCitadelTerrainObjects(messenger.landmarks.odysseyCitadel, objects);
+        rebuildCitadelTerrainObjects(getCitadelTarget(), objects);
         citadelObstacle = null;
       },
       onApply: (layout) => {
         // 编辑器提交的是 v2 五台地布局对象（{ terraces: [...] }），不能再包进
         // 旧版单城堡的 `levels` 字段；否则归一化时会得到五座空城堡。
-        const stats = rebuildCitadelTown(messenger.landmarks.odysseyCitadel, layout);
+        const citadel = getCitadelTarget();
+        const stats = rebuildCitadelTown(citadel, layout);
         citadelObstacle = null; // 建筑体量变了，净空区下帧重算
         citadelSupportCache.clear(); // 包围盒可能变，支撑缓存失效
         // 重建后 level 组全部换新，按面板状态重新断言一次可见性
@@ -779,7 +850,7 @@ const crystalCityEditorPanel = messenger?.landmarks?.moebius
 // 以圣城为锚点摆放飞行中的飞艇：保持当前方位角，90° 步进环视，或升到顶端。
 let citadelViewState = null; // { bearing, dist, height } —— 相对圣城的观察位
 function citadelViewAction(action) {
-  const citadel = messenger?.landmarks?.odysseyCitadel;
+  const citadel = getCitadelTarget();
   const airship = messenger?.landmarks?.airship;
   if (!citadel || !airship) return;
   if (!airshipRide.isFlying?.()) {
@@ -814,16 +885,16 @@ function citadelViewAction(action) {
   airshipRide.setPose?.(pos.clone().normalize(), pos.length() - PLANET_RADIUS, target);
 }
 
-// 场景 3D 直编辑：面板打开且乘坐航空艇时，点块顶面叠块 / 侧面改色 /
+// 场景 3D 直编辑：面板打开（已开局）时，点块顶面叠块 / 侧面改色 /
 // 当前层空地加块 / 右键删块，悬停出幽灵块（townscaper.html 同款交互）。
-const citadelSceneEdit = citadelEditorPanel
+let citadelSceneEdit = citadelEditorPanel
   ? createCitadelSceneEdit({
       dom: renderer.domElement,
       camera,
       scene,
-      getCitadel: () => messenger?.landmarks?.odysseyCitadel || null,
+      getCitadel: () => getCitadelTarget(),
       panel: citadelEditorPanel,
-      canEdit: () => gameStarted && !!airshipRide.isFlying?.(),
+      canEdit: () => gameStarted, // 已开局即可编辑（不再要求航空艇）
       isUiEvent: isCitadelUiEvent,
       toast: showToast,
     })
@@ -834,28 +905,47 @@ const citadelSceneEdit = citadelEditorPanel
   const citadelPickNdc = new THREE.Vector2();
   renderer.domElement.addEventListener("pointerdown", (e) => {
     if (!citadelEditorPanel || e.button !== 0) return;
-    // 只有乘坐航空艇时才能点选圣城
-    if (!gameStarted || !airshipRide.isFlying?.()) return;
+    // 已开局即可点选圣城/运河古堡弹搭建菜单（不再要求乘坐航空艇）
+    if (!gameStarted) return;
     if (isCitadelUiEvent(e)) return;
     // 面板已打开时左键归 3D 直编辑，不再重复弹面板
     if (citadelEditorPanel.isOpen()) return;
     if (crystalCityEditorPanel?.isOpen?.()) return;
-    const citadel = messenger?.landmarks?.odysseyCitadel;
-    if (!citadel) return;
     const rect = renderer.domElement.getBoundingClientRect();
     citadelPickNdc.set(
       ((e.clientX - rect.left) / rect.width) * 2 - 1,
       -((e.clientY - rect.top) / rect.height) * 2 + 1
     );
     citadelPickRay.setFromCamera(citadelPickNdc, camera);
-    const hits = citadelPickRay.intersectObject(citadel, true);
-    // 梯湖/瀑布水系挂在场景根而非圣城容器：点湖面也应能开面板
-    if (!hits.length) {
+    // 遍历全部城堡实例：命中哪个就自动切到哪个目标（高山圣城 ⇄ 运河交汇古堡）。
+    // 运河古堡的堤岸高亮方框也是命中对象：点高亮框即可开面板构建。
+    let hit = null;
+    for (const t of citadelTargets) {
+      const objs = t.pick ? t.pick() : [t.get()];
+      for (const o of objs) {
+        if (o && citadelPickRay.intersectObject(o, true).length) {
+          hit = t;
+          break;
+        }
+      }
+      if (hit) break;
+    }
+    // 梯湖/瀑布水系挂在场景根而非圣城容器：点湖面也应能开面板（仅高山实例）
+    if (!hit) {
       const waterSteps = scene.getObjectByName("citadel-pilgrimage-water-steps");
       if (!waterSteps || !citadelPickRay.intersectObject(waterSteps, true).length) return;
+      hit = citadelTargets[0];
     }
+    if (!hit) return;
+    if ((hit.id ?? null) !== citadelTargetId) {
+      // 点选命中非当前目标：自动切换（含存档键与 3D 目标），再打开面板
+      citadelTargetId = hit.id ?? null;
+      citadelSupportCache.clear();
+      citadelObstacle = null;
+      citadelEditorPanel.switchTarget?.(() => true);
+    }
+    showToast(`已选中「${hit.name}」· 搭建面板已打开`, 2.2);
     citadelEditorPanel.open();
-    showToast("已选中高山圣城 · 搭建面板已打开", 2.2);
   });
 }
 
@@ -1186,6 +1276,7 @@ window.__tm = {
   quest,
   cameraRig,
   camera, // 调试/验收截图用
+  renderer, // 性能探针读取 draw calls / triangles
   P,
   scene,
   planet,

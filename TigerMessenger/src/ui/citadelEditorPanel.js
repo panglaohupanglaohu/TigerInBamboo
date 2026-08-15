@@ -1,6 +1,6 @@
 // =====================================================================
 //  高山圣城 · Townscaper 搭建面板（游戏内）
-//  - 乘坐航空艇时用鼠标点选圣城弹出（main.js 接线）
+//  - 已开局时用鼠标点选圣城弹出（main.js 接线）
 //  - 标题栏可拖拽（位置记忆）· 可收起成一条标题 · 可关闭
 //  - 分层 2D 平面图点格编辑，onApply 回调驱动场景 3D 即时重建
 //  - 场景 3D 直编辑：点块顶面叠块 / 侧面改色 / 空地加块 / 右键删块
@@ -23,6 +23,7 @@ import {
   clearCell,
   resolveCitadelDropTarget,
   citadelGridCellCenter,
+  citadelLevelsKey,
 } from "../world/citadelTown.js";
 import {
   CITADEL,
@@ -34,19 +35,31 @@ import {
   normalizeCitadelTerrainObjects,
   citadelTerrainPointSupported,
   isCitadelCascadeEnabled,
+  isCitadelCascadePoolsEnabled,
+  citadelTerrainKey,
+  citadelTerrainObjectsKey,
 } from "../world/odysseyCitadel.js";
 import { CITADEL_CASCADE_MARKER } from "../world/citadelRange.js";
 import { CANAL_WATER_LIFT } from "../world/canalSystem.js";
 import { makePanelDraggable } from "./dragPanel.js";
 
 const MAX_COORD = CITADEL_GRID_SIZE - 1;
-const MAX_LEVEL = CITADEL_CASTLE_FLOORS - 1;
 const DEFAULT_GRID_PX = 12;
 const POS_KEY = "tm.citadelEditor.pos";
 const COLLAPSE_KEY = "tm.citadelEditor.collapsed";
 const DROP_KEY = "tm.citadelEditor.dropToGround";
-const PANEL_CHARS = { W: "#e5eff2", L: "#d9cfac", B: "#caa88c", D: "#8b5a2b" };
-const CHAR_NAMES = { W: "白石", L: "浅砂石", B: "淡砖", D: "正门" };
+const PANEL_CHARS = {
+  0: "#e8e4da", 1: "#e9ddc0", 2: "#d8c08a", 3: "#d4b450", 4: "#c67a3f",
+  5: "#a8543c", 6: "#b06a4a", 7: "#8a5a3a", 8: "#6a4a33", 9: "#7c8a93",
+  A: "#5f6b73", B: "#5a7d9e", C: "#3e5368", D: "#4d8f84", E: "#4f7755",
+  G: "#8b5a2b",
+};
+const CHAR_NAMES = {
+  0: "白", 1: "米白", 2: "沙黄", 3: "柠黄", 4: "橙", 5: "砖红", 6: "陶土",
+  7: "褐", 8: "深褐", 9: "蓝灰", A: "石板灰", B: "蓝", C: "藏青", D: "青",
+  E: "松绿", G: "正门",
+};
+const PALETTE_ORDER = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "G"];
 const CELL = CITADEL_TOWN_SPEC.cellSize;
 const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
 
@@ -81,6 +94,8 @@ export function removeCitadelTerrainObjectPlacement(objects, id) {
  * @param {(ix: number, iz: number, terraceIndex: number) => number} [opts.getSupportLevel]
  *        土坡支撑探测：返回该柱可落块的层级，-1 = 无承重土坡（默认 0 = 全可放）
  * @param {(msg: string, dur?: number) => void} [opts.toast]
+ * @param {() => void} [opts.onOpen] 打开搭建面板（可收起鸟群等）
+ * @param {() => void} [opts.onClose] 关闭搭建面板
  * @returns {{
  *   open(): void, close(): void, toggle(): void, isOpen(): boolean, element: HTMLElement,
  *   getState(): { activeChar: string, activeTerrace: number, activeLayer: number, hideAbove: boolean, dropToGround: boolean },
@@ -101,12 +116,40 @@ export function createCitadelEditorPanel({
   onTerrainObjectsChange = () => {},
   getSupportLevel = () => 0,
   toast = () => {},
+  onOpen = () => {},
+  onClose = () => {},
+  getInstanceId = () => null,
+  getTargets = () => [], // [{ id, name }]，id=null 为高山圣城默认实例
+  onTargetChange = () => {},
 }) {
+  /** 当前目标城堡层数上限（高山 5 层 / 运河交汇古堡 12 层）。 */
+  function currentMaxLevel() {
+    const id = getInstanceId();
+    try {
+      const t = getTargets().find((x) => (x.id ?? null) === id);
+      const floors = t?.floors ?? CITADEL_CASTLE_FLOORS;
+      return Math.max(0, floors - 1);
+    } catch {
+      return CITADEL_CASTLE_FLOORS - 1;
+    }
+  }
+
+  // ---------- 实例化：存档键跟随当前目标城堡（null=高山圣城默认 / 运河交汇等实例） ----------
+  function instanceStorageKeys() {
+    const id = getInstanceId() ?? null;
+    return {
+      levels: citadelLevelsKey(id),
+      terrain: citadelTerrainKey(id),
+      objects: citadelTerrainObjectsKey(id),
+      id,
+    };
+  }
+
   // ---------- 状态 ----------
   let terraceGrids = loadTerraceGrids();
   let activeTerrace = 0; // 0 = 台地 1（最高）
   let grid = terraceGrids[activeTerrace];
-  let activeChar = "W";
+  let activeChar = "0";
   let activeLayer = 0;
   let hideAbove = false;
   let dropToGround = true; // 空地加块自动堆到柱顶（落地），关闭则悬在当前层
@@ -124,7 +167,7 @@ export function createCitadelEditorPanel({
 
   function loadTerraceGrids() {
     try {
-      const saved = JSON.parse(localStorage.getItem(CITADEL_LEVELS_KEY) || "null");
+      const saved = JSON.parse(localStorage.getItem(instanceStorageKeys().levels) || "null");
       if (saved) {
         return normalizeCitadelTerraceLayout(saved).terraces.map((entry) =>
           levelsToGrid(entry.levels)
@@ -139,7 +182,7 @@ export function createCitadelEditorPanel({
   function loadTerrainObjects() {
     try {
       return normalizeCitadelTerrainObjects(
-        JSON.parse(localStorage.getItem(CITADEL_TERRAIN_OBJECTS_KEY) || "[]")
+        JSON.parse(localStorage.getItem(instanceStorageKeys().objects) || "[]")
       );
     } catch {
       return [];
@@ -148,7 +191,7 @@ export function createCitadelEditorPanel({
 
   function persistTerrainObjects() {
     try {
-      localStorage.setItem(CITADEL_TERRAIN_OBJECTS_KEY, JSON.stringify(terrainObjects));
+      localStorage.setItem(instanceStorageKeys().objects, JSON.stringify(terrainObjects));
     } catch { /* private mode */ }
   }
 
@@ -197,7 +240,9 @@ export function createCitadelEditorPanel({
   panel.innerHTML = `
     <div id="ce-head" style="display:flex;align-items:center;gap:6px;padding:7px 10px;
       background:#2a2b2d;color:#fff;border-radius:10px 10px 0 0;">
-      <strong style="flex:1;font-size:13px;">高山圣城 · 搭建</strong>
+      <strong style="flex:1;font-size:13px;">古堡 · 搭建</strong>
+      <select id="ce-target" title="切换要编辑的古堡实例（高山圣城 / 运河交汇古堡等）"
+        style="font:12px/1.2 -apple-system,'PingFang SC',sans-serif;color:#2a2b2d;border-radius:4px;padding:2px 4px;max-width:180px;"></select>
       <button type="button" id="ce-collapse" title="收起/展开"
         style="background:none;border:none;color:#fff;cursor:pointer;font-size:13px;">▾</button>
       <button type="button" id="ce-close" title="关闭"
@@ -239,19 +284,20 @@ export function createCitadelEditorPanel({
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:-2px 0 9px;">
         <strong style="font-size:12px;color:#4a5560;">地貌对象</strong>
         <button type="button" id="ce-object-cascade" title="层叠瀑布+梯湖：点一次添加/已有则提示；用删除工具点蓝色瀑布标记可移除（移除后台地缺口关闭，前缘可建城堡）">层叠瀑布</button>
+        <button type="button" id="ce-object-pools" title="梯湖开关：关 = 瀑布独立挂帘、台地不建白石梯湖，台面全部让给建筑">台地湖</button>
         <button type="button" id="ce-object-watchtower" title="选择后在上方鸟瞰图点击落点">瞭望塔</button>
         <button type="button" id="ce-object-tree" title="选择后在上方鸟瞰图点击落点">参天树</button>
         <button type="button" id="ce-object-horse" title="选择后在上方鸟瞰图点击落点；放好后按住木马标记左键拖拽平移，右键删除">木马</button>
         <button type="button" id="ce-object-delete" title="选择后点击鸟瞰图中的对象标记删除（含层叠瀑布）">删除对象</button>
-        <span style="font:10px monospace;color:#71808a;">层叠瀑布=五湖四帘+窄扇区缺口；删掉后完整台面可建 · 其他对象点鸟瞰图放置 · 木马：左键拖拽平移 / 右键删除</span>
+        <span style="font:10px monospace;color:#71808a;">层叠瀑布=五湖四帘+窄扇区缺口；删掉后完整台面可建 · 台地湖=瀑布独立化开关（关湖省台面） · 其他对象点鸟瞰图放置 · 木马：左键拖拽平移 / 右键删除</span>
       </div>
       <div style="border-top:1px solid #dbe2e8;padding-top:7px;font-weight:700;margin-bottom:5px;">
         2）城堡层 <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
       </div>
-      <div style="display:flex;gap:5px;align-items:center;margin-bottom:8px;" id="ce-palette"></div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-bottom:8px;" id="ce-palette"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
         <button type="button" id="ce-prev" title="上一层（Q）">◀</button>
-        <span>城堡第 <b id="ce-layer">1</b> / 5 层</span>
+        <span>城堡第 <b id="ce-layer">1</b> / <b id="ce-layer-total">5</b> 层</span>
         <button type="button" id="ce-next" title="下一层（E）">▶</button>
         <button type="button" id="ce-hide" title="隐藏更高层（H）">隐藏高层</button>
         <button type="button" id="ce-drop"
@@ -303,15 +349,15 @@ export function createCitadelEditorPanel({
     "border:1px solid #9aa4ad;background:#fff;border-radius:6px;padding:2px 9px;cursor:pointer;font:inherit;";
   panel.querySelectorAll("#ce-body button").forEach((b) => (b.style.cssText = btnCss));
 
-  for (const char of ["W", "L", "B", "D"]) {
+  for (const char of PALETTE_ORDER) {
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.char = char;
-    b.title = `${CHAR_NAMES[char]}（${"WLBD".indexOf(char) + 1}）`;
+    b.title = `${CHAR_NAMES[char]}（${PALETTE_ORDER.indexOf(char) + 1}）`;
     b.innerHTML =
-      `<span style="display:inline-block;width:11px;height:11px;border-radius:3px;` +
-      `margin-right:4px;vertical-align:-1px;border:1px solid rgba(0,0,0,.25);` +
-      `background:${PANEL_CHARS[char]}"></span>${CHAR_NAMES[char]}`;
+      `<span style="display:inline-block;width:12px;height:12px;border-radius:3px;` +
+      `vertical-align:-1px;border:1px solid rgba(0,0,0,.3);` +
+      `background:${PANEL_CHARS[char]}"></span><span style="font-size:11px;">${CHAR_NAMES[char]}</span>`;
     b.onclick = () => selectChar(char);
     paletteEl.appendChild(b);
   }
@@ -470,7 +516,7 @@ export function createCitadelEditorPanel({
   let terrain = loadTerrain();
   function loadTerrain() {
     try {
-      const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
+      const saved = JSON.parse(localStorage.getItem(instanceStorageKeys().terrain) || "null");
       if (saved) {
         const normalized = normalizeCitadelTerrain(saved);
         normalized.moat = normalizeMoatSpec(saved.moat);
@@ -527,9 +573,36 @@ export function createCitadelEditorPanel({
       ? "层叠瀑布已启用（蓝框）。选「删除对象」后点鸟瞰图蓝色瀑布标记可移除，前缘台地缺口会关闭"
       : "层叠瀑布未启用。点此工具再点鸟瞰图即可添加（会开窄扇区缺口 + 五湖四帘）";
   }
+
+  /** 开关梯湖（瀑布独立化）：写 contour、重建水系，标脏待保存。 */
+  function setPoolsEnabled(enabled) {
+    const next = normalizeCitadelTerrain({
+      ...terrain,
+      cascadePoolsEnabled: Boolean(enabled),
+    });
+    if (terrain.moat) next.moat = terrain.moat;
+    terrain = next;
+    markDirty();
+    clearTimeout(terrainTimer);
+    drawTerrainMap();
+    draw();
+    onTerrainChange({ ...terrain });
+    refreshPoolsButton();
+  }
+
+  function refreshPoolsButton() {
+    const btn = terrainObjectButtons.get("pools");
+    if (!btn) return;
+    const on = isCitadelCascadePoolsEnabled(terrain);
+    btn.style.outline = on ? "2px solid #3a8fd0" : "none";
+    btn.style.background = on ? "#fff" : "#e8ecef";
+    btn.title = on
+      ? "梯湖已启用（蓝框）：五台地各有一座白石梯湖，瀑布落在湖面。点此关闭 → 瀑布独立挂帘、台面全部让给建筑"
+      : "梯湖已关闭：瀑布独立挂帘、台地不建湖，台面全部可建。点此恢复五湖四帘";
+  }
   function persistTerrain() {
     try {
-      localStorage.setItem(CITADEL_TERRAIN_KEY, JSON.stringify(terrain));
+      localStorage.setItem(instanceStorageKeys().terrain, JSON.stringify(terrain));
     } catch { /* private mode */ }
   }
   const TERRAIN_FIELDS = [
@@ -597,6 +670,7 @@ export function createCitadelEditorPanel({
   refreshMoatInputs();
   const terrainObjectButtons = new Map([
     ["cascade", panel.querySelector("#ce-object-cascade")],
+    ["pools", panel.querySelector("#ce-object-pools")],
     ["watchtower", panel.querySelector("#ce-object-watchtower")],
     ["elderTree", panel.querySelector("#ce-object-tree")],
     ["trojanHorse", panel.querySelector("#ce-object-horse")],
@@ -634,6 +708,7 @@ export function createCitadelEditorPanel({
     // 切换工具时清掉选中
     if (tool !== null && tool !== "delete") selectedObjectId = null;
     refreshCascadeButton();
+    refreshPoolsButton();
   }
   for (const [type, button] of terrainObjectButtons) {
     button.onclick = () => {
@@ -647,6 +722,19 @@ export function createCitadelEditorPanel({
         }
         toast("层叠瀑布已存在。选「删除对象」点蓝色标记，或右键蓝色标记可移除", 1.8);
         selectTerrainObjectTool("delete");
+        return;
+      }
+      // 台地湖：纯开关（瀑布独立化），不进入工具态
+      if (type === "pools") {
+        const next = !isCitadelCascadePoolsEnabled(terrain);
+        setPoolsEnabled(next);
+        selectTerrainObjectTool(null);
+        toast(
+          next
+            ? "已启用台地湖：五座白石梯湖 + 瀑布落湖（台面被湖占用）"
+            : "已关闭台地湖：瀑布独立挂帘、台地不建湖，台面全部让给建筑",
+          2.0
+        );
         return;
       }
       selectTerrainObjectTool(type);
@@ -1157,6 +1245,7 @@ export function createCitadelEditorPanel({
     refreshTerrainInputs();
     refreshMoatInputs();
     refreshCascadeButton();
+    refreshPoolsButton();
     // 仅预览默认值，不立刻清存档；点保存后才覆盖 localStorage
     markDirty();
     clearTimeout(terrainTimer);
@@ -1174,6 +1263,7 @@ export function createCitadelEditorPanel({
   drawTerraceTabs();
   refreshTerrainInputs();
   refreshCascadeButton();
+  refreshPoolsButton();
   drawTerrainMap();
 
   // ---------- 保存（编辑实时进 3D，点保存才写存档） ----------
@@ -1207,7 +1297,7 @@ export function createCitadelEditorPanel({
   }
   function save() {
     try {
-      localStorage.setItem(CITADEL_LEVELS_KEY, JSON.stringify(serializeLayout()));
+      localStorage.setItem(instanceStorageKeys().levels, JSON.stringify(serializeLayout()));
       // 台地层半径/层高 + 护城河等高线（内径/外径/高度）
       persistTerrain();
       // 瞭望塔 / 参天树 / 木马
@@ -1233,7 +1323,7 @@ export function createCitadelEditorPanel({
       b.style.color = on ? "#fff" : "#2a2b2d";
     });
   }
-  selectChar("W");
+  selectChar("0");
 
   function pushUndo() {
     undoStack.push(JSON.stringify({
@@ -1253,8 +1343,10 @@ export function createCitadelEditorPanel({
     if (stats) {
       statsEl.textContent =
         `格 ${stats.cellCount} · 穹顶 ${stats.domeCount} · 塔顶 ${stats.towerCount}` +
-        ` · 坡顶 ${stats.roofCount} · 拱 ${stats.archCount} · 拱窗 ${stats.windowCount}` +
+        ` · 坡顶 ${stats.roofCount} · 教堂 ${stats.steepleCount ?? 0} · 旗杆 ${stats.flagCount ?? 0}` +
+        ` · 拱 ${stats.archCount} · 拱窗 ${stats.windowCount} · 门 ${stats.doorCount ?? 0}` +
         ` · 城垛 ${stats.crenelCount} · 围栏 ${stats.fenceCount} · 绿植 ${stats.shrubCount}` +
+        ` · 花园 ${stats.gardenCount ?? 0} · 广场 ${stats.plazaCount ?? 0}` +
         ` · 水道 ${stats.canalCount} · 水门 ${stats.waterGateCount}` +
         (stats.gate ? " · 正门✓" : " · 无正门");
     }
@@ -1328,7 +1420,7 @@ export function createCitadelEditorPanel({
         if (char) {
           ctx2d.fillStyle = PANEL_CHARS[char] ?? PANEL_CHARS.W;
           ctx2d.fillRect(ix * gridPx + 1, iz * gridPx + 1, gridPx - 2, gridPx - 2);
-          if (char === "D") {
+          if (char === "G") {
             ctx2d.fillStyle = "#3a2412";
             ctx2d.fillRect(ix * gridPx + gridPx / 2 - 1.5, iz * gridPx + 3, 3, gridPx - 6);
           }
@@ -1338,6 +1430,8 @@ export function createCitadelEditorPanel({
       }
     }
     layerLabel.textContent = String(activeLayer + 1);
+    const totalEl = panel.querySelector("#ce-layer-total");
+    if (totalEl) totalEl.textContent = String(currentMaxLevel() + 1);
   }
 
   canvasEl.addEventListener("pointerdown", (e) => {
@@ -1383,7 +1477,7 @@ export function createCitadelEditorPanel({
   );
 
   function stepLayer(delta) {
-    activeLayer = Math.min(MAX_LEVEL, Math.max(0, activeLayer + delta));
+    activeLayer = Math.min(currentMaxLevel(), Math.max(0, activeLayer + delta));
     draw();
     onLayerVisibility(activeTerrace, activeLayer, hideAbove);
   }
@@ -1454,8 +1548,16 @@ export function createCitadelEditorPanel({
       redo();
       return;
     }
-    const palette = { Digit1: "W", Digit2: "L", Digit3: "B", Digit4: "D" };
-    if (palette[e.code]) selectChar(palette[e.code]);
+    // Townscaper 15 色 + 正门：数字键 1-9 → 色 0-8，0 → 色 9；
+    // Shift+1..6 或字母 Y/U/I/O/P（补充 A-E）；G 键选正门
+    const palette = {
+      Digit1: "0", Digit2: "1", Digit3: "2", Digit4: "3", Digit5: "4",
+      Digit6: "5", Digit7: "6", Digit8: "7", Digit9: "8", Digit0: "9",
+    };
+    const shiftPalette = { Digit1: "A", Digit2: "B", Digit3: "C", Digit4: "D", Digit5: "E", Digit6: "G" };
+    if (e.shiftKey && shiftPalette[e.code]) selectChar(shiftPalette[e.code]);
+    else if (palette[e.code]) selectChar(palette[e.code]);
+    else if (e.code === "KeyG") selectChar("G");
     else if (e.code === "KeyQ") stepLayer(-1);
     else if (e.code === "KeyE") stepLayer(1);
     else if (e.code === "KeyH") btnHide.click();
@@ -1488,7 +1590,7 @@ export function createCitadelEditorPanel({
    */
   function dropTarget(ix, iz, terraceIndex = activeTerrace) {
     const support = getSupportLevel(ix, iz, terraceIndex);
-    return resolveCitadelDropTarget(grid, ix, iz, support, MAX_LEVEL);
+    return resolveCitadelDropTarget(grid, ix, iz, support, currentMaxLevel());
   }
 
   /** Single source of truth for 2D tinting/clicks and 3D plane placement. */
@@ -1503,7 +1605,7 @@ export function createCitadelEditorPanel({
   function applySceneEdit({ ix, iy, iz, terraceIndex = activeTerrace }, mode) {
     if (terraceIndex !== activeTerrace) return false;
     if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return false;
-    if (iy < 0 || iy > MAX_LEVEL) return false;
+    if (iy < 0 || iy > currentMaxLevel()) return false;
     const existing = grid.get(`${ix},${iy},${iz}`);
     if (mode === "erase") {
       if (!existing) return false;
@@ -1531,12 +1633,22 @@ export function createCitadelEditorPanel({
       hideAbove = false;
       applyHideAbove(); // 每次打开先完整显示五座台地上的全部城堡层
       drawTerrainMap(); // 等高线高亮与当前层同步
+      try {
+        onOpen();
+      } catch {
+        /* ignore */
+      }
     },
     close() {
       open = false;
       panel.style.display = "none";
       io.style.display = "none";
       onLayerVisibility(activeTerrace, activeLayer, false); // 关面板恢复全楼可见
+      try {
+        onClose();
+      } catch {
+        /* ignore */
+      }
     },
     toggle() {
       if (open) api.close();
@@ -1558,9 +1670,77 @@ export function createCitadelEditorPanel({
     supportsCell,
     setActiveTerrace: (index) => selectTerrace(index),
     deleteTerrainObject,
-    maxLevel: MAX_LEVEL,
+    /**
+     * 台地缩放自动裁剪后同步面板内存布局：把重建后的五台地 levels
+     * 回写 terraceGrids，2D 平面图不再显示已裁格子（不落盘——保存仍
+     * 由用户显式触发，裁剪结果随「保存台地配置/保存全部」一并写入）。
+     */
+    syncTrimmedLayout(spec) {
+      const next = normalizeCitadelTerraceLayout(spec ?? CITADEL_TOWN_SPEC);
+      terraceGrids = next.terraces.map((entry) => levelsToGrid(entry.levels));
+      grid = terraceGrids[activeTerrace];
+      markDirty();
+      draw();
+      drawTerrainMap();
+    },
+    /**
+     * 目标城堡切换（高山圣城 ⇄ 运河交汇古堡等实例）：
+     * 按新实例的存档键重载布局/台地/地貌对象并重建 3D。
+     * @param {(instanceId: string|null) => boolean} tryApply 返回是否已切换成功
+     */
+    switchTarget(tryApply) {
+      if (!tryApply(getInstanceId())) return false;
+      terraceGrids = loadTerraceGrids();
+      terrain = loadTerrain();
+      terrainObjects = loadTerrainObjects();
+      grid = terraceGrids[activeTerrace];
+      activeTerrace = 0;
+      activeLayer = 0;
+      hideAbove = false;
+      refreshTerrainInputs();
+      refreshMoatInputs();
+      refreshCascadeButton();
+      refreshPoolsButton();
+      refreshTargetSelect(); // 点选命中切换后，下拉选中态同步
+      drawTerraceTabs();
+      drawTerrainMap();
+      draw();
+      applyHideAbove();
+      markDirty();
+      return true;
+    },
+    // 动态 getter：切换目标城堡（5↔12 层）后即时生效
+    get maxLevel() {
+      return currentMaxLevel();
+    },
     maxCoord: MAX_COORD,
   };
+  // ---------- 目标古堡切换（高山圣城 ⇄ 运河交汇古堡等） ----------
+  const targetSelect = panel.querySelector("#ce-target");
+  function refreshTargetSelect() {
+    const targets = getTargets();
+    const current = getInstanceId();
+    targetSelect.innerHTML = "";
+    for (const t of targets) {
+      const opt = document.createElement("option");
+      opt.value = t.id ?? "";
+      opt.textContent = t.name;
+      opt.selected = (t.id ?? null) === current;
+      targetSelect.appendChild(opt);
+    }
+  }
+  targetSelect.addEventListener("change", () => {
+    const id = targetSelect.value === "" ? null : targetSelect.value;
+    if ((id ?? null) === getInstanceId()) return;
+    // 走 switchTarget 完整切换：上层先改目标（存档键/3D 目标），
+    // 成功后按新实例键重载布局/台地/地貌对象并重建面板。
+    api.switchTarget(() => {
+      onTargetChange(id); // 上层切换目标实例（含存档键与 3D 目标）
+      return true;
+    });
+  });
+  refreshTargetSelect();
+
   // Keep the backing canvas exactly equal to the fixed 25×25 building grid.
   // This makes its visual centre identical to cellCenter(12, *, 12).
   canvasEl.width = Math.round((MAX_COORD + 1) * gridPx);
