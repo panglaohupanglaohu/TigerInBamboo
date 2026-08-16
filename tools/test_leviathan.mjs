@@ -80,7 +80,13 @@ const outlineCount = (root) => {
 console.log("[1] 鲸体资产：拉伸锁死 · 切平 · 尾鳍 · 藤壶 · 灌木 · 描边");
 {
   const scene = new THREE.Scene();
-  const { group, update } = buildEcoLeviathanIsland({ seed: 9901 });
+  // minR/maxR 拉开 + basePos 在 maxR：升空态检验规格锁死值
+  const { group, update } = buildEcoLeviathanIsland({
+    seed: 9901,
+    basePos: new THREE.Vector3(0, 10, 0),
+    minR: -5,
+    maxR: 10,
+  });
   scene.add(group);
   assert.equal(group.name, "leviathanGroup");
   const body = group.getObjectByName("leviathan-body");
@@ -94,7 +100,10 @@ console.log("[1] 鲸体资产：拉伸锁死 · 切平 · 尾鳍 · 藤壶 · �
     "背顶必须切平在地壳板 Y");
   const plate = group.getObjectByName("leviathan-crust-plate");
   assert(plate, "地壳板必须存在");
-  assert(Math.abs(plate.position.y - LEVIATHAN_PLATE_Y) < 1e-6, "地壳板 Y 锁死 6.08");
+  const island = group.getObjectByName("leviathan-island");
+  assert(island, "苔庭岛组必须存在");
+  assert(Math.abs(island.position.y - LEVIATHAN_PLATE_Y) < 1e-6, "岛面 Y 锁死 6.08");
+  assert(Math.abs(plate.position.y) < 1e-6, "地壳板贴岛面原点");
   assert.deepEqual(
     [plate.geometry.parameters.width, plate.geometry.parameters.height],
     [25, 14],
@@ -177,4 +186,55 @@ console.log("[2] 苔庭上鲸背：六景落入地壳板投影 · 松树随鲸�
   ok(`六景 6 · 古松 ${pines} · 投影 ${maxExtent.x.toFixed(1)}×${maxExtent.z.toFixed(1)} · 呼吸联动`);
 }
 
-console.log(`\n结果：${pass}/2 组验收通过`);
+console.log("[3] 藏地/升空状态机：平时只见苔庭 · 扫描灯艇掠过才升空");
+{
+  const scene = new THREE.Scene();
+  const handle = saihojiGardenScene.load({ scene, planetRadius: R, options: {} });
+  const group = handle.group;
+  scene.add(group);
+  group.updateMatrixWorld(true);
+  const hubDir = latLonToGardenDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
+  const plate = group.getObjectByName("leviathan-crust-plate");
+  const body = group.getObjectByName("leviathan-body");
+  const flukes = group.getObjectByName("leviathan-flukes");
+  const tailRoot = group.getObjectByName("leviathan-tail-root");
+  const plateWorldY = () => {
+    group.updateMatrixWorld(true);
+    return plate.getWorldPosition(new THREE.Vector3()).dot(hubDir);
+  };
+  // 初始藏地：地壳板贴球面（≈R+0.3）、鲸身全部入地、尾鳍收起
+  handle.update(0, 0);
+  assert(Math.abs(plateWorldY() - (R + 0.3)) < 0.6, `藏地时板高 ${(plateWorldY() - R).toFixed(2)} 应≈0.3`);
+  {
+    group.updateMatrixWorld(true);
+    const bb = new THREE.Box3().setFromObject(body);
+    const top = bb.max.dot(hubDir);
+    assert(top < R - 0.5, `藏地时鲸身必须全部入地（背顶 ${(top - R).toFixed(1)}）`);
+  }
+  assert(flukes.rotation.x < 0.1, `藏地时尾鳍应收起（rotation.x=${flukes.rotation.x.toFixed(2)}）`);
+  assert(tailRoot.position.y < -1.5, `藏地时尾柄应贴地收起（y=${tailRoot.position.y.toFixed(2)}）`);
+  ok(`藏地：板高 +${(plateWorldY() - R).toFixed(2)} · 鲸身全入地 · 尾鳍收起 · 只见苔庭`);
+  // 扫描灯艇接近 → 升空（编队组不动，读 userData._patrolCenter）
+  const squad = new THREE.Group();
+  squad.name = "moebius-aircraft-squad";
+  const eastOf = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), hubDir).normalize();
+  squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R).addScaledVector(eastOf, 20);
+  scene.add(squad);
+  for (let i = 0; i < 120; i++) handle.update(0.5, 0);
+  assert(plateWorldY() > R + 18, `升空后板高 ${(plateWorldY() - R).toFixed(1)} 应≈+30`);
+  assert(Math.abs(flukes.rotation.x - 0.6) < 0.03,
+    `升空后尾鳍应扬起 35°（rotation.x=${flukes.rotation.x.toFixed(2)}）`);
+  assert(tailRoot.position.y > 3.3, `升空后尾柄应回位（y=${tailRoot.position.y.toFixed(2)}）`);
+  ok(`升空：板高 +${(plateWorldY() - R).toFixed(1)} · 尾鳍 35° 扬起`);
+  // 扫描灯艇远去 → 藏回地下
+  squad.userData._patrolCenter = hubDir
+    .clone()
+    .multiplyScalar(R)
+    .addScaledVector(eastOf, 400);
+  for (let i = 0; i < 120; i++) handle.update(0.5, 0);
+  assert(Math.abs(plateWorldY() - (R + 0.3)) < 0.6, "灯艇远去后应藏回地下");
+  assert(flukes.rotation.x < 0.1, "藏回后尾鳍应收起");
+  ok("降藏：灯艇远去 → 苔庭落回地面 · 鲸体入地");
+}
+
+console.log(`\n结果：${pass} 项断言 · 3 组验收通过`);

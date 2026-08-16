@@ -56,13 +56,25 @@ function flatTriangle(a, b, c, mat) {
 }
 
 /**
- * 构建太古巨型浮岛白鲸资产（含呼吸缓动）。
+ * 构建太古巨型浮岛白鲸资产（含呼吸缓动 + 藏地/升空两态）。
+ *
+ * 藏地态（minR）：整头鲸沉入星球地下，只有背部苔原地壳与苔庭露出
+ * 地表——「平时只见苔庭」；升空态（maxR）：扫描灯艇掠过时整鲸升空。
+ * 两态之间由 setAnchorRadius() 平滑过渡；尾柄/尾鳍随升空微延迟地
+ * 从「贴地收起」到「斜向上 35° 扬起」。
+ *
  * @param {object} [opts]
  * @param {THREE.Vector3} [opts.basePos] 栖息锚点（世界位）。缺省原点。
  * @param {THREE.Vector3} [opts.up] 鲸体上方（径向朝外）。缺省 +Y。
  * @param {THREE.Vector3} [opts.forward] 鲸头朝向（局部 +X）。缺省 +X。
+ * @param {number} [opts.minR] 藏地锚点半径（鲸身全沉地下；默认 = basePos 长度）
+ * @param {number} [opts.maxR] 升空锚点半径（默认 = basePos 长度）
+ * @param {number} [opts.plateWorldLift] 藏地时苔庭岛留驻的地表径向高度
+ *   （默认 = basePos 长度 + 地壳板高）——鲸沉入地下时岛面不随之下陷
  * @param {number} [opts.seed]
- * @returns {{ group: THREE.Group, update: (dt:number, t:number) => void }}
+ * @returns {{ group: THREE.Group, island: THREE.Group,
+ *             update: (dt:number, t:number) => void,
+ *             setAnchorRadius: (r:number) => void }}
  */
 export function buildEcoLeviathanIsland(opts = {}) {
   const rnd = lcg(opts.seed ?? 9901);
@@ -73,6 +85,9 @@ export function buildEcoLeviathanIsland(opts = {}) {
     .normalize();
   const rightN = new THREE.Vector3().crossVectors(fwdN, upN).normalize(); // 组局部 +Z
   const basePos = opts.basePos ? opts.basePos.clone() : new THREE.Vector3();
+  const minR = Number.isFinite(opts.minR) ? opts.minR : basePos.length();
+  const maxR = Number.isFinite(opts.maxR) ? opts.maxR : basePos.length();
+  let anchorR = THREE.MathUtils.clamp(basePos.length(), minR, maxR);
 
   const group = new THREE.Group();
   group.name = "leviathanGroup";
@@ -140,6 +155,15 @@ export function buildEcoLeviathanIsland(opts = {}) {
   }
 
   // ---------- 2. 背部苔原地壳层：西芳寺的地基容器 ----------
+  // islandGroup 的局部原点 = 地壳板面（升空时随鲸、藏地时脱离鲸体
+  // 留在球面地表——「平时只见苔庭」，鲸身整头沉入地下）。
+  const plateWorldLift = Number.isFinite(opts.plateWorldLift)
+    ? opts.plateWorldLift
+    : basePos.length() + LEVIATHAN_PLATE_Y;
+  const island = new THREE.Group();
+  island.name = "leviathan-island";
+  island.position.y = LEVIATHAN_PLATE_Y;
+  group.add(island);
   {
     const plate = new THREE.Mesh(
       new THREE.PlaneGeometry(25.0, 14.0),
@@ -147,11 +171,11 @@ export function buildEcoLeviathanIsland(opts = {}) {
     );
     plate.name = "leviathan-crust-plate";
     plate.rotation.x = -Math.PI / 2; // 绕 X 转 90° 平躺
-    plate.position.y = LEVIATHAN_PLATE_Y; // 锁死 Y≈6（+0.08 防与背顶共面闪烁）
+    plate.position.y = 0;
     plate.castShadow = true;
     plate.receiveShadow = true;
     addOutline(plate, OUTLINE_W);
-    group.add(plate);
+    island.add(plate);
 
     // 板面苔斑：墨绿/草绿系极扁圆片铺在板面上，承接西芳寺苔庭的
     // 地面语言（远端苔斑沉进板内时，板面仍读作苔原而非裸板）
@@ -171,12 +195,12 @@ export function buildEcoLeviathanIsland(opts = {}) {
       patch.rotation.x = -Math.PI / 2;
       patch.position.set(
         (rnd() * 2 - 1) * 11.6,
-        LEVIATHAN_PLATE_Y + 0.02 + rnd() * 0.06,
+        0.02 + rnd() * 0.06,
         (rnd() * 2 - 1) * 6.2
       );
       patch.rotation.z = rnd() * Math.PI;
       patch.receiveShadow = true;
-      group.add(patch);
+      island.add(patch);
     }
 
     // 防空灌木围墙：沿板缘一圈翠绿低面数小球，模糊鲸肤与大地的交界线
@@ -213,16 +237,24 @@ export function buildEcoLeviathanIsland(opts = {}) {
       // 略外探半身，包住板缘棱线
       shrub.position.set(
         x + Math.sign(x || 1e-4) * rnd() * 0.9,
-        LEVIATHAN_PLATE_Y + 0.1 + rnd() * 0.42,
+        0.1 + rnd() * 0.42,
         z + Math.sign(z || 1e-4) * rnd() * 0.9
       );
       shrub.rotateY(rnd() * Math.PI);
       addOutline(shrub, OUTLINE_W);
-      group.add(shrub);
+      island.add(shrub);
     }
   }
 
   // ---------- 3. 尾柄 + 巨型 Y 字分叉尾鳍（斜向上 35° 微翘） ----------
+  // 藏地态：尾柄贴地收起、尾鳍放平（整鲸藏进地下，只见苔庭）；
+  // 升空态：尾柄回位、尾鳍以微延迟重新扬起 35°——升空时的神韵动作。
+  const TAIL_Y_UP = 3.6;
+  const TAIL_Y_BURIED = -2.0;
+  const tailRoot = new THREE.Group();
+  tailRoot.name = "leviathan-tail-root";
+  tailRoot.position.y = TAIL_Y_UP;
+  group.add(tailRoot);
   {
     // CylinderGeometry(rTop, rBottom)：绕 Z −90° 后 +Y→+X，
     // 「顶」落在近体侧（x=−30）、「底」落在尾端（x=−44）——
@@ -233,15 +265,15 @@ export function buildEcoLeviathanIsland(opts = {}) {
     );
     stalk.name = "leviathan-tail-stalk";
     stalk.rotation.z = -Math.PI / 2; // 圆柱轴沿 -X 后伸
-    stalk.position.set(-37, 3.6, 0);
+    stalk.position.set(-37, 0, 0);
     stalk.castShadow = true;
     addOutline(stalk, OUTLINE_W);
-    group.add(stalk);
+    tailRoot.add(stalk);
 
     // 尾鳍组：双片扁平三角，从尾尖向左右展开；rotation.x=0.6 高高翘起
     const flukes = new THREE.Group();
     flukes.name = "leviathan-flukes";
-    flukes.position.set(-44, 3.6, 0);
+    flukes.position.set(-44, 0, 0);
     flukes.rotation.x = 0.6; // 斜向上微翘 ~35°
     const skinMat = toonMat(SKIN, { flatShading: true, side: THREE.DoubleSide });
     const wing = (side) => {
@@ -258,25 +290,42 @@ export function buildEcoLeviathanIsland(opts = {}) {
     };
     wing(-1);
     wing(1);
-    group.add(flukes);
+    tailRoot.add(flukes);
   }
 
-  // ---------- 4. 平缓呼吸 + 缓慢漂移 ----------
+  // ---------- 4. 平缓呼吸 + 缓慢漂移 + 藏地/升空尾姿 ----------
   // 用户锁死：position.y = sin(t·0.6)·0.25。鲸体上方在世界系近似 +Y
   // （栖息于 lat56），此处沿「鲸体上方」做同频径向起伏，语义一致且
   // 不破坏球面定位；另叠极低频的切向漂移（±1.1），呼应「缓缓漂移」。
+  const _anchor = new THREE.Vector3();
+  const _base = new THREE.Vector3();
+  const setAnchorRadius = (r) => {
+    anchorR = THREE.MathUtils.clamp(Number(r) || minR, minR, maxR);
+  };
   const update = (_dt, t) => {
     const time = Number(t) || 0;
+    _anchor.copy(upN).multiplyScalar(anchorR);
     const bob = Math.sin(time * 0.6) * 0.25;
     const driftF = Math.sin(time * 0.05 + 1.3) * 1.1;
     const driftR = Math.sin(time * 0.07) * 1.1;
     group.position
-      .copy(basePos)
+      .copy(_anchor)
       .addScaledVector(upN, bob)
       .addScaledVector(fwdN, driftF)
       .addScaledVector(rightN, driftR);
+    // 尾姿随升空进度：尾鳍比躯干微延迟 12% 扬起
+    const span = Math.max(1e-6, maxR - minR);
+    const t01 = THREE.MathUtils.clamp((anchorR - minR) / span, 0, 1);
+    const k = t01 <= 0.12 ? 0 : (t01 - 0.12) / 0.88;
+    const tailT = k * k * (3 - 2 * k); // smoothstep
+    tailRoot.position.y = THREE.MathUtils.lerp(TAIL_Y_BURIED, TAIL_Y_UP, tailT);
+    const flukes = tailRoot.getObjectByName("leviathan-flukes");
+    if (flukes) flukes.rotation.x = 0.6 * tailT;
+    // 苔庭岛随鲸/留地：升空时骑在鲸背（Y=PLATE_Y），藏地时脱离鲸体、
+    // 留在地表（plateWorldLift）——鲸身沉入地下，只见苔庭
+    island.position.y = Math.max(LEVIATHAN_PLATE_Y, plateWorldLift - anchorR);
   };
   update(0, 0);
 
-  return { group, update };
+  return { group, update, setAnchorRadius, island };
 }

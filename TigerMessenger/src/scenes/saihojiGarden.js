@@ -1,9 +1,12 @@
 // =====================================================================
 //  场景：西芳寺（苔寺）景观 —— 太古巨型浮岛白鲸脊背上的苔海六景
-//  - 六座苔海石庭整座扎根、承托在天空缓缓漂移的巨鲸脊背上
-//  - 鲸体：非等比拉伸山岳躯干 + 背部横向切平墨绿苔原地壳
-//    + 斜向上 35° 微翘的巨型 Y 字尾鳍（assets/leviathanIsland.js）
-//  - 入口苔径 / 主石 / 枯瀑 / 岛群 / 空庭 / 回望 全部随鲸呼吸起伏
+//  - 六座苔海石庭整座扎根、承托在巨鲸脊背的墨绿苔原地壳上
+//  - 平时巨鲸藏在地下（鲸身全沉、只见苔庭落在地表）；
+//    扫描灯艇（莫比斯航空艇编队）掠过苔庭上空时才升空，
+//    尾鳍随升空扬起 35°，随灯艇远去再缓缓藏回地下
+//  - 鲸体：非等比拉伸山岳躯干 + 背部横向切平 + 巨型 Y 字尾鳍
+//    （assets/leviathanIsland.js）；入口苔径/主石/枯瀑/岛群/空庭/回望
+//    全部随鲸呼吸起伏
 //  构建逻辑在 world/saihoji.js + assets/leviathanIsland.js。
 // =====================================================================
 import * as THREE from "three";
@@ -11,12 +14,18 @@ import { PLANET_RADIUS } from "../world/planet.js";
 import { buildSaihojiPlanet, SAIHOJI_HUB, SAIHOJI_ZONES, latLonToGardenDir } from "../world/saihoji.js";
 import {
   buildEcoLeviathanIsland,
-  LEVIATHAN_PLATE_Y,
   LEVIATHAN_GARDEN_SCALE,
 } from "../assets/leviathanIsland.js";
 
-/** 鲸体栖息高度：地壳板（背脊）悬停在球面 +24 上方，鲸腹不压苔丘 */
+/** 鲸体升空锚点：地壳板（背脊）悬停在球面 +24 上方，鲸腹不压苔丘 */
 const WHALE_LIFT = 24;
+/** 藏地锚点：鲸身整头沉入地下（背顶 = 锚点 +6 ≤ R−7），只见苔庭 */
+const WHALE_BURIED_DEPTH = 13;
+/** 藏地时苔庭岛留驻的地表高度（球面 +0.3） */
+const PLATE_GROUND_LIFT = 0.3;
+/** 扫描灯艇接近半径：进入则升空；退出须超出降藏半径（迟滞防抖） */
+const RISE_RADIUS = 60;
+const SINK_RADIUS = 70;
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const saihojiGardenScene = {
@@ -38,15 +47,21 @@ export const saihojiGardenScene = {
       rockCount: opt.rockCount ?? 28,
     });
 
-    // ---------- 太古浮岛白鲸：栖于苔庭中枢上方，承载整座苔庭 ----------
+    // ---------- 太古浮岛白鲸：栖于苔庭中枢，平时藏地、扫描灯艇掠过时升空 ----------
     const hubDir = latLonToGardenDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
     const hubEast = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), hubDir).normalize();
+    const buriedR = R - WHALE_BURIED_DEPTH; // 鲸身全沉地下
+    const risenR = R + WHALE_LIFT;
     const leviathan = buildEcoLeviathanIsland({
-      basePos: hubDir.clone().multiplyScalar(R + WHALE_LIFT),
+      basePos: hubDir.clone().multiplyScalar(buriedR),
       up: hubDir,
       forward: hubEast,
+      minR: buriedR,
+      maxR: risenR,
+      plateWorldLift: R + PLATE_GROUND_LIFT,
     });
     const leviathanGroup = leviathan.group;
+    const islandGroup = leviathan.island;
     scene.add(leviathanGroup);
 
     // 苔庭整组移上鲸背：把「球面苔庭」仿射变换进鲸体局部系——
@@ -99,7 +114,7 @@ export const saihojiGardenScene = {
         .applyQuaternion(invQ);
       off.x += shiftX;
       off.z += shiftZ;
-      off.y += sag * S + LEVIATHAN_PLATE_Y + 0.05;
+      off.y += sag * S + 0.05; // 相对岛面原点（islandGroup 局部 y=0 即板面）
       child.position.copy(off);
       child.quaternion.copy(invQ).multiply(q0);
       child.scale.multiplyScalar(S);
@@ -119,7 +134,38 @@ export const saihojiGardenScene = {
         if (Math.abs(delta) > 1e-4) obj.position.addScaledVector(hubDir, delta);
       }
     }
-    leviathanGroup.add(garden);
+    islandGroup.add(garden);
+
+    // ---------- 藏地/升空状态机：扫描灯艇（莫比斯航空艇编队）掠过才升空 ----------
+    let currentR = buriedR;
+    let squad = null;
+    const squadPos = new THREE.Vector3();
+    const hubGround = hubDir.clone().multiplyScalar(R);
+    const update = (dt, t) => {
+      const step = Math.min(1, Number(dt) || 0.016);
+      if (!squad) squad = scene.getObjectByName("moebius-aircraft-squad") || null;
+      let target = null;
+      if (squad) {
+        // 编队组自身不动，成员逐帧摆到 formationCenter：
+        // 读 _patrolCenter（updateAircraftHover 每帧刷新）为编队实时位置
+        const center = squad.userData?._patrolCenter;
+        if (center) squadPos.copy(center);
+        else squad.getWorldPosition(squadPos);
+        const dist = squadPos.distanceTo(hubGround);
+        if (dist < RISE_RADIUS) target = risenR; // 扫描灯艇接近 → 升空
+        else if (dist > SINK_RADIUS) target = buriedR; // 远去 → 藏回地下
+      } else {
+        target = buriedR; // 无扫描灯艇的独立场景：永远藏地
+      }
+      if (target != null) {
+        const k = 1 - Math.exp(-step * 0.22); // ~8s 的庄严升降
+        currentR += (target - currentR) * k;
+        if (Math.abs(target - currentR) < 0.02) currentR = target;
+        leviathan.setAnchorRadius(currentR);
+      }
+      leviathan.update(dt, t);
+    };
+    update(0, 0);
 
     return {
       id: "saihoji",
@@ -131,10 +177,18 @@ export const saihojiGardenScene = {
         mossCount: built.mossCount,
         placed: built.placed?.length ?? 0,
         onLeviathan: true,
+        buriedR,
+        risenR,
       },
-      update(dt, t) {
-        leviathan.update(dt, t);
-      },
+      isWhaleRisen: () =>
+        (currentR - buriedR) / Math.max(1e-3, risenR - buriedR) > 0.55,
+      whaleLift01: () =>
+        THREE.MathUtils.clamp(
+          (currentR - buriedR) / Math.max(1e-3, risenR - buriedR),
+          0,
+          1
+        ),
+      update,
       dispose() {
         if (leviathanGroup.parent) leviathanGroup.parent.remove(leviathanGroup);
         leviathanGroup.traverse((o) => {
