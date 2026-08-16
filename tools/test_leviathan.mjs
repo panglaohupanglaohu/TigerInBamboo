@@ -237,4 +237,46 @@ console.log("[3] 藏地/升空状态机：平时只见苔庭 · 扫描灯艇掠�
   ok("降藏：灯艇远去 → 苔庭落回地面 · 鲸体入地");
 }
 
-console.log(`\n结果：${pass} 项断言 · 3 组验收通过`);
+console.log("[4] 扫描吸食感：松树波动 + 树叶螺旋升空被吸进灯艇");
+{
+  const scene = new THREE.Scene();
+  const handle = saihojiGardenScene.load({ scene, planetRadius: R, options: {} });
+  scene.add(handle.group);
+  const hubDir = latLonToGardenDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
+  const eastOf = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), hubDir).normalize();
+  // 扫描灯艇悬停苔庭旁（升空触发圈内）
+  const squad = new THREE.Group();
+  squad.name = "moebius-aircraft-squad";
+  squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R + 20).addScaledVector(eastOf, 24);
+  scene.add(squad);
+  handle.update(0, 0);
+  const garden = handle.group.getObjectByName("SaihojiSixScenes");
+  // 松树基础姿态快照
+  const pineBases = new Map();
+  garden.traverse((o) => {
+    if (o.userData?._swayBase) pineBases.set(o, o.userData._swayBase.clone());
+  });
+  assert(pineBases.size >= 20, `古松 ${pineBases.size} 株不足`);
+  // 扫描进行 1 秒（岛面尚低于灯艇，树叶应开始释放）
+  for (let i = 0; i < 24; i++) handle.update(1 / 24, i / 24);
+  let swayed = 0;
+  for (const [pine, base] of pineBases) {
+    if (pine.quaternion.angleTo(base) > 0.002) swayed++;
+  }
+  assert(swayed >= 10, `波动松树 ${swayed} 株不足`);
+  const leafGroup = scene.getObjectByName("saihoji-scan-leaves");
+  assert(leafGroup, "叶池必须存在");
+  const visibleLeaves = () =>
+    leafGroup.children.filter((l) => l.visible && l.userData.life > 0);
+  const before = visibleLeaves();
+  assert(before.length > 0, "扫描时必须有树叶被吸起");
+  // 树叶向灯艇收拢：3 帧后与灯艇的距离应明显减小
+  const target = squad.userData._patrolCenter;
+  const d0 = Math.min(...before.map((l) => l.position.distanceTo(target)));
+  for (let i = 0; i < 6; i++) handle.update(1 / 24, 1 + i / 24);
+  const d1 = Math.min(...visibleLeaves().map((l) => l.position.distanceTo(target)));
+  assert(d1 < d0 - 0.5, `树叶应被吸向灯艇（d0=${d0.toFixed(1)} → d1=${d1.toFixed(1)}）`);
+  ok(`波动 ${swayed}/${pineBases.size} 株 · 升空叶 ${before.length} 片 · 收拢 ${d0.toFixed(1)}→${d1.toFixed(1)}`);
+}
+
+console.log(`\n结果：${pass} 项断言 · 4 组验收通过`);
