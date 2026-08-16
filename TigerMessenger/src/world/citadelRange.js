@@ -1817,6 +1817,47 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     rangeSystem.rebuildMoat(contourSpec?.moat);
   };
 
+  // 运河建成后对准木马：马头转向离它最近的运河航段（港口侧运河）。
+  // 马头朝向不再由瀑布方向推导——运河锚点/排除区调整会移动曲线，
+  // 固定瀑布角会与真实航道失准；以建成后的曲线为准（圣城局部平面内
+  // 找最近航段，与广场/木马验收同一语义），永不失准。
+  rangeSystem.aimHorseToCanal = (curve) => {
+    if (!trojanHorse || !curve) return false;
+    const pos = trojanHorse.position;
+    const posLx = pos.dot(_right);
+    const posLz = pos.dot(_fwd);
+    let bestD = Infinity;
+    let bestX = 0;
+    let bestZ = 0;
+    for (let i = 0; i < 480; i++) {
+      const p = curve.getPointAt(i / 480, _o);
+      const dx = p.dot(_right) - posLx;
+      const dz = p.dot(_fwd) - posLz;
+      const d = dx * dx + dz * dz;
+      if (d < bestD) {
+        bestD = d;
+        bestX = dx;
+        bestZ = dz;
+      }
+    }
+    if (!Number.isFinite(bestD)) return false;
+    const yaw = Math.atan2(bestX, bestZ);
+    const facing = new THREE.Vector3()
+      .copy(_right)
+      .multiplyScalar(bestX)
+      .addScaledVector(_fwd, bestZ);
+    facing.addScaledVector(_site, -facing.dot(_site));
+    if (facing.lengthSq() < 1e-8) return false;
+    facing.normalize();
+    const up = _site.clone();
+    const right = new THREE.Vector3().crossVectors(up, facing).normalize();
+    trojanHorse.quaternion.setFromRotationMatrix(
+      new THREE.Matrix4().makeBasis(right, up, facing)
+    );
+    if (trojanHorse.userData.placement) trojanHorse.userData.placement.yaw = yaw;
+    return true;
+  };
+
   // 台地半径/层高/层叠瀑布开关变更时热重建水系。
   // cascadeEnabled=false → 空组（不占台面）；true → 五湖四帘，且不得跨两层跌落。
   rangeSystem.rebuildWaterTerraces = (nextContour = CITADEL.contourTerrain) => {

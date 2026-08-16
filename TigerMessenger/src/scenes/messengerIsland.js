@@ -48,7 +48,14 @@ import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { createHarborLogistics } from "../assets/harborLogistics.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
-import { createCitySeaLake, CITY_SEA_LAKE } from "../world/citySeaLake.js";
+import {
+  createCitySeaLake,
+  CITY_SEA_LAKE,
+  WATER_CITY_WATER_DROP,
+  WATER_CITY_ANG_R,
+  waterCityShoreAng,
+  waterCityCanalWaypointDir,
+} from "../world/citySeaLake.js";
 import {
   buildOdysseyCitadel,
   CITADEL_TERRAIN_KEY,
@@ -154,17 +161,17 @@ export const messengerIslandScene = {
     // 3 艘气泡座舱分别围绕水晶城 3 座含花厅的建筑巡游。
     const bubblePods = createBubblePodsAroundFlowerBuildings(scene, moebius.crystals, { count: 3 });
 
-    // ---------- 花厅塔下方双湖：沉在峡谷底，塔身自湖心拔起 ----------
-    // 塔位是运行时从轨道曲线算出来的（computeTracksideGoldSites），
-    // 所以这里用实际塔的 dir/root 定位，而不是硬编码经纬度（否则改线就漂移）。
-    // 水面取塔基高度 root，电车在十余单位上方的高架桥凌空掠过，纵深拉满。
-    const hallTowers = moebius.crystals.filter((c) => c.group?.userData?.bioLayers?.length);
-    // 只保留这一个带白鲸的湖：湖心取母塔（花厅塔中体量最大者），塔身自湖心拔起
-    const lakeHall = hallTowers[0] || null;
+    // ---------- 峡谷水城 · 坑底大湖（湖面覆盖整个城区） ----------
+    // 湖心 = 峡谷中心；水面沉到 R-24（与第 2/3 阶地边界相交 → 湖岸角距 0.486）：
+    // 城区足迹 0.7286 rad 全在水面之下，第 1/2 阶地成干燥岛环、其余入水。
+    // 城区建筑由 moebiusCity 按水位抬根 + 水线石台（被淹丘顶不再托底），
+    // 母塔立在湖心绿岛上、金鳞双塔自水中拔起；电车高架在十余单位上方掠过。
     const citySeaLake = createCitySeaLake(scene, R, {
       seed: 5521,
-      centerDir: lakeHall?.dir,
-      baseRadius: lakeHall?.root,
+      centerDir: latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3()),
+      baseRadius: R - WATER_CITY_WATER_DROP - CITY_SEA_LAKE.waterLift,
+      angR: WATER_CITY_ANG_R,
+      fixedLevel: true,
     });
 
     // ---------- 太古高山圣城要塞 + 五层贴地台地 ----------
@@ -460,6 +467,9 @@ export const messengerIslandScene = {
     // 形态是贴地沟渠（河床/水面/两侧立壁/岸顶土埂），不是埋进球心的地下通道。
     // 场景锚点动态取运行时方向（门在轨道上、海湖可搬迁、圣城在峡谷侧）。
     // 注意：bookshop / canyonDir 在本段之上才初始化，必须置于其后以避免暂时性死区。
+    // 峡谷水城水晶城航点：湖面开阔水（避开三座花厅塔与母塔岛丘，
+    // 数值经运河曲线探针验证，最近塔距 ≥0.2 rad）。
+    const cityCanalWaypoint = waterCityCanalWaypointDir();
     const canalAnchors = [];
     const canalNames = [];
     const canalPush = (dir, name) => {
@@ -473,7 +483,10 @@ export const messengerIslandScene = {
     canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖");
     canalPush(odysseyCitadel?.position, "高山圣城");
     canalPush(canalJunctionCitadel?.position, "运河交汇古堡");
-    canalPush(moebius?.grand?.dir, "水晶城");
+    // 峡谷水城：水晶城锚点改为湖面航点（谷心西偏 40°、角距 0.2 的开阔水面）——
+    // 原锚点在花厅塔上，运河高架穿塔、且落差梯道会撞进塔岛；现航点避开
+    // 三座花厅塔（最近塔距 ≥0.2 rad）与母塔岛丘，梯道/升船机落在开阔水面上方。
+    canalPush(cityCanalWaypoint, "水晶城");
     canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon), "白鲸海湖");
     // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
     canalPush(canyonDir, "叹息之门");
@@ -520,11 +533,19 @@ export const messengerIslandScene = {
           citadelRange.placeNavonaPlaza(-10, 75, Math.PI / 2, odysseyCitadel);
         }
       }
+      // 木马在广场摆放（placeNavonaPlaza）后才创建；以建成后的运河曲线为准
+      // 对准港口侧航道——锚点调整不再导致失准。
+      citadelRange.aimHorseToCanal?.(canal.curve);
       // 复制 10 艘古战船沿运河环线巡游（整体放大一倍），送信人可靠近 [F] 登船驾驶
       canalBoats = createCanalBoatPatrol(scene, canal, { count: 10, scale: 1.84 });
       // 利用落差互联互通：运河水沿阶梯瀑布船道跌入大湖，战船顺梯入湖巡游，
-      // 归来时由出口升船机整厢抬回运河水位，形成闭环通航
-      canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake);
+      // 归来时由出口升船机整厢抬回运河水位，形成闭环通航。
+      // 峡谷水城：梯道/升船机锚在湖岸崖壁内侧的开阔水面（湖岸角距 - 余量），
+      // 入湖后先收进深潭（角距 0.2）环湖巡航，避开水中塔群。
+      canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake, {
+        edgeAng: waterCityShoreAng(WATER_CITY_WATER_DROP) - 0.02,
+        cruiseAng: 0.2,
+      });
       canalLakeLink?.attachAll?.(canalBoats.boats);
 
       // 旧港装船物流：纸士兵计数装货 → 满载离港入运河 →

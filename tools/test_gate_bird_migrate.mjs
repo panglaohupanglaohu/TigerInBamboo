@@ -190,7 +190,8 @@ const island = fs.readFileSync(
   "utf8"
 );
 assert(island.includes("BirdVortexManager"), "场景应创建 BirdVortexManager");
-assert(island.includes("landmarks: {"), "场景应暴露 landmarks");
+assert(island.includes("landmarks: messengerLandmarks") || island.includes("landmarks: {"),
+  "场景应暴露 landmarks");
 assert(island.includes("birdVortex"), "场景应挂 landmarks.birdVortex");
 const main = fs.readFileSync(fileURLToPath(new URL("src/main.js", BASE)), "utf8");
 assert(main.includes("syncToGate"), "门体迁移入口应同步 BirdVortex");

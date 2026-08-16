@@ -92,7 +92,13 @@ function foamSprite(scale, opacity) {
   return sp;
 }
 
-/** 运河—大湖落差互联；交点求解失败时返回 null（调用方可 ?. 安全调用） */
+/** 运河—大湖落差互联；交点求解失败时返回 null（调用方可 ?. 安全调用）
+ * @param {object} [opts]
+ * @param {number} [opts.edgeAng] 进出湖盘的交点角距（rad）。峡谷水城大湖时
+ *   应传「湖岸角距 - 余量」，让梯道/升船机锚在开阔水面上方而非干燥阶地里。
+ * @param {number} [opts.cruiseAng] 环湖巡航角距（rad）。大湖时传深潭角距
+ *   （如 0.2），战船绕湖心深潭巡航、避开水中塔群；缺省沿用入湖点角距。
+ */
 export function buildCanalLakeLink(scene, canal, sea, opts = {}) {
   if (!canal?.curve || !sea?.centerDir || !Number.isFinite(sea.surfaceR)) {
     return null;
@@ -101,7 +107,8 @@ export function buildCanalLakeLink(scene, canal, sea, opts = {}) {
   const curve = canal.curve;
   const waterR = canal.waterR;
   const centerDir = sea.centerDir.clone().normalize();
-  const edgeAng = sea.angR + EDGE_MARGIN;
+  const edgeAng = Number.isFinite(opts.edgeAng) ? opts.edgeAng : sea.angR + EDGE_MARGIN;
+  const cruiseAng = Number.isFinite(opts.cruiseAng) ? opts.cruiseAng : null;
 
   /* ---------- 求运河曲线进出湖盘的两个交点 ---------- */
   const SCAN = 1024;
@@ -150,6 +157,19 @@ export function buildCanalLakeLink(scene, canal, sea, opts = {}) {
     Math.sign(entryFwd.dot(new THREE.Vector3().crossVectors(centerDir, entryDir))) || 1;
   let sweepDelta = signedAngleAround(entryDir, exitDir, centerDir);
   while (sweepDelta * sweepSign < 0.4) sweepDelta += sweepSign * Math.PI * 2;
+
+  // 巡航角距剖面：入湖点（岸线）→ 深潭巡航角 → 出湖点（岸线）。
+  // 大湖（cruiseAng 给定）时先收进深潭、出湖前再展开，避开水中塔群；
+  // 小湖（cruiseAng 缺省）时保持旧行为：以入湖点角距绕湖巡航。
+  const entryAng = entryDir.angleTo(centerDir);
+  const exitAng = exitDir.angleTo(centerDir);
+  const radialAngAt = (progress) => {
+    if (cruiseAng == null) return entryAng;
+    const inT = THREE.MathUtils.clamp(progress / 0.3, 0, 1);
+    const outT = THREE.MathUtils.clamp((progress - 0.7) / 0.3, 0, 1);
+    if (outT <= 0) return THREE.MathUtils.lerp(entryAng, cruiseAng, easeInOut(inT));
+    return THREE.MathUtils.lerp(cruiseAng, exitAng, easeInOut(outT));
+  };
 
   /* ---------- 落差剖面：七级阶梯（水平段 + 前 38% 缓跌） ---------- */
   const liveDrop = () => waterR - sea.surfaceR; // 落差（relocate 后仍有效）
@@ -498,10 +518,11 @@ export function buildCanalLakeLink(scene, canal, sea, opts = {}) {
       return;
     }
     if (st.phase === "lake") {
-      const orbitR = Math.sin(entryDir.angleTo(centerDir)) * surfR;
+      const progress = THREE.MathUtils.clamp(st.phi / sweepDelta, 0, 1);
+      const ang = radialAngAt(progress);
+      const orbitR = Math.sin(ang) * surfR;
       const omega = CRUISE_SPEED / Math.max(1, orbitR);
       st.phi += sweepSign * omega * dt;
-      const progress = THREE.MathUtils.clamp(st.phi / sweepDelta, 0, 1);
       if (st.phi * sweepSign >= Math.abs(sweepDelta)) {
         // 抵达升船机捕获点
         _m4.makeBasis(exitFwd, exitDir, _v3.crossVectors(exitFwd, exitDir));
@@ -521,7 +542,7 @@ export function buildCanalLakeLink(scene, canal, sea, opts = {}) {
       boat.quaternion.setFromRotationMatrix(_m4);
       boat.position
         .copy(_dirK)
-        .multiplyScalar(surfR + DRAFT + Math.sin(st.phi * 3.1) * 0.03);
+        .multiplyScalar(Math.sin(ang) * surfR + DRAFT + Math.sin(st.phi * 3.1) * 0.03);
       updateWarshipOars(boat, dt, 1);
       return;
     }

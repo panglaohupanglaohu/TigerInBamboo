@@ -13,6 +13,7 @@ import { facet } from "../assets/lowPoly.js";
 import { createDetailedMoebiusTower } from "../assets/moebiusTower.js";
 import { latLonToDir, quatYToDir } from "./sphereMath.js";
 import { CANYON, canyonOffsetDir } from "./canyon.js";
+import { WATER_CITY_WATER_DROP } from "./citySeaLake.js";
 import {
   cityLocalToDir,
   dirToCityLocal,
@@ -148,9 +149,11 @@ export function footprintSurfaceRange(dir, radiusWorld, R, samples = 16) {
  *  2) 其上起一座矮绿丘，建筑底落在丘顶面之上
  *  不得把建筑埋进绿丘，也不得埋进邻阶山壁。
  *
- * @param {{ hall?: boolean, meshBottomLocal?: number }} [opts]
+ * @param {{ hall?: boolean, meshBottomLocal?: number, waterLevel?: number }} [opts]
  *   hall: 花厅塔（母皇/金鳞）用更大净空与丘高
  *   meshBottomLocal: 缩放后网格最低点（通常 ≤0）；用于把真实塔脚抬到丘顶之上
+ *   waterLevel: 水面径向高度（峡谷水城）。丘顶低于水位时建筑不再被淹——
+ *     底抬到水面 + 净空，从水中拔起（水线石台由调用方另建）；缺省 -Infinity 行为不变。
  */
 export function buildingPlacementOnTerrain(dir, radiusWorld, R, opts = {}) {
   const hall = !!opts.hall;
@@ -164,9 +167,11 @@ export function buildingPlacementOnTerrain(dir, radiusWorld, R, opts = {}) {
   const hillBase = maxS;
   const hillCrest = hillBase + hillHeight;
   const clearance = hall ? HALL_SURFACE_CLEARANCE : BUILDING_SURFACE_CLEARANCE;
-  // 真实网格底 = root + meshBottomLocal；令其 = hillCrest + clearance
+  // 真实网格底 = root + meshBottomLocal；令其 = max(丘顶, 水位) + clearance
   const meshBottomLocal = Number.isFinite(opts.meshBottomLocal) ? opts.meshBottomLocal : 0;
-  const root = hillCrest + clearance - meshBottomLocal;
+  const waterLevel = Number.isFinite(opts.waterLevel) ? opts.waterLevel : -Infinity;
+  const submerged = hillCrest < waterLevel;
+  const root = (submerged ? waterLevel : hillCrest) + clearance - meshBottomLocal;
   const padHeight = hillHeight + GREEN_HILL_EMBED;
   return {
     root,
@@ -179,6 +184,7 @@ export function buildingPlacementOnTerrain(dir, radiusWorld, R, opts = {}) {
     padHeight,
     clearance,
     hall,
+    submerged,
   };
 }
 
@@ -340,6 +346,10 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
     return canyonOffsetDir(dir) <= -minDrop + 1e-5;
   }
 
+  // 峡谷水城水位：水面沉到 R-WATER_CITY_WATER_DROP（= 湖岸角距 0.486 的阶地边界）。
+  // 被淹丘顶之上的建筑底抬到水面 + 净空，从水中拔起。
+  const waterLevel = R - WATER_CITY_WATER_DROP;
+
   function trackClear(dir, minAngle = 0.19) {
     if (!trackCurve) return true;
     for (let i = 0; i <= 320; i++) {
@@ -392,7 +402,7 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
       continue;
     }
     if (!trackClear(dir, (r + 2.0) / R)) continue;
-    const place = buildingPlacementOnTerrain(dir, r, R);
+    const place = buildingPlacementOnTerrain(dir, r, R, { waterLevel });
     const root = place.root;
     const tooClose = placedBuildings.some((other) => {
       const needed =
@@ -407,6 +417,7 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
       r,
       root,
       place,
+      submerged: place.submerged,
       tx: c.tx ?? 0,
       tz: c.tz ?? 0,
       lx: c.lx,
@@ -427,6 +438,7 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
     geo.translate(0, 0.5, 0); // 底部原点（实例矩阵缩放为最终尺寸）
     const mat = crystalPhysical(); // 玻璃折射
     const inst = new THREE.InstancedMesh(geo, mat, list.length);
+    inst.name = "moebius-crystal-instances";
     // 透明体必须用极细壳线；过厚反向壳会被玻璃透射成“灰色钢筋”。
     const outInst = new THREE.InstancedMesh(geo, outlineMatInstanced(0.012), list.length);
     list.forEach((c, i) => {
@@ -446,6 +458,32 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
     group.add(inst, outInst);
   }
 
+  // 峡谷水城：被淹晶塔的水线石台（防波堤语汇）——塔底抬到水面后，
+  // 石台跨水线托住塔脚，替代被淹的绿丘顶面。
+  {
+    const lifted = [];
+    for (const seg of [4, 5, 6]) {
+      for (const c of buckets[seg]) if (c.submerged) lifted.push(c);
+    }
+    if (lifted.length) {
+      const platGeo = facet(new THREE.CylinderGeometry(1, 1.18, 0.35, 8));
+      const platMat = toonMat(0x8b99a3, { flatShading: true });
+      const plats = new THREE.InstancedMesh(platGeo, platMat, lifted.length);
+      lifted.forEach((c, i) => {
+        _pos.copy(c.dir).multiplyScalar(waterLevel + BUILDING_SURFACE_CLEARANCE - 0.05);
+        _quat.copy(quatYToDir(c.dir, new THREE.Quaternion()));
+        _scl.set(c.r * 1.18, 1, c.r * 1.18);
+        _m.compose(_pos, _quat, _scl);
+        plats.setMatrixAt(i, _m);
+      });
+      plats.name = "moebius-waterline-platforms";
+      plats.castShadow = true;
+      plats.receiveShadow = true;
+      plats.instanceMatrix.needsUpdate = true;
+      group.add(plats);
+    }
+  }
+
   /**
    * 花厅塔（母皇/金鳞）落在绿色山丘顶面：
    *  - 先 scale，再量真实网格底
@@ -459,6 +497,7 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
     const place = buildingPlacementOnTerrain(dir, footR, R, {
       hall: true,
       meshBottomLocal,
+      waterLevel,
     });
     const rootR = place.root;
     placeGreenHillPad(
@@ -481,6 +520,20 @@ export function buildMoebiusCrystalMetropolis(scene, R, options = {}) {
       }
     } else {
       tower.quaternion.copy(quatYToDir(dir, new THREE.Quaternion()));
+    }
+    // 峡谷水城：被淹花厅塔的水线石台（与晶塔平台同一语汇）
+    if (place.submerged) {
+      const plat = new THREE.Mesh(
+        facet(new THREE.CylinderGeometry(footR * 1.14, footR * 1.28, 0.42, 10)),
+        toonMat(0x8b99a3, { flatShading: true })
+      );
+      plat.name = "moebius-hall-waterline-platform";
+      plat.position.copy(dir).multiplyScalar(waterLevel + HALL_SURFACE_CLEARANCE - 0.05);
+      plat.quaternion.copy(quatYToDir(dir, new THREE.Quaternion()));
+      plat.castShadow = true;
+      plat.receiveShadow = true;
+      addOutline(plat, 0.02, 0x1c2523, 0);
+      group.add(plat);
     }
     group.add(tower);
     return { root: rootR, padHeight: place.padHeight, hillCrest: place.hillCrest };

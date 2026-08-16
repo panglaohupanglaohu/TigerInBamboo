@@ -742,7 +742,12 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
       onViewAction: citadelViewAction,
       getSupportLevel: citadelSupportAt,
       getInstanceId: () => citadelTargetId,
-      getTargets: () => citadelTargets.map((t) => ({ id: t.id, name: t.name, floors: t.floors })),
+      getTargets: () =>
+        citadelTargets.map((t) => ({
+          id: t.id,
+          name: t.name,
+          floors: t.get()?.userData?.floors ?? t.floors,
+        })),
       onTargetChange: (id) => {
         citadelTargetId = id ?? null;
         citadelSupportCache.clear();
@@ -819,11 +824,10 @@ const crystalCityEditorPanel = messenger?.landmarks?.moebius
           layout,
           useStorage: false,
         });
-        // 海水湖跟到新母皇塔基
+        // 峡谷水城：湖固定于峡谷中心（fixedLevel 水位恒定），重建后复位出厂湖位
         const lake = messenger.landmarks.citySeaLake;
-        const grand = api.grand;
-        if (lake?.relocate && grand?.dir) {
-          lake.relocate(grand.dir, grand.root);
+        if (lake?.relocate) {
+          lake.relocate(lake.defaultCenterDir);
         }
         return { halls: layout.halls?.length ?? 0, crystals: layout.crystals?.length ?? 0 };
       },

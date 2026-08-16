@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { latLonToDir, quatYToDir } from "./sphereMath.js";
 import { PLANET_RADIUS } from "./planet.js";
-import { canyonOffsetDir } from "./canyon.js";
+import { CANYON, canyonOffsetDir } from "./canyon.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
 
 
@@ -17,6 +17,9 @@ import { groundLiftAt, worldToFlatXZ } from "./hills.js";
  * 现改为随花厅塔运行时定位（见 createCitySeaLake 的 centerDir/baseRadius）：
  * 水面沉到塔基高度，母塔自湖心拔起，电车在十余单位上方的高架桥凌空掠过。
  * 下方 lat/lon 仅作无塔可用时的兜底（= 母塔方位）。
+ *
+ * 注：峡谷水城模式下（messengerIsland 传入 angR 0.75 + fixedLevel），
+ * 湖心改为峡谷中心、水面沉到 R-WATER_CITY_WATER_DROP——此处常量仅为小湖兜底。
  */
 export const CITY_SEA_LAKE = Object.freeze({
   lat: -24, // 母塔纬度
@@ -28,6 +31,45 @@ export const CITY_SEA_LAKE = Object.freeze({
   maxDive: 10, // 最大潜深（径向向球心，世界单位）
   shoreW: 0.045, // 岸带宽（角）
 });
+
+/**
+ * 峡谷水城（Water City）参数——湖面覆盖整个水晶城城区。
+ *  - 城区足迹半径 = min(0.77, 0.85·(1-5/7)·3) = 0.7286 rad；
+ *  - 水面下沉 24 单位后，与阶梯台地相交于第 2/3 阶地边界（湖岸角距 0.486）：
+ *    第 1/2 环（0.486 之外）成干燥岛环，第 3 环起全部入水；
+ *  - 被淹建筑由 moebiusCity 按水位抬根 + 水线石台（防波堤语汇）。
+ */
+export const WATER_CITY_WATER_DROP = 24;
+export const WATER_CITY_ANG_R = 0.75;
+
+/**
+ * 水位对应的湖岸角距：水面与阶梯台地相交的阶地边界（谷心角距，rad）。
+ * 例：drop=24 → ceil(24/8.571)=3 → 岸在 rim·(1-3/7)=0.4857（第 2/3 阶地边界）。
+ */
+export function waterCityShoreAng(drop = WATER_CITY_WATER_DROP) {
+  const stepDepth = CANYON.depth / CANYON.steps;
+  const stepsBelow = Math.ceil(drop / stepDepth);
+  return CANYON.rim * (1 - stepsBelow / CANYON.steps);
+}
+
+/**
+ * 峡谷水城的水晶城运河航点：谷心切平面系 az=-40°、角距 0.2 的开阔水面。
+ * 原锚点在花厅塔上（高架穿塔 + 落差梯道撞塔岛）；此航点避开三座花厅塔
+ * （最近塔距 ≥0.2 rad）与母塔岛丘，梯道/升船机落在开阔水面上方。
+ */
+export function waterCityCanalWaypointDir(out = new THREE.Vector3()) {
+  const c = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
+  const e = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), c).normalize();
+  const n = new THREE.Vector3().crossVectors(c, e).normalize();
+  const az = THREE.MathUtils.degToRad(-40);
+  const d = 0.2;
+  return out
+    .copy(c)
+    .multiplyScalar(Math.cos(d))
+    .addScaledVector(e, Math.cos(az) * Math.sin(d))
+    .addScaledVector(n, Math.sin(az) * Math.sin(d))
+    .normalize();
+}
 
 const _dir = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -232,7 +274,16 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   // let 而非 const：relocate() 需要改写它，且 containsWorldPos / diveDepthAt
   // 等闭包要能读到新值（否则搬迁后潜水判定仍按旧水面高度算）
   let surfaceR = baseR + cfg.waterLift;
-  const rFlat = planetRadius * Math.sin(cfg.angR);
+  // 湖盘贴合水面球（半径 surfaceR）：切平面半径按水面球计算，
+  // 盘缘角距 == cfg.angR（旧版用 planetRadius 计算，水面下沉后盘缘会外扩）。
+  const rFlat = surfaceR * Math.sin(cfg.angR);
+  // 湖岸角距（水面与阶梯台地的交线）：岸砂环/礁石/湖底装饰都以它为准，
+  // 避免把岸线画到干燥阶地之下或悬在深水之上。
+  const shoreAng = waterCityShoreAng(planetRadius - surfaceR);
+  const shoreChord = surfaceR * Math.sin(shoreAng);
+  // 深潭半径：湖心开阔水域（角距 0.24 内无建筑，白鲸/鱼群在此巡游）
+  const deepChord = surfaceR * Math.sin(0.24);
+  const waterSeg = rFlat > 60 ? 128 : 64;
 
   const group = new THREE.Group();
   group.name = "city-sea-lake";
@@ -268,12 +319,12 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   // ---- 海水面（深蓝青 · clearcoat 高光，无物理透射） ----
   // 性能硬约束：transmission > 0 会让 three.js 走 renderTransmissionPass，
   // 每帧把全部不透明物体二次渲染到 4x MSAA + 完整 mipmap 的 render target，
-  // 再在片元里做屏幕空间采样。本湖水面是 rFlat≈13 的大圆盘（占屏面积极大），
+  // 再在片元里做屏幕空间采样。湖面是大圆盘（占屏面积极大），
   // 无头 SwiftShader（纯 CPU 光栅化）会直接 Context Lost / GPU 超时死锁。
   // 观感用 opacity 半透明 + clearcoat 高光复现，成本只剩一次正向渲染。
   // 同理去掉 ior / thickness（仅在 transmission > 0 时生效，留着是误导）。
   const water = new THREE.Mesh(
-    makeSphericalDisc(rFlat, 64, surfaceR),
+    makeSphericalDisc(rFlat, waterSeg, surfaceR),
     new THREE.MeshStandardMaterial({
       color: 0x1a6a88,
       transparent: true,
@@ -289,9 +340,14 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   water.renderOrder = 2;
   group.add(water);
 
-  // 深水暗盘（视觉纵深）
+  // 深水暗盘（视觉纵深）：大湖时收在湖岸之内，不漫上浅滩
   const deep = new THREE.Mesh(
-    makeSphericalDisc(rFlat * 0.72, 48, surfaceR, 0.08),
+    makeSphericalDisc(
+      Math.min(rFlat * 0.72, shoreChord * 0.88),
+      waterSeg,
+      surfaceR,
+      0.08
+    ),
     new THREE.MeshBasicMaterial({
       color: 0x0a3048,
       transparent: true,
@@ -304,9 +360,16 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   deep.position.y = -0.08;
   group.add(deep);
 
-  // 水下体积柱（潜行时可见的青蓝柱体）
+  // 水下体积柱（潜行时可见的青蓝柱体）：大湖时收在湖岸之内
   const volume = new THREE.Mesh(
-    new THREE.CylinderGeometry(rFlat * 0.92, rFlat * 0.88, cfg.maxDive * 0.95, 48, 1, true),
+    new THREE.CylinderGeometry(
+      Math.min(rFlat * 0.92, shoreChord * 0.94) * 0.98,
+      Math.min(rFlat * 0.88, shoreChord * 0.94) * 0.94,
+      cfg.maxDive * 0.95,
+      48,
+      1,
+      true
+    ),
     new THREE.MeshBasicMaterial({
       color: 0x0d4a62,
       transparent: true,
@@ -320,8 +383,12 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   group.add(volume);
 
   // 岸砂环（球面贴合：与水面同一曲率，不翘边）
+  // 大湖模式：湖岸 = 阶地崖壁水线，砂环贴在水线处（崖壁前的浅水带）；
+  // 小湖模式：湖岸 = 盘缘，砂环如旧贴盘缘。
   {
-    const rimGeo = new THREE.RingGeometry(rFlat * 0.97, rFlat * 1.08, 64);
+    const rimInner = Math.min(rFlat * 0.97, shoreChord * 0.98);
+    const rimOuter = rimInner + Math.min(rFlat * 0.11, shoreChord * 0.05);
+    const rimGeo = new THREE.RingGeometry(rimInner, rimOuter, waterSeg);
     const pos = rimGeo.attributes.position;
     const rr2 = surfaceR * surfaceR;
     for (let i = 0; i < pos.count; i++) {
@@ -339,10 +406,12 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
     group.add(rim);
   }
 
-  // 岸边礁石点缀
+  // 岸边礁石点缀：大湖时收在湖岸水线，避免埋进干燥阶地
+  const rockBandInner = Math.min(rFlat * 0.94, shoreChord * 0.97);
+  const rockBandOuter = Math.min(rFlat * 1.04, shoreChord * 1.03);
   for (let i = 0; i < 14; i++) {
     const a = (i / 14) * Math.PI * 2 + rnd() * 0.2;
-    const d = rFlat * (0.94 + rnd() * 0.1);
+    const d = rockBandInner + (rockBandOuter - rockBandInner) * rnd();
     const rock = part(
       new THREE.DodecahedronGeometry(0.55 + rnd() * 0.7, 0),
       toonMat(0x6a7580, { flatShading: true }),
@@ -379,12 +448,14 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   }
 
   /* ---------- 培育：湖沼动物迁入海水 ---------- */
+  // 大湖模式：巡游半径收进深潭（角距 0.24 内无建筑、水深充足），
+  // 避免生物游进浅滩穿进阶地崖壁。
   const whales = [];
   for (let i = 0; i < 3; i++) {
     const w = buildSeaBeluga(rnd);
     const sc = i === 0 ? 1.1 : 0.55 + rnd() * 0.25;
     w.scale.setScalar(sc);
-    w.userData.orbitR = rFlat * (0.25 + rnd() * 0.45);
+    w.userData.orbitR = Math.min(rFlat * (0.25 + rnd() * 0.45), deepChord * 0.9);
     w.userData.orbitY = -1.2 - rnd() * 3.5; // 水面下
     w.userData.speed = 0.12 + rnd() * 0.08;
     w.userData.phase = rnd() * Math.PI * 2;
@@ -396,7 +467,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   for (let i = 0; i < 5; i++) {
     const e = buildSeaEel(rnd);
     e.scale.setScalar(0.55 + rnd() * 0.35);
-    e.userData.orbitR = rFlat * (0.2 + rnd() * 0.5);
+    e.userData.orbitR = Math.min(rFlat * (0.2 + rnd() * 0.5), deepChord * 0.85);
     e.userData.orbitY = -2.5 - rnd() * 4;
     e.userData.speed = 0.2 + rnd() * 0.15;
     e.userData.phase = rnd() * Math.PI * 2;
@@ -408,7 +479,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   for (let i = 0; i < 8; i++) {
     const f = buildSeaRibbonFish(rnd);
     f.scale.setScalar(0.7 + rnd() * 0.5);
-    f.userData.orbitR = rFlat * (0.15 + rnd() * 0.55);
+    f.userData.orbitR = Math.min(rFlat * (0.15 + rnd() * 0.55), deepChord * 0.8);
     f.userData.orbitY = -0.8 - rnd() * 5;
     f.userData.speed = 0.28 + rnd() * 0.2;
     f.userData.phase = rnd() * Math.PI * 2;
@@ -416,20 +487,34 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
     fish.push(f);
   }
 
-  // 湖底管虫 / 贝壳
+  // 湖底管虫 / 贝壳：贴真实湖底（阶梯阶地面）摆放，不悬在半水。
+  // 局部切平面 (x,z) → 世界方向 → 峡谷阶地面半径 → 换算回组内径向偏移。
+  const _t1 = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), centerDir);
+  if (_t1.lengthSq() < 1e-8) _t1.set(1, 0, 0);
+  _t1.normalize();
+  const _t2 = new THREE.Vector3().crossVectors(centerDir, _t1).normalize();
+  const floorLocalYAt = (x, z) => {
+    const dir = _tmp
+      .copy(centerDir)
+      .addScaledVector(_t1, x / surfaceR)
+      .addScaledVector(_t2, z / surfaceR)
+      .normalize();
+    return planetRadius + canyonOffsetDir(dir) - surfaceR + 0.06;
+  };
+  const decorRadius = Math.min(rFlat * 0.75, shoreChord * 0.9);
   for (let i = 0; i < 10; i++) {
     const a = rnd() * Math.PI * 2;
-    const d = rnd() * rFlat * 0.75;
+    const d = rnd() * decorRadius;
     const worms = buildSeaTubeWorms(rnd);
-    worms.position.set(Math.cos(a) * d, -cfg.maxDive * 0.85, Math.sin(a) * d);
+    worms.position.set(Math.cos(a) * d, floorLocalYAt(Math.cos(a) * d, Math.sin(a) * d), Math.sin(a) * d);
     worms.scale.setScalar(0.8 + rnd() * 0.5);
     group.add(worms);
   }
   for (let i = 0; i < 16; i++) {
     const a = rnd() * Math.PI * 2;
-    const d = rnd() * rFlat * 0.9;
+    const d = rnd() * decorRadius;
     const sh = buildSeaShell(rnd);
-    sh.position.set(Math.cos(a) * d, -cfg.maxDive * 0.88 + rnd() * 0.3, Math.sin(a) * d);
+    sh.position.set(Math.cos(a) * d, floorLocalYAt(Math.cos(a) * d, Math.sin(a) * d), Math.sin(a) * d);
     sh.rotation.y = rnd() * Math.PI * 2;
     group.add(sh);
   }
@@ -459,7 +544,10 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
     if (!dir) return false;
     centerDir.copy(dir).normalize(); // 原地改写 → 闭包看到新值
     let nextBase = baseRadius;
-    if (!Number.isFinite(nextBase)) {
+    if (fixedLevel) {
+      // 峡谷水城：水位恒定（R-WATER_CITY_WATER_DROP），搬迁只移动湖心
+      nextBase = surfaceR - cfg.waterLift;
+    } else if (!Number.isFinite(nextBase)) {
       const flat = worldToFlatXZ(centerDir, planetRadius);
       nextBase = flat
         ? planetRadius + groundLiftAt(flat.x, flat.z)
@@ -564,6 +652,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   }
 
   // 具名对象：relocate() 要改写 api.surfaceR，外部（bubblePodRide）持有同一引用
+  const fixedLevel = !!opts.fixedLevel;
   const api = {
     group,
     centerDir,
@@ -576,6 +665,9 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
     maxDive: cfg.maxDive,
     rFlat,
     waterLift: cfg.waterLift,
+    waterDrop: planetRadius - surfaceR,
+    shoreAng,
+    fixedLevel,
     planetRadius,
     containsWorldPos,
     surfaceHeightAt,
