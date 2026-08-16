@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>canal townscaper shot</title>
+<script type="importmap">
+{"imports":{"three":"./vendor/three.module.js"}}
+</script>
+<style>html,body{margin:0;background:#c5d4d8}canvas{display:block;width:100vw;height:100vh}</style>
+</head><body>
+<script type="module">
+import * as THREE from "./vendor/three.module.js";
+import {
+  CANAL_JUNCTION_TOWN_SPEC,
+  CITADEL_PALETTE,
+  CITADEL_GATE_CHAR,
+  CITADEL_GATE_COLOR,
+  citadelPaletteIndexOfChar,
+  citadelShadeStep,
+  buildCitadelTown,
+} from "./src/world/citadelTown.js";
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xb8c8cc);
+scene.fog = new THREE.FogExp2(0xb8c8cc, 0.012);
+const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 200);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(1);
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xfff4ea, 1.15));
+const sun = new THREE.DirectionalLight(0xffe0c0, 0.85);
+sun.position.set(8, 14, 6);
+scene.add(sun);
+const hemi = new THREE.HemisphereLight(0xc8dce0, 0x6a9088, 0.55);
+scene.add(hemi);
+
+const water = new THREE.Mesh(
+  new THREE.CircleGeometry(48, 48),
+  new THREE.MeshToonMaterial({ color: 0x5a9eaa })
+);
+water.rotation.x = -Math.PI / 2;
+water.position.y = -0.2;
+scene.add(water);
+
+const mats = {};
+for (const e of CITADEL_PALETTE) {
+  mats[e.char] = new THREE.MeshToonMaterial({ color: e.color, vertexColors: true });
+  mats[e.char].flatShading = true;
+}
+mats[CITADEL_GATE_CHAR] = new THREE.MeshToonMaterial({ color: CITADEL_GATE_COLOR, vertexColors: true });
+mats.W = mats["0"];
+mats.roofTile = new THREE.MeshToonMaterial({ color: 0xe87828, vertexColors: true });
+mats.ink = new THREE.MeshToonMaterial({ color: 0x2a2b2d, vertexColors: true });
+mats.wood = new THREE.MeshToonMaterial({ color: 0x8b5a2b, vertexColors: true });
+mats.trim = mats.ink;
+mats.water = new THREE.MeshToonMaterial({ color: 0x5a9eaa, vertexColors: true, transparent: true, opacity: 0.85 });
+mats.foliageDark = new THREE.MeshToonMaterial({ color: 0x365c3b, vertexColors: true });
+mats.foliageLight = new THREE.MeshToonMaterial({ color: 0x628253, vertexColors: true });
+mats.plazaStone = new THREE.MeshToonMaterial({ color: 0xbfc9cd, vertexColors: true });
+mats.A = mats["A"];
+mats.shade = (char, ix, iz) => {
+  const step = citadelShadeStep(ix, iz, char);
+  const base = CITADEL_PALETTE[citadelPaletteIndexOfChar(char)] ?? CITADEL_PALETTE[0];
+  const c = new THREE.Color(base.color);
+  const hsl = {};
+  c.getHSL(hsl);
+  hsl.l = THREE.MathUtils.clamp(hsl.l + step * 0.02, 0.02, 0.98);
+  c.setHSL(hsl.h, hsl.s, hsl.l);
+  const key = char + step;
+  if (!mats[key]) {
+    mats[key] = new THREE.MeshToonMaterial({ color: c, vertexColors: true });
+    mats[key].flatShading = true;
+  }
+  return mats[key];
+};
+const mesh = (g, m, n) => {
+  const o = new THREE.Mesh(g, m);
+  o.name = n;
+  return o;
+};
+let built;
+try {
+built = buildCitadelTown(CANAL_JUNCTION_TOWN_SPEC, {
+  leanDecor: true,
+  mesh,
+  materials: mats,
+  shrubMaterials: mats,
+  random: () => 0.37,
+  archWindowGeometry: new THREE.BoxGeometry(0.4, 1.2, 0.05),
+  buildHalfDome: (r, m, n) => mesh(new THREE.SphereGeometry(r, 10, 8, 0, Math.PI * 2, 0, Math.PI / 2), m, n),
+  buildShrub: (n) => new THREE.Group(),
+  buildTopiary: (n) => new THREE.Group(),
+  finialHeight: 0.4,
+});
+const root = new THREE.Group();
+built.levels.forEach((lv) => root.add(lv));
+scene.add(root);
+window.__stats = built.stats;
+
+camera.position.set(18, 16, 22);
+camera.lookAt(0, 4, 0);
+renderer.render(scene, camera);
+window.__shotReady = true;
+} catch (err) {
+  console.error(err);
+  window.__shotError = String(err && err.stack || err);
+  window.__shotReady = true;
+}
+</script>
+</body></html>

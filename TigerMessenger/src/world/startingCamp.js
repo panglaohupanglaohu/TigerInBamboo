@@ -7,7 +7,6 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { facet, createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
-import { createAncientPineTree } from "../assets/ancient.js";
 import { createLowPolyFox } from "../assets/fox.js";
 import { placeObjectOnSphere } from "./sphereMath.js";
 import { groundLiftAt } from "./hills.js";
@@ -262,26 +261,8 @@ export function buildStartingCamp(scene, R) {
   const foxCol = { position: ali.position.clone(), radius: 0.38, kind: "npc" };
   ali.userData.collider = foxCol;
 
-  // ---------- 5. 营地周边：古松两株 + 花草点缀 ----------
-  // 原 (-7,13) 古松树冠压电车车体（全程扫描 d=2.88），移到 (-2,12.5)（轨道净空 7.26）
-  for (const [x, z] of [[7, 2], [-2, 12.5]]) {
-    const pine = createAncientPineTree();
-    pine.scale.multiplyScalar(0.12); // 巨松资产缩小为营地点缀松
-    pine.userData.settle = true; // 后建地形（沙滩/苔丘）不得埋树，收尾沉降 pass 抬回地表
-    put(pine, x, z, layoutGroundLiftAt(x, z), rnd() * Math.PI * 2);
-    colliders.push({ position: pine.position.clone(), radius: 0.3 });
-  }
+  // ---------- 5. 营地周边（水墨花已清理——用户认为花模型不好看） ----------
   const campFlowers = [];
-  for (let i = 0; i < 8; i++) {
-    const a = rnd() * Math.PI * 2;
-    const d = 3 + rnd() * 5;
-    const x = ELDER.x + Math.cos(a) * d;
-    const z = ELDER.z + Math.sin(a) * d;
-    if (Math.hypot(x - ELDER.x, z - ELDER.z) < 3) continue; // 老人净空 3 单位
-    const flower = createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]);
-    put(flower, x, z, layoutGroundLiftAt(x, z) + 0.01, rnd() * Math.PI * 2);
-    campFlowers.push(flower); // 收尾由场景层修剪贴轨花（轨道后建，此处未知）
-  }
 
   scene.add(g);
   return {

@@ -29,7 +29,7 @@ import {
 // 再导出，供编辑器等沿用 citadelRange 路径
 export { CITADEL_CASCADE_POOL_SPECS, CITADEL_CASCADE_MARKER };
 import { createSnowMassif } from "../assets/snowMassif.js";
-import { createAncientPineTree } from "../assets/ancient.js";
+import { createColossalVernacularTree } from "../assets/ancient.js";
 import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
 import { createTieSoldier } from "../assets/harbor.js";
@@ -642,7 +642,10 @@ function buildPilgrimageWaterSteps(R, materials, contourSpec) {
   const waterSteps = new THREE.Group();
   waterSteps.name = "citadel-pilgrimage-water-steps";
   waterSteps.userData.cascadeEnabled = normalized.cascadeEnabled;
-  if (!normalized.cascadeEnabled) {
+  waterSteps.userData.cascadePoolsEnabled = normalized.cascadePoolsEnabled;
+  if (!normalized.cascadeEnabled || !normalized.cascadePoolsEnabled) {
+    // 瀑布总开关关：无瀑布无湖；湖开关关：瀑布独立挂帘（buildPilgrimageCascades
+    // 改走台地落差锚点），本组为空——台面全部让给建筑。
     waterSteps.userData.curvatureGrounding = {
       contactRadius: 0,
       contactElevation: 0,
@@ -694,21 +697,42 @@ function buildPilgrimageWaterSteps(R, materials, contourSpec) {
   return waterSteps;
 }
 
-function buildPilgrimageCascades(R, waterSteps, materials) {
-  if (!waterSteps?.children?.length) {
+function buildPilgrimageCascades(R, waterSteps, materials, contourSpec = null) {
+  const normalized = normalizeCitadelTerrain(contourSpec ?? CITADEL.contourTerrain);
+  if (!normalized.cascadeEnabled) {
     return buildEmptyWaterGroup("citadel-pilgrimage-layered-cascades");
   }
+  // 湖开关关闭（瀑布独立模式）：不再依赖梯湖组，按台地 metrics 落差挂帘。
+  // 锚点沿用各台地梯湖池心坐标（与湖模式同位置），帘高 = 相邻台地 top 差。
+  const poolsOff = !normalized.cascadePoolsEnabled || !waterSteps?.children?.length;
   const cascades = new THREE.Group();
   cascades.name = "citadel-pilgrimage-layered-cascades";
   cascades.userData.cascadeEnabled = true;
-  for (let i = 0; i < waterSteps.children.length - 1; i++) {
-    const upper = waterSteps.children[i];
-    const lower = waterSteps.children[i + 1];
-    const upperWaterY = upper.position.dot(_site) + 0.09;
-    const lowerWaterY = lower.position.dot(_site) + 0.09;
+  cascades.userData.cascadePoolsEnabled = normalized.cascadePoolsEnabled;
+  cascades.userData.waterfallCount = 0;
+
+  const metrics = citadelTerraceMetrics(normalized);
+  const count = poolsOff ? metrics.length - 1 : waterSteps.children.length - 1;
+
+  for (let i = 0; i < count; i++) {
+    const upper = poolsOff ? null : waterSteps.children[i];
+    const lower = poolsOff ? null : waterSteps.children[i + 1];
+    let upperWaterY, lowerWaterY, connectorX, connectorZ;
+    if (poolsOff) {
+      // 独立模式：帘顶 = 上台地台面，帘脚 = 下台地台面；水平位置用池心 + 前缘偏置
+      upperWaterY = metrics[i].top;
+      lowerWaterY = metrics[i + 1].top;
+      const upperSpec = CITADEL_CASCADE_POOL_SPECS[i];
+      const lowerSpec = CITADEL_CASCADE_POOL_SPECS[i + 1];
+      connectorX = (upperSpec.x + lowerSpec.x) * 0.5;
+      connectorZ = (upperSpec.z + lowerSpec.z) * 0.5 + 0.3;
+    } else {
+      upperWaterY = upper.position.dot(_site) + 0.09;
+      lowerWaterY = lower.position.dot(_site) + 0.09;
+      connectorX = (upper.userData.rangeLocal.lx + lower.userData.rangeLocal.lx) * 0.5;
+      connectorZ = (upper.userData.rangeLocal.lz + lower.userData.rangeLocal.lz) * 0.5 + 0.3;
+    }
     const drop = upperWaterY - lowerWaterY;
-    const connectorX = (upper.userData.rangeLocal.lx + lower.userData.rangeLocal.lx) * 0.5;
-    const connectorZ = (upper.userData.rangeLocal.lz + lower.userData.rangeLocal.lz) * 0.5 + 0.3;
 
     const waterfall = createMangaWaterfall({
       topY: drop,
@@ -735,15 +759,15 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
     receivingWater.name = "citadel-cascade-receiving-water";
     receivingWater.rotation.x = -Math.PI / 2;
     receivingWater.position.set(
-      (lower.userData.rangeLocal.lx - connectorX) * 0.5,
+      poolsOff ? 0 : (lower.userData.rangeLocal.lx - connectorX) * 0.5,
       0.003,
-      (lower.userData.rangeLocal.lz - connectorZ) * 0.5
+      poolsOff ? 0 : (lower.userData.rangeLocal.lz - connectorZ) * 0.5
     );
     receivingWater.scale.z = 0.76;
     receivingWater.castShadow = false;
     receivingWater.renderOrder = 7;
     waterfall.add(receivingWater);
-    waterfall.userData.receivingPool = lower.name;
+    waterfall.userData.receivingPool = poolsOff ? null : lower.name;
 
     waterfall.userData.rebuiltSoilShoulders = 0;
     const connectorBase = rangeLocalToWorld(
@@ -767,8 +791,8 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
     // the original lower lake so both water surfaces visibly overlap.
     receivingWater.position.z -= facadeClearance * 0.5;
     waterfall.userData.sequence = i;
-    waterfall.userData.upperPool = upper.name;
-    waterfall.userData.lowerPool = lower.name;
+    waterfall.userData.upperPool = poolsOff ? null : upper.name;
+    waterfall.userData.lowerPool = poolsOff ? null : lower.name;
     waterfall.userData.actualDrop = drop;
     waterfall.userData.spansTerraceCount = 1;
     waterfall.userData.upperTerraceIndex = i;
@@ -777,13 +801,13 @@ function buildPilgrimageCascades(R, waterSteps, materials) {
     waterfall.userData.deployedCurtainWidth = 4.5 * waterfall.scale.x;
     waterfall.userData.waterlinePenetration = 0.5;
     cascades.add(waterfall);
+    cascades.userData.waterfallCount++;
   }
   const update = (dt, t) => {
     for (const waterfall of cascades.children) waterfall.update?.(dt, t);
   };
   cascades.update = update;
   cascades.userData.update = update;
-  cascades.userData.waterfallCount = cascades.children.length;
   cascades.userData.spansTerraceCount = 1;
   return cascades;
 }
@@ -855,191 +879,17 @@ function buildRangeShrub(name, scale, materials, seed) {
 }
 
 /**
- * 港口深潭参天巨松（士兵装货栈桥旁 · The Colossal Primordial Pine）
- * 金字塔收分虯干 · 乳白剥落芯 · 斜向嵌套龙枝 · 极端拍扁云片冠 · 全网格 0.05 墨线
- * 设计单位 1:1（高约 30，约玩家 20–25 倍）；底部原点。
+ * 港口深潭太古巨木（士兵装货栈桥旁 · 仅此双株使用 createColossalVernacularTree）
  */
 function buildSacredTarnTree(_materials) {
-  // 锁死色盘（不随 range 通用 materials 漂移）
-  const barkMat = toonMat(0x7d6b5d, { flatShading: true });
-  const coreMat = toonMat(0xf4efeb, { flatShading: true });
-  const canopyMats = [
-    toonMat(0x1a3326, { flatShading: true }),
-    toonMat(0x112219, { flatShading: true }),
-  ];
-  const INK = 0.05;
-
-  const giantTreeGroup = new THREE.Group();
-  giantTreeGroup.name = "citadel-sacred-tarn-elder-tree";
-
-  // ---------- 1. 金字塔收分 + 左倾虯干 ----------
-  const trunkRoot = new THREE.Group();
-  trunkRoot.name = "tarn-elder-tree-trunk-root";
-  trunkRoot.rotation.z = 0.18; // ~10° 左倾
-
-  const trunkSpecs = [
-    { bottom: 1.8, top: 1.15, h: 10, x: 0.0, y0: 0.0 },
-    { bottom: 1.05, top: 0.62, h: 8, x: -0.5, y0: 9.0 },
-    { bottom: 0.58, top: 0.28, h: 8, x: -1.2, y0: 15.8 },
-  ];
-  for (let i = 0; i < trunkSpecs.length; i++) {
-    const s = trunkSpecs[i];
-    const mesh = rangePart(
-      new THREE.CylinderGeometry(s.top, s.bottom, s.h, 6, 1, false),
-      barkMat,
-      "tarn-elder-tree-trunk",
-      INK
-    );
-    mesh.position.set(s.x, s.y0 + s.h * 0.5, 0);
-    trunkRoot.add(mesh);
-  }
-
-  // 树皮剥落乳白内芯（下半干朝 +Z）
-  const peel = rangePart(
-    new THREE.BoxGeometry(1.35, 5.2, 0.09, 1, 4, 1),
-    coreMat,
-    "tarn-elder-tree-bark-peel",
-    INK
-  );
-  peel.position.set(0.15, 4.1, 1.55);
-  peel.rotation.set(-0.04, 0.08, 0.06);
-  trunkRoot.add(peel);
-  const peel2 = rangePart(
-    new THREE.BoxGeometry(0.72, 2.6, 0.07, 1, 3, 1),
-    coreMat,
-    "tarn-elder-tree-bark-peel",
-    INK
-  );
-  peel2.position.set(-0.35, 8.6, 1.05);
-  peel2.rotation.set(-0.05, -0.12, 0.1);
-  trunkRoot.add(peel2);
-
-  // 根盘爪
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 6) * Math.PI * 2 + i * 0.11;
-    const len = 1.4 + (i % 3) * 0.18;
-    const dig = 0.45;
-    const root = rangePart(
-      new THREE.CylinderGeometry(0.08, 0.4, len, 6, 1, false),
-      barkMat,
-      "tarn-elder-tree-root",
-      INK
-    );
-    const dir = new THREE.Vector3(Math.cos(a), -0.22, Math.sin(a)).normalize();
-    root.position.copy(dir).multiplyScalar(len * 0.5 - dig);
-    root.position.y = 0.12;
-    root.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
-    trunkRoot.add(root);
-  }
-  giantTreeGroup.add(trunkRoot);
-
-  // ---------- 2. 斜向外上方嵌套主枝（消灭 90° 直角） ----------
-  const branchRoot = new THREE.Group();
-  branchRoot.name = "tarn-elder-tree-branches";
-  branchRoot.rotation.z = 0.18;
-
-  const canopyAnchors = [];
-
-  function addSCurveBranch(spec) {
-    const dig = Math.max(0.35, spec.dig ?? 0.42);
-    const attach = new THREE.Vector3(spec.ax, spec.ay, spec.az);
-    const mainLen = spec.len;
-    const main = rangePart(
-      new THREE.CylinderGeometry(spec.r1 * 1.15, spec.r0, mainLen, 6, 1, false),
-      barkMat,
-      "tarn-elder-tree-branch",
-      INK
-    );
-    main.rotation.order = "YZX";
-    main.rotation.y = spec.yaw ?? 0;
-    main.rotation.z = spec.rotZ ?? 0.6;
-    const mainDir = new THREE.Vector3(0, 1, 0).applyEuler(main.rotation);
-    main.position.copy(attach).addScaledVector(mainDir, mainLen * 0.5 - dig);
-    branchRoot.add(main);
-
-    // 梢段下弯
-    const mid = attach.clone().addScaledVector(mainDir, mainLen - dig);
-    const tipLen = mainLen * 0.42;
-    const tipMesh = rangePart(
-      new THREE.CylinderGeometry(spec.r1 * 0.55, spec.r1 * 1.05, tipLen, 6, 1, false),
-      barkMat,
-      "tarn-elder-tree-branch-tip",
-      INK
-    );
-    tipMesh.rotation.order = "YZX";
-    tipMesh.rotation.y = (spec.yaw ?? 0) * 0.9;
-    tipMesh.rotation.z = (spec.rotZ ?? 0.6) * 0.35 - 0.18;
-    const tipDir = new THREE.Vector3(0, 1, 0).applyEuler(tipMesh.rotation);
-    tipMesh.position.copy(mid).addScaledVector(tipDir, tipLen * 0.5 - 0.38);
-    branchRoot.add(tipMesh);
-
-    const tip = mid.clone().addScaledVector(tipDir, tipLen - 0.38);
-    canopyAnchors.push({
-      tip,
-      yaw: Math.atan2(tip.z - attach.z, tip.x - attach.x),
-      size: spec.canopySize ?? 1,
-    });
-  }
-
-  // Y≈12 / Y≈18 共 5 根主枝（测试/剪影要求清晰分叉）
-  const branchSpecs = [
-    { ax: -0.15, ay: 12.0, az: 0.15, len: 7.2, r0: 0.48, r1: 0.18, rotZ: 0.62, yaw: 0.12, dig: 0.48, canopySize: 1.05 },
-    { ax: -0.25, ay: 11.4, az: -0.55, len: 5.6, r0: 0.36, r1: 0.14, rotZ: 0.55, yaw: -0.48, dig: 0.42, canopySize: 0.92 },
-    { ax: -0.85, ay: 18.0, az: 0.08, len: 8.4, r0: 0.4, r1: 0.15, rotZ: 0.68, yaw: 0.05, dig: 0.45, canopySize: 1.2 },
-    { ax: -0.7, ay: 17.4, az: 0.55, len: 6.1, r0: 0.3, r1: 0.11, rotZ: 0.58, yaw: 0.42, dig: 0.4, canopySize: 1.0 },
-    { ax: -1.15, ay: 22.5, az: 0.0, len: 4.2, r0: 0.26, r1: 0.1, rotZ: 0.48, yaw: -0.1, dig: 0.4, canopySize: 1.1 },
-  ];
-  for (const spec of branchSpecs) addSCurveBranch(spec);
-  giantTreeGroup.add(branchRoot);
-
-  // ---------- 3. 极端非等比拍扁云片树冠 ----------
-  const canopyRoot = new THREE.Group();
-  canopyRoot.name = "tarn-elder-tree-canopy";
-  canopyRoot.rotation.z = 0.18;
-
-  let crownCount = 0;
-  function addCanopyMat(center, yaw, size = 1) {
-    const cluster = 3 + (crownCount % 2); // 3–4 片
-    for (let i = 0; i < cluster; i++) {
-      const useIco = (crownCount + i) % 3 !== 0;
-      const geo = useIco
-        ? new THREE.IcosahedronGeometry(1, 0)
-        : new THREE.SphereGeometry(1, 5, 3);
-      const crown = rangePart(
-        geo,
-        canopyMats[(crownCount + i) % canopyMats.length],
-        "tarn-elder-tree-crown",
-        INK
-      );
-      const s = size * (0.78 + ((crownCount * 3 + i) % 5) * 0.06);
-      // 核心视觉：X 横向 3.8 · Y 拍扁 0.45 · Z 2.2
-      crown.scale.set(3.8 * s, 0.45 * s, 2.2 * s);
-      crown.position.set(
-        center.x + ((i % 3) - 1) * 0.9 * size,
-        center.y + (i % 2) * 0.28 * size,
-        center.z + ((i % 2) - 0.5) * 0.7 * size
-      );
-      crown.rotation.set(
-        ((i * 0.37) % 1) * 0.3 - 0.15,
-        yaw + i * 1.1,
-        ((i * 0.53) % 1) * 0.24 - 0.12
-      );
-      canopyRoot.add(crown);
-      crownCount++;
-    }
-  }
-
-  for (const a of canopyAnchors) addCanopyMat(a.tip, a.yaw, a.size);
-  // 补两团横向流云墙，形成压迫分量
-  addCanopyMat(new THREE.Vector3(-4.5, 16.5, 0.4), 0.2, 1.05);
-  addCanopyMat(new THREE.Vector3(-6.2, 20.8, -0.6), -0.15, 1.2);
-
-  giantTreeGroup.add(canopyRoot);
-
-  giantTreeGroup.userData.canopyHeight = 31.5;
-  giantTreeGroup.userData.kind = "sacredTarnElderTree";
-  giantTreeGroup.userData.designHeight = 30;
-  return giantTreeGroup;
+  const tree = createColossalVernacularTree({
+    seed: 9901,
+    merge: true,
+    namePrefix: "tarn-elder-tree",
+    groupName: "citadel-sacred-tarn-elder-tree",
+  });
+  tree.userData.kind = "sacredTarnElderTree";
+  return tree;
 }
 
 function buildLakeBallShrub(name, scale, materials, seed) {
@@ -1178,7 +1028,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   let normalizedContour = normalizeCitadelTerrain(contourSpec);
   let pilgrimageWaterSteps = buildPilgrimageWaterSteps(R, materials, normalizedContour);
   scene.add(pilgrimageWaterSteps);
-  let pilgrimageCascades = buildPilgrimageCascades(R, pilgrimageWaterSteps, materials);
+  let pilgrimageCascades = buildPilgrimageCascades(R, pilgrimageWaterSteps, materials, normalizedContour);
   scene.add(pilgrimageCascades);
   // Preserve the old shot-harness camera datum without retaining its four
   // visible lookout-stone props in the live scene.
@@ -1198,11 +1048,13 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   placeRangeAsset(sacredTarnTree, -15.2, 42.0, R, -0.15, true);
   scene.add(sacredTarnTree);
 
-  // 第二棵参天巨松：港口深潭参天大树旁（交错对生，双株成景）。
-  // 与 saihoji 主石之庭保留的单株同款资产（createAncientPineTree），
-  // 不同种籽 + 绕地表法向 ~1.05 rad 偏转，树冠与第一棵交错穿插。
-  const tarnCompanionPine = createAncientPineTree(7788);
-  tarnCompanionPine.name = "citadel-tarn-companion-pine";
+  // 第二棵太古巨木：港口深潭旁交错对生（仅港口双株，不影响全局松树）
+  const tarnCompanionPine = createColossalVernacularTree({
+    seed: 7788,
+    merge: true,
+    namePrefix: "tarn-companion",
+    groupName: "citadel-tarn-companion-pine",
+  });
   placeRangeAsset(tarnCompanionPine, -19.8, 44.2, R, -0.15, true);
   tarnCompanionPine.rotateY(1.05);
   scene.add(tarnCompanionPine);
@@ -1794,6 +1646,13 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
         terraceTwoPool.updateWorldMatrix(true, false);
         terraceTwoPool.getWorldPosition(waterfallPos);
         waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.24));
+      } else if (waterfallNodes.length) {
+        // 湖开关关闭（瀑布独立模式）：最后一道水帘的帘脚即台面 2 前缘，
+        // 直接以最低帘的世界位置作为攀爬终点（贴台面前缘）。
+        const last = waterfallNodes[waterfallNodes.length - 1];
+        last.updateWorldMatrix(true, false);
+        last.getWorldPosition(waterfallPos);
+        waterfallRoute.push(waterfallPos.clone().addScaledVector(_site, 0.24));
       }
 
       const stairRoute = [];
@@ -1968,7 +1827,12 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       group.traverse((object) => object.geometry?.dispose?.());
     }
     pilgrimageWaterSteps = buildPilgrimageWaterSteps(R, materials, normalizedContour);
-    pilgrimageCascades = buildPilgrimageCascades(R, pilgrimageWaterSteps, materials);
+    pilgrimageCascades = buildPilgrimageCascades(
+      R,
+      pilgrimageWaterSteps,
+      materials,
+      normalizedContour
+    );
     scene.add(pilgrimageWaterSteps, pilgrimageCascades);
     rangeSystem.pilgrimageWaterSteps = pilgrimageWaterSteps;
     rangeSystem.pilgrimageCascades = pilgrimageCascades;

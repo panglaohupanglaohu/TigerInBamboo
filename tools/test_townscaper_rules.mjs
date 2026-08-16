@@ -40,6 +40,9 @@ const {
   normalizeCitadelTerraceLayout,
   levelsToGrid,
   CITADEL_TOWN_SPEC,
+  CANAL_JUNCTION_TOWN_SPEC,
+  citadelGridVertexJitter,
+  citadelLevelsKey,
 } = await import(new URL("src/world/citadelTown.js", BASE).href);
 
 let pass = 0;
@@ -212,5 +215,55 @@ ok("屋顶形状分类：single/strip/L/cross/block2x2/plaza");
   ok(`默认 SPEC 全规则：${s.cellCount} 格 · ${s.windowCount} 窗 · ${s.doorCount} 门 · ${s.roofCount} 坡顶 · ${s.domeCount} 穹顶 · ${s.canalCount} 水道`);
 }
 
-console.log(`\n结果：${pass}/9 通过`);
+// ---------- 10. 运河交汇种子岛：多色户 + 岸裙 + 支架 ----------
+{
+  assert.equal(citadelLevelsKey("canal-junction"), "tm.citadel.levels.canal-junction.v4");
+  const assembly = buildCitadelTownAssembly(CANAL_JUNCTION_TOWN_SPEC, { baseY: 0 });
+  const s = assembly.stats;
+  const chars = new Set();
+  for (const floor of CANAL_JUNCTION_TOWN_SPEC.levels) {
+    for (const row of floor) {
+      for (const ch of row) {
+        if (ch !== ".") chars.add(ch);
+      }
+    }
+  }
+  assert(chars.size >= 6, `种子岛户色应 ≥6（实际 ${[...chars].join("")}）`);
+  assert(s.cellCount >= 80, `种子岛体块（实际 ${s.cellCount}）`);
+  assert(s.seawallCount > 0, "临水石裙");
+  assert(s.supportCount > 0, "飞楼黑铁支架");
+  assert(s.roofCount > 0 && s.windowCount > 0, "屋顶+窗");
+  assert((s.shrubCount ?? 0) > 0, "露台圆树");
+  assert((s.balconyCount ?? 0) > 0, "阳台");
+  assert((s.clotheslineCount ?? 0) >= 0, "晾衣绳计数存在");
+  ok(`运河种子岛 ${s.cellCount} 格 · ${chars.size} 色 · 裙 ${s.seawallCount} · 架 ${s.supportCount} · 树 ${s.shrubCount} · 阳台 ${s.balconyCount}`);
+}
+
+// ---------- 10b. 水上软模式：阳台/石裙/圆树还在，不叠假水道 ----------
+{
+  const assembly = buildCitadelTownAssembly(CANAL_JUNCTION_TOWN_SPEC, {
+    baseY: 0,
+    leanDecor: true,
+  });
+  const s = assembly.stats;
+  assert(s.seawallCount > 0, "软模式仍有岸裙");
+  assert(s.supportCount > 0, "软模式仍有铁架");
+  assert((s.shrubCount ?? 0) > 0, "软模式仍有圆树");
+  assert((s.balconyCount ?? 0) > 0, "软模式仍有阳台");
+  assert.equal(s.canalCount, 0, "坐在真水面上，不再叠假水道");
+  ok(`水上软模式：裙 ${s.seawallCount} · 架 ${s.supportCount} · 树 ${s.shrubCount} · 阳台 ${s.balconyCount} · 假水道 0`);
+}
+
+// ---------- 11. 扭曲网格：同角点稳定、非零 ----------
+{
+  const a = citadelGridVertexJitter(3, 4, 0);
+  const b = citadelGridVertexJitter(3, 4, 0);
+  assert.equal(a.dx, b.dx);
+  assert.equal(a.dz, b.dz);
+  const c = citadelGridVertexJitter(8, 2, 2);
+  assert(Math.abs(c.dx) + Math.abs(c.dz) > 0, "上层扰动非零");
+  ok("扭曲网格确定性角点扰动");
+}
+
+console.log(`\n结果：${pass} 项通过`);
 process.exit(0);

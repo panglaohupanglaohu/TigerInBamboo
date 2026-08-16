@@ -28,6 +28,8 @@ export const CITADEL_LEVELS_KEY = "tm.citadel.levels.v1";
  * 其他实例（如运河交汇古堡）用带 id 后缀的键，互不覆盖。
  */
 export function citadelLevelsKey(instanceId = null) {
+  // v4：水面地基就绪后重新落入 Townscaper 种子岛（彩色竖户 / 飞楼 / 贴水）
+  if (instanceId === "canal-junction") return "tm.citadel.levels.canal-junction.v4";
   return instanceId ? `tm.citadel.levels.${instanceId}.v1` : CITADEL_LEVELS_KEY;
 }
 
@@ -45,21 +47,21 @@ export const CITADEL_GRID_SIZE = 25;
  * 索引 0–14 ↔ 字符 "0"–"9" 与 "A"–"E"。
  */
 export const CITADEL_PALETTE = Object.freeze([
-  Object.freeze({ name: "白", char: "0", color: 0xe8e4da }),
-  Object.freeze({ name: "米白", char: "1", color: 0xe9ddc0 }),
-  Object.freeze({ name: "沙黄", char: "2", color: 0xd8c08a }),
-  Object.freeze({ name: "柠黄", char: "3", color: 0xd4b450 }),
-  Object.freeze({ name: "橙", char: "4", color: 0xc67a3f }),
-  Object.freeze({ name: "砖红", char: "5", color: 0xa8543c }),
-  Object.freeze({ name: "陶土", char: "6", color: 0xb06a4a }),
-  Object.freeze({ name: "褐", char: "7", color: 0x8a5a3a }),
-  Object.freeze({ name: "深褐", char: "8", color: 0x6a4a33 }),
-  Object.freeze({ name: "蓝灰", char: "9", color: 0x7c8a93 }),
-  Object.freeze({ name: "石板灰", char: "A", color: 0x5f6b73 }),
-  Object.freeze({ name: "蓝", char: "B", color: 0x5a7d9e }),
-  Object.freeze({ name: "藏青", char: "C", color: 0x3e5368 }),
-  Object.freeze({ name: "青", char: "D", color: 0x4d8f84 }),
-  Object.freeze({ name: "松绿", char: "E", color: 0x4f7755 }),
+  Object.freeze({ name: "白", char: "0", color: 0xf6f1e6 }),
+  Object.freeze({ name: "米白", char: "1", color: 0xf3d89a }),
+  Object.freeze({ name: "沙黄", char: "2", color: 0xf0c44a }),
+  Object.freeze({ name: "柠黄", char: "3", color: 0xf2c230 }),
+  Object.freeze({ name: "橙", char: "4", color: 0xe87828 }),
+  Object.freeze({ name: "砖红", char: "5", color: 0xe03a38 }),
+  Object.freeze({ name: "陶土", char: "6", color: 0xd45a3a }),
+  Object.freeze({ name: "褐", char: "7", color: 0x9a4e30 }),
+  Object.freeze({ name: "深褐", char: "8", color: 0x5a3420 }),
+  Object.freeze({ name: "蓝灰", char: "9", color: 0x7e90a0 }),
+  Object.freeze({ name: "石板灰", char: "A", color: 0x4a5864 }),
+  Object.freeze({ name: "蓝", char: "B", color: 0x3b6fd4 }),
+  Object.freeze({ name: "藏青", char: "C", color: 0x2a3f68 }),
+  Object.freeze({ name: "青", char: "D", color: 0x2a9a88 }),
+  Object.freeze({ name: "松绿", char: "E", color: 0x48b04a }),
 ]);
 
 /** 正门字符（门廊语义，非调色板色；颜色固定为木褐）。 */
@@ -111,9 +113,9 @@ export function citadelShadeStep(ix, iz, char = "") {
 
 /** 扭曲网格开关：false = 严格正交（对比验收/兼容旧截图） */
 export const CITADEL_DISTORTION_ENABLED = true;
-/** 角点扰动幅度（cellSize 1.4 的 ~2.4%），确定性、与层高累积 */
-const JITTER_AMT = 0.034;
-const JITTER_FLOOR_GROWTH = 0.012; // 每层额外累积的歪斜
+/** 角点扰动幅度（约 cellSize 的 4%），上层再略歪，对齐原版积木感 */
+const JITTER_AMT = 0.056;
+const JITTER_FLOOR_GROWTH = 0.02;
 
 /**
  * 网格顶点 (gx, gz) 的确定性扰动偏移（局部坐标，单位格尺寸）。
@@ -142,6 +144,83 @@ export function citadelGridVertexJitter(gx, gz, floor = 0) {
  * @param {number} floor 层高（扰动随层累积）
  * @returns {THREE.BufferGeometry} 该格专属的扭曲立方体
  */
+/**
+ * Townscaper 式立面渐变：顶亮底暗（天空漫反射），写进 vertex color。
+ */
+export function applyVerticalVertexColors(geo, top = 1.2, bot = 0.7) {
+  const pos = geo.attributes.position;
+  if (!pos) return geo;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i);
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
+  }
+  const span = Math.max(1e-5, maxY - minY);
+  const col = new Float32Array(pos.count * 3);
+  for (let i = 0; i < pos.count; i++) {
+    const t = (pos.getY(i) - minY) / span;
+    const e = t * t * (3 - 2 * t);
+    const k = bot + (top - bot) * e;
+    col[i * 3] = k;
+    col[i * 3 + 1] = k;
+    col[i * 3 + 2] = k;
+  }
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  return geo;
+}
+
+function pushTownQuad(pos, nrm, a, b, c, d, n) {
+  pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
+  pos.push(a[0], a[1], a[2], c[0], c[1], c[2], d[0], d[1], d[2]);
+  for (let i = 0; i < 6; i++) nrm.push(n[0], n[1], n[2]);
+}
+
+/**
+ * 只生成朝空邻的外露面。相邻实心格共享面不画 → 体块融合成一整坨，
+ * 不再是描边方盒堆（Townscaper 邻接协调的几何层）。
+ */
+export function makeExposedCellGeometry(cs, ch, expose, ix, iz, floor = 0) {
+  const hx = cs * 0.5;
+  const hy = ch * 0.5;
+  const hz = cs * 0.5;
+  const j00 = citadelGridVertexJitter(ix, iz, floor);
+  const j10 = citadelGridVertexJitter(ix + 1, iz, floor);
+  const j01 = citadelGridVertexJitter(ix, iz + 1, floor);
+  const j11 = citadelGridVertexJitter(ix + 1, iz + 1, floor);
+  const corner = (sx, sy, sz) => {
+    const j = sx > 0 ? (sz > 0 ? j11 : j10) : (sz > 0 ? j01 : j00);
+    return [sx * hx + j.dx, sy * hy, sz * hz + j.dz];
+  };
+  const pos = [];
+  const nrm = [];
+  if (expose.py) {
+    pushTownQuad(pos, nrm, corner(-1, 1, -1), corner(1, 1, -1), corner(1, 1, 1), corner(-1, 1, 1), [0, 1, 0]);
+  }
+  if (expose.ny) {
+    pushTownQuad(pos, nrm, corner(-1, -1, 1), corner(1, -1, 1), corner(1, -1, -1), corner(-1, -1, -1), [0, -1, 0]);
+  }
+  if (expose.px) {
+    pushTownQuad(pos, nrm, corner(1, -1, -1), corner(1, -1, 1), corner(1, 1, 1), corner(1, 1, -1), [1, 0, 0]);
+  }
+  if (expose.nx) {
+    pushTownQuad(pos, nrm, corner(-1, -1, 1), corner(-1, -1, -1), corner(-1, 1, -1), corner(-1, 1, 1), [-1, 0, 0]);
+  }
+  if (expose.pz) {
+    pushTownQuad(pos, nrm, corner(1, -1, 1), corner(-1, -1, 1), corner(-1, 1, 1), corner(1, 1, 1), [0, 0, 1]);
+  }
+  if (expose.nz) {
+    pushTownQuad(pos, nrm, corner(-1, -1, -1), corner(1, -1, -1), corner(1, 1, -1), corner(-1, 1, -1), [0, 0, -1]);
+  }
+  if (!pos.length) return null;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute("normal", new THREE.Float32BufferAttribute(nrm, 3));
+  applyVerticalVertexColors(geo, 1.22, 0.68);
+  return geo;
+}
+
 export function makeDistortedCellGeometry(source, ix, iz, floor = 0) {
   const geo = source.clone();
   const pos = geo.attributes.position;
@@ -275,6 +354,109 @@ export const CITADEL_TOWN_SPEC = Object.freeze({
       "..WWW..",
       ".......",
       ".......",
+    ]),
+  ]),
+});
+
+/**
+ * 运河交汇默认岛城（Townscaper 种子）。
+ * 对照原版：贴水不规则岸线、竖柱同色户、退台花园、飞楼（自动长黑铁 stilts）。
+ * 仅在无存档时使用；玩家编辑写入 tm.citadel.levels.canal-junction.v1 后不再覆盖。
+ */
+export const CANAL_JUNCTION_TOWN_SPEC = Object.freeze({
+  cellSize: 1.6,
+  cellHeight: 1.7,
+  levels: Object.freeze([
+    // L0 不规则贴水岸 · 红/绿/蓝/橙/黄/白户基（禁止整片灰白）
+    Object.freeze([
+      "...5EE5BB..",
+      "..55EEEBBB.",
+      ".D5E00EBBBC",
+      "55E0000EB5B",
+      "5EE00G00EE5",
+      "BB00000EE55",
+      "BBBEE44455.",
+      ".3BEE4455..",
+      "..BEE44....",
+      "...E4......",
+    ]),
+    // L1 巷洞 + 拱廊空档
+    Object.freeze([
+      "...5EE5BB..",
+      "..55E.EBBB.",
+      ".D5E00EBBBC",
+      "55E0..0EB5B",
+      "5EE0.G.0EE5",
+      "BB0...0EE55",
+      "BBBEE44455.",
+      ".3BEE4455..",
+      "..BEE44....",
+      "...........",
+    ]),
+    // L2 退台花园底 + 中庭
+    Object.freeze([
+      "....E.5B...",
+      "..55E.EB...",
+      ".D5E00EB.C.",
+      ".5E0..0E...",
+      ".EE0.3.0EE.",
+      ".B0...0EE..",
+      ".BBEE444...",
+      "..BEE44....",
+      "....E4.....",
+      "...........",
+    ]),
+    // L3 竖户拔高（红塔/蓝塔/黄块/橙条 → 人字坡）
+    Object.freeze([
+      "...........",
+      "..5....B...",
+      "..DE00E..C.",
+      "...........",
+      "....333....",
+      "...........",
+      ".....444...",
+      "....E44....",
+      "...........",
+      "...........",
+    ]),
+    // L4 塔身 + 橙条续坡
+    Object.freeze([
+      "...........",
+      "..5....B...",
+      "...E.......",
+      "...........",
+      "....3.3....",
+      "...........",
+      "......44...",
+      ".....44....",
+      "...........",
+      "...........",
+    ]),
+    // L5 飞楼（下空 → 黑铁 stilts）
+    Object.freeze([
+      "...........",
+      ".......B...",
+      "..DDB......",
+      "...........",
+      ".....3.....",
+      "...........",
+      "...........",
+      "......4....",
+      "...........",
+      "...........",
+    ]),
+    // L6 收顶
+    Object.freeze([
+      "...........",
+      ".......B...",
+      "...........",
+      "...........",
+      ".....3.....",
+      "...........",
+      "...........",
+      "...........",
+      "...........",
+      "...........",
     ]),
   ]),
 });
@@ -703,12 +885,28 @@ export function buildCitadelTown(spec, ctx) {
   const domeCenters = new Set(); // "ix,iy,iz" —— 不出垛口/塔顶
   const towerTops = new Set();
 
-  // ---------- 规则 0：实心体块（扭曲网格：每格克隆 + 角点扰动） ----------
+  // ---------- 规则 0：实心体块（只画外露面 + 顶底渐变 + 角点扰动） ----------
   const cellGeometry = new THREE.BoxGeometry(cs, ch, cs);
+  const leanDecor = ctx.leanDecor === true;
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
+    const expose = {
+      px: at(ix + 1, iy, iz) === ".",
+      nx: at(ix - 1, iy, iz) === ".",
+      py: at(ix, iy + 1, iz) === ".",
+      ny: iy === 0,
+      pz: at(ix, iy, iz + 1) === ".",
+      nz: at(ix, iy, iz - 1) === ".",
+    };
+    if (!expose.px && !expose.nx && !expose.py && !expose.ny && !expose.pz && !expose.nz) {
+      stats.cellCount++;
+      continue;
+    }
+    const geo = makeExposedCellGeometry(cs, ch, expose, ix, iz, iy)
+      || makeDistortedCellGeometry(cellGeometry, ix, iz, iy);
+    applyVerticalVertexColors(geo, 1.22, 0.68);
     const cell = mesh(
-      makeDistortedCellGeometry(cellGeometry, ix, iz, iy),
+      geo,
       ctx.materials.shade?.(char, ix, iz) ?? materials[char] ?? materials.W,
       "town-cell"
     );
@@ -921,10 +1119,16 @@ export function buildCitadelTown(spec, ctx) {
         const [ix, iz] = comp.cells[0];
         const key = `${ix},${iy},${iz}`;
         const floors = columnHeight.get(`${ix},${iz}`) ?? 1;
-        // 高细柱（≥4 层）出更高更尖的四坡尖顶；红旗装饰不做（用户偏好）
-        const spire = mesh(spireGeometry, materials.roofTile, "town-spire", 0.035);
-        spire.scale.set(1, 1 + Math.max(0, floors - 3) * 0.45, 1);
-        spire.position.set(cx(ix), (iy + 1) * ch + ch * 0.27, cz(iz));
+        // 矮户：宽扁四坡（房子，不是帐篷锥）；高柱才拉尖
+        const spire = mesh(spireGeometry.clone(), materials.roofTile, "town-spire", 0.035);
+        applyVerticalVertexColors(spire.geometry, 1.28, 0.62);
+        if (floors <= 2) {
+          spire.scale.set(1.18, 0.68, 1.18);
+          spire.position.set(cx(ix), (iy + 1) * ch + ch * 0.16, cz(iz));
+        } else {
+          spire.scale.set(1, 1 + Math.max(0, floors - 3) * 0.45, 1);
+          spire.position.set(cx(ix), (iy + 1) * ch + ch * 0.27, cz(iz));
+        }
         levelGroups[iy].add(spire);
         stats.roofCount++;
         roofCells.add(key);
@@ -939,7 +1143,8 @@ export function buildCitadelTown(spec, ctx) {
         const tower = mesh(steepleTowerGeometry, materials.steepleStone ?? materials.W, "town-steeple-tower", 0.04);
         tower.position.y = ch * 0.42;
         towerGroup.add(tower);
-        const cone = mesh(steepleConeGeometry, materials.roofTile, "town-steeple-cone", 0.035);
+        const cone = mesh(steepleConeGeometry.clone(), materials.roofTile, "town-steeple-cone", 0.035);
+        applyVerticalVertexColors(cone.geometry, 1.28, 0.62);
         cone.position.y = ch * 0.85 + ch * 0.48;
         towerGroup.add(cone);
         const crossBar = mesh(new THREE.BoxGeometry(0.09, 0.09, 0.55), materials.ink, "town-steeple-cross", 0.01);
@@ -983,17 +1188,24 @@ export function buildCitadelTown(spec, ctx) {
           }
           if (inX + inZ === 0) continue;
           const alongX = inX >= inZ;
-          const roof = mesh(alongX ? gableX : gableZ, materials.roofTile, "town-roof", 0.04);
+          const roof = mesh((alongX ? gableX : gableZ).clone(), materials.roofTile, "town-roof", 0.04);
+          applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
           levelGroups[iy].add(roof);
           roofCells.add(key);
           stats.roofCount++;
-          // 臂上屋脊瓦
-          const ridge = mesh(ridgeGeometry, trimMat, "town-roof-ridge", 0.014);
-          ridge.position.set(cx(ix), (iy + 1) * ch + ch * 0.52, cz(iz));
-          if (!alongX) ridge.rotation.y = Math.PI / 2;
-          levelGroups[iy].add(ridge);
-          stats.ridgeCount = (stats.ridgeCount ?? 0) + 1;
+          {
+            const ridge = mesh(
+              ridgeGeometry,
+              leanDecor ? (materials.roofTile ?? trimMat) : trimMat,
+              "town-roof-ridge",
+              0.014
+            );
+            ridge.position.set(cx(ix), (iy + 1) * ch + ch * 0.52, cz(iz));
+            if (!alongX) ridge.rotation.y = Math.PI / 2;
+            levelGroups[iy].add(ridge);
+            stats.ridgeCount = (stats.ridgeCount ?? 0) + 1;
+          }
         }
         continue;
       }
@@ -1001,7 +1213,8 @@ export function buildCitadelTown(spec, ctx) {
       if (shape.kind === "strip") {
         for (const [ix, iz] of comp.cells) {
           const key = `${ix},${iy},${iz}`;
-          const roof = mesh(shape.alongX ? gableX : gableZ, materials.roofTile, "town-roof", 0.04);
+          const roof = mesh((shape.alongX ? gableX : gableZ).clone(), materials.roofTile, "town-roof", 0.04);
+          applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
           levelGroups[iy].add(roof);
           roofCells.add(key);
@@ -1010,7 +1223,12 @@ export function buildCitadelTown(spec, ctx) {
         // 屋脊瓦：沿条带轴向一条深色压条（挑檐方向的两端不出）
         const alongX = shape.alongX;
         for (const [ix, iz] of comp.cells) {
-          const ridge = mesh(ridgeGeometry, trimMat, "town-roof-ridge", 0.014);
+          const ridge = mesh(
+            ridgeGeometry,
+            leanDecor ? (materials.roofTile ?? trimMat) : trimMat,
+            "town-roof-ridge",
+            0.014
+          );
           ridge.position.set(cx(ix), (iy + 1) * ch + ch * 0.52, cz(iz));
           if (!alongX) ridge.rotation.y = Math.PI / 2;
           levelGroups[iy].add(ridge);
@@ -1018,7 +1236,7 @@ export function buildCitadelTown(spec, ctx) {
           // 挑檐：条带两端各出一条压檐（沿轴向端头）
           const firstX = comp.cells[0][0] === ix && comp.cells[0][1] === iz;
           const lastX = comp.cells[comp.cells.length - 1][0] === ix && comp.cells[comp.cells.length - 1][1] === iz;
-          if (firstX || lastX) {
+          if ((firstX || lastX) && !leanDecor) {
             const eave = mesh(eaveGeometry, trimMat, "town-roof-eave", 0.012);
             eave.position.set(
               cx(ix) + (alongX ? (firstX ? -cs * 0.5 : cs * 0.5) : 0),
@@ -1066,6 +1284,7 @@ export function buildCitadelTown(spec, ctx) {
           "town-block2x2-cone",
           0.035
         );
+        applyVerticalVertexColors(cone.geometry, 1.26, 0.64);
         cone.position.set(cx(center[0]), (iy + 1) * ch + ch * 0.35, cz(center[1]));
         levelGroups[iy].add(cone);
         stats.steepleCount++;
@@ -1102,11 +1321,17 @@ export function buildCitadelTown(spec, ctx) {
           if (at(x + dx, iy + 1, z + dz) !== ".") hugsWall = true;
         }
       }
-      if (!hugsWall) continue; // 晒台：留给规则 3 的围栏/城垛
+      // 贴墙的大平顶 = 花园；不贴墙但 ≥3 格的晒台也铺草+圆树（原版岛城到处是盆栽）
+      if (!hugsWall && comp.cells.length < 3) continue;
       for (const key of comp.keys) {
         const [x, , z] = key.split(",").map(Number);
         gardenCells.add(key);
-        const grass = mesh(grassGeometry, materials.foliageDark, "town-garden-grass", 0.008);
+        const grass = mesh(
+          grassGeometry,
+          materials.foliageLight ?? materials.foliageDark,
+          "town-garden-grass",
+          0.008
+        );
         grass.position.set(cx(x), (iy + 1) * ch + 0.03, cz(z));
         levelGroups[iy].add(grass);
         // 分量外缘低栅栏（外露 + 上方开敞的边）
@@ -1149,6 +1374,26 @@ export function buildCitadelTown(spec, ctx) {
         levelGroups[iy].add(green);
         stats.shrubCount++;
       }
+      // 露台盆栽：花园格再撒 1~2 盆圆树，贴近原版「到处是球树」
+      if (ctx.buildTopiary) {
+        const extra = 1 + (comp.cells.length % 2);
+        for (let i = 0; i < extra && i < slots.length; i++) {
+          const [px, pz] = slots[(i * 7919 + 17) % slots.length];
+          const pot = ctx.buildTopiary(
+            `town-shrub-${stats.shrubCount}`,
+            0.55 + (i % 2) * 0.12,
+            ctx.shrubMaterials,
+            random
+          );
+          pot.position.set(
+            cx(px) + (i % 2 ? 0.28 : -0.22),
+            (iy + 1) * ch + 0.06,
+            cz(pz) + (i % 2 ? -0.2 : 0.26)
+          );
+          levelGroups[iy].add(pot);
+          stats.shrubCount++;
+        }
+      }
       // 屋顶鸟：花园边缘栅栏上停 1~2 只静态小鸟（Townscaper 点缀）
       const edge = comp.cells.filter(([x, z]) =>
         at(x + 1, iy, z) === "." || at(x - 1, iy, z) === "." ||
@@ -1180,10 +1425,18 @@ export function buildCitadelTown(spec, ctx) {
       for (const [dx, dz] of DIRS) {
         if (at(ix + dx, iy, iz + dz) !== ".") continue;
         if (isGate && dz === 1) continue;
+        // 临街/临水（邻空）窗更密；背贴邻户的面已在上面 continue
+        const street = at(ix + dx, iy - 1, iz + dz) === "." || iy === house.bottom + 1;
+        const faceDensity = Math.min(1, (density + (street ? 0.22 : 0)) * (leanDecor ? 0.72 : 1));
         // 户级随机：同一面（ix,iz,dx,dz）全层一致，避免每层窗位漂移
         const faceSeed = (house.seed ^ (dx * 131 + dz * 173) ^ (ix * 7 + iz * 11)) >>> 0;
-        if ((faceSeed % 1000) / 1000 >= density) continue;
-        const window = mesh(ctx.archWindowGeometry, winMat, "town-window", 0.022);
+        if ((faceSeed % 1000) / 1000 >= faceDensity) continue;
+        const window = mesh(
+          leanDecor ? new THREE.BoxGeometry(0.38, 0.64, 0.05) : ctx.archWindowGeometry,
+          winMat,
+          "town-window",
+          0.022
+        );
         window.position.set(
           cx(ix) + dx * (cs / 2 + 0.028),
           cy(iy) - ch * 0.08,
@@ -1197,17 +1450,18 @@ export function buildCitadelTown(spec, ctx) {
         window.userData.cellIy = iy;
         levelGroups[iy].add(window);
         stats.windowCount++;
-        // 窗台 / 窗楣：深色盘压条（Townscaper 立面细部）
-        const wx = cx(ix) + dx * (cs / 2 + 0.06);
-        const wz = cz(iz) + dz * (cs / 2 + 0.06);
-        const sill = mesh(sillGeometry, trimMat, "town-window-sill", 0.01);
-        sill.position.set(wx, cy(iy) - ch * 0.08 - 0.62, wz);
-        sill.rotation.y = Math.atan2(dx, dz);
-        levelGroups[iy].add(sill);
-        const lintel = mesh(lintelGeometry, trimMat, "town-window-lintel", 0.01);
-        lintel.position.set(wx, cy(iy) - ch * 0.08 + 0.92, wz);
-        lintel.rotation.y = Math.atan2(dx, dz);
-        levelGroups[iy].add(lintel);
+        if (!leanDecor) {
+          const wx = cx(ix) + dx * (cs / 2 + 0.06);
+          const wz = cz(iz) + dz * (cs / 2 + 0.06);
+          const sill = mesh(sillGeometry, trimMat, "town-window-sill", 0.01);
+          sill.position.set(wx, cy(iy) - ch * 0.08 - 0.62, wz);
+          sill.rotation.y = Math.atan2(dx, dz);
+          levelGroups[iy].add(sill);
+          const lintel = mesh(lintelGeometry, trimMat, "town-window-lintel", 0.01);
+          lintel.position.set(wx, cy(iy) - ch * 0.08 + 0.92, wz);
+          lintel.rotation.y = Math.atan2(dx, dz);
+          levelGroups[iy].add(lintel);
+        }
       }
     }
 
@@ -1261,8 +1515,8 @@ export function buildCitadelTown(spec, ctx) {
         const ex = cx(ix) + dx * (cs / 2 + 0.055);
         const ez = cz(iz) + dz * (cs / 2 + 0.055);
         const yaw = Math.atan2(dx, dz);
-        // 檐口线（顶层 + 中间层，贴墙檐高）
-        if (iy >= 1 || isRoof(ix, iy, iz)) {
+        // 檐口线：软融合模式用浅色细条，避免黑框铁笼
+        if ((iy >= 1 || isRoof(ix, iy, iz)) && !leanDecor) {
           const cornice = mesh(corniceGeometry, trimMatLoc, "town-cornice", 0.014);
           cornice.position.set(ex, (iy + 1) * ch - 0.09, ez);
           cornice.rotation.y = yaw;
@@ -1271,11 +1525,28 @@ export function buildCitadelTown(spec, ctx) {
         }
         // 底层墙裙
         if (iy === 0) {
-          const plinth = mesh(plinthGeometry, trimMatLoc, "town-plinth", 0.016);
+          const plinth = mesh(
+            plinthGeometry,
+            leanDecor ? (materials.A ?? trimMatLoc) : trimMatLoc,
+            "town-plinth",
+            0.016
+          );
           plinth.position.set(ex, 0.24, ez);
           plinth.rotation.y = yaw;
           levelGroups[0].add(plinth);
           stats.plinthCount = (stats.plinthCount ?? 0) + 1;
+        }
+        // 石砌横缝：软融合模式下省略（描边+缝线会把岛城画成铁笼）
+        if (iy >= 1 && !leanDecor) {
+          const grout = mesh(
+            new THREE.BoxGeometry(cs * 0.92, 0.035, 0.04),
+            trimMatLoc,
+            "town-grout",
+            0.008
+          );
+          grout.position.set(ex, cy(iy), ez);
+          grout.rotation.y = yaw;
+          levelGroups[iy].add(grout);
         }
         // 阳台：外露面 + 上方开空（外墙）+ 户种子 30%
         const balconySeed = (house.seed ^ (dx * 911 + dz * 313)) >>> 0;
@@ -1315,7 +1586,7 @@ export function buildCitadelTown(spec, ctx) {
       for (const [dx, dz] of DIRS) {
         if (at(ix + dx, iy, iz + dz) === ".") openDirs.push([dx, dz]);
       }
-      if (openDirs.length >= 2) {
+      if (openDirs.length >= 2 && !leanDecor) {
         for (let a = 0; a < openDirs.length; a++) {
           for (let b = a + 1; b < openDirs.length; b++) {
             const [ax, az] = openDirs[a];
@@ -1551,6 +1822,7 @@ export function buildCitadelTown(spec, ctx) {
     }
     const waterGeometry = new THREE.BoxGeometry(cs * 0.98, 0.12, cs * 0.98);
     for (const key of reached) {
+      if (leanDecor) break; // 水上城堡坐在真水面上，不再叠一层假水道
       const [ix, iz] = key.split(",").map(Number);
       if (ix < 0 || ix >= cols || iz < 0 || iz >= rows) continue; // 格外水源不算
       const enclosedX = at(ix - 1, 0, iz) !== "." && at(ix + 1, 0, iz) !== ".";
@@ -1660,9 +1932,9 @@ export function buildCitadelTown(spec, ctx) {
   // 从下方承重面（下一非空块的顶面 / 基座顶）到悬空块底面的细木柱 + 四角斜撑。
   // 与规则 1（拱）互补：悬空但有侧向支撑 → 拱；完全悬空 → 支架。
   {
-    const pillarGeo = new THREE.BoxGeometry(0.16, 1, 0.16); // 支架细柱（单位高，按需拉长）
-    const strutGeo = new THREE.BoxGeometry(0.07, 0.07, 1); // 斜撑（单位长，按需旋转/拉长）
-    const supportMat = materials.trim ?? materials.wood ?? materials.ink;
+    const pillarGeo = new THREE.BoxGeometry(0.09, 1, 0.09);
+    const strutGeo = new THREE.BoxGeometry(0.045, 0.045, 1);
+    const supportMat = materials.iron ?? materials.ink ?? materials.trim;
     let supportCount = 0;
     for (const [key, char] of grid) {
       const [ix, iy, iz] = key.split(",").map(Number);
@@ -1706,6 +1978,89 @@ export function buildCitadelTown(spec, ctx) {
       }
     }
     if (supportCount > 0) stats.supportCount = supportCount;
+  }
+
+  // ---------- 规则 7：晾衣绳（Townscaper Italian wires）----------
+  {
+    const houses = collectCitadelHouses(grid);
+    const tall = houses.filter((h) => h.floors >= 3);
+    const used = new Set();
+    let wires = 0;
+    const clothColors = [0xe03a38, 0xf6f1e6, 0x3b6fd4, 0x48b04a, 0xf2c230];
+    for (let i = 0; i < tall.length && wires < 5; i++) {
+      for (let j = i + 1; j < tall.length && wires < 5; j++) {
+        const a = tall[i];
+        const b = tall[j];
+        const gap = Math.abs(a.ix - b.ix) + Math.abs(a.iz - b.iz);
+        if (gap < 2 || gap > 4) continue;
+        if (Math.abs(a.top - b.top) > 1) continue;
+        const pair = `${Math.min(a.ix, b.ix)},${Math.min(a.iz, b.iz)}-${Math.max(a.ix, b.ix)},${Math.max(a.iz, b.iz)}`;
+        if (used.has(pair)) continue;
+        const midX = (a.ix + b.ix) / 2;
+        const midZ = (a.iz + b.iz) / 2;
+        const iy = Math.min(a.top, b.top);
+        if (at(Math.round(midX), iy, Math.round(midZ)) !== ".") continue;
+        used.add(pair);
+        const p0 = new THREE.Vector3(cx(a.ix), (iy + 0.82) * ch, cz(a.iz));
+        const p2 = new THREE.Vector3(cx(b.ix), (iy + 0.82) * ch, cz(b.iz));
+        const p1 = p0.clone().lerp(p2, 0.5);
+        p1.y -= 0.28;
+        const curve = new THREE.CatmullRomCurve3([p0, p1, p2]);
+        const tube = new THREE.Mesh(
+          new THREE.TubeGeometry(curve, 8, 0.018, 4, false),
+          materials.ink
+        );
+        tube.name = "town-clothesline";
+        levelGroups[iy].add(tube);
+        for (let k = 0; k < 3; k++) {
+          const u = 0.25 + k * 0.22;
+          const pt = curve.getPoint(u);
+          const cloth = mesh(
+            new THREE.BoxGeometry(0.22, 0.28, 0.04),
+            materials[CITADEL_PALETTE[k + 3]?.char] ?? materials.wood,
+            "town-cloth",
+            0.006
+          );
+          cloth.material = cloth.material.clone();
+          cloth.material.color.setHex(clothColors[k % clothColors.length]);
+          cloth.position.copy(pt);
+          cloth.position.y -= 0.16;
+          levelGroups[iy].add(cloth);
+        }
+        wires++;
+      }
+    }
+    stats.clotheslineCount = wires;
+  }
+
+  // ---------- 规则 6：临水防波堤（Townscaper 岸石裙）----------
+  // 底层外露格贴空格（运河/海）→ 厚石阶下切水面；整岛再垫一层石基，
+  // 岸线连成一圈，像原版岛城的砌石裙。
+  {
+    const skirtMat = materials.weatherStone ?? materials.plazaStone ?? materials.A ?? trimMat;
+    const skirtGeo = new THREE.BoxGeometry(cs * 1.08, 0.72, 0.46);
+    const plinthGeo = new THREE.BoxGeometry(cs * 1.12, 0.34, cs * 1.12);
+    let skirtCount = 0;
+    for (const [key] of grid) {
+      const [ix, iy, iz] = key.split(",").map(Number);
+      if (iy !== 0) continue;
+      const base = mesh(plinthGeo, skirtMat, "town-seawall-plinth", 0.02);
+      base.position.set(cx(ix), -0.28, cz(iz));
+      levelGroups[0].add(base);
+      for (const [dx, dz] of DIRS) {
+        if (at(ix + dx, 0, iz + dz) !== ".") continue;
+        const skirt = mesh(skirtGeo, skirtMat, "town-seawall", 0.018);
+        skirt.position.set(
+          cx(ix) + dx * (cs / 2 + 0.18),
+          -0.22,
+          cz(iz) + dz * (cs / 2 + 0.18)
+        );
+        skirt.rotation.y = Math.atan2(dx, dz);
+        levelGroups[0].add(skirt);
+        skirtCount++;
+      }
+    }
+    stats.seawallCount = skirtCount;
   }
 
   stats.gridSize = { cols, rows, levels: levels.length };

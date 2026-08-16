@@ -37,23 +37,84 @@ const { buildSaihojiPlanet } = await import(new URL("src/world/saihoji.js", BASE
 const scene = new THREE.Scene();
 const built = buildSaihojiPlanet(scene, { seed: 884 });
 
-// 主石之庭应只剩一株完整尺寸巨松（giantA），giantB 已移往圣城港口
-let fullSize = 0;
-let small = 0;
-built.group.traverse((o) => {
-  if (o.name === "giantTreeGroup") {
-    if (Math.abs(o.scale.x - 1) < 0.01) fullSize++;
-    else small++;
+// 松树碰撞体存在（古松 collideRadius 随 scale 变化）
+const pineColliders = built.colliders?.filter((c) => c.radius >= 0.4) || [];
+assert(pineColliders.length >= 10, `松树碰撞体应 ≥10（实际 ${pineColliders.length}）`);
+console.log(`  ✓ 松树碰撞体 ${pineColliders.length} 个`);
+
+const zones = built.landmarks?.zones ?? {};
+const byId = Object.fromEntries(
+  Object.entries(zones).map(([id, z]) => [id, z.pines?.length ?? 0])
+);
+const totalPines = Object.values(byId).reduce((a, b) => a + b, 0);
+assert(totalPines >= 18 && totalPines <= 30, `全庭松树 18–30 株（实际 ${totalPines}）`);
+console.log(`  ✓ 全庭 ${totalPines} 株 · 分区 ${JSON.stringify(byId)}`);
+
+// 空庭极简（计白当黑）
+assert((byId["empty-court"] ?? 0) <= 3, `空庭应 ≤3 株（实际 ${byId["empty-court"]}）`);
+console.log(`  ✓ 空庭极简 ${byId["empty-court"]} 株`);
+
+// 高低胖瘦：scale 跨度
+const allPines = Object.values(zones).flatMap((z) => z.pines || []);
+const scales = allPines.map((p) => p.userData.pineScale ?? 1);
+const sMin = Math.min(...scales);
+const sMax = Math.max(...scales);
+assert(sMin <= 0.7, `应有幼/矮松 scale≤0.7（min=${sMin.toFixed(2)}）`);
+assert(sMax >= 1.2, `应有主木 scale≥1.2（max=${sMax.toFixed(2)}）`);
+console.log(`  ✓ 胖瘦高低 scale ${sMin.toFixed(2)}–${sMax.toFixed(2)}`);
+
+// 角色齐全
+const roles = new Set(allPines.map((p) => p.userData.pineRole));
+assert(roles.has("master") && roles.has("companion"), `应有主木/添木角色（${[...roles]}）`);
+console.log(`  ✓ 角色 ${[...roles].join(",")}`);
+
+// 非均匀：同景内株距方差（忌等距环植）
+function localXZ(pine, zoneDef) {
+  // 用世界位相对区心的切向投影近似局部 xz
+  const R = 160;
+  const lat = (zoneDef.lat * Math.PI) / 180;
+  const lon = (zoneDef.lon * Math.PI) / 180;
+  const base = new THREE.Vector3(
+    Math.cos(lat) * Math.cos(lon),
+    Math.sin(lat),
+    Math.cos(lat) * Math.sin(lon)
+  );
+  const east = new THREE.Vector3(0, 1, 0).cross(base).normalize();
+  const north = base.clone().cross(east).normalize();
+  const p = pine.position.clone().normalize();
+  // 切平面投影（弧长近似）
+  const d = p.clone().sub(base);
+  return { x: d.dot(east) * R, z: d.dot(north) * R };
+}
+let nonUniformOk = 0;
+for (const [id, z] of Object.entries(zones)) {
+  const pines = z.pines || [];
+  if (pines.length < 3) continue;
+  const pts = pines.map((p) => localXZ(p, z.definition));
+  const dists = [];
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i + 1; j < pts.length; j++) {
+      dists.push(Math.hypot(pts[i].x - pts[j].x, pts[i].z - pts[j].z));
+    }
   }
-});
-assert.equal(fullSize, 1, `完整尺寸巨松应恰 1 株（实际 ${fullSize}）`);
-assert(small >= 5, "庭园点缀小松应保留");
-console.log(`  ✓ 主石之庭完整巨松 1 株（点缀小松 ${small} 株仍在）`);
+  const mean = dists.reduce((a, b) => a + b, 0) / dists.length;
+  const variance =
+    dists.reduce((a, b) => a + (b - mean) ** 2, 0) / dists.length;
+  const cv = Math.sqrt(variance) / mean; // 变异系数
+  assert(cv > 0.18, `${id} 株距应参差（cv=${cv.toFixed(2)}）`);
+  nonUniformOk++;
+}
+console.log(`  ✓ ${nonUniformOk} 景株距参差（非等距环）`);
 
-// colliders 含该巨松（半径 2.6）
-const masterColliders = built.colliders?.filter((c) => c.radius >= 2) || [];
-assert.equal(masterColliders.length, 1, `巨松 collider 应恰 1 个（实际 ${masterColliders.length}）`);
-console.log("  ✓ 巨松碰撞体 1 个（r=2.6）");
+// 抬根：径向位置应略高于球面 R
+const R = 160;
+let buried = 0;
+for (const pine of allPines) {
+  const r = pine.position.length();
+  if (r < R + 0.04) buried++;
+}
+assert(buried === 0, `应全部抬根出苔，埋入 ${buried} 株`);
+console.log(`  ✓ 全部抬根出苔（r ≥ R+0.04）`);
 
-console.log("\n结果：2/2 通过");
+console.log(`\n结果：通过`);
 process.exit(0);

@@ -1,12 +1,12 @@
 // =====================================================================
 //  老虎起始视角：苔海六景式小庭园
 //  不是一张背景贴图，而是一组贴合主岛球面的可读 3D 景物：
-//  前景池水、苔岩岛、右侧瀑布、左侧红叶、后方竹林与一株古松。
+//  前景池水、苔岩岛、右侧瀑布、左侧红叶、后方竹林。
+//  古松已集中到西芳寺（正常尺寸）。
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { facet } from "../assets/lowPoly.js";
-import { createAncientPineTree } from "../assets/ancient.js";
 import { placeObjectOnSphere } from "./sphereMath.js";
 import {
   groundLiftAt,
@@ -387,63 +387,6 @@ function addMossRing(group, cx, cz, ringR, count, lift = 0.06) {
 }
 const MOSS_RING_COLORS = [0x4e8849, 0x5c994e, 0x6fae56, 0x3f7a44, 0x569a52, 0x487a40];
 
-/** 截图 1 的可重复景观单元：横向古松 + 苔岩 + 踏石小径。 */
-function createPineRockVignette(seed, scale = 1) {
-  const group = new THREE.Group();
-  const pine = createAncientPineTree(seed);
-  pine.scale.multiplyScalar(scale);
-  pine.position.set(0, 0, 0);
-  group.add(pine);
-
-  const stones = [
-    [-1.35, 0.26, 0.28, 1.15], [-0.35, 0.2, 0.7, 0.85],
-    [1.05, 0.18, 0.35, 0.72], [1.72, 0.16, -0.22, 0.62],
-  ];
-  for (const [x, y, z, s] of stones) {
-    const boulder = rock(toonMat(0x4a4d46), s * scale);
-    boulder.position.set(x * scale, y * scale, z * scale);
-    group.add(boulder);
-  }
-
-  // 斜向踏石串，采用截图 1 的“从石组伸向远处”的节奏。
-  const pathMat = toonMat(0x8c887a);
-  for (let i = 0; i < 6; i++) {
-    const step = new THREE.Mesh(
-      facet(new THREE.CylinderGeometry(0.42, 0.5, 0.1, 7)),
-      pathMat,
-    );
-    step.position.set((2.05 + i * 0.68) * scale, 0.055 * scale, (0.55 + i * 0.4) * scale);
-    step.scale.set(1.0 * scale, 1, 0.78 * scale);
-    step.rotation.y = -0.18 + i * 0.06;
-    step.castShadow = true;
-    step.receiveShadow = true;
-    addOutline(step, 0.009, 0x343d37, 0.035);
-    group.add(step);
-  }
-  for (const [x, z, rx, rz] of [[-0.2, 0.5, 1.1, 0.6], [1.0, -0.18, 0.9, 0.45]]) {
-    group.add(mossPatch(x * scale, 0.05 * scale, z * scale, rx * scale, rz * scale, 0x5f9552));
-  }
-  return group;
-}
-
-function addPineRockVignettes(root, planetRadius, colliders) {
-  const placements = [
-    [-10.2, -7.2, 0.98, 4301, 0.18],
-    [9.8, -7.6, 0.84, 4311, -0.38],
-    [10.2, 5.4, 0.8, 4321, 0.42],
-    [-8.8, 2.0, 0.74, 4331, -0.2],
-  ];
-  for (const [x, z, scale, seed, yaw] of placements) {
-    const vignette = createPineRockVignette(seed, scale);
-    placeObjectOnSphere(vignette, x, z, groundLiftAt(x, z), planetRadius);
-    vignette.rotateY(yaw);
-    root.add(vignette);
-    const center = new THREE.Vector3();
-    vignette.getWorldPosition(center);
-    colliders.push({ position: center, radius: 0.85 * scale });
-  }
-}
-
 /**
  * 固定在出生点前方的园景构图。平面坐标仍使用主岛的 x/z，
  * 由 placeObjectOnSphere 贴到球面，因此镜头旋转时不会像贴纸一样脱离地面。
@@ -516,8 +459,6 @@ export function createStartGardenVista(scene, planetRadius) {
   placeObjectOnSphere(rearMoss, 0, 9.1, groundLiftAt(0, 9.1) + 0.04, planetRadius);
   root.add(rearMoss);
 
-  // 主岛四处再铺开同一套“古松—苔岩—踏石”景观，形成西芳寺式重复节奏。
-  addPineRockVignettes(root, planetRadius, colliders);
 
   scene.add(root);
   return { group: root, pond, waterfall: cascade, mountain, colliders };

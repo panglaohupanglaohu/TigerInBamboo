@@ -40,7 +40,7 @@ import {
 } from "../assets/moebiusAircraft.js";
 import { createBubblePod, createBubblePodsAroundFlowerBuildings, updateBubblePodPatrol } from "../assets/bubblePod.js";
 import { groundLiftAt } from "../world/hills.js";
-import { placeObjectOnSphere, latLonToDir, flatXZToLatLon } from "../world/sphereMath.js";
+import { placeObjectOnSphere, latLonToDir, flatXZToLatLon, quatUprightOnSphere } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
 import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
@@ -57,8 +57,8 @@ import {
   citadelTerrainObjectsKey,
 } from "../world/odysseyCitadel.js";
 import {
-  CITADEL_TOWN_SPEC,
   CITADEL_LEVELS_KEY,
+  CANAL_JUNCTION_TOWN_SPEC,
   citadelLevelsKey,
 } from "../world/citadelTown.js";
 import {
@@ -378,11 +378,9 @@ export const messengerIslandScene = {
       bubblePods.add(shopPod);
     }
 
-    // ---------- 运河交汇古堡（第二城堡实例）----------
-    // 摆脱「只能在高山圣城建古堡」：运河环线经过月亮湖侧畔，此处放置
-    // 同款可编辑古堡（独立存档键 tm.citadel.levels.canal-junction.v1），
-    // 运河在它身边交汇；搭建面板可切换目标实例编辑。
-    // 选址：月亮湖 → 白鲸海湖航段中点方向（开阔水面，不与其他场景重叠）。
+    // ---------- 运河交汇 · 水上城堡（第二城堡实例）----------
+    // 高山圣城才有多层台地。这里是河水相交的开阔水面，
+    // Townscaper 式点水面盖楼：无台地、楼脚自动出防波堤。
     const moonLakeLatLon = flatXZToLatLon(LAKE.x, LAKE.z, R);
     const canalJunctionDir = latLonToDir(
       (moonLakeLatLon.lat + CITY_SEA_LAKE.lat) * 0.5,
@@ -402,8 +400,8 @@ export const messengerIslandScene = {
         const saved = JSON.parse(localStorage.getItem(cjsLevelsKey) || "null");
         if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) cjSpec = saved;
       } catch { /* 回落空布局 */ }
-      // 运河交汇处初始不建城堡：堤岸方框 = 空地基（无存档时），由玩家自己搭建。
-      if (!cjSpec) cjSpec = { terraces: [] };
+      // 无存档：水面岛城种子（彩色竖户 / 退台 / 飞楼），点格可改。
+      if (!cjSpec) cjSpec = CANAL_JUNCTION_TOWN_SPEC;
       let cjContour;
       try {
         const saved = JSON.parse(localStorage.getItem(cjsTerrainKey) || "null");
@@ -416,16 +414,12 @@ export const messengerIslandScene = {
       } catch { /* 空 */ }
       // 朝向运河切向（月亮湖方向）：古堡正门对着运河流向
       const faceDir = moonLake?.centerWorld || canalJunctionDir;
-      // ---------- 运河交汇堤岸方框（Townscaper 式城堡地基）----------
-      // 运河在此交汇：堤岸围出的矩形方框 = 城堡建立之处（高亮四边 + 角灯）。
-      // 方框中心即古堡台地中心，古堡正门朝向运河切向。
       const junctionBox = buildCanalJunctionBox(scene, R, {
         centerDir: canalJunctionDir,
         forwardDir: moonLake?.centerWorld || canalJunctionDir,
         halfLength: 22,
         halfWidth: 18,
         waterLift: 0.6,
-        highlight: true,
       });
       scene.add(junctionBox.group);
       canalJunctionBox = junctionBox.group; // 高亮构建区：点选/切换目标用
@@ -440,19 +434,23 @@ export const messengerIslandScene = {
         contour: cjContour,
         terrainObjects: cjObjects,
         instanceId: "canal-junction",
-        floors: 12, // 运河交汇古堡：Townscaper 式高塔，12 层（高山为 5 层）
-        skipOuterTerrain: true, // 不建外围台地：运河堤岸方框就是地基
-        townBaseLift: 0.62, // 镇体基座落在方框水面平台（约 CANAL_WATER_LIFT）
+        floors: 12,
+        skipOuterTerrain: true,
+        townBaseLift: 0.62,
+        place: false,
       });
       scene.add(canalJunctionCitadel);
-      canalJunctionCitadel.updateMatrixWorld(true);
-
-      // 镇体基座对齐方框实心平台顶面（水面 + 微抬），不嵌入平台
-      const platformTop = canalJunctionDir
-        .clone()
-        .multiplyScalar(R + (junctionBox.group.userData.waterLift ?? 0.6) + 0.1);
-      canalJunctionCitadel.position.copy(platformTop);
-      canalJunctionCitadel.quaternion.copy(junctionBox.quaternion);
+      // 直立坐在水面上：+Y = 球面法向。楼脚与水面齐平，防波堤没入水里。
+      const up = canalJunctionDir.clone().normalize();
+      quatUprightOnSphere(
+        up,
+        moonLake?.centerWorld || canalJunctionDir,
+        canalJunctionCitadel.quaternion
+      );
+      // 镇体底坐在水面：local baseY + 径向位移 = R + waterLift
+      const waterLift = junctionBox.group.userData.waterLift ?? 0.6;
+      const townLift = canalJunctionCitadel.userData.townBaseLift ?? 0.62;
+      canalJunctionCitadel.position.copy(up).multiplyScalar(R + waterLift - townLift);
       canalJunctionCitadel.updateMatrixWorld(true);
       junctionBox.group.userData.citadel = canalJunctionCitadel;
     }
@@ -485,6 +483,14 @@ export const messengerIslandScene = {
         anchors: canalAnchors,
         names: canalNames,
         groundLift: citadelRangeLiftDir,
+        // 交汇水塘处去掉窄沟网格，改由开阔水面承接，避免沟壁穿过水塘。
+        excludeZones: canalJunctionDir
+          ? [{
+              center: canalJunctionDir,
+              radius: canalJunctionBox?.userData?.excludeRadius
+                ?? Math.hypot(22, 18) + 1.6,
+            }]
+          : [],
         // 护城河环带处护堤缺口：立壁/土埂断开、水面/河床连续（水系打通）。
         // 余量须盖住运河自身护堤横向展幅（半宽 6.3 + 壁/埂 ≈ 8.1），
         // 否则中心线在带外、壁体仍会伸入环带造成护堤交叉。
@@ -616,17 +622,7 @@ export const messengerIslandScene = {
         tuft.rotateY(rnd() * Math.PI * 2);
         scene.add(tuft);
       }
-      for (let i = 0; i < 7; i++) {
-        const a = rnd() * Math.PI * 2;
-        const d = 2.8 + rnd() * 2.0;
-        const x = bookshopX + Math.cos(a) * d;
-        const z = bookshopZ + Math.sin(a) * d;
-        const flower = createLowPolyFlower(
-          INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]
-        );
-        placeObjectOnSphere(flower, x, z, groundLiftAt(x, z) + 0.01, R);
-        scene.add(flower);
-      }
+      // 水墨花环已清理（用户认为花模型不好看）；书店镇仅保留草簇。
     }
 
     // ---------- 厚涂苔丘草地（Impasto Mossy Knolls）：西芳寺缘 + 湖沼边缘 ----------
@@ -642,10 +638,13 @@ export const messengerIslandScene = {
       radius: bookshop.userData.collideRadius || 3,
       flatten: true,
     });
-    // ① 西芳寺缘：入口苔径 ↔ 主石之庭 的路线间隙；草丛避开六景石组庭园
+    // ① 西芳寺缘：入口苔径 ↔ 主石之庭 的路线间隙；草丛避开六景石组庭园。
+    // flatten=true：苔丘连续地形在六景区内压平到球面——否则苔丘隆起
+    // （2–4.6 单位）会把贴球面放置的松树整棵埋进苔庭。
     const zoneAvoid = SAIHOJI_ZONES.map((z) => ({
       position: latLonToDir(z.lat, z.lon, new THREE.Vector3()).multiplyScalar(R),
       radius: z.radius + 1,
+      flatten: true,
     }));
     const mossSaihoji = buildImpastoMossyGround({
       dir: latLonToDir(56, -120, new THREE.Vector3()),
@@ -797,6 +796,9 @@ export const messengerIslandScene = {
 
         // 运河战船巡游（已搭乘的船跳过，由 boatRide 接管）
         canalBoats?.update?.(dt);
+        canalSys?.group?.userData?.update?.(dt, t);
+        canalJunctionBox?.userData?.update?.(dt, t);
+        canalJunctionCitadel?.update?.(dt, t);
 
         // 旧港码头：两组剪纸士兵搬运货物上船的往返动画
         harborBuilt?.update?.(dt, t);

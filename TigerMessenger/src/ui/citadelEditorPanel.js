@@ -12,6 +12,7 @@
 // =====================================================================
 import {
   CITADEL_TOWN_SPEC,
+  CANAL_JUNCTION_TOWN_SPEC,
   CITADEL_LEVELS_KEY,
   CITADEL_TERRACE_COUNT,
   CITADEL_CASTLE_FLOORS,
@@ -165,9 +166,48 @@ export function createCitadelEditorPanel({
     dropToGround = localStorage.getItem(DROP_KEY) !== "0";
   } catch { /* private mode */ }
 
-  /** 无存档时各实例的默认布局：高山圣城用内置 SPEC；运河交汇古堡为空地基（玩家自建）。 */
+  /** 运河交汇：无台地，方框里直接搭建筑。 */
+  function isCanalFlat() {
+    return getInstanceId() === "canal-junction";
+  }
+
+  /** 无存档时：高山圣城用内置 SPEC；运河交汇是空地基，由玩家自建。 */
   function defaultGridSpec() {
-    return getInstanceId() === "canal-junction" ? { terraces: [] } : CITADEL_TOWN_SPEC;
+    return isCanalFlat() ? CANAL_JUNCTION_TOWN_SPEC : CITADEL_TOWN_SPEC;
+  }
+
+  function applyInstanceMode() {
+    const canal = isCanalFlat();
+    const terrainSection = panel.querySelector("#ce-terrain-section");
+    if (terrainSection) terrainSection.style.display = canal ? "none" : "";
+    const heading = panel.querySelector("#ce-castle-heading");
+    if (heading) heading.textContent = canal ? "水上城堡" : "2）城堡层";
+    const clearBtn = panel.querySelector("#ce-clear");
+    if (clearBtn) {
+      clearBtn.textContent = canal ? "清空" : "清空当前台地";
+      clearBtn.title = canal ? "清空全部建筑" : "清空当前台地的五层城堡";
+    }
+    const resetBtn = panel.querySelector("#ce-reset");
+    if (resetBtn) {
+      resetBtn.textContent = canal ? "恢复岛城" : "重置为 SPEC";
+      resetBtn.title = canal ? "恢复 Townscaper 水面岛城种子" : "恢复内置布局";
+    }
+    const hint = panel.querySelector("#ce-hint");
+    if (hint) {
+      hint.innerHTML = canal
+        ? "河水相交处 · 点水面盖楼（Townscaper 水上城堡），无台地。<br/>楼脚贴水，邻空自动长防波堤。平面图左键放块 / 右键删块 · 3D 点顶叠高 · Q/E 换层 · Ctrl+S 保存"
+        : "平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>台地/护城河/城堡改动都即时预览 3D · 必须点「保存台地配置」或「保存全部」（Ctrl+S）才写入存档";
+    }
+    if (canal) {
+      activeTerrace = 0;
+      grid = terraceGrids[0] ?? grid;
+    }
+    const ctxEl = panel.querySelector("#ce-castle-context");
+    if (ctxEl) {
+      ctxEl.textContent = canal
+        ? "· 点水面盖楼"
+        : `— 台地 ${activeTerrace + 1}${activeTerrace === 0 ? "（最高）" : ""}`;
+    }
   }
 
   function loadTerraceGrids() {
@@ -254,6 +294,7 @@ export function createCitadelEditorPanel({
         style="background:none;border:none;color:#fff;cursor:pointer;font-size:13px;">✕</button>
     </div>
     <div id="ce-body" style="padding:10px 12px 12px;max-height:calc(100vh - 118px);overflow-y:auto;">
+      <div id="ce-terrain-section">
       <div style="font-weight:700;margin-bottom:5px;">1）台地层 · 地形地貌</div>
       <div id="ce-terrace-tabs" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;"></div>
       <canvas id="ce-terrain-map" width="312" height="190"
@@ -296,8 +337,9 @@ export function createCitadelEditorPanel({
         <button type="button" id="ce-object-delete" title="选择后点击鸟瞰图中的对象标记删除（含层叠瀑布）">删除对象</button>
         <span style="font:10px monospace;color:#71808a;">层叠瀑布=五湖四帘+窄扇区缺口；删掉后完整台面可建 · 台地湖=瀑布独立化开关（关湖省台面） · 其他对象点鸟瞰图放置 · 木马：左键拖拽平移 / 右键删除</span>
       </div>
+      </div>
       <div style="border-top:1px solid #dbe2e8;padding-top:7px;font-weight:700;margin-bottom:5px;">
-        2）城堡层 <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
+        <span id="ce-castle-heading">2）城堡层</span> <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
       </div>
       <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-bottom:8px;" id="ce-palette"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
@@ -330,7 +372,7 @@ export function createCitadelEditorPanel({
         <button type="button" id="ce-view-top" title="升到圣城顶端俯瞰">到顶</button>
       </div>
       <div id="ce-stats" style="margin-top:7px;color:#4a5560;font:11px/1.5 monospace;"></div>
-      <div style="margin-top:4px;color:#8a96a1;font:10px/1.5 monospace;">
+      <div id="ce-hint" style="margin-top:4px;color:#8a96a1;font:10px/1.5 monospace;">
         平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>
         3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>
         台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>
@@ -772,6 +814,14 @@ export function createCitadelEditorPanel({
   applyAngleBtn.onclick = applySelectedYaw;
 
   function selectTerrace(index) {
+    if (isCanalFlat()) {
+      activeTerrace = 0;
+      grid = terraceGrids[0] ?? grid;
+      applyInstanceMode();
+      draw();
+      onLayerVisibility(0, activeLayer, hideAbove);
+      return;
+    }
     activeTerrace = Math.min(CITADEL_TERRACE_COUNT - 1, Math.max(0, index));
     grid = terraceGrids[activeTerrace];
     drawTerraceTabs();
@@ -787,7 +837,9 @@ export function createCitadelEditorPanel({
       button.style.background = selected ? "#2a2b2d" : "#fff";
       button.style.color = selected ? "#fff" : "#2a2b2d";
     });
-    castleContextEl.textContent = `— 台地 ${activeTerrace + 1}${activeTerrace === 0 ? "（最高）" : ""}`;
+    castleContextEl.textContent = isCanalFlat()
+      ? "· 点水面盖楼"
+      : `— 台地 ${activeTerrace + 1}${activeTerrace === 0 ? "（最高）" : ""}`;
   }
   for (let index = 0; index < CITADEL_TERRACE_COUNT; index++) {
     const button = document.createElement("button");
@@ -1363,8 +1415,8 @@ export function createCitadelEditorPanel({
     ctx2d.clearRect(0, 0, canvasEl.width, canvasEl.height);
     ctx2d.fillStyle = "#f2f5f7";
     ctx2d.fillRect(0, 0, canvasEl.width, canvasEl.height);
-    // 五层台地背景：所有城堡网格共享同一个固定中心。
-    {
+    // 高山圣城：五层台地背景。运河交汇是平地，只铺一层浅水色，不画台地环。
+    if (!isCanalFlat()) {
       // The terrain origin is the centre of grid cell (12, 12), not that
       // cell's top-left corner. The old MAX_COORD/2 formula shifted every
       // contour by half a cell and made map-edge cells disagree with 3D.
@@ -1404,7 +1456,6 @@ export function createCitadelEditorPanel({
         ctx2d.lineWidth = isActive ? 2.4 : (i === CITADEL_TERRACE_COUNT - 1 ? 1.2 : 0.8);
         ctx2d.stroke();
       }
-      // 城堡居中标记（"+城"）
       ctx2d.fillStyle = "rgba(42,43,45,0.7)";
       ctx2d.beginPath();
       ctx2d.arc(cx, cy, 5, 0, Math.PI * 2);
@@ -1414,6 +1465,9 @@ export function createCitadelEditorPanel({
       ctx2d.textAlign = "center";
       ctx2d.textBaseline = "middle";
       ctx2d.fillText("城", cx, cy);
+    } else {
+      ctx2d.fillStyle = "#e4eef1";
+      ctx2d.fillRect(0, 0, canvasEl.width, canvasEl.height);
     }
     for (let iz = 0; iz < n; iz++) {
       for (let ix = 0; ix < n; ix++) {
@@ -1456,7 +1510,10 @@ export function createCitadelEditorPanel({
       // after clearing a terrace its first block can be placed in every cell
       // whose centre lies on the selected terrace, and nowhere else.
       if (!existing && !supportsCell(ix, iz, activeTerrace)) {
-        toast("该格不在当前台地可建面（土坡环带或层叠梯湖）内", 1.6);
+        toast(
+          isCanalFlat() ? "此处不能放置" : "该格不在当前台地可建面（土坡环带或层叠梯湖）内",
+          1.6
+        );
         return;
       }
       pushUndo();
@@ -1520,14 +1577,13 @@ export function createCitadelEditorPanel({
   panel.querySelector("#ce-redo").onclick = redo;
   panel.querySelector("#ce-reset").onclick = () => {
     pushUndo();
-    // 按实例重置：高山圣城恢复内置 SPEC；运河交汇古堡清空为堤岸空地基（玩家自建）
     const isCanal = getInstanceId() === "canal-junction";
     terraceGrids = normalizeCitadelTerraceLayout(
-      isCanal ? { terraces: [] } : CITADEL_TOWN_SPEC
+      isCanal ? CANAL_JUNCTION_TOWN_SPEC : CITADEL_TOWN_SPEC
     ).terraces.map((entry) => levelsToGrid(entry.levels));
     grid = terraceGrids[activeTerrace];
     commit();
-    toast(isCanal ? "已清空运河古堡（堤岸方框即地基，可自由搭建）" : "已恢复内置圣城布局", 1.6);
+    toast(isCanal ? "已恢复水面岛城种子" : "已恢复内置圣城布局", 1.6);
   };
   panel.querySelector("#ce-clear").onclick = () => {
     pushUndo();
@@ -1611,6 +1667,7 @@ export function createCitadelEditorPanel({
    * 无变化返回 false（不进撤销栈）；有变化走 commit 即时重建。
    */
   function applySceneEdit({ ix, iy, iz, terraceIndex = activeTerrace }, mode) {
+    if (isCanalFlat()) terraceIndex = 0;
     if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return false;
     if (iy < 0 || iy > currentMaxLevel()) return false;
     if (mode === "erase") {
@@ -1641,9 +1698,10 @@ export function createCitadelEditorPanel({
       panel.style.display = "block";
       // 打开面板只改变 UI，不得重建或修改 3D 城堡。布局在每次真正编辑时
       // 已由 commit() 即时同步；这里调用 commit 会让一次普通点选变成场景写入。
+      applyInstanceMode();
       hideAbove = false;
       applyHideAbove(); // 每次打开先完整显示五座台地上的全部城堡层
-      drawTerrainMap(); // 等高线高亮与当前层同步
+      if (!isCanalFlat()) drawTerrainMap(); // 等高线高亮与当前层同步
       try {
         onOpen();
       } catch {
@@ -1704,17 +1762,20 @@ export function createCitadelEditorPanel({
       terraceGrids = loadTerraceGrids();
       terrain = loadTerrain();
       terrainObjects = loadTerrainObjects();
-      grid = terraceGrids[activeTerrace];
       activeTerrace = 0;
+      grid = terraceGrids[0];
       activeLayer = 0;
       hideAbove = false;
-      refreshTerrainInputs();
-      refreshMoatInputs();
-      refreshCascadeButton();
-      refreshPoolsButton();
+      applyInstanceMode();
       refreshTargetSelect(); // 点选命中切换后，下拉选中态同步
-      drawTerraceTabs();
-      drawTerrainMap();
+      if (!isCanalFlat()) {
+        refreshTerrainInputs();
+        refreshMoatInputs();
+        refreshCascadeButton();
+        refreshPoolsButton();
+        drawTerraceTabs();
+        drawTerrainMap();
+      }
       draw();
       applyHideAbove();
       markDirty();
@@ -1751,6 +1812,7 @@ export function createCitadelEditorPanel({
     });
   });
   refreshTargetSelect();
+  applyInstanceMode();
 
   // Keep the backing canvas exactly equal to the fixed 25×25 building grid.
   // This makes its visual centre identical to cellCenter(12, *, 12).

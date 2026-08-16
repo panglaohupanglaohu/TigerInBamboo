@@ -76,13 +76,52 @@ const siteDir = citadelSiteDir(new THREE.Vector3());
 assert(we.clone().normalize().dot(siteDir) > 0.9, "双株应位于站点方向半球");
 ok(`双株贴地：半径 ${wc.length().toFixed(2)} ≈ R=${R}`);
 
-// 网格构成：第二棵 = createAncientPineTree 资产（合并后按材质 ~6 组：
-// bark/barkDark/inner/canopyA/canopyB + 描边；合并前为 130 个独立网格）
+// 网格构成：第二棵 = createColossalVernacularTree（合并后少量绘制）
 let compMeshes = 0;
 comp.traverse((o) => { if (o.isMesh) compMeshes++; });
-assert(compMeshes >= 3 && compMeshes <= 10,
-  `第二棵巨松合并后网格数应 3~10（实际 ${compMeshes}）`);
-ok(`第二棵巨松 ${compMeshes} 个合并网格（三段干+枝+云片冠，130→~6）`);
+assert(compMeshes >= 2 && compMeshes <= 16,
+  `第二棵巨木合并后网格数应 2~16（实际 ${compMeshes}）`);
+ok(`第二棵巨木 ${compMeshes} 个合并网格（三股干+爆炸枝+伞冠）`);
+assert.equal(comp.userData.assetType, "colossalVernacularTree", "第二棵应为港口专用地标巨木");
+ok("第二棵为 createColossalVernacularTree 港口专用地标");
 
-console.log(`\n结果：${pass}/4 通过`);
+// ---- 2. 工笔古樟结构：双干合生 + 云片伞冠 ----
+const { createColossalVernacularTree } = await import(new URL("src/assets/ancient.js", BASE).href);
+const probe = createColossalVernacularTree({ seed: 4242, merge: false, namePrefix: "probe" });
+let trunks = 0, branches = 0, crowns = 0, fills = 0, clouds = 0;
+probe.traverse((o) => {
+  if (o.isPointLight) fills++;
+  if (o.isGroup && /cloud-/.test(o.name || "")) clouds++;
+  if (!o.isMesh || o.userData.isOutline) return;
+  const nm = o.name || "";
+  if (nm.includes("trunk-") && nm.endsWith("-shaft")) trunks++;
+  else if (nm.includes("branch-")) branches++;
+  else if (nm.includes("crown-")) crowns++;
+});
+assert.equal(trunks, 3, `合生树干应为 3（实际 ${trunks}）`);
+assert.equal(branches, 4, `藏冠骨干应为 4（实际 ${branches}）`);
+assert.equal(clouds, 8, `云片团应为 8（实际 ${clouds}）`);
+assert(crowns >= 60 && crowns <= 90, `云片叶团应 60–90（实际 ${crowns}）`);
+assert.equal(fills, 1, "应有局部补光");
+assert.equal(probe.userData.style, "gongbi-courtyard-camphor");
+assert.equal(probe.userData.cloudPads, 8);
+assert(probe.userData.canopyBands.dark > 0);
+assert(probe.userData.canopyBands.mid > 0);
+assert(probe.userData.canopyBands.light > 0);
+ok(`工笔结构 3干+8云片+${crowns}叶团 三色齐全`);
+
+const box = new THREE.Box3().setFromObject(probe);
+const size = box.getSize(new THREE.Vector3());
+assert(size.y >= 26, `总高度应 ≥26（实际 h=${size.y.toFixed(1)}）`);
+assert(size.y < 42, `高度应 <42（实际 h=${size.y.toFixed(1)}）`);
+assert(size.x > 20 && size.z > 14, `伞冠应宽于树干，实际 ${size.x.toFixed(1)}×${size.z.toFixed(1)}`);
+ok(`体量 ${size.x.toFixed(1)}×${size.y.toFixed(1)}×${size.z.toFixed(1)}（庭院古樟）`);
+
+assert.equal(elder.userData.assetType, "colossalVernacularTree");
+assert.equal(elder.userData.style, "gongbi-courtyard-camphor");
+assert.equal(elder.userData.trunkCount, 3);
+assert.equal(elder.userData.cloudPads, 8);
+ok("港口双株同为工笔古樟");
+
+console.log(`\n结果：${pass} 项通过`);
 process.exit(0);

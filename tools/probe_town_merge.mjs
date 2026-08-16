@@ -45,7 +45,7 @@ assert(total < 400, `合并后应 <400（实际 ${total}）`);
 // 窗口保留独立（夜间切换材质）
 let windows = 0;
 citadel.traverse((o) => { if (o.isMesh && o.name === "town-window") windows++; });
-assert(windows >= 100, `窗口应保留独立网格（实际 ${windows}）`);
+assert(windows >= 60, `窗口应保留独立网格（实际 ${windows}，密度规则 0.5/0.7/1.0）`);
 console.log("窗口独立网格:", windows);
 
 // cell 面映射可用

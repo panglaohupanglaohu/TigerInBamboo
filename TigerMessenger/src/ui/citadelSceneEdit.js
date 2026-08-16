@@ -107,10 +107,22 @@ export function raycastCitadelTerraceTop(
   const up = new THREE.Vector3(0, 1, 0).applyQuaternion(
     citadel.getWorldQuaternion(new THREE.Quaternion())
   );
-  for (const hit of raycaster.intersectObjects(roots, false)) {
-    if (!hit.face || !hit.object.userData.isCitadelTerrace) continue;
-    const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
-    if (normal.dot(up) > 0.75) return out.copy(hit.point);
+  for (const hit of raycaster.intersectObjects(roots, true)) {
+    const terrace = hit.object.userData.isCitadelTerrace
+      || hit.object.name?.startsWith("contour-step-");
+    if (!terrace) continue;
+    if (hit.face) {
+      const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
+      if (normal.dot(up) > 0.75) return out.copy(hit.point);
+    }
+    // 斜视角打到拾取垫侧面：投影到该台地建块平面
+    const baseY = citadelEditBaseY(citadel, terraceIndex) ?? 0;
+    const planePt = citadel.localToWorld(new THREE.Vector3(0, baseY, 0));
+    const denom = raycaster.ray.direction.dot(up);
+    if (Math.abs(denom) > 1e-6) {
+      const t = planePt.sub(raycaster.ray.origin).dot(up) / denom;
+      if (t > 0) return out.copy(raycaster.ray.at(t, out));
+    }
   }
   return null;
 }
@@ -269,7 +281,7 @@ export function createCitadelSceneEdit({
       const cell = hit.object.userData?.cell ?? lookupMergedCell(hit);
       if (cell && hit.face) {
         // 点击其它台地已建体块：自动切换编辑台地（不弹回 castPlane）
-        if (cell.terraceIndex !== activeTerrace) {
+        if (cell.terraceIndex !== activeTerrace && !citadel.userData?.skipOuterTerrain) {
           panel.setActiveTerrace(cell.terraceIndex);
           toast(`已切换到台地 ${cell.terraceIndex + 1}`, 1.0);
         }
@@ -445,17 +457,18 @@ export function createCitadelSceneEdit({
       }
     } else {
       const target = castPlane(e);
+      const canal = !!getCitadel()?.userData?.skipOuterTerrain;
       if (target?.unsupported) {
-        toast("此处没有可承重的土坡，不可放置", 1.6);
+        toast(canal ? "此处不能放置" : "此处没有可承重的土坡，不可放置", 1.6);
       } else if (target) {
         const st = panel.getState();
-        if (Number.isFinite(target.terraceIndex) && target.terraceIndex !== st.activeTerrace) {
+        if (!canal && Number.isFinite(target.terraceIndex) && target.terraceIndex !== st.activeTerrace) {
           // 点到其它台地台面/梯湖：自动切换编辑台地再落块
           panel.setActiveTerrace(target.terraceIndex);
           toast(`已切换到台地 ${target.terraceIndex + 1} · 放置体块`, 1.6);
         }
-        // 兜底：切换未生效时对齐当前台地，避免 applySceneEdit 静默拒绝
-        const terraceIndex = panel.getState().activeTerrace;
+        // 运河交汇锁在台地 0；高山则对齐当前选中台地
+        const terraceIndex = canal ? 0 : panel.getState().activeTerrace;
         panel.applySceneEdit({ ...target, terraceIndex }, "place");
       }
     }

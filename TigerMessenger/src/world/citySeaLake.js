@@ -239,6 +239,32 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   group.position.copy(centerDir).multiplyScalar(surfaceR);
   group.quaternion.copy(quatYToDir(centerDir, new THREE.Quaternion()));
 
+  /**
+   * 球面贴合的圆盘几何：湖面（及深水盘/岸砂环）不再用平面 CircleGeometry——
+   * 平面盘在球面曲率下边缘会高出/低于球面 r²/2R（rFlat≈35 → 约 3.8 单位），
+   * 湖缘「翘边/悬空」。这里把每个顶点沿球面下陷：
+   *   local z = -(sphereR - sqrt(sphereR² - r²))，中心贴水面、边缘随球面垂落。
+   * @param {number} radius 圆盘半径（局部切平面）
+   * @param {number} segments 圆周分段
+   * @param {number} sphereR 贴合的球面半径（= surfaceR）
+   * @param {number} [baseDrop] 额外基础下沉（deep/rim 分层用）
+   */
+  const makeSphericalDisc = (radius, segments, sphereR, baseDrop = 0) => {
+    const geo = new THREE.CircleGeometry(radius, segments);
+    const pos = geo.attributes.position;
+    const rr2 = sphereR * sphereR;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const y = pos.getY(i);
+      const r2 = x * x + y * y;
+      const drop = r2 > 0 ? sphereR - Math.sqrt(Math.max(rr2 - r2, 0)) : 0;
+      pos.setZ(i, -(drop + baseDrop));
+    }
+    pos.needsUpdate = true;
+    geo.computeVertexNormals();
+    return geo;
+  };
+
   // ---- 海水面（深蓝青 · clearcoat 高光，无物理透射） ----
   // 性能硬约束：transmission > 0 会让 three.js 走 renderTransmissionPass，
   // 每帧把全部不透明物体二次渲染到 4x MSAA + 完整 mipmap 的 render target，
@@ -247,7 +273,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   // 观感用 opacity 半透明 + clearcoat 高光复现，成本只剩一次正向渲染。
   // 同理去掉 ior / thickness（仅在 transmission > 0 时生效，留着是误导）。
   const water = new THREE.Mesh(
-    new THREE.CircleGeometry(rFlat, 64),
+    makeSphericalDisc(rFlat, 64, surfaceR),
     new THREE.MeshStandardMaterial({
       color: 0x1a6a88,
       transparent: true,
@@ -265,7 +291,7 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
 
   // 深水暗盘（视觉纵深）
   const deep = new THREE.Mesh(
-    new THREE.CircleGeometry(rFlat * 0.72, 48),
+    makeSphericalDisc(rFlat * 0.72, 48, surfaceR, 0.08),
     new THREE.MeshBasicMaterial({
       color: 0x0a3048,
       transparent: true,
@@ -293,15 +319,25 @@ export function createCitySeaLake(scene, planetRadius = PLANET_RADIUS, opts = {}
   volume.renderOrder = 1;
   group.add(volume);
 
-  // 岸砂环
-  const rim = new THREE.Mesh(
-    new THREE.RingGeometry(rFlat * 0.97, rFlat * 1.08, 64),
-    toonMat(0xd2c09a, { side: THREE.DoubleSide })
-  );
-  rim.rotation.x = -Math.PI / 2;
-  rim.position.y = -0.04;
-  rim.receiveShadow = true;
-  group.add(rim);
+  // 岸砂环（球面贴合：与水面同一曲率，不翘边）
+  {
+    const rimGeo = new THREE.RingGeometry(rFlat * 0.97, rFlat * 1.08, 64);
+    const pos = rimGeo.attributes.position;
+    const rr2 = surfaceR * surfaceR;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const y = pos.getY(i);
+      const r2 = x * x + y * y;
+      const drop = r2 > 0 ? surfaceR - Math.sqrt(Math.max(rr2 - r2, 0)) : 0;
+      pos.setZ(i, -(drop + 0.04));
+    }
+    pos.needsUpdate = true;
+    rimGeo.computeVertexNormals();
+    const rim = new THREE.Mesh(rimGeo, toonMat(0xd2c09a, { side: THREE.DoubleSide }));
+    rim.rotation.x = -Math.PI / 2;
+    rim.receiveShadow = true;
+    group.add(rim);
+  }
 
   // 岸边礁石点缀
   for (let i = 0; i < 14; i++) {

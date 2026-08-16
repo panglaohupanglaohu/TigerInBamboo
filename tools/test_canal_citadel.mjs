@@ -43,7 +43,7 @@ const ok = (m) => { console.log(`  ✓ ${m}`); pass++; };
 // ---------- 1. 存档键隔离 ----------
 {
   assert.equal(citadelLevelsKey(null), "tm.citadel.levels.v1", "默认实例用旧键");
-  assert.equal(citadelLevelsKey("canal-junction"), "tm.citadel.levels.canal-junction.v1");
+  assert.equal(citadelLevelsKey("canal-junction"), "tm.citadel.levels.canal-junction.v4");
   assert.notEqual(citadelLevelsKey("canal-junction"), citadelLevelsKey(null));
   assert.notEqual(citadelTerrainKey("canal-junction"), citadelTerrainKey(null));
   assert.notEqual(citadelTerrainObjectsKey("canal-junction"), citadelTerrainObjectsKey(null));
@@ -119,41 +119,24 @@ const ok = (m) => { console.log(`  ✓ ${m}`); pass++; };
     halfWidth: 18,
   });
   let glow = 0, lamps = 0, walls = 0, water = 0, solid = 0, zone = 0;
-  // 平台顶面高度与球面贴合校验：直接用平台网格顶点沿 up 投影取最大/最小
-  let solidTopH = null;
-  let solidBottomH = null;
-  const _upDir = dir.clone();
-  const _v3 = new THREE.Vector3();
   box.group.traverse((o) => {
     if (!o.isMesh) return;
     if (o.name === "canal-junction-glow") glow++;
     if (o.name === "canal-junction-corner-lamp") lamps++;
     if (/^canal-junction-wall-\d+$/.test(o.name)) walls++;
     if (o.name === "canal-junction-water") water++;
-    if (o.name === "canal-junction-solid-platform") {
-      solid++;
-      o.updateWorldMatrix(true, false);
-      const pos = o.geometry.attributes.position;
-      for (let i = 0; i < pos.count; i++) {
-        _v3.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld);
-        const h = _v3.dot(_upDir);
-        if (solidTopH == null || h > solidTopH) solidTopH = h;
-        if (solidBottomH == null || h < solidBottomH) solidBottomH = h;
-      }
-    }
+    if (o.name === "canal-junction-solid-platform") solid++;
     if (o.name === "canal-junction-build-zone") zone++;
   });
-  assert.equal(glow, 4, "四边高亮描边");
-  assert.equal(lamps, 4, "四角灯塔");
-  assert.equal(walls, 4, "四边立壁");
-  assert.equal(water, 0, "内部水面已移除（平台为干台面）");
-  assert.equal(solid, 1, "实心平台垫层（盖住原地貌）");
-  assert(zone >= 15, `高亮构建区（光罩+双亮线+空中方框 4 光柱+4 角球+4 顶线，实际 ${zone}）`);
-  assert(Math.abs(box.position.length() - 160) < 1, "方框贴球面");
-  // 平台顶面 = 水平平面（R + waterLift + 0.3 ≈ 160.9），底面深入球面以下（贴合）
-  assert(solidTopH != null && Math.abs(solidTopH - 160.9) < 0.5, `平台顶面水平（${solidTopH?.toFixed(2)} ≈ 160.9）`);
-  assert(solidBottomH != null && solidBottomH < 158.5, `平台底面深入球面（${solidBottomH?.toFixed(2)} < 158.5，边缘不悬空）`);
-  ok(`运河堤岸方框：4 立壁 + 4 高亮 + 4 角灯 + 平顶贴球平台 + 空中高亮方框（r=${box.position.length().toFixed(1)}）`);
+  assert.equal(glow, 0, "水上城堡不围金色土框");
+  assert.equal(lamps, 4, "四角水边灯");
+  assert.equal(walls, 0, "不围干坞立壁");
+  assert.equal(water, 1, "交汇处是开阔水面");
+  assert.equal(solid, 0, "无平顶石台");
+  assert.equal(zone, 1, "水面拾取垫");
+  assert(Math.abs(box.position.length() - 160) < 1, "水塘贴球面");
+  assert(box.group.userData.excludeRadius > 20, "给运河让出排除半径");
+  ok(`运河交汇水面：水塘 + 4 水边灯 + 拾取垫（r=${box.position.length().toFixed(1)}）`);
 }
 
 // ---------- 6. 无台地模式（skipOuterTerrain：堤岸方框即地基） ----------
@@ -169,10 +152,11 @@ const ok = (m) => { console.log(`  ✓ ${m}`); pass++; };
     spec: { terraces: [] },
   });
   assert.equal(canalJunction.userData.skipOuterTerrain, true, "flat 模式标记");
-  // 无外围台地（原 buildOuterCitadelTerrain 产物 contour-step 不应存在）
-  let contourSteps = 0;
-  canalJunction.traverse((o) => { if (o.name?.startsWith("contour-step")) contourSteps++; });
-  assert.equal(contourSteps, 0, `无台地模式不应有 contour-step（实际 ${contourSteps}）`);
+  // 无台地仍保留一块不可见拾取垫（contour-step-0），3D 直编辑点空地用
+  const pad = canalJunction.getObjectByName("contour-step-0");
+  assert(pad, "无台地模式应有 contour-step-0 拾取垫");
+  assert.equal(pad.userData.isCitadelTerrace, true, "拾取垫带台地标记");
+  assert.equal(pad.userData.terraceIndex, 0, "拾取垫归台地 0");
   // 基座全部 = 方框水面平台抬升
   assert(canalJunction.userData.townBaseYs.every((y) => Math.abs(y - 0.62) < 1e-9), "基座统一 0.62");
   // 默认空地基：建筑格 0（玩家自建；堤岸方框仍在）
@@ -185,11 +169,64 @@ const ok = (m) => { console.log(`  ✓ ${m}`); pass++; };
   );
   const stats1 = rebuildCitadelTown(canalJunction, one);
   assert(stats1?.cellCount >= 1, "玩家放置后建筑格 ≥1");
+  assert(canalJunction.getObjectByName("contour-step-0"), "热重建后拾取垫仍在");
+  assert(
+    canalJunction.userData.townBaseYs.every((y) => Math.abs(y - 0.62) < 1e-9),
+    "热重建后基座仍是 0.62，不能回退成高山台地高度"
+  );
   // trim 闭环在 flat 模式不裁剪（方框内全可放置）
   const trim = trimCitadelTownToTerrain(canalJunction, { terraces: [] });
   assert.equal(trim.trimmed, 0, "flat 模式不裁剪");
-  ok(`无台地模式：0 contour-step · 基座 0.62 · 12 层 · 空地基可自建 · trim 不裁剪`);
+  ok(`无台地模式：拾取垫 + 基座 0.62 · 12 层 · 空地基可自建 · trim 不裁剪`);
 }
 
-console.log(`\n结果：${pass}/6 通过`);
+// ---------- 7. 直立：城堡 +Y = 径向，堤岸方框父节点不二次旋转 ----------
+{
+  const { buildCanalJunctionBox } = await import(new URL("src/world/canalSystem.js", BASE).href);
+  const { quatUprightOnSphere } = await import(
+    new URL("src/world/sphereMath.js", BASE).href
+  );
+  const dir = new THREE.Vector3(0.55, 0.28, 0.79).normalize();
+  const face = new THREE.Vector3(0.1, 0.95, 0.3);
+  const scene = new THREE.Scene();
+  const box = buildCanalJunctionBox(scene, 160, {
+    centerDir: dir,
+    forwardDir: face,
+    halfLength: 22,
+    halfWidth: 18,
+  });
+  assert(box.group.quaternion.equals(new THREE.Quaternion()), "方框父节点必须是单位四元数（子网格已是世界坐标）");
+  const localY = new THREE.Vector3(0, 1, 0).applyQuaternion(box.quaternion);
+  assert(localY.dot(dir) > 0.999, `返回的直立四元数 +Y 应对齐径向（dot=${localY.dot(dir).toFixed(4)}）`);
+
+  const citadel = buildOdysseyCitadel({
+    dir,
+    faceDir: face,
+    planetRadius: 160,
+    groundRadius: 160,
+    instanceId: "canal-junction",
+    floors: 12,
+    skipOuterTerrain: true,
+    townBaseLift: 0.62,
+    place: false,
+    spec: { terraces: [] },
+  });
+  quatUprightOnSphere(dir, face, citadel.quaternion);
+  citadel.position.copy(dir).multiplyScalar(160 + 0.28);
+  citadel.updateMatrixWorld(true);
+  const citadelUp = new THREE.Vector3(0, 1, 0).applyQuaternion(citadel.quaternion);
+  assert(citadelUp.dot(dir) > 0.999, `城堡局部 +Y 必须贴球面法向（dot=${citadelUp.dot(dir).toFixed(4)}）`);
+
+  // 对照：旧的 setFromUnitVectors(+Z, 切向) 会把 +Y 拧离径向
+  const tangent = face.clone().addScaledVector(dir, -face.dot(dir)).normalize();
+  const bad = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), tangent);
+  const badY = new THREE.Vector3(0, 1, 0).applyQuaternion(bad);
+  assert(
+    Math.abs(badY.dot(dir)) < 0.98,
+    `对照：Z→切向 会把城堡拧斜（dot=${badY.dot(dir).toFixed(4)}）`
+  );
+  ok("运河古堡直立：+Y=法向 · 方框不二次旋转 · 旧 Z→切向会斜插");
+}
+
+console.log(`\n结果：${pass}/7 通过`);
 process.exit(0);

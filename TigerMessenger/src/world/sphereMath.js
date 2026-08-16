@@ -9,6 +9,10 @@ import { PLANET_RADIUS } from "./planet.js";
 const _yUp = new THREE.Vector3(0, 1, 0);
 const _dir = new THREE.Vector3();
 const _quat = new THREE.Quaternion();
+const _uprightUp = new THREE.Vector3();
+const _uprightFwd = new THREE.Vector3();
+const _uprightRight = new THREE.Vector3();
+const _uprightBasis = new THREE.Matrix4();
 
 /**
  * 平面 (x,z) → 地理纬度/经度（度）。北极 = 距离 0。
@@ -46,6 +50,29 @@ export function flatToWorld(x, yHeight, z, radius = PLANET_RADIUS, out = new THR
 export function quatYToDir(dir, out = new THREE.Quaternion()) {
   _dir.copy(dir).normalize();
   return out.setFromUnitVectors(_yUp, _dir);
+}
+
+/**
+ * 球面直立四元数：局部 +Y = 径向 up，局部 +Z = forward 在切平面上的投影。
+ * 建筑/城堡必须用这个。`setFromUnitVectors(+Z, fwd)` 只会把朝向拧到切向，
+ * 局部 +Y 会离开法线，看起来整座城斜插在运河上。
+ */
+export function quatUprightOnSphere(upDir, forwardDir, out = new THREE.Quaternion()) {
+  _uprightUp.copy(upDir).normalize();
+  _uprightFwd.copy(forwardDir);
+  _uprightFwd.addScaledVector(_uprightUp, -_uprightFwd.dot(_uprightUp));
+  if (_uprightFwd.lengthSq() < 1e-8) {
+    _uprightFwd.set(0, 0, 1).addScaledVector(_uprightUp, -_uprightUp.z);
+    if (_uprightFwd.lengthSq() < 1e-8) {
+      _uprightFwd.set(1, 0, 0).addScaledVector(_uprightUp, -_uprightUp.x);
+    }
+  }
+  _uprightFwd.normalize();
+  _uprightRight.crossVectors(_uprightUp, _uprightFwd).normalize();
+  _uprightFwd.crossVectors(_uprightRight, _uprightUp).normalize();
+  return out.setFromRotationMatrix(
+    _uprightBasis.makeBasis(_uprightRight, _uprightUp, _uprightFwd)
+  );
 }
 
 /**

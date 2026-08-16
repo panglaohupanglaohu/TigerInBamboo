@@ -15,7 +15,6 @@ import {
   INK_FLOWER_COLORS,
 } from "../assets/lowPoly.js";
 import { placeObjectOnSphere, latLonToDir } from "./sphereMath.js";
-import { createAncientPineTree } from "../assets/ancient.js";
 
 import { QUEST_DEFS } from "../quest/questSystem.js";
 import { groundLiftAt } from "./hills.js";
@@ -40,16 +39,9 @@ export function decorateFarSide(scene, planetRadius, seed = 20260802) {
   // 远侧同步水墨色系（沉绿树 / 焦墨岩 / 低饱和花）
   // 第三位 = settle 标记：地形后建（苔丘等）可能埋住资产，加载收尾时重新落地
   const defs = [
-    // 远侧也统一使用截图 1 的横向云片古松，避免再出现截图 2 的锥形树。
-    // 第四位 = 额外缩放：巨松资产缩成远侧点缀松（约 2.6~3.6 单位）。
-    [createAncientPineTree, 12, true, 0.12],
+    // 古松已集中到西芳寺（正常尺寸）；远侧不再散点缩小松
     [createLowPolyRock, 10, true, 1],
-    [
-      () => createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]),
-      16,
-      undefined,
-      1,
-    ],
+    // 水墨花已清理（用户认为花模型不好看）
     [createLowPolyHouse, 0, undefined, 1], // 房屋已删除；工厂已水墨化备用
   ];
   for (const [make, count, settle, extraScale = 1] of defs) {
@@ -141,9 +133,10 @@ export function createCloudRing(scene, planetRadius, { count = 16, height = 8, s
  */
 const LAYOUT_RULES = {
   houses: { count: 0, minGap: 8.0 * WORLD_SCALE, gapVsHouse: 8.0 * WORLD_SCALE, ring: [5 * WORLD_SCALE, 12 * WORLD_SCALE], scale: [0.9, 1.05] },
-  trees: { count: 8, minGap: 4.0 * WORLD_SCALE, gapVsHouse: 4.5 * WORLD_SCALE, ring: [3.5 * WORLD_SCALE, 15.5 * WORLD_SCALE], scale: [0.12, 0.17] },
+  // 古松已集中到西芳寺（正常尺寸）；主岛游玩区不再随机缩小松
+  trees: { count: 0, minGap: 4.0 * WORLD_SCALE, gapVsHouse: 4.5 * WORLD_SCALE, ring: [3.5 * WORLD_SCALE, 15.5 * WORLD_SCALE], scale: [1, 1] },
   rocks: { count: 4, minGap: 5.0 * WORLD_SCALE, gapVsHouse: 3.5 * WORLD_SCALE, ring: [5 * WORLD_SCALE, 15 * WORLD_SCALE], scale: [0.8, 1.2] },
-  flowers: { count: 12, minGap: 2.5 * WORLD_SCALE, gapVsHouse: 2.5 * WORLD_SCALE, ring: [3 * WORLD_SCALE, 14 * WORLD_SCALE], scale: [0.9, 1.2] },
+  flowers: { count: 0, minGap: 2.5 * WORLD_SCALE, gapVsHouse: 2.5 * WORLD_SCALE, ring: [3 * WORLD_SCALE, 14 * WORLD_SCALE], scale: [0.9, 1.2] }, // 水墨花已清理
 };
 
 // 起始视角改为庭园构图，主岛不再随机生成街灯、电线杆等现代街道资产。
@@ -170,12 +163,9 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
 
   const groups = [
     ["houses", createLowPolyHouse], // 工厂水墨化；count=0 不摆
-    ["trees", createAncientPineTree], // 分形水墨古松
+    // trees 已迁西芳寺（LAYOUT_RULES.trees.count=0）
     ["rocks", createLowPolyRock], // 焦墨岩
-    [
-      "flowers",
-      () => createLowPolyFlower(INK_FLOWER_COLORS[(rnd() * INK_FLOWER_COLORS.length) | 0]),
-    ],
+    // 水墨花已清理（用户认为花模型不好看）：flowers 组移除
   ];
 
   const placedHouses = []; // 房对房的克制 + 他类对房的间距
@@ -209,17 +199,7 @@ export function decoratePlayZone(scene, planetRadius, seed = 11) {
     }
   }
 
-  // 驿站山脊（北脊土坡）上再来几棵古松，引导视线
-  for (const [x, z] of [[-1.5 * WORLD_SCALE, -13.2 * WORLD_SCALE], [1.6 * WORLD_SCALE, -11.4 * WORLD_SCALE]]) {
-    if (!isClear(x, z)) continue;
-    const obj = createAncientPineTree();
-    placeObjectOnSphere(obj, x, z, groundLiftAt(x, z), planetRadius);
-    obj.scale.multiplyScalar(0.12 + rnd() * 0.04); // 高台树稍小，避免压迫
-    obj.userData.settle = true;
-    scene.add(obj);
-    meshes.push(obj);
-    pushCollider(colliders, obj);
-  }
+  // 驿站北脊古松已并入西芳寺集中布置（正常尺寸）
 
   // 街道资产：路牌 / 街灯 / 电线杆
   const streetMake = {

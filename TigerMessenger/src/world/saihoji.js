@@ -1,6 +1,7 @@
 // =====================================================================
 //  西芳寺 · 苔海六景
-//  不把庭园摊成两个半球，而是把石组、枯瀑、苔海和留白拆成六座环绕主岛的球面景区。
+//  六景聚拢在「苔庭」中枢（与主岛西芳寺缘苔丘同向 lat56/lon-120），
+//  2×3 相邻排布、圆盘不重叠；朝圣小路按入口→…→回望顺序串联。
 //  每座景区使用确定性构图；随机仅用于石面和苔斑细节。
 // =====================================================================
 import * as THREE from "three";
@@ -22,18 +23,78 @@ const _north = new THREE.Vector3();
 const _dir = new THREE.Vector3();
 const _quat = new THREE.Quaternion();
 
+/**
+ * 苔庭中枢（与 messengerIsland 西芳寺缘苔丘锚点一致）。
+ * 六景在此局部东-北平面 2×3 密铺：
+ *   回望石组 ── 空庭 ── 苔海岛群   (北排)
+ *   入口苔径 ── 主石之庭 ── 枯瀑之庭 (南排 · 游线起)
+ * 圆心距 ≥ rᵢ+rⱼ+1.25m，保证相邻不重叠。
+ */
+export const SAIHOJI_HUB = Object.freeze({ lat: 56, lon: -120 });
+
 /** 固定的“苔海六景”：半径为各景区需要留出的球面距离（世界单位）。 */
 export const SAIHOJI_ZONES = Object.freeze([
-  // 六景从全球散点收拢到信使主岛北半球外围，成为同一座球形庭园的环形游线。
-  { id: "moss-entry", name: "入口苔径", lat: 58, lon: -150, radius: 5.5, heading: -0.25, path: [-0.2, -2.4] },
-  { id: "master-stones", name: "主石之庭", lat: 54, lon: -90, radius: 7.5, heading: 0.35, path: [-3.6, -1.8] },
-  { id: "dry-cascade", name: "枯瀑之庭", lat: 52, lon: -30, radius: 7.0, heading: -0.2, path: [3.35, 0.2] },
-  { id: "moss-islands", name: "苔海岛群", lat: 52, lon: 30, radius: 8.5, heading: 0.5, path: [0.2, 4.1] },
-  { id: "empty-court", name: "空庭", lat: 54, lon: 90, radius: 9.0, heading: -0.45, path: [-3.2, -1.7] },
-  { id: "return-view", name: "回望石组", lat: 58, lon: 150, radius: 7.0, heading: 0.2, path: [0.1, -3.35] },
+  // 2×3 密铺于苔庭中枢；圆心距按球面弧长 ≥ rᵢ+rⱼ+1.25m
+  // 南排（游线起）：入口 → 主石 → 枯瀑
+  {
+    id: "moss-entry",
+    name: "入口苔径",
+    lat: 56.0,
+    lon: -120.0,
+    radius: 5.5,
+    heading: 1.571,
+    path: [-0.2, -2.4],
+  },
+  {
+    id: "master-stones",
+    name: "主石之庭",
+    lat: 55.5136,
+    lon: -130.9127,
+    radius: 7.5,
+    heading: 1.571,
+    path: [-3.6, -1.8],
+  },
+  {
+    id: "dry-cascade",
+    name: "枯瀑之庭",
+    lat: 53.9805,
+    lon: -141.9182,
+    radius: 7.0,
+    heading: 0.0,
+    path: [3.35, 0.2],
+  },
+  // 北排：苔海 → 空庭 → 回望
+  {
+    id: "moss-islands",
+    name: "苔海岛群",
+    lat: 59.8020,
+    lon: -145.7141,
+    radius: 8.5,
+    heading: -1.571,
+    path: [0.2, 4.1],
+  },
+  {
+    id: "empty-court",
+    name: "空庭",
+    lat: 61.7147,
+    lon: -132.9937,
+    radius: 9.0,
+    heading: -1.571,
+    path: [-3.2, -1.7],
+  },
+  {
+    id: "return-view",
+    name: "回望石组",
+    lat: 62.3304,
+    lon: -120.0,
+    radius: 7.0,
+    heading: Math.PI,
+    path: [0.1, -3.35],
+  },
 ]);
 
-export const SAIHOJI_MIN_DISTANCE = 5;
+/** 六景之间最小净空（米）；打包时圆心距 ≥ rᵢ+rⱼ+此值 */
+export const SAIHOJI_MIN_DISTANCE = 1.25;
 
 function lcg(seed) {
   let s = seed >>> 0;
@@ -237,19 +298,83 @@ const STONE_LAYOUTS = Object.freeze({
   ],
 });
 
+/**
+ * 西芳寺古松构图（作庭记 / 梦窗疏石 · 聚散有致）
+ *
+ * 原则（非均匀环植）：
+ *  - 奇数组景：1 / 3 / 5；主木–副木–添木（大–中–小）
+ *  - 聚：紧簇成「岛」「屏」；散：单株点景、计白当黑
+ *  - 高低胖瘦：scale 0.58–1.32（幼松→老干），忌一刀齐
+ *  - 错落：间距参差、不对称；yaw 让树干斜势朝向景心或互成对景
+ *  - 抬根：lift 0.06–0.12，根盘坐在苔面之上，避免埋进苔毯
+ *  - 让路：石组中轴、砂带、游线正中不植；空庭极简
+ *
+ * role: master | secondary | companion | solitary
+ */
 const PINE_LAYOUTS = Object.freeze({
+  // —— 入口苔径：门前对景 1+1，小径侧添一幼松；前庭留白 ——
   "moss-entry": [
-    { x: -4.2, z: 2.4, scale: 0.16, yaw: 0.35, seed: 811 },
+    // 门左主松（略高、斜向内迎客）
+    { x: -3.55, z: 1.15, scale: 1.18, yaw: 0.95, lift: 0.09, seed: 811, role: "master" },
+    // 门右副松（略矮、反向呼应，非对称）
+    { x: 3.15, z: 0.55, scale: 0.88, yaw: -1.25, lift: 0.08, seed: 820, role: "secondary" },
+    // 径侧添木（幼、贴边，不挡踏步）
+    { x: -2.05, z: -2.85, scale: 0.62, yaw: 0.4, lift: 0.07, seed: 829, role: "companion" },
   ],
+
+  // —— 主石之庭：西北聚三（主屏），东南散一，北缘远一 ——
   "master-stones": [
-    { x: 4.4, z: 2.8, scale: 0.17, yaw: -0.5, seed: 1229 },
+    // 聚 · 主屏三株（主石西侧，成林遮映，非环绕）
+    { x: -4.85, z: 1.65, scale: 1.28, yaw: 0.72, lift: 0.1, seed: 5566, role: "master" },
+    { x: -3.55, z: 2.85, scale: 0.92, yaw: 1.35, lift: 0.08, seed: 1229, role: "secondary" },
+    { x: -5.35, z: 0.15, scale: 0.68, yaw: 0.2, lift: 0.07, seed: 1238, role: "companion" },
+    // 散 · 东南远点（与主屏对角，拉开纵深）
+    { x: 5.05, z: -2.55, scale: 1.05, yaw: -2.1, lift: 0.09, seed: 1247, role: "solitary" },
+    // 散 · 北缘矮松（远景层次，不压主石）
+    { x: 1.85, z: 5.35, scale: 0.58, yaw: -0.55, lift: 0.07, seed: 1256, role: "companion" },
   ],
+
+  // —— 枯瀑之庭：瀑两侧夹峙（非围环）；下游散一 ——
+  "dry-cascade": [
+    // 瀑顶左 · 老干（高）
+    { x: -3.95, z: 3.55, scale: 1.22, yaw: 0.55, lift: 0.11, seed: 1401, role: "master" },
+    // 瀑顶右 · 副（中，距主略远、高度差）
+    { x: 3.45, z: 2.85, scale: 0.86, yaw: -0.85, lift: 0.09, seed: 1410, role: "secondary" },
+    // 瀑腰左下 · 添（矮，贴岸）
+    { x: -4.55, z: 0.65, scale: 0.64, yaw: 1.1, lift: 0.08, seed: 1419, role: "companion" },
+    // 下游散 · 单株点景（砂带外，回望枯流）
+    { x: 4.15, z: -3.35, scale: 0.95, yaw: -2.4, lift: 0.08, seed: 1428, role: "solitary" },
+  ],
+
+  // —— 苔海岛群：随三组石岛各配「岛松」；聚散随岛，忌等距 ——
   "moss-islands": [
-    { x: -5.15, z: -2.8, scale: 0.14, yaw: 0.2, seed: 1997 },
-    { x: 4.7, z: -2.45, scale: 0.13, yaw: -0.4, seed: 2153 },
+    // 西岛聚三（主岛锚点 · 主副添）
+    { x: -5.35, z: 0.85, scale: 1.2, yaw: 0.35, lift: 0.1, seed: 1997, role: "master" },
+    { x: -4.15, z: 2.15, scale: 0.78, yaw: 1.55, lift: 0.08, seed: 2153, role: "secondary" },
+    { x: -6.05, z: -0.65, scale: 0.6, yaw: -0.4, lift: 0.07, seed: 2162, role: "companion" },
+    // 南岛单株（散 · 与西岛对角）
+    { x: 0.95, z: -4.85, scale: 1.08, yaw: 2.65, lift: 0.09, seed: 2171, role: "solitary" },
+    // 东岛双株（一小一大，非对称）
+    { x: 5.55, z: 2.45, scale: 0.98, yaw: -1.15, lift: 0.09, seed: 2180, role: "secondary" },
+    { x: 4.35, z: 3.65, scale: 0.58, yaw: 0.85, lift: 0.07, seed: 2189, role: "companion" },
   ],
+
+  // —— 空庭：极简 · 仅远角两株遥相呼应，中心大留白 ——
   "empty-court": [
-    { x: -5.1, z: 2.9, scale: 0.16, yaw: 0.5, seed: 3011 },
+    { x: -6.25, z: 3.45, scale: 1.12, yaw: 0.65, lift: 0.09, seed: 3011, role: "solitary" },
+    { x: 5.85, z: -4.15, scale: 0.72, yaw: -2.05, lift: 0.08, seed: 3020, role: "companion" },
+  ],
+
+  // —— 回望石组：背后聚三成屏，前景两侧散点，正面留观景口 ——
+  "return-view": [
+    // 北缘聚屏（主副添 · 回望时的背景林）
+    { x: -1.15, z: 4.65, scale: 1.32, yaw: 3.0, lift: 0.1, seed: 4101, role: "master" },
+    { x: -2.85, z: 3.55, scale: 0.9, yaw: 2.55, lift: 0.08, seed: 4110, role: "secondary" },
+    { x: 0.95, z: 4.15, scale: 0.66, yaw: -2.85, lift: 0.07, seed: 4119, role: "companion" },
+    // 西翼散
+    { x: -4.65, z: -1.55, scale: 0.82, yaw: 1.15, lift: 0.08, seed: 4128, role: "solitary" },
+    // 东翼散（更矮，错落）
+    { x: 4.45, z: -0.85, scale: 0.6, yaw: -1.45, lift: 0.07, seed: 4137, role: "companion" },
   ],
 });
 
@@ -459,27 +584,25 @@ export function buildSaihojiPlanet(scene, opts = {}) {
       }
     }
 
+    // 古松：聚散组景 · 高低胖瘦 · 抬根出苔（见 PINE_LAYOUTS）
     const pines = PINE_LAYOUTS[zone.id] || [];
     for (const spec of pines) {
+      const sc = Number.isFinite(spec.scale) ? spec.scale : 1;
       const pine = createAncientPineTree(spec.seed);
-      pine.scale.multiplyScalar(spec.scale);
-      placeAtLocal(pine, zone, spec.x, spec.z, radius, 0, spec.yaw);
+      if (Math.abs(sc - 1) > 1e-3) pine.scale.multiplyScalar(sc);
+      // lift：根盘明显坐于苔面之上——苔庭（苔斑 + 苔丘地形）略高于球面，
+      // 松树抬根不足会被埋（用户反馈），默认抬根 0.22 让根盘/干基全部露出
+      const lift = (Number.isFinite(spec.lift) ? spec.lift : 0.08) + 0.14;
+      placeAtLocal(pine, zone, spec.x, spec.z, radius, lift, spec.yaw ?? 0);
+      pine.userData.pineRole = spec.role || "solitary";
+      pine.userData.pineScale = sc;
       group.add(pine);
       zones[zone.id].pines.push(pine);
       placed.push(pine.position.clone());
-      pushCollider(colliders, pine, 2.4 * spec.scale);
-      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 2.2 * spec.scale);
-    }
-
-    // 参天巨松地标：主石之庭单株（西芳寺核心地标资产，完整尺寸不缩放；
-    // 第二株已移往圣城港口参天大树旁——两株巨松分处两地遥相呼应）
-    if (zone.id === "master-stones") {
-      const giantA = createAncientPineTree(5566);
-      placeAtLocal(giantA, zone, -3.6, 0.8, radius, 0, 0.55);
-      group.add(giantA);
-      zones[zone.id].pines.push(giantA);
-      pushCollider(colliders, giantA, 2.6);
-      addStoneMossSkirt(group, zone, -3.6, 0.8, radius, rnd, 2.6);
+      const cr = (pine.userData.collideRadius ?? 0.58) * sc * 1.15;
+      pushCollider(colliders, pine, Math.max(0.45, cr));
+      // 根际苔裙略小于树冠投影，不把树干埋进厚苔
+      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 0.55 * sc);
     }
 
     if (zone.id === "moss-entry") {

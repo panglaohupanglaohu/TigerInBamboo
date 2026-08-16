@@ -83,7 +83,7 @@ const { colliders, clouds } = scatterOnSphere(scene, PLANET_RADIUS, {
   houses: 10,  // 规格：10 栋房子
   rocks: 30,   // 规格：30 块岩石
   clouds: 10,  // 规格：低空云朵（距球面 5）
-  flowers: 24, // 以下为规格外点缀
+  flowers: 0,  // 水墨花已清理（用户认为花模型不好看）
   fences: 6,
   bridges: 2,
   latMax: 78,

@@ -42,6 +42,12 @@ const SOLDIER_BASE_PACE = 2.4;
 const RETURN_APPROACH_DURATION = 4.5;
 const RETURN_DURATION = 2.6;
 const RETURN_SEQUENCE_GAP = 3.0;
+/** 标枪：蓄力 / 飞行 / 钉住（秒） */
+const JAVELIN_WINDUP = 0.28;
+const JAVELIN_FLIGHT = 0.95;
+const JAVELIN_MIN_RANGE = 3.2;
+const JAVELIN_MAX_RANGE = 18;
+const JAVELIN_ARC = 3.6; // 抛物线顶高（米）
 
 const _up = new THREE.Vector3();
 const _right = new THREE.Vector3();
@@ -51,6 +57,15 @@ const _tmpB = new THREE.Vector3();
 const _tmpC = new THREE.Vector3();
 const _tmpE = new THREE.Vector3();
 const _tmpQ = new THREE.Quaternion();
+const _javFrom = new THREE.Vector3();
+const _javTo = new THREE.Vector3();
+const _javPos = new THREE.Vector3();
+const _javPrev = new THREE.Vector3();
+const _javDir = new THREE.Vector3();
+const _javWorldDir = new THREE.Vector3();
+const _javQuat = new THREE.Quaternion();
+const _javY = new THREE.Vector3(0, 1, 0);
+const _patrolProgress = { value: 0 };
 const _basis = new THREE.Matrix4();
 
 function isNight(phase) {
@@ -345,10 +360,14 @@ function buildDistributedPatrolPlan({
   };
 }
 
-function samplePatrolPlan(plan, elapsed, recordIndex, position, lookAhead) {
+/**
+ * @param {object|null} [progressOut] 若传入 `{ value: number }`，写入当前段进度 0–1
+ */
+function samplePatrolPlan(plan, elapsed, recordIndex, position, lookAhead, progressOut = null) {
   if (!plan?.segments?.length) {
     position.set(0, 0, 0);
     lookAhead.copy(position);
+    if (progressOut) progressOut.value = 0;
     return null;
   }
   let remaining = Math.max(0, elapsed);
@@ -357,6 +376,7 @@ function samplePatrolPlan(plan, elapsed, recordIndex, position, lookAhead) {
     if (remaining <= duration) {
       const path = segment.paths[recordIndex];
       const progress = THREE.MathUtils.clamp(remaining / duration, 0, 1);
+      if (progressOut) progressOut.value = progress;
       samplePath(path, progress, position);
       samplePathDistance(path, Math.min(path.total, progress * path.total + 0.28), lookAhead);
       return segment;
@@ -365,18 +385,33 @@ function samplePatrolPlan(plan, elapsed, recordIndex, position, lookAhead) {
   }
   const last = plan.segments.at(-1);
   const path = last.paths[recordIndex];
+  if (progressOut) progressOut.value = 1;
   samplePath(path, 1, position);
   lookAhead.copy(position);
   return last;
 }
 
+/** 巡查路径上「下一户」目标点（当前进度前方最近的路径拐点）。 */
+function nextHouseTargetOnPath(path, progress, out = new THREE.Vector3()) {
+  if (!path?.points?.length) return null;
+  if (path.points.length === 1) return out.copy(path.points[0]);
+  const dist = THREE.MathUtils.clamp(progress, 0, 1) * path.total;
+  let index = 1;
+  while (index < path.lengths.length && path.lengths[index] <= dist + 0.15) index++;
+  const targetIndex = Math.min(path.points.length - 1, Math.max(1, index));
+  return out.copy(path.points[targetIndex]);
+}
+
+function targetKey(pos) {
+  return `${pos.x.toFixed(1)},${pos.y.toFixed(1)},${pos.z.toFixed(1)}`;
+}
+
 /**
  * 木马夜间潜入事件。
  *
- * 两组各四名纸士兵各用一根腹舱下降绳，按组内顺序依次下降：每组队首、队尾左手持火炬，
- * 中间两名左手持盾、右手持长枪。落地后解除队列，分别沿瀑布和城堡折返阶梯向上；
- * 台面上四人分散跑步排查，瀑布攀爬时以拉、推、搀扶的手脚姿态快速互助，不使用队列连接绳。路线点已经
- * 由 citadelRange 按当前台地/瀑布/石阶几何计算为世界坐标，因此动画不会依赖旧的平面高度。
+ * 两组各四名纸士兵各用一根腹舱下降绳，按组内顺序依次下降。
+ * 全员左手持盾、右手持长枪；台面排查时，确认「下一家」后由该士兵将长矛如标枪投出，
+ * 弧线命中目标门户，士兵跑到后收回长矛。瀑布攀爬时以拉、推、搀扶姿态互助。
  */
 export function createCitadelNightInfiltration({
   scene,
@@ -480,12 +515,12 @@ export function createCitadelNightInfiltration({
     groups.push(group);
 
     const groupRecords = [];
+    group.userData.thrownTargets = new Set();
     for (let i = 0; i < 4; i++) {
-      // 队首和队尾举火把；中间两名持盾，形成首尾照明、中段防护的队形。
-      const torchLeft = i === 0 || i === 3;
-      const soldier = createNightInfiltrationSoldier({ torchLeft });
+      // 全员左盾右枪（搜家投矛需要统一装备）
+      const soldier = createNightInfiltrationSoldier({ torchLeft: false });
       soldier.userData.group = spec.routeKey;
-      soldier.userData.equipmentRole = torchLeft ? "torch" : "shield";
+      soldier.userData.equipmentRole = "shield-spear";
       soldier.userData.queueIndex = i;
       soldier.userData.queueSpacing = 0;
       soldier.userData.descentSpacing = SOLDIER_BODY_LENGTH;
@@ -686,19 +721,191 @@ export function createCitadelNightInfiltration({
       return;
     }
     record.soldier.userData.assistAction = "march";
+    // 投矛蓄力：右臂后扬高举，左盾护胸
+    if (record.javelin?.phase === "windup") {
+      parts.body.rotation.z = -0.08;
+      parts.armL.rotation.z = -0.55;
+      parts.armR.rotation.z = 1.55;
+      parts.legL.rotation.z = 0.25;
+      parts.legR.rotation.z = -0.35;
+      return;
+    }
+    // 出手后空右手前送，左盾仍护胸（矛在飞行/钉住）
+    if (record.javelin?.phase === "flight" || record.javelin?.phase === "stuck") {
+      parts.body.rotation.z = moving ? -0.14 + gait * 0.03 : -0.06;
+      parts.armL.rotation.z = -0.48;
+      parts.armR.rotation.z = 1.15 + gait * 0.05;
+      parts.legL.rotation.z = moving ? 0.12 - stride * 0.7 : 0.08;
+      parts.legR.rotation.z = moving ? -0.12 + stride * 0.7 : -0.08;
+      return;
+    }
     parts.body.rotation.z = moving
       ? (sprinting ? -0.16 + gait * 0.045 : -0.12 + gait * 0.035)
       : 0;
-    // 左右手脚交叉摆动：左腿前摆时右臂后摆，火炬手左臂只做小幅护持。
-    const armSwing = moving ? gait * (sprinting ? 0.62 : 0.5) : 0;
-    const torchArmSwing = moving ? gait * 0.12 : 0;
-    parts.armL.rotation.z = moving
-      ? -0.38 + (torchBearer ? torchArmSwing : armSwing)
-      : -0.38;
-    parts.armR.rotation.z = moving ? 0.38 - armSwing : 0.38;
+    // 左盾小幅随步，右枪前指略摆（枪在手中）
+    const armSwing = moving ? gait * (sprinting ? 0.45 : 0.35) : 0;
+    parts.armL.rotation.z = moving ? -0.42 + armSwing * 0.35 : -0.42;
+    parts.armR.rotation.z = moving ? 0.95 - armSwing * 0.25 : 0.55;
     const legSwing = sprinting ? 0.8 : 0.68;
     parts.legL.rotation.z = moving ? 0.12 - stride * legSwing : 0.08;
     parts.legR.rotation.z = moving ? -0.12 + stride * legSwing : -0.08;
+  };
+
+  /** 开始向「下一家」投掷标枪式长矛 */
+  const beginJavelinThrow = (record, targetWorld) => {
+    const spear = record.soldier?.userData?.equipment?.spear;
+    if (!spear || record.javelin) return false;
+    if (record.soldier.userData?.sedated) return false;
+    const key = targetKey(targetWorld);
+    if (record.thrownKeys?.has(key)) return false;
+    const groupThrown = record.group.userData.thrownTargets;
+    // 同一目标全组只投一次（一位士兵代表）
+    if (groupThrown?.has(key)) return false;
+    record.soldier.getWorldPosition(_javFrom);
+    const dist = _javFrom.distanceTo(targetWorld);
+    if (dist < JAVELIN_MIN_RANGE || dist > JAVELIN_MAX_RANGE) return false;
+
+    record.thrownKeys = record.thrownKeys || new Set();
+    record.thrownKeys.add(key);
+    groupThrown?.add(key);
+
+    record.javelin = {
+      phase: "windup",
+      t: 0,
+      key,
+      spear,
+      homeParent: spear.parent,
+      homePos: spear.position.clone(),
+      homeQuat: spear.quaternion.clone(),
+      from: new THREE.Vector3(),
+      to: targetWorld.clone(),
+      stuck: false,
+    };
+    record.soldier.userData.javelinPhase = "windup";
+    return true;
+  };
+
+  const reattachSpear = (record) => {
+    const j = record.javelin;
+    if (!j?.spear) {
+      record.javelin = null;
+      if (record.soldier) record.soldier.userData.javelinPhase = null;
+      return;
+    }
+    const spear = j.spear;
+    if (spear.parent) spear.parent.remove(spear);
+    if (j.homeParent) {
+      j.homeParent.add(spear);
+      spear.position.copy(j.homePos);
+      spear.quaternion.copy(j.homeQuat);
+    }
+    record.javelin = null;
+    record.soldier.userData.javelinPhase = null;
+  };
+
+  /** 昼夜切换时收回所有飞行/钉住的长矛，清空投掷记录 */
+  const clearAllJavelins = () => {
+    for (const record of records) {
+      reattachSpear(record);
+      record.thrownKeys?.clear();
+    }
+    for (const group of groups) {
+      group.userData.thrownTargets?.clear();
+    }
+  };
+
+  const updateJavelins = (dt) => {
+    for (const record of records) {
+      const j = record.javelin;
+      if (!j) continue;
+      j.t += dt;
+      const spear = j.spear;
+      if (!spear) {
+        record.javelin = null;
+        continue;
+      }
+
+      if (j.phase === "windup") {
+        if (j.t >= JAVELIN_WINDUP) {
+          // 出手：矛脱离右手，进入世界空间飞行
+          spear.updateWorldMatrix(true, false);
+          spear.getWorldPosition(j.from);
+          // 目标略抬到门楣高度
+          j.to.addScaledVector(_up, 0.55);
+          if (spear.parent) spear.parent.remove(spear);
+          root.add(spear);
+          // 初始位置对齐出手点（root 局部）
+          _javPos.copy(j.from);
+          root.worldToLocal(_javPos);
+          spear.position.copy(_javPos);
+          j.phase = "flight";
+          j.t = 0;
+          record.soldier.userData.javelinPhase = "flight";
+        }
+        continue;
+      }
+
+      if (j.phase === "flight") {
+        const u = THREE.MathUtils.clamp(j.t / JAVELIN_FLIGHT, 0, 1);
+        // 平滑加速：前段快、末端插入（标枪感）
+        const e = 1 - (1 - u) * (1 - u);
+        _javPos.lerpVectors(j.from, j.to, e);
+        // 标枪抛物线：中段抬高
+        _javPos.addScaledVector(_up, JAVELIN_ARC * u * (1 - u) * 4);
+        // root 局部坐标
+        root.worldToLocal(_javPos);
+        if (u > 0.02) {
+          _javPrev.copy(spear.position);
+          spear.position.copy(_javPos);
+          // 朝向速度：枪杆沿 +Y 几何，把 +Y 对齐飞行方向
+          _javDir.copy(_javPos).sub(_javPrev);
+          if (_javDir.lengthSq() > 1e-8) {
+            _javDir.normalize();
+            // 局部方向 → 世界方向
+            _javWorldDir.copy(_javDir).transformDirection(root.matrixWorld).normalize();
+            _javQuat.setFromUnitVectors(_javY, _javWorldDir);
+            spear.quaternion.copy(_javQuat);
+            // 抵消 root 旋转 → 本地四元数
+            root.getWorldQuaternion(_tmpQ);
+            spear.quaternion.premultiply(_tmpQ.invert());
+          }
+        } else {
+          spear.position.copy(_javPos);
+        }
+        if (u >= 1) {
+          j.phase = "stuck";
+          j.t = 0;
+          j.stuck = true;
+          record.soldier.userData.javelinPhase = "stuck";
+          // 钉在目标：略插入门面
+          _javPos.copy(j.to).addScaledVector(_up, 0.05);
+          root.worldToLocal(_javPos);
+          spear.position.copy(_javPos);
+        }
+        continue;
+      }
+
+      if (j.phase === "stuck") {
+        // 士兵跑到门前收回长矛；超时也收回
+        record.soldier.getWorldPosition(_javFrom);
+        const near = _javFrom.distanceTo(j.to) < 1.35;
+        if (near || j.t > 5.5) {
+          reattachSpear(record);
+        }
+      }
+    }
+  };
+
+  /** 台面巡查：确认下一家后，由负责该路径的士兵投掷标枪 */
+  const tryJavelinForPatrol = (record, segment, progress) => {
+    if (segment?.kind !== "terrace-patrol") return;
+    if (record.javelin) return;
+    if (record.soldier.userData?.sedated) return;
+    const path = segment.paths?.[record.index];
+    if (!path) return;
+    const target = nextHouseTargetOnPath(path, progress, _javTo);
+    if (!target) return;
+    beginJavelinThrow(record, target);
   };
 
   const updateClimbingAssistance = () => {
@@ -774,6 +981,7 @@ export function createCitadelNightInfiltration({
     returnRecords = [];
     returnRecordsByRope = [];
     elapsed = 0;
+    clearAllJavelins();
     root.visible = false;
     staticSquad.visible = true;
     horse.userData.setBellyOpen?.(0);
@@ -795,6 +1003,7 @@ export function createCitadelNightInfiltration({
     returnRecords = [];
     returnRecordsByRope = descentRopes.map(() => []);
     elapsed = 0;
+    clearAllJavelins();
     root.visible = true;
     staticSquad.visible = false;
     hideDescentRopes();
@@ -820,6 +1029,7 @@ export function createCitadelNightInfiltration({
     active = false;
     returning = true;
     returnElapsed = 0;
+    clearAllJavelins();
     root.visible = true;
     staticSquad.visible = false;
     hideDescentRopes();
@@ -1025,15 +1235,25 @@ export function createCitadelNightInfiltration({
         // 每人独立开始巡查：不等队尾，不回到队列；分配到不同屋门/扇区的
         // patrolPath 会把四人自然拉开，台面段统一使用跑步姿态。
         const patrolElapsed = sortieElapsed - record.moveDuration;
+        _patrolProgress.value = 0;
         const segment = samplePatrolPlan(
           record.patrolPlan,
           patrolElapsed,
           record.index,
           _tmpA,
-          _tmpB
+          _tmpB,
+          _patrolProgress
         );
+        // 确认「下一家」后投掷标枪式长矛（抛物线命中门户）
+        if (segment?.kind === "terrace-patrol") {
+          tryJavelinForPatrol(record, segment, _patrolProgress.value);
+        }
         const moving = segment?.kind === "terrace-patrol"
           || segment?.kind === "stair-transfer";
+        // 蓄力时仍朝下一家门户，便于看清投掷方向
+        if (record.javelin?.phase === "windup" && record.javelin.to) {
+          _tmpB.copy(record.javelin.to);
+        }
         const patrolPace = segment?.paths?.[record.index]
           ? segment.kind === "terrace-patrol"
             ? Math.max(
@@ -1063,6 +1283,8 @@ export function createCitadelNightInfiltration({
       setRecordPose(record, _tmpA, _tmpC.copy(_tmpB).sub(_tmpA));
       record.soldier.userData.climbing = climbing;
     }
+
+    updateJavelins(dt);
 
     updateClimbingAssistance(
       records.some((record) => record.soldier.visible && record.soldier.userData.climbing)
@@ -1117,6 +1339,19 @@ export function createCitadelNightInfiltration({
     torchQueueIndices: records
       .filter((record) => record.soldier.userData.torchBearer)
       .map((record) => `${record.group.userData.route}:${record.index}`),
+    equipmentRole: "shield-spear",
+    javelinsActive: records.filter((record) => record.javelin).length,
+    javelinPhases: records
+      .filter((record) => record.javelin)
+      .map((record) => ({
+        group: record.group.userData.route,
+        index: record.index,
+        phase: record.javelin.phase,
+      })),
+    thrownTargetCount: groups.reduce(
+      (sum, group) => sum + (group.userData.thrownTargets?.size || 0),
+      0
+    ),
     assistanceLinksVisible: 0,
     ropesVisible: descentRopes.filter((rope) => rope.visible).length,
     descentRopes: descentRopes.filter((rope) => rope.visible).length,

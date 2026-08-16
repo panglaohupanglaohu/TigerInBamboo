@@ -10,6 +10,7 @@
  *   onMidDrag?: (on: boolean) => void,
  *   onRightDrag?: (on: boolean) => void,
  *   isActive?: () => boolean,
+ *   isRightClickEditor?: () => boolean, // 3D 直编辑右键（删除体块）接管时返回 true
  * }} [hooks]
  */
 export function createInput(hooks = {}) {
@@ -21,6 +22,7 @@ export function createInput(hooks = {}) {
     onMidDrag = () => {},
     onRightDrag = () => {},
     isActive = () => true,
+    isRightClickEditor = () => false,
   } = hooks;
 
   function isTypingTarget(el) {
@@ -103,6 +105,8 @@ export function createInput(hooks = {}) {
 
   window.addEventListener("contextmenu", (e) => e.preventDefault()); // 屏蔽右键菜单
   window.addEventListener("mousedown", (e) => {
+    // 3D 直编辑的右键（删除体块）接管时，不触发相机右拖平移
+    if (isRightClickEditor()) return;
     if (!isActive() || e.button !== 2) return;
     e.preventDefault();
     rightDrag = true;
@@ -111,6 +115,7 @@ export function createInput(hooks = {}) {
     onRightDrag(true);
   });
   window.addEventListener("mousemove", (e) => {
+    if (isRightClickEditor()) return;
     if (!rightDrag) return;
     const dx = e.clientX - rLastX;
     const dy = e.clientY - rLastY;

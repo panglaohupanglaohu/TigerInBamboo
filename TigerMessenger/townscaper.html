@@ -66,10 +66,22 @@
   </select>
   <span id="editTools" style="display:none; gap:6px; align-items:center; flex-wrap:wrap;">
     <span class="chip">材质</span>
-    <button data-char="W" class="pal on"><span class="swatch" style="background:#e5eff2"></span>白石 1</button>
-    <button data-char="L" class="pal"><span class="swatch" style="background:#d9cfac"></span>浅砂石 2</button>
-    <button data-char="B" class="pal"><span class="swatch" style="background:#caa88c"></span>淡砖 3</button>
-    <button data-char="D" class="pal"><span class="swatch" style="background:#8b5a2b"></span>正门 4</button>
+    <button data-char="0" class="pal on"><span class="swatch" style="background:#e8e4da"></span>白</button>
+    <button data-char="1" class="pal"><span class="swatch" style="background:#e9ddc0"></span>米白</button>
+    <button data-char="2" class="pal"><span class="swatch" style="background:#d8c08a"></span>沙黄</button>
+    <button data-char="3" class="pal"><span class="swatch" style="background:#d4b450"></span>柠黄</button>
+    <button data-char="4" class="pal"><span class="swatch" style="background:#c67a3f"></span>橙</button>
+    <button data-char="5" class="pal"><span class="swatch" style="background:#a8543c"></span>砖红</button>
+    <button data-char="6" class="pal"><span class="swatch" style="background:#b06a4a"></span>陶土</button>
+    <button data-char="7" class="pal"><span class="swatch" style="background:#8a5a3a"></span>褐</button>
+    <button data-char="8" class="pal"><span class="swatch" style="background:#6a4a33"></span>深褐</button>
+    <button data-char="9" class="pal"><span class="swatch" style="background:#7c8a93"></span>蓝灰</button>
+    <button data-char="A" class="pal"><span class="swatch" style="background:#5f6b73"></span>石板灰</button>
+    <button data-char="B" class="pal"><span class="swatch" style="background:#5a7d9e"></span>蓝</button>
+    <button data-char="C" class="pal"><span class="swatch" style="background:#3e5368"></span>藏青</button>
+    <button data-char="D" class="pal"><span class="swatch" style="background:#4d8f84"></span>青</button>
+    <button data-char="E" class="pal"><span class="swatch" style="background:#4f7755"></span>松绿</button>
+    <button data-char="G" class="pal"><span class="swatch" style="background:#8b5a2b"></span>正门</button>
     <span class="chip">层 <b id="layerLabel">0</b>（Q/E 换层）</span>
     <button id="hideAbove">隐藏更高层</button>
     <button id="undo">撤销</button>
@@ -98,7 +110,7 @@
 <div id="help" style="display:none">
   3D：左键 空地加块 · 点块顶面向上叠 · 点块侧面改色 · 右键单击 删块<br/>
   中键 / 空格+左键拖动 旋转 · 右键拖动 平移 · 滚轮 缩放<br/>
-  1–4 材质 · Q/E 层 · H 隐藏高层 · Ctrl+Z 撤销
+  1–9/0/Shift+1–6 材质 · G 正门 · Q/E 层 · H 隐藏高层 · Ctrl+Z 撤销
 </div>
 
 <div id="io">
@@ -117,6 +129,7 @@
 import * as THREE from "three";
 import {
   CITADEL_TOWN_SPEC, CITADEL_LEVELS_KEY, levelsToGrid, gridToLevels, setCell, clearCell,
+  CITADEL_PALETTE, CITADEL_GATE_CHAR, CITADEL_GATE_COLOR, migrateLegacyTownChars,
 } from "./src/world/citadelTown.js";
 import {
   buildCitadelTownAssembly, applyInkOutlines, CITADEL,
@@ -130,14 +143,17 @@ const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
 const MAX_COORD = 15;   // ix/iz ∈ [0, 15]，iy ∈ [0, 9]
 const MAX_LEVEL = 9;
 const STORE_KEY = CITADEL_LEVELS_KEY; // 与游戏内搭建面板、主场景启动共用同一存档
-const CHAR_COLORS = { W: 0xe5eff2, L: 0xd9cfac, B: 0xcaa88c, D: 0x8b5a2b };
+const CHAR_COLORS = {};
+for (const entry of CITADEL_PALETTE) CHAR_COLORS[entry.char] = entry.color;
+CHAR_COLORS[CITADEL_GATE_CHAR] = CITADEL_GATE_COLOR;
+CHAR_COLORS.W = CHAR_COLORS["0"];
 const GRID_PX = 26;     // 平面图每格像素（16×26 = 416）
 // 台地等高线参数（与游戏内编辑器共用 CITADEL.contourTerrain）
 const TERRAIN = CITADEL.contourTerrain;
 
 let grid = loadInitialGrid();
 let selectedObject = null; // null = 未选择，编辑界面隐藏
-let activeChar = "W";
+let activeChar = "0";
 let activeLayer = 0;
 let hideAbove = false;
 let townGroup = null;   // 当前城镇装配（含描边）
@@ -148,7 +164,9 @@ let redoStack = [];
 function loadInitialGrid() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
-    if (Array.isArray(saved) && saved.length) return levelsToGrid(saved);
+    if (Array.isArray(saved) && saved.length) {
+      return levelsToGrid(saved.map((rows) => rows.map(migrateLegacyTownChars)));
+    }
   } catch { /* 损坏的存档回落到 SPEC */ }
   return levelsToGrid(CITADEL_TOWN_SPEC.levels);
 }
@@ -418,7 +436,10 @@ function updateStats(s) {
 // ---------------------------------------------------------------------------
 const layerCanvas = document.getElementById("layerCanvas");
 const layerCtx = layerCanvas.getContext("2d");
-const PANEL_CHARS = { W: "#e5eff2", L: "#d9cfac", B: "#caa88c", D: "#8b5a2b" };
+const PANEL_CHARS = {};
+for (const entry of CITADEL_PALETTE) PANEL_CHARS[entry.char] = "#" + entry.color.toString(16).padStart(6, "0");
+PANEL_CHARS[CITADEL_GATE_CHAR] = "#8b5a2b";
+PANEL_CHARS.W = PANEL_CHARS["0"];
 
 function drawLayerPanel() {
   if (!selectedObject) return;
@@ -488,7 +509,7 @@ function drawLayerPanel() {
       if (char) {
         layerCtx.fillStyle = PANEL_CHARS[char] ?? PANEL_CHARS.W;
         layerCtx.fillRect(ix * GRID_PX + 1, iz * GRID_PX + 1, GRID_PX - 2, GRID_PX - 2);
-        if (char === "D") { // 正门格标出门扇
+        if (char === "G") { // 正门格标出门扇
           layerCtx.fillStyle = "#3a2412";
           layerCtx.fillRect(ix * GRID_PX + GRID_PX / 2 - 2, iz * GRID_PX + 4, 4, GRID_PX - 8);
         }
@@ -696,8 +717,14 @@ window.addEventListener("keydown", (e) => {
     return;
   }
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") { e.preventDefault(); redo(); return; }
-  const palette = { Digit1: "W", Digit2: "L", Digit3: "B", Digit4: "D" };
-  if (palette[e.code]) selectChar(palette[e.code]);
+  const palette = {
+    Digit1: "0", Digit2: "1", Digit3: "2", Digit4: "3", Digit5: "4",
+    Digit6: "5", Digit7: "6", Digit8: "7", Digit9: "8", Digit0: "9",
+  };
+  const shiftPalette = { Digit1: "A", Digit2: "B", Digit3: "C", Digit4: "D", Digit5: "E", Digit6: "G" };
+  if (e.shiftKey && shiftPalette[e.code]) selectChar(shiftPalette[e.code]);
+  else if (palette[e.code]) selectChar(palette[e.code]);
+  else if (e.code === "KeyG") selectChar("G");
   else if (e.code === "KeyQ" || e.code === "ArrowDown") stepLayer(-1);
   else if (e.code === "KeyE" || e.code === "ArrowUp") stepLayer(1);
   else if (e.code === "KeyH") document.getElementById("hideAbove").click();

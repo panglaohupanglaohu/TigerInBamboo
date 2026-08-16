@@ -406,18 +406,15 @@ assert.deepEqual(range.sacredTarnTree.userData.rangeLocal, { lx: -15.2, lz: 42 }
 let tarnTreeCrowns = 0;
 let tarnTreeBranches = 0;
 let tarnTreeTrunks = 0;
-let tarnTreePeels = 0;
 range.sacredTarnTree.traverse((o) => {
   if (o.name === "tarn-elder-tree-crown") tarnTreeCrowns++;
   if (o.name === "tarn-elder-tree-branch") tarnTreeBranches++;
   if (o.name === "tarn-elder-tree-trunk") tarnTreeTrunks++;
-  if (o.name === "tarn-elder-tree-bark-peel") tarnTreePeels++;
 });
-// 云片冠：每枝 3–4 片 + 补团，极端拍扁 scale(3.8,0.45,2.2)
-assert(tarnTreeCrowns >= 15, `湖沼参天树云片冠不足（${tarnTreeCrowns}）`);
+// 伞冠：25–30 团 + 顶补；三股融合干；五根爆炸枝
+assert(tarnTreeCrowns >= 25, `湖沼参天树伞冠团块不足（${tarnTreeCrowns}）`);
 assert.equal(tarnTreeBranches, 5, "湖沼参天树必须呈现清晰分叉结构");
-assert.equal(tarnTreeTrunks, 3, "主树干应为三段级联收分");
-assert(tarnTreePeels >= 1, "须有乳白树皮剥落拼色");
+assert.equal(tarnTreeTrunks, 3, "主树干应为三股并生嵌套融合");
 const removedNames = [
   "citadel-foreground-defense-tower",
   "citadel-range-vegetation",

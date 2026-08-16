@@ -196,7 +196,18 @@ export function createCitadelTerraceBirds(scene, odysseyCitadel, opts = {}) {
     });
   }
 
+  /** 设计城堡层时收起鸟群（隐藏 + 停更） */
+  let designHidden = false;
+
+  function setVisible(visible) {
+    designHidden = !visible;
+    for (const f of flocks) {
+      if (f.vortex?.root) f.vortex.root.visible = !!visible;
+    }
+  }
+
   function update(dt, t, ctx = {}) {
+    if (designHidden) return;
     const phase = ctx.phase ?? P.timeOfDay ?? 0.5;
     const night = isNight(phase);
     const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
@@ -252,6 +263,8 @@ export function createCitadelTerraceBirds(scene, odysseyCitadel, opts = {}) {
     flocks,
     update,
     dispose,
+    setVisible,
+    isVisible: () => !designHidden,
     getThreats: () => _threats,
     /** 兼容旧单旋涡 API：返回台地 1 的 vortex */
     get primary() {

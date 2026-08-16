@@ -32,7 +32,7 @@ let tramProximity = 0;
 const TRAM_MAX_DISTANCE = 22;
 const TRAM_PEAK_GAIN = 0.42;
 
-// 电车搭乘 BGM：先 Tram.mp3 头 16 秒，再接《城南花已开》循环
+// 电车搭乘 BGM：先 Tram.mp3 头 16 秒，再接《三亩地 - 城南花已开》循环
 /** @type {HTMLAudioElement|null} */
 let tramIntroEl = null;
 /** @type {HTMLAudioElement|null} */
@@ -47,7 +47,7 @@ const TRAM_INTRO_URL = new URL(
   import.meta.url
 ).href;
 const TRAM_MAIN_URL = new URL(
-  "../../music/sophia Fang-城南花已开 (纯音纯享版).mp3",
+  "../../music/三亩地 - 城南花已开.mp3",
   import.meta.url
 ).href;
 /** Tram 采样只播开头 16 秒 */
@@ -954,7 +954,7 @@ function anySegmentBgmEngaged() {
 }
 
 // =====================================================================
-//  电车搭乘 BGM：Various Artists-Tram.mp3（0–16s）→ 城南花已开（循环）
+//  电车搭乘 BGM：Various Artists-Tram.mp3（0–16s）→ 三亩地-城南花已开（循环）
 // =====================================================================
 
 function ensureTramIntroEl() {
@@ -1042,7 +1042,7 @@ function advanceTramRideToMain() {
 
 /**
  * 电车搭乘背景音乐。
- * 上车：先播 Tram.mp3 头 16 秒，再循环《城南花已开》；下车：停止。
+ * 上车：先播 Tram.mp3 头 16 秒，再循环《三亩地 - 城南花已开》；下车：停止。
  * 近峡谷时由峡谷 BGM 优先，离谷后若仍在车上则恢复主曲。
  * @param {boolean} active
  * @param {{ fade?: number, skipIntro?: boolean }} [opts]

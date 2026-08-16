@@ -43,8 +43,8 @@ const PALETTE = Object.freeze({
   // 小镇字符配色：W 白石（stone）/ L 浅砂石 / B 淡砖角塔 / D 棕色正门。
   sandStone: 0xd9cfac,
   paleBrick: 0xcaa88c,
-  roofTile: 0xb4694e, // 坡屋顶/尖顶瓦红（Townscaper 式暖陶瓦）
-  water: 0x8fc7d6, // 水道水面（与梯湖水帘同色系）
+  roofTile: 0xe87828, // Townscaper 陶瓦橙
+  water: 0x5a9eaa, // 原版岛城青绿水
   foliageDark: 0x365c3b,
   foliageLight: 0x628253,
   bark: 0x59452d,
@@ -367,8 +367,9 @@ function lcg(seed) {
 
 /** A local, headless-safe three-band cel ramp. */
 function makeThreeStepGradient() {
-  const pixels = new Uint8Array([72, 168, 255]);
-  const gradient = new THREE.DataTexture(pixels, 3, 1, THREE.RedFormat);
+  // 5 阶更软：Townscaper 是漫反射渐变，不是两档硬卡通
+  const pixels = new Uint8Array([88, 132, 176, 214, 255]);
+  const gradient = new THREE.DataTexture(pixels, 5, 1, THREE.RedFormat);
   gradient.name = "citadel-three-step-gradient";
   gradient.minFilter = THREE.NearestFilter;
   gradient.magFilter = THREE.NearestFilter;
@@ -431,7 +432,11 @@ function makeCitadelShadeMaterialFactory(gradientMap) {
       _citadelPaletteColor.getHSL(hsl);
       hsl.l = THREE.MathUtils.clamp(hsl.l + step * 0.02, 0.02, 0.98);
       _citadelPaletteColor.setHSL(hsl.h, hsl.s, hsl.l);
-      material = new THREE.MeshToonMaterial({ color: _citadelPaletteColor.clone(), gradientMap });
+      material = new THREE.MeshToonMaterial({
+        color: _citadelPaletteColor.clone(),
+        gradientMap,
+        vertexColors: true,
+      });
       material.flatShading = true;
       material.needsUpdate = true;
       material.userData.shared = true;
@@ -680,7 +685,8 @@ function buildCitadelRoundTopiary(name, scale, materials, random) {
 }
 
 /** Add inverse-hull ink only after the complete town assembly exists. */
-export function applyInkOutlines(assembly) {
+export function applyInkOutlines(assembly, enabled = true) {
+  if (!enabled) return 0;
   const surfaces = [];
   assembly.traverse((object) => {
     if (object.isMesh && !object.userData.isOutline) surfaces.push(object);
@@ -1052,6 +1058,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     contour: makeToon(PALETTE.contour, gradientMap),
     pilgrimageStone: makeToon(PALETTE.pilgrimageStone, gradientMap),
   };
+  // 瓦片/户色不要开共享 vertexColors：合并时没色属性的屋脊/尖顶/栏杆会整批变黑。
   if (materials.water) {
     materials.water.transparent = true;
     materials.water.opacity = 0.82;
@@ -1061,6 +1068,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
   if (!materials.windowLit) materials.windowLit = makeWindowLitMat(gradientMap);
 
   const town = buildCitadelTown(spec, {
+    leanDecor: options.leanDecor === true,
     mesh,
     materials: {
       // Townscaper 15 色调色板：字符 "0"–"9A"–"E" → 基色材质（含旧 4 色兼容键）
@@ -1076,6 +1084,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
       plazaStone: materials.plazaStone ?? materials.weatherStone, // 石板广场
       // 建筑构件统一深色盘：檐口线/墙裙/窗台窗楣/阳台栏杆/屋脊瓦/山墙圆窗/风向标
       trim: materials.trim ?? makeToon(0x333a42, gradientMap),
+      iron: materials.iron ?? makeToon(0x1a1b1e, gradientMap),
       windowDark: materials.windowDark,
       windowLit: materials.windowLit,
       // 明度微抖：shade(char, ix, iz) 按格坐标哈希到 5 档明度材质（缓存）
@@ -1154,6 +1163,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
       },
       {
         ...options,
+        leanDecor: options.leanDecor === true || options.baseYOverride !== undefined,
         // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升
         baseY: options.baseYOverride ?? metrics[terraceIndex].top - 0.06,
       }
@@ -1190,7 +1200,9 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     terraceLevels,
     stats,
     layout,
-    baseYs: metrics.map((metric) => metric.top - 0.06),
+    baseYs: metrics.map((metric) =>
+      options.baseYOverride !== undefined ? options.baseYOverride : metric.top - 0.06
+    ),
     materials: options.materials,
     gradientMap: options.gradientMap,
   };
@@ -1266,6 +1278,42 @@ function buildCitadelTerrainObjects(placements, contourSpec, anchor = null) {
   group.userData.placements = normalizedPlacements;
   group.userData.objectCount = group.children.length;
   return group;
+}
+
+/**
+ * 运河交汇无台地模式：放一块看不见的厚垫，名字仍叫 contour-step-0，
+ * 这样 3D 直编辑的 getObjectByName / isCitadelTerrace 拾取和高山圣城走同一条路。
+ * 用扁盒子而不是无限薄平面，斜视角也能点到空地基。
+ */
+function ensureSkipOuterTerrainEditPad(castleContainer) {
+  const lift = castleContainer.userData.townBaseLift ?? 0.6;
+  let terrain = castleContainer.userData.outerTerrainSystem;
+  if (!terrain) {
+    terrain = new THREE.Group();
+    terrain.name = "citadel-skip-outer-terrain";
+    castleContainer.add(terrain);
+    castleContainer.userData.outerTerrainSystem = terrain;
+  }
+  let pad = terrain.getObjectByName("contour-step-0");
+  if (!pad) {
+    pad = new THREE.Mesh(
+      new THREE.BoxGeometry(52, 0.28, 44),
+      new THREE.MeshBasicMaterial({
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+      })
+    );
+    pad.name = "contour-step-0";
+    terrain.add(pad);
+  }
+  pad.position.set(0, lift - 0.14, 0);
+  pad.rotation.set(0, 0, 0);
+  pad.userData.isCitadelTerrace = true;
+  pad.userData.terraceIndex = 0;
+  pad.visible = true;
+  return pad;
 }
 
 /**
@@ -1374,6 +1422,7 @@ export function buildOdysseyCitadel(options = {}) {
   // 断崖消耗过，此处继续同一序列，保证渲染结果与重构前逐位一致。
   const townAssembly = buildCitadelTerraceTownAssembly(townSpec, contourSpec, {
     floors: castleFloors,
+    leanDecor: skipOuterTerrain,
     random,
     materials,
     gradientMap,
@@ -1389,7 +1438,8 @@ export function buildOdysseyCitadel(options = {}) {
   });
 
   for (const layer of layers) citadelAssembly.add(layer);
-  const mainOutlinedSurfaceCount = applyInkOutlines(citadelAssembly);
+  // 运河交汇：去掉描边，靠外露面融合 + 顶点渐变协调邻接
+  const mainOutlinedSurfaceCount = applyInkOutlines(citadelAssembly, !skipOuterTerrain);
 
   const outerTerrainSystem = skipOuterTerrain
     ? new THREE.Group()
@@ -1402,10 +1452,21 @@ export function buildOdysseyCitadel(options = {}) {
     : applyInkOutlines(outerTerrainSystem);
   castleContainer.add(outerTerrainSystem);
   castleContainer.add(citadelAssembly);
+  castleContainer.userData.skipOuterTerrain = skipOuterTerrain;
+  castleContainer.userData.townBaseLift = options.townBaseLift ?? 0.6;
+  castleContainer.userData.outerTerrainSystem = outerTerrainSystem;
+  if (skipOuterTerrain) ensureSkipOuterTerrainEditPad(castleContainer);
 
-  // Preserve the scene's update contract while keeping this architectural
-  // landmark static and deterministic for headless screenshot comparisons.
-  const update = () => {};
+  // 运河交汇：首次入场 plop（软弹一下），其余帧静态。
+  let plopT = skipOuterTerrain ? 0 : 1;
+  const update = (dt = 0.016) => {
+    if (plopT >= 0.32) return;
+    plopT += Math.max(0.008, Number(dt) || 0.016);
+    const u = Math.min(1, plopT / 0.32);
+    const bounce = 1 + Math.sin(u * Math.PI) * 0.055 * (1 - u);
+    citadelAssembly.scale.setScalar(bounce);
+    if (u >= 1) citadelAssembly.scale.setScalar(1);
+  };
   castleContainer.update = update;
   castleContainer.userData.update = update;
 
@@ -1545,9 +1606,10 @@ export function rebuildCitadelTown(castleContainer, spec) {
       baseYOverride: castleContainer.userData.skipOuterTerrain
         ? castleContainer.userData.townBaseLift ?? 0.6
         : undefined,
+      leanDecor: castleContainer.userData.skipOuterTerrain === true,
     }
   );
-  applyInkOutlines(assembly.group);
+  applyInkOutlines(assembly.group, !castleContainer.userData.skipOuterTerrain);
   assembly.terraceLevels.forEach((terrace) => {
     terrace.forEach((levelGroup, floorIndex) => {
       layers[floorIndex].add(levelGroup);
@@ -1557,7 +1619,15 @@ export function rebuildCitadelTown(castleContainer, spec) {
   mergeCitadelTownStatic(castleContainer);
   castleContainer.userData.townStats = assembly.stats;
   castleContainer.userData.townSpec = assembly.layout;
-  castleContainer.userData.townBaseYs = assembly.baseYs;
+  if (castleContainer.userData.skipOuterTerrain) {
+    const lift = castleContainer.userData.townBaseLift ?? 0.6;
+    const n = Math.max(1, assembly.baseYs?.length ?? 1);
+    castleContainer.userData.townBaseY = lift;
+    castleContainer.userData.townBaseYs = Array.from({ length: n }, () => lift);
+    ensureSkipOuterTerrainEditPad(castleContainer);
+  } else {
+    castleContainer.userData.townBaseYs = assembly.baseYs;
+  }
   // 布局热重建后窗口列表与夜灯材质需刷新
   castleContainer.userData.gradientMap =
     castleContainer.userData.gradientMap ?? assembly.gradientMap ?? makeThreeStepGradient();
@@ -1621,8 +1691,10 @@ export function rebuildCitadelTerrain(castleContainer, contourSpec) {
   if (castleContainer?.userData?.skipOuterTerrain) {
     const baseY = castleContainer.userData.townBaseLift ?? 0.6;
     castleContainer.userData.townBaseY = baseY;
-    castleContainer.userData.townBaseYs = [baseY];
-    return null;
+    const n = Math.max(1, castleContainer.userData.townBaseYs?.length ?? 1);
+    castleContainer.userData.townBaseYs = Array.from({ length: n }, () => baseY);
+    ensureSkipOuterTerrainEditPad(castleContainer);
+    return castleContainer.userData.outerTerrainSystem ?? null;
   }
   const old = castleContainer?.userData?.outerTerrainSystem;
   if (!old) return null;
