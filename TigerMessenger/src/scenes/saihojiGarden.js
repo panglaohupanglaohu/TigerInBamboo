@@ -219,6 +219,13 @@ export const saihojiGardenScene = {
           m.userData.woundHeightMul < 0.999
       );
     };
+    // 循环条件：aircraft ↔ 士兵方阵的交互。方阵未整队时，扫描也不升鲸——
+    // 鼓息运兵 → 下岸整队 → 鲸起 → 攒箭 → 箭伤降鲸 → 终扫收束 → 撤阵 → 下一轮。
+    let phalanxRoot = null;
+    const phalanxReady = () => {
+      if (!phalanxRoot) return true; // 独立场景无方阵：照旧
+      return phalanxRoot.userData?.assembled !== false;
+    };
     const leafSpawn = () => {
       const pine = pines[(leafRnd() * pines.length) | 0] || null;
       const leaf = leafPool[leafCursor];
@@ -277,6 +284,7 @@ export const saihojiGardenScene = {
     const update = (dt, t) => {
       const step = Math.min(1, Number(dt) || 0.016);
       if (!squad) squad = scene.getObjectByName("moebius-aircraft-squad") || null;
+      if (!phalanxRoot) phalanxRoot = scene.getObjectByName("saihoji-phalanx-battle") || null;
       let target = null;
       let scanDist = Infinity;
       if (squad) {
@@ -289,8 +297,8 @@ export const saihojiGardenScene = {
         const near = scanDist < RISE_RADIUS;
         const far = scanDist > SINK_RADIUS;
         if (storyPhase === 0) {
-          // 常规：扫描接近升空、远去藏回；升到顶后故事线接管
-          if (near) target = risenR;
+          // 常规：扫描接近 + 方阵已整队才升空；远去藏回；升到顶后故事线接管
+          if (near && phalanxReady()) target = risenR;
           else if (far) target = buriedR;
           if (target === risenR && (currentR - buriedR) / Math.max(1e-3, risenR - buriedR) > 0.92) {
             storyPhase = 1; // 苔庭鲸升空：故事线以鲸为主
@@ -315,6 +323,7 @@ export const saihojiGardenScene = {
             if (members) {
               for (const m of members) m.userData.arrowHits = 0; // 升空能力随缓动恢复
             }
+            phalanxRoot?.userData?.reset?.(); // 士兵撤阵——下一轮重新运兵整队
             finaleLeft = false;
             finaleScanned = false;
             storyPhase = 0;
