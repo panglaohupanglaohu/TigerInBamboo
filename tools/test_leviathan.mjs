@@ -279,4 +279,48 @@ console.log("[4] 扫描吸食感：松树波动 + 树叶螺旋升空被吸进灯
   ok(`波动 ${swayed}/${pineBases.size} 株 · 升空叶 ${before.length} 片 · 收拢 ${d0.toFixed(1)}→${d1.toFixed(1)}`);
 }
 
-console.log(`\n结果：${pass} 项断言 · 4 组验收通过`);
+console.log("[5] 升空落雨：苔庭水沿鲸身滑落、如雨下坠，只在上升时");
+{
+  const scene = new THREE.Scene();
+  const handle = saihojiGardenScene.load({ scene, planetRadius: R, options: {} });
+  scene.add(handle.group);
+  const hubDir = latLonToGardenDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
+  const eastOf = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), hubDir).normalize();
+  const squad = new THREE.Group();
+  squad.name = "moebius-aircraft-squad";
+  squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R + 20).addScaledVector(eastOf, 24);
+  scene.add(squad);
+  handle.update(0, 0);
+  const rainGroup = handle.group.getObjectByName("leviathan-rain");
+  assert(rainGroup, "雨滴池必须存在");
+  const visibleRain = () => rainGroup.children.filter((d) => d.visible);
+  assert(visibleRain().length === 0, "静止藏地时不得落雨");
+  // 上升至中段（t01≈0.6，发射峰值）：雨滴出现且在下坠
+  for (let i = 0; i < 8; i++) handle.update(0.5, 0);
+  const mid = visibleRain();
+  assert(mid.length >= 20, `上升中段雨滴 ${mid.length} 不足`);
+  const falling = mid.filter((d) => d.userData.phase === 1);
+  assert(falling.length > 0, "应有脱离体表下坠的雨滴");
+  assert(falling.every((d) => d.userData.vel.y < 0), "下坠雨滴垂直速度必须向下");
+  const t0 = falling[0];
+  const y0 = t0.position.y;
+  const life0 = t0.userData.life;
+  for (let i = 0; i < 3; i++) handle.update(0.15, 0);
+  if (t0.visible && t0.userData.life > life0) {
+    assert(t0.position.y < y0, `雨滴应下坠（y ${y0.toFixed(2)} → ${t0.position.y.toFixed(2)}）`);
+  }
+  ok(`上升中段雨滴 ${mid.length} 片（下坠 ${falling.length}）· 全部向下`);
+  // 升到顶：发射停止，残雨落尽
+  for (let i = 0; i < 130; i++) handle.update(0.5, 0);
+  assert(visibleRain().length === 0, "升到顶后雨应落尽");
+  // 下沉：不得反向落雨
+  squad.userData._patrolCenter = hubDir
+    .clone()
+    .multiplyScalar(R)
+    .addScaledVector(eastOf, 400);
+  for (let i = 0; i < 40; i++) handle.update(0.5, 0);
+  assert(visibleRain().length === 0, "下沉时不得落雨");
+  ok("升顶雨尽 · 下沉无雨");
+}
+
+console.log(`\n结果：${pass} 项断言 · 5 组验收通过`);

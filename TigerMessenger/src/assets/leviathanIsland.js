@@ -71,6 +71,8 @@ function flatTriangle(a, b, c, mat) {
  * @param {number} [opts.maxR] 升空锚点半径（默认 = basePos 长度）
  * @param {number} [opts.plateWorldLift] 藏地时苔庭岛留驻的地表径向高度
  *   （默认 = basePos 长度 + 地壳板高）——鲸沉入地下时岛面不随之下陷
+ * @param {number} [opts.groundRadius] 星球地表半径（默认 = minR）——
+ *   升空落雨的水滴坠到地表高度即隐
  * @param {number} [opts.seed]
  * @returns {{ group: THREE.Group, island: THREE.Group,
  *             update: (dt:number, t:number) => void,
@@ -293,17 +295,169 @@ export function buildEcoLeviathanIsland(opts = {}) {
     tailRoot.add(flukes);
   }
 
+  // ---------- 3b. 升空落雨：苔庭的水沿鲸身滑落、如雨坠向地面 ----------
+  // 只在上浮时触发（上升速度驱动发射率；下沉不落雨）。水滴两个来源：
+  // 苔庭地壳板缘（水从板缘滴落）+ 鲸身上半球（水沿体表下滑、过赤道
+  // 后脱离坠落）；坠到地面高度即隐。水滴挂鲸体局部系，随鲸呼吸漂移。
+  const groundRadius = Number.isFinite(opts.groundRadius)
+    ? opts.groundRadius
+    : minR;
+  const RAIN_POOL = 110;
+  const rainGroup = new THREE.Group();
+  rainGroup.name = "leviathan-rain";
+  const rainGeo = new THREE.BufferGeometry();
+  rainGeo.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+      [0, 0.3, 0, 0.1, -0.26, 0.06, -0.1, -0.26, 0.06, 0, 0.06, -0.17],
+      3
+    )
+  );
+  rainGeo.setIndex([0, 1, 2, 0, 2, 3, 0, 3, 1, 1, 3, 2]);
+  rainGeo.computeVertexNormals();
+  const rainMats = [0xbfe8f2, 0xd6f2fb, 0x9fd4e8].map(
+    (c) =>
+      new THREE.MeshBasicMaterial({
+        color: c,
+        transparent: true,
+        opacity: 0.8,
+        depthWrite: false,
+      })
+  );
+  const rainDrops = [];
+  for (let i = 0; i < RAIN_POOL; i++) {
+    const drop = new THREE.Mesh(rainGeo, rainMats[i % rainMats.length]);
+    drop.visible = false;
+    drop.userData = {
+      dir: new THREE.Vector3(0, 1, 0),
+      phase: 0,
+      vel: new THREE.Vector3(),
+      life: 0,
+      dur: 2.4,
+      s0: 0.6 + rnd() * 0.5,
+    };
+    rainGroup.add(drop);
+    rainDrops.push(drop);
+  }
+  group.add(rainGroup);
+  const _rn = new THREE.Vector3();
+  const _rt = new THREE.Vector3();
+  const _redge = { x: 0, z: 0 };
+  const BODY_Y = 6 - 8 * 1.3; // 躯干局部 Y（与主躯干同值）
+  const rainEdgePoint = () => {
+    const s = rnd() * 78; // 板缘周长 2·(25+14)
+    if (s < 25) {
+      _redge.x = -12.5 + s;
+      _redge.z = -7;
+    } else if (s < 39) {
+      _redge.x = 12.5;
+      _redge.z = -7 + (s - 25);
+    } else if (s < 64) {
+      _redge.x = 12.5 - (s - 39);
+      _redge.z = 7;
+    } else {
+      _redge.x = -12.5;
+      _redge.z = 7 - (s - 64);
+    }
+  };
+  const spawnRain = () => {
+    const drop = rainDrops[rainCursor];
+    rainCursor = (rainCursor + 1) % rainDrops.length;
+    if (!drop) return;
+    const u = drop.userData;
+    u.life = 0;
+    u.dur = 2.2 + rnd() * 0.9;
+    u.s0 = 0.5 + rnd() * 0.55;
+    if (rnd() < 0.5) {
+      // 苔庭地壳板缘滴落
+      rainEdgePoint();
+      u.phase = 1;
+      u.vel.set((rnd() - 0.5) * 2.4, -1.2 - rnd() * 1.6, (rnd() - 0.5) * 2.4);
+      drop.position.set(
+        _redge.x + (rnd() - 0.5) * 0.6,
+        island.position.y + 0.08,
+        _redge.z + (rnd() - 0.5) * 0.6
+      );
+    } else {
+      // 鲸身上半球：沿体表下滑
+      let d = null;
+      for (let guard = 0; guard < 12 && !d; guard++) {
+        const lat = rnd() * 1.25;
+        const lon = rnd() * Math.PI * 2;
+        const dx = Math.cos(lat) * Math.cos(lon);
+        const dy = Math.sin(lat);
+        const dz = Math.cos(lat) * Math.sin(lon);
+        const x = dx * 36;
+        const z = dz * 17.6;
+        if (Math.abs(x) < 13.2 && Math.abs(z) < 7.6) continue; // 板下
+        d = new THREE.Vector3(dx, dy, dz);
+      }
+      if (!d) return;
+      u.dir.copy(d);
+      u.phase = 0;
+      u.vel.set(0, 0, 0);
+      drop.position.set(u.dir.x * 36, u.dir.y * 10.4 + BODY_Y, u.dir.z * 17.6);
+    }
+    drop.visible = true;
+  };
+  const updateRain = (dt) => {
+    const groundLocalY = groundRadius - anchorR + 0.6;
+    for (const drop of rainDrops) {
+      if (!drop.visible) continue;
+      const u = drop.userData;
+      u.life += dt;
+      const e = Math.min(1, u.life / u.dur);
+      if (e >= 1) {
+        drop.visible = false;
+        continue;
+      }
+      if (u.phase === 0) {
+        // 沿椭球面下滑：法向 (dx/sx², dy/sy², dz/sz²)，滑向 = -Y 切向
+        _rn.set(u.dir.x / 20.25, u.dir.y / 1.69, u.dir.z / 4.84).normalize();
+        _rt.set(0, -1, 0).addScaledVector(_rn, -_rn.y);
+        if (_rt.lengthSq() < 1e-8) _rt.set(1, 0, 0).addScaledVector(_rn, -_rn.x);
+        _rt.normalize();
+        u.dir.addScaledVector(_rt, dt * (1.6 + rnd() * 1.4)).normalize();
+        drop.position.set(u.dir.x * 36, u.dir.y * 10.4 + BODY_Y, u.dir.z * 17.6);
+        if (u.dir.y < -0.12) {
+          // 滑过赤道：脱离体表，沿切向初速坠落
+          u.phase = 1;
+          u.vel.set(
+            _rt.x * 3.4 + (rnd() - 0.5) * 0.8,
+            _rt.y * 3.4,
+            _rt.z * 3.4 + (rnd() - 0.5) * 0.8
+          );
+        }
+      } else {
+        u.vel.y -= 13 * dt; // 重力（鲸体上方 = +Y）
+        u.vel.x *= 0.985;
+        u.vel.z *= 0.985;
+        drop.position.addScaledVector(u.vel, dt);
+        if (drop.position.y < groundLocalY) {
+          drop.visible = false;
+          continue;
+        }
+      }
+      drop.scale.setScalar(u.s0 * (1 - e) + 0.04);
+    }
+  };
+
   // ---------- 4. 平缓呼吸 + 缓慢漂移 + 藏地/升空尾姿 ----------
   // 用户锁死：position.y = sin(t·0.6)·0.25。鲸体上方在世界系近似 +Y
   // （栖息于 lat56），此处沿「鲸体上方」做同频径向起伏，语义一致且
   // 不破坏球面定位；另叠极低频的切向漂移（±1.1），呼应「缓缓漂移」。
   const _anchor = new THREE.Vector3();
   const _base = new THREE.Vector3();
+  let _prevAnchorR = anchorR;
+  let rainSpeed = 0;
+  let rainAcc = 0;
+  let rainCursor = 0;
   const setAnchorRadius = (r) => {
     anchorR = THREE.MathUtils.clamp(Number(r) || minR, minR, maxR);
   };
   const update = (_dt, t) => {
     const time = Number(t) || 0;
+    const step = Math.min(1, Number(_dt) || 0.016);
     _anchor.copy(upN).multiplyScalar(anchorR);
     const bob = Math.sin(time * 0.6) * 0.25;
     const driftF = Math.sin(time * 0.05 + 1.3) * 1.1;
@@ -324,6 +478,18 @@ export function buildEcoLeviathanIsland(opts = {}) {
     // 苔庭岛随鲸/留地：升空时骑在鲸背（Y=PLATE_Y），藏地时脱离鲸体、
     // 留在地表（plateWorldLift）——鲸身沉入地下，只见苔庭
     island.position.y = Math.max(LEVIATHAN_PLATE_Y, plateWorldLift - anchorR);
+
+    // ---- 升空落雨：上升速度驱动发射，峰值在中段；下沉不落雨 ----
+    const vRise = step > 1e-4 ? (anchorR - _prevAnchorR) / step : 0;
+    _prevAnchorR = anchorR;
+    rainSpeed += (Math.max(0, vRise) - rainSpeed) * Math.min(1, step * 1.6);
+    const wRain = Math.sin(Math.PI * THREE.MathUtils.clamp(t01, 0, 1));
+    rainAcc += step * rainSpeed * 34 * wRain;
+    while (rainAcc >= 1) {
+      spawnRain();
+      rainAcc -= 1;
+    }
+    updateRain(step);
   };
   update(0, 0);
 

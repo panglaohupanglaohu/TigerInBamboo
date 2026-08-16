@@ -59,6 +59,7 @@ export const saihojiGardenScene = {
       minR: buriedR,
       maxR: risenR,
       plateWorldLift: R + PLATE_GROUND_LIFT,
+      groundRadius: R,
     });
     const leviathanGroup = leviathan.group;
     const islandGroup = leviathan.island;
