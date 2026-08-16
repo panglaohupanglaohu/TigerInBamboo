@@ -226,15 +226,15 @@ console.log("[3] 藏地/升空状态机：平时只见苔庭 · 扫描灯艇掠�
     `升空后尾鳍应扬起 35°（rotation.x=${flukes.rotation.x.toFixed(2)}）`);
   assert(tailRoot.position.y > 3.3, `升空后尾柄应回位（y=${tailRoot.position.y.toFixed(2)}）`);
   ok(`升空：板高 +${(plateWorldY() - R).toFixed(1)} · 尾鳍 35° 扬起`);
-  // 扫描灯艇远去 → 藏回地下
+  // 扫描灯艇远去 → 故事线锁定升空（鲸起后不随灯艇离场降藏；降藏由箭伤触发）
   squad.userData._patrolCenter = hubDir
     .clone()
     .multiplyScalar(R)
     .addScaledVector(eastOf, 400);
   for (let i = 0; i < 120; i++) handle.update(0.5, 0);
-  assert(Math.abs(plateWorldY() - (R + 0.3)) < 0.6, "灯艇远去后应藏回地下");
-  assert(flukes.rotation.x < 0.1, "藏回后尾鳍应收起");
-  ok("降藏：灯艇远去 → 苔庭落回地面 · 鲸体入地");
+  assert(plateWorldY() > R + 18, "鲸起故事线锁定：灯艇远去仍应保持升空");
+  assert(flukes.rotation.x > 0.5, "故事线锁定期间尾鳍保持扬起");
+  ok("故事线锁定：灯艇远去 → 苔庭鲸保持升空");
 }
 
 console.log("[4] 扫描吸食感：松树波动 + 树叶螺旋升空被吸进灯艇");
@@ -313,14 +313,72 @@ console.log("[5] 升空落雨：苔庭水沿鲸身滑落、如雨下坠，只在
   // 升到顶：发射停止，残雨落尽
   for (let i = 0; i < 130; i++) handle.update(0.5, 0);
   assert(visibleRain().length === 0, "升到顶后雨应落尽");
-  // 下沉：不得反向落雨
+  // 灯艇远去：发射停止，残雨落尽（故事线锁定升空，不降藏也不落雨）
   squad.userData._patrolCenter = hubDir
     .clone()
     .multiplyScalar(R)
     .addScaledVector(eastOf, 400);
   for (let i = 0; i < 40; i++) handle.update(0.5, 0);
-  assert(visibleRain().length === 0, "下沉时不得落雨");
-  ok("升顶雨尽 · 下沉无雨");
+  assert(visibleRain().length === 0, "灯艇远去后不得再落雨");
+  ok("升顶雨尽 · 灯艇远去无雨");
 }
 
-console.log(`\n结果：${pass} 项断言 · 5 组验收通过`);
+console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回原位 → 终扫 → 复位");
+{
+  const scene = new THREE.Scene();
+  const handle = saihojiGardenScene.load({ scene, planetRadius: R, options: {} });
+  scene.add(handle.group);
+  const hubDir = latLonToGardenDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
+  const eastOf = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), hubDir).normalize();
+  const squad = new THREE.Group();
+  squad.name = "moebius-aircraft-squad";
+  squad.userData.members = [{ userData: { arrowHits: 0 } }];
+  squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R + 20).addScaledVector(eastOf, 24);
+  scene.add(squad);
+  handle.update(0, 0);
+  const plate = handle.group.getObjectByName("leviathan-crust-plate");
+  const plateY = () => {
+    handle.group.updateMatrixWorld(true);
+    return plate.getWorldPosition(new THREE.Vector3()).dot(hubDir);
+  };
+  const setNear = () => {
+    squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R + 20).addScaledVector(eastOf, 24);
+  };
+  const setFar = () => {
+    squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R).addScaledVector(eastOf, 400);
+  };
+  // 0→1：扫描升空并锁定
+  for (let i = 0; i < 60; i++) handle.update(0.5, 0);
+  assert.equal(handle.getStoryPhase(), 1, "鲸升到顶应进入故事线锁定");
+  assert(plateY() > R + 18, "鲸应升空");
+  // 灯艇远去 → 保持升空（故事线以鲸为主）
+  setFar();
+  for (let i = 0; i < 30; i++) handle.update(0.5, 0);
+  assert(plateY() > R + 18, "故事线锁定：灯艇离场不降藏");
+  // 羽箭攒射（50 箭）→ 升空能力不足 → 鲸恢复原位
+  squad.userData.members[0].userData.arrowHits = 50;
+  squad.userData.members[0].userData.woundHeightMul = 0.5;
+  for (let i = 0; i < 60; i++) handle.update(0.5, 0);
+  assert.equal(handle.getStoryPhase(), 2, "箭伤后进入收束阶段");
+  assert(Math.abs(plateY() - (R + 0.3)) < 0.6, "鲸应恢复原位");
+  // 收束：机队离开 → 终扫一次 → 再离开 → 中箭清零、故事复位
+  for (let i = 0; i < 10; i++) handle.update(0.5, 0);
+  setNear();
+  for (let i = 0; i < 10; i++) handle.update(0.5, 0);
+  assert.equal(handle.getStoryPhase(), 2, "终扫期间仍处收束");
+  assert(Math.abs(plateY() - (R + 0.3)) < 0.6, "终扫不得再升鲸");
+  setFar();
+  for (let i = 0; i < 10; i++) handle.update(0.5, 0);
+  assert.equal(handle.getStoryPhase(), 0, "终扫结束后故事复位");
+  assert.equal(squad.userData.members[0].userData.arrowHits, 0, "中箭计数应清零（升空能力恢复）");
+  // 模拟机队侧缓动：中箭清零后升空能力逐渐恢复（updateAircraftHover 每帧上修 woundHeightMul）
+  squad.userData.members[0].userData.woundHeightMul = 1;
+  // 新一轮：再次扫描 → 鲸再升
+  setNear();
+  for (let i = 0; i < 60; i++) handle.update(0.5, 0);
+  assert.equal(handle.getStoryPhase(), 1, "新一轮扫描应再次进入故事线");
+  assert(plateY() > R + 18, "新一轮扫描应再次升鲸");
+  ok("鲸起锁定 · 箭伤降鲸 · 终扫收束 · 痊愈复位 · 新一轮循环");
+}
+
+console.log(`\n结果：${pass} 项断言 · 6 组验收通过`);

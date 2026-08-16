@@ -201,6 +201,24 @@ export const saihojiGardenScene = {
     let scanSmooth = 0;
     let leafTimer = 0;
     let leafCursor = 0;
+    // ---------- 苔庭鲸故事线状态 ----------
+    // 0 常规：扫描接近升空、远去藏回（周而复始）
+    // 1 鲸起：故事线以苔庭鲸为主——锁定升空，直到 aircraft 被羽箭攒射、
+    //   升空能力不足（woundHeightMul<1，见 saihojiPhalanx 50 箭）→ 鲸恢复原位
+    // 2 收束：鲸回原位 → 机队离开 → 终扫一次 → 再离开 → 中箭计数清零
+    //   （升空能力随缓动恢复）、故事复位回 0
+    let storyPhase = 0;
+    let finaleLeft = false;
+    let finaleScanned = false;
+    const aircraftWounded = () => {
+      const members = squad?.userData?.members;
+      if (!members?.length) return false;
+      return members.some(
+        (m) =>
+          Number.isFinite(m.userData?.woundHeightMul) &&
+          m.userData.woundHeightMul < 0.999
+      );
+    };
     const leafSpawn = () => {
       const pine = pines[(leafRnd() * pines.length) | 0] || null;
       const leaf = leafPool[leafCursor];
@@ -268,10 +286,45 @@ export const saihojiGardenScene = {
         if (center) squadPos.copy(center);
         else squad.getWorldPosition(squadPos);
         scanDist = squadPos.distanceTo(hubGround);
-        if (scanDist < RISE_RADIUS) target = risenR; // 扫描灯艇接近 → 升空
-        else if (scanDist > SINK_RADIUS) target = buriedR; // 远去 → 藏回地下
+        const near = scanDist < RISE_RADIUS;
+        const far = scanDist > SINK_RADIUS;
+        if (storyPhase === 0) {
+          // 常规：扫描接近升空、远去藏回；升到顶后故事线接管
+          if (near) target = risenR;
+          else if (far) target = buriedR;
+          if (target === risenR && (currentR - buriedR) / Math.max(1e-3, risenR - buriedR) > 0.92) {
+            storyPhase = 1; // 苔庭鲸升空：故事线以鲸为主
+          }
+        } else if (storyPhase === 1) {
+          // 故事线以苔庭鲸为主：锁定升空（灯艇离场不降藏），
+          // 直到 aircraft 被羽箭攒射、升空能力不足 → 鲸恢复原位
+          target = risenR;
+          if (aircraftWounded()) {
+            storyPhase = 2;
+            finaleLeft = false;
+            finaleScanned = false;
+            target = buriedR;
+          }
+        } else {
+          // 收束：鲸回原位 → 机队离开 → 终扫一次 → 再离开 → 伤口痊愈、故事复位
+          target = buriedR;
+          if (far) finaleLeft = true;
+          if (finaleLeft && near) finaleScanned = true;
+          if (finaleScanned && far) {
+            const members = squad?.userData?.members;
+            if (members) {
+              for (const m of members) m.userData.arrowHits = 0; // 升空能力随缓动恢复
+            }
+            finaleLeft = false;
+            finaleScanned = false;
+            storyPhase = 0;
+          }
+        }
       } else {
         target = buriedR; // 无扫描灯艇的独立场景：永远藏地
+        storyPhase = 0;
+        finaleLeft = false;
+        finaleScanned = false;
       }
       if (target != null) {
         const k = 1 - Math.exp(-step * 0.22); // ~8s 的庄严升降
@@ -335,6 +388,7 @@ export const saihojiGardenScene = {
           0,
           1
         ),
+      getStoryPhase: () => storyPhase,
       update,
       dispose() {
         if (leafGroup.parent) leafGroup.parent.remove(leafGroup);
