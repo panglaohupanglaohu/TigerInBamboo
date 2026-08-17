@@ -360,15 +360,19 @@ export const saihojiGardenScene = {
           // 常规：唯一前提——莫比斯飞艇飞过来吸食松树（切向掠近即触发）；
           // 远去藏回；升到顶后故事线接管
           if (near) {
-            // 升起前先触发一次狂风暴雨，再开始视觉升空
+            // 升起前先触发一次《狂风暴雨》；真正升空后切 Terminator 2
             if (!stormArmed) {
               cueLeviathanStormOnce();
               stormArmed = true;
               stormPreludeT = 0;
             }
-            setLeviathanStormBgm(true);
             stormPreludeT += step;
-            target = stormPreludeT >= STORM_PRELUDE_SEC ? risenR : buriedR;
+            if (stormPreludeT >= STORM_PRELUDE_SEC) {
+              setLeviathanStormBgm(true);
+              target = risenR;
+            } else {
+              target = buriedR;
+            }
           } else if (far) {
             target = buriedR;
             const lift01 =
@@ -539,9 +543,10 @@ export const saihojiGardenScene = {
           pine.rotateX(a);
           pine.rotateZ(b);
         }
-        // 岛面高于灯艇时不吸叶（鲸已升到灯艇上方，吸食方向会反向）
+        // 岛面高于灯艇时不吸叶（鲸已升到灯艇上方，吸食方向会反向）；
+        // 吸取力接近枯竭才停——从鲸升起到被拉回，吸食过程全程可见
         const islandTopR = currentR + islandGroup.position.y;
-        if (islandTopR < squadPos.length() + 6 && suction01 > 0.2) {
+        if (islandTopR < squadPos.length() + 6 && suction01 > 0.04) {
           leafTimer -= step;
           while (leafTimer <= 0) {
             leafSpawn();

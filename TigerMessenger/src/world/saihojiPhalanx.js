@@ -291,7 +291,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     for (const s of wave.soldiers) {
       const lx = (s.userData.gx - c) * CELL;
       const lz = (s.userData.gz - c) * CELL;
-      _tmp.copy(_up).multiplyScalar(PLANET_RADIUS + 0.08)
+      _tmp.copy(_up).multiplyScalar(PLANET_RADIUS + groundLift(_up))
         .addScaledVector(_right, lx)
         .addScaledVector(_fwd, -lz);
       s.position.copy(_tmp);
@@ -545,16 +545,16 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       const offR = (i - 2) * 0.8;
       const offF = ((i % 2) - 0.5) * 0.8;
       // 下车点贴地（电车在轨上，士兵落到地面后步行）
-      const from = fromWorld
+      const fromDir = fromWorld.clone().normalize();
+      const from = fromDir
         .clone()
-        .normalize()
-        .multiplyScalar(PLANET_RADIUS + 0.08)
+        .multiplyScalar(PLANET_RADIUS + groundLift(fromDir))
         .addScaledVector(rightN, offR)
         .addScaledVector(fwdN, offF);
       // 目标 = 槽位 + 队内偏移
       const target = slotDir
         .clone()
-        .multiplyScalar(PLANET_RADIUS + 0.08)
+        .multiplyScalar(PLANET_RADIUS + groundLift(slotDir))
         .addScaledVector(rightN, offR)
         .addScaledVector(fwdN, offF);
       s.userData.garrisonFrom = from.clone();
@@ -596,7 +596,18 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       .addScaledVector(east, lx / PLANET_RADIUS)
       .addScaledVector(ringNorth, lz / PLANET_RADIUS)
       .normalize()
-      .multiplyScalar(PLANET_RADIUS + 0.08);
+      .multiplyScalar(PLANET_RADIUS + groundLift(out));
+  }
+
+  /**
+   * 地面抬升：苔庭地壳板（含苔丘，板面 R+0.3 + 苔 0.1）上的士兵站到苔面上，
+   * 板外贴地（R+0.08）——草坪不能埋住士兵。
+   * @param {THREE.Vector3} dir 球面方向（单位向量）
+   */
+  function groundLift(dir) {
+    const ex = Math.abs(dir.dot(east)) * PLANET_RADIUS;
+    const nz = Math.abs(dir.dot(ringNorth)) * PLANET_RADIUS;
+    return ex <= 13 && nz <= 8 ? 0.45 : 0.08;
   }
 
   /**
@@ -634,11 +645,14 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
         e,
         _tmp
       );
-      _tmp.multiplyScalar(PLANET_RADIUS + 0.08);
+      _tmp.multiplyScalar(PLANET_RADIUS + groundLift(_tmp));
       s.position.copy(_tmp);
-      // 面向苔庭中心（机队悬停方向）
-      surfaceBasis(_tmp.normalize(), landDir, _up, _fwd, _right);
-      s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
+      // 行军时面向目的地；到站后姿态交给射击循环（仰望机队）——
+      // 不再每帧整设，否则会把射手的仰射姿态打回水平（长弓手瞄地）
+      if (u.t < 1) {
+        surfaceBasis(_tmp.normalize(), landDir, _up, _fwd, _right);
+        s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
+      }
       return;
     }
     u.returning = false;
@@ -651,7 +665,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     }
     const e = Math.min(1, u.t / Math.max(1, u.wait));
     slerpDir(u.from.clone().normalize(), u.to.clone().normalize(), e, _tmp);
-    _tmp.multiplyScalar(PLANET_RADIUS + 0.08);
+    _tmp.multiplyScalar(PLANET_RADIUS + groundLift(_tmp));
     s.position.copy(_tmp);
     surfaceBasis(_tmp.normalize(), u.to.clone().normalize(), _up, _fwd, _right);
     s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
@@ -884,7 +898,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
             ee,
             _tmp
           );
-          _tmp.multiplyScalar(PLANET_RADIUS + 0.08);
+          _tmp.multiplyScalar(PLANET_RADIUS + groundLift(_tmp));
           s.position.copy(_tmp);
           surfaceBasis(_tmp.normalize(), team.anchor.clone().normalize(), _up, _fwd, _right);
           s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
@@ -1138,10 +1152,15 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
           continue;
         }
         s.getWorldPosition(_tmp);
-        // 面向机队（盘顶悬停位）
+        // 面向机队（盘顶悬停位）：完整三维瞄准——机队在空中，箭手必须仰射
         _fwd.copy(squad.userData?._patrolCenter || _tmp).sub(_tmp);
         if (_fwd.lengthSq() > 1e-4) {
-          surfaceBasis(_tmp, _fwd, _up, _fwd, _right);
+          _fwd.normalize();
+          // 右手 = fwd × 径向（侧向），再正交化出体轴（含仰角，不再投影成水平）
+          _right.crossVectors(_fwd, _tmp.clone().normalize());
+          if (_right.lengthSq() < 1e-6) _right.set(1, 0, 0).addScaledVector(_fwd, -_fwd.x);
+          _right.normalize();
+          _up.crossVectors(_right, _fwd).normalize();
           s.quaternion.slerp(
             _q.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right)),
             0.08

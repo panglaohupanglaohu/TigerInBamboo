@@ -737,7 +737,7 @@ export function pauseDefaultAmbience() {
  * 恢复默认环境音（离开峡谷场景且未静音时）
  */
 export function resumeDefaultAmbience() {
-  if (muted || infiltrationBgmWanted || leviathanStormWanted) return;
+  if (muted || infiltrationBgmWanted || leviathanStormWanted || leviathanCueWanted) return;
   ambienceDuck = 1;
   if (!padStarted) startAmbience();
 }
@@ -982,7 +982,8 @@ function anySegmentBgmEngaged() {
     swampBgmPendingStop ||
     infiltrationBgmWanted ||
     tramRideWanted ||
-    leviathanStormWanted
+    leviathanStormWanted ||
+    leviathanCueWanted
   );
 }
 
@@ -1268,10 +1269,12 @@ function pauseOthersForInfiltration() {
     }
   }
   leviathanStormWanted = false;
-  if (leviathanStormEl && !leviathanStormEl.paused) {
+  leviathanCueWanted = false;
+  for (const el of [leviathanStormEl, leviathanCueEl]) {
+    if (!el || el.paused) continue;
     try {
-      leviathanStormEl.pause();
-      leviathanStormEl.volume = 0;
+      el.pause();
+      el.volume = 0;
     } catch {
       /* ignore */
     }
@@ -1702,28 +1705,53 @@ function fadeOutSwampBgm(seconds = 1.4) {
 }
 
 // =====================================================================
-//  苔庭鲸升空 BGM：CV君言君与 · 狂风暴雨
-//  升起前 cue 一次从头播放；升空过程中循环作为 BGM；降藏淡出。
+//  苔庭鲸升空音乐：
+//  - 升起前 cue 一次《狂风暴雨》（不循环）
+//  - 升起过程 BGM：《Terminator 2》循环
 // =====================================================================
 /** @type {HTMLAudioElement|null} */
 let leviathanStormEl = null;
+/** @type {HTMLAudioElement|null} */
+let leviathanCueEl = null;
 let leviathanStormWanted = false;
+let leviathanCueWanted = false;
 let leviathanStormFading = false;
-const LEVIATHAN_STORM_BGM_URL = new URL(
+const LEVIATHAN_STORM_CUE_URL = new URL(
   "../../music/CV君言君与-狂风暴雨.mp3",
   import.meta.url
 ).href;
+const LEVIATHAN_STORM_BGM_URL = new URL(
+  "../../music/The Original Movies Orchestra (电影原声带)-Terminator 2.mp3",
+  import.meta.url
+).href;
 const LEVIATHAN_STORM_VOLUME = 0.5;
+const LEVIATHAN_CUE_VOLUME = 0.52;
 
-function ensureLeviathanStormEl() {
-  if (leviathanStormEl) return leviathanStormEl;
+function makeLeviathanAudio(url, loop) {
   if (typeof Audio === "undefined") return null;
-  const el = new Audio(LEVIATHAN_STORM_BGM_URL);
-  el.loop = true;
+  const el = new Audio(url);
+  el.loop = !!loop;
   el.preload = "auto";
   el.volume = 0;
   el.crossOrigin = "anonymous";
-  leviathanStormEl = el;
+  return el;
+}
+
+function ensureLeviathanStormEl() {
+  if (leviathanStormEl) return leviathanStormEl;
+  leviathanStormEl = makeLeviathanAudio(LEVIATHAN_STORM_BGM_URL, true);
+  return leviathanStormEl;
+}
+
+function ensureLeviathanCueEl() {
+  if (leviathanCueEl) return leviathanCueEl;
+  const el = makeLeviathanAudio(LEVIATHAN_STORM_CUE_URL, false);
+  if (el) {
+    el.addEventListener("ended", () => {
+      leviathanCueWanted = false;
+    });
+  }
+  leviathanCueEl = el;
   return el;
 }
 
@@ -1759,17 +1787,43 @@ function pauseOthersForLeviathanStorm() {
   }
 }
 
+function stopLeviathanCue(fade = 0.35) {
+  leviathanCueWanted = false;
+  const el = leviathanCueEl;
+  if (!el) return;
+  if (el.paused && el.volume <= 0.001) return;
+  const start = el.volume;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, fade) * 1000;
+  const step = () => {
+    if (leviathanCueWanted) return;
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+  };
+  requestAnimationFrame(step);
+}
+
 /**
- * 升起前触发一次：强制从曲头起播。升空当帧先叫这个，再开始视觉升起。
+ * 升起前触发一次《狂风暴雨》：强制从曲头起播，不循环。
  * 同一轮升空里重复调用不会重头。
  */
 export function cueLeviathanStormOnce() {
   if (muted) return false;
-  if (leviathanStormWanted && isLeviathanStormAudible()) return false;
-  const el = ensureLeviathanStormEl();
+  if (leviathanCueWanted && leviathanCueEl && !leviathanCueEl.paused) return false;
+  const el = ensureLeviathanCueEl();
   if (!el) return false;
-  leviathanStormWanted = true;
-  leviathanStormFading = false;
+  leviathanCueWanted = true;
   pauseOthersForLeviathanStorm();
   ensureAudio();
   try {
@@ -1779,12 +1833,22 @@ export function cueLeviathanStormOnce() {
   }
   el.volume = 0;
   el.play()?.catch?.(() => {});
-  fadeLeviathanStormTo(el, LEVIATHAN_STORM_VOLUME, 0.55);
+  const t0 = performance.now();
+  const start = 0;
+  const end = LEVIATHAN_CUE_VOLUME;
+  const dur = 450;
+  const step = () => {
+    if (!leviathanCueWanted || !leviathanCueEl) return;
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
   return true;
 }
 
 /**
- * 升空期间保持风暴 BGM。已由 cue 起播则只续播，不重头。
+ * 升空期间循环 Terminator 2。起播时压掉前奏《狂风暴雨》。
  * @param {boolean} active
  * @param {{ fade?: number }} [opts]
  */
@@ -1802,14 +1866,24 @@ export function setLeviathanStormBgm(active, opts = {}) {
     }
     const el = ensureLeviathanStormEl();
     if (!el) return;
+    stopLeviathanCue(0.4);
     pauseOthersForLeviathanStorm();
     ensureAudio();
+    try {
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
     el.play()?.catch?.(() => {});
     fadeLeviathanStormTo(el, LEVIATHAN_STORM_VOLUME, fade);
     return;
   }
-  if (!leviathanStormWanted && !isLeviathanStormAudible()) return;
+  if (!leviathanStormWanted && !isLeviathanStormAudible()) {
+    stopLeviathanCue(fade);
+    return;
+  }
   leviathanStormWanted = false;
+  stopLeviathanCue(0.3);
   fadeOutLeviathanStormBgm(fade);
 }
 
@@ -1894,11 +1968,13 @@ function setMuted(next) {
     swampBgmWanted = false;
     fadeOutSwampBgm(0.2);
     leviathanStormWanted = false;
-    if (leviathanStormEl) {
+    leviathanCueWanted = false;
+    for (const el of [leviathanStormEl, leviathanCueEl]) {
+      if (!el) continue;
       try {
-        leviathanStormEl.pause();
-        leviathanStormEl.volume = 0;
-        leviathanStormEl.currentTime = 0;
+        el.pause();
+        el.volume = 0;
+        el.currentTime = 0;
       } catch {
         /* ignore */
       }

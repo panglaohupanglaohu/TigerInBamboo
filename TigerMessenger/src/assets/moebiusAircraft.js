@@ -80,8 +80,9 @@ export function createMoebiusAircraft() {
   const g = new THREE.Group();
   g.name = "moebius-aircraft";
 
-  // ---------- 1. 外层卡通水晶外壳 (LatheGeometry · 12 棱低多边形 · 复古橙红) ----------
-  // 废除 MeshPhysicalMaterial transmission，改用 MeshToonMaterial + opacity 半透明。
+  // ---------- 1. 外层玻璃灯罩外壳 (LatheGeometry · 12 棱低多边形 · 复古琥珀) ----------
+  // 真玻璃：MeshPhysicalMaterial 透射（内舱霓虹/舱核/尾焰透过玻璃可见）。
+  // P.aircraftGlass=false 时回退旧式 Toon 半透明（无头 SwiftShader 渲染更稳）。
   // LatheGeometry 段数 48→12：配合 flatShading 产生干净的多面体硬朗棱角。
   const seg = 30;
   const profile = [];
@@ -93,13 +94,34 @@ export function createMoebiusAircraft() {
   const hullGeo = new THREE.LatheGeometry(profile, 12);
   hullGeo.rotateX(Math.PI / 2); // 旋转轴 Y -> Z，机头朝 +Z
 
-  const hullMat = crystalToon(0xD35400, {
-    transparent: true,
-    opacity: 0.85,
-    side: THREE.DoubleSide,
-    emissive: 0xD35400,
-    emissiveIntensity: 0.12,
-  });
+  const glassHull = P.aircraftGlass !== false;
+  const hullMat = glassHull
+    ? new THREE.MeshPhysicalMaterial({
+        color: 0xd35400, // 琥珀玻璃
+        transparent: true,
+        opacity: 0.5,
+        transmission: 0.92, // 透射：透过外壳看到内部霓虹结构
+        thickness: 1.4,
+        roughness: 0.1,
+        metalness: 0.05,
+        ior: 1.45,
+        clearcoat: 0.7,
+        clearcoatRoughness: 0.12,
+        envMapIntensity: 1.1,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+        emissive: 0xd35400,
+        emissiveIntensity: 0.08,
+      })
+    : crystalToon(0xD35400, {
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide,
+        emissive: 0xD35400,
+        emissiveIntensity: 0.12,
+      });
+  hullMat.flatShading = true;
+  hullMat.needsUpdate = true;
   const hull = part(hullGeo, hullMat, 0.04);
   hull.name = "aircraft-hull";
   g.add(hull);
