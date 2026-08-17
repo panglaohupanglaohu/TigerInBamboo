@@ -118,15 +118,20 @@ console.log("[1] 白天电车运兵：电车掠近 → 下车 → 步行入阵 �
   for (let i = 0; i < 10; i++) ph.update(0.1, 60 + i * 0.1);
   assert(s0.position.distanceTo(p0) > 0.2, "巡查中的士兵应持续移动");
   ok(`电车驻军 ${soldiers.length} 名 · 苔庭内巡查（最远 ${maxD.toFixed(1)}）`);
-  // 鲸起 → 归位环绕槽位（内圈 ~20 / 外圈 ~24，17~26 环带）
+  // 鲸起 → 告警整队：全营奔向北翼列阵（长弓两列 19/22 + 矛盾护壁 27/30，
+  // 全部在鲸身侧缘 17.6 之外、护壁最远 ~42）
   whaleUp = true;
-  for (let i = 0; i < 160; i++) ph.update(0.1, 61 + i * 0.1);
+  for (let i = 0; i < 200; i++) ph.update(0.1, 61 + i * 0.1);
   maxD = 0;
+  let northMin = Infinity;
+  const ringNorth = new THREE.Vector3().crossVectors(landDir, hubEast).normalize();
   for (const s of soldiers) {
     maxD = Math.max(maxD, s.position.distanceTo(landingWorld));
+    northMin = Math.min(northMin, s.position.clone().normalize().dot(ringNorth) * R);
   }
-  assert(maxD > 17 && maxD < 26, `鲸起后应归位槽位（最远 ${maxD.toFixed(1)}）`);
-  ok(`鲸起归位：最远 ${maxD.toFixed(1)} 单位（环绕槽位）`);
+  assert(maxD > 17 && maxD < 44, `鲸起后应奔向北翼列阵（最远 ${maxD.toFixed(1)}）`);
+  assert(northMin > 15, `北翼列阵应整体在北侧（最近北距 ${northMin.toFixed(1)}）`);
+  ok(`鲸起整队：最远 ${maxD.toFixed(1)} · 北翼最近 ${northMin.toFixed(1)}（长弓两列 + 护壁）`);
 }
 
 console.log("[2] 鼓声发兵 → 运河交汇 → 下岸整队 → 战船补给 → 鲸归撤兵");

@@ -69,6 +69,9 @@ function hullRadiusAt(u, MIDR = 1.35) {
 
 const LEN = 7.0; // 外壳总长（沿 Z 轴分布）
 
+/** 编队羽箭攒射上限：全队合计中箭 600 支 → 吸取力降到 45%（逐箭渐进，非突变） */
+const ARROW_FULL_WOUND_SQUAD = 600;
+
 /**
  * 创建飞行器：所有部件加入一个 Group 并返回。
  * 机身长轴沿 +Z（机头朝 +Z），局部中心在原点附近。
@@ -554,6 +557,8 @@ const _acTmpB = new THREE.Vector3();
 const _acTmpC = new THREE.Vector3();
 const _acTmpD = new THREE.Vector3();
 const _acTmpE = new THREE.Vector3();
+const _acRedFlash = new THREE.Color(0xff4030);
+const _acBaseCore = new THREE.Color(0xa8ff4a);
 const _acSlotPos = new THREE.Vector3();
 const _acFeedPos = new THREE.Vector3();
 const _acFeedUp = new THREE.Vector3();
@@ -588,7 +593,87 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
   let formationBank = 0;
   let formationPitch = 0;
 
-  if (aircraft.userData.patrol) {
+  // ---------- 苔庭鲸对抗期：俯冲吸食 / 悬停盘顶（鲸起→战斗→拉回全程跟随） ----------
+  // 苔庭鲸场景（saihojiGarden）每帧把 whaleLock 写入 squad.userData：
+  //  { active, hubDir, hoverRadius } — hoverRadius = 盘面世界半径 + 7（贴背悬停）。
+  // 锁定时冻结航线相位，编队中心平滑过渡到盘顶上方盘旋，随鲸升降；解锁后平滑回到航线。
+  const wl = aircraft.userData.whaleLock;
+  if (wl?.active && wl.hubDir && Number.isFinite(wl.hoverRadius)) {
+    const hubD = wl.hubDir;
+    const east = new THREE.Vector3()
+      .crossVectors(new THREE.Vector3(0, 1, 0), hubD)
+      .normalize();
+    const north = new THREE.Vector3().crossVectors(hubD, east).normalize();
+    // 盘旋方位角：缓慢绕盘顶扫掠（0.075 rad 半径的倾斜小圆 → 角距 ~12 单位）
+    const az0 = Number.isFinite(wl.az0) ? wl.az0 : 0;
+    const az = az0 + t * 0.22;
+    const tilt = 0.075;
+    const dir = hubD
+      .clone()
+      .multiplyScalar(Math.cos(tilt))
+      .addScaledVector(east, Math.cos(az) * Math.sin(tilt))
+      .addScaledVector(north, Math.sin(az) * Math.sin(tilt))
+      .normalize();
+    const hoverCenter = dir
+      .clone()
+      .multiplyScalar(wl.hoverRadius + Math.sin(t * 1.3) * 1.2);
+    // 盘侧悬停偏置（苔庭鲸写入：悬停盘顶北翼，长弓列阵正上方）
+    if (wl.offset) hoverCenter.add(wl.offset);
+    // 盘旋切向（绕 hubD 的角速度方向）
+    const tanAz = east
+      .clone()
+      .multiplyScalar(-Math.sin(az))
+      .addScaledVector(north, Math.cos(az));
+    const orbitTan = tanAz
+      .addScaledVector(hubD, -tanAz.dot(hubD))
+      .normalize();
+
+    // 冻结的航线位置（st.phase 不再推进，用最近一次相位复算）→ 平滑过渡锚点
+    let holdCenter = null;
+    let holdUp = null;
+    let holdTan = null;
+    let holdSide = null;
+    const p = aircraft.userData.patrol;
+    const st = aircraft.userData._patrol;
+    if (p && st && !wl.blendStart) {
+      const dA = p.dirA;
+      const dB = p.dirB;
+      const hdir = dA.clone().lerp(dB, st.phase).normalize();
+      holdCenter = hdir
+        .clone()
+        .multiplyScalar(p.R + p.height + Math.sin(t * 0.28) * 1.35);
+      holdUp = hdir;
+      const tan = dB
+        .clone()
+        .addScaledVector(dA, -dB.dot(dA))
+        .normalize();
+      holdTan = tan;
+      holdSide = new THREE.Vector3().crossVectors(holdUp, tan).normalize();
+    }
+    // 首次锁定记录过渡起点
+    if (!wl.blendStart && holdCenter) {
+      wl.blendStart = holdCenter.clone();
+      wl.blendUp = holdUp.clone();
+      wl.blendTan = holdTan.clone();
+    }
+    const from = wl.blendStart || hoverCenter.clone();
+    const upFrom = wl.blendUp || hubD;
+    const tanFrom = wl.blendTan || orbitTan;
+    wl.blend = Math.min(1, (wl.blend ?? 0) + dt / 3.2);
+    const e = wl.blend * wl.blend * (3 - 2 * wl.blend);
+    formationCenter = from.clone().lerp(hoverCenter, e);
+    formationUp = upFrom.clone().lerp(hubD, e).normalize();
+    formationTan = tanFrom.clone().lerp(orbitTan, e).normalize();
+    formationSide = new THREE.Vector3()
+      .crossVectors(formationUp, formationTan)
+      .normalize();
+    formationTan.crossVectors(formationSide, formationUp).normalize();
+    formationBank = -Math.sin(az) * 0.3 - (1 - wl.blend) * 0.12;
+    formationPitch = 0.05 + Math.sin(t * 0.9) * 0.03;
+    patrolMoving = true;
+    wl._lastHoverCenter = hoverCenter.clone();
+    aircraft.userData._patrolCenter = formationCenter.clone();
+  } else if (aircraft.userData.patrol) {
     const p = aircraft.userData.patrol;
     // 状态机：0 城→店 1 店停留 2 店→城 3 城停留
     if (!aircraft.userData._patrol) aircraft.userData._patrol = { seg: 0, u: 0, phase: 0 };
@@ -619,7 +704,14 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
     const pathHeave = Math.sin(phase * Math.PI) * 4.2;
     const breath = Math.sin(t * 0.28) * 1.35;
     const flyH = p.height + pathHeave + breath;
-    const center = dir.clone().multiplyScalar(p.R + flyH);
+    let center = dir.clone().multiplyScalar(p.R + flyH);
+    // 解锁过渡：从盘顶悬停位平滑回到航线（blend 1 → 0，2.5s）
+    const wlOut = aircraft.userData.whaleLock;
+    if (wlOut && !wlOut.active && wlOut._lastHoverCenter && (wlOut.blend ?? 0) > 0.002) {
+      wlOut.blend = Math.max(0, (wlOut.blend ?? 0) - dt / 2.5);
+      const e2 = wlOut.blend * wlOut.blend * (3 - 2 * wlOut.blend);
+      center = center.clone().lerp(wlOut._lastHoverCenter, e2);
+    }
 
     const phaseStep = moving ? 0.012 : 0;
     const dirNext = dirA
@@ -638,7 +730,11 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
       tangent.copy(aircraft.userData._prevTangent);
     }
 
-    const up = dir.clone();
+    let up = dir.clone();
+    // 解锁过渡：编队朝向量也从盘顶悬停位渐变回航线法向
+    if (wlOut && !wlOut.active && wlOut._lastHoverCenter && (wlOut.blend ?? 0) > 0.002) {
+      up = up.clone().lerp(wlOut.hubDir, wlOut.blend).normalize();
+    }
     const side = new THREE.Vector3().crossVectors(up, tangent).normalize();
     tangent.crossVectors(side, up).normalize();
 
@@ -737,27 +833,36 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
         ? "search"
         : "patrol";
 
-  // 橙红尾焰脉动（悬停吸蜜时更急促，像蜂鸟振翅余韵）
+  // 编队级吸取力（成员平均，苔庭鲸光束/叶流每帧读取；受创后逐箭下降）
+  const squadSuction01 =
+    members.length > 0
+      ? members.reduce((s, m) => s + (Number.isFinite(m.userData?.suction01) ? m.userData.suction01 : 1), 0) /
+        members.length
+      : 1;
+  aircraft.userData.squadSuction01 = squadSuction01;
+
+  // 橙红尾焰脉动（悬停吸蜜时更急促，像蜂鸟振翅余韵；受创后尾焰随吸取力萎缩）
   const forageBoost = anyForaging ? 1.35 : 1;
   const pulse = 0.75 + Math.sin(t * 16 * forageBoost) * 0.3;
+  const woundDim = 0.35 + 0.65 * squadSuction01;
   if (aircraft.userData.flames) {
     for (const f of aircraft.userData.flames) {
-      f.scale.set(1, pulse, 1);
+      f.scale.set(1, pulse * woundDim, 1);
       if (f.material?.opacity != null) {
         f.material.opacity =
           f.material.color?.r > 0.9 && f.material.color?.g < 0.4
-            ? 0.75 + pulse * 0.2
-            : 0.4 + pulse * 0.25;
+            ? (0.75 + pulse * 0.2) * woundDim
+            : (0.4 + pulse * 0.25) * woundDim;
       }
     }
   }
   if (aircraft.userData.thrusters) {
-    const glow = 1.3 + Math.sin(t * 9) * 0.4;
+    const glow = (1.3 + Math.sin(t * 9) * 0.4) * woundDim;
     for (const c of aircraft.userData.thrusters) {
       if (c.material.emissiveIntensity !== undefined) c.material.emissiveIntensity = glow;
     }
   }
-  const neonPulse = 1.1 + Math.sin(t * 11 + 1.2) * 0.45;
+  const neonPulse = (1.1 + Math.sin(t * 11 + 1.2) * 0.45) * woundDim;
   for (const m of members) {
     const tube = m.userData?.energyTube;
     if (tube?.material?.emissiveIntensity !== undefined) {
@@ -777,10 +882,19 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
     (aircraft.userData.cockpitLight ? [aircraft.userData.cockpitLight] : []);
   for (const core of cores) core.scale.setScalar(0.95 + cockpitPulse * 0.15);
   for (const glow of glows) {
-    glow.material.opacity = 0.4 + cockpitPulse * 0.28;
-    glow.scale.setScalar(0.85 + cockpitPulse * 0.35);
+    glow.material.opacity = (0.4 + cockpitPulse * 0.28) * woundDim;
+    glow.scale.setScalar((0.85 + cockpitPulse * 0.35) * (0.6 + 0.4 * woundDim));
   }
-  for (const light of lights) light.intensity = 3.2 + cockpitPulse * 1.6;
+  for (const light of lights) light.intensity = (3.2 + cockpitPulse * 1.6) * woundDim;
+
+  // 中箭瞬间：舱核闪红（成员级冲击冲量）
+  for (const m of members) {
+    const imp2 = m.userData?._hitImpulse || 0;
+    const coreMat = m.userData?.cockpitCore?.material;
+    if (coreMat?.emissive) {
+      coreMat.emissive.copy(_acRedFlash).lerp(_acBaseCore, 1 - Math.min(1, imp2 * 1.4));
+    }
+  }
 
   const neonLights = aircraft.userData.neonLights || [];
   for (const nl of neonLights) nl.intensity = 1.2 + Math.sin(t * 12 + 0.7) * 0.7;
@@ -964,6 +1078,10 @@ function updateHummingbirdForage(members, nectarList, ctx) {
     }
   }
 
+  // 编队合计中箭数（轮转攒射的伤口总量，驱动整队受创）
+  let squadHits = 0;
+  for (const m of members) squadHits += m.userData?.arrowHits || 0;
+
   for (let i = 0; i < members.length; i++) {
     const member = members[i];
     if (!member.userData._forage) {
@@ -984,11 +1102,38 @@ function updateHummingbirdForage(members, nectarList, ctx) {
         .add(_acTmpA.copy(formationTan).multiplyScalar(slot.fwd))
         .add(_acTmpB.copy(formationSide).multiplyScalar(slot.side + personalSway))
         .add(_acTmpC.copy(formationUp).multiplyScalar(slot.up + personalHeave));
-      const want = (member.userData.arrowHits || 0) >= 50 ? 0.5 : 1;
+      // 逐箭渐进受创：编队合计中箭 300 支 → 吸取力/高度降到 45%（非突变）。
+      // 用编队总箭数算伤势：长弓手轮转攒射五架，整队一起受创、一起下滑
+      const hits = member.userData.arrowHits || 0;
+      const want = THREE.MathUtils.clamp(
+        1 - (squadHits / ARROW_FULL_WOUND_SQUAD) * 0.55,
+        0.45,
+        1
+      );
       const cur = Number.isFinite(member.userData.woundHeightMul)
         ? member.userData.woundHeightMul
         : 1;
       member.userData.woundHeightMul = cur + (want - cur) * Math.min(1, dt * 0.55);
+      // 中箭冲击：箭数增长 → 抖动冲量（机体摇晃，肉眼可见受创）
+      const prevHits = member.userData._prevHits ?? 0;
+      if (hits > prevHits) {
+        member.userData._hitImpulse = Math.min(1.6, (member.userData._hitImpulse || 0) + 0.4);
+      }
+      member.userData._prevHits = hits;
+      const imp = Math.max(0, (member.userData._hitImpulse || 0) - dt * 2.4);
+      member.userData._hitImpulse = imp;
+      if (imp > 0.01) {
+        _acSlotPos
+          .addScaledVector(formationTan, (Math.random() - 0.5) * imp * 1.1)
+          .addScaledVector(formationSide, (Math.random() - 0.5) * imp * 1.1)
+          .addScaledVector(formationUp, (Math.random() - 0.5) * imp * 0.5);
+      }
+      // 吸取力 0..1（受创后下降，供苔庭鲸光束/叶流读取）
+      member.userData.suction01 = THREE.MathUtils.clamp(
+        1 - (1 - member.userData.woundHeightMul) / 0.55,
+        0,
+        1
+      );
       if (member.userData.woundHeightMul < 0.995) {
         const alt = _acSlotPos.length() - R;
         if (alt > 0) {

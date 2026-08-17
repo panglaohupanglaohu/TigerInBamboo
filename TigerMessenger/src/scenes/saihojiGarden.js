@@ -19,6 +19,7 @@ import {
 import {
   cueLeviathanStormOnce,
   setLeviathanStormBgm,
+  rearmPhalanxAlarm,
 } from "../audio/sfx.js";
 
 /** 鲸体升空锚点：地壳板（背脊）悬停在球面 +24 上方，鲸腹不压苔丘 */
@@ -163,17 +164,18 @@ export const saihojiGardenScene = {
         return s / 0x100000000;
       };
     })();
-    const LEAF_COUNT = 44;
+    const LEAF_COUNT = 110;
     const leafGroup = new THREE.Group();
     leafGroup.name = "saihoji-scan-leaves";
     const leafGeo = new THREE.BufferGeometry();
     leafGeo.setAttribute(
       "position",
-      new THREE.Float32BufferAttribute([0, 0, 0, 0.17, 0, 0.06, -0.05, 0, 0.15], 3)
+      new THREE.Float32BufferAttribute([0, 0, 0, 0.22, 0, 0.08, -0.06, 0, 0.2], 3)
     );
     leafGeo.setIndex([0, 1, 2]);
     leafGeo.computeVertexNormals();
-    const leafMats = [0x3e8e52, 0x54a05a, 0x2e7d32, 0x6fae74].map(
+    // 亮色叶片：被高级文明吸走时高亮可见
+    const leafMats = [0x4ade80, 0x7bed9f, 0x2f9e44, 0x8fe388, 0xd9f99a, 0x38d9a9].map(
       (c) =>
         new THREE.MeshBasicMaterial({
           color: c,
@@ -188,15 +190,58 @@ export const saihojiGardenScene = {
       leaf.visible = false;
       leaf.userData = {
         life: 0,
-        dur: 2.0 + leafRnd() * 0.8,
+        dur: 2.2 + leafRnd() * 1.1,
         start: new THREE.Vector3(),
         phase: leafRnd() * Math.PI * 2,
-        radius: 1.2 + leafRnd() * 1.8,
+        radius: 1.4 + leafRnd() * 2.2,
       };
       leafGroup.add(leaf);
       leafPool.push(leaf);
     }
     scene.add(leafGroup);
+
+    // ---------- 扫描吸食光束：编队中心 → 苔庭盘面（鲸起/战斗全程可见） ----------
+    // 光束本体（加色混合锥 + 亮核）随吸取力缩放：箭伤越重、光束越细越暗；
+    // 地面光圈照亮盘面，像高级文明的「吸食探照灯」。
+    const beamGroup = new THREE.Group();
+    beamGroup.name = "saihoji-suction-beam";
+    beamGroup.visible = false;
+    const beamMat = new THREE.MeshBasicMaterial({
+      color: 0x7fffe0,
+      transparent: true,
+      opacity: 0.14,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const beamCone = new THREE.Mesh(new THREE.ConeGeometry(1, 1, 18, 1, true), beamMat);
+    beamCone.name = "beam-cone";
+    const beamCoreMat = new THREE.MeshBasicMaterial({
+      color: 0xc8fff0,
+      transparent: true,
+      opacity: 0.32,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const beamCore = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.5, 1, 10, 1, true), beamCoreMat);
+    beamCore.name = "beam-core";
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0x8fffe4,
+      transparent: true,
+      opacity: 0.5,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const groundRing = new THREE.Mesh(new THREE.RingGeometry(0.72, 1, 28), ringMat);
+    groundRing.rotation.x = -Math.PI / 2;
+    groundRing.name = "beam-ground-ring";
+    beamGroup.add(beamCone, beamCore, groundRing);
+    scene.add(beamGroup);
+    const beamSpot = new THREE.SpotLight(0x9fffe8, 0, 280, 0.75, 0.6, 1.7);
+    beamSpot.name = "saihoji-beam-spot";
+    beamSpot.target = new THREE.Object3D();
+    beamSpot.target.name = "saihoji-beam-spot-target";
+    scene.add(beamSpot, beamSpot.target);
 
     // ---------- 藏地/升空状态机：扫描灯艇（莫比斯航空艇编队）掠过才升空 ----------
     let currentR = buriedR;
@@ -206,32 +251,32 @@ export const saihojiGardenScene = {
     const _toTarget = new THREE.Vector3();
     const _leafUp = new THREE.Vector3();
     const _leafSide = new THREE.Vector3();
+    const _beamUp = new THREE.Vector3(0, 1, 0);
+    const _beamDir = new THREE.Vector3();
+    const _beamMid = new THREE.Vector3();
+    const _plateTop = new THREE.Vector3();
+    const _plateEdge = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+    const _hubNorth = new THREE.Vector3().crossVectors(hubDir, hubEast).normalize();
     let scanSmooth = 0;
     let leafTimer = 0;
     let leafCursor = 0;
     // ---------- 苔庭鲸故事线状态 ----------
     // 0 常规：扫描接近升空、远去藏回（周而复始）
-    // 1 鲸起：故事线以苔庭鲸为主——锁定升空，直到 aircraft 被羽箭攒射、
-    //   升空能力不足（woundHeightMul<1，见 saihojiPhalanx 50 箭）→ 鲸恢复原位
+    // 1 战斗：锁定升空——莫比斯 aircraft 俯冲吸食、悬停盘顶；
+    //   长弓手攒箭逐箭削弱吸取力，士兵绳索小队拔河拉鲸；
+    //   吸取力不足时绳索获胜 → 鲸落回地面
     // 2 收束：鲸回原位 → 机队离开 → 终扫一次 → 再离开 → 中箭计数清零
-    //   （升空能力随缓动恢复）、故事复位回 0
+    //   （吸取力随缓动恢复）、故事复位回 0
     let storyPhase = 0;
     let finaleLeft = false;
     let finaleScanned = false;
     let returnSignaled = false;
     let stormArmed = false;
     let stormPreludeT = 0;
-    const aircraftWounded = () => {
-      const members = squad?.userData?.members;
-      if (!members?.length) return false;
-      return members.some(
-        (m) =>
-          Number.isFinite(m.userData?.woundHeightMul) &&
-          m.userData.woundHeightMul < 0.999
-      );
-    };
-    // 循环条件：aircraft ↔ 士兵方阵的交互。方阵未整队时，扫描也不升鲸——
-    // 鼓息运兵 → 下岸整队 → 鲸起 → 攒箭 → 箭伤降鲸 → 终扫收束 → 撤阵 → 下一轮。
+    // 拔河拉锯进度：绳索拉力 − 吸取力 → 负值鲸保持升空，正值缓缓下降；
+    // 越过阈值（吸取力被箭削弱）后绳索获胜、鲸整段落回地面
+    let tug01 = 0;
+    let pulseCd = 15; // aircraft 反击脉冲（光束闪爆推倒士兵）的间隔计时
     let phalanxRoot = null;
     const leafSpawn = () => {
       const pine = pines[(leafRnd() * pines.length) | 0] || null;
@@ -252,19 +297,20 @@ export const saihojiGardenScene = {
       }
       leaf.userData.start.copy(_leafUp);
       leaf.userData.life = 0;
-      leaf.userData.dur = 2.0 + leafRnd() * 0.8;
+      leaf.userData.dur = 2.2 + leafRnd() * 1.1;
       leaf.userData.phase = leafRnd() * Math.PI * 2;
-      leaf.userData.radius = 1.2 + leafRnd() * 1.8;
+      leaf.userData.radius = 1.4 + leafRnd() * 2.2;
       leaf.position.copy(_leafUp);
-      leaf.scale.setScalar(0.5 + leafRnd() * 0.5);
+      leaf.scale.setScalar(0.6 + leafRnd() * 0.7);
       leaf.visible = true;
     };
-    const updateLeaves = (dt, strength) => {
+    const updateLeaves = (dt, strength, suction01) => {
+      const pull = 0.06 + 0.94 * Math.max(0, Number.isFinite(suction01) ? suction01 : 1);
       for (const leaf of leafPool) {
         if (!leaf.visible) continue;
         const u = leaf.userData;
-        // 灯艇远去：残叶快速消散
-        u.life += dt * (strength > 0.02 ? 1 : 3);
+        // 灯艇远去 / 吸取力枯竭：残叶快速消散（被箭打落的叶片不再升起）
+        u.life += dt * (strength > 0.02 && pull > 0.25 ? 1 : 3);
         const e = Math.min(1, u.life / u.dur);
         if (e >= 1) {
           leaf.visible = false;
@@ -272,7 +318,8 @@ export const saihojiGardenScene = {
         }
         const ee = e * e * (3 - 2 * e);
         _toTarget.copy(squadPos).sub(u.start);
-        const dist = _toTarget.length();
+        // 吸取力越弱，叶片飞得越近——够不到灯艇就提前坠落（吸取力下降的可视化）
+        const dist = _toTarget.length() * pull;
         if (dist > 1e-4) _toTarget.multiplyScalar(1 / dist);
         _leafUp.copy(u.start).normalize();
         _leafSide.crossVectors(_leafUp, _toTarget);
@@ -282,8 +329,8 @@ export const saihojiGardenScene = {
           .copy(u.start)
           .addScaledVector(_toTarget, dist * ee)
           .addScaledVector(_leafSide, Math.sin(ee * Math.PI * 2.6 + u.phase) * u.radius * (1 - ee))
-          .addScaledVector(_leafUp, Math.sin(ee * Math.PI) * 5.5);
-        leaf.rotation.y += dt * 6.5;
+          .addScaledVector(_leafUp, Math.sin(ee * Math.PI) * 5.5 * (0.4 + 0.6 * pull));
+        leaf.rotation.y += dt * 8;
         const s = (1 - ee) * (0.9 + (u.phase % 1) * 0.4) + 0.05;
         leaf.scale.setScalar(s);
       }
@@ -294,6 +341,8 @@ export const saihojiGardenScene = {
       if (!phalanxRoot) phalanxRoot = scene.getObjectByName("saihoji-phalanx-battle") || null;
       let target = null;
       let scanDist = Infinity;
+      let near = false;
+      let far = false;
       if (squad) {
         // 编队组自身不动，成员逐帧摆到 formationCenter：
         // 读 _patrolCenter（updateAircraftHover 每帧刷新）为编队实时位置
@@ -305,8 +354,8 @@ export const saihojiGardenScene = {
         // 一偏整趟掠过都不触发（用户反馈从未见鲸升起）。改用方向角距：
         // 灯艇从苔庭上空掠过即算「扫描过来」，与高度无关。
         scanDist = squadPos.clone().normalize().angleTo(hubDir) * R;
-        const near = scanDist < RISE_RADIUS;
-        const far = scanDist > SINK_RADIUS;
+        near = scanDist < RISE_RADIUS;
+        far = scanDist > SINK_RADIUS;
         if (storyPhase === 0) {
           // 常规：唯一前提——莫比斯飞艇飞过来吸食松树（切向掠近即触发）；
           // 远去藏回；升到顶后故事线接管
@@ -334,18 +383,36 @@ export const saihojiGardenScene = {
             storyPhase = 1; // 苔庭鲸升空：故事线以鲸为主
           }
         } else if (storyPhase === 1) {
-          // 故事线以苔庭鲸为主：锁定升空（灯艇离场不降藏），
-          // 直到 aircraft 被羽箭攒射、升空能力不足 → 鲸恢复原位
+          // 战斗期：锁顶不落，吸取力 vs 绳索拉力的拔河——
+          // 长弓手逐箭削弱吸取力，绳索小队把鲸一点点拽回地面
           setLeviathanStormBgm(true);
-          target = risenR;
-          if (aircraftWounded()) {
+          const suction01 = Number.isFinite(squad?.userData?.squadSuction01)
+            ? squad.userData.squadSuction01
+            : 1;
+          const ropePull01 = THREE.MathUtils.clamp(
+            phalanxRoot?.userData?.ropePull01 ?? 0,
+            0,
+            1
+          );
+          const range = risenR - buriedR;
+          const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
+          // 净拉力：绳索拉（×0.9 拔河优势）− 吸取抬（×1.15 高等文明防线）。
+          // 吸取力满时绳索拉不动（僵持期：长弓攒箭）；逐箭削弱后净拉力越过
+          // 阈值 → 鲸缓缓下降；吸取枯竭 → 绳索获胜整段落回地面
+          const net = ropePull01 * 0.9 - suction01 * 1.15;
+          tug01 += (THREE.MathUtils.clamp(net, -0.5, 1.5) - tug01) * Math.min(1, step * 0.4);
+          // 越过阈值后绳索获胜：鲸整段落回地面
+          const down01 = THREE.MathUtils.clamp((tug01 - 0.25) / 0.45, 0, 1);
+          target = risenR - range * down01;
+          // 拉锯中的挣扎：被绳拽着仍有微幅起伏（鲸在对抗）
+          if (down01 > 0.03) target += Math.sin(t * 2.1) * 0.7 * (1 - down01 * 0.5);
+          if (down01 > 0.97 && lift01 < 0.06) {
             storyPhase = 2;
             finaleLeft = false;
             finaleScanned = false;
             returnSignaled = false;
             stormArmed = false;
             setLeviathanStormBgm(false, { fade: 1.6 });
-            target = buriedR;
           }
         } else {
           // 收束：鲸回原位 → 士兵撤阵返回高山圣城 → 机队离开 → 终扫一次
@@ -364,13 +431,15 @@ export const saihojiGardenScene = {
           if (finaleScanned && far) {
             const members = squad?.userData?.members;
             if (members) {
-              for (const m of members) m.userData.arrowHits = 0; // 升空能力随缓动恢复
+              for (const m of members) m.userData.arrowHits = 0; // 吸取力随缓动恢复
             }
             finaleLeft = false;
             finaleScanned = false;
             storyPhase = 0;
             stormArmed = false;
             stormPreludeT = 0;
+            tug01 = 0;
+            rearmPhalanxAlarm();
           }
         }
       } else {
@@ -380,8 +449,69 @@ export const saihojiGardenScene = {
         finaleScanned = false;
         stormArmed = false;
         stormPreludeT = 0;
+        tug01 = 0;
         setLeviathanStormBgm(false, { fade: 0.8 });
       }
+
+      // ---------- 对抗期对外契约：机队锁定悬停 / 盘沿锚点 / 反击脉冲 ----------
+      const range = risenR - buriedR;
+      const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
+      const plateTopR = currentR + islandGroup.position.y; // 盘面世界半径
+      const suction01 = Number.isFinite(squad?.userData?.squadSuction01)
+        ? squad.userData.squadSuction01
+        : 1;
+      if (squad) {
+        const lock = squad.userData.whaleLock || (squad.userData.whaleLock = {});
+        const wantLock =
+          storyPhase === 1 || (storyPhase === 0 && near && lift01 > 0.03);
+        if (wantLock && !lock.active) {
+          // 新一轮锁定：重置过渡起点（从当前航线位平滑俯冲/爬升到盘顶）
+          lock.active = true;
+          lock.blend = 0;
+          lock.blendStart = null;
+          lock.az0 = Math.random() * Math.PI * 2;
+        } else if (!wantLock && lock.active) {
+          lock.active = false;
+        }
+        lock.hubDir = hubDir;
+        lock.hoverRadius = plateTopR + 7;
+        // 悬停位偏到北翼（鲸身侧缘之外）：长弓列阵与机队面对面，全程可见
+        lock.offset = _hubNorth.clone().multiplyScalar(26);
+        // 反击脉冲：战斗期 aircraft 每隔一阵闪爆光束、推倒光束落点附近的士兵
+        if (storyPhase === 1) {
+          pulseCd -= step;
+          if (pulseCd <= 0) {
+            pulseCd = 15 + Math.random() * 9;
+            // 落点在北翼长弓列阵处（机队盘旋一侧）
+            squad.userData.groundPulse = {
+              t: 1.2,
+              center: hubDir
+                .clone()
+                .multiplyScalar(R + 0.5)
+                .addScaledVector(_hubNorth, 19.5),
+              radius: 10,
+            };
+          }
+        }
+        const gp = squad.userData.groundPulse;
+        if (gp) {
+          gp.t -= step;
+          if (gp.t <= 0) squad.userData.groundPulse = null;
+        }
+      }
+      // 盘沿锚点（世界坐标）：绳索小队抛绳/挂绳的落点，随鲸升降每帧刷新
+      if (phalanxRoot) {
+        const pe = phalanxRoot.userData.plateEdges || (phalanxRoot.userData.plateEdges = []);
+        _plateEdge[0].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(hubEast, 12.5);
+        _plateEdge[1].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(hubEast, -12.5);
+        _plateEdge[2].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(_hubNorth, 7);
+        _plateEdge[3].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(_hubNorth, -7);
+        for (let i = 0; i < 4; i++) {
+          if (!pe[i]) pe[i] = new THREE.Vector3();
+          pe[i].copy(_plateEdge[i]);
+        }
+      }
+
       if (target != null) {
         const k = 1 - Math.exp(-step * 0.22); // ~8s 的庄严升降
         currentR += (target - currentR) * k;
@@ -391,9 +521,11 @@ export const saihojiGardenScene = {
       leviathan.update(dt, t);
 
       // ---- 扫描吸食感 ----
-      const strength = Number.isFinite(scanDist)
+      let strength = Number.isFinite(scanDist)
         ? THREE.MathUtils.clamp(1 - scanDist / RISE_RADIUS, 0, 1)
         : 0;
+      // 战斗期：机队锁定盘顶，吸食始终进行（不再依赖角距）
+      if (storyPhase === 1) strength = Math.max(strength, 0.85);
       scanSmooth += (strength - scanSmooth) * Math.min(1, step * 2.2);
       if (scanSmooth > 0.008) {
         const tNow = Number(t) || 0;
@@ -409,17 +541,54 @@ export const saihojiGardenScene = {
         }
         // 岛面高于灯艇时不吸叶（鲸已升到灯艇上方，吸食方向会反向）
         const islandTopR = currentR + islandGroup.position.y;
-        if (islandTopR < squadPos.length() + 6) {
+        if (islandTopR < squadPos.length() + 6 && suction01 > 0.2) {
           leafTimer -= step;
           while (leafTimer <= 0) {
             leafSpawn();
-            leafTimer += 0.11 / Math.max(0.4, scanSmooth);
+            leafTimer += 0.055 / Math.max(0.4, scanSmooth);
           }
         }
       } else if (scanSmooth > 0.001) {
         scanSmooth = 0;
       }
-      updateLeaves(step, scanSmooth);
+      updateLeaves(step, scanSmooth, suction01);
+
+      // ---- 光束本体：编队中心 → 盘面；随吸取力缩放（箭伤越重越细越暗） ----
+      const pulseFlash = squad?.userData?.groundPulse
+        ? 1 + squad.userData.groundPulse.t * 1.6
+        : 1;
+      if (scanSmooth > 0.02 && suction01 > 0.02 && squadPos.lengthSq() > 0) {
+        beamGroup.visible = true;
+        _plateTop.copy(hubDir).multiplyScalar(plateTopR);
+        _beamDir.copy(_plateTop).sub(squadPos);
+        const beamLen = Math.max(0.1, _beamDir.length());
+        _beamDir.normalize();
+        _beamMid.copy(squadPos).addScaledVector(_beamDir, beamLen * 0.5);
+        const beamR =
+          (1.6 + 3.4 * scanSmooth) * (0.4 + 0.6 * suction01) * pulseFlash;
+        beamCone.scale.set(beamR, beamLen, beamR);
+        beamCone.quaternion.setFromUnitVectors(_beamUp, _beamDir);
+        beamCone.position.copy(_beamMid);
+        beamCone.material.opacity =
+          (0.1 + 0.13 * scanSmooth) * (0.35 + 0.65 * suction01) * pulseFlash;
+        beamCore.scale.set(1, beamLen, 1);
+        beamCore.quaternion.copy(beamCone.quaternion);
+        beamCore.position.copy(_beamMid);
+        beamCore.material.opacity =
+          (0.22 + 0.2 * scanSmooth) * (0.35 + 0.65 * suction01) * pulseFlash;
+        groundRing.position.copy(_plateTop);
+        groundRing.quaternion.setFromUnitVectors(_beamUp, hubDir);
+        const gr = beamR * 1.15;
+        groundRing.scale.set(gr, gr, 1);
+        groundRing.material.opacity =
+          0.28 * scanSmooth * (0.4 + 0.6 * suction01) * pulseFlash;
+        beamSpot.position.copy(squadPos);
+        beamSpot.target.position.copy(_plateTop);
+        beamSpot.intensity = 6 * scanSmooth * (0.4 + 0.6 * suction01) * pulseFlash;
+      } else {
+        beamGroup.visible = false;
+        beamSpot.intensity = 0;
+      }
     };
     update(0, 0);
 
@@ -453,6 +622,10 @@ export const saihojiGardenScene = {
           if (o.geometry) o.geometry.dispose?.();
         });
         for (const m of leafMats) m.dispose?.();
+        if (beamGroup.parent) beamGroup.parent.remove(beamGroup);
+        for (const m of [beamMat, beamCoreMat, ringMat]) m.dispose?.();
+        if (beamSpot.parent) beamSpot.parent.remove(beamSpot);
+        if (beamSpot.target.parent) beamSpot.target.parent.remove(beamSpot.target);
         if (leviathanGroup.parent) leviathanGroup.parent.remove(leviathanGroup);
         leviathanGroup.traverse((o) => {
           if (o.geometry) o.geometry.dispose?.();

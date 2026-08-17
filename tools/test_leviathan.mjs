@@ -363,11 +363,17 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   setFar();
   for (let i = 0; i < 30; i++) handle.update(0.5, 0);
   assert(plateY() > R + 18, "故事线锁定：灯艇离场不降藏");
-  // 羽箭攒射（50 箭）→ 升空能力不足 → 鲸恢复原位
-  squad.userData.members[0].userData.arrowHits = 50;
-  squad.userData.members[0].userData.woundHeightMul = 0.5;
+  // 只中箭、没绳索 → 鲸保持升空（拔河必须双方在场）
+  squad.userData.members[0].userData.arrowHits = 400;
+  squad.userData.squadSuction01 = 0.45;
   for (let i = 0; i < 60; i++) handle.update(0.5, 0);
-  assert.equal(handle.getStoryPhase(), 2, "箭伤后进入收束阶段");
+  assert.equal(handle.getStoryPhase(), 1, "仅箭伤不降鲸（绳索未拉）");
+  assert(plateY() > R + 18, "吸取力虽弱，绳索未拉则鲸不落");
+  // 绳索小队拉满 + 吸取力被箭削到枯竭 → 拔河获胜 → 鲸回原位
+  phalanx.userData.ropePull01 = 1;
+  squad.userData.squadSuction01 = 0;
+  for (let i = 0; i < 120; i++) handle.update(0.5, 0);
+  assert.equal(handle.getStoryPhase(), 2, "绳拉 + 箭伤后进入收束阶段");
   assert(Math.abs(plateY() - (R + 0.3)) < 0.6, "鲸应恢复原位");
   assert.equal(phalanx.userData.assembled, false, "鲸恢复原位后士兵应撤阵返回（whaleReturned 被调用）");
   // 收束：机队离开 → 终扫一次 → 再离开 → 中箭清零、故事复位
@@ -380,14 +386,16 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   for (let i = 0; i < 10; i++) handle.update(0.5, 0);
   assert.equal(handle.getStoryPhase(), 0, "终扫结束后故事复位");
   assert.equal(squad.userData.members[0].userData.arrowHits, 0, "中箭计数应清零（升空能力恢复）");
-  // 模拟机队侧缓动：中箭清零后升空能力逐渐恢复（updateAircraftHover 每帧上修 woundHeightMul）
+  // 模拟机队侧缓动：中箭清零后吸取力逐渐恢复；绳索松脱
   squad.userData.members[0].userData.woundHeightMul = 1;
+  squad.userData.squadSuction01 = 1;
+  phalanx.userData.ropePull01 = 0;
   // 新一轮：方阵重新整队 + 再次扫描 → 鲸再升
   setNear();
   for (let i = 0; i < 60; i++) handle.update(0.5, 0);
   assert.equal(handle.getStoryPhase(), 1, "新一轮扫描应再次进入故事线");
   assert(plateY() > R + 18, "新一轮扫描应再次升鲸");
-  ok("飞艇掠过即升鲸 · 鲸起锁定 · 箭伤降鲸 · 终扫收束 · 撤阵复位 · 新一轮循环");
+  ok("飞艇掠过即升鲸 · 鲸起锁定 · 拔河拉回 · 终扫收束 · 撤阵复位 · 新一轮循环");
 }
 
 console.log(`\n结果：${pass} 项断言 · 6 组验收通过`);

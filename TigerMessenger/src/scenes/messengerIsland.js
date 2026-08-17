@@ -775,7 +775,9 @@ export const messengerIslandScene = {
       scene,
       isWhaleRisen: () => {
         const lev = scene.getObjectByName("leviathanGroup");
-        return !!(lev && lev.position.length() > R + 8);
+        // R+3 低阈值：拔河拉锯中鲸被拽到半空仍算「鲸起」，箭雨不停、
+        // 绳索不松（R+8 会在拉锯中段误触发，导致战斗死锁在半空）
+        return !!(lev && lev.position.length() > R + 3);
       },
       getSquad: () => aircraftSquad,
       // 白天源源不断的电车运兵：电车掠过苔庭（航线最近 ~27 单位）时士兵下车入阵

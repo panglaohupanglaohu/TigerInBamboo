@@ -1,13 +1,19 @@
 // =====================================================================
 //  西芳寺罗马方阵：鼓声平息 + 苔庭鲸升空后，战船一艘艘运兵上岸，
 //  长矛围边、短剑盾第二层、核心英格兰长弓，对莫比斯 aircraft 攒箭。
-//  单机中箭 50 支后高度降到原来的一半。
+//  鲸起即告警 → 全营整队：长弓手在北翼排成两列，矛/盾结成护壁；
+//  aircraft 悬停盘顶吸食，羽箭逐箭削弱其吸取力；绳索小队抛绳挂上
+//  鲸身两侧，拔河式把苔庭鲸拉回地面（低级文明 vs 高级文明的拉锯）。
 // =====================================================================
 import * as THREE from "three";
 import { PLANET_RADIUS } from "./planet.js";
 import { SAIHOJI_HUB } from "./saihoji.js";
 import { latLonToDir, quatYToDir } from "./sphereMath.js";
-import { isInfiltrationMissionActive } from "../audio/sfx.js";
+import {
+  isInfiltrationMissionActive,
+  cuePhalanxAlarmOnce,
+  rearmPhalanxAlarm,
+} from "../audio/sfx.js";
 import {
   createFisherBoat,
   createHarborPatrolSoldier,
@@ -21,7 +27,8 @@ const SHIP_COUNT = 2;
 const SHIP_GAP = 16;
 const GRID = 5;
 const CELL = 0.72;
-const ARROW_KILL = 50;
+// 羽箭池上限：机队中箭数只做计数，吸取力由 moebiusAircraft 逐箭渐进计算
+const ARROW_POOL = 150;
 
 const _up = new THREE.Vector3();
 const _fwd = new THREE.Vector3();
@@ -67,30 +74,47 @@ const _axisX = new THREE.Vector3(1, 0, 0);
 function makeArrow() {
   const g = new THREE.Group();
   g.name = "phalanx-arrow";
-  // 与长弓上搭箭同尺度（fig×2 后约 0.68），撒放时才不会突然变短
+  // 与长弓上搭箭同尺度（fig×2 后约 0.68），撒放时才不会突然变短；
+  // 放大 1.5 倍 + 加色拖尾：长距离攒射在空中清晰可见
   const shaft = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.014, 0.014, 0.64, 4),
-    new THREE.MeshBasicMaterial({ color: 0x7a5a32 })
+    new THREE.CylinderGeometry(0.02, 0.02, 0.92, 5),
+    new THREE.MeshBasicMaterial({ color: 0x9a7a4a })
   );
   shaft.rotation.z = Math.PI / 2;
   g.add(shaft);
   const head = new THREE.Mesh(
-    new THREE.ConeGeometry(0.03, 0.1, 4),
-    new THREE.MeshBasicMaterial({ color: 0x8a9498 })
+    new THREE.ConeGeometry(0.045, 0.14, 5),
+    new THREE.MeshBasicMaterial({ color: 0xcfd6da })
   );
   head.rotation.z = -Math.PI / 2;
-  head.position.x = 0.36;
+  head.position.x = 0.52;
   g.add(head);
   const fletch = new THREE.Mesh(
-    new THREE.BoxGeometry(0.09, 0.07, 0.012),
-    new THREE.MeshBasicMaterial({ color: 0xc43c32 })
+    new THREE.BoxGeometry(0.14, 0.11, 0.016),
+    new THREE.MeshBasicMaterial({ color: 0xe04c3e })
   );
-  fletch.position.x = -0.26;
+  fletch.position.x = -0.36;
   g.add(fletch);
+  // 亮色拖尾（加色混合）：飞行轨迹如流星
+  const trail = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.055, 0.055),
+    new THREE.MeshBasicMaterial({
+      color: 0xaee8ff,
+      transparent: true,
+      opacity: 0.55,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+  );
+  trail.name = "arrow-trail";
+  trail.userData.isTrail = true;
+  trail.position.x = -0.72;
+  g.add(trail);
   g.userData.fly = 0;
   g.userData.from = new THREE.Vector3();
   g.userData.to = new THREE.Vector3();
   g.userData.arcUp = new THREE.Vector3(0, 1, 0);
+  g.userData.miss = 0;
   g.visible = false;
   return g;
 }
@@ -121,14 +145,49 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
   let shipIdx = 0;
   let nextShipIn = 0;
   let returnRequested = false;
+  let wasWhaleUp = false;
   const waves = [];
   const arrows = [];
-  for (let i = 0; i < 72; i++) {
+  for (let i = 0; i < ARROW_POOL; i++) {
     const a = makeArrow();
     root.add(a);
     arrows.push(a);
   }
   let arrowI = 0;
+  // 命中火花/受创烟：池化小网格（加色火花 + 半透明烟）
+  const sparkPool = [];
+  const smokePool = [];
+  for (let i = 0; i < 16; i++) {
+    const sp = new THREE.Mesh(
+      new THREE.SphereGeometry(0.5, 6, 4),
+      new THREE.MeshBasicMaterial({
+        color: 0xffe8a0,
+        transparent: true,
+        opacity: 0.95,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
+    );
+    sp.visible = false;
+    root.add(sp);
+    sparkPool.push(sp);
+  }
+  for (let i = 0; i < 14; i++) {
+    const sm = new THREE.Mesh(
+      new THREE.SphereGeometry(0.5, 6, 4),
+      new THREE.MeshBasicMaterial({
+        color: 0x2a2a30,
+        transparent: true,
+        opacity: 0.4,
+        depthWrite: false,
+      })
+    );
+    sm.visible = false;
+    root.add(sm);
+    smokePool.push(sm);
+  }
+  let sparkI = 0;
+  let smokeI = 0;
 
   const landDir = hubDir(new THREE.Vector3());
   const east = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), landDir).normalize();
@@ -244,10 +303,12 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
   }
 
   function fireArrow(from, toAc) {
+    root.userData._fireCalls = (root.userData._fireCalls || 0) + 1;
     const a = arrows[arrowI % arrows.length];
     arrowI++;
     if (a.parent !== root) root.attach(a);
     a.userData.stuck = false;
+    a.userData.miss = 0;
     a.visible = true;
     a.userData.fly = 0;
     a.userData.target = toAc;
@@ -262,10 +323,14 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     a.position.copy(_tmp);
     from.getWorldQuaternion(_q);
     a.userData.arcUp.set(0, 1, 0).applyQuaternion(_q).normalize();
+    // 目标点：成员当前位置 + 固定散布（世界偏移，随成员移动）
     toAc.getWorldPosition(_tmpB);
-    _tmpB.x += (Math.random() - 0.5) * 1.6;
-    _tmpB.y += (Math.random() - 0.5) * 0.9;
-    _tmpB.z += (Math.random() - 0.5) * 1.6;
+    a.userData.aimOff = new THREE.Vector3(
+      (Math.random() - 0.5) * 6.8,
+      (Math.random() - 0.5) * 3.4,
+      (Math.random() - 0.5) * 6.8
+    );
+    _tmpB.add(a.userData.aimOff);
     a.userData.from.copy(a.position);
     a.userData.to.copy(_tmpB);
     _tmpB.sub(a.position);
@@ -274,25 +339,115 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     }
   }
 
+  const _sparkTmp = new THREE.Vector3();
+  const _smokeUp = new THREE.Vector3(0, 1, 0);
+
+  function spawnSpark(worldPos) {
+    const sp = sparkPool[sparkI % sparkPool.length];
+    sparkI++;
+    sp.visible = true;
+    sp.position.copy(worldPos);
+    sp.scale.setScalar(0.7 + Math.random() * 0.9);
+    sp.userData.t = 0;
+  }
+
+  function spawnSmoke(worldPos) {
+    const sm = smokePool[smokeI % smokePool.length];
+    smokeI++;
+    sm.visible = true;
+    sm.position.copy(worldPos);
+    sm.scale.setScalar(0.8 + Math.random() * 1.1);
+    sm.userData.t = 0;
+    sm.userData.up = worldPos.clone().normalize();
+  }
+
   function updateArrows(dt) {
     for (const a of arrows) {
-      if (!a.visible || a.userData.stuck) continue;
-      a.userData.fly += dt / 0.55;
-      const u = Math.min(1, a.userData.fly);
-      a.position.lerpVectors(a.userData.from, a.userData.to, u);
-      a.position.addScaledVector(a.userData.arcUp, Math.sin(u * Math.PI) * 1.8);
-      if (u < 1) continue;
-      const ac = a.userData.target;
-      if (ac?.parent) {
-        ac.attach(a);
-        a.userData.stuck = true;
-        ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
-        if (ac.userData.arrowHits >= ARROW_KILL) {
-          ac.userData.woundHeightMul = 0.5;
+      if (!a.visible) continue;
+      const u = a.userData;
+      if (u.stuck) {
+        // 扎在机身上的箭：微颤（受创感）
+        if (u.wobble > 0) {
+          u.wobble -= dt;
+          a.position.x += Math.sin(u.wobble * 31) * 0.01 * u.wobble;
         }
-      } else {
-        a.visible = false;
+        continue;
       }
+      if (u.miss > 0) {
+        // 脱靶：箭沿径向坠落（球面世界下坠方向 = 指向球心）
+        u.miss += dt / 0.75;
+        a.position.addScaledVector(
+          _tmp.copy(a.position).normalize(),
+          -dt * 5.5
+        );
+        a.rotation.x += dt * 4;
+        const m = Math.min(1, u.miss);
+        a.scale.setScalar(1 - m * 0.5);
+        if (m >= 1) {
+          a.visible = false;
+          a.scale.setScalar(1);
+        }
+        continue;
+      }
+      // 追踪飞行：目标点每帧跟随成员（带滞后），箭弧优美追射
+      const ac = u.target;
+      let tgt = null;
+      if (ac?.parent) {
+        ac.getWorldPosition(_sparkTmp);
+        if (u.aimOff) _sparkTmp.add(u.aimOff);
+        u.to.lerp(_sparkTmp, Math.min(1, dt * 2.1));
+        tgt = _sparkTmp;
+      } else {
+        u.miss = 0.01; // 目标没了：直接坠落
+        continue;
+      }
+      u.fly += dt / 1.15;
+      const p = Math.min(1, u.fly);
+      a.position.lerpVectors(u.from, u.to, p);
+      a.position.addScaledVector(u.arcUp, Math.sin(p * Math.PI) * 3.2);
+      // 箭身顺飞行方向
+      _tmp.copy(u.to).sub(u.from).normalize();
+      a.quaternion.setFromUnitVectors(_axisX, _tmp);
+      // 拖尾随速度闪烁
+      const trail = a.children.find((c) => c.userData?.isTrail) || a.getObjectByName?.("arrow-trail");
+      if (trail?.material) trail.material.opacity = 0.3 + 0.35 * Math.sin(p * Math.PI);
+      if (p < 1) continue;
+      // 落地判定：命中判定圈 = 成员半径（散布+滞后决定脱靶率）
+      const tip = a.position.clone();
+      const acPos = _sparkTmp.clone();
+      if (ac?.parent && tip.distanceTo(acPos) < 5.2) {
+        // 命中：箭头扎进机体（随机姿态），计数 + 火花 + 烟 + 冲击
+        ac.attach(a);
+        u.stuck = true;
+        u.wobble = 1.6 + Math.random() * 0.8;
+        a.scale.setScalar(0.9 + Math.random() * 0.25);
+        ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
+        spawnSpark(tip);
+        if (Math.random() < 0.5) spawnSmoke(tip);
+      } else {
+        u.miss = 0.01; // 脱靶：坠落
+      }
+    }
+    // 火花/烟 寿命
+    for (const sp of sparkPool) {
+      if (!sp.visible) continue;
+      sp.userData.t += dt;
+      const e = Math.min(1, sp.userData.t / 0.28);
+      sp.scale.multiplyScalar(1 + dt * 6);
+      sp.material.opacity = 0.95 * (1 - e);
+      if (e >= 1) sp.visible = false;
+    }
+    for (const sm of smokePool) {
+      if (!sm.visible) continue;
+      sm.userData.t += dt;
+      const e = Math.min(1, sm.userData.t / 1.4);
+      sm.position.addScaledVector(
+        sm.userData.up || _smokeUp,
+        dt * 1.6
+      );
+      sm.scale.multiplyScalar(1 + dt * 0.9);
+      sm.material.opacity = 0.4 * (1 - e);
+      if (e >= 1) sm.visible = false;
     }
   }
 
@@ -307,6 +462,8 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
 
   /** 硬重置（调试/热重载）：士兵撤阵清场，回到 atCastle 等下一轮鼓息运兵 */
   function resetBattle() {
+    detachRopes();
+    resetFightFormation();
     for (const w of waves) {
       root.remove(w.boat);
       root.remove(w.cohort);
@@ -324,6 +481,8 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       a.visible = false;
       a.userData.stuck = false;
     }
+    for (const sp of sparkPool) sp.visible = false;
+    for (const sm of smokePool) sm.visible = false;
   }
 
   // ---------- 白天源源不断的运兵（电车下车 + 战船补给） ----------
@@ -382,7 +541,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     const fwdN = _fwd.clone();
     const soldiers = [];
     for (let i = 0; i < GARRISON_SQUAD; i++) {
-      const s = spawnSoldier(i < 2 ? "longbow" : i < 4 ? "gladius" : "spear");
+      const s = spawnSoldier(i < 3 ? "longbow" : i < 4 ? "gladius" : "spear");
       const offR = (i - 2) * 0.8;
       const offF = ((i % 2) - 0.5) * 0.8;
       // 下车点贴地（电车在轨上，士兵落到地面后步行）
@@ -443,11 +602,13 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
   /**
    * 落位士兵的两态行为：
    *  - 鲸未升起：在苔庭内分散巡查（随机漫步点，人人相位不同）；
-   *  - 鲸升起：返回各自阵位（槽位/主阵）攒箭。
+   *  - 鲸升起：告警整队——长弓手奔向北翼两列、矛/盾结成护壁（整理队伍）。
    * @param {THREE.Object3D} s 士兵（须已存 formationPos = 阵位）
    */
   function patrolSoldier(s, dt, whaleUp) {
     if (!s.userData.formationPos) return;
+    // 战斗期（fightFormed 在拔河全程锁定，鲸被拽到半空也保持列阵）或鲸起
+    const inFight = whaleUp || fightFormed;
     const u = s.userData.patrol || (s.userData.patrol = {
       t: 0,
       wait: 4 + Math.random() * 5,
@@ -455,22 +616,29 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       to: null,
       returning: false,
     });
-    if (whaleUp) {
+    if (inFight) {
       if (!u.returning) {
         u.returning = true;
         u.t = 0;
         u.from = s.position.clone();
       }
-      u.t = Math.min(1, u.t + dt / 14);
+      // 目标：战斗站位（长弓两列 / 矛盾护壁）；未分配则先分配
+      if (!s.userData.fightPos) assignFightStation(s);
+      const goal = s.userData.fightPos || s.userData.formationPos;
+      const dist = u.from.distanceTo(goal);
+      u.t = Math.min(1, u.t + dt / Math.max(5, dist * 0.32)); // 告警奔跑列阵
       const e = u.t * u.t * (3 - 2 * u.t);
       slerpDir(
         u.from.clone().normalize(),
-        s.userData.formationPos.clone().normalize(),
+        goal.clone().normalize(),
         e,
         _tmp
       );
       _tmp.multiplyScalar(PLANET_RADIUS + 0.08);
       s.position.copy(_tmp);
+      // 面向苔庭中心（机队悬停方向）
+      surfaceBasis(_tmp.normalize(), landDir, _up, _fwd, _right);
+      s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
       return;
     }
     u.returning = false;
@@ -489,14 +657,73 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
   }
 
+  // ---------- 战斗列阵：告警后长弓北翼两列、矛/盾护壁（整理队伍） ----------
+  // 鲸身总长 72（半长 36）、半宽 17.6：战斗列阵必须排在鲸身侧缘之外，
+  // 北翼（ringNorth）距中心 19/22 两列长弓、27/30 两行护壁，全部面向盘顶机队。
+  const FIGHT_LINE_Y = [19, 22]; // 长弓两列（北距）
+  const FIGHT_LINE_X = 24; // 列半宽
+  const FIGHT_LINE_SPACE = 2.4;
+  const FIGHT_SHIELD_Y = [27, 30]; // 矛/盾两行
+  const FIGHT_SHIELD_X = 30;
+  const FIGHT_SHIELD_SPACE = 3.0;
+  let fightSlotLongbow = 0;
+  let fightSlotShield = 0;
+  let fightFormed = false;
+
+  function fightStationDir(slotIdx, role, out) {
+    let y, x;
+    if (role === "longbow") {
+      const perCol = Math.floor((FIGHT_LINE_X * 2) / FIGHT_LINE_SPACE) + 1; // 21
+      const col = Math.min(FIGHT_LINE_Y.length - 1, (slotIdx / perCol) | 0);
+      const i = slotIdx % perCol;
+      y = FIGHT_LINE_Y[col];
+      x = -FIGHT_LINE_X + i * FIGHT_LINE_SPACE;
+    } else {
+      const perRow = Math.floor((FIGHT_SHIELD_X * 2) / FIGHT_SHIELD_SPACE) + 1; // 21
+      const row = Math.min(FIGHT_SHIELD_Y.length - 1, (slotIdx / perRow) | 0);
+      const i = slotIdx % perRow;
+      y = FIGHT_SHIELD_Y[row];
+      x = -FIGHT_SHIELD_X + i * FIGHT_SHIELD_SPACE;
+    }
+    const r = Math.sqrt(x * x + y * y);
+    const d = r / PLANET_RADIUS;
+    return out
+      .copy(landDir)
+      .multiplyScalar(Math.cos(d))
+      .addScaledVector(east, (x / r) * Math.sin(d))
+      .addScaledVector(ringNorth, (y / r) * Math.sin(d))
+      .normalize();
+  }
+
+  function assignFightStation(s) {
+    const role = s.userData.phalanxRole;
+    const isBow = role === "longbow";
+    const dir = fightStationDir(
+      isBow ? fightSlotLongbow++ : fightSlotShield++,
+      isBow ? "longbow" : "shield",
+      new THREE.Vector3()
+    );
+    s.userData.fightPos = dir
+      .clone()
+      .multiplyScalar(PLANET_RADIUS + 0.08);
+    s.userData.fightSlot = isBow ? fightSlotLongbow : fightSlotShield;
+  }
+
+  function resetFightFormation() {
+    fightFormed = false;
+    fightSlotLongbow = 0;
+    fightSlotShield = 0;
+  }
+
   function updateGarrison(dt, whaleUp) {
     for (const g of garrison) {
       const arrived = g.u >= 1;
       if (!arrived) g.u = Math.min(1, g.u + dt / 20);
       const e = g.u * g.u * (3 - 2 * g.u);
       for (const s of g.soldiers) {
+        if (s.userData.ropeTeam) continue;
         if (arrived) {
-          // 落位：鲸未升起 → 苔庭内分散巡查；鲸起 → 归位攒箭
+          // 落位：鲸未升起 → 苔庭内分散巡查；鲸起 → 列阵/护壁
           patrolSoldier(s, dt, whaleUp);
           continue;
         }
@@ -513,6 +740,189 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
         s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
       }
     }
+  }
+
+  // ---------- 绳索小队：告警后抛绳挂鲸身、拔河式拉回地面 ----------
+  // 4 队（东/西/北/南）× 3 人：锚点在地面、绳头挂在鲸身中腰侧缘
+  // （绳路避开鲸体，整段可见）；拉力汇入 root.userData.ropePull01 供苔庭鲸
+  // 与机队吸取力做拉锯。
+  const ROPE_TEAMS = 4;
+  const ROPE_AXES = [1, -1, 1, -1]; // 东/西/北/南 符号
+  const ROPE_HALF = [36, 36, 17.6, 17.6]; // 鲸身中腰半长/半宽（与 leviathanIsland 锁死几何一致）
+  const ROPE_ANCHOR_DIST = [41, 41, 21.5, 21.5]; // 地面锚点距
+  const ropeTeams = [];
+  let ropesDispatched = false;
+  const ropeMat = new THREE.MeshBasicMaterial({
+    color: 0xc8a06a,
+    side: THREE.DoubleSide,
+  });
+  const _ropeUp = new THREE.Vector3(0, 1, 0);
+  const _ropeMid = new THREE.Vector3();
+  const _ropeDir = new THREE.Vector3();
+  const _ropeTgt = new THREE.Vector3();
+  const _ropeTmpA = new THREE.Vector3();
+  const _ropeTmpB = new THREE.Vector3();
+  const _ropeTmpC = new THREE.Vector3();
+
+  function ropeAxisDir(i, out) {
+    if (i < 2) return out.copy(east).multiplyScalar(ROPE_AXES[i]);
+    return out.copy(ringNorth).multiplyScalar(ROPE_AXES[i]);
+  }
+
+  function ensureRope(team) {
+    if (team.rope) return team.rope;
+    const rope = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.05, 0.05, 1, 5, 1, true),
+      ropeMat
+    );
+    rope.name = "saihoji-rope";
+    rope.visible = false;
+    root.add(rope);
+    team.rope = rope;
+    return rope;
+  }
+
+  /** 绳头目标：鲸身中腰侧缘（随鲸升降） */
+  function ropeTarget(i, out) {
+    const lev = scene.getObjectByName("leviathanGroup");
+    const anchorR = lev ? lev.position.length() : PLANET_RADIUS + 24;
+    const alt = anchorR - 4.4; // 鲸体中腰高度
+    ropeAxisDir(i, _ropeTmpA);
+    return out
+      .copy(landDir)
+      .multiplyScalar(alt)
+      .addScaledVector(_ropeTmpA, ROPE_HALF[i] + 1.5);
+  }
+
+  function setRopePose(team, vis) {
+    const rope = ensureRope(team);
+    const i = team.teamIdx;
+    ropeTarget(i, _ropeTgt);
+    rope.visible = vis;
+    _ropeMid.copy(team.anchor).add(_ropeTgt).multiplyScalar(0.5);
+    rope.position.copy(_ropeMid);
+    _ropeDir.copy(_ropeTgt).sub(team.anchor);
+    const len = Math.max(0.05, _ropeDir.length());
+    _ropeDir.normalize();
+    rope.quaternion.setFromUnitVectors(_ropeUp, _ropeDir);
+    rope.scale.set(1, len, 1);
+  }
+
+  function detachRopes() {
+    for (const team of ropeTeams) {
+      if (team.rope?.parent) root.remove(team.rope);
+      for (const s of team.soldiers) {
+        s.userData.ropeTeam = undefined;
+        s.userData.ropeLean = 0;
+      }
+    }
+    ropeTeams.length = 0;
+    ropesDispatched = false;
+    root.userData.ropePull01 = 0;
+  }
+
+  function dispatchRopeTeams(allSoldiers) {
+    if (ropesDispatched) return;
+    ropesDispatched = true;
+    // 优先矛兵（不射箭），其次剑盾，最后长弓
+    const pool = allSoldiers.filter((s) => !s.userData.ropeTeam);
+    const pick = (role) => {
+      const i = pool.findIndex(
+        (s) => s.userData.phalanxRole === role && !s.userData.ropeTeam
+      );
+      if (i < 0) return null;
+      const s = pool[i];
+      s.userData.ropeTeam = true;
+      pool.splice(i, 1);
+      return s;
+    };
+    for (let i = 0; i < ROPE_TEAMS; i++) {
+      const aDir = ropeAxisDir(i, new THREE.Vector3());
+      const d = ROPE_ANCHOR_DIST[i] / PLANET_RADIUS;
+      const anchor = landDir
+        .clone()
+        .multiplyScalar(Math.cos(d))
+        .addScaledVector(aDir, Math.sin(d))
+        .normalize()
+        .multiplyScalar(PLANET_RADIUS + 0.3);
+      const team = {
+        teamIdx: i,
+        soldiers: [],
+        anchor,
+        state: "walk",
+        t: 0,
+        rope: null,
+        pullT: 0,
+      };
+      for (let k = 0; k < 3; k++) {
+        const s = pick("spear") || pick("gladius") || pick("longbow");
+        if (!s) break;
+        team.soldiers.push(s);
+        s.userData.ropeOff = new THREE.Vector3((k - 1) * 1.1, 0, 0);
+        s.userData.ropeStart = s.position.clone();
+      }
+      if (team.soldiers.length) ropeTeams.push(team);
+    }
+  }
+
+  function updateRopeTeams(dt, t) {
+    let pullSum = 0;
+    for (const team of ropeTeams) {
+      const lead = team.soldiers[0];
+      if (!lead) continue;
+      if (team.state === "walk") {
+        // 全队跑向锚点（保持小横队）
+        const dist = lead.position.distanceTo(team.anchor);
+        team.t += dt / Math.max(3, dist * 0.3);
+        const e = Math.min(1, team.t);
+        const ee = e * e * (3 - 2 * e);
+        for (const s of team.soldiers) {
+          const off = s.userData.ropeOff;
+          slerpDir(
+            s.userData.ropeStart.clone().normalize(),
+            team.anchor.clone().normalize(),
+            ee,
+            _tmp
+          );
+          _tmp.multiplyScalar(PLANET_RADIUS + 0.08);
+          s.position.copy(_tmp);
+          surfaceBasis(_tmp.normalize(), team.anchor.clone().normalize(), _up, _fwd, _right);
+          s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
+          // 队内横排偏移（绕锚点切向）
+          if (off) {
+            _ropeTmpB.copy(_tmp).normalize();
+            _ropeTmpC.crossVectors(_ropeTmpB, landDir).normalize();
+            s.position.addScaledVector(_ropeTmpC, off.x);
+          }
+        }
+        if (e >= 1) {
+          team.state = "throw";
+          team.t = 0;
+        }
+      } else if (team.state === "throw") {
+        // 抛绳：0.9s 内绳从锚点伸到鲸身
+        team.t += dt / 0.9;
+        const e = Math.min(1, team.t);
+        setRopePose(team, e > 0.15);
+        if (e >= 1) {
+          team.state = "pull";
+          team.t = 0;
+        }
+      } else {
+        // 拉拽：拉力爬升 + 士兵后仰（拔河）
+        team.pullT = Math.min(1, team.pullT + dt / 3.5);
+        setRopePose(team, true);
+        const lean = 0.5 + Math.sin(t * 2.3 + team.teamIdx * 1.7) * 0.1;
+        for (const s of team.soldiers) {
+          s.userData.ropeLean = lean;
+          // 面向鲸身
+          surfaceBasis(s.position.clone().normalize(), landDir, _up, _fwd, _right);
+          s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
+        }
+        pullSum += team.pullT;
+      }
+    }
+    root.userData.ropePull01 = ropeTeams.length ? pullSum / ROPE_TEAMS : 0;
   }
 
   function update(dt, t) {
@@ -652,12 +1062,47 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     // 故事波次（主阵/补给）落位后同样两态：鲸未升起 → 苔庭内分散巡查
     for (const w of waves) {
       if (w.state !== "ashore" && w.state !== "fight") continue;
-      for (const s of w.soldiers) patrolSoldier(s, dt, whaleUp);
+      for (const s of w.soldiers) {
+        if (s.userData.ropeTeam) continue;
+        patrolSoldier(s, dt, whaleUp);
+      }
     }
+
+    // ---------- 告警 + 整队：鲸起瞬间响号角，全营奔向北翼列阵 ----------
+    if (whaleUp && !wasWhaleUp) {
+      cuePhalanxAlarmOnce();
+    }
+    if (whaleUp && !fightFormed) {
+      fightFormed = true;
+      fightSlotLongbow = 0;
+      fightSlotShield = 0;
+    }
+    // 注：fightFormed/绳索小队在战斗期内保持（鲸被拽到半空不算落回，
+    // 避免拔河拉锯时反复解散重排）；鲸落回地面后由 whaleReturned/reset 解散。
+    wasWhaleUp = whaleUp;
 
     const squad = typeof getSquad === "function" ? getSquad() : null;
     const members = squad?.userData?.members || [];
     const live = members.filter((m) => m.parent);
+
+    // ---------- 绳索小队：抛绳挂鲸、拔河拉回（告警后稍候出发） ----------
+    if (whaleUp && !ropesDispatched && fightFormed) {
+      const allS = [
+        ...waves
+          .filter((w) => w.state === "fight" || w.state === "ashore")
+          .flatMap((w) => w.soldiers),
+        ...garrison.flatMap((g) => g.soldiers),
+      ];
+      if (allS.length >= 4) dispatchRopeTeams(allS);
+    }
+    updateRopeTeams(dt, t);
+    // 绳索士兵的后仰姿态（拔河）
+    for (const team of ropeTeams) {
+      for (const s of team.soldiers) {
+        if (!s.userData.ropeLean) continue;
+        s.rotateX(-s.userData.ropeLean);
+      }
+    }
 
     const shooters = [
       ...waves
@@ -665,26 +1110,65 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
         .flatMap((w) => w.soldiers),
       ...garrison.flatMap((g) => g.soldiers),
     ];
-    if (whaleUp && shooters.length) {
-      const aim = live[0];
-      if (aim) {
-        aim.getWorldPosition(_tmpB);
-        for (const s of shooters) {
-          s.getWorldPosition(_tmp);
-          _fwd.copy(_tmpB).sub(_tmp);
-          surfaceBasis(_tmp, _fwd, _up, _fwd, _right);
-          s.quaternion.slerp(_q.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right)), 0.08);
-          if (s.userData.phalanxRole !== "longbow") continue;
-          const released = updateLongbowShot(s, dt);
-          if (!released || !live.length) continue;
-          const tgt =
-            live.find((m) => (m.userData.arrowHits || 0) < ARROW_KILL) ||
-            live[((s.userData.garrisonSeed ?? 0) + ((s.userData.gx ?? 0) + (s.userData.gz ?? 0))) % live.length];
-          fireArrow(s, tgt);
+
+    // ---------- aircraft 反击脉冲：光束闪爆推倒光束落点附近的士兵 ----------
+    const gp = squad?.userData?.groundPulse;
+    if (gp && whaleUp) {
+      for (const s of shooters) {
+        if (s.userData.ropeTeam) continue;
+        s.getWorldPosition(_tmp);
+        if (_tmp.distanceTo(gp.center) < gp.radius) {
+          s.userData._stunT = 1.5;
+          s.userData.patrol = null; // 打乱阵位，重新整队
+          _tmpB.copy(_tmp).sub(gp.center).normalize().multiplyScalar(3.4);
+          s.position.add(_tmpB);
+          if (s.userData.bowCycle) s.userData.bowCycle.phase = "reach";
         }
       }
-      updateArrows(dt);
     }
+
+    // ---------- 长弓手攒射：整理队伍后按列齐射，箭矢追射盘顶机队 ----------
+    // 战斗期用 fightFormed 锁定（鲸被拽到半空也不停箭），直到鲸落回地面
+    if ((whaleUp || fightFormed) && shooters.length && live.length) {
+      for (const s of shooters) {
+        if (s.userData.ropeTeam) continue;
+        // 冲击眩晕：跳过射击
+        if (s.userData._stunT > 0) {
+          s.userData._stunT -= dt;
+          continue;
+        }
+        s.getWorldPosition(_tmp);
+        // 面向机队（盘顶悬停位）
+        _fwd.copy(squad.userData?._patrolCenter || _tmp).sub(_tmp);
+        if (_fwd.lengthSq() > 1e-4) {
+          surfaceBasis(_tmp, _fwd, _up, _fwd, _right);
+          s.quaternion.slerp(
+            _q.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right)),
+            0.08
+          );
+        }
+        if (s.userData.phalanxRole !== "longbow") continue;
+        // 撒放即射：短冷却每帧递减（脉冲同步后错峰），只挡下一次撒放
+        const cd0 = s.userData._shotCd || 0;
+        if (cd0 > 0) s.userData._shotCd = cd0 - dt;
+        const released = updateLongbowShot(s, dt);
+        root.userData._relCalls = (root.userData._relCalls || 0) + 1;
+        if (released) {
+          root.userData._relTrue = (root.userData._relTrue || 0) + 1;
+          s.userData._relCount = (s.userData._relCount || 0) + 1;
+        }
+        if (!released) continue;
+        if ((s.userData._shotCd || 0) > 0) continue;
+        s.userData._shotCd = 0.8 + Math.random() * 0.8;
+        // 目标轮转：五架轮流挨箭（全编队可见中箭）
+        const tgt = live[arrowI % live.length];
+        fireArrow(s, tgt);
+      }
+    }
+    // 箭矢运动（飞行/命中/脱靶坠落/火花烟）始终推进，鲸落也不冻结
+    updateArrows(dt);
+    // 调试/验收：累计发射箭数
+    root.userData.arrowsFired = arrowI;
   }
 
   // 苔庭鲸故事线通过 root.userData 与此方阵松耦合：
@@ -693,6 +1177,9 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
   //  - 鲸读 root.userData.assembled（是否整队）作升空循环条件；
   //  - 鲸恢复原位后调 root.userData.whaleReturned()，士兵撤阵登船返回高山圣城。
   root.userData.whaleReturned = () => {
+    detachRopes();
+    resetFightFormation();
+    rearmPhalanxAlarm();
     returnRequested = true;
   };
   root.userData.reset = () => {

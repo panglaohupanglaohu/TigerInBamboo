@@ -402,6 +402,38 @@ export function sfxWin() {
   });
 }
 
+// =====================================================================
+//  苔庭鲸告警号角：低级文明发现高级文明飞行器 → 双音警报 + 低频战鼓心
+//  每轮「鲸起 → 绳索拉回」只响一次；鲸落回地面后 rearm 允许下一轮再响。
+// =====================================================================
+let phalanxAlarmDone = false;
+
+/**
+ * 告警号角（每轮一次）：双音交替换频 + 低沉脉冲，像烽火台上的示警角。
+ * @returns {boolean} 是否真的发声（静音/已响过/无音频上下文时 false）
+ */
+export function cuePhalanxAlarmOnce() {
+  if (muted || phalanxAlarmDone) return false;
+  phalanxAlarmDone = true;
+  const ctx = ensureAudio();
+  if (!ctx || ctx.state !== "running") return true; // 上下文未就绪：静默放行，下轮再响
+  // 双音交替 5 组（战争号角感）
+  const hi = [622, 466, 622, 466, 622];
+  hi.forEach((f, i) => {
+    setTimeout(() => playTone({ freq: f, dur: 0.21, type: "square", gain: 0.05, slide: -14 }), 40 + i * 240);
+  });
+  // 低音战鼓心：四下沉闷脉冲垫底
+  for (let i = 0; i < 4; i++) {
+    setTimeout(() => playTone({ freq: 82, dur: 0.3, type: "sine", gain: 0.14, slide: -24 }), i * 300);
+  }
+  return true;
+}
+
+/** 鲸落回地面（新一轮循环前）重新武装告警，下轮再响 */
+export function rearmPhalanxAlarm() {
+  phalanxAlarmDone = false;
+}
+
 // 雷声闪电：外部采样 music/纯音乐-雷声闪电.mp3（不再用合成噪声）
 const THUNDER_SFX_URL = new URL(
   "../../music/纯音乐-雷声闪电.mp3",
