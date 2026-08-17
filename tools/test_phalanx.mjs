@@ -99,12 +99,12 @@ console.log("[1] 白天电车运兵：电车掠近 → 下车 → 步行入阵 �
     getSquad: () => squad,
     getTram: () => ({ redTram: tramCar, blueTram: null }),
   });
-  // 鼓息（stub 恒 false）：5s 后第一次电车检查 → 下车；30s 后驻军成流
-  for (let i = 0; i < 300; i++) ph.update(0.1, i * 0.1);
+  // 鼓息（stub 恒 false）：5s 后第一次电车检查 → 下车；60s 后两队驻军到位
+  for (let i = 0; i < 600; i++) ph.update(0.1, i * 0.1);
   assert(ph.root.userData.assembled === true, "电车驻军下车后应视为就位");
   const soldiers = ph.root.children.filter((c) => c.userData?.phalanxRole);
   assert(soldiers.length >= 10, `驻军 ${soldiers.length} 不足（源源不断 ≥10）`);
-  // 最早下车的小队应已步行入阵（距下岸点 ≤12 单位）；后队仍在行军（源源不断）
+  // 先头小队应已走到自己的环绕槽位（内圈半径 ~20）
   const landDir = hubDir.clone().addScaledVector(hubEast, 0.11).normalize();
   const landingWorld = landDir.clone().multiplyScalar(R);
   const oldest = soldiers.slice(0, 5);
@@ -112,8 +112,17 @@ console.log("[1] 白天电车运兵：电车掠近 → 下车 → 步行入阵 �
   for (const s of oldest) {
     oldestMax = Math.max(oldestMax, s.position.distanceTo(landingWorld));
   }
-  assert(oldestMax < 12, `先头小队应已入阵（最远 ${oldestMax.toFixed(1)}）`);
-  ok(`电车驻军 ${soldiers.length} 名 · 先头入阵最远 ${oldestMax.toFixed(1)} 单位`);
+  assert(oldestMax > 17 && oldestMax < 24, `先头小队应在环绕槽位（最远 ${oldestMax.toFixed(1)}）`);
+  // 排布不重复：两队的中心点应分处不同槽位（黄金角散列，间距 > 8）
+  const c0 = new THREE.Vector3();
+  const c1 = new THREE.Vector3();
+  for (const s of soldiers.slice(0, 5)) c0.add(s.position);
+  for (const s of soldiers.slice(5, 10)) c1.add(s.position);
+  c0.multiplyScalar(1 / 5);
+  c1.multiplyScalar(1 / 5);
+  const slotGap = c0.distanceTo(c1);
+  assert(slotGap > 8, `两队槽位应不重复（间距 ${slotGap.toFixed(1)}）`);
+  ok(`电车驻军 ${soldiers.length} 名 · 环绕槽位 ${oldestMax.toFixed(1)} · 队间间距 ${slotGap.toFixed(1)}`);
 }
 
 console.log("[2] 鼓声发兵 → 运河交汇 → 下岸整队 → 战船补给 → 鲸归撤兵");
