@@ -109,6 +109,15 @@ console.log("[1] 鲸体资产：拉伸锁死 · 切平 · 尾鳍 · 藤壶 · �
     [25, 14],
     "地壳板 25×14 锁死"
   );
+  const rump = group.getObjectByName("leviathan-rump");
+  assert(rump, "臀段必须存在，用来焊住身体和尾巴");
+  const tailRoot0 = group.getObjectByName("leviathan-tail-root");
+  assert(tailRoot0, "尾柄枢纽必须存在");
+  assert(
+    tailRoot0.position.x < rump.position.x &&
+      tailRoot0.position.x > rump.position.x - 8 * rump.scale.x,
+    "尾柄枢纽必须插在臀段内部，不能悬空"
+  );
   const flukes = group.getObjectByName("leviathan-flukes");
   assert(flukes, "尾鳍组必须存在");
   assert(Math.abs(flukes.rotation.x - 0.6) < 1e-9, "尾鳍 rotation.x=0.6（35° 微翘）锁死");
@@ -212,7 +221,7 @@ console.log("[3] 藏地/升空状态机：平时只见苔庭 · 扫描灯艇掠�
     assert(top < R - 0.5, `藏地时鲸身必须全部入地（背顶 ${(top - R).toFixed(1)}）`);
   }
   assert(flukes.rotation.x < 0.1, `藏地时尾鳍应收起（rotation.x=${flukes.rotation.x.toFixed(2)}）`);
-  assert(tailRoot.position.y < -1.5, `藏地时尾柄应贴地收起（y=${tailRoot.position.y.toFixed(2)}）`);
+  assert(tailRoot.rotation.z > 0.45, `藏地时尾柄应下折贴身（z=${tailRoot.rotation.z.toFixed(2)}）`);
   ok(`藏地：板高 +${(plateWorldY() - R).toFixed(2)} · 鲸身全入地 · 尾鳍收起 · 只见苔庭`);
   // 扫描灯艇接近 → 升空（编队组不动，读 userData._patrolCenter）
   const squad = new THREE.Group();
@@ -224,7 +233,7 @@ console.log("[3] 藏地/升空状态机：平时只见苔庭 · 扫描灯艇掠�
   assert(plateWorldY() > R + 18, `升空后板高 ${(plateWorldY() - R).toFixed(1)} 应≈+30`);
   assert(Math.abs(flukes.rotation.x - 0.6) < 0.03,
     `升空后尾鳍应扬起 35°（rotation.x=${flukes.rotation.x.toFixed(2)}）`);
-  assert(tailRoot.position.y > 3.3, `升空后尾柄应回位（y=${tailRoot.position.y.toFixed(2)}）`);
+  assert(tailRoot.rotation.z < 0, `升空后尾柄应回抬（z=${tailRoot.rotation.z.toFixed(2)}）`);
   ok(`升空：板高 +${(plateWorldY() - R).toFixed(1)} · 尾鳍 35° 扬起`);
   // 扫描灯艇远去 → 故事线锁定升空（鲸起后不随灯艇离场降藏；降藏由箭伤触发）
   squad.userData._patrolCenter = hubDir
@@ -363,18 +372,20 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   setFar();
   for (let i = 0; i < 30; i++) handle.update(0.5, 0);
   assert(plateY() > R + 18, "故事线锁定：灯艇离场不降藏");
-  // 只中箭、没绳索 → 鲸保持升空（拔河必须双方在场）
-  squad.userData.members[0].userData.arrowHits = 400;
-  squad.userData.squadSuction01 = 0.45;
-  for (let i = 0; i < 60; i++) handle.update(0.5, 0);
-  assert.equal(handle.getStoryPhase(), 1, "仅箭伤不降鲸（绳索未拉）");
-  assert(plateY() > R + 18, "吸取力虽弱，绳索未拉则鲸不落");
-  // 绳索小队拉满 + 吸取力被箭削到枯竭 → 拔河获胜 → 鲸回原位
-  phalanx.userData.ropePull01 = 1;
-  squad.userData.squadSuction01 = 0;
+  // 每 50 支下一档：150 支 = 第 3 档，鲸应在半空，尚未收束
+  squad.userData.members[0].userData.arrowHits = 150;
+  for (let i = 0; i < 80; i++) handle.update(0.5, 0);
+  assert.equal(handle.getStoryPhase(), 1, "未满 300 支仍在战斗期");
+  {
+    const mid = plateY();
+    assert(mid < R + 18, `第 3 档应明显低于满高，实际 +${(mid - R).toFixed(1)}`);
+    assert(mid > R + 6, `第 3 档不应落地，实际 +${(mid - R).toFixed(1)}`);
+  }
+  // 满 300 支 = 第 6 档，鲸落地进入收束
+  squad.userData.members[0].userData.arrowHits = 300;
   for (let i = 0; i < 120; i++) handle.update(0.5, 0);
-  assert.equal(handle.getStoryPhase(), 2, "绳拉 + 箭伤后进入收束阶段");
-  assert(Math.abs(plateY() - (R + 0.3)) < 0.6, "鲸应恢复原位");
+  assert.equal(handle.getStoryPhase(), 2, "中箭 300 支后进入收束阶段");
+  assert(Math.abs(plateY() - (R + 0.3)) < 0.6, "第 6 档鲸应落回原位");
   assert.equal(phalanx.userData.assembled, false, "鲸恢复原位后士兵应撤阵返回（whaleReturned 被调用）");
   // 收束：机队离开 → 终扫一次 → 再离开 → 中箭清零、故事复位
   for (let i = 0; i < 10; i++) handle.update(0.5, 0);
@@ -395,7 +406,7 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   for (let i = 0; i < 60; i++) handle.update(0.5, 0);
   assert.equal(handle.getStoryPhase(), 1, "新一轮扫描应再次进入故事线");
   assert(plateY() > R + 18, "新一轮扫描应再次升鲸");
-  ok("飞艇掠过即升鲸 · 鲸起锁定 · 拔河拉回 · 终扫收束 · 撤阵复位 · 新一轮循环");
+  ok("飞艇掠过即升鲸 · 每 50 箭一档 · 300 箭鲸落 · 终扫收束 · 撤阵复位");
 }
 
 console.log(`\n结果：${pass} 项断言 · 6 组验收通过`);

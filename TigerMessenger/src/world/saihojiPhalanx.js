@@ -380,9 +380,9 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     // 目标点：成员当前位置 + 固定散布（世界偏移，随成员移动）
     toAc.getWorldPosition(_tmpB);
     a.userData.aimOff = new THREE.Vector3(
-      (Math.random() - 0.5) * 6.8,
-      (Math.random() - 0.5) * 3.4,
-      (Math.random() - 0.5) * 6.8
+      (Math.random() - 0.5) * 10,
+      (Math.random() - 0.5) * 5,
+      (Math.random() - 0.5) * 10
     );
     _tmpB.add(a.userData.aimOff);
     a.userData.from.copy(a.position);
@@ -469,7 +469,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       // 落地判定：命中判定圈 = 成员半径（散布+滞后决定脱靶率）
       const tip = a.position.clone();
       const acPos = _sparkTmp.clone();
-      if (ac?.parent && tip.distanceTo(acPos) < 5.2) {
+      if (ac?.parent && tip.distanceTo(acPos) < 4.8) {
         // 命中：箭头扎进机体（随机姿态），计数 + 火花 + 烟 + 冲击
         ac.attach(a);
         u.stuck = true;
@@ -533,9 +533,9 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     j.userData.arcUp.set(0, 1, 0).applyQuaternion(_q).normalize();
     toAc.getWorldPosition(_tmpB);
     j.userData.aimOff = new THREE.Vector3(
-      (Math.random() - 0.5) * 4.6,
-      (Math.random() - 0.5) * 2.4,
-      (Math.random() - 0.5) * 4.6
+      (Math.random() - 0.5) * 10.8,
+      (Math.random() - 0.5) * 5.4,
+      (Math.random() - 0.5) * 10.8
     );
     _tmpB.add(j.userData.aimOff);
     j.userData.from.copy(j.position);
@@ -590,7 +590,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       if (p < 1) continue;
       const tip = j.position.clone();
       const acPos = _sparkTmp.clone();
-      if (ac?.parent && tip.distanceTo(acPos) < 5.2) {
+      if (ac?.parent && tip.distanceTo(acPos) < 5.0) {
         ac.attach(j);
         u.stuck = true;
         u.wobble = 1.8 + Math.random() * 0.8;
@@ -1081,10 +1081,12 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
           team.t = 0;
         }
       } else {
-        // 拉拽：拉力爬升 + 士兵后仰（拔河）
+        // 拉拽：拉力爬升 + 士兵后仰（拔河）；鲸每下一档（stepPulse）猛拽一记
         team.pullT = Math.min(1, team.pullT + dt / 3.5);
         setRopePose(team, true);
-        const lean = 0.5 + Math.sin(t * 2.3 + team.teamIdx * 1.7) * 0.1;
+        const sp = root.userData.stepPulse;
+        const jerk = sp ? 0.45 * sp.t : 0;
+        const lean = 0.5 + Math.sin(t * 2.3 + team.teamIdx * 1.7) * 0.1 + jerk;
         for (const s of team.soldiers) {
           s.userData.ropeLean = lean;
           // 面向鲸身
@@ -1348,7 +1350,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
               throwJavelin(s, tgt);
               th.phase = "recover";
               th.t = 0;
-              th.cd = 6.5 + Math.random() * 5; // 投枪沉重：下一轮间隔更长
+              th.cd = 11 + Math.random() * 7; // 投枪沉重：11~18s 一掷
             }
           } else {
             th.t += dt / 0.6; // 0.6s 收手
@@ -1372,7 +1374,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
         }
         if (!released) continue;
         if ((s.userData._shotCd || 0) > 0) continue;
-        s.userData._shotCd = 0.8 + Math.random() * 0.8;
+        s.userData._shotCd = 2.6 + Math.random() * 1.6;
         // 目标轮转：五架轮流挨箭（全编队可见中箭）
         const tgt = live[arrowI % live.length];
         fireArrow(s, tgt);

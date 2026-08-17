@@ -434,6 +434,23 @@ export function rearmPhalanxAlarm() {
   phalanxAlarmDone = false;
 }
 
+// =====================================================================
+//  苔庭鲸每档下沉的「低鸣闷响」：巨鲸被绳索拽下一档的沉重顿挫
+// =====================================================================
+let whaleStepSoundCd = 0;
+
+/** 每档下沉一声闷响（双振荡：65Hz 滑落 + 40Hz 顿挫），0.5s 防连发 */
+export function sfxWhaleStep() {
+  if (muted) return;
+  const ctx = ensureAudio();
+  if (!ctx || ctx.state !== "running") return;
+  const now = ctx.currentTime;
+  if (now < whaleStepSoundCd) return;
+  whaleStepSoundCd = now + 0.5;
+  playTone({ freq: 65, dur: 0.55, type: "sine", gain: 0.2, slide: -30 });
+  playTone({ freq: 40, dur: 0.32, type: "triangle", gain: 0.16, slide: -12 });
+}
+
 // 雷声闪电：外部采样 music/纯音乐-雷声闪电.mp3（不再用合成噪声）
 const THUNDER_SFX_URL = new URL(
   "../../music/纯音乐-雷声闪电.mp3",

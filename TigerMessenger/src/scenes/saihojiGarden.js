@@ -20,6 +20,7 @@ import {
   cueLeviathanStormOnce,
   setLeviathanStormBgm,
   rearmPhalanxAlarm,
+  sfxWhaleStep,
 } from "../audio/sfx.js";
 
 /** 鲸体升空锚点：地壳板（背脊）悬停在球面 +24 上方，鲸腹不压苔丘 */
@@ -35,6 +36,31 @@ const RISE_RADIUS = 68;
 const SINK_RADIUS = 78;
 /** 风暴曲先响再升鲸，让「升起前触发一次」听得见曲头 */
 const STORM_PRELUDE_SEC = 2.8;
+/** 每 50 支箭鲸下一档，共 6 档，满 300 支落地 */
+const ARROW_SINK_STEP = 50;
+const ARROW_SINK_STEPS = 6;
+
+function readSquadArrowHits(squad) {
+  const members = squad?.userData?.members;
+  if (!Array.isArray(members) || !members.length) {
+    return Number(squad?.userData?.squadArrowHits) || 0;
+  }
+  let hits = 0;
+  for (const m of members) hits += m.userData?.arrowHits || 0;
+  return hits;
+}
+
+function readWhaleSinkStep(squad) {
+  return THREE.MathUtils.clamp(
+    Math.floor(readSquadArrowHits(squad) / ARROW_SINK_STEP),
+    0,
+    ARROW_SINK_STEPS
+  );
+}
+
+function readSquadSuction01(squad) {
+  return 1 - readWhaleSinkStep(squad) / ARROW_SINK_STEPS;
+}
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const saihojiGardenScene = {
@@ -263,8 +289,7 @@ export const saihojiGardenScene = {
     // ---------- 苔庭鲸故事线状态 ----------
     // 0 常规：扫描接近升空、远去藏回（周而复始）
     // 1 战斗：锁定升空——莫比斯 aircraft 俯冲吸食、悬停盘顶；
-    //   长弓手攒箭逐箭削弱吸取力，士兵绳索小队拔河拉鲸；
-    //   吸取力不足时绳索获胜 → 鲸落回地面
+    //   编队合计每中 50 支箭鲸下一档，6 档共 300 支落地；飞艇不掉高度
     // 2 收束：鲸回原位 → 机队离开 → 终扫一次 → 再离开 → 中箭计数清零
     //   （吸取力随缓动恢复）、故事复位回 0
     let storyPhase = 0;
@@ -277,6 +302,26 @@ export const saihojiGardenScene = {
     // 越过阈值（吸取力被箭削弱）后绳索获胜、鲸整段落回地面
     let tug01 = 0;
     let pulseCd = 15; // aircraft 反击脉冲（光束闪爆推倒士兵）的间隔计时
+    // 档位下沉反馈：每满 50 支箭鲸下一档——震颤 + 扬尘 + 闷响 + 绳索猛拽
+    let lastSinkStep = 0;
+    let stepShake = 0;
+    const dustPool = [];
+    for (let i = 0; i < 10; i++) {
+      const d = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 6, 4),
+        new THREE.MeshBasicMaterial({
+          color: 0x6e6252,
+          transparent: true,
+          opacity: 0.5,
+          depthWrite: false,
+        })
+      );
+      d.visible = false;
+      scene.add(d);
+      dustPool.push(d);
+    }
+    let dustI = 0;
+    const _dustUp = new THREE.Vector3();
     let phalanxRoot = null;
     const leafSpawn = () => {
       const pine = pines[(leafRnd() * pines.length) | 0] || null;
@@ -387,35 +432,53 @@ export const saihojiGardenScene = {
             storyPhase = 1; // 苔庭鲸升空：故事线以鲸为主
           }
         } else if (storyPhase === 1) {
-          // 战斗期：锁顶不落，吸取力 vs 绳索拉力的拔河——
-          // 长弓手逐箭削弱吸取力，绳索小队把鲸一点点拽回地面
+          // 战斗期：飞艇不掉高度。每 50 支箭鲸下一档，6 档 / 300 支落地。
           setLeviathanStormBgm(true);
-          const suction01 = Number.isFinite(squad?.userData?.squadSuction01)
-            ? squad.userData.squadSuction01
-            : 1;
-          const ropePull01 = THREE.MathUtils.clamp(
-            phalanxRoot?.userData?.ropePull01 ?? 0,
-            0,
-            1
-          );
+          const sinkStep = readWhaleSinkStep(squad);
+          const suction01 = 1 - sinkStep / ARROW_SINK_STEPS;
           const range = risenR - buriedR;
           const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
-          // 净拉力：绳索拉（×0.9 拔河优势）− 吸取抬（×1.15 高等文明防线）。
-          // 吸取力满时绳索拉不动（僵持期：长弓攒箭）；逐箭削弱后净拉力越过
-          // 阈值 → 鲸缓缓下降；吸取枯竭 → 绳索获胜整段落回地面
-          const net = ropePull01 * 0.9 - suction01 * 1.15;
-          tug01 += (THREE.MathUtils.clamp(net, -0.5, 1.5) - tug01) * Math.min(1, step * 0.4);
-          // 越过阈值后绳索获胜：鲸整段落回地面
-          const down01 = THREE.MathUtils.clamp((tug01 - 0.25) / 0.45, 0, 1);
-          target = risenR - range * down01;
-          // 拉锯中的挣扎：被绳拽着仍有微幅起伏（鲸在对抗）
-          if (down01 > 0.03) target += Math.sin(t * 2.1) * 0.7 * (1 - down01 * 0.5);
-          if (down01 > 0.97 && lift01 < 0.06) {
+          target = buriedR + range * suction01;
+          // 档位切换反馈：巨鲸被拽下一档——震颤 + 扬尘 + 闷响 + 绳索猛拽
+          if (sinkStep > lastSinkStep) {
+            stepShake = 1;
+            sfxWhaleStep();
+            if (phalanxRoot) phalanxRoot.userData.stepPulse = { t: 1.2 };
+            for (let k = 0; k < 4; k++) {
+              const base = _plateEdge[k] || hubGround;
+              for (let q = 0; q < 2; q++) {
+                const d = dustPool[dustI % dustPool.length];
+                dustI++;
+                if (!d) continue;
+                d.visible = true;
+                d.position
+                  .copy(base)
+                  .addScaledVector(hubDir, 1.5)
+                  .addScaledVector(
+                    _dustUp.set(
+                      (Math.random() - 0.5),
+                      Math.random() * 0.6 + 0.2,
+                      (Math.random() - 0.5)
+                    ),
+                    0.8
+                  );
+                d.scale.setScalar(0.7 + Math.random() * 0.9);
+                d.userData.t = 0;
+                d.userData.v = _dustUp
+                  .clone()
+                  .multiplyScalar(2.2 + Math.random() * 1.6)
+                  .addScaledVector(hubDir, 1.5);
+              }
+            }
+          }
+          lastSinkStep = sinkStep;
+          if (sinkStep >= ARROW_SINK_STEPS && lift01 < 0.08) {
             storyPhase = 2;
             finaleLeft = false;
             finaleScanned = false;
             returnSignaled = false;
             stormArmed = false;
+            tug01 = 0;
             setLeviathanStormBgm(false, { fade: 1.6 });
           }
         } else {
@@ -461,9 +524,7 @@ export const saihojiGardenScene = {
       const range = risenR - buriedR;
       const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
       const plateTopR = currentR + islandGroup.position.y; // 盘面世界半径
-      const suction01 = Number.isFinite(squad?.userData?.squadSuction01)
-        ? squad.userData.squadSuction01
-        : 1;
+      const suction01 = readSquadSuction01(squad);
       if (squad) {
         const lock = squad.userData.whaleLock || (squad.userData.whaleLock = {});
         const wantLock =
@@ -481,6 +542,8 @@ export const saihojiGardenScene = {
         lock.hoverRadius = plateTopR + 7;
         // 悬停位偏到北翼（鲸身侧缘之外）：长弓列阵与机队面对面，全程可见
         lock.offset = _hubNorth.clone().multiplyScalar(26);
+        // 吃力感：鲸越被拽低，机队悬停越挣扎（供 aircraft 每帧读取做晃动）
+        lock.strain = 1 - suction01;
         // 反击脉冲：战斗期 aircraft 每隔一阵闪爆光束、推倒光束落点附近的士兵
         if (storyPhase === 1) {
           pulseCd -= step;
@@ -501,6 +564,12 @@ export const saihojiGardenScene = {
         if (gp) {
           gp.t -= step;
           if (gp.t <= 0) squad.userData.groundPulse = null;
+        }
+        // 档位下沉的绳索猛拽脉冲：1.2s 内衰减消失（不衰减会变成永久后仰）
+        const sp = phalanxRoot?.userData?.stepPulse;
+        if (sp) {
+          sp.t -= step;
+          if (sp.t <= 0) phalanxRoot.userData.stepPulse = null;
         }
       }
       // 盘沿锚点（世界坐标）：绳索小队抛绳/挂绳的落点，随鲸升降每帧刷新
@@ -523,6 +592,22 @@ export const saihojiGardenScene = {
         leviathan.setAnchorRadius(currentR);
       }
       leviathan.update(dt, t);
+      // 档位下沉震颤：叠在球面直立姿态上，禁止写死 rotation.x/z=0（会拆掉直立四元数）
+      stepShake = Math.max(0, stepShake - step * 1.7);
+      if (stepShake > 0.01) {
+        leviathanGroup.rotateX(Math.sin(t * 46) * 0.02 * stepShake);
+        leviathanGroup.rotateZ(Math.cos(t * 39) * 0.016 * stepShake);
+      }
+      // 扬尘粒子：向下向外飞散后消散
+      for (const d of dustPool) {
+        if (!d.visible) continue;
+        d.userData.t += step;
+        const e = Math.min(1, d.userData.t / 1.1);
+        d.position.addScaledVector(d.userData.v, step * (1 - e * 0.6));
+        d.scale.multiplyScalar(1 + step * 0.8);
+        d.material.opacity = 0.5 * (1 - e);
+        if (e >= 1) d.visible = false;
+      }
 
       // ---- 扫描吸食感 ----
       let strength = Number.isFinite(scanDist)
@@ -562,6 +647,7 @@ export const saihojiGardenScene = {
       const pulseFlash = squad?.userData?.groundPulse
         ? 1 + squad.userData.groundPulse.t * 1.6
         : 1;
+      const stepFlash = 1 + stepShake * 0.5; // 档位下沉瞬间光束一颤
       if (scanSmooth > 0.02 && suction01 > 0.02 && squadPos.lengthSq() > 0) {
         beamGroup.visible = true;
         _plateTop.copy(hubDir).multiplyScalar(plateTopR);
@@ -570,26 +656,26 @@ export const saihojiGardenScene = {
         _beamDir.normalize();
         _beamMid.copy(squadPos).addScaledVector(_beamDir, beamLen * 0.5);
         const beamR =
-          (1.6 + 3.4 * scanSmooth) * (0.4 + 0.6 * suction01) * pulseFlash;
+          (1.6 + 3.4 * scanSmooth) * (0.4 + 0.6 * suction01) * pulseFlash * stepFlash;
         beamCone.scale.set(beamR, beamLen, beamR);
         beamCone.quaternion.setFromUnitVectors(_beamUp, _beamDir);
         beamCone.position.copy(_beamMid);
         beamCone.material.opacity =
-          (0.1 + 0.13 * scanSmooth) * (0.35 + 0.65 * suction01) * pulseFlash;
+          (0.1 + 0.13 * scanSmooth) * (0.35 + 0.65 * suction01) * pulseFlash * stepFlash;
         beamCore.scale.set(1, beamLen, 1);
         beamCore.quaternion.copy(beamCone.quaternion);
         beamCore.position.copy(_beamMid);
         beamCore.material.opacity =
-          (0.22 + 0.2 * scanSmooth) * (0.35 + 0.65 * suction01) * pulseFlash;
+          (0.22 + 0.2 * scanSmooth) * (0.35 + 0.65 * suction01) * pulseFlash * stepFlash;
         groundRing.position.copy(_plateTop);
         groundRing.quaternion.setFromUnitVectors(_beamUp, hubDir);
         const gr = beamR * 1.15;
         groundRing.scale.set(gr, gr, 1);
         groundRing.material.opacity =
-          0.28 * scanSmooth * (0.4 + 0.6 * suction01) * pulseFlash;
+          0.28 * scanSmooth * (0.4 + 0.6 * suction01) * pulseFlash * stepFlash;
         beamSpot.position.copy(squadPos);
         beamSpot.target.position.copy(_plateTop);
-        beamSpot.intensity = 6 * scanSmooth * (0.4 + 0.6 * suction01) * pulseFlash;
+        beamSpot.intensity = 6 * scanSmooth * (0.4 + 0.6 * suction01) * pulseFlash * stepFlash;
       } else {
         beamGroup.visible = false;
         beamSpot.intensity = 0;

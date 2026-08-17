@@ -32,7 +32,6 @@ export const LEVIATHAN_PLATE_Y = 6.08;
 /** 苔庭压缩比：六景跨度 ~40×23 → ~22×12.6，收进 25×14 地壳板 */
 export const LEVIATHAN_GARDEN_SCALE = 0.55;
 
-const _q = new THREE.Quaternion();
 const _up = new THREE.Vector3(0, 1, 0);
 
 function lcg(seed) {
@@ -41,18 +40,6 @@ function lcg(seed) {
     s = (Math.imul(1664525, s) + 1013904223) >>> 0;
     return s / 0x100000000;
   };
-}
-
-/** 极扁三角形（尾鳍用）：三点逆时针铺平，DoubleSide 才能双面描边。 */
-function flatTriangle(a, b, c, mat) {
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute([a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]], 3)
-  );
-  geo.setIndex([0, 1, 2]);
-  geo.computeVertexNormals();
-  return new THREE.Mesh(geo, mat);
 }
 
 /**
@@ -81,11 +68,15 @@ function flatTriangle(a, b, c, mat) {
 export function buildEcoLeviathanIsland(opts = {}) {
   const rnd = lcg(opts.seed ?? 9901);
   const upN = (opts.up || new THREE.Vector3(0, 1, 0)).clone().normalize();
-  const fwdN = (opts.forward || new THREE.Vector3(1, 0, 0))
-    .clone()
-    .addScaledVector(upN, -(opts.forward || new THREE.Vector3(1, 0, 0)).dot(upN))
-    .normalize();
-  const rightN = new THREE.Vector3().crossVectors(fwdN, upN).normalize(); // 组局部 +Z
+  const fwdN = (opts.forward || new THREE.Vector3(1, 0, 0)).clone();
+  fwdN.addScaledVector(upN, -fwdN.dot(upN));
+  if (fwdN.lengthSq() < 1e-8) {
+    fwdN.set(0, 0, 1).addScaledVector(upN, -upN.z);
+    if (fwdN.lengthSq() < 1e-8) fwdN.set(1, 0, 0).addScaledVector(upN, -upN.x);
+  }
+  fwdN.normalize();
+  const rightN = new THREE.Vector3().crossVectors(fwdN, upN).normalize();
+  fwdN.crossVectors(upN, rightN).normalize();
   const basePos = opts.basePos ? opts.basePos.clone() : new THREE.Vector3();
   const minR = Number.isFinite(opts.minR) ? opts.minR : basePos.length();
   const maxR = Number.isFinite(opts.maxR) ? opts.maxR : basePos.length();
@@ -95,16 +86,9 @@ export function buildEcoLeviathanIsland(opts = {}) {
   group.name = "leviathanGroup";
 
   // 组姿态：局部 +X=鲸头 / +Y=背脊上方 / +Z=右舷。
-  // makeBasis 列 = (X, Y, Z)；右手性：X×Y=Z ⇔ fwd×up=right，
-  // 故 Z 列取 cross(fwd, up)（= -cross(up, fwd)）。
-  _q.setFromRotationMatrix(
-    new THREE.Matrix4().makeBasis(
-      fwdN.clone(),
-      upN.clone(),
-      new THREE.Vector3().crossVectors(fwdN, upN).normalize()
-    )
-  );
-  group.quaternion.copy(_q);
+  const _basis = new THREE.Matrix4().makeBasis(fwdN, upN, rightN);
+  group.quaternion.setFromRotationMatrix(_basis);
+  const poseQ = group.quaternion.clone();
 
   // ---------- 1. 主躯干：非等比极致拉伸的山岳巨鲸 ----------
   // SphereGeometry(8,16,12) × (4.5, 1.3, 2.2)：总长 72（玩家 35~40 倍），
@@ -122,6 +106,57 @@ export function buildEcoLeviathanIsland(opts = {}) {
     body.receiveShadow = true;
     addOutline(body, OUTLINE_W);
     group.add(body);
+
+    // 额头 + 吻突：把拉伸球体读成鲸头，而不是一颗光蛋
+    const head = new THREE.Mesh(
+      new THREE.SphereGeometry(8, 12, 10),
+      toonMat(SKIN, { flatShading: true })
+    );
+    head.name = "leviathan-head";
+    head.scale.set(1.55, 0.72, 1.18);
+    head.position.set(24.5, -2.15, 0);
+    head.castShadow = true;
+    addOutline(head, OUTLINE_W);
+    group.add(head);
+    const snout = new THREE.Mesh(
+      new THREE.SphereGeometry(8, 10, 8),
+      toonMat(SKIN, { flatShading: true })
+    );
+    snout.name = "leviathan-snout";
+    snout.scale.set(1.28, 0.42, 0.58);
+    snout.position.set(33.2, -4.85, 0);
+    snout.castShadow = true;
+    addOutline(snout, OUTLINE_W);
+    group.add(snout);
+
+    // 臀段：塞进躯干后极，把身体和尾柄焊死，中间不许留缝
+    const rump = new THREE.Mesh(
+      new THREE.SphereGeometry(8, 14, 11),
+      toonMat(SKIN, { flatShading: true })
+    );
+    rump.name = "leviathan-rump";
+    rump.scale.set(1.62, 0.94, 1.18);
+    rump.position.set(-24.2, -4.15, 0);
+    rump.castShadow = true;
+    addOutline(rump, OUTLINE_W);
+    group.add(rump);
+
+    // 胸鳍：贴在躯干中段两侧，增加剪影
+    for (const side of [-1, 1]) {
+      const pec = new THREE.Mesh(
+        new THREE.ConeGeometry(2.6, 9.2, 6),
+        toonMat(SKIN, { flatShading: true })
+      );
+      pec.name = `leviathan-pectoral-${side < 0 ? "L" : "R"}`;
+      pec.scale.set(1, 0.22, 1.05);
+      pec.position.set(6.5, -7.2, side * 14.2);
+      pec.rotation.z = Math.PI / 2;
+      pec.rotation.y = side * 0.42;
+      pec.rotation.x = side * 0.18;
+      pec.castShadow = true;
+      addOutline(pec, OUTLINE_W);
+      group.add(pec);
+    }
 
     // 20 枚极扁太古藤壶：贴躯体表面，避开地壳板投影区与腹底
     let placed = 0;
@@ -248,44 +283,56 @@ export function buildEcoLeviathanIsland(opts = {}) {
     }
   }
 
-  // ---------- 3. 尾柄 + 巨型 Y 字分叉尾鳍（斜向上 35° 微翘） ----------
-  // 藏地态：尾柄贴地收起、尾鳍放平（整鲸藏进地下，只见苔庭）；
-  // 升空态：尾柄回位、尾鳍以微延迟重新扬起 35°——升空时的神韵动作。
-  const TAIL_Y_UP = 3.6;
-  const TAIL_Y_BURIED = -2.0;
+  // ---------- 3. 尾柄 + 巨型 Y 字分叉尾鳍 ----------
+  // 枢纽钉在臀段内部，只绕 Z 俯仰，禁止整段平移——平移会把尾巴从身上撕开。
+  // 藏地：尾柄下折收起；升空：尾柄回水平并微抬，尾鳍再扬 35°。
+  const TAIL_Z_BURIED = 0.78;
+  const TAIL_Z_RISEN = -0.2;
   const tailRoot = new THREE.Group();
   tailRoot.name = "leviathan-tail-root";
-  tailRoot.position.y = TAIL_Y_UP;
+  tailRoot.position.set(-31.2, -3.55, 0);
+  tailRoot.rotation.z = TAIL_Z_RISEN;
   group.add(tailRoot);
   {
-    // CylinderGeometry(rTop, rBottom)：绕 Z −90° 后 +Y→+X，
-    // 「顶」落在近体侧（x=−30）、「底」落在尾端（x=−44）——
-    // 近体粗 2.55、尾端细 1.15，向后逐渐收窄。
-    const stalk = new THREE.Mesh(
-      new THREE.CylinderGeometry(2.55, 1.15, 14, 10),
-      toonMat(SKIN, { flatShading: true })
-    );
-    stalk.name = "leviathan-tail-stalk";
-    stalk.rotation.z = -Math.PI / 2; // 圆柱轴沿 -X 后伸
-    stalk.position.set(-37, 0, 0);
-    stalk.castShadow = true;
-    addOutline(stalk, OUTLINE_W);
-    tailRoot.add(stalk);
+    const skinMat = toonMat(SKIN, { flatShading: true });
+    const cuff = new THREE.Mesh(new THREE.SphereGeometry(8, 12, 10), skinMat);
+    cuff.name = "leviathan-tail-cuff";
+    cuff.scale.set(0.78, 0.74, 0.92);
+    cuff.position.set(1.2, 0, 0);
+    cuff.castShadow = true;
+    addOutline(cuff, OUTLINE_W);
+    tailRoot.add(cuff);
 
-    // 尾鳍组：双片扁平三角，从尾尖向左右展开；rotation.x=0.6 高高翘起
-    const flukes = new THREE.Group();
-    flukes.name = "leviathan-flukes";
-    flukes.position.set(-44, 0, 0);
-    flukes.rotation.x = 0.6; // 斜向上微翘 ~35°
-    const skinMat = toonMat(SKIN, { flatShading: true, side: THREE.DoubleSide });
-    const wing = (side) => {
-      const tri = flatTriangle(
-        [0, 0, 0],
-        [-8.6, 0, side * 4.8],
-        [-6.2, 0, side * 0.7],
+    const addStalk = (name, rNear, rFar, len, x, y = 0) => {
+      const stalk = new THREE.Mesh(
+        new THREE.CylinderGeometry(rNear, rFar, len, 11),
         skinMat
       );
+      stalk.name = name;
+      stalk.rotation.z = -Math.PI / 2;
+      stalk.position.set(x, y, 0);
+      stalk.castShadow = true;
+      addOutline(stalk, OUTLINE_W);
+      tailRoot.add(stalk);
+      return stalk;
+    };
+    // 三段交叠收细：近体粗端插进臀段，远端口对上尾鳍根
+    addStalk("leviathan-tail-stalk", 5.35, 3.55, 9.2, -3.8, 0.05);
+    addStalk("leviathan-tail-mid", 3.6, 2.05, 8.4, -11.8, 0.18);
+    addStalk("leviathan-tail-tip", 2.1, 1.05, 6.6, -18.8, 0.38);
+
+    const flukes = new THREE.Group();
+    flukes.name = "leviathan-flukes";
+    flukes.position.set(-22.2, 0.45, 0);
+    flukes.rotation.x = 0.6;
+    const flukeMat = toonMat(SKIN, { flatShading: true });
+    const wing = (side) => {
+      const tri = new THREE.Mesh(new THREE.ConeGeometry(3.6, 10.4, 7), flukeMat);
       tri.name = `leviathan-fluke-${side < 0 ? "L" : "R"}`;
+      tri.scale.set(1.05, 1, 0.2);
+      tri.position.set(-4.6, 0, side * 2.15);
+      tri.rotation.z = Math.PI / 2;
+      tri.rotation.y = side * 0.38;
       tri.castShadow = true;
       addOutline(tri, OUTLINE_W);
       flukes.add(tri);
@@ -458,6 +505,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
   const update = (_dt, t) => {
     const time = Number(t) || 0;
     const step = Math.min(1, Number(_dt) || 0.016);
+    group.quaternion.copy(poseQ);
     _anchor.copy(upN).multiplyScalar(anchorR);
     const bob = Math.sin(time * 0.6) * 0.25;
     const driftF = Math.sin(time * 0.05 + 1.3) * 1.1;
@@ -472,7 +520,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
     const t01 = THREE.MathUtils.clamp((anchorR - minR) / span, 0, 1);
     const k = t01 <= 0.12 ? 0 : (t01 - 0.12) / 0.88;
     const tailT = k * k * (3 - 2 * k); // smoothstep
-    tailRoot.position.y = THREE.MathUtils.lerp(TAIL_Y_BURIED, TAIL_Y_UP, tailT);
+    tailRoot.rotation.z = THREE.MathUtils.lerp(TAIL_Z_BURIED, TAIL_Z_RISEN, tailT);
     const flukes = tailRoot.getObjectByName("leviathan-flukes");
     if (flukes) flukes.rotation.x = 0.6 * tailT;
     // 苔庭岛随鲸/留地：升空时骑在鲸背（Y=PLATE_Y），藏地时脱离鲸体、

@@ -643,6 +643,15 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
       .multiplyScalar(wl.hoverRadius + Math.sin(t * 1.3) * 1.2);
     // 盘侧悬停偏置（苔庭鲸写入：悬停盘顶北翼，长弓列阵正上方）
     if (wl.offset) hoverCenter.add(wl.offset);
+    // 吃力晃动：鲸越被拽低（strain 越大），机队悬停越挣扎
+    const strain = Number.isFinite(wl.strain) ? wl.strain : 0;
+    if (strain > 0.02) {
+      hoverCenter.addScaledVector(dir, Math.sin(t * 7.3) * 1.9 * strain);
+      hoverCenter.addScaledVector(
+        east,
+        Math.cos(t * 5.1) * 1.1 * strain
+      );
+    }
     // 盘旋切向（绕 hubD 的角速度方向）
     const tanAz = east
       .clone()
