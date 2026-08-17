@@ -658,7 +658,9 @@ export const saihojiGardenScene = {
         const beamR =
           (1.6 + 3.4 * scanSmooth) * (0.4 + 0.6 * suction01) * pulseFlash * stepFlash;
         beamCone.scale.set(beamR, beamLen, beamR);
-        beamCone.quaternion.setFromUnitVectors(_beamUp, _beamDir);
+        // 锥尖（local +Y）朝上（机队端）、锥底宽口朝下罩住盘面——
+        // 方向取反：setFromUnitVectors(+Y, −dir) 让锥尖指向机队
+        beamCone.quaternion.setFromUnitVectors(_beamUp, _beamDir.clone().negate());
         beamCone.position.copy(_beamMid);
         beamCone.material.opacity =
           (0.1 + 0.13 * scanSmooth) * (0.35 + 0.65 * suction01) * pulseFlash * stepFlash;

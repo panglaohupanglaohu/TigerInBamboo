@@ -96,20 +96,34 @@ function makeArrow() {
   fletch.position.x = -0.36;
   g.add(fletch);
   // 亮色拖尾（加色混合）：飞行轨迹如流星
+  // 双层拖尾（彗尾式）：长淡尾 + 短亮核——飞行轨迹清晰可见
   const trail = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.055, 0.055),
+    new THREE.BoxGeometry(2.4, 0.07, 0.07),
     new THREE.MeshBasicMaterial({
-      color: 0xaee8ff,
+      color: 0xbfe8ff,
       transparent: true,
-      opacity: 0.55,
+      opacity: 0.4,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     })
   );
   trail.name = "arrow-trail";
   trail.userData.isTrail = true;
-  trail.position.x = -0.72;
+  trail.position.x = -1.7;
   g.add(trail);
+  const trailCore = new THREE.Mesh(
+    new THREE.BoxGeometry(0.95, 0.05, 0.05),
+    new THREE.MeshBasicMaterial({
+      color: 0xeaf8ff,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+  );
+  trailCore.name = "arrow-trail-core";
+  trailCore.position.x = -0.9;
+  g.add(trailCore);
   g.userData.fly = 0;
   g.userData.from = new THREE.Vector3();
   g.userData.to = new THREE.Vector3();
@@ -144,17 +158,17 @@ function makeJavelin() {
   band.position.x = -0.34;
   g.add(band);
   const trail = new THREE.Mesh(
-    new THREE.BoxGeometry(0.6, 0.075, 0.075),
+    new THREE.BoxGeometry(1.7, 0.08, 0.08),
     new THREE.MeshBasicMaterial({
-      color: 0xd8e8ff,
+      color: 0xd8ecff,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.5,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     })
   );
   trail.name = "javelin-trail";
-  trail.position.x = -0.95;
+  trail.position.x = -1.35;
   g.add(trail);
   g.userData.fly = 0;
   g.userData.from = new THREE.Vector3();
@@ -211,7 +225,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
   // 命中火花/受创烟：池化小网格（加色火花 + 半透明烟）
   const sparkPool = [];
   const smokePool = [];
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 22; i++) {
     const sp = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 6, 4),
       new THREE.MeshBasicMaterial({
@@ -380,9 +394,9 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     // 目标点：成员当前位置 + 固定散布（世界偏移，随成员移动）
     toAc.getWorldPosition(_tmpB);
     a.userData.aimOff = new THREE.Vector3(
-      (Math.random() - 0.5) * 10,
-      (Math.random() - 0.5) * 5,
-      (Math.random() - 0.5) * 10
+      (Math.random() - 0.5) * 6,
+      (Math.random() - 0.5) * 3,
+      (Math.random() - 0.5) * 6
     );
     _tmpB.add(a.userData.aimOff);
     a.userData.from.copy(a.position);
@@ -401,7 +415,7 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     sparkI++;
     sp.visible = true;
     sp.position.copy(worldPos);
-    sp.scale.setScalar(0.7 + Math.random() * 0.9);
+    sp.scale.setScalar(1.1 + Math.random() * 1.1);
     sp.userData.t = 0;
   }
 
@@ -462,9 +476,11 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       // 箭身顺飞行方向
       _tmp.copy(u.to).sub(u.from).normalize();
       a.quaternion.setFromUnitVectors(_axisX, _tmp);
-      // 拖尾随速度闪烁
+      // 拖尾随速度闪烁（长淡尾 + 短亮核）
       const trail = a.children.find((c) => c.userData?.isTrail) || a.getObjectByName?.("arrow-trail");
-      if (trail?.material) trail.material.opacity = 0.3 + 0.35 * Math.sin(p * Math.PI);
+      if (trail?.material) trail.material.opacity = 0.25 + 0.3 * Math.sin(p * Math.PI);
+      const trailCore = a.getObjectByName?.("arrow-trail-core");
+      if (trailCore?.material) trailCore.material.opacity = 0.6 + 0.3 * Math.sin(p * Math.PI);
       if (p < 1) continue;
       // 落地判定：命中判定圈 = 成员半径（散布+滞后决定脱靶率）
       const tip = a.position.clone();
@@ -533,9 +549,9 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     j.userData.arcUp.set(0, 1, 0).applyQuaternion(_q).normalize();
     toAc.getWorldPosition(_tmpB);
     j.userData.aimOff = new THREE.Vector3(
-      (Math.random() - 0.5) * 10.8,
-      (Math.random() - 0.5) * 5.4,
-      (Math.random() - 0.5) * 10.8
+      (Math.random() - 0.5) * 6.4,
+      (Math.random() - 0.5) * 3.2,
+      (Math.random() - 0.5) * 6.4
     );
     _tmpB.add(j.userData.aimOff);
     j.userData.from.copy(j.position);
@@ -762,10 +778,48 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
    * 板外贴地（R+0.08）——草坪不能埋住士兵。
    * @param {THREE.Vector3} dir 球面方向（单位向量）
    */
+  // ---------- 真实地形采样：士兵站在苔丘/地壳板/星面之上 + 脚底偏移 ----------
+  // 苔庭周围是起伏苔丘（mossyGround bump），球面固定高度会把士兵埋进丘里。
+  // 从上方沿径向向下射线，命中最近地面网格取真实高度；同一位置缓存（地形静态）。
+  const groundMeshes = [];
+  let groundCollected = false;
+  const groundCache = new Map();
+  const _groundRay = new THREE.Raycaster();
+  function groundHeightAt(dir) {
+    const key = `${(dir.x * 8192) | 0},${(dir.y * 8192) | 0},${(dir.z * 8192) | 0}`;
+    const cached = groundCache.get(key);
+    if (cached !== undefined) return cached;
+    if (groundCache.size > 800) groundCache.clear();
+    if (!groundCollected) {
+      groundCollected = true;
+      scene.traverse((o) => {
+        if (!o.isMesh || !o.raycast || !o.visible) return;
+        const n = o.name || "";
+        const pn = o.parent?.name || "";
+        if (
+          n === "planet-surface" ||
+          n === "mossy-terrain" ||
+          n === "leviathan-crust-plate" ||
+          pn === "mossyGround"
+        ) {
+          groundMeshes.push(o);
+        }
+      });
+    }
+    _groundRay.set(
+      dir.clone().multiplyScalar(PLANET_RADIUS + 14),
+      dir.clone().multiplyScalar(-1)
+    );
+    const hits = _groundRay.intersectObjects(groundMeshes, false);
+    let h = PLANET_RADIUS + 0.08;
+    if (hits.length) h = hits[0].point.length();
+    h += 0.22; // 脚底偏移（地面之上）
+    groundCache.set(key, h);
+    return h;
+  }
+
   function groundLift(dir) {
-    const ex = Math.abs(dir.dot(east)) * PLANET_RADIUS;
-    const nz = Math.abs(dir.dot(ringNorth)) * PLANET_RADIUS;
-    return ex <= 13 && nz <= 8 ? 0.45 : 0.08;
+    return groundHeightAt(dir) - PLANET_RADIUS;
   }
 
   /**
