@@ -30,8 +30,9 @@ import {
 import { GATE, GATE_DEPTH } from "../world/abandonedGate.js";
 import { AirshipEscortManager } from "../world/airshipEscort.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
-import { swampMidwayDir, placeMoebiusSwampOnSphere } from "../world/moebiusSwamp.js";
+import { placeMoebiusSwampOnSphere } from "../world/moebiusSwamp.js";
 import { SAIHOJI_ZONES } from "../world/saihoji.js";
+import { createSaihojiPhalanxBattle } from "../world/saihojiPhalanx.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import {
@@ -291,7 +292,7 @@ export const messengerIslandScene = {
     scene.add(odysseyCitadel);
     odysseyCitadel.updateMatrixWorld(true);
 
-    // ---------- 各台地鸟群 ×20：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞后立刻落下 ----------
+    // ---------- 高山古堡鸟群 20 只：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞后立刻落下 ----------
     const terraceBirds = createCitadelTerraceBirds(scene, odysseyCitadel, {
       contour: citadelContour,
       getTram: () => tramSystem?.tram || null,
@@ -342,22 +343,32 @@ export const messengerIslandScene = {
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
 
-    // ---------- 莫比斯湖沼：挪到书店镇中心（湖边书店）----------
-    // 湖沼坑口半径 34×scale≈17 世界单位：中心取书店旁 21 单位，
-    // 坑缘恰好擦书店门前草地（书店在湖边，可走入坑缘/跳入湖沼）。
-    // 注册 mapUid → 地图编辑器可选中/拖动/存档（无存档时默认在此）。
+    // ---------- 莫比斯湖沼：水晶城外侧（贴峡谷地表）----------
+    // 坑口半径 34×scale≈17：从母塔沿谷心外向+侧向挪开，落在城区旁，
+    // 不吞母塔、不占湖心。mapUid 换新，旧书店存档不再把它拽回去。
     let moebiusSwamp = null;
     {
       const swampScale = 0.5;
       const swamp = createCatalogObject("moebiusSwamp", { seed: 7711, scale: swampScale });
-      swamp.userData.mapUid = "world-swamp";
-      const bookUp = bookshop.position.clone().normalize();
-      const tang = new THREE.Vector3(1, 0, 0)
-        .addScaledVector(bookUp, -bookUp.x)
-        .normalize();
-      const target = bookshop.position.clone().addScaledVector(tang, 21);
-      const lift = Math.max(0, target.length() - R);
-      placeMoebiusSwampOnSphere(swamp, target.clone().normalize(), R, swampScale, lift);
+      swamp.userData.mapUid = "world-swamp-crystal";
+      const cityDir = grandDir.clone().normalize();
+      const canyonCenter = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
+      const outward = cityDir.clone().sub(canyonCenter);
+      outward.addScaledVector(cityDir, -outward.dot(cityDir));
+      if (outward.lengthSq() < 1e-8) {
+        outward.crossVectors(cityDir, new THREE.Vector3(0, 0, 1));
+        if (outward.lengthSq() < 1e-8) outward.set(1, 0, 0).addScaledVector(cityDir, -cityDir.x);
+      }
+      outward.normalize();
+      const side = new THREE.Vector3().crossVectors(cityDir, outward).normalize();
+      const target = cityDir
+        .clone()
+        .multiplyScalar(R)
+        .addScaledVector(outward, 28)
+        .addScaledVector(side, 16);
+      const swampDir = target.normalize();
+      const lift = canyonOffsetDir(swampDir);
+      placeMoebiusSwampOnSphere(swamp, swampDir, R, swampScale, lift);
       scene.add(swamp);
       moebiusSwamp = swamp;
     }
@@ -594,7 +605,7 @@ export const messengerIslandScene = {
       patrol: {
         dirA: cityDir,
         dirB: bookshopDir,
-        maxSpeed: 1.65, // 与 P.aircraftSpeed 同级，沉重缓行
+        maxSpeed: 2.6, // 与 P.aircraftSpeed 同级：单程≈4分钟，苔庭鲸每~4分钟可睹一次升空
       },
     });
     scene.add(aircraftSquad);
@@ -606,15 +617,9 @@ export const messengerIslandScene = {
     const airship = createMoebiusAirship();
     airship.scale.setScalar(1.25);
     scene.add(airship);
-    // 初始兜底锚点：湖沼默认方位（书店→水晶城中点再偏向书店 25%）
+    // 初始兜底锚点：水晶城旁湖沼上方（找到湖沼根后会改锚跟随）
     {
-      const { lat, lon } = flatXZToLatLon(bookshopX, bookshopZ, R);
-      const bookDir = latLonToDir(lat, lon, new THREE.Vector3());
-      const cityDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
-      const mid = bookDir.clone().add(cityDir);
-      if (mid.lengthSq() > 1e-8) mid.normalize();
-      else mid.copy(cityDir);
-      const dir = bookDir.lerp(mid, 0.25).normalize();
+      const dir = (moebiusSwamp?.position || grandDir).clone().normalize();
       placeMoebiusAirshipAbove(airship, dir, R, 20);
     }
     // 湖沼懒查找锚定状态（地图编辑器放置/移动后飞艇跟随）
@@ -675,11 +680,11 @@ export const messengerIslandScene = {
       avoidWorld: [...mossAvoidCommon, ...zoneAvoid],
     });
     scene.add(mossSaihoji);
-    // ② 湖沼边缘：跟随湖沼新位置（书店镇中心旁），湖沼挪动后苔丘不再留在原锚地
+    // ② 湖沼边缘：跟随湖沼（水晶城旁）
     const mossSwamp = buildImpastoMossyGround({
       dir: moebiusSwamp
         ? moebiusSwamp.position.clone().normalize()
-        : swampMidwayDir(bookshopX, bookshopZ, R),
+        : grandDir.clone(),
       planetRadius: R,
       seed: 7743,
       yaw: 1.9,
@@ -766,6 +771,17 @@ export const messengerIslandScene = {
     // 走廊压平后悬空的岩石落回地面——树木种在草坡上，而不是被埋
     settleBuriedAssets(scene, colliders);
 
+    const saihojiPhalanx = createSaihojiPhalanxBattle({
+      scene,
+      isWhaleRisen: () => {
+        const lev = scene.getObjectByName("leviathanGroup");
+        return !!(lev && lev.position.length() > R + 8);
+      },
+      getSquad: () => aircraftSquad,
+      // 白天源源不断的电车运兵：电车掠过苔庭（航线最近 ~27 单位）时士兵下车入阵
+      getTram: () => tramSystem,
+    });
+
     // 可变 landmarks：装船物流换船时更新 boat 引用
     messengerLandmarks = {
       playZone,
@@ -789,12 +805,13 @@ export const messengerIslandScene = {
       flock, // 叹息之门城头小群 Boids 近景备份
       gateBirdVortex, // 三重门千鸟漩涡（门廊攀附 + 双螺旋）
       birdVortex: gateBirdVortex, // 兼容旧引用：门体漩涡
-      terraceBirds, // 五级台地各 20 只 · 随机栖顶 · 昼夜栖飞 · 纸士兵惊飞
+      terraceBirds, // 高山古堡共 20 只 · 最高台地栖顶 · 昼夜栖飞 · 纸士兵惊飞
       hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
       escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
       aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
+      saihojiPhalanx, // 鼓息+鲸起后战船运罗马方阵至西芳寺射飞艇
       mossSaihoji, // 厚涂苔丘 · 西芳寺缘
-      moebiusSwamp, // 莫比斯湖沼（默认在书店镇中心 · 地图编辑器可拖动）
+      moebiusSwamp, // 莫比斯湖沼（默认在水晶城旁 · 地图编辑器可拖动）
       canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
       canalBoats, // 运河巡游古战船 · 可 F 登船
       canalLakeLink, // 运河↔大湖落差互联（瀑布船道/升船机）
@@ -867,6 +884,7 @@ export const messengerIslandScene = {
 
         // 沿城↔书店航迹扫描近区：有概率发现湖沼 → 再蜂鸟吸蜜
         updateAircraftHover(aircraftSquad, t, dt, { swamp: swampRoot });
+        saihojiPhalanx?.update?.(dt, t);
 
         // 飞艇跟随湖沼：找到地图放置的 moebiusSwamp 后锚到其正上方；
         // 地图编辑器移动湖沼时（位置变化）自动重新锚定。

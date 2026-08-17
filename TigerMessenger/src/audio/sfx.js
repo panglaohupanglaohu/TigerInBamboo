@@ -705,7 +705,7 @@ export function pauseDefaultAmbience() {
  * 恢复默认环境音（离开峡谷场景且未静音时）
  */
 export function resumeDefaultAmbience() {
-  if (muted || infiltrationBgmWanted) return;
+  if (muted || infiltrationBgmWanted || leviathanStormWanted) return;
   ambienceDuck = 1;
   if (!padStarted) startAmbience();
 }
@@ -941,7 +941,7 @@ function fadeOutCanyonBgm(seconds = 1.4) {
 //  同构：整段播完才停，离开不打断；与峡谷/八音盒互斥（先停对方）
 // =====================================================================
 
-/** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘）仍在占用声道时，默认环境音不得恢复 */
+/** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘 / 苔庭鲸风暴）仍在占用声道时，默认环境音不得恢复 */
 function anySegmentBgmEngaged() {
   return (
     canyonBgmWanted ||
@@ -949,7 +949,8 @@ function anySegmentBgmEngaged() {
     swampBgmWanted ||
     swampBgmPendingStop ||
     infiltrationBgmWanted ||
-    tramRideWanted
+    tramRideWanted ||
+    leviathanStormWanted
   );
 }
 
@@ -1230,6 +1231,15 @@ function pauseOthersForInfiltration() {
     try {
       swampBgmEl.pause();
       swampBgmEl.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+  leviathanStormWanted = false;
+  if (leviathanStormEl && !leviathanStormEl.paused) {
+    try {
+      leviathanStormEl.pause();
+      leviathanStormEl.volume = 0;
     } catch {
       /* ignore */
     }
@@ -1659,6 +1669,183 @@ function fadeOutSwampBgm(seconds = 1.4) {
   requestAnimationFrame(step);
 }
 
+// =====================================================================
+//  苔庭鲸升空 BGM：CV君言君与 · 狂风暴雨
+//  升起前 cue 一次从头播放；升空过程中循环作为 BGM；降藏淡出。
+// =====================================================================
+/** @type {HTMLAudioElement|null} */
+let leviathanStormEl = null;
+let leviathanStormWanted = false;
+let leviathanStormFading = false;
+const LEVIATHAN_STORM_BGM_URL = new URL(
+  "../../music/CV君言君与-狂风暴雨.mp3",
+  import.meta.url
+).href;
+const LEVIATHAN_STORM_VOLUME = 0.5;
+
+function ensureLeviathanStormEl() {
+  if (leviathanStormEl) return leviathanStormEl;
+  if (typeof Audio === "undefined") return null;
+  const el = new Audio(LEVIATHAN_STORM_BGM_URL);
+  el.loop = true;
+  el.preload = "auto";
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  leviathanStormEl = el;
+  return el;
+}
+
+function isLeviathanStormAudible() {
+  return !!(
+    leviathanStormEl &&
+    !leviathanStormEl.paused &&
+    leviathanStormEl.volume > 0.001
+  );
+}
+
+function pauseOthersForLeviathanStorm() {
+  pauseDefaultAmbience();
+  if (musicBoxSession) stopMusicBox();
+  if (swampBgmWanted || swampBgmPendingStop || isSwampBgmAudible()) {
+    fadeOutSwampBgm(0.5);
+  }
+  if (canyonBgmWanted || canyonBgmPendingStop) {
+    canyonBgmPendingStop = false;
+    canyonBgmWanted = false;
+    fadeOutCanyonBgm(0.5);
+  }
+  if (tramRidePhase !== "idle") {
+    for (const el of [tramIntroEl, tramMainEl]) {
+      if (!el) continue;
+      try {
+        el.pause();
+        el.volume = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+}
+
+/**
+ * 升起前触发一次：强制从曲头起播。升空当帧先叫这个，再开始视觉升起。
+ * 同一轮升空里重复调用不会重头。
+ */
+export function cueLeviathanStormOnce() {
+  if (muted) return false;
+  if (leviathanStormWanted && isLeviathanStormAudible()) return false;
+  const el = ensureLeviathanStormEl();
+  if (!el) return false;
+  leviathanStormWanted = true;
+  leviathanStormFading = false;
+  pauseOthersForLeviathanStorm();
+  ensureAudio();
+  try {
+    el.currentTime = 0;
+  } catch {
+    /* ignore */
+  }
+  el.volume = 0;
+  el.play()?.catch?.(() => {});
+  fadeLeviathanStormTo(el, LEVIATHAN_STORM_VOLUME, 0.55);
+  return true;
+}
+
+/**
+ * 升空期间保持风暴 BGM。已由 cue 起播则只续播，不重头。
+ * @param {boolean} active
+ * @param {{ fade?: number }} [opts]
+ */
+export function setLeviathanStormBgm(active, opts = {}) {
+  const fade = opts.fade ?? 1.1;
+  const next = !!active && !muted;
+  if (next) {
+    leviathanStormWanted = true;
+    if (isLeviathanStormAudible()) {
+      if (leviathanStormEl?.paused) {
+        ensureAudio();
+        leviathanStormEl.play()?.catch?.(() => {});
+      }
+      return;
+    }
+    const el = ensureLeviathanStormEl();
+    if (!el) return;
+    pauseOthersForLeviathanStorm();
+    ensureAudio();
+    el.play()?.catch?.(() => {});
+    fadeLeviathanStormTo(el, LEVIATHAN_STORM_VOLUME, fade);
+    return;
+  }
+  if (!leviathanStormWanted && !isLeviathanStormAudible()) return;
+  leviathanStormWanted = false;
+  fadeOutLeviathanStormBgm(fade);
+}
+
+export function isLeviathanStormBgmPlaying() {
+  return !!(leviathanStormWanted && isLeviathanStormAudible());
+}
+
+function fadeLeviathanStormTo(el, targetVol, seconds) {
+  if (!el) return;
+  const start = el.volume;
+  const end = THREE_CLAMP(targetVol, 0, 1);
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  leviathanStormFading = true;
+  const step = () => {
+    if (!leviathanStormEl || leviathanStormEl !== el) return;
+    if (!leviathanStormWanted && end > 0) {
+      leviathanStormFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1 && leviathanStormFading) requestAnimationFrame(step);
+    else {
+      el.volume = end;
+      leviathanStormFading = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
+function fadeOutLeviathanStormBgm(seconds = 1.2) {
+  const el = leviathanStormEl;
+  leviathanStormWanted = false;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : LEVIATHAN_STORM_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  leviathanStormFading = true;
+  const step = () => {
+    if (!leviathanStormEl || leviathanStormEl !== el) return;
+    if (leviathanStormWanted) {
+      leviathanStormFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+    leviathanStormFading = false;
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    else resumeTramRideBgmIfWanted();
+  };
+  requestAnimationFrame(step);
+}
+
 function THREE_CLAMP(v, a, b) {
   return Math.max(a, Math.min(b, v));
 }
@@ -1674,6 +1861,16 @@ function setMuted(next) {
     swampBgmPendingStop = false;
     swampBgmWanted = false;
     fadeOutSwampBgm(0.2);
+    leviathanStormWanted = false;
+    if (leviathanStormEl) {
+      try {
+        leviathanStormEl.pause();
+        leviathanStormEl.volume = 0;
+        leviathanStormEl.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
     infiltrationMissionActive = false;
     infiltrationBgmWanted = false;
     infiltrationInRange = false;

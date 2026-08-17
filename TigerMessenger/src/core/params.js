@@ -14,7 +14,7 @@ export const P_DEFAULTS = Object.freeze({
   camDist: 7.5,
   talkRange: 3.2,
   tramSpeed: 7, // 电车行驶速度（地图扩大后默认 7；开发者菜单可调）
-  aircraftSpeed: 1.65, // 空中鲸群：沉重缓巡（世界单位/秒）
+  aircraftSpeed: 2.6, // 空中鲸群：城↔店单程≈4分钟（苔庭鲸每~4分钟升空一次）
   aircraftScale: 2.6, // 宏大压迫感体量（约原飞艇两倍以上）
   aircraftHoldSec: 36, // 站点上空滞空更久，像鲸群盘桓
   windSpeed: 0.8, // 风速（云漂移与拉伸）

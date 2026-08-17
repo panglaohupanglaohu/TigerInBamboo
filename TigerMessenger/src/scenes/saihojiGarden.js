@@ -16,6 +16,10 @@ import {
   buildEcoLeviathanIsland,
   LEVIATHAN_GARDEN_SCALE,
 } from "../assets/leviathanIsland.js";
+import {
+  cueLeviathanStormOnce,
+  setLeviathanStormBgm,
+} from "../audio/sfx.js";
 
 /** 鲸体升空锚点：地壳板（背脊）悬停在球面 +24 上方，鲸腹不压苔丘 */
 const WHALE_LIFT = 24;
@@ -23,9 +27,13 @@ const WHALE_LIFT = 24;
 const WHALE_BURIED_DEPTH = 13;
 /** 藏地时苔庭岛留驻的地表高度（球面 +0.3） */
 const PLATE_GROUND_LIFT = 0.3;
-/** 扫描灯艇接近半径：进入则升空；退出须超出降藏半径（迟滞防抖） */
-const RISE_RADIUS = 60;
-const SINK_RADIUS = 70;
+/** 扫描灯艇接近半径：进入则升空；退出须超出降藏半径（迟滞防抖）。
+ *  按切向角距判定（不含飞行高度）：航线横向最近 54.5，68 留足余量——
+ *  灯艇每趟掠过都会触发，不再被高度起伏卡在阈值上。 */
+const RISE_RADIUS = 68;
+const SINK_RADIUS = 78;
+/** 风暴曲先响再升鲸，让「升起前触发一次」听得见曲头 */
+const STORM_PRELUDE_SEC = 2.8;
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const saihojiGardenScene = {
@@ -211,6 +219,8 @@ export const saihojiGardenScene = {
     let finaleLeft = false;
     let finaleScanned = false;
     let returnSignaled = false;
+    let stormArmed = false;
+    let stormPreludeT = 0;
     const aircraftWounded = () => {
       const members = squad?.userData?.members;
       if (!members?.length) return false;
@@ -223,10 +233,6 @@ export const saihojiGardenScene = {
     // 循环条件：aircraft ↔ 士兵方阵的交互。方阵未整队时，扫描也不升鲸——
     // 鼓息运兵 → 下岸整队 → 鲸起 → 攒箭 → 箭伤降鲸 → 终扫收束 → 撤阵 → 下一轮。
     let phalanxRoot = null;
-    const phalanxReady = () => {
-      if (!phalanxRoot) return true; // 独立场景无方阵：照旧
-      return phalanxRoot.userData?.assembled !== false;
-    };
     const leafSpawn = () => {
       const pine = pines[(leafRnd() * pines.length) | 0] || null;
       const leaf = leafPool[leafCursor];
@@ -294,30 +300,57 @@ export const saihojiGardenScene = {
         const center = squad.userData?._patrolCenter;
         if (center) squadPos.copy(center);
         else squad.getWorldPosition(squadPos);
-        scanDist = squadPos.distanceTo(hubGround);
+        // 切向角距（不含飞行高度）：航线横向最近 54.5，而灯艇高度 ~24——
+        // 三维距离 sqrt(54.5²+24.6²)≈59.6~60.2 恰卡在触发半径上，起伏相位
+        // 一偏整趟掠过都不触发（用户反馈从未见鲸升起）。改用方向角距：
+        // 灯艇从苔庭上空掠过即算「扫描过来」，与高度无关。
+        scanDist = squadPos.clone().normalize().angleTo(hubDir) * R;
         const near = scanDist < RISE_RADIUS;
         const far = scanDist > SINK_RADIUS;
         if (storyPhase === 0) {
-          // 常规：扫描接近 + 方阵已整队才升空；远去藏回；升到顶后故事线接管
-          if (near && phalanxReady()) target = risenR;
-          else if (far) target = buriedR;
+          // 常规：唯一前提——莫比斯飞艇飞过来吸食松树（切向掠近即触发）；
+          // 远去藏回；升到顶后故事线接管
+          if (near) {
+            // 升起前先触发一次狂风暴雨，再开始视觉升空
+            if (!stormArmed) {
+              cueLeviathanStormOnce();
+              stormArmed = true;
+              stormPreludeT = 0;
+            }
+            setLeviathanStormBgm(true);
+            stormPreludeT += step;
+            target = stormPreludeT >= STORM_PRELUDE_SEC ? risenR : buriedR;
+          } else if (far) {
+            target = buriedR;
+            const lift01 =
+              (currentR - buriedR) / Math.max(1e-3, risenR - buriedR);
+            if (lift01 < 0.05) {
+              setLeviathanStormBgm(false, { fade: 1.4 });
+              stormArmed = false;
+              stormPreludeT = 0;
+            }
+          }
           if (target === risenR && (currentR - buriedR) / Math.max(1e-3, risenR - buriedR) > 0.92) {
             storyPhase = 1; // 苔庭鲸升空：故事线以鲸为主
           }
         } else if (storyPhase === 1) {
           // 故事线以苔庭鲸为主：锁定升空（灯艇离场不降藏），
           // 直到 aircraft 被羽箭攒射、升空能力不足 → 鲸恢复原位
+          setLeviathanStormBgm(true);
           target = risenR;
           if (aircraftWounded()) {
             storyPhase = 2;
             finaleLeft = false;
             finaleScanned = false;
             returnSignaled = false;
+            stormArmed = false;
+            setLeviathanStormBgm(false, { fade: 1.6 });
             target = buriedR;
           }
         } else {
           // 收束：鲸回原位 → 士兵撤阵返回高山圣城 → 机队离开 → 终扫一次
           // → 再离开 → 伤口痊愈、故事复位
+          setLeviathanStormBgm(false, { fade: 1.4 });
           target = buriedR;
           const lift01 = (currentR - buriedR) / Math.max(1e-3, risenR - buriedR);
           if (!returnSignaled && lift01 < 0.03) {
@@ -336,6 +369,8 @@ export const saihojiGardenScene = {
             finaleLeft = false;
             finaleScanned = false;
             storyPhase = 0;
+            stormArmed = false;
+            stormPreludeT = 0;
           }
         }
       } else {
@@ -343,6 +378,9 @@ export const saihojiGardenScene = {
         storyPhase = 0;
         finaleLeft = false;
         finaleScanned = false;
+        stormArmed = false;
+        stormPreludeT = 0;
+        setLeviathanStormBgm(false, { fade: 0.8 });
       }
       if (target != null) {
         const k = 1 - Math.exp(-step * 0.22); // ~8s 的庄严升降
@@ -409,6 +447,7 @@ export const saihojiGardenScene = {
       getStoryPhase: () => storyPhase,
       update,
       dispose() {
+        setLeviathanStormBgm(false, { fade: 0.4 });
         if (leafGroup.parent) leafGroup.parent.remove(leafGroup);
         leafGroup.traverse((o) => {
           if (o.geometry) o.geometry.dispose?.();

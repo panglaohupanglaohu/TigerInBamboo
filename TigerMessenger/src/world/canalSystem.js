@@ -126,6 +126,49 @@ export function createCanalWaterMaterial() {
   return mat;
 }
 
+/**
+ * Townscaper 水面：平视/远处 Fresnel 更实，俯视近岸更透，
+ * 好看见水下石基和倒影。depthTest 开、depthWrite 关，不会盖住水上的实心房子。
+ */
+export function createTownscaperWaterMaterial() {
+  const mat = new THREE.MeshStandardMaterial({
+    color: SHARED_WATER_COLOR,
+    roughness: 0.2,
+    metalness: 0.06,
+    transparent: true,
+    opacity: 0.62,
+    depthWrite: false,
+    depthTest: true,
+    side: THREE.FrontSide,
+    bumpMap: getWaterBumpTexture(),
+    bumpScale: 0.45,
+  });
+  mat.userData.waveTime = { value: 0 };
+  mat.userData.townscaperWater = true;
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms.waveTime = mat.userData.waveTime;
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <opaque_fragment>",
+      `#include <opaque_fragment>
+#ifdef USE_TRANSMISSION
+#else
+	{
+		vec3 wn = normalize( vNormal );
+		vec3 wv = normalize( vViewPosition );
+		float ndv = clamp( abs( dot( wn, wv ) ), 0.0, 1.0 );
+		float glance = 1.0 - ndv;
+		// 平视≈不透明（远岸成片），俯视≈半透（看见地基/倒影）
+		float alpha = mix( 0.22, 0.86, glance * glance );
+		gl_FragColor.a = alpha;
+		gl_FragColor.rgb = mix( gl_FragColor.rgb * 0.72, gl_FragColor.rgb, glance );
+	}
+#endif`
+    );
+  };
+  mat.customProgramCacheKey = () => "townscaper-water-fresnel-v2";
+  return mat;
+}
+
 /** 推进运河水面顶点波（Townscaper 慢浪）。 */
 export function tickCanalWater(root, time) {
   if (!root) return;
@@ -439,18 +482,30 @@ export function buildCanalJunctionBox(scene, planetRadius, opts = {}) {
   group.name = "canal-junction-box";
   const align = quatUprightOnSphere(up, fwd);
 
-  // 水面：薄片，不要厚圆台——厚圆台从侧面看像一只灰盘子。
+  // 两层水：深处不透明青绿（远看是实的海），表层 Fresnel 半透（近看透出地基+倒影）。
   {
-    const waterMat = createCanalWaterMaterial();
-    waterMat.opacity = 0.62;
-    waterMat.transparent = true;
-    waterMat.depthWrite = false;
-    const water = new THREE.Mesh(new THREE.CircleGeometry(1, 36), waterMat);
+    const deep = new THREE.Mesh(
+      new THREE.CircleGeometry(1, 36),
+      toonMat(0x2f6f78, { flatShading: true })
+    );
+    deep.name = "canal-junction-water-deep";
+    deep.scale.set(halfLength + 0.35, halfWidth + 0.35, 1);
+    deep.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), up);
+    deep.position.copy(up).multiplyScalar(R + waterLift - 0.55);
+    deep.receiveShadow = true;
+    deep.castShadow = false;
+    group.add(deep);
+
+    const water = new THREE.Mesh(
+      new THREE.CircleGeometry(1, 36),
+      createTownscaperWaterMaterial()
+    );
     water.name = "canal-junction-water";
     water.scale.set(halfLength, halfWidth, 1);
     water.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), up);
-    water.position.copy(up).multiplyScalar(R + waterLift);
-    water.renderOrder = 2;
+    water.position.copy(up).multiplyScalar(R + waterLift - 0.02);
+    water.renderOrder = 3;
+    water.receiveShadow = true;
     water.castShadow = false;
     group.add(water);
   }

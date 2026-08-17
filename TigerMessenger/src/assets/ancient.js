@@ -230,7 +230,7 @@ export function createColossalVernacularTree(seedOrOpts = {}) {
   //  合生树基：矮阔根盘，两干从同一坨根里长出来
   // ------------------------------------------------------------------
   const base = ink(
-    new THREE.Mesh(new THREE.CylinderGeometry(2.05, 2.55, 2.4, 8, 1, false), bark),
+    new THREE.Mesh(new THREE.CylinderGeometry(1.025, 1.275, 2.4, 8, 1, false), bark),
     0.05
   );
   base.name = n("trunk-base");
@@ -258,7 +258,7 @@ export function createColossalVernacularTree(seedOrOpts = {}) {
       const a = (i / ribs) * Math.PI * 2 + rnd() * 0.18;
       const r = THREE.MathUtils.lerp(spec.rBot, spec.rTop, 0.45);
       const rib = ink(
-        new THREE.Mesh(new THREE.BoxGeometry(0.1, spec.h * 0.78, 0.22), groove),
+        new THREE.Mesh(new THREE.BoxGeometry(0.05, spec.h * 0.78, 0.11), groove),
         0.03
       );
       rib.name = n(`bark-rib-${spec.x.toFixed(1)}-${i}`);
@@ -275,15 +275,15 @@ export function createColossalVernacularTree(seedOrOpts = {}) {
 
   // 原画主体：左干略矮粗、右干略高，后侧一股较细
   addColumn(
-    { x: -0.95, z: 0.18, h: 12.4, rTop: 1.02, rBot: 1.48, leanZ: 0.055, leanX: 0.02 },
+    { x: -0.48, z: 0.09, h: 12.4, rTop: 0.51, rBot: 0.74, leanZ: 0.055, leanX: 0.02 },
     n("trunk-0")
   );
   addColumn(
-    { x: 1.05, z: -0.22, h: 13.6, rTop: 0.96, rBot: 1.4, leanZ: -0.048, leanX: -0.025 },
+    { x: 0.52, z: -0.11, h: 13.6, rTop: 0.48, rBot: 0.7, leanZ: -0.048, leanX: -0.025 },
     n("trunk-1")
   );
   addColumn(
-    { x: 0.12, z: 0.92, h: 11.2, rTop: 0.68, rBot: 1.02, leanZ: 0.02, leanX: 0.07 },
+    { x: 0.06, z: 0.46, h: 11.2, rTop: 0.34, rBot: 0.51, leanZ: 0.02, leanX: 0.07 },
     n("trunk-2")
   );
 

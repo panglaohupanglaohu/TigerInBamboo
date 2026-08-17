@@ -355,14 +355,9 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   const setFar = () => {
     squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R).addScaledVector(eastOf, 400);
   };
-  // 0→1 前：方阵未整队——扫描也不升鲸（循环条件：aircraft↔方阵交互）
-  for (let i = 0; i < 40; i++) handle.update(0.5, 0);
-  assert(Math.abs(plateY() - (R + 0.3)) < 0.6, "方阵未整队时扫描不得升鲸");
-  assert.equal(handle.getStoryPhase(), 0, "方阵未整队时故事不得推进");
-  // 方阵整队（士兵下岸成阵）→ 扫描 → 升空并锁定
-  phalanx.userData.assembled = true;
+  // 0→1：唯一前提 = 飞艇掠近（吸食松树）——无需等方阵整队
   for (let i = 0; i < 60; i++) handle.update(0.5, 0);
-  assert.equal(handle.getStoryPhase(), 1, "方阵整队 + 扫描后鲸升空进入故事线");
+  assert.equal(handle.getStoryPhase(), 1, "飞艇掠过即升空进入故事线");
   assert(plateY() > R + 18, "鲸应升空");
   // 灯艇远去 → 保持升空（故事线以鲸为主）
   setFar();
@@ -388,12 +383,11 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   // 模拟机队侧缓动：中箭清零后升空能力逐渐恢复（updateAircraftHover 每帧上修 woundHeightMul）
   squad.userData.members[0].userData.woundHeightMul = 1;
   // 新一轮：方阵重新整队 + 再次扫描 → 鲸再升
-  phalanx.userData.assembled = true;
   setNear();
   for (let i = 0; i < 60; i++) handle.update(0.5, 0);
   assert.equal(handle.getStoryPhase(), 1, "新一轮扫描应再次进入故事线");
   assert(plateY() > R + 18, "新一轮扫描应再次升鲸");
-  ok("方阵整队才升鲸 · 鲸起锁定 · 箭伤降鲸 · 终扫收束 · 撤阵复位 · 新一轮循环");
+  ok("飞艇掠过即升鲸 · 鲸起锁定 · 箭伤降鲸 · 终扫收束 · 撤阵复位 · 新一轮循环");
 }
 
 console.log(`\n结果：${pass} 项断言 · 6 组验收通过`);

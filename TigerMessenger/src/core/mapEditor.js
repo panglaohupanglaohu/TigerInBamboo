@@ -12,6 +12,10 @@ import { PLANET_RADIUS } from "../world/planet.js";
 import { createCatalogObject, getBuildingDef, listBuildingTypes } from "./buildingCatalog.js";
 
 const STORAGE_KEY = "tm.mapEditor.placements.v1";
+/** 场景默认物换址后作废的旧 uid：读档时丢掉，避免把湖沼拽回书店。 */
+const OBSOLETE_MAP_UIDS = new Set(["world-swamp"]);
+/** 换址后的新默认 uid：旧档没写到也不要删。 */
+const KEEP_DEFAULT_UIDS = new Set(["world-swamp-crystal"]);
 const MAP_EXTENT = 20; // 平面图默认半宽（世界 flat 单位，zoom=1）
 const MAP_ZOOM_MIN = 0.12; // 缩到最小可览整个半球（半宽 ≈ 167，覆盖 ±63 flat）
 const MAP_ZOOM_MAX = 10; // 放到最大看细节
@@ -1072,6 +1076,7 @@ export function createMapEditor({
 
     for (const item of list) {
       if (!item?.type || (item.uid && skipUids.has(item.uid))) continue;
+      if (item.uid && OBSOLETE_MAP_UIDS.has(item.uid)) continue;
       if (!getBuildingDef(item.type)) continue;
 
       // 1) 精确 uid
@@ -1143,7 +1148,9 @@ export function createMapEditor({
 
     // 存档未包含的已登记物（含被用户删掉的默认建筑）：从场景移除
     for (const p of placements.slice()) {
-      if (!reused.has(p)) removePlacement(p.uid);
+      if (reused.has(p)) continue;
+      if (KEEP_DEFAULT_UIDS.has(p.uid)) continue;
+      removePlacement(p.uid);
     }
 
     redraw();

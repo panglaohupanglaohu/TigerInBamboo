@@ -6,7 +6,11 @@
 //  断崖基岩、五层台地/折返石阶外围地势、水墨描边与球面放置。
 // ============================================================================
 import * as THREE from "three";
-import { addOutline } from "../assets/toon.js";
+import {
+  addOutline,
+  SVARBOVA_OUTLINE_COLOR,
+  SVARBOVA_OUTLINE_THICKNESS,
+} from "../assets/toon.js";
 import { mergeStaticGroup } from "./geometryMerge.js";
 import { createCitadelWatchtower } from "../assets/citadelWatchtower.js";
 import { createCitadelElderTree } from "../assets/citadelElderTree.js";
@@ -22,34 +26,42 @@ import {
   CITADEL_PALETTE,
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
-  citadelShadeStep,
-  citadelPaletteIndexOfChar,
   CITADEL_CASTLE_FLOORS,
 } from "./citadelTown.js";
 
+/** Maria Svarbova 无菌马卡龙：低语调中间色，禁止赤陶/焦黑。 */
+export const SVARBOVA = Object.freeze({
+  porcelain: 0xf2f4f4,
+  grayBlue: 0xd5dbdb,
+  mint: 0xe8f8f5,
+  goose: 0xfcf3cf,
+  outline: SVARBOVA_OUTLINE_COLOR,
+  figure: 0xff3333,
+});
+
+/** 城堡建筑专用光照层：世界光仍打在 layer 0，避免整颗星球被 1.6 环境光洗白。 */
+export const CITADEL_SVARBOVA_LAYER = 1;
+
 const PALETTE = Object.freeze({
-  // 浅色系基岩与土坡：与黄土坡/白石梯湖的暖色盘统一，弃用深灰。
-  cliff: 0xcfc5a2,
-  stone: 0xe5eff2,
-  weatherStone: 0xb8c5c9,
-  ink: 0x2a2b2d,
-  outline: 0x000000,
-  wood: 0x8b5a2b,
-  // Architecture owns no orange sunset color: illumination supplies it.
-  domeIvory: 0xe6e3d7,
-  domeShade: 0xbdc6c4,
-  towerStone: 0xd6d8d4,
-  towerShade: 0xaeb8b7,
-  // 小镇字符配色：W 白石（stone）/ L 浅砂石 / B 淡砖角塔 / D 棕色正门。
-  sandStone: 0xd9cfac,
-  paleBrick: 0xcaa88c,
-  roofTile: 0xe87828, // Townscaper 陶瓦橙
-  water: 0x5a9eaa, // 原版岛城青绿水
-  foliageDark: 0x365c3b,
-  foliageLight: 0x628253,
-  bark: 0x59452d,
-  contour: 0xcfc49a,
-  pilgrimageStone: 0xe3ddc7,
+  cliff: SVARBOVA.porcelain,
+  stone: SVARBOVA.porcelain,
+  weatherStone: SVARBOVA.grayBlue,
+  ink: SVARBOVA.grayBlue,
+  outline: SVARBOVA.outline,
+  wood: SVARBOVA.grayBlue,
+  domeIvory: SVARBOVA.mint,
+  domeShade: SVARBOVA.mint,
+  towerStone: SVARBOVA.mint,
+  towerShade: SVARBOVA.grayBlue,
+  sandStone: SVARBOVA.porcelain,
+  paleBrick: SVARBOVA.grayBlue,
+  roofTile: SVARBOVA.goose,
+  water: 0x5a9eaa,
+  foliageDark: 0xc5ddd6,
+  foliageLight: 0xd7ebe4,
+  bark: SVARBOVA.grayBlue,
+  contour: SVARBOVA.grayBlue,
+  pilgrimageStone: SVARBOVA.porcelain,
 });
 
 // 城堡连同前方绿地相对护城河水面的下沉量：与 citadelRange.js 的 CITADEL_SINK 一致，
@@ -58,7 +70,7 @@ export const CITADEL_SINK = 0.6;
 
 export const CITADEL = Object.freeze({
   layer0: { rockRadius: 2.3, rockCount: 7, centerY: 11.2 },
-  outline: 0.055,
+  outline: SVARBOVA_OUTLINE_THICKNESS,
   finialHeight: PLAYER_HEIGHT * 2.0,
   // 规则生成的小镇按最终尺寸直接落地：基座底面咬入顶层台地（Y=12）0.06。
   townBaseY: 11.94,
@@ -378,23 +390,42 @@ function makeThreeStepGradient() {
   return gradient;
 }
 
-function makeToon(color, gradientMap) {
-  // Do not pass flatShading through setValues(): the Three.js revision bundled
-  // by this project logs an avoidable warning for that constructor key.
-  const material = new THREE.MeshToonMaterial({ color, gradientMap });
-  // Keep this assignment explicit: older Three.js revisions only rebuild the
-  // shader after flatShading is changed post-construction.
-  material.flatShading = true;
-  material.needsUpdate = true;
+const _pastelMatCache = new Map();
+
+/**
+ * 斯瓦尔博娃瓷砖：牛奶弱高光。独立缓存，禁止改透明（否则整座城一起发虚）。
+ * @param {number|THREE.Color} color
+ */
+export function makePastelStandard(color) {
+  const hex = typeof color === "number" ? color : (color?.getHex?.() ?? SVARBOVA.porcelain);
+  let material = _pastelMatCache.get(hex);
+  if (!material) {
+    const albedo = new THREE.Color(hex);
+    material = new THREE.MeshStandardMaterial({
+      color: albedo,
+      roughness: 0.15,
+      metalness: 0.02,
+      envMapIntensity: 0.4,
+      emissive: albedo.clone().multiplyScalar(0.08),
+      emissiveIntensity: 1,
+    });
+    material.userData.shared = true;
+    material.userData.svarbova = true;
+    material.dispose = () => {};
+    _pastelMatCache.set(hex, material);
+  }
   return material;
+}
+
+function makeToon(color, _gradientMap) {
+  return makePastelStandard(color);
 }
 
 // ---------------------------------------------------------------------------
 //  Townscaper 15 色调色板材质（含明度微抖缓存）
 // ---------------------------------------------------------------------------
 
-const _citadelPaletteMats = new Map(); // "hex|step" -> material
-const _citadelPaletteColor = new THREE.Color();
+const _citadelPaletteMats = new Map(); // hex -> material
 
 /**
  * 调色板字符 → 基色材质表：buildCitadelTown 的 materials[char] 直接可用。
@@ -416,46 +447,41 @@ function buildCitadelPaletteMaterials(gradientMap) {
 }
 
 /**
- * 明度微抖材质：citadelShadeStep 给出 -2..+2 档（±4% 亮度），按
- * (char, 档位) 缓存——15 色 × 5 档 = 至多 75 个实例，全城堡共享。
+ * 墙面配色：底层/中层瓷白↔浅灰蓝棋盘；顶两层与外凸体统一薄荷。
+ * 不做明度微抖，保持机械对称的隐形网格。
  */
-function makeCitadelShadeMaterialFactory(gradientMap) {
-  return function makeCitadelShadeMaterial(char, ix, iz) {
-    const base = CITADEL_PALETTE[citadelPaletteIndexOfChar(char)] ?? CITADEL_PALETTE[0];
-    const step = citadelShadeStep(ix, iz, char);
-    const key = `${gradientMap.uuid}|${base.char}|${step}`;
+function makeCitadelShadeMaterialFactory(_gradientMap, floors = CITADEL_CASTLE_FLOORS) {
+  return function makeCitadelShadeMaterial(char, ix, iz, iy = 0) {
+    const topStart = Math.max(0, (Number(floors) || CITADEL_CASTLE_FLOORS) - 2);
+    let hex;
+    if (char === CITADEL_GATE_CHAR) {
+      hex = SVARBOVA.grayBlue;
+    } else if (iy >= topStart) {
+      hex = SVARBOVA.mint;
+    } else {
+      hex = ((ix + iz) & 1) === 0 ? SVARBOVA.porcelain : SVARBOVA.grayBlue;
+    }
+    const key = `svarbova|${hex.toString(16)}`;
     let material = _citadelPaletteMats.get(key);
     if (!material) {
-      _citadelPaletteColor.setHex(base.color);
-      // 只动明度：hue/saturation 保持，lightness 微调（+/-4%）
-      const hsl = {};
-      _citadelPaletteColor.getHSL(hsl);
-      hsl.l = THREE.MathUtils.clamp(hsl.l + step * 0.02, 0.02, 0.98);
-      _citadelPaletteColor.setHSL(hsl.h, hsl.s, hsl.l);
-      material = new THREE.MeshToonMaterial({
-        color: _citadelPaletteColor.clone(),
-        gradientMap,
-        vertexColors: true,
-      });
-      material.flatShading = true;
-      material.needsUpdate = true;
-      material.userData.shared = true;
+      material = makePastelStandard(hex);
       _citadelPaletteMats.set(key, material);
     }
     return material;
   };
 }
 
-/** 古堡窗口夜灯材质：暖黄透光 + 自发光 */
-function makeWindowLitMat(gradientMap) {
-  const material = new THREE.MeshToonMaterial({
-    color: 0xffc878,
-    gradientMap,
-    emissive: new THREE.Color(0xff8a33),
-    emissiveIntensity: 1.15,
+/** 古堡窗口夜灯：鹅黄瓷面微自发光，仍保持无菌弱高光。 */
+function makeWindowLitMat(_gradientMap) {
+  const material = new THREE.MeshStandardMaterial({
+    color: SVARBOVA.goose,
+    roughness: 0.15,
+    metalness: 0.02,
+    emissive: new THREE.Color(SVARBOVA.goose),
+    emissiveIntensity: 0.55,
   });
-  material.flatShading = true;
-  material.needsUpdate = true;
+  material.userData.shared = true;
+  material.userData.svarbova = true;
   return material;
 }
 
@@ -484,7 +510,7 @@ export function refreshCitadelWindowLights(castleContainer) {
   if (!castleContainer) return [];
   const gradientMap = castleContainer.userData.gradientMap ?? makeThreeStepGradient();
   // 重建后旧材质可能已 dispose，始终新建一对共享昼夜材质
-  castleContainer.userData.windowDarkMat = makeToon(PALETTE.ink, gradientMap);
+  castleContainer.userData.windowDarkMat = makePastelStandard(SVARBOVA.grayBlue);
   castleContainer.userData.windowLitMat = makeWindowLitMat(gradientMap);
   const windows = [];
   castleContainer.traverse((o) => {
@@ -582,11 +608,11 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
   }
 }
 
-function mesh(geometry, material, name, outlineThickness = CITADEL.outline) {
+function mesh(geometry, material, name, outlineThickness = SVARBOVA_OUTLINE_THICKNESS) {
   const result = new THREE.Mesh(geometry, material);
   result.name = name;
-  result.castShadow = true;
-  result.receiveShadow = true;
+  result.castShadow = false;
+  result.receiveShadow = false;
   result.userData.outlineThickness = outlineThickness;
   return result;
 }
@@ -694,8 +720,8 @@ export function applyInkOutlines(assembly, enabled = true) {
   for (const surface of surfaces) {
     addOutline(
       surface,
-      surface.userData.outlineThickness ?? CITADEL.outline,
-      PALETTE.outline,
+      surface.userData.outlineThickness ?? SVARBOVA_OUTLINE_THICKNESS,
+      SVARBOVA_OUTLINE_COLOR,
       0
     );
   }
@@ -1043,7 +1069,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     cliff: makeToon(PALETTE.cliff, gradientMap),
     stone: makeToon(PALETTE.stone, gradientMap),
     weatherStone: makeToon(PALETTE.weatherStone, gradientMap),
-    plazaStone: makeToon(0xbfc9cd, gradientMap), // 石板广场铺装
+    plazaStone: makePastelStandard(SVARBOVA.porcelain),
     ink: makeToon(PALETTE.ink, gradientMap),
     wood: makeToon(PALETTE.wood, gradientMap),
     gold: makeToon(PALETTE.domeIvory, gradientMap),
@@ -1057,14 +1083,17 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     bark: makeToon(PALETTE.bark, gradientMap),
     contour: makeToon(PALETTE.contour, gradientMap),
     pilgrimageStone: makeToon(PALETTE.pilgrimageStone, gradientMap),
+    trim: makePastelStandard(SVARBOVA.goose),
+    crenel: makePastelStandard(SVARBOVA.goose),
   };
-  // 瓦片/户色不要开共享 vertexColors：合并时没色属性的屋脊/尖顶/栏杆会整批变黑。
-  if (materials.water) {
-    materials.water.transparent = true;
-    materials.water.opacity = 0.82;
-  }
+  // 水道格子用单独半透明材质，绝不改共享 toon（否则整座城会一起变透）。
+  const townWaterMat = makeToon(PALETTE.water, gradientMap);
+  townWaterMat.transparent = true;
+  townWaterMat.opacity = 0.55;
+  townWaterMat.depthWrite = false;
+  townWaterMat.userData.townWater = true;
   // 窗口昼夜材质（可被 options 注入共享实例）
-  if (!materials.windowDark) materials.windowDark = makeToon(PALETTE.ink, gradientMap);
+  if (!materials.windowDark) materials.windowDark = makePastelStandard(SVARBOVA.grayBlue);
   if (!materials.windowLit) materials.windowLit = makeWindowLitMat(gradientMap);
 
   const town = buildCitadelTown(spec, {
@@ -1077,18 +1106,21 @@ export function buildCitadelTownAssembly(spec, options = {}) {
       wood: materials.wood,
       ink: materials.ink,
       roofTile: materials.roofTile,
-      water: materials.water,
+      water: townWaterMat,
       steepleStone: materials.stone, // 教堂尖塔白石塔身
       foliageDark: materials.foliageDark,
       foliageLight: materials.foliageLight,
       plazaStone: materials.plazaStone ?? materials.weatherStone, // 石板广场
-      // 建筑构件统一深色盘：檐口线/墙裙/窗台窗楣/阳台栏杆/屋脊瓦/山墙圆窗/风向标
-      trim: materials.trim ?? makeToon(0x333a42, gradientMap),
-      iron: materials.iron ?? makeToon(0x1a1b1e, gradientMap),
+      // 拱窗外框 / 楼顶构件：整面锁死同一淡鹅黄，作为隐形网格
+      trim: materials.trim ?? makePastelStandard(SVARBOVA.goose),
+      iron: materials.iron ?? makePastelStandard(SVARBOVA.goose),
+      crenel: materials.crenel ?? makePastelStandard(SVARBOVA.goose),
       windowDark: materials.windowDark,
       windowLit: materials.windowLit,
-      // 明度微抖：shade(char, ix, iz) 按格坐标哈希到 5 档明度材质（缓存）
-      shade: makeCitadelShadeMaterialFactory(gradientMap),
+      shade: makeCitadelShadeMaterialFactory(
+        gradientMap,
+        options.floors ?? spec?.floors ?? CITADEL_CASTLE_FLOORS
+      ),
     },
     shrubMaterials: materials,
     random,
@@ -1285,6 +1317,70 @@ function buildCitadelTerrainObjects(placements, contourSpec, anchor = null) {
  * 这样 3D 直编辑的 getObjectByName / isCitadelTerrace 拾取和高山圣城走同一条路。
  * 用扁盒子而不是无限薄平面，斜视角也能点到空地基。
  */
+/** 房子必须实心：共享材质被改成透明时，整座岛会发虚。 */
+function sealCitadelBuildingsOpaque(root) {
+  if (!root) return;
+  root.traverse((o) => {
+    if (!o.isMesh) return;
+    if (o.userData?.isOutline) return;
+    if (o.name === "canal-junction-water" || o.material?.userData?.townscaperWater) return;
+    if (o.material?.userData?.townWater) return;
+    if (o.name === "canal-town-reflection" || o.parent?.name === "canal-town-reflection") return;
+    if (o.name?.startsWith("contour-step") || o.name === "canal-junction-build-zone") return;
+    if (o.material?.visible === false || o.visible === false) return;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    for (const mat of mats) {
+      if (!mat || mat.userData?.townscaperWater || mat.userData?.townWater) continue;
+      if (mat.transparent || mat.opacity < 1 || mat.depthWrite === false) {
+        const target = mat.userData?.shared ? mat.clone() : mat;
+        target.transparent = false;
+        target.opacity = 1;
+        target.depthWrite = true;
+        if (target !== mat) {
+          if (Array.isArray(o.material)) {
+            o.material = o.material.map((m) => (m === mat ? target : m));
+          } else {
+            o.material = target;
+          }
+        }
+      }
+    }
+  });
+}
+
+/** 水面倒影：把镇体沿水面镜像，压暗半透，不参与拾取。 */
+function refreshCanalTownReflection(castleContainer) {
+  const stale = castleContainer.getObjectByName("canal-town-reflection");
+  if (stale) {
+    stale.traverse((o) => {
+      if (o.isMesh && o.material && !o.material.userData?.shared) o.material.dispose?.();
+    });
+    stale.removeFromParent();
+  }
+  if (!castleContainer.userData?.skipOuterTerrain) return;
+  const src = castleContainer.userData.mainCastle;
+  if (!src) return;
+  const waterY = castleContainer.userData.townBaseLift ?? 0.62;
+  const mirror = src.clone(true);
+  mirror.name = "canal-town-reflection";
+  mirror.scale.y = -Math.abs(mirror.scale.y || 1);
+  mirror.position.y = 2 * waterY;
+  mirror.traverse((o) => {
+    if (!o.isMesh) return;
+    o.raycast = () => {};
+    o.castShadow = false;
+    const srcMat = o.material;
+    if (!srcMat) return;
+    const m = srcMat.clone();
+    m.transparent = true;
+    m.opacity = 0.32;
+    m.depthWrite = false;
+    m.userData.townWater = true;
+    o.material = m;
+  });
+  castleContainer.add(mirror);
+}
+
 function ensureSkipOuterTerrainEditPad(castleContainer) {
   const lift = castleContainer.userData.townBaseLift ?? 0.6;
   let terrain = castleContainer.userData.outerTerrainSystem;
@@ -1295,25 +1391,120 @@ function ensureSkipOuterTerrainEditPad(castleContainer) {
     castleContainer.userData.outerTerrainSystem = terrain;
   }
   let pad = terrain.getObjectByName("contour-step-0");
+  if (pad && pad.geometry?.type === "BoxGeometry") {
+    pad.removeFromParent();
+    pad.geometry.dispose?.();
+    pad = null;
+  }
   if (!pad) {
+    // 只用水平面：厚盒子侧壁会挡住斜视角点楼，点不到上层。
     pad = new THREE.Mesh(
-      new THREE.BoxGeometry(52, 0.28, 44),
+      new THREE.PlaneGeometry(48, 40),
       new THREE.MeshBasicMaterial({
-        transparent: true,
-        opacity: 0,
-        depthWrite: false,
+        visible: false,
         side: THREE.DoubleSide,
       })
     );
     pad.name = "contour-step-0";
+    pad.rotation.x = -Math.PI / 2;
     terrain.add(pad);
   }
-  pad.position.set(0, lift - 0.14, 0);
-  pad.rotation.set(0, 0, 0);
+  pad.position.set(0, lift, 0);
+  pad.rotation.x = -Math.PI / 2;
   pad.userData.isCitadelTerrace = true;
   pad.userData.terraceIndex = 0;
   pad.visible = true;
   return pad;
+}
+
+/**
+ * 主相机 / 拾取射线必须能看见 layer 1，否则无菌光照层上的城体会消失。
+ * @param {THREE.Camera|THREE.Raycaster} target
+ */
+export function enableSvarbovaCitadelLayer(target) {
+  target?.layers?.enable?.(CITADEL_SVARBOVA_LAYER);
+}
+
+function markSvarbovaLitMesh(object) {
+  if (!object?.isMesh) return;
+  if (object.material?.userData?.townWater || object.material?.userData?.townscaperWater) return;
+  if (object.name === "canal-junction-water" || object.name === "canal-town-reflection") return;
+  if (object.name?.startsWith("contour-step")) return;
+  object.layers.set(CITADEL_SVARBOVA_LAYER);
+  object.castShadow = false;
+  object.receiveShadow = false;
+}
+
+function attachSvarbovaLightRig(castleContainer, buildingRoot) {
+  if (!castleContainer) return;
+  let ambient = castleContainer.getObjectByName("citadel-svarbova-ambient");
+  if (!ambient) {
+    ambient = new THREE.AmbientLight(0xffffff, 1.6);
+    ambient.name = "citadel-svarbova-ambient";
+    castleContainer.add(ambient);
+  }
+  ambient.intensity = 1.6;
+  ambient.color.setHex(0xffffff);
+  ambient.layers.set(CITADEL_SVARBOVA_LAYER);
+
+  let sun = castleContainer.getObjectByName("citadel-svarbova-sun");
+  if (!sun) {
+    sun = new THREE.DirectionalLight(0xffffff, 0.15);
+    sun.name = "citadel-svarbova-sun";
+    sun.position.set(10, 22, 12);
+    sun.castShadow = false;
+    castleContainer.add(sun);
+  }
+  sun.intensity = 0.15;
+  sun.color.setHex(0xffffff);
+  sun.layers.set(CITADEL_SVARBOVA_LAYER);
+
+  buildingRoot?.traverse(markSvarbovaLitMesh);
+}
+
+function buildSvarbovaRedFigure() {
+  const mat = new THREE.MeshStandardMaterial({
+    color: SVARBOVA.figure,
+    roughness: 0.15,
+    metalness: 0.02,
+    emissive: new THREE.Color(SVARBOVA.figure).multiplyScalar(0.12),
+  });
+  mat.userData.svarbova = true;
+  const figure = new THREE.Group();
+  figure.name = "svarbova-red-figure";
+  const part = (geo, y, x = 0, z = 0) => {
+    const meshObj = new THREE.Mesh(geo, mat);
+    meshObj.position.set(x, y, z);
+    meshObj.castShadow = false;
+    meshObj.receiveShadow = false;
+    addOutline(meshObj, SVARBOVA_OUTLINE_THICKNESS, SVARBOVA_OUTLINE_COLOR, 0);
+    figure.add(meshObj);
+    return meshObj;
+  };
+  part(new THREE.BoxGeometry(0.3, 0.44, 0.18), 0.98);
+  part(new THREE.BoxGeometry(0.2, 0.2, 0.18), 1.32);
+  part(new THREE.BoxGeometry(0.11, 0.5, 0.11), 0.5, -0.075);
+  part(new THREE.BoxGeometry(0.11, 0.5, 0.11), 0.5, 0.075);
+  part(new THREE.BoxGeometry(0.08, 0.4, 0.08), 0.94, -0.22);
+  part(new THREE.BoxGeometry(0.08, 0.4, 0.08), 0.94, 0.22);
+  figure.userData.kind = "svarbova-npc";
+  figure.userData.frozen = true;
+  return figure;
+}
+
+function placeSvarbovaRedFigure(castleContainer, skipOuterTerrain, townBaseLift) {
+  const host = castleContainer.userData.mainCastle || castleContainer;
+  const stale = host.getObjectByName("svarbova-red-figure");
+  if (stale) stale.removeFromParent();
+  const figure = buildSvarbovaRedFigure();
+  if (skipOuterTerrain) {
+    figure.position.set(0, (Number(townBaseLift) || 0.6) + 0.08, 4.0);
+  } else {
+    figure.position.set(0, 11.5, 4.0);
+  }
+  host.add(figure);
+  figure.traverse(markSvarbovaLitMesh);
+  return figure;
 }
 
 /**
@@ -1352,7 +1543,7 @@ export function buildOdysseyCitadel(options = {}) {
     cliff: makeToon(PALETTE.cliff, gradientMap),
     stone: makeToon(PALETTE.stone, gradientMap),
     weatherStone: makeToon(PALETTE.weatherStone, gradientMap),
-    plazaStone: makeToon(0xbfc9cd, gradientMap), // 石板广场铺装
+    plazaStone: makePastelStandard(SVARBOVA.porcelain),
     ink: makeToon(PALETTE.ink, gradientMap),
     wood: makeToon(PALETTE.wood, gradientMap),
     gold: makeToon(PALETTE.domeIvory, gradientMap),
@@ -1366,6 +1557,8 @@ export function buildOdysseyCitadel(options = {}) {
     bark: makeToon(PALETTE.bark, gradientMap),
     contour: makeToon(PALETTE.contour, gradientMap),
     pilgrimageStone: makeToon(PALETTE.pilgrimageStone, gradientMap),
+    trim: makePastelStandard(SVARBOVA.goose),
+    crenel: makePastelStandard(SVARBOVA.goose),
   };
 
   const castleContainer = new THREE.Group();
@@ -1438,8 +1631,7 @@ export function buildOdysseyCitadel(options = {}) {
   });
 
   for (const layer of layers) citadelAssembly.add(layer);
-  // 运河交汇：去掉描边，靠外露面融合 + 顶点渐变协调邻接
-  const mainOutlinedSurfaceCount = applyInkOutlines(citadelAssembly, !skipOuterTerrain);
+  const mainOutlinedSurfaceCount = applyInkOutlines(citadelAssembly, true);
 
   const outerTerrainSystem = skipOuterTerrain
     ? new THREE.Group()
@@ -1546,8 +1738,14 @@ export function buildOdysseyCitadel(options = {}) {
   // 性能：Townscaper 小镇按材质静态合并（窗口/台地拾取/塔树拾取跳过；
   // cell 面映射供 3D 直编辑）。在窗口灯绑定前执行，合并不动窗口网格。
   mergeCitadelTownStatic(castleContainer);
+  if (skipOuterTerrain) {
+    sealCitadelBuildingsOpaque(castleContainer);
+    refreshCanalTownReflection(castleContainer);
+  }
   // 拱窗夜景：收集 town-window 并绑定昼夜材质
   refreshCitadelWindowLights(castleContainer);
+  attachSvarbovaLightRig(castleContainer, citadelAssembly);
+  placeSvarbovaRedFigure(castleContainer, skipOuterTerrain, options.townBaseLift ?? 0.6);
 
   return castleContainer;
 }
@@ -1609,7 +1807,7 @@ export function rebuildCitadelTown(castleContainer, spec) {
       leanDecor: castleContainer.userData.skipOuterTerrain === true,
     }
   );
-  applyInkOutlines(assembly.group, !castleContainer.userData.skipOuterTerrain);
+  applyInkOutlines(assembly.group, true);
   assembly.terraceLevels.forEach((terrace) => {
     terrace.forEach((levelGroup, floorIndex) => {
       layers[floorIndex].add(levelGroup);
@@ -1617,6 +1815,10 @@ export function rebuildCitadelTown(castleContainer, spec) {
   });
   // 热重建后再次静态合并（幂等：先清旧合并网格）；窗口/拾取依赖同上
   mergeCitadelTownStatic(castleContainer);
+  if (castleContainer.userData.skipOuterTerrain) {
+    sealCitadelBuildingsOpaque(castleContainer);
+    refreshCanalTownReflection(castleContainer);
+  }
   castleContainer.userData.townStats = assembly.stats;
   castleContainer.userData.townSpec = assembly.layout;
   if (castleContainer.userData.skipOuterTerrain) {
@@ -1632,6 +1834,12 @@ export function rebuildCitadelTown(castleContainer, spec) {
   castleContainer.userData.gradientMap =
     castleContainer.userData.gradientMap ?? assembly.gradientMap ?? makeThreeStepGradient();
   refreshCitadelWindowLights(castleContainer);
+  attachSvarbovaLightRig(castleContainer, castleContainer.userData.mainCastle);
+  placeSvarbovaRedFigure(
+    castleContainer,
+    castleContainer.userData.skipOuterTerrain === true,
+    castleContainer.userData.townBaseLift ?? 0.6
+  );
   return assembly.stats;
 }
 

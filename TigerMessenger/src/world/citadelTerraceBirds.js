@@ -1,5 +1,5 @@
 // =====================================================================
-//  圣城各台地鸟群：每台 20 只，随机栖于各房屋屋顶
+//  圣城鸟群：全城共 20 只，栖于最高台地房屋屋顶
 //  · 白天：双螺旋漩涡起舞
 //  · 夜晚：栖息屋顶；纸士兵经过时惊飞，离开后立刻落下
 // =====================================================================
@@ -8,7 +8,7 @@ import { BirdVortexManager } from "./birdVortex.js";
 import { citadelTerraceMetrics } from "./odysseyCitadel.js";
 import { P } from "../core/params.js";
 
-const BIRDS_PER_TERRACE = 20;
+const CITADEL_BIRD_TOTAL = 20;
 /** 与 citadelInfiltration / 窗户夜景一致：一入夜 0.82 → 黎明 0.22 */
 const NIGHT_OPEN = 0.82;
 const NIGHT_CLOSE = 0.22;
@@ -62,7 +62,7 @@ export function collectTerraceRoofPerches(castle, terraceIndex, up) {
     const base = _tmp.clone().addScaledVector(up, 0.22);
     const isPrimary =
       o.name === "town-roof" || o.name === "town-spire" || o.name === "town-dome";
-    // 每块屋顶撒 2–4 个点，便于 20 只鸟分散到不同屋面
+    // 每块屋顶撒几个点，便于鸟分散到不同屋面
     const samples = isPrimary ? 3 : 1;
     for (let s = 0; s < samples; s++) {
       const j = Math.random() * Math.PI * 2;
@@ -119,7 +119,7 @@ function anyThreatNear(threats, origin, radius, up, bandH = 5.5) {
 }
 
 /**
- * 在五级台地各布 20 只鸟，随机栖于各房屋屋顶；昼夜切换漩涡/栖顶/惊飞。
+ * 高山古堡共 20 只鸟，落在最高台地屋顶；昼夜切换漩涡/栖顶/惊飞。
  * @param {THREE.Scene} scene
  * @param {THREE.Object3D} odysseyCitadel
  * @param {object} [opts]
@@ -136,12 +136,14 @@ export function createCitadelTerraceBirds(scene, odysseyCitadel, opts = {}) {
   _fwd.set(0, 0, 1).applyQuaternion(odysseyCitadel.quaternion).normalize();
 
   for (let ti = 0; ti < metrics.length; ti++) {
+    const count = ti === 0 ? CITADEL_BIRD_TOTAL : 0;
+    if (count <= 0) continue;
     const m = metrics[ti];
     _origin.set(0, m.top + 0.35, 0);
     odysseyCitadel.localToWorld(_origin);
 
     const vortex = new BirdVortexManager(scene, {
-      count: BIRDS_PER_TERRACE,
+      count,
       origin: _origin.clone(),
       up: _up.clone(),
       right: _right.clone(),

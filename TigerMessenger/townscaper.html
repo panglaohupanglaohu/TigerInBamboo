@@ -213,6 +213,7 @@ scene.add(layerFrame);
 //   中键 / 空格+左键拖动 = 旋转 · 右键拖动 = 平移 · 滚轮 = 缩放
 // ---------------------------------------------------------------------------
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 500);
+camera.layers.enable(1);
 const orbit = {
   theta: Math.PI / 5, phi: 1.05, radius: 34,
   target: new THREE.Vector3(0, 5.5, 0),

@@ -1351,6 +1351,7 @@ export function createTieSoldier() {
 export function createHarborPatrolSoldier() {
   const root = createNightInfiltrationSoldier({ torchLeft: false });
   root.name = "harbor-patrol-soldier";
+  root.userData.phalanxRole = "spear";
   const { body, armL, armR, crate } = root.userData.parts || {};
   if (crate) crate.visible = false;
   // 前倾突击：矛头朝局部 +X（行进方向）
@@ -1368,6 +1369,398 @@ export function createHarborPatrolSoldier() {
     shield.position.set(-0.16, PORTER_HIP + 0.14, 0.12);
   }
   return root;
+}
+
+/**
+ * 方阵短剑盾兵：左手盾、右手青铜短剑。
+ */
+export function createGladiusSoldier() {
+  const root = createNightInfiltrationSoldier({ torchLeft: false });
+  root.name = "gladius-soldier";
+  root.userData.phalanxRole = "gladius";
+  const spear = root.userData.equipment?.spear;
+  if (spear) spear.visible = false;
+  const fig = root.children[0];
+  const bronze = toonMat(0x9a7434, { flatShading: true });
+  const wood = toonMat(0x4b3523, { flatShading: true });
+  const sword = new THREE.Group();
+  sword.name = "right-hand-gladius";
+  const grip = part(new THREE.CylinderGeometry(0.012, 0.014, 0.08, 5), wood, 0.004);
+  grip.position.y = 0.04;
+  sword.add(grip);
+  const blade = part(new THREE.BoxGeometry(0.028, 0.2, 0.008), bronze, 0.005);
+  blade.position.y = 0.16;
+  sword.add(blade);
+  sword.position.set(0.2, PORTER_HIP + 0.12, 0.1);
+  sword.rotation.set(0.15, 0, -0.9);
+  fig?.getObjectByName("infiltration-equipment")?.add(sword);
+  const eq = root.userData.equipment || {};
+  eq.gladius = sword;
+  root.userData.equipment = eq;
+  const { armR } = root.userData.parts || {};
+  if (armR) armR.rotation.z = 0.85;
+  return root;
+}
+
+/**
+ * 英格兰长弓兵（侧视剪纸）。
+ * 臂几何沿局部 −Y 垂下，绕 Z 转：0=下垂，≈1.5=前平举，≈3.4=拉到耳侧。
+ * 弓贴左手、箭随右手；撒放时弦弹回、手留在耳侧，再 follow-through。
+ * 用 updateLongbowShot 驱动 reach→nock→draw→hold→loose→follow→recover。
+ */
+const BOW_ARM = {
+  L_LOW: 0.62,
+  L_AIM: 1.74,
+  R_QUIVER: 0.08,
+  R_NOCK: 1.52,
+  R_DRAW: 3.82,
+  R_FOLLOW: 2.18,
+};
+const BOW_HAND_LEN = 0.138;
+const BOW_TIP = 0.235;
+const BOW_STRING_LEN = 0.22;
+const ARROW_HALF = 0.17;
+
+const _bowHandL = new THREE.Vector3();
+const _bowHandR = new THREE.Vector3();
+
+function bowEase(u) {
+  const x = THREE.MathUtils.clamp(u, 0, 1);
+  return x * x * (3 - 2 * x);
+}
+
+function bowSmooth(u) {
+  const x = THREE.MathUtils.clamp(u, 0, 1);
+  return x * x * x * (x * (x * 6 - 15) + 10);
+}
+
+function armHandPos(arm, out) {
+  const th = arm?.rotation.z || 0;
+  out.set(
+    (arm?.position.x || 0) + BOW_HAND_LEN * Math.sin(th),
+    (arm?.position.y || 0) - BOW_HAND_LEN * Math.cos(th),
+    arm?.position.z || 0
+  );
+  return out;
+}
+
+function placeBowString(seg, ax, ay, bx, by) {
+  if (!seg) return;
+  const dx = bx - ax;
+  const dy = by - ay;
+  const len = Math.hypot(dx, dy) || 0.001;
+  seg.position.set((ax + bx) * 0.5, (ay + by) * 0.5, 0);
+  seg.scale.y = len / BOW_STRING_LEN;
+  seg.rotation.z = Math.atan2(dx, dy);
+}
+
+export function createLongbowSoldier() {
+  const root = createNightInfiltrationSoldier({ torchLeft: false });
+  root.name = "longbow-soldier";
+  root.userData.phalanxRole = "longbow";
+  const spear = root.userData.equipment?.spear;
+  if (spear) spear.visible = false;
+  const shield = root.userData.equipment?.shield;
+  if (shield) shield.visible = false;
+
+  const fig = root.children[0];
+  const equip =
+    root.userData.equipment?.equipment || fig?.getObjectByName("infiltration-equipment");
+  const yew = toonMat(0x6b4a24, { flatShading: true });
+  const horn = toonMat(0x3a2a18, { flatShading: true });
+  const wrap = toonMat(0x4a3020, { flatShading: true });
+  const stringMat = toonMat(0xf2ebe0, { flatShading: true });
+  const shaftMat = toonMat(0x7a5a32, { flatShading: true });
+  const headMat = toonMat(0x8a9498, { flatShading: true });
+  const fletchMat = toonMat(0xc43c32, { flatShading: true });
+  const leather = toonMat(0x5c3a22, { flatShading: true });
+
+  const bow = new THREE.Group();
+  bow.name = "english-longbow";
+  const grip = part(new THREE.BoxGeometry(0.026, 0.055, 0.02), wrap, 0.004);
+  bow.add(grip);
+
+  const limbTop = new THREE.Group();
+  limbTop.name = "bow-limb-top";
+  const staveTop = part(new THREE.BoxGeometry(0.018, 0.21, 0.014), yew, 0.004);
+  staveTop.position.y = 0.118;
+  limbTop.add(staveTop);
+  const tipT = part(new THREE.BoxGeometry(0.014, 0.036, 0.012), horn, 0.003);
+  tipT.position.y = BOW_TIP;
+  limbTop.add(tipT);
+  bow.add(limbTop);
+
+  const limbBot = new THREE.Group();
+  limbBot.name = "bow-limb-bot";
+  const staveBot = part(new THREE.BoxGeometry(0.018, 0.21, 0.014), yew, 0.004);
+  staveBot.position.y = -0.118;
+  limbBot.add(staveBot);
+  const tipB = part(new THREE.BoxGeometry(0.014, 0.036, 0.012), horn, 0.003);
+  tipB.position.y = -BOW_TIP;
+  limbBot.add(tipB);
+  bow.add(limbBot);
+
+  const stringTop = part(new THREE.BoxGeometry(0.008, BOW_STRING_LEN, 0.008), stringMat, 0.002);
+  stringTop.name = "bow-string-top";
+  bow.add(stringTop);
+  const stringBot = part(new THREE.BoxGeometry(0.008, BOW_STRING_LEN, 0.008), stringMat, 0.002);
+  stringBot.name = "bow-string-bot";
+  bow.add(stringBot);
+  equip?.add(bow);
+
+  const nocked = new THREE.Group();
+  nocked.name = "nocked-arrow";
+  const ash = part(new THREE.CylinderGeometry(0.007, 0.007, 0.34, 4), shaftMat, 0.002);
+  ash.rotation.z = Math.PI / 2;
+  nocked.add(ash);
+  const head = part(new THREE.ConeGeometry(0.016, 0.05, 4), headMat, 0.002);
+  head.rotation.z = -Math.PI / 2;
+  head.position.x = 0.19;
+  nocked.add(head);
+  const fletch = part(new THREE.BoxGeometry(0.05, 0.036, 0.008), fletchMat, 0.002);
+  fletch.position.x = -0.14;
+  nocked.add(fletch);
+  nocked.visible = false;
+  equip?.add(nocked);
+
+  const quiver = new THREE.Group();
+  quiver.name = "longbow-quiver";
+  const pot = part(new THREE.CylinderGeometry(0.026, 0.032, 0.15, 6), leather, 0.004);
+  pot.rotation.z = 0.55;
+  quiver.add(pot);
+  for (let i = 0; i < 3; i++) {
+    const extra = part(new THREE.CylinderGeometry(0.005, 0.005, 0.16, 4), shaftMat, 0.001);
+    extra.position.set(-0.02 + i * 0.016, 0.08, 0.01 - i * 0.006);
+    extra.rotation.z = 0.5;
+    quiver.add(extra);
+    const nock = part(new THREE.BoxGeometry(0.018, 0.014, 0.006), fletchMat, 0.001);
+    nock.position.copy(extra.position).add(new THREE.Vector3(-0.01, 0.07, 0));
+    nock.rotation.z = 0.5;
+    quiver.add(nock);
+  }
+  quiver.position.set(-0.05, PORTER_HIP + 0.07, -0.035);
+  equip?.add(quiver);
+
+  const { body, armL, armR, legL, legR } = root.userData.parts || {};
+  if (armL) armL.rotation.z = BOW_ARM.L_LOW;
+  if (armR) armR.rotation.z = BOW_ARM.R_QUIVER;
+  if (body) body.rotation.z = 0.04;
+  if (legL) legL.rotation.z = 0.16;
+  if (legR) legR.rotation.z = -0.12;
+
+  const eq = root.userData.equipment || {};
+  eq.bow = bow;
+  eq.limbTop = limbTop;
+  eq.limbBot = limbBot;
+  eq.stringTop = stringTop;
+  eq.stringBot = stringBot;
+  eq.nockedArrow = nocked;
+  eq.quiver = quiver;
+  eq.quiverMouth = new THREE.Vector3(-0.08, PORTER_HIP + 0.16, -0.02);
+  root.userData.equipment = eq;
+  root.userData.bowCycle = {
+    phase: "reach",
+    t: Math.random() * 0.18,
+    draw: 0,
+    holdFor: 0.16 + Math.random() * 0.16,
+    seed: Math.random() * Math.PI * 2,
+  };
+  poseLongbowGear(root, { draw: 0, showArrow: false });
+  return root;
+}
+
+/**
+ * 按当前手臂角度摆弓、弦、搭箭。手臂角度由 updateLongbowShot 先写好。
+ * @param {THREE.Group} root
+ * @param {{ draw?: number, showArrow?: boolean, stringJiggle?: number, arrowFromQuiver?: number }} opts
+ */
+function poseLongbowGear(root, opts = {}) {
+  const d = THREE.MathUtils.clamp(opts.draw ?? 0, 0, 1);
+  const showArrow = !!opts.showArrow;
+  const jiggle = opts.stringJiggle || 0;
+  const fromQ = THREE.MathUtils.clamp(opts.arrowFromQuiver ?? 0, 0, 1);
+  const { body, armL, armR, legL, legR } = root.userData.parts || {};
+  const eq = root.userData.equipment || {};
+
+  if (body) {
+    body.rotation.z = 0.05 - d * 0.12;
+    body.position.y = PORTER_HIP - d * 0.01;
+  }
+  if (legL) legL.rotation.z = 0.16 + d * 0.07;
+  if (legR) legR.rotation.z = -0.12 - d * 0.05;
+
+  armHandPos(armL, _bowHandL);
+  armHandPos(armR, _bowHandR);
+
+  const bow = eq.bow;
+  if (bow) {
+    bow.position.set(_bowHandL.x + 0.012, _bowHandL.y + 0.006, 0.045);
+  }
+
+  const bend = d * 0.28;
+  if (eq.limbTop) eq.limbTop.rotation.z = bend;
+  if (eq.limbBot) eq.limbBot.rotation.z = -bend;
+
+  const tipTopX = -BOW_TIP * Math.sin(bend);
+  const tipTopY = BOW_TIP * Math.cos(bend);
+  const tipBotX = BOW_TIP * Math.sin(bend);
+  const tipBotY = -BOW_TIP * Math.cos(bend);
+
+  const braceX = -0.014;
+  let nockX = braceX + jiggle;
+  let nockY = jiggle * 0.15;
+  if (bow && d > 0.02) {
+    nockX = THREE.MathUtils.lerp(braceX, _bowHandR.x - bow.position.x, d) + jiggle;
+    nockY = THREE.MathUtils.lerp(0, _bowHandR.y - bow.position.y, d) + jiggle * 0.2;
+  }
+  placeBowString(eq.stringTop, tipTopX, tipTopY, nockX, nockY);
+  placeBowString(eq.stringBot, tipBotX, tipBotY, nockX, nockY);
+
+  const arrow = eq.nockedArrow;
+  if (!arrow) return;
+  arrow.visible = showArrow;
+  if (!showArrow) return;
+
+  const mouth = eq.quiverMouth;
+  if (fromQ > 0.001 && mouth) {
+    const ax = THREE.MathUtils.lerp(mouth.x, _bowHandR.x + ARROW_HALF * 0.15, 1 - fromQ);
+    const ay = THREE.MathUtils.lerp(mouth.y, _bowHandR.y, 1 - fromQ);
+    arrow.position.set(ax, ay, 0.06);
+    arrow.rotation.z = THREE.MathUtils.lerp(0.85, 0.08, 1 - fromQ);
+    return;
+  }
+
+  const aimX = (_bowHandL.x - _bowHandR.x) || 0.2;
+  const aimY = _bowHandL.y - _bowHandR.y;
+  // 单骨纸臂拉到耳侧会偏高，箭路略压平，剪影才像平射
+  const ang = Math.atan2(aimY, aimX) * 0.42;
+  arrow.rotation.z = ang;
+  arrow.position.set(
+    _bowHandR.x + Math.cos(ang) * ARROW_HALF,
+    _bowHandR.y + Math.sin(ang) * ARROW_HALF,
+    0.055
+  );
+}
+
+/**
+ * 长弓循环。返回 true 的那一帧是撒放，应立刻射出飞箭。
+ * @param {THREE.Group} root
+ * @param {number} dt
+ */
+export function updateLongbowShot(root, dt = 0.016) {
+  if (!root?.userData) return false;
+  if (!root.userData.bowCycle) {
+    root.userData.bowCycle = {
+      phase: "reach",
+      t: 0,
+      draw: 0,
+      holdFor: 0.2,
+      seed: 0,
+    };
+  }
+  const c = root.userData.bowCycle;
+  const { armL, armR } = root.userData.parts || {};
+  c.t += Math.max(0, Number(dt) || 0);
+  let released = false;
+
+  const setArms = (lz, rz) => {
+    if (armL) armL.rotation.z = lz;
+    if (armR) armR.rotation.z = rz;
+  };
+
+  if (c.phase === "reach") {
+    const u = bowEase(c.t / 0.22);
+    setArms(
+      THREE.MathUtils.lerp(BOW_ARM.L_AIM * 0.7, BOW_ARM.L_LOW, u),
+      THREE.MathUtils.lerp(BOW_ARM.R_FOLLOW, BOW_ARM.R_QUIVER, u)
+    );
+    c.draw = 0;
+    poseLongbowGear(root, { draw: 0, showArrow: u > 0.55, arrowFromQuiver: 1 });
+    if (c.t >= 0.22) {
+      c.phase = "nock";
+      c.t = 0;
+    }
+  } else if (c.phase === "nock") {
+    const u = bowEase(c.t / 0.28);
+    setArms(
+      THREE.MathUtils.lerp(BOW_ARM.L_LOW, BOW_ARM.L_AIM, u),
+      THREE.MathUtils.lerp(BOW_ARM.R_QUIVER, BOW_ARM.R_NOCK, u)
+    );
+    c.draw = u * 0.08;
+    poseLongbowGear(root, {
+      draw: c.draw,
+      showArrow: true,
+      arrowFromQuiver: 1 - u,
+    });
+    if (c.t >= 0.28) {
+      c.phase = "draw";
+      c.t = 0;
+    }
+  } else if (c.phase === "draw") {
+    const u = bowSmooth(c.t / 0.68);
+    setArms(
+      THREE.MathUtils.lerp(BOW_ARM.L_AIM, BOW_ARM.L_AIM + 0.04, u),
+      THREE.MathUtils.lerp(BOW_ARM.R_NOCK, BOW_ARM.R_DRAW, u)
+    );
+    c.draw = u;
+    poseLongbowGear(root, { draw: c.draw, showArrow: true });
+    if (c.t >= 0.68) {
+      c.phase = "hold";
+      c.t = 0;
+      c.draw = 1;
+      if (!c.holdFor) c.holdFor = 0.18 + Math.random() * 0.14;
+    }
+  } else if (c.phase === "hold") {
+    const wobble = 0.018 * Math.sin(c.t * 10 + (c.seed || 0));
+    setArms(BOW_ARM.L_AIM + 0.04, BOW_ARM.R_DRAW + wobble);
+    c.draw = 1;
+    poseLongbowGear(root, { draw: 1, showArrow: true, stringJiggle: wobble * 0.15 });
+    if (c.t >= (c.holdFor || 0.2)) {
+      c.phase = "loose";
+      c.t = 0;
+      released = true;
+      if (root.userData.equipment?.nockedArrow) {
+        root.userData.equipment.nockedArrow.visible = false;
+      }
+    }
+  } else if (c.phase === "loose") {
+    // 撒放：弦弹回，右手留在耳侧（不跟着弦走）
+    const u = Math.min(1, c.t / 0.1);
+    c.draw = Math.max(0, (1 - u) * (1 - u));
+    const osc = Math.exp(-c.t * 22) * Math.sin(c.t * 78) * 0.035;
+    setArms(BOW_ARM.L_AIM + 0.02, BOW_ARM.R_DRAW - u * 0.18);
+    poseLongbowGear(root, { draw: Math.max(0, c.draw + osc * 4), showArrow: false, stringJiggle: osc });
+    if (c.t >= 0.12) {
+      c.phase = "follow";
+      c.t = 0;
+    }
+  } else if (c.phase === "follow") {
+    const u = bowEase(c.t / 0.26);
+    setArms(
+      THREE.MathUtils.lerp(BOW_ARM.L_AIM, BOW_ARM.L_AIM * 0.72, u),
+      THREE.MathUtils.lerp(BOW_ARM.R_DRAW - 0.18, BOW_ARM.R_FOLLOW, u)
+    );
+    c.draw = 0;
+    poseLongbowGear(root, { draw: 0, showArrow: false });
+    if (c.t >= 0.26) {
+      c.phase = "recover";
+      c.t = 0;
+    }
+  } else {
+    const u = bowEase(c.t / 0.16);
+    setArms(
+      THREE.MathUtils.lerp(BOW_ARM.L_AIM * 0.72, BOW_ARM.L_AIM * 0.7, u),
+      THREE.MathUtils.lerp(BOW_ARM.R_FOLLOW, BOW_ARM.R_FOLLOW, u)
+    );
+    c.draw = 0;
+    poseLongbowGear(root, { draw: 0, showArrow: false });
+    if (c.t >= 0.16) {
+      c.phase = "reach";
+      c.t = 0;
+      c.holdFor = 0.16 + Math.random() * 0.16;
+    }
+  }
+  return released;
 }
 
 /**

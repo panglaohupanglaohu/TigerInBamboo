@@ -50,15 +50,15 @@ const POS_KEY = "tm.citadelEditor.pos";
 const COLLAPSE_KEY = "tm.citadelEditor.collapsed";
 const DROP_KEY = "tm.citadelEditor.dropToGround";
 const PANEL_CHARS = {
-  0: "#e8e4da", 1: "#e9ddc0", 2: "#d8c08a", 3: "#d4b450", 4: "#c67a3f",
-  5: "#a8543c", 6: "#b06a4a", 7: "#8a5a3a", 8: "#6a4a33", 9: "#7c8a93",
-  A: "#5f6b73", B: "#5a7d9e", C: "#3e5368", D: "#4d8f84", E: "#4f7755",
-  G: "#8b5a2b",
+  0: "#F2F4F4", 1: "#D5DBDB", 2: "#F2F4F4", 3: "#FCF3CF", 4: "#FCF3CF",
+  5: "#E8F8F5", 6: "#E8F8F5", 7: "#D5DBDB", 8: "#D5DBDB", 9: "#D5DBDB",
+  A: "#F2F4F4", B: "#D5DBDB", C: "#E8F8F5", D: "#E8F8F5", E: "#E8F8F5",
+  G: "#D5DBDB",
 };
 const CHAR_NAMES = {
-  0: "白", 1: "米白", 2: "沙黄", 3: "柠黄", 4: "橙", 5: "砖红", 6: "陶土",
-  7: "褐", 8: "深褐", 9: "蓝灰", A: "石板灰", B: "蓝", C: "藏青", D: "青",
-  E: "松绿", G: "正门",
+  0: "瓷白", 1: "浅灰蓝", 2: "瓷白", 3: "鹅黄", 4: "鹅黄", 5: "薄荷", 6: "薄荷",
+  7: "浅灰蓝", 8: "浅灰蓝", 9: "浅灰蓝", A: "瓷白", B: "浅灰蓝", C: "薄荷", D: "薄荷",
+  E: "薄荷", G: "正门",
 };
 const PALETTE_ORDER = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "G"];
 const CELL = CITADEL_TOWN_SPEC.cellSize;
@@ -128,10 +128,10 @@ export function createCitadelEditorPanel({
     const id = getInstanceId();
     try {
       const t = getTargets().find((x) => (x.id ?? null) === id);
-      const floors = t?.floors ?? CITADEL_CASTLE_FLOORS;
+      const floors = t?.floors ?? (id === "canal-junction" ? 12 : CITADEL_CASTLE_FLOORS);
       return Math.max(0, floors - 1);
     } catch {
-      return CITADEL_CASTLE_FLOORS - 1;
+      return (getInstanceId() === "canal-junction" ? 12 : CITADEL_CASTLE_FLOORS) - 1;
     }
   }
 
@@ -195,7 +195,7 @@ export function createCitadelEditorPanel({
     const hint = panel.querySelector("#ce-hint");
     if (hint) {
       hint.innerHTML = canal
-        ? "河水相交处 · 点水面盖楼（Townscaper 水上城堡），无台地。<br/>楼脚贴水，邻空自动长防波堤。平面图左键放块 / 右键删块 · 3D 点顶叠高 · Q/E 换层 · Ctrl+S 保存"
+        ? "河水相交处 · 点水面盖楼，可叠 12 层。<br/>3D：点屋顶往上盖 · 侧面改色 · 右键删块 · Q/E 换层（共 12 层）· Ctrl+S 保存"
         : "平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>台地/护城河/城堡改动都即时预览 3D · 必须点「保存台地配置」或「保存全部」（Ctrl+S）才写入存档";
     }
     if (canal) {

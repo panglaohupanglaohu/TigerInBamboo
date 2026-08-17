@@ -211,6 +211,7 @@ export function createCitadelSceneEdit({
   const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
 
   const raycaster = new THREE.Raycaster();
+  raycaster.layers.enable(1);
   const ndc = new THREE.Vector2();
   const upLocal = new THREE.Vector3(0, 1, 0);
   const tmpQ = new THREE.Quaternion();
@@ -273,6 +274,7 @@ export function createCitadelSceneEdit({
     if (!frame) return null;
     const hits = ray.intersectObject(citadel, true);
     const activeTerrace = panel.getState().activeTerrace;
+    const canal = !!citadel.userData?.skipOuterTerrain;
     // 选中台地归属梯湖的命中距离：水面在台壁之前时，台壁不得拦截拾取
     // （缺口内的梯湖本就压在邻层台壁后方，否则水面永远点不到）
     const poolSel = raycastCascadePoolTop(scene, ray, tmpV2, activeTerrace);
@@ -281,20 +283,33 @@ export function createCitadelSceneEdit({
       const cell = hit.object.userData?.cell ?? lookupMergedCell(hit);
       if (cell && hit.face) {
         // 点击其它台地已建体块：自动切换编辑台地（不弹回 castPlane）
-        if (cell.terraceIndex !== activeTerrace && !citadel.userData?.skipOuterTerrain) {
+        if (cell.terraceIndex !== activeTerrace && !canal) {
           panel.setActiveTerrace(cell.terraceIndex);
           toast(`已切换到台地 ${cell.terraceIndex + 1}`, 1.0);
         }
         const up = upLocal.clone().applyQuaternion(frame.citadel.getWorldQuaternion(tmpQ));
         const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
-        return { cell, top: normal.dot(up) > 0.9 };
+        return { cell, top: normal.dot(up) > 0.75 };
       }
-      // A visible terrace surface is an occluder, not transparent picking
-      // space. Stop here so a town cell hidden behind it cannot steal the
-      // click; castPlane() will then resolve the selected terrace/grid cell.
-      if (hit.object.userData.isCitadelTerrace) {
-        if (dPoolSel < hit.distance) break; // 选中台地的水面更近 → 交给 castPlane
+      // 高山台地顶面挡住后面的楼。水上城堡的拾取垫不能挡楼——
+      // 斜视角会先打到垫子侧/面，点屋顶就叠不上去。
+      if (hit.object.userData.isCitadelTerrace && !canal) {
+        if (dPoolSel < hit.distance) break;
         return null;
+      }
+    }
+    // 点到屋顶/窗/岸裙：按落点找柱，当作点在该柱最高块顶面 → 往上叠
+    if (canal) {
+      for (const hit of hits) {
+        if (hit.object.userData.isCitadelTerrace) continue;
+        if (hit.object.userData.isOutline) continue;
+        frame.citadel.worldToLocal(tmpV.copy(hit.point));
+        const col = panel.cellAtLocal(tmpV.x, tmpV.z, 0);
+        if (!col) continue;
+        const next = panel.dropTarget(col.ix, col.iz, 0);
+        if (next && next.iy > 0) {
+          return { cell: { ix: next.ix, iy: next.iy - 1, iz: next.iz }, top: true };
+        }
       }
     }
     return null;
@@ -448,10 +463,15 @@ export function createCitadelSceneEdit({
       }
     } else if (hit) {
       if (hit.top && hit.cell.iy < panel.maxLevel) {
-        panel.applySceneEdit(
+        const ok = panel.applySceneEdit(
           { ix: hit.cell.ix, iy: hit.cell.iy + 1, iz: hit.cell.iz },
           "place"
         );
+        if (!ok && hit.cell.iy + 1 > panel.maxLevel) {
+          toast(`已经到顶（${panel.maxLevel + 1} 层）`, 1.4);
+        }
+      } else if (hit.top && hit.cell.iy >= panel.maxLevel) {
+        toast(`已经到顶（${panel.maxLevel + 1} 层）`, 1.4);
       } else {
         panel.applySceneEdit(hit.cell, "place"); // 侧面/到顶 → 改色
       }

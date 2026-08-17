@@ -113,6 +113,10 @@ export const OUTLINE_DRY = Object.freeze({
 /** 松烟墨色（暖黑，非冷蓝黑） */
 export const INK_COLOR = 0x211e19;
 
+/** 斯瓦尔博娃圣城：灰蓝铅笔细勾，不污染全局墨线默认值 */
+export const SVARBOVA_OUTLINE_COLOR = 0x5d6d7e;
+export const SVARBOVA_OUTLINE_THICKNESS = 0.025;
+
 /**
  * 反向壳描边 · 毛笔笔意版：
  *  - 提按：顶点噪声调制宽度 0.65x~1.25x（略收敛，防抖）

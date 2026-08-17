@@ -16,6 +16,7 @@ export function createStage() {
     0.1,
     500
   );
+  camera.layers.enable(1); // 斯瓦尔博娃圣城光照层
   camera.position.set(0, 50, 20);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });

@@ -219,7 +219,7 @@ if (messenger?.landmarks?.bookshop) {
   );
   mapEditor.registerFromWorld("bookshop", shop, -0.5, col || null);
 }
-// 登记场景内置莫比斯湖沼（默认在书店镇中心；地图编辑器可拖动/存档/删除）
+// 登记场景内置莫比斯湖沼（默认在水晶城旁；地图编辑器可拖动/存档/删除）
 if (messenger?.landmarks?.moebiusSwamp) {
   mapEditor.registerFromWorld(
     "moebiusSwamp",
@@ -915,6 +915,7 @@ let citadelSceneEdit = citadelEditorPanel
 
 {
   const citadelPickRay = new THREE.Raycaster();
+  citadelPickRay.layers.enable(1);
   const citadelPickNdc = new THREE.Vector2();
   renderer.domElement.addEventListener("pointerdown", (e) => {
     if (!citadelEditorPanel || e.button !== 0) return;

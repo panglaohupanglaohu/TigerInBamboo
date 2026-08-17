@@ -984,6 +984,20 @@ function updateHummingbirdForage(members, nectarList, ctx) {
         .add(_acTmpA.copy(formationTan).multiplyScalar(slot.fwd))
         .add(_acTmpB.copy(formationSide).multiplyScalar(slot.side + personalSway))
         .add(_acTmpC.copy(formationUp).multiplyScalar(slot.up + personalHeave));
+      const want = (member.userData.arrowHits || 0) >= 50 ? 0.5 : 1;
+      const cur = Number.isFinite(member.userData.woundHeightMul)
+        ? member.userData.woundHeightMul
+        : 1;
+      member.userData.woundHeightMul = cur + (want - cur) * Math.min(1, dt * 0.55);
+      if (member.userData.woundHeightMul < 0.995) {
+        const alt = _acSlotPos.length() - R;
+        if (alt > 0) {
+          _acSlotPos.addScaledVector(
+            formationUp,
+            -alt * (1 - member.userData.woundHeightMul)
+          );
+        }
+      }
     } else {
       _acSlotPos.copy(member.position);
     }

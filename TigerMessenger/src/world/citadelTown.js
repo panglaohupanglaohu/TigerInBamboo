@@ -47,26 +47,26 @@ export const CITADEL_GRID_SIZE = 25;
  * 索引 0–14 ↔ 字符 "0"–"9" 与 "A"–"E"。
  */
 export const CITADEL_PALETTE = Object.freeze([
-  Object.freeze({ name: "白", char: "0", color: 0xf6f1e6 }),
-  Object.freeze({ name: "米白", char: "1", color: 0xf3d89a }),
-  Object.freeze({ name: "沙黄", char: "2", color: 0xf0c44a }),
-  Object.freeze({ name: "柠黄", char: "3", color: 0xf2c230 }),
-  Object.freeze({ name: "橙", char: "4", color: 0xe87828 }),
-  Object.freeze({ name: "砖红", char: "5", color: 0xe03a38 }),
-  Object.freeze({ name: "陶土", char: "6", color: 0xd45a3a }),
-  Object.freeze({ name: "褐", char: "7", color: 0x9a4e30 }),
-  Object.freeze({ name: "深褐", char: "8", color: 0x5a3420 }),
-  Object.freeze({ name: "蓝灰", char: "9", color: 0x7e90a0 }),
-  Object.freeze({ name: "石板灰", char: "A", color: 0x4a5864 }),
-  Object.freeze({ name: "蓝", char: "B", color: 0x3b6fd4 }),
-  Object.freeze({ name: "藏青", char: "C", color: 0x2a3f68 }),
-  Object.freeze({ name: "青", char: "D", color: 0x2a9a88 }),
-  Object.freeze({ name: "松绿", char: "E", color: 0x48b04a }),
+  Object.freeze({ name: "瓷白", char: "0", color: 0xf2f4f4 }),
+  Object.freeze({ name: "浅灰蓝", char: "1", color: 0xd5dbdb }),
+  Object.freeze({ name: "瓷白", char: "2", color: 0xf2f4f4 }),
+  Object.freeze({ name: "鹅黄", char: "3", color: 0xfcf3cf }),
+  Object.freeze({ name: "鹅黄", char: "4", color: 0xfcf3cf }),
+  Object.freeze({ name: "薄荷", char: "5", color: 0xe8f8f5 }),
+  Object.freeze({ name: "薄荷", char: "6", color: 0xe8f8f5 }),
+  Object.freeze({ name: "浅灰蓝", char: "7", color: 0xd5dbdb }),
+  Object.freeze({ name: "浅灰蓝", char: "8", color: 0xd5dbdb }),
+  Object.freeze({ name: "浅灰蓝", char: "9", color: 0xd5dbdb }),
+  Object.freeze({ name: "瓷白", char: "A", color: 0xf2f4f4 }),
+  Object.freeze({ name: "浅灰蓝", char: "B", color: 0xd5dbdb }),
+  Object.freeze({ name: "薄荷", char: "C", color: 0xe8f8f5 }),
+  Object.freeze({ name: "薄荷", char: "D", color: 0xe8f8f5 }),
+  Object.freeze({ name: "薄荷", char: "E", color: 0xe8f8f5 }),
 ]);
 
-/** 正门字符（门廊语义，非调色板色；颜色固定为木褐）。 */
+/** 正门字符（门廊语义，非调色板色；无菌灰蓝，去掉木褐）。 */
 export const CITADEL_GATE_CHAR = "G";
-export const CITADEL_GATE_COLOR = 0x8b5a2b;
+export const CITADEL_GATE_COLOR = 0xd5dbdb;
 
 /** 调色板字符串 "0123456789ABCDE"（顺序即色序）。 */
 export const CITADEL_PALETTE_CHARS = CITADEL_PALETTE.map((entry) => entry.char).join("");
@@ -708,7 +708,7 @@ function buildCitadelRoofBird(materials, x, y, z, random) {
   for (const side of [-1, 1]) {
     const wing = new THREE.Mesh(
       new THREE.BoxGeometry(0.28, 0.03, 0.12),
-      new THREE.MeshBasicMaterial({ color: side < 0 ? 0xd8c08a : 0xb06a4a })
+      materials.roofTile ?? materials.wood
     );
     wing.position.set(0, 0.2, side * 0.14);
     wing.rotation.x = side * 0.28;
@@ -904,10 +904,10 @@ export function buildCitadelTown(spec, ctx) {
     }
     const geo = makeExposedCellGeometry(cs, ch, expose, ix, iz, iy)
       || makeDistortedCellGeometry(cellGeometry, ix, iz, iy);
-    applyVerticalVertexColors(geo, 1.22, 0.68);
+    applyVerticalVertexColors(geo, 1.0, 1.0);
     const cell = mesh(
       geo,
-      ctx.materials.shade?.(char, ix, iz) ?? materials[char] ?? materials.W,
+      ctx.materials.shade?.(char, ix, iz, iy) ?? materials[char] ?? materials.W,
       "town-cell"
     );
     cell.position.set(cx(ix), cy(iy), cz(iz));
@@ -1640,9 +1640,9 @@ export function buildCitadelTown(spec, ctx) {
           for (const offset of [-cs * 0.26, cs * 0.26]) {
             const merlon = mesh(
               new THREE.BoxGeometry(0.42, 0.52, 0.42),
-              materials[char] ?? materials.W,
+              materials.crenel ?? materials.roofTile ?? materials[char] ?? materials.W,
               "town-crenel",
-              0.03
+              0.025
             );
             merlon.position.set(
               cx(ix) + dx * (cs / 2 - 0.22) + (dz !== 0 ? offset : 0),
@@ -1917,7 +1917,7 @@ export function buildCitadelTown(spec, ctx) {
         // 灯笼：水面小光点（暖黄无光材质）
         const lantern = new THREE.Mesh(
           new THREE.BoxGeometry(0.22, 0.3, 0.22),
-          new THREE.MeshBasicMaterial({ color: 0xffc878 })
+          materials.roofTile ?? materials.wood
         );
         lantern.name = "town-lantern";
         lantern.position.set(cx(ix), 0.5, cz(iz));
@@ -1986,7 +1986,7 @@ export function buildCitadelTown(spec, ctx) {
     const tall = houses.filter((h) => h.floors >= 3);
     const used = new Set();
     let wires = 0;
-    const clothColors = [0xe03a38, 0xf6f1e6, 0x3b6fd4, 0x48b04a, 0xf2c230];
+    const clothColors = [0xf2f4f4, 0xd5dbdb, 0xe8f8f5, 0xfcf3cf, 0xd5dbdb];
     for (let i = 0; i < tall.length && wires < 5; i++) {
       for (let j = i + 1; j < tall.length && wires < 5; j++) {
         const a = tall[i];
@@ -2038,22 +2038,22 @@ export function buildCitadelTown(spec, ctx) {
   // 岸线连成一圈，像原版岛城的砌石裙。
   {
     const skirtMat = materials.weatherStone ?? materials.plazaStone ?? materials.A ?? trimMat;
-    const skirtGeo = new THREE.BoxGeometry(cs * 1.08, 0.72, 0.46);
-    const plinthGeo = new THREE.BoxGeometry(cs * 1.12, 0.34, cs * 1.12);
+    const skirtGeo = new THREE.BoxGeometry(cs * 1.08, 1.15, 0.5);
+    const plinthGeo = new THREE.BoxGeometry(cs * 1.14, 0.85, cs * 1.14);
     let skirtCount = 0;
     for (const [key] of grid) {
       const [ix, iy, iz] = key.split(",").map(Number);
       if (iy !== 0) continue;
       const base = mesh(plinthGeo, skirtMat, "town-seawall-plinth", 0.02);
-      base.position.set(cx(ix), -0.28, cz(iz));
+      base.position.set(cx(ix), -0.52, cz(iz));
       levelGroups[0].add(base);
       for (const [dx, dz] of DIRS) {
         if (at(ix + dx, 0, iz + dz) !== ".") continue;
         const skirt = mesh(skirtGeo, skirtMat, "town-seawall", 0.018);
         skirt.position.set(
-          cx(ix) + dx * (cs / 2 + 0.18),
-          -0.22,
-          cz(iz) + dz * (cs / 2 + 0.18)
+          cx(ix) + dx * (cs / 2 + 0.2),
+          -0.58,
+          cz(iz) + dz * (cs / 2 + 0.2)
         );
         skirt.rotation.y = Math.atan2(dx, dz);
         levelGroups[0].add(skirt);
