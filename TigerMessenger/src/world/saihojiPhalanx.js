@@ -119,6 +119,52 @@ function makeArrow() {
   return g;
 }
 
+/** 长枪（投掷标枪）：比箭长一倍、更粗，枪头 + 红缨 + 加色拖尾 */
+function makeJavelin() {
+  const g = new THREE.Group();
+  g.name = "phalanx-javelin";
+  const shaft = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.032, 0.032, 1.3, 5),
+    new THREE.MeshBasicMaterial({ color: 0x6b4f2a })
+  );
+  shaft.rotation.z = Math.PI / 2;
+  g.add(shaft);
+  const head = new THREE.Mesh(
+    new THREE.ConeGeometry(0.055, 0.18, 5),
+    new THREE.MeshBasicMaterial({ color: 0xc9d1d6 })
+  );
+  head.rotation.z = -Math.PI / 2;
+  head.position.x = 0.72;
+  g.add(head);
+  const band = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.034, 0.034, 0.16, 5),
+    new THREE.MeshBasicMaterial({ color: 0xb83028 })
+  );
+  band.rotation.z = Math.PI / 2;
+  band.position.x = -0.34;
+  g.add(band);
+  const trail = new THREE.Mesh(
+    new THREE.BoxGeometry(0.6, 0.075, 0.075),
+    new THREE.MeshBasicMaterial({
+      color: 0xd8e8ff,
+      transparent: true,
+      opacity: 0.4,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+  );
+  trail.name = "javelin-trail";
+  trail.position.x = -0.95;
+  g.add(trail);
+  g.userData.fly = 0;
+  g.userData.from = new THREE.Vector3();
+  g.userData.to = new THREE.Vector3();
+  g.userData.arcUp = new THREE.Vector3(0, 1, 0);
+  g.userData.miss = 0;
+  g.visible = false;
+  return g;
+}
+
 /**
  * @param {object} opts
  * @param {THREE.Scene} opts.scene
@@ -154,6 +200,14 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     arrows.push(a);
   }
   let arrowI = 0;
+  // 长枪兵的投枪池：比箭更长更粗，掷向盘顶机队
+  const javelins = [];
+  for (let i = 0; i < 44; i++) {
+    const j = makeJavelin();
+    root.add(j);
+    javelins.push(j);
+  }
+  let javelinI = 0;
   // 命中火花/受创烟：池化小网格（加色火花 + 半透明烟）
   const sparkPool = [];
   const smokePool = [];
@@ -451,6 +505,105 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
     }
   }
 
+  // 投枪专用临时向量（与箭矢共用 _sparkTmp/_axisX，但飞行用独立向量避免互踩）
+  const _jvTmpA = new THREE.Vector3();
+  const _jvTmpB = new THREE.Vector3();
+  const _jvUp = new THREE.Vector3(0, 1, 0);
+
+  /** 长枪兵掷出手中的长枪（从枪尖所在的手位出手，飞向机队成员） */
+  function throwJavelin(from, toAc) {
+    const j = javelins[javelinI % javelins.length];
+    javelinI++;
+    if (j.parent !== root) root.attach(j);
+    j.userData.stuck = false;
+    j.userData.miss = 0;
+    j.visible = true;
+    j.userData.fly = 0;
+    j.userData.target = toAc;
+    const spear = from.userData.equipment?.spear;
+    if (spear) {
+      spear.getWorldPosition(_tmp);
+    } else {
+      from.getWorldPosition(_tmp);
+      from.getWorldQuaternion(_q);
+      _tmp.add(_tmpB.set(0.3, 0.45, 0).applyQuaternion(_q));
+    }
+    j.position.copy(_tmp);
+    from.getWorldQuaternion(_q);
+    j.userData.arcUp.set(0, 1, 0).applyQuaternion(_q).normalize();
+    toAc.getWorldPosition(_tmpB);
+    j.userData.aimOff = new THREE.Vector3(
+      (Math.random() - 0.5) * 4.6,
+      (Math.random() - 0.5) * 2.4,
+      (Math.random() - 0.5) * 4.6
+    );
+    _tmpB.add(j.userData.aimOff);
+    j.userData.from.copy(j.position);
+    j.userData.to.copy(_tmpB);
+    _tmpB.sub(j.position);
+    if (_tmpB.lengthSq() > 1e-8) {
+      j.quaternion.setFromUnitVectors(_axisX, _tmpB.normalize());
+    }
+  }
+
+  /** 投枪运动：追踪飞行（更重更慢、弧更高）→ 命中扎入机队 / 脱靶坠落 */
+  function updateJavelins(dt) {
+    for (const j of javelins) {
+      if (!j.visible) continue;
+      const u = j.userData;
+      if (u.stuck) {
+        if (u.wobble > 0) {
+          u.wobble -= dt;
+          j.position.x += Math.sin(u.wobble * 27) * 0.012 * u.wobble;
+        }
+        continue;
+      }
+      if (u.miss > 0) {
+        u.miss += dt / 0.9;
+        j.position.addScaledVector(_jvTmpA.copy(j.position).normalize(), -dt * 6);
+        j.rotation.x += dt * 3;
+        const m = Math.min(1, u.miss);
+        j.scale.setScalar(1 - m * 0.5);
+        if (m >= 1) {
+          j.visible = false;
+          j.scale.setScalar(1);
+        }
+        continue;
+      }
+      const ac = u.target;
+      if (ac?.parent) {
+        ac.getWorldPosition(_sparkTmp);
+        if (u.aimOff) _sparkTmp.add(u.aimOff);
+        u.to.lerp(_sparkTmp, Math.min(1, dt * 1.7));
+      } else {
+        u.miss = 0.01;
+        continue;
+      }
+      u.fly += dt / 1.5;
+      const p = Math.min(1, u.fly);
+      j.position.lerpVectors(u.from, u.to, p);
+      j.position.addScaledVector(u.arcUp, Math.sin(p * Math.PI) * 4.5);
+      _jvTmpB.copy(u.to).sub(u.from).normalize();
+      j.quaternion.setFromUnitVectors(_axisX, _jvTmpB);
+      const trail = j.getObjectByName?.("javelin-trail");
+      if (trail?.material) trail.material.opacity = 0.25 + 0.3 * Math.sin(p * Math.PI);
+      if (p < 1) continue;
+      const tip = j.position.clone();
+      const acPos = _sparkTmp.clone();
+      if (ac?.parent && tip.distanceTo(acPos) < 5.2) {
+        ac.attach(j);
+        u.stuck = true;
+        u.wobble = 1.8 + Math.random() * 0.8;
+        j.scale.setScalar(0.95 + Math.random() * 0.2);
+        ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
+        spawnSpark(tip);
+        if (Math.random() < 0.6) spawnSmoke(tip);
+      } else {
+        u.miss = 0.01;
+      }
+    }
+  }
+
   /** 方阵是否已整队成阵（运兵船全部下岸）——苔庭鲸以此作为升空循环条件 */
   function isAssembled() {
     return (
@@ -480,6 +633,11 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
       if (a.parent && a.parent !== root) a.parent.remove(a);
       a.visible = false;
       a.userData.stuck = false;
+    }
+    for (const j of javelins) {
+      if (j.parent && j.parent !== root) j.parent.remove(j);
+      j.visible = false;
+      j.userData.stuck = false;
     }
     for (const sp of sparkPool) sp.visible = false;
     for (const sm of smokePool) sm.visible = false;
@@ -970,11 +1128,16 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
         w.boat.visible = true;
         placeOnSphere(w.boat, landDir, 0.18, landDir);
       }
-      // 残箭回收：撤阵时把扎在机队上的箭取回
+      // 残箭回收：撤阵时把扎在机队上的箭/枪取回
       for (const a of arrows) {
         if (a.parent && a.parent !== root) a.parent.remove(a);
         a.visible = false;
         a.userData.stuck = false;
+      }
+      for (const j of javelins) {
+        if (j.parent && j.parent !== root) j.parent.remove(j);
+        j.visible = false;
+        j.userData.stuck = false;
       }
     }
 
@@ -1166,6 +1329,37 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
             0.08
           );
         }
+        // 长枪兵：投掷手中的长枪（抬手 → 掷出 → 收手，掷完冷却再掷）
+        if (s.userData.phalanxRole === "spear") {
+          const th = s.userData.throwState || (s.userData.throwState = { t: -4, phase: "rest" });
+          const armR = s.userData.parts?.armR;
+          if (th.phase === "rest") {
+            th.t -= dt;
+            if (th.t <= 0) {
+              th.phase = "wind";
+              th.t = 0;
+            }
+          } else if (th.phase === "wind") {
+            th.t += dt / 0.5; // 0.5s 抬手
+            const u = Math.min(1, th.t);
+            if (armR) armR.rotation.z = 1.28 + (-0.9 - 1.28) * u;
+            if (u >= 1) {
+              const tgt = live[javelinI % live.length];
+              throwJavelin(s, tgt);
+              th.phase = "recover";
+              th.t = 0;
+              th.cd = 6.5 + Math.random() * 5; // 投枪沉重：下一轮间隔更长
+            }
+          } else {
+            th.t += dt / 0.6; // 0.6s 收手
+            if (armR) armR.rotation.z = THREE.MathUtils.lerp(-0.9, 1.28, Math.min(1, th.t));
+            if (th.t >= 1) {
+              th.phase = "rest";
+              th.t = -th.cd;
+            }
+          }
+          continue;
+        }
         if (s.userData.phalanxRole !== "longbow") continue;
         // 撒放即射：短冷却每帧递减（脉冲同步后错峰），只挡下一次撒放
         const cd0 = s.userData._shotCd || 0;
@@ -1184,8 +1378,9 @@ export function createSaihojiPhalanxBattle({ scene, isWhaleRisen, getSquad, getT
         fireArrow(s, tgt);
       }
     }
-    // 箭矢运动（飞行/命中/脱靶坠落/火花烟）始终推进，鲸落也不冻结
+    // 箭矢/投枪运动（飞行/命中/脱靶坠落/火花烟）始终推进，鲸落也不冻结
     updateArrows(dt);
+    updateJavelins(dt);
     // 调试/验收：累计发射箭数
     root.userData.arrowsFired = arrowI;
   }

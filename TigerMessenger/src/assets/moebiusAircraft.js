@@ -69,8 +69,10 @@ function hullRadiusAt(u, MIDR = 1.35) {
 
 const LEN = 7.0; // 外壳总长（沿 Z 轴分布）
 
-/** 编队羽箭攒射上限：全队合计中箭 600 支 → 吸取力降到 45%（逐箭渐进，非突变） */
-const ARROW_FULL_WOUND_SQUAD = 600;
+/** 羽箭攒射：每 50 支苔庭鲸下沉一档，共 6 档 / 300 支落地。飞艇本身不掉高度。 */
+export const ARROW_SINK_STEP = 50;
+export const ARROW_SINK_STEPS = 6;
+export const ARROW_SINK_TOTAL = ARROW_SINK_STEP * ARROW_SINK_STEPS;
 
 /**
  * 创建飞行器：所有部件加入一个 Group 并返回。
@@ -811,6 +813,7 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
   updateHummingbirdForage(members, nectarList, {
     t,
     dt,
+    aircraft,
     formationCenter,
     formationUp,
     formationTan,
@@ -855,13 +858,9 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
         ? "search"
         : "patrol";
 
-  // 编队级吸取力（成员平均，苔庭鲸光束/叶流每帧读取；受创后逐箭下降）
-  const squadSuction01 =
-    members.length > 0
-      ? members.reduce((s, m) => s + (Number.isFinite(m.userData?.suction01) ? m.userData.suction01 : 1), 0) /
-        members.length
-      : 1;
-  aircraft.userData.squadSuction01 = squadSuction01;
+  const squadSuction01 = Number.isFinite(aircraft.userData.squadSuction01)
+    ? aircraft.userData.squadSuction01
+    : 1;
 
   // 橙红尾焰脉动（悬停吸蜜时更急促，像蜂鸟振翅余韵；受创后尾焰随吸取力萎缩）
   const forageBoost = anyForaging ? 1.35 : 1;
@@ -1064,6 +1063,7 @@ function updateHummingbirdForage(members, nectarList, ctx) {
   const {
     t,
     dt,
+    aircraft = null,
     formationCenter,
     formationUp,
     formationTan,
@@ -1100,9 +1100,24 @@ function updateHummingbirdForage(members, nectarList, ctx) {
     }
   }
 
-  // 编队合计中箭数（轮转攒射的伤口总量，驱动整队受创）
+  // 编队合计中箭：每 50 支鲸下一档，300 支落地。飞艇高度不变。
   let squadHits = 0;
   for (const m of members) squadHits += m.userData?.arrowHits || 0;
+  const sinkStep = THREE.MathUtils.clamp(
+    Math.floor(squadHits / ARROW_SINK_STEP),
+    0,
+    ARROW_SINK_STEPS
+  );
+  const wantSquadSuction = 1 - sinkStep / ARROW_SINK_STEPS;
+  const prevSquadSuction = Number.isFinite(aircraft?.userData?.squadSuction01)
+    ? aircraft.userData.squadSuction01
+    : 1;
+  if (aircraft) {
+    aircraft.userData.squadSuction01 =
+      prevSquadSuction + (wantSquadSuction - prevSquadSuction) * Math.min(1, dt * 1.2);
+    aircraft.userData.squadArrowHits = squadHits;
+    aircraft.userData.whaleSinkStep = sinkStep;
+  }
 
   for (let i = 0; i < members.length; i++) {
     const member = members[i];
@@ -1124,19 +1139,10 @@ function updateHummingbirdForage(members, nectarList, ctx) {
         .add(_acTmpA.copy(formationTan).multiplyScalar(slot.fwd))
         .add(_acTmpB.copy(formationSide).multiplyScalar(slot.side + personalSway))
         .add(_acTmpC.copy(formationUp).multiplyScalar(slot.up + personalHeave));
-      // 逐箭渐进受创：编队合计中箭 300 支 → 吸取力/高度降到 45%（非突变）。
-      // 用编队总箭数算伤势：长弓手轮转攒射五架，整队一起受创、一起下滑
+      // 中箭只抖、不掉高度——下沉的是苔庭鲸
       const hits = member.userData.arrowHits || 0;
-      const want = THREE.MathUtils.clamp(
-        1 - (squadHits / ARROW_FULL_WOUND_SQUAD) * 0.55,
-        0.45,
-        1
-      );
-      const cur = Number.isFinite(member.userData.woundHeightMul)
-        ? member.userData.woundHeightMul
-        : 1;
-      member.userData.woundHeightMul = cur + (want - cur) * Math.min(1, dt * 0.55);
-      // 中箭冲击：箭数增长 → 抖动冲量（机体摇晃，肉眼可见受创）
+      member.userData.woundHeightMul = 1;
+      member.userData.suction01 = wantSquadSuction;
       const prevHits = member.userData._prevHits ?? 0;
       if (hits > prevHits) {
         member.userData._hitImpulse = Math.min(1.6, (member.userData._hitImpulse || 0) + 0.4);
@@ -1149,21 +1155,6 @@ function updateHummingbirdForage(members, nectarList, ctx) {
           .addScaledVector(formationTan, (Math.random() - 0.5) * imp * 1.1)
           .addScaledVector(formationSide, (Math.random() - 0.5) * imp * 1.1)
           .addScaledVector(formationUp, (Math.random() - 0.5) * imp * 0.5);
-      }
-      // 吸取力 0..1（受创后下降，供苔庭鲸光束/叶流读取）
-      member.userData.suction01 = THREE.MathUtils.clamp(
-        1 - (1 - member.userData.woundHeightMul) / 0.55,
-        0,
-        1
-      );
-      if (member.userData.woundHeightMul < 0.995) {
-        const alt = _acSlotPos.length() - R;
-        if (alt > 0) {
-          _acSlotPos.addScaledVector(
-            formationUp,
-            -alt * (1 - member.userData.woundHeightMul)
-          );
-        }
       }
     } else {
       _acSlotPos.copy(member.position);
