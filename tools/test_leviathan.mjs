@@ -335,12 +335,12 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   squad.userData.members = [{ userData: { arrowHits: 0 } }];
   squad.userData._patrolCenter = hubDir.clone().multiplyScalar(R + 20).addScaledVector(eastOf, 24);
   scene.add(squad);
-  // 伪方阵：松耦合（root.userData.assembled/reset），与 saihojiPhalanx 同契约
+  // 伪方阵：松耦合（root.userData.assembled / whaleReturned），与 saihojiPhalanx 同契约
   const phalanx = new THREE.Group();
   phalanx.name = "saihoji-phalanx-battle";
   phalanx.userData.assembled = false;
-  phalanx.userData.reset = () => {
-    phalanx.userData.assembled = false;
+  phalanx.userData.whaleReturned = () => {
+    phalanx.userData.assembled = false; // 鲸恢复原位 → 士兵撤阵返回高山圣城
   };
   scene.add(phalanx);
   handle.update(0, 0);
@@ -374,6 +374,7 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   for (let i = 0; i < 60; i++) handle.update(0.5, 0);
   assert.equal(handle.getStoryPhase(), 2, "箭伤后进入收束阶段");
   assert(Math.abs(plateY() - (R + 0.3)) < 0.6, "鲸应恢复原位");
+  assert.equal(phalanx.userData.assembled, false, "鲸恢复原位后士兵应撤阵返回（whaleReturned 被调用）");
   // 收束：机队离开 → 终扫一次 → 再离开 → 中箭清零、故事复位
   for (let i = 0; i < 10; i++) handle.update(0.5, 0);
   setNear();
@@ -384,7 +385,6 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   for (let i = 0; i < 10; i++) handle.update(0.5, 0);
   assert.equal(handle.getStoryPhase(), 0, "终扫结束后故事复位");
   assert.equal(squad.userData.members[0].userData.arrowHits, 0, "中箭计数应清零（升空能力恢复）");
-  assert.equal(phalanx.userData.assembled, false, "收束后士兵应撤阵（reset 被调用）");
   // 模拟机队侧缓动：中箭清零后升空能力逐渐恢复（updateAircraftHover 每帧上修 woundHeightMul）
   squad.userData.members[0].userData.woundHeightMul = 1;
   // 新一轮：方阵重新整队 + 再次扫描 → 鲸再升

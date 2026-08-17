@@ -210,6 +210,7 @@ export const saihojiGardenScene = {
     let storyPhase = 0;
     let finaleLeft = false;
     let finaleScanned = false;
+    let returnSignaled = false;
     const aircraftWounded = () => {
       const members = squad?.userData?.members;
       if (!members?.length) return false;
@@ -311,11 +312,20 @@ export const saihojiGardenScene = {
             storyPhase = 2;
             finaleLeft = false;
             finaleScanned = false;
+            returnSignaled = false;
             target = buriedR;
           }
         } else {
-          // 收束：鲸回原位 → 机队离开 → 终扫一次 → 再离开 → 伤口痊愈、故事复位
+          // 收束：鲸回原位 → 士兵撤阵返回高山圣城 → 机队离开 → 终扫一次
+          // → 再离开 → 伤口痊愈、故事复位
           target = buriedR;
+          const lift01 = (currentR - buriedR) / Math.max(1e-3, risenR - buriedR);
+          if (!returnSignaled && lift01 < 0.03) {
+            // 苔庭鲸恢复原位：士兵离开返回高山圣城（此后才重新受鼓声控制）
+            returnSignaled = true;
+            if (phalanxRoot?.userData?.whaleReturned) phalanxRoot.userData.whaleReturned();
+            else phalanxRoot?.userData?.reset?.();
+          }
           if (far) finaleLeft = true;
           if (finaleLeft && near) finaleScanned = true;
           if (finaleScanned && far) {
@@ -323,7 +333,6 @@ export const saihojiGardenScene = {
             if (members) {
               for (const m of members) m.userData.arrowHits = 0; // 升空能力随缓动恢复
             }
-            phalanxRoot?.userData?.reset?.(); // 士兵撤阵——下一轮重新运兵整队
             finaleLeft = false;
             finaleScanned = false;
             storyPhase = 0;
