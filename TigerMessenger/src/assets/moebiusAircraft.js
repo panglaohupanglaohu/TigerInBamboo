@@ -101,10 +101,10 @@ export function createMoebiusAircraft() {
     ? new THREE.MeshPhysicalMaterial({
         color: 0xd35400, // 琥珀玻璃
         transparent: true,
-        opacity: 0.5,
-        transmission: 0.92, // 透射：透过外壳看到内部霓虹结构
+        opacity: 0.7, // 提高存在感：正对机头时也透出琥珀色，不再"隐形"
+        transmission: 0.72, // 降透射保留折射感，但外壳全程有琥珀色相
         thickness: 1.4,
-        roughness: 0.1,
+        roughness: 0.14,
         metalness: 0.05,
         ior: 1.45,
         clearcoat: 0.7,
@@ -113,7 +113,7 @@ export function createMoebiusAircraft() {
         side: THREE.DoubleSide,
         depthWrite: false,
         emissive: 0xd35400,
-        emissiveIntensity: 0.08,
+        emissiveIntensity: 0.18, // 自发光琥珀：亮天背景下前端也可见
       })
     : crystalToon(0xD35400, {
         transparent: true,
@@ -846,13 +846,16 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
     },
   });
 
-  // 体积：开发者可调倍数（默认 1.25，与飞艇同体量），每帧应用以响应菜单实时改动。
-  // localStorage 或开发者菜单中的 0/负值不能让整个编队缩成不可见。
+  // 体积：开发者可调倍数（默认 2.6，宏大压迫感），每帧应用以响应菜单实时改动。
+  // 关键：缩放必须作用在成员网格上，而不是编队组——成员阵位写的是世界坐标，
+  // 组缩放会把世界阵位也乘一遍，把可见机队甩到天上 2.6× 高度（历史大 bug：
+  // 光束/吸食/拉锯全在正确高度，唯独飞机本体飘在 ~300 单位高空）。
   const sc =
     Number.isFinite(P.aircraftScale) && P.aircraftScale > 0
       ? P.aircraftScale
       : P_DEFAULTS.aircraftScale;
-  aircraft.scale.setScalar(sc);
+  if (aircraft.scale.x !== 1) aircraft.scale.setScalar(1);
+  for (const m of members) m.scale.setScalar(sc);
 
   // 巡航 / 扫描中 / 吸蜜 时保持扫描激光；归航义务期走常规巡航光
   const anyForaging = members.some(
@@ -1188,8 +1191,14 @@ function updateHummingbirdForage(members, nectarList, ctx) {
         );
       }
 
-      // 必须编队扫描发现湖沼后，才允许个体去吸蜜
-      if (fg.cooldown <= 0 && swampFound && nectarList.length) {
+      // 必须编队扫描发现湖沼后，才允许个体去吸蜜；
+      // 苔庭鲸对抗期（whaleLock 锁定）：机队全程压住鲸，禁止离队吸蜜
+      if (
+        fg.cooldown <= 0 &&
+        swampFound &&
+        nectarList.length &&
+        !aircraft?.userData?.whaleLock?.active
+      ) {
         let best = null;
         let bestD = Infinity;
         for (const n of nectarList) {
