@@ -1,7 +1,8 @@
 // =====================================================================
-//  莫比斯复古科幻飞船（Mœbius 法式复古科幻 · 半透明琥珀玻璃飞艇）
-//  - 风格：70-80 年代复古科幻手绘风；拉长玻璃灯泡 / 有机飞艇造型
-//  - 核心技术：外层半透明玻璃外壳(MeshPhysicalMaterial, transmission) + 内层发光机械结构
+//  莫比斯复古科幻飞船（Mœbius 法式复古科幻 · 低多边形不透明硬壳飞艇）
+//  - 风格：70-80 年代复古科幻手绘风；拉长琥珀硬壳 / 有机飞艇造型
+//  - 核心技术：12 棱 LatheGeometry + flatShading 低多边形 Toon 不透明外壳，
+//    内层发光机械结构 + 驾驶舱橙色点状光源
 //  - 机身长轴沿 +Z（机头朝 +Z），局部中心在原点附近（与编队/航线逻辑约定一致）
 // =====================================================================
 import * as THREE from "three";
@@ -82,9 +83,9 @@ export function createMoebiusAircraft() {
   const g = new THREE.Group();
   g.name = "moebius-aircraft";
 
-  // ---------- 1. 外层玻璃灯罩外壳 (LatheGeometry · 12 棱低多边形 · 复古琥珀) ----------
-  // 真玻璃：MeshPhysicalMaterial 透射（内舱霓虹/舱核/尾焰透过玻璃可见）。
-  // P.aircraftGlass=false 时回退旧式 Toon 半透明（无头 SwiftShader 渲染更稳）。
+  // ---------- 1. 外层低多边形硬壳 (LatheGeometry · 12 棱低多边形 · 复古琥珀) ----------
+  // 不透明 Low-poly Toon：flatShading 多面体硬棱角，任何角度都清晰可见
+  // （不再用玻璃透射——正对机头时前端会"隐形"）。
   // LatheGeometry 段数 48→12：配合 flatShading 产生干净的多面体硬朗棱角。
   const seg = 30;
   const profile = [];
@@ -96,32 +97,13 @@ export function createMoebiusAircraft() {
   const hullGeo = new THREE.LatheGeometry(profile, 12);
   hullGeo.rotateX(Math.PI / 2); // 旋转轴 Y -> Z，机头朝 +Z
 
-  const glassHull = P.aircraftGlass !== false;
-  const hullMat = glassHull
-    ? new THREE.MeshPhysicalMaterial({
-        color: 0xd35400, // 琥珀玻璃
-        transparent: true,
-        opacity: 0.7, // 提高存在感：正对机头时也透出琥珀色，不再"隐形"
-        transmission: 0.72, // 降透射保留折射感，但外壳全程有琥珀色相
-        thickness: 1.4,
-        roughness: 0.14,
-        metalness: 0.05,
-        ior: 1.45,
-        clearcoat: 0.7,
-        clearcoatRoughness: 0.12,
-        envMapIntensity: 1.1,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-        emissive: 0xd35400,
-        emissiveIntensity: 0.18, // 自发光琥珀：亮天背景下前端也可见
-      })
-    : crystalToon(0xD35400, {
-        transparent: true,
-        opacity: 0.85,
-        side: THREE.DoubleSide,
-        emissive: 0xD35400,
-        emissiveIntensity: 0.12,
-      });
+  // 不透明 Low-poly 琥珀硬壳（飞行员视野 / 玩家近观都不透光）
+  const hullMat = crystalToon(0xD35400, {
+    transparent: false,
+    side: THREE.DoubleSide,
+    emissive: 0xD35400,
+    emissiveIntensity: 0.14,
+  });
   hullMat.flatShading = true;
   hullMat.needsUpdate = true;
   const hull = part(hullGeo, hullMat, 0.04);
@@ -381,6 +363,20 @@ export function createMoebiusAircraft() {
   g.userData.cockpitLight = cockpitLight;
   g.userData.cockpitGlow = cockpitGlow;
   g.userData.cockpitCore = cockpitCore;
+  // 驾驶舱内橙色点状光源：可见光点 + 点光源（暖橙，区别于青柠舱核）
+  const cockpitOrangeDot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.1, 8, 6),
+    new THREE.MeshBasicMaterial({ color: 0xff8a32 })
+  );
+  cockpitOrangeDot.name = "aircraft-cockpit-orange-dot";
+  cockpitOrangeDot.position.set(0, 0.2, 1.66);
+  g.add(cockpitOrangeDot);
+  const cockpitOrangeLight = new THREE.PointLight(0xff8a32, 2.8, 9, 2);
+  cockpitOrangeLight.name = "aircraft-cockpit-orange-light";
+  cockpitOrangeLight.position.set(0, 0.22, 1.66);
+  g.add(cockpitOrangeLight);
+  g.userData.cockpitOrangeDot = cockpitOrangeDot;
+  g.userData.cockpitOrangeLight = cockpitOrangeLight;
   g.userData.neonLight = neonLight;
   g.userData.thrusterLight = thrusterLight;
   g.userData.energyTube = energyTube;
@@ -547,7 +543,9 @@ export function createMoebiusAircraftSquad(centerDir, R, opts = {}) {
   squad.userData.flames = members.flatMap((m) => m.userData.flames || []);
   squad.userData.cockpitCores = members.map((m) => m.userData.cockpitCore).filter(Boolean);
   squad.userData.cockpitGlows = members.map((m) => m.userData.cockpitGlow).filter(Boolean);
-  squad.userData.cockpitLights = members.map((m) => m.userData.cockpitLight).filter(Boolean);
+  squad.userData.cockpitLights = members
+    .flatMap((m) => [m.userData.cockpitLight, m.userData.cockpitOrangeLight])
+    .filter(Boolean);
   squad.userData.neonLights = members.map((m) => m.userData.neonLight).filter(Boolean);
   squad.userData.thrusterLights = members.map((m) => m.userData.thrusterLight).filter(Boolean);
   if (patrol) {
