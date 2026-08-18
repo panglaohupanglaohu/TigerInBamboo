@@ -2,6 +2,7 @@
 //  气泡艇麻醉弹 · 命中与苏醒
 //  - 飞鸟：坠落贴地，扑翅停，约 5s 后苏醒再飞
 //  - 士兵：原地卧倒僵直，约 5s 后爬起继续
+//  - 飞行器：攒满 20 发后像飞鸟坠地，贴地片刻再缓缓升空
 //  时长够看清效果，又不会拖太久。
 // =====================================================================
 import * as THREE from "three";
@@ -12,6 +13,16 @@ export const TRANQ_DURATION = 5.0;
 export const TRANQ_DURATION_BIRD = TRANQ_DURATION * 2;
 export const TRANQ_HIT_R_BIRD = 2.4;
 export const TRANQ_HIT_R_SOLDIER = 2.9;
+/** 莫比斯飞行器：攒满若干发麻醉弹后才像飞鸟一样坠地 */
+export const TRANQ_HITS_AIRCRAFT = 20;
+/** 机身约 7 长、中段半径 ~1.4，命中球略放宽 */
+export const TRANQ_HIT_R_AIRCRAFT = 5.5;
+/** 坠地速度与飞鸟 tickBirdSedation 一致 */
+export const TRANQ_AIRCRAFT_FALL_SPEED = 22;
+/** 苏醒后缓缓升回阵位 */
+export const TRANQ_AIRCRAFT_RISE_SPEED = 3.2;
+/** 贴地瘫软片刻，再开始爬升 */
+export const TRANQ_AIRCRAFT_DOWN_SEC = 2.6;
 
 const _up = new THREE.Vector3();
 const _qLie = new THREE.Quaternion();
@@ -149,4 +160,159 @@ export function sedateBirdRecord(bird, duration = TRANQ_DURATION_BIRD) {
   }
   bird.vel?.set(0, 0, 0);
   return true;
+}
+
+const _acUp = new THREE.Vector3();
+const _acTan = new THREE.Vector3();
+const _acSide = new THREE.Vector3();
+const _acMat = new THREE.Matrix4();
+const _acQ = new THREE.Quaternion();
+const _acTo = new THREE.Vector3();
+
+function abortAircraftForage(member) {
+  const fg = member?.userData?._forage;
+  if (!fg) return;
+  if (fg.flower) {
+    fg.flower.userData.feeding = false;
+    if (fg.flower.userData._feeder === member) fg.flower.userData._feeder = null;
+  }
+  fg.mode = "cruise";
+  fg.t = 0;
+  fg.flower = null;
+  fg.targetPos = null;
+}
+
+/**
+ * 气泡艇麻醉弹命中一架莫比斯飞行器。
+ * 累计 TRANQ_HITS_AIRCRAFT 发后进入坠落；坠落中不再叠层。
+ * @param {THREE.Object3D} member
+ * @returns {{ hits: number, knocked: boolean } | null}
+ */
+export function applyAircraftTranqHit(member) {
+  if (!member) return null;
+  const tf = member.userData.tranqFall;
+  if (tf?.phase === "fall" || tf?.phase === "down" || tf?.phase === "rise") {
+    return { hits: member.userData.tranqHits || 0, knocked: true, already: true };
+  }
+  const hits = (member.userData.tranqHits || 0) + 1;
+  member.userData.tranqHits = hits;
+  member.userData.sedated = true;
+  member.userData.sedateKind = "aircraft";
+  member.userData.sedateT = Math.max(member.userData.sedateT || 0, TRANQ_DURATION_BIRD);
+  if (hits >= TRANQ_HITS_AIRCRAFT) {
+    member.userData.tranqFall = { phase: "fall", t: 0 };
+    member.userData.sedateT = 40;
+    abortAircraftForage(member);
+    return { hits, knocked: true };
+  }
+  return { hits, knocked: false };
+}
+
+/** 飞行器是否正处于麻醉坠落 / 贴地 / 缓升 */
+export function isAircraftKnocked(member) {
+  const phase = member?.userData?.tranqFall?.phase;
+  return phase === "fall" || phase === "down" || phase === "rise";
+}
+
+function poseAircraftKnocked(member, limp01, slotPos = null) {
+  _acUp.copy(member.position).normalize();
+  if (_acUp.lengthSq() < 1e-8) _acUp.set(0, 1, 0);
+  if (slotPos) {
+    _acTan.copy(slotPos).sub(member.position);
+    _acTan.addScaledVector(_acUp, -_acTan.dot(_acUp));
+  } else {
+    _acTan.set(1, 0, 0);
+    _acTan.addScaledVector(_acUp, -_acTan.dot(_acUp));
+  }
+  if (_acTan.lengthSq() < 1e-8) _acTan.set(0, 0, 1);
+  _acTan.normalize();
+  _acSide.crossVectors(_acUp, _acTan).normalize();
+  _acTan.crossVectors(_acSide, _acUp).normalize();
+  _acMat.makeBasis(_acSide, _acUp, _acTan);
+  member.quaternion.setFromRotationMatrix(_acMat);
+  const limp = THREE.MathUtils.clamp(limp01, 0, 1);
+  if (limp > 0.01) {
+    _acQ.setFromAxisAngle(_acTan, limp * 1.15);
+    member.quaternion.premultiply(_acQ);
+    _acQ.setFromAxisAngle(_acUp, limp * 0.28);
+    member.quaternion.premultiply(_acQ);
+  }
+}
+
+/**
+ * 飞行器麻醉一帧：快速掉到地表（同飞鸟），贴地片刻，再缓缓升回阵位。
+ * @param {THREE.Object3D} member
+ * @param {number} dt
+ * @param {number} groundR 星球半径
+ * @param {THREE.Vector3} [slotPos] 巡航阵位（升空目标）
+ * @returns {boolean} 仍处于坠落/贴地/缓升（调用方应跳过巡航 AI）
+ */
+export function tickAircraftTranqFall(member, dt, groundR, slotPos = null) {
+  if (!member) return false;
+  const tf = member.userData?.tranqFall;
+  if (!tf) {
+    if (member.userData?.sedated && member.userData?.sedateKind === "aircraft") {
+      member.userData.sedateT = (member.userData.sedateT ?? 0) - dt;
+      if (member.userData.sedateT <= 0) {
+        member.userData.sedated = false;
+        member.userData.sedateT = 0;
+      }
+    }
+    return false;
+  }
+
+  const pos = member.position;
+  const r = pos.length();
+  const targetR = Math.max(groundR, 1) + 0.2;
+  member.userData.sedated = true;
+  member.userData.sedateKind = "aircraft";
+  member.userData.sedateT = Math.max(member.userData.sedateT || 0, 1);
+
+  if (tf.phase === "fall") {
+    tf.t = (tf.t || 0) + dt;
+    if (r > targetR + 0.35) {
+      const next = Math.max(targetR, r - TRANQ_AIRCRAFT_FALL_SPEED * dt);
+      pos.multiplyScalar(next / Math.max(r, 1e-6));
+    } else {
+      pos.multiplyScalar(targetR / Math.max(pos.length(), 1e-6));
+      tf.phase = "down";
+      tf.t = 0;
+    }
+    poseAircraftKnocked(member, 1, slotPos);
+    return true;
+  }
+
+  if (tf.phase === "down") {
+    tf.t = (tf.t || 0) + dt;
+    pos.multiplyScalar(targetR / Math.max(pos.length(), 1e-6));
+    poseAircraftKnocked(member, 1, slotPos);
+    if (tf.t >= TRANQ_AIRCRAFT_DOWN_SEC) {
+      tf.phase = "rise";
+      tf.t = 0;
+    }
+    return true;
+  }
+
+  if (tf.phase === "rise") {
+    tf.t = (tf.t || 0) + dt;
+    const dest = slotPos || _acTo.copy(pos).normalize().multiplyScalar(targetR + 20);
+    _acTo.copy(dest).sub(pos);
+    const dist = _acTo.length();
+    if (dist > 1e-4) {
+      const step = Math.min(dist, TRANQ_AIRCRAFT_RISE_SPEED * dt);
+      pos.addScaledVector(_acTo.multiplyScalar(1 / dist), step);
+    }
+    const limp = THREE.MathUtils.clamp(1 - tf.t / 3.2, 0, 1);
+    poseAircraftKnocked(member, limp, dest);
+    if (dist < 2.2 || tf.t > 28) {
+      member.userData.tranqFall = null;
+      member.userData.tranqHits = 0;
+      member.userData.sedated = false;
+      member.userData.sedateT = 0;
+      return false;
+    }
+    return true;
+  }
+
+  return false;
 }

@@ -31,6 +31,8 @@ const OUTLINE_W = 0.055;
 export const LEVIATHAN_PLATE_Y = 6.08;
 /** 苔庭压缩比：六景跨度 ~40×23 → ~22×12.6，收进 25×14 地壳板 */
 export const LEVIATHAN_GARDEN_SCALE = 0.55;
+/** 整鲸（连同背上苔庭）线性缩放：体积观感缩到一半 */
+export const LEVIATHAN_SIZE = 0.5;
 
 const _up = new THREE.Vector3(0, 1, 0);
 
@@ -194,9 +196,11 @@ export function buildEcoLeviathanIsland(opts = {}) {
   // ---------- 2. 背部苔原地壳层：西芳寺的地基容器 ----------
   // islandGroup 的局部原点 = 地壳板面（升空时随鲸、藏地时脱离鲸体
   // 留在球面地表——「平时只见苔庭」，鲸身整头沉入地下）。
+  const size = LEVIATHAN_SIZE;
+  group.scale.setScalar(size);
   const plateWorldLift = Number.isFinite(opts.plateWorldLift)
     ? opts.plateWorldLift
-    : basePos.length() + LEVIATHAN_PLATE_Y;
+    : basePos.length() + LEVIATHAN_PLATE_Y * size;
   const island = new THREE.Group();
   island.name = "leviathan-island";
   island.position.y = LEVIATHAN_PLATE_Y;
@@ -507,9 +511,9 @@ export function buildEcoLeviathanIsland(opts = {}) {
     const step = Math.min(1, Number(_dt) || 0.016);
     group.quaternion.copy(poseQ);
     _anchor.copy(upN).multiplyScalar(anchorR);
-    const bob = Math.sin(time * 0.6) * 0.25;
-    const driftF = Math.sin(time * 0.05 + 1.3) * 1.1;
-    const driftR = Math.sin(time * 0.07) * 1.1;
+    const bob = Math.sin(time * 0.6) * 0.25 * size;
+    const driftF = Math.sin(time * 0.05 + 1.3) * 1.1 * size;
+    const driftR = Math.sin(time * 0.07) * 1.1 * size;
     group.position
       .copy(_anchor)
       .addScaledVector(upN, bob)
@@ -525,7 +529,12 @@ export function buildEcoLeviathanIsland(opts = {}) {
     if (flukes) flukes.rotation.x = 0.6 * tailT;
     // 苔庭岛随鲸/留地：升空时骑在鲸背（Y=PLATE_Y），藏地时脱离鲸体、
     // 留在地表（plateWorldLift）——鲸身沉入地下，只见苔庭
-    island.position.y = Math.max(LEVIATHAN_PLATE_Y, plateWorldLift - anchorR);
+    {
+      const rideY = LEVIATHAN_PLATE_Y;
+      const detachWorld = plateWorldLift - anchorR;
+      island.position.y =
+        detachWorld > rideY * size ? detachWorld / size : rideY;
+    }
 
     // ---- 升空落雨：上升速度驱动发射，峰值在中段；下沉不落雨 ----
     const vRise = step > 1e-4 ? (anchorR - _prevAnchorR) / step : 0;

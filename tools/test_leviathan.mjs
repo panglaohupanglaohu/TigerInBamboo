@@ -59,6 +59,7 @@ const {
   buildEcoLeviathanIsland,
   LEVIATHAN_PLATE_Y,
   LEVIATHAN_GARDEN_SCALE,
+  LEVIATHAN_SIZE,
 } = await import(new URL("src/assets/leviathanIsland.js", BASE).href);
 const { saihojiGardenScene } = await import(new URL("src/scenes/saihojiGarden.js", BASE).href);
 const { SAIHOJI_HUB, latLonToGardenDir } = await import(new URL("src/world/saihoji.js", BASE).href);
@@ -89,6 +90,7 @@ console.log("[1] 鲸体资产：拉伸锁死 · 切平 · 尾鳍 · 藤壶 · �
   });
   scene.add(group);
   assert.equal(group.name, "leviathanGroup");
+  assert.equal(group.scale.x, LEVIATHAN_SIZE, "整鲸线性缩放 1/2");
   const body = group.getObjectByName("leviathan-body");
   assert(body, "鲸体必须存在");
   assert.deepEqual(
@@ -372,6 +374,11 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   setFar();
   for (let i = 0; i < 30; i++) handle.update(0.5, 0);
   assert(plateY() > R + 18, "故事线锁定：灯艇离场不降藏");
+  // 吸鲸悬停：机队在鲸背正上方（无侧偏），与鲸保持固定高度差
+  const lock0 = squad.userData.whaleLock;
+  assert(lock0?.active, "鲸起后机队应锁定悬停");
+  assert(lock0.offset == null, "吸鲸期机队应在鲸背正上方（无侧向偏置）");
+  const gapRise = lock0.hoverRadius - plateY();
   // 每 50 支下一档：150 支 = 第 3 档，鲸应在半空，尚未收束
   squad.userData.members[0].userData.arrowHits = 150;
   for (let i = 0; i < 80; i++) handle.update(0.5, 0);
@@ -380,6 +387,12 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
     const mid = plateY();
     assert(mid < R + 18, `第 3 档应明显低于满高，实际 +${(mid - R).toFixed(1)}`);
     assert(mid > R + 6, `第 3 档不应落地，实际 +${(mid - R).toFixed(1)}`);
+    // 鲸被拽降到半空：机队同步压下，高度差与满高时一致
+    const gapMid = squad.userData.whaleLock.hoverRadius - mid;
+    assert(
+      Math.abs(gapMid - gapRise) < 0.6,
+      `鲸升/降时机队应保持固定高度差（满高 ${gapRise.toFixed(2)} vs 半空 ${gapMid.toFixed(2)}）`
+    );
   }
   // 满 300 支 = 第 6 档，鲸落地进入收束
   squad.userData.members[0].userData.arrowHits = 300;
@@ -406,7 +419,7 @@ console.log("[6] 苔庭鲸故事线：鲸起锁定 → 羽箭攒射 → 鲸回�
   for (let i = 0; i < 60; i++) handle.update(0.5, 0);
   assert.equal(handle.getStoryPhase(), 1, "新一轮扫描应再次进入故事线");
   assert(plateY() > R + 18, "新一轮扫描应再次升鲸");
-  ok("飞艇掠过即升鲸 · 每 50 箭一档 · 300 箭鲸落 · 终扫收束 · 撤阵复位");
+  ok("飞艇掠过即升鲸 · 机队鲸背正上方随鲸升降保持高度差 · 每 50 箭一档 · 300 箭鲸落 · 终扫收束 · 撤阵复位");
 }
 
 console.log(`\n结果：${pass} 项断言 · 6 组验收通过`);

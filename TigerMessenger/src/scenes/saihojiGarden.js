@@ -15,6 +15,7 @@ import { buildSaihojiPlanet, SAIHOJI_HUB, SAIHOJI_ZONES, latLonToGardenDir } fro
 import {
   buildEcoLeviathanIsland,
   LEVIATHAN_GARDEN_SCALE,
+  LEVIATHAN_SIZE,
 } from "../assets/leviathanIsland.js";
 import {
   cueLeviathanStormOnce,
@@ -25,6 +26,8 @@ import {
 
 /** 鲸体升空锚点：地壳板（背脊）悬停在球面 +24 上方，鲸腹不压苔丘 */
 const WHALE_LIFT = 24;
+// 机队吸鲸悬停：鲸背盘顶上方的固定高度差（随鲸升起/降落同步跟随）
+const WHALE_HOVER_GAP = 12 * LEVIATHAN_SIZE; // = 6 世界单位
 /** 藏地锚点：鲸身整头沉入地下（背顶 = 锚点 +6 ≤ R−7），只见苔庭 */
 const WHALE_BURIED_DEPTH = 13;
 /** 藏地时苔庭岛留驻的地表高度（球面 +0.3） */
@@ -523,7 +526,7 @@ export const saihojiGardenScene = {
       // ---------- 对抗期对外契约：机队锁定悬停 / 盘沿锚点 / 反击脉冲 ----------
       const range = risenR - buriedR;
       const lift01 = (currentR - buriedR) / Math.max(1e-3, range);
-      const plateTopR = currentR + islandGroup.position.y; // 盘面世界半径
+      const plateTopR = currentR + islandGroup.position.y * LEVIATHAN_SIZE;
       const suction01 = readSquadSuction01(squad);
       if (squad) {
         const lock = squad.userData.whaleLock || (squad.userData.whaleLock = {});
@@ -539,9 +542,10 @@ export const saihojiGardenScene = {
           lock.active = false;
         }
         lock.hubDir = hubDir;
-        lock.hoverRadius = plateTopR + 7;
-        // 悬停位偏到北翼（鲸身侧缘之外）：长弓列阵与机队面对面，全程可见
-        lock.offset = _hubNorth.clone().multiplyScalar(26);
+        // 吸住鲸后：机队悬停在鲸背正上方，随鲸升起/降落保持固定高度差
+        // （plateTopR 每帧随 currentR 变化，鲸被绳索拽降时机队同步压下）
+        lock.hoverRadius = plateTopR + WHALE_HOVER_GAP;
+        lock.offset = null;
         // 吃力感：鲸越被拽低，机队悬停越挣扎（供 aircraft 每帧读取做晃动）
         lock.strain = 1 - suction01;
         // 反击脉冲：战斗期 aircraft 每隔一阵闪爆光束、推倒光束落点附近的士兵
@@ -575,10 +579,12 @@ export const saihojiGardenScene = {
       // 盘沿锚点（世界坐标）：绳索小队抛绳/挂绳的落点，随鲸升降每帧刷新
       if (phalanxRoot) {
         const pe = phalanxRoot.userData.plateEdges || (phalanxRoot.userData.plateEdges = []);
-        _plateEdge[0].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(hubEast, 12.5);
-        _plateEdge[1].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(hubEast, -12.5);
-        _plateEdge[2].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(_hubNorth, 7);
-        _plateEdge[3].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(_hubNorth, -7);
+        const edgeX = 12.5 * LEVIATHAN_SIZE;
+        const edgeZ = 7 * LEVIATHAN_SIZE;
+        _plateEdge[0].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(hubEast, edgeX);
+        _plateEdge[1].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(hubEast, -edgeX);
+        _plateEdge[2].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(_hubNorth, edgeZ);
+        _plateEdge[3].copy(hubDir).multiplyScalar(plateTopR).addScaledVector(_hubNorth, -edgeZ);
         for (let i = 0; i < 4; i++) {
           if (!pe[i]) pe[i] = new THREE.Vector3();
           pe[i].copy(_plateEdge[i]);
@@ -630,7 +636,7 @@ export const saihojiGardenScene = {
         }
         // 岛面高于灯艇时不吸叶（鲸已升到灯艇上方，吸食方向会反向）；
         // 吸取力接近枯竭才停——从鲸升起到被拉回，吸食过程全程可见
-        const islandTopR = currentR + islandGroup.position.y;
+        const islandTopR = currentR + islandGroup.position.y * LEVIATHAN_SIZE;
         if (islandTopR < squadPos.length() + 6 && suction01 > 0.04) {
           leafTimer -= step;
           while (leafTimer <= 0) {

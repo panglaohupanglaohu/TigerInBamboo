@@ -68,6 +68,33 @@ export const CITADEL_PALETTE = Object.freeze([
 export const CITADEL_GATE_CHAR = "G";
 export const CITADEL_GATE_COLOR = 0xd5dbdb;
 
+/**
+ * 运河古堡 15 色（仅运河交汇古堡实例；高山圣城仍用 CITADEL_PALETTE）。
+ * 字符集与 CITADEL_PALETTE 一一对应，布局 ASCII 无需改动即可整体换色。
+ * 全部改为马卡龙色调：朱红/明黄/钴蓝等高饱和原色拉高明度、降饱和，
+ * 黄昏光线下仍能看清色相（杏粉/沙石等浅色也给出可分辨的色偏）。
+ */
+export const TOWNSCAPER_CANAL_PALETTE = Object.freeze([
+  Object.freeze({ name: "奶油白", char: "0", color: 0xf6efe3 }),
+  Object.freeze({ name: "沙石", char: "1", color: 0xe8d8bc }),
+  Object.freeze({ name: "杏粉", char: "2", color: 0xf5cdbd }),
+  Object.freeze({ name: "明黄", char: "3", color: 0xf6de8c }),
+  Object.freeze({ name: "蜜橙", char: "4", color: 0xf2b67f }),
+  Object.freeze({ name: "朱红", char: "5", color: 0xee9a93 }),
+  Object.freeze({ name: "绛红", char: "6", color: 0xce8e97 }),
+  Object.freeze({ name: "紫罗兰", char: "7", color: 0xc4a3d8 }),
+  Object.freeze({ name: "堇青", char: "8", color: 0xb3a6db }),
+  Object.freeze({ name: "天青", char: "9", color: 0x93c6ec }),
+  Object.freeze({ name: "湖蓝", char: "A", color: 0x97d2e4 }),
+  Object.freeze({ name: "草绿", char: "B", color: 0x93cf95 }),
+  Object.freeze({ name: "青碧", char: "C", color: 0x86c9be }),
+  Object.freeze({ name: "赭红", char: "D", color: 0xde9d85 }),
+  Object.freeze({ name: "钴蓝", char: "E", color: 0x8fa9e4 }),
+]);
+
+/** 运河古堡正门墙体色（奶油白，与 0 户同色系）。 */
+export const TOWNSCAPER_CANAL_GATE_COLOR = 0xf6efe3;
+
 /** 调色板字符串 "0123456789ABCDE"（顺序即色序）。 */
 export const CITADEL_PALETTE_CHARS = CITADEL_PALETTE.map((entry) => entry.char).join("");
 
@@ -147,8 +174,7 @@ export function citadelGridVertexJitter(gx, gz, floor = 0) {
 /**
  * Townscaper 式立面渐变：顶亮底暗（天空漫反射），写进 vertex color。
  */
-export function applyVerticalVertexColors(geo, top = 1.2, bot = 0.7) {
-  const pos = geo.attributes.position;
+export function applyVerticalVertexColors(geo, top = 1.2, bot = 0.7) {  const pos = geo.attributes.position;
   if (!pos) return geo;
   let minY = Infinity;
   let maxY = -Infinity;
@@ -166,6 +192,44 @@ export function applyVerticalVertexColors(geo, top = 1.2, bot = 0.7) {
     col[i * 3] = k;
     col[i * 3 + 1] = k;
     col[i * 3 + 2] = k;
+  }
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  return geo;
+}
+
+/**
+ * Townscaper 原版墙面质感（运河交汇古堡 colorful 模式）：
+ * 在「顶亮底暗」立面渐变之上，再按面片抹一层确定性明度色块——
+ * 同一面墙内每块砖面有 0.90~1.10 的明度漂移，大墙不再是一片死色，
+ * 对齐原版「墙上抹了渐变色块」的手绘墙面。只写 vertex color，
+ * 材质需 vertexColors=true（墙面 shade 材质保证）。
+ */
+export function applyPatchyWallColors(geo, ix = 0, iz = 0, iy = 0) {
+  const pos = geo.attributes.position;
+  if (!pos) return geo;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i);
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
+  }
+  const span = Math.max(1e-5, maxY - minY);
+  const col = new Float32Array(pos.count * 3);
+  // 面片分组：外露面几何每 6 顶点一 quad；BoxGeometry 回退每 4 顶点一面
+  const groupSize = pos.count % 6 === 0 ? 6 : 4;
+  for (let g = 0; g + groupSize <= pos.count; g += groupSize) {
+    const faceIndex = g / groupSize;
+    const h = (ix * 374761393 + iz * 668265263 + iy * 2246822519 + faceIndex * 3266489917) >>> 0;
+    const tint = 0.9 + ((h % 1000) / 1000) * 0.2; // 面色块 0.90~1.10
+    for (let i = g; i < g + groupSize; i++) {
+      const t = (pos.getY(i) - minY) / span;
+      const e = t * t * (3 - 2 * t);
+      const k = (0.85 + (1.12 - 0.85) * e) * tint;
+      col[i * 3] = k;
+      col[i * 3 + 1] = k;
+      col[i * 3 + 2] = k;
+    }
   }
   geo.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
   return geo;
@@ -888,6 +952,10 @@ export function buildCitadelTown(spec, ctx) {
   // ---------- 规则 0：实心体块（只画外露面 + 顶底渐变 + 角点扰动） ----------
   const cellGeometry = new THREE.BoxGeometry(cs, ch, cs);
   const leanDecor = ctx.leanDecor === true;
+  // 运河交汇古堡：Townscaper 高饱和彩城模式——墙面抹渐变色块、
+  // 屋顶用带顶点渐变的陶瓦材质（高山圣城保持原平涂路径不变）。
+  const colorful = ctx.colorful === true;
+  const roofGradMat = materials.roofTileGrad ?? materials.roofTile;
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
     const expose = {
@@ -904,7 +972,8 @@ export function buildCitadelTown(spec, ctx) {
     }
     const geo = makeExposedCellGeometry(cs, ch, expose, ix, iz, iy)
       || makeDistortedCellGeometry(cellGeometry, ix, iz, iy);
-    applyVerticalVertexColors(geo, 1.0, 1.0);
+    if (colorful) applyPatchyWallColors(geo, ix, iz, iy);
+    else applyVerticalVertexColors(geo, 1.0, 1.0);
     const cell = mesh(
       geo,
       ctx.materials.shade?.(char, ix, iz, iy) ?? materials[char] ?? materials.W,
@@ -1120,7 +1189,7 @@ export function buildCitadelTown(spec, ctx) {
         const key = `${ix},${iy},${iz}`;
         const floors = columnHeight.get(`${ix},${iz}`) ?? 1;
         // 矮户：宽扁四坡（房子，不是帐篷锥）；高柱才拉尖
-        const spire = mesh(spireGeometry.clone(), materials.roofTile, "town-spire", 0.035);
+        const spire = mesh(spireGeometry.clone(), roofGradMat, "town-spire", 0.035);
         applyVerticalVertexColors(spire.geometry, 1.28, 0.62);
         if (floors <= 2) {
           spire.scale.set(1.18, 0.68, 1.18);
@@ -1143,7 +1212,7 @@ export function buildCitadelTown(spec, ctx) {
         const tower = mesh(steepleTowerGeometry, materials.steepleStone ?? materials.W, "town-steeple-tower", 0.04);
         tower.position.y = ch * 0.42;
         towerGroup.add(tower);
-        const cone = mesh(steepleConeGeometry.clone(), materials.roofTile, "town-steeple-cone", 0.035);
+        const cone = mesh(steepleConeGeometry.clone(), roofGradMat, "town-steeple-cone", 0.035);
         applyVerticalVertexColors(cone.geometry, 1.28, 0.62);
         cone.position.y = ch * 0.85 + ch * 0.48;
         towerGroup.add(cone);
@@ -1188,7 +1257,7 @@ export function buildCitadelTown(spec, ctx) {
           }
           if (inX + inZ === 0) continue;
           const alongX = inX >= inZ;
-          const roof = mesh((alongX ? gableX : gableZ).clone(), materials.roofTile, "town-roof", 0.04);
+          const roof = mesh((alongX ? gableX : gableZ).clone(), roofGradMat, "town-roof", 0.04);
           applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
           levelGroups[iy].add(roof);
@@ -1197,7 +1266,7 @@ export function buildCitadelTown(spec, ctx) {
           {
             const ridge = mesh(
               ridgeGeometry,
-              leanDecor ? (materials.roofTile ?? trimMat) : trimMat,
+              colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat,
               "town-roof-ridge",
               0.014
             );
@@ -1213,7 +1282,7 @@ export function buildCitadelTown(spec, ctx) {
       if (shape.kind === "strip") {
         for (const [ix, iz] of comp.cells) {
           const key = `${ix},${iy},${iz}`;
-          const roof = mesh((shape.alongX ? gableX : gableZ).clone(), materials.roofTile, "town-roof", 0.04);
+          const roof = mesh((shape.alongX ? gableX : gableZ).clone(), roofGradMat, "town-roof", 0.04);
           applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
           levelGroups[iy].add(roof);
@@ -1225,7 +1294,7 @@ export function buildCitadelTown(spec, ctx) {
         for (const [ix, iz] of comp.cells) {
           const ridge = mesh(
             ridgeGeometry,
-            leanDecor ? (materials.roofTile ?? trimMat) : trimMat,
+            colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat,
             "town-roof-ridge",
             0.014
           );
@@ -1280,7 +1349,7 @@ export function buildCitadelTown(spec, ctx) {
         const center = [minX + 0.5, minZ + 0.5];
         const cone = mesh(
           new THREE.ConeGeometry(cs * 0.4, ch * 0.7, 4).rotateY(Math.PI / 4),
-          materials.roofTile,
+          roofGradMat,
           "town-block2x2-cone",
           0.035
         );

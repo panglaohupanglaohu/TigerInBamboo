@@ -901,10 +901,18 @@ function buildPorter(m, geo) {
   body.add(part(geo.torso, m.leather, 0.01));
   body.add(part(geo.skirt, m.leatherDark, 0.01));
   body.add(part(geo.head, m.skin, 0.008));
-  body.add(part(geo.helmet, m.bronze, 0.008));
-  body.add(part(geo.crest, m.crest, 0.008));
-  body.add(part(geo.crestFeathers, m.crestDark, 0.004));
-  body.add(part(geo.crestStems, m.crestLight, 0.003));
+  const helm = part(geo.helmet, m.bronze, 0.008);
+  helm.name = "soldier-helm";
+  body.add(helm);
+  const crest = part(geo.crest, m.crest, 0.008);
+  crest.name = "soldier-crest";
+  body.add(crest);
+  const crestFeathers = part(geo.crestFeathers, m.crestDark, 0.004);
+  crestFeathers.name = "soldier-crest-feathers";
+  body.add(crestFeathers);
+  const crestStems = part(geo.crestStems, m.crestLight, 0.003);
+  crestStems.name = "soldier-crest-stems";
+  body.add(crestStems);
 
   // 双臂：肩枢轴，抱箱时前平举
   const armL = new THREE.Group();
@@ -1342,6 +1350,61 @@ export function createTieSoldier() {
     eq.spear.rotation.set(0.2, 0, -Math.PI / 2 - 0.2);
   }
   return root;
+}
+
+// 红盔/蓝盔指的是头盔上的「缨穗」（羽冠）颜色，盔体始终为共享的亮青铜。
+const SOLDIER_CREST = {
+  blue: { crest: 0x2563eb, feathers: 0x1e3a8a, stems: 0x93c5fd },
+  red: { crest: 0xc62828, feathers: 0x7f1d1d, stems: 0xef5350 },
+};
+
+/**
+ * 给纸士兵换盔顶缨穗颜色（蓝缨攻城 / 红缨守城）。只刷羽冠三件
+ * （soldier-crest / -crest-feathers / -crest-stems），不动青铜盔体。
+ * @param {THREE.Object3D} root
+ * @param {"blue"|"red"} side
+ */
+export function paintSoldierHelm(root, side = "blue") {
+  const pal = SOLDIER_CREST[side] || SOLDIER_CREST.blue;
+  if (!root) return root;
+  root.userData.helmSide = side;
+  const mats = {
+    "soldier-crest": toonMat(pal.crest),
+    "soldier-crest-feathers": toonMat(pal.feathers),
+    "soldier-crest-stems": toonMat(pal.stems),
+  };
+  root.traverse((o) => {
+    if (!o.isMesh || o.userData.isOutline) return;
+    const mat = mats[o.name];
+    if (mat) o.material = mat;
+  });
+  return root;
+}
+
+/**
+ * 给战船甲板桨手（warship-crew 的 InstancedMesh）换缨穗颜色。
+ * 船上看到的士兵是船自带的剪纸桨手，不是方阵士兵；方阵换边时船组也要同步换，
+ * 否则「蓝缨士兵乘船」看起来仍是红缨。只换羽冠三件，盔体保持亮青铜；
+ * 不改动 CREW_SHARED 共享材质（运河巡航船/红缨增援船仍是红缨）。
+ * @param {THREE.Object3D} boat createFisherBoat 的战船
+ * @param {"blue"|"red"} side
+ */
+export function paintBoatCrewCrest(boat, side = "blue") {
+  if (!boat) return boat;
+  if (boat.userData.crewCrestSide === side) return boat; // 幂等
+  boat.userData.crewCrestSide = side;
+  const pal = SOLDIER_CREST[side] || SOLDIER_CREST.blue;
+  const mats = {
+    "crew-crest": toonMat(pal.crest),
+    "crew-crestFeathers": toonMat(pal.feathers),
+    "crew-crestStems": toonMat(pal.stems),
+  };
+  boat.traverse((o) => {
+    if (!o.isMesh) return;
+    const mat = mats[o.name];
+    if (mat) o.material = mat;
+  });
+  return boat;
 }
 
 /**

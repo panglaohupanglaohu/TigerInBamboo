@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
 import { P, P_DEFAULTS } from "../core/params.js";
+import { tickAircraftTranqFall, isAircraftKnocked } from "../world/tranquilizer.js";
 
 /* ---------------- 3 阶硬边缘 Toon 渐变贴图（纯代码生成） ----------------
  * 三阶灰度阶梯 [0, 127, 255]：暗部 / 中间调 / 亮部，
@@ -315,8 +316,11 @@ export function createMoebiusAircraft() {
     blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide,
   });
+  // 光锥方向：圆柱 +Y 端经 alignVecTo 对齐到"指向地面"方向。
+  // 因此 radiusTop 是靠近地面的一端，radiusBottom 是靠近飞行器的一端。
+  // 视觉要求：靠近飞行器(顶部)细、靠近被扫描地面点粗 → top=粗, bottom=细。
   const scanBeam = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.05, 0.18, 1, 10, 1, true),
+    new THREE.CylinderGeometry(0.18, 0.05, 1, 10, 1, true),
     scanBeamMat
   );
   scanBeam.name = "aircraft-scan-laser";
@@ -617,8 +621,9 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
 
   // ---------- 苔庭鲸对抗期：俯冲吸食 / 悬停盘顶（鲸起→战斗→拉回全程跟随） ----------
   // 苔庭鲸场景（saihojiGarden）每帧把 whaleLock 写入 squad.userData：
-  //  { active, hubDir, hoverRadius } — hoverRadius = 盘面世界半径 + 7（贴背悬停）。
-  // 锁定时冻结航线相位，编队中心平滑过渡到盘顶上方盘旋，随鲸升降；解锁后平滑回到航线。
+  //  { active, hubDir, hoverRadius } — hoverRadius = 鲸背盘顶半径 + WHALE_HOVER_GAP
+  //  （固定高度差，鲸被绳索拽升/拽降时逐帧跟随）。锁定时冻结航线相位，
+  //  编队中心平滑过渡到鲸背正上方盘旋；解锁后平滑回到航线。
   const wl = aircraft.userData.whaleLock;
   if (wl?.active && wl.hubDir && Number.isFinite(wl.hoverRadius)) {
     const hubD = wl.hubDir;
@@ -626,10 +631,11 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
       .crossVectors(new THREE.Vector3(0, 1, 0), hubD)
       .normalize();
     const north = new THREE.Vector3().crossVectors(hubD, east).normalize();
-    // 盘旋方位角：缓慢绕盘顶扫掠（0.075 rad 半径的倾斜小圆 → 角距 ~12 单位）
+    // 盘旋方位角：鲸背正上方小圈扫掠（0.028 rad ≈ 半径 5 单位，
+    // 不越出鲸身 footprint，机队始终压在鲸的正上方）
     const az0 = Number.isFinite(wl.az0) ? wl.az0 : 0;
     const az = az0 + t * 0.22;
-    const tilt = 0.075;
+    const tilt = 0.028;
     const dir = hubD
       .clone()
       .multiplyScalar(Math.cos(tilt))
@@ -639,7 +645,7 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
     const hoverCenter = dir
       .clone()
       .multiplyScalar(wl.hoverRadius + Math.sin(t * 1.3) * 1.2);
-    // 盘侧悬停偏置（苔庭鲸写入：悬停盘顶北翼，长弓列阵正上方）
+    // 侧向偏置（当前不写：吸鲸期机队保持鲸背正上方，不侧偏）
     if (wl.offset) hoverCenter.add(wl.offset);
     // 吃力晃动：鲸越被拽低（strain 越大），机队悬停越挣扎
     const strain = Number.isFinite(wl.strain) ? wl.strain : 0;
@@ -878,12 +884,14 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
   const woundDim = 0.35 + 0.65 * squadSuction01;
   if (aircraft.userData.flames) {
     for (const f of aircraft.userData.flames) {
-      f.scale.set(1, pulse * woundDim, 1);
+      const host = f.parent;
+      const dim = isAircraftKnocked(host) ? 0.08 : woundDim;
+      f.scale.set(1, pulse * dim, 1);
       if (f.material?.opacity != null) {
         f.material.opacity =
           f.material.color?.r > 0.9 && f.material.color?.g < 0.4
-            ? (0.75 + pulse * 0.2) * woundDim
-            : (0.4 + pulse * 0.25) * woundDim;
+            ? (0.75 + pulse * 0.2) * dim
+            : (0.4 + pulse * 0.25) * dim;
       }
     }
   }
@@ -1168,6 +1176,12 @@ function updateHummingbirdForage(members, nectarList, ctx) {
       }
     } else {
       _acSlotPos.copy(member.position);
+    }
+
+    // 麻醉弹攒满 20 发：像飞鸟一样坠地，再缓缓升回阵位
+    const groundR = Number.isFinite(R) && R > 8 ? R : member.position.length() - 22;
+    if (tickAircraftTranqFall(member, dt, Math.max(groundR, 8), _acSlotPos)) {
+      continue;
     }
 
     // ---- 状态：cruise — 阵中巡航 + 扫描，仅「已发现湖沼」才接蜜 ----

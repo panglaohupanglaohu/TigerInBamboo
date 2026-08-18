@@ -18,11 +18,41 @@ import { PLANET_RADIUS } from "./planet.js";
 import { canyonOffsetDir } from "./canyon.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
 
-/* ---------------- 陶土赤红色板（对冲冰川蓝晶塔） ---------------- */
+/* ---------------- 陶土赤红（旧默认，现由 Towerscaper 糖果色替代） ---------------- */
 const TERRACOTTA = 0xb85a42; // 主体：高饱和陶土赤红
 const TERRACOTTA_DEEP = 0xa64b35; // 暗部 / 刻线
 const TERRACOTTA_WARM = 0xc46a4e; // 拱环略暖
-const RUBBLE_GREY = 0x6b6560; // 基座剥落乱石
+const RUBBLE_GREY = 0x9a918a; // 基座剥落乱石（改为浅暖灰褐）
+
+/* ---------------- Towerscaper 糖果色板（低饱和·高明度·水彩感） ---------------- */
+const TS_WALLS = [
+  { name: "樱桃红", main: 0xe85d5d, roof: 0xf2975d },
+  { name: "天蓝", main: 0x62b6e6, roof: 0xf2d85a },
+  { name: "薄荷绿", main: 0x6dd5a0, roof: 0xf2975d },
+  { name: "柠檬黄", main: 0xf2d85a, roof: 0xe87e52 },
+  { name: "浅粉", main: 0xe8a0c0, roof: 0xf2975d },
+  { name: "奶油白", main: 0xf5f0e6, roof: 0xe87e52 },
+];
+const TS_ARCH = 0xfff8ed; // 拱门/中央建筑：奶油白
+const TS_PIER = 0x8ecae6; // 通道矮墩：淡青蓝（可选，目前未用）
+
+const _cMain = new THREE.Color();
+const _cDeep = new THREE.Color();
+const _cRoof = new THREE.Color();
+
+/** 同系暗部：主色向黑乘 0.78，再略向暖偏移 */
+function deepen(mainHex, factor = 0.78) {
+  _cDeep.setHex(mainHex).multiplyScalar(factor);
+  return _cDeep.getHex();
+}
+
+/** 为双子塔挑选两个不同的糖果色（seed 确定但左右不同） */
+function pickTowerColors(rnd) {
+  const a = Math.floor(rnd() * TS_WALLS.length);
+  let b = Math.floor(rnd() * (TS_WALLS.length - 1));
+  if (b >= a) b += 1;
+  return [TS_WALLS[a], TS_WALLS[b]];
+}
 
 /* ---------------- 城门 / 拱环剖面（三重圆拱形状锁死） ---------------- */
 // 局部 XY 平面：X = 横向，Y = 高度，Z = 轨道前进（挤出方向）
@@ -237,31 +267,49 @@ function extrudeGatePart(shape, depth) {
   return facet(geo);
 }
 
-function matMain() {
-  return toonMat(TERRACOTTA, { flatShading: true });
+function matMain(color = TERRACOTTA) {
+  return toonMat(color, { flatShading: true });
 }
-function matDeep() {
-  return toonMat(TERRACOTTA_DEEP, { flatShading: true });
+function matDeep(color = TERRACOTTA_DEEP) {
+  return toonMat(color, { flatShading: true });
 }
-function matWarm() {
-  return toonMat(TERRACOTTA_WARM, { flatShading: true });
+function matWarm(color = TERRACOTTA_WARM) {
+  return toonMat(color, { flatShading: true });
 }
-function matRubble() {
-  return toonMat(RUBBLE_GREY, { flatShading: true });
+function matRubble(color = RUBBLE_GREY) {
+  return toonMat(color, { flatShading: true });
+}
+
+/** 按主色生成一套 Towerscaper 材质：主色 / 暗部 / 屋顶（保留 hex 供插值） */
+function makePalette(mainHex, roofHex) {
+  return {
+    mainHex,
+    roofHex,
+    main: matMain(mainHex),
+    deep: matDeep(deepen(mainHex, 0.78)),
+    warm: matWarm(roofHex),
+    strip: matDeep(deepen(mainHex, 0.62)), // 科技刻线更深
+    rubble: matRubble(),
+  };
 }
 
 /**
  * 多级立方体阶梯塔（下粗上细，平顶祭坛）。
  * 局部：Y 向上，X 横向（远离轨道为正「外」），Z 沿轨。
  */
-function buildTieredTower(sideSign, rnd) {
+function buildTieredTower(sideSign, rnd, palette) {
   const g = new THREE.Group();
   g.name = sideSign < 0 ? "leftTowerGroup" : "rightTowerGroup";
   // 塔组原点：夹道半宽处（±5），体量向外侧展开
   g.position.set(sideSign * GATE.towerOffset, 0, 0);
 
-  const main = matMain();
-  const deep = matDeep();
+  const main = palette.main;
+  const deep = palette.deep;
+  const warm = palette.warm;
+  const stripMat = palette.strip;
+
+  // 由底到顶：主色逐渐向屋顶暖色偏移（Towerscaper 层层水彩感）
+  const tierTints = [0.0, 0.12, 0.28, 0.52];
 
   // 4 级：每级 XZ 缩 12% 左右，Y 累加
   // 底层宽大；「内侧」朝向轨道（-sideSign * X）
@@ -278,9 +326,20 @@ function buildTieredTower(sideSign, rnd) {
     const t = tiers[i];
     // 向外偏心：内侧贴 ±5 通道，外侧更远
     const cx = sideSign * (t.w * 0.42);
+
+    // 由底到顶：主色逐渐向屋顶暖色偏移（Towerscaper 层层水彩感）
+    const isTop = i === tiers.length - 1;
+    const tierHex = isTop
+      ? palette.roofHex
+      : _cMain
+          .setHex(palette.mainHex)
+          .lerp(_cRoof.setHex(palette.roofHex), tierTints[i])
+          .getHex();
+    const tierMat = isTop ? warm : matMain(tierHex);
+
     const mesh = new THREE.Mesh(
       facet(new THREE.BoxGeometry(t.w, t.h, t.d)),
-      i === tiers.length - 1 ? deep : main
+      tierMat
     );
     mesh.name = `tower-tier-${i}`;
     mesh.position.set(cx, yCursor + t.h * 0.5, (rnd() - 0.5) * 0.6);
@@ -320,7 +379,7 @@ function buildTieredTower(sideSign, rnd) {
     }
     const strip = new THREE.Mesh(
       facet(new THREE.BoxGeometry(sx, sy, sz)),
-      deep
+      stripMat
     );
     strip.name = "mech-strip";
     strip.position.set(px, py, pz);
@@ -330,9 +389,9 @@ function buildTieredTower(sideSign, rnd) {
     g.add(strip);
   }
 
-  // 基座风化乱石
+  // 基座风化乱石（浅暖灰褐，呼应 Towerscaper 水岸石基）
   const rubbleN = 10 + Math.floor(rnd() * 6);
-  const rubbleMat = matRubble();
+  const rubbleMat = palette.rubble;
   for (let i = 0; i < rubbleN; i++) {
     const rs = 0.35 + rnd() * 1.1;
     const rock = new THREE.Mesh(
@@ -424,8 +483,12 @@ export function buildAbandonedGate({
   group.add(seatRoot);
 
   const rnd = lcg(seed);
-  const archMat = matWarm();
-  const mainMat = matMain();
+  // Towerscaper 糖果色：左右塔不同色，拱门用奶油白，矮墩随塔
+  const [leftColor, rightColor] = pickTowerColors(rnd);
+  const leftPalette = makePalette(leftColor.main, leftColor.roof);
+  const rightPalette = makePalette(rightColor.main, rightColor.roof);
+  const archMat = matMain(TS_ARCH);
+  const pierMat = matMain(TS_ARCH);
 
   // 1) 三重圆拱（形状不变）
   const archGeo = extrudeGatePart(createGateShape(GATE.passHalf), GATE.archDepth);
@@ -441,16 +504,16 @@ export function buildAbandonedGate({
     seatRoot.add(arch);
   }
 
-  // 2) 双子巨塔：±5 夹道 10
-  const leftTower = buildTieredTower(-1, rnd);
-  const rightTower = buildTieredTower(1, rnd);
+  // 2) 双子巨塔：±5 夹道 10（左右塔不同糖果色）
+  const leftTower = buildTieredTower(-1, rnd, leftPalette);
+  const rightTower = buildTieredTower(1, rnd, rightPalette);
   seatRoot.add(leftTower, rightTower);
 
   // 3) 通道两侧额外矮墩：强化「一线天」纵深
   for (const side of [-1, 1]) {
     const pier = new THREE.Mesh(
       facet(new THREE.BoxGeometry(1.8, GATE.archTop * 0.92, GATE_DEPTH * 0.92)),
-      mainMat
+      pierMat
     );
     pier.name = side < 0 ? "channel-pier-L" : "channel-pier-R";
     pier.position.set(

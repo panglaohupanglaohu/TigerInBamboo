@@ -754,7 +754,15 @@ export function pauseDefaultAmbience() {
  * 恢复默认环境音（离开峡谷场景且未静音时）
  */
 export function resumeDefaultAmbience() {
-  if (muted || infiltrationBgmWanted || leviathanStormWanted || leviathanCueWanted) return;
+  if (
+    muted ||
+    infiltrationBgmWanted ||
+    leviathanStormWanted ||
+    leviathanCueWanted ||
+    bubblePodCannonWanted
+  ) {
+    return;
+  }
   ambienceDuck = 1;
   if (!padStarted) startAmbience();
 }
@@ -990,7 +998,7 @@ function fadeOutCanyonBgm(seconds = 1.4) {
 //  同构：整段播完才停，离开不打断；与峡谷/八音盒互斥（先停对方）
 // =====================================================================
 
-/** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘 / 苔庭鲸风暴）仍在占用声道时，默认环境音不得恢复 */
+/** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘 / 苔庭鲸风暴 / 气泡艇开炮）仍在占用声道时，默认环境音不得恢复 */
 function anySegmentBgmEngaged() {
   return (
     canyonBgmWanted ||
@@ -1000,7 +1008,8 @@ function anySegmentBgmEngaged() {
     infiltrationBgmWanted ||
     tramRideWanted ||
     leviathanStormWanted ||
-    leviathanCueWanted
+    leviathanCueWanted ||
+    bubblePodCannonWanted
   );
 }
 
@@ -1292,6 +1301,15 @@ function pauseOthersForInfiltration() {
     try {
       el.pause();
       el.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+  bubblePodCannonWanted = false;
+  if (bubblePodCannonEl && !bubblePodCannonEl.paused) {
+    try {
+      bubblePodCannonEl.pause();
+      bubblePodCannonEl.volume = 0;
     } catch {
       /* ignore */
     }
@@ -1783,6 +1801,9 @@ function isLeviathanStormAudible() {
 function pauseOthersForLeviathanStorm() {
   pauseDefaultAmbience();
   if (musicBoxSession) stopMusicBox();
+  if (bubblePodCannonWanted || isBubblePodCannonAudible()) {
+    fadeOutBubblePodCannonBgm(0.45);
+  }
   if (swampBgmWanted || swampBgmPendingStop || isSwampBgmAudible()) {
     fadeOutSwampBgm(0.5);
   }
@@ -1973,6 +1994,164 @@ function THREE_CLAMP(v, a, b) {
   return Math.max(a, Math.min(b, v));
 }
 
+// =====================================================================
+//  气泡艇开炮 BGM：黄英华-Opening.mp3
+//  第一次开炮起播并循环；连发不重头；下艇淡出
+// =====================================================================
+/** @type {HTMLAudioElement|null} */
+let bubblePodCannonEl = null;
+let bubblePodCannonWanted = false;
+let bubblePodCannonFading = false;
+export const BUBBLE_POD_CANNON_BGM_URL = new URL(
+  "../../music/黄英华-Opening.mp3",
+  import.meta.url
+).href;
+const BUBBLE_POD_CANNON_VOLUME = 0.5;
+
+function ensureBubblePodCannonEl() {
+  if (bubblePodCannonEl) return bubblePodCannonEl;
+  if (typeof Audio === "undefined") return null;
+  const el = new Audio(BUBBLE_POD_CANNON_BGM_URL);
+  el.loop = true;
+  el.preload = "auto";
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  bubblePodCannonEl = el;
+  return el;
+}
+
+function isBubblePodCannonAudible() {
+  return !!(
+    bubblePodCannonEl &&
+    !bubblePodCannonEl.paused &&
+    bubblePodCannonEl.volume > 0.001
+  );
+}
+
+function pauseOthersForBubblePodCannon() {
+  pauseDefaultAmbience();
+  if (musicBoxSession) stopMusicBox();
+  if (swampBgmWanted || swampBgmPendingStop || isSwampBgmAudible()) {
+    fadeOutSwampBgm(0.5);
+  }
+  if (canyonBgmWanted || canyonBgmPendingStop) {
+    canyonBgmPendingStop = false;
+    canyonBgmWanted = false;
+    fadeOutCanyonBgm(0.5);
+  }
+  if (tramRidePhase !== "idle") {
+    for (const el of [tramIntroEl, tramMainEl]) {
+      if (!el) continue;
+      try {
+        el.pause();
+        el.volume = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+}
+
+function fadeBubblePodCannonTo(el, targetVol, seconds) {
+  if (!el) return;
+  const start = el.volume;
+  const end = THREE_CLAMP(targetVol, 0, 1);
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  bubblePodCannonFading = true;
+  const step = () => {
+    if (!bubblePodCannonEl || bubblePodCannonEl !== el) return;
+    if (!bubblePodCannonWanted && end > 0) {
+      bubblePodCannonFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1 && bubblePodCannonFading) requestAnimationFrame(step);
+    else {
+      el.volume = end;
+      bubblePodCannonFading = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
+function fadeOutBubblePodCannonBgm(seconds = 0.9) {
+  const el = bubblePodCannonEl;
+  bubblePodCannonWanted = false;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : BUBBLE_POD_CANNON_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  bubblePodCannonFading = true;
+  const step = () => {
+    if (!bubblePodCannonEl || bubblePodCannonEl !== el) return;
+    if (bubblePodCannonWanted) {
+      bubblePodCannonFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+    bubblePodCannonFading = false;
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    else resumeTramRideBgmIfWanted();
+  };
+  requestAnimationFrame(step);
+}
+
+/**
+ * 气泡艇开炮 BGM。第一次开炮从曲头循环《黄英华-Opening》；连发不重头。
+ * 苔庭鲸风暴 / 潜入太鼓优先，不抢它们的声道。
+ * @param {boolean} active
+ * @param {{ fade?: number }} [opts]
+ */
+export function setBubblePodCannonBgm(active, opts = {}) {
+  const fade = opts.fade ?? 0.7;
+  const next = !!active && !muted;
+  if (next) {
+    if (leviathanStormWanted || leviathanCueWanted || infiltrationBgmWanted) {
+      return false;
+    }
+    bubblePodCannonWanted = true;
+    const el = ensureBubblePodCannonEl();
+    if (!el) return false;
+    // 已在播（含淡入中 volume≈0）：连发不重头
+    if (!el.paused) return true;
+    pauseOthersForBubblePodCannon();
+    ensureAudio();
+    try {
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+    el.play()?.catch?.(() => {});
+    fadeBubblePodCannonTo(el, BUBBLE_POD_CANNON_VOLUME, fade);
+    return true;
+  }
+  if (!bubblePodCannonWanted && !isBubblePodCannonAudible()) return false;
+  bubblePodCannonWanted = false;
+  fadeOutBubblePodCannonBgm(fade);
+  return true;
+}
+
+export function isBubblePodCannonBgmPlaying() {
+  return !!(bubblePodCannonWanted && bubblePodCannonEl && !bubblePodCannonEl.paused);
+}
+
 function setMuted(next) {
   muted = next;
   if (muted) {
@@ -2019,6 +2198,16 @@ function setMuted(next) {
     }
     tramRideWanted = false;
     stopTramRideElements();
+    bubblePodCannonWanted = false;
+    if (bubblePodCannonEl) {
+      try {
+        bubblePodCannonEl.pause();
+        bubblePodCannonEl.volume = 0;
+        bubblePodCannonEl.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
     tramProximity = 0;
     if (tramNodes?.master && audioCtx) {
       tramNodes.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);

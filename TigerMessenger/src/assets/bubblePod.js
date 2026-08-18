@@ -598,10 +598,21 @@ export function updateBubbleShot(shot, dt, planetRadius = 40) {
         disposeBubbleShot(shot);
         return false;
       }
-      const still = host.userData?.sedated && (host.userData.sedateT ?? 0) > 0;
+      const knocked =
+        host.userData?.tranqFall?.phase === "fall" ||
+        host.userData?.tranqFall?.phase === "down" ||
+        host.userData?.tranqFall?.phase === "rise";
+      const still =
+        (host.userData?.sedated && (host.userData.sedateT ?? 0) > 0) || knocked;
       if (!still) {
         disposeBubbleShot(shot);
         return false;
+      }
+      // 飞行器坠落全程气泡跟着机身，不按弹寿命提前破
+      if (knocked) {
+        const wobbleK = 1 + Math.sin(shot.age * 9) * 0.04;
+        if (shot.shell) shot.shell.scale.set(1.25 * wobbleK, 0.72, 1.25 * wobbleK);
+        return true;
       }
     }
     // 粘液微颤

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>siege diorama shot</title>
+<script type="importmap">
+{"imports":{"three":"./vendor/three.module.js"}}
+</script>
+<style>html,body{margin:0;background:#c5d4d8}canvas{display:block;width:100vw;height:100vh}</style>
+</head><body>
+<script type="module">
+import * as THREE from "./vendor/three.module.js";
+import { TOWNSCAPER_CANAL_PALETTE } from "./src/world/citadelTown.js";
+import {
+  createHarborPatrolSoldier,
+  createGladiusSoldier,
+  createLongbowSoldier,
+  createFisherBoat,
+  paintSoldierHelm,
+  paintBoatCrewCrest,
+} from "./src/assets/harbor.js";
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xd8e4e6);
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 200);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(1);
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xfff4ea, 1.2));
+const sun = new THREE.DirectionalLight(0xffe0c0, 0.9);
+sun.position.set(6, 12, 8);
+scene.add(sun);
+
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(30, 40),
+  new THREE.MeshToonMaterial({ color: 0x9db8a4 })
+);
+ground.rotation.x = -Math.PI / 2;
+scene.add(ground);
+
+try {
+  // ---------- 马卡龙 15 色样墙（每种色一块，直观验收色偏） ----------
+  const pal = TOWNSCAPER_CANAL_PALETTE;
+  pal.forEach((e, i) => {
+    const b = new THREE.Mesh(
+      new THREE.BoxGeometry(0.9, 1.6, 0.9),
+      new THREE.MeshToonMaterial({ color: e.color })
+    );
+    b.position.set(-7.5 + (i % 8) * 1.1, 0.8, -6 - Math.floor(i / 8) * 1.2);
+    scene.add(b);
+  });
+
+  // ---------- 攻城梯：斜靠在「一层台地」沿 ----------
+  const terrace = new THREE.Mesh(
+    new THREE.BoxGeometry(9, 2.1, 4),
+    new THREE.MeshToonMaterial({ color: TOWNSCAPER_CANAL_PALETTE[2].color }) // 杏粉墙体
+  );
+  terrace.position.set(2, 1.05, 2.5);
+  scene.add(terrace);
+
+  const ladder = new THREE.Group();
+  const wood = new THREE.MeshToonMaterial({ color: 0x8a5a33 });
+  const L = 4.6;
+  for (const sx of [-0.28, 0.28]) {
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(0.09, L, 0.09), wood);
+    rail.position.x = sx;
+    ladder.add(rail);
+  }
+  const rungs = 10;
+  for (let i = 0; i < rungs; i++) {
+    const rung = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.07, 0.07), wood);
+    rung.position.y = -L / 2 + 0.24 + (i * (L - 0.48)) / (rungs - 1);
+    ladder.add(rung);
+  }
+  ladder.position.set(2, 1.9, 4.15);
+  ladder.rotation.x = 0.42;
+  scene.add(ladder);
+
+  // ---------- 红盔防守（梯顶两名 + 长弓手居高） ----------
+  const redA = createHarborPatrolSoldier();
+  paintSoldierHelm(redA, "red");
+  redA.position.set(1.3, 2.1, 2.2);
+  redA.rotation.y = Math.PI;
+  scene.add(redA);
+  const redB = createGladiusSoldier();
+  paintSoldierHelm(redB, "red");
+  redB.position.set(2.8, 2.1, 2.2);
+  redB.rotation.y = Math.PI;
+  scene.add(redB);
+  const redBow = createLongbowSoldier();
+  paintSoldierHelm(redBow, "red");
+  redBow.position.set(4.6, 2.1, 1.2);
+  redBow.rotation.y = Math.PI * 0.9;
+  scene.add(redBow);
+
+  // ---------- 蓝盔进攻（爬梯中 + 梯下排队 + 地面长弓） ----------
+  const climber = createHarborPatrolSoldier();
+  paintSoldierHelm(climber, "blue");
+  climber.position.set(2, 1.55, 4.0);
+  climber.rotation.x = -0.35;
+  climber.rotation.y = Math.PI;
+  scene.add(climber);
+  const queueBlue = createGladiusSoldier();
+  paintSoldierHelm(queueBlue, "blue");
+  queueBlue.position.set(2.1, 0, 5.6);
+  queueBlue.rotation.y = Math.PI;
+  scene.add(queueBlue);
+  const blueBow = createLongbowSoldier();
+  paintSoldierHelm(blueBow, "blue");
+  blueBow.position.set(-1.8, 0, 6.5);
+  blueBow.rotation.y = Math.PI * 1.05;
+  scene.add(blueBow);
+  // 瘫倒的蓝盔（1 近战/2 箭状态）：倒地不起
+  const downed = createGladiusSoldier();
+  paintSoldierHelm(downed, "blue");
+  downed.position.set(3.6, 0.15, 5.2);
+  downed.rotation.z = 1.15;
+  scene.add(downed);
+
+  // ---------- 战船桨手缨穗对比：左红（默认/守城）右蓝（攻城返程） ----------
+  const boatRed = createFisherBoat();
+  boatRed.position.set(-5.6, 0, 4.6);
+  boatRed.rotation.y = 1.25; // 侧舷朝镜头，露出桨手列
+  scene.add(boatRed);
+  const boatBlue = createFisherBoat();
+  paintBoatCrewCrest(boatBlue, "blue");
+  boatBlue.position.set(-0.6, 0, 7.6);
+  boatBlue.rotation.y = 1.25;
+  scene.add(boatBlue);
+
+  camera.position.set(8.8, 6.6, 13.8);
+  camera.lookAt(0.2, 1.2, 3.2);
+  renderer.render(scene, camera);
+  window.__shotReady = true;
+} catch (err) {
+  console.error(err);
+  window.__shotError = String(err && err.stack || err);
+  window.__shotReady = true;
+}
+</script>
+</body></html>

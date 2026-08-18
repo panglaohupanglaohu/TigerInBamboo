@@ -3,7 +3,7 @@
 //  - 靠近气泡艇 [F] 登艇 / 下艇
 //  - WASD 驾驶 · Space 上浮 · Shift/C 潜行（水晶城海水湖内可下潜）
 //  - 鼠标 / 游戏手柄右摇杆 / 触控环视 → 十字光标瞄准
-//  - [G] 或手柄 RT → 发射麻醉弹（飞鸟坠落 · 士兵卧倒 · 约 5s 苏醒）
+//  - [G] 或手柄 RT → 发射麻醉弹（飞鸟坠落 · 飞行器 20 发坠地 · 士兵卧倒）
 // =====================================================================
 import * as THREE from "three";
 import {
@@ -16,11 +16,16 @@ import { sedateWarshipCrewNearest } from "../assets/harbor.js";
 import { quatYToDir } from "../world/sphereMath.js";
 import {
   sedateObject,
+  applyAircraftTranqHit,
+  isAircraftKnocked,
   TRANQ_DURATION,
   TRANQ_DURATION_BIRD,
   TRANQ_HIT_R_BIRD,
   TRANQ_HIT_R_SOLDIER,
+  TRANQ_HIT_R_AIRCRAFT,
+  TRANQ_HITS_AIRCRAFT,
 } from "../world/tranquilizer.js";
+import { setBubblePodCannonBgm } from "../audio/sfx.js";
 
 const BOARD_RANGE = 5.2;
 const FIRE_COOLDOWN = 0.09;
@@ -309,6 +314,7 @@ export function createBubblePodRide({
     camera.updateProjectionMatrix();
     showCrosshair(false);
     setHint(null);
+    setBubblePodCannonBgm(false, { fade: 0.85 });
     if (document.pointerLockElement) document.exitPointerLock?.();
     toast("已离开气泡艇", 1.8);
   }
@@ -390,6 +396,7 @@ export function createBubblePodRide({
 
     // 炮口火焰：细长锥体沿射击方向，贴炮口、短促、不挡座舱视野
     spawnMuzzleFlame(_muzzle, _dir);
+    setBubblePodCannonBgm(true);
     return true;
   }
 
@@ -439,7 +446,7 @@ export function createBubblePodRide({
    * @returns {boolean}
    */
   /**
-   * 麻醉弹命中：对所有生物生效（鸟/兵/桨手/系绳兵/兽类…）
+   * 麻醉弹命中：对所有生物生效（鸟/飞行器/兵/桨手/系绳兵/兽类…）
    * @param {object} shot
    * @returns {boolean}
    */
@@ -493,6 +500,47 @@ export function createBubblePodRide({
       for (const f of terraceFlocks) {
         const hit = f?.vortex?.sedateNearest?.(pos, rBird, TRANQ_DURATION_BIRD);
         if (applyHit(hit, "麻醉命中 · 飞鸟坠落")) return true;
+      }
+    }
+
+    // 2.5) 莫比斯飞行器：攒满 20 发后像飞鸟一样坠地，再缓缓升空
+    {
+      const squad = lm.aircraftSquad;
+      const acMembers = Array.isArray(squad?.userData?.members)
+        ? squad.userData.members
+        : squad?.userData?.kind === "moebius-aircraft"
+          ? [squad]
+          : [];
+      let best = null;
+      let bestD = Infinity;
+      for (const m of acMembers) {
+        if (!m || m.visible === false) continue;
+        if (typeof m.getWorldPosition === "function") m.getWorldPosition(_hitPos);
+        else _hitPos.copy(m.position);
+        const sc = Math.max(1, m.scale?.x || 1);
+        const rAc = TRANQ_HIT_R_AIRCRAFT * sc;
+        const d2 = _hitPos.distanceToSquared(pos);
+        if (d2 <= rAc * rAc && d2 < bestD) {
+          bestD = d2;
+          best = m;
+        }
+      }
+      if (best) {
+        const result = applyAircraftTranqHit(best);
+        stickBubbleShot(shot, {
+          kind: "object",
+          object: best,
+          duration: isAircraftKnocked(best) ? 40 : TRANQ_DURATION_BIRD,
+        });
+        if (result?.already) {
+          toast("麻醉命中 · 飞行器已坠落", 1.2);
+        } else if (result?.knocked) {
+          toast("麻醉命中 · 飞行器坠落", 1.8);
+        } else {
+          const n = result?.hits || best.userData.tranqHits || 0;
+          toast(`麻醉命中 · 飞行器 ${n}/${TRANQ_HITS_AIRCRAFT}`, 1.2);
+        }
+        return true;
       }
     }
 

@@ -9,9 +9,9 @@
 import * as THREE from "./vendor/three.module.js";
 import {
   CANAL_JUNCTION_TOWN_SPEC,
-  CITADEL_PALETTE,
+  TOWNSCAPER_CANAL_PALETTE,
   CITADEL_GATE_CHAR,
-  CITADEL_GATE_COLOR,
+  TOWNSCAPER_CANAL_GATE_COLOR,
   citadelPaletteIndexOfChar,
   citadelShadeStep,
   buildCitadelTown,
@@ -42,28 +42,34 @@ water.position.y = -0.2;
 scene.add(water);
 
 const mats = {};
-for (const e of CITADEL_PALETTE) {
-  mats[e.char] = new THREE.MeshToonMaterial({ color: e.color, vertexColors: true });
+for (const e of TOWNSCAPER_CANAL_PALETTE) {
+  mats[e.char] = new THREE.MeshToonMaterial({ color: e.color });
   mats[e.char].flatShading = true;
 }
-mats[CITADEL_GATE_CHAR] = new THREE.MeshToonMaterial({ color: CITADEL_GATE_COLOR, vertexColors: true });
+mats[CITADEL_GATE_CHAR] = new THREE.MeshToonMaterial({ color: TOWNSCAPER_CANAL_GATE_COLOR });
 mats.W = mats["0"];
-mats.roofTile = new THREE.MeshToonMaterial({ color: 0xe87828, vertexColors: true });
-mats.ink = new THREE.MeshToonMaterial({ color: 0x2a2b2d, vertexColors: true });
-mats.wood = new THREE.MeshToonMaterial({ color: 0x8b5a2b, vertexColors: true });
-mats.trim = mats.ink;
-mats.water = new THREE.MeshToonMaterial({ color: 0x5a9eaa, vertexColors: true, transparent: true, opacity: 0.85 });
-mats.foliageDark = new THREE.MeshToonMaterial({ color: 0x365c3b, vertexColors: true });
-mats.foliageLight = new THREE.MeshToonMaterial({ color: 0x628253, vertexColors: true });
-mats.plazaStone = new THREE.MeshToonMaterial({ color: 0xbfc9cd, vertexColors: true });
+mats.roofTile = new THREE.MeshToonMaterial({ color: 0xd9732f });
+mats.roofTileGrad = new THREE.MeshToonMaterial({ color: 0xd9732f, vertexColors: true });
+mats.ink = new THREE.MeshToonMaterial({ color: 0x2b3540 });
+mats.wood = new THREE.MeshToonMaterial({ color: 0x8a5a33 });
+mats.trim = new THREE.MeshToonMaterial({ color: 0x4a3b2e });
+mats.iron = new THREE.MeshToonMaterial({ color: 0x2e2a26 });
+mats.crenel = new THREE.MeshToonMaterial({ color: 0xf2ead8 });
+mats.water = new THREE.MeshToonMaterial({ color: 0x3e8fa3, transparent: true, opacity: 0.85 });
+mats.foliageDark = new THREE.MeshToonMaterial({ color: 0x2f7d3f });
+mats.foliageLight = new THREE.MeshToonMaterial({ color: 0x55a84f });
+mats.plazaStone = new THREE.MeshToonMaterial({ color: 0xc9bca4 });
+mats.weatherStone = new THREE.MeshToonMaterial({ color: 0x7e8b99 });
+mats.gold = new THREE.MeshToonMaterial({ color: 0xd9732f });
+mats.windowDark = new THREE.MeshToonMaterial({ color: 0x22303c });
 mats.A = mats["A"];
 mats.shade = (char, ix, iz) => {
   const step = citadelShadeStep(ix, iz, char);
-  const base = CITADEL_PALETTE[citadelPaletteIndexOfChar(char)] ?? CITADEL_PALETTE[0];
+  const base = TOWNSCAPER_CANAL_PALETTE[citadelPaletteIndexOfChar(char)] ?? TOWNSCAPER_CANAL_PALETTE[0];
   const c = new THREE.Color(base.color);
   const hsl = {};
   c.getHSL(hsl);
-  hsl.l = THREE.MathUtils.clamp(hsl.l + step * 0.02, 0.02, 0.98);
+  hsl.l = THREE.MathUtils.clamp(hsl.l + step * 0.025, 0.02, 0.98);
   c.setHSL(hsl.h, hsl.s, hsl.l);
   const key = char + step;
   if (!mats[key]) {
@@ -81,6 +87,7 @@ let built;
 try {
 built = buildCitadelTown(CANAL_JUNCTION_TOWN_SPEC, {
   leanDecor: true,
+  colorful: true,
   mesh,
   materials: mats,
   shrubMaterials: mats,

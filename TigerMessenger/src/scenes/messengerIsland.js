@@ -782,6 +782,8 @@ export const messengerIslandScene = {
       getSquad: () => aircraftSquad,
       // 白天源源不断的电车运兵：电车掠过苔庭（航线最近 ~27 单位）时士兵下车入阵
       getTram: () => tramSystem,
+      getTimeOfDay: () => P.timeOfDay,
+      getNightInfiltration: () => citadelRange?.nightInfiltration || null,
     });
 
     // 可变 landmarks：装船物流换船时更新 boat 引用

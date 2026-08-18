@@ -60,6 +60,19 @@ const CHAR_NAMES = {
   7: "浅灰蓝", 8: "浅灰蓝", 9: "浅灰蓝", A: "瓷白", B: "浅灰蓝", C: "薄荷", D: "薄荷",
   E: "薄荷", G: "正门",
 };
+// 运河交汇古堡（canal-junction）：马卡龙色调 15 色，
+// 与 citadelTown.js 的 TOWNSCAPER_CANAL_PALETTE 一一对应。
+const PANEL_CHARS_CANAL = {
+  0: "#F6EFE3", 1: "#E8D8BC", 2: "#F5CDBD", 3: "#F6DE8C", 4: "#F2B67F",
+  5: "#EE9A93", 6: "#CE8E97", 7: "#C4A3D8", 8: "#B3A6DB", 9: "#93C6EC",
+  A: "#97D2E4", B: "#93CF95", C: "#86C9BE", D: "#DE9D85", E: "#8FA9E4",
+  G: "#F6EFE3",
+};
+const CHAR_NAMES_CANAL = {
+  0: "奶油白", 1: "沙石", 2: "杏粉", 3: "明黄", 4: "蜜橙", 5: "朱红", 6: "绛红",
+  7: "紫罗兰", 8: "堇青", 9: "天青", A: "湖蓝", B: "草绿", C: "青碧", D: "赭红",
+  E: "钴蓝", G: "正门",
+};
 const PALETTE_ORDER = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "G"];
 const CELL = CITADEL_TOWN_SPEC.cellSize;
 const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
@@ -171,6 +184,14 @@ export function createCitadelEditorPanel({
     return getInstanceId() === "canal-junction";
   }
 
+  /** 当前实例的色板/色名（运河交汇 = Townscaper 高饱和 15 色）。 */
+  function panelChars() {
+    return isCanalFlat() ? PANEL_CHARS_CANAL : PANEL_CHARS;
+  }
+  function charNames() {
+    return isCanalFlat() ? CHAR_NAMES_CANAL : CHAR_NAMES;
+  }
+
   /** 无存档时：高山圣城用内置 SPEC；运河交汇是空地基，由玩家自建。 */
   function defaultGridSpec() {
     return isCanalFlat() ? CANAL_JUNCTION_TOWN_SPEC : CITADEL_TOWN_SPEC;
@@ -202,6 +223,7 @@ export function createCitadelEditorPanel({
       activeTerrace = 0;
       grid = terraceGrids[0] ?? grid;
     }
+    refreshPaletteSwatches();
     const ctxEl = panel.querySelector("#ce-castle-context");
     if (ctxEl) {
       ctxEl.textContent = canal
@@ -396,18 +418,29 @@ export function createCitadelEditorPanel({
     "border:1px solid #9aa4ad;background:#fff;border-radius:6px;padding:2px 9px;cursor:pointer;font:inherit;";
   panel.querySelectorAll("#ce-body button").forEach((b) => (b.style.cssText = btnCss));
 
+  const paletteButtons = [];
   for (const char of PALETTE_ORDER) {
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.char = char;
-    b.title = `${CHAR_NAMES[char]}（${PALETTE_ORDER.indexOf(char) + 1}）`;
-    b.innerHTML =
-      `<span style="display:inline-block;width:12px;height:12px;border-radius:3px;` +
-      `vertical-align:-1px;border:1px solid rgba(0,0,0,.3);` +
-      `background:${PANEL_CHARS[char]}"></span><span style="font-size:11px;">${CHAR_NAMES[char]}</span>`;
     b.onclick = () => selectChar(char);
     paletteEl.appendChild(b);
+    paletteButtons.push(b);
   }
+  /** 按当前实例刷新色板按钮（高山马卡龙 ⇄ 运河 Townscaper 高饱和）。 */
+  function refreshPaletteSwatches() {
+    const chars = panelChars();
+    const names = charNames();
+    for (const b of paletteButtons) {
+      const char = b.dataset.char;
+      b.title = `${names[char]}（${PALETTE_ORDER.indexOf(char) + 1}）`;
+      b.innerHTML =
+        `<span style="display:inline-block;width:12px;height:12px;border-radius:3px;` +
+        `vertical-align:-1px;border:1px solid rgba(0,0,0,.3);` +
+        `background:${chars[char]}"></span><span style="font-size:11px;">${names[char]}</span>`;
+    }
+  }
+  refreshPaletteSwatches();
 
   // ---------- 导出 / 导入弹窗 ----------
   const io = document.createElement("div");
@@ -1478,7 +1511,8 @@ export function createCitadelEditorPanel({
           ctx2d.fillRect(ix * gridPx + 1, iz * gridPx + 1, gridPx - 2, gridPx - 2);
         }
         if (char) {
-          ctx2d.fillStyle = PANEL_CHARS[char] ?? PANEL_CHARS.W;
+          const chars = panelChars();
+          ctx2d.fillStyle = chars[char] ?? chars.G;
           ctx2d.fillRect(ix * gridPx + 1, iz * gridPx + 1, gridPx - 2, gridPx - 2);
           if (char === "G") {
             ctx2d.fillStyle = "#3a2412";

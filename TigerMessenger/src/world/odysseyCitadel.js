@@ -27,6 +27,10 @@ import {
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
   CITADEL_CASTLE_FLOORS,
+  TOWNSCAPER_CANAL_PALETTE,
+  TOWNSCAPER_CANAL_GATE_COLOR,
+  citadelPaletteIndexOfChar,
+  citadelShadeStep,
 } from "./citadelTown.js";
 
 /** Maria Svarbova 无菌马卡龙：低语调中间色，禁止赤陶/焦黑。 */
@@ -427,17 +431,135 @@ function makeToon(color, _gradientMap) {
 
 const _citadelPaletteMats = new Map(); // hex -> material
 
+// ---------------------------------------------------------------------------
+//  运河交汇古堡 · Townscaper 原版高饱和配色（仅 canal-junction 实例）
+//  高山圣城保持 Svarbova 无菌马卡龙；两套材质体系互不污染。
+// ---------------------------------------------------------------------------
+
+/** 运河彩城构件色：橙红陶瓦 / 焦黑铁架 / 深色木 / 墨窗 / 饱和绿植。 */
+export const CANAL_TOWNSCAPER = Object.freeze({
+  roofTile: 0xd9732f, // 橙红陶瓦（原版标志性屋顶，比蜜橙墙深一档）
+  trim: 0x4a3b2e, // 深色木线脚（屋脊/栏杆/风向标）
+  iron: 0x2e2a26, // 焦黑铁（飞楼 stilts）
+  wood: 0x8a5a33, // 门/船/栅栏暖木
+  ink: 0x2b3540, // 门洞/窗洞深墨
+  dome: 0xde8138, // 穹顶随屋顶陶瓦
+  stone: 0xf6efe3, // 教堂塔身奶油石
+  seawall: 0x7e8b99, // 防波堤青灰石
+  plaza: 0xc9bca4, // 广场石板
+  water: 0x3e8fa3, // 水道青绿
+  foliageDark: 0x2f7d3f,
+  foliageLight: 0x55a84f,
+  windowDark: 0x22303c, // 窗洞深海军蓝
+  crenel: 0xf6efe3, // 露台矮墙奶油
+});
+
+const _canalMatCache = new Map(); // "hex|v|p" -> material
+
+/**
+ * Townscaper 哑光彩釉：饱和 albedo + 哑光表面（马卡龙管线是牛奶高光，
+ * 直接复用会显得塑料）。共享缓存 + dispose noop，与 makePastelStandard 同约定。
+ */
+export function makeCanalMat(hex, { vertexColors = false } = {}) {
+  const key = `${hex.toString(16)}|${vertexColors ? "v" : "p"}`;
+  let material = _canalMatCache.get(key);
+  if (!material) {
+    const albedo = new THREE.Color(hex);
+    material = new THREE.MeshStandardMaterial({
+      color: albedo,
+      roughness: 0.62,
+      metalness: 0.0,
+      envMapIntensity: 0.35,
+      emissive: albedo.clone().multiplyScalar(0.06),
+      emissiveIntensity: 1,
+      vertexColors,
+    });
+    material.userData.shared = true;
+    material.dispose = () => {};
+    _canalMatCache.set(key, material);
+  }
+  return material;
+}
+
+/**
+ * 把装配材质表整体切换成 Townscaper 原版配色（就地覆盖，调用方每次
+ * 构建都新建材质表，不会污染高山圣城实例）。新增 roofTileGrad：
+ * 带顶点渐变的陶瓦，仅屋顶片（几何必带 color 属性）使用。
+ */
+function applyTownscaperCanalMaterials(materials) {
+  materials.stone = makeCanalMat(CANAL_TOWNSCAPER.stone);
+  materials.weatherStone = makeCanalMat(CANAL_TOWNSCAPER.seawall);
+  materials.plazaStone = makeCanalMat(CANAL_TOWNSCAPER.plaza);
+  materials.ink = makeCanalMat(CANAL_TOWNSCAPER.ink);
+  materials.wood = makeCanalMat(CANAL_TOWNSCAPER.wood);
+  materials.gold = makeCanalMat(CANAL_TOWNSCAPER.dome);
+  materials.goldShade = makeCanalMat(CANAL_TOWNSCAPER.dome);
+  materials.roofTile = makeCanalMat(CANAL_TOWNSCAPER.roofTile);
+  materials.roofTileGrad = makeCanalMat(CANAL_TOWNSCAPER.roofTile, { vertexColors: true });
+  materials.water = makeCanalMat(CANAL_TOWNSCAPER.water);
+  materials.foliageDark = makeCanalMat(CANAL_TOWNSCAPER.foliageDark);
+  materials.foliageLight = makeCanalMat(CANAL_TOWNSCAPER.foliageLight);
+  materials.bark = makeCanalMat(CANAL_TOWNSCAPER.wood);
+  materials.trim = makeCanalMat(CANAL_TOWNSCAPER.trim);
+  materials.iron = makeCanalMat(CANAL_TOWNSCAPER.iron);
+  materials.crenel = makeCanalMat(CANAL_TOWNSCAPER.crenel);
+  materials.windowDark = makeCanalMat(CANAL_TOWNSCAPER.windowDark);
+  return materials;
+}
+
+/**
+ * 运河彩城墙面 shade 工厂：尊重布局字符的户色（竖柱同色=一户），
+ * 按 citadelShadeStep 做 ±10% 明度微抖；材质开 vertexColors，
+ * 与 applyPatchyWallColors 的墙面渐变色块相乘出原版手绘墙感。
+ */
+function makeCanalTownscaperShadeFactory() {
+  const cache = new Map(); // "char|step" -> material
+  return function canalTownscaperShade(char, ix, iz) {
+    if (char === CITADEL_GATE_CHAR) {
+      return makeCanalMat(TOWNSCAPER_CANAL_GATE_COLOR, { vertexColors: true });
+    }
+    const idx = citadelPaletteIndexOfChar(char);
+    if (idx < 0) return null; // 未知字符回落 materials[char]
+    const step = citadelShadeStep(ix, iz, char); // -2..+2 五档
+    const key = `${char}|${step}`;
+    let material = cache.get(key);
+    if (!material) {
+      const albedo = new THREE.Color(TOWNSCAPER_CANAL_PALETTE[idx].color);
+      albedo.multiplyScalar(1 + step * 0.05);
+      albedo.r = Math.min(1, Math.max(0, albedo.r));
+      albedo.g = Math.min(1, Math.max(0, albedo.g));
+      albedo.b = Math.min(1, Math.max(0, albedo.b));
+      material = new THREE.MeshStandardMaterial({
+        color: albedo,
+        roughness: 0.62,
+        metalness: 0.0,
+        envMapIntensity: 0.35,
+        emissive: albedo.clone().multiplyScalar(0.06),
+        emissiveIntensity: 1,
+        vertexColors: true,
+      });
+      material.userData.shared = true;
+      material.dispose = () => {};
+      cache.set(key, material);
+    }
+    return material;
+  };
+}
+
 /**
  * 调色板字符 → 基色材质表：buildCitadelTown 的 materials[char] 直接可用。
  * 每个装配调用共享同一份缓存（材质复用，避免重建 15+ 个 MeshToonMaterial）。
+ * entries/factory/gateColor 可覆盖——运河交汇古堡传 TOWNSCAPER_CANAL_PALETTE
+ * + 哑光彩釉工厂，出原版高饱和户色。
  */
-function buildCitadelPaletteMaterials(gradientMap) {
+function buildCitadelPaletteMaterials(gradientMap, entries = CITADEL_PALETTE, factory = null, gateColor = CITADEL_GATE_COLOR) {
+  const make = factory ?? ((hex) => makeToon(hex, gradientMap));
   const table = {};
-  for (const entry of CITADEL_PALETTE) {
-    table[entry.char] = makeToon(entry.color, gradientMap);
+  for (const entry of entries) {
+    table[entry.char] = make(entry.color);
   }
-  // 正门字符：木褐专用材质（门廊语义，非调色板色）
-  table[CITADEL_GATE_CHAR] = makeToon(CITADEL_GATE_COLOR, gradientMap);
+  // 正门字符：门廊语义专用材质（非调色板色）
+  table[CITADEL_GATE_CHAR] = make(gateColor);
   // 旧档兼容键（normalize 已迁移字符，这里兜底面板/编辑器直传旧字符）
   table.W = table["0"];
   table.L = table["2"];
@@ -510,7 +632,11 @@ export function refreshCitadelWindowLights(castleContainer) {
   if (!castleContainer) return [];
   const gradientMap = castleContainer.userData.gradientMap ?? makeThreeStepGradient();
   // 重建后旧材质可能已 dispose，始终新建一对共享昼夜材质
-  castleContainer.userData.windowDarkMat = makePastelStandard(SVARBOVA.grayBlue);
+  // 运河交汇古堡：窗洞深海军蓝（Townscaper 小孔窗）；高山圣城维持无菌灰蓝
+  castleContainer.userData.windowDarkMat =
+    castleContainer.userData.instanceId === "canal-junction"
+      ? makeCanalMat(CANAL_TOWNSCAPER.windowDark)
+      : makePastelStandard(SVARBOVA.grayBlue);
   castleContainer.userData.windowLitMat = makeWindowLitMat(gradientMap);
   const windows = [];
   castleContainer.traverse((o) => {
@@ -1064,6 +1190,8 @@ function buildOuterCitadelTerrain(materials, contourSpec = CITADEL.contourTerrai
 export function buildCitadelTownAssembly(spec, options = {}) {
   const random = options.random ?? lcg(20260808);
   const gradientMap = options.gradientMap ?? makeThreeStepGradient();
+  // 运河交汇古堡：Townscaper 原版高饱和彩城（高山圣城保持马卡龙淡彩）
+  const townscaperColors = options.townscaperColors === true;
 
   const materials = options.materials ?? {
     cliff: makeToon(PALETTE.cliff, gradientMap),
@@ -1086,8 +1214,11 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     trim: makePastelStandard(SVARBOVA.goose),
     crenel: makePastelStandard(SVARBOVA.goose),
   };
+  if (townscaperColors) applyTownscaperCanalMaterials(materials);
   // 水道格子用单独半透明材质，绝不改共享 toon（否则整座城会一起变透）。
-  const townWaterMat = makeToon(PALETTE.water, gradientMap);
+  const townWaterMat = townscaperColors
+    ? makeCanalMat(CANAL_TOWNSCAPER.water).clone()
+    : makeToon(PALETTE.water, gradientMap);
   townWaterMat.transparent = true;
   townWaterMat.opacity = 0.55;
   townWaterMat.depthWrite = false;
@@ -1098,14 +1229,21 @@ export function buildCitadelTownAssembly(spec, options = {}) {
 
   const town = buildCitadelTown(spec, {
     leanDecor: options.leanDecor === true,
+    colorful: townscaperColors,
     mesh,
     materials: {
       // Townscaper 15 色调色板：字符 "0"–"9A"–"E" → 基色材质（含旧 4 色兼容键）
-      ...buildCitadelPaletteMaterials(gradientMap),
+      ...buildCitadelPaletteMaterials(
+        gradientMap,
+        townscaperColors ? TOWNSCAPER_CANAL_PALETTE : CITADEL_PALETTE,
+        townscaperColors ? (hex) => makeCanalMat(hex) : null,
+        townscaperColors ? TOWNSCAPER_CANAL_GATE_COLOR : CITADEL_GATE_COLOR
+      ),
       gold: materials.gold,
       wood: materials.wood,
       ink: materials.ink,
       roofTile: materials.roofTile,
+      roofTileGrad: materials.roofTileGrad, // 仅运河彩城提供；高山回落 roofTile
       water: townWaterMat,
       steepleStone: materials.stone, // 教堂尖塔白石塔身
       foliageDark: materials.foliageDark,
@@ -1117,10 +1255,12 @@ export function buildCitadelTownAssembly(spec, options = {}) {
       crenel: materials.crenel ?? makePastelStandard(SVARBOVA.goose),
       windowDark: materials.windowDark,
       windowLit: materials.windowLit,
-      shade: makeCitadelShadeMaterialFactory(
-        gradientMap,
-        options.floors ?? spec?.floors ?? CITADEL_CASTLE_FLOORS
-      ),
+      shade: townscaperColors
+        ? makeCanalTownscaperShadeFactory()
+        : makeCitadelShadeMaterialFactory(
+            gradientMap,
+            options.floors ?? spec?.floors ?? CITADEL_CASTLE_FLOORS
+          ),
     },
     shrubMaterials: materials,
     random,
@@ -1619,6 +1759,8 @@ export function buildOdysseyCitadel(options = {}) {
     random,
     materials,
     gradientMap,
+    // 运河交汇古堡：Townscaper 原版高饱和彩城（高山圣城不动色盘）
+    townscaperColors: options.instanceId === "canal-junction",
     // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升。
     // 不传则回落台地 metrics 顶（≈7.5 局部），城堡会悬空在平台上方。
     baseYOverride: skipOuterTerrain ? options.townBaseLift ?? 0.6 : undefined,
@@ -1805,6 +1947,8 @@ export function rebuildCitadelTown(castleContainer, spec) {
         ? castleContainer.userData.townBaseLift ?? 0.6
         : undefined,
       leanDecor: castleContainer.userData.skipOuterTerrain === true,
+      // 热重建保持实例配色：运河交汇古堡仍是 Townscaper 高饱和彩城
+      townscaperColors: castleContainer.userData.instanceId === "canal-junction",
     }
   );
   applyInkOutlines(assembly.group, true);
