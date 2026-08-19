@@ -170,7 +170,7 @@ export function setupEnvironment(scene) {
     }
   }
 
-  return { lanterns, ambient, sun: dir, skyMat, hemi };
+  return { lanterns, ambient, sun: dir, skyMat, hemi, fill };
 }
 
 /** 白天飞鸟 / 光尘动画 */

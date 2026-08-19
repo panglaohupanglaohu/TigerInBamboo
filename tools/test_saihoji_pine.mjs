@@ -32,7 +32,9 @@ if (!globalThis.document) {
 
 const BASE = new URL("../TigerMessenger/", import.meta.url);
 const THREE = await import(new URL("vendor/three.module.js", BASE).href);
-const { buildSaihojiPlanet } = await import(new URL("src/world/saihoji.js", BASE).href);
+const { buildSaihojiPlanet, SAIHOJI_PINE_SIZE } = await import(
+  new URL("src/world/saihoji.js", BASE).href
+);
 
 const scene = new THREE.Scene();
 const built = buildSaihojiPlanet(scene, { seed: 884 });
@@ -61,7 +63,13 @@ const sMin = Math.min(...scales);
 const sMax = Math.max(...scales);
 assert(sMin <= 0.7, `应有幼/矮松 scale≤0.7（min=${sMin.toFixed(2)}）`);
 assert(sMax >= 1.2, `应有主木 scale≥1.2（max=${sMax.toFixed(2)}）`);
-console.log(`  ✓ 胖瘦高低 scale ${sMin.toFixed(2)}–${sMax.toFixed(2)}`);
+assert.equal(SAIHOJI_PINE_SIZE, 2, "苔庭松树体积应为两倍");
+const visuals = allPines.map((p) => p.scale.x);
+const vMin = Math.min(...visuals);
+const vMax = Math.max(...visuals);
+assert(vMin >= 1.02 * sMin * SAIHOJI_PINE_SIZE * 0.98, `幼松可见尺度应约 2×（min=${vMin.toFixed(2)}）`);
+assert(vMax >= 1.02 * 1.2 * SAIHOJI_PINE_SIZE * 0.98, `主木可见尺度应约 2×（max=${vMax.toFixed(2)}）`);
+console.log(`  ✓ 胖瘦高低 scale ${sMin.toFixed(2)}–${sMax.toFixed(2)} · 体积 ×${SAIHOJI_PINE_SIZE}（${vMin.toFixed(2)}–${vMax.toFixed(2)}）`);
 
 // 角色齐全
 const roles = new Set(allPines.map((p) => p.userData.pineRole));

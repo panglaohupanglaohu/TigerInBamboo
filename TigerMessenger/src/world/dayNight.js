@@ -48,9 +48,9 @@ function sample(t) {
 
 /**
  * 创建昼夜循环。
- * @param {object} refs { scene, skyMat, sun, ambient, hemi, clouds }
+ * @param {object} refs { scene, skyMat, sun, ambient, hemi, clouds, fill }
  */
-export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds }) {
+export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds, fill }) {
   let phase = P.timeOfDay ?? 0.5;
   let lastWritten = phase;
   let current = null; // 最近一帧采样（供莫比斯结界二次调色）
@@ -81,6 +81,8 @@ export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds }) {
       skyMat.uniforms.topColor.value.copy(s.skyTop);
       skyMat.uniforms.midColor.value.copy(s.skyMid);
       skyMat.uniforms.botColor.value.copy(s.skyBot);
+      // 云带颜色必须同步：否则深夜天顶已黑、白天的薄荷云纹还横在天上发亮
+      if (skyMat.uniforms.cloudColor) skyMat.uniforms.cloudColor.value.copy(s.cloud);
     }
     if (scene.background && scene.background.isColor) scene.background.copy(s.skyMid);
     if (scene.fog) scene.fog.color.copy(s.skyMid);
@@ -90,6 +92,7 @@ export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds }) {
     }
     if (ambient) ambient.intensity = s.ambientI;
     if (hemi) hemi.intensity = s.ambientI * 0.5;
+    if (fill) fill.intensity = 0.28 * Math.min(1, s.ambientI / 0.9); // 薄荷补光随夜衰减
     for (const m of cloudMats) m.color.copy(s.cloud);
   }
 

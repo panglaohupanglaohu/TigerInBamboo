@@ -13,6 +13,8 @@ import {
   isInfiltrationMissionActive,
   cuePhalanxAlarmOnce,
   rearmPhalanxAlarm,
+  setSiegeAssaultBgm,
+  allowSiegeAssaultBgmHandoff,
 } from "../audio/sfx.js";
 import {
   createFisherBoat,
@@ -23,6 +25,7 @@ import {
   updateWarshipOars,
   paintSoldierHelm,
   paintBoatCrewCrest,
+  emptyBoatCrew,
 } from "../assets/harbor.js";
 import { P } from "../core/params.js";
 
@@ -41,6 +44,9 @@ const RED_POSTS = Object.freeze([
   [0.042, 0.042],
   [-0.042, 0.042],
 ]);
+// 一层台地前沿哨位：攻城梯扇区（x 0.6~6.6）两翼的台面 x 带（城堡局部坐标，
+// 柱高运行时射线实测）；RED_POSTS 方向仅作桩环境兜底
+const RED_POST_SIEGE_X = Object.freeze([-1.6, -3.6, -5.6, 8.6, 10.6, 12.6]);
 const STRAGGLER_COUNT = 5; // 深夜仍滞留的蓝盔残部（被木马兵驱赶的对象）
 const TROJAN_PATROL_COUNT = 6; // 木马腹里出来的深夜巡查兵
 const PATROL_PACE = 1.7; // 木马兵巡查步速（世界单位/秒）
@@ -50,8 +56,10 @@ const STRAGGLER_ESCAPE_DIST = 14; // 残部逃离滞留点 ≥14 单位即没入
 const SIEGE_LADDER_COUNT = 4; // 瀑布缺口处的攻城梯数量
 const SIEGE_GATHER_SEC = 5; // 纳沃纳广场集结时长（秒后中央突破）
 const BOARD_HOLD_SEC = 3.2; // 苔庭战役后换蓝缨原地列队时长（秒，看得见换缨再登船）
-const SIEGE_ADVANCE_PACE = 1.5; // 突破推进步速（世界单位/秒）
+const SIEGE_ADVANCE_PACE = 2.6; // 突破推进步速（跑步，广场→瀑布约 30 秒）
 const SIEGE_CLIMB_SEC = 4.2; // 单人爬梯耗时
+/** 深夜抵达时强制拨回傍晚后，至少演完这么久再进深夜清场 */
+const SIEGE_MIN_DAY_SEC = 62;
 const RED_LONGBOW_COUNT = 4; // 红盔长弓手（少量，居高俯射防守）
 // 攻城战斗数值（红蓝双方同规则）：
 //  瘫倒 = 1 次近战（短剑/长矛）或 2 支羽箭 —— 倒地失去战斗力，仍可见可被补刀
@@ -271,14 +279,23 @@ export function createSaihojiPhalanxBattle({
   let siegeNightT = 0;
   let redRoot = null;
   const redSoldiers = [];
+  const redPostWorld = []; // 一层台地前沿哨位实测锚点（null = 桩环境旧方向兜底）
   // 攻城战：红盔战船经运河从交汇处不断增援圣城（人数不限，战船到岸即增援 4 人小队）
   const redShips = []; // { boat, u, unloaded }
   let redReinforceT = 0;
   const RED_SHIP_SAIL_TIME = 14; // 交汇处 → 圣城航程（秒）
+  // 蓝盔第二波增援：攻城打响后再从运河交汇处运两船蓝缨兵（满编 5×5）
+  const blueShips = []; // { wave, u, arrived, side }
+  let blueReinforced = false;
+  const BLUE_REINFORCE_AT = 16; // 攻城开始后 16 秒从交汇处出发
+  const BLUE_REINFORCE_SHIPS = 2;
+  const BLUE_SHIP_SAIL_TIME = 22; // 交汇处 → 纳沃纳广场航程（秒）
   // 瀑布攻城梯（蓝盔中央突破的登城通道）
   let ladderRoot = null;
   const siegeLadders = []; // { group, base, top, x }
   let siegeGatherT = 0;
+  let siegeElapsed = 0;
+  let siegeForceDay = false;
   // 深夜清场：木马士兵巡查驱赶蓝盔残部
   let patrolRoot = null;
   const trojanPatrol = []; // { s, wpIndex }
@@ -511,6 +528,84 @@ export function createSaihojiPhalanxBattle({
     if (!hits.length) return null;
     return out.copy(hits[0].point);
   }
+  // ---------- 圣城一带地表实测：行军贴地 + 台地台面/水面采样 ----------
+  // 五层台地重建后，城堡局部坐标的旧 y 值整体失准：梯底/梯顶/驻守点/路口哨位
+  // 全被埋进坡体或台地实体（「士兵走到草地就不见了」）。统一改为径向射线实测：
+  //   可站立面 = contour-step 台地 + citadel-range 山体 + 星面 + 广场甲板
+  //   涉水钳制 = citadel 系水面（护城河/接水湖），最多没腰，不没顶
+  // 桩环境（测试）无任何命中网格 → citadelSurfaceR 返回 null，调用方走旧坐标兜底。
+  const _marchRay = new THREE.Raycaster();
+  _marchRay.far = 30;
+  const _marchDir = new THREE.Vector3();
+  const _marchO = new THREE.Vector3();
+  const _marchNeg = new THREE.Vector3();
+  let _groundSets = null; // { ground, water } | null（桩环境保持 null）
+  function citadelGroundSets() {
+    if (_groundSets) return _groundSets;
+    const ground = [];
+    const castle = scene.getObjectByName?.("castleContainer");
+    if (castle) {
+      castle.updateWorldMatrix(true, true);
+      castle.traverse((o) => {
+        if (o.isMesh && o.visible && (o.name || "").startsWith("contour-step")) ground.push(o);
+      });
+    }
+    for (const n of ["citadel-range", "planet-surface"]) {
+      const m = scene.getObjectByName?.(n);
+      if (m && m.isMesh && m.visible) ground.push(m);
+    }
+    ground.push(...plazaDeckInfo().meshes);
+    if (!ground.length) return null;
+    const water = [];
+    scene.traverse?.((o) => {
+      if (!o.isMesh || !o.visible) return;
+      const n = o.name || "";
+      if (n.startsWith("citadel-") && n.includes("water")) water.push(o);
+    });
+    _groundSets = { ground, water };
+    return _groundSets;
+  }
+  /** pos 所在柱的最顶可站立面半径（无脚底偏移）；桩环境/无命中返回 null */
+  function citadelSurfaceR(pos) {
+    const sets = citadelGroundSets();
+    if (!sets) return null;
+    _marchDir.copy(pos).normalize();
+    _marchO.copy(_marchDir).multiplyScalar(PLANET_RADIUS + 15);
+    _marchRay.set(_marchO, _marchNeg.copy(_marchDir).multiplyScalar(-1));
+    const hit = _marchRay.intersectObjects(sets.ground, false)[0];
+    return hit ? hit.point.length() : null;
+  }
+  const _marchCache = new Map();
+  /** 行军贴地半径：地表 +0.22 脚底偏移；遇水面时最多没腰（-0.6）。方向量化缓存。 */
+  function siegeMarchGroundR(pos) {
+    _marchDir.copy(pos).normalize();
+    const sets = citadelGroundSets();
+    if (!sets) return groundHeightAt(_marchDir); // 桩：苔庭采样/球面兜底
+    const key = `${Math.round(_marchDir.x * 512)},${Math.round(_marchDir.y * 512)},${Math.round(
+      _marchDir.z * 512
+    )}`;
+    let r = _marchCache.get(key);
+    if (r === undefined) {
+      if (_marchCache.size > 600) _marchCache.clear();
+      _marchO.copy(_marchDir).multiplyScalar(PLANET_RADIUS + 15);
+      _marchRay.set(_marchO, _marchNeg.copy(_marchDir).multiplyScalar(-1));
+      const hit = _marchRay.intersectObjects(sets.ground, false)[0];
+      r = hit ? hit.point.length() + 0.22 : PLANET_RADIUS + 0.3;
+      if (sets.water.length) {
+        const wh = _marchRay.intersectObjects(sets.water, false)[0];
+        if (wh) r = Math.max(r, wh.point.length() - 0.6); // 涉水：胸部出水
+      }
+      _marchCache.set(key, r);
+    }
+    return r;
+  }
+  /** 城堡局部 (x,z) 柱的真实台面世界点；桩环境返回 null → 调用方用旧坐标兜底 */
+  function groundAtLocal(x, z, lift = 0.05) {
+    const p = castleLocalPoint(x, 0, z, new THREE.Vector3());
+    const r = citadelSurfaceR(p);
+    return r == null ? null : p.normalize().multiplyScalar(r + lift);
+  }
+
   const _deckPt = new THREE.Vector3();
   function placeCohortOnPlaza(wave, centerDir, face) {
     surfaceBasis(centerDir, face, _up, _fwd, _right);
@@ -521,15 +616,20 @@ export function createSaihojiPhalanxBattle({
       if (plazaDeckPoint(_right, _fwd, lx, -lz, _up, _deckPt)) {
         s.position.copy(_deckPt).addScaledVector(_up, 0.06);
       } else {
-        // 广场缺失（测试桩/无存档）：退回原球面贴地逻辑
-        s.position.copy(_up).multiplyScalar(PLANET_RADIUS + groundLift(_up))
+        // 甲板射线未命中（广场边缘/测试桩）：贴真实地形（圣城山脉+星面），
+        // 不再用球面裸半径——坡地上会把士兵埋进黄土坡
+        _tmp
+          .copy(_up)
+          .multiplyScalar(PLANET_RADIUS)
           .addScaledVector(_right, lx)
           .addScaledVector(_fwd, -lz);
+        s.position.copy(_tmp.normalize()).multiplyScalar(siegeMarchGroundR(_tmp));
       }
       s.userData.formationPos = s.position.clone();
       s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
     }
     wave.cohort.visible = true; // 不藏战船：船就泊在广场水盆边
+    emptyBoatCrew(wave.boat); // 士兵全部离船登岸 → 战船应为空船
   }
 
   function fireArrow(from, toAc) {
@@ -805,6 +905,8 @@ export function createSaihojiPhalanxBattle({
     resetFightFormation();
     clearRedGarrison();
     siegeNightT = 0;
+    root.userData.siegeAssaultBgm = false;
+    setSiegeAssaultBgm(false, { fade: 0.4 });
     for (const w of waves) {
       root.remove(w.boat);
       root.remove(w.cohort);
@@ -1154,6 +1256,8 @@ export function createSaihojiPhalanxBattle({
     }
     siegeLadders.length = 0;
     siegeGatherT = 0;
+    siegeElapsed = 0;
+    siegeForceDay = false;
   }
 
   // ---------- 瀑布攻城梯：架在层叠瀑布缺口（圣城局部 +Z 扇区）， ----------
@@ -1192,6 +1296,20 @@ export function createSaihojiPhalanxBattle({
       const base = castleLocalPoint(x, 0.05, 27.4, new THREE.Vector3());
       const top = castleLocalPoint(x, 2.2, 23.2, new THREE.Vector3()); // 一层台地顶沿
       const capture = castleLocalPoint(x * 1.25, 2.25, 19.6, new THREE.Vector3()); // 台地建筑旁
+      // 五层台地重建后旧局部 y 失准（三点全埋进坡体/台地实体，梯子不可见、
+      // 士兵奔着埋点行军被地形吞掉）——对真实场景射线取面：
+      // 梯脚落在台地壁前干地（z≈22.4），梯顶搭上一层台地前沿台面
+      //（contour-step-4，z≈19~20 扫柱取最高），夺取点在台面内侧。
+      const gBase = groundAtLocal(x, 22.4, 0.02);
+      if (gBase) base.copy(gBase);
+      let gTop = null;
+      for (const z of [20.2, 19.6, 19.0]) {
+        const g = groundAtLocal(x, z, 0.05);
+        if (g && (!gTop || g.length() > gTop.length())) gTop = g;
+      }
+      if (gTop) top.copy(gTop);
+      const gCap = groundAtLocal(x * 1.25, 19.2, 0.05);
+      if (gCap) capture.copy(gCap);
       const len = base.distanceTo(top) + 0.5;
       const ladder = createSiegeLadder(len);
       ladder.position.copy(base).lerp(top, 0.5);
@@ -1241,9 +1359,20 @@ export function createSaihojiPhalanxBattle({
     clearRedGarrison();
     siegeNightT = 0;
     siegeGatherT = 0;
+    siegeElapsed = 0;
+    blueReinforced = false; // 第二波增援随本次攻城重新计
+    blueShips.length = 0;
     phase = "siege";
     root.userData.helmSide = "blue";
     root.userData.siegeNight = false;
+    root.userData.siegeAssaultBgm = false;
+    // 剧情时间校准：苔庭战役+返程常把游戏内时间耗到深夜（≥0.88），
+    // 而攻城要集结→突破→爬梯→混战、持续到深夜才清场（约需 60 秒），
+    // 深夜抵达则拨回傍晚 0.60，并用内部计时保证至少演完白天攻城，
+    // 否则第一帧 updateSiege 就进深夜清场，玩家看不到集结与进攻。
+    const todNow = readTimeOfDay();
+    siegeForceDay = todNow >= 0.84 || todNow < 0.2;
+    if (siegeForceDay) P.timeOfDay = 0.6;
     // 战船停靠纳沃纳广场水侧；士兵上岸集结
     // （蓝盔在苔庭战役结束撤阵登船时已换好：多少人参加苔庭战争，
     //   就有多少人换蓝盔并被战船运来）
@@ -1301,28 +1430,44 @@ export function createSaihojiPhalanxBattle({
       wi++;
     }
     // 瀑布缺口架梯（蓝盔的登城通道）
+    _groundSets = null; // 圣城可能被编辑器重建：重新收集命中网格
+    _marchCache.clear();
     spawnSiegeLadders();
     // 红盔守军：路口小队（原地防守）+ 攻城梯顶部阻击 + 少量长弓手居高俯射
     redRoot = new THREE.Group();
     redRoot.name = "citadel-red-garrison";
     root.add(redRoot);
+    // 一层台地前沿哨位锚点实测（攻城梯扇区两翼）；桩环境 anchor=null 走旧方向兜底
+    redPostWorld.length = 0;
+    for (let i = 0; i < RED_POSTS.length; i++) {
+      let anchor = null;
+      for (const z of [20.2, 19.6, 19.0]) {
+        const g = groundAtLocal(RED_POST_SIEGE_X[i % RED_POST_SIEGE_X.length], z, 0.05);
+        if (g && (!anchor || g.length() > anchor.length())) anchor = g;
+      }
+      redPostWorld.push(anchor);
+    }
     for (let p = 0; p < RED_POSTS.length; p++) spawnRedSquadAt(p);
     for (const ladder of siegeLadders) {
       for (const dx of [-0.7, 0.7]) {
-        // 攻城梯顶部（必经之处）两侧各一名防守兵
-        spawnRedAt(
-          dx < 0 ? "spear" : "gladius",
-          castleLocalPoint(ladder.x + dx, 2.25, 22.9, new THREE.Vector3()),
-          castleFwdWorld
-        );
+        // 攻城梯顶部（必经之处）两侧各一名防守兵：站在一层台地台面梯口旁
+        const post =
+          groundAtLocal(ladder.x + dx, 19.2, 0.05) ||
+          castleLocalPoint(ladder.x + dx, 2.25, 22.9, new THREE.Vector3());
+        spawnRedAt(dx < 0 ? "spear" : "gladius", post, castleFwdWorld);
       }
     }
     for (let i = 0; i < RED_LONGBOW_COUNT; i++) {
-      // 少量红盔长弓手：二层台地沿居高俯射爬梯的蓝盔
+      // 少量红盔长弓手：二层台地沿居高俯射爬梯的蓝盔（台面实测取最高柱）
       const lx = siegeLadders[i % siegeLadders.length]?.x ?? 0.6 + i * 2.0;
+      let bow = null;
+      for (const z of [18.4, 17.8, 17.2]) {
+        const g = groundAtLocal(lx, z, 0.05);
+        if (g && (!bow || g.length() > bow.length())) bow = g;
+      }
       spawnRedAt(
         "longbow",
-        castleLocalPoint(lx, 4.3, 18.8, new THREE.Vector3()),
+        bow || castleLocalPoint(lx, 4.3, 18.8, new THREE.Vector3()),
         castleFwdWorld
       );
     }
@@ -1330,10 +1475,13 @@ export function createSaihojiPhalanxBattle({
     redReinforceT = 8;
   }
 
-  // 在某个路口站位落一组 4 人红盔小队（守军与援军战船卸兵共用）
+  // 在某个哨位落一组 4 人红盔小队（守军与援军战船卸兵共用）：
+  // 优先用攻城开始时的实测台面锚点（redPostWorld，一层台地前沿），
+  // 桩环境/缺场景退回旧的方向偏移 + 球面裸半径。
   function spawnRedSquadAt(p) {
+    const anchor = redPostWorld[p] || null;
     const origin = castleOffsetDir(RED_POSTS[p][0], RED_POSTS[p][1], new THREE.Vector3());
-    surfaceBasis(origin, castleDir, _up, _fwd, _right);
+    surfaceBasis(anchor ? anchor.clone().normalize() : origin, castleDir, _up, _fwd, _right);
     for (let i = 0; i < 4; i++) {
       const role = i % 2 === 0 ? "spear" : "gladius";
       const s = spawnSoldier(role);
@@ -1345,11 +1493,21 @@ export function createSaihojiPhalanxBattle({
       s.userData._meleeCd = 0;
       s.userData.gx = i % 2;
       s.userData.gz = (i / 2) | 0;
-      _tmp
-        .copy(_up)
-        .multiplyScalar(PLANET_RADIUS + 0.08)
-        .addScaledVector(_right, (i - 1.5) * 0.62)
-        .addScaledVector(_fwd, (p % 2 === 0 ? 0.2 : -0.2));
+      if (anchor) {
+        // 沿台面前沿横向排开，逐兵射线贴台面（曲面台地，不能共用一个高度）
+        _tmp
+          .copy(anchor)
+          .addScaledVector(_right, (i - 1.5) * 0.62)
+          .addScaledVector(_fwd, p % 2 === 0 ? 0.2 : -0.2);
+        const rr = citadelSurfaceR(_tmp);
+        if (rr != null) _tmp.copy(_tmp.normalize()).multiplyScalar(rr + 0.05);
+      } else {
+        _tmp
+          .copy(_up)
+          .multiplyScalar(PLANET_RADIUS + 0.08)
+          .addScaledVector(_right, (i - 1.5) * 0.62)
+          .addScaledVector(_fwd, (p % 2 === 0 ? 0.2 : -0.2));
+      }
       s.position.copy(_tmp);
       s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
       s.userData.holdPos = s.position.clone(); // 路口哨位：原地防守不追击
@@ -1386,6 +1544,77 @@ export function createSaihojiPhalanxBattle({
     }
   }
 
+  // ---------- 蓝盔第二波增援：攻城打响后再运两船蓝缨兵来攻 ----------
+  // 与红盔援军同来路（运河交汇处 → 纳沃纳广场），到岸全员下船编入攻城：
+  // 集结即转入中央突破，战船清空（士兵离船即空船）。
+  function spawnBlueReinforcements() {
+    if (blueReinforced) return;
+    blueReinforced = true;
+    for (let i = 0; i < BLUE_REINFORCE_SHIPS; i++) {
+      spawnWave(200 + i); // 满编 5×5 方阵 + 战船（spawnSoldier 默认红缨）
+      const w = waves[waves.length - 1];
+      w.state = "blueReinforce"; // 不进 sailOut/return 状态机，由 updateBlueShips 驾驶
+      paintBoatCrewCrest(w.boat, "blue"); // 航行中船上就是蓝缨
+      const side = i === 0 ? 1 : -1;
+      const d0 = junctionDir.clone().addScaledVector(castleEast, side * 0.03).normalize();
+      placeOnSphere(w.boat, d0, 0.18, plazaDir); // 出发点：运河交汇处
+      let k = 0;
+      for (const s of w.soldiers) {
+        paintSoldierHelm(s, "blue"); // 苔庭战役后的换装部队：出征即蓝缨
+        s.userData.dead = false;
+        s.userData.downed = false;
+        s.userData._fell = false;
+        s.userData.arrowHits = 0;
+        s.userData.meleeHits = 0;
+        s.userData._meleeCd = 0;
+        s.userData.ropeTeam = null;
+        s.userData.siegeStage = "gather"; // 到岸即编入攻城流程
+        s.userData.ladder = (i * 2 + k) % SIEGE_LADDER_COUNT;
+        s.userData.queueIdx = 2 + (((i * 25 + k) / SIEGE_LADDER_COUNT) % 5 | 0);
+        k++;
+      }
+      blueShips.push({ wave: w, u: 0, arrived: false, side });
+    }
+  }
+
+  function updateBlueShips(dt, lateNight = false) {
+    for (const bs of blueShips) {
+      if (bs.arrived) continue;
+      bs.u = Math.min(1, bs.u + dt / BLUE_SHIP_SAIL_TIME);
+      const e = bs.u * bs.u * (3 - 2 * bs.u);
+      _tmp
+        .copy(junctionDir)
+        .lerp(plazaDir, e)
+        .addScaledVector(castleEast, bs.side * 0.03)
+        .normalize();
+      _tmpB.copy(junctionDir).lerp(plazaDir, Math.min(1, e + 0.02)).normalize();
+      placeOnSphere(bs.wave.boat, _tmp, 0.18, _tmpB);
+      updateWarshipOars?.(bs.wave.boat, dt, 0.9);
+      if (bs.u >= 1) {
+        bs.arrived = true;
+        // 深夜清场后才到岸：援军没入夜色直接退场（cohort 保持隐藏）
+        if (lateNight) {
+          bs.wave.boat.visible = false;
+          continue;
+        }
+        // 泊进广场水盆（射线取真实水面），两船左右错开
+        surfaceBasis(_tmp, castleDir, _up, _fwd, _right);
+        if (plazaDeckPoint(_right, _fwd, bs.side * 1.2, 0.4, _up, _deckPt)) {
+          bs.wave.boat.position.copy(_deckPt).addScaledVector(_up, 0.1);
+          bs.wave.boat.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
+        }
+        // 全员下岸（空船）→ 直接编入攻城：集结落位后随大流转入中央突破
+        const center = plazaDir
+          .clone()
+          .addScaledVector(castleEast, bs.side * 0.045)
+          .addScaledVector(castleNorth, -0.035)
+          .normalize();
+        placeCohortOnPlaza(bs.wave, center, castleDir);
+        bs.wave.state = "siege";
+      }
+    }
+  }
+
   // ---------- 攻城伤害模型（红蓝同规则） ----------
   // 瘫倒：1 次近战（短剑/长矛）或 2 支羽箭 → 倒地失去战斗力（仍可见）
   // 击杀：2 次近战或 4 支羽箭 → 倒地后淡出消失（瘫倒可被补刀）
@@ -1414,10 +1643,21 @@ export function createSaihojiPhalanxBattle({
 
   function updateSiege(dt, t) {
     const livingReds = redSoldiers.filter((s) => s.visible && !s.userData.dead);
-    const blues = waves.flatMap((w) => w.soldiers).filter((s) => s.visible && !s.userData.dead);
-    const chase = isInfiltrationMissionActive();
+    // 蓝军只算「已到岸编入攻城」的波次：增援船在途时士兵隐身于舱内，
+    // 不能被红缨长弓当目标、也不能提前行军
+    const blues = waves
+      .filter((w) => w.state === "siege")
+      .flatMap((w) => w.soldiers)
+      .filter((s) => s.visible && !s.userData.dead);
+    // 攻城期不受夜间潜入任务（太鼓）信号支配：那套信号一激活会把全体蓝盔
+    // 拽去运河交汇（chase 逃跑），刚集结完的攻城军每夜都会被扯散——
+    // 攻城故事的收尾只由「深夜清场 + 木马兵驱赶残部」（下方 lateNight 分支）负责。
+    const chase = false;
+    siegeElapsed += dt;
     const tod = readTimeOfDay();
-    const lateNight = tod >= 0.88 || tod < 0.16;
+    const lateNight = siegeForceDay
+      ? siegeElapsed >= SIEGE_MIN_DAY_SEC
+      : tod >= 0.88 || tod < 0.16;
 
     // 红盔战船不限量增援：只要还在攻城（未到深夜），运河上不断有战船开来
     if (!lateNight) {
@@ -1426,8 +1666,11 @@ export function createSaihojiPhalanxBattle({
         redReinforceT = 18 + Math.random() * 10;
         spawnRedShip();
       }
+      // 蓝盔第二波：攻城 16 秒后两船蓝缨增援从运河交汇处开来
+      if (siegeElapsed >= BLUE_REINFORCE_AT) spawnBlueReinforcements();
     }
     updateRedShips(dt);
+    updateBlueShips(dt, lateNight);
 
     for (const s of livingReds) {
       // 防守姿态：不追出哨位，贴身（攻城梯必经之处）才挥砍
@@ -1495,6 +1738,10 @@ export function createSaihojiPhalanxBattle({
     if (!chase && siegeLadders.length) {
       siegeGatherT += dt;
       const advancing = siegeGatherT > SIEGE_GATHER_SEC;
+      if (advancing && !root.userData.siegeAssaultBgm) {
+        root.userData.siegeAssaultBgm = true;
+        setSiegeAssaultBgm(true);
+      }
       for (const s of blues) {
         if (s.userData.downed) continue;
         let stage = s.userData.siegeStage || "gather";
@@ -1519,6 +1766,16 @@ export function createSaihojiPhalanxBattle({
           } else {
             _tmpB.normalize();
             s.position.addScaledVector(_tmpB, Math.min(SIEGE_ADVANCE_PACE * dt, d));
+            // 行军贴地：广场→瀑布横穿黄土坡/绿地起伏，两点直线插值会把士兵
+            // 埋进中段坡脊（「走到草地就不见了」）；降频径向射线实测取高。
+            s.userData._grndT = (s.userData._grndT || 0) - dt;
+            if (s.userData._grndT <= 0) {
+              s.userData._grndT = 0.12;
+              s.userData._grndR = siegeMarchGroundR(s.position);
+            }
+            if (s.userData._grndR) {
+              s.position.normalize().multiplyScalar(s.userData._grndR);
+            }
             faceMoving(s, _tmpB);
           }
         } else if (stage === "climb") {
@@ -1652,6 +1909,8 @@ export function createSaihojiPhalanxBattle({
       if (siegeNightT > 3.2) {
         phase = "siegeNight";
         root.userData.siegeNight = true;
+        // 攻城曲继续播，直到夜晚太鼓真正响起再让出声道
+        allowSiegeAssaultBgmHandoff();
         for (const w of waves) {
           // 注意：不能整组藏 cohort —— 蓝盔残部是 cohort 子节点，要保持可见
           w.boat.visible = false;
@@ -1720,7 +1979,13 @@ export function createSaihojiPhalanxBattle({
       if (fleeDist > 1e-6) {
         _tmpB.normalize();
         s.position.addScaledVector(_tmpB, Math.min(pace * dt, fleeDist));
-        s.position.normalize().multiplyScalar(PLANET_RADIUS + 0.08);
+        // 逃路横穿台地/坡地/水面：贴实测地表（涉水钳制），不沉坡不没顶
+        s.userData._grndT = (s.userData._grndT || 0) - dt;
+        if (s.userData._grndT <= 0) {
+          s.userData._grndT = 0.15;
+          s.userData._grndR = siegeMarchGroundR(s.position);
+        }
+        if (s.userData._grndR) s.position.normalize().multiplyScalar(s.userData._grndR);
         surfaceBasis(s.position.clone().normalize(), _tmpB, _up, _fwd, _right);
         s.quaternion.slerp(
           _q.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right)),
@@ -1761,8 +2026,14 @@ export function createSaihojiPhalanxBattle({
         if (p.fadeT < 0) p.fadeT = 0;
       }
       if (!target) {
-        const wp = castleOffsetDir(RED_POSTS[p.wpIndex][0], RED_POSTS[p.wpIndex][1], _tmpE);
-        target = _tmpB.copy(wp).multiplyScalar(PLANET_RADIUS + 0.08);
+        // 巡查点 = 一层台地前沿哨位（实测锚点）；桩环境退回旧方向偏移
+        const wpw = redPostWorld[p.wpIndex];
+        if (wpw) {
+          target = wpw;
+        } else {
+          const wp = castleOffsetDir(RED_POSTS[p.wpIndex][0], RED_POSTS[p.wpIndex][1], _tmpE);
+          target = _tmpB.copy(wp).multiplyScalar(PLANET_RADIUS + 0.08);
+        }
         if (p.s.position.distanceToSquared(target) < 0.36) {
           p.wpIndex = (p.wpIndex + 1) % RED_POSTS.length;
         }
@@ -1772,7 +2043,13 @@ export function createSaihojiPhalanxBattle({
       if (dist > 0.2) {
         _tmpB.normalize();
         p.s.position.addScaledVector(_tmpB, Math.min(PATROL_PACE * dt, dist));
-        p.s.position.normalize().multiplyScalar(PLANET_RADIUS + 0.08);
+        // 巡查横穿台地/坡地：贴实测地表（涉水钳制），不沉坡
+        p.gT = (p.gT || 0) - dt;
+        if (p.gT <= 0) {
+          p.gT = 0.25;
+          p.gR = siegeMarchGroundR(p.s.position);
+        }
+        if (p.gR) p.s.position.normalize().multiplyScalar(p.gR);
         surfaceBasis(p.s.position.clone().normalize(), _tmpB, _up, _fwd, _right);
         p.s.quaternion.slerp(
           _q.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right)),
@@ -1788,6 +2065,7 @@ export function createSaihojiPhalanxBattle({
     // 收束：残部被驱离殆尽 + 巡查兵全部回腹 → 故事线落幕（不等黎明）
     if (!stragglers.length && trojanPatrol.every((p) => !p.s.visible)) {
       phase = "done";
+      allowSiegeAssaultBgmHandoff();
     }
   }
 

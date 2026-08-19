@@ -559,8 +559,8 @@ export function toggleMusicBox(hooks = {}) {
     return false;
   }
   if (muted) return false;
-  // 潜入太鼓独占时不播八音盒
-  if (infiltrationBgmWanted) return false;
+  // 潜入太鼓 / 蓝盔攻城曲独占时不播八音盒
+  if (infiltrationBgmWanted || siegeAssaultWanted) return false;
   ensureAudio();
 
   // 压低默认环境点缀
@@ -702,7 +702,7 @@ export function sfxWaterTrain() {
  * 白天环境点缀：仅稀疏高音风铃，无持续低频垫音（旧版 110Hz 和弦会嗡嗡响）
  */
 export function startAmbience() {
-  if (padStarted || muted || infiltrationBgmWanted) return;
+  if (padStarted || muted || infiltrationBgmWanted || siegeAssaultWanted) return;
   const ctx = ensureAudio();
   if (!ctx) return;
   padStarted = true;
@@ -759,7 +759,8 @@ export function resumeDefaultAmbience() {
     infiltrationBgmWanted ||
     leviathanStormWanted ||
     leviathanCueWanted ||
-    bubblePodCannonWanted
+    bubblePodCannonWanted ||
+    siegeAssaultWanted
   ) {
     return;
   }
@@ -836,8 +837,8 @@ function isCanyonBgmAudible() {
  */
 export function setCanyonApproachBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
-  // 木马潜入太鼓独占时不抢播
-  const next = !!active && !muted && !infiltrationBgmWanted;
+  // 木马潜入太鼓 / 蓝盔攻城曲独占时不抢播
+  const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
 
   if (next) {
     // 重新进入谷区：取消「播完即停」，继续循环
@@ -998,7 +999,7 @@ function fadeOutCanyonBgm(seconds = 1.4) {
 //  同构：整段播完才停，离开不打断；与峡谷/八音盒互斥（先停对方）
 // =====================================================================
 
-/** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘 / 苔庭鲸风暴 / 气泡艇开炮）仍在占用声道时，默认环境音不得恢复 */
+/** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘 / 苔庭鲸风暴 / 气泡艇开炮 / 蓝盔攻城）仍在占用声道时，默认环境音不得恢复 */
 function anySegmentBgmEngaged() {
   return (
     canyonBgmWanted ||
@@ -1009,7 +1010,8 @@ function anySegmentBgmEngaged() {
     tramRideWanted ||
     leviathanStormWanted ||
     leviathanCueWanted ||
-    bubblePodCannonWanted
+    bubblePodCannonWanted ||
+    siegeAssaultWanted
   );
 }
 
@@ -1066,8 +1068,8 @@ function stopTramRideElements() {
 
 function advanceTramRideToMain() {
   if (!tramRideWanted || muted) return;
-  // 峡谷 / 潜入独占时不抢播
-  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted) {
+  // 峡谷 / 潜入 / 蓝盔攻城独占时不抢播
+  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted || siegeAssaultWanted) {
     if (tramIntroEl) {
       try {
         tramIntroEl.pause();
@@ -1113,8 +1115,13 @@ export function setTramRideBgm(active, opts = {}) {
 
   if (next) {
     tramRideWanted = true;
-    // 峡谷 / 潜入独占：只记 wanted，不抢播
-    if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted) {
+    // 峡谷 / 潜入 / 蓝盔攻城独占：只记 wanted，不抢播
+    if (
+      canyonBgmWanted ||
+      canyonBgmPendingStop ||
+      infiltrationBgmWanted ||
+      siegeAssaultWanted
+    ) {
       return;
     }
     if (tramRidePhase === "intro" || tramRidePhase === "main") {
@@ -1162,7 +1169,9 @@ export function setTramRideBgm(active, opts = {}) {
 /** 峡谷/潜入结束后，若仍在车上则恢复搭乘曲 */
 export function resumeTramRideBgmIfWanted() {
   if (!tramRideWanted || muted) return;
-  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted) return;
+  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted || siegeAssaultWanted) {
+    return;
+  }
   if (tramRidePhase === "intro" && tramIntroEl && !tramIntroEl.paused) return;
   if (tramRidePhase === "main" && tramMainEl && !tramMainEl.paused) return;
   pauseDefaultAmbience();
@@ -1314,6 +1323,9 @@ function pauseOthersForInfiltration() {
       /* ignore */
     }
   }
+  if (siegeAssaultWanted || isSiegeAssaultAudible()) {
+    fadeOutSiegeAssaultBgm(0.7);
+  }
   // 电车搭乘曲：暂停声道（tramRideWanted 保留，任务结束后可恢复）
   for (const el of [tramIntroEl, tramMainEl]) {
     if (!el) continue;
@@ -1359,6 +1371,8 @@ export function setInfiltrationBgm(active, opts = {}) {
  * @param {THREE.Vector3|{x:number,y:number,z:number}|null|undefined} sourcePos 木马/场景锚点
  */
 export function updateInfiltrationBgm(listenerPos, sourcePos) {
+  // 蓝盔进攻曲独占到「夜晚鼓声响起」：交接前不启太鼓
+  if (siegeAssaultWanted && !siegeAssaultHandoff) return;
   if (!infiltrationMissionActive || muted) {
     if (infiltrationBgmWanted || isInfiltrationBgmAudible()) {
       infiltrationBgmWanted = false;
@@ -1610,8 +1624,8 @@ function isSwampBgmAudible() {
  */
 export function setSwampBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
-  // 木马潜入太鼓独占时不抢播
-  const next = !!active && !muted && !infiltrationBgmWanted;
+  // 木马潜入太鼓 / 蓝盔攻城曲独占时不抢播
+  const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
 
   if (next) {
     const wasPendingOnly = swampBgmPendingStop && !swampBgmWanted;
@@ -1804,6 +1818,9 @@ function pauseOthersForLeviathanStorm() {
   if (bubblePodCannonWanted || isBubblePodCannonAudible()) {
     fadeOutBubblePodCannonBgm(0.45);
   }
+  if (siegeAssaultWanted || isSiegeAssaultAudible()) {
+    fadeOutSiegeAssaultBgm(0.45);
+  }
   if (swampBgmWanted || swampBgmPendingStop || isSwampBgmAudible()) {
     fadeOutSwampBgm(0.5);
   }
@@ -1857,7 +1874,7 @@ function stopLeviathanCue(fade = 0.35) {
  * 同一轮升空里重复调用不会重头。
  */
 export function cueLeviathanStormOnce() {
-  if (muted) return false;
+  if (muted || siegeAssaultWanted) return false;
   if (leviathanCueWanted && leviathanCueEl && !leviathanCueEl.paused) return false;
   const el = ensureLeviathanCueEl();
   if (!el) return false;
@@ -1892,7 +1909,7 @@ export function cueLeviathanStormOnce() {
  */
 export function setLeviathanStormBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.1;
-  const next = !!active && !muted;
+  const next = !!active && !muted && !siegeAssaultWanted;
   if (next) {
     leviathanStormWanted = true;
     if (isLeviathanStormAudible()) {
@@ -2123,7 +2140,12 @@ export function setBubblePodCannonBgm(active, opts = {}) {
   const fade = opts.fade ?? 0.7;
   const next = !!active && !muted;
   if (next) {
-    if (leviathanStormWanted || leviathanCueWanted || infiltrationBgmWanted) {
+    if (
+      leviathanStormWanted ||
+      leviathanCueWanted ||
+      infiltrationBgmWanted ||
+      siegeAssaultWanted
+    ) {
       return false;
     }
     bubblePodCannonWanted = true;
@@ -2150,6 +2172,189 @@ export function setBubblePodCannonBgm(active, opts = {}) {
 
 export function isBubblePodCannonBgmPlaying() {
   return !!(bubblePodCannonWanted && bubblePodCannonEl && !bubblePodCannonEl.paused);
+}
+
+// =====================================================================
+//  蓝盔攻城 BGM：Aoife Ni Fhearraigh-The Best Is Yet To Come.mp3
+//  蓝盔开始中央突破时起播并循环；深夜清场淡出
+// =====================================================================
+/** @type {HTMLAudioElement|null} */
+let siegeAssaultEl = null;
+let siegeAssaultWanted = false;
+let siegeAssaultFading = false;
+/** 深夜太鼓可以接手后为 true；此前攻城曲独占，其它 BGM 一律不播 */
+let siegeAssaultHandoff = false;
+export const SIEGE_ASSAULT_BGM_URL = new URL(
+  "../../music/Aoife Ni Fhearraigh-The Best Is Yet To Come.mp3",
+  import.meta.url
+).href;
+const SIEGE_ASSAULT_VOLUME = 0.5;
+
+function ensureSiegeAssaultEl() {
+  if (siegeAssaultEl) return siegeAssaultEl;
+  if (typeof Audio === "undefined") return null;
+  const el = new Audio(SIEGE_ASSAULT_BGM_URL);
+  el.loop = true;
+  el.preload = "auto";
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  siegeAssaultEl = el;
+  return el;
+}
+
+function isSiegeAssaultAudible() {
+  return !!(
+    siegeAssaultEl &&
+    !siegeAssaultEl.paused &&
+    siegeAssaultEl.volume > 0.001
+  );
+}
+
+function pauseOthersForSiegeAssault() {
+  pauseDefaultAmbience();
+  if (musicBoxSession) stopMusicBox();
+  if (infiltrationBgmWanted || isInfiltrationBgmAudible()) {
+    infiltrationBgmWanted = false;
+    silenceInfiltrationBgmKeepMission(0.4);
+  }
+  if (leviathanStormWanted || leviathanCueWanted || isLeviathanStormAudible()) {
+    leviathanStormWanted = false;
+    leviathanCueWanted = false;
+    stopLeviathanCue(0.35);
+    fadeOutLeviathanStormBgm(0.4);
+  }
+  if (bubblePodCannonWanted || isBubblePodCannonAudible()) {
+    fadeOutBubblePodCannonBgm(0.4);
+  }
+  if (swampBgmWanted || swampBgmPendingStop || isSwampBgmAudible()) {
+    fadeOutSwampBgm(0.5);
+  }
+  if (canyonBgmWanted || canyonBgmPendingStop) {
+    canyonBgmPendingStop = false;
+    canyonBgmWanted = false;
+    fadeOutCanyonBgm(0.5);
+  }
+  if (tramRidePhase !== "idle") {
+    for (const el of [tramIntroEl, tramMainEl]) {
+      if (!el) continue;
+      try {
+        el.pause();
+        el.volume = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+}
+
+function fadeSiegeAssaultTo(el, targetVol, seconds) {
+  if (!el) return;
+  const start = el.volume;
+  const end = THREE_CLAMP(targetVol, 0, 1);
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  siegeAssaultFading = true;
+  const step = () => {
+    if (!siegeAssaultEl || siegeAssaultEl !== el) return;
+    if (!siegeAssaultWanted && end > 0) {
+      siegeAssaultFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start + (end - start) * k;
+    if (k < 1 && siegeAssaultFading) requestAnimationFrame(step);
+    else {
+      el.volume = end;
+      siegeAssaultFading = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
+function fadeOutSiegeAssaultBgm(seconds = 1.2) {
+  const el = siegeAssaultEl;
+  siegeAssaultWanted = false;
+  siegeAssaultHandoff = false;
+  if (!el || (el.paused && el.volume <= 0.001)) {
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    return;
+  }
+  const start = el.volume > 0 ? el.volume : SIEGE_ASSAULT_VOLUME;
+  const t0 = performance.now();
+  const dur = Math.max(0.05, seconds) * 1000;
+  siegeAssaultFading = true;
+  const step = () => {
+    if (!siegeAssaultEl || siegeAssaultEl !== el) return;
+    if (siegeAssaultWanted) {
+      siegeAssaultFading = false;
+      return;
+    }
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.volume = start * (1 - k);
+    if (k < 1) {
+      requestAnimationFrame(step);
+      return;
+    }
+    el.volume = 0;
+    try {
+      el.pause();
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+    siegeAssaultFading = false;
+    if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
+    else resumeTramRideBgmIfWanted();
+  };
+  requestAnimationFrame(step);
+}
+
+/**
+ * 蓝盔开始进攻时循环《The Best Is Yet To Come》。
+ * 起播后独占声道，直到夜晚太鼓真正响起（handoff）才让出。
+ * @param {boolean} active
+ * @param {{ fade?: number }} [opts]
+ */
+export function setSiegeAssaultBgm(active, opts = {}) {
+  const fade = opts.fade ?? 0.9;
+  const next = !!active && !muted;
+  if (next) {
+    siegeAssaultWanted = true;
+    siegeAssaultHandoff = false;
+    const el = ensureSiegeAssaultEl();
+    if (!el) return false;
+    if (!el.paused) return true;
+    pauseOthersForSiegeAssault();
+    ensureAudio();
+    try {
+      el.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+    el.play()?.catch?.(() => {});
+    fadeSiegeAssaultTo(el, SIEGE_ASSAULT_VOLUME, fade);
+    return true;
+  }
+  if (!siegeAssaultWanted && !isSiegeAssaultAudible()) return false;
+  siegeAssaultWanted = false;
+  siegeAssaultHandoff = false;
+  fadeOutSiegeAssaultBgm(fade);
+  return true;
+}
+
+/** 允许夜晚太鼓接手：攻城曲继续播，直到太鼓真正起声再淡出 */
+export function allowSiegeAssaultBgmHandoff() {
+  if (!siegeAssaultWanted) return false;
+  siegeAssaultHandoff = true;
+  return true;
+}
+
+export function isSiegeAssaultBgmPlaying() {
+  return !!(siegeAssaultWanted && siegeAssaultEl && !siegeAssaultEl.paused);
+}
+
+export function isSiegeAssaultBgmHandoff() {
+  return !!siegeAssaultHandoff;
 }
 
 function setMuted(next) {
@@ -2204,6 +2409,17 @@ function setMuted(next) {
         bubblePodCannonEl.pause();
         bubblePodCannonEl.volume = 0;
         bubblePodCannonEl.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+    siegeAssaultWanted = false;
+    siegeAssaultHandoff = false;
+    if (siegeAssaultEl) {
+      try {
+        siegeAssaultEl.pause();
+        siegeAssaultEl.volume = 0;
+        siegeAssaultEl.currentTime = 0;
       } catch {
         /* ignore */
       }

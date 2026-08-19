@@ -300,6 +300,7 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   // 集结 5s 后中央突破：蓝盔离开广场奔向瀑布攻城梯（advance/climb/capture）
   const staged = allBlues.filter((s) => (s.userData.siegeStage || "gather") !== "gather");
   assert(staged.length > 0, "集结后蓝盔应发起中央突破（离开 gather 阶段）");
+  assert.equal(ph.root.userData.siegeAssaultBgm, true, "开始进攻时应起播攻城 BGM");
   // 箭雨数值：2 支瘫倒 / 4 支击杀 —— 32s 箭雨 + 梯顶近战必有战损
   const arrowHitRed = garrison.children.some((s) => (s.userData.arrowHits || 0) >= 1);
   const downedOrDead = garrison.children.some((s) => s.userData.downed || s.userData.dead);
@@ -342,4 +343,47 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   ok("残部驱离 · 木马兵回腹 · 深夜落幕（不等黎明）");
 }
 
-console.log(`\n结果：${pass} 项断言 · 3 组验收通过`);
+console.log("[4] 深夜才抵达圣城：拨回傍晚，先演完集结与进攻");
+{
+  const scene = new THREE.Scene();
+  const castle = new THREE.Group();
+  castle.name = "castleContainer";
+  castle.position.copy(hubDir).multiplyScalar(R).addScaledVector(hubEast, -80);
+  scene.add(castle);
+  const junction = new THREE.Group();
+  junction.name = "canal-junction-box";
+  junction.userData.up = hubDir.clone().multiplyScalar(R).addScaledVector(hubEast, 30).normalize();
+  scene.add(junction);
+  const squad = new THREE.Group();
+  squad.userData.members = [{ userData: { arrowHits: 0 } }];
+  scene.add(squad);
+  let tod = 0.93; // 返程结束已是深夜
+  const ph = createSaihojiPhalanxBattle({
+    scene,
+    isWhaleRisen: () => false,
+    getSquad: () => squad,
+    getTimeOfDay: () => tod,
+  });
+  for (let i = 0; i < 20; i++) ph.update(0.1, i * 0.1);
+  for (let i = 0; i < 550; i++) ph.update(0.1, 2 + i * 0.1);
+  ph.root.userData.whaleReturned();
+  let guard = 0;
+  while (ph.root.userData.phase !== "siege" && guard++ < 600) {
+    ph.update(0.1, 84 + guard * 0.1);
+  }
+  assert.equal(ph.root.userData.phase, "siege", "深夜抵达仍应进入攻城（不得跳过）");
+  const { P } = await import(new URL("src/core/params.js", BASE).href);
+  assert(P.timeOfDay >= 0.55 && P.timeOfDay < 0.84, `应拨回傍晚，实际 ${P.timeOfDay}`);
+  for (let i = 0; i < 80; i++) ph.update(0.1, 150 + i * 0.1);
+  assert.equal(ph.root.userData.phase, "siege", "开打后 8s 不得立刻深夜清场");
+  const blues = ph.root.children
+    .filter((c) => c.name?.startsWith("saihoji-cohort"))
+    .flatMap((c) => c.children)
+    .filter((s) => s.visible && !s.userData.dead);
+  assert(blues.length >= 4, "白天攻城窗口内蓝盔应仍在场");
+  const leftGather = blues.some((s) => (s.userData.siegeStage || "gather") !== "gather");
+  assert(leftGather, "应能看到广场集结后的中央突破");
+  ok("深夜抵达 → 拨回傍晚 · 8s 内仍在攻城 · 蓝盔已开始突破");
+}
+
+console.log(`\n结果：${pass} 项断言 · 4 组验收通过`);

@@ -337,6 +337,7 @@ export const saihojiGardenScene = {
         const h =
           (Number.isFinite(pine.userData?.height) ? pine.userData.height : 8) *
           (pine.userData?.pineScale ?? 1) *
+          (pine.userData?.pineSize ?? 1) *
           LEVIATHAN_GARDEN_SCALE *
           0.6;
         _leafUp.addScaledVector(hubDir, h + leafRnd() * 1.2);

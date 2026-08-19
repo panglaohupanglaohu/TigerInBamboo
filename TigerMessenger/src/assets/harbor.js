@@ -1408,6 +1408,18 @@ export function paintBoatCrewCrest(boat, side = "blue") {
 }
 
 /**
+ * 卸下战船全部乘员：方阵士兵登岸（或打光）后，甲板应为空船。
+ * 隐藏 warship-crew 整组（剪纸桨手 InstancedMesh）；桨保持停泊姿态。
+ * @param {THREE.Object3D} boat createFisherBoat 的战船
+ */
+export function emptyBoatCrew(boat) {
+  if (!boat) return boat;
+  const crew = boat.userData.crew || boat.getObjectByName?.("warship-crew");
+  if (crew) crew.visible = false;
+  return boat;
+}
+
+/**
  * 港口鼓声巡查兵：左手盾牌、右手长枪（矛头向前），快步行进姿态。
  * @returns {THREE.Group}
  */

@@ -88,7 +88,7 @@ const { scene, camera, renderer } = createStage();
 initQuestPanelCollapse();
 
 // ---------- 环境光 / 天空（跨场景共享） ----------
-const { lanterns, ambient, sun, skyMat, hemi } = setupEnvironment(scene);
+const { lanterns, ambient, sun, skyMat, hemi, fill } = setupEnvironment(scene);
 
 // ---------- 星球壳（各场景可在其上贴装） ----------
 const planet = createPlanet(scene);
@@ -495,7 +495,9 @@ const dayNight = createDayNight({
   sun,
   ambient,
   hemi,
-  clouds: messenger?.clouds || [],
+  fill,
+  // 赤道云墙（MeshToonMaterial 近白基色）也要入夜染色，否则深夜仍亮着白天云带
+  clouds: [...(messenger?.clouds || []), ...(equatorialClouds ? [equatorialClouds] : [])],
 });
 
 // ---------- 电车搭乘（近车 [F] 上车 · 窗边乘坐看风景） ----------

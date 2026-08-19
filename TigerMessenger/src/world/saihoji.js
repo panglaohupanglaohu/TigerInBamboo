@@ -16,6 +16,8 @@ const STONE_COLORS = Object.freeze([0x706b61, 0x625f58, 0x4f514b]);
 const SAND_COLOR = 0xc8bea8;
 const PATH_COLOR = 0x8e887d;
 const HEAVY_INK = 0.022;
+/** 苔庭古松整体体积倍率（相对 createAncientPineTree 原尺寸） */
+export const SAIHOJI_PINE_SIZE = 2;
 const _yUp = new THREE.Vector3(0, 1, 0);
 const _base = new THREE.Vector3();
 const _east = new THREE.Vector3();
@@ -589,20 +591,26 @@ export function buildSaihojiPlanet(scene, opts = {}) {
     for (const spec of pines) {
       const sc = Number.isFinite(spec.scale) ? spec.scale : 1;
       const pine = createAncientPineTree(spec.seed);
-      if (Math.abs(sc - 1) > 1e-3) pine.scale.multiplyScalar(sc);
+      const visual = sc * SAIHOJI_PINE_SIZE;
+      pine.scale.multiplyScalar(visual);
       // lift：根盘明显坐于苔面之上——苔庭（苔斑 + 苔丘地形）略高于球面，
-      // 松树抬根不足会被埋（用户反馈），默认抬根 0.22 让根盘/干基全部露出
-      const lift = (Number.isFinite(spec.lift) ? spec.lift : 0.08) + 0.14;
+      // 松树抬根不足会被埋（用户反馈），默认抬根 0.22；体积×2 后再略抬，
+      // 免得放大后的根盘重新埋进苔裙。
+      const lift =
+        (Number.isFinite(spec.lift) ? spec.lift : 0.08) +
+        0.14 +
+        0.06 * Math.max(0, SAIHOJI_PINE_SIZE - 1);
       placeAtLocal(pine, zone, spec.x, spec.z, radius, lift, spec.yaw ?? 0);
       pine.userData.pineRole = spec.role || "solitary";
       pine.userData.pineScale = sc;
+      pine.userData.pineSize = SAIHOJI_PINE_SIZE;
       group.add(pine);
       zones[zone.id].pines.push(pine);
       placed.push(pine.position.clone());
-      const cr = (pine.userData.collideRadius ?? 0.58) * sc * 1.15;
+      const cr = (pine.userData.collideRadius ?? 0.58) * visual * 1.15;
       pushCollider(colliders, pine, Math.max(0.45, cr));
       // 根际苔裙略小于树冠投影，不把树干埋进厚苔
-      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 0.55 * sc);
+      addStoneMossSkirt(group, zone, spec.x, spec.z, radius, rnd, 0.55 * visual);
     }
 
     if (zone.id === "moss-entry") {
