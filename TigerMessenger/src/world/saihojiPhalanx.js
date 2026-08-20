@@ -53,7 +53,8 @@ const PATROL_PACE = 1.7; // 木马兵巡查步速（世界单位/秒）
 const STRAGGLER_FLEE_PACE = 2.3; // 残部逃跑步速
 const STRAGGLER_ESCAPE_DIST = 14; // 残部逃离滞留点 ≥14 单位即没入夜色消失
 // 攻城路线：苔庭战船 → 纳沃纳广场集结 → 中央突破 → 瀑布攻城梯 → 夺取一层台地建筑
-const SIEGE_LADDER_COUNT = 4; // 瀑布缺口处的攻城梯数量
+const SIEGE_LADDER_COUNT = 6; // 瀑布缺口处的攻城梯数量（首波 4 架 + 第二波增援专属 2 架，总攻展开）
+const SIEGE_LADDER_FIRST_WAVE = 4; // 首波蓝盔使用的梯数；梯 4/5 留给第二波增援
 const SIEGE_GATHER_SEC = 5; // 纳沃纳广场集结时长（秒后中央突破）
 const BOARD_HOLD_SEC = 3.2; // 苔庭战役后换蓝缨原地列队时长（秒，看得见换缨再登船）
 const SIEGE_ADVANCE_PACE = 2.6; // 突破推进步速（跑步，广场→瀑布约 30 秒）
@@ -1413,8 +1414,8 @@ export function createSaihojiPhalanxBattle({
         s.userData.ropeTeam = null;
         // 集结 → 分配攻城梯与爬梯队列序号
         s.userData.siegeStage = "gather";
-        s.userData.ladder = gi % SIEGE_LADDER_COUNT;
-        s.userData.queueIdx = Math.floor(gi / SIEGE_LADDER_COUNT);
+        s.userData.ladder = gi % SIEGE_LADDER_FIRST_WAVE; // 首波只占 0~3 号梯
+        s.userData.queueIdx = Math.floor(gi / SIEGE_LADDER_FIRST_WAVE);
         gi++;
       }
       const off = plazaStagger[wi % plazaStagger.length];
@@ -1569,8 +1570,8 @@ export function createSaihojiPhalanxBattle({
         s.userData._meleeCd = 0;
         s.userData.ropeTeam = null;
         s.userData.siegeStage = "gather"; // 到岸即编入攻城流程
-        s.userData.ladder = (i * 2 + k) % SIEGE_LADDER_COUNT;
-        s.userData.queueIdx = 2 + (((i * 25 + k) / SIEGE_LADDER_COUNT) % 5 | 0);
+        s.userData.ladder = SIEGE_LADDER_FIRST_WAVE + i; // 增援专属梯：船 0→梯 4，船 1→梯 5
+        s.userData.queueIdx = 2 + ((k / 3) % 5 | 0);
         k++;
       }
       blueShips.push({ wave: w, u: 0, arrived: false, side });

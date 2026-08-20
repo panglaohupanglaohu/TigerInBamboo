@@ -251,9 +251,10 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
     ph.update(0.1, 84 + guard * 0.1);
   }
   assert.equal(ph.root.userData.phase, "siege", "应进入攻城阶段");
-  // 集结点与攻城梯：战船泊纳沃纳广场，瀑布缺口架起 4 架攻城梯
+  // 集结点与攻城梯：战船泊纳沃纳广场，瀑布缺口架起 6 架攻城梯
+  //（首波 4 架 + 第二波蓝盔增援专属 2 架，总攻画面）
   const ladders = ph.root.getObjectByName("siege-ladders");
-  assert(ladders?.children?.length === 4, "瀑布缺口应有 4 架攻城梯");
+  assert(ladders?.children?.length === 6, "瀑布缺口应有 6 架攻城梯");
   const allBlues = ph.root.children
     .filter((c) => c.name?.startsWith("saihoji-cohort"))
     .flatMap((c) => c.children);
@@ -287,7 +288,7 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   red0.userData._meleeCd = 0;
   ph.update(0.1, 126.1);
   assert(victim.userData.dead === true, "2 次近战应击杀（补刀瘫倒目标）");
-  ok("集结广场 · 攻城梯×4 · 红盔长弓×4 · 近战 1 击瘫倒 / 2 击击杀");
+  ok("集结广场 · 攻城梯×6 · 红盔长弓×4 · 近战 1 击瘫倒 / 2 击击杀");
   // 红盔战船不限量增援：攻城 32s 内应有援军战船抵达，守军人数增加
   const redBefore = garrison.children.length;
   for (let i = 0; i < 320; i++) ph.update(0.1, 126 + i * 0.1);
@@ -296,6 +297,15 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   assert(
     garrison.children.length > redBefore,
     `战船到岸应增援守军（${redBefore} → ${garrison.children.length}）`
+  );
+  // 第二波蓝盔增援（攻城 16s 生成，22s 航程）：专属梯位 4/5，有自己的突破方向
+  const wave200 = ph.root.getObjectByName("saihoji-cohort-200");
+  const wave201 = ph.root.getObjectByName("saihoji-cohort-201");
+  assert(wave200 && wave201, "攻城 16s 后应生成两船蓝盔增援（cohort 200/201）");
+  assert(
+    wave200.children.every((s) => s.userData.ladder === 4) &&
+      wave201.children.every((s) => s.userData.ladder === 5),
+    "第二波蓝盔应分到自己的专属攻城梯（4 号/5 号）"
   );
   // 集结 5s 后中央突破：蓝盔离开广场奔向瀑布攻城梯（advance/climb/capture）
   const staged = allBlues.filter((s) => (s.userData.siegeStage || "gather") !== "gather");
