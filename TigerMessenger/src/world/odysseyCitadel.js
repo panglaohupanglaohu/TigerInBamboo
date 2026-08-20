@@ -29,6 +29,8 @@ import {
   CITADEL_CASTLE_FLOORS,
   TOWNSCAPER_CANAL_PALETTE,
   TOWNSCAPER_CANAL_GATE_COLOR,
+  TOWNSCAPER_HIGHLAND_PALETTE,
+  TOWNSCAPER_HIGHLAND_GATE_COLOR,
   citadelPaletteIndexOfChar,
   citadelShadeStep,
 } from "./citadelTown.js";
@@ -508,15 +510,15 @@ function applyTownscaperCanalMaterials(materials) {
 }
 
 /**
- * 运河彩城墙面 shade 工厂：尊重布局字符的户色（竖柱同色=一户），
- * 按 citadelShadeStep 做 ±10% 明度微抖；材质开 vertexColors，
- * 与 applyPatchyWallColors 的墙面渐变色块相乘出原版手绘墙感。
+ * Townscaper 墙面 shade 工厂（运河/高山两堡共用）：尊重布局字符的户色
+ * （竖柱同色=一户），按 citadelShadeStep 做 ±10% 明度微抖；材质开
+ * vertexColors，与 applyPatchyWallColors 的墙面渐变色块相乘出原版手绘墙感。
  */
-function makeCanalTownscaperShadeFactory() {
+function makeTownscaperShadeFactory(palette = TOWNSCAPER_CANAL_PALETTE, gateColor = TOWNSCAPER_CANAL_GATE_COLOR) {
   const cache = new Map(); // "char|step" -> material
-  return function canalTownscaperShade(char, ix, iz) {
+  return function townscaperShade(char, ix, iz) {
     if (char === CITADEL_GATE_CHAR) {
-      return makeCanalMat(TOWNSCAPER_CANAL_GATE_COLOR, { vertexColors: true });
+      return makeCanalMat(gateColor, { vertexColors: true });
     }
     const idx = citadelPaletteIndexOfChar(char);
     if (idx < 0) return null; // 未知字符回落 materials[char]
@@ -524,7 +526,7 @@ function makeCanalTownscaperShadeFactory() {
     const key = `${char}|${step}`;
     let material = cache.get(key);
     if (!material) {
-      const albedo = new THREE.Color(TOWNSCAPER_CANAL_PALETTE[idx].color);
+      const albedo = new THREE.Color(palette[idx].color);
       albedo.multiplyScalar(1 + step * 0.05);
       albedo.r = Math.min(1, Math.max(0, albedo.r));
       albedo.g = Math.min(1, Math.max(0, albedo.g));
@@ -1190,8 +1192,17 @@ function buildOuterCitadelTerrain(materials, contourSpec = CITADEL.contourTerrai
 export function buildCitadelTownAssembly(spec, options = {}) {
   const random = options.random ?? lcg(20260808);
   const gradientMap = options.gradientMap ?? makeThreeStepGradient();
-  // 运河交汇古堡：Townscaper 原版高饱和彩城（高山圣城保持马卡龙淡彩）
-  const townscaperColors = options.townscaperColors === true;
+  // Townscaper 彩城管线：运河交汇古堡（马卡龙 15 色）与高山圣城
+  // （截屏同调薄荷/天青 15 色）共用——哑光彩釉 + 墙面渐变色块 + 陶瓦屋顶渐变。
+  const townscaperColors = options.townscaperColors === true; // 运河交汇古堡
+  const highlandColors = options.highlandColors === true; // 高山圣城 Townscaper 化
+  const townscaperMode = townscaperColors || highlandColors;
+  const townPalette = highlandColors && !townscaperColors
+    ? TOWNSCAPER_HIGHLAND_PALETTE
+    : TOWNSCAPER_CANAL_PALETTE;
+  const townGateColor = highlandColors && !townscaperColors
+    ? TOWNSCAPER_HIGHLAND_GATE_COLOR
+    : TOWNSCAPER_CANAL_GATE_COLOR;
 
   const materials = options.materials ?? {
     cliff: makeToon(PALETTE.cliff, gradientMap),
@@ -1214,9 +1225,9 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     trim: makePastelStandard(SVARBOVA.goose),
     crenel: makePastelStandard(SVARBOVA.goose),
   };
-  if (townscaperColors) applyTownscaperCanalMaterials(materials);
+  if (townscaperMode) applyTownscaperCanalMaterials(materials);
   // 水道格子用单独半透明材质，绝不改共享 toon（否则整座城会一起变透）。
-  const townWaterMat = townscaperColors
+  const townWaterMat = townscaperMode
     ? makeCanalMat(CANAL_TOWNSCAPER.water).clone()
     : makeToon(PALETTE.water, gradientMap);
   townWaterMat.transparent = true;
@@ -1229,21 +1240,21 @@ export function buildCitadelTownAssembly(spec, options = {}) {
 
   const town = buildCitadelTown(spec, {
     leanDecor: options.leanDecor === true,
-    colorful: townscaperColors,
+    colorful: townscaperMode,
     mesh,
     materials: {
       // Townscaper 15 色调色板：字符 "0"–"9A"–"E" → 基色材质（含旧 4 色兼容键）
       ...buildCitadelPaletteMaterials(
         gradientMap,
-        townscaperColors ? TOWNSCAPER_CANAL_PALETTE : CITADEL_PALETTE,
-        townscaperColors ? (hex) => makeCanalMat(hex) : null,
-        townscaperColors ? TOWNSCAPER_CANAL_GATE_COLOR : CITADEL_GATE_COLOR
+        townscaperMode ? townPalette : CITADEL_PALETTE,
+        townscaperMode ? (hex) => makeCanalMat(hex) : null,
+        townscaperMode ? townGateColor : CITADEL_GATE_COLOR
       ),
       gold: materials.gold,
       wood: materials.wood,
       ink: materials.ink,
       roofTile: materials.roofTile,
-      roofTileGrad: materials.roofTileGrad, // 仅运河彩城提供；高山回落 roofTile
+      roofTileGrad: materials.roofTileGrad, // Townscaper 模式提供；否则回落 roofTile
       water: townWaterMat,
       steepleStone: materials.stone, // 教堂尖塔白石塔身
       foliageDark: materials.foliageDark,
@@ -1255,8 +1266,8 @@ export function buildCitadelTownAssembly(spec, options = {}) {
       crenel: materials.crenel ?? makePastelStandard(SVARBOVA.goose),
       windowDark: materials.windowDark,
       windowLit: materials.windowLit,
-      shade: townscaperColors
-        ? makeCanalTownscaperShadeFactory()
+      shade: townscaperMode
+        ? makeTownscaperShadeFactory(townPalette, townGateColor)
         : makeCitadelShadeMaterialFactory(
             gradientMap,
             options.floors ?? spec?.floors ?? CITADEL_CASTLE_FLOORS
@@ -1320,6 +1331,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     ridgeCount: 0,
     eaveCount: 0,
     oculusCount: 0,
+    chimneyCount: 0, // 烟囱（Townscaper 坡屋顶签名构件）
     supportCount: 0, // 悬空支撑支架（flying buildings）
     gate: null,
     gates: [],
@@ -1760,7 +1772,10 @@ export function buildOdysseyCitadel(options = {}) {
     materials,
     gradientMap,
     // 运河交汇古堡：Townscaper 原版高饱和彩城（高山圣城不动色盘）
+    // 两座城堡都走 Townscaper 彩城管线：运河古堡用马卡龙 15 色，
+    // 高山圣城（默认实例）用截屏同调的高地 15 色。
     townscaperColors: options.instanceId === "canal-junction",
+    highlandColors: options.instanceId !== "canal-junction",
     // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升。
     // 不传则回落台地 metrics 顶（≈7.5 局部），城堡会悬空在平台上方。
     baseYOverride: skipOuterTerrain ? options.townBaseLift ?? 0.6 : undefined,
@@ -1949,6 +1964,7 @@ export function rebuildCitadelTown(castleContainer, spec) {
       leanDecor: castleContainer.userData.skipOuterTerrain === true,
       // 热重建保持实例配色：运河交汇古堡仍是 Townscaper 高饱和彩城
       townscaperColors: castleContainer.userData.instanceId === "canal-junction",
+      highlandColors: castleContainer.userData.instanceId !== "canal-junction",
     }
   );
   applyInkOutlines(assembly.group, true);

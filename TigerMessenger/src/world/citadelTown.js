@@ -20,7 +20,9 @@
 import * as THREE from "three";
 
 /** 编辑器（citadelEditorPanel / townscaper.html）与主场景共用的布局存档键。 */
-export const CITADEL_LEVELS_KEY = "tm.citadel.levels.v1";
+// v2：默认布局换成 Townscaper 种子山城（五彩户/坡屋顶/飞楼支架），
+// v1 旧档（白婚礼蛋糕）不再读取——与 canal-junction v4 换档同一先例。
+export const CITADEL_LEVELS_KEY = "tm.citadel.levels.v2";
 
 /**
  * 城堡实例化：存档键按实例隔离。
@@ -94,6 +96,32 @@ export const TOWNSCAPER_CANAL_PALETTE = Object.freeze([
 
 /** 运河古堡正门墙体色（奶油白，与 0 户同色系）。 */
 export const TOWNSCAPER_CANAL_GATE_COLOR = 0xf6efe3;
+
+/**
+ * 高山圣城 15 色（Townscaper 化）：与运河古堡同一条马卡龙管线，
+ * 色相分布对齐 Townscaper 官方截屏——薄荷/青碧/天青/湖蓝/奶油为主调，
+ * 点缀明黄/蜜橙/珊瑚/草绿/紫罗兰。字符集与 CITADEL_PALETTE 一一对应。
+ */
+export const TOWNSCAPER_HIGHLAND_PALETTE = Object.freeze([
+  Object.freeze({ name: "奶油白", char: "0", color: 0xf6efe3 }),
+  Object.freeze({ name: "沙石", char: "1", color: 0xe8d8bc }),
+  Object.freeze({ name: "杏粉", char: "2", color: 0xf5cdbd }),
+  Object.freeze({ name: "明黄", char: "3", color: 0xf6de8c }),
+  Object.freeze({ name: "蜜橙", char: "4", color: 0xf2b67f }),
+  Object.freeze({ name: "珊瑚粉", char: "5", color: 0xf0a196 }),
+  Object.freeze({ name: "砖红", char: "6", color: 0xd98f86 }),
+  Object.freeze({ name: "薄荷", char: "7", color: 0xafe3d0 }),
+  Object.freeze({ name: "青碧", char: "8", color: 0x86c9be }),
+  Object.freeze({ name: "天青", char: "9", color: 0x93c6ec }),
+  Object.freeze({ name: "湖蓝", char: "A", color: 0x97d2e4 }),
+  Object.freeze({ name: "草绿", char: "B", color: 0x93cf95 }),
+  Object.freeze({ name: "松石绿", char: "C", color: 0x7fcfb9 }),
+  Object.freeze({ name: "紫罗兰", char: "D", color: 0xc4a3d8 }),
+  Object.freeze({ name: "钴蓝", char: "E", color: 0x8fa9e4 }),
+]);
+
+/** 高山圣城正门墙体色（奶油白，与 0 户同色系）。 */
+export const TOWNSCAPER_HIGHLAND_GATE_COLOR = 0xf6efe3;
 
 /** 调色板字符串 "0123456789ABCDE"（顺序即色序）。 */
 export const CITADEL_PALETTE_CHARS = CITADEL_PALETTE.map((entry) => entry.char).join("");
@@ -327,99 +355,110 @@ export function citadelGridCellCenter(
   };
 }
 
+// ============================================================================
+//  高山圣城 · Townscaper 种子山城（v2，确定性生成）
+//  手绘 ASCII 已表达不了「五台地 × 有机屋群」：改为生成器落子——
+//  顶台地主堡（奶油基座 + 珊瑚主塔穹顶 + 两翼坡屋顶 + 正门 G），
+//  低四台地在环带（上一台地半径 < r ≤ 本台地半径）上散落小屋，
+//  环带外的格子自动不画（防悬浮/防插进高台地墙壁）；
+//  瀑布缺口扇区（前四层）与攻城梯战场（台地 5 前排）自动留空；
+//  每台地至少一处「飞楼」——悬空 2 层的挑出间，规则 5 自动长黑铁支架。
+//  竖柱同色 = 一户（户色见 TOWNSCAPER_HIGHLAND_PALETTE）。
+// ============================================================================
+const HIGHLAND_TERRACE_RADII = [15.7464, 17.496, 19.44, 21.6, 24.0]; // 同 CITADEL.contourTerrain.terraces
+
+function makeHighlandTownTerraces() {
+  const N = CITADEL_GRID_SIZE; // 25×25
+  const C = (N - 1) / 2; // 中心格 12
+  const F = CITADEL_CASTLE_FLOORS; // 每台地 5 层
+  const grids = Array.from({ length: CITADEL_TERRACE_COUNT }, () =>
+    Array.from({ length: F }, () => Array.from({ length: N }, () => Array(N).fill(".")))
+  );
+  const inRing = (t, ix, iz) => {
+    const r = Math.hypot((ix - C) * 2, (iz - C) * 2);
+    const hi = HIGHLAND_TERRACE_RADII[t] + 0.3;
+    const lo = t === 0 ? 0 : HIGHLAND_TERRACE_RADII[t - 1] - 0.6;
+    return r >= lo && r <= hi;
+  };
+  // 瀑布缺口（方位角 0.17±0.30 rad，前四层台地开槽）：前排略偏 +x 的扇区
+  const inNotch = (ix, iz) => iz >= 19 && ix >= 11 && ix <= 16;
+  // 攻城梯战场（台地 5 前排 +z）：梯脚/行军通道不压房子
+  const inBattlefield = (ix, iz) => iz >= 19 && ix >= 10 && ix <= 18;
+  const put = (t, ix, iz, f, ch, force = false) => {
+    if (ix < 0 || ix >= N || iz < 0 || iz >= N || f < 0 || f >= F) return;
+    if (!force && !inRing(t, ix, iz)) return; // 环带约束
+    if (!force && t < 4 && inNotch(ix, iz)) return;
+    if (!force && t === 4 && inBattlefield(ix, iz)) return;
+    grids[t][f][iz][ix] = ch;
+  };
+  const house = (t, x0, z0, x1, z1, f0, f1, ch) => {
+    for (let f = f0; f <= f1; f++)
+      for (let iz = z0; iz <= z1; iz++)
+        for (let ix = x0; ix <= x1; ix++) put(t, ix, iz, f, ch);
+  };
+  // 飞楼：只画第 f 层（下方留空 → 规则 5 支架）；位置仍需台地承重柱
+  const fly = (t, ix, iz, f, ch) => {
+    if (inRing(t, ix, iz) && !(t < 4 && inNotch(ix, iz)) && !(t === 4 && inBattlefield(ix, iz)))
+      grids[t][f][iz][ix] = ch;
+  };
+
+  // ---- 台地 1（最高，r≤15.7）：主堡群 ----
+  house(0, 10, 10, 14, 14, 0, 1, "0"); // 奶油主堡基座 5×5×2（顶成环带晒台花园）
+  house(0, 11, 11, 13, 13, 2, 3, "5"); // 珊瑚主塔 3×3 再拔两层 → 顶出穹顶
+  house(0, 8, 11, 8, 13, 0, 1, "9");   // 天青西翼 1×3 → 人字坡
+  house(0, 16, 10, 16, 12, 0, 2, "C"); // 松石绿东翼 1×3×3 居高
+  house(0, 9, 9, 9, 9, 0, 2, "1");     // 沙石西北塔 → 四坡尖顶
+  house(0, 15, 14, 15, 14, 0, 2, "1"); // 沙石东南塔
+  house(0, 10, 16, 11, 16, 0, 0, "3"); // 明黄门廊左厢 → 坡顶
+  house(0, 14, 16, 15, 16, 0, 0, "B"); // 草绿门廊右厢
+  put(0, 13, 15, 0, "G");              // 正门（前排中央，与旧档同位 x=+2）
+  put(0, 13, 16, 0, "G");
+  fly(0, 15, 11, 2, "A");              // 湖蓝飞楼（与东翼并成 L → 尖塔 + 黑铁支架）
+
+  // ---- 台地 2（r 15.7–17.5）：轴向一环小屋 ----
+  house(1, 11, 4, 13, 4, 0, 1, "A");   // 北侧湖蓝 1×3
+  house(1, 9, 19, 9, 20, 0, 1, "3");   // 前左明黄 1×2（缺口扇区外）
+  house(1, 19, 11, 20, 12, 0, 2, "C"); // 东侧松石绿 2×2×2
+  fly(1, 20, 13, 2, "C");              // 其旁飞楼
+  house(1, 4, 11, 4, 13, 0, 1, "4");   // 西侧蜜橙 1×3
+
+  // ---- 台地 3（r 17.5–19.4）----
+  house(2, 11, 3, 13, 3, 0, 1, "B");   // 北侧草绿 1×3
+  house(2, 3, 11, 3, 13, 0, 1, "9");   // 西侧天青 1×3
+  house(2, 21, 11, 21, 12, 0, 1, "D"); // 东侧紫罗兰 1×2
+  fly(2, 21, 13, 2, "D");              // 飞楼
+  house(2, 8, 20, 8, 20, 0, 1, "6");   // 前左砖红独栋 → 尖顶
+
+  // ---- 台地 4（r 19.4–21.6）----
+  house(3, 11, 2, 13, 2, 0, 1, "4");   // 北侧蜜橙 1×3
+  house(3, 2, 11, 2, 13, 0, 2, "9");   // 西侧天青 1×3×3
+  fly(3, 2, 14, 2, "9");               // 飞楼
+  house(3, 22, 11, 22, 12, 0, 1, "5"); // 东侧珊瑚 1×2
+  house(3, 9, 21, 9, 21, 0, 1, "A");   // 前左湖蓝独栋
+
+  // ---- 台地 5（最低，r 21.6–24；前排留攻城战场）----
+  house(4, 11, 1, 13, 1, 0, 1, "B");   // 北侧草绿 1×3
+  fly(4, 13, 1, 2, "B");               // 飞楼
+  house(4, 1, 11, 1, 13, 0, 1, "C");   // 西侧松石绿 1×3
+  house(4, 23, 11, 23, 12, 0, 1, "3"); // 东侧明黄 1×2
+  house(4, 8, 22, 8, 22, 0, 1, "0");   // 前左奶油独栋
+  house(4, 19, 21, 19, 21, 0, 1, "6"); // 前右砖红独栋（战场右缘外）
+
+  return grids.map((floors) =>
+    floors.map((rows) => Object.freeze(rows.map((row) => row.join(""))))
+  );
+}
+
+const HIGHLAND_TOWN_TERRACES = Object.freeze(makeHighlandTownTerraces());
+
 export const CITADEL_TOWN_SPEC = Object.freeze({
   cellSize: 2.0,
   cellHeight: 2.0,
-  // 字符：`.` 空 · `W` 白石 · `L` 浅砂石 · `B` 淡砖（角塔）· `D` 棕色正门
-  levels: Object.freeze([
-    // Level 0 —— 7×7 基座，四角淡砖塔基，前排中央正门；
-    // 第 5 列纵向留空成水道（两端与格外相通）；iz=0 一排离墙附屋
-    // （1×3 条状，顶部出坡屋顶），iz=1 空格成后排水巷。
-    Object.freeze([
-      "..WWW..",
-      ".......",
-      "BWWWW.B",
-      "WLLLL.W",
-      "WLLLL.W",
-      "WLLLL.W",
-      "WLLLL.W",
-      "WLLLL.W",
-      "BWWDW.B",
-    ]),
-    // Level 1 —— 正门上方的门洞豁口（..W.W.. → 悬空位）；水道与附屋同层续空
-    Object.freeze([
-      "..WWW..",
-      ".......",
-      "BWWWW.B",
-      "WLLLL.W",
-      "WLLLL.W",
-      "WLLLL.W",
-      "WLLLL.W",
-      "WLLLL.W",
-      "BWW.W.B",
-    ]),
-    // Level 2 —— 基座顶层；门洞豁口上方悬空格 → 出拱；
-    // 本层整体横跨水道（水道成暗渠，两端出拱形水门）
-    Object.freeze([
-      ".......",
-      ".......",
-      "BWWWWWB",
-      "WWWWWWW",
-      "WWWWWWW",
-      "WWWWWWW",
-      "WWWWWWW",
-      "WWWWWWW",
-      "BWWWWWB",
-    ]),
-    // Level 3 —— 5×5 中层内缩，四角塔继续拔高
-    Object.freeze([
-      ".......",
-      ".......",
-      "B.....B",
-      ".WWWWW.",
-      ".WWWWW.",
-      ".WWWWW.",
-      ".WWWWW.",
-      ".WWWWW.",
-      "B.....B",
-    ]),
-    // Level 4 —— 5×5 中层顶层；角塔到顶 → 出金顶
-    Object.freeze([
-      ".......",
-      ".......",
-      "B.....B",
-      ".WWWWW.",
-      ".WWWWW.",
-      ".WWWWW.",
-      ".WWWWW.",
-      ".WWWWW.",
-      "B.....B",
-    ]),
-    // Level 5 —— 3×3 顶层
-    Object.freeze([
-      ".......",
-      ".......",
-      ".......",
-      ".......",
-      "..WWW..",
-      "..WWW..",
-      "..WWW..",
-      ".......",
-      ".......",
-    ]),
-    // Level 6 —— 3×3 屋顶：中心格出主黄金穹顶
-    Object.freeze([
-      ".......",
-      ".......",
-      ".......",
-      ".......",
-      "..WWW..",
-      "..WWW..",
-      "..WWW..",
-      ".......",
-      ".......",
-    ]),
-  ]),
+  // 字符：`.` 空 · `0-9A-E` Townscaper 15 色户 · `G` 正门
+  // 五台地 × 每台地五层（v2 Townscaper 种子山城，生成器见上）
+  terraces: HIGHLAND_TOWN_TERRACES,
+  // 旧读取方兼容：levels = 顶台地五层（normalize 优先走 terraces）
+  levels: HIGHLAND_TOWN_TERRACES[0],
 });
 
 /**
@@ -944,6 +983,7 @@ export function buildCitadelTown(spec, ctx) {
     ridgeCount: 0,
     eaveCount: 0,
     oculusCount: 0,
+    chimneyCount: 0, // 烟囱（Townscaper 坡屋顶签名构件）
     gate: null,
   };
   const domeCenters = new Set(); // "ix,iy,iz" —— 不出垛口/塔顶
@@ -1129,6 +1169,26 @@ export function buildCitadelTown(spec, ctx) {
   // 风向标：细杆 + 箭头尾翼（教堂尖塔顶饰；旗杆不做——用户偏好）
   const vanePostGeometry = new THREE.BoxGeometry(0.03, 0.5, 0.03);
   const vaneTailGeometry = new THREE.BoxGeometry(0.26, 0.05, 0.04);
+  // 烟囱（Townscaper 签名构件）：墙色方柱 + 深色压顶，立在坡屋顶一端
+  const chimneyGeometry = new THREE.BoxGeometry(cs * 0.16, ch * 0.52, cs * 0.16);
+  const chimneyCapGeometry = new THREE.BoxGeometry(cs * 0.22, 0.07, cs * 0.22);
+  // 在坡屋顶 cell 上加烟囱：位置偏屋脊一侧坡面，颜色随该户墙色
+  const addChimney = (ix, iy, iz, alongX) => {
+    const chChar = at(ix, iy, iz);
+    const wallMat = materials[chChar] ?? materials.W ?? trimMat;
+    const chimney = mesh(chimneyGeometry, wallMat, "town-roof-chimney", 0.012);
+    chimney.position.set(
+      cx(ix) + (alongX ? 0 : cs * 0.18),
+      (iy + 1) * ch + ch * 0.6,
+      cz(iz) + (alongX ? cs * 0.18 : 0)
+    );
+    levelGroups[iy].add(chimney);
+    const cap = mesh(chimneyCapGeometry, materials.ink ?? trimMat, "town-roof-chimney-cap", 0.006);
+    cap.position.copy(chimney.position);
+    cap.position.y += ch * 0.28;
+    levelGroups[iy].add(cap);
+    stats.chimneyCount = (stats.chimneyCount ?? 0) + 1;
+  };
 
   // ---------- 规则 2.5：屋顶形状分类（Townscaper 全模拟）----------
   // 1×1 孤立 → 四坡尖顶（高柱更高）· 直线条带 → 人字坡 · L 形 → 转角教堂尖塔
@@ -1244,6 +1304,8 @@ export function buildCitadelTown(spec, ctx) {
         roofCells.add(`${anchor[0]},${iy},${anchor[1]}`);
 
         // 臂上格子出人字坡（沿臂轴向：4 邻分量方向取主轴）
+        let chimneyCell = null;
+        let chimneyDist = 0;
         for (const [ix, iz] of comp.cells) {
           const key = `${ix},${iy},${iz}`;
           if (key === `${anchor[0]},${iy},${anchor[1]}`) continue;
@@ -1257,6 +1319,11 @@ export function buildCitadelTown(spec, ctx) {
           }
           if (inX + inZ === 0) continue;
           const alongX = inX >= inZ;
+          const armDist = Math.abs(ix - anchor[0]) + Math.abs(iz - anchor[1]);
+          if (armDist > chimneyDist) {
+            chimneyDist = armDist;
+            chimneyCell = [ix, iz, alongX];
+          }
           const roof = mesh((alongX ? gableX : gableZ).clone(), roofGradMat, "town-roof", 0.04);
           applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
@@ -1276,6 +1343,8 @@ export function buildCitadelTown(spec, ctx) {
             stats.ridgeCount = (stats.ridgeCount ?? 0) + 1;
           }
         }
+        // L/十字坡屋顶：离尖塔最远的臂端出一根烟囱
+        if (chimneyCell) addChimney(chimneyCell[0], iy, chimneyCell[1], chimneyCell[2]);
         continue;
       }
 
@@ -1317,6 +1386,8 @@ export function buildCitadelTown(spec, ctx) {
             stats.eaveCount = (stats.eaveCount ?? 0) + 1;
           }
         }
+        // 烟囱：条带屋顶第二格上立一根（墙色随户），Townscaper 招牌剪影
+        if (comp.cells.length >= 2) addChimney(comp.cells[1][0], iy, comp.cells[1][1], alongX);
         // 山墙圆窗：条带两端山墙面各开一圆窗
         {
           const [sx0, sz0] = comp.cells[0];
