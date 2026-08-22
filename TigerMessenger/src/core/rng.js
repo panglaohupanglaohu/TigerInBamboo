@@ -26,6 +26,16 @@ export function createRng(seed = 1) {
     chance: (p) => next() < p,
     /** 从数组均匀取一个元素 */
     pick: (arr) => arr[Math.floor(next() * arr.length)],
+    /** 按 tick/标签派生互不干扰的子源（PLAN V4 固定步长契约） */
+    fork: (label = 0) => {
+      const extra =
+        typeof label === "number" && Number.isFinite(label)
+          ? label >>> 0
+          : seedFromString(String(label));
+      return createRng(((a ^ extra ^ 0x9e3779b9) >>> 0) || 1);
+    },
+    /** 稳定洗牌（Fisher–Yates，同序列同排列） */
+    shuffle: (arr) => stableShuffle(arr, { next }),
   };
 }
 
@@ -45,4 +55,27 @@ export function seedFromString(str) {
 /** 命名子随机源：同一母 seed 下各子序列互不干扰且可复现 */
 export function deriveRng(parentSeed, name) {
   return createRng(((parentSeed >>> 0) ^ seedFromString(name)) >>> 0);
+}
+
+/** FNV-1a 十六进制指纹（canonical hash / 重放比对） */
+export function hashHex(str) {
+  return seedFromString(String(str)).toString(16).padStart(8, "0");
+}
+
+/**
+ * 稳定洗牌：同 rng 序列必得同一排列；不修改入参。
+ * @template T
+ * @param {T[]} arr
+ * @param {{ next: () => number }} rng
+ */
+export function stableShuffle(arr, rng) {
+  const out = arr.slice();
+  const next = rng.next;
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(next() * (i + 1));
+    const tmp = out[i];
+    out[i] = out[j];
+    out[j] = tmp;
+  }
+  return out;
 }

@@ -54,5 +54,9 @@ export function createCombatEventLog({ seed = 1, scenario = "" } = {}) {
     snapshot() {
       return { seed: this.seed, scenario, events: events.slice(), commands: commands.slice() };
     },
+    /** PLAN V4 canonical hash：事件流 + 命令流，同输入必须逐字节一致 */
+    canonicalHash() {
+      return hashHex(`${this.seed}|${scenario}\n${this.digest()}\n${this.commandDigest()}`);
+    },
   };
 }
