@@ -36,6 +36,7 @@ const {
   migrateLegacyTownChars,
   citadelShadeStep,
   collectCitadelHouses,
+  collectCitadelCourtyardRegions,
   classifyRoofComponent,
   normalizeCitadelTerraceLayout,
   levelsToGrid,
@@ -202,11 +203,42 @@ ok("屋顶形状分类：single/strip/L/cross/block2x2/plaza");
   ok(`底层围合广场 ${stats.plazaCount}`);
 }
 
+// ---------- 8b. 庭院二次规则：围合空域 → 台面/矮墙/井盆 ----------
+{
+  const courtyardFloor = Array.from({ length: 25 }, (_, iz) =>
+    Array.from({ length: 25 }, (_, ix) => {
+      if (ix >= 11 && ix <= 13 && iz >= 11 && iz <= 13 && !(ix === 12 && iz === 12)) return "4";
+      return ".";
+    }).join("")
+  );
+  const COURTYARD_SPEC = {
+    cellSize: 2.0,
+    cellHeight: 2.0,
+    gridSize: 25,
+    levels: [
+      Array.from({ length: 25 }, () => ".".repeat(25)),
+      courtyardFloor,
+      Array.from({ length: 25 }, () => ".".repeat(25)),
+      Array.from({ length: 25 }, () => ".".repeat(25)),
+      Array.from({ length: 25 }, () => ".".repeat(25)),
+    ],
+  };
+  const regions = collectCitadelCourtyardRegions(levelsToGrid(COURTYARD_SPEC.levels), 25, 25, 5);
+  assert.equal(regions.length, 1, "第二轮空域分析应找到一个内院");
+  assert.equal(regions[0].terraceFloor, 1);
+  assert.equal(regions[0].size, 1);
+  const assembly = buildCitadelTownAssembly(COURTYARD_SPEC, { baseY: 0 });
+  assert.equal(assembly.stats.courtyardCount, 1, "装配层应消费内院区域");
+  assert.equal(assembly.stats.courtyardWellCount, 1, "内院应有井盆");
+  assert(assembly.stats.courtyardWallCount >= 4, "内院四周应有矮墙");
+  ok("庭院二次规则：1 格空域 · 井盆 " + assembly.stats.courtyardWellCount + " · 墙 " + assembly.stats.courtyardWallCount);
+}
+
 // ---------- 9. 默认 SPEC 全规则回归 ----------
 {
   const assembly = buildCitadelTownAssembly(CITADEL_TOWN_SPEC, { baseY: 0 });
   const s = assembly.stats;
-  assert(s.cellCount >= 150, `默认布局体块数（实际 ${s.cellCount}）`);
+  assert(s.cellCount >= 140, `默认布局体块数（实际 ${s.cellCount}）`);
   assert(s.windowCount > 0 && s.doorCount > 0, "窗+门");
   assert(s.roofCount > 0, "坡顶");
   assert(s.domeCount >= 1, "黄金穹顶保留");

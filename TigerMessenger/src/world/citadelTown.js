@@ -20,9 +20,9 @@
 import * as THREE from "three";
 
 /** 编辑器（citadelEditorPanel / townscaper.html）与主场景共用的布局存档键。 */
-// v2：默认布局换成 Townscaper 种子山城（五彩户/坡屋顶/飞楼支架），
-// v1 旧档（白婚礼蛋糕）不再读取——与 canal-junction v4 换档同一先例。
-export const CITADEL_LEVELS_KEY = "tm.citadel.levels.v2";
+// v3：在五彩户/坡屋顶/飞楼支架基础上加入沿台地生长的密集街区，
+// 绕开旧版稀疏布局存档；v2 仍留在 localStorage 中，可回退读取。
+export const CITADEL_LEVELS_KEY = "tm.citadel.levels.v3";
 
 /**
  * 城堡实例化：存档键按实例隔离。
@@ -38,6 +38,47 @@ export function citadelLevelsKey(instanceId = null) {
 export const CITADEL_TERRACE_COUNT = 5;
 export const CITADEL_CASTLE_FLOORS = 5;
 export const CITADEL_GRID_SIZE = 25;
+
+/**
+ * Townscaper 资源拆解的运行时对应物。
+ *
+ * 原作把“2450 种 module”表现成网格邻接后的组合结果，而不是 2450
+ * 个互不相干的静态模型。这里保留同样的思路：把可复用的部件拆成八个
+ * 家族，再由格坐标、楼层、户色和开敞方向确定性选型。这样既能稳定复现
+ * 同一座城，又能让一座城里出现足够多的楼层、地基、围栏、阳台、楼梯、
+ * 支架、开洞和装饰组合，而不会为每种组合复制一套几何资产。
+ */
+export const TOWNSCAPER_MODULE_VARIANTS = 2450;
+export const TOWNSCAPER_MODULE_FAMILIES = Object.freeze({
+  foundation: Object.freeze(["path", "stone-plinth", "pillar", "cantilever"]),
+  floor: Object.freeze(["base", "split-band", "cornice", "top-band", "tower"]),
+  fence: Object.freeze(["iron", "wood", "painted", "garden"]),
+  balcony: Object.freeze(["flower-tile", "flower-box", "awning", "overhang"]),
+  stairs: Object.freeze(["small", "large", "beach", "switchback"]),
+  support: Object.freeze(["pillar", "v-brace", "arch-post", "cantilever"]),
+  hole: Object.freeze(["archway", "door-tunnel", "garden-door", "water-gate"]),
+  decor: Object.freeze(["window", "oculus", "chimney", "clothesline", "topiary", "lamp"]),
+});
+
+/** 组合索引只依赖布局，不依赖随机数，因此编辑器和运行时完全一致。 */
+export function townscaperModuleSelection(ix, iy, iz, char = "", salt = 0, openMask = 0) {
+  let h = (ix * 374761393 + iy * 668265263 + iz * 2246822519
+    + char.charCodeAt(0) * 3266489917 + salt * 1597334677
+    + openMask * 2971215073) >>> 0;
+  h = Math.imul(h ^ (h >>> 15), 2246822519) >>> 0;
+  h ^= h >>> 13;
+  const pick = (family) => h % TOWNSCAPER_MODULE_FAMILIES[family].length;
+  return {
+    foundation: pick("foundation"),
+    floor: pick("floor"),
+    fence: pick("fence"),
+    balcony: pick("balcony"),
+    stairs: pick("stairs"),
+    support: pick("support"),
+    hole: pick("hole"),
+    decor: pick("decor"),
+  };
+}
 
 // ============================================================================
 //  Townscaper 15 色调色板 + 字符集 + 旧档迁移
@@ -103,25 +144,25 @@ export const TOWNSCAPER_CANAL_GATE_COLOR = 0xf6efe3;
  * 点缀明黄/蜜橙/珊瑚/草绿/紫罗兰。字符集与 CITADEL_PALETTE 一一对应。
  */
 export const TOWNSCAPER_HIGHLAND_PALETTE = Object.freeze([
-  Object.freeze({ name: "奶油白", char: "0", color: 0xf6efe3 }),
-  Object.freeze({ name: "沙石", char: "1", color: 0xe8d8bc }),
-  Object.freeze({ name: "杏粉", char: "2", color: 0xf5cdbd }),
-  Object.freeze({ name: "明黄", char: "3", color: 0xf6de8c }),
-  Object.freeze({ name: "蜜橙", char: "4", color: 0xf2b67f }),
-  Object.freeze({ name: "珊瑚粉", char: "5", color: 0xf0a196 }),
-  Object.freeze({ name: "砖红", char: "6", color: 0xd98f86 }),
-  Object.freeze({ name: "薄荷", char: "7", color: 0xafe3d0 }),
-  Object.freeze({ name: "青碧", char: "8", color: 0x86c9be }),
-  Object.freeze({ name: "天青", char: "9", color: 0x93c6ec }),
-  Object.freeze({ name: "湖蓝", char: "A", color: 0x97d2e4 }),
-  Object.freeze({ name: "草绿", char: "B", color: 0x93cf95 }),
-  Object.freeze({ name: "松石绿", char: "C", color: 0x7fcfb9 }),
-  Object.freeze({ name: "紫罗兰", char: "D", color: 0xc4a3d8 }),
-  Object.freeze({ name: "钴蓝", char: "E", color: 0x8fa9e4 }),
+  Object.freeze({ name: "奶油白", char: "0", color: 0xffedc4 }),
+  Object.freeze({ name: "暖砂石", char: "1", color: 0xf0c37c }),
+  Object.freeze({ name: "杏粉", char: "2", color: 0xf28e82 }),
+  Object.freeze({ name: "奶油黄", char: "3", color: 0xf6dd45 }),
+  Object.freeze({ name: "蜜橙", char: "4", color: 0xf08a3c }),
+  Object.freeze({ name: "珊瑚红", char: "5", color: 0xef4f67 }),
+  Object.freeze({ name: "覆盆子红", char: "6", color: 0xd94f7d }),
+  Object.freeze({ name: "薄荷绿", char: "7", color: 0x46d88e }),
+  Object.freeze({ name: "翡翠绿", char: "8", color: 0x31c46f }),
+  Object.freeze({ name: "天青", char: "9", color: 0x4f9de9 }),
+  Object.freeze({ name: "湖蓝", char: "A", color: 0x3f88db }),
+  Object.freeze({ name: "鲜草绿", char: "B", color: 0x63d54d }),
+  Object.freeze({ name: "松石绿", char: "C", color: 0x32cbb2 }),
+  Object.freeze({ name: "灰紫", char: "D", color: 0xb06cca }),
+  Object.freeze({ name: "钴蓝", char: "E", color: 0x5f78d1 }),
 ]);
 
 /** 高山圣城正门墙体色（奶油白，与 0 户同色系）。 */
-export const TOWNSCAPER_HIGHLAND_GATE_COLOR = 0xf6efe3;
+export const TOWNSCAPER_HIGHLAND_GATE_COLOR = 0xeee9d8;
 
 /** 调色板字符串 "0123456789ABCDE"（顺序即色序）。 */
 export const CITADEL_PALETTE_CHARS = CITADEL_PALETTE.map((entry) => entry.char).join("");
@@ -228,8 +269,9 @@ export function applyVerticalVertexColors(geo, top = 1.2, bot = 0.7) {  const po
 /**
  * Townscaper 原版墙面质感（运河交汇古堡 colorful 模式）：
  * 在「顶亮底暗」立面渐变之上，再按面片抹一层确定性明度色块——
- * 同一面墙内每块砖面有 0.90~1.10 的明度漂移，大墙不再是一片死色，
- * 对齐原版「墙上抹了渐变色块」的手绘墙面。只写 vertex color，
+ * 同一面墙保留轻微的 0.96~1.04 明度漂移；更细的错缝砖块由程序化墙砖
+ * 纹理负责。这里只做柔和天空渐变，避免早期 0.85~1.12 的强渐变洗掉户色。
+ * 只写 vertex color，
  * 材质需 vertexColors=true（墙面 shade 材质保证）。
  */
 export function applyPatchyWallColors(geo, ix = 0, iz = 0, iy = 0) {
@@ -249,11 +291,11 @@ export function applyPatchyWallColors(geo, ix = 0, iz = 0, iy = 0) {
   for (let g = 0; g + groupSize <= pos.count; g += groupSize) {
     const faceIndex = g / groupSize;
     const h = (ix * 374761393 + iz * 668265263 + iy * 2246822519 + faceIndex * 3266489917) >>> 0;
-    const tint = 0.9 + ((h % 1000) / 1000) * 0.2; // 面色块 0.90~1.10
+    const tint = 0.96 + ((h % 1000) / 1000) * 0.08;
     for (let i = g; i < g + groupSize; i++) {
       const t = (pos.getY(i) - minY) / span;
       const e = t * t * (3 - 2 * t);
-      const k = (0.85 + (1.12 - 0.85) * e) * tint;
+      const k = (0.94 + (1.06 - 0.94) * e) * tint;
       col[i * 3] = k;
       col[i * 3 + 1] = k;
       col[i * 3 + 2] = k;
@@ -263,10 +305,13 @@ export function applyPatchyWallColors(geo, ix = 0, iz = 0, iy = 0) {
   return geo;
 }
 
-function pushTownQuad(pos, nrm, a, b, c, d, n) {
+function pushTownQuad(pos, nrm, uv, a, b, c, d, n) {
   pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
   pos.push(a[0], a[1], a[2], c[0], c[1], c[2], d[0], d[1], d[2]);
   for (let i = 0; i < 6; i++) nrm.push(n[0], n[1], n[2]);
+  // 每个单元格外墙固定铺两列×四行错缝砖；纹理自身首尾可拼接，
+  // 相邻单元格与上下楼层会在灰缝处自然衔接。
+  uv.push(0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0);
 }
 
 /**
@@ -285,30 +330,36 @@ export function makeExposedCellGeometry(cs, ch, expose, ix, iz, floor = 0) {
     const j = sx > 0 ? (sz > 0 ? j11 : j10) : (sz > 0 ? j01 : j00);
     return [sx * hx + j.dx, sy * hy, sz * hz + j.dz];
   };
+  // 注意：pushTownQuad 的角点顺序必须与法线构成右手系（绕序 = 正面）。
+  // 旧版顺序与法线相反——FrontSide 材质下墙面正面被剔除，看到的是屋内
+  // 远侧内壁（白墙时代侥幸发白），反向壳描边（BackSide）则整个糊在墙面
+  // 上（彩墙时代整面深灰蓝）。修正绕序后两者同时归位。
   const pos = [];
   const nrm = [];
+  const uv = [];
   if (expose.py) {
-    pushTownQuad(pos, nrm, corner(-1, 1, -1), corner(1, 1, -1), corner(1, 1, 1), corner(-1, 1, 1), [0, 1, 0]);
+    pushTownQuad(pos, nrm, uv, corner(-1, 1, -1), corner(-1, 1, 1), corner(1, 1, 1), corner(1, 1, -1), [0, 1, 0]);
   }
   if (expose.ny) {
-    pushTownQuad(pos, nrm, corner(-1, -1, 1), corner(1, -1, 1), corner(1, -1, -1), corner(-1, -1, -1), [0, -1, 0]);
+    pushTownQuad(pos, nrm, uv, corner(-1, -1, 1), corner(-1, -1, -1), corner(1, -1, -1), corner(1, -1, 1), [0, -1, 0]);
   }
   if (expose.px) {
-    pushTownQuad(pos, nrm, corner(1, -1, -1), corner(1, -1, 1), corner(1, 1, 1), corner(1, 1, -1), [1, 0, 0]);
+    pushTownQuad(pos, nrm, uv, corner(1, -1, -1), corner(1, 1, -1), corner(1, 1, 1), corner(1, -1, 1), [1, 0, 0]);
   }
   if (expose.nx) {
-    pushTownQuad(pos, nrm, corner(-1, -1, 1), corner(-1, -1, -1), corner(-1, 1, -1), corner(-1, 1, 1), [-1, 0, 0]);
+    pushTownQuad(pos, nrm, uv, corner(-1, -1, 1), corner(-1, 1, 1), corner(-1, 1, -1), corner(-1, -1, -1), [-1, 0, 0]);
   }
   if (expose.pz) {
-    pushTownQuad(pos, nrm, corner(1, -1, 1), corner(-1, -1, 1), corner(-1, 1, 1), corner(1, 1, 1), [0, 0, 1]);
+    pushTownQuad(pos, nrm, uv, corner(1, -1, 1), corner(1, 1, 1), corner(-1, 1, 1), corner(-1, -1, 1), [0, 0, 1]);
   }
   if (expose.nz) {
-    pushTownQuad(pos, nrm, corner(-1, -1, -1), corner(1, -1, -1), corner(1, 1, -1), corner(-1, 1, -1), [0, 0, -1]);
+    pushTownQuad(pos, nrm, uv, corner(-1, -1, -1), corner(-1, 1, -1), corner(1, 1, -1), corner(1, -1, -1), [0, 0, -1]);
   }
   if (!pos.length) return null;
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
   geo.setAttribute("normal", new THREE.Float32BufferAttribute(nrm, 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
   applyVerticalVertexColors(geo, 1.22, 0.68);
   return geo;
 }
@@ -356,7 +407,7 @@ export function citadelGridCellCenter(
 }
 
 // ============================================================================
-//  高山圣城 · Townscaper 种子山城（v2，确定性生成）
+//  高山圣城 · Townscaper 种子山城（v3，确定性生成）
 //  手绘 ASCII 已表达不了「五台地 × 有机屋群」：改为生成器落子——
 //  顶台地主堡（奶油基座 + 珊瑚主塔穹顶 + 两翼坡屋顶 + 正门 G），
 //  低四台地在环带（上一台地半径 < r ≤ 本台地半径）上散落小屋，
@@ -444,6 +495,93 @@ function makeHighlandTownTerraces() {
   house(4, 8, 22, 8, 22, 0, 1, "0");   // 前左奶油独栋
   house(4, 19, 21, 19, 21, 0, 1, "6"); // 前右砖红独栋（战场右缘外）
 
+  // ---- 环带街屋簇：沿等高线切向连续生长，而不是只放四个孤立样板屋 ----
+  // Townscaper 的体量感来自相邻格触发的坡顶、露台、拱廊和飞楼规则。
+  // 这里按每级台地的中径等角采样，以 2~3 格切向条带组成一户；高度和
+  // 户色由整数序列确定，既保持可复现，也为每圈形成连续但不机械的街墙。
+  const districtColors = ["5", "9", "8", "3", "0", "B", "A", "2", "C", "6", "4", "E"];
+  const addRingHouse = (t, sampleIndex, sampleCount) => {
+    const inner = t === 0 ? 0 : HIGHLAND_TERRACE_RADII[t - 1];
+    const outer = HIGHLAND_TERRACE_RADII[t];
+    const radiusCells = ((inner + outer) * 0.5) / 2;
+    // 每级错开半个采样间距，避免五圈街屋在鸟瞰中排成放射状直线。
+    const phi = (sampleIndex + 0.34 * t) / sampleCount * Math.PI * 2;
+    const centerX = Math.round(C + Math.sin(phi) * radiusCells);
+    const centerZ = Math.round(C + Math.cos(phi) * radiusCells);
+    // 切向取主轴，条带沿等高线排列；每第三户三格，其余两格。
+    const tangentAlongX = Math.abs(Math.cos(phi)) >= Math.abs(Math.sin(phi));
+    const length = (sampleIndex + t) % 3 === 0 ? 3 : 2;
+    // 少量户扩成 2 格进深，制造 Townscaper 的小院、厚墙和屋顶花园，
+    // 避免所有建筑都退化成单列“火柴盒”。
+    const depth = (sampleIndex * 3 + t) % 5 === 0 ? 2 : 1;
+    const cells = [];
+    const start = -Math.floor((length - 1) / 2);
+    const radialSign = Math.cos(phi) >= 0 ? 1 : -1;
+    for (let d = 0; d < depth; d++) {
+      for (let k = 0; k < length; k++) {
+        cells.push([
+          centerX + (tangentAlongX ? start + k : radialSign * d),
+          centerZ + (tangentAlongX ? radialSign * d : start + k),
+        ]);
+      }
+    }
+    const floors = 2 + ((sampleIndex * 7 + t) % 3); // 2~4 层，形成高低错落屋脊
+    // 整户必须完全落在本环带、避开水帘/战场且不覆盖现有标志建筑。
+    if (cells.some(([ix, iz]) =>
+      !inRing(t, ix, iz)
+      || (t < 4 && inNotch(ix, iz))
+      || (t === 4 && inBattlefield(ix, iz))
+      || Array.from({ length: floors }, (_, f) => grids[t][f][iz]?.[ix] !== ".").some(Boolean)
+    )) return;
+    const color = districtColors[(sampleIndex * 5 + t * 3) % districtColors.length];
+    for (let f = 0; f < floors; f++) {
+      for (const [ix, iz] of cells) put(t, ix, iz, f, color);
+    }
+    // 每四户伸出一格顶层飞楼，自动触发深色支架；只在承重环带内生成。
+    if ((sampleIndex + t) % 4 === 1 && floors < F) {
+      const [edgeX, edgeZ] = cells.at(-1);
+      const flyX = edgeX + (tangentAlongX ? 1 : 0);
+      const flyZ = edgeZ + (tangentAlongX ? 0 : 1);
+      if (
+        inRing(t, flyX, flyZ)
+        && !(t < 4 && inNotch(flyX, flyZ))
+        && !(t === 4 && inBattlefield(flyX, flyZ))
+        && grids[t][floors - 1][flyZ]?.[flyX] === "."
+      ) fly(t, flyX, flyZ, floors - 1, color);
+    }
+  };
+
+  // 主堡外围补一圈低矮街屋，让最高台地不是整圈空广场；其余四圈随
+  // 周长增加采样数，外圈形成连续山城，内圈也不会留下过大的灰台面。
+  for (let i = 0; i < 10; i++) addRingHouse(0, i, 10);
+  for (let t = 1; t < CITADEL_TERRACE_COUNT; t++) {
+    const sampleCount = 16 + t * 3;
+    for (let i = 0; i < sampleCount; i++) addRingHouse(t, i, sampleCount);
+  }
+
+  // 桥接拱廊：寻找“左右有房、下方为空”的可承重缝，补一格上层房体。
+  // 这是 Townscaper 里由相邻体块触发的空中连桥；数量按台地递增，
+  // 同时避开瀑布缺口和港口战场的通行带。
+  const bridgeBudget = [1, 2, 2, 2, 2];
+  for (let t = 0; t < CITADEL_TERRACE_COUNT; t++) {
+    let added = 0;
+    for (let f = 1; f < F && added < bridgeBudget[t]; f++) {
+      for (let iz = 1; iz < N - 1 && added < bridgeBudget[t]; iz++) {
+        for (let ix = 1; ix < N - 1 && added < bridgeBudget[t]; ix++) {
+          if (!inRing(t, ix, iz) || grids[t][f][iz][ix] !== "." || grids[t][f - 1][iz][ix] !== ".") continue;
+          if ((t < 4 && inNotch(ix, iz)) || (t === 4 && inBattlefield(ix, iz))) continue;
+          const horizontal = grids[t][f][iz][ix - 1] !== "." && grids[t][f][iz][ix + 1] !== ".";
+          const vertical = grids[t][f][iz - 1][ix] !== "." && grids[t][f][iz + 1][ix] !== ".";
+          if (!horizontal && !vertical) continue;
+          grids[t][f][iz][ix] = horizontal
+            ? grids[t][f][iz][ix - 1]
+            : grids[t][f][iz - 1][ix];
+          added++;
+        }
+      }
+    }
+  }
+
   return grids.map((floors) =>
     floors.map((rows) => Object.freeze(rows.map((row) => row.join(""))))
   );
@@ -455,7 +593,7 @@ export const CITADEL_TOWN_SPEC = Object.freeze({
   cellSize: 2.0,
   cellHeight: 2.0,
   // 字符：`.` 空 · `0-9A-E` Townscaper 15 色户 · `G` 正门
-  // 五台地 × 每台地五层（v2 Townscaper 种子山城，生成器见上）
+  // 五台地 × 每台地五层（v3 Townscaper 密集种子山城，生成器见上）
   terraces: HIGHLAND_TOWN_TERRACES,
   // 旧读取方兼容：levels = 顶台地五层（normalize 优先走 terraces）
   levels: HIGHLAND_TOWN_TERRACES[0],
@@ -600,7 +738,7 @@ function normalizeFiveFloors(levels, useLegacyCrown = false, floors = CITADEL_CA
 }
 
 /**
- * Normalize legacy single-stack saves and the v2 five-terrace layout into:
+ * Normalize legacy single-stack saves and the v3 five-terrace layout into:
  * terrace 0 = 台地 1（最高）, each terrace owns exactly `floors` castle floors
  * （高山圣城 5 层；运河交汇古堡 12 层——层数参数化，100% Townscaper 高塔）。
  * Every floor is padded to a common 25×25 centered grid, so editing one
@@ -658,6 +796,70 @@ export function levelsToGrid(levels) {
     });
   });
   return grid;
+}
+
+/**
+ * 第二轮空间规则：从建筑体块之间的空域中找出真正的“内院”。
+ *
+ * Townscaper 的庭院不是布局表里额外硬编码的一类房子，而是第一轮
+ * 建筑组合完成后，对被墙体围合的空单元再跑一次 2D 规则。这里保持
+ * 同样的分层：先做空域 flood fill，再要求区域不接触边界、上方开敞、
+ * 至少有三条实体边。返回值只含坐标，不创建 Three.js 对象，便于编辑器
+ * 预览、运行时装配和 headless 测试共享。
+ */
+export function collectCitadelCourtyardRegions(
+  grid,
+  cols = CITADEL_GRID_SIZE,
+  rows = CITADEL_GRID_SIZE,
+  levels = CITADEL_CASTLE_FLOORS
+) {
+  const at = (ix, iy, iz) => grid.get(`${ix},${iy},${iz}`) ?? ".";
+  const result = [];
+  for (let iy = 0; iy < levels; iy++) {
+    const seen = new Set();
+    for (let ix = 0; ix < cols; ix++) {
+      for (let iz = 0; iz < rows; iz++) {
+        const startKey = `${ix},${iz}`;
+        if (at(ix, iy, iz) !== "." || seen.has(startKey)) continue;
+        const queue = [[ix, iz]];
+        const cells = [];
+        let touchesBoundary = false;
+        seen.add(startKey);
+        while (queue.length) {
+          const [x, z] = queue.pop();
+          cells.push([x, z]);
+          if (x === 0 || z === 0 || x === cols - 1 || z === rows - 1) touchesBoundary = true;
+          for (const [dx, dz] of DIRS) {
+            const nx = x + dx;
+            const nz = z + dz;
+            const key = `${nx},${nz}`;
+            if (nx < 0 || nx >= cols || nz < 0 || nz >= rows) continue;
+            if (seen.has(key) || at(nx, iy, nz) !== ".") continue;
+            seen.add(key);
+            queue.push([nx, nz]);
+          }
+        }
+        if (touchesBoundary) continue;
+        const topOpen = cells.every(([x, z]) => at(x, iy + 1, z) === ".");
+        if (!topOpen) continue;
+        let solidBorderEdges = 0;
+        for (const [x, z] of cells) {
+          for (const [dx, dz] of DIRS) {
+            if (at(x + dx, iy, z + dz) !== ".") solidBorderEdges++;
+          }
+        }
+        if (solidBorderEdges < 3) continue;
+        result.push(Object.freeze({
+          terraceFloor: iy,
+          cells: Object.freeze(cells.map(([x, z]) => Object.freeze([x, z]))),
+          size: cells.length,
+          solidBorderEdges,
+          topOpen,
+        }));
+      }
+    }
+  }
+  return Object.freeze(result);
 }
 
 /**
@@ -906,6 +1108,17 @@ function makeGableRoofGeometry(cs, ch) {
   ];
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.Float32BufferAttribute(tris.flat(), 3));
+  // 两片坡面各自铺满一张可拼接陶瓦纹理；山墙端面复用同一范围，
+  // 让条带屋顶连续出现横向瓦行和交错竖缝。
+  const uv = [
+    0, 0, 1, 1, 1, 0,
+    0, 0, 0, 1, 1, 1,
+    0, 0, 1, 0, 1, 1,
+    0, 0, 1, 1, 0, 1,
+    0, 0, 1, 0, 0.5, 1,
+    0, 0, 0.5, 1, 1, 0,
+  ];
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
   geometry.computeVertexNormals();
   return geometry;
 }
@@ -946,6 +1159,10 @@ export function buildCitadelTown(spec, ctx) {
     });
   });
   const at = (ix, iy, iz) => grid.get(`${ix},${iy},${iz}`) ?? ".";
+  const openMaskFor = (ix, iy, iz) => DIRS.reduce(
+    (mask, [dx, dz], index) => at(ix + dx, iy, iz + dz) === "." ? mask | (1 << index) : mask,
+    0
+  );
   const cx = (ix) => citadelGridCellCenter(ix, 0, 0, cs, ch, cols).x;
   const cz = (iz) => citadelGridCellCenter(0, 0, iz, cs, ch, rows).z;
   const cy = (iy) => citadelGridCellCenter(0, iy, 0, cs, ch, cols).y;
@@ -971,6 +1188,10 @@ export function buildCitadelTown(spec, ctx) {
     doorCount: 0,
     steepleCount: 0,
     gardenCount: 0,
+    courtyardCount: 0,
+    courtyardCellCount: 0,
+    courtyardWallCount: 0,
+    courtyardWellCount: 0,
     plazaCount: 0,
     boatCount: 0,
     birdCount: 0,
@@ -984,6 +1205,10 @@ export function buildCitadelTown(spec, ctx) {
     eaveCount: 0,
     oculusCount: 0,
     chimneyCount: 0, // 烟囱（Townscaper 坡屋顶签名构件）
+    moduleCount: 0,
+    moduleFamilyCounts: Object.fromEntries(
+      Object.keys(TOWNSCAPER_MODULE_FAMILIES).map((family) => [family, 0])
+    ),
     gate: null,
   };
   const domeCenters = new Set(); // "ix,iy,iz" —— 不出垛口/塔顶
@@ -996,6 +1221,64 @@ export function buildCitadelTown(spec, ctx) {
   // 屋顶用带顶点渐变的陶瓦材质（高山圣城保持原平涂路径不变）。
   const colorful = ctx.colorful === true;
   const roofGradMat = materials.roofTileGrad ?? materials.roofTile;
+  const roofVariantSource = ctx.roofTileVariants ?? materials.roofTileVariants;
+  const roofVariants = Array.isArray(roofVariantSource) && roofVariantSource.length
+    ? roofVariantSource
+    : [roofGradMat];
+  const roofMaterialFor = (ix, iz, iy) => {
+    const h = (ix * 374761393 + iz * 668265263 + iy * 2246822519) >>> 0;
+    return roofVariants[h % roofVariants.length];
+  };
+  const balconyVariantSource = ctx.balconyTileVariants ?? materials.balconyTileVariants;
+  const balconyVariants = Array.isArray(balconyVariantSource) && balconyVariantSource.length
+    ? balconyVariantSource
+    : [roofGradMat];
+  const foundationVariantSource = ctx.foundationVariants ?? materials.foundationVariants;
+  const foundationVariants = Array.isArray(foundationVariantSource) && foundationVariantSource.length
+    ? foundationVariantSource
+    : [materials.plazaStone ?? materials.contour ?? trimMat];
+  const fenceVariantSource = ctx.fenceVariants ?? materials.fenceVariants;
+  const fenceVariants = Array.isArray(fenceVariantSource) && fenceVariantSource.length
+    ? fenceVariantSource
+    : [materials.iron ?? trimMat];
+  const balconyMaterialFor = (ix, iz, iy, style = 0) => {
+    const h = (ix * 374761393 + iz * 668265263 + iy * 2246822519 + style * 3266489917) >>> 0;
+    return balconyVariants[h % balconyVariants.length];
+  };
+  const foundationMaterialFor = (ix, iz, iy, style = 0) => {
+    const h = (ix * 668265263 + iz * 374761393 + iy * 2246822519 + style * 1597334677) >>> 0;
+    return foundationVariants[h % foundationVariants.length];
+  };
+  const fenceMaterialFor = (ix, iz, iy, style = 0) => {
+    const h = (ix * 2246822519 + iz * 3266489917 + iy * 668265263 + style * 374761393) >>> 0;
+    return fenceVariants[h % fenceVariants.length];
+  };
+  const registerModule = (family, ix, iy, iz, variant, object = null) => {
+    stats.moduleCount++;
+    stats.moduleFamilyCounts[family] = (stats.moduleFamilyCounts[family] ?? 0) + 1;
+    if (object) {
+      const openFaces = DIRS
+        .filter(([dx, dz]) => at(ix + dx, iy, iz + dz) === ".")
+        .map(([dx, dz]) => `${dx},${dz}`);
+      object.userData.townModule = {
+        family,
+        variant,
+        ix,
+        iy,
+        iz,
+        catalogSize: TOWNSCAPER_MODULE_VARIANTS,
+        // 邻接约束快照：几何可以合并，但编辑器/后续 WFC 仍能知道这个
+        // module 面向哪些空域、是否有上下承重关系以及是否处于屋顶。
+        constraints: {
+          openFaces,
+          roof: at(ix, iy + 1, iz) === ".",
+          supportBelow: iy === 0 || at(ix, iy - 1, iz) !== ".",
+          continuationAbove: at(ix, iy + 1, iz) !== ".",
+        },
+      };
+    }
+    return object;
+  };
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
     const expose = {
@@ -1141,12 +1424,18 @@ export function buildCitadelTown(spec, ctx) {
   const fencePostGeometry = new THREE.BoxGeometry(0.09, 0.5, 0.09);
   const fenceRailXGeometry = new THREE.BoxGeometry(cs + 0.06, 0.07, 0.07); // 横杆沿 x
   const fenceRailZGeometry = new THREE.BoxGeometry(0.07, 0.07, cs + 0.06); // 横杆沿 z
+  // 二次庭院规则：围墙/矮墙 + 中央井盆。与第一轮体块共用格坐标，
+  // 只在空域上添细节，不改变可编辑的建筑占格。
+  const courtyardWallGeometry = new THREE.BoxGeometry(cs * 0.96, 0.34, 0.12);
+  const courtyardBasinGeometry = new THREE.CylinderGeometry(cs * 0.2, cs * 0.24, 0.12, 8);
+  const courtyardWaterGeometry = new THREE.CylinderGeometry(cs * 0.13, cs * 0.13, 0.035, 8);
 
   // ---------- 建筑构件统一几何（Townscaper 立面层次）----------
   // 深色盘 trim：檐口线 / 墙裙 / 窗台窗楣 / 阳台栏杆 / 屋脊瓦 / 山墙圆窗 / 风向标
   const trimMat = materials.trim ?? materials.ink;
   // 楼板檐口线：外露面层顶压条（宽跨格、突出 0.08）
   const corniceGeometry = new THREE.BoxGeometry(cs + 0.16, 0.16, 0.09);
+  const floorBandGeometry = new THREE.BoxGeometry(cs * 0.88, 0.07, 0.075);
   // 底层墙裙：外露面底部基座条
   const plinthGeometry = new THREE.BoxGeometry(cs + 0.16, 0.46, 0.09);
   // 窗台（下托）/ 窗楣（上压）
@@ -1158,6 +1447,10 @@ export function buildCitadelTown(spec, ctx) {
   const balconySlabGeometry = new THREE.BoxGeometry(0.96, 0.08, 0.5);
   const balconyRailPostGeometry = new THREE.BoxGeometry(0.05, 0.42, 0.05);
   const balconyRailBarGeometry = new THREE.BoxGeometry(0.96, 0.045, 0.05);
+  const balconyCanopyGeometry = new THREE.BoxGeometry(1.08, 0.06, 0.42);
+  const flowerBoxGeometry = new THREE.BoxGeometry(0.44, 0.14, 0.22);
+  const windowAwningGeometry = new THREE.BoxGeometry(1.08, 0.06, 0.26);
+  const balconyTileAccentGeometry = new THREE.BoxGeometry(0.12, 0.035, 0.12);
   // 连拱柱廊细柱
   const arcadeColumnGeometry = new THREE.CylinderGeometry(0.13, 0.17, ch, 6);
   // 屋脊瓦 / 挑檐压条
@@ -1172,6 +1465,24 @@ export function buildCitadelTown(spec, ctx) {
   // 烟囱（Townscaper 签名构件）：墙色方柱 + 深色压顶，立在坡屋顶一端
   const chimneyGeometry = new THREE.BoxGeometry(cs * 0.16, ch * 0.52, cs * 0.16);
   const chimneyCapGeometry = new THREE.BoxGeometry(cs * 0.22, 0.07, cs * 0.22);
+  // 拱形门口几何缓存：矩形身 + 半圆拱顶，底部对齐 y=0（ExtrudeGeometry 薄挤出）
+  const archDoorCache = new Map();
+  const archDoorGeometry = (w, h, depth) => {
+    const key = `${w}|${h}|${depth}`;
+    let geo = archDoorCache.get(key);
+    if (geo) return geo;
+    const r = w / 2;
+    const shape = new THREE.Shape();
+    shape.moveTo(-r, 0);
+    shape.lineTo(-r, h - r);
+    shape.absarc(0, h - r, r, Math.PI, 0, true); // 半圆拱顶
+    shape.lineTo(r, 0);
+    shape.closePath();
+    geo = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 10 });
+    geo.translate(0, 0, -depth / 2);
+    archDoorCache.set(key, geo);
+    return geo;
+  };
   // 在坡屋顶 cell 上加烟囱：位置偏屋脊一侧坡面，颜色随该户墙色
   const addChimney = (ix, iy, iz, alongX) => {
     const chChar = at(ix, iy, iz);
@@ -1183,6 +1494,7 @@ export function buildCitadelTown(spec, ctx) {
       cz(iz) + (alongX ? cs * 0.18 : 0)
     );
     levelGroups[iy].add(chimney);
+    registerModule("decor", ix, iy, iz, "chimney", chimney);
     const cap = mesh(chimneyCapGeometry, materials.ink ?? trimMat, "town-roof-chimney-cap", 0.006);
     cap.position.copy(chimney.position);
     cap.position.y += ch * 0.28;
@@ -1249,7 +1561,7 @@ export function buildCitadelTown(spec, ctx) {
         const key = `${ix},${iy},${iz}`;
         const floors = columnHeight.get(`${ix},${iz}`) ?? 1;
         // 矮户：宽扁四坡（房子，不是帐篷锥）；高柱才拉尖
-        const spire = mesh(spireGeometry.clone(), roofGradMat, "town-spire", 0.035);
+        const spire = mesh(spireGeometry.clone(), roofMaterialFor(ix, iz, iy), "town-spire", 0.035);
         applyVerticalVertexColors(spire.geometry, 1.28, 0.62);
         if (floors <= 2) {
           spire.scale.set(1.18, 0.68, 1.18);
@@ -1272,7 +1584,7 @@ export function buildCitadelTown(spec, ctx) {
         const tower = mesh(steepleTowerGeometry, materials.steepleStone ?? materials.W, "town-steeple-tower", 0.04);
         tower.position.y = ch * 0.42;
         towerGroup.add(tower);
-        const cone = mesh(steepleConeGeometry.clone(), roofGradMat, "town-steeple-cone", 0.035);
+        const cone = mesh(steepleConeGeometry.clone(), roofMaterialFor(anchor[0], anchor[1], iy), "town-steeple-cone", 0.035);
         applyVerticalVertexColors(cone.geometry, 1.28, 0.62);
         cone.position.y = ch * 0.85 + ch * 0.48;
         towerGroup.add(cone);
@@ -1324,7 +1636,7 @@ export function buildCitadelTown(spec, ctx) {
             chimneyDist = armDist;
             chimneyCell = [ix, iz, alongX];
           }
-          const roof = mesh((alongX ? gableX : gableZ).clone(), roofGradMat, "town-roof", 0.04);
+          const roof = mesh((alongX ? gableX : gableZ).clone(), roofMaterialFor(ix, iz, iy), "town-roof", 0.04);
           applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
           levelGroups[iy].add(roof);
@@ -1351,7 +1663,7 @@ export function buildCitadelTown(spec, ctx) {
       if (shape.kind === "strip") {
         for (const [ix, iz] of comp.cells) {
           const key = `${ix},${iy},${iz}`;
-          const roof = mesh((shape.alongX ? gableX : gableZ).clone(), roofGradMat, "town-roof", 0.04);
+          const roof = mesh((shape.alongX ? gableX : gableZ).clone(), roofMaterialFor(ix, iz, iy), "town-roof", 0.04);
           applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
           levelGroups[iy].add(roof);
@@ -1420,7 +1732,7 @@ export function buildCitadelTown(spec, ctx) {
         const center = [minX + 0.5, minZ + 0.5];
         const cone = mesh(
           new THREE.ConeGeometry(cs * 0.4, ch * 0.7, 4).rotateY(Math.PI / 4),
-          roofGradMat,
+          roofMaterialFor(comp.cells[0][0], comp.cells[0][1], iy),
           "town-block2x2-cone",
           0.035
         );
@@ -1483,12 +1795,13 @@ export function buildCitadelTown(spec, ctx) {
           const topY = (iy + 1) * ch;
           const rail = mesh(
             dz !== 0 ? fenceRailXGeometry : fenceRailZGeometry,
-            materials.wood,
+            fenceMaterialFor(x, z, iy, (x + z + iy) & 3),
             "town-garden-fence",
             0.014
           );
           rail.position.set(ex, topY + 0.22, ez);
           levelGroups[iy].add(rail);
+          registerModule("fence", x, iy, z, TOWNSCAPER_MODULE_FAMILIES.fence[3], rail);
           stats.fenceCount++;
         }
       }
@@ -1552,6 +1865,7 @@ export function buildCitadelTown(spec, ctx) {
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
     const isGate = char === CITADEL_GATE_CHAR;
+    const module = townscaperModuleSelection(ix, iy, iz, char, 0, openMaskFor(ix, iy, iz));
     const house = houseByColumn.get(`${ix},${iz}`) ?? {
       ix, iz, seed: 0, bottom: iy, top: iy, floors: 1, hasGate: isGate,
     };
@@ -1589,6 +1903,7 @@ export function buildCitadelTown(spec, ctx) {
         window.userData.cellIz = iz;
         window.userData.cellIy = iy;
         levelGroups[iy].add(window);
+        registerModule("decor", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.decor[module.decor], window);
         stats.windowCount++;
         if (!leanDecor) {
           const wx = cx(ix) + dx * (cs / 2 + 0.06);
@@ -1619,21 +1934,13 @@ export function buildCitadelTown(spec, ctx) {
         const [ddx, ddz] = preferred ?? openFaces[house.seed % openFaces.length];
         const doorGroup = new THREE.Group();
         doorGroup.name = "town-door";
-        const recess = mesh(
-          new THREE.BoxGeometry(0.95, 1.62, 0.1),
-          materials.ink,
-          "town-door-recess",
-          0.024
-        );
-        recess.position.set(0, 0.81, cs / 2 + 0.02);
+        // Townscaper 式拱形门口：门洞与门板都做圆拱顶（矩形身 + 半圆头），
+        // 不再是方门洞。
+        const recess = mesh(archDoorGeometry(0.95, 1.62, 0.1), materials.ink, "town-door-recess", 0.024);
+        recess.position.set(0, 0, cs / 2 + 0.02);
         doorGroup.add(recess);
-        const leaf = mesh(
-          new THREE.BoxGeometry(0.72, 1.5, 0.06),
-          materials.wood,
-          "town-door-leaf",
-          0.02
-        );
-        leaf.position.set(0, 0.75, cs / 2 + 0.06);
+        const leaf = mesh(archDoorGeometry(0.72, 1.5, 0.06), materials.wood, "town-door-leaf", 0.02);
+        leaf.position.set(0, 0, cs / 2 + 0.06);
         doorGroup.add(leaf);
         doorGroup.position.set(cx(ix), 0, cz(iz));
         doorGroup.rotation.y = Math.atan2(ddx, ddz);
@@ -1657,23 +1964,34 @@ export function buildCitadelTown(spec, ctx) {
         const yaw = Math.atan2(dx, dz);
         // 檐口线：软融合模式用浅色细条，避免黑框铁笼
         if ((iy >= 1 || isRoof(ix, iy, iz)) && !leanDecor) {
-          const cornice = mesh(corniceGeometry, trimMatLoc, "town-cornice", 0.014);
+          const floorBandMaterial = module.floor === 1 || module.floor === 3
+            ? roofMaterialFor(ix, iz, iy)
+            : trimMatLoc;
+          const cornice = mesh(corniceGeometry, floorBandMaterial, "town-cornice", 0.014);
           cornice.position.set(ex, (iy + 1) * ch - 0.09, ez);
           cornice.rotation.y = yaw;
           levelGroups[iy].add(cornice);
+          registerModule("floor", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.floor[module.floor], cornice);
           stats.corniceCount = (stats.corniceCount ?? 0) + 1;
+          if (module.floor === 1 || module.floor === 3) {
+            const band = mesh(floorBandGeometry, floorBandMaterial, "town-floor-band", 0.009);
+            band.position.set(ex, (iy + 1) * ch - 0.27, ez);
+            band.rotation.y = yaw;
+            levelGroups[iy].add(band);
+          }
         }
         // 底层墙裙
         if (iy === 0) {
           const plinth = mesh(
             plinthGeometry,
-            leanDecor ? (materials.A ?? trimMatLoc) : trimMatLoc,
+            leanDecor ? (materials.A ?? trimMatLoc) : foundationMaterialFor(ix, iz, iy, module.foundation),
             "town-plinth",
             0.016
           );
           plinth.position.set(ex, 0.24, ez);
           plinth.rotation.y = yaw;
           levelGroups[0].add(plinth);
+          registerModule("foundation", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.foundation[module.foundation], plinth);
           stats.plinthCount = (stats.plinthCount ?? 0) + 1;
         }
         // 石砌横缝：软融合模式下省略（描边+缝线会把岛城画成铁笼）
@@ -1688,12 +2006,16 @@ export function buildCitadelTown(spec, ctx) {
           grout.rotation.y = yaw;
           levelGroups[iy].add(grout);
         }
-        // 阳台：外露面 + 上方开空（外墙）+ 户种子 30%
+        // 阳台：外露面 + 上方开空（外墙）+ 户种子概率；高山城堡增加
+        // 屋檐、花箱和少量彩色遮篷，形成参考图里的街道层次。
         const balconySeed = (house.seed ^ (dx * 911 + dz * 313)) >>> 0;
-        const wantsBalcony = (balconySeed % 100) < 30;
+        const balconyChance = iy <= 2 ? 48 : 34;
+        const wantsBalcony = (balconySeed % 100) < balconyChance;
         const aboveOpen = at(ix + dx, iy + 1, iz + dz) === ".";
         if (iy >= 1 && aboveOpen && wantsBalcony) {
-          const slab = mesh(balconySlabGeometry, charMat, "town-balcony", 0.014);
+          const balconyMaterial = balconyMaterialFor(ix, iz, iy, module.balcony);
+          const railMaterial = fenceMaterialFor(ix, iz, iy, module.fence);
+          const slab = mesh(balconySlabGeometry, balconyMaterial, "town-balcony", 0.014);
           slab.position.set(
             cx(ix) + dx * (cs / 2 + 0.26),
             iy * ch + 0.42,
@@ -1701,8 +2023,9 @@ export function buildCitadelTown(spec, ctx) {
           );
           slab.rotation.y = yaw;
           levelGroups[iy].add(slab);
+          registerModule("balcony", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.balcony[module.balcony], slab);
           for (const off of [-0.34, 0, 0.34]) {
-            const post = mesh(balconyRailPostGeometry, trimMatLoc, "town-balcony-rail", 0.01);
+            const post = mesh(balconyRailPostGeometry, railMaterial, "town-balcony-rail", 0.01);
             post.position.set(
               cx(ix) + dx * (cs / 2 + 0.26) + (dz !== 0 ? off : 0),
               iy * ch + 0.42 + 0.25,
@@ -1710,7 +2033,7 @@ export function buildCitadelTown(spec, ctx) {
             );
             levelGroups[iy].add(post);
           }
-          const bar = mesh(balconyRailBarGeometry, trimMatLoc, "town-balcony-rail", 0.01);
+          const bar = mesh(balconyRailBarGeometry, railMaterial, "town-balcony-rail", 0.01);
           bar.position.set(
             cx(ix) + dx * (cs / 2 + 0.26),
             iy * ch + 0.42 + 0.46,
@@ -1718,7 +2041,67 @@ export function buildCitadelTown(spec, ctx) {
           );
           bar.rotation.y = yaw;
           levelGroups[iy].add(bar);
+          const planter = mesh(flowerBoxGeometry, balconyMaterial, "town-balcony-flowerbox", 0.008);
+          planter.position.set(
+            cx(ix) + dx * (cs / 2 + 0.48),
+            iy * ch + 0.77,
+            cz(iz) + dz * (cs / 2 + 0.48)
+          );
+          planter.rotation.y = yaw;
+          levelGroups[iy].add(planter);
+          // 彩色花砖不是一整块绿色花箱：在花箱外侧加三块小釉砖，
+          // 与 balcony pattern 共同形成 Townscaper 式彩色拼花节奏。
+          for (let tileIndex = 0; tileIndex < 3; tileIndex++) {
+            const tile = mesh(
+              balconyTileAccentGeometry,
+              balconyMaterialFor(ix, iz, iy, module.balcony + tileIndex + 1),
+              "town-balcony-flower-tile",
+              0.006
+            );
+            const off = (tileIndex - 1) * 0.15;
+            tile.position.set(
+              cx(ix) + dx * (cs / 2 + 0.60) + (dz !== 0 ? off : 0),
+              iy * ch + 0.86,
+              cz(iz) + dz * (cs / 2 + 0.60) + (dx !== 0 ? off : 0)
+            );
+            tile.rotation.y = yaw;
+            levelGroups[iy].add(tile);
+          }
+          if ((balconySeed % 100) < 22) {
+            const canopy = mesh(
+              balconyCanopyGeometry,
+              balconyMaterialFor(ix + dx, iz + dz, iy, module.balcony + 2),
+              "town-balcony-canopy",
+              0.012
+            );
+            canopy.position.set(
+              cx(ix) + dx * (cs / 2 + 0.28),
+              iy * ch + 1.02,
+              cz(iz) + dz * (cs / 2 + 0.28)
+            );
+            canopy.rotation.y = yaw;
+            levelGroups[iy].add(canopy);
+          }
           stats.balconyCount = (stats.balconyCount ?? 0) + 1;
+        }
+        // 临街窗的遮阳篷：每户少量触发，使用屋顶色而非墙色，增加彩色节奏。
+        if (iy >= 1 && aboveOpen) {
+          const faceSeed = (house.seed ^ (dx * 131 + dz * 173) ^ (ix * 7 + iz * 11)) >>> 0;
+          if ((faceSeed % 100) < (iy <= 2 ? 24 : 14)) {
+            const awning = mesh(
+              windowAwningGeometry,
+              roofMaterialFor(ix, iz, iy),
+              "town-window-awning",
+              0.01
+            );
+            awning.position.set(
+              cx(ix) + dx * (cs / 2 + 0.11),
+              cy(iy) + 0.58,
+              cz(iz) + dz * (cs / 2 + 0.11)
+            );
+            awning.rotation.y = yaw;
+            levelGroups[iy].add(awning);
+          }
         }
       }
       // 转角壁柱：两相邻方向同时开敞（角格）
@@ -1757,7 +2140,12 @@ export function buildCitadelTown(spec, ctx) {
             const ez = cz(iz) + dz * cs / 2;
             const topY = (iy + 1) * ch;
             for (const offset of [-cs * 0.36, cs * 0.36]) {
-              const post = mesh(fencePostGeometry, materials[char] ?? materials.W, "town-fence", 0.018);
+              const post = mesh(
+                fencePostGeometry,
+                fenceMaterialFor(ix, iz, iy, module.fence),
+                "town-fence",
+                0.018
+              );
               post.position.set(
                 ex + (dz !== 0 ? offset : 0),
                 topY + 0.25,
@@ -1767,12 +2155,13 @@ export function buildCitadelTown(spec, ctx) {
             }
             const rail = mesh(
               dz !== 0 ? fenceRailXGeometry : fenceRailZGeometry,
-              materials[char] ?? materials.W,
+              fenceMaterialFor(ix, iz, iy, module.fence),
               "town-fence",
               0.018
             );
             rail.position.set(ex, topY + 0.46, ez);
             levelGroups[iy].add(rail);
+            registerModule("fence", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.fence[module.fence], rail);
             stats.fenceCount++;
             continue;
           }
@@ -1819,6 +2208,7 @@ export function buildCitadelTown(spec, ctx) {
         const arch = mesh(archGeometry, materials[char] ?? materials.W, "town-arch", 0.035);
         arch.position.set(cx(ix), iy * ch + 0.02, cz(iz));
         levelGroups[iy - 1].add(arch);
+        registerModule("hole", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.hole[module.hole], arch);
         stats.archCount++;
       }
     }
@@ -1827,22 +2217,13 @@ export function buildCitadelTown(spec, ctx) {
     if (isGate) {
       const gate = new THREE.Group();
       gate.name = "town-gate";
-      const recess = mesh(
-        new THREE.BoxGeometry(1.5, 1.9, 0.12),
-        materials.ink,
-        "town-gate-recess",
-        0.03
-      );
-      recess.position.set(0, 0.95, cs / 2 + 0.02);
+      // 正门也是圆拱门洞（与户门同一条拱形几何管线）
+      const recess = mesh(archDoorGeometry(1.5, 1.9, 0.12), materials.ink, "town-gate-recess", 0.03);
+      recess.position.set(0, 0, cs / 2 + 0.02);
       gate.add(recess);
       for (const sx of [-0.36, 0.36]) {
-        const door = mesh(
-          new THREE.BoxGeometry(0.68, 1.7, 0.08),
-          materials.wood,
-          "town-gate-door",
-          0.025
-        );
-        door.position.set(sx, 0.85, cs / 2 + 0.07);
+        const door = mesh(archDoorGeometry(0.68, 1.7, 0.08), materials.wood, "town-gate-door", 0.025);
+        door.position.set(sx, 0, cs / 2 + 0.07);
         gate.add(door);
       }
       for (const sx of [-0.82, 0.82]) {
@@ -1985,6 +2366,9 @@ export function buildCitadelTown(spec, ctx) {
         );
         waterGate.rotation.y = Math.atan2(dx, dz);
         levelGroups[0].add(waterGate);
+        const gateModule = townscaperModuleSelection(ix, 0, iz, at(ix + dx, 0, iz + dz), 4);
+        registerModule("hole", ix, 0, iz, TOWNSCAPER_MODULE_FAMILIES.hole[3], waterGate);
+        waterGate.userData.townModule.variant = TOWNSCAPER_MODULE_FAMILIES.hole[gateModule.hole];
         stats.waterGateCount++;
       }
     }
@@ -2021,6 +2405,99 @@ export function buildCitadelTown(spec, ctx) {
         levelGroups[0].add(seamZ);
         stats.plazaCount++;
       }
+    }
+  }
+
+  // ---------- 规则 4.55：庭院二次坍缩（Townscaper courtyard pass） ----------
+  // 第一轮体块已经决定“墙在哪里”；这里把墙内仍然开敞的空域当作一张
+  // 小型 2D WFC 结果，生成不同于屋顶花园的内院模块。底层内院复用规则
+  // 4.5 的石板地面，避免 z-fighting；高层内院补一块真正的悬空平台。
+  // 水道是外部环境，不参与内院生成。
+  {
+    const courtyardRegions = collectCitadelCourtyardRegions(grid, cols, rows, levels.length);
+    const seenWalls = new Set();
+    const courtyardSurfaceMaterial = materials.plazaStone ?? materials.weatherStone ?? trimMat;
+    const courtyardWallMaterial = materials.trim ?? materials.iron ?? trimMat;
+    for (const region of courtyardRegions) {
+      if (region.terraceFloor === 0 && region.cells.some(([x, z]) => waterReached.has(`${x},${z}`))) continue;
+      const { terraceFloor: iy, cells } = region;
+      const floorY = iy === 0 ? 0.05 : iy * ch + 0.05;
+      // 底层围合空格已经由 plaza 规则铺好；上层才需要新铺庭院台面。
+      if (iy > 0) {
+        for (const [x, z] of cells) {
+          const surface = mesh(
+            new THREE.BoxGeometry(cs * 0.93, 0.08, cs * 0.93),
+            courtyardSurfaceMaterial,
+            "town-courtyard-surface",
+            0.012
+          );
+          surface.position.set(cx(x), floorY, cz(z));
+          levelGroups[iy - 1].add(surface);
+          registerModule("decor", x, iy, z, "courtyard-surface", surface);
+        }
+      }
+
+      // 只在每个围合边缘生成一次低墙，避免相邻内院格重复叠边。
+      for (const [x, z] of cells) {
+        for (const [dx, dz] of DIRS) {
+          if (at(x + dx, iy, z + dz) === ".") continue;
+          const wallKey = `${iy}:${Math.min(x, x + dx)},${Math.min(z, z + dz)}:${dx},${dz}`;
+          if (seenWalls.has(wallKey)) continue;
+          seenWalls.add(wallKey);
+          const wall = mesh(
+            courtyardWallGeometry,
+            courtyardWallMaterial,
+            "town-courtyard-wall",
+            0.012
+          );
+          wall.position.set(
+            cx(x) + dx * cs * 0.5,
+            floorY + 0.17,
+            cz(z) + dz * cs * 0.5
+          );
+          wall.rotation.y = dx !== 0 ? Math.PI / 2 : 0;
+          levelGroups[Math.max(0, iy - 1)].add(wall);
+          registerModule("decor", x, iy, z, "courtyard-wall", wall);
+          stats.courtyardWallCount++;
+        }
+      }
+
+      const [centerX, centerZ] = cells[Math.floor(cells.length / 2)];
+      const basin = mesh(
+        courtyardBasinGeometry,
+        courtyardSurfaceMaterial,
+        "town-courtyard-well",
+        0.014
+      );
+      basin.position.set(cx(centerX), floorY + 0.09, cz(centerZ));
+      levelGroups[Math.max(0, iy - 1)].add(basin);
+      registerModule("decor", centerX, iy, centerZ, "courtyard-well", basin);
+      const basinWater = mesh(
+        courtyardWaterGeometry,
+        materials.water ?? materials.roofTile ?? trimMat,
+        "town-courtyard-water",
+        0.006
+      );
+      basinWater.position.set(cx(centerX), floorY + 0.165, cz(centerZ));
+      levelGroups[Math.max(0, iy - 1)].add(basinWater);
+      registerModule("decor", centerX, iy, centerZ, "courtyard-water", basinWater);
+      stats.courtyardWellCount++;
+
+      // 大于一格的内院才放树，留出单格天井的呼吸感；树落在内院台面而非空中。
+      if (cells.length >= 3 && ctx.buildTopiary) {
+        const [treeX, treeZ] = cells[(cells.length * 7919 + iy) % cells.length];
+        const tree = ctx.buildTopiary(
+          `town-courtyard-tree-${stats.shrubCount}`,
+          0.62,
+          ctx.shrubMaterials,
+          random
+        );
+        tree.position.set(cx(treeX), floorY + 0.06, cz(treeZ));
+        levelGroups[Math.max(0, iy - 1)].add(tree);
+        stats.shrubCount++;
+      }
+      stats.courtyardCount++;
+      stats.courtyardCellCount += cells.length;
     }
   }
 
@@ -2095,6 +2572,15 @@ export function buildCitadelTown(spec, ctx) {
       pillar.scale.y = pillarH;
       pillar.position.set(cx(ix), supportTop * ch + pillarH * ch * 0.5, cz(iz));
       levelGroups[iy].add(pillar);
+      const supportModule = townscaperModuleSelection(
+        ix,
+        iy,
+        iz,
+        char,
+        supportTop,
+        openMaskFor(ix, iy, iz)
+      );
+      registerModule("support", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.support[supportModule.support], pillar);
       supportCount++;
       // 四角斜撑（桌腿式）：悬空块底四角 → 承重面中心，只在大悬空（≥2 层）时加
       if (pillarH >= 2) {
@@ -2113,6 +2599,14 @@ export function buildCitadelTown(spec, ctx) {
           strut.position.copy(bot.clone().addScaledVector(dir, len * 0.5));
           strut.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir);
           levelGroups[iy].add(strut);
+          strut.userData.townModule = {
+            family: "support",
+            variant: TOWNSCAPER_MODULE_FAMILIES.support[3],
+            ix,
+            iy,
+            iz,
+            catalogSize: TOWNSCAPER_MODULE_VARIANTS,
+          };
           supportCount++;
         }
       }

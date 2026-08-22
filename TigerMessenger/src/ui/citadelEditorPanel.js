@@ -49,16 +49,18 @@ const DEFAULT_GRID_PX = 12;
 const POS_KEY = "tm.citadelEditor.pos";
 const COLLAPSE_KEY = "tm.citadelEditor.collapsed";
 const DROP_KEY = "tm.citadelEditor.dropToGround";
+// 高山圣城（默认实例）：与 citadelTown.js 的 TOWNSCAPER_HIGHLAND_PALETTE
+// 一一对应——搭建什么色、面板就显示什么色（修复选「薄荷」建成色差问题）。
 const PANEL_CHARS = {
-  0: "#F2F4F4", 1: "#D5DBDB", 2: "#F2F4F4", 3: "#FCF3CF", 4: "#FCF3CF",
-  5: "#E8F8F5", 6: "#E8F8F5", 7: "#D5DBDB", 8: "#D5DBDB", 9: "#D5DBDB",
-  A: "#F2F4F4", B: "#D5DBDB", C: "#E8F8F5", D: "#E8F8F5", E: "#E8F8F5",
-  G: "#D5DBDB",
+  0: "#FFEDC4", 1: "#F0C37C", 2: "#F28E82", 3: "#F6DD45", 4: "#F08A3C",
+  5: "#EF4F67", 6: "#D94F7D", 7: "#46D88E", 8: "#31C46F", 9: "#4F9DE9",
+  A: "#3F88DB", B: "#63D54D", C: "#32CBB2", D: "#B06CCA", E: "#5F78D1",
+  G: "#EEE9D8",
 };
 const CHAR_NAMES = {
-  0: "瓷白", 1: "浅灰蓝", 2: "瓷白", 3: "鹅黄", 4: "鹅黄", 5: "薄荷", 6: "薄荷",
-  7: "浅灰蓝", 8: "浅灰蓝", 9: "浅灰蓝", A: "瓷白", B: "浅灰蓝", C: "薄荷", D: "薄荷",
-  E: "薄荷", G: "正门",
+  0: "奶油白", 1: "暖砂石", 2: "杏粉", 3: "奶油黄", 4: "蜜橙", 5: "珊瑚红", 6: "覆盆子",
+  7: "薄荷绿", 8: "翡翠绿", 9: "天青", A: "湖蓝", B: "鲜草绿", C: "松石绿", D: "灰紫",
+  E: "钴蓝", G: "正门",
 };
 // 运河交汇古堡（canal-junction）：马卡龙色调 15 色，
 // 与 citadelTown.js 的 TOWNSCAPER_CANAL_PALETTE 一一对应。

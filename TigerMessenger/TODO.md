@@ -86,7 +86,367 @@
 
 ## 待办
 
-- （当前无未完成 Grok 项）
+### 高山城堡攻防 V2（Kimi，必须按顺序执行）
+
+> 完整设计与验收标准见 `PLAN.md` 第六章。第一批只做 P0～P1；P1 验收前不得继续扩写 `saihojiPhalanx.js`，也不得开始个体 AI、战斗结算或导演系统。
+>
+> **任务负责人：Kimi。本节 P0～P7 的全部 `[ ]` 待办项均为 Kimi 的任务。**
+
+#### P0 · 基线与可复现（负责人：Kimi）
+
+- [ ] 增加 `citadelCombatV2` 功能开关，关闭时完整保留现有攻城/木马流程。
+- [ ] 建立可注入的种子随机源，清除攻防关键逻辑中的直接 `Math.random()`。
+- [ ] 保存 seed、命令序列和关键战斗事件，支持同输入重放。
+- [ ] 固定港口登陆、门洞瓶颈、跨台地追击、深夜木马双组 4 个回归场景。
+- [ ] 记录现有单位数、到达率、悬空次数、寻路/战斗耗时、胜负与总时长基线。
+- [ ] 验收：同 seed 连跑 3 次事件顺序一致，旧系统测试全过。
+
+#### P1 · 城堡战术导航图（负责人：Kimi；第一批终点）
+
+- [ ] 新建 `src/world/citadelTacticalGraph.js`，生成稳定节点 ID。
+- [ ] 接入台地、建筑门口、庭院、阶梯首尾、城门、梯子、瀑布、港口和木马落地点。
+- [ ] 定义 `walk/stairs/ladder/waterfall-climb/door` 边及宽度、坡度、高差、容量、危险度、方向元数据。
+- [ ] 实现分层 A*、空间占位、窄道容量、短期节点预约与受阻重寻路。
+- [ ] 城堡编辑后增量重建受影响图块，清理失效节点与路径。
+- [ ] 添加调试可视化：节点、边、法线、容量、占位、预约和当前路径。
+- [ ] 新增 `tools/test_citadel_tactical_graph.mjs`。
+- [ ] 验收：跨台地只走合法连接；离表误差 ≤0.15；10 分钟无空中路线、穿墙捷径或无限卡死。
+- [ ] **P1 验收报告提交给主人；得到确认后才开始 P2。**
+
+#### P2 · 小队命令与个体代理（负责人：Kimi；P1 批准后）
+
+- [ ] 新建 `citadelSquadOrder.js` 与 `citadelCombatAgent.js`；小队只给目标/阵型，士兵独立决策。
+- [ ] 落地统一个体数据：角色、命令、意图、目标、路径、体力、勇气、冷却、受阻时间、敌友与威胁方向。
+- [ ] 落地统一状态：idle/move/form/brace/aim/attack/block/recover/stagger/down/retreat/climb/assist。
+- [ ] 决策频率限制为 6～10 Hz，并用滞回抑制目标和状态抖动。
+- [ ] 受阻时可等待、让路、换邻格、重寻路、冲锋或撤退，不再整队平移。
+- [ ] 新增 `tools/test_citadel_combat_agent.mjs`。
+
+#### P3 · 战斗结算与动作（负责人：Kimi）
+
+- [ ] 新建 `citadelCombatResolver.js` 与 `citadelCombatAnimation.js`，分离规则和表现。
+- [ ] 攻击按预备/接触/恢复结算；盾牌覆盖角、长枪距离、静止枪墙、视线、遮挡、高地和身体阻挡生效。
+- [ ] 用步态相位驱动跑步及手脚反相摆动；速度控制步频；补转身、阶梯、刺击、格挡、踉跄、倒地动作。
+- [ ] 动画只订阅战斗事件，禁止动画代码自行决定命中。
+
+#### P4 · 日间攻城导演（负责人：Kimi）
+
+- [ ] 新建 `citadelSiegeDirector.js`，攻方支持登陆、集结、突破、破门/架梯、占领、推进、增援、撤退。
+- [ ] 守方支持高地/瓶颈布防、预备队、逐层后撤与反击。
+- [ ] 从 `saihojiPhalanx.js` 拆出职责，停止在巨型状态机内追加特例。
+- [ ] 攻城梯数量与落点由战场评估产生，不再永久固定脚本。
+- [ ] 新增 `tools/test_citadel_siege_director.mjs`。
+
+#### P5 · 深夜木马行动接入（负责人：Kimi）
+
+- [ ] 保留四绳、每绳两次下降、两组首尾火炬手、其余盾牌+长枪、天亮返回马腹。
+- [ ] 瀑布组检查台面 2/1，阶梯组检查台面 5～3；逐屋跑到门口，覆盖完再走合法阶梯换台面。
+- [ ] 攀爬时按距离/体力/高差触发拉扯、推举、搀扶；禁止巡查绳索和队列牵引。
+- [ ] 遭遇守军与返程统一使用战术图、个体代理和战斗结算。
+
+#### P6 · 可读性（负责人：Kimi）
+
+- [ ] 用阵型、姿态、盾枪方向、犹豫、呼喊、音效、火炬和撤退表达内部状态。
+- [ ] 除调试模式外不新增勇气、威胁、命中率等数字 HUD。
+- [ ] 全局镜头能读出台地攻防关系，近战动作和兵器接触仍可辨认。
+
+#### P7 · 性能与最终验收（负责人：Kimi）
+
+- [ ] 加空间哈希、远处低频决策、路径失效重算；单兵路径查询不高于每 0.5 秒一次。
+- [ ] 新增 `test_citadel_combat_replay.mjs` 与 `tools/e2e/citadel_combat_v2_e2e.mjs`。
+- [ ] 150 名活跃单位时战斗系统 P95 CPU ≤5 ms/帧。
+- [ ] 连跑 10 分钟：离表误差 ≤0.15、无悬空巡查、无无限卡阶梯、无队伍互穿。
+- [ ] 同 seed 可复现；日间攻城、夜间木马、天亮回收与城堡热编辑回归全部通过。
+
+### 高山城堡整体配色 V3（负责人：Kimi）
+
+> 研究与完整设计见 `PLAN.md` 第七章；来源为 [Bad North: On Beauty and Strategy](https://deathisawhale.com/2020/02/26/bad-north-beauty-strategy/)。本节所有 `[ ]` 项均为 Kimi 的任务。按 C0→C7 执行；C2 白天/深夜样片给主人确认后，再批量修改船只、士兵与环境。
+
+#### C0 · 固定视觉基线（负责人：Kimi）
+
+- [ ] 固定晴天/落日/雨天/雪天/深夜 5 个时刻与城堡全景/港口/第一层瀑布/攻城/木马 5 个镜头。
+- [ ] 保存当前 25 张基线截图，并记录像素主色、单位/背景明度差、材质数和 draw calls。
+- [ ] 将基线 seed、相机、时刻、天气和战斗阶段写入截图脚本，保证可复现。
+
+#### C1 · 语义主题与回滚开关（负责人：Kimi）
+
+- [ ] 新建 `src/world/citadelVisualTheme.js`，录入 PLAN 7.3 的城堡、船只、士兵、环境和战斗反馈 token。
+- [ ] 增加 `citadelPaletteV3` 开关；关闭时无损回到当前配色。
+- [ ] 统一 sRGB→Linear→输出流程，禁止重复颜色空间转换。
+- [ ] 将 `odysseyCitadel.js`、`citadelRange.js`、`assets/harbor.js`、`saihojiPhalanx.js`、`citadelInfiltration.js`、`dayNight.js`、`weather.js` 的城堡相关散落 Hex 迁移到主题模块。
+- [ ] 新增 `tools/test_citadel_visual_theme.mjs`，检查 token 完整性、颜色格式、状态 grade 和材质缓存。
+
+#### C2 · 城堡与台地样片（负责人：Kimi；主人确认点）
+
+- [ ] 替换高山城堡高纯度逐格色板，按建筑簇执行 38/20/17/13/8/4 墙色权重。
+- [ ] 同一建筑簇最多一个主色+一个相邻辅色；竖柱同色；只在街区边界换色。
+- [ ] 面向阶梯/门口/台地入口的墙面提亮 3%～5%，背面压暗 2%～4%。
+- [ ] 墙体明度抖动限制为 `L* ±2.5`，禁止随机改变色相和饱和度。
+- [ ] 接入灰鲑陶瓦、深蓝灰结构线、粉白正门、灰绿公共石材和彩色阳台花砖。
+- [ ] 校准墙/布/木粗糙度 0.82～0.95、普通材质 metalness=0、黄铜粗糙度/金属度范围。
+- [ ] 输出同机位白天与深夜前后对比图，并提交给主人确认；**未确认不得进入 C3。**
+
+#### C3 · 船只配色（负责人：Kimi）
+
+- [ ] 敌船改为暗酒紫船体+炭灰船底+小面积灰红舷带，鲜红舷带可见面积 ≤12%。
+- [ ] 甲板、桨、帆、绳和撞角全部改用 `ship*` 语义 token。
+- [ ] 战船、港口船、桨手附属船和 Townscaper 水面小船统一阵营主题。
+- [ ] 在晴/雾/雨/逆光/深夜检查船体剪影；保证敌船与血迹红不混淆。
+
+#### C4 · 士兵与阵营配色（负责人：Kimi）
+
+- [ ] 守军统一 `unitDefenderMain/Shade`，攻方与渗透兵统一 `unitAttackerMain/Shade`。
+- [ ] 统一盾面、躯干、旗帜、羽冠、黄铜、钢、皮肤、长枪和弓箭 token。
+- [ ] 羽冠保持当前 1/3 尺寸；只承担阵营辅色，不承担兵种彩虹编码。
+- [ ] 兵种依靠长枪/盾/弓/火炬轮廓识别；旗帜辅色不改写整队服装主体。
+- [ ] 船上桨手、港口巡逻兵、日间方阵和夜间纸兵使用同一阵营映射。
+
+#### C5 · 环境、水体与天气（负责人：Kimi）
+
+- [ ] 高山坡道由现有砂黄改为灰绿谷地→粉白崖壁→浅鼠尾草高台。
+- [ ] 港口、运河、湖泊、梯湖、瀑布和水沫统一 `envWater/Deep/Foam` 色族。
+- [ ] 天空和雾切换为雾蓝灰基准，远景降对比但不吞没五层城堡轮廓。
+- [ ] 实现晴/落日/雨/雪/深夜 grade；基础 token 不得被逐帧累乘污染。
+- [ ] 雨天环境饱和约 82%、角色保留 92%；雪天环境提亮、角色保留 88%；深夜火炬不参与全局降饱和。
+
+#### C6 · 战斗痕迹（负责人：Kimi）
+
+- [ ] 新鲜血迹使用 `battleBloodFresh`，随时间过渡到 `battleBloodDry`。
+- [ ] 血迹、焦痕严格贴合合法承载台面，不悬空、不穿水面、不跨越墙体。
+- [ ] 区分火炬、火灾、燃烧窗与落日的暖色；战斗反馈拥有最高局部色彩优先级。
+- [ ] 战后截图可以从血迹和焦痕读出登陆点、瓶颈和主要交锋路线。
+
+#### C7 · 验收与性能（负责人：Kimi）
+
+- [ ] 新增 `tools/e2e/citadel_palette_v3_e2e.mjs`，自动生成 25 镜头对比矩阵。
+- [ ] 日间单位/背景 `ΔL* ≥18`，深夜 `ΔL* ≥12`，敌我主体 `ΔE00 ≥18`。
+- [ ] 单镜头前三大环境色像素占比 >55%；未交战时战斗红像素占比 <2%。
+- [ ] 色盲模拟检查敌我仍能通过明度、盾枪轮廓和旗形区分。
+- [ ] 材质必须缓存共享，draw calls 相对 C0 基线增幅 ≤5%。
+- [ ] 运行城堡编辑、日间攻城、夜间木马、天亮回收、昼夜和天气既有回归测试。
+- [ ] 提交最终五天气×五镜头对比板、色板清单、性能报告和回滚说明给主人验收。
+
+### Tiger Messenger 总体系统优化 V4（负责人：Grok）
+
+> 完整架构、研究来源、伪代码与验收门槛见 `PLAN.md` 第八章。
+>
+> **本节 G0～G12 的每一个任务均由 Grok 负责。** 不转交 Kimi，不把已有文件的存在误报为任务完成。Grok 必须逐项附：改动文件、测试命令、固定 seed、截图/调试图、性能前后值、回滚开关。
+>
+> **强制顺序：** G0 → G1/G2 第一层瀑布地形/UV 样片 → G3/G4 单建筑簇样片 → G5/G6/G7 单场攻防样片 → G8/G9/G10 → G11 → G12。未通过阶段门，不得全量迁移。
+
+#### G0 · 现状审计、可复现基线与功能开关（负责人：Grok）
+
+- [ ] **[Grok]** 列出 `citadelTown.js`、`citadelRange.js`、`citadelInfiltration.js`、`citadelBlueprint.js`、`citadelTacticalGraph.js`、`combatEvents.js`、`rng.js` 的职责、调用方、行数和重叠能力。
+- [ ] **[Grok]** 审核当前未提交修改；逐个运行蓝图、战术图、战斗重放、Townscaper 规则与士兵风格测试，保留合格实现，禁止覆盖用户/其他代理改动。
+- [ ] **[Grok]** 新增独立开关 `citadelTownV4`、`citadelTerrainUvV2`、`citadelCombatV3`；任一开关关闭均能恢复对应旧系统。
+- [ ] **[Grok]** 固定城堡/地形/战斗 seed，记录命令流和 canonical hash；清除关键路径的 `Math.random()`、时间戳和非稳定 Map 插入顺序依赖。
+- [ ] **[Grok]** 固定 5 个天气 × 5 个镜头、第一层瀑布近景、单格编辑、港口攻城、深夜木马共 29 组基线。
+- [ ] **[Grok]** 记录 FPS、P95 CPU、draw calls、geometry/material/texture 数、JS heap、单位离表误差、寻路失败和 WFC/模块 fallback 次数。
+- [ ] **[Grok]** 提交 G0 报告；同 seed 连跑 3 次 hash 与事件顺序完全一致后才能进入 G1。
+
+实现契约伪代码：
+
+```js
+for (const tick of fixedStep(1 / 60)) {
+  simulation.update(tick, replay.commandsAt(tick), rng.fork(tick));
+  replay.assertOrRecord(tick, simulation.canonicalHash());
+}
+```
+
+#### G1 · CitadelBlueprint、Half-Edge 与主/对偶网格（负责人：Grok）
+
+- [ ] **[Grok]** 将现有 `citadelBlueprint.js` 定为唯一语义真源，补版本迁移、schema 校验、稳定实体 ID 和 canonical serialization。
+- [ ] **[Grok]** 新建纯数据 `world/citadel/topology.js`；不得 import Three.js。
+- [ ] **[Grok]** 实现 Half-Edge 顶点/半边/边/面与 n-gon 邻接、稳定 ID、边界环、非流形/绕序验证。
+- [ ] **[Grok]** 同时构建主网格和对偶网格；主网格承载房屋/角色/导航，对偶网格承载 field/地形/岸线/崖壁 patch。
+- [ ] **[Grok]** 建立主/对偶网格 cross-ID；编辑器、渲染、导航、UV 可从任一对象追溯同一 blueprint 实体。
+- [ ] **[Grok]** 编写拓扑测试：孤点、洞、边界、多边形、旋转/镜像、五层台地、瀑布缺口和故意非流形输入。
+- [ ] **[Grok]** 输出主网格/对偶网格/Half-Edge 方向叠图，并核对第一层瀑布与港口附近拓扑。
+
+```js
+const topology = compileTopology(blueprint);
+topology.halfEdge.validate({ manifold: true, winding: "ccw" });
+assertStableCrossIds(topology.main, topology.dual);
+```
+
+#### G2 · 地形地貌、SurfaceProvider 与 UV 构建（负责人：Grok）
+
+- [ ] **[Grok]** 拆出 `terrainGenerator.js`、`terrainUvCompiler.js`、`surfaceProvider.js`；旧 `citadelRange.js` 暂作适配入口，不整文件推倒重写。
+- [ ] **[Grok]** 按“锚点→排水→柔坡→断崖→侵蚀→路线验证”实现确定性地形 passes；每个 pass 可单步、暂停和导出。
+- [ ] **[Grok]** 在生成前锁定城门、阶梯、港口、运河、瀑布和道路；长窄有向结构不得交给 WFC 随机碰运气。
+- [ ] **[Grok]** 检测并修复无出口局部最低点；保留明确的水池例外并记录 outlet。
+- [ ] **[Grok]** `SurfaceProvider` 统一提供 point/normal/tangent/surfaceId/terraceId/regionId/edgeDistance；替换城堡范围内重复高度真源。
+- [ ] **[Grok]** 将面分类为顶面/柔坡/断崖/阶梯/道路/运河/瀑布/岸线/建筑，按语义与夹角生成 UV chart。
+- [ ] **[Grok]** 实现 chart 切线平行传输、沿等高线/流向定向、稳定原点和世界尺度 texel density。
+- [ ] **[Grok]** 断崖接入 triplanar/world projection；道路/阶梯/运河/瀑布的 V 沿里程连续且单调。
+- [ ] **[Grok]** 写入 `uv1.edgeDistance/slope` 或等价通道，用于接缝混合、崖脚污迹、泡沫和语义轮廓。
+- [ ] **[Grok]** 实现 UV 调试层：chart 色、切线、流向、texel density、硬缝、翻转、非有限值和 seam blend。
+- [ ] **[Grok]** 先只交付“第一层瀑布 + 相邻两块台地”样片；明显接缝像素 <1%、texel 密度偏差 ≤15%、路线全部连通后才能全地形迁移。
+
+```js
+const terrain = pipeline(blueprint)
+  .stampRequiredRoutes()
+  .solveDrainage({ forbidLocalMinima: true })
+  .relaxSoftSlopes()
+  .sharpenCliffs()
+  .validateConnections();
+const charts = compileTerrainUV(terrain.halfEdge, terrain.surfaceField);
+```
+
+#### G3 · Townscaper 模块目录、socket 与求解器（负责人：Grok）
+
+- [ ] **[Grok]** 将当前八类模块家族迁入 `moduleCatalog.js`，每个模块补 `id/family/role/sockets/requires/forbids/transforms/paletteSlots/weight/rarity/meshFactory`。
+- [ ] **[Grok]** 明确 `2450` 是组合空间/覆盖指标，不把现有常量冒充 2450 个已完成资产。
+- [ ] **[Grok]** 建立楼层、转角、屋顶、围栏、地基、阳台、挖洞、楼梯、支架、桥、门窗、烟囱、衣绳、花箱、灯和运河门最低模块集。
+- [ ] **[Grok]** 编码 6 邻接、对角邻接、暴露面、承重、路线净空、门口/水边/悬挑语义签名。
+- [ ] **[Grok]** 实现 socket 约束传播、稳定加权选型、有限回溯、可解释 fallback 和最小冲突报告。
+- [ ] **[Grok]** 门口、完整阶梯、道路、运河、水门和攻防必经路线先锁定；局部模块求解不得破坏它们。
+- [ ] **[Grok]** 新增模块覆盖工具；对 100 个固定 seed 记录 candidate/selected/rejected reason/first seed。
+- [ ] **[Grok]** 条件可满足但从未出现的稀有模块逐个审查条件/权重，禁止以全局随机重试解决。
+- [ ] **[Grok]** 阳台步行面统一接入彩色花砖角色，禁止绿色草坪材质回归。
+
+```js
+const candidates = catalog.match(encodeSignature(cell, world))
+  .filter(module => satisfiesSockets(module, cell, world))
+  .filter(module => preservesRequiredRoutes(module, cell, world));
+return candidates.length
+  ? deterministicWeightedPick(candidates, hash(seed, cell.id))
+  : explainableFallback(cell);
+```
+
+#### G4 · 古堡增量构建、鲜艳协调配色与单簇样片（负责人：Grok）
+
+- [ ] **[Grok]** 新建 `incrementalBuilder.js`；blueprint transaction 只重建变更 cell 两环邻域及关联 UV/surface/nav patch。
+- [ ] **[Grok]** 常规单格编辑不得全量重建五层古堡；P95 ≤16 ms，批量编辑分帧并显示进度。
+- [ ] **[Grok]** 每个建筑簇分配一主墙色、一相邻辅色和一个花砖 accent；同一竖向户保持色族一致。
+- [ ] **[Grok]** 恢复 Townscaper 式鲜艳度和明度协调，远景读建筑簇、近景读组件；禁止逐格随机彩虹和全局灰化。
+- [ ] **[Grok]** 建立墙、陶瓦、阳台花砖、门窗、围栏、支架、公共石材的语义材质和共享缓存。
+- [ ] **[Grok]** 彩砖至少 4 套受控釉色/图案；只用于阳台、露台边带和小广场，可见面积占单栋 2%～12%。
+- [ ] **[Grok]** 输出一栋完整建筑簇样片，必须同屏含楼层、地基、围栏、彩砖阳台、楼梯、支架、门洞、屋顶和 3 类装饰。
+- [ ] **[Grok]** 样片经主人确认后才能迁移全城；确认前不批量删除旧构建路径。
+
+```js
+const dirty = expandTopologyNeighborhood(diffBlueprint(before, after).cells, 2);
+for (const id of stableTopologicalSort(dirty)) meshPool.replace(id, buildResolvedCell(id));
+patchUVSurfaceAndNavigation(dirty);
+```
+
+#### G5 · 真实表面战术图与路径（负责人：Grok）
+
+- [ ] **[Grok]** 审核并适配现有 `citadelTacticalGraph.js`；保留合格 A*/预约/增量逻辑，不重复创建第二张图。
+- [ ] **[Grok]** 图节点改由真实 walk surface 与 portal 产生；固定半径环节点只能作为临时回退/调试，不作最终真源。
+- [ ] **[Grok]** 接入 walk/stairs/door/ladder/waterfall-climb/bridge 边及宽度、坡度、容量、危险和方向。
+- [ ] **[Grok]** 路径分区域 A*、portal funnel、当前多边形内局部避让；局部避让无权跨墙、崖边或台地。
+- [ ] **[Grok]** 每个路径点携带 surface/terrace/edgeType/normal；surface 不一致立即刹车并重寻路。
+- [ ] **[Grok]** 普通 walk 边高差 ≤0.22；跨台地只允许 stairs/ladder/waterfall-climb。
+- [ ] **[Grok]** 固定测试港口→城门、木马→台面 5、台面 5→1、瀑布底→台面 2/1、所有逐屋门口路线。
+- [ ] **[Grok]** 连跑 10 分钟：离表误差 ≤0.15，无空中抄近路、穿墙、跨崖、无限卡阶梯。
+
+```js
+const regions = graph.aStar(start.regionId, goal.regionId, edgeCost(agent));
+const points = funnel(start.point, goal.point, graph.toPortals(regions));
+return constrainToSurfaces(points, regions, surfaceProvider);
+```
+
+#### G6 · 小队命令、单兵决策、跑步与攀爬协作（负责人：Grok）
+
+- [ ] **[Grok]** 统一纸士兵、守军、攻城兵和港口兵为 `CombatAgent`；外观与行为数据分离。
+- [ ] **[Grok]** 实现 `SquadDirector`：小队只发布目标/阵型/优先级/撤退条件，禁止整队位置插值。
+- [ ] **[Grok]** 实现单兵 intent utility + 0.12 滞回；决策 8 Hz、路径重算最高 2 Hz、动画 60 Hz。
+- [ ] **[Grok]** 当前路径受阻时按等待、让路、换槽位、重寻路、协助、撤退处理，不互相穿过。
+- [ ] **[Grok]** 运动 motor 每帧投影到当前 surface polygon；越界或采样失败立即刹车。
+- [ ] **[Grok]** 步态相位由真实速度/步长计算；左右腿反相、手臂与对侧腿反相，停止平滑收敛。
+- [ ] **[Grok]** 区分持盾、双手持长枪和左手火炬的上身摆动；补转身、上/下阶、制动、刺击、格挡、踉跄、倒地。
+- [ ] **[Grok]** 攀爬者按 hold 分散；实现成对 `pull/push/brace/reach` 事件，上拉、下推、搀扶必须有真实 partner。
+- [ ] **[Grok]** 输出低速/快跑/阶梯/柔坡/瀑布攀爬五类动作近景及 60 秒无滑步/悬空回归。
+
+```js
+agent.intent = maxWithHysteresis(scoreAllIntents(agent, world), agent.intent, 0.12);
+const hit = surfaceProvider.projectTo(agent.path.currentSurfaceId, proposedPosition);
+if (!hit || hit.edgeDistance < agent.radius) requestRepathAndBrake(agent);
+```
+
+#### G7 · 长枪盾牌战斗、攻城导演与木马全流程（负责人：Grok）
+
+- [ ] **[Grok]** 将纸士兵短剑全部替换为长枪；其余规则保持：普通兵左盾右枪，首尾火炬手左火炬且无盾。
+- [ ] **[Grok]** 战斗规则与动画分层；只有 `combatResolver` 判定命中/格挡，动画只消费事件。
+- [ ] **[Grok]** 实现长枪 reach、枪墙、转向半径、近身劣势、刺击 windup/contact/recover。
+- [ ] **[Grok]** 实现盾牌覆盖角、身体/武器遮挡、高地、队形支援、体力、踉跄、倒地和撤退。
+- [ ] **[Grok]** 攻城导演只发布登陆/集结/突破/占门/上阶/推进/撤退命令；不得瞬移或越过战术图。
+- [ ] **[Grok]** 守军实现高地/瓶颈布防、预备队、逐层后撤和反击。
+- [ ] **[Grok]** 木马保持四根绳索、每绳两次下降、两组首尾火炬手、天亮返回马腹。
+- [ ] **[Grok]** 瀑布组检查台面 2/1，阶梯组检查台面 5～3；到台面后按空间分区分散逐屋跑到门口排查。
+- [ ] **[Grok]** 每完成一台面覆盖才进入下一台面；不同台面间严格走阶梯/合法攀爬 portal。
+- [ ] **[Grok]** 血迹、倒地、焦痕只从战斗事件产生并投射到合法 surface，不悬空、不穿水。
+- [ ] **[Grok]** 先交付港口登陆→一段阶梯→单层交战样片；路径、跑步、盾枪、结算通过后才接完整木马与五层攻防。
+
+```js
+if (attack.phase === "contact" && inReach(attacker, defender) && hasLineOfSight(attacker, defender)) {
+  combatEvents.emit(resolveShieldOrBodyImpact(attacker, defender, tacticalContext));
+}
+```
+
+#### G8 · 环境、材质、轮廓、昼夜与天气（负责人：Grok）
+
+- [ ] **[Grok]** 新建/收敛 `visualTheme.js`；城堡、台地、水、士兵、船、火炬、血迹只引用语义 token。
+- [ ] **[Grok]** 基础 token → weather grade → day grade → readability clamp，只读求值，禁止逐帧累乘污染材质。
+- [ ] **[Grok]** 保持主人已确认的天空贴图旋转，不擅自恢复旧角度。
+- [ ] **[Grok]** 草地/树叶 billboard 轮廓按表面/背景对比和深度差增强；内部线弱、轮廓线强，转相机不闪。
+- [ ] **[Grok]** 用 AO、接触阴影、门洞暗部和阶梯投影建立层次，禁止每个模块统一纯黑描边。
+- [ ] **[Grok]** 深夜火炬只影响邻近 surface/人物剪影；固定 tick 噪声保证重放一致。
+- [ ] **[Grok]** 晴、落日、雨、雪、深夜中保持古堡鲜艳协调、单位可读、路线可辨和水陆层次。
+
+#### G9 · 编辑器事务与算法可视化（负责人：Grok）
+
+- [ ] **[Grok]** 城堡编辑器只提交 blueprint transaction；禁止直接永久改 Mesh 顶点作为数据真源。
+- [ ] **[Grok]** 实现 undo/redo、schema 校验、冲突提示、版本号和重放记录。
+- [ ] **[Grok]** 增加主/对偶网格、Half-Edge、地形 pass、UV、模块、导航、Agent、战斗、性能九类调试层。
+- [ ] **[Grok]** 每类调试对象都显示稳定 ID，可从画面反查 blueprint/module/surface/agent/event。
+- [ ] **[Grok]** 生成器支持逐 pass 暂停、单步、固定 seed 重播和 JSON 导出；展示延迟不得改变生产算法结果。
+- [ ] **[Grok]** 热编辑后验证 UV、surface、战术图、任务锚点和正在行动的士兵路径同步 patch。
+
+```js
+const tx = validateAndNormalize(editorCommand, blueprintStore.current());
+if (tx.ok) applyCitadelEdit(tx); else editor.showConflict(tx.errors);
+```
+
+#### G10 · 性能、资源生命周期与压力测试（负责人：Grok）
+
+- [ ] **[Grok]** Worker 化前先通过确定性测试；Worker 只返回稳定排序纯数据 patch，不操作 Three.js。
+- [ ] **[Grok]** 模块几何/材质合批，士兵共享资源；禁止每兵、每砖、每墙 clone 材质。
+- [ ] **[Grok]** `SurfaceProvider` 使用 BVH/空间哈希；战术图、威胁图、覆盖图和路径按 dirty region 更新。
+- [ ] **[Grok]** 建立 `ResourceRegistry` 管理 geometry/material/texture/CanvasTexture 引用计数与释放。
+- [ ] **[Grok]** 近景动画 60 Hz，近景决策 8 Hz，远景 2～4 Hz；降频不得跳过 contact tick。
+- [ ] **[Grok]** 达标：单格编辑 P95 ≤16 ms；150 人模拟 P95 ≤5 ms/帧；固定镜头平均 ≥50 FPS。
+- [ ] **[Grok]** 材质数增幅 ≤10%、draw calls 增幅 ≤8%；10 分钟热编辑/战斗后 GPU 资源数回稳。
+
+#### G11 · Tiger Messenger 其他系统适配与存档迁移（负责人：Grok）
+
+- [ ] **[Grok]** 将 `messengerIsland.js` 降至 600 行以内，只保留装配；出生、任务、交通、城堡、天气接线分模块。
+- [ ] **[Grok]** 玩家、电车、船、木马统一 `SurfaceRider` 接口；只有可搭乘对象实现 `Mountable`，不共享战斗 AI。
+- [ ] **[Grok]** quest 目标引用稳定 `worldEntityId`；编辑地形/建筑后信件收发点不丢失。
+- [ ] **[Grok]** 昼夜/天气只发布环境状态；音频订阅 surface/event 语义决定脚步、瀑布、门洞、战斗和火炬音效。
+- [ ] **[Grok]** 存档保存 blueprint/seed/玩家/任务关键状态，不序列化 Three.js 对象。
+- [ ] **[Grok]** 建立逐版本 migration、备份、失败回滚和旧存档夹具；每版迁移后 canonical hash 稳定。
+- [ ] **[Grok]** 电车、莫比斯城、书店、出生营地、信件任务、天气、木马逐个适配，每迁一个先跑完整旧回归。
+
+```js
+while (save.version < CURRENT_SAVE_VERSION) save = MIGRATIONS[save.version](save);
+return canonicalize(validateSave(save));
+```
+
+#### G12 · 最终回归、清理与交付（负责人：Grok）
+
+- [ ] **[Grok]** 新增拓扑、排水、UV、模块覆盖、增量编辑、SurfaceProvider、路径、Agent、战斗、存档迁移的 Node 测试。
+- [ ] **[Grok]** 新增第一层瀑布、全城、港口攻防、阶梯、五层巡查、深夜木马、天亮回收的浏览器 E2E。
+- [ ] **[Grok]** 运行 5 天气 × 5 镜头视觉矩阵和色盲/明度检查；保存 V3/V4 前后对比板。
+- [ ] **[Grok]** 固定 seed 三次重放；canonical hash、战斗事件、路径选择和模块结果完全一致。
+- [ ] **[Grok]** 运行 10 分钟压力测试：无离表 >0.15、悬空、穿墙、跨崖、卡阶、路径抖动或资源持续增长。
+- [ ] **[Grok]** 逐开关验证 `citadelTownV4/citadelTerrainUvV2/citadelCombatV3` 回退路径。
+- [ ] **[Grok]** 只有在调用扫描、旧开关回归和存档迁移均通过后才删除旧适配代码。
+- [ ] **[Grok]** 更新模块目录、数据 schema、事件表、性能报告、已知限制、迁移/回滚文档。
+- [ ] **[Grok]** 每项 TODO 回填证据：文件、测试命令、结果、截图、seed、性能值；不得只把 `[ ]` 改成 `[x]`。
+- [ ] **[Grok]** 提交给主人最终验收；主人确认前不合并破坏旧系统的清理提交。
 
 ## 已完成（续）
 

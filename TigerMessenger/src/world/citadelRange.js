@@ -14,7 +14,7 @@
 import * as THREE from "three";
 import { latLonToDir } from "./sphereMath.js";
 import { canyonOffsetDir, canyonOffsetDirSmooth } from "./canyon.js";
-import { P } from "../core/params.js";
+import { P, FEATURES } from "../core/params.js";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { createMangaWaterfall } from "./mangaWaterfall.js";
 import {
@@ -34,6 +34,7 @@ import { createCitadelMoat, CITADEL_MOAT_SPEC } from "../assets/citadelMoat.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
 import { createTieSoldier } from "../assets/harbor.js";
 import { createCitadelNightInfiltration } from "./citadelInfiltration.js";
+import { createCombatEventLog } from "./combatEvents.js";
 import { tickObjectSedation } from "./tranquilizer.js";
 import { CANAL_WATER_LIFT, CANAL_HALF_WIDTH, CANAL_LIP_WIDTH, CANAL_BANK_COLOR, CANAL_LIP_COLOR, sweepPrism } from "./canalSystem.js";
 import { createNavonaCanalPlaza } from "./navonaPlaza.js";
@@ -302,6 +303,16 @@ export function citadelWalkLiftLocal(lx, lz) {
   return Math.max(citadelRangeLiftLocal(lx, lz), citadelTerraceWalkLiftLocal(lx, lz));
 }
 
+/** P1 · 战术导航图数据源：台地间折返石阶连接表（随编辑器热重建自动刷新，返回拷贝） */
+export function citadelWalkFlights() {
+  return walkFlights.map((f) => ({ ...f }));
+}
+
+/** P1 · 战术导航图数据源：台地度量表（terraceIndex/radius/height/bottom/top，返回拷贝） */
+export function citadelWalkMetrics() {
+  return walkMetrics.map((m) => ({ ...m }));
+}
+
 /**
  * 世界方向 → 可行走高程（域外恒 0）。仅供 collision.js 落脚判定；
  * 视觉网格与选址仍用 citadelRangeLiftDir，不受台地/台阶影响。
@@ -320,6 +331,16 @@ export function citadelWalkLiftDir(dir) {
 /** 站点方向（单位向量，拷贝进 out；不传则返回新向量） */
 export function citadelSiteDir(out = new THREE.Vector3()) {
   return out.copy(_site);
+}
+
+/** 世界坐标 → 站点局部 (lx, lz)（切平面投影；P1 导航图锚点换算用） */
+export function rangeWorldToLocal(worldPos, out = { x: 0, z: 0 }) {
+  _o.copy(worldPos).normalize();
+  _o.addScaledVector(_site, -_o.dot(_site)); // 切向偏移（单位球近似）
+  const k = 160; // 与 citadelWalkLiftDir 同约定：切向偏移放大为世界单位
+  out.x = _o.dot(_right) * k;
+  out.z = _o.dot(_fwd) * k;
+  return out;
 }
 
 function rangePart(geometry, material, name, outline = 0.04) {
@@ -1757,6 +1778,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       stairTransferRoutes: infiltrationRoutes.stairTransferRoutes,
       patrolCastle,
       patrolSurfacePoint: infiltrationRoutes.patrolSurfacePoint,
+      events: createCombatEventLog({ seed: FEATURES.combatSeed, scenario: "infiltration" }),
     });
     trojanHorse.userData.nightInfiltration = nightInfiltration.root;
 

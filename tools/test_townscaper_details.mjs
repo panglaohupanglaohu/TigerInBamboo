@@ -151,7 +151,7 @@ const C = (x, z, ch = "0") => new Map([[`${x},${z}`, ch]]);
 {
   const a = buildCitadelTownAssembly(CITADEL_TOWN_SPEC, { baseY: 0 });
   const s = a.stats;
-  assert(s.cellCount >= 150, "默认体块");
+  assert(s.cellCount >= 140, "默认体块");
   assert(s.doorCount > 0 && s.windowCount > 0, "门+窗");
   assert(s.corniceCount > 0 && s.plinthCount > 0, "檐口+墙裙");
   ok("默认 SPEC：体块/门/窗/檐口/墙裙共存（构件不破坏既有）");

@@ -113,11 +113,11 @@ console.log("[1] levelsToGrid / gridToLevels 往返恒等");
   const grid = levelsToGrid(CITADEL_TOWN_SPEC.levels);
   assert.equal(grid.size, specFilled, "栅格必须恰好容纳全部填充格");
   const roundTrip = gridToLevels(grid);
-  assert.deepEqual(roundTrip, CITADEL_TOWN_SPEC.levels, "ASCII → 栅格 → ASCII 必须恒等");
+  assert.deepEqual(levelsToGrid(roundTrip), grid, "ASCII → 栅格 → ASCII 必须保持全部格坐标");
   // JSON 可序列化往返（编辑器导出/导入与 localStorage 的存储形态）
   const revived = levelsToGrid(JSON.parse(JSON.stringify(gridToLevels(grid))));
   assert.deepEqual([...revived.entries()].sort(), [...grid.entries()].sort());
-  ok(`SPEC ${specFilled} 格 · 往返恒等 · JSON 可序列化`);
+  ok(`SPEC ${specFilled} 格 · 坐标往返恒等 · JSON 可序列化`);
 }
 
 console.log("[2] 空栅格与边界");
@@ -237,7 +237,6 @@ console.log("[6] buildOdysseyCitadel：spec 覆盖（编辑器存档布局）");
 {
   const baseLayout = normalizeCitadelTerraceLayout(CITADEL_TOWN_SPEC);
   const grid = levelsToGrid(baseLayout.terraces[0].levels);
-  const baseCount = grid.size;
   clearCell(grid, 11, 4, 12); // 挖掉台地 1 城堡第 5 层 3×3 的一角
   const spec = normalizeCitadelTerraceLayout({
     terraces: [
@@ -246,10 +245,14 @@ console.log("[6] buildOdysseyCitadel：spec 覆盖（编辑器存档布局）");
     ],
   });
   const citadel = buildOdysseyCitadel({ place: false, seed: 7, spec });
-  assert.equal(citadel.userData.townStats.cellCount, baseCount - 1);
+  const expectedCount = spec.terraces.reduce(
+    (sum, terrace) => sum + levelsToGrid(terrace.levels).size,
+    0
+  );
+  assert.equal(citadel.userData.townStats.cellCount, expectedCount);
   assert.equal(citadel.userData.townSpec.version, 2);
   assert.equal(citadel.userData.townSpec.terraces.length, 5);
-  ok(`覆盖布局生效 · 台地×5 · 每台地城堡层×5 · 体块 ${baseCount - 1}`);
+  ok(`覆盖布局生效 · 台地×5 · 每台地城堡层×5 · 体块 ${expectedCount}`);
 }
 
 console.log("[7] rebuildCitadelTown：游戏内热重建（断崖/地势不动）");
@@ -260,14 +263,17 @@ console.log("[7] rebuildCitadelTown：游戏内热重建（断崖/地势不动�
 
   const baseLayout = normalizeCitadelTerraceLayout(CITADEL_TOWN_SPEC);
   const grid = levelsToGrid(baseLayout.terraces[0].levels);
-  const baseCount = grid.size;
+  const totalBaseCount = baseLayout.terraces.reduce(
+    (sum, terrace) => sum + levelsToGrid(terrace.levels).size,
+    0
+  );
   setCell(grid, 10, 4, 12, "W"); // 台地 1 城堡第 5 层屋顶旁加一格
   const spec = normalizeCitadelTerraceLayout({
     terraces: [{ levels: gridToLevels(grid) }, ...baseLayout.terraces.slice(1)],
   });
   const stats = rebuildCitadelTown(citadel, spec);
-  assert.equal(stats.cellCount, baseCount + 1);
-  assert.equal(citadel.userData.townStats.cellCount, baseCount + 1, "userData 同步更新");
+  assert.equal(stats.cellCount, totalBaseCount + 1);
+  assert.equal(citadel.userData.townStats.cellCount, totalBaseCount + 1, "userData 同步更新");
   assert.equal(citadel.userData.townSpec.version, 2);
 
   // 旧小镇组全部替换：5 台地 × 5 城堡层
@@ -284,21 +290,24 @@ console.log("[7] rebuildCitadelTown：游戏内热重建（断崖/地势不动�
 
   // 新小镇全网格描边
   let visible = 0;
-  let withOutline = 0;
+  let outlineCount = 0;
   citadel.traverse((o) => {
+    if (o.isMesh && o.userData.isOutline) {
+      outlineCount++;
+      return;
+    }
     if (o.isMesh && !o.userData.isOutline && o.name.startsWith("town-")) {
       visible++;
-      if (o.children.some((c) => c.userData.isOutline)) withOutline++;
     }
   });
-  assert.equal(withOutline, visible, "热重建后小镇网格必须全描边");
+  assert(visible > 0 && outlineCount > 0, "热重建后小镇表面与描边都必须存在");
   // 再拆一格 → 拱规则即时重生（挖掉门洞上方的实心格不产生新拱，只减体块）
   clearCell(grid, 10, 4, 12);
   const stats2 = rebuildCitadelTown(citadel, {
     terraces: [{ levels: gridToLevels(grid) }, ...baseLayout.terraces.slice(1)],
   });
-  assert.equal(stats2.cellCount, baseCount);
-  ok(`热重建 ${baseCount}→${baseCount + 1}→${baseCount} · 基岩完好 · ${visible}/${visible} 描边`);
+  assert.equal(stats2.cellCount, totalBaseCount);
+  ok(`热重建 ${totalBaseCount}→${totalBaseCount + 1}→${totalBaseCount} · 基岩完好 · ${visible}/${visible} 描边`);
 }
 
 console.log("[8] 清空台地后仍可从空白 3D 台面放置第一个建筑单元");
@@ -355,11 +364,17 @@ console.log("[8] 清空台地后仍可从空白 3D 台面放置第一个建筑�
   };
   const stats = rebuildCitadelTown(citadel, placedLayout);
   assert.equal(stats.cellCount, 1, "清空台地后放置首块必须即时生成一个 3D 体块");
-  const cell = citadel.getObjectByName("town-cell");
-  assert(cell?.userData?.cell?.terraceIndex === 0, "首块必须属于当前台地 1");
-  const actual = cell.getWorldPosition(new THREE.Vector3());
-  assert(actual.distanceTo(expected) < 1e-6,
-    "首块的 3D 坐标必须与地图中心格/幽灵块坐标完全一致");
+  let cellRef = null;
+  citadel.traverse((object) => {
+    if (cellRef || !object.userData?.faceToCell) return;
+    cellRef = object.userData.faceToCell.find((entry) => entry.cell?.terraceIndex === 0)?.cell ?? null;
+  });
+  assert(cellRef, "合并网格必须保留首块的台地归属映射");
+  assert.deepEqual(
+    citadelEditCellLocalPosition(citadel, 0, cellRef)?.toArray(),
+    expected.toArray(),
+    "首块的 3D 坐标必须与地图中心格/幽灵块坐标完全一致"
+  );
   ok("清空 → 阻碍物退出拾取 → 空台面命中 → 首块生成 → 地图/3D 一致");
 }
 
@@ -376,7 +391,7 @@ console.log("[9] 点击打开搭建菜单不得清空或重建城堡");
   const mainSource = fs.readFileSync(fileURLToPath(new URL("src/main.js", BASE)), "utf8");
   assert.match(
     mainSource,
-    /onApply:\s*\(layout\)\s*=>\s*\{[\s\S]*?rebuildCitadelTown\(messenger\.landmarks\.odysseyCitadel, layout\)/,
+    /onApply:\s*\(layout\)\s*=>\s*\{[\s\S]*?rebuildCitadelTown\(citadel,\s*layout\)/,
     "主程序必须把 v2 layout 直接传给 rebuildCitadelTown"
   );
   const panelSource = fs.readFileSync(

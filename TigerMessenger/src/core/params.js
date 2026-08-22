@@ -67,5 +67,25 @@ export function resetParams() {
   saveParams();
 }
 
+// ---------- 功能开关（P0 · 高山城堡攻防 V2） ----------
+// 不进 P_DEFAULTS：开关不参与开发者菜单与 localStorage 持久化，
+// 只用 URL 参数控制（?citadelCombatV2=1&seed=42），默认关闭时完整保留现有流程。
+export const FEATURES = {
+  citadelCombatV2: false, // 攻防 V2 总开关：战术导航图 / 个体代理（P0~P1 阶段先接管随机源与事件记录）
+  combatSeed: 1, // 攻防种子随机源；同 seed + 同输入 → 同事件序列
+};
+
+/** 从 URL 查询串读取开关（在场景构建之前调用一次） */
+export function applyUrlOverrides(search) {
+  if (typeof search !== "string" || !search) return;
+  const q = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
+  if (q.get("citadelCombatV2") === "1") FEATURES.citadelCombatV2 = true;
+  const seed = +(q.get("seed") ?? q.get("combatSeed"));
+  if (Number.isFinite(seed)) FEATURES.combatSeed = seed >>> 0;
+}
+
 // 启动时自动加载
 loadParams();
+// URL 开关必须在 import 阶段生效：scenes/registry 在 main.js 顶层加载场景、
+// 场景内部随即创建攻城/木马系统并读取 FEATURES。
+if (typeof location !== "undefined") applyUrlOverrides(location.search);

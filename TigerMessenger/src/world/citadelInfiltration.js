@@ -425,6 +425,7 @@ export function createCitadelNightInfiltration({
   stairTransferRoutes = [],
   patrolCastle = null,
   patrolSurfacePoint = null,
+  events = null, // P0 · 可选 CombatEventLog（本模块零随机，时间轴天然可重放）
 }) {
   _up.copy(siteUp).normalize();
   _right.copy(siteRight).normalize();
@@ -435,7 +436,13 @@ export function createCitadelNightInfiltration({
   const root = new THREE.Group();
   root.name = "citadel-night-infiltration";
   root.visible = false;
+  root.userData.combatEvents = events;
   scene.add(root);
+
+  // P0 事件记录：elapsed/returnElapsed 为模块内时间轴（声明在后，调用时已过初始化）
+  const logEvent = (kind, data) => {
+    if (events) events.record(elapsed, kind, data);
+  };
 
   const ropeMat = new THREE.MeshStandardMaterial({
     color: 0x24170f,
@@ -782,6 +789,7 @@ export function createCitadelNightInfiltration({
       stuck: false,
     };
     record.soldier.userData.javelinPhase = "windup";
+    logEvent("javelin", { index: record.index, key });
     return true;
   };
 
@@ -975,6 +983,7 @@ export function createCitadelNightInfiltration({
   };
 
   const resetForDay = () => {
+    if (events && (active || returning)) logEvent("dayReset");
     active = false;
     returning = false;
     returnElapsed = 0;
@@ -989,6 +998,8 @@ export function createCitadelNightInfiltration({
     assistanceRoot.visible = false;
     for (const record of records) {
       record.soldier.visible = false;
+      record._landedLogged = false;
+      record._stageLogged = null;
       setMovementPose(record, false, false, 0);
       setRecordPose(record, record.anchor, _tmpA.copy(record.dropTarget).sub(record.anchor));
     }
@@ -997,6 +1008,7 @@ export function createCitadelNightInfiltration({
   };
 
   const startNight = () => {
+    logEvent("nightStart");
     active = true;
     returning = false;
     returnElapsed = 0;
@@ -1010,6 +1022,8 @@ export function createCitadelNightInfiltration({
     assistanceRoot.visible = false;
     for (const record of records) {
       record.soldier.visible = false;
+      record._landedLogged = false;
+      record._stageLogged = null;
       setMovementPose(record, false, false, 0);
       setRecordPose(record, record.anchor, _tmpA.copy(record.dropTarget).sub(record.anchor));
     }
@@ -1026,6 +1040,7 @@ export function createCitadelNightInfiltration({
   };
 
   const startReturn = () => {
+    logEvent("returnStart");
     active = false;
     returning = true;
     returnElapsed = 0;
@@ -1190,6 +1205,14 @@ export function createCitadelNightInfiltration({
         setRecordPose(record, _tmpA, _tmpB.copy(record.dropTarget).sub(record.anchor));
         continue;
       }
+      if (!record._landedLogged) {
+        record._landedLogged = true;
+        logEvent("landed", {
+          group: record.group?.userData?.route || "?",
+          index: record.index,
+          rope: record.ropeIndex,
+        });
+      }
 
       // 每名士兵完成自己的绳降后立即出发，不等待整组排成一列；两批士兵
       // 仍按绳索批次落地，但落地后直接进入各自的快速攀登路径。
@@ -1275,7 +1298,17 @@ export function createCitadelNightInfiltration({
               )
           : 1;
         setMovementPose(record, moving, false, sortieElapsed, patrolPace);
-        record.soldier.userData.patrolStage = segment?.kind || "patrol-complete";
+        const stageNow = segment?.kind || "patrol-complete";
+        if (record._stageLogged !== stageNow) {
+          logEvent("patrolStage", {
+            index: record.index,
+            from: record._stageLogged,
+            to: stageNow,
+            terrace: segment?.terraceIndex ?? segment?.toTerrace ?? null,
+          });
+          record._stageLogged = stageNow;
+        }
+        record.soldier.userData.patrolStage = stageNow;
         record.soldier.userData.patrolTerrace = segment?.terraceIndex
           ?? segment?.toTerrace
           ?? null;

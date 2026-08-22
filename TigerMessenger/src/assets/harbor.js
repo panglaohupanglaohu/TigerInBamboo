@@ -440,6 +440,102 @@ export function updateWarshipOars(boat, dt = 1 / 60, moving = false) {
 
   // 剪纸士兵随桨同步划动
   updateWarshipCrew(boat, phase, speed, d);
+
+  // Bad North 式船尾水纹：航行时在船尾吐出扩散白沫环
+  updateBoatWake(boat, d, speed);
+}
+
+// =====================================================================
+//  Bad North 式船尾水纹：白沫扩散环 + 左右舷交替的 V 形编织尾迹
+//  由 updateWarshipOars 内部驱动（speed = 平滑后的划水强度 0..1），
+//  所有调用方（运河船队、攻城增援船、码头战船）自动获得尾迹。
+// =====================================================================
+const WAKE_POOL = 24; // 每船水纹环池（循环复用）
+const WAKE_LIFE = 2.3; // 单环寿命（秒）
+const WAKE_INTERVAL = 0.18; // 全速时的出环间隔（秒）
+const _wakeV = new THREE.Vector3();
+const _wakeUp = new THREE.Vector3();
+const _wakeQ = new THREE.Quaternion();
+const _wakePQ = new THREE.Quaternion();
+const _wakeZ = new THREE.Vector3(0, 0, 1);
+
+function boatWakePool(boat) {
+  let w = boat.userData.wake;
+  if (w) return w;
+  const parent = boat.parent || boat;
+  // 白沫环：内孔外晕的扁平圆环，DoubleSide 免得俯视时背面消失
+  const geo = new THREE.RingGeometry(0.3, 0.52, 20);
+  const pool = [];
+  for (let i = 0; i < WAKE_POOL; i++) {
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0xf4fbff,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    });
+    const ring = new THREE.Mesh(geo, mat);
+    ring.name = "boat-wake-ring";
+    ring.visible = false;
+    ring.renderOrder = 2; // 压过水面底色
+    ring.userData.t = 1e9;
+    parent.add(ring);
+    pool.push(ring);
+  }
+  w = boat.userData.wake = { pool, i: 0, emitT: 0, lateral: 1 };
+  return w;
+}
+
+/**
+ * 战船航行尾迹：船尾周期性吐白色扩散环，左右舷交替偏置织出 V 形尾流；
+ * 环随寿命扩大、淡出。船停（划速≈0）时不吐新环，旧环自然消散。
+ * @param {THREE.Object3D} boat createFisherBoat 的战船
+ * @param {number} dt
+ * @param {number} speed updateWarshipOars 平滑后的划水强度 0..1
+ */
+export function updateBoatWake(boat, dt = 1 / 60, speed = 0) {
+  const w = boatWakePool(boat);
+  const parent = boat.parent;
+  if (!parent) return;
+  const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
+  // 已有环：扩大 + 淡出（先慢后快的扩张模拟涟漪扩散）
+  for (const ring of w.pool) {
+    if (!ring.visible) continue;
+    ring.userData.t += d;
+    const e = ring.userData.t / WAKE_LIFE;
+    if (e >= 1) {
+      ring.visible = false;
+      continue;
+    }
+    ring.scale.setScalar(0.6 + e * 3.4);
+    ring.material.opacity = 0.44 * (1 - e) * (1 - e * 0.35);
+  }
+  // 新环：只在明显前进时吐
+  if (speed > 0.22) {
+    w.emitT -= d;
+    if (w.emitT <= 0) {
+      w.emitT = WAKE_INTERVAL / Math.max(0.35, speed);
+      w.lateral = -w.lateral; // 左右舷交替 → V 形编织
+      const ring = w.pool[w.i++ % w.pool.length];
+      // 船尾入水点：局部 -X 为船尾，y 贴吃水线，z 左右交替
+      _wakeV.set(-2.7, 0.08, w.lateral * 0.36);
+      boat.updateWorldMatrix(true, false);
+      boat.localToWorld(_wakeV);
+      parent.updateWorldMatrix(true, false);
+      parent.worldToLocal(_wakeV);
+      ring.position.copy(_wakeV);
+      // 环面贴水面：环局部 +Z 对齐船体的「上」（当地法线）
+      boat.getWorldQuaternion(_wakePQ);
+      _wakeUp.set(0, 1, 0).applyQuaternion(_wakePQ).normalize();
+      _wakeQ.setFromUnitVectors(_wakeZ, _wakeUp);
+      parent.getWorldQuaternion(_wakePQ).invert();
+      ring.quaternion.copy(_wakePQ).multiply(_wakeQ);
+      ring.userData.t = 0;
+      ring.visible = true;
+    }
+  } else if (w.emitT > 0.08) {
+    w.emitT = 0.08; // 停桨后迅速停止吐环
+  }
 }
 
 /**
@@ -508,7 +604,7 @@ export function sedateWarshipCrewNearest(boat, worldPos, radius = 2.9, duration 
 // =====================================================================
 //  战船剪纸罗马士兵：每支桨配一名，四肢关节随桨相位划动
 //  - 剪纸人：扁平薄片（Z 向薄），所有关节绕面法线旋转（2D 纸偶动画）
-//  - 皮甲（躯干 cuirass + 皮裙 pteruges）+ 罗马青铜盔（galea）+ 大型红羽冠
+//  - Bad North 风格低多边纸偶：块面躯干 + 小型羽冠 + 夸张可读的盾/长枪
 //  - 每船 11 个 InstancedMesh（躯干/皮裙/头/盔/羽冠/羽片/羽轴/双臂/双腿），尺寸
 //    定义在船局部坐标系内，随战船 scale 自然成比例
 // =====================================================================
@@ -545,21 +641,33 @@ function mergeBoxes(defs) {
 let CREW_SHARED = null;
 function crewShared() {
   if (CREW_SHARED) return CREW_SHARED;
+  // 羽冠仍保留罗马识别点，但按纸士兵头部比例压到原设计的 1/3，
+  // 避免角色被一片红羽毛“吃掉”，同时保留远景剪影辨识度。
   const CREST_SCALE = 1 / 3;
   const CREST_BASE_Y = 0.292;
   const m = {
-    leather: toonMat(0x8a5a33), // 皮甲
-    leatherDark: toonMat(0x5c3a22), // 皮裙
+    // 参考 Bad North 的“低多边 + 柔和阵营色 + 深轮廓”关系：
+    // 身体用偏蓝的海岛军服，装备再用米金/红色做少量高对比点。
+    leather: toonMat(0x4d718d), // 蓝灰军服
+    leatherDark: toonMat(0x293c50), // 深蓝裙甲
     skin: toonMat(0xd9a06b), // 头/四肢
-    bronze: toonMat(0xd4a84a), // 罗马盔 — 亮青铜
-    crest: toonMat(0xc62828), // 红色羽冠主体
-    crestDark: toonMat(0x7f1d1d), // 羽毛分层暗部
-    crestLight: toonMat(0xef5350), // 羽轴高光
+    bronze: toonMat(0xd6bd7d), // 柔和黄铜盔
+    crest: toonMat(0xd94d5d), // 红色羽冠主体
+    crestDark: toonMat(0x8b2d3b), // 羽毛分层暗部
+    crestLight: toonMat(0xff9b8e), // 羽轴高光
   };
-  // 部件原点均在关节处；头/盔/冠的颈部位移直接烘焙进几何
-  const box = (w, h, t, ox, oy) => {
-    const geo = new THREE.BoxGeometry(w, h, t);
-    geo.translate(ox, oy, 0);
+  // 部件原点均在关节处；头/盔/冠的颈部位移直接烘焙进几何。
+  /** 带硬切面的椭球块：替代平面盒子，让纸偶在等距视角下仍有体积。 */
+  const lowPolyBody = (radius, sx, sy, sz, ox, oy, oz = 0) => {
+    const geo = new THREE.DodecahedronGeometry(radius, 0);
+    geo.scale(sx, sy, sz);
+    geo.translate(ox, oy, oz);
+    return facet(geo);
+  };
+  /** 关节原点在上端的五边形肢体，方便跑步/攀爬动画继续绕 Z 摆动。 */
+  const lowPolyLimb = (topRadius, bottomRadius, height, ox, oy, oz = 0) => {
+    const geo = new THREE.CylinderGeometry(topRadius, bottomRadius, height, 5);
+    geo.translate(ox, oy, oz);
     return facet(geo);
   };
   /** XY 面剪纸轮廓，Z 向薄挤出；z 用于把羽毛细节叠到羽冠前面。 */
@@ -609,10 +717,7 @@ function crewShared() {
     return merged;
   };
 
-  /**
-   * 大型扇形红羽冠：底部横跨头盔前额至后颈，顶部高高展开。
-   * 纸士兵是侧向剪纸轮廓，因此羽冠也沿 XY 面展开，保留清晰的扇形剪影。
-   */
+  /** 小型扇形红羽冠：保留头盔前额到后颈的扇形识别轮廓。 */
   const crestFan = () => {
     const shape = new THREE.Shape();
     shape.moveTo(-0.205, 0.292);
@@ -673,10 +778,12 @@ function crewShared() {
   };
   const crestDetail = crestFeathers();
   const geo = {
-    torso: box(0.13, 0.17, 0.03, 0, 0.085), // 关节=髋
-    skirt: box(0.15, 0.08, 0.026, 0, -0.04), // 关节=髋（下垂）
+    // Bad North 式“玩具士兵”比例：头/盔略大，身体短厚，四肢用五边形块面。
+    // 几何仍以髋为根，所以船桨、搬运、跑步、攀爬的旧动画无需改坐标契约。
+    torso: lowPolyBody(0.1, 0.86, 1.02, 0.58, 0, 0.092), // 关节=髋
+    skirt: lowPolyBody(0.1, 1.08, 0.48, 0.68, 0, -0.04), // 关节=髋（下垂）
     // 脸从颊护之间露出
-    head: box(0.064, 0.07, 0.024, 0, 0.188),
+    head: lowPolyBody(0.052, 0.9, 1.12, 0.62, 0, 0.188),
     // 罗马 galea 剪纸轮廓：盔碗 + 额檐 + 颈护 + 双颊护 + 羽冠座
     helmet: mergeBoxes([
       [0.118, 0.07, 0.05, 0, 0.252], // 盔碗 calotte
@@ -690,8 +797,8 @@ function crewShared() {
     crest: crestFan(),
     crestFeathers: crestDetail.feathers,
     crestStems: crestDetail.stems,
-    arm: box(0.042, 0.15, 0.02, 0, -0.07), // 关节=肩
-    leg: box(0.048, 0.16, 0.02, 0, -0.075), // 关节=髋
+    arm: lowPolyLimb(0.018, 0.026, 0.15, 0, -0.075), // 关节=肩
+    leg: lowPolyLimb(0.019, 0.028, 0.16, 0, -0.08), // 关节=髋
   };
   CREW_SHARED = { m, geo };
   return CREW_SHARED;
@@ -1529,7 +1636,7 @@ function placeBowString(seg, ax, ay, bx, by) {
   seg.rotation.z = Math.atan2(dx, dy);
 }
 
-export function createLongbowSoldier() {
+export function createLongbowSoldier({ rand = Math.random } = {}) {
   const root = createNightInfiltrationSoldier({ torchLeft: false });
   root.name = "longbow-soldier";
   root.userData.phalanxRole = "longbow";
@@ -1635,10 +1742,10 @@ export function createLongbowSoldier() {
   root.userData.equipment = eq;
   root.userData.bowCycle = {
     phase: "reach",
-    t: Math.random() * 0.18,
+    t: rand() * 0.18,
     draw: 0,
-    holdFor: 0.16 + Math.random() * 0.16,
-    seed: Math.random() * Math.PI * 2,
+    holdFor: 0.16 + rand() * 0.16,
+    seed: rand() * Math.PI * 2,
   };
   poseLongbowGear(root, { draw: 0, showArrow: false });
   return root;
@@ -1722,7 +1829,7 @@ function poseLongbowGear(root, opts = {}) {
  * @param {THREE.Group} root
  * @param {number} dt
  */
-export function updateLongbowShot(root, dt = 0.016) {
+export function updateLongbowShot(root, dt = 0.016, rand = Math.random) {
   if (!root?.userData) return false;
   if (!root.userData.bowCycle) {
     root.userData.bowCycle = {
@@ -1783,7 +1890,7 @@ export function updateLongbowShot(root, dt = 0.016) {
       c.phase = "hold";
       c.t = 0;
       c.draw = 1;
-      if (!c.holdFor) c.holdFor = 0.18 + Math.random() * 0.14;
+      if (!c.holdFor) c.holdFor = 0.18 + rand() * 0.14;
     }
   } else if (c.phase === "hold") {
     const wobble = 0.018 * Math.sin(c.t * 10 + (c.seed || 0));
@@ -1832,18 +1939,18 @@ export function updateLongbowShot(root, dt = 0.016) {
     if (c.t >= 0.16) {
       c.phase = "reach";
       c.t = 0;
-      c.holdFor = 0.16 + Math.random() * 0.16;
+      c.holdFor = 0.16 + rand() * 0.16;
     }
   }
   return released;
 }
 
 /**
- * 夜间潜入城堡的纸士兵：默认左手盾牌、右手长枪。
+ * 夜间潜入城堡的 Bad North 风格纸士兵：默认左手盾牌、右手长枪。
  * torchLeft=true 时左手改火炬（夜探照明），右手仍持长枪。
  *
- * 仍复用码头班组的剪纸罗马士兵几何，装备单独挂在 fig 上，
- * 因而不会改变已有搬运兵的尺寸与动画。
+ * 复用共享的低多边纸偶几何，装备单独挂在 fig 上，
+ * 因而不会改变已有搬运兵、船桨手和城堡巡查动画的尺寸契约。
  * @param {{ torchLeft?: boolean }} [opts]
  * @returns {THREE.Group}
  */
@@ -1851,6 +1958,8 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   const { m, geo } = crewShared();
   const root = buildPorter(m, geo);
   root.name = torchLeft ? "night-torch-soldier" : "night-shield-soldier";
+  root.userData.modelStyle = "bad-north-lowpoly-paper";
+  root.userData.silhouette = "chunky-head-short-body-clear-equipment";
   const { body, armL, armR, legL, legR, crate } = root.userData.parts;
   const fig = root.children[0];
   crate.visible = false;
@@ -1863,9 +1972,10 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   legR.rotation.z = -0.08;
 
   const bronze = m.bronze;
-  const shieldMat = toonMat(0xb8c4c7, { flatShading: true });
-  const shieldRimMat = toonMat(0x65777a, { flatShading: true });
-  const spearWood = toonMat(0x4b3523, { flatShading: true });
+  const shieldMat = toonMat(0x3f6f91, { flatShading: true });
+  const shieldRimMat = toonMat(0xe2c584, { flatShading: true });
+  const shieldBossMat = toonMat(0x2b4359, { flatShading: true });
+  const spearWood = toonMat(0x5c4936, { flatShading: true });
   const flameMat = new THREE.MeshBasicMaterial({ color: 0xffb22e });
   const equipment = new THREE.Group();
   equipment.name = "infiltration-equipment";
@@ -1890,17 +2000,26 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
     torch.add(torchLight);
     equipment.add(torch);
   } else {
-    // 左手圆盾：面朝 +X 前（行进方向）
+    // 左手圆盾：面朝 +X 前（行进方向）。颜色分成蓝面/米金边/深色盾脐，
+    // 让小尺寸士兵在城堡台面上仍能一眼读出“盾兵”轮廓。
     shield = new THREE.Group();
     shield.name = "left-hand-shield";
     const face = part(new THREE.CylinderGeometry(0.1, 0.1, 0.028, 8), shieldMat, 0.008);
-    face.rotation.z = Math.PI / 2; // 盾面朝左右？→ 改朝前
-    face.rotation.y = Math.PI / 2;
+    face.rotation.set(0, 0, Math.PI / 2);
     shield.add(face);
     const rim = part(new THREE.TorusGeometry(0.102, 0.012, 4, 8), shieldRimMat, 0.006);
     rim.rotation.y = Math.PI / 2;
     rim.position.x = 0.02;
     shield.add(rim);
+    const boss = part(new THREE.CylinderGeometry(0.025, 0.025, 0.035, 6), shieldBossMat, 0.005);
+    boss.name = "shield-boss";
+    boss.rotation.z = Math.PI / 2;
+    boss.position.x = 0.028;
+    shield.add(boss);
+    const sigil = part(new THREE.BoxGeometry(0.012, 0.064, 0.022), shieldRimMat, 0.004);
+    sigil.name = "shield-sigil";
+    sigil.position.x = 0.026;
+    shield.add(sigil);
     shield.position.set(-0.16, PORTER_HIP + 0.14, 0.1);
     equipment.add(shield);
   }
@@ -1930,6 +2049,7 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   fig.add(equipment);
   root.userData.equipment = { equipment, shield, spear, torch, torchLight };
   root.userData.torchBearer = !!torchLeft;
+  root.userData.unitClass = torchLeft ? "torch-scout" : "spear-shield-infantry";
   return root;
 }
 

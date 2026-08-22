@@ -7,7 +7,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
-import { P } from "../core/params.js";
+import { P, FEATURES } from "../core/params.js";
 import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
 import { buildHills, carveHillsForTrack } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
@@ -33,6 +33,7 @@ import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { placeMoebiusSwampOnSphere } from "../world/moebiusSwamp.js";
 import { SAIHOJI_ZONES } from "../world/saihoji.js";
 import { createSaihojiPhalanxBattle } from "../world/saihojiPhalanx.js";
+import { createCombatEventLog } from "../world/combatEvents.js";
 import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import {
@@ -73,8 +74,17 @@ import {
   buildCitadelRange,
   citadelRangeLiftDir,
   citadelSiteDir,
+  citadelWalkFlights,
+  citadelWalkLiftLocal,
+  citadelWalkMetrics,
   rangeLocalToWorld,
+  rangeWorldToLocal,
+  CITADEL_CASCADE_POOL_SPECS,
 } from "../world/citadelRange.js";
+import {
+  createCitadelTacticalGraph,
+  createTacticalGraphDebugView,
+} from "../world/citadelTacticalGraph.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
 
 /** 飞艇锚定用临时向量 */
@@ -784,7 +794,67 @@ export const messengerIslandScene = {
       getTram: () => tramSystem,
       getTimeOfDay: () => P.timeOfDay,
       getNightInfiltration: () => citadelRange?.nightInfiltration || null,
+      // P0 · 攻防 V2：注入种子随机源 + 事件日志（开关关闭时行为不变，仅多了可复现性）
+      seed: FEATURES.combatSeed,
+      events: createCombatEventLog({ seed: FEATURES.combatSeed, scenario: "siege" }),
     });
+
+    // ---------- P1 · 城堡战术导航图（?citadelCombatV2=1 启用；?tgDebug=1 叠加可视化） ----------
+    // 数据源全部是已有真源：台地度量/折返石阶/可行走高程（citadelRange 模块级缓存，
+    // 编辑器热重建自动跟随）、城门锚点（townStats.gates）、梯湖（瀑布攀爬点）、
+    // 港口/纳沃纳广场/木马落地点。坐标系 = 站点局部（lx,lz），y = 可行走高程。
+    let tacticalGraph = null;
+    let tacticalGraphView = null;
+    let tgRefreshT = 0;
+    let tgGatesJson = "";
+    const collectCastleGates = () =>
+      (odysseyCitadel.userData.townStats?.gates || []).map((g) => ({
+        terraceIndex: g.terraceIndex,
+        x: g.x,
+        z: g.z,
+        width: 1.4,
+      }));
+    if (FEATURES.citadelCombatV2) {
+      const horseLocal = citadelRange.trojanHorse
+        ? rangeWorldToLocal(citadelRange.trojanHorse.position)
+        : null;
+      const plazaLocal = citadelRange.navonaPlaza
+        ? rangeWorldToLocal(citadelRange.navonaPlaza.getWorldPosition(new THREE.Vector3()))
+        : null;
+      const harborLocal = rangeWorldToLocal(harbor.position);
+      tacticalGraph = createCitadelTacticalGraph({
+        metrics: citadelWalkMetrics(),
+        flights: citadelWalkFlights(),
+        walkLift: citadelWalkLiftLocal,
+        contour: odysseyCitadel.userData.blueprint?.terrain?.config ?? undefined,
+        gates: collectCastleGates(),
+        extras: {
+          waterfalls: (CITADEL_CASCADE_POOL_SPECS || []).map((p) => ({ x: p.x, z: p.z })),
+          harbor: harborLocal,
+          plaza: plazaLocal,
+          trojanDrops: horseLocal ? [horseLocal] : [],
+        },
+      });
+      tgGatesJson = JSON.stringify(collectCastleGates());
+      if (new URLSearchParams(location.search).get("tgDebug") === "1") {
+        // 站点局部 (lx,lz,lift) → 世界：与 citadelWalkLiftDir 同约定（k=160 切向展开）
+        const siteUp = citadelSiteDir(new THREE.Vector3());
+        const siteRight = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), siteUp).normalize();
+        const siteFwd = new THREE.Vector3().crossVectors(siteUp, siteRight).normalize();
+        tacticalGraphView = createTacticalGraphDebugView(tacticalGraph, (p) =>
+          siteUp
+            .clone()
+            .addScaledVector(siteRight, p.x / 160)
+            .addScaledVector(siteFwd, p.z / 160)
+            .normalize()
+            .multiplyScalar(R + p.y + 0.25)
+        );
+        scene.add(tacticalGraphView.root);
+      }
+      console.info(
+        `[citadelCombatV2] 战术导航图就绪：${JSON.stringify(tacticalGraph.stats())}`
+      );
+    }
 
     // 可变 landmarks：装船物流换船时更新 boat 引用
     messengerLandmarks = {
@@ -814,6 +884,7 @@ export const messengerIslandScene = {
       escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
       aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
       saihojiPhalanx, // 鼓息+鲸起后战船运罗马方阵至西芳寺射飞艇
+      tacticalGraph, // P1 · 城堡战术导航图（?citadelCombatV2=1 时非 null）
       mossSaihoji, // 厚涂苔丘 · 西芳寺缘
       moebiusSwamp, // 莫比斯湖沼（默认在水晶城旁 · 地图编辑器可拖动）
       canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
@@ -889,6 +960,23 @@ export const messengerIslandScene = {
         // 沿城↔书店航迹扫描近区：有概率发现湖沼 → 再蜂鸟吸蜜
         updateAircraftHover(aircraftSquad, t, dt, { swamp: swampRoot });
         saihojiPhalanx?.update?.(dt, t);
+
+        // P1 · 战术导航图：预约时钟 + 编辑器热重建后的增量刷新（1Hz 签名比对）
+        if (tacticalGraph) {
+          tacticalGraph.tick(dt);
+          tgRefreshT -= dt;
+          if (tgRefreshT <= 0) {
+            tgRefreshT = 1;
+            const changed = tacticalGraph.rebuildChanged(citadelWalkMetrics(), citadelWalkFlights());
+            const gatesNow = JSON.stringify(collectCastleGates());
+            if (gatesNow !== tgGatesJson) {
+              tgGatesJson = gatesNow;
+              tacticalGraph.refreshGates(collectCastleGates());
+              tacticalGraphView?.rebuild();
+            }
+            if (changed.length) tacticalGraphView?.rebuild();
+          }
+        }
 
         // 飞艇跟随湖沼：找到地图放置的 moebiusSwamp 后锚到其正上方；
         // 地图编辑器移动湖沼时（位置变化）自动重新锚定。

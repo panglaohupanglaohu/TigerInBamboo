@@ -28,6 +28,7 @@ import {
   emptyBoatCrew,
 } from "../assets/harbor.js";
 import { P } from "../core/params.js";
+import { createRng } from "../core/rng.js";
 
 const SHIP_COUNT = 2;
 const SHIP_GAP = 16;
@@ -62,15 +63,22 @@ const SIEGE_CLIMB_SEC = 4.2; // 单人爬梯耗时
 /** 深夜抵达时强制拨回傍晚后，至少演完这么久再进深夜清场 */
 const SIEGE_MIN_DAY_SEC = 62;
 const RED_LONGBOW_COUNT = 4; // 红盔长弓手（少量，居高俯射防守）
-// 攻城战斗数值（红蓝双方同规则）：
-//  瘫倒 = 1 次近战（短剑/长矛）或 2 支羽箭 —— 倒地失去战斗力，仍可见可被补刀
-//  击杀 = 2 次近战（短剑/长矛）或 4 支羽箭 —— 倒地淡出消失
+// 攻城战斗数值（Bad North 式兵种克制，红蓝双方同规则）：
+//  瘫倒 = 1 次近战（短剑）或 2 支羽箭 —— 倒地失去战斗力，仍可见可被补刀
+//  击杀 = 2 次近战（短剑）或 4 支羽箭 —— 倒地淡出消失
+//  克制关系（参考 Bad North：盾兵克弓 / 长矛站桩克冲锋 / 弓箭居高压制）：
+//   · 盾步兵（短剑+圆盾 gladius）隔箭挡箭：未陷入近战、未爬梯时，
+//     每两支羽箭挡下一支（盾一次只能挡一个威胁）；爬梯时盾在背后挡不了
+//   · 长矛（spear）站桩封路：静止防守时一击即击杀冲锋者（pike=2 次近战），
+//     但移动中（advance）不能出手 —— 梯口/路口的矛墙是攻方噩梦
+//   · 长弓居高：射手站位比目标高时射速加快（高台箭雨压梯压船）
 const MELEE_RANGE = 1.7; // 贴身近战距离
 const MELEE_COOLDOWN = 1.15; // 近战出手间隔（秒）
 const STAGGER_ARROW = 2;
 const STAGGER_MELEE = 1;
 const KILL_ARROW = 4;
 const KILL_MELEE = 2;
+const HIGHGROUND_SHOT_FACTOR = 0.72; // 居高射箭冷却倍率（<1 = 更快）
 
 const _up = new THREE.Vector3();
 const _fwd = new THREE.Vector3();
@@ -113,6 +121,13 @@ function roleAt(ix, iz) {
   return "longbow";
 }
 
+// Bad North 式小队簇：不再是阅兵式刚性网格，每个站位带确定性抖动，
+// 25 人挤成一小簇「乌合之众」（抖动由格子坐标哈希生成，测试可复现）
+function slotJitter(gx, gz, axis) {
+  const h = Math.sin(gx * 127.1 + gz * 311.7 + axis * 74.7) * 43758.5453;
+  return (h - Math.floor(h) - 0.5) * 0.34; // ±0.17
+}
+
 const _axisX = new THREE.Vector3(1, 0, 0);
 
 function makeArrow() {
@@ -133,55 +148,38 @@ function makeArrow() {
   head.rotation.z = -Math.PI / 2;
   head.position.x = 0.52;
   g.add(head);
-  // 箭头附近一点流星火焰感：橙红微光核（半透明 + 加色），飞行时微微闪烁
-  const ember = new THREE.Mesh(
-    new THREE.SphereGeometry(0.05, 6, 5),
-    new THREE.MeshBasicMaterial({
-      color: 0xff6a3a,
-      transparent: true,
-      opacity: 0.85,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    })
-  );
-  ember.name = "arrow-ember";
-  ember.position.x = 0.46;
-  g.add(ember);
-  g.userData.ember = ember;
   const fletch = new THREE.Mesh(
     new THREE.BoxGeometry(0.14, 0.11, 0.016),
     new THREE.MeshBasicMaterial({ color: 0xe04c3e })
   );
   fletch.position.x = -0.36;
   g.add(fletch);
-  // 亮色拖尾（加色混合）：飞行轨迹如流星
-  // 双层拖尾（彗尾式）：长淡尾 + 短亮核——飞行轨迹清晰可见
+  // Bad North 式朴素箭矢：去掉流星火焰核与光剑长拖尾，
+  // 只留一条短而淡的米白速度痕（普通透明混合，不加色发光）
   const trail = new THREE.Mesh(
-    new THREE.BoxGeometry(2.4, 0.07, 0.07),
+    new THREE.BoxGeometry(0.62, 0.034, 0.034),
     new THREE.MeshBasicMaterial({
-      color: 0xbfe8ff,
+      color: 0xf5f2e8,
       transparent: true,
-      opacity: 0.4,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.3,
       depthWrite: false,
     })
   );
   trail.name = "arrow-trail";
   trail.userData.isTrail = true;
-  trail.position.x = -1.7;
+  trail.position.x = -0.78;
   g.add(trail);
   const trailCore = new THREE.Mesh(
-    new THREE.BoxGeometry(0.95, 0.05, 0.05),
+    new THREE.BoxGeometry(0.3, 0.024, 0.024),
     new THREE.MeshBasicMaterial({
-      color: 0xeaf8ff,
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.85,
-      blending: THREE.AdditiveBlending,
+      opacity: 0.5,
       depthWrite: false,
     })
   );
   trailCore.name = "arrow-trail-core";
-  trailCore.position.x = -0.9;
+  trailCore.position.x = -0.58;
   g.add(trailCore);
   g.userData.fly = 0;
   g.userData.from = new THREE.Vector3();
@@ -255,10 +253,33 @@ export function createSaihojiPhalanxBattle({
   getTram,
   getTimeOfDay = null,
   getNightInfiltration = null,
+  seed = 1, // P0 · 攻防 V2：注入式种子随机源；同 seed 同输入 → 同事件序列
+  rng: rngOpt = null,
+  events = null, // 可选 CombatEventLog（P0 事件记录/重放）
 } = {}) {
+  const rng = rngOpt || createRng(seed);
+  const rand = rng.next;
   const root = new THREE.Group();
   root.name = "saihoji-phalanx-battle";
+  root.userData.combatSeed = rng.seed;
+  root.userData.combatEvents = events; // P0 事件日志（可为 null）
   scene.add(root);
+
+  // ---------- P0 事件记录：simT 为仿真时钟（update 累加 dt），与渲染 t 无关 ----------
+  let simT = 0;
+  let nextUid = 1; // 士兵稳定 ID：事件流跨运行可比对
+  const logEvent = (kind, data) => {
+    if (events) events.record(simT, kind, data);
+  };
+  const logCommand = (name, data) => {
+    if (events) events.command(simT, name, data);
+  };
+  const setPhase = (next) => {
+    if (phase !== next) {
+      logEvent("phase", { from: phase, to: next });
+      phase = next;
+    }
+  };
 
   /**
    * 完整故事线状态机：
@@ -423,25 +444,26 @@ export function createSaihojiPhalanxBattle({
   function spawnSoldier(role) {
     const s =
       role === "longbow"
-        ? createLongbowSoldier()
+        ? createLongbowSoldier({ rand })
         : role === "gladius"
           ? createGladiusSoldier()
           : createHarborPatrolSoldier();
+    s.userData.uid = nextUid++; // P0 稳定士兵 ID（事件流比对用）
     s.userData.phalanxRole = role;
     // 苔庭方阵原本就是红盔；完成鲸拉回任务、随船返回圣城攻城时才换蓝盔
     // （beginSiege 中逐个 paintSoldierHelm(s, "blue")，蓝盔人数 = 完成任务人数）
     paintSoldierHelm(s, "red");
     if (role === "longbow") {
       const order = ["reach", "nock", "draw", "hold", "follow", "recover"];
-      const holdFor = 0.18 + Math.random() * 0.16;
+      const holdFor = 0.18 + rand() * 0.16;
       s.userData.bowCycle = {
-        phase: order[Math.floor(Math.random() * order.length)],
-        t: Math.random() * 0.12,
+        phase: order[Math.floor(rand() * order.length)],
+        t: rand() * 0.12,
         draw: 0,
         holdFor,
-        seed: Math.random() * Math.PI * 2,
+        seed: rand() * Math.PI * 2,
       };
-      updateLongbowShot(s, 0);
+      updateLongbowShot(s, 0, rand);
     }
     s.traverse((o) => {
       if (o.isMesh) o.frustumCulled = false;
@@ -450,6 +472,7 @@ export function createSaihojiPhalanxBattle({
   }
 
   function spawnWave(index, grid = GRID, ringIndex = null) {
+    logEvent("wave", { index, grid, ringIndex });
     const boat = createFisherBoat();
     boat.name = `saihoji-troopship-${index}`;
     boat.scale.setScalar(1.7);
@@ -485,8 +508,8 @@ export function createSaihojiPhalanxBattle({
     surfaceBasis(origin, face, _up, _fwd, _right);
     const c = (GRID - 1) / 2;
     for (const s of wave.soldiers) {
-      const lx = (s.userData.gx - c) * CELL;
-      const lz = (s.userData.gz - c) * CELL;
+      const lx = (s.userData.gx - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 0);
+      const lz = (s.userData.gz - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 1);
       _tmp.copy(_up).multiplyScalar(PLANET_RADIUS + groundLift(_up))
         .addScaledVector(_right, lx)
         .addScaledVector(_fwd, -lz);
@@ -540,9 +563,12 @@ export function createSaihojiPhalanxBattle({
   const _marchDir = new THREE.Vector3();
   const _marchO = new THREE.Vector3();
   const _marchNeg = new THREE.Vector3();
-  let _groundSets = null; // { ground, water } | null（桩环境保持 null）
+  let _groundSets = null; // { ground, water } | null（桩环境为 null）
+  let _groundSetsAt = -Infinity; // 负结果也要短期缓存：桩环境每帧全场景重扫是主要热点
   function citadelGroundSets() {
-    if (_groundSets) return _groundSets;
+    // 2 秒 TTL：编辑器热重建最多 2 秒内生效；桩环境则免去每帧全场景扫描
+    if (simT - _groundSetsAt < 2) return _groundSets;
+    _groundSetsAt = simT;
     const ground = [];
     const castle = scene.getObjectByName?.("castleContainer");
     if (castle) {
@@ -556,14 +582,15 @@ export function createSaihojiPhalanxBattle({
       if (m && m.isMesh && m.visible) ground.push(m);
     }
     ground.push(...plazaDeckInfo().meshes);
-    if (!ground.length) return null;
+    _groundSets = ground.length ? { ground, water: [] } : null;
+    if (!_groundSets) return null;
     const water = [];
     scene.traverse?.((o) => {
       if (!o.isMesh || !o.visible) return;
       const n = o.name || "";
       if (n.startsWith("citadel-") && n.includes("water")) water.push(o);
     });
-    _groundSets = { ground, water };
+    _groundSets.water = water;
     return _groundSets;
   }
   /** pos 所在柱的最顶可站立面半径（无脚底偏移）；桩环境/无命中返回 null */
@@ -612,8 +639,8 @@ export function createSaihojiPhalanxBattle({
     surfaceBasis(centerDir, face, _up, _fwd, _right);
     const c = (GRID - 1) / 2;
     for (const s of wave.soldiers) {
-      const lx = (s.userData.gx - c) * CELL;
-      const lz = (s.userData.gz - c) * CELL;
+      const lx = (s.userData.gx - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 0);
+      const lz = (s.userData.gz - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 1);
       if (plazaDeckPoint(_right, _fwd, lx, -lz, _up, _deckPt)) {
         s.position.copy(_deckPt).addScaledVector(_up, 0.06);
       } else {
@@ -635,6 +662,7 @@ export function createSaihojiPhalanxBattle({
 
   function fireArrow(from, toAc) {
     root.userData._fireCalls = (root.userData._fireCalls || 0) + 1;
+    logEvent("arrow", { from: from.userData.uid ?? 0, to: toAc?.userData?.uid ?? -1 });
     const a = arrows[arrowI % arrows.length];
     arrowI++;
     if (a.parent !== root) root.attach(a);
@@ -657,9 +685,9 @@ export function createSaihojiPhalanxBattle({
     // 目标点：成员当前位置 + 固定散布（世界偏移，随成员移动）
     toAc.getWorldPosition(_tmpB);
     a.userData.aimOff = new THREE.Vector3(
-      (Math.random() - 0.5) * 6,
-      (Math.random() - 0.5) * 3,
-      (Math.random() - 0.5) * 6
+      (rand() - 0.5) * 6,
+      (rand() - 0.5) * 3,
+      (rand() - 0.5) * 6
     );
     _tmpB.add(a.userData.aimOff);
     a.userData.from.copy(a.position);
@@ -678,7 +706,7 @@ export function createSaihojiPhalanxBattle({
     sparkI++;
     sp.visible = true;
     sp.position.copy(worldPos);
-    sp.scale.setScalar(1.1 + Math.random() * 1.1);
+    sp.scale.setScalar(1.1 + rand() * 1.1);
     sp.userData.t = 0;
   }
 
@@ -687,7 +715,7 @@ export function createSaihojiPhalanxBattle({
     smokeI++;
     sm.visible = true;
     sm.position.copy(worldPos);
-    sm.scale.setScalar(0.8 + Math.random() * 1.1);
+    sm.scale.setScalar(0.8 + rand() * 1.1);
     sm.userData.t = 0;
     sm.userData.up = worldPos.clone().normalize();
   }
@@ -739,31 +767,31 @@ export function createSaihojiPhalanxBattle({
       // 箭身顺飞行方向
       _tmp.copy(u.to).sub(u.from).normalize();
       a.quaternion.setFromUnitVectors(_axisX, _tmp);
-      // 拖尾随速度闪烁（长淡尾 + 短亮核）
+      // 拖尾随速度轻微起伏（Bad North 朴素速度痕：短、淡、不发光）
       const trail = a.children.find((c) => c.userData?.isTrail) || a.getObjectByName?.("arrow-trail");
-      if (trail?.material) trail.material.opacity = 0.25 + 0.3 * Math.sin(p * Math.PI);
+      if (trail?.material) trail.material.opacity = 0.1 + 0.2 * Math.sin(p * Math.PI);
       const trailCore = a.getObjectByName?.("arrow-trail-core");
-      if (trailCore?.material) trailCore.material.opacity = 0.6 + 0.3 * Math.sin(p * Math.PI);
-      // 流星火焰感：箭头橙红微光核轻微脉动，像流星掠过
-      const ember = u.ember || a.getObjectByName?.("arrow-ember");
-      if (ember?.material) {
-        ember.material.opacity = 0.55 + 0.35 * Math.abs(Math.sin(u.fly * 14));
-        ember.scale.setScalar(0.85 + 0.3 * Math.abs(Math.sin(u.fly * 14 + 1.3)));
-      }
+      if (trailCore?.material) trailCore.material.opacity = 0.28 + 0.18 * Math.sin(p * Math.PI);
       if (p < 1) continue;
       // 落地判定：命中判定圈 = 成员半径（散布+滞后决定脱靶率）
       const tip = a.position.clone();
       const acPos = _sparkTmp.clone();
       if (ac?.parent && tip.distanceTo(acPos) < 4.8) {
+        if (ac.userData.phalanxRole && shieldBlocksArrow(ac)) {
+          // Bad North 盾挡箭：箭在盾面弹开、沿径向坠落，不计伤害
+          u.miss = 0.01;
+          spawnSpark(tip);
+          continue;
+        }
         // 命中：箭头扎进机体（随机姿态），计数 + 火花 + 烟 + 冲击
         ac.attach(a);
         u.stuck = true;
-        u.wobble = 1.6 + Math.random() * 0.8;
-        a.scale.setScalar(0.9 + Math.random() * 0.25);
+        u.wobble = 1.6 + rand() * 0.8;
+        a.scale.setScalar(0.9 + rand() * 0.25);
         if (ac.userData.phalanxRole) applySoldierDamage(ac, "arrow"); // 攻城：士兵中箭
         else ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1; // 机队成员
         spawnSpark(tip);
-        if (Math.random() < 0.5) spawnSmoke(tip);
+        if (rand() < 0.5) spawnSmoke(tip);
       } else {
         u.miss = 0.01; // 脱靶：坠落
       }
@@ -798,6 +826,7 @@ export function createSaihojiPhalanxBattle({
 
   /** 长枪兵掷出手中的长枪（从枪尖所在的手位出手，飞向机队成员） */
   function throwJavelin(from, toAc) {
+    logEvent("javelin", { from: from.userData.uid ?? 0, to: toAc?.userData?.uid ?? -1 });
     const j = javelins[javelinI % javelins.length];
     javelinI++;
     if (j.parent !== root) root.attach(j);
@@ -819,9 +848,9 @@ export function createSaihojiPhalanxBattle({
     j.userData.arcUp.set(0, 1, 0).applyQuaternion(_q).normalize();
     toAc.getWorldPosition(_tmpB);
     j.userData.aimOff = new THREE.Vector3(
-      (Math.random() - 0.5) * 6.4,
-      (Math.random() - 0.5) * 3.2,
-      (Math.random() - 0.5) * 6.4
+      (rand() - 0.5) * 6.4,
+      (rand() - 0.5) * 3.2,
+      (rand() - 0.5) * 6.4
     );
     _tmpB.add(j.userData.aimOff);
     j.userData.from.copy(j.position);
@@ -879,11 +908,11 @@ export function createSaihojiPhalanxBattle({
       if (ac?.parent && tip.distanceTo(acPos) < 5.0) {
         ac.attach(j);
         u.stuck = true;
-        u.wobble = 1.8 + Math.random() * 0.8;
-        j.scale.setScalar(0.95 + Math.random() * 0.2);
+        u.wobble = 1.8 + rand() * 0.8;
+        j.scale.setScalar(0.95 + rand() * 0.2);
         ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
         spawnSpark(tip);
-        if (Math.random() < 0.6) spawnSmoke(tip);
+        if (rand() < 0.6) spawnSmoke(tip);
       } else {
         u.miss = 0.01;
       }
@@ -914,7 +943,7 @@ export function createSaihojiPhalanxBattle({
     }
     waves.length = 0;
     shipIdx = 0;
-    phase = "atCastle";
+    setPhase("atCastle");
     quietT = 0;
     for (const g of garrison) {
       for (const s of g.soldiers) root.remove(s);
@@ -1038,8 +1067,8 @@ export function createSaihojiPhalanxBattle({
 
   /** 苔庭内随机巡查点（地壳板 25×14 内缩） */
   function patrolPoint(out) {
-    const lx = (Math.random() - 0.5) * 22;
-    const lz = (Math.random() - 0.5) * 11;
+    const lx = (rand() - 0.5) * 22;
+    const lz = (rand() - 0.5) * 11;
     return out
       .copy(landDir)
       .addScaledVector(east, lx / PLANET_RADIUS)
@@ -1109,7 +1138,7 @@ export function createSaihojiPhalanxBattle({
     const inFight = whaleUp || fightFormed;
     const u = s.userData.patrol || (s.userData.patrol = {
       t: 0,
-      wait: 4 + Math.random() * 5,
+      wait: 4 + rand() * 5,
       from: null,
       to: null,
       returning: false,
@@ -1146,7 +1175,7 @@ export function createSaihojiPhalanxBattle({
     u.t += dt;
     if (!u.to || u.t >= u.wait) {
       u.t = 0;
-      u.wait = 4 + Math.random() * 5;
+      u.wait = 4 + rand() * 5;
       u.from = s.position.clone();
       patrolPoint((u.to = u.to || new THREE.Vector3()));
     }
@@ -1318,6 +1347,7 @@ export function createSaihojiPhalanxBattle({
       ladderRoot.add(ladder);
       siegeLadders.push({ group: ladder, base, top, capture, x });
     }
+    logEvent("ladders", { count: siegeLadders.length });
   }
 
   // 指定世界坐标生成一名红盔守军（攻城梯顶部/台地高处的防守哨位）
@@ -1363,7 +1393,7 @@ export function createSaihojiPhalanxBattle({
     siegeElapsed = 0;
     blueReinforced = false; // 第二波增援随本次攻城重新计
     blueShips.length = 0;
-    phase = "siege";
+    setPhase("siege");
     root.userData.helmSide = "blue";
     root.userData.siegeNight = false;
     root.userData.siegeAssaultBgm = false;
@@ -1480,6 +1510,7 @@ export function createSaihojiPhalanxBattle({
   // 优先用攻城开始时的实测台面锚点（redPostWorld，一层台地前沿），
   // 桩环境/缺场景退回旧的方向偏移 + 球面裸半径。
   function spawnRedSquadAt(p) {
+    logEvent("redSquad", { post: p });
     const anchor = redPostWorld[p] || null;
     const origin = castleOffsetDir(RED_POSTS[p][0], RED_POSTS[p][1], new THREE.Vector3());
     surfaceBasis(anchor ? anchor.clone().normalize() : origin, castleDir, _up, _fwd, _right);
@@ -1519,6 +1550,7 @@ export function createSaihojiPhalanxBattle({
 
   // ---------- 红盔援军战船：从运河交汇处驶向高山圣城，到岸即增援 ----------
   function spawnRedShip() {
+    logEvent("redShip", { n: redShips.length });
     const boat = createFisherBoat();
     boat.name = `red-reinforce-ship-${redShips.length}`;
     boat.scale.setScalar(1.7);
@@ -1540,7 +1572,7 @@ export function createSaihojiPhalanxBattle({
         // 战船到岸：卸下 4 人红盔小队投入战斗（随机路口），船没入港内
         rs.unloaded = true;
         rs.boat.visible = false;
-        spawnRedSquadAt(Math.floor(Math.random() * RED_POSTS.length));
+        spawnRedSquadAt(Math.floor(rand() * RED_POSTS.length));
       }
     }
   }
@@ -1551,6 +1583,7 @@ export function createSaihojiPhalanxBattle({
   function spawnBlueReinforcements() {
     if (blueReinforced) return;
     blueReinforced = true;
+    logEvent("blueReinforce", { ships: BLUE_REINFORCE_SHIPS });
     for (let i = 0; i < BLUE_REINFORCE_SHIPS; i++) {
       spawnWave(200 + i); // 满编 5×5 方阵 + 战船（spawnSoldier 默认红缨）
       const w = waves[waves.length - 1];
@@ -1616,30 +1649,53 @@ export function createSaihojiPhalanxBattle({
     }
   }
 
-  // ---------- 攻城伤害模型（红蓝同规则） ----------
-  // 瘫倒：1 次近战（短剑/长矛）或 2 支羽箭 → 倒地失去战斗力（仍可见）
+  // ---------- 攻城伤害模型（Bad North 克制，红蓝同规则） ----------
+  // 瘫倒：1 次近战（短剑）或 2 支羽箭 → 倒地失去战斗力（仍可见）
   // 击杀：2 次近战或 4 支羽箭 → 倒地后淡出消失（瘫倒可被补刀）
+  // pike：长矛站桩的封路一击（=2 次近战，冲锋者撞上矛墙即阵亡）
+  // 死亡呈现（Bad North 式）：0.28s 倒平（瘫倒半倒 0.95rad / 击杀全倒 1.45rad）
+  //  → 尸体原地躺 2.6s（死在哪一目了然）→ 1.1s 沉入地面消失
   function applySoldierDamage(s, kind) {
     if (!s || s.userData.dead) return;
     if (kind === "arrow") s.userData.arrowHits = (s.userData.arrowHits || 0) + 1;
-    else s.userData.meleeHits = (s.userData.meleeHits || 0) + 1;
+    else s.userData.meleeHits = (s.userData.meleeHits || 0) + (kind === "pike" ? 2 : 1);
     const ah = s.userData.arrowHits || 0;
     const mh = s.userData.meleeHits || 0;
     if (ah >= KILL_ARROW || mh >= KILL_MELEE) {
       s.userData.dead = true;
       s.userData.downed = true;
-      s.userData._dieT = 0.7;
-      if (!s.userData._fell) {
-        s.rotateZ(1.15);
-        s.userData._fell = true;
-      }
+      s.userData._dieT = 3.7; // 躺 2.6s + 沉地 1.1s
+      s.userData._fallT = 0; // 重新触发倒平动画（瘫倒→击杀会再倒到底）
     } else if (!s.userData.downed && (ah >= STAGGER_ARROW || mh >= STAGGER_MELEE)) {
       s.userData.downed = true; // 瘫倒
-      if (!s.userData._fell) {
-        s.rotateZ(1.15);
-        s.userData._fell = true;
-      }
+      s.userData._fallT = 0;
     }
+    logEvent("hit", {
+      uid: s.userData.uid ?? 0,
+      side: redSoldiers.includes(s) ? "red" : "blue",
+      kind,
+      ah,
+      mh,
+      downed: !!s.userData.downed,
+      dead: !!s.userData.dead,
+    });
+  }
+
+  // Bad North「盾一次只能挡一个威胁」：盾步兵未陷入近战、未爬梯时，
+  // 每两支羽箭挡下一支（确定性交替，测试可复现）；挡下的箭弹开坠落不计数。
+  function shieldBlocksArrow(s) {
+    if (!s || s.userData.dead || s.userData.downed) return false;
+    if (s.userData.phalanxRole !== "gladius") return false; // 仅短剑盾兵持盾
+    if (s.userData.siegeStage === "climb") return false; // 爬梯时盾在背后
+    if ((s.userData._meleeEngagedT || 0) > 0) return false; // 被近战缠住腾不出盾
+    s.userData._arrowParity = (s.userData._arrowParity || 0) + 1;
+    return (s.userData._arrowParity & 1) === 0;
+  }
+
+  // 近战互殴标记：双方 1.4 秒内视为「陷入近战」（盾挡不了箭的时间窗）
+  function markMeleeEngaged(a, b) {
+    if (a) a.userData._meleeEngagedT = 1.4;
+    if (b) b.userData._meleeEngagedT = 1.4;
   }
 
   function updateSiege(dt, t) {
@@ -1664,7 +1720,7 @@ export function createSaihojiPhalanxBattle({
     if (!lateNight) {
       redReinforceT -= dt;
       if (redReinforceT <= 0) {
-        redReinforceT = 18 + Math.random() * 10;
+        redReinforceT = 18 + rand() * 10;
         spawnRedShip();
       }
       // 蓝盔第二波：攻城 16 秒后两船蓝缨增援从运河交汇处开来
@@ -1672,6 +1728,11 @@ export function createSaihojiPhalanxBattle({
     }
     updateRedShips(dt);
     updateBlueShips(dt, lateNight);
+
+    // 近战缠斗标记随时间消退（盾兵脱战后才能重新用盾挡箭）
+    for (const s of [...livingReds, ...blues]) {
+      if ((s.userData._meleeEngagedT || 0) > 0) s.userData._meleeEngagedT -= dt;
+    }
 
     for (const s of livingReds) {
       // 防守姿态：不追出哨位，贴身（攻城梯必经之处）才挥砍
@@ -1689,7 +1750,13 @@ export function createSaihojiPhalanxBattle({
         }
       }
       if (foe) {
-        // 贴身近战：短剑/长矛挥砍（补刀瘫倒目标也算）
+        // 贴身近战：短剑挥砍（补刀瘫倒目标也算）；
+        // 长矛守军站桩封路：Bad North 矛墙——只惩罚「冲锋中」的敌人
+        // （蓝缨还在 advance/climb 即撞矛一击击杀；站稳互殴仍按 1 击瘫倒/2 击击杀）
+        const foeStage = foe.userData.siegeStage || "gather";
+        const pikeWall =
+          s.userData.phalanxRole === "spear" &&
+          (foeStage === "advance" || foeStage === "climb");
         foe.getWorldPosition(_tmpB);
         _fwd.copy(_tmpB).sub(_tmp);
         if (_fwd.lengthSq() > 1e-6) {
@@ -1701,8 +1768,9 @@ export function createSaihojiPhalanxBattle({
         }
         s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
         if (s.userData._meleeCd <= 0) {
-          s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + Math.random() * 0.5);
-          applySoldierDamage(foe, "melee");
+          s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
+          markMeleeEngaged(s, foe);
+          applySoldierDamage(foe, pikeWall ? "pike" : "melee");
         }
       } else if (
         s.userData.holdPos &&
@@ -1728,10 +1796,16 @@ export function createSaihojiPhalanxBattle({
       for (const s of livingReds) {
         if (s.userData.phalanxRole !== "longbow" || s.userData.downed) continue;
         if ((s.userData._shotCd || 0) > 0) s.userData._shotCd -= dt;
-        const released = updateLongbowShot(s, dt);
+        const released = updateLongbowShot(s, dt, rand);
         if (!released || (s.userData._shotCd || 0) > 0 || !bluePool.length) continue;
-        s.userData._shotCd = 1.7 + Math.random() * 0.9;
-        fireArrow(s, bluePool[Math.floor(Math.random() * bluePool.length)]);
+        const tgt = bluePool[Math.floor(rand() * bluePool.length)];
+        // Bad North 居高箭术：站位高于目标（球面半径更大）→ 俯射冷却加快
+        let cd = 1.7 + rand() * 0.9;
+        if (tgt && s.position.length() - tgt.position.length() > 0.5) {
+          cd *= HIGHGROUND_SHOT_FACTOR;
+        }
+        s.userData._shotCd = cd;
+        fireArrow(s, tgt);
       }
     }
 
@@ -1812,12 +1886,16 @@ export function createSaihojiPhalanxBattle({
       }
     }
 
-    // 蓝盔矛/盾手原地反击：红盔贴身即回砍（长弓手只攒箭；爬梯中无法还手）
+    // 蓝盔矛/盾手原地反击：红盔贴身即回砍（长弓手只攒箭；爬梯中无法还手；
+    // Bad North 长矛移动中不能出手——只有站稳（gather/驻守 capture）才挺矛，
+    // 站稳的矛对贴身红盔同样是矛墙一击）
     if (!chase) {
       for (const s of blues) {
         const role = s.userData.phalanxRole;
         if (role === "longbow" || s.userData.downed) continue;
-        if (s.userData.siegeStage === "climb") continue;
+        const stage = s.userData.siegeStage || "gather";
+        if (stage === "climb") continue;
+        if (role === "spear" && stage === "advance") continue; // 行军中的矛兵不出手
         s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
         if (s.userData._meleeCd > 0) continue;
         s.getWorldPosition(_tmp);
@@ -1832,7 +1910,7 @@ export function createSaihojiPhalanxBattle({
           }
         }
         if (!foe) continue;
-        s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + Math.random() * 0.5);
+        s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
         foe.getWorldPosition(_tmpB);
         _fwd.copy(_tmpB).sub(_tmp);
         if (_fwd.lengthSq() > 1e-6) {
@@ -1842,6 +1920,8 @@ export function createSaihojiPhalanxBattle({
             0.2
           );
         }
+        markMeleeEngaged(s, foe);
+        // 蓝缨长矛站稳后贴身仍按 1 击瘫倒/2 击击杀（矛墙加成只给防守方）
         applySoldierDamage(foe, "melee");
       }
     }
@@ -1866,19 +1946,37 @@ export function createSaihojiPhalanxBattle({
         if ((s.userData._shotCd || 0) > 0) {
           s.userData._shotCd -= dt;
         }
-        const released = updateLongbowShot(s, dt);
+        const released = updateLongbowShot(s, dt, rand);
         if (!released || (s.userData._shotCd || 0) > 0) continue;
-        s.userData._shotCd = 1.4 + Math.random() * 0.8;
         const tgt = targetPool[(s.userData.gx + s.userData.gz) % targetPool.length];
+        // Bad North 居高箭术：蓝缨长弓登上台地后居高临下，冷却加快
+        let cd = 1.4 + rand() * 0.8;
+        if (tgt && s.position.length() - tgt.position.length() > 0.5) {
+          cd *= HIGHGROUND_SHOT_FACTOR;
+        }
+        s.userData._shotCd = cd;
         if (tgt) fireArrow(s, tgt);
       }
     }
 
-    // 击杀淡出：红蓝双方（瘫倒不倒计数，只有 dead 才消失）
+    // 死亡呈现（Bad North 式）：倒地动画 → 尸体躺地留痕 → 沉入地面消失
     for (const s of [...redSoldiers, ...waves.flatMap((w) => w.soldiers)]) {
-      if (!s.userData.dead || !s.visible) continue;
-      s.userData._dieT = (s.userData._dieT || 0) - dt;
-      if (s.userData._dieT <= 0) s.visible = false;
+      const ud = s.userData;
+      // 倒地动画：0.28s easeOut 倒到目标角（瘫倒半倒 / 击杀全倒贴地）
+      if (ud._fallT != null && ud._fallT < 0.28) {
+        ud._fallT += dt;
+        const e = Math.min(1, ud._fallT / 0.28);
+        const target = ud.dead ? 1.45 : 0.95;
+        s.rotation.z = target * (1 - (1 - e) * (1 - e));
+      }
+      if (!ud.dead || !s.visible) continue;
+      ud._dieT = (ud._dieT ?? 3.7) - dt;
+      if (ud._dieT <= 1.1) {
+        // 沉入地面：沿当地法线缓缓下沉（尸体不是凭空消失）
+        _tmp.copy(s.position).normalize();
+        s.position.addScaledVector(_tmp, -dt * 0.55);
+      }
+      if (ud._dieT <= 0) s.visible = false;
     }
 
     if (lateNight) {
@@ -1908,7 +2006,7 @@ export function createSaihojiPhalanxBattle({
         if (k < 0.08) s.visible = false;
       }
       if (siegeNightT > 3.2) {
-        phase = "siegeNight";
+        setPhase("siegeNight");
         root.userData.siegeNight = true;
         // 攻城曲继续播，直到夜晚太鼓真正响起再让出声道
         allowSiegeAssaultBgmHandoff();
@@ -2065,7 +2163,7 @@ export function createSaihojiPhalanxBattle({
 
     // 收束：残部被驱离殆尽 + 巡查兵全部回腹 → 故事线落幕（不等黎明）
     if (!stragglers.length && trojanPatrol.every((p) => !p.s.visible)) {
-      phase = "done";
+      setPhase("done");
       allowSiegeAssaultBgmHandoff();
     }
   }
@@ -2283,6 +2381,7 @@ export function createSaihojiPhalanxBattle({
   }
 
   function update(dt, t) {
+    simT += dt; // P0 仿真时钟：事件记录以此为准
     const drums = isInfiltrationMissionActive();
     if (drums) quietT = 0;
     else quietT += dt;
@@ -2295,6 +2394,7 @@ export function createSaihojiPhalanxBattle({
     root.userData.phase = phase;
     if (root.userData.resetRequested) {
       root.userData.resetRequested = false;
+      logCommand("reset");
       resetBattle();
       return;
     }
@@ -2305,7 +2405,7 @@ export function createSaihojiPhalanxBattle({
         waves.some((w) => w.state === "fight" || w.state === "ashore"))
     ) {
       returnRequested = false;
-      phase = "return";
+      setPhase("return");
       for (const w of waves) {
         // 苔庭鲸战役一结束就换蓝缨：多少人参加苔庭战争，
         // 就有多少人换缨并被战船运往纳沃纳广场集结攻城。
@@ -2336,7 +2436,7 @@ export function createSaihojiPhalanxBattle({
     if (phase === "atCastle") {
       // 高山圣城 · 受鼓声控制：鼓声结束后才发船
       if (quietT > 1.6) {
-        phase = "sailOut";
+        setPhase("sailOut");
         shipIdx = 0;
         nextShipIn = 0.4;
       }
@@ -2362,6 +2462,7 @@ export function createSaihojiPhalanxBattle({
         updateWarshipOars?.(w.boat, dt, 0.85);
         if (w.u >= 1) {
           w.state = "ashore";
+          logEvent("waveAshore", { index: w.boat.name });
           if (Number.isFinite(w.ringIndex)) {
             // 补给船：下岸到环绕苔庭槽位（面朝苔庭中心）
             placeCohort(w, ringSlotDir(w.ringIndex, new THREE.Vector3()), landDir);
@@ -2371,7 +2472,7 @@ export function createSaihojiPhalanxBattle({
         }
       }
       if (allLanded && waves.every((w) => w.state === "ashore" || w.state === "fight")) {
-        phase = "fight";
+        setPhase("fight");
         for (const w of waves) w.state = "fight";
       }
     }
@@ -2555,7 +2656,7 @@ export function createSaihojiPhalanxBattle({
               throwJavelin(s, tgt);
               th.phase = "recover";
               th.t = 0;
-              th.cd = 11 + Math.random() * 7; // 投枪沉重：11~18s 一掷
+              th.cd = 11 + rand() * 7; // 投枪沉重：11~18s 一掷
             }
           } else {
             th.t += dt / 0.6; // 0.6s 收手
@@ -2571,7 +2672,7 @@ export function createSaihojiPhalanxBattle({
         // 撒放即射：短冷却每帧递减（脉冲同步后错峰），只挡下一次撒放
         const cd0 = s.userData._shotCd || 0;
         if (cd0 > 0) s.userData._shotCd = cd0 - dt;
-        const released = updateLongbowShot(s, dt);
+        const released = updateLongbowShot(s, dt, rand);
         root.userData._relCalls = (root.userData._relCalls || 0) + 1;
         if (released) {
           root.userData._relTrue = (root.userData._relTrue || 0) + 1;
@@ -2579,7 +2680,7 @@ export function createSaihojiPhalanxBattle({
         }
         if (!released) continue;
         if ((s.userData._shotCd || 0) > 0) continue;
-        s.userData._shotCd = 2.6 + Math.random() * 1.6;
+        s.userData._shotCd = 2.6 + rand() * 1.6;
         // 目标轮转：五架轮流挨箭（全编队可见中箭）
         const tgt = live[arrowI % live.length];
         fireArrow(s, tgt);
@@ -2598,6 +2699,7 @@ export function createSaihojiPhalanxBattle({
   //  - 鲸读 root.userData.assembled（是否整队）作升空循环条件；
   //  - 鲸恢复原位后调 root.userData.whaleReturned()，士兵撤阵登船返回高山圣城。
   root.userData.whaleReturned = () => {
+    logCommand("whaleReturned");
     detachRopes();
     resetFightFormation();
     rearmPhalanxAlarm();

@@ -1,6 +1,6 @@
 // 太古高山圣城验收（Townscaper 规则生成版）：逐层 ASCII 单元格地图驱动，
 // 体块/穹顶/城垛/拱窗/悬空拱/塔楼金顶/屋顶花园/棕色正门全部由邻接规则生成。
-// 斯瓦尔博娃无菌马卡龙：MeshStandard 瓷感 + 灰蓝细描边 + 区域平洗光
+// Townscaper 高地彩城：错缝砖墙 + 赤陶瓦 + 深蓝灰描边 + 哑光方向光
 // 运行：node tools/test_odyssey_citadel.mjs
 import fs from "node:fs";
 import assert from "node:assert/strict";
@@ -121,6 +121,12 @@ assert.deepEqual(mainCastle.scale.toArray(), [1, 1, 1], "规则小镇按最终�
 assert.equal(mainCastle.position.y, 0);
 const townSpec = citadel.userData.townSpec;
 const townStats = citadel.userData.townStats;
+assert.equal(citadel.userData.blueprintVersion, 1, "古堡必须由蓝图编译层生成");
+assert.deepEqual(
+  citadel.userData.blueprintSummary?.stages,
+  ["foundation", "terraces", "waterfalls", "town", "terrain-objects", "presentation"]
+);
+assert.equal(citadel.userData.blueprint?.town?.terraceCount, 5);
 assert.equal(townSpec?.terraces?.length, 5, "必须提供五座台地的城堡布局");
 let specFilled = 0;
 for (const terrace of townSpec.terraces) {
@@ -154,7 +160,7 @@ for (let i = 0; i < 5; i++) {
   assert.equal(shelf.userData.isCitadelTerrace, true,
     `台地 ${i + 1} 必须标记为可拾取承重面`);
   assert.equal(shelf.userData.contourRadius, expectedRadius);
-  assert.equal(shelf.material.color.getHex(), 0xd5dbdb, "台地必须为浅灰蓝马卡龙");
+  assert.equal(shelf.material.color.getHex(), 0x98a5a0, "台地必须为压暗暖灰石材");
   if (i > 0) {
     // 台地 2–5：环形扇区开槽露出默认层间瀑布 + 实心核托住高层
     assert.equal(shelf.geometry.type, "ExtrudeGeometry", `台地 ${i} 必须为开槽环形扇区`);
@@ -199,30 +205,51 @@ for (const rock of rocks) {
 }
 ok("IcosahedronGeometry(2.3, 0) ×7 · 非等比缩放与 Y 轴偏转");
 
-console.log("[3] Townscaper 规则：体块配色 · 穹顶 · 塔楼金顶 · 悬空拱 · 正门");
-const PASTEL = new Set([0xf2f4f4, 0xd5dbdb, 0xe8f8f5, 0xfcf3cf]);
+console.log("[3] Townscaper 规则：多户配色 · 穹顶 · 塔楼金顶 · 悬空拱 · 正门");
+const wallColors = new Set();
+let patternedWallCount = 0;
+let patternedRoofCount = 0;
+let patternedBalconyCount = 0;
+const moduleFamilies = new Set(
+  Object.entries(townStats.moduleFamilyCounts ?? {})
+    .filter(([, count]) => count > 0)
+    .map(([family]) => family)
+);
 citadel.traverse((object) => {
   if (!object.isMesh || object.userData.isOutline) return;
-  if (object.material?.userData?.townWater) return;
-  if (object.userData.terrainObjectId != null) return;
-  if (!object.material?.color) return;
-  const hex = object.material.color.getHex();
-  if (hex === 0xff3333) return; // 正红人偶
-  if (object.material.isMeshBasicMaterial) return;
-  assert(
-    PASTEL.has(hex) || hex === 0x5a9eaa || hex === 0xc5ddd6 || hex === 0xd7ebe4,
-    `建筑色必须落在马卡龙盘内，${object.name} 实际 0x${hex.toString(16)}`
-  );
+  const pattern = object.material?.userData?.townscaperPattern;
+  if (pattern === "wall") {
+    patternedWallCount++;
+    if (object.material.color) wallColors.add(object.material.color.getHex());
+  } else if (pattern === "roof") patternedRoofCount++;
+  else if (pattern === "balcony") patternedBalconyCount++;
 });
+assert(patternedWallCount > 0, "墙面必须使用程序化错缝砖纹");
+assert(patternedRoofCount > 0, "屋顶必须使用程序化陶瓦纹");
+assert(patternedBalconyCount > 0, "阳台必须使用独立彩色花砖纹理，而不是绿色植被材质");
+assert(moduleFamilies.has("foundation"), "必须落地地基模块");
+assert(moduleFamilies.has("floor"), "必须落地楼层压条模块");
+assert(moduleFamilies.has("fence"), "必须落地围栏模块");
+assert(moduleFamilies.has("balcony"), "必须落地阳台模块");
+assert(moduleFamilies.has("hole"), "必须落地开洞模块");
+assert(moduleFamilies.has("support"), "必须落地支架模块");
+assert(moduleFamilies.has("stairs"), "必须标记折返楼梯模块");
+assert(moduleFamilies.has("decor"), "必须落地装饰模块");
+assert(wallColors.size >= 10, `高地彩城至少需要 10 种墙体色，实际 ${wallColors.size}`);
 assert.equal(townStats.domeCount, 1, "默认布局应只有顶层 3×3 屋顶出一座主穹顶");
-assert.equal(townStats.archCount, 8);
 assert(townStats.windowCount > 80, "暴露立面必须普遍出拱窗");
 assert(townStats.fenceCount > 0, "基座露台边缘必须出围栏");
 assert(townStats.roofCount > 0, "必须出坡屋顶");
-assert.equal(townStats.canalCount, 10, "水道 = 第 5 列暗渠 7 格 + 后排水巷 3 格");
-assert.equal(townStats.waterGateCount, 20, "夹道立面底层必须出拱形水门");
-assert(townStats.gate, "必须存在 D 正门格");
-assert.equal(townStats.gate.x, 0);
+assert(townStats.archCount > 0, "密集街区必须触发至少一组桥接拱廊");
+assert(townStats.balconyCount > 0, "高层立面必须出现分散阳台");
+assert(townStats.gardenCount > 0, "厚进深街屋必须触发屋顶花园");
+assert(townStats.steepleCount > 0, "L形/十字形屋顶必须触发尖塔变化");
+assert(townStats.chimneyCount > 0, "连续坡屋顶必须出现烟囱点缀");
+assert(townStats.supportCount > 0, "环带飞楼必须触发深色支架");
+assert(townStats.canalCount > 0, "密集街区的邻接空隙必须自动形成少量水巷");
+assert(townStats.waterGateCount > 0, "夹水巷立面必须自动生成拱形水门");
+assert(townStats.gate, "必须存在 G 正门格");
+assert.equal(townStats.gate.x, 2);
 assert.equal(townStats.gate.z + CITADEL.townOffsetZ, 9,
   "门脸经 townOffsetZ 补偿后必须在前排 z=9（与石阶平桥门槛条 z=9.05 相接）");
 const windows = allByName(citadel, "town-window").filter((x) => x.isMesh);
@@ -245,22 +272,18 @@ assert.equal(allByName(citadel, "bastion-crenel").length, 0);
 assert.equal(allByName(citadel, "bifora-arch").length, 0);
 ok("手工要塞/大厅/圣堂/旧穹顶全部移除，只保留规则生成体量");
 
-console.log("[7] 无菌瓷感 Standard + 灰蓝细描边 + 平洗光 + 正红人偶");
-let surfaceCount = 0;
-let outlineMisses = 0;
+console.log("[7] Townscaper 哑光材质 + 深蓝灰描边 + 塑形光 + 正红人偶");
 let materialFailures = 0;
 citadel.traverse((object) => {
   if (!object.isMesh || object.userData.isOutline) return;
-  if (object.material?.userData?.townWater) return;
-  if (object.userData.terrainObjectId != null) return;
-  if (object.material?.isMeshBasicMaterial && object.material.visible === false) return;
-  surfaceCount++;
   const mat = object.material;
+  if (!mat?.userData?.townscaperPattern || mat.userData.townscaperPattern === "flat") return;
   if (
     !mat?.isMeshStandardMaterial ||
-    Math.abs((mat.roughness ?? 1) - 0.15) > 1e-6 ||
-    Math.abs((mat.metalness ?? 1) - 0.02) > 1e-6 ||
-    (mat.transmission ?? 0) > 0
+    (mat.roughness ?? 0) < 0.8 ||
+    (mat.metalness ?? 1) !== 0 ||
+    !mat.map ||
+    !mat.bumpMap
   ) {
     materialFailures++;
   }
@@ -269,18 +292,23 @@ const outlineMeshes = [];
 citadel.traverse((object) => {
   if (object.isMesh && object.userData.isOutline) outlineMeshes.push(object);
 });
-assert(outlineMeshes.length > 0, "必须有灰蓝细描边");
+assert(outlineMeshes.length > 0, "必须有深蓝灰细描边");
+let townOutlineCount = 0;
 for (const line of outlineMeshes) {
-  assert.equal(line.material.color.getHex(), 0x5d6d7e, "描边必须是深灰蓝");
+  const color = line.material.color.getHex();
+  assert([0x233446, 0x5d6d7e].includes(color), "描边必须是 Townscaper 深蓝灰");
+  if (color === 0x233446) townOutlineCount++;
 }
-assert.equal(materialFailures, 0, `Standard 瓷感失败 ${materialFailures}`);
+assert(townOutlineCount > 0, "城体必须使用压深的 Townscaper 描边");
+assert.equal(materialFailures, 0, `Townscaper 哑光纹理材质失败 ${materialFailures}`);
 const ambient = byName(citadel, "citadel-svarbova-ambient");
 const sun = byName(citadel, "citadel-svarbova-sun");
 assert.equal(ambient?.isAmbientLight, true);
-assert.equal(ambient.intensity, 1.6);
+assert.equal(ambient.intensity, 0.62);
 assert.equal(ambient.color.getHex(), 0xffffff);
 assert.equal(sun?.isDirectionalLight, true);
-assert.equal(sun.intensity, 0.15);
+assert.equal(sun.intensity, 0.95);
+assert.equal(sun.color.getHex(), 0xfff4e6);
 const figure = byName(citadel, "svarbova-red-figure");
 assert(figure?.isGroup, "中层露台必须有正红人偶");
 assert.deepEqual(figure.position.toArray(), [0, 11.5, 4]);
@@ -289,13 +317,13 @@ figure.traverse((o) => {
   if (o.isMesh && !o.userData.isOutline && o.material?.color?.getHex() === 0xff3333) redParts++;
 });
 assert(redParts >= 6, "人偶必须通体正红");
-ok(`瓷感 Standard · 灰蓝描边 ×${outlineMeshes.length} · 平洗光 1.6/0.15 · 正红人偶`);
+ok(`错缝砖/陶瓦 · 深蓝灰描边 ×${outlineMeshes.length} · 塑形光 0.62/0.95 · 正红人偶`);
 
 console.log("[8] 规则小镇、五层贴地台地、静态更新契约与半径 160 定位");
 citadel.updateMatrixWorld(true);
 const bounds = new THREE.Box3().setFromObject(citadel);
 const totalHeight = bounds.max.y - bounds.min.y;
-assert(totalHeight > 27 && totalHeight < 30, `五层制规则小镇总高应在 27–30，实际 ${totalHeight.toFixed(2)}`);
+assert(totalHeight > 22 && totalHeight < 25, `五层制规则小镇总高应在 22–25，实际 ${totalHeight.toFixed(2)}`);
 for (let i = 0; i < 60; i++) citadel.update(1 / 60, i / 60);
 const { citadelRangeLiftDir, citadelSiteDir } = await import(
   new URL("src/world/citadelRange.js", BASE).href
@@ -425,13 +453,13 @@ assert.equal(terrainSupportLevel(citadel, 16 * Math.sin(phiOk), 16 * Math.cos(ph
   "台地 2 环带不得误写进台地 1 城堡");
 assert.equal(terrainSupportLevel(citadel, 26 * Math.sin(phiOk), 26 * Math.cos(phiOk), 2, 4), 0,
   "台地 5 外环必须允许独立五层城堡");
-// 默认瀑布缺口内：不在梯湖椭圆上的柱位无承重；梯湖椭圆上可安放城堡。
+// 默认瀑布缺口属于可编辑台地：缺口扇区和梯湖椭圆都允许强制安放城堡。
 const phiNotchBare = -0.11; // 缺口扇区内、避开梯湖椭圆
 const rNotchBare = 16;
 const nxBare = rNotchBare * Math.sin(phiNotchBare);
 const nzBare = rNotchBare * Math.cos(phiNotchBare);
-assert.equal(terrainSupportLevel(citadel, nxBare, nzBare, 2, 1), -1,
-  "缺口扇区且不在梯湖上的柱位无承重，必须返回 -1");
+assert.equal(terrainSupportLevel(citadel, nxBare, nzBare, 2, 1), 0,
+  "缺口扇区仍属于可编辑台地，必须允许强制占位");
 // 台地 2 对应的层叠梯湖中心必须可建
 const { CITADEL_CASCADE_POOL_SPECS } = await import(
   new URL("src/world/odysseyCitadel.js", BASE).href
