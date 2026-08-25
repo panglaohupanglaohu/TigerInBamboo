@@ -3597,6 +3597,8 @@ Codex 负责现役流水线接线、Worker/ResourceRegistry、运行时 shader �
 - `tools/test_ecology_field_v10.mjs`：坡度抑制、北坡增益、雪线/岩石/keepout 硬零、9 带 species 转换、合成低山脊（雪线下、上风有海）迎风林带强于背风（降雨反馈闭环）、真实 chain 场景——高山迎风湿度高/峡谷干燥带/湖岸芦苇环/苔庭核心开阔率 ≥ 0.72。
 - `tools/test_planet_v9_terrain_editor.mjs`（扩展）：依赖锥范围与 `maxFetchDistance` 上界、不回灌上风、跨 chart、区域外 hash 不变、undo/redo/失败事务 hash 恢复、十层 overlay 探针与语义格同值。
 
+**G21-F 接线（2026-08-26，RUNTIME_WIRED，默认关）：** `vegetationCompilerV9` 经 `readEcologySample` 复制 `ecologyFieldV10` 的 forestness/speciesBand/grassness/reedness/mudness；`bakeTerrainSemantic` 写入 `climateData1`/`ecologyData0`；terrain shader 用 ecologicalWetness 与 precipitation 做湿草/泥/岸色。生产开关仍默认 false。
+
 **实现要点与限制（记录在案）**：
 
 - 水文/气候/生态在**dual-cell 格**上求解；真实 chain 世界测试用「subdivision=1 编译的连续场 + subdivision=4 网格采样」（生产 chart 同源采样方式）。细分 1/3 的格心密度装不下 authored 裂谷湖盆（湖盆核心半径仅约 0.075 rad）；细网格 4 才解析。chain 编译在细分 ≥2 时 WFC 陆地组件校验失败是既有限制（pin 格太稀 + ocean-coverage 后处理拆链），不影响本数据层，Codex 接线时需单独处理。

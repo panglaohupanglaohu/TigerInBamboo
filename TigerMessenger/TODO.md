@@ -1936,10 +1936,10 @@ cloudPotential = saturate(0.08 + vapor * 0.48 + lift * 0.32 - rainShadow * 0.38)
 
 #### G21-F · 植被和材质消费统一生态场（P1，负责人：Codex）
 
-- [ ] **[Codex]** 修改 `vegetationCompilerV9.js`/runtime，只读取 `ecologyFieldV10` 的 density/speciesBand/grassness/reedness/mudness；移除重复的局部湿度猜测。
-- [ ] **[Codex]** terrain/grass shader 接入 ecologicalWetness 与 precipitation climatology：湖岸湿色渐变、湿草、泥地和雪岩在同一字段边界上连续。
-- [ ] **[Codex]** 保持 InstancedMesh/impostor LOD、稳定 instance ID 和 ResourceRegistry 释放契约；字段更新只替换 dirty chunks。
-- [ ] **[Codex TEST]** 扩展 `test_planet_v9_forest_grass.mjs` 与 runtime wiring：语义 hash 对齐、species bucket、dirty replace、20 轮资源回收、区域外实例 hash 不变。
+- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** `vegetationCompilerV9.readEcologySample` 读取 `ecologyFieldV10`；生产路径 `planetCompilerV8` 在植被之前 `solveEcologyV10`。树/草/芦苇/岩石 species 来自 `speciesBand`，不再跑 `forestDensityAt` 局部湿度猜测。
+- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** `bakeTerrainSemantic` 写入 `climateData1`/`ecologyData0`；`semanticTerrainMaterial` 用 ecologicalWetness + precipitation 做湖岸湿色、湿草、泥和雪岩混合。
+- [x] **[Grok 2026-08-26]** InstancedMesh 按 chart chunk 挂到 ResourceRegistry；`replaceDirty` 只换脏 chunk；稳定 `instanceId` 按 cell+triangle。
+- [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v9_forest_grass.mjs`（seed 1/7/42/884，ecology hash 对齐、species bucket、dirty 区域外 hash、20 轮 registry=0）。
 
 #### G21-G · 编辑器调试层与依赖锥（P1，负责人：DeepSeek）
 

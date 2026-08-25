@@ -137,5 +137,19 @@ export function solveEcologyV10({
     rockness,
     snowness,
     speciesBands: SPECIES_BANDS_V10,
+    hash: hashEcologyFieldV10(cellsOut),
   });
+}
+
+export function hashEcologyFieldV10(cells = []) {
+  let hash = 2166136261;
+  for (const cell of cells) {
+    const ecology = cell.ecology || {};
+    const token = `${cell.id}:${Number(ecology.ecologicalWetness || 0).toFixed(4)}:${Number(ecology.forestness || 0).toFixed(4)}:${Number(ecology.grassness || 0).toFixed(4)}:${Number(ecology.reedness || 0).toFixed(4)}:${Number(ecology.mudness || 0).toFixed(4)}:${ecology.speciesBand ?? 0}`;
+    for (const character of token) {
+      hash ^= character.charCodeAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+  }
+  return (hash >>> 0).toString(16);
 }

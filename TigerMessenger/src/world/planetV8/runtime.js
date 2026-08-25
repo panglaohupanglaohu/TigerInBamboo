@@ -113,6 +113,8 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
           mesh.geometry.setAttribute("terrainData0", new THREE.BufferAttribute(chart.semantic.terrainData0, 4));
           mesh.geometry.setAttribute("terrainData1", new THREE.BufferAttribute(chart.semantic.terrainData1, 4));
           mesh.geometry.setAttribute("flowData", new THREE.BufferAttribute(chart.semantic.flowData, 4));
+          if (chart.semantic.climateData1) mesh.geometry.setAttribute("climateData1", new THREE.BufferAttribute(chart.semantic.climateData1, 4));
+          if (chart.semantic.ecologyData0) mesh.geometry.setAttribute("ecologyData0", new THREE.BufferAttribute(chart.semantic.ecologyData0, 4));
           if (chart.semantic.uv) mesh.geometry.setAttribute("uv", new THREE.BufferAttribute(chart.semantic.uv, 2));
         }
         mesh.castShadow = true;
@@ -121,8 +123,9 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
         trackLogicalResource(state.resourceRegistry, "terrain", chart.id);
       }
       if (isV9) {
-        state.vegetation = createVegetationRuntime(THREE, root, compiled.vegetation, compiled.charts);
-        trackLogicalResource(state.resourceRegistry, "vegetation", "planet-v9");
+        state.vegetation = createVegetationRuntime(THREE, root, compiled.vegetation, compiled.charts, {
+          resourceRegistry: state.resourceRegistry,
+        });
       }
     }
     if (planet) planet.userData.planetV8Snapshot = compiled.snapshot;

@@ -22,8 +22,9 @@
 - [x] 高山圣城本地戴帽云/云海框挂在方尖碑场景山脊上，不依赖 V8 开关（2026-08-25，`highlandHeroClouds.js`，`node tools/test_odyssey_citadel.mjs`）
 - [x] 蓝车搭乘 BGM 在车上优先于攻城/峡谷（2026-08-25，`node tools/test_tram_ride_bgm_priority.mjs`）
 - [x] voxel AO + bounce 默认关；bounce 是实验档不是发售档
-- [x] V10 schema/水文/气候/生态 **DATA_TESTED**（DeepSeek 2026-08-24）；植被仍未 RUNTIME_WIRED
+- [x] V10 schema/水文/气候/生态 **DATA_TESTED**（DeepSeek 2026-08-24）
 - [x] 云 compiler 读 `climateFieldV10`（Grok 2026-08-26）；球面云物理字段不再用 `dot(direction, wind)` 冒充 fetch
+- [x] 植被 compiler/runtime 读 `ecologyFieldV10`（Grok 2026-08-26）；生产路径不再用 `forestDensityAt` 局部湿度猜测
 
 ---
 
@@ -31,7 +32,7 @@
 
 - [x] **[2026-08-26]** 写明官方方法计划：`docs/OSKAR_OFFICIAL_PLAN.md`
 - [x] **[2026-08-26]** 代码/注释搜索 `MFC`：仅出现在 PLAN 12.23.1 的否定声明（「不存在名为 MFC 的独立算法」），无第三算法实现
-- [ ] 跑 `node tools/audit_planet_v8_oskar_gap.mjs`，把 JSON 结论贴回本文件（读 field/runtime/shader，不读勾选）
+- [x] **[Grok 2026-08-26]** 跑 `node tools/audit_planet_v8_oskar_gap.mjs`（读 field/runtime/shader，不读勾选）。结论：`verdict=RUNTIME_READY_OPT_IN`；默认 `planetTerrainV1/curvedWaterV1/terrainSemanticShaderV1/cloudImpostorV1` 全是 false；`dense-forest`/`grass-surface`/`mountain-rolling-clouds`/`ocean-surface`/`lake-surface`/`terrain-editor` = RUNTIME_WIRED；`terrain-chain`/`highland-global-maximum` = DATA_TESTED。未 DEFAULT_ON。
 - [ ] 任何新云/海/草 PR 的描述必须引用 PLAN 本文件的 S 编号，禁止「更像 Oskar」
 
 ---
@@ -45,10 +46,10 @@
 - [x] **[Grok 2026-08-26]** ridge path 采样 `field.heightAt`；clearance 绑 lift；cloudBase 复制气候场。`planetCompilerV8` 在云之前跑 hydrology+climate
 - [x] **[Grok 2026-08-26]** impostor shader 仍只更新 `uTime/uWind/uWeather/uDay/uHeroDayWeight`；测试断言不含 precipitation/forestness/upwindOceanFetch
 - [x] **[Grok 2026-08-26 TEST]** `test_planet_v9_cloud_paths.mjs` 对齐 climate.hash；`test_planet_v8_cloud_climate_chain.mjs` 4 golden+100 seed；`test_planet_v8_determinism.mjs`
-- [ ] `vegetationCompilerV9.js` / runtime 只读 `ecologyFieldV10` 的 density/speciesBand/grassness/reedness/mudness
-- [ ] terrain/grass shader 吃 ecologicalWetness 与 precipitation：湖岸湿色、湿草、泥、雪岩在同一字段边界连续
-- [ ] InstancedMesh LOD、稳定 instance ID、ResourceRegistry；dirty 只换脏 chunk
-- [ ] 扩展 `tools/test_planet_v9_forest_grass.mjs` 与 runtime wiring：语义 hash、species bucket、dirty replace、20 轮回收、区域外 hash 不变
+- [x] **[Grok 2026-08-26]** `vegetationCompilerV9.js` 经 `readEcologySample` 只读 `ecologyFieldV10` 的 forestness/speciesBand/grassness/reedness/mudness；无生态场时才回退 V8。`planetCompilerV8` 在植被之前 `solveEcologyV10`
+- [x] **[Grok 2026-08-26]** terrain shader 吃 `climateData1`（precipitation + ecologicalWetness）与 `ecologyData0`（forest/grass/reed/mud）：湖岸湿色、湿草、泥、雪岩按同一字段混合
+- [x] **[Grok 2026-08-26]** InstancedMesh 按 chart chunk + 稳定 `instanceId`；`bindVegetationChunks` / `replaceDirty` 只换脏 chunk；runtime 每帧只改 `uGrassTime`
+- [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v9_forest_grass.mjs` seed=1/7/42/884：ecology hash 对齐、species bucket、dirty 区域外 instance hash 不变、20 轮 ResourceRegistry 归零
 
 ---
 
@@ -119,4 +120,4 @@
 
 ## 建议下一刀
 
-云单源已接线。下一刀 **O1 植被读 `ecologyFieldV10`**（G21-F），仍不碰 DEFAULT_ON。
+云和植被单源都已接线。下一刀 **O2 生产顺序与快照**（G21-H）：`field → hydrology → climate → charts/semantic bake → cloud+ecology → snapshot`，同一 climate hash 供给云和树；仍不碰 DEFAULT_ON。

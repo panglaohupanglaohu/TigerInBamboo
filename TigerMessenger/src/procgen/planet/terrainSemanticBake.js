@@ -9,7 +9,7 @@ function normalizeWeights(values) {
   return values.map((value) => Math.max(0, value) / total);
 }
 
-export function bakeTerrainSemantic({ positions, normals = null, recipe, tileIds = [] } = {}) {
+export function bakeTerrainSemantic({ positions, normals = null, recipe, tileIds = [], ecologyAt = null, climateAt = null } = {}) {
   if (!positions || positions.length % 3 !== 0) throw new Error("semantic bake requires positions");
   const count = positions.length / 3;
   const ids = new Uint32Array(count * 4);
@@ -17,26 +17,46 @@ export function bakeTerrainSemantic({ positions, normals = null, recipe, tileIds
   const terrainData0 = new Float32Array(count * 4);
   const terrainData1 = new Float32Array(count * 4);
   const flowData = new Float32Array(count * 4);
+  const climateData1 = new Float32Array(count * 4);
+  const ecologyData0 = new Float32Array(count * 4);
   const uv = new Float32Array(count * 2);
   const histogram = {};
   for (let i = 0; i < count; i++) {
     const p = [positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]];
     const s = recipe.semanticAt(p);
+    const ecoCell = ecologyAt?.(p);
+    const climCell = climateAt?.(p) || ecoCell;
+    const ecology = ecoCell?.ecology;
+    const climate = climCell?.climate;
+    const wetness = ecology ? ecology.ecologicalWetness : s.wetness;
+    const forestness = ecology ? ecology.forestness : s.forestness;
     const slope = normals ? 1 - Math.abs(normals[i * 3] * p[0] + normals[i * 3 + 1] * p[1] + normals[i * 3 + 2] * p[2]) / (Math.hypot(...p) || 1) : 0.2;
-    const coastDistance = clamp01(s.coastDistance ?? (1 - s.land) * 0.8 + s.wetness * 0.2);
-    const ao = clamp01(s.ao ?? (0.72 - slope * 0.25 - s.wetness * 0.08));
-    const flow = s.flow || [0, 0, s.wetness];
+    const coastDistance = clamp01(s.coastDistance ?? (1 - s.land) * 0.8 + wetness * 0.2);
+    const ao = clamp01(s.ao ?? (0.72 - slope * 0.25 - wetness * 0.08));
+    const flow = s.flow || [0, 0, wetness];
     const candidates = [
       { id: tileIds[i] ?? 0, weight: 1 - slope },
-      { id: 1, weight: s.wetness * 0.5 },
+      { id: 1, weight: wetness * 0.5 },
       { id: 2, weight: s.rockness * (0.4 + slope) },
-      { id: 3, weight: s.forestness * (1 - slope) },
+      { id: 3, weight: forestness * (1 - slope) },
     ];
     const ws = normalizeWeights(candidates.map((candidate) => candidate.weight));
     for (let k = 0; k < 4; k++) { ids[i * 4 + k] = candidates[k].id; weights[i * 4 + k] = ws[k]; }
-    terrainData0.set([s.height, clamp01(slope), clamp01(s.wetness), clamp01(1 - s.land)], i * 4);
-    terrainData1.set([clamp01(s.forestness), clamp01(s.rockness), coastDistance, ao], i * 4);
-    flowData.set([Number(flow[0]) || 0, Number(flow[1]) || 0, Number(flow[2]) || s.wetness, coastDistance], i * 4);
+    terrainData0.set([s.height, clamp01(slope), clamp01(wetness), clamp01(1 - s.land)], i * 4);
+    terrainData1.set([clamp01(forestness), clamp01(s.rockness), coastDistance, ao], i * 4);
+    flowData.set([Number(flow[0]) || 0, Number(flow[1]) || 0, Number(flow[2]) || wetness, coastDistance], i * 4);
+    climateData1.set([
+      clamp01(climate?.precipitationClimatology ?? 0),
+      clamp01(climate?.cloudPotential ?? 0),
+      clamp01((climate?.cloudBase ?? 0) / 1.6),
+      clamp01(ecology?.ecologicalWetness ?? 0),
+    ], i * 4);
+    ecologyData0.set([
+      clamp01(ecology?.forestness ?? 0),
+      clamp01(ecology?.grassness ?? 0),
+      clamp01(ecology?.reedness ?? 0),
+      clamp01(ecology?.mudness ?? 0),
+    ], i * 4);
     // Chart-local planar UV is derived from the normalized world direction;
     // hard semantic edges remain encoded in ids/weights, not texture names.
     const length = Math.hypot(...p) || 1;
@@ -44,7 +64,7 @@ export function bakeTerrainSemantic({ positions, normals = null, recipe, tileIds
     uv[i * 2 + 1] = 0.5 + p[2] / length * 0.5;
     histogram[s.tileId] = (histogram[s.tileId] || 0) + 1;
   }
-  return { ids, weights, terrainData0, terrainData1, flowData, uv, histogram, count, schema: "terrain-semantic-v8" };
+  return { ids, weights, terrainData0, terrainData1, flowData, climateData1, ecologyData0, uv, histogram, count, schema: "terrain-semantic-v8" };
 }
 
 export function forestDensityAt({ forestness = 0, wetness = 0, slope = 0, coastExposure = 0, keepout = 0, facing = 0 } = {}) {

@@ -6,7 +6,7 @@
 // =====================================================================
 
 import { createLandmarkManifest, createContinuousLandformManifest, validateLandmarkManifest, landmarkManifestHash, DEFAULT_LANDMARK_MANIFEST } from "../../world/planetV8/landmarkManifest.js";
-import { buildGeodesicMainAndDualGrid } from "./geodesicGrid.js";
+import { buildGeodesicMainAndDualGrid, sampleBarycentricDirection } from "./geodesicGrid.js";
 import { createTerrainTiles } from "./terrainTiles.js";
 import { solveSphericalTerrain, terrainAssignmentMap } from "./sphericalWfc.js";
 import { createPlanetFieldRecipe, createRadialChartField } from "./planetFieldComposer.js";
@@ -20,6 +20,7 @@ import { compileLandmarkTerrainRoutes, LANDFORM_CHAIN_ROUTE_DEFINITIONS } from "
 import { compilePlanetClouds } from "../../render/clouds/heroCloudCompiler.js";
 import { solveHydrologyV10 } from "./hydrologyFieldV10.js";
 import { solveClimateV10 } from "./climateFieldV10.js";
+import { solveEcologyV10 } from "./ecologyFieldV10.js";
 import { validatePlanetTopology } from "./planetValidatorsV8.js";
 import { validateChartSeams } from "./chartSeamValidator.js";
 import { validatePlanetGlobalConstraints, measurePlanetArea } from "./globalConstraints.js";
@@ -112,15 +113,47 @@ function prepareCharts(grid, assignment, landmarks, chartLimit) {
   });
 }
 
-function trianglesFromMesh(mesh, recipe) {
+export function trianglesFromMesh(mesh, recipe) {
   const triangles = [];
   for (let i = 0; i < mesh.indices.length; i += 3) {
     const indices = [mesh.indices[i], mesh.indices[i + 1], mesh.indices[i + 2]];
     if (indices.some((index) => index == null)) continue;
     const points = indices.map((index) => [mesh.positions[index * 3], mesh.positions[index * 3 + 1], mesh.positions[index * 3 + 2]]);
-    triangles.push({ a: points[0], b: points[1], c: points[2], semantic: recipe.semanticAt(points[0]) });
+    triangles.push({ a: points[0], b: points[1], c: points[2], semantic: recipe?.semanticAt?.(points[0]) || null });
   }
   return triangles;
+}
+
+function sampleV10At(grid, fieldV10, position) {
+  if (!grid?.dual || !fieldV10?.cells) return null;
+  const length = Math.hypot(position[0], position[1], position[2]) || 1;
+  const direction = [position[0] / length, position[1] / length, position[2] / length];
+  const hit = sampleBarycentricDirection(grid, direction);
+  return fieldV10.cells[hit.cellIndex] || null;
+}
+
+function ecologyLocksAt(grid, combatSurface, radius, field) {
+  const keepouts = [];
+  for (const zone of combatSurface?.zones || []) {
+    for (const keepout of zone.keepouts || []) keepouts.push(keepout);
+  }
+  return (cellId) => {
+    const index = grid.dual.indexOfId(cellId);
+    if (index < 0) return {};
+    const direction = grid.dual.directionOf(index);
+    const position = direction.map((value) => value * (radius + field.heightAt(direction)));
+    let combat = 0;
+    for (const keepout of keepouts) {
+      if (!keepout.position) continue;
+      const distance = Math.hypot(
+        position[0] - keepout.position[0],
+        position[1] - keepout.position[1],
+        position[2] - keepout.position[2],
+      );
+      if (distance < (keepout.radius || 0)) combat = 1;
+    }
+    return { combat };
+  };
 }
 
 function landmarkForDirection(direction, landmarks) {
@@ -268,6 +301,18 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
     wind: [1, 0, 0],
     radius,
   });
+  const ecologyV10 = solveEcologyV10({
+    grid,
+    hydrology: hydrologyV10,
+    climate: climateV10,
+    elevationAt: (direction) => field.heightAt(direction),
+    baseForestnessAt: (cellId) => {
+      const index = grid.dual.indexOfId(cellId);
+      if (index < 0) return 0.5;
+      return field.semanticAt(grid.dual.directionOf(index)).forestness ?? 0.5;
+    },
+    locksAt: ecologyLocksAt(grid, combatSurface, radius, field),
+  });
   const clouds = compilePlanetClouds({
     cells: cloudCells,
     semantics: cloudSemantics,
@@ -281,7 +326,13 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
   const charts = prepareCharts(grid, assignment, manifest, chartLimit).map((chart) => {
     const scalar = createChartScalarField(field, chart, { radialMin: -4, radialMax: 8, span: 10, resolution });
     const mesh = marchingCubes(scalar, { isoLevel: 0, normalMode: "gradient" });
-    const semantic = bakeTerrainSemantic({ positions: mesh.positions, normals: mesh.normals, recipe: field });
+    const semantic = bakeTerrainSemantic({
+      positions: mesh.positions,
+      normals: mesh.normals,
+      recipe: field,
+      ecologyAt: (position) => sampleV10At(grid, ecologyV10, position),
+      climateAt: (position) => sampleV10At(grid, climateV10, position),
+    });
     return { ...chart, mesh, semantic };
   });
   const vegetationByChart = charts.map((chart) => {
@@ -304,6 +355,9 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
       seed: seed + chart.cellIndex,
       keepouts,
       maxInstances: 240,
+      ecology: ecologyV10,
+      grid,
+      chartId: chart.id,
     });
   });
   surface.registerCharts?.(charts);
@@ -335,6 +389,8 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
     .join("|");
   snapshot.vegetation.instanceCounts = Object.fromEntries(vegetationByChart.map((vegetation, index) => ["chart:" + index, vegetation.instanceCount]));
   snapshot.vegetation.clusterHash = vegetationByChart.map((vegetation) => Object.entries(vegetation.buckets).map(([species, instances]) => species + ":" + instances.length).join(",")).join("|");
+  snapshot.vegetation.ecologyHash = ecologyV10.hash;
+  snapshot.vegetation.ecologySource = "ecology-v10";
   snapshot.clouds.clusterHash = clouds.climateHash;
   snapshot.clouds.climateHash = climateV10.hash || clouds.climateHash;
   snapshot.clouds.heroHash = clouds.heroHash;
@@ -343,7 +399,7 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
   snapshot.clouds.climateBands = [...new Set(clouds.instances.map((instance) => instance.climateBand))].sort();
   snapshot.clouds.climateSource = "climate-v10";
   const validation = validatePlanetSnapshot(snapshot);
-  return { ok: validation.ok, stage: validation.ok ? "complete" : "snapshot", snapshot, manifest, grid, wfc, field, water, surface, portals, navigation, terrainRoutes, routeMetadataReport, waterfallReport, chainReport, elevationReport, finalElevationReport, chainAdjacencyReport, bookshopReport, combatSurface, combatReport, vegetation: vegetationByChart, clouds, climate: climateV10, hydrology: hydrologyV10, charts, seamReport, globalReport, report: validation };
+  return { ok: validation.ok, stage: validation.ok ? "complete" : "snapshot", snapshot, manifest, grid, wfc, field, water, surface, portals, navigation, terrainRoutes, routeMetadataReport, waterfallReport, chainReport, elevationReport, finalElevationReport, chainAdjacencyReport, bookshopReport, combatSurface, combatReport, vegetation: vegetationByChart, clouds, climate: climateV10, hydrology: hydrologyV10, ecology: ecologyV10, charts, seamReport, globalReport, report: validation };
 }
 
 export { createChartScalarField };

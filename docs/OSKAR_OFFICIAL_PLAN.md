@@ -70,8 +70,8 @@
 | --- | --- | --- |
 | 云 | `cloudClusterCompiler` 烘焙 fetch/lift/path；高山圣城另有 **本地戴帽云** | impostor 只更 `uTime/uWind/uWeather/uDay` |
 | 海/湖 | 曲面 mesh + `waterData0/1` | shader 波浪；湖有 wake/ripple 缓冲 |
-| 植被 | V9 compiler + InstancedMesh（opt-in） | 开关默认关 |
-| 气候/生态 V10 | hydrology/climate/ecology 纯数据 | **未**替换 cloud/vegetation 的局部近似 |
+| 植被 | V9 compiler 读 `ecologyFieldV10` + InstancedMesh（opt-in） | 开关默认关 |
+| 气候/生态 V10 | hydrology/climate/ecology 纯数据 | 云与植被编译器已消费；运行时仍 opt-in |
 
 ### 2.4 平滑与硬边同时存在
 
@@ -89,7 +89,7 @@
 
 **来源事实 / 画面归纳（S11）：** 蓬松云块 → 多角度 impostor；叠放制造云海遮挡；运动在 shader。
 
-**项目现状：** Planet V8 impostor atlas 存在，默认关。高山圣城 **本地山脊** 已钉戴帽云/云海框（`highlandHeroClouds.js`），不依赖 V8 开关。气候抽样云与 V10 `climateFieldV10` 仍未并源。
+**项目现状：** Planet V8 impostor atlas 存在，默认关。高山圣城 **本地山脊** 已钉戴帽云/云海框（`highlandHeroClouds.js`），不依赖 V8 开关。球面 opt-in 气候抽样云已读 `climateFieldV10`。
 
 ### 2.7 海面不是第三种等值面算法
 
@@ -128,14 +128,14 @@ MC 只生成结构。浪是 shader。
 | --- | --- | --- |
 | main + dual 同时保留 | `geodesicMainGrid` / `geodesicDualGrid` | RUNTIME_WIRED，默认关 |
 | 手工模块 + WFC/约束 | 城堡 Townscaper；球面 `sphericalWfc` | 城堡默认开；球面 opt-in |
-| 长窄结构不靠 WFC 碰运气 | `hardRoutePlanner`、水文 V10 | 路线门仍有 P0 golden 漂移；水文未接线 |
+| 长窄结构不靠 WFC 碰运气 | `hardRoutePlanner`、水文 V10 | 水文已接入编译器；硬路线 golden 仍是 P0 |
 | 生成烘焙 / 运行 shader | 云 impostor、水面 data 纹理 | 圣城本地云已挂；球面云默认关 |
 | 云海 impostor | `cloudImpostorSystem` + `highlandHeroClouds` | 圣城本地 RUNTIME_WIRED；球面 opt-in |
 | 草 contrast outline | V9 grass shader 契约 | VISUAL_PROXY_PASSED，默认世界未见 |
 | 海面结构 ≠ 浪 | curved water + shader | RUNTIME_WIRED，默认关 |
 | 假 AO + 可选 bounce | `render/lighting`、`render/ao` | RUNTIME_WIRED，bounce 默认关 |
 | 编辑小输入 | 高山格网编辑器 | RUNTIME_WIRED |
-| 气候→云/植被单源 | `climateFieldV10` / `ecologyFieldV10` | **DATA_TESTED only** |
+| 气候→云/植被单源 | `climateFieldV10` / `ecologyFieldV10` | RUNTIME_WIRED，默认关 |
 
 审计入口（读代码与 field，不读勾选）：
 
@@ -147,9 +147,9 @@ node tools/audit_planet_v8_oskar_gap.mjs
 
 按 Oskar 方法，而不是按「文件是否存在」：
 
-1. **单源气候。** 云 compiler 仍用 `dot(direction, wind)` 一类局部近似，没有读 `climateFieldV10`。这直接违反「生成期烘焙、一处真源」。
-2. **单源生态。** 植被/草地仍可走局部湿度猜测，没有强制只读 `ecologyFieldV10`。
-3. **生产顺序。** 需要 `field → hydrology → climate → bake → cloud+ecology → snapshot`，同一 climate hash 供给云和树。现在 V10 模块在旁路。
+1. **单源气候。** 云 compiler 已读 `climateFieldV10`（2026-08-26）。
+2. **单源生态。** 植被 compiler/runtime 已读 `ecologyFieldV10`（2026-08-26）；默认世界的山坡草仍不是这套 InstancedMesh。
+3. **生产顺序。** 需要 `field → hydrology → climate → charts/semantic bake → cloud+ecology → snapshot`，同一 climate hash 供给云和树。现在 hydrology/climate/ecology 已在生产编译器里求解，但 snapshot 还缺完整 hash 与 Worker 原子提交。
 4. **默认世界。** 官方方法要求玩家看见 main/dual/field 的结果。当前默认仍是 legacy 圣城切图 + 本地山体；V8/V9 要 URL/`worldVersion`。
 5. **草与地面。** 默认镜头里的山坡/苔庭仍不是 contrast-aware billboard 草。
 6. **WFC 与河流。** 岸线/湖盆应来自地形场，禁止再出现与 field 无关的大矩形水面。最新圣城湖面已改 WFC cap；球面海洋仍是 opt-in。
