@@ -55,22 +55,22 @@
 
 ## O2 · 生产顺序与快照（原 V10-G21 H，P0）
 
-- [ ] `planetCompilerV8.js` 生产顺序：`field → hydrology → climate → charts/semantic bake → cloud+ecology → snapshot`
-- [ ] cloud 与 vegetation 读取 **同一个** climate hash
-- [ ] Worker 生成，帧边界原子提交；旧 V8/V9 semantic 可 flag 回滚；场景不得双套水/云/植被 renderer
-- [ ] snapshot 增加 `hydrologyHash` / `climateHash` / `ecologyHash` / `dependencyGraphVersion`
-- [ ] capability ledger 只允许 DATA_TESTED → RUNTIME_WIRED → DEFAULT_ON，禁止跳级
-- [ ] 新建 `tools/test_planet_v10_coupled_systems.mjs`：schema+水文+气候+生态+云+植被+编辑器+runtime；golden `1/7/42/884` + 100 full world + 1000 field seeds
-- [ ] 全部绿灯后才改 PLAN.md / TigerMessenger/TODO.md 对应勾选
+- [x] **[Grok 2026-08-26]** `planetCompilerV8` pipeline：`field → hydrology → climate → charts → ecology+clouds → semantic → vegetation → snapshot`
+- [x] **[Grok 2026-08-26]** cloud 与 vegetation 的 `snapshot.*.climateHash` 都等于同一个 `climateFieldV10.hash`
+- [x] **[Grok 2026-08-26]** Worker `createPlanetCompileHost` + `commitAtFrameBoundary`；semantic shader 仍走 flag；`cloudImpostorV1` 开启时跳过 legacy `createCloudRing`
+- [x] **[Grok 2026-08-26]** snapshot 增加 `hydrologyHash` / `climateHash` / `ecologyHash` / `dependencyGraphVersion`
+- [x] **[Grok 2026-08-26]** capability ledger 禁止从 DATA_TESTED 跳到 DEFAULT_ON，禁止新建条目直接 DEFAULT_ON
+- [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v10_coupled_systems.mjs` golden 1/7/42/884 + 100 full world + 1000 field seeds
+- [x] **[Grok 2026-08-26]** PLAN.md / TigerMessenger/TODO.md G21-H 已按绿灯回填
 
 ---
 
 ## O3 · 默认世界仍 opt-in
 
-- [ ] `params.js` 中 `planetTerrainV1` `curvedWaterV1` `cloudImpostorV1` `terrainSemanticShaderV1` 保持默认 false
-- [ ] `test_grok_completion_contract.mjs` 继续锁默认 false 与 rollback
+- [x] **[Grok 2026-08-26]** `params.js` 中 `planetTerrainV1` `curvedWaterV1` `cloudImpostorV1` `terrainSemanticShaderV1` 保持默认 false；耦合测试与 grok contract 锁死
+- [x] **[Grok 2026-08-26]** `node tools/test_grok_completion_contract.mjs` 继续锁默认 false 与 rollback
 - [ ] 主系统 A/B/C（V7/V8/V9）按钮不得在 O1/O2 红灯时把 V9 设成默认进入页
-- [ ] 文档写清：方尖碑圣城本地山体 ≠ 球面 V8 大陆链；两套云不要互相覆盖成双层错误
+- [x] **[Grok 2026-08-26]** 球面 impostor 开时 `messengerIsland` 跳过 legacy `createCloudRing`；圣城戴帽云仍是本地钉点，不等于 V8 大陆链
 
 ---
 
@@ -120,4 +120,4 @@
 
 ## 建议下一刀
 
-云和植被单源都已接线。下一刀 **O2 生产顺序与快照**（G21-H）：`field → hydrology → climate → charts/semantic bake → cloud+ecology → snapshot`，同一 climate hash 供给云和树；仍不碰 DEFAULT_ON。
+O1/O2 已接线。下一刀 **O3 剩余文档 + O4 默认镜头草/岸**；硬路线 golden 仍不得改回 `17acc1eb`。仍不碰 DEFAULT_ON。

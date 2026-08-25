@@ -1950,11 +1950,11 @@ cloudPotential = saturate(0.08 + vapor * 0.48 + lift * 0.32 - rainShadow * 0.38)
 
 #### G21-H · 生产接线、迁移与完成门（P0，负责人：Codex）
 
-- [ ] **[Codex]** 在 `planetCompilerV8.js` 建立生产顺序：field→hydrology→climate→charts/semantic bake→cloud+ecology→snapshot；cloud 与 vegetation 读取同一个 climate hash。
-- [ ] **[Codex]** Worker 执行生成，帧边界原子提交；旧 V8/V9 semantic 路径保留 feature flag 回滚，但场景中不得出现双套水/云/植被 renderer。
-- [ ] **[Codex]** snapshot 增加 hydrologyHash/climateHash/ecologyHash/dependencyGraphVersion；capability ledger 逐级记录 DATA_TESTED/RUNTIME_WIRED/DEFAULT_ON。
-- [ ] **[Codex]** 新建 `tools/test_planet_v10_coupled_systems.mjs`，串联 schema、水文、气候、生态、云、植被、编辑器、runtime；golden `1/7/42/884` + 100 full world + 1000 field seeds。
-- [ ] **[Codex]** 仅在所有门禁通过后更新 PLAN/TODO 状态；不以截图、文件存在或 DeepSeek 自报完成代替生产接线证据。
+- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** `planetCompilerV8` 生产顺序 `field → hydrology → climate → charts → ecology+clouds → semantic bake → vegetation → snapshot`；cloud 与 vegetation 读取同一个 `climate.hash`。
+- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** Worker `createPlanetCompileHost` 生成，runtime `commitAtFrameBoundary` 原子提交；semantic/impostor/水面仍 flag 回滚；`cloudImpostorV1` 开启时不挂 legacy 云环。
+- [x] **[Grok 2026-08-26]** snapshot 增加 hydrologyHash/climateHash/ecologyHash/dependencyGraphVersion；capability ledger 禁止 DATA_TESTED→DEFAULT_ON 跳级。
+- [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v10_coupled_systems.mjs`：schema+水文+气候+生态+云+植被+编辑器+runtime；golden `1/7/42/884` + 100 full world + 1000 field seeds。
+- [x] **[Grok 2026-08-26]** 门禁通过后回填本段与 PLAN 12.30 G21-H；未改默认 flag。
 
 #### G21-I · 定量验收阈值（共同）
 

@@ -149,7 +149,7 @@ node tools/audit_planet_v8_oskar_gap.mjs
 
 1. **单源气候。** 云 compiler 已读 `climateFieldV10`（2026-08-26）。
 2. **单源生态。** 植被 compiler/runtime 已读 `ecologyFieldV10`（2026-08-26）；默认世界的山坡草仍不是这套 InstancedMesh。
-3. **生产顺序。** 需要 `field → hydrology → climate → charts/semantic bake → cloud+ecology → snapshot`，同一 climate hash 供给云和树。现在 hydrology/climate/ecology 已在生产编译器里求解，但 snapshot 还缺完整 hash 与 Worker 原子提交。
+3. **生产顺序。** `planetCompilerV8` 已按 `field → hydrology → climate → charts → ecology+clouds → semantic → vegetation → snapshot` 接线（2026-08-26）；snapshot 带 hydrology/climate/ecology hash。默认世界仍 opt-in。
 4. **默认世界。** 官方方法要求玩家看见 main/dual/field 的结果。当前默认仍是 legacy 圣城切图 + 本地山体；V8/V9 要 URL/`worldVersion`。
 5. **草与地面。** 默认镜头里的山坡/苔庭仍不是 contrast-aware billboard 草。
 6. **WFC 与河流。** 岸线/湖盆应来自地形场，禁止再出现与 field 无关的大矩形水面。最新圣城湖面已改 WFC cap；球面海洋仍是 opt-in。

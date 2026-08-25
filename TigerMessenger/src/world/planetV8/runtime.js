@@ -16,7 +16,6 @@ import {
 import { compilePlanetV8 } from "../../procgen/planet/planetCompilerV8.js";
 import { createBufferGeometryFromMesh } from "../../procgen/three/bufferGeometryAdapter.js";
 import { compileCurvedWater } from "../waterV8/curvedWaterCompiler.js";
-import { compilePlanetClouds } from "../../render/clouds/heroCloudCompiler.js";
 import { buildCloudImpostorAtlas } from "../../render/clouds/impostorAtlasBuilder.js";
 import { createCloudImpostorSystem } from "../../render/clouds/cloudImpostorSystem.js";
 import { createSemanticTerrainMaterial } from "../../render/terrain/semanticTerrainMaterial.js";
@@ -24,6 +23,17 @@ import { createCurvedWaterMaterial, createCurvedLakeMaterial } from "../../rende
 import { createVegetationRuntime } from "../../render/vegetation/vegetationRuntime.js";
 import { createWaterSurfaceEventBuffer, createWaterWakeRibbonBuffer } from "../waterV8/waterSurfaceEvents.js";
 import { createResourceRegistry } from "../../core/resourceRegistry.js";
+import { createPlanetSnapshotCommitQueue } from "./snapshotCommitV8.js";
+import { validatePlanetSnapshot } from "../../procgen/planet/schema.js";
+
+export function planetRendererOwnership(features = {}) {
+  return {
+    terrain: features.planetTerrainV1 === true,
+    water: features.curvedWaterV1 === true,
+    clouds: features.cloudImpostorV1 === true,
+    vegetation: features.planetPresentationVersion === "v9" && features.planetTerrainV1 === true,
+  };
+}
 
 export function selectPlanetV9LOD({ cameraDistance = 160, landmarkImportance = 1 } = {}) {
   const distance = Number.isFinite(cameraDistance) ? Math.max(0, cameraDistance) : 160;
@@ -79,6 +89,7 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     resourceRegistry: features.resourceRegistry || createResourceRegistry(),
     lod,
     compiled: false,
+    commitQueue: features.commitQueue || createPlanetSnapshotCommitQueue({ validate: validatePlanetSnapshot }),
     surfaceProjectionEnabled: enabledTerrain && (features.planetSurfaceRidersV1 ?? isPlanetSurfaceRidersV1()),
   };
   if (!root.visible) return state;
@@ -100,7 +111,19 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
       root.visible = false;
       return state;
     }
-    state.snapshot = compiled.snapshot;
+    const queued = state.commitQueue.enqueue(compiled.snapshot);
+    if (!queued.ok) {
+      root.userData.v8Error = queued.result || "snapshot-commit";
+      root.visible = false;
+      return state;
+    }
+    const committed = state.commitQueue.commitAtFrameBoundary();
+    if (!committed.ok) {
+      root.userData.v8Error = committed.result || "snapshot-commit";
+      root.visible = false;
+      return state;
+    }
+    state.snapshot = committed.snapshot;
     const material = enabledSemanticShader
       ? createSemanticTerrainMaterial(THREE)
       : new THREE.MeshStandardMaterial({ color: 0x6d8f65, roughness: 0.96, metalness: 0, flatShading: true });
@@ -148,14 +171,8 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     }
   }
 
-  if (enabledClouds && (state.compiler?.clouds || state.compiler?.grid)) {
-    const clusters = state.compiler.clouds || compilePlanetClouds({
-      cells: state.compiler.grid.dual.cells().map((cell) => ({ ...cell, direction: state.compiler.grid.dual.directionOf(cell.index) })),
-      semantics: new Map(),
-      seed,
-      landmarks: state.compiler.manifest,
-      field: state.compiler.field,
-    });
+  if (enabledClouds && state.compiler?.clouds) {
+    const clusters = state.compiler.clouds;
     state.clouds = { atlas: buildCloudImpostorAtlas(), clusters };
     state.clouds.renderer = createCloudImpostorSystem(THREE, root, state.clouds.clusters, { atlas: state.clouds.atlas, radius });
     trackLogicalResource(state.resourceRegistry, "cloud", `planet-${presentationVersion}`);

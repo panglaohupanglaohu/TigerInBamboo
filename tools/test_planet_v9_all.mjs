@@ -16,6 +16,7 @@ const scripts = [
   "tools/test_planet_v9_lake_surface.mjs",
   "tools/test_planet_v9_terrain_editor.mjs",
   "tools/test_planet_v9_runtime_wiring.mjs",
+  "tools/test_planet_v10_coupled_systems.mjs",
 ];
 const results = [];
 for (const script of scripts) {

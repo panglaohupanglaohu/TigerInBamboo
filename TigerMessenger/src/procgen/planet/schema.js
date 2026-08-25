@@ -47,6 +47,9 @@ export function validatePlanetSnapshot(snapshot) {
   for (const key of ["graph", "land", "water", "nav", "vegetation", "clouds", "versions"]) {
     if (!snapshot?.[key] || typeof snapshot[key] !== "object") errors.push(key);
   }
+  for (const key of ["hydrologyHash", "climateHash", "ecologyHash", "dependencyGraphVersion"]) {
+    if (typeof snapshot?.[key] !== "string" || !snapshot[key]) errors.push(key);
+  }
   return { ok: errors.length === 0, errors };
 }
 
@@ -58,8 +61,12 @@ export function createEmptyPlanetSnapshot({ seed = 0, versions = createPlanetVer
     land: { chunkManifest: [], meshHash: null, semanticHash: null, biomeStats: {} },
     water: { oceanLevel: 0, lakeBasins: [], shorelineHash: null, routeHash: null },
     nav: { surfaceHash: null, portalHash: null, routeHash: null },
-    vegetation: { clusterHash: null, instanceCounts: {} },
+    vegetation: { clusterHash: null, instanceCounts: {}, climateHash: null, ecologyHash: null, ecologySource: null },
     clouds: { atlasVersion: versions.clouds, clusterHash: null, climateHash: null, heroHash: null, heroCount: 0, instanceCount: 0 },
+    hydrologyHash: null,
+    climateHash: null,
+    ecologyHash: null,
+    dependencyGraphVersion: null,
     versions,
   };
 }

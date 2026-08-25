@@ -138,6 +138,7 @@ function compileVegetationFromEcology({
   maxInstances = 2000,
   maxGrass = 800,
   ecology,
+  climateHash = null,
   grid,
   chartId = null,
 } = {}) {
@@ -237,6 +238,7 @@ function compileVegetationFromEcology({
     chartId,
     ecologySource: "ecology-v10",
     ecologyHash: ecology.hash || null,
+    climateHash: climateHash || null,
     buckets,
     lodBuckets: rebuildLodBuckets(buckets),
     clusterSchema: "trunk/canopy/octa-impostor",
@@ -268,6 +270,7 @@ function wrapVegetationV8(options = {}) {
     chartId: options.chartId || null,
     ecologySource: "missing-ecology",
     ecologyHash: null,
+    climateHash: null,
     buckets,
     lodBuckets: rebuildLodBuckets(buckets),
     clusterSchema: "trunk/canopy/octa-impostor",

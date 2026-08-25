@@ -24,7 +24,7 @@ import { loadMoebiusDistrict, placeMoebiusSwampAndSky } from "./messenger/loadMo
 import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/loadTraffic.js";
 import { updateMessengerIsland } from "./messenger/updateIsland.js";
 import { createSwampBgmState } from "./messenger/swampBgm.js";
-import { createPlanetV8Runtime } from "../world/planetV8/runtime.js";
+import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
 import { FEATURES } from "../core/params.js";
 
 // 苔庭周边地被与西芳寺六景共用一套灰青苔色阶；普通主岛苔丘仍保留
@@ -50,7 +50,9 @@ export const messengerIslandScene = {
 
     const platforms = buildWorld(scene);
     const hills = buildHills(scene, R);
-    const clouds = createCloudRing(scene, R);
+    const planetFeatures = { ...FEATURES, ...(ctx.options?.planetV8?.features || {}) };
+    const planetLayers = planetRendererOwnership(planetFeatures);
+    const clouds = planetLayers.clouds ? [] : createCloudRing(scene, R);
     const playZone = decoratePlayZone(scene, R);
     const camp = buildStartingCamp(scene, R);
     const farSide = decorateFarSide(scene, R);
@@ -60,7 +62,7 @@ export const messengerIslandScene = {
       planet: ctx.planet,
       radius: R,
       seed: ctx.options?.planetV8?.seed ?? FEATURES.terrainSeed ?? 42,
-      features: { ...FEATURES, ...(ctx.options?.planetV8?.features || {}) },
+      features: planetFeatures,
     });
 
     const harborBuilt = buildOldHarborScene({ seed: 8844 });

@@ -5,7 +5,7 @@
 import { createProcgenJob, validateProcgenJob } from "./jobProtocol.js";
 import { compilePlanetV8 } from "../planet/planetCompilerV8.js";
 
-const PHASES = ["graph", "WFC", "field", "MC", "smooth", "semantic", "water", "nav", "cloud"];
+const PHASES = ["graph", "WFC", "field", "hydrology", "climate", "MC", "semantic", "water", "nav", "cloud", "ecology"];
 
 export function createPlanetCompileHost({ workerUrl = null, budgetMs = 4 } = {}) {
   let worker = null;
