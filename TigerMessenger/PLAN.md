@@ -3599,7 +3599,7 @@ Codex 负责现役流水线接线、Worker/ResourceRegistry、运行时 shader �
 
 **G21-F 接线（2026-08-26，RUNTIME_WIRED，默认关）：** `vegetationCompilerV9` 经 `readEcologySample` 复制 `ecologyFieldV10` 的 forestness/speciesBand/grassness/reedness/mudness；`bakeTerrainSemantic` 写入 `climateData1`/`ecologyData0`；terrain shader 用 ecologicalWetness 与 precipitation 做湿草/泥/岸色。生产开关仍默认 false。
 
-**G21-H 接线（2026-08-26，RUNTIME_WIRED，默认关）：** 生产顺序 `field → hydrology → climate → charts → ecology+clouds → semantic → vegetation → snapshot`；snapshot 带 hydrologyHash/climateHash/ecologyHash/dependencyGraphVersion；云与植被读同一 climate hash；Worker 合作调度 + 帧边界原子提交；ledger 禁止跳级到 DEFAULT_ON。`tools/test_planet_v10_coupled_systems.mjs` 4 golden + 100 world + 1000 field seeds。
+**G21-H 接线（2026-08-26，RUNTIME_WIRED，默认关）：** 生产顺序 `field → hydrology → climate → ecology → cloud → charts/semantic bake → vegetation → snapshot`；snapshot 带 hydrologyHash/climateHash/ecologyHash/dependencyGraphVersion；云与植被读同一 climate hash；Worker 合作调度 + 帧边界原子提交；ledger 禁止跳级到 DEFAULT_ON。`tools/test_planet_v10_coupled_systems.mjs` 4 golden + 100 world + 1000 field seeds。
 
 **实现要点与限制（记录在案）**：
 

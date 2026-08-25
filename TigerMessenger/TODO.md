@@ -1950,7 +1950,7 @@ cloudPotential = saturate(0.08 + vapor * 0.48 + lift * 0.32 - rainShadow * 0.38)
 
 #### G21-H · 生产接线、迁移与完成门（P0，负责人：Codex）
 
-- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** `planetCompilerV8` 生产顺序 `field → hydrology → climate → charts → ecology+clouds → semantic bake → vegetation → snapshot`；cloud 与 vegetation 读取同一个 `climate.hash`。
+- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** `planetCompilerV8` 生产顺序 `field → hydrology → climate → ecology → cloud → charts/semantic bake → vegetation → snapshot`；cloud 与 vegetation 读取同一个 `climate.hash`。
 - [x] **[Grok 2026-08-26 RUNTIME_WIRED]** Worker `createPlanetCompileHost` 生成，runtime `commitAtFrameBoundary` 原子提交；semantic/impostor/水面仍 flag 回滚；`cloudImpostorV1` 开启时不挂 legacy 云环。
 - [x] **[Grok 2026-08-26]** snapshot 增加 hydrologyHash/climateHash/ecologyHash/dependencyGraphVersion；capability ledger 禁止 DATA_TESTED→DEFAULT_ON 跳级。
 - [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v10_coupled_systems.mjs`：schema+水文+气候+生态+云+植被+编辑器+runtime；golden `1/7/42/884` + 100 full world + 1000 field seeds。

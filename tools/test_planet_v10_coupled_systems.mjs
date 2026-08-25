@@ -65,10 +65,11 @@ for (const seed of [1, 7, 42, 884]) {
   assert.equal(validatePlanetSnapshot(world.snapshot).ok, true, `snapshot seed=${seed}`);
   assert.ok(pipelineIndex(world, "field") < pipelineIndex(world, "hydrology"));
   assert.ok(pipelineIndex(world, "hydrology") < pipelineIndex(world, "climate"));
-  assert.ok(pipelineIndex(world, "climate") < pipelineIndex(world, "charts"));
-  assert.ok(pipelineIndex(world, "charts") < pipelineIndex(world, "ecology"));
-  assert.ok(pipelineIndex(world, "charts") < pipelineIndex(world, "clouds"));
-  assert.ok(pipelineIndex(world, "ecology") < pipelineIndex(world, "vegetation"));
+  assert.ok(pipelineIndex(world, "climate") < pipelineIndex(world, "ecology"));
+  assert.ok(pipelineIndex(world, "climate") < pipelineIndex(world, "clouds"));
+  assert.ok(pipelineIndex(world, "ecology") < pipelineIndex(world, "charts"));
+  assert.ok(pipelineIndex(world, "clouds") < pipelineIndex(world, "charts"));
+  assert.ok(pipelineIndex(world, "charts") < pipelineIndex(world, "vegetation"));
   assert.ok(pipelineIndex(world, "vegetation") < pipelineIndex(world, "snapshot"));
   assert.equal(world.snapshot.hydrologyHash, world.hydrology.hash);
   assert.equal(world.snapshot.climateHash, world.climate.hash);
@@ -91,8 +92,7 @@ for (let seed = 1; seed <= 100; seed++) {
   assert.equal(world.ok, true, `full world seed=${seed}`);
   assert.equal(world.snapshot.climateHash, world.snapshot.vegetation.climateHash);
   assert.equal(world.snapshot.clouds.climateHash, world.climate.hash);
-  assert.equal(world.pipeline[0], "field");
-  assert.equal(world.pipeline.at(-1), "snapshot");
+  assert.deepEqual(world.pipeline, ["field", "hydrology", "climate", "ecology", "clouds", "charts", "vegetation", "snapshot"]);
 }
 
 for (let seed = 1; seed <= 1000; seed++) {

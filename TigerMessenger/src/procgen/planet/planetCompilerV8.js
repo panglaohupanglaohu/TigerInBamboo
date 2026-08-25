@@ -307,12 +307,6 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
     radius,
   });
   mark("climate");
-  const chartMeshes = prepareCharts(grid, assignment, manifest, chartLimit).map((chart) => {
-    const scalar = createChartScalarField(field, chart, { radialMin: -4, radialMax: 8, span: 10, resolution });
-    const mesh = marchingCubes(scalar, { isoLevel: 0, normalMode: "gradient" });
-    return { ...chart, mesh };
-  });
-  mark("charts");
   const ecologyV10 = solveEcologyV10({
     grid,
     hydrology: hydrologyV10,
@@ -337,17 +331,19 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
     climate: climateV10,
   });
   mark("clouds");
-  const charts = chartMeshes.map((chart) => {
+  const charts = prepareCharts(grid, assignment, manifest, chartLimit).map((chart) => {
+    const scalar = createChartScalarField(field, chart, { radialMin: -4, radialMax: 8, span: 10, resolution });
+    const mesh = marchingCubes(scalar, { isoLevel: 0, normalMode: "gradient" });
     const semantic = bakeTerrainSemantic({
-      positions: chart.mesh.positions,
-      normals: chart.mesh.normals,
+      positions: mesh.positions,
+      normals: mesh.normals,
       recipe: field,
       ecologyAt: (position) => sampleV10At(grid, ecologyV10, position),
       climateAt: (position) => sampleV10At(grid, climateV10, position),
     });
-    return { ...chart, semantic };
+    return { ...chart, mesh, semantic };
   });
-  mark("semantic");
+  mark("charts");
   const vegetationByChart = charts.map((chart) => {
     const profileLandmark = landmarkForDirection(chart.centerDirection, manifest);
     const keepouts = manifest

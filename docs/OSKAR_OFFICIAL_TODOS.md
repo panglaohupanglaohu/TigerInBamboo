@@ -24,7 +24,7 @@
 - [x] voxel AO + bounce 默认关；bounce 是实验档不是发售档
 - [x] V10 schema/水文/气候/生态 **DATA_TESTED**（DeepSeek 2026-08-24）
 - [x] 云 compiler 读 `climateFieldV10`（Grok 2026-08-26）；球面云物理字段不再用 `dot(direction, wind)` 冒充 fetch
-- [x] 植被 compiler/runtime 读 `ecologyFieldV10`（Grok 2026-08-26）；生产路径不再用 `forestDensityAt` 局部湿度猜测
+- [x] 植被 `vegetationCompilerV9` + InstancedMesh **已接入 opt-in RUNTIME_WIRED**，默认世界未启用（`planetTerrainV1` 仍 false）。compiler 读 `ecologyFieldV10`，不再用 `forestDensityAt` 局部湿度猜测
 
 ---
 
@@ -32,7 +32,13 @@
 
 - [x] **[2026-08-26]** 写明官方方法计划：`docs/OSKAR_OFFICIAL_PLAN.md`
 - [x] **[2026-08-26]** 代码/注释搜索 `MFC`：仅出现在 PLAN 12.23.1 的否定声明（「不存在名为 MFC 的独立算法」），无第三算法实现
-- [x] **[Grok 2026-08-26]** 跑 `node tools/audit_planet_v8_oskar_gap.mjs`（读 field/runtime/shader，不读勾选）。结论：`verdict=RUNTIME_READY_OPT_IN`；默认 `planetTerrainV1/curvedWaterV1/terrainSemanticShaderV1/cloudImpostorV1` 全是 false；`dense-forest`/`grass-surface`/`mountain-rolling-clouds`/`ocean-surface`/`lake-surface`/`terrain-editor` = RUNTIME_WIRED；`terrain-chain`/`highland-global-maximum` = DATA_TESTED。未 DEFAULT_ON。
+- [x] **[Grok 2026-08-26 复审]** `node tools/audit_planet_v8_oskar_gap.mjs`（读 field/runtime/shader，不读勾选）
+  - `verdict=RUNTIME_READY_OPT_IN`；`productionEnabled=false`
+  - 默认 flag：`planetTerrainV1/curvedWaterV1/terrainSemanticShaderV1/cloudImpostorV1` 全 false
+  - `dense-forest` = RUNTIME_WIRED（opt-in；`vegetationDataCount=167`，runtime 有 InstancedMesh；**默认世界未启用**）
+  - `grass-surface` / `mountain-rolling-clouds` / `ocean-surface` / `lake-surface` / `terrain-editor` = RUNTIME_WIRED
+  - `terrain-chain` / `highland-global-maximum` = DATA_TESTED（highland 4 golden 场高 9.4，strictHighest）
+  - 未 DEFAULT_ON
 - [ ] 任何新云/海/草 PR 的描述必须引用 PLAN 本文件的 S 编号，禁止「更像 Oskar」
 
 ---
@@ -55,10 +61,10 @@
 
 ## O2 · 生产顺序与快照（原 V10-G21 H，P0）
 
-- [x] **[Grok 2026-08-26]** `planetCompilerV8` pipeline：`field → hydrology → climate → charts → ecology+clouds → semantic → vegetation → snapshot`
+- [x] **[Grok 2026-08-26]** `planetCompilerV8` 实测 pipeline：`field → hydrology → climate → ecology → cloud → charts/semantic bake → vegetation → snapshot`
 - [x] **[Grok 2026-08-26]** cloud 与 vegetation 的 `snapshot.*.climateHash` 都等于同一个 `climateFieldV10.hash`
 - [x] **[Grok 2026-08-26]** Worker `createPlanetCompileHost` + `commitAtFrameBoundary`；semantic shader 仍走 flag；`cloudImpostorV1` 开启时跳过 legacy `createCloudRing`
-- [x] **[Grok 2026-08-26]** snapshot 增加 `hydrologyHash` / `climateHash` / `ecologyHash` / `dependencyGraphVersion`
+- [x] **[Grok 2026-08-26]** 完整 snapshot 契约：顶栏 `hydrologyHash` / `climateHash` / `ecologyHash` / `dependencyGraphVersion=fieldDependencyGraphV10`；植被依赖 `vegetation.climateHash === clouds.climateHash === climate.hash`（seed 42 实测 `6786f1a6`）。`validatePlanetSnapshot` 缺任一 hash 即失败
 - [x] **[Grok 2026-08-26]** capability ledger 禁止从 DATA_TESTED 跳到 DEFAULT_ON，禁止新建条目直接 DEFAULT_ON
 - [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v10_coupled_systems.mjs` golden 1/7/42/884 + 100 full world + 1000 field seeds
 - [x] **[Grok 2026-08-26]** PLAN.md / TigerMessenger/TODO.md G21-H 已按绿灯回填
@@ -87,14 +93,12 @@
 
 ## O5 · 硬路线与聚合测试
 
+定量数字只写在文末「定量门槛」，这里不重复勾选。
+
 - [ ] **P0** 不得把 `test_procgen_profiles_hard_routes.mjs` 的 expected 从 `264b9dbd` 改回 `17acc1eb`
 - [ ] planner 删除五台地/瀑布旧权威路线；改为连续山谷地面入口 → 五层内部旋转楼梯 → `castle-top`，再冻新 golden
 - [ ] `test_procgen_v7_all.mjs` 与 `test_planet_v8_all.mjs` 聚合入口转绿
-- [ ] 1000 seed 水面：无悬空水片/开放湖盆；岸线 seam ≤ `1e-4`（G21-I）
-- [ ] 气候：迎风 lift ≥ 背风 `1.35×`；长水面 fetch 区 vapor 高于无水上风 ≥ `0.18`
-- [ ] 生态：坡度 `>0.70` 非雪线森林密度 ≤ `0.08`；高山迎风林带高于背风 ≥ `0.12`；苔庭核心开阔率 ≥ `0.72`
-- [ ] 同 seed hash 稳定；dirty cone 外不变；20 轮 mount/replace/dispose 后 registry=0
-- [ ] 运行时每帧只更新 shader uniforms 与固定容量 buffer，不重跑 hydrology/climate/ecology solver
+- [ ] 定量门槛（水面 / 气候 / 生态 / 稳定性 / 性能）在生产路径上证明，见文末
 
 ---
 

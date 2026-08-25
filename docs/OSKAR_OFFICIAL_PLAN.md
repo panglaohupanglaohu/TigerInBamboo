@@ -58,7 +58,7 @@
 
 **来源事实（S3, S4, S7）：** Townscaper 核心是少量输入 + 手工模块 + 程序化组装。WFC **不擅长** 长、窄、有方向的结构（尤其河流）。失败必须可解释，不能靠无限重启。
 
-**项目现状：** 城堡侧有 Townscaper 单元目录、socket、WFC/约束求解（V6/V7）。球面侧有 `sphericalWfc.js` + hard pins。河流/岸线仍有「后处理补丁」痕迹；V10 水文场已 DATA_TESTED，**尚未**接到生产 cloud/vegetation compiler。
+**项目现状：** 城堡侧有 Townscaper 单元目录、socket、WFC/约束求解（V6/V7）。球面侧有 `sphericalWfc.js` + hard pins。河流/岸线仍有「后处理补丁」痕迹；V10 水文/气候/生态已接入生产 compiler（opt-in），默认世界未启用。
 
 ### 2.3 生成阶段烘焙，运行阶段只动 shader
 
@@ -149,9 +149,9 @@ node tools/audit_planet_v8_oskar_gap.mjs
 
 1. **单源气候。** 云 compiler 已读 `climateFieldV10`（2026-08-26）。
 2. **单源生态。** 植被 compiler/runtime 已读 `ecologyFieldV10`（2026-08-26）；默认世界的山坡草仍不是这套 InstancedMesh。
-3. **生产顺序。** `planetCompilerV8` 已按 `field → hydrology → climate → charts → ecology+clouds → semantic → vegetation → snapshot` 接线（2026-08-26）；snapshot 带 hydrology/climate/ecology hash。默认世界仍 opt-in。
+3. **生产顺序。** `planetCompilerV8` 已按 `field → hydrology → climate → ecology → cloud → charts/semantic bake → vegetation → snapshot` 接线（2026-08-26）；snapshot 带 hydrology/climate/ecology hash。默认世界仍 opt-in。
 4. **默认世界。** 官方方法要求玩家看见 main/dual/field 的结果。当前默认仍是 legacy 圣城切图 + 本地山体；V8/V9 要 URL/`worldVersion`。
-5. **草与地面。** 默认镜头里的山坡/苔庭仍不是 contrast-aware billboard 草。
+5. **草与地面。** 默认高山圣城山坡已挂本地 contrast-aware billboard 草；球面 V9 InstancedMesh 草仍 opt-in。
 6. **WFC 与河流。** 岸线/湖盆应来自地形场，禁止再出现与 field 无关的大矩形水面。最新圣城湖面已改 WFC cap；球面海洋仍是 opt-in。
 7. **硬路线 golden。** `test_procgen_profiles_hard_routes.mjs` 不得把 expected 改回旧五台地/瀑布 hash；应冻「地面入口 → 内部旋梯 → castle-top」。
 
