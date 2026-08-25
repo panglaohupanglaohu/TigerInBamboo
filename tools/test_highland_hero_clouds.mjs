@@ -12,6 +12,8 @@ import {
   heroLayoutHash,
 } from "../TigerMessenger/src/render/clouds/heroCloudCompiler.js";
 import { resolveCameraV8 } from "../TigerMessenger/src/render/visualV8/resolveCameraV8.js";
+import { compileHighlandLocalHeroClouds } from "../TigerMessenger/src/world/highlandHeroClouds.js";
+import { compileHighlandSlopeGrass } from "../TigerMessenger/src/world/highlandSlopeGrass.js";
 
 function normalize(v) { const l = Math.hypot(...v) || 1; return v.map((n) => n / l); }
 function dot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
@@ -127,5 +129,14 @@ const layered = compilePlanetClouds({
 });
 assert.ok(layered.heroCount >= 13);
 assert.ok(layered.instances.some((instance) => !instance.authored) || layered.instanceCount >= layered.heroCount);
+
+const localHero = compileHighlandLocalHeroClouds({ radius: 160 });
+assert.equal(localHero.instances.filter((instance) => instance.heroRole === "cap").length, 1);
+assert.ok(localHero.instances.every((instance) => instance.authored && instance.source === "hero-landmark-local"));
+assert.ok(localHero.instances.every((instance) => instance.climateSource !== "climate-v10"));
+const localGrass = compileHighlandSlopeGrass({ seed: 7 });
+assert.ok(localGrass.instanceCount > 80, `local grass ${localGrass.instanceCount}`);
+assert.equal(localGrass.contrastAware, true);
+assert.equal(localGrass.billboard, true);
 
 console.log(`✅ Highland hero clouds: cap+${rings.length} ring+${forests.length} forest, 1000-seed layout hash=${layoutSeed1}, 6 highland cameras peak-visible, world heroCount=${world.clouds.heroCount}`);

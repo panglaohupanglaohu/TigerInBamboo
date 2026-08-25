@@ -83,7 +83,7 @@
 
 **来源事实（S5）：** vertex shader 采脚下与背景 contrast，差值控制轮廓。草内部低、与悬崖/天空交界高。
 
-**项目现状：** `semanticTerrainMaterial` 有草语义色；contrast-aware grass outline 在 V9 有 shader 契约测试。默认世界的地面仍大量走旧材质，玩家在圣城山坡上不一定看见这套草。
+**项目现状：** `semanticTerrainMaterial` 有草语义色；contrast-aware grass outline 在 V9 有 shader 契约测试。默认高山圣城山坡另挂 **本地 billboard 草**（`highlandSlopeGrass.js`），不依赖 V8 开关。
 
 ### 2.6 云：代理，不是体积云模拟器
 

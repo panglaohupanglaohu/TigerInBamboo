@@ -41,7 +41,11 @@ function v6LegacyAndVisualContract() {
   for (const flag of ["citadelTownV4", "citadelTerrainUvV2", "citadelCombatV3", "planetTerrainV1", "curvedWaterV1", "cloudImpostorV1"]) {
     assert.match(params, new RegExp(`${flag}:\\s*false`), `${flag} must remain explicitly rollback-safe`);
   }
-  mustContain("TigerMessenger/src/core/params.js", [/legacyCanalWorld:\s*true/]);
+  mustContain("TigerMessenger/src/core/params.js", [
+    /legacyCanalWorld:\s*true/,
+    /worldVersion:\s*"custom"/,
+    /planetPresentationVersion:\s*"legacy"/,
+  ]);
   mustContain("TigerMessenger/src/world/citadel/runtimeAdapter.js", [/createSurfaceRider/, /bindRidersToSnapshot/]);
   mustContain("TigerMessenger/src/world/citadel/pipeline.js", [/createSurfaceProvider/]);
   mustContain("TigerMessenger/src/render/lighting/presetLoader.js", [/validateLightingPreset/, /VERSION_RE/]);

@@ -100,7 +100,8 @@ export const FEATURES = {
   planetSurfaceRidersV1: false,
   legacyCanalWorld: true,
   // shot-harness / 主系统 A-B-C 展示版本；只描述运行时管线，不替代各 feature flag。
-  planetPresentationVersion: "v9",
+  // 默认进入页必须是 custom/legacy：点 C 或带 worldVersion=v9 才进 V9。
+  planetPresentationVersion: "legacy",
   worldVersion: "custom",
   combatSeed: 1,
   townSeed: 1,
@@ -208,6 +209,9 @@ export function applyUrlOverrides(search) {
     FEATURES.terrainSemanticShaderV1 = true;
     FEATURES.cloudImpostorV1 = true;
     FEATURES.oceanWorldRoutesV1 = true;
+    if (!["v8", "v9"].includes(FEATURES.planetPresentationVersion)) {
+      FEATURES.planetPresentationVersion = "v8";
+    }
   }
   for (const key of [
     "planetGraphV1",
@@ -316,6 +320,20 @@ export function getWorldVersion() {
 }
 export function getPlanetPresentationVersion() {
   return FEATURES.planetPresentationVersion;
+}
+
+/** A/B/C 当前世界。无 URL、无原子 preset 时返回 custom，绝不默认落到 V9。 */
+export function resolveActiveWorldVersion({ search = "", features = FEATURES } = {}) {
+  const q = new URLSearchParams(typeof search === "string" && search.startsWith("?") ? search.slice(1) : search);
+  const fromUrl = q.get("worldVersion");
+  if (WORLD_VERSION_PRESETS[fromUrl]) return fromUrl;
+  if (WORLD_VERSION_PRESETS[features.worldVersion]) return features.worldVersion;
+  if (features.planetTerrainV1) {
+    if (features.planetPresentationVersion === "v9") return "v9";
+    return "v8";
+  }
+  if (features.procgenEngineV1 || features.wfcCastleV1 || features.marchingTerrainV1) return "v7";
+  return "custom";
 }
 
 // 启动时自动加载

@@ -6,7 +6,7 @@
 //  - 读取真实 renderer 统计并直接下载当前画布截图；
 //  - 不复制一套 Three 场景，避免“样片通过、游戏场景没接上”的假验收。
 // =====================================================================
-import { P, FEATURES } from "../core/params.js";
+import { P, FEATURES, resolveActiveWorldVersion } from "../core/params.js";
 import { makePanelDraggable } from "./dragPanel.js";
 import { setLightingPresetOverrides } from "../render/lighting/lightingState.js";
 import { validateLightingPreset } from "../render/lighting/presetLoader.js";
@@ -241,14 +241,7 @@ export function createShotHarnessPanel({ renderer, lightingDirector, subjects = 
   const statsEl = panel.querySelector("#shot-harness-stats");
   const enableEl = panel.querySelector("#shot-harness-enable-oskar");
   const versionStatusEl = panel.querySelector("#shot-harness-version-status");
-  let activeWorldVersion = (() => {
-    const fromUrl = new URLSearchParams(location.search).get("worldVersion");
-    if (WORLD_VERSIONS[fromUrl]) return fromUrl;
-    if (WORLD_VERSIONS[FEATURES.worldVersion]) return FEATURES.worldVersion;
-    if (FEATURES.planetTerrainV1) return FEATURES.planetPresentationVersion === "v8" ? "v8" : "v9";
-    if (FEATURES.procgenEngineV1 || FEATURES.wfcCastleV1 || FEATURES.marchingTerrainV1) return "v7";
-    return "custom";
-  })();
+  let activeWorldVersion = resolveActiveWorldVersion({ search: location.search, features: FEATURES });
   let activeSubject = subjectEl.value;
   let activeMode = lightingDirector.isEnabled?.() ? "prototype" : "legacy";
   let activePhase = "noon";

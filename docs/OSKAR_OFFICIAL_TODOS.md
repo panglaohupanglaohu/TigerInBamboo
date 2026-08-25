@@ -69,7 +69,7 @@
 
 - [x] **[Grok 2026-08-26]** `params.js` 中 `planetTerrainV1` `curvedWaterV1` `cloudImpostorV1` `terrainSemanticShaderV1` 保持默认 false；耦合测试与 grok contract 锁死
 - [x] **[Grok 2026-08-26]** `node tools/test_grok_completion_contract.mjs` 继续锁默认 false 与 rollback
-- [ ] 主系统 A/B/C（V7/V8/V9）按钮不得在 O1/O2 红灯时把 V9 设成默认进入页
+- [x] **[Grok 2026-08-26]** 默认 `worldVersion=custom`、`planetPresentationVersion=legacy`；A/B/C 只有 URL/`worldVersion` 才进 V7/V8/V9。`resolveActiveWorldVersion("")===custom`
 - [x] **[Grok 2026-08-26]** 球面 impostor 开时 `messengerIsland` 跳过 legacy `createCloudRing`；圣城戴帽云仍是本地钉点，不等于 V8 大陆链
 
 ---
@@ -78,9 +78,9 @@
 
 官方方法是玩家看见结果，不是只有 Node 哈希。
 
-- [ ] 默认高山圣城山坡：contrast-aware 草或明确的低端 billboard 降级，禁止只换绿色
-- [ ] 默认圣城湖面继续 WFC/dual-grid 曲面，禁止回归整块平面蓝
-- [ ] 戴帽云保持本地钉点；气候抽样云不得再随机盖住峰顶（`peak-visibility` keepout）
+- [x] **[Grok 2026-08-26]** 默认山坡挂 `highland-slope-grass-billboards`（contrast-aware + wind billboard），不是只换顶点绿
+- [x] **[Grok 2026-08-26]** 默认湖面 `curved=true`、WFC dual-grid、非 PlaneGeometry；`test_odyssey_citadel.mjs` 锁曲率
+- [x] **[Grok 2026-08-26]** 本地戴帽云钉回方尖碑山脊；气候抽样云不进圣城子树；球面 keepout 仍挡峰顶
 - [x] **[Grok 2026-08-26]** 球面 opt-in 路径气候抽样云读 `climateFieldV10`，不再 `dot(wind)` 近似；戴帽云仍是本地钉点
 
 ---
@@ -120,4 +120,4 @@
 
 ## 建议下一刀
 
-O1/O2 已接线。下一刀 **O3 剩余文档 + O4 默认镜头草/岸**；硬路线 golden 仍不得改回 `17acc1eb`。仍不碰 DEFAULT_ON。
+O1–O4 已接线。下一刀 **O5 硬路线 golden 与聚合测试**；不得把 `264b9dbd` 改回 `17acc1eb`。仍不碰 DEFAULT_ON。

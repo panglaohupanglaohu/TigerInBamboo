@@ -616,6 +616,9 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
   assert.equal(waterfrontWater.userData.surfaceProfile, "navona-gentle-basin");
   assert(waterfrontWater.userData.maxAuthoredRelief <= 0.12);
   assert.equal(waterfrontWater.userData.flatSurface, false, "湖面不得退回平面片");
+  assert.equal(waterfrontWater.userData.curved, true, "湖面必须标记为曲面");
+  assert.notEqual(waterfrontWater.geometry.type, "PlaneGeometry", "湖面不得退回 PlaneGeometry");
+  assert(waterfrontWater.geometry.index.count > 24, "湖面必须是 WFC/dual 不规则网格");
   assert.equal(waterfrontWater.userData.surfaceRadius, 160);
   assert.equal(waterfrontWater.userData.shoreline, "wfc-tile-mask");
   assert.equal(waterfrontWater.geometry.userData.wfc.tileSet, "highland-water-v1");
@@ -756,8 +759,20 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
   assert.equal(ambient?.isAmbientLight, true);
   assert.equal(ambient.intensity, 0.34, "最新设计使用冷色低环境光");
   assert.equal(ambient.color.getHex(), 0x8eb9e5);
-  assert.equal(byName(latest, "highland-hero-cloud-impostors"), null,
-    "圣城局部子树不得再夹带云层；云统一由全局地势/风场系统生成");
+  const slopeGrass = byName(latest, "highland-slope-grass-billboards");
+  assert(slopeGrass, "默认山坡必须挂 contrast-aware 草 billboard，禁止只换绿色");
+  assert.equal(slopeGrass.userData.grassBillboard, true);
+  assert.equal(slopeGrass.userData.contrastAwareOutline, true);
+  assert(slopeGrass.count > 80, `山坡草实例过少: ${slopeGrass.count}`);
+  const localClouds = byName(latest, "highland-hero-cloud-impostors");
+  assert(localClouds, "戴帽云必须钉在本地山脊上");
+  assert.equal(localClouds.userData.kind, "highland-hero-clouds");
+  assert(localClouds.userData.heroCount >= 1, "本地戴帽云 cap 缺失");
+  let climateCloudsOnCitadel = 0;
+  latest.traverse((object) => {
+    if (object.userData?.climateSource === "climate-v10") climateCloudsOnCitadel += 1;
+  });
+  assert.equal(climateCloudsOnCitadel, 0, "气候抽样云不得挂进圣城局部子树盖住峰顶");
   ok(`山谷设计 ${latest.userData.highlandLatestDesignVersion} · 连续地形×1 · 建筑${latestMetrics.buildingCount}格 · 地台埋入山体 · 非建筑道具=0 · 圣城低模绿团树×${latestMetrics.mountainVegetationCount}`);
 }
 

@@ -1696,6 +1696,7 @@ function buildWaterfront(materials, { waterOnly = false } = {}) {
   );
   water.userData.waterTopology = "curved-lake-cap-v10-navona-gentle";
   water.userData.flatSurface = false;
+  water.userData.curved = true;
   water.userData.gridMethod = "primary-grid+dual-grid+alternating-triangles";
   water.userData.surfaceRadius = 160;
   water.userData.shoreline = "wfc-tile-mask";

@@ -32,6 +32,8 @@ import {
   HIGHLAND_TOWNSCAPER_BASE_Y,
   HIGHLAND_TOWNSCAPER_PLATFORM,
 } from "./highlandCitadelDesign.js?v=reference-waterfront-v18-lift-trees-lake-cutout";
+import { mountHighlandLocalHeroClouds } from "./highlandHeroClouds.js";
+import { mountHighlandSlopeGrass } from "./highlandSlopeGrass.js";
 import {
   v3HighlandWallPalette,
   v3HighlandGateColor,
@@ -2378,6 +2380,8 @@ export function buildOdysseyCitadel(options = {}) {
   if (useHighlandLatestDesign) {
     outerTerrainSystem.add(buildHighlandTownFoundationPlatform(materials));
     outerTerrainSystem.userData.townFoundation = HIGHLAND_TOWNSCAPER_PLATFORM;
+    mountHighlandSlopeGrass(THREE, outerTerrainSystem);
+    mountHighlandLocalHeroClouds(THREE, castleContainer);
   }
   const terrainOutlinedSurfaceCount = skipOuterTerrain
     ? 0
@@ -2400,6 +2404,8 @@ export function buildOdysseyCitadel(options = {}) {
       citadelAssembly.scale.setScalar(bounce);
       if (u >= 1) citadelAssembly.scale.setScalar(1);
     }
+    outerTerrainSystem.userData.highlandSlopeGrass?.update?.(t);
+    castleContainer.userData.highlandHeroClouds?.update?.(t);
   };
   castleContainer.update = update;
   castleContainer.userData.update = update;
