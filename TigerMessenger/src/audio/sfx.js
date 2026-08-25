@@ -32,16 +32,21 @@ let tramProximity = 0;
 const TRAM_MAX_DISTANCE = 22;
 const TRAM_PEAK_GAIN = 0.42;
 
-// 电车搭乘 BGM：先 Tram.mp3 头 16 秒，再接《三亩地 - 城南花已开》循环
+// 电车搭乘 BGM：蓝车沿用原有 Tram.mp3 →《三亩地 - 城南花已开》；
+// 红车使用 FKJ Tom Bailey - Drops.mp3 循环。
 /** @type {HTMLAudioElement|null} */
 let tramIntroEl = null;
 /** @type {HTMLAudioElement|null} */
 let tramMainEl = null;
+/** @type {HTMLAudioElement|null} */
+let tramRedRideEl = null;
 /** 玩家仍在车上，应保持搭乘 BGM */
 let tramRideWanted = false;
-/** @type {'idle'|'intro'|'main'} */
+/** @type {'idle'|'intro'|'main'|'red'} */
 let tramRidePhase = "idle";
 let tramRideFading = false;
+/** @type {'blue'|'red'} */
+let tramRideVariant = "blue";
 const TRAM_INTRO_URL = new URL(
   "../../music/Various Artists-Tram.mp3",
   import.meta.url
@@ -50,11 +55,16 @@ const TRAM_MAIN_URL = new URL(
   "../../music/三亩地 - 城南花已开.mp3",
   import.meta.url
 ).href;
+const TRAM_RED_BGM_URL = new URL(
+  "../../music/FKJ Tom Bailey - Drops.mp3",
+  import.meta.url
+).href;
 /** Tram 采样只播开头 16 秒 */
 const TRAM_INTRO_END_SEC = 16;
 const TRAM_RIDE_VOLUME = 0.44;
 
-// 环境点缀（风铃）；八音盒 / 峡谷 BGM 播放时 duck 压低
+// 环境点缀（风铃）；八音盒 / 场景 BGM 播放时 duck 压低。
+// 乘坐电车时，电车搭乘曲优先于峡谷/湖沼等区域 BGM。
 let padTimer = null;
 let padStarted = false;
 /** 1 = 正常环境音量；八音盒播放时降到 AMBIENCE_DUCK_MUSIC_BOX */
@@ -837,6 +847,21 @@ function isCanyonBgmAudible() {
  */
 export function setCanyonApproachBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
+  // 电车是移动中的主场景：保留峡谷的 wanted 状态，实际声道让给电车；
+  // 下车后主循环再次调用本函数时，峡谷曲会从这里恢复。
+  if (active && tramRideWanted && !infiltrationBgmWanted && !siegeAssaultWanted) {
+    canyonBgmWanted = true;
+    canyonBgmPendingStop = false;
+    if (canyonBgmEl && !canyonBgmEl.paused) {
+      try {
+        canyonBgmEl.pause();
+        canyonBgmEl.volume = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+    return;
+  }
   // 木马潜入太鼓 / 蓝盔攻城曲独占时不抢播
   const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
 
@@ -869,7 +894,7 @@ export function setCanyonApproachBgm(active, opts = {}) {
     }
     // 峡谷优先：暂停电车搭乘曲（下车 wanted 仍保留，离谷后可恢复）
     if (tramRidePhase !== "idle") {
-      for (const el of [tramIntroEl, tramMainEl]) {
+      for (const el of [tramIntroEl, tramMainEl, tramRedRideEl]) {
         if (!el) continue;
         try {
           el.pause();
@@ -1015,8 +1040,49 @@ function anySegmentBgmEngaged() {
   );
 }
 
+/** 电车上暂停区域曲，但不清除区域 wanted，便于下车后恢复。 */
+function suspendRegionalBgmForTram() {
+  for (const el of [canyonBgmEl, swampBgmEl]) {
+    if (!el || el.paused) continue;
+    try {
+      el.pause();
+      el.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+/** 乘车是当前场景：攻城/潜入只保留 wanted，声道让给电车曲。 */
+function suspendExclusiveBgmForTram() {
+  suspendRegionalBgmForTram();
+  for (const el of [siegeAssaultEl, infiltrationBgmEl]) {
+    if (!el || el.paused) continue;
+    try {
+      el.pause();
+      el.volume = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+function resumeExclusiveBgmAfterTram() {
+  if (muted) return;
+  if (siegeAssaultWanted && siegeAssaultEl) {
+    siegeAssaultEl.volume = SIEGE_ASSAULT_VOLUME;
+    siegeAssaultEl.play()?.catch?.(() => {});
+    return;
+  }
+  if (infiltrationBgmWanted && infiltrationBgmEl) {
+    infiltrationBgmEl.volume = INFILTRATION_BGM_VOLUME;
+    infiltrationBgmEl.play()?.catch?.(() => {});
+  }
+}
+
 // =====================================================================
-//  电车搭乘 BGM：Various Artists-Tram.mp3（0–16s）→ 三亩地-城南花已开（循环）
+//  电车搭乘 BGM：蓝车 = Various Artists-Tram.mp3（0–16s）→ 三亩地-城南花已开；
+//  红车 = FKJ Tom Bailey - Drops.mp3（循环）。
 // =====================================================================
 
 function ensureTramIntroEl() {
@@ -1051,10 +1117,21 @@ function ensureTramMainEl() {
   return el;
 }
 
+function ensureTramRedRideEl() {
+  if (tramRedRideEl) return tramRedRideEl;
+  const el = new Audio(TRAM_RED_BGM_URL);
+  el.preload = "auto";
+  el.loop = true;
+  el.volume = 0;
+  el.crossOrigin = "anonymous";
+  tramRedRideEl = el;
+  return el;
+}
+
 function stopTramRideElements() {
   tramRidePhase = "idle";
   tramRideFading = false;
-  for (const el of [tramIntroEl, tramMainEl]) {
+  for (const el of [tramIntroEl, tramMainEl, tramRedRideEl]) {
     if (!el) continue;
     try {
       el.pause();
@@ -1064,23 +1141,12 @@ function stopTramRideElements() {
       /* ignore */
     }
   }
+  tramRideVariant = "blue";
 }
 
 function advanceTramRideToMain() {
   if (!tramRideWanted || muted) return;
-  // 峡谷 / 潜入 / 蓝盔攻城独占时不抢播
-  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted || siegeAssaultWanted) {
-    if (tramIntroEl) {
-      try {
-        tramIntroEl.pause();
-        tramIntroEl.volume = 0;
-      } catch {
-        /* ignore */
-      }
-    }
-    tramRidePhase = "main"; // 记住应播主曲，等独占结束后恢复
-    return;
-  }
+  suspendExclusiveBgmForTram();
   const intro = tramIntroEl;
   if (intro) {
     try {
@@ -1105,40 +1171,67 @@ function advanceTramRideToMain() {
 /**
  * 电车搭乘背景音乐。
  * 上车：先播 Tram.mp3 头 16 秒，再循环《三亩地 - 城南花已开》；下车：停止。
- * 近峡谷时由峡谷 BGM 优先，离谷后若仍在车上则恢复主曲。
+ * 乘车时电车曲占主声道；峡谷/湖沼/攻城只保留 wanted，下车后再恢复。
  * @param {boolean} active
- * @param {{ fade?: number, skipIntro?: boolean }} [opts]
+ * @param {{ fade?: number, skipIntro?: boolean, variant?: 'red'|'blue' }} [opts]
  */
 export function setTramRideBgm(active, opts = {}) {
   const fade = opts.fade ?? 0.7;
   const next = !!active && !muted;
 
   if (next) {
+    const requestedVariant = opts.variant === "red" ? "red" : "blue";
+    // 全局只允许一条搭乘曲；切换车辆颜色时先清掉上一条，避免叠播。
+    if (tramRidePhase !== "idle" && tramRideVariant !== requestedVariant) {
+      stopTramRideElements();
+    }
+    tramRideVariant = requestedVariant;
     tramRideWanted = true;
-    // 峡谷 / 潜入 / 蓝盔攻城独占：只记 wanted，不抢播
-    if (
-      canyonBgmWanted ||
-      canyonBgmPendingStop ||
-      infiltrationBgmWanted ||
-      siegeAssaultWanted
-    ) {
+    if (requestedVariant === "red") {
+      if (tramRidePhase === "red") {
+        if (tramRedRideEl) {
+          ensureAudio();
+          suspendExclusiveBgmForTram();
+          if (tramRedRideEl.volume < TRAM_RIDE_VOLUME * 0.5) {
+            tramRedRideEl.volume = TRAM_RIDE_VOLUME;
+          }
+          if (tramRedRideEl.paused) tramRedRideEl.play()?.catch?.(() => {});
+        }
+        return;
+      }
+      pauseDefaultAmbience();
+      if (musicBoxSession) stopMusicBox();
+      suspendExclusiveBgmForTram();
+      ensureAudio();
+      tramRidePhase = "red";
+      const redRide = ensureTramRedRideEl();
+      try {
+        redRide.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+      redRide.volume = 0;
+      redRide.play()?.catch?.(() => {});
+      fadeTramRideAudioTo(redRide, TRAM_RIDE_VOLUME, fade);
+      // 预加载蓝车链路，不改变蓝车原曲逻辑。
+      ensureTramIntroEl();
+      ensureTramMainEl();
       return;
     }
     if (tramRidePhase === "intro" || tramRidePhase === "main") {
-      // 已在播：确保未暂停
       const el = tramRidePhase === "intro" ? tramIntroEl : tramMainEl;
-      if (el?.paused) {
+      if (el) {
         ensureAudio();
-        el.play()?.catch?.(() => {});
+        suspendExclusiveBgmForTram();
+        if (el.volume < TRAM_RIDE_VOLUME * 0.5) el.volume = TRAM_RIDE_VOLUME;
+        if (el.paused) el.play()?.catch?.(() => {});
       }
       return;
     }
     pauseDefaultAmbience();
     if (musicBoxSession) stopMusicBox();
-    // 与湖沼互斥
-    if (swampBgmWanted || swampBgmPendingStop) {
-      fadeOutSwampBgm(0.5);
-    }
+    // 区域/攻城 wanted 保留，声道让给蓝车 Tram.mp3 → 城南花已开。
+    suspendExclusiveBgmForTram();
 
     ensureAudio();
     if (opts.skipIntro) {
@@ -1169,7 +1262,13 @@ export function setTramRideBgm(active, opts = {}) {
 /** 峡谷/潜入结束后，若仍在车上则恢复搭乘曲 */
 export function resumeTramRideBgmIfWanted() {
   if (!tramRideWanted || muted) return;
-  if (canyonBgmWanted || canyonBgmPendingStop || infiltrationBgmWanted || siegeAssaultWanted) {
+  if (tramRideVariant === "red" && tramRidePhase === "red") {
+    if (tramRedRideEl && !tramRedRideEl.paused) return;
+    pauseDefaultAmbience();
+    ensureAudio();
+    const redRide = ensureTramRedRideEl();
+    redRide.volume = TRAM_RIDE_VOLUME;
+    redRide.play()?.catch?.(() => {});
     return;
   }
   if (tramRidePhase === "intro" && tramIntroEl && !tramIntroEl.paused) return;
@@ -1192,7 +1291,9 @@ export function resumeTramRideBgmIfWanted() {
 export function isTramRideBgmPlaying() {
   return !!(
     tramRideWanted &&
-    ((tramIntroEl && !tramIntroEl.paused) || (tramMainEl && !tramMainEl.paused))
+    ((tramIntroEl && !tramIntroEl.paused) ||
+      (tramMainEl && !tramMainEl.paused) ||
+      (tramRedRideEl && !tramRedRideEl.paused))
   );
 }
 
@@ -1204,7 +1305,7 @@ function fadeTramRideAudioTo(el, targetVol, seconds) {
   const dur = Math.max(0.05, seconds) * 1000;
   tramRideFading = true;
   const step = () => {
-    if (el !== tramIntroEl && el !== tramMainEl) return;
+    if (el !== tramIntroEl && el !== tramMainEl && el !== tramRedRideEl) return;
     if (!tramRideWanted && end > 0) {
       tramRideFading = false;
       return;
@@ -1227,9 +1328,12 @@ function fadeOutTramRideBgm(seconds = 0.9) {
       ? tramIntroEl
       : tramRidePhase === "main"
         ? tramMainEl
+        : tramRidePhase === "red"
+          ? tramRedRideEl
         : tramIntroEl || tramMainEl;
   if (!el || (el.paused && el.volume <= 0.001)) {
     stopTramRideElements();
+    resumeExclusiveBgmAfterTram();
     if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
     return;
   }
@@ -1249,6 +1353,7 @@ function fadeOutTramRideBgm(seconds = 0.9) {
       return;
     }
     stopTramRideElements();
+    resumeExclusiveBgmAfterTram();
     if (!muted && !anySegmentBgmEngaged()) resumeDefaultAmbience();
   };
   requestAnimationFrame(step);
@@ -1327,7 +1432,7 @@ function pauseOthersForInfiltration() {
     fadeOutSiegeAssaultBgm(0.7);
   }
   // 电车搭乘曲：暂停声道（tramRideWanted 保留，任务结束后可恢复）
-  for (const el of [tramIntroEl, tramMainEl]) {
+  for (const el of [tramIntroEl, tramMainEl, tramRedRideEl]) {
     if (!el) continue;
     try {
       el.pause();
@@ -1371,6 +1476,7 @@ export function setInfiltrationBgm(active, opts = {}) {
  * @param {THREE.Vector3|{x:number,y:number,z:number}|null|undefined} sourcePos 木马/场景锚点
  */
 export function updateInfiltrationBgm(listenerPos, sourcePos) {
+  if (tramRideWanted) return;
   // 蓝盔进攻曲独占到「夜晚鼓声响起」：交接前不启太鼓
   if (siegeAssaultWanted && !siegeAssaultHandoff) return;
   if (!infiltrationMissionActive || muted) {
@@ -1624,6 +1730,20 @@ function isSwampBgmAudible() {
  */
 export function setSwampBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
+  // 电车上保留湖沼 wanted 状态，但不让区域 BGM 抢主声道。
+  if (active && tramRideWanted && !infiltrationBgmWanted && !siegeAssaultWanted) {
+    swampBgmWanted = true;
+    swampBgmPendingStop = false;
+    if (swampBgmEl && !swampBgmEl.paused) {
+      try {
+        swampBgmEl.pause();
+        swampBgmEl.volume = 0;
+      } catch {
+        /* ignore */
+      }
+    }
+    return;
+  }
   // 木马潜入太鼓 / 蓝盔攻城曲独占时不抢播
   const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
 
@@ -1830,7 +1950,7 @@ function pauseOthersForLeviathanStorm() {
     fadeOutCanyonBgm(0.5);
   }
   if (tramRidePhase !== "idle") {
-    for (const el of [tramIntroEl, tramMainEl]) {
+    for (const el of [tramIntroEl, tramMainEl, tramRedRideEl]) {
       if (!el) continue;
       try {
         el.pause();
@@ -2057,7 +2177,7 @@ function pauseOthersForBubblePodCannon() {
     fadeOutCanyonBgm(0.5);
   }
   if (tramRidePhase !== "idle") {
-    for (const el of [tramIntroEl, tramMainEl]) {
+    for (const el of [tramIntroEl, tramMainEl, tramRedRideEl]) {
       if (!el) continue;
       try {
         el.pause();
@@ -2235,7 +2355,7 @@ function pauseOthersForSiegeAssault() {
     fadeOutCanyonBgm(0.5);
   }
   if (tramRidePhase !== "idle") {
-    for (const el of [tramIntroEl, tramMainEl]) {
+    for (const el of [tramIntroEl, tramMainEl, tramRedRideEl]) {
       if (!el) continue;
       try {
         el.pause();
@@ -2321,6 +2441,7 @@ export function setSiegeAssaultBgm(active, opts = {}) {
   if (next) {
     siegeAssaultWanted = true;
     siegeAssaultHandoff = false;
+    if (tramRideWanted) return true;
     const el = ensureSiegeAssaultEl();
     if (!el) return false;
     if (!el.paused) return true;

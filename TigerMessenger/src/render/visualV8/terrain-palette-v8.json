@@ -1,0 +1,26 @@
+{
+  "version": "kimi-v8-v1",
+  "baseOn": "visualTheme.js THEME + PLAN.md §12.15",
+  "_note": "V8-K0/V8-G4 地形色板（Kimi，2026-08-23）。语义 token 目标值，分正午/黄昏/深夜三档；供 terrain semantic shader 取色，不引用任何 Object3D。基调延续 citadel visualTheme（envGrass #88A779 / envWater #6F9EA4 / envCliff #D6DEDA），鲜艳但协调；灰度与三类色盲可区分性由 tools/test_planet_v8_visual.mjs 机器断言。",
+  "timeBands": ["noon", "sunset", "night"],
+  "tokens": {
+    "deepOcean":    { "noon": "#2F6270", "sunset": "#3A5A6E", "night": "#101C2C", "_note": "海洋主体；与陆地的明度差是远景海陆判读主依据" },
+    "shallowOcean": { "noon": "#5E9EA0", "sunset": "#6E8E96", "night": "#182A3E", "_note": "浅海/大陆架，延续 envWater 青系" },
+    "shore":        { "noon": "#E0D3AC", "sunset": "#E8C9A0", "night": "#3E4046", "_note": "岸线砂色；与 shallowOcean 形成岸带层次" },
+    "grass":        { "noon": "#88A779", "sunset": "#8E9E6E", "night": "#33453A", "_note": "草地基准 = envGrass；深夜档需与海面保持 ΔL* ≥ 12" },
+    "hill":         { "noon": "#B8B070", "sunset": "#C0AA6C", "night": "#3A4A40", "_note": "丘陵：偏黄亮，与草地拉开 ΔE；逆光轮廓靠它读层叠" },
+    "moss":         { "noon": "#2E9A6C", "sunset": "#3A9464", "night": "#1E4A3A", "_note": "苔庭湿润苔绿：偏青翠、比草更暗更饱和" },
+    "forest":       { "noon": "#38664A", "sunset": "#44604A", "night": "#1E2E26", "_note": "森林团块：全套色板中最低明度绿色，与草地灰度可分" },
+    "rock":         { "noon": "#C9C4BC", "sunset": "#D0B8AC", "night": "#4A5060", "_note": "粉白崖壁系（对齐 C5 灰绿谷地→粉白崖壁→浅鼠尾草高台）" },
+    "snow":         { "noon": "#EEF3F2", "sunset": "#F0E4E0", "night": "#5A6A7C", "_note": "雪线：深夜不得纯白，保留蓝灰明度层次" },
+    "wetland":      { "noon": "#7C9A80", "sunset": "#88947A", "night": "#2E4038", "_note": "湖沼湿地：介于草与水之间" }
+  },
+  "constraints": {
+    "landSeaDeltaLNoon": 18,
+    "landSeaDeltaLNight": 12,
+    "grassForestRockDeltaL": 8,
+    "vegetationPairDeltaE00Noon": 12,
+    "vegetationPairDeltaE00Cvd": 6,
+    "_note": "数值门槛由 tools/test_planet_v8_visual.mjs 断言；海陆对齐 C7 日间 ΔL* ≥ 18 / 深夜 ≥ 12"
+  }
+}

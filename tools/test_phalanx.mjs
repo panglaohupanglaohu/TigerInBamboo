@@ -218,6 +218,12 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   const castle = new THREE.Group();
   castle.name = "castleContainer";
   castle.position.copy(hubDir).multiplyScalar(R).addScaledVector(hubEast, -80);
+  // 城堡朝向：局部 +Y 沿径向（台地法向）、局部 +Z 切向（瀑布正立面）——
+  // 与真实场景一致，否则 castleFwdWorld=(0,0,1) 在攀爬点近乎径向，攻城永远到不了位
+  castle.quaternion.setFromUnitVectors(
+    new THREE.Vector3(0, 1, 0),
+    castle.position.clone().normalize()
+  );
   scene.add(castle);
   const junction = new THREE.Group();
   junction.name = "canal-junction-box";
@@ -235,6 +241,14 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   const squad = new THREE.Group();
   squad.userData.members = [{ userData: { arrowHits: 0 } }];
   scene.add(squad);
+  // 桩星面：半径 R 的球面网格，让攻城行军贴地/台地台面射线有真实命中，
+  // advance → climb → capture 全链路在桩环境也可验（梯子与瀑布道同规则）
+  const planet = new THREE.Mesh(
+    new THREE.SphereGeometry(R, 32, 24),
+    new THREE.MeshBasicMaterial()
+  );
+  planet.name = "planet-surface";
+  scene.add(planet);
   let tod = 0.45; // 白天
   const ph = createSaihojiPhalanxBattle({
     scene,
@@ -252,9 +266,17 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   }
   assert.equal(ph.root.userData.phase, "siege", "应进入攻城阶段");
   // 集结点与攻城梯：战船泊纳沃纳广场，瀑布缺口架起 6 架攻城梯
-  //（首波 4 架 + 第二波蓝盔增援专属 2 架，总攻画面）
+  //（首波 4 架覆盖四层落差 + 第二波蓝盔增援专属 2 架，总攻画面）
   const ladders = ph.root.getObjectByName("siege-ladders");
   assert(ladders?.children?.length === 6, "瀑布缺口应有 6 架攻城梯");
+  const coveredWaterfalls = new Set(
+    ladders.children.map((ladder) => ladder.userData?.cascadeSequence)
+  );
+  assert.deepEqual(
+    [...coveredWaterfalls].sort((a, b) => a - b),
+    [0, 1, 2, 3],
+    "四个相邻瀑布落差之间都必须有攻城梯"
+  );
   const allBlues = ph.root.children
     .filter((c) => c.name?.startsWith("saihoji-cohort"))
     .flatMap((c) => c.children);
@@ -262,6 +284,18 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
     allBlues.every((s) => s.userData.siegeStage === "gather"),
     "上岸后应先在纳沃纳广场集结（gather）"
   );
+  // 瀑布攀爬道：攻城梯每梯排满 8 人后，其余蓝盔改走瀑布（无攻城梯也能攀上城）
+  const wfAssigned = allBlues.filter((s) => (s.userData.waterfall ?? -1) >= 0);
+  assert(
+    wfAssigned.length > 0,
+    "攻城梯排满后应有蓝盔分到瀑布攀爬道（无攻城梯也能沿瀑布攀上城）"
+  );
+  assert(
+    wfAssigned.every((s) => s.userData.ladder === -1),
+    "瀑布攀爬者不应占用攻城梯梯位"
+  );
+  const wfLanes = new Set(wfAssigned.map((s) => s.userData.waterfall));
+  assert(wfLanes.size >= 2, "瀑布攀爬者应分散到多条攀爬道");
   // 红盔守军含少量长弓手（4 名居高俯射）
   const garrison = ph.root.getObjectByName("citadel-red-garrison");
   const redBows = garrison.children.filter((s) => s.userData.phalanxRole === "longbow");
@@ -285,6 +319,17 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
     victim.userData.downed === true && victim.userData.dead !== true,
     "1 次近战应瘫倒（未死）"
   );
+  const redTool =
+    red0.userData.equipment?.spear?.visible !== false
+      ? red0.userData.equipment?.spear
+      : red0.userData.equipment?.gladius;
+  const redWorld = red0.getWorldPosition(new THREE.Vector3());
+  const victimWorld = victim.getWorldPosition(new THREE.Vector3());
+  const toolWorld = redTool?.getWorldPosition(new THREE.Vector3());
+  const toolTip = redTool?.localToWorld(new THREE.Vector3(0, 1, 0));
+  const toolDir = toolTip?.sub(toolWorld).normalize();
+  const targetDir = victimWorld.sub(redWorld).normalize();
+  assert(toolDir && toolDir.dot(targetDir) > 0.75, "近战作战工具应朝向当前目标");
   red0.userData._meleeCd = 0;
   ph.update(0.1, 126.1);
   assert(victim.userData.dead === true, "2 次近战应击杀（补刀瘫倒目标）");
@@ -317,6 +362,20 @@ console.log("[3] 红盔战船增援 · 深夜木马红盔兵驱赶蓝盔残部 �
   assert(arrowHitRed, "箭雨应命中红盔（arrowHits ≥ 1）");
   assert(downedOrDead, "应有红盔瘫倒/阵亡（2 箭瘫倒 / 4 箭或 2 刀击杀）");
   ok(`红盔战船经运河增援 · 守军 ${redBefore} → ${garrison.children.length} · 中央突破 ${staged.length} 人已动 · 箭雨/近战出伤害`);
+  // 瀑布攀爬实战：桩星面（planet-surface 球）让行军贴地/台面射线有真实命中，
+  // 再推 45 秒（集结 5s + 行军 + 潭边排队 + 攀瀑 6.5s/人），分到瀑布道的
+  // 蓝盔应有人正在攀瀑（climb）或已登上一台地（capture）
+  const wfLanesData = ph.root.userData.siegeWaterfallClimbs || [];
+  assert(wfLanesData.length === 3, "应生成 3 条瀑布攀爬道");
+  for (let i = 0; i < 450; i++) ph.update(0.1, 158 + i * 0.1);
+  const wfUp = allBlues.filter(
+    (s) =>
+      (s.userData.waterfall ?? -1) >= 0 &&
+      (s.userData.siegeStage === "climb" || s.userData.siegeStage === "capture")
+  );
+  assert(wfUp.length > 0, "瀑布攀爬道的蓝盔应沿瀑布水帘攀城（climb/capture）");
+  const wfCaptured = wfUp.filter((s) => s.userData.siegeStage === "capture").length;
+  ok(`瀑布攀爬：${wfAssigned.length} 人分 ${wfLanesData.length} 条道 · ${wfUp.length} 人攀瀑中/已登台（capture ${wfCaptured}）`);
   // 入深夜：主力隐入夜色，残部滞留，木马兵出腹巡查
   tod = 0.92;
   for (let i = 0; i < 60; i++) ph.update(0.1, 158 + i * 0.1);
@@ -396,4 +455,118 @@ console.log("[4] 深夜才抵达圣城：拨回傍晚，先演完集结与进攻
   ok("深夜抵达 → 拨回傍晚 · 8s 内仍在攻城 · 蓝盔已开始突破");
 }
 
-console.log(`\n结果：${pass} 项断言 · 4 组验收通过`);
+console.log("[5] 无攻城梯：沿朝圣石阶逐层寻路登城");
+{
+  const scene = new THREE.Scene();
+  const castle = new THREE.Group();
+  castle.name = "castleContainer";
+  castle.position.copy(hubDir).multiplyScalar(R).addScaledVector(hubEast, -80);
+  castle.quaternion.setFromUnitVectors(
+    new THREE.Vector3(0, 1, 0),
+    castle.position.clone().normalize()
+  );
+  scene.add(castle);
+  const junction = new THREE.Group();
+  junction.name = "canal-junction-box";
+  junction.userData.up = hubDir.clone().multiplyScalar(R).addScaledVector(hubEast, 30).normalize();
+  scene.add(junction);
+  const squad = new THREE.Group();
+  squad.userData.members = [{ userData: { arrowHits: 0 } }];
+  scene.add(squad);
+  const planet = new THREE.Mesh(
+    new THREE.SphereGeometry(R, 32, 24),
+    new THREE.MeshBasicMaterial()
+  );
+  planet.name = "planet-surface";
+  scene.add(planet);
+  const ph = createSaihojiPhalanxBattle({
+    scene,
+    isWhaleRisen: () => false,
+    getSquad: () => squad,
+    disableSiegeLadders: true,
+  });
+  ph.root.userData.debugSiege();
+  const ladders = ph.root.getObjectByName("siege-ladders");
+  assert.equal(ladders?.children?.length, 0, "无梯模式不得生成实体攻城梯");
+  const route = ph.root.userData.siegeStairRoutes?.[0];
+  assert(route?.points?.length >= 20, "无梯模式应生成跨五层台面的连续石阶点列");
+  const blues = ph.root.children
+    .filter((c) => c.name?.startsWith("saihoji-cohort"))
+    .flatMap((c) => c.children)
+    .filter((s) => s.visible && !s.userData.dead);
+  assert(blues.length > 0 && blues.every((s) => s.userData.siegeRoute === "stairs"), "无梯士兵应全部选择 stairs 路线");
+  for (let i = 0; i < 600; i++) ph.update(0.1, i * 0.1);
+  const stairProgress = blues.filter(
+    (s) => s.userData.siegeStage === "climb" || s.userData.siegeStage === "capture"
+  );
+  assert(stairProgress.length > 0, "无梯士兵应沿阶梯离开广场并开始逐层上行");
+  assert(
+    blues.some((s) => s.userData.siegeStage === "capture"),
+    "无梯士兵走完石阶后应抵达台面并进入 capture"
+  );
+  ok(`无梯寻路 · 石阶点列 ${route.points.length} 个 · ${stairProgress.length} 名已上行/登台`);
+}
+
+console.log("[6] 最新圣城：无瀑布，外部石阶接内部旋转楼梯收束到顶层");
+{
+  const scene = new THREE.Scene();
+  const castle = new THREE.Group();
+  castle.name = "castleContainer";
+  castle.position.copy(hubDir).multiplyScalar(R).addScaledVector(hubEast, -80);
+  castle.quaternion.setFromUnitVectors(
+    new THREE.Vector3(0, 1, 0),
+    castle.position.clone().normalize()
+  );
+  castle.userData.highlandAssaultAnchors = {
+    destination: "castle-top",
+    keepTop: [0, 10.2, 2.2],
+    stairRoute: [[-7, 0.3, 13], [-5, 3.2, 9], [-4, 6.8, 5], [0, 10.2, 2.2]],
+    ladderPolicy: "disabled",
+    ladderLanes: [],
+    captureMode: "interior-rotating-stairs",
+    interiorFloorRoutes: [{ floor: 0, points: [[0, 10.2, 2.2]] }],
+  };
+  scene.add(castle);
+  const junction = new THREE.Group();
+  junction.name = "canal-junction-box";
+  junction.userData.up = hubDir.clone().multiplyScalar(R).addScaledVector(hubEast, 30).normalize();
+  scene.add(junction);
+  const planet = new THREE.Mesh(
+    new THREE.SphereGeometry(R, 32, 24),
+    new THREE.MeshBasicMaterial()
+  );
+  planet.name = "planet-surface";
+  scene.add(planet);
+  const squad = new THREE.Group();
+  squad.userData.members = [{ userData: { arrowHits: 0 } }];
+  scene.add(squad);
+  const ph = createSaihojiPhalanxBattle({
+    scene,
+    isWhaleRisen: () => false,
+    getSquad: () => squad,
+  });
+  ph.root.userData.debugSiege();
+  const ladders = ph.root.getObjectByName("siege-ladders");
+  assert.equal(ladders.children.length, 0, "最新圣城不得生成实体攻城梯");
+  assert.equal(ladders.userData.destination, "castle-top");
+  assert.deepEqual(ladders.userData.waterfallCoverage, [], "最新圣城不得保留瀑布覆盖语义");
+  assert.equal(ph.root.userData.siegeWaterfallClimbs.length, 0, "不得生成瀑布攀爬道");
+  const stair = ph.root.userData.siegeStairRoutes[0];
+  assert.equal(stair.destination, "castle-top");
+  assert.deepEqual(stair.terraces, []);
+  const blues = ph.root.children
+    .filter((c) => c.name?.startsWith("saihoji-cohort"))
+    .flatMap((c) => c.children);
+  assert(blues.length > 0);
+  assert(blues.every((s) => s.userData.siegeRoute === "stairs"));
+  assert(blues.every((s) => s.userData.siegeRoute !== "waterfall"));
+  const keepWorld = new THREE.Vector3(...castle.userData.highlandAssaultAnchors.keepTop)
+    .applyQuaternion(castle.quaternion)
+    .add(castle.position);
+  assert(stair.capture.distanceTo(keepWorld) < 1e-6, "山路终点必须精确等于古堡顶层锚点");
+  for (let i = 0; i < 300; i++) ph.update(0.1, i * 0.1);
+  assert(blues.some((s) => (s.userData.siegeStage || "gather") !== "gather"), "士兵必须开始向城顶推进");
+  ok("0 架攻城梯 · 外部石阶/内部旋梯 · 0 条瀑布路线 · 最终目标 castle-top");
+}
+
+console.log(`\n结果：${pass} 项断言 · 6 组验收通过`);

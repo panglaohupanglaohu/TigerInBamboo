@@ -6,6 +6,7 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 /** 冰川蓝外罩玻璃 */
 const GLASS_SHELL = 0xd6eaf8;
@@ -210,6 +211,15 @@ function createNeonBioDome({
   glow.name = "neon-dome-point-light";
   glow.position.set(0, coreR * 0.45, 0);
   hall.add(glow);
+  // K4：花厅点光迁入 registry（owner 派生稳定 id：moebius-tower-dome#N）
+  registerLocalLight(glow, {
+    owner: "moebius-tower-dome",
+    kind: "point",
+    color: lightColor,
+    intensity: lightIntensity,
+    radius: lightDistance,
+    priority: 4,
+  });
 
   hall.userData.shell = shell;
   hall.userData.core = core;

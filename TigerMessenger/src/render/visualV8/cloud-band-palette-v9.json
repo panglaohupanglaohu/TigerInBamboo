@@ -1,0 +1,19 @@
+{
+  "version": "kimi-v9-v1",
+  "baseOn": "cloud-palette-v8.json + V8-G14 六气候带语义",
+  "_note": "V8-G14 六地貌云 look-dev 参数包（Kimi，非阻塞，2026-08-23）。只提供云色/透明度/软边/夜间 grade 数据；不修改云概率、地貌 field 或导航真源（那些由 cloudClusterCompiler 编译）。夜间 L* 上限继承 cloud-palette-v8 的 nightMaxL=32（深夜天空 L*≈24，云只允许略亮）。灰度/CVD 数值由 tools/test_planet_v9_visual_params.mjs 断言。",
+  "bands": {
+    "snowline-crown":  { "color": "#F4F7F6", "opacity": 0.82, "softness": 0.55, "nightColor": "#2A3850", "nightOpacity": 0.6,  "_note": "高山雪线云冠：最亮最挺，对应 cloud-palette-v8 noon 档" },
+    "windward-wall":   { "color": "#C2CED2", "opacity": 0.9,  "softness": 0.5,  "nightColor": "#232E42", "nightOpacity": 0.68, "_note": "三重门迎风云墙：最厚最灰（正午 L*=82，与薄缘 ΔL*≈15.7 灰度可分），夜间六带最暗" },
+    "rift-low-fog":    { "color": "#C9D2D4", "opacity": 0.55, "softness": 0.8,  "nightColor": "#2E3A48", "nightOpacity": 0.5,  "_note": "峡谷低雾/抬升云：薄而软，opacity 全套最低之一" },
+    "lake-low-cloud":  { "color": "#E3EAE8", "opacity": 0.7,  "softness": 0.7,  "nightColor": "#28344A", "nightOpacity": 0.55, "_note": "湖沼湖上低云：中等密度，软边" },
+    "sea-breeze-scatter": { "color": "#F0F4EF", "opacity": 0.6, "softness": 0.65, "nightColor": "#2A3850", "nightOpacity": 0.5, "_note": "书店海风碎云：亮而碎" },
+    "open-sky-edge":   { "color": "#F7F9F6", "opacity": 0.45, "softness": 0.75, "nightColor": "#263248", "nightOpacity": 0.42, "_note": "苔庭开阔薄云：最薄最透，opacity 全套最低" }
+  },
+  "checks": {
+    "nightMaxL": 32,
+    "denseVsThinDeltaLNoon": 10,
+    "crownVsFogDeltaE00Cvd": 6,
+    "_note": "denseVsThin=windward-wall vs open-sky-edge 正午灰度差（厚墙/薄缘灰度可分）；crownVsFog=雪冠 vs 低雾在三类 CVD 下的 ΔE00 下限"
+  }
+}

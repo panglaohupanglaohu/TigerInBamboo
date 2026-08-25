@@ -3,10 +3,26 @@
 <head>
 <meta charset="UTF-8" />
 <title>TigerMessenger 清单截图 Harness</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg" />
 <style>
   html, body { margin: 0; padding: 0; background: #e9eef3; }
-  #c { display: block; width: 512px; height: 512px; }
+  #c { display: block; width: min(512px, 100vw); height: auto; }
   #status { position: fixed; left: 8px; top: 8px; font: 12px/1.4 monospace; color: #333; }
+  #lighting-lab { position: fixed; left: 524px; top: 12px; width: 300px; padding: 12px; background: #f8fafc; border: 1px solid #aab6c2; border-radius: 10px; font: 12px/1.45 monospace; color: #25303b; }
+  #lighting-lab strong { display: block; margin-bottom: 8px; }
+  #lighting-lab select, #lighting-lab button { margin: 2px; padding: 5px 7px; }
+  #lighting-stats { margin: 8px 0 0; max-height: 310px; overflow: auto; white-space: pre-wrap; }
+  @media (max-width: 860px) {
+    body { overflow-x: hidden; overflow-y: auto; }
+    #lighting-lab {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      max-width: none;
+      margin: 12px;
+    }
+  }
 </style>
 <!-- 与 index.html 一致的 importmap，复用本地 vendor/three -->
 <script type="importmap">
@@ -21,9 +37,26 @@
 <body>
 <canvas id="c" width="512" height="512"></canvas>
 <div id="status">init…</div>
+<section id="lighting-lab" data-ready="false" data-preset="legacy">
+  <strong>OskSta lighting A/B lab</strong>
+  <select id="lighting-object">
+    <option value="citadelEnsemble">高山圣城全景</option>
+    <option value="odysseyCitadel">高山圣城主体（隔离）</option>
+    <option value="citadelCascadeAudit">古堡顶层攻城梯近景</option>
+    <option value="citadelStairAudit">山路阶梯近景</option>
+    <option value="planetOskarV9">Oskar 风格·球面地貌 V9</option>
+  </select>
+  <button type="button" id="lighting-build">构建</button><br>
+  <button type="button" data-lighting-mode="legacy">旧光照</button>
+  <button type="button" data-lighting-mode="prototype" data-phase="noon">实验·正午</button>
+  <button type="button" data-lighting-mode="prototype" data-phase="sunset">实验·黄昏</button>
+  <button type="button" data-lighting-mode="prototype" data-phase="night">实验·深夜</button>
+  <pre id="lighting-stats">等待构建…</pre>
+</section>
 
 <script type="module">
 import * as THREE from "three";
+import { createOskLightingPrototype } from "./src/render/lighting/oskLightingPrototype.js";
 
 // ---------- 资产 / 世界工厂 ----------
 import { toonMat, addOutline } from "./src/assets/toon.js";
@@ -62,19 +95,23 @@ import { buildMoebiusCrystalMetropolis } from "./src/world/moebiusCity.js";
 import { buildStartingCamp } from "./src/world/startingCamp.js";
 import { buildSaihojiPlanet } from "./src/world/saihoji.js";
 import { createPlanet } from "./src/world/planet.js";
+import { createPlanetV8Runtime, disposePlanetV8Runtime } from "./src/world/planetV8/runtime.js";
 import { buildHills } from "./src/world/hills.js";
 import { createMoonLake } from "./src/world/lake.js";
 import { buildChristchurchTramSystem } from "./src/world/tramSystem.js";
 import { createDynamicMoebiusClouds } from "./src/world/equatorialClouds.js";
 import { buildImpastoMossyGround } from "./src/world/mossyGround.js";
 import { buildWorld } from "./src/world/platforms.js";
-import { buildOdysseyCitadel } from "./src/world/odysseyCitadel.js";
+import {
+  buildOdysseyCitadel,
+  updateCitadelNightWindows,
+} from "./src/world/odysseyCitadel.js?v=20260825-highland-reference-clean-v7";
 import { createMangaWaterfall } from "./src/world/mangaWaterfall.js";
 import {
   buildCitadelRange,
   citadelRangeLiftDir,
   citadelSiteDir,
-} from "./src/world/citadelRange.js";
+} from "./src/world/citadelRange.js?v=reference-reconstruction-v5";
 
 import { buildMessenger } from "./src/player/messenger.js";
 import { buildAgentMessenger } from "./src/player/agentMessenger.js";
@@ -83,6 +120,15 @@ import { createCatalogObject } from "./src/core/buildingCatalog.js";
 
 const STATUS = document.getElementById("status");
 const R_DEFAULT = 40;
+const LATEST_CITADEL_CONTOUR = Object.freeze({
+  presentationMode: "mountain-valley-v1",
+  cascadeEnabled: false,
+  cascadePoolsEnabled: false,
+  notchedLayers: 0,
+  notchHalf: 0,
+});
+const buildLatestCitadelRange = (scene, radius = 160) =>
+  buildCitadelRange(scene, radius, LATEST_CITADEL_CONTOUR);
 
 // =====================================================================
 //  清单项注册表
@@ -146,6 +192,23 @@ const REGISTRY = [
     build: (ctx) => buildSaihojiPlanet(ctx.scene, {}) },
   { id: "planet", cat: "场景结构", label: "小星球本体", R: 40,
     build: (ctx) => createPlanet(ctx.scene) },
+  { id: "planetOskarV9", cat: "场景结构", label: "Oskar 风格·球面地貌 V9", R: 160,
+    build: (ctx) => {
+      const state = createPlanetV8Runtime({
+        scene: ctx.scene,
+        radius: 160,
+        seed: 42,
+        features: {
+          planetTerrainV1: true,
+          curvedWaterV1: true,
+          terrainSemanticShaderV1: true,
+          cloudImpostorV1: true,
+          planetResolution: 16,
+        },
+      });
+      ctx.scene.userData.planetV8State = state;
+      return state.root;
+    } },
   { id: "hills", cat: "场景结构", label: "岛丘地形", R: 40,
     build: (ctx) => buildHills(ctx.scene, ctx.R) },
   { id: "moonLake", cat: "场景结构", label: "月牙湖", R: 40,
@@ -156,13 +219,26 @@ const REGISTRY = [
     build: (ctx) => createDynamicMoebiusClouds(ctx.scene, ctx.R) },
   { id: "platforms", cat: "场景结构", label: "平台土坡", R: 40,
     build: (ctx) => buildWorld(ctx.scene) },
-  { id: "odysseyCitadel", cat: "场景结构", label: "太古高山圣城要塞",
-    build: () => buildOdysseyCitadel({ place: false, seed: 20260808 }) },
+  { id: "odysseyCitadel", cat: "场景结构", label: "太古高山圣城要塞", manualFrame: true,
+    build: (ctx) => {
+      const castle = buildOdysseyCitadel({ place: false, seed: 20260808 });
+      // 隔离镜头只检查建筑层级，排除前景山体的遮挡；全景选项仍显示完整山谷。
+      castle.getObjectByName("citadel-continuous-mountain-terrain-system").visible = false;
+      castle.getObjectByName("highland-mountain-ravine-walls").visible = false;
+      ctx.camera.up.set(0, 1, 0);
+      ctx.camera.position.set(0, 25, 102);
+      ctx.camera.fov = 40;
+      ctx.camera.near = 0.5;
+      ctx.camera.far = 400;
+      ctx.camera.updateProjectionMatrix();
+      ctx.camera.lookAt(0, 19, -2);
+      return castle;
+    } },
   { id: "mangaWaterfall", cat: "场景结构", label: "多层清透水帘与雾气瀑布",
     build: () => createMangaWaterfall({ seed: 20260809 }) },
   { id: "citadelRange", cat: "场景结构", label: "圣城山脉（双峰峡谷）", manualFrame: true,
     build: (ctx) => {
-      const r = buildCitadelRange(ctx.scene, 160);
+      const r = buildLatestCitadelRange(ctx.scene, 160);
       // 球面贴片通用对角取景会侧视成细条：沿站点法向拉开、岛侧俯看双峰峡谷
       const target = r.siteDir.clone().multiplyScalar(168);
       ctx.camera.position.copy(r.siteDir).multiplyScalar(160 + 45)
@@ -176,7 +252,7 @@ const REGISTRY = [
   { id: "citadelEnsemble", cat: "场景结构", label: "圣城·前哨塔·雪山组合", R: 160,
     manualFrame: true,
     build: (ctx) => {
-      const range = buildCitadelRange(ctx.scene, 160);
+      const range = buildLatestCitadelRange(ctx.scene, 160);
       const site = citadelSiteDir(new THREE.Vector3());
       const castle = buildOdysseyCitadel({
         dir: site,
@@ -186,12 +262,13 @@ const REGISTRY = [
         seed: 20260808,
       });
       ctx.scene.add(castle);
-      const target = site.clone().multiplyScalar(188)
+      const target = site.clone().multiplyScalar(176)
         .addScaledVector(range.fwd, -1);
       ctx.camera.up.copy(site);
-      ctx.camera.position.copy(site).multiplyScalar(176)
-        .addScaledVector(range.fwd, 118)
-        .addScaledVector(range.right, 34);
+      ctx.camera.position.copy(site).multiplyScalar(174)
+        .addScaledVector(range.fwd, 92)
+        .addScaledVector(range.right, 16);
+      ctx.camera.fov = 42;
       ctx.camera.near = 1;
       ctx.camera.far = 900;
       ctx.camera.updateProjectionMatrix();
@@ -201,7 +278,7 @@ const REGISTRY = [
   { id: "citadelPilgrimageVista", cat: "场景结构", label: "送信人·白石梯湖·圣城远眺", R: 160,
     manualFrame: true,
     build: (ctx) => {
-      const range = buildCitadelRange(ctx.scene, 160);
+      const range = buildLatestCitadelRange(ctx.scene, 160);
       const site = citadelSiteDir(new THREE.Vector3());
       const castle = buildOdysseyCitadel({
         dir: site,
@@ -238,7 +315,7 @@ const REGISTRY = [
       ctx.camera.lookAt(target);
       return null;
     } },
-  { id: "citadelCascadeAudit", cat: "场景结构", label: "圣城四段逐级瀑布近景", R: 160,
+  { id: "citadelCascadeAudit", cat: "场景结构", label: "古堡顶层攻城梯近景", R: 160,
     manualFrame: true,
     build: (ctx) => {
       const auditGround = new THREE.Mesh(
@@ -247,7 +324,7 @@ const REGISTRY = [
       );
       auditGround.name = "citadel-cascade-audit-global-ground";
       ctx.scene.add(auditGround);
-      const range = buildCitadelRange(ctx.scene, 160);
+      const range = buildLatestCitadelRange(ctx.scene, 160);
       const site = citadelSiteDir(new THREE.Vector3());
       const castle = buildOdysseyCitadel({
         dir: site,
@@ -258,9 +335,10 @@ const REGISTRY = [
       });
       ctx.scene.add(castle);
       ctx.scene.updateMatrixWorld(true);
-      const target = new THREE.Box3()
-        .setFromObject(range.pilgrimageCascades)
-        .getCenter(new THREE.Vector3());
+      const deck = castle.getObjectByName("highland-castle-top-capture-deck");
+      const target = deck
+        ? deck.getWorldPosition(new THREE.Vector3())
+        : site.clone().multiplyScalar(191);
       ctx.camera.up.copy(site);
       ctx.camera.position.copy(target)
         .addScaledVector(site, 5.5)
@@ -282,7 +360,7 @@ const REGISTRY = [
       );
       auditGround.name = "citadel-side-audit-global-ground";
       ctx.scene.add(auditGround);
-      const range = buildCitadelRange(ctx.scene, 160);
+      const range = buildLatestCitadelRange(ctx.scene, 160);
       const site = citadelSiteDir(new THREE.Vector3());
       const castle = buildOdysseyCitadel({
         dir: site,
@@ -307,7 +385,7 @@ const REGISTRY = [
   { id: "citadelStairAudit", cat: "场景结构", label: "圣城折返石阶·正门平桥近景", R: 160,
     manualFrame: true,
     build: (ctx) => {
-      const range = buildCitadelRange(ctx.scene, 160);
+      const range = buildLatestCitadelRange(ctx.scene, 160);
       const site = citadelSiteDir(new THREE.Vector3());
       const castle = buildOdysseyCitadel({
         dir: site,
@@ -317,7 +395,7 @@ const REGISTRY = [
         seed: 20260808,
       });
       ctx.scene.add(castle);
-      // 左前低位看向门廊：五段折返石阶 + 顶端平桥接入棕色正门。
+      // 左前低位看向连续山路：无旧五层台地，路线直接接入顶层古堡。
       ctx.camera.up.copy(site);
       ctx.camera.position.copy(site).multiplyScalar(183)
         .addScaledVector(range.fwd, 62)
@@ -511,6 +589,7 @@ renderer.setClearColor(SKY_MOEBIUS, 1);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(SKY_MOEBIUS);
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 5000);
+camera.layers.enable(1); // 高山圣城建筑使用独立塑形光层
 
 // 强白光：Ambient 1.35 把橙红/奶黄色块彻底照亮，无死黑面
 const hemi = new THREE.HemisphereLight(0xffffff, 0xf5e6e0, 1.05);
@@ -523,6 +602,13 @@ dir2.position.set(-8, 4, -6);
 scene.add(dir2);
 const ambient = new THREE.AmbientLight(0xffffff, 1.35);
 scene.add(ambient);
+
+const lightingPrototype = createOskLightingPrototype({
+  scene,
+  renderer,
+  legacyLights: [hemi, dir, dir2, ambient],
+  shadowMapSize: 1024,
+});
 
 let dynamic = null;
 
@@ -562,13 +648,81 @@ function frameCamera(box, mode = "bbox") {
   camera.lookAt(center);
 }
 
+function canvasStats() {
+  const gl = renderer.getContext();
+  if (!gl?.readPixels) return null;
+  const pixels = new Uint8Array(512 * 512 * 4);
+  gl.readPixels(0, 0, 512, 512, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+  const bg = [pixels[0], pixels[1], pixels[2]];
+  const luminance = [];
+  let clipped = 0;
+  let dark = 0;
+  let saturationSum = 0;
+  for (let i = 0; i < pixels.length; i += 4) {
+    const r = pixels[i];
+    const g = pixels[i + 1];
+    const b = pixels[i + 2];
+    const bgDistance = Math.abs(r - bg[0]) + Math.abs(g - bg[1]) + Math.abs(b - bg[2]);
+    if (bgDistance < 20 || pixels[i + 3] === 0) continue;
+    const y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    luminance.push(y);
+    if (Math.max(r, g, b) >= 250) clipped++;
+    if (y <= 18) dark++;
+    const hi = Math.max(r, g, b);
+    const lo = Math.min(r, g, b);
+    saturationSum += hi > 0 ? (hi - lo) / hi : 0;
+  }
+  if (!luminance.length) return null;
+  luminance.sort((a, b) => a - b);
+  const q = (p) => luminance[Math.min(luminance.length - 1, Math.floor(luminance.length * p))];
+  return {
+    subjectPixels: luminance.length,
+    p10: +q(0.1).toFixed(2),
+    p50: +q(0.5).toFixed(2),
+    p90: +q(0.9).toFixed(2),
+    contrastP90P10: +(q(0.9) / Math.max(1, q(0.1))).toFixed(2),
+    clippedPercent: +((clipped / luminance.length) * 100).toFixed(2),
+    darkPercent: +((dark / luminance.length) * 100).toFixed(2),
+    meanSaturation: +(saturationSum / luminance.length).toFixed(3),
+  };
+}
+
+function rerenderLighting(mode = "legacy", phase = "noon") {
+  lightingPrototype.attach(dynamic, camera);
+  lightingPrototype.setMode(mode, phase);
+  const citadelPhase = phase === "night" ? 0.92 : phase === "sunset" ? 0.79 : 0.5;
+  dynamic?.traverse((object) => {
+    if (object.userData?.kind === "odyssey-citadel") {
+      updateCitadelNightWindows(object, citadelPhase, { force: true });
+    }
+  });
+  const renderTimes = [];
+  for (let i = 0; i < 5; i++) {
+    const started = performance.now();
+    renderer.render(scene, camera);
+    if (i > 0) renderTimes.push(performance.now() - started);
+  }
+  renderTimes.sort((a, b) => a - b);
+  return {
+    state: lightingPrototype.getState(),
+    stats: canvasStats(),
+    render: {
+      calls: renderer.info.render.calls,
+      triangles: renderer.info.render.triangles,
+      medianMs: +((renderTimes[1] + renderTimes[2]) * 0.5).toFixed(3),
+    },
+    dataUrl: canvas.toDataURL("image/png"),
+  };
+}
+
 async function renderItem(id) {
   const entry = BY_ID[id];
   if (!entry) return { ok: false, error: "no such id: " + id };
   try {
     if (dynamic) {
       scene.remove(dynamic);
-      disposeObject(dynamic);
+      if (dynamic.userData?.planetV8State) disposePlanetV8Runtime(dynamic.userData.planetV8State);
+      else disposeObject(dynamic);
       dynamic = null;
     }
     dynamic = new THREE.Group();
@@ -615,6 +769,8 @@ async function renderItem(id) {
     }
     if (box.isEmpty()) return { ok: false, error: "empty bounds" };
     if (!entry.manualFrame) frameCamera(box, entry.frameMode);
+    lightingPrototype.attach(dynamic, camera);
+    lightingPrototype.setMode("legacy");
     renderer.render(scene, camera);
     const dataUrl = canvas.toDataURL("image/png");
     return { ok: true, dataUrl, label: entry.label, cat: entry.cat };
@@ -624,8 +780,44 @@ async function renderItem(id) {
 }
 
 window.renderItem = renderItem;
+window.renderLightingVariant = rerenderLighting;
 window.__ready = true;
 STATUS.textContent = "ready · " + REGISTRY.length + " items";
+
+const LIGHTING_PANEL = document.getElementById("lighting-lab");
+const LIGHTING_STATS = document.getElementById("lighting-stats");
+const LIGHTING_OBJECT = document.getElementById("lighting-object");
+let lightingBuilt = false;
+
+function publishLightingResult(mode, phase, result) {
+  const compact = { mode, phase, state: result.state, stats: result.stats, render: result.render };
+  LIGHTING_PANEL.dataset.ready = "true";
+  LIGHTING_PANEL.dataset.preset = mode === "legacy" ? "legacy" : phase;
+  LIGHTING_STATS.textContent = JSON.stringify(compact, null, 2);
+}
+
+async function buildLightingObject() {
+  LIGHTING_PANEL.dataset.ready = "false";
+  LIGHTING_STATS.textContent = "构建中…";
+  const built = await renderItem(LIGHTING_OBJECT.value);
+  if (!built.ok) {
+    LIGHTING_STATS.textContent = built.error || "构建失败";
+    return;
+  }
+  lightingBuilt = true;
+  publishLightingResult("legacy", "noon", rerenderLighting("legacy", "noon"));
+}
+
+document.getElementById("lighting-build").addEventListener("click", buildLightingObject);
+for (const button of document.querySelectorAll("[data-lighting-mode]")) {
+  button.addEventListener("click", async () => {
+    if (!lightingBuilt) await buildLightingObject();
+    if (!lightingBuilt) return;
+    const mode = button.dataset.lightingMode;
+    const phase = button.dataset.phase || "noon";
+    publishLightingResult(mode, phase, rerenderLighting(mode, phase));
+  });
+}
 </script>
 </body>
 </html>

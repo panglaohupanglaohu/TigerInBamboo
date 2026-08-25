@@ -26,7 +26,10 @@ const {
   createTieSoldier,
   createHarborPatrolSoldier,
   createLongbowSoldier,
+  createCitadelMeleeSoldier,
+  createGladiusSoldier,
 } = await import(new URL("src/assets/harbor.js", BASE).href);
+const { applyUrlOverrides, isCitadelCombatV3 } = await import(new URL("src/core/params.js", BASE).href);
 
 const meshes = (root) => {
   const result = [];
@@ -84,5 +87,22 @@ assert(spear.position.x > 0.2, "长枪应位于角色前方");
 assert(Math.abs(spear.rotation.z + Math.PI / 2 + 0.08) < 1e-6,
   "长枪应保持横向前指姿态");
 assert.equal(typeof THREE.Vector3, "function");
+
+console.log("[5] V3 近战主武器：默认短剑，开关开时长枪");
+{
+  applyUrlOverrides("?citadelCombatV3=0");
+  const meleeOff = createCitadelMeleeSoldier();
+  assert.equal(isCitadelCombatV3(), false);
+  assert(meleeOff.getObjectByName("right-hand-gladius"), "默认近战仍是短剑盾");
+  applyUrlOverrides("?citadelCombatV3=1");
+  const meleeOn = createCitadelMeleeSoldier();
+  assert.equal(isCitadelCombatV3(), true);
+  assert(meleeOn.getObjectByName("right-hand-long-spear"), "V3 近战必须长枪");
+  assert.equal(meleeOn.getObjectByName("right-hand-gladius"), undefined);
+  assert.equal(meleeOn.userData.phalanxRole, "spear");
+  const gladius = createGladiusSoldier();
+  assert(gladius.getObjectByName("right-hand-gladius"), "短剑工厂仍可用");
+  applyUrlOverrides("?citadelCombatV3=0");
+}
 
 console.log("纸士兵 Bad North 风格模型验收通过 ✅");

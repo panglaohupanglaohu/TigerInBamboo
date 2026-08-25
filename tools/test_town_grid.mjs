@@ -165,7 +165,7 @@ console.log("[2c] 2D 地图、支撑判定与 3D 编辑坐标共用同一原点"
       { radius: 28, height: 2 },
     ],
   };
-  const citadel = buildOdysseyCitadel({ place: false, seed: 7, contour });
+  const citadel = buildOdysseyCitadel({ latestDesign: false, place: false, seed: 7, contour });
   const edge = citadelGridCellCenter(18, 0, 12);
   const outside = citadelGridCellCenter(19, 0, 12);
   assert.equal(terrainSupportLevel(citadel, edge.x, edge.z, 2, 0), 0,
@@ -223,12 +223,13 @@ console.log("[5] buildCitadelTownAssembly：编辑器/主场景同路径 + 描�
   let visible = 0;
   let withOutline = 0;
   group.traverse((o) => {
-    if (o.isMesh && !o.userData.isOutline) {
+    // 与 applyInkOutlines 跳过规则对齐：透明水面/显式 skip 不做反向壳描边
+    if (o.isMesh && !o.userData.isOutline && o.material?.transparent !== true && o.userData.skipInkOutline !== true) {
       visible++;
       if (o.children.some((c) => c.userData.isOutline)) withOutline++;
     }
   });
-  assert.equal(outlined, visible, "描边计数必须等于可见网格数");
+  assert.equal(outlined, visible, "描边计数必须等于可见网格数（透明水面除外）");
   assert.equal(withOutline, visible, "每个可见网格必须有反向壳墨线");
   ok(`${visible}/${visible} 网格描边 · level×${levels.length} · 基座 Y=${CITADEL.townBaseY}`);
 }
@@ -244,7 +245,7 @@ console.log("[6] buildOdysseyCitadel：spec 覆盖（编辑器存档布局）");
       ...baseLayout.terraces.slice(1),
     ],
   });
-  const citadel = buildOdysseyCitadel({ place: false, seed: 7, spec });
+  const citadel = buildOdysseyCitadel({ latestDesign: false, place: false, seed: 7, spec });
   const expectedCount = spec.terraces.reduce(
     (sum, terrace) => sum + levelsToGrid(terrace.levels).size,
     0
@@ -257,7 +258,7 @@ console.log("[6] buildOdysseyCitadel：spec 覆盖（编辑器存档布局）");
 
 console.log("[7] rebuildCitadelTown：游戏内热重建（断崖/地势不动）");
 {
-  const citadel = buildOdysseyCitadel({ place: false, seed: 7 });
+  const citadel = buildOdysseyCitadel({ latestDesign: false, place: false, seed: 7 });
   const layers = citadel.userData.layers;
   const layer1ChildrenBefore = layers[1].children.length;
 
@@ -321,7 +322,7 @@ console.log("[8] 清空台地后仍可从空白 3D 台面放置第一个建筑�
     gridSize: 25,
     terraces: Array.from({ length: 5 }, () => emptyTerrace),
   };
-  const citadel = buildOdysseyCitadel({ place: false, seed: 7, spec: emptyLayout });
+  const citadel = buildOdysseyCitadel({ latestDesign: false, place: false, seed: 7, spec: emptyLayout });
   assert.equal(citadel.userData.townStats.cellCount, 0, "五座台地应已全部清空");
   assert.equal(citadelEditBaseY(citadel, 0), citadel.userData.townBaseYs[0],
     "空台地编辑平面必须直接来自台地高程，而非建筑层组");
@@ -383,7 +384,7 @@ console.log("[9] 点击打开搭建菜单不得清空或重建城堡");
   // 面板 serializeLayout() 产生的是整个 v2 对象。直接交给热重建器时，
   // 五座台地应完整保留；若误包成旧版 { levels: layout } 则会归零。
   const layout = normalizeCitadelTerraceLayout(CITADEL_TOWN_SPEC);
-  const citadel = buildOdysseyCitadel({ place: false, seed: 7 });
+  const citadel = buildOdysseyCitadel({ latestDesign: false, place: false, seed: 7 });
   const before = citadel.userData.townStats.cellCount;
   const stats = rebuildCitadelTown(citadel, layout);
   assert.equal(stats.cellCount, before, "v2 面板布局必须按 terraces 直接重建，不能被清空");
@@ -438,6 +439,32 @@ console.log("[10] 瞭望塔/参天树支持鸟瞰图与 3D 场景右键删除");
   assert.match(sceneEditSource, /panel\.deleteTerrainObject\?\.\(terrainObject\.id\)/,
     "3D 右键必须优先删除塔/树，再回落到体块删除");
   ok("不可变删除 · 嵌套网格拾取 · 鸟瞰右键 · 3D 右键");
+}
+
+console.log("[11] 高山圣城切换为运河同源 Townscaper 网格编辑器");
+{
+  const mainSource = fs.readFileSync(fileURLToPath(new URL("src/main.js", BASE)), "utf8");
+  const panelSource = fs.readFileSync(
+    fileURLToPath(new URL("src/ui/citadelEditorPanel.js", BASE)),
+    "utf8"
+  );
+  assert.match(mainSource, /getLatestDesign:\s*\(\)\s*=>\s*getCitadelTarget\(\)\?\.userData\?\.highlandLatestDesign\s*===\s*true/,
+    "主程序必须把最新连续山谷标志传给编辑器");
+  assert.match(panelSource, /terrainSection\.style\.display\s*=\s*canal\s*\|\|\s*latestValley\s*\?\s*\"none\"/,
+    "最新连续山谷必须隐藏台地地貌编辑区");
+  assert.match(panelSource, /if\s*\(isLatestValley\(\)\)\s*\{[\s\S]*?terraceTabsEl\.style\.display\s*=\s*\"none\"/,
+    "最新连续山谷必须隐藏台地标签");
+  assert.match(panelSource, /if\s*\(isLatestValley\(\)\)\s*\{[\s\S]*?terrainMapCtx\.clearRect/,
+    "最新连续山谷不得绘制旧台地等高线");
+  assert.match(panelSource, /function\s+usesTownscaperGrid\(\)\s*\{[\s\S]*?isCanalFlat\(\)\s*\|\|\s*\(isLatestValley\(\)\s*&&\s*!usesHighlandUnitMap\(\)\)/,
+    "高山圣城必须与运河交汇古堡共用逐格 Townscaper 编辑分支");
+  assert.match(panelSource, /高山圣城 · Townscaper 网格/,
+    "编辑器必须明确显示高山圣城 Townscaper 网格模式");
+  assert.match(panelSource, /左键空格扩建[\s\S]*?右键删除命中的单元并挖洞/,
+    "高山圣城编辑提示必须覆盖左键扩建与右键挖洞");
+  assert.match(panelSource, /Array\.from\(\{ length: currentMaxLevel\(\) \+ 1 \}/,
+    "网格序列化必须保留高山圣城的动态 12 层，而不是旧 5 层常量");
+  ok("同源网格接线 · 左建右挖 · 12 层序列化 · 旧台地菜单隐藏");
 }
 
 console.log(`\n全部通过：${pass} 组验收`);

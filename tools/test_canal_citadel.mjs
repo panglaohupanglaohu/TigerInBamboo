@@ -42,7 +42,11 @@ const ok = (m) => { console.log(`  ✓ ${m}`); pass++; };
 
 // ---------- 1. 存档键隔离 ----------
 {
-  assert.equal(citadelLevelsKey(null), "tm.citadel.levels.v3", "默认实例使用当前蓝图布局键");
+  assert.equal(
+    citadelLevelsKey(null),
+    "tm.citadel.levels.highland-townscaper.v5",
+    "高山默认实例必须使用独立的逐格 Townscaper 存档键"
+  );
   assert.equal(citadelLevelsKey("canal-junction"), "tm.citadel.levels.canal-junction.v4");
   assert.notEqual(citadelLevelsKey("canal-junction"), citadelLevelsKey(null));
   assert.notEqual(citadelTerrainKey("canal-junction"), citadelTerrainKey(null));

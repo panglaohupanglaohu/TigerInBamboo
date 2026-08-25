@@ -12,7 +12,8 @@ import {
   CITADEL_TERRACE_COUNT,
   CITADEL_TOWN_SPEC,
   normalizeCitadelTerraceLayout,
-} from "./citadelTown.js";
+} from "./citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+import { hashHex } from "../core/rng.js";
 
 export const CITADEL_BLUEPRINT_VERSION = 1;
 export const CITADEL_BUILD_STAGES = Object.freeze([
@@ -202,5 +203,89 @@ export function citadelBlueprintSummary(blueprint) {
     gridSize: blueprint.grid.size,
     objectCount: blueprint.objects.length,
     stages: blueprint.stages.filter((stage) => stage.enabled).map((stage) => stage.id),
+  });
+}
+
+/** 稳定序列化：键顺序由 createCitadelBlueprint 固定，供 canonical hash。 */
+export function serializeCitadelBlueprint(blueprint) {
+  return JSON.stringify(citadelBlueprintSummary(blueprint)) + "\n" + JSON.stringify({
+    version: blueprint.version,
+    instanceId: blueprint.instanceId,
+    floors: blueprint.floors,
+    grid: blueprint.grid,
+    terrain: {
+      config: blueprint.terrain.config,
+      metrics: blueprint.terrain.metrics,
+      baseYs: blueprint.terrain.baseYs,
+      topY: blueprint.terrain.topY,
+      skipOuterTerrain: blueprint.terrain.skipOuterTerrain,
+    },
+    town: {
+      terraceCount: blueprint.town.terraceCount,
+      layout: blueprint.town.layout,
+    },
+    objects: blueprint.objects,
+    presentation: blueprint.presentation,
+    stages: blueprint.stages,
+  });
+}
+
+export function citadelBlueprintCanonicalHash(blueprint) {
+  return hashHex(serializeCitadelBlueprint(blueprint));
+}
+
+/**
+ * 版本迁移入口：未知/缺失 version 一律经 createCitadelBlueprint 归一到当前 schema。
+ * 拒绝比当前更新的版本，避免静默丢字段。
+ */
+export function validateCitadelBlueprint(blueprint) {
+  const errors = [];
+  if (!blueprint || typeof blueprint !== "object") return { ok: false, errors: ["missing blueprint"] };
+  if (blueprint.version !== CITADEL_BLUEPRINT_VERSION) {
+    errors.push(`version ${blueprint.version} != ${CITADEL_BLUEPRINT_VERSION}`);
+  }
+  if (!blueprint.grid || !Number.isFinite(blueprint.grid.size)) errors.push("grid.size");
+  if (!blueprint.terrain?.metrics?.length) errors.push("terrain.metrics");
+  if (!blueprint.town?.layout?.terraces) errors.push("town.layout.terraces");
+  if (!Array.isArray(blueprint.objects)) errors.push("objects");
+  if (!Array.isArray(blueprint.stages) || blueprint.stages.length !== CITADEL_BUILD_STAGES.length) {
+    errors.push("stages");
+  }
+  return { ok: errors.length === 0, errors };
+}
+
+/** 稳定实体 ID：地貌对象 + 占格，供拓扑/任务/编辑器交叉引用。 */
+export function citadelBlueprintEntityIds(blueprint) {
+  const ids = [];
+  for (const obj of blueprint.objects || []) ids.push(`object:${obj.id}`);
+  const terraces = blueprint.town?.layout?.terraces || [];
+  for (const terr of terraces) {
+    const t = terr.terraceIndex;
+    (terr.levels || []).forEach((rows, iy) => {
+      (rows || []).forEach((row, iz) => {
+        [...String(row)].forEach((ch, ix) => {
+          if (ch && ch !== ".") ids.push(`cell:${t}:${ix}:${iy}:${iz}`);
+        });
+      });
+    });
+    ids.push(`terrace:${t}`);
+  }
+  ids.sort();
+  return Object.freeze(ids);
+}
+
+export function migrateCitadelBlueprint(raw = {}) {
+  const version = Number(raw?.version);
+  if (Number.isFinite(version) && version > CITADEL_BLUEPRINT_VERSION) {
+    throw new Error(`citadel blueprint version ${version} > ${CITADEL_BLUEPRINT_VERSION}`);
+  }
+  return createCitadelBlueprint({
+    spec: raw.town?.layout ?? raw.spec,
+    contour: raw.terrain?.config ?? raw.contour,
+    floors: raw.floors,
+    instanceId: raw.instanceId ?? null,
+    skipOuterTerrain: raw.terrain?.skipOuterTerrain ?? raw.skipOuterTerrain,
+    townBaseLift: raw.presentation?.townBaseLift ?? raw.townBaseLift,
+    terrainObjects: raw.objects ?? raw.terrainObjects,
   });
 }

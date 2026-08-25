@@ -1,8 +1,15 @@
+// =====================================================================
+//  @legacy 深夜木马巡查（禁止追加新玩法）
+//  V4 真源：src/agents/citadel/siegeDirector.js makeTrojanWave / assignSearchTargets
+//  本文件暂留：四绳下降与天亮回收仍在这里。见 docs/citadel-v4-legacy.md
+// =====================================================================
 import * as THREE from "three";
 import { createNightInfiltrationSoldier } from "../assets/harbor.js";
 import { citadelTerraceMetrics } from "./odysseyCitadel.js";
 import { setInfiltrationBgm, updateInfiltrationBgm } from "../audio/sfx.js";
 import { tickObjectSedation } from "./tranquilizer.js";
+import { isCitadelPaletteV3 } from "../core/params.js";
+import { v3TokenInt } from "./citadelVisualTheme.js";
 
 // 一入夜即行动（与 dayNight 入夜≈0.85、窗户/鸟群夜栖≈0.82 对齐），
 // 不再等到 0.93 深夜，留给攀爬/巡查更长时间。
@@ -410,7 +417,8 @@ function targetKey(pos) {
  * 木马夜间潜入事件。
  *
  * 两组各四名纸士兵各用一根腹舱下降绳，按组内顺序依次下降。
- * 全员左手持盾、右手持长枪；台面排查时，确认「下一家」后由该士兵将长矛如标枪投出，
+ * 首尾为火炬手（左火炬右长枪，K4 起由 LocalLightRegistry 统一预算局部灯），
+ * 中间两名左盾右枪；台面排查时，确认「下一家」后由该士兵将长矛如标枪投出，
  * 弧线命中目标门户，士兵跑到后收回长矛。瀑布攀爬时以拉、推、搀扶姿态互助。
  */
 export function createCitadelNightInfiltration({
@@ -425,6 +433,8 @@ export function createCitadelNightInfiltration({
   stairTransferRoutes = [],
   patrolCastle = null,
   patrolSurfacePoint = null,
+  topAssaultMode = false,
+  captureTarget = null,
   events = null, // P0 · 可选 CombatEventLog（本模块零随机，时间轴天然可重放）
 }) {
   _up.copy(siteUp).normalize();
@@ -445,13 +455,15 @@ export function createCitadelNightInfiltration({
   };
 
   const ropeMat = new THREE.MeshStandardMaterial({
-    color: 0x24170f,
+    // V3（?citadelPaletteV3=1）：木马绳索/内壁暗色走 unitAttackerShade
+    color: isCitadelPaletteV3() ? v3TokenInt("unitAttackerShade") : 0x24170f,
     roughness: 0.95,
     flatShading: true,
   });
   const baseGround = horseGround.clone().addScaledVector(_up, 0.08);
   const baseRoutes = {
     waterfall: makePath([baseGround, ...(waterfallRoute || [])]),
+    ladder: makePath([baseGround, ...(waterfallRoute || [])]),
     stairs: makePath([baseGround, ...(stairRoute || [])]),
   };
   // 可热重建的路线状态：地形编辑器改台地半径/瀑布/石阶后，由 citadelRange
@@ -460,15 +472,47 @@ export function createCitadelNightInfiltration({
   let _stairRoute = (stairRoute || []).slice();
   let _stairTransferRoutes = (stairTransferRoutes || []).slice();
   let _patrolSurfacePoint = patrolSurfacePoint || null;
-  let terraceTargets = collectPatrolTargets(
-    patrolCastle,
-    [0, 1, 2, 3, 4],
-    _up,
-    patrolSurfacePoint
-  );
+  const makeCastleTopTargets = () => {
+    const target = captureTarget?.isVector3 ? captureTarget : baseRoutes.stairs.points.at(-1);
+    if (!target) return new Map([[0, []]]);
+    const forward = new THREE.Vector3().crossVectors(_up, _siteRight).normalize();
+    const offsets = [
+      [-1.8, -1.25], [0, -1.35], [1.8, -1.25],
+      [-2.2, 0], [0, 0], [2.2, 0],
+      [-1.7, 1.25], [0, 1.35], [1.7, 1.25],
+    ];
+    return new Map([[0, offsets.map(([x, z]) => target.clone()
+      .addScaledVector(_siteRight, x)
+      .addScaledVector(forward, z))]]);
+  };
+  let terraceTargets = topAssaultMode
+    ? makeCastleTopTargets()
+    : collectPatrolTargets(
+        patrolCastle,
+        [0, 1, 2, 3, 4],
+        _up,
+        patrolSurfacePoint
+      );
   const groups = [];
   const records = [];
-  const groupSpecs = [
+  const groupSpecs = topAssaultMode ? [
+    {
+      name: "ladder-infiltration-group",
+      routeKey: "ladder",
+      route: baseRoutes.ladder,
+      moveDuration: WATERFALL_MOVE_DURATION,
+      patrolDuration: WATERFALL_PATROL_DURATION,
+      patrolTerraces: [0],
+    },
+    {
+      name: "mountain-stair-infiltration-group",
+      routeKey: "stairs",
+      route: baseRoutes.stairs,
+      moveDuration: STAIR_MOVE_DURATION,
+      patrolDuration: STAIR_PATROL_DURATION,
+      patrolTerraces: [0],
+    },
+  ] : [
     {
       name: "waterfall-infiltration-group",
       routeKey: "waterfall",
@@ -514,7 +558,9 @@ export function createCitadelNightInfiltration({
     group.userData.route = spec.routeKey;
     group.userData.patrolTerraces = spec.patrolTerraces.slice();
     group.userData.patrolTargetCount = 0;
-    group.userData.patrolTargetSource = "town-gate-terrace-surface-distributed";
+    group.userData.patrolTargetSource = topAssaultMode
+      ? "castle-top-capture-zone"
+      : "town-gate-terrace-surface-distributed";
     group.userData.patrolMode = "distributed-coverage";
     group.userData.patrolFormation = "dispersed-running-inspection";
     group.userData.climbingFormation = "mutual-support-no-queue";
@@ -524,10 +570,12 @@ export function createCitadelNightInfiltration({
     const groupRecords = [];
     group.userData.thrownTargets = new Set();
     for (let i = 0; i < 4; i++) {
-      // 全员左盾右枪（搜家投矛需要统一装备）
-      const soldier = createNightInfiltrationSoldier({ torchLeft: false });
+      // 首尾火炬手（PLAN 8.11：两组首尾为火炬手，其余左盾右枪）；
+      // 火炬手右手仍持长枪，投矛/攀爬/回收流程不受影响。
+      const torchBearer = i === 0 || i === 3;
+      const soldier = createNightInfiltrationSoldier({ torchLeft: torchBearer });
       soldier.userData.group = spec.routeKey;
-      soldier.userData.equipmentRole = "shield-spear";
+      soldier.userData.equipmentRole = torchBearer ? "torch-spear" : "shield-spear";
       soldier.userData.queueIndex = i;
       soldier.userData.queueSpacing = 0;
       soldier.userData.descentSpacing = SOLDIER_BODY_LENGTH;
@@ -606,13 +654,16 @@ export function createCitadelNightInfiltration({
   /** 用当前路线状态重建各组的进场路径与分散巡查计划（地形热重建）。 */
   const rebuildPlans = () => {
     baseRoutes.waterfall = makePath([baseGround, ..._waterfallRoute]);
+    baseRoutes.ladder = makePath([baseGround, ..._waterfallRoute]);
     baseRoutes.stairs = makePath([baseGround, ..._stairRoute]);
-    terraceTargets = collectPatrolTargets(
-      patrolCastle,
-      [0, 1, 2, 3, 4],
-      _up,
-      _patrolSurfacePoint
-    );
+    terraceTargets = topAssaultMode
+      ? makeCastleTopTargets()
+      : collectPatrolTargets(
+          patrolCastle,
+          [0, 1, 2, 3, 4],
+          _up,
+          _patrolSurfacePoint
+        );
     for (const group of groups) {
       const route = baseRoutes[group.userData.route];
       const groupRecords = group.userData.records || [];
@@ -1247,7 +1298,8 @@ export function createCitadelNightInfiltration({
           Math.min(record.path.total, approachDistance + 0.24),
           _tmpB
         );
-        climbing = record.group.userData.route === "waterfall";
+        climbing = record.group.userData.route === "waterfall"
+          || record.group.userData.route === "ladder";
         const approachPace = THREE.MathUtils.clamp(
           record.path.total / Math.max(0.001, record.moveDuration) / SOLDIER_BASE_PACE,
           0.55,
@@ -1336,6 +1388,8 @@ export function createCitadelNightInfiltration({
   root.userData.patrolTargetsByTerrace = terraceTargets;
   root.userData.activationPhase = NIGHT_OPEN;
   root.userData.queueSpacing = 0;
+  root.userData.destination = topAssaultMode ? "castle-top" : "legacy-terraces";
+  root.userData.topAssaultMode = topAssaultMode;
   root.userData.getState = () => ({
     active,
     returning,
@@ -1372,7 +1426,7 @@ export function createCitadelNightInfiltration({
     torchQueueIndices: records
       .filter((record) => record.soldier.userData.torchBearer)
       .map((record) => `${record.group.userData.route}:${record.index}`),
-    equipmentRole: "shield-spear",
+    equipmentRole: "torch-flank-shield-spear", // 首尾火炬手 + 中间左盾右枪
     javelinsActive: records.filter((record) => record.javelin).length,
     javelinPhases: records
       .filter((record) => record.javelin)

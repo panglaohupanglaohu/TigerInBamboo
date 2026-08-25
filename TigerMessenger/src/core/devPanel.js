@@ -1,8 +1,10 @@
 // =====================================================================
 //  开发者菜单：右上角 🤖；滑杆调参 + FPS；改动写入 localStorage
 // =====================================================================
-import { P, P_DEFAULTS, saveParams, resetParams } from "./params.js";
+import { P, P_DEFAULTS, FEATURES, saveParams, resetParams } from "./params.js";
 import { makePanelDraggable } from "../ui/dragPanel.js";
+import { LIGHTING_DEBUG_VIEW_MODES, LIGHTING_DEBUG_VIEW_DEFAULT } from "../render/lighting/debugViewMode.js";
+import { LIGHTING_QUALITY_TIERS } from "../render/lighting/lightingQuality.js";
 
 const SLIDERS = [
   { key: "moveSpeed", label: "移动速度", min: 1, max: 15, step: 0.1, group: "玩家" },
@@ -30,30 +32,45 @@ const SLIDERS = [
  * @param {import("three").AmbientLight} deps.ambient
  * @param {(d: number) => void} [deps.onCamDist]
  * @param {() => void} [deps.onOpenMap] 打开地图编辑器
+ * @param {() => void} [deps.onOpenCitadel] 打开古堡 Townscaper / WFC 搭建器
  * @param {() => void} [deps.onOpenStoryboard] 打开并列的故事板工作台
  * @param {() => string} [deps.onGateHere] 把三重门/云墙搬到玩家当前轨道位置，返回状态文字
  * @param {() => string} [deps.onGateReset] 恢复三重门/云墙的默认位置，返回状态文字
  * @param {() => string} [deps.onLakeHere] 把白鲸湖搬到玩家当前位置，返回状态文字
  * @param {() => string} [deps.onLakeReset] 恢复白鲸湖的默认位置，返回状态文字
+ * @param {() => void} [deps.onOpenShotHarness] 打开运行时截图 / OskSta A-B 工作台
  * @param {boolean} [deps.cloudWallEnabled] 城头云墙当前是否显示
  * @param {(on: boolean) => string} [deps.onCloudWallToggle] 开关城头云墙，返回状态文字
  */
 export function createDevPanel({
   sun,
   ambient,
+  lightingDirector = null, // V5 光照导演：开启时滑杆写入 trim 而非直接碰灯
+  lightingV5 = false,
+  voxelAo = null, // K3/K7：体素 AO 系统（可传对象或 () => 对象的惰性取值；null=不提供）
+  localLights = null, // K4/K7：局部灯预算桥接（同 voxelAo 支持惰性取值）
   onCamDist,
   onOpenMap,
+  onOpenCitadel,
   onOpenStoryboard,
   onGateHere,
   onGateReset,
   onLakeHere,
   onLakeReset,
+  onOpenShotHarness,
   cloudWallEnabled = false,
   onCloudWallToggle,
 }) {
   // 应用已持久化的光照
   if (Number.isFinite(P.sunIntensity)) sun.intensity = P.sunIntensity;
   if (Number.isFinite(P.ambientIntensity)) ambient.intensity = P.ambientIntensity;
+  if (lightingV5 && lightingDirector) {
+    // V5：旧默认 1.6/1.4 是旧管线量纲，换算成 trim 乘子作用于主题值
+    lightingDirector.setTrims({
+      sunMul: P.sunIntensity / 1.6,
+      ambientMul: P.ambientIntensity / 1.4,
+    });
+  }
   if (onCamDist) onCamDist(P.camDist);
 
   const toggle = document.createElement("button");
@@ -88,11 +105,68 @@ export function createDevPanel({
     `<em data-lval="sun">${sun.intensity.toFixed(2)}</em></label>`;
   html +=
     `<label class="dev-row"><span>环境光强</span>` +
-    `<input type="range" data-light="ambient" min="0" max="1" step="0.02" value="${ambient.intensity}">` +
+    // 修正：上限原为 1 与默认 1.4 不一致，统一 0~3
+    `<input type="range" data-light="ambient" min="0" max="3" step="0.02" value="${ambient.intensity}">` +
     `<em data-lval="ambient">${ambient.intensity.toFixed(2)}</em></label>`;
+  // ---------- V5 光照 · K7（TODO 572/573） ----------
+  // voxelAo/localLights 在面板之后装配（main.js 初始化顺序），支持惰性取值；
+  // 构建期调用可能撞上 let 的 TDZ，安全回退 null
+  const safeGet = (fn) => { try { return fn(); } catch { return null; } };
+  const getVoxelAo = () => (typeof voxelAo === "function" ? safeGet(voxelAo) : voxelAo);
+  const getLocalLights = () => (typeof localLights === "function" ? safeGet(localLights) : localLights);
+  if (lightingDirector) {
+    html += `<div class="dev-group">V5 光照 · K7</div>`;
+    html +=
+      `<label class="dev-row dev-check"><span>V5 管线（关=legacy）</span>` +
+      `<input type="checkbox" id="dev-v5-enabled" ${lightingV5 ? "checked" : ""}></label>`;
+    html +=
+      `<label class="dev-row dev-check"><span>冻结光照状态</span>` +
+      `<input type="checkbox" id="dev-v5-freeze"></label>`;
+    html +=
+      `<label class="dev-row"><span>质量分档</span>` +
+      `<select id="dev-v5-quality">` +
+      Object.keys(LIGHTING_QUALITY_TIERS)
+        .map((q) => `<option value="${q}" ${FEATURES.lightingQuality === q ? "selected" : ""}>${q}</option>`)
+        .join("") +
+      `</select></label>`;
+    html +=
+      `<label class="dev-row"><span>调试视图</span>` +
+      `<select id="dev-v5-debug-view">` +
+      [LIGHTING_DEBUG_VIEW_DEFAULT, ...LIGHTING_DEBUG_VIEW_MODES.filter((m) => m !== LIGHTING_DEBUG_VIEW_DEFAULT)]
+        .map((m) => `<option value="${m}">${m}</option>`)
+        .join("") +
+      `</select></label>`;
+    html +=
+      `<label class="dev-row"><span>阴影预设</span>` +
+      `<select id="dev-v5-shadow-preset"><option value="paper">paper</option><option value="soft">soft</option></select></label>`;
+    html +=
+      `<label class="dev-row dev-check"><span>体素 AO</span>` +
+      `<input type="checkbox" id="dev-v5-ao" ${voxelAo ? "" : "disabled"}></label>`;
+    html +=
+      `<label class="dev-row dev-check"><span>单次色彩反弹（high 档+刷新）</span>` +
+      `<input type="checkbox" id="dev-v5-bounce" ${FEATURES.voxelBounceV1 ? "checked" : ""}></label>`;
+    html +=
+      `<label class="dev-row"><span>曝光</span>` +
+      `<input type="range" id="dev-v5-exposure" min="0.2" max="3" step="0.05" value="1">` +
+      `<em id="dev-v5-exposure-val">1.00</em></label>`;
+    html +=
+      `<label class="dev-row"><span>天空/地面光</span>` +
+      `<input type="range" id="dev-v5-sky" min="0" max="3" step="0.05" value="1">` +
+      `<em id="dev-v5-sky-val">1.00</em></label>`;
+    if (localLights) {
+      const cap = getLocalLights()?.getDebugInfo?.().budget ?? 8;
+      html +=
+        `<label class="dev-row"><span>局部灯预算</span>` +
+        `<input type="range" id="dev-v5-light-budget" min="0" max="${cap}" step="1" value="${cap}">` +
+        `<em id="dev-v5-light-budget-val">${cap}</em></label>`;
+    }
+    html += `<p class="dev-hint">bounce 采样侧尚未接入着色器，开关只写 FEATURES 标志；调试视图的真实 shader 通道分解属浏览器 GPU 阶段</p>`;
+  }
   html += `<div class="dev-group">地图 / 故事板</div>`;
   html += `<button type="button" id="dev-open-map" class="dev-action">🗺️ 打开地图编辑</button>`;
+  html += `<button type="button" id="dev-open-citadel" class="dev-action">🏰 打开古堡搭建</button>`;
   html += `<button type="button" id="dev-open-storyboard" class="dev-action">🎬 打开故事板工作台</button>`;
+  html += `<button type="button" id="dev-open-shot-harness" class="dev-action">📸 打开 OskSta A/B 工作台</button>`;
   html += `<p class="dev-hint">故事板已独立为并列面板（左上 🎬），支持分镜拖拽与 LLM 执行</p>`;
   // ---------- 三重门 / 云墙 ----------
   html += `<div class="dev-group">三重门 · 云墙</div>`;
@@ -129,10 +203,24 @@ export function createDevPanel({
       panel.style.display = "none";
     });
   }
+  const citadelBtn = panel.querySelector("#dev-open-citadel");
+  if (citadelBtn && onOpenCitadel) {
+    citadelBtn.addEventListener("click", () => {
+      onOpenCitadel();
+      panel.style.display = "none";
+    });
+  }
   const sbBtn = panel.querySelector("#dev-open-storyboard");
   if (sbBtn && onOpenStoryboard) {
     sbBtn.addEventListener("click", () => {
       onOpenStoryboard();
+      panel.style.display = "none";
+    });
+  }
+  const shotBtn = panel.querySelector("#dev-open-shot-harness");
+  if (shotBtn && onOpenShotHarness) {
+    shotBtn.addEventListener("click", () => {
+      onOpenShotHarness();
       panel.style.display = "none";
     });
   }
@@ -195,6 +283,28 @@ export function createDevPanel({
     });
   }
 
+  // ---------- V5 光照 · K7 控件绑定 ----------
+  if (lightingDirector) {
+    const bindCheck = (id, fn) => panel.querySelector(id)?.addEventListener("change", (e) => fn(e.target.checked));
+    const bindSelect = (id, fn) => panel.querySelector(id)?.addEventListener("change", (e) => fn(e.target.value));
+    const bindRange = (id, valId, fn) => panel.querySelector(id)?.addEventListener("input", (e) => {
+      const v = Number(e.target.value);
+      const em = panel.querySelector(valId);
+      if (em) em.textContent = v.toFixed(2);
+      fn(v);
+    });
+    bindCheck("#dev-v5-enabled", (on) => lightingDirector.setEnabled(on));
+    bindCheck("#dev-v5-freeze", (on) => lightingDirector.setFrozen(on));
+    bindSelect("#dev-v5-quality", (q) => { FEATURES.lightingQuality = q; });
+    bindSelect("#dev-v5-debug-view", (m) => lightingDirector.setDebugViewMode(m));
+    bindSelect("#dev-v5-shadow-preset", (p) => lightingDirector.setShadowPreset(p));
+    bindCheck("#dev-v5-ao", (on) => getVoxelAo()?.setEnabled(on));
+    bindCheck("#dev-v5-bounce", (on) => { FEATURES.voxelBounceV1 = on; });
+    bindRange("#dev-v5-exposure", "#dev-v5-exposure-val", (v) => lightingDirector.setTrims({ exposureMul: v }));
+    bindRange("#dev-v5-sky", "#dev-v5-sky-val", (v) => lightingDirector.setTrims({ skyMul: v }));
+    bindRange("#dev-v5-light-budget", "#dev-v5-light-budget-val", (v) => getLocalLights()?.setBudgetCap(v));
+  }
+
   panel.addEventListener("input", (e) => {
     const t = e.target;
     if (!(t instanceof HTMLInputElement)) return;
@@ -206,20 +316,34 @@ export function createDevPanel({
       saveParams();
     } else if (t.dataset.light) {
       const isSun = t.dataset.light === "sun";
-      const light = isSun ? sun : ambient;
-      light.intensity = Number(t.value);
-      panel.querySelector(`[data-lval="${t.dataset.light}"]`).textContent =
-        Number(t.value).toFixed(2);
-      if (isSun) P.sunIntensity = light.intensity;
-      else P.ambientIntensity = light.intensity;
+      const value = Number(t.value);
+      panel.querySelector(`[data-lval="${t.dataset.light}"]`).textContent = value.toFixed(2);
+      if (isSun) P.sunIntensity = value;
+      else P.ambientIntensity = value;
+      if (lightingV5 && lightingDirector) {
+        // V5：写入 LightingState trim，不直接碰 Three Light（且旧灯已被导演隐藏）
+        lightingDirector.setTrims(
+          isSun ? { sunMul: value / 1.6 } : { ambientMul: value / 1.4 }
+        );
+      } else {
+        const light = isSun ? sun : ambient;
+        light.intensity = value;
+      }
       saveParams();
     }
   });
 
   panel.querySelector("#dev-reset").addEventListener("click", () => {
     resetParams();
-    sun.intensity = P.sunIntensity;
-    ambient.intensity = P.ambientIntensity;
+    if (lightingV5 && lightingDirector) {
+      lightingDirector.setTrims({
+        sunMul: P.sunIntensity / 1.6,
+        ambientMul: P.ambientIntensity / 1.4,
+      });
+    } else {
+      sun.intensity = P.sunIntensity;
+      ambient.intensity = P.ambientIntensity;
+    }
     for (const s of SLIDERS) {
       const input = panel.querySelector(`[data-key="${s.key}"]`);
       input.value = String(P[s.key]);

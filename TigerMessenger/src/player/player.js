@@ -6,6 +6,7 @@ import { buildAgentMessenger } from "./agentMessenger.js";
 import { flatToWorld, surfaceNormal } from "../world/sphereMath.js";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 const _up = new THREE.Vector3();
 const _fwd = new THREE.Vector3();
@@ -40,6 +41,16 @@ export function createPlayer(scene) {
   const holdAura = new THREE.PointLight(0x72d7e7, 0, 4, 2);
   holdAura.position.set(0, 0.75, 0); // 智能体工作核心高度（缩放后）
   playerGroup.add(holdAura);
+  // K4：持信光环迁入 registry（玩家相关，优先级高于场景氛围灯）
+  registerLocalLight(holdAura, {
+    id: "player-hold-aura",
+    owner: "player",
+    kind: "point",
+    color: 0x72d7e7,
+    intensity: 0,
+    radius: 4,
+    priority: 8,
+  });
 
   syncPlayerVisual(player, playerGroup);
   return { player, playerGroup, messengerMesh, holdAura };

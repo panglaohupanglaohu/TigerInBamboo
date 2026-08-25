@@ -136,7 +136,18 @@ const R = 40;
 const DECK_W = 3.35;
 const PLAYER_H = 1.6;
 const LANE_SPAN = 1.8;
-const TERRACOTTA = new Set(["#B85A42", "#A64B35", "#C46A4E"]);
+// Towerscaper 糖果色板（与 src/world/abandonedGate.js 同步锁定）
+const TS_WALLS = [
+  { main: 0xe85d5d, roof: 0xf2975d }, // 樱桃红
+  { main: 0x62b6e6, roof: 0xf2d85a }, // 天蓝
+  { main: 0x6dd5a0, roof: 0xf2975d }, // 薄荷绿
+  { main: 0xf2d85a, roof: 0xe87e52 }, // 柠檬黄
+  { main: 0xe8a0c0, roof: 0xf2975d }, // 浅粉
+  { main: 0xf5f0e6, roof: 0xe87e52 }, // 奶油白
+];
+const TS_ARCH_HEX = "#FFF8ED"; // 拱门/矮墩：奶油白
+const RUBBLE_HEX = "#9A918A"; // 乱石：浅暖灰褐
+const toHex = (c) => `#${c.toString(16).toUpperCase().padStart(6, "0")}`;
 
 let pass = 0;
 const ok = (m) => {
@@ -325,8 +336,8 @@ seatRoot.traverse((o) => {
 assert.equal(collideHits, 0, "存在带碰撞半径的构件，会挡电车");
 ok("不参与碰撞（电车可穿三重拱）");
 
-// ---------- 6. 材质：陶土赤红 Toon ----------
-console.log("[6] 陶土赤红卡通材质");
+// ---------- 6. 材质：Towerscaper 糖果色 Toon ----------
+console.log("[6] Towerscaper 糖果色卡通材质");
 const mats = new Set();
 seatRoot.traverse((o) => {
   if (o.isMesh && o.material && !o.userData?.isOutline) mats.add(o.material);
@@ -336,12 +347,30 @@ assert([...mats].every((m) => m.flatShading === true), "flatShading 未生效");
 ok(`材质全为 MeshToonMaterial + flatShading（${mats.size} 种）`);
 
 const hexes = [...mats].map((m) => `#${m.color.getHexString().toUpperCase()}`);
-const allowed = new Set([...TERRACOTTA, "#6B6560"]); // 乱石灰
+// 与源码相同的派生规则：deep=main×0.78、strip=main×0.62、阶梯主色→屋顶色 lerp(0.12/0.28)
+const allowed = new Set([TS_ARCH_HEX, RUBBLE_HEX]);
+const tsMains = new Set();
+for (const w of TS_WALLS) {
+  const main = new THREE.Color(w.main);
+  const roof = new THREE.Color(w.roof);
+  allowed.add(toHex(w.main));
+  allowed.add(toHex(w.roof));
+  allowed.add(toHex(main.clone().multiplyScalar(0.78).getHex()));
+  allowed.add(toHex(main.clone().multiplyScalar(0.62).getHex()));
+  for (const t of [0.12, 0.28]) allowed.add(toHex(main.clone().lerp(roof, t).getHex()));
+  tsMains.add(toHex(w.main));
+}
 assert(
   hexes.every((h) => allowed.has(h)),
   `配色越界：${[...new Set(hexes)].join(",")}`
 );
-ok(`陶土赤红 + 乱石灰：${[...new Set(hexes)].join(" / ")}`);
+ok(`Towerscaper 糖果色 + 乱石灰：${[...new Set(hexes)].join(" / ")}`);
+// 设计意图：拱门奶油白、双子塔各用一种不同墙色、乱石浅暖灰褐
+assert(hexes.includes(TS_ARCH_HEX), `拱门应为奶油白 ${TS_ARCH_HEX}`);
+assert(hexes.includes(RUBBLE_HEX), `乱石应为浅暖灰褐 ${RUBBLE_HEX}`);
+const usedMains = [...new Set(hexes)].filter((h) => tsMains.has(h));
+assert(usedMains.length === 2, `双子塔应各用一种不同糖果墙色，实际 ${usedMains.join(",")}`);
+ok(`双子塔双色：${usedMains.join(" / ")}`);
 assert([...mats].every((m) => (m.transmission ?? 0) === 0), "含 transmission");
 ok("无 transmission（避免 SwiftShader 全场景回读）");
 

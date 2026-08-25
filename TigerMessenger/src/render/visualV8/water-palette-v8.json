@@ -1,0 +1,19 @@
+{
+  "version": "kimi-v8-v1",
+  "baseOn": "waterSemantics.js WATER_SEMANTICS + visualTheme.js envWater",
+  "_note": "V8-K0/V8-G5 水体系色板（Kimi，2026-08-23）。token 与 src/world/waterV8/waterSemantics.js 的 WATER_SEMANTICS 一一对应，外加 foam；统一港口/湖泊/湿地/水沫色族（对齐 C5 envWater/Deep/Foam 色族要求）。深夜不提高水体曝光（curvedWaterMaterial 夜间 grade 约束）。",
+  "timeBands": ["noon", "sunset", "night"],
+  "tokens": {
+    "deep-ocean":   { "noon": "#2F6270", "sunset": "#3A5A6E", "night": "#101C2C", "_note": "与 terrain deepOcean 同值：海洋单一真源" },
+    "shallow-ocean":{ "noon": "#5E9EA0", "sunset": "#6E8E96", "night": "#182A3E" },
+    "shallow-lake": { "noon": "#7FA8A4", "sunset": "#8E9A94", "night": "#1E3040", "_note": "月亮湖/白鲸湖浅水缘，比海更暖更浅" },
+    "deep-lake":    { "noon": "#3E7280", "sunset": "#486878", "night": "#142436" },
+    "wetland":      { "noon": "#6E9484", "sunset": "#7A8E7C", "night": "#223832", "_note": "苔庭/湖沼湿地水面，带苔绿" },
+    "shore":        { "noon": "#9EBFB4", "sunset": "#ACB2A4", "night": "#263A44", "_note": "岸线过渡带，衔接 terrain shore 砂色" },
+    "foam":         { "noon": "#E4F0EC", "sunset": "#EAE2D4", "night": "#3E4E5C", "_note": "水沫/瀑布脚：深夜压暗，不得发白抢火炬焦点" }
+  },
+  "constraints": {
+    "foamNightMaxL": 34,
+    "_note": "foam 深夜 L* 上限，防止深夜水沫发白；由 tools/test_planet_v8_visual.mjs 断言"
+  }
+}

@@ -3,6 +3,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { P } from "../core/params.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 export function setupEnvironment(scene) {
   // ---------- 光照：暖日光配青绿天光，保持 Cel 色块 ----------
@@ -92,6 +93,16 @@ export function setupEnvironment(scene) {
     const sunHalo = new THREE.PointLight(0xffe8b0, 0.35, 100, 2);
     sunHalo.position.copy(sunDisc.position);
     scene.add(sunHalo);
+    // K4：日轮光晕迁入 LocalLightRegistry（V5 下由 registry 决定它是否变真实灯）
+    registerLocalLight(sunHalo, {
+      id: "sun-halo",
+      owner: "environment",
+      kind: "point",
+      color: 0xffe8b0,
+      intensity: 0.35,
+      radius: 100,
+      priority: 2,
+    });
   }
 
   // ---------- 白天氛围：远景飞鸟剪影 + 暖色光尘（替代夜色 lanterns） ----------

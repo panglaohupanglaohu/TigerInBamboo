@@ -1,0 +1,54 @@
+{
+  "version": "grok-v1",
+  "baseOn": "legacy-incode",
+  "_note": "V6-G11 色板参数包第一版：对 visualTheme.js THEME / TILE_ACCENTS / WEATHER_GRADES / DAY_GRADES 的忠实抽取（零视觉差），不含任何调色创作。字段与代码常量逐项相等，由 tools/test_theme_presets.mjs ① 强制保证。",
+  "rollback": {
+    "version": "legacy-incode",
+    "_note": "上一版即代码内置常量：注入 null（setThemePresetOverrides(null)）即完整回滚，行为与本包注入前逐位一致。"
+  },
+  "theme": {
+    "castleWallChalk": "#F2F4F4",
+    "castleWallMist": "#D5DBDB",
+    "castleWallSage": "#A7BE9C",
+    "castleWallSand": "#E8D5B5",
+    "castleWallBlush": "#E8A0A8",
+    "castleWallAccent": "#7FB3C8",
+    "castleRoof": "#C98778",
+    "castleRoofShade": "#9D6866",
+    "castleTrim": "#46545D",
+    "castleWindow": "#294452",
+    "castleGateFocus": "#EEE2CB",
+    "castlePlaza": "#A9B2AB",
+    "envSkyTop": "#8EADB0",
+    "envFog": "#A9B9B8",
+    "envWater": "#6F9EA4",
+    "envGrass": "#88A779",
+    "envCliff": "#D6DEDA",
+    "unitDefenderMain": "#416F91",
+    "unitAttackerMain": "#593B47",
+    "unitTorch": "#FFB347",
+    "battleBloodFresh": "#A9283C",
+    "battleBloodDry": "#672F3A",
+    "shipEnemyHull": "#533842",
+    "outlineSoft": "#5A6670",
+    "outlineHard": "#2D353B"
+  },
+  "tileAccents": [
+    { "id": "coral", "hex": "#C89082", "_note": "忠实抽取 TILE_ACCENTS[0]" },
+    { "id": "teal", "hex": "#7FA6AC", "_note": "忠实抽取 TILE_ACCENTS[1]" },
+    { "id": "mustard", "hex": "#B4A06B", "_note": "忠实抽取 TILE_ACCENTS[2]" },
+    { "id": "sage", "hex": "#7FA98C", "_note": "忠实抽取 TILE_ACCENTS[3]" }
+  ],
+  "weatherGrades": {
+    "clear": { "sat": 1, "lift": 0, "tint": null, "_note": "晴；忠实抽取 WEATHER_GRADES.clear" },
+    "sunset": { "sat": 1.02, "lift": 0.02, "tint": "#C87669", "_note": "黄昏暖调；忠实抽取 WEATHER_GRADES.sunset" },
+    "rain": { "sat": 0.82, "lift": -0.06, "tint": null, "_note": "雨；忠实抽取 WEATHER_GRADES.rain" },
+    "snow": { "sat": 0.9, "lift": 0.14, "tint": "#E8EEF0", "_note": "雪；忠实抽取 WEATHER_GRADES.snow" },
+    "night": { "sat": 0.92, "lift": -0.18, "tint": "#1E2D3D", "_note": "夜；忠实抽取 WEATHER_GRADES.night" }
+  },
+  "dayGrades": {
+    "day": { "sat": 1, "lift": 0, "_note": "白天；忠实抽取 DAY_GRADES.day" },
+    "dusk": { "sat": 1, "lift": -0.04, "_note": "黄昏；忠实抽取 DAY_GRADES.dusk" },
+    "night": { "sat": 0.95, "lift": -0.12, "_note": "夜晚；忠实抽取 DAY_GRADES.night" }
+  }
+}

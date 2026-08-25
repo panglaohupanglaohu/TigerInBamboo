@@ -1,5 +1,7 @@
 // ============================================================================
-//  Citadel Town — Townscaper 式规则化圣城构建器
+//  @legacy Citadel Town — Townscaper 网格装配（禁止追加新玩法）
+//  V4 真源：src/world/citadel/moduleResolver.js · incrementalBuilder.js
+//  本文件暂留：V4 尚未输出等价 Three 网格。见 docs/citadel-v4-legacy.md
 //
 //  城市不再手工摆放坐标：布局是一张逐层 ASCII 单元格地图（见
 //  CITADEL_TOWN_SPEC），建筑构件全部由邻接规则自动生成——
@@ -18,11 +20,22 @@
 //  小镇原点位于基座底面中心，由调用方抬放到台地顶面。
 // ============================================================================
 import * as THREE from "three";
+export { isCitadelTownV4 } from "../core/params.js";
+export {
+  TOWNSCAPER_MODULE_VARIANTS,
+  TOWNSCAPER_MODULE_FAMILIES,
+} from "./citadel/moduleFamilies.js";
+import {
+  TOWNSCAPER_MODULE_VARIANTS,
+  TOWNSCAPER_MODULE_FAMILIES,
+} from "./citadel/moduleFamilies.js";
 
 /** 编辑器（citadelEditorPanel / townscaper.html）与主场景共用的布局存档键。 */
 // v3：在五彩户/坡屋顶/飞楼支架基础上加入沿台地生长的密集街区，
 // 绕开旧版稀疏布局存档；v2 仍留在 localStorage 中，可回退读取。
-export const CITADEL_LEVELS_KEY = "tm.citadel.levels.v3";
+// v5：参考高山圣城设计图重做 12 层湖岸坡城种子。使用新键隔离 v4 的
+// 运河示例种子，确保现有浏览器也能看到新构图；两版都保持逐格可编辑。
+export const CITADEL_LEVELS_KEY = "tm.citadel.levels.highland-townscaper.v5";
 
 /**
  * 城堡实例化：存档键按实例隔离。
@@ -48,18 +61,6 @@ export const CITADEL_GRID_SIZE = 25;
  * 同一座城，又能让一座城里出现足够多的楼层、地基、围栏、阳台、楼梯、
  * 支架、开洞和装饰组合，而不会为每种组合复制一套几何资产。
  */
-export const TOWNSCAPER_MODULE_VARIANTS = 2450;
-export const TOWNSCAPER_MODULE_FAMILIES = Object.freeze({
-  foundation: Object.freeze(["path", "stone-plinth", "pillar", "cantilever"]),
-  floor: Object.freeze(["base", "split-band", "cornice", "top-band", "tower"]),
-  fence: Object.freeze(["iron", "wood", "painted", "garden"]),
-  balcony: Object.freeze(["flower-tile", "flower-box", "awning", "overhang"]),
-  stairs: Object.freeze(["small", "large", "beach", "switchback"]),
-  support: Object.freeze(["pillar", "v-brace", "arch-post", "cantilever"]),
-  hole: Object.freeze(["archway", "door-tunnel", "garden-door", "water-gate"]),
-  decor: Object.freeze(["window", "oculus", "chimney", "clothesline", "topiary", "lamp"]),
-});
-
 /** 组合索引只依赖布局，不依赖随机数，因此编辑器和运行时完全一致。 */
 export function townscaperModuleSelection(ix, iy, iz, char = "", salt = 0, openMask = 0) {
   let h = (ix * 374761393 + iy * 668265263 + iz * 2246822519
@@ -139,26 +140,25 @@ export const TOWNSCAPER_CANAL_PALETTE = Object.freeze([
 export const TOWNSCAPER_CANAL_GATE_COLOR = 0xf6efe3;
 
 /**
- * 高山圣城 15 色（Townscaper 化）：与运河古堡同一条马卡龙管线，
- * 色相分布对齐 Townscaper 官方截屏——薄荷/青碧/天青/湖蓝/奶油为主调，
- * 点缀明黄/蜜橙/珊瑚/草绿/紫罗兰。字符集与 CITADEL_PALETTE 一一对应。
+ * 高山圣城 15 个可编辑户色槽仍保留，但全部收敛到方尖碑的冷白石材。
+ * 昼夜冷暖来自环境光、窗灯和雾色，而不是把墙体本身涂成红蓝黄绿。
  */
 export const TOWNSCAPER_HIGHLAND_PALETTE = Object.freeze([
-  Object.freeze({ name: "奶油白", char: "0", color: 0xffedc4 }),
-  Object.freeze({ name: "暖砂石", char: "1", color: 0xf0c37c }),
-  Object.freeze({ name: "杏粉", char: "2", color: 0xf28e82 }),
-  Object.freeze({ name: "奶油黄", char: "3", color: 0xf6dd45 }),
-  Object.freeze({ name: "蜜橙", char: "4", color: 0xf08a3c }),
-  Object.freeze({ name: "珊瑚红", char: "5", color: 0xef4f67 }),
-  Object.freeze({ name: "覆盆子红", char: "6", color: 0xd94f7d }),
-  Object.freeze({ name: "薄荷绿", char: "7", color: 0x46d88e }),
-  Object.freeze({ name: "翡翠绿", char: "8", color: 0x31c46f }),
-  Object.freeze({ name: "天青", char: "9", color: 0x4f9de9 }),
-  Object.freeze({ name: "湖蓝", char: "A", color: 0x3f88db }),
-  Object.freeze({ name: "鲜草绿", char: "B", color: 0x63d54d }),
-  Object.freeze({ name: "松石绿", char: "C", color: 0x32cbb2 }),
-  Object.freeze({ name: "灰紫", char: "D", color: 0xb06cca }),
-  Object.freeze({ name: "钴蓝", char: "E", color: 0x5f78d1 }),
+  Object.freeze({ name: "峰顶瓷白", char: "0", color: 0xdce5ea }),
+  Object.freeze({ name: "冷雾石", char: "1", color: 0xd1dce3 }),
+  Object.freeze({ name: "月灰石", char: "2", color: 0xc6d3dc }),
+  Object.freeze({ name: "浅银蓝", char: "3", color: 0xbccbd6 }),
+  Object.freeze({ name: "山雾蓝", char: "4", color: 0xb2c3cf }),
+  Object.freeze({ name: "阴影银", char: "5", color: 0xa9bbc8 }),
+  Object.freeze({ name: "旧白石", char: "6", color: 0xd7ddd9 }),
+  Object.freeze({ name: "冷灰白", char: "7", color: 0xcdd6d5 }),
+  Object.freeze({ name: "雾青灰", char: "8", color: 0xbfcdd0 }),
+  Object.freeze({ name: "淡岩蓝", char: "9", color: 0xafc0cb }),
+  Object.freeze({ name: "方尖碑中灰", char: "A", color: 0xa2b5c2 }),
+  Object.freeze({ name: "方尖碑阴面", char: "B", color: 0x95a9b7 }),
+  Object.freeze({ name: "风化白石", char: "C", color: 0xd5d9d2 }),
+  Object.freeze({ name: "暮色灰石", char: "D", color: 0xaeb8bc }),
+  Object.freeze({ name: "深雾蓝灰", char: "E", color: 0x899eae }),
 ]);
 
 /** 高山圣城正门墙体色（奶油白，与 0 户同色系）。 */
@@ -198,6 +198,74 @@ export function migrateLegacyTownChars(row) {
 export function citadelShadeStep(ix, iz, char = "") {
   const h = (ix * 374761393 + iz * 668265263 + (char ? char.charCodeAt(0) * 2246822519 : 0)) >>> 0;
   return (h % 5) - 2; // -2..+2
+}
+
+// ============================================================================
+//  建筑簇划分（V3 配色 C2）：同字符 4 连通洪泛成簇，簇内统一户色，
+//  只在簇边界换色；簇 id = 簇内字典序最小格坐标，天然稳定。
+// ============================================================================
+
+/**
+ * @param {Map<string, string>} grid  "ix,iy,iz" → char（buildCitadelTown 栅格）
+ * @returns {{ baseChar: Map<string, string>, clusterOf: Map<string, string> }}
+ *   baseChar: "ix,iz" → 该列最低占用层字符（竖柱同色 = 一户的基底）
+ *   clusterOf: "ix,iz" → 簇 id "c<ix>,<iz>"
+ */
+export function computeTownClusters(grid) {
+  const baseChar = new Map();
+  // 取每列最低占用层字符作为户色基底（竖柱同色 = 一户）
+  const baseLevel = new Map();
+  for (const [key, char] of grid) {
+    const [ix, iy, iz] = key.split(",").map(Number);
+    const col = `${ix},${iz}`;
+    const lv = baseLevel.get(col);
+    if (lv === undefined || iy < lv) {
+      baseLevel.set(col, iy);
+      baseChar.set(col, char);
+    }
+  }
+  const clusterOf = new Map();
+  for (const [col] of baseChar) {
+    if (clusterOf.has(col)) continue;
+    const char = baseChar.get(col);
+    // BFS 洪泛同字符 4 连通
+    const queue = [col];
+    const members = [];
+    clusterOf.set(col, col); // 暂置，最后统一改写为最小 id
+    while (queue.length) {
+      const cur = queue.pop();
+      members.push(cur);
+      const [cx0, cz0] = cur.split(",").map(Number);
+      for (const [dx, dz] of DIRS) {
+        const nb = `${cx0 + dx},${cz0 + dz}`;
+        if (baseChar.get(nb) === char && !clusterOf.has(nb)) {
+          clusterOf.set(nb, nb);
+          queue.push(nb);
+        }
+      }
+    }
+    members.sort();
+    const id = `c${members[0]}`;
+    for (const m of members) clusterOf.set(m, id);
+  }
+  return { baseChar, clusterOf };
+}
+
+/**
+ * 单格朝向（V3 路线导向明度，PLAN 7.4.3 的近似）：
+ * 4 邻接正门 G → "route"（提亮）；四邻同字符（簇核内部）→ "back"（压暗）；
+ * 其余 → "normal"。
+ */
+export function townCellFacing(baseChar, ix, iz) {
+  const char = baseChar.get(`${ix},${iz}`);
+  if (char === undefined) return "normal";
+  let sameCount = 0;
+  for (const [dx, dz] of DIRS) {
+    const nb = baseChar.get(`${ix + dx},${iz + dz}`);
+    if (nb === "G") return "route";
+    if (nb === char) sameCount++;
+  }
+  return sameCount === 4 ? "back" : "normal";
 }
 
 // ============================================================================
@@ -702,6 +770,141 @@ export const CANAL_JUNCTION_TOWN_SPEC = Object.freeze({
   ]),
 });
 
+/**
+ * 高山圣城的 Townscaper 种子（参考图 v2）。
+ *
+ * 构建方法与运河交汇古堡完全一致：逐层栅格 → 邻接解析 → module family
+ * 自动换型。种子只描述结构和颜色，不写死 Three.js 建筑：
+ *   · 前排湖岸低城和码头门廊；
+ *   · 中段高密坡城与蛇形朝圣巷；
+ *   · 后排收窄并拔高，两侧形成可编辑的山脊塔群；
+ *   · 中央 5×5 空腔让给不可删除的方尖碑战斗目标。
+ * 玩家之后仍可左键生长、右键逐格挖洞，所有外形由邻接重新求解。
+ */
+function makeHighlandTownscaperLevels() {
+  const N = CITADEL_GRID_SIZE;
+  const C = (N - 1) / 2;
+  const F = 12;
+  const levels = Array.from({ length: F }, () =>
+    Array.from({ length: N }, () => Array(N).fill("."))
+  );
+  const clampHeight = (value) => Math.min(F - 1, Math.max(0, Math.round(value)));
+  const hashAt = (x, z, salt = 0) => {
+    let h = Math.imul(x + 97, 374761393)
+      ^ Math.imul(z + 131, 668265263)
+      ^ Math.imul(salt + 17, 2246822519);
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return (h ^ (h >>> 16)) >>> 0;
+  };
+  const protectedCore = (x, z) => Math.abs(x) <= 2 && Math.abs(z) <= 2;
+  const inside = (x, z) => x >= -12 && x <= 12 && z >= -12 && z <= 12;
+  const set = (x, z, floor, char) => {
+    if (!inside(x, z) || floor < 0 || floor >= F || protectedCore(x, z)) return;
+    levels[floor][z + C][x + C] = char;
+  };
+
+  // 参考图的竖向叙事：湖岸只保留分段低城，建筑沿山谷向中轴方尖碑
+  // 聚拢并拔高。z=+10 面向湖面，z=-10 靠山；禁止生成一整条齐平城墙。
+  const towerAnchors = Object.freeze([
+    { x: -7, z: -8, radius: 2.15, boost: 6, char: "0" },
+    { x: 7, z: -8, radius: 2.05, boost: 6, char: "9" },
+    { x: -9, z: -1, radius: 1.85, boost: 4, char: "A" },
+    { x: 9, z: 0, radius: 1.95, boost: 5, char: "0" },
+    { x: -7, z: 6, radius: 1.65, boost: 3, char: "2" },
+    { x: 7, z: 5, radius: 1.65, boost: 3, char: "1" },
+  ]);
+  const waterfrontPalette = ["0", "2", "4", "5", "9", "A"];
+  const middlePalette = ["0", "1", "2", "9", "A", "E", "7"];
+  const upperPalette = ["0", "1", "9", "A", "E"];
+
+  for (let z = -11; z <= 10; z++) {
+    const depthT = (z + 11) / 21;
+    const halfWidth = Math.round(7.0 + depthT * 1.4 + Math.sin(z * 0.71) * 0.45);
+    for (let x = -halfWidth; x <= halfWidth; x++) {
+      if (protectedCore(x, z)) continue;
+      const hash = hashAt(x, z);
+      const edge = Math.abs(x) >= halfWidth;
+      if (edge && hash % 4 === 0) continue;
+      // 湖岸底层分成数个相连街区；缺口由邻接规则长出巷口、拱洞和台阶，
+      // 视觉上不再是一根横贯画面的直墙。
+      const waterfrontBreak = z >= 8
+        && Math.abs(x) >= 4
+        && (hashAt(x, z, 41) % 5 <= 1);
+      if (waterfrontBreak) continue;
+
+      // 从码头到方尖碑的蛇形朝圣巷保持地面净空；横巷只切出短缺口，
+      // 邻接 resolver 会自动在缺口上生成拱、阳台和支架。
+      const laneX = Math.round(Math.sin((z - 1) * 0.64) * 1.25);
+      const onPilgrimageLane = z >= 3 && Math.abs(x - laneX) === 0;
+      const onCrossAlley = (z === 6 || z === -4)
+        && Math.abs(x) >= 3
+        && Math.abs(x) <= halfWidth - 2
+        && (Math.abs(x) % 5 === 0);
+      if (onPilgrimageLane || onCrossAlley) continue;
+
+      const rearRise = Math.max(0, Math.floor((5 - z) / 6));
+      const irregularStorey = hash % 5 <= 1 ? 1 : 0;
+      const axialRise = Math.max(0, 2 - Math.floor(Math.abs(x) / 4))
+        * (Math.abs(z) <= 7 ? 1 : 0);
+      let height = 1 + rearRise + irregularStorey + axialRise;
+      let color = (z >= 6 ? waterfrontPalette : z >= -3 ? middlePalette : upperPalette)[
+        hash % (z >= 6 ? waterfrontPalette.length : z >= -3 ? middlePalette.length : upperPalette.length)
+      ];
+
+      // 可编辑的六座山城塔群替代旧的独立预制副塔。塔心拔高，外圈逐级
+      // 回落，因此仍然只是一组普通 Townscaper 格，而不是特殊整楼模型。
+      for (const anchor of towerAnchors) {
+        const distance = Math.hypot(x - anchor.x, z - anchor.z);
+        if (distance > anchor.radius + 0.7) continue;
+        const towerLift = Math.max(0, anchor.boost - Math.floor(distance * 2.25));
+        height = Math.max(height, 2 + rearRise + towerLift);
+        if (distance <= anchor.radius) color = anchor.char;
+      }
+
+      // 两侧山壁方向逐步压低，突出中轴与高塔，同时保留不对称轮廓。
+      if (Math.abs(x) >= halfWidth - 1) height -= 1;
+      height = clampHeight(height);
+      for (let floor = 0; floor < height; floor++) set(x, z, floor, color);
+    }
+  }
+
+  // 湖岸正门：只占底层，避免整根竖户都被解释为门材质。
+  set(0, 10, 0, CITADEL_GATE_CHAR);
+
+  // 三处跨巷飞楼。下方保持空格，上层按相邻户色接回，Townscaper 规则
+  // 会自动生成拱洞和黑铁支架，呼应参考图的层叠桥廊。
+  for (const bridge of [
+    { x: 0, z: 6, floor: 2, char: "0" },
+    { x: -5, z: -4, floor: 3, char: "9" },
+    { x: 5, z: -4, floor: 4, char: "A" },
+  ]) {
+    set(bridge.x, bridge.z, bridge.floor, bridge.char);
+    set(bridge.x, bridge.z, bridge.floor + 1, bridge.char);
+  }
+
+  // 方尖碑 hard cavity 最后再清一次，防止任何塔群/飞楼覆盖战斗核心。
+  for (let floor = 0; floor < F; floor++) {
+    for (let z = -2; z <= 2; z++) {
+      for (let x = -2; x <= 2; x++) levels[floor][z + C][x + C] = ".";
+    }
+  }
+
+  return Object.freeze(levels.map((rows) =>
+    Object.freeze(rows.map((row) => Object.freeze(row.join(""))))
+  ));
+}
+
+export const HIGHLAND_TOWNSCAPER_TOWN_SPEC = Object.freeze({
+  cellSize: 2.0,
+  cellHeight: 2.0,
+  floors: 12,
+  construction: "canal-townscaper-grid-v1",
+  seedVersion: "highland-reference-obelisk-stone-v3",
+  composition: "broken-waterfront_to_dense-white-slope_to_obelisk",
+  protectedCore: Object.freeze({ centerX: 12, centerZ: 12, halfX: 2, halfZ: 2 }),
+  levels: makeHighlandTownscaperLevels(),
+});
+
 const EMPTY_CASTLE_FLOOR = Object.freeze(
   Array.from({ length: CITADEL_GRID_SIZE }, () => ".".repeat(CITADEL_GRID_SIZE))
 );
@@ -1159,6 +1362,8 @@ export function buildCitadelTown(spec, ctx) {
     });
   });
   const at = (ix, iy, iz) => grid.get(`${ix},${iy},${iz}`) ?? ".";
+  // V3 簇配色（C2）：同字符 4 连通簇 + 朝向近似；非 V3 的 shade 工厂忽略第五参
+  const townClusters = computeTownClusters(grid);
   const openMaskFor = (ix, iy, iz) => DIRS.reduce(
     (mask, [dx, dz], index) => at(ix + dx, iy, iz + dz) === "." ? mask | (1 << index) : mask,
     0
@@ -1297,9 +1502,13 @@ export function buildCitadelTown(spec, ctx) {
       || makeDistortedCellGeometry(cellGeometry, ix, iz, iy);
     if (colorful) applyPatchyWallColors(geo, ix, iz, iy);
     else applyVerticalVertexColors(geo, 1.0, 1.0);
+    const clusterInfo = {
+      clusterId: townClusters.clusterOf.get(`${ix},${iz}`),
+      facing: townCellFacing(townClusters.baseChar, ix, iz),
+    };
     const cell = mesh(
       geo,
-      ctx.materials.shade?.(char, ix, iz, iy) ?? materials[char] ?? materials.W,
+      ctx.materials.shade?.(char, ix, iz, iy, clusterInfo) ?? materials[char] ?? materials.W,
       "town-cell"
     );
     cell.position.set(cx(ix), cy(iy), cz(iz));
@@ -2546,13 +2755,27 @@ export function buildCitadelTown(spec, ctx) {
 
   // ---------- 规则 5：悬空支撑支架（Townscaper flying buildings）----------
   // 右键删除中间层后，上层建筑不塌陷、悬浮在空中的块自动长出支撑支架：
-  // 从下方承重面（下一非空块的顶面 / 基座顶）到悬空块底面的细木柱 + 四角斜撑。
+  // 从下方承重面（下一非空块的顶面 / 基座顶）到悬空块底面的八面体边框。
   // 与规则 1（拱）互补：悬空但有侧向支撑 → 拱；完全悬空 → 支架。
   {
-    const pillarGeo = new THREE.BoxGeometry(0.09, 1, 0.09);
-    const strutGeo = new THREE.BoxGeometry(0.045, 0.045, 1);
+    // 支架不是“中央一点向上四角发散”的棱锥：四个环向节点把上/下
+    // 承重点分开，四个支撑单元各由两条边组成，形成八面体式承重框。
+    const edgeGeo = new THREE.BoxGeometry(0.075, 0.075, 1);
     const supportMat = materials.iron ?? materials.ink ?? materials.trim;
     let supportCount = 0;
+    const zAxis = new THREE.Vector3(0, 0, 1);
+    const addSupportEdge = (parent, from, to) => {
+      const dir = to.clone().sub(from);
+      const len = dir.length();
+      if (len <= 1e-6) return null;
+      dir.normalize();
+      const edge = mesh(edgeGeo, supportMat, "town-support-edge", 0.008);
+      edge.scale.z = len;
+      edge.position.copy(from).addScaledVector(dir, len * 0.5);
+      edge.quaternion.setFromUnitVectors(zAxis, dir);
+      parent.add(edge);
+      return edge;
+    };
     for (const [key, char] of grid) {
       const [ix, iy, iz] = key.split(",").map(Number);
       if (iy === 0) continue; // 底层贴台地，无需支架
@@ -2567,11 +2790,17 @@ export function buildCitadelTown(spec, ctx) {
       }
       const pillarH = iy - supportTop; // 悬空高度（层数）
       if (pillarH <= 0) continue;
-      // 中央细柱：从承重面顶升到悬空块底
-      const pillar = mesh(pillarGeo, supportMat, "town-support-pillar", 0.01);
-      pillar.scale.y = pillarH;
-      pillar.position.set(cx(ix), supportTop * ch + pillarH * ch * 0.5, cz(iz));
-      levelGroups[iy].add(pillar);
+
+      const topApex = new THREE.Vector3(cx(ix), iy * ch, cz(iz));
+      const bottomApex = new THREE.Vector3(cx(ix), supportTop * ch, cz(iz));
+      const ringY = (topApex.y + bottomApex.y) * 0.5;
+      const ringRadius = Math.min(cs * 0.42, ch * 0.42);
+      const ring = [
+        [1, 0],
+        [0, 1],
+        [-1, 0],
+        [0, -1],
+      ];
       const supportModule = townscaperModuleSelection(
         ix,
         iy,
@@ -2580,36 +2809,38 @@ export function buildCitadelTown(spec, ctx) {
         supportTop,
         openMaskFor(ix, iy, iz)
       );
-      registerModule("support", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.support[supportModule.support], pillar);
-      supportCount++;
-      // 四角斜撑（桌腿式）：悬空块底四角 → 承重面中心，只在大悬空（≥2 层）时加
-      if (pillarH >= 2) {
-        for (const [sx, sz] of [[1, 1], [-1, -1], [1, -1], [-1, 1]]) {
-          const top = new THREE.Vector3(
-            cx(ix) + sx * ch * 0.45,
-            iy * ch,
-            cz(iz) + sz * ch * 0.45
-          );
-          const bot = new THREE.Vector3(cx(ix), supportTop * ch, cz(iz));
-          const dir = top.clone().sub(bot);
-          const len = dir.length();
-          dir.normalize();
-          const strut = mesh(strutGeo, supportMat, "town-support-strut", 0.008);
-          strut.scale.z = len;
-          strut.position.copy(bot.clone().addScaledVector(dir, len * 0.5));
-          strut.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir);
-          levelGroups[iy].add(strut);
-          strut.userData.townModule = {
-            family: "support",
-            variant: TOWNSCAPER_MODULE_FAMILIES.support[3],
-            ix,
-            iy,
-            iz,
-            catalogSize: TOWNSCAPER_MODULE_VARIANTS,
-          };
-          supportCount++;
-        }
+      // 四个“支柱”是四个环向支撑单元，而不是同名的中央柱；每个单元
+      // 连接上、下承重点与一个环向节点，组成八面体的四组边。
+      for (const [sx, sz] of ring) {
+        const support = new THREE.Group();
+        support.name = "town-support-pillar";
+        support.userData.supportShape = "octahedral-four-edge";
+        support.userData.townModule = {
+          family: "support",
+          variant: TOWNSCAPER_MODULE_FAMILIES.support[supportModule.support],
+          ix,
+          iy,
+          iz,
+          catalogSize: TOWNSCAPER_MODULE_VARIANTS,
+        };
+        const ringPoint = new THREE.Vector3(
+          cx(ix) + sx * ringRadius,
+          ringY,
+          cz(iz) + sz * ringRadius
+        );
+        addSupportEdge(support, topApex, ringPoint);
+        addSupportEdge(support, ringPoint, bottomApex);
+        levelGroups[iy].add(support);
+        supportCount++;
       }
+      registerModule(
+        "support",
+        ix,
+        iy,
+        iz,
+        TOWNSCAPER_MODULE_FAMILIES.support[supportModule.support],
+        levelGroups[iy].children[levelGroups[iy].children.length - 1]
+      );
     }
     if (supportCount > 0) stats.supportCount = supportCount;
   }

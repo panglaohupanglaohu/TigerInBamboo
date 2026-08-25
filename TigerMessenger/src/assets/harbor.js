@@ -9,6 +9,9 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
+import { isCitadelCombatV3, isCitadelPaletteV3 } from "../core/params.js";
+import { v3TokenInt } from "../world/citadelVisualTheme.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 /** 货柜青灰 */
 const CRATE_STEEL = 0xa2b5cd;
@@ -61,16 +64,19 @@ export function createFisherBoat() {
   const g = new THREE.Group();
   g.name = "fisher-boat";
 
-  const hullDark = toonMat(0x3f4a3c); // 船底暗绿灰
-  const hullRed = toonMat(0xb0492c); // 红橙舷带
-  const stripeWhite = toonMat(0xe8e0cc); // 回纹白带
-  const ink = toonMat(0x2a2620); // 回纹深方
-  const wood = toonMat(0xb8956a); // 甲板
-  const woodDark = toonMat(0x6a5340); // 栏杆 / 艏柱
-  const bronze = toonMat(0x9a7434); // 撞角
-  const sailTan = toonMat(0xe6dcc0, { side: THREE.DoubleSide }); // 帆
-  const sailRed = toonMat(0xb03a2a, { side: THREE.DoubleSide }); // 帆边 / 蛇纹
-  const rope = toonMat(0x8a7a5c); // 帆索 / 支索
+  // V3（?citadelPaletteV3=1）：船体/舷带/帆/绳/撞角全部走 ship* 语义 token；
+  // 关闭时逐字节保留旧色（暗绿灰船底 + 红橙舷带）。
+  const v3 = isCitadelPaletteV3();
+  const hullDark = toonMat(v3 ? v3TokenInt("shipEnemyHullShade") : 0x3f4a3c); // 船底
+  const hullRed = toonMat(v3 ? v3TokenInt("shipEnemyBand") : 0xb0492c); // 舷带
+  const stripeWhite = toonMat(v3 ? v3TokenInt("shipSailBone") : 0xe8e0cc); // 回纹白带
+  const ink = toonMat(v3 ? v3TokenInt("castleTrim") : 0x2a2620); // 回纹深方
+  const wood = toonMat(v3 ? v3TokenInt("shipDeckWood") : 0xb8956a); // 甲板
+  const woodDark = toonMat(v3 ? v3TokenInt("shipRope") : 0x6a5340); // 栏杆 / 艏柱
+  const bronze = toonMat(v3 ? v3TokenInt("shipMetal") : 0x9a7434); // 撞角
+  const sailTan = toonMat(v3 ? v3TokenInt("shipSailBone") : 0xe6dcc0, { side: THREE.DoubleSide }); // 帆
+  const sailRed = toonMat(v3 ? v3TokenInt("shipEnemyBand") : 0xb03a2a, { side: THREE.DoubleSide }); // 帆边 / 蛇纹
+  const rope = toonMat(v3 ? v3TokenInt("shipRope") : 0x8a7a5c); // 帆索 / 支索
 
   // ---- 船体：侧面轮廓挤出（船尾上翘）----
   const hullShape = new THREE.Shape();
@@ -645,13 +651,16 @@ function crewShared() {
   // 避免角色被一片红羽毛“吃掉”，同时保留远景剪影辨识度。
   const CREST_SCALE = 1 / 3;
   const CREST_BASE_Y = 0.292;
+  const v3 = isCitadelPaletteV3();
   const m = {
     // 参考 Bad North 的“低多边 + 柔和阵营色 + 深轮廓”关系：
     // 身体用偏蓝的海岛军服，装备再用米金/红色做少量高对比点。
-    leather: toonMat(0x4d718d), // 蓝灰军服
-    leatherDark: toonMat(0x293c50), // 深蓝裙甲
-    skin: toonMat(0xd9a06b), // 头/四肢
-    bronze: toonMat(0xd6bd7d), // 柔和黄铜盔
+    // V3（?citadelPaletteV3=1）：躯干/裙甲/皮肤/黄铜走 unit* 语义 token；
+    // 羽冠保持现状（阵营辅色，C4 再统一裁决）。
+    leather: toonMat(v3 ? v3TokenInt("unitDefenderMain") : 0x4d718d), // 蓝灰军服
+    leatherDark: toonMat(v3 ? v3TokenInt("unitDefenderShade") : 0x293c50), // 深蓝裙甲
+    skin: toonMat(v3 ? v3TokenInt("unitSkin") : 0xd9a06b), // 头/四肢
+    bronze: toonMat(v3 ? v3TokenInt("unitMetal") : 0xd6bd7d), // 柔和黄铜盔
     crest: toonMat(0xd94d5d), // 红色羽冠主体
     crestDark: toonMat(0x8b2d3b), // 羽毛分层暗部
     crestLight: toonMat(0xff9b8e), // 羽轴高光
@@ -996,6 +1005,10 @@ const easeIO = (s) => s * s * (3 - 2 * s);
 function buildPorter(m, geo) {
   const root = new THREE.Group();
   root.name = "porter";
+  // 搬运工也复用纸士兵的红色羽冠几何，但不是战斗单位；
+  // 旧港战斗触发器必须能把“视觉上的红缨”与“可参战士兵”区分开。
+  root.userData.combatant = false;
+  root.userData.unitClass = "harbor-porter";
   const fig = new THREE.Group();
   fig.scale.setScalar(PORTER_SCALE);
   root.add(fig);
@@ -1475,6 +1488,7 @@ export function paintSoldierHelm(root, side = "blue") {
   const pal = SOLDIER_CREST[side] || SOLDIER_CREST.blue;
   if (!root) return root;
   root.userData.helmSide = side;
+  root.userData.crestSide = side;
   const mats = {
     "soldier-crest": toonMat(pal.crest),
     "soldier-crest-feathers": toonMat(pal.feathers),
@@ -1533,6 +1547,7 @@ export function emptyBoatCrew(boat) {
 export function createHarborPatrolSoldier() {
   const root = createNightInfiltrationSoldier({ torchLeft: false });
   root.name = "harbor-patrol-soldier";
+  root.userData.combatant = true;
   root.userData.phalanxRole = "spear";
   const { body, armL, armR, crate } = root.userData.parts || {};
   if (crate) crate.visible = false;
@@ -1556,6 +1571,19 @@ export function createHarborPatrolSoldier() {
 /**
  * 方阵短剑盾兵：左手盾、右手青铜短剑。
  */
+/**
+ * 近战纸兵：V3 开时主武器为长枪（PLAN G7）；默认仍是短剑盾，避免改旧方阵外观。
+ */
+export function createCitadelMeleeSoldier() {
+  if (isCitadelCombatV3()) {
+    const root = createHarborPatrolSoldier();
+    root.userData.phalanxRole = "spear";
+    root.userData.meleeV3 = true;
+    return root;
+  }
+  return createGladiusSoldier();
+}
+
 export function createGladiusSoldier() {
   const root = createNightInfiltrationSoldier({ torchLeft: false });
   root.name = "gladius-soldier";
@@ -1960,6 +1988,9 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   root.name = torchLeft ? "night-torch-soldier" : "night-shield-soldier";
   root.userData.modelStyle = "bad-north-lowpoly-paper";
   root.userData.silhouette = "chunky-head-short-body-clear-equipment";
+  root.userData.combatant = true;
+  root.userData.helmSide = "red";
+  root.userData.crestSide = "red";
   const { body, armL, armR, legL, legR, crate } = root.userData.parts;
   const fig = root.children[0];
   crate.visible = false;
@@ -1972,11 +2003,15 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
   legR.rotation.z = -0.08;
 
   const bronze = m.bronze;
-  const shieldMat = toonMat(0x3f6f91, { flatShading: true });
-  const shieldRimMat = toonMat(0xe2c584, { flatShading: true });
-  const shieldBossMat = toonMat(0x2b4359, { flatShading: true });
-  const spearWood = toonMat(0x5c4936, { flatShading: true });
-  const flameMat = new THREE.MeshBasicMaterial({ color: 0xffb22e });
+  // V3（?citadelPaletteV3=1）：盾面/盾边/盾脐/枪杆/火炬走 unit* 语义 token
+  const v3 = isCitadelPaletteV3();
+  const shieldMat = toonMat(v3 ? v3TokenInt("unitDefenderMain") : 0x3f6f91, { flatShading: true });
+  const shieldRimMat = toonMat(v3 ? v3TokenInt("unitMetal") : 0xe2c584, { flatShading: true });
+  const shieldBossMat = toonMat(v3 ? v3TokenInt("unitDefenderShade") : 0x2b4359, { flatShading: true });
+  const spearWood = toonMat(v3 ? v3TokenInt("shipDeckWood") : 0x5c4936, { flatShading: true });
+  const flameMat = new THREE.MeshBasicMaterial({
+    color: v3 ? v3TokenInt("unitTorch", { torch: true }) : 0xffb22e,
+  });
   const equipment = new THREE.Group();
   equipment.name = "infiltration-equipment";
 
@@ -1994,10 +2029,28 @@ export function createNightInfiltrationSoldier({ torchLeft = false } = {}) {
     flame.position.y = 0.225;
     torch.add(flame);
     torch.position.set(-0.15, PORTER_HIP + 0.12, 0.11);
-    torchLight = new THREE.PointLight(0xff8a32, 0.75, 3.2, 2);
+    torchLight = new THREE.PointLight(
+      v3 ? v3TokenInt("unitTorchHalo", { torch: true }) : 0xff8a32,
+      0.75,
+      3.2,
+      2
+    );
     torchLight.name = "infiltration-torch-light";
     torchLight.position.set(0, 0.2, 0.03);
     torch.add(torchLight);
+    // K4：火炬迁入 LocalLightRegistry。V5 下超预算的火炬只留 emissive
+    // 火焰外观（上面的 MeshBasic 火锥），不创建真实 PointLight；
+    // 池内火炬走固定 tick 噪声闪动（亮度/半径/色温有上限）。
+    registerLocalLight(torchLight, {
+      owner: "night-torch-soldier",
+      kind: "torch",
+      color: torchLight.color.getHex(),
+      intensity: torchLight.intensity,
+      radius: torchLight.distance,
+      priority: 6,
+      flicker: true,
+      affectsSoldiers: true,
+    });
     equipment.add(torch);
   } else {
     // 左手圆盾：面朝 +X 前（行进方向）。颜色分成蓝面/米金边/深色盾脐，
@@ -2449,6 +2502,15 @@ export function buildOldHarborScene(opts = {}) {
 
   g.userData.kind = "oldHarbor";
   g.userData.collideRadius = 4.0;
+  // 旧港战斗触发区使用本地 X/Z 椭圆，不用世界 AABB；港口贴在球面上并
+  // 会随城堡旋转，使用本地范围才能保证士兵真正踏入码头/栈桥才触发。
+  g.userData.combatZone = {
+    kind: "oldHarbor",
+    centerX: (box.min.x + box.max.x) * 0.5,
+    centerZ: (box.min.z + box.max.z) * 0.5,
+    radiusX: Math.max(1.5, (box.max.x - box.min.x) * 0.5 + 0.35),
+    radiusZ: Math.max(1.5, (box.max.z - box.min.z) * 0.5 + 0.35),
+  };
 
   // 泊位船：装货计数初始状态（物流系统 bind 后接管离港/进港）
   boat.userData.harborDocked = true;

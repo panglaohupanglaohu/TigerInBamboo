@@ -22,8 +22,29 @@ import {
   citadelBlueprintSummary,
   createCitadelBlueprint,
 } from "./citadelBlueprint.js";
+import { isCitadelPaletteV3 } from "../core/params.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
+import {
+  buildHighlandCitadelContinuousTerrain,
+  buildHighlandCitadelLatestDesign,
+  HIGHLAND_CITADEL_DESIGN_PALETTE,
+  HIGHLAND_CITADEL_DESIGN_VERSION,
+  HIGHLAND_TOWNSCAPER_BASE_Y,
+  HIGHLAND_TOWNSCAPER_PLATFORM,
+} from "./highlandCitadelDesign.js?v=reference-waterfront-v18-lift-trees-lake-cutout";
+import {
+  v3HighlandWallPalette,
+  v3HighlandGateColor,
+  v3HighlandScheme,
+  resolveClusterWallColors,
+  v3TokenHex,
+  v3HexInt,
+  jitterLStar,
+  v3HashString,
+} from "./citadelVisualTheme.js";
 import {
   CITADEL_TOWN_SPEC,
+  HIGHLAND_TOWNSCAPER_TOWN_SPEC,
   buildCitadelTown,
   normalizeCitadelTerraceLayout,
   trimCitadelGridToTerrain,
@@ -40,7 +61,7 @@ import {
   TOWNSCAPER_MODULE_FAMILIES,
   citadelPaletteIndexOfChar,
   citadelShadeStep,
-} from "./citadelTown.js";
+} from "./citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 
 /** Maria Svarbova 无菌马卡龙：低语调中间色，禁止赤陶/焦黑。 */
 export const SVARBOVA = Object.freeze({
@@ -467,19 +488,18 @@ export const CANAL_TOWNSCAPER = Object.freeze({
 });
 
 /**
- * 高山城堡专用构件色。墙体户色来自 TOWNSCAPER_HIGHLAND_PALETTE；这里
- * 只控制屋瓦、檐口、支架、窗洞和公共石材，按参考截屏统一成赤陶屋顶与
- * 深蓝灰结构线，让五彩墙体保持清晰而不过度甜腻。
+ * 高山城堡专用构件色。墙体与屋顶统一到方尖碑冷白石材；画面的蓝/橙
+ * 来自环境光与窗灯，不再把建筑本体涂成马卡龙色块。
  */
 export const HIGHLAND_TOWNSCAPER = Object.freeze({
-  roofTile: 0xff8a67,
-  roofVariants: Object.freeze([0xff8a67, 0xff6f83, 0xffa15c, 0xff78a1]),
+  roofTile: 0x627b90,
+  roofVariants: Object.freeze([0x627b90, 0x71889a, 0x536b82, 0x8196a6]),
   trim: 0x344257,
   iron: 0x243243,
-  wood: 0x765044,
+  wood: 0x566575,
   ink: 0x203549,
-  dome: 0xcf8065,
-  stone: 0xeee9d8,
+  dome: 0x758ba0,
+  stone: 0xd8e1e8,
   seawall: 0x7f8d9a,
   plaza: 0xaaa38e,
   // 参考图的街台是压暗的冷暖灰石，不再沿用旧版近白色台地。
@@ -490,9 +510,9 @@ export const HIGHLAND_TOWNSCAPER = Object.freeze({
   foliageLight: 0x70aa91,
   windowDark: 0x1e4058,
   crenel: 0xeee9d8,
-  balconyTileVariants: Object.freeze([0xf3b47f, 0xef8c93, 0x83c5d4, 0xf4d66f]),
-  foundationVariants: Object.freeze([0x98a5a0, 0xb8aa95, 0x7f8d9a]),
-  fenceVariants: Object.freeze([0x344257, 0x243243, 0x765044, 0x8c6570]),
+  balconyTileVariants: Object.freeze([0xc7d2da, 0xb8c7d1, 0xaabdc9, 0xd5dde1]),
+  foundationVariants: Object.freeze([0x7f8d9a, 0x91a0aa, 0x718391]),
+  fenceVariants: Object.freeze([0x344257, 0x243243, 0x566575, 0x485a6a]),
 });
 
 const _canalMatCache = new Map(); // "hex|v|pattern" -> material
@@ -652,12 +672,36 @@ function applyTownscaperCanalMaterials(materials, scheme = CANAL_TOWNSCAPER) {
  * Townscaper 墙面 shade 工厂（运河/高山两堡共用）：尊重布局字符的户色
  * （竖柱同色=一户），按 citadelShadeStep 做 ±10% 明度微抖；材质开
  * vertexColors，与 applyPatchyWallColors 的墙面渐变色块相乘出原版手绘墙感。
+ * V3（opts.v3，C2 簇配色）：有 clusterInfo 时按建筑簇取主色+相邻辅色，
+ * 朝向做路线导向明度，抖动换成 L*±2.5 五档（不碰色相/饱和度，PLAN 7.4.4）。
  */
-function makeTownscaperShadeFactory(palette = TOWNSCAPER_CANAL_PALETTE, gateColor = TOWNSCAPER_CANAL_GATE_COLOR) {
+function makeTownscaperShadeFactory(palette = TOWNSCAPER_CANAL_PALETTE, gateColor = TOWNSCAPER_CANAL_GATE_COLOR, opts = {}) {
   const cache = new Map(); // "char|step" -> material
-  return function townscaperShade(char, ix, iz) {
+  const v3 = opts.v3 === true;
+  return function townscaperShade(char, ix, iz, iy, clusterInfo) {
     if (char === CITADEL_GATE_CHAR) {
       return makeCanalMat(gateColor, { vertexColors: true, pattern: "wall" });
+    }
+    if (v3 && clusterInfo?.clusterId) {
+      const { main, accent } = resolveClusterWallColors(clusterInfo.clusterId);
+      const h = v3HashString(`${clusterInfo.clusterId}|${ix},${iz}`);
+      // 同簇最多一个主色 + 一个相邻辅色：约 1/5 墙面用辅色（PLAN 7.4.2）
+      const token = h % 5 === 0 ? accent : main;
+      const step = ((h >>> 3) % 5) - 2; // -2..+2 五档，保证材质可缓存
+      const key = `v3|${token}|${clusterInfo.facing}|${step}`;
+      let material = cache.get(key);
+      if (!material) {
+        let hex = v3TokenHex(token, { facing: clusterInfo.facing });
+        if (step !== 0) hex = jitterLStar(hex, step * 1.25); // L*±2.5 内
+        material = makeCanalMat(v3HexInt(hex), {
+          vertexColors: true,
+          pattern: "wall",
+        });
+        material.userData.townShade = true;
+        material.userData.paletteV3 = true;
+        cache.set(key, material);
+      }
+      return material;
     }
     const idx = citadelPaletteIndexOfChar(char);
     if (idx < 0) return null; // 未知字符回落 materials[char]
@@ -729,16 +773,25 @@ function makeCitadelShadeMaterialFactory(_gradientMap, floors = CITADEL_CASTLE_F
 }
 
 /** 古堡窗口夜灯：鹅黄瓷面微自发光，仍保持无菌弱高光。 */
-function makeWindowLitMat(_gradientMap) {
+function makeWindowLitMat(_gradientMap, highlandLatest = true) {
+  const color = highlandLatest
+    ? HIGHLAND_CITADEL_DESIGN_PALETTE.windowWarm
+    : SVARBOVA.goose;
+  const emissive = highlandLatest
+    ? HIGHLAND_CITADEL_DESIGN_PALETTE.windowCore
+    : SVARBOVA.goose;
   const material = new THREE.MeshStandardMaterial({
-    color: SVARBOVA.goose,
-    roughness: 0.15,
-    metalness: 0.02,
-    emissive: new THREE.Color(SVARBOVA.goose),
-    emissiveIntensity: 0.55,
+    color,
+    roughness: highlandLatest ? 0.42 : 0.15,
+    metalness: highlandLatest ? 0.0 : 0.02,
+    emissive: new THREE.Color(emissive),
+    emissiveIntensity: highlandLatest ? 1.65 : 0.55,
   });
   material.userData.shared = true;
   material.userData.svarbova = true;
+  material.userData.semanticToken = highlandLatest
+    ? "highland-window-warm"
+    : "canal-window-warm";
   return material;
 }
 
@@ -750,6 +803,8 @@ export const CITADEL_WINDOW_LIT_CHANCE = 0.7;
  * @param {THREE.Object3D} castleContainer
  */
 const _winWorld = new THREE.Vector3();
+const _windowMat = new THREE.Matrix4();
+const _windowInv = new THREE.Matrix4();
 
 /** 从父链解析台地索引（town-terrace-T-level-N 或 userData.terraceIndex） */
 function resolveWindowTerraceIndex(mesh) {
@@ -772,14 +827,26 @@ export function refreshCitadelWindowLights(castleContainer) {
     ? CANAL_TOWNSCAPER
     : HIGHLAND_TOWNSCAPER;
   castleContainer.userData.windowDarkMat = makeCanalMat(windowScheme.windowDark);
-  castleContainer.userData.windowLitMat = makeWindowLitMat(gradientMap);
+  castleContainer.userData.windowLitMat = makeWindowLitMat(
+    gradientMap,
+    castleContainer.userData.instanceId !== "canal-junction"
+  );
   const windows = [];
+  const designWindows = [];
   castleContainer.traverse((o) => {
-    if (!o.isMesh || o.name !== "town-window") return;
+    if (!o.isMesh) return;
+    const townWindow = o.name === "town-window";
+    const designWindow = o.userData.citadelDesignWindow === true;
+    if (!townWindow && !designWindow) return;
     o.material = castleContainer.userData.windowDarkMat;
-    o.userData.citadelWindow = true;
+    o.userData.citadelWindow = townWindow;
     o.userData.litTonight = false;
     o.userData.extinguishedBySoldiers = false;
+    if (designWindow) {
+      o.userData.houseId = `latest-design:${o.name}`;
+      designWindows.push(o);
+      return;
+    }
     const tIdx = resolveWindowTerraceIndex(o);
     const ix = Number.isFinite(o.userData.cellIx) ? o.userData.cellIx : 0;
     const iz = Number.isFinite(o.userData.cellIz) ? o.userData.cellIz : 0;
@@ -788,8 +855,96 @@ export function refreshCitadelWindowLights(castleContainer) {
     windows.push(o);
   });
   castleContainer.userData.townWindows = windows;
+  castleContainer.userData.latestDesignWindows = designWindows;
   castleContainer.userData.windowNightRolled = false;
+  // 性能（2026-08-24）：town 拱窗全部同构（共享几何布局），打包为
+  // lit/dark 两个 InstancedMesh——404 个逐窗 draw call → 2 个。
+  // 原窗口 mesh 保留在场景树（visible=false + 禁拾取）以兼容验收断言
+  // 与拾取行为；夜灯状态记录在 userData.windowInstances。
+  rebuildCitadelWindowInstances(castleContainer);
   return windows;
+}
+
+/**
+ * 性能（2026-08-24）：把 town 拱窗（town-window，同构共享几何）打包为
+ * lit/dark 两个 InstancedMesh。窗口亮/暗/熄灯不再切换逐窗材质，而是把
+ * 记录在 lit/dark 实例列表之间移动（syncCitadelWindowInstances 重建矩阵）。
+ * 原窗口 mesh 保留（visible=false、raycast 禁用）供验收与拾取兼容。
+ * 可重复调用（rebuildCitadelTown 热重建后再次打包，先清旧实例）。
+ */
+export function rebuildCitadelWindowInstances(castleContainer) {
+  if (!castleContainer) return;
+  const oldInstances = castleContainer.userData.windowInstances;
+  if (oldInstances) {
+    oldInstances.lit?.removeFromParent?.();
+    oldInstances.dark?.removeFromParent?.();
+  }
+  const windows = castleContainer.userData.townWindows || [];
+  const darkMat = castleContainer.userData.windowDarkMat;
+  const litMat = castleContainer.userData.windowLitMat;
+  if (!windows.length || !darkMat || !litMat) {
+    castleContainer.userData.windowInstances = null;
+    return;
+  }
+  // 同构性校验：全部窗口必须共享同一几何布局（position.count 一致）
+  const refCount = windows[0].geometry.getAttribute("position").count;
+  if (!windows.every((w) => w.geometry.getAttribute("position").count === refCount)) {
+    throw new Error("citadel-window-instances: town windows must share one geometry layout");
+  }
+  castleContainer.updateMatrixWorld(true);
+  _windowInv.copy(castleContainer.matrixWorld).invert();
+  const count = windows.length;
+  const dark = new THREE.InstancedMesh(windows[0].geometry, darkMat, count);
+  const lit = new THREE.InstancedMesh(windows[0].geometry, litMat, count);
+  dark.name = "citadel-window-instances-dark";
+  lit.name = "citadel-window-instances-lit";
+  dark.raycast = () => {};
+  lit.raycast = () => {};
+  dark.frustumCulled = false;
+  lit.frustumCulled = false;
+  const records = windows.map((w) => {
+    w.updateMatrixWorld(true);
+    _windowMat.copy(w.matrixWorld).premultiply(_windowInv);
+    const matrix = _windowMat.clone();
+    // 原 mesh 隐藏并禁拾取：渲染与 raycast 全部交给 InstancedMesh
+    w.visible = false;
+    w.raycast = () => {};
+    return {
+      mesh: w,
+      matrix,
+      houseId: w.userData.houseId,
+      terraceIndex: w.userData.terraceIndex,
+      castleFloor: w.userData.castleFloor,
+      cellIx: w.userData.cellIx,
+      cellIz: w.userData.cellIz,
+      cellIy: w.userData.cellIy,
+      litTonight: false,
+      extinguishedBySoldiers: false,
+      lit: false,
+    };
+  });
+  castleContainer.add(dark, lit);
+  castleContainer.userData.windowInstances = Object.freeze({
+    dark,
+    lit,
+    records,
+  });
+  syncCitadelWindowInstances(castleContainer);
+}
+
+/** 按 records 的 lit 状态重建两个 InstancedMesh 的实例矩阵与 count。 */
+export function syncCitadelWindowInstances(castleContainer) {
+  const instances = castleContainer.userData.windowInstances;
+  if (!instances) return;
+  const darkList = [];
+  const litList = [];
+  for (const record of instances.records) (record.lit ? litList : darkList).push(record);
+  instances.dark.count = darkList.length;
+  instances.lit.count = litList.length;
+  for (let i = 0; i < darkList.length; i++) instances.dark.setMatrixAt(i, darkList[i].matrix);
+  for (let i = 0; i < litList.length; i++) instances.lit.setMatrixAt(i, litList[i].matrix);
+  instances.dark.instanceMatrix.needsUpdate = true;
+  instances.lit.instanceMatrix.needsUpdate = true;
 }
 
 /**
@@ -805,7 +960,26 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
   if (!Array.isArray(windows) || !windows.length) {
     windows = refreshCitadelWindowLights(castleContainer);
   }
-  if (!windows.length) return;
+  const designWindows = Array.isArray(castleContainer.userData.latestDesignWindows)
+    ? castleContainer.userData.latestDesignWindows
+    : [];
+  const instances = castleContainer.userData.windowInstances;
+  const records = instances?.records ?? null;
+  // town 窗口状态读/写统一走 record（有实例时）；design 窗口始终走 mesh.userData
+  const stateOf = (entry) => (entry.userData ? entry.userData : entry); // record 直接有字段，mesh 有 userData
+  const readState = (entry, key) => (entry.userData ? entry.userData[key] : entry[key]);
+  const writeState = (entry, key, value) => {
+    if (entry.userData) entry.userData[key] = value;
+    else entry[key] = value;
+    if (entry.mesh) entry.mesh.userData[key] = value; // 同步到原 mesh（兼容其他消费者）
+  };
+  const getWorld = (entry, out) => {
+    if (entry.mesh) entry.mesh.getWorldPosition(out);
+    else entry.getWorldPosition(out);
+    return out;
+  };
+  const controlledWindows = (records ?? windows).concat(designWindows);
+  if (!controlledWindows.length) return;
 
   const p = ((Number(phase) % 1) + 1) % 1;
   // 入夜 ≈0.82，整夜至黎明 ≈0.22（与 dayNight KEYS 一致）
@@ -813,22 +987,23 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
 
   if (night) {
     if (!castleContainer.userData.windowNightRolled) {
-      for (const w of windows) {
-        w.userData.extinguishedBySoldiers = false;
-        w.userData.litTonight = Math.random() < CITADEL_WINDOW_LIT_CHANCE;
+      for (const w of controlledWindows) {
+        writeState(w, "extinguishedBySoldiers", false);
+        writeState(w, "litTonight", Math.random() < CITADEL_WINDOW_LIT_CHANCE);
       }
       castleContainer.userData.windowNightRolled = true;
     }
     // 纸士兵经过：整屋熄灯，当夜不再亮起
     const threats = opts.threats;
     if (Array.isArray(threats) && threats.length) {
-      const r = Number.isFinite(opts.threatRadius) ? opts.threatRadius : 3.6;
+      const r = Number.isFinite(opts.threatRadius) ? opts.threatRadius : 3.8;
       const r2 = r * r;
       const snuffed = new Set();
-      for (const w of windows) {
-        if (!w.userData.litTonight || w.userData.extinguishedBySoldiers) continue;
-        if (snuffed.has(w.userData.houseId)) continue;
-        w.getWorldPosition(_winWorld);
+      for (const w of controlledWindows) {
+        if (!readState(w, "litTonight") || readState(w, "extinguishedBySoldiers")) continue;
+        const houseId = readState(w, "houseId");
+        if (snuffed.has(houseId)) continue;
+        getWorld(w, _winWorld);
         let near = false;
         for (let i = 0; i < threats.length; i++) {
           const s = threats[i];
@@ -842,20 +1017,36 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
           }
         }
         if (!near) continue;
-        snuffed.add(w.userData.houseId);
+        snuffed.add(houseId);
       }
       if (snuffed.size) {
-        for (const w of windows) {
-          if (!snuffed.has(w.userData.houseId)) continue;
-          w.userData.litTonight = false;
-          w.userData.extinguishedBySoldiers = true;
+        for (const w of controlledWindows) {
+          if (!snuffed.has(readState(w, "houseId"))) continue;
+          writeState(w, "litTonight", false);
+          writeState(w, "extinguishedBySoldiers", true);
         }
       }
     }
+    // The assault system commits captured floors on the same castle container.
+    // Apply that state after the nightly roll so a captured room cannot be
+    // randomly relit by the next frame.
+    const capturedFloors = new Set(
+      Array.isArray(castleContainer.userData.capturedFloors)
+        ? castleContainer.userData.capturedFloors.map((floor) => Number(floor))
+        : []
+    );
+    if (capturedFloors.size) {
+      for (const w of controlledWindows) {
+        const floor = Number(readState(w, "castleFloor"));
+        if (!Number.isFinite(floor) || !capturedFloors.has(floor)) continue;
+        writeState(w, "litTonight", false);
+        writeState(w, "extinguishedBySoldiers", true);
+      }
+    }
   } else if (castleContainer.userData.windowNightRolled) {
-    for (const w of windows) {
-      w.userData.litTonight = false;
-      w.userData.extinguishedBySoldiers = false;
+    for (const w of controlledWindows) {
+      writeState(w, "litTonight", false);
+      writeState(w, "extinguishedBySoldiers", false);
     }
     castleContainer.userData.windowNightRolled = false;
   }
@@ -863,10 +1054,42 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
   const dark = castleContainer.userData.windowDarkMat;
   const lit = castleContainer.userData.windowLitMat;
   if (!dark || !lit) return;
-  for (const w of windows) {
-    const on = night && w.userData.litTonight && !w.userData.extinguishedBySoldiers;
-    if (w.material !== (on ? lit : dark)) w.material = on ? lit : dark;
+  if (records) {
+    // town 窗口：状态变化 → 移动实例（lit/dark 列表），无逐窗材质切换
+    let changed = false;
+    for (const record of records) {
+      const on = night && record.litTonight && !record.extinguishedBySoldiers;
+      if (record.lit !== on) { record.lit = on; changed = true; }
+    }
+    if (changed) syncCitadelWindowInstances(castleContainer);
+    // design 窗口（尺寸参数化，不实例化）：逐窗材质切换
+    for (const w of designWindows) {
+      const on = night && w.userData.litTonight && !w.userData.extinguishedBySoldiers;
+      if (w.material !== (on ? lit : dark)) w.material = on ? lit : dark;
+    }
+  } else {
+    for (const w of controlledWindows) {
+      const on = night && readState(w, "litTonight") && !readState(w, "extinguishedBySoldiers");
+      if (w.material !== (on ? lit : dark)) w.material = on ? lit : dark;
+    }
   }
+}
+
+/** Called by the siege simulation when an interior floor is secured. */
+export function markCitadelFloorCaptured(castleContainer, floorIndex) {
+  if (!castleContainer || !Number.isFinite(floorIndex)) return [];
+  const floors = new Set(
+    Array.isArray(castleContainer.userData.capturedFloors)
+      ? castleContainer.userData.capturedFloors
+      : []
+  );
+  floors.add(floorIndex | 0);
+  castleContainer.userData.capturedFloors = [...floors].sort((a, b) => a - b);
+  castleContainer.userData.capturedTopFloor = Math.max(
+    Number(castleContainer.userData.capturedTopFloor ?? -1),
+    floorIndex | 0
+  );
+  return castleContainer.userData.capturedFloors;
 }
 
 function mesh(geometry, material, name, outlineThickness = SVARBOVA_OUTLINE_THICKNESS) {
@@ -980,7 +1203,12 @@ export function applyInkOutlines(
   if (!enabled) return 0;
   const surfaces = [];
   assembly.traverse((object) => {
-    if (object.isMesh && !object.userData.isOutline) surfaces.push(object);
+    if (
+      object.isMesh
+      && !object.userData.isOutline
+      && object.userData.skipInkOutline !== true
+      && object.material?.transparent !== true
+    ) surfaces.push(object);
   });
   for (const surface of surfaces) {
     // 屋顶本身已有瓦行纹理；反向壳若覆盖坡面会把亮陶瓦压成黑色，
@@ -1010,10 +1238,11 @@ export function applyInkOutlines(
  * 可重复调用（rebuildCitadelTown 热重建后再次合并，幂等清旧）。
  */
 export function mergeCitadelTownStatic(assemblyRoot) {
-  // 幂等：先移除上次合并产生的网格
+  // 幂等：先移除上次合并产生的网格（仅 town 层组的 mergedGeometry===true；
+  // highland 装饰组合并网格带 "highland-decoration" 命名空间，不可误删）
   const stale = [];
   assemblyRoot.traverse((o) => {
-    if (o.isMesh && o.userData.mergedGeometry) stale.push(o);
+    if (o.isMesh && o.userData.mergedGeometry === true) stale.push(o);
   });
   for (const mesh of stale) {
     mesh.geometry?.dispose?.();
@@ -1071,7 +1300,7 @@ export function mergeCitadelTownStatic(assemblyRoot) {
 
   // 外围台地石阶（无层语义）单独合并：contour-step 仍按名字拾取，跳过
   const terrain = assemblyRoot.userData?.outerTerrainSystem;
-  if (terrain && terrain !== assemblyRoot) {
+  if (terrain && terrain !== assemblyRoot && assemblyRoot.userData?.highlandTownscaperGrid !== true) {
     mergeStaticGroup(terrain, { skip });
   }
 
@@ -1354,14 +1583,16 @@ export function buildCitadelTownAssembly(spec, options = {}) {
   const townscaperColors = options.townscaperColors === true; // 运河交汇古堡
   const highlandColors = options.highlandColors === true; // 高山圣城 Townscaper 化
   const townscaperMode = townscaperColors || highlandColors;
+  // V3 Bad North 语义配色（?citadelPaletteV3=1）：只接管高山圣城，不动运河古堡。
+  const usePaletteV3 = highlandColors && !townscaperColors && isCitadelPaletteV3();
   const townPalette = highlandColors && !townscaperColors
-    ? TOWNSCAPER_HIGHLAND_PALETTE
+    ? (usePaletteV3 ? v3HighlandWallPalette() : TOWNSCAPER_HIGHLAND_PALETTE)
     : TOWNSCAPER_CANAL_PALETTE;
   const townGateColor = highlandColors && !townscaperColors
-    ? TOWNSCAPER_HIGHLAND_GATE_COLOR
+    ? (usePaletteV3 ? v3HighlandGateColor() : TOWNSCAPER_HIGHLAND_GATE_COLOR)
     : TOWNSCAPER_CANAL_GATE_COLOR;
   const townMaterialScheme = highlandColors && !townscaperColors
-    ? HIGHLAND_TOWNSCAPER
+    ? (usePaletteV3 ? v3HighlandScheme() : HIGHLAND_TOWNSCAPER)
     : CANAL_TOWNSCAPER;
 
   const materials = options.materials ?? {
@@ -1432,7 +1663,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
       windowDark: materials.windowDark,
       windowLit: materials.windowLit,
       shade: townscaperMode
-        ? makeTownscaperShadeFactory(townPalette, townGateColor)
+        ? makeTownscaperShadeFactory(townPalette, townGateColor, { v3: usePaletteV3 })
         : makeCitadelShadeMaterialFactory(
             gradientMap,
             options.floors ?? spec?.floors ?? CITADEL_CASTLE_FLOORS
@@ -1456,7 +1687,23 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     group.add(levelGroup);
   });
 
-  return { group, levels: town.levels, stats: town.stats, materials, gradientMap };
+  const surfaceConformance = Object.freeze({
+    provider: options.surfaceProvider ?? "uniform-town-base",
+    sampleCount: 1,
+    minBaseY: baseY,
+    maxBaseY: baseY,
+    verticalSpan: 0,
+    uniformPlane: true,
+  });
+
+  return {
+    group,
+    levels: town.levels,
+    stats: town.stats,
+    materials,
+    gradientMap,
+    surfaceConformance,
+  };
 }
 
 /** 五座台地 × 每台地五层城堡的统一装配。台地 1 为最高层和共享中心。 */
@@ -1470,6 +1717,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
   group.name = "citadel-terrace-town-assembly";
   const levels = [];
   const terraceLevels = [];
+  const surfaceConformance = [];
   const stats = {
     cellCount: 0,
     windowCount: 0,
@@ -1541,6 +1789,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
       levels.push(level);
       terraceLevels[terraceIndex].push(level);
     });
+    surfaceConformance[terraceIndex] = assembly.surfaceConformance;
     for (const [key, value] of Object.entries(assembly.stats)) {
       if (typeof value === "number" && typeof stats[key] === "number") stats[key] += value;
     }
@@ -1568,6 +1817,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     baseYs: metrics.map((metric) =>
       options.baseYOverride !== undefined ? options.baseYOverride : metric.top - 0.06
     ),
+    surfaceConformance,
     materials: options.materials,
     gradientMap: options.gradientMap,
   };
@@ -1714,8 +1964,72 @@ function refreshCanalTownReflection(castleContainer) {
   castleContainer.add(mirror);
 }
 
+function makeHighlandTownPlatformShape() {
+  const { halfWidth: x, halfDepth: z, cornerCut: c } = HIGHLAND_TOWNSCAPER_PLATFORM;
+  const shape = new THREE.Shape();
+  shape.moveTo(-x + c, -z);
+  shape.lineTo(x - c, -z);
+  shape.lineTo(x, -z + c);
+  shape.lineTo(x, z - c);
+  shape.lineTo(x - c, z);
+  shape.lineTo(-x + c, z);
+  shape.lineTo(-x, z - c);
+  shape.lineTo(-x, -z + c);
+  shape.closePath();
+  return shape;
+}
+
+/**
+ * 运河交汇古堡同型的水平承重地台：顶面只提供一个 Y，厚底向下插入
+ * 球面山体。山体曲率由地台侧壁吸收，Townscaper 单元无需逐格倾斜。
+ */
+function buildHighlandTownFoundationPlatform(materials) {
+  const spec = HIGHLAND_TOWNSCAPER_PLATFORM;
+  const geometry = new THREE.ExtrudeGeometry(makeHighlandTownPlatformShape(), {
+    depth: spec.thickness,
+    bevelEnabled: false,
+    steps: 1,
+  });
+  // ExtrudeGeometry 默认沿 +Z；转成沿 -Y，使 shape 所在面成为水平顶面。
+  geometry.rotateX(Math.PI / 2);
+  geometry.computeVertexNormals();
+  geometry.userData.surfaceProvider = spec.surfaceProvider;
+  geometry.userData.uniformTop = true;
+  geometry.userData.embeddedFoundation = true;
+  const platform = mesh(
+    geometry,
+    materials.weatherStone ?? materials.contour,
+    "highland-town-foundation-platform"
+  );
+  platform.position.y = spec.topY;
+  // 逻辑地台只负责统一建筑、编辑器和寻路标高；天然山体已在城址内反向
+  // 抵消球面下沉并覆盖至顶面，因此实体承重体应完全埋在地下，禁止在
+  // 湖岸画面中读成一条人工灰墙。
+  platform.visible = false;
+  platform.receiveShadow = false;
+  platform.castShadow = false;
+  platform.userData.buildStage = "foundation";
+  platform.userData.isCitadelFoundation = true;
+  platform.userData.surfaceProvider = spec.surfaceProvider;
+  platform.userData.topY = spec.topY;
+  platform.userData.bottomY = spec.topY - spec.thickness;
+  platform.userData.uniformTop = true;
+  platform.userData.embeddedIntoTerrain = true;
+  platform.userData.fullySubmerged = true;
+  platform.userData.footprint = {
+    halfWidth: spec.halfWidth,
+    halfDepth: spec.halfDepth,
+    cornerCut: spec.cornerCut,
+  };
+  return platform;
+}
+
 function ensureSkipOuterTerrainEditPad(castleContainer) {
-  const lift = castleContainer.userData.townBaseLift ?? 0.6;
+  if (!castleContainer.userData?.skipOuterTerrain && !castleContainer.userData?.highlandTownscaperGrid) return null;
+  const highlandPlatform = castleContainer.userData.highlandTownscaperGrid === true;
+  const lift = highlandPlatform
+    ? HIGHLAND_TOWNSCAPER_BASE_Y
+    : castleContainer.userData.townBaseLift ?? 0.6;
   let terrain = castleContainer.userData.outerTerrainSystem;
   if (!terrain) {
     terrain = new THREE.Group();
@@ -1724,28 +2038,45 @@ function ensureSkipOuterTerrainEditPad(castleContainer) {
     castleContainer.userData.outerTerrainSystem = terrain;
   }
   let pad = terrain.getObjectByName("contour-step-0");
-  if (pad && pad.geometry?.type === "BoxGeometry") {
+  if (pad && (
+    pad.geometry?.type === "BoxGeometry"
+    || (highlandPlatform && pad.geometry?.userData?.surfaceProvider !== HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider)
+  )) {
     pad.removeFromParent();
     pad.geometry.dispose?.();
     pad = null;
   }
   if (!pad) {
-    // 只用水平面：厚盒子侧壁会挡住斜视角点楼，点不到上层。
+    // 高山和运河都使用水平建造面；高山拾取形状与厚地台完全同形。
+    const geometry = highlandPlatform
+      ? new THREE.ShapeGeometry(makeHighlandTownPlatformShape())
+      : new THREE.PlaneGeometry(48, 40, 1, 1);
+    geometry.rotateX(-Math.PI / 2);
+    geometry.userData.surfaceProvider = highlandPlatform
+      ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
+      : "uniform-town-base";
+    geometry.userData.curved = false;
+    geometry.userData.uniformTop = true;
     pad = new THREE.Mesh(
-      new THREE.PlaneGeometry(48, 40),
+      geometry,
       new THREE.MeshBasicMaterial({
         visible: false,
         side: THREE.DoubleSide,
       })
     );
     pad.name = "contour-step-0";
-    pad.rotation.x = -Math.PI / 2;
     terrain.add(pad);
   }
-  pad.position.set(0, lift, 0);
-  pad.rotation.x = -Math.PI / 2;
+  pad.position.set(0, lift + (highlandPlatform ? 0.025 : 0), 0);
+  pad.rotation.set(0, 0, 0);
   pad.userData.isCitadelTerrace = true;
   pad.userData.terraceIndex = 0;
+  pad.userData.townscaperBuildZone = highlandPlatform
+    ? "highland"
+    : "canal-junction";
+  pad.userData.surfaceProvider = highlandPlatform
+    ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
+    : "uniform-town-base";
   pad.visible = true;
   return pad;
 }
@@ -1770,27 +2101,47 @@ function markSvarbovaLitMesh(object) {
 
 function attachSvarbovaLightRig(castleContainer, buildingRoot) {
   if (!castleContainer) return;
+  const highlandLatest = castleContainer.userData?.highlandLatestDesign === true;
+  const ambientColor = highlandLatest ? 0x8eb9e5 : 0xffffff;
+  const ambientIntensity = highlandLatest ? 0.34 : 0.62;
+  const sunColor = highlandLatest ? 0x78aee0 : 0xfff4e6;
+  const sunIntensity = highlandLatest ? 0.62 : 0.95;
   let ambient = castleContainer.getObjectByName("citadel-svarbova-ambient");
   if (!ambient) {
-    ambient = new THREE.AmbientLight(0xffffff, 0.62);
+    ambient = new THREE.AmbientLight(ambientColor, ambientIntensity);
     ambient.name = "citadel-svarbova-ambient";
     castleContainer.add(ambient);
   }
-  ambient.intensity = 0.62;
-  ambient.color.setHex(0xffffff);
+  ambient.intensity = ambientIntensity;
+  ambient.color.setHex(ambientColor);
   ambient.layers.set(CITADEL_SVARBOVA_LAYER);
+  // K4：圣城 layer-1 例外灯登记进 registry（不参与预算选择，仅调试可见）
+  registerLocalLight(ambient, {
+    id: "citadel-svarbova-ambient",
+    owner: "odyssey-citadel",
+    kind: "ambient",
+    intensity: ambientIntensity,
+    exception: true,
+  });
 
   let sun = castleContainer.getObjectByName("citadel-svarbova-sun");
   if (!sun) {
-    sun = new THREE.DirectionalLight(0xfff4e6, 0.95);
+    sun = new THREE.DirectionalLight(sunColor, sunIntensity);
     sun.name = "citadel-svarbova-sun";
     sun.position.set(10, 22, 12);
     sun.castShadow = false;
     castleContainer.add(sun);
   }
-  sun.intensity = 0.95;
-  sun.color.setHex(0xfff4e6);
+  sun.intensity = sunIntensity;
+  sun.color.setHex(sunColor);
   sun.layers.set(CITADEL_SVARBOVA_LAYER);
+  registerLocalLight(sun, {
+    id: "citadel-svarbova-sun",
+    owner: "odyssey-citadel",
+    kind: "directional",
+    intensity: sunIntensity,
+    exception: true,
+  });
 
   buildingRoot?.traverse(markSvarbovaLitMesh);
 }
@@ -1859,12 +2210,18 @@ function placeSvarbovaRedFigure(castleContainer, skipOuterTerrain, townBaseLift)
  */
 export function buildOdysseyCitadel(options = {}) {
   const random = lcg(options.seed ?? 20260808);
+  const skipOuterTerrain = options.skipOuterTerrain === true;
+  const useHighlandLatestDesign = !skipOuterTerrain
+    && options.instanceId !== "canal-junction"
+    && options.latestDesign !== false;
+  const defaultTownSpec = useHighlandLatestDesign
+    ? HIGHLAND_TOWNSCAPER_TOWN_SPEC
+    : CITADEL_TOWN_SPEC;
   const castleFloors = Number.isFinite(options.floors)
     ? Math.min(20, Math.max(1, Math.round(options.floors)))
-    : (options.spec?.floors ?? CITADEL_CASTLE_FLOORS);
-  const skipOuterTerrain = options.skipOuterTerrain === true;
+    : (options.spec?.floors ?? defaultTownSpec.floors ?? CITADEL_CASTLE_FLOORS);
   const blueprint = createCitadelBlueprint({
-    spec: options.spec ?? CITADEL_TOWN_SPEC,
+    spec: options.spec ?? defaultTownSpec,
     contour: options.contour ?? CITADEL.contourTerrain,
     floors: castleFloors,
     instanceId: options.instanceId ?? null,
@@ -1908,7 +2265,9 @@ export function buildOdysseyCitadel(options = {}) {
     : "castleContainer";
 
   const citadelAssembly = new THREE.Group();
-  citadelAssembly.name = "odyssey-citadel-five-layer-assembly";
+  citadelAssembly.name = useHighlandLatestDesign
+    ? "odyssey-citadel-mountain-valley-assembly"
+    : "odyssey-citadel-five-layer-assembly";
   citadelAssembly.userData.buildStage = "town";
 
   // 物理层组数跟随城堡层数（高山 5 层 / 运河交汇古堡 12 层）
@@ -1925,7 +2284,7 @@ export function buildOdysseyCitadel(options = {}) {
   // 无台地模式（运河交汇古堡）：堤岸方框即地基，跳过断崖岩石——
   // 否则岩石按高山台地高度（centerY 11.2）悬浮在方框平台上方。
   // --------------------------------------------------------------------------
-  if (!skipOuterTerrain) {
+  if (!skipOuterTerrain && !useHighlandLatestDesign) {
     const rockGeometry = new THREE.IcosahedronGeometry(CITADEL.layer0.rockRadius, 0);
     for (let i = 0; i < CITADEL.layer0.rockCount; i++) {
       const rock = mesh(rockGeometry, materials.cliff, `primordial-cliff-rock-${i}`);
@@ -1967,16 +2326,34 @@ export function buildOdysseyCitadel(options = {}) {
     highlandColors: options.instanceId !== "canal-junction",
     // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升。
     // 不传则回落台地 metrics 顶（≈7.5 局部），城堡会悬空在平台上方。
-    baseYOverride: skipOuterTerrain ? options.townBaseLift ?? 0.6 : undefined,
+    baseYOverride: skipOuterTerrain
+      ? options.townBaseLift ?? 0.6
+      : useHighlandLatestDesign
+        ? HIGHLAND_TOWNSCAPER_BASE_Y
+        : undefined,
+    // 高山圣城与运河古堡一样使用统一水平承重面；球面落差由下方厚地台吸收。
+    surfaceProvider: useHighlandLatestDesign
+      ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
+      : "uniform-town-base",
   });
-  // 每个台地都有独立的城堡 1–5 层；同楼层归入同一物理层级组。
-  townAssembly.terraceLevels.forEach((terrace, terraceIndex) => {
+  // 高山与运河现在共享同一套逐格 Townscaper 层组；高山仅使用 terrace 0，
+  // 其余空 terrace 是存档格式兼容层，不会恢复旧五台地视觉。
+  townAssembly.terraceLevels.forEach((terrace) => {
     terrace.forEach((levelGroup, floorIndex) => {
       layers[floorIndex].add(levelGroup);
     });
   });
 
   for (const layer of layers) citadelAssembly.add(layer);
+  // 最新高山圣城：中央圣塔、山脊副塔、两侧山壁、暖光朝圣轴和前景水岸
+  // 共同构成连续山谷；旧五层台地和瀑布不再挂入场景。战斗改读显式城顶锚点。
+  const highlandLatestDesign = useHighlandLatestDesign
+    ? buildHighlandCitadelLatestDesign({
+        externalTownscaperCity: true,
+        townscaperStats: townAssembly.stats,
+      })
+    : null;
+  if (highlandLatestDesign) citadelAssembly.add(highlandLatestDesign);
   const mainOutlinedSurfaceCount = applyInkOutlines(
     citadelAssembly,
     true,
@@ -1985,11 +2362,23 @@ export function buildOdysseyCitadel(options = {}) {
 
   const outerTerrainSystem = skipOuterTerrain
     ? new THREE.Group()
-    : buildOuterCitadelTerrain(materials, contourSpec);
+    : useHighlandLatestDesign
+      ? buildHighlandCitadelContinuousTerrain()
+      : buildOuterCitadelTerrain(materials, contourSpec);
   outerTerrainSystem.name = skipOuterTerrain
     ? "citadel-skip-outer-terrain"
-    : "citadel-outer-terrain-system";
-  outerTerrainSystem.userData.buildStage = skipOuterTerrain ? "foundation" : "terraces";
+    : useHighlandLatestDesign
+      ? "citadel-continuous-mountain-terrain-system"
+      : "citadel-outer-terrain-system";
+  outerTerrainSystem.userData.buildStage = skipOuterTerrain
+    ? "foundation"
+    : useHighlandLatestDesign
+      ? "continuous-mountain"
+      : "terraces";
+  if (useHighlandLatestDesign) {
+    outerTerrainSystem.add(buildHighlandTownFoundationPlatform(materials));
+    outerTerrainSystem.userData.townFoundation = HIGHLAND_TOWNSCAPER_PLATFORM;
+  }
   const terrainOutlinedSurfaceCount = skipOuterTerrain
     ? 0
     : applyInkOutlines(outerTerrainSystem);
@@ -1998,17 +2387,19 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.skipOuterTerrain = skipOuterTerrain;
   castleContainer.userData.townBaseLift = options.townBaseLift ?? 0.6;
   castleContainer.userData.outerTerrainSystem = outerTerrainSystem;
-  if (skipOuterTerrain) ensureSkipOuterTerrainEditPad(castleContainer);
+  castleContainer.userData.highlandTownscaperGrid = useHighlandLatestDesign;
+  if (skipOuterTerrain || useHighlandLatestDesign) ensureSkipOuterTerrainEditPad(castleContainer);
 
   // 运河交汇：首次入场 plop（软弹一下），其余帧静态。
   let plopT = skipOuterTerrain ? 0 : 1;
-  const update = (dt = 0.016) => {
-    if (plopT >= 0.32) return;
-    plopT += Math.max(0.008, Number(dt) || 0.016);
-    const u = Math.min(1, plopT / 0.32);
-    const bounce = 1 + Math.sin(u * Math.PI) * 0.055 * (1 - u);
-    citadelAssembly.scale.setScalar(bounce);
-    if (u >= 1) citadelAssembly.scale.setScalar(1);
+  const update = (dt = 0.016, t = 0) => {
+    if (plopT < 0.32) {
+      plopT += Math.max(0.008, Number(dt) || 0.016);
+      const u = Math.min(1, plopT / 0.32);
+      const bounce = 1 + Math.sin(u * Math.PI) * 0.055 * (1 - u);
+      citadelAssembly.scale.setScalar(bounce);
+      if (u >= 1) citadelAssembly.scale.setScalar(1);
+    }
   };
   castleContainer.update = update;
   castleContainer.userData.update = update;
@@ -2046,14 +2437,14 @@ export function buildOdysseyCitadel(options = {}) {
     castleContainer.userData.curvatureDrop = curvatureDrop;
   }
 
-  const terrainObjects = skipOuterTerrain
+  const terrainObjects = skipOuterTerrain || useHighlandLatestDesign
     ? new THREE.Group()
     : buildCitadelTerrainObjects(
       blueprint.objects,
       contourSpec,
       castleContainer.userData.anchor
     );
-  terrainObjects.name = skipOuterTerrain
+  terrainObjects.name = skipOuterTerrain || useHighlandLatestDesign
     ? "citadel-skip-terrain-objects"
     : "citadel-terrain-objects";
   terrainObjects.userData.buildStage = "terrain-objects";
@@ -2065,16 +2456,27 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.buildStages = blueprint.stages;
   castleContainer.userData.blueprintVersion = CITADEL_BLUEPRINT_VERSION;
   castleContainer.userData.instanceId = options.instanceId ?? null; // 多城堡实例标识（null=高山圣城默认）
+  castleContainer.userData.highlandLatestDesign = useHighlandLatestDesign;
+  castleContainer.userData.highlandLatestDesignVersion = useHighlandLatestDesign
+    ? HIGHLAND_CITADEL_DESIGN_VERSION
+    : null;
+  castleContainer.userData.highlandLatestDesignMetrics = highlandLatestDesign?.userData.latestDesign ?? null;
+  castleContainer.userData.highlandLatestDesignRoot = highlandLatestDesign;
+  castleContainer.userData.highlandAssaultAnchors = highlandLatestDesign?.userData.assaultAnchors ?? null;
   castleContainer.userData.floors = castleFloors; // 城堡层数（高山 5 / 运河古堡 12）
   castleContainer.userData.skipOuterTerrain = skipOuterTerrain; // 无台地模式（堤岸方框即地基）
   castleContainer.userData.townBaseLift = options.townBaseLift ?? 0.6;
   castleContainer.userData.spec = CITADEL;
   castleContainer.userData.contourSpec = contourSpec;
-  castleContainer.userData.townBaseY = townBaseY;
+  castleContainer.userData.townBaseY = useHighlandLatestDesign
+    ? HIGHLAND_TOWNSCAPER_BASE_Y
+    : townBaseY;
   // 无台地模式：所有台地基座统一 = 方框水面平台抬升
   castleContainer.userData.townBaseYs = skipOuterTerrain
     ? townAssembly.baseYs.map(() => options.townBaseLift ?? 0.6)
-    : townAssembly.baseYs;
+    : useHighlandLatestDesign
+      ? townAssembly.baseYs.map(() => HIGHLAND_TOWNSCAPER_BASE_Y)
+      : townAssembly.baseYs;
   castleContainer.userData.terrainMaterials = {
     contour: materials.contour,
     pilgrimageStone: materials.pilgrimageStone,
@@ -2086,6 +2488,9 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.terrainObjectsSpec = terrainObjects.userData?.placements ?? [];
   castleContainer.userData.townSpec = townAssembly.layout;
   castleContainer.userData.townStats = townAssembly.stats;
+  castleContainer.userData.townSurfaceConformance = useHighlandLatestDesign
+    ? townAssembly.surfaceConformance?.[0] ?? null
+    : null;
   castleContainer.userData.mainOutlinedSurfaceCount = mainOutlinedSurfaceCount;
   castleContainer.userData.terrainOutlinedSurfaceCount = terrainOutlinedSurfaceCount;
   castleContainer.userData.outlinedSurfaceCount =
@@ -2101,7 +2506,10 @@ export function buildOdysseyCitadel(options = {}) {
   // 拱窗夜景：收集 town-window 并绑定昼夜材质
   refreshCitadelWindowLights(castleContainer);
   attachSvarbovaLightRig(castleContainer, citadelAssembly);
-  placeSvarbovaRedFigure(castleContainer, skipOuterTerrain, options.townBaseLift ?? 0.6);
+  // 正红人偶仅供旧版 Svarbova 材质基准测试；正式高山圣城不得混入测试模型。
+  if (!useHighlandLatestDesign) {
+    placeSvarbovaRedFigure(castleContainer, skipOuterTerrain, options.townBaseLift ?? 0.6);
+  }
 
   return castleContainer;
 }
@@ -2167,7 +2575,12 @@ export function rebuildCitadelTown(castleContainer, spec) {
       // 无台地模式：基座保持方框水面平台抬升（防热重建后城堡悬空）
       baseYOverride: castleContainer.userData.skipOuterTerrain
         ? castleContainer.userData.townBaseLift ?? 0.6
-        : undefined,
+        : castleContainer.userData.highlandTownscaperGrid
+          ? HIGHLAND_TOWNSCAPER_BASE_Y
+          : undefined,
+      surfaceProvider: castleContainer.userData.highlandTownscaperGrid
+        ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
+        : "uniform-town-base",
       leanDecor: castleContainer.userData.skipOuterTerrain === true,
       // 热重建保持实例配色：运河交汇古堡仍是 Townscaper 高饱和彩城
       townscaperColors: castleContainer.userData.instanceId === "canal-junction",
@@ -2187,6 +2600,9 @@ export function rebuildCitadelTown(castleContainer, spec) {
     refreshCanalTownReflection(castleContainer);
   }
   castleContainer.userData.townStats = assembly.stats;
+  castleContainer.userData.townSurfaceConformance = castleContainer.userData.highlandTownscaperGrid
+    ? assembly.surfaceConformance?.[0] ?? null
+    : null;
   castleContainer.userData.townSpec = assembly.layout;
   castleContainer.userData.blueprint = blueprint;
   castleContainer.userData.blueprintSummary = citadelBlueprintSummary(blueprint);
@@ -2197,6 +2613,11 @@ export function rebuildCitadelTown(castleContainer, spec) {
     castleContainer.userData.townBaseY = lift;
     castleContainer.userData.townBaseYs = Array.from({ length: n }, () => lift);
     ensureSkipOuterTerrainEditPad(castleContainer);
+  } else if (castleContainer.userData.highlandTownscaperGrid) {
+    const n = Math.max(1, assembly.baseYs?.length ?? 1);
+    castleContainer.userData.townBaseY = HIGHLAND_TOWNSCAPER_BASE_Y;
+    castleContainer.userData.townBaseYs = Array.from({ length: n }, () => HIGHLAND_TOWNSCAPER_BASE_Y);
+    ensureSkipOuterTerrainEditPad(castleContainer);
   } else {
     castleContainer.userData.townBaseYs = assembly.baseYs;
   }
@@ -2205,11 +2626,13 @@ export function rebuildCitadelTown(castleContainer, spec) {
     castleContainer.userData.gradientMap ?? assembly.gradientMap ?? makeThreeStepGradient();
   refreshCitadelWindowLights(castleContainer);
   attachSvarbovaLightRig(castleContainer, castleContainer.userData.mainCastle);
-  placeSvarbovaRedFigure(
-    castleContainer,
-    castleContainer.userData.skipOuterTerrain === true,
-    castleContainer.userData.townBaseLift ?? 0.6
-  );
+  if (!castleContainer.userData.highlandTownscaperGrid) {
+    placeSvarbovaRedFigure(
+      castleContainer,
+      castleContainer.userData.skipOuterTerrain === true,
+      castleContainer.userData.townBaseLift ?? 0.6
+    );
+  }
   return assembly.stats;
 }
 

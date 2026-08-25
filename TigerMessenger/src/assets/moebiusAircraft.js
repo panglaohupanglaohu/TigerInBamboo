@@ -10,6 +10,7 @@ import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
 import { P, P_DEFAULTS } from "../core/params.js";
 import { tickAircraftTranqFall, isAircraftKnocked } from "../world/tranquilizer.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 /* ---------------- 3 阶硬边缘 Toon 渐变贴图（纯代码生成） ----------------
  * 三阶灰度阶梯 [0, 127, 255]：暗部 / 中间调 / 亮部，
@@ -138,6 +139,15 @@ export function createMoebiusAircraft() {
   cockpitCabinLight.name = "aircraft-cockpit-light";
   cockpitCabinLight.position.set(0, 0.15, 1.55);
   g.add(cockpitCabinLight);
+  // K4：迁入 registry（owner=灯名，编队 5 架按创建序派生 #0..#4）
+  registerLocalLight(cockpitCabinLight, {
+    owner: "aircraft-cockpit-light",
+    kind: "point",
+    color: 0xb8ff66,
+    intensity: 2.4,
+    radius: 8,
+    priority: 3,
+  });
 
   // 3b. 中段：霓虹能量线（品红→青蓝）
   const tubePts = [];
@@ -180,6 +190,14 @@ export function createMoebiusAircraft() {
   neonLight.name = "aircraft-neon-light";
   neonLight.position.set(0, 0, -0.4);
   g.add(neonLight);
+  registerLocalLight(neonLight, {
+    owner: "aircraft-neon-light",
+    kind: "point",
+    color: 0x00e8ff,
+    intensity: 1.8,
+    radius: 7,
+    priority: 3,
+  });
 
   // 3c. 尾部喷口：灰黑机械喷罩 + 橙红尾焰光
   const nozzleMat = crystalToon(0x2a2a2e, { transparent: false });
@@ -195,6 +213,14 @@ export function createMoebiusAircraft() {
   thrusterLight.name = "aircraft-thruster-light";
   thrusterLight.position.set(0, 0, -3.5);
   g.add(thrusterLight);
+  registerLocalLight(thrusterLight, {
+    owner: "aircraft-thruster-light",
+    kind: "point",
+    color: 0xff4a18,
+    intensity: 2.6,
+    radius: 6,
+    priority: 3,
+  });
 
   // ---------- 4. 头部鼻锥 (灰白锥 + 黑色圈纹 + 金属探针) ----------
   const noseMat = crystalToon(0xd9d4c8, { transparent: false });
@@ -276,6 +302,14 @@ export function createMoebiusAircraft() {
   cockpitLight.name = "aircraft-cockpit-fill";
   cockpitLight.position.set(0, 0.55, 1.9);
   g.add(cockpitLight);
+  registerLocalLight(cockpitLight, {
+    owner: "aircraft-cockpit-fill",
+    kind: "point",
+    color: 0xc8ff70,
+    intensity: 3.8,
+    radius: 22,
+    priority: 3,
+  });
 
   // ---------- 7. 尾焰：橙红喷焰（MeshBasic · 供 updateAircraftHover 脉动）----------
   const flames = [];
@@ -379,6 +413,14 @@ export function createMoebiusAircraft() {
   cockpitOrangeLight.name = "aircraft-cockpit-orange-light";
   cockpitOrangeLight.position.set(0, 0.22, 1.66);
   g.add(cockpitOrangeLight);
+  registerLocalLight(cockpitOrangeLight, {
+    owner: "aircraft-cockpit-orange-light",
+    kind: "point",
+    color: 0xff8a32,
+    intensity: 2.8,
+    radius: 9,
+    priority: 3,
+  });
   g.userData.cockpitOrangeDot = cockpitOrangeDot;
   g.userData.cockpitOrangeLight = cockpitOrangeLight;
   g.userData.neonLight = neonLight;

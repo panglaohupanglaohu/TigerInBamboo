@@ -117,6 +117,30 @@ ok("外部地表不再偷偷增加第六层土坡；前方绿地浸水、城堡�
 console.log("[3] 地形网格：视觉=碰撞");
 const scene = new THREE.Scene();
 const range = buildCitadelRange(scene, R);
+const latestScene = new THREE.Scene();
+const latestRange = buildCitadelRange(latestScene, R, {
+  ...CITADEL.contourTerrain,
+  presentationMode: "mountain-valley-v1",
+  cascadeEnabled: false,
+  cascadePoolsEnabled: false,
+  notchedLayers: 0,
+});
+assert(!latestScene.children.includes(latestRange.mesh),
+  "最新球面 WFC 设计不得把旧矩形 citadel-range 视觉网格挂回场景");
+assert.equal(latestRange.mesh.userData.legacyVisualSuppressed, true);
+assert.equal(latestRange.userData.terrainVisualOwner,
+  "citadel-continuous-mountain-terrain-system");
+assert.equal(latestRange.userData.waterVisualOwner, "highland-waterfront-water");
+assert.equal(latestScene.getObjectByName("citadel-pilgrimage-layered-cascades"), undefined,
+  "最新设计不得重新出现旧瀑布视觉组");
+assert.equal(latestRange.sacredTarnTree.visible, false,
+  "最新设计不得把旧港参天古树挂进圣城");
+assert.deepEqual(latestRange.sacredTarnTree.userData.rangeLocal, { lx: 17.4, lz: 14.2 },
+  "旧港参天古树应保留确定性回迁源位");
+assert.equal(latestRange.sacredTarnTree.userData.designRole,
+  "old-port-elder-tree-returned-to-harbor");
+assert.equal(latestRange.sacredTarnTree.userData.pendingHarborRestore, true,
+  "旧港参天古树必须等待港口子树回迁");
 // 木马/夜间潜入在 placeNavonaPlaza（延迟摆放，由 messengerIsland 按运河走向调用）内构建；
 // 测试用单位城堡桩复刻该调用，使后续木马断言可运行。
 {
@@ -403,18 +427,43 @@ assert(range.sacredTarnTree.userData.canopyHeight >= 30,
   "深潭古树必须形成超过 30 单位的参天轮廓");
 assert.deepEqual(range.sacredTarnTree.userData.rangeLocal, { lx: -15.2, lz: 42 },
   "参天树必须位于深潭侧岸并避开中央远眺视线");
-let tarnTreeCrowns = 0;
-let tarnTreeBranches = 0;
-let tarnTreeTrunks = 0;
-range.sacredTarnTree.traverse((o) => {
-  if (o.name === "tarn-elder-tree-crown") tarnTreeCrowns++;
-  if (o.name === "tarn-elder-tree-branch") tarnTreeBranches++;
-  if (o.name === "tarn-elder-tree-trunk") tarnTreeTrunks++;
-});
-// 伞冠：25–30 团 + 顶补；三股融合干；五根爆炸枝
-assert(tarnTreeCrowns >= 25, `湖沼参天树伞冠团块不足（${tarnTreeCrowns}）`);
-assert.equal(tarnTreeBranches, 5, "湖沼参天树必须呈现清晰分叉结构");
-assert.equal(tarnTreeTrunks, 3, "主树干应为三股并生嵌套融合");
+// 伞冠/枝干结构（defect.citadel-range-swamp-canopy 修复，2026-08-23）：
+// f5a23b7 起深潭太古木改用 createColossalVernacularTree 工笔云片古樟，
+// 分件在 mergeStaticGroup 后合并（9 mesh / 12192 顶点），逐件名字遍历
+// 不再可用；结构事实记录在 userData（构建器落盘，合并后仍准确）。
+// 现行设计：77 团云片伞冠（暗/中/嫩三带）、4 根冠内骨干、三股合生干。
+// 旧定制树的「8 伞冠/5 爆炸枝」断言自 f5a23b7 起即为坏测试（该提交换了
+// 实现却只改期望值、没改逐名遍历），此处按现行设计重写为可验证断言。
+{
+  const ud = range.sacredTarnTree.userData;
+  assert(ud.crownCount >= 25, `湖沼参天树伞冠团块不足（${ud.crownCount}）`);
+  assert(ud.canopyBands?.dark > 0 && ud.canopyBands?.mid > 0 && ud.canopyBands?.light > 0,
+    "伞冠必须有暗底/竹青/嫩黄绿三带层次");
+  assert.equal(ud.branchCount, 4, "湖沼参天树必须呈现清晰分叉结构（4 根冠内骨干）");
+  assert.equal(ud.trunkCount, 3, "主树干应为三股并生嵌套融合");
+  // 合并不得掏空几何：顶点数与包围盒高度兜底（实测 12192 顶点 / 29.8 高）
+  let meshVerts = 0;
+  range.sacredTarnTree.traverse((o) => {
+    if (o.isMesh) meshVerts += o.geometry.attributes.position.count;
+  });
+  assert(meshVerts > 5000, `合并后几何被掏空（顶点 ${meshVerts}）`);
+  // 树随球面法线倾斜，真实树高要沿树自身 up 轴量（世界 Y 会被倾角吃掉）
+  range.sacredTarnTree.updateWorldMatrix(true, true);
+  const bb = new THREE.Box3().setFromObject(range.sacredTarnTree);
+  const treeUp = new THREE.Vector3()
+    .setFromMatrixColumn(range.sacredTarnTree.matrixWorld, 1)
+    .normalize();
+  let hMin = Infinity;
+  let hMax = -Infinity;
+  for (const cx of [bb.min.x, bb.max.x])
+    for (const cy of [bb.min.y, bb.max.y])
+      for (const cz of [bb.min.z, bb.max.z]) {
+        const h = new THREE.Vector3(cx, cy, cz).dot(treeUp);
+        hMin = Math.min(hMin, h);
+        hMax = Math.max(hMax, h);
+      }
+  assert(hMax - hMin >= 28, `参天轮廓不足（沿树轴高 ${(hMax - hMin).toFixed(1)}）`);
+}
 const removedNames = [
   "citadel-foreground-defense-tower",
   "citadel-range-vegetation",
@@ -442,10 +491,12 @@ assert(range.navonaPlaza.getFlooded() < 0.05, "泄洪后应回到旱季广场");
 ok(`梯湖×${waterSurfaces} · 瀑布×4 · 参天树×1 · 护城河×1 · 纳沃纳广场 · 非保留器物全部清空`);
 
 console.log("[4] 场景与物理接线");
-const island = fs.readFileSync(
-  fileURLToPath(new URL("src/scenes/messengerIsland.js", BASE)),
-  "utf8"
-);
+const island = [
+  "src/scenes/messengerIsland.js",
+  "src/scenes/messenger/loadCitadel.js",
+  "src/scenes/messenger/loadTraffic.js",
+  "src/scenes/messenger/updateIsland.js",
+].map((f) => fs.readFileSync(fileURLToPath(new URL(f, BASE)), "utf8")).join("\n");
 assert(island.includes("buildCitadelRange"), "场景应构建山脉");
 assert(island.includes("citadelRangeLiftDir"), "圣城 groundRadius 应取山脉高程");
 assert(island.includes("pilgrimageCascades.update"), "圣城梯湖瀑布动效必须接入主更新循环");

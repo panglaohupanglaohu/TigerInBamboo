@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
 import { mergeStaticGroup } from "../world/geometryMerge.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 const BARK = 0x665d52; // 老松灰褐树皮
 const BARK_DARK = 0x453f37;
@@ -378,6 +379,15 @@ export function createColossalVernacularTree(seedOrOpts = {}) {
   fill.name = n("zone-fill");
   fill.position.set(0, 20, 0);
   giantBanyanGroup.add(fill);
+  // K4：古榕树区补光迁入 registry（owner 前缀随 namePrefix，多株各自稳定）
+  registerLocalLight(fill, {
+    owner: `${prefix}-zone-fill`,
+    kind: "point",
+    color: 0xffffff,
+    intensity: BANYAN_ZONE_FILL,
+    radius: 68,
+    priority: 3,
+  });
 
   giantBanyanGroup.rotation.y = (rnd() - 0.5) * 0.5;
   if (merge) mergeStaticGroup(giantBanyanGroup);

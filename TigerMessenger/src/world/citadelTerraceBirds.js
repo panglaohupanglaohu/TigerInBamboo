@@ -126,8 +126,20 @@ function anyThreatNear(threats, origin, radius, up, bandH = 5.5) {
  * @param {object} [opts.contour]
  * @param {() => object|null} [opts.getTram]
  * @param {() => object|null} [opts.getInfiltration]
+ * @param {boolean} [opts.disabled] 新圣城移除旧台地鸟群时返回兼容空系统
  */
 export function createCitadelTerraceBirds(scene, odysseyCitadel, opts = {}) {
+  if (opts.disabled === true) {
+    return {
+      flocks: [],
+      update() {},
+      dispose() {},
+      setVisible() {},
+      isVisible: () => false,
+      getThreats: () => [],
+      get primary() { return null; },
+    };
+  }
   const metrics = citadelTerraceMetrics(opts.contour ?? odysseyCitadel?.userData?.contourSpec);
   const flocks = [];
 

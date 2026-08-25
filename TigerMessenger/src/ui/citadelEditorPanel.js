@@ -13,6 +13,7 @@
 import {
   CITADEL_TOWN_SPEC,
   CANAL_JUNCTION_TOWN_SPEC,
+  HIGHLAND_TOWNSCAPER_TOWN_SPEC,
   CITADEL_LEVELS_KEY,
   CITADEL_TERRACE_COUNT,
   CITADEL_CASTLE_FLOORS,
@@ -25,7 +26,7 @@ import {
   resolveCitadelDropTarget,
   citadelGridCellCenter,
   citadelLevelsKey,
-} from "../world/citadelTown.js";
+} from "../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 import {
   CITADEL,
   CITADEL_TERRAIN_KEY,
@@ -79,6 +80,101 @@ const PALETTE_ORDER = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B
 const CELL = CITADEL_TOWN_SPEC.cellSize;
 const CELL_H = CITADEL_TOWN_SPEC.cellHeight;
 
+/** Build the latest highland citadel's coloured valley map from its WFC units.
+ * The waterfront band is drawn at the bottom and the summit band at the top. */
+export function layoutHighlandUnitMap(units = [], width = 300, height = 260, padding = 14) {
+  const valid = units.filter((unit) => Array.isArray(unit?.grid) && unit.grid.length >= 2);
+  const maxBand = Math.max(0, ...valid.map((unit) => Number(unit.grid[1]) || 0));
+  const byBandExtent = new Map();
+  for (const unit of valid) {
+    const band = Number(unit.grid[1]) || 0;
+    const column = Number(unit.grid[0]) || 0;
+    const extent = byBandExtent.get(band) || { min: column, max: column };
+    extent.min = Math.min(extent.min, column);
+    extent.max = Math.max(extent.max, column);
+    byBandExtent.set(band, extent);
+  }
+  const maxColumns = Math.max(1, ...[...byBandExtent.values()].map((extent) => extent.max - extent.min + 1));
+  const cellSize = Math.max(8, Math.min(
+    (width - padding * 2) / maxColumns,
+    (height - padding * 2) / (maxBand + 1)
+  ));
+  const mapWidth = maxColumns * cellSize;
+  const mapHeight = (maxBand + 1) * cellSize;
+  const originX = (width - mapWidth) * 0.5;
+  const originY = (height - mapHeight) * 0.5;
+  const cells = valid.map((unit) => {
+    const column = Number(unit.grid[0]) || 0;
+    const band = Number(unit.grid[1]) || 0;
+    const extent = byBandExtent.get(band) || { min: 0, max: maxColumns - 1 };
+    const rowColumns = extent.max - extent.min + 1;
+    const rowOffset = (maxColumns - rowColumns) * cellSize * 0.5;
+    return {
+      unit,
+      band,
+      column,
+      x: originX + rowOffset + (column - extent.min) * cellSize,
+      y: originY + (maxBand - band) * cellSize,
+      width: cellSize,
+      height: cellSize,
+    };
+  });
+  return { cells, cellSize, maxBand, maxColumns, width, height };
+}
+
+export function highlandUnitAtMapPoint(layout, x, y) {
+  return layout?.cells?.find((cell) =>
+    x >= cell.x && x < cell.x + cell.width && y >= cell.y && y < cell.y + cell.height
+  )?.unit || null;
+}
+
+/**
+ * Townscaper 单元编辑的唯一交互规则，供 2D 地图、3D 拾取和自动化测试共用。
+ * 左键（place/raise/paint）负责生长；右键（erase）一次删除整个 WFC 单元，
+ * 原坐标继续保留为空槽，因此之后可以在同一位置重新搭建。
+ */
+export function highlandTownscaperPatch(unit, action = "place", activeColor = "0") {
+  if (!unit?.id) return null;
+  const occupied = unit.occupied !== false;
+  const storeys = Math.max(1, Number(unit.storeys) || 1);
+  const maxStoreys = Math.max(1, Number(unit.maxStoreys) || 4);
+  const colorChar = String(activeColor || unit.colorChar || "0");
+
+  if (action === "erase") {
+    return occupied
+      ? { id: unit.id, occupied: false, hidden: false, storeys: 1 }
+      : null;
+  }
+  if (!occupied) {
+    return {
+      id: unit.id,
+      occupied: true,
+      hidden: false,
+      storeys: 1,
+      colorChar,
+    };
+  }
+  if (action === "raise") {
+    return storeys < maxStoreys
+      ? { id: unit.id, storeys: storeys + 1, colorChar, hidden: false }
+      : null;
+  }
+  if (action === "paint") {
+    return unit.colorChar === colorChar && unit.hidden !== true
+      ? null
+      : { id: unit.id, colorChar, hidden: false };
+  }
+  if (unit.hidden === true) {
+    return { id: unit.id, hidden: false, colorChar };
+  }
+  if (unit.colorChar === colorChar) {
+    return storeys < maxStoreys
+      ? { id: unit.id, storeys: storeys + 1 }
+      : null;
+  }
+  return { id: unit.id, colorChar, hidden: false };
+}
+
 /** Human-readable name for a terrain-object type. */
 export function objectTypeName(type) {
   return type === "watchtower" ? "瞭望塔"
@@ -112,6 +208,9 @@ export function removeCitadelTerrainObjectPlacement(objects, id) {
  * @param {(msg: string, dur?: number) => void} [opts.toast]
  * @param {() => void} [opts.onOpen] 打开搭建面板（可收起鸟群等）
  * @param {() => void} [opts.onClose] 关闭搭建面板
+ * @param {() => boolean} [opts.getLatestDesign] 当前目标是否为连续山谷最新版（无台地）
+ * @param {() => object[]} [opts.getLatestUnits] 当前高山城堡的 Townscaper/WFC 单元
+ * @param {(patch: object) => object} [opts.onHighlandUnitEdit] 应用高山城堡单元编辑
  * @returns {{
  *   open(): void, close(): void, toggle(): void, isOpen(): boolean, element: HTMLElement,
  *   getState(): { activeChar: string, activeTerrace: number, activeLayer: number, hideAbove: boolean, dropToGround: boolean },
@@ -137,6 +236,9 @@ export function createCitadelEditorPanel({
   getInstanceId = () => null,
   getTargets = () => [], // [{ id, name }]，id=null 为高山圣城默认实例
   onTargetChange = () => {},
+  getLatestDesign = () => false,
+  getLatestUnits = () => [],
+  onHighlandUnitEdit = () => ({ ok: false, error: "latest-unit-editor-unavailable" }),
 }) {
   /** 当前目标城堡层数上限（高山 5 层 / 运河交汇古堡 12 层）。 */
   function currentMaxLevel() {
@@ -174,6 +276,15 @@ export function createCitadelEditorPanel({
   let redoStack = [];
   let open = false;
   let dirty = false; // 有未保存改动（编辑实时进 3D，保存才落盘）
+  let latestDirty = false;
+  let latestActiveColor = "0";
+  let latestActiveBand = 0;
+  let latestSelectedUnitId = null;
+  let latestMapLayout = null;
+  let latestUndoStack = [];
+  let latestRedoStack = [];
+  const latestBaselines = new Map();
+  const latestLoadedTargets = new Set();
   let terrainObjects = loadTerrainObjects();
   let terrainObjectTool = null;
   let terrainObjectSequence = terrainObjects.length;
@@ -186,6 +297,25 @@ export function createCitadelEditorPanel({
     return getInstanceId() === "canal-junction";
   }
 
+  /** 最新高山圣城只有连续山谷地形，不显示旧五台地编辑器。 */
+  function isLatestValley() {
+    try {
+      return !isCanalFlat() && getLatestDesign() === true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** 旧 85 栋整栋参数地图仅作存档兼容；新高山圣城使用逐格 Townscaper。 */
+  function usesHighlandUnitMap() {
+    return isLatestValley() && latestUnits().length > 0;
+  }
+
+  /** 运河古堡与高山圣城共用的单格生长/挖洞编辑模式。 */
+  function usesTownscaperGrid() {
+    return isCanalFlat() || (isLatestValley() && !usesHighlandUnitMap());
+  }
+
   /** 当前实例的色板/色名（运河交汇 = Townscaper 高饱和 15 色）。 */
   function panelChars() {
     return isCanalFlat() ? PANEL_CHARS_CANAL : PANEL_CHARS;
@@ -196,40 +326,58 @@ export function createCitadelEditorPanel({
 
   /** 无存档时：高山圣城用内置 SPEC；运河交汇是空地基，由玩家自建。 */
   function defaultGridSpec() {
-    return isCanalFlat() ? CANAL_JUNCTION_TOWN_SPEC : CITADEL_TOWN_SPEC;
+    if (isCanalFlat()) return CANAL_JUNCTION_TOWN_SPEC;
+    if (isLatestValley()) return HIGHLAND_TOWNSCAPER_TOWN_SPEC;
+    return CITADEL_TOWN_SPEC;
   }
 
   function applyInstanceMode() {
     const canal = isCanalFlat();
+    const latestValley = isLatestValley();
+    const latestUnitMap = usesHighlandUnitMap();
+    const townscaperGrid = usesTownscaperGrid();
     const terrainSection = panel.querySelector("#ce-terrain-section");
-    if (terrainSection) terrainSection.style.display = canal ? "none" : "";
+    if (terrainSection) terrainSection.style.display = canal || latestValley ? "none" : "";
+    const latestUnitSection = panel.querySelector("#ce-latest-unit-section");
+    const legacyCastleControls = panel.querySelector("#ce-legacy-castle-controls");
+    if (latestUnitSection) latestUnitSection.style.display = latestUnitMap ? "block" : "none";
+    if (legacyCastleControls) legacyCastleControls.style.display = latestUnitMap ? "none" : "block";
     const heading = panel.querySelector("#ce-castle-heading");
-    if (heading) heading.textContent = canal ? "水上城堡" : "2）城堡层";
+    if (heading) heading.textContent = canal
+      ? "水上城堡"
+      : latestValley
+        ? "高山圣城 · Townscaper 网格"
+        : "2）城堡层";
     const clearBtn = panel.querySelector("#ce-clear");
     if (clearBtn) {
-      clearBtn.textContent = canal ? "清空" : "清空当前台地";
-      clearBtn.title = canal ? "清空全部建筑" : "清空当前台地的五层城堡";
+      clearBtn.textContent = townscaperGrid ? "清空" : "清空当前台地";
+      clearBtn.title = townscaperGrid ? "清空全部可编辑建筑单元" : "清空当前台地的五层城堡";
     }
     const resetBtn = panel.querySelector("#ce-reset");
     if (resetBtn) {
-      resetBtn.textContent = canal ? "恢复岛城" : "重置为 SPEC";
-      resetBtn.title = canal ? "恢复 Townscaper 水面岛城种子" : "恢复内置布局";
+      resetBtn.textContent = canal ? "恢复岛城" : latestValley ? "恢复山城" : "重置为 SPEC";
+      resetBtn.title = townscaperGrid ? "恢复 Townscaper 网格种子" : "恢复内置布局";
     }
     const hint = panel.querySelector("#ce-hint");
     if (hint) {
       hint.innerHTML = canal
         ? "河水相交处 · 点水面盖楼，可叠 12 层。<br/>3D：点屋顶往上盖 · 侧面改色 · 右键删块 · Q/E 换层（共 12 层）· Ctrl+S 保存"
+        : latestValley
+          ? "与运河交汇古堡共用 Townscaper 网格：左键空格扩建/同色继续生长/异色改色；右键删除命中的单元并挖洞。<br/>邻接变化会自动重算屋顶、墙角、拱洞、阳台、支架与装饰；共 12 层，Ctrl+S 保存。"
         : "平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>台地/护城河/城堡改动都即时预览 3D · 必须点「保存台地配置」或「保存全部」（Ctrl+S）才写入存档";
     }
-    if (canal) {
+    if (townscaperGrid) {
       activeTerrace = 0;
       grid = terraceGrids[0] ?? grid;
     }
     refreshPaletteSwatches();
+    refreshLatestUnitEditor();
     const ctxEl = panel.querySelector("#ce-castle-context");
     if (ctxEl) {
       ctxEl.textContent = canal
         ? "· 点水面盖楼"
+        : latestValley
+          ? "— 与运河古堡共用逐格构建器"
         : `— 台地 ${activeTerrace + 1}${activeTerrace === 0 ? "（最高）" : ""}`;
     }
   }
@@ -238,12 +386,12 @@ export function createCitadelEditorPanel({
     try {
       const saved = JSON.parse(localStorage.getItem(instanceStorageKeys().levels) || "null");
       if (saved) {
-        return normalizeCitadelTerraceLayout(saved).terraces.map((entry) =>
+        return normalizeCitadelTerraceLayout(saved, currentMaxLevel() + 1).terraces.map((entry) =>
           levelsToGrid(entry.levels)
         );
       }
     } catch { /* 损坏存档回落默认布局 */ }
-    return normalizeCitadelTerraceLayout(defaultGridSpec()).terraces.map((entry) =>
+    return normalizeCitadelTerraceLayout(defaultGridSpec(), currentMaxLevel() + 1).terraces.map((entry) =>
       levelsToGrid(entry.levels)
     );
   }
@@ -276,7 +424,7 @@ export function createCitadelEditorPanel({
   }
 
   function gridToFixedLevels(sourceGrid) {
-    return Array.from({ length: CITADEL_CASTLE_FLOORS }, (_, floor) =>
+    return Array.from({ length: currentMaxLevel() + 1 }, (_, floor) =>
       Array.from({ length: CITADEL_GRID_SIZE }, (_, iz) => {
         let row = "";
         for (let ix = 0; ix < CITADEL_GRID_SIZE; ix++) {
@@ -365,6 +513,41 @@ export function createCitadelEditorPanel({
       <div style="border-top:1px solid #dbe2e8;padding-top:7px;font-weight:700;margin-bottom:5px;">
         <span id="ce-castle-heading">2）城堡层</span> <span id="ce-castle-context" style="font-weight:400;color:#687681;"></span>
       </div>
+      <div id="ce-latest-unit-section" style="display:none;border:1px solid #bfc9d3;border-radius:7px;padding:8px;margin-bottom:8px;background:#f4f7fa;">
+        <div style="font-weight:700;margin-bottom:4px;">彩色山谷古堡 · Townscaper WFC 地图</div>
+        <div style="font:10px/1.4 monospace;color:#657483;margin-bottom:6px;">Townscaper 点击搭建：左键空格扩建；同色建筑继续增层，换色建筑改色；右键删除命中的整个单元，在原位挖出空洞。水岸到山顶共 11 条建筑带，与 3D 城堡实时一致。</div>
+        <div id="ce-latest-palette" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-bottom:7px;"></div>
+        <div style="display:flex;gap:7px;align-items:center;margin-bottom:7px;">
+          <button type="button" id="ce-latest-band-prev" title="向水岸移动一条建筑带">◀</button>
+          <span>山谷建筑带 <b id="ce-latest-band">1</b> / <b id="ce-latest-band-total">11</b></span>
+          <button type="button" id="ce-latest-band-next" title="向山顶移动一条建筑带">▶</button>
+          <span style="flex:1"></span>
+          <button type="button" id="ce-latest-undo">撤销</button>
+          <button type="button" id="ce-latest-redo">重做</button>
+        </div>
+        <canvas id="ce-latest-map" width="312" height="286"
+          style="display:block;width:100%;height:auto;box-sizing:border-box;border:1px solid #cbd7df;border-radius:6px;cursor:crosshair;background:#e6f0f3;"></canvas>
+        <div style="display:flex;gap:5px;margin:7px 0;flex-wrap:wrap;">
+          <button type="button" id="ce-latest-save">保存全部</button>
+          <button type="button" id="ce-latest-reset">恢复设计</button>
+          <button type="button" id="ce-latest-hide-band">隐藏本带</button>
+          <button type="button" id="ce-latest-show-all">显示全部</button>
+          <button type="button" id="ce-latest-export">导出</button>
+          <button type="button" id="ce-latest-import">导入</button>
+        </div>
+        <div style="font-weight:700;margin:7px 0 4px;">选中建筑单元</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
+          <label>单元 <select id="ce-latest-unit-id" style="max-width:138px;"></select></label>
+          <label>族类 <select id="ce-latest-unit-family"><option value="foundation">foundation</option><option value="floor">floor</option><option value="tower">tower</option><option value="balcony">balcony</option><option value="support">support</option><option value="stair">stair</option><option value="roof">roof</option><option value="decor">decor</option></select></label>
+          <label>变体 <select id="ce-latest-unit-variant"><option value="gable">gable</option><option value="dome">dome</option><option value="flat">flat</option><option value="balcony">balcony</option><option value="lantern">lantern</option></select></label>
+          <label>旋转 <input id="ce-latest-unit-rotation" type="number" step="15" style="width:52px;"></label>
+          <label>比例 <input id="ce-latest-unit-scale" type="number" min="0.72" max="1.35" step="0.01" style="width:52px;"></label>
+          <button type="button" id="ce-latest-unit-apply">应用单元</button>
+          <button type="button" id="ce-latest-unit-refresh">刷新</button>
+        </div>
+        <div id="ce-latest-unit-status" style="margin-top:5px;color:#5d7569;font:10px monospace;"></div>
+      </div>
+      <div id="ce-legacy-castle-controls">
       <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-bottom:8px;" id="ce-palette"></div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
         <button type="button" id="ce-prev" title="上一层（Q）">◀</button>
@@ -402,6 +585,7 @@ export function createCitadelEditorPanel({
         台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>
         台地/护城河/城堡改动都即时预览 3D · 必须点「保存台地配置」或「保存全部」（Ctrl+S）才写入存档
       </div>
+      </div>
     </div>`;
   document.body.appendChild(panel);
 
@@ -415,6 +599,237 @@ export function createCitadelEditorPanel({
   const btnHide = panel.querySelector("#ce-hide");
   const btnSave = panel.querySelector("#ce-save");
   const btnTerrainSave = panel.querySelector("#ce-terrain-save");
+  const latestUnitIdEl = panel.querySelector("#ce-latest-unit-id");
+  const latestUnitFamilyEl = panel.querySelector("#ce-latest-unit-family");
+  const latestUnitVariantEl = panel.querySelector("#ce-latest-unit-variant");
+  const latestUnitRotationEl = panel.querySelector("#ce-latest-unit-rotation");
+  const latestUnitScaleEl = panel.querySelector("#ce-latest-unit-scale");
+  const latestUnitStatusEl = panel.querySelector("#ce-latest-unit-status");
+  const latestMapEl = panel.querySelector("#ce-latest-map");
+  const latestMapCtx = latestMapEl?.getContext("2d");
+  const latestBandEl = panel.querySelector("#ce-latest-band");
+  const latestBandTotalEl = panel.querySelector("#ce-latest-band-total");
+  const latestSaveBtn = panel.querySelector("#ce-latest-save");
+  const latestPaletteEl = panel.querySelector("#ce-latest-palette");
+  const latestPaletteButtons = [];
+
+  function latestUnits() {
+    try {
+      return Array.isArray(getLatestUnits()) ? getLatestUnits() : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function latestTargetKey() {
+    return String(getInstanceId() ?? "highland-citadel");
+  }
+
+  function latestStorageKey() {
+    return `tm.highlandCitadel.units.v2.${latestTargetKey()}`;
+  }
+
+  function latestUnitSnapshot() {
+    return latestUnits().map((unit) => ({
+      id: unit.id,
+      family: unit.family,
+      variant: unit.variant,
+      colorChar: unit.colorChar || "0",
+      hidden: unit.hidden === true,
+      occupied: unit.occupied !== false,
+      storeys: Math.max(1, Number(unit.storeys) || 1),
+      rotation: Number(unit.rotation) || 0,
+      scale: Number(unit.scale) || 1,
+    }));
+  }
+
+  function setLatestSaveState() {
+    if (!latestSaveBtn) return;
+    latestSaveBtn.textContent = latestDirty ? "保存全部 ●" : "保存全部";
+    latestSaveBtn.style.background = latestDirty ? "#2a2b2d" : "#fff";
+    latestSaveBtn.style.color = latestDirty ? "#fff" : "#2a2b2d";
+  }
+
+  function applyLatestSnapshot(snapshot, { mark = true } = {}) {
+    if (!Array.isArray(snapshot)) return false;
+    let ok = true;
+    for (const patch of snapshot) {
+      const result = onHighlandUnitEdit(patch);
+      if (!result?.ok) ok = false;
+    }
+    if (mark) {
+      latestDirty = true;
+      setLatestSaveState();
+    }
+    refreshLatestUnitEditor({ skipLoad: true });
+    return ok;
+  }
+
+  function ensureLatestTargetLoaded() {
+    const targetKey = latestTargetKey();
+    const units = latestUnits();
+    if (!units.length) return;
+    if (!latestBaselines.has(targetKey)) latestBaselines.set(targetKey, latestUnitSnapshot());
+    if (latestLoadedTargets.has(targetKey)) return;
+    latestLoadedTargets.add(targetKey);
+    try {
+      const saved = JSON.parse(localStorage.getItem(latestStorageKey()) || "null");
+      if (Array.isArray(saved?.units)) applyLatestSnapshot(saved.units, { mark: false });
+    } catch {
+      /* 损坏存档回落设计图默认值 */
+    }
+  }
+
+  function pushLatestUndo() {
+    latestUndoStack.push(JSON.stringify(latestUnitSnapshot()));
+    if (latestUndoStack.length > 100) latestUndoStack.shift();
+    latestRedoStack = [];
+  }
+
+  function setLatestActiveColor(char) {
+    if (!PANEL_CHARS[char] || char === "G") return;
+    latestActiveColor = char;
+    for (const button of latestPaletteButtons) {
+      const active = button.dataset.char === char;
+      button.style.background = active ? "#2a2b2d" : "#fff";
+      button.style.color = active ? "#fff" : "#2a2b2d";
+    }
+  }
+
+  function drawLatestUnitMap() {
+    if (!latestMapEl || !latestMapCtx) return;
+    const units = latestUnits();
+    latestMapLayout = layoutHighlandUnitMap(units, latestMapEl.width, latestMapEl.height, 16);
+    latestActiveBand = Math.min(latestMapLayout.maxBand, Math.max(0, latestActiveBand));
+    latestMapCtx.clearRect(0, 0, latestMapEl.width, latestMapEl.height);
+    latestMapCtx.fillStyle = "#e7f0f2";
+    latestMapCtx.fillRect(0, 0, latestMapEl.width, latestMapEl.height);
+
+    // 山谷轮廓：地图上方是山顶，下方是水岸，建筑带向山顶逐步收窄。
+    latestMapCtx.strokeStyle = "rgba(76,103,115,.22)";
+    latestMapCtx.lineWidth = 1;
+    for (let band = 0; band <= latestMapLayout.maxBand; band++) {
+      const bandCells = latestMapLayout.cells.filter((cell) => cell.band === band);
+      if (!bandCells.length) continue;
+      const left = Math.min(...bandCells.map((cell) => cell.x));
+      const right = Math.max(...bandCells.map((cell) => cell.x + cell.width));
+      const y = bandCells[0].y + bandCells[0].height * 0.5;
+      latestMapCtx.beginPath();
+      latestMapCtx.moveTo(left - 5, y);
+      latestMapCtx.lineTo(right + 5, y);
+      latestMapCtx.stroke();
+    }
+
+    for (const cell of latestMapLayout.cells) {
+      const unit = cell.unit;
+      const inset = 1.25;
+      latestMapCtx.globalAlpha = cell.band === latestActiveBand ? 1 : 0.48;
+      const occupied = unit.occupied !== false;
+      latestMapCtx.fillStyle = !occupied
+        ? "rgba(255,255,255,.36)"
+        : unit.hidden
+          ? "#d7dde0"
+          : (PANEL_CHARS[unit.colorChar] || PANEL_CHARS["0"]);
+      latestMapCtx.fillRect(cell.x + inset, cell.y + inset, cell.width - inset * 2, cell.height - inset * 2);
+      latestMapCtx.strokeStyle = unit.id === latestSelectedUnitId
+        ? "#172535"
+        : occupied ? "rgba(79,99,112,.52)" : "rgba(79,99,112,.28)";
+      latestMapCtx.lineWidth = unit.id === latestSelectedUnitId ? 2.4 : 0.8;
+      latestMapCtx.strokeRect(cell.x + inset, cell.y + inset, cell.width - inset * 2, cell.height - inset * 2);
+      if (!occupied) {
+        latestMapCtx.fillStyle = "rgba(66,102,112,.52)";
+        latestMapCtx.font = `${Math.max(8, cell.width * 0.48)}px sans-serif`;
+        latestMapCtx.textAlign = "center";
+        latestMapCtx.textBaseline = "middle";
+        latestMapCtx.fillText("+", cell.x + cell.width * 0.5, cell.y + cell.height * 0.52);
+      } else if (unit.hidden) {
+        latestMapCtx.beginPath();
+        latestMapCtx.moveTo(cell.x + 4, cell.y + 4);
+        latestMapCtx.lineTo(cell.x + cell.width - 4, cell.y + cell.height - 4);
+        latestMapCtx.moveTo(cell.x + cell.width - 4, cell.y + 4);
+        latestMapCtx.lineTo(cell.x + 4, cell.y + cell.height - 4);
+        latestMapCtx.stroke();
+      } else if ((Number(unit.storeys) || 1) > 1) {
+        latestMapCtx.fillStyle = "rgba(20,35,48,.82)";
+        latestMapCtx.font = `bold ${Math.max(7, cell.width * 0.34)}px monospace`;
+        latestMapCtx.textAlign = "right";
+        latestMapCtx.textBaseline = "top";
+        latestMapCtx.fillText(String(unit.storeys), cell.x + cell.width - 3, cell.y + 3);
+      }
+    }
+    latestMapCtx.globalAlpha = 1;
+    if (latestBandEl) latestBandEl.textContent = String(latestActiveBand + 1);
+    if (latestBandTotalEl) latestBandTotalEl.textContent = String(latestMapLayout.maxBand + 1);
+  }
+
+  function refreshLatestUnitEditor({ skipLoad = false } = {}) {
+    if (!latestUnitIdEl) return;
+    if (!skipLoad && isLatestValley()) ensureLatestTargetLoaded();
+    const units = latestUnits();
+    const previous = latestSelectedUnitId || latestUnitIdEl.value;
+    latestUnitIdEl.innerHTML = "";
+    for (const unit of units) {
+      const option = document.createElement("option");
+      option.value = unit.id;
+      option.textContent = `${unit.id} · ${unit.family}/${unit.variant}`;
+      latestUnitIdEl.appendChild(option);
+    }
+    if (!units.length) {
+      latestUnitStatusEl.textContent = "当前目标没有可编辑单元";
+      drawLatestUnitMap();
+      return;
+    }
+    latestUnitIdEl.value = units.some((unit) => unit.id === previous) ? previous : units[0].id;
+    const selected = units.find((unit) => unit.id === latestUnitIdEl.value) || units[0];
+    latestSelectedUnitId = selected.id;
+    latestActiveBand = Number(selected.grid?.[1]) || latestActiveBand;
+    latestUnitFamilyEl.value = selected.family || "floor";
+    latestUnitVariantEl.value = selected.variant || "gable";
+    latestUnitRotationEl.value = String(Math.round(((Number(selected.rotation) || 0) * 180) / Math.PI));
+    latestUnitScaleEl.value = String(Number(selected.scale || 1).toFixed(2));
+    setLatestActiveColor(selected.colorChar || latestActiveColor);
+    const occupied = units.filter((unit) => unit.occupied !== false).length;
+    latestUnitStatusEl.textContent = `${occupied} 栋 / ${units.length} 个可建槽 · townscaper-wfc-v1 · 左键扩建 / 右键挖洞`;
+    setLatestSaveState();
+    drawLatestUnitMap();
+  }
+
+  function selectLatestUnit({ preserveColor = false } = {}) {
+    const selected = latestUnits().find((unit) => unit.id === latestUnitIdEl.value);
+    if (!selected) return;
+    latestSelectedUnitId = selected.id;
+    latestActiveBand = Number(selected.grid?.[1]) || 0;
+    latestUnitFamilyEl.value = selected.family || "floor";
+    latestUnitVariantEl.value = selected.variant || "gable";
+    latestUnitRotationEl.value = String(Math.round(((Number(selected.rotation) || 0) * 180) / Math.PI));
+    latestUnitScaleEl.value = String(Number(selected.scale || 1).toFixed(2));
+    if (!preserveColor) setLatestActiveColor(selected.colorChar || latestActiveColor);
+    drawLatestUnitMap();
+  }
+
+  latestUnitIdEl?.addEventListener("change", () => selectLatestUnit());
+  panel.querySelector("#ce-latest-unit-refresh")?.addEventListener("click", refreshLatestUnitEditor);
+  panel.querySelector("#ce-latest-unit-apply")?.addEventListener("click", () => {
+    pushLatestUndo();
+    const patch = {
+      id: latestUnitIdEl?.value,
+      family: latestUnitFamilyEl?.value,
+      variant: latestUnitVariantEl?.value,
+      rotation: (Number(latestUnitRotationEl?.value) || 0) * Math.PI / 180,
+      scale: Number(latestUnitScaleEl?.value) || 1,
+      occupied: true,
+    };
+    const result = onHighlandUnitEdit(patch);
+    if (result?.ok) {
+      latestDirty = true;
+      setLatestSaveState();
+      latestUnitStatusEl.textContent = `已应用 ${patch.id} · ${result.algorithm || "townscaper-wfc-v1"}`;
+      toast("已应用高山城堡建筑单元", 1.4);
+      refreshLatestUnitEditor({ skipLoad: true });
+    } else {
+      latestUnitStatusEl.textContent = `应用失败：${result?.error || "unknown"}`;
+    }
+  });
 
   const btnCss =
     "border:1px solid #9aa4ad;background:#fff;border-radius:6px;padding:2px 9px;cursor:pointer;font:inherit;";
@@ -443,6 +858,115 @@ export function createCitadelEditorPanel({
     }
   }
   refreshPaletteSwatches();
+
+  for (const char of PALETTE_ORDER.filter((value) => value !== "G")) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.char = char;
+    button.title = `${CHAR_NAMES[char]} · 点击后在地图上刷色`;
+    button.style.cssText = btnCss;
+    button.innerHTML =
+      `<span style="display:inline-block;width:12px;height:12px;border-radius:3px;` +
+      `vertical-align:-1px;border:1px solid rgba(0,0,0,.3);background:${PANEL_CHARS[char]}"></span>` +
+      `<span style="font-size:11px;">${CHAR_NAMES[char]}</span>`;
+    button.onclick = () => setLatestActiveColor(char);
+    latestPaletteEl?.appendChild(button);
+    latestPaletteButtons.push(button);
+  }
+  setLatestActiveColor(latestActiveColor);
+
+  function selectLatestBand(nextBand) {
+    const maxBand = Math.max(0, ...(latestUnits().map((unit) => Number(unit.grid?.[1]) || 0)));
+    latestActiveBand = Math.min(maxBand, Math.max(0, nextBand));
+    const candidate = latestUnits().find((unit) => Number(unit.grid?.[1]) === latestActiveBand);
+    if (candidate) {
+      latestSelectedUnitId = candidate.id;
+      latestUnitIdEl.value = candidate.id;
+      selectLatestUnit();
+    } else {
+      drawLatestUnitMap();
+    }
+  }
+
+  panel.querySelector("#ce-latest-band-prev")?.addEventListener("click", () => selectLatestBand(latestActiveBand - 1));
+  panel.querySelector("#ce-latest-band-next")?.addEventListener("click", () => selectLatestBand(latestActiveBand + 1));
+
+  latestMapEl?.addEventListener("pointerdown", (event) => {
+    const rect = latestMapEl.getBoundingClientRect();
+    const x = (event.clientX - rect.left) * latestMapEl.width / Math.max(1, rect.width);
+    const y = (event.clientY - rect.top) * latestMapEl.height / Math.max(1, rect.height);
+    const unit = highlandUnitAtMapPoint(latestMapLayout, x, y);
+    if (!unit) return;
+    latestSelectedUnitId = unit.id;
+    latestActiveBand = Number(unit.grid?.[1]) || 0;
+    latestUnitIdEl.value = unit.id;
+    selectLatestUnit({ preserveColor: true });
+    const patch = event.button === 2
+      ? highlandTownscaperPatch(unit, "erase", latestActiveColor)
+      : event.button === 0
+        ? highlandTownscaperPatch(unit, "place", latestActiveColor)
+        : null;
+    if (!patch) return;
+    pushLatestUndo();
+    const result = onHighlandUnitEdit(patch);
+    if (!result?.ok) {
+      latestUndoStack.pop();
+      latestUnitStatusEl.textContent = `地图编辑失败：${result?.error || "unknown"}`;
+      return;
+    }
+    latestDirty = true;
+    setLatestSaveState();
+    refreshLatestUnitEditor({ skipLoad: true });
+  });
+  latestMapEl?.addEventListener("contextmenu", (event) => event.preventDefault());
+
+  panel.querySelector("#ce-latest-undo")?.addEventListener("click", () => {
+    if (!latestUndoStack.length) return;
+    latestRedoStack.push(JSON.stringify(latestUnitSnapshot()));
+    applyLatestSnapshot(JSON.parse(latestUndoStack.pop()));
+  });
+  panel.querySelector("#ce-latest-redo")?.addEventListener("click", () => {
+    if (!latestRedoStack.length) return;
+    latestUndoStack.push(JSON.stringify(latestUnitSnapshot()));
+    applyLatestSnapshot(JSON.parse(latestRedoStack.pop()));
+  });
+  function saveLatestUnits() {
+    try {
+      localStorage.setItem(latestStorageKey(), JSON.stringify({
+        version: 2,
+        algorithm: "townscaper-wfc-v1",
+        target: latestTargetKey(),
+        units: latestUnitSnapshot(),
+      }));
+      latestDirty = false;
+      setLatestSaveState();
+      toast("已保存高山圣城彩色地图", 1.6);
+    } catch {
+      toast("保存失败：浏览器存档不可用", 2.0);
+    }
+  }
+  latestSaveBtn?.addEventListener("click", saveLatestUnits);
+  panel.querySelector("#ce-latest-reset")?.addEventListener("click", () => {
+    const baseline = latestBaselines.get(latestTargetKey());
+    if (!baseline) return;
+    pushLatestUndo();
+    applyLatestSnapshot(baseline);
+    toast("已恢复高山圣城设计图配色与单元", 1.6);
+  });
+  panel.querySelector("#ce-latest-hide-band")?.addEventListener("click", () => {
+    const patches = latestUnits()
+      .filter((unit) => Number(unit.grid?.[1]) === latestActiveBand)
+      .map((unit) => ({ id: unit.id, hidden: true }));
+    if (!patches.length) return;
+    pushLatestUndo();
+    applyLatestSnapshot(patches);
+  });
+  panel.querySelector("#ce-latest-show-all")?.addEventListener("click", () => {
+    const patches = latestUnits().filter((unit) => unit.hidden).map((unit) => ({ id: unit.id, hidden: false }));
+    if (!patches.length) return;
+    pushLatestUndo();
+    applyLatestSnapshot(patches);
+  });
 
   // ---------- 导出 / 导入弹窗 ----------
   const io = document.createElement("div");
@@ -514,6 +1038,7 @@ export function createCitadelEditorPanel({
     ioText.readOnly = false;
     ioCopy.style.display = "none";
     ioApply.style.display = "";
+    ioApply.onclick = applyLegacyImport;
     io.style.display = "block";
   };
   ioCopy.onclick = async () => {
@@ -524,7 +1049,7 @@ export function createCitadelEditorPanel({
       document.execCommand("copy");
     }
   };
-  ioApply.onclick = () => {
+  function applyLegacyImport() {
     try {
       const levels = parseImport(ioText.value);
       pushUndo();
@@ -536,7 +1061,42 @@ export function createCitadelEditorPanel({
     } catch (err) {
       ioTitle.textContent = `导入失败：${err.message}`;
     }
-  };
+  }
+  ioApply.onclick = applyLegacyImport;
+
+  panel.querySelector("#ce-latest-export")?.addEventListener("click", () => {
+    ioTitle.textContent = "导出 —— 高山圣城 Townscaper WFC 彩色地图 JSON";
+    ioText.value = JSON.stringify({
+      version: 2,
+      algorithm: "townscaper-wfc-v1",
+      target: latestTargetKey(),
+      units: latestUnitSnapshot(),
+    }, null, 2);
+    ioText.readOnly = true;
+    ioCopy.style.display = "";
+    ioApply.style.display = "none";
+    io.style.display = "block";
+  });
+  panel.querySelector("#ce-latest-import")?.addEventListener("click", () => {
+    ioTitle.textContent = "导入 —— 高山圣城 Townscaper WFC 彩色地图 JSON";
+    ioText.value = "";
+    ioText.readOnly = false;
+    ioCopy.style.display = "none";
+    ioApply.style.display = "";
+    ioApply.onclick = () => {
+      try {
+        const data = JSON.parse(ioText.value);
+        if (!Array.isArray(data?.units)) throw new Error("缺少 units 数组");
+        pushLatestUndo();
+        if (!applyLatestSnapshot(data.units)) throw new Error("存在无法匹配的建筑单元");
+        io.style.display = "none";
+        toast("已导入高山圣城彩色地图", 1.6);
+      } catch (error) {
+        ioTitle.textContent = `导入失败：${error.message}`;
+      }
+    };
+    io.style.display = "block";
+  });
   io.querySelector("#ce-io-close").onclick = () => {
     io.style.display = "none";
   };
@@ -849,7 +1409,7 @@ export function createCitadelEditorPanel({
   applyAngleBtn.onclick = applySelectedYaw;
 
   function selectTerrace(index) {
-    if (isCanalFlat()) {
+    if (usesTownscaperGrid()) {
       activeTerrace = 0;
       grid = terraceGrids[0] ?? grid;
       applyInstanceMode();
@@ -867,6 +1427,12 @@ export function createCitadelEditorPanel({
   }
 
   function drawTerraceTabs() {
+    if (isLatestValley()) {
+      terraceTabsEl.innerHTML = "";
+      terraceTabsEl.style.display = "none";
+      return;
+    }
+    terraceTabsEl.style.display = "flex";
     terraceTabsEl.querySelectorAll("button").forEach((button) => {
       const selected = Number(button.dataset.terrace) === activeTerrace;
       button.style.background = selected ? "#2a2b2d" : "#fff";
@@ -874,6 +1440,8 @@ export function createCitadelEditorPanel({
     });
     castleContextEl.textContent = isCanalFlat()
       ? "· 点水面盖楼"
+      : isLatestValley()
+        ? "— 连续山谷"
       : `— 台地 ${activeTerrace + 1}${activeTerrace === 0 ? "（最高）" : ""}`;
   }
   for (let index = 0; index < CITADEL_TERRACE_COUNT; index++) {
@@ -890,6 +1458,10 @@ export function createCitadelEditorPanel({
    * 鸟瞰顺序严格等于菜单顺序：台地 1 是最高、最内层；台地 5 最低、最外层。
    */
   function drawTerrainMap() {
+    if (isLatestValley()) {
+      terrainMapCtx.clearRect(0, 0, terrainMapEl.width, terrainMapEl.height);
+      return;
+    }
     const ctx = terrainMapCtx;
     const W = terrainMapEl.width;
     const H = terrainMapEl.height;
@@ -1451,7 +2023,7 @@ export function createCitadelEditorPanel({
     ctx2d.fillStyle = "#f2f5f7";
     ctx2d.fillRect(0, 0, canvasEl.width, canvasEl.height);
     // 高山圣城：五层台地背景。运河交汇是平地，只铺一层浅水色，不画台地环。
-    if (!isCanalFlat()) {
+    if (!isCanalFlat() && !isLatestValley()) {
       // The terrain origin is the centre of grid cell (12, 12), not that
       // cell's top-left corner. The old MAX_COORD/2 formula shifted every
       // contour by half a cell and made map-edge cells disagree with 3D.
@@ -1547,7 +2119,7 @@ export function createCitadelEditorPanel({
       // whose centre lies on the selected terrace, and nowhere else.
       if (!existing && !supportsCell(ix, iz, activeTerrace)) {
         toast(
-          isCanalFlat() ? "此处不能放置" : "该格不在当前台地可建面（土坡环带或层叠梯湖）内",
+          usesTownscaperGrid() ? "此处是方尖碑保护核心，不能放置" : "该格不在当前台地可建面（土坡环带或层叠梯湖）内",
           1.6
         );
         return;
@@ -1615,11 +2187,13 @@ export function createCitadelEditorPanel({
     pushUndo();
     const isCanal = getInstanceId() === "canal-junction";
     terraceGrids = normalizeCitadelTerraceLayout(
-      isCanal ? CANAL_JUNCTION_TOWN_SPEC : CITADEL_TOWN_SPEC
+      defaultGridSpec(),
+      currentMaxLevel() + 1
     ).terraces.map((entry) => levelsToGrid(entry.levels));
+    activeTerrace = 0;
     grid = terraceGrids[activeTerrace];
     commit();
-    toast(isCanal ? "已恢复水面岛城种子" : "已恢复内置圣城布局", 1.6);
+    toast(isCanal ? "已恢复水面岛城种子" : isLatestValley() ? "已恢复高山 Townscaper 种子" : "已恢复内置圣城布局", 1.6);
   };
   panel.querySelector("#ce-clear").onclick = () => {
     pushUndo();
@@ -1634,18 +2208,22 @@ export function createCitadelEditorPanel({
     if (!open || e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
       e.preventDefault();
-      save();
+      if (isLatestValley()) saveLatestUnits();
+      else save();
       return;
     }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
       e.preventDefault();
-      if (e.shiftKey) redo();
+      if (isLatestValley()) {
+        panel.querySelector(e.shiftKey ? "#ce-latest-redo" : "#ce-latest-undo")?.click();
+      } else if (e.shiftKey) redo();
       else undo();
       return;
     }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
       e.preventDefault();
-      redo();
+      if (isLatestValley()) panel.querySelector("#ce-latest-redo")?.click();
+      else redo();
       return;
     }
     // Townscaper 15 色 + 正门：数字键 1-9 → 色 0-8，0 → 色 9；
@@ -1655,12 +2233,15 @@ export function createCitadelEditorPanel({
       Digit6: "5", Digit7: "6", Digit8: "7", Digit9: "8", Digit0: "9",
     };
     const shiftPalette = { Digit1: "A", Digit2: "B", Digit3: "C", Digit4: "D", Digit5: "E", Digit6: "G" };
-    if (e.shiftKey && shiftPalette[e.code]) selectChar(shiftPalette[e.code]);
-    else if (palette[e.code]) selectChar(palette[e.code]);
-    else if (e.code === "KeyG") selectChar("G");
-    else if (e.code === "KeyQ") stepLayer(-1);
-    else if (e.code === "KeyE") stepLayer(1);
-    else if (e.code === "KeyH") btnHide.click();
+    const chooseColor = (char) => isLatestValley() ? setLatestActiveColor(char) : selectChar(char);
+    if (e.shiftKey && shiftPalette[e.code]) chooseColor(shiftPalette[e.code]);
+    else if (palette[e.code]) chooseColor(palette[e.code]);
+    else if (e.code === "KeyG" && !isLatestValley()) selectChar("G");
+    else if (e.code === "KeyQ") isLatestValley() ? selectLatestBand(latestActiveBand - 1) : stepLayer(-1);
+    else if (e.code === "KeyE") isLatestValley() ? selectLatestBand(latestActiveBand + 1) : stepLayer(1);
+    else if (e.code === "KeyH") isLatestValley()
+      ? panel.querySelector("#ce-latest-hide-band")?.click()
+      : btnHide.click();
   });
 
   // ---------- 场景 3D 直编辑 API（citadelSceneEdit.js 使用） ----------
@@ -1703,7 +2284,7 @@ export function createCitadelEditorPanel({
    * 无变化返回 false（不进撤销栈）；有变化走 commit 即时重建。
    */
   function applySceneEdit({ ix, iy, iz, terraceIndex = activeTerrace }, mode) {
-    if (isCanalFlat()) terraceIndex = 0;
+    if (usesTownscaperGrid()) terraceIndex = 0;
     if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return false;
     if (iy < 0 || iy > currentMaxLevel()) return false;
     if (mode === "erase") {
@@ -1725,6 +2306,28 @@ export function createCitadelEditorPanel({
     return true;
   }
 
+  /** 高山山谷的 3D Townscaper 点击入口：左键扩建/增层/改色，右键删除整个单元并挖洞。 */
+  function applyHighlandAction(unitId, action = "place") {
+    if (!isLatestValley()) return false;
+    const unit = latestUnits().find((candidate) => candidate.id === unitId);
+    if (!unit) return false;
+    const patch = highlandTownscaperPatch(unit, action, latestActiveColor);
+    if (!patch) return false;
+    pushLatestUndo();
+    const result = onHighlandUnitEdit(patch);
+    if (!result?.ok) {
+      latestUndoStack.pop();
+      latestUnitStatusEl.textContent = `3D 搭建失败：${result?.error || "unknown"}`;
+      return false;
+    }
+    latestSelectedUnitId = unit.id;
+    latestActiveBand = Number(unit.grid?.[1]) || 0;
+    latestDirty = true;
+    setLatestSaveState();
+    refreshLatestUnitEditor({ skipLoad: true });
+    return true;
+  }
+
   // ---------- 开关 ----------
   const api = {
     element: panel,
@@ -1737,7 +2340,7 @@ export function createCitadelEditorPanel({
       applyInstanceMode();
       hideAbove = false;
       applyHideAbove(); // 每次打开先完整显示五座台地上的全部城堡层
-      if (!isCanalFlat()) drawTerrainMap(); // 等高线高亮与当前层同步
+      if (!isCanalFlat() && !isLatestValley()) drawTerrainMap(); // 等高线高亮与当前层同步
       try {
         onOpen();
       } catch {
@@ -1760,6 +2363,10 @@ export function createCitadelEditorPanel({
       else api.open();
     },
     isOpen: () => open,
+    isLatestValley,
+    usesHighlandUnitMap,
+    usesTownscaperGrid,
+    getLatestUnits: latestUnits,
     getState: () => ({
       activeChar,
       activeTerrace,
@@ -1769,6 +2376,7 @@ export function createCitadelEditorPanel({
       terrainObjectTool,
     }),
     applySceneEdit,
+    applyHighlandAction,
     cellCenter,
     cellAtLocal,
     dropTarget,
@@ -1781,7 +2389,7 @@ export function createCitadelEditorPanel({
      * 由用户显式触发，裁剪结果随「保存台地配置/保存全部」一并写入）。
      */
     syncTrimmedLayout(spec) {
-      const next = normalizeCitadelTerraceLayout(spec ?? CITADEL_TOWN_SPEC);
+      const next = normalizeCitadelTerraceLayout(spec ?? defaultGridSpec(), currentMaxLevel() + 1);
       terraceGrids = next.terraces.map((entry) => levelsToGrid(entry.levels));
       grid = terraceGrids[activeTerrace];
       markDirty();
@@ -1804,7 +2412,7 @@ export function createCitadelEditorPanel({
       hideAbove = false;
       applyInstanceMode();
       refreshTargetSelect(); // 点选命中切换后，下拉选中态同步
-      if (!isCanalFlat()) {
+      if (!isCanalFlat() && !isLatestValley()) {
         refreshTerrainInputs();
         refreshMoatInputs();
         refreshCascadeButton();

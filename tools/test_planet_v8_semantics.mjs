@@ -1,0 +1,18 @@
+import assert from "node:assert/strict";
+import { bakeTerrainSemantic, forestDensityAt, sampleForestInstances } from "../TigerMessenger/src/procgen/planet/terrainSemanticBake.js";
+import { compileVegetationV8, validateVegetationKeepouts, vegetationScaleMultiplier } from "../TigerMessenger/src/procgen/planet/vegetationCompilerV8.js";
+const recipe = { semanticAt: () => ({ height: 1, wetness: 0.6, land: 1, forestness: 0.8, rockness: 0.2, tileId: "hill" }) };
+const baked = bakeTerrainSemantic({ positions: new Float32Array([0, 1, 0, 1, 1, 0, 0, 1, 1]), normals: new Float32Array([0, 1, 0, 0, 1, 0, 0, 1, 0]), recipe });
+for (let i = 0; i < baked.count; i++) assert.ok(Math.abs(baked.weights[i * 4] + baked.weights[i * 4 + 1] + baked.weights[i * 4 + 2] + baked.weights[i * 4 + 3] - 1) < 1e-6);
+assert.ok(forestDensityAt({ forestness: 1, wetness: 1, slope: 0 }) > forestDensityAt({ forestness: 1, wetness: 0, slope: 1 }));
+const triangles = [{ a: [0, 0, 0], b: [1, 0, 0], c: [0, 0, 1], semantic: { forestness: 1, wetness: 0.2, slope: 0 } }];
+const a = sampleForestInstances({ triangles, seed: 42, maxInstances: 100 });
+const b = sampleForestInstances({ triangles, seed: 42, maxInstances: 100 });
+assert.deepEqual(a, b);
+assert.equal(sampleForestInstances({ triangles, seed: 42, keepouts: [{ position: [0, 0, 0], radius: 10 }], maxInstances: 100 }).length, 0);
+const vegetation = compileVegetationV8({ triangles, profile: "saihoji-hills", seed: 42, keepouts: [{ position: [0, 0, 0], radius: 10 }], maxInstances: 100 });
+assert.equal(validateVegetationKeepouts(vegetation, [{ position: [0, 0, 0], radius: 10 }]).ok, true);
+assert.equal(vegetation.instanceCount, Object.values(vegetation.buckets).flat().length);
+assert.equal(vegetationScaleMultiplier("saihoji-hills", "pine"), 3);
+assert.equal(vegetationScaleMultiplier("saihoji-hills", "broadleaf"), 1);
+console.log(`✅ Planet V8 semantics: weights, density, barycentric instances and keepout passed (${a.length} instances)`);

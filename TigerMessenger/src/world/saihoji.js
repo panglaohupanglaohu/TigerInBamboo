@@ -17,7 +17,7 @@ const SAND_COLOR = 0xc8bea8;
 const PATH_COLOR = 0x8e887d;
 const HEAVY_INK = 0.022;
 /** 苔庭古松整体体积倍率（相对 createAncientPineTree 原尺寸） */
-export const SAIHOJI_PINE_SIZE = 2;
+export const SAIHOJI_PINE_SIZE = 3;
 const _yUp = new THREE.Vector3(0, 1, 0);
 const _base = new THREE.Vector3();
 const _east = new THREE.Vector3();
@@ -594,7 +594,7 @@ export function buildSaihojiPlanet(scene, opts = {}) {
       const visual = sc * SAIHOJI_PINE_SIZE;
       pine.scale.multiplyScalar(visual);
       // lift：根盘明显坐于苔面之上——苔庭（苔斑 + 苔丘地形）略高于球面，
-      // 松树抬根不足会被埋（用户反馈），默认抬根 0.22；体积×2 后再略抬，
+      // 松树抬根不足会被埋（用户反馈），默认抬根 0.22；体积×3 后再略抬，
       // 免得放大后的根盘重新埋进苔裙。
       const lift =
         (Number.isFinite(spec.lift) ? spec.lift : 0.08) +

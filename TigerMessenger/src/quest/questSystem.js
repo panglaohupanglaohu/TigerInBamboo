@@ -31,6 +31,7 @@ import {
   clearJournal,
   warmMemoryBridge,
 } from "./letterJournal.js";
+import { withQuestWorldIds } from "../world/citadel/questAdapter.js";
 
 /**
  * 信件任务：寄件人 → 收件人
@@ -64,17 +65,19 @@ const QUEST_DEFS_BASE = [
 ];
 
 /** 任务 NPC 是主岛布局锚点：缩放 x/z，保留 y 高度与交互半径。 */
-export const QUEST_DEFS = QUEST_DEFS_BASE.map((q) => ({
-  ...q,
-  sender: {
-    ...q.sender,
-    pos: [q.sender.pos[0] * WORLD_SCALE, q.sender.pos[1], q.sender.pos[2] * WORLD_SCALE],
-  },
-  receiver: {
-    ...q.receiver,
-    pos: [q.receiver.pos[0] * WORLD_SCALE, q.receiver.pos[1], q.receiver.pos[2] * WORLD_SCALE],
-  },
-}));
+export const QUEST_DEFS = QUEST_DEFS_BASE.map((q) =>
+  withQuestWorldIds({
+    ...q,
+    sender: {
+      ...q.sender,
+      pos: [q.sender.pos[0] * WORLD_SCALE, q.sender.pos[1], q.sender.pos[2] * WORLD_SCALE],
+    },
+    receiver: {
+      ...q.receiver,
+      pos: [q.receiver.pos[0] * WORLD_SCALE, q.receiver.pos[1], q.receiver.pos[2] * WORLD_SCALE],
+    },
+  })
+);
 
 /**
  * @param {object} deps

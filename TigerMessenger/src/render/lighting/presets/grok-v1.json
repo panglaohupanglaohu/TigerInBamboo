@@ -1,0 +1,118 @@
+{
+  "version": "grok-v1",
+  "baseOn": "legacy-incode",
+  "_note": "V6-G11 光照参数包第一版：对 lightingTheme.js LIGHTING_V5_KEYFRAMES 与 lightingState.js WEATHER_OVERLAYS 的忠实抽取（零视觉差），不含任何调色创作。字段与代码常量逐项相等，由 tools/test_lighting_presets.mjs ① 强制保证。",
+  "rollback": {
+    "version": "legacy-incode",
+    "_note": "上一版即代码内置常量：注入 null（setLightingPresetOverrides(null)）即完整回滚，行为与本包注入前逐位一致。"
+  },
+  "keyframes": [
+    {
+      "t": 0.0,
+      "name": "night",
+      "sunColor": "#8AA8E6",
+      "sunIntensity": 0.24,
+      "sunDir": [-0.25, 0.65, 0.7],
+      "skyColor": "#263A5A",
+      "groundColor": "#090C14",
+      "hemiIntensity": 0.2,
+      "ambientFloor": 0.03,
+      "background": "#070A12",
+      "_note": "深夜（跨午夜连续）；忠实抽取 LIGHTING_V5_KEYFRAMES[0]"
+    },
+    {
+      "t": 0.2,
+      "name": "predawn",
+      "sunColor": "#A8B8E0",
+      "sunIntensity": 0.55,
+      "sunDir": [-0.05, 0.55, 0.83],
+      "skyColor": "#5A6E91",
+      "groundColor": "#1B2230",
+      "hemiIntensity": 0.38,
+      "ambientFloor": 0.07,
+      "background": "#1A2438",
+      "_note": "黎明前：比深夜略回暖；忠实抽取 LIGHTING_V5_KEYFRAMES[1]"
+    },
+    {
+      "t": 0.28,
+      "name": "dawn",
+      "sunColor": "#FFB27A",
+      "sunIntensity": 1.35,
+      "sunDir": [0.7, 0.3, -0.64],
+      "skyColor": "#F0C8A8",
+      "groundColor": "#8A705C",
+      "hemiIntensity": 0.72,
+      "ambientFloor": 0.16,
+      "background": "#F2B57E",
+      "_note": "日出（朝霞，对接 dayNight 既有 0xF0A878 系）；忠实抽取 LIGHTING_V5_KEYFRAMES[2]"
+    },
+    {
+      "t": 0.5,
+      "name": "noon",
+      "sunColor": "#FFE2B9",
+      "sunIntensity": 1.35,
+      "sunDir": [0.6, 0.72, 0.35],
+      "skyColor": "#D8F2EF",
+      "groundColor": "#B6A790",
+      "hemiIntensity": 0.82,
+      "ambientFloor": 0.2,
+      "background": "#79C8C1",
+      "_note": "正午（样片 noon 初值，按 A/B 截断率校准）；忠实抽取 LIGHTING_V5_KEYFRAMES[3]"
+    },
+    {
+      "t": 0.75,
+      "name": "sunset",
+      "sunColor": "#FF9B62",
+      "sunIntensity": 1.5,
+      "sunDir": [-0.2, 0.38, 0.9],
+      "skyColor": "#AAB5CA",
+      "groundColor": "#8C7164",
+      "hemiIntensity": 0.76,
+      "ambientFloor": 0.18,
+      "background": "#B87982",
+      "_note": "日落（样片 sunset 初值）；忠实抽取 LIGHTING_V5_KEYFRAMES[4]"
+    },
+    {
+      "t": 0.9,
+      "name": "night",
+      "sunColor": "#8AA8E6",
+      "sunIntensity": 0.24,
+      "sunDir": [-0.25, 0.65, 0.7],
+      "skyColor": "#263A5A",
+      "groundColor": "#090C14",
+      "hemiIntensity": 0.2,
+      "ambientFloor": 0.03,
+      "background": "#070A12",
+      "_note": "入夜→深夜过渡末端，与 t:0 深夜同值闭环；忠实抽取 LIGHTING_V5_KEYFRAMES[5]"
+    }
+  ],
+  "weathers": {
+    "clear": {
+      "sunMul": 1,
+      "hemiMul": 1,
+      "ambientAdd": 0,
+      "fogMul": 1,
+      "tint": null,
+      "tintMix": 0,
+      "_note": "晴；忠实抽取 WEATHER_OVERLAYS.clear"
+    },
+    "rain": {
+      "sunMul": 0.55,
+      "hemiMul": 0.85,
+      "ambientAdd": 0.02,
+      "fogMul": 1.8,
+      "tint": "#8FA5AD",
+      "tintMix": 0.35,
+      "_note": "雨（雾效并入 fogMul 1.8 与蓝灰 tint，当前代码无独立雾天气）；忠实抽取 WEATHER_OVERLAYS.rain"
+    },
+    "snow": {
+      "sunMul": 0.8,
+      "hemiMul": 0.95,
+      "ambientAdd": 0.06,
+      "fogMul": 1.4,
+      "tint": "#EEF3F2",
+      "tintMix": 0.25,
+      "_note": "雪；忠实抽取 WEATHER_OVERLAYS.snow"
+    }
+  }
+}

@@ -46,6 +46,11 @@ export function mergeStaticGroup(root, options = {}) {
     skip = () => false,
     onSurface = null,
     onOutline = null,
+    // Namespaced merged marker: callers that merge multiple independent
+    // static groups into the same root (e.g. town layers vs highland
+    // decoration) must use distinct tags so idempotent cleanup of one
+    // group never removes another group's merged meshes.
+    mergedTag = true,
   } = options;
 
   root.updateWorldMatrix(true, true);
@@ -153,7 +158,7 @@ export function mergeStaticGroup(root, options = {}) {
     const mergedMesh = new THREE.Mesh(merged, material);
     mergedMesh.castShadow = meshes.some((m) => m.castShadow);
     mergedMesh.receiveShadow = meshes.some((m) => m.receiveShadow);
-    mergedMesh.userData.mergedGeometry = true;
+    mergedMesh.userData.mergedGeometry = mergedTag;
     mergedMesh.userData.mergedSourceCount = meshes.length;
     root.add(mergedMesh);
     madeSurfaces.push(mergedMesh);
@@ -172,7 +177,7 @@ export function mergeStaticGroup(root, options = {}) {
     const mergedMesh = new THREE.Mesh(merged, material);
     mergedMesh.raycast = () => {};
     mergedMesh.userData.isOutline = true;
-    mergedMesh.userData.mergedGeometry = true;
+    mergedMesh.userData.mergedGeometry = mergedTag;
     root.add(mergedMesh);
     madeOutlines.push(mergedMesh);
     if (onOutline) onOutline(mergedMesh, material, entries.map((e) => e.outline), triCursor);

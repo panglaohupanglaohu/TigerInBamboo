@@ -32,7 +32,7 @@ export function createRng(seed = 1) {
         typeof label === "number" && Number.isFinite(label)
           ? label >>> 0
           : seedFromString(String(label));
-      return createRng(((a ^ extra ^ 0x9e3779b9) >>> 0) || 1);
+      return createRng((((seed >>> 0) ^ extra ^ 0x9e3779b9) >>> 0) || 1);
     },
     /** 稳定洗牌（Fisher–Yates，同序列同排列） */
     shuffle: (arr) => stableShuffle(arr, { next }),

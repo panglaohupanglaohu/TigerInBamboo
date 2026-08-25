@@ -1,6 +1,32 @@
 import { createRequire } from "module";
 import * as THREE from "../TigerMessenger/vendor/three.module.js";
 import { latLonToDir } from "../TigerMessenger/src/world/sphereMath.js";
+
+// node 直跑需要 DOM 桩：运河水面 bump 贴图（getWaterBumpTexture）用 canvas 2D 生成，
+// 与 test_citadel_range.mjs / test_townscaper_support.mjs 同一套空桩。
+if (!globalThis.document) {
+  const el = () => ({ classList: { toggle() {} }, setAttribute() {}, addEventListener() {} });
+  globalThis.document = { getElementById: el, querySelector: el, createElement: el };
+  globalThis.document.createElement = (tag) => {
+    if (tag === "canvas") {
+      const ctx2d = new Proxy({}, {
+        get(t, k) {
+          if (k === "canvas") return { width: 256, height: 256 };
+          if (k === "createLinearGradient" || k === "createRadialGradient") {
+            return () => ({ addColorStop() {} });
+          }
+          if (k === "measureText") return () => ({ width: 0 });
+          if (k === "getImageData") return () => ({ data: new Uint8ClampedArray(4) });
+          if (k === "createImageData") return () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 });
+          return typeof k === "string" ? () => {} : undefined;
+        },
+      });
+      return { width: 256, height: 256, getContext: () => ctx2d };
+    }
+    return el();
+  };
+}
+
 import { CANAL_DEPTH, buildWorldCanal } from "../TigerMessenger/src/world/canalSystem.js";
 import { PLANET_RADIUS } from "../TigerMessenger/src/world/planet.js";
 

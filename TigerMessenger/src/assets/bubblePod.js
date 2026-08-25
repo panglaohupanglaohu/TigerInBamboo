@@ -11,6 +11,7 @@
 import * as THREE from "three";
 import { addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 const _worldQuat = new THREE.Quaternion();
 const _up = new THREE.Vector3();
@@ -303,6 +304,15 @@ export function createBubblePod(opts = {}) {
   interiorLight.name = "bubble-interior-light";
   interiorLight.position.set(0, 0.4, 0.5);
   group.add(interiorLight);
+  // K4：舱内补光迁入 registry（owner 派生稳定 id：bubble-interior#N）
+  registerLocalLight(interiorLight, {
+    owner: "bubble-interior",
+    kind: "point",
+    color: accent,
+    intensity: 1.7,
+    radius: 5,
+    priority: 3,
+  });
 
   // 驾驶相机锚点：与抬高后的飞行员视线对齐，略靠前减少舱内遮挡
   const cockpitAnchor = new THREE.Object3D();

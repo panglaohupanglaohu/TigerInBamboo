@@ -2,7 +2,7 @@
 //  高山圣城 · 游戏内 3D 直编辑（townscaper.html 的场景编辑能力搬进主场景）
 //  - 搭建面板打开且满足 canEdit（已开局）时生效：
 //      左键点体块顶面 → 向上叠块 · 点侧面 → 改色 · 点当前层空地 → 加块
-//      右键点体块 → 删块 · 悬停显示幽灵块预览
+//      右键点体块 → 删除整个 WFC 单元并留下空槽 · 悬停显示幽灵块预览
 //  - 只负责射线拾取与坐标换算，布局读写全部走面板的 applySceneEdit，
 //    与 2D 平面图共用同一份撤销栈 / 存档 / 即时重建。
 // =====================================================================
@@ -14,7 +14,7 @@ import {
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
   citadelPaletteIndexOfChar,
-} from "../world/citadelTown.js";
+} from "../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 
 /** Resolve a ray hit on any nested mesh/outline back to its tower/tree root. */
 export function citadelTerrainObjectFromHits(hits = []) {
@@ -48,6 +48,44 @@ export function lookupMergedCell(hit) {
   for (const entry of map) {
     if (tri >= entry.triStart && tri < entry.triStart + entry.triCount) {
       return entry.cell;
+    }
+  }
+  return null;
+}
+
+/**
+ * 高山圣城 Townscaper 单元拾取。空槽由不可见 pick plane 提供稳定 ID；
+ * 已有建筑从任意子网格向上追溯 townscaperUnit。返回值与旧五台地格网
+ * 完全分离，避免最新山谷设计再次落回台地坐标系。
+ */
+export function highlandUnitFromHits(hits = []) {
+  for (const hit of hits) {
+    const slotId = hit?.object?.userData?.highlandSlotUnitId;
+    if (slotId) {
+      return { unitId: slotId, unit: null, empty: true, top: true, hit };
+    }
+    let object = hit?.object;
+    while (object) {
+      const unit = object.userData?.townscaperUnit;
+      if (unit?.id) {
+        let top = true;
+        if (hit.face && hit.object?.matrixWorld) {
+          const up = new THREE.Vector3(0, 1, 0).applyQuaternion(
+            object.getWorldQuaternion(new THREE.Quaternion())
+          );
+          const normal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
+          // 坡屋顶也属于“顶面”；侧墙法线与当地 up 几乎垂直。
+          top = normal.dot(up) > 0.42;
+        }
+        return {
+          unitId: unit.id,
+          unit,
+          empty: unit.occupied === false,
+          top,
+          hit,
+        };
+      }
+      object = object.parent;
     }
   }
   return null;
@@ -262,6 +300,18 @@ export function createCitadelSceneEdit({
     return raycaster;
   }
 
+  /** 最新山谷城专用拾取：不经过旧台地/体素坐标换算。 */
+  function castHighlandUnit(e) {
+    if (!panel.usesHighlandUnitMap?.()) return null;
+    const ray = castRay(e);
+    const citadel = getCitadel();
+    if (!ray || !citadel) return null;
+    const hit = highlandUnitFromHits(ray.intersectObject(citadel, true));
+    if (!hit) return null;
+    const liveUnit = panel.getLatestUnits?.().find((unit) => unit.id === hit.unitId);
+    return liveUnit ? { ...hit, unit: liveUnit, empty: liveUnit.occupied === false } : null;
+  }
+
   /** 拾取体块：跳过窗/垛/穹顶等装饰件，返回格坐标与是否顶面命中。
    *  兼容合并几何：town 体块按材质合并后，cell 通过 userData.faceToCell
    *  （面区间 → cell）按 hit.faceIndex 反查。
@@ -274,7 +324,8 @@ export function createCitadelSceneEdit({
     if (!frame) return null;
     const hits = ray.intersectObject(citadel, true);
     const activeTerrace = panel.getState().activeTerrace;
-    const canal = !!citadel.userData?.skipOuterTerrain;
+    const gridTownscaper = citadel.userData?.skipOuterTerrain === true
+      || citadel.userData?.highlandTownscaperGrid === true;
     // 选中台地归属梯湖的命中距离：水面在台壁之前时，台壁不得拦截拾取
     // （缺口内的梯湖本就压在邻层台壁后方，否则水面永远点不到）
     const poolSel = raycastCascadePoolTop(scene, ray, tmpV2, activeTerrace);
@@ -283,7 +334,7 @@ export function createCitadelSceneEdit({
       const cell = hit.object.userData?.cell ?? lookupMergedCell(hit);
       if (cell && hit.face) {
         // 点击其它台地已建体块：自动切换编辑台地（不弹回 castPlane）
-        if (cell.terraceIndex !== activeTerrace && !canal) {
+        if (cell.terraceIndex !== activeTerrace && !gridTownscaper) {
           panel.setActiveTerrace(cell.terraceIndex);
           toast(`已切换到台地 ${cell.terraceIndex + 1}`, 1.0);
         }
@@ -293,13 +344,13 @@ export function createCitadelSceneEdit({
       }
       // 高山台地顶面挡住后面的楼。水上城堡的拾取垫不能挡楼——
       // 斜视角会先打到垫子侧/面，点屋顶就叠不上去。
-      if (hit.object.userData.isCitadelTerrace && !canal) {
+      if (hit.object.userData.isCitadelTerrace && !gridTownscaper) {
         if (dPoolSel < hit.distance) break;
         return null;
       }
     }
     // 点到屋顶/窗/岸裙：按落点找柱，当作点在该柱最高块顶面 → 往上叠
-    if (canal) {
+    if (gridTownscaper) {
       for (const hit of hits) {
         if (hit.object.userData.isCitadelTerrace) continue;
         if (hit.object.userData.isOutline) continue;
@@ -443,6 +494,11 @@ export function createCitadelSceneEdit({
       if (!editing()) ghost.visible = false;
       return;
     }
+    if (panel.usesHighlandUnitMap?.()) {
+      // 山谷建筑不是正交体素，不显示会误导位置的旧格网幽灵块。
+      ghost.visible = false;
+      return;
+    }
     showGhost(pickTarget(e));
   });
 
@@ -452,6 +508,29 @@ export function createCitadelSceneEdit({
     downButton = -1;
     const moved = Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY);
     if (moved > CLICK_SLOP_PX || !editing()) return;
+
+    if (panel.usesHighlandUnitMap?.()) {
+      const highlandHit = castHighlandUnit(e);
+      if (!highlandHit) return;
+      const action = button === 2
+        ? "erase"
+        : highlandHit.empty
+          ? "place"
+          : highlandHit.top
+            ? "raise"
+            : "paint";
+      if (panel.applyHighlandAction?.(highlandHit.unitId, action)) {
+        const labels = {
+          place: "已扩建建筑单元",
+          raise: `已增至 ${Math.min((highlandHit.unit.storeys || 1) + 1, highlandHit.unit.maxStoreys || 4)} 层`,
+          paint: "已更新建筑颜色",
+          erase: "已删除建筑单元 · 原位保留空洞",
+        };
+        toast(labels[action], 1.25);
+      }
+      ghost.visible = false;
+      return;
+    }
 
     const hit = castCell(e);
     if (button === 2) {
@@ -477,18 +556,19 @@ export function createCitadelSceneEdit({
       }
     } else {
       const target = castPlane(e);
-      const canal = !!getCitadel()?.userData?.skipOuterTerrain;
+      const gridTownscaper = getCitadel()?.userData?.skipOuterTerrain === true
+        || getCitadel()?.userData?.highlandTownscaperGrid === true;
       if (target?.unsupported) {
-        toast(canal ? "此处不能放置" : "此处没有可承重的土坡，不可放置", 1.6);
+        toast(gridTownscaper ? "此处是方尖碑保护核心，不能放置" : "此处没有可承重的土坡，不可放置", 1.6);
       } else if (target) {
         const st = panel.getState();
-        if (!canal && Number.isFinite(target.terraceIndex) && target.terraceIndex !== st.activeTerrace) {
+        if (!gridTownscaper && Number.isFinite(target.terraceIndex) && target.terraceIndex !== st.activeTerrace) {
           // 点到其它台地台面/梯湖：自动切换编辑台地再落块
           panel.setActiveTerrace(target.terraceIndex);
           toast(`已切换到台地 ${target.terraceIndex + 1} · 放置体块`, 1.6);
         }
         // 运河交汇锁在台地 0；高山则对齐当前选中台地
-        const terraceIndex = canal ? 0 : panel.getState().activeTerrace;
+        const terraceIndex = gridTownscaper ? 0 : panel.getState().activeTerrace;
         panel.applySceneEdit({ ...target, terraceIndex }, "place");
       }
     }

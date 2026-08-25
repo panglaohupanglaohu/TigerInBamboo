@@ -1,5 +1,5 @@
 // 悬空支撑支架（Townscaper flying buildings）单元测试
-// 验证：删除中间层后上层悬浮，下方自动生成支撑柱 + 斜撑
+// 验证：删除中间层后上层悬浮，下方自动生成八面体式四支柱边框
 // 运行：node tools/test_townscaper_support.mjs
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
@@ -56,24 +56,17 @@ const FLOATING = {
   assert(stats.cellCount === 2, `2 格（y0+y2，中间层已删）——实际 ${stats.cellCount}`);
   assert((stats.supportCount ?? 0) >= 1, `悬空块长出支撑支架（实际 ${stats.supportCount ?? 0}）`);
   // 检查支撑柱存在于场景
-  let pillars = 0, struts = 0;
+  let pillars = 0, edges = 0, invalidShape = 0;
   assembly.group.traverse((o) => {
     if (o.name === "town-support-pillar") pillars++;
-    if (o.name === "town-support-strut") struts++;
+    if (o.name === "town-support-edge") edges++;
+    if (o.name === "town-support-pillar" && o.userData?.supportShape !== "octahedral-four-edge") {
+      invalidShape++;
+    }
   });
-  assert(pillars >= 1, `中央支撑柱 ≥1（实际 ${pillars}）`);
-  // 删 y1 后悬空仅 1 层（y0 仍在）→ 无斜撑（合理，细柱即可）
-  assert(struts === 0, `1 层悬空不出斜撑（实际 ${struts}）`);
-  // 支柱高度：从 y0 顶（1*ch=2）到 y2 底（2*ch=4），高 1 层
-  const pillar = (() => {
-    let p = null;
-    assembly.group.traverse((o) => { if (!p && o.name === "town-support-pillar") p = o; });
-    return p;
-  })();
-  if (pillar) {
-    const h = pillar.scale.y;
-    assert(Math.abs(h - 1) < 1e-6, `支柱高 = 悬空层数（1 层 → ${h}）`);
-  }
+  assert.equal(pillars, 4, `四个八面体环向支柱（实际 ${pillars}）`);
+  assert.equal(edges, 8, `四个支柱各含上下两条边（实际 ${edges}）`);
+  assert.equal(invalidShape, 0, "支架不退化为棱锥中央柱");
 }
 
 // 布局：完整 3 层柱（无悬空）→ 无支架
@@ -119,13 +112,13 @@ const FULL_FLOAT = {
 };
 {
   const assembly = buildCitadelTownAssembly(FULL_FLOAT, { baseY: 0 });
-  let pillars = 0, struts = 0;
+  let pillars = 0, edges = 0;
   assembly.group.traverse((o) => {
     if (o.name === "town-support-pillar") pillars++;
-    if (o.name === "town-support-strut") struts++;
+    if (o.name === "town-support-edge") edges++;
   });
-  t(pillars >= 1, `完全悬空 2 层出中央支柱（实际 ${pillars}）`);
-  t(struts >= 2, `完全悬空 2 层出斜撑 ≥2（实际 ${struts}）`);
+  t(pillars === 4, `完全悬空 2 层仍保持四个八面体支柱（实际 ${pillars}）`);
+  t(edges === 8, `完全悬空 2 层八面体边数为 8（实际 ${edges}）`);
 }
 
 console.log(`\n结果：${pass}/${pass + fail} 通过`);

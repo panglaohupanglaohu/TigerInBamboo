@@ -1,0 +1,46 @@
+{
+  "version": "kimi-v9-v1",
+  "baseOn": "terrain-palette-v8.json token 值 + lighting-v8.json + grok-v1 关键帧",
+  "_note": "V8-G13 新地貌 look-dev 参数包（Kimi，非阻塞，2026-08-23）。六大连續地貌链景区的色板引用与光照 trim 建议：只引用 terrain-palette-v8 的语义 token + 数值 trim，不创建灯光对象、不引用运行时对象名、不改 WFC/field/route 真源。灰度/CVD 数值门槛由 tools/test_planet_v9_visual_params.mjs 机器断言。",
+  "cameraPoseHash": "camc8520c18",
+  "cameraPoseHashNote": "cameras-v1.json 34 镜头经 resolveCameraV8 解析后的稳定 hash；测试每次重算比对，机位变动必须升版本",
+  "landforms": {
+    "highland-citadel": {
+      "tokens": { "primary": "rock", "secondary": "snow", "accent": "forest" },
+      "gradeTrim": { "exposureMul": 1.0, "saturationMul": 0.95, "ambientAdd": 0 },
+      "_note": "雪线岩峰：粉白崖壁+雪冠为主，山脚密林点缀；深夜靠冷蓝岩壁 L* 分层，不抬 ambient"
+    },
+    "triple-gate": {
+      "tokens": { "primary": "rock", "secondary": "hill", "accent": "grass" },
+      "gradeTrim": { "exposureMul": 1.0, "saturationMul": 0.97, "ambientAdd": 0 },
+      "_note": "三重门高地：岩壁+鞍部草甸，门槛剪影靠 rock/hill 灰度差"
+    },
+    "crystal-canyon": {
+      "tokens": { "primary": "rock", "secondary": "grass", "accent": "moss" },
+      "gradeTrim": { "exposureMul": 1.0, "saturationMul": 1.0, "ambientAdd": 0 },
+      "_note": "峡谷：岩壁+谷底草带，溪边苔 accent（rock/shore 正午 ΔL*=5.4 不达标，弃用砂色）"
+    },
+    "saihoji-moss-garden": {
+      "tokens": { "primary": "moss", "secondary": "grass", "accent": "forest" },
+      "gradeTrim": { "exposureMul": 1.0, "saturationMul": 1.02, "ambientAdd": 0 },
+      "_note": "苔庭：苔绿主调+开阔草战场明度差，林缘 accent（moss/grass CVD ΔE00=5.9 不足，故 accent 改森林）"
+    },
+    "swamp-lake": {
+      "tokens": { "primary": "shallowOcean", "secondary": "forest", "accent": "wetland" },
+      "gradeTrim": { "exposureMul": 1.0, "saturationMul": 0.98, "ambientAdd": 0 },
+      "_note": "湖沼：浅水青+岸林 dark 框架，湿地 accent（shallowOcean/wetland ΔL*=0.4 灰度不可分，湖岸层次改由森林带承担）"
+    },
+    "bookshop-town": {
+      "tokens": { "primary": "hill", "secondary": "forest", "accent": "grass" },
+      "gradeTrim": { "exposureMul": 1.0, "saturationMul": 1.0, "ambientAdd": 0 },
+      "_note": "书店丘陵：黄亮丘陵+林带，草谷 accent（hill/grass ΔL*=6.0 不达标，主/次改为丘陵/林带）"
+    }
+  },
+  "checks": {
+    "primarySecondaryDeltaLNoon": 8,
+    "primaryAccentDeltaE00Noon": 12,
+    "primaryAccentDeltaE00Cvd": 6,
+    "nightTokenMaxL": 100,
+    "_note": "门槛对齐 terrain-palette-v8 constraints（grassForestRockDeltaL=8 / vegetationPairDeltaE00Noon=12 / Cvd=6）"
+  }
+}

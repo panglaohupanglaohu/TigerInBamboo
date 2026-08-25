@@ -28,6 +28,41 @@ if (!fs.existsSync(bridgePkg)) {
   console.log("[bootstrap] 已创建 three → vendor 解析桥");
 }
 
+// 无头 DOM 桩：equatorialClouds → audio/sfx.js → ui/hud.js 链在模块顶层
+// 访问 document/window/localStorage（浏览器全局），Node 下需先打桩再动态 import。
+// 与 tools/test_bubble_pod_cannon_bgm.mjs 的既有惯例一致；不改变任何被测逻辑。
+const stubEl = () => ({
+  style: {},
+  classList: { add() {}, remove() {}, toggle() {}, contains: () => false },
+  textContent: "",
+  setAttribute() {},
+  addEventListener() {},
+});
+globalThis.document = {
+  getElementById: () => stubEl(),
+  querySelector: () => stubEl(),
+  createElement: () => stubEl(),
+  body: { appendChild() {} },
+  addEventListener() {},
+};
+globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
+globalThis.window = globalThis;
+globalThis.window.addEventListener = () => {};
+// sfxThunder 风暴期经 window.setTimeout → new Audio()：风暴期落雷路径兜底
+globalThis.Audio = class {
+  constructor() {
+    this.paused = true;
+  }
+  play() {
+    this.paused = false;
+    return Promise.resolve();
+  }
+  pause() {
+    this.paused = true;
+  }
+  addEventListener() {}
+};
+
 const THREE = await import("../TigerMessenger/vendor/three.module.js");
 const { FlockManager } = await import("../TigerMessenger/src/world/flock.js");
 const { AirshipEscortManager } = await import("../TigerMessenger/src/world/airshipEscort.js");
@@ -291,9 +326,11 @@ results.push(
 );
 
 // ---------------------------------------------------------------------------
-//  第四阶段：赤道动态积雨云墙（焊接几何 / 噪声形变 / 太阳受光 / 描边）
+//  第四阶段：城头六组穿行云线 · megaCloudWall（合并几何 / 滚筒涌动 / 天气循环）
+//  注：equatorialClouds 已重写（66a1a03）——旧「赤道 24 塔 + 逐球形变 + 龙卷风」
+//  行为被刻意替换为「城头单锚 6 组云线 + 整簇运动 + 无龙卷风」，断言随之对齐新契约。
 // ---------------------------------------------------------------------------
-console.log("--- 赤道动态积雨云墙 ---");
+console.log("--- 城头六组穿行云线 ---");
 
 const cloudScene = new THREE.Scene();
 const wall = createDynamicMoebiusClouds(cloudScene, R);
@@ -302,55 +339,54 @@ const mockSun = {
   intensity: 1.6,
   color: new THREE.Color(0xfff1c9),
 };
-const towers = wall.children.filter((c) => c.name === "cloud-tower");
-const blobCounts = towers.map((tw) => tw.userData.blobs.length);
-const allBlobs = wall.userData.blobs;
-const radii = towers.map((tw) => tw.position.length());
-const onEquator = towers.every((tw) => Math.abs(tw.position.y) < 1e-6);
+const towers = wall.userData.towers;
+const allBlobs = wall.userData.blobs; // = clusters（每簇多 puff 合并成单 Mesh）
+const lineGroups = new Set(allBlobs.map((b) => b.userData.lineGroup));
 const allOutlined = allBlobs.every((b) =>
   b.children.some((c) => c.userData?.isOutline)
 );
 const matsOk = allBlobs.every(
   (b) =>
     b.material.isMeshToonMaterial &&
-    b.material.flatShading === true &&
     b.material.gradientMap?.image?.width === 3
 );
-// 焊接索引网格：92 唯一顶点（Icosahedron 细分 2 → 180 面，欧拉 V=92）
-const weldedOk = allBlobs.every(
-  (b) => b.geometry.index !== null && b.geometry.attributes.position.count === 92
+// 合并索引网格：每簇 9–14 颗 puff（Icosahedron detail 3），合并后仍索引共享
+const PUFF_VERTS = new THREE.IcosahedronGeometry(1, 3).attributes.position.count;
+const puffCounts = allBlobs.map(
+  (b) => b.geometry.attributes.position.count / PUFF_VERTS
 );
-// 高频流体形变：两个时刻快照逐颗比对（风暴模式全群每帧形变）
+const mergedOk = allBlobs.every(
+  (b, i) =>
+    b.geometry.index !== null && Number.isInteger(puffCounts[i])
+);
+// 整簇运动：滚筒翻滚 + 传送带穿行 + 微呼吸（不碰顶点拓扑）
 updateDynamicMoebiusClouds(wall, 0.5, mockSun);
-const snap1 = allBlobs.map((b) => b.geometry.attributes.position.array.slice());
+const snapPos = allBlobs.map((b) => b.position.x);
+const snapRot = allBlobs.map((b) => b.rotation.x);
 updateDynamicMoebiusClouds(wall, 0.9, mockSun);
-let fluidOk = true;
-let fluidMax = 0;
-let deformMax = 0;
+let paradeOk = true;
+let rollOk = true;
+let loopBoundOk = true;
+let breathBounded = true;
 for (let bi = 0; bi < allBlobs.length; bi++) {
-  const arr = allBlobs[bi].geometry.attributes.position.array;
-  const orig = allBlobs[bi].userData.deform.orig;
-  let frameDiff = 0;
-  let origDiff = 0;
-  for (let i = 0; i < arr.length; i++) {
-    frameDiff = Math.max(frameDiff, Math.abs(arr[i] - snap1[bi][i]));
-    origDiff = Math.max(origDiff, Math.abs(arr[i] - orig[i]));
+  const b = allBlobs[bi];
+  if (Math.abs(b.position.x - snapPos[bi]) < 1e-4) paradeOk = false;
+  if (Math.abs(b.rotation.x - snapRot[bi]) < 1e-4) rollOk = false;
+  const xMin = b.userData.paradeMin;
+  const span = b.userData.paradeSpan;
+  if (!(b.position.x >= xMin - 1e-6 && b.position.x <= xMin + span + 1e-6)) {
+    loopBoundOk = false;
   }
-  if (frameDiff < 1e-4) fluidOk = false;
-  fluidMax = Math.max(fluidMax, frameDiff);
-  deformMax = Math.max(deformMax, origDiff);
-}
-// 形变幅度有界：amp = 0.35·(0.5 + r·0.28)，最大半径 ~5.5 → ≤ ~0.71
-let ampBounded = true;
-for (const b of allBlobs) {
-  if (b.userData.deform.amp > 0.8) ampBounded = false;
+  const s = b.userData.stretch;
+  const k = s ? b.scale.x / s.x : b.scale.x;
+  if (k < 0.94 || k > 1.06) breathBounded = false;
 }
 // 云底雨带：嵌套 LineSegments，随时间倾泻（位置变化）
 const rain = wall.userData.rain;
 const rainOk =
   !!rain &&
   rain.isLineSegments &&
-  rain.geometry.attributes.position.count === 800 * 2;
+  rain.geometry.attributes.position.count === 1100 * 2;
 const rainArr0 = rain ? rain.geometry.attributes.position.array.slice() : null;
 updateDynamicMoebiusClouds(wall, 1.7, mockSun);
 let rainMoved = false;
@@ -363,64 +399,44 @@ if (rainArr0 && rain) {
     }
   }
 }
-// 闪电频闪状态机存在
-const stormStateOk = !!wall.userData.storm && typeof wall.userData.storm.next === "number";
+// 闪电频闪状态机 + 天气相位机存在
+const stormStateOk =
+  !!wall.userData.storm &&
+  typeof wall.userData.storm.next === "number" &&
+  wall.userData.weather?.phase === "clear";
 
-// ---- 龙卷风：随机吹开云墙（概率 1/3）----
-// 续跑 ~28s，观测：生成 → 云球外散（吹开）→ 漏斗 → 合拢
-let torSeen = false;
-let torOpenSeen = false; // 云球被吹离基准位 > 1 单位
-let torFunnelSeen = false; // 漏斗挂进云塔
-let torCloseSeen = false; // 进入合拢阶段
+// ---- 天气循环 + 龙卷风已关闭 ----
+// 续跑 50s：晴朗必在 19–29s 内转入聚云（dark 上升）；全程不得出现龙卷风
+let weatherLeftClear = false;
+let darkMax = 0;
 let torMaxActive = 0;
 let torT = 1.7; // 接前面已推进到的时刻
-for (let f = 0; f < 840; f++) {
+for (let f = 0; f < 1500; f++) {
   torT += 1 / 30;
   updateDynamicMoebiusClouds(wall, torT, mockSun);
-  const tors = wall.userData.tornadoes;
-  torMaxActive = Math.max(torMaxActive, tors.length);
-  if (tors.length > 0) torSeen = true;
-  for (const tor of tors) {
-    if (tor.funnel && tor.funnel.parent === tor.tower) torFunnelSeen = true;
-    if (tor.state === "close") torCloseSeen = true;
-    if (tor.state === "open" || tor.state === "hold") {
-      for (const s of tor.blobStates) {
-        if (s.blob.position.distanceTo(s.base) > 1.0) {
-          torOpenSeen = true;
-          break;
-        }
-      }
-    }
-  }
-}
-// 合拢后云球归位：无活跃龙卷风的云塔，其云球应回到初始堆叠半径范围内
-let wallClosedOk = true;
-for (const tor of wall.userData.tornadoes) {
-  // 收尾仍可能有残留，宽松判断：只要大多数云球未飞远即可
-  for (const s of tor.blobStates) {
-    if (s.blob.position.distanceTo(s.base) > 12) wallClosedOk = false;
-  }
+  const w = wall.userData.weather;
+  if (w.phase !== "clear") weatherLeftClear = true;
+  darkMax = Math.max(darkMax, w.dark);
+  torMaxActive = Math.max(torMaxActive, wall.userData.tornadoes.length);
 }
 
 results.push(
-  ["[云墙] 挂载全局场景（equatorialClouds）", wall.name === "equatorialClouds" && cloudScene.children.includes(wall), `name=${wall.name}`],
-  ["[云墙] 赤道环 24 座云塔（每 15°）", towers.length === 24, `towers=${towers.length}`],
-  ["[云墙] 单塔 ≥30 颗云球", blobCounts.every((c) => c >= 30 && c <= 42), `count∈[${Math.min(...blobCounts)}, ${Math.max(...blobCounts)}]`],
-  ["[云墙] 锚定赤道面（y=0）", onEquator, "全部塔 y=0"],
-  ["[云墙] 半径带 45–50（低空 5–10）", radii.every((r) => r >= 45 && r <= 50), `r∈[${Math.min(...radii).toFixed(2)}, ${Math.max(...radii).toFixed(2)}]`],
-  ["[云墙] 焊接索引网格（92 顶点/球）", weldedOk, "细分 2 → 92 唯一顶点"],
-  ["[云墙] 全网格 addOutline 墨线", allOutlined, `${allBlobs.length} 颗云球全部带描边`],
-  ["[云墙] Toon(flatShading)+3 阶 gradientMap", matsOk, "材质规格一致"],
-  ["[云墙] 高频流体形变逐颗生效", fluidOk, `帧间maxΔ=${fluidMax.toFixed(4)} 幅值maxΔ=${deformMax.toFixed(4)}`],
-  ["[云墙] 形变幅度有界", ampBounded, "amp ≤ 0.8"],
-  ["[云墙] 云底嵌套雨带（800 丝）", rainOk, "LineSegments × 800"],
-  ["[云墙] 雨带随时间倾泻", rainMoved, "位置帧间变化"],
-  ["[云墙] 闪电频闪状态机", stormStateOk, "storm.next 已调度"],
-  ["[云墙] 龙卷风随机生成（1/3）", torSeen, `28s 内出现，峰值同屏=${torMaxActive}`],
-  ["[云墙] 龙卷风吹开云墙（云球外散）", torOpenSeen, "云球被吹离基准位"],
-  ["[云墙] 漏斗挂入云塔", torFunnelSeen, "funnel 作为塔子节点"],
-  ["[云墙] 云墙随后合拢", torCloseSeen && wallClosedOk, "close 阶段 + 云球归位"],
-  ["[云墙] 同屏龙卷风 ≤3", torMaxActive <= 3, `max=${torMaxActive}`]
+  ["[云线] 挂载全局场景（equatorialClouds）", wall.name === "equatorialClouds" && cloudScene.children.includes(wall) && !!wall.userData.megaCloudWall, `name=${wall.name}`],
+  ["[云线] 城头单锚点（cloud-crown-line）", towers.length === 1 && towers[0].name === "cloud-crown-line" && towers[0].position.length() > R, `towers=${towers.length} r=${towers[0]?.position.length().toFixed(1)}`],
+  ["[云线] 6 组 × 12 簇穿行云线", allBlobs.length === 72 && lineGroups.size === 6, `clusters=${allBlobs.length} groups=${lineGroups.size}`],
+  ["[云线] 每簇 9–14 puff 合并", puffCounts.every((c) => c >= 9 && c <= 14), `puffs∈[${Math.min(...puffCounts)}, ${Math.max(...puffCounts)}]`],
+  ["[云线] 合并索引网格", mergedOk, `${allBlobs.length} 簇全部索引化`],
+  ["[云线] 全网格 addOutline 墨线", allOutlined, `${allBlobs.length} 簇全部带描边`],
+  ["[云线] Toon 材质 + 3 阶 gradientMap", matsOk, "材质规格一致"],
+  ["[云线] 传送带穿行逐簇生效", paradeOk, "帧间 position.x 全簇变化"],
+  ["[云线] 穿行位置约束在环路内", loopBoundOk, "x ∈ [xMin, xMin+span]"],
+  ["[云线] 滚筒翻滚逐簇生效", rollOk, "帧间 rotation.x 全簇变化"],
+  ["[云线] 呼吸幅度有界", breathBounded, "scale k ∈ [0.94, 1.06]"],
+  ["[云线] 云底嵌套雨带（1100 丝）", rainOk, "LineSegments × 1100"],
+  ["[云线] 雨带随时间倾泻", rainMoved, "位置帧间变化"],
+  ["[云线] 闪电频闪 + 天气相位机", stormStateOk, "storm.next 已调度 · 起始晴朗"],
+  ["[云线] 50s 内晴朗转入聚云（dark 上升）", weatherLeftClear && darkMax > 0.3, `phase=${wall.userData.weather.phase} darkMax=${darkMax.toFixed(2)}`],
+  ["[云线] 龙卷风已关闭（全程 0 个）", torMaxActive === 0, `max=${torMaxActive}`]
 );
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,8 @@
 // =====================================================================
+//  @legacy V2 环采样战术图（禁止新代码依赖）
+//  V4 真源：src/world/citadel/surfaceGraph.js
+//  仅 ?citadelCombatV2=1 时挂载。见 docs/citadel-v4-legacy.md
+//
 //  P1 · 城堡战术导航图（高山城堡攻防 V2）
 //
 //  数据源（全部由调用方注入，核心逻辑不依赖 three，Node 可直接测）：
@@ -120,6 +124,8 @@ export function createCitadelTacticalGraph(opts) {
     if (!a || !b) return null;
     const id = `${type}:${aId}→${bId}`;
     if (edges.has(id)) return edges.get(id);
+    const rid = `${type}:${bId}→${aId}`;
+    if (edges.has(rid)) return edges.get(rid); // 无向边不重复建反向
     const length = dist(a.pos, b.pos);
     const rise = Math.abs(a.pos.y - b.pos.y);
     const edge = {
@@ -186,65 +192,88 @@ export function createCitadelTacticalGraph(opts) {
   };
 
   /** 单台地环带采样：径向环 × 弧向段，剔除缺口/占格/不可走 */
+  // terraceGrid: terrace → rings: Array<Map<seg, nodeId>>（结构化互联用）
+  const terraceGrid = new Map();
   function buildTerraceNodes(metrics, terrace) {
     const m = metrics[terrace];
-    // metrics 0=最高/最小半径：台地 t 的可走环带 = 外缘 metrics[t].radius
-    // 到内缘 metrics[t-1].radius（更高一层台地的 footprint）；t=0 顶台地为圆盘
+    // 台地是嵌套圆盘：walkLift 取「包含该点的最高台面」。台地 t 的可走环带 =
+    // (t-1 层半径, t 层半径]；t=0 顶台地为圆盘。真实台地间距可能只有 ~2 单位，
+    // 边距必须随环带宽度自适应，否则窄环带被边距吃光、石阶端点无环可接。
     const upper = metrics[terrace - 1] || null;
-    const rOut = m.radius - 0.9;
-    const rIn = upper ? upper.radius + 1.2 : 0;
-    if (rOut <= rIn) {
-      // 顶台地近似圆盘：单环 + 中心点
-      const rMid = Math.max(1.5, rOut * 0.55);
-      const segs = Math.max(6, Math.round((Math.PI * 2 * rMid) / RING_SPACING));
-      for (let s = 0; s < segs; s++) {
-        const phi = (s / segs) * Math.PI * 2;
-        const x = Math.sin(phi) * rMid;
-        const z = Math.cos(phi) * rMid;
-        if (!walkable(x, z, terrace)) continue;
-        addNode("ring", terrace, { x, y: opts.walkLift(x, z), z }, nodeId("t", [terrace, 0, s]));
-      }
-      if (walkable(0, 0, terrace)) {
-        addNode("ring", terrace, { x: 0, y: opts.walkLift(0, 0), z: 0 }, nodeId("t", [terrace, 0, "c"]));
-      }
-      return;
-    }
+    const rawIn = upper ? upper.radius : 0;
+    const rawOut = m.radius;
+    const width = rawOut - rawIn;
+    if (width <= 0.3) return; // 完全被上一层覆盖
+    const margin = Math.min(0.45, width * 0.25);
+    const rIn = rawIn + (upper ? margin : 0);
+    const rOut = rawOut - margin;
     const ringCount = Math.max(1, Math.round((rOut - rIn) / RING_SPACING));
+    const rings = [];
     for (let ri = 0; ri < ringCount; ri++) {
       const r = rIn + ((ri + 0.5) / ringCount) * (rOut - rIn);
       const segs = Math.max(6, Math.round((Math.PI * 2 * r) / RING_SPACING));
+      const segMap = new Map();
       for (let s = 0; s < segs; s++) {
         const phi = (s / segs) * Math.PI * 2;
         const x = Math.sin(phi) * r;
         const z = Math.cos(phi) * r;
         if (!walkable(x, z, terrace)) continue;
-        addNode("ring", terrace, { x, y: opts.walkLift(x, z), z }, nodeId("t", [terrace, ri, s]));
+        const node = addNode("ring", terrace, { x, y: opts.walkLift(x, z), z }, nodeId("t", [terrace, ri, s]));
+        segMap.set(s, node.id);
       }
+      rings.push(segMap);
     }
+    terraceGrid.set(terrace, rings);
   }
 
-  /** 台地内互联：弧向邻居 + 径向最近邻（k 最近 4，限距；跨缺口/占格的弦剔除） */
+  /** 台地内结构化互联：弧向相邻段 + 相邻环最近角度（保证径向连通），
+       弦中点必须仍可走（防横跨瀑布缺口/占格拉出空中直线）；
+      之后再用限距 k 近邻补斜向捷径。 */
   function linkTerraceEdges(terrace) {
-    const list = (regionNodes.get(`terrace:${terrace}`) || []).map((id) => nodes.get(id));
-    for (let i = 0; i < list.length; i++) {
-      const a = list[i];
-      const near = [];
-      for (let j = 0; j < list.length; j++) {
-        if (i === j) continue;
-        const b = list[j];
-        const d = dist(a.pos, b.pos);
-        if (d <= NODE_LINK_DIST) near.push([d, b]);
+    const rings = terraceGrid.get(terrace) || [];
+    const tryLink = (aId, bId) => {
+      if (!aId || !bId || aId === bId) return;
+      const a = nodes.get(aId);
+      const b = nodes.get(bId);
+      const mx = (a.pos.x + b.pos.x) / 2;
+      const mz = (a.pos.z + b.pos.z) / 2;
+      if (!walkable(mx, mz, terrace)) return;
+      const d = dist(a.pos, b.pos);
+      addEdge(aId, bId, "walk", { width: Math.min(3, Math.max(1.2, d * 0.8)) });
+    };
+    rings.forEach((segMap, ri) => {
+      const segs = [];
+      for (const s of segMap.keys()) segs.push(s);
+      segs.sort((a, b) => a - b);
+      // 弧向：每段连向顺时针下一个存在段（成环；缺口处自然断开，由中点检查拦截跨缺口弦）
+      for (let i = 0; i < segs.length; i++) {
+        const a = segMap.get(segs[i]);
+        const b = segMap.get(segs[(i + 1) % segs.length]);
+        const na = nodes.get(a);
+        const nb = nodes.get(b);
+        if (dist(na.pos, nb.pos) > NODE_LINK_DIST * 1.2) continue; // 缺口两端不强行闭合
+        tryLink(a, b);
       }
-      near.sort((p, q) => p[0] - q[0]);
-      for (const [d, b] of near.slice(0, 4)) {
-        if (a.id > b.id) continue;
-        // 弦中点必须仍可走：防止横跨瀑布缺口/建筑占格拉出"空中直线"
-        const mx = (a.pos.x + b.pos.x) / 2;
-        const mz = (a.pos.z + b.pos.z) / 2;
-        if (!walkable(mx, mz, terrace)) continue;
-        addEdge(a.id, b.id, "walk", { width: Math.min(3, d * 0.8) });
+      // 径向：本环每段连向内外两环角度最近的节点（保证环间必通）
+      for (const adjRi of [ri - 1, ri + 1]) {
+        const adj = rings[adjRi];
+        if (!adj || !adj.size) continue;
+        for (const [, id] of segMap) {
+          const n = nodes.get(id);
+          let best = null;
+          let bestD = Infinity;
+          for (const [, oid] of adj) {
+            const o = nodes.get(oid);
+            const d = dist(n.pos, o.pos);
+            if (d < bestD) {
+              bestD = d;
+              best = oid;
+            }
+          }
+          if (best && bestD <= NODE_LINK_DIST * 1.2) tryLink(id, best);
+        }
       }
-    }
+    });
   }
 
   /** 石阶：沿圆弧采样节点串，两端接最近台面节点 */

@@ -5,6 +5,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { sfxThunder } from "../audio/sfx.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 const RAIN_COUNT = 550;
 const SNOW_COUNT = 380;
@@ -153,6 +154,17 @@ export function createWeatherSystem(scene, R, opts = {}) {
   const MAX_BOLT_SEGS = 120;
   const flash = new THREE.PointLight(0xcfe0ff, 0, 260, 1.6);
   scene.add(flash);
+  // K4：雷电 PointLight 迁入 registry（kind=lightning 最高优先级；
+  // V5 下由桥接层采样强度 → LightingDirector 短时 override，平滑恢复）
+  registerLocalLight(flash, {
+    id: "weather-lightning",
+    owner: "weather",
+    kind: "lightning",
+    color: 0xcfe0ff,
+    intensity: 0,
+    radius: 260,
+    priority: 10,
+  });
 
   const boltPosArr = new Float32Array(MAX_BOLT_SEGS * 4 * 3);
   const boltIdxArr = new Uint16Array(MAX_BOLT_SEGS * 6);
@@ -587,6 +599,8 @@ export function createWeatherSystem(scene, R, opts = {}) {
     strikeNow: () => strikeBolt(lastCenter),
     isRaining: () => mode === 1 && rainPhase === "raining",
     isRainPaused: () => mode === 1 && rainPhase === "clear",
+    /** 测试用：闪电 PointLight 当前强度（0=本次闪击已结束） */
+    getFlashIntensity: () => flash.intensity,
     /** 测试用：立刻进入停雨彩虹 */
     forceRainClear: () => {
       if (mode === 1) beginRainClear();

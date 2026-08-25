@@ -74,6 +74,7 @@ const {
   citadelCurvatureDrop,
   CITADEL,
   CITADEL_SINK,
+  rebuildCitadelTown,
   rebuildCitadelTerrain,
   rebuildCitadelTerrainObjects,
   terrainSupportLevel,
@@ -85,6 +86,22 @@ const {
 } = await import(
   new URL("src/world/odysseyCitadel.js", BASE).href
 );
+const {
+  highlandCityGroundHeight,
+  highlandTerrainSurfaceHeight,
+  highlandTownscaperSurfaceHeight,
+  HIGHLAND_TOWNSCAPER_PLATFORM,
+  isHighlandWaterfrontCutout,
+} = await import(new URL("src/world/highlandCitadelDesign.js", BASE).href);
+const { HIGHLAND_TOWNSCAPER_TOWN_SPEC, TOWNSCAPER_HIGHLAND_PALETTE } = await import(
+  new URL("src/world/citadelTown.js", BASE).href
+);
+const {
+  layoutHighlandUnitMap,
+  highlandUnitAtMapPoint,
+  highlandTownscaperPatch,
+} = await import(new URL("src/ui/citadelEditorPanel.js", BASE).href);
+const { highlandUnitFromHits } = await import(new URL("src/ui/citadelSceneEdit.js", BASE).href);
 let pass = 0;
 const ok = (m) => {
   console.log(`  ✓ ${m}`);
@@ -105,7 +122,7 @@ const allByName = (root, prefix) => {
   return out;
 };
 
-const citadel = buildOdysseyCitadel({ place: false, seed: 7 });
+const citadel = buildOdysseyCitadel({ latestDesign: false, place: false, seed: 7 });
 
 console.log("[1] 统一 castleContainer + 五层物理层级 + 小镇装配");
 assert.equal(citadel.name, "castleContainer");
@@ -331,7 +348,7 @@ const { citadelRangeLiftDir, citadelSiteDir } = await import(
 const radius = 160;
 const siteDir = citadelSiteDir(new THREE.Vector3());
 const groundRadius = radius + citadelRangeLiftDir(siteDir);
-const placed = buildOdysseyCitadel({ dir: siteDir, groundRadius, planetRadius: radius, seed: 7 });
+const placed = buildOdysseyCitadel({ latestDesign: false, dir: siteDir, groundRadius, planetRadius: radius, seed: 7 });
 const placedMetrics = citadelTerraceMetrics(placed.userData.contourSpec);
 const curvatureDrop = citadelCurvatureDrop(groundRadius, placed.userData.contourSpec);
 assert.equal(CITADEL.groundEmbed, 2, "第五层局部底面仍从 Y=2 开始");
@@ -379,7 +396,11 @@ assert(Math.abs(widerOuterPoint.length() - (groundRadius - CITADEL_SINK)) < 0.02
 ok(`台地热编辑后曲率下沉自动更新 ${curvatureDrop.toFixed(2)}→${widerDrop.toFixed(2)}`);
 
 console.log("[9] 场景接线 + 纯白 AmbientLight 1.4");
-const island = fs.readFileSync(fileURLToPath(new URL("src/scenes/messengerIsland.js", BASE)), "utf8");
+const island = [
+  "src/scenes/messengerIsland.js",
+  "src/scenes/messenger/loadCitadel.js",
+  "src/scenes/messenger/updateIsland.js",
+].map((f) => fs.readFileSync(fileURLToPath(new URL(f, BASE)), "utf8")).join("\n");
 assert(island.includes("buildOdysseyCitadel"));
 assert(island.includes("odysseyCitadel.update"));
 assert(island.includes("citadelRangeLiftDir"));
@@ -481,6 +502,7 @@ const terrainObjectSpec = [
 assert.equal(normalizeCitadelTerrainObjects(terrainObjectSpec).length, 3);
 assert.equal(citadelTerrainPointSupported(CITADEL.contourTerrain, -5, 0, 0), true);
 const objectCitadel = buildOdysseyCitadel({
+  latestDesign: false,
   place: false,
   seed: 7,
   terrainObjects: terrainObjectSpec,
@@ -527,5 +549,216 @@ assert.equal(
 const onlyTree = rebuildCitadelTerrainObjects(objectCitadel, [terrainObjectSpec[1]]);
 assert.equal(onlyTree.children.length, 1, "删除工具必须能热重建为仅保留参天树");
 ok(`瞭望塔×1 · 参天树×1 · 木马×1 · 网格描边 ${terrainObjectMeshes}/${terrainObjectMeshes} · 台地变高自动贴地`);
+
+console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨架）");
+{
+  const latest = buildOdysseyCitadel({ place: false, seed: 7 });
+  assert.equal(latest.userData.highlandLatestDesign, true, "默认构建必须启用最新山谷设计");
+  assert.equal(latest.userData.highlandLatestDesignVersion, "2026.08.25-reference-obelisk-stone-v11");
+  assert(latest.userData.highlandLatestDesignRoot, "设计根组必须挂进装配");
+  const townscaperPad = byName(latest, "contour-step-0");
+  assert.equal(townscaperPad?.geometry?.type, "ShapeGeometry", "高山圣城必须提供与厚地台同形的水平 Townscaper 拾取面");
+  assert.equal(townscaperPad?.userData?.townscaperBuildZone, "highland");
+  assert.equal(byName(latest, "contour-step-1"), null, "最新圣城不得挂回旧五层圆形台地");
+  assert.equal(byName(latest, "citadel-pilgrimage-layered-cascades"), null, "最新圣城不得生成瀑布");
+  assert(byName(latest, "town-terrace-0-level-0"), "高山圣城必须显示与运河古堡同构的 Townscaper 层组");
+  assert.equal(byName(latest, "highland-continuous-valley-city"), null, "旧 85 栋整栋参数模型不得与逐格城体重叠");
+  assert.equal(latest.userData.highlandTownscaperGrid, true);
+  assert.equal(latest.userData.floors, 12, "高山 Townscaper 编辑器必须支持 12 层逐格生长");
+  const latestTerrain = byName(latest, "citadel-continuous-mountain-terrain-system");
+  assert(latestTerrain, "必须使用单一连续山谷地形");
+  assert.equal(latestTerrain.userData.terraceLayerCount, 0);
+  assert.equal(latestTerrain.userData.waterfallCount, 0);
+  const mountainSurface = byName(latest, "citadel-oskar-grid-mountain-surface");
+  assert(mountainSurface, "Oskar 网格山体缺失");
+  assert.equal(mountainSurface.userData.gridMethod, "primary-grid+dual-grid+alternating-triangles");
+  assert.equal(mountainSurface.userData.flatBase, false, "山体不得带暴露的水平底面");
+  assert.equal(mountainSurface.geometry.userData.sideSkirt, true, "山体边界必须用顺坡侧裙收口");
+  assert.equal(mountainSurface.geometry.userData.waterfrontCutout, "wfc-curved-lake-corridor");
+  assert.equal(mountainSurface.geometry.userData.canalRockObstructionRemoved, true);
+  assert.equal(mountainSurface.geometry.userData.frontObstaclePolicy,
+    "remove-whole-touching-cells-and-skirt-edges");
+  const latestMetrics = latest.userData.highlandLatestDesignMetrics;
+  assert.equal(latestMetrics.preservesGameplayTerraces, false);
+  assert.equal(latestMetrics.districtCount, 1, "高山建筑必须收敛到一个共享 Townscaper 网格域");
+  assert.equal(latestMetrics.buildingCount, latest.userData.townStats.cellCount);
+  assert(latestMetrics.buildingCount >= 650 && latestMetrics.buildingCount <= 1000,
+    `Townscaper 参考坡城密度必须在 650~1000 格：${latestMetrics.buildingCount}`);
+  assert.equal(latestMetrics.districtWindowCount, latest.userData.townStats.windowCount);
+  assert.equal(latestMetrics.townscaperConstruction, "shared-with-canal-junction");
+  assert.equal(latestMetrics.waterfrontBoatCount, 0, "圣城表现层只保留地形、水体、建筑与植物");
+  assert.equal(latestMetrics.mountainVegetationCount, 12, "山坡必须使用十二株低模绿团树");
+  assert.equal(latestMetrics.mistLayerCount, 0);
+  assert.equal(latestMetrics.nonBuildingPropCount, 0);
+  assert.equal(latestMetrics.plantAssetSource, "buildMountainTree-low-poly-round-canopy");
+  assert.equal(latestMetrics.mountainGridMethod, "primary-grid+dual-grid+alternating-triangles");
+  assert.equal(latestMetrics.townscaperRidgeTowerAnchorCount, 6,
+    "参考图两侧/后排六座高塔必须由 Townscaper 格网生成");
+  assert.equal(byName(latest, "highland-ridge-tower-0"), null,
+    "最新模式不得用不可编辑预制副塔冒充 Townscaper 高塔");
+  assert.equal(latestMetrics.referenceProportions.castleToBattleShip, 8);
+  assert.equal(latestMetrics.referenceProportions.mountainToCastle, 5);
+  assert(byName(latest, "highland-central-sacred-tower"), "中央圣塔缺失");
+  assert(byName(latest, "highland-central-obelisk-chamber"), "最高建筑必须是方尖碑式塔身");
+  assert(byName(latest, "highland-central-tower-foundation"), "方尖碑基础段不得被装饰合批吞掉");
+  assert(byName(latest, "highland-central-tower-lower"), "方尖碑下塔身必须连续可见");
+  assert(byName(latest, "highland-central-tower-middle"), "方尖碑中塔身必须连续可见");
+  assert(byName(latest, "highland-central-tower-upper"), "方尖碑上塔身必须连续可见");
+  assert(byName(latest, "highland-castle-top-capture-deck"), "古堡顶层夺取平台缺失");
+  const highestRoof = byName(latest, "highland-central-tower-roof");
+  const captureDeck = byName(latest, "highland-castle-top-capture-deck");
+  assert(highestRoof.geometry.parameters.radius <= 2.4, "最高塔冠不得形成夸张大帽檐");
+  assert.equal(highestRoof.geometry.parameters.radius, 1.55, "最高塔冠必须收窄为方尖碑尖顶");
+  assert(captureDeck.geometry.parameters.width <= 7.2, "城顶平台不得外挑成巨型屋檐");
+  const waterfrontWater = byName(latest, "highland-waterfront-water");
+  assert(waterfrontWater, "设计图水岸前景水面缺失");
+  assert.equal(waterfrontWater.userData.waterTopology, "curved-lake-cap-v10-navona-gentle");
+  assert.equal(waterfrontWater.userData.surfaceProfile, "navona-gentle-basin");
+  assert(waterfrontWater.userData.maxAuthoredRelief <= 0.12);
+  assert.equal(waterfrontWater.userData.flatSurface, false, "湖面不得退回平面片");
+  assert.equal(waterfrontWater.userData.surfaceRadius, 160);
+  assert.equal(waterfrontWater.userData.shoreline, "wfc-tile-mask");
+  assert.equal(waterfrontWater.geometry.userData.wfc.tileSet, "highland-water-v1");
+  const waterPositions = waterfrontWater.geometry.attributes.position;
+  let waterMinY = Infinity;
+  let waterMaxY = -Infinity;
+  for (let i = 0; i < waterPositions.count; i++) {
+    waterMinY = Math.min(waterMinY, waterPositions.getY(i));
+    waterMaxY = Math.max(waterMaxY, waterPositions.getY(i));
+  }
+  assert(waterMaxY - waterMinY > 5, "湖面必须有可测球面曲率");
+  assert(waterfrontWater.geometry.userData.chartBounds.zMax <= 62,
+    "湖面不得伸出连续山体图表成为悬空蓝色大平面");
+  const cityGround = highlandCityGroundHeight(0, 0);
+  const mountainAtCitadel = highlandTerrainSurfaceHeight(0, 0);
+  assert(mountainAtCitadel >= cityGround + 0.03 && mountainAtCitadel <= cityGround + 0.08,
+    "城堡中心山体必须被挖到城市行走地面，而不是掩埋城堡");
+  assert.equal(latest.userData.highlandLatestDesignRoot.userData.walkSurfaceProvider,
+    "highland-town-platform-v1");
+  assert.equal(latest.userData.highlandAssaultAnchors.surfaceProvider,
+    "highland-town-platform-v1");
+  const townSurface = latest.userData.townSurfaceConformance;
+  assert(townSurface, "高山 Townscaper 必须发布水平地台统计");
+  assert.equal(townSurface.provider, "highland-town-platform-v1");
+  assert.equal(townSurface.uniformPlane, true, "城堡建筑必须共用水平地台顶面");
+  assert.equal(townSurface.verticalSpan, 0, "水平地台不得把球面坡度传给建筑单元");
+  assert.equal(highlandTownscaperSurfaceHeight(20, 20), highlandTownscaperSurfaceHeight(0, 0),
+    "城内任意格必须读取同一地台标高");
+  const foundationPlatform = byName(latest, "highland-town-foundation-platform");
+  assert(foundationPlatform, "高山圣城缺少承受球面高差的厚地台");
+  assert.equal(foundationPlatform.userData.uniformTop, true);
+  assert.equal(foundationPlatform.userData.surfaceProvider, "highland-town-platform-v1");
+  assert.equal(foundationPlatform.userData.topY, HIGHLAND_TOWNSCAPER_PLATFORM.topY);
+  assert.equal(foundationPlatform.visible, false, "地下承重地台不得在湖岸露出灰色墙面");
+  assert.equal(foundationPlatform.userData.fullySubmerged, true);
+  assert(foundationPlatform.userData.bottomY < highlandTerrainSurfaceHeight(20, 20),
+    "地台底部必须插入球面山体，而不是停在地面上方");
+  assert.equal(isHighlandWaterfrontCutout(0, 20), false,
+    "湖面不得切掉最前排 Townscaper 正门脚下的天然承重岸");
+  assert.equal(isHighlandWaterfrontCutout(0, 30), true,
+    "承重岸前方仍必须打开为湖面，而不是封死水岸");
+  const platformEditPad = byName(latest, "contour-step-0");
+  assert(platformEditPad, "高山 Townscaper 水平地台编辑拾取面缺失");
+  assert.equal(platformEditPad.userData.surfaceProvider, "highland-town-platform-v1");
+  assert.equal(platformEditPad.geometry.userData.curved, false);
+  assert.equal(platformEditPad.geometry.userData.uniformTop, true);
+  assert.equal(latestMetrics.referenceProportions.battleShipLength, 4.5);
+  assert.equal(latestMetrics.referenceProportions.castleArchitecturalHeight, 36);
+  assert.equal(latestMetrics.referenceProportions.mountainRangeSpan, 180);
+  assert.equal(allByName(latest, "highland-waterfront-boat-").length, 0,
+    "圣城内部不得残留船只和船灯表现模型");
+  assert.equal(allByName(latest, "highland-lake-surface-light-").length, 0,
+    "圣城内部不得残留独立湖面灯标");
+  assert.equal(byName(latest, "svarbova-red-figure"), null,
+    "最新圣城不得残留红色材质测试人偶");
+  const assault = latest.userData.highlandAssaultAnchors;
+  assert(Math.abs(assault.approach[1] - (HIGHLAND_TOWNSCAPER_PLATFORM.topY + 0.22)) < 1e-6,
+    "士兵入口必须读取水平地台顶面");
+  assert.equal(assault.destination, "castle-top");
+  assert.equal(assault.ladderPolicy, "disabled", "最新城堡不得默认生成攻城梯");
+  assert.equal(assault.ladderLanes.length, 0, "最新城堡不应有默认攻城梯通道");
+  assert.equal(assault.captureMode, "interior-rotating-stairs");
+  assert.equal(assault.interiorFloorRoutes.length, 5, "方尖碑内部必须有五段旋转楼梯路线");
+  assert.equal(latest.userData.highlandLatestDesignRoot.userData.castleUnitEditor, "canal-townscaper-grid-v1");
+  assert.equal(latest.userData.highlandLatestDesignRoot.userData.castleEditMode, "left-build-right-hole-v1");
+  assert.equal(latest.userData.highlandLatestDesignRoot.userData.castleUnits.length, 0,
+    "旧整栋参数单元必须退出现役场景");
+  assert.equal(latest.userData.highlandLatestDesignRoot.userData.castleUnitBandCount, 0);
+  assert.equal(latest.userData.highlandLatestDesignRoot.userData.castleUnitPalette.length, 15, "高山圣城必须使用 15 色 Townscaper 色板");
+  assert.equal(HIGHLAND_TOWNSCAPER_TOWN_SPEC.seedVersion, "highland-reference-obelisk-stone-v3");
+  assert.equal(HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels.length, 12);
+  const highlandColumns = new Map();
+  const usedColors = new Set();
+  let protectedCoreCells = 0;
+  for (let iy = 0; iy < HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels.length; iy++) {
+    const floor = HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels[iy];
+    assert.equal(floor.length, 25, `高山 Townscaper 第 ${iy + 1} 层必须为 25 行`);
+    for (let iz = 0; iz < floor.length; iz++) {
+      assert.equal(floor[iz].length, 25, `高山 Townscaper 第 ${iy + 1} 层第 ${iz + 1} 行必须为 25 格`);
+      for (let ix = 0; ix < floor[iz].length; ix++) {
+        const char = floor[iz][ix];
+        if (char === ".") continue;
+        usedColors.add(char);
+        highlandColumns.set(`${ix},${iz}`, Math.max(highlandColumns.get(`${ix},${iz}`) ?? 0, iy + 1));
+        if (Math.abs(ix - 12) <= 2 && Math.abs(iz - 12) <= 2) protectedCoreCells++;
+      }
+    }
+  }
+  const highlandColumnStats = [...highlandColumns].map(([key, height]) => {
+    const [ix, iz] = key.split(",").map(Number);
+    return { x: ix - 12, z: iz - 12, height };
+  });
+  const averageHeight = (items) => items.reduce((sum, item) => sum + item.height, 0) / items.length;
+  const waterfrontAverage = averageHeight(highlandColumnStats.filter((item) => item.z >= 6));
+  const ridgeAverage = averageHeight(highlandColumnStats.filter((item) => item.z <= -6));
+  assert(highlandColumns.size >= 300, "湖岸到山腰必须形成高密连续城域");
+  assert(ridgeAverage >= waterfrontAverage + 1.8,
+    `后排山城必须明显高于湖岸低城（${ridgeAverage.toFixed(2)} vs ${waterfrontAverage.toFixed(2)}）`);
+  assert(highlandColumnStats.filter((item) => item.height >= 8).length >= 2,
+    "参考图必须保留至少两根九层侧塔，同时让中央方尖碑保持唯一最高点");
+  assert(usedColors.size >= 10, "参考坡城必须保持 Townscaper 彩色街区变化");
+  for (const entry of TOWNSCAPER_HIGHLAND_PALETTE) {
+    const r = (entry.color >> 16) & 0xff;
+    const g = (entry.color >> 8) & 0xff;
+    const b = entry.color & 0xff;
+    assert(Math.max(r, g, b) - Math.min(r, g, b) <= 42,
+      `${entry.name} 必须保持方尖碑冷白/灰蓝石材，不得恢复彩色墙体`);
+  }
+  assert.equal(protectedCoreCells, 0, "中央方尖碑 5×5 hard cavity 必须全层净空");
+  assert.equal(HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels[0][22][12], "G", "湖岸中轴必须有正门");
+  assert.equal(HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels[0][18][12], ".", "朝圣巷飞楼下方必须留空");
+  assert.notEqual(HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels[2][18][12], ".", "朝圣巷上方必须生成可编辑桥楼");
+  const beforeCells = latest.userData.townStats.cellCount;
+  const editedLayout = JSON.parse(JSON.stringify(latest.userData.townSpec));
+  let editedCell = null;
+  for (let iy = 0; iy < editedLayout.terraces[0].levels.length && !editedCell; iy++) {
+    for (let iz = 0; iz < editedLayout.terraces[0].levels[iy].length && !editedCell; iz++) {
+      const row = editedLayout.terraces[0].levels[iy][iz];
+      const ix = [...row].findIndex((char) => char !== ".");
+      if (ix >= 0) editedCell = { ix, iy, iz, char: row[ix] };
+    }
+  }
+  assert(editedCell, "Townscaper 种子必须包含可删除格");
+  const row = [...editedLayout.terraces[0].levels[editedCell.iy][editedCell.iz]];
+  row[editedCell.ix] = ".";
+  editedLayout.terraces[0].levels[editedCell.iy][editedCell.iz] = row.join("");
+  const deleteStats = rebuildCitadelTown(latest, editedLayout);
+  assert.equal(deleteStats.cellCount, beforeCells - 1, "右键挖洞语义必须删除一个精确网格单元");
+  row[editedCell.ix] = "7";
+  editedLayout.terraces[0].levels[editedCell.iy][editedCell.iz] = row.join("");
+  const rebuildStats = rebuildCitadelTown(latest, editedLayout);
+  assert.equal(rebuildStats.cellCount, beforeCells, "左键必须能在同一空洞重新扩建");
+  assert.equal(latest.userData.townSurfaceConformance?.uniformPlane, true,
+    "热重建后城堡仍必须落在同一水平地台");
+  assert.equal(latest.userData.townSurfaceConformance?.verticalSpan, 0,
+    "热重建后不得重新把球面坡度传给建筑单元");
+  const ambient = byName(latest, "citadel-svarbova-ambient");
+  assert.equal(ambient?.isAmbientLight, true);
+  assert.equal(ambient.intensity, 0.34, "最新设计使用冷色低环境光");
+  assert.equal(ambient.color.getHex(), 0x8eb9e5);
+  assert.equal(byName(latest, "highland-hero-cloud-impostors"), null,
+    "圣城局部子树不得再夹带云层；云统一由全局地势/风场系统生成");
+  ok(`山谷设计 ${latest.userData.highlandLatestDesignVersion} · 连续地形×1 · 建筑${latestMetrics.buildingCount}格 · 地台埋入山体 · 非建筑道具=0 · 圣城低模绿团树×${latestMetrics.mountainVegetationCount}`);
+}
 
 console.log(`\n全部通过：${pass} 组验收`);

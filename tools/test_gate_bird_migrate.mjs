@@ -185,10 +185,10 @@ for (const mesh of [vortex.bodyMesh, vortex.wingLMesh, vortex.wingRMesh]) {
 }
 ok("BirdVortex.syncToGate：门体迁移后 origin/实例矩阵已重锚且保持可见");
 
-const island = fs.readFileSync(
-  fileURLToPath(new URL("src/scenes/messengerIsland.js", BASE)),
-  "utf8"
-);
+const island = [
+  "src/scenes/messengerIsland.js",
+  "src/scenes/messenger/loadTraffic.js",
+].map((f) => fs.readFileSync(fileURLToPath(new URL(f, BASE)), "utf8")).join("\n");
 assert(island.includes("BirdVortexManager"), "场景应创建 BirdVortexManager");
 assert(island.includes("landmarks: messengerLandmarks") || island.includes("landmarks: {"),
   "场景应暴露 landmarks");

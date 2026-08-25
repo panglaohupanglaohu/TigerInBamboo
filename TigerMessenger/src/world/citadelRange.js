@@ -1,5 +1,9 @@
 // =====================================================================
-//  圣城外围地表（Citadel Range）：五层台地的贴地承接面
+//  @legacy Citadel Range — 外围地形网格 / walkLift / 瀑布 / 木马
+//  V4 真源：src/world/citadel/surfaceProvider.js · terrainGenerator.js
+//  本文件暂留：碰撞与瀑布网格仍走这里。见 docs/citadel-v4-legacy.md
+//
+//  圣城外围地表：五层台地的贴地承接面
 //
 //  布局（站点局部切平面，lz+ 指向主岛）：
 //    lz≈0   不再生成旧 +16 黄土主峰；城堡只由五层可编辑台地承托
@@ -14,7 +18,8 @@
 import * as THREE from "three";
 import { latLonToDir } from "./sphereMath.js";
 import { canyonOffsetDir, canyonOffsetDirSmooth } from "./canyon.js";
-import { P, FEATURES } from "../core/params.js";
+import { P, FEATURES, isCitadelPaletteV3 } from "../core/params.js";
+import { v3TokenInt } from "./citadelVisualTheme.js";
 import { toonMat, addOutline } from "../assets/toon.js";
 import { createMangaWaterfall } from "./mangaWaterfall.js";
 import {
@@ -959,6 +964,12 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     _groundRay.far = 60;
   }
   configureCitadelWalkTerrain(R, contourSpec);
+  // The reference reconstruction uses the continuous spherical WFC terrain
+  // owned by odysseyCitadel.  Keep this legacy range object alive for combat
+  // and editor compatibility, but never attach its rectangular/terrace visual
+  // surface to the live scene in the latest mode.
+  let normalizedContour = normalizeCitadelTerrain(contourSpec);
+  let latestValleyMode = normalizedContour.presentationMode === "mountain-valley-v1";
   const nx = Math.round((LX_MAX - LX_MIN) / STEP) + 1;
   const nz = Math.round((LZ_MAX - LZ_MIN) / STEP) + 1;
   const positions = new Float32Array(nx * nz * 3);
@@ -966,9 +977,11 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   const tmp = new THREE.Vector3();
   // 配色坡道：配合圣城暖色盘（奶白/鎏金/红砖），弃用冷青灰 ——
   // 谷地灰草绿 → 坡面砂石土黄 → 峰顶淡黄绿砂石（Sable 式沙漠圣城）
-  const grass = new THREE.Color(0x6d8a63); // 谷地灰草绿（去饱和）
-  const soil = new THREE.Color(0xb3a577); // 坡面砂石土黄
-  const mesa = new THREE.Color(0xc9c096); // 峰顶淡黄绿砂石（圣城底座）
+  // V3（?citadelPaletteV3=1）：灰绿谷地 → 粉白崖壁 → 浅鼠尾草高台（PLAN 7.5/C5 方向）
+  const v3 = isCitadelPaletteV3();
+  const grass = new THREE.Color(v3 ? v3TokenInt("envGrass") : 0x6d8a63); // 谷地灰草绿（去饱和）
+  const soil = new THREE.Color(v3 ? v3TokenInt("envCliff") : 0xb3a577); // 坡面
+  const mesa = new THREE.Color(v3 ? v3TokenInt("envGrassLight") : 0xc9c096); // 峰顶高台
   const mix = new THREE.Color();
   // 砂石颗粒感：逐顶点微亮度抖动（确定性 lcg，与种子绑定）
   let grain = 20260808 >>> 0;
@@ -1021,22 +1034,24 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   mesh.name = "citadel-range";
   mesh.userData.baseLift = BASE_LIFT;
   mesh.userData.formerSoilMoundRemoved = true;
+  mesh.userData.legacyVisualSuppressed = latestValleyMode;
   mesh.receiveShadow = true;
-  scene.add(mesh);
+  if (!latestValleyMode) scene.add(mesh);
 
   const materials = {
-    mountain: toonMat(0x7893a1, { flatShading: true }),
-    snow: toonMat(0xf1f4ed, { flatShading: true }),
-    outpost: toonMat(0xd6dcd9, { flatShading: true }),
-    ink: toonMat(0x25292b, { flatShading: true }),
-    leaf: toonMat(0x385e3e, { flatShading: true }),
-    leafLight: toonMat(0x6f8b55, { flatShading: true }),
-    bark: toonMat(0x57462f, { flatShading: true }),
-    whiteStone: toonMat(0xdde3df, { flatShading: true }),
+    mountain: toonMat(v3 ? v3TokenInt("envCliffShade") : 0x7893a1, { flatShading: true }),
+    snow: toonMat(v3 ? v3TokenInt("envFoam") : 0xf1f4ed, { flatShading: true }),
+    outpost: toonMat(v3 ? v3TokenInt("castleWallChalk") : 0xd6dcd9, { flatShading: true }),
+    ink: toonMat(v3 ? v3TokenInt("castleTrim") : 0x25292b, { flatShading: true }),
+    leaf: toonMat(v3 ? v3TokenInt("envFoliageDark") : 0x385e3e, { flatShading: true }),
+    leafLight: toonMat(v3 ? v3TokenInt("envFoliageLight") : 0x6f8b55, { flatShading: true }),
+    bark: toonMat(v3 ? v3TokenInt("shipDeckWood") : 0x57462f, { flatShading: true }),
+    whiteStone: toonMat(v3 ? v3TokenInt("envCliff") : 0xdde3df, { flatShading: true }),
     whiteStoneShade: toonMat(0xbcc8c6, { flatShading: true }),
     // 与运河/护城河统一水色（0x3a86a0）；梯湖/水帘同属地表水系
+    // V3：统一 envWater 色族（PLAN 7.3 envWater/Deep/Foam）
     water: new THREE.MeshBasicMaterial({
-      color: 0x3a86a0,
+      color: v3 ? v3TokenInt("envWater") : 0x3a86a0,
       transparent: true,
       opacity: 0.92,
       depthWrite: false,
@@ -1046,11 +1061,12 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
 
   // 层叠瀑布 + 五级梯湖：可由编辑器 cascadeEnabled 开关。
   // 开启时：窄扇区开槽 + 五湖四帘；关闭时：完整台面，水系组为空。
-  let normalizedContour = normalizeCitadelTerrain(contourSpec);
+  // In latest mode these two groups are retained as empty API-compatible
+  // handles only.  Attaching them would resurrect the retired five-terrace
+  // water/cascade visuals on top of the spherical WFC lake.
   let pilgrimageWaterSteps = buildPilgrimageWaterSteps(R, materials, normalizedContour);
-  scene.add(pilgrimageWaterSteps);
   let pilgrimageCascades = buildPilgrimageCascades(R, pilgrimageWaterSteps, materials, normalizedContour);
-  scene.add(pilgrimageCascades);
+  if (!latestValleyMode) scene.add(pilgrimageWaterSteps, pilgrimageCascades);
   // Preserve the old shot-harness camera datum without retaining its four
   // visible lookout-stone props in the live scene.
   const pilgrimageLookout = new THREE.Group();
@@ -1066,8 +1082,25 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // crown remains offset from the central sightline between messenger and
   // citadel, while the smaller lake-edge vegetation stays strictly spherical.
   const sacredTarnTree = buildSacredTarnTree(materials);
-  placeRangeAsset(sacredTarnTree, -15.2, 42.0, R, -0.15, true);
-  scene.add(sacredTarnTree);
+  // The two old-port giant trees belong to the old harbor. They used to be
+  // moved into the highland castle for a temporary reference composition;
+  // latest mode now hands them back to loadCitadel, which reparents them into
+  // the actual harbor group. Legacy mode keeps the historical range layout.
+  const elderPlacement = latestValleyMode
+    ? { lx: 17.4, lz: 14.2 }
+    : { lx: -15.2, lz: 42.0 };
+  placeRangeAsset(sacredTarnTree, elderPlacement.lx, elderPlacement.lz, R, -0.15, true);
+  if (!latestValleyMode) scene.add(sacredTarnTree);
+  sacredTarnTree.visible = !latestValleyMode;
+  sacredTarnTree.userData.presentationOnly = true;
+  sacredTarnTree.userData.nonNavigable = true;
+  sacredTarnTree.userData.designRole = latestValleyMode
+    ? "old-port-elder-tree-returned-to-harbor"
+    : "old-port-elder-tree";
+  if (latestValleyMode) {
+    sacredTarnTree.userData.pendingHarborRestore = true;
+    sacredTarnTree.userData.referenceScale = 1;
+  }
 
   // 第二棵太古巨木：港口深潭旁交错对生（仅港口双株，不影响全局松树）
   const tarnCompanionPine = createColossalVernacularTree({
@@ -1078,7 +1111,12 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   });
   placeRangeAsset(tarnCompanionPine, -19.8, 44.2, R, -0.15, true);
   tarnCompanionPine.rotateY(1.05);
-  scene.add(tarnCompanionPine);
+  if (!latestValleyMode) scene.add(tarnCompanionPine);
+  tarnCompanionPine.visible = !latestValleyMode;
+  tarnCompanionPine.userData.designRole = latestValleyMode
+    ? "old-port-companion-tree-returned-to-harbor"
+    : "old-port-companion-tree";
+  tarnCompanionPine.userData.pendingHarborRestore = latestValleyMode;
 
   // ---------- 城堡背后雪山：面对城堡时左右各一组 ----------
   // 站点局部：lz+ = 主岛/正门朝向；站在正门前看城堡时，-lx 为左、+lx 为右，
@@ -1187,6 +1225,9 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   embedSnowMassifBase(snowRight, R, SNOW_MASSIF_BURY);
   retreatSnowMassifFromInnerTerraces(snowRight, rightYaw, 54, -56, normalizedContour);
   snowMountains.add(snowRight);
+  snowMountains.visible = !latestValleyMode;
+  snowMountains.userData.hiddenByLatestValleyDesign = latestValleyMode;
+  snowMountains.userData.removedFromCanalSightline = latestValleyMode;
   scene.add(snowMountains);
 
   // ---------- 护城河：环绕圣城墙脚，落在星球曲面地表 ----------
@@ -1316,6 +1357,10 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     return moat;
   };
   buildMoat(contourSpec?.moat);
+  if (latestValleyMode && moat) {
+    moat.visible = false;
+    moat.userData.hiddenByLatestValleyDesign = true;
+  }
 
   // ---------- 纳沃纳式双栖水利广场：运河进入城堡前 ----------
   // 运河环线在圣城附近的具体走向要等 buildWorldCanal 后才能确定，
@@ -1479,7 +1524,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     // ---------- 连港步道：广场 R 侧门洞 → 旧港码头陆侧（贴地石堤，跨护城河处护堤开缺） ----------
     buildHarborCauseway(navonaPlaza);
 
-    // 低多边形特洛伊木马：第一层瀑布正下方的接水湖面。
+    // 低多边形特洛伊木马：新圣城停在山脚水岸；历史模式仍兼容旧瀑布湖位。
     trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
     trojanHorse.scale.setScalar(0.72);
 
@@ -1533,7 +1578,16 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       lakeWaterObject = "first-waterfall-fallback-surface";
       lakeSurfacePos.copy(firstWaterfallPos);
     }
-    lakeSurfacePos.addScaledVector(_site, HORSE_LAKE_CLEARANCE);
+    if (latestValleyMode) {
+      // 设计图前景是水岸与舟船，不再存在“第一层瀑布接水湖”。木马强制
+      // 落在右侧岸边水面，并继续由 aimHorseToCanal 对准真实运河航段。
+      rangeLocalToWorld(10.8, 31.5, R, lakeSurfacePos);
+      lakeSurfacePos.addScaledVector(_site, HORSE_LAKE_CLEARANCE);
+      rangeLocalToWorld(0, 23.5, R, firstWaterfallPos);
+      lakeWaterObject = "highland-waterfront";
+    } else {
+      lakeSurfacePos.addScaledVector(_site, HORSE_LAKE_CLEARANCE);
+    }
 
     const surfaceUp = _site.clone();
     const surfaceForward = _fwd.clone()
@@ -1564,7 +1618,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     const horseYaw = waterfallYaw - Math.PI / 2;
     trojanHorse.rotateY(horseYaw);
     trojanHorse.userData.placement = {
-      kind: "citadel-cascade-lake",
+      kind: latestValleyMode ? "highland-waterfront" : "citadel-cascade-lake",
       surface: "water",
       lx: horseLx,
       lz: horseLz,
@@ -1573,12 +1627,13 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       waterfallYaw,
       rotationOffset: -Math.PI / 2,
       facing: "canal",
-      facingReference: "first-ground-level-waterfall",
+      facingReference: latestValleyMode ? "waterfront-canal" : "first-ground-level-waterfall",
       lake: true,
-      waterfall: "first-ground-level",
+      waterfall: latestValleyMode ? null : "first-ground-level",
       waterObject: lakeWaterObject,
-      cascadeSequence: firstWaterfall?.userData?.sequence ?? 3,
-      waterfallOrder: "ground-to-castle",
+      cascadeSequence: latestValleyMode ? null : firstWaterfall?.userData?.sequence ?? 3,
+      waterfallOrder: latestValleyMode ? null : "ground-to-castle",
+      battleDestination: "castle-top",
     };
     scene.add(trojanHorse);
 
@@ -1646,6 +1701,34 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       // 城堡台地/石阶/正门都在城堡本地切平面；路线用城堡自身变换贴地，
       // 避免 range 坐标系（R+elevation）与城堡径向下沉(radialEmbed≈4)之间的偏移导致走空中。
       castle.updateMatrixWorld(true);
+      const latestAnchors = castle.userData?.highlandAssaultAnchors;
+      if (latestAnchors?.destination === "castle-top") {
+        const toWorld = (tuple) => new THREE.Vector3(
+          Number(tuple?.[0]) || 0,
+          Number(tuple?.[1]) || 0,
+          Number(tuple?.[2]) || 0
+        ).applyMatrix4(castle.matrixWorld);
+        const ladderRoute = [];
+        const stairRoute = (latestAnchors.stairRoute || []).map(toWorld);
+        const interiorFloorRoutes = (latestAnchors.interiorFloorRoutes || []).map((route) => ({
+          floor: route.floor,
+          surface: route.surface,
+          points: (route.points || []).map(toWorld),
+        }));
+        const captureTarget = toWorld(latestAnchors.keepTop);
+        return {
+          // waterfallRoute 是兼容旧 API 的字段名；最新设计强制走地面石阶
+          // 和方尖碑内部旋转楼梯，绝不生成空中的梯子/瀑布路线。
+          waterfallRoute: ladderRoute,
+          stairRoute,
+          interiorFloorRoutes,
+          stairTransferRoutes: interiorFloorRoutes,
+          patrolSurfacePoint: null,
+          topAssaultMode: true,
+          captureMode: latestAnchors.captureMode || "interior-rotating-stairs",
+          captureTarget,
+        };
+      }
       const waterfallRoute = [];
       const waterfallNodes = [...(pilgrimageCascades?.children || [])].sort(
         (a, b) => (b.userData?.sequence ?? 0) - (a.userData?.sequence ?? 0)
@@ -1778,6 +1861,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       stairTransferRoutes: infiltrationRoutes.stairTransferRoutes,
       patrolCastle,
       patrolSurfacePoint: infiltrationRoutes.patrolSurfacePoint,
+      topAssaultMode: infiltrationRoutes.topAssaultMode === true,
+      captureTarget: infiltrationRoutes.captureTarget || null,
       events: createCombatEventLog({ seed: FEATURES.combatSeed, scenario: "infiltration" }),
     });
     trojanHorse.userData.nightInfiltration = nightInfiltration.root;
@@ -1817,6 +1902,16 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     siteDir: _site.clone(),
     fwd: _fwd.clone(),
     right: _right.clone(),
+  };
+  rangeSystem.userData = {
+    latestValleyMode,
+    legacyVisualSuppressed: latestValleyMode,
+    terrainVisualOwner: latestValleyMode
+      ? "citadel-continuous-mountain-terrain-system"
+      : "citadel-range",
+    waterVisualOwner: latestValleyMode
+      ? "highland-waterfront-water"
+      : "citadel-pilgrimage-water-steps",
   };
 
   // 地貌菜单可实时调整护城河内径/外径/高度/曲率：重建环带并重贴球面曲率。
@@ -1883,7 +1978,17 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
   // 台地半径/层高/层叠瀑布开关变更时热重建水系。
   // cascadeEnabled=false → 空组（不占台面）；true → 五湖四帘，且不得跨两层跌落。
   rangeSystem.rebuildWaterTerraces = (nextContour = CITADEL.contourTerrain) => {
-    normalizedContour = normalizeCitadelTerrain(nextContour);
+    const noCascade = normalizedContour.presentationMode === "mountain-valley-v1";
+    normalizedContour = normalizeCitadelTerrain(noCascade
+      ? {
+          ...nextContour,
+          presentationMode: "mountain-valley-v1",
+          cascadeEnabled: false,
+          cascadePoolsEnabled: false,
+          notchedLayers: 0,
+          notchHalf: 0,
+        }
+      : nextContour);
     configureCitadelWalkTerrain(R, normalizedContour);
     scene.remove(pilgrimageWaterSteps, pilgrimageCascades);
     for (const group of [pilgrimageWaterSteps, pilgrimageCascades]) {
@@ -1896,7 +2001,7 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       materials,
       normalizedContour
     );
-    scene.add(pilgrimageWaterSteps, pilgrimageCascades);
+    if (!latestValleyMode) scene.add(pilgrimageWaterSteps, pilgrimageCascades);
     rangeSystem.pilgrimageWaterSteps = pilgrimageWaterSteps;
     rangeSystem.pilgrimageCascades = pilgrimageCascades;
     rangeSystem.contourSpec = normalizedContour;

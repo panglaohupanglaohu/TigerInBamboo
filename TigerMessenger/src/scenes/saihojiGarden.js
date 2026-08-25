@@ -11,6 +11,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 import { buildSaihojiPlanet, SAIHOJI_HUB, SAIHOJI_ZONES, latLonToGardenDir } from "../world/saihoji.js";
 import {
   buildEcoLeviathanIsland,
@@ -271,6 +272,17 @@ export const saihojiGardenScene = {
     beamSpot.target = new THREE.Object3D();
     beamSpot.target.name = "saihoji-beam-spot-target";
     scene.add(beamSpot, beamSpot.target);
+    // K4：鲸升空光束迁入 registry（事件驱动强度，桥接层每帧回灌；
+    // 池灯以 PointLight 近似 SpotLight，仅作预算内的局部照明）
+    registerLocalLight(beamSpot, {
+      id: "saihoji-beam-spot",
+      owner: "saihoji",
+      kind: "spot",
+      color: 0x9fffe8,
+      intensity: 0,
+      radius: 60,
+      priority: 5,
+    });
 
     // ---------- 藏地/升空状态机：扫描灯艇（莫比斯航空艇编队）掠过才升空 ----------
     let currentR = buriedR;

@@ -137,6 +137,9 @@ function createTerrainNoise(rnd, size) {
  *   segments?: number,            // 地形分段（默认 64）
  *   seed?: number,
  *   yaw?: number,                 // 绕法线自转
+ *   palette?: { low?: number, ink?: number, emerald?: number, fresh?: number, edge?: number },
+ *   footprint?: { rx?: number, rz?: number, segments?: number },
+ *   heightScale?: number,          // 专用地貌的起伏倍率
  *   avoidWorld?: { position: THREE.Vector3, radius: number }[],
  * }} [opts]  avoidWorld：世界坐标避障体（轨道采样点/桥墩/书店），
  *            苔藓块与其保持 MIN_DISTANCE 安全阻尼距离
@@ -150,6 +153,9 @@ export function buildImpastoMossyGround(opts = {}) {
     segments = 64,
     seed = 20260804,
     yaw = 0,
+    palette = null,
+    footprint = null,
+    heightScale = 1,
     avoidWorld = [],
   } = opts;
 
@@ -194,41 +200,136 @@ export function buildImpastoMossyGround(opts = {}) {
   }
 
   // ---------- 地形网格：平面贴球弯曲 + 噪声隆起 ----------
-  // 球面下陷量：局部系中球面随距中心距离向下弯曲（切平面 → 球面），
-  // 顶点 y = −drop，使补丁边缘贴合球面而非翘起
+  // 球面下陷量：局部系中球面随距中心距离向下弯曲（切平面 → 球面）。
+  // 普通苔地继续使用旧的方形采样；苔庭战区传入 footprint 后改用
+  // 不规则环形网格，避免出现截图中突兀的巨大矩形绿板。
   const sphereDrop = (x, z) => R - Math.sqrt(Math.max(R * R - (x * x + z * z), 0));
-  const terrainY = (x, z) => -sphereDrop(x, z) + 0.05 + bump(x, z);
+  const footprintSpec = footprint
+    ? {
+        rx: Math.max(4, footprint.rx ?? size * 0.32),
+        rz: Math.max(3, footprint.rz ?? size * 0.22),
+        segments: Math.max(14, Math.floor(footprint.segments ?? 24)),
+      }
+    : null;
+  const parsedHeightScale = Number(heightScale);
+  const terrainHeightScale = THREE.MathUtils.clamp(
+    Number.isFinite(parsedHeightScale) ? parsedHeightScale : 1,
+    0,
+    1.5
+  );
+  const footprintDistance = (x, z) =>
+    footprintSpec
+      ? Math.hypot(x / footprintSpec.rx, z / footprintSpec.rz)
+      : 0;
+  const terrainY = (x, z) => {
+    const base = -sphereDrop(x, z) + 0.05;
+    if (!footprintSpec) return base + bump(x, z) * terrainHeightScale;
+    // 向边缘连续压低丘陵，边界自然落回星球表面，不形成垂直切口。
+    const edgeKeep = 1 - smoothstepJS(0.58, 1.0, footprintDistance(x, z));
+    return base + bump(x, z) * edgeKeep * terrainHeightScale;
+  };
 
-  const geo = new THREE.PlaneGeometry(size, size, segments, segments);
-  geo.rotateX(-Math.PI / 2); // XY 平面 → XZ 平面（Y 向上）
-  const pos = geo.attributes.position;
-  const colors = new Float32Array(pos.count * 3);
-  const cLow = new THREE.Color(TERRAIN_LOW);
-  const cInk = new THREE.Color(MOSS_INK);
-  const cEmerald = new THREE.Color(MOSS_EMERALD);
-  const cFresh = new THREE.Color(MOSS_FRESH);
+  const groundPalette = {
+    low: palette?.low ?? TERRAIN_LOW,
+    ink: palette?.ink ?? MOSS_INK,
+    emerald: palette?.emerald ?? MOSS_EMERALD,
+    fresh: palette?.fresh ?? MOSS_FRESH,
+    edge: palette?.edge ?? palette?.emerald ?? MOSS_EMERALD,
+  };
+  const cLow = new THREE.Color(groundPalette.low);
+  const cInk = new THREE.Color(groundPalette.ink);
+  const cEmerald = new THREE.Color(groundPalette.emerald);
+  const cFresh = new THREE.Color(groundPalette.fresh);
+  const cEdge = new THREE.Color(groundPalette.edge);
   const _c = new THREE.Color();
 
   //  bumps 的峰值（用于色彩归一）
   let bumpMax = 1e-3;
-  for (let i = 0; i < pos.count; i++) {
-    bumpMax = Math.max(bumpMax, bump(pos.getX(i), pos.getZ(i)));
+  const sampleN = footprintSpec ? Math.max(16, footprintSpec.segments) : segments + 1;
+  const sampleRx = footprintSpec ? footprintSpec.rx : size / 2;
+  const sampleRz = footprintSpec ? footprintSpec.rz : size / 2;
+  for (let iz = 0; iz < sampleN; iz++) {
+    for (let ix = 0; ix < sampleN; ix++) {
+      const sx = -sampleRx + (ix / (sampleN - 1)) * sampleRx * 2;
+      const sz = -sampleRz + (iz / (sampleN - 1)) * sampleRz * 2;
+      bumpMax = Math.max(bumpMax, bump(sx, sz));
+    }
   }
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const z = pos.getZ(i);
+  const colorAt = (x, z, out = new THREE.Color()) => {
     const b = bump(x, z);
-    pos.setY(i, terrainY(x, z));
     // 按高度分层上色：谷底湿泥焦墨 → 翡翠 → 丘顶嫩绿
     const t = b / bumpMax;
-    if (t < 0.28) _c.copy(cLow).lerp(cInk, smoothstepJS(0, 0.28, t));
-    else if (t < 0.6) _c.copy(cInk).lerp(cEmerald, smoothstepJS(0.28, 0.6, t));
-    else _c.copy(cEmerald).lerp(cFresh, smoothstepJS(0.6, 0.95, t));
-    colors[i * 3] = _c.r;
-    colors[i * 3 + 1] = _c.g;
-    colors[i * 3 + 2] = _c.b;
+    if (t < 0.28) out.copy(cLow).lerp(cInk, smoothstepJS(0, 0.28, t));
+    else if (t < 0.6) out.copy(cInk).lerp(cEmerald, smoothstepJS(0.28, 0.6, t));
+    else out.copy(cEmerald).lerp(cFresh, smoothstepJS(0.6, 0.95, t));
+    if (footprintSpec) {
+      out.lerp(cEdge, smoothstepJS(0.68, 1.0, footprintDistance(x, z)));
+    }
+    return out;
+  };
+
+  let geo;
+  if (footprintSpec) {
+    const positions = [];
+    const faceColors = [];
+    const ringCount = 4;
+    const ringSize = footprintSpec.segments;
+    const phase = rnd() * Math.PI * 2;
+    const rings = [];
+    const pushTriangle = (a, b, c) => {
+      positions.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
+      for (const p of [a, b, c]) {
+        const tint = colorAt(p.x, p.z, _c);
+        faceColors.push(tint.r, tint.g, tint.b);
+      }
+    };
+    for (let ri = 0; ri < ringCount; ri++) {
+      const radius01 = (ri + 1) / ringCount;
+      const ring = [];
+      for (let i = 0; i < ringSize; i++) {
+        const a = phase + (i / ringSize) * Math.PI * 2;
+        const profile =
+          1 +
+          Math.sin(a * 3 + phase) * 0.055 +
+          Math.cos(a * 5 - phase * 0.7) * 0.035 +
+          (rnd() - 0.5) * 0.08;
+        const x = Math.cos(a) * footprintSpec.rx * radius01 * profile;
+        const z = Math.sin(a) * footprintSpec.rz * radius01 * profile;
+        ring.push({ x, y: terrainY(x, z), z });
+      }
+      rings.push(ring);
+    }
+    const center = { x: 0, y: terrainY(0, 0), z: 0 };
+    for (let i = 0; i < ringSize; i++) {
+      const next = (i + 1) % ringSize;
+      pushTriangle(center, rings[0][i], rings[0][next]);
+    }
+    for (let ri = 0; ri < rings.length - 1; ri++) {
+      for (let i = 0; i < ringSize; i++) {
+        const next = (i + 1) % ringSize;
+        pushTriangle(rings[ri][i], rings[ri + 1][i], rings[ri + 1][next]);
+        pushTriangle(rings[ri][i], rings[ri + 1][next], rings[ri][next]);
+      }
+    }
+    geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    geo.setAttribute("color", new THREE.Float32BufferAttribute(faceColors, 3));
+  } else {
+    geo = new THREE.PlaneGeometry(size, size, segments, segments);
+    geo.rotateX(-Math.PI / 2); // XY 平面 → XZ 平面（Y 向上）
+    const pos = geo.attributes.position;
+    const colors = new Float32Array(pos.count * 3);
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      pos.setY(i, terrainY(x, z));
+      colorAt(x, z, _c);
+      colors[i * 3] = _c.r;
+      colors[i * 3 + 1] = _c.g;
+      colors[i * 3 + 2] = _c.b;
+    }
+    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   }
-  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   geo.computeVertexNormals();
 
   const terrainMat = new THREE.MeshToonMaterial({
@@ -271,16 +372,19 @@ export function buildImpastoMossyGround(opts = {}) {
       z = (rnd() - 0.5) * (size - 4);
     }
     if (Math.max(Math.abs(x), Math.abs(z)) > size / 2 - 2) continue;
+    // 有机足迹模式下，装饰也必须留在椭圆边界内；否则虽然地形网格已不再是
+    // 方形，散落的苔藓块仍会把视觉轮廓重新撑成一个大方块。
+    if (footprintSpec && footprintDistance(x, z) > 0.93) continue;
     if (blocked(x, z)) continue; // 轨道/桥墩/书店安全阻尼
 
     const b = bump(x, z);
     const s = 0.6 * (0.6 + rnd() * 1.0); // 大小不一
     const mat =
       b / bumpMax > 0.62 + rnd() * 0.1
-        ? getMossMaterial(MOSS_FRESH)
+        ? getMossMaterial(groundPalette.fresh)
         : b / bumpMax > 0.24
-          ? getMossMaterial(MOSS_EMERALD)
-          : getMossMaterial(MOSS_INK);
+          ? getMossMaterial(groundPalette.emerald)
+          : getMossMaterial(groundPalette.ink);
 
     const moss = new THREE.Mesh(mossGeo, mat);
     moss.position.set(x, terrainY(x, z) + 0.04, z);
@@ -296,5 +400,8 @@ export function buildImpastoMossyGround(opts = {}) {
 
   group.userData.terrainY = terrainY; // 供外部贴放小物件
   group.userData.mossCount = placed;
+  group.userData.footprint = footprintSpec ? Object.freeze({ ...footprintSpec }) : null;
+  group.userData.heightScale = terrainHeightScale;
+  group.userData.palette = Object.freeze({ ...groundPalette });
   return group;
 }

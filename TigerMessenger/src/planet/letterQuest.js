@@ -3,6 +3,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { findNearbyNpc } from "./npcs.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 /**
  * @param {object} deps
@@ -120,6 +121,16 @@ export function createCarryLetterVisual(playerMesh) {
   const glow = new THREE.PointLight(0xffe08a, 0.9, 4, 2);
   glow.position.y = 1.4;
   group.add(glow);
+  // K4：任务灯迁入 registry（携信可见性由 setCarrying 驱动强度）
+  registerLocalLight(glow, {
+    id: "planet-letter-quest-glow",
+    owner: "letter-quest",
+    kind: "point",
+    color: 0xffe08a,
+    intensity: 0,
+    radius: 4,
+    priority: 5,
+  });
 
   group.visible = false;
   playerMesh.add(group);

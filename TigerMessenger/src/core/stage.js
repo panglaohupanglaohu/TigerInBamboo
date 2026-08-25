@@ -22,6 +22,10 @@ export function createStage() {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // 显式色彩管理（V5 K1）：即 r172 默认值，写明以便回归测试断言、防重复转换
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.NoToneMapping;
+  renderer.toneMappingExposure = 1;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.BasicShadowMap; // 硬边投影（Cel 动漫感，不要软渐变）
   document.body.appendChild(renderer.domElement);

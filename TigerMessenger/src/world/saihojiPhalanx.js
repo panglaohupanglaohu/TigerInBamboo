@@ -1,4 +1,8 @@
 // =====================================================================
+//  @legacy 日间攻城状态机（禁止追加新玩法）
+//  V4 真源：src/agents/citadel/siegeDirector.js · combatAgent.js · combatSim.js
+//  本文件暂留：完整运兵/弓箭/拔河仍在这里。见 docs/citadel-v4-legacy.md
+//
 //  西芳寺罗马方阵：鼓声平息 + 苔庭鲸升空后，战船一艘艘运兵上岸，
 //  长矛围边、短剑盾第二层、核心英格兰长弓，对莫比斯 aircraft 攒箭。
 //  鲸起即告警 → 全营整队：长弓手在北翼排成两列，矛/盾结成护壁；
@@ -8,6 +12,8 @@
 import * as THREE from "three";
 import { PLANET_RADIUS } from "./planet.js";
 import { SAIHOJI_HUB } from "./saihoji.js";
+import { CITADEL_CASCADE_POOL_SPECS } from "./odysseyCitadel.js";
+import { citadelWalkFlights, citadelWalkMetrics } from "./citadelRange.js";
 import { latLonToDir, quatYToDir } from "./sphereMath.js";
 import {
   isInfiltrationMissionActive,
@@ -19,7 +25,7 @@ import {
 import {
   createFisherBoat,
   createHarborPatrolSoldier,
-  createGladiusSoldier,
+  createCitadelMeleeSoldier,
   createLongbowSoldier,
   updateLongbowShot,
   updateWarshipOars,
@@ -27,8 +33,10 @@ import {
   paintBoatCrewCrest,
   emptyBoatCrew,
 } from "../assets/harbor.js";
-import { P } from "../core/params.js";
+import { P, isCitadelPaletteV3 } from "../core/params.js";
+import { v3TokenInt } from "./citadelVisualTheme.js";
 import { createRng } from "../core/rng.js";
+import { projectWorldObjectToPlanetSurface } from "./planetV8/riderProjection.js";
 
 const SHIP_COUNT = 2;
 const SHIP_GAP = 16;
@@ -53,13 +61,21 @@ const TROJAN_PATROL_COUNT = 6; // 木马腹里出来的深夜巡查兵
 const PATROL_PACE = 1.7; // 木马兵巡查步速（世界单位/秒）
 const STRAGGLER_FLEE_PACE = 2.3; // 残部逃跑步速
 const STRAGGLER_ESCAPE_DIST = 14; // 残部逃离滞留点 ≥14 单位即没入夜色消失
-// 攻城路线：苔庭战船 → 纳沃纳广场集结 → 中央突破 → 瀑布攻城梯 → 夺取一层台地建筑
-const SIEGE_LADDER_COUNT = 6; // 瀑布缺口处的攻城梯数量（首波 4 架 + 第二波增援专属 2 架，总攻展开）
+// 攻城路线：苔庭战船 → 纳沃纳广场集结 → 中央突破 → 逐层瀑布攻城梯 → 夺取台地建筑
+const SIEGE_LADDER_COUNT = 6; // 总梯数保持 6：首波 4 架覆盖四个层间落差，增援再用 2 架
 const SIEGE_LADDER_FIRST_WAVE = 4; // 首波蓝盔使用的梯数；梯 4/5 留给第二波增援
+// 台地数组按高→低排列；攻城从地面向上，所以瀑布顺序必须反向。
+// 2、2、1、1 的分配既保留 6 架梯，又保证每个层间瀑布至少有一架。
+const SIEGE_LADDER_CASCADE_SEQUENCE = Object.freeze([3, 2, 1, 0, 3, 2]);
 const SIEGE_GATHER_SEC = 5; // 纳沃纳广场集结时长（秒后中央突破）
 const BOARD_HOLD_SEC = 3.2; // 苔庭战役后换蓝缨原地列队时长（秒，看得见换缨再登船）
 const SIEGE_ADVANCE_PACE = 2.6; // 突破推进步速（跑步，广场→瀑布约 30 秒）
 const SIEGE_CLIMB_SEC = 4.2; // 单人爬梯耗时
+const LADDER_QUEUE_CAP = 8; // 每架攻城梯的排队上限：排满的士兵改走瀑布攀爬道
+const WATERFALL_CLIMB_LANES = 3; // 瀑布攀爬道数量（没有攻城梯也能沿瀑布水帘攀上城）
+const WATERFALL_CLIMB_SEC = 6.5; // 攀瀑比爬梯更慢更危险（无梯登城的险路）
+const STAIR_ASSAULT_PACE = 2.9; // 无梯时沿真实朝圣石阶小跑上行
+const STAIR_QUEUE_GAP_SEC = 0.42; // 阶梯入口排队间隔，避免士兵互相重叠
 /** 深夜抵达时强制拨回傍晚后，至少演完这么久再进深夜清场 */
 const SIEGE_MIN_DAY_SEC = 62;
 const RED_LONGBOW_COUNT = 4; // 红盔长弓手（少量，居高俯射防守）
@@ -89,6 +105,12 @@ const _tmpD = new THREE.Vector3();
 const _tmpE = new THREE.Vector3();
 const _q = new THREE.Quaternion();
 const _basis = new THREE.Matrix4();
+const _toolOrigin = new THREE.Vector3();
+const _toolTarget = new THREE.Vector3();
+const _toolDir = new THREE.Vector3();
+const _toolAxis = new THREE.Vector3(0, 1, 0);
+const _toolParentQ = new THREE.Quaternion();
+const _toolAimQ = new THREE.Quaternion();
 
 function hubDir(out = new THREE.Vector3()) {
   return latLonToDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, out);
@@ -133,17 +155,19 @@ const _axisX = new THREE.Vector3(1, 0, 0);
 function makeArrow() {
   const g = new THREE.Group();
   g.name = "phalanx-arrow";
+  // V3（?citadelPaletteV3=1）：箭杆/箭头走 token；红羽翎保留作阵营识别点
+  const v3 = isCitadelPaletteV3();
   // 与长弓上搭箭同尺度（fig×2 后约 0.68），撒放时才不会突然变短；
   // 放大 1.5 倍 + 加色拖尾：长距离攒射在空中清晰可见
   const shaft = new THREE.Mesh(
     new THREE.CylinderGeometry(0.02, 0.02, 0.92, 5),
-    new THREE.MeshBasicMaterial({ color: 0x9a7a4a })
+    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("shipDeckWood") : 0x9a7a4a })
   );
   shaft.rotation.z = Math.PI / 2;
   g.add(shaft);
   const head = new THREE.Mesh(
     new THREE.ConeGeometry(0.045, 0.14, 5),
-    new THREE.MeshBasicMaterial({ color: 0xcfd6da })
+    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("unitSteel") : 0xcfd6da })
   );
   head.rotation.z = -Math.PI / 2;
   head.position.x = 0.52;
@@ -194,15 +218,16 @@ function makeArrow() {
 function makeJavelin() {
   const g = new THREE.Group();
   g.name = "phalanx-javelin";
+  const v3 = isCitadelPaletteV3();
   const shaft = new THREE.Mesh(
     new THREE.CylinderGeometry(0.032, 0.032, 1.3, 5),
-    new THREE.MeshBasicMaterial({ color: 0x6b4f2a })
+    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("shipDeckWood") : 0x6b4f2a })
   );
   shaft.rotation.z = Math.PI / 2;
   g.add(shaft);
   const head = new THREE.Mesh(
     new THREE.ConeGeometry(0.055, 0.18, 5),
-    new THREE.MeshBasicMaterial({ color: 0xc9d1d6 })
+    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("unitSteel") : 0xc9d1d6 })
   );
   head.rotation.z = -Math.PI / 2;
   head.position.x = 0.72;
@@ -245,14 +270,25 @@ function makeJavelin() {
  * @param {() => THREE.Group|null} opts.getSquad
  * @param {() => object|null} [opts.getTram] 电车系统（redTram/blueTram 实时位置）——
  *   白天源源不断的电车运兵：电车掠过苔庭附近时士兵下车、步行入阵
+ * @param {object|null} [opts.oldHarbor] 旧港场景构建结果或 old-harbor-scene Group
+ * @param {() => object|null} [opts.getOldHarbor] 动态取得旧港（编辑器重建后仍有效）
+ * @param {boolean} [opts.disableSiegeLadders] 调试/编辑器开关：禁用实体攻城梯，
+ *   强制验证朝圣石阶备用寻路
+ * @param {object|null} [opts.surfaceProvider] V8 provider-owned terrain surface
+ * @param {boolean} [opts.surfaceProjectionEnabled] opt-in unit projection gate
  */
 export function createSaihojiPhalanxBattle({
   scene,
   isWhaleRisen,
   getSquad,
   getTram,
+  oldHarbor = null,
+  getOldHarbor = null,
   getTimeOfDay = null,
   getNightInfiltration = null,
+  disableSiegeLadders = false,
+  surfaceProvider = null,
+  surfaceProjectionEnabled = false,
   seed = 1, // P0 · 攻防 V2：注入式种子随机源；同 seed 同输入 → 同事件序列
   rng: rngOpt = null,
   events = null, // 可选 CombatEventLog（P0 事件记录/重放）
@@ -263,6 +299,31 @@ export function createSaihojiPhalanxBattle({
   root.name = "saihoji-phalanx-battle";
   root.userData.combatSeed = rng.seed;
   root.userData.combatEvents = events; // P0 事件日志（可为 null）
+  root.userData.siegeLaddersDisabled = !!disableSiegeLadders;
+  root.userData.surfaceProjectionEnabled = !!surfaceProjectionEnabled;
+
+  // 旧港是独立的即时交战区：红缨战斗单位一旦进入港区就切换为战斗状态，
+  // 不再被当作普通巡查/运输单位。港区判定基于 old-harbor-scene 的本地
+  // 椭圆范围，避免球面旋转后用世界 AABB 误判。
+  const harborCombatInside = new Set();
+  const harborCombatEntered = new Set();
+  const harborCombat = {
+    active: false,
+    redEntered: 0,
+    engagements: 0,
+    lastAttackerUid: null,
+    lastDefenderUid: null,
+    _inside: harborCombatInside,
+    getState: () => ({
+      active: harborCombat.active,
+      redEntered: harborCombat.redEntered,
+      engagements: harborCombat.engagements,
+      insideCount: harborCombatInside.size,
+      lastAttackerUid: harborCombat.lastAttackerUid,
+      lastDefenderUid: harborCombat.lastDefenderUid,
+    }),
+  };
+  root.userData.oldHarborCombat = harborCombat;
   scene.add(root);
 
   // ---------- P0 事件记录：simT 为仿真时钟（update 累加 dt），与渲染 t 无关 ----------
@@ -287,8 +348,8 @@ export function createSaihojiPhalanxBattle({
    *  → sailOut（运兵：城堡 → 运河交汇处城堡 → 苔庭下岸）
    *  → fight（整队成阵，鲸起才攒箭对 aircraft 射击）
    *  → return（苔庭鲸恢复原位后，全员换蓝盔、撤阵登船经运河去纳沃纳广场）
-   *  → siege（广场集结 → 中央突破从瀑布攻城梯登城，夺取一层台地建筑；
-   *          红盔原地防守（梯顶/路口）+ 少量红盔长弓手俯射，
+   *  → siege（广场集结 → 由攻城梯或山路/阶梯登城，夺取古堡顶层；
+   *          红盔原地防守（梯顶/城顶）+ 少量红盔长弓手俯射，
    *          红盔战船经运河不断增援，人数不限；蓝盔长弓箭雨点名）
    *  → siegeNight（深夜主力消失，木马腹中红盔兵出腹巡查、驱赶蓝盔残部回运河）
    *  → done（残部驱离殆尽、巡查兵回木马腹，故事线落幕）
@@ -301,7 +362,7 @@ export function createSaihojiPhalanxBattle({
   let siegeNightT = 0;
   let redRoot = null;
   const redSoldiers = [];
-  const redPostWorld = []; // 一层台地前沿哨位实测锚点（null = 桩环境旧方向兜底）
+  const redPostWorld = []; // 城顶防守哨位实测锚点（null = 桩环境旧方向兜底）
   // 攻城战：红盔战船经运河从交汇处不断增援圣城（人数不限，战船到岸即增援 4 人小队）
   const redShips = []; // { boat, u, unloaded }
   let redReinforceT = 0;
@@ -312,9 +373,16 @@ export function createSaihojiPhalanxBattle({
   const BLUE_REINFORCE_AT = 16; // 攻城开始后 16 秒从交汇处出发
   const BLUE_REINFORCE_SHIPS = 2;
   const BLUE_SHIP_SAIL_TIME = 22; // 交汇处 → 纳沃纳广场航程（秒）
-  // 瀑布攻城梯（蓝盔中央突破的登城通道）
+  // 山脚至古堡顶层的攻城梯（蓝盔中央突破通道）
   let ladderRoot = null;
   const siegeLadders = []; // { group, base, top, x }
+  root.userData.siegeLadders = siegeLadders; // 自动验收/调试：路线终点必须为 castle-top
+  // 旧瀑布攀爬道仅保留给 latestDesign=false 的兼容场景；新圣城不生成。
+  const siegeWaterfallClimbs = []; // { base, top, capture, x }
+  // 无攻城梯时的山路/石阶路线：从山脚连续抵达古堡顶层。
+  const siegeStairRoutes = []; // { points, base, top, capture, terraces }
+  root.userData.siegeWaterfallClimbs = siegeWaterfallClimbs; // 测试/调试句柄
+  root.userData.siegeStairRoutes = siegeStairRoutes; // 测试/调试句柄
   let siegeGatherT = 0;
   let siegeElapsed = 0;
   let siegeForceDay = false;
@@ -346,7 +414,7 @@ export function createSaihojiPhalanxBattle({
     const sp = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 6, 4),
       new THREE.MeshBasicMaterial({
-        color: 0xffe8a0,
+        color: isCitadelPaletteV3() ? v3TokenInt("unitTorch", { torch: true }) : 0xffe8a0,
         transparent: true,
         opacity: 0.95,
         blending: THREE.AdditiveBlending,
@@ -393,12 +461,23 @@ export function createSaihojiPhalanxBattle({
   // 高山圣城局部系（瀑布缺口朝向 = 容器局部 +Z，notchCenter≈0.17 略偏 +X）：
   // 攻城梯/台地落点需要在「含台地高度」的世界坐标插值，不能只做球面归一。
   const castleObj = scene.getObjectByName("castleContainer");
+  const latestAssault = castleObj?.userData?.highlandAssaultAnchors ?? null;
+  const ladderPolicyDisabled = !!(
+    disableSiegeLadders || latestAssault?.ladderPolicy === "disabled"
+  );
+  root.userData.siegeLaddersDisabled = ladderPolicyDisabled;
+  root.userData.siegeLadderPolicy = latestAssault?.ladderPolicy
+    ?? (disableSiegeLadders ? "disabled" : "legacy");
   const castleQuat = castleObj?.quaternion?.clone() ?? new THREE.Quaternion();
   const castlePos = castleObj
     ? castleObj.position.clone()
     : castleDir.clone().multiplyScalar(PLANET_RADIUS);
   function castleLocalPoint(x, y, z, out = new THREE.Vector3()) {
     return out.set(x, y, z).applyQuaternion(castleQuat).add(castlePos);
+  }
+  function latestAssaultPoint(tuple, out = new THREE.Vector3()) {
+    if (!Array.isArray(tuple) || tuple.length < 3) return null;
+    return castleLocalPoint(tuple[0], tuple[1], tuple[2], out);
   }
   // 圣城局部 +Y（台地法向）与 +Z（瀑布/正立面朝向）的世界向量
   const castleUpWorld = new THREE.Vector3(0, 1, 0).applyQuaternion(castleQuat);
@@ -446,7 +525,7 @@ export function createSaihojiPhalanxBattle({
       role === "longbow"
         ? createLongbowSoldier({ rand })
         : role === "gladius"
-          ? createGladiusSoldier()
+          ? createCitadelMeleeSoldier()
           : createHarborPatrolSoldier();
     s.userData.uid = nextUid++; // P0 稳定士兵 ID（事件流比对用）
     s.userData.phalanxRole = role;
@@ -574,7 +653,11 @@ export function createSaihojiPhalanxBattle({
     if (castle) {
       castle.updateWorldMatrix(true, true);
       castle.traverse((o) => {
-        if (o.isMesh && o.visible && (o.name || "").startsWith("contour-step")) ground.push(o);
+        if (
+          o.isMesh
+          && o.visible
+          && ((o.name || "").startsWith("contour-step") || o.userData.isCitadelTerrain === true)
+        ) ground.push(o);
       });
     }
     for (const n of ["citadel-range", "planet-surface"]) {
@@ -934,6 +1017,20 @@ export function createSaihojiPhalanxBattle({
     detachRopes();
     resetFightFormation();
     clearRedGarrison();
+    for (const s of harborCombatInside) {
+      if (s?.userData) {
+        s.userData.harborCombat = false;
+        s.userData.harborCombatIntent = null;
+        s.userData.harborCombatTargetUid = null;
+      }
+    }
+    harborCombatInside.clear();
+    harborCombatEntered.clear();
+    harborCombat.active = false;
+    harborCombat.redEntered = 0;
+    harborCombat.engagements = 0;
+    harborCombat.lastAttackerUid = null;
+    harborCombat.lastDefenderUid = null;
     siegeNightT = 0;
     root.userData.siegeAssaultBgm = false;
     setSiegeAssaultBgm(false, { fade: 0.4 });
@@ -1104,6 +1201,8 @@ export function createSaihojiPhalanxBattle({
           n === "planet-surface" ||
           n === "mossy-terrain" ||
           n === "leviathan-crust-plate" ||
+          n === "leviathan-terrain-topography" ||
+          n.startsWith("leviathan-moss-bed") ||
           pn === "mossyGround"
         ) {
           groundMeshes.push(o);
@@ -1285,9 +1384,43 @@ export function createSaihojiPhalanxBattle({
       ladderRoot = null;
     }
     siegeLadders.length = 0;
+    siegeStairRoutes.length = 0;
     siegeGatherT = 0;
     siegeElapsed = 0;
     siegeForceDay = false;
+    if (castleObj?.userData) {
+      castleObj.userData.capturedFloors = [];
+      castleObj.userData.capturedTopFloor = -1;
+    }
+  }
+
+  function isSiegeLadderAvailable(lane) {
+    return !!(
+      lane?.group?.parent &&
+      lane.group.visible !== false &&
+      ladderRoot?.visible !== false
+    );
+  }
+
+  function hasAvailableSiegeLadder() {
+    return siegeLadders.some(isSiegeLadderAvailable);
+  }
+
+  function markCastleFloorCaptured(floorIndex) {
+    if (!castleObj?.userData || !Number.isFinite(floorIndex)) return;
+    const floors = new Set(Array.isArray(castleObj.userData.capturedFloors)
+      ? castleObj.userData.capturedFloors
+      : []);
+    floors.add(floorIndex | 0);
+    castleObj.userData.capturedFloors = [...floors].sort((a, b) => a - b);
+    castleObj.userData.capturedTopFloor = Math.max(
+      Number(castleObj.userData.capturedTopFloor ?? -1),
+      floorIndex | 0
+    );
+    logEvent("castleFloorCaptured", {
+      floor: floorIndex | 0,
+      capturedFloors: castleObj.userData.capturedFloors.slice(),
+    });
   }
 
   // ---------- 瀑布攻城梯：架在层叠瀑布缺口（圣城局部 +Z 扇区）， ----------
@@ -1295,7 +1428,9 @@ export function createSaihojiPhalanxBattle({
   function createSiegeLadder(len) {
     const g = new THREE.Group();
     g.name = "siege-ladder";
-    const wood = new THREE.MeshToonMaterial({ color: 0x8a5a33 });
+    const wood = new THREE.MeshToonMaterial({
+      color: isCitadelPaletteV3() ? v3TokenInt("shipDeckWood") : 0x8a5a33,
+    });
     const railGeo = new THREE.BoxGeometry(0.09, len, 0.09);
     for (const sx of [-0.28, 0.28]) {
       const rail = new THREE.Mesh(railGeo, wood);
@@ -1320,17 +1455,174 @@ export function createSaihojiPhalanxBattle({
     ladderRoot = new THREE.Group();
     ladderRoot.name = "siege-ladders";
     root.add(ladderRoot);
+    if (ladderPolicyDisabled) {
+      ladderRoot.userData.disabled = true;
+      ladderRoot.userData.policy = latestAssault?.ladderPolicy ?? "disabled";
+      ladderRoot.userData.waterfallCoverage = [];
+      ladderRoot.userData.destination = latestAssault?.destination ?? "legacy-terraces";
+      spawnWaterfallClimbs();
+      spawnSiegeStairRoutes();
+      logEvent("ladders", {
+        count: 0,
+        waterfalls: [],
+        disabled: true,
+        destination: ladderRoot.userData.destination,
+      });
+      return;
+    }
     const _axisY = new THREE.Vector3(0, 1, 0);
+    if (latestAssault && !ladderPolicyDisabled) {
+      const lanes = Array.isArray(latestAssault.ladderLanes)
+        ? latestAssault.ladderLanes.slice(0, SIEGE_LADDER_COUNT)
+        : [];
+      ladderRoot.userData.waterfallCoverage = [];
+      ladderRoot.userData.destination = "castle-top";
+      ladderRoot.userData.routeSystem = "mountain-valley-assault";
+      for (let i = 0; i < lanes.length; i++) {
+        const laneSpec = lanes[i];
+        const base = latestAssaultPoint(laneSpec.base);
+        const top = latestAssaultPoint(laneSpec.top);
+        const capture = latestAssaultPoint(laneSpec.capture);
+        if (!base || !top || !capture) continue;
+        const len = base.distanceTo(top) + 0.5;
+        const ladder = createSiegeLadder(len);
+        ladder.name = laneSpec.id || `castle-top-ladder-${i}`;
+        ladder.position.copy(base).lerp(top, 0.5);
+        ladder.quaternion.setFromUnitVectors(_axisY, _tmp.copy(top).sub(base).normalize());
+        ladder.userData.destination = "castle-top";
+        ladder.userData.routeSystem = "mountain-valley-assault";
+        ladder.userData.laneIndex = i;
+        ladderRoot.add(ladder);
+        siegeLadders.push({
+          group: ladder,
+          base,
+          top,
+          capture,
+          x: Number(laneSpec.top?.[0]) || 0,
+          destination: "castle-top",
+          laneIndex: i,
+        });
+      }
+      spawnSiegeStairRoutes();
+      logEvent("ladders", {
+        count: siegeLadders.length,
+        waterfalls: [],
+        destination: "castle-top",
+      });
+      return;
+    }
+    const cascadeRoot = scene.getObjectByName("citadel-pilgrimage-layered-cascades");
+    const cascades = new Map();
+    for (const waterfall of cascadeRoot?.children || []) {
+      const sequence = Number(waterfall.userData?.sequence);
+      if (Number.isInteger(sequence)) cascades.set(sequence, waterfall);
+    }
+    const usedPerCascade = new Map();
+    const fallbackPoint = (x, z, lift) =>
+      groundAtLocal(x, z, lift) || castleLocalPoint(x, lift, z, new THREE.Vector3());
+    ladderRoot.userData.waterfallCoverage = [];
     for (let i = 0; i < SIEGE_LADDER_COUNT; i++) {
-      const x = 0.6 + i * 2.0; // 瀑布缺口扇区内（notch 0.17±0.30 rad @ r≈24）
-      const base = castleLocalPoint(x, 0.05, 27.4, new THREE.Vector3());
+      const cascadeSequence = SIEGE_LADDER_CASCADE_SEQUENCE[i];
+      const waterfall = cascades.get(cascadeSequence);
+      const slot = usedPerCascade.get(cascadeSequence) || 0;
+      usedPerCascade.set(cascadeSequence, slot + 1);
+      const slotCount = SIEGE_LADDER_CASCADE_SEQUENCE.filter((s) => s === cascadeSequence).length;
+      const sideOffset = (slot - (slotCount - 1) * 0.5) * 0.78;
+      let x = 0.6 + i * 2.0;
+      let base;
+      let top;
+      let capture;
+      let captureX = x;
+      let captureZ = 19.6;
+
+      if (waterfall) {
+        // 瀑布组原点就是该落差的下游水面；actualDrop 是严格的相邻台地落差。
+        waterfall.updateWorldMatrix(true, false);
+        const waterfallBase = waterfall.getWorldPosition(new THREE.Vector3());
+        const drop = Math.max(1.2, Number(waterfall.userData?.actualDrop) || 4);
+        base = waterfallBase
+          .clone()
+          .addScaledVector(castleUpWorld, 0.12)
+          .addScaledVector(castleEast, sideOffset);
+        top = waterfallBase
+          .clone()
+          .addScaledVector(castleUpWorld, drop + 0.28)
+          .addScaledVector(castleEast, sideOffset);
+        const rangeLocal = waterfall.userData?.rangeLocal;
+        if (rangeLocal) {
+          x = rangeLocal.lx + sideOffset;
+          captureX = x;
+          captureZ = rangeLocal.lz - 2.1;
+          capture = fallbackPoint(captureX, captureZ, 0.05);
+        }
+        if (!capture) capture = top.clone().addScaledVector(castleFwdWorld, -2.1);
+      } else {
+        // 桩环境/旧场景没有瀑布组时，仍按同一四层拓扑生成可测试的兜底梯位。
+        const upper = CITADEL_CASCADE_POOL_SPECS[cascadeSequence];
+        const lower = CITADEL_CASCADE_POOL_SPECS[cascadeSequence + 1];
+        const centerX = upper && lower ? (upper.x + lower.x) * 0.5 : x;
+        const centerZ = upper && lower ? (upper.z + lower.z) * 0.5 + 0.3 : 22.0;
+        x = centerX + sideOffset;
+        captureX = x;
+        const baseZ = centerZ + (lower?.rz ?? 2.4) * 0.62;
+        const topZ = centerZ - (upper?.rz ?? 2.1) * 0.62;
+        captureZ = topZ - Math.max(1.4, (upper?.rz ?? 2.1) * 0.75);
+        base = fallbackPoint(x, baseZ, 0.02);
+        top = fallbackPoint(x, topZ, 0.05);
+        capture = fallbackPoint(captureX, captureZ, 0.05);
+      }
+      const len = base.distanceTo(top) + 0.5;
+      const ladder = createSiegeLadder(len);
+      ladder.position.copy(base).lerp(top, 0.5);
+      ladder.quaternion.setFromUnitVectors(_axisY, _tmp.copy(top).sub(base).normalize());
+      ladder.userData.cascadeSequence = cascadeSequence;
+      ladder.userData.upperTerraceIndex = cascadeSequence;
+      ladder.userData.lowerTerraceIndex = cascadeSequence + 1;
+      ladder.userData.localX = x;
+      ladder.userData.captureX = captureX;
+      ladder.userData.captureZ = captureZ;
+      ladderRoot.add(ladder);
+      siegeLadders.push({
+        group: ladder,
+        base,
+        top,
+        capture,
+        x,
+        cascadeSequence,
+        upperTerraceIndex: cascadeSequence,
+        lowerTerraceIndex: cascadeSequence + 1,
+      });
+      if (!ladderRoot.userData.waterfallCoverage.includes(cascadeSequence)) {
+        ladderRoot.userData.waterfallCoverage.push(cascadeSequence);
+      }
+    }
+    ladderRoot.userData.waterfallCoverage.sort((a, b) => a - b);
+    logEvent("ladders", {
+      count: siegeLadders.length,
+      waterfalls: ladderRoot.userData.waterfallCoverage.slice(),
+    });
+    spawnWaterfallClimbs();
+    spawnSiegeStairRoutes();
+  }
+
+  // 瀑布攀爬道：沿层叠瀑布水帘（x≈2.4 水道）的徒手上攀线，与攻城梯共用
+  // 台面射线校正逻辑；无实体梯子——士兵直接在瀑布里攀，更慢更危险
+  function spawnWaterfallClimbs() {
+    if (siegeWaterfallClimbs.length) return;
+    if (latestAssault) {
+      logEvent("waterfallClimbs", {
+        count: 0,
+        disabled: true,
+        reason: "latest-design-has-no-waterfalls",
+      });
+      return;
+    }
+    for (let i = 0; i < WATERFALL_CLIMB_LANES; i++) {
+      const x = 1.3 + i * 1.1; // 瀑布水道内（攻城梯间隙偏水帘侧，层叠梯湖 x≈2.2~2.6）
+      const base = castleLocalPoint(x, 0.05, 26.2, new THREE.Vector3());
       const top = castleLocalPoint(x, 2.2, 23.2, new THREE.Vector3()); // 一层台地顶沿
       const capture = castleLocalPoint(x * 1.25, 2.25, 19.6, new THREE.Vector3()); // 台地建筑旁
-      // 五层台地重建后旧局部 y 失准（三点全埋进坡体/台地实体，梯子不可见、
-      // 士兵奔着埋点行军被地形吞掉）——对真实场景射线取面：
-      // 梯脚落在台地壁前干地（z≈22.4），梯顶搭上一层台地前沿台面
-      //（contour-step-4，z≈19~20 扫柱取最高），夺取点在台面内侧。
-      const gBase = groundAtLocal(x, 22.4, 0.02);
+      const gBase = groundAtLocal(x, 25.2, 0.02); // 四层梯湖水潭边，涉水起攀
       if (gBase) base.copy(gBase);
       let gTop = null;
       for (const z of [20.2, 19.6, 19.0]) {
@@ -1340,14 +1632,120 @@ export function createSaihojiPhalanxBattle({
       if (gTop) top.copy(gTop);
       const gCap = groundAtLocal(x * 1.25, 19.2, 0.05);
       if (gCap) capture.copy(gCap);
-      const len = base.distanceTo(top) + 0.5;
-      const ladder = createSiegeLadder(len);
-      ladder.position.copy(base).lerp(top, 0.5);
-      ladder.quaternion.setFromUnitVectors(_axisY, _tmp.copy(top).sub(base).normalize());
-      ladderRoot.add(ladder);
-      siegeLadders.push({ group: ladder, base, top, capture, x });
+      siegeWaterfallClimbs.push({ base, top, capture, x });
     }
-    logEvent("ladders", { count: siegeLadders.length });
+    logEvent("waterfallClimbs", { count: siegeWaterfallClimbs.length });
+  }
+
+  // 真实朝圣石阶路线：直接复用 citadelRange 的 walkFlights，和碰撞/视觉
+  // 使用同一组 rho、from/to、yA/yB 参数。士兵逐点走过每一段，而不是把
+  // 位置从地面直线插值到高台，因此没有攻城梯时也不会悬空穿过台地。
+  function spawnSiegeStairRoutes() {
+    if (siegeStairRoutes.length) return;
+    if (latestAssault) {
+      const points = (latestAssault.stairRoute || [])
+        .map((tuple) => latestAssaultPoint(tuple))
+        .filter(Boolean);
+      const floorRoutes = [];
+      for (const route of latestAssault.interiorFloorRoutes || []) {
+        const routePoints = (route.points || [])
+          .map((tuple) => latestAssaultPoint(tuple))
+          .filter(Boolean);
+        if (!routePoints.length) continue;
+        const start = points.length;
+        points.push(...routePoints);
+        floorRoutes.push({
+          floor: Number(route.floor) || 0,
+          start,
+          end: points.length - 1,
+          surface: route.surface || "interior-rotating-stairs",
+        });
+      }
+      const capture = latestAssaultPoint(latestAssault.keepTop)
+        || points.at(-1)?.clone();
+      if (points.length && capture) {
+        siegeStairRoutes.push({
+          points,
+          base: points[0].clone(),
+          top: points.at(-1).clone(),
+          capture,
+          terraces: [],
+          destination: "castle-top",
+          routeSystem: "mountain-valley-assault",
+          captureMode: latestAssault.captureMode || "interior-rotating-stairs",
+          floorRoutes,
+        });
+      }
+      logEvent("stairs", {
+        routes: siegeStairRoutes.length,
+        points: points.length,
+        terraces: [],
+        destination: "castle-top",
+        floorRoutes: floorRoutes.map((route) => ({ floor: route.floor, start: route.start, end: route.end })),
+      });
+      return;
+    }
+    const flights = citadelWalkFlights();
+    const metrics = citadelWalkMetrics();
+    const points = [];
+    const terraces = [];
+    const sampleCount = 8;
+    const hasStairGeometry = !!scene.getObjectByName?.("winding-pilgrimage-ramp");
+    for (const flight of flights) {
+      if (!flight || !Number.isFinite(flight.rho)) continue;
+      for (let i = 0; i < sampleCount; i++) {
+        const t = sampleCount === 1 ? 0 : i / (sampleCount - 1);
+        const phi = THREE.MathUtils.lerp(flight.from, flight.to, t);
+        const localY = THREE.MathUtils.lerp(flight.yA, flight.yB, t) + 0.22;
+        const localX = flight.rho * Math.sin(phi);
+        const localZ = flight.rho * Math.cos(phi);
+        const rawPoint = castleLocalPoint(localX, localY, localZ, new THREE.Vector3());
+        // 没有真实城堡网格的回放桩只剩 planet-surface；将路线投影到可行走
+        // 表面，避免 siegeMarchGroundR 把局部高程点反复拉回另一条半径。
+        const point = !hasStairGeometry
+          ? groundAtLocal(localX, localZ, 0.22) || rawPoint
+          : rawPoint;
+        if (!points.length || points[points.length - 1].distanceTo(point) > 0.05) {
+          points.push(point);
+          terraces.push(flight.terraceIndex);
+        }
+      }
+    }
+    // 桩场景或旧存档可能没有 walkFlights；仍给寻路一个可行的逐段坡道，
+    // 这样“删掉攻城梯”不会退化成士兵永远停在广场。
+    if (!points.length) {
+      const fallback = [
+        [5.8, 0.22, 28.0],
+        [5.0, 1.1, 24.8],
+        [4.2, 2.0, 21.8],
+        [3.4, 2.9, 18.9],
+        [2.4, 3.8, 15.8],
+        [0.0, 4.7, 9.9],
+      ];
+      for (const [x, y, z] of fallback) {
+        points.push(castleLocalPoint(x, y, z, new THREE.Vector3()));
+        terraces.push(-1);
+      }
+    }
+    const topMetric = metrics[0];
+    const capture = castleLocalPoint(
+      0,
+      (topMetric?.top ?? 4.7) + 0.22,
+      9.9,
+      new THREE.Vector3()
+    );
+    siegeStairRoutes.push({
+      points,
+      base: points[0].clone(),
+      top: points[points.length - 1].clone(),
+      capture,
+      terraces,
+    });
+    logEvent("stairs", {
+      routes: siegeStairRoutes.length,
+      points: points.length,
+      terraces: [...new Set(terraces.filter((n) => n >= 0))],
+    });
   }
 
   // 指定世界坐标生成一名红盔守军（攻城梯顶部/台地高处的防守哨位）
@@ -1386,6 +1784,205 @@ export function createSaihojiPhalanxBattle({
     s.quaternion.slerp(_q.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right)), k);
   }
 
+  // 身体朝向和武器朝向是两件事：士兵模型会先转身，但短剑/长枪仍挂在
+  // 纸偶局部坐标里。近战锁定时把武器的握持轴（模型局部 +Y）转向目标，
+  // 避免出现“人已经面对敌人，枪尖/剑刃却斜向别处”的视觉错误。
+  function aimCombatToolAt(s, target, strength = 0.72) {
+    if (!s || !target) return;
+    const equipment = s.userData?.equipment || {};
+    const tool =
+      equipment.spear?.visible !== false
+        ? equipment.spear
+        : equipment.gladius?.visible !== false
+          ? equipment.gladius
+          : null;
+    if (!tool?.parent) return;
+    target.getWorldPosition(_toolTarget);
+    tool.getWorldPosition(_toolOrigin);
+    _toolDir.copy(_toolTarget).sub(_toolOrigin);
+    if (_toolDir.lengthSq() < 1e-8) return;
+    _toolDir.normalize();
+    tool.parent.getWorldQuaternion(_toolParentQ).invert();
+    _toolDir.applyQuaternion(_toolParentQ).normalize();
+    _toolAimQ.setFromUnitVectors(_toolAxis, _toolDir);
+    tool.quaternion.slerp(
+      _toolAimQ,
+      THREE.MathUtils.clamp(strength, 0, 1)
+    );
+    s.userData.combatTargetUid = target.userData?.uid ?? null;
+  }
+
+  function faceCombatTarget(s, target, strength = 0.5) {
+    if (!s || !target) return;
+    target.getWorldPosition(_toolTarget);
+    s.getWorldPosition(_toolOrigin);
+    _toolDir.copy(_toolTarget).sub(_toolOrigin);
+    if (_toolDir.lengthSq() < 1e-8) return;
+    faceMoving(s, _toolDir, strength);
+    s.userData.combatTargetUid = target.userData?.uid ?? null;
+  }
+
+  function resolveOldHarborGroup() {
+    const ref = typeof getOldHarbor === "function" ? getOldHarbor() : oldHarbor;
+    const group = ref?.group || ref || scene?.getObjectByName?.("old-harbor-scene");
+    if (!group?.isObject3D) return null;
+    group.updateWorldMatrix(true, false);
+    return group;
+  }
+
+  function isInsideOldHarbor(s, group) {
+    if (!s || !group) return false;
+    s.getWorldPosition(_tmp);
+    group.worldToLocal(_tmpB.copy(_tmp));
+    const zone = group.userData?.combatZone;
+    if (zone) {
+      const dx = (_tmpB.x - zone.centerX) / Math.max(0.001, zone.radiusX);
+      const dz = (_tmpB.z - zone.centerZ) / Math.max(0.001, zone.radiusZ);
+      return dx * dx + dz * dz <= 1;
+    }
+    // 兼容旧港热重载/测试桩：没有 combatZone 时按旧港碰撞半径退化。
+    const r = Number(group.userData?.collideRadius) || 4;
+    return _tmpB.x * _tmpB.x + _tmpB.z * _tmpB.z <= (r + 1.2) * (r + 1.2);
+  }
+
+  function isHarborCombatant(o) {
+    const ud = o?.userData;
+    if (!ud || (ud.helmSide !== "red" && ud.helmSide !== "blue")) return false;
+    if (ud.combatant === false || ud.dead || ud.downed || o.visible === false) return false;
+    // 明确标记优先；phalanxRole 兼容已有战斗兵和外部战斗挂接点。
+    return ud.combatant === true || !!ud.phalanxRole;
+  }
+
+  function collectOldHarborCombatants(group) {
+    const list = [];
+    scene?.traverse?.((o) => {
+      if (o === group || o === scene || o === root || o === harborCombat) return;
+      if (!isHarborCombatant(o) || !isInsideOldHarbor(o, group)) return;
+      list.push(o);
+    });
+    return list;
+  }
+
+  function updateOldHarborCombat(dt) {
+    const group = resolveOldHarborGroup();
+    if (!group) return;
+
+    const current = collectOldHarborCombatants(group);
+    const currentSet = new Set(current);
+    for (const s of harborCombatInside) {
+      if (currentSet.has(s)) continue;
+      s.userData.harborCombat = false;
+      s.userData.harborCombatIntent = null;
+      s.userData.harborCombatTargetUid = null;
+    }
+    harborCombatInside.clear();
+    for (const s of current) {
+      harborCombatInside.add(s);
+      s.userData.harborCombat = true;
+      s.userData.harborCombatIntent = "engage-on-contact";
+      if (s.userData.helmSide === "red" && !harborCombatEntered.has(s)) {
+        harborCombatEntered.add(s);
+        harborCombat.redEntered += 1;
+        logEvent("oldHarborCombatEnter", { uid: s.userData.uid ?? 0, side: "red" });
+      }
+    }
+
+    const reds = current.filter((s) => s.userData.helmSide === "red");
+    const blues = current.filter((s) => s.userData.helmSide === "blue");
+    harborCombat.active = reds.length > 0;
+    if (!reds.length || !blues.length) return;
+
+    // 港内优先最近敌人：进入旧港即锁定港内对手，不会隔着城堡追击远处单位。
+    for (const red of reds) {
+      if (red.userData.downed || red.userData.dead) continue;
+      red.getWorldPosition(_tmp);
+      let foe = null;
+      let best = Infinity;
+      for (const blue of blues) {
+        if (blue.userData.downed || blue.userData.dead) continue;
+        blue.getWorldPosition(_tmpB);
+        const d2 = _tmpB.distanceToSquared(_tmp);
+        if (d2 < best) {
+          best = d2;
+          foe = blue;
+        }
+      }
+      if (!foe || best > MELEE_RANGE * MELEE_RANGE * 1.6) continue;
+
+      red.userData.harborCombatIntent = "attack";
+      foe.userData.harborCombat = true;
+      foe.userData.harborCombatIntent = "defend-old-harbor";
+      red.userData.harborCombatTargetUid = foe.userData.uid ?? null;
+      foe.userData.harborCombatTargetUid = red.userData.uid ?? null;
+      faceCombatTarget(red, foe, 0.35);
+      faceCombatTarget(foe, red, 0.35);
+
+      if (red.userData.phalanxRole === "longbow") {
+        red.userData._shotCd = (red.userData._shotCd || 0) - dt;
+        if (red.userData._shotCd <= 0 && updateLongbowShot(red, dt, rand)) {
+          red.userData._shotCd = 1.5 + rand() * 0.6;
+          fireArrow(red, foe);
+          harborCombat.engagements += 1;
+          harborCombat.lastAttackerUid = red.userData.uid ?? null;
+          harborCombat.lastDefenderUid = foe.userData.uid ?? null;
+          logEvent("oldHarborCombatAttack", {
+            attacker: red.userData.uid ?? 0,
+            defender: foe.userData.uid ?? 0,
+            kind: "arrow",
+          });
+        }
+        continue;
+      }
+
+      red.userData._meleeCd = (red.userData._meleeCd || 0) - dt;
+      if (red.userData._meleeCd > 0) continue;
+      red.userData._meleeCd = MELEE_COOLDOWN;
+      aimCombatToolAt(red, foe, 1);
+      markMeleeEngaged(red, foe);
+      applySoldierDamage(foe, "melee");
+      harborCombat.engagements += 1;
+      harborCombat.lastAttackerUid = red.userData.uid ?? null;
+      harborCombat.lastDefenderUid = foe.userData.uid ?? null;
+      logEvent("oldHarborCombatAttack", {
+        attacker: red.userData.uid ?? 0,
+        defender: foe.userData.uid ?? 0,
+        kind: "melee",
+      });
+    }
+
+    // 蓝缨守港兵在同一近战距离内回击，保持旧港是双方交战而不是单向触发。
+    for (const blue of blues) {
+      if (blue.userData.downed || blue.userData.dead) continue;
+      blue.getWorldPosition(_tmp);
+      let foe = null;
+      let best = Infinity;
+      for (const red of reds) {
+        if (red.userData.downed || red.userData.dead) continue;
+        red.getWorldPosition(_tmpB);
+        const d2 = _tmpB.distanceToSquared(_tmp);
+        if (d2 < best) {
+          best = d2;
+          foe = red;
+        }
+      }
+      if (!foe || best > MELEE_RANGE * MELEE_RANGE * 1.6) continue;
+      blue.userData._meleeCd = (blue.userData._meleeCd || 0) - dt;
+      if (blue.userData._meleeCd > 0) continue;
+      blue.userData._meleeCd = MELEE_COOLDOWN;
+      aimCombatToolAt(blue, foe, 1);
+      markMeleeEngaged(blue, foe);
+      applySoldierDamage(foe, "melee");
+      harborCombat.engagements += 1;
+      harborCombat.lastAttackerUid = blue.userData.uid ?? null;
+      harborCombat.lastDefenderUid = foe.userData.uid ?? null;
+      logEvent("oldHarborCombatAttack", {
+        attacker: blue.userData.uid ?? 0,
+        defender: foe.userData.uid ?? 0,
+        kind: "counter-melee",
+      });
+    }
+  }
+
   function beginSiege() {
     clearRedGarrison();
     siegeNightT = 0;
@@ -1413,8 +2010,15 @@ export function createSaihojiPhalanxBattle({
       [-0.03, 0.03],
       [0.02, -0.03],
     ];
+    // 先建立所有可用登城通道，再给每名士兵分配路线；否则“无梯模式”
+    // 会在分配时误拿到不存在的梯号，直到更新循环才发现 lane=null。
+    _groundSets = null;
+    _groundSetsAt = -Infinity;
+    _marchCache.clear();
+    spawnSiegeLadders();
     let wi = 0;
     let gi = 0;
+    const wfQueue = Array.from({ length: WATERFALL_CLIMB_LANES }, () => 0); // 各瀑布攀爬道的上攀排队计数
     for (const w of waves) {
       w.state = "siege";
       w.boat.visible = true;
@@ -1442,10 +2046,33 @@ export function createSaihojiPhalanxBattle({
         s.userData._meleeCd = 0;
         s.visible = true;
         s.userData.ropeTeam = null;
-        // 集结 → 分配攻城梯与爬梯队列序号
+        // 集结 → 按真实可用通道分配路线：有梯优先上梯；新圣城中梯子
+        // 排满或被摧毁后改走山路/阶梯，所有路线都收束到古堡顶层。
         s.userData.siegeStage = "gather";
-        s.userData.ladder = gi % SIEGE_LADDER_FIRST_WAVE; // 首波只占 0~3 号梯
-        s.userData.queueIdx = Math.floor(gi / SIEGE_LADDER_FIRST_WAVE);
+        const li = gi % SIEGE_LADDER_FIRST_WAVE;
+        const lq = Math.floor(gi / SIEGE_LADDER_FIRST_WAVE);
+        const stairRoute = siegeStairRoutes.length ? gi % siegeStairRoutes.length : -1;
+        const ladderAvailable = hasAvailableSiegeLadder();
+        if (!ladderPolicyDisabled && ladderAvailable && lq < LADDER_QUEUE_CAP && isSiegeLadderAvailable(siegeLadders[li])) {
+          s.userData.siegeRoute = "ladder";
+          s.userData.ladder = li;
+          s.userData.waterfall = -1;
+          s.userData.queueIdx = lq;
+        } else if (!latestAssault && ladderAvailable && siegeWaterfallClimbs.length) {
+          s.userData.siegeRoute = "waterfall";
+          const lane = gi % WATERFALL_CLIMB_LANES;
+          s.userData.ladder = -1;
+          s.userData.waterfall = lane;
+          s.userData.queueIdx = wfQueue[lane]++;
+        } else {
+          s.userData.siegeRoute = "stairs";
+          s.userData.ladder = -1;
+          s.userData.waterfall = -1;
+          s.userData.stairRoute = Math.max(0, stairRoute);
+          s.userData.stairPointIndex = 0;
+          s.userData.stairWaitT = gi * STAIR_QUEUE_GAP_SEC;
+          s.userData.queueIdx = gi;
+        }
         gi++;
       }
       const off = plazaStagger[wi % plazaStagger.length];
@@ -1460,41 +2087,50 @@ export function createSaihojiPhalanxBattle({
       );
       wi++;
     }
-    // 瀑布缺口架梯（蓝盔的登城通道）
-    _groundSets = null; // 圣城可能被编辑器重建：重新收集命中网格
-    _marchCache.clear();
-    spawnSiegeLadders();
     // 红盔守军：路口小队（原地防守）+ 攻城梯顶部阻击 + 少量长弓手居高俯射
     redRoot = new THREE.Group();
     redRoot.name = "citadel-red-garrison";
     root.add(redRoot);
-    // 一层台地前沿哨位锚点实测（攻城梯扇区两翼）；桩环境 anchor=null 走旧方向兜底
+    // 新圣城守军全部在古堡顶层设防；旧场景才保留一层台地实测兜底。
     redPostWorld.length = 0;
     for (let i = 0; i < RED_POSTS.length; i++) {
       let anchor = null;
-      for (const z of [20.2, 19.6, 19.0]) {
-        const g = groundAtLocal(RED_POST_SIEGE_X[i % RED_POST_SIEGE_X.length], z, 0.05);
-        if (g && (!anchor || g.length() > anchor.length())) anchor = g;
+      if (latestAssault) {
+        const lane = siegeLadders[i % Math.max(1, siegeLadders.length)];
+        anchor = lane?.capture?.clone()
+          .addScaledVector(castleEast, ((i % 3) - 1) * 0.62)
+          .addScaledVector(castleFwdWorld, Math.floor(i / 3) * 0.48) || null;
+      } else {
+        for (const z of [20.2, 19.6, 19.0]) {
+          const g = groundAtLocal(RED_POST_SIEGE_X[i % RED_POST_SIEGE_X.length], z, 0.05);
+          if (g && (!anchor || g.length() > anchor.length())) anchor = g;
+        }
       }
       redPostWorld.push(anchor);
     }
     for (let p = 0; p < RED_POSTS.length; p++) spawnRedSquadAt(p);
     for (const ladder of siegeLadders) {
       for (const dx of [-0.7, 0.7]) {
-        // 攻城梯顶部（必经之处）两侧各一名防守兵：站在一层台地台面梯口旁
-        const post =
-          groundAtLocal(ladder.x + dx, 19.2, 0.05) ||
-          castleLocalPoint(ladder.x + dx, 2.25, 22.9, new THREE.Vector3());
+        // 每个瀑布落差的梯顶都在对应上层台面设防，不能再把所有守军
+        // 锚到最低层的 19.2 旧坐标。
+        const post = ladder.capture.clone().addScaledVector(castleEast, dx);
         spawnRedAt(dx < 0 ? "spear" : "gladius", post, castleFwdWorld);
       }
     }
     for (let i = 0; i < RED_LONGBOW_COUNT; i++) {
-      // 少量红盔长弓手：二层台地沿居高俯射爬梯的蓝盔（台面实测取最高柱）
+      // 少量红盔长弓手：在古堡顶层居高俯射爬梯的蓝盔。
       const lx = siegeLadders[i % siegeLadders.length]?.x ?? 0.6 + i * 2.0;
       let bow = null;
-      for (const z of [18.4, 17.8, 17.2]) {
-        const g = groundAtLocal(lx, z, 0.05);
-        if (g && (!bow || g.length() > bow.length())) bow = g;
+      if (latestAssault) {
+        bow = latestAssaultPoint(latestAssault.keepTop)?.addScaledVector(
+          castleEast,
+          (i - (RED_LONGBOW_COUNT - 1) * 0.5) * 0.72
+        );
+      } else {
+        for (const z of [18.4, 17.8, 17.2]) {
+          const g = groundAtLocal(lx, z, 0.05);
+          if (g && (!bow || g.length() > bow.length())) bow = g;
+        }
       }
       spawnRedAt(
         "longbow",
@@ -1603,8 +2239,29 @@ export function createSaihojiPhalanxBattle({
         s.userData._meleeCd = 0;
         s.userData.ropeTeam = null;
         s.userData.siegeStage = "gather"; // 到岸即编入攻城流程
-        s.userData.ladder = SIEGE_LADDER_FIRST_WAVE + i; // 增援专属梯：船 0→梯 4，船 1→梯 5
-        s.userData.queueIdx = 2 + ((k / 3) % 5 | 0);
+        const reinforcementLadder = SIEGE_LADDER_FIRST_WAVE + i;
+        const ladderAvailable = hasAvailableSiegeLadder();
+        if (!ladderPolicyDisabled && ladderAvailable && isSiegeLadderAvailable(siegeLadders[reinforcementLadder])) {
+          s.userData.siegeRoute = "ladder";
+          s.userData.ladder = reinforcementLadder; // 船 0→梯 4，船 1→梯 5
+          s.userData.waterfall = -1;
+          s.userData.queueIdx = 2 + ((k / 3) % 5 | 0);
+        } else if (!latestAssault && ladderAvailable && siegeWaterfallClimbs.length) {
+          s.userData.siegeRoute = "waterfall";
+          s.userData.ladder = -1;
+          s.userData.waterfall = k % WATERFALL_CLIMB_LANES;
+          s.userData.queueIdx = (k / WATERFALL_CLIMB_LANES) | 0;
+        } else {
+          s.userData.siegeRoute = "stairs";
+          s.userData.ladder = -1;
+          s.userData.waterfall = -1;
+          s.userData.stairRoute = siegeStairRoutes.length
+            ? k % siegeStairRoutes.length
+            : 0;
+          s.userData.stairPointIndex = 0;
+          s.userData.stairWaitT = k * STAIR_QUEUE_GAP_SEC;
+          s.userData.queueIdx = k;
+        }
         k++;
       }
       blueShips.push({ wave: w, u: 0, arrived: false, side });
@@ -1672,7 +2329,7 @@ export function createSaihojiPhalanxBattle({
     }
     logEvent("hit", {
       uid: s.userData.uid ?? 0,
-      side: redSoldiers.includes(s) ? "red" : "blue",
+      side: s.userData.helmSide || (redSoldiers.includes(s) ? "red" : "blue"),
       kind,
       ah,
       mh,
@@ -1766,6 +2423,7 @@ export function createSaihojiPhalanxBattle({
             0.12
           );
         }
+        aimCombatToolAt(s, foe, 1);
         s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
         if (s.userData._meleeCd <= 0) {
           s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
@@ -1799,6 +2457,7 @@ export function createSaihojiPhalanxBattle({
         const released = updateLongbowShot(s, dt, rand);
         if (!released || (s.userData._shotCd || 0) > 0 || !bluePool.length) continue;
         const tgt = bluePool[Math.floor(rand() * bluePool.length)];
+        faceCombatTarget(s, tgt, 0.9);
         // Bad North 居高箭术：站位高于目标（球面半径更大）→ 俯射冷却加快
         let cd = 1.7 + rand() * 0.9;
         if (tgt && s.position.length() - tgt.position.length() > 0.5) {
@@ -1809,8 +2468,8 @@ export function createSaihojiPhalanxBattle({
       }
     }
 
-    // 蓝盔攻城流程：纳沃纳广场集结 → 中央突破（瀑布）→ 爬攻城梯 → 夺取一层台地建筑
-    if (!chase && siegeLadders.length) {
+    // 蓝盔攻城流程：纳沃纳广场集结 → 选择攻城梯/瀑布/朝圣石阶 → 逐层夺取台面
+    if (!chase && (siegeLadders.length || siegeWaterfallClimbs.length || siegeStairRoutes.length)) {
       siegeGatherT += dt;
       const advancing = siegeGatherT > SIEGE_GATHER_SEC;
       if (advancing && !root.userData.siegeAssaultBgm) {
@@ -1824,20 +2483,48 @@ export function createSaihojiPhalanxBattle({
           if (!advancing) continue; // 集结中（长弓手照常攒箭）
           stage = s.userData.siegeStage = "advance";
         }
-        const ladder = siegeLadders[s.userData.ladder || 0];
-        if (!ladder) continue;
+        // 登城通道：攻城梯 → 山路/石阶。旧瀑布路线只服务历史场景。
+        // 即使所有攻城梯被删掉，士兵也会继续寻路到古堡顶层。
+        let route = s.userData.siegeRoute;
+        if (!route) {
+          route = (s.userData.ladder ?? -1) >= 0
+            ? "ladder"
+            : (s.userData.waterfall ?? -1) >= 0
+              ? "waterfall"
+              : "stairs";
+        }
+        let lane = route === "stairs"
+          ? siegeStairRoutes[s.userData.stairRoute || 0]
+          : route === "ladder"
+            ? siegeLadders[s.userData.ladder]
+            : siegeWaterfallClimbs[s.userData.waterfall || 0];
+        if (route === "ladder" && !isSiegeLadderAvailable(lane)) lane = null;
+        if (!lane && siegeStairRoutes.length) {
+          route = s.userData.siegeRoute = "stairs";
+          s.userData.ladder = -1;
+          s.userData.waterfall = -1;
+          s.userData.stairRoute = 0;
+          s.userData.stairPointIndex = 0;
+          lane = siegeStairRoutes[0];
+        }
+        if (!lane) continue;
         const q = s.userData.queueIdx || 0;
         if (stage === "advance") {
-          // 中央突破：直奔瀑布缺口分到的攻城梯底（按队列纵深错开）
-          _tmp
-            .copy(ladder.base)
-            .addScaledVector(castleFwdWorld, 0.6 + (q % 6) * 0.55)
-            .addScaledVector(castleUpWorld, 0);
+          // 中央突破：梯/瀑布走到入口；石阶则走到第一块真实踏面。
+          _tmp.copy(lane.base);
+          if (route !== "stairs") {
+            _tmp.addScaledVector(castleFwdWorld, 0.6 + (q % 6) * 0.55);
+          }
           _tmpB.copy(_tmp).sub(s.position);
           const d = _tmpB.length();
           if (d < 0.35) {
             s.userData.siegeStage = "climb";
-            s.userData.climbT = -q * 0.7; // 梯下排队，依次上梯
+            if (route === "stairs") {
+              s.userData.stairPointIndex = 0;
+              s.userData.stairWaitT = q * STAIR_QUEUE_GAP_SEC;
+            } else {
+              s.userData.climbT = -q * 0.7; // 梯下/潭边排队，依次上攀
+            }
           } else {
             _tmpB.normalize();
             s.position.addScaledVector(_tmpB, Math.min(SIEGE_ADVANCE_PACE * dt, d));
@@ -1854,17 +2541,58 @@ export function createSaihojiPhalanxBattle({
             faceMoving(s, _tmpB);
           }
         } else if (stage === "climb") {
+          if (route === "stairs") {
+            s.userData.stairWaitT = Math.max(0, (s.userData.stairWaitT || 0) - dt);
+            if (s.userData.stairWaitT > 0) continue;
+            const points = lane.points;
+            const pointIndex = Math.min(
+              points.length - 1,
+              Math.max(0, s.userData.stairPointIndex || 0)
+            );
+            const stairTarget = points[pointIndex];
+            _tmpB.copy(stairTarget).sub(s.position);
+            const stairDistance = _tmpB.length();
+            if (stairDistance <= 0.28) {
+              const floorCapture = lane.floorRoutes?.find((entry) => entry.end === pointIndex);
+              if (floorCapture) {
+                s.userData.siegeFloor = floorCapture.floor;
+                markCastleFloorCaptured(floorCapture.floor);
+              }
+              if (pointIndex >= points.length - 1) {
+                s.userData.siegeStage = "capture";
+              } else {
+                s.userData.stairPointIndex = pointIndex + 1;
+              }
+              continue;
+            }
+            _tmpB.normalize();
+            s.position.addScaledVector(
+              _tmpB,
+              Math.min(STAIR_ASSAULT_PACE * dt, stairDistance)
+            );
+            faceMoving(s, _tmpB, 0.2);
+            continue;
+          }
           s.userData.climbT = (s.userData.climbT ?? -q * 0.7) + dt;
           if (s.userData.climbT < 0) continue; // 排队等待
-          const p = Math.min(1, s.userData.climbT / SIEGE_CLIMB_SEC);
-          s.position.lerpVectors(ladder.base, ladder.top, p);
-          _tmpB.copy(ladder.top).sub(ladder.base).normalize();
+          // 攀瀑比爬梯更慢；水帘中左右腾挪（无梯登城的险路）
+          const climbingFall = (s.userData.waterfall ?? -1) >= 0;
+          const climbSec = climbingFall ? WATERFALL_CLIMB_SEC : SIEGE_CLIMB_SEC;
+          const p = Math.min(1, s.userData.climbT / climbSec);
+          s.position.lerpVectors(lane.base, lane.top, p);
+          if (climbingFall) {
+            s.position.addScaledVector(
+              castleEast,
+              Math.sin(s.userData.climbT * 3.1 + (s.userData.uid || 0)) * 0.12
+            );
+          }
+          _tmpB.copy(lane.top).sub(lane.base).normalize();
           faceMoving(s, _tmpB, 0.2);
           if (p >= 1) s.userData.siegeStage = "capture";
         } else if (stage === "capture") {
-          // 夺取一层台地建筑：进到台地内圈建筑旁驻守（面朝城内）
+          // 最终夺取古堡顶层：所有通道在同一顶层目标区域收束。
           _tmp
-            .copy(ladder.capture)
+            .copy(lane.capture)
             .addScaledVector(castleFwdWorld, -(q % 4) * 0.5)
             .add(
               _tmpD
@@ -1880,6 +2608,11 @@ export function createSaihojiPhalanxBattle({
             s.position.addScaledVector(_tmpB, Math.min(0.9 * dt, d));
             faceMoving(s, _tmpB);
           } else {
+            const finalFloor = lane.floorRoutes?.at(-1)?.floor;
+            if (Number.isFinite(finalFloor)) {
+              s.userData.siegeFloor = finalFloor;
+              markCastleFloorCaptured(finalFloor);
+            }
             faceMoving(s, castleFwdWorld.clone().negate(), 0.08); // 驻守：面向城内
           }
         }
@@ -1920,6 +2653,7 @@ export function createSaihojiPhalanxBattle({
             0.2
           );
         }
+        aimCombatToolAt(s, foe, 1);
         markMeleeEngaged(s, foe);
         // 蓝缨长矛站稳后贴身仍按 1 击瘫倒/2 击击杀（矛墙加成只给防守方）
         applySoldierDamage(foe, "melee");
@@ -1949,6 +2683,7 @@ export function createSaihojiPhalanxBattle({
         const released = updateLongbowShot(s, dt, rand);
         if (!released || (s.userData._shotCd || 0) > 0) continue;
         const tgt = targetPool[(s.userData.gx + s.userData.gz) % targetPool.length];
+        faceCombatTarget(s, tgt, 0.9);
         // Bad North 居高箭术：蓝缨长弓登上台地后居高临下，冷却加快
         let cd = 1.4 + rand() * 0.8;
         if (tgt && s.position.length() - tgt.position.length() > 0.5) {
@@ -2166,6 +2901,27 @@ export function createSaihojiPhalanxBattle({
       setPhase("done");
       allowSiegeAssaultBgmHandoff();
     }
+  }
+
+  function projectCombatUnitsToSurface() {
+    if (!surfaceProjectionEnabled || !surfaceProvider?.sample) return;
+    const units = [
+      ...redSoldiers,
+      ...garrison.flatMap((group) => group.soldiers || []),
+      ...waves
+        .filter((wave) => wave.state === "ashore" || wave.state === "fight" || wave.state === "return")
+        .flatMap((wave) => wave.soldiers || []),
+      ...trojanPatrol.map((patrol) => patrol.s),
+    ];
+    let projected = 0;
+    let rejected = 0;
+    for (const unit of units) {
+      if (!unit?.visible || unit.userData?.ropeTeam) continue;
+      const result = projectWorldObjectToPlanetSurface(surfaceProvider, unit, { lift: 0.08, allowWater: false });
+      if (result.ok) projected++;
+      else if (result.reason !== "water-disallowed") rejected++;
+    }
+    root.userData.surfaceProjectionStats = { projected, rejected, at: simT };
   }
 
   function updateGarrison(dt, whaleUp) {
@@ -2398,6 +3154,9 @@ export function createSaihojiPhalanxBattle({
       resetBattle();
       return;
     }
+    // 旧港触发器必须先于各故事阶段的 early-return（尤其 atCastle）运行，
+    // 否则红缨兵在城堡待机阶段踏入旧港会被漏掉。
+    updateOldHarborCombat(dt);
     // 苔庭鲸恢复原位 → 撤阵登船返回高山圣城（离城期不受鼓声影响）
     if (
       returnRequested &&
@@ -2543,6 +3302,10 @@ export function createSaihojiPhalanxBattle({
       }
     }
     updateGarrison(dt, whaleUp);
+    // The opt-in gate is deliberately last: all legacy movement paths finish,
+    // then the provider-owned surface becomes the final placement authority
+    // for visible ground combatants.
+    projectCombatUnitsToSurface();
 
     // 故事波次（主阵/补给）落位后同样两态：鲸未升起 → 苔庭内分散巡查
     for (const w of waves) {
@@ -2704,6 +3467,18 @@ export function createSaihojiPhalanxBattle({
     resetFightFormation();
     rearmPhalanxAlarm();
     returnRequested = true;
+  };
+  // 调试直跳攻城（无头实拍/验收用）：波次未发则立即补齐，视为苔庭战役已结束
+  // 直接 beginSiege——换蓝缨/架梯/攀爬道/守军配置都在 beginSiege 内完成；
+  // 鼓息发船与航程链路另有 test_phalanx 覆盖，此处跳过只为快速到达攻城画面
+  root.userData.debugSiege = () => {
+    logCommand("debugSiege");
+    while (shipIdx < SHIP_COUNT) {
+      spawnWave(shipIdx);
+      shipIdx++;
+    }
+    returnRequested = false;
+    beginSiege();
   };
   root.userData.reset = () => {
     root.userData.resetRequested = true;

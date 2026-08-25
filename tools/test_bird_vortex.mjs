@@ -182,10 +182,10 @@ assert.equal(tpl.name, "vortex-bird-template");
 ok("createVortexBirdTemplate 可用");
 
 console.log("[5] 场景接线");
-const island = fs.readFileSync(
-  fileURLToPath(new URL("src/scenes/messengerIsland.js", BASE)),
-  "utf8"
-);
+const island = [
+  "src/scenes/messengerIsland.js",
+  "src/scenes/messenger/loadTraffic.js",
+].map((f) => fs.readFileSync(fileURLToPath(new URL(f, BASE)), "utf8")).join("\n");
 assert(island.includes("BirdVortexManager"), "场景应导入 BirdVortexManager");
 assert(island.includes("birdVortex"), "场景应挂 landmarks.birdVortex");
 assert(!island.includes("citadelBirdVortex"),

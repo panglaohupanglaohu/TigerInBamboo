@@ -1,0 +1,7 @@
+{
+  "name": "tiger-messenger",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TigerMessenger 网页 3D 游戏（零构建、CDN Three.js、GitHub Pages 直接运行）。type:module 供 Node 测试/工具消除 MODULE_TYPELESS_PACKAGE_JSON 警告；浏览器入口走 importmap + vendor 兜底，不读本文件。"
+}

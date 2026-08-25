@@ -178,19 +178,26 @@ assert(Number.isFinite(seatU), "findGateSeatU 无结果");
 assert(Math.abs(gateU - seatU) < 1e-9, `城门未用 findGateSeatU：gateU=${gateU} seatU=${seatU}`);
 ok(`城门 / 默认云线同用 findGateSeatU → u=${gateU.toFixed(4)}`);
 
-// 城头抬高后，欧氏「最近点投影」会沿弯轨漂移；改比径向方向对齐
+// 城头抬高后，欧氏「最近点投影」会沿弯轨漂移；改比径向方向对齐。
+// 注意：整堵云墙被刻意沿轨向（世界系切向）后退 CLOUD_BACKDROP_OFFSET=13.5
+// 作双子塔正后方纯背景层（equatorialClouds.js，与 relocate 一致），
+// 所以先扣掉这段沿轨偏移，再校验锚点径向对准城门。
+const BACKDROP_OFFSET = 13.5; // 与 equatorialClouds.js CLOUD_BACKDROP_OFFSET 一致
 const gateDir = curve.getPointAt(gateU, new THREE.Vector3()).normalize();
-const cloudDir = towers[0].position.clone().normalize();
+const gateTan = curve.getTangentAt(gateU, new THREE.Vector3()).normalize();
+const alongTrack = gateTan.addScaledVector(gateDir, -gateTan.dot(gateDir)).normalize();
+const anchorPos = towers[0].position.clone().addScaledVector(alongTrack, -BACKDROP_OFFSET);
+const cloudDir = anchorPos.clone().normalize();
 const align = cloudDir.dot(gateDir);
 assert(align > 0.999, `云线径向未对准城门：dot=${align.toFixed(6)}`);
-ok(`径向对齐 dot=${align.toFixed(6)}（抬高后不用弧长最近点）`);
+ok(`径向对齐 dot=${align.toFixed(6)}（扣除背景层沿轨后退 ${BACKDROP_OFFSET} 后）`);
 
 const drop = canyonOffsetDir(cloudDir);
 assert(drop === 0, `云线落在峡谷内，沉降 ${drop.toFixed(1)}`);
 ok("云线位于草地一侧（峡谷沉降 0）");
 
 const groundR = R + drop;
-const radial = towers[0].position.length();
+const radial = anchorPos.length();
 const expectedR = groundR + GATE.wallTop;
 assert(
   Math.abs(radial - expectedR) < 0.25,
@@ -198,13 +205,16 @@ assert(
 );
 ok(`径向半径=${radial.toFixed(2)} ≈ 地面+wallTop ${expectedR.toFixed(2)}`);
 
-// 显式 anchorU 也应精确命中
+// 显式 anchorU 也应精确命中（同样扣除背景层沿轨后退）
 const cloudsPinned = createDynamicMoebiusClouds(new THREE.Scene(), R, {
   trackCurve: curve,
   anchorU: gateU,
   crownY: GATE.wallTop,
 });
-const pinDir = cloudsPinned.userData.towers[0].position.clone().normalize();
+const pinDir = cloudsPinned.userData.towers[0].position
+  .clone()
+  .addScaledVector(alongTrack, -BACKDROP_OFFSET)
+  .normalize();
 assert(pinDir.dot(gateDir) > 0.9999, "显式 anchorU 未对齐");
 ok("显式 anchorU 精确钉在城门座");
 

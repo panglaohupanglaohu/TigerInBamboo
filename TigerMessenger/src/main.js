@@ -25,9 +25,23 @@ import {
   updateCitadelNightWindows,
 } from "./world/odysseyCitadel.js";
 import { collectInfiltrationThreats } from "./world/citadelTerraceBirds.js";
-import { CITADEL_TOWN_SPEC, citadelGridCellCenter } from "./world/citadelTown.js";
+import {
+  CITADEL_TOWN_SPEC,
+  HIGHLAND_TOWNSCAPER_TOWN_SPEC,
+  citadelGridCellCenter,
+} from "./world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
-import { P } from "./core/params.js";
+import { P, FEATURES, isOskLightingV1, isVoxelAoV1, isLocalLightBudgetV1 } from "./core/params.js";
+import { createLightingDirector } from "./render/lighting/lightingDirector.js";
+import { setLightingPresetOverrides } from "./render/lighting/lightingState.js";
+import {
+  getLocalLightHub,
+  resolveLocalLightBudget,
+} from "./render/lighting/localLightRegistry.js";
+import { createLocalLightBridge } from "./render/lighting/localLightBridge.js";
+import { createVoxelAoSystem } from "./render/ao/voxelAoRenderer.js";
+import { createG8DebugOverlay } from "./render/debug/g8Overlay.js";
+import { refreshTownV4 } from "./world/citadel/presentationMesh.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createDayNight } from "./world/dayNight.js";
 import { createTramRide } from "./player/tramRide.js";
@@ -44,6 +58,7 @@ import {
 } from "./world/moebiusTiger.js";
 import { createTouchControls } from "./ui/touchControls.js";
 import { createMinimap } from "./ui/minimap.js";
+import { createShotHarnessPanel } from "./ui/shotHarnessPanel.js";
 import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
 import { FlockManager } from "./world/flock.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
@@ -72,6 +87,8 @@ import {
   startTramSound,
   sfxJump,
   setTramRideBgm,
+  resumeTramRideBgmIfWanted,
+  isTramRideBgmPlaying,
   setCanyonApproachBgm,
   isCanyonBgmPlaying,
 } from "./audio/sfx.js";
@@ -89,6 +106,16 @@ initQuestPanelCollapse();
 
 // ---------- 环境光 / 天空（跨场景共享） ----------
 const { lanterns, ambient, sun, skyMat, hemi, fill } = setupEnvironment(scene);
+
+// ---------- V5 光照导演（?oskLightingV1=1）：rig 默认隐藏，旧四灯不受影响 ----------
+const lightingV5 = isOskLightingV1();
+const lightingDirector = createLightingDirector({
+  scene,
+  renderer,
+  skyMat,
+  legacy: { ambient, hemi, sun, fill },
+});
+if (lightingV5) lightingDirector.setEnabled(true);
 
 // ---------- 星球壳（各场景可在其上贴装） ----------
 const planet = createPlanet(scene);
@@ -414,12 +441,23 @@ function moveSeaLakeTo(dir, baseRadius) {
   }
 }
 
+// 运行时截图工作台在 devPanel 之后装配；回调只在用户点击后执行，
+// 因此可以安全引用下面完成初始化的 shotHarnessPanel。
+let shotHarnessPanel = null;
+
 const devPanel = createDevPanel({
   sun,
   ambient,
+  lightingDirector,
+  lightingV5,
+  voxelAo: () => voxelAo, // 装配顺序在面板之后，惰性取值
+  localLights: () => localLights,
   onCamDist: (d) => cameraRig.setDist(d),
   onOpenMap: () => mapEditor.setOpen(true),
+  // 面板本体在后文装配；回调只会在开局后由用户点击，届时已完成初始化。
+  onOpenCitadel: () => citadelEditorPanel?.open(),
   onOpenStoryboard: () => storyboardPanel.setOpen(true),
+  onOpenShotHarness: () => shotHarnessPanel?.setOpen(true),
   cloudWallEnabled: isCloudWallEnabled(),
   onCloudWallToggle: (on) => {
     const enabled = setCloudWallEnabled(on);
@@ -489,6 +527,8 @@ const devPanel = createDevPanel({
 });
 
 // ---------- 昼夜循环（朝霞/暮云重点过渡；面板可拖时刻与速度） ----------
+// V5（?oskLightingV1=1）：dayNight 只推进时钟并发布 sample，
+// 太阳/天光/雾/天空由 LightingDirector 统一提交（PLAN 第九章）。
 const dayNight = createDayNight({
   scene,
   skyMat,
@@ -496,9 +536,161 @@ const dayNight = createDayNight({
   ambient,
   hemi,
   fill,
+  publishOnly: lightingV5,
   // 赤道云墙（MeshToonMaterial 近白基色）也要入夜染色，否则深夜仍亮着白天云带
   clouds: [...(messenger?.clouds || []), ...(equatorialClouds ? [equatorialClouds] : [])],
 });
+
+// ---------- shot-harness 能力并入主系统 ----------
+// 这些 getter 不复制对象，只把真实场景中的根节点交给同一个 LightingDirector
+// 做阴影拟合。因此开发验收看到的就是玩家实际会看到的地形/城堡/瀑布/木马。
+shotHarnessPanel = createShotHarnessPanel({
+  renderer,
+  lightingDirector,
+  subjects: {
+    citadelEnsemble: () => [
+      messenger?.landmarks?.citadelRange?.mesh,
+      messenger?.landmarks?.odysseyCitadel,
+      messenger?.landmarks?.citadelRange?.trojanHorse,
+    ],
+    citadelCascadeAudit: () => [
+      messenger?.landmarks?.citadelRange?.pilgrimageCascades,
+      messenger?.landmarks?.citadelRange?.trojanHorse,
+      messenger?.landmarks?.citadelRange?.nightInfiltration?.root,
+    ],
+    citadelStairAudit: () => [
+      messenger?.landmarks?.odysseyCitadel,
+      messenger?.landmarks?.citadelRange?.pilgrimageWaterSteps,
+    ],
+    planetOskarV9: () => messenger?.landmarks?.planetV8?.root,
+  },
+  onEnableOskar: (version = "v9") => {
+    const url = new URL(location.href);
+    url.searchParams.set("worldVersion", version);
+    url.searchParams.set("planetPresentationVersion", version);
+    url.searchParams.delete("planetOskarV1");
+    url.searchParams.set("shotLab", "1");
+    location.assign(url.href);
+  },
+});
+// V5 阴影焦点：城堡 + 木马 + 玩家（玩家移动时阴影框跟随，见主循环）；
+// 不回退整颗星球——焦点过大 texel 过粗，阴影会糊成一片
+lightingDirector.setFocus([
+  messenger?.landmarks?.odysseyCitadel,
+  messenger?.landmarks?.citadelRange?.trojanHorse,
+  playerGroup,
+].filter(Boolean));
+if (new URLSearchParams(location.search).get("shotLab") === "1") {
+  shotHarnessPanel?.setOpen(true);
+}
+// shadow coverage 调试视图：?v5ShadowDebug=1
+const v5Params = new URLSearchParams(location.search);
+if (v5Params.get("v5ShadowDebug") === "1") {
+  lightingDirector.setShadowDebugVisible(true);
+}
+// K2 PCFSoft 对照 preset：?v5Shadow=soft（默认 paper 硬边纸艺）
+if (v5Params.get("v5Shadow")) {
+  lightingDirector.setShadowPreset(v5Params.get("v5Shadow"));
+}
+
+// ---------- K3 体素 AO 垂直样片（?oskLightingV1=1&voxelAoV1=1，挂在 V5 之下） ----------
+// 范围：第一层瀑布—木马—相邻楼梯/门洞（Box3 并集外扩 ~20%，voxel 0.5）。
+// 士兵/木马不写静态体积，用脚底 contact shadow 贴片；编辑器 dirty 与
+// lightingDirector.invalidateShadowFit() 同步钩子（onApply / onTerrainObjectsChange）。
+let voxelAo = null;
+if (lightingV5 && isVoxelAoV1() && messenger?.landmarks?.citadelRange) {
+  const cascades = messenger.landmarks.citadelRange.pilgrimageCascades;
+  const firstWaterfall = cascades?.children?.at(-1) || cascades?.children?.[0] || null;
+  const horse = messenger.landmarks.citadelRange.trojanHorse || null;
+  const infiltrationRoot = messenger.landmarks.citadelRange.nightInfiltration?.root || null;
+  // contact shadow 宿主：潜入士兵 + 系绳兵 + 木马本体（均不进静态 AO 体积）
+  const contactShadows = [];
+  for (const s of infiltrationRoot?.userData?.soldiers || []) {
+    contactShadows.push({ object: s, radius: 0.55, opacity: 0.26 });
+  }
+  for (const s of horse?.userData?.tiedownSquad?.children || []) {
+    contactShadows.push({ object: s, radius: 0.55, opacity: 0.26 });
+  }
+  if (horse) contactShadows.push({ object: horse, radius: 3.6, opacity: 0.22, y: 0.12 });
+  voxelAo = createVoxelAoSystem({
+    scene,
+    renderer,
+    camera,
+    regionObjects: [firstWaterfall, horse].filter(Boolean),
+    excludeRoots: [horse, infiltrationRoot].filter(Boolean),
+    contactShadows,
+    // ?voxelAoBudget=毫秒：e2e/调试用每帧预算（默认 4ms，生产不应调大）
+    budgetMs: Number(v5Params.get("voxelAoBudget")) > 0 ? Number(v5Params.get("voxelAoBudget")) : 4,
+    debug: v5Params.get("voxelAoDebug") || "",
+  });
+}
+
+// ---------- K4 局部灯预算（?oskLightingV1=1 之下，缺省跟随 V5；?localLightBudgetV1=0 可单关） ----------
+// 创建点（太阳盘/火炬/闪电/莫比斯资产等，见 docs/lighting-v5-audit.md）在构建期
+// 已注册进 hub；桥接层在 V5 下静音原灯、用固定大小 PointLight 池承载 active 集合。
+// ?localLightBudget=desktop|medium|low|数字 覆盖预算档（e2e/调试用）。
+const localLightBudget = resolveLocalLightBudget(
+  v5Params.get("localLightBudget") && Number.isFinite(+v5Params.get("localLightBudget"))
+    ? +v5Params.get("localLightBudget")
+    : v5Params.get("localLightBudget") || "desktop"
+);
+const localLights = createLocalLightBridge({
+  scene,
+  camera,
+  registry: getLocalLightHub(),
+  budget: localLightBudget,
+  director: lightingDirector,
+});
+localLights.setEnabled(lightingV5 && isLocalLightBudgetV1());
+
+// ---------- V6-G11 光照参数包（?lightingPreset=grok-v1；缺省=代码内置 legacy-incode） ----------
+// versioned JSON（src/render/lighting/presets/）；加载/校验失败保持内置常量并只告警一次，
+// 参数包只走 setLightingPresetOverrides 注入，不创建任何 Three Light。
+const lightingPresetInfo = { name: "legacy-incode", loaded: false };
+if (v5Params.get("lightingPreset")) {
+  const presetName = v5Params.get("lightingPreset");
+  fetch(`src/render/lighting/presets/${encodeURIComponent(presetName)}.json`)
+    .then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then((json) => {
+      setLightingPresetOverrides(json);
+      lightingPresetInfo.name = json.version || presetName;
+      lightingPresetInfo.loaded = true;
+    })
+    .catch((err) =>
+      console.warn("[lightingPreset] 加载失败，保持 legacy-incode：", err.message)
+    );
+}
+
+// ---------- V6-G8 调试叠图（?g8Debug=wfc-entropy,hard-route,...；默认关，零开销） ----------
+// 逗号分隔层 ID（全部 20 层 ID 见 render/debug/v6G8Layers.js）。有几何可视化的
+// 层画 LineSegments/Points 叠图（depthTest 关、renderOrder 999）；其余层接受
+// 但只出空叠图 + note。URL 直读模式同 v5ShadowDebug/localLightBudget。
+const g8Debug = createG8DebugOverlay({
+  THREE,
+  scene,
+  camera,
+  getRuntime: () => {
+    const lm = messenger?.landmarks;
+    const v4rt = lm?.v4Runtime ?? lm?.odysseyCitadel?.userData?.v4Runtime ?? null;
+    return {
+      v4: v4rt?.v4 ?? null,
+      citadel: lm?.odysseyCitadel ?? null,
+      director: lightingDirector,
+      registry: getLocalLightHub(),
+      aoVolume: voxelAo?.volume ?? null,
+      lightBudget: localLightBudget,
+    };
+  },
+});
+{
+  const g8Param = v5Params.get("g8Debug");
+  if (g8Param) {
+    g8Debug.setLayers(g8Param.split(",").map((s) => s.trim()).filter(Boolean));
+  }
+}
 
 // ---------- 电车搭乘（近车 [F] 上车 · 窗边乘坐看风景） ----------
 const tramRide = createTramRide({
@@ -511,18 +703,10 @@ const tramRide = createTramRide({
   elHint: document.getElementById("tram-hint"),
   toast: showToast,
   onBoard: (tram) => {
-    // 若已近峡谷 / 在谷内：直接切峡谷 BGM；否则登车曲 Tram 头 16s → 三亩地-城南花已开
-    const tramSystem = messenger?.landmarks?.tramSystem;
-    const cue = tramSystem?.getCanyonAudioCue?.(tram);
-    const nearCanyon = cue && (cue.inCanyon || cue.secondsToEntry <= 10);
-    if (nearCanyon) {
-      setCanyonApproachBgm(true, { fade: 0.8 });
-      // 仍标记搭乘 wanted，离谷后可接主曲
-      setTramRideBgm(true, { fade: 0.1 });
-    } else {
-      setTramRideBgm(true, { fade: 0.7 });
-    }
-    const color = tram?.userData?.variant === "blue" ? "蓝色" : "红色";
+    ensureAudio();
+    const variant = tram?.userData?.variant === "red" ? "red" : "blue";
+    setTramRideBgm(true, { fade: 0.7, variant });
+    const color = variant === "blue" ? "蓝色" : "红色";
     const foxHint =
       foxNpc?.isFollowing?.() ? " · 阿狸卧在身旁" : "";
     showToast(
@@ -677,6 +861,16 @@ function citadelSupportAt(ix, iz, terraceIndex = 0) {
     citadelSupportCache.set(key, 0);
     return 0;
   }
+  // 高山圣城现与运河交汇古堡共用单格 Townscaper 构建面；中央核心
+  // 留给不可删除的方尖碑及内部旋梯战斗，不允许普通建筑穿入。
+  if (citadel.userData?.highlandTownscaperGrid) {
+    const core = HIGHLAND_TOWNSCAPER_TOWN_SPEC.protectedCore;
+    const protectedCell = Math.abs(ix - core.centerX) <= core.halfX
+      && Math.abs(iz - core.centerZ) <= core.halfZ;
+    const level = protectedCell ? -1 : 0;
+    citadelSupportCache.set(key, level);
+    return level;
+  }
   // Pure canonical transform: safe even while the panel is still being
   // constructed, and exactly identical to both the 2D map and 3D generator.
   const c = citadelGridCellCenter(ix, 0, iz);
@@ -744,6 +938,18 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
       onViewAction: citadelViewAction,
       getSupportLevel: citadelSupportAt,
       getInstanceId: () => citadelTargetId,
+      getLatestDesign: () => getCitadelTarget()?.userData?.highlandLatestDesign === true,
+      getLatestUnits: () => getCitadelTarget()?.userData?.highlandLatestDesignRoot?.userData?.castleUnits ?? [],
+      onHighlandUnitEdit: (patch) => {
+        const citadel = getCitadelTarget();
+        if (!citadel?.userData?.highlandLatestDesign) return { ok: false, error: "not-latest-highland-citadel" };
+        const result = citadel.userData.highlandLatestDesignRoot?.userData?.editCastleUnit?.(patch.id, patch);
+        if (result?.ok) {
+          lightingDirector.invalidateShadowFit();
+          voxelAo?.markWorldDirty(new THREE.Box3().setFromObject(citadel));
+        }
+        return result || { ok: false, error: "latest-unit-editor-unavailable" };
+      },
       getTargets: () =>
         citadelTargets.map((t) => ({
           id: t.id,
@@ -781,6 +987,9 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
       onTerrainObjectsChange: (objects) => {
         rebuildCitadelTerrainObjects(getCitadelTarget(), objects);
         citadelObstacle = null;
+        lightingDirector.invalidateShadowFit(); // 地形件变了，V5 阴影下帧重拟合
+        // K3：地形件 dirty → 体素 AO 只重栅格受影响切片（与体积求交，交不上即跳过）
+        voxelAo?.markWorldDirty(new THREE.Box3().setFromObject(getCitadelTarget()));
       },
       onApply: (layout) => {
         // 编辑器提交的是 v2 五台地布局对象（{ terraces: [...] }），不能再包进
@@ -789,9 +998,13 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
         const stats = rebuildCitadelTown(citadel, layout);
         citadelObstacle = null; // 建筑体量变了，净空区下帧重算
         citadelSupportCache.clear(); // 包围盒可能变，支撑缓存失效
+        lightingDirector.invalidateShadowFit(); // 建筑 dirty → V5 阴影重拟合
+        // K3：建筑 dirty → 体素 AO 受影响切片重栅格（与 invalidateShadowFit 同钩子）
+        voxelAo?.markWorldDirty(new THREE.Box3().setFromObject(citadel));
         // 重建后 level 组全部换新，按面板状态重新断言一次可见性
         const st = citadelEditorPanel?.getState?.();
         if (st) applyTownLayerVisibility(st.activeTerrace, st.activeLayer, st.hideAbove);
+        refreshTownV4(citadel, FEATURES.terrainSeed);
         return stats;
       },
     })
@@ -808,6 +1021,7 @@ function isCitadelUiEvent(e) {
       t.closest("#map-editor") ||
       t.closest("#dev-panel") ||
       t.closest("#dev-toggle") ||
+      t.closest("#shot-harness-panel") ||
       t.closest("#storyboard-panel") ||
       t.closest("#quest-panel") ||
       t.closest("#journal-panel") ||
@@ -1073,6 +1287,11 @@ function updateMoebiusBarrier(dt) {
   const tram = tramSystem?.tram;
   const target = tram && tram.position.y < 0 ? 1 : 0;
   moebiusFactor += (target - moebiusFactor) * Math.min(1, dt / 2); // 2 秒时间常数
+  if (lightingDirector.isEnabled()) {
+    // V5：结界染色作为 override 交给导演合成，不直接改灯/天空
+    lightingDirector.setMoebiusFactor(moebiusFactor);
+    return;
+  }
   if (moebiusFactor < 0.001) return;
   const cur = dayNight.getCurrent();
   if (!cur) return;
@@ -1144,6 +1363,14 @@ function animate() {
 
   updateToast(dt);
   dayNight.update(dt);
+  // K4 局部灯桥接：先于导演合成，闪电 override 当帧生效（关时 no-op）
+  localLights.update(dt);
+  // V5 光照导演：开关开时由它提交全局灯/雾/天空/exposure（关时 no-op）
+  lightingDirector.update(dt, { timeOfDay: dayNight.getPhase?.() ?? P.timeOfDay, weather: P.weather | 0 });
+  // K3 体素 AO：dirty 分帧调度（任一切片 ≤4ms；未开启时 voxelAo 为 null）
+  voxelAo?.update(dt);
+  // V6-G8 调试叠图：节流重建动态层；未启用时内部直接返回（零开销）
+  g8Debug.update(dt);
   // 古堡拱窗：夜晚 70% 概率点亮，天亮熄灭，每夜重新抽签
   // 古堡拱窗：夜亮；纸士兵经过房屋时熄灯，次夜再点亮
   {
@@ -1189,20 +1416,27 @@ function animate() {
     resolveAssetColliders(player.position, assetColliders);
   }
 
-  // 峡谷进谷 BGM：乘车且距进谷 ≤10s（或已在谷内）→ 播風之傳說，关默认环境音
+  // 电车搭乘 BGM：车上必须保持电车曲。峡谷曲只记 wanted，声道不抢。
   {
+    const onTram = tramRide.isRiding?.() === true;
+    if (onTram && !isTramRideBgmPlaying()) resumeTramRideBgmIfWanted();
     const tramSystem = messenger?.landmarks?.tramSystem;
     let wantCanyonBgm = false;
-    if (riding && tramSystem?.getCanyonAudioCue) {
+    if (onTram && tramSystem?.getCanyonAudioCue) {
       const tram =
-        tramSystem.getNearestTram?.(player.position) || tramSystem.tram || null;
+        tramRide.getActiveTram?.() ||
+        tramSystem.getNearestTram?.(player.position) ||
+        tramSystem.tram ||
+        null;
       const cue = tramSystem.getCanyonAudioCue(tram);
       if (cue && (cue.inCanyon || cue.secondsToEntry <= 10)) wantCanyonBgm = true;
     }
-    // 滞回：已在播则离谷后再关，避免边界闪断（出谷后 seconds>12 才关）
-    if (isCanyonBgmPlaying() && riding && tramSystem?.getCanyonAudioCue) {
+    if (isCanyonBgmPlaying() && onTram && tramSystem?.getCanyonAudioCue) {
       const tram =
-        tramSystem.getNearestTram?.(player.position) || tramSystem.tram || null;
+        tramRide.getActiveTram?.() ||
+        tramSystem.getNearestTram?.(player.position) ||
+        tramSystem.tram ||
+        null;
       const cue = tramSystem.getCanyonAudioCue(tram);
       if (cue && (cue.inCanyon || cue.secondsToEntry <= 12)) wantCanyonBgm = true;
     }
@@ -1314,5 +1548,11 @@ window.__tm = {
   elderMusic,
   foxNpc,
   weather,
+  lightingDirector, // V5 光照导演（验收/调试用）
+  shotHarness: shotHarnessPanel, // 运行时截图 / OskSta A-B 工作台
+  voxelAo, // K3 体素 AO 垂直样片（验收/调试用，未开启为 null）
+  localLights, // K4 局部灯预算桥接（验收/调试用）
+  g8Debug, // V6-G8 调试层叠图（验收/调试用，默认空层零开销）
+  lightingPresetInfo, // V6-G11 光照参数包加载状态（?lightingPreset=grok-v1）
   touchControls,
 };

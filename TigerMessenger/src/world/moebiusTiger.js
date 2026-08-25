@@ -8,6 +8,7 @@ import * as THREE from "three";
 import { addOutline, toonMat, OUTLINE } from "../assets/toon.js";
 import { showBubble, hideBubble } from "../ui/hud.js";
 import { PLANET_RADIUS } from "./planet.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 const BODY_BLACK = 0x121214; // 身体墨黑
 const PAW_WHITE = 0xf4f1ea; // 脚掌白
@@ -197,6 +198,15 @@ export function createMoebiusTiger(rnd = Math.random, roam = null) {
     const glow = new THREE.PointLight(EYE_LIGHT, 0.9, 5, 2);
     glow.position.set(s * 0.5, 0.16, 1.25);
     headGroup.add(glow);
+    // K4：虎眼点光迁入 registry（owner 派生稳定 id：moebius-tiger-eye#0/#1）
+    registerLocalLight(glow, {
+      owner: "moebius-tiger-eye",
+      kind: "point",
+      color: EYE_LIGHT,
+      intensity: 0.9,
+      radius: 5,
+      priority: 4,
+    });
   }
 
   /* ---------- 面部少量白斑（口鼻） ---------- */

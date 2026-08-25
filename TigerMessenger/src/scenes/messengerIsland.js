@@ -1,101 +1,42 @@
 // =====================================================================
-//  场景：信使主岛（可玩关卡）
-//  - 球面平台 / 土坡 / 云环
-//  - 游玩区 + 远侧自然点缀
-//  - 月牙湖 + 湖畔老旧修船厂码头 + 背侧大湖
-//  不包含西芳寺景观（见 saihojiGarden.js）
+//  场景：信使主岛（装配器）
+//  出生 / 交通 / 城堡 / 水晶城 / 逐帧更新拆到 scenes/messenger/
 // =====================================================================
 import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
-import { P, FEATURES } from "../core/params.js";
-import { buildWorld, updatePlatformPulse } from "../world/platforms.js";
-import { buildHills, carveHillsForTrack } from "../world/hills.js";
+import { buildWorld } from "../world/platforms.js";
+import { buildHills, groundLiftAt } from "../world/hills.js";
 import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
-import { createMoonLake, LAKE } from "../world/lake.js";
-import { buildChristchurchTramSystem } from "../world/tramSystem.js";
-import { buildWorldCanal, buildCanalJunctionBox } from "../world/canalSystem.js";
-import { buildCanalLakeLink } from "../world/canalLakeLink.js";
-import { createCanalBoatPatrol } from "../world/canalBoats.js";
-import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../world/moebiusCity.js";
-import { loadCrystalLayoutFromStorage } from "../world/crystalCityLayout.js";
-import { buildAbandonedGate } from "../world/abandonedGate.js";
-import { isCanyonBgmPlaying, isCanyonBgmFinishing, setSwampBgm } from "../audio/sfx.js";
-import { canyonOffsetDir, CANYON } from "../world/canyon.js";
-import { FlockManager } from "../world/flock.js";
-import { BirdVortexManager } from "../world/birdVortex.js";
-import {
-  createCitadelTerraceBirds,
-  collectInfiltrationThreats,
-} from "../world/citadelTerraceBirds.js";
-import { GATE, GATE_DEPTH } from "../world/abandonedGate.js";
-import { AirshipEscortManager } from "../world/airshipEscort.js";
-import { buildImpastoMossyGround } from "../world/mossyGround.js";
-import { placeMoebiusSwampOnSphere } from "../world/moebiusSwamp.js";
+import { createMoonLake } from "../world/lake.js";
+import { GRAND_CRYSTAL } from "../world/moebiusCity.js";
+import { canyonOffsetDir } from "../world/canyon.js";
 import { SAIHOJI_ZONES } from "../world/saihoji.js";
-import { createSaihojiPhalanxBattle } from "../world/saihojiPhalanx.js";
-import { createCombatEventLog } from "../world/combatEvents.js";
-import { updateClouds } from "../assets/lowPoly.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
-import {
-  createMoebiusAircraftSquad,
-  updateAircraftHover,
-} from "../assets/moebiusAircraft.js";
-import { createBubblePod, createBubblePodsAroundFlowerBuildings, updateBubblePodPatrol } from "../assets/bubblePod.js";
-import { groundLiftAt } from "../world/hills.js";
-import { placeObjectOnSphere, latLonToDir, flatXZToLatLon, quatUprightOnSphere } from "../world/sphereMath.js";
+import { placeObjectOnSphere, latLonToDir } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
 import { createBookshopHydrangeas } from "../assets/hydrangea.js";
-import { createLowPolyFlower, INK_FLOWER_COLORS } from "../assets/lowPoly.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
-import { createHarborLogistics } from "../assets/harborLogistics.js";
-import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../assets/moebiusAirship.js";
-import {
-  createCitySeaLake,
-  CITY_SEA_LAKE,
-  WATER_CITY_WATER_DROP,
-  WATER_CITY_ANG_R,
-  waterCityShoreAng,
-  waterCityCanalWaypointDir,
-} from "../world/citySeaLake.js";
-import {
-  buildOdysseyCitadel,
-  CITADEL_TERRAIN_KEY,
-  CITADEL_TERRAIN_OBJECTS_KEY,
-  citadelTerrainKey,
-  citadelTerrainObjectsKey,
-} from "../world/odysseyCitadel.js";
-import {
-  CITADEL_LEVELS_KEY,
-  CANAL_JUNCTION_TOWN_SPEC,
-  citadelLevelsKey,
-} from "../world/citadelTown.js";
-import {
-  buildCitadelRange,
-  citadelRangeLiftDir,
-  citadelSiteDir,
-  citadelWalkFlights,
-  citadelWalkLiftLocal,
-  citadelWalkMetrics,
-  rangeLocalToWorld,
-  rangeWorldToLocal,
-  CITADEL_CASCADE_POOL_SPECS,
-} from "../world/citadelRange.js";
-import {
-  createCitadelTacticalGraph,
-  createTacticalGraphDebugView,
-} from "../world/citadelTacticalGraph.js";
+import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
+import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260823-citadel-reference-v6";
+import { loadMoebiusDistrict, placeMoebiusSwampAndSky } from "./messenger/loadMoebius.js";
+import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/loadTraffic.js";
+import { updateMessengerIsland } from "./messenger/updateIsland.js";
+import { createSwampBgmState } from "./messenger/swampBgm.js";
+import { createPlanetV8Runtime } from "../world/planetV8/runtime.js";
+import { FEATURES } from "../core/params.js";
 
-/** 飞艇锚定用临时向量 */
-const _asTmp = new THREE.Vector3();
-
-/** 湖沼 BGM 进入判定（局部坐标：坑口半径 34，坑缘 y=0） */
-const _swampLocal = new THREE.Vector3();
-const SWAMP_BGM_ENTER_R = 33; // 进入判定半径（湖沼局部资产单位，不随世界半径放大）
-const SWAMP_BGM_EXIT_R = 37; // 离开判定半径（滞回，防坑缘抖动反复切歌）
-const SWAMP_BGM_CEILING = 28; // 高于此局部高度视为飞越树冠，不算进入
-let swampBgmInside = false;
+// 苔庭周边地被与西芳寺六景共用一套灰青苔色阶；普通主岛苔丘仍保留
+// mossyGround 的鲜黄绿默认色，只有苔庭战区切换到这套更克制的色板。
+const SAIHOJI_MOSS_PALETTE = Object.freeze({
+  low: 0x3f5f49,
+  ink: 0x4b7052,
+  emerald: 0x587d59,
+  fresh: 0x688e64,
+  // 与主岛 paintPlanetMossSea 的中间色一致，足迹最外缘才能真正回到周边草地。
+  edge: 0x4d9b69,
+});
 
 /** @type {import("./sceneApi.js").SceneModule} */
 export const messengerIslandScene = {
@@ -106,542 +47,83 @@ export const messengerIslandScene = {
   load(ctx) {
     const scene = ctx.scene;
     const R = ctx.planetRadius ?? PLANET_RADIUS;
-    let canalSys = null; // 星海运河环线（连通各场景，地面浅沟）
-    let canalBoats = null; // 运河巡游古战船（可 F 登船 WASD 驾驶）
-    let canalLakeLink = null; // 运河↔大湖落差互联（瀑布船道+升船机）
 
     const platforms = buildWorld(scene);
     const hills = buildHills(scene, R);
     const clouds = createCloudRing(scene, R);
     const playZone = decoratePlayZone(scene, R);
-    // 出生点场景（彻底重构）：海岛悬崖瀑布营地
-    // 多层海岸 / 左侧荒山山洞 / 崖壁叠瀑 / 太空水环 / 弹琴老人
     const camp = buildStartingCamp(scene, R);
     const farSide = decorateFarSide(scene, R);
-    // 月牙湖（主岛动线交汇）
     const moonLake = createMoonLake(scene, R);
-    // 峡谷白鲸湖在水晶城建好后创建（见下方「花厅塔下方白鲸湖」），
-    // 因为要拿到运行时算出的花厅塔方向与塔基高度。
+    const planetV8 = createPlanetV8Runtime({
+      scene,
+      planet: ctx.planet,
+      radius: R,
+      seed: ctx.options?.planetV8?.seed ?? FEATURES.terrainSeed ?? 42,
+      features: { ...FEATURES, ...(ctx.options?.planetV8?.features || {}) },
+    });
 
-    // ---------- 旧港码头 · 圣城深潭参天树下 ----------
-    // 摆放依赖 rangeLocalToWorld（需圣城山脉先建），统一在圣城段落执行。
-    // world/lake.js 的 HARBOR 常量仍被电车避障引用（tramSystem.js），不改动。
     const harborBuilt = buildOldHarborScene({ seed: 8844 });
     const harbor = harborBuilt.group;
     scene.add(harbor);
-    let harborColliders = [];
-    /** 装船物流换船时写回 landmarks.boat（return 前赋值） */
     let messengerLandmarks = null;
 
-    // 基督城有轨电车：北岛环线 + 跨赤道绕莫比斯主晶塔
-    // 能量束目标：中央母体晶皇塔顶
-    const grandDir = latLonToDir(
-      GRAND_CRYSTAL.lat,
-      GRAND_CRYSTAL.lon,
-      new THREE.Vector3()
-    );
+    const grandDir = latLonToDir(GRAND_CRYSTAL.lat, GRAND_CRYSTAL.lon, new THREE.Vector3());
     const grandTopTarget = grandDir
       .clone()
       .multiplyScalar(R + canyonOffsetDir(grandDir) + GRAND_CRYSTAL.h * 0.96);
-    const tramSystem = buildChristchurchTramSystem(scene, R, {
-      beamTarget: grandTopTarget,
+    const tramSystem = loadTram({ scene, R, hills, camp, grandTopTarget });
+    const moebiusPack = loadMoebiusDistrict({ scene, R, tramSystem });
+    const citadelPack = loadCitadelBlock({
+      scene,
+      R,
+      moonLake,
+      camp,
+      harbor,
+      harborBuilt,
+      tramSystem,
     });
 
-    // 轨道走廊压平丘陵：轨道在岛面平铺不爬山，走廊上山体高于轨面会穿轨/穿车体
-    carveHillsForTrack(hills.mesh, [tramSystem.curve, ...Object.values(tramSystem.curves || {})], R);
-
-    // 营地花草不得长在电车轨道上：贴近车道采样点的花直接修剪
-    {
-      const trackPts = [tramSystem.curve, ...Object.values(tramSystem.curves || {})].flatMap((c) =>
-        c.getPoints(320)
-      );
-      for (const flower of camp.landmarks.campFlowers || []) {
-        if (trackPts.some((p) => p.distanceToSquared(flower.position) < 2.2 * 2.2)) {
-          flower.removeFromParent();
-        }
-      }
-    }
-
-    // 莫比斯水晶大都会：花厅+晶体汇聚较高山峦环带；布局可读搭建面板存档
-    const moebius = buildMoebiusCrystalMetropolis(scene, R, {
-      trackCurve: tramSystem.curve,
-      layout: loadCrystalLayoutFromStorage() || undefined,
-      useStorage: true,
-    });
-
-    // 3 艘气泡座舱分别围绕水晶城 3 座含花厅的建筑巡游。
-    const bubblePods = createBubblePodsAroundFlowerBuildings(scene, moebius.crystals, { count: 3 });
-
-    // ---------- 峡谷水城 · 坑底大湖（湖面覆盖整个城区） ----------
-    // 湖心 = 峡谷中心；水面沉到 R-24（与第 2/3 阶地边界相交 → 湖岸角距 0.486）：
-    // 城区足迹 0.7286 rad 全在水面之下，第 1/2 阶地成干燥岛环、其余入水。
-    // 城区建筑由 moebiusCity 按水位抬根 + 水线石台（被淹丘顶不再托底），
-    // 母塔立在湖心绿岛上、金鳞双塔自水中拔起；电车高架在十余单位上方掠过。
-    const citySeaLake = createCitySeaLake(scene, R, {
-      seed: 5521,
-      centerDir: latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3()),
-      baseRadius: R - WATER_CITY_WATER_DROP - CITY_SEA_LAKE.waterLift,
-      angR: WATER_CITY_ANG_R,
-      fixedLevel: true,
-    });
-
-    // ---------- 太古高山圣城要塞 + 五层贴地台地 ----------
-    // 选址：lat 24.1 / lon 36.05（主岛东南旷野，三边测量定位的用户指定点）。
-    // 旧 +16 黄土主峰与前景土坡均已取消；第五层台地直接贴住全球地表。
-    // 五座台地湖泊由四道相邻层瀑布连接，不允许跨层跌落。
-    // 主建筑重构版：三层马斯塔巴 + 黄金瓜棱穹顶 + 宣礼塔/红砖角楼；
-    // 四级清透水帘连接五座白石梯湖；底部雾气与涟漪落入下一级水面。
-    // 地形编辑器保存的台地参数同时驱动台地和梯湖，确保两者永远同层。
-    let citadelContour;
-    try {
-      const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
-      if (saved && (Number.isFinite(saved.baseRadius) || Array.isArray(saved.terraces))) {
-        citadelContour = saved;
-      }
-    } catch { /* 损坏存档回落内置台地参数 */ }
-    const citadelRange = buildCitadelRange(scene, R, citadelContour);
-    const citadelDir = citadelSiteDir(new THREE.Vector3());
-
-    // ---------- 旧港码头 + 古战船 · 圣城深潭参天大树下（贴地） ----------
-    // 参天树（圣池深潭参天树，range 局部 -15.2,42）旁、离地面最近的深潭湖泊
-    // （range 局部 ~1,43）边上。码头整组落在岸地树荫下，栈桥朝向潭心。
-    {
-      const TREE_LX = -15.2;
-      const TREE_LZ = 42.0;
-      const POOL_LX = 1.0;
-      const POOL_LZ = 43.0;
-      // 树根旁偏潭约 1.0：仍在岸上，树冠正下方
-      const toPoolFlatX = POOL_LX - TREE_LX;
-      const toPoolFlatZ = POOL_LZ - TREE_LZ;
-      const flatLen = Math.hypot(toPoolFlatX, toPoolFlatZ) || 1;
-      const harborLx = TREE_LX + (toPoolFlatX / flatLen) * 1.0;
-      const harborLz = TREE_LZ + (toPoolFlatZ / flatLen) * 1.0;
-      // 与 placeRangeAsset(siteUpright) 同构：落在高度场表面 + 站点法向
-      rangeLocalToWorld(harborLx, harborLz, R, harbor.position);
-      const siteUp = citadelSiteDir(new THREE.Vector3());
-      // 桩底 y=0 对齐地表；微抬 0.04 防与高度场 z-fight，不悬空
-      harbor.position.addScaledVector(siteUp, 0.04);
-      const poolC = rangeLocalToWorld(POOL_LX, POOL_LZ, R, new THREE.Vector3());
-      const toPool = poolC.sub(harbor.position);
-      toPool.addScaledVector(siteUp, -toPool.dot(siteUp)).normalize();
-      const zAxis = new THREE.Vector3().crossVectors(toPool, siteUp).normalize();
-      // 局部 +Y = 站点法向（贴地），+X 朝潭，栈桥沿地面伸向深潭
-      harbor.quaternion.setFromRotationMatrix(
-        new THREE.Matrix4().makeBasis(toPool, siteUp, zAxis)
-      );
-      harbor.updateMatrixWorld(true);
-      const harborWater = harbor.getObjectByName("harbor-water");
-      if (harborWater) harborWater.visible = false;
-      // 船保持建造时的甲板高度（约 0.61），与栈桥同高、坐在码头上
-      const boat = harborBuilt.landmarks.boat;
-      if (boat && boat.position.y < 0.3) boat.position.y = 0.61;
-
-      // 弹琴老人：从出生营地迁到码头，坐在起重机旁货柜叠边（码头局部坐标）
-      // 营地小地图锚点仍留原处；碰撞 / elderMusic 跟老人世界位。
-      const elder = camp?.landmarks?.elder;
-      const crane = harborBuilt.landmarks.crane;
-      const cratesByCrane = harborBuilt.landmarks.cratesByCrane;
-      if (elder && crane) {
-        elder.removeFromParent();
-        harbor.add(elder);
-        // 靠起重机与 cratesByCrane 之间、甲板面坐姿；略偏岸侧不挡搬运动线
-        const deckTop =
-          cratesByCrane?.position?.y ?? crane.position.y ?? 0.51;
-        const seat = new THREE.Vector3(
-          (crane.position.x + (cratesByCrane?.position.x ?? 2.2)) * 0.5 - 0.75,
-          deckTop,
-          (crane.position.z + (cratesByCrane?.position.z ?? 1.0)) * 0.5 + 0.15
-        );
-        elder.position.copy(seat);
-        // 坐姿面朝栈桥活动：船 / 搬运班组 / 起重机
-        elder.rotation.set(0, Math.PI * 0.55, 0);
-        elder.updateMatrixWorld(true);
-        const elderWorld = elder.getWorldPosition(new THREE.Vector3());
-        const elderCol = camp.colliders?.find((c) => c.kind === "elder");
-        if (elderCol) elderCol.position.copy(elderWorld);
-        else camp.colliders?.push({ position: elderWorld.clone(), radius: 0.8, kind: "elder" });
-        harborBuilt.landmarks.elder = elder;
-      }
-
-      harborColliders = [
-        { position: harbor.position.clone(), radius: 3.8 },
-        {
-          position: (crane || harborBuilt.landmarks.crane).getWorldPosition(
-            new THREE.Vector3()
-          ),
-          radius: 1.15,
-        },
-      ];
-    }
-    // 圣城搭建面板/编辑器（citadelEditorPanel / townscaper.html）保存的布局优先；
-    // 无存档时回落到内置 CITADEL_TOWN_SPEC。
-    let citadelSpec;
-    try {
-      const saved = JSON.parse(localStorage.getItem(CITADEL_LEVELS_KEY) || "null");
-      if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) {
-        citadelSpec = saved;
-      }
-    } catch { /* 损坏存档回落内置 SPEC */ }
-    let citadelTerrainObjects;
-    try {
-      const saved = JSON.parse(
-        localStorage.getItem(CITADEL_TERRAIN_OBJECTS_KEY) || "[]"
-      );
-      if (Array.isArray(saved)) citadelTerrainObjects = saved;
-    } catch { /* 损坏存档回落空地貌对象 */ }
-    const odysseyCitadel = buildOdysseyCitadel({
-      dir: citadelDir,
-      faceDir: moonLake?.centerWorld || null,
-      groundRadius: R + citadelRangeLiftDir(citadelDir), // 主峰平顶
-      planetRadius: R,
-      seed: 20260808,
-      spec: citadelSpec,
-      contour: citadelContour,
-      terrainObjects: citadelTerrainObjects,
-    });
-    scene.add(odysseyCitadel);
-    odysseyCitadel.updateMatrixWorld(true);
-
-    // ---------- 高山古堡鸟群 20 只：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞后立刻落下 ----------
-    const terraceBirds = createCitadelTerraceBirds(scene, odysseyCitadel, {
-      contour: citadelContour,
-      getTram: () => tramSystem?.tram || null,
-      getInfiltration: () => citadelRange?.nightInfiltration || null,
-    });
-    // 兼容旧引用：台地 1 旋涡
-    const birdVortex = terraceBirds.primary;
-
-    // Boids 鸟群：先在峡谷方向占位，建门后整群迁移到叹息之门城头（见下方 migrate）
-    const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
-    const flock = new FlockManager(scene, {
-      count: 18,
-      planetRadius: R,
-      centerDir: canyonDir,
-      windDir: new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), canyonDir).normalize(),
-      obstacles: moebius.crystals,
-    });
-
-    // 水晶城花厅「忽聚忽散」鸟群：保留在母皇塔楼顶（不迁移）
-    const grandTower = moebius.grand;
-    const roofAlt = grandTower.root + grandTower.h - R; // 花厅楼顶海拔（谷心台阶根基 + 塔高）
-    const hallFlock = new FlockManager(scene, {
-      count: 12,
-      planetRadius: R,
-      centerDir: grandTower.dir,
-      altMin: roofAlt - 2,
-      altMax: roofAlt + 18,
-      homeRadius: 12,
-      homeWeight: 1.3, // 楼顶小空域：收紧家域缰绳
-      windDir: new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), grandTower.dir).normalize(),
-      obstacles: moebius.crystals,
-    });
-
-    // Hard To Find Bookshop：与地图共用 createCatalogObject（同一工厂/参数）
     const bookshopX = 11.5 * WORLD_SCALE;
     const bookshopZ = 5.5 * WORLD_SCALE;
-    const bookshopLift = groundLiftAt(bookshopX, bookshopZ);
     const bookshop = createCatalogObject("bookshop", {
       signLine1: "HARD TO FIND",
       signLine2: "BOOKSHOP",
     });
-    // 稳定 uid：地图存档跨次加载可对齐，不必依赖初始化坐标
     bookshop.userData.mapUid = "world-bookshop";
-    // 底部原点 = 球面 R+lift（与 mapEditor.applyPose 同序：place + rotateY）
-    placeObjectOnSphere(bookshop, bookshopX, bookshopZ, bookshopLift, R);
-    bookshop.rotateY(-0.5); // 立面朝向街道
-    // 绣球花丛围绕书店（程序布局；单丛仍可用地图放置 hydrangea）
+    placeObjectOnSphere(bookshop, bookshopX, bookshopZ, groundLiftAt(bookshopX, bookshopZ), R);
+    bookshop.rotateY(-0.5);
     bookshop.add(createBookshopHydrangeas());
     scene.add(bookshop);
 
-    // ---------- 莫比斯湖沼：水晶城外侧（贴峡谷地表）----------
-    // 坑口半径 34×scale≈17：从母塔沿谷心外向+侧向挪开，落在城区旁，
-    // 不吞母塔、不占湖心。mapUid 换新，旧书店存档不再把它拽回去。
-    let moebiusSwamp = null;
-    {
-      const swampScale = 0.5;
-      const swamp = createCatalogObject("moebiusSwamp", { seed: 7711, scale: swampScale });
-      swamp.userData.mapUid = "world-swamp-crystal";
-      const cityDir = grandDir.clone().normalize();
-      const canyonCenter = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
-      const outward = cityDir.clone().sub(canyonCenter);
-      outward.addScaledVector(cityDir, -outward.dot(cityDir));
-      if (outward.lengthSq() < 1e-8) {
-        outward.crossVectors(cityDir, new THREE.Vector3(0, 0, 1));
-        if (outward.lengthSq() < 1e-8) outward.set(1, 0, 0).addScaledVector(cityDir, -cityDir.x);
-      }
-      outward.normalize();
-      const side = new THREE.Vector3().crossVectors(cityDir, outward).normalize();
-      const target = cityDir
-        .clone()
-        .multiplyScalar(R)
-        .addScaledVector(outward, 28)
-        .addScaledVector(side, 16);
-      const swampDir = target.normalize();
-      const lift = canyonOffsetDir(swampDir);
-      placeMoebiusSwampOnSphere(swamp, swampDir, R, swampScale, lift);
-      scene.add(swamp);
-      moebiusSwamp = swamp;
-    }
+    const skyPack = placeMoebiusSwampAndSky({
+      scene,
+      R,
+      moebius: moebiusPack.moebius,
+      grandDir: moebiusPack.grandDir,
+      bubblePods: moebiusPack.bubblePods,
+      bookshop,
+    });
 
-    // ---------- 书店镇气泡艇：停泊在书店上空、绕店轻缓巡游，可 [F] 登艇驾驶 ----------
-    // 加入花厅巡游舰队，复用同一套驾驶/潜行/气泡弹逻辑（updateBubblePodPatrol 会遍历舰队）。
-    {
-      const shopPod = createBubblePod({ scale: 0.72, accent: 0xffd98e });
-      const shopUp = bookshop.position.clone().normalize();
-      const shopRight = new THREE.Vector3(1, 0, 0).applyQuaternion(bookshop.quaternion).normalize();
-      const shopFront = new THREE.Vector3(0, 0, 1).applyQuaternion(bookshop.quaternion).normalize();
-      shopPod.userData.orbit = {
-        center: bookshop.position.clone(),
-        up: shopUp,
-        right: shopRight,
-        front: shopFront,
-        radius: 4.5,   // 绕书店外缘（collideRadius 3.2 之外）轻缓环绕
-        altitude: 3.2, // 书店上空约 3.2 单位悬浮
-        phase: 0.7,
-        speed: 0.3,
-      };
-      shopPod.userData.hoverPhase = 0.7;
-      shopPod.userData.anchorDirection = shopUp.clone();
-      shopPod.userData.bookshopPod = true;
-      bubblePods.add(shopPod);
-    }
-
-    // ---------- 运河交汇 · 水上城堡（第二城堡实例）----------
-    // 高山圣城才有多层台地。这里是河水相交的开阔水面，
-    // Townscaper 式点水面盖楼：无台地、楼脚自动出防波堤。
-    const moonLakeLatLon = flatXZToLatLon(LAKE.x, LAKE.z, R);
-    const canalJunctionDir = latLonToDir(
-      (moonLakeLatLon.lat + CITY_SEA_LAKE.lat) * 0.5,
-      (moonLakeLatLon.lon + CITY_SEA_LAKE.lon) * 0.5,
-      new THREE.Vector3()
-    );
-    let canalJunctionCitadel = null;
-    let canalJunctionStorage = null;
-    let canalJunctionBox = null;
-    {
-      const cjsLevelsKey = citadelLevelsKey("canal-junction");
-      const cjsTerrainKey = citadelTerrainKey("canal-junction");
-      const cjsObjectsKey = citadelTerrainObjectsKey("canal-junction");
-      canalJunctionStorage = { levels: cjsLevelsKey, terrain: cjsTerrainKey, objects: cjsObjectsKey };
-      let cjSpec;
-      try {
-        const saved = JSON.parse(localStorage.getItem(cjsLevelsKey) || "null");
-        if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) cjSpec = saved;
-      } catch { /* 回落空布局 */ }
-      // 无存档：水面岛城种子（彩色竖户 / 退台 / 飞楼），点格可改。
-      if (!cjSpec) cjSpec = CANAL_JUNCTION_TOWN_SPEC;
-      let cjContour;
-      try {
-        const saved = JSON.parse(localStorage.getItem(cjsTerrainKey) || "null");
-        if (saved) cjContour = saved;
-      } catch { /* 回落默认 */ }
-      let cjObjects;
-      try {
-        const saved = JSON.parse(localStorage.getItem(cjsObjectsKey) || "[]");
-        if (Array.isArray(saved)) cjObjects = saved;
-      } catch { /* 空 */ }
-      // 朝向运河切向（月亮湖方向）：古堡正门对着运河流向
-      const faceDir = moonLake?.centerWorld || canalJunctionDir;
-      const junctionBox = buildCanalJunctionBox(scene, R, {
-        centerDir: canalJunctionDir,
-        forwardDir: moonLake?.centerWorld || canalJunctionDir,
-        halfLength: 22,
-        halfWidth: 18,
-        waterLift: 0.6,
-      });
-      scene.add(junctionBox.group);
-      canalJunctionBox = junctionBox.group; // 高亮构建区：点选/切换目标用
-
-      canalJunctionCitadel = buildOdysseyCitadel({
-        dir: canalJunctionDir,
-        faceDir,
-        groundRadius: R,
-        planetRadius: R,
-        seed: 918273,
-        spec: cjSpec,
-        contour: cjContour,
-        terrainObjects: cjObjects,
-        instanceId: "canal-junction",
-        floors: 12,
-        skipOuterTerrain: true,
-        townBaseLift: 0.62,
-        place: false,
-      });
-      scene.add(canalJunctionCitadel);
-      // 直立坐在水面上：+Y = 球面法向。楼脚与水面齐平，防波堤没入水里。
-      const up = canalJunctionDir.clone().normalize();
-      quatUprightOnSphere(
-        up,
-        moonLake?.centerWorld || canalJunctionDir,
-        canalJunctionCitadel.quaternion
-      );
-      // 镇体底坐在水面：local baseY + 径向位移 = R + waterLift
-      const waterLift = junctionBox.group.userData.waterLift ?? 0.6;
-      const townLift = canalJunctionCitadel.userData.townBaseLift ?? 0.62;
-      canalJunctionCitadel.position.copy(up).multiplyScalar(R + waterLift - townLift);
-      canalJunctionCitadel.updateMatrixWorld(true);
-      junctionBox.group.userData.citadel = canalJunctionCitadel;
-    }
-
-    // ---------- 星海运河环线：连通各主要场景，在地面挖出的浅沟 ----------
-    // 控制点取各场景方向（世界位 normalize），用 CatmullRom 闭合样条稍曲折绕行；
-    // 形态是贴地沟渠（河床/水面/两侧立壁/岸顶土埂），不是埋进球心的地下通道。
-    // 场景锚点动态取运行时方向（门在轨道上、海湖可搬迁、圣城在峡谷侧）。
-    // 注意：bookshop / canyonDir 在本段之上才初始化，必须置于其后以避免暂时性死区。
-    // 峡谷水城水晶城航点：湖面开阔水（避开三座花厅塔与母塔岛丘，
-    // 数值经运河曲线探针验证，最近塔距 ≥0.2 rad）。
-    const cityCanalWaypoint = waterCityCanalWaypointDir();
-    const canalAnchors = [];
-    const canalNames = [];
-    const canalPush = (dir, name) => {
-      if (dir?.isVector3 && dir.lengthSq() > 1e-6) {
-        canalAnchors.push(dir.clone());
-        canalNames.push(name);
-      }
-    };
-    canalPush(bookshop?.position, "书店镇");
-    canalPush(camp?.landmarks?.anchor?.position, "出发营地");
-    canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖");
-    canalPush(odysseyCitadel?.position, "高山圣城");
-    canalPush(canalJunctionCitadel?.position, "运河交汇古堡");
-    // 峡谷水城：水晶城锚点改为湖面航点（谷心西偏 40°、角距 0.2 的开阔水面）——
-    // 原锚点在花厅塔上，运河高架穿塔、且落差梯道会撞进塔岛；现航点避开
-    // 三座花厅塔（最近塔距 ≥0.2 rad）与母塔岛丘，梯道/升船机落在开阔水面上方。
-    canalPush(cityCanalWaypoint, "水晶城");
-    canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon), "白鲸海湖");
-    // 叹息之门锚在轨道上，方向取峡谷兜底（门在入谷门槛附近）
-    canalPush(canyonDir, "叹息之门");
-    if (canalAnchors.length >= 3) {
-      // 运河全程不断开：纳沃纳广场已横向偏离运河中线，河道完整露出
-      const canal = buildWorldCanal(scene, R, {
-        anchors: canalAnchors,
-        names: canalNames,
-        groundLift: citadelRangeLiftDir,
-        // 交汇水塘处去掉窄沟网格，改由开阔水面承接，避免沟壁穿过水塘。
-        excludeZones: canalJunctionDir
-          ? [{
-              center: canalJunctionDir,
-              radius: canalJunctionBox?.userData?.excludeRadius
-                ?? Math.hypot(22, 18) + 1.6,
-            }]
-          : [],
-        // 护城河环带处护堤缺口：立壁/土埂断开、水面/河床连续（水系打通）。
-        // 余量须盖住运河自身护堤横向展幅（半宽 6.3 + 壁/埂 ≈ 8.1），
-        // 否则中心线在带外、壁体仍会伸入环带造成护堤交叉。
-        embankGapTest: ((_dir, worldP) => {
-          const ms = citadelRange.moat?.userData?.spec;
-          if (!ms) return false;
-          const lx = worldP.dot(citadelRange.right);
-          const lz = worldP.dot(citadelRange.fwd);
-          const r = Math.hypot(lx, lz);
-          return r > ms.inner - 8.4 && r < ms.outer + 8.4;
-        }),
-      });
-      canalSys = canal;
-      // 护城河接入运河：护城河护堤在运河走廊开弧缺（两者护堤不交叉）
-      citadelRange.linkCanalToMoat?.(canal.curve);
-      // ---------- 纳沃纳广场延迟摆放：港口及参天大树正前方 ----------
-      // 港口栈桥/参天大树在 range 局部 (-15.2,42)/(1,43) 一带；广场置于其正前方
-      // （北缘域外平地），长轴横陈作前景舞台；木马另置城堡前方草地。运河北段自此以东
-      // ~24 处南北贯通：广场东缘与河道留 5+ 净空，河道全程露出、两者零重叠。
-      {
-        let plazaGroup = null;
-        scene.traverse((o) => {
-          if (!plazaGroup && o.name === "citadel-navona-canal-plaza") plazaGroup = o;
-        });
-        if (!plazaGroup) {
-          // yaw=π/2：长轴(+Z)转沿 +right（东西横陈）；木马落在第一层瀑布右侧草地
-          citadelRange.placeNavonaPlaza(-10, 75, Math.PI / 2, odysseyCitadel);
-        }
-      }
-      // 木马在广场摆放（placeNavonaPlaza）后才创建；以建成后的运河曲线为准
-      // 对准港口侧航道——锚点调整不再导致失准。
-      citadelRange.aimHorseToCanal?.(canal.curve);
-      // 复制 10 艘古战船沿运河环线巡游（整体放大一倍），送信人可靠近 [F] 登船驾驶
-      canalBoats = createCanalBoatPatrol(scene, canal, { count: 10, scale: 1.84 });
-      // 利用落差互联互通：运河水沿阶梯瀑布船道跌入大湖，战船顺梯入湖巡游，
-      // 归来时由出口升船机整厢抬回运河水位，形成闭环通航。
-      // 峡谷水城：梯道/升船机锚在湖岸崖壁内侧的开阔水面（湖岸角距 - 余量），
-      // 入湖后先收进深潭（角距 0.2）环湖巡航，避开水中塔群。
-      canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake, {
-        edgeAng: waterCityShoreAng(WATER_CITY_WATER_DROP) - 0.02,
-        cruiseAng: 0.2,
-      });
-      canalLakeLink?.attachAll?.(canalBoats.boats);
-
-      // 旧港装船物流：纸士兵计数装货 → 满载离港入运河 →
-      // 城堡雪山附近运河船走护城河进港继续装船
-      {
-        const dockBoat = harborBuilt.landmarks.boat;
-        const dockCrane = harborBuilt.landmarks.crane;
-        const squads = harborBuilt.squads || harborBuilt.landmarks.porterSquads || [];
-        if (dockBoat && dockCrane && squads.length) {
-          const logistics = createHarborLogistics({
-            harbor,
-            boat: dockBoat,
-            crane: dockCrane,
-            squads,
-            scene,
-          });
-          logistics.bindWorld({
-            canal,
-            canalBoats,
-            moat: citadelRange.moat,
-            citadel: odysseyCitadel,
-          });
-          // boatRide / 小地图等通过 landmarks.boat 取当前泊位船
-          logistics.setOnBoatChange((b) => {
-            harborBuilt.landmarks.boat = b;
-            if (messengerLandmarks) messengerLandmarks.boat = b;
-          });
-          harbor.userData.logistics = logistics;
-          harborBuilt.logistics = logistics;
-        }
-      }
-    }
-
-    // 水晶城母塔 ↔ 书店：空中搜寻航线（途经湖沼）
-    // 目的：像巨大蜂鸟一样发现湖沼水面落花，脱离阵型俯冲悬停吸蜜
-    const cityDir = grandDir.clone().normalize();
-    const bookshopDir = bookshop.position.clone().normalize();
-    const aircraftHeight = 20; // 与莫比斯航空艇 placeMoebiusAirshipAbove(..., 20) 同高
-    const aircraftSquad = createMoebiusAircraftSquad(cityDir, R, {
-      count: 5,
-      height: aircraftHeight,
-      radius: 18, // 翼展拉开，像鲸群列阵
-      spin: 0.03,
-      formation: "v",
-      whaleFlight: true,
-      patrol: {
-        dirA: cityDir,
-        dirB: bookshopDir,
-        maxSpeed: 2.6, // 与 P.aircraftSpeed 同级：单程≈4分钟，苔庭鲸每~4分钟可睹一次升空
+    const traffic = loadCanalNetwork({
+      scene,
+      R,
+      moonLake,
+      bookshop,
+      camp,
+      odysseyCitadel: citadelPack.odysseyCitadel,
+      citadelRange: citadelPack.citadelRange,
+      citySeaLake: moebiusPack.citySeaLake,
+      canyonDir: moebiusPack.canyonDir,
+      harbor,
+      harborBuilt,
+      canalBoatsOut: {
+        onBoatChange(b) {
+          if (messengerLandmarks) messengerLandmarks.boat = b;
+        },
       },
     });
-    scene.add(aircraftSquad);
 
-    // 莫比斯湖沼：请用地图编辑器放置「莫比斯湖沼」(moebiusSwamp)
-    // createMoebiusSwampPlacement / createCatalogObject("moebiusSwamp")
-
-    // ---------- 莫比斯蒸汽航空艇：悬停在湖沼正上方 ----------
-    const airship = createMoebiusAirship();
-    airship.scale.setScalar(1.25);
-    scene.add(airship);
-    // 初始兜底锚点：水晶城旁湖沼上方（找到湖沼根后会改锚跟随）
-    {
-      const dir = (moebiusSwamp?.position || grandDir).clone().normalize();
-      placeMoebiusAirshipAbove(airship, dir, R, 20);
-    }
-    // 湖沼懒查找锚定状态（地图编辑器放置/移动后飞艇跟随）
-    const airshipAnchor = { swamp: null, lastPos: new THREE.Vector3(), locked: false };
-
-    // 航空艇护航队：异星滑翔长翼鸟（尾流伴飞 · 6–15 环形圆柱结界 · 两级折叠长翼）
-    const escort = new AirshipEscortManager(scene, airship, {
-      count: 9,
-      obstacles: moebius.crystals,
-    });
-
-    // 坡下草地：草簇 + 小花环带（围绕书店山坡）
     {
       let s = 41;
       const rnd = () => {
@@ -650,7 +132,7 @@ export const messengerIslandScene = {
       };
       for (let i = 0; i < 16; i++) {
         const a = rnd() * Math.PI * 2;
-        const d = 2.4 + rnd() * 2.2; // 坡腰到坡脚
+        const d = 2.4 + rnd() * 2.2;
         const x = bookshopX + Math.cos(a) * d;
         const z = bookshopZ + Math.sin(a) * d;
         const tuft = createGrassTuft();
@@ -658,12 +140,8 @@ export const messengerIslandScene = {
         tuft.rotateY(rnd() * Math.PI * 2);
         scene.add(tuft);
       }
-      // 水墨花环已清理（用户认为花模型不好看）；书店镇仅保留草簇。
     }
 
-    // ---------- 厚涂苔丘草地（Impasto Mossy Knolls）：西芳寺缘 + 湖沼边缘 ----------
-    // 安全阻尼：电车铁轨采样点 / 书店大门（minDistance = 4，见 mossyGround.js）
-    // flatten = true：苔丘连续地形在走廊内衰减为 0，防 bump 穿轨/穿车体
     const mossAvoidCommon = tramSystem.curve.getPoints(60).map((p) => ({
       position: p,
       radius: 1.2,
@@ -674,9 +152,6 @@ export const messengerIslandScene = {
       radius: bookshop.userData.collideRadius || 3,
       flatten: true,
     });
-    // ① 西芳寺缘：入口苔径 ↔ 主石之庭 的路线间隙；草丛避开六景石组庭园。
-    // flatten=true：苔丘连续地形在六景区内压平到球面——否则苔丘隆起
-    // （2–4.6 单位）会把贴球面放置的松树整棵埋进苔庭。
     const zoneAvoid = SAIHOJI_ZONES.map((z) => ({
       position: latLonToDir(z.lat, z.lon, new THREE.Vector3()).multiplyScalar(R),
       radius: z.radius + 1,
@@ -687,14 +162,16 @@ export const messengerIslandScene = {
       planetRadius: R,
       seed: 9101,
       yaw: 0.6,
+      footprint: { rx: 9.2, rz: 5.8, segments: 28 },
+      heightScale: 0.42,
+      palette: SAIHOJI_MOSS_PALETTE,
       avoidWorld: [...mossAvoidCommon, ...zoneAvoid],
     });
     scene.add(mossSaihoji);
-    // ② 湖沼边缘：跟随湖沼（水晶城旁）
     const mossSwamp = buildImpastoMossyGround({
-      dir: moebiusSwamp
-        ? moebiusSwamp.position.clone().normalize()
-        : grandDir.clone(),
+      dir: skyPack.moebiusSwamp
+        ? skyPack.moebiusSwamp.position.clone().normalize()
+        : moebiusPack.grandDir.clone(),
       planetRadius: R,
       seed: 7743,
       yaw: 1.9,
@@ -706,157 +183,34 @@ export const messengerIslandScene = {
       ...playZone.colliders,
       ...camp.colliders,
       ...farSide.colliders,
-      ...harborColliders,
+      ...citadelPack.harborColliders,
       { position: bookshop.position.clone(), radius: bookshop.userData.collideRadius },
-      // 太古高山圣城要塞主殿墙体足域（0.4 缩放后基座半宽 4.8 + 余量）：
-      // 仅挡穿墙，送信人可沿折返石阶走上顶层台地、经平桥抵达棕色正门门廊。
-      { position: odysseyCitadel.position.clone(), radius: 6.0 },
+      { position: citadelPack.odysseyCitadel.position.clone(), radius: 6.0 },
     ];
     if (moonLake?.deepCollider) colliders.push(moonLake.deepCollider);
 
-    // ---------- 太古双子要塞巨门：轨道离开草地、即将入谷 ----------
-    // 三重圆拱形状不变 + 左右阶梯巨塔夹道（通道 10）陶土赤红
-    const abandonedGate = buildAbandonedGate({
-      curve: tramSystem.curve,
-      planetRadius: R,
-      setback: 6,
+    const gatePack = loadAbandonedGateBlock({
+      scene,
+      R,
+      tramSystem,
+      flock: moebiusPack.flock,
+      canyonDir: moebiusPack.canyonDir,
     });
-    scene.add(abandonedGate);
-
-    // ---------- 三重门千鸟漩涡（门廊 A/B/C/D 组群 · 随门搬迁） ----------
-    const gateBirdVortex = new BirdVortexManager(scene, {
-      // 默认约 1000 只 InstancedMesh；非 spiralOnly = 攀附门墙 + 双螺旋
-      name: "bird-vortex-triple-gate",
-      getTram: () =>
-        tramSystem?.getNearestTram?.(abandonedGate.position) ||
-        tramSystem?.tram ||
-        null,
-    });
-    gateBirdVortex.syncToGate(abandonedGate, { respawn: true });
-    gateBirdVortex.root.userData.anchor = { kind: "triple-gate" };
-
-    // ---------- 叹息之门城头：小群 Boids 近景备份（穿门夹道） ----------
-    {
-      const seat = abandonedGate.userData?.seatRoot;
-      seat?.updateWorldMatrix?.(true, false);
-      const gateOrigin = new THREE.Vector3();
-      const gateQ = new THREE.Quaternion();
-      if (seat) {
-        seat.getWorldPosition(gateOrigin);
-        seat.getWorldQuaternion(gateQ);
-      }
-      const gateUp = seat
-        ? new THREE.Vector3(0, 1, 0).applyQuaternion(gateQ).normalize()
-        : canyonDir.clone();
-      const gateRight = seat
-        ? new THREE.Vector3(1, 0, 0).applyQuaternion(gateQ).normalize()
-        : new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), gateUp).normalize();
-      const gateFwd = seat
-        ? new THREE.Vector3(0, 0, 1).applyQuaternion(gateQ).normalize()
-        : new THREE.Vector3().crossVectors(gateUp, gateRight).normalize();
-      flock.setHome?.(gateUp, {
-        altMin: 8,
-        altMax: 32,
-        homeRadius: 18,
-        homeWeight: 1.15,
-        windDir: gateFwd,
-        respawn: true,
-      });
-      // 限制在三重门夹道内穿行
-      flock.setCorridor?.({
-        origin: gateOrigin.lengthSq() > 1e-6 ? gateOrigin : gateUp.clone().multiplyScalar(R),
-        right: gateRight,
-        up: gateUp,
-        forward: gateFwd,
-        halfWidth: Math.max(3.2, (GATE.channelWidth || 10) * 0.48),
-        halfLength: Math.max(14, (GATE_DEPTH || 18) * 0.95),
-        yMin: 3,
-        yMax: 30,
-        cloudCeilY: 40,
-      });
-      if (flock?.root) flock.root.visible = true;
-    }
-
-    // 安置沉降 pass（全部地形建完后）：被苔丘/土坡/营地埋住的树/石抬回地表，
-    // 走廊压平后悬空的岩石落回地面——树木种在草坡上，而不是被埋
     settleBuriedAssets(scene, colliders);
 
-    const saihojiPhalanx = createSaihojiPhalanxBattle({
+    const combatPack = loadCitadelCombat({
       scene,
-      isWhaleRisen: () => {
-        const lev = scene.getObjectByName("leviathanGroup");
-        // R+3 低阈值：拔河拉锯中鲸被拽到半空仍算「鲸起」，箭雨不停、
-        // 绳索不松（R+8 会在拉锯中段误触发，导致战斗死锁在半空）
-        return !!(lev && lev.position.length() > R + 3);
-      },
-      getSquad: () => aircraftSquad,
-      // 白天源源不断的电车运兵：电车掠过苔庭（航线最近 ~27 单位）时士兵下车入阵
-      getTram: () => tramSystem,
-      getTimeOfDay: () => P.timeOfDay,
-      getNightInfiltration: () => citadelRange?.nightInfiltration || null,
-      // P0 · 攻防 V2：注入种子随机源 + 事件日志（开关关闭时行为不变，仅多了可复现性）
-      seed: FEATURES.combatSeed,
-      events: createCombatEventLog({ seed: FEATURES.combatSeed, scenario: "siege" }),
+      R,
+      odysseyCitadel: citadelPack.odysseyCitadel,
+      citadelRange: citadelPack.citadelRange,
+      harbor,
+      harborBuilt,
+      tramSystem,
+      aircraftSquad: skyPack.aircraftSquad,
+      v4Runtime: citadelPack.v4Runtime,
+      planetV8,
     });
 
-    // ---------- P1 · 城堡战术导航图（?citadelCombatV2=1 启用；?tgDebug=1 叠加可视化） ----------
-    // 数据源全部是已有真源：台地度量/折返石阶/可行走高程（citadelRange 模块级缓存，
-    // 编辑器热重建自动跟随）、城门锚点（townStats.gates）、梯湖（瀑布攀爬点）、
-    // 港口/纳沃纳广场/木马落地点。坐标系 = 站点局部（lx,lz），y = 可行走高程。
-    let tacticalGraph = null;
-    let tacticalGraphView = null;
-    let tgRefreshT = 0;
-    let tgGatesJson = "";
-    const collectCastleGates = () =>
-      (odysseyCitadel.userData.townStats?.gates || []).map((g) => ({
-        terraceIndex: g.terraceIndex,
-        x: g.x,
-        z: g.z,
-        width: 1.4,
-      }));
-    if (FEATURES.citadelCombatV2) {
-      const horseLocal = citadelRange.trojanHorse
-        ? rangeWorldToLocal(citadelRange.trojanHorse.position)
-        : null;
-      const plazaLocal = citadelRange.navonaPlaza
-        ? rangeWorldToLocal(citadelRange.navonaPlaza.getWorldPosition(new THREE.Vector3()))
-        : null;
-      const harborLocal = rangeWorldToLocal(harbor.position);
-      tacticalGraph = createCitadelTacticalGraph({
-        metrics: citadelWalkMetrics(),
-        flights: citadelWalkFlights(),
-        walkLift: citadelWalkLiftLocal,
-        contour: odysseyCitadel.userData.blueprint?.terrain?.config ?? undefined,
-        gates: collectCastleGates(),
-        extras: {
-          waterfalls: (CITADEL_CASCADE_POOL_SPECS || []).map((p) => ({ x: p.x, z: p.z })),
-          harbor: harborLocal,
-          plaza: plazaLocal,
-          trojanDrops: horseLocal ? [horseLocal] : [],
-        },
-      });
-      tgGatesJson = JSON.stringify(collectCastleGates());
-      if (new URLSearchParams(location.search).get("tgDebug") === "1") {
-        // 站点局部 (lx,lz,lift) → 世界：与 citadelWalkLiftDir 同约定（k=160 切向展开）
-        const siteUp = citadelSiteDir(new THREE.Vector3());
-        const siteRight = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), siteUp).normalize();
-        const siteFwd = new THREE.Vector3().crossVectors(siteUp, siteRight).normalize();
-        tacticalGraphView = createTacticalGraphDebugView(tacticalGraph, (p) =>
-          siteUp
-            .clone()
-            .addScaledVector(siteRight, p.x / 160)
-            .addScaledVector(siteFwd, p.z / 160)
-            .normalize()
-            .multiplyScalar(R + p.y + 0.25)
-        );
-        scene.add(tacticalGraphView.root);
-      }
-      console.info(
-        `[citadelCombatV2] 战术导航图就绪：${JSON.stringify(tacticalGraph.stats())}`
-      );
-    }
-
-    // 可变 landmarks：装船物流换船时更新 boat 引用
     messengerLandmarks = {
       playZone,
       camp,
@@ -866,32 +220,67 @@ export const messengerIslandScene = {
       harbor,
       oldHarbor: harborBuilt,
       boat: harborBuilt.landmarks.boat,
-      moebius,
-      abandonedGate, // 太古双子要塞：三重圆拱 + 左右阶梯塔（入谷门槛）
-      bubblePods, // 围绕水晶城 3 座花厅建筑巡游的气泡座舱
-      citySeaLake, // 水晶城旁海水湖 · 湖沼生物培育 · 气泡艇潜行
-      citadelRange, // 圣城黄土坡 · 五级梯湖 · 四段水帘瀑布 · 纳沃纳双栖广场
-      odysseyCitadel, // 太古高山圣城要塞：三层内缩主殿 + 黄金穹顶 + 宣礼塔 + 断崖瀑布
-      canalJunctionCitadel, // 运河交汇古堡（第二城堡实例，独立存档键）
-      canalJunctionBox, // 运河交汇高亮构建方框（堤岸 + 实心平台 + 高亮区）
-      canalJunctionStorage, // { levels, terrain, objects } 存档键（编辑器切换目标用）
-      airship, // 莫比斯航空艇（垂绳登艇 · WASD 驾驶）
-      flock, // 叹息之门城头小群 Boids 近景备份
-      gateBirdVortex, // 三重门千鸟漩涡（门廊攀附 + 双螺旋）
-      birdVortex: gateBirdVortex, // 兼容旧引用：门体漩涡
-      terraceBirds, // 高山古堡共 20 只 · 最高台地栖顶 · 昼夜栖飞 · 纸士兵惊飞
-      hallFlock, // 花厅楼顶忽聚忽散 Boids（保留在水晶城）
-      escort, // 异星滑翔长翼鸟 · 航空艇生态护航队
-      aircraftSquad, // 水晶城母塔↔书店低速往返的人字阵飞行器编队（含青柠驾驶舱光源）
-      saihojiPhalanx, // 鼓息+鲸起后战船运罗马方阵至西芳寺射飞艇
-      tacticalGraph, // P1 · 城堡战术导航图（?citadelCombatV2=1 时非 null）
-      mossSaihoji, // 厚涂苔丘 · 西芳寺缘
-      moebiusSwamp, // 莫比斯湖沼（默认在水晶城旁 · 地图编辑器可拖动）
-      canal: canalSys, // 星海运河环线 · 地面浅沟 · 连通各场景
-      canalBoats, // 运河巡游古战船 · 可 F 登船
-      canalLakeLink, // 运河↔大湖落差互联（瀑布船道/升船机）
-      mossSwamp, // 厚涂苔丘 · 湖沼边缘
+      moebius: moebiusPack.moebius,
+      abandonedGate: gatePack.abandonedGate,
+      bubblePods: moebiusPack.bubblePods,
+      citySeaLake: moebiusPack.citySeaLake,
+      citadelRange: citadelPack.citadelRange,
+      odysseyCitadel: citadelPack.odysseyCitadel,
+      canalJunctionCitadel: traffic.canalJunctionCitadel,
+      canalJunctionBox: traffic.canalJunctionBox,
+      canalJunctionStorage: traffic.canalJunctionStorage,
+      airship: skyPack.airship,
+      flock: moebiusPack.flock,
+      gateBirdVortex: gatePack.gateBirdVortex,
+      birdVortex: gatePack.gateBirdVortex,
+      terraceBirds: citadelPack.terraceBirds,
+      hallFlock: moebiusPack.hallFlock,
+      escort: skyPack.escort,
+      aircraftSquad: skyPack.aircraftSquad,
+      saihojiPhalanx: combatPack.saihojiPhalanx,
+      tacticalGraph: combatPack.tacticalGraph,
+      mossSaihoji,
+      moebiusSwamp: skyPack.moebiusSwamp,
+      canal: traffic.canalSys,
+      canalBoats: traffic.canalBoats,
+      waterRouteFleet: traffic.waterRouteFleet,
+      canalLakeLink: traffic.canalLakeLink,
+      mossSwamp,
       harborLogistics: harborBuilt.logistics || null,
+      v4Runtime: citadelPack.v4Runtime,
+      planetV8,
+    };
+
+    const state = {
+      scene,
+      R,
+      platforms,
+      clouds,
+      tramSystem,
+      canalBoats: traffic.canalBoats,
+      waterRouteFleet: traffic.waterRouteFleet,
+      canalSys: traffic.canalSys,
+      canalJunctionBox: traffic.canalJunctionBox,
+      canalJunctionCitadel: traffic.canalJunctionCitadel,
+      harborBuilt,
+      canalLakeLink: traffic.canalLakeLink,
+      bubblePods: moebiusPack.bubblePods,
+      citySeaLake: moebiusPack.citySeaLake,
+      citadelRange: citadelPack.citadelRange,
+      odysseyCitadel: citadelPack.odysseyCitadel,
+      v4Runtime: citadelPack.v4Runtime,
+      aircraftSquad: skyPack.aircraftSquad,
+      saihojiPhalanx: combatPack.saihojiPhalanx,
+      combatPack,
+      airship: skyPack.airship,
+      airshipAnchor: skyPack.airshipAnchor,
+      moebius: moebiusPack.moebius,
+      gateBirdVortex: gatePack.gateBirdVortex,
+      terraceBirds: citadelPack.terraceBirds,
+      flock: moebiusPack.flock,
+      hallFlock: moebiusPack.hallFlock,
+      escort: skyPack.escort,
+      swampBgm: createSwampBgmState(),
     };
 
     return {
@@ -903,170 +292,7 @@ export const messengerIslandScene = {
       colliders,
       landmarks: messengerLandmarks,
       update(dt, t, runtime) {
-        updatePlatformPulse(platforms, t);
-        updateClouds(clouds, dt, t, { speed: P.windSpeed, dirDeg: P.windDir });
-        tramSystem.update(dt, runtime?.player?.position);
-
-        // 运河战船巡游（已搭乘的船跳过，由 boatRide 接管）
-        canalBoats?.update?.(dt);
-        canalSys?.group?.userData?.update?.(dt, t);
-        canalJunctionBox?.userData?.update?.(dt, t);
-        canalJunctionCitadel?.update?.(dt, t);
-
-        // 旧港码头：两组剪纸士兵搬运货物上船的往返动画
-        harborBuilt?.update?.(dt, t);
-
-        // 运河↔大湖落差互联：升船机吊厢/配重 + 瀑布浪花动画
-        canalLakeLink?.update?.(dt, t);
-
-        // 3 艘气泡座舱分别围绕 3 座花厅建筑巡游
-        updateBubblePodPatrol(bubblePods, t);
-
-        // 水晶城海水湖：涟漪 + 培育白鲸/鳗/带鱼
-        citySeaLake.update?.(dt, t);
-
-        // 圣城梯湖：四段水帘、雾气与涟漪；城堡本体保持静态。
-        citadelRange.pilgrimageCascades.update?.(dt, t);
-        // 深夜：木马腹舱开启，纸士兵潜入；太鼓按玩家与木马距离启停。
-        citadelRange.update?.(dt, t, {
-          listener: runtime?.player?.position || null,
-        });
-        // 护城河：阶梯量化水波 + 方块浪花
-        citadelRange.moat?.update?.(dt, t);
-        // 纳沃纳双栖广场：喷泉动画 + 旱/汛水面插值
-        citadelRange.navonaPlaza?.update?.(dt, t);
-        odysseyCitadel.update?.(dt, t);
-
-        // 地图放置的湖沼/飞艇动效（鲸/舟/悬浮艇）
-        // 必须先于 aircraft：湖沼更新水面落花蜜源列表，供巨蜂鸟寻觅
-        scene.traverse((o) => {
-          const kind = o.userData?.kind;
-          if ((kind === "moebius-swamp" || kind === "moebius-airship") && o.userData.update) {
-            o.userData.update(dt, t, runtime);
-          }
-        });
-
-        // 缓存湖沼根节点（地图放置 wrap）
-        let swampRoot = airshipAnchor.swamp;
-        if (!swampRoot || !swampRoot.parent) {
-          swampRoot = null;
-          scene.traverse((o) => {
-            if (!swampRoot && o.userData?.kind === "moebius-swamp") swampRoot = o;
-          });
-          airshipAnchor.swamp = swampRoot;
-          airshipAnchor.locked = false;
-        }
-
-        // 沿城↔书店航迹扫描近区：有概率发现湖沼 → 再蜂鸟吸蜜
-        updateAircraftHover(aircraftSquad, t, dt, { swamp: swampRoot });
-        saihojiPhalanx?.update?.(dt, t);
-
-        // P1 · 战术导航图：预约时钟 + 编辑器热重建后的增量刷新（1Hz 签名比对）
-        if (tacticalGraph) {
-          tacticalGraph.tick(dt);
-          tgRefreshT -= dt;
-          if (tgRefreshT <= 0) {
-            tgRefreshT = 1;
-            const changed = tacticalGraph.rebuildChanged(citadelWalkMetrics(), citadelWalkFlights());
-            const gatesNow = JSON.stringify(collectCastleGates());
-            if (gatesNow !== tgGatesJson) {
-              tgGatesJson = gatesNow;
-              tacticalGraph.refreshGates(collectCastleGates());
-              tacticalGraphView?.rebuild();
-            }
-            if (changed.length) tacticalGraphView?.rebuild();
-          }
-        }
-
-        // 飞艇跟随湖沼：找到地图放置的 moebiusSwamp 后锚到其正上方；
-        // 地图编辑器移动湖沼时（位置变化）自动重新锚定。
-        // 玩家已驾驶过（flown）或正在驾驶（flying）时不再回锚，飞艇归玩家支配。
-        if (!airship.userData.flown && !airship.userData.flying) {
-          const sw = swampRoot;
-          if (sw) {
-            _asTmp.copy(sw.position);
-            if (!airshipAnchor.locked || airshipAnchor.lastPos.distanceToSquared(_asTmp) > 0.25) {
-              airshipAnchor.lastPos.copy(_asTmp);
-              placeMoebiusAirshipAbove(airship, _asTmp.normalize(), R, 20, airship.userData.yaw ?? 0.7);
-              airshipAnchor.locked = true;
-            }
-          }
-        }
-
-        // 鸟群：花厅巡航；电车驶出水晶城 → 送别伴飞（红车优先，不依赖是否乘车）
-        {
-          const bgmHold = isCanyonBgmPlaying() || isCanyonBgmFinishing();
-          const escortTram =
-            tramSystem.getFarewellEscortTram?.({ bgmHold }) || null;
-          moebius.update?.(dt, t, { escortTram });
-        }
-
-        // 三重门千鸟漩涡 + 门廊 Boids
-        if (gateBirdVortex) {
-          const tram =
-            tramSystem.getNearestTram?.(runtime?.player?.position) ||
-            tramSystem.tram ||
-            null;
-          gateBirdVortex.update(dt, t, {
-            tram,
-            viewer: runtime?.player?.position || null,
-          });
-        }
-        // 五级台地鸟群：白天漩涡 · 夜栖屋顶 · 纸士兵经过惊飞、离开立刻落下
-        if (terraceBirds) {
-          const tram =
-            tramSystem.getNearestTram?.(runtime?.player?.position) ||
-            tramSystem.tram ||
-            null;
-          terraceBirds.update(dt, t, {
-            phase: P.timeOfDay,
-            tram,
-            viewer: runtime?.player?.position || null,
-            infiltration: citadelRange?.nightInfiltration || null,
-          });
-        }
-        // 门周 Boids 备份层（近景可辨 · 夹道穿行）
-        if (flock?.root?.visible) flock.update(dt, t);
-
-        // 花厅楼顶忽聚忽散：仍环绕母皇塔尖
-        hallFlock.update(dt, t);
-
-        // 航空艇护航队：尾流场吸引 + 6–15 环形圆柱结界 + 两级折叠滑翔
-        escort.update(dt, t);
-
-        // 湖沼 BGM：进入莫比斯原初湖沼 → 《風之傳說》1:36–1:54（滞回防抖）
-        {
-          const p = runtime?.player;
-          let swamp = null;
-          if (p) {
-            scene.traverse((o) => {
-              if (!swamp && o.userData?.kind === "moebius-swamp") swamp = o;
-            });
-          }
-          if (p && swamp) {
-            // 湖沼可能刚被地图编辑器移动 → 强制刷新世界矩阵再逆变换
-            swamp.updateWorldMatrix(true, false);
-            _swampLocal.copy(p.position);
-            swamp.worldToLocal(_swampLocal);
-            const horiz = Math.hypot(_swampLocal.x, _swampLocal.z);
-            if (swampBgmInside) {
-              if (horiz > SWAMP_BGM_EXIT_R || _swampLocal.y > SWAMP_BGM_CEILING + 6) {
-                swampBgmInside = false;
-              }
-            } else if (horiz < SWAMP_BGM_ENTER_R && _swampLocal.y < SWAMP_BGM_CEILING) {
-              swampBgmInside = true;
-            }
-          } else {
-            swampBgmInside = false;
-          }
-          setSwampBgm(swampBgmInside);
-        }
-
-        const player = runtime?.player;
-        if (player) {
-          // 重置涉水系数（月牙湖判定在自己的 update 里写）
-          player.wadeFactor = 1;
-        }
+        updateMessengerIsland(state, dt, t, runtime);
       },
       debug: { playZone, camp, farSide, harbor },
     };

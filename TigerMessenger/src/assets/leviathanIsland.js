@@ -3,9 +3,11 @@
 //
 //  世界观重构：西芳寺苔庭不再贴地球面，而是整座扎根、承托在
 //  一尾在天空中缓缓漂移的太古白鲸脊背上。本模块只产出「鲸体资产」：
-//   - 非等比极致拉伸的山岳级流线型躯干（压扁拉长的低面数球体）
+//   - 非等比极致拉伸的山岳级流线型躯干（压扁拉长的低面数球体，
+//     分段压到 6~11，flatShading 下呈手工积木式大刻面）
+//   - 头段两侧各一枚深色太古鲸眼（半嵌贴面，远景读得出「活物」）
 //   - 背部横向切平的墨绿苔原地壳层（西芳寺的地基容器）
-//   - 后方斜向上 35° 微翘扬起的巨型 Y 字分叉尾鳍
+//   - 后方斜向上 35° 微翘扬起的巨型 Y 字分叉尾鳍，升空后极缓摆尾
 //   - 20 枚极扁太古藤壶贴片 + 环绕地壳的「防空灌木围墙」
 //   - 平缓呼吸缓动：leviathanGroup 随极低频正弦起伏 + 缓慢漂移
 //
@@ -42,6 +44,129 @@ function lcg(seed) {
     s = (Math.imul(1664525, s) + 1013904223) >>> 0;
     return s / 0x100000000;
   };
+}
+
+// 西芳寺苔庭周边不是一块矩形草皮：用 Oskar Stålberg 式的低面数、
+// 模块化轮廓表达「苔台 → 湿润斜坡 → 深色地脚」三层地貌。每一层仍
+// 保持确定性，截图、寻路和战斗回放都能得到同一块地形。
+const MOSS_TERRAIN_TOP = Object.freeze([0x477f58, 0x548c60, 0x3e704f, 0x5c9767]);
+const MOSS_TERRAIN_SLOPE = Object.freeze([0x345b43, 0x3e704f, 0x2f5d41, 0x477f58]);
+const MOSS_TERRAIN_BASE = Object.freeze([0x20392f, 0x2b4838, 0x344e3e, 0x263f34]);
+
+function makeMossContour(rnd, rx, rz, count, phase, jitter) {
+  const contour = [];
+  for (let i = 0; i < count; i++) {
+    const a = phase + (i / count) * Math.PI * 2;
+    // 椭圆是轮廓骨架，二次低频扰动让边缘像手工拼出的自然苔台，
+    // 而不是带有明显 CSS/PlaneGeometry 直角的人工平台。
+    const profile =
+      1 +
+      Math.sin(a * 3 + phase * 1.7) * 0.045 +
+      Math.cos(a * 5 - phase * 0.8) * 0.028 +
+      (rnd() - 0.5) * jitter;
+    contour.push({
+      x: Math.cos(a) * rx * profile,
+      y: 0,
+      z: Math.sin(a) * rz * profile,
+    });
+  }
+  return contour;
+}
+
+function pushTerrainTriangle(positions, colors, a, b, c, color) {
+  positions.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
+  const tint = new THREE.Color(color);
+  for (let i = 0; i < 3; i++) colors.push(tint.r, tint.g, tint.b);
+}
+
+function buildMossTerrainTopography(rnd) {
+  const count = 18;
+  const layers = [
+    { rx: 14.25, rz: 7.65, y: -1.75, jitter: 0.12, palette: MOSS_TERRAIN_BASE },
+    { rx: 14.0, rz: 7.55, y: -1.28, jitter: 0.1, palette: MOSS_TERRAIN_BASE },
+    { rx: 13.35, rz: 7.18, y: -0.78, jitter: 0.085, palette: MOSS_TERRAIN_SLOPE },
+    { rx: 12.55, rz: 6.82, y: -0.28, jitter: 0.07, palette: MOSS_TERRAIN_SLOPE },
+    { rx: 11.75, rz: 6.38, y: 0.02, jitter: 0.055, palette: MOSS_TERRAIN_TOP },
+  ];
+  const phase = rnd() * Math.PI * 2;
+  const contours = layers.map((layer, i) => {
+    const ring = makeMossContour(rnd, layer.rx, layer.rz, count, phase, layer.jitter);
+    for (const point of ring) point.y = layer.y + (i === layers.length - 1 ? rnd() * 0.035 : 0);
+    return ring;
+  });
+
+  const positions = [];
+  const colors = [];
+  const center = { x: 0, y: 0.055, z: 0 };
+  const top = contours.length - 1;
+  for (let i = 0; i < count; i++) {
+    const next = (i + 1) % count;
+    pushTerrainTriangle(
+      positions,
+      colors,
+      center,
+      contours[top][next],
+      contours[top][i],
+      layers[top].palette[(i + Math.floor(rnd() * 2)) % layers[top].palette.length]
+    );
+  }
+  for (let layer = 0; layer < contours.length - 1; layer++) {
+    const lower = contours[layer];
+    const upper = contours[layer + 1];
+    for (let i = 0; i < count; i++) {
+      const next = (i + 1) % count;
+      const palette = layers[layer].palette;
+      const c0 = palette[(i + layer) % palette.length];
+      const c1 = palette[(i + layer + 1) % palette.length];
+      pushTerrainTriangle(positions, colors, lower[i], upper[i], upper[next], c0);
+      pushTerrainTriangle(positions, colors, lower[i], upper[next], lower[next], c1);
+    }
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+  geometry.computeVertexNormals();
+  const terrain = new THREE.Mesh(
+    geometry,
+    toonMat(0xffffff, {
+      vertexColors: true,
+      flatShading: true,
+      side: THREE.DoubleSide,
+    })
+  );
+  terrain.name = "leviathan-terrain-topography";
+  terrain.castShadow = true;
+  terrain.receiveShadow = true;
+  addOutline(terrain, OUTLINE_W * 0.9, 0x1b2b24, 0.035);
+  terrain.userData.surfaceTopY = 0.055;
+  terrain.userData.layerCount = layers.length;
+  terrain.userData.contour = contours[top].map(({ x, y, z }) => ({ x, y, z }));
+  // 保留旧地壳板的尺寸元数据，调试器/存档工具仍可识别原来的
+  // 25×14 设计包络；实际可见轮廓由上面的五层等高线提供。
+  geometry.parameters = { width: 25.0, height: 14.0 };
+  return { terrain, topContour: contours[top] };
+}
+
+function addMossBed(parent, rnd, x, z, rx, rz, y, color, index) {
+  const count = 9;
+  const contour = makeMossContour(rnd, rx, rz, count, rnd() * Math.PI * 2, 0.18);
+  const positions = [x, y, z];
+  const indices = [];
+  for (const point of contour) positions.push(x + point.x, y + point.y, z + point.z);
+  for (let i = 0; i < count; i++) indices.push(0, i + 1, ((i + 1) % count) + 1);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  const bed = new THREE.Mesh(
+    geometry,
+    toonMat(color, { flatShading: true, side: THREE.DoubleSide })
+  );
+  bed.name = `leviathan-moss-bed-${index}`;
+  bed.receiveShadow = true;
+  parent.add(bed);
+  return bed;
 }
 
 /**
@@ -93,12 +218,14 @@ export function buildEcoLeviathanIsland(opts = {}) {
   const poseQ = group.quaternion.clone();
 
   // ---------- 1. 主躯干：非等比极致拉伸的山岳巨鲸 ----------
-  // SphereGeometry(8,16,12) × (4.5, 1.3, 2.2)：总长 72（玩家 35~40 倍），
+  // SphereGeometry(8,11,8) × (4.5, 1.3, 2.2)：总长 72（玩家 35~40 倍），
   // 前粗后尖的流线由「球体拉伸 + 尾柄收细 + 尾鳍」三段共同完成；
   // 躯干整体下沉，使背部最高点恰好在 Y=6——地壳板在此横向切平封顶。
+  // 分段数刻意压低（参考低多边形样例的 6~11 分段）：flatShading 下
+  // 大块刻面让巨鲸读出「手工积木」感，而不是一颗光滑的光蛋。
   {
     const body = new THREE.Mesh(
-      new THREE.SphereGeometry(8.0, 16, 12),
+      new THREE.SphereGeometry(8.0, 11, 8),
       toonMat(SKIN, { flatShading: true })
     );
     body.name = "leviathan-body";
@@ -111,7 +238,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
 
     // 额头 + 吻突：把拉伸球体读成鲸头，而不是一颗光蛋
     const head = new THREE.Mesh(
-      new THREE.SphereGeometry(8, 12, 10),
+      new THREE.SphereGeometry(8, 9, 7),
       toonMat(SKIN, { flatShading: true })
     );
     head.name = "leviathan-head";
@@ -121,7 +248,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
     addOutline(head, OUTLINE_W);
     group.add(head);
     const snout = new THREE.Mesh(
-      new THREE.SphereGeometry(8, 10, 8),
+      new THREE.SphereGeometry(8, 8, 6),
       toonMat(SKIN, { flatShading: true })
     );
     snout.name = "leviathan-snout";
@@ -131,9 +258,25 @@ export function buildEcoLeviathanIsland(opts = {}) {
     addOutline(snout, OUTLINE_W);
     group.add(snout);
 
+    // 太古鲸眼：头段两侧各一枚深色小珠，半嵌进头壳（头椭球心
+    // (24.5,-2.15,0)、半径 (12.4,5.76,9.44)，眼位 = 表面方向
+    // (0.55,0.35,±0.75) 内缩 0.85 倍）。没有眼睛的巨鲸在远景里只是
+    // 一团白影；有了眼睛，低多边形刻面才读成「活物」。
+    for (const side of [-1, 1]) {
+      const eye = new THREE.Mesh(
+        new THREE.SphereGeometry(0.85, 6, 5),
+        toonMat(0x16303a, { flatShading: true })
+      );
+      eye.name = `leviathan-eye-${side < 0 ? "L" : "R"}`;
+      eye.position.set(30.3, -0.44, side * 6.0);
+      eye.scale.set(1, 1, 0.55); // 压扁贴面
+      addOutline(eye, OUTLINE_W);
+      group.add(eye);
+    }
+
     // 臀段：塞进躯干后极，把身体和尾柄焊死，中间不许留缝
     const rump = new THREE.Mesh(
-      new THREE.SphereGeometry(8, 14, 11),
+      new THREE.SphereGeometry(8, 10, 8),
       toonMat(SKIN, { flatShading: true })
     );
     rump.name = "leviathan-rump";
@@ -146,7 +289,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
     // 胸鳍：贴在躯干中段两侧，增加剪影
     for (const side of [-1, 1]) {
       const pec = new THREE.Mesh(
-        new THREE.ConeGeometry(2.6, 9.2, 6),
+        new THREE.ConeGeometry(2.6, 9.2, 5),
         toonMat(SKIN, { flatShading: true })
       );
       pec.name = `leviathan-pectoral-${side < 0 ? "L" : "R"}`;
@@ -206,85 +349,71 @@ export function buildEcoLeviathanIsland(opts = {}) {
   island.position.y = LEVIATHAN_PLATE_Y;
   group.add(island);
   {
-    const plate = new THREE.Mesh(
-      new THREE.PlaneGeometry(25.0, 14.0),
-      toonMat(CRUST, { flatShading: true, side: THREE.DoubleSide })
-    );
-    plate.name = "leviathan-crust-plate";
-    plate.rotation.x = -Math.PI / 2; // 绕 X 转 90° 平躺
-    plate.position.y = 0;
-    plate.castShadow = true;
-    plate.receiveShadow = true;
-    addOutline(plate, OUTLINE_W);
-    island.add(plate);
+    // 地形由五条不规则等高线组成：顶面是苔庭连续的浅台，下面逐级
+    // 收成湿润深色坡脚。这样远景读到的是一座小型苔丘，而不是漂浮
+    // 在天空中的矩形地板；顶面仍保留足够平缓的可行走区域。
+    const { terrain, topContour } = buildMossTerrainTopography(rnd);
+    terrain.name = "leviathan-crust-plate";
+    island.add(terrain);
 
-    // 板面苔斑：墨绿/草绿系极扁圆片铺在板面上，承接西芳寺苔庭的
-    // 地面语言（远端苔斑沉进板内时，板面仍读作苔原而非裸板）
-    const MOSS_TONES = [0x3e704f, 0x477f58, 0x548c60, 0x5c9767, 0x1a331e];
-    for (let i = 0; i < 42; i++) {
-      const patch = new THREE.Mesh(
-        new THREE.CircleGeometry(1, 8),
-        toonMat(MOSS_TONES[(rnd() * MOSS_TONES.length) | 0], {
-          flatShading: true,
-          side: THREE.DoubleSide,
-        })
+    // 顶面再铺少量不规则苔床，作为苔庭六景之间的自然过渡；每块都
+    // 使用低面数扇形，不引入贴图噪声，也不遮住主石与古松的构图。
+    const MOSS_BEDS = [0x477f58, 0x5c9767, 0x3e704f, 0x668b60, 0x355a40];
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * Math.PI * 2 + rnd() * 0.22;
+      const r = 0.42 + rnd() * 0.36;
+      const x = Math.cos(a) * (5.8 + rnd() * 5.1) * r;
+      const z = Math.sin(a) * (2.35 + rnd() * 2.9) * r;
+      addMossBed(
+        island,
+        rnd,
+        x,
+        z,
+        0.65 + rnd() * 1.2,
+        0.36 + rnd() * 0.72,
+        0.06 + rnd() * 0.03,
+        MOSS_BEDS[i % MOSS_BEDS.length],
+        i
       );
-      patch.name = "leviathan-moss-patch";
-      const rx = 0.5 + rnd() * 1.15;
-      const rz = 0.4 + rnd() * 1.0;
-      patch.scale.set(rx, 0.05 + rnd() * 0.05, rz);
-      patch.rotation.x = -Math.PI / 2;
-      patch.position.set(
-        (rnd() * 2 - 1) * 11.6,
-        0.02 + rnd() * 0.06,
-        (rnd() * 2 - 1) * 6.2
-      );
-      patch.rotation.z = rnd() * Math.PI;
-      patch.receiveShadow = true;
-      island.add(patch);
     }
 
-    // 防空灌木围墙：沿板缘一圈翠绿低面数小球，模糊鲸肤与大地的交界线
-    const halfW = 12.5;
-    const halfD = 7.0;
-    const perimeter = 2 * (25 + 14);
+    // 防空灌木不再沿矩形四边排队，而是跟随自然轮廓稀疏落位；
+    // 中间留出缺口，形成苔庭入口与可读的坡面边缘。
     const count = 26;
     for (let i = 0; i < count; i++) {
-      const s = (i / count) * perimeter;
-      let x = 0;
-      let z = 0;
-      const a = 25; // 底边
-      const b = 14; // 侧边
-      if (s < a) {
-        x = -halfW + s;
-        z = -halfD;
-      } else if (s < a + b) {
-        x = halfW;
-        z = -halfD + (s - a);
-      } else if (s < 2 * a + b) {
-        x = halfW - (s - a - b);
-        z = halfD;
-      } else {
-        x = -halfW;
-        z = halfD - (s - 2 * a - b);
-      }
+      const u = (i / count) * topContour.length;
+      const i0 = Math.floor(u) % topContour.length;
+      const i1 = (i0 + 1) % topContour.length;
+      const mix = u - Math.floor(u);
+      const contour = {
+        x: THREE.MathUtils.lerp(topContour[i0].x, topContour[i1].x, mix),
+        z: THREE.MathUtils.lerp(topContour[i0].z, topContour[i1].z, mix),
+      };
+      const sparse = i % 5 === 2;
       const shrub = new THREE.Mesh(
         new THREE.IcosahedronGeometry(1, 0),
-        toonMat(SHRUB, { flatShading: true })
+        toonMat(i % 3 === 0 ? 0x467d4f : SHRUB, { flatShading: true })
       );
       shrub.name = "leviathan-shrub-ring";
-      const scl = 0.42 + rnd() * 0.4;
+      // 入口位置保留同样的 26 个地貌标记以兼容旧调试器，但缩成
+      // 低矮苔丛，不再形成一圈等高的“防空围墙”。
+      const scl = sparse ? 0.22 + rnd() * 0.16 : 0.42 + rnd() * 0.4;
       shrub.scale.set(scl, scl * 0.62, scl);
-      // 略外探半身，包住板缘棱线
+      // 略外探半身，包住坡缘的层次接缝
       shrub.position.set(
-        x + Math.sign(x || 1e-4) * rnd() * 0.9,
-        0.1 + rnd() * 0.42,
-        z + Math.sign(z || 1e-4) * rnd() * 0.9
+        contour.x * (sparse ? 0.94 : 0.985) + (rnd() - 0.5) * 0.42,
+        (sparse ? 0.07 : 0.1) + rnd() * (sparse ? 0.16 : 0.42),
+        contour.z * (sparse ? 0.94 : 0.985) + (rnd() - 0.5) * 0.42
       );
       shrub.rotateY(rnd() * Math.PI);
       addOutline(shrub, OUTLINE_W);
       island.add(shrub);
     }
+
+    island.userData.terrain = terrain;
+    island.userData.topContour = topContour;
+    island.userData.terrainStyle = "osksta-moss-terraces-v1";
+    island.userData.terrainLayerCount = 5;
   }
 
   // ---------- 3. 尾柄 + 巨型 Y 字分叉尾鳍 ----------
@@ -299,7 +428,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
   group.add(tailRoot);
   {
     const skinMat = toonMat(SKIN, { flatShading: true });
-    const cuff = new THREE.Mesh(new THREE.SphereGeometry(8, 12, 10), skinMat);
+    const cuff = new THREE.Mesh(new THREE.SphereGeometry(8, 9, 7), skinMat);
     cuff.name = "leviathan-tail-cuff";
     cuff.scale.set(0.78, 0.74, 0.92);
     cuff.position.set(1.2, 0, 0);
@@ -309,7 +438,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
 
     const addStalk = (name, rNear, rFar, len, x, y = 0) => {
       const stalk = new THREE.Mesh(
-        new THREE.CylinderGeometry(rNear, rFar, len, 11),
+        new THREE.CylinderGeometry(rNear, rFar, len, 7),
         skinMat
       );
       stalk.name = name;
@@ -331,7 +460,7 @@ export function buildEcoLeviathanIsland(opts = {}) {
     flukes.rotation.x = 0.6;
     const flukeMat = toonMat(SKIN, { flatShading: true });
     const wing = (side) => {
-      const tri = new THREE.Mesh(new THREE.ConeGeometry(3.6, 10.4, 7), flukeMat);
+      const tri = new THREE.Mesh(new THREE.ConeGeometry(3.6, 10.4, 4), flukeMat);
       tri.name = `leviathan-fluke-${side < 0 ? "L" : "R"}`;
       tri.scale.set(1.05, 1, 0.2);
       tri.position.set(-4.6, 0, side * 2.15);
@@ -525,8 +654,15 @@ export function buildEcoLeviathanIsland(opts = {}) {
     const k = t01 <= 0.12 ? 0 : (t01 - 0.12) / 0.88;
     const tailT = k * k * (3 - 2 * k); // smoothstep
     tailRoot.rotation.z = THREE.MathUtils.lerp(TAIL_Z_BURIED, TAIL_Z_RISEN, tailT);
+    // 升空后极缓摆尾（巨物慢节奏，参考低多边形样例的尾部游动）：
+    // 只绕 Y 轻摆，藏地/升空断言锁死的 z 俯仰与尾鳍 x 仰角不受影响。
+    tailRoot.rotation.y = Math.sin(time * 0.8) * 0.07 * tailT;
     const flukes = tailRoot.getObjectByName("leviathan-flukes");
-    if (flukes) flukes.rotation.x = 0.6 * tailT;
+    if (flukes) {
+      flukes.rotation.x = 0.6 * tailT;
+      // 尾鳍比尾柄滞后半拍，像大动物甩尾的跟随动作
+      flukes.rotation.y = Math.sin(time * 0.8 - 0.55) * 0.09 * tailT;
+    }
     // 苔庭岛随鲸/留地：升空时骑在鲸背（Y=PLATE_Y），藏地时脱离鲸体、
     // 留在地表（plateWorldLift）——鲸身沉入地下，只见苔庭
     {

@@ -1,0 +1,16 @@
+{
+  "version": "kimi-v8-v1",
+  "baseOn": "PLAN.md §12.11 云系统 + grok-v1 光照关键帧",
+  "_note": "V8-K0/V8-G9 云参数包（Kimi，2026-08-23）：color/opacity/softness/altitudeRange × 正午/黄昏/深夜/雨/雪五档。供 cloudImpostorMaterial 昼夜颜色与 SDF 软边取参；只含语义参数，不含 cluster/实例字段（那是 Grok 编译产物）。altitudeRange 为相对海平面世界单位区间。深夜云明度上限由 test_planet_v8_visual.mjs 断言（防夜间发白）。",
+  "conditions": {
+    "noon":   { "color": "#F4F7F6", "opacity": 0.82, "softness": 0.55, "altitudeRange": [90, 160], "_note": "正午高云亮白但不 clipped" },
+    "sunset": { "color": "#F2C9A8", "opacity": 0.78, "softness": 0.6, "altitudeRange": [85, 150], "_note": "黄昏暖边，对接 sunset keyframe sunColor #FF9B62" },
+    "night":  { "color": "#2A3850", "opacity": 0.6, "softness": 0.7, "altitudeRange": [80, 140], "_note": "深夜冷蓝灰；L* 上限受约束，严禁发白" },
+    "rain":   { "color": "#8FA0AC", "opacity": 0.88, "softness": 0.8, "altitudeRange": [60, 110], "_note": "雨云低压灰暗，softness 加大弱化 SDF 硬边" },
+    "snow":   { "color": "#E8EEF2", "opacity": 0.85, "softness": 0.75, "altitudeRange": [55, 100], "_note": "雪云亮而低，与环境提亮 grade 一致" }
+  },
+  "constraints": {
+    "nightMaxL": 32,
+    "_note": "night.color 的 L* 上限；背景深夜天空 #263A5A L*≈24，云只允许略亮"
+  }
+}
