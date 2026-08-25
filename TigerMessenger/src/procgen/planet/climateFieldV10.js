@@ -217,5 +217,19 @@ export function solveClimateV10({
     fetchBudget,
     shadowBudget,
     iterations: iterations,
+    hash: hashClimateFieldV10(cellsOut),
   });
+}
+
+export function hashClimateFieldV10(cells = []) {
+  let hash = 2166136261;
+  for (const cell of cells) {
+    const climate = cell.climate || {};
+    const token = `${cell.id}:${Number(climate.upwindOceanFetch || 0).toFixed(4)}:${Number(climate.orographicLift || 0).toFixed(4)}:${Number(climate.rainShadow || 0).toFixed(4)}:${Number(climate.vapor || 0).toFixed(4)}:${Number(climate.cloudBase || 0).toFixed(4)}`;
+    for (const character of token) {
+      hash ^= character.charCodeAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+  }
+  return (hash >>> 0).toString(16);
 }

@@ -94,11 +94,13 @@ export function bakeRidgePath({
     const centered = t - 0.5;
     const roll = Math.sin(t * Math.PI);
     const direction = normalize(addScaled(addScaled(radial, tangentWind, centered * 0.045 * scale), curlAxis, roll * lift * 0.008));
+    const sampledHeight = field?.heightAt?.(direction) ?? terrainHeight;
+    const pointClearance = Math.max(terrainClearance, 1.2);
     points.push({
       direction,
-      altitude: safeBaseAltitude + roll * lift * 1.6,
-      terrainHeight,
-      terrainClearance,
+      altitude: Math.max(safeBaseAltitude, sampledHeight + pointClearance) + roll * lift * 1.6,
+      terrainHeight: sampledHeight,
+      terrainClearance: pointClearance,
       lift,
       curl: roll * dot(ridgeTangent, tangentWind),
     });
@@ -197,66 +199,102 @@ export function cloudBaseForBand(band, elevation = 0, wetness = 0) {
   return Math.max(0.8, base + Math.max(0, elevation) * 0.08 + wetness * 0.35);
 }
 
-export function compileCloudClusters({ cells = [], semantics = new Map(), water = null, wind = [1, 0, 0], seed = 1, maxInstances = 600 } = {}) {
+const LIFT_SCALE = 0.45;
+
+export function readClimateSample(cell, climate) {
+  if (!climate) return null;
+  const packed = climate.byId?.get?.(cell.id)
+    || (Number.isInteger(cell.index) ? climate.cells?.[cell.index] : null);
+  const fields = packed?.climate;
+  if (!fields) return null;
+  return {
+    fetch: Number(fields.upwindOceanFetch) || 0,
+    lift: Number(fields.orographicLift) || 0,
+    rainShadow: Number(fields.rainShadow) || 0,
+    vapor: Number(fields.vapor) || 0,
+    cloudPotential: Number(fields.cloudPotential) || 0,
+    cloudBase: Number(fields.cloudBase) || 1.2,
+    windTangent: climate.windTangent?.[cell.index] || null,
+  };
+}
+
+export function compileCloudClusters({
+  cells = [],
+  semantics = new Map(),
+  water = null,
+  wind = [1, 0, 0],
+  seed = 1,
+  maxInstances = 600,
+  climate = null,
+  field = null,
+} = {}) {
   const rng = createStableRng(seed, "cloud-climate");
   const direction = normalize(wind);
   const instances = [];
   for (const cell of cells) {
     if (instances.length >= maxInstances) break;
     const semantic = semantics.get(cell.id) || {};
-    const fetch = Math.max(0, dot(cell.direction || [0, 1, 0], direction));
-    const oceanMoisture = semantic.wetness ?? (water ? 0.5 : 0);
-    const mountainLift = Math.max(0, semantic.height ?? 0) / 8;
-    const slope = Math.max(0, Math.min(1, semantic.slope ?? mountainLift * 0.7));
-    const rainShadow = Math.max(0, 1 - fetch) * Math.min(1, mountainLift);
-    const windwardLift = fetch * Math.min(1, mountainLift + oceanMoisture * 0.35);
-    const climateBand = classifyCloudBand(semantic.landformClass, oceanMoisture, mountainLift, fetch);
-    const probability = Math.max(0.03, Math.min(0.9, 0.12 + oceanMoisture * 0.42 + fetch * 0.25 + mountainLift * 0.16 + windwardLift * 0.12 - rainShadow * 0.26 - slope * 0.04));
+    const sample = readClimateSample(cell, climate);
+    const climateSource = sample ? "climate-v10" : "missing-climate";
+    const vapor = sample ? sample.vapor : (semantic.wetness ?? (water ? 0.5 : 0));
+    const fetch = sample ? sample.fetch : 0;
+    const rainShadow = sample ? sample.rainShadow : 0;
+    const orographicLift = sample ? sample.lift : 0;
+    const lift01 = Math.max(0, Math.min(1, orographicLift / LIFT_SCALE));
+    const terrainHeight = field?.heightAt?.(cell.direction || [0, 1, 0]) ?? (semantic.height ?? 0);
+    const slope = Math.max(0, Math.min(1, semantic.slope ?? 0));
+    const climateBand = classifyCloudBand(semantic.landformClass, vapor, lift01, fetch);
+    const probability = sample
+      ? Math.max(0.03, Math.min(0.92, 0.04 + sample.cloudPotential * 0.9))
+      : Math.max(0.03, Math.min(0.9, 0.12 + vapor * 0.42));
     if (!rng.chance(probability)) continue;
     const phase = rng.next();
-    const cloudBase = cloudBaseForBand(climateBand, semantic.height ?? 0, oceanMoisture);
     const chainBand = OSKAR_CLOUD_CHAIN_BANDS.find((band) =>
       band.id === semantic.landmarkId || band.id === semantic.cloudChainBand
     ) || null;
-    const lift = Math.max(0, windwardLift + mountainLift * slope);
+    const clearance = Math.max(1.2, 1.2 + Math.min(4.5, Math.max(0, terrainHeight) * 0.12) + lift01 * 2.4);
+    const cloudBase = sample ? sample.cloudBase : Math.max(0.8, 1.2 + vapor * 0.35);
+    const altitude = terrainHeight + clearance + cloudBase;
+    const localWind = sample?.windTangent || direction;
     const ridgePath = bakeRidgePath({
       anchor: cell.direction || [0, 1, 0],
-      semantic,
-      wind: direction,
-      altitude: chainBand
-        ? chainBand.base + rng.range(-chainBand.thickness * 0.18, chainBand.thickness * 0.18)
-        : 4.5 + mountainLift * 6 + rng.range(-0.4, 1.4),
-      lift,
-      scale: 0.75 + oceanMoisture * 0.5,
+      semantic: { ...semantic, height: terrainHeight, flow: semantic.flow },
+      wind: localWind,
+      altitude,
+      lift: lift01,
+      scale: 0.75 + vapor * 0.5,
+      field,
+      clearance,
     });
     instances.push({
       cellIndex: cell.index,
       anchor: (cell.direction || [0, 1, 0]).slice(),
       altitude: ridgePath.points[2].altitude,
-      type: mountainLift > 0.45 ? "orographic" : oceanMoisture > 0.65 ? "low-lake" : "fair-weather",
+      type: lift01 > 0.45 ? "orographic" : vapor > 0.65 ? "low-lake" : "fair-weather",
       climateBand,
       cloudBase,
-      lowLayer: !!(chainBand?.lowLayer || cloudBase <= 1.8),
+      climateSource,
+      lowLayer: !!(chainBand?.lowLayer || cloudBase <= 0.55),
       chainBand: chainBand?.id || null,
       oceanFetch: fetch,
       slope,
-      windward: windwardLift,
+      windward: lift01,
       rainShadow,
-      humidity: oceanMoisture,
+      humidity: vapor,
       pathPoints: ridgePath.points,
       ridgeTangent: ridgePath.ridgeTangent,
       terrainClearance: ridgePath.terrainClearance,
-      lift,
+      lift: lift01,
       landformClass: semantic.landformClass || null,
-      scale: 1.2 + rng.next() * (1.2 + oceanMoisture),
+      scale: 1.2 + rng.next() * (1.2 + vapor) * (1 + (chainBand?.thickness ?? 0.2) * 0.08),
       rotation: rng.next() * Math.PI * 2,
-      inDir: direction.slice(),
-      outDir: normalize([direction[2], direction[1] * 0.2, -direction[0]]),
+      inDir: localWind.slice(),
+      outDir: normalize([localWind[2], localWind[1] * 0.2, -localWind[0]]),
       timeOffset: phase,
       speed: 0.08 + rng.next() * 0.12,
       phase,
       cameraKeepout: false,
-      lod: mountainLift > 0.45 ? "cluster-detail" : oceanMoisture > 0.65 ? "octa-impostor" : "weather-band",
+      lod: lift01 > 0.45 ? "cluster-detail" : vapor > 0.65 ? "octa-impostor" : "weather-band",
       shadowMode: "projected-low-resolution",
     });
   }
@@ -275,8 +313,11 @@ export function compileCloudClusters({ cells = [], semantics = new Map(), water 
       climateBand: instance.climateBand,
       chainBand: instance.chainBand,
       lowLayer: instance.lowLayer,
+      climateSource: instance.climateSource,
     })),
     cloudChain: compileOskarCloudChain(),
+    climateSource: climate ? "climate-v10" : "missing-climate",
+    climateFieldHash: climate?.hash || null,
   };
 }
 

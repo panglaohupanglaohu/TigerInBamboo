@@ -269,10 +269,12 @@ export function compilePlanetClouds({
   maxInstances = 600,
   landmarks = [],
   field = null,
+  climate = null,
 } = {}) {
-  const climate = compileCloudClusters({ cells, semantics, water, wind, seed, maxInstances });
+  const sampled = compileCloudClusters({ cells, semantics, water, wind, seed, maxInstances, climate, field });
   const hero = compileHeroCloudClusters({ landmarks, field, wind });
-  const merged = mergeCloudClusters(climate, hero);
+  const merged = mergeCloudClusters(sampled, hero);
+  merged.climateFieldHash = climate?.hash || sampled.climateFieldHash || null;
   return applyCloudCameraKeepouts(merged, compileCloudKeepouts({ landmarks, field }));
 }
 

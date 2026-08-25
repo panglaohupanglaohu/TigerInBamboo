@@ -18,6 +18,8 @@ import { createSurfaceProviderV8 } from "../../world/planetV8/surfaceProviderV8.
 import { compilePlanetNavigationV8, compileManifestPortals, validatePlanetNavigation } from "../../world/planetV8/navigationV8.js";
 import { compileLandmarkTerrainRoutes, LANDFORM_CHAIN_ROUTE_DEFINITIONS } from "../../world/planetV8/terrainRoutesV8.js";
 import { compilePlanetClouds } from "../../render/clouds/heroCloudCompiler.js";
+import { solveHydrologyV10 } from "./hydrologyFieldV10.js";
+import { solveClimateV10 } from "./climateFieldV10.js";
 import { validatePlanetTopology } from "./planetValidatorsV8.js";
 import { validateChartSeams } from "./chartSeamValidator.js";
 import { validatePlanetGlobalConstraints, measurePlanetArea } from "./globalConstraints.js";
@@ -252,13 +254,29 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
       cloudChainBand,
     }];
   }));
+  const hydrologyV10 = solveHydrologyV10({
+    grid,
+    elevationAt: (direction) => field.heightAt(direction),
+    seaLevel,
+    basinLocks: basins,
+    radius,
+  });
+  const climateV10 = solveClimateV10({
+    grid,
+    hydrology: hydrologyV10,
+    elevationAt: (direction) => field.heightAt(direction),
+    wind: [1, 0, 0],
+    radius,
+  });
   const clouds = compilePlanetClouds({
     cells: cloudCells,
     semantics: cloudSemantics,
     water,
+    wind: climateV10.wind || [1, 0, 0],
     seed,
     landmarks: manifest,
     field,
+    climate: climateV10,
   });
   const charts = prepareCharts(grid, assignment, manifest, chartLimit).map((chart) => {
     const scalar = createChartScalarField(field, chart, { radialMin: -4, radialMax: 8, span: 10, resolution });
@@ -318,13 +336,14 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
   snapshot.vegetation.instanceCounts = Object.fromEntries(vegetationByChart.map((vegetation, index) => ["chart:" + index, vegetation.instanceCount]));
   snapshot.vegetation.clusterHash = vegetationByChart.map((vegetation) => Object.entries(vegetation.buckets).map(([species, instances]) => species + ":" + instances.length).join(",")).join("|");
   snapshot.clouds.clusterHash = clouds.climateHash;
-  snapshot.clouds.climateHash = clouds.climateHash;
+  snapshot.clouds.climateHash = climateV10.hash || clouds.climateHash;
   snapshot.clouds.heroHash = clouds.heroHash;
   snapshot.clouds.heroCount = clouds.heroCount;
   snapshot.clouds.instanceCount = clouds.instanceCount;
   snapshot.clouds.climateBands = [...new Set(clouds.instances.map((instance) => instance.climateBand))].sort();
+  snapshot.clouds.climateSource = "climate-v10";
   const validation = validatePlanetSnapshot(snapshot);
-  return { ok: validation.ok, stage: validation.ok ? "complete" : "snapshot", snapshot, manifest, grid, wfc, field, water, surface, portals, navigation, terrainRoutes, routeMetadataReport, waterfallReport, chainReport, elevationReport, finalElevationReport, chainAdjacencyReport, bookshopReport, combatSurface, combatReport, vegetation: vegetationByChart, clouds, charts, seamReport, globalReport, report: validation };
+  return { ok: validation.ok, stage: validation.ok ? "complete" : "snapshot", snapshot, manifest, grid, wfc, field, water, surface, portals, navigation, terrainRoutes, routeMetadataReport, waterfallReport, chainReport, elevationReport, finalElevationReport, chainAdjacencyReport, bookshopReport, combatSurface, combatReport, vegetation: vegetationByChart, clouds, climate: climateV10, hydrology: hydrologyV10, charts, seamReport, globalReport, report: validation };
 }
 
 export { createChartScalarField };

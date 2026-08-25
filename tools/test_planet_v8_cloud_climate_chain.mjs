@@ -28,6 +28,8 @@ for (const seed of [1, 7, 42, 884]) {
   assert.equal(world.ok, true, `cloud climate world seed=${seed}`);
   assert.ok(world.clouds.instances.every((instance) => Number.isFinite(instance.cloudBase)));
   assert.ok(world.clouds.instances.every((instance) => expected.includes(instance.climateBand) || ["windward-mountain", "rain-shadow"].includes(instance.climateBand)));
+  assert.ok(world.clouds.instances.filter((instance) => !instance.authored).every((instance) => instance.climateSource === "climate-v10"));
+  assert.equal(world.snapshot.clouds.climateSource, "climate-v10");
 }
 for (let seed = 1; seed <= 100; seed++) {
   const world = compilePlanetV8({ seed, landformChain: true, subdivision: 1, chartLimit: 1, resolution: 3 });

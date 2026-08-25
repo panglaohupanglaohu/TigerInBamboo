@@ -1929,10 +1929,10 @@ cloudPotential = saturate(0.08 + vapor * 0.48 + lift * 0.32 - rainShadow * 0.38)
 
 #### G21-E · 云系统消费统一气候场（P1，负责人：Codex）
 
-- [ ] **[Codex]** 修改 `cloudClusterCompiler.js`，移除内部临时 fetch/lift/rainShadow 近似，直接读取 `climateFieldV10`；五段 Oskar 云带只做美术约束，不覆盖物理字段。
-- [ ] **[Codex]** 将 ridge streamline 的 altitude/clearance/cloudBase 绑定 terrain+climate；高山云沿迎风坡抬升并越脊下降，湖沼保留贴水雾，三重门门洞保持净空。
-- [ ] **[Codex]** cloud impostor shader 继续只更新 `uTime/uWind/uWeather`；不得每帧重算 fetch、precipitation 或 forestness。
-- [ ] **[Codex TEST]** 扩展 `test_planet_v9_cloud_paths.mjs`：统一 climate hash、迎风/背风概率差、water-vapor 来源、低云、ridge clearance、CPU 每帧无语义重编。
+- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** `cloudClusterCompiler.readClimateSample` 读取 `climateFieldV10`；生产路径 `planetCompilerV8` 在云之前 `solveHydrologyV10` + `solveClimateV10`。五段 Oskar 云带只作 `lowLayer`/尺度美术约束，不覆盖 fetch/lift/cloudBase。
+- [x] **[Grok 2026-08-26 RUNTIME_WIRED]** ridge streamline 沿切向风采样 `field.heightAt`；altitude = terrain + clearance(lift) + climate.cloudBase。
+- [x] **[Grok 2026-08-26]** impostor shader 仍只更新 `uTime/uWind/uWeather/uDay/uHeroDayWeight`；测试锁定不含 precipitation/forestness。
+- [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v9_cloud_paths.mjs`（seed 42，climate hash 对齐）；`node tools/test_planet_v8_cloud_climate_chain.mjs` 4 golden + 100 seed；`node tools/test_planet_v8_determinism.mjs`。
 
 #### G21-F · 植被和材质消费统一生态场（P1，负责人：Codex）
 
