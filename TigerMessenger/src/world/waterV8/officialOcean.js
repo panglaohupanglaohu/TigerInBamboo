@@ -9,7 +9,7 @@ export const OFFICIAL_OCEAN_COLOR = 0x4cb8c4;
 export const OFFICIAL_OCEAN_OPACITY = 0.88;
 export const OFFICIAL_OCEAN_WIDTH_SEGMENTS = 72;
 export const OFFICIAL_OCEAN_HEIGHT_SEGMENTS = 48;
-export const OFFICIAL_HIGHLAND_ISLAND_LIFT = 6;
+export const OFFICIAL_HIGHLAND_ISLAND_LIFT = 0;
 
 const _dir = new THREE.Vector3();
 

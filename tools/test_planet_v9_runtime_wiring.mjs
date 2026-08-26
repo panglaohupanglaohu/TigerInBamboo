@@ -28,7 +28,7 @@ assert.match(island, /curvedWaterV1 = true/);
 assert.match(island, /oceanWorldRoutesV1 = true/);
 assert.match(island, /legacyCanalWorld = false/);
 assert.match(island, /canalScope = "crystal-city"/);
-assert.match(island, /highlandIslandLift = 6/);
+assert.match(island, /highlandIslandLift = 0/);
 assert.match(island, /saihojiIslandLift = 3.2/);
 assert.match(island, /baseLift: planetFeatures.saihojiIslandLift/);
 assert.match(island, /legacyCanalWorld: planetFeatures.legacyCanalWorld/);

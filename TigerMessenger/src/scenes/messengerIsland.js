@@ -37,7 +37,7 @@ export function officialPagePlanetFeatures(base = FEATURES) {
     features.oceanWorldRoutesV1 = true;
     features.legacyCanalWorld = false;
     features.canalScope = "crystal-city";
-    features.highlandIslandLift = 6;
+    features.highlandIslandLift = 0;
     features.saihojiIslandLift = 3.2;
     features.bookshopIslandLift = 3.2;
     if (!["v8", "v9"].includes(features.planetPresentationVersion)) {
