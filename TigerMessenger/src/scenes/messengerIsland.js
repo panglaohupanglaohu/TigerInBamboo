@@ -33,6 +33,7 @@ export function officialPagePlanetFeatures(base = FEATURES) {
   const explicit = features.worldVersion === "v7" || features.worldVersion === "v8" || features.worldVersion === "v9";
   if (!explicit) {
     features.cloudImpostorV1 = true;
+    features.legacyCanalWorld = false;
     if (!["v8", "v9"].includes(features.planetPresentationVersion)) {
       features.planetPresentationVersion = "v9";
     }
@@ -132,6 +133,7 @@ export const messengerIslandScene = {
       canyonDir: moebiusPack.canyonDir,
       harbor,
       harborBuilt,
+      legacyCanalWorld: planetFeatures.legacyCanalWorld,
       canalBoatsOut: {
         onBoatChange(b) {
           if (messengerLandmarks) messengerLandmarks.boat = b;

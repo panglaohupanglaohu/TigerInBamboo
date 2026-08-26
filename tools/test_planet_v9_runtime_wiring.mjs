@@ -17,6 +17,8 @@ assert.match(runtime, /selectPlanetV9LOD/);
 assert.match(runtime, /disposePlanetV8Runtime/);
 assert.match(island, /officialPagePlanetFeatures/);
 assert.match(island, /cloudImpostorV1 = true/);
+assert.match(island, /legacyCanalWorld = false/);
+assert.match(island, /legacyCanalWorld: planetFeatures.legacyCanalWorld/);
 assert.match(island, /features: planetFeatures/);
 assert.match(runtime, /enabledTerrain \? \(features.planetChartLimit/);
 assert.match(runtime, /const isV9 = presentationVersion === "v9"/);

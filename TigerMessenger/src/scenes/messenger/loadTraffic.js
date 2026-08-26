@@ -54,6 +54,7 @@ export function loadCanalNetwork({
   harbor,
   harborBuilt,
   canalBoatsOut,
+  legacyCanalWorld = FEATURES.legacyCanalWorld,
 }) {
   const moonLakeLatLon = flatXZToLatLon(LAKE.x, LAKE.z, R);
   const canalJunctionDir = latLonToDir(
@@ -162,7 +163,8 @@ export function loadCanalNetwork({
     waterRouteFleet = createWaterRouteFleet({ routes, boats: routeBoats });
     if (routeBoat) routeBoat.userData.waterRouteBoat = routeBoats[0] || null;
   }
-  if (canalAnchors.length >= 3 && (!useOceanRoutes || FEATURES.legacyCanalWorld !== false)) {
+  const useLegacyCanal = legacyCanalWorld === true;
+  if (canalAnchors.length >= 3 && useLegacyCanal) {
     const canal = buildWorldCanal(scene, R, {
       anchors: canalAnchors,
       names: canalNames,

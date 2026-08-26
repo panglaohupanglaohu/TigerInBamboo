@@ -56,7 +56,7 @@ assert.match(planetRuntime, /if \(isV9\)/);
 assert.match(planetRuntime, /planet-sphere-baseline-v8/);
 assert.match(planetRuntime, /oskar-continuous-chain-v9/);
 // 现役入口必须随高山水平厚地台一起换戳，防止浏览器混用逐格曲率旧模块。
-assert.match(indexHtml, /main\.js\?v=20260826-oskar-main-clouds-v1/);
+assert.match(indexHtml, /main\.js\?v=20260826-oskar-no-canal-v1/);
 for (const source of citadelImporters) {
   assert.match(source, /citadelTown\.js\?v=20260825-highland-obelisk-stone-v3/,
     "所有现役城堡入口必须请求同一个 citadelTown 版本，避免浏览器混用旧导出缓存");
