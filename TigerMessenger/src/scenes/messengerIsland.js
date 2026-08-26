@@ -19,7 +19,7 @@ import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
-import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260823-citadel-reference-v6";
+import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260826-ocean-highland-lift-v1";
 import { loadMoebiusDistrict, placeMoebiusSwampAndSky } from "./messenger/loadMoebius.js";
 import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/loadTraffic.js";
 import { updateMessengerIsland } from "./messenger/updateIsland.js";
@@ -27,14 +27,17 @@ import { createSwampBgmState } from "./messenger/swampBgm.js";
 import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
 import { FEATURES } from "../core/params.js";
 
-/** 正式主页（custom/legacy）挂球面 impostor 云海，只留水晶城运河，不改全局 DEFAULT_ON。 */
+/** 正式主页（custom/legacy）挂球面 impostor 云海与曲率海洋，只留水晶城运河，不改全局 DEFAULT_ON。 */
 export function officialPagePlanetFeatures(base = FEATURES) {
   const features = { ...base };
   const explicit = features.worldVersion === "v7" || features.worldVersion === "v8" || features.worldVersion === "v9";
   if (!explicit) {
     features.cloudImpostorV1 = true;
+    features.curvedWaterV1 = true;
+    features.oceanWorldRoutesV1 = true;
     features.legacyCanalWorld = false;
     features.canalScope = "crystal-city";
+    features.highlandIslandLift = 6;
     if (!["v8", "v9"].includes(features.planetPresentationVersion)) {
       features.planetPresentationVersion = "v9";
     }
@@ -99,6 +102,7 @@ export const messengerIslandScene = {
       harbor,
       harborBuilt,
       tramSystem,
+      highlandIslandLift: planetFeatures.highlandIslandLift || 0,
     });
 
     const bookshopX = 11.5 * WORLD_SCALE;
@@ -136,6 +140,7 @@ export const messengerIslandScene = {
       harborBuilt,
       legacyCanalWorld: planetFeatures.legacyCanalWorld,
       canalScope: planetFeatures.canalScope || (planetFeatures.legacyCanalWorld ? "world" : "none"),
+      oceanWorldRoutes: planetFeatures.oceanWorldRoutesV1 === true,
       canalBoatsOut: {
         onBoatChange(b) {
           if (messengerLandmarks) messengerLandmarks.boat = b;

@@ -62,3 +62,38 @@ export function createPlanet(scene) {
   scene.add(planet);
   return planet;
 }
+
+/** 正式页海洋覆盖球面时，把绿苔球改成海底，避免透明浪下透出草地。峡谷阶地仍走沙蓝。 */
+export function paintPlanetOceanBed(planetMesh) {
+  if (!planetMesh?.geometry?.attributes?.position) return planetMesh;
+  const geo = planetMesh.geometry;
+  const pos = geo.attributes.position;
+  const colors = new Float32Array(pos.count * 3);
+  const deep = new THREE.Color(0x143d52);
+  const mid = new THREE.Color(0x1f5c72);
+  const shelf = new THREE.Color(0x2f7a86);
+  const canyonShade = new THREE.Color(0x5d7f8c);
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const z = pos.getZ(i);
+    const len = Math.hypot(x, y, z) || PLANET_RADIUS;
+    _dir.set(x / len, y / len, z / len);
+    const band = Math.sin(_dir.x * 6.0 + _dir.z * 4.5) * 0.5 + 0.5;
+    _c.copy(deep).lerp(mid, 0.35 + band * 0.4);
+    if (_dir.y > 0.35) _c.lerp(shelf, 0.12);
+    const canyonDrop = canyonOffsetDir(_dir);
+    if (canyonDrop < 0) {
+      const depthFactor = Math.min(1, Math.abs(canyonDrop) / CANYON.depth);
+      _c.lerp(canyonShade, 0.25 + depthFactor * 0.45);
+    }
+    colors[i * 3] = _c.r;
+    colors[i * 3 + 1] = _c.g;
+    colors[i * 3 + 2] = _c.b;
+  }
+  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  planetMesh.material = toonMat(0xffffff, { vertexColors: true, flatShading: true });
+  planetMesh.material.needsUpdate = true;
+  planetMesh.userData.oceanBed = true;
+  return planetMesh;
+}

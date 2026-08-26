@@ -54,13 +54,16 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
   const waterR = canal.waterR;
   const curve = canal.curve;
   const baseSpeed = 1 / LAP_SECONDS; // 参数 u 每秒增量
+  const namePrefix = opts.namePrefix || "canal-warship";
+  const kind = opts.kind || "canal-warship";
 
   for (let i = 0; i < count; i++) {
     const boat = createFisherBoat();
-    boat.name = `canal-warship-${i}`;
+    boat.name = `${namePrefix}-${i}`;
     boat.scale.setScalar(scale);
-    boat.userData.kind = "canal-warship";
+    boat.userData.kind = kind;
     boat.userData.canalPatrol = true;
+    boat.userData.oceanPatrol = kind === "ocean-warship";
     boat.userData.piloted = false;
     // 均匀相位 + 轻微速度差，避免扎堆
     boat.userData.u = (i / count + 0.03 * i) % 1;

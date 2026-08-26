@@ -29,6 +29,7 @@ import { isOceanWorldRoutesV1, FEATURES } from "../../core/params.js";
 import { CANYON, canyonOffsetDir } from "../../world/canyon.js";
 import { compileWaterRoutes } from "../../world/waterV8/curvedWaterCompiler.js";
 import { createWaterRouteFleet } from "../../world/waterV8/waterRouteFleet.js";
+import { buildOceanPatrolCurve, OFFICIAL_OCEAN_SEA_LEVEL } from "../../world/waterV8/officialOcean.js";
 
 export function loadTram({ scene, R, hills, camp, grandTopTarget }) {
   const tramSystem = buildChristchurchTramSystem(scene, R, { beamTarget: grandTopTarget });
@@ -57,24 +58,24 @@ export function loadCanalNetwork({
   canalBoatsOut,
   legacyCanalWorld = FEATURES.legacyCanalWorld,
   canalScope = null,
+  oceanWorldRoutes = null,
 }) {
-  // 主人约定：正式主页只留水晶城区域运河。A·V7 仍走世界运河回滚。
+  // 主人约定：正式主页只留水晶城区域运河；交汇古堡保留。A·V7 仍走世界运河回滚。
   const scope = canalScope || (legacyCanalWorld === true ? "world" : "none");
   const useCrystalCanal = scope === "crystal-city";
   const useWorldCanal = scope === "world";
+  const useOceanRoutes = oceanWorldRoutes ?? isOceanWorldRoutesV1();
 
   const moonLakeLatLon = flatXZToLatLon(LAKE.x, LAKE.z, R);
-  const canalJunctionDir = useWorldCanal
-    ? latLonToDir(
-      (moonLakeLatLon.lat + CITY_SEA_LAKE.lat) * 0.5,
-      (moonLakeLatLon.lon + CITY_SEA_LAKE.lon) * 0.5,
-      new THREE.Vector3()
-    )
-    : null;
+  const canalJunctionDir = latLonToDir(
+    (moonLakeLatLon.lat + CITY_SEA_LAKE.lat) * 0.5,
+    (moonLakeLatLon.lon + CITY_SEA_LAKE.lon) * 0.5,
+    new THREE.Vector3()
+  );
   let canalJunctionCitadel = null;
   let canalJunctionStorage = null;
   let canalJunctionBox = null;
-  if (useWorldCanal) {
+  {
     const cjsLevelsKey = citadelLevelsKey("canal-junction");
     const cjsTerrainKey = citadelTerrainKey("canal-junction");
     const cjsObjectsKey = citadelTerrainObjectsKey("canal-junction");
@@ -133,20 +134,19 @@ export function loadCanalNetwork({
   const cityCanalWaypoint = waterCityCanalWaypointDir();
   const canalAnchors = [];
   const canalNames = [];
-  const canalPush = (dir, name) => {
+  const oceanAnchors = [];
+  const canalPush = (dir, name, into = canalAnchors) => {
     if (dir?.isVector3 && dir.lengthSq() > 1e-6) {
-      canalAnchors.push(dir.clone());
-      canalNames.push(name);
+      into.push(dir.clone());
+      if (into === canalAnchors) canalNames.push(name);
     }
   };
-  const useOceanRoutes = isOceanWorldRoutesV1();
-  // 主人约定：只有水晶城区域还留运河；圣城/月亮湖/书店/营地/交汇堡不再接世界运河。
-  // V8/V9 海面航线仍用世界锚点，但不建运河 mesh / 巡游战船。
+  // 主人约定：只有水晶城区域还留运河；交汇古堡保留。战船改走球面海洋。
   if (useCrystalCanal) {
     canalPush(cityCanalWaypoint, "水晶城");
     canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon, new THREE.Vector3()), "白鲸海湖");
     canalPush(canyonDir || latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3()), "水晶城峡谷");
-  } else if (useWorldCanal || useOceanRoutes) {
+  } else if (useWorldCanal) {
     canalPush(bookshop?.position, "书店镇");
     canalPush(camp?.landmarks?.anchor?.position, "出发营地");
     canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖");
@@ -156,29 +156,49 @@ export function loadCanalNetwork({
     canalPush(citySeaLake?.centerDir || latLonToDir(CITY_SEA_LAKE.lat, CITY_SEA_LAKE.lon, new THREE.Vector3()), "白鲸海湖");
     canalPush(canyonDir, "叹息之门");
   }
+  if (useOceanRoutes) {
+    canalPush(bookshop?.position, "书店镇", oceanAnchors);
+    canalPush(camp?.landmarks?.anchor?.position, "出发营地", oceanAnchors);
+    canalPush(moonLake?.centerWorld || moonLake?.position, "月亮湖", oceanAnchors);
+    canalPush(odysseyCitadel?.position, "高山圣城", oceanAnchors);
+    canalPush(canalJunctionCitadel?.position, "运河交汇古堡", oceanAnchors);
+    canalPush(harbor?.position, "旧港", oceanAnchors);
+  }
 
   let canalSys = null;
   let canalBoats = null;
   let canalLakeLink = null;
   let waterRouteFleet = null;
   if (useOceanRoutes) {
-    const harborAnchors = canalAnchors.map((position, index) => ({
+    const harborAnchors = oceanAnchors.map((position, index) => ({
       id: `harbor-anchor:${index}`,
       direction: position.clone().normalize().toArray(),
       clearance: 2.4,
     }));
-    const routes = compileWaterRoutes({ harborAnchors, radius: R });
+    const routes = compileWaterRoutes({ harborAnchors, radius: R + OFFICIAL_OCEAN_SEA_LEVEL });
+    const oceanPatrol = buildOceanPatrolCurve(oceanAnchors, R, OFFICIAL_OCEAN_SEA_LEVEL);
+    if (oceanPatrol) {
+      canalBoats = createCanalBoatPatrol(scene, oceanPatrol, {
+        count: 8,
+        scale: 1.84,
+        namePrefix: "ocean-warship",
+        kind: "ocean-warship",
+      });
+    }
     const routeBoat = harborBuilt?.landmarks?.boat;
-    const routeBoats = routeBoat && routes.length ? [{
-      id: "old-harbor-route-boat",
-      object: routeBoat,
-      position: routeBoat.position?.toArray?.() || [0, 0, R],
-      routeId: routes[0].id,
-      speed: 0.004,
-      u: 0,
-    }] : [];
-    waterRouteFleet = createWaterRouteFleet({ routes, boats: routeBoats });
-    if (routeBoat) routeBoat.userData.waterRouteBoat = routeBoats[0] || null;
+    if (routeBoat && oceanPatrol) {
+      if (routeBoat.parent !== scene) scene.attach(routeBoat);
+      routeBoat.userData.canalPatrol = true;
+      routeBoat.userData.oceanPatrol = true;
+      routeBoat.userData.kind = "ocean-warship";
+      routeBoat.userData.piloted = false;
+      routeBoat.userData.u = 0.08;
+      routeBoat.userData.speed = (1 / 180) * 0.92;
+      oceanPatrol.curve.getPointAt(routeBoat.userData.u, routeBoat.position);
+      routeBoat.position.normalize().multiplyScalar(oceanPatrol.waterR + 0.12);
+      if (canalBoats?.boats && !canalBoats.boats.includes(routeBoat)) canalBoats.boats.push(routeBoat);
+    }
+    waterRouteFleet = createWaterRouteFleet({ routes, boats: [] });
   }
   if (canalAnchors.length >= 3 && (useCrystalCanal || useWorldCanal)) {
     const canal = buildWorldCanal(scene, R, {
@@ -212,15 +232,22 @@ export function loadCanalNetwork({
       }
       citadelRange.aimHorseToCanal?.(canal.curve);
     }
-    canalBoats = createCanalBoatPatrol(scene, canal, {
-      count: useCrystalCanal ? 4 : 10,
-      scale: 1.84,
-    });
-    canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake, {
-      edgeAng: waterCityShoreAng(WATER_CITY_WATER_DROP) - 0.02,
-      cruiseAng: 0.2,
-    });
-    canalLakeLink?.attachAll?.(canalBoats.boats);
+    if (!useOceanRoutes) {
+      canalBoats = createCanalBoatPatrol(scene, canal, {
+        count: useCrystalCanal ? 4 : 10,
+        scale: 1.84,
+      });
+      canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake, {
+        edgeAng: waterCityShoreAng(WATER_CITY_WATER_DROP) - 0.02,
+        cruiseAng: 0.2,
+      });
+      canalLakeLink?.attachAll?.(canalBoats.boats);
+    } else {
+      canalLakeLink = buildCanalLakeLink(scene, canal, citySeaLake, {
+        edgeAng: waterCityShoreAng(WATER_CITY_WATER_DROP) - 0.02,
+        cruiseAng: 0.2,
+      });
+    }
 
     if (useWorldCanal) {
       const dockBoat = harborBuilt.landmarks.boat;

@@ -16,10 +16,12 @@ import {
 import { compilePlanetV8 } from "../../procgen/planet/planetCompilerV8.js";
 import { createBufferGeometryFromMesh } from "../../procgen/three/bufferGeometryAdapter.js";
 import { compileCurvedWater } from "../waterV8/curvedWaterCompiler.js";
+import { compileOfficialOcean } from "../waterV8/officialOcean.js";
 import { buildCloudImpostorAtlas } from "../../render/clouds/impostorAtlasBuilder.js";
 import { createCloudImpostorSystem } from "../../render/clouds/cloudImpostorSystem.js";
 import { createSemanticTerrainMaterial } from "../../render/terrain/semanticTerrainMaterial.js";
 import { createCurvedWaterMaterial, createCurvedLakeMaterial } from "../../render/water/curvedWaterMaterial.js";
+import { paintPlanetOceanBed } from "../planet.js";
 import { createVegetationRuntime } from "../../render/vegetation/vegetationRuntime.js";
 import { createWaterSurfaceEventBuffer, createWaterWakeRibbonBuffer } from "../waterV8/waterSurfaceEvents.js";
 import { createResourceRegistry } from "../../core/resourceRegistry.js";
@@ -94,7 +96,8 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
   };
   if (!root.visible) return state;
   scene.add(root);
-  if (enabledWater && planet) planet.visible = false;
+  // V8/V9 地形替换实心球时才隐藏 planet。正式页峡谷刻在 planet 上，只能盖海洋、不能关可见。
+  if (enabledWater && enabledTerrain && planet) planet.visible = false;
 
   if (enabledTerrain || enabledWater || enabledClouds) {
     const compiled = compilePlanetV8({
@@ -154,7 +157,7 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     if (planet) planet.userData.planetV8Snapshot = compiled.snapshot;
   }
 
-  if (enabledWater && state.compiler?.grid) {
+  if (enabledWater && enabledTerrain && state.compiler?.grid) {
     const basins = state.compiler.manifest.filter((entry) => entry.waterNeeds === "closed-lake-basin").map((entry) => ({ direction: entry.direction, angularRadius: entry.angularRadius, level: 0.08 }));
     const water = state.compiler.water || compileCurvedWater({ grid: state.compiler.grid, radius, seaLevel: 0, basins, fieldRecipe: state.compiler.field });
     state.water = water;
@@ -168,6 +171,29 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
       lake.name = `planet-v8-curved-lake-${i}`;
       root.add(lake);
       trackLogicalResource(state.resourceRegistry, "water", `lake-${i}`);
+    }
+  } else if (enabledWater && !enabledTerrain) {
+    const official = compileOfficialOcean({
+      radius,
+      seed: features.terrainSeed ?? seed,
+      subdivision: features.oceanSubdivision ?? 5,
+      seaLevel: features.oceanSeaLevel ?? 0.12,
+    });
+    state.water = { ocean: official.ocean, lakes: [], radius: official.radius, official: true };
+    const ocean = waterMesh(official.ocean, createCurvedWaterMaterial(THREE, {
+      color: 0x1a5570,
+      opacity: 0.94,
+      kind: "ocean",
+      depthWrite: true,
+    }));
+    ocean.name = "planet-v8-curved-ocean";
+    ocean.userData.officialOcean = true;
+    ocean.receiveShadow = true;
+    root.add(ocean);
+    trackLogicalResource(state.resourceRegistry, "water", "ocean");
+    if (planet) {
+      paintPlanetOceanBed(planet);
+      planet.visible = true;
     }
   }
 

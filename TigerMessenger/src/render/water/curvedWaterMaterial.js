@@ -1,12 +1,12 @@
 // Curved water stays one static mesh; only a low-cost vertex wave and a
 // bounded night grade run on the GPU.  No per-frame topology rebuild.
 
-export function createCurvedWaterMaterial(THREE, { color = 0x4a8fa0, opacity = 0.84, night = 1, kind = "ocean" } = {}) {
+export function createCurvedWaterMaterial(THREE, { color = 0x4a8fa0, opacity = 0.84, night = 1, kind = "ocean", depthWrite = false } = {}) {
   const base = new THREE.Color(color);
   const waterKind = kind === "lake" ? 1 : 0;
   return new THREE.ShaderMaterial({
     transparent: true,
-    depthWrite: false,
+    depthWrite,
     side: THREE.DoubleSide,
     uniforms: {
       uTime: { value: 0 },

@@ -32,7 +32,8 @@ import {
   createTacticalGraphDebugView,
 } from "../../world/citadelTacticalGraph.js";
 
-export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt, tramSystem }) {
+export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt, tramSystem, highlandIslandLift = 0 }) {
+  const islandLift = Number.isFinite(highlandIslandLift) ? highlandIslandLift : 0;
   let savedCitadelContour;
   try {
     const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_KEY) || "null");
@@ -53,7 +54,7 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   const citadelRange = buildCitadelRange(scene, R, citadelContour);
   const citadelDir = citadelSiteDir(new THREE.Vector3());
 
-  const harborColliders = placeHarborOnCitadel({ R, camp, harbor, harborBuilt });
+  const harborColliders = placeHarborOnCitadel({ R, camp, harbor, harborBuilt, islandLift });
   restoreOldHarborTreePair({ harbor, harborBuilt, citadelRange });
 
   let citadelSpec;
@@ -70,7 +71,7 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   const odysseyCitadel = buildOdysseyCitadel({
     dir: citadelDir,
     faceDir: moonLake?.centerWorld || null,
-    groundRadius: R + citadelRangeLiftDir(citadelDir),
+    groundRadius: R + citadelRangeLiftDir(citadelDir) + islandLift,
     planetRadius: R,
     seed: 20260808,
     spec: citadelSpec,
@@ -80,6 +81,19 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   });
   scene.add(odysseyCitadel);
   odysseyCitadel.updateMatrixWorld(true);
+  if (islandLift > 0) {
+    const up = citadelDir.clone().normalize();
+    for (const obj of [
+      citadelRange.snowMountains,
+      citadelRange.moat,
+      citadelRange.trojanHorse,
+      citadelRange.navonaPlaza,
+    ]) {
+      if (!obj?.position) continue;
+      obj.position.addScaledVector(up, islandLift);
+      obj.updateMatrixWorld?.(true);
+    }
+  }
 
   // The V4 snapshot compiler still describes the retired five-terrace castle.
   // Compiling it against the continuous mountain-valley design would both
@@ -140,7 +154,7 @@ function restoreOldHarborTreePair({ harbor, harborBuilt, citadelRange }) {
   return restored;
 }
 
-function placeHarborOnCitadel({ R, camp, harbor, harborBuilt }) {
+function placeHarborOnCitadel({ R, camp, harbor, harborBuilt, islandLift = 0 }) {
   const TREE_LX = -15.2;
   const TREE_LZ = 42.0;
   const POOL_LX = 1.0;
@@ -152,7 +166,7 @@ function placeHarborOnCitadel({ R, camp, harbor, harborBuilt }) {
   const harborLz = TREE_LZ + (toPoolFlatZ / flatLen) * 1.0;
   rangeLocalToWorld(harborLx, harborLz, R, harbor.position);
   const siteUp = citadelSiteDir(new THREE.Vector3());
-  harbor.position.addScaledVector(siteUp, 0.04);
+  harbor.position.addScaledVector(siteUp, 0.04 + islandLift);
   const poolC = rangeLocalToWorld(POOL_LX, POOL_LZ, R, new THREE.Vector3());
   const toPool = poolC.sub(harbor.position);
   toPool.addScaledVector(siteUp, -toPool.dot(siteUp)).normalize();

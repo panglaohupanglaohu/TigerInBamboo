@@ -65,6 +65,7 @@ export function createBoatRide({
   }
 
   function boatLabel(target) {
+    if (target?.userData?.oceanPatrol || target?.userData?.kind === "ocean-warship") return "海面战船";
     if (target?.userData?.canalPatrol) return "运河战船";
     if (target?.name === "fisher-boat") return "古战船";
     return "战船";
