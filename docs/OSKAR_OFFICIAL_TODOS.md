@@ -26,7 +26,7 @@
 - [x] 云 compiler 读 `climateFieldV10`（Grok 2026-08-26）；球面云物理字段不再用 `dot(direction, wind)` 冒充 fetch
 - [x] 植被 `vegetationCompilerV9` + InstancedMesh **已接入 opt-in RUNTIME_WIRED**，默认世界未启用（`planetTerrainV1` 仍 false）。compiler 读 `ecologyFieldV10`，不再用 `forestDensityAt` 局部湿度猜测
 - [x] **[2026-08-26]** 来源 S12 登记：`x.com/OskSta/status/1852334860137849222`——云 shader 与树共用同一 impostor；写入 `OSKAR_OFFICIAL_PLAN.md` 来源表与 2.6 缺口对照
-- [x] **[2026-08-26]** S12 云/树共用 impostor 落地（默认世界 hero 层可见）：`buildSharedImpostorAtlas`（云块+树冠块同 atlas）+ `createSharedImpostorMaterial`（aShape 选块、树冠无风漂移）+ `createCloudImpostorSystem` 自动切换；圣城山脚 7 树冠卡 + 11 云卡同 mesh 同 draw call；近景 12 株低模树保持几何。V8/V9 全局开关保持 false（O3）。`node tools/test_cloud_tree_shared_impostor.mjs`
+- [x] **[2026-08-26]** S12 云/树共用 impostor 落地（默认世界 hero 层可见）：`buildSharedImpostorAtlas`（云块+树冠块同 atlas）+ `createSharedImpostorMaterial`（aHero 编码选块——低位 authored/高位 canopy，不新增 attribute，总 attribute ≤16 保住 WebGL 下限；树冠无风漂移）+ `createCloudImpostorSystem` 自动切换；圣城山脚 7 树冠卡 + 11 云卡同 mesh 同 draw call；近景 12 株低模树保持几何。V8/V9 全局开关保持 false（O3）。`node tools/test_cloud_tree_shared_impostor.mjs`
 
 ---
 
@@ -58,7 +58,7 @@
 - [x] **[Grok 2026-08-26]** terrain shader 吃 `climateData1`（precipitation + ecologicalWetness）与 `ecologyData0`（forest/grass/reed/mud）：湖岸湿色、湿草、泥、雪岩按同一字段混合
 - [x] **[Grok 2026-08-26]** InstancedMesh 按 chart chunk + 稳定 `instanceId`；`bindVegetationChunks` / `replaceDirty` 只换脏 chunk；runtime 每帧只改 `uGrassTime`
 - [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v9_forest_grass.mjs` seed=1/7/42/884：ecology hash 对齐、species bucket、dirty 区域外 instance hash 不变、20 轮 ResourceRegistry 归零
-- [x] **[S12 云/树共用 impostor，P1]** 已落地：`buildSharedImpostorAtlas`（云块+树冠块同 atlas，`cloud+canopy-shared-octa-impostor`）+ `createSharedImpostorMaterial`（aShape 逐实例选块、canopy 无风漂移）+ `createCloudImpostorSystem` 检测 canopy 自动切共享管线；圣城山脚 7 个树冠卡片与 11 个云卡片同一 mesh 同一 draw call（默认世界可见，V8/V9 全局开关保持 opt-in）。**剩余**：全星球 V9 `vegetationRuntime` 远 LOD 接入共享 impostor（atlas 版本进 snapshot hash）。验收：`tools/test_cloud_tree_shared_impostor.mjs`
+- [x] **[S12 云/树共用 impostor，P1]** 已落地：`buildSharedImpostorAtlas`（云块+树冠块同 atlas，`cloud+canopy-shared-octa-impostor`）+ `createSharedImpostorMaterial`（aHero 编码逐实例选块——云 0/1、树冠 3，不新增 attribute，总 attribute ≤16 保住 WebGL 下限；canopy 无风漂移）+ `createCloudImpostorSystem` 检测 canopy 自动切共享管线；圣城山脚 7 个树冠卡片与 11 个云卡片同一 mesh 同一 draw call（默认世界可见，V8/V9 全局开关保持 opt-in）。**剩余**：全星球 V9 `vegetationRuntime` 远 LOD 接入共享 impostor（atlas 版本进 snapshot hash）。验收：`tools/test_cloud_tree_shared_impostor.mjs`
 - [x] **[S12 TEST]** `tools/test_cloud_tree_shared_impostor.mjs`：共享 atlas 确定性/双族像素（云白、树冠绿+树干棕）、aShape 选块与 uniform（uCloudViews/uTotalViews）、云+树冠同 mesh 单 draw call、canopy 静态路径（speed 0 / 单点 path）、近景 12 株低模树与 legacy cloud pipeline 不变
 
 ---
@@ -82,7 +82,7 @@
 - [x] **[Grok 2026-08-26]** 默认 `worldVersion=custom`、`planetPresentationVersion=legacy`；A/B/C 只有 URL/`worldVersion` 才进 V7/V8/V9。`resolveActiveWorldVersion("")===custom`
 - [x] **[Grok 2026-08-26]** 球面 impostor 开时 `messengerIsland` 跳过 legacy `createCloudRing`；圣城戴帽云仍是本地钉点，不等于 V8 大陆链
 - [x] **[Grok 2026-08-26]** 正式主页 `custom` 场景通过 `officialPagePlanetFeatures` 挂球面 impostor 云海 + 曲率海洋壳（`curvedWaterV1` 仅场景 opt-in，测地线 subdiv 5，峡谷顶点随 `canyonOffsetDir` 下潜，不关 `planet-surface`）；`canalScope=crystal-city` 只留水晶城运河；交汇古堡保留；战船走海面巡航（8 艘 `ocean-warship`）。圣城 `highlandIslandLift=6`。`FEATURES.curvedWaterV1/oceanWorldRoutesV1/legacyCanalWorld` 全局默认不变。不碰地形 DEFAULT_ON
-- [x] **[Grok 2026-08-26]** 书店镇海岛台地 `BOOKSHOP_OCEAN_ISLAND_LIFT=2.6`、苔庭 `saihojiIslandLift=2.6` 高于海面；海洋在谷缘保持海平面、向谷内平滑下灌（`officialOceanLevelAt`）；湖沼迁到水晶城峡谷水岸阶地（`crystalCanyonSwampDir`）
+- [x] **[Grok 2026-08-26]** 书店镇海岛台地 `BOOKSHOP_OCEAN_ISLAND_LIFT=3.2`、苔庭 `saihojiIslandLift=3.2` 高于海面；海洋用贴地球壳（海面 `#4cb8c4` 青）浮在地面之上，谷缘保持海平面并向谷内平滑下灌；湖沼在水晶城峡谷水岸阶地
 
 ---
 

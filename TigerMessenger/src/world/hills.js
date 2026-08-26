@@ -49,7 +49,7 @@ export const BOOKSHOP_TOWN = Object.freeze({
   r: 8.4 * WORLD_SCALE,
 });
 /** 书店镇相对海面的台地抬升：让镇子成为高出海洋的丘岛，而不是贴在水线上。 */
-export const BOOKSHOP_OCEAN_ISLAND_LIFT = 2.6;
+export const BOOKSHOP_OCEAN_ISLAND_LIFT = 3.2;
 
 function bookshopIslandLift(x, z) {
   const d = Math.hypot(x - BOOKSHOP_TOWN.x, z - BOOKSHOP_TOWN.z);

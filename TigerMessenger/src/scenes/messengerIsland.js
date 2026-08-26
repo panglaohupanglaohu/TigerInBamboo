@@ -38,8 +38,8 @@ export function officialPagePlanetFeatures(base = FEATURES) {
     features.legacyCanalWorld = false;
     features.canalScope = "crystal-city";
     features.highlandIslandLift = 6;
-    features.saihojiIslandLift = 2.6;
-    features.bookshopIslandLift = 2.6;
+    features.saihojiIslandLift = 3.2;
+    features.bookshopIslandLift = 3.2;
     if (!["v8", "v9"].includes(features.planetPresentationVersion)) {
       features.planetPresentationVersion = "v9";
     }

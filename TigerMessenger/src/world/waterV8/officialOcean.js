@@ -1,13 +1,14 @@
-// Official-page ocean: a geodesic curved shell draped over the legacy planet.
-// Does not enable planetTerrainV1. Canyon vertices follow canyonOffsetDir so
-// the crystal-city rift stays open instead of getting an ocean lid.
+// Official-page ocean: a dense curved sphere shell that sits above the legacy
+// planet. Coarse geodesic chords were sinking under the ground except in the
+// canyon; this shell matches the planet tessellation so the sea stays on top.
 import * as THREE from "three";
-import { buildGeodesicMainAndDualGrid } from "../../procgen/planet/geodesicGrid.js";
-import { buildGeodesicWaterShell } from "./curvedWaterCompiler.js";
 import { CANYON, canyonOffsetDirSmooth } from "../canyon.js";
 
-export const OFFICIAL_OCEAN_SEA_LEVEL = 0.12;
-export const OFFICIAL_OCEAN_SUBDIVISION = 5;
+export const OFFICIAL_OCEAN_SEA_LEVEL = 0.72;
+export const OFFICIAL_OCEAN_COLOR = 0x4cb8c4;
+export const OFFICIAL_OCEAN_OPACITY = 0.88;
+export const OFFICIAL_OCEAN_WIDTH_SEGMENTS = 72;
+export const OFFICIAL_OCEAN_HEIGHT_SEGMENTS = 48;
 export const OFFICIAL_HIGHLAND_ISLAND_LIFT = 6;
 
 const _dir = new THREE.Vector3();
@@ -49,15 +50,50 @@ export function drapeOceanOnLegacyPlanet(positions, radius, seaLevel = OFFICIAL_
 
 export function compileOfficialOcean({
   radius = 160,
-  seed = 42,
-  subdivision = OFFICIAL_OCEAN_SUBDIVISION,
   seaLevel = OFFICIAL_OCEAN_SEA_LEVEL,
+  widthSegments = OFFICIAL_OCEAN_WIDTH_SEGMENTS,
+  heightSegments = OFFICIAL_OCEAN_HEIGHT_SEGMENTS,
 } = {}) {
-  const grid = buildGeodesicMainAndDualGrid({ radius, subdivision, seed });
-  const ocean = buildGeodesicWaterShell({ grid, radius, level: seaLevel });
-  drapeOceanOnLegacyPlanet(ocean.positions, radius, seaLevel);
-  ocean.hash = `${ocean.hash}:legacy-drape`;
-  return { grid, ocean, seaLevel, radius: radius + seaLevel, curved: true };
+  const geo = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+  const pos = geo.attributes.position;
+  const positions = new Float32Array(pos.count * 3);
+  const waterData0 = new Float32Array(pos.count * 4);
+  const waterData1 = new Float32Array(pos.count * 4);
+  for (let vertex = 0; vertex < pos.count; vertex++) {
+    _dir.fromBufferAttribute(pos, vertex).normalize();
+    const level = officialOceanLevelAt(_dir, seaLevel);
+    const r = radius + level;
+    positions[vertex * 3] = _dir.x * r;
+    positions[vertex * 3 + 1] = _dir.y * r;
+    positions[vertex * 3 + 2] = _dir.z * r;
+    const dropped = Math.max(0, seaLevel - level);
+    const depth = Math.max(0.22, Math.min(1, 0.42 + dropped / 14));
+    const shore = Math.max(0.06, Math.min(1, 0.2 + dropped / 18));
+    const fetch = 0.42 + Math.max(0, _dir.x * 0.38);
+    waterData0.set([depth, shore, fetch, ((vertex * 37) % 101) / 100], vertex * 4);
+    waterData1.set([_dir.x, _dir.z, dropped > 0.4 ? 1 : 0, 0.86], vertex * 4);
+  }
+  const srcIndex = geo.index.array;
+  const indices = new Uint32Array(srcIndex.length);
+  indices.set(srcIndex);
+  geo.dispose();
+  return {
+    ocean: {
+      kind: "curved-ocean-shell-v8",
+      radius: radius + seaLevel,
+      positions,
+      indices,
+      waterData0,
+      waterData1,
+      semantic: "ocean",
+      curved: true,
+      topology: { source: "sphere-shell+canyon-inflow", nearShoreData: true, stableVertexIds: true },
+      hash: `ocean:fitted:${widthSegments}x${heightSegments}:${(radius + seaLevel).toFixed(2)}`,
+    },
+    seaLevel,
+    radius: radius + seaLevel,
+    curved: true,
+  };
 }
 
 /** Closed spherical patrol curve: lerp+normalize between landmark dirs so chords stay on the shell. */

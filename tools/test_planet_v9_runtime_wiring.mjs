@@ -29,7 +29,7 @@ assert.match(island, /oceanWorldRoutesV1 = true/);
 assert.match(island, /legacyCanalWorld = false/);
 assert.match(island, /canalScope = "crystal-city"/);
 assert.match(island, /highlandIslandLift = 6/);
-assert.match(island, /saihojiIslandLift = 2.6/);
+assert.match(island, /saihojiIslandLift = 3.2/);
 assert.match(island, /baseLift: planetFeatures.saihojiIslandLift/);
 assert.match(island, /legacyCanalWorld: planetFeatures.legacyCanalWorld/);
 assert.match(island, /canalScope: planetFeatures.canalScope/);
@@ -45,6 +45,7 @@ assert.match(
 assert.match(runtime, /enabledWater && enabledTerrain && planet/);
 assert.match(runtime, /compileOfficialOcean/);
 assert.match(runtime, /paintPlanetOceanBed/);
+assert.match(runtime, /OFFICIAL_OCEAN_COLOR/);
 assert.match(traffic, /canalPush\(cityCanalWaypoint, "水晶城"\)/);
 assert.match(traffic, /canalPush\(canyonDir \|\| latLonToDir\(CANYON\.lat, CANYON\.lon, new THREE\.Vector3\(\)\), "水晶城峡谷"\)/);
 assert.doesNotMatch(
@@ -72,7 +73,7 @@ assert.equal(cloudsOnly.charts.length, 0);
 assert.ok(cloudsOnly.clouds.instanceCount > 0, "official-page cloud path must bake impostors without terrain charts");
 assert.equal(cloudsOnly.snapshot.clouds.climateSource, "climate-v10");
 
-const officialOcean = compileOfficialOcean({ radius: 160, seed: 42, subdivision: 3, seaLevel: 0.12 });
+const officialOcean = compileOfficialOcean({ radius: 160, seaLevel: 0.12, widthSegments: 32, heightSegments: 24 });
 assert.equal(officialOcean.ocean.curved, true);
 const seaRadii = [];
 let canyonNearestR = Infinity;
@@ -101,7 +102,18 @@ for (let i = 0; i < officialOcean.ocean.positions.length; i += 3) {
   if (ang > 0.9) seaRadii.push(r);
 }
 assert.ok(seaRadii.length > 0 && Math.max(...seaRadii) - Math.min(...seaRadii) < 0.4, "open ocean must stay on the curved shell");
+assert.ok(Math.min(...seaRadii) > 160.05, "open ocean must sit above the planet ground, not chord under it");
 assert.ok(canyonNearestR < 160 - 4, `canyon ocean must drape into the rift (r=${canyonNearestR.toFixed(2)} ang=${canyonNearestAng.toFixed(3)})`);
+const fitted = compileOfficialOcean({ radius: 160 });
+const fittedSea = [];
+for (let i = 0; i < fitted.ocean.positions.length; i += 3) {
+  const x = fitted.ocean.positions[i];
+  const y = fitted.ocean.positions[i + 1];
+  const z = fitted.ocean.positions[i + 2];
+  const dir = new THREE.Vector3(x, y, z).normalize();
+  if (dir.angleTo(canyonDir) > 0.9) fittedSea.push(Math.hypot(x, y, z));
+}
+assert.ok(fittedSea.length > 0 && Math.min(...fittedSea) > 160.5, "production ocean shell must rest above the ground everywhere except the canyon");
 const sample = new Float32Array([160, 0, 0, 0, 160, 0, 0, 0, 160]);
 drapeOceanOnLegacyPlanet(sample, 160, 0.12);
 assert.ok(Math.abs(Math.hypot(sample[0], sample[1], sample[2]) - 160.12) < 1e-3);

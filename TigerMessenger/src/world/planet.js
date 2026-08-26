@@ -69,10 +69,10 @@ export function paintPlanetOceanBed(planetMesh) {
   const geo = planetMesh.geometry;
   const pos = geo.attributes.position;
   const colors = new Float32Array(pos.count * 3);
-  const deep = new THREE.Color(0x143d52);
-  const mid = new THREE.Color(0x1f5c72);
-  const shelf = new THREE.Color(0x2f7a86);
-  const canyonShade = new THREE.Color(0x5d7f8c);
+  const deep = new THREE.Color(0x1a5e63);
+  const mid = new THREE.Color(0x2a8388);
+  const shelf = new THREE.Color(0x3d9aa0);
+  const canyonShade = new THREE.Color(0x6aa3a8);
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i);
     const y = pos.getY(i);

@@ -16,7 +16,12 @@ import {
 import { compilePlanetV8 } from "../../procgen/planet/planetCompilerV8.js";
 import { createBufferGeometryFromMesh } from "../../procgen/three/bufferGeometryAdapter.js";
 import { compileCurvedWater } from "../waterV8/curvedWaterCompiler.js";
-import { compileOfficialOcean } from "../waterV8/officialOcean.js";
+import {
+  compileOfficialOcean,
+  OFFICIAL_OCEAN_SEA_LEVEL,
+  OFFICIAL_OCEAN_COLOR,
+  OFFICIAL_OCEAN_OPACITY,
+} from "../waterV8/officialOcean.js";
 import { buildCloudImpostorAtlas } from "../../render/clouds/impostorAtlasBuilder.js";
 import { createCloudImpostorSystem } from "../../render/clouds/cloudImpostorSystem.js";
 import { createSemanticTerrainMaterial } from "../../render/terrain/semanticTerrainMaterial.js";
@@ -175,16 +180,15 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
   } else if (enabledWater && !enabledTerrain) {
     const official = compileOfficialOcean({
       radius,
-      seed: features.terrainSeed ?? seed,
-      subdivision: features.oceanSubdivision ?? 5,
-      seaLevel: features.oceanSeaLevel ?? 0.12,
+      seaLevel: features.oceanSeaLevel ?? OFFICIAL_OCEAN_SEA_LEVEL,
     });
     state.water = { ocean: official.ocean, lakes: [], radius: official.radius, official: true };
     const ocean = waterMesh(official.ocean, createCurvedWaterMaterial(THREE, {
-      color: 0x1a5570,
-      opacity: 0.94,
+      color: OFFICIAL_OCEAN_COLOR,
+      opacity: OFFICIAL_OCEAN_OPACITY,
       kind: "ocean",
       depthWrite: true,
+      polygonOffset: true,
     }));
     ocean.name = "planet-v8-curved-ocean";
     ocean.userData.officialOcean = true;
