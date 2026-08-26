@@ -25,6 +25,7 @@
 - [x] V10 schema/水文/气候/生态 **DATA_TESTED**（DeepSeek 2026-08-24）
 - [x] 云 compiler 读 `climateFieldV10`（Grok 2026-08-26）；球面云物理字段不再用 `dot(direction, wind)` 冒充 fetch
 - [x] 植被 `vegetationCompilerV9` + InstancedMesh **已接入 opt-in RUNTIME_WIRED**，默认世界未启用（`planetTerrainV1` 仍 false）。compiler 读 `ecologyFieldV10`，不再用 `forestDensityAt` 局部湿度猜测
+- [x] **[2026-08-26]** 来源 S12 登记：`x.com/OskSta/status/1852334860137849222`——云 shader 与树共用同一 impostor；写入 `OSKAR_OFFICIAL_PLAN.md` 来源表与 2.6 缺口对照
 
 ---
 
@@ -39,7 +40,7 @@
   - `grass-surface` / `mountain-rolling-clouds` / `ocean-surface` / `lake-surface` / `terrain-editor` = RUNTIME_WIRED
   - `terrain-chain` / `highland-global-maximum` = DATA_TESTED（highland 4 golden 场高 9.4，strictHighest）
   - 未 DEFAULT_ON
-- [ ] 任何新云/海/草 PR 的描述必须引用 PLAN 本文件的 S 编号，禁止「更像 Oskar」
+- [ ] 任何新云/海/草 PR 的描述必须引用 PLAN 本文件的 S 编号（S1–S12），禁止「更像 Oskar」
 
 ---
 
@@ -56,6 +57,8 @@
 - [x] **[Grok 2026-08-26]** terrain shader 吃 `climateData1`（precipitation + ecologicalWetness）与 `ecologyData0`（forest/grass/reed/mud）：湖岸湿色、湿草、泥、雪岩按同一字段混合
 - [x] **[Grok 2026-08-26]** InstancedMesh 按 chart chunk + 稳定 `instanceId`；`bindVegetationChunks` / `replaceDirty` 只换脏 chunk；runtime 每帧只改 `uGrassTime`
 - [x] **[Grok 2026-08-26 TEST]** `node tools/test_planet_v9_forest_grass.mjs` seed=1/7/42/884：ecology hash 对齐、species bucket、dirty 区域外 instance hash 不变、20 轮 ResourceRegistry 归零
+- [ ] **[S12 云/树共用 impostor，P1]** 核查并统一：云 `impostorAtlasBuilder`（8–16 视角 atlas + PlaneGeometry shader）与树 `vegetationRuntime`（InstancedMesh 几何 canopy）目前两套独立；V9 schema 的 `octa-impostor` 远 LOD 未实现。目标：树 canopy 远 LOD 与云共用同一 octa impostor atlas/shader 家族，atlas 版本进入 snapshot hash；近景保持 InstancedMesh 几何。验收：`node tools/test_planet_v9_forest_grass.mjs` + 新增 atlas 共享断言（同源 hash、shader 家族、实例预算）
+- [ ] **[S12 TEST]** 新增 `tools/test_cloud_tree_shared_impostor.mjs`：云/树 atlas 同源（同 builder/同 hash 前缀）、远 LOD 走 billboard 不生成几何、CPU 每帧无语义重编、近景 InstancedMesh 不变
 
 ---
 
@@ -77,6 +80,7 @@
 - [x] **[Grok 2026-08-26]** `node tools/test_grok_completion_contract.mjs` 继续锁默认 false 与 rollback
 - [x] **[Grok 2026-08-26]** 默认 `worldVersion=custom`、`planetPresentationVersion=legacy`；A/B/C 只有 URL/`worldVersion` 才进 V7/V8/V9。`resolveActiveWorldVersion("")===custom`
 - [x] **[Grok 2026-08-26]** 球面 impostor 开时 `messengerIsland` 跳过 legacy `createCloudRing`；圣城戴帽云仍是本地钉点，不等于 V8 大陆链
+- [x] **[Grok 2026-08-26]** 正式主页 `custom` 场景通过 `officialPagePlanetFeatures` 挂球面 impostor 云海；`FEATURES.cloudImpostorV1` 默认仍 false，A/B/C 显式版本不改。不碰地形/水面 DEFAULT_ON
 
 ---
 
@@ -125,3 +129,5 @@
 ## 建议下一刀
 
 O1–O4 已接线。下一刀 **O5 硬路线 golden 与聚合测试**；不得把 `264b9dbd` 改回 `17acc1eb`。仍不碰 DEFAULT_ON。
+
+新来源 **S12**（2024-11-01 蓬松云 shader 与树共用 impostor）已登记：O1 末尾新增「云/树共用 impostor 管线」P1 任务与测试项（当前云 atlas 与树 InstancedMesh 两套独立，树侧 `octa-impostor` 仅 schema 声明未实现）。

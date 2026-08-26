@@ -27,6 +27,19 @@ import { createSwampBgmState } from "./messenger/swampBgm.js";
 import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
 import { FEATURES } from "../core/params.js";
 
+/** 正式主页（custom/legacy）挂球面 impostor 云海，不改全局 DEFAULT_ON。 */
+export function officialPagePlanetFeatures(base = FEATURES) {
+  const features = { ...base };
+  const explicit = features.worldVersion === "v7" || features.worldVersion === "v8" || features.worldVersion === "v9";
+  if (!explicit) {
+    features.cloudImpostorV1 = true;
+    if (!["v8", "v9"].includes(features.planetPresentationVersion)) {
+      features.planetPresentationVersion = "v9";
+    }
+  }
+  return features;
+}
+
 // 苔庭周边地被与西芳寺六景共用一套灰青苔色阶；普通主岛苔丘仍保留
 // mossyGround 的鲜黄绿默认色，只有苔庭战区切换到这套更克制的色板。
 const SAIHOJI_MOSS_PALETTE = Object.freeze({
@@ -50,7 +63,7 @@ export const messengerIslandScene = {
 
     const platforms = buildWorld(scene);
     const hills = buildHills(scene, R);
-    const planetFeatures = { ...FEATURES, ...(ctx.options?.planetV8?.features || {}) };
+    const planetFeatures = officialPagePlanetFeatures({ ...FEATURES, ...(ctx.options?.planetV8?.features || {}) });
     const planetLayers = planetRendererOwnership(planetFeatures);
     const clouds = planetLayers.clouds ? [] : createCloudRing(scene, R);
     const playZone = decoratePlayZone(scene, R);

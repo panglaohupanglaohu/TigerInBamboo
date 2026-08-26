@@ -102,8 +102,8 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
       radius,
       landformChain: isV9,
       subdivision: features.planetSubdivision ?? lod.subdivision,
-      chartLimit: features.planetChartLimit ?? lod.chartLimit,
-      resolution: features.planetResolution ?? lod.resolution,
+      chartLimit: enabledTerrain ? (features.planetChartLimit ?? lod.chartLimit) : (features.planetChartLimit ?? 0),
+      resolution: enabledTerrain ? (features.planetResolution ?? lod.resolution) : (features.planetResolution ?? 3),
     });
     state.compiler = compiled;
     if (!compiled.ok) {
