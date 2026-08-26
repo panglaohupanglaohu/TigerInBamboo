@@ -4,6 +4,7 @@ import { compilePlanetV8 } from "../TigerMessenger/src/procgen/planet/planetComp
 
 const runtime = readFileSync(new URL("../TigerMessenger/src/world/planetV8/runtime.js", import.meta.url), "utf8");
 const island = readFileSync(new URL("../TigerMessenger/src/scenes/messengerIsland.js", import.meta.url), "utf8");
+const traffic = readFileSync(new URL("../TigerMessenger/src/scenes/messenger/loadTraffic.js", import.meta.url), "utf8");
 const params = readFileSync(new URL("../TigerMessenger/src/core/params.js", import.meta.url), "utf8");
 assert.match(runtime, /createVegetationRuntime/);
 assert.match(runtime, /createCurvedWaterMaterial/);
@@ -18,8 +19,20 @@ assert.match(runtime, /disposePlanetV8Runtime/);
 assert.match(island, /officialPagePlanetFeatures/);
 assert.match(island, /cloudImpostorV1 = true/);
 assert.match(island, /legacyCanalWorld = false/);
+assert.match(island, /canalScope = "crystal-city"/);
 assert.match(island, /legacyCanalWorld: planetFeatures.legacyCanalWorld/);
+assert.match(island, /canalScope: planetFeatures.canalScope/);
 assert.match(island, /features: planetFeatures/);
+assert.match(traffic, /useCrystalCanal = scope === "crystal-city"/);
+assert.match(traffic, /if \(useWorldCanal\) \{/);
+assert.match(traffic, /count: useCrystalCanal \? 4 : 10/);
+assert.match(traffic, /canalPush\(cityCanalWaypoint, "水晶城"\)/);
+assert.match(traffic, /canalPush\(canyonDir \|\| latLonToDir\(CANYON\.lat, CANYON\.lon, new THREE\.Vector3\(\)\), "水晶城峡谷"\)/);
+assert.doesNotMatch(
+  traffic.slice(traffic.indexOf("if (useCrystalCanal)"), traffic.indexOf("else if (useWorldCanal || useOceanRoutes)")),
+  /书店镇|出发营地|月亮湖|高山圣城|运河交汇古堡/,
+  "crystal-city canal must not reattach world landmarks",
+);
 assert.match(runtime, /enabledTerrain \? \(features.planetChartLimit/);
 assert.match(runtime, /const isV9 = presentationVersion === "v9"/);
 assert.match(runtime, /landformChain:\s*isV9/);

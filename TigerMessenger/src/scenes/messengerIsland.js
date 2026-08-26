@@ -27,13 +27,14 @@ import { createSwampBgmState } from "./messenger/swampBgm.js";
 import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
 import { FEATURES } from "../core/params.js";
 
-/** 正式主页（custom/legacy）挂球面 impostor 云海，不改全局 DEFAULT_ON。 */
+/** 正式主页（custom/legacy）挂球面 impostor 云海，只留水晶城运河，不改全局 DEFAULT_ON。 */
 export function officialPagePlanetFeatures(base = FEATURES) {
   const features = { ...base };
   const explicit = features.worldVersion === "v7" || features.worldVersion === "v8" || features.worldVersion === "v9";
   if (!explicit) {
     features.cloudImpostorV1 = true;
     features.legacyCanalWorld = false;
+    features.canalScope = "crystal-city";
     if (!["v8", "v9"].includes(features.planetPresentationVersion)) {
       features.planetPresentationVersion = "v9";
     }
@@ -134,6 +135,7 @@ export const messengerIslandScene = {
       harbor,
       harborBuilt,
       legacyCanalWorld: planetFeatures.legacyCanalWorld,
+      canalScope: planetFeatures.canalScope || (planetFeatures.legacyCanalWorld ? "world" : "none"),
       canalBoatsOut: {
         onBoatChange(b) {
           if (messengerLandmarks) messengerLandmarks.boat = b;

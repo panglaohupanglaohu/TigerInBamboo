@@ -80,7 +80,7 @@
 - [x] **[Grok 2026-08-26]** `node tools/test_grok_completion_contract.mjs` 继续锁默认 false 与 rollback
 - [x] **[Grok 2026-08-26]** 默认 `worldVersion=custom`、`planetPresentationVersion=legacy`；A/B/C 只有 URL/`worldVersion` 才进 V7/V8/V9。`resolveActiveWorldVersion("")===custom`
 - [x] **[Grok 2026-08-26]** 球面 impostor 开时 `messengerIsland` 跳过 legacy `createCloudRing`；圣城戴帽云仍是本地钉点，不等于 V8 大陆链
-- [x] **[Grok 2026-08-26]** 正式主页 `custom` 场景通过 `officialPagePlanetFeatures` 挂球面 impostor 云海，并关掉世界运河/巡游战船；`FEATURES.legacyCanalWorld` 默认仍 true（A·V7 可回滚）。不碰地形/水面 DEFAULT_ON
+- [x] **[Grok 2026-08-26]** 正式主页 `custom` 场景通过 `officialPagePlanetFeatures` 挂球面 impostor 云海；`canalScope=crystal-city` 只留水晶城区域运河（4 艘巡游船 + 海湖船闸），书店/营地/月亮湖/圣城/交汇堡不再接世界运河。`FEATURES.legacyCanalWorld` 默认仍 true（A·V7 可回滚）。不碰地形/水面 DEFAULT_ON
 
 ---
 
