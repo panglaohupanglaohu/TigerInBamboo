@@ -140,6 +140,7 @@ function createTerrainNoise(rnd, size) {
  *   palette?: { low?: number, ink?: number, emerald?: number, fresh?: number, edge?: number },
  *   footprint?: { rx?: number, rz?: number, segments?: number },
  *   heightScale?: number,          // 专用地貌的起伏倍率
+ *   baseLift?: number,             // 整块苔丘相对球面的径向抬升（让苔庭高于海面）
  *   avoidWorld?: { position: THREE.Vector3, radius: number }[],
  * }} [opts]  avoidWorld：世界坐标避障体（轨道采样点/桥墩/书店），
  *            苔藓块与其保持 MIN_DISTANCE 安全阻尼距离
@@ -156,6 +157,7 @@ export function buildImpastoMossyGround(opts = {}) {
     palette = null,
     footprint = null,
     heightScale = 1,
+    baseLift = 0,
     avoidWorld = [],
   } = opts;
 
@@ -168,7 +170,9 @@ export function buildImpastoMossyGround(opts = {}) {
   const center = dir.clone().normalize();
   group.quaternion.copy(quatYToDir(center, new THREE.Quaternion()));
   group.rotateY(yaw);
-  group.position.copy(center).multiplyScalar(R);
+  const islandLift = Number.isFinite(baseLift) ? Math.max(0, baseLift) : 0;
+  group.position.copy(center).multiplyScalar(R + islandLift);
+  group.userData.baseLift = islandLift;
   group.updateWorldMatrix(true, false);
 
   // 世界避障体 → 补丁局部坐标（flatten 标记：需要压平地形走廊的避障体，如轨道/书店）

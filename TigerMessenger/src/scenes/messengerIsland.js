@@ -38,6 +38,8 @@ export function officialPagePlanetFeatures(base = FEATURES) {
     features.legacyCanalWorld = false;
     features.canalScope = "crystal-city";
     features.highlandIslandLift = 6;
+    features.saihojiIslandLift = 2.6;
+    features.bookshopIslandLift = 2.6;
     if (!["v8", "v9"].includes(features.planetPresentationVersion)) {
       features.planetPresentationVersion = "v9";
     }
@@ -187,7 +189,8 @@ export const messengerIslandScene = {
       seed: 9101,
       yaw: 0.6,
       footprint: { rx: 9.2, rz: 5.8, segments: 28 },
-      heightScale: 0.42,
+      heightScale: 0.55,
+      baseLift: planetFeatures.saihojiIslandLift || 0,
       palette: SAIHOJI_MOSS_PALETTE,
       avoidWorld: [...mossAvoidCommon, ...zoneAvoid],
     });

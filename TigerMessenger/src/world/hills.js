@@ -31,7 +31,7 @@ const HILL_DEFS_BASE = [
   // —— 东南微丘（和缓草丘，远观层次；避开出生点与湖岸）
   { x: 5.8, z: 6.8, r: 2.4, peak: 0.45 },
   // —— 书店山坡（Hard To Find Bookshop，主岛东侧可见）
-  { x: 11.5, z: 5.5, r: 4.5, peak: 1.4 },
+  { x: 11.5, z: 5.5, r: 5.6, peak: 2.2 },
 ];
 
 const HILL_DEFS = HILL_DEFS_BASE.map((def) => ({
@@ -43,6 +43,21 @@ const HILL_DEFS = HILL_DEFS_BASE.map((def) => ({
 
 export const ISLAND_FLAT_R = 18 * WORLD_SCALE; // 主岛平面足迹
 export const ISLAND_BASE_LIFT = 0.6; // 岛面厚度（原平台顶高）
+export const BOOKSHOP_TOWN = Object.freeze({
+  x: 11.5 * WORLD_SCALE,
+  z: 5.5 * WORLD_SCALE,
+  r: 8.4 * WORLD_SCALE,
+});
+/** 书店镇相对海面的台地抬升：让镇子成为高出海洋的丘岛，而不是贴在水线上。 */
+export const BOOKSHOP_OCEAN_ISLAND_LIFT = 2.6;
+
+function bookshopIslandLift(x, z) {
+  const d = Math.hypot(x - BOOKSHOP_TOWN.x, z - BOOKSHOP_TOWN.z);
+  if (d >= BOOKSHOP_TOWN.r) return 0;
+  const t = 1 - d / BOOKSHOP_TOWN.r;
+  const s = t * t * (3 - 2 * t);
+  return BOOKSHOP_OCEAN_ISLAND_LIFT * s;
+}
 
 // 起始庭园的池水不是贴在岛面上的透明平板，而是球面岛上的一个浅盆。
 // 这些参数同时供地形、平台壳体、碰撞和水面使用，避免四套坐标各算各的。
@@ -83,10 +98,11 @@ export function hillHeightAt(x, z) {
   return h;
 }
 
-/** 地面真实抬升：岛内 = 岛面 + 丘高 + 池盆下挖；岛外 = 0（星球裸面） */
+/** 地面真实抬升：岛内 = 岛面 + 丘高 + 池盆下挖 + 书店镇海岛台地；岛外 = 0 */
 export function groundLiftAt(x, z) {
-  if (Math.hypot(x, z) > ISLAND_FLAT_R) return 0;
-  return ISLAND_BASE_LIFT + hillHeightAt(x, z) + pondDepressionAt(x, z);
+  const town = bookshopIslandLift(x, z);
+  if (Math.hypot(x, z) > ISLAND_FLAT_R) return town;
+  return ISLAND_BASE_LIFT + hillHeightAt(x, z) + pondDepressionAt(x, z) + town;
 }
 
 /**

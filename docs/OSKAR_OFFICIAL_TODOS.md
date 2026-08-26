@@ -82,6 +82,7 @@
 - [x] **[Grok 2026-08-26]** 默认 `worldVersion=custom`、`planetPresentationVersion=legacy`；A/B/C 只有 URL/`worldVersion` 才进 V7/V8/V9。`resolveActiveWorldVersion("")===custom`
 - [x] **[Grok 2026-08-26]** 球面 impostor 开时 `messengerIsland` 跳过 legacy `createCloudRing`；圣城戴帽云仍是本地钉点，不等于 V8 大陆链
 - [x] **[Grok 2026-08-26]** 正式主页 `custom` 场景通过 `officialPagePlanetFeatures` 挂球面 impostor 云海 + 曲率海洋壳（`curvedWaterV1` 仅场景 opt-in，测地线 subdiv 5，峡谷顶点随 `canyonOffsetDir` 下潜，不关 `planet-surface`）；`canalScope=crystal-city` 只留水晶城运河；交汇古堡保留；战船走海面巡航（8 艘 `ocean-warship`）。圣城 `highlandIslandLift=6`。`FEATURES.curvedWaterV1/oceanWorldRoutesV1/legacyCanalWorld` 全局默认不变。不碰地形 DEFAULT_ON
+- [x] **[Grok 2026-08-26]** 书店镇海岛台地 `BOOKSHOP_OCEAN_ISLAND_LIFT=2.6`、苔庭 `saihojiIslandLift=2.6` 高于海面；海洋在谷缘保持海平面、向谷内平滑下灌（`officialOceanLevelAt`）；湖沼迁到水晶城峡谷水岸阶地（`crystalCanyonSwampDir`）
 
 ---
 

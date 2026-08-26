@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { compilePlanetV8 } from "../TigerMessenger/src/procgen/planet/planetCompilerV8.js";
-import { compileOfficialOcean, drapeOceanOnLegacyPlanet } from "../TigerMessenger/src/world/waterV8/officialOcean.js";
-import { CANYON } from "../TigerMessenger/src/world/canyon.js";
+import { compileOfficialOcean, drapeOceanOnLegacyPlanet, officialOceanLevelAt } from "../TigerMessenger/src/world/waterV8/officialOcean.js";
+import { CANYON, canyonOffsetDir } from "../TigerMessenger/src/world/canyon.js";
 import { latLonToDir } from "../TigerMessenger/src/world/sphereMath.js";
+import { BOOKSHOP_TOWN, BOOKSHOP_OCEAN_ISLAND_LIFT, ISLAND_BASE_LIFT, groundLiftAt } from "../TigerMessenger/src/world/hills.js";
+import { crystalCanyonSwampDir } from "../TigerMessenger/src/world/citySeaLake.js";
 import * as THREE from "../TigerMessenger/vendor/three.module.js";
 
 const runtime = readFileSync(new URL("../TigerMessenger/src/world/planetV8/runtime.js", import.meta.url), "utf8");
@@ -27,6 +29,8 @@ assert.match(island, /oceanWorldRoutesV1 = true/);
 assert.match(island, /legacyCanalWorld = false/);
 assert.match(island, /canalScope = "crystal-city"/);
 assert.match(island, /highlandIslandLift = 6/);
+assert.match(island, /saihojiIslandLift = 2.6/);
+assert.match(island, /baseLift: planetFeatures.saihojiIslandLift/);
 assert.match(island, /legacyCanalWorld: planetFeatures.legacyCanalWorld/);
 assert.match(island, /canalScope: planetFeatures.canalScope/);
 assert.match(island, /oceanWorldRoutes: planetFeatures.oceanWorldRoutesV1/);
@@ -34,6 +38,10 @@ assert.match(island, /features: planetFeatures/);
 assert.match(traffic, /useCrystalCanal = scope === "crystal-city"/);
 assert.match(traffic, /kind: "ocean-warship"/);
 assert.match(traffic, /buildOceanPatrolCurve/);
+assert.match(
+  readFileSync(new URL("../TigerMessenger/src/scenes/messenger/loadMoebius.js", import.meta.url), "utf8"),
+  /crystalCanyonSwampDir/,
+);
 assert.match(runtime, /enabledWater && enabledTerrain && planet/);
 assert.match(runtime, /compileOfficialOcean/);
 assert.match(runtime, /paintPlanetOceanBed/);
@@ -70,6 +78,15 @@ const seaRadii = [];
 let canyonNearestR = Infinity;
 let canyonNearestAng = Infinity;
 const canyonDir = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
+const east = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), canyonDir).normalize();
+const rimDir = canyonDir.clone().multiplyScalar(Math.cos(CANYON.rim * 0.98)).addScaledVector(east, Math.sin(CANYON.rim * 0.98)).normalize();
+const midDir = canyonDir.clone().multiplyScalar(Math.cos(CANYON.rim * 0.70)).addScaledVector(east, Math.sin(CANYON.rim * 0.70)).normalize();
+const rimLevel = officialOceanLevelAt(rimDir, 0.12);
+const midLevel = officialOceanLevelAt(midDir, 0.12);
+const floorLevel = officialOceanLevelAt(canyonDir, 0.12);
+assert.ok(Math.abs(rimLevel - 0.12) < 0.35, `canyon rim must keep ocean at sea level (level=${rimLevel.toFixed(2)})`);
+assert.ok(floorLevel < -8, `canyon floor ocean must drop well below sea level (level=${floorLevel.toFixed(2)})`);
+assert.ok(midLevel < rimLevel - 1 && midLevel > floorLevel + 1, "ocean must slope from rim into the canyon instead of dropping as a lid");
 for (let i = 0; i < officialOcean.ocean.positions.length; i += 3) {
   const x = officialOcean.ocean.positions[i];
   const y = officialOcean.ocean.positions[i + 1];
@@ -88,5 +105,12 @@ assert.ok(canyonNearestR < 160 - 4, `canyon ocean must drape into the rift (r=${
 const sample = new Float32Array([160, 0, 0, 0, 160, 0, 0, 0, 160]);
 drapeOceanOnLegacyPlanet(sample, 160, 0.12);
 assert.ok(Math.abs(Math.hypot(sample[0], sample[1], sample[2]) - 160.12) < 1e-3);
+
+const bookshopLift = groundLiftAt(BOOKSHOP_TOWN.x, BOOKSHOP_TOWN.z);
+assert.ok(bookshopLift > ISLAND_BASE_LIFT + BOOKSHOP_OCEAN_ISLAND_LIFT, "bookshop town must sit on a plateau above sea level");
+assert.match(readFileSync(new URL("../TigerMessenger/src/world/mossyGround.js", import.meta.url), "utf8"), /baseLift/);
+const swampDir = crystalCanyonSwampDir(new THREE.Vector3());
+assert.ok(canyonOffsetDir(swampDir) < -8, "marsh must sit on a canyon terrace, not outside the rift");
+assert.ok(swampDir.angleTo(canyonDir) < CANYON.rim, "marsh direction must remain inside the canyon rim");
 
 console.log("✅ Planet V9 runtime wiring: terrain, vegetation, ocean, lake, cloud and bounded surface events have mount/update/dispose contracts");

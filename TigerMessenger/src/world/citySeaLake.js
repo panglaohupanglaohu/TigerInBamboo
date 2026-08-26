@@ -57,6 +57,24 @@ export function waterCityShoreAng(drop = WATER_CITY_WATER_DROP) {
  * 原锚点在花厅塔上（高架穿塔 + 落差梯道撞塔岛）；此航点避开三座花厅塔
  * （最近塔距 ≥0.2 rad）与母塔岛丘，梯道/升船机落在开阔水面上方。
  */
+/**
+ * 湖沼迁入水晶城峡谷的锚点方向：水城湖岸外侧、峡谷东侧阶地。
+ * 角距略大于水城岸线，保证在谷内、又不压母塔岛。
+ */
+export function crystalCanyonSwampDir(out = new THREE.Vector3()) {
+  const c = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
+  const e = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), c).normalize();
+  const n = new THREE.Vector3().crossVectors(c, e).normalize();
+  const az = THREE.MathUtils.degToRad(72);
+  const d = waterCityShoreAng(WATER_CITY_WATER_DROP) + 0.06;
+  return out
+    .copy(c)
+    .multiplyScalar(Math.cos(d))
+    .addScaledVector(e, Math.cos(az) * Math.sin(d))
+    .addScaledVector(n, Math.sin(az) * Math.sin(d))
+    .normalize();
+}
+
 export function waterCityCanalWaypointDir(out = new THREE.Vector3()) {
   const c = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
   const e = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), c).normalize();

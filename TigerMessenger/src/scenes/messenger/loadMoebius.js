@@ -12,6 +12,7 @@ import {
   CITY_SEA_LAKE,
   WATER_CITY_WATER_DROP,
   WATER_CITY_ANG_R,
+  crystalCanyonSwampDir,
 } from "../../world/citySeaLake.js";
 import { createCatalogObject } from "../../core/buildingCatalog.js";
 import { placeMoebiusSwampOnSphere } from "../../world/moebiusSwamp.js";
@@ -81,19 +82,9 @@ export function placeMoebiusSwampAndSky({ scene, R, moebius, grandDir, bubblePod
     const swampScale = 0.5;
     const swamp = createCatalogObject("moebiusSwamp", { seed: 7711, scale: swampScale });
     swamp.userData.mapUid = "world-swamp-crystal";
-    const cityDir = grandDir.clone().normalize();
-    const canyonCenter = latLonToDir(CANYON.lat, CANYON.lon, new THREE.Vector3());
-    const outward = cityDir.clone().sub(canyonCenter);
-    outward.addScaledVector(cityDir, -outward.dot(cityDir));
-    if (outward.lengthSq() < 1e-8) {
-      outward.crossVectors(cityDir, new THREE.Vector3(0, 0, 1));
-      if (outward.lengthSq() < 1e-8) outward.set(1, 0, 0).addScaledVector(cityDir, -cityDir.x);
-    }
-    outward.normalize();
-    const side = new THREE.Vector3().crossVectors(cityDir, outward).normalize();
-    const target = cityDir.clone().multiplyScalar(R).addScaledVector(outward, 28).addScaledVector(side, 16);
-    const swampDir = target.normalize();
+    const swampDir = crystalCanyonSwampDir();
     const lift = canyonOffsetDir(swampDir);
+    swamp.userData.canyonSwamp = true;
     placeMoebiusSwampOnSphere(swamp, swampDir, R, swampScale, lift);
     scene.add(swamp);
     moebiusSwamp = swamp;
