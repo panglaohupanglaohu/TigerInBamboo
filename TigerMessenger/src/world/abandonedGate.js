@@ -7,7 +7,7 @@
 //    · 中央一线天通道宽 10，电车高架从三重门正中穿行
 //    · 每塔 4 级长方体阶梯内缩（下粗上细）+ 平顶祭坛台
 //    · 墙面科技加固刻线薄片 + 基座风化乱石
-//    · 陶土赤红 MeshToon + flatShading + addOutline(0.05)
+//    · 晚霞残垣色 MeshToon + flatShading + addOutline(0.05)
 //
 //  局部坐标（seatRoot）：+X = 轨右，+Y = 径向/天空，+Z = 轨道前进
 // =====================================================================
@@ -18,23 +18,23 @@ import { PLANET_RADIUS } from "./planet.js";
 import { canyonOffsetDir } from "./canyon.js";
 import { groundLiftAt, worldToFlatXZ } from "./hills.js";
 
-/* ---------------- 陶土赤红（旧默认，现由 Towerscaper 糖果色替代） ---------------- */
-const TERRACOTTA = 0xb85a42; // 主体：高饱和陶土赤红
-const TERRACOTTA_DEEP = 0xa64b35; // 暗部 / 刻线
-const TERRACOTTA_WARM = 0xc46a4e; // 拱环略暖
-const RUBBLE_GREY = 0x9a918a; // 基座剥落乱石（改为浅暖灰褐）
-
-/* ---------------- Towerscaper 糖果色板（低饱和·高明度·水彩感） ---------------- */
-const TS_WALLS = [
-  { name: "樱桃红", main: 0xe85d5d, roof: 0xf2975d },
-  { name: "天蓝", main: 0x62b6e6, roof: 0xf2d85a },
-  { name: "薄荷绿", main: 0x6dd5a0, roof: 0xf2975d },
-  { name: "柠檬黄", main: 0xf2d85a, roof: 0xe87e52 },
-  { name: "浅粉", main: 0xe8a0c0, roof: 0xf2975d },
-  { name: "奶油白", main: 0xf5f0e6, roof: 0xe87e52 },
+/* ---------------- 叹息之门·晚霞残垣色板 ----------------
+ * 不复用运河交汇古堡的糖果色建筑板。叹息之门是峡谷入口的残垣断壁：
+ * 墙体以晚霞染暖的灰褐、砖红为主，刻线和门洞压到焦褐色，避免白墙/薄荷绿
+ * 在晚霞下抢掉场景叙事。左右塔保留轻微色差，但只在同一组废墟色内变化。
+ */
+const TERRACOTTA = 0x875044; // 主体：风化砖红褐
+const TERRACOTTA_DEEP = 0x4b302f; // 暗部 / 刻线：焦褐墨色
+const TERRACOTTA_WARM = 0xa6664e; // 拱环与残砖：晚霞暖红
+const RUBBLE_GREY = 0x6f5d59; // 基座剥落乱石：暖灰褐
+const RUIN_STONE = 0x746367; // 拱门和矮墩：烟灰石
+const RUIN_WALLS = [
+  { name: "风化砖红", main: 0x875044, roof: 0xa6664e },
+  { name: "烟灰砖褐", main: 0x705458, roof: 0x93604e },
+  { name: "暗赭石", main: 0x795342, roof: 0x9a6248 },
+  { name: "灰紫残墙", main: 0x68565a, roof: 0x88605b },
 ];
-const TS_ARCH = 0xfff8ed; // 拱门/中央建筑：奶油白
-const TS_PIER = 0x8ecae6; // 通道矮墩：淡青蓝（可选，目前未用）
+const RUIN_ARCH = 0x746367; // 拱门：烟灰石，不使用奶油白
 
 const _cMain = new THREE.Color();
 const _cDeep = new THREE.Color();
@@ -46,12 +46,12 @@ function deepen(mainHex, factor = 0.78) {
   return _cDeep.getHex();
 }
 
-/** 为双子塔挑选两个不同的糖果色（seed 确定但左右不同） */
+/** 为双子塔挑选两个不同的残垣色（seed 确定但左右不同） */
 function pickTowerColors(rnd) {
-  const a = Math.floor(rnd() * TS_WALLS.length);
-  let b = Math.floor(rnd() * (TS_WALLS.length - 1));
+  const a = Math.floor(rnd() * RUIN_WALLS.length);
+  let b = Math.floor(rnd() * (RUIN_WALLS.length - 1));
   if (b >= a) b += 1;
-  return [TS_WALLS[a], TS_WALLS[b]];
+  return [RUIN_WALLS[a], RUIN_WALLS[b]];
 }
 
 /* ---------------- 城门 / 拱环剖面（三重圆拱形状锁死） ---------------- */
@@ -280,7 +280,7 @@ function matRubble(color = RUBBLE_GREY) {
   return toonMat(color, { flatShading: true });
 }
 
-/** 按主色生成一套 Towerscaper 材质：主色 / 暗部 / 屋顶（保留 hex 供插值） */
+/** 按残垣主色生成材质：主色 / 暗部 / 屋顶（保留 hex 供插值） */
 function makePalette(mainHex, roofHex) {
   return {
     mainHex,
@@ -308,7 +308,7 @@ function buildTieredTower(sideSign, rnd, palette) {
   const warm = palette.warm;
   const stripMat = palette.strip;
 
-  // 由底到顶：主色逐渐向屋顶暖色偏移（Towerscaper 层层水彩感）
+  // 由底到顶：主色逐渐向残砖暖色偏移，模拟晚霞下的风化层次
   const tierTints = [0.0, 0.12, 0.28, 0.52];
 
   // 4 级：每级 XZ 缩 12% 左右，Y 累加
@@ -327,7 +327,7 @@ function buildTieredTower(sideSign, rnd, palette) {
     // 向外偏心：内侧贴 ±5 通道，外侧更远
     const cx = sideSign * (t.w * 0.42);
 
-    // 由底到顶：主色逐渐向屋顶暖色偏移（Towerscaper 层层水彩感）
+    // 由底到顶：主色逐渐向残砖暖色偏移
     const isTop = i === tiers.length - 1;
     const tierHex = isTop
       ? palette.roofHex
@@ -389,7 +389,7 @@ function buildTieredTower(sideSign, rnd, palette) {
     g.add(strip);
   }
 
-  // 基座风化乱石（浅暖灰褐，呼应 Towerscaper 水岸石基）
+  // 基座风化乱石（暖灰褐，和残墙统一）
   const rubbleN = 10 + Math.floor(rnd() * 6);
   const rubbleMat = palette.rubble;
   for (let i = 0; i < rubbleN; i++) {
@@ -483,12 +483,12 @@ export function buildAbandonedGate({
   group.add(seatRoot);
 
   const rnd = lcg(seed);
-  // Towerscaper 糖果色：左右塔不同色，拱门用奶油白，矮墩随塔
+  // 晚霞残垣色：左右塔不同暖灰/砖褐，拱门与矮墩使用烟灰石
   const [leftColor, rightColor] = pickTowerColors(rnd);
   const leftPalette = makePalette(leftColor.main, leftColor.roof);
   const rightPalette = makePalette(rightColor.main, rightColor.roof);
-  const archMat = matMain(TS_ARCH);
-  const pierMat = matMain(TS_ARCH);
+  const archMat = matMain(RUIN_ARCH);
+  const pierMat = matMain(RUIN_STONE);
 
   // 1) 三重圆拱（形状不变）
   const archGeo = extrudeGatePart(createGateShape(GATE.passHalf), GATE.archDepth);

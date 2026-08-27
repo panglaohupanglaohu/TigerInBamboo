@@ -1,6 +1,7 @@
 import { createRequire } from "module";
 import * as THREE from "../TigerMessenger/vendor/three.module.js";
 import { latLonToDir } from "../TigerMessenger/src/world/sphereMath.js";
+import { canyonOffsetDir } from "../TigerMessenger/src/world/canyon.js";
 
 // node 直跑需要 DOM 桩：运河水面 bump 贴图（getWaterBumpTexture）用 canvas 2D 生成，
 // 与 test_citadel_range.mjs / test_townscaper_support.mjs 同一套空桩。
@@ -57,6 +58,19 @@ assert(scene.getObjectByName("canal-water"), "运河水面存在");
 assert(scene.getObjectByName("canal-bed"), "运河河床存在");
 assert(scene.getObjectByName("canal-wall-L") && scene.getObjectByName("canal-wall-R"), "左右立壁存在");
 assert(scene.getObjectByName("canal-lip-L") && scene.getObjectByName("canal-lip-R"), "两岸土埂存在");
+
+// 生产策略：河堤不是水面本身。仅保留峡谷区域的立壁/土埂，
+// 非峡谷区移除河堤采样，但河床与水面仍然存在。
+const scopedScene = new THREE.Scene();
+const scopedCanal = buildWorldCanal(scopedScene, R, {
+  anchors,
+  names: ["圣城", "海湖", "门", "苔庭"],
+  embankmentKeepTest: (dir) => canyonOffsetDir(dir) < -1e-6,
+});
+assert(scopedCanal.group.userData.embankmentPolicy === "keep-test", "生产河堤策略已启用");
+assert(scopedCanal.group.userData.embankmentKeptSampleCount > 0, "峡谷区河堤仍保留");
+assert(scopedCanal.group.userData.embankmentRemovedSampleCount > 0, "非峡谷区河堤已移除");
+assert(scopedScene.getObjectByName("canal-water") && scopedScene.getObjectByName("canal-bed"), "移除河堤不影响水面/河床");
 
 // 地面沟：河床应略高于实心球面（可见），不是埋进球心
 let allOnSurface = true;

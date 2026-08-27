@@ -269,6 +269,9 @@ export function sweepPrism(samplesArr, side0, side1, h0, h1, mat, skipKey = "gap
  * @param {Array<{center:THREE.Vector3, radius:number}>} [opts.excludeZones]
  *        排除区：center 为世界方向/位置，radius 为切向半宽（世界单位）。
  *        落在区内的采样不生成河道网格（给纳沃纳广场等让路）。
+ * @param {(dir:THREE.Vector3, worldPoint:THREE.Vector3, t:number, index:number)=>boolean} [opts.embankmentKeepTest]
+ *        河堤保留策略。返回 true 才生成两侧立壁/土埂；false 只移除河堤，
+ *        不影响河床与水面。生产主岛用它仅保留峡谷区河堤。
  * @returns {{ group:THREE.Group, curve:THREE.CatmullRomCurve3, sinks:Array, planetRadius:number, waterR:number, bedR:number, depth:number }}
  */
 export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) {
@@ -342,6 +345,9 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
     }
   }
   const curve = new THREE.CatmullRomCurve3(projected, true, "centripetal", 0.5);
+  const embankmentKeepTest = typeof opts.embankmentKeepTest === "function"
+    ? opts.embankmentKeepTest
+    : null;
 
   // ---- 采样：河床点 + 局部基（up=径向, right=横向, fwd=切向） ----
   const samples = [];
@@ -355,7 +361,7 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
       _right.set(1, 0, 0).addScaledVector(_up, -_up.x).normalize();
     }
     const pBed = _up.clone().multiplyScalar(bedRAt(_up));
-    samples.push({
+    const sample = {
       p: pBed,
       up: _up.clone(),
       right: _right.clone(),
@@ -364,7 +370,12 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
       gap: inExclude(_up, pBed),
       // 护堤缺口：水系打通处（护城河环带）立壁/土埂断开，水面/河床保持连续
       embankGap: false,
-    });
+    };
+    if (embankmentKeepTest && !embankmentKeepTest(sample.up, sample.p, t, i)) {
+      // 只移除立壁/土埂；河床和水面仍然保留为连续自然水体。
+      sample.embankGap = true;
+    }
+    samples.push(sample);
   }
   if (typeof opts.embankGapTest === "function") {
     for (const s of samples) {
@@ -376,6 +387,13 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
   group.name = "world-canal";
   group.userData.excludeZones = excludeZones.length;
   group.userData.gapSampleCount = samples.filter((s) => s.gap).length;
+  group.userData.embankmentPolicy = embankmentKeepTest ? "keep-test" : "default-all";
+  group.userData.embankmentKeptSampleCount = embankmentKeepTest
+    ? samples.filter((s) => !s.embankGap).length
+    : samples.length;
+  group.userData.embankmentRemovedSampleCount = embankmentKeepTest
+    ? samples.filter((s) => s.embankGap).length
+    : 0;
 
   const half = CANAL_HALF_WIDTH;
   const bedMat = toonMat(0x3a2f26, { flatShading: true });

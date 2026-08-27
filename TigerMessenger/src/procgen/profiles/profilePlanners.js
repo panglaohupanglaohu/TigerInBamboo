@@ -29,87 +29,110 @@ function route(id, nodes, edges, extra = {}) {
   return { id, nodes: [...nodes], edges: edges.map((item) => ({ ...item })), ...extra };
 }
 
+const HIGHLAND_LEGAL_EDGE_KINDS = Object.freeze(["surface", "stairs", "interior-rotating-stairs"]);
+const HIGHLAND_INTERIOR_FLOORS = Object.freeze([1, 2, 3, 4, 5]);
+
 /**
- * 高山圣城的不可变路线合同：
- * - 港口→高台走阶梯；
- * - 台面 2→1 走瀑布攀爬；
- * - 木马固定在 L1 waterfall basin，头朝 canal；
- * - 木马下降使用四根绳，每根两次，分为两组；
- * - 所有跨层边都是显式 surface portal，不允许 air edge。
+ * 高山圣城的不可变路线合同（PLAN 12.25 现役权威）：
+ * - 连续山谷地面入口，不经五层室外台地、不经瀑布；
+ * - 五层内部旋转楼梯接到 `castle-top`；
+ * - 木马 keepout 钉在水岸，头朝水岸，不再占用 L1 waterfall basin；
+ * - 木马下降仍是四绳×两次、两组；夜间走内部旋梯（ladderPolicy=disabled）；
+ * - 所有跨层边都是显式 surface/stairs/interior-rotating-stairs portal，不允许 air / waterfall-climb。
  */
 export function compileHighlandRoutePlan({ seed = 1, blueprint = null } = {}) {
-  const terraces = [1, 2, 3, 4, 5];
-  const stairPortals = [
-    edge("terrace:5", "terrace:4", "stairs", { surface: "terrace-surface" }),
-    edge("terrace:4", "terrace:3", "stairs", { surface: "terrace-surface" }),
-    edge("terrace:3", "terrace:2", "stairs", { surface: "terrace-surface" }),
+  const interiorFloors = [...HIGHLAND_INTERIOR_FLOORS];
+  const groundEntryPortals = [
+    edge("valley-ground", "mountain-approach", "surface", { surface: "continuous-valley" }),
+    edge("mountain-approach", "interior-entry", "stairs", { surface: "mountain-stair", portal: "stairs:ground-entry" }),
   ];
-  const waterfallPortals = [
-    edge("terrace:2", "terrace:1", "waterfall-climb", { surface: "waterfall-surface", direction: "downhill" }),
-  ];
-  const stairRoute = route(
-    "highland:stairs-patrol",
-    ["harbor", "terrace:5", "terrace:4", "terrace:3"],
-    [
-      edge("harbor", "terrace:5", "stairs", { portal: "stairs:harbor-5" }),
-      ...stairPortals.slice(0, 2),
-    ],
-    { patrolTerraces: [5, 4, 3], mode: "surface-run", speedBand: "slow" },
+  const interiorPortals = interiorFloors.slice(1).map((floor, index) =>
+    edge(
+      `interior-floor:${interiorFloors[index]}`,
+      `interior-floor:${floor}`,
+      "interior-rotating-stairs",
+      { surface: "interior-rotating-stairs", portal: `stairs:floor-${interiorFloors[index]}-${floor}` },
+    )
   );
-  const waterfallRoute = route(
-    "highland:waterfall-patrol",
-    ["terrace:2", "terrace:1"],
-    waterfallPortals,
-    { patrolTerraces: [2, 1], mode: "surface-climb", speedBand: "fast" },
+  interiorPortals.push(edge(
+    "interior-floor:5",
+    "castle-top",
+    "interior-rotating-stairs",
+    { surface: "interior-rotating-stairs", portal: "stairs:floor-5-castle-top" },
+  ));
+  const entryToFloor = edge(
+    "interior-entry",
+    "interior-floor:1",
+    "interior-rotating-stairs",
+    { surface: "interior-rotating-stairs", portal: "stairs:entry-floor-1" },
+  );
+  const groundEntryRoute = route(
+    "highland:ground-entry",
+    ["valley-ground", "mountain-approach", "interior-entry", "interior-floor:1"],
+    [...groundEntryPortals, entryToFloor],
+    { mode: "surface-run", speedBand: "slow", destination: "castle-top" },
+  );
+  const interiorRoute = route(
+    "highland:interior-stairs",
+    ["interior-entry", ...interiorFloors.map((floor) => `interior-floor:${floor}`), "castle-top"],
+    [entryToFloor, ...interiorPortals],
+    { patrolFloors: [...interiorFloors], mode: "interior-rotating-stairs", speedBand: "fast", destination: "castle-top" },
   );
   const retreatRoute = route(
     "highland:defender-retreat",
-    ["terrace:3", "terrace:4", "terrace:5", "harbor"],
+    ["castle-top", "interior-floor:5", "interior-floor:1", "interior-entry", "valley-ground"],
     [
-      edge("terrace:3", "terrace:4", "stairs", { reverseOf: "stairs:4->3" }),
-      edge("terrace:4", "terrace:5", "stairs", { reverseOf: "stairs:5->4" }),
-      edge("terrace:5", "harbor", "stairs", { portal: "stairs:harbor-5" }),
+      edge("castle-top", "interior-floor:5", "interior-rotating-stairs", { reverseOf: "stairs:floor-5-castle-top" }),
+      edge("interior-floor:5", "interior-floor:1", "interior-rotating-stairs", { reverseOf: "stairs:floor-1-5" }),
+      edge("interior-floor:1", "interior-entry", "interior-rotating-stairs", { reverseOf: "stairs:entry-floor-1" }),
+      edge("interior-entry", "valley-ground", "stairs", { reverseOf: "stairs:ground-entry" }),
     ],
-    { mode: "surface-run", side: "defender" },
+    { mode: "surface-run", side: "defender", destination: "valley-ground" },
   );
   const horse = {
     id: "wood-horse",
-    surface: "lower-waterfall-basin",
-    terrace: 1,
-    heading: "canal",
+    surface: "valley-waterfront",
+    heading: "waterfront",
     keepout: { kind: "clearance", id: "wood-horse:keepout", value: 3.2, repairRadius: 2 },
   };
   const anchors = [
-    { id: "harbor", kind: "cell", cell: "harbor", variant: "harbor" },
-    { id: "waterfall-1", kind: "cell", cell: "waterfall-1", variant: "waterfall", repairRadius: 2 },
-    { id: "wood-horse", kind: "cell", cell: "horse:l1-basin", variant: "horse", repairRadius: 2 },
-    { id: "wood-horse:heading", kind: "visibility", landmark: "canal", value: "canal", repairRadius: 2 },
+    { id: "valley-ground", kind: "cell", cell: "valley-ground", variant: "ground-entry" },
+    { id: "castle-top", kind: "cell", cell: "castle-top", variant: "capture-deck", repairRadius: 2 },
+    { id: "wood-horse", kind: "cell", cell: "horse:waterfront", variant: "horse", repairRadius: 2 },
+    { id: "wood-horse:heading", kind: "visibility", landmark: "waterfront", value: "waterfront", repairRadius: 2 },
     horse.keepout,
   ];
-  const portals = [...stairPortals, ...waterfallPortals, edge("harbor", "terrace:5", "stairs", { portal: "stairs:harbor-5" })];
+  const portals = [...groundEntryPortals, entryToFloor, ...interiorPortals];
   const hardConstraints = compileHardRouteLocks({
     anchors,
     routes: [
-      { id: stairRoute.id, portals: stairRoute.edges },
-      { id: waterfallRoute.id, portals: waterfallRoute.edges },
+      { id: groundEntryRoute.id, portals: groundEntryRoute.edges },
+      { id: interiorRoute.id, portals: interiorRoute.edges },
       { id: retreatRoute.id, portals: retreatRoute.edges },
     ],
     maxRepairRounds: 3,
   });
   const soldiers = makeTrojanWave(TROJAN_RULES);
   const plan = {
-    kind: "highland-route-plan-v1",
+    kind: "highland-route-plan-v2",
     seed,
     blueprintHash: blueprint?.blueprintHash || null,
-    terraces,
+    destination: "castle-top",
+    captureMode: "interior-rotating-stairs",
+    ladderPolicy: "disabled",
+    waterfallCount: 0,
+    terraceLayerCount: 0,
+    interiorFloors,
     anchorIds: anchors.map((item) => item.id),
     portals,
-    routes: [stairRoute, waterfallRoute, retreatRoute],
+    routes: [groundEntryRoute, interiorRoute, retreatRoute],
     horse,
     trojan: {
       ropes: TROJAN_RULES.ropes,
       dropsPerRope: TROJAN_RULES.dropsPerRope,
       squads: TROJAN_RULES.squads,
+      captureTarget: TROJAN_RULES.captureTarget,
+      captureMode: TROJAN_RULES.captureMode,
       entries: soldiers.map((soldier) => ({
         id: soldier.id,
         rope: soldier.rope,
@@ -123,8 +146,8 @@ export function compileHighlandRoutePlan({ seed = 1, blueprint = null } = {}) {
     },
     hardConstraints,
     routePolicy: {
-      crossTerraceKinds: ["stairs", "waterfall-climb", "ladder"],
-      offSurfaceEdgeKinds: ["air"],
+      crossLayerKinds: [...HIGHLAND_LEGAL_EDGE_KINDS],
+      offSurfaceEdgeKinds: ["air", "waterfall-climb", "terrace-transfer"],
       patrolDirection: "distributed-by-door",
     },
   };
@@ -230,11 +253,23 @@ export function validateCastlePlan(plan) {
   if (!plan?.kind || !plan?.hardConstraints?.locks) errors.push("missing-plan-contract");
   const edgeKinds = (plan?.routes || []).flatMap((item) => item.edges || []).map((item) => item.kind);
   if (edgeKinds.includes("air")) errors.push("air-edge");
-  if (plan?.kind === "highland-route-plan-v1") {
-    if (plan.terraces?.join(",") !== "1,2,3,4,5") errors.push("terrace-order");
-    if (plan.horse?.surface !== "lower-waterfall-basin" || plan.horse?.heading !== "canal") errors.push("horse-anchor");
+  if (plan?.kind === "highland-route-plan-v2" || plan?.kind === "highland-route-plan-v1") {
+    if (plan.kind !== "highland-route-plan-v2") errors.push("retired-five-terrace-plan");
+    if (plan.destination !== "castle-top") errors.push("destination");
+    if (plan.interiorFloors?.join(",") !== HIGHLAND_INTERIOR_FLOORS.join(",")) errors.push("interior-floors");
+    if (plan.waterfallCount !== 0 || plan.terraceLayerCount !== 0) errors.push("waterfall-or-terrace-not-retired");
+    if (plan.horse?.surface !== "valley-waterfront" || plan.horse?.heading !== "waterfront") errors.push("horse-anchor");
     if (plan.trojan?.ropes !== 4 || plan.trojan?.dropsPerRope !== 2 || plan.trojan?.entries?.length !== 8) errors.push("trojan-rope-contract");
-    if (plan.routes?.some((route) => route.edges.some((item) => !["stairs", "waterfall-climb", "surface"].includes(item.kind)))) errors.push("illegal-cross-terrace-edge");
+    if (plan.routes?.some((item) => item.edges.some((edgeItem) => !HIGHLAND_LEGAL_EDGE_KINDS.includes(edgeItem.kind)))) {
+      errors.push("illegal-cross-layer-edge");
+    }
+    if (plan.routes?.some((item) => item.edges.some((edgeItem) => edgeItem.kind === "waterfall-climb"))) {
+      errors.push("waterfall-climb-retired");
+    }
+    if (!plan.routes?.some((item) => item.id.endsWith("ground-entry"))) errors.push("missing-ground-entry");
+    if (!plan.routes?.some((item) => item.id.endsWith("interior-stairs") && item.nodes?.includes("castle-top"))) {
+      errors.push("missing-interior-castle-top");
+    }
   }
   if (plan?.kind === "ancient-fortress-plan-v1" && !plan.invariants?.closedWallRing) errors.push("wall-ring-open");
   if (plan?.kind === "canal-citadel-plan-v1" && !plan.invariants?.waterOwnedByPlanner) errors.push("canal-not-planner-owned");

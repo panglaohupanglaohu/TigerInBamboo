@@ -26,7 +26,14 @@ export function createHighlandProfile(input = {}) {
     blueprintHash: citadelBlueprintCanonicalHash(blueprint),
     fixtureHash: castleFixtureHash(HIGHLAND_MINIMAL),
     routePlan: compileHighlandRoutePlan({ seed: input.seed || 1, blueprint: { blueprintHash: citadelBlueprintCanonicalHash(blueprint) } }),
-    routePolicy: Object.freeze({ terraces: blueprint.terrain.metrics.map((m) => m.terraceIndex), waterfallSide: "right-of-first-waterfall" }),
+    routePolicy: Object.freeze({
+      destination: "castle-top",
+      captureMode: "interior-rotating-stairs",
+      interiorFloors: Object.freeze([1, 2, 3, 4, 5]),
+      waterfallCount: 0,
+      terraceLayerCount: 0,
+      waterfallSide: "retired",
+    }),
     ...common,
   });
 }

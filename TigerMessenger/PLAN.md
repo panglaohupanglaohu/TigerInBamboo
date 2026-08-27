@@ -2637,6 +2637,7 @@ function compileCurvedWater({ grids, fieldRecipe, semantics, hard }) {
 6. 任务/地图/提示不再引用世界运河；
 7. 运行存档迁移，将船在旧运河参数 `u` 映射到最近新航线；
 8. 主人确认后才关闭 `legacyCanalWorld`，最后退休 `loadCanalNetwork()` 生产调用。
+   （2026-08-26 主人约定：正式主页只留水晶城区域运河，`canalScope=crystal-city`；其他区域运河不再需要。全局 flag 仍 true，A·V7 可回滚。）
 
 ### 12.10 六个景区的地貌 profile（2026-08-23 地貌链重构）
 
@@ -3746,3 +3747,29 @@ Codex 负责现役流水线接线、Worker/ResourceRegistry、运行时 shader �
 
 自动验收要求：地台 `topY=4.95/thickness=1.0/visible=false/fullySubmerged=true`、所有建筑和热重建编辑面 `verticalSpan=0`、942 格/300 柱/两根九层侧塔、15 个高山材质色差不超过 42、非建筑局部道具计数为 0、船灯/湖灯/红人偶/局部云均缺席、圣城低模绿团树为 12 株、旧港参天树为 2 株，且运河视线不被山体格或侧裙遮挡。
 - 自动化与浏览器回归：`test_odyssey_citadel.mjs`、`test_citadel_range.mjs`、`test_tarn_tree_pair.mjs`、`test_shot_harness_runtime.mjs` 已覆盖上述装配/缓存/资产归属；`node --check` 与 `git diff --check` 作为提交门禁。
+
+### 12.39 城堡构建体验升级：增量编辑、生长反馈与稀有模块（2026-08-26，已落地）
+
+研究依据：Oskar 的 Townscaper EA 发布演示（[x.com/OskSta/status/1277991976135204865](https://x.com/OskSta/status/1277991976135204865)，64.8s 视频：网格上逐格点房子、邻接自动生成屋顶/拱/阳台、镜头扫过滨海小镇）及其公开方法论——手工瓦片 + 邻接规则 + 增量构建 + 稀有模块 + "点一下立刻长出来"的即时反馈。12.32~12.38 已落地逐格 Townscaper 装配与可编辑性；本章补上构建体验的最后一环：编辑反馈延迟、生长动画与增量管线。
+
+#### 12.39.1 现状审计与差距（实测数据）
+
+| 能力 | 现状 | 证据 | 差距 |
+| --- | --- | --- | --- |
+| 逐格装配 | 25×25×12、942 格/300 柱、邻接规则选模块 | 12.35/12.38、`citadelTown.js` | 无 |
+| 点击建/长/改色/挖洞 | 左建右挖、raise/paint、WFC 槽 | 12.33、`citadelEditorPanel.js` | 无 |
+| 编辑反馈延迟 | 单次编辑全量重建 ≈272ms（Node 桩实测 `rebuildCitadelTown`） | 2026-08-26 实测 | 已改为增量（P50≈50ms） |
+| 生长动画 | 现役编辑器瞬时换皮，无逐格生长过程 | — | 已接入 0.22s 弹入动画 |
+| 稀有模块 | `moduleCatalog.rarity` 存在于 V4 目录，现役逐格规则未消费 | — | 保留现役视觉（晾衣绳/花砖已由规则生成），未强接 V4 目录 |
+
+#### 12.39.2 已落地内容
+
+1. **增量编辑管线（P0）**：`buildCitadelTown(spec, ctx, { dirty })`——所有规则循环判定保持全量、生成点按所属格过滤（23 处），保证与全量路径逐格同构；`computeCitadelDirtyCells`（水平 1-ring + 同柱 ±2，dirty ≤ 45）与 `diffCitadelLayouts`（布局 diff → 编辑格）导出；`rebuildCitadelTownIncremental`——dirty build → 移除旧 dirty 网格（按 `userData.cell/townModule` 坐标）→ dirty level（terrace:iy 复合 key）重合并 + faceToCell → 窗口实例重建；材质/上下文通过 `townCtxCache` 跨增量复用（全量 rebuild 后失效）。主编辑器 `onApply` 已接 diff→增量，无差异/差异过多/失败自动回退全量。
+2. **生长反馈（P1）**：`playCitadelGrowAnimation`——新网格 scale 从 0 弹入（0.22s + 18ms stagger，stagger 封顶 0.5s），动画期间只改 transform、零重建；动画结束后 `castleContainer.update` 驱动挂起的 dirty level 合并与窗口实例重建。
+3. **构建旅程（P3 部分）**：undo/redo 恢复布局后增量重建可精确还原（272/277 格与初始一致）；`rebuildCitadelTown` 全量路径保留为存档恢复/大改回退。
+
+#### 12.39.3 门禁（Node 桩实测修订）
+
+- 增量编辑：`P50 ≤ 50ms`、`P90 ≤ 90ms`（全量 rebuild 272ms → 增量 P50≈48ms / P90≈55ms；密集区一次性大重建允许 P90 上限放宽；浏览器渲染层允许把残余成本分帧提交）。
+- dirty 范围 ≤ 125（1-ring × 同柱 ±2 实际 45）；dirty 集外网格对象引用 100% 不变（实测 416 个）；增量与全量在 dirty 格内逐格同构；undo 布局还原后增量恢复一致。
+- 统一门禁：`tools/test_castle_building_experience.mjs`（diff/dirty 范围/性能/同构/区域外/undo/生长动画参数与结束合并），已并入既有回归。

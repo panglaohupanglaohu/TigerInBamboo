@@ -230,15 +230,16 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
     ctx.clearRect(0, 0, W, H);
     // 纸面圆盘
     const bg = ctx.createRadialGradient(CX, CY, 8, CX, CY, DISC_R + 6);
-    bg.addColorStop(0, "#f4faf6");
-    bg.addColorStop(0.8, "#e3f0ea");
-    bg.addColorStop(1, "#cfe2d8");
+    // 与旧 HUD 深色玻璃主题一致；深色纸面能让白色地标文字和高亮更稳定可读。
+    bg.addColorStop(0, "#315e68");
+    bg.addColorStop(0.8, "#214956");
+    bg.addColorStop(1, "#122d3c");
     ctx.fillStyle = bg;
     ctx.beginPath();
     ctx.arc(CX, CY, DISC_R + 4, 0, Math.PI * 2);
     ctx.fill();
     // 距离场环 + 十字方位线
-    ctx.strokeStyle = "rgba(47, 143, 122, 0.18)";
+    ctx.strokeStyle = "rgba(158, 197, 255, 0.22)";
     ctx.lineWidth = 1;
     for (const k of [1 / 3, 2 / 3, 1]) {
       ctx.beginPath();
@@ -272,9 +273,9 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
         ctx.moveTo(ax, ay);
         ctx.arc(ax, ay, LEN, ang - half, ang + half);
         ctx.closePath();
-        ctx.fillStyle = "rgba(47, 143, 122, 0.20)";
+        ctx.fillStyle = "rgba(110, 210, 205, 0.22)";
         ctx.fill();
-        ctx.strokeStyle = "rgba(47, 143, 122, 0.55)";
+        ctx.strokeStyle = "rgba(158, 225, 255, 0.72)";
         ctx.lineWidth = 1.2;
         ctx.stroke();
       }
@@ -309,7 +310,7 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
       ctx.strokeStyle = "rgba(255,255,255,0.9)";
       ctx.lineWidth = 1.4;
       ctx.stroke();
-      ctx.fillStyle = "rgba(26,38,56,0.85)";
+      ctx.fillStyle = "rgba(232, 238, 248, 0.94)";
       ctx.font = "9px sans-serif";
       ctx.fillText(lm.name, x + 6, y);
       ctx.globalAlpha = 1;

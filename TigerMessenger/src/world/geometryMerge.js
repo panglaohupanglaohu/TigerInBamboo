@@ -70,13 +70,15 @@ export function mergeStaticGroup(root, options = {}) {
   const bake = (mesh) => {
     let entry = bakedByMesh.get(mesh);
     if (!entry) {
-      const geo = mesh.geometry.index
-        ? mesh.geometry.toNonIndexed()
-        : mesh.geometry.clone();
+      // G30 增量性能：先变换（indexed 顶点少 2-3x）后展开，减少热路径矩阵变换量。
+      const src = mesh.geometry;
+      const hasIndex = !!src.index;
+      const geo = src.clone();
       _rel.copy(mesh.matrixWorld).premultiply(_rootInv);
       geo.applyMatrix4(_rel);
-      const pos = geo.getAttribute("position");
-      entry = { geo, triCount: pos ? pos.count / 3 : 0 };
+      const final = hasIndex ? geo.toNonIndexed() : geo;
+      const pos = final.getAttribute("position");
+      entry = { geo: final, triCount: pos ? pos.count / 3 : 0 };
       bakedByMesh.set(mesh, entry);
     }
     return entry;
@@ -88,20 +90,25 @@ export function mergeStaticGroup(root, options = {}) {
     const attrNames = ["position", "normal", "uv", "color"].filter((name) =>
       all.every((g) => g.getAttribute(name))
     );
-    const arrays = {};
-    for (const name of attrNames) arrays[name] = [];
+    // G30 增量性能：预分配 TypedArray + 批量 set，替代逐顶点 push（dirty
+    // level 每 edit 重合并，这是热路径）。
     let totalVerts = 0;
+    for (const g of all) totalVerts += g.getAttribute("position").count;
+    const arrays = {};
+    for (const name of attrNames) {
+      arrays[name] = new Float32Array(totalVerts * all[0].getAttribute(name).itemSize);
+    }
+    let offset = 0;
     for (const g of all) {
       const pos = g.getAttribute("position");
       const count = pos.count;
       for (const name of attrNames) {
         const attr = g.getAttribute(name);
         if (!attr) continue;
-        const arr = arrays[name];
-        const src = attr.array;
-        for (let i = 0; i < count * attr.itemSize; i++) arr.push(src[i]);
+        const src = attr.count === count ? attr.array : attr.array.subarray(0, count * attr.itemSize);
+        arrays[name].set(src, offset * attr.itemSize);
       }
-      totalVerts += count;
+      offset += count;
     }
     const merged = new THREE.BufferGeometry();
     for (const name of attrNames) {

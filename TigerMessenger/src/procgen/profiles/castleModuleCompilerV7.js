@@ -29,7 +29,7 @@ function structuralPrototype(id, family, weight = 1) {
 
 function structuralSet(kind) {
   const families = kind === "highland"
-    ? ["foundation", "floor", "tower", "balcony", "support", "stairs", "bridge", "roof", "waterfall-gap"]
+    ? ["foundation", "floor", "tower", "balcony", "support", "stairs", "bridge", "roof", "interior-rotating-stairs"]
     : kind === "ancient"
       ? ["wall", "corner", "tower", "gate", "floor", "support", "stairs", "bridge", "roof", "damage-pin"]
       : ["bank", "bridge", "pier", "water-gate", "balcony", "support", "stairs", "roof", "dock"];
@@ -47,13 +47,13 @@ function twoDPrototypes(kind, sets) {
 }
 
 function recipeFor(kind) {
-  if (kind === "highland") return ["mountain", "terrace-shoulder", "cliff", "lake-shore", "waterfall-gap", "foundation-collar"];
+  if (kind === "highland") return ["mountain", "valley-shoulder", "cliff", "lake-shore", "interior-stair-volume", "foundation-collar"];
   if (kind === "ancient") return ["rock-base", "moat-slope", "trench", "damage-subtract", "tunnel-collar", "foundation-collar"];
   return ["river-bank", "island-base", "bridge-abutment", "water-gate", "canal-foundation", "foundation-collar"];
 }
 
 function keepoutsFor(kind, plan) {
-  if (kind === "highland") return [{ id: "wood-horse:l1-basin", kind: "wood-horse", surfaceId: "lower-waterfall-basin", radius: 3.2 }, ...(plan.anchorIds || []).filter((id) => id.includes("waterfall") || id.includes("harbor")).map((id) => ({ id, kind: "hard-anchor" }))];
+  if (kind === "highland") return [{ id: "wood-horse:waterfront", kind: "wood-horse", surfaceId: "valley-waterfront", radius: 3.2 }, ...(plan.anchorIds || []).filter((id) => id.includes("valley-ground") || id.includes("castle-top") || id.includes("wood-horse")).map((id) => ({ id, kind: "hard-anchor" }))];
   if (kind === "ancient") return plan.damagePins.map((pin) => ({ id: `damage:${pin.id}`, kind: "damage-pin", position: pin.at || null }));
   return plan.bridges.map((bridge) => ({ id: bridge.id, kind: "bridge-clearance", clearance: bridge.clearance, waterRoute: bridge.waterRoute }));
 }

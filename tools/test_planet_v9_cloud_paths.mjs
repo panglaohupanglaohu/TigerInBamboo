@@ -41,8 +41,13 @@ const material = readFileSync(new URL("../TigerMessenger/src/render/clouds/cloud
 // uploads six representative samples to stay within mobile attribute limits.
 assert.match(material, /aPath5/);
 assert.doesNotMatch(material, /aPath9/);
-assert.match(material, /uHeroDayWeight/);
-assert.match(material, /terrain clearance|terrainClearance|ridgePath/i);
+  assert.match(material, /uHeroDayWeight/);
+  assert.match(material, /uViews/);
+  assert.match(material, /uv\.x \/ max\(1\.0, uViews\)/);
+  assert.match(material, /cameraPosition/);
+  assert.match(material, /length\(billboardForward\) < 0\.001/);
+  assert.match(material, /length\(pathPosition\) > 0\.001/);
+  assert.match(material, /terrain clearance|terrainClearance|ridgePath/i);
 assert.doesNotMatch(material, /precipitation|forestness|upwindOceanFetch/);
 
 console.log(`✅ Planet V9 cloud paths: ${CLOUD_RIDGE_PATH_POINTS}-point ridge streamlines, climate-v10 source, clearance and shader path interpolation passed (${world.clouds.instances.length} clusters)`);

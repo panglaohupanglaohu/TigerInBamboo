@@ -325,10 +325,12 @@ const F4 = (c) => ({ N: { connector: c, parity: "symmetric" }, E: { connector: c
 // ---------- G11 (TODO 1249)：五层台地编号保持稳定 ----------
 {
   const profile = createHighlandProfile();
-  assert.deepEqual(profile.routePolicy.terraces, [0, 1, 2, 3, 4], "五层台地鸟瞰编号 0..4 稳定");
-  assert.equal(profile.routePolicy.waterfallSide, "right-of-first-waterfall");
+  assert.equal(profile.routePolicy.destination, "castle-top", "现役终点 castle-top");
+  assert.deepEqual(profile.routePolicy.interiorFloors, [1, 2, 3, 4, 5], "五层内部旋梯编号 1..5 稳定");
+  assert.equal(profile.routePolicy.waterfallSide, "retired");
+  assert.equal(profile.routePolicy.waterfallCount, 0);
   assert.equal(profile.version, 1);
-  ok("G11/1249：高山 profile 五层台地编号与瀑布侧向 schema 锁定");
+  ok("G11/1249：高山 profile 内部旋梯编号与 castle-top 终点 schema 锁定");
 }
 
 // ---------- G16 (TODO 1347)：package.json type=module 消除 MODULE_TYPELESS 警告 ----------

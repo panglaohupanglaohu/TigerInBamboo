@@ -27,6 +27,7 @@
 - [x] 植被 `vegetationCompilerV9` + InstancedMesh **已接入 opt-in RUNTIME_WIRED**，默认世界未启用（`planetTerrainV1` 仍 false）。compiler 读 `ecologyFieldV10`，不再用 `forestDensityAt` 局部湿度猜测
 - [x] **[2026-08-26]** 来源 S12 登记：`x.com/OskSta/status/1852334860137849222`——云 shader 与树共用同一 impostor；写入 `OSKAR_OFFICIAL_PLAN.md` 来源表与 2.6 缺口对照
 - [x] **[2026-08-26]** 来源 S13 登记：`x.com/OskSta/status/1991099314714902634`（岸浪展示）+ `1991101097818403263`（实现方法回复：looping vertex shader + 生成期烘焙 + 每顶点 in/out 方向与 time offset）；写入 `OSKAR_OFFICIAL_PLAN.md` 来源表与 2.7.1
+- [x] **[2026-08-26]** 白云可见性验收修复：cap 云原贴峰顶（y≈55，被城堡/山峰遮挡，默认视角看不到）→ 移到**城堡正上方**；云 mesh `raycast=()=>{}` 防挡拾取。**2026-08-27 三轮修复（飞艇视角）**：① 玩家出生朝向 +z（面向湖）→ -z（面向城堡）；② 出生点 z=24（湖边，平视只到城堡 y≈15）→ z=60（湖对岸，城堡全景+云进画面）；③ **云分层 58 朵覆盖飞艇全高度带与山脉内外（2026-08-27 云海重做）**：cap（城堡顶上方，scale 25.1）+ castle-cloud（×2，y=38）+ inner-cloud（×4，半径 32–44，y 32–41）+ **ring 加强（×17，半径 56，scale 8.8–13.9，y 30–54，主峰方向抬到山峰以上）** + **outer-cloud 新增（×14，半径 66–102 = 山脉外缘/海上，y 47–68，天空中的云）** + forest；ring 改圆形环（原椭圆压缩致前方云贴城堡半径仅 13–20）+ 32 朵相邻重叠 27 对成云海带；outer 20 朵 8/8 方位全覆盖。验收 `tools/test_cloud_layers.mjs`。
 - [x] **[2026-08-26]** S12 云/树共用 impostor 落地（默认世界 hero 层可见）：`buildSharedImpostorAtlas`（云块+树冠块同 atlas）+ `createSharedImpostorMaterial`（aHero 编码选块——低位 authored/高位 canopy，不新增 attribute，总 attribute ≤16 保住 WebGL 下限；树冠无风漂移）+ `createCloudImpostorSystem` 自动切换；圣城山脚 7 树冠卡 + 11 云卡同 mesh 同 draw call；近景 12 株低模树保持几何。V8/V9 全局开关保持 false（O3）。`node tools/test_cloud_tree_shared_impostor.mjs`
 
 ---
@@ -42,7 +43,10 @@
   - `grass-surface` / `mountain-rolling-clouds` / `ocean-surface` / `lake-surface` / `terrain-editor` = RUNTIME_WIRED
   - `terrain-chain` / `highland-global-maximum` = DATA_TESTED（highland 4 golden 场高 9.4，strictHighest）
   - 未 DEFAULT_ON
-- [ ] 任何新云/海/草 PR 的描述必须引用 PLAN 本文件的 S 编号（S1–S12），禁止「更像 Oskar」
+- [x] **[2026-08-26]** 来源 S14 登记：`x.com/OskSta/status/1769641473895432220`——relax pass 防蘑菇化（模块格收敛到期望形状尺寸，左上角格子收缩演示）；写入 PLAN 来源表与 2.7.2
+- [x] **[2026-08-26]** 来源 S15 登记：`x.com/OskSta/status/1768627849529893109`——把瓦片格子地形放到球体上（球面格子星球，与 S14 同期同系列）；写入 PLAN 来源表与 2.7.2 球面化段落
+- [x] **[2026-08-26]** 来源 S16 登记：`x.com/OskSta/status/1751945034851570056`——背光高光（反向网格轮廓层 + 阴影遮罩）；写入 PLAN 来源表与 2.7.3
+- [ ] 任何新云/海/草 PR 的描述必须引用 PLAN 本文件的 S 编号（S1–S17），禁止「更像 Oskar」
 
 ---
 
@@ -62,9 +66,18 @@
 - [x] **[S12 云/树共用 impostor，P1]** 已落地：`buildSharedImpostorAtlas`（云块+树冠块同 atlas，`cloud+canopy-shared-octa-impostor`）+ `createSharedImpostorMaterial`（aHero 编码逐实例选块——云 0/1、树冠 3，不新增 attribute，总 attribute ≤16 保住 WebGL 下限；canopy 无风漂移）+ `createCloudImpostorSystem` 检测 canopy 自动切共享管线；圣城山脚 7 个树冠卡片与 11 个云卡片同一 mesh 同一 draw call（默认世界可见，V8/V9 全局开关保持 opt-in）。**剩余**：全星球 V9 `vegetationRuntime` 远 LOD 接入共享 impostor（atlas 版本进 snapshot hash）。验收：`tools/test_cloud_tree_shared_impostor.mjs`
 - [x] **[S12 TEST]** `tools/test_cloud_tree_shared_impostor.mjs`：共享 atlas 确定性/双族像素（云白、树冠绿+树干棕）、aShape 选块与 uniform（uCloudViews/uTotalViews）、云+树冠同 mesh 单 draw call、canopy 静态路径（speed 0 / 单点 path）、近景 12 株低模树与 legacy cloud pipeline 不变
 
-- [ ] **[S13 岸浪，P1]** 圣城台地-海衔接岸浪：岸线数据**生成期烘焙**（每顶点 in/out 方向 + time offset，近岸振幅大、深海衰减回 swell）+ 运行期 **looping vertex shader**（沿 in→out 循环位移，time offset 错相成推进浪）；与 2.7 水面 swell shader 共存，不引入第三种水面算法。对应 PLAN 2.7.1
-- [ ] **[S13 TEST]** 新增 `tools/test_shore_waves.mjs`：烘焙确定性（同源 hash）、每顶点 in/out 方向与 time offset 存在、相邻顶点相位错开、振幅随离岸距离衰减、draw 预算、legacy 水面 swell 不受影响
-- [ ] **[S13 高山-台地结构]** 核对圣城「连续山地 + 台地平台」与画面（海中岩石台地山）的一致性：台地外缘入海轮廓与岸线过渡带；记录与画面差距（当前台地平台埋入山体 + `CITADEL_SINK` 入水的硬边，无岸浪带）
+- [x] **[S13 岸浪，P1]** 已落地（2026-08-26）：`highlandShoreWaves.js` —— `bakeHighlandShoreWaves` 生成期烘焙湖岸浪带（每顶点 in/out 方向 + time offset 沿岸推进错相 + 振幅近岸 0.34/远岸 0.10 衰减），`createHighlandShoreWaveSystem` looping vertex shader 循环位移（涌岸/退岸），挂 `castleContainer`（`highland-shore-waves`，renderOrder 5，update 驱动 uTime）。验收：`tools/test_shore_waves.mjs`（232 顶点/336 三角，确定性 hash，相位推进 ~0.132，振幅衰减，预算）
+- [x] **[S14 五地点地面连接，P1]** 已落地（2026-08-27）：`groundConnector.js` `bakeGroundConnector`（基础剖面 + relax 迭代收敛 + 防膨胀钳制）；**应用二挂（飞艇鸟瞰验收）**：圣城台地前缘 relax 岸坡带 `highland-relax-shore-band`——初版 y 2.95–4.36 灰蓝像水下台地被撤，二挂**整体抬高（5.2→4.4）+ 亮岸色 0x9fb4c0**，y 3.70–5.14 高于湖面（2.99/2.50/1.76），飞艇鸟瞰时湖面上可见平滑亮岸带；书店镇岛感（bookshopIslandLift 平滑）、叹息之门走廊（carveHillsForTrack CORRIDOR→FADE smoothstep）核对已有平滑过渡
+- [x] **[S14 TEST]** `tools/test_ground_connector.mjs`：确定性 hash、relax 收敛（final change < 1e-3、更多迭代收敛同剖面）、剖面平滑（相邻差 < 2）、防膨胀（高度 ≤ desired+maxDeviation、端点保持期望）、索引合法、预算
+- [x] **[S15 球面连接带，P1]** 已落地（2026-08-27）：`bakeGroundConnector` 支持 `fromDir/toDir`（slerp 大圆弧采样 + 切平面横向 + 半径+抬升）；**应用**：接口就绪，苔庭/交汇城堡/白鲸海湖角距 80–170°（跨半球）不做整体大陆桥，保持轨道/运河连接
+- [x] **[S15 TEST]** `test_ground_connector.mjs` 球面版断言：确定性、`spherical=true`、所有顶点在半径+抬升球面（±1.5）、起点方向≈fromDir、relax 收敛、防膨胀
+- [x] **[S16 背光高光，P1]** 已落地（2026-08-26）：`backlitHighlight.js`——山体几何克隆等比放大 1.02 + BackSide 暖金层（0xffd9a0）+ rim（法线⊥视线）+ 受光遮罩（法线×太阳，阴影侧不显示）+ 背光因子（`main.js` animate 每帧传 sunDir/camera）；挂 `outerTerrainSystem`。**2026-08-27 修复**：`depthTest:false`——放大壳背面在源物体之后，默认深度测试会整体被山体挡掉（主人验收「看不到高光」的根因）；轮廓光必须画在所有物体之上 + rim 只在边缘发亮
+- [x] **[S16 TEST]** `tools/test_backlit_highlight.mjs`：层创建/几何克隆/BackSide、update 驱动与 null 安全、遮罩纯函数（背阳面=0、受光单调、正对最强）、预算、dispose、圣城构建后高光层挂载与源名断言
+- [x] **[S17 植被小阴影，P1]** 已落地（2026-08-27）：`buildBlobShadow`（圆形贴地半透明暗斑，共享几何/材质）→ 12 株树 + 42 丛灌木根部各 1 个（共 54，radius 1.05–1.65，贴地形高度 +0.035）；城堡-山脉整合核对：12.39 台地埋入山体、城址外缘山体抬升（基座无悬空）
+- [x] **[S17 TEST]** `tools/test_blob_shadow.mjs`：blob 数量对齐（12 树 + 42 灌木）、全部贴地（|y−terrain| < 0.1）、共享几何/材质 ≤2 份、Basic 材质透明不写深、平放贴地、预算 ≤80
+- [x] **[2026-08-27 地势重做]** 台地崖壁：城址边缘过渡 0.80–1.08 → 0.90–1.04（鸟瞰可见台地边界崖线，湖岸不受影响）；出城山体台阶 1.6u → 2.6u（鸟瞰可见岩层）；验收 `tools/test_terrain_profile.mjs`（台地平坦/崖壁落差≥2.5/台阶级/湖面低于台地/过渡有层级）。
+- [x] **[S13 TEST]** `tools/test_shore_waves.mjs`：烘焙确定性、in/out 反向、time offset ∈[0,1)、沿岸排相位推进、近岸振幅 > 远岸 ×2、浪带贴合真实湖岸线（`highlandWaterHalfWidth`/`highlandWaterCenterX`）、索引合法、预算、legacy 水面不受影响
+- [x] **[S13 高山-台地结构]** 已落地（2026-08-26）：视频逐帧/缩略图分析（暖橙棕岩石山、顶部平台、岩层层理、山腰台阶、台地受光）→ 出城台阶化 + 山坡灌木层 `buildHighlandSlopeShrubs`（42 丛，避开湖/城址，独立统计层）复刻视频成片暗绿树丛；**山体岩石配色按主人验收恢复 2026-08-25 基线（冷蓝灰）**。**剩余差距**：岸浪带 → 归 [S13 岸浪]（已落地，见上）
 
 ---
 

@@ -14,7 +14,10 @@ for (const profile of [highland, ancient, canal]) {
   assert.ok(profile.fixtureHash || profile.blueprintHash);
 }
 assert.equal(highland.id, "highland-citadel");
-assert.equal(highland.routePolicy.waterfallSide, "right-of-first-waterfall");
+assert.equal(highland.routePolicy.destination, "castle-top");
+assert.equal(highland.routePolicy.captureMode, "interior-rotating-stairs");
+assert.equal(highland.routePolicy.waterfallCount, 0);
+assert.equal(highland.routePolicy.waterfallSide, "retired");
 assert.equal(ancient.routePolicy.patrolLoopRequired, true);
 assert.equal(canal.routePolicy.bridgesHaveClearance, true);
 ok("高山/古堡/运河 profile：共用 solver/terrain contract，路线政策各自显式化");

@@ -20,7 +20,8 @@ import {
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
 } from "../../world/odysseyCitadel.js?v=20260825-highland-reference-clean-v7";
-import { CITADEL_LEVELS_KEY } from "../../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+import { loadCitadelLevelsSave } from "../../world/citadelLevelsSave.js";
 import {
   createCitadelTerraceBirds,
 } from "../../world/citadelTerraceBirds.js?v=20260823-citadel-reference-v2";
@@ -59,8 +60,17 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
 
   let citadelSpec;
   try {
-    const saved = JSON.parse(localStorage.getItem(CITADEL_LEVELS_KEY) || "null");
-    if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces))) citadelSpec = saved;
+    const migrated = loadCitadelLevelsSave(localStorage, {
+      instanceId: null,
+      normalize: normalizeCitadelTerraceLayout,
+    });
+    if (migrated?.layout) citadelSpec = migrated.layout;
+    else {
+      const saved = JSON.parse(localStorage.getItem(CITADEL_LEVELS_KEY) || "null");
+      if (saved && (Array.isArray(saved) || Array.isArray(saved.terraces) || saved.layout)) {
+        citadelSpec = saved.layout || saved;
+      }
+    }
   } catch { /* 损坏存档回落内置 SPEC */ }
   let citadelTerrainObjects;
   try {

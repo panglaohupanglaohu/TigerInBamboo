@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { TOWNSCAPER_HIGHLAND_PALETTE } from "./citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 import { mergeStaticGroup } from "./geometryMerge.js";
 
-export const HIGHLAND_CITADEL_DESIGN_VERSION = "2026.08.25-reference-obelisk-stone-v11";
+export const HIGHLAND_CITADEL_DESIGN_VERSION = "2026.08.27-reference-obelisk-stone-v12-vegetation-bands";
 
 /** 高山 Townscaper 城区的统一建造/行走基面；山体在边缘连续抬升。 */
 export const HIGHLAND_TOWNSCAPER_BASE_Y = 4.95;
@@ -37,16 +37,18 @@ export const HIGHLAND_REFERENCE_PROPORTIONS = Object.freeze({
 });
 
 export const HIGHLAND_CITADEL_DESIGN_PALETTE = Object.freeze({
+  // 山体岩石配色按主人验收恢复为 2026-08-25 基线（冷蓝灰系）。
   mountainDeep: 0x14243d,
   mountainMid: 0x294766,
   mountainMist: 0x4f7897,
   mountainFace: 0x3b5f69,
   mountainHigh: 0x8095a0,
   mountainSnow: 0xd7e0df,
-  foliageDeep: 0x163c3b,
-  foliageMid: 0x3e7567,
-  foliageLight: 0x8ab19a0,
-  bark: 0x5a5148,
+  // 山地植被只使用截图 2 的去饱和灰绿低模色，不使用彩色树冠。
+  foliageDeep: 0x46524a,
+  foliageMid: 0x64705f,
+  foliageLight: 0x7e8870,
+  bark: 0x665b4b,
   wallShadow: 0x7898b5,
   wallMid: 0xa9bdcf,
   wallLight: 0xd8e1e8,
@@ -61,6 +63,25 @@ export const HIGHLAND_CITADEL_DESIGN_PALETTE = Object.freeze({
   mist: 0x76c9e8,
   lakeGlow: 0xff8b4e,
 });
+
+/**
+ * 山地树的权威放置表。点位在山肩/山脊带上，而不是城址内部；
+ * 运行时 Y 仍由 highlandTerrainSurfaceHeight(x,z) 采样，避免树根悬空。
+ */
+export const HIGHLAND_MOUNTAIN_TREE_PLACEMENTS = Object.freeze([
+  Object.freeze({ x: -62, z: 22, scale: 1.04, band: "west-shoulder" }),
+  Object.freeze({ x: -55, z: 10, scale: 0.94, band: "west-shoulder" }),
+  Object.freeze({ x: -48, z: -2, scale: 0.98, band: "west-shoulder" }),
+  Object.freeze({ x: -43, z: -15, scale: 1.02, band: "west-shoulder" }),
+  Object.freeze({ x: 62, z: 22, scale: 1.04, band: "east-shoulder" }),
+  Object.freeze({ x: 55, z: 9, scale: 0.94, band: "east-shoulder" }),
+  Object.freeze({ x: 48, z: -3, scale: 0.98, band: "east-shoulder" }),
+  Object.freeze({ x: 43, z: -16, scale: 1.02, band: "east-shoulder" }),
+  Object.freeze({ x: -34, z: -44, scale: 1.00, band: "north-forest-belt" }),
+  Object.freeze({ x: -12, z: -50, scale: 0.92, band: "north-forest-belt" }),
+  Object.freeze({ x: 15, z: -50, scale: 0.96, band: "north-forest-belt" }),
+  Object.freeze({ x: 37, z: -43, scale: 1.05, band: "north-forest-belt" }),
+]);
 
 /** Single continuous mountain-city ground.  It replaces all five ring shelves. */
 export function highlandCityGroundHeight(x, z) {
@@ -77,8 +98,20 @@ export function highlandCityGroundHeight(x, z) {
   // v8 运河样例更宽。共享承重面必须覆盖完整城域，否则外圈格会被山体
   // 穿过；只在 22u 城址内压平，外圈仍平滑回到连续山坡。
   const townFootprint = Math.max(Math.abs(x) / 25.0, Math.abs(z) / 25.0);
-  const townBlend = 1 - smoothMask(0.80, 1.08, townFootprint);
-  return THREE.MathUtils.lerp(slopeGround, HIGHLAND_TOWNSCAPER_BASE_Y - 0.04, townBlend);
+  // 2026-08-27 地势重做（飞艇鸟瞰验收）：城址边缘从 0.80–1.08 宽过渡
+  // 改为 0.90–1.04 的台地崖壁——鸟瞰时台地边界是一条清晰崖线，
+  // 不再与山坡糊成一片；湖岸（z=24，footprint≈0.81）不受影响。
+  const townBlend = 1 - smoothMask(0.90, 1.04, townFootprint);
+  const raw = THREE.MathUtils.lerp(slopeGround, HIGHLAND_TOWNSCAPER_BASE_Y - 0.04, townBlend);
+  // S13 层级台地（画面归纳）：城址外的山腰是岩石台阶，不是平滑坡面——
+  // 高度量化成 ~1.35u 一级的岩层，出城 1.30 后完全台阶化，1.02–1.30 平滑过渡。
+  // 城址内保持水平（建筑/编辑器/寻路承重面），湖岸线（waterfront）不受影响。
+  const outCity = smoothMask(1.02, 1.30, townFootprint);
+  if (outCity > 0.01) {
+    const stepped = Math.floor(slopeGround / 1.35) * 1.35 + 0.9;
+    return THREE.MathUtils.lerp(raw, stepped, outCity);
+  }
+  return raw;
 }
 
 function smoothMask(edge0, edge1, value) {
@@ -125,7 +158,16 @@ export function highlandMountainGridHeight(x, z) {
   const groundedCityFloor = highlandCityGroundHeight(x, z)
     + 0.04
     - localSphericalSurfaceOffset(x, z);
-  return THREE.MathUtils.lerp(naturalMountain, groundedCityFloor, cityCarve);
+  const mountainBase = THREE.MathUtils.lerp(naturalMountain, groundedCityFloor, cityCarve);
+  // S13/S14 层级岩山（2026-08-27 飞艇鸟瞰重做）：出城后的山体量化成
+  // ~2.6u 一级的岩石台阶（原 1.6u 太细，鸟瞰不可见），还原视频里岩石
+  // 台地山的层理；城址内保持水平承重面，1.02–1.30 平滑过渡。
+  const outCity = smoothMask(1.02, 1.30, cityFootprint);
+  if (outCity > 0.01) {
+    const stepped = Math.floor(naturalMountain / 2.6) * 2.6 + 1.3;
+    return THREE.MathUtils.lerp(mountainBase, stepped, outCity);
+  }
+  return mountainBase;
 }
 
 /** Tangent-chart → planet surface offset. The chart is never a flat plane. */
@@ -254,7 +296,7 @@ const HIGHLAND_WATER_TILES = Object.freeze([
 // The waterfront is a carved opening in the same terrain chart.  Keeping this
 // footprint in one place prevents the mountain mesh, the water cap, and the
 // editor/debug overlays from disagreeing about what is land.
-const HIGHLAND_LAKE_CHART = Object.freeze({
+export const HIGHLAND_LAKE_CHART = Object.freeze({
   // Townscaper 最前排格心在 z=20，体块前缘到 z≈21。湖面从 z=24
   // 才开始切开山体，留下连续天然湖岸承重带；旧值 18 会把正门脚下
   // 的 terrain cell 一并删掉，即使 Y 曲率正确也会看成悬空桥。
@@ -269,11 +311,11 @@ const HIGHLAND_LAKE_CHART = Object.freeze({
   basinHalfWidth: 22.0,
 });
 
-function highlandWaterCenterX(z) {
+export function highlandWaterCenterX(z) {
   return Math.sin((z - HIGHLAND_LAKE_CHART.zStart) * 0.16) * HIGHLAND_LAKE_CHART.centerAmplitude;
 }
 
-function highlandWaterHalfWidth(z) {
+export function highlandWaterHalfWidth(z) {
   const u = THREE.MathUtils.clamp(
     (z - HIGHLAND_LAKE_CHART.zStart) / HIGHLAND_LAKE_CHART.depth,
     0,
@@ -511,6 +553,13 @@ export function highlandTerrainSurfaceHeight(x, z, radius = 160) {
     ? Math.max(0.9, highlandMountainGridHeight(x, z) * 0.58)
     : highlandMountainGridHeight(x, z);
   return localSphericalSurfaceOffset(x, z, radius) + height;
+}
+
+/** 山体采样坡度；树、灌木、草都读取同一高度场，不能各自猜 Y。 */
+export function highlandMountainSlope(x, z, delta = 0.75) {
+  const dx = (highlandTerrainSurfaceHeight(x + delta, z) - highlandTerrainSurfaceHeight(x - delta, z)) / (2 * delta);
+  const dz = (highlandTerrainSurfaceHeight(x, z + delta) - highlandTerrainSurfaceHeight(x, z - delta)) / (2 * delta);
+  return Math.hypot(dx, dz);
 }
 
 function mountainGridSurfaceHeight(x, z) {
@@ -1448,12 +1497,15 @@ function buildMountainBackdrop(materials) {
 function buildMountainTree(materials, index, x, z, scale = 1) {
   const tree = new THREE.Group();
   tree.name = `highland-mountain-vegetation-${index}`;
-  tree.position.set(x, mountainGridSurfaceHeight(x, z) + 0.18, z);
+  const surfaceY = mountainGridSurfaceHeight(x, z);
+  tree.position.set(x, surfaceY + 0.02, z);
   tree.rotation.y = (index * 1.713) % (Math.PI * 2);
   tree.scale.setScalar(scale);
   tree.userData.nonNavigable = true;
   tree.userData.presentationOnly = true;
   tree.userData.role = "mountain-slope-vegetation";
+  tree.userData.surfaceProvider = "highlandTerrainSurfaceHeight";
+  tree.userData.surfaceY = surfaceY;
 
   const trunk = presentationMesh(
     new THREE.CylinderGeometry(0.18, 0.26, 2.3, 5),
@@ -1489,25 +1541,44 @@ function buildMountainVegetation(materials) {
   group.name = "highland-mountain-slope-vegetation";
   group.userData.nonNavigable = true;
   group.userData.presentationOnly = true;
-  // 圣城只使用小体量的圆团低模树；旧港口参天古樟不再跨场景复用。
-  // 每棵树仍按连续山体采样扎根，避免树根浮在网格上或穿入建筑。
-  const placements = [
-    [-21, 8, 0.92], [-19, -4, 1.02], [-17, -16, 0.94],
-    [18, 9, 0.88], [20, -5, 1.04], [17, -17, 0.96],
-    [-10, -23, 1.08], [9, -24, 0.98],
-    [-35, -8, 1.10], [36, -10, 1.06], [-43, 15, 1.02], [44, 16, 1.08],
-  ];
-  placements.forEach(([x, z, scale], index) => {
+  // 圣城只使用截图 2 的灰绿圆团低模树；旧港口参天古樟不跨场景复用。
+  // 点位沿西/东山肩与北侧森林带排布，城址内部和湖面不再出现孤立树。
+  const placements = HIGHLAND_MOUNTAIN_TREE_PLACEMENTS;
+  // S17 小阴影：树根部共享 blob（圆形贴地暗斑）
+  const blobShared = {
+    geometry: new THREE.CircleGeometry(1, 14),
+    material: new THREE.MeshBasicMaterial({
+      color: 0x141d18,
+      transparent: true,
+      opacity: 0.24,
+      depthWrite: false,
+    }),
+  };
+  placements.forEach(({ x, z, scale, band }, index) => {
     const tree = buildMountainTree(materials, index, x, z, scale);
-    tree.position.set(x, highlandTerrainSurfaceHeight(x, z), z);
+    tree.userData.mountainBand = band;
+    tree.userData.slope = highlandMountainSlope(x, z);
     tree.userData.kind = "highland-low-poly-round-tree";
     tree.userData.assetType = "lowPolyRoundTree";
-    tree.userData.style = "three-icosahedron-green-canopy";
+    tree.userData.style = "three-icosahedron-muted-gray-green-canopy";
+    tree.userData.palette = "screenshot-2-gray-green-v1";
     tree.userData.plantOnly = true;
     group.add(tree);
+    const blob = buildBlobShadow(THREE, {
+      x,
+      y: tree.userData.surfaceY,
+      z,
+      radius: 1.05 * scale,
+      shared: blobShared,
+    });
+    blob.userData.host = tree.name;
+    group.add(blob);
   });
   group.userData.treeCount = placements.length;
+  group.userData.blobShadowCount = placements.length;
   group.userData.followsMountainGrid = true;
+  group.userData.distribution = "authored-mountain-slope-bands";
+  group.userData.bandIds = Object.freeze([...new Set(placements.map((entry) => entry.band))]);
   group.userData.assetSource = "buildMountainTree-low-poly-round-canopy";
   return group;
 }
@@ -2083,4 +2154,253 @@ export function buildHighlandCitadelLatestDesign(options = {}) {
     });
   }
   return root;
+}
+
+// =====================================================================
+// S13 山坡植被（视频画面归纳）：高山圣城山坡有成片暗绿树丛/灌木
+// （色 ≈ 80–112, 96–112, 80），覆盖山体下部多个坡面。
+// 新增独立"山坡灌木层"：低模圆冠丛（Icosahedron detail 0，每丛 3 球），
+// 确定性散布在城址外山坡环带，避开湖面/城址/12 株低模树；不计入
+// mountainVegetationCount 与道具统计（独立 userData.vegetationLayer）。
+// =====================================================================
+
+const SHRUB_FOLIAGE = Object.freeze([
+  0x5a7058, // 暗绿 (90,112,88) —— 视频植被暗部
+  0x6a8060, // 中绿 (106,128,96)
+  0x4a5c48, // 最深绿 (74,92,72)
+]);
+
+// 截图 3 的植被不是围绕城堡随机撒点，而是沿山肩的等高带成片出现。
+// 每条折线都是山体图表中的一条“森林带”；偏移量只沿带的法线抖动，
+// 因而既保留自然感，又不会再次退化成圆环随机分布。
+const HIGHLAND_MOUNTAIN_SHRUB_BANDS = Object.freeze([
+  Object.freeze({
+    id: "west-shoulder-forest-belt",
+    points: Object.freeze([[-83, 25], [-72, 16], [-59, 3], [-47, -14], [-42, -27]]),
+    samples: 24,
+    width: 5.4,
+  }),
+  Object.freeze({
+    id: "east-shoulder-forest-belt",
+    points: Object.freeze([[83, 25], [72, 16], [59, 3], [47, -14], [42, -27]]),
+    samples: 24,
+    width: 5.4,
+  }),
+  Object.freeze({
+    id: "north-forest-belt",
+    points: Object.freeze([[-56, -42], [-35, -46], [-12, -48], [12, -48], [35, -46], [56, -42]]),
+    samples: 28,
+    width: 4.8,
+  }),
+]);
+
+function pointOnPolyline(points, t) {
+  const segments = [];
+  let total = 0;
+  for (let index = 0; index < points.length - 1; index++) {
+    const [x0, z0] = points[index];
+    const [x1, z1] = points[index + 1];
+    const length = Math.hypot(x1 - x0, z1 - z0);
+    segments.push({ x0, z0, x1, z1, length });
+    total += length;
+  }
+  let distance = THREE.MathUtils.clamp(t, 0, 1) * total;
+  for (const segment of segments) {
+    if (distance <= segment.length || segment === segments[segments.length - 1]) {
+      const u = segment.length > 1e-6 ? distance / segment.length : 0;
+      const tx = (segment.x1 - segment.x0) / Math.max(segment.length, 1e-6);
+      const tz = (segment.z1 - segment.z0) / Math.max(segment.length, 1e-6);
+      return {
+        x: THREE.MathUtils.lerp(segment.x0, segment.x1, u),
+        z: THREE.MathUtils.lerp(segment.z0, segment.z1, u),
+        tx,
+        tz,
+      };
+    }
+    distance -= segment.length;
+  }
+  const [x, z] = points[points.length - 1];
+  return { x, z, tx: 1, tz: 0 };
+}
+
+function compileHighlandShrubPlacements(count, seed) {
+  const random = highlandSeededRandom(seed);
+  const candidates = [];
+  for (const band of HIGHLAND_MOUNTAIN_SHRUB_BANDS) {
+    for (let index = 0; index < band.samples; index++) {
+      const t = (index + 0.22 + random() * 0.56) / band.samples;
+      const point = pointOnPolyline(band.points, t);
+      const offset = (random() - 0.5) * band.width;
+      const x = point.x - point.tz * offset + (random() - 0.5) * 0.85;
+      const z = point.z + point.tx * offset + (random() - 0.5) * 0.85;
+      const footprint = Math.max(Math.abs(x) / 28.5, Math.abs(z + 1.5) / 31.5);
+      if (footprint < 1.15 || isHighlandWaterfrontCutout(x, z)) continue;
+      const surfaceY = highlandTerrainSurfaceHeight(x, z);
+      const slope = highlandMountainSlope(x, z);
+      if (surfaceY < 1.0 || surfaceY > 50 || slope > 3.2) continue;
+      candidates.push({ x, z, surfaceY, slope, band: band.id, size: random() });
+    }
+  }
+
+  // First enforce a readable gap. A second pass relaxes only the gap, never
+  // the surface/water/city tests, so dense belts remain intentional clusters.
+  const placements = [];
+  for (const minGap of [3.15, 2.2]) {
+    for (const candidate of candidates) {
+      if (placements.length >= count) break;
+      if (placements.some((placed) => Math.hypot(placed.x - candidate.x, placed.z - candidate.z) < minGap)) continue;
+      placements.push(candidate);
+    }
+    if (placements.length >= count) break;
+  }
+  return placements.slice(0, count);
+}
+
+// S17 植被小阴影（原文 *lil' shadows, they look quite volumetric*）：
+// 圆形贴地半透明暗斑，让低模植被「坐」在地面上。共享几何/材质，只改矩阵。
+const _blobShadowGeometry = null;
+function buildBlobShadow(THREE, { x, y, z, radius = 1.0, opacity = 0.26, shared = null }) {
+  const geometry = shared?.geometry || new THREE.CircleGeometry(1, 14);
+  const material = shared?.material || new THREE.MeshBasicMaterial({
+    color: 0x141d18,
+    transparent: true,
+    opacity,
+    depthWrite: false,
+  });
+  const blob = new THREE.Mesh(geometry, material);
+  blob.name = "highland-blob-shadow";
+  blob.position.set(x, y + 0.035, z);
+  blob.rotation.x = -Math.PI / 2;
+  blob.scale.setScalar(radius);
+  blob.renderOrder = 1;
+  blob.userData.role = "vegetation-blob-shadow";
+  blob.userData.skipInkOutline = true;
+  return blob;
+}
+
+function buildSlopeShrub(materials, index, x, z, size, placement = {}) {
+  const shrub = new THREE.Group();
+  shrub.name = `highland-slope-shrub-${index}`;
+  shrub.position.set(x, placement.surfaceY ?? highlandTerrainSurfaceHeight(x, z) + 0.02, z);
+  shrub.rotation.y = (index * 1.913) % (Math.PI * 2);
+  shrub.scale.setScalar(0.7 + size * 0.7);
+  shrub.userData.nonNavigable = true;
+  shrub.userData.presentationOnly = true;
+  shrub.userData.role = "slope-shrub";
+  shrub.userData.vegetationLayer = "highland-slope-shrubs-v1";
+  shrub.userData.surfaceProvider = "highlandTerrainSurfaceHeight";
+  shrub.userData.surfaceY = placement.surfaceY ?? highlandTerrainSurfaceHeight(x, z);
+  shrub.userData.mountainBand = placement.band ?? "unknown";
+  shrub.userData.slope = placement.slope ?? highlandMountainSlope(x, z);
+  shrub.userData.palette = "screenshot-2-gray-green-v1";
+  // 成丛：中央主冠 + 两侧副冠，堆叠成圆润树丛（视频山坡植被形态）
+  const blobs = [
+    [0.0, 0.34, 0.0, 0.55, materials.shrubDeep],
+    [0.34, 0.22, 0.18, 0.42, materials.shrubMid],
+    [-0.3, 0.2, -0.14, 0.4, materials.shrubMid],
+    [0.06, 0.6, -0.04, 0.3, materials.shrubLight ?? materials.shrubDeep],
+  ];
+  for (let blobIndex = 0; blobIndex < blobs.length; blobIndex++) {
+    const [bx, by, bz, radius, material] = blobs[blobIndex];
+    const blob = presentationMesh(
+      new THREE.IcosahedronGeometry(radius, 0),
+      material,
+      `highland-slope-shrub-${index}-blob-${blobIndex}`,
+      "mountain-shrub-blob"
+    );
+    blob.position.set(bx, by, bz);
+    blob.scale.set(1.0, 0.8, 0.92);
+    blob.userData.skipInkOutline = true;
+    shrub.add(blob);
+  }
+  return shrub;
+}
+
+export function buildHighlandSlopeShrubs(options = {}) {
+  const count = options.count ?? 42;
+  const seed = options.seed ?? 20260826;
+  const foliage = {
+    shrubDeep: new THREE.Color(SHRUB_FOLIAGE[0]),
+    shrubMid: new THREE.Color(SHRUB_FOLIAGE[1]),
+  };
+  const materials = {
+    shrubDeep: new THREE.MeshStandardMaterial({
+      color: foliage.shrubDeep,
+      roughness: 1,
+      flatShading: true,
+    }),
+    shrubMid: new THREE.MeshStandardMaterial({
+      color: foliage.shrubMid,
+      roughness: 1,
+      flatShading: true,
+    }),
+    shrubLight: new THREE.MeshStandardMaterial({
+      color: new THREE.Color(SHRUB_FOLIAGE[2]),
+      roughness: 1,
+      flatShading: true,
+    }),
+  };
+  // S17: 共享 blob shadow 几何/材质（所有灌木/树共用一块圆片）
+  const blobShared = {
+    geometry: new THREE.CircleGeometry(1, 14),
+    material: new THREE.MeshBasicMaterial({
+      color: 0x141d18,
+      transparent: true,
+      opacity: 0.26,
+      depthWrite: false,
+    }),
+  };
+  const group = new THREE.Group();
+  group.name = "highland-slope-shrub-vegetation";
+  group.userData.nonNavigable = true;
+  group.userData.presentationOnly = true;
+  group.userData.role = "slope-shrub-vegetation";
+  group.userData.vegetationLayer = "highland-slope-shrubs-v1";
+  group.userData.shrubCount = 0;
+  group.userData.blobShadowShared = blobShared;
+  const placements = compileHighlandShrubPlacements(count, seed);
+  placements.forEach((placement, index) => {
+    const shrub = buildSlopeShrub(
+      materials,
+      index + 1,
+      placement.x,
+      placement.z,
+      placement.size,
+      placement
+    );
+    group.add(shrub);
+    // S17 小阴影：灌木根部圆形暗斑（共享几何，贴地）
+    const blob = buildBlobShadow(THREE, {
+      x: placement.x,
+      y: placement.surfaceY,
+      z: placement.z,
+      radius: 1.15 + placement.size * 0.5,
+      shared: blobShared,
+    });
+    blob.userData.host = shrub.name;
+    group.add(blob);
+  });
+  group.userData.shrubCount = placements.length;
+  group.userData.distribution = "authored-mountain-slope-bands";
+  group.userData.bandIds = Object.freeze([...new Set(placements.map((entry) => entry.band))]);
+  group.userData.surfaceProvider = "highlandTerrainSurfaceHeight";
+  group.userData.assetSource = "buildHighlandSlopeShrubs-low-poly-round-cluster";
+  return group;
+}
+
+export function mountHighlandSlopeShrubs(THREE, parent, options = {}) {
+  if (!THREE || !parent) return null;
+  const existing = parent.getObjectByName("highland-slope-shrub-vegetation");
+  if (existing) {
+    existing.removeFromParent();
+    existing.traverse((o) => {
+      if (o.isMesh) {
+        o.geometry?.dispose?.();
+        o.material?.dispose?.();
+      }
+    });
+  }
+  const shrubs = buildHighlandSlopeShrubs(options);
+  parent.add(shrubs);
+  return shrubs;
 }

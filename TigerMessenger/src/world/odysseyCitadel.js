@@ -32,8 +32,12 @@ import {
   HIGHLAND_TOWNSCAPER_BASE_Y,
   HIGHLAND_TOWNSCAPER_PLATFORM,
 } from "./highlandCitadelDesign.js?v=reference-waterfront-v18-lift-trees-lake-cutout";
-import { mountHighlandLocalHeroClouds } from "./highlandHeroClouds.js";
+import { mountHighlandLocalHeroClouds } from "./highlandHeroClouds.js?v=shared-impostor-s12-v1";
 import { mountHighlandSlopeGrass } from "./highlandSlopeGrass.js";
+import { mountHighlandSlopeShrubs } from "./highlandCitadelDesign.js?v=reference-waterfront-v18-lift-trees-lake-cutout";
+import { bakeHighlandShoreWaves, createHighlandShoreWaveSystem } from "./highlandShoreWaves.js?v=shore-waves-s13-v1";
+import { createBacklitHighlightLayer } from "./backlitHighlight.js?v=backlit-s16-v1";
+import { bakeGroundConnector } from "./groundConnector.js?v=ground-connector-s14-v1";
 import {
   v3HighlandWallPalette,
   v3HighlandGateColor,
@@ -64,6 +68,7 @@ import {
   citadelPaletteIndexOfChar,
   citadelShadeStep,
 } from "./citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+import { attachBuildingOwnedProps } from "./citadelBuildingProps.js";
 
 /** Maria Svarbova 无菌马卡龙：低语调中间色，禁止赤陶/焦黑。 */
 export const SVARBOVA = Object.freeze({
@@ -1239,6 +1244,31 @@ export function applyInkOutlines(
  * pilgrimage-step / pilgrimage-landing 无拾取依赖，随组合并。
  * 可重复调用（rebuildCitadelTown 热重建后再次合并，幂等清旧）。
  */
+// G30-A（2026-08-26）：town 层组合并的 skip/onSurface 在 mergeCitadelTownStatic
+// 与增量编辑（rebuildCitadelTownIncremental）之间共享。
+const citadelTownMergeSkip = (mesh) =>
+  mesh.name === "town-window" ||
+  mesh.userData.citadelWindow === true ||
+  mesh.userData.terrainObjectId != null ||
+  mesh.name?.startsWith("contour-step-") ||
+  mesh.userData.mergedGeometry === true;
+
+const citadelTownMergeOnSurface = (merged, _material, segments, _groupTriStart) => {
+  const faceToCell = [];
+  for (const seg of segments) {
+    if (!seg.mesh.userData?.cell) continue;
+    faceToCell.push({
+      triStart: seg.triStart,
+      triCount: seg.triCount,
+      cell: seg.mesh.userData.cell,
+    });
+  }
+  if (faceToCell.length) {
+    merged.userData.faceToCell = faceToCell;
+    merged.userData.hasMergedCells = true;
+  }
+};
+
 export function mergeCitadelTownStatic(assemblyRoot) {
   // 幂等：先移除上次合并产生的网格（仅 town 层组的 mergedGeometry===true；
   // highland 装饰组合并网格带 "highland-decoration" 命名空间，不可误删）
@@ -1251,33 +1281,8 @@ export function mergeCitadelTownStatic(assemblyRoot) {
     mesh.removeFromParent();
   }
 
-  const skip = (mesh) =>
-    mesh.name === "town-window" ||
-    mesh.userData.citadelWindow === true ||
-    mesh.userData.terrainObjectId != null ||
-    mesh.name?.startsWith("contour-step-");
-
-  const onSurface = (merged, _material, segments, groupTriStart) => {
-    // 只给含 cell 数据的体块组建立面区间映射。
-    // triStart 必须用「相对该合并网格自身」的段起点（seg.triStart）——
-    // raycaster 命中的 hit.faceIndex 是网格局部索引；groupTriStart 是跨
-    // 材质组累计的全局游标，若写入全局值，多材质组下映射会整体错位，
-    // 3D 直编辑点块/悬停拾取随机失败（扭曲网格引入多组后暴露）。
-    const faceToCell = [];
-    for (const seg of segments) {
-      if (!seg.mesh.userData?.cell) continue;
-      faceToCell.push({
-        triStart: seg.triStart,
-        triCount: seg.triCount,
-        cell: seg.mesh.userData.cell,
-      });
-    }
-    if (faceToCell.length) {
-      merged.userData.faceToCell = faceToCell;
-      // 合并网格本身也携带 cell 引用（供 castCell 判定「这是体块网格」）
-      merged.userData.hasMergedCells = true;
-    }
-  };
+  const skip = citadelTownMergeSkip;
+  const onSurface = citadelTownMergeOnSurface;
 
   // 按层组合并：每层一个锚点，隐藏高层的组 visible 语义保持有效
   const layers = assemblyRoot.userData?.layers;
@@ -1577,7 +1582,7 @@ function buildOuterCitadelTerrain(materials, contourSpec = CITADEL.contourTerrai
  *   gradientMap: THREE.DataTexture,
  * }}
  */
-export function buildCitadelTownAssembly(spec, options = {}) {
+function buildTownAssemblyCtx(options = {}) {
   const random = options.random ?? lcg(20260808);
   const gradientMap = options.gradientMap ?? makeThreeStepGradient();
   // Townscaper 彩城管线：运河交汇古堡（马卡龙 15 色）与高山圣城
@@ -1631,6 +1636,29 @@ export function buildCitadelTownAssembly(spec, options = {}) {
   if (!materials.windowDark) materials.windowDark = makePastelStandard(SVARBOVA.grayBlue);
   if (!materials.windowLit) materials.windowLit = makeWindowLitMat(gradientMap);
 
+  return {
+    random,
+    gradientMap,
+    townscaperMode,
+    townPalette,
+    townGateColor,
+    townMaterialScheme,
+    usePaletteV3,
+    materials,
+    townWaterMat,
+    mesh,
+    makeCanalMat,
+    finialHeight: CITADEL.finialHeight,
+  };
+}
+
+export function buildCitadelTownAssembly(spec, options = {}) {
+  const ctx = options.reuseCtx ?? buildTownAssemblyCtx(options);
+  const {
+    random, gradientMap, townscaperMode, townPalette, townGateColor,
+    townMaterialScheme, usePaletteV3, materials, townWaterMat, mesh,
+  } = ctx;
+
   const town = buildCitadelTown(spec, {
     leanDecor: options.leanDecor === true,
     colorful: townscaperMode,
@@ -1678,7 +1706,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     buildShrub: buildCitadelShrub,
     buildTopiary: buildCitadelRoundTopiary,
     finialHeight: CITADEL.finialHeight,
-  });
+  }, { dirty: options.dirty });
 
   const group = new THREE.Group();
   group.name = "citadel-town-assembly";
@@ -1705,6 +1733,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     materials,
     gradientMap,
     surfaceConformance,
+    ctx,
   };
 }
 
@@ -1773,8 +1802,11 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
         leanDecor: options.leanDecor === true || options.baseYOverride !== undefined,
         // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升
         baseY: options.baseYOverride ?? metrics[terraceIndex].top - 0.06,
+        // G30-A：增量编辑复用同一套材质/上下文（全量 rebuild 后由调用方清缓存）
+        reuseCtx: options.townCtxCache?.ctx ?? undefined,
       }
     );
+    if (options.townCtxCache && !options.townCtxCache.ctx) options.townCtxCache.ctx = assembly.ctx;
     terraceLevels[terraceIndex] = [];
     assembly.levels.forEach((level, floorIndex) => {
       level.name = `town-terrace-${terraceIndex}-level-${floorIndex}`;
@@ -2381,7 +2413,75 @@ export function buildOdysseyCitadel(options = {}) {
     outerTerrainSystem.add(buildHighlandTownFoundationPlatform(materials));
     outerTerrainSystem.userData.townFoundation = HIGHLAND_TOWNSCAPER_PLATFORM;
     mountHighlandSlopeGrass(THREE, outerTerrainSystem);
+    // S13 山坡植被：城址外山坡成片暗绿灌木丛（视频画面归纳），
+    // 独立层，不计入 12 株低模树与道具统计。
+    mountHighlandSlopeShrubs(THREE, outerTerrainSystem);
     mountHighlandLocalHeroClouds(THREE, castleContainer);
+    // S13 岸浪（台地-海衔接）：湖岸线内侧烘焙 in/out/time 浪带，
+    // looping vertex shader 循环位移（涌岸/退岸），castleContainer.update 驱动。
+    try {
+      const shoreWaves = createHighlandShoreWaveSystem(
+        THREE,
+        castleContainer,
+        bakeHighlandShoreWaves({ seed: 20260826 }),
+        {}
+      );
+      shoreWaves.mesh.name = "highland-shore-waves";
+      castleContainer.userData.highlandShoreWaves = shoreWaves;
+    } catch (error) {
+      console.warn("[citadel] shore waves skipped:", error?.message);
+    }
+    // S16 背光高光：连续山体反向轮廓高光层（逆光构图时轮廓亮线），
+    // main.js animate 每帧驱动 sunDir/camera。
+    try {
+      const terrainMesh = outerTerrainSystem.getObjectByName("citadel-oskar-grid-mountain-surface");
+      if (terrainMesh) {
+        const backlit = createBacklitHighlightLayer(THREE, terrainMesh, { scale: 1.02 });
+        outerTerrainSystem.add(backlit.layer);
+        castleContainer.userData.highlandBacklit = backlit;
+      }
+    } catch (error) {
+      console.warn("[citadel] backlit highlight skipped:", error?.message);
+    }
+    // S14 relax 连接带（飞艇鸟瞰验收，2026-08-27 二挂）：台地前缘 → 浅水区的
+    // relax 岸坡带。初版 y 2.95–4.36 太低、灰蓝色像水下台地被撤；二挂整体
+    // 抬高（5.2→4.4）+ 亮岸色，飞艇鸟瞰时在湖面上可见一条平滑岸带。
+    try {
+      const band = bakeGroundConnector({
+        from: [0, 24],
+        to: [0, 31],
+        fromHeight: 5.2,
+        toHeight: 4.4,
+        width: 30,
+        segments: 5,
+        crossSegments: 9,
+        seed: 20260827,
+      });
+      const bandGeometry = new THREE.BufferGeometry();
+      bandGeometry.setAttribute("position", new THREE.Float32BufferAttribute(band.positions, 3));
+      bandGeometry.setIndex(band.indices);
+      bandGeometry.computeVertexNormals();
+      bandGeometry.computeBoundingSphere();
+      const bandMaterial = new THREE.MeshStandardMaterial({
+        color: 0x9fb4c0,
+        roughness: 1,
+        flatShading: true,
+        polygonOffset: true,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1,
+      });
+      const bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
+      bandMesh.name = "highland-relax-shore-band";
+      bandMesh.renderOrder = 3;
+      bandMesh.userData.relaxConnector = true;
+      bandMesh.userData.connectorHash = band.hash;
+      bandMesh.userData.connectorVertices = band.vertexCount;
+      bandMesh.userData.relaxFinalMaxChange = band.relaxFinalMaxChange;
+      castleContainer.add(bandMesh);
+      castleContainer.userData.highlandRelaxBand = bandMesh;
+    } catch (error) {
+      console.warn("[citadel] relax shore band skipped:", error?.message);
+    }
   }
   const terrainOutlinedSurfaceCount = skipOuterTerrain
     ? 0
@@ -2397,6 +2497,8 @@ export function buildOdysseyCitadel(options = {}) {
   // 运河交汇：首次入场 plop（软弹一下），其余帧静态。
   let plopT = skipOuterTerrain ? 0 : 1;
   const update = (dt = 0.016, t = 0) => {
+    // G30-B：驱动城堡构建生长动画（含动画结束后的挂起合并/窗口重建）
+    tickCitadelGrowAnimations(castleContainer, dt);
     if (plopT < 0.32) {
       plopT += Math.max(0.008, Number(dt) || 0.016);
       const u = Math.min(1, plopT / 0.32);
@@ -2406,6 +2508,7 @@ export function buildOdysseyCitadel(options = {}) {
     }
     outerTerrainSystem.userData.highlandSlopeGrass?.update?.(t);
     castleContainer.userData.highlandHeroClouds?.update?.(t);
+    castleContainer.userData.highlandShoreWaves?.update?.(t);
   };
   castleContainer.update = update;
   castleContainer.userData.update = update;
@@ -2494,6 +2597,7 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.terrainObjectsSpec = terrainObjects.userData?.placements ?? [];
   castleContainer.userData.townSpec = townAssembly.layout;
   castleContainer.userData.townStats = townAssembly.stats;
+  attachBuildingOwnedProps(castleContainer, townAssembly.layout, { seed: options.seed ?? 20260808 });
   castleContainer.userData.townSurfaceConformance = useHighlandLatestDesign
     ? townAssembly.surfaceConformance?.[0] ?? null
     : null;
@@ -2544,9 +2648,287 @@ function disposeTownLevels(levelGroups) {
  * @param {typeof CITADEL_TOWN_SPEC} spec 新布局
  * @returns {object|null} 新 stats；非圣城容器返回 null
  */
+
+// =====================================================================
+// G30-A 城堡构建增量编辑（2026-08-26）
+// 编辑命令 → dirty 邻域（水平 1-ring + 同柱 ±2 层）→ 只重建 dirty 格的
+// 几何（buildCitadelTown dirty 过滤）→ 移除旧 dirty 网格 → dirty level
+// 重合并 → 窗口实例重建。全量 rebuildCitadelTown 保留为存档恢复/大改路径。
+// =====================================================================
+
+/** 编辑格 → dirty 集：水平 rings-ring（切比雪夫，规则最大依赖 3×3=1-ring，
+ *  2-ring 为门禁上限）+ 同柱上下 columnSpan 层（塔 3 层/飞楼 2 层跨层依赖）。 */
+export function computeCitadelDirtyCells(edits = [], { rings = 1, columnSpan = 2 } = {}) {
+  const dirty = new Set();
+  for (const edit of edits) {
+    const ix = Number(edit?.ix);
+    const iy = Number(edit?.iy);
+    const iz = Number(edit?.iz);
+    if (!Number.isFinite(ix) || !Number.isFinite(iy) || !Number.isFinite(iz)) continue;
+    for (let dx = -rings; dx <= rings; dx++) {
+      for (let dz = -rings; dz <= rings; dz++) {
+        for (let dy = -columnSpan; dy <= columnSpan; dy++) {
+          dirty.add(`${ix + dx},${iy + dy},${iz + dz}`);
+        }
+      }
+    }
+  }
+  return dirty;
+}
+
+/** 两个 layout（terraces[].levels 字符串网格）逐格 diff → 编辑命令列表。 */
+export function diffCitadelLayouts(before, after) {
+  const collect = (layout, target) => {
+    const terraces = Array.isArray(layout) ? layout : layout?.terraces;
+    for (const terr of terraces || []) {
+      const t = Number.isFinite(terr?.terraceIndex) ? terr.terraceIndex : 0;
+      (terr?.levels || []).forEach((rowsArr, iy) => {
+        (rowsArr || []).forEach((row, iz) => {
+          [...String(row)].forEach((ch, ix) => {
+            target.set(`${t}|${ix}|${iy}|${iz}`, ch);
+          });
+        });
+      });
+    }
+  };
+  const a = new Map();
+  const b = new Map();
+  collect(before, a);
+  collect(after, b);
+  const edits = [];
+  for (const key of new Set([...a.keys(), ...b.keys()])) {
+    const beforeChar = a.get(key);
+    const afterChar = b.get(key);
+    if (beforeChar === afterChar) continue;
+    const [t, ix, iy, iz] = key.split("|").map(Number);
+    edits.push({ terraceIndex: t, ix, iy, iz, before: beforeChar ?? ".", after: afterChar ?? "." });
+  }
+  return edits;
+}
+
+/** 与 applyInkOutlines 相同的单网格描边判定。 */
+function shouldInkOutline(mesh) {
+  return mesh.isMesh &&
+    !mesh.userData.isOutline &&
+    mesh.userData.skipInkOutline !== true &&
+    mesh.material?.transparent !== true &&
+    mesh.material?.userData?.townscaperPattern !== "roof";
+}
+
+/**
+ * G30-A 增量重建：只重建 dirty 邻域的网格。
+ * @param {THREE.Object3D} castleContainer
+ * @param {object} spec 新布局（normalizeCitadelTerraceLayout 产物或原 townSpec）
+ * @param {Set<string>|string[]} dirtyKeys "ix,iy,iz" 集合
+ */
+
+// =====================================================================
+// G30-B 城堡构建生长动画（2026-08-26）
+// 新网格 scale 从 0 弹入（0.22s + 18ms stagger），动画期间只改 transform；
+// 动画结束后由 castleContainer.update 执行挂起的 dirty level 合并与窗口实例重建。
+// =====================================================================
+const CITADEL_GROW_DURATION = 0.22;
+const CITADEL_GROW_STAGGER = 0.018;
+
+export function playCitadelGrowAnimation(castleContainer, newMeshes, { duration = CITADEL_GROW_DURATION, stagger = CITADEL_GROW_STAGGER } = {}) {
+  const list = [];
+  for (const mesh of newMeshes || []) {
+    if (mesh.userData?.isOutline || mesh.userData?.citadelWindow) continue;
+    // stagger 封顶 0.5s：批量编辑时动画总时长不随网格数线性膨胀
+    list.push({ mesh, baseScale: mesh.scale.clone(), t: 0, duration, delay: Math.min(list.length * stagger, 0.5) });
+  }
+  if (!list.length) return 0;
+  castleContainer.userData.growAnimations = list;
+  return list.length;
+}
+
+function tickCitadelGrowAnimations(castleContainer, dt) {
+  const grows = castleContainer.userData.growAnimations;
+  if (!grows?.length) return;
+  let alive = 0;
+  for (const grow of grows) {
+    grow.t += Math.max(0.008, Number(dt) || 0.016);
+    if (grow.t < grow.delay) continue;
+    const k = Math.min(1, (grow.t - grow.delay) / grow.duration);
+    const ease = k * k * (3 - 2 * k); // smoothstep
+    const scale = Math.max(0.001, ease);
+    grow.mesh.scale.set(grow.baseScale.x * scale, grow.baseScale.y * scale, grow.baseScale.z * scale);
+    if (k < 1) alive++;
+  }
+  if (alive) return;
+  for (const grow of grows) grow.mesh.scale.copy(grow.baseScale);
+  castleContainer.userData.growAnimations = null;
+  const pending = castleContainer.userData.pendingMerge;
+  if (pending) {
+    castleContainer.userData.pendingMerge = null;
+    for (const level of pending.dirtyLevels) {
+      mergeStaticGroup(level, { skip: citadelTownMergeSkip, onSurface: citadelTownMergeOnSurface });
+    }
+    refreshCitadelWindowLights(castleContainer);
+  }
+}
+
+export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys = [], options = {}) {
+  const animate = options.animate === true;
+  const layers = castleContainer?.userData?.layers;
+  if (!layers?.length) return { ok: false, error: "no-layers" };
+  const dirty = dirtyKeys instanceof Set
+    ? dirtyKeys
+    : new Set(dirtyKeys.map((cell) => (Array.isArray(cell) ? `${cell[0]},${cell[1]},${cell[2]}` : String(cell))));
+  if (!dirty.size) return { ok: true, dirtyCount: 0, editMs: 0, removedCount: 0, mergedCount: 0 };
+  const t0 = performance.now();
+
+  const blueprint = createCitadelBlueprint({
+    spec,
+    contour: castleContainer.userData.contourSpec ?? CITADEL.contourTerrain,
+    floors: castleContainer.userData.floors ?? CITADEL_CASTLE_FLOORS,
+    instanceId: castleContainer.userData.instanceId ?? null,
+    skipOuterTerrain: castleContainer.userData.skipOuterTerrain === true,
+    townBaseLift: castleContainer.userData.townBaseLift ?? 0.6,
+  });
+  if (!castleContainer.userData.townCtxCache) castleContainer.userData.townCtxCache = {};
+  const townCtxCache = castleContainer.userData.townCtxCache;
+  const assembly = buildCitadelTerraceTownAssembly(
+    blueprint.town.layout,
+    blueprint.terrain.config,
+    {
+      floors: blueprint.floors,
+      baseYOverride: castleContainer.userData.skipOuterTerrain
+        ? castleContainer.userData.townBaseLift ?? 0.6
+        : castleContainer.userData.highlandTownscaperGrid
+          ? HIGHLAND_TOWNSCAPER_BASE_Y
+          : undefined,
+      leanDecor: castleContainer.userData.skipOuterTerrain === true,
+      townscaperColors: castleContainer.userData.instanceId === "canal-junction",
+      highlandColors: castleContainer.userData.instanceId !== "canal-junction",
+      dirty: [...dirty],
+      townCtxCache,
+    }
+  );
+
+  // 1) 收集现有 level 组（"terrace:iy" → Group）与 dirty 相关 level
+  //    （编辑格 iy±2 所在层；高山 layout 保留 5 个 terrace 层组，仅一个有内容，
+  //     key 必须区分 terrace，否则同名 level-N 互相覆盖）
+  const byLevel = new Map();
+  for (const layer of layers) {
+    for (const child of layer.children) {
+      const match = /^town-terrace-(\d+)-level-(\d+)$/.exec(child.name || "");
+      if (match) byLevel.set(`${Number(match[1])}:${Number(match[2])}`, child);
+    }
+  }
+  const dirtyLevels = new Set();
+  for (const key of dirty) {
+    const iy = Number(key.split(",")[1]);
+    if (!Number.isFinite(iy)) continue;
+    for (let dy = -2; dy <= 2; dy++) {
+      for (let t = 0; t < 5; t++) {
+        const level = byLevel.get(`${t}:${iy + dy}`);
+        if (level) dirtyLevels.add(level);
+      }
+    }
+  }
+
+  // 2) 移除旧 dirty 网格（userData.cell / townModule 坐标 ∈ dirty）与
+  //    dirty level 的全部旧合并网格
+  // G30 增量性能：dirty 网格只可能挂在 town 层组里（地形/装饰不在层组），
+  // 逐层遍历替代全城堡 traverse，省掉每 edit 对数千对象的一次全树扫描。
+  const stale = [];
+  for (const layer of layers) {
+    layer.traverse((o) => {
+      if (!o.isMesh) return;
+      const cell = o.userData?.cell;
+      const module = o.userData?.townModule;
+      const isDirty = (cell && dirty.has(`${cell.ix},${cell.iy},${cell.iz}`)) ||
+        (module && dirty.has(`${module.ix},${module.iy},${module.iz}`));
+      if (!isDirty) return;
+      stale.push(o);
+    });
+  }
+  for (const mesh of stale) {
+    mesh.geometry?.dispose?.();
+    mesh.removeFromParent();
+  }
+  for (const level of dirtyLevels) {
+    for (const child of [...level.children]) {
+      if (child.isMesh && child.userData.mergedGeometry === true) {
+        child.geometry?.dispose?.();
+        child.removeFromParent();
+      }
+    }
+  }
+
+  // 3) 挂载 dirty build 的新网格到对应 level 组（按 terrace:iy 精确匹配）
+  const newMeshes = [];
+  (assembly.terraceLevels ?? []).forEach((terrace, t) => {
+    (terrace ?? []).forEach((levelGroup, iy) => {
+      const target = byLevel.get(`${t}:${iy}`);
+      if (!target || !levelGroup) return;
+      for (const child of [...(levelGroup.children ?? [])]) {
+        target.add(child);
+        newMeshes.push(child);
+      }
+    });
+  });
+
+  // 4) 新网格描边（单网格，与全量 applyInkOutlines 同参数）
+  let outlineCount = 0;
+  for (const mesh of newMeshes) {
+    if (!shouldInkOutline(mesh)) continue;
+    addOutline(mesh, mesh.userData.outlineThickness ?? SVARBOVA_OUTLINE_THICKNESS, SVARBOVA_OUTLINE_COLOR, 0);
+    outlineCount++;
+  }
+
+  // 5) dirty level 重合并 + faceToCell（非 dirty level 的合并网格保留）。
+  //    动画模式：合并延迟到生长动画结束后（castleContainer.update 驱动），
+  //    动画期间新网格保持独立 transform（scale 弹入）。
+  let mergedCount = 0;
+  if (!animate) {
+    for (const level of dirtyLevels) {
+      const report = mergeStaticGroup(level, { skip: citadelTownMergeSkip, onSurface: citadelTownMergeOnSurface });
+      mergedCount += report.surfaces.length;
+    }
+  } else {
+    castleContainer.userData.pendingMerge = { dirtyLevels };
+  }
+
+  // 6) 窗口实例重建（窗口在 dirty level 内重建，需重新打包；动画模式延迟）
+  if (!animate) refreshCitadelWindowLights(castleContainer);
+
+  // 7) 元数据与统计
+  castleContainer.userData.townSpec = spec;
+  castleContainer.userData.townStats = assembly.stats;
+  castleContainer.userData.blueprint = blueprint;
+  castleContainer.userData.blueprintSummary = citadelBlueprintSummary(blueprint);
+  attachBuildingOwnedProps(castleContainer, spec, { seed: 20260808 });
+  castleContainer.userData.lastIncrementalEdit = {
+    lastDirtyCells: [...dirty],
+    lastEditHash: castleContainer.userData.buildingOwnedPropHash || null,
+    rebuildMode: "incremental",
+  };
+  const editMs = performance.now() - t0;
+  const result = {
+    ok: true,
+    dirtyCount: dirty.size,
+    removedCount: stale.length,
+    newMeshCount: newMeshes.length,
+    outlineCount,
+    mergedCount,
+    editMs,
+    stats: assembly.stats,
+  };
+  if (animate) {
+    result.animatedCount = playCitadelGrowAnimation(castleContainer, newMeshes);
+    result.animationDuration = CITADEL_GROW_DURATION;
+    result.animationStagger = CITADEL_GROW_STAGGER;
+  }
+  return result;
+}
+
 export function rebuildCitadelTown(castleContainer, spec) {
   const layers = castleContainer?.userData?.layers;
   if (!layers?.length) return null;
+  // G30-A：全量重建后旧材质被 dispose，增量 ctx 缓存必须失效
+  castleContainer.userData.townCtxCache = null;
 
   const oldLevels = [];
   for (const layer of layers) {
@@ -2610,6 +2992,12 @@ export function rebuildCitadelTown(castleContainer, spec) {
     ? assembly.surfaceConformance?.[0] ?? null
     : null;
   castleContainer.userData.townSpec = assembly.layout;
+  attachBuildingOwnedProps(castleContainer, assembly.layout, { seed: 20260808 });
+  castleContainer.userData.lastIncrementalEdit = {
+    lastDirtyCells: [],
+    lastEditHash: castleContainer.userData.buildingOwnedPropHash || null,
+    rebuildMode: "full",
+  };
   castleContainer.userData.blueprint = blueprint;
   castleContainer.userData.blueprintSummary = citadelBlueprintSummary(blueprint);
   castleContainer.userData.buildStages = blueprint.stages;

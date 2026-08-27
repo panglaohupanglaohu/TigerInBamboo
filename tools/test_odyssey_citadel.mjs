@@ -90,6 +90,8 @@ const {
   highlandCityGroundHeight,
   highlandTerrainSurfaceHeight,
   highlandTownscaperSurfaceHeight,
+  HIGHLAND_CITADEL_DESIGN_PALETTE,
+  HIGHLAND_MOUNTAIN_TREE_PLACEMENTS,
   HIGHLAND_TOWNSCAPER_PLATFORM,
   isHighlandWaterfrontCutout,
 } = await import(new URL("src/world/highlandCitadelDesign.js", BASE).href);
@@ -554,7 +556,7 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
 {
   const latest = buildOdysseyCitadel({ place: false, seed: 7 });
   assert.equal(latest.userData.highlandLatestDesign, true, "默认构建必须启用最新山谷设计");
-  assert.equal(latest.userData.highlandLatestDesignVersion, "2026.08.25-reference-obelisk-stone-v11");
+  assert.equal(latest.userData.highlandLatestDesignVersion, "2026.08.27-reference-obelisk-stone-v12-vegetation-bands");
   assert(latest.userData.highlandLatestDesignRoot, "设计根组必须挂进装配");
   const townscaperPad = byName(latest, "contour-step-0");
   assert.equal(townscaperPad?.geometry?.type, "ShapeGeometry", "高山圣城必须提供与厚地台同形的水平 Townscaper 拾取面");
@@ -592,6 +594,40 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
   assert.equal(latestMetrics.nonBuildingPropCount, 0);
   assert.equal(latestMetrics.plantAssetSource, "buildMountainTree-low-poly-round-canopy");
   assert.equal(latestMetrics.mountainGridMethod, "primary-grid+dual-grid+alternating-triangles");
+  const mountainVegetation = byName(latest, "highland-mountain-slope-vegetation");
+  assert(mountainVegetation, "山地灰绿植被层缺失");
+  assert.equal(mountainVegetation.userData.distribution, "authored-mountain-slope-bands");
+  assert.deepEqual(
+    mountainVegetation.userData.bandIds,
+    ["west-shoulder", "east-shoulder", "north-forest-belt"],
+    "树必须沿三条山脉森林带分布"
+  );
+  const mountainTrees = [];
+  mountainVegetation.traverse((object) => {
+    if (object.userData?.kind === "highland-low-poly-round-tree") mountainTrees.push(object);
+  });
+  assert.equal(mountainTrees.length, HIGHLAND_MOUNTAIN_TREE_PLACEMENTS.length);
+  const allowedFoliage = new Set([
+    HIGHLAND_CITADEL_DESIGN_PALETTE.foliageDeep,
+    HIGHLAND_CITADEL_DESIGN_PALETTE.foliageMid,
+    HIGHLAND_CITADEL_DESIGN_PALETTE.foliageLight,
+  ]);
+  for (const tree of mountainTrees) {
+    assert.equal(tree.userData.palette, "screenshot-2-gray-green-v1");
+    assert.equal(tree.userData.surfaceProvider, "highlandTerrainSurfaceHeight");
+    assert(Math.abs(tree.position.y - (tree.userData.surfaceY + 0.02)) < 1e-6,
+      "树根必须贴在山体采样面上");
+    tree.traverse((object) => {
+      if (!object.name?.includes("-canopy-")) return;
+      assert(allowedFoliage.has(object.material?.color?.getHex()),
+        "山地树冠不得使用紫色/高饱和彩色材质");
+    });
+  }
+  const mountainShrubs = byName(latest, "highland-slope-shrub-vegetation");
+  assert(mountainShrubs, "山脉森林带灌木层缺失");
+  assert.equal(mountainShrubs.userData.distribution, "authored-mountain-slope-bands");
+  assert.equal(mountainShrubs.userData.shrubCount, 42);
+  assert.equal(mountainShrubs.userData.surfaceProvider, "highlandTerrainSurfaceHeight");
   assert.equal(latestMetrics.townscaperRidgeTowerAnchorCount, 6,
     "参考图两侧/后排六座高塔必须由 Townscaper 格网生成");
   assert.equal(byName(latest, "highland-ridge-tower-0"), null,

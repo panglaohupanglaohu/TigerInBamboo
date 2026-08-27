@@ -18,6 +18,9 @@ import { createCitadelSceneEdit } from "./ui/citadelSceneEdit.js";
 import { createCrystalCityEditorPanel } from "./ui/crystalCityEditorPanel.js";
 import {
   rebuildCitadelTown,
+  rebuildCitadelTownIncremental,
+  computeCitadelDirtyCells,
+  diffCitadelLayouts,
   rebuildCitadelTerrain,
   rebuildCitadelTerrainObjects,
   trimCitadelTownToTerrain,
@@ -995,7 +998,22 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
         // 编辑器提交的是 v2 五台地布局对象（{ terraces: [...] }），不能再包进
         // 旧版单城堡的 `levels` 字段；否则归一化时会得到五座空城堡。
         const citadel = getCitadelTarget();
-        const stats = rebuildCitadelTown(citadel, layout);
+        // G30-A（2026-08-26）：布局 diff → 增量重建（只重建 dirty 邻域）。
+        // 无差异/差异过多/失败时回退全量 rebuild，保证编辑器行为不降级。
+        let stats;
+        const prevLayout = citadel.userData?.townSpec ?? null;
+        if (prevLayout) {
+          const edits = diffCitadelLayouts(prevLayout, layout);
+          if (edits.length && edits.length <= 64) {
+            const dirty = computeCitadelDirtyCells(edits);
+            const incr = rebuildCitadelTownIncremental(citadel, layout, [...dirty]);
+            stats = incr.ok ? incr.stats : rebuildCitadelTown(citadel, layout);
+          } else {
+            stats = rebuildCitadelTown(citadel, layout);
+          }
+        } else {
+          stats = rebuildCitadelTown(citadel, layout);
+        }
         citadelObstacle = null; // 建筑体量变了，净空区下帧重算
         citadelSupportCache.clear(); // 包围盒可能变，支撑缓存失效
         lightingDirector.invalidateShadowFit(); // 建筑 dirty → V5 阴影重拟合
@@ -1367,6 +1385,17 @@ function animate() {
   localLights.update(dt);
   // V5 光照导演：开关开时由它提交全局灯/雾/天空/exposure（关时 no-op）
   lightingDirector.update(dt, { timeOfDay: dayNight.getPhase?.() ?? P.timeOfDay, weather: P.weather | 0 });
+  // S16 背光高光：圣城山体反向轮廓层随太阳方向 + 相机位置驱动
+  {
+    const backlit = messenger?.landmarks?.odysseyCitadel?.userData?.highlandBacklit;
+    if (backlit?.update) {
+      const sunState = lightingDirector.getState?.();
+      const sunDir = sunState?.sunDirection;
+      if (sunDir && camera?.position) {
+        backlit.update({ x: sunDir[0], y: sunDir[1], z: sunDir[2] }, camera.position);
+      }
+    }
+  }
   // K3 体素 AO：dirty 分帧调度（任一切片 ≤4ms；未开启时 voxelAo 为 null）
   voxelAo?.update(dt);
   // V6-G8 调试叠图：节流重建动态层；未启用时内部直接返回（零开销）

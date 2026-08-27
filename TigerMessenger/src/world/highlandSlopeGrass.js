@@ -3,14 +3,16 @@
 // contrast-aware grass (S5): silhouette/cliff edges get more ink, interiors
 // less, and blades bend in the vertex shader.  Independent of V8 flags.
 
-import { highlandTerrainSurfaceHeight, isHighlandWaterfrontCutout } from "./highlandCitadelDesign.js";
+import {
+  HIGHLAND_MOUNTAIN_TREE_PLACEMENTS,
+  highlandTerrainSurfaceHeight,
+  isHighlandWaterfrontCutout,
+} from "./highlandCitadelDesign.js";
 
-const TREE_KEEPOUTS = Object.freeze([
-  [-21, 8], [-19, -4], [-17, -16],
-  [18, 9], [20, -5], [17, -17],
-  [-10, -23], [9, -24],
-  [-35, -8], [36, -10], [-43, 15], [44, 16],
-]);
+// 与山地树的权威放置表共享 keep-out，避免草重新长回树根/树影里。
+const TREE_KEEPOUTS = Object.freeze(
+  HIGHLAND_MOUNTAIN_TREE_PLACEMENTS.map(({ x, z }) => Object.freeze([x, z]))
+);
 
 function occupiesCastle(x, z) {
   return Math.max(Math.abs(x) / 28.5, Math.abs(z + 1.5) / 31.5) < 1.08;
@@ -61,6 +63,7 @@ export function compileHighlandSlopeGrass({
     instanceCount: instances.length,
     contrastAware: true,
     billboard: true,
+    distribution: "terrain-grid-with-authored-forest-belt-keepouts",
   };
 }
 

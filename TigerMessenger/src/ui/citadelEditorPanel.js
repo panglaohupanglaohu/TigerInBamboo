@@ -28,6 +28,11 @@ import {
   citadelLevelsKey,
 } from "../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 import {
+  citadelLevelsSaveKey,
+  loadCitadelLevelsSave,
+  saveCitadelLevelsSave,
+} from "../world/citadelLevelsSave.js";
+import {
   CITADEL,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
@@ -256,7 +261,7 @@ export function createCitadelEditorPanel({
   function instanceStorageKeys() {
     const id = getInstanceId() ?? null;
     return {
-      levels: citadelLevelsKey(id),
+      levels: citadelLevelsSaveKey(id),
       terrain: citadelTerrainKey(id),
       objects: citadelTerrainObjectsKey(id),
       id,
@@ -384,7 +389,15 @@ export function createCitadelEditorPanel({
 
   function loadTerraceGrids() {
     try {
-      const saved = JSON.parse(localStorage.getItem(instanceStorageKeys().levels) || "null");
+      const migrated = loadCitadelLevelsSave(localStorage, {
+        instanceId: getInstanceId() ?? null,
+        floors: currentMaxLevel() + 1,
+        normalize: normalizeCitadelTerraceLayout,
+      });
+      if (migrated?.layout) {
+        return migrated.layout.terraces.map((entry) => levelsToGrid(entry.levels));
+      }
+      const saved = JSON.parse(localStorage.getItem(citadelLevelsKey(getInstanceId() ?? null)) || "null");
       if (saved) {
         return normalizeCitadelTerraceLayout(saved, currentMaxLevel() + 1).terraces.map((entry) =>
           levelsToGrid(entry.levels)
@@ -1961,7 +1974,14 @@ export function createCitadelEditorPanel({
   }
   function save() {
     try {
-      localStorage.setItem(instanceStorageKeys().levels, JSON.stringify(serializeLayout()));
+      saveCitadelLevelsSave(localStorage, serializeLayout(), getCitadelTarget?.()?.userData?.lastIncrementalEdit || {
+        lastDirtyCells: [],
+        rebuildMode: "incremental",
+      }, {
+        instanceId: getInstanceId() ?? null,
+        floors: currentMaxLevel() + 1,
+        normalize: normalizeCitadelTerraceLayout,
+      });
       // 台地层半径/层高 + 护城河等高线（内径/外径/高度）
       persistTerrain();
       // 瞭望塔 / 参天树 / 木马

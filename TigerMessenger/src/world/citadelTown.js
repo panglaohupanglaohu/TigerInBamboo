@@ -212,12 +212,14 @@ export function citadelShadeStep(ix, iz, char = "") {
  *   clusterOf: "ix,iz" → 簇 id "c<ix>,<iz>"
  */
 export function computeTownClusters(grid) {
+  // G30 增量性能：列坐标走整数 key（ix*32+iz，网格 ≤ 25×25 不越界），
+  // 每 edit 全量 BFS 不再做字符串拼接；cluster id 仍为 "c<ix>,<iz>" 字符串。
   const baseChar = new Map();
   // 取每列最低占用层字符作为户色基底（竖柱同色 = 一户）
   const baseLevel = new Map();
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
-    const col = `${ix},${iz}`;
+    const col = ix * 32 + iz;
     const lv = baseLevel.get(col);
     if (lv === undefined || iy < lv) {
       baseLevel.set(col, iy);
@@ -235,17 +237,18 @@ export function computeTownClusters(grid) {
     while (queue.length) {
       const cur = queue.pop();
       members.push(cur);
-      const [cx0, cz0] = cur.split(",").map(Number);
+      const cx0 = Math.floor(cur / 32);
+      const cz0 = cur % 32;
       for (const [dx, dz] of DIRS) {
-        const nb = `${cx0 + dx},${cz0 + dz}`;
+        const nb = (cx0 + dx) * 32 + (cz0 + dz);
         if (baseChar.get(nb) === char && !clusterOf.has(nb)) {
           clusterOf.set(nb, nb);
           queue.push(nb);
         }
       }
     }
-    members.sort();
-    const id = `c${members[0]}`;
+    members.sort((a, b) => a - b);
+    const id = `c${Math.floor(members[0] / 32)},${members[0] % 32}`;
     for (const m of members) clusterOf.set(m, id);
   }
   return { baseChar, clusterOf };
@@ -257,11 +260,11 @@ export function computeTownClusters(grid) {
  * 其余 → "normal"。
  */
 export function townCellFacing(baseChar, ix, iz) {
-  const char = baseChar.get(`${ix},${iz}`);
+  const char = baseChar.get(ix * 32 + iz);
   if (char === undefined) return "normal";
   let sameCount = 0;
   for (const [dx, dz] of DIRS) {
-    const nb = baseChar.get(`${ix + dx},${iz + dz}`);
+    const nb = baseChar.get((ix + dx) * 32 + (iz + dz));
     if (nb === "G") return "route";
     if (nb === char) sameCount++;
   }
@@ -948,6 +951,17 @@ function normalizeFiveFloors(levels, useLegacyCrown = false, floors = CITADEL_CA
  * terrace can never shift the shared sacred-city origin.
  */
 export function normalizeCitadelTerraceLayout(input = CITADEL_TOWN_SPEC, floors = CITADEL_CASTLE_FLOORS) {
+  // G30 增量性能：已规范化的布局（version 2 + gridSize + terraces）是
+  // Object.freeze 的不可变结果（createCitadelBlueprint 产物），直接复用，
+  // 避免增量 rebuild 每 edit 全量深拷贝 942 格（字符串分配 → GC 压力）。
+  if (
+    input?.version === 2 &&
+    input?.gridSize &&
+    Array.isArray(input?.terraces) &&
+    input?.terraces.every?.((terrace) => Array.isArray(terrace?.levels))
+  ) {
+    return input;
+  }
   const rawTerraces = input?.terraces;
   let terraces;
   if (Array.isArray(rawTerraces)) {
@@ -1342,12 +1356,24 @@ function makeGableRoofGeometry(cs, ch) {
  * }} ctx 调用方提供的 toon/描边构建约定
  * @returns {{ levels: THREE.Group[], stats: object }}
  */
-export function buildCitadelTown(spec, ctx) {
+export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
+  // dirty 增量（G30-A）：只生成 dirty 集的格子几何；所有"判定"循环保持全量，
+  // 只在生成点按所属格过滤，保证与全量路径逐格同构（dirty 集外不生成、旧网格保留）。
+  const dirtySet = dirty ? new Set(dirty.map((cell) => {
+    const parts = Array.isArray(cell) ? cell : String(cell).split(",");
+    return (Number(parts[0]) << 12) | (Number(parts[1]) << 6) | Number(parts[2]);
+  })) : null;
+  // G30 增量性能：want() 与 at() 同走整数 key（ix<<12 | iy<<6 | iz），
+  // 判定循环热路径不再做模板字符串拼接。
+  const want = (ix, iy, iz) => !dirtySet || dirtySet.has((ix << 12) | (iy << 6) | iz);
   const { cellSize: cs, cellHeight: ch } = spec;
   const { mesh, materials, random } = ctx;
 
   // ---------- 栅格索引 ----------
   const grid = new Map();
+  // G30 增量性能：at() 是判定循环热路径（全量判定 × 每格多次邻域查询），
+  // 整数 key（ix<<12 | iy<<6 | iz，网格 ≤ 25×12×25 不越界）替代字符串拼接。
+  const gridFlat = new Map();
   let cols = Number.isInteger(spec.gridSize) ? spec.gridSize : 0;
   let rows = Number.isInteger(spec.gridSize) ? spec.gridSize : 0;
   // 旧档字符在入口统一迁移（W/L/B/D → 0/2/6/G），所有调用方共用
@@ -1357,11 +1383,14 @@ export function buildCitadelTown(spec, ctx) {
     rowsArr.forEach((row, iz) => {
       cols = Math.max(cols, row.length);
       [...row].forEach((char, ix) => {
-        if (char !== ".") grid.set(`${ix},${iy},${iz}`, char);
+        if (char !== ".") {
+          grid.set(`${ix},${iy},${iz}`, char);
+          gridFlat.set((ix << 12) | (iy << 6) | iz, char);
+        }
       });
     });
   });
-  const at = (ix, iy, iz) => grid.get(`${ix},${iy},${iz}`) ?? ".";
+  const at = (ix, iy, iz) => gridFlat.get((ix << 12) | (iy << 6) | iz) ?? ".";
   // V3 簇配色（C2）：同字符 4 连通簇 + 朝向近似；非 V3 的 shade 工厂忽略第五参
   const townClusters = computeTownClusters(grid);
   const openMaskFor = (ix, iy, iz) => DIRS.reduce(
@@ -1486,6 +1515,9 @@ export function buildCitadelTown(spec, ctx) {
   };
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
+    // G30 增量性能：dirty 模式下先 want() 跳过非 dirty 格，再算 expose（
+    // 6 次邻域查询）——897/942 格直接 continue，统计语义不变。
+    if (!want(ix, iy, iz)) { stats.cellCount++; continue; }
     const expose = {
       px: at(ix + 1, iy, iz) === ".",
       nx: at(ix - 1, iy, iz) === ".",
@@ -1503,7 +1535,7 @@ export function buildCitadelTown(spec, ctx) {
     if (colorful) applyPatchyWallColors(geo, ix, iz, iy);
     else applyVerticalVertexColors(geo, 1.0, 1.0);
     const clusterInfo = {
-      clusterId: townClusters.clusterOf.get(`${ix},${iz}`),
+      clusterId: townClusters.clusterOf.get(ix * 32 + iz),
       facing: townCellFacing(townClusters.baseChar, ix, iz),
     };
     const cell = mesh(
@@ -1569,6 +1601,7 @@ export function buildCitadelTown(spec, ctx) {
       }
       const [bx, by, bz] = best;
       domeCenters.add(`${bx},${by},${bz}`);
+      if (!want(bx, by, bz)) continue;
       const dome = new THREE.Group();
       dome.name = "town-dome";
       const drum = mesh(
@@ -1622,6 +1655,7 @@ export function buildCitadelTown(spec, ctx) {
       }
       if (!isolated || domeCenters.has(`${ix},${top},${iz}`)) continue;
       towerTops.add(`${ix},${top},${iz}`);
+      if (!want(ix, top, iz)) continue;
       const cap = ctx.buildHalfDome(cs * 0.56, materials.gold, "town-tower-cap", 1.22);
       cap.position.set(cx(ix), (top + 1) * ch, cz(iz));
       levelGroups[top].add(cap);
@@ -1769,6 +1803,7 @@ export function buildCitadelTown(spec, ctx) {
         const [ix, iz] = comp.cells[0];
         const key = `${ix},${iy},${iz}`;
         const floors = columnHeight.get(`${ix},${iz}`) ?? 1;
+        if (!want(ix, iy, iz)) { roofCells.add(key); continue; }
         // 矮户：宽扁四坡（房子，不是帐篷锥）；高柱才拉尖
         const spire = mesh(spireGeometry.clone(), roofMaterialFor(ix, iz, iy), "town-spire", 0.035);
         applyVerticalVertexColors(spire.geometry, 1.28, 0.62);
@@ -1820,8 +1855,10 @@ export function buildCitadelTown(spec, ctx) {
         vaneTip.position.set(0.3, ch * 0.85 + ch * 0.95 + 0.76, 0);
         towerGroup.add(vaneTip);
         towerGroup.position.set(cx(anchor[0]), (iy + 1) * ch, cz(anchor[1]));
-        levelGroups[iy].add(towerGroup);
-        stats.steepleCount++;
+        if (want(anchor[0], iy, anchor[1])) {
+          levelGroups[iy].add(towerGroup);
+          stats.steepleCount++;
+        }
         roofCells.add(`${anchor[0]},${iy},${anchor[1]}`);
 
         // 臂上格子出人字坡（沿臂轴向：4 邻分量方向取主轴）
@@ -1845,27 +1882,29 @@ export function buildCitadelTown(spec, ctx) {
             chimneyDist = armDist;
             chimneyCell = [ix, iz, alongX];
           }
-          const roof = mesh((alongX ? gableX : gableZ).clone(), roofMaterialFor(ix, iz, iy), "town-roof", 0.04);
-          applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
-          roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
-          levelGroups[iy].add(roof);
           roofCells.add(key);
-          stats.roofCount++;
-          {
-            const ridge = mesh(
-              ridgeGeometry,
-              colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat,
-              "town-roof-ridge",
-              0.014
-            );
-            ridge.position.set(cx(ix), (iy + 1) * ch + ch * 0.52, cz(iz));
-            if (!alongX) ridge.rotation.y = Math.PI / 2;
-            levelGroups[iy].add(ridge);
-            stats.ridgeCount = (stats.ridgeCount ?? 0) + 1;
+          if (want(ix, iy, iz)) {
+            const roof = mesh((alongX ? gableX : gableZ).clone(), roofMaterialFor(ix, iz, iy), "town-roof", 0.04);
+            applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
+            roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
+            levelGroups[iy].add(roof);
+            stats.roofCount++;
+            {
+              const ridge = mesh(
+                ridgeGeometry,
+                colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat,
+                "town-roof-ridge",
+                0.014
+              );
+              ridge.position.set(cx(ix), (iy + 1) * ch + ch * 0.52, cz(iz));
+              if (!alongX) ridge.rotation.y = Math.PI / 2;
+              levelGroups[iy].add(ridge);
+              stats.ridgeCount = (stats.ridgeCount ?? 0) + 1;
+            }
           }
         }
         // L/十字坡屋顶：离尖塔最远的臂端出一根烟囱
-        if (chimneyCell) addChimney(chimneyCell[0], iy, chimneyCell[1], chimneyCell[2]);
+        if (chimneyCell && want(chimneyCell[0], iy, chimneyCell[1])) addChimney(chimneyCell[0], iy, chimneyCell[1], chimneyCell[2]);
         continue;
       }
 
@@ -1882,6 +1921,7 @@ export function buildCitadelTown(spec, ctx) {
         // 屋脊瓦：沿条带轴向一条深色压条（挑檐方向的两端不出）
         const alongX = shape.alongX;
         for (const [ix, iz] of comp.cells) {
+          if (!want(ix, iy, iz)) continue;
           const ridge = mesh(
             ridgeGeometry,
             colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat,
@@ -1908,12 +1948,13 @@ export function buildCitadelTown(spec, ctx) {
           }
         }
         // 烟囱：条带屋顶第二格上立一根（墙色随户），Townscaper 招牌剪影
-        if (comp.cells.length >= 2) addChimney(comp.cells[1][0], iy, comp.cells[1][1], alongX);
+        if (comp.cells.length >= 2 && want(comp.cells[1][0], iy, comp.cells[1][1])) addChimney(comp.cells[1][0], iy, comp.cells[1][1], alongX);
         // 山墙圆窗：条带两端山墙面各开一圆窗
         {
           const [sx0, sz0] = comp.cells[0];
           const [sx1, sz1] = comp.cells[comp.cells.length - 1];
           for (const [gx, gz] of [[sx0, sz0], [sx1, sz1]]) {
+            if (!want(gx, iy, gz)) continue;
             const oculus = mesh(oculusGeometry, trimMat, "town-gable-oculus", 0.014);
             oculus.rotation.x = Math.PI / 2;
             oculus.position.set(
@@ -1947,8 +1988,10 @@ export function buildCitadelTown(spec, ctx) {
         );
         applyVerticalVertexColors(cone.geometry, 1.26, 0.64);
         cone.position.set(cx(center[0]), (iy + 1) * ch + ch * 0.35, cz(center[1]));
-        levelGroups[iy].add(cone);
-        stats.steepleCount++;
+        if (comp.cells.some(([gx, gz]) => want(gx, iy, gz))) {
+          levelGroups[iy].add(cone);
+          stats.steepleCount++;
+        }
         // 方块本身平顶：交给规则 3 边缘围栏（openSky 判定）
         continue;
       }
@@ -1987,6 +2030,7 @@ export function buildCitadelTown(spec, ctx) {
       for (const key of comp.keys) {
         const [x, , z] = key.split(",").map(Number);
         gardenCells.add(key);
+        if (!want(x, iy, z)) continue;
         const grass = mesh(
           grassGeometry,
           materials.foliageLight ?? materials.foliageDark,
@@ -2073,6 +2117,7 @@ export function buildCitadelTown(spec, ctx) {
 
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
+    if (!want(ix, iy, iz)) continue;
     const isGate = char === CITADEL_GATE_CHAR;
     const module = townscaperModuleSelection(ix, iy, iz, char, 0, openMaskFor(ix, iy, iz));
     const house = houseByColumn.get(`${ix},${iz}`) ?? {
@@ -2483,6 +2528,7 @@ export function buildCitadelTown(spec, ctx) {
       if (runX >= 2 && supportXLeft && supportXRight) {
         for (let r = 0; r < runX; r++) {
           visitedArcade.add(`${ix + r},${iy},${iz}`);
+          if (!want(ix + r, iy, iz)) continue;
           const arch = mesh(archGeoX, materials[arcChar] ?? materials.W, "town-arch", 0.035);
           arch.position.set(cx(ix + r), iy * ch + 0.02, cz(iz));
           levelGroups[iy - 1].add(arch);
@@ -2561,8 +2607,10 @@ export function buildCitadelTown(spec, ctx) {
       const water = mesh(waterGeometry, materials.water, "town-canal-water", 0.02);
       water.castShadow = false;
       water.position.set(cx(ix), 0.34, cz(iz));
-      levelGroups[0].add(water);
-      stats.canalCount++;
+      if (want(ix, 0, iz)) {
+        levelGroups[0].add(water);
+        stats.canalCount++;
+      }
       // 拱形水门：夹道立面底层开深色拱券（水道口）
       for (const [dx, dz] of DIRS) {
         if (at(ix + dx, 0, iz + dz) === ".") continue;
@@ -2598,6 +2646,7 @@ export function buildCitadelTown(spec, ctx) {
           if (at(ix + dx, 0, iz + dz) !== ".") solidNei++;
         }
         if (solidNei < 3) continue; // 至少三面围合
+        if (!want(ix, 0, iz)) continue;
         const plaza = mesh(plazaGeometry, materials.plazaStone ?? materials.W, "town-plaza", 0.018);
         plaza.position.set(cx(ix), 0.05, cz(iz));
         levelGroups[0].add(plaza);
@@ -2634,6 +2683,7 @@ export function buildCitadelTown(spec, ctx) {
       // 底层围合空格已经由 plaza 规则铺好；上层才需要新铺庭院台面。
       if (iy > 0) {
         for (const [x, z] of cells) {
+          if (!want(x, iy, z)) continue;
           const surface = mesh(
             new THREE.BoxGeometry(cs * 0.93, 0.08, cs * 0.93),
             courtyardSurfaceMaterial,
@@ -2653,6 +2703,7 @@ export function buildCitadelTown(spec, ctx) {
           const wallKey = `${iy}:${Math.min(x, x + dx)},${Math.min(z, z + dz)}:${dx},${dz}`;
           if (seenWalls.has(wallKey)) continue;
           seenWalls.add(wallKey);
+          if (!want(x, iy, z) && !want(x + dx, iy, z + dz)) continue;
           const wall = mesh(
             courtyardWallGeometry,
             courtyardWallMaterial,
@@ -2672,25 +2723,27 @@ export function buildCitadelTown(spec, ctx) {
       }
 
       const [centerX, centerZ] = cells[Math.floor(cells.length / 2)];
-      const basin = mesh(
-        courtyardBasinGeometry,
-        courtyardSurfaceMaterial,
-        "town-courtyard-well",
-        0.014
-      );
-      basin.position.set(cx(centerX), floorY + 0.09, cz(centerZ));
-      levelGroups[Math.max(0, iy - 1)].add(basin);
-      registerModule("decor", centerX, iy, centerZ, "courtyard-well", basin);
-      const basinWater = mesh(
-        courtyardWaterGeometry,
-        materials.water ?? materials.roofTile ?? trimMat,
-        "town-courtyard-water",
-        0.006
-      );
-      basinWater.position.set(cx(centerX), floorY + 0.165, cz(centerZ));
-      levelGroups[Math.max(0, iy - 1)].add(basinWater);
-      registerModule("decor", centerX, iy, centerZ, "courtyard-water", basinWater);
-      stats.courtyardWellCount++;
+      if (want(centerX, iy, centerZ)) {
+        const basin = mesh(
+          courtyardBasinGeometry,
+          courtyardSurfaceMaterial,
+          "town-courtyard-well",
+          0.014
+        );
+        basin.position.set(cx(centerX), floorY + 0.09, cz(centerZ));
+        levelGroups[Math.max(0, iy - 1)].add(basin);
+        registerModule("decor", centerX, iy, centerZ, "courtyard-well", basin);
+        const basinWater = mesh(
+          courtyardWaterGeometry,
+          materials.water ?? materials.roofTile ?? trimMat,
+          "town-courtyard-water",
+          0.006
+        );
+        basinWater.position.set(cx(centerX), floorY + 0.165, cz(centerZ));
+        levelGroups[Math.max(0, iy - 1)].add(basinWater);
+        registerModule("decor", centerX, iy, centerZ, "courtyard-water", basinWater);
+        stats.courtyardWellCount++;
+      }
 
       // 大于一格的内院才放树，留出单格天井的呼吸感；树落在内院台面而非空中。
       if (cells.length >= 3 && ctx.buildTopiary) {
@@ -2723,6 +2776,7 @@ export function buildCitadelTown(spec, ctx) {
     const boatGeometry = new THREE.BoxGeometry(0.72, 0.22, 0.3);
     const sailGeometry = new THREE.BoxGeometry(0.02, 0.5, 0.22);
     for (const [ix, iz] of waterKeys) {
+      if (!want(ix, 0, iz)) continue;
       const seed = (ix * 997 + iz * 811) >>> 0;
       const roll = seed % 100;
       if (roll < 18) {
@@ -2778,6 +2832,7 @@ export function buildCitadelTown(spec, ctx) {
     };
     for (const [key, char] of grid) {
       const [ix, iy, iz] = key.split(",").map(Number);
+      if (!want(ix, iy, iz)) continue;
       if (iy === 0) continue; // 底层贴台地，无需支架
       if (at(ix, iy - 1, iz) !== ".") continue; // 下方有块，无需支架
       // 向下找承重面：下一个非空块的顶面（iy2+1）或基座顶（0）
@@ -2858,6 +2913,7 @@ export function buildCitadelTown(spec, ctx) {
         const b = tall[j];
         const gap = Math.abs(a.ix - b.ix) + Math.abs(a.iz - b.iz);
         if (gap < 2 || gap > 4) continue;
+      if (!want(a.ix, a.top, a.iz) && !want(b.ix, b.top, b.iz)) continue;
         if (Math.abs(a.top - b.top) > 1) continue;
         const pair = `${Math.min(a.ix, b.ix)},${Math.min(a.iz, b.iz)}-${Math.max(a.ix, b.ix)},${Math.max(a.iz, b.iz)}`;
         if (used.has(pair)) continue;
@@ -2908,6 +2964,7 @@ export function buildCitadelTown(spec, ctx) {
     let skirtCount = 0;
     for (const [key] of grid) {
       const [ix, iy, iz] = key.split(",").map(Number);
+      if (!want(ix, iy, iz)) continue;
       if (iy !== 0) continue;
       const base = mesh(plinthGeo, skirtMat, "town-seawall-plinth", 0.02);
       base.position.set(cx(ix), -0.52, cz(iz));

@@ -219,6 +219,10 @@ export function loadCanalNetwork({
         const r = Math.hypot(lx, lz);
         return r > ms.inner - 8.4 && r < ms.outer + 8.4;
       }) : () => false,
+      // 主岛的海/湖是连续自然水面：港口、交汇古堡、苔庭等不再
+      // 出现旧运河的两条河堤。只有真正落在东非大裂谷区域的水道
+      // 保留立壁/土埂；河床和水面不受此策略影响。
+      embankmentKeepTest: (_dir) => canyonOffsetDir(_dir) < -1e-6,
     });
     canalSys = canal;
     if (useWorldCanal) {

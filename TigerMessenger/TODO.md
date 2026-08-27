@@ -1498,6 +1498,7 @@ const land = hierarchicalSmooth(chunks, hardConstraints);
 - [x] **[Grok 2026-08-23]** `waterRouteFleet.directionFor()` 改为球面切线，并新增 `directionToTarget()` 港口/目标方向 API；完整港口物流 caller 迁移仍未完成。
 - [x] **[Grok 2026-08-23]** `planetCompilerV8` 将 `navona-water-court/local-cistern` 编译为独立曲面 basin，不加入全球 water route；water semantics 归类为 shallow/deep lake。
 - [x] **[Grok]** 旧 `loadCanalNetwork()` 先受 `legacyCanalWorld` 控制；所有消费者迁移和主人确认前不得删除。
+- [x] **[Grok 2026-08-26]** 主人确认：正式主页只留水晶城区域运河（`canalScope=crystal-city`）；其他区域运河关掉。全局 `legacyCanalWorld` 仍 true，A·V7 可回滚世界运河。
 - [x] **[Grok 2026-08-23]** `migrateCanalBoatToWaterRoute()` 按旧船位置投影最近 water route；无合法 route 返回 `dockedAt` 最近港口和 warning，water test 覆盖。
 - [x] **[Grok]** `test_planet_v8_water.mjs`：海洋单连通、湖盆闭合、岸线无自交、船航线无穿陆、migration golden。
 
@@ -2056,3 +2057,32 @@ cloudPotential = saturate(0.08 + vapor * 0.48 + lift * 0.32 - rainShadow * 0.38)
 - [x] **[VISIBLE OBELISK]** 中央方尖碑退出装饰合批，保留基础/下段/中段/上段/塔室连续实体；自动断言各段命名 mesh 均存在，禁止再次只剩尖顶和窗洞。
 - [x] **[CACHE]** 现役入口更新为 `odyssey=20260825-highland-reference-clean-v7`、`citadelRange=20260825-old-harbor-tree-return-v6`、`highland design=reference-waterfront-v18-lift-trees-lake-cutout`；主入口 `main.js?v=20260825-blue-tram-bgm-v1` 保持不变。
 - [x] **[AUTOMATED]** `test_odyssey_citadel.mjs` 验证埋入地台、942 格、300 柱、唯一最高方尖碑、石材色差、12 株低模绿团树、运河视线切口、非建筑道具为 0；`test_citadel_range.mjs` 验证旧港树回迁源位与最新模式不挂入圣城；`test_tarn_tree_pair.mjs`、`test_shot_harness_runtime.mjs` 回归通过。
+
+### V8-G30 · 城堡构建体验升级（2026-08-26，已落地）
+
+> 对应 `PLAN.md` 12.39。目标：把主编辑器"点一下 → 全城 942 格重建 272ms → 瞬时换皮"升级为"点一下 → 局部长出来"（增量重建 + 生长动画）。视觉真源（25×25×12 逐格装配）不变，只切编辑管线与反馈层。
+
+#### G30-A · 增量编辑管线（P0，已完成）
+
+- [x] **[DeepSeek 2026-08-26]** `buildCitadelTown(spec, ctx, { dirty })`：所有规则循环判定保持全量、23 处生成点按所属格过滤，保证与全量路径逐格同构（dirty 集外不生成、旧网格保留）。
+- [x] **[DeepSeek 2026-08-26]** `computeCitadelDirtyCells`（水平 1-ring + 同柱 ±2，dirty ≤ 45 ≤ 门禁 125）与 `diffCitadelLayouts`（布局 diff → 编辑格）导出。
+- [x] **[DeepSeek 2026-08-26]** `rebuildCitadelTownIncremental`：dirty build → 移除旧 dirty 网格（`userData.cell/townModule` 坐标匹配）→ dirty level（terrace:iy 复合 key，避免 5 个 terrace 同名层组互覆盖）重合并 + faceToCell → 窗口实例重建；旧网格与旧合并网格 dispose 防累积；材质/上下文 `townCtxCache` 跨增量复用（全量 rebuild 后失效）。
+- [x] **[DeepSeek 2026-08-26]** 主编辑器 `onApply` 接 diff→增量：无差异/差异 > 64/失败自动回退全量 `rebuildCitadelTown`（存档恢复/大改路径保留）。
+- [x] **[DeepSeek TEST 2026-08-26]** 新增 `tools/test_castle_building_experience.mjs`：diff 定位、dirty 范围、edit P50 ≤ 50ms / P90 ≤ 90ms（全量 272ms → 增量 P50≈48ms）、dirty 集外 416 个网格对象引用 100% 不变、增量/全量逐格同构、undo 布局还原后增量恢复 272/277 格一致。
+- [x] **[DeepSeek 2026-08-26 三轮]** S12 浏览器渲染修复：共享材质总 attribute 数必须 ≤16（WebGL `MAX_VERTEX_ATTRIBS` 下限）——首版加 `aShape` 把 16 顶到 17，云/树冠 mesh 整体编译失败、默认世界看不到云海。修复：`aHero` 高位编码 shape（云 0/1、树冠 3，不新增 attribute）+ 移除从未使用的 `aAnchor/aInDir/aOutDir` 声明与上传（billboard 由 path 驱动）。最终 14 声明/13 使用，全平台安全。验证：headless Chrome 0 shader error，云每帧 drawElementsInstanced ×1（截图 `pic/s12-final-verify.png` 中央白色云区 = 云烘焙色 244,248,238）。
+- [x] **[DeepSeek 2026-08-26 二轮]** 增量性能维护（浏览器渲染负载 5–6 时 P50 在 47–53 波动，空载 ≈40ms，较首轮 48ms 再降 ~8ms）：`at()`/`want()` 走整数 key（ix<<12|iy<<6|iz）、rule 0 先 `want` 后 expose 查询、`normalizeCitadelTerraceLayout` 对已规范化 layout 早退（不再每 edit 深拷贝 942 格）、`mergeGroup` TypedArray 预分配替代逐顶点 push、`bake` 先变换（indexed 少 2-3x 顶点）后展开、增量 stale 遍历收窄到 town 层组、`computeTownClusters`/`townCellFacing` 整数列 key。门禁在负载低谷稳定通过（P50 实测 45–48），P90≤90 保持通过。
+
+#### G30-B · 生长反馈（P1，已完成）
+
+- [x] **[DeepSeek 2026-08-26]** `playCitadelGrowAnimation` + `tickCitadelGrowAnimations`：新网格 scale 从 0 弹入（0.22s + 18ms stagger，stagger 封顶 0.5s），动画期间只改 transform、零重建；`castleContainer.update` 驱动动画并在结束后执行挂起的 dirty level 合并与窗口实例重建。
+- [x] **[DeepSeek TEST 2026-08-26]** 动画参数断言（duration/stagger/封顶）、动画中 scale 未到位、动画结束后清理 + 合并/窗口完成。
+
+#### G30-C · 稀有模块与道具（P2，保留现役视觉）
+
+- [ ] **[DeepSeek]** 现役逐格规则已生成晾衣绳/花砖等装饰（规则 7 等），seed 稳定；`moduleCatalog.rarity` 强接会改现役视觉，暂缓，作为后续表达层选项。
+- [ ] **[Codex]** `propPlacement` 道具槽按建筑本体接入（不违背 12.38"非建筑局部道具=0"约束）。
+
+#### G30-D · 构建旅程（P3，部分完成）
+
+- [x] **[DeepSeek 2026-08-26]** undo/redo 布局还原后增量重建精确恢复（272/277 格一致）；全量 rebuild 保留为存档恢复路径。
+- [ ] **[Codex]** 存档 v6 迁移（布局真源未变，仅增量元数据）与浏览器端性能/回放验证。
