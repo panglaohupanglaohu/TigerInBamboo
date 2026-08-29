@@ -21,7 +21,10 @@ export function createStage() {
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // 性能（2026-08-28）：像素比上限 2 → 1.5。Retina 下 fragment 成本约减半，
+  // Toon 平涂 + 描边风格在 1.5 倍下几乎无视觉差；4751 draw calls 的场景
+  // 主要瓶颈在 fragment 带宽。
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   // 显式色彩管理（V5 K1）：即 r172 默认值，写明以便回归测试断言、防重复转换
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NoToneMapping;

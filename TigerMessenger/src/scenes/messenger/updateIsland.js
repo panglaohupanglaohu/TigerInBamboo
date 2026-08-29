@@ -37,6 +37,8 @@ export function updateMessengerIsland(s, dt, t, runtime) {
   s.odysseyCitadel.update?.(dt, t);
   s.v4Runtime?.update?.(dt, t, P);
   updatePlanetV8Runtime(s.planetV8, t, [Math.cos(P.windDir * Math.PI / 180), Math.sin(P.windDir * Math.PI / 180)]);
+  if (!s.scoutDefense) s.tripleGateScoutAircraft?.userData?.update?.(t, dt);
+  s.scoutDefense?.update?.(dt, t);
   if (s.planetV8?.surfaceProjectionEnabled && runtime?.player) {
     projectObjectToPlanetSurface(s.planetV8.compiler?.surface, runtime.player, { allowWater: true });
   }

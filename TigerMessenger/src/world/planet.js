@@ -63,6 +63,22 @@ export function createPlanet(scene) {
   return planet;
 }
 
+/**
+ * 星球夜相_grade（主人验收 2026-08-28：B·V8/C·V9 夜相与 A·V7 对齐）：
+ * V8/V9 下这颗星球球壳就是地平线以外的「天空」，白天绿/淡蓝、夜里若不
+ * 压暗就是灰绿/粉夜。weight=0 白天原色，1 深夜蓝暗。
+ */
+export const PLANET_NIGHT_TINT = Object.freeze({ r: 0.3, g: 0.38, b: 0.58 });
+export function applyPlanetNightGrade(material, weight) {
+  if (!material?.color) return;
+  const w = Math.max(0, Math.min(1, Number.isFinite(weight) ? weight : 0));
+  material.color.setRGB(
+    1 + (PLANET_NIGHT_TINT.r - 1) * w,
+    1 + (PLANET_NIGHT_TINT.g - 1) * w,
+    1 + (PLANET_NIGHT_TINT.b - 1) * w
+  );
+}
+
 /** 正式页海洋覆盖球面时，把绿苔球改成海底，避免透明浪下透出草地。峡谷阶地仍走沙蓝。 */
 export function paintPlanetOceanBed(planetMesh) {
   if (!planetMesh?.geometry?.attributes?.position) return planetMesh;

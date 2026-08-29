@@ -785,6 +785,7 @@ function createMoebiusHallBirdFlocks(parent, crystals, rnd) {
     bird.userData.wingR = wingR;
     bird.userData.baseScale = scale;
     bird.userData.farewellOnly = farewell;
+    bird.userData.species = "medium-black-grey-companion-bird";
     return bird;
   }
 
@@ -1083,6 +1084,27 @@ function createMoebiusHallBirdFlocks(parent, crystals, rnd) {
 
       const u0 = (flock.phase + t * flock.speed) % 1;
       for (const bird of flock.birds) {
+        // 小型侦察机命中后的坠落演出：先径向下坠，再短暂隐去，随后
+        // 重新加入塔间航线。这样“击落”有反馈，但不会破坏生态群体。
+        const defenseDownT = bird.userData.scoutDefenseDownT || 0;
+        if (defenseDownT > 0) {
+          bird.userData.scoutDefenseDownT = Math.max(0, defenseDownT - dt);
+          const fallT = bird.userData.scoutDefenseFallT || 0;
+          if (fallT > 0) {
+            bird.userData.scoutDefenseFallT = Math.max(0, fallT - dt);
+            _patrolUp.copy(bird.position).normalize();
+            bird.position.addScaledVector(_patrolUp, -18 * dt);
+            bird.rotation.z += dt * 4.2;
+          } else {
+            bird.visible = false;
+          }
+          if (bird.userData.scoutDefenseDownT <= 0) {
+            bird.visible = true;
+            bird.rotation.z = 0;
+            bird.userData.scoutDefenseFallT = 0;
+          }
+          continue;
+        }
         const u = (u0 - (bird.userData.lag || 0) + 1) % 1;
         // ---- 花厅巡航位 ----
         if (flock.path?.length) {

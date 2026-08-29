@@ -22,8 +22,10 @@ import {
   citadelBlueprintSummary,
   createCitadelBlueprint,
 } from "./citadelBlueprint.js";
-import { isCitadelPaletteV3 } from "../core/params.js";
+import { isCitadelPaletteV3, P } from "../core/params.js";
 import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
+import { createHighlandLightVolumes } from "../render/lighting/highlandLightVolumes.js?v=reference-light-v2";
+import { OFFICIAL_OCEAN_SEA_LEVEL } from "./waterV8/officialOcean.js";
 import {
   buildHighlandCitadelContinuousTerrain,
   buildHighlandCitadelLatestDesign,
@@ -31,13 +33,14 @@ import {
   HIGHLAND_CITADEL_DESIGN_VERSION,
   HIGHLAND_TOWNSCAPER_BASE_Y,
   HIGHLAND_TOWNSCAPER_PLATFORM,
-} from "./highlandCitadelDesign.js?v=reference-waterfront-v18-lift-trees-lake-cutout";
-import { mountHighlandLocalHeroClouds } from "./highlandHeroClouds.js?v=shared-impostor-s12-v1";
+  HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE,
+  highlandCurvedLakeSurfaceHeight,
+  highlandTerrainSurfaceHeight,
+} from "./highlandCitadelDesign.js?v=20260828-reference-light-v9";
+import { mountHighlandLocalHeroClouds } from "./highlandHeroClouds.js?v=20260828-reference-light-v9";
 import { mountHighlandSlopeGrass } from "./highlandSlopeGrass.js";
-import { mountHighlandSlopeShrubs } from "./highlandCitadelDesign.js?v=reference-waterfront-v18-lift-trees-lake-cutout";
-import { bakeHighlandShoreWaves, createHighlandShoreWaveSystem } from "./highlandShoreWaves.js?v=shore-waves-s13-v1";
+import { mountHighlandSlopeShrubs, mountHighlandCanopyGroves } from "./highlandCitadelDesign.js?v=20260828-reference-light-v9";
 import { createBacklitHighlightLayer } from "./backlitHighlight.js?v=backlit-s16-v1";
-import { bakeGroundConnector } from "./groundConnector.js?v=ground-connector-s14-v1";
 import {
   v3HighlandWallPalette,
   v3HighlandGateColor,
@@ -1999,49 +2002,171 @@ function refreshCanalTownReflection(castleContainer) {
 }
 
 function makeHighlandTownPlatformShape() {
-  const { halfWidth: x, halfDepth: z, cornerCut: c } = HIGHLAND_TOWNSCAPER_PLATFORM;
+  const {
+    halfWidth: x,
+    halfDepth: z,
+    centerZ = 0,
+    cornerCut: c,
+  } = HIGHLAND_TOWNSCAPER_PLATFORM;
+  const zMin = centerZ - z;
+  const zMax = centerZ + z;
   const shape = new THREE.Shape();
-  shape.moveTo(-x + c, -z);
-  shape.lineTo(x - c, -z);
-  shape.lineTo(x, -z + c);
-  shape.lineTo(x, z - c);
-  shape.lineTo(x - c, z);
-  shape.lineTo(-x + c, z);
-  shape.lineTo(-x, z - c);
-  shape.lineTo(-x, -z + c);
+  shape.moveTo(-x + c, zMin);
+  shape.lineTo(x - c, zMin);
+  shape.lineTo(x, zMin + c);
+  shape.lineTo(x, zMax - c);
+  shape.lineTo(x - c, zMax);
+  shape.lineTo(-x + c, zMax);
+  shape.lineTo(-x, zMax - c);
+  shape.lineTo(-x, zMin + c);
   shape.closePath();
   return shape;
+}
+
+function makeHighlandTownPlatformSideGeometry() {
+  const spec = HIGHLAND_TOWNSCAPER_PLATFORM;
+  const points = makeHighlandTownPlatformShape().getPoints();
+  const ring = points.length > 1 && points[0].distanceTo(points[points.length - 1]) < 1e-6
+    ? points.slice(0, -1)
+    : points;
+  const positions = [];
+  const indices = [];
+  for (const point of ring) positions.push(point.x, 0, point.y);
+  for (const point of ring) positions.push(point.x, -spec.thickness, point.y);
+  for (let index = 0; index < ring.length; index++) {
+    const next = (index + 1) % ring.length;
+    const bottom = ring.length;
+    indices.push(index, next, bottom + next, index, bottom + next, bottom + index);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData = {
+    platformSide: true,
+    noBottomCap: true,
+    embeddedFoundation: true,
+    surfaceProvider: spec.surfaceProvider,
+  };
+  return geometry;
 }
 
 /**
  * 运河交汇古堡同型的水平承重地台：顶面只提供一个 Y，厚底向下插入
  * 球面山体。山体曲率由地台侧壁吸收，Townscaper 单元无需逐格倾斜。
  */
+/**
+ * 圣城岸线草甸（参考图夜港/主人验收 2026-08-28）：台地与海面交接处的
+ * 鼠尾草绿平地——不规则圆盘（顶点噪声撕边）+ 两块深色岩点，贴水面 +
+0.05。静态呈现层，不进道具统计。
+ */
+function buildHighlandShoreMeadow(THREE_) {
+  const group = new THREE.Group();
+  group.name = "highland-shore-meadow";
+  group.userData.presentationOnly = true;
+  group.userData.nonNavigable = true;
+
+  const geometry = new THREE.CircleGeometry(10.5, 26);
+  geometry.rotateX(-Math.PI / 2);
+  const pos = geometry.attributes.position;
+  const colors = new Float32Array(pos.count * 3);
+  const base = new THREE.Color(0x7fae8f);
+  const dark = new THREE.Color(0x67947c);
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const z = pos.getZ(i);
+    // 确定性撕边：半径按角度与噪声收缩
+    const angle = Math.atan2(z, x);
+    const wobble = 1
+      - 0.14 * Math.abs(Math.sin(angle * 3.1 + 1.3))
+      - 0.09 * Math.abs(Math.cos(angle * 5.7 + 0.4));
+    pos.setX(i, x * wobble);
+    pos.setZ(i, z * wobble);
+    const t = ((i * 7) % 5) / 5;
+    const c = base.clone().lerp(dark, t * 0.5);
+    colors[i * 3] = c.r;
+    colors[i * 3 + 1] = c.g;
+    colors[i * 3 + 2] = c.b;
+  }
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  geometry.computeVertexNormals();
+  const material = new THREE.MeshStandardMaterial({
+    vertexColors: true,
+    roughness: 1,
+    metalness: 0,
+    flatShading: true,
+  });
+  const plate = new THREE.Mesh(geometry, material);
+  plate.name = "shore-meadow-plate";
+  // 半沉构图（DROP 5.33）后的海面局部高 ≈ 5.65：草甸贴着新水线
+  plate.position.set(4, 5.62, 27);
+  plate.receiveShadow = true;
+  group.add(plate);
+
+  const rockMat = new THREE.MeshStandardMaterial({ color: 0x6a6f66, roughness: 1, flatShading: true });
+  const rockSpecs = [
+    [-3.4, 0.4, 25.4, 0.8],
+    [9.8, 0.3, 28.6, 0.55],
+  ];
+  rockSpecs.forEach(([x, y, z, size], index) => {
+    const rock = new THREE.Mesh(new THREE.IcosahedronGeometry(size, 0), rockMat);
+    rock.name = `shore-meadow-rock-${index}`;
+    rock.position.set(x, 5.69, z);
+    rock.rotation.y = index * 1.7;
+    rock.castShadow = true;
+    group.add(rock);
+  });
+
+  return group;
+}
+
 function buildHighlandTownFoundationPlatform(materials) {
   const spec = HIGHLAND_TOWNSCAPER_PLATFORM;
-  const geometry = new THREE.ExtrudeGeometry(makeHighlandTownPlatformShape(), {
-    depth: spec.thickness,
-    bevelEnabled: false,
-    steps: 1,
-  });
-  // ExtrudeGeometry 默认沿 +Z；转成沿 -Y，使 shape 所在面成为水平顶面。
-  geometry.rotateX(Math.PI / 2);
+  const geometry = new THREE.ShapeGeometry(makeHighlandTownPlatformShape());
+  // ShapeGeometry 位于 XY 面；旋转到 XZ 后，法线朝向 +Y，作为统一水平顶面。
+  geometry.rotateX(-Math.PI / 2);
   geometry.computeVertexNormals();
   geometry.userData.surfaceProvider = spec.surfaceProvider;
   geometry.userData.uniformTop = true;
   geometry.userData.embeddedFoundation = true;
+  geometry.userData.platformTop = true;
+  const plateauMaterial = new THREE.MeshStandardMaterial({
+    color: 0x718e6d,
+    roughness: 1,
+    metalness: 0,
+    flatShading: true,
+  });
+  plateauMaterial.userData.highlandLatestDesign = true;
+  plateauMaterial.userData.semanticToken = "highland-mountain-platform-meadow";
   const platform = mesh(
     geometry,
-    materials.weatherStone ?? materials.contour,
+    plateauMaterial,
     "highland-town-foundation-platform"
   );
-  platform.position.y = spec.topY;
-  // 逻辑地台只负责统一建筑、编辑器和寻路标高；天然山体已在城址内反向
-  // 抵消球面下沉并覆盖至顶面，因此实体承重体应完全埋在地下，禁止在
-  // 湖岸画面中读成一条人工灰墙。
-  platform.visible = false;
-  platform.receiveShadow = false;
+  // 平台顶面比权威建筑高度高 0.08，避免与下方山体网格共面闪烁；建筑
+  // 仍以 spec.topY 为基面，8cm 只进入建筑底部，不改变可行走高度。
+  platform.position.y = spec.topY + HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE;
+  platform.visible = true;
+  platform.receiveShadow = true;
   platform.castShadow = false;
+  const sideMaterial = new THREE.MeshStandardMaterial({
+    color: HIGHLAND_CITADEL_DESIGN_PALETTE.mountainFace,
+    roughness: 1,
+    metalness: 0,
+    flatShading: true,
+  });
+  sideMaterial.userData.highlandLatestDesign = true;
+  sideMaterial.userData.semanticToken = "highland-mountain-platform-side";
+  const side = new THREE.Mesh(makeHighlandTownPlatformSideGeometry(), sideMaterial);
+  side.name = "highland-town-foundation-platform-side";
+  side.castShadow = false;
+  side.receiveShadow = true;
+  side.userData.nonNavigable = true;
+  side.userData.presentationOnly = true;
+  side.userData.skipInkOutline = true;
+  platform.add(side);
   platform.userData.buildStage = "foundation";
   platform.userData.isCitadelFoundation = true;
   platform.userData.surfaceProvider = spec.surfaceProvider;
@@ -2049,10 +2174,14 @@ function buildHighlandTownFoundationPlatform(materials) {
   platform.userData.bottomY = spec.topY - spec.thickness;
   platform.userData.uniformTop = true;
   platform.userData.embeddedIntoTerrain = true;
-  platform.userData.fullySubmerged = true;
+  platform.userData.fullySubmerged = false;
+  platform.userData.visiblePlateau = true;
+  platform.userData.visualTopY = spec.topY + HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE;
+  platform.userData.foundationGeometry = "flat-top-faceted-side-skirt-v1";
   platform.userData.footprint = {
     halfWidth: spec.halfWidth,
     halfDepth: spec.halfDepth,
+    centerZ: spec.centerZ ?? 0,
     cornerCut: spec.cornerCut,
   };
   return platform;
@@ -2416,21 +2545,49 @@ export function buildOdysseyCitadel(options = {}) {
     // S13 山坡植被：城址外山坡成片暗绿灌木丛（视频画面归纳），
     // 独立层，不计入 12 株低模树与道具统计。
     mountHighlandSlopeShrubs(THREE, outerTerrainSystem);
+    // 参考图植被（2026-08-28）：大团鼠尾草绿树冠群落（InstancedMesh 单 draw call）
+    mountHighlandCanopyGroves(THREE, outerTerrainSystem);
     mountHighlandLocalHeroClouds(THREE, castleContainer);
-    // S13 岸浪（台地-海衔接）：湖岸线内侧烘焙 in/out/time 浪带，
-    // looping vertex shader 循环位移（涌岸/退岸），castleContainer.update 驱动。
+    // 参考图海交草甸（主人验收 2026-08-28）：水晶城上空的"空中草地"
+    // 挪到圣城台地与海面交接处——湾面上一块不规则鼠尾草草甸盘 + 两块
+    // 深色岩点，贴在海面高度。
     try {
-      const shoreWaves = createHighlandShoreWaveSystem(
-        THREE,
-        castleContainer,
-        bakeHighlandShoreWaves({ seed: 20260826 }),
-        {}
-      );
-      shoreWaves.mesh.name = "highland-shore-waves";
-      castleContainer.userData.highlandShoreWaves = shoreWaves;
+      castleContainer.add(buildHighlandShoreMeadow(THREE));
     } catch (error) {
-      console.warn("[citadel] shore waves skipped:", error?.message);
+      console.warn("[citadel] shore meadow skipped:", error?.message);
     }
+    // S18 光体积灯（主人验收 2026-08-27/28）：OskSta 点光源 light volume 方法
+    // + 参考图夜港配色——暖橙灯下密上疏、港口岸湾灯、塔楼暖光冠、立面窗光、
+    // 岸湾水面倒影光斑。海面局部 Y = (R + 海平面) − 城堡原点半径；
+    // 未放置（place:false 测试路径）时回落降海后的默认值。
+    const castleOriginRadius = Number.isFinite(options.groundRadius)
+      ? options.groundRadius
+      : (options.planetRadius ?? 160) - 4.2; // R + lift(0.40) − SEA_DROP(4.6) 的默认
+    castleContainer.userData.highlandLightVolumes = createHighlandLightVolumes(
+      THREE,
+      castleContainer,
+      {
+        getTimeOfDay: () => P.timeOfDay,
+        terrainHeightAt: highlandTerrainSurfaceHeight,
+        townLayout: townAssembly.layout,
+        // 参考图/X 动图双色温：后山塔群用中等钴蓝光域，两侧山肩用更大、
+        // 更暗、更软的冷光域。光域位置固定，只做慢强度变化，避免低分辨率
+        // 体积在移动时显出格子感；暖橙仍集中在下城和水岸。
+        coolAccents: [
+          { x: -14, y: 18, z: -16, radius: 10.8, color: 0x5778df, intensityScale: 0.78 },
+          { x: 14, y: 18, z: -16, radius: 10.2, color: 0x526fd1, intensityScale: 0.72 },
+          { x: 18, y: 15, z: 0, radius: 8.6, color: 0x6a86df, intensityScale: 0.62 },
+          { x: -39, y: 25, z: -8, radius: 20, color: 0x3557b7, intensityScale: 0.30 },
+          { x: 38, y: 28, z: -10, radius: 22, color: 0x304da3, intensityScale: 0.27 },
+        ],
+        waterLocalY: (options.planetRadius ?? 160) + OFFICIAL_OCEAN_SEA_LEVEL - castleOriginRadius,
+        waterHeightAt: highlandCurvedLakeSurfaceHeight,
+      }
+    ).group;
+    // S13 岸浪带会生成一组沿岸三角形透明条带，并使用近白色 foam
+    // shader；在当前海面构图中会读成悬浮白条，因此不再挂载到正式场景。
+    // 水面保留在 highland-waterfront-water，由蓝色平面材质负责统一表现。
+    castleContainer.userData.highlandShoreWaves = null;
     // S16 背光高光：连续山体反向轮廓高光层（逆光构图时轮廓亮线），
     // main.js animate 每帧驱动 sunDir/camera。
     try {
@@ -2442,45 +2599,6 @@ export function buildOdysseyCitadel(options = {}) {
       }
     } catch (error) {
       console.warn("[citadel] backlit highlight skipped:", error?.message);
-    }
-    // S14 relax 连接带（飞艇鸟瞰验收，2026-08-27 二挂）：台地前缘 → 浅水区的
-    // relax 岸坡带。初版 y 2.95–4.36 太低、灰蓝色像水下台地被撤；二挂整体
-    // 抬高（5.2→4.4）+ 亮岸色，飞艇鸟瞰时在湖面上可见一条平滑岸带。
-    try {
-      const band = bakeGroundConnector({
-        from: [0, 24],
-        to: [0, 31],
-        fromHeight: 5.2,
-        toHeight: 4.4,
-        width: 30,
-        segments: 5,
-        crossSegments: 9,
-        seed: 20260827,
-      });
-      const bandGeometry = new THREE.BufferGeometry();
-      bandGeometry.setAttribute("position", new THREE.Float32BufferAttribute(band.positions, 3));
-      bandGeometry.setIndex(band.indices);
-      bandGeometry.computeVertexNormals();
-      bandGeometry.computeBoundingSphere();
-      const bandMaterial = new THREE.MeshStandardMaterial({
-        color: 0x9fb4c0,
-        roughness: 1,
-        flatShading: true,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-      });
-      const bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
-      bandMesh.name = "highland-relax-shore-band";
-      bandMesh.renderOrder = 3;
-      bandMesh.userData.relaxConnector = true;
-      bandMesh.userData.connectorHash = band.hash;
-      bandMesh.userData.connectorVertices = band.vertexCount;
-      bandMesh.userData.relaxFinalMaxChange = band.relaxFinalMaxChange;
-      castleContainer.add(bandMesh);
-      castleContainer.userData.highlandRelaxBand = bandMesh;
-    } catch (error) {
-      console.warn("[citadel] relax shore band skipped:", error?.message);
     }
   }
   const terrainOutlinedSurfaceCount = skipOuterTerrain
@@ -2508,6 +2626,7 @@ export function buildOdysseyCitadel(options = {}) {
     }
     outerTerrainSystem.userData.highlandSlopeGrass?.update?.(t);
     castleContainer.userData.highlandHeroClouds?.update?.(t);
+    castleContainer.userData.highlandLightVolumes?.update?.(t);
     castleContainer.userData.highlandShoreWaves?.update?.(t);
   };
   castleContainer.update = update;
@@ -2533,9 +2652,16 @@ export function buildOdysseyCitadel(options = {}) {
     const groundRadius = Number.isFinite(options.groundRadius)
       ? options.groundRadius
       : planetRadius + canyonOffsetDir(_dir);
-    const curvatureDrop = citadelCurvatureDrop(groundRadius, contourSpec);
-    // 城堡相对护城河水面上浮并整体下沉 CITADEL_SINK，使台地外缘/前方绿地浸入水面下
-    const radialEmbed = CITADEL.groundEmbed + curvatureDrop + CITADEL_SINK;
+    // 高山版的山体网格已经把球面曲率烘焙进自己的局部高度场；城堡
+    // 必须直接挂在同一个山地平台锚点上，不能再套用旧五层台地的弦高
+    // 下沉，否则建筑底部会落到平台/山体内部。运河交汇古堡仍使用
+    // 原有的台地曲率 + 护城河下沉公式。
+    const curvatureDrop = useHighlandLatestDesign
+      ? 0
+      : citadelCurvatureDrop(groundRadius, contourSpec);
+    const radialEmbed = useHighlandLatestDesign
+      ? 0
+      : CITADEL.groundEmbed + curvatureDrop + CITADEL_SINK;
     castleContainer.position.copy(_dir).multiplyScalar(groundRadius - radialEmbed);
     castleContainer.userData.anchor = {
       dir: _dir.clone(),
@@ -3129,8 +3255,11 @@ export function rebuildCitadelTerrain(castleContainer, contourSpec) {
   // 共用 castleContainer，因此只需更新容器径向位置即可整体同步下沉。
   const anchor = castleContainer.userData.anchor;
   if (anchor?.dir?.isVector3 && Number.isFinite(anchor.groundR)) {
-    const curvatureDrop = citadelCurvatureDrop(anchor.groundR, normalized);
-    const radialEmbed = CITADEL.groundEmbed + curvatureDrop + CITADEL_SINK;
+    const highlandPlatform = castleContainer.userData.highlandTownscaperGrid === true;
+    const curvatureDrop = highlandPlatform ? 0 : citadelCurvatureDrop(anchor.groundR, normalized);
+    const radialEmbed = highlandPlatform
+      ? 0
+      : CITADEL.groundEmbed + curvatureDrop + CITADEL_SINK;
     castleContainer.position.copy(anchor.dir).multiplyScalar(anchor.groundR - radialEmbed);
     anchor.curvatureDrop = curvatureDrop;
     anchor.radialEmbed = radialEmbed;

@@ -25,6 +25,8 @@ import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/
 import { updateMessengerIsland } from "./messenger/updateIsland.js";
 import { createSwampBgmState } from "./messenger/swampBgm.js";
 import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
+import { createScoutDefenseSquad } from "../world/scoutDefense.js";
+import { pruneTaggedOfficialOceanOccludeds } from "../core/officialOceanOcclusionPruning.js";
 import { FEATURES } from "../core/params.js";
 
 /** 正式主页（custom/legacy）挂球面 impostor 云海与曲率海洋，只留水晶城运河，不改全局 DEFAULT_ON。 */
@@ -84,6 +86,15 @@ export const messengerIslandScene = {
       seed: ctx.options?.planetV8?.seed ?? FEATURES.terrainSeed ?? 42,
       features: planetFeatures,
     });
+
+    // 三重门编译锚点保留给门侧巡检逻辑，侦察队实际以门的 seatRoot
+    // 读取最新姿态，保证开发者菜单搬迁叹息之门后仍能正确赶赴目标。
+    const tripleGateLandmark = planetV8.compiler?.manifest?.find((entry) => entry.id === "triple-gate") || {
+      id: "triple-gate",
+      direction: [-0.46, 0.88, 0.09],
+      forward: [0, 0, 1],
+    };
+    const tripleGateSample = planetV8.compiler?.surface?.sample?.(tripleGateLandmark.direction) || null;
 
     const harborBuilt = buildOldHarborScene({ seed: 8844 });
     const harbor = harborBuilt.group;
@@ -195,6 +206,46 @@ export const messengerIslandScene = {
       avoidWorld: [...mossAvoidCommon, ...zoneAvoid],
     });
     scene.add(mossSaihoji);
+    {
+      // 湖沼坑口缘碎石 → 苔庭（主人验收 2026-08-29）：这组石头整体迁来，
+      // 沿苔庭椭圆边线散布成一组（同色同形，确定性散布）。
+      const srand = (function () {
+        let state = 20260829 >>> 0;
+        return function () {
+          state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+          return state / 4294967296;
+        };
+      })();
+      const mossDir = latLonToDir(56, -120, new THREE.Vector3());
+      const surfaceR = R + (planetFeatures.saihojiIslandLift || 0) + 0.18;
+      const upT = mossDir.clone();
+      const rightT = new THREE.Vector3().crossVectors(upT, new THREE.Vector3(0, 0, 1)).normalize();
+      if (rightT.lengthSq() < 1e-6) rightT.set(1, 0, 0);
+      const fwdT = new THREE.Vector3().crossVectors(rightT, upT).normalize();
+      const screeMat = new THREE.MeshStandardMaterial({ color: 0x2c5f56, roughness: 1, flatShading: true });
+      const screeGroup = new THREE.Group();
+      screeGroup.name = "saihoji-scree-rocks";
+      screeGroup.userData.presentationOnly = true;
+      for (let i = 0; i < 18; i++) {
+        const angle = (i / 18) * Math.PI * 2 + srand() * 0.3;
+        const ox = Math.cos(angle) * (7.6 + srand() * 1.4);
+        const oz = Math.sin(angle) * (4.6 + srand() * 1.0);
+        const rock = new THREE.Mesh(
+          new THREE.IcosahedronGeometry(0.9 + srand() * 1.1, 0),
+          screeMat
+        );
+        rock.position
+          .copy(mossDir)
+          .multiplyScalar(surfaceR)
+          .addScaledVector(rightT, ox)
+          .addScaledVector(fwdT, oz);
+        rock.scale.set(1.3, 0.3 + srand() * 0.3, 1.1);
+        rock.rotation.y = srand() * Math.PI;
+        rock.castShadow = true;
+        screeGroup.add(rock);
+      }
+      scene.add(screeGroup);
+    }
     const mossSwamp = buildImpastoMossyGround({
       dir: skyPack.moebiusSwamp
         ? skyPack.moebiusSwamp.position.clone().normalize()
@@ -223,6 +274,18 @@ export const messengerIslandScene = {
       flock: moebiusPack.flock,
       canyonDir: moebiusPack.canyonDir,
     });
+    const scoutDefense = createScoutDefenseSquad({
+      scene,
+      radius: R,
+      moebius: moebiusPack.moebius,
+      abandonedGate: gatePack.abandonedGate,
+      getCityBirdFlocks: () => moebiusPack.moebius?.birdFlocks || null,
+      getGateBirdVortex: () => gatePack.gateBirdVortex || null,
+      surfacePosition: tripleGateSample?.position,
+      count: 5,
+    });
+    // 兼容旧版调试句柄：现在代表5架侦察机组成的 squad，而非单机。
+    const tripleGateScoutAircraft = scoutDefense.root;
     settleBuriedAssets(scene, colliders);
 
     const combatPack = loadCitadelCombat({
@@ -237,6 +300,9 @@ export const messengerIslandScene = {
       v4Runtime: citadelPack.v4Runtime,
       planetV8,
     });
+    // 正式页海壳内的谷底静态副本不会进入视野。只处理内容工厂明确标记、
+    // 且包围范围完整低于海面的子树；战斗、车辆、倒影等动态内容绝不猜测。
+    const officialOceanOcclusion = pruneTaggedOfficialOceanOccludeds(scene, { radius: R });
 
     messengerLandmarks = {
       playZone,
@@ -264,6 +330,8 @@ export const messengerIslandScene = {
       hallFlock: moebiusPack.hallFlock,
       escort: skyPack.escort,
       aircraftSquad: skyPack.aircraftSquad,
+      tripleGateScoutAircraft,
+      scoutDefense,
       saihojiPhalanx: combatPack.saihojiPhalanx,
       tacticalGraph: combatPack.tacticalGraph,
       mossSaihoji,
@@ -276,6 +344,7 @@ export const messengerIslandScene = {
       harborLogistics: harborBuilt.logistics || null,
       v4Runtime: citadelPack.v4Runtime,
       planetV8,
+      officialOceanOcclusion,
     };
 
     const state = {
@@ -297,6 +366,8 @@ export const messengerIslandScene = {
       odysseyCitadel: citadelPack.odysseyCitadel,
       v4Runtime: citadelPack.v4Runtime,
       aircraftSquad: skyPack.aircraftSquad,
+      tripleGateScoutAircraft,
+      scoutDefense,
       saihojiPhalanx: combatPack.saihojiPhalanx,
       combatPack,
       airship: skyPack.airship,
@@ -307,6 +378,7 @@ export const messengerIslandScene = {
       flock: moebiusPack.flock,
       hallFlock: moebiusPack.hallFlock,
       escort: skyPack.escort,
+      officialOceanOcclusion,
       swampBgm: createSwampBgmState(),
     };
 

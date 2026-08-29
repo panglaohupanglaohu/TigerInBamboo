@@ -13,7 +13,7 @@ import {
   isPlanetSurfaceRidersV1,
   isTerrainSemanticShaderV1,
 } from "../../core/params.js";
-import { compilePlanetV8 } from "../../procgen/planet/planetCompilerV8.js";
+import { compilePlanetV8 } from "../../procgen/planet/planetCompilerV8.js?v=20260827-terrain-v11";
 import { createBufferGeometryFromMesh } from "../../procgen/three/bufferGeometryAdapter.js";
 import { compileCurvedWater } from "../waterV8/curvedWaterCompiler.js";
 import {
@@ -25,7 +25,7 @@ import {
 import { buildCloudImpostorAtlas } from "../../render/clouds/impostorAtlasBuilder.js";
 import { createCloudImpostorSystem } from "../../render/clouds/cloudImpostorSystem.js";
 import { createSemanticTerrainMaterial } from "../../render/terrain/semanticTerrainMaterial.js";
-import { createCurvedWaterMaterial, createCurvedLakeMaterial } from "../../render/water/curvedWaterMaterial.js";
+import { createCurvedWaterMaterial, createCurvedLakeMaterial } from "../../render/water/curvedWaterMaterial.js?v=20260827-terrain-v11";
 import { paintPlanetOceanBed } from "../planet.js";
 import { createVegetationRuntime } from "../../render/vegetation/vegetationRuntime.js";
 import { createWaterSurfaceEventBuffer, createWaterWakeRibbonBuffer } from "../waterV8/waterSurfaceEvents.js";
@@ -136,9 +136,12 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
       ? createSemanticTerrainMaterial(THREE)
       : new THREE.MeshStandardMaterial({ color: 0x6d8f65, roughness: 0.96, metalness: 0, flatShading: true });
     if (enabledTerrain) {
-      for (const chart of compiled.charts) {
+      const terrainEntries = isV9 && compiled.globalTerrain ? [compiled.globalTerrain] : compiled.charts;
+      for (const chart of terrainEntries) {
         const mesh = meshFromData(chart.mesh, material);
-        mesh.name = `planet-v8-terrain-${chart.id}`;
+        mesh.name = isV9 && chart.kind === "global-spherical-terrain"
+          ? "planet-v9-global-spherical-patch-terrain"
+          : `planet-v8-terrain-${chart.id}`;
         mesh.userData.semantic = chart.semantic;
         if (enabledSemanticShader) {
           mesh.geometry.setAttribute("terrainData0", new THREE.BufferAttribute(chart.semantic.terrainData0, 4));
@@ -146,6 +149,8 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
           mesh.geometry.setAttribute("flowData", new THREE.BufferAttribute(chart.semantic.flowData, 4));
           if (chart.semantic.climateData1) mesh.geometry.setAttribute("climateData1", new THREE.BufferAttribute(chart.semantic.climateData1, 4));
           if (chart.semantic.ecologyData0) mesh.geometry.setAttribute("ecologyData0", new THREE.BufferAttribute(chart.semantic.ecologyData0, 4));
+          if (chart.semantic.patchData0) mesh.geometry.setAttribute("patchData0", new THREE.BufferAttribute(chart.semantic.patchData0, 4));
+          if (chart.semantic.patchData1) mesh.geometry.setAttribute("patchData1", new THREE.BufferAttribute(chart.semantic.patchData1, 4));
           if (chart.semantic.uv) mesh.geometry.setAttribute("uv", new THREE.BufferAttribute(chart.semantic.uv, 2));
         }
         mesh.castShadow = true;
@@ -166,7 +171,7 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
     const basins = state.compiler.manifest.filter((entry) => entry.waterNeeds === "closed-lake-basin").map((entry) => ({ direction: entry.direction, angularRadius: entry.angularRadius, level: 0.08 }));
     const water = state.compiler.water || compileCurvedWater({ grid: state.compiler.grid, radius, seaLevel: 0, basins, fieldRecipe: state.compiler.field });
     state.water = water;
-    const ocean = waterMesh(water.ocean, createCurvedWaterMaterial(THREE, { color: 0x1c5972, opacity: 0.92, kind: "ocean" }));
+    const ocean = waterMesh(water.ocean, createCurvedWaterMaterial(THREE, { color: 0x0f5e87, opacity: 0.96, kind: "ocean" }));
     ocean.name = "planet-v8-curved-ocean";
     ocean.receiveShadow = true;
     root.add(ocean);

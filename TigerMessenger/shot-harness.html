@@ -56,7 +56,7 @@
 
 <script type="module">
 import * as THREE from "three";
-import { createOskLightingPrototype } from "./src/render/lighting/oskLightingPrototype.js";
+import { createOskLightingPrototype } from "./src/render/lighting/oskLightingPrototype.js?nightlab=20260828";
 
 // ---------- 资产 / 世界工厂 ----------
 import { toonMat, addOutline } from "./src/assets/toon.js";
@@ -82,6 +82,7 @@ import {
 import { createDetailedMoebiusTower } from "./src/assets/moebiusTower.js";
 import { createMoebiusAirship } from "./src/assets/moebiusAirship.js";
 import { createMoebiusAircraft } from "./src/assets/moebiusAircraft.js";
+import { createTripleGateScoutAircraft } from "./src/world/planetV8/tripleGateScout.js";
 import { createChristchurchTram } from "./src/assets/tram.js";
 import { createBubblePod } from "./src/assets/bubblePod.js";
 
@@ -95,7 +96,7 @@ import { buildMoebiusCrystalMetropolis } from "./src/world/moebiusCity.js";
 import { buildStartingCamp } from "./src/world/startingCamp.js";
 import { buildSaihojiPlanet } from "./src/world/saihoji.js";
 import { createPlanet } from "./src/world/planet.js";
-import { createPlanetV8Runtime, disposePlanetV8Runtime } from "./src/world/planetV8/runtime.js";
+import { createPlanetV8Runtime, disposePlanetV8Runtime } from "./src/world/planetV8/runtime.js?v=20260827-terrain-v11";
 import { buildHills } from "./src/world/hills.js";
 import { createMoonLake } from "./src/world/lake.js";
 import { buildChristchurchTramSystem } from "./src/world/tramSystem.js";
@@ -105,7 +106,7 @@ import { buildWorld } from "./src/world/platforms.js";
 import {
   buildOdysseyCitadel,
   updateCitadelNightWindows,
-} from "./src/world/odysseyCitadel.js?v=20260825-highland-reference-clean-v7";
+} from "./src/world/odysseyCitadel.js?v=20260828-reference-light-v9";
 import { createMangaWaterfall } from "./src/world/mangaWaterfall.js";
 import {
   buildCitadelRange,
@@ -153,6 +154,7 @@ const REGISTRY = [
   { id: "moebiusTower", cat: "器物", label: "莫比斯塔", build: () => createDetailedMoebiusTower({ stages: 3, goldScales: false }) },
   { id: "moebiusAirship", cat: "器物", label: "莫比斯航空艇", build: () => createMoebiusAirship() },
   { id: "moebiusAircraft", cat: "器物", label: "莫比斯磁悬浮飞碟", build: () => createMoebiusAircraft() },
+  { id: "tripleGateScoutAircraft", cat: "器物", label: "三重门·小型侦察飞行器", build: () => createTripleGateScoutAircraft() },
   { id: "tram", cat: "器物", label: "基督城电车", build: () => createChristchurchTram({ variant: "red" }) },
   { id: "bubblePod", cat: "器物", label: "气泡座舱", build: () => createBubblePod({}) },
   { id: "fence", cat: "器物", label: "木栅栏", build: () => createLowPolyFence() },
@@ -203,6 +205,7 @@ const REGISTRY = [
           curvedWaterV1: true,
           terrainSemanticShaderV1: true,
           cloudImpostorV1: true,
+          planetPresentationVersion: "v9",
           planetResolution: 16,
         },
       });
@@ -695,6 +698,12 @@ function rerenderLighting(mode = "legacy", phase = "noon") {
     if (object.userData?.kind === "odyssey-citadel") {
       updateCitadelNightWindows(object, citadelPhase, { force: true });
     }
+    // 正式场景的 light volume 由 castle.update/P.timeOfDay 驱动；独立验收页
+    // 没有主循环昼夜系统，因此显式注入相同相位，保证 A/B 截图能看到
+    // 塔群冷光、低城暖光和贴合曲面湖泊的动态倒影。
+    if (object.userData?.kind === "highland-light-volumes") {
+      object.update?.(performance.now() * 0.001, citadelPhase);
+    }
   });
   const renderTimes = [];
   for (let i = 0; i < 5; i++) {
@@ -727,6 +736,10 @@ async function renderItem(id) {
     }
     dynamic = new THREE.Group();
     scene.add(dynamic);
+    // Expose the current subject for the local visual harness only; this is
+    // useful for isolating a generated surface from its water/vegetation
+    // companions during browser-side QA.
+    window.__shotHarnessDynamic = dynamic;
     const ctx = { THREE, scene: dynamic, camera, R: entry.R ?? R_DEFAULT };
     const obj = entry.build(ctx);
     if (obj) dynamic.add(obj);

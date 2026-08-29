@@ -14,14 +14,16 @@ import {
   rangeLocalToWorld,
   rangeWorldToLocal,
   CITADEL_CASCADE_POOL_SPECS,
-} from "../../world/citadelRange.js?v=20260825-old-harbor-tree-return-v6";
+} from "../../world/citadelRange.js?v=20260828-sea-contact-v8";
 import {
   buildOdysseyCitadel,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
-} from "../../world/odysseyCitadel.js?v=20260825-highland-reference-clean-v7";
+} from "../../world/odysseyCitadel.js?v=20260828-reference-light-v9";
 import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 import { loadCitadelLevelsSave } from "../../world/citadelLevelsSave.js";
+import { OFFICIAL_OCEAN_SEA_LEVEL, HIGHLAND_CASTLE_SEA_DROP } from "../../world/waterV8/officialOcean.js";
+import { highlandTerrainSurfaceHeight } from "../../world/highlandCitadelDesign.js?v=20260828-reference-light-v9";
 import {
   createCitadelTerraceBirds,
 } from "../../world/citadelTerraceBirds.js?v=20260823-citadel-reference-v2";
@@ -81,7 +83,9 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   const odysseyCitadel = buildOdysseyCitadel({
     dir: citadelDir,
     faceDir: moonLake?.centerWorld || null,
-    groundRadius: R + citadelRangeLiftDir(citadelDir) + islandLift,
+    // HIGHLAND_CASTLE_SEA_DROP：主人验收 2026-08-27——城堡与台地整体下降，
+    // 城市基面(4.95)与海面(0.72)接触，台地崖壁没入海中（S13 参考构图）。
+    groundRadius: R + citadelRangeLiftDir(citadelDir) + islandLift - HIGHLAND_CASTLE_SEA_DROP,
     planetRadius: R,
     seed: 20260808,
     spec: citadelSpec,
@@ -91,6 +95,7 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   });
   scene.add(odysseyCitadel);
   odysseyCitadel.updateMatrixWorld(true);
+  snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborColliders, camp, R });
   if (islandLift > 0) {
     const up = citadelDir.clone().normalize();
     for (const obj of [
@@ -162,6 +167,38 @@ function restoreOldHarborTreePair({ harbor, harborBuilt, citadelRange }) {
   if (harborBuilt?.landmarks) harborBuilt.landmarks.oldHarborGiantTrees = restored;
   harbor.updateMatrixWorld(true);
   return restored;
+}
+
+/**
+ * 旧港整组贴回圣城岸湾（主人验收 2026-08-27）：港口原本停在 range 基准面，
+ * 沉在湖盆水下、海壳横穿树干。这里把整组沿城堡 up 抬到岸湾山体顶面
+ * （isHighlandWaterfrontCutout 已为岸湾保留山体），渔船单独压回海平面。
+ * 世界碰撞体（港口/起重机/弹琴老人）随抬升刷新。
+ */
+function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborColliders, camp, R }) {
+  if (!odysseyCitadel || !harbor?.isGroup) return;
+  odysseyCitadel.updateMatrixWorld(true);
+  harbor.updateMatrixWorld(true);
+  const up = citadelSiteDir(new THREE.Vector3());
+  const inv = new THREE.Matrix4().copy(odysseyCitadel.matrixWorld).invert();
+  const local = harbor.position.clone().applyMatrix4(inv);
+  const terrain = highlandTerrainSurfaceHeight(local.x, local.z);
+  if (!Number.isFinite(terrain)) return;
+  const delta = terrain - local.y;
+  if (!(Math.abs(delta) > 1e-4)) return;
+  harbor.position.addScaledVector(up, delta);
+  harbor.updateMatrixWorld(true);
+  // 渔船留在海面：泊位在水上，不跟港台一起上崖
+  const boat = harborBuilt?.landmarks?.boat;
+  if (boat) {
+    const boatR = boat.getWorldPosition(new THREE.Vector3()).length();
+    boat.position.y -= boatR - (R + OFFICIAL_OCEAN_SEA_LEVEL + 0.1);
+    boat.updateMatrixWorld(true);
+  }
+  for (const collider of harborColliders || []) collider.position.addScaledVector(up, delta);
+  const elder = harborBuilt?.landmarks?.elder;
+  const elderCol = camp?.colliders?.find((entry) => entry.kind === "elder");
+  if (elder && elderCol) elderCol.position.copy(elder.getWorldPosition(new THREE.Vector3()));
 }
 
 function placeHarborOnCitadel({ R, camp, harbor, harborBuilt, islandLift = 0 }) {

@@ -178,10 +178,10 @@ export function createHighlandShoreWaveSystem(THREE, scene, data, { speed = 0.55
       varying float vDist;
       varying float vPhase;
       void main() {
-        // 浪花：近岸白青、远岸透明；随相位闪动（涌起亮、退去暗）
-        float alpha = (1.0 - vDist) * 0.5 * (0.72 + 0.28 * sin(vPhase * 6.2831853));
+        // 备用岸浪保持蓝青色；正式场景不挂载这层动态带，避免读成白条。
+        float alpha = (1.0 - vDist) * 0.24 * (0.72 + 0.28 * sin(vPhase * 6.2831853));
         if (alpha < 0.015) discard;
-        vec3 foam = mix(vec3(0.62, 0.82, 0.84), vec3(0.94, 0.97, 0.96), 1.0 - vDist);
+        vec3 foam = mix(vec3(0.18, 0.52, 0.68), vec3(0.34, 0.70, 0.80), 1.0 - vDist);
         gl_FragColor = vec4(foam * mix(0.75, 1.0, uDay), alpha);
       }
     `,

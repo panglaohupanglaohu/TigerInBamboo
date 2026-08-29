@@ -66,6 +66,14 @@ export function createCurvedWaterMaterial(THREE, {
         float depth = clamp(vWater0.x, 0.0, 1.0);
         float shore = clamp(vWater0.y, 0.0, 1.0);
         float fetch = clamp(vWater0.z, 0.0, 1.0);
+        float waterMask = clamp(vWater1.w, 0.0, 1.0);
+        // Ocean data is sampled on the whole closed sphere.  Hide the land
+        // portion here; otherwise a transparent blue shell tints every
+        // settlement/terrain face and makes the land read as a submerged card.
+        // Keep the transition narrow around the authored shoreline.  A 0.5
+        // mask means a WFC boundary cell, not an ocean cell; treating it as
+        // opaque would wash the adjacent land triangle blue.
+        if (waterMask < 0.42) discard;
         float crest = smoothstep(0.014, 0.052, abs(vWave)) * (0.18 + fetch * 0.82);
         float shorelineFoam = (1.0 - smoothstep(0.05, 0.32, shore)) * smoothstep(0.008, 0.035, abs(vWave));
         float ripplePhase = length(vRadial.xz - vWater1.xy) * 155.0 + uTime * 1.15 + vWater0.w * 6.2831;
@@ -74,8 +82,10 @@ export function createCurvedWaterMaterial(THREE, {
         vec3 deepColor = uColor * mix(0.64, 1.0, depth);
         vec3 color = deepColor * light * mix(0.48, 1.0, uNight);
         color += vec3(0.02, 0.05, 0.065) * (vWave + 0.06) * (1.0 - uWaterKind * 0.35);
-        color = mix(color, vec3(0.68, 0.86, 0.86), clamp(foam, 0.0, 1.0));
-        float alpha = uOpacity * mix(0.9, 1.0, depth);
+        // Foam stays cyan-blue instead of reaching near-white; this also
+        // prevents distant strips from blooming into bright white bands.
+        color = mix(color, vec3(0.42, 0.69, 0.76), clamp(foam * 0.55, 0.0, 1.0));
+        float alpha = uOpacity * mix(0.9, 1.0, depth) * smoothstep(0.42, 0.78, waterMask);
         gl_FragColor = vec4(color, alpha);
       }
     `,

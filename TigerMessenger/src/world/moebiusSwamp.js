@@ -1284,18 +1284,8 @@ export function createMoebiusSwampZone(opts = {}) {
   const ENTRANCE_A = 0.5; // 入坑通道方位角（局部）
   const angDiff = (a) => Math.atan2(Math.sin(a - ENTRANCE_A), Math.cos(a - ENTRANCE_A));
 
-  // 低矮断崖碎石：沿坑缘不连续散布（高度≤ 0.9，不拦路），入口处留豁口
-  const screeMat = toonMat(0x275a58, { flatShading: true });
-  for (let i = 0; i < 18; i++) {
-    const a = rnd() * Math.PI * 2;
-    if (Math.abs(angDiff(a)) < 0.66) continue; // 入口不设石
-    const rock = part(jitter(new THREE.IcosahedronGeometry(0.9 + rnd() * 1.1, 0), 0.3, rnd), screeMat, 0.02);
-    const d = 33.5 + rnd() * 2.5;
-    rock.position.set(Math.cos(a) * d, SWAMP_LOCAL_GROUND_Y + 0.15, Math.sin(a) * d);
-    rock.scale.set(1.3, 0.3 + rnd() * 0.3, 1.1);
-    rock.rotation.y = rnd() * Math.PI;
-    swampZone.add(rock);
-  }
+  // 低矮断崖碎石（2026-08-29 主人验收：这组石头已整体迁往西芳寺苔庭，
+  // 见 messengerIsland saihoji-scree-rocks；湖沼坑缘不再放置）。
 
   // 入口缓坡石阶：8 级宽石板从草地 Y=40 一路下行没入水下 Y≈22，可直接走入
   const stepMat = toonMat(0x2f6a66, { flatShading: true });
@@ -1961,6 +1951,9 @@ export function createMoebiusSwampZone(opts = {}) {
   // 船A：进坞维修的战船（桅杆帆索已拆下待换），长尾猴负责吊装备用桅
   const shipA = createFisherBoat();
   shipA.name = "swamp-warship-repair";
+  // 正式页的全球海壳会完整盖住这艘谷底维修船；允许装配器在确认
+  // 整船（含描边）都在水下后关闭该子树。独立湖沼场景不受此标记影响。
+  shipA.userData.officialOceanOcclusionCandidate = true;
   shipA.scale.setScalar(2); // 战船整体放大一倍（剪纸桨手/维修工位随船同步）
   for (const child of [...shipA.children]) {
     // 桅杆/帆/横桁/支索/旗组 = 中线高位件，拆除待修（露出无桅战船）
@@ -2072,6 +2065,8 @@ export function createMoebiusSwampZone(opts = {}) {
   // 船B：修毕待发的战船 —— 泊稳 → 划桨驶向入口豁口 → 爬上石阶出沼（循环）
   const shipB = createFisherBoat();
   shipB.name = "swamp-warship-depart";
+  // 同上：只有正式页海壳的实际包围检测通过才会关闭，不能按位置硬删。
+  shipB.userData.officialOceanOcclusionCandidate = true;
   const SHIPB_SCALE = 2; // 战船整体放大一倍
   swampZone.add(shipB);
   let shipyardWakeT = 0; // 尾流涟漪计时
@@ -2648,6 +2643,12 @@ export function createMoebiusSwampZone(opts = {}) {
 
     /* ---------- 战船维修厂动画：猴吊桅杆 / 蜥蜴送水 / 船B 出沼 + 白鲸护送 ---------- */
     {
+      // 正式页已确认整座船坞完全在全球海壳下：不再更新不可见的桨、尾流
+      // 和船员动画，避免即使已从场景树摘除仍留下的 CPU 消耗。
+      if (shipA.userData.officialOceanOccluded || shipB.userData.officialOceanOccluded) {
+        // 这两艘船共用同一船坞剧情；只要正式页剔除了其中任意一艘，整段
+        // 船坞表演都不可能露出水面。
+      } else {
       const dt = Math.min(0.05, Math.max(0.001, Number(_dt) || 1 / 60));
       // 船A 泊稳微浮（随水呼吸），桨兵静坐待命
       shipA.position.y = WATER_Y + 0.02 + Math.sin(t * 0.9) * 0.05;
@@ -2793,6 +2794,7 @@ export function createMoebiusSwampZone(opts = {}) {
         escortWhale.rotation.y = Math.atan2(bDirX, bDirZ);
         escortWhale.rotation.x = -0.2 - Math.sin(k * Math.PI) * 0.45;
         escortWhale.visible = k < 0.92;
+      }
       }
     }
     // 气泡

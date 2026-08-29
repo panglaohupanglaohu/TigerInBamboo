@@ -356,7 +356,7 @@
     }
 
     /* NPC 交谈提示（屏幕中央，E 键触发） */
-    #npc-hint, #tram-hint, #airship-hint, #elder-hint, #fox-hint, #bubble-hint, #boat-hint {
+    #npc-hint, #tram-hint, #airship-hint, #scout-hint, #elder-hint, #fox-hint, #bubble-hint, #boat-hint {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -374,11 +374,12 @@
       opacity: 0;
       transition: opacity 0.2s ease;
     }
-    #npc-hint.show, #tram-hint.show, #airship-hint.show, #elder-hint.show, #fox-hint.show, #bubble-hint.show { opacity: 1; }
+    #npc-hint.show, #tram-hint.show, #airship-hint.show, #scout-hint.show, #elder-hint.show, #fox-hint.show, #bubble-hint.show { opacity: 1; }
     /* 遥控杆展开时：收起中央按键提示（避免挡操作） */
     body.touch-pad-open #npc-hint,
     body.touch-pad-open #tram-hint,
     body.touch-pad-open #airship-hint,
+    body.touch-pad-open #scout-hint,
     body.touch-pad-open #elder-hint,
     body.touch-pad-open #fox-hint,
     body.touch-pad-open #bubble-hint {
@@ -1433,14 +1434,14 @@
       color: #1a2638;
     }
     #bubble::after { border: none; box-shadow: 3px 3px 6px rgba(26, 38, 56, 0.08); }
-    #npc-hint, #tram-hint, #airship-hint, #elder-hint, #fox-hint, #bubble-hint, #boat-hint {
+    #npc-hint, #tram-hint, #airship-hint, #scout-hint, #elder-hint, #fox-hint, #bubble-hint, #boat-hint {
       background: rgba(255, 255, 255, 0.9);
       border: none;
       border-radius: 8px;
       color: #1a2638;
       box-shadow: 0 8px 24px rgba(26, 38, 56, 0.16);
     }
-    #npc-hint kbd, #tram-hint kbd, #airship-hint kbd, #elder-hint kbd, #fox-hint kbd, #bubble-hint kbd, #boat-hint kbd {
+    #npc-hint kbd, #tram-hint kbd, #airship-hint kbd, #scout-hint kbd, #elder-hint kbd, #fox-hint kbd, #bubble-hint kbd, #boat-hint kbd {
       border: 1px solid rgba(47, 143, 122, 0.45);
       background: rgba(47, 143, 122, 0.12);
       color: #2f8f7a;
@@ -1619,6 +1620,7 @@
     <div id="npc-hint">[<kbd>E</kbd>] 与居民交谈</div>
     <div id="tram-hint">[<kbd>F</kbd>] 上车 · 窗边看风景 · 车上 [<kbd>C</kbd>] 司机视野</div>
     <div id="airship-hint">[<kbd>F</kbd>] 抓住垂绳 · 攀爬登上航空艇</div>
+    <div id="scout-hint">[<kbd>F</kbd>] 驾驶小型侦察飞行器</div>
     <div id="boat-hint">[<kbd>F</kbd>] 上船 · WASD 驾驶</div>
     <div id="bubble-crosshair" aria-hidden="true"><span class="ring"></span><span class="dot"></span></div>
     <div id="dive-tint" aria-hidden="true">
@@ -1657,7 +1659,17 @@
     2. ?cdn=1 时尝试 CDN；失败则提示改回默认本地
     importmap 必须写在任何 type=module 之前（不可在 module 内动态注入）。
   -->
-  <script type="importmap" id="tm-importmap">
+  <script>
+  // 早期错误收集（调试用）：自动化验收时经 window.__errors 读取
+  window.__errors = [];
+  window.addEventListener("error", function (e) {
+    window.__errors.push(String(e.message || e.error) + " @" + (e.filename || "?") + ":" + (e.lineno || 0));
+  });
+  window.addEventListener("unhandledrejection", function (e) {
+    window.__errors.push("rejection: " + String(e.reason));
+  });
+</script>
+<script type="importmap" id="tm-importmap">
   {
     "imports": {
       "three": "./vendor/three.module.js",

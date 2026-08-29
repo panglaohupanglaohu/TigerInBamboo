@@ -9,7 +9,10 @@ import {
   createFisherBoat,
   updateWarshipOars,
   applyBoatOarWobble,
+  setNightBoatLanternWeight,
 } from "../assets/harbor.js";
+import { nightWeightAt } from "../render/lighting/highlandLightVolumes.js";
+import { P } from "../core/params.js";
 
 const _p = new THREE.Vector3();
 const _t = new THREE.Vector3();
@@ -109,6 +112,8 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
 
   function update(dt) {
     if (!Number.isFinite(dt) || dt <= 0) return;
+    // S18 船灯夜权重：泊船/巡游船的灯笼白天熄、入夜亮
+    setNightBoatLanternWeight(nightWeightAt(P.timeOfDay));
     for (const boat of boats) {
       if (boat.userData.piloted) {
         // 驾驶中由 boatRide 负责桨动画

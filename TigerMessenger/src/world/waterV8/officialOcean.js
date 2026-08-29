@@ -5,11 +5,18 @@ import * as THREE from "three";
 import { CANYON, canyonOffsetDirSmooth } from "../canyon.js";
 
 export const OFFICIAL_OCEAN_SEA_LEVEL = 0.72;
-export const OFFICIAL_OCEAN_COLOR = 0x4cb8c4;
-export const OFFICIAL_OCEAN_OPACITY = 0.88;
+export const OFFICIAL_OCEAN_COLOR = 0x17698b;
+export const OFFICIAL_OCEAN_OPACITY = 0.94;
 export const OFFICIAL_OCEAN_WIDTH_SEGMENTS = 72;
 export const OFFICIAL_OCEAN_HEIGHT_SEGMENTS = 48;
 export const OFFICIAL_HIGHLAND_ISLAND_LIFT = 0;
+/**
+ * 圣城城堡容器整体下移量（主人验收 2026-08-29 方案1「半沉堡垒」）：
+ * 4.63 = 接触极限（基面贴海面）；5.33 = 在接触极限上再降 0.7，海线淹上
+ * 城内第一排墙脚——街道平台隐入水下、白城建筑从海面直接拔起
+ * （主人确认接受淹街构图）。
+ */
+export const HIGHLAND_CASTLE_SEA_DROP = 5.33;
 
 const _dir = new THREE.Vector3();
 

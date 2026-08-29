@@ -35,6 +35,9 @@ import {
 } from "./world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P, FEATURES, isOskLightingV1, isVoxelAoV1, isLocalLightBudgetV1 } from "./core/params.js";
+import { createMiniBloom } from "./render/postprocessing/miniBloom.js";
+import { nightWeightAt } from "./render/lighting/highlandLightVolumes.js";
+import { createSceneDistanceCulling } from "./core/sceneDistanceCulling.js";
 import { createLightingDirector } from "./render/lighting/lightingDirector.js";
 import { setLightingPresetOverrides } from "./render/lighting/lightingState.js";
 import {
@@ -50,6 +53,7 @@ import { createDayNight } from "./world/dayNight.js";
 import { createTramRide } from "./player/tramRide.js";
 import { createAirshipRide } from "./player/airshipRide.js";
 import { createAircraftRide } from "./player/aircraftRide.js";
+import { createScoutAircraftRide } from "./player/scoutAircraftRide.js";
 import { createBubblePodRide } from "./player/bubblePodRide.js";
 import { createBoatRide } from "./player/boatRide.js";
 import { createWeatherSystem } from "./world/weather.js";
@@ -62,7 +66,7 @@ import {
 import { createTouchControls } from "./ui/touchControls.js";
 import { createMinimap } from "./ui/minimap.js";
 import { createShotHarnessPanel } from "./ui/shotHarnessPanel.js";
-import { createPlanet, PLANET_RADIUS } from "./world/planet.js";
+import { createPlanet, PLANET_RADIUS, applyPlanetNightGrade } from "./world/planet.js";
 import { FlockManager } from "./world/flock.js";
 import { resolveCollisions, resolveAssetColliders } from "./world/collision.js";
 import {
@@ -105,6 +109,25 @@ import { mergeColliders, updateScenes } from "./scenes/sceneApi.js";
 
 // ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
+// S18 夜港辉光：迷你 bloom（只让灯头/窗光/塔冠这类超亮自发光起晕；
+// 强度乘夜权重——白天自动直出。回滚：P.nightBloomV1 = false）。
+// S18 卡顿治理：小件静态装饰距离剔除（地平线天然遮蔽远处）
+const distanceCulling = P.distanceCullV1
+  ? createSceneDistanceCulling(THREE, {
+      scene,
+      getCamera: () => camera,
+      planetRadius: 160,
+      cullDistance: P.distanceCullMeters,
+    })
+  : null;
+const nightBloom = P.nightBloomV1
+  ? createMiniBloom(THREE, renderer, {
+      strength: P.nightBloomStrength,
+      threshold: P.nightBloomThreshold,
+      getTimeOfDay: () => P.timeOfDay,
+      nightWeightAt,
+    })
+  : null;
 initQuestPanelCollapse();
 
 // ---------- 环境光 / 天空（跨场景共享） ----------
@@ -208,6 +231,7 @@ const keys = createInput({
 
 // bubblePodRide 稍后创建；触控环视在驾驶气泡艇时改为挪准星
 let bubblePodRide = null;
+let scoutAircraftRide = null;
 
 // ---------- 触控遥控杆（手机 / 平板；可收起） ----------
 const touchControls = createTouchControls({
@@ -586,6 +610,15 @@ lightingDirector.setFocus([
 if (new URLSearchParams(location.search).get("shotLab") === "1") {
   shotHarnessPanel?.setOpen(true);
 }
+// 验收便捷（?autostart=1）：跳过开场弹窗直接开始送信；配合
+// ?timeOfDay=0.9 直接截夜景（四季/夜相验收用，替代手工点击时序）。
+if (new URLSearchParams(location.search).get("autostart") === "1") {
+  setTimeout(() => {
+    const startButton = [...document.querySelectorAll("button")]
+      .find((button) => button.textContent.trim() === "开始送信");
+    startButton?.click();
+  }, 1500);
+}
 // shadow coverage 调试视图：?v5ShadowDebug=1
 const v5Params = new URLSearchParams(location.search);
 if (v5Params.get("v5ShadowDebug") === "1") {
@@ -789,7 +822,26 @@ bubblePodRide = createBubblePodRide({
   exitOtherRides: () => {
     airshipRide.forceExit?.();
     if (aircraftRide.isRiding?.()) aircraftRide.toggle();
+    scoutAircraftRide?.forceExit?.();
   },
+});
+
+// ---------- 小型侦察飞行器驾驶（靠近 [F] 登机 · WASD · Space/Ctrl 升降） ----------
+scoutAircraftRide = createScoutAircraftRide({
+  player,
+  playerGroup,
+  camera,
+  cameraRig,
+  keys,
+  planetRadius: PLANET_RADIUS,
+  getSquad: () => messenger?.landmarks?.scoutDefense || null,
+  exitOtherRides: () => {
+    airshipRide.forceExit?.();
+    if (aircraftRide.isRiding?.()) aircraftRide.toggle();
+    bubblePodRide?.forceExit?.();
+  },
+  elHint: document.getElementById("scout-hint"),
+  toast: showToast,
 });
 
 // ---------- 战船驾驶（码头古战船 + 运河巡游战船；靠近 [F] 上船 · WASD 驾驶） ----------
@@ -826,6 +878,7 @@ const boatRide = createBoatRide({
     airshipRide.forceExit?.();
     bubblePodRide?.forceExit?.();
     if (aircraftRide.isRiding?.()) aircraftRide.toggle();
+    scoutAircraftRide?.forceExit?.();
   },
   onDismount: (left) => {
     // 运河船下船后吸附回航道继续巡游
@@ -1200,6 +1253,7 @@ let citadelSceneEdit = citadelEditorPanel
 // [V] 进入/退出飞行器驾驶舱
 window.addEventListener("keydown", (e) => {
   if (e.repeat || e.code !== "KeyV") return;
+  scoutAircraftRide?.forceExit?.();
   bubblePodRide?.forceExit?.();
   const on = aircraftRide.toggle();
   showToast(on ? "已进入飞行器驾驶舱 · [V] 退出" : "已退出飞行器驾驶舱", 2.4);
@@ -1426,6 +1480,7 @@ function animate() {
 
   // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
   const riding =
+    scoutAircraftRide?.update(dt) ||
     aircraftRide.update() ||
     bubblePodRide.update(dt) ||
     boatRide.update(dt) ||
@@ -1490,7 +1545,8 @@ function animate() {
   const moving = Math.hypot(tx, ty, tz) > 0.3;
   updatePlayerAnim(player, messengerMesh, dt, moving);
   // 驾驶舱第一人称（飞行器 / 气泡艇）由各自 update 写相机，跳过第三人称跟随
-  const cockpitView = aircraftRide.isRiding?.() || bubblePodRide.isRiding?.();
+  const cockpitView =
+    scoutAircraftRide?.isRiding?.() || aircraftRide.isRiding?.() || bubblePodRide.isRiding?.();
   if (!cockpitView) cameraRig.update(dt);
   quest.updateInteraction(dt);
   elderMusic.update(dt, t);
@@ -1544,7 +1600,32 @@ function animate() {
     });
   }
 
-  renderer.render(scene, camera);
+  // 新视觉系统一律 try 护罩：单系统异常只禁用自身，绝不杀主渲染循环
+  try {
+    if (distanceCulling) distanceCulling.update(dt);
+  } catch (error) {
+    console.warn("[perf] distance culling disabled:", error?.message);
+    distanceCulling?.dispose?.();
+  }
+  try {
+    // 星球夜相（B·V8/C·V9 夜港对齐）：球壳在 V8/V9 就是地平线以外的天空，
+    // 夜里压成深蓝，不再透出灰绿/粉调
+    if (planet?.material) applyPlanetNightGrade(planet.material, nightWeightAt(P.timeOfDay));
+  } catch (error) {
+    console.warn("[perf] planet night grade disabled:", error?.message);
+  }
+  if (nightBloom) {
+    try {
+      nightBloom.setSize(renderer.domElement.width, renderer.domElement.height);
+      nightBloom.render(scene, camera);
+    } catch (error) {
+      console.warn("[perf] bloom disabled:", error?.message);
+      nightBloom.dispose?.();
+      renderer.render(scene, camera);
+    }
+  } else {
+    renderer.render(scene, camera);
+  }
 }
 
 animate();
@@ -1574,6 +1655,7 @@ window.__tm = {
   storyboardPanel,
   tramRide,
   airshipRide,
+  scoutAircraftRide,
   elderMusic,
   foxNpc,
   weather,

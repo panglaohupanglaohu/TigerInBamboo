@@ -83,7 +83,9 @@ export function placeMoebiusSwampAndSky({ scene, R, moebius, grandDir, bubblePod
     const swamp = createCatalogObject("moebiusSwamp", { seed: 7711, scale: swampScale });
     swamp.userData.mapUid = "world-swamp-crystal";
     const swampDir = crystalCanyonSwampDir();
-    const lift = canyonOffsetDir(swampDir);
+    // 主人验收 2026-08-28：湖沼碟整体下沉 4，坑口缘草地不再悬在水晶城
+    // 天空里读成"空中草地"；湖沼本体留在峡谷原地（海面下剔除对其豁免）。
+    const lift = canyonOffsetDir(swampDir) - 4;
     swamp.userData.canyonSwamp = true;
     placeMoebiusSwampOnSphere(swamp, swampDir, R, swampScale, lift);
     scene.add(swamp);

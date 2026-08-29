@@ -22,13 +22,14 @@ const PHASES = Object.freeze({
     worldDirection: Object.freeze([-0.2, 0.38, 0.9]),
   }),
   night: Object.freeze({
-    background: 0x070a12,
+    // 参考图夜港（2026-08-28）：深蓝夜空 + 蓝调月夜氛围，不再死黑
+    background: 0x24406e,
     sunColor: 0x8aa8e6,
-    sunIntensity: 0.24,
-    skyColor: 0x263a5a,
-    groundColor: 0x090c14,
-    hemiIntensity: 0.2,
-    ambientIntensity: 0.03,
+    sunIntensity: 0.3,
+    skyColor: 0x35507e,
+    groundColor: 0x1a2438,
+    hemiIntensity: 0.52,
+    ambientIntensity: 0.13,
     worldDirection: Object.freeze([-0.25, 0.65, 0.7]),
   }),
 });

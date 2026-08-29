@@ -60,6 +60,58 @@ function lcg(seed) {
  * 红蛇纹）+ 两侧长桨 + 甲板货箱栏杆。局部 +X = 船头，底部约 Y=0。
  * @returns {THREE.Group}
  */
+// =====================================================================
+// S18 船只夜灯（主人验收 2026-08-28 参考图夜港）：参考图里入港/泊船的
+// 桅顶与船尾挂着暖橙灯笼、在水上拖出光。所有渔船/战船（同一构造器）
+// 共享一套灯笼材质与点光注册表；夜权重由巡航海湾的 update 每帧驱动。
+// =====================================================================
+let _nightBoatLanternMaterial = null;
+const _nightBoatLights = [];
+
+export function nightBoatLanternMaterial() {
+  if (!_nightBoatLanternMaterial) {
+    _nightBoatLanternMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4a3a24,
+      roughness: 0.7,
+      flatShading: true,
+      emissive: new THREE.Color(0xffa04c),
+      emissiveIntensity: 0,
+    });
+  }
+  return _nightBoatLanternMaterial;
+}
+
+/** 每帧由海湾巡游 update 驱动：灯笼自发光 + 注册过的点光强度。 */
+export function setNightBoatLanternWeight(weight) {
+  const w = Number.isFinite(weight) ? Math.max(0, Math.min(1, weight)) : 0;
+  if (_nightBoatLanternMaterial) _nightBoatLanternMaterial.emissiveIntensity = w * 1.6;
+  for (let i = _nightBoatLights.length - 1; i >= 0; i--) {
+    const light = _nightBoatLights[i];
+    if (!light?.parent) {
+      _nightBoatLights.splice(i, 1);
+      continue;
+    }
+    light.intensity = w * 1.1;
+  }
+}
+
+function attachNightLanterns(boat) {
+  const lanternMaterial = nightBoatLanternMaterial();
+  const mastLantern = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.22, 0.17), lanternMaterial);
+  mastLantern.name = "night-lantern-mast";
+  mastLantern.position.set(0.55, 3.78, 0);
+  boat.add(mastLantern);
+  const sternLantern = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.18, 0.14), lanternMaterial);
+  sternLantern.name = "night-lantern-stern";
+  sternLantern.position.set(-2.3, 1.42, 0);
+  boat.add(sternLantern);
+  const light = new THREE.PointLight(0xffa04c, 0, 9, 2);
+  light.name = "night-lantern-light";
+  light.position.set(0.55, 3.4, 0);
+  boat.add(light);
+  _nightBoatLights.push(light);
+}
+
 export function createFisherBoat() {
   const g = new THREE.Group();
   g.name = "fisher-boat";
@@ -357,6 +409,9 @@ export function createFisherBoat() {
 
   // 船体吃水：整体下移，让龙骨（局部 y≈0.14）贴到原点水线之下
   for (const child of g.children) child.position.y -= 0.18;
+
+  // S18 夜灯：桅顶 + 船尾暖橙灯笼 + 小范围点光（入港/夜航可见，参考图）
+  attachNightLanterns(g);
 
   g.userData.kind = "fisherBoat";
   g.userData.collideRadius = 6.8;
@@ -2370,7 +2425,8 @@ export function buildOldHarborScene(opts = {}) {
   const harborWater = new THREE.Mesh(
     new THREE.BoxGeometry(14.5, 0.08, 9.5),
     new THREE.MeshBasicMaterial({
-      color: 0x247f99,
+      // 旧港水面与全局开阔海保持深蓝，避免被天空/岸边浅色冲成白青。
+      color: 0x145f86,
       side: THREE.DoubleSide,
       depthWrite: false,
     })
@@ -2381,7 +2437,7 @@ export function buildOldHarborScene(opts = {}) {
   harborWater.receiveShadow = true;
   g.add(harborWater);
 
-  // 桩柱
+  // 桩柱（港台抬到岸湾崖顶后，桩脚要扎进下方海面：长桩 2.7–2.95）
   const pilePositions = [
     [-3.2, -1.8],
     [-3.2, 1.8],
@@ -2393,9 +2449,9 @@ export function buildOldHarborScene(opts = {}) {
     [4.8, 0.4],
   ];
   for (const [px, pz] of pilePositions) {
-    const ph = 0.55 + rnd() * 0.15;
+    const ph = 2.7 + rnd() * 0.25;
     const pile = part(new THREE.CylinderGeometry(0.1, 0.12, ph, 6), pileMat, 0.022);
-    pile.position.set(px, ph / 2, pz);
+    pile.position.set(px, 0.4 - ph / 2, pz);
     g.add(pile);
   }
 
@@ -2486,12 +2542,10 @@ export function buildOldHarborScene(opts = {}) {
   g.add(squadA);
   g.add(squadB);
 
-  // 底部对齐 Y=0
+  // 底部基准：栈桥/砂土基局部 y≈0。长桩脚刻意伸到 y=0 下方 2.5——
+  // 港台贴到圣城岸湾崖顶后，桩脚要没入下方海面，不再参与整体对齐。
   g.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(g);
-  if (Number.isFinite(box.min.y) && Math.abs(box.min.y) > 1e-4) {
-    g.position.y -= box.min.y;
-  }
 
   // 碰撞（局部 → 世界由调用方在 place 后写 position）
   const collidersLocal = [

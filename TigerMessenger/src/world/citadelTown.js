@@ -809,7 +809,8 @@ function makeHighlandTownscaperLevels() {
   // 参考图的竖向叙事：湖岸只保留分段低城，建筑沿山谷向中轴方尖碑
   // 聚拢并拔高。z=+10 面向湖面，z=-10 靠山；禁止生成一整条齐平城墙。
   const towerAnchors = Object.freeze([
-    { x: -7, z: -8, radius: 2.15, boost: 6, char: "0" },
+    // 参考图剖面主塔：后山左塔最高（插画顶部的 focal 塔）
+    { x: -7, z: -8, radius: 2.4, boost: 8, char: "0" },
     { x: 7, z: -8, radius: 2.05, boost: 6, char: "9" },
     { x: -9, z: -1, radius: 1.85, boost: 4, char: "A" },
     { x: 9, z: 0, radius: 1.95, boost: 5, char: "0" },
@@ -866,6 +867,8 @@ function makeHighlandTownscaperLevels() {
 
       // 两侧山壁方向逐步压低，突出中轴与高塔，同时保留不对称轮廓。
       if (Math.abs(x) >= halfWidth - 1) height -= 1;
+      // 参考图剖面：临水两排压成低阶（下城矮、密、亮，往上逐步拔高）
+      if (z >= 9) height = Math.min(height, 2);
       height = clampHeight(height);
       for (let floor = 0; floor < height; floor++) set(x, z, floor, color);
     }

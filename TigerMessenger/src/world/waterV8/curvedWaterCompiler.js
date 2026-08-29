@@ -49,7 +49,11 @@ export function buildGeodesicWaterShell({ grid, radius, level = 0, semantic = "o
     const flow = Array.isArray(terrain.flow) ? terrain.flow : [radial[0], radial[2], 1];
     const curvature = Math.max(0, Math.min(1, Number(terrain.canyon) || 0));
     waterData0.set([depth, shoreDistance, fetch, foamSeed], vertex * 4);
-    waterData1.set([Number(flow[0]) || radial[0], Number(flow[1]) || radial[2], curvature, 1 - landness * 0.4], vertex * 4);
+    // The spherical ocean shell is generated over the closed globe, but land
+    // cells must not receive a translucent blue overlay.  Keep the mask in
+    // the existing packed channel so the renderer can discard/taper land at
+    // the WFC shoreline without adding another attribute.
+    waterData1.set([Number(flow[0]) || radial[0], Number(flow[1]) || radial[2], curvature, 1 - landness], vertex * 4);
   }
   const indices = Uint32Array.from(grid.main.faces.flat());
   return { kind: "curved-ocean-shell-v8", radius: scale, positions, indices, waterData0, waterData1, semantic, curved: true, irregular: true, topology: { source: "main/dual-grid+field+mc", nearShoreData: true, stableVertexIds: true }, hash: `ocean:${grid.hash}:${scale}` };

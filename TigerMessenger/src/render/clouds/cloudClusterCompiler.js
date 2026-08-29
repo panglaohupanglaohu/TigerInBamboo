@@ -53,6 +53,22 @@ function samplePolylineSlerp(points, t) {
   return slerpUnit(points[index], points[index + 1], scaled - index);
 }
 
+// ① 贴地脊线路径通用化（2026-08-27）：对坡度/抬升达标的 cell 提取脊线
+// 折线（沿脊线切线两端 + 中心三点），走 bakeRidgePath 的 hugRidge 分支
+// （clearance 0.2–0.4 贴地），而不是默认的飘高分支。
+export function buildRidgeDirections({ anchor = [0, 1, 0], ridgeTangent = null, extent = 0.03 } = {}) {
+  const r = normalize(anchor);
+  let t = ridgeTangent;
+  if (!t) t = normalize(reject([0, 0, 1], r));
+  t = normalize(reject(t, r));
+  const k = Math.max(0.01, extent);
+  return [
+    normalize(addScaled(r, t, -k)),
+    r.slice(),
+    normalize(addScaled(r, t, k)),
+  ];
+}
+
 export function bakeRidgePath({
   anchor, semantic = {}, wind = [1, 0, 0], altitude, lift = 0, scale = 1,
   hugRidge = false, ridgeDirections = null, field = null, clearance = null,
@@ -173,7 +189,10 @@ function keepoutRemovesInstance(instance, keepout) {
   return role === "climate";
 }
 
-export function classifyCloudBand(landformClass, wetness = 0, lift = 0, fetch = 0) {
+export function classifyCloudBand(landformClass, wetness = 0, lift = 0, fetch = 0, slope = 0) {
+  // ② 雾毯类：高坡 + 一定抬升 → 贴地雾毯（低 base、薄、lowLayer），
+  // 与高空积云区分；云贴着山脊而不是飘在天上。
+  if (slope >= 0.35 && lift >= 0.25) return "ridge-mist-blanket";
   if (landformClass === "volcanic-snow-massif") return "snowline-crown";
   if (landformClass === "rift-shoulder-pass") return "windward-wall";
   if (landformClass === "rift-escarpment") return "rift-low-fog";
@@ -187,6 +206,7 @@ export function classifyCloudBand(landformClass, wetness = 0, lift = 0, fetch = 
 
 export function cloudBaseForBand(band, elevation = 0, wetness = 0) {
   const base = {
+    "ridge-mist-blanket": 0.22,
     "snowline-crown": 8.5,
     "windward-wall": 6.2,
     "rift-low-fog": 2.4,
@@ -196,6 +216,10 @@ export function cloudBaseForBand(band, elevation = 0, wetness = 0) {
     "windward-mountain": 6.5,
     "rain-shadow": 8.2,
   }[band] ?? 5;
+  // ② 雾毯类单独小 clamp（0.15–0.35），不受全局 0.8 下限约束
+  if (band === "ridge-mist-blanket") {
+    return Math.max(0.15, Math.min(0.35, base + wetness * 0.1));
+  }
   return Math.max(0.8, base + Math.max(0, elevation) * 0.08 + wetness * 0.35);
 }
 
@@ -243,7 +267,10 @@ export function compileCloudClusters({
     const lift01 = Math.max(0, Math.min(1, orographicLift / LIFT_SCALE));
     const terrainHeight = field?.heightAt?.(cell.direction || [0, 1, 0]) ?? (semantic.height ?? 0);
     const slope = Math.max(0, Math.min(1, semantic.slope ?? 0));
-    const climateBand = classifyCloudBand(semantic.landformClass, vapor, lift01, fetch);
+    // ① 山脊候选：坡度 ≥0.35 且高程 ≥3（无 climate 时 lift 为 0，坡度+高程
+    // 是贴地脊线的稳定信号；有 climate 时 lift 自然参与 clearance/base）
+    const isRidgeMist = slope >= 0.35 && terrainHeight >= 3;
+    const climateBand = classifyCloudBand(semantic.landformClass, vapor, lift01, fetch, slope);
     const probability = sample
       ? Math.max(0.03, Math.min(0.92, 0.04 + sample.cloudPotential * 0.9))
       : Math.max(0.03, Math.min(0.9, 0.12 + vapor * 0.42));
@@ -252,10 +279,24 @@ export function compileCloudClusters({
     const chainBand = OSKAR_CLOUD_CHAIN_BANDS.find((band) =>
       band.id === semantic.landmarkId || band.id === semantic.cloudChainBand
     ) || null;
-    const clearance = Math.max(1.2, 1.2 + Math.min(4.5, Math.max(0, terrainHeight) * 0.12) + lift01 * 2.4);
-    const cloudBase = sample ? sample.cloudBase : Math.max(0.8, 1.2 + vapor * 0.35);
+    // ② 雾毯 clearance/base：贴地云单独小 clamp（最小 0.2 而不是 1.2）
+    const clearance = isRidgeMist
+      ? Math.max(0.2, 0.2 + lift01 * 0.3)
+      : Math.max(1.2, 1.2 + Math.min(4.5, Math.max(0, terrainHeight) * 0.12) + lift01 * 2.4);
+    const cloudBase = isRidgeMist
+      ? 0.15 + vapor * 0.15
+      : sample ? sample.cloudBase : Math.max(0.8, 1.2 + vapor * 0.35);
     const altitude = terrainHeight + clearance + cloudBase;
     const localWind = sample?.windTangent || direction;
+    // ① 脊线提取：坡向局部最高点串折线（这里用脊线切线两端+中心三点），
+    // 雾毯云 hugRidge 贴地，其他云保持默认分支
+    const ridgeDirections = isRidgeMist
+      ? buildRidgeDirections({
+          anchor: cell.direction || [0, 1, 0],
+          ridgeTangent: semantic.flow ? reject(normalize(semantic.flow), normalize(cell.direction || [0, 1, 0])) : null,
+          extent: 0.028 + vapor * 0.014,
+        })
+      : null;
     const ridgePath = bakeRidgePath({
       anchor: cell.direction || [0, 1, 0],
       semantic: { ...semantic, height: terrainHeight, flow: semantic.flow },
@@ -265,16 +306,18 @@ export function compileCloudClusters({
       scale: 0.75 + vapor * 0.5,
       field,
       clearance,
+      hugRidge: isRidgeMist,
+      ridgeDirections,
     });
     instances.push({
       cellIndex: cell.index,
       anchor: (cell.direction || [0, 1, 0]).slice(),
       altitude: ridgePath.points[2].altitude,
-      type: lift01 > 0.45 ? "orographic" : vapor > 0.65 ? "low-lake" : "fair-weather",
+      type: isRidgeMist ? "ridge-mist-blanket" : lift01 > 0.45 ? "orographic" : vapor > 0.65 ? "low-lake" : "fair-weather",
       climateBand,
       cloudBase,
       climateSource,
-      lowLayer: !!(chainBand?.lowLayer || cloudBase <= 0.55),
+      lowLayer: isRidgeMist || !!(chainBand?.lowLayer || cloudBase <= 0.55),
       chainBand: chainBand?.id || null,
       oceanFetch: fetch,
       slope,
@@ -291,7 +334,8 @@ export function compileCloudClusters({
       inDir: localWind.slice(),
       outDir: normalize([localWind[2], localWind[1] * 0.2, -localWind[0]]),
       timeOffset: phase,
-      speed: 0.08 + rng.next() * 0.12,
+      // ⑥ 贴地雾几乎不飘：speed 单独调小
+      speed: isRidgeMist ? 0.02 + rng.next() * 0.04 : 0.08 + rng.next() * 0.12,
       phase,
       cameraKeepout: false,
       lod: lift01 > 0.45 ? "cluster-detail" : vapor > 0.65 ? "octa-impostor" : "weather-band",

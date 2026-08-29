@@ -49,6 +49,7 @@
 | S13 | [高山圣城岸浪展示](https://x.com/OskSta/status/1991099314714902634) + [岸浪实现方法（回复）](https://x.com/OskSta/status/1991101097818403263) | 原文①：*Got some pretty sweet new shore waves going*（海中岩石台地山的岸浪视频，缩略图证据：中央暖棕岩石台地、四周深蓝海、外缘岸线过渡带）；原文②：*It's based on a looping vertex shader. The data is baked at generation-time. Each vert has an in-direction, an out-direction and a time offset.*——**岸浪 = 生成期烘焙 + 循环顶点 shader**；每顶点 in/out 方向与时间偏移 |
 | S14 | [relax pass 防蘑菇化](https://x.com/OskSta/status/1769641473895432220)（2024-03） | 原文：*In cute tile based planets like this you often get a "mushrooming" issue where tall mountains get weirdly wide. I managed to mitigate this by a relax pass where all module-containing cells try to achieve their desired shape and size. Note the cells on the top left contracting.*——瓦片星球高山会「蘑菇化」（越高越宽）；**relax pass：所有含模块的格子尝试达到期望形状与尺寸**（左上角格子收缩演示） |
 | S17 | [纹理植被与城堡-山脉整合](https://x.com/OskSta/status/1707490932017279035)（2023-09） | 原文：*They are of course 100% texture, painted onto a fairly low, poly mesh. I keep thinking I'm gonna need to give em some volume with billboard sprites, but now I'm not so sure anymore. Especially with the lil' shadows, they look quite volumetric as they are.*——**植被 = 100% 纹理画在低多边形网格** + **小阴影** → 无需 billboard 已有体积感；视频画面（640×640 逐帧）：岩石山体（暖色）顶部草甸（绿）、城堡亮部**嵌入山体** |
+| S18 | [点光源 Light Volume](https://x.com/OskSta/status/1582757294672314368)（2022-10-19） | 原文：*I'm seeing if my light volume approach can work with point lights too.* ／ *The low resolution is noticeable for sure.* ／ *Especially when you move em around like this.* ／ *But if you keep em big and soft and somewhat still I think it's gonna be good.*——**点光源烘进低分辨率光体积**；低分辨率是接受的代价；使用规则 = 灯要**大、软、基本不动**（移动会暴露低分辨率）。与 S9/S10 同一 light volume 实验家族 |
 | S16 | [背光高光](https://x.com/OskSta/status/1751945034851570056)（2024-01） | 原文：*Some nice new highlights when the island is backlit. Achieved by simply adding another inverted mesh outline layer that shows up when looking into the sun. And masked by shadows, of course.*——**背光高光 = 反向网格轮廓层**（看向太阳时显示）+ **阴影遮罩**（阴影区不显示） |
 | S15 | [放到球体上](https://x.com/OskSta/status/1768627849529893109)（2024-03） | 原文：*For reasons I will not be explaining at this point I've gone and put this on a sphere*——把瓦片格子地形**放到球体上**；视频（640×640，6.9s）：海中的绿色格子陆地在球面上，曲率可见、视角旋转，陆地边缘有缺口/内凹。与 S14 同期同系列（球面格子星球） |
 
@@ -166,9 +167,9 @@ MC 只生成结构。浪是 shader。
 
 ### 2.9 光照：可读优先，bounce 是实验档
 
-**来源事实（S8, S9, S10）：** 战场必须一眼可读。发售级方案是假 AO + 稳定阴影，不是物理 GI。真正 bounce 是 2022 实验，默认关闭才符合 Oskar 自己的代际划分。
+**来源事实（S8, S9, S10, S18）：** 战场必须一眼可读。发售级方案是假 AO + 稳定阴影，不是物理 GI。真正 bounce 是 2022 实验，默认关闭才符合 Oskar 自己的代际划分。S18（2022-10）把同一套 light volume 思路用在**点光源**上：灯烘进低分辨率体积，代价是低分辨率感，所以灯要**大、软、基本不动**。
 
-**项目现状：** V5 LightingDirector + voxel AO + 默认关的 bounce。圣城另有一层独立灯。主场景仍可能和旧四灯并存，取决于开关。
+**项目现状：** V5 LightingDirector + voxel AO + 默认关的 bounce。圣城另有一层独立灯。**S18 落地（2026-08-27，主人验收）**：`highlandLightVolumes.js`——圣城台面 10 盏暖光灯，每盏生成期烘焙 5³ 低分辨率光体积 lattice（确定性 hash），运行期采样 3D 纹理软光壳；灯半径 ≥4（大）、smoothstep 边界归零（软）、位置永不动画、亮度只有 ≤6% 慢呼吸（基本不动）；真实 PointLight 前 8 盏（K4 desktop 预算纪律），其余只留光晕；夜权重由 `P.timeOfDay` 驱动（正午 0 / 暮色爬升 / 午夜 1 / 晨光回落）。主场景仍可能和旧四灯并存，取决于开关。
 
 ### 2.10 战斗：命令在小队，动作在单兵
 
@@ -187,15 +188,16 @@ MC 只生成结构。浪是 shader。
 | 长窄结构不靠 WFC 碰运气 | `hardRoutePlanner`、水文 V10 | 水文已接入编译器；硬路线 golden 仍是 P0 |
 | 生成烘焙 / 运行 shader | 云 impostor、水面 data 纹理 | 圣城本地云已挂；球面云默认关 |
 | 云海 impostor | `cloudImpostorSystem` + `highlandHeroClouds` | 圣城本地 RUNTIME_WIRED；球面 opt-in |
-| 云/树共用 impostor（S12） | `impostorAtlasBuilder`（共享 atlas）+ `createSharedImpostorMaterial` + `highlandHeroClouds` | **RUNTIME_WIRED（默认世界 hero 层）**：云块+树冠块同 atlas、同 shader 家族、同 draw call；近景树保持几何；V8/V9 全局开关保持 opt-in |
-| 岸浪：台地-海衔接（S13） | `highlandShoreWaves.js`（烘焙 in/out/time + looping vertex shader）+ 圣城台地外缘湖岸浪带 | **RUNTIME_WIRED**（默认世界 hero 层可见：232 顶点浪带沿湖岸线，推进波 + 振幅衰减；与全局水面 swell 共存，无第三种水面算法）；山体岩石配色按主人验收恢复基线（冷蓝灰），出城台阶 + 山坡灌木保留 |
+| 云/树共用 impostor（S12） | `impostorAtlasBuilder`（共享 atlas）+ `createSharedImpostorMaterial` + `highlandHeroClouds` | **RUNTIME_WIRED（树冠侧）**：2026-08-27 主人验收撤销 hero 云卡片（形状雷同/卡格纹）→ 圣城云改 `highland-hero-cloud-blobs` 体积云团（多样剪影/气候分布/山脊贴地/风漂/聚散）；共享 atlas 管线保留给圣城树冠卡与球面 opt-in 云路径 |
+| 岸浪：台地-海衔接（S13） | `highlandShoreWaves.js`（烘焙 in/out/time + looping vertex shader）+ 圣城台地外缘湖岸浪带 | 数据层 RUNTIME_WIRED；2026-08-27 圣城降海后湾面即海壳，浪带暂位于海壳之下，待重定位到崖壁-海面接触线 |
 | 草 contrast outline | V9 grass shader 契约 | VISUAL_PROXY_PASSED，默认世界未见 |
 | 海面结构 ≠ 浪 | curved water + shader | RUNTIME_WIRED，默认关 |
 | 假 AO + 可选 bounce | `render/lighting`、`render/ao` | RUNTIME_WIRED，bounce 默认关 |
+| 点光源 Light Volume（S18） | `highlandLightVolumes.js`（5³ 烘焙 lattice + 3D 纹理软光壳 + 预算点光源） | **RUNTIME_WIRED（参考图夜港 1:1，2026-08-28）**：14 灯阶梯光色下密上疏 + 岸湾贴地 + 塔楼暖光冠 + 52 扇立面窗光 + 水面倒影光斑 + 迷你 Bloom（`P.nightBloomV1`）；`tools/test_highland_light_volumes.mjs` / `test_night_bloom.mjs` 验收 |
 | 背光高光（S16） | `backlitHighlight.js`（反向轮廓层 + 背光因子 + 受光遮罩） | **RUNTIME_WIRED**（圣城山体高光层已挂，main 循环驱动）；城堡/台地轮廓层待扩展 |
 | 城堡-山脉整合 + 植被小阴影（S17） | 山体覆盖建筑基座 + 树/灌木根部 blob shadow | **RUNTIME_WIRED**（12 树 + 42 灌木 54 个贴地暗斑已挂）；整合已核对（12.39 台地埋入山体） |
 | 编辑小输入 | 高山格网编辑器 | RUNTIME_WIRED |
-| 地形连接 relax（S14/S15） | 五地点地面连接带（relax 收敛剖面，平面版 + 球面版） | **MISSING**（烘焙器 `groundConnector.js` 平面版已写未测；球面版未实现） |
+| 地形连接 relax（S14/S15） | 五地点地面连接带（relax 收敛剖面，平面版 + 球面版） | 烘焙器 `groundConnector.js` 平面/球面版已测（`tools/test_ground_connector.mjs`）；圣城岸坡带应用经主人验收撤销（2026-08-27，悬在海面上方遮挡旧港湖面），库保留待后续地点接入 |
 | 气候→云/植被单源 | `climateFieldV10` / `ecologyFieldV10` | RUNTIME_WIRED，默认关 |
 
 审计入口（读代码与 field，不读勾选）：

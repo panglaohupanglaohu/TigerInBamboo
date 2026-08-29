@@ -41,8 +41,10 @@ export const CANAL_BANK_COLOR = 0x6b563f; // 立壁土色
 export const CANAL_LIP_COLOR = 0x7a6548; // 岸顶土埂
 // 场景登岸浅湾半径（数据预留）
 const DOCK_RADIUS = 8.4;
-// 运河水面色：护城河/交接水系以此为准（不再用护城河旧淡青）
-export const SHARED_WATER_COLOR = 0x5a9eaa;
+// 运河水面色：统一压低青白感，改用更明确的蓝色。
+export const SHARED_WATER_COLOR = 0x2a7e9d;
+// 跨场景的开阔水带使用无光照材质，避免扫掠条带的侧面/法线产生白色高光。
+export const OPEN_SEA_WATER_COLOR = 0x145f86;
 
 let _waterBumpTex = null;
 
@@ -90,22 +92,28 @@ export function scrollWaterBumpTexture(time) {
   tex.offset.y = (time * 0.011) % 1;
 }
 
-/** 运河水面材质；护城河/纳沃纳水面复用，保证色相+质感一致。
- *  性能：MeshPhysicalMaterial 的 clearcoat 会额外加一层高光着色，且透明+DoubleSide
- *  成倍放大透明 pass 开销；改为 MeshStandardMaterial（无 clearcoat）+ FrontSide。
- *  注：不做单例——纳沃纳广场会每帧改自身水面 opacity（蓄洪动画），共享单例会互相污染。 */
-export function createCanalWaterMaterial() {
-  const mat = new THREE.MeshStandardMaterial({
-    color: SHARED_WATER_COLOR,
-    transparent: true,
-    opacity: 0.78,
-    roughness: 0.18,
-    metalness: 0.05,
-    side: THREE.FrontSide,
-    depthWrite: false,
-    bumpMap: getWaterBumpTexture(),
-    bumpScale: 0.6,
-  });
+/** 运河水面材质；不做单例——纳沃纳广场会每帧改自身水面 opacity。 */
+export function createCanalWaterMaterial({ color = SHARED_WATER_COLOR, opacity = 0.78, unlit = false } = {}) {
+  const mat = unlit
+    ? new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity,
+      side: THREE.FrontSide,
+      depthWrite: false,
+    })
+    : new THREE.MeshStandardMaterial({
+      color,
+      transparent: true,
+      opacity,
+      roughness: 0.68,
+      metalness: 0,
+      side: THREE.FrontSide,
+      depthWrite: false,
+      bumpMap: getWaterBumpTexture(),
+      bumpScale: 0.22,
+    });
+  mat.userData.waterStyle = unlit ? "open-sea-unlit" : "calm-blue";
   mat.userData.waveTime = { value: 0 };
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.waveTime = mat.userData.waveTime;
@@ -122,7 +130,7 @@ export function createCanalWaterMaterial() {
 \t  + sin(position.z * 0.85 + wt * 1.1) * 0.022;`
       );
   };
-  mat.customProgramCacheKey = () => "canal-water-wave-v1";
+  mat.customProgramCacheKey = () => `canal-water-wave-v2-${unlit ? "unlit" : "lit"}`;
   return mat;
 }
 
@@ -219,7 +227,7 @@ export function insertWindingPoints(a, b, k, wiggle, getR, out) {
  *  - gap      整段断开（给广场等节点让路）；
  *  - embankGap 仅护堤（立壁/土埂）断开——水系打通处护堤不可交叉。
  */
-export function sweepPrism(samplesArr, side0, side1, h0, h1, mat, skipKey = "gap") {
+export function sweepPrism(samplesArr, side0, side1, h0, h1, mat, skipKey = "gap", { topOnly = false } = {}) {
   const n = samplesArr.length;
   const positions = new Float32Array(n * 4 * 3);
   const v = new THREE.Vector3();
@@ -244,6 +252,7 @@ export function sweepPrism(samplesArr, side0, side1, h0, h1, mat, skipKey = "gap
     const a = i * 4;
     const b = (i + 1) * 4;
     idx.push(a, b, a + 1, a + 1, b, b + 1); // 顶
+    if (topOnly) continue;
     idx.push(a + 2, a + 3, b + 2, a + 3, b + 3, b + 2); // 底
     idx.push(a, a + 2, b, a + 2, b + 2, b); // side0 壁
     idx.push(a + 1, b + 1, a + 3, a + 3, b + 1, b + 3); // side1 壁
@@ -399,7 +408,11 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
   const bedMat = toonMat(0x3a2f26, { flatShading: true });
   const bankMat = toonMat(CANAL_BANK_COLOR, { flatShading: true });
   const lipMat = toonMat(CANAL_LIP_COLOR, { flatShading: true });
-  const waterMat = createCanalWaterMaterial();
+  const waterMat = createCanalWaterMaterial({
+    color: OPEN_SEA_WATER_COLOR,
+    opacity: 0.84,
+    unlit: true,
+  });
 
   // 1) 河床：沟底薄板（整条贴地浅沟底）
   const bed = sweepPrism(samples, -half, half, -0.02, 0.02, bedMat);
@@ -407,7 +420,16 @@ export function buildWorldCanal(scene, planetRadius = PLANET_RADIUS, opts = {}) 
   group.add(bed);
 
   // 2) 水面：灌在沟里，低于岸顶
-  const water = sweepPrism(samples, -half + 0.04, half - 0.04, WATER_FILL - 0.02, WATER_FILL + 0.02, waterMat);
+  const water = sweepPrism(
+    samples,
+    -half + 0.04,
+    half - 0.04,
+    WATER_FILL - 0.02,
+    WATER_FILL + 0.02,
+    waterMat,
+    "gap",
+    { topOnly: true },
+  );
   water.name = "canal-water";
   water.renderOrder = 2;
   water.castShadow = false;

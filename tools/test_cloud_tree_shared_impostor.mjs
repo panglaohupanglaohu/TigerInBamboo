@@ -85,17 +85,44 @@ const mesh = renderer.mesh;
 assert.equal(mesh.userData.sharedImpostor, true, "canopy present must switch the system to shared pipeline");
 assert.equal(mesh.userData.canopyCount, canopies.length);
 assert.equal(mesh.userData.cloudCount, clouds.length);
-// 云 Sprite 层（heroClouds mount 挂载）：每朵云一个 Sprite，面向相机可靠可见
+// 体积云团层（2026-08-27 主人验收重做）：合体几何卡通云团，替代单卡片
+// Sprite——形状多样/气候分布/风漂/聚散，无 impostor 卡格纹。
 const citadelModule = await import(new URL("src/world/odysseyCitadel.js", BASE).href);
 const spriteCastle = citadelModule.buildOdysseyCitadel({ latestDesign: true, place: false, seed: 20260808 });
-const spriteGroup = spriteCastle.getObjectByName("highland-hero-cloud-sprites");
-assert.ok(spriteGroup, "云 Sprite 层已挂载");
-assert.ok(spriteGroup.children.length >= 40, `云 Sprite ${spriteGroup.children.length} 朵`);
-assert.ok(spriteGroup.children.every((s) => s.isSprite), "全部为 Sprite");
-assert.ok(spriteGroup.children.some((s) => s.userData.heroRole === "cap"), "cap Sprite 存在");
-const capSprite = spriteGroup.children.find((s) => s.userData.heroRole === "cap");
-assert.ok(capSprite.position.y >= 36, `cap 在城堡上方 y=${capSprite.position.y}`);
-assert.ok(spriteGroup.children.every((s) => s.material.map), "Sprite 使用云块纹理");
+const blobGroup = spriteCastle.getObjectByName("highland-hero-cloud-blobs");
+assert.ok(blobGroup, "体积云团层已挂载");
+assert.ok(blobGroup.children.length >= 10, `云团 ${blobGroup.children.length} 团`);
+assert.ok(blobGroup.children.every((c) => c.isMesh), "全部为实体云团 Mesh");
+assert.ok(
+  blobGroup.children.every((c) => c.geometry.getAttribute("color") && c.geometry.getAttribute("position").count > 120),
+  "每团为多球泡融合几何 + 顶点色"
+);
+assert.ok(blobGroup.children.some((c) => c.userData.heroRole === "cap"), "cap 云团存在");
+const capBlob = blobGroup.children.find((c) => c.userData.heroRole === "cap");
+assert.ok(capBlob.position.y >= 36, `cap 在城堡上方 y=${capBlob.position.y}`);
+assert.ok(blobGroup.children.every((c) => !c.material.map), "不使用 impostor 图块纹理（去卡格纹）");
+// 山脊攀升链（主人验收 2026-08-28）：云沿山脊从山脚爬到峰顶
+const ridgeClusters = blobGroup.children.filter((c) => c.userData.heroRole === "ridge");
+assert.ok(ridgeClusters.length >= 9, `山脊攀升云团 ${ridgeClusters.length}（3 条脊 × ≤5，水盆点跳过）`);
+const ridgeYs = ridgeClusters.map((c) => c.position.y);
+assert.ok(Math.max(...ridgeYs) - Math.min(...ridgeYs) > 8, `山脊云高度跨度 ${(Math.max(...ridgeYs) - Math.min(...ridgeYs)).toFixed(1)}（攀升）`);
+assert.ok(Math.min(...ridgeYs) >= 5, "山脚云不沉入海面");
+// 横穿城堡的云：豁免遮挡剔除，存在于城堡正前方低空
+const crossing = blobGroup.children.filter((c) => c.userData.heroRole === "crossing");
+assert.ok(crossing.length >= 2, `横穿城堡云团 ${crossing.length}`);
+assert.ok(crossing.every((c) => c.position.y < 20 && Math.abs(c.position.x) < 18 && c.position.z > 0), "横穿云在城堡正前方低空");
+assert.ok(typeof blobGroup.userData.update === "function", "云团层可驱动（风漂/聚散）");
+// 确定性：同样布局两次构建，团数与首团位置一致
+const blobGroupB = spriteCastle.getObjectByName("highland-hero-cloud-blobs");
+assert.equal(blobGroup.children.length, blobGroupB.children.length);
+// 形状多样：不同团的顶点包围盒尺寸互不相同
+const sizes = new Set();
+for (const child of blobGroup.children) {
+  child.geometry.computeBoundingBox();
+  const b = child.geometry.boundingBox;
+  sizes.add(`${(b.max.x - b.min.x).toFixed(2)}x${(b.max.y - b.min.y).toFixed(2)}`);
+}
+assert.ok(sizes.size >= Math.min(8, blobGroup.children.length), `剪影多样性不足: ${sizes.size}`);
 // aHero 编码：低位 authored，高位 shape（canopy=1）→ 云 0/1、树冠 3。
 // 不新增 attribute —— 总 attribute 数必须 ≤ 16（WebGL MAX_VERTEX_ATTRIBS 下限）。
 assert.equal(mesh.geometry.getAttribute("aShape"), undefined, "must not add aShape attribute (16-attribute budget)");

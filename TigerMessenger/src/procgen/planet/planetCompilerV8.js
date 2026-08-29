@@ -10,10 +10,10 @@ import { buildGeodesicMainAndDualGrid, sampleBarycentricDirection } from "./geod
 import { createTerrainTiles } from "./terrainTiles.js";
 import { solveSphericalTerrain, terrainAssignmentMap } from "./sphericalWfc.js";
 import { createPlanetFieldRecipe, createRadialChartField } from "./planetFieldComposer.js";
-import { bakeTerrainSemantic } from "./terrainSemanticBake.js";
+import { bakeTerrainSemantic } from "./terrainSemanticBake.js?v=20260827-terrain-v11";
 import { marchingCubes } from "../field/marchingCubes.js";
 import { createEmptyPlanetSnapshot, createPlanetVersionManifest, validatePlanetSnapshot } from "./schema.js";
-import { compileCurvedWater, validateCurvedWater } from "../../world/waterV8/curvedWaterCompiler.js";
+import { compileCurvedWater, validateCurvedWater } from "../../world/waterV8/curvedWaterCompiler.js?v=20260827-terrain-v11";
 import { createSurfaceProviderV8 } from "../../world/planetV8/surfaceProviderV8.js";
 import { compilePlanetNavigationV8, compileManifestPortals, validatePlanetNavigation } from "../../world/planetV8/navigationV8.js";
 import { compileLandmarkTerrainRoutes, LANDFORM_CHAIN_ROUTE_DEFINITIONS } from "../../world/planetV8/terrainRoutesV8.js";
@@ -133,6 +133,82 @@ function sampleV10At(grid, fieldV10, position) {
   return fieldV10.cells[hit.cellIndex] || null;
 }
 
+function buildGlobalSphericalTerrain({ grid, surfaceGrid = grid, field, ecology, climate }) {
+  const sourcePositions = surfaceGrid.main.positions;
+  const positions = new Float32Array(sourcePositions.length * 3);
+  for (let i = 0; i < sourcePositions.length; i++) {
+    const source = sourcePositions[i];
+    const length = Math.hypot(source[0], source[1], source[2]) || 1;
+    const direction = [source[0] / length, source[1] / length, source[2] / length];
+    const semantic = field.semanticAt(direction);
+    const surfaceRadius = field.radius + semantic.height;
+    positions[i * 3] = direction[0] * surfaceRadius;
+    positions[i * 3 + 1] = direction[1] * surfaceRadius;
+    positions[i * 3 + 2] = direction[2] * surfaceRadius;
+  }
+
+  const normals = new Float32Array(positions.length);
+  const indices = [];
+  for (const face of surfaceGrid.main.faces) {
+    let [a, b, c] = face;
+    const ax = positions[a * 3]; const ay = positions[a * 3 + 1]; const az = positions[a * 3 + 2];
+    const bx = positions[b * 3]; const by = positions[b * 3 + 1]; const bz = positions[b * 3 + 2];
+    const cx = positions[c * 3]; const cy = positions[c * 3 + 1]; const cz = positions[c * 3 + 2];
+    const ab = [bx - ax, by - ay, bz - az];
+    const ac = [cx - ax, cy - ay, cz - az];
+    let cross = [
+      ab[1] * ac[2] - ab[2] * ac[1],
+      ab[2] * ac[0] - ab[0] * ac[2],
+      ab[0] * ac[1] - ab[1] * ac[0],
+    ];
+    const center = [ax + bx + cx, ay + by + cy, az + bz + cz];
+    if (cross[0] * center[0] + cross[1] * center[1] + cross[2] * center[2] < 0) {
+      [b, c] = [c, b];
+      cross = cross.map((value) => -value);
+    }
+    indices.push(a, b, c);
+    for (const vertex of [a, b, c]) {
+      normals[vertex * 3] += cross[0];
+      normals[vertex * 3 + 1] += cross[1];
+      normals[vertex * 3 + 2] += cross[2];
+    }
+  }
+  for (let i = 0; i < normals.length; i += 3) {
+    const length = Math.hypot(normals[i], normals[i + 1], normals[i + 2]) || 1;
+    normals[i] /= length;
+    normals[i + 1] /= length;
+    normals[i + 2] /= length;
+  }
+
+  const semantic = bakeTerrainSemantic({
+    positions,
+    normals,
+    recipe: field,
+    ecologyAt: (position) => sampleV10At(grid, ecology, position),
+    climateAt: (position) => sampleV10At(grid, climate, position),
+  });
+  return {
+    id: "planet-global-spherical-terrain-v10",
+    kind: "global-spherical-terrain",
+    centerDirection: [0, 1, 0],
+    cellIndex: 0,
+    mesh: {
+      kind: "indexed-spherical-patch-terrain-v10",
+      positions,
+      normals,
+      indices: Uint32Array.from(indices),
+      stats: {
+        vertexCount: positions.length / 3,
+        triangleCount: indices.length / 3,
+        source: "geodesic-main+WFC+continuous-field",
+        sourceSubdivision: surfaceGrid.subdivision,
+        topology: "spherical-closed",
+      },
+    },
+    semantic,
+  };
+}
+
 function ecologyLocksAt(grid, combatSurface, radius, field) {
   const keepouts = [];
   for (const zone of combatSurface?.zones || []) {
@@ -225,7 +301,22 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
     surfaceId: "curved-ocean-shell-v8",
     landformClass: entry.landformClass || "coastal-water",
   }));
-  const water = compileCurvedWater({ grid, radius, seaLevel, basins, harborAnchors, fieldRecipe: field });
+  // Keep the WFC/navigation grid coarse enough for the existing chain solver,
+  // but render the V9 ocean on the same denser geodesic surface as the land.
+  // This removes the 20-face triangular water cap that previously read as a
+  // flat blue card while preserving the field-backed shoreline semantics.
+  const globalSurfaceGrid = landformChain
+    ? buildGeodesicMainAndDualGrid({
+      radius,
+      // Keep the WFC solve on the cheap authoring grid, but present the
+      // result on a denser geodesic shell so the Oskar-style patch seams
+      // read as a continuous low-poly globe rather than five giant cards.
+      subdivision: 3,
+      seed,
+      preserve: manifest.map((entry) => entry.direction),
+    })
+    : grid;
+  const water = compileCurvedWater({ grid: landformChain ? globalSurfaceGrid : grid, radius, seaLevel, basins, harborAnchors, fieldRecipe: field });
   const waterReport = validateCurvedWater(water);
   if (!waterReport.ok) return { ok: false, stage: "water", report: waterReport, grid, wfc, field };
   const surface = createSurfaceProviderV8({ radius, field, water });
@@ -344,7 +435,14 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
     return { ...chart, mesh, semantic };
   });
   mark("charts");
-  const vegetationByChart = charts.map((chart) => {
+  // V9 presents one closed spherical surface.  The selected MC charts remain
+  // available for local landmarks/vegetation and for V8 compatibility, while
+  // this global mesh prevents the runtime from showing isolated terrain cards.
+  const globalTerrain = landformChain
+    ? buildGlobalSphericalTerrain({ grid, surfaceGrid: globalSurfaceGrid, field, ecology: ecologyV10, climate: climateV10 })
+    : null;
+  const vegetationCharts = globalTerrain ? [globalTerrain] : charts;
+  const vegetationByChart = vegetationCharts.map((chart) => {
     const profileLandmark = landmarkForDirection(chart.centerDirection, manifest);
     const keepouts = manifest
       .filter((entry) => entry.id !== "saihoji-moss-garden")
@@ -383,6 +481,7 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
     snapshot.graph.landformChainHash = landformChainHash(chainManifest);
   }
   snapshot.land.chunkManifest = charts.map((chart) => ({ id: chart.id, cellIndex: chart.cellIndex, meshHash: `${chart.mesh.stats.vertexCount}:${chart.mesh.stats.triangleCount}` }));
+  if (globalTerrain) snapshot.land.globalMeshHash = `${globalTerrain.mesh.stats.vertexCount}:${globalTerrain.mesh.stats.triangleCount}:${globalTerrain.mesh.stats.topology}`;
   snapshot.land.area = measurePlanetArea({ grid, assignment });
   snapshot.land.meshHash = charts.map((chart) => chart.mesh.stats.triangleCount).join(":");
   snapshot.land.semanticHash = charts.map((chart) => Object.keys(chart.semantic.histogram).sort().join(",")).join("|");
@@ -416,7 +515,7 @@ export function compilePlanetV8({ seed = 1, radius = 160, subdivision = 1, chart
   snapshot.clouds.climateSource = "climate-v10";
   mark("snapshot");
   const validation = validatePlanetSnapshot(snapshot);
-  return { ok: validation.ok, stage: validation.ok ? "complete" : "snapshot", snapshot, pipeline, manifest, grid, wfc, field, water, surface, portals, navigation, terrainRoutes, routeMetadataReport, waterfallReport, chainReport, elevationReport, finalElevationReport, chainAdjacencyReport, bookshopReport, combatSurface, combatReport, vegetation: vegetationByChart, clouds, climate: climateV10, hydrology: hydrologyV10, ecology: ecologyV10, charts, seamReport, globalReport, report: validation };
+  return { ok: validation.ok, stage: validation.ok ? "complete" : "snapshot", snapshot, pipeline, manifest, grid, wfc, field, water, surface, portals, navigation, terrainRoutes, routeMetadataReport, waterfallReport, chainReport, elevationReport, finalElevationReport, chainAdjacencyReport, bookshopReport, combatSurface, combatReport, vegetation: vegetationByChart, clouds, climate: climateV10, hydrology: hydrologyV10, ecology: ecologyV10, charts, globalTerrain, seamReport, globalReport, report: validation };
 }
 
 export { createChartScalarField };

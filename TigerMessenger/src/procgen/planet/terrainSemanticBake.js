@@ -1,6 +1,8 @@
 // =====================================================================
 // Semantic bake shared by terrain shader, vegetation, collision and water.
 // No runtime string/object lookup is needed by the render path.
+
+import { terrainPatchBlendAt } from "./terrainPatchBlendingV10.js?v=20260827-terrain-v11";
 // =====================================================================
 
 function clamp01(value) { return Math.max(0, Math.min(1, value)); }
@@ -19,6 +21,8 @@ export function bakeTerrainSemantic({ positions, normals = null, recipe, tileIds
   const flowData = new Float32Array(count * 4);
   const climateData1 = new Float32Array(count * 4);
   const ecologyData0 = new Float32Array(count * 4);
+  const patchData0 = new Float32Array(count * 4);
+  const patchData1 = new Float32Array(count * 4);
   const uv = new Float32Array(count * 2);
   const histogram = {};
   for (let i = 0; i < count; i++) {
@@ -34,6 +38,7 @@ export function bakeTerrainSemantic({ positions, normals = null, recipe, tileIds
     const coastDistance = clamp01(s.coastDistance ?? (1 - s.land) * 0.8 + wetness * 0.2);
     const ao = clamp01(s.ao ?? (0.72 - slope * 0.25 - wetness * 0.08));
     const flow = s.flow || [0, 0, wetness];
+    const patch = terrainPatchBlendAt({ direction: p, semantic: s });
     const candidates = [
       { id: tileIds[i] ?? 0, weight: 1 - slope },
       { id: 1, weight: wetness * 0.5 },
@@ -57,14 +62,26 @@ export function bakeTerrainSemantic({ positions, normals = null, recipe, tileIds
       clamp01(ecology?.reedness ?? 0),
       clamp01(ecology?.mudness ?? 0),
     ], i * 4);
-    // Chart-local planar UV is derived from the normalized world direction;
-    // hard semantic edges remain encoded in ids/weights, not texture names.
-    const length = Math.hypot(...p) || 1;
-    uv[i * 2] = 0.5 + p[0] / length * 0.5;
-    uv[i * 2 + 1] = 0.5 + p[2] / length * 0.5;
+    patchData0.set([
+      patch.projectedUv[0],
+      patch.projectedUv[1],
+      patch.shorelineWeight,
+      patch.heightBlend,
+    ], i * 4);
+    patchData1.set([
+      patch.shorelineUv[0],
+      patch.shorelineUv[1],
+      patch.tileVariation,
+      patch.waterWeight,
+    ], i * 4);
+    // Broad grass/water textures use the spherical projection.  Shoreline
+    // detail keeps its authored local UV in patchData1, so the seam does not
+    // inherit a longitude wrap or a chart-local planar stretch.
+    uv[i * 2] = patch.projectedUv[0];
+    uv[i * 2 + 1] = patch.projectedUv[1];
     histogram[s.tileId] = (histogram[s.tileId] || 0) + 1;
   }
-  return { ids, weights, terrainData0, terrainData1, flowData, climateData1, ecologyData0, uv, histogram, count, schema: "terrain-semantic-v8" };
+  return { ids, weights, terrainData0, terrainData1, flowData, climateData1, ecologyData0, patchData0, patchData1, uv, histogram, count, schema: "terrain-semantic-v10-patch-blend" };
 }
 
 export function forestDensityAt({ forestness = 0, wetness = 0, slope = 0, coastExposure = 0, keepout = 0, facing = 0 } = {}) {

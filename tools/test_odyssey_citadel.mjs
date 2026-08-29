@@ -93,6 +93,7 @@ const {
   HIGHLAND_CITADEL_DESIGN_PALETTE,
   HIGHLAND_MOUNTAIN_TREE_PLACEMENTS,
   HIGHLAND_TOWNSCAPER_PLATFORM,
+  HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE,
   isHighlandWaterfrontCutout,
 } = await import(new URL("src/world/highlandCitadelDesign.js", BASE).href);
 const { HIGHLAND_TOWNSCAPER_TOWN_SPEC, TOWNSCAPER_HIGHLAND_PALETTE } = await import(
@@ -670,8 +671,8 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
     "湖面不得伸出连续山体图表成为悬空蓝色大平面");
   const cityGround = highlandCityGroundHeight(0, 0);
   const mountainAtCitadel = highlandTerrainSurfaceHeight(0, 0);
-  assert(mountainAtCitadel >= cityGround + 0.03 && mountainAtCitadel <= cityGround + 0.08,
-    "城堡中心山体必须被挖到城市行走地面，而不是掩埋城堡");
+  assert(mountainAtCitadel <= cityGround - 0.03 && mountainAtCitadel >= cityGround - 0.14,
+    "城堡中心山体必须低于平台顶面，不能掩埋可见承重平台");
   assert.equal(latest.userData.highlandLatestDesignRoot.userData.walkSurfaceProvider,
     "highland-town-platform-v1");
   assert.equal(latest.userData.highlandAssaultAnchors.surfaceProvider,
@@ -688,8 +689,16 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
   assert.equal(foundationPlatform.userData.uniformTop, true);
   assert.equal(foundationPlatform.userData.surfaceProvider, "highland-town-platform-v1");
   assert.equal(foundationPlatform.userData.topY, HIGHLAND_TOWNSCAPER_PLATFORM.topY);
-  assert.equal(foundationPlatform.visible, false, "地下承重地台不得在湖岸露出灰色墙面");
-  assert.equal(foundationPlatform.userData.fullySubmerged, true);
+  assert.equal(foundationPlatform.visible, true, "高山城堡必须落在可见的山地平台上");
+  assert.equal(foundationPlatform.userData.visiblePlateau, true);
+  assert.equal(foundationPlatform.userData.fullySubmerged, false);
+  assert.equal(foundationPlatform.userData.foundationGeometry, "flat-top-faceted-side-skirt-v1");
+  assert.equal(foundationPlatform.geometry.type, "ShapeGeometry");
+  assert(byName(latest, "highland-town-foundation-platform-side"), "平台必须带嵌入山体的侧裙");
+  assert(Math.abs(
+    foundationPlatform.position.y
+      - (HIGHLAND_TOWNSCAPER_PLATFORM.topY + HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE)
+  ) < 1e-6, "平台可见顶面必须与建筑基面保持固定视觉间隙");
   assert(foundationPlatform.userData.bottomY < highlandTerrainSurfaceHeight(20, 20),
     "地台底部必须插入球面山体，而不是停在地面上方");
   assert.equal(isHighlandWaterfrontCutout(0, 20), false,
@@ -724,6 +733,24 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
     "旧整栋参数单元必须退出现役场景");
   assert.equal(latest.userData.highlandLatestDesignRoot.userData.castleUnitBandCount, 0);
   assert.equal(latest.userData.highlandLatestDesignRoot.userData.castleUnitPalette.length, 15, "高山圣城必须使用 15 色 Townscaper 色板");
+  const placedHighland = buildOdysseyCitadel({
+    latestDesign: true,
+    dir: siteDir,
+    groundRadius,
+    planetRadius: radius,
+    seed: 7,
+  });
+  assert.equal(placedHighland.userData.anchor.radialEmbed, 0,
+    "高山版必须直接挂在山地平台锚点，不得叠加旧台地下沉量");
+  assert(Math.abs(placedHighland.position.length() - groundRadius) < 1e-6,
+    "高山版城堡容器必须与山地平台共享径向落点");
+  placedHighland.updateMatrixWorld(true);
+  const placedPlatform = byName(placedHighland, "highland-town-foundation-platform");
+  const placedTower = byName(placedHighland, "highland-central-sacred-tower");
+  const platformTop = placedPlatform.localToWorld(new THREE.Vector3(0, 0, 0));
+  const towerFoot = placedTower.localToWorld(new THREE.Vector3(0, 0, 0));
+  assert(Math.abs(platformTop.distanceTo(towerFoot) - HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE) < 0.02,
+    "方尖碑塔脚必须位于山地平台顶面，而不是浮在山体外或埋入山体内");
   assert.equal(HIGHLAND_TOWNSCAPER_TOWN_SPEC.seedVersion, "highland-reference-obelisk-stone-v3");
   assert.equal(HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels.length, 12);
   const highlandColumns = new Map();

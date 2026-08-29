@@ -20,11 +20,18 @@ export const HIGHLAND_TOWNSCAPER_BASE_Y = 4.95;
 export const HIGHLAND_TOWNSCAPER_PLATFORM = Object.freeze({
   topY: HIGHLAND_TOWNSCAPER_BASE_Y,
   halfWidth: 23,
-  halfDepth: 22.5,
+  // 城市后缘落到 z≈-27，前缘停在 z=23；z=24 起由湖面接管。
+  // 这样平台覆盖整座 Townscaper 城，而不会把湖底封成一块蓝色大平面。
+  halfDepth: 25,
+  centerZ: -2,
   cornerCut: 3.0,
   thickness: 1.0,
   surfaceProvider: "highland-town-platform-v1",
 });
+
+// 山体网格故意低于平台顶面这一小段，给可见平台留下稳定的深度分离，
+// 同时平台底部仍然嵌入山体；建筑的权威行走高度仍是 BASE_Y，不随该视觉缝隙改变。
+export const HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE = 0.08;
 
 // 视觉比例以“战船船长”为一个可测量的基准，而不是凭镜头感觉缩放。
 // 战船≈4.5u，城堡最高建筑≈36u（8×），山体连续网格横向跨度≈180u（5×城堡高度）。
@@ -37,17 +44,18 @@ export const HIGHLAND_REFERENCE_PROPORTIONS = Object.freeze({
 });
 
 export const HIGHLAND_CITADEL_DESIGN_PALETTE = Object.freeze({
-  // 山体岩石配色按主人验收恢复为 2026-08-25 基线（冷蓝灰系）。
-  mountainDeep: 0x14243d,
-  mountainMid: 0x294766,
-  mountainMist: 0x4f7897,
-  mountainFace: 0x3b5f69,
-  mountainHigh: 0x8095a0,
-  mountainSnow: 0xd7e0df,
-  // 山地植被只使用截图 2 的去饱和灰绿低模色，不使用彩色树冠。
-  foliageDeep: 0x46524a,
-  foliageMid: 0x64705f,
-  foliageLight: 0x7e8870,
+  // 2026-08-28 主人验收：参考瓦片星球俯瞰图重上色——暖沙色崖壁 +
+  // 鼠尾草绿植被（替换 2026-08-25 冷蓝灰基线）。
+  mountainDeep: 0xc0ae86,
+  mountainMid: 0xd3c3a0,
+  mountainMist: 0xb9c6bd,
+  mountainFace: 0xd3c3a0,
+  mountainHigh: 0xe2d8ba,
+  mountainSnow: 0xf2efe2,
+  // 山地植被：参考图的鼠尾草/青灰绿树冠
+  foliageDeep: 0x6f9c8c,
+  foliageMid: 0x84b09e,
+  foliageLight: 0x9bbfae,
   bark: 0x665b4b,
   wallShadow: 0x7898b5,
   wallMid: 0xa9bdcf,
@@ -156,7 +164,7 @@ export function highlandMountainGridHeight(x, z) {
   // localSphericalSurfaceOffset。这里预先抵消球面下沉，让城址周围的
   // 天然土层盖到水平地台顶面，厚地台只在地下承重而不形成高墙。
   const groundedCityFloor = highlandCityGroundHeight(x, z)
-    + 0.04
+    - HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE
     - localSphericalSurfaceOffset(x, z);
   const mountainBase = THREE.MathUtils.lerp(naturalMountain, groundedCityFloor, cityCarve);
   // S13/S14 层级岩山（2026-08-27 飞艇鸟瞰重做）：出城后的山体量化成
@@ -311,6 +319,20 @@ export const HIGHLAND_LAKE_CHART = Object.freeze({
   basinHalfWidth: 22.0,
 });
 
+/**
+ * 圣城局部湖面的权威高度。水面光、湖面网格与截图验收共用这条曲面，
+ * 避免用一个固定 Y 的倒影平面悬在球面湖泊上方。
+ */
+export function highlandCurvedLakeSurfaceHeight(x, z, radius = 160) {
+  const nx = (x - highlandWaterCenterX(z)) / Math.max(1, highlandWaterHalfWidth(z));
+  const nz = (z - (HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth * 0.5))
+    / (HIGHLAND_LAKE_CHART.depth * 0.5);
+  const bowl = (nx * nx * 0.08 + nz * nz * 0.12) * 0.055;
+  const ripple = Math.sin(x * 0.38 + z * 0.17) * 0.009
+    + Math.cos(z * 0.26 - x * 0.21) * 0.006;
+  return localSphericalSurfaceOffset(x, z, radius) + 4.8 + bowl + ripple;
+}
+
 export function highlandWaterCenterX(z) {
   return Math.sin((z - HIGHLAND_LAKE_CHART.zStart) * 0.16) * HIGHLAND_LAKE_CHART.centerAmplitude;
 }
@@ -327,6 +349,9 @@ export function highlandWaterHalfWidth(z) {
 
 export function isHighlandWaterfrontCutout(x, z) {
   if (z < HIGHLAND_LAKE_CHART.zStart - 1 || z > HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth + 7) return false;
+  // 旧港岸湾：港台陆岬整体保留山体（主人验收 2026-08-27，港口双株古樟
+  // 与栈桥要坐在实地之上，水面不得横穿树干）。
+  if (isHighlandHarborCove(x, z)) return false;
   const center = highlandWaterCenterX(z);
   // A narrow downstream continuation keeps the front of the terrain open
   // without turning the entire mountain chart into a lake.
@@ -334,6 +359,23 @@ export function isHighlandWaterfrontCutout(x, z) {
     ? Math.max(5.6, HIGHLAND_LAKE_CHART.shoreHalfWidth - (z - (HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth)) * 0.2)
     : highlandWaterHalfWidth(z);
   return Math.abs(x - center) <= continuation + 1.8;
+}
+
+/**
+ * 旧港岸湾（圣城局部坐标）：包住旧港整组（栈桥 13.4–21.2 / 36.6–41.9、
+ * 双株古樟 (20.2,35.5)(14.0,36.6)、起重机 (14.9,41.0)、港口原点 (17.3,39.2)）
+ * 的陆岬矩形，北接 z=24 城前湖岸承重带；z+ 侧地形自然落到 2.37 没入海面。
+ */
+export const HIGHLAND_HARBOR_COVE = Object.freeze({
+  xMin: 10.5,
+  xMax: 24.0,
+  zMin: 23.0,
+  zMax: 45.5,
+});
+
+export function isHighlandHarborCove(x, z) {
+  return x >= HIGHLAND_HARBOR_COVE.xMin && x <= HIGHLAND_HARBOR_COVE.xMax
+    && z >= HIGHLAND_HARBOR_COVE.zMin && z <= HIGHLAND_HARBOR_COVE.zMax;
 }
 
 function highlandWaterTileCompatible(a, b, direction) {
@@ -487,6 +529,9 @@ function buildIrregularMountainGrid() {
   }
   // Side skirt: every boundary edge drops to its own local ground height.
   // There is intentionally no bottom cap, so no rectangular underside is exposed.
+  // 海岸裙边地板（主人验收 2026-08-28）：裙边统一压到海面(城堡局部 4.92)
+  // 之下——岸湾台地/悬崖下缘不再悬空露出底边，海面直接咬住崖壁。
+  const skirtFloor = 3.4;
   const boundary = [];
   for (let col = 0; col <= cols; col++) boundary.push(pointIndex(0, col));
   for (let row = 1; row <= rows; row++) boundary.push(pointIndex(row, cols));
@@ -498,7 +543,8 @@ function buildIrregularMountainGrid() {
       vertex.y - 0.18,
       localSphericalSurfaceOffset(vertex.x, vertex.z)
         + highlandCityGroundHeight(vertex.x * 0.22, vertex.z * 0.24)
-        - 0.2
+        - 0.2,
+      skirtFloor
     );
     points.push({ x: vertex.x, y: skirtY, z: vertex.z });
     tileValues.push(0);
@@ -1683,8 +1729,9 @@ function buildCurvedLakeSurface(materials) {
   const positions = [];
   const colors = [];
   const indices = [];
-  const waterNear = new THREE.Color(0x91cbd0);
-  const waterFar = new THREE.Color(0x39788a);
+  // 水面必须保持蓝青色；过去的浅灰青色在强光下会冲成白色条带。
+  const waterNear = new THREE.Color(0x1f7398);
+  const waterFar = new THREE.Color(0x0b3f61);
   const cellFilled = [];
   const waterCenterX = highlandWaterCenterX;
   const waterHalfWidth = highlandWaterHalfWidth;
@@ -1693,15 +1740,11 @@ function buildCurvedLakeSurface(materials) {
     const z = zStart + (depth * row) / rows;
     for (let col = 0; col <= cols; col++) {
       const x = -width / 2 + (width * col) / cols;
-      const nx = (x - waterCenterX(z)) / Math.max(1, waterHalfWidth(z));
-      const nz = (z - (zStart + depth * 0.5)) / (depth * 0.5);
-      // Navona-style calm water: the planet curvature supplies the broad
-      // concavity; only a few centimetres of authored relief remain.
-      const bowl = (nx * nx * 0.08 + nz * nz * 0.12) * 0.055;
-      const ripple = Math.sin(x * 0.38 + z * 0.17) * 0.009 + Math.cos(z * 0.26 - x * 0.21) * 0.006;
       const tileIndex = tileField.tiles[Math.min(rows - 1, row) * cols + Math.min(cols - 1, col)];
       const tileBias = HIGHLAND_WATER_TILES[tileIndex]?.bias ?? 0;
-      positions.push(x, localSphericalSurfaceOffset(x, z) + 4.8 + bowl + ripple + tileBias * 0.004, z);
+      // Navona-style calm water: broad curvature comes from the shared surface
+      // function; WFC tile bias only adds a few millimetres of local variation.
+      positions.push(x, highlandCurvedLakeSurfaceHeight(x, z) + tileBias * 0.004, z);
       const t = THREE.MathUtils.clamp((z - zStart) / depth, 0, 1);
       const color = waterNear.clone().lerp(waterFar, t * 0.78);
       colors.push(color.r, color.g, color.b);
@@ -1718,6 +1761,8 @@ function buildCurvedLakeSurface(materials) {
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       if (!cellFilled[row * cols + col]) continue;
+      // 旧港岸湾内不铺湖面（港台陆岬脚下只留海面）
+      if (isHighlandHarborCove(-width / 2 + (width * (col + 0.5)) / cols, zStart + (depth * (row + 0.5)) / rows)) continue;
       const a = at(row, col);
       const b = at(row, col + 1);
       const c = at(row + 1, col + 1);
@@ -1902,6 +1947,17 @@ function buildMistLayers(materials) {
 
 function makeMaterials() {
   const P = HIGHLAND_CITADEL_DESIGN_PALETTE;
+  const waterfrontWater = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.98,
+    depthWrite: false,
+    side: THREE.FrontSide,
+  });
+  waterfrontWater.userData.highlandLatestDesign = true;
+  waterfrontWater.userData.semanticToken = "waterfront-water";
+  waterfrontWater.userData.waterStyle = "blue-flat-no-specular";
   return {
     mountain: standardMaterial(0xffffff, {
       vertexColors: true,
@@ -1956,15 +2012,7 @@ function makeMaterials() {
     }),
     quay: standardMaterial(P.quay, { roughness: 0.94, semanticToken: "waterfront-stone" }),
     boat: standardMaterial(P.boat, { roughness: 0.9, semanticToken: "waterfront-boat" }),
-    waterfrontWater: standardMaterial(0xffffff, {
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.96,
-      roughness: 0.62,
-      metalness: 0.02,
-      side: THREE.DoubleSide,
-      semanticToken: "waterfront-water",
-    }),
+    waterfrontWater,
     reflection: standardMaterial(P.windowWarm, {
       transparent: true,
       opacity: 0.32,
@@ -2165,9 +2213,9 @@ export function buildHighlandCitadelLatestDesign(options = {}) {
 // =====================================================================
 
 const SHRUB_FOLIAGE = Object.freeze([
-  0x5a7058, // 暗绿 (90,112,88) —— 视频植被暗部
-  0x6a8060, // 中绿 (106,128,96)
-  0x4a5c48, // 最深绿 (74,92,72)
+  0x7fa89b, // 鼠尾草青绿 (127,168,155) —— 参考图树冠主体
+  0x94b5a5, // 亮鼠尾草 (148,181,165) —— 参考图受光冠
+  0x6b9488, // 深青绿 (107,148,136) —— 参考图冠影
 ]);
 
 // 截图 3 的植被不是围绕城堡随机撒点，而是沿山肩的等高带成片出现。
@@ -2382,10 +2430,114 @@ export function buildHighlandSlopeShrubs(options = {}) {
   });
   group.userData.shrubCount = placements.length;
   group.userData.distribution = "authored-mountain-slope-bands";
+  // 性能（2026-08-28）：灌木与光斑是纯静态呈现层——整组合并，
+  // 42 株 × ~4 网格 + 42 光斑（≈210 draw）→ 按材质归并后的个位数 draw。
+  // 独立 mergedTag 命名空间：mergeCitadelTownStatic 的幂等清扫按
+  // mergedGeometry === true 误删其他组的合并网格（此处必须与之区分）
+  mergeStaticGroup(group, { mergedTag: "highland-slope-shrub-vegetation" });
   group.userData.bandIds = Object.freeze([...new Set(placements.map((entry) => entry.band))]);
   group.userData.surfaceProvider = "highlandTerrainSurfaceHeight";
   group.userData.assetSource = "buildHighlandSlopeShrubs-low-poly-round-cluster";
   return group;
+}
+
+// =====================================================================
+// 参考图植被（主人验收 2026-08-28）：瓦片星球俯瞰图的大团鼠尾草绿树冠
+// 群落。InstancedMesh 单 draw call；群落中心确定性采样野地（避开城址/
+// 水面/港台），每群落 5–9 块低多边形冠，冠心贴地形。独立视觉层，不计入
+// 道具统计（12.38）。
+// =====================================================================
+const HIGHLAND_CANOPY_TONES = Object.freeze([
+  new THREE.Color(0x7fa89b),
+  new THREE.Color(0x94b5a5),
+  new THREE.Color(0x86ad9f),
+  new THREE.Color(0x6f9c8c),
+]);
+
+export function compileHighlandCanopyGroves({ groves = 22, perGrove = 7, seed = 20260828 } = {}) {
+  const rng = highlandSeededRandom(seed);
+  const centers = [];
+  let guard = 0;
+  while (centers.length < groves && guard < 6000) {
+    guard += 1;
+    const x = (rng() - 0.5) * 132;
+    const z = -32 + rng() * 92;
+    const footprint = Math.max(Math.abs(x) / 28.5, Math.abs(z + 1.5) / 31.5);
+    if (footprint < 1.12) continue; // 城址
+    if (isHighlandWaterfrontCutout(x, z)) continue; // 水域
+    if (isHighlandHarborCove(x, z)) continue; // 港台
+    const surfaceY = highlandTerrainSurfaceHeight(x, z);
+    if (surfaceY < 1.2 || surfaceY > 26) continue; // 参考图：低中坡与平地
+    if (highlandMountainSlope(x, z) > 2.4) continue; // 缓坡
+    if (centers.some((c) => Math.hypot(c.x - x, c.z - z) < 13)) continue; // 群落间距
+    centers.push({ x, z, surfaceY });
+  }
+  const canopies = [];
+  for (const center of centers) {
+    const count = 5 + Math.floor(rng() * 5); // 5–9
+    for (let i = 0; i < count; i++) {
+      const angle = rng() * Math.PI * 2;
+      const radius = 0.8 + rng() * 2.6;
+      const x = center.x + Math.cos(angle) * radius;
+      const z = center.z + Math.sin(angle) * radius;
+      const footprint = Math.max(Math.abs(x) / 28.5, Math.abs(z + 1.5) / 31.5);
+      if (footprint < 1.1 || isHighlandWaterfrontCutout(x, z) || isHighlandHarborCove(x, z)) continue;
+      const size = 1.0 + rng() * 1.1;
+      const tone = HIGHLAND_CANOPY_TONES[Math.floor(rng() * HIGHLAND_CANOPY_TONES.length)];
+      canopies.push({
+        x,
+        z,
+        y: highlandTerrainSurfaceHeight(x, z) + 0.72 * size,
+        size,
+        rotation: rng() * Math.PI * 2,
+        tone,
+        grove: centers.indexOf(center),
+      });
+    }
+  }
+  return { centers, canopies };
+}
+
+export function buildHighlandCanopyGroves(options = {}) {
+  const { centers, canopies } = compileHighlandCanopyGroves(options);
+  const geometry = new THREE.IcosahedronGeometry(1, 1);
+  const material = new THREE.MeshStandardMaterial({ roughness: 1, flatShading: true });
+  const instanced = new THREE.InstancedMesh(geometry, material, Math.max(1, canopies.length));
+  instanced.name = "highland-canopy-groves";
+  const matrix = new THREE.Matrix4();
+  const quaternion = new THREE.Quaternion();
+  const euler = new THREE.Euler();
+  const position = new THREE.Vector3();
+  const scale = new THREE.Vector3();
+  canopies.forEach((canopy, index) => {
+    euler.set(0, canopy.rotation, 0);
+    quaternion.setFromEuler(euler);
+    position.set(canopy.x, canopy.y, canopy.z);
+    scale.set(canopy.size, canopy.size * 0.86, canopy.size);
+    matrix.compose(position, quaternion, scale);
+    instanced.setMatrixAt(index, matrix);
+    instanced.setColorAt(index, canopy.tone);
+  });
+  instanced.instanceMatrix.needsUpdate = true;
+  if (instanced.instanceColor) instanced.instanceColor.needsUpdate = true;
+  instanced.userData.nonNavigable = true;
+  instanced.userData.presentationOnly = true;
+  return { instanced, centers, canopies };
+}
+
+export function mountHighlandCanopyGroves(THREE, parent, options = {}) {
+  if (!THREE || !parent) return null;
+  const existing = parent.getObjectByName("highland-canopy-groves");
+  if (existing) {
+    existing.removeFromParent();
+    existing.geometry?.dispose?.();
+    existing.material?.dispose?.();
+  }
+  const { instanced, centers, canopies } = buildHighlandCanopyGroves(options);
+  parent.add(instanced);
+  instanced.userData.groveCount = centers.length;
+  instanced.userData.canopyCount = canopies.length;
+  return instanced;
 }
 
 export function mountHighlandSlopeShrubs(THREE, parent, options = {}) {

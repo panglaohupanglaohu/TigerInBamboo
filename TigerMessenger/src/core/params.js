@@ -27,6 +27,19 @@ export const P_DEFAULTS = Object.freeze({
   weather: 0, // 天气：0 晴 / 1 雨（带闪电） / 2 雪
   sunIntensity: 1.6,
   ambientIntensity: 1.4, // 纯白强环境光：Toon 色块不掉死黑（1.2~1.5）
+  // S18 夜港辉光（主人验收 2026-08-28 参考图夜港）：迷你 bloom 后处理，
+  // 只让灯头/窗光/塔冠这类超亮自发光起晕；强度随夜权重（白天自动直出）。
+  // 回滚：P.nightBloomV1 = false 即回 renderer.render 直出。
+  nightBloomV1: true,
+  nightBloomStrength: 0.7,
+  nightBloomThreshold: 0.72,
+  // 距离剔除（2026-08-28 卡顿治理）：小件静态装饰超出视距即不提交绘制；
+  // 小星球地平线天然遮蔽远处，肉眼几乎无感。回滚：P.distanceCullV1 = false。
+  // 2026-08-29 主人验收回滚：距离剔除/海面下剔除**默认关闭**——远景
+  // （>视距）会把半径 ≤25 的城体合并网格/港口/送信人整体误隐藏。
+  // 代码保留，需要时 ?distanceCullV1=1 / ?underseaCullV1=1 手动开启。
+  distanceCullV1: false,
+  distanceCullMeters: 150,
 });
 
 /** 运行时可变参数（每帧被玩家/相机/交互读取） */
@@ -99,6 +112,11 @@ export const FEATURES = {
   oceanWorldRoutesV1: false,
   planetSurfaceRidersV1: false,
   legacyCanalWorld: true,
+  // 四季世界档（主人验收 2026-08-28 修订）：主页无显式 ?worldVersion 时
+  // 秋(9-11月)=C·V9、冬(12-2月)=B·V8；**春/夏保持 custom/legacy 海面夜港
+  // 现状**（A·V7 预设 = 旧运河世界、无海面，与主人认可的夜景不一致）。
+  // URL 显式 ?worldVersion 时永远优先。
+  seasonWorldV1: true,
   // shot-harness / 主系统 A-B-C 展示版本；只描述运行时管线，不替代各 feature flag。
   // 默认进入页必须是 custom/legacy：点 C 或带 worldVersion=v9 才进 V9。
   planetPresentationVersion: "legacy",
@@ -169,8 +187,38 @@ export function applyWorldVersionPreset(version) {
   return true;
 }
 
+/**
+ * 四季世界档：月份(0-11) → 管线版本。
+ * 春(2-4)与夏(5-7) = "custom"（保持海面夜港现状——A·V7 预设是旧运河世界，
+ * 无海面）、秋(8-10) = v9（C·V9）、冬(11,0,1) = v8（B·V8）。
+ */
+export function seasonWorldVersion(month = new Date().getMonth()) {
+  const m = Number.isFinite(month) ? month : new Date().getMonth();
+  if (m >= 8 && m <= 10) return "v9";
+  if (m >= 2 && m <= 7) return "custom";
+  return "v8";
+}
+
 /** 从 URL 查询串读取开关（在场景构建之前调用一次） */
-export function applyUrlOverrides(search) {
+export function applyUrlOverrides(search, { month } = {}) {
+  // 四季世界档：无显式 ?worldVersion 时按月份套 C·V9（秋）/ B·V8（冬）；
+  // 春夏保持 custom 海面世界。
+  const seasonQ = typeof search === "string" && search
+    ? new URLSearchParams(search.startsWith("?") ? search.slice(1) : search)
+    : new URLSearchParams();
+  const seasonFlag = readFlag(seasonQ, "seasonWorldV1");
+  if (seasonFlag !== null) FEATURES.seasonWorldV1 = seasonFlag;
+  if (FEATURES.seasonWorldV1 !== false && !seasonQ.get("worldVersion")) {
+    const seasonVersion = seasonWorldVersion(month ?? new Date().getMonth());
+    if (seasonVersion === "v9" || seasonVersion === "v8") {
+      applyWorldVersionPreset(seasonVersion);
+    } else {
+      // 春/夏：保持 custom/legacy 海面夜港现状（officialPagePlanetFeatures
+      // 会挂曲率海 + 海洋航线 + 只留水晶城运河）
+      FEATURES.worldVersion = "custom";
+      FEATURES.planetPresentationVersion = "legacy";
+    }
+  }
   if (typeof search !== "string" || !search) return;
   const q = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
   const v2 = readFlag(q, "citadelCombatV2");
@@ -191,6 +239,23 @@ export function applyUrlOverrides(search) {
   if (voxelBounce !== null) FEATURES.voxelBounceV1 = voxelBounce;
   const lightingQuality = q.get("lightingQuality");
   if (isLightingQualityName(lightingQuality)) FEATURES.lightingQuality = lightingQuality;
+  // 验收便捷：?timeOfDay=0.9 直设初始时刻（配合 ?autostart=1 截夜景）
+  const todOverride = q.get("timeOfDay");
+  if (todOverride !== null && Number.isFinite(parseFloat(todOverride))) {
+    P.timeOfDay = Math.max(0, Math.min(1, parseFloat(todOverride)));
+  }
+  // 性能系统 URL 开关（卡顿二分定位/回滚用）
+  for (const [flag, target] of [
+    ["underseaCullV1", "P"],
+    ["distanceCullV1", "P"],
+    ["nightBloomV1", "P"],
+  ]) {
+    const value = readFlag(q, flag);
+    if (value !== null) {
+      if (target === "P") P[flag] = value;
+      else FEATURES[flag] = value;
+    }
+  }
   const localLight = readFlag(q, "localLightBudgetV1");
   if (localLight !== null) FEATURES.localLightBudgetV1 = localLight;
   const procgen = readFlag(q, "procgenEngineV1");

@@ -26,7 +26,17 @@ castle.traverse((o) => {
 assert.equal(trees.length, 12, `树 12 株 ${trees.length}`);
 assert.equal(treeBlobs.length, 12, `树 blob 与树对齐 ${treeBlobs.length}`);
 assert.equal(shrubs.length, castle.getObjectByName("highland-slope-shrub-vegetation")?.userData?.shrubCount ?? 0, "灌木计数一致");
-assert.equal(shrubBlobs.length, shrubs.length, `灌木 blob 对齐 ${shrubBlobs.length}`);
+// 2026-08-28 性能修订：灌木 blob 不再是独立网格——与灌木冠块一起
+  // mergeStaticGroup 进合并网格（共享几何/材质语义由合并管线保证）
+  assert.equal(shrubBlobs.length, 0, "灌木 blob 已并入合并网格");
+  const shrubGroup = castle.getObjectByName("highland-slope-shrub-vegetation");
+  const shrubMeshes = [];
+  shrubGroup?.traverse((o) => { if (o.isMesh) shrubMeshes.push(o); });
+  assert.ok(shrubMeshes.length <= 8, `灌木组合并后网格 ${shrubMeshes.length} ≤ 8`);
+  let shrubTris = 0;
+  for (const mesh of shrubMeshes) shrubTris += (mesh.geometry.attributes.position?.count || 0) / 3;
+  // 42 株冠/干 + 42 片 blob(14 面) 的量级必须还在画面里
+  assert.ok(shrubTris >= 1200, `灌木组三角形量级保留 ${shrubTris}`);
 
 // --- 2. 贴地: blob y 与 terrain 高度一致(±0.1) --------------------------
 for (const blob of [...treeBlobs, ...shrubBlobs]) {
@@ -45,8 +55,9 @@ for (const blob of [...treeBlobs, ...shrubBlobs]) {
   geos.add(blob.geometry);
   mats.add(blob.material);
 }
-assert.equal(geos.size, 2, `共享几何 ≤2(树/灌木各一) ${geos.size}`);
-assert.equal(mats.size, 2, `共享材质 ≤2 ${mats.size}`);
+// 2026-08-28 修订：灌木 blob 已并入合并网格，独立 blob 只剩树侧 1 套共享
+  assert.equal(geos.size, 1, `共享几何 = 树侧 1 套 ${geos.size}`);
+  assert.equal(mats.size, 1, `共享材质 = 树侧 1 套 ${mats.size}`);
 assert.ok(blobSharedMaterialIsBasic(mats), "blob 用 Basic 材质(不受光)");
 
 function blobSharedMaterialIsBasic(mats) {
@@ -64,7 +75,7 @@ for (const blob of treeBlobs.slice(0, 2)) {
 }
 
 // --- 5. 预算 ------------------------------------------------------------
-assert.ok(treeBlobs.length + shrubBlobs.length <= 80, `blob 总数 ${treeBlobs.length + shrubBlobs.length}`);
+assert.ok(treeBlobs.length + shrubBlobs.length <= 80, `独立 blob 总数 ${treeBlobs.length + shrubBlobs.length}`);
 // 每 blob 14 面圆片: 总三角形 ≈ 14 * 54 = 756(极轻)
 
 console.log(`✅ S17 blob shadow: 树 ${treeBlobs.length} + 灌木 ${shrubBlobs.length} = ${treeBlobs.length + shrubBlobs.length} 个贴地暗斑, 共享几何 ${geos.size} 份, 全部贴地`);
