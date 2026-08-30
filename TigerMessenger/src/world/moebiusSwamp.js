@@ -1474,7 +1474,8 @@ export function createMoebiusSwampZone(opts = {}) {
   }
 
   /* ---------- 树冠顶棚：苍天大树枝冠交织遮天（水面不见阳光） ---------- */
-  buildCanopyCeiling(rnd, swampZone);
+  // 树冠顶棚（2026-08-29 主人验收：深绿冠团在暮色里糊在苔庭视角，已去除）
+  // buildCanopyCeiling(rnd, swampZone);
 
   /* ---------- 月光柱：树冠隙缝漏下几缕微弱冷光柱（「月夜」暗示） ---------- */
   const shafts = [];

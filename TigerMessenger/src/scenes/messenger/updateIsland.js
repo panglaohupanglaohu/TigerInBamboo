@@ -27,6 +27,9 @@ export function updateMessengerIsland(s, dt, t, runtime) {
   s.canalJunctionBox?.userData?.update?.(dt, t);
   s.canalJunctionCitadel?.update?.(dt, t);
   s.harborBuilt?.update?.(dt, t);
+  // 弹唱老人（2026-08-29 修订）：不再随狐——老人在旧港灯杆/半沉战船旁站立（loadCitadel snap 落位）。
+
+
   s.canalLakeLink?.update?.(dt, t);
   updateBubblePodPatrol(s.bubblePods, t);
   s.citySeaLake.update?.(dt, t);

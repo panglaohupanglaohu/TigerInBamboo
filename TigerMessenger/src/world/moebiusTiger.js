@@ -473,6 +473,7 @@ export function createMoebiusTiger(rnd = Math.random, roam = null) {
  * ------------------------------------------------------------------- */
 const GREET_SEE_R = 32; // 坑缘看见送信人的水平距离（湖沼本地）
 const GREET_MEET_R = 3.2; // 走到面前的距离
+const WATER_WALK_Y = 25.15; // 湖沼水面 +0.15：水墨虎踏水而行（主人验收 2026-08-29）
 const GREET_STAY = 10; // 相见停留（够说完灯谜）
 const GREET_COOLDOWN = 18; // 结束后冷却，避免反复跳
 const GREET_JUMP_DUR = 0.95;
@@ -587,7 +588,9 @@ function attachRoamBehavior(tiger, roam) {
     const stop = Math.max(0, d - 2.8);
     const tx = tiger.position.x + (dx / d) * stop;
     const tz = tiger.position.z + (dz / d) * stop;
-    _greetTo.set(tx, feetOnGround(tx, tz), tz);
+    var landY = feetOnGround(tx, tz);
+    if (Math.hypot(tx, tz) < 27 && landY < 25.2) landY = WATER_WALK_Y; // 湖沼水域内 → 落在水面
+    _greetTo.set(tx, landY, tz);
     jump = { t: 0, dur: GREET_JUMP_DUR, peak: GREET_JUMP_PEAK * TIGER_SCALE * 2.2 };
     mode = "greet-jump";
     tiger.userData._greeting = true;
@@ -613,7 +616,8 @@ function attachRoamBehavior(tiger, roam) {
       tiger.userData.forceDrink = false;
     }
 
-    // 巡游/饮水途中看见送信人 → 跳下相见
+    // 送信人一进入湖沼（进坑）→ 虎必从坑缘跃下相见（主人验收 2026-08-29）：
+    // 不再受虎的视野半径限制——进沼即相见；重复进出仍有短暂冷却防刷。
     if (
       player &&
       greetCd <= 0 &&
@@ -629,7 +633,8 @@ function attachRoamBehavior(tiger, roam) {
         // 送信人在湖沼坑内（比坑缘低）或已足够近
         const rimY = rim[0].y;
         const playerBelow = pl.y < rimY - 2;
-        if (horiz < GREET_SEE_R && (playerBelow || horiz < 14)) {
+        const playerInCrater = Math.hypot(pl.x, pl.z) < 30; // 坑内（坑缘半径 37 的内侧）
+        if (playerInCrater || (horiz < GREET_SEE_R && (playerBelow || horiz < 14))) {
           beginGreetJump(pl);
         }
       }
@@ -667,19 +672,18 @@ function attachRoamBehavior(tiger, roam) {
         queue = up;
         qi = 0;
       } else {
-        // 只水平跟随送信人；高度始终用坑面贴地，不用 pl.y
-        const pathY = surfacePathY(tiger.position.x, tiger.position.z);
-        _greetTo.set(pl.x, pathY, pl.z);
-        if (seek(_greetTo, dt, GREET_MEET_R, speed * 1.35, pathY)) {
+        // 踏水跟随：跟随高度用水面（主人验收 2026-08-29 水墨虎水上行走）
+        _greetTo.set(pl.x, WATER_WALK_Y, pl.z);
+        if (seek(_greetTo, dt, GREET_MEET_R, speed * 1.35, WATER_WALK_Y)) {
           const dx = pl.x - tiger.position.x;
           const dz = pl.z - tiger.position.z;
           if (dx * dx + dz * dz > 1e-6) tiger.rotation.y = Math.atan2(dx, dz);
-          tiger.userData._baseY = feetOnGround();
+          tiger.userData._baseY = WATER_WALK_Y;
           mode = "greet-stay";
           greetStayT = GREET_STAY;
         } else {
           tiger.userData._walking = true;
-          tiger.userData._baseY = feetOnGround();
+          tiger.userData._baseY = WATER_WALK_Y;
         }
       }
     } else if (mode === "greet-stay") {
@@ -689,15 +693,15 @@ function attachRoamBehavior(tiger, roam) {
         const dx = pl.x - tiger.position.x;
         const dz = pl.z - tiger.position.z;
         if (dx * dx + dz * dz > 1e-6) tiger.rotation.y = Math.atan2(dx, dz);
-        // 人若缓步走动：贴地跟几步，保持脚在地面
+        // 人若缓步走动：保持脚在水面
         const horiz = Math.hypot(dx, dz);
         if (horiz > GREET_MEET_R * 1.15 && horiz < GREET_SEE_R * 0.85) {
-          const pathY = surfacePathY(tiger.position.x, tiger.position.z);
+          const pathY = WATER_WALK_Y;
           _greetTo.set(pl.x, pathY, pl.z);
           seek(_greetTo, dt, GREET_MEET_R, speed * 1.1, pathY);
           tiger.userData._walking = true;
         }
-        tiger.userData._baseY = feetOnGround();
+        tiger.userData._baseY = WATER_WALK_Y;
         // 人跑远则提前结束
         if (horiz > GREET_SEE_R * 0.85) greetStayT = 0;
       } else {

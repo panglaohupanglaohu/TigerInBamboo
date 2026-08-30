@@ -208,10 +208,10 @@ export function buildStartingCamp(scene, R) {
   torso.castShadow = true;
   addOutline(torso, 0.018);
   elder.add(torso);
-  // 前伸双腿（坐姿）
+  // 站姿双腿（主人验收 2026-08-29：老人在旧港灯杆旁站立，不再坐姿前伸）
   for (const side of [-1, 1]) {
-    const leg = new THREE.Mesh(facet(new THREE.BoxGeometry(0.15, 0.16, 0.5)), cloth);
-    leg.position.set(side * 0.14, 0.14, 0.3);
+    const leg = new THREE.Mesh(facet(new THREE.BoxGeometry(0.16, 0.55, 0.18)), cloth);
+    leg.position.set(side * 0.14, 0.28, 0);
     addOutline(leg, 0.012);
     elder.add(leg);
   }
@@ -227,7 +227,7 @@ export function buildStartingCamp(scene, R) {
   elder.add(beard);
   // 膝上的琴（扁平长方体手风琴：棕身 + 奶白键条）
   const qin = new THREE.Mesh(facet(new THREE.BoxGeometry(0.58, 0.16, 0.3)), toonMat(0x8a5a3a));
-  qin.position.set(0, 0.52, 0.34);
+  qin.position.set(0, 0.72, 0.3);
   qin.castShadow = true;
   addOutline(qin, 0.012);
   elder.add(qin);

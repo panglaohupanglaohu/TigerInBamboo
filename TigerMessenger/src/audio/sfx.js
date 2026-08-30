@@ -7,18 +7,19 @@ import { showToast } from "../ui/hud.js";
 let audioCtx = null;
 let muted = false;
 
-// 弹琴老人八音盒：music/黄昏屁.mp3，从头播到 4:33，不循环
+// 弹琴老人 BGM（主人验收 2026-08-29）：music/Balmorhea-Remembrance.mp3，
+// 从头播到 5:49（349.23s 取整），不循环
 let musicBoxSession = null;
 /** @type {HTMLAudioElement|null} */
 let musicBoxEl = null;
 const MUSIC_BOX_BGM_URL = new URL(
-  "../../music/黄昏屁.mp3",
+  "../../music/Balmorhea-Remembrance.mp3",
   import.meta.url
 ).href;
 /** 从曲头开始 */
 const MUSIC_BOX_START_SEC = 0;
-/** 4 分 33 秒结束（不循环） */
-const MUSIC_BOX_END_SEC = 4 * 60 + 33;
+/** 5 分 49 秒结束（不循环） */
+const MUSIC_BOX_END_SEC = 5 * 60 + 49;
 const MUSIC_BOX_VOLUME = 0.5;
 
 // 有轨电车声：轮轨「哐啷」+ 到站铃/风铃感高音（禁止持续低频嗡嗡）
@@ -528,7 +529,7 @@ function setAmbienceDuck(level) {
 function ensureMusicBoxEl() {
   if (musicBoxEl) {
     // 曲目若已切换，刷新 src
-    if (musicBoxEl.src !== MUSIC_BOX_BGM_URL && !musicBoxEl.src.endsWith(encodeURI("黄昏屁.mp3")) && !musicBoxEl.src.includes("%E9%BB%84%E6%98%8F%E5%B1%81")) {
+    if (musicBoxEl.src !== MUSIC_BOX_BGM_URL && !musicBoxEl.src.endsWith(encodeURI("Balmorhea-Remembrance.mp3")) && !musicBoxEl.src.includes("Balmorhea-Remembrance")) {
       try {
         musicBoxEl.src = MUSIC_BOX_BGM_URL;
         musicBoxEl.load();
@@ -558,7 +559,7 @@ function ensureMusicBoxEl() {
 }
 
 /**
- * 弹琴老人八音盒：播放 `music/黄昏屁.mp3`（0 → 4:33，不循环）。
+ * 弹琴老人 BGM：播放 `music/Balmorhea-Remembrance.mp3`（0 → 5:49，不循环）。
  * 必须在用户按键手势里同步调用 play()，避免浏览器拦截异步播放。
  * 返回 true 表示开始播放；正在播放时再次调用会停止并返回 false。
  * @param {{onNote?:(index:number)=>void, onEnded?:()=>void}} hooks

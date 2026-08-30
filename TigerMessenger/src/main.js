@@ -128,6 +128,23 @@ const nightBloom = P.nightBloomV1
       nightWeightAt,
     })
   : null;
+// 帧率自适应质量档（卡顿兜底）：持续 <26fps 4 秒 → 自动关闭 bloom（最贵的
+// 后处理）；回升到 34fps 以上 6 秒 → 恢复。只动 bloom，不碰场景内容。
+var bloomFpsSamples = [];
+var bloomDisabled = false;
+function governBloomByFps(now) {
+  if (!nightBloom || bloomDisabled) return;
+  bloomFpsSamples.push(now);
+  if (bloomFpsSamples.length < 120) return;
+  var span = (bloomFpsSamples[bloomFpsSamples.length - 1] - bloomFpsSamples[0]) / 1000;
+  var fps = (bloomFpsSamples.length - 1) / Math.max(0.001, span);
+  bloomFpsSamples = [];
+  if (fps < 26) {
+    bloomDisabled = true;
+    nightBloom.dispose();
+    console.warn("[perf] 持续低帧，bloom 已自动关闭（刷新或 P.nightBloomV1 重开）");
+  }
+}
 initQuestPanelCollapse();
 
 // ---------- 环境光 / 天空（跨场景共享） ----------
@@ -1059,7 +1076,7 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
           const edits = diffCitadelLayouts(prevLayout, layout);
           if (edits.length && edits.length <= 64) {
             const dirty = computeCitadelDirtyCells(edits);
-            const incr = rebuildCitadelTownIncremental(citadel, layout, [...dirty]);
+            const incr = rebuildCitadelTownIncremental(citadel, layout, [...dirty], { debounceMs: 400 });
             stats = incr.ok ? incr.stats : rebuildCitadelTown(citadel, layout);
           } else {
             stats = rebuildCitadelTown(citadel, layout);
@@ -1602,7 +1619,8 @@ function animate() {
 
   // 新视觉系统一律 try 护罩：单系统异常只禁用自身，绝不杀主渲染循环
   try {
-    if (distanceCulling) distanceCulling.update(dt);
+    governBloomByFps(performance.now());
+  if (distanceCulling) distanceCulling.update(dt);
   } catch (error) {
     console.warn("[perf] distance culling disabled:", error?.message);
     distanceCulling?.dispose?.();

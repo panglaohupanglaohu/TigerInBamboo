@@ -2672,14 +2672,16 @@ export function buildOdysseyCitadel(options = {}) {
     castleContainer.userData.curvatureDrop = curvatureDrop;
   }
 
-  const terrainObjects = skipOuterTerrain || useHighlandLatestDesign
+  // 主人验收 2026-08-29：最新高山设计也构建地貌物件（瞭望塔/参天树/木马）
+  // ——此前 latestDesign 直接给空组，编辑器放置的木马因此消失
+  const terrainObjects = skipOuterTerrain
     ? new THREE.Group()
     : buildCitadelTerrainObjects(
       blueprint.objects,
       contourSpec,
       castleContainer.userData.anchor
     );
-  terrainObjects.name = skipOuterTerrain || useHighlandLatestDesign
+  terrainObjects.name = skipOuterTerrain
     ? "citadel-skip-terrain-objects"
     : "citadel-terrain-objects";
   terrainObjects.userData.buildStage = "terrain-objects";
@@ -2870,6 +2872,21 @@ export function playCitadelGrowAnimation(castleContainer, newMeshes, { duration 
 
 function tickCitadelGrowAnimations(castleContainer, dt) {
   const grows = castleContainer.userData.growAnimations;
+  // 去抖合并：停手 mergeDebounceLeft 秒后执行一次 pendingMerge（连续编辑
+  // 不再逐次 60ms 冻结）
+  const debounced = castleContainer.userData.pendingMerge;
+  if (debounced && !grows?.length) {
+    const left = (castleContainer.userData.mergeDebounceLeft ?? 0) - Math.max(0.008, Number(dt) || 0.016);
+    castleContainer.userData.mergeDebounceLeft = left;
+    if (left <= 0) {
+      castleContainer.userData.mergeDebounceLeft = null;
+      for (const level of debounced.dirtyLevels) {
+        mergeStaticGroup(level, { skip: citadelTownMergeSkip, onSurface: citadelTownMergeOnSurface });
+      }
+      refreshCitadelWindowLights(castleContainer);
+      castleContainer.userData.pendingMerge = null;
+    }
+  }
   if (!grows?.length) return;
   let alive = 0;
   for (const grow of grows) {
@@ -2943,13 +2960,18 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     }
   }
   const dirtyLevels = new Set();
+  const changedLevels = new Set(); // 2026-08-29 性能：只重合并真正变化的层
+  const levelOf = new Map();
   for (const key of dirty) {
     const iy = Number(key.split(",")[1]);
     if (!Number.isFinite(iy)) continue;
     for (let dy = -2; dy <= 2; dy++) {
       for (let t = 0; t < 5; t++) {
         const level = byLevel.get(`${t}:${iy + dy}`);
-        if (level) dirtyLevels.add(level);
+        if (level) {
+          dirtyLevels.add(level);
+          levelOf.set(level, false);
+        }
       }
     }
   }
@@ -2959,6 +2981,14 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   // G30 增量性能：dirty 网格只可能挂在 town 层组里（地形/装饰不在层组），
   // 逐层遍历替代全城堡 traverse，省掉每 edit 对数千对象的一次全树扫描。
   const stale = [];
+  const isChangedLevel = (node) => {
+    let cursor = node;
+    for (let depth = 0; cursor && depth < 6; depth++) {
+      if (levelOf.has(cursor)) return cursor;
+      cursor = cursor.parent;
+    }
+    return null;
+  };
   for (const layer of layers) {
     layer.traverse((o) => {
       if (!o.isMesh) return;
@@ -2968,6 +2998,8 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
         (module && dirty.has(`${module.ix},${module.iy},${module.iz}`));
       if (!isDirty) return;
       stale.push(o);
+      const level = isChangedLevel(o);
+      if (level) levelOf.set(level, true);
     });
   }
   for (const mesh of stale) {
@@ -2992,6 +3024,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
       for (const child of [...(levelGroup.children ?? [])]) {
         target.add(child);
         newMeshes.push(child);
+        levelOf.set(target, true);
       }
     });
   });
@@ -3008,17 +3041,31 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   //    动画模式：合并延迟到生长动画结束后（castleContainer.update 驱动），
   //    动画期间新网格保持独立 transform（scale 弹入）。
   let mergedCount = 0;
-  if (!animate) {
-    for (const level of dirtyLevels) {
+  // 性能（2026-08-29 编辑卡顿治理）：只重合并「真正变化」的层——典型
+  // 单格编辑只影响 1-3 层，而不是 ±2 层 × 5 台地共 25 层全量重烘焙。
+  const levelsToMerge = [];
+  for (const level of dirtyLevels) {
+    if (levelOf.get(level) === true) levelsToMerge.push(level);
+  }
+  // 编辑卡顿治理（主人验收 2026-08-29）：debounceMs > 0 时连续编辑不再
+  // 逐次全量重合并（单次 60ms+ 冻结），延迟到停手后再合并（由
+  // tickCitadelGrowAnimations 的倒计时驱动）；animate 模式维持生长动画后合并。
+  const debounceMs = Number(options.debounceMs) || 0;
+  if (!animate && debounceMs > 0) {
+    castleContainer.userData.pendingMerge = { dirtyLevels: levelsToMerge };
+    castleContainer.userData.mergeDebounceLeft = debounceMs / 1000;
+  } else if (!animate) {
+    for (const level of levelsToMerge) {
       const report = mergeStaticGroup(level, { skip: citadelTownMergeSkip, onSurface: citadelTownMergeOnSurface });
       mergedCount += report.surfaces.length;
     }
+    refreshCitadelWindowLights(castleContainer);
   } else {
-    castleContainer.userData.pendingMerge = { dirtyLevels };
+    castleContainer.userData.pendingMerge = { dirtyLevels: levelsToMerge };
   }
 
-  // 6) 窗口实例重建（窗口在 dirty level 内重建，需重新打包；动画模式延迟）
-  if (!animate) refreshCitadelWindowLights(castleContainer);
+  // 6) 窗口实例重建（去抖模式延迟到合并后；动画模式维持生长后合并）
+  if (!animate && debounceMs <= 0) refreshCitadelWindowLights(castleContainer);
 
   // 7) 元数据与统计
   castleContainer.userData.townSpec = spec;

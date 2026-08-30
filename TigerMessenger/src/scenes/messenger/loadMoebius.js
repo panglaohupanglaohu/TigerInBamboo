@@ -19,6 +19,7 @@ import { placeMoebiusSwampOnSphere } from "../../world/moebiusSwamp.js";
 import { latLonToDir } from "../../world/sphereMath.js";
 import { createMoebiusAircraftSquad } from "../../assets/moebiusAircraft.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../../assets/moebiusAirship.js";
+import { createFisherBoat } from "../../assets/harbor.js";
 import { AirshipEscortManager } from "../../world/airshipEscort.js";
 
 export function loadMoebiusDistrict({ scene, R, tramSystem }) {
@@ -144,5 +145,20 @@ export function placeMoebiusSwampAndSky({ scene, R, moebius, grandDir, bubblePod
     obstacles: moebius.crystals,
   });
 
-  return { moebiusSwamp, aircraftSquad, airship, airshipAnchor, escort };
+  // 湖沼旁的半沉沉船（主人验收 2026-08-29）：断船斜倾半没入水中，
+  // 弹唱老人依靠在船舷边（老人由 messengerIsland 在装载后迁入）。
+  const swampWreck = createFisherBoat();
+  swampWreck.name = "swamp-shipwreck";
+  swampWreck.scale.setScalar(2);
+  swampWreck.rotation.set(0.16, 2.35, 0.42); // 左舷倾斜 + 偏航
+  {
+    const base = (moebiusSwamp?.position || grandDir.clone().multiplyScalar(R)).clone();
+    const side = new THREE.Vector3(1, 0, 0).applyQuaternion(moebiusSwamp.quaternion).normalize();
+    swampWreck.position.copy(base).addScaledVector(side, 7.5).add(new THREE.Vector3(0, -0.55, 2.2));
+  }
+  swampWreck.userData.kind = "swamp-shipwreck";
+  swampWreck.userData.presentationOnly = true;
+  scene.add(swampWreck);
+
+  return { moebiusSwamp, aircraftSquad, airship, airshipAnchor, escort, swampWreck };
 }

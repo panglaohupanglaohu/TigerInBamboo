@@ -79,6 +79,22 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
     const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_OBJECTS_KEY) || "[]");
     if (Array.isArray(saved)) citadelTerrainObjects = saved;
   } catch { /* 损坏存档回落空地貌对象 */ }
+  // 主人验收 2026-08-29：木马放回城堡前——无编辑存档时也常驻一匹
+  // （城堡正门前、面向湾面；编辑器存档存在时以存档为准）
+  if (!Array.isArray(citadelTerrainObjects) || citadelTerrainObjects.length === 0) {
+    citadelTerrainObjects = [
+      {
+        id: "default-trojan-horse",
+        type: "trojanHorse",
+        terraceIndex: 0,
+        x: 0,
+        z: 6,
+        yaw: 0.6,
+        scale: 0.9,
+        grounded: false,
+      },
+    ];
+  }
 
   const odysseyCitadel = buildOdysseyCitadel({
     dir: citadelDir,
@@ -188,7 +204,7 @@ function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborCol
   if (!(Math.abs(delta) > 1e-4)) return;
   harbor.position.addScaledVector(up, delta);
   harbor.updateMatrixWorld(true);
-  // 渔船留在海面：泊位在水上，不跟港台一起上崖
+  // 船留在海面：泊位在水上，不跟港台一起上崖
   const boat = harborBuilt?.landmarks?.boat;
   if (boat) {
     const boatR = boat.getWorldPosition(new THREE.Vector3()).length();
@@ -196,9 +212,7 @@ function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborCol
     boat.updateMatrixWorld(true);
   }
   for (const collider of harborColliders || []) collider.position.addScaledVector(up, delta);
-  const elder = harborBuilt?.landmarks?.elder;
-  const elderCol = camp?.colliders?.find((entry) => entry.kind === "elder");
-  if (elder && elderCol) elderCol.position.copy(elder.getWorldPosition(new THREE.Vector3()));
+  // 弹唱老人的最终落位在 messengerIsland 的沉船编排块（湖沼旁半沉沉船）
 }
 
 function placeHarborOnCitadel({ R, camp, harbor, harborBuilt, islandLift = 0 }) {

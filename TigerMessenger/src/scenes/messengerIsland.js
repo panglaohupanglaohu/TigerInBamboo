@@ -18,8 +18,9 @@ import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
 import { buildOldHarborScene } from "../assets/harbor.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
+import { mergeStaticGroup } from "../world/geometryMerge.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
-import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260826-ocean-highland-lift-v1";
+import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260829-elder-pier-v2";
 import { loadMoebiusDistrict, placeMoebiusSwampAndSky } from "./messenger/loadMoebius.js";
 import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/loadTraffic.js";
 import { updateMessengerIsland } from "./messenger/updateIsland.js";
@@ -138,6 +139,29 @@ export const messengerIslandScene = {
       bubblePods: moebiusPack.bubblePods,
       bookshop,
     });
+  // 主人验收 2026-08-29（最终）：弹唱老人**依靠在湖沼旁的半沉沉船船舷**——
+  // 右舷外 1.9，面朝船身微靠；E 键八音盒聆听与碰撞体随位。
+  {
+    const wreck = skyPack.swampWreck;
+    const elder = camp?.landmarks?.elder;
+    if (wreck && elder) {
+      elder.removeFromParent();
+      scene.add(elder);
+      // 主人验收 2026-08-29（最终）：老人站在**露出水面的船底板**上——
+      // 沉船倾覆后船底朝天，老人作为沉船子节点、抵消倾角与倍率后
+      // 世界正立站在底板上（背靠船壳、面朝船头）。
+      elder.removeFromParent();
+      wreck.add(elder);
+      elder.scale.setScalar(0.5); // 抵消沉船 scale 2，老人保持原尺寸
+      // 站在倾覆后露出水面的船底板上（船体局部 -Y 面，即仰面朝上的船底）
+      elder.position.set(1.1, -1.35, 0.2);
+      elder.quaternion.copy(wreck.quaternion).invert();
+      elder.rotateY(0.5);
+      elder.updateMatrixWorld(true);
+      var elderCol = camp?.colliders?.find((entry) => entry.kind === "elder");
+      if (elderCol) elderCol.position.copy(elder.position);
+    }
+  }
 
     const traffic = loadCanalNetwork({
       scene,
@@ -201,7 +225,9 @@ export const messengerIslandScene = {
       yaw: 0.6,
       footprint: { rx: 9.2, rz: 5.8, segments: 28 },
       heightScale: 0.55,
-      baseLift: planetFeatures.saihojiIslandLift || 0,
+      // 主人验收 2026-08-29：苔庭降到刚露出海面（海 0.72 → 盘面 ≈+0.6），
+      // 士兵涉水仅踝深；原 3.2 令周边士兵腰深泡在海里
+      baseLift: 0.62,
       palette: SAIHOJI_MOSS_PALETTE,
       avoidWorld: [...mossAvoidCommon, ...zoneAvoid],
     });
@@ -217,7 +243,7 @@ export const messengerIslandScene = {
         };
       })();
       const mossDir = latLonToDir(56, -120, new THREE.Vector3());
-      const surfaceR = R + (planetFeatures.saihojiIslandLift || 0) + 0.18;
+      const surfaceR = R + 0.62 + 0.18;
       const upT = mossDir.clone();
       const rightT = new THREE.Vector3().crossVectors(upT, new THREE.Vector3(0, 0, 1)).normalize();
       if (rightT.lengthSq() < 1e-6) rightT.set(1, 0, 0);
@@ -244,6 +270,8 @@ export const messengerIslandScene = {
         rock.castShadow = true;
         screeGroup.add(rock);
       }
+      // 性能：碎石组合并（18 网格 → 按材质归并的个位数 draw）
+      mergeStaticGroup(screeGroup);
       scene.add(screeGroup);
     }
     const mossSwamp = buildImpastoMossyGround({
@@ -350,6 +378,7 @@ export const messengerIslandScene = {
     const state = {
       scene,
       R,
+      camp,
       platforms,
       clouds,
       tramSystem,
