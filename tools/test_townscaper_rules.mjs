@@ -286,7 +286,7 @@ ok("屋顶形状分类：single/strip/L/cross/block2x2/plaza");
   ok(`水上软模式：裙 ${s.seawallCount} · 架 ${s.supportCount} · 树 ${s.shrubCount} · 阳台 ${s.balconyCount} · 假水道 0`);
 }
 
-// ---------- 11. 扭曲网格：同角点稳定、非零 ----------
+// ---------- 11. 扭曲网格：同角点稳定、非零、竖向共棱 ----------
 {
   const a = citadelGridVertexJitter(3, 4, 0);
   const b = citadelGridVertexJitter(3, 4, 0);
@@ -294,7 +294,25 @@ ok("屋顶形状分类：single/strip/L/cross/block2x2/plaza");
   assert.equal(a.dz, b.dz);
   const c = citadelGridVertexJitter(8, 2, 2);
   assert(Math.abs(c.dx) + Math.abs(c.dz) > 0, "上层扰动非零");
-  ok("扭曲网格确定性角点扰动");
+
+  // 竖着叠的格必须共享竖棱：floor 只允许缩放幅度，不得重抽方向。
+  // 方向逐层随机时，一根塔每层棱错开最大 0.06（格宽 2.0 的 3%），读成“每层转了一点”。
+  for (const [gx, gz] of [[3, 4], [8, 2], [0, 0], [17, 5]]) {
+    const f0 = citadelGridVertexJitter(gx, gz, 0);
+    for (const floor of [1, 3, 7, 11]) {
+      const fn = citadelGridVertexJitter(gx, gz, floor);
+      assert(fn.dx * f0.dx >= 0 && fn.dz * f0.dz >= 0,
+        `角点 (${gx},${gz}) 第 ${floor} 层扰动反向了：${f0.dx},${f0.dz} → ${fn.dx},${fn.dz}`);
+      // 同方向则比例恒定（幅度同倍缩放），dx/dz 比值不变
+      if (Math.abs(f0.dz) > 1e-9) {
+        assert(Math.abs(fn.dx / fn.dz - f0.dx / f0.dz) < 1e-6,
+          `角点 (${gx},${gz}) 第 ${floor} 层方向变了`);
+      }
+      const grow = Math.hypot(fn.dx, fn.dz) / Math.hypot(f0.dx, f0.dz);
+      assert(grow >= 1 && grow < 1.5, `第 ${floor} 层幅度缩放 ${grow.toFixed(3)} 不在 [1, 1.5)`);
+    }
+  }
+  ok("扭曲网格确定性角点扰动 · 竖向同方向共棱");
 }
 
 console.log(`\n结果：${pass} 项通过`);

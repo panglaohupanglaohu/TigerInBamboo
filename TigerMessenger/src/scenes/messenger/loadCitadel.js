@@ -19,8 +19,9 @@ import {
   buildOdysseyCitadel,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
-} from "../../world/odysseyCitadel.js?v=20260828-reference-light-v9";
-import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+} from "../../world/odysseyCitadel.js?v=20260903-level-set-parity-v1";
+import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
+import { withResidentTrojanHorse } from "../../world/citadelBlueprint.js";
 import { loadCitadelLevelsSave } from "../../world/citadelLevelsSave.js";
 import { OFFICIAL_OCEAN_SEA_LEVEL, HIGHLAND_CASTLE_SEA_DROP } from "../../world/waterV8/officialOcean.js";
 import { highlandTerrainSurfaceHeight } from "../../world/highlandCitadelDesign.js?v=20260828-reference-light-v9";
@@ -79,22 +80,7 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
     const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_OBJECTS_KEY) || "[]");
     if (Array.isArray(saved)) citadelTerrainObjects = saved;
   } catch { /* 损坏存档回落空地貌对象 */ }
-  // 主人验收 2026-08-29：木马放回城堡前——无编辑存档时也常驻一匹
-  // （城堡正门前、面向湾面；编辑器存档存在时以存档为准）
-  if (!Array.isArray(citadelTerrainObjects) || citadelTerrainObjects.length === 0) {
-    citadelTerrainObjects = [
-      {
-        id: "default-trojan-horse",
-        type: "trojanHorse",
-        terraceIndex: 0,
-        x: 0,
-        z: 6,
-        yaw: 0.6,
-        scale: 0.9,
-        grounded: false,
-      },
-    ];
-  }
+  citadelTerrainObjects = withResidentTrojanHorse(citadelTerrainObjects);
 
   const odysseyCitadel = buildOdysseyCitadel({
     dir: citadelDir,

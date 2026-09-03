@@ -12,7 +12,7 @@ import { GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { canyonOffsetDir } from "../world/canyon.js";
 import { SAIHOJI_ZONES } from "../world/saihoji.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
-import { placeObjectOnSphere, latLonToDir } from "../world/sphereMath.js";
+import { placeObjectOnSphere, latLonToDir, quatYToDir } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
 import { createBookshopHydrangeas } from "../assets/hydrangea.js";
 import { createCatalogObject } from "../core/buildingCatalog.js";
@@ -28,6 +28,7 @@ import { createSwampBgmState } from "./messenger/swampBgm.js";
 import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
 import { createScoutDefenseSquad } from "../world/scoutDefense.js";
 import { pruneTaggedOfficialOceanOccludeds } from "../core/officialOceanOcclusionPruning.js";
+import { sampleSceneHeightAt, collectStaticTerrainMeshes } from "../world/planetV8/cloudTerrainRemap.js";
 import { FEATURES } from "../core/params.js";
 
 /** 正式主页（custom/legacy）挂球面 impostor 云海与曲率海洋，只留水晶城运河，不改全局 DEFAULT_ON。 */
@@ -61,6 +62,30 @@ const SAIHOJI_MOSS_PALETTE = Object.freeze({
   edge: 0x4d9b69,
 });
 
+// 玩家 2026-09-02 在场上站定后读出的落点，是地形最终形态下的实测值。
+const ELDER_SPOT = new THREE.Vector3(-69.7, 142.01, 27.71);
+
+/**
+ * 弹唱老人直接落在玩家选定的世界坐标上，挂在 scene 下不跟随任何建筑。
+ * 之前挂书店做子节点会被地图编辑器存档搬走；地形本身在运行时不动，
+ * 所以这里用世界坐标反而是稳定解。+Y 对齐球面法线保证人站着而不是躺着。
+ */
+function placeElderAtWorldPoint(elder, scene, colliders, spot = ELDER_SPOT) {
+  elder.removeFromParent();
+  scene.add(elder);
+  elder.position.copy(spot);
+  elder.quaternion.copy(quatYToDir(spot.clone().normalize()));
+  elder.scale.setScalar(1);
+  elder.visible = true;
+  elder.updateMatrixWorld(true);
+
+  const world = elder.position.clone();
+  const elderCol = colliders?.find((entry) => entry.kind === "elder");
+  if (elderCol) elderCol.position.copy(world);
+  else colliders?.push({ position: world.clone(), radius: 0.8, kind: "elder" });
+  return { world, radius: world.length() };
+}
+
 /** @type {import("./sceneApi.js").SceneModule} */
 export const messengerIslandScene = {
   id: "messenger",
@@ -80,22 +105,6 @@ export const messengerIslandScene = {
     const camp = buildStartingCamp(scene, R);
     const farSide = decorateFarSide(scene, R);
     const moonLake = createMoonLake(scene, R);
-    const planetV8 = createPlanetV8Runtime({
-      scene,
-      planet: ctx.planet,
-      radius: R,
-      seed: ctx.options?.planetV8?.seed ?? FEATURES.terrainSeed ?? 42,
-      features: planetFeatures,
-    });
-
-    // 三重门编译锚点保留给门侧巡检逻辑，侦察队实际以门的 seatRoot
-    // 读取最新姿态，保证开发者菜单搬迁叹息之门后仍能正确赶赴目标。
-    const tripleGateLandmark = planetV8.compiler?.manifest?.find((entry) => entry.id === "triple-gate") || {
-      id: "triple-gate",
-      direction: [-0.46, 0.88, 0.09],
-      forward: [0, 0, 1],
-    };
-    const tripleGateSample = planetV8.compiler?.surface?.sample?.(tripleGateLandmark.direction) || null;
 
     const harborBuilt = buildOldHarborScene({ seed: 8844 });
     const harbor = harborBuilt.group;
@@ -119,6 +128,44 @@ export const messengerIslandScene = {
       highlandIslandLift: planetFeatures.highlandIslandLift || 0,
     });
 
+    // 云贴地重投影（方案 A）· 阶段 0：可见地形清单。createPlanetV8Runtime 已挪到
+    // harbor / moebius / citadel 构建之后，保证云采样时这些 group 已在场景中。
+    // 清单经 collectStaticTerrainMeshes 收集为静态 mesh：排除飞鸟群/气泡艇等瞬态
+    // 对象（否则云会贴着鸟飞）与水面节点；水域云走海平面兜底不被拽入水下。
+    const moebiusRoot = moebiusPack?.moebius?.group || moebiusPack?.moebius;
+    const transientExcludes = [
+      moebiusPack?.moebius?.flocks, // moebius 城鸟群（数组）
+      moebiusPack?.flock,
+      moebiusPack?.hallFlock,
+      moebiusPack?.bubblePods,
+      citadelPack?.birdVortex,            // 圣城阳台鸟旋涡
+      citadelPack?.terraceBirds?.primary,
+    ];
+    const terrainMeshes = [
+      ...collectStaticTerrainMeshes(hills?.mesh, transientExcludes),
+      ...collectStaticTerrainMeshes(hills?.skirt, transientExcludes),
+      ...collectStaticTerrainMeshes(harbor, transientExcludes),
+      ...collectStaticTerrainMeshes(citadelPack?.odysseyCitadel, transientExcludes),
+      ...collectStaticTerrainMeshes(moebiusRoot, transientExcludes),
+    ];
+    const planetV8 = createPlanetV8Runtime({
+      scene,
+      planet: ctx.planet,
+      radius: R,
+      seed: ctx.options?.planetV8?.seed ?? FEATURES.terrainSeed ?? 42,
+      features: planetFeatures,
+      terrainMeshes,
+    });
+
+    // 三重门编译锚点保留给门侧巡检逻辑，侦察队实际以门的 seatRoot
+    // 读取最新姿态，保证开发者菜单搬迁叹息之门后仍能正确赶赴目标。
+    const tripleGateLandmark = planetV8.compiler?.manifest?.find((entry) => entry.id === "triple-gate") || {
+      id: "triple-gate",
+      direction: [-0.46, 0.88, 0.09],
+      forward: [0, 0, 1],
+    };
+    const tripleGateSample = planetV8.compiler?.surface?.sample?.(tripleGateLandmark.direction) || null;
+
     const bookshopX = 11.5 * WORLD_SCALE;
     const bookshopZ = 5.5 * WORLD_SCALE;
     const bookshop = createCatalogObject("bookshop", {
@@ -139,27 +186,15 @@ export const messengerIslandScene = {
       bubblePods: moebiusPack.bubblePods,
       bookshop,
     });
-  // 主人验收 2026-08-29（最终）：弹唱老人**依靠在湖沼旁的半沉沉船船舷**——
-  // 右舷外 1.9，面朝船身微靠；E 键八音盒聆听与碰撞体随位。
+  // 弹唱老人：玩家指定的固定落点。
   {
-    const wreck = skyPack.swampWreck;
-    const elder = camp?.landmarks?.elder;
-    if (wreck && elder) {
-      elder.removeFromParent();
-      scene.add(elder);
-      // 主人验收 2026-08-29（最终）：老人站在**露出水面的船底板**上——
-      // 沉船倾覆后船底朝天，老人作为沉船子节点、抵消倾角与倍率后
-      // 世界正立站在底板上（背靠船壳、面朝船头）。
-      elder.removeFromParent();
-      wreck.add(elder);
-      elder.scale.setScalar(0.5); // 抵消沉船 scale 2，老人保持原尺寸
-      // 站在倾覆后露出水面的船底板上（船体局部 -Y 面，即仰面朝上的船底）
-      elder.position.set(1.1, -1.35, 0.2);
-      elder.quaternion.copy(wreck.quaternion).invert();
-      elder.rotateY(0.5);
-      elder.updateMatrixWorld(true);
-      var elderCol = camp?.colliders?.find((entry) => entry.kind === "elder");
-      if (elderCol) elderCol.position.copy(elder.position);
+    let elder = camp?.landmarks?.elder || null;
+    if (!elder) scene.traverse((o) => { if (!elder && o.name === "music-elder") elder = o; });
+    if (elder) {
+      const placed = placeElderAtWorldPoint(elder, scene, camp?.colliders);
+      console.log("[ELDER] 已放到指定落点 r=" + placed.radius.toFixed(1));
+    } else {
+      console.warn("[ELDER] 未找到 music-elder，老人未放置");
     }
   }
 

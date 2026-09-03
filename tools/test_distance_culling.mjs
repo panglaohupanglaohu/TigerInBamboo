@@ -94,10 +94,57 @@ function buildScene() {
   ok("高空：剔除半径随相机高度放大（航拍不丢远景）");
 }
 
+// --- 2b. 合并网格：原点远离几何体（mergeStaticGroup 的典型形态） ---------
+// 距离必须按几何包围球的世界中心算；按 mesh 原点算会让近在眼前的合并城体被误判成远物。
+{
+  const scene = new THREE.Scene();
+  // 几何体顶点就在相机正前方，但 mesh 原点留在星球中心 (0,0,0)
+  const geo = new THREE.IcosahedronGeometry(2, 1);
+  geo.translate(0, 160, -10);
+  const merged = new THREE.Mesh(geo, new THREE.MeshStandardMaterial());
+  merged.name = "citadel-merged-town";
+  scene.add(merged); // position 保持 (0,0,0)
+
+  const culling = createSceneDistanceCulling(THREE, {
+    scene, getCamera: () => camera, planetRadius: 160,
+    cullDistance: 20, altitudeFactor: 0, // 收紧剔距，逼出原点/中心的差异
+  });
+  culling.update(3);
+  culling.update(0.5);
+  assert.equal(
+    merged.visible,
+    true,
+    "合并网格：几何体近在眼前必须可见（距离要按包围球世界中心算，不是 mesh 原点）"
+  );
+  ok("合并网格：按几何包围球世界中心计算距离（原点远离几何体也不误剔）");
+}
+
+// --- 2c. maxObjectRadius：整块城体不参与小件剔除 -------------------------
+// 2026-08-29 回滚主因：旧值 25 相当于一整个城区，把合并城体/港口当小摆件剔掉。
+{
+  const scene = new THREE.Scene();
+  const big = new THREE.Mesh(new THREE.IcosahedronGeometry(12, 1), new THREE.MeshStandardMaterial());
+  big.name = "citadel-town-merged";
+  big.position.set(0, 160, -300); // 远处
+  scene.add(big);
+
+  const culling = createSceneDistanceCulling(THREE, {
+    scene, getCamera: () => camera, planetRadius: 160,
+    cullDistance: 150, altitudeFactor: 5,
+  });
+  culling.update(3);
+  culling.update(0.5);
+  assert.equal(culling.entryCount, 0, "半径 12 的城体不应进入小件剔除名单");
+  assert.equal(big.visible, true, "整块城体远景也不得整体消失");
+  ok("maxObjectRadius=8：合并城体/港口不再被当小摆件整体剔除");
+}
+
 // --- 3. 参数与开关 -------------------------------------------------------
-assert.equal(P.distanceCullV1, false, "2026-08-29 回滚：距离剔除默认关（远景误剔城堡/港口/送信人）");
+// 保持默认关闭：实测瓶颈在片元光照而非 draw call，且 8/29 曾因远景误剔被回滚，
+// 需浏览器目验后再由主人决定是否常开。
+assert.equal(P.distanceCullV1, false, "距离剔除默认关闭，待目验后再开");
 assert.equal(P.distanceCullMeters, 150, "基准剔距 150");
-ok("P.distanceCullV1 / underseaCullV1 默认关（代码保留，URL 可开）");
+ok("P.distanceCullV1 默认关闭（?distanceCullV1=1 手动开启验收）");
 
 // --- 4. 圣城/主页面集成 ---------------------------------------------------
 const citadelModule = await import(new URL("src/world/odysseyCitadel.js", BASE).href);

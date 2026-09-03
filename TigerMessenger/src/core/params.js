@@ -29,17 +29,34 @@ export const P_DEFAULTS = Object.freeze({
   ambientIntensity: 1.4, // 纯白强环境光：Toon 色块不掉死黑（1.2~1.5）
   // S18 夜港辉光（主人验收 2026-08-28 参考图夜港）：迷你 bloom 后处理，
   // 只让灯头/窗光/塔冠这类超亮自发光起晕；强度随夜权重（白天自动直出）。
-  // 回滚：P.nightBloomV1 = false 即回 renderer.render 直出。
+  // 开关就是开关：2026-09-02 删掉了「持续低帧就自动关 bloom」的降级器。
+  // 它只降不恢复（注释声称会恢复，代码里根本没有那条路径），而且会在
+  // 不知情时改变画面与性能对照基线。回滚：?nightBloomV1=0
   nightBloomV1: true,
   nightBloomStrength: 0.7,
   nightBloomThreshold: 0.72,
-  // 距离剔除（2026-08-28 卡顿治理）：小件静态装饰超出视距即不提交绘制；
-  // 小星球地平线天然遮蔽远处，肉眼几乎无感。回滚：P.distanceCullV1 = false。
-  // 2026-08-29 主人验收回滚：距离剔除/海面下剔除**默认关闭**——远景
-  // （>视距）会把半径 ≤25 的城体合并网格/港口/送信人整体误隐藏。
-  // 代码保留，需要时 ?distanceCullV1=1 / ?underseaCullV1=1 手动开启。
+  // 距离剔除：小件静态装饰超出视距即不提交绘制。
+  // 2026-09-02 保持**默认关闭**：已修复动态物快照、包围球中心、maxObjectRadius，
+  // 但实测表明瓶颈在片元光照（~85 盏灯）而非 draw call，本项收益小；
+  // 8/29 曾因远景误剔被主人回滚，需浏览器目验后再决定是否常开。
+  // 打开：?distanceCullV1=1
   distanceCullV1: false,
   distanceCullMeters: 150,
+  // 空闲灯剔除（2026-09-02）：Three 的 intensity=0 灯仍占 uniform 槽位并
+  // 参与逐片元循环。实测（A-B-A 对照，漂移 0.9%）：78 盏点光/聚光
+  // = 140ms / 62% 帧时间。强度≈0 的灯本来就不可见，隐藏零视觉变化。
+  // 回滚：?idleLightCullV1=0
+  idleLightCullV1: true,
+  // 固定容量灯池（2026-09-02）：常驻 8 盏 PointLight，按「亮度/距离²」
+  // 把它们移到最重要的灯位上。灯数恒定 → 永不触发材质重编译。
+  // 开启时接管所有点光，idleLightCullV1 自动让位（两者会抢 visible）。
+  // 回滚：?lightPoolV1=0
+  lightPoolV1: true,
+  lightPoolCapacity: 8,
+  // 海面巡航战船数量。实测（A-B-A，漂移 2.6%）：8 艘 = 1730 万三角形
+  // （全场 33%）/ 5.4ms。纯背景对象，主人 2026-09-02 定为 3 艘。
+  // 回滚：?oceanWarshipCount=8
+  oceanWarshipCount: 3,
 });
 
 /** 运行时可变参数（每帧被玩家/相机/交互读取） */
@@ -100,11 +117,7 @@ export const FEATURES = {
   lightingQuality: "medium",
   // K4 局部灯预算（render/lighting/localLight*）；null=跟随 V5，0/1 可显式覆盖
   localLightBudgetV1: null,
-  procgenEngineV1: false, // V7 引擎 debug API（procgen/）；生产画面保持 V6/legacy（V7-G17 阶段一）
-  wfcCastleV1: false, // V7 WFC 城堡求解；关=V6 constraintSolver 路径（阶段二启用）
-  marchingTerrainV1: false, // V7 Marching Cubes 地形；关=citadelRange @legacy（阶段三起）
   // V8 球形自然世界：默认关闭，只有 snapshot、视觉和性能门禁通过后才开启。
-  planetGraphV1: false,
   planetTerrainV1: false,
   curvedWaterV1: false,
   terrainSemanticShaderV1: false,
@@ -112,13 +125,12 @@ export const FEATURES = {
   oceanWorldRoutesV1: false,
   planetSurfaceRidersV1: false,
   legacyCanalWorld: true,
-  // 四季世界档（主人验收 2026-08-28 修订）：主页无显式 ?worldVersion 时
-  // 秋(9-11月)=C·V9、冬(12-2月)=B·V8；**春/夏保持 custom/legacy 海面夜港
-  // 现状**（A·V7 预设 = 旧运河世界、无海面，与主人认可的夜景不一致）。
-  // URL 显式 ?worldVersion 时永远优先。
-  seasonWorldV1: true,
-  // shot-harness / 主系统 A-B-C 展示版本；只描述运行时管线，不替代各 feature flag。
-  // 默认进入页必须是 custom/legacy：点 C 或带 worldVersion=v9 才进 V9。
+  // 地理季相外观开关（2026-09-01）：按地表纬度对地被/植被染色。回滚：?seasonBandsV1=0
+  seasonBandsV1: true,
+  // 运河交汇古堡构建开关（2026-09-01 B4）：默认开启，?canalJunctionV1=0 可关闭以诊断成本
+  canalJunctionV1: true,
+  // 主系统 A-B-C 展示版本；只描述运行时管线，不替代各 feature flag。
+  // 默认进入页永远是 custom/legacy，只有显式 ?worldVersion= 才切实验管线。
   planetPresentationVersion: "legacy",
   worldVersion: "custom",
   combatSeed: 1,
@@ -134,25 +146,7 @@ function readFlag(q, key) {
 }
 
 export const WORLD_VERSION_PRESETS = Object.freeze({
-  v7: Object.freeze({
-    procgenEngineV1: true,
-    wfcCastleV1: true,
-    marchingTerrainV1: true,
-    planetGraphV1: false,
-    planetTerrainV1: false,
-    curvedWaterV1: false,
-    terrainSemanticShaderV1: false,
-    cloudImpostorV1: false,
-    oceanWorldRoutesV1: false,
-    planetSurfaceRidersV1: false,
-    legacyCanalWorld: true,
-    planetPresentationVersion: "v7",
-  }),
   v8: Object.freeze({
-    procgenEngineV1: true,
-    wfcCastleV1: true,
-    marchingTerrainV1: true,
-    planetGraphV1: true,
     planetTerrainV1: true,
     curvedWaterV1: true,
     terrainSemanticShaderV1: true,
@@ -163,10 +157,6 @@ export const WORLD_VERSION_PRESETS = Object.freeze({
     planetPresentationVersion: "v8",
   }),
   v9: Object.freeze({
-    procgenEngineV1: true,
-    wfcCastleV1: true,
-    marchingTerrainV1: true,
-    planetGraphV1: true,
     planetTerrainV1: true,
     curvedWaterV1: true,
     terrainSemanticShaderV1: true,
@@ -187,38 +177,15 @@ export function applyWorldVersionPreset(version) {
   return true;
 }
 
-/**
- * 四季世界档：月份(0-11) → 管线版本。
- * 春(2-4)与夏(5-7) = "custom"（保持海面夜港现状——A·V7 预设是旧运河世界，
- * 无海面）、秋(8-10) = v9（C·V9）、冬(11,0,1) = v8（B·V8）。
- */
-export function seasonWorldVersion(month = new Date().getMonth()) {
-  const m = Number.isFinite(month) ? month : new Date().getMonth();
-  if (m >= 8 && m <= 10) return "v9";
-  if (m >= 2 && m <= 7) return "custom";
-  return "v8";
-}
-
 /** 从 URL 查询串读取开关（在场景构建之前调用一次） */
-export function applyUrlOverrides(search, { month } = {}) {
-  // 四季世界档：无显式 ?worldVersion 时按月份套 C·V9（秋）/ B·V8（冬）；
-  // 春夏保持 custom 海面世界。
-  const seasonQ = typeof search === "string" && search
-    ? new URLSearchParams(search.startsWith("?") ? search.slice(1) : search)
-    : new URLSearchParams();
-  const seasonFlag = readFlag(seasonQ, "seasonWorldV1");
-  if (seasonFlag !== null) FEATURES.seasonWorldV1 = seasonFlag;
-  if (FEATURES.seasonWorldV1 !== false && !seasonQ.get("worldVersion")) {
-    const seasonVersion = seasonWorldVersion(month ?? new Date().getMonth());
-    if (seasonVersion === "v9" || seasonVersion === "v8") {
-      applyWorldVersionPreset(seasonVersion);
-    } else {
-      // 春/夏：保持 custom/legacy 海面夜港现状（officialPagePlanetFeatures
-      // 会挂曲率海 + 海洋航线 + 只留水晶城运河）
-      FEATURES.worldVersion = "custom";
-      FEATURES.planetPresentationVersion = "legacy";
-    }
-  }
+export function applyUrlOverrides(search) {
+  // 世界档不再随日历漂移（2026-09-01 卡顿事故）：默认永远 custom，
+  // 只有显式 ?worldVersion=v7|v8|v9 才切实验管线。
+  // 事故经过：原 seasonWorldVersion() 按 new Date().getMonth() 选管线版本，
+  // 9/1 首次落进「秋」区间，代码一行未改却自动点燃了从未联调过的 V9 重型管线。
+  // 季节现由地理纬度驱动，见 world/seasonBands.js。
+  FEATURES.worldVersion = "custom";
+  FEATURES.planetPresentationVersion = "legacy";
   if (typeof search !== "string" || !search) return;
   const q = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
   const v2 = readFlag(q, "citadelCombatV2");
@@ -246,9 +213,10 @@ export function applyUrlOverrides(search, { month } = {}) {
   }
   // 性能系统 URL 开关（卡顿二分定位/回滚用）
   for (const [flag, target] of [
-    ["underseaCullV1", "P"],
     ["distanceCullV1", "P"],
     ["nightBloomV1", "P"],
+    ["idleLightCullV1", "P"],
+    ["lightPoolV1", "P"],
   ]) {
     const value = readFlag(q, flag);
     if (value !== null) {
@@ -256,19 +224,16 @@ export function applyUrlOverrides(search, { month } = {}) {
       else FEATURES[flag] = value;
     }
   }
+  const poolCap = parseInt(q.get("lightPoolCapacity"), 10);
+  if (Number.isFinite(poolCap) && poolCap >= 0) P.lightPoolCapacity = poolCap;
+  const warships = parseInt(q.get("oceanWarshipCount"), 10);
+  if (Number.isFinite(warships) && warships >= 0) P.oceanWarshipCount = warships;
   const localLight = readFlag(q, "localLightBudgetV1");
   if (localLight !== null) FEATURES.localLightBudgetV1 = localLight;
-  const procgen = readFlag(q, "procgenEngineV1");
-  if (procgen !== null) FEATURES.procgenEngineV1 = procgen;
-  const wfcCastle = readFlag(q, "wfcCastleV1");
-  if (wfcCastle !== null) FEATURES.wfcCastleV1 = wfcCastle;
-  const mcTerrain = readFlag(q, "marchingTerrainV1");
-  if (mcTerrain !== null) FEATURES.marchingTerrainV1 = mcTerrain;
   // Shot/QA convenience switch: enables the complete opt-in Planet V8
   // presentation stack without changing the legacy default scene.
   const planetOskar = readFlag(q, "planetOskarV1");
   if (planetOskar === true) {
-    FEATURES.planetGraphV1 = true;
     FEATURES.planetTerrainV1 = true;
     FEATURES.curvedWaterV1 = true;
     FEATURES.terrainSemanticShaderV1 = true;
@@ -279,7 +244,6 @@ export function applyUrlOverrides(search, { month } = {}) {
     }
   }
   for (const key of [
-    "planetGraphV1",
     "planetTerrainV1",
     "curvedWaterV1",
     "terrainSemanticShaderV1",
@@ -287,16 +251,20 @@ export function applyUrlOverrides(search, { month } = {}) {
     "oceanWorldRoutesV1",
     "planetSurfaceRidersV1",
     "legacyCanalWorld",
+    "seasonBandsV1",
+    "canalJunctionV1",
   ]) {
     const value = readFlag(q, key);
     if (value !== null) FEATURES[key] = value;
   }
-  // worldVersion 是主系统 A/B/C 的原子选择。放在逐项 flag 之后应用，确保
+  const canalJunctionShort = readFlag(q, "canalJunction");
+  if (canalJunctionShort !== null) FEATURES.canalJunctionV1 = canalJunctionShort;
+  // worldVersion 是主系统 B/C 的原子选择。放在逐项 flag 之后应用，确保
   // 切换不会留下上一版本残余参数；需要诊断单个 flag 时不传 worldVersion 即可。
   const worldVersion = q.get("worldVersion");
   if (worldVersion) applyWorldVersionPreset(worldVersion);
   const presentationVersion = q.get("planetPresentationVersion");
-  if (["v7", "v8", "v9"].includes(presentationVersion)) {
+  if (["v8", "v9"].includes(presentationVersion)) {
     FEATURES.planetPresentationVersion = presentationVersion;
   }
   // 注意 +null===0：缺省参数必须先判空，否则会把 seed 冲成 0
@@ -346,22 +314,7 @@ export function isLocalLightBudgetV1() {
 export function isAnyCitadelV4() {
   return isCitadelTownV4() || isCitadelTerrainUvV2() || isCitadelCombatV3();
 }
-/** V7 引擎 debug API（阶段一：只暴露调试入口，不改生产画面） */
-export function isProcgenEngineV1() {
-  return FEATURES.procgenEngineV1 === true;
-}
-/** V7 WFC 城堡求解（阶段二：可独立回滚到 V6 constraintSolver） */
-export function isWfcCastleV1() {
-  return FEATURES.wfcCastleV1 === true;
-}
-/** V7 Marching Cubes 地形（阶段三起：苔庭+L1 瀑布样片先行） */
-export function isMarchingTerrainV1() {
-  return FEATURES.marchingTerrainV1 === true;
-}
 
-export function isPlanetGraphV1() {
-  return FEATURES.planetGraphV1 === true;
-}
 export function isPlanetTerrainV1() {
   return FEATURES.planetTerrainV1 === true;
 }
@@ -380,6 +333,12 @@ export function isOceanWorldRoutesV1() {
 export function isPlanetSurfaceRidersV1() {
   return FEATURES.planetSurfaceRidersV1 === true;
 }
+export function isSeasonBandsV1() {
+  return FEATURES.seasonBandsV1 !== false;
+}
+export function isCanalJunctionV1() {
+  return FEATURES.canalJunctionV1 !== false;
+}
 export function getWorldVersion() {
   return FEATURES.worldVersion;
 }
@@ -387,7 +346,7 @@ export function getPlanetPresentationVersion() {
   return FEATURES.planetPresentationVersion;
 }
 
-/** A/B/C 当前世界。无 URL、无原子 preset 时返回 custom，绝不默认落到 V9。 */
+/** B/C 当前世界。无 URL、无原子 preset 时返回 custom，绝不默认落到 V9。 */
 export function resolveActiveWorldVersion({ search = "", features = FEATURES } = {}) {
   const q = new URLSearchParams(typeof search === "string" && search.startsWith("?") ? search.slice(1) : search);
   const fromUrl = q.get("worldVersion");
@@ -397,7 +356,6 @@ export function resolveActiveWorldVersion({ search = "", features = FEATURES } =
     if (features.planetPresentationVersion === "v9") return "v9";
     return "v8";
   }
-  if (features.procgenEngineV1 || features.wfcCastleV1 || features.marchingTerrainV1) return "v7";
   return "custom";
 }
 

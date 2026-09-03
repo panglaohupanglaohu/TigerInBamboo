@@ -55,19 +55,20 @@ assert.match(planetRuntime, /landformChain: isV9/);
 assert.match(planetRuntime, /if \(isV9\)/);
 assert.match(planetRuntime, /planet-sphere-baseline-v8/);
 assert.match(planetRuntime, /oskar-continuous-chain-v9/);
-// 现役入口必须随高山水平厚地台一起换戳，防止浏览器混用逐格曲率旧模块。
-assert.match(indexHtml, /main\.js\?v=20260827-oskar-cloud-all-heights-v1/);
+// 现役入口必须随 main.js 改动一起换戳，否则浏览器读旧缓存、改动看似没生效。
+assert.match(indexHtml, /main\.js\?v=20260903-decor-owns-cell-v1/);
 for (const source of citadelImporters) {
-  assert.match(source, /citadelTown\.js\?v=20260825-highland-obelisk-stone-v3/,
+  assert.match(source, /citadelTown\.js\?v=20260903-decor-owns-cell-v1/,
     "所有现役城堡入口必须请求同一个 citadelTown 版本，避免浏览器混用旧导出缓存");
 }
 
 assert.equal(resolveActiveWorldVersion({ search: "" }), "custom");
-assert.equal(resolveActiveWorldVersion({ search: "?worldVersion=v7" }), "v7");
+// v7 预设已删（2026-09-01）：未知版本必须回落 custom，不得报错或粘住
+assert.equal(resolveActiveWorldVersion({ search: "?worldVersion=v7" }), "custom");
 assert.equal(resolveActiveWorldVersion({ search: "?worldVersion=v9" }), "v9");
 assert.equal(resolveActiveWorldVersion({
   search: "",
   features: { worldVersion: "custom", planetTerrainV1: true, planetPresentationVersion: "legacy" },
 }), "v8", "enabling terrain without C must not land on V9");
 
-console.log("✅ Runtime shot harness: V7/V8/V9 A/B/C, live focus, lighting A/B, cache-coherent citadel modules and capture contract passed");
+console.log("✅ Runtime shot harness: B/C 两档、live focus、lighting A/B、cache-coherent citadel modules and capture contract passed");

@@ -24,6 +24,7 @@ import {
 } from "../waterV8/officialOcean.js";
 import { buildCloudImpostorAtlas } from "../../render/clouds/impostorAtlasBuilder.js";
 import { createCloudImpostorSystem } from "../../render/clouds/cloudImpostorSystem.js";
+import { remapCloudClustersToSceneTerrain, relocateCloudClustersToRidges } from "./cloudTerrainRemap.js";
 import { createSemanticTerrainMaterial } from "../../render/terrain/semanticTerrainMaterial.js";
 import { createCurvedWaterMaterial, createCurvedLakeMaterial } from "../../render/water/curvedWaterMaterial.js?v=20260827-terrain-v11";
 import { paintPlanetOceanBed } from "../planet.js";
@@ -68,7 +69,7 @@ function waterMesh(data, material) {
   return new THREE.Mesh(geometry, material);
 }
 
-export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed = 1, features = {} } = {}) {
+export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed = 1, features = {}, terrainMeshes = null } = {}) {
   const enabledTerrain = features.planetTerrainV1 ?? isPlanetTerrainV1();
   const enabledWater = features.curvedWaterV1 ?? isCurvedWaterV1();
   const enabledClouds = features.cloudImpostorV1 ?? isCloudImpostorV1();
@@ -208,6 +209,32 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
 
   if (enabledClouds && state.compiler?.clouds) {
     const clusters = state.compiler.clouds;
+    // 云贴地重投影（方案 A）：必须在 createCloudImpostorSystem 构建 GPU buffer 之前
+    // 改写 JS 端 clusters——buffer 建完之后再改数据不会生效。地形清单由调用方在
+    // 本函数调用前构建完成（messengerIsland 已把本调用挪到 harbor/moebius/citadel 之后）。
+    if (terrainMeshes?.length) {
+      const cloudSeaLevel = (enabledWater && enabledTerrain)
+        ? 0 // v8 弯曲水面贴半径球面
+        : (features.oceanSeaLevel ?? OFFICIAL_OCEAN_SEA_LEVEL);
+      // 阶段 2A（先于 remap）：按真实脊线重摆/筛选云实例——先决定“云该出现在哪”，
+      // 再由下方 remap 把高度贴到新位置的真实地表。参数全部可经 features 覆盖调参。
+      relocateCloudClustersToRidges(clusters, {
+        terrainMeshes,
+        radius,
+        seaLevel: cloudSeaLevel,
+        ridgeWeight: features.cloudRidgeWeight ?? 1,
+        heightWeight: features.cloudHeightWeight ?? 0.6,
+        heightRef: features.cloudHeightRef ?? 6,
+        canopyWeight: features.cloudCanopyWeight ?? 0, // 阶段 2B 接入植被注册表后启用
+        scoreThreshold: features.cloudRidgeThreshold ?? 0.35,
+        candidateCount: features.cloudRidgeCandidates ?? 12,
+      });
+      remapCloudClustersToSceneTerrain(clusters, {
+        terrainMeshes,
+        radius,
+        seaLevel: cloudSeaLevel,
+      });
+    }
     state.clouds = { atlas: buildCloudImpostorAtlas(), clusters };
     state.clouds.renderer = createCloudImpostorSystem(THREE, root, state.clouds.clusters, { atlas: state.clouds.atlas, radius });
     trackLogicalResource(state.resourceRegistry, "cloud", `planet-${presentationVersion}`);

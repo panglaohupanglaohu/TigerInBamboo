@@ -41,16 +41,9 @@ export const LAMP_COLOR_LOW = 0xff6f32;   // 水岸/前缘：珊瑚深橙
 export const LAMP_COLOR_MID = 0xff8d42;   // 中城：火焰橙
 export const LAMP_COLOR_HIGH = 0xffad64;  // 后排高处：柔暖黄
 export const LAMP_COLOR_BEACON = 0xffc979; // 塔楼暖光冠
-export const WINDOW_SPARK_COLOR = 0xff9d55;
-/** 参考图双色温：低层暖橙窗、高层冷蓝窗（上塔被月光/冷光洗亮） */
-export const WINDOW_SPARK_COOL = 0x7694e6;
-/** 山壁与上塔使用更深的钴蓝，不使用会把白石洗成灰白的浅天蓝。 */
-export const COOL_ACCENT_COLOR = 0x4e72d8;
 /** 湖面冷底光：只做宽而柔的低强度色域，暖倒影仍是画面焦点。 */
 export const WATER_COOL_WASH_COLOR = 0x3158b2;
 export const HIGHLAND_LAMP_BASE_Y = 4.95; // = HIGHLAND_TOWNSCAPER_BASE_Y
-/** 立面窗光：最多点亮的窗数（低层窗海的量级） */
-export const WINDOW_SPARK_MAX = 90;
 
 function hash01(n) {
   let x = Math.imul(n ^ (n >>> 16), 0x45d9f3b);
@@ -125,51 +118,6 @@ export function highlandLampLayout({ terrainHeightAt } = {}) {
   });
 }
 
-/**
- * 立面窗光（参考图：散布的暖色小窗，低层密、高层稀）。
- * 从 Townscaper layout 的 terraces[0].levels ASCII 扫 +z 朝向立面格，
- * 确定性哈希抽取子集；坐标 = citadelGridCellCenter + 基面高度。
- */
-export function highlandWindowSparks(layout, {
-    maxCount = WINDOW_SPARK_MAX,
-    cellSize = 2.0,
-    cellHeight = 2.0,
-    gridSize = 25,
-    baseY = HIGHLAND_LAMP_BASE_Y,
-  } = {}) {
-  const levels = layout?.terraces?.[0]?.levels || [];
-  const charAt = (ix, iy, iz) => (levels[iy]?.[iz] || ".")[ix] || ".";
-  const sparks = [];
-  if (!levels.length) return sparks;
-  for (let iy = 0; iy < levels.length; iy++) {
-    for (let iz = 0; iz < gridSize; iz++) {
-      for (let ix = 0; ix < gridSize; ix++) {
-        if (charAt(ix, iy, iz) === ".") continue;
-        if (charAt(ix, iy, iz + 1) !== ".") continue; // 只取 +z 朝向立面
-        const roof = charAt(ix, iy + 1, iz) !== ".";
-        if (roof) continue; // 屋顶墙面无窗
-        // 低层窗海、高层零星（参考图：下城窗海、上塔零星）
-        const keep = 0.12 + (iy <= 2 ? 0.3 : iy <= 4 ? 0.12 : 0.05);
-        if (hash01(ix * 7 + iz * 131 + iy * 3109 + 17) > keep) continue;
-        const center = {
-          x: (ix - (gridSize - 1) / 2) * cellSize,
-          y: baseY + (iy + 0.5) * cellHeight,
-          z: (iz - (gridSize - 1) / 2) * cellSize,
-        };
-        sparks.push({
-          id: `window:${ix},${iy},${iz}`,
-          position: [center.x, center.y, center.z + cellSize / 2 + 0.06],
-          floor: iy,
-          // 双色温（参考图）：低层暖橙、高层冷蓝、中层混合
-          tone: iy <= 3 ? WINDOW_SPARK_COLOR : iy >= 6 ? WINDOW_SPARK_COOL : hash01(ix * 2917 + iz * 613 + 41) > 0.5 ? WINDOW_SPARK_COLOR : WINDOW_SPARK_COOL,
-        });
-        if (sparks.length >= maxCount) return sparks;
-      }
-    }
-  }
-  return sparks;
-}
-
 function fnv1a(bytes) {
   let h = 0x811c9dc5;
   for (let i = 0; i < bytes.length; i++) {
@@ -226,13 +174,10 @@ export function createHighlandLightVolumes(THREE_, parent, {
   lamps,
   getTimeOfDay = () => 0.5,
   terrainHeightAt,
-  townLayout,
   /** 海面在城堡局部坐标的 Y（岸湾灯倒影光斑贴水面用） */
   waterLocalY = 4.92,
   /** 球面湖泊的局部权威高度；提供时倒影逐顶点贴合曲面。 */
   waterHeightAt = null,
-  /** 冷蓝辉光冠（参考图：上塔被冷光洗亮）——独立于暖灯预算 */
-  coolAccents = [],
 } = {}) {
   if (!THREE_?.Group || !parent) throw new Error("light volumes require THREE and parent");
   const lampList = lamps ?? highlandLampLayout({ terrainHeightAt });
@@ -431,44 +376,6 @@ export function createHighlandLightVolumes(THREE_, parent, {
     }
   });
 
-  // 冷蓝辉光冠（参考图：上塔/山肩被深钴蓝洗亮）：纯光壳，不加点光预算。
-  coolAccents.forEach((accent, index) => {
-    const holder = new THREE.Group();
-    holder.name = `highland-cool-accent-${index}`;
-    holder.position.set(accent.x, accent.y, accent.z);
-    const accentRadius = (accent.radius ?? 7) * LIGHT_ORB_RADIUS_SCALE;
-    const shell = new THREE.Mesh(
-      new THREE_.IcosahedronGeometry(accentRadius, 1),
-      shellMaterial.clone()
-    );
-    shell.material.uniforms.uRadius.value = accentRadius;
-    shell.material.uniforms.uColor.value = new THREE_.Color(accent.color ?? COOL_ACCENT_COLOR);
-    if (THREE_.Data3DTexture) {
-      const bake = bakeLightVolume({ radius: accentRadius });
-      const tex = new THREE_.Data3DTexture(new Float32Array(bake.data), bake.dims[0], bake.dims[1], bake.dims[2]);
-      tex.format = THREE_.RedFormat;
-      tex.type = THREE_.FloatType;
-      tex.minFilter = THREE_.LinearFilter;
-      tex.magFilter = THREE_.LinearFilter;
-      tex.unpackAlignment = 1;
-      tex.needsUpdate = true;
-      shell.material.uniforms.uVolume = { value: tex };
-      shell.userData.volumeTexture = tex;
-    }
-    shell.name = "cool-accent-shell";
-    shell.renderOrder = 7;
-    holder.add(shell);
-    // 性能（2026-08-28）：冷蓝冠只保留光壳，不再挂 PointLight
-    group.add(holder);
-    entries.push({
-      lamp: { phase: index * 0.37 + 0.5, height: accent.y },
-      holder,
-      shell,
-      light: null,
-      dimScale: Number.isFinite(accent.intensityScale) ? accent.intensityScale : accent.dim ? 0.7 : 1,
-    });
-  });
-
   // 一块很低强度的深钴蓝水域底光，把冷山体与湖面连成同一夜景；边缘
   // 同样由 shader 羽化，因此不会重新制造此前已经移除的白色硬条。
   const coolWashGeometry = new THREE_.PlaneGeometry(38, 24, 4, 14);
@@ -486,35 +393,7 @@ export function createHighlandLightVolumes(THREE_, parent, {
   reflectionGroup.userData.coolWashCount = 1;
   group.add(reflectionGroup);
 
-  // 立面窗光（参考图：低层窗海）。InstancedMesh 单 draw call + 逐实例
-  // 双色温（低暖高冷）；独立视觉层，不计入道具统计。
-  const sparks = townLayout ? highlandWindowSparks(townLayout) : [];
-  const sparkMaterial = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0,
-    depthWrite: false,
-  });
-  const sparkGeometry = new THREE.PlaneGeometry(0.42, 0.6);
-  if (sparks.length) {
-    const instanced = new THREE_.InstancedMesh(sparkGeometry, sparkMaterial, sparks.length);
-    instanced.name = "highland-window-sparks";
-    const matrix = new THREE_.Matrix4();
-    const sparkColor = new THREE_.Color();
-    sparks.forEach((spark, sparkIndex) => {
-      matrix.makeTranslation(spark.position[0], spark.position[1], spark.position[2]);
-      instanced.setMatrixAt(sparkIndex, matrix);
-      instanced.setColorAt(sparkIndex, sparkColor.setHex(spark.tone ?? WINDOW_SPARK_COLOR));
-    });
-    instanced.instanceMatrix.needsUpdate = true;
-    if (instanced.instanceColor) instanced.instanceColor.needsUpdate = true;
-    instanced.renderOrder = 6;
-    group.add(instanced);
-    group.userData.windowSparkCount = sparks.length;
-  }
-
   group.userData.lampCount = lampList.length;
-  group.userData.coolAccentCount = coolAccents.length;
   group.userData.bakeHashes = bakes.map((bake) => bake.hash);
   group.userData.volumeShellCount = entries.length;
   group.userData.realLightCount = entries.filter((entry) => entry.light).length;
@@ -525,8 +404,6 @@ export function createHighlandLightVolumes(THREE_, parent, {
     const time = Number.isFinite(t) ? t : 0;
     nightWeight = nightWeightAt(Number.isFinite(forcedTimeOfDay) ? forcedTimeOfDay : getTimeOfDay());
     headMaterial.emissiveIntensity = nightWeight * 1.35;
-    sparkMaterial.opacity = nightWeight * 0.95;
-    sparkMaterial.visible = nightWeight > 0.004;
     for (const entry of entries) {
       // 慢呼吸：≤ LAMP_BREATH_MAX，周期秒级——「somewhat still」
       const breathe = 1 - LAMP_BREATH_MAX * (0.5 + 0.5 * Math.sin(time * (Math.PI * 2 / LAMP_BREATH_PERIOD) + entry.lamp.phase * Math.PI * 2));
@@ -565,10 +442,8 @@ export function createHighlandLightVolumes(THREE_, parent, {
     }
     poleMaterial.dispose();
     headMaterial.dispose();
-    sparkGeometry.dispose();
-    sparkMaterial.dispose();
     group.removeFromParent();
   };
 
-  return { group, lamps: lampList, bakes, sparks, update, dispose, get nightWeight() { return nightWeight; } };
+  return { group, lamps: lampList, bakes, update, dispose, get nightWeight() { return nightWeight; } };
 }

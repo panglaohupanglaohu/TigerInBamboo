@@ -26,7 +26,7 @@ import {
   resolveCitadelDropTarget,
   citadelGridCellCenter,
   citadelLevelsKey,
-} from "../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+} from "../world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
 import {
   citadelLevelsSaveKey,
   loadCitadelLevelsSave,
@@ -131,6 +131,21 @@ export function highlandUnitAtMapPoint(layout, x, y) {
   return layout?.cells?.find((cell) =>
     x >= cell.x && x < cell.x + cell.width && y >= cell.y && y < cell.y + cell.height
   )?.unit || null;
+}
+
+/**
+ * 存档写失败的真实原因。旧提示一律说「浏览器存档不可用」，
+ * 但绝大多数情况其实是配额写满（城堡网格 JSON 很大），两者处理方式完全不同。
+ */
+export function describeStorageWriteError(error) {
+  const name = error?.name || "";
+  const quota = name === "QuotaExceededError"
+    || name === "NS_ERROR_DOM_QUOTA_REACHED"
+    || error?.code === 22
+    || error?.code === 1014;
+  if (quota) return "保存失败：浏览器存档已满，请先导出备份再清理旧存档";
+  if (name === "SecurityError") return "保存失败：无痕模式或站点被禁止使用本地存档";
+  return `保存失败：${error?.message || name || "未知原因"}`;
 }
 
 /**
@@ -239,6 +254,8 @@ export function createCitadelEditorPanel({
   onOpen = () => {},
   onClose = () => {},
   getInstanceId = () => null,
+  /** 取当前城堡容器；保存时要读它的 lastIncrementalEdit 快照 */
+  getCitadelTarget = () => null,
   getTargets = () => [], // [{ id, name }]，id=null 为高山圣城默认实例
   onTargetChange = () => {},
   getLatestDesign = () => false,
@@ -427,6 +444,11 @@ export function createCitadelEditorPanel({
 
   /** Delete one tower/tree, persist immediately, and hot-rebuild the 3D group. */
   function deleteTerrainObject(id) {
+    // 木马常驻：删了也会被装载时补回，不如当场拒绝，免得 UI 说谎
+    if (terrainObjects.find((object) => object.id === id)?.type === "trojanHorse") {
+      toast("木马常驻城堡前，不可删除（可拖拽平移 / 角度°旋转）", 1.8);
+      return false;
+    }
     const result = removeCitadelTerrainObjectPlacement(terrainObjects, id);
     if (!result.removed) return false;
     terrainObjects = result.objects;
@@ -954,8 +976,9 @@ export function createCitadelEditorPanel({
       latestDirty = false;
       setLatestSaveState();
       toast("已保存高山圣城彩色地图", 1.6);
-    } catch {
-      toast("保存失败：浏览器存档不可用", 2.0);
+    } catch (error) {
+      console.warn("[citadel-editor] 保存失败：", error);
+      toast(describeStorageWriteError(error), 2.6);
     }
   }
   latestSaveBtn?.addEventListener("click", saveLatestUnits);
@@ -1782,7 +1805,8 @@ export function createCitadelEditorPanel({
       // One terrain object per immediate footprint; replacing a nearby marker
       // avoids interpenetrating towers/trees on the small upper terraces.
       terrainObjects = terrainObjects.filter((object) =>
-        object.terraceIndex !== activeTerrace
+        object.type === "trojanHorse"
+        || object.terraceIndex !== activeTerrace
         || Math.hypot(object.x - localX, object.z - localZ) > 4
       );
       terrainObjects.push(placement);
@@ -1986,8 +2010,9 @@ export function createCitadelEditorPanel({
       persistTerrain();
       // 瞭望塔 / 参天树 / 木马
       persistTerrainObjects();
-    } catch {
-      toast("保存失败：浏览器存档不可用", 2.0);
+    } catch (error) {
+      console.warn("[citadel-editor] 保存失败：", error);
+      toast(describeStorageWriteError(error), 2.6);
       return;
     }
     dirty = false;

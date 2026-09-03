@@ -12,6 +12,8 @@
 import * as THREE from "three";
 import { toonMat, addOutline, getToonGradient, INK_COLOR } from "../assets/toon.js";
 import { quatYToDir } from "./sphereMath.js";
+import { seasonTint, quantizeHex } from "./seasonPalette.js";
+import { isSeasonBandsV1 } from "../core/params.js";
 
 /* ---------------- 三色插画绿 ---------------- */
 const MOSS_FRESH = 0x8ae234; // 鲜嫩黄绿（丘顶受光）
@@ -233,12 +235,16 @@ export function buildImpastoMossyGround(opts = {}) {
     return base + bump(x, z) * edgeKeep * terrainHeightScale;
   };
 
+  const useSeason = isSeasonBandsV1();
+  const tintGround = (base) =>
+    useSeason ? quantizeHex(seasonTint(base, group.position, "ground"), 16) : base;
+
   const groundPalette = {
-    low: palette?.low ?? TERRAIN_LOW,
-    ink: palette?.ink ?? MOSS_INK,
-    emerald: palette?.emerald ?? MOSS_EMERALD,
-    fresh: palette?.fresh ?? MOSS_FRESH,
-    edge: palette?.edge ?? palette?.emerald ?? MOSS_EMERALD,
+    low: tintGround(palette?.low ?? TERRAIN_LOW),
+    ink: tintGround(palette?.ink ?? MOSS_INK),
+    emerald: tintGround(palette?.emerald ?? MOSS_EMERALD),
+    fresh: tintGround(palette?.fresh ?? MOSS_FRESH),
+    edge: tintGround(palette?.edge ?? palette?.emerald ?? MOSS_EMERALD),
   };
   const cLow = new THREE.Color(groundPalette.low);
   const cInk = new THREE.Color(groundPalette.ink);

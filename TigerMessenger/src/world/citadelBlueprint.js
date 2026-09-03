@@ -12,7 +12,7 @@ import {
   CITADEL_TERRACE_COUNT,
   CITADEL_TOWN_SPEC,
   normalizeCitadelTerraceLayout,
-} from "./citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+} from "./citadelTown.js?v=20260903-column-coherent-jitter-v1";
 import { hashHex } from "../core/rng.js";
 
 export const CITADEL_BLUEPRINT_VERSION = 1;
@@ -26,6 +26,29 @@ export const CITADEL_BUILD_STAGES = Object.freeze([
 ]);
 
 const TERRAIN_OBJECT_TYPES = new Set(["watchtower", "elderTree", "trojanHorse"]);
+
+/** 城堡正门前、面朝湾面。 */
+export const DEFAULT_TROJAN_HORSE = Object.freeze({
+  id: "default-trojan-horse",
+  type: "trojanHorse",
+  terraceIndex: 0,
+  x: 0,
+  z: 6,
+  yaw: 0.6,
+  scale: 0.9,
+  grounded: false,
+});
+
+/**
+ * 木马常驻城堡前：存档只能改它的位置，不能把它删掉。
+ * 旧规则是「存档非空就完全以存档为准」，结果在编辑器里摆一棵古树存档，
+ * 木马就被整个挤掉了（2026-09-02 主人实测）。
+ */
+export function withResidentTrojanHorse(objects) {
+  const list = Array.isArray(objects) ? objects.filter(Boolean) : [];
+  if (list.some((item) => item?.type === "trojanHorse")) return list;
+  return [...list, { ...DEFAULT_TROJAN_HORSE }];
+}
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));

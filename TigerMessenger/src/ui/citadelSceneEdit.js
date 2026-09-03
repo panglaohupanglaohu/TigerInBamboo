@@ -14,7 +14,7 @@ import {
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
   citadelPaletteIndexOfChar,
-} from "../world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+} from "../world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
 
 /** Resolve a ray hit on any nested mesh/outline back to its tower/tree root. */
 export function citadelTerrainObjectFromHits(hits = []) {

@@ -48,12 +48,13 @@ globalThis.document = {
 globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
 
 const THREE = await import(new URL("vendor/three.module.js", BASE).href);
+const lightVolumes = await import(new URL("src/render/lighting/highlandLightVolumes.js", BASE).href);
 const {
   LIGHT_VOLUME_GRID, LAMP_MIN_RADIUS, LAMP_BREATH_MAX, REAL_LIGHT_BUDGET,
-  WINDOW_SPARK_MAX, HIGHLAND_LAMP_COLOR, COOL_ACCENT_COLOR, WATER_COOL_WASH_COLOR,
-  falloff01, highlandLampLayout, highlandWindowSparks, bakeLightVolume, nightWeightAt,
+  HIGHLAND_LAMP_COLOR, WATER_COOL_WASH_COLOR,
+  falloff01, highlandLampLayout, bakeLightVolume, nightWeightAt,
   createHighlandLightVolumes,
-} = await import(new URL("src/render/lighting/highlandLightVolumes.js", BASE).href);
+} = lightVolumes;
 const { highlandTerrainSurfaceHeight, highlandCurvedLakeSurfaceHeight, HIGHLAND_HARBOR_COVE } = await import(
   new URL("src/world/highlandCitadelDesign.js", BASE).href
 );
@@ -141,28 +142,13 @@ assert.ok(nightWeightAt(0.75) > 0.5 && nightWeightAt(0.75) < 1, "暮色爬升中
 assert.ok(nightWeightAt(0.28) < 1, "晨光回落");
 ok("夜权重：正午 0 / 暮色爬升 / 午夜 1");
 
-// --- 4b. 立面窗光：+z 立面、低层密、确定性 -------------------------------
-const fakeLayout = { terraces: [{ levels: [
-  ".........................",
-  ".A.A.............A...A...",
-  ".........................",
-  ".........................",
-] }] };
-const sparks = highlandWindowSparks(fakeLayout);
-assert.ok(sparks.length >= 1 && sparks.length <= WINDOW_SPARK_MAX, `窗光 ${sparks.length}`);
-for (const spark of sparks) {
-  const [gx, gy, gz] = spark.id.match(/window:(\d+),(\d+),(\d+)/).slice(1).map(Number);
-  assert.equal(charAtFake(fakeLayout, gx, gy, gz + 1), ".", "窗朝空旷 +z");
-  assert.equal(charAtFake(fakeLayout, gx, gy + 1, gz), ".", "窗在有顶墙面的顶层格");
-  const expectedZ = (gz - 12) * 2 + 1 + 0.06;
-  assert.ok(Math.abs(spark.position[2] - expectedZ) < 1e-6, `窗贴立面外沿 ${spark.position[2]} vs ${expectedZ}`);
-  assert.equal(spark.floor, gy, "floor 一致");
-}
-function charAtFake(layout, ix, iy, iz) {
-  return (layout.terraces[0].levels[iy]?.[iz] || ".")[ix] || ".";
-}
-assert.deepEqual(sparks, highlandWindowSparks(fakeLayout), "窗光确定性");
-ok(`立面窗光：+z 立面抽取，低层权重高，确定性（示例 ${sparks.length} 窗）`);
+// --- 4b. 窗光已废除 -------------------------------------------------
+// 2026-09-02：立面窗光曾是独立一层贴片，在构建期烤死位置；玩家在编辑器
+// 里删掉建筑单元后它们原地不动，变成悬空光片。现改为唯一真相源：
+// 窗光就是建筑单元自己的窗，灯光模块不再平行造一套。
+assert.equal(typeof lightVolumes.highlandWindowSparks, "undefined",
+  "平行的立面窗光系统已删除，不得复活");
+ok("立面窗光已废除（窗光唯一来源：建筑单元）");
 
 // --- 5. 挂载：灯杆/灯头/体积壳 + 预算内的真实点光源 ---------------------
 const parent = new THREE.Group();
@@ -262,39 +248,17 @@ const castle = citadelModule.buildOdysseyCitadel({ latestDesign: true, place: fa
 const mounted = castle.getObjectByName("highland-light-volumes");
 assert.ok(mounted, "圣城已挂光体积灯组");
 assert.equal(mounted.userData.kind, "highland-light-volumes");
-assert.equal(mounted.userData.realLightCount, 4, "暖灯点光 4 盏（2026-08-28 性能 8→4），冷蓝域纯壳 0 盏");
+assert.equal(mounted.userData.realLightCount, 4, "暖灯点光 4 盏（2026-08-28 性能 8→4）");
 const coolMounted = mounted.children.filter((holder) => (holder.name || "").startsWith("highland-cool-accent"));
-assert.equal(coolMounted.length, 5, "3 座塔冠 + 2 侧山肩冷蓝光域");
-for (const [index, holder] of coolMounted.entries()) {
-  const shell = holder.children.find((c) => c.name === "cool-accent-shell");
-  assert.ok(shell, "冷蓝光域存在");
-  assert.ok(shell.material.uniforms.uColor.value.b > shell.material.uniforms.uColor.value.r, "冷蓝光域保持钴蓝色相");
-  if (index === 0) assert.notEqual(shell.material.uniforms.uColor.value.getHex(), 0x9fc8ff, "不再使用会洗白石材的浅天蓝");
-  assert.ok(shell.geometry.parameters.radius <= 11, `冷蓝光域壳仍按 0.5 缩放 r=${shell.geometry.parameters.radius}`);
-  assert.ok(!holder.children.some((c) => c.name === "cool-accent-light"), "冷蓝冠纯壳无点光（性能）");
-}
-assert.equal(COOL_ACCENT_COLOR, 0x4e72d8, "默认冷光为深钴蓝");
+assert.equal(coolMounted.length, 0, "主人 2026-09-02：5 个冷蓝辉光冠已删除");
 // 壳体细分 2→1（性能）：单壳面数 ≤ 96
 for (const shell of shells) {
   assert.ok(shell.geometry.attributes.position.count / 3 <= 96, `光球壳三角数 ${shell.geometry.attributes.position.count / 3} ≤ 96`);
 }
 assert.ok(typeof mounted.update === "function", "圣城 update 链可驱动灯组");
-const sparkGroup = mounted.getObjectByName("highland-window-sparks");
-assert.ok(sparkGroup?.isInstancedMesh, "立面窗光层已挂载（InstancedMesh 单 draw call）");
-assert.ok(sparkGroup.count >= 20 && sparkGroup.count <= WINDOW_SPARK_MAX, `圣城窗光 ${sparkGroup.count} 扇`);
-// 复核窗位全部落在真实立面前沿：直接由同一 layout 重算比对
-const recomputed = highlandWindowSparks(castle.userData.townSpec);
-assert.equal(sparkGroup.count, recomputed.length, "窗位与 layout 复算一致");
-const expectedPositions = new Set(recomputed.map((spark) => spark.position.map((v) => v.toFixed(2)).join(",")));
-const m4 = new THREE.Matrix4();
-for (let i = 0; i < sparkGroup.count; i++) {
-  sparkGroup.getMatrixAt(i, m4);
-  const key = [m4.elements[12], m4.elements[13], m4.elements[14]].map((v) => v.toFixed(2)).join(",");
-  assert.ok(expectedPositions.has(key), `窗位合法 ${key}`);
-}
-mounted.update(0);
-assert.equal(sparkGroup.material.opacity, 0, "正午窗光熄灭");
-ok(`圣城集成：${mounted.children.length} 灯组 + ${sparkGroup.count} 扇立面窗光（单 draw call），全部贴真实立面`);
+assert.equal(mounted.getObjectByName("highland-window-sparks"), undefined,
+  "平行窗光层不得再挂载（删建筑后会变成悬空光片）");
+ok(`圣城集成：${mounted.children.length} 灯组，无平行窗光层`);
 
 console.log(`\n✅ S18 light volume: ${lamps.length} 灯 5³ 体积烘焙 + 软落壳 + ${Math.min(REAL_LIGHT_BUDGET, lamps.length)} 盏预算点光源 + 立面窗光，参考图夜港光照全过`);
 console.log(`全部通过：${pass} 组验收`);

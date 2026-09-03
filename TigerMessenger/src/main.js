@@ -6,6 +6,8 @@
 import { Timer } from "three/addons/misc/Timer.js";
 import * as THREE from "three";
 import { createStage } from "./core/stage.js";
+import { createPerfProbe } from "./tools/perfProbe.js";
+import { createSceneCensus } from "./tools/sceneCensus.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js";
 import { createDevPanel } from "./core/devPanel.js";
@@ -26,18 +28,21 @@ import {
   trimCitadelTownToTerrain,
   citadelTerrainCellSupported,
   updateCitadelNightWindows,
+  syncCitadelWindowInstances,
 } from "./world/odysseyCitadel.js";
 import { collectInfiltrationThreats } from "./world/citadelTerraceBirds.js";
 import {
   CITADEL_TOWN_SPEC,
   HIGHLAND_TOWNSCAPER_TOWN_SPEC,
   citadelGridCellCenter,
-} from "./world/citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+} from "./world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P, FEATURES, isOskLightingV1, isVoxelAoV1, isLocalLightBudgetV1 } from "./core/params.js";
 import { createMiniBloom } from "./render/postprocessing/miniBloom.js";
 import { nightWeightAt } from "./render/lighting/highlandLightVolumes.js";
 import { createSceneDistanceCulling } from "./core/sceneDistanceCulling.js";
+import { createIdleLightCulling } from "./render/lighting/idleLightCulling.js";
+import { createLightPool } from "./render/lighting/lightPool.js";
 import { createLightingDirector } from "./render/lighting/lightingDirector.js";
 import { setLightingPresetOverrides } from "./render/lighting/lightingState.js";
 import {
@@ -57,6 +62,8 @@ import { createScoutAircraftRide } from "./player/scoutAircraftRide.js";
 import { createBubblePodRide } from "./player/bubblePodRide.js";
 import { createBoatRide } from "./player/boatRide.js";
 import { createWeatherSystem } from "./world/weather.js";
+import { seasonAt } from "./world/seasonBands.js";
+import { createSeasonWeatherBias } from "./world/seasonWeatherBias.js";
 import { createElderMusicInteraction } from "./world/elderMusic.js";
 import { createFoxNpc } from "./world/foxNpc.js";
 import {
@@ -109,6 +116,19 @@ import { mergeColliders, updateScenes } from "./scenes/sceneApi.js";
 
 // ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
+// 性能探针（F10 显隐 / F9 截图）。performance.now() 以页面导航为起点，
+// 首帧读数即完整 boot 耗时，无需额外基准。
+const perfProbe = createPerfProbe(renderer);
+// 固定容量灯池：接管全部点光，常驻 lightPoolCapacity 盏代理灯追随最重要的灯位。
+// 它与 idleLightCulling 会争抢同一批灯的 visible，所以二选一。回滚：?lightPoolV1=0
+const lightPool = P.lightPoolV1 === false
+  ? null
+  : createLightPool({ scene, getCamera: () => camera, capacity: P.lightPoolCapacity ?? 8 });
+// 空闲灯剔除：Three 的 intensity=0 灯仍占 uniform 槽位并参与逐片元循环，
+// 实测 78 盏点光/聚光占 140ms / 62% 帧时间。回滚：?idleLightCullV1=0
+const idleLightCulling = lightPool || P.idleLightCullV1 === false
+  ? null
+  : createIdleLightCulling({ scene });
 // S18 夜港辉光：迷你 bloom（只让灯头/窗光/塔冠这类超亮自发光起晕；
 // 强度乘夜权重——白天自动直出。回滚：P.nightBloomV1 = false）。
 // S18 卡顿治理：小件静态装饰距离剔除（地平线天然遮蔽远处）
@@ -128,23 +148,6 @@ const nightBloom = P.nightBloomV1
       nightWeightAt,
     })
   : null;
-// 帧率自适应质量档（卡顿兜底）：持续 <26fps 4 秒 → 自动关闭 bloom（最贵的
-// 后处理）；回升到 34fps 以上 6 秒 → 恢复。只动 bloom，不碰场景内容。
-var bloomFpsSamples = [];
-var bloomDisabled = false;
-function governBloomByFps(now) {
-  if (!nightBloom || bloomDisabled) return;
-  bloomFpsSamples.push(now);
-  if (bloomFpsSamples.length < 120) return;
-  var span = (bloomFpsSamples[bloomFpsSamples.length - 1] - bloomFpsSamples[0]) / 1000;
-  var fps = (bloomFpsSamples.length - 1) / Math.max(0.001, span);
-  bloomFpsSamples = [];
-  if (fps < 26) {
-    bloomDisabled = true;
-    nightBloom.dispose();
-    console.warn("[perf] 持续低帧，bloom 已自动关闭（刷新或 P.nightBloomV1 重开）");
-  }
-}
 initQuestPanelCollapse();
 
 // ---------- 环境光 / 天空（跨场景共享） ----------
@@ -211,6 +214,8 @@ const platforms = messenger?.platforms || [];
 const hills = messenger?.hills || null;
 // 可写碰撞列表（地图编辑器会 push / 改 position）
 const assetColliders = mergeColliders(sceneHandles);
+// 灯池建在空场景上，这里场景已装配完毕，立刻接管以免首帧按 78 盏灯编译一次再重编译
+lightPool?.recollect();
 
 // ---------- 玩家 / 相机 / 输入 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
@@ -1011,6 +1016,7 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
       onViewAction: citadelViewAction,
       getSupportLevel: citadelSupportAt,
       getInstanceId: () => citadelTargetId,
+      getCitadelTarget: () => getCitadelTarget(),
       getLatestDesign: () => getCitadelTarget()?.userData?.highlandLatestDesign === true,
       getLatestUnits: () => getCitadelTarget()?.userData?.highlandLatestDesignRoot?.userData?.castleUnits ?? [],
       onHighlandUnitEdit: (patch) => {
@@ -1018,6 +1024,8 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
         if (!citadel?.userData?.highlandLatestDesign) return { ok: false, error: "not-latest-highland-citadel" };
         const result = citadel.userData.highlandLatestDesignRoot?.userData?.editCastleUnit?.(patch.id, patch);
         if (result?.ok) {
+          // 删掉的建筑其窗户仍由全城 InstancedMesh 照画，必须重算实例表
+          syncCitadelWindowInstances(citadel);
           lightingDirector.invalidateShadowFit();
           voxelAo?.markWorldDirty(new THREE.Box3().setFromObject(citadel));
         }
@@ -1299,6 +1307,7 @@ window.addEventListener("keydown", (e) => {
 const weather = createWeatherSystem(scene, PLANET_RADIUS, {
   skyRing: messenger?.landmarks?.camp?.landmarks?.skyRing || null,
 });
+const seasonWeatherBias = createSeasonWeatherBias({ initialSeason: "summer", hysteresisSec: 3.0 });
 
 // ---------- 弹琴老人（近身 E 键播放 / 停止八音盒；老人已迁到旧港码头） ----------
 const elderMusic = createElderMusicInteraction({
@@ -1481,8 +1490,18 @@ function animate() {
       threats,
       threatRadius: 3.8,
     });
+    // 交汇古堡也有自己的一套窗实例表；漏掉它，那边的窗永远不会随建筑增删重算
+    updateCitadelNightWindows(messenger?.landmarks?.canalJunctionCitadel, phase, {
+      threats,
+      threatRadius: 3.8,
+    });
   }
   updateMoebiusBarrier(dt);
+  // 季相天气偏置（E5）：按玩家当前所处季相带温和偏置天气（冬雪/春雨/夏秋晴），3 秒滞后防抖
+  if (player?.position) {
+    const season = seasonAt(player.position);
+    seasonWeatherBias.update(dt, season?.name, P);
+  }
   weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   // 纳沃纳双栖广场：雨天蓄洪 / 晴雪泄回旱季广场（与天气联动）
   {
@@ -1619,11 +1638,23 @@ function animate() {
 
   // 新视觉系统一律 try 护罩：单系统异常只禁用自身，绝不杀主渲染循环
   try {
-    governBloomByFps(performance.now());
-  if (distanceCulling) distanceCulling.update(dt);
+    if (distanceCulling) distanceCulling.update(dt);
   } catch (error) {
     console.warn("[perf] distance culling disabled:", error?.message);
     distanceCulling?.dispose?.();
+  }
+  try {
+    lightPool?.update(dt);
+  } catch (error) {
+    console.warn("[perf] light pool disabled:", error?.message);
+    lightPool?.dispose?.();
+  }
+  try {
+    // 熄灭的灯必须 visible=false 才能移出光照 uniform 数组（仅调 intensity 不省钱）
+    idleLightCulling?.update(dt);
+  } catch (error) {
+    console.warn("[perf] idle light culling disabled:", error?.message);
+    idleLightCulling?.dispose?.();
   }
   try {
     // 星球夜相（B·V8/C·V9 夜港对齐）：球壳在 V8/V9 就是地平线以外的天空，
@@ -1644,12 +1675,26 @@ function animate() {
   } else {
     renderer.render(scene, camera);
   }
+  // 必须在 render 之后读，renderer.info 才是本帧的真实提交数
+  perfProbe?.update(dt);
 }
 
 animate();
 
+// 性能探针快捷键：F9 下载截图 / F10 显隐 HUD
+window.addEventListener("keydown", (e) => {
+  if (e.key === "F9") {
+    e.preventDefault();
+    perfProbe?.capture(null, scene, camera);
+  } else if (e.key === "F10") {
+    e.preventDefault();
+    perfProbe?.setVisible(!perfProbe.isVisible());
+  }
+});
+
 // 调试：场景列表与句柄
 window.__tm = {
+  THREE, // 控制台调试用：new __tm.THREE.Raycaster() 等
   player,
   quest,
   cameraRig,
@@ -1658,6 +1703,11 @@ window.__tm = {
   P,
   scene,
   planet,
+  perfProbe, // 性能探针：__tm.perfProbe.snapshot() / .capture()
+  census: createSceneCensus({ renderer, scene, getCamera: () => camera }), // __tm.census.run()
+  idleLightCulling, // 空闲灯剔除：__tm.idleLightCulling.activeCount
+  lightPool, // 固定容量灯池：__tm.lightPool.adoptedCount / .activeCount
+  FEATURES, // 世界档诊断：应恒为 worldVersion "custom"
   sceneIds,
   sceneHandles,
   listScenes,
@@ -1677,6 +1727,7 @@ window.__tm = {
   elderMusic,
   foxNpc,
   weather,
+  seasonWeatherBias, // E5 季相天气偏置
   lightingDirector, // V5 光照导演（验收/调试用）
   shotHarness: shotHarnessPanel, // 运行时截图 / OskSta A-B 工作台
   voxelAo, // K3 体素 AO 垂直样片（验收/调试用，未开启为 null）

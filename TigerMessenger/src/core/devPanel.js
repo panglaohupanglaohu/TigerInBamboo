@@ -4,7 +4,6 @@
 import { P, P_DEFAULTS, FEATURES, saveParams, resetParams } from "./params.js";
 import { makePanelDraggable } from "../ui/dragPanel.js";
 import { LIGHTING_DEBUG_VIEW_MODES, LIGHTING_DEBUG_VIEW_DEFAULT } from "../render/lighting/debugViewMode.js";
-import { LIGHTING_QUALITY_TIERS } from "../render/lighting/lightingQuality.js";
 
 const SLIDERS = [
   { key: "moveSpeed", label: "移动速度", min: 1, max: 15, step: 0.1, group: "玩家" },
@@ -108,27 +107,15 @@ export function createDevPanel({
     // 修正：上限原为 1 与默认 1.4 不一致，统一 0~3
     `<input type="range" data-light="ambient" min="0" max="3" step="0.02" value="${ambient.intensity}">` +
     `<em data-lval="ambient">${ambient.intensity.toFixed(2)}</em></label>`;
-  // ---------- V5 光照 · K7（TODO 572/573） ----------
-  // voxelAo/localLights 在面板之后装配（main.js 初始化顺序），支持惰性取值；
-  // 构建期调用可能撞上 let 的 TDZ，安全回退 null
-  const safeGet = (fn) => { try { return fn(); } catch { return null; } };
-  const getVoxelAo = () => (typeof voxelAo === "function" ? safeGet(voxelAo) : voxelAo);
-  const getLocalLights = () => (typeof localLights === "function" ? safeGet(localLights) : localLights);
+  // ---------- V5 光照 ----------
   if (lightingDirector) {
-    html += `<div class="dev-group">V5 光照 · K7</div>`;
+    html += `<div class="dev-group">V5 光照 · 调试</div>`;
     html +=
       `<label class="dev-row dev-check"><span>V5 管线（关=legacy）</span>` +
       `<input type="checkbox" id="dev-v5-enabled" ${lightingV5 ? "checked" : ""}></label>`;
     html +=
       `<label class="dev-row dev-check"><span>冻结光照状态</span>` +
       `<input type="checkbox" id="dev-v5-freeze"></label>`;
-    html +=
-      `<label class="dev-row"><span>质量分档</span>` +
-      `<select id="dev-v5-quality">` +
-      Object.keys(LIGHTING_QUALITY_TIERS)
-        .map((q) => `<option value="${q}" ${FEATURES.lightingQuality === q ? "selected" : ""}>${q}</option>`)
-        .join("") +
-      `</select></label>`;
     html +=
       `<label class="dev-row"><span>调试视图</span>` +
       `<select id="dev-v5-debug-view">` +
@@ -140,12 +127,6 @@ export function createDevPanel({
       `<label class="dev-row"><span>阴影预设</span>` +
       `<select id="dev-v5-shadow-preset"><option value="paper">paper</option><option value="soft">soft</option></select></label>`;
     html +=
-      `<label class="dev-row dev-check"><span>体素 AO</span>` +
-      `<input type="checkbox" id="dev-v5-ao" ${voxelAo ? "" : "disabled"}></label>`;
-    html +=
-      `<label class="dev-row dev-check"><span>单次色彩反弹（high 档+刷新）</span>` +
-      `<input type="checkbox" id="dev-v5-bounce" ${FEATURES.voxelBounceV1 ? "checked" : ""}></label>`;
-    html +=
       `<label class="dev-row"><span>曝光</span>` +
       `<input type="range" id="dev-v5-exposure" min="0.2" max="3" step="0.05" value="1">` +
       `<em id="dev-v5-exposure-val">1.00</em></label>`;
@@ -153,14 +134,6 @@ export function createDevPanel({
       `<label class="dev-row"><span>天空/地面光</span>` +
       `<input type="range" id="dev-v5-sky" min="0" max="3" step="0.05" value="1">` +
       `<em id="dev-v5-sky-val">1.00</em></label>`;
-    if (localLights) {
-      const cap = getLocalLights()?.getDebugInfo?.().budget ?? 8;
-      html +=
-        `<label class="dev-row"><span>局部灯预算</span>` +
-        `<input type="range" id="dev-v5-light-budget" min="0" max="${cap}" step="1" value="${cap}">` +
-        `<em id="dev-v5-light-budget-val">${cap}</em></label>`;
-    }
-    html += `<p class="dev-hint">bounce 采样侧尚未接入着色器，开关只写 FEATURES 标志；调试视图的真实 shader 通道分解属浏览器 GPU 阶段</p>`;
   }
   html += `<div class="dev-group">地图 / 故事板</div>`;
   html += `<button type="button" id="dev-open-map" class="dev-action">🗺️ 打开地图编辑</button>`;
@@ -283,7 +256,7 @@ export function createDevPanel({
     });
   }
 
-  // ---------- V5 光照 · K7 控件绑定 ----------
+  // ---------- V5 光照 控件绑定 ----------
   if (lightingDirector) {
     const bindCheck = (id, fn) => panel.querySelector(id)?.addEventListener("change", (e) => fn(e.target.checked));
     const bindSelect = (id, fn) => panel.querySelector(id)?.addEventListener("change", (e) => fn(e.target.value));
@@ -295,14 +268,10 @@ export function createDevPanel({
     });
     bindCheck("#dev-v5-enabled", (on) => lightingDirector.setEnabled(on));
     bindCheck("#dev-v5-freeze", (on) => lightingDirector.setFrozen(on));
-    bindSelect("#dev-v5-quality", (q) => { FEATURES.lightingQuality = q; });
     bindSelect("#dev-v5-debug-view", (m) => lightingDirector.setDebugViewMode(m));
     bindSelect("#dev-v5-shadow-preset", (p) => lightingDirector.setShadowPreset(p));
-    bindCheck("#dev-v5-ao", (on) => getVoxelAo()?.setEnabled(on));
-    bindCheck("#dev-v5-bounce", (on) => { FEATURES.voxelBounceV1 = on; });
     bindRange("#dev-v5-exposure", "#dev-v5-exposure-val", (v) => lightingDirector.setTrims({ exposureMul: v }));
     bindRange("#dev-v5-sky", "#dev-v5-sky-val", (v) => lightingDirector.setTrims({ skyMul: v }));
-    bindRange("#dev-v5-light-budget", "#dev-v5-light-budget-val", (v) => getLocalLights()?.setBudgetCap(v));
   }
 
   panel.addEventListener("input", (e) => {

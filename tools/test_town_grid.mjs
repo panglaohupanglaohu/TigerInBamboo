@@ -78,6 +78,7 @@ const {
   resolveCitadelDropTarget,
   normalizeCitadelTerraceLayout,
   citadelGridCellCenter,
+  CITADEL_TERRACE_COUNT,
 } = await import(new URL("src/world/citadelTown.js", BASE).href);
 const { buildCitadelTownAssembly, applyInkOutlines, CITADEL } = await import(
   new URL("src/world/odysseyCitadel.js", BASE).href

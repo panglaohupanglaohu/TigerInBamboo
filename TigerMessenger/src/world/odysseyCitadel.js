@@ -70,7 +70,7 @@ import {
   TOWNSCAPER_MODULE_FAMILIES,
   citadelPaletteIndexOfChar,
   citadelShadeStep,
-} from "./citadelTown.js?v=20260825-highland-obelisk-stone-v3";
+} from "./citadelTown.js?v=20260903-column-coherent-jitter-v1";
 import { attachBuildingOwnedProps } from "./citadelBuildingProps.js";
 
 /** Maria Svarbova 无菌马卡龙：低语调中间色，禁止赤陶/焦黑。 */
@@ -137,20 +137,12 @@ export const CITADEL = Object.freeze({
       Object.freeze({ radius: 21.6, height: 2.0 }),
       Object.freeze({ radius: 24.0, height: 2.0 }),
     ]),
-    // 瀑布缺口：仅当 cascadeEnabled 时，前四层台地在朝向梯湖的窄扇区开槽；
-    // 缺口不切入 coreRadius 实心核，城堡基座始终落在实土上。
-    // 半角从旧 0.56（≈±32°，占台面约 1/6 环带）收窄到 0.30（≈±17°），
-    // 只让出梯湖水道与水帘宽度，避免整块前缘台地被水系吃掉。
-    // 梯湖椭圆本身仍可作为城堡承重面（见 citadelTerrainPointSupported）。
-    cascadeEnabled: true, // 层叠瀑布+梯湖总开关（编辑器可删/加）
+    cascadeEnabled: true,
     coreRadius: 9.0,
-    notchCenter: 0.17, // 方位角 φ（从 +z 朝 +x 量）≈ 10°，正对梯湖水道
-    notchHalf: 0.30, // 半角 ≈ 17°，刚好覆盖收窄后的梯湖水道
-    notchedLayers: 4, // 仅前四层开槽；顶层台地完整，托住城堡与门廊平桥
+    notchCenter: 0.17,
+    notchHalf: 0.30,
+    notchedLayers: 4,
   },
-  // Terrace 5 starts at local Y=2. This removes the local construction offset;
-  // placement also subtracts citadelCurvatureDrop(), so the outer rim—not only
-  // the centre—meets the radius-160 spherical ground.
   groundEmbed: 2.0,
 });
 
@@ -168,6 +160,50 @@ export const CITADEL_CASCADE_POOL_SPECS = Object.freeze([
 
 /** 鸟瞰图 / 编辑器上的层叠瀑布标记落点（水道中段）。 */
 export const CITADEL_CASCADE_MARKER = Object.freeze({ x: 2.4, z: 22.0 });
+
+/**
+ * 单台地边缘直落海面的瀑布（2026-09-02 主人定案）。
+ * 五湖四帘绑死在五层台地上；台地塌缩成一层后没有中间落差可挂，改为
+ * 从台地外沿直落海面的单级形态。`可叠加` = 沿台地边缘可摆任意多道，
+ * 每道只由方位角与宽度决定，互不依赖，所以增删一道不影响其余。
+ */
+export const CITADEL_RIM_FALL_DEFAULTS = Object.freeze({
+  /** 方位角 φ：从 +z 朝 +x 量，与 notchCenter 同一约定 */
+  azimuth: 0.17,
+  /** 水帘弧宽（弧度）。台地半径 24 时，0.16 ≈ 3.8 单位宽 */
+  arc: 0.16,
+  /** 落水处接水潭的半径；0 = 直接砸进海面不做潭 */
+  poolRadius: 4.0,
+  /** 水量：驱动水帘厚度与飞沫密度 */
+  flow: 1,
+});
+
+/**
+ * 归一化一组边缘瀑布。顺序不影响结果；同方位角的重复项会被合并，
+ * 避免编辑器连点摆出两道完全重叠、Z-fighting 的水帘。
+ */
+export function normalizeCitadelRimFalls(input = []) {
+  const list = Array.isArray(input) ? input : [];
+  const byAzimuth = new Map();
+  for (const raw of list) {
+    if (!raw) continue;
+    const azimuth = Number.isFinite(Number(raw.azimuth))
+      ? Number(raw.azimuth)
+      : CITADEL_RIM_FALL_DEFAULTS.azimuth;
+    const key = azimuth.toFixed(3);
+    if (byAzimuth.has(key)) continue;
+    byAzimuth.set(key, Object.freeze({
+      id: String(raw.id || `rim-fall-${key}`),
+      azimuth,
+      arc: Math.min(1.2, Math.max(0.04, Number(raw.arc) || CITADEL_RIM_FALL_DEFAULTS.arc)),
+      poolRadius: Math.max(0, Number.isFinite(Number(raw.poolRadius))
+        ? Number(raw.poolRadius)
+        : CITADEL_RIM_FALL_DEFAULTS.poolRadius),
+      flow: Math.min(3, Math.max(0.1, Number(raw.flow) || CITADEL_RIM_FALL_DEFAULTS.flow)),
+    }));
+  }
+  return Object.freeze([...byAzimuth.values()].sort((a, b) => a.azimuth - b.azimuth));
+}
 
 const _dir = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -882,79 +918,39 @@ export function refreshCitadelWindowLights(castleContainer) {
  * 原窗口 mesh 保留（visible=false、raycast 禁用）供验收与拾取兼容。
  * 可重复调用（rebuildCitadelTown 热重建后再次打包，先清旧实例）。
  */
+/**
+ * 拆掉全城共享的窗户 InstancedMesh，让窗回到它所属的墙模块里。
+ *
+ * 2026-08-24 的性能优化（404 逐窗 draw call → 2 个 InstancedMesh）把窗从墙
+ * 模块剥离，矩阵在构建期烘死，于是打破了 Townscaper/WFC 的核心不变量：
+ * **窗是墙模块的一部分，墙变窗必变**。剥离后墙一改，实例表毫不知情，
+ * 空中就留下悬空窗（2026-09-03 主人实测，删/建两个方向都复现）。
+ *
+ * 现在窗就是普通子网格：随所属 level 组一起被合并、一起被重建、一起被删除，
+ * 不需要任何同步代码。合并按材质分组，窗仍然并成每层一个网格，draw call
+ * 并不比实例化差。夜间亮灭改为整体材质切换（主人确认不需要逐窗独立控制）。
+ */
 export function rebuildCitadelWindowInstances(castleContainer) {
   if (!castleContainer) return;
-  const oldInstances = castleContainer.userData.windowInstances;
-  if (oldInstances) {
-    oldInstances.lit?.removeFromParent?.();
-    oldInstances.dark?.removeFromParent?.();
+  const old = castleContainer.userData.windowInstances;
+  if (old) {
+    old.lit?.removeFromParent?.();
+    old.dark?.removeFromParent?.();
+    for (const record of old.records ?? []) {
+      if (!record.mesh) continue;
+      record.mesh.visible = true;
+      delete record.mesh.raycast;
+    }
   }
-  const windows = castleContainer.userData.townWindows || [];
-  const darkMat = castleContainer.userData.windowDarkMat;
-  const litMat = castleContainer.userData.windowLitMat;
-  if (!windows.length || !darkMat || !litMat) {
-    castleContainer.userData.windowInstances = null;
-    return;
-  }
-  // 同构性校验：全部窗口必须共享同一几何布局（position.count 一致）
-  const refCount = windows[0].geometry.getAttribute("position").count;
-  if (!windows.every((w) => w.geometry.getAttribute("position").count === refCount)) {
-    throw new Error("citadel-window-instances: town windows must share one geometry layout");
-  }
-  castleContainer.updateMatrixWorld(true);
-  _windowInv.copy(castleContainer.matrixWorld).invert();
-  const count = windows.length;
-  const dark = new THREE.InstancedMesh(windows[0].geometry, darkMat, count);
-  const lit = new THREE.InstancedMesh(windows[0].geometry, litMat, count);
-  dark.name = "citadel-window-instances-dark";
-  lit.name = "citadel-window-instances-lit";
-  dark.raycast = () => {};
-  lit.raycast = () => {};
-  dark.frustumCulled = false;
-  lit.frustumCulled = false;
-  const records = windows.map((w) => {
-    w.updateMatrixWorld(true);
-    _windowMat.copy(w.matrixWorld).premultiply(_windowInv);
-    const matrix = _windowMat.clone();
-    // 原 mesh 隐藏并禁拾取：渲染与 raycast 全部交给 InstancedMesh
-    w.visible = false;
-    w.raycast = () => {};
-    return {
-      mesh: w,
-      matrix,
-      houseId: w.userData.houseId,
-      terraceIndex: w.userData.terraceIndex,
-      castleFloor: w.userData.castleFloor,
-      cellIx: w.userData.cellIx,
-      cellIz: w.userData.cellIz,
-      cellIy: w.userData.cellIy,
-      litTonight: false,
-      extinguishedBySoldiers: false,
-      lit: false,
-    };
-  });
-  castleContainer.add(dark, lit);
-  castleContainer.userData.windowInstances = Object.freeze({
-    dark,
-    lit,
-    records,
-  });
-  syncCitadelWindowInstances(castleContainer);
+  castleContainer.userData.windowInstances = null;
+  castleContainer.userData.windowInstanceSignature = null;
 }
 
-/** 按 records 的 lit 状态重建两个 InstancedMesh 的实例矩阵与 count。 */
+/** @deprecated 窗已回归墙模块，实例表不再存在；保留空实现供旧调用点。 */
 export function syncCitadelWindowInstances(castleContainer) {
-  const instances = castleContainer.userData.windowInstances;
-  if (!instances) return;
-  const darkList = [];
-  const litList = [];
-  for (const record of instances.records) (record.lit ? litList : darkList).push(record);
-  instances.dark.count = darkList.length;
-  instances.lit.count = litList.length;
-  for (let i = 0; i < darkList.length; i++) instances.dark.setMatrixAt(i, darkList[i].matrix);
-  for (let i = 0; i < litList.length; i++) instances.lit.setMatrixAt(i, litList[i].matrix);
-  instances.dark.instanceMatrix.needsUpdate = true;
-  instances.lit.instanceMatrix.needsUpdate = true;
+  if (castleContainer?.userData?.windowInstances) {
+    rebuildCitadelWindowInstances(castleContainer);
+  }
 }
 
 /**
@@ -1066,12 +1062,13 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
   if (!dark || !lit) return;
   if (records) {
     // town 窗口：状态变化 → 移动实例（lit/dark 列表），无逐窗材质切换
-    let changed = false;
     for (const record of records) {
       const on = night && record.litTonight && !record.extinguishedBySoldiers;
-      if (record.lit !== on) { record.lit = on; changed = true; }
+      if (record.lit !== on) record.lit = on;
     }
-    if (changed) syncCitadelWindowInstances(castleContainer);
+    // 无条件重算：宿主可见性也可能变（编辑器删格会把窗 mesh 摘出场景树），
+    // 只看 lit 是否变化会漏掉这类改动，留下悬空窗。构成没变时 sync 内部会早退。
+    syncCitadelWindowInstances(castleContainer);
     // design 窗口（尺寸参数化，不实例化）：逐窗材质切换
     for (const w of designWindows) {
       const on = night && w.userData.litTonight && !w.userData.extinguishedBySoldiers;
@@ -2563,23 +2560,14 @@ export function buildOdysseyCitadel(options = {}) {
     const castleOriginRadius = Number.isFinite(options.groundRadius)
       ? options.groundRadius
       : (options.planetRadius ?? 160) - 4.2; // R + lift(0.40) − SEA_DROP(4.6) 的默认
+    // S18 光体积灯：暖橙灯下密上疏 + 港口岸湾灯 + 塔楼暖光冠 + 水面倒影。
+    // 窗光不再由本模块另建一层：唯一真相源是建筑单元自己的窗（2026-09-02）。
     castleContainer.userData.highlandLightVolumes = createHighlandLightVolumes(
       THREE,
       castleContainer,
       {
         getTimeOfDay: () => P.timeOfDay,
         terrainHeightAt: highlandTerrainSurfaceHeight,
-        townLayout: townAssembly.layout,
-        // 参考图/X 动图双色温：后山塔群用中等钴蓝光域，两侧山肩用更大、
-        // 更暗、更软的冷光域。光域位置固定，只做慢强度变化，避免低分辨率
-        // 体积在移动时显出格子感；暖橙仍集中在下城和水岸。
-        coolAccents: [
-          { x: -14, y: 18, z: -16, radius: 10.8, color: 0x5778df, intensityScale: 0.78 },
-          { x: 14, y: 18, z: -16, radius: 10.2, color: 0x526fd1, intensityScale: 0.72 },
-          { x: 18, y: 15, z: 0, radius: 8.6, color: 0x6a86df, intensityScale: 0.62 },
-          { x: -39, y: 25, z: -8, radius: 20, color: 0x3557b7, intensityScale: 0.30 },
-          { x: 38, y: 28, z: -10, radius: 22, color: 0x304da3, intensityScale: 0.27 },
-        ],
         waterLocalY: (options.planetRadius ?? 160) + OFFICIAL_OCEAN_SEA_LEVEL - castleOriginRadius,
         waterHeightAt: highlandCurvedLakeSurfaceHeight,
       }
@@ -2911,6 +2899,43 @@ function tickCitadelGrowAnimations(castleContainer, dt) {
   }
 }
 
+/** 模块选型的纵向影响半径：改一格会牵动上下各 2 层的屋顶/地基选型。 */
+const CITADEL_LEVEL_INFLUENCE = 2;
+
+/**
+ * 把 dirty 扩成「受影响层的全部格」，并返回受影响的层号集合。
+ *
+ * 增量重建第 2 步会删掉这些层的合并网格，而合并网格装的是那一层**所有**格子
+ * 的几何；第 3 步却只挂回 dirty 格。差额就凭空消失了——2026-09-03 实测三角形
+ * 119,952 → 44,170。合并块目前不支持局部替换，所以动了哪一层就得整层重来。
+ *
+ * 返回值必须是「删合并块」唯一的层依据：调用方若再套一层 ±2 邻域，删除范围
+ * 就会比重建范围大一圈，最外圈整层蒸发（实测编辑 iy=2 打掉 level-7/8，只剩
+ * 不参与合并的窗悬在半空）。
+ */
+function expandDirtyToWholeLevels(dirty, spec) {
+  const levels = new Set();
+  for (const key of dirty) {
+    const iy = Number(String(key).split(",")[1]);
+    if (!Number.isFinite(iy)) continue;
+    for (let dy = -CITADEL_LEVEL_INFLUENCE; dy <= CITADEL_LEVEL_INFLUENCE; dy++) levels.add(iy + dy);
+  }
+  for (const terrace of spec?.terraces ?? []) {
+    const rowsByLevel = terrace?.levels ?? [];
+    for (const iy of levels) {
+      const rows = rowsByLevel[iy];
+      if (!rows) continue;
+      for (let iz = 0; iz < rows.length; iz++) {
+        const row = String(rows[iz] ?? "");
+        for (let ix = 0; ix < row.length; ix++) {
+          if (row[ix] !== ".") dirty.add(`${ix},${iy},${iz}`);
+        }
+      }
+    }
+  }
+  return levels;
+}
+
 export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys = [], options = {}) {
   const animate = options.animate === true;
   const layers = castleContainer?.userData?.layers;
@@ -2919,6 +2944,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     ? dirtyKeys
     : new Set(dirtyKeys.map((cell) => (Array.isArray(cell) ? `${cell[0]},${cell[1]},${cell[2]}` : String(cell))));
   if (!dirty.size) return { ok: true, dirtyCount: 0, editMs: 0, removedCount: 0, mergedCount: 0 };
+  const affectedLevels = expandDirtyToWholeLevels(dirty, spec);
   const t0 = performance.now();
 
   const blueprint = createCitadelBlueprint({
@@ -2941,6 +2967,11 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
         : castleContainer.userData.highlandTownscaperGrid
           ? HIGHLAND_TOWNSCAPER_BASE_Y
           : undefined,
+      // 必须与首次构建/全量重建逐字一致：漏传时增量会走另一套承重面装配，
+      // 产出简化模块（2026-09-03 实测三角形只有全量的 38%）。
+      surfaceProvider: castleContainer.userData.highlandTownscaperGrid
+        ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
+        : "uniform-town-base",
       leanDecor: castleContainer.userData.skipOuterTerrain === true,
       townscaperColors: castleContainer.userData.instanceId === "canal-junction",
       highlandColors: castleContainer.userData.instanceId !== "canal-junction",
@@ -2959,19 +2990,16 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
       if (match) byLevel.set(`${Number(match[1])}:${Number(match[2])}`, child);
     }
   }
+  // 邻域只在 expandDirtyToWholeLevels 里算一次：这里再套一层 ±2 就会「删得比
+  // 补的多一圈」，最外圈整层丢几何。
   const dirtyLevels = new Set();
-  const changedLevels = new Set(); // 2026-08-29 性能：只重合并真正变化的层
   const levelOf = new Map();
-  for (const key of dirty) {
-    const iy = Number(key.split(",")[1]);
-    if (!Number.isFinite(iy)) continue;
-    for (let dy = -2; dy <= 2; dy++) {
-      for (let t = 0; t < 5; t++) {
-        const level = byLevel.get(`${t}:${iy + dy}`);
-        if (level) {
-          dirtyLevels.add(level);
-          levelOf.set(level, false);
-        }
+  for (const iy of affectedLevels) {
+    for (let t = 0; t < 5; t++) {
+      const level = byLevel.get(`${t}:${iy}`);
+      if (level) {
+        dirtyLevels.add(level);
+        levelOf.set(level, false);
       }
     }
   }
@@ -3052,6 +3080,8 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   // tickCitadelGrowAnimations 的倒计时驱动）；animate 模式维持生长动画后合并。
   const debounceMs = Number(options.debounceMs) || 0;
   if (!animate && debounceMs > 0) {
+    // 窗表重烘跟着合并一起延迟：删掉的窗由逐帧 syncCitadelWindowInstances
+    // 的「祖先链必须走到 castleContainer」立即停画，不必在这里再扫一遍全树。
     castleContainer.userData.pendingMerge = { dirtyLevels: levelsToMerge };
     castleContainer.userData.mergeDebounceLeft = debounceMs / 1000;
   } else if (!animate) {

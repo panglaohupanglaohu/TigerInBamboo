@@ -287,11 +287,15 @@ const JITTER_FLOOR_GROWTH = 0.02;
 /**
  * 网格顶点 (gx, gz) 的确定性扰动偏移（局部坐标，单位格尺寸）。
  * 相邻格共享同一角点 → 体块不裂开；结果只依赖 (gx, gz, floor)，可缓存。
+ *
+ * floor 只缩放幅度、不进哈希：方向一旦逐层重新随机，竖着叠的格就共享不到
+ * 竖棱，每层错一点（实测最大 0.06，格宽 2.0 的 3%），看上去就像整层扭了一下。
+ * 同方向 + 幅度逐层微增 = “上层再略歪”的手搭积木感。
  * @returns {{ dx: number, dz: number }}
  */
 export function citadelGridVertexJitter(gx, gz, floor = 0) {
   if (!CITADEL_DISTORTION_ENABLED) return { dx: 0, dz: 0 };
-  const h = (gx * 1103515245 + gz * 12345 + floor * 78901) >>> 0;
+  const h = (gx * 1103515245 + gz * 12345) >>> 0;
   const h2 = (h ^ (h >>> 13)) >>> 0;
   const a = ((h2 % 1000) / 1000 - 0.5) * 2; // -1..1
   const h3 = (h * 2654435761 + gz * 40503) >>> 0;
@@ -2162,16 +2166,21 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         levelGroups[iy].add(window);
         registerModule("decor", ix, iy, iz, TOWNSCAPER_MODULE_FAMILIES.decor[module.decor], window);
         stats.windowCount++;
+        // 装饰归属于它所装饰的那一格：增量重建按 userData.cell 回收，没有这个
+        // 标签的装饰会永远留在层容器里，格删了它还在（悬空窗/窗台）。
+        window.userData.cell = { ix, iy, iz, char };
         if (!leanDecor) {
           const wx = cx(ix) + dx * (cs / 2 + 0.06);
           const wz = cz(iz) + dz * (cs / 2 + 0.06);
           const sill = mesh(sillGeometry, trimMat, "town-window-sill", 0.01);
           sill.position.set(wx, cy(iy) - ch * 0.08 - 0.62, wz);
           sill.rotation.y = Math.atan2(dx, dz);
+          sill.userData.cell = { ix, iy, iz, char };
           levelGroups[iy].add(sill);
           const lintel = mesh(lintelGeometry, trimMat, "town-window-lintel", 0.01);
           lintel.position.set(wx, cy(iy) - ch * 0.08 + 0.92, wz);
           lintel.rotation.y = Math.atan2(dx, dz);
+          lintel.userData.cell = { ix, iy, iz, char };
           levelGroups[iy].add(lintel);
         }
       }
