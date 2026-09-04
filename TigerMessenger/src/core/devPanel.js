@@ -4,6 +4,7 @@
 import { P, P_DEFAULTS, FEATURES, saveParams, resetParams } from "./params.js";
 import { makePanelDraggable } from "../ui/dragPanel.js";
 import { LIGHTING_DEBUG_VIEW_MODES, LIGHTING_DEBUG_VIEW_DEFAULT } from "../render/lighting/debugViewMode.js";
+import { mountWfcFailureSection } from "../ui/wfcFailurePanel.js";
 
 const SLIDERS = [
   { key: "moveSpeed", label: "移动速度", min: 1, max: 15, step: 0.1, group: "玩家" },
@@ -107,6 +108,16 @@ export function createDevPanel({
     // 修正：上限原为 1 与默认 1.4 不一致，统一 0~3
     `<input type="range" data-light="ambient" min="0" max="3" step="0.02" value="${ambient.intensity}">` +
     `<em data-lval="ambient">${ambient.intensity.toFixed(2)}</em></label>`;
+  // ---------- C13-7 太阳二维摇杆（PLAN §10.7）----------
+  // Townscaper 的太阳是**方位 × 高度**两个自由度，不是一条时间滑条。
+  // 拖动板子横向 = 绕一圈，纵向 = 从天顶压到地平线以下（夜侧）。
+  html += `<div class="dev-group">太阳装置</div>`;
+  html +=
+    `<label class="dev-row dev-check"><span>摇杆接管太阳</span>` +
+    `<input type="checkbox" id="dev-sun-manual" ${P.sunRigManual ? "checked" : ""}></label>`;
+  html += `<div id="dev-sun-pad" title="横=方位 · 纵=高度（虚线以下为夜侧）"><div id="dev-sun-knob"></div></div>`;
+  html += `<div id="dev-sun-readout">方位 ${P.sunAzimuth.toFixed(0)}° · 高度 ${P.sunElevation.toFixed(0)}°</div>`;
+
   // ---------- V5 光照 ----------
   if (lightingDirector) {
     html += `<div class="dev-group">V5 光照 · 调试</div>`;
@@ -157,6 +168,7 @@ export function createDevPanel({
   html += `<p class="dev-hint" id="dev-lake-status">湖含 283 个可绘制对象（面数比水晶城还多），搬远可减少同屏负担</p>`;
   html += `<button type="button" id="dev-reset">重置全部参数</button>`;
   panel.innerHTML = html;
+  mountWfcFailureSection(panel);
 
   // 标题栏拖拽摆放（位置记入 localStorage）
   makePanelDraggable(
@@ -324,6 +336,55 @@ export function createDevPanel({
     panel.querySelector('[data-lval="ambient"]').textContent = String(P.ambientIntensity);
     if (onCamDist) onCamDist(P.camDist);
   });
+
+  // ---------- C13-7 摇杆交互 ----------
+  {
+    const pad = panel.querySelector("#dev-sun-pad");
+    const knob = panel.querySelector("#dev-sun-knob");
+    const readout = panel.querySelector("#dev-sun-readout");
+    const manual = panel.querySelector("#dev-sun-manual");
+    // 方位 0..360 映射到 x 的 0..1；高度 +90..−90 映射到 y 的 0..1（上=天顶）
+    const syncKnob = () => {
+      knob.style.left = `${((P.sunAzimuth % 360) / 360) * 100}%`;
+      knob.style.top = `${((90 - P.sunElevation) / 180) * 100}%`;
+      readout.textContent =
+        `方位 ${P.sunAzimuth.toFixed(0)}° · 高度 ${P.sunElevation.toFixed(0)}°` +
+        (P.sunElevation < 0 ? " · 夜" : "");
+    };
+    syncKnob();
+    let dragging = false;
+    const write = (e) => {
+      const r = pad.getBoundingClientRect();
+      const u = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      const v = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+      P.sunAzimuth = u * 360;
+      P.sunElevation = 90 - v * 180;
+      // 拖摇杆即视为要接管：否则拖了没反应，用户以为坏了
+      if (!P.sunRigManual) { P.sunRigManual = true; manual.checked = true; }
+      syncKnob();
+      saveParams();
+    };
+    pad.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      pad.setPointerCapture?.(e.pointerId);
+      write(e);
+      e.preventDefault();
+    });
+    pad.addEventListener("pointermove", (e) => { if (dragging) write(e); });
+    const stop = (e) => { dragging = false; pad.releasePointerCapture?.(e.pointerId); };
+    pad.addEventListener("pointerup", stop);
+    pad.addEventListener("pointercancel", stop);
+    manual.addEventListener("change", () => {
+      P.sunRigManual = manual.checked;
+      saveParams();
+      syncKnob();
+    });
+    // 重置按钮走的是同一条 reset 流程，这里跟着回到默认位
+    panel.querySelector("#dev-reset")?.addEventListener("click", () => {
+      manual.checked = P.sunRigManual;
+      syncKnob();
+    });
+  }
 
   const elFps = panel.querySelector("#dev-fps");
   let frames = 0;

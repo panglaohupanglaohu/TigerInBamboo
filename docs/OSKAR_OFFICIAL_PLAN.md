@@ -52,6 +52,11 @@
 | S18 | [点光源 Light Volume](https://x.com/OskSta/status/1582757294672314368)（2022-10-19） | 原文：*I'm seeing if my light volume approach can work with point lights too.* ／ *The low resolution is noticeable for sure.* ／ *Especially when you move em around like this.* ／ *But if you keep em big and soft and somewhat still I think it's gonna be good.*——**点光源烘进低分辨率光体积**；低分辨率是接受的代价；使用规则 = 灯要**大、软、基本不动**（移动会暴露低分辨率）。与 S9/S10 同一 light volume 实验家族 |
 | S16 | [背光高光](https://x.com/OskSta/status/1751945034851570056)（2024-01） | 原文：*Some nice new highlights when the island is backlit. Achieved by simply adding another inverted mesh outline layer that shows up when looking into the sun. And masked by shadows, of course.*——**背光高光 = 反向网格轮廓层**（看向太阳时显示）+ **阴影遮罩**（阴影区不显示） |
 | S15 | [放到球体上](https://x.com/OskSta/status/1768627849529893109)（2024-03） | 原文：*For reasons I will not be explaining at this point I've gone and put this on a sphere*——把瓦片格子地形**放到球体上**；视频（640×640，6.9s）：海中的绿色格子陆地在球面上，曲率可见、视角旋转，陆地边缘有缺口/内凹。与 S14 同期同系列（球面格子星球） |
+| S19 | [Townscaper Steam 商店演示片](https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1291340/extras/629c1921d8f421a2605001922e524572.mp4)（无需登录，3.96s / 132 帧 / 750×358） | **画面归纳**（本地抽 12 帧，`/tmp/tsc/f_01..12.png`）：① 首帧高亮的可建造单元是**不规则四边形**，不是正方形；② 添一格后**相邻建筑的屋顶整体改形**（坡顶 → 错落屋脊 → 让位于圆塔），不是只在新格出模型 |
+| S20 | [How Townscaper Works（AI and Games 访谈全文）](https://www.gamedeveloper.com/game-platforms/how-townscaper-works-a-story-four-games-in-the-making) | 原文八条关键句（与 S7 同页）：① *tiles no longer being complete chunks of building, but rather **corner segments** that can be more easily put together to create shapes that fit within the cells*；② *Stalberg uses a **stencil buffer** to cut [windows] out of the mesh after it is placed, rather than having the windows in the tiles themselves, given there would be many edge cases*；③ *the **decoration** of a tile is **separate** from when it is generated*；④ *it is actually allowed to **fail silently**… the main place where that happens is with the **steel support structures**… you can see **loose hanging steel structures that aren't properly connected***；⑤ *take a fixed **hexagonal grid**, breaking it up into **quads**, then breaking it up into quads **again** and then **moving some of the points** within the grid*；⑥ *the garden modules are **super high priority**, but they … can only exist … where they end up next to a wall*；⑦ *the larger a structure becomes, one change **ripples through the entire connected area***；⑧ *I want the **larger shapes** to feel very **predictable**, but the **smaller shapes** are allowed to vary quite a bit* |
+| S21 | [GameRes：Steam 游戏《TownScaper》技术分析](https://www.gameres.com/877989.html) | S21 中文二手转述（只作旁证）：每个 Cube 不是一栋完整房子，房子由若干 4×n 模型块拼成；每个 Cube 区块的模型根据当前网格的形状做扭曲；封闭庭院内再跑一次 2D WFC 放围栏/花园 |
+
+S21 见上表（gameres 877989，只作旁证，不改本文件 §2–§6 结论）。
 
 ## 2. 官方方法（按流水线）
 
@@ -226,6 +231,15 @@ node tools/audit_planet_v8_oskar_gap.mjs
 11. **背光高光（S16）。** 已落地（山体层）：`backlitHighlight.js`（等比放大 BackSide 暖金层 + rim + 受光遮罩 + 背光因子），`tools/test_backlit_highlight.mjs` 验收。**剩余**：城堡（942 格合并几何）与台地轮廓高光层扩展、与 `applyInkOutlines` 的描边优先级核对。
 
 12. **植被小阴影（S17）。** 已落地：`buildBlobShadow` 共享圆片贴地暗斑（54 个），`tools/test_blob_shadow.mjs` 验收。**剩余**：球面 V9 植被接入同款 blob shadow。
+
+13. **城堡建造三层管线（S19/S20）——已单独立项，不在本文件展开。**
+
+    前 12 条都是资产 / 场效果缺口；城堡建造是**算法本体**缺口，量级与验收方式都不同，2026-09-03 拆到独立文档：
+
+    - 计划：`TigerMessenger/docs/CITADEL_BUILD_PIPELINE_PLAN.md`
+    - 任务：`TigerMessenger/docs/CITADEL_BUILD_PIPELINE_TODOS.md`
+
+    一句话结论（详见该文档）：Oskar 的三层（不规则四边形网格 / WFC / 角落模块）在本仓库**三层全部不成立**，`townscaperModuleSelection` 是纯哈希而非约束求解。本文件只负责登记来源 S19/S20，不重复结论。
 
 不在本文件范围、但已单独完成、不要回退：
 

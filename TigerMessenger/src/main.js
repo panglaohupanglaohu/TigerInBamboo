@@ -35,7 +35,7 @@ import {
   CITADEL_TOWN_SPEC,
   HIGHLAND_TOWNSCAPER_TOWN_SPEC,
   citadelGridCellCenter,
-} from "./world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
+} from "./world/citadelTown.js?v=20260904-sun-rig-v1";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P, FEATURES, isOskLightingV1, isVoxelAoV1, isLocalLightBudgetV1 } from "./core/params.js";
 import { createMiniBloom } from "./render/postprocessing/miniBloom.js";
@@ -216,6 +216,9 @@ const hills = messenger?.hills || null;
 const assetColliders = mergeColliders(sceneHandles);
 // 灯池建在空场景上，这里场景已装配完毕，立刻接管以免首帧按 78 盏灯编译一次再重编译
 lightPool?.recollect();
+// 距离剔除同理：它内部 2.5s 后才首次 collect()，而 boot 要 5~8s——
+// 那次快照拍在半空场景上，之后再不重收集，等于整个模块空转（实测隐藏数 0）。
+distanceCulling?.recollect();
 
 // ---------- 玩家 / 相机 / 输入 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
@@ -1512,7 +1515,7 @@ function animate() {
     }
   }
   mapEditor.tickHighlight?.(dt);
-  citadelSceneEdit?.tick();
+  citadelSceneEdit?.tick(dt);
 
   // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
   const riding =
@@ -1707,6 +1710,7 @@ window.__tm = {
   census: createSceneCensus({ renderer, scene, getCamera: () => camera }), // __tm.census.run()
   idleLightCulling, // 空闲灯剔除：__tm.idleLightCulling.activeCount
   lightPool, // 固定容量灯池：__tm.lightPool.adoptedCount / .activeCount
+  distanceCulling, // 距离剔除：__tm.distanceCulling.entryCount / .visibleCount
   FEATURES, // 世界档诊断：应恒为 worldVersion "custom"
   sceneIds,
   sceneHandles,

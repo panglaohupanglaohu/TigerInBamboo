@@ -26,7 +26,7 @@ import {
   resolveCitadelDropTarget,
   citadelGridCellCenter,
   citadelLevelsKey,
-} from "../world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
+} from "../world/citadelTown.js?v=20260904-sun-rig-v1";
 import {
   citadelLevelsSaveKey,
   loadCitadelLevelsSave,

@@ -139,12 +139,55 @@ function buildScene() {
   ok("maxObjectRadius=8：合并城体/港口不再被当小摆件整体剔除");
 }
 
+// --- 2d. 动态物移动后不得被误剔（C2 修的正是这个）-------------------------
+// 旧实现在 collect() 时把世界坐标快照进 entry.center，之后永不更新：
+// 送信人/船/电车走远后，距离仍按出生点算 → 人走到眼前却是隐身的。
+//
+// 注意：DEFAULT_EXCLUDED 与 DYNAMIC_RE **几乎完全重叠**
+// （agent|boat|ship|soldier|bird|whale|pod|tram 都已在豁免名单，根本不进管理列表），
+// 真正走动态分支的只有 messenger|npc|fox|tiger|aircraft|airship 六个名字。
+// 所以这里用 npc-前缀验证，否则测的是豁免而不是动态分支。
+{
+  const scene = new THREE.Scene();
+  const mkAt = (name, x, y, z) => {
+    const mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 1), new THREE.MeshStandardMaterial());
+    mesh.name = name;
+    mesh.position.set(x, y, z);
+    scene.add(mesh);
+    return mesh;
+  };
+  const walker = mkAt("npc-villager", 0, 160, -300);   // 动态且未豁免
+  const statue = mkAt("prop-statue", 0, 160, -300);    // 对照：静态
+
+  const culling = createSceneDistanceCulling(THREE, {
+    scene, getCamera: () => camera, planetRadius: 160,
+    cullDistance: 150, altitudeFactor: 5,
+  });
+  culling.update(3);
+  culling.update(0.5);
+  assert.equal(walker.visible, false, "出生在 300 外应先被剔");
+
+  walker.position.set(0, 160, -20);   // 走到相机跟前
+  statue.position.set(0, 160, -20);
+  scene.updateMatrixWorld(true);
+  culling.update(0.5);
+
+  assert.equal(walker.visible, true,
+    "动态物走近后必须现算世界位置并显形——否则 NPC 会隐身走到你面前");
+  assert.equal(statue.visible, false,
+    "静态物仍按 collect 时的快照算（移动静态物要显式 recollect()）");
+  ok("动态物移动后现算世界位置，不被出生点快照误剔");
+}
+
 // --- 3. 参数与开关 -------------------------------------------------------
-// 保持默认关闭：实测瓶颈在片元光照而非 draw call，且 8/29 曾因远景误剔被回滚，
-// 需浏览器目验后再由主人决定是否常开。
-assert.equal(P.distanceCullV1, false, "距离剔除默认关闭，待目验后再开");
+// 2026-09-04 转为默认开启：真正的阻碍不是误剔，而是它一直在空转——
+// collect() 内部 2.5s 后首次执行，而 boot 要 5~8s，快照拍在半空场景上，
+// 之后再不重收集。main.js 在场景装配完毕处补 recollect() 后实测：
+//   管理条目 0 → 10,753；隐藏网格 444 → 4,763；draw call 2,711 → 2,112（−22%）；
+//   同机位截图像素级一致（/tmp/cull_off.png vs /tmp/cull_on.png）。
+assert.equal(P.distanceCullV1, true, "距离剔除默认开启（?distanceCullV1=0 回滚）");
 assert.equal(P.distanceCullMeters, 150, "基准剔距 150");
-ok("P.distanceCullV1 默认关闭（?distanceCullV1=1 手动开启验收）");
+ok("P.distanceCullV1 默认开启（?distanceCullV1=0 可回滚）");
 
 // --- 4. 圣城/主页面集成 ---------------------------------------------------
 const citadelModule = await import(new URL("src/world/odysseyCitadel.js", BASE).href);
@@ -154,7 +197,13 @@ scene2.add(castle);
 const mainSrc = fs.readFileSync(new URL("src/main.js", BASE), "utf8");
 assert.match(mainSrc, /createSceneDistanceCulling\(THREE, \{\s*scene,\s*getCamera: \(\) => camera/);
 assert.match(mainSrc, /distanceCulling\.update\(dt\)/);
-ok("main.js 已接线（update(dt) 每帧驱动，内部 0.3s 节流）");
+// 场景装配完毕必须补一次 recollect()：模块内部 2.5s 就首次 collect()，
+// 而 boot 要 5~8s——不补这一下，名单是半空场景的快照，整个模块空转（实测隐藏数 0）。
+assert.match(mainSrc, /distanceCulling\?\.recollect\(\)/,
+  "main.js 必须在场景装配完毕处调用 distanceCulling.recollect()，否则剔除名单是半空场景的快照");
+assert.match(mainSrc, /^\s*distanceCulling,/m,
+  "distanceCulling 须挂到 __tm，否则只能靠间接推断它有没有在工作");
+ok("main.js 已接线（update(dt) 每帧驱动 + 装配后 recollect + __tm 可观测）");
 
 console.log(`\n✅ 距离剔除：小星球地平线遮蔽 + 高空自适应半径 + 名字/尺寸豁免 + 开关回滚`);
 console.log(`全部通过：${pass + 2} 组断言`);

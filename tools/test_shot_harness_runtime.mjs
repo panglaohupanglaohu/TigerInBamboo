@@ -56,11 +56,17 @@ assert.match(planetRuntime, /if \(isV9\)/);
 assert.match(planetRuntime, /planet-sphere-baseline-v8/);
 assert.match(planetRuntime, /oskar-continuous-chain-v9/);
 // 现役入口必须随 main.js 改动一起换戳，否则浏览器读旧缓存、改动看似没生效。
-assert.match(indexHtml, /main\.js\?v=20260903-decor-owns-cell-v1/);
+// 守的是「带戳」与「所有城堡入口共用同一个戳」这两条契约，不写死具体戳——
+// 写死会让每次正常 bump 都把这条测试打红，久而久之被当噪声忽略。
+assert.match(indexHtml, /main\.js\?v=[\w.-]+/, "index.html 的 main.js 入口必须带 ?v= 缓存戳");
+const citadelTags = new Set();
 for (const source of citadelImporters) {
-  assert.match(source, /citadelTown\.js\?v=20260903-decor-owns-cell-v1/,
-    "所有现役城堡入口必须请求同一个 citadelTown 版本，避免浏览器混用旧导出缓存");
+  const tag = source.match(/citadelTown\.js\?v=([\w.-]+)/)?.[1];
+  assert.ok(tag, "现役城堡入口必须给 citadelTown.js 带 ?v= 缓存戳");
+  citadelTags.add(tag);
 }
+assert.equal(citadelTags.size, 1,
+  `所有现役城堡入口必须请求同一个 citadelTown 版本，避免浏览器混用旧导出缓存；实际有 ${citadelTags.size} 个：${[...citadelTags].join(" / ")}`);
 
 assert.equal(resolveActiveWorldVersion({ search: "" }), "custom");
 // v7 预设已删（2026-09-01）：未知版本必须回落 custom，不得报错或粘住

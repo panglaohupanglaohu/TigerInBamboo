@@ -20,7 +20,7 @@ import { buildOldHarborScene } from "../assets/harbor.js";
 import { buildImpastoMossyGround } from "../world/mossyGround.js";
 import { mergeStaticGroup } from "../world/geometryMerge.js";
 import { WORLD_SCALE } from "../world/worldScale.js";
-import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260829-elder-pier-v2";
+import { loadCitadelBlock, loadCitadelCombat } from "./messenger/loadCitadel.js?v=20260903-navona-at-harbor-v1";
 import { loadMoebiusDistrict, placeMoebiusSwampAndSky } from "./messenger/loadMoebius.js";
 import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/loadTraffic.js";
 import { updateMessengerIsland } from "./messenger/updateIsland.js";
@@ -378,6 +378,8 @@ export const messengerIslandScene = {
       boat: harborBuilt.landmarks.boat,
       moebius: moebiusPack.moebius,
       abandonedGate: gatePack.abandonedGate,
+      gatePods: gatePack.gatePods, // 叹息之门泡形飞行器 ×3
+      gateHaulers: gatePack.gateHaulers, // 叹息之门重型运输艇 ×3
       bubblePods: moebiusPack.bubblePods,
       citySeaLake: moebiusPack.citySeaLake,
       citadelRange: citadelPack.citadelRange,
@@ -433,11 +435,14 @@ export const messengerIslandScene = {
       tripleGateScoutAircraft,
       scoutDefense,
       saihojiPhalanx: combatPack.saihojiPhalanx,
+      vanguardSquad: combatPack.vanguardSquad, // 先锋重甲兵中队
       combatPack,
       airship: skyPack.airship,
       airshipAnchor: skyPack.airshipAnchor,
       moebius: moebiusPack.moebius,
       gateBirdVortex: gatePack.gateBirdVortex,
+      gatePods: gatePack.gatePods,
+      gateHaulers: gatePack.gateHaulers,
       terraceBirds: citadelPack.terraceBirds,
       flock: moebiusPack.flock,
       hallFlock: moebiusPack.hallFlock,

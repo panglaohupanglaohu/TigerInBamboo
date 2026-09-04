@@ -14,21 +14,22 @@ import {
   rangeLocalToWorld,
   rangeWorldToLocal,
   CITADEL_CASCADE_POOL_SPECS,
-} from "../../world/citadelRange.js?v=20260828-sea-contact-v8";
+} from "../../world/citadelRange.js?v=20260903-navona-at-harbor-v1";
 import {
   buildOdysseyCitadel,
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
-} from "../../world/odysseyCitadel.js?v=20260903-level-set-parity-v1";
-import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
-import { withResidentTrojanHorse } from "../../world/citadelBlueprint.js";
+} from "../../world/odysseyCitadel.js?v=20260903-merged-patch-v1";
+import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260904-sun-rig-v1";
+
 import { loadCitadelLevelsSave } from "../../world/citadelLevelsSave.js";
 import { OFFICIAL_OCEAN_SEA_LEVEL, HIGHLAND_CASTLE_SEA_DROP } from "../../world/waterV8/officialOcean.js";
 import { highlandTerrainSurfaceHeight } from "../../world/highlandCitadelDesign.js?v=20260828-reference-light-v9";
 import {
   createCitadelTerraceBirds,
 } from "../../world/citadelTerraceBirds.js?v=20260823-citadel-reference-v2";
-import { createSaihojiPhalanxBattle } from "../../world/saihojiPhalanx.js?v=20260823-citadel-reference-v2";
+import { createSaihojiPhalanxBattle } from "../../world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1";
+import { createVanguardSquad } from "../../world/vanguardTrooper.js";
 import { isCitadelCombatV3 } from "../../core/params.js";
 import { createHarborLandingSample, selectCombatBackend } from "../../agents/citadel/combatSample.js";
 import {
@@ -80,7 +81,8 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
     const saved = JSON.parse(localStorage.getItem(CITADEL_TERRAIN_OBJECTS_KEY) || "[]");
     if (Array.isArray(saved)) citadelTerrainObjects = saved;
   } catch { /* 损坏存档回落空地貌对象 */ }
-  citadelTerrainObjects = withResidentTrojanHorse(citadelTerrainObjects);
+  // 木马只要一匹（主人定案 2026-09-03）：故事木马由 placeNavonaPlaza 浮在港边水面上。
+  // 这里不再注入常驻地貌木马，否则城堡门前会多出第二匹。
 
   const odysseyCitadel = buildOdysseyCitadel({
     dir: citadelDir,
@@ -98,6 +100,18 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   scene.add(odysseyCitadel);
   odysseyCitadel.updateMatrixWorld(true);
   snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborColliders, camp, R });
+
+  // 纳沃纳广场落在城堡→旧港连线的 70% 处，门洞朗港（广场局部 +X）。
+  // 它是 saihojiPhalanx 的集结点；不摆就回落到城堡侧后方，整个故事场景被城堡遮住。
+  // 坐标由旧港实位反解：写死会在 snapOldHarborToSeaCove 改港口位置后失配。
+  {
+    const h = rangeWorldToLocal(harbor.getWorldPosition(new THREE.Vector3()));
+    const t = 0.70;
+    const gx = h.x * (1 - t);
+    const gz = h.z * (1 - t);
+    citadelRange.placeNavonaPlaza(h.x * t, h.z * t, Math.atan2(-gz, -gx), odysseyCitadel);
+  }
+
   if (islandLift > 0) {
     const up = citadelDir.clone().normalize();
     for (const obj of [
@@ -262,6 +276,13 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
   // that optional backend is rebuilt for this landmark, the latest scene keeps
   // the live phalanx battle, which consumes explicit castle-top routes.
   const useV3 = !latestAssault && selectCombatBackend({ combat: isCitadelCombatV3() }) === "v3";
+  // 先锋重甲兵中队（用户 2026-09-04）：随莫比斯 aircraft 出行 → 苔庭之战落地参战。
+  // 挂在 scene 上而不是机队下——伴飞是每帧跟位，落地后就该留在地面，
+  // 挂成机队子节点的话机队一走它们会被拖上天。
+  const vanguardSquad = createVanguardSquad();
+  vanguardSquad.name = "vanguard-squad";
+  scene.add(vanguardSquad);
+
   const saihojiPhalanx = useV3
     ? null
     : createSaihojiPhalanxBattle({
@@ -271,6 +292,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
           return !!(lev && lev.position.length() > R + 3);
         },
         getSquad: () => aircraftSquad,
+        getVanguards: () => vanguardSquad,
         getTram: () => tramSystem,
         oldHarbor: harborBuilt || harbor,
         getTimeOfDay: () => P.timeOfDay,
@@ -342,7 +364,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
     console.info(`[citadelCombatV2] 战术导航图就绪：${JSON.stringify(tacticalGraph.stats())}`);
   }
 
-  return { saihojiPhalanx, paperLanding, tacticalGraph, tacticalGraphView, collectCastleGates, tgState };
+  return { saihojiPhalanx, vanguardSquad, paperLanding, tacticalGraph, tacticalGraphView, collectCastleGates, tgState };
 }
 
 export function tickTacticalGraph(pack, dt) {

@@ -891,6 +891,32 @@
       padding: 3px 0;
     }
     .dev-row input[type="range"] { width: 100%; accent-color: #7eb0ff; }
+    /* C13-7 太阳二维摇杆：方位（横）× 高度（纵），地平线画一条亮线 */
+    #dev-sun-pad {
+      position: relative;
+      width: 100%;
+      height: 108px;
+      margin: 4px 0 6px;
+      border: 1px solid rgba(140, 180, 255, 0.35);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,224,138,0.16) 0%, rgba(255,224,138,0.03) 49%,
+                                rgba(60,90,160,0.10) 51%, rgba(20,30,60,0.30) 100%);
+      cursor: crosshair;
+      touch-action: none;
+      overflow: hidden;
+    }
+    #dev-sun-pad::after {
+      content: ""; position: absolute; left: 0; right: 0; top: 50%;
+      border-top: 1px dashed rgba(255, 224, 138, 0.55);
+    }
+    #dev-sun-knob {
+      position: absolute; width: 13px; height: 13px; margin: -7px 0 0 -7px;
+      border-radius: 50%; background: #ffd479;
+      box-shadow: 0 0 8px 2px rgba(255, 212, 121, 0.6);
+      pointer-events: none;
+    }
+    #dev-sun-readout { font-size: 10px; opacity: 0.8; font-variant-numeric: tabular-nums; }
     .dev-row em { font-style: normal; text-align: right; opacity: 0.8; font-variant-numeric: tabular-nums; }
     #dev-reset, .dev-action {
       margin-top: 10px;
@@ -1755,7 +1781,7 @@
             "[TigerMessenger] three.js source: local vendor" +
               (wantCdn ? "（已忽略 ?cdn=1，默认本地更稳）" : "")
           );
-          await import("./src/main.js?v=20260903-decor-owns-cell-v1");
+          await import("./src/main.js?v=20260904-distcull-recollect-v1");
         }
       }
     } catch (err) {

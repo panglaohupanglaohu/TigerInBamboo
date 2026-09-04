@@ -5,7 +5,7 @@
 //  每座景区使用确定性构图；随机仅用于石面和苔斑细节。
 // =====================================================================
 import * as THREE from "three";
-import { facet } from "../assets/lowPoly.js";
+import { facet, createLowPolyLawnHill } from "../assets/lowPoly.js";
 import { createAncientPineTree } from "../assets/ancient.js";
 import { toonMat, addOutline, INK_COLOR } from "../assets/toon.js";
 import { mergeStaticGroup } from "./geometryMerge.js";
@@ -624,6 +624,40 @@ export function buildSaihojiPlanet(scene, opts = {}) {
     // 枯瀑之庭：补阶梯式浅蓝跌水唇（垂直层叠）
     if (zone.id === "dry-cascade") {
       addDryCascadeTiers(group, zone, radius, rnd);
+    }
+  }
+
+  // 苔庭草坪丘（主人要求 2026-09-04：草坪挪到苔庭）：北排苔海岛群后方
+  // 的缓坡草丘作庭园收尾背景——低多边形草丘 + 坡脚青苔扁斑，
+  // 贴球面放置，略抬根防埋进苔裙。lawnHill 资产默认“坡顶露土褐”，
+  // 与草坪语义不符，这里按苔庭色板重刷顶点色：丘顶亮苔绿 → 坡脚深绿。
+  {
+    const lawnZone = SAIHOJI_ZONES.find((z) => z.id === "moss-islands");
+    if (lawnZone) {
+      const lawnHill = createLowPolyLawnHill({ scale: 3.2, seed: 20260904 });
+      lawnHill.name = "saihoji-lawn-hill";
+      lawnHill.userData.designRole = "saihoji-backdrop-lawn";
+      const rim = new THREE.Color(0x3e704f);
+      const crest = new THREE.Color(0x6ba573);
+      const recolor = new THREE.Color();
+      lawnHill.traverse((node) => {
+        if (!node.isMesh || !node.geometry?.attributes?.color) return;
+        node.geometry.computeBoundingBox();
+        const bb = node.geometry.boundingBox;
+        const span = Math.max(1e-3, bb.max.y - bb.min.y);
+        const attr = node.geometry.attributes.color;
+        for (let i = 0; i < attr.count; i++) {
+          // 取世界向高度比（丘体局部 +Y 即离坡脚高度）
+          const t = THREE.MathUtils.clamp((attr.getY(i) - bb.min.y) / span, 0, 1);
+          recolor.copy(rim).lerp(crest, t);
+          attr.setXYZ(i, recolor.r, recolor.g, recolor.b);
+        }
+        attr.needsUpdate = true;
+      });
+      placeAtLocal(lawnHill, lawnZone, 1.5, 13.2, radius, 0.14, 0.3);
+      root.add(lawnHill);
+      placed.push(lawnHill.position.clone());
+      pushCollider(colliders, lawnHill, Math.max(1.2, (lawnHill.userData.collideRadius ?? 4.8)));
     }
   }
 

@@ -466,6 +466,60 @@ export function makeDistortedCellGeometry(source, ix, iz, floor = 0) {
  * query and generated mesh must use this function so cell (12, *, 12) stays
  * exactly on the shared citadel origin.
  */
+/**
+ * C13-1（S23 / PLAN §10.1）：把墙面 UV 改成**世界坐标**取模。
+ *
+ * 原来每个面都是 0..1 的 UV，于是砖块尺寸随面大小缩放、相邻两格的砖缝也对不上——
+ * 远看就是一块块「贴了图的方盒子」。z1.png 实测 Townscaper 的砖是**连续**的：
+ * 一栋楼从底到顶、跨好几格，横缝是一条直线穿过去的。
+ *
+ * 做法：每个顶点按它所在面的朝向取世界 X 或 Z 当 u、世界 Y 当 v，
+ * 再除以「一块砖的世界尺寸」。因为用的是世界坐标，跨格自动连续，且砖尺寸恒定。
+ *
+ * @param {THREE.BufferGeometry} geo 已经算好 normal 的格几何（局部坐标，中心在原点）
+ * @param {number} wx 该格中心的世界 X
+ * @param {number} wy 该格中心的世界 Y
+ * @param {number} wz 该格中心的世界 Z
+ * @param {number} cs 格宽（世界单位）
+ * @param {number} ch 层高（世界单位）
+ * @param {number} [bricksPerCell=6] 一格宽几块砖（贴图一个 tile = 2 砖 × 4 皮）
+ * @param {number} [coursesPerFloor=12] 一层几皮砖
+ */
+export function applyWorldBrickUv(geo, wx, wy, wz, cs, ch, bricksPerCell = 6, coursesPerFloor = 12) {
+  const pos = geo.attributes.position;
+  const nor = geo.attributes.normal;
+  if (!pos || !nor) return geo;
+  // 贴图一个 tile 覆盖 2 砖 × 4 皮（makeTownPatternTexture: brickW=64 / courseH=32 / size=128）
+  const tileW = (cs / bricksPerCell) * 2;
+  const tileH = (ch / coursesPerFloor) * 4;
+  const uv = new Float32Array(pos.count * 2);
+  for (let i = 0; i < pos.count; i++) {
+    const nx = Math.abs(nor.getX(i));
+    const ny = Math.abs(nor.getY(i));
+    const nz = Math.abs(nor.getZ(i));
+    const px = pos.getX(i) + wx;
+    const py = pos.getY(i) + wy;
+    const pz = pos.getZ(i) + wz;
+    let u;
+    let v;
+    if (ny >= nx && ny >= nz) {
+      // 顶/底面：用 XZ 平铺，避免顶面被拉成条纹
+      u = px / tileW;
+      v = pz / tileW;
+    } else if (nx >= nz) {
+      u = pz / tileW; // 朝 ±X 的面：横向走 Z
+      v = py / tileH;
+    } else {
+      u = px / tileW; // 朝 ±Z 的面：横向走 X
+      v = py / tileH;
+    }
+    uv[i * 2] = u;
+    uv[i * 2 + 1] = v;
+  }
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  return geo;
+}
+
 export function citadelGridCellCenter(
   ix,
   iy,
@@ -1197,6 +1251,17 @@ export function classifyRoofComponent(cells) {
       }
     }
   }
+  // 实心块判据：存在一个完整的 2×2 方块 = 这是一片「面」，不是「臂」。
+  // 十字教堂靠「有格子四邻皆有」来认，但**任何实心块的内部格都满足这个条件**——
+  // 7×7 全实心也会被判成十字教堂，于是整片广场长满屋顶还插一根尖塔
+  // （2026-09-04 实测：7×7 单层 → town-roof ×47 + 尖塔，fence 0）。
+  // 而录像里（S23 sheetA 5–8s / sheet_0 15–20s）大平台就是**开阔广场 + 沿轮廓的女儿墙**。
+  // 所以先排除实心块：有 2×2 就是平顶，轮不到十字。
+  const has2x2 = cells.some(([ix, iz]) =>
+    set.has(`${ix + 1},${iz}`) && set.has(`${ix},${iz + 1}`) && set.has(`${ix + 1},${iz + 1}`)
+  );
+  // 2×2 方块环（恰好四格）另有专门分支，不能被 has2x2 提前吃掉
+  if (has2x2 && size > 4) return { kind: "plaza" };
   // 十字教堂：恰存在四臂交汇格
   if (cross) return { kind: "cross", center: cross };
   // 2×2 方块环：四格全为垂直转角、无面格
@@ -1372,7 +1437,20 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   })) : null;
   // G30 增量性能：want() 与 at() 同走整数 key（ix<<12 | iy<<6 | iz），
   // 判定循环热路径不再做模板字符串拼接。
-  const want = (ix, iy, iz) => !dirtySet || dirtySet.has((ix << 12) | (iy << 6) | iz);
+  // 跨格构件发射期间（ownSpanning 作用域内），整组格一律视为 dirty：
+  // 摘旧网格用的是 cells.some(dirty)，重建也必须整组一起来，否则「摘掉一整块
+  // 屋顶只补回一格」。把口径绑在 ownSpanning 声明的格集上，比往 dirty 里塞
+  // 邻域格便宜得多——后者会连带重建那些格自己的墙/窗/门（实测 P90 190ms）。
+  let _spanWant = null;
+  const want = (ix, iy, iz) => {
+    if (!dirtySet) return true;
+    const key = (ix << 12) | (iy << 6) | iz;
+    return dirtySet.has(key) || (_spanWant !== null && _spanWant.has(key));
+  };
+  const spanKeyOf = (cellKey) => {
+    const [x, y, z] = String(cellKey).split(",").map(Number);
+    return (x << 12) | (y << 6) | z;
+  };
   const { cellSize: cs, cellHeight: ch } = spec;
   const { mesh, materials, random } = ctx;
 
@@ -1408,9 +1486,53 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   const cz = (iz) => citadelGridCellCenter(0, 0, iz, cs, ch, rows).z;
   const cy = (iy) => citadelGridCellCenter(0, iy, 0, cs, ch, cols).y;
 
+  // 归属声明（C3）：层组内每个网格都必须能说出自己属于哪一格，否则增量重建
+  // 摘不掉它（`o.isMesh && (userData.cell || userData.townModule)`），合并块也
+  // 无法按格局部替换。拦截 add 而不是改 52 个调用点：规则块只需在循环顶部
+  // 用 ownCell() 声明当前格。
+  let _ownerCell = null;
+  const ownCell = (ix, iy, iz, char) => { _ownerCell = { ix, iy, iz, char }; };
+  /**
+   * 声明「接下来发射的对象属于这一组格」。
+   * @returns {boolean} 这组格是否需要重建（全量恒 true；增量下 = 任一格 dirty）。
+   *   调用方拿它当门：`if (!ownSpanning(keys)) continue;`——不 dirty 就整组不发，
+   *   dirty 就整组全发（组内每格的 want() 在作用域内一律为真）。
+   */
+  const ownSpanning = (cells) => {
+    _ownerCell = { cells };
+    _spanWant = new Set(cells.map(spanKeyOf));
+    return !dirtySet || cells.some((key) => dirtySet.has(spanKeyOf(key)));
+  };
+  const ownNone = () => { _ownerCell = null; _spanWant = null; };
+  const stampOwner = (object, iy) => {
+    const unowned = [];
+    object.traverse?.((o) => {
+      if (!o.isMesh) return;
+      if (o.userData.cell || o.userData.townModule || o.userData.cells) return;
+      if (_ownerCell) {
+        if (_ownerCell.cells) o.userData.cells = _ownerCell.cells;
+        else o.userData.cell = _ownerCell;
+        return;
+      }
+      unowned.push(o.name || o.type);
+    });
+    if (unowned.length) {
+      throw new Error(
+        `town level ${iy}: 网格无主（不在 ownCell/ownSpanning 作用域内，自身也没写 userData.cell）：${unowned.slice(0, 5).join(", ")}`
+      );
+    }
+  };
+
   const levelGroups = levels.map((_, iy) => {
     const group = new THREE.Group();
     group.name = `town-level-${iy}`;
+    const rawAdd = group.add.bind(group);
+    group.userData.restoreAdd = () => { group.add = rawAdd; };
+    group.userData.stampOwner = (object) => stampOwner(object, iy);
+    group.add = (...objects) => {
+      for (const object of objects) stampOwner(object, iy);
+      return rawAdd(...objects);
+    };
     return group;
   });
 
@@ -1541,6 +1663,8 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       || makeDistortedCellGeometry(cellGeometry, ix, iz, iy);
     if (colorful) applyPatchyWallColors(geo, ix, iz, iy);
     else applyVerticalVertexColors(geo, 1.0, 1.0);
+    // 砖缝跨格连续（C13-1）：UV 走世界坐标，不用每面 0..1
+    applyWorldBrickUv(geo, cx(ix), cy(iy), cz(iz), cs, ch);
     const clusterInfo = {
       clusterId: townClusters.clusterOf.get(ix * 32 + iz),
       facing: townCellFacing(townClusters.baseChar, ix, iz),
@@ -1634,7 +1758,9 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         dome.add(finial);
       }
       dome.position.set(cx(bx), (by + 1) * ch, cz(bz));
+      ownCell(bx, by, bz, at(bx, by, bz));
       levelGroups[by].add(dome);
+      ownNone();
       stats.domeCount++;
     }
   }
@@ -1665,7 +1791,9 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       if (!want(ix, top, iz)) continue;
       const cap = ctx.buildHalfDome(cs * 0.56, materials.gold, "town-tower-cap", 1.22);
       cap.position.set(cx(ix), (top + 1) * ch, cz(iz));
+      ownCell(ix, top, iz, at(ix, top, iz));
       levelGroups[top].add(cap);
+      ownNone();
       stats.towerCount++;
     }
   }
@@ -1689,6 +1817,19 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // 底层墙裙：外露面底部基座条
   const plinthGeometry = new THREE.BoxGeometry(cs + 0.16, 0.46, 0.09);
   // 窗台（下托）/ 窗楣（上压）
+  // C13-2（S23 / PLAN §10.2，证据 docs/z1.png）：窗是**三件套**，不是一块贴片。
+  //   frame   白色厚外框，比洞口大 12%，外凸 0.02 → 在墙上投一道细影
+  //   glass   中蓝玻璃，相对外框内凹 0.01
+  //   mullion 白色十字窗棂（2×2 分格）
+  // 尺寸按 z1 读数：窗接近正方形，边长 ≈ 0.62 世界单位。
+  const WIN_W = 0.62;
+  const winFrameGeometry = new THREE.BoxGeometry(WIN_W * 1.12, WIN_W * 1.12, 0.05);
+  const winGlassGeometry = new THREE.BoxGeometry(WIN_W, WIN_W, 0.03);
+  const winMullionVGeometry = new THREE.BoxGeometry(WIN_W * 0.09, WIN_W, 0.045);
+  const winMullionHGeometry = new THREE.BoxGeometry(WIN_W, WIN_W * 0.09, 0.045);
+  // 山墙菱形窗（z1 右下：山墙上是 45° 旋转的方窗，无棂）
+  const gableDiamondFrameGeometry = new THREE.BoxGeometry(WIN_W * 0.62, WIN_W * 0.62, 0.05);
+  const gableDiamondGlassGeometry = new THREE.BoxGeometry(WIN_W * 0.44, WIN_W * 0.44, 0.03);
   const sillGeometry = new THREE.BoxGeometry(0.92, 0.09, 0.16);
   const lintelGeometry = new THREE.BoxGeometry(1.06, 0.1, 0.12);
   // 转角壁柱：竖向细柱
@@ -1706,6 +1847,27 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // 屋脊瓦 / 挑檐压条
   const ridgeGeometry = new THREE.BoxGeometry(cs * 0.92, 0.12, 0.18);
   const eaveGeometry = new THREE.BoxGeometry(cs, 0.09, 0.24);
+  // ---- C13-4 檐口三层色带（PLAN §10.4）----
+  // z1 的檐口剖面自上而下是「瓦面橙 → 白色檐板 → 暗红封檐」，出挑约 0.04 格。
+  // 原来的坡面只是一条硬边，所以屋顶像纸片。这里在**落水侧两条檐口**各挂两片薄板：
+  //   檐板 EAVE_FASCIA_H = 0.03ch，顶面与坡面根部（y = baseY）齐平；
+  //   封檐 EAVE_BARGE_H  = 0.02ch，紧贴檐板下沿。
+  // 带的外沿 = 坡面半宽 0.56cs + 出挑 0.04cs = 0.60cs，所以带中心正好落在 0.56cs。
+  const EAVE_FASCIA_H = ch * 0.03;
+  const EAVE_BARGE_H = ch * 0.02;
+  const EAVE_OVERHANG = cs * 0.04;
+  const EAVE_SPAN = cs * 1.08; // = makeGableRoofGeometry 的 2l，与相邻格首尾相接
+  const EAVE_HALF_W = cs * 0.56; // = makeGableRoofGeometry 的 w（坡面半宽）
+  // 檐口按**整条屋脊**出一根，不是逐格四片：一条 N 格的条带只加 4 个网格（±Z 各
+  // 檐板 + 封檐），而不是 4N 个。既省合并成本（逐格版把 edit P50 从 150 顶到 187ms），
+  // 视觉上也更对——真实檐口是一条连续的线，逐格拼会在格缝处露出接头。
+  const _eaveGeoCache = new Map();
+  const eaveRunGeometry = (spanLen, h, depth) => {
+    const key = `${spanLen.toFixed(4)}|${h.toFixed(4)}|${depth.toFixed(4)}`;
+    let geo = _eaveGeoCache.get(key);
+    if (!geo) { geo = new THREE.BoxGeometry(spanLen, h, depth); _eaveGeoCache.set(key, geo); }
+    return geo;
+  };
   // 山墙圆窗（口沿 + 十字格）
   const oculusGeometry = new THREE.CylinderGeometry(0.24, 0.24, 0.08, 10);
   const oculusCrossGeometry = new THREE.BoxGeometry(0.34, 0.06, 0.08);
@@ -1733,6 +1895,51 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     archDoorCache.set(key, geo);
     return geo;
   };
+  // C13-4：给一格人字坡的两条落水檐口挂「白檐板 + 暗红封檐」。
+  // alongX = 屋脊沿 X（落水侧朝 ±Z），否则朝 ±X。必须在 ownSpanning(comp.keys)
+  // 作用域里调用——它和瓦面是同一块屋顶，整块 dirty 才重建。
+  // cells：同一条屋脊上的格子（[ix, iz][]），alongX = 屋脊沿 X。
+  const addEaveBands = (cells, iy, alongX) => {
+    if (!cells.length) return;
+    const baseY = (iy + 1) * ch;
+    const fasciaMat = materials.fascia ?? materials.crenel ?? materials.stone ?? trimMat;
+    const bargeMat = materials.bargeboard ?? materials.roofTile ?? trimMat;
+    // 沿脊向的世界坐标区间：首尾格中心各外扩半个 EAVE_SPAN（= 坡面半长 0.54cs）
+    const along = cells.map(([ix, iz]) => (alongX ? cx(ix) : cz(iz)));
+    const cross = alongX ? cz(cells[0][1]) : cx(cells[0][0]);
+    const a0 = Math.min(...along) - EAVE_SPAN / 2;
+    const a1 = Math.max(...along) + EAVE_SPAN / 2;
+    const mid = (a0 + a1) / 2;
+    const spanLen = a1 - a0;
+    for (const sign of [-1, 1]) {
+      const off = sign * EAVE_HALF_W;
+      const fascia = mesh(
+        eaveRunGeometry(spanLen, EAVE_FASCIA_H, EAVE_OVERHANG * 2),
+        fasciaMat,
+        "town-roof-fascia",
+        0.01
+      );
+      const barge = mesh(
+        eaveRunGeometry(spanLen, EAVE_BARGE_H, EAVE_OVERHANG * 2.1),
+        bargeMat,
+        "town-roof-bargeboard",
+        0.008
+      );
+      if (alongX) {
+        fascia.position.set(mid, baseY - EAVE_FASCIA_H / 2, cross + off);
+        barge.position.set(mid, baseY - EAVE_FASCIA_H - EAVE_BARGE_H / 2, cross + off);
+      } else {
+        fascia.rotation.y = Math.PI / 2;
+        barge.rotation.y = Math.PI / 2;
+        fascia.position.set(cross + off, baseY - EAVE_FASCIA_H / 2, mid);
+        barge.position.set(cross + off, baseY - EAVE_FASCIA_H - EAVE_BARGE_H / 2, mid);
+      }
+      levelGroups[iy].add(fascia);
+      levelGroups[iy].add(barge);
+    }
+    stats.eaveCount = (stats.eaveCount ?? 0) + 1;
+  };
+
   // 在坡屋顶 cell 上加烟囱：位置偏屋脊一侧坡面，颜色随该户墙色
   const addChimney = (ix, iy, iz, alongX) => {
     const chChar = at(ix, iy, iz);
@@ -1805,6 +2012,11 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       const { iy } = comp;
       const shape = classifyRoofComponent(comp.cells);
       const cellSet = new Set(comp.keys);
+      // 屋顶归整个连通分量：形状由 classifyRoofComponent(comp.cells) 定，
+      // 改一格就会改变整块屋顶，所以任一格 dirty 都得整块重建。
+      // 屋顶按连通分量整块重建：形状由 classifyRoofComponent(comp.cells) 定，
+      // 少一格就可能整体改形。不 dirty 就整块不动，dirty 就整块重来。
+      if (!ownSpanning(comp.keys)) continue;
 
       if (shape.kind === "single") {
         const [ix, iz] = comp.cells[0];
@@ -1896,10 +2108,11 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
             roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
             levelGroups[iy].add(roof);
             stats.roofCount++;
+            addEaveBands([[ix, iz]], iy, alongX); // C13-4 檐口三层色带（臂上逐格，轴向可能各不相同）
             {
               const ridge = mesh(
                 ridgeGeometry,
-                colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat,
+                materials.bargeboard ?? (colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat),
                 "town-roof-ridge",
                 0.014
               );
@@ -1918,20 +2131,23 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       if (shape.kind === "strip") {
         for (const [ix, iz] of comp.cells) {
           const key = `${ix},${iy},${iz}`;
+          roofCells.add(key);   // 记账不受 dirty 影响，规则 3 靠它跳过城垛
+          if (!want(ix, iy, iz)) continue;
           const roof = mesh((shape.alongX ? gableX : gableZ).clone(), roofMaterialFor(ix, iz, iy), "town-roof", 0.04);
           applyVerticalVertexColors(roof.geometry, 1.26, 0.64);
           roof.position.set(cx(ix), (iy + 1) * ch, cz(iz));
           levelGroups[iy].add(roof);
-          roofCells.add(key);
           stats.roofCount++;
         }
+        // C13-4 檐口三层色带：整条屋脊一根，不逐格
+        addEaveBands(comp.cells.filter(([gx, gz]) => want(gx, iy, gz)), iy, shape.alongX);
         // 屋脊瓦：沿条带轴向一条深色压条（挑檐方向的两端不出）
         const alongX = shape.alongX;
         for (const [ix, iz] of comp.cells) {
           if (!want(ix, iy, iz)) continue;
           const ridge = mesh(
             ridgeGeometry,
-            colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat,
+            materials.bargeboard ?? (colorful || !leanDecor ? trimMat : materials.roofTile ?? trimMat),
             "town-roof-ridge",
             0.014
           );
@@ -1962,20 +2178,31 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
           const [sx1, sz1] = comp.cells[comp.cells.length - 1];
           for (const [gx, gz] of [[sx0, sz0], [sx1, sz1]]) {
             if (!want(gx, iy, gz)) continue;
-            const oculus = mesh(oculusGeometry, trimMat, "town-gable-oculus", 0.014);
-            oculus.rotation.x = Math.PI / 2;
-            oculus.position.set(
-              cx(gx) + (alongX ? 0 : (gx === sx0 ? -cs * 0.5 - 0.04 : cs * 0.5 + 0.04)),
+            // C13-2（z1.png 右下）：山墙上是**45° 菱形窗**，不是带十字棂的圆窗。
+            // 山墙端的外法线：屋脊沿 X 时朝 ±Z，沿 Z 时朝 ±X。
+            const gnx = alongX ? 0 : (gx === sx0 ? -1 : 1);
+            const gnz = alongX ? (gz === sz0 ? -1 : 1) : 0;
+            const gPos = [
+              cx(gx) + gnx * (cs * 0.5 + 0.04),
               (iy + 1) * ch + ch * 0.3,
-              cz(gz) + (alongX ? (gz === sz0 ? -cs * 0.5 - 0.04 : cs * 0.5 + 0.04) : 0)
+              cz(gz) + gnz * (cs * 0.5 + 0.04),
+            ];
+            const gYaw = Math.atan2(gnx, gnz);
+            const diamondFrame = mesh(gableDiamondFrameGeometry, trimMat, "town-gable-diamond", 0.014);
+            diamondFrame.position.set(gPos[0], gPos[1], gPos[2]);
+            diamondFrame.rotation.y = gYaw;
+            diamondFrame.rotation.z = Math.PI / 4; // 正方形转 45° = 菱形
+            levelGroups[iy].add(diamondFrame);
+            const diamondGlass = mesh(
+              gableDiamondGlassGeometry,
+              materials.windowDark || materials.ink,
+              "town-gable-diamond-glass",
+              0.008
             );
-            oculus.rotation.z = alongX ? 0 : Math.PI / 2;
-            levelGroups[iy].add(oculus);
-            // 十字窗棂
-            const oculusCross = mesh(oculusCrossGeometry, trimMat, "town-gable-oculus", 0.008);
-            oculusCross.position.copy(oculus.position);
-            oculusCross.rotation.y = oculus.rotation.y;
-            levelGroups[iy].add(oculusCross);
+            diamondGlass.position.set(gPos[0] + gnx * 0.02, gPos[1], gPos[2] + gnz * 0.02);
+            diamondGlass.rotation.y = gYaw;
+            diamondGlass.rotation.z = Math.PI / 4;
+            levelGroups[iy].add(diamondGlass);
             stats.oculusCount = (stats.oculusCount ?? 0) + 1;
           }
         }
@@ -2006,6 +2233,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       // plaza：大平顶分量，留给规则 3.5 花园/晒台判定
       roofPlazas.push(comp);
     }
+    ownNone();
   }
 
 
@@ -2032,11 +2260,18 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
           if (at(x + dx, iy + 1, z + dz) !== ".") hugsWall = true;
         }
       }
-      // 贴墙的大平顶 = 花园；不贴墙但 ≥3 格的晒台也铺草+圆树（原版岛城到处是盆栽）
-      if (!hugsWall && comp.cells.length < 3) continue;
+      // S20⑥ 逐字：*the garden modules are super high priority, but they … can only
+      // exist … where they end up next to a wall*——**花园只在贴墙（围合）时成立**。
+      // 原来还有一条「不贴墙但 ≥3 格也铺草」，结果整片开阔大平台全铺成草地；
+      // 而录像里（S23 sheetA 5–8s / sheet_0 15–20s）开阔平台是**石板广场 + 沿轮廓女儿墙**，
+      // 草地与树只出现在被墙围起来的内院/屋顶花园里。
+      if (!hugsWall) continue;
+      // 花园按整个平顶分量成立/消失（少一格就可能不再围合），归属跨格；
+      // gardenCells 是规则 3 的输入，必须在门外照常填（否则城垛会冒出来）。
+      for (const key of comp.keys) gardenCells.add(key);
+      if (!ownSpanning(comp.keys)) continue;
       for (const key of comp.keys) {
         const [x, , z] = key.split(",").map(Number);
-        gardenCells.add(key);
         if (!want(x, iy, z)) continue;
         const grass = mesh(
           grassGeometry,
@@ -2066,6 +2301,10 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         }
       }
       stats.gardenCount++;
+      // 绿植按整片花园成立，但下面几个循环没有逐格 want() 门——增量模式下
+      // 若不在这里拦一次，全城花园的树/盆栽/鸟每次编辑都会重造一份（实测每次
+      // 泄漏 6,536 tris）。与 ownSpanning(comp.keys) 的归属口径保持一致。
+      if (dirtySet && !comp.cells.some(([x, z]) => want(x, iy, z))) continue;
       // 树 1~3 棵：哈希选位，落在分量内部（非最外圈）
       const inner = comp.cells.filter(([x, z]) =>
         at(x + 1, iy, z) !== "." && at(x - 1, iy, z) !== "." &&
@@ -2120,11 +2359,13 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         stats.birdCount++;
       }
     }
+    ownNone();
   }
 
   for (const [key, char] of grid) {
     const [ix, iy, iz] = key.split(",").map(Number);
     if (!want(ix, iy, iz)) continue;
+    ownCell(ix, iy, iz, char);
     const isGate = char === CITADEL_GATE_CHAR;
     const module = townscaperModuleSelection(ix, iy, iz, char, 0, openMaskFor(ix, iy, iz));
     const house = houseByColumn.get(`${ix},${iz}`) ?? {
@@ -2137,27 +2378,62 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     if (iy >= 1) {
       const winMat = materials.windowDark || materials.ink;
       const density = [0.5, 0.7, 1.0][house.seed % 3];
+      // 窗的「有没有」由**柱-面**决定，与层号无关，而且**按排名取前 n 面**，
+      // 不是逐面掷骰子（C13-2，证据 z1.png / z2.png）。
+      //
+      // 旧写法有两个毛病：
+      //   ① faceDensity 里含 `street`（只在最低层为真）→ 同一面一层有窗二层没窗，
+      //      立面像被虫蛀；z1 里是严整的窗格阵，一旦开窗每层都有。
+      //   ② 逐面独立掷骰 → **整栋楼可能一扇窗都没有**。实测孤立 5 层塔
+      //      seed=1043026656 → density 0.5，四个面的 r 分别 0.545/0.751/0.527/0.769
+      //      全部 ≥0.5，于是塔身一片空白；而 z2.png 里塔身是满满一列窗。
+      // 改成排名制：这根柱子恒定开 n = max(1, round(density × 暴露面数)) 个面，
+      // 取 faceSeed 最小的前 n 个。密度仍然管疏密，但永远不会归零。
+      // 面集只依赖 (户种子, 柱坐标, 密度)，**不看邻居的死活**。
+      // 试过「按实际暴露面排名」，结果引入了一条长程依赖：删掉 (5,2,4) 会改变
+      // 邻柱 (5,3) 的暴露面数 → 改变它的开窗面 → 连带改掉该柱 iy=8 的窗，
+      // 而增量的 dirty 只覆盖 ±2 层，于是增量比全量少 12 tris
+      // （2026-09-04 实测，`test_edit_exactness` 逐格对比抓到）。
+      // 层高方向的窗仍由「这一层这一面是否临空」逐格决定，所以外观不受影响。
+      if (!house.windowFaces) {
+        const ranked = DIRS
+          .map(([dx, dz]) => ({ dx, dz, r: ((house.seed ^ (dx * 131 + dz * 173) ^ (ix * 7 + iz * 11)) >>> 0) % 1000 }))
+          .sort((a, b) => a.r - b.r);
+        const n = Math.max(1, Math.round(density * DIRS.length * (leanDecor ? 0.82 : 1)));
+        house.windowFaces = new Set(ranked.slice(0, n).map(({ dx, dz }) => `${dx},${dz}`));
+      }
       for (const [dx, dz] of DIRS) {
         if (at(ix + dx, iy, iz + dz) !== ".") continue;
         if (isGate && dz === 1) continue;
-        // 临街/临水（邻空）窗更密；背贴邻户的面已在上面 continue
-        const street = at(ix + dx, iy - 1, iz + dz) === "." || iy === house.bottom + 1;
-        const faceDensity = Math.min(1, (density + (street ? 0.22 : 0)) * (leanDecor ? 0.72 : 1));
-        // 户级随机：同一面（ix,iz,dx,dz）全层一致，避免每层窗位漂移
-        const faceSeed = (house.seed ^ (dx * 131 + dz * 173) ^ (ix * 7 + iz * 11)) >>> 0;
-        if ((faceSeed % 1000) / 1000 >= faceDensity) continue;
+        if (!house.windowFaces.has(`${dx},${dz}`)) continue;
+        const winYaw = Math.atan2(dx, dz);
+        const winY = cy(iy) - ch * 0.08;
+        const winX = cx(ix) + dx * (cs / 2 + 0.028);
+        const winZ = cz(iz) + dz * (cs / 2 + 0.028);
+        // 外框（白，外凸）→ 玻璃（中蓝，内凹）→ 十字棂（白）
+        const frameMat = materials.trim ?? materials.W;
+        const addWinPart = (geo, mat, name, out, tag) => {
+          const part = mesh(geo, mat, name, 0.014);
+          part.position.set(winX + dx * out, winY, winZ + dz * out);
+          part.rotation.y = winYaw;
+          part.userData.cell = { ix, iy, iz, char };
+          if (tag) part.userData.citadelWindowPart = tag;
+          levelGroups[iy].add(part);
+          return part;
+        };
+        if (!leanDecor) addWinPart(winFrameGeometry, frameMat, "town-window-frame", 0.014, "frame");
         const window = mesh(
-          leanDecor ? new THREE.BoxGeometry(0.38, 0.64, 0.05) : ctx.archWindowGeometry,
+          leanDecor ? new THREE.BoxGeometry(0.38, 0.64, 0.05) : winGlassGeometry,
           winMat,
           "town-window",
           0.022
         );
-        window.position.set(
-          cx(ix) + dx * (cs / 2 + 0.028),
-          cy(iy) - ch * 0.08,
-          cz(iz) + dz * (cs / 2 + 0.028)
-        );
-        window.rotation.y = Math.atan2(dx, dz);
+        window.position.set(winX, winY, winZ);
+        window.rotation.y = winYaw;
+        if (!leanDecor) {
+          addWinPart(winMullionVGeometry, frameMat, "town-window-mullion", 0.024, "mullion-v");
+          addWinPart(winMullionHGeometry, frameMat, "town-window-mullion", 0.024, "mullion-h");
+        }
         window.userData.citadelWindow = true;
         // 房屋单元 id 用格坐标；台地号在挂到 town-terrace-T 后由 refresh 补齐
         window.userData.cellIx = ix;
@@ -2517,6 +2793,9 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       stats.gate = { ix, iy, iz, x: cx(ix), z: cz(iz) + cs / 2 };
     }
   }
+  // 出循环即撤销归属：后续规则块若未自己声明，宁可留成「无主」被审计抓到，
+  // 也不能沿用最后一格的陈旧值被静默错标（实测防波堤曾因此归错格）。
+  ownNone();
 
   // ---------- 规则 3.7：连拱柱廊（Townscaper 底层开敞廊）----------
   // 悬空段（下方全空、同层连续、两端有支撑）长度 ≥2：每格出拱，
@@ -2538,9 +2817,16 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       const supportXLeft = at(ix - 1, iy, iz) !== ".";
       const supportXRight = at(ix + runX, iy, iz) !== ".";
       if (runX >= 2 && supportXLeft && supportXRight) {
+      // 连拱段是一个跨格构件：整段的成立与否由「悬空 run + 两端支撑」决定，
+      // 少一格就不是这条廊。归属给整段，重建也按整段（cells.some(want)）——
+      // 与摘旧网格的 cells.some(dirty) 同口径，否则会摘掉一段只补回一格。
+        const runCellsX = [];
         for (let r = 0; r < runX; r++) {
           visitedArcade.add(`${ix + r},${iy},${iz}`);
-          if (!want(ix + r, iy, iz)) continue;
+          runCellsX.push(`${ix + r},${iy},${iz}`);
+        }
+        if (!ownSpanning(runCellsX)) { continue; }
+        for (let r = 0; r < runX; r++) {
           const arch = mesh(archGeoX, materials[arcChar] ?? materials.W, "town-arch", 0.035);
           arch.position.set(cx(ix + r), iy * ch + 0.02, cz(iz));
           levelGroups[iy - 1].add(arch);
@@ -2552,6 +2838,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
             stats.arcadeColumnCount = (stats.arcadeColumnCount ?? 0) + 1;
           }
         }
+        ownNone();
         continue;
       }
       // 沿 +z 扫描
@@ -2560,8 +2847,18 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       const supportZDown = at(ix, iy, iz - 1) !== ".";
       const supportZUp = at(ix, iy, iz + runZ) !== ".";
       if (runZ >= 2 && supportZDown && supportZUp) {
+      // 连拱段是一个跨格构件：整段的成立与否由「悬空 run + 两端支撑」决定，
+      // 少一格就不是这条廊。归属给整段，重建也按整段（cells.some(want)）——
+      // 与摘旧网格的 cells.some(dirty) 同口径，否则会摘掉一段只补回一格。
+        const runCellsZ = [];
         for (let r = 0; r < runZ; r++) {
           visitedArcade.add(`${ix},${iy},${iz + r}`);
+          runCellsZ.push(`${ix},${iy},${iz + r}`);
+        }
+        // 这里原本连 want() 门都没有：增量模式每次编辑都会把全城 z 向连拱
+        // 重新发射一份（重影来源之一，2026-09-04）。
+        if (!ownSpanning(runCellsZ)) { continue; }
+        for (let r = 0; r < runZ; r++) {
           const arch = mesh(archGeoZ, materials[arcChar] ?? materials.W, "town-arch", 0.035);
           arch.position.set(cx(ix), iy * ch + 0.02, cz(iz + r));
           levelGroups[iy - 1].add(arch);
@@ -2573,6 +2870,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
             stats.arcadeColumnCount = (stats.arcadeColumnCount ?? 0) + 1;
           }
         }
+        ownNone();
       }
     }
   }
@@ -2616,6 +2914,14 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       const enclosedX = at(ix - 1, 0, iz) !== "." && at(ix + 1, 0, iz) !== ".";
       const enclosedZ = at(ix, 0, iz - 1) !== "." && at(ix, 0, iz + 1) !== ".";
       if (!enclosedX && !enclosedZ) continue;
+      // 水道格与水门都由「两侧夹住它的实心格」决定：任一侧被删/加，这段水
+      // 道就不再成立。归属给空格自身 + 四邻实心格（与 plaza 同一套口径）。
+      if (!ownSpanning([
+        `${ix},0,${iz}`,
+        ...DIRS.map(([dx, dz]) => [ix + dx, iz + dz])
+          .filter(([x, z]) => at(x, 0, z) !== ".")
+          .map(([x, z]) => `${x},0,${z}`),
+      ])) continue;
       const water = mesh(waterGeometry, materials.water, "town-canal-water", 0.02);
       water.castShadow = false;
       water.position.set(cx(ix), 0.34, cz(iz));
@@ -2640,6 +2946,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         waterGate.userData.townModule.variant = TOWNSCAPER_MODULE_FAMILIES.hole[gateModule.hole];
         stats.waterGateCount++;
       }
+      ownNone();
     }
   }
 
@@ -2658,7 +2965,17 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
           if (at(ix + dx, 0, iz + dz) !== ".") solidNei++;
         }
         if (solidNei < 3) continue; // 至少三面围合
-        if (!want(ix, 0, iz)) continue;
+        // 广场铺在**空格**上，它的存在由四周的实心格决定：任一围合格被删/加，
+        // 这块石板就该重来。所以归属是「空格自身 + 全部围合格」的跨格集合，
+        // 与摘旧网格的 cells.some(dirty) 判据同口径。
+        // （2026-09-04：此前整块无主，orphan 普查看不见——因为无主面在合并时
+        //   不进 faceToCell，census 只数进了表的段。）
+        if (!ownSpanning([
+          `${ix},0,${iz}`,
+          ...DIRS.map(([dx, dz]) => [ix + dx, iz + dz])
+            .filter(([x, z]) => at(x, 0, z) !== ".")
+            .map(([x, z]) => `${x},0,${z}`),
+        ])) continue;
         const plaza = mesh(plazaGeometry, materials.plazaStone ?? materials.W, "town-plaza", 0.018);
         plaza.position.set(cx(ix), 0.05, cz(iz));
         levelGroups[0].add(plaza);
@@ -2673,6 +2990,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         seamZ.name = "town-plaza-seam";
         seamZ.position.set(cx(ix) + cs * 0.24, 0.05, cz(iz));
         levelGroups[0].add(seamZ);
+        ownNone();
         stats.plazaCount++;
       }
     }
@@ -2692,6 +3010,21 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       if (region.terraceFloor === 0 && region.cells.some(([x, z]) => waterReached.has(`${x},${z}`))) continue;
       const { terraceFloor: iy, cells } = region;
       const floorY = iy === 0 ? 0.05 : iy * ch + 0.05;
+      // 内院的台面/矮墙/水井/水面都由整片围合决定：少一格围合，这个内院就不
+      // 成立。归属统一给 region.cells，与摘旧网格的 cells.some(dirty) 同口径。
+      // （2026-09-04：此前 241 个内院构件整体无主，orphan 普查漏报——无主面
+      //   不进 faceToCell，合并后就从 census 里消失了。）
+      //
+      // **围合墙也要进格集**：region.cells 全是**空格**，而编辑发生在实心格上。
+      // 只登记空格的话，玩家拆掉围墙时这段内院永远不会被判 dirty，就一直挂在
+      // 那儿（2026-09-04 parity 测试里 65 个「登记了却摘不到」的键就是它）。
+      const courtyardKeys = new Set(cells.map(([x, z]) => `${x},${iy},${z}`));
+      for (const [x, z] of cells) {
+        for (const [dx, dz] of DIRS) {
+          if (at(x + dx, iy, z + dz) !== ".") courtyardKeys.add(`${x + dx},${iy},${z + dz}`);
+        }
+      }
+      if (!ownSpanning([...courtyardKeys])) continue;
       // 底层围合空格已经由 plaza 规则铺好；上层才需要新铺庭院台面。
       if (iy > 0) {
         for (const [x, z] of cells) {
@@ -2758,8 +3091,13 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       }
 
       // 大于一格的内院才放树，留出单格天井的呼吸感；树落在内院台面而非空中。
-      if (cells.length >= 3 && ctx.buildTopiary) {
+      // 与 ownSpanning(cells) 同口径拦一次：树没有逐格 want() 门，
+      // 增量模式下不拦就会每次编辑重造全城内院树。
+      if (cells.length >= 3 && ctx.buildTopiary
+        && !(dirtySet && !cells.some(([x, z]) => want(x, iy, z)))) {
         const [treeX, treeZ] = cells[(cells.length * 7919 + iy) % cells.length];
+        // 内院成立与否由整片围合决定，树跟着整个内院生灭
+        ownSpanning(cells.map(([x, z]) => `${x},${iy},${z}`));
         const tree = ctx.buildTopiary(
           `town-courtyard-tree-${stats.shrubCount}`,
           0.62,
@@ -2768,8 +3106,10 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         );
         tree.position.set(cx(treeX), floorY + 0.06, cz(treeZ));
         levelGroups[Math.max(0, iy - 1)].add(tree);
+        ownNone();
         stats.shrubCount++;
       }
+      ownNone();
       stats.courtyardCount++;
       stats.courtyardCellCount += cells.length;
     }
@@ -2821,27 +3161,45 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
 
   // ---------- 规则 5：悬空支撑支架（Townscaper flying buildings）----------
   // 右键删除中间层后，上层建筑不塌陷、悬浮在空中的块自动长出支撑支架：
-  // 从下方承重面（下一非空块的顶面 / 基座顶）到悬空块底面的八面体边框。
+  // 从下方承重面（下一非空块的顶面 / 基座顶）到悬空块底面。
   // 与规则 1（拱）互补：悬空但有侧向支撑 → 拱；完全悬空 → 支架。
+  //
+  // C13-6（PLAN §10.6，证据 docs/z2.png）：形从「八面体四边桁架」改成 Oskar 的
+  // **双扁方管**——两根扁方管竖柱贴着承重侧、顶部一道水平横梁托住体块底面、
+  // 悬空高度 > 2 层时中段加一道 λ 斜撑。
+  //
+  // **不改的是构造式**（§4 N3）：支架仍然是「按下方承重面直接算出来」的，
+  // 不进 WFC 域、不做可满足性搜索，所以永远不会出现「该有支架却没有」的静默失败。
+  // 因此两根柱脚必须落在 (ix,iz) 这一格的承重投影里——这就是柱轴离格心只取
+  // 0.30cs（= 距墙面 0.20cs）而不是真的悬在墙外 0.3 格的原因：再往外挪，
+  // 柱脚就踩空了，「必然连通」当场失效。z2 里的塔是圆的所以管子看着在轮廓外，
+  // 我们的格是方的，贴着立面就是能做到的最像。
   {
-    // 支架不是“中央一点向上四角发散”的棱锥：四个环向节点把上/下
-    // 承重点分开，四个支撑单元各由两条边组成，形成八面体式承重框。
-    const edgeGeo = new THREE.BoxGeometry(0.075, 0.075, 1);
     const supportMat = materials.iron ?? materials.ink ?? materials.trim;
     let supportCount = 0;
-    const zAxis = new THREE.Vector3(0, 0, 1);
-    const addSupportEdge = (parent, from, to) => {
-      const dir = to.clone().sub(from);
-      const len = dir.length();
-      if (len <= 1e-6) return null;
-      dir.normalize();
-      const edge = mesh(edgeGeo, supportMat, "town-support-edge", 0.008);
-      edge.scale.z = len;
-      edge.position.copy(from).addScaledVector(dir, len * 0.5);
-      edge.quaternion.setFromUnitVectors(zAxis, dir);
-      parent.add(edge);
-      return edge;
+    // 扁方管截面 0.10（切向宽）× 0.05（径向厚），长边朝外
+    const TUBE_W = 0.10;
+    const TUBE_T = 0.05;
+    const COL_OFFSET = cs * 0.30; // 柱轴离格心（承重侧方向）
+    const COL_HALF_SPAN = cs * 0.31; // 两柱间距 0.62cs 的一半
+    const BEAM_H = 0.09;
+    const _supportGeoCache = new Map();
+    const barGeometry = (w, h, d) => {
+      const key = `${w.toFixed(4)}|${h.toFixed(4)}|${d.toFixed(4)}`;
+      let geo = _supportGeoCache.get(key);
+      if (!geo) { geo = new THREE.BoxGeometry(w, h, d); _supportGeoCache.set(key, geo); }
+      return geo;
     };
+    // 局部坐标系：+X = 朝承重侧（外），+Z = 切向，y = 世界 y（组不平移 y）
+    const addBar = (parent, part, w, h, d, x, y, z, tiltZ = 0) => {
+      const bar = mesh(barGeometry(w, h, d), supportMat, "town-support-edge", 0.008);
+      bar.position.set(x, y, z);
+      if (tiltZ) bar.rotation.x = tiltZ;
+      bar.userData.supportPart = part;
+      parent.add(bar);
+      return bar;
+    };
+
     for (const [key, char] of grid) {
       const [ix, iy, iz] = key.split(",").map(Number);
       if (!want(ix, iy, iz)) continue;
@@ -2858,16 +3216,19 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       const pillarH = iy - supportTop; // 悬空高度（层数）
       if (pillarH <= 0) continue;
 
-      const topApex = new THREE.Vector3(cx(ix), iy * ch, cz(iz));
-      const bottomApex = new THREE.Vector3(cx(ix), supportTop * ch, cz(iz));
-      const ringY = (topApex.y + bottomApex.y) * 0.5;
-      const ringRadius = Math.min(cs * 0.42, ch * 0.42);
-      const ring = [
-        [1, 0],
-        [0, 1],
-        [-1, 0],
-        [0, -1],
-      ];
+      // 承重侧：优先同层实体邻居（体块就是从那儿挑出来的），否则下一层邻居；
+      // 都没有就按格坐标定一个稳定方向（禁止 Math.random）。
+      let bearing = null;
+      for (const [dx, dz] of DIRS) {
+        if (at(ix + dx, iy, iz) !== ".") { bearing = [dx, dz]; break; }
+      }
+      if (!bearing) {
+        for (const [dx, dz] of DIRS) {
+          if (at(ix + dx, iy - 1, iz) !== ".") { bearing = [dx, dz]; break; }
+        }
+      }
+      if (!bearing) bearing = DIRS[(ix * 3 + iz * 5 + iy) & 3];
+
       const supportModule = townscaperModuleSelection(
         ix,
         iy,
@@ -2876,37 +3237,72 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         supportTop,
         openMaskFor(ix, iy, iz)
       );
-      // 四个“支柱”是四个环向支撑单元，而不是同名的中央柱；每个单元
-      // 连接上、下承重点与一个环向节点，组成八面体的四组边。
-      for (const [sx, sz] of ring) {
-        const support = new THREE.Group();
-        support.name = "town-support-pillar";
-        support.userData.supportShape = "octahedral-four-edge";
-        support.userData.townModule = {
-          family: "support",
-          variant: TOWNSCAPER_MODULE_FAMILIES.support[supportModule.support],
-          ix,
-          iy,
-          iz,
-          catalogSize: TOWNSCAPER_MODULE_VARIANTS,
-        };
-        const ringPoint = new THREE.Vector3(
-          cx(ix) + sx * ringRadius,
-          ringY,
-          cz(iz) + sz * ringRadius
-        );
-        addSupportEdge(support, topApex, ringPoint);
-        addSupportEdge(support, ringPoint, bottomApex);
-        levelGroups[iy].add(support);
-        supportCount++;
+
+      const yBot = supportTop * ch;
+      const yTop = iy * ch;
+      const h = yTop - yBot;
+
+      const support = new THREE.Group();
+      support.name = "town-support-pillar";
+      support.userData.supportShape = "twin-flat-tube";
+      support.userData.townModule = {
+        family: "support",
+        variant: TOWNSCAPER_MODULE_FAMILIES.support[supportModule.support],
+        ix,
+        iy,
+        iz,
+        catalogSize: TOWNSCAPER_MODULE_VARIANTS,
+      };
+
+      // ① 两根扁方管竖柱：柱顶顶到横梁底、柱脚落在承重面
+      const colH = h - BEAM_H;
+      for (const sign of [-1, 1]) {
+        addBar(support, "column", TUBE_T, colH, TUBE_W, COL_OFFSET, yBot + colH / 2, sign * COL_HALF_SPAN);
       }
+      // ② 顶部水平横梁：连两柱 + 托住体块底面
+      addBar(support, "beam", TUBE_T, BEAM_H, COL_HALF_SPAN * 2 + TUBE_W, COL_OFFSET, yTop - BEAM_H / 2, 0);
+      // ③ λ 斜撑（悬空 > 2 层）：两根斜杆自两柱下段升到中轴同一点
+      if (pillarH > 2) {
+        const yFoot = yBot + colH * 0.30;
+        const yApex = yBot + colH * 0.60;
+        const dz = COL_HALF_SPAN;
+        const dy = yApex - yFoot;
+        const len = Math.hypot(dz, dy);
+        for (const sign of [-1, 1]) {
+          // 竖杆绕 X 轴倾斜到 (0, dy, -sign*dz) 方向：长度沿自身 Y
+          const brace = addBar(
+            support,
+            "brace",
+            TUBE_T,
+            len,
+            TUBE_W * 0.8,
+            COL_OFFSET,
+            (yFoot + yApex) / 2,
+            (sign * dz) / 2,
+            // 杆自身长轴是局部 +Y；绕 X 转 θ 后指向 (0, cosθ, sinθ)。
+            // 要从柱脚 z=sign*dz 指到中轴顶点 z=0，方向是 (0, dy, −sign*dz)/len。
+            -sign * Math.atan2(dz, dy)
+          );
+          brace.userData.supportPart = "brace";
+        }
+      }
+
+      support.position.set(cx(ix), 0, cz(iz));
+      support.rotation.y = Math.atan2(-bearing[1], bearing[0]);
+      // 归属必须落到杆件网格自身：增量重建摘旧网格只看 o.isMesh，
+      // 只标 Group 的话杆件永远摘不掉，格删了支架还悬在半空。
+      support.traverse((o) => {
+        if (o.isMesh) o.userData.cell = { ix, iy, iz, char };
+      });
+      levelGroups[iy].add(support);
+      supportCount++;
       registerModule(
         "support",
         ix,
         iy,
         iz,
         TOWNSCAPER_MODULE_FAMILIES.support[supportModule.support],
-        levelGroups[iy].children[levelGroups[iy].children.length - 1]
+        support
       );
     }
     if (supportCount > 0) stats.supportCount = supportCount;
@@ -2925,7 +3321,6 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         const b = tall[j];
         const gap = Math.abs(a.ix - b.ix) + Math.abs(a.iz - b.iz);
         if (gap < 2 || gap > 4) continue;
-      if (!want(a.ix, a.top, a.iz) && !want(b.ix, b.top, b.iz)) continue;
         if (Math.abs(a.top - b.top) > 1) continue;
         const pair = `${Math.min(a.ix, b.ix)},${Math.min(a.iz, b.iz)}-${Math.max(a.ix, b.ix)},${Math.max(a.iz, b.iz)}`;
         if (used.has(pair)) continue;
@@ -2934,6 +3329,12 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         const iy = Math.min(a.top, b.top);
         if (at(Math.round(midX), iy, Math.round(midZ)) !== ".") continue;
         used.add(pair);
+        wires++; // 预算与 dirty 无关：选哪 5 对必须只由布局决定
+        // 只有「发不发」受 dirty 影响。此前把 want() 门放在选对之前，增量模式
+        // 会跳过非 dirty 的对、让后面的对补进 5 根的预算 —— 于是增量选出的 5 根
+        // 和全量选出的 5 根不是同一组，旧的没摘、新的又挂（2026-09-04 实测 +500 tris）。
+        const wireIy = Math.min(a.top, b.top);
+        if (!ownSpanning([`${a.ix},${wireIy},${a.iz}`, `${b.ix},${wireIy},${b.iz}`])) continue;
         const p0 = new THREE.Vector3(cx(a.ix), (iy + 0.82) * ch, cz(a.iz));
         const p2 = new THREE.Vector3(cx(b.ix), (iy + 0.82) * ch, cz(b.iz));
         const p1 = p0.clone().lerp(p2, 0.5);
@@ -2960,9 +3361,9 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
           cloth.position.y -= 0.16;
           levelGroups[iy].add(cloth);
         }
-        wires++;
       }
     }
+    ownNone();
     stats.clotheslineCount = wires;
   }
 
@@ -2974,10 +3375,11 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     const skirtGeo = new THREE.BoxGeometry(cs * 1.08, 1.15, 0.5);
     const plinthGeo = new THREE.BoxGeometry(cs * 1.14, 0.85, cs * 1.14);
     let skirtCount = 0;
-    for (const [key] of grid) {
+    for (const [key, char] of grid) {
       const [ix, iy, iz] = key.split(",").map(Number);
       if (!want(ix, iy, iz)) continue;
       if (iy !== 0) continue;
+      ownCell(ix, iy, iz, char);
       const base = mesh(plinthGeo, skirtMat, "town-seawall-plinth", 0.02);
       base.position.set(cx(ix), -0.52, cz(iz));
       levelGroups[0].add(base);
@@ -2994,9 +3396,15 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         skirtCount++;
       }
     }
+    ownNone();
     stats.seawallCount = skirtCount;
   }
 
   stats.gridSize = { cols, rows, levels: levels.length };
+  // 归属拦截只在本次装配内有效：增量重建第 3 步会往这些层组挂新网格，
+  // 那时 _ownerCell 已是陈旧值，必须还原原生 add。
+  ownNone();
+  for (const group of levelGroups) group.userData.restoreAdd?.();
+
   return { levels: levelGroups, stats };
 }

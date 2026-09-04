@@ -260,18 +260,23 @@ ok("簇划分：同字符 4 连通成一簇、异字符分簇、竖柱同簇", (
     ],
   ]);
   const { clusterOf, baseChar } = computeTownClusters(g);
+  // computeTownClusters 的键是**整数** ix*32+iz（citadelTown.js:1545 的 G30 性能改动），
+  // 不是 "ix,iz" 字符串。测试一直按字符串取，取到的全是 undefined——
+  // assert.equal(undefined, undefined) 静默通过，只有 notEqual 那两行会炸，
+  // 于是这个文件从那次改动起就一直是红的（2026-09-04 修）。
+  const K = (ix, iz) => ix * 32 + iz;
   // 三簇：0 簇（(0,0),(1,0),(0,1)）、1 簇（(2,0..2)）、2 簇（(0,2),(1,2)）
-  assert.equal(clusterOf.get("0,0"), clusterOf.get("1,0"));
-  assert.equal(clusterOf.get("0,0"), clusterOf.get("0,1"));
-  assert.notEqual(clusterOf.get("0,0"), clusterOf.get("2,0"));
-  assert.equal(clusterOf.get("2,0"), clusterOf.get("2,2"));
-  assert.equal(clusterOf.get("0,2"), clusterOf.get("1,2"));
-  assert.notEqual(clusterOf.get("0,2"), clusterOf.get("1,0"));
+  assert.equal(clusterOf.get(K(0, 0)), clusterOf.get(K(1, 0)));
+  assert.equal(clusterOf.get(K(0, 0)), clusterOf.get(K(0, 1)));
+  assert.notEqual(clusterOf.get(K(0, 0)), clusterOf.get(K(2, 0)));
+  assert.equal(clusterOf.get(K(2, 0)), clusterOf.get(K(2, 2)));
+  assert.equal(clusterOf.get(K(0, 2)), clusterOf.get(K(1, 2)));
+  assert.notEqual(clusterOf.get(K(0, 2)), clusterOf.get(K(1, 0)));
   // 竖柱：baseChar 记录最低层字符
-  assert.equal(baseChar.get("0,0"), "0");
+  assert.equal(baseChar.get(K(0, 0)), "0");
   // 簇 id 稳定
   const again = computeTownClusters(g);
-  assert.equal(again.clusterOf.get("2,1"), clusterOf.get("2,1"));
+  assert.equal(again.clusterOf.get(K(2, 1)), clusterOf.get(K(2, 1)));
 });
 
 ok("朝向：邻门=route、簇核=back、边缘=normal", () => {

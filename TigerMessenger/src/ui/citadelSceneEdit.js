@@ -14,7 +14,8 @@ import {
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
   citadelPaletteIndexOfChar,
-} from "../world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
+} from "../world/citadelTown.js?v=20260904-sun-rig-v1";
+import { createCitadelEditFx } from "../world/citadelEditFx.js";
 
 /** Resolve a ray hit on any nested mesh/outline back to its tower/tree root. */
 export function citadelTerrainObjectFromHits(hits = []) {
@@ -269,6 +270,38 @@ export function createCitadelSceneEdit({
   ghost.name = "citadel-edit-ghost";
   ghost.visible = false;
   scene.add(ghost);
+
+  // C13-5 编辑涟漪（PLAN §10.5）：纯表现层，挂在 scene 上而不是城堡组里，
+  // 且根节点标了 transientFx —— 合并管线整棵跳过，dirty 完全不知道它存在。
+  const editFx = createCitadelEditFx(THREE, scene, { radius: CELL * 0.5 });
+
+  /** 世界坐标：某一格的中心（涟漪落点用，与幽灵块同一套换算）。 */
+  function cellWorldPosition(target, out = new THREE.Vector3()) {
+    const frame = editFrame();
+    if (!target || !frame) return null;
+    frame.citadel.updateWorldMatrix(true, false);
+    const local = citadelEditCellLocalPosition(
+      frame.citadel,
+      target.terraceIndex ?? panel.getState().activeTerrace,
+      target,
+      out
+    );
+    if (!local) return null;
+    return frame.citadel.localToWorld(local);
+  }
+
+  /**
+   * 唯一的编辑入口：成功了才发涟漪。
+   * 涟漪在**重建之后**发——重建会摘掉并重挂网格，但 FX 挂在 scene 上不受影响。
+   */
+  function editAt(target, action) {
+    const ok = panel.applySceneEdit(target, action);
+    if (ok) {
+      const p = cellWorldPosition(target, tmpV2);
+      if (p) editFx.spawn(p.x, p.y, p.z);
+    }
+    return ok;
+  }
 
   function editing() {
     return panel.isOpen() && canEdit();
@@ -537,12 +570,12 @@ export function createCitadelSceneEdit({
       const terrainObject = castTerrainObject(e);
       if (terrainObject && panel.deleteTerrainObject?.(terrainObject.id)) {
         toast(terrainObject.type === "watchtower" ? "已删除瞭望塔" : "已删除参天树", 1.2);
-      } else if (hit && panel.applySceneEdit(hit.cell, "erase")) {
+      } else if (hit && editAt(hit.cell, "erase")) {
         toast("已删除体块", 1.2);
       }
     } else if (hit) {
       if (hit.top && hit.cell.iy < panel.maxLevel) {
-        const ok = panel.applySceneEdit(
+        const ok = editAt(
           { ix: hit.cell.ix, iy: hit.cell.iy + 1, iz: hit.cell.iz },
           "place"
         );
@@ -552,7 +585,7 @@ export function createCitadelSceneEdit({
       } else if (hit.top && hit.cell.iy >= panel.maxLevel) {
         toast(`已经到顶（${panel.maxLevel + 1} 层）`, 1.4);
       } else {
-        panel.applySceneEdit(hit.cell, "place"); // 侧面/到顶 → 改色
+        editAt(hit.cell, "place"); // 侧面/到顶 → 改色
       }
     } else {
       const target = castPlane(e);
@@ -569,7 +602,7 @@ export function createCitadelSceneEdit({
         }
         // 运河交汇锁在台地 0；高山则对齐当前选中台地
         const terraceIndex = gridTownscaper ? 0 : panel.getState().activeTerrace;
-        panel.applySceneEdit({ ...target, terraceIndex }, "place");
+        editAt({ ...target, terraceIndex }, "place");
       }
     }
     showGhost(pickTarget(e)); // 重建后立刻刷新预览
@@ -586,8 +619,11 @@ export function createCitadelSceneEdit({
     /** 当前是否处于 3D 直编辑态（面板打开且可编辑）。 */
     isEditing: () => editing(),
     /** 每帧兜底：面板关闭/落地后强制收起幽灵块。 */
-    tick() {
+    tick(dt = 1 / 60) {
       if (ghost.visible && !editing()) ghost.visible = false;
+      editFx.update(dt); // C13-5：1.2s 后自动回收，不需要外部管生命周期
     },
+    /** 测试/调试用：当前在播的涟漪数。 */
+    liveRippleCount: () => editFx.liveCount(),
   };
 }

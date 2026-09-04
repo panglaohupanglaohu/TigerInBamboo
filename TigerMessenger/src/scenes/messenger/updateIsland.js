@@ -7,6 +7,9 @@ import { updatePlatformPulse } from "../../world/platforms.js";
 import { updateClouds } from "../../assets/lowPoly.js";
 import { updateBubblePodPatrol } from "../../assets/bubblePod.js";
 import { updateAircraftHover } from "../../assets/moebiusAircraft.js";
+import { updateGatePodCraft, updateGatePodEscort } from "../../world/gatePodCraft.js";
+import { updateGateHaulerCraft } from "../../world/gateHaulerCraft.js";
+import { updateVanguardAboard } from "../../world/vanguardTrooper.js";
 import { isCanyonBgmPlaying, isCanyonBgmFinishing } from "../../audio/sfx.js";
 import { placeMoebiusAirshipAbove } from "../../assets/moebiusAirship.js";
 import { tickTacticalGraph } from "./loadCitadel.js";
@@ -64,6 +67,11 @@ export function updateMessengerIsland(s, dt, t, runtime) {
   }
 
   updateAircraftHover(s.aircraftSquad, t, dt, { swamp: swampRoot });
+  // 伴飞泡机必须在 updateAircraftHover **之后**跟位：机队这一帧的阵位已经算完，
+  // 反过来会慢一帧，编队转弯时看得出拖影。
+  updateGatePodEscort(s.aircraftSquad, t);
+  // 先锋兵伴飞：未落地时跟着莫比斯机队飞（落地后由 saihojiPhalanx 接管出手）
+  if (s.vanguardSquad && s.aircraftSquad) updateVanguardAboard(s.vanguardSquad, s.aircraftSquad, t);
   s.saihojiPhalanx?.update?.(dt, t);
   tickTacticalGraph(s.combatPack, dt);
 
@@ -89,6 +97,8 @@ export function updateMessengerIsland(s, dt, t, runtime) {
     const tram = s.tramSystem.getNearestTram?.(runtime?.player?.position) || s.tramSystem.tram || null;
     s.gateBirdVortex.update(dt, t, { tram, viewer: runtime?.player?.position || null });
   }
+  if (s.gatePods) updateGatePodCraft(s.gatePods, t); // 叹息之门泡形飞行器悬停摆动
+  if (s.gateHaulers) updateGateHaulerCraft(s.gateHaulers, t); // 重型运输艇（更重更慢）
   if (s.terraceBirds) {
     const tram = s.tramSystem.getNearestTram?.(runtime?.player?.position) || s.tramSystem.tram || null;
     s.terraceBirds.update(dt, t, {

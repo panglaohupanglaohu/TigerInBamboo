@@ -7,6 +7,7 @@
 import { sampleLightingTheme, setLightingThemeKeyframes } from "./lightingTheme.js";
 import { composeBounceLighting } from "./lightingBounce.js";
 import { validateLightingPreset, formatPresetErrors } from "./presetLoader.js";
+import { sunDirectionFromAngles } from "../../world/sunRig.js";
 
 // 天气 overlay：只改强度/雾/色调，永久不改基础 token（PLAN 7.5 同一原则）
 // 导出供 V6-G11 参数包做逐字段对照（tools/test_lighting_presets.mjs）
@@ -123,7 +124,14 @@ export function composeLightingState(snapshot) {
     sun: Object.freeze({
       color: sunColor,
       intensity: theme.sunIntensity * weather.sunMul * sunMul,
-      direction: Object.freeze([...theme.sunDir]),
+      // C13-7（PLAN §10.7）：摇杆接管时方向由 azimuth/elevation 直接给出，
+      // 不再从时刻主题里读。方向不参与一阶平滑（见 lightingDirector），
+      // 所以摇杆一动主光下一帧就跟上。
+      direction: Object.freeze(
+        s.sunOverride
+          ? sunDirectionFromAngles(s.sunOverride.azimuth, s.sunOverride.elevation)
+          : [...theme.sunDir]
+      ),
     }),
     sky: Object.freeze({
       skyColor,

@@ -12,6 +12,7 @@ import {
   SVARBOVA_OUTLINE_THICKNESS,
 } from "../assets/toon.js";
 import { mergeStaticGroup } from "./geometryMerge.js";
+import { dropCellsFromMerged, mergedTriangleCount } from "./citadel/mergedCellPatch.js";
 import { createCitadelWatchtower } from "../assets/citadelWatchtower.js";
 import { createCitadelElderTree } from "../assets/citadelElderTree.js";
 import { createCitadelTrojanHorse } from "../assets/citadelTrojanHorse.js";
@@ -70,7 +71,13 @@ import {
   TOWNSCAPER_MODULE_FAMILIES,
   citadelPaletteIndexOfChar,
   citadelShadeStep,
-} from "./citadelTown.js?v=20260903-column-coherent-jitter-v1";
+} from "./citadelTown.js?v=20260904-sun-rig-v1";
+import {
+  sunElevationForPhase,
+  nightFactor,
+  windowIsLit,
+  rollWindowLit,
+} from "./sunRig.js";
 import { attachBuildingOwnedProps } from "./citadelBuildingProps.js";
 
 /** Maria Svarbova 无菌马卡龙：低语调中间色，禁止赤陶/焦黑。 */
@@ -528,6 +535,9 @@ export const CANAL_TOWNSCAPER = Object.freeze({
   foliageLight: 0x55a84f,
   windowDark: 0x22303c, // 窗洞深海军蓝
   crenel: 0xf6efe3, // 露台矮墙奶油
+  // C13-4（PLAN §10.4）檐口三层色带：瓦面橙 → 白色檐板 → 暗红封檐
+  fascia: 0xf9f4ea, // 白色檐板（比奶油石再亮半档，出挑面吃光）
+  bargeboard: 0x9c3f2c, // 暗红封檐（比陶瓦深两档，屋脊压顶复用）
   balconyTileVariants: Object.freeze([0xf3b47f, 0xef8c93, 0x83c5d4, 0xf4d66f]),
   foundationVariants: Object.freeze([0x7e8b99, 0xc9bca4, 0xb8aa95]),
   fenceVariants: Object.freeze([0x4a3b2e, 0x2e2a26, 0x765044]),
@@ -556,6 +566,9 @@ export const HIGHLAND_TOWNSCAPER = Object.freeze({
   foliageLight: 0x70aa91,
   windowDark: 0x1e4058,
   crenel: 0xeee9d8,
+  // C13-4：冷色系里「白檐板 + 暗压边」——封檐取比瓦深两档的靛灰，不用暖红
+  fascia: 0xeff4f7,
+  bargeboard: 0x3f5060,
   balconyTileVariants: Object.freeze([0xc7d2da, 0xb8c7d1, 0xaabdc9, 0xd5dde1]),
   foundationVariants: Object.freeze([0x7f8d9a, 0x91a0aa, 0x718391]),
   fenceVariants: Object.freeze([0x344257, 0x243243, 0x566575, 0x485a6a]),
@@ -622,10 +635,34 @@ function makeTownPatternTexture(kind = "flat") {
           : (roof ? 235 : 244) + cellNoise + grain;
         // 陶瓦下沿略暗，形成参考图中的层层瓦行；墙砖保持更柔和的粉刷质感。
         if (roof && !grout && rowY > courseH - 5) value -= 8;
+        // C13-4（PLAN §10.4）：z1 的瓦面还有**沿坡向的平行细线**（瓦垄）。
+        // 垄不随砖行错缝走，所以用未加 stagger 的 x：每 8px 一垄（一块瓦 32px = 4 垄），
+        // 垄脊提亮 / 垄沟压暗各 7/255，远看只是一层丝光，近看才是瓦楞。
+        if (roof && !grout) {
+          const ribX = x % 8;
+          if (ribX === 0) value += 7;
+          else if (ribX === 7) value -= 7;
+        }
         value = Math.max(150, Math.min(255, value));
-        data[offset] = value;
-        data[offset + 1] = value;
-        data[offset + 2] = value;
+        // C13-1（S23 / PLAN §10.1）：每块砖除了明度扰动，还要有**色相**扰动。
+        // z1.png 实测：米黄 / 浅粉 / 浅紫 / 浅绿交替，明度差 ≤ ±5%，饱和度极低——
+        // 远看是一片米色，近看像织物。此前只有灰度 cellNoise，所以墙面平得发死。
+        // 三通道给不同符号的小偏移即可造出低饱和色偏，不需要真的做 HSL 转换。
+        // 灰缝不参与（保持中性），屋顶陶瓦也不参与（它靠自己的暖色）。
+        let r = value;
+        let g = value;
+        let b = value;
+        if (!grout && !roof) {
+          const hueBrick = townPatternHash(brickX, row, 53) % 4; // 4 档低饱和色偏
+          const amp = 4 + (townPatternHash(brickX, row, 97) % 4); // 4..7 / 255 ≈ ±2%
+          if (hueBrick === 0) { r += amp; g += amp >> 1; b -= amp; }          // 米黄
+          else if (hueBrick === 1) { r += amp; g -= amp >> 1; b += amp >> 2; } // 浅粉
+          else if (hueBrick === 2) { r -= amp >> 2; g -= amp >> 1; b += amp; } // 浅紫
+          else { r -= amp >> 1; g += amp; b -= amp >> 2; }                     // 浅绿
+        }
+        data[offset] = Math.max(150, Math.min(255, r));
+        data[offset + 1] = Math.max(150, Math.min(255, g));
+        data[offset + 2] = Math.max(150, Math.min(255, b));
       }
       data[offset + 3] = 255;
     }
@@ -708,6 +745,9 @@ function applyTownscaperCanalMaterials(materials, scheme = CANAL_TOWNSCAPER) {
   materials.trim = makeCanalMat(scheme.trim);
   materials.iron = makeCanalMat(scheme.iron);
   materials.crenel = makeCanalMat(scheme.crenel, { pattern: "wall" });
+  // C13-4 檐口：檐板走墙面砖纹（近看有质感），封檐纯色（它只是一条压边）
+  materials.fascia = makeCanalMat(scheme.fascia ?? scheme.crenel, { pattern: "wall" });
+  materials.bargeboard = makeCanalMat(scheme.bargeboard ?? scheme.trim);
   materials.windowDark = makeCanalMat(scheme.windowDark);
   materials.contour = makeCanalMat(scheme.contour ?? scheme.seawall);
   materials.pilgrimageStone = makeCanalMat(scheme.pilgrimageStone ?? scheme.plaza);
@@ -988,14 +1028,33 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
   if (!controlledWindows.length) return;
 
   const p = ((Number(phase) % 1) + 1) % 1;
-  // 入夜 ≈0.82，整夜至黎明 ≈0.22（与 dayNight KEYS 一致）
-  const night = p >= 0.82 || p < 0.22;
+  // C13-7（PLAN §10.7）：夜不再是布尔，而是**夜色浓度** 0..1。
+  // 优先用摇杆给的太阳高度角（摇杆接管时时刻已经不代表太阳位置了），
+  // 否则由时刻推高度角——两条路都落到同一个 nightFactor。
+  const elevation = P.sunRigManual ? P.sunElevation : sunElevationForPhase(p);
+  const dusk = nightFactor(elevation);
+  // 入夜 ≈0.82，整夜至黎明 ≈0.22（与 dayNight KEYS 一致）。
+  // night 仍保留：它决定"当晚重掷一次"这件事，不决定某扇窗此刻亮不亮。
+  const night = dusk > 0;
+  // 每扇窗的身份：优先 houseId+楼层，退化到世界坐标串。错相阈值只认它，
+  // 所以同一扇窗在整个夜里跨阈值的时刻是稳定的，不会闪。
+  const _wid = new THREE.Vector3();
+  const windowId = (entry) => {
+    const h = readState(entry, "houseId");
+    const f = readState(entry, "castleFloor");
+    if (h != null) return `${h}|${f ?? 0}`;
+    getWorld(entry, _wid);
+    return `${_wid.x.toFixed(2)},${_wid.y.toFixed(2)},${_wid.z.toFixed(2)}`;
+  };
+  // 当晚序号：每过一个 0.82 边界算一晚，用于"每晚重掷"
+  const nightIndex = Math.floor(p >= 0.82 ? p : p + 1);
 
   if (night) {
     if (!castleContainer.userData.windowNightRolled) {
       for (const w of controlledWindows) {
         writeState(w, "extinguishedBySoldiers", false);
-        writeState(w, "litTonight", Math.random() < CITADEL_WINDOW_LIT_CHANCE);
+        // 确定性重掷（禁止 Math.random：夜景要能逐帧复现、截图可比对）
+        writeState(w, "litTonight", rollWindowLit(windowId(w), nightIndex, CITADEL_WINDOW_LIT_CHANCE));
       }
       castleContainer.userData.windowNightRolled = true;
     }
@@ -1063,7 +1122,8 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
   if (records) {
     // town 窗口：状态变化 → 移动实例（lit/dark 列表），无逐窗材质切换
     for (const record of records) {
-      const on = night && record.litTonight && !record.extinguishedBySoldiers;
+      const on = record.litTonight && !record.extinguishedBySoldiers
+        && windowIsLit(dusk, windowId(record));
       if (record.lit !== on) record.lit = on;
     }
     // 无条件重算：宿主可见性也可能变（编辑器删格会把窗 mesh 摘出场景树），
@@ -1071,12 +1131,14 @@ export function updateCitadelNightWindows(castleContainer, phase, opts = {}) {
     syncCitadelWindowInstances(castleContainer);
     // design 窗口（尺寸参数化，不实例化）：逐窗材质切换
     for (const w of designWindows) {
-      const on = night && w.userData.litTonight && !w.userData.extinguishedBySoldiers;
+      const on = w.userData.litTonight && !w.userData.extinguishedBySoldiers
+        && windowIsLit(dusk, windowId(w));
       if (w.material !== (on ? lit : dark)) w.material = on ? lit : dark;
     }
   } else {
     for (const w of controlledWindows) {
-      const on = night && readState(w, "litTonight") && !readState(w, "extinguishedBySoldiers");
+      const on = readState(w, "litTonight") && !readState(w, "extinguishedBySoldiers")
+        && windowIsLit(dusk, windowId(w));
       if (w.material !== (on ? lit : dark)) w.material = on ? lit : dark;
     }
   }
@@ -1253,20 +1315,59 @@ const citadelTownMergeSkip = (mesh) =>
   mesh.name?.startsWith("contour-step-") ||
   mesh.userData.mergedGeometry === true;
 
-const citadelTownMergeOnSurface = (merged, _material, segments, _groupTriStart) => {
+// 增量重合并专用：不跳过已合并块，让压缩后的旧块作为合并源被吸收回去。
+// 否则每次编辑都在旧块旁边新增一个合并网格，draw call 随编辑次数线性增长。
+const citadelTownIncrementalMergeSkip = (mesh) =>
+  mesh.name === "town-window" ||
+  mesh.userData.citadelWindow === true ||
+  mesh.userData.terrainObjectId != null ||
+  mesh.name?.startsWith("contour-step-");
+
+/**
+ * 采集面区间 → 格归属。覆盖面必须与增量第 2 步摘旧网格的判据逐字一致
+ * （cell / townModule / cells），认领得比摘除得少，差集就会在合并块里留一份、
+ * 第 3 步再造一份 → 重影。
+ */
+const collectFaceToCell = (segments) => {
   const faceToCell = [];
   for (const seg of segments) {
-    if (!seg.mesh.userData?.cell) continue;
-    faceToCell.push({
-      triStart: seg.triStart,
-      triCount: seg.triCount,
-      cell: seg.mesh.userData.cell,
-    });
+    // 被吸收的旧合并块自带 faceToCell：区间整体平移到新组偏移上
+    const inherited = seg.mesh.userData?.faceToCell;
+    if (inherited?.length) {
+      for (const entry of inherited) {
+        faceToCell.push({ ...entry, triStart: seg.triStart + entry.triStart });
+      }
+      continue;
+    }
+    const data = seg.mesh.userData ?? {};
+    const cell = data.cell ?? data.townModule;
+    if (cell) faceToCell.push({ triStart: seg.triStart, triCount: seg.triCount, cell });
+    else if (data.cells) faceToCell.push({ triStart: seg.triStart, triCount: seg.triCount, cells: data.cells });
   }
+  return faceToCell;
+};
+
+const citadelTownMergeOnSurface = (merged, _material, segments, _groupTriStart) => {
+  const faceToCell = collectFaceToCell(segments);
   if (faceToCell.length) {
     merged.userData.faceToCell = faceToCell;
     merged.userData.hasMergedCells = true;
   }
+};
+
+// 描边合并块也得记区间：没有它，增量编辑只能整块删描边，
+// 非 dirty 格的描边会跟着一起消失。
+const citadelTownMergeOnOutline = (merged, _material, _sources, _groupTriStart, segments) => {
+  if (!segments) return;
+  const faceToCell = collectFaceToCell(segments);
+  if (faceToCell.length) merged.userData.faceToCell = faceToCell;
+};
+
+/** 区间归属是否命中 dirty 集（单格与跨格两种归属都要认）。 */
+const citadelSegmentIsDirty = (dirty) => (seg) => {
+  if (seg.cell) return dirty.has(`${seg.cell.ix},${seg.cell.iy},${seg.cell.iz}`);
+  if (seg.cells) return seg.cells.some((key) => dirty.has(key));
+  return false;
 };
 
 export function mergeCitadelTownStatic(assemblyRoot) {
@@ -2054,71 +2155,6 @@ function makeHighlandTownPlatformSideGeometry() {
  * 运河交汇古堡同型的水平承重地台：顶面只提供一个 Y，厚底向下插入
  * 球面山体。山体曲率由地台侧壁吸收，Townscaper 单元无需逐格倾斜。
  */
-/**
- * 圣城岸线草甸（参考图夜港/主人验收 2026-08-28）：台地与海面交接处的
- * 鼠尾草绿平地——不规则圆盘（顶点噪声撕边）+ 两块深色岩点，贴水面 +
-0.05。静态呈现层，不进道具统计。
- */
-function buildHighlandShoreMeadow(THREE_) {
-  const group = new THREE.Group();
-  group.name = "highland-shore-meadow";
-  group.userData.presentationOnly = true;
-  group.userData.nonNavigable = true;
-
-  const geometry = new THREE.CircleGeometry(10.5, 26);
-  geometry.rotateX(-Math.PI / 2);
-  const pos = geometry.attributes.position;
-  const colors = new Float32Array(pos.count * 3);
-  const base = new THREE.Color(0x7fae8f);
-  const dark = new THREE.Color(0x67947c);
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const z = pos.getZ(i);
-    // 确定性撕边：半径按角度与噪声收缩
-    const angle = Math.atan2(z, x);
-    const wobble = 1
-      - 0.14 * Math.abs(Math.sin(angle * 3.1 + 1.3))
-      - 0.09 * Math.abs(Math.cos(angle * 5.7 + 0.4));
-    pos.setX(i, x * wobble);
-    pos.setZ(i, z * wobble);
-    const t = ((i * 7) % 5) / 5;
-    const c = base.clone().lerp(dark, t * 0.5);
-    colors[i * 3] = c.r;
-    colors[i * 3 + 1] = c.g;
-    colors[i * 3 + 2] = c.b;
-  }
-  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  geometry.computeVertexNormals();
-  const material = new THREE.MeshStandardMaterial({
-    vertexColors: true,
-    roughness: 1,
-    metalness: 0,
-    flatShading: true,
-  });
-  const plate = new THREE.Mesh(geometry, material);
-  plate.name = "shore-meadow-plate";
-  // 半沉构图（DROP 5.33）后的海面局部高 ≈ 5.65：草甸贴着新水线
-  plate.position.set(4, 5.62, 27);
-  plate.receiveShadow = true;
-  group.add(plate);
-
-  const rockMat = new THREE.MeshStandardMaterial({ color: 0x6a6f66, roughness: 1, flatShading: true });
-  const rockSpecs = [
-    [-3.4, 0.4, 25.4, 0.8],
-    [9.8, 0.3, 28.6, 0.55],
-  ];
-  rockSpecs.forEach(([x, y, z, size], index) => {
-    const rock = new THREE.Mesh(new THREE.IcosahedronGeometry(size, 0), rockMat);
-    rock.name = `shore-meadow-rock-${index}`;
-    rock.position.set(x, 5.69, z);
-    rock.rotation.y = index * 1.7;
-    rock.castShadow = true;
-    group.add(rock);
-  });
-
-  return group;
-}
-
 function buildHighlandTownFoundationPlatform(materials) {
   const spec = HIGHLAND_TOWNSCAPER_PLATFORM;
   const geometry = new THREE.ShapeGeometry(makeHighlandTownPlatformShape());
@@ -2545,14 +2581,6 @@ export function buildOdysseyCitadel(options = {}) {
     // 参考图植被（2026-08-28）：大团鼠尾草绿树冠群落（InstancedMesh 单 draw call）
     mountHighlandCanopyGroves(THREE, outerTerrainSystem);
     mountHighlandLocalHeroClouds(THREE, castleContainer);
-    // 参考图海交草甸（主人验收 2026-08-28）：水晶城上空的"空中草地"
-    // 挪到圣城台地与海面交接处——湾面上一块不规则鼠尾草草甸盘 + 两块
-    // 深色岩点，贴在海面高度。
-    try {
-      castleContainer.add(buildHighlandShoreMeadow(THREE));
-    } catch (error) {
-      console.warn("[citadel] shore meadow skipped:", error?.message);
-    }
     // S18 光体积灯（主人验收 2026-08-27/28）：OskSta 点光源 light volume 方法
     // + 参考图夜港配色——暖橙灯下密上疏、港口岸湾灯、塔楼暖光冠、立面窗光、
     // 岸湾水面倒影光斑。海面局部 Y = (R + 海平面) − 城堡原点半径；
@@ -2575,6 +2603,9 @@ export function buildOdysseyCitadel(options = {}) {
     // S13 岸浪带会生成一组沿岸三角形透明条带，并使用近白色 foam
     // shader；在当前海面构图中会读成悬浮白条，因此不再挂载到正式场景。
     // 水面保留在 highland-waterfront-water，由蓝色平面材质负责统一表现。
+    // C13-5（PLAN §10.5）：轮廓泡沫带用的是同一个 foam shader，所以默认同样不挂。
+    // 数据侧（bakeContourFoamBand / traceGridOutlineRings）已经烘好并有回归，
+    // 打开 ?foamBandV1=1 才会挂进场景——等着色单独过一轮再改默认值。
     castleContainer.userData.highlandShoreWaves = null;
     // S16 背光高光：连续山体反向轮廓高光层（逆光构图时轮廓亮线），
     // main.js animate 每帧驱动 sunDir/camera。
@@ -2869,7 +2900,11 @@ function tickCitadelGrowAnimations(castleContainer, dt) {
     if (left <= 0) {
       castleContainer.userData.mergeDebounceLeft = null;
       for (const level of debounced.dirtyLevels) {
-        mergeStaticGroup(level, { skip: citadelTownMergeSkip, onSurface: citadelTownMergeOnSurface });
+        mergeStaticGroup(level, {
+          skip: citadelTownIncrementalMergeSkip,
+          onSurface: citadelTownMergeOnSurface,
+          onOutline: citadelTownMergeOnOutline,
+        });
       }
       refreshCitadelWindowLights(castleContainer);
       castleContainer.userData.pendingMerge = null;
@@ -2893,7 +2928,11 @@ function tickCitadelGrowAnimations(castleContainer, dt) {
   if (pending) {
     castleContainer.userData.pendingMerge = null;
     for (const level of pending.dirtyLevels) {
-      mergeStaticGroup(level, { skip: citadelTownMergeSkip, onSurface: citadelTownMergeOnSurface });
+      mergeStaticGroup(level, {
+          skip: citadelTownIncrementalMergeSkip,
+          onSurface: citadelTownMergeOnSurface,
+          onOutline: citadelTownMergeOnOutline,
+        });
     }
     refreshCitadelWindowLights(castleContainer);
   }
@@ -2903,48 +2942,90 @@ function tickCitadelGrowAnimations(castleContainer, dt) {
 const CITADEL_LEVEL_INFLUENCE = 2;
 
 /**
- * 把 dirty 扩成「受影响层的全部格」，并返回受影响的层号集合。
+ * 受影响的层号集合（改一格牵动上下各 CITADEL_LEVEL_INFLUENCE 层的模块选型）。
  *
- * 增量重建第 2 步会删掉这些层的合并网格，而合并网格装的是那一层**所有**格子
- * 的几何；第 3 步却只挂回 dirty 格。差额就凭空消失了——2026-09-03 实测三角形
- * 119,952 → 44,170。合并块目前不支持局部替换，所以动了哪一层就得整层重来。
- *
- * 返回值必须是「删合并块」唯一的层依据：调用方若再套一层 ±2 邻域，删除范围
- * 就会比重建范围大一圈，最外圈整层蒸发（实测编辑 iy=2 打掉 level-7/8，只剩
- * 不参与合并的窗悬在半空）。
+ * 早期版本在这里把 dirty 扩成整层，因为第 2 步会整块删合并网格而第 3 步只挂回 dirty
+ * 格，不扩就丢几何（实测 119,952 → 44,170）。代价是每次 edit 重建整层模块，P50 108ms
+ * → 558ms。现在合并块改成按区间压缩（dropCellsFromMerged），非 dirty 格的顶点原封不动，
+ * 扩层就不再需要了。
  */
-function expandDirtyToWholeLevels(dirty, spec) {
+function citadelAffectedLevels(dirty) {
   const levels = new Set();
   for (const key of dirty) {
     const iy = Number(String(key).split(",")[1]);
     if (!Number.isFinite(iy)) continue;
     for (let dy = -CITADEL_LEVEL_INFLUENCE; dy <= CITADEL_LEVEL_INFLUENCE; dy++) levels.add(iy + dy);
   }
-  for (const terrace of spec?.terraces ?? []) {
-    const rowsByLevel = terrace?.levels ?? [];
-    for (const iy of levels) {
-      const rows = rowsByLevel[iy];
-      if (!rows) continue;
-      for (let iz = 0; iz < rows.length; iz++) {
-        const row = String(rows[iz] ?? "");
-        for (let ix = 0; ix < row.length; ix++) {
-          if (row[ix] !== ".") dirty.add(`${ix},${iy},${iz}`);
+  return levels;
+}
+
+/**
+ * 跨格构件闭包：任一覆盖格 dirty → 该构件的**全部**格进 dirty。
+ *
+ * 摘旧网格的判据是「userData.cells 里任一格 dirty」（第 2 步），而重建时每条
+ * 规则只对**代表格**调 want()。两个口径不一致时，与 dirty 只部分相交的跨格
+ * 构件会出现两种坏法：
+ *   · 摘掉了却没重建 → 缺几何（2026-09-04 实测连港步道 −70、−8 tris）
+ *   · 从另一个代表格重新发射一份 → 重影（实测晾衣绳 +400 tris）
+ * 闭包之后两个口径逐字一致：摘的就是重建的。
+ *
+ * 这正是 Oskar 说的 *one change ripples through the entire connected area*
+ * （S20⑦）——改一格的波及范围由连通构件决定，不是固定的 2-ring。
+ *
+ * 旧构件的格集直接从现场读（散网格 userData.cells / 合并块 faceToCell[].cells），
+ * 不需要重算布局；迭代到不动点，因为一次扩张可能让另一个构件也相交。
+ *
+ * @returns {{passes:number, added:number}} 迭代轮数与新增格数（供诊断）
+ */
+function closeDirtyOverSpanningParts(layers, dirty) {
+  const spans = [];
+  const collect = (cells) => {
+    if (Array.isArray(cells) && cells.length > 1) spans.push(cells.map(String));
+  };
+  for (const layer of layers) {
+    layer.traverse((o) => {
+      if (!o.isMesh) return;
+      collect(o.userData?.cells);
+      for (const seg of o.userData?.faceToCell ?? []) collect(seg.cells);
+    });
+  }
+  const before = dirty.size;
+  let passes = 0;
+  for (; passes < 8; passes++) {
+    let grown = false;
+    for (const cells of spans) {
+      if (!cells.some((key) => dirty.has(key))) continue;
+      for (const key of cells) {
+        if (!dirty.has(key)) {
+          dirty.add(key);
+          grown = true;
         }
       }
     }
+    if (!grown) break;
   }
-  return levels;
+  return { passes, added: dirty.size - before };
 }
 
 export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys = [], options = {}) {
   const animate = options.animate === true;
   const layers = castleContainer?.userData?.layers;
   if (!layers?.length) return { ok: false, error: "no-layers" };
-  const dirty = dirtyKeys instanceof Set
-    ? dirtyKeys
-    : new Set(dirtyKeys.map((cell) => (Array.isArray(cell) ? `${cell[0]},${cell[1]},${cell[2]}` : String(cell))));
+  // 永远复制一份：闭包会往里加格，不能改调用方传进来的 Set。
+  const dirty = new Set(
+    (dirtyKeys instanceof Set ? [...dirtyKeys] : dirtyKeys).map((cell) =>
+      Array.isArray(cell) ? `${cell[0]},${cell[1]},${cell[2]}` : String(cell)
+    )
+  );
   if (!dirty.size) return { ok: true, dirtyCount: 0, editMs: 0, removedCount: 0, mergedCount: 0 };
-  const affectedLevels = expandDirtyToWholeLevels(dirty, spec);
+  // 两道保险叠加（2026-09-04 实测，20 次连续编辑 vs 同布局全量重建）：
+  //   只靠 ownSpanning 声明即门 …… 累积 2.2%，合并块净增 58
+  //   再加这层闭包       …… 累积 0.6%，合并块净增 16，P50 只多 0.8ms
+  // 所以默认开；`closeSpans: false` 可关掉单独观察前者的效果。
+  const spanClosure = options.closeSpans === false
+    ? { passes: 0, added: 0 }
+    : closeDirtyOverSpanningParts(layers, dirty);
+  const affectedLevels = citadelAffectedLevels(dirty);
   const t0 = performance.now();
 
   const blueprint = createCitadelBlueprint({
@@ -3009,6 +3090,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   // G30 增量性能：dirty 网格只可能挂在 town 层组里（地形/装饰不在层组），
   // 逐层遍历替代全城堡 traverse，省掉每 edit 对数千对象的一次全树扫描。
   const stale = [];
+  const isDirtySegment = citadelSegmentIsDirty(dirty);
   const isChangedLevel = (node) => {
     let cursor = node;
     for (let depth = 0; cursor && depth < 6; depth++) {
@@ -3022,8 +3104,12 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
       if (!o.isMesh) return;
       const cell = o.userData?.cell;
       const module = o.userData?.townModule;
+      // 跨格构件（屋顶分量、花园、晾衣绳、庭院树）：任一覆盖格 dirty 即整体重建，
+      // 因为它们的形状由整片格集决定，少一格就可能整体改形或不再成立。
+      const cells = o.userData?.cells;
       const isDirty = (cell && dirty.has(`${cell.ix},${cell.iy},${cell.iz}`)) ||
-        (module && dirty.has(`${module.ix},${module.iy},${module.iz}`));
+        (module && dirty.has(`${module.ix},${module.iy},${module.iz}`)) ||
+        (cells && cells.some((key) => dirty.has(key)));
       if (!isDirty) return;
       stale.push(o);
       const level = isChangedLevel(o);
@@ -3034,9 +3120,16 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     mesh.geometry?.dispose?.();
     mesh.removeFromParent();
   }
-  for (const level of dirtyLevels) {
+  for (const level of byLevel.values()) {
     for (const child of [...level.children]) {
-      if (child.isMesh && child.userData.mergedGeometry === true) {
+      if (!child.isMesh || child.userData.mergedGeometry !== true) continue;
+      // 合并块装的是整层几何：只能按区间摸掉 dirty 格，
+      // 整块删会把非 dirty 格一起带走（实测 119,952 → 44,170）。
+      //
+      // 范围必须是**全部**层组而不只是 dirtyLevels：第 3 步会往所有层挂新网格，
+      // 只压缩 dirtyLevels 的话，跨层构件会「旧的没摘、新的又挂」→ 重影。
+      dropCellsFromMerged(child, isDirtySegment);
+      if (mergedTriangleCount(child) === 0) {
         child.geometry?.dispose?.();
         child.removeFromParent();
       }
@@ -3086,7 +3179,11 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     castleContainer.userData.mergeDebounceLeft = debounceMs / 1000;
   } else if (!animate) {
     for (const level of levelsToMerge) {
-      const report = mergeStaticGroup(level, { skip: citadelTownMergeSkip, onSurface: citadelTownMergeOnSurface });
+      const report = mergeStaticGroup(level, {
+          skip: citadelTownIncrementalMergeSkip,
+          onSurface: citadelTownMergeOnSurface,
+          onOutline: citadelTownMergeOnOutline,
+        });
       mergedCount += report.surfaces.length;
     }
     refreshCitadelWindowLights(castleContainer);
@@ -3112,6 +3209,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   const result = {
     ok: true,
     dirtyCount: dirty.size,
+    spanClosure,
     removedCount: stale.length,
     newMeshCount: newMeshes.length,
     outlineCount,

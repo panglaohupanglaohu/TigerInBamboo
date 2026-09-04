@@ -37,7 +37,8 @@ const _rootInv = new THREE.Matrix4();
  *     该组合并几何中的三角形区间（triStart 相对组起点，源几何已非索引化），
  *     groupTriStart 为该组合并几何在 root 全部合并几何中的三角形起始序号
  *     （跨组累计，供全局面索引映射，如编辑器 cell 拾取）。
- *   - onOutline: 描边组合并完成后回调（sources 为描边网格，几何与表面共享）。
+ *   - onOutline: 描边组合并完成后回调（sources 为描边网格，几何与表面共享；
+ *     第 5 参 segments 与 onSurface 同构，供描边合并块按格区间压缩）。
  * @returns {{ surfaces: THREE.Mesh[], outlines: THREE.Mesh[],
  *             removedSurfaces: number, removedOutlines: number }}
  */
@@ -56,9 +57,21 @@ export function mergeStaticGroup(root, options = {}) {
   root.updateWorldMatrix(true, true);
   _rootInv.copy(root.matrixWorld).invert();
 
+  // ---------- 0. 一次性表现层子树（C13-5 编辑涟漪等）----------
+  // 标了 userData.transientFx 的节点，**连同整棵子树**都不参与合并：
+  // 它们会在 1~2 秒内自己消失，烘进合并块就等于把一帧的表现层焊死进静态几何。
+  // traverse 是先序，父节点一定先于子节点被访问，所以父在集合里子就一定在。
+  const transient = new Set();
+  const isTransient = (o) => {
+    if (o.userData.transientFx) { transient.add(o); return true; }
+    if (o.parent && transient.has(o.parent)) { transient.add(o); return true; }
+    return false;
+  };
+
   // ---------- 1. 收集表面网格与描边子节点 ----------
   const surfaces = [];
   root.traverse((o) => {
+    if (isTransient(o)) return;
     if (!o.isMesh || o.userData.isOutline) return;
     if (skip(o)) return;
     surfaces.push(o);
@@ -127,6 +140,7 @@ export function mergeStaticGroup(root, options = {}) {
   // 表面因运行时材质切换不合并，但描边无切换仍可合并。 ----------
   const outlineGroups = new Map(); // material -> { outline, surface }[]
   root.traverse((o) => {
+    if (transient.has(o)) return;
     if (!o.isMesh || o.userData.isOutline) return;
     for (const child of o.children) {
       if (child.isMesh && child.userData.isOutline) {
@@ -135,6 +149,15 @@ export function mergeStaticGroup(root, options = {}) {
         list.push({ outline: child, surface: o });
       }
     }
+  });
+  // 上一轮合并出的描边网格没有宿主表面（自身即几何源）。不收进来的话，
+  // 增量重合并会在它旁边再造一个描边合并网格，每次编辑多一个 draw call。
+  root.traverse((o) => {
+    if (transient.has(o)) return;
+    if (!o.isMesh || !o.userData.isOutline || !o.userData.mergedGeometry) return;
+    let list = outlineGroups.get(o.material);
+    if (!list) outlineGroups.set(o.material, (list = []));
+    list.push({ outline: o, surface: o });
   });
 
   // ---------- 3. 表面网格按材质分组 ----------
@@ -180,14 +203,22 @@ export function mergeStaticGroup(root, options = {}) {
 
   // ---------- 4. 描边合并：描边材质分组，几何用表面烘焙副本 ----------
   for (const [material, entries] of outlineGroups) {
-    const { merged, totalVerts } = mergeGroup(entries.map((e) => bake(e.surface)));
+    const segments = [];
+    let groupTri = 0;
+    const baked = entries.map((e) => {
+      const entry = bake(e.surface);
+      segments.push({ mesh: e.surface, triStart: groupTri, triCount: entry.triCount });
+      groupTri += entry.triCount;
+      return entry;
+    });
+    const { merged, totalVerts } = mergeGroup(baked);
     const mergedMesh = new THREE.Mesh(merged, material);
     mergedMesh.raycast = () => {};
     mergedMesh.userData.isOutline = true;
     mergedMesh.userData.mergedGeometry = mergedTag;
     root.add(mergedMesh);
     madeOutlines.push(mergedMesh);
-    if (onOutline) onOutline(mergedMesh, material, entries.map((e) => e.outline), triCursor);
+    if (onOutline) onOutline(mergedMesh, material, entries.map((e) => e.outline), triCursor, segments);
     triCursor += totalVerts / 3;
     for (const { outline } of entries) {
       removedOutlines.push(outline);

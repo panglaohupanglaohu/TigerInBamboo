@@ -12,7 +12,7 @@ import {
   citadelTerrainKey,
   citadelTerrainObjectsKey,
 } from "../../world/odysseyCitadel.js";
-import { CANAL_JUNCTION_TOWN_SPEC, citadelLevelsKey } from "../../world/citadelTown.js?v=20260903-column-coherent-jitter-v1";
+import { CANAL_JUNCTION_TOWN_SPEC, citadelLevelsKey } from "../../world/citadelTown.js?v=20260904-sun-rig-v1";
 import {
   waterCityCanalWaypointDir,
   waterCityShoreAng,
@@ -22,6 +22,8 @@ import {
 import { quatUprightOnSphere, latLonToDir, flatXZToLatLon } from "../../world/sphereMath.js";
 import { LAKE } from "../../world/lake.js";
 import { buildAbandonedGate, GATE, GATE_DEPTH } from "../../world/abandonedGate.js";
+import { mountGatePodCraft } from "../../world/gatePodCraft.js";
+import { mountGateHaulerCraft } from "../../world/gateHaulerCraft.js";
 import { BirdVortexManager } from "../../world/birdVortex.js";
 import { isOceanWorldRoutesV1, FEATURES, P } from "../../core/params.js";
 import { CANYON, canyonOffsetDir } from "../../world/canyon.js";
@@ -286,5 +288,10 @@ export function loadAbandonedGateBlock({ scene, R, tramSystem, flock, canyonDir 
     if (flock?.root) flock.root.visible = true;
   }
 
-  return { abandonedGate, gateBirdVortex };
+  // 叹息之门泡形飞行器 ×3：挂在 seatRoot 下，搬门时跟着走
+  const gatePods = mountGatePodCraft(abandonedGate);
+  // 重型运输艇 ×3：停低位、贴夹道，与高处的侦察艇错开
+  const gateHaulers = mountGateHaulerCraft(abandonedGate);
+
+  return { abandonedGate, gateBirdVortex, gatePods, gateHaulers };
 }

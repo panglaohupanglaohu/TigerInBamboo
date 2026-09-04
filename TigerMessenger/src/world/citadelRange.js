@@ -68,6 +68,10 @@ const CITADEL_SINK = 0.6; // 城堡 + 护城河内岸绿地相对护城河水面
 // 木马固定落在第一层瀑布正下方的接水湖面，不再回退到港口前草地。
 // 该净空对应模型车轮/底座离水面的微小间隙，保证“停在水面上”而不是沉入水体。
 const HORSE_LAKE_CLEARANCE = 0.12;
+/** 木马相对广场的偏移：沿门洞方向推出去、再侧移让开连港步道。 */
+const HORSE_PLAZA_ALONG = 5;
+// 侧移 2 让木马落在海面上（原岸线草甸盘已删除，2026-09-04 主人要求）
+const HORSE_PLAZA_SIDE = 2;
 // 局部基架：up = 站点方向，lz+ 指向主岛，lx = 右
 const _site = latLonToDir(RANGE_SITE.lat, RANGE_SITE.lon, new THREE.Vector3());
 const _island = latLonToDir(90, 0, new THREE.Vector3());
@@ -1579,11 +1583,18 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       lakeSurfacePos.copy(firstWaterfallPos);
     }
     if (latestValleyMode) {
-      // 设计图前景是水岸与舟船，不再存在“第一层瀑布接水湖”。木马强制
-      // 落在右侧岸边水面，并继续由 aimHorseToCanal 对准真实运河航段。
-      rangeLocalToWorld(10.8, 31.5, R, lakeSurfacePos);
+      // 木马跟着广场走：沿门洞方向（广场局部 +X）推出去、再侧移让开连港步道，
+      // 浮在水面上。写死局部坐标会在广场移位后失配。
+      const gateX = -Math.cos(yaw);
+      const gateZ = -Math.sin(yaw);
+      rangeLocalToWorld(
+        lx + gateX * HORSE_PLAZA_ALONG + Math.sin(yaw) * HORSE_PLAZA_SIDE,
+        lz + gateZ * HORSE_PLAZA_ALONG - Math.cos(yaw) * HORSE_PLAZA_SIDE,
+        R,
+        lakeSurfacePos
+      );
       lakeSurfacePos.addScaledVector(_site, HORSE_LAKE_CLEARANCE);
-      rangeLocalToWorld(0, 23.5, R, firstWaterfallPos);
+      rangeLocalToWorld(0, 0, R, firstWaterfallPos); // 谷地模式改以城堡为朝向基准
       lakeWaterObject = "highland-waterfront";
     } else {
       lakeSurfacePos.addScaledVector(_site, HORSE_LAKE_CLEARANCE);
@@ -1614,8 +1625,9 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       -toFirstWaterfall.dot(_right),
       toFirstWaterfall.dot(_fwd)
     );
-    // 以瀑布朝向为基准逆时针旋转 90°，使马头转向港口侧运河。
-    const horseYaw = waterfallYaw - Math.PI / 2;
+    // 该公式给出“马头直指目标”的 yaw；历史模式再逆时针 90° 转向港口侧运河。
+    // 谷地模式目标已是城堡，不再偏转——主人要求木马面对城堡。
+    const horseYaw = latestValleyMode ? waterfallYaw : waterfallYaw - Math.PI / 2;
     trojanHorse.rotateY(horseYaw);
     trojanHorse.userData.placement = {
       kind: latestValleyMode ? "highland-waterfront" : "citadel-cascade-lake",
@@ -1625,9 +1637,9 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       lift: HORSE_LAKE_CLEARANCE,
       yaw: horseYaw,
       waterfallYaw,
-      rotationOffset: -Math.PI / 2,
-      facing: "canal",
-      facingReference: latestValleyMode ? "waterfront-canal" : "first-ground-level-waterfall",
+      rotationOffset: latestValleyMode ? 0 : -Math.PI / 2,
+      facing: latestValleyMode ? "castle" : "canal",
+      facingReference: latestValleyMode ? "citadel-center" : "first-ground-level-waterfall",
       lake: true,
       waterfall: latestValleyMode ? null : "first-ground-level",
       waterObject: lakeWaterObject,

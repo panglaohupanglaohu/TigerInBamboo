@@ -1933,6 +1933,83 @@ F2 已经在做这件事 → **H3 必须排在 F2 之后**。
 | 9 | | C2 距离剔除 | `index.html` | | | | | | | | | |
 | 10+ | | C3 / C4 逐项 | | | | | | | | | | |
 
+### 2026-09-04 · C2 距离剔除转默认开启（Claude）
+
+**根因不是误剔，是它一直在空转。** `sceneDistanceCulling` 内部 2.5s 后才首次
+`collect()`，而 boot 要 5~8s —— 那次快照拍在半空场景上，之后再不重收集。
+`main.js` 在场景装配完毕处（`lightPool?.recollect()` 旁）补一次
+`distanceCulling?.recollect()` 后才真正生效。
+
+| 指标 | `?distanceCullV1=0` | `?distanceCullV1=1` | 变化 |
+|---|---|---|---|
+| 管理条目 entryCount | — | **10,753** | 补 recollect 前为 0（模块空转） |
+| 场景内隐藏网格 | 444 | **4,763** | **+4,319** |
+| draw calls | 2,711 | **2,112** | **−599（−22%）** |
+| triangles | 548,982 | 531,928 | −17,054（−3.1%） |
+
+**目验**：同机位两张截图 `/tmp/cull_off.png` vs `/tmp/cull_on.png` 画面一致
+（风车 / 人物 / 地形 / 海岸线全在），无误剔。
+
+**注意**：`fps` 未记录 —— 自动化页面不可见时 rAF 被节流，`perfProbe` 采样数为 0。
+帧时间需主人在真实可见窗口里读 HUD 补录。
+
+**顺带发现**：`DEFAULT_EXCLUDED` 与 `DYNAMIC_RE` 几乎完全重叠
+（`agent|boat|ship|soldier|bird|whale|pod|tram` 都已在豁免名单里，根本不进管理列表），
+所以 C2 原方案的「静态/动态分流」对它们是死代码，真正走动态分支的只有
+`messenger|npc|fox|tiger|aircraft|airship` 六个名字。已在
+`tools/test_distance_culling.mjs` 用 `npc-` 前缀验证动态分支确实可用。
+
+### 2026-09-04 · C1 按需重烘：**按文档规则跳过**（Claude）
+
+C1-a 的判据是「Δ < 10% → 跳过 C1」。可用的唯一实测是 9/02 那次 A-B-A：
+关阴影 64.3ms → 58.1ms，省 **6.1ms / 64.3ms = 9.5% < 10%** → 跳过。
+
+另有一条现实约束：本环境无法测帧时间。自动化浏览器页面不可见时 rAF 被节流，
+`perfProbe.snapshot()` 的 `samples` 恒为 0、`fps` 为 null（`bringToFront()` 也无效）。
+`calls / triangles / geometries / programs` 仍可靠，本轮验收全部基于这几项。
+
+C1-b 若将来要做，还需先回答一个本文档没提的风险：**玩家与 NPC 的投影会冻结**
+（按 1/64 昼夜相位重烘，人走动时影子留在原地）。做之前应先确认角色用的是
+`buildBlobShadow` 贴地暗斑还是真实 castShadow。
+
+### 2026-09-04 · C3 材质去重（Claude，第一刀：箭矢/投枪池）
+
+**先量后改**：`TODO.md` 记的「材质 ~2977」确有其事，实测 **2,645 个材质实例 /
+仅 721 种参数签名 → 1,924 个可去重（73%）**。但 `programs` 只有 36，
+说明着色器编译早已不是瓶颈；材质实例多的真实代价是
+`mergeStaticGroup` 按**材质实例**分组——150 个同参数材质会合并出 150 个网格。
+
+最大重复组是 `saihojiPhalanx.js` 的箭矢池：150 支箭 × 5 材质 + 5 几何，
+投枪池 44 支 × 4 + 4。箭之间除变换外完全一致。
+
+**共享边界**（不是全共享）：`update()` 里逐箭按各自飞行进度改
+`trail.material.opacity` 与 `trailCore.material.opacity`，这两件**必须保持逐箭独立**，
+否则全体拖尾会跟着最后更新的那支一起闪。其余 3 件材质 + 全部 5 件几何可共享。
+
+| 指标 | 改前 | 改后 | 变化 |
+|---|---|---|---|
+| 材质实例总数 | 2,645 | **2,069** | −576 |
+| 可去重余量 | 1,924 | 1,361 | −563 |
+| 箭矢+投枪材质实例 | 926 | **350** | −576（剩下的全是逐箭拖尾） |
+| GPU 几何 `memory.geometries` | ~1,683 | **1,378** | −305 |
+| draw calls | 2,122 | 2,122 | 不变（出生点看不到战场，收益在交战时） |
+
+**剩余可做**（按重复量排序，收益递减）：沼泽 `moebius-swamp-zone` 80 个、
+运河倒影 `canal-town-reflection` 68 个、`vanguard-trooper` 20 个。
+箭矢/投枪剩下的 344 个重复是**故意保留**的逐箭拖尾，不要"顺手优化"掉。
+
+**沼泽那 80 个我看过但没动**：`moebiusSwamp.js` 有统一的 `toonMat()` 工厂，
+看上去在那里加缓存能一次性去重整片沼泽——但同文件有 **11 处逐实例改材质**
+（涟漪 `rp.material.opacity`、萤火 `core.material.color.setRGB`、气泡/水滴/花蕊…）。
+加全局缓存会让这些动画互相串。要做得先像箭矢那样**先划边界**：
+静态的走共享工厂，带动画的保持独立。80 个实例、还在远景，收益不抵这份风险。
+
+**守门**：`tools/test_projectile_shared_assets.mjs` 把边界钉死了——
+`makeArrow` / `makeJavelin` 体内不得再出现 `new THREE.*Geometry`；
+`makeArrow` 内必须恰好保留 2 个 `MeshBasicMaterial`（trail + trailCore）、
+`makeJavelin` 恰好 1 个；共享缓存必须按 `isCitadelPaletteV3()` 分桶，否则切调色板串色。
+少了 = 拖尾被误共享（全体一起闪），多了 = 本可共享的没共享。
+
 ### 2026-09-02 实测（A-B-A 对照，只收录漂移 ≤ 30% 的行）
 
 协议：同一次加载、站着不动、`perfProbe.reset()` + `settle()` 各测一次，

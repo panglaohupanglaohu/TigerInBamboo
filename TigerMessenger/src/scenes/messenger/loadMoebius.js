@@ -7,6 +7,7 @@ import { FlockManager } from "../../world/flock.js";
 import { buildMoebiusCrystalMetropolis, GRAND_CRYSTAL } from "../../world/moebiusCity.js";
 import { loadCrystalLayoutFromStorage } from "../../world/crystalCityLayout.js";
 import { createBubblePod, createBubblePodsAroundFlowerBuildings } from "../../assets/bubblePod.js";
+import { mountGatePodEscort } from "../../world/gatePodCraft.js";
 import {
   createCitySeaLake,
   CITY_SEA_LAKE,
@@ -131,6 +132,8 @@ export function placeMoebiusSwampAndSky({ scene, R, moebius, grandDir, bubblePod
     },
   });
   scene.add(aircraftSquad);
+  // 叹息之门泡形飞行器伴飞：跟着莫比斯机队出行（updateIsland 每帧跟位）
+  mountGatePodEscort(aircraftSquad);
 
   const airship = createMoebiusAirship();
   airship.scale.setScalar(1.25);

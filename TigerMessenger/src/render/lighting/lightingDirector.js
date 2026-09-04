@@ -13,6 +13,7 @@
 import * as THREE from "three";
 import { composeLightingState, lightingWeatherName } from "./lightingState.js";
 import { setLightingDebugViewMode, getLightingDebugViewMode } from "./debugViewMode.js";
+import { P } from "../../core/params.js";
 
 const _box = new THREE.Box3();
 const _center = new THREE.Vector3();
@@ -470,6 +471,11 @@ export function createLightingDirector({ scene, renderer, skyMat = null, legacy 
         weather: lightingWeatherName(weather ?? 0),
         trims,
         moebius: moebiusFactor,
+        // C13-7（PLAN §10.7）：摇杆接管时主光方向由 azimuth/elevation 直接给出。
+        // 方向不进下面那道一阶平滑（只有 intensity 进），所以摇杆一动**下一帧**就跟上。
+        sunOverride: P.sunRigManual
+          ? { azimuth: P.sunAzimuth, elevation: P.sunElevation }
+          : null,
       });
       // 一阶平滑（tau≈0.8s），太阳方向跳变仍立即生效（关键时刻边界）
       const k = Math.min(1, (dt || 0.016) / 0.8);

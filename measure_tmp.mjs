@@ -1,0 +1,12 @@
+const BASE = new URL("./TigerMessenger/", import.meta.url);
+globalThis.window={innerWidth:1,innerHeight:1,addEventListener(){},removeEventListener(){},matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}})};
+const el=()=>({style:{},classList:{add(){},remove(){},toggle(){},contains:()=>false},textContent:"",appendChild(){},addEventListener(){},querySelector:()=>el(),querySelectorAll:()=>[]});
+const cv=()=>{const e=el();e.width=64;e.height=64;e.getContext=()=>({canvas:e,fillRect(){},clearRect(){},createLinearGradient:()=>({addColorStop(){}}),getImageData:()=>({data:new Uint8ClampedArray(4)}),putImageData(){},drawImage(){},measureText:()=>({width:1}),fillText(){}});e.toDataURL=()=>"";return e;};
+globalThis.document={createElement:t=>String(t).toLowerCase()==="canvas"?cv():el(),createElementNS:(n,t)=>String(t).toLowerCase()==="canvas"?cv():el(),getElementById:()=>el(),querySelector:()=>el(),querySelectorAll:()=>[],body:{appendChild(){}},addEventListener(){}};
+globalThis.localStorage={getItem:()=>null,setItem(){},removeItem(){}};
+const THREE=await import(new URL("vendor/three.module.js",BASE).href);
+const h=await import(new URL("src/assets/harbor.js",BASE).href);
+const s=h.createLongbowSoldier({rand:()=>0.5});
+const b=new THREE.Box3().setFromObject(s);
+const sz=b.getSize(new THREE.Vector3());
+console.log("longbow soldier size:", sz.x.toFixed(3), sz.y.toFixed(3), sz.z.toFixed(3), "minY", b.min.y.toFixed(3));

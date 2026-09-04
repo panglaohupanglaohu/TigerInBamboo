@@ -40,7 +40,7 @@ export const P_DEFAULTS = Object.freeze({
   // 但实测表明瓶颈在片元光照（~85 盏灯）而非 draw call，本项收益小；
   // 8/29 曾因远景误剔被主人回滚，需浏览器目验后再决定是否常开。
   // 打开：?distanceCullV1=1
-  distanceCullV1: false,
+  distanceCullV1: true,
   distanceCullMeters: 150,
   // 空闲灯剔除（2026-09-02）：Three 的 intensity=0 灯仍占 uniform 槽位并
   // 参与逐片元循环。实测（A-B-A 对照，漂移 0.9%）：78 盏点光/聚光
@@ -57,6 +57,20 @@ export const P_DEFAULTS = Object.freeze({
   // （全场 33%）/ 5.4ms。纯背景对象，主人 2026-09-02 定为 3 艘。
   // 回滚：?oceanWarshipCount=8
   oceanWarshipCount: 3,
+  // C13-5 岸线泡沫带（PLAN §10.5）：沿城堡轮廓环烘一条窄带，复用 S13 的
+  // looping vertex shader。**默认关**——S13 的岸浪带早在 2026-08 就因为
+  // 「近白色 foam shader 在当前海面构图里读成悬浮白条」被摘出正式场景
+  // （odysseyCitadel.js `highlandShoreWaves = null`），轮廓带用的是同一个
+  // shader，同一个毛病会原样复现。数据侧已烘好并有回归
+  // （tools/test_contour_foam_band.mjs），等着色单独过一轮再打开。
+  // 打开：?foamBandV1=1
+  foamBandV1: false,
+  // C13-7 太阳二维摇杆（PLAN §10.7）：Townscaper 的太阳是方位×高度两个自由度，
+  // 不是一条时间滑条。sunRigManual=true 时 lightingState 用下面两个角度定主光方向，
+  // 不再从 timeOfDay 推；关掉就回到按时刻自动跑。摇杆在 devPanel 里。
+  sunRigManual: false,
+  sunAzimuth: 135,   // 度：0 = +Z，顺时针（俯视）
+  sunElevation: 42,  // 度：0 = 地平线，负数 = 夜侧
 });
 
 /** 运行时可变参数（每帧被玩家/相机/交互读取） */

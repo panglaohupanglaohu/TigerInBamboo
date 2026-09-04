@@ -37,6 +37,12 @@ import { P, isCitadelPaletteV3 } from "../core/params.js";
 import { v3TokenInt } from "./citadelVisualTheme.js";
 import { createRng } from "../core/rng.js";
 import { projectWorldObjectToPlanetSurface } from "./planetV8/riderProjection.js";
+import {
+  applyVanguardHit,
+  updateVanguardCombat,
+  deployVanguardSquad,
+  VANGUARD_COMBAT,
+} from "./vanguardTrooper.js";
 
 const SHIP_COUNT = 2;
 const SHIP_GAP = 16;
@@ -152,36 +158,49 @@ function slotJitter(gx, gz, axis) {
 
 const _axisX = new THREE.Vector3(1, 0, 0);
 
+// 箭矢池 150 支，每支原本各造 5 个几何 + 5 个材质 = 750 + 750 个实例。
+// 箭之间除了变换以外完全一样，几何可全共享；材质里只有拖尾两件被逐箭改
+// opacity（见 update 里的速度痕起伏），其余三件从不改，可共享。
+// 共享后 mergeStaticGroup 也不会再把 150 支箭拆成 150 组。
+let _arrowShared = null;
+function arrowShared() {
+  const v3 = isCitadelPaletteV3();
+  if (_arrowShared?.v3 === v3) return _arrowShared;
+  _arrowShared = {
+    v3,
+    shaftGeo: new THREE.CylinderGeometry(0.02, 0.02, 0.92, 5),
+    headGeo: new THREE.ConeGeometry(0.045, 0.14, 5),
+    fletchGeo: new THREE.BoxGeometry(0.14, 0.11, 0.016),
+    trailGeo: new THREE.BoxGeometry(0.62, 0.034, 0.034),
+    trailCoreGeo: new THREE.BoxGeometry(0.3, 0.024, 0.024),
+    shaftMat: new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("shipDeckWood") : 0x9a7a4a }),
+    headMat: new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("unitSteel") : 0xcfd6da }),
+    fletchMat: new THREE.MeshBasicMaterial({ color: 0xe04c3e }),
+  };
+  return _arrowShared;
+}
+
 function makeArrow() {
   const g = new THREE.Group();
   g.name = "phalanx-arrow";
-  // V3（?citadelPaletteV3=1）：箭杆/箭头走 token；红羽翎保留作阵营识别点
-  const v3 = isCitadelPaletteV3();
+  const S = arrowShared();
   // 与长弓上搭箭同尺度（fig×2 后约 0.68），撒放时才不会突然变短；
   // 放大 1.5 倍 + 加色拖尾：长距离攒射在空中清晰可见
-  const shaft = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.02, 0.02, 0.92, 5),
-    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("shipDeckWood") : 0x9a7a4a })
-  );
+  const shaft = new THREE.Mesh(S.shaftGeo, S.shaftMat);
   shaft.rotation.z = Math.PI / 2;
   g.add(shaft);
-  const head = new THREE.Mesh(
-    new THREE.ConeGeometry(0.045, 0.14, 5),
-    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("unitSteel") : 0xcfd6da })
-  );
+  const head = new THREE.Mesh(S.headGeo, S.headMat);
   head.rotation.z = -Math.PI / 2;
   head.position.x = 0.52;
   g.add(head);
-  const fletch = new THREE.Mesh(
-    new THREE.BoxGeometry(0.14, 0.11, 0.016),
-    new THREE.MeshBasicMaterial({ color: 0xe04c3e })
-  );
+  const fletch = new THREE.Mesh(S.fletchGeo, S.fletchMat);
   fletch.position.x = -0.36;
   g.add(fletch);
   // Bad North 式朴素箭矢：去掉流星火焰核与光剑长拖尾，
   // 只留一条短而淡的米白速度痕（普通透明混合，不加色发光）
+  // 拖尾材质逐箭独立：update 里按各自飞行进度改 opacity，共享会让全体一起闪。
   const trail = new THREE.Mesh(
-    new THREE.BoxGeometry(0.62, 0.034, 0.034),
+    S.trailGeo,
     new THREE.MeshBasicMaterial({
       color: 0xf5f2e8,
       transparent: true,
@@ -194,7 +213,7 @@ function makeArrow() {
   trail.position.x = -0.78;
   g.add(trail);
   const trailCore = new THREE.Mesh(
-    new THREE.BoxGeometry(0.3, 0.024, 0.024),
+    S.trailCoreGeo,
     new THREE.MeshBasicMaterial({
       color: 0xffffff,
       transparent: true,
@@ -215,34 +234,43 @@ function makeArrow() {
 }
 
 /** 长枪（投掷标枪）：比箭长一倍、更粗，枪头 + 红缨 + 加色拖尾 */
+let _javelinShared = null;
+function javelinShared() {
+  const v3 = isCitadelPaletteV3();
+  if (_javelinShared?.v3 === v3) return _javelinShared;
+  _javelinShared = {
+    v3,
+    shaftGeo: new THREE.CylinderGeometry(0.032, 0.032, 1.3, 5),
+    headGeo: new THREE.ConeGeometry(0.055, 0.18, 5),
+    bandGeo: new THREE.CylinderGeometry(0.034, 0.034, 0.16, 5),
+    trailGeo: new THREE.BoxGeometry(0.55, 0.03, 0.03),
+    shaftMat: new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("shipDeckWood") : 0x6b4f2a }),
+    headMat: new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("unitSteel") : 0xc9d1d6 }),
+    bandMat: new THREE.MeshBasicMaterial({ color: 0xb83028 }),
+  };
+  return _javelinShared;
+}
+
 function makeJavelin() {
   const g = new THREE.Group();
   g.name = "phalanx-javelin";
-  const v3 = isCitadelPaletteV3();
-  const shaft = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.032, 0.032, 1.3, 5),
-    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("shipDeckWood") : 0x6b4f2a })
-  );
+  const S = javelinShared();
+  const shaft = new THREE.Mesh(S.shaftGeo, S.shaftMat);
   shaft.rotation.z = Math.PI / 2;
   g.add(shaft);
-  const head = new THREE.Mesh(
-    new THREE.ConeGeometry(0.055, 0.18, 5),
-    new THREE.MeshBasicMaterial({ color: v3 ? v3TokenInt("unitSteel") : 0xc9d1d6 })
-  );
+  const head = new THREE.Mesh(S.headGeo, S.headMat);
   head.rotation.z = -Math.PI / 2;
   head.position.x = 0.72;
   g.add(head);
-  const band = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.034, 0.034, 0.16, 5),
-    new THREE.MeshBasicMaterial({ color: 0xb83028 })
-  );
+  const band = new THREE.Mesh(S.bandGeo, S.bandMat);
   band.rotation.z = Math.PI / 2;
   band.position.x = -0.34;
   g.add(band);
   // 长矛本体即可，不再附加夸张亮色光柱（避免尾部大光带夸大形状）。
   // 仅保留极轻微的短拖影以提示飞行方向，几乎不可见。
+  // 拖尾材质逐枪独立：update 里按各自飞行进度改 opacity。
   const trail = new THREE.Mesh(
-    new THREE.BoxGeometry(0.55, 0.03, 0.03),
+    S.trailGeo,
     new THREE.MeshBasicMaterial({
       color: 0xd8ecff,
       transparent: true,
@@ -281,6 +309,8 @@ export function createSaihojiPhalanxBattle({
   scene,
   isWhaleRisen,
   getSquad,
+  /** 先锋重甲兵中队（随莫比斯 aircraft 出行，落地后参战）。返回 vanguard-squad 根节点 */
+  getVanguards = null,
   getTram,
   oldHarbor = null,
   getOldHarbor = null,
@@ -859,7 +889,10 @@ export function createSaihojiPhalanxBattle({
       // 落地判定：命中判定圈 = 成员半径（散布+滞后决定脱靶率）
       const tip = a.position.clone();
       const acPos = _sparkTmp.clone();
-      if (ac?.parent && tip.distanceTo(acPos) < 4.8) {
+      // 判定圈按目标体型给：机队成员是庞然大物（4.8），先锋兵只有 1.45 高的人形，
+      // 沿用 4.8 会变成"箭射到旁边也算中"，20 箭一次损伤的口径就名存实亡。
+      const hitR = ac?.userData?.unitClass === "vanguard-trooper" ? 1.1 : 4.8;
+      if (ac?.parent && tip.distanceTo(acPos) < hitR) {
         if (ac.userData.phalanxRole && shieldBlocksArrow(ac)) {
           // Bad North 盾挡箭：箭在盾面弹开、沿径向坠落，不计伤害
           u.miss = 0.01;
@@ -872,7 +905,14 @@ export function createSaihojiPhalanxBattle({
         u.wobble = 1.6 + rand() * 0.8;
         a.scale.setScalar(0.9 + rand() * 0.25);
         if (ac.userData.phalanxRole) applySoldierDamage(ac, "arrow"); // 攻城：士兵中箭
-        else ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1; // 机队成员
+        else if (ac.userData.unitClass === "vanguard-trooper") {
+          // 先锋兵：20 箭才算一次损伤（用户 2026-09-04 裁定的不对称口径）
+          const r = applyVanguardHit(ac, "arrow");
+          if (r.wounded) {
+            root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
+            logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "arrow", life: r.life, dead: r.dead });
+          }
+        } else ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1; // 机队成员
         spawnSpark(tip);
         if (rand() < 0.5) spawnSmoke(tip);
       } else {
@@ -988,12 +1028,20 @@ export function createSaihojiPhalanxBattle({
       if (p < 1) continue;
       const tip = j.position.clone();
       const acPos = _sparkTmp.clone();
-      if (ac?.parent && tip.distanceTo(acPos) < 5.0) {
+      const jHitR = ac?.userData?.unitClass === "vanguard-trooper" ? 1.2 : 5.0;
+      if (ac?.parent && tip.distanceTo(acPos) < jHitR) {
         ac.attach(j);
         u.stuck = true;
         u.wobble = 1.8 + rand() * 0.8;
         j.scale.setScalar(0.95 + rand() * 0.2);
-        ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
+        if (ac.userData.unitClass === "vanguard-trooper") {
+          // 先锋兵：10 标枪才算一次损伤
+          const r = applyVanguardHit(ac, "javelin");
+          if (r.wounded) {
+            root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
+            logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "javelin", life: r.life, dead: r.dead });
+          }
+        } else ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
         spawnSpark(tip);
         if (rand() < 0.6) spawnSmoke(tip);
       } else {
@@ -3331,7 +3379,13 @@ export function createSaihojiPhalanxBattle({
 
     const squad = typeof getSquad === "function" ? getSquad() : null;
     const members = squad?.userData?.members || [];
-    const live = members.filter((m) => m.parent);
+    // 先锋兵**落地之后**才进箭矢/标枪的目标池：还在机腹下伴飞时打不到。
+    const vanguardRoot = typeof getVanguards === "function" ? getVanguards() : null;
+    const vanguardTroopers =
+      vanguardRoot?.userData?.state === "deployed"
+        ? (vanguardRoot.userData.troopers || []).filter((v) => v.parent && !v.userData.dead)
+        : [];
+    const live = [...members.filter((m) => m.parent), ...vanguardTroopers];
 
     // ---------- 绳索小队：抛绳挂鲸、拔河拉回（告警后稍候出发） ----------
     if (whaleUp && !ropesDispatched && fightFormed) {
@@ -3449,6 +3503,35 @@ export function createSaihojiPhalanxBattle({
         fireArrow(s, tgt);
       }
     }
+    // ---------- 先锋兵落地：鲸起 + 方阵成形 = 苔庭之战开打 ----------
+    // 落地点取苔庭中枢方向的地表；落一次就不再落（state 从 aboard 变 deployed）。
+    if (vanguardRoot && vanguardRoot.userData.state === "aboard" && whaleUp && fightFormed) {
+      const hd = hubDir(_tmp).clone();
+      const gr = groundHeightAt(hd) ?? PLANET_RADIUS + 0.3;
+      deployVanguardSquad(vanguardRoot, hd, gr + 0.05);
+      logCommand("vanguardDeploy");
+    }
+
+    // ---------- 先锋兵反击：激光刀 1 刀 / 闪电枪 2 枪 损伤一名普通士兵 ----------
+    // 只做"够不够一次损伤"的判定；真正扣血仍走 applySoldierDamage，
+    // 瘫倒/击杀阈值与事件日志只有它知道，不在这里另开第二套账。
+    if (vanguardTroopers.length && shooters.length) {
+      const vs = updateVanguardCombat(vanguardRoot, dt, t, {
+        soldiers: shooters,
+        onWound: (soldier, weapon) => {
+          applySoldierDamage(soldier, weapon === "blade" ? "pike" : "melee");
+          root.userData.vanguardKills = (root.userData.vanguardKills || 0) + (soldier.userData.dead ? 1 : 0);
+          logEvent("vanguardStrike", {
+            target: soldier.userData.uid ?? 0,
+            weapon,
+            dead: !!soldier.userData.dead,
+          });
+        },
+      });
+      root.userData.vanguardBladeSwings = (root.userData.vanguardBladeSwings || 0) + vs.blade;
+      root.userData.vanguardBoltShots = (root.userData.vanguardBoltShots || 0) + vs.bolt;
+    }
+
     // 箭矢/投枪运动（飞行/命中/脱靶坠落/火花烟）始终推进，鲸落也不冻结
     updateArrows(dt);
     updateJavelins(dt);
@@ -3483,5 +3566,12 @@ export function createSaihojiPhalanxBattle({
   root.userData.reset = () => {
     root.userData.resetRequested = true;
   };
-  return { root, update, isAssembled, reset: resetBattle };
+  return {
+    root,
+    update,
+    isAssembled,
+    reset: resetBattle,
+    /** 苔庭之战数值口径（先锋兵不对称伤害），供 UI / 测试读，不许在别处硬编码第二份 */
+    combatRules: VANGUARD_COMBAT,
+  };
 }
