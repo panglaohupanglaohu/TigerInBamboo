@@ -233,10 +233,11 @@ export function createGatePodCraft({
  * 所以搬门（relocateAbandonedGate）时跟着 seatRoot 走，不需要重算。
  *
  * @param {THREE.Object3D} abandonedGate buildAbandonedGate 的返回值
- * @param {{scale?:number}} [opts]
+ * @param {{scale?:number, count?:number}} [opts] count：停几台（默认 3；苔庭之战
+ *   要带走泡机，叹息之门的停机数相应减少）
  * @returns {THREE.Group|null} 三台的容器（挂载失败返回 null）
  */
-export function mountGatePodCraft(abandonedGate, { scale = 1 } = {}) {
+export function mountGatePodCraft(abandonedGate, { scale = 1, count = 3 } = {}) {
   const seat = abandonedGate?.userData?.seatRoot;
   if (!seat) return null;
   // 幂等：重复挂载先摘旧的（开发者菜单搬门会重跑这段）
@@ -254,7 +255,7 @@ export function mountGatePodCraft(abandonedGate, { scale = 1 } = {}) {
     { pos: [10.8, 20.5, -7.0], yaw: -2.62, pitch: 0.05, roll: -0.13, scale: 0.86 },
     { pos: [1.2, 33.5, 17.5], yaw: 0.12, pitch: -0.10, roll: 0.04, scale: 1.12 },
   ];
-  berths.forEach((berth, i) => {
+  berths.slice(0, Math.max(0, Math.min(berths.length, count))).forEach((berth, i) => {
     const variant = GATE_POD_VARIANTS[i % GATE_POD_VARIANTS.length];
     const pod = createGatePodCraft({
       scale: berth.scale * scale,
@@ -337,6 +338,12 @@ export function mountGatePodEscort(squad, { scale = 1, slots = ESCORT_SLOTS } = 
     });
     pod.name = `gate-pod-escort-${variant.id}`;
     pod.userData.escortSlot = slot;
+    // 麻醉炮口（机鼻下缘）：苔庭之战时从这里向红盔发射麻醉弹（5 发瘫倒）
+    const tranqMuzzle = new THREE.Object3D();
+    tranqMuzzle.name = "tranq-muzzle";
+    tranqMuzzle.position.set(0, -1.35, 2.5);
+    pod.add(tranqMuzzle);
+    pod.userData.tranqMuzzle = tranqMuzzle;
     wing.add(pod);
   });
   squad.add(wing);

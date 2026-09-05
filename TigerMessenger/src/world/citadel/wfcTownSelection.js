@@ -22,6 +22,17 @@ export const defaultBanPolicy = townBanPolicy;
 /** 保留旧名字，避免外部引用断裂 */
 export { CITADEL_DIRS };
 
+const compiledMemo = new WeakMap();
+function compileTown(prototypes) {
+  let hit = compiledMemo.get(prototypes);
+  if (hit) return hit;
+  const compiled = compileVariants(prototypes);
+  const table = compileCompatibilityTable(compiled, { onDeadVariant: "throw" });
+  hit = { compiled, table };
+  compiledMemo.set(prototypes, hit);
+  return hit;
+}
+
 function protoFamilyOf(protoId, prototypes) {
   const hit = prototypes.find((p) => p.id === protoId);
   if (hit?.family) return hit.family;
@@ -47,8 +58,7 @@ export function solveTownSelection({
   maxBacktrack = 64,
 } = {}) {
   const graph = createCitadelCellGraph(grid);
-  const compiled = compileVariants(prototypes);
-  const table = compileCompatibilityTable(compiled, { onDeadVariant: "throw" });
+  const { compiled, table } = compileTown(prototypes);
   const bans = [];
   for (const { id, index } of graph.cells()) {
     const exposure = graph.exposure(index);

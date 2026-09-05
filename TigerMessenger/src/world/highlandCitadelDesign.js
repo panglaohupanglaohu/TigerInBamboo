@@ -5,7 +5,7 @@
 //  mountain-valley city. Local convention: +Y = sky, +Z = waterfront/player.
 // ============================================================================
 import * as THREE from "three";
-import { TOWNSCAPER_HIGHLAND_PALETTE } from "./citadelTown.js?v=20260904-sun-rig-v1";
+import { TOWNSCAPER_HIGHLAND_PALETTE } from "./citadelTown.js?v=20260905-wfc-wire-v1";
 import { mergeStaticGroup } from "./geometryMerge.js";
 
 export const HIGHLAND_CITADEL_DESIGN_VERSION = "2026.08.27-reference-obelisk-stone-v12-vegetation-bands";

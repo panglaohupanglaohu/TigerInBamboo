@@ -72,9 +72,9 @@ function hullRadiusAt(u, MIDR = 1.35) {
 
 const LEN = 7.0; // 外壳总长（沿 Z 轴分布）
 
-/** 羽箭攒射：每 50 支苔庭鲸下沉一档，共 6 档 / 300 支落地。飞艇本身不掉高度。 */
+/** 羽箭攒射：每 50 支苔庭鲸下沉一档，共 12 档 / 600 支落地（主人 2026-09-05：延长战斗）。飞艇本身不掉高度。 */
 export const ARROW_SINK_STEP = 50;
-export const ARROW_SINK_STEPS = 6;
+export const ARROW_SINK_STEPS = 12;
 export const ARROW_SINK_TOTAL = ARROW_SINK_STEP * ARROW_SINK_STEPS;
 
 /**
@@ -661,13 +661,105 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
   let formationBank = 0;
   let formationPitch = 0;
 
+  // ---------- 苔庭之战舰队模式（2026-09-05）：整个机队随舰队飞抵苔庭上空 ----------
+  // vanguardAssault.begin 时给每架 member 写 missionLock = { active, hubDir,
+  // hoverRadius, az0 }（az0 确定性，禁随机）。结构照抄 whaleLock：3.2s blend 过渡
+  // 到苔庭上空小圈盘旋；done 后 active=false 走 2.5s 回归航线过渡。
+  const ml = aircraft.userData.missionLock;
+  if (ml?.active && ml.hubDir && Number.isFinite(ml.hoverRadius)) {
+    const hubD = ml.hubDir;
+    const east2 = new THREE.Vector3()
+      .crossVectors(new THREE.Vector3(0, 1, 0), hubD)
+      .normalize();
+    const north2 = new THREE.Vector3().crossVectors(hubD, east2).normalize();
+    const az0 = Number.isFinite(ml.az0) ? ml.az0 : 0;
+    const az = az0 + t * 0.22;
+    const tilt = 0.05; // 舰队盘旋圈略大（半径 ~8），压在苔庭正上方
+    const dir = hubD
+      .clone()
+      .multiplyScalar(Math.cos(tilt))
+      .addScaledVector(east2, Math.cos(az) * Math.sin(tilt))
+      .addScaledVector(north2, Math.sin(az) * Math.sin(tilt))
+      .normalize();
+    const hoverCenter = dir
+      .clone()
+      .multiplyScalar(ml.hoverRadius + Math.sin(t * 1.3) * 1.2);
+    const tanAz = east2
+      .clone()
+      .multiplyScalar(-Math.sin(az))
+      .addScaledVector(north2, Math.cos(az));
+    const orbitTan = tanAz
+      .addScaledVector(hubD, -tanAz.dot(hubD))
+      .normalize();
+
+    // 冻结航线相位复算过渡起点（照抄 whaleLock）
+    let holdCenter = null;
+    let holdUp = null;
+    let holdTan = null;
+    let holdSide = null;
+    const p = aircraft.userData.patrol;
+    const st = aircraft.userData._patrol;
+    if (p && st && !ml.blendStart) {
+      const dA = p.dirA;
+      const dB = p.dirB;
+      const hdir = dA.clone().lerp(dB, st.phase).normalize();
+      holdCenter = hdir
+        .clone()
+        .multiplyScalar(p.R + p.height + Math.sin(t * 0.28) * 1.35);
+      holdUp = hdir;
+      const tan = dB
+        .clone()
+        .addScaledVector(dA, -dB.dot(dA))
+        .normalize();
+      holdTan = tan;
+      holdSide = new THREE.Vector3().crossVectors(holdUp, tan).normalize();
+    }
+    if (!ml.blendStart && holdCenter) {
+      ml.blendStart = holdCenter.clone();
+      ml.blendUp = holdUp.clone();
+      ml.blendTan = holdTan.clone();
+    }
+    const from = ml.blendStart || hoverCenter.clone();
+    const upFrom = ml.blendUp || hubD;
+    const tanFrom = ml.blendTan || orbitTan;
+    ml.blend = Math.min(1, (ml.blend ?? 0) + dt / 3.2);
+    const e = ml.blend * ml.blend * (3 - 2 * ml.blend);
+    formationCenter = from.clone().lerp(hoverCenter, e);
+    formationUp = upFrom.clone().lerp(hubD, e).normalize();
+    formationTan = tanFrom.clone().lerp(orbitTan, e).normalize();
+    formationSide = new THREE.Vector3()
+      .crossVectors(formationUp, formationTan)
+      .normalize();
+    formationTan.crossVectors(formationSide, formationUp).normalize();
+    formationBank = -Math.sin(az) * 0.3 - (1 - ml.blend) * 0.12;
+    formationPitch = 0.05 + Math.sin(t * 0.9) * 0.03;
+    patrolMoving = true;
+    ml._lastHoverCenter = hoverCenter.clone();
+    aircraft.userData._patrolCenter = formationCenter.clone();
+  } else {
+    // missionLock 解锁回归：从盘旋位平滑回到航线（blend 1 → 0，2.5s）
+    const mlOut = aircraft.userData.missionLock;
+    if (mlOut && !mlOut.active && mlOut._lastHoverCenter && (mlOut.blend ?? 0) > 0.002) {
+      mlOut.blend = Math.max(0, (mlOut.blend ?? 0) - dt / 2.5);
+    }
+  }
+  const missionLockActive = !!(ml?.active && ml.hubDir && Number.isFinite(ml.hoverRadius));
+  const missionReturnCenter = (() => {
+    const mlOut = aircraft.userData.missionLock;
+    if (mlOut && !mlOut.active && mlOut._lastHoverCenter && (mlOut.blend ?? 0) > 0.002) {
+      const k = mlOut.blend * mlOut.blend * (3 - 2 * mlOut.blend);
+      return { center: mlOut._lastHoverCenter.clone(), k };
+    }
+    return null;
+  })();
+
   // ---------- 苔庭鲸对抗期：俯冲吸食 / 悬停盘顶（鲸起→战斗→拉回全程跟随） ----------
   // 苔庭鲸场景（saihojiGarden）每帧把 whaleLock 写入 squad.userData：
   //  { active, hubDir, hoverRadius } — hoverRadius = 鲸背盘顶半径 + WHALE_HOVER_GAP
   //  （固定高度差，鲸被绳索拽升/拽降时逐帧跟随）。锁定时冻结航线相位，
   //  编队中心平滑过渡到鲸背正上方盘旋；解锁后平滑回到航线。
   const wl = aircraft.userData.whaleLock;
-  if (wl?.active && wl.hubDir && Number.isFinite(wl.hoverRadius)) {
+  if (!missionLockActive && wl?.active && wl.hubDir && Number.isFinite(wl.hoverRadius)) {
     const hubD = wl.hubDir;
     const east = new THREE.Vector3()
       .crossVectors(new THREE.Vector3(0, 1, 0), hubD)
@@ -752,7 +844,7 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
     patrolMoving = true;
     wl._lastHoverCenter = hoverCenter.clone();
     aircraft.userData._patrolCenter = formationCenter.clone();
-  } else if (aircraft.userData.patrol) {
+  } else if (!missionLockActive && aircraft.userData.patrol) {
     const p = aircraft.userData.patrol;
     // 状态机：0 城→店 1 店停留 2 店→城 3 城停留
     if (!aircraft.userData._patrol) aircraft.userData._patrol = { seg: 0, u: 0, phase: 0 };
@@ -1246,12 +1338,13 @@ function updateHummingbirdForage(members, nectarList, ctx) {
       }
 
       // 必须编队扫描发现湖沼后，才允许个体去吸蜜；
-      // 苔庭鲸对抗期（whaleLock 锁定）：机队全程压住鲸，禁止离队吸蜜
+      // 苔庭鲸对抗期（whaleLock 锁定）与苔庭之战舰队期（missionLock）：禁止离队吸蜜
       if (
         fg.cooldown <= 0 &&
         swampFound &&
         nectarList.length &&
-        !aircraft?.userData?.whaleLock?.active
+        !aircraft?.userData?.whaleLock?.active &&
+        !aircraft?.userData?.missionLock?.active
       ) {
         let best = null;
         let bestD = Infinity;

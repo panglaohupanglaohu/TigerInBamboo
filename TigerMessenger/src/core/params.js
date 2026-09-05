@@ -71,6 +71,23 @@ export const P_DEFAULTS = Object.freeze({
   sunRigManual: false,
   sunAzimuth: 135,   // 度：0 = +Z，顺时针（俯视）
   sunElevation: 42,  // 度：0 = 地平线，负数 = 夜侧
+  // C11 stencil 挖窗原型（PLAN §阶段6 / S20②）：窗框写 stencil、墙做 NotEqual 丢片元、
+  // 再画窗内壁与玻璃。**默认关**——`src/render/stencilWindows.js` 的材质状态机、
+  // draw call 账目（+2/层）、卸载可逆都有 `tools/probe_stencil_windows.mjs` 兜着，
+  // 但「窗洞里露不露描边壳」只能看画面，还没有人看过。上生产前必须有截图对照。
+  // 打开：?stencilWindowsV1=1
+  stencilWindowsV1: false,
+  // C6 WFC 选型接线（PLAN 阶段 2）：顶格坡/平/花园改由 solveTownSelection 决定。
+  // **默认关**——100 seed 体检顶格只有 ~35% 长成屋顶，天际线会变，要主人对着
+  // S23 录像看过再翻默认。打开：?wfcTownV1=1
+  wfcTownV1: false,
+  // C10 不规则网格（PLAN 阶段 5）：编辑器拾取与承重按 face 重心。
+  // **默认关**——笼形变形还没上，打开只会换采样点、体块仍是方格。
+  // 打开：?irregularGrid=1  回退：?irregularGrid=0
+  irregularGridV1: false,
+  // C9 角落模块（PLAN 阶段 4）：角柱装配替换格体/墙裙。默认关。
+  // 打开：?cornerModules=1
+  cornerModulesV1: false,
 });
 
 /** 运行时可变参数（每帧被玩家/相机/交互读取） */
@@ -231,6 +248,10 @@ export function applyUrlOverrides(search) {
     ["nightBloomV1", "P"],
     ["idleLightCullV1", "P"],
     ["lightPoolV1", "P"],
+    ["wfcTownV1", "P"],
+    ["stencilWindowsV1", "P"],
+    ["irregularGridV1", "P"],
+    ["cornerModulesV1", "P"],
   ]) {
     const value = readFlag(q, flag);
     if (value !== null) {
@@ -238,6 +259,10 @@ export function applyUrlOverrides(search) {
       else FEATURES[flag] = value;
     }
   }
+  const irregularShort = readFlag(q, "irregularGrid");
+  if (irregularShort !== null) P.irregularGridV1 = irregularShort;
+  const cornerShort = readFlag(q, "cornerModules");
+  if (cornerShort !== null) P.cornerModulesV1 = cornerShort;
   const poolCap = parseInt(q.get("lightPoolCapacity"), 10);
   if (Number.isFinite(poolCap) && poolCap >= 0) P.lightPoolCapacity = poolCap;
   const warships = parseInt(q.get("oceanWarshipCount"), 10);
@@ -324,6 +349,9 @@ export function getLightingQuality() {
 /** K4 局部灯预算：挂在 V5 之下，缺省跟随 V5（?localLightBudgetV1=0/1 显式覆盖） */
 export function isLocalLightBudgetV1() {
   return (FEATURES.localLightBudgetV1 ?? FEATURES.oskLightingV1) === true;
+}
+export function isWfcTownV1() {
+  return P.wfcTownV1 === true;
 }
 export function isAnyCitadelV4() {
   return isCitadelTownV4() || isCitadelTerrainUvV2() || isCitadelCombatV3();

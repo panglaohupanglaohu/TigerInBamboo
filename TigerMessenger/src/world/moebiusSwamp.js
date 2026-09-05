@@ -707,6 +707,8 @@ const _ffAim = new THREE.Vector3();
 const _ffTmp = new THREE.Vector3();
 const _syV1 = new THREE.Vector3(); // 战船维修厂动画临时向量
 const _syV2 = new THREE.Vector3();
+const _raidV1 = new THREE.Vector3(); // 湖沼生物袭击机队临时向量
+const _raidV2 = new THREE.Vector3();
 
 /** 长尾猴：暗毛浅脸 + S 形长尾，树冠间跳跃 */
 function buildLongTailMonkey(rnd) {
@@ -1914,6 +1916,17 @@ export function createMoebiusSwampZone(opts = {}) {
   /** @type {THREE.Mesh|null} 送信人手中暂存的果 */
   let heldFruit = null;
 
+  // 飞刺池（主人 2026-09-05 湖沼生物袭击莫比斯机队）：蜥蜴喷光珠 / 飞鸟丢光羽，
+  // 轻追踪飞向机队局部点，命中 → runtime.onFleetAttacked(射主) 触发开战
+  const raidSpikes = [];
+  for (let i = 0; i < 10; i++) {
+    const sp = glowSprite(i % 2 ? 0x8fffc0 : 0xd8ffe0, 0.3, 0.95);
+    sp.visible = false;
+    sp.userData = { active: false, vel: new THREE.Vector3(), life: 0, owner: null, targetObj: null };
+    swampZone.add(sp);
+    raidSpikes.push(sp);
+  }
+
   // 发光蜥蜴：坑缘草甸缓爬 ×2 + 湖底 ×1
   /** @type {THREE.Group[]} */
   const lizards = [];
@@ -2151,6 +2164,121 @@ export function createMoebiusSwampZone(opts = {}) {
   };
 
   swampZone.update = function updateSwamp(_dt, t, runtime) {
+    const onFleetHit = typeof runtime?.onFleetAttacked === "function"
+      ? runtime.onFleetAttacked : null;
+
+    /* ---------- 湖沼生物袭击莫比斯机队（主人 2026-09-05）---------- */
+    // runtime.fleetObjects：世界坐标机队对象清单（莫比斯 aircraft + 泡机 + 运输艇）；
+    // runtime.onFleetAttacked：命中回调 → vanguardAssault 记威胁 + 触发全员开战。
+    // 长尾猴扔果 / 发光蜥蜴喷光珠 / 发光飞鸟丢光羽，轻追踪咬住飞行中的机队。
+    const fleetObjs = runtime?.fleetObjects;
+    if (fleetObjs?.length && onFleetHit) {
+      swampZone.updateWorldMatrix(true, false);
+      const fleetPts = [];  // 机队局部坐标缓存
+      const fleetRef = [];  // 与 fleetPts 索引对齐的机队对象
+      for (const o of fleetObjs) {
+        if (!o?.parent) continue;
+        o.getWorldPosition(_raidV1);
+        swampZone.worldToLocal(_raidV1);
+        fleetPts.push(_raidV1.clone());
+        fleetRef.push(o);
+      }
+      if (fleetPts.length) {
+        const RAID_RANGE2 = 110 * 110; // 局部 110（scale 0.5 → 世界 ~55m）
+        const nearestFleet = (from) => {
+          let bi = -1;
+          let bd = Infinity;
+          for (let i = 0; i < fleetPts.length; i++) {
+            const d = from.distanceToSquared(fleetPts[i]);
+            if (d < bd) { bd = d; bi = i; }
+          }
+          return bd <= RAID_RANGE2 ? bi : -1;
+        };
+        const takeSpike = () => raidSpikes.find((x) => !x.userData.active) || null;
+        // 发光蜥蜴：坑缘抬头喷光珠
+        for (const lz of lizards) {
+          const u = lz.userData;
+          u.raidCd = (u.raidCd || 0) - _dt;
+          if (u.raidCd > 0) continue;
+          const bi = nearestFleet(lz.position);
+          if (bi < 0) continue;
+          const sp = takeSpike();
+          if (!sp) continue;
+          u.raidCd = 5 + Math.random() * 4;
+          sp.visible = true;
+          sp.position.copy(lz.position);
+          sp.position.y += 0.4;
+          const su = sp.userData;
+          su.active = true; su.owner = lz; su.targetObj = fleetRef[bi]; su.life = 8;
+          su.vel.copy(fleetPts[bi]).sub(sp.position).normalize().multiplyScalar(22);
+        }
+        // 发光飞鸟：穿梭间朝机队丢光羽
+        for (const bd of birds) {
+          const u = bd.userData;
+          u.raidCd = (u.raidCd || 0) - _dt;
+          if (u.raidCd > 0) continue;
+          const bi = nearestFleet(bd.position);
+          if (bi < 0) continue;
+          const sp = takeSpike();
+          if (!sp) continue;
+          u.raidCd = 7 + Math.random() * 5;
+          sp.visible = true;
+          sp.position.copy(bd.position);
+          const su = sp.userData;
+          su.active = true; su.owner = bd; su.targetObj = fleetRef[bi]; su.life = 8;
+          su.vel.copy(fleetPts[bi]).sub(sp.position).normalize().multiplyScalar(20);
+        }
+        // 长尾猴：树冠上朝机队扔果（复用果实池，phase "raid"，命中在果循环结算）
+        for (const mk of monkeys) {
+          const u = mk.userData;
+          u.raidCd = (u.raidCd || 0) - _dt;
+          if (u.raidCd > 0) continue;
+          const bi = nearestFleet(mk.position);
+          if (bi < 0) continue;
+          const fr = fruits.find((x) => !x.userData.active);
+          if (!fr) continue;
+          u.raidCd = 6 + Math.random() * 5;
+          const fu = fr.userData;
+          fu.active = true;
+          fu.phase = "raid";
+          fu.owner = null;
+          fu.targetMk = null;
+          fu.raidOwner = mk; // 谁扔的：命中回调记进优先打击名单
+          fu.raidTargetObj = fleetRef[bi];
+          fu.life = 8;
+          fr.visible = true;
+          fr.position.copy(mk.position);
+          fr.position.y += 0.9;
+          fu.vel.copy(fleetPts[bi]).sub(fr.position).normalize().multiplyScalar(19);
+        }
+        // 飞刺推进 + 命中结算（蜥蜴光珠 / 鸟光羽）
+        for (const sp of raidSpikes) {
+          const su = sp.userData;
+          if (!su.active) continue;
+          su.life -= _dt;
+          let hit = false;
+          if (su.targetObj?.parent) {
+            su.targetObj.getWorldPosition(_raidV1);
+            swampZone.worldToLocal(_raidV1);
+            _raidV2.copy(_raidV1).sub(sp.position);
+            const d = _raidV2.length();
+            if (d < 2.0) hit = true;
+            else {
+              _raidV2.normalize().multiplyScalar(su.vel.length() || 20);
+              su.vel.lerp(_raidV2, Math.min(1, _dt * 2.5)); // 轻追踪咬住机队
+            }
+          }
+          if (hit || su.life <= 0) {
+            if (hit) onFleetHit(su.owner);
+            su.active = false;
+            sp.visible = false;
+            continue;
+          }
+          sp.position.addScaledVector(su.vel, _dt);
+        }
+      }
+    }
+
     /* ---------- 玩家入沼判定：萤火环绕/尾随 + 长尾猴投果 ---------- */
     const player = runtime?.player;
     let playerIn = false;
@@ -2550,6 +2678,32 @@ export function createMoebiusSwampZone(opts = {}) {
 
       if (fu.phase === "held") {
         // 由 heldFruit 分支驱动位置
+        continue;
+      }
+
+      // 袭击机队的果：轻追踪、无重力（主人 2026-09-05），命中 → 受击回调
+      if (fu.phase === "raid") {
+        fu.life -= _dt;
+        let hit = false;
+        if (fu.raidTargetObj?.parent) {
+          fu.raidTargetObj.getWorldPosition(_raidV1);
+          swampZone.worldToLocal(_raidV1);
+          _raidV2.copy(_raidV1).sub(fr.position);
+          const d = _raidV2.length();
+          if (d < 2.2) hit = true;
+          else {
+            _raidV2.normalize().multiplyScalar(fu.vel.length() || 19);
+            fu.vel.lerp(_raidV2, Math.min(1, _dt * 2.2));
+          }
+        }
+        if (hit || fu.life <= 0) {
+          if (hit && fu.raidOwner) onFleetHit?.(fu.raidOwner);
+          fu.active = false;
+          fr.visible = false;
+          continue;
+        }
+        fr.position.addScaledVector(fu.vel, _dt);
+        fr.rotation.x += _dt * 6;
         continue;
       }
 

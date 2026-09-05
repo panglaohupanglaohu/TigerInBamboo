@@ -33,7 +33,7 @@
 | `town-balcony` `town-balcony-rail` `town-balcony-canopy` `town-balcony-flowerbox` `town-balcony-flower-tile` | 阳台整组：贴在暴露面，按 seed 出现 | 该格 exposure + 户 seed |
 | `town-fence` `town-garden-fence` | 晒台/花园外缘栏杆：**按 exposure**（terrace 朝空的面加栏杆，S19 t=0.35） | assignment（terrace/garden）+ exposure |
 | `town-pilaster` | 立面壁柱 | 该格暴露面 |
-| `town-gable-oculus` | 山墙圆窗 | 屋顶分量的山墙端 |
+| `town-gable-diamond` `town-gable-diamond-glass` | 山墙菱形窗（2026-09-05 起；旧名 `town-gable-oculus` 圆窗已废） | 屋顶分量的山墙端 |
 | `town-roof-chimney` `town-roof-chimney-cap` | 烟囱按 seed 散布（S19 t=1.40 出现在合并后的屋顶上） | 屋顶分量 + seed |
 | `town-steeple-cross` `town-steeple-vane` | 尖顶饰件 | 尖顶位置 |
 | `town-clothesline` `town-cloth` | 跨格晾衣绳（`ownSpanning`） | 两格暴露面 + seed |

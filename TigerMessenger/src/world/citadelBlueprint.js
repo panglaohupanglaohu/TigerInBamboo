@@ -12,7 +12,7 @@ import {
   CITADEL_TERRACE_COUNT,
   CITADEL_TOWN_SPEC,
   normalizeCitadelTerraceLayout,
-} from "./citadelTown.js?v=20260904-sun-rig-v1";
+} from "./citadelTown.js?v=20260905-wfc-wire-v1";
 import { hashHex } from "../core/rng.js";
 
 export const CITADEL_BLUEPRINT_VERSION = 1;
@@ -174,6 +174,8 @@ export function createCitadelBlueprint({
   skipOuterTerrain = false,
   townBaseLift = 0.6,
   terrainObjects = [],
+  gridKind = "ascii",
+  gridHash = null,
 } = {}) {
   const safeFloors = Math.min(20, Math.max(1, Math.round(Number(floors) || CITADEL_CASTLE_FLOORS)));
   const townLayout = normalizeCitadelTerraceLayout(spec, safeFloors);
@@ -197,6 +199,8 @@ export function createCitadelBlueprint({
       size: townLayout.gridSize ?? CITADEL_GRID_SIZE,
       cellSize: CITADEL_TOWN_SPEC.cellSize,
       cellHeight: CITADEL_TOWN_SPEC.cellHeight,
+      kind: gridKind === "faces" ? "faces" : "ascii",
+      gridHash: gridHash ?? null,
     }),
     terrain: Object.freeze({
       config: terrain,

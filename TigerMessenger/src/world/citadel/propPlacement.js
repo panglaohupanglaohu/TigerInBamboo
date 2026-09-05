@@ -55,12 +55,30 @@ function facadeKey(prop) {
   return `${prop.cellId || ""}:${prop.facadeDir || "x"}`;
 }
 
-function breaksFourInARow(placed, next) {
-  const key = facadeKey(next);
-  const same = placed.filter((p) => facadeKey(p) === key);
-  if (same.length < 3) return false;
-  const tail = same.slice(-3);
-  return tail.every((p) => p.kind === next.kind);
+/**
+ * 「同一立面上不许连着放四个一样的」。
+ *
+ * 性能（2026-09-04）：原来是 `placed.filter(...)` 扫全表 —— 每放一个候选扫一遍
+ * 已放列表，整体 O(n²)。增量重建每次编辑都要把**整份布局**重跑一遍 placeProps，
+ * CPU profile 实测 placeProps + breaksFourInARow 占一次编辑的 3.3%。
+ * 改成按立面维护「最近 3 个 kind」的小尾巴，判定变 O(1)，语义逐字不变：
+ * 原来看的就是「该立面上最后放的 3 个是否与候选同 kind」。
+ *
+ * @param {Map<string, string[]>} tails facadeKey → 最近 ≤3 个 kind（放置顺序）
+ */
+function breaksFourInARow(tails, next) {
+  const tail = tails.get(facadeKey(next));
+  if (!tail || tail.length < 3) return false;
+  return tail[0] === next.kind && tail[1] === next.kind && tail[2] === next.kind;
+}
+
+/** 记录一次放置，维护 3 个长度的尾巴 */
+function pushFacadeTail(tails, prop) {
+  const key = facadeKey(prop);
+  let tail = tails.get(key);
+  if (!tail) tails.set(key, (tail = []));
+  tail.push(prop.kind);
+  if (tail.length > 3) tail.shift();
 }
 
 export function placeProps(slots, context = {}) {
@@ -69,6 +87,7 @@ export function placeProps(slots, context = {}) {
   const shuffled = stableShuffle(slots || [], rng);
   const reserved = new Set(context.reserved || []);
   const placed = [];
+  const facadeTails = new Map(); // facadeKey → 最近 ≤3 个 kind（见 breaksFourInARow）
   for (const slot of shuffled) {
     if (!clearanceOK(slot) || occluded(slot)) continue;
     const tags = slot.tags || PROP_FOR[slot.kind] || ["lamp"];
@@ -76,9 +95,10 @@ export function placeProps(slots, context = {}) {
     if (!slopeOK(slot, trial.kind)) continue;
     const fp = `${slot.cellId}:${slot.kind}:${Math.round((slot.u || 0) * 8)}:${Math.round((slot.v || 0) * 8)}`;
     if (reserved.has(fp)) continue;
-    if (breaksFourInARow(placed, trial)) continue;
+    if (breaksFourInARow(facadeTails, trial)) continue;
     reserved.add(fp);
     placed.push(trial);
+    pushFacadeTail(facadeTails, trial);
   }
   return placed;
 }

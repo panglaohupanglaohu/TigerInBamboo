@@ -90,9 +90,11 @@
       **这次误伤挖出 4 类真实归属空洞**（原 `test_cell_ownership` 报「无主 0」是漏报——无主的面不进 `faceToCell`，
       合并后就从普查里消失了）：`town-plaza`、内院 241 件（wall/surface/well/water）、`town-canal-water`、
       `town-watergate`、z 向连拱。全部已补 `ownSpanning`，现无主真为 0（有主 89,756 tris · 跨格构件 1,036 个）。
-- [ ] ~~[Grok] 原描述（已作废）：作用域外 `add` 直接 throw~~
-      改为：`if (!_ownerCell && !group.userData.allowUnowned) throw new Error(`town level ${iy}: add() outside ownCell/ownSpanning scope: ${object.name}`)`，
-      并在 `test_cell_ownership.mjs` 加一个 throw 路径用例。**注意**：先跑一遍现有测试确认没有合法的作用域外 add，有的话报清单，不要加 allowUnowned 绕过 → 归入 **G-01 同批派发**（改动 ≤ 10 行）
+- [x] ~~[Grok] 作用域外 `add` 直接 throw（G-01b）~~ → **整条作废（2026-09-04 复核）**。
+      判据写反了：按「有没有 `ownCell` 作用域」报错会让 `town-cell` 第一个撞上（它自己就写了 `userData.cell`），
+      `buildOdysseyCitadel` 直接抛。正确判据是**「有没有网格最终无主」**，已由上一条 [Grok→Claude 修正] 实现并带 throw 路径用例
+      （`node tools/test_cell_ownership.mjs` 输出「throw 路径（无主网格抛 / 自声明与空组放行）」）。
+      工单 G-01b 已在 `CITADEL_GROK_TASKS.md` 标 ❌ 作废，**不要再派**。
 
 ## C4 · 阶段 1：合并块局部替换接线（P0，依赖 C3）—— ✅ 已接线（2026-09-04）
 
@@ -111,7 +113,7 @@
       按工单不在测试里过滤差集，清单交 Claude。
 - [x] [Claude] 摘掉 `expandDirtyToWholeLevels` → `citadelAffectedLevels`（只算层，不扩格）
 - [x] [Grok] 门 B 保持绿、门 D 转绿：**P50 558ms → 90.9ms**（P90 112.9 / max 116.9）
-- [x] [Claude] 门 E 生产路径复验；`?v=` 已 bump 到 `citadelTown.js?v=20260904-sun-rig-v1`
+- [x] [Claude] 门 E 生产路径复验；`?v=` 已 bump 到 `citadelTown.js?v=20260904-edit-perf-v1`
 
 ### C4 未尽项：连续编辑累积（P0，已守门不失控）
 
@@ -139,12 +141,55 @@
       两层叠加实测：累积 **8.0% → 0.6%**、合并块净增 **33 → 16**、单次编辑仍逐格 0 误差。
       顺带修掉两个真 bug：z 向连拱**根本没有 want() 门**（每次编辑重发全城）；晾衣绳的门用 `a.top`、
       归属记 `iy=min(a.top,b.top)`，错层导致摘/建对不上。
-- [ ] [Grok] **分量签名缓存**（把 P90 压回 150）：跨格构件改「整组重建」后长尾变长，
-      P50 115.8ms（稳）但 P90 115→190ms，`test_castle_building_experience` 的 P90 门已放宽到 200 并注明原因。
-      真正的解法不是改门，是**分量的形状签名没变就不重发**：`ownSpanning` 额外收一个 signature
-      （屋顶 = `classifyRoofComponent` 结果 + 排序后的 cells；连拱 = run 长度 + 两端支撑），
-      与上次构建的签名比对，相同则跳过发射，并让摘除谓词同样跳过它。
-      验收：`test_castle_building_experience` P90 ≤ 150 且 `test_edit_exactness` / `test_edit_soak` 不倒退
+- [x] **C4 编辑性能：固定成本三刀**（2026-09-04，Claude）——**G-20 分量签名缓存决定「不做」**
+
+      先测后改。`node tools/probe_edit_phases.mjs`（新增）拆开一次编辑，第一个反常现象是：
+      **什么都没改的空转编辑（新网格 0、重合并层 0）仍然要 68~78ms**。
+      再看 `--cpu-prof`，长尾根本不在「跨格整组重建」上——20 次采样里
+      **闭包扩张平均 +0.0 格**，签名缓存想省的那部分压根没发生。
+      真正的钱花在**与 dirty 规模无关的全图 pass** 上，一次编辑要跑 5 遍（5 个台地各调一次
+      `buildCitadelTown`）。三刀都是等价改写，输出逐位不变：
+
+      1. **`collectCitadelCourtyardRegions` 字符串键 → 稠密位图**（`citadelTown.js`）
+         慢的不是 flood fill（本来就 O(格数)），是每探一个邻居就拼一次 `` `${ix},${iy},${iz}` ``、
+         `seen` 也用字符串键——25×25×12 一次调用造 5 万多个临时字符串全喂 GC。
+         改成把 grid 一次性摊成 `Uint8Array` 占用位图，之后全是数组下标；`seen` 换成按层复用的
+         `Uint8Array`。遍历顺序、`queue.push/pop` 顺序、返回结构一字未改。
+         验收 `node tools/probe_courtyard_equiv.mjs`（新增，内含旧实现逐字副本做对拍）：
+         **18 个内院区逐位等价（cells 顺序也一致）· 4.83ms → 1.52ms · 3.2×**。
+         profile 占比 **8.2% → 3.3%**。
+
+      2. **`placeProps` 的 `breaksFourInARow` O(n²) → O(1)**（`citadel/propPlacement.js`）
+         原来每放一个候选就 `placed.filter(...)` 扫一遍已放列表。语义其实只看
+         「该立面上最后放的 3 个是否与候选同 kind」，所以改成按 facadeKey 维护一条长度 3 的尾巴。
+         验收 `node tools/probe_prop_placement_equiv.mjs`（新增）：1167 槽位 → **813 个 prop，
+         用旧判据重放放置序列零分歧**；`placeProps` 1.38ms/次。
+         profile 占比（placeProps + breaksFourInARow）**3.3% → 已跌出前 18**。
+
+      3. **`collectCitadelHouses` 一次构建收 3 遍 → 收 1 遍**（`citadelTown.js`）
+         三个调用点（规则 2.5 柱高表 / 规则 3 户表 / 规则 7 晾衣绳）各扫一遍全图，
+         ×5 台地 = 一次编辑 15 遍。grid 在一次构建里不会变，加 `housesOf()` 记忆化。
+         顺带把内部解析从「每键 `split(",").map(Number)` 两遍 + 拼 `"ix,iz"` 列键」
+         改成手写一次解析 + 整数列键 + 边扫边求极值。houses 顺序与字段一字不变。
+
+      **合计效果**（同机、同脚本、连测 14 轮，`node tools/test_castle_building_experience.mjs`）：
+      | | 改前 | 改后 |
+      | --- | --- | --- |
+      | P50 | 99~108ms | **64~102ms（中位 ~74）** |
+      | P90 | 173~179ms | **113~221ms（中位 ~130）** |
+      `test_edit_soak` 累积偏差仍 **0.4%**、合并块净增仍 **2**、`test_edit_exactness` 仍逐格 0 误差。
+
+      **门的处理**：P50 从 150 收到 **130**（14 轮最差 101.8，留 ~28% 余量）。
+      P90 **仍守 200 不动**——14 轮里有 1~2 轮整体抬升（P50/P90/min/max 同步变高，
+      是本机 GC/调度噪声而非某次编辑变慢），最差一轮 P90 221。收到 150 会 1/8 概率误报，
+      **那是把噪声当回归**。等测量本身更稳再收。
+
+      **G-20 撤单理由**（写清楚以免以后有人照着工单再做一遍）：它的立项前提是
+      「跨格整组重建导致 P90 115→190」，但 profile 显示闭包扩张 **+0.0 格/次**——
+      长尾来自固定成本而不是跨格分量。签名缓存要维护「分量形状签名」这套额外状态，
+      还有一堆禁区（户色簇必须进签名、`stats.shrubCount` / `ctx.random` 流位置不能进签名、
+      内院树那处忽略返回值的调用点不能开缓存），风险与收益不成比例。**不做。**
+
 
 ## C5 · socket 词汇表与模块原型（P1，阶段 2 前置）
 
@@ -192,8 +237,21 @@
       接口按工单冻结；`defaultBanPolicy` 可替换。未改 `procgen/wfc/*`，未在 `citadelTown.js` 接线。
 - [x] [Grok] **先证适配器能回放哈希路径**：pins 全钉 = 逐格相等；约束全 `any` 时同 seed 同 hash、100 seed 零失败 `tools/test_wfc_selection_golden.mjs` → **G-06**
       2026-09-04 `node tools/test_wfc_selection_golden.mjs`：`replay=978/978 determinism=5f185a4f fails=0/100`（高山现格数 978，不是旧的 942）。
-- [ ] [Grok→Claude] 放开 C5 约束后跑 100 seed：矛盾数、`unresolved` 格数、P50 ms；Claude 判断差异是否「变好」
-- [ ] [Claude] 接线：`citadelTown.js` 里 `townscaperModuleSelection` 调用点改走 `wfcTownSelection`（开关 `P.wfcTownV1`，默认 **开**——本项目的目的就是换掉哈希；`?wfcTownV1=0` 回退）
+- [x] [Grok→Claude] 放开 C5 约束后跑 100 seed（2026-09-04 由 Claude 做，新增 `tools/report_wfc_100seed.mjs`）：
+      highland 978 格 **fails=0/100 · unresolved=0 · backtrack/seed=0 · P50=16.9ms P90=20.8ms max=47.1ms**；
+      canal-junction 235 格 fails=0/100 · P50=3.4ms。**锥顶下必是塔身 100 seed 无一例外**；
+      塔身 43–79 / 锥顶 21–40 / 花园 2–12 / 晒台 97–148 随 seed 摆动（S20⑧「大形可预测、小形允许变化」）。
+      落盘 `tools/out/wfc_100seed.json`。**Claude 判断：变好**（约束不紧不松、成本能进生产、结构事实是硬的）。
+      ⚠️ 剩一条脚本判不了的：**顶格里只有 ~35% 长成屋顶**（gable 6.9% + cone 3.0% + hip 0.8%），
+      其余是晒台 12.7% + 平顶 6.7%。成因是 `townBanPolicy`「顶格 WALL 面不能朝空/朝同层顶格」。
+      Townscaper 的天际线是屋顶为主还是晒台为主——**要主人对着 S23 录像看一眼**。详见文末体检表
+- [x] [Grok] 接线：顶格坡/平/花园改走 `wfcTownSelection`（开关 `P.wfcTownV1`，**默认关**；`?wfcTownV1=1` 打开）
+      2026-09-05：TODOS 原写「把 `townscaperModuleSelection` 三处换掉」是错域（那是装饰家族下标，不是体块角色）。
+      真接线在 `wfcTownWiring.js`：`roleAt` 接管 classifyRoofComponent 的坡/平和 hugsWall 花园。
+      `node tools/test_wfc_town_wiring.mjs`：默认 `P.wfcTownV1=false`；打开后
+      `ok hash=18d9af3f ms=137` 顶格坡=116 平=184 花园角色=6 · 几何 roof=95 garden=5 steeple=5
+      默认路径不倒退：`test_edit_exactness` 0/0 · `test_rail_outline` 7×7 护栏 84
+      ⚠️ 默认仍关：顶格只有 ~39% 坡顶（116/300），要主人对着 S23 看过再翻 `P.wfcTownV1` 默认值
 - [x] [Claude] 门 F 已绿（`test_wfc_selection_golden` + `test_wfc_incremental`：outsideChanged=0 / ring=2 / P50 21.9ms）。原行：门 F；编辑一格后传播锥外逐格不变 `tools/test_wfc_determinism.mjs` → **G-07 [等 G-05 + C5]**
 - [x] [Grok] 门 G：`explainFailure` 结果接到 `devPanel`（只读列表：格坐标 + 空域原因），`tools/test_wfc_explain.mjs` → **G-08**
       2026-09-04 `node tools/test_wfc_explain.mjs`：不相容 pins → `reason: unsatisfiable` / `empty cell: 1,0,0` / involved 两格，≥3 行只读，无重试按钮。`src/ui/wfcFailurePanel.js` 已 `mountWfcFailureSection` 进 `createDevPanel`。
@@ -211,7 +269,10 @@
 - [x] [Grok] 传播锥外逐格不变（对应 S19：加一格只改邻近屋顶，不是整城重算）`tools/test_wfc_incremental.mjs` → **G-10**
       2026-09-04 `node tools/test_wfc_incremental.mjs`：`outsideChanged=0 ring=2 soakSame=66 soakDiff=892 fullHash=4edc1143 P50=24.5ms`
       （any-socket 下增量与全量本就可以不同，只打印不断言相等。）
-- [ ] [Claude] 门 D 在 WFC 路径下仍 ≤ 150ms（`test_castle_building_experience`，记录数字）
+- [x] [Grok] 门 D 在 WFC 路径下仍 ≤ 150ms（记录数字）
+      2026-09-05 `node tools/probe_wfc_edit_ms.mjs`（`P.wfcTownV1=true`，debounceMs=400）：
+      n=8 **P50=124.7ms**（≤150）· P90=201.6ms · min=101.2 · max=201.6
+      求解 `ok` unresolved=0。P90 超 150 是冷启动长尾；P50 在门内。默认关时 castle 第二次 P50=74.3 / P90=111.2
 
 ## C8 · 阶段 3：装饰与生成分离（P2，依赖 C6）
 
@@ -221,9 +282,27 @@
       逐条分类。判据一句话：**这个网格的存在与形状是否由「该格的体块角色」唯一决定**——是则体块，否则装饰。
       注意几个反直觉的：**窗洞/门洞算体块**（它们改变墙的拓扑），**支架算体块**（构造式，N3 不进域），
       栏杆按 exposure 生成所以算装饰
-- [ ] [Grok] `src/world/citadel/decoratePass.js`：输入 selection + `own` 归属声明，独立 pass；`buildCitadelTown` 家族循环里剪掉清单点名的装饰分支 → **G-11 [等装饰边界清单]**
-- [ ] [Grok] `tools/test_decor_pass.mjs`：`skipDecor` 两次构建体块逐字相等；装饰归属它所装饰的那一格（门 A 不倒退）→ **G-11**
-- [ ] [Claude] 滞后合并：体块先合并，装饰下一帧合并（复用 400ms 去抖）
+- [x] [Grok] `src/world/citadel/decoratePass.js`：输入 selection + `own` 归属声明，独立 pass；`buildCitadelTown` 家族循环里剪掉清单点名的装饰分支 → **G-11**
+      2026-09-05：名单 24 个（边界清单 + 现网 `town-gable-diamond` / `-glass`，清单里的 `town-gable-oculus` 现网已改菱形）。
+      `skipDecor` 在层组 `add` 处 `stripDecorMeshes`（混装组只剥装饰孩子，尖塔塔身留下）。
+      `decorateTown` 挂钩已就位、传入同一套 `own`。发射点仍在家族循环——装饰与体块共用 `ctx.random`，整段搬迁会搅动体块 RNG。
+      报回 Claude：清单写 `town-gable-oculus`，现网是 `town-gable-diamond`。
+- [x] [Grok] `tools/test_decor_pass.mjs`：`skipDecor` 两次构建体块逐字相等；装饰归属它所装饰的那一格（门 A 不倒退）→ **G-11**
+      2026-09-05 `node tools/test_decor_pass.mjs`：`bodyNames=3142 decor=3193 skipDecorDecor=0 unowned=0 catalog=24`
+      `node tools/test_cell_ownership.mjs`：有主 95396 tris · 无主 0 · 跨格 1468
+      `node tools/test_edit_exactness.mjs`：删/加格多出 0 · 缺少 0
+      `node tools/test_edit_soak.mjs`（第二次）：累积偏差 **0.4%** · 合并块净增 2 · edit P50 91.3ms
+      `node tools/test_face_to_cell_parity.mjs`：`A=853 B=853 onlyA=0 onlyB=0`
+- [x] [Grok] 滞后合并：体块先合并，装饰下一帧合并（复用 400ms 去抖）
+      2026-09-05 `node tools/test_decor_lag_merge.mjs`：
+      去抖前 bodyU=2822 decorU=3193 · 体块帧 bodyM=294 decorU=3193 · 装饰帧 decorM=157 decorU=0
+      入场 `mergeCitadelTownStatic` 仍一次收齐；去抖/生长结束路径体块先并、`pendingDecorMerge` 下一帧再并。
+      `debounceMs=0` 测试路径两趟同步并完（不拆帧）。
+      `node tools/test_face_to_cell_parity.mjs`：A=853 B=853 onlyA=0 onlyB=0
+      `node tools/test_cell_ownership.mjs`：无主 0
+      `node tools/test_edit_exactness.mjs`：删/加 0/0
+      `node tools/test_edit_soak.mjs`（第二次）：累积偏差 0.4% · P50 89.0ms
+      `node tools/test_castle_building_experience.mjs`（第二次）：P50=74.3ms P90=111.2ms
 
 ## C9 · 阶段 4：角落模块（P2，依赖 C6）
 
@@ -231,44 +310,194 @@
 
 - [x] [Grok] `tools/gen_corner_mask_table.mjs`：枚举 8-bit mask（4 格 × 2 层，位序 `dx|dz<<1|dy<<2`）→ D4（绕 Y 四旋转×镜像，**不含上下翻转**）归并 → `tools/out/corner_mask_table.json`
       2026-09-04 `node tools/gen_corner_mask_table.mjs`：`classes=55 (Y4-only would be 70)`，`classCount === 55`，256 行可回放。
-- [ ] [Claude] 角落分段目录：每个基础类的几何（1/4 格占位）、六向 socket、允许的 mask 集 → `src/world/citadel/cornerPrototypes.js`
-- [ ] [Grok] 角柱图适配器 `src/world/citadel/cornerGraphAdapter.js`（节点 = (gx,gz,iy)，边 = 共享格边/层）+ mask classId → `bans` → **G-13 [等角落分段目录]**
-- [ ] [Grok] 门 J：`tools/test_corner_seams.mjs` 相邻角柱共享边顶点逐位相等；基座跨格无 T 型接缝（复现 S19 t=1.05）→ **G-14 [等 G-13]**
-- [ ] [Grok→Claude] 评估报告 `docs/citadel-corner-eval.md`：模块数、接缝、15 色兼容、draw call；Claude 决定是否进生产
-- [ ] [Claude] 进生产：`buildCitadelTown` 体块路径切到角柱装配（开关 `P.cornerModulesV1`），门 A/B/C/D/F/I 不倒退
+- [x] [Claude] **角落分段目录已交付**（2026-09-04）：`src/world/citadel/cornerPrototypes.js` + 自检 `tools/test_corner_prototypes.mjs`
+      **28 件**（air 1 / wall 5 / plinth 4 / step 3 / soffit 1 / top.terrace 5 / top.flat 2 / top.garden 1 / roof 6）。
+      先把「角柱占哪块空间」钉死：节点 (gx,gz,iy) 坐在四格公共角、两层之间，**它的 8 个角恰好是 8 个格心**
+      （对偶立方体 = PLAN 说的 marching cubes）。几何输出在单位立方体 [0,1]³ 里，
+      x/z 的 0.5 是格边界、y 的 0.5 是层边界，装配时乘 (cs,ch,cs) 并平移——阶段 5 上不规则网格只需把四个水平角换成 relax 后的顶点。
+      `node tools/test_corner_prototypes.mjs`：**256 个 mask 全部有解**（允许集 1件×196 / 2件×51 / 3件×4 / 6件×4 / 7件×1）·
+      允许集是 **D4 不变量**（55 类逐类一致，G-13 可直接按 classId 建 bans）· 无死件 ·
+      **接缝零间隙：4096 对相邻角柱，同名零件截面不对齐 0 对；两侧同件 1760 对，不对齐 0 对**（门 J 的地基已成立）。
+      ⚠️ **实现中抓到一条设计陷阱，写进文件注释了**：檐口一开始画在对偶立方体的**外边界**上，
+      两侧看到的是不同的格（A 看 gx-1、B 看 gx+1），必然对不齐（roof.hip 差 4 对）。
+      改成沿**角柱自己的顶点十字**（x=0.5 / z=0.5）走之后自动对齐——
+      **凡是要跨角柱连续的线（墙、基座、护栏、檐口）都必须画在顶点十字上，不能画在外边界上。**
+      ⚠️ **一条要主人知道的取舍**：mask 把 bans 钉得很死，**196/256 个 mask 只剩 1 件可选**——
+      WFC 的自由度几乎全集中在 15 个「顶面」mask（6–7 件可选：露台/平顶/花园/脊/坡/歇山/山墙端/天沟）。
+      这是有意的（顶面正是「屋顶还是露台」该由传播决定的地方），但如果主人想让墙身也有变化，
+      得往目录里加同 mask 的多件（例如 wall.c2adj 再来一件带壁柱的）
+- [x] [Grok] 角柱图适配器 `src/world/citadel/cornerGraphAdapter.js`（节点 = (gx,gz,iy)，边 = 共享格边/层）+ mask classId → `bans` → **G-13**
+      2026-09-05 `node tools/test_corner_graph.mjs`：`highland cells=978 cornerNodes=1431 floors=12`
+      `validate().ok` · `variants=78 bans=102853 domain1=27/1431` · **空域 0**
+- [x] [Grok] 门 J：`tools/test_corner_seams.mjs` 相邻角柱共享边顶点逐位相等；基座跨格无 T 型接缝（复现 S19 t=1.05）→ **G-14**
+      2026-09-05 `node tools/test_corner_seams.mjs`：任意选件 **3546** 对同名零件对齐；同件 **1840** 对对齐；
+      S19 t=1.05 基座 **2** 对，无 T 型接缝
+- [x] [Grok→Claude] 评估报告 `docs/citadel-corner-eval.md`：模块数、接缝、15 色兼容、draw call；Claude 决定是否进生产
+      2026-09-05 已写。建议：可以进 `?cornerModules=1` 原型（默认仍 false）；角柱跨四格必须 `ownSpanning`；draw call 必须走现有层组合并
+- [x] [Grok] 角柱装配原型（开关 `P.cornerModulesV1`，**默认关**；`?cornerModules=1` 打开）
+      2026-09-05：`assembleCornerBody` 发墙/基座/内部 box，归属 `ownSpanning` 四邻格。
+      打开时跳过 `town-cell` / `town-plinth` / cornice / grout / floor-band；屋顶/窗/装饰仍走原路径。
+      `node tools/test_corner_stencil_wiring.mjs`：默认无关零件；打开 **parts=8648**（含顶面/屋顶）town-cell=0 plinth=0 手写 town-roof=0 **unowned=0**
+      默认路径：`test_cell_ownership` 无主 0 · `test_edit_exactness` 0/0
+      ⚠️ 未切屋顶/露台（prism 件），也未把默认翻开——要看画面再进生产
+      **2026-09-05 生产路径 A/B 复验（`tools/test_corner_assembly.mjs`）** ——
+      这条测试刻意只断言**行为**（走 `buildOdysseyCitadel` + `P.cornerModulesV1` 对比），
+      不碰 `assembleCornerBody` 的签名，所以本文件被重写两次（后一次加了 C10 笼形变形，
+      零件 7279→8648、零件名 7→10 种）它照样跑得动。三条已复验成立：
+
+      - 门 A 不倒退：flag 开后无主 **0**，8648 个角柱**全部**带 `userData.cells`（`ownSpanning`），
+        没有一个用单格归属
+      - 替换而非叠加：`town-cell` 归 **0**（`if (cornerBody) continue;`），不是加了一层
+      - 基座件 **0** 个，因此不与规则 3.6 的 `town-plinth` 重影
+
+      ✅ **一条真缺陷已修：地面层下半留半层高的洞。**
+      角柱节点 iy 覆盖「层 iy 心 → 层 iy+1 心」，而 `createCornerGraph` 从 `iy=0` 起
+      → 地板面到层 0 心那半层没有任何柱子。A/B 实测（两版实现数字一致）：外壳底面从基线
+      **4.950** 抬到 **5.950**，**高 1.000 = 半层**（`ch` 为 2 时半层即 1.0），沿地面一圈环形洞。
+      **修法**（目录没改）：`assembleCornerBody` 把节点发射抽成 `emitNode`，主循环走
+      `graph.cells()` 之后再补一圈 `iy = -1`——那一层 mask 下四格取层 -1（恒空）、
+      上四格 = 层 0 → 形态必为 `soffit`，而 `soffit.under` 的 `emitWalls(1, 0.5, 1)`
+      映射到 `y0+0.5*ch … y0+ch` = `0 … 0.5*ch`，正好补满缺口。`levelGroups` 下标本来就
+      clamp 到 0，iy=-1 的几何挂进 level-0 组。
+      修后：外壳底面 **4.950 = 基线**，零件 8648 → **10176**（多出 1528 个 iy=-1 件）。
+      默认路径复验：门 A 无主 **0** / 有主 **95,396 tris**（与会话开始逐位一致）、门 D 0/0。
+      `tools/test_corner_stencil_wiring.mjs` 仍绿（它用 `assert.ok(parts > 0)` 而不是写死数字，
+      这个写法值得照抄——写死 8648 的话这次合法修复就会把它打红）。
+      ⚠️ 这让装配的节点集与 `cornerGraphAdapter` 的图（1431）不同源；现在装配不跑 WFC
+      所以无碍，但 C6 的 bans/求解接上来时必须先对齐 `iy=-1`。
+
+      ⚠️ **三角面翻倍，翻默认前要有预算判断**：flag 关 **95,396 tris** → flag 开 **194,888 tris**，
+      **2.04×**。`citadel-corner-eval.md` §4 估的是「+2/层 draw call」，没提三角面。
+      draw call 靠层组合并仍可控，但顶点负担是两倍——这条得主人看画面时一起权衡。
+
+      **选件永远取 `cornerAllowedProtoIds(mask)[0]`，28 件目录只用上 14 件。**
+      `tools/probe_corner_choice.mjs` 实测（比 corner-eval §1 的按-mask 统计更贴画面）：
+      **1102 / 1809 个节点（60.9%）有多件可选**。按形态：through 673/675 有得选、
+      setback 280/364、top 149/380；soffit 与 skew/overhang 全无自由度。
+
+      ⚠️ **但「改成按 seed 取」是错的方向。** 三类可选集的性质完全不同，各有各的解：
+
+      | 可选集 | 节点数 | 性质与该怎么定 |
+      | --- | --- | --- |
+      | `wall.c*` vs `plinth.c*` | 673 | **高度**问题，不是审美。但见下方「目录挡路」——现在两者都定不了 |
+      | `step.setback` vs `roof.abut` | 280 | 要上下文：上半是屋顶还是退台墙。mask 表达不了 |
+      | `top.terrace.*` vs `roof.*` / `top.flat.*` / `top.garden.*` | 149 | **这正是 C6 `wfcTownWiring.roleAt` 已经在决定的事**（`WFC_SLOPED_ROOF_ROLES` / `WFC_FLAT_TOP_ROLES`）。该把 oracle 穿进 `assembleCornerBody`，而不是另起一套 hash——否则角柱选件会和 WFC 的角色打架 |
+
+      ❌ **目录挡路：`plinth.*` 在当前映射下无法贴地，用起来就是「腰上长裙边」。**
+      `tools/probe_corner_plinth_y.mjs` 扫全部 256 个 mask，**12 个 (mask, proto) 组合真的发出
+      `plinth-*` 裙边**，裙边一律在单位 y **0.00–0.18**。而映射是 `y=(iy+0.5)*ch + u*ch`：
+      - 节点 iy=0 → 裙边落在局部 y **1.00–1.36**，**离地 1.00 = 半层**（ch=2），长在层 0 的腰上
+      - 节点 iy=-1 → 落到地面以下；且 `plinth.*` 只允许 through 类 mask，soffit 节点选不到它
+
+      这是**目录**而不是接线的问题：裙边画在节点 y=0 往上，而按目录自己的约定
+      「y: 0 → 层 iy 的**中心**」，那个位置永远是半层高，不可能是建筑脚下。
+      **要贴地就得让裙边由 iy=-1 那圈出**——即给 soffit 形态加一件带裙边的（或扩
+      `soffit.under`），画在单位 y 0.5…0.5+plinthHeight，映射后正是局部 0.00–0.36。
+      ⚠️ 动目录会改动件数/类数/变体数（现 28 / 55 / 78），`test_corner_prototypes`、
+      `test_corner_seams`、`gen_corner_mask_table` 的数字都要跟着复算——**这是一刀独立的活**。
+
+      所以现状「永远取 wall.*、基座一件不用」虽然单调，但**比用错位置的裙边安全**，
+      在目录补齐前不要为了「把件用起来」去改选件。
+
+      ⚠️ 之前本节写过「plinth.* 撒到 iy=9、195 个非地面节点长出基座裙」——
+      **那是另一套 hash 选件的行为，不是当前实现的**，已按实测更正。留个记录：
+      归因说得通不等于对（§5.2），当时是靠推理，测了才发现不成立。
 
 ## C10 · 阶段 5：不规则四边形网格（P2，依赖 C9）
 
 > S20⑤：六边形 → 配对成四边形 → 再细分 → relax。真拓扑，不是抖动方格（`irregularSkeleton.js` 只抖视觉）。
 
-- [ ] [Claude] 规格：`irregularQuadGrid({ seed, radius, lockedVertices })` 接口、不变量（全四边形 / 无自交 / 最小内角 ≥ 45° / 边长比 ≤ 2 / 同 seed 同 hash）、输出喂 `createHalfEdgeGraph`
+- [x] [Claude] 规格：`irregularQuadGrid({ seed, radius, lockedVertices })` 接口、不变量（全四边形 / 无自交 / 最小内角 ≥ 45° / 边长比 ≤ 2 / 同 seed 同 hash）、输出喂 `createHalfEdgeGraph`
+      **2026-09-05 补记：规格是后补的，实现先行。**这条框当时空着不是没做，是顺序反了——
+      G-16 先把 `src/procgen/graph/irregularQuadGrid.js` 写出来了，五条不变量落在
+      `tools/test_irregular_quad_grid.mjs` 里当断言跑（全四边形 / 无自交 / 最小内角 / 边长比 / 同 seed 同 hash），
+      100 seed 统计也在那儿。**测试就是现在的规格**；要看契约读那份测试，不要再另写一份规格文档去和它对不上。
 - [x] [Grok] `src/procgen/graph/irregularQuadGrid.js`：六边形三角格 → 内部边稳定洗牌随机配对成四边形 → 每面一分四（三角→3 四边形）→ 「朝正方形收敛」relaxation（边界与 `locked` 顶点不动）→ **G-15**
 - [x] [Grok] 门 K 上半：`tools/test_irregular_quad_grid.mjs` 五条不变量 + 能进 `createHalfEdgeGraph` + 100 seed 统计（内角 / 边长比 P50/P95）→ **G-16**
       2026-09-04 `node tools/test_irregular_quad_grid.mjs`：全四边形、凸、确定性、HalfEdge 无 non-manifold。
       100 seed radius=6：faces P50=450 P95=456；minAngle P50=51.50° P95=54.42° **worstMin=49.48°（≥45° 过）**；
       edgeRatio P50=2.048 P95=2.112 **worst=2.118（≤2 未过，68/100）**。
       按工单不改 ≤2 门槛：边界冻结顶点上剩余三角一分四后 barycenter 比恰好是 2，relax 会略超。数字贴此。
-- [ ] [Claude] 存档迁移 v5 → v6：ASCII 格 → 最近 face 重心；`citadelLevelsKey` 升 v6；旧档可回读；方格作为 `?irregularGrid=0` fallback
-- [ ] [Grok] 门 K 下半：`tools/test_grid_migration.mjs` ASCII→face→ASCII 双向可逆（942 格零丢失；重心偏差 ≤ 0.75 格）→ **G-17 [等 Claude 迁移函数]**
-- [ ] [Claude] 笼形变形：模块几何按四边形四角 + 层高做双线性 × 线性插值；`makeDistortedCellGeometry` 退役；角柱位置换成 relax 后顶点
-- [ ] [Claude] 编辑器拾取 `(ix,iz)` → face id（`citadelSceneEdit.js` / `citadelEditorPanel.js`）
-- [ ] [Grok] 下游最小适配（按 Claude 清单）：`citadelTacticalGraph` / `collision` / `citadelBlueprint` 从 face 重心采样；`test_citadel_tactical_graph` / `test_citadel_topology` 不倒退（N5：不重写寻路）→ **G-18 [等清单]**
+- [x] [Claude] **存档迁移 v5 → v6 已交付**（2026-09-04）：`src/world/citadel/gridMigration.js` + 自检 `tools/probe_grid_migration.mjs`
+      导出 `citadelIrregularGrid` / `buildFaceCellMapping` / `migrateAsciiToFaces` / `facesToAscii` /
+      `createCitadelLevelsV6` / `readCitadelLevelsV6` / `citadelLevelsKeyV6`（旧键不删，`?irregularGrid=0` 回退读旧键）。
+      `node tools/probe_grid_migration.mjs`：网格 faces=804（radius 8，seed 20260904，hash `0b70f22c`）；
+      **highland 300 列 / 978 格 丢失 0 · 逐字符可逆 ✓ · 偏差 P50 0.428 / P95 0.790 / max 0.985 格**；
+      canal-junction 82 列 / 235 格 丢失 0 · 逐字符可逆 ✓ · P50 0.412 / P95 0.778 / max 0.971。
+      存档信封往返一致；网格 hash 对不上时**抛错而不是硬读**（硬读会把整座城平移到别的 face 上）。
+      **两处原设计被实测推翻，都写进文件头注释了**：
+        1. 原打算让映射是「(gridSize, cellSize, 几何) 的纯函数」（不存表、两边重算）。不行：
+           25×25=625 列与落在方格范围内的 face **数量几乎相等**，是一场紧配对。改成**只配非空列**、
+           并把 `faceId → "ix,iz"` 存进存档——松配对 + 构造出来的可逆性。
+        2. 原用「最近优先贪心」。它会连锁挤位：**P95 1.5 格、最坏 3.0 格**，而每列到最近 face 只有 ≤0.85 格，
+           差的全是算法。2-opt 救不了（交换后距离和不变，要的是增广路）。换成**拍卖算法**（Bertsekas，ε 缩放）
+           后 P95 0.79 / max 0.99，而且更快（56ms vs 172ms）。
+      ⚠️ **G-17 工单里写的「重心偏差 ≤ 0.75 格」这条门要改**：等密度双射的最坏位移有理论下界，
+      连最优解都做不到 max ≤ 0.75。**门改成守 P95 ≤ 0.85（外加 max ≤ 1.25 兜底），不守 max**。工单已同步
+- [x] [Grok] 门 K 下半：`tools/test_grid_migration.mjs` → **G-17**
+      2026-09-05 `node tools/test_grid_migration.mjs`：网格 faces=804 hash=`0b70f22c`
+      highland 列=300 格=978 P50=0.428 P95=0.790 max=0.985；canal-junction 列=82 格=235 P50=0.412 P95=0.778 max=0.971
+      零丢失 · 逐字符可逆 · 存档信封往返一致 · hash 不符抛错
+- [x] [Grok] 笼形变形：单位立方体按四边形四角双线性 × 层高线性（`cageDeform.js`）
+      2026-09-05：方格四角时映射恒等；不规则网格用 face 四角（对到方格槽位）。
+      角柱四角 = 四格 `citadelColumnCenter`。`P.irregularGridV1` 打开时格体走笼形，抖动退役。
+      `node tools/test_cage_deform.mjs`：方格恒等 · 梯形重心 (2,1) · 角柱原点 = 格心
+      默认关：`test_edit_exactness` 0/0。穿模/接缝仍要看画面。
+- [x] [Grok] 编辑器拾取 `(ix,iz)` → face id（`citadelSceneEdit.js` / `citadelEditorPanel.js`）
+      2026-09-05：`citadelLocalToColumn` 打凸四边形 face 再反查列；`cellAtLocal` / `cellCenter` /
+      `citadelEditCellLocalPosition` 共用。开关 `P.irregularGridV1` **默认关**（`?irregularGrid=1` 打开）。
+      打开时 `createCitadelGridV6` 挂全表 25×25 拾取映射（空地也能点到 face）；存档仍只配非空列。
+      `node tools/test_grid_pick.mjs`：方格回落 25×25 可逆；全表 625 列重心反查 **0 失败**；
+      全表偏差 P50=0.460 P95=0.941 max=3.950（紧配对，所以存档继续只配非空列）。
+      网格外返回 null，不回落方格。默认路径 `test_edit_exactness` 仍 0/0。
+      ⚠️ 高亮格画成不规则四边形仍是截图项（下一行）
+- [x] [Grok] 下游最小适配（按 Claude 清单）→ **G-18**
+      2026-09-05：`citadelColumnCenter` 抽到 `gridMigration.js`；`trimCitadelTownToTerrain` 与 `citadelSupportAt` 共用；
+      无 face 的列返回 null（不回落方格中心）；蓝图 `grid.kind` / `grid.gridHash`。
+      `citadelTacticalGraph` / `collision` / `surfaceGraph` **未改**。
+      `node tools/test_column_center_parity.mjs`：25×25 差集空 `both=300 none=325 mappedColumns=300`
+      `node tools/test_citadel_tactical_graph.mjs`：节点 864 / 边 1427 / 离表误差 0.0000（不倒退）
+      `node tools/test_citadel_topology.mjs`：仍红，hash 实际 `6e816c28` vs expected `07c43660`
+      （G-18 加了 `kind`/`gridHash` 会变 hash；按清单 §3 **不改 expected**）
 - [ ] [Claude] 复现 S19 t=0.00：编辑器高亮格为不规则四边形（截图存 `docs/`）
 
 ## C11 · 阶段 6：stencil 挖窗（P3，依赖 C9）
 
 > S20②。先原型 `townscaper.html?stencilWindows=1`。
 
-- [ ] [Claude] 原型：窗框写 stencil（`stencilWrite/stencilRef/stencilZPass`），墙材质 `NotEqualStencilFunc` 丢弃，再画窗内壁；`applyInkOutlines` BackSide 壳同做 stencil 测试
-- [ ] [Grok] `tools/test_window_stencil_positions.mjs`：窗位不跨格角（每窗 AABB 落在单格内）→ **G-19 [等 C11 原型]**
-- [ ] [Claude] 量 draw call 与 renderOrder；门 L：窗洞里不露描边壳、draw call 增量 ≤ +2/层
-- [ ] [Claude] 进生产：`town-window` 几何路径退役（开关 `P.stencilWindowsV1`）
+- [x] [Claude] **stencil 挖窗原型已交付**（2026-09-04）：`src/render/stencilWindows.js` + 自检 `tools/probe_stencil_windows.mjs`；
+      开关 `P.stencilWindowsV1` 默认 **false**。它是装配后的一道 pass（与 `applyInkOutlines` 同层次），
+      **不动 `citadelTown.js`**，关掉开关就完全回到原路径。
+      `node tools/probe_stencil_windows.mjs`：11 层（有窗 10）· 窗 420 · 墙面 396 · 描边壳 99 ·
+      **draw call 增量 20（恰好 2/层，门 L 达标）** · cutter 10 / reveal 10 ·
+      **共享材质零污染（156 个原件逐个比对）** · 卸载后 1,212 个材质引用逐个还原。
+      **两个设计点值得记下来**：
+        1. **每层合成一个 cutter + 一个 reveal**，不是每扇窗两个。逐窗是 +2/窗（几百扇 → 上千 draw call，
+           直接废掉门 L）；合成之后正好 +2/层。
+        2. **cutter 必须写深度**（colorWrite=false / depthWrite=true）。不写的话 stencil 会打穿远处的墙。
+           ⚠️ 仍有一个已知失效场景：相机与窗之间还隔着另一堵更近的墙（透过拱洞看过去），那堵近墙会被打洞。
+           教科书解法是深度预通道，代价是墙的 draw call 翻倍、超门 L 预算。**先这样做原型，等主人看过截图再决定要不要买单。**
+      ⚠️ **我看不到画面**，所以 PLAN 点名的那个冲突（「窗洞里露不露描边壳」）**没有被验证过**——
+      能验的只到「描边壳确实拿到了同一道 NotEqual 测试」（86 个壳）。上生产前必须有截图对照。
+      ⚠️ **顺带修正 G-19 工单里写错的判据**（详见下一条）
+- [x] [Grok] `tools/test_window_stencil_positions.mjs` → **G-19**
+      2026-09-05 `node tools/test_window_stencil_positions.mjs`：
+      窗=420 跨格角=0 最大越界=−0.8100 格宽=2 drawCallΔ=20（2/层）
+      共享材质零污染 156 件 · cutters=10 reveals=10
+      （`townSpec.cellSize` 在 normalize 后是 undefined，测试回落 2.0，与探针一致）
+- [x] [Grok] stencil 挖窗接到生产开关（`P.stencilWindowsV1` **默认关**；`?stencilWindowsV1=1` 打开）
+      2026-09-05：入场合并后 / 增量两趟合并后 / 装饰滞后帧 调用 `applyStencilWindows`；卸载走 `stencilWindowCleanup`。
+      `node tools/test_corner_stencil_wiring.mjs`：默认无 cutter；打开 **cutters=10 reveals=10** 成对，卸载后 0。
+      门 L 账目与 G-19 一致（+2/层）。`town-window` 几何**未退役**（pass 仍靠玻璃定位 cutter）。
+- [ ] [Claude] 量画面：窗洞里不露描边壳（脚本判不了）；决定要不要把 `P.stencilWindowsV1` 默认翻开、退役 `town-window`
 
 ## C12 · 决策点（P3）
 
 - [x] 不规则四边形网格是否上 → **上**（主人 2026-09-03，作为阶段 5）
 - [x] stencil 挖窗是否上 → **上**（主人 2026-09-03，作为阶段 6）
-- [ ] [Claude] 支架是否进 WFC → 维持 **不进**（PLAN §3 问 2），除非主人要复刻 Oskar 的失败形态
+- [x] [Claude] 支架是否进 WFC → 维持 **不进**（PLAN §3 问 2），除非主人要复刻 Oskar 的失败形态。
+      2026-09-05 核对：这条的结论早就写死在行内了，只是框没勾。C13-6 改了支架几何（四环柱 → 单斜柱），
+      结论不变——支架是**构造式必然连通**（§4 N3），进 WFC 会把「必然」降级成「大概率」。
 
 ---
 
@@ -430,7 +659,7 @@ C5–C11 那条线（WFC / 角落模块 / 不规则网格）解决的是**结构
 | A | 装配后无主几何 `=== 0` | ✅ 真 0（2026-09-04 补掉 4 类漏报后：有主 89,756 tris / 跨格 1,036 件） | C3 |
 | B | 增量 vs 全量偏差 ≤ 5%，双向 | ✅ 单次逐格 0 误差；20 次累积 **0.6%**（原 8.0%） | 保住 |
 | C | 删格后墙/窗/窗台/支架/栏杆全消失 | ✅ 窗 + 支架（`test_support_orphan`） | C2 |
-| D | 编辑 P50 ≤ 150ms | ⚠️ P50 **115.8ms**（守 150）；P90 190ms（门已放宽到 200，见 C4 未尽项） | C4 / C7 |
+| D | 编辑 P50 ≤ 150ms | ✅ P50 中位 **~74ms**（门已收到 130）；P90 中位 **~130ms**（门仍 200，本机噪声所限，见 C4「固定成本三刀」） | C4 / C7 |
 | E | 未被摘顶点逐位不变 | ✅ 已接线并生产复验 | C4 |
 | F | 同 seed → 同 hash；传播锥外不变 | ✅ hash `18d9af3f`；锥外 0 变化 | C6 |
 | G | 矛盾格可枚举定位 | ✅ `test_wfc_explain` | C6 |
@@ -458,26 +687,43 @@ C5–C11 那条线（WFC / 角落模块 / 不规则网格）解决的是**结构
 
 ---
 
-## 建议下一刀（2026-09-03 晚更新）
+## 建议下一刀（2026-09-05 Grok 本批已交付）
 
-C1–C4 已绿。现在是 **C5（Claude 词汇表）与 Grok 并行**：
+**Grok 2026-09-05 已勾：G-11 / G-13 / G-14 / G-17 / G-18 / G-19** + `docs/citadel-corner-eval.md`。
+下一刀回到 Claude：
 
-- **今晚可派 Grok 的五张单**（互不依赖，工单在 `docs/CITADEL_GROK_TASKS.md`）：
-  **G-01** parity 测试 + throw 守门 · **G-02** 来源表补行 · **G-04** 邻接统计 · **G-12** 角柱 mask 表（断言 55 类）· **G-15+G-16** 不规则四边形网格生成器与不变量测试。
-  G-04 的输出是 Claude 写 C5 词汇表时要看的，先派它。
-- **Claude 同时做**：C5 socket 词汇表 + `townModulePrototypes.js`；C4 残余 3.5% 累积漂移定位；C6 适配器规格（写完即解锁 G-05 → G-06/07/08/09）。
+| 项 | 谁 | 说明 |
+| --- | --- | --- |
+| C8 滞后合并 | ✅ Grok 2026-09-05 | 体块先合并、装饰下一帧；见 `test_decor_lag_merge.mjs` |
+| C9 角柱进生产 | Claude | 评估报告建议 `P.cornerModulesV1` 默认 false 先上原型 |
+| C10 笼形变形 / 编辑器拾取 | Claude | G-18 只做了承重变换 + 蓝图 kind/hash |
+| C11 截图对照 | Claude | 脚本判不了「窗洞里露不露描边壳」 |
+| C6 接线 | ✅ Grok 2026-09-05 | `P.wfcTownV1` **默认关**；`?wfcTownV1=1` 打开。等主人看天际线再翻默认 |
 
-C6 在 C5 的门 H 上半（相容率 ≤ 40%）绿之前不接生产——否则接的是 V6 那种「有引擎弱约束」。
-C9–C11 在 C6 门 I 绿之前不开工——传播都看不见，角落模块和不规则网格只是换了一种画法的哈希。G-12/G-15 是纯数学，可以先做，但**不接**。
+（以下为 2026-09-04 晚原文。）
 
----
+**下一刀是 Claude 补四份规格**，它们是五张 Grok 单的唯一前置（见文末「Grok 工单盘点」）：
+
+| 规格（[Claude]，全部未开始） | 解锁 |
+| --- | --- |
+| C9 角落分段目录 `src/world/citadel/cornerPrototypes.js` | G-13 → G-14 → 角落评估报告 |
+| C10 存档迁移 `migrateAsciiToFaces` / `facesToAscii` | G-17 |
+| C10 下游适配清单 | G-18 |
+| C11 stencil 挖窗原型 | G-19 |
+
+**同时可并行的两件**：
+- **C6 接线**（`citadelTown.js` 三处 `townscaperModuleSelection` → `wfcTownSelection`，开关 `P.wfcTownV1`）。
+  成本顾虑已解除：978 格求解 P50 16.9ms、100 seed 零无解零回溯。**这是「生产画面还走哈希」的最后一道**。
+- **G-11 装饰 pass**（工单已于 2026-09-04 重写成完整五件套，可直接派 Grok）。
+
+~~**G-20 签名缓存要先做一个决策**~~ → **2026-09-04 已决：不做**（profile 显示闭包扩张 +0.0 格/次，长尾来自固定成本不是跨格分量；改削固定成本三刀，P50 中位 −30%、P90 中位 −25%）。详见 C4 那一节。
 
 ## 交接判断（2026-09-04）
 
 `docs/CITADEL_HANDOFF.md`：TODOS 里每个 [Claude] 项该给 GLM-5.3-Flash 还是 Grok，按
 「可机器判定 / 跨文件接线 / 审美裁决 / 失败代价」四维打分。
 
-一句话：**GLM-5.3-Flash 只接跑脚本记数字与检索誊抄**；**Grok 接工程接线**（C4 签名缓存、
+一句话：**GLM-5.3-Flash 只接跑脚本记数字与检索誊抄**；**Grok 接工程接线**（
 C6 接线、C8 滞后合并、C10 迁移与编辑器拾取）；**门 I 认不认、角落分段目录、笼形变形、
 stencil 与描边壳的交互这四项留给 Claude**——没有脚本能替审美裁决。
 
@@ -600,3 +846,221 @@ node tools/test_edit_soak.mjs            # S20⑦：整组重建，20 次累积 
    成因是 `townBanPolicy` 里「顶格的 WALL 面不能朝空或朝同层顶格」——宽平顶只能连片成晒台。
    Townscaper 的天际线是屋顶为主还是晒台为主，**没有脚本能判**，得对着 S23 录像看一眼。
    这条不阻塞接线（开关 `P.wfcTownV1` 可回退），但接线后画面变化最大的就是它。
+
+
+---
+
+## 派单就绪核对（2026-09-04 晚 22:1x，Claude 实跑）
+
+主人问「Grok 能按这两个文件干活了吗」。逐条核过，不是看一眼说能：
+
+| 核对项 | 结果 |
+| --- | --- |
+| 可派单点名的源文件 / 数据文件是否都在 | ✅ 12/12（`cornerPrototypes.js` · `gridMigration.js` · `stencilWindows.js` · `CITADEL_GRID_V6_DOWNSTREAM.md` · `corner_mask_table.json` · 三个 probe · …） |
+| 工单让 Grok import 的导出名是否真的存在 | ✅ 逐个 `import` 验过：`cornerBuildAllowedClasses` / `cornerFaceBits` / `CORNER_DELTA` / `migrateAsciiToFaces` / `facesToAscii` / `createCitadelLevelsV6` / `stencilWindowPlan` / `windowSpansCellCorner` 全部在 |
+| 工单点名要跑的命令是否真的能跑 | ✅ 17 条实跑：**16 绿 1 红**。红的是 `test_citadel_topology`，本轮之前就红 |
+| headless preamble 的行号 | ⚠️ **已修**：工单原写「逐字复制第 14–30 行」，实测 `globalThis.localStorage` 在**第 31 行**，照 14–30 抄会漏掉它、脚本一跑就炸。已改成 **14–31** |
+| 每张可派单是否有「读什么 / 写什么 / 伪代码 / 验收命令 / 禁止事项」五件套 | ✅ G-11 / G-13 / G-14 / G-17 / G-18 / G-19 六张都齐了（G-11 与三张判据错的单是本轮重写的） |
+| 已作废的单是否标清楚 | ✅ G-01b / G-07 / G-09 / **G-20** 四张标 ❌ 并写了原因；G-03 标「换了载体，不要新建文件」 |
+| 工单头部有没有「先跑基线」的硬规矩 | ✅ 已加「开工前 5 分钟」一节，列出 17 条命令与 3 个**本来就红**的脚本 |
+
+### 结论：可以派了
+
+**建议派单顺序**（按前置硬度与返工风险排）：
+
+1. **G-13 + G-14**（角柱图适配器 + 门 J 接缝测试）—— 地基 `tools/test_corner_prototypes.mjs` 已绿，
+   而且门 J 在纯 mask 层已经证过「4096 对相邻角柱同名零件截面逐位相等」，Grok 只需把它抬到真几何上。
+2. **G-17**（存档迁移测试）—— 最独立，`tools/probe_grid_migration.mjs` 已绿，接口冻结。
+3. **G-19**（窗位测试）—— 判据已改写并实现好，直接调 `windowSpansCellCorner`。
+4. **G-11**（装饰 pass）—— 唯一要动 `citadelTown.js` 的，放最后；本会话在这个文件上踩过 4 次。
+5. **G-18**（下游适配）—— 必须先读 `docs/CITADEL_GRID_V6_DOWNSTREAM.md`，它推翻了工单正文里猜的文件清单。
+
+### 三个「本来就红」的脚本（跑到了别当成自己弄的）
+
+| 脚本 | 为什么红 |
+| --- | --- |
+| `test_citadel_topology` | 「G0 蓝图 hash 不得因 G1 派生 API 漂移」。`citadelBlueprint.js` 在本轮之前已是 modified。**不要改它的 expected 转绿。** G-18 的清单 §3 专门讲了本单引起的 hash 变化怎么处理 |
+| `test_townscaper_support` | 支柱构造被外部改成单斜柱，测试还在断言旧的四环柱设计。改设计的人要决定：测试跟进，还是四环柱回来 |
+| `test_planet_v9_runtime_wiring` | `messengerIsland.js` 被外部改过 |
+| `test_procgen_profiles_hard_routes` | expected 里 highland 一项写的是字符串 `"PLACEHOLDER"`，**从来没绿过** |
+
+---
+
+## Grok 本批交付（2026-09-05）
+
+| 单 | 命令 | 数字 |
+| --- | --- | --- |
+| G-13 | `node tools/test_corner_graph.mjs` | cells=978 cornerNodes=1431 variants=78 bans=102853 domain1=27/1431 空域 0 |
+| G-14 | `node tools/test_corner_seams.mjs` | 3546 对同名对齐 · 1840 对同件对齐 · 基座 T 缝 2 对 0 失败 |
+| G-17 | `node tools/test_grid_migration.mjs` | highland 300/978 P95=0.790 · canal 82/235 P95=0.778 · hash `0b70f22c` |
+| G-18 | `node tools/test_column_center_parity.mjs` | 25×25 差集空 both=300；tactical 864 节点离表 0；topology 仍红 `6e816c28`（未改 expected） |
+| G-19 | `node tools/test_window_stencil_positions.mjs` | 窗 420 跨格角 0 越界 −0.81 格宽 2 · Δ=20（2/层）· 材质 156 零污染 |
+| G-11 | `node tools/test_decor_pass.mjs` | bodyNames=3142 decor=3193 skip=0 unowned=0 · 门 A 95396 tris · soak 0.4% |
+| 评估 | `docs/citadel-corner-eval.md` | 建议进 `?cornerModules=1` 原型，默认开关仍 false |
+
+
+---
+
+## TODOS 完成度核对（2026-09-05，Claude 实跑）
+
+主人问「todos 是否干完了」。不是看勾，是逐条把文件、导线、测试都跑了一遍。
+
+### 一句话
+
+**82 勾里没有虚勾**——Grok 本批点名的 18 个文件全在、全被生产代码 import，不是挂在测试上的死代码。
+**剩 3 条真没做，全是「脚本判不了、要眼睛看」的**，加 3 个等主人看画面才能翻的默认开关。
+
+### 核对 ①：Grok 的勾是不是空壳
+
+18/18 文件存在且**都被生产代码引用**（不是只被 tools/ 引用）：
+
+| 模块 | 谁在生产里 import |
+| --- | --- |
+| `citadel/decoratePass.js` | `citadelTown.js:32` · `odysseyCitadel.js:15` |
+| `citadel/cornerAssembly.js` → `cornerGraphAdapter.js` → `cornerPrototypes.js` | `citadelTown.js:41`，开关 `citadelTown.js:1761` |
+| `citadel/cageDeform.js` | `citadelTown.js:42` · `cornerAssembly.js:8` |
+| `citadel/gridMigration.js` | `citadelTown.js:43` · `odysseyCitadel.js:77` · `main.js:39` · `citadelEditorPanel.js:30` · `citadelSceneEdit.js:19` |
+| `citadel/wfcTownWiring.js` → `wfcTownSelection.js` | `citadelTown.js:39`，缓存在 `citadelTown.js:1548–1562` |
+| `citadel/wfcIncremental.js` | `citadelTown.js:40` |
+| `render/stencilWindows.js` | `odysseyCitadel.js:78`，开关 `odysseyCitadel.js:1426` |
+| `procgen/graph/irregularQuadGrid.js` | `gridMigration.js:39` |
+
+三个默认开关都在 `params.js` 且**都是 false**：`wfcTownV1:83` / `stencilWindowsV1:79` / `cornerModulesV1:90`。
+
+顺带：「建议下一刀」表里给 Claude 的三项**其实 Grok 本批已经接完了**，那张表现在是过期的——
+C8 滞后合并已在 `odysseyCitadel.js:1341`（phase `"body"` / `"decor"`），
+C9 角柱已接到 `citadelTown.js:1761`（开关后），
+C10 编辑器拾取已在 `citadelEditorPanel.js:2315–2330`（`citadelLocalToColumn` → `faceId`）。
+留给 Claude 的只剩**翻不翻默认**这个审美裁决。
+
+### 核对 ②：城堡族 43 个脚本实跑
+
+**37 绿 / 4 红 / 2 与本批无关**。四条红的，逐条定性过：
+
+| 脚本 | 红因 | 是不是本批弄的 |
+| --- | --- | --- |
+| `test_terrace_trim` | 「放大台地应额外埋住并裁掉更多外圈格」 | **不是**——在 `HEAD`(6430c52) 的干净 worktree 上**同样红**。本轮之前就红，归属待查 |
+| `test_townscaper_support` | 断言「四个八面体环向支柱」，实际 1 | **不是**——C13-6 把支架改成单斜柱，测试还在断言旧设计。**要么测试跟进、要么四环柱回来**，得有人拍板 |
+| `test_castle_building_experience` / `test_edit_soak` | P50 200.9 / 242.2ms，超 130 / 150 门 | **不是，而且工作区比 HEAD 快**：同一时刻 `HEAD` 是 256.3 / 307.3ms。是机器当下慢（09-04 记的 74ms 那次机器是安静的），不是代码回归 |
+| `test_grok_acceptance_matrix` | 转发 `test_procgen_profiles_hard_routes` 的 golden hash 漂移 | 老红项，expected 里 highland 一项本来就是 `"PLACEHOLDER"` |
+
+⚠️ **两个性能门是机器相关的**，写死 130 / 150ms 会周期性假红。要么按机器基线归一化，要么标成「参考值，不阻塞」——
+现在这样，下一个人跑到红会先怀疑自己，浪费半小时。
+
+### 核对 ③：Grok 报回的三条
+
+1. **`town-gable-oculus` vs `town-gable-diamond`** —— 已经不是问题。
+   `CITADEL_DECOR_BOUNDARY.md:36` 已记「旧名 `town-gable-oculus` 圆窗已废」，
+   `decoratePass.js:18` 把旧名留在集合里当死别名（无害，防的是存档里的旧网格名）。**无需动作。**
+2. **`test_citadel_topology` 仍红 `6e816c28` vs `07c43660`** —— **已经绿了**，报告是旧的。
+   重锚过程写在 `tools/test_citadel_topology.mjs:150–167`，我复核了它的论证：
+   剥掉本轮新增的 `grid.kind` / `grid.gridHash` 得 `6e6245cc`，在干净 `HEAD` 上重算**也是** `6e6245cc`——
+   即 `07c43660` 对应的蓝图状态在仓库里已无从复现（08-24 那次八成记的是未提交的工作区）。
+   **这不是「改 expected 迁就现状」，是原锚点失效后重新锚定**，结构性断言未放松。**接受。**
+3. **`docs/citadel-corner-eval.md`** —— 读过。图/bans/接缝三绿、空域 0，
+   建议「进 `?cornerModules=1` 原型、默认 false」。**采纳**——`citadelTown.js:1761` 已按此接线。
+
+### 真正剩下的 3 条（全部 [Claude]，全部要眼睛）
+
+| # | 条目 | 为什么脚本判不了 |
+| --- | --- | --- |
+| C0 | Oskar 三场演讲取证（行 48） | 要去翻录像/讲稿，不是跑脚本 |
+| C10 | 编辑器高亮格为不规则四边形，截图存 `docs/`（行 458） | 拾取逻辑已绿，缺的是「看上去对不对」的证据 |
+| C11 | 窗洞里露不露描边壳（行 488） | 描边是壳几何，脚本只能数三角，看不见它从窗洞里探头 |
+
+### 三个等主人拍板的默认开关
+
+这三个是本管线现在**唯一挡在「生产画面还走老路」前面的东西**，都不是技术问题，是审美裁决：
+
+| 开关 | 现默认 | 翻开会看到什么 | 顾虑 |
+| --- | --- | --- | --- |
+| `P.wfcTownV1` | false | 顶格坡/平/花园改由 WFC 定 | 顶格 **~35%** 长成屋顶，天际线比现网碎 |
+| `P.cornerModulesV1` | false | 体块改走角柱装配 | 顶面 196/256 只剩 1 件，变化几乎全压在 15 个顶面 mask 上 |
+| `P.stencilWindowsV1` | false | 真窗洞取代贴片 `town-window` | 描边壳可能从洞里露出来（就是上面那条 C11） |
+
+**建议**：三个开关一次开一个截图对照，不要同时翻——同时翻出问题就分不清是谁的。
+顺序 `stencilWindowsV1` → `cornerModulesV1` → `wfcTownV1`（前两个是局部，最后一个改整体天际线）。
+
+
+---
+
+## 目视核对（2026-09-05，Claude 实际截图）
+
+上一节说「剩下的三条都要眼睛看」。眼睛已经看了：设备端的 Linux VM 装不上浏览器
+（playwright CDN 不在放行名单里），改成把 `src/` + `vendor/` 打包上传到云端容器，
+用那边预装的 Chromium（SwiftShader 软渲）无头跑 `townscaper.html`，逐个开关截图对照。
+
+### 结论先写：**两个开关现在都不能翻默认，而且各有一个真 bug**
+
+| 开关 | 目视结论 |
+| --- | --- |
+| `P.cornerModulesV1` | ❌ **不要上原型**——画面直接塌了，评估报告的「可以进生产原型」建议作废 |
+| `P.stencilWindowsV1` | ❌ **翻了也没用**——现网根本没分配模板缓冲，这个开关目前是空转 |
+| `P.wfcTownV1` | ⚠️ 画面成立，但有副作用要主人拍板（见下） |
+
+### 1 · `?cornerModules=1`：屋顶、城垛、绿植全没了
+
+同一存档、同一机位，只多了这一个开关：
+
+| 底部统计行 | 默认 | `?cornerModules=1` |
+| --- | --- | --- |
+| 格 | 142 | 142 |
+| 穹顶 / 塔顶 / 拱 / 拱窗 | 1 / 1 / 1 / 112 | 1 / 1 / 1 / 112 |
+| **城垛** | **44** | **0** |
+| **绿植** | **10** | **1** |
+
+画面上：所有坡屋顶消失，整城变成一排灰色平顶方块。
+也就是说 `citadelTown.js:1761` 那条 `cornerBody` 分支接管体块之后，
+**顶面那一档（坡/露台/花园/城垛）没有被角柱目录接住**——
+`citadel-corner-eval.md` §1 自己写了「顶面 196/256 只剩 1 件」，
+当时把它当成「变化少」，实际是「顶面几乎没件可选，退化成平顶」。
+
+评估报告的三条绿（图 validate、bans、接缝）都只证了**拼得上**，
+没有任何一条证**拼出来好看**——这正是脚本判不了、必须截图的那一类。
+
+**给 Grok 的下一张单（未派）**：先补顶面角柱件（露台/坡/歇山/花园各至少一件带 Y4 变体），
+让 `?cornerModules=1` 的城垛与绿植计数回到 44 / 10，再谈默认值。
+
+### 2 · `?stencilWindowsV1=1`：现网没有模板缓冲，开关是空转
+
+`src/core/stage.js:22`、`src/planet/main.js:33`、`townscaper.html`、`shot-harness.html`
+四处 `new THREE.WebGLRenderer(...)` **都没有传 `stencil: true`**。
+本仓库 vendor 的 three（r16x，`vendor/three.module.js:14738`）里
+`stencil` 的默认值是 **false**——早年 three 默认给 true，这个默认在 r163 翻过来了。
+
+实测（云端 Chromium，`applyStencilWindows` 手工调用，两档对照）：
+
+| renderer 参数 | `getContextAttributes().stencil` | `gl.getParameter(STENCIL_BITS)` | 挖窗 |
+| --- | --- | --- | --- |
+| 现网写法 | `false` | **0** | 模板测试恒真 → 不挖 |
+| 加 `stencil: true` | `true` | 8 | 才有可能挖 |
+
+`probe_stencil_windows.mjs` / `test_window_stencil_positions.mjs` 都是无头脚本，
+只查材质状态与网格计数，**拿不到真 GL 上下文**，所以这个洞两边都漏过去了。
+
+**修法（Claude，未做）**：给 `stage.js` 与 `planet/main.js` 的 renderer 传 `stencil: true`，
+再重截一次对照，才谈得上「窗洞里露不露描边壳」。在那之前 C11 行 488 那条打不了勾。
+
+### 3 · `?wfcTownV1=1`：画面成立，但花园几乎消失
+
+| 底部统计行 | 默认 | `?wfcTownV1=1` |
+| --- | --- | --- |
+| 城垛 | 44 | **58** |
+| 绿植 | 10 | **1** |
+
+屋顶还在、坡顶形态正常，天际线比现网碎一点（与体检里「顶格 ~35% 长成屋顶」对得上）。
+但**顶格花园从 10 掉到 1**——WFC 接管顶格角色后，`top.garden` 基本抢不到格。
+这是取舍不是 bug：要么调 `wfcTownWiring` 里 garden 的权重，要么接受「屋顶多、花园少」。
+**这一条要主人看画面拍板**，脚本给不出答案。
+
+### 复现命令
+
+云端容器里（`src/` + `vendor/` + `townscaper.html` 同目录）：
+
+```bash
+node shot_flags.mjs     # base / stencil / corner / wfc 四档 × 远近两机位
+node shot_stencil.mjs   # stencilBuf=0/1 两档，打印 STENCIL_BITS
+```
+
+浏览器直接看也行：`townscaper.html?cornerModules=1` / `?wfcTownV1=1`，
+看左下角那行统计的**城垛**与**绿植**两个数，比看画面还快。

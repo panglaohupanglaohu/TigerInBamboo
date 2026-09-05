@@ -29,6 +29,18 @@ import {
   TOWNSCAPER_MODULE_VARIANTS,
   TOWNSCAPER_MODULE_FAMILIES,
 } from "./citadel/moduleFamilies.js";
+import { isDecorTree, stripDecorMeshes, decorateTown } from "./citadel/decoratePass.js";
+import { P } from "../core/params.js";
+import {
+  resolveTownSelection,
+  makeTownRoleOracle,
+  partitionRoofComponent,
+  townGridSignature,
+} from "./citadel/wfcTownWiring.js";
+import { resolveIncremental } from "./citadel/wfcIncremental.js";
+import { assembleCornerBody } from "./citadel/cornerAssembly.js";
+import { cellCageCorners, cageMapUnit } from "./citadel/cageDeform.js";
+import { citadelColumnCenter } from "./citadel/gridMigration.js";
 
 /** 编辑器（citadelEditorPanel / townscaper.html）与主场景共用的布局存档键。 */
 // v3：在五彩户/坡屋顶/飞楼支架基础上加入沿台地生长的密集街区，
@@ -393,7 +405,7 @@ function pushTownQuad(pos, nrm, uv, a, b, c, d, n) {
  * 只生成朝空邻的外露面。相邻实心格共享面不画 → 体块融合成一整坨，
  * 不再是描边方盒堆（Townscaper 邻接协调的几何层）。
  */
-export function makeExposedCellGeometry(cs, ch, expose, ix, iz, floor = 0) {
+export function makeExposedCellGeometry(cs, ch, expose, ix, iz, floor = 0, cage = null) {
   const hx = cs * 0.5;
   const hy = ch * 0.5;
   const hz = cs * 0.5;
@@ -401,10 +413,18 @@ export function makeExposedCellGeometry(cs, ch, expose, ix, iz, floor = 0) {
   const j10 = citadelGridVertexJitter(ix + 1, iz, floor);
   const j01 = citadelGridVertexJitter(ix, iz + 1, floor);
   const j11 = citadelGridVertexJitter(ix + 1, iz + 1, floor);
-  const corner = (sx, sy, sz) => {
-    const j = sx > 0 ? (sz > 0 ? j11 : j10) : (sz > 0 ? j01 : j00);
-    return [sx * hx + j.dx, sy * hy, sz * hz + j.dz];
-  };
+  const corner = cage
+    ? (sx, sy, sz) => {
+        const u = (sx + 1) * 0.5;
+        const v = (sz + 1) * 0.5;
+        const y = (sy + 1) * 0.5;
+        const p = cageMapUnit(u, y, v, cage.corners, -hy, hy);
+        return [p[0] - cage.cx, p[1], p[2] - cage.cz];
+      }
+    : (sx, sy, sz) => {
+        const j = sx > 0 ? (sz > 0 ? j11 : j10) : (sz > 0 ? j01 : j00);
+        return [sx * hx + j.dx, sy * hy, sz * hz + j.dz];
+      };
   // 注意：pushTownQuad 的角点顺序必须与法线构成右手系（绕序 = 正面）。
   // 旧版顺序与法线相反——FrontSide 材质下墙面正面被剔除，看到的是屋内
   // 远侧内壁（白墙时代侥幸发白），反向壳描边（BackSide）则整个糊在墙面
@@ -1091,18 +1111,49 @@ export function collectCitadelCourtyardRegions(
   rows = CITADEL_GRID_SIZE,
   levels = CITADEL_CASTLE_FLOORS
 ) {
-  const at = (ix, iy, iz) => grid.get(`${ix},${iy},${iz}`) ?? ".";
+  // 性能（2026-09-04）：这个函数是**每次编辑都要重跑一遍的固定成本**——
+  // 增量重建只把「发不发几何」按 dirty 收窄，空间规则本身仍然是全图的。
+  // CPU profile 实测它占一次编辑的 8.2%，仅次于 Three 的几何烘焙。
+  // 慢的不是算法（flood fill 本来就是 O(格数)），是**字符串键**：
+  // 原来 at() 每探一个邻居就拼一次 `${ix},${iy},${iz}`，seen 也用字符串键，
+  // 32×32×5 的图一次调用要造 5 万多个临时字符串，全喂给 GC。
+  //
+  // 改法：把 grid 一次性摊成**稠密占用位图**（Uint8Array），此后所有探测都是
+  // 数组下标；seen 换成按层复用的 Uint8Array。遍历顺序、push/pop 顺序、
+  // 返回结构一字未改——`cells` 数组的顺序也逐位不变，测试可以直接比对。
+  const planeSize = cols * rows;
+  // levels + 1 层：topOpen 要探 iy+1，最上面多留一层空平面当哨兵
+  const solid = new Uint8Array(planeSize * (levels + 1));
+  for (const [key, ch] of grid) {
+    if (ch === ".") continue;
+    // grid 的键就是 "ix,iy,iz"，这里只在**摊平时**解析一次，不在热路径里
+    const c1 = key.indexOf(",");
+    const c2 = key.indexOf(",", c1 + 1);
+    const ix = +key.slice(0, c1);
+    const iy = +key.slice(c1 + 1, c2);
+    const iz = +key.slice(c2 + 1);
+    if (ix < 0 || ix >= cols || iz < 0 || iz >= rows || iy < 0 || iy >= levels) continue;
+    solid[iy * planeSize + iz * cols + ix] = 1;
+  }
+  /** 越界一律当空（与原来的 `?? "."` 同义） */
+  const isSolid = (ix, iy, iz) =>
+    ix >= 0 && ix < cols && iz >= 0 && iz < rows && iy >= 0 && iy <= levels
+      ? solid[iy * planeSize + iz * cols + ix] === 1
+      : false;
+
+  const seen = new Uint8Array(planeSize);
   const result = [];
   for (let iy = 0; iy < levels; iy++) {
-    const seen = new Set();
+    seen.fill(0);
+    const base = iy * planeSize;
     for (let ix = 0; ix < cols; ix++) {
       for (let iz = 0; iz < rows; iz++) {
-        const startKey = `${ix},${iz}`;
-        if (at(ix, iy, iz) !== "." || seen.has(startKey)) continue;
+        const startIdx = iz * cols + ix;
+        if (solid[base + startIdx] === 1 || seen[startIdx] === 1) continue;
         const queue = [[ix, iz]];
         const cells = [];
         let touchesBoundary = false;
-        seen.add(startKey);
+        seen[startIdx] = 1;
         while (queue.length) {
           const [x, z] = queue.pop();
           cells.push([x, z]);
@@ -1110,20 +1161,25 @@ export function collectCitadelCourtyardRegions(
           for (const [dx, dz] of DIRS) {
             const nx = x + dx;
             const nz = z + dz;
-            const key = `${nx},${nz}`;
             if (nx < 0 || nx >= cols || nz < 0 || nz >= rows) continue;
-            if (seen.has(key) || at(nx, iy, nz) !== ".") continue;
-            seen.add(key);
+            const nIdx = nz * cols + nx;
+            if (seen[nIdx] === 1 || solid[base + nIdx] === 1) continue;
+            seen[nIdx] = 1;
             queue.push([nx, nz]);
           }
         }
         if (touchesBoundary) continue;
-        const topOpen = cells.every(([x, z]) => at(x, iy + 1, z) === ".");
+        let topOpen = true;
+        for (let i = 0; i < cells.length; i++) {
+          if (isSolid(cells[i][0], iy + 1, cells[i][1])) { topOpen = false; break; }
+        }
         if (!topOpen) continue;
         let solidBorderEdges = 0;
-        for (const [x, z] of cells) {
+        for (let i = 0; i < cells.length; i++) {
+          const x = cells[i][0];
+          const z = cells[i][1];
           for (const [dx, dz] of DIRS) {
-            if (at(x + dx, iy, z + dz) !== ".") solidBorderEdges++;
+            if (isSolid(x + dx, iy, z + dz)) solidBorderEdges++;
           }
         }
         if (solidBorderEdges < 3) continue;
@@ -1321,27 +1377,31 @@ function buildCitadelRoofBird(materials, x, y, z, random) {
  * 纯函数、零 three 依赖，供立面规则与 headless 测试共用。
  */
 export function collectCitadelHouses(grid) {
-  const columns = new Map(); // "ix,iz" -> { keys: string[], chars: Set }
-  for (const key of grid.keys()) {
-    const [ix, iy, iz] = key.split(",").map(Number);
-    const col = `${ix},${iz}`;
+  // 性能（2026-09-04）：原来每个格键要 `split(",").map(Number)` **两遍**
+  // （一遍建列、一遍求 bottom/top），还要为每根柱拼一个 "ix,iz" 字符串键。
+  // 一次编辑要跑 15 遍（buildCitadelTown ×5 台地 × 3 个调用点），
+  // CPU profile 实测占 2.4%。改成：手写一次解析 + 整数列键 + 边扫边求极值，
+  // 不再存 keys 数组。houses 的顺序与字段一字不变（列的首次出现顺序）。
+  const columns = new Map(); // ix*4096+iz -> { ix, iz, bottom, top, hasGate, bottomChar }
+  for (const [key, ch] of grid) {
+    const c1 = key.indexOf(",");
+    const c2 = key.indexOf(",", c1 + 1);
+    const ix = +key.slice(0, c1);
+    const iy = +key.slice(c1 + 1, c2);
+    const iz = +key.slice(c2 + 1);
+    const col = ix * 4096 + iz;
     let entry = columns.get(col);
-    if (!entry) columns.set(col, (entry = { keys: [], chars: new Set() }));
-    entry.keys.push(key);
-    entry.chars.add(grid.get(key));
+    if (!entry) {
+      columns.set(col, { ix, iz, bottom: iy, top: iy, hasGate: ch === CITADEL_GATE_CHAR, bottomChar: ch });
+      continue;
+    }
+    if (iy < entry.bottom) { entry.bottom = iy; entry.bottomChar = ch; }
+    if (iy > entry.top) entry.top = iy;
+    if (ch === CITADEL_GATE_CHAR) entry.hasGate = true;
   }
   const houses = [];
-  for (const [col, entry] of columns) {
-    const [ix, iz] = col.split(",").map(Number);
-    let bottom = Infinity;
-    let top = -1;
-    let hasGate = false;
-    for (const key of entry.keys) {
-      const [, iy] = key.split(",").map(Number);
-      if (iy < bottom) bottom = iy;
-      if (iy > top) top = iy;
-      if (grid.get(key) === CITADEL_GATE_CHAR) hasGate = true;
-    }
+  for (const entry of columns.values()) {
+    const { ix, iz, bottom, top, hasGate } = entry;
     houses.push({
       ix,
       iz,
@@ -1349,7 +1409,7 @@ export function collectCitadelHouses(grid) {
       bottom,
       top,
       floors: top - bottom + 1,
-      char: grid.get(`${ix},${bottom},${iz}`) ?? "0",
+      char: entry.bottomChar ?? "0",
       hasGate,
     });
   }
@@ -1453,6 +1513,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   };
   const { cellSize: cs, cellHeight: ch } = spec;
   const { mesh, materials, random } = ctx;
+  const skipDecor = ctx.skipDecor === true;
 
   // ---------- 栅格索引 ----------
   const grid = new Map();
@@ -1476,12 +1537,58 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     });
   });
   const at = (ix, iy, iz) => gridFlat.get((ix << 12) | (iy << 6) | iz) ?? ".";
+
+  const wfcOn = (ctx.wfcTownV1 ?? P.wfcTownV1) === true && grid.size > 0;
+  let wfcOracle = makeTownRoleOracle(null);
+  let wfcReport = { enabled: false, ok: false };
+  if (wfcOn) {
+    const cache = ctx.townCtxCache ?? null;
+    const seed = ctx.wfcSeed ?? 1;
+    let selection;
+    if (dirtySet && cache?.wfcTownSelection?.value?.byCell) {
+      const dirtyKeys = [];
+      for (const packed of dirtySet) {
+        dirtyKeys.push(`${packed >> 12},${(packed >> 6) & 63},${packed & 63}`);
+      }
+      const inc = resolveIncremental({
+        grid,
+        seed,
+        previous: cache.wfcTownSelection.value.byCell,
+        dirtyKeys,
+      });
+      const roleAt = (ix, iy, iz) => inc.byCell?.[`${ix},${iy},${iz}`]?.variant ?? null;
+      selection = { ...inc, roleAt, fromCache: false };
+      if (inc.ok && cache) {
+        cache.wfcTownSelection = {
+          sig: `${townGridSignature(grid)}|${seed}`,
+          value: { ok: true, byCell: inc.byCell, hash: inc.hash ?? null, roleAt },
+        };
+      }
+    } else {
+      selection = resolveTownSelection(grid, { cache, seed });
+    }
+    wfcOracle = makeTownRoleOracle(selection);
+    wfcReport = {
+      enabled: true,
+      ok: selection.ok === true,
+      ms: selection.ms ?? 0,
+      fromCache: selection.fromCache === true,
+      unresolved: selection.unresolved?.length ?? 0,
+      hash: selection.hash ?? null,
+    };
+  }
   // V3 簇配色（C2）：同字符 4 连通簇 + 朝向近似；非 V3 的 shade 工厂忽略第五参
   const townClusters = computeTownClusters(grid);
   const openMaskFor = (ix, iy, iz) => DIRS.reduce(
     (mask, [dx, dz], index) => at(ix + dx, iy, iz + dz) === "." ? mask | (1 << index) : mask,
     0
   );
+  // 户表（竖柱同色 = 一户）：grid 在本次构建里不再变，所以**只收一次**。
+  // 原来三个调用点各收一遍（规则 2.5 柱高表 / 规则 3 户表 / 规则 7 晾衣绳），
+  // 一次编辑 ×5 台地 = 15 遍全图扫描。
+  let _housesMemo = null;
+  const housesOf = () => (_housesMemo ??= collectCitadelHouses(grid));
+
   const cx = (ix) => citadelGridCellCenter(ix, 0, 0, cs, ch, cols).x;
   const cz = (iz) => citadelGridCellCenter(0, 0, iz, cs, ch, rows).z;
   const cy = (iy) => citadelGridCellCenter(0, iy, 0, cs, ch, cols).y;
@@ -1530,8 +1637,16 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     group.userData.restoreAdd = () => { group.add = rawAdd; };
     group.userData.stampOwner = (object) => stampOwner(object, iy);
     group.add = (...objects) => {
-      for (const object of objects) stampOwner(object, iy);
-      return rawAdd(...objects);
+      const kept = [];
+      for (const object of objects) {
+        const next = skipDecor ? stripDecorMeshes(object) : object;
+        if (!next) continue;
+        if (skipDecor && isDecorTree(next)) continue;
+        stampOwner(next, iy);
+        kept.push(next);
+      }
+      if (!kept.length) return group;
+      return rawAdd(...kept);
     };
     return group;
   });
@@ -1559,6 +1674,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     boatCount: 0,
     birdCount: 0,
     supportCount: 0, // 悬空支撑支架（flying buildings 支撑柱 + 斜撑）
+    wfcTown: wfcReport,
     corniceCount: 0,
     plinthCount: 0,
     balconyCount: 0,
@@ -1642,7 +1758,16 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     }
     return object;
   };
+  const cornerBody = (ctx.cornerModulesV1 ?? P.cornerModulesV1) === true;
+  if (cornerBody) {
+    assembleCornerBody({
+      grid, cols, cs, ch, mesh, materials, ownSpanning, ownNone, levelGroups, stats,
+      gridV6: ctx.gridV6 ?? null,
+    });
+    stats.cellCount = grid.size;
+  }
   for (const [key, char] of grid) {
+    if (cornerBody) continue;
     const [ix, iy, iz] = key.split(",").map(Number);
     // G30 增量性能：dirty 模式下先 want() 跳过非 dirty 格，再算 expose（
     // 6 次邻域查询）——897/942 格直接 continue，统计语义不变。
@@ -1659,8 +1784,21 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       stats.cellCount++;
       continue;
     }
-    const geo = makeExposedCellGeometry(cs, ch, expose, ix, iz, iy)
-      || makeDistortedCellGeometry(cellGeometry, ix, iz, iy);
+    const gridV6 = ctx.gridV6 ?? null;
+    const cageCorners = gridV6
+      ? cellCageCorners(ix, iz, {
+          quad: gridV6.quad, mapping: gridV6.mapping, cellSize: cs, gridSize: cols,
+        })
+      : null;
+    const col = gridV6
+      ? citadelColumnCenter(ix, iz, {
+          quad: gridV6.quad, mapping: gridV6.mapping, cellSize: cs, gridSize: cols,
+        })
+      : null;
+    const geo = makeExposedCellGeometry(
+      cs, ch, expose, ix, iz, iy,
+      cageCorners && col ? { corners: cageCorners, cx: col.x, cz: col.z } : null
+    ) || makeDistortedCellGeometry(cellGeometry, ix, iz, iy);
     if (colorful) applyPatchyWallColors(geo, ix, iz, iy);
     else applyVerticalVertexColors(geo, 1.0, 1.0);
     // 砖缝跨格连续（C13-1）：UV 走世界坐标，不用每面 0..1
@@ -1674,7 +1812,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       ctx.materials.shade?.(char, ix, iz, iy, clusterInfo) ?? materials[char] ?? materials.W,
       "town-cell"
     );
-    cell.position.set(cx(ix), cy(iy), cz(iz));
+    cell.position.set(col?.x ?? cx(ix), cy(iy), col?.z ?? cz(iz));
     cell.userData.cell = { ix, iy, iz, char };
     levelGroups[iy].add(cell);
     stats.cellCount++;
@@ -1976,7 +2114,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
 
     // 柱高表（孤立尖顶按柱高拉高）
     const columnHeight = new Map();
-    for (const house of collectCitadelHouses(grid)) {
+    for (const house of housesOf()) {
       columnHeight.set(`${house.ix},${house.iz}`, house.floors);
     }
 
@@ -2008,8 +2146,34 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       components.push({ iy: iy0, cells, keys: cells.map(([x, z]) => `${x},${iy0},${z}`) });
     }
 
+    const routed = [];
     for (const comp of components) {
+      const parts = partitionRoofComponent(comp.cells, comp.iy, wfcOracle);
+      for (const cells of parts.slopedGroups) {
+        routed.push({
+          iy: comp.iy,
+          cells,
+          keys: cells.map(([x, z]) => `${x},${comp.iy},${z}`),
+        });
+      }
+      for (const cells of parts.flatGroups) {
+        routed.push({
+          iy: comp.iy,
+          cells,
+          keys: cells.map(([x, z]) => `${x},${comp.iy},${z}`),
+          forcePlaza: true,
+        });
+      }
+    }
+
+    for (const comp of routed) {
+      if (cornerBody) break;
       const { iy } = comp;
+      if (comp.forcePlaza) {
+        if (!ownSpanning(comp.keys)) continue;
+        roofPlazas.push(comp);
+        continue;
+      }
       const shape = classifyRoofComponent(comp.cells);
       const cellSet = new Set(comp.keys);
       // 屋顶归整个连通分量：形状由 classifyRoofComponent(comp.cells) 定，
@@ -2241,7 +2405,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // ---------- 规则 3：逐格立面/屋顶构件 ----------
   // 户概念（Townscaper）：竖柱同色 = 一户，户种子决定窗密度与门面。
   const houseByColumn = new Map();
-  for (const house of collectCitadelHouses(grid)) {
+  for (const house of housesOf()) {
     houseByColumn.set(`${house.ix},${house.iz}`, house);
   }
 
@@ -2249,7 +2413,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // Townscaper 屋顶花园：大平顶分量且贴更高墙 → 铺草地 + 低栅栏 + 1~3 棵树；
   // 不贴墙的晒台保持平顶（规则 3 出城垛/围栏）。gardenCells 让规则 3 跳过城垛。
   const gardenCells = new Set();
-  {
+  if (!cornerBody) {
     const grassGeometry = new THREE.BoxGeometry(cs * 0.96, 0.06, cs * 0.96);
     for (const comp of roofPlazas) {
       const { iy } = comp;
@@ -2265,7 +2429,10 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       // 原来还有一条「不贴墙但 ≥3 格也铺草」，结果整片开阔大平台全铺成草地；
       // 而录像里（S23 sheetA 5–8s / sheet_0 15–20s）开阔平台是**石板广场 + 沿轮廓女儿墙**，
       // 草地与树只出现在被墙围起来的内院/屋顶花园里。
-      if (!hugsWall) continue;
+      // C6：WFC 开时由 townBanPolicy 的 garden 角色接管，不再二次判 hugsWall。
+      if (wfcOracle.enabled) {
+        if (!comp.cells.some(([x, z]) => wfcOracle.isGarden(x, iy, z) === true)) continue;
+      } else if (!hugsWall) continue;
       // 花园按整个平顶分量成立/消失（少一格就可能不再围合），归属跨格；
       // gardenCells 是规则 3 的输入，必须在门外照常填（否则城垛会冒出来）。
       for (const key of comp.keys) gardenCells.add(key);
@@ -2505,7 +2672,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         const ez = cz(iz) + dz * (cs / 2 + 0.055);
         const yaw = Math.atan2(dx, dz);
         // 檐口线：软融合模式用浅色细条，避免黑框铁笼
-        if ((iy >= 1 || isRoof(ix, iy, iz)) && !leanDecor) {
+        if (!cornerBody && (iy >= 1 || isRoof(ix, iy, iz)) && !leanDecor) {
           const floorBandMaterial = module.floor === 1 || module.floor === 3
             ? roofMaterialFor(ix, iz, iy)
             : trimMatLoc;
@@ -2523,7 +2690,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
           }
         }
         // 底层墙裙
-        if (iy === 0) {
+        if (!cornerBody && iy === 0) {
           const plinth = mesh(
             plinthGeometry,
             leanDecor ? (materials.A ?? trimMatLoc) : foundationMaterialFor(ix, iz, iy, module.foundation),
@@ -2537,7 +2704,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
           stats.plinthCount = (stats.plinthCount ?? 0) + 1;
         }
         // 石砌横缝：软融合模式下省略（描边+缝线会把岛城画成铁笼）
-        if (iy >= 1 && !leanDecor) {
+        if (!cornerBody && iy >= 1 && !leanDecor) {
           const grout = mesh(
             new THREE.BoxGeometry(cs * 0.92, 0.035, 0.04),
             trimMatLoc,
@@ -2670,7 +2837,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     }
 
     // 屋顶格：边缘出城垛（高处/贴墙）或围栏（低层开阔平台）；花园格已自出低栅栏
-    if (isRoof(ix, iy, iz)) {
+    if (!cornerBody && isRoof(ix, iy, iz)) {
       const skipTrim = domeCenters.has(key) || towerTops.has(key) || roofCells.has(key) || gardenCells.has(key);
       if (!skipTrim) {
         for (const [dx, dz] of DIRS) {
@@ -3310,7 +3477,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
 
   // ---------- 规则 7：晾衣绳（Townscaper Italian wires）----------
   {
-    const houses = collectCitadelHouses(grid);
+    const houses = housesOf();
     const tall = houses.filter((h) => h.floors >= 3);
     const used = new Set();
     let wires = 0;
@@ -3401,6 +3568,25 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   }
 
   stats.gridSize = { cols, rows, levels: levels.length };
+  if (!skipDecor) {
+    decorateTown({
+      grid,
+      at,
+      want,
+      own: { cell: ownCell, spanning: ownSpanning, none: ownNone },
+      levelGroups,
+      ctx,
+      materials,
+      mesh,
+      stats,
+      cs,
+      ch,
+      cx,
+      cy,
+      cz,
+      skipDecor,
+    });
+  }
   // 归属拦截只在本次装配内有效：增量重建第 3 步会往这些层组挂新网格，
   // 那时 _ownerCell 已是陈旧值，必须还原原生 add。
   ownNone();

@@ -14,8 +14,9 @@ import {
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
   citadelPaletteIndexOfChar,
-} from "../world/citadelTown.js?v=20260904-sun-rig-v1";
+} from "../world/citadelTown.js?v=20260905-wfc-wire-v1";
 import { createCitadelEditFx } from "../world/citadelEditFx.js";
+import { citadelColumnCenter } from "../world/citadel/gridMigration.js";
 
 /** Resolve a ray hit on any nested mesh/outline back to its tower/tree root. */
 export function citadelTerrainObjectFromHits(hits = []) {
@@ -121,8 +122,19 @@ export function citadelEditCellLocalPosition(
 ) {
   const baseY = citadelEditBaseY(citadel, terraceIndex);
   if (baseY == null) return null;
-  const c = citadelGridCellCenter(target.ix, target.iy, target.iz);
-  return out.set(c.x, baseY + c.y, c.z);
+  const gridV6 = citadel.userData?.gridV6;
+  const spec = citadel.userData?.townSpec;
+  const cs = spec?.cellSize ?? CITADEL_TOWN_SPEC.cellSize;
+  const gs = spec?.gridSize ?? 25;
+  const col = citadelColumnCenter(target.ix, target.iz, {
+    quad: gridV6?.quad ?? null,
+    mapping: gridV6?.mapping ?? null,
+    cellSize: cs,
+    gridSize: gs,
+  });
+  const c = col ?? citadelGridCellCenter(target.ix, target.iy, target.iz);
+  const y = citadelGridCellCenter(target.ix, target.iy, target.iz).y;
+  return out.set(c.x, baseY + y, c.z);
 }
 
 /**

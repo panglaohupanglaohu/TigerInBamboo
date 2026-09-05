@@ -33,6 +33,7 @@ const _rootInv = new THREE.Matrix4();
  *                sources: THREE.Mesh[], groupTriStart: number) => void,
  * }} [options]
  *   - skip: 返回 true 的网格不合并、保持原样（如运行时换材质的窗口）。
+ *   - skipOutline: (outline, surface) => true 则该描边不合并。C8 体块/装饰分两帧合并时用。
  *   - onSurface: 每组合并完成后回调；segments 给出组内每个源网格在
  *     该组合并几何中的三角形区间（triStart 相对组起点，源几何已非索引化），
  *     groupTriStart 为该组合并几何在 root 全部合并几何中的三角形起始序号
@@ -45,6 +46,7 @@ const _rootInv = new THREE.Matrix4();
 export function mergeStaticGroup(root, options = {}) {
   const {
     skip = () => false,
+    skipOutline = null,
     onSurface = null,
     onOutline = null,
     // Namespaced merged marker: callers that merge multiple independent
@@ -144,6 +146,7 @@ export function mergeStaticGroup(root, options = {}) {
     if (!o.isMesh || o.userData.isOutline) return;
     for (const child of o.children) {
       if (child.isMesh && child.userData.isOutline) {
+        if (skipOutline?.(child, o)) continue;
         let list = outlineGroups.get(child.material);
         if (!list) outlineGroups.set(child.material, (list = []));
         list.push({ outline: child, surface: o });
@@ -155,6 +158,7 @@ export function mergeStaticGroup(root, options = {}) {
   root.traverse((o) => {
     if (transient.has(o)) return;
     if (!o.isMesh || !o.userData.isOutline || !o.userData.mergedGeometry) return;
+    if (skipOutline?.(o, o)) return;
     let list = outlineGroups.get(o.material);
     if (!list) outlineGroups.set(o.material, (list = []));
     list.push({ outline: o, surface: o });

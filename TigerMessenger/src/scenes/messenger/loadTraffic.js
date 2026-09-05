@@ -12,7 +12,7 @@ import {
   citadelTerrainKey,
   citadelTerrainObjectsKey,
 } from "../../world/odysseyCitadel.js";
-import { CANAL_JUNCTION_TOWN_SPEC, citadelLevelsKey } from "../../world/citadelTown.js?v=20260904-sun-rig-v1";
+import { CANAL_JUNCTION_TOWN_SPEC, citadelLevelsKey } from "../../world/citadelTown.js?v=20260905-wfc-wire-v1";
 import {
   waterCityCanalWaypointDir,
   waterCityShoreAng,
@@ -288,10 +288,10 @@ export function loadAbandonedGateBlock({ scene, R, tramSystem, flock, canyonDir 
     if (flock?.root) flock.root.visible = true;
   }
 
-  // 叹息之门泡形飞行器 ×3：挂在 seatRoot 下，搬门时跟着走
-  const gatePods = mountGatePodCraft(abandonedGate);
-  // 重型运输艇 ×3：停低位、贴夹道，与高处的侦察艇错开
-  const gateHaulers = mountGateHaulerCraft(abandonedGate);
+  // 叹息之门泡形飞行器：苔庭之战要带走 3 台随莫比斯机队参战，门口留 2 台布景
+  const gatePods = mountGatePodCraft(abandonedGate, { count: 2 });
+  // 重型运输艇 ×3 全部随莫比斯机队参加苔庭之战（气垫贴海进场），门口不再停
+  const gateHaulers = null;
 
   return { abandonedGate, gateBirdVortex, gatePods, gateHaulers };
 }

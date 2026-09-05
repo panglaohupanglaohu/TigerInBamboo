@@ -80,6 +80,7 @@ m.rebuildCitadelTownIncremental(castle, spec, allCells, { debounceMs: 400 });
 
 const A = collectExtractKeys(castle);
 castle.update?.(1);
+castle.update?.(0.016);
 
 const B = collectFaceKeys(castle);
 const onlyA = [...A].filter((k) => !B.has(k));

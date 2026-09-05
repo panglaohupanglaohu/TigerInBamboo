@@ -26,7 +26,8 @@ import {
   resolveCitadelDropTarget,
   citadelGridCellCenter,
   citadelLevelsKey,
-} from "../world/citadelTown.js?v=20260904-sun-rig-v1";
+} from "../world/citadelTown.js?v=20260905-wfc-wire-v1";
+import { citadelColumnCenter, citadelLocalToColumn } from "../world/citadel/gridMigration.js";
 import {
   citadelLevelsSaveKey,
   loadCitadelLevelsSave,
@@ -2296,18 +2297,37 @@ export function createCitadelEditorPanel({
   }
 
   /** 格中心在 level 组局部坐标（未含 townBaseY 抬升，由调用方按参考组变换）。 */
-  function cellCenter(ix, iy, iz) {
-    const { cols } = gridDims();
-    return citadelGridCellCenter(ix, iy, iz, CELL, CELL_H, cols);
+  function gridV6Of() {
+    return getCitadelTarget?.()?.userData?.gridV6 ?? null;
   }
 
-  /** level 组局部 x/z → 格坐标（越界返回 null）。 */
+  function cellCenter(ix, iy, iz) {
+    const { cols } = gridDims();
+    const gridV6 = gridV6Of();
+    const y = citadelGridCellCenter(ix, iy, iz, CELL, CELL_H, cols).y;
+    const c = citadelColumnCenter(ix, iz, {
+      quad: gridV6?.quad ?? null,
+      mapping: gridV6?.mapping ?? null,
+      cellSize: CELL,
+      gridSize: cols,
+    });
+    if (!c) return citadelGridCellCenter(ix, iy, iz, CELL, CELL_H, cols);
+    return { x: c.x, y, z: c.z, faceId: c.faceId };
+  }
+
+  /** level 组局部 x/z → 格坐标（越界 / 不在 face 内返回 null）。 */
   function cellAtLocal(x, z, iy) {
-    const { cols, rows } = gridDims();
-    const ix = Math.round(x / CELL + (cols - 1) / 2);
-    const iz = Math.round(z / CELL + (rows - 1) / 2);
-    if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return null;
-    return { ix, iy, iz };
+    const { cols } = gridDims();
+    const gridV6 = gridV6Of();
+    const hit = citadelLocalToColumn(x, z, {
+      quad: gridV6?.quad ?? null,
+      mapping: gridV6?.mapping ?? null,
+      cellSize: CELL,
+      gridSize: cols,
+    });
+    if (!hit) return null;
+    if (hit.ix < 0 || hit.ix > MAX_COORD || hit.iz < 0 || hit.iz > MAX_COORD) return null;
+    return { ix: hit.ix, iy, iz: hit.iz, faceId: hit.faceId };
   }
 
   /**

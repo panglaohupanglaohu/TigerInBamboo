@@ -29,7 +29,7 @@ if (!fs.existsSync(bridgePkg)) {
 }
 globalThis.window = { innerWidth: 1280, innerHeight: 720, addEventListener() {}, removeEventListener() {}, requestAnimationFrame() {}, matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }) };
 const stubEl = () => ({ style: {}, classList: { add() {}, remove() {}, toggle() {}, contains: () => false }, textContent: "", appendChild() {}, addEventListener() {}, querySelector: () => stubEl(), querySelectorAll: () => [] });
-const stubCanvas = () => { const el = stubEl(); el.width = 64; el.height = 64; el.getContext = () => ({ canvas: el, fillRect() {}, clearRect() {}, measureText: () => ({ width: 6 }), createLinearGradient: () => ({ addColorStop() {} }), fillText() {}, drawImage() {}, getImageData: () => ({ data: new Uint8ClampedArray(4) }), putImageData() {} }); el.toDataURL = () => ""; return el; };
+const stubCanvas = () => { const el = stubEl(); el.width = 64; el.height = 64; el.getContext = () => ({ canvas: el, fillRect() {}, clearRect() {}, measureText: () => ({ width: 6 }), createLinearGradient: () => ({ addColorStop() {} }), createRadialGradient: () => ({ addColorStop() {} }), fillText() {}, drawImage() {}, getImageData: () => ({ data: new Uint8ClampedArray(4) }), putImageData() {} }); el.toDataURL = () => ""; return el; };
 globalThis.document = { createElement: (t) => String(t).toLowerCase() === "canvas" ? stubCanvas() : stubEl(), createElementNS: (_n, t) => String(t).toLowerCase() === "canvas" ? stubCanvas() : stubEl(), getElementById: () => stubEl(), querySelector: () => stubEl(), querySelectorAll: () => [], body: { appendChild() {} }, addEventListener() {} };
 globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
 
@@ -70,14 +70,14 @@ const tr = createVanguardTrooper();
   console.log(`  单兵：${tris} 三角 · 身高 ${size.y.toFixed(2)} · 刀长 ${bladeLen.toFixed(2)}`);
 }
 
-// ---- ② 中队 20 人
+// ---- ② 中队 22 人（2026-09-05 修订：20 战斗 + 2 看护留守飞行器）
 const squad = createVanguardSquad();
-assert.equal(VANGUARD_SQUAD_SIZE, 20, "用户要 20 个");
-assert.equal(squad.userData.troopers.length, 20, `中队应 20 人，实得 ${squad.userData.troopers.length}`);
-assert.equal(vanguardAliveCount(squad), 20);
+assert.equal(VANGUARD_SQUAD_SIZE, 22, "2026-09-05 修订：3泡机×2索降 + 3艇×6卸载（6/6/4），总 22 = 20 战斗 + 2 看护");
+assert.equal(squad.userData.troopers.length, 22, `中队应 22 人，实得 ${squad.userData.troopers.length}`);
+assert.equal(vanguardAliveCount(squad), 22);
 {
   const uids = new Set(squad.userData.troopers.map((t) => t.userData.uid));
-  assert.equal(uids.size, 20, "每人一个独立 uid");
+  assert.equal(uids.size, 22, "每人一个独立 uid");
   // 战斗账互相独立
   applyVanguardHit(squad.userData.troopers[0], "arrow");
   assert.equal(squad.userData.troopers[0].userData.arrowHits, 1);
@@ -208,4 +208,4 @@ assert.equal(vanguardAliveCount(squad), 20);
   assert.deepEqual(a.max.toArray().map((v) => v.toFixed(6)), b.max.toArray().map((v) => v.toFixed(6)));
 }
 
-console.log(`✅ test_vanguard_trooper（20 人 · 箭 ${VANGUARD_COMBAT.arrowsPerWound} / 标枪 ${VANGUARD_COMBAT.javelinsPerWound} 伤一次 · 刀 ${VANGUARD_COMBAT.bladeHitsPerWound} / 枪 ${VANGUARD_COMBAT.boltHitsPerWound} 伤士兵 · 伴飞→落地）`);
+console.log(`✅ test_vanguard_trooper（22 人 = 20 战斗 + 2 看护 · 箭 ${VANGUARD_COMBAT.arrowsPerWound} / 标枪 ${VANGUARD_COMBAT.javelinsPerWound} 伤一次 · 刀 ${VANGUARD_COMBAT.bladeHitsPerWound} / 枪 ${VANGUARD_COMBAT.boltHitsPerWound} 伤士兵 · 落地贴地）`);

@@ -35,7 +35,8 @@ import {
   CITADEL_TOWN_SPEC,
   HIGHLAND_TOWNSCAPER_TOWN_SPEC,
   citadelGridCellCenter,
-} from "./world/citadelTown.js?v=20260904-sun-rig-v1";
+} from "./world/citadelTown.js?v=20260905-wfc-wire-v1";
+import { citadelColumnCenter } from "./world/citadel/gridMigration.js";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P, FEATURES, isOskLightingV1, isVoxelAoV1, isLocalLightBudgetV1 } from "./core/params.js";
 import { createMiniBloom } from "./render/postprocessing/miniBloom.js";
@@ -954,9 +955,19 @@ function citadelSupportAt(ix, iz, terraceIndex = 0) {
   }
   // Pure canonical transform: safe even while the panel is still being
   // constructed, and exactly identical to both the 2D map and 3D generator.
-  const c = citadelGridCellCenter(ix, 0, iz);
+  const gridV6 = citadel.userData?.gridV6;
+  const c = citadelColumnCenter(ix, iz, {
+    quad: gridV6?.quad ?? null,
+    mapping: gridV6?.mapping ?? null,
+    cellSize: CITADEL_TOWN_SPEC.cellSize,
+    gridSize: citadel.userData?.townSpec?.gridSize,
+  });
   const contour = citadel.userData?.contourSpec;
   if (!contour) return -1;
+  if (!c) {
+    citadelSupportCache.set(key, -1);
+    return -1;
+  }
   // 格级承重：瀑布缺口边缘格的中心可能落在被切掉的扇区里，
   // 但格体仍坐在台地顶面上——任一角点（格半宽处）支撑即允许放置。
   const level = citadelTerrainCellSupported(
@@ -964,7 +975,7 @@ function citadelSupportAt(ix, iz, terraceIndex = 0) {
     c.x,
     c.z,
     terraceIndex,
-    CITADEL_TOWN_SPEC.cellSize * 0.5
+    c.inradius
   )
     ? 0
     : -1;
@@ -1739,4 +1750,5 @@ window.__tm = {
   g8Debug, // V6-G8 调试层叠图（验收/调试用，默认空层零开销）
   lightingPresetInfo, // V6-G11 光照参数包加载状态（?lightingPreset=grok-v1）
   touchControls,
+  messenger, // messengerIsland 场景句柄（含 vanguardAssault：苔庭之战任务，验收可驱动）
 };

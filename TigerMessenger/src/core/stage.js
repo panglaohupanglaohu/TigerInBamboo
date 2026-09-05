@@ -2,6 +2,7 @@
 //  场景 / 相机 / 渲染器
 // =====================================================================
 import * as THREE from "three";
+import { P } from "./params.js";
 
 export function createStage() {
   const scene = new THREE.Scene();
@@ -19,7 +20,14 @@ export function createStage() {
   camera.layers.enable(1); // 斯瓦尔博娃圣城光照层
   camera.position.set(0, 50, 20);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  // 模板缓冲：three r163 起 `stencil` 默认 **false**（早年默认 true）。
+  // 不申请就没有模板位，`stencilWindows.js` 写的模板状态全部空转——
+  // 2026-09-05 实测：现网写法 gl.STENCIL_BITS = 0，加上这一行才是 8。
+  // 只在挖窗开关打开时申请，关着的时候不为它付带宽。
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    stencil: P.stencilWindowsV1 === true,
+  });
   renderer.setSize(window.innerWidth, window.innerHeight);
   // 性能（2026-08-28）：像素比上限 2 → 1.5。Retina 下 fragment 成本约减半，
   // Toon 平涂 + 描边风格在 1.5 倍下几乎无视觉差；4751 draw calls 的场景

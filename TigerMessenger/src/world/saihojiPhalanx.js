@@ -41,6 +41,7 @@ import {
   applyVanguardHit,
   updateVanguardCombat,
   deployVanguardSquad,
+  createBoltArcFx,
   VANGUARD_COMBAT,
 } from "./vanguardTrooper.js";
 
@@ -99,6 +100,8 @@ const MELEE_COOLDOWN = 1.15; // 近战出手间隔（秒）
 const STAGGER_ARROW = 2;
 const STAGGER_MELEE = 1;
 const KILL_ARROW = 4;
+// 近战击杀阈值（红盔内战：1 瘫 2 死）。先锋兵武器走专用点数：
+// 闪电枪 "vanguardBolt"（+2，2 枪毙命）/ 激光剑 "pike"（+2，1 剑毙命）。
 const KILL_MELEE = 2;
 const HIGHGROUND_SHOT_FACTOR = 0.72; // 居高射箭冷却倍率（<1 = 更快）
 
@@ -120,6 +123,11 @@ const _toolAimQ = new THREE.Quaternion();
 
 function hubDir(out = new THREE.Vector3()) {
   return latLonToDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, out);
+}
+
+/** 苔庭方向（模块级，供 updateIsland 的湖沼受击回调使用） */
+export function saihoujiHubDir(out = new THREE.Vector3()) {
+  return hubDir(out);
 }
 
 function surfaceBasis(dir, face, outUp, outFwd, outRight) {
@@ -311,6 +319,8 @@ export function createSaihojiPhalanxBattle({
   getSquad,
   /** 先锋重甲兵中队（随莫比斯 aircraft 出行，落地后参战）。返回 vanguard-squad 根节点 */
   getVanguards = null,
+  /** 先锋兵到场—作战—撤离任务状态机（vanguardAssault）。给了就不走旧的瞬时落地 */
+  vanguardAssault = null,
   getTram,
   oldHarbor = null,
   getOldHarbor = null,
@@ -885,6 +895,19 @@ export function createSaihojiPhalanxBattle({
       if (trail?.material) trail.material.opacity = 0.1 + 0.2 * Math.sin(p * Math.PI);
       const trailCore = a.getObjectByName?.("arrow-trail-core");
       if (trailCore?.material) trailCore.material.opacity = 0.28 + 0.18 * Math.sin(p * Math.PI);
+      // 代差感（主人 2026-09-05）：飞向先锋重甲兵的箭，大半在空中就被击碎——
+      // 重甲对冷兵器不是"挨不挨得住"，是"根本近不了身"。
+      if (
+        !u.deflected && p >= 0.78 && ac?.parent &&
+        ac.userData.unitClass === "vanguard-trooper" && rand() < 0.55
+      ) {
+        u.deflected = true;
+        u.miss = 0.01;
+        spawnSpark(a.position);
+        root.userData.vanguardDeflects = (root.userData.vanguardDeflects || 0) + 1;
+        logEvent("vanguardDeflect", { by: "arrow", uid: ac.userData.uid ?? 0, midair: true });
+        continue;
+      }
       if (p < 1) continue;
       // 落地判定：命中判定圈 = 成员半径（散布+滞后决定脱靶率）
       const tip = a.position.clone();
@@ -893,6 +916,19 @@ export function createSaihojiPhalanxBattle({
       // 沿用 4.8 会变成"箭射到旁边也算中"，20 箭一次损伤的口径就名存实亡。
       const hitR = ac?.userData?.unitClass === "vanguard-trooper" ? 1.1 : 4.8;
       if (ac?.parent && tip.distanceTo(acPos) < hitR) {
+        if (ac.userData.unitClass === "vanguard-trooper") {
+          // 重甲代差：箭在甲面碎裂，从不钉进装甲。20 箭 = 1 次损伤的口径不变。
+          u.miss = 0.01;
+          spawnSpark(tip);
+          root.userData.vanguardDeflects = (root.userData.vanguardDeflects || 0) + 1;
+          logEvent("vanguardDeflect", { by: "arrow", uid: ac.userData.uid ?? 0, contact: true });
+          const r = applyVanguardHit(ac, "arrow");
+          if (r.wounded) {
+            root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
+            logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "arrow", life: r.life, dead: r.dead });
+          }
+          continue;
+        }
         if (ac.userData.phalanxRole && shieldBlocksArrow(ac)) {
           // Bad North 盾挡箭：箭在盾面弹开、沿径向坠落，不计伤害
           u.miss = 0.01;
@@ -912,7 +948,12 @@ export function createSaihojiPhalanxBattle({
             root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
             logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "arrow", life: r.life, dead: r.dead });
           }
-        } else ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1; // 机队成员
+        } else {
+          ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1; // 机队成员
+          // 舰队受击警报（主人 2026-09-05）：红盔攻击莫比斯 aircraft → 泡机/艇/重甲兵
+          // 全员立即参战，攻击打击机队的士兵
+          vanguardAssault?.onFleetUnderAttack?.(ac, hubDir(_tmp).clone());
+        }
         spawnSpark(tip);
         if (rand() < 0.5) spawnSmoke(tip);
       } else {
@@ -1025,23 +1066,50 @@ export function createSaihojiPhalanxBattle({
       j.quaternion.setFromUnitVectors(_axisX, _jvTmpB);
       const trail = j.getObjectByName?.("javelin-trail");
       if (trail?.material) trail.material.opacity = 0.25 + 0.3 * Math.sin(p * Math.PI);
-      if (p < 1) continue;
+      if (p < 1) {
+        // 标枪也会在半空被先锋兵的重甲/力场击碎（火更大，代差感更狠）
+        if (
+          !u.deflected && p >= 0.8 && ac?.parent &&
+          ac.userData.unitClass === "vanguard-trooper" && rand() < 0.4
+        ) {
+          u.deflected = true;
+          u.miss = 0.01;
+          spawnSpark(j.position);
+          if (rand() < 0.5) spawnSmoke(j.position);
+          root.userData.vanguardDeflects = (root.userData.vanguardDeflects || 0) + 1;
+          logEvent("vanguardDeflect", { by: "javelin", uid: ac.userData.uid ?? 0, midair: true });
+        }
+        continue;
+      }
       const tip = j.position.clone();
       const acPos = _sparkTmp.clone();
       const jHitR = ac?.userData?.unitClass === "vanguard-trooper" ? 1.2 : 5.0;
       if (ac?.parent && tip.distanceTo(acPos) < jHitR) {
-        ac.attach(j);
-        u.stuck = true;
-        u.wobble = 1.8 + rand() * 0.8;
-        j.scale.setScalar(0.95 + rand() * 0.2);
         if (ac.userData.unitClass === "vanguard-trooper") {
-          // 先锋兵：10 标枪才算一次损伤
+          // 重甲代差：标枪砸在装甲上弹碎，从不钉进去。10 支 = 1 次损伤口径不变。
+          u.miss = 0.01;
+          spawnSpark(tip);
+          if (rand() < 0.6) spawnSmoke(tip);
+          root.userData.vanguardDeflects = (root.userData.vanguardDeflects || 0) + 1;
+          logEvent("vanguardDeflect", { by: "javelin", uid: ac.userData.uid ?? 0, contact: true });
           const r = applyVanguardHit(ac, "javelin");
           if (r.wounded) {
             root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
             logEvent("vanguardWound", { uid: ac.userData.uid ?? 0, by: "javelin", life: r.life, dead: r.dead });
           }
-        } else ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
+          continue;
+        }
+        ac.attach(j);
+        u.stuck = true;
+        u.wobble = 1.8 + rand() * 0.8;
+        j.scale.setScalar(0.95 + rand() * 0.2);
+        if (ac.userData.phalanxRole) {
+          ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1; // 原行为：士兵扛标枪按箭账
+        } else {
+          // 舰队受击警报（主人 2026-09-05）：标枪命中莫比斯 aircraft → 全员参战
+          ac.userData.arrowHits = (ac.userData.arrowHits || 0) + 1;
+          vanguardAssault?.onFleetUnderAttack?.(ac, hubDir(_tmp).clone());
+        }
         spawnSpark(tip);
         if (rand() < 0.6) spawnSmoke(tip);
       } else {
@@ -2363,7 +2431,9 @@ export function createSaihojiPhalanxBattle({
   function applySoldierDamage(s, kind) {
     if (!s || s.userData.dead) return;
     if (kind === "arrow") s.userData.arrowHits = (s.userData.arrowHits || 0) + 1;
-    else s.userData.meleeHits = (s.userData.meleeHits || 0) + (kind === "pike" ? 2 : 1);
+    // vanguardBolt：先锋兵闪电枪光圈（主人 2026-09-05：2 枪毙命口径——
+    // strikeLands 2 枪才报 1 次 wound，此处一次 wound 记 2 点近战 ≥ KILL_MELEE 即死）
+    else s.userData.meleeHits = (s.userData.meleeHits || 0) + (kind === "pike" || kind === "vanguardBolt" ? 2 : 1);
     const ah = s.userData.arrowHits || 0;
     const mh = s.userData.meleeHits || 0;
     if (ah >= KILL_ARROW || mh >= KILL_MELEE) {
@@ -3503,29 +3573,65 @@ export function createSaihojiPhalanxBattle({
         fireArrow(s, tgt);
       }
     }
-    // ---------- 先锋兵落地：鲸起 + 方阵成形 = 苔庭之战开打 ----------
-    // 落地点取苔庭中枢方向的地表；落一次就不再落（state 从 aboard 变 deployed）。
-    if (vanguardRoot && vanguardRoot.userData.state === "aboard" && whaleUp && fightFormed) {
+    // ---------- 先锋兵到场：鲸起 + 方阵成形 = 苔庭之战开打 ----------
+    // 2026-09-05：不再瞬移落地。先锋兵由 vanguardAssault 状态机护送到场——
+    // 3 台 GatePodCraft 索降 6 名 + SOCCO 运输艇贴海送 14 名，逐人采样苔庭地表落地。
+    // 落地半径、战斗推进、绳索撤离全归它管；这里只负责扣响发令枪。
+    root.userData.groundHeightAt = groundHeightAt;
+    root.userData.getDefenders = () => shooters.filter((s) => s?.parent && !s.userData?.dead);
+    root.userData.spawnSmoke = spawnSmoke; // 灰烬/麻醉雾复用现成烟池
+    if (vanguardRoot && whaleUp && fightFormed &&
+        (vanguardRoot.userData.state === "aboard" || vanguardRoot.userData.state === "done")) {
+      // 2026-09-05：done（巡演收队）后再次鲸起也能重新触发
       const hd = hubDir(_tmp).clone();
-      const gr = groundHeightAt(hd) ?? PLANET_RADIUS + 0.3;
-      deployVanguardSquad(vanguardRoot, hd, gr + 0.05);
+      if (vanguardAssault?.begin) {
+        vanguardAssault.begin(hd);
+      } else {
+        // 无突击模块（如 V3 后端）：退回旧的瞬时落地（已修球面浮高）
+        const gr = groundHeightAt(hd) ?? PLANET_RADIUS + 0.3;
+        deployVanguardSquad(vanguardRoot, hd, gr + 0.05);
+      }
       logCommand("vanguardDeploy");
     }
 
-    // ---------- 先锋兵反击：激光刀 1 刀 / 闪电枪 2 枪 损伤一名普通士兵 ----------
+    // ---------- 先锋兵反击：激光刀 1 刀（先破盾）/ 闪电炮光圈 2 炮 损伤目标 ----------
     // 只做"够不够一次损伤"的判定；真正扣血仍走 applySoldierDamage，
     // 瘫倒/击杀阈值与事件日志只有它知道，不在这里另开第二套账。
-    if (vanguardTroopers.length && shooters.length) {
+    // 主人 2026-09-05：巡演站的非保护生物也进打击池（闪电枪 2 枪/激光剑 1 剑毙命）。
+    const tourTargets = vanguardAssault?.tourTargets?.() || [];
+    if (vanguardTroopers.length && (shooters.length || tourTargets.length)) {
+      let boltFx = root.userData.__boltFx || null;
+      if (!boltFx) {
+        boltFx = createBoltArcFx();
+        root.userData.__boltFx = boltFx;
+        scene.add(boltFx.root);
+      }
+      boltFx.update(dt);
       const vs = updateVanguardCombat(vanguardRoot, dt, t, {
-        soldiers: shooters,
+        soldiers: shooters.concat(tourTargets),
+        // 主人 2026-09-05：谁在打莫比斯机队就先瞄准谁、面对谁、近战谁
+        prefer: vanguardAssault?.threatTargets?.() || [],
         onWound: (soldier, weapon) => {
-          applySoldierDamage(soldier, weapon === "blade" ? "pike" : "melee");
+          // 主人 2026-09-05 口径：激光剑 1 剑毙命（pike +2）/ 闪电枪 2 枪毙命
+          //（vanguardBolt +2：strikeLands 已按 2 枪折 1 次 wound，此处一次 wound 直接致死）
+          applySoldierDamage(soldier, weapon === "blade" ? "pike" : "vanguardBolt");
           root.userData.vanguardKills = (root.userData.vanguardKills || 0) + (soldier.userData.dead ? 1 : 0);
           logEvent("vanguardStrike", {
             target: soldier.userData.uid ?? 0,
             weapon,
             dead: !!soldier.userData.dead,
           });
+        },
+        // 闪电炮放电弧光（充电→放电的"悬念"可视化）
+        onBoltArc: (from, to) => boltFx.spawn(from, to),
+        // 激光刀劈盾：盾网格当场消失——普通盾牌对激光刀等于没有（代差感）
+        onShieldBroken: (soldier) => {
+          const sh = soldier?.userData?.equipment?.shield;
+          if (sh) sh.visible = false;
+          soldier.userData.shieldBroken = true;
+          root.userData.vanguardShieldBreaks = (root.userData.vanguardShieldBreaks || 0) + 1;
+          logEvent("vanguardShieldBreak", { target: soldier.userData.uid ?? 0 });
+          spawnSpark(soldier.getWorldPosition(new THREE.Vector3()));
         },
       });
       root.userData.vanguardBladeSwings = (root.userData.vanguardBladeSwings || 0) + vs.blade;

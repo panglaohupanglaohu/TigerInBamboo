@@ -258,7 +258,9 @@ export const messengerIslandScene = {
       planetRadius: R,
       seed: 9101,
       yaw: 0.6,
-      footprint: { rx: 9.2, rz: 5.8, segments: 28 },
+      // 主人 2026-09-05：苔庭整体空间 ×2（rx 9.2→18.4 / rz 5.8→11.6），
+      // 分段 28→48 保住地形细节密度
+      footprint: { rx: 18.4, rz: 11.6, segments: 48 },
       heightScale: 0.55,
       // 主人验收 2026-08-29：苔庭降到刚露出海面（海 0.72 → 盘面 ≈+0.6），
       // 士兵涉水仅踝深；原 3.2 令周边士兵腰深泡在海里
@@ -419,6 +421,7 @@ export const messengerIslandScene = {
       platforms,
       clouds,
       tramSystem,
+      vanguardAssault: combatPack.vanguardAssault, // 控制台可经 __tm 句柄驱动验收
       canalBoats: traffic.canalBoats,
       waterRouteFleet: traffic.waterRouteFleet,
       canalSys: traffic.canalSys,
@@ -436,6 +439,7 @@ export const messengerIslandScene = {
       scoutDefense,
       saihojiPhalanx: combatPack.saihojiPhalanx,
       vanguardSquad: combatPack.vanguardSquad, // 先锋重甲兵中队
+      vanguardAssault: combatPack.vanguardAssault, // 到场—作战—撤离任务状态机
       combatPack,
       airship: skyPack.airship,
       airshipAnchor: skyPack.airshipAnchor,
@@ -459,6 +463,7 @@ export const messengerIslandScene = {
       moonLake,
       colliders,
       landmarks: messengerLandmarks,
+      vanguardAssault: combatPack.vanguardAssault, // 苔庭之战任务（调试/验收可驱动）
       update(dt, t, runtime) {
         updateMessengerIsland(state, dt, t, runtime);
       },

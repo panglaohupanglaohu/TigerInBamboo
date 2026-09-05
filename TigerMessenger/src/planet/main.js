@@ -30,7 +30,8 @@ const camera = new THREE.PerspectiveCamera(
   500
 );
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+// 模板缓冲：见 src/core/stage.js 的同名注释（three r163 起默认 false）
+const renderer = new THREE.WebGLRenderer({ antialias: true, stencil: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;

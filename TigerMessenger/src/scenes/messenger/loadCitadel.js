@@ -20,7 +20,7 @@ import {
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
 } from "../../world/odysseyCitadel.js?v=20260903-merged-patch-v1";
-import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260904-sun-rig-v1";
+import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260905-wfc-wire-v1";
 
 import { loadCitadelLevelsSave } from "../../world/citadelLevelsSave.js";
 import { OFFICIAL_OCEAN_SEA_LEVEL, HIGHLAND_CASTLE_SEA_DROP } from "../../world/waterV8/officialOcean.js";
@@ -30,6 +30,8 @@ import {
 } from "../../world/citadelTerraceBirds.js?v=20260823-citadel-reference-v2";
 import { createSaihojiPhalanxBattle } from "../../world/saihojiPhalanx.js?v=20260904-shared-projectile-assets-v1";
 import { createVanguardSquad } from "../../world/vanguardTrooper.js";
+import { createVanguardAssault } from "../../world/vanguardAssault.js";
+import { createSoccoCraft } from "../../world/gateHaulerCraft.js";
 import { isCitadelCombatV3 } from "../../core/params.js";
 import { createHarborLandingSample, selectCombatBackend } from "../../agents/citadel/combatSample.js";
 import {
@@ -283,7 +285,55 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
   vanguardSquad.name = "vanguard-squad";
   scene.add(vanguardSquad);
 
-  const saihojiPhalanx = useV3
+  // gateHaulerCraft 气垫运输艇 ×3（先锋兵专属）：贴海进场 → 苔庭附近海面开
+  // 尾门放出重甲兵（每艇 6 名，实载 6/6/4）→ 撤离时苔庭上空收绳 → 贴海离场。
+  // 原本停在叹息之门的三艘全部随队参战（门口不再停运兵艇）。
+  const vanguardHaulers = [0, 1, 2].map((i) => {
+    const c = createSoccoCraft();
+    c.name = `vanguard-hauler-${i}`;
+    c.visible = false; // 开局不出场，vanguardAssault.begin 时才压到进场起点
+    scene.add(c);
+    return c;
+  });
+
+  // 先锋兵突击任务状态机：到场（索降+卸兵）→ 三三制推进 → 闪电炮/激光刀作战 → 绳索撤离
+  let saihojiPhalanx = null; // 改 let：突击模块要懒取 phalanx 暴露的苔庭地表采样
+  const vanguardAssault = createVanguardAssault({
+    scene,
+    squad: vanguardSquad,
+    R,
+    getPods: () => aircraftSquad?.userData?.gatePodEscort?.children || [],
+    getHaulers: () => vanguardHaulers,
+    getFleet: () => aircraftSquad || null,
+    getGroundHeightAt: () => saihojiPhalanx?.userData?.groundHeightAt || null,
+    getDefenders: () => saihojiPhalanx?.userData?.getDefenders?.() || [],
+    getSpawnSmoke: () => saihojiPhalanx?.userData?.spawnSmoke || null,
+    // 巡演下一站：湖沼（moebius-swamp）。湖沼之虎与红狐受保护（白名单），
+    // 其余生物一旦登记进可打清单即会被扫描光线/麻醉炮/重甲兵攻击
+    getTourAnchor: () => {
+      let sw = null;
+      scene.traverse((o) => { if (!sw && o.userData?.kind === "moebius-swamp") sw = o; });
+      return sw ? sw.position.clone().normalize() : null;
+    },
+    getTourTargets: () => {
+      // 白名单：湖沼之虎（swampTiger）、红狐（fox-ali）永不成为目标。
+      // 目前湖沼暂无其它战斗生物登记 → 返回空（框架就绪，新生物加入即自动参战）。
+      const protectedNames = /tiger|swamp-tiger|fox-ali/i;
+      const list = [];
+      scene.traverse((o) => {
+        if (!o.parent || o.userData?.dead) return;
+        if (!o.userData?.combatant && !o.userData?.wildCreature) return;
+        if (o.userData.faction === "moebius") return;   // 舰队自身单位
+        if (protectedNames.test(o.name || "")) return;  // 白名单
+        if (o.userData.unitClass === "vanguard-trooper") return;
+        list.push(o);
+      });
+      return list;
+    },
+  });
+  scene.add(vanguardAssault.root);
+
+  const saihojiPhalanxBattle = useV3
     ? null
     : createSaihojiPhalanxBattle({
         scene,
@@ -293,6 +343,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
         },
         getSquad: () => aircraftSquad,
         getVanguards: () => vanguardSquad,
+        vanguardAssault,
         getTram: () => tramSystem,
         oldHarbor: harborBuilt || harbor,
         getTimeOfDay: () => P.timeOfDay,
@@ -302,6 +353,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
         seed: FEATURES.combatSeed,
         events: createCombatEventLog({ seed: FEATURES.combatSeed, scenario: "siege" }),
       });
+  saihojiPhalanx = saihojiPhalanxBattle;
   let paperLanding = null;
   if (useV3 && v4Runtime?.v4) {
     paperLanding = createHarborLandingSample(v4Runtime.v4, { seed: FEATURES.combatSeed });
@@ -364,7 +416,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
     console.info(`[citadelCombatV2] 战术导航图就绪：${JSON.stringify(tacticalGraph.stats())}`);
   }
 
-  return { saihojiPhalanx, vanguardSquad, paperLanding, tacticalGraph, tacticalGraphView, collectCastleGates, tgState };
+  return { saihojiPhalanx, vanguardSquad, vanguardAssault, vanguardHaulers, paperLanding, tacticalGraph, tacticalGraphView, collectCastleGates, tgState };
 }
 
 export function tickTacticalGraph(pack, dt) {

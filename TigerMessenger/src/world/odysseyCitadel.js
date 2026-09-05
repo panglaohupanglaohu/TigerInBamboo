@@ -12,6 +12,7 @@ import {
   SVARBOVA_OUTLINE_THICKNESS,
 } from "../assets/toon.js";
 import { mergeStaticGroup } from "./geometryMerge.js";
+import { isDecorName } from "./citadel/decoratePass.js";
 import { dropCellsFromMerged, mergedTriangleCount } from "./citadel/mergedCellPatch.js";
 import { createCitadelWatchtower } from "../assets/citadelWatchtower.js";
 import { createCitadelElderTree } from "../assets/citadelElderTree.js";
@@ -63,6 +64,7 @@ import {
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
   CITADEL_CASTLE_FLOORS,
+  CITADEL_GRID_SIZE,
   TOWNSCAPER_CANAL_PALETTE,
   TOWNSCAPER_CANAL_GATE_COLOR,
   TOWNSCAPER_HIGHLAND_PALETTE,
@@ -71,7 +73,9 @@ import {
   TOWNSCAPER_MODULE_FAMILIES,
   citadelPaletteIndexOfChar,
   citadelShadeStep,
-} from "./citadelTown.js?v=20260904-sun-rig-v1";
+} from "./citadelTown.js?v=20260905-wfc-wire-v1";
+import { citadelColumnCenter, createCitadelGridV6 } from "./citadel/gridMigration.js";
+import { applyStencilWindows } from "../render/stencilWindows.js";
 import {
   sunElevationForPhase,
   nightFactor,
@@ -1323,6 +1327,53 @@ const citadelTownIncrementalMergeSkip = (mesh) =>
   mesh.userData.terrainObjectId != null ||
   mesh.name?.startsWith("contour-step-");
 
+function isTownDecorMesh(mesh) {
+  if (!mesh) return false;
+  if (mesh.userData?.mergedDecor === true) return true;
+  if (isDecorName(mesh.name)) return true;
+  for (let n = mesh.parent, i = 0; n && i < 8; n = n.parent, i++) {
+    if (isDecorName(n.name)) return true;
+  }
+  return false;
+}
+
+/**
+ * C8 滞后合并：phase "body" 跳过装饰，"decor" 只收装饰。
+ * 全量 mergeCitadelTownStatic 仍一次收齐（入场时城应是完成态）。
+ */
+function mergeCitadelTownLevels(levels, phase) {
+  const skip = (mesh) => {
+    if (citadelTownIncrementalMergeSkip(mesh)) return true;
+    const decor = isTownDecorMesh(mesh);
+    return phase === "body" ? decor : !decor;
+  };
+  const skipOutline = (outline, surface) => {
+    const decor = isTownDecorMesh(surface) || outline.userData?.mergedDecor === true;
+    return phase === "body" ? decor : !decor;
+  };
+  const tag = (merged) => {
+    if (phase === "decor") merged.userData.mergedDecor = true;
+  };
+  let surfaces = 0;
+  for (const level of levels) {
+    if (!level) continue;
+    const report = mergeStaticGroup(level, {
+      skip,
+      skipOutline,
+      onSurface: (merged, mat, segs, start) => {
+        citadelTownMergeOnSurface(merged, mat, segs, start);
+        tag(merged);
+      },
+      onOutline: (merged, mat, sources, start, segs) => {
+        citadelTownMergeOnOutline(merged, mat, sources, start, segs);
+        tag(merged);
+      },
+    });
+    surfaces += report.surfaces.length;
+  }
+  return surfaces;
+}
+
 /**
  * 采集面区间 → 格归属。覆盖面必须与增量第 2 步摘旧网格的判据逐字一致
  * （cell / townModule / cells），认领得比摘除得少，差集就会在合并块里留一份、
@@ -1369,6 +1420,12 @@ const citadelSegmentIsDirty = (dirty) => (seg) => {
   if (seg.cells) return seg.cells.some((key) => dirty.has(key));
   return false;
 };
+
+function applyCitadelStencilPass(root) {
+  root?.userData?.stencilWindowCleanup?.();
+  if (P.stencilWindowsV1 !== true || !root) return;
+  applyStencilWindows(root, THREE, { enabled: true });
+}
 
 export function mergeCitadelTownStatic(assemblyRoot) {
   // 幂等：先移除上次合并产生的网格（仅 town 层组的 mergedGeometry===true；
@@ -1762,6 +1819,11 @@ export function buildCitadelTownAssembly(spec, options = {}) {
 
   const town = buildCitadelTown(spec, {
     leanDecor: options.leanDecor === true,
+    skipDecor: options.skipDecor === true,
+    townCtxCache: options.townCtxCache ?? null,
+    wfcTownV1: options.wfcTownV1,
+    wfcSeed: options.wfcSeed ?? options.seed ?? 1,
+    gridV6: options.gridV6 ?? null,
     colorful: townscaperMode,
     mesh,
     materials: {
@@ -1883,6 +1945,8 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     courtyardWallCount: 0,
     courtyardWellCount: 0,
     moduleCount: 0,
+    cornerPartCount: 0,
+    wfcTown: { enabled: false, ok: false },
     moduleFamilyCounts: Object.fromEntries(
       Object.keys(TOWNSCAPER_MODULE_FAMILIES).map((family) => [family, 0])
     ),
@@ -1928,6 +1992,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     for (const [key, value] of Object.entries(assembly.stats)) {
       if (typeof value === "number" && typeof stats[key] === "number") stats[key] += value;
     }
+    if (assembly.stats.wfcTown?.enabled) stats.wfcTown = assembly.stats.wfcTown;
     for (const [family, count] of Object.entries(assembly.stats.moduleFamilyCounts ?? {})) {
       if (typeof stats.moduleFamilyCounts[family] === "number") stats.moduleFamilyCounts[family] += count;
     }
@@ -2509,9 +2574,17 @@ export function buildOdysseyCitadel(options = {}) {
   // --------------------------------------------------------------------------
   // 复用与编辑器（townscaper.html）相同的装配入口；random 已被 Layer 0
   // 断崖消耗过，此处继续同一序列，保证渲染结果与重构前逐位一致。
+  const gridV6 = P.irregularGridV1 === true
+    ? createCitadelGridV6(townSpec, {
+        cellSize: CITADEL_TOWN_SPEC.cellSize,
+        gridSize: townSpec.gridSize ?? CITADEL_GRID_SIZE,
+      })
+    : null;
   const townAssembly = buildCitadelTerraceTownAssembly(townSpec, contourSpec, {
     floors: castleFloors,
     leanDecor: skipOuterTerrain,
+    skipDecor: options.skipDecor === true,
+    gridV6,
     random,
     materials,
     gradientMap,
@@ -2629,6 +2702,7 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.townBaseLift = options.townBaseLift ?? 0.6;
   castleContainer.userData.outerTerrainSystem = outerTerrainSystem;
   castleContainer.userData.highlandTownscaperGrid = useHighlandLatestDesign;
+  castleContainer.userData.skipDecor = options.skipDecor === true;
   if (skipOuterTerrain || useHighlandLatestDesign) ensureSkipOuterTerrainEditPad(castleContainer);
 
   // 运河交汇：首次入场 plop（软弹一下），其余帧静态。
@@ -2744,6 +2818,7 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.terrainObjectsSpec = terrainObjects.userData?.placements ?? [];
   castleContainer.userData.townSpec = townAssembly.layout;
   castleContainer.userData.townStats = townAssembly.stats;
+  castleContainer.userData.gridV6 = gridV6;
   attachBuildingOwnedProps(castleContainer, townAssembly.layout, { seed: options.seed ?? 20260808 });
   castleContainer.userData.townSurfaceConformance = useHighlandLatestDesign
     ? townAssembly.surfaceConformance?.[0] ?? null
@@ -2762,6 +2837,7 @@ export function buildOdysseyCitadel(options = {}) {
   }
   // 拱窗夜景：收集 town-window 并绑定昼夜材质
   refreshCitadelWindowLights(castleContainer);
+  applyCitadelStencilPass(castleContainer);
   attachSvarbovaLightRig(castleContainer, citadelAssembly);
   // 正红人偶仅供旧版 Svarbova 材质基准测试；正式高山圣城不得混入测试模型。
   if (!useHighlandLatestDesign) {
@@ -2892,23 +2968,26 @@ export function playCitadelGrowAnimation(castleContainer, newMeshes, { duration 
 function tickCitadelGrowAnimations(castleContainer, dt) {
   const grows = castleContainer.userData.growAnimations;
   // 去抖合并：停手 mergeDebounceLeft 秒后执行一次 pendingMerge（连续编辑
-  // 不再逐次 60ms 冻结）
+  // 不再逐次 60ms 冻结）。C8：体块先并，装饰下一帧再并（S19 t=2.80）。
   const debounced = castleContainer.userData.pendingMerge;
+  let mergedBodyThisTick = false;
   if (debounced && !grows?.length) {
     const left = (castleContainer.userData.mergeDebounceLeft ?? 0) - Math.max(0.008, Number(dt) || 0.016);
     castleContainer.userData.mergeDebounceLeft = left;
     if (left <= 0) {
       castleContainer.userData.mergeDebounceLeft = null;
-      for (const level of debounced.dirtyLevels) {
-        mergeStaticGroup(level, {
-          skip: citadelTownIncrementalMergeSkip,
-          onSurface: citadelTownMergeOnSurface,
-          onOutline: citadelTownMergeOnOutline,
-        });
-      }
+      mergeCitadelTownLevels(debounced.dirtyLevels, "body");
       refreshCitadelWindowLights(castleContainer);
       castleContainer.userData.pendingMerge = null;
+      castleContainer.userData.pendingDecorMerge = { dirtyLevels: debounced.dirtyLevels };
+      mergedBodyThisTick = true;
     }
+  }
+  if (!mergedBodyThisTick && !grows?.length && castleContainer.userData.pendingDecorMerge) {
+    mergeCitadelTownLevels(castleContainer.userData.pendingDecorMerge.dirtyLevels, "decor");
+    castleContainer.userData.pendingDecorMerge = null;
+    refreshCitadelWindowLights(castleContainer);
+    applyCitadelStencilPass(castleContainer);
   }
   if (!grows?.length) return;
   let alive = 0;
@@ -2927,14 +3006,9 @@ function tickCitadelGrowAnimations(castleContainer, dt) {
   const pending = castleContainer.userData.pendingMerge;
   if (pending) {
     castleContainer.userData.pendingMerge = null;
-    for (const level of pending.dirtyLevels) {
-      mergeStaticGroup(level, {
-          skip: citadelTownIncrementalMergeSkip,
-          onSurface: citadelTownMergeOnSurface,
-          onOutline: citadelTownMergeOnOutline,
-        });
-    }
+    mergeCitadelTownLevels(pending.dirtyLevels, "body");
     refreshCitadelWindowLights(castleContainer);
+    castleContainer.userData.pendingDecorMerge = { dirtyLevels: pending.dirtyLevels };
   }
 }
 
@@ -3018,6 +3092,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     )
   );
   if (!dirty.size) return { ok: true, dirtyCount: 0, editMs: 0, removedCount: 0, mergedCount: 0 };
+  castleContainer.userData.pendingDecorMerge = null;
   // 两道保险叠加（2026-09-04 实测，20 次连续编辑 vs 同布局全量重建）：
   //   只靠 ownSpanning 声明即门 …… 累积 2.2%，合并块净增 58
   //   再加这层闭包       …… 累积 0.6%，合并块净增 16，P50 只多 0.8ms
@@ -3054,8 +3129,10 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
         ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
         : "uniform-town-base",
       leanDecor: castleContainer.userData.skipOuterTerrain === true,
+      skipDecor: options.skipDecor === true || castleContainer.userData.skipDecor === true,
       townscaperColors: castleContainer.userData.instanceId === "canal-junction",
       highlandColors: castleContainer.userData.instanceId !== "canal-junction",
+      gridV6: castleContainer.userData.gridV6 ?? null,
       dirty: [...dirty],
       townCtxCache,
     }
@@ -3178,15 +3255,10 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     castleContainer.userData.pendingMerge = { dirtyLevels: levelsToMerge };
     castleContainer.userData.mergeDebounceLeft = debounceMs / 1000;
   } else if (!animate) {
-    for (const level of levelsToMerge) {
-      const report = mergeStaticGroup(level, {
-          skip: citadelTownIncrementalMergeSkip,
-          onSurface: citadelTownMergeOnSurface,
-          onOutline: citadelTownMergeOnOutline,
-        });
-      mergedCount += report.surfaces.length;
-    }
+    mergedCount += mergeCitadelTownLevels(levelsToMerge, "body");
+    mergedCount += mergeCitadelTownLevels(levelsToMerge, "decor");
     refreshCitadelWindowLights(castleContainer);
+    applyCitadelStencilPass(castleContainer);
   } else {
     castleContainer.userData.pendingMerge = { dirtyLevels: levelsToMerge };
   }
@@ -3230,6 +3302,9 @@ export function rebuildCitadelTown(castleContainer, spec) {
   if (!layers?.length) return null;
   // G30-A：全量重建后旧材质被 dispose，增量 ctx 缓存必须失效
   castleContainer.userData.townCtxCache = null;
+  castleContainer.userData.pendingDecorMerge = null;
+  castleContainer.userData.pendingMerge = null;
+  castleContainer.userData.mergeDebounceLeft = null;
 
   const oldLevels = [];
   for (const layer of layers) {
@@ -3271,6 +3346,8 @@ export function rebuildCitadelTown(castleContainer, spec) {
         ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
         : "uniform-town-base",
       leanDecor: castleContainer.userData.skipOuterTerrain === true,
+      skipDecor: castleContainer.userData.skipDecor === true,
+      gridV6: castleContainer.userData.gridV6 ?? null,
       // 热重建保持实例配色：运河交汇古堡仍是 Townscaper 高饱和彩城
       townscaperColors: castleContainer.userData.instanceId === "canal-junction",
       highlandColors: castleContainer.userData.instanceId !== "canal-junction",
@@ -3293,6 +3370,14 @@ export function rebuildCitadelTown(castleContainer, spec) {
     ? assembly.surfaceConformance?.[0] ?? null
     : null;
   castleContainer.userData.townSpec = assembly.layout;
+  if (P.irregularGridV1 === true) {
+    castleContainer.userData.gridV6 = createCitadelGridV6(assembly.layout, {
+      cellSize: CITADEL_TOWN_SPEC.cellSize,
+      gridSize: assembly.layout?.gridSize ?? CITADEL_GRID_SIZE,
+    });
+  } else {
+    castleContainer.userData.gridV6 = null;
+  }
   attachBuildingOwnedProps(castleContainer, assembly.layout, { seed: 20260808 });
   castleContainer.userData.lastIncrementalEdit = {
     lastDirtyCells: [],
@@ -3320,6 +3405,7 @@ export function rebuildCitadelTown(castleContainer, spec) {
   castleContainer.userData.gradientMap =
     castleContainer.userData.gradientMap ?? assembly.gradientMap ?? makeThreeStepGradient();
   refreshCitadelWindowLights(castleContainer);
+  applyCitadelStencilPass(castleContainer);
   attachSvarbovaLightRig(castleContainer, castleContainer.userData.mainCastle);
   if (!castleContainer.userData.highlandTownscaperGrid) {
     placeSvarbovaRedFigure(
@@ -3354,14 +3440,15 @@ export function trimCitadelTownToTerrain(castleContainer, contourSpec, spec = nu
   let totalTrimmed = 0;
   const trimmedTerraces = current.terraces.map((terrace, terraceIndex) => {
     const result = trimCitadelGridToTerrain(terrace.levels, (ix, iz) => {
-      const c = citadelGridCellCenter(ix, 0, iz);
-      return citadelTerrainCellSupported(
-        contour,
-        c.x,
-        c.z,
-        terraceIndex,
-        CITADEL_TOWN_SPEC.cellSize * 0.5
-      );
+      const gridV6 = castleContainer.userData?.gridV6;
+      const c = citadelColumnCenter(ix, iz, {
+        quad: gridV6?.quad ?? null,
+        mapping: gridV6?.mapping ?? null,
+        cellSize: CITADEL_TOWN_SPEC.cellSize,
+        gridSize: current.gridSize ?? CITADEL_GRID_SIZE,
+      });
+      if (!c) return false;
+      return citadelTerrainCellSupported(contour, c.x, c.z, terraceIndex, c.inradius);
     });
     totalTrimmed += result.trimmed;
     return { terraceIndex, levels: result.levels };

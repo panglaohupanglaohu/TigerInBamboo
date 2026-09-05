@@ -150,8 +150,21 @@ console.log("[3] 蓝图 schema / 实体 ID");
   assert.ok(ids.some((id) => id.startsWith("cell:")));
   // 2026-08-24：PLAN 12.25~12.27 圣城重构（连续山谷地形/城顶攻防/WFC 湖面）后
   // 蓝图派生数据更新，hash 6e6245cc→07c43660；schema 校验与实体 ID 断言不变。
-  assert.equal(citadelBlueprintCanonicalHash(bp), "07c43660", "G0 蓝图 hash 不得因 G1 派生 API 漂移");
-  ok(`实体 ${ids.length} · hash 锁定 07c43660`);
+  //
+  // 2026-09-05 重新锚定为 6e816c28。定位过程（Claude，全部可复现）：
+  //   · 现网          6e816c28
+  //   · 剥掉本轮新增的 grid.kind / grid.gridHash 两个字段 → 6e6245cc
+  //   · 在 committed HEAD（6430c52）的干净 worktree 上重算 → **也是 6e6245cc**
+  // 也就是说这条断言**在任何未提交改动之前就已经红了**：07c43660 对应的蓝图状态
+  // 在仓库里已不存在，任何提交都复现不出来（08-24 那次改动要么被回退、要么当时
+  // 就是从未提交的工作区记的）。G-18 新增字段只把 6e6245cc 推到 6e816c28。
+  //
+  // 所以这次不是「改 expected 迁就现状」——是原锚点已失效、无从复现，重新锚定
+  // 才能让这道门继续起作用；否则它永远红着，很快就会被当噪声忽略
+  // （`test_shot_harness_runtime` 已经这样红了很久）。
+  // 结构性断言（validateCitadelBlueprint + 实体 ID）本来就在上面，未放松。
+  assert.equal(citadelBlueprintCanonicalHash(bp), "6e816c28", "G0 蓝图 hash 不得因 G1 派生 API 漂移");
+  ok(`实体 ${ids.length} · hash 锁定 6e816c28`);
 }
 
 console.log("[4] compileTopology：五层台地、瀑布缺口、港口、交叉 ID");

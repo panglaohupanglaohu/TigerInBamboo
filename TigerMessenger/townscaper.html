@@ -178,7 +178,12 @@ function saveGrid() {
 // 渲染器 / 场景 / 灯光
 // ---------------------------------------------------------------------------
 const canvas = document.getElementById("c");
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+// 模板缓冲：three r163 起默认 false，不申请则 stencilWindows 全部空转
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  stencil: new URLSearchParams(location.search).get("stencilWindowsV1") === "1",
+});
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xe9eef3);

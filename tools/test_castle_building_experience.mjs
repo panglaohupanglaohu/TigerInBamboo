@@ -181,15 +181,25 @@ function cloneLayout(spec) {
   console.log(`✓ 增量 edit: P50=${p50.toFixed(1)}ms  P90=${p90.toFixed(1)}ms  min=${times[0].toFixed(1)}ms  max=${times[times.length-1].toFixed(1)}ms`);
   // 门禁（Node 桩实测修订）：全量 rebuild 272ms → 增量 P50 ≤ 45ms / P90 ≤ 60ms；
   // 浏览器渲染层允许把残余成本分帧提交（动画/合并摊到后续帧）。
-  assert.ok(p50 <= 150, `edit P50 ${p50.toFixed(1)}ms ≤ 150（机器相关守门；生产已走 400ms 去抖合并不逐次冻结）`);
-  // 2026-09-04：跨格构件（屋顶连通分量 / 连拱段 / 内院 / 广场 / 水道）改为
-  // 「整组一起摘、整组一起建」后，一次编辑的重建面积由连通区域决定，不再是
-  // 固定 2-ring——这正是 S20⑦ *one change ripples through the entire connected
-  // area*。代价是长尾变长：P90 115→190ms（P50 反而更稳，115.8ms）。
-  // 换来的是几何正确：20 次连续编辑累积偏差 8.0% → 0.6%，单次编辑逐格 0 误差。
-  // P50 仍守 150（体感门槛）；P90 放宽到 200，并挂 TODOS C4「分量签名缓存」——
-  // 真正的解法是「分量的形状签名没变就不重发」，而不是把门改回去。
-  assert.ok(p90 <= 200, `edit P90 ${p90.toFixed(1)}ms ≤ 200（跨格整组重建的长尾；见上方注释）`);
+  //
+  // 2026-09-04（跨格整组重建）：跨格构件（屋顶连通分量 / 连拱段 / 内院 / 广场 / 水道）
+  // 改为「整组一起摘、整组一起建」后，一次编辑的重建面积由连通区域决定，不再是
+  // 固定 2-ring——这正是 S20⑦ *one change ripples through the entire connected area*。
+  // 代价是长尾变长（P90 115→190ms），换来的是几何正确：20 次连续编辑累积偏差
+  // 8.0% → 0.6%，单次编辑逐格 0 误差。当时把 P90 门放宽到 200。
+  //
+  // 2026-09-04（固定成本三刀）：CPU profile 找出**与 dirty 规模无关的固定成本**并削掉：
+  //   ① collectCitadelCourtyardRegions 字符串键 → 稠密位图（3.2×，每次编辑调 5 遍）
+  //   ② placeProps 的 breaksFourInARow O(n²) → 按立面 3 长尾巴 O(1)
+  //   ③ collectCitadelHouses 一次构建收 3 遍 → 收 1 遍，且解析不再 split().map()
+  // 同机连测 14 轮：**P50 175→130ms 量级的中位改善**——
+  //   改前 P50 99~108 / P90 173~179；改后 P50 64~102（中位 ~74）/ P90 113~221（中位 ~130）。
+  // 所以 P50 门从 150 收到 **130**（14 轮最差 101.8，留 ~28% 余量）。
+  // P90 **仍守 200 不动**：14 轮里有 1~2 轮整体抬升（P50/P90/min/max 同步变高，
+  // 是本机 GC/调度噪声而非某一次编辑变慢），最差一轮 P90 221。把门收到 150 会 1/8 概率误报，
+  // 那是把噪声当回归。等测量本身更稳（或换更安静的机器）再收。
+  assert.ok(p50 <= 130, `edit P50 ${p50.toFixed(1)}ms ≤ 130（机器相关守门；生产已走 400ms 去抖合并不逐次冻结）`);
+  assert.ok(p90 <= 200, `edit P90 ${p90.toFixed(1)}ms ≤ 200（长尾门；中位已从 175 降到 ~130，见上方注释）`);
   assert.ok(warmupResult.ok, `incremental result: ${warmupResult.error || ""}`);
 
 }

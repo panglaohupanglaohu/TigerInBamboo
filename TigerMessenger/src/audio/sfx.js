@@ -81,6 +81,8 @@ let canyonBgmWanted = false;
 /** 场景已离开，但当前 18–53s 这一整段必须播完再停 */
 let canyonBgmPendingStop = false;
 let canyonBgmFading = false;
+/** 主人 2026-09-05：BGM 只播一遍——本次进谷已播完整段（离开谷区才复位） */
+let canyonBgmDone = false;
 const CANYON_BGM_URL = new URL(
   "../../music/Gwenan Gibbard-風之傳說.mp3",
   import.meta.url
@@ -98,6 +100,8 @@ let swampBgmWanted = false;
 /** 场景已离开，但当前 18–53s 这一整段必须播完再停 */
 let swampBgmPendingStop = false;
 let swampBgmFading = false;
+/** 主人 2026-09-05：BGM 只播一遍——本次进湖沼已播完整段（离开才复位） */
+let swampBgmDone = false;
 const SWAMP_BGM_URL = new URL(
   "../../music/Gwenan Gibbard-風之傳說.mp3",
   import.meta.url
@@ -782,7 +786,7 @@ export function resumeDefaultAmbience() {
 function ensureCanyonBgmEl() {
   if (canyonBgmEl) return canyonBgmEl;
   const el = new Audio(CANYON_BGM_URL);
-  // 不用原生 loop（会回到 0 秒）；在 21s–57s 区间内自循环
+  // 主人 2026-09-05：BGM 只播一遍——到 57s 段尾即收，不再区间回环
   el.loop = false;
   el.preload = "auto";
   el.volume = 0;
@@ -802,17 +806,13 @@ function ensureCanyonBgmEl() {
 }
 
 /**
- * 区间终点处理：在谷内 → 回 18s 再循环；已请求停止 → 淡出结束（保证整段 18–53 播完）
+ * 区间终点（主人 2026-09-05：BGM 只播一遍）——整段走完即淡出收尾，
+ * 不再回 21s 回环；是否重播由离开/再进触发区决定。
  */
 function onCanyonBgmSegmentEnd(el) {
-  if (canyonBgmWanted && !canyonBgmPendingStop) {
-    seekCanyonBgmToStart(el);
-    if (el.paused) el.play()?.catch?.(() => {});
-    return;
-  }
-  // 场景已离开（pending stop）或不再需要：本段结束，真正停掉
   canyonBgmPendingStop = false;
   canyonBgmWanted = false;
+  canyonBgmDone = true;
   fadeOutCanyonBgm(1.2);
 }
 
@@ -850,7 +850,8 @@ export function setCanyonApproachBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
   // 电车是移动中的主场景：保留峡谷的 wanted 状态，实际声道让给电车；
   // 下车后主循环再次调用本函数时，峡谷曲会从这里恢复。
-  if (active && tramRideWanted && !infiltrationBgmWanted && !siegeAssaultWanted) {
+  // 本轮已播完整段（canyonBgmDone）则不再保留 wanted——不回环。
+  if (active && !canyonBgmDone && tramRideWanted && !infiltrationBgmWanted && !siegeAssaultWanted) {
     canyonBgmWanted = true;
     canyonBgmPendingStop = false;
     if (canyonBgmEl && !canyonBgmEl.paused) {
@@ -867,6 +868,8 @@ export function setCanyonApproachBgm(active, opts = {}) {
   const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
 
   if (next) {
+    // 主人 2026-09-05：本轮进谷已播完整段就不再重播（离开谷区才复位）
+    if (canyonBgmDone) return;
     // 重新进入谷区：取消「播完即停」，继续循环
     const wasPendingOnly = canyonBgmPendingStop && !canyonBgmWanted;
     canyonBgmPendingStop = false;
@@ -880,7 +883,7 @@ export function setCanyonApproachBgm(active, opts = {}) {
       return;
     }
 
-    // pending 收尾过程中又进谷：接上当前进度继续播，不从头 seek（避免跳播）
+    // 收尾过程中又进谷：接上当前进度继续播完这一遍，不重新 seek
     if (wasPendingOnly && isCanyonBgmAudible()) {
       canyonBgmWanted = true;
       return;
@@ -917,11 +920,13 @@ export function setCanyonApproachBgm(active, opts = {}) {
 
   // ---- 请求停止 ----
   if (!canyonBgmWanted && !canyonBgmPendingStop) {
-    // 本来就没在播
+    // 本来就没在播（含整段已播完）：离开触发区，复位后下次进谷可重播一遍
+    canyonBgmDone = false;
     return;
   }
 
   canyonBgmWanted = false;
+  canyonBgmDone = false;
 
   // 本段 18–53 尚未走完：标记 pending，播到 53s 再停
   const el = canyonBgmEl;
@@ -1070,12 +1075,13 @@ function suspendExclusiveBgmForTram() {
 
 function resumeExclusiveBgmAfterTram() {
   if (muted) return;
-  if (siegeAssaultWanted && siegeAssaultEl) {
+  if (siegeAssaultWanted && siegeAssaultEl && !siegeAssaultEl.ended) {
     siegeAssaultEl.volume = SIEGE_ASSAULT_VOLUME;
     siegeAssaultEl.play()?.catch?.(() => {});
     return;
   }
-  if (infiltrationBgmWanted && infiltrationBgmEl) {
+  // 只播一遍：已播完的曲子不在下车时复活
+  if (infiltrationBgmWanted && infiltrationBgmEl && !infiltrationBgmEl.ended) {
     infiltrationBgmEl.volume = INFILTRATION_BGM_VOLUME;
     infiltrationBgmEl.play()?.catch?.(() => {});
   }
@@ -1368,10 +1374,15 @@ function fadeOutTramRideBgm(seconds = 0.9) {
 function ensureInfiltrationBgmEl() {
   if (infiltrationBgmEl) return infiltrationBgmEl;
   const el = new Audio(INFILTRATION_BGM_URL);
-  el.loop = true;
+  // 主人 2026-09-05：BGM 只播一遍——整首走完即止，任务结束才复位
+  el.loop = false;
   el.preload = "auto";
   el.volume = 0;
   el.crossOrigin = "anonymous";
+  // 播完即解除独占：wanted 滞留会挡住八音盒/气泡炮/峡谷湖沼的重启
+  el.addEventListener("ended", () => {
+    infiltrationBgmWanted = false;
+  });
   infiltrationBgmEl = el;
   return el;
 }
@@ -1459,6 +1470,14 @@ export function setInfiltrationBgm(active, opts = {}) {
   const next = !!active && !muted;
   if (next) {
     infiltrationMissionActive = true;
+    // 新一轮任务允许重播一遍：清掉上一首的 ended 痕迹
+    if (infiltrationBgmEl) {
+      try {
+        if (infiltrationBgmEl.ended) infiltrationBgmEl.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+    }
     // 不立即 play：等本帧/后续 updateInfiltrationBgm 判定距离
     return;
   }
@@ -1529,7 +1548,12 @@ export function updateInfiltrationBgm(listenerPos, sourcePos) {
   }
   const targetVol = INFILTRATION_BGM_VOLUME * gain;
 
-  if (!infiltrationBgmWanted || !isInfiltrationBgmAudible()) {
+  // 只播一遍：整首已播完（ended）就不在本轮任务里再起播；
+  // 离开听距的暂停不算完，回到听距会从暂停处续完这一遍
+  if (
+    (!infiltrationBgmWanted || !isInfiltrationBgmAudible()) &&
+    !infiltrationBgmEl?.ended
+  ) {
     infiltrationBgmWanted = true;
     pauseOthersForInfiltration();
     ensureAudio();
@@ -1669,7 +1693,7 @@ function fadeOutInfiltrationBgm(seconds = 1.0) {
 function ensureSwampBgmEl() {
   if (swampBgmEl) return swampBgmEl;
   const el = new Audio(SWAMP_BGM_URL);
-  // 不用原生 loop（会回到 0 秒）；在 18–53s 区间内自循环
+  // 主人 2026-09-05：BGM 只播一遍——到 53s 段尾即收，不再区间回环
   el.loop = false;
   el.preload = "auto";
   el.volume = 0;
@@ -1687,15 +1711,14 @@ function ensureSwampBgmEl() {
   return el;
 }
 
-/** 区间终点：仍在湖沼内 → 回 18s 再循环；已请求停止 → 本段播完淡出 */
+/**
+ * 区间终点（主人 2026-09-05：BGM 只播一遍）——整段走完即淡出收尾，
+ * 不再回 18s 回环；是否重播由离开/再进湖沼决定。
+ */
 function onSwampBgmSegmentEnd(el) {
-  if (swampBgmWanted && !swampBgmPendingStop) {
-    seekSwampBgmToStart(el);
-    if (el.paused) el.play()?.catch?.(() => {});
-    return;
-  }
   swampBgmPendingStop = false;
   swampBgmWanted = false;
+  swampBgmDone = true;
   fadeOutSwampBgm(1.2);
 }
 
@@ -1732,7 +1755,8 @@ function isSwampBgmAudible() {
 export function setSwampBgm(active, opts = {}) {
   const fade = opts.fade ?? 1.2;
   // 电车上保留湖沼 wanted 状态，但不让区域 BGM 抢主声道。
-  if (active && tramRideWanted && !infiltrationBgmWanted && !siegeAssaultWanted) {
+  // 本轮已播完整段（swampBgmDone）则不再保留 wanted——不回环。
+  if (active && !swampBgmDone && tramRideWanted && !infiltrationBgmWanted && !siegeAssaultWanted) {
     swampBgmWanted = true;
     swampBgmPendingStop = false;
     if (swampBgmEl && !swampBgmEl.paused) {
@@ -1749,6 +1773,8 @@ export function setSwampBgm(active, opts = {}) {
   const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
 
   if (next) {
+    // 主人 2026-09-05：本轮进湖沼已播完整段就不再重播（离开才复位）
+    if (swampBgmDone) return;
     const wasPendingOnly = swampBgmPendingStop && !swampBgmWanted;
     swampBgmPendingStop = false;
 
@@ -1783,9 +1809,14 @@ export function setSwampBgm(active, opts = {}) {
   }
 
   // ---- 请求停止 ----
-  if (!swampBgmWanted && !swampBgmPendingStop) return;
+  if (!swampBgmWanted && !swampBgmPendingStop) {
+    // 本来就没在播（含整段已播完）：离开触发区，复位后下次进湖沼可重播一遍
+    swampBgmDone = false;
+    return;
+  }
 
   swampBgmWanted = false;
+  swampBgmDone = false;
 
   const el = swampBgmEl;
   if (
@@ -1884,6 +1915,8 @@ let leviathanStormEl = null;
 /** @type {HTMLAudioElement|null} */
 let leviathanCueEl = null;
 let leviathanStormWanted = false;
+/** 主人 2026-09-05：BGM 只播一遍——本轮升空已播完整首（收飞才复位） */
+let leviathanStormDone = false;
 let leviathanCueWanted = false;
 let leviathanStormFading = false;
 const LEVIATHAN_STORM_CUE_URL = new URL(
@@ -1909,7 +1942,11 @@ function makeLeviathanAudio(url, loop) {
 
 function ensureLeviathanStormEl() {
   if (leviathanStormEl) return leviathanStormEl;
-  leviathanStormEl = makeLeviathanAudio(LEVIATHAN_STORM_BGM_URL, true);
+  // 主人 2026-09-05：BGM 只播一遍——整首走完即止（收飞/落回才复位）
+  leviathanStormEl = makeLeviathanAudio(LEVIATHAN_STORM_BGM_URL, false);
+  leviathanStormEl?.addEventListener("ended", () => {
+    leviathanStormDone = true;
+  });
   return leviathanStormEl;
 }
 
@@ -2033,6 +2070,9 @@ export function setLeviathanStormBgm(active, opts = {}) {
   const next = !!active && !muted && !siegeAssaultWanted;
   if (next) {
     leviathanStormWanted = true;
+    // 主人 2026-09-05：本轮升空已播完整首就不再重播（收飞才复位）。
+    // 战斗期每帧都会带 active 调进来，靠这个闩锁防“没完没了”。
+    if (leviathanStormDone) return;
     if (isLeviathanStormAudible()) {
       if (leviathanStormEl?.paused) {
         ensureAudio();
@@ -2055,10 +2095,13 @@ export function setLeviathanStormBgm(active, opts = {}) {
     return;
   }
   if (!leviathanStormWanted && !isLeviathanStormAudible()) {
+    // 已停/已播完：本轮收尾，复位闩锁，下次升空重播一遍
+    leviathanStormDone = false;
     stopLeviathanCue(fade);
     return;
   }
   leviathanStormWanted = false;
+  leviathanStormDone = false;
   stopLeviathanCue(0.3);
   fadeOutLeviathanStormBgm(fade);
 }
@@ -2150,7 +2193,8 @@ function ensureBubblePodCannonEl() {
   if (bubblePodCannonEl) return bubblePodCannonEl;
   if (typeof Audio === "undefined") return null;
   const el = new Audio(BUBBLE_POD_CANNON_BGM_URL);
-  el.loop = true;
+  // 主人 2026-09-05：BGM 只播一遍——整首走完即止，再次开炮才是新触发
+  el.loop = false;
   el.preload = "auto";
   el.volume = 0;
   el.crossOrigin = "anonymous";
@@ -2315,10 +2359,15 @@ function ensureSiegeAssaultEl() {
   if (siegeAssaultEl) return siegeAssaultEl;
   if (typeof Audio === "undefined") return null;
   const el = new Audio(SIEGE_ASSAULT_BGM_URL);
-  el.loop = true;
+  // 主人 2026-09-05：BGM 只播一遍——整首走完即止，下次攻城才是新触发
+  el.loop = false;
   el.preload = "auto";
   el.volume = 0;
   el.crossOrigin = "anonymous";
+  // 播完即解除独占（夜晚太鼓经 handoff 接管，滞留 wanted 会挡住八音盒等）
+  el.addEventListener("ended", () => {
+    siegeAssaultWanted = false;
+  });
   siegeAssaultEl = el;
   return el;
 }
