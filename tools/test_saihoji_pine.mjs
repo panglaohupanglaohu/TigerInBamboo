@@ -32,7 +32,7 @@ if (!globalThis.document) {
 
 const BASE = new URL("../TigerMessenger/", import.meta.url);
 const THREE = await import(new URL("vendor/three.module.js", BASE).href);
-const { buildSaihojiPlanet, SAIHOJI_PINE_SIZE } = await import(
+const { buildSaihojiPlanet, SAIHOJI_PINE_SIZE, SAIHOJI_PINE_SPREAD } = await import(
   new URL("src/world/saihoji.js", BASE).href
 );
 
@@ -63,12 +63,18 @@ const sMin = Math.min(...scales);
 const sMax = Math.max(...scales);
 assert(sMin <= 0.7, `应有幼/矮松 scale≤0.7（min=${sMin.toFixed(2)}）`);
 assert(sMax >= 1.2, `应有主木 scale≥1.2（max=${sMax.toFixed(2)}）`);
-assert.equal(SAIHOJI_PINE_SIZE, 3, "苔庭松树体积应为三倍");
+// 2026-09-05：体积从 ×3 再放大到 ×6，株距同步 ×2（SAIHOJI_PINE_SPREAD）。
+// 两个数必须成对改：只放大体积不放大间距，树冠互相穿插挤成一坨；
+// 只放大间距不放大体积，六景之间又会空得发慌。
+// 谁再动这两个数，必须同时交代苔庭在鲸背地壳板上的投影怎么办
+// ——见 test_leviathan [2] 的「六景落入地壳板投影」，那条门是硬的。
+assert.equal(SAIHOJI_PINE_SIZE, 6, "苔庭松树体积应为六倍");
+assert.equal(SAIHOJI_PINE_SPREAD, 2, "体积放大后株距必须同步 ×2，否则挤成一坨");
 const visuals = allPines.map((p) => p.scale.x);
 const vMin = Math.min(...visuals);
 const vMax = Math.max(...visuals);
-assert(vMin >= 1.02 * sMin * SAIHOJI_PINE_SIZE * 0.98, `幼松可见尺度应约 3×（min=${vMin.toFixed(2)}）`);
-assert(vMax >= 1.02 * 1.2 * SAIHOJI_PINE_SIZE * 0.98, `主木可见尺度应约 3×（max=${vMax.toFixed(2)}）`);
+assert(vMin >= 1.02 * sMin * SAIHOJI_PINE_SIZE * 0.98, `幼松可见尺度应约 ${SAIHOJI_PINE_SIZE}×（min=${vMin.toFixed(2)}）`);
+assert(vMax >= 1.02 * 1.2 * SAIHOJI_PINE_SIZE * 0.98, `主木可见尺度应约 ${SAIHOJI_PINE_SIZE}×（max=${vMax.toFixed(2)}）`);
 console.log(`  ✓ 胖瘦高低 scale ${sMin.toFixed(2)}–${sMax.toFixed(2)} · 体积 ×${SAIHOJI_PINE_SIZE}（${vMin.toFixed(2)}–${vMax.toFixed(2)}）`);
 
 // 角色齐全

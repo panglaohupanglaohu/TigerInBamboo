@@ -20,7 +20,7 @@ import {
   CITADEL_TERRAIN_KEY,
   CITADEL_TERRAIN_OBJECTS_KEY,
 } from "../../world/odysseyCitadel.js?v=20260903-merged-patch-v1";
-import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260905-wfc-wire-v1";
+import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260905-townscaper-palette-v1";
 
 import { loadCitadelLevelsSave } from "../../world/citadelLevelsSave.js";
 import { OFFICIAL_OCEAN_SEA_LEVEL, HIGHLAND_CASTLE_SEA_DROP } from "../../world/waterV8/officialOcean.js";
@@ -310,11 +310,15 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
     getSpawnSmoke: () => saihojiPhalanx?.userData?.spawnSmoke || null,
     // 巡演下一站：湖沼（moebius-swamp）。湖沼之虎与红狐受保护（白名单），
     // 其余生物一旦登记进可打清单即会被扫描光线/麻醉炮/重甲兵攻击
-    getTourAnchor: () => {
-      let sw = null;
-      scene.traverse((o) => { if (!sw && o.userData?.kind === "moebius-swamp") sw = o; });
-      return sw ? sw.position.clone().normalize() : null;
-    },
+    // 巡演路线（主人 2026-09-05：「组成一个强大的陆海空舰队去扫荡一切景点」）：
+    // 不再只有湖沼一站，而是按下面这一圈景点轮转，走完一圈从头再来。
+    // 找不到的站自动跳过（场景没加载就当它不存在），一站都找不到才返回 null。
+    // getTourAnchor 于 2026-09-06 下线（主人：「舰队围绕主舰」）。
+    // 它原本是一个 4 站轮转环（湖沼 / 老港 / 纳沃纳广场 / 绿丘停机坪），
+    // 由登陆队自己排班挑下一站，再用 missionLock 把主舰拽过去——反向指挥，
+    // 也是「重甲兵反复空降」的主发动机（站与站之间没有一帧停顿）。
+    // 现在扫荡由主舰自己的航线完成：主舰停在哪，登陆队就在哪开局。
+    // 若要让舰队走遍这四站，改的是**主舰的航线**，不是这里。
     getTourTargets: () => {
       // 白名单：湖沼之虎（swampTiger）、红狐（fox-ali）永不成为目标。
       // 目前湖沼暂无其它战斗生物登记 → 返回空（框架就绪，新生物加入即自动参战）。

@@ -92,6 +92,11 @@ export function mergeStaticGroup(root, options = {}) {
       _rel.copy(mesh.matrixWorld).premultiply(_rootInv);
       geo.applyMatrix4(_rel);
       const final = hasIndex ? geo.toNonIndexed() : geo;
+      // toNonIndexed() 会再造一个新几何，clone 出来的那个当场就没人要了。
+      // 不显式 dispose 就等着 GC——而这是每次编辑跑几百次的热路径，
+      // 攒下来的 Float32Array 足以把帧时间顶到 1.5s（主人 2026-09-05 截屏
+      // hitch 844 / worst 1582.6ms / fps 11.9，声音在放画面几乎不动）。
+      if (final !== geo) geo.dispose();
       const pos = final.getAttribute("position");
       entry = { geo: final, triCount: pos ? pos.count / 3 : 0 };
       bakedByMesh.set(mesh, entry);
@@ -120,7 +125,15 @@ export function mergeStaticGroup(root, options = {}) {
       for (const name of attrNames) {
         const attr = g.getAttribute(name);
         if (!attr) continue;
-        const src = attr.count === count ? attr.array : attr.array.subarray(0, count * attr.itemSize);
+        // 一律按 count 切片，不能按「count 是否等于 pos.count」来决定。
+        // 被 dropCellsFromMerged 压缩过的合并块，count 已经收小、array 仍是
+        // 原长（原地压缩不重开缓冲区，见 mergedCellPatch.js 的长注释）：
+        // 这时 attr.count === count 成立，但 attr.array 比 count 长一大截，
+        // 拿整条 array 去 set 就是 RangeError: offset is out of bounds
+        // ——2026-09-05 实测，删格后的第一次重合并当场炸。
+        // subarray 只是个视图，不分配，没有省下来的余地可惜。
+        const len = count * attr.itemSize;
+        const src = attr.array.length === len ? attr.array : attr.array.subarray(0, len);
         arrays[name].set(src, offset * attr.itemSize);
       }
       offset += count;
@@ -240,6 +253,14 @@ export function mergeStaticGroup(root, options = {}) {
   const dead = new Set();
   for (const mesh of removedSurfaces) if (!stillUsed.has(mesh.geometry)) dead.add(mesh.geometry);
   for (const mesh of removedOutlines) if (!stillUsed.has(mesh.geometry)) dead.add(mesh.geometry);
+  // 烘焙中间体（bake 的 clone / toNonIndexed 产物）：mergeGroup 已经把顶点
+  // 数据整块拷进合并几何里了，它们从此无人引用。原来这一段只清「被摘掉的源
+  // 网格」，把烘焙副本漏在外面——`tools/probe_geom_leak.mjs` 实测：
+  // 12 次编辑漏 11011 个几何，其中 90% 出自 bake()。
+  for (const entry of bakedByMesh.values()) {
+    if (entry?.geo && !stillUsed.has(entry.geo)) dead.add(entry.geo);
+  }
+  bakedByMesh.clear();
   for (const g of dead) g.dispose();
 
   return {

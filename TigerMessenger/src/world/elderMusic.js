@@ -15,7 +15,11 @@ export const ELDER_MUSIC_RANGE = 4.5;
  * @param {HTMLElement|null} deps.elHint
  * @param {() => boolean} deps.isGameStarted
  */
-export function createElderMusicInteraction({ player, elder: elderInit, elHint, isGameStarted }) {
+export function createElderMusicInteraction({
+  player, elder: elderInit, elHint, isGameStarted,
+  /** 送信人是否正在驾驶载具——是则不许隔着船舷听八音盒 */
+  isBusyRiding = () => false,
+}) {
   let elder = elderInit || null;
   let notePulse = 0;
   let keys = elder?.userData?.musicKeys || null;
@@ -25,6 +29,7 @@ export function createElderMusicInteraction({ player, elder: elderInit, elHint, 
   function nearElder() {
     // 老人可能挂在码头等子节点下，须用世界坐标判断近身
     if (!elder) return false;
+    if (isBusyRiding()) return false; // 坐在载具上不算近身（见 main.js 的同名闸）
     elder.getWorldPosition(_elderWorld);
     return player.position.distanceTo(_elderWorld) <= ELDER_MUSIC_RANGE;
   }

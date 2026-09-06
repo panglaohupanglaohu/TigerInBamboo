@@ -382,9 +382,36 @@ S20②。窗不再是贴在墙上的 `town-window` 几何：窗框网格写 sten
 | G · WFC 可解释 | 矛盾格可枚举并定位，不靠整城重启 | 未开始（V7 `explainFailure` 已有，未接） | 阶段 2 |
 | **H · 约束有区分度（新）** | 随机 100 对模块两两相容率 ≤ 40%；100 seed 中至少 1 个 seed 出现 ≥ 1 次域收缩到 1 的传播 | V6 目录相容率 **74.9%**（水平 87.1%） | 阶段 2 |
 | **I · 传播可见（新）** | 复现 S19 t=0.70：孤立格加盖 → 该格模块从 `terrace.rail` 变为 `wall`；t=1.40：两格并排加盖 → 屋顶变为一个共享脊的 gable | 未开始 | 阶段 2/4 |
-| **J · 角落无缝（新）** | 相邻角柱共享边上的顶点逐位相等；基座跨格零间隙 | 未开始 | 阶段 4 |
-| **K · 不规则网格有效（新）** | 全四边形、无自交、最小内角 ≥ 45°、边长比 ≤ 2、同 seed 同 hash；ASCII→face 迁移双向可逆 | 未开始 | 阶段 5 |
-| **L · stencil 窗（新）** | 窗洞里不露描边壳；窗位不跨格角；draw call 增量 ≤ +2/层 | 未开始 | 阶段 6 |
+| **J · 角落无缝（新）** | 相邻角柱共享边上的顶点逐位相等；基座跨格零间隙 | ✅ 2026-09-05 `tools/test_corner_seams.mjs`：任选件 3546 对 / 两侧同件 1840 对，不对齐 **0** | 阶段 4 |
+| **K · 不规则网格有效（新）** | 全四边形、无自交、最小内角 ≥ 45°、边长比 ≤ 2、同 seed 同 hash；ASCII→face 迁移双向可逆 | ✅ 上半（内角 50.49° / 边长比 1.977）+ ✅ 下半 `tools/test_grid_migration.mjs`（P95 0.790 / 0.778 · hash `0b70f22c`） | 阶段 5 |
+| **L · stencil 窗（新）** | **（新增前置）renderer 必须显式申请模板缓冲**；窗洞里不露描边壳；窗位不跨格角；draw call 增量 ≤ +2/层 | ⚠️ 前置 ✅ 2026-09-05 已修（见 §6.1）· 窗位 ✅ 420 窗跨格角 0 · draw call ✅ +2/层 · **「不露描边壳」仍待目视** | 阶段 6 |
+
+
+### 6.1 · 门 L 的前置：模板缓冲（2026-09-05 补）
+
+门 L 原来只写了三条画面判据，漏了最底下那条**物理前提**：模板测试要生效，
+renderer 得先申请模板缓冲。本仓库 vendor 的 three（r163+）里
+`new THREE.WebGLRenderer({...})` 的 `stencil` 默认是 **false**（早年默认 true，r163 翻了过来），
+而现网四处创建 renderer 的地方**一处都没传过它**。实测（云端 Chromium，真 GL 上下文）：
+
+| renderer 写法 | `gl.getParameter(STENCIL_BITS)` | 结果 |
+| --- | --- | --- |
+| 修之前 | **0** | 模板测试恒真，`?stencilWindowsV1=1` 打开也不挖洞 |
+| 传 `stencil: true` | 8 | 才谈得上挖 |
+
+两个无头脚本（`probe_stencil_windows` / `test_window_stencil_positions`）只查材质状态
+与网格计数，**拿不到真 GL**，所以两边都漏了。已修 `src/core/stage.js`（按
+`P.stencilWindowsV1` 条件申请，关着时不为它付带宽）、`src/planet/main.js`、
+`townscaper.html`，并在 `test_window_stencil_positions.mjs` 末尾加了一条**源码级**断言兜底。
+
+### 6.2 · 按 §8 的完成定义，阶段 2 / 4 / 5 / 6 都还不算完成
+
+§8 写死了：「生产代码路径消费该改动（不是死文件、**不是只在 `?flag=1` 下 import**）」。
+现状是**四个开关默认全 false**：`P.wfcTownV1` / `P.cornerModulesV1` /
+`P.irregularGridV1` / `P.stencilWindowsV1`。
+也就是说这四个阶段正停在 §7 风险表点名的那个坑里——
+「**Grok 交付停在 TESTED**（V4/V6/V7 三代先例）」，只不过这回停在 Claude 手上。
+翻默认是它们唯一剩下的工作，且必须**一次一个**、每次带截图对照 + 全量回归。
 
 ---
 

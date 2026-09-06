@@ -1,14 +1,15 @@
 // =====================================================================
 // 苔庭之战 · 先锋重甲兵到场—作战—撤离任务状态机（主人 2026-09-05 修订剧本验收）
 //
-//   ① 编成：总员 22 = 20 战斗（2 组 × 10 三三制）+ 2 看护留守飞行器旁
-//      乘坐：GatePodCraft 3 台各索降 2（6）+ gateHaulerCraft 3 台各卸 6 实载 6/6/4（16）
+//   ① 编成（主人 2026-09-06 舰队编成）：总员 27 = 24 战斗 + 3 看护
+//      GatePodCraft 3 台各载 2 名索降（6，前后型突击对，全员参战）
+//      gateHaulerCraft 3 艘各载 7 名（21），每艘留守 1 名 → 参战 18 = 6 个三人小组
 //   ② 阶段机：begin → approach（泡机护送、气垫艇贴海楔形）→ insert（索降 + 开尾门放出）
 //      → combat（三三制推进）→ withdraw（苔庭上空收绳）→ extract（贴海离场）→ done
 //   ③ **落点铁律**：全员落地后每人 |position| ≈ 苔庭地表半径（逐人采样），
 //      绝不允许回到「站在树顶」的悬空状态
 //   ④ combat 期阵型向守军推进；看护（vehicleGuard）不进阵、留在艇旁
-//   ⑤ 撤离：三艇回滩头放坡，全部存活兵**从后舱门走回腹内**（aboard = 22），贴海离场，泡机归队
+//   ⑤ 撤离：三艇回滩头放坡，艇兵**从后舱门走回腹内**，索降兵由本泡机绳索收回，贴海离场
 //   ⑥ controlsPods：任务中 true（护航跟位让位），结束后 false
 //   ⑦ 确定性：同输入重跑，落地坐标逐位一致（禁 Math.random）
 //   ⑧ 泡机缺编兜底：没分到泡机的兵改走艇腹，任务照常完成
@@ -105,15 +106,17 @@ function runTo(w, assault, phase, maxFrames = 9000, dt = 0.25) {
   const w = makeWorld();
   const sq = w.squad;
   const { groups } = assignVanguardFireteams(sq);
-  assert.equal(VANGUARD_SQUAD_SIZE, 22, "总员 22 = 20 战斗 + 2 看护");
-  assert.equal(groups.length, 2, "2 组");
+  assert.equal(VANGUARD_SQUAD_SIZE, 27, "总员 27 = 24 战斗 + 3 看护");
+  assert.equal(groups.length, 3, "一艇一组，共 3 组");
   for (const g of groups) {
-    assert.equal(g.all.length, 10, "每组 10 人");
+    assert.equal(g.all.length, 6, "每艇 6 名参战（第 7 名留守）");
     assert.equal(g.leader?.userData?.role, "leader", "每组 1 名组长");
-    assert.equal(g.teams.length, 3, "每组 3 个子小组");
-    for (const team of g.teams) assert.equal(team.length, 3, "子小组 3 人（三三制）");
+    assert.equal(g.teams.length, 2, "每艇 2 个三人小组");
+    for (const team of g.teams) assert.equal(team.length, 3, "三三制：每小组 3 人");
   }
-  console.log("  ① 编成：22 = 2 组 × 10（三三制）+ 2 看护 ✓");
+  assert.equal(sq.userData.troopers.filter((t) => t.userData.vehicleGuard).length, 3,
+    "每艘登陆艇留守 1 名");
+  console.log("  ① 编成：27 = 泡机 3×2 前后型 + 登陆艇 3×(6 参战 + 1 留守) ✓");
 }
 
 // ---- ②③ 阶段机推进到 combat，落地必须逐人贴地（反「站在树顶」铁律）
@@ -141,12 +144,12 @@ function runTo(w, assault, phase, maxFrames = 9000, dt = 0.25) {
     assert.ok(r > R && r < R + 7, `气垫艇贴海飞行：半径 ${r.toFixed(1)} 应在 ${R}~${R + 7}`);
   }
 
-  // insert：索降 6 + 艇卸 16 → 全员落地（含 2 看护到位）
+  // insert：索降 6 + 艇卸 21 → 全员落地（含 3 名看护各就各位）
   const frames = runTo(w, assault, "insert");
   assert.equal(assault.phase(), "combat", `insert 应全员到位（喂了 ${(frames * 0.25).toFixed(0)}s）`);
   const st = assault.stats();
-  assert.equal(st.onGround, 22, `全员 onGround（含 2 看护），实得 ${st.onGround}`);
-  assert.equal(st.guards, 2, "看护 2 名");
+  assert.equal(st.onGround, 27, `全员 onGround（含 3 看护），实得 ${st.onGround}`);
+  assert.equal(st.guards, 3, "看护 3 名（每艘登陆艇留守 1）");
   assert.equal(w.squad.userData.state, "deployed", "落地后进 deployed（箭矢目标池接管）");
   // ③ 铁律：每人贴着假苔庭地表（±0.6），不是树顶
   for (const tr of w.squad.userData.troopers) {
@@ -154,13 +157,13 @@ function runTo(w, assault, phase, maxFrames = 9000, dt = 0.25) {
     assert.ok(Math.abs(r - GROUND) < 0.6, `落地半径 ${r.toFixed(2)} 应 ≈ ${GROUND}（贴地采样，绝不悬空）`);
     assert.equal(tr.userData.onGround, true);
   }
-  // ④ 看护留守艇旁（不进战斗阵型）：uid 20/21 远离阵型中心
+  // ④ 看护留守自己那艘艇旁（不进战斗阵型）：每艇最后一个座位
   const fighters = w.squad.userData.troopers.filter((t) => !t.userData.vehicleGuard);
-  assert.equal(fighters.length, 20, "战斗 20 人");
+  assert.equal(fighters.length, 24, "战斗 24 人 = 泡机 6 + 艇上 18");
   for (const tr of w.squad.userData.troopers.filter((t) => t.userData.vehicleGuard)) {
     assert.equal(tr.userData.vehicleGuard, true, "看护标记");
   }
-  console.log(`  ②③ approach→insert→combat：6 索降 + 16 艇卸（6/6/4）全员逐人贴地（r=${GROUND}）✓`);
+  console.log(`  ②③ approach→insert→combat：6 索降 + 21 艇卸（7/7/7）全员逐人贴地（r=${GROUND}）✓`);
 }
 
 // ---- ④ combat：阵型向守军推进、看护不随阵移动
@@ -201,14 +204,14 @@ function runTo(w, assault, phase, maxFrames = 9000, dt = 0.25) {
   assert.equal(assault.phase(), "withdraw");
   const frames = runTo(w, assault, "withdraw", 12000);
   assert.equal(assault.phase(), "extract", `全员上艇后转 extract（${(frames * 0.25).toFixed(0)}s）`);
-  assert.equal(assault.stats().aboard, 22, "22 名全部从后舱门回艇腹（含 2 看护）");
+  assert.equal(assault.stats().aboard, 27, "27 名全部收回载具（艇兵走后舱门，索降兵走绳索）");
   for (const tr of w.squad.userData.troopers) assert.equal(tr.visible, false, "进腹后隐身");
   runTo(w, assault, "extract", 4000);
   assert.equal(assault.phase(), "done", "离场完成");
   assert.equal(assault.controlsPods(), false, "结束后释放泡机");
   for (const p of w.pods) assert.equal(p.parent, w.wing, "泡机归队（挂回伴飞翼）");
   for (const h of w.haulers) assert.equal(h.visible, false, "艇离场后隐身");
-  console.log("  ⑤⑥ withdraw→extract→done：22 人后舱门回艇腹、贴海离场、泡机归队 ✓");
+  console.log("  ⑤⑥ withdraw→extract→done：27 人全部收回、贴海离场、泡机归队 ✓");
 }
 
 // ---- ⑦ 确定性：两次完整落地，坐标逐位一致
@@ -236,8 +239,8 @@ function runTo(w, assault, phase, maxFrames = 9000, dt = 0.25) {
   runTo(w, assault, "approach", 600, 0.1);
   const frames = runTo(w, assault, "insert", 12000);
   assert.equal(assault.phase(), "combat", "无泡机时全员从艇卸下，任务照常");
-  assert.equal(assault.stats().onGround, 22, `实得 ${frames * 0.25}s 时 onGround=${assault.stats().onGround}`);
+  assert.equal(assault.stats().onGround, 27, `实得 ${frames * 0.25}s 时 onGround=${assault.stats().onGround}`);
   console.log("  ⑧ 兜底：泡机缺编时全员走艇腹，任务不卡死 ✓");
 }
 
-console.log(`✅ test_vanguard_assault（22 = 20三三制 + 2看护 · 3泡机索降6 + 3艇卸16 · approach→insert→combat→withdraw→extract · 逐人贴地 · 后舱门回艇腹）`);
+console.log(`✅ test_vanguard_assault（27 = 泡机6前后型 + 艇21（每艇留守1）· approach→insert→combat→withdraw→extract · 逐人贴地）`);

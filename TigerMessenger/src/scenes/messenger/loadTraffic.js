@@ -12,7 +12,7 @@ import {
   citadelTerrainKey,
   citadelTerrainObjectsKey,
 } from "../../world/odysseyCitadel.js";
-import { CANAL_JUNCTION_TOWN_SPEC, citadelLevelsKey } from "../../world/citadelTown.js?v=20260905-wfc-wire-v1";
+import { CANAL_JUNCTION_TOWN_SPEC, citadelLevelsKey } from "../../world/citadelTown.js?v=20260905-townscaper-palette-v1";
 import {
   waterCityCanalWaypointDir,
   waterCityShoreAng,

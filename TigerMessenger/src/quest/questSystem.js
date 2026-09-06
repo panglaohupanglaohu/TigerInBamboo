@@ -89,7 +89,11 @@ export const QUEST_DEFS = QUEST_DEFS_BASE.map((q) =>
  * @param {THREE.PerspectiveCamera} deps.camera 气泡投影用
  * @param {() => boolean} deps.isGameStarted 未开始前不交互
  */
-export function createQuestSystem({ scene, platforms, player, messengerMesh, holdAura, camera, isGameStarted }) {
+export function createQuestSystem({
+  scene, platforms, player, messengerMesh, holdAura, camera, isGameStarted,
+  /** 送信人是否正在驾驶载具——是则不许接信/送信（见 main.js 的同名闸） */
+  isBusyRiding = () => false,
+}) {
   let questIndex = 0;
   let deliveredCount = 0;
   /** @type {'idle'|'carry'} */
@@ -338,6 +342,10 @@ export function createQuestSystem({ scene, platforms, player, messengerMesh, hol
 
   /** 当前可交互的目标 NPC（在对话距离内才返回） */
   function currentTarget() {
+    // 坐在飞艇/飞行器/小船上不算「站在居民面前」：搭乘期 player.position 是座位，
+    // 载具停在村口就会落进 talkRange，隔着船舷接信送信。
+    // 闸放在这里而不是 keydown 里：提示气泡与「[E] 与居民交谈」一并跟着消失。
+    if (isBusyRiding()) return null;
     const q = QUEST_DEFS[questIndex];
     if (!q) return null;
     const key = questPhase === "idle" ? `${q.id}-sender` : `${q.id}-receiver`;

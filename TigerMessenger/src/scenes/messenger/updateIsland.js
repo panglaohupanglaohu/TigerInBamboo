@@ -90,7 +90,12 @@ export function updateMessengerIsland(s, dt, t, runtime) {
   // 反过来会慢一帧，编队转弯时看得出拖影。
   // 先锋兵任务期间泡机由 vanguardAssault 接管（索降/编队/离场），跳过护航跟位。
   const podsOnMission = s.vanguardAssault?.controlsPods?.() ?? false;
-  if (!podsOnMission) updateGatePodEscort(s.aircraftSquad, t);
+  if (!podsOnMission) {
+    // 双保险：任务半途夭折时泡机可能还挂在 scene 下，`updateGatePodEscort`
+    // 只遍历 wing.children 看不见它们，会让三台泡机停在原地不动。
+    s.vanguardAssault?.releasePods?.();
+    updateGatePodEscort(s.aircraftSquad, t);
+  }
   // 先锋重甲兵：乘 GatePodCraft / gateHaulerCraft 到场（主人 2026-09-05），
   // 不再吊挂在莫比斯机腹下飞行；未开局时全员隐身在载具里
   s.saihojiPhalanx?.update?.(dt, t);

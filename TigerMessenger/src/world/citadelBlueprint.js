@@ -12,7 +12,7 @@ import {
   CITADEL_TERRACE_COUNT,
   CITADEL_TOWN_SPEC,
   normalizeCitadelTerraceLayout,
-} from "./citadelTown.js?v=20260905-wfc-wire-v1";
+} from "./citadelTown.js?v=20260905-townscaper-palette-v1";
 import { hashHex } from "../core/rng.js";
 
 export const CITADEL_BLUEPRINT_VERSION = 1;

@@ -51,6 +51,7 @@ export function azimuthalProject(dir, center, right, up, maxRho, radius) {
  * @param {{
  *   landmarks: Array<{ id:string, name:string, color:string,
  *     getDir: () => THREE.Vector3|null|undefined }>,
+ *   getVisible?: () => Array<object>,
  *   getPlayer: () => { position: THREE.Vector3, facing?: THREE.Vector3 }|null,
  *   getView?: () => { position: THREE.Vector3, forward: THREE.Vector3,
  *     fov?: number, aspect?: number }|null,   // 相机视野（视野扇形框）
@@ -58,8 +59,13 @@ export function azimuthalProject(dir, center, right, up, maxRho, radius) {
  *   rangeRad?: number,   // 圆盘边缘对应的角距（rad），默认 0.5 ≈ 80 世界单位
  *   toast?: (msg:string, dur?:number) => void,
  * }} opts
+ *   - landmarks：全集（兜底用）。
+ *   - getVisible：**三级导航**用。返回当前该显示的子集（Planet / Region / Local），
+ *     由 `world/worldStructure.js` 的 `visibleLandmarks()` 算出。
+ *     不传则退回 `landmarks` 全集，保持旧调用方兼容。
+ *     图例会在可见 id 集合变化时重建——所以进出区域时列表会跟着增减。
  */
-export function createMinimap({ landmarks, getPlayer, getView = null, planetRadius = 160, rangeRad = 0.5, toast = () => {} }) {
+export function createMinimap({ landmarks, getVisible = null, getPlayer, getView = null, planetRadius = 160, rangeRad = 0.5, toast = () => {} }) {
   const questPanel = document.getElementById("quest-panel");
   const hud = document.getElementById("hud");
   if (!questPanel || !hud) return null;
@@ -128,17 +134,41 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
   head.addEventListener("pointerdown", detachFromStack, { capture: true });
   makePanelDraggable(panel, head, POS_KEY);
 
+  // ---------- 可见集（三级导航）----------
+  // 原来这里在**构造时**就把图例定死了；接入四级空间结构后可见集会随玩家
+  // 进出区域变化（Tier0 恒显 / Tier1 进区域 / Tier2 进苔庭），
+  // 所以下面所有遍历都改走 visible()，图例按 id 集合变化重建。
+  let visibleCache = Array.isArray(landmarks) ? landmarks : [];
+  function visible() {
+    if (!getVisible) return Array.isArray(landmarks) ? landmarks : [];
+    const next = getVisible();
+    return Array.isArray(next) ? next : [];
+  }
+
   // ---------- 图例菜单 ----------
   const rows = new Map();
-  for (const lm of landmarks) {
-    const li = document.createElement("li");
-    li.dataset.id = lm.id;
-    li.innerHTML = `<span class="dot" style="background:${lm.color}"></span>
-      <span class="nm">${lm.name}</span><span class="dist">—</span>`;
-    li.addEventListener("click", () => ping(lm.id, true));
-    legend.appendChild(li);
-    rows.set(lm.id, li);
+  let legendKey = "";
+  function rebuildLegend(list) {
+    legend.innerHTML = "";
+    rows.clear();
+    for (const lm of list) {
+      const li = document.createElement("li");
+      li.dataset.id = lm.id;
+      li.innerHTML = `<span class="dot" style="background:${lm.color}"></span>
+        <span class="nm">${lm.name}</span><span class="dist">—</span>`;
+      li.addEventListener("click", () => ping(lm.id, true));
+      legend.appendChild(li);
+      rows.set(lm.id, li);
+    }
   }
+  /** 只在可见 id 集合真的变了才重建 DOM（每帧重建会把点击态和滚动位置抖掉） */
+  function syncLegend(list) {
+    const key = list.map((lm) => lm.id).join("|");
+    if (key === legendKey) return;
+    legendKey = key;
+    rebuildLegend(list);
+  }
+  syncLegend(visibleCache);
 
   // ---------- 投影基架（以送信人为图心 · 固定比例尺 · 每帧重建） ----------
   // 旧方案以「全部地标平均方向」为图心：峡谷远景把 maxRho 撑到 1.5+ rad，
@@ -156,7 +186,7 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
       center.copy(player.position).normalize();
       okFlag = true;
     } else {
-      for (const lm of landmarks) {
+      for (const lm of visibleCache) {
         const d = lm.getDir?.();
         if (d && d.lengthSq() > 1e-8) {
           center.copy(d).normalize();
@@ -183,7 +213,9 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
   function ping(id, report = false) {
     pings.set(id, performance.now() + 1600);
     if (report) {
-      const lm = landmarks.find((l) => l.id === id);
+      // 点击来自图例/图上，一律在全集里找——可见集刚变化时也能报出名字
+      const lm = (Array.isArray(landmarks) ? landmarks : []).find((l) => l.id === id)
+        ?? visibleCache.find((l) => l.id === id);
       const player = getPlayer?.();
       const d = lm?.getDir?.();
       if (lm && player && d) {
@@ -210,7 +242,8 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
     const my = ((ev.clientY - rect.top) / rect.height) * H - CY;
     let best = null;
     let bestD = 14; // 命中半径 px
-    for (const lm of landmarks) {
+    // 只命中当前画出来的点：画不出来的点不该能被点到
+    for (const lm of visibleCache) {
       const d = lm.getDir?.();
       if (!d || d.lengthSq() < 1e-8) continue;
       const p = azimuthalProject(d, center, right, up, maxRho, DISC_R);
@@ -227,6 +260,9 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
   let lastDraw = 0;
   let lastDist = 0;
   function draw(now) {
+    // 每帧刷一次可见集：玩家可能刚跨进/离开某区域或苔庭
+    visibleCache = visible();
+    syncLegend(visibleCache);
     ctx.clearRect(0, 0, W, H);
     // 纸面圆盘
     const bg = ctx.createRadialGradient(CX, CY, 8, CX, CY, DISC_R + 6);
@@ -281,10 +317,10 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
       }
     }
 
-    // 地标
+    // 地标（只画当前可见级：Tier0 恒显 / Tier1 进区域 / Tier2 进苔庭）
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
-    for (const lm of landmarks) {
+    for (const lm of visibleCache) {
       const d = lm.getDir?.();
       if (!d || d.lengthSq() < 1e-8) continue;
       const p = azimuthalProject(d, center, right, up, maxRho, DISC_R);
@@ -362,7 +398,7 @@ export function createMinimap({ landmarks, getPlayer, getView = null, planetRadi
     if (now - lastDist > 900) {
       lastDist = now;
       const player = getPlayer?.();
-      for (const lm of landmarks) {
+      for (const lm of visibleCache) {
         const row = rows.get(lm.id);
         if (!row) continue;
         const d = lm.getDir?.();

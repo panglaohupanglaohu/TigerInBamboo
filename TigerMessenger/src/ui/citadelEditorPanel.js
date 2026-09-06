@@ -26,7 +26,9 @@ import {
   resolveCitadelDropTarget,
   citadelGridCellCenter,
   citadelLevelsKey,
-} from "../world/citadelTown.js?v=20260905-wfc-wire-v1";
+  TOWNSCAPER_HIGHLAND_PALETTE,
+  TOWNSCAPER_HIGHLAND_GATE_COLOR,
+} from "../world/citadelTown.js?v=20260905-townscaper-palette-v1";
 import { citadelColumnCenter, citadelLocalToColumn } from "../world/citadel/gridMigration.js";
 import {
   citadelLevelsSaveKey,
@@ -56,19 +58,22 @@ const DEFAULT_GRID_PX = 12;
 const POS_KEY = "tm.citadelEditor.pos";
 const COLLAPSE_KEY = "tm.citadelEditor.collapsed";
 const DROP_KEY = "tm.citadelEditor.dropToGround";
-// 高山圣城（默认实例）：与 citadelTown.js 的 TOWNSCAPER_HIGHLAND_PALETTE
-// 一一对应——搭建什么色、面板就显示什么色（修复选「薄荷」建成色差问题）。
-const PANEL_CHARS = {
-  0: "#FFEDC4", 1: "#F0C37C", 2: "#F28E82", 3: "#F6DD45", 4: "#F08A3C",
-  5: "#EF4F67", 6: "#D94F7D", 7: "#46D88E", 8: "#31C46F", 9: "#4F9DE9",
-  A: "#3F88DB", B: "#63D54D", C: "#32CBB2", D: "#B06CCA", E: "#5F78D1",
-  G: "#EEE9D8",
-};
-const CHAR_NAMES = {
-  0: "奶油白", 1: "暖砂石", 2: "杏粉", 3: "奶油黄", 4: "蜜橙", 5: "珊瑚红", 6: "覆盆子",
-  7: "薄荷绿", 8: "翡翠绿", 9: "天青", A: "湖蓝", B: "鲜草绿", C: "松石绿", D: "灰紫",
-  E: "钴蓝", G: "正门",
-};
+// 高山圣城（默认实例）：**从 TOWNSCAPER_HIGHLAND_PALETTE 派生，不再手抄十六进制**。
+//
+// 这里历史上漂过两次，两次都是同一个病：面板一份硬编码、生产一份色板，
+// 改了色板忘了改面板 → 「选薄荷建成别的色」（第一次）、
+// 「选松石绿建成风化白石」（第二次，2026-09-05 实测 15 个字符 14 个对不上，
+// C 的 RGB 距离 167）。派生之后这种漂移在构造上就不可能发生。
+// 校验脚本：node tools/test_palette_panel_parity.mjs
+const hex6 = (n) => `#${(n & 0xffffff).toString(16).padStart(6, "0").toUpperCase()}`;
+const PANEL_CHARS = Object.freeze({
+  ...Object.fromEntries(TOWNSCAPER_HIGHLAND_PALETTE.map((e) => [e.char, hex6(e.color)])),
+  G: hex6(TOWNSCAPER_HIGHLAND_GATE_COLOR),
+});
+const CHAR_NAMES = Object.freeze({
+  ...Object.fromEntries(TOWNSCAPER_HIGHLAND_PALETTE.map((e) => [e.char, e.name])),
+  G: "正门",
+});
 // 运河交汇古堡（canal-junction）：马卡龙色调 15 色，
 // 与 citadelTown.js 的 TOWNSCAPER_CANAL_PALETTE 一一对应。
 const PANEL_CHARS_CANAL = {

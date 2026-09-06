@@ -47,6 +47,15 @@ function makeMerged(cellTriCounts) {
   return mesh;
 }
 
+/**
+ * 属性里「活着」的那一段。
+ *
+ * 压缩是**原地**做的：缓冲区长度永远不变，只有 count 收小，尾巴留着上一版的
+ * 残数据。所以读几何一律按 count 切片，别直接 [...attr.array]——下游代码同理，
+ * 按 array.length 读就会读到残数据（geometryMerge 踩过，见第 7b 组）。
+ */
+const live = (attr) => [...attr.array.subarray(0, attr.count * attr.itemSize)];
+
 const C = (ix, iy, iz) => ({ ix, iy, iz });
 const key = (c) => `${c.ix},${c.iy},${c.iz}`;
 
@@ -82,7 +91,7 @@ const TOTAL = 12;
   dropCellsFromMerged(m, (s) => key(s.cell) === "2,0,0");
   // 被摘的是三角形 5..6（B），保留 0..4 与 7..11
   const expect = [...src.slice(0, 5 * 9), ...src.slice(7 * 9)];
-  assert.deepEqual([...m.geometry.attributes.position.array], expect,
+  assert.deepEqual(live(m.geometry.attributes.position), expect,
     "未被摘的顶点必须逐位不变——否则非 dirty 格还是得重建");
   // color 属性同样要跟着搬，不能只搬 position
   assert.equal(m.geometry.attributes.color.count, m.geometry.attributes.position.count,
@@ -94,7 +103,7 @@ const TOTAL = 12;
   const m = makeMerged(layout);
   dropCellsFromMerged(m, () => true); // 摘掉所有认领了的格
   const tags = new Set();
-  const a = m.geometry.attributes.position.array;
+  const a = live(m.geometry.attributes.position);
   for (let i = 0; i < a.length; i += 3) tags.add(a[i]);
   assert.deepEqual([...tags].sort((x, y) => x - y), [98, 99],
     "只剩两段无主几何，说明无主区间被保住了");
@@ -117,6 +126,7 @@ const TOTAL = 12;
   const f0 = m.userData.faceToCell;
   assert.equal(dropCellsFromMerged(m, () => false), 0);
   assert.deepEqual([...m.geometry.attributes.position.array], before);
+  // 没命中时整条缓冲区（含尾巴）都不许动——这条仍然按 array 比，是故意的
   assert.equal(m.userData.faceToCell, f0, "没动就不该重建 faceToCell 数组");
 }
 
@@ -131,9 +141,46 @@ const TOTAL = 12;
 {
   const m = makeMerged(layout);
   dropCellsFromMerged(m, (s) => key(s.cell) === "2,0,0");
-  const after = [...m.geometry.attributes.position.array];
+  const after = live(m.geometry.attributes.position);
   assert.equal(dropCellsFromMerged(m, (s) => key(s.cell) === "2,0,0"), 0);
-  assert.deepEqual([...m.geometry.attributes.position.array], after);
+  assert.deepEqual(live(m.geometry.attributes.position), after);
+}
+
+// ---- 7b. 同一个实例、同一条缓冲区（画面冻死 + 显存漂移的两条根因） ----
+//
+// (1) 不许换 array。three 的 WebGLAttributes 按 attribute 实例记住 GPU buffer，
+//     并存下首次上传的 array.byteLength，此后每次 needsUpdate 都校验
+//     `data.size !== attribute.array.byteLength`。同一实例换更短的数组 →
+//     每一帧 render 都 throw，抛在 projectObject 里 = render 半途中断：
+//     声音照放、画面停住、编辑器点不动
+//     （主人 2026-09-05：「系统播放声音，但是无法继续编辑，画面不动了」）。
+// (2) 也不许换 attribute 实例。那样能绕开校验，但旧实例的 GPU buffer 成了孤儿
+//     ——three 只在 geometry.dispose() 释放 buffer，而这块几何还活着。
+//     一次编辑几 MB，连续编辑攒成几百 MB 显存，就是「老是崩溃」。
+//
+// 所以这一组把两头都钉死：实例不变、array 不变、只有 count 与 drawRange 收小。
+{
+  const m = makeMerged(layout);
+  const pos = m.geometry.attributes.position;
+  const col = m.geometry.attributes.color;
+  const posArr = pos.array;
+  const posBytes = posArr.byteLength;
+  const colBytes = col.array.byteLength;
+
+  dropCellsFromMerged(m, (s) => key(s.cell) === "2,0,0");
+
+  assert.equal(m.geometry.attributes.position, pos,
+    "attribute 实例必须原样保留——换实例会把旧 GPU buffer 甩成孤儿，显存越编越多");
+  assert.equal(m.geometry.attributes.position.array, posArr,
+    "array 实例也必须原样保留——换 array 会让 three 每帧 throw，画面冻死");
+  assert.equal(pos.array.byteLength, posBytes, "position 缓冲区长度必须不变");
+  assert.equal(col.array.byteLength, colBytes, "color 缓冲区长度必须不变");
+  assert.equal(pos.count, (TOTAL - 2) * 3, "只有 count 收小");
+  assert.equal(col.count, (TOTAL - 2) * 3, "所有属性同步收 count");
+  assert.equal(m.geometry.drawRange.count, (TOTAL - 2) * 3,
+    "drawRange 必须跟着 count 收——否则尾巴上的残三角会被画出来");
+  assert.ok(pos.array.length > pos.count * pos.itemSize,
+    "尾巴确实留着（这正是下游必须按 count 读的原因）");
 }
 
 // ---- 8. 跨格构件：按 cells 列表命中（屋顶分量/花园/晾衣绳） ----

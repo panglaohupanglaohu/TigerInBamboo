@@ -18,6 +18,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
+import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 
 /**
  * 鲸体配色（主人 2026-09-05 参考座头鲸照片重定）。
@@ -35,6 +36,8 @@ const SKIN_PLEAT = 0xb0aca3; // 喉腹褶槽阴影（暖灰）
 const FIN_PALE = 0xf2efe8; // 鳍肢腹面白
 const FIN_DARK = 0x2a2e34; // 鳍肢背面近黑
 const FLUKE_DEEP = 0x1d2025; // 尾叶背面近黑（照片里尾叶比体色更深）
+/** 眼珠高光与眼灯色：暖琥珀，不是冷白——冷白在近黑的头上会读成一颗塑料珠 */
+const EYE_GLOW = 0xffcf8a;
 /** 藤壶浅壳色（暖白骨色，不是冰蓝） */
 const BARNACLE = 0xd8d3c8;
 /** 地壳深苔绿（西芳寺苔庭地基） */
@@ -45,8 +48,19 @@ const SHRUB = 0x3e8e52;
 const OUTLINE_W = 0.055;
 /** 地壳板局部高度：鲸背在此「横向切平」 */
 export const LEVIATHAN_PLATE_Y = 6.08;
-/** 苔庭压缩比：六景跨度 ~40×23 → ~22×12.6，收进 25×14 地壳板 */
-export const LEVIATHAN_GARDEN_SCALE = 0.55;
+/**
+ * 苔庭压缩比：把六景整体压到鲸背那块 25×14 的地壳板上。
+ *
+ * 2026-09-05 从 0.55 调到 0.43：苔庭古松体积放大到 ×6、株距同步 ×2 之后，
+ * 六景本身的跨度变大了，按旧比例压下来投影是 15.1×10.1，撑出板外
+ * （`test_leviathan` [2] 的门是 13.2×8.0）——树会长到板沿外面悬空。
+ *
+ * 这里**不动松树、只动压缩比**：主人要的是苔庭内部「树大、树距也大」的
+ * 疏朗关系，那是六景自己的事；板子多大是鲸的事。压缩比是这两件事之间
+ * 唯一该动的那颗螺丝。净效果：松树落到鲸背上仍比改之前大 ~1.6 倍，
+ * 株距也宽 ~1.6 倍，只是整体收进了板内。
+ */
+export const LEVIATHAN_GARDEN_SCALE = 0.43;
 /** 整鲸（连同背上苔庭）线性缩放：体积观感缩到一半 */
 export const LEVIATHAN_SIZE = 0.5;
 
@@ -70,7 +84,7 @@ function lcg(seed) {
  *    最好认的特征，比花斑重要得多。
  * 材质须配 toonMat(0xffffff, { vertexColors: true, flatShading: true })。
  */
-function paintWhaleSkin(geometry, { pleats = false } = {}) {
+function paintWhaleSkin(geometry, { pleats = false, toWorld = null } = {}) {
   const pos = geometry.attributes.position;
   const colors = new Float32Array(pos.count * 3);
   const deep = new THREE.Color(SKIN_DEEP);
@@ -79,6 +93,9 @@ function paintWhaleSkin(geometry, { pleats = false } = {}) {
   const crest = new THREE.Color(SKIN_CREST);
   const pleat = new THREE.Color(SKIN_PLEAT);
   const c = new THREE.Color();
+  // 背腹位置必须按**该处横截面**归一化，不能拿绝对 Y 当尺子：体轴本身是有
+  // 起伏的（吻端低、背鳍处高），拿绝对 Y 分层会让白腹的边界在体侧上下乱窜，
+  // 渲出来是一块一块的斑，而不是照片里那条顺着体线走的硬边。
   const radiusY = Math.max(
     1e-3,
     Math.max(Math.abs(geometry.boundingBox?.min.y ?? -8), geometry.boundingBox?.max.y ?? 8)
@@ -87,19 +104,29 @@ function paintWhaleSkin(geometry, { pleats = false } = {}) {
     const x = pos.getX(i);
     const y = pos.getY(i);
     const z = pos.getZ(i);
-    const tTop = THREE.MathUtils.clamp(y / radiusY, -1, 1); // -1 腹 → 1 背
+    let tTop;
+    let wx = x;
+    if (toWorld) {
+      wx = toWorld.x(x);
+      const sec = whaleSectionAt(wx);
+      const scy = (sec.top + sec.bot) * 0.5;
+      const shy = Math.max(1e-3, (sec.top - sec.bot) * 0.5);
+      tTop = THREE.MathUtils.clamp((toWorld.y(y) - scy) / shy, -1, 1);
+    } else {
+      tTop = THREE.MathUtils.clamp(y / radiusY, -1, 1); // -1 腹 → 1 背
+    }
     // 极弱低频起伏：只够让大刻面之间有明暗差，不形成可辨认的斑块
     const grain = 0.5 + 0.5 * Math.sin(x * 0.31 + z * 0.19 + 1.3);
     c.copy(deep).lerp(mid, grain * 0.42);
     c.lerp(crest, THREE.MathUtils.clamp(tTop, 0, 1) * 0.16); // 背脊只提一点点
-    // 背腹硬边：seam 随体轴前移而下降 → 白喉往头部越包越高
-    const seam = 0.30 - 0.011 * x;
-    const bellyMix = THREE.MathUtils.smoothstep(-tTop, seam, seam + 0.16);
+    // 背腹硬边：越靠头分界线越高（照片里白喉一直包到下颌上方）
+    const seam = 0.24 - 0.0105 * wx;
+    const bellyMix = THREE.MathUtils.smoothstep(-tTop, seam, seam + 0.14);
     c.lerp(pale, bellyMix);
     // 喉腹褶：下颌 → 胸鳍之间的平行深槽
-    if (bellyMix > 0.18 && x > -4) {
+    if (bellyMix > 0.18 && wx > 0) {
       const groove = Math.sin(z * 2.35 + x * 0.42);
-      const fade = pleats ? 1 : THREE.MathUtils.clamp((x - 2) / 12, 0, 1);
+      const fade = pleats ? THREE.MathUtils.clamp(wx / 8, 0, 1) : 0;
       if (groove > -0.1) {
         c.lerp(pleat, THREE.MathUtils.clamp((groove + 0.1) * 0.62, 0, 1) * bellyMix * fade);
       }
@@ -228,8 +255,164 @@ const DORSAL_BLADE = Object.freeze([
   [3.2, -1.7, -1.4],
 ]);
 
+
 /**
- * 鲸体纵剖轮廓（主人 2026-09-05 调形）：后段向尾柄收细、头区体厚略收。
+ * 鲸体横截面站位表 —— 主人 2026-09-05 给的正交线稿（顶视 + 侧视）逐站量出来的。
+ *
+ * 为什么必须有这张表：上一版鲸体是「躯干球 + 头球 + 吻球 + 臀球 + 三节圆柱尾柄」
+ * 六件拼的，每件各有各的轮廓函数，接缝处必然出台阶——主人先后两次点名
+ * 「腰部突然变窄」「头到腰到尾应该是很平顺的」，根子都在这。拼件是修不好的，
+ * 补一件、挪一件只会把台阶挪个地方，所以整条体线改成**一张放样壳**：
+ * 一组横截面沿体轴放样，中间不存在接缝。
+ *
+ * 每行 = `[世界 X, 背线 Y, 腹线 Y, 半宽 Z]`，X 从吻端 +43 一路到尾鳍缺刻 −51。
+ *  - 横向严格按线稿比例：最大半宽 / 体长 = 17.6 / 94 ≈ 0.19（也正是
+ *    `saihojiPhalanx.js` 的 `ROPE_HALF` 锁死的 36 / 17.6，两边对得上）。
+ *  - 纵向做了 1.24× 夸张：线稿的体高换算到世界只有 ±8.4，而这头鲸背上要托
+ *    一块 Y=6.08 的地壳板（`LEVIATHAN_PLATE_Y`），压不下去。
+ */
+const WHALE_SECTIONS = Object.freeze([
+  //  世界X    背线Y    腹线Y    半宽Z
+  [43.0, -6.50, -8.30, 1.60], // 吻端
+  [37.6, -3.45, -12.02, 7.80],
+  [31.6, -1.37, -14.47, 12.10],
+  [24.7, 0.47, -15.69, 15.50], // 眼 / 胸鳍前
+  [16.8, 2.67, -16.30, 17.20],
+  [8.9, 4.26, -16.30, 17.60], // 最厚处
+  [1.9, 5.12, -15.69, 17.00],
+  [-8.0, 5.73, -14.72, 15.30],
+  [-17.8, 6.10, -13.00, 12.30], // 背鳍
+  [-27.8, 3.90, -10.80, 8.80],
+  [-35.7, 0.22, -9.33, 5.20],
+  [-42.6, -3.45, -8.60, 3.00], // 尾柄：侧扁，横向收得比纵向快
+  [-47.5, -5.29, -8.34, 1.90],
+  [-51.0, -6.50, -8.09, 1.30], // 尾鳍缺刻
+]);
+
+/** Catmull-Rom（端点夹持）：站位之间要 C1 连续，用线性会在每一站留折角 */
+function _cr(p0, p1, p2, p3, t) {
+  const t2 = t * t;
+  const t3 = t2 * t;
+  return 0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 +
+    (-p0 + 3 * p1 - 3 * p2 + p3) * t3);
+}
+
+/**
+ * 取体轴 X 处的横截面 `{ top, bot, hz }`（世界坐标）。
+ * 背部在地壳板下方会被「横向切平」抬到板面高度——这是设定里那块苔庭台地，
+ * 不是几何凑数；过渡带 |X| 10.5→19 用 smoothstep，不留硬边。
+ */
+function whaleSectionAt(x) {
+  const S = WHALE_SECTIONS;
+  const n = S.length;
+  let out;
+  if (x >= S[0][0]) out = { top: S[0][1], bot: S[0][2], hz: S[0][3] };
+  else if (x <= S[n - 1][0]) out = { top: S[n - 1][1], bot: S[n - 1][2], hz: S[n - 1][3] };
+  else {
+    let i = 0;
+    while (i < n - 2 && x < S[i + 1][0]) i++;
+    const a = S[Math.max(0, i - 1)];
+    const b = S[i];
+    const c = S[i + 1];
+    const d = S[Math.min(n - 1, i + 2)];
+    const t = (b[0] - x) / (b[0] - c[0]);
+    out = {
+      top: _cr(a[1], b[1], c[1], d[1], t),
+      bot: _cr(a[2], b[2], c[2], d[2], t),
+      hz: Math.max(0.05, _cr(a[3], b[3], c[3], d[3], t)),
+    };
+  }
+  const flat = 1 - THREE.MathUtils.smoothstep(Math.abs(x), 10.5, 19.0);
+  if (flat > 0) out.top = THREE.MathUtils.lerp(out.top, Math.max(out.top, LEVIATHAN_PLATE_Y + 0.07), flat);
+  if (out.bot > out.top - 0.1) out.bot = out.top - 0.1;
+  return out;
+}
+
+/**
+ * 沿站位表放样一段壳体。返回的是**局部坐标**：世界 = 局部 × scale + origin。
+ * 缠绕方向不靠手推——建完取一张面的法线与它的外向径向量点乘，为负就整体翻转。
+ * （上一轮鳍叶就是缠反了，`FrontSide` 被整片剔掉、只剩描边墨壳，渲成一团黑斑。）
+ */
+function buildWhaleHull({
+  fromX, toX, rings = 26, radial = 12, scale, originX = 0, originY = 0,
+  /** 可选：按体轴 X 缩放该处截面半径。用来让尾柄段的前几环「缩进」躯干里 */
+  radiusMul = null,
+}) {
+  const pos = [];
+  const idx = [];
+  const sx = scale?.x ?? 1;
+  const sy = scale?.y ?? 1;
+  const sz = scale?.z ?? 1;
+  const put = (x, wy, wz) => pos.push((x - originX) / sx, (wy - originY) / sy, wz / sz);
+  for (let i = 0; i <= rings; i++) {
+    const x = THREE.MathUtils.lerp(fromX, toX, i / rings);
+    const sec = whaleSectionAt(x);
+    const cy = (sec.top + sec.bot) * 0.5;
+    const k = radiusMul ? radiusMul(x) : 1;
+    const hy = Math.max(0.05, (sec.top - sec.bot) * 0.5) * k;
+    const hz = sec.hz * k;
+    for (let j = 0; j < radial; j++) {
+      const a = (j / radial) * Math.PI * 2;
+      put(x, cy + hy * Math.sin(a), hz * Math.cos(a));
+    }
+  }
+  for (let i = 0; i < rings; i++) {
+    for (let j = 0; j < radial; j++) {
+      const j2 = (j + 1) % radial;
+      const a = i * radial + j;
+      const b = i * radial + j2;
+      const c = (i + 1) * radial + j;
+      const d = (i + 1) * radial + j2;
+      idx.push(a, c, b, b, c, d);
+    }
+  }
+  // 两端封口：尾根一端会被下一段壳盖住，但不封口的话尾巴一摆就露出内壁
+  const capAt = (x, ringBase) => {
+    const sec = whaleSectionAt(x);
+    const cy = (sec.top + sec.bot) * 0.5;
+    const center = pos.length / 3;
+    put(x, cy, 0);
+    for (let j = 0; j < radial; j++) {
+      const j2 = (j + 1) % radial;
+      idx.push(center, ringBase + j, ringBase + j2);
+    }
+  };
+  capAt(fromX, 0);
+  capAt(toX, rings * radial);
+
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(idx);
+  // 自动定向：拿第一张面判一次
+  {
+    const p = g.attributes.position;
+    const i0 = idx[0];
+    const i1 = idx[1];
+    const i2 = idx[2];
+    const v = (k) => new THREE.Vector3(p.getX(k), p.getY(k), p.getZ(k));
+    const A = v(i0);
+    const nrm = new THREE.Vector3().subVectors(v(i1), A).cross(new THREE.Vector3().subVectors(v(i2), A));
+    // 该面所在环的截面中心（局部）
+    const midX = A.x;
+    const sec = whaleSectionAt(midX * sx + originX);
+    const cyLocal = ((sec.top + sec.bot) * 0.5 - originY) / sy;
+    const radialDir = new THREE.Vector3(0, A.y - cyLocal, A.z);
+    if (nrm.dot(radialDir) < 0) {
+      for (let k = 0; k < idx.length; k += 3) {
+        const t = idx[k + 1];
+        idx[k + 1] = idx[k + 2];
+        idx[k + 2] = t;
+      }
+      g.setIndex(idx);
+    }
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
+/**
+ * 鲸体纵剖轮廓（旧）：现在只剩「升空落雨」那段用它把水滴出生点随体形内收，
+ * 体形本身已改由 `WHALE_SECTIONS` + `buildWhaleHull` 决定。
  * X 为世界体轴坐标（吻端约 +36 / 尾端约 -36）；返回该处 y/z 半径缩放。
  * 躯干/头/吻/臀段几何与藤壶、落雨出生点共用，保证贴件不脱体。
  */
@@ -241,18 +424,6 @@ function whaleProfile(X) {
   return { sy: 1 - 0.55 * rear, sz: 1 - 0.52 * rear - 0.16 * fore };
 }
 
-/** 把几何顶点沿体轴套轮廓（originX/scaleX：该段在世界体轴上的位置与半幅） */
-function deformAlongBody(geometry, originX, scaleX) {
-  const pos = geometry.attributes.position;
-  for (let i = 0; i < pos.count; i++) {
-    const X = pos.getX(i) * scaleX + originX;
-    const { sy, sz } = whaleProfile(X);
-    pos.setY(i, pos.getY(i) * sy);
-    pos.setZ(i, pos.getZ(i) * sz);
-  }
-  pos.needsUpdate = true;
-  geometry.computeVertexNormals();
-}
 
 // 西芳寺苔庭周边不是一块矩形草皮：用 Oskar Stålberg 式的低面数、
 // 模块化轮廓表达「苔台 → 湿润斜坡 → 深色地脚」三层地貌。每一层仍
@@ -432,78 +603,76 @@ export function buildEcoLeviathanIsland(opts = {}) {
   // 分段数刻意压低（参考低多边形样例的 6~11 分段）：flatShading 下
   // 大块刻面让巨鲸读出「手工积木」感，而不是一颗光滑的光蛋。
   {
-    const bodyGeo = new THREE.SphereGeometry(8.0, 11, 8);
-    paintWhaleSkin(bodyGeo);
-    // 调形：后段收细入尾柄、头区体厚略收（轮廓见 whaleProfile）
-    deformAlongBody(bodyGeo, 0, 4.5);
+    // 一张放样壳从吻端一路走到尾柄枢纽（世界 X +43 → −31.2），
+    // 中间没有任何接缝。躯干整体下沉，使背部最高点落在地壳板高度。
+    const BODY_SCALE = new THREE.Vector3(4.5, 1.3, 2.2); // 锁死（test_leviathan 断言）
+    const BODY_Y0 = 6 - 8 * 1.3; // = −4.4，背顶 +6.0
+    const bodyGeo = buildWhaleHull({
+      fromX: 43.0,
+      // 比尾柄枢纽（−31.2）再往后多伸 2.8：接口要**互相埋进去**，不能对接。
+      // 对接的话尾巴一抬（tailRoot.rotation.z）就把两段壳掰开一道楔形缝，
+      // 加上两端封口盖与各自的描边壳，看上去就是尾巴断了——主人 2026-09-05
+      // 「鲸鱼尾还真有断裂口」。
+      toX: -34.0,
+      rings: 30,
+      radial: 12,
+      scale: BODY_SCALE,
+      originY: BODY_Y0,
+    });
+    paintWhaleSkin(bodyGeo, {
+      pleats: true,
+      toWorld: { x: (lx) => lx * BODY_SCALE.x, y: (ly) => ly * BODY_SCALE.y + BODY_Y0 },
+    });
     const body = new THREE.Mesh(
       bodyGeo,
       toonMat(0xffffff, { vertexColors: true, flatShading: true })
     );
     body.name = "leviathan-body";
-    body.scale.set(4.5, 1.3, 2.2); // 缩放死代码：锁死
-    body.position.y = 6 - 8 * 1.3; // 背顶 = +6.0
+    body.scale.copy(BODY_SCALE);
+    body.position.y = BODY_Y0;
     body.castShadow = true;
     body.receiveShadow = true;
     addOutline(body, OUTLINE_W);
     group.add(body);
 
-    // 额头 + 吻突：把拉伸球体读成鲸头，而不是一颗光蛋
-    const headGeo = new THREE.SphereGeometry(8, 9, 7);
-    paintWhaleSkin(headGeo, { pleats: true });
-    deformAlongBody(headGeo, 24.5, 12.4);
-    const head = new THREE.Mesh(
-      headGeo,
-      toonMat(0xffffff, { vertexColors: true, flatShading: true })
-    );
-    head.name = "leviathan-head";
-    head.scale.set(1.55, 0.72, 1.18);
-    head.position.set(24.5, -2.15, 0);
-    head.castShadow = true;
-    addOutline(head, OUTLINE_W);
-    group.add(head);
-    const snoutGeo = new THREE.SphereGeometry(8, 8, 6);
-    paintWhaleSkin(snoutGeo, { pleats: true });
-    deformAlongBody(snoutGeo, 33.2, 10.24);
-    const snout = new THREE.Mesh(
-      snoutGeo,
-      toonMat(0xffffff, { vertexColors: true, flatShading: true })
-    );
-    snout.name = "leviathan-snout";
-    snout.scale.set(1.28, 0.42, 0.58);
-    snout.position.set(33.2, -4.85, 0);
-    snout.castShadow = true;
-    addOutline(snout, OUTLINE_W);
-    group.add(snout);
+    // 头 / 吻 / 臀：几何已并进壳体，这三个名字保留为**定位空节点**——
+    // 贴件（结节、眼、藤壶）与 test_leviathan 的「尾柄枢纽必须插在臀段内部」
+    // 都按它们取参考系。留空节点比留三颗看不见的球干净。
+    const anchor = (name, x, y, sx) => {
+      const a = new THREE.Object3D();
+      a.name = name;
+      a.position.set(x, y, 0);
+      a.scale.setScalar(sx);
+      group.add(a);
+      return a;
+    };
+    anchor("leviathan-head", 24.5, -2.15, 1.55);
+    anchor("leviathan-snout", 33.2, -4.85, 1.28);
+    anchor("leviathan-rump", -24.2, -4.15, 1.62);
 
-    // 吻背鼓包（座头鲸结节）：沿头部上脊两排小丘，读出「活物」质感。
-    // 头椭球心 (24.5,-2.15,0)、半径 (12.4,5.76,9.44)——按参数方向贴面。
-    {
-      const hc = new THREE.Vector3(24.5, -2.15, 0);
-      const hr = new THREE.Vector3(12.4, 5.76, 9.44);
-      for (const side of [-1, 1]) {
-        for (let i = 0; i < 4; i++) {
-          const lx = 4.5 + i * 1.9; // 头局部系向前
-          const rim = Math.sqrt(Math.max(0.05, 1 - (lx / hr.x) ** 2));
-          const dir = new THREE.Vector3(lx / hr.x, rim * 0.82, (side * rim * 0.42) / 1).normalize();
-          const tub = new THREE.Mesh(
-            new THREE.SphereGeometry(0.42, 5, 4),
-            toonMat(SKIN_MID, { flatShading: true })
-          );
-          tub.name = `leviathan-tubercle-${side < 0 ? "L" : "R"}-${i}`;
-          tub.position.set(
-            hc.x + dir.x * hr.x,
-            hc.y + dir.y * hr.y,
-            hc.z + dir.z * hr.z
-          );
-          tub.scale.set(1, 0.72, 1);
-          addOutline(tub, OUTLINE_W * 0.6);
-          group.add(tub);
-        }
+    // 吻背结节（座头鲸 tubercle）：沿吻背两排小丘贴在壳面上
+    for (const side of [-1, 1]) {
+      for (let i = 0; i < 5; i++) {
+        const x = 28.0 + i * 3.1;
+        const sec = whaleSectionAt(x);
+        const cy = (sec.top + sec.bot) * 0.5;
+        const hy = (sec.top - sec.bot) * 0.5;
+        const phi = Math.PI / 2 - (0.34 + 0.07 * i); // 从背脊往体侧铺开一点
+        const zz = sec.hz * Math.cos(phi) * side;
+        const yy = cy + hy * Math.sin(phi);
+        const tub = new THREE.Mesh(
+          new THREE.SphereGeometry(0.42, 5, 4),
+          toonMat(SKIN_MID, { flatShading: true })
+        );
+        tub.name = `leviathan-tubercle-${side < 0 ? "L" : "R"}-${i}`;
+        tub.position.set(x, yy, zz);
+        tub.scale.set(1, 0.72, 1);
+        addOutline(tub, OUTLINE_W * 0.6);
+        group.add(tub);
       }
     }
 
-    // 背鳍（座头鲸的小钩状背鳍）：地壳板后方脊线上的一枚小后掠鳍
+    // 背鳍（座头鲸的小钩状背鳍）：脊线上、地壳板后方
     {
       const dorsal = new THREE.Mesh(
         makeFinBlade(DORSAL_BLADE, {
@@ -514,43 +683,116 @@ export function buildEcoLeviathanIsland(opts = {}) {
       );
       dorsal.name = "leviathan-dorsal";
       dorsal.scale.set(1.25, 1, 1.25);
-      dorsal.position.set(-14.6, 4.35, 0);
+      dorsal.position.set(-16.5, whaleSectionAt(-16.5).top - 0.25, 0);
       dorsal.rotation.x = -Math.PI / 2; // 展向 +Z → +Y（立起来），厚度落在 ±Z
       dorsal.castShadow = true;
       addOutline(dorsal, OUTLINE_W * 0.34);
       group.add(dorsal);
     }
 
-    // 太古鲸眼：头段两侧各一枚深色小珠，半嵌进头壳（头椭球心
-    // (24.5,-2.15,0)、半径 (12.4,5.76,9.44)，眼位 = 表面方向
-    // (0.55,0.35,±0.75) 内缩 0.85 倍）。没有眼睛的巨鲸在远景里只是
-    // 一团白影；有了眼睛，低多边形刻面才读成「活物」。
+    // 太古鲸眼（主人 2026-09-05 加需求）：**会睁会闭**，眼珠里有光。
+    //
+    // 结构（每侧一组，挂在 eyeRoot 下，动画只动这一组）：
+    //   眼球（近黑压扁球） → 眼珠高光（暖琥珀小球，MeshBasicMaterial 不吃光）
+    //   → 眼珠外的**两枚半球壳**（绕前后轴相向开合）
+    //   → 眼灯（PointLight，走 localLightRegistry 参与 K4 预算，不是野生灯）
+    //
+    // 开合形式是主人 2026-09-05 明确指定的：「眼珠外有两个半球开合即可」。
+    // 上一版我做成上下两片扁球体沿 Y 平移相向合拢，视觉上读成「眼睑连睫毛
+    // 一起被拉开」，主人的原话是「一点都不好看」。两者的差别不是参数而是
+    // 机制：平移的是两张皮，旋转的是一个被剖开的壳——后者合上时就是一颗
+    // 完整的球，张开时像贝壳让开，没有任何「皮」的形状出现。
+    const eyes = [];
     for (const side of [-1, 1]) {
+      const sec = whaleSectionAt(27.5);
+      const cy = (sec.top + sec.bot) * 0.5;
+      const hy = (sec.top - sec.bot) * 0.5;
+      const phi = -0.18;
+      const ex = 27.5;
+      const ey = cy + hy * Math.sin(phi);
+      const ez = side * sec.hz * Math.cos(phi) * 0.97;
+      const tag = side < 0 ? "L" : "R";
+
+      const eyeRoot = new THREE.Group();
+      eyeRoot.name = `leviathan-eye-root-${tag}`;
+      eyeRoot.position.set(ex, ey, ez);
+      group.add(eyeRoot);
+
       const eye = new THREE.Mesh(
         new THREE.SphereGeometry(0.85, 6, 5),
         toonMat(0x101215, { flatShading: true })
       );
-      eye.name = `leviathan-eye-${side < 0 ? "L" : "R"}`;
-      eye.position.set(30.3, -0.44, side * 6.0);
+      eye.name = `leviathan-eye-${tag}`; // 名字不变：test_leviathan / 外部按名取
       eye.scale.set(1, 1, 0.55); // 压扁贴面
       addOutline(eye, OUTLINE_W);
-      group.add(eye);
-    }
+      eyeRoot.add(eye);
 
-    // 臀段：塞进躯干后极，把身体和尾柄焊死，中间不许留缝
-    const rumpGeo = new THREE.SphereGeometry(8, 10, 8);
-    paintWhaleSkin(rumpGeo);
-    deformAlongBody(rumpGeo, -24.2, 12.96);
-    const rump = new THREE.Mesh(
-      rumpGeo,
-      toonMat(0xffffff, { vertexColors: true, flatShading: true })
-    );
-    rump.name = "leviathan-rump";
-    rump.scale.set(1.62, 0.94, 1.18);
-    rump.position.set(-24.2, -4.15, 0);
-    rump.castShadow = true;
-    addOutline(rump, OUTLINE_W);
-    group.add(rump);
+      // 眼珠高光：不吃光的小亮点，偏上外侧——这是「活物」的关键一笔
+      const shine = new THREE.Mesh(
+        new THREE.SphereGeometry(0.26, 5, 4),
+        new THREE.MeshBasicMaterial({ color: EYE_GLOW })
+      );
+      shine.name = `leviathan-eye-shine-${tag}`;
+      shine.position.set(0.16, 0.24, side * 0.42);
+      shine.scale.set(1, 1, 0.6);
+      shine.userData.transientFx = true; // 不进静态合并块
+      eyeRoot.add(shine);
+
+      // 两枚半球壳：合上时拼成一颗完整的球把眼珠整个包住，张开时各自
+      // 绕**前后轴**向背离镜头的一侧转开。
+      //
+      // 半球用 SphereGeometry 的 thetaStart/thetaLength 切：
+      // 上壳 theta 0→π/2（+Y 那半），下壳 π/2→π（−Y 那半）。
+      //
+      // 旋转轴必须是局部 X（鲸的前后向）。眼睛朝 ±Z（体侧），绕 X 转才是
+      // 「掀开」；绕 Y 会把壳转到眼珠正前方，绕 Z 是绕着视线自转，两个都不对。
+      //
+      // lidWrap 承担压扁：**先转再压**。如果把压扁写在半球自己身上，
+      // 压扁轴会跟着旋转一起转，转到一半壳会变成一个歪的椭球。
+      // 放进父级 group 就是「在正球空间里转好，再整体压向体侧」，
+      // 合上时是一枚贴着皮肤的透镜状眼盖，不是一颗突出来的球。
+      const lidWrap = new THREE.Group();
+      lidWrap.name = `leviathan-eyelid-wrap-${tag}`;
+      lidWrap.scale.set(1, 1, 0.62);
+      eyeRoot.add(lidWrap);
+
+      const lidMat = toonMat(SKIN_MID, { flatShading: true });
+      const mkLid = (upper) => {
+        const lid = new THREE.Mesh(
+          new THREE.SphereGeometry(
+            0.94, 12, 5, 0, Math.PI * 2,
+            upper ? 0 : Math.PI / 2, Math.PI / 2
+          ),
+          lidMat
+        );
+        lid.name = `leviathan-eyelid-${tag}-${upper ? "top" : "bot"}`;
+        lid.userData.lidUpper = upper;
+        addOutline(lid, OUTLINE_W * 0.5);
+        lidWrap.add(lid);
+        return lid;
+      };
+      const lidTop = mkLid(true);
+      const lidBot = mkLid(false);
+
+      // 眼灯：K4 局部光预算内的注册灯，id 由 owner 派生（leviathan-eye#0/#1）
+      const glow = new THREE.PointLight(EYE_GLOW, 0.0, 26, 2);
+      glow.name = `leviathan-eye-light-${tag}`;
+      glow.position.set(0.2, 0.2, side * 0.7);
+      eyeRoot.add(glow);
+      registerLocalLight(glow, {
+        owner: "leviathan-eye",
+        kind: "point",
+        color: EYE_GLOW,
+        intensity: 1.15,
+        radius: 26,
+        priority: 4,
+      });
+
+      eyes.push({ eyeRoot, eye, shine, lidTop, lidBot, glow, side });
+    }
+    group.userData.leviathanEyes = eyes;
+
+
 
     // 胸鳍：座头鲸标志性的长鳍肢——淡青白，贴在躯干中段两侧
     // 胸鳍：座头鲸标志性的超长鳍肢。上一版是 ConeGeometry 且埋在体侧
@@ -566,11 +808,19 @@ export function buildEcoLeviathanIsland(opts = {}) {
       pec.name = `leviathan-pectoral-${side < 0 ? "L" : "R"}`;
       // 姿态取「侧视能看全、俯视也露得出」的折中：后掠 30°、下垂 22°，
       // 再绕体轴外翻一点，让鳍面不与体侧平行（平行时侧视会缩成一条线）。
-      pec.position.set(9.6, -6.8, side * 11.0);
+      // 附着点按线稿取在体长 ~30% 处的下体侧，长度也照线稿放大到近体长 1/3
+      {
+        const sec = whaleSectionAt(16.0);
+        const cy = (sec.top + sec.bot) * 0.5;
+        const hy = (sec.top - sec.bot) * 0.5;
+        const phi = -0.62;
+        pec.position.set(16.0, cy + hy * Math.sin(phi), side * sec.hz * Math.cos(phi) * 0.86);
+      }
+      pec.scale.setScalar(1.55);
       pec.rotation.order = "ZYX";
-      pec.rotation.z = -0.30; // 鳍面外翻，侧视看得到叶面而不是刃口
-      pec.rotation.y = -side * 0.42;
-      pec.rotation.x = side * 0.38;
+      pec.rotation.z = -0.26; // 鳍面外翻，侧视看得到叶面而不是刃口
+      pec.rotation.y = -side * 0.50;
+      pec.rotation.x = side * 0.34;
       pec.castShadow = true;
       addOutline(pec, OUTLINE_W * 0.34); // 薄件描边必须减细
       group.add(pec);
@@ -591,32 +841,30 @@ export function buildEcoLeviathanIsland(opts = {}) {
       }
     }
 
-    // 20 枚极扁太古藤壶：贴躯体表面，避开地壳板投影区与腹底
+    // 20 枚极扁太古藤壶：贴壳面撒，避开地壳板投影区与腹底正中
     let placed = 0;
     let guard = 0;
     while (placed < 20 && guard < 400) {
       guard++;
-      const lat = (rnd() - 0.5) * Math.PI * 0.92;
-      const lon = rnd() * Math.PI * 2;
-      const dx = Math.cos(lat) * Math.cos(lon);
-      const dy = Math.sin(lat);
-      const dz = Math.cos(lat) * Math.sin(lon);
-      const x = dx * 8 * 4.5;
-      const prof = whaleProfile(x); // 贴件随体形轮廓（收细段同步内收）
-      const y = dy * 8 * 1.3 * prof.sy + body.position.y;
-      const z = dz * 8 * 2.2 * prof.sz;
-      if (Math.abs(x) < 13.2 && Math.abs(z) < 7.6 && y > 3.4) continue; // 板下投影
-      if (y < -9.5) continue; // 腹底留白
+      const x = THREE.MathUtils.lerp(40, -29, rnd());
+      const a = rnd() * Math.PI * 2;
+      const sec = whaleSectionAt(x);
+      const cy = (sec.top + sec.bot) * 0.5;
+      const hy = (sec.top - sec.bot) * 0.5;
+      const y = cy + hy * Math.sin(a);
+      const z = sec.hz * Math.cos(a);
+      if (Math.abs(x) < 13.2 && Math.abs(z) < 7.6 && y > 3.4) continue; // 地壳板投影下
+      if (Math.sin(a) < -0.86) continue; // 腹底正中留白
       const barn = new THREE.Mesh(
         new THREE.IcosahedronGeometry(1, 0),
         toonMat(BARNACLE, { flatShading: true })
       );
       barn.name = "leviathan-barnacle";
-      const s = 0.32 + rnd() * 0.3;
-      barn.scale.set(s * (0.85 + rnd() * 0.5), s * (0.16 + rnd() * 0.12), s * (0.85 + rnd() * 0.5));
+      const sc = 0.32 + rnd() * 0.3;
+      barn.scale.set(sc * (0.85 + rnd() * 0.5), sc * (0.16 + rnd() * 0.12), sc * (0.85 + rnd() * 0.5));
       barn.position.set(x, y, z);
-      // 椭球面法向 = (dx/sx², dy/sy², dz/sz²) 归一化（含轮廓缩放）
-      const n = new THREE.Vector3(dx / 20.25, dy / (1.69 * prof.sy), dz / (4.84 * prof.sz)).normalize();
+      // 椭圆截面外法线（体轴方向的斜度对贴片朝向影响可忽略）
+      const n = new THREE.Vector3(0, Math.sin(a) / hy, Math.cos(a) / sec.hz).normalize();
       barn.quaternion.setFromUnitVectors(_up, n);
       barn.rotateY(rnd() * Math.PI);
       addOutline(barn, OUTLINE_W);
@@ -716,42 +964,48 @@ export function buildEcoLeviathanIsland(opts = {}) {
   tailRoot.rotation.z = TAIL_Z_RISEN;
   group.add(tailRoot);
   {
-    // 尾柄肤色：体侧青蓝（与躯干背部水彩衔接）
-    const skinMat = toonMat(SKIN_MID, { flatShading: true });
-    const cuff = new THREE.Mesh(new THREE.SphereGeometry(8, 9, 7), skinMat);
-    cuff.name = "leviathan-tail-cuff";
-    cuff.scale.set(0.80, 0.80, 0.66); // 侧扁：尾柄从这里就开始左右收窄
-    cuff.position.set(1.2, 0, 0);
-    cuff.castShadow = true;
-    addOutline(cuff, OUTLINE_W);
-    tailRoot.add(cuff);
-
-    const addStalk = (name, rNear, rFar, len, x, y = 0) => {
+    // 尾柄是**同一张站位表的续接段**：起点截面与躯干壳在 X=−31.2 处逐字相同，
+    // 所以尾巴摆动时接口只是弯，不会露台阶。原来的「袖口球 + 三节圆柱」正是
+    // 主人看到的那圈突然鼓出来的方块。
+    {
+      const sec0 = whaleSectionAt(-31.2);
+      const pivotY = (sec0.top + sec0.bot) * 0.5;
+      tailRoot.position.y = pivotY;
+      const stalkGeo = buildWhaleHull({
+        // 从枢纽**之前** 3.2 起步，整段前端埋进躯干里；埋进去的那截半径缩到
+        // 0.84 再渐回 1.0，避免与躯干壳同半径重合而 z-fighting。
+        // 这样尾巴绕枢纽俯仰时，掰动发生在躯干内部，外面看不到接缝。
+        fromX: -28.0,
+        toX: -51.0,
+        rings: 16,
+        radial: 12,
+        scale: new THREE.Vector3(1, 1, 1),
+        originX: -31.2,
+        originY: pivotY,
+        radiusMul: (x) => (x >= -34.0
+          ? THREE.MathUtils.lerp(0.84, 1.0, THREE.MathUtils.clamp((-28.0 - x) / 6.0, 0, 1))
+          : 1),
+      });
+      paintWhaleSkin(stalkGeo, {
+        toWorld: { x: (lx) => lx - 31.2, y: (ly) => ly + pivotY },
+      });
       const stalk = new THREE.Mesh(
-        new THREE.CylinderGeometry(rNear, rFar, len, 7),
-        skinMat
+        stalkGeo,
+        toonMat(0xffffff, { vertexColors: true, flatShading: true })
       );
-      stalk.name = name;
-      stalk.rotation.z = -Math.PI / 2;
-      // 侧扁尾柄：旋转后 local X→世界 −Y、local Z→世界 Z，
-      // 所以纵向放大 1.18、横向压到 0.52，读出真鲸那种「刀刃形」尾柄，
-      // 而不是上一版的圆管。
-      stalk.scale.set(1.16, 1, 0.62);
-      stalk.position.set(x, y, 0);
+      stalk.name = "leviathan-tail-stalk";
       stalk.castShadow = true;
       addOutline(stalk, OUTLINE_W);
       tailRoot.add(stalk);
-      return stalk;
-    };
-    // 三段交叠收细：近体粗端插进臀段，远端口对上尾鳍根
-    // 2026-09-05：尾柄缩短一节并略加粗——上一轮收得太细太长，俯视读成一根针。
-    addStalk("leviathan-tail-stalk", 5.20, 3.90, 9.2, -3.8, 0.05);
-    addStalk("leviathan-tail-mid", 3.90, 2.90, 8.0, -11.6, 0.18);
-    addStalk("leviathan-tail-tip", 2.90, 2.00, 5.2, -17.6, 0.34);
+    }
 
     const flukes = new THREE.Group();
     flukes.name = "leviathan-flukes";
-    flukes.position.set(-19.9, 0.42, 0);
+    {
+      const secT = whaleSectionAt(-51.0);
+      flukes.position.set(-19.8, (secT.top + secT.bot) * 0.5 - whaleSectionAt(-31.2).top * 0 -
+        ((whaleSectionAt(-31.2).top + whaleSectionAt(-31.2).bot) * 0.5), 0);
+    }
     flukes.rotation.x = 0.6;
     // 尾叶：上一版是两只 4 面锥体，读成飞镖尾翼——主人 2026-09-05 点名
     // 「尤其是尾巴」不对。改成放样鳍叶：中央有缺刻、两片向后掠、后缘凹、
@@ -961,6 +1215,42 @@ export function buildEcoLeviathanIsland(opts = {}) {
       .addScaledVector(upN, bob)
       .addScaledVector(fwdN, driftF)
       .addScaledVector(rightN, driftR);
+    // ---- 眨眼（主人 2026-09-05）：确定性节律，不用 Math.random ----
+    // 节律参考真实巨鲸：多数时候半睁着缓慢呼吸，偶尔一次快速眨，
+    // 更偶尔一次长闭（像在打盹）。三条正弦错相拼出来，同一时刻永远同一结果。
+    {
+      const eyes = group.userData.leviathanEyes || [];
+      if (eyes.length) {
+        const cyc = time / 5.7;
+        const frac = cyc - Math.floor(cyc);            // 每 5.7s 一轮
+        // 快眨：一轮里前 7% 的时间，0→1→0 走一个正弦包
+        const quick = frac < 0.07 ? Math.sin((frac / 0.07) * Math.PI) : 0;
+        // 长闭：每 6 轮来一次，闭得更久也更深
+        const longIdx = Math.floor(cyc) % 6 === 0;
+        const long = longIdx && frac < 0.30 ? Math.sin((frac / 0.30) * Math.PI) ** 0.6 : 0;
+        // 常态半睁：极缓的呼吸感，眼睑始终有一点点动
+        const idle = 0.12 + 0.05 * Math.sin(time * 0.31);
+        const close = THREE.MathUtils.clamp(Math.max(quick, long * 0.95, idle), 0, 1);
+        for (const e of eyes) {
+          // 两枚半球开合：0 = 合成整球盖住眼珠，最大 ≈83° = 让开眼珠。
+          // 不给满 90°：留一点点壳挂在上下缘，眼睛才有眼眶的厚度，
+          // 全部转光了会读成「眼珠直接长在皮肤上」。
+          const open = 1 - close;
+          const ang = Math.PI * 0.46 * open;
+          // 往**背离镜头**的一侧转开。右眼 side>0、镜头在 +Z：
+          // 上壳要 +Y→−Z（绕 X 负向），下壳要 −Y→−Z（绕 X 正向）；
+          // 左眼镜头在 −Z，两个方向同时取反——所以统一写成 ∓side*ang。
+          e.lidTop.rotation.x = -e.side * ang;
+          e.lidBot.rotation.x = e.side * ang;
+          // 闭合时眼珠高光与眼灯一起熄，睁开才亮——不然会隔着眼皮发光
+          const lit = Math.max(0, open - 0.25) / 0.75;
+          e.shine.visible = lit > 0.02;
+          e.shine.scale.setScalar(0.6 + 0.4 * lit);
+          e.glow.intensity = 1.15 * lit * lit;
+        }
+      }
+    }
+
     // 尾姿随升空进度：尾鳍比躯干微延迟 12% 扬起
     const span = Math.max(1e-6, maxR - minR);
     const t01 = THREE.MathUtils.clamp((anchorR - minR) / span, 0, 1);

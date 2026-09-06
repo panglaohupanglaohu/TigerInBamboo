@@ -339,6 +339,38 @@ export const messengerIslandScene = {
       flock: moebiusPack.flock,
       canyonDir: moebiusPack.canyonDir,
     });
+    // 舰队分队的两个后期绑定：combatPack 在下面才创建，先留个引用槽。
+    // 侦察机每帧才去读它，所以「创建顺序」和「使用顺序」可以错开——
+    // 硬要把 scoutDefense 挪到 combatPack 之后会打乱废弃之门那一块的装配顺序。
+    let combatPackRef = null;
+    /** 战场中心 = 主舰（莫比斯机队）的地面投影。「随主舰移动」在侦察机这一侧的落点 */
+    const fleetAnchorDir = (() => {
+      const acc = new THREE.Vector3();
+      const tmp = new THREE.Vector3();
+      const smooth = new THREE.Vector3();
+      let primed = false;
+      let lastT = 0;
+      return () => {
+        const members = (skyPack.aircraftSquad?.userData?.members || []).filter((m) => m?.parent);
+        if (!members.length) { primed = false; return null; }
+        acc.set(0, 0, 0);
+        for (const m of members) acc.add(m.getWorldPosition(tmp));
+        acc.multiplyScalar(1 / members.length);
+        if (acc.lengthSq() < 1e-8) return null;
+        acc.normalize();
+        // ---- 低通：圆心不许跟着主舰的高频动作跳（主人 2026-09-06）----
+        // 苔庭鲸把主舰拽得上下俯冲时，瞬时地面投影每帧都在动；侦察机的盘旋圆心
+        // 照着它走，三架机就跟着抽——「跟着莫比斯 aircraft 拉扯癫狂」在侦察机
+        // 这一侧的样子。滤掉高频，主舰真正转场（低频）时照样跟得过去。
+        const now = (typeof performance !== "undefined" ? performance.now() : Date.now()) / 1000;
+        const dt = primed ? Math.max(0, Math.min(0.25, now - lastT)) : 0;
+        lastT = now;
+        if (!primed) { smooth.copy(acc); primed = true; return smooth.clone(); }
+        smooth.lerp(acc, 1 - Math.exp(-dt / 2.2)).normalize();
+        return smooth.clone();
+      };
+    })();
+
     const scoutDefense = createScoutDefenseSquad({
       scene,
       radius: R,
@@ -348,11 +380,22 @@ export const messengerIslandScene = {
       getGateBirdVortex: () => gatePack.gateBirdVortex || null,
       surfacePosition: tripleGateSample?.position,
       count: 5,
+      // 主人 2026-09-06：抽 3 架编入莫比斯舰队（前出侦查 + 曳光指示），
+      // 水晶城留 2 架守原岗——两条故事线都保住。
+      fleetCount: 3,
+      getFleetAnchor: fleetAnchorDir,
+      getFleetTargets: () => combatPackRef?.vanguardAssault?.tourTargets?.() || [],
+      // 分工制：曳光只标记，标出来的东西推进舰队的优先打击名单，
+      // 由泡机（麻醉）/ 重甲兵（射击格斗）/ 登陆艇（撞飞）各打各的。
+      onDesignate: (object) => {
+        combatPackRef?.vanguardAssault?.designateTarget?.(object);
+      },
     });
     // 兼容旧版调试句柄：现在代表5架侦察机组成的 squad，而非单机。
     const tripleGateScoutAircraft = scoutDefense.root;
     settleBuriedAssets(scene, colliders);
 
+    // eslint-disable-next-line prefer-const
     const combatPack = loadCitadelCombat({
       scene,
       R,
@@ -365,6 +408,7 @@ export const messengerIslandScene = {
       v4Runtime: citadelPack.v4Runtime,
       planetV8,
     });
+    combatPackRef = combatPack; // 侦察机的舰队分队从这一刻起能读到任务状态
     // 正式页海壳内的谷底静态副本不会进入视野。只处理内容工厂明确标记、
     // 且包围范围完整低于海面的子树；战斗、车辆、倒影等动态内容绝不猜测。
     const officialOceanOcclusion = pruneTaggedOfficialOceanOccludeds(scene, { radius: R });

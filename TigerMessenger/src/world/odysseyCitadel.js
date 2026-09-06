@@ -73,7 +73,7 @@ import {
   TOWNSCAPER_MODULE_FAMILIES,
   citadelPaletteIndexOfChar,
   citadelShadeStep,
-} from "./citadelTown.js?v=20260905-wfc-wire-v1";
+} from "./citadelTown.js?v=20260905-townscaper-palette-v1";
 import { citadelColumnCenter, createCitadelGridV6 } from "./citadel/gridMigration.js";
 import { applyStencilWindows } from "../render/stencilWindows.js";
 import {
@@ -698,6 +698,21 @@ export function makeCanalMat(hex, { vertexColors = false, pattern = "flat" } = {
       color: albedo,
       map,
       bumpMap: map,
+      // 墙体必须双面（主人 2026-09-05：「删除建筑单元后留下来的灰色网孔是什么」）。
+      //
+      // 体块几何只画朝空邻的外露面（makeExposedCellGeometry），那是对的、也确实
+      // 在工作——探针实测：挖掉一个六面全包的内部格，邻域三角 1684 → 1814，
+      // 邻格朝洞的那一面照长不误。问题出在**墙是零厚度的单面 quad**：
+      // 一旦视线能看到墙的背面（删掉一片格之后到处都是这种剖面），
+      // FrontSide 把墙整片剔掉，剩下 addOutline 那层向外扩的 BackSide 墨壳
+      // 正对着你 —— 灰蓝色、还带着壳与壳互相穿插漏出的窟窿，就是「灰色网孔」。
+      //
+      // 双面是这里代价最小的正解：不加一个三角、不加一次 draw call，
+      // 只是让背面也被光栅化；three 会为背面翻转法线，着色是对的。
+      // 墙的背面在深度上比外扩的墨壳更近，画上去正好把墨壳挡住。
+      // （屋顶/阳台等其它 pattern 不参与：它们不会被从背面看到，
+      //   而且 roof 本来就被 applyInkOutlines 跳过。）
+      side: pattern === "wall" ? THREE.DoubleSide : THREE.FrontSide,
       bumpScale: pattern === "roof" ? 0.055 : pattern === "wall" ? 0.035 : pattern === "balcony" ? 0.028 : 0,
       roughness: pattern === "roof" ? 0.9 : pattern === "balcony" ? 0.82 : 0.86,
       metalness: 0.0,
@@ -3226,6 +3241,30 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
       }
     });
   });
+
+  // 3b) 丢弃剩下的整份装配（2026-09-05）。
+  //
+  // 增量重建为了拿 dirty 层的新网格，实际上**重造了一整座城**，然后只把
+  // 命中的层组 `add` 进场景，其余整批扔掉——扔掉的那些几何从来没人 dispose。
+  // `tools/probe_geom_leak.mjs` 实测：修掉 geometryMerge 的烘焙中间体之后，
+  // 每次编辑仍净漏 ~245 个 BufferGeometry，出生地全在 buildCitadelTown 的
+  // 各个建件行上，就是这一批。编辑几十次之后帧时间被 GC 顶到 1.5s
+  // （主人 2026-09-05 截屏：fps 11.9 / hitch 844 / worst 1582.6ms）。
+  //
+  // 共享实例要当心：一次 build 里多个网格可能共用同一份原型几何，其中一部分
+  // 已经被搬进场景。所以只释放「当前场景里没有任何网格引用」的那些。
+  {
+    const kept = new Set();
+    castleContainer.traverse((o) => { if (o.isMesh && o.geometry) kept.add(o.geometry); });
+    const dropped = new Set();
+    assembly.group?.traverse?.((o) => {
+      if (!o.isMesh || !o.geometry) return;
+      if (kept.has(o.geometry)) return;
+      dropped.add(o.geometry);
+    });
+    for (const g of dropped) g.dispose();
+    // 材质是整份装配共享的（搬进场景的网格还在用），不能碰。
+  }
 
   // 4) 新网格描边（单网格，与全量 applyInkOutlines 同参数）
   let outlineCount = 0;

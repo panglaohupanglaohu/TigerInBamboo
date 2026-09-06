@@ -105,6 +105,12 @@ const KILL_ARROW = 4;
 const KILL_MELEE = 2;
 const HIGHGROUND_SHOT_FACTOR = 0.72; // 居高射箭冷却倍率（<1 = 更快）
 
+// 主人 2026-09-05：**受攻击必反击**——红盔或蓝盔被重甲兵打中，立刻记仇扑上去。
+const RETALIATE_HOLD = 9;     // 记仇持续（秒），期间脱离阵列扑向重甲兵
+const RETALIATE_SPREAD_R = 7; // 同袍被激怒的半径：一人挨刀，附近同党一起上
+const RETALIATE_SEEK_R = 45;  // 主动扑击的搜索半径（超出就放弃追击回列阵）
+const CHARGE_SPEED = 2.6;     // 扑击速度（米/秒）——普通士兵跑起来的样子
+
 const _up = new THREE.Vector3();
 const _fwd = new THREE.Vector3();
 const _right = new THREE.Vector3();
@@ -1347,6 +1353,62 @@ export function createSaihojiPhalanxBattle({
    *  - 鲸升起：告警整队——长弓手奔向北翼两列、矛/盾结成护壁（整理队伍）。
    * @param {THREE.Object3D} s 士兵（须已存 formationPos = 阵位）
    */
+  /**
+   * 本帧存活、已落地的重甲兵清单（主人 2026-09-05 反击机制用）。
+   * update 里刷新；patrolSoldier 在 updateGarrison 中调用，用的是上一帧的清单
+   * （差一帧，观感无差别，避免改动既有调用顺序）。
+   */
+  let liveVanguards = [];
+
+  /** 距 s 最近的活着重甲兵（超出 seekR 算没有） */
+  function nearestVanguard(s, seekR = RETALIATE_SEEK_R) {
+    if (!liveVanguards.length) return null;
+    s.getWorldPosition(_tmpD);
+    let best = null;
+    let bestD = seekR * seekR;
+    for (const v of liveVanguards) {
+      if (!v?.parent || v.userData?.dead) continue;
+      v.getWorldPosition(_tmpE);
+      const d2 = _tmpE.distanceToSquared(_tmpD);
+      if (d2 < bestD) { bestD = d2; best = v; }
+    }
+    return best;
+  }
+
+  /**
+   * 记仇（主人 2026-09-05）：被重甲兵打中的士兵，连同附近同阵营的同袍一起被激怒，
+   * 此后一段时间脱离阵列扑向重甲兵。
+   * @param {THREE.Object3D} soldier 挨打的士兵
+   * @param {THREE.Object3D|null} trooper 打他的重甲兵（可能为空 → 只记仇不指定对象）
+   * @param {THREE.Object3D[]} peers 同阵营士兵池（用于扩散激怒）
+   */
+  function markGrudge(soldier, trooper = null, peers = []) {
+    if (!soldier?.userData) return;
+    soldier.userData.grudgeT = RETALIATE_HOLD;
+    if (trooper?.parent) soldier.userData.grudgeFoe = trooper;
+    // 同袍被激怒：一人挨刀，附近一起上（"踊跃向前"）
+    soldier.getWorldPosition(_tmpD);
+    for (const o of peers) {
+      if (o === soldier || !o?.parent || o.userData?.dead || o.userData?.downed) continue;
+      if ((o.userData.helmSide || "red") !== (soldier.userData.helmSide || "red")) continue;
+      o.getWorldPosition(_tmpE);
+      if (_tmpE.distanceToSquared(_tmpD) > RETALIATE_SPREAD_R * RETALIATE_SPREAD_R) continue;
+      o.userData.grudgeT = Math.max(o.userData.grudgeT || 0, RETALIATE_HOLD * 0.7);
+    }
+    logEvent("vanguardRetaliate", {
+      target: soldier.userData.uid ?? 0,
+      by: trooper?.userData?.uid ?? 0,
+    });
+  }
+
+  /** 记仇衰减（每帧） */
+  function decayGrudge(list, dt) {
+    for (const s of list) {
+      const g = s?.userData?.grudgeT || 0;
+      if (g > 0) s.userData.grudgeT = Math.max(0, g - dt);
+    }
+  }
+
   function patrolSoldier(s, dt, whaleUp) {
     if (!s.userData.formationPos) return;
     // 战斗期（fightFormed 在拔河全程锁定，鲸被拽到半空也保持列阵）或鲸起
@@ -1359,6 +1421,27 @@ export function createSaihojiPhalanxBattle({
       returning: false,
     });
     if (inFight) {
+      // 主人 2026-09-05：被重甲兵打过 → **脱离阵列扑上去**（不再钉在 fightPos 挨打）
+      const grudgeFoe = (s.userData.grudgeT || 0) > 0 ? nearestVanguard(s) : null;
+      if (grudgeFoe) {
+        grudgeFoe.getWorldPosition(_tmpB);
+        if (s.position.distanceTo(_tmpB) > MELEE_RANGE * 0.8) {
+          _tmp.copy(_tmpB).sub(s.position);
+          const d = _tmp.length();
+          if (d > 1e-4) {
+            _tmp.multiplyScalar(Math.min(CHARGE_SPEED * dt, d) / d);
+            s.position.add(_tmp);
+            _tmp.copy(s.position).normalize();
+            s.position.copy(_tmp).multiplyScalar(PLANET_RADIUS + groundLift(_tmp));
+            surfaceBasis(_tmp, _tmpB.clone().sub(s.position), _up, _fwd, _right);
+            s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
+          }
+        }
+        u.returning = false; // 退出列阵插值态（下次解气后重新列阵）
+        s.userData.charging = true;
+        return;
+      }
+      s.userData.charging = false;
       if (!u.returning) {
         u.returning = true;
         u.t = 0;
@@ -2481,6 +2564,9 @@ export function createSaihojiPhalanxBattle({
       .filter((w) => w.state === "siege")
       .flatMap((w) => w.soldiers)
       .filter((s) => s.visible && !s.userData.dead);
+    // 记仇衰减：攻城期被重甲兵打过的红盔/蓝盔亦然，解气后回归本职（守梯/攻城）
+    decayGrudge(livingReds, dt);
+    decayGrudge(blues, dt);
     // 攻城期不受夜间潜入任务（太鼓）信号支配：那套信号一激活会把全体蓝盔
     // 拽去运河交汇（chase 逃跑），刚集结完的攻城军每夜都会被扯散——
     // 攻城故事的收尾只由「深夜清场 + 木马兵驱赶残部」（下方 lateNight 分支）负责。
@@ -2516,6 +2602,27 @@ export function createSaihojiPhalanxBattle({
       let foe = null;
       let best = MELEE_RANGE * MELEE_RANGE * 1.4;
       s.getWorldPosition(_tmp);
+      // 主人 2026-09-05：被重甲兵打过 → 优先砍重甲兵（够得着才扑，够不着照旧守梯口）
+      const vgFoe = (s.userData.grudgeT || 0) > 0 ? nearestVanguard(s, RETALIATE_SEEK_R) : null;
+      if (vgFoe) {
+        vgFoe.getWorldPosition(_tmpB);
+        if (_tmpB.distanceToSquared(_tmp) <= MELEE_RANGE * MELEE_RANGE * 1.4) {
+          faceCombatTarget(s, vgFoe, 0.35);
+          aimCombatToolAt(s, vgFoe, 1);
+          s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
+          if (s.userData._meleeCd <= 0) {
+            s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
+            const r = applyVanguardHit(vgFoe, "melee"); // 15 刀 1 伤
+            if (r.wounded) {
+              root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
+              logEvent("vanguardWound", { uid: vgFoe.userData.uid ?? 0, by: "melee", life: r.life, dead: r.dead });
+            }
+            vgFoe.getWorldPosition(_tmpB);
+            spawnSpark(_tmpB);
+          }
+          continue;
+        }
+      }
       for (const b of blues) {
         b.getWorldPosition(_tmpB);
         const d2 = _tmpB.distanceToSquared(_tmp);
@@ -2750,6 +2857,24 @@ export function createSaihojiPhalanxBattle({
         s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
         if (s.userData._meleeCd > 0) continue;
         s.getWorldPosition(_tmp);
+        // 主人 2026-09-05：蓝缨被重甲兵打过，同样扑上去还手
+        const vgFoe = (s.userData.grudgeT || 0) > 0 ? nearestVanguard(s, RETALIATE_SEEK_R) : null;
+        if (vgFoe) {
+          vgFoe.getWorldPosition(_tmpB);
+          if (_tmpB.distanceToSquared(_tmp) <= MELEE_RANGE * MELEE_RANGE * 1.4) {
+            faceCombatTarget(s, vgFoe, 0.35);
+            aimCombatToolAt(s, vgFoe, 1);
+            s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
+            const r = applyVanguardHit(vgFoe, "melee");
+            if (r.wounded) {
+              root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
+              logEvent("vanguardWound", { uid: vgFoe.userData.uid ?? 0, by: "melee", life: r.life, dead: r.dead });
+            }
+            vgFoe.getWorldPosition(_tmpB);
+            spawnSpark(_tmpB);
+            continue;
+          }
+        }
         let foe = null;
         let best = MELEE_RANGE * MELEE_RANGE;
         for (const r of livingReds) {
@@ -3455,7 +3580,9 @@ export function createSaihojiPhalanxBattle({
       vanguardRoot?.userData?.state === "deployed"
         ? (vanguardRoot.userData.troopers || []).filter((v) => v.parent && !v.userData.dead)
         : [];
+    liveVanguards = vanguardTroopers; // 反击机制共用（找最近重甲兵 / 冲锋）
     const live = [...members.filter((m) => m.parent), ...vanguardTroopers];
+    // 记仇衰减见下方 shooters 就位之后
 
     // ---------- 绳索小队：抛绳挂鲸、拔河拉回（告警后稍候出发） ----------
     if (whaleUp && !ropesDispatched && fightFormed) {
@@ -3482,6 +3609,8 @@ export function createSaihojiPhalanxBattle({
         .flatMap((w) => w.soldiers),
       ...garrison.flatMap((g) => g.soldiers),
     ];
+    // 记仇衰减：解气（或重甲兵撤离）后回列阵继续射机队
+    decayGrudge(shooters, dt);
 
     // ---------- aircraft 反击脉冲：光束闪爆推倒光束落点附近的士兵 ----------
     const gp = squad?.userData?.groundPulse;
@@ -3510,6 +3639,37 @@ export function createSaihojiPhalanxBattle({
           continue;
         }
         s.getWorldPosition(_tmp);
+        // 主人 2026-09-05：被重甲兵打过 → 这一轮不打机队，扑上去打重甲兵
+        const grudgeFoe = (s.userData.grudgeT || 0) > 0 ? nearestVanguard(s) : null;
+        if (grudgeFoe) {
+          faceCombatTarget(s, grudgeFoe, 0.35);
+          if (s.userData.phalanxRole === "longbow") {
+            const cd = s.userData._shotCd || 0;
+            if (cd > 0) s.userData._shotCd = cd - dt;
+            const released = updateLongbowShot(s, dt, rand);
+            if (released && (s.userData._shotCd || 0) <= 0) {
+              s.userData._shotCd = 1.6 + rand() * 0.9;
+              fireArrow(s, grudgeFoe); // 箭钉在重甲上（20 箭 1 伤的账由 applyVanguardHit 记）
+            }
+          } else {
+            // 长枪兵也改为近身刺击（冲到面前再投枪不成立）
+            grudgeFoe.getWorldPosition(_tmpB);
+            if (_tmpB.distanceToSquared(_tmp) > MELEE_RANGE * MELEE_RANGE * 2.2) continue;
+            aimCombatToolAt(s, grudgeFoe, 1);
+            s.userData._meleeCd = (s.userData._meleeCd || 0) - dt;
+            if (s.userData._meleeCd <= 0) {
+              s.userData._meleeCd = MELEE_COOLDOWN * (0.8 + rand() * 0.5);
+              const r = applyVanguardHit(grudgeFoe, "melee"); // 15 刀 1 伤（代差）
+              if (r.wounded) {
+                root.userData.vanguardWounds = (root.userData.vanguardWounds || 0) + 1;
+                logEvent("vanguardWound", { uid: grudgeFoe.userData.uid ?? 0, by: "melee", life: r.life, dead: r.dead });
+              }
+              grudgeFoe.getWorldPosition(_tmpB);
+              spawnSpark(_tmpB); // 砍在重甲上的火星（看得见砍不动）
+            }
+          }
+          continue;
+        }
         // 面向机队（盘顶悬停位）：完整三维瞄准——机队在空中，箭手必须仰射
         _fwd.copy(squad.userData?._patrolCenter || _tmp).sub(_tmp);
         if (_fwd.lengthSq() > 1e-4) {
@@ -3583,15 +3743,27 @@ export function createSaihojiPhalanxBattle({
     if (vanguardRoot && whaleUp && fightFormed &&
         (vanguardRoot.userData.state === "aboard" || vanguardRoot.userData.state === "done")) {
       // 2026-09-05：done（巡演收队）后再次鲸起也能重新触发
-      const hd = hubDir(_tmp).clone();
-      if (vanguardAssault?.begin) {
-        vanguardAssault.begin(hd);
-      } else {
-        // 无突击模块（如 V3 后端）：退回旧的瞬时落地（已修球面浮高）
-        const gr = groundHeightAt(hd) ?? PLANET_RADIUS + 0.3;
-        deployVanguardSquad(vanguardRoot, hd, gr + 0.05);
+      // ⚠️ 主人 2026-09-06：**这里不再开局**。
+      //
+      // 原来是「鲸起 + 方阵成形 = 苔庭之战开打」，每帧问一次 requestStation。
+      // 那等于把苔庭钉成一个固定战役：主舰只要在附近停稳、冷却又过了，
+      // 就会自己开一局，跟有没有人打主舰毫无关系——这是「重甲兵反复空降」
+      // 的最后一台发动机。
+      //
+      // 现在苔庭跟别的地方一视同仁，是主舰航线上的一站。红盔朝天上放箭打中
+      // 机队时，本文件的箭/标枪命中回调会调 onFleetUnderAttack，
+      // 那是唯一的开局入口（「只有莫比斯 aircraft 受到攻击才会产生空降」）。
+      if (!vanguardAssault?.requestStation) {
+        // 无突击模块（如 V3 后端）：保留旧的瞬时落地，那条线上没有受击回调
+        const hd = hubDir(_tmp).clone();
+        if (vanguardAssault?.begin) {
+          vanguardAssault.begin(hd);
+        } else {
+          const gr = groundHeightAt(hd) ?? PLANET_RADIUS + 0.3;
+          deployVanguardSquad(vanguardRoot, hd, gr + 0.05);
+        }
+        logCommand("vanguardDeploy");
       }
-      logCommand("vanguardDeploy");
     }
 
     // ---------- 先锋兵反击：激光刀 1 刀（先破盾）/ 闪电炮光圈 2 炮 损伤目标 ----------
@@ -3611,10 +3783,12 @@ export function createSaihojiPhalanxBattle({
         soldiers: shooters.concat(tourTargets),
         // 主人 2026-09-05：谁在打莫比斯机队就先瞄准谁、面对谁、近战谁
         prefer: vanguardAssault?.threatTargets?.() || [],
-        onWound: (soldier, weapon) => {
+        onWound: (soldier, weapon, trooper = null) => {
           // 主人 2026-09-05 口径：激光剑 1 剑毙命（pike +2）/ 闪电枪 2 枪毙命
           //（vanguardBolt +2：strikeLands 已按 2 枪折 1 次 wound，此处一次 wound 直接致死）
           applySoldierDamage(soldier, weapon === "blade" ? "pike" : "vanguardBolt");
+          // 主人 2026-09-05：挨了重甲兵一下 → 记仇，带着附近同袍扑上去反击
+          markGrudge(soldier, trooper, shooters);
           root.userData.vanguardKills = (root.userData.vanguardKills || 0) + (soldier.userData.dead ? 1 : 0);
           logEvent("vanguardStrike", {
             target: soldier.userData.uid ?? 0,
@@ -3625,10 +3799,12 @@ export function createSaihojiPhalanxBattle({
         // 闪电炮放电弧光（充电→放电的"悬念"可视化）
         onBoltArc: (from, to) => boltFx.spawn(from, to),
         // 激光刀劈盾：盾网格当场消失——普通盾牌对激光刀等于没有（代差感）
-        onShieldBroken: (soldier) => {
+        onShieldBroken: (soldier, trooper = null) => {
           const sh = soldier?.userData?.equipment?.shield;
           if (sh) sh.visible = false;
           soldier.userData.shieldBroken = true;
+          // 盾被激光刀劈了更该拼命：同样记仇扑上去
+          markGrudge(soldier, trooper, shooters);
           root.userData.vanguardShieldBreaks = (root.userData.vanguardShieldBreaks || 0) + 1;
           logEvent("vanguardShieldBreak", { target: soldier.userData.uid ?? 0 });
           spawnSpark(soldier.getWorldPosition(new THREE.Vector3()));

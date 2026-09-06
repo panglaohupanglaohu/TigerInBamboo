@@ -32,4 +32,5 @@ assert.match(main, /createScoutAircraftRide/);
 assert.match(main, /scoutAircraftRide\?\.update\(dt\)/);
 assert.match(html, /id="scout-hint"/);
 
+
 console.log("✅ Scout defense: five-aircraft deployment, city/gate target scan, F driving and vertical controls verified");

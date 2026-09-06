@@ -52,18 +52,43 @@ export function dropCellsFromMerged(mesh, isDirty) {
   const removedTris = totalTris - keptTris;
   if (removedTris <= 0) return 0;
 
+  // 压缩必须**原地**做：同一个 attribute、同一条 array，只收 count。
+  //
+  // 两条互相拉扯的约束，缺一条就出事：
+  //
+  // (1) 不许换 array（保留同一实例、换更短的数组）。three 的 WebGLAttributes
+  //     用 WeakMap 按 attribute 实例记住 GPU buffer，并存下首次上传时的
+  //     array.byteLength；此后每次 needsUpdate 都校验
+  //     `data.size !== attribute.array.byteLength`，换短数组这条永远不相等，
+  //     于是**每一帧 render 都 throw**。异常抛在 projectObject 里 = render
+  //     半途中断：音频线程照跑（有声音），画面停在最后一帧、编辑器点不动。
+  //     主人 2026-09-05：「系统播放声音，但是无法继续编辑，画面不动了」。
+  //
+  // (2) 也不许换 attribute 实例（那样能绕开校验，three 会给新实例建新 buffer）。
+  //     旧实例连同它的 GPU buffer 会变成孤儿——three 只在 geometry.dispose()
+  //     时释放 buffer，而这块几何还活着。一次编辑几 MB，连续编辑攒到几百 MB
+  //     显存，就是主人说的「老是崩溃」。
+  //
+  // 同时满足两条的写法只有一个：缓冲区原封不动，只把要留的三角形往前搬，
+  // 然后收 count 与 drawRange。byteLength 全程不变 → 校验通过；实例不变 →
+  // 不产生孤儿 buffer；不分配 → 增量编辑这条热路径上零 GC 压力。
+  //
+  // 代价是数组尾部留着上一版的残数据。**所有下游都必须按 count 读几何，
+  // 不能按 array.length 读**——geometryMerge.mergeGroup 就踩过这条（批量 set
+  // 时按整条 array 长度算偏移，直接 RangeError: offset is out of bounds）。
+  //
+  // 前向压缩天然安全：head <= from 恒成立；且 TypedArray.prototype.set 对同
+  // buffer 的重叠拷贝有规范定义（等价于先克隆源）。
   for (const name of Object.keys(geometry.attributes)) {
     const attr = geometry.attributes[name];
     const size = attr.itemSize;
-    const next = new attr.array.constructor(keptTris * 3 * size);
     let head = 0;
     for (const [a, b] of keep) {
       const from = a * 3 * size;
       const to = b * 3 * size;
-      next.set(attr.array.subarray(from, to), head);
+      if (head !== from) attr.array.set(attr.array.subarray(from, to), head);
       head += to - from;
     }
-    attr.array = next;
     attr.count = keptTris * 3;
     attr.needsUpdate = true;
   }

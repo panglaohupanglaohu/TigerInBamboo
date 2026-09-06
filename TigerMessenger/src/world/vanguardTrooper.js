@@ -28,6 +28,12 @@ export const VANGUARD_COMBAT = Object.freeze({
   arrowsPerWound: 20,
   /** 打先锋兵：10 标枪 = 1 次损伤 */
   javelinsPerWound: 10,
+  /**
+   * 打先锋兵：15 刀 = 1 次损伤（主人 2026-09-05"被攻击就反击"补的新口径）。
+   * 比标枪（10）还钝——红盔/蓝盔的短剑砍在重甲上几乎无效，代差感就在这里：
+   * 士兵会**踊跃扑上去**，但砍半天砍不倒，反过来被 1 刀 1 个。
+   */
+  meleeHitsPerWound: 15,
   /** 先锋兵打普通士兵：激光刀 1 刀 = 1 次损伤 */
   bladeHitsPerWound: 1,
   /** 先锋兵打普通士兵：闪电枪 2 枪 = 1 次损伤 */
@@ -42,7 +48,45 @@ export const VANGUARD_COMBAT = Object.freeze({
  * 乘坐：GatePodCraft 3 台各索降 2 名（6），gateHaulerCraft 3 台各卸 6 名（18 容量，
  * 实载 16：6/6/4，末艇差额让给"比 20 多出的看护"口径）。战斗队形仍是 2 × 10。
  */
-export const VANGUARD_SQUAD_SIZE = 22;
+export const VANGUARD_SQUAD_SIZE = 27;
+
+/**
+ * 花名册版图（主人 2026-09-06 定的舰队编成）——**唯一真相**。
+ *
+ *   uid  0.. 5：泡机突击兵。3 台 × 2 名，每台一前一后（前后型快速突击）
+ *   uid  6..26：登陆艇兵。3 艘 × 7 名，每艘第 7 名（seat 6）留守看护
+ *
+ * 谁上哪台车、坐第几个位子，全部由 uid 一次算出。这不是为了好看：撤离时
+ * 「回自己乘来的那艘艇」、回收时「谁归哪台泡机的绳子」都要靠这个映射，
+ * 旧口径把看护定义成「uid ≥ 20」，跟载具无关，于是这两件事永远对不上号。
+ *
+ * @param {number} uid
+ * @returns {{kind:"pod"|"hauler", vehicle:number, seat:number, lead:boolean, guard:boolean}}
+ */
+export function vanguardRosterSlot(uid) {
+  const i = Math.max(0, uid | 0);
+  const podSeats = VANGUARD_FORMATION.assaultPods * VANGUARD_FORMATION.perAssaultPod; // 6
+  if (i < podSeats) {
+    const seat = i % VANGUARD_FORMATION.perAssaultPod;
+    return {
+      kind: "pod",
+      vehicle: Math.floor(i / VANGUARD_FORMATION.perAssaultPod),
+      seat,
+      lead: seat === 0,   // 前位：突击对里冲在前面的那个
+      guard: false,
+    };
+  }
+  const k = i - podSeats;
+  const per = VANGUARD_FORMATION.perHaulerSeats; // 7
+  const seat = k % per;
+  return {
+    kind: "hauler",
+    vehicle: Math.floor(k / per),
+    seat,
+    lead: seat === 0,     // 每艇第一个人当组长
+    guard: seat === per - 1, // 最后一个位子＝留守看护
+  };
+}
 
 /**
  * 闪电炮的**充电—放电**模型（主人 2026-09-04：「别上来一顿突突，要出现充电过程，
@@ -65,12 +109,14 @@ export const VANGUARD_BOLT = Object.freeze({
   cooldown: 0.85,
   /** 满充命中率（近距离） */
   hitFull: 0.86,
-  /** 零充命中率（被打断/抢射时的下限） */
-  hitEmpty: 0.06,
-  /** 命中率随距离衰减到一半的距离（主人 2026-09-05：射程拉到 150m） */
-  halfRange: 80,
-  /** 最大射程（超出不开火）——150 米外即可瞄准发射 */
-  maxRange: 150,
+  /** 零充命中率（被打断/抢射时的下限）——主人 2026-09-06 抬到 0.25，远距脱靶更少见 */
+  hitEmpty: 0.25,
+  /** 命中率随距离衰减到一半的距离（主人 2026-09-06：射程拉到 500m，halfRange 同步抬到 280） */
+  halfRange: 280,
+  /** 最大射程（超出不开火）——主人 2026-09-06 拉到 500m，让空中飞行的攻击者进入射程 */
+  maxRange: 500,
+  /** 对威胁目标「超距则逼近」停下开火的水平接战距离（米，切平面投影） */
+  engageHoriz: 50,
   /** 光圈弹丸飞行速度（米/秒）：放慢到肉眼能看清青色光环划过弹道（主人 2026-09-05） */
   ringSpeed: 30,
   /** 弧光折线段数（放电函数的采样数，弧光已由光圈弹取代，常量保留兼容） */
@@ -86,10 +132,22 @@ export const VANGUARD_BOLT = Object.freeze({
  * 每组 = **1 名组长 + 3 个三人子小组**（三三制）。
  */
 export const VANGUARD_FORMATION = Object.freeze({
-  groups: 2,
-  perGroup: 10,
-  teamsPerGroup: 3,
+  // 三三制的最小单位是**三人小组**。一艘登陆艇下 6 名参战兵 = 2 个三人小组，
+  // 三艘艇就是 3 组 × 2 小组 = 18 人。按艇分组而不是按人数硬切，
+  // 是为了让「哪条艇下来的人、撤离时回哪条艇」在编成上就成立。
+  groups: 3,          // 一艇一组
+  perGroup: 6,        // 每艇参战 6（第 7 名留守看护，不进阵型）
+  teamsPerGroup: 2,
   perTeam: 3,
+  /** 每艘登陆艇的实际座位数（含那名留守看护） */
+  perHaulerSeats: 7,
+  /** 泡机突击对：3 台 × 2 名，不进三三制方阵，另走前后型突击 */
+  assaultPods: 3,
+  perAssaultPod: 2,
+  /** 突击对前出距离（米）：压在三三制阵列前方，先接敌 */
+  assaultLead: 7.5,
+  /** 突击对内前后两人的间距（米） */
+  assaultPairGap: 2.6,
   /** 推进速度（米/秒）——「缓慢沉稳推进」，比普通士兵慢一截 */
   advanceSpeed: 0.85,
   /** 子小组三角的边长 */
@@ -300,13 +358,13 @@ export function createVanguardTrooper({ scale = 1, seed = 0 } = {}) {
  * 箭与标枪各记各的账——用户给的是两个独立口径，不是换算成同一种伤害点数。
  *
  * @param {THREE.Object3D} trooper
- * @param {"arrow"|"javelin"} kind
- * @returns {{wounded:boolean, dead:boolean, arrowHits:number, javelinHits:number, life:number}}
+ * @param {"arrow"|"javelin"|"melee"} kind
+ * @returns {{wounded:boolean, dead:boolean, arrowHits:number, javelinHits:number, meleeHits:number, life:number}}
  */
 export function applyVanguardHit(trooper, kind) {
   const u = trooper?.userData;
   if (!u || u.dead) {
-    return { wounded: false, dead: !!u?.dead, arrowHits: u?.arrowHits ?? 0, javelinHits: u?.javelinHits ?? 0, life: u?.life ?? 0 };
+    return { wounded: false, dead: !!u?.dead, arrowHits: u?.arrowHits ?? 0, javelinHits: u?.javelinHits ?? 0, meleeHits: u?.meleeHits ?? 0, life: u?.life ?? 0 };
   }
   let wounded = false;
   if (kind === "arrow") {
@@ -315,13 +373,17 @@ export function applyVanguardHit(trooper, kind) {
   } else if (kind === "javelin") {
     u.javelinHits = (u.javelinHits || 0) + 1;
     if (u.javelinHits >= VANGUARD_COMBAT.javelinsPerWound) { u.javelinHits = 0; wounded = true; }
+  } else if (kind === "melee") {
+    // 红盔/蓝盔的刀砍重甲：15 刀才 1 次损伤（代差）
+    u.meleeHits = (u.meleeHits || 0) + 1;
+    if (u.meleeHits >= VANGUARD_COMBAT.meleeHitsPerWound) { u.meleeHits = 0; wounded = true; }
   }
   if (wounded) {
     u.wounds = (u.wounds || 0) + 1;
     u.life = Math.max(0, (u.life ?? VANGUARD_COMBAT.vanguardLife) - 1);
     if (u.life <= 0) { u.dead = true; u.downed = true; }
   }
-  return { wounded, dead: !!u.dead, arrowHits: u.arrowHits, javelinHits: u.javelinHits, life: u.life };
+  return { wounded, dead: !!u.dead, arrowHits: u.arrowHits, javelinHits: u.javelinHits, meleeHits: u.meleeHits ?? 0, life: u.life };
 }
 
 /**
@@ -369,6 +431,7 @@ const _vtD = new THREE.Vector3();
 const _vtE = new THREE.Vector3();
 const _vtF = new THREE.Vector3();
 const _vtG = new THREE.Vector3();
+const _vtH = new THREE.Vector3();
 const _vtQ = new THREE.Quaternion();
 const _vtUp = new THREE.Vector3();
 const _vtFwd = new THREE.Vector3();
@@ -539,6 +602,23 @@ export function updateVanguardCombat(squadRoot, dt, t, opts = {}) {
     if (!best) continue;
     const dist = Math.sqrt(bestD);
 
+    // 主人 2026-09-06：威胁目标（正在攻击机队的生物/红盔）超距则主动逼近。
+    // 之前重甲兵站着不追，光圈弹永远够不着天上的攻击者。用「水平距离」（切平面投影）
+    // 判据——攻击者盘旋高空时重甲兵朝其正下方走，走到接近水平阈值即停，
+    // 此时欧氏 dist 落入拉大后的射程（maxRange=500），闪电枪才真正开火。
+    if (preferLive.length && preferLive.includes(best)) {
+      _vtE.copy(_vtA).normalize();                   // 自身径向
+      _vtH.copy(_vtB).sub(_vtA);                     // 指向目标（世界）
+      _vtH.addScaledVector(_vtE, -_vtH.dot(_vtE));   // 剥去径向 → 水平分量
+      const horiz = _vtH.length();
+      if (horiz > VANGUARD_BOLT.engageHoriz) {
+        _vtH.normalize();
+        const r0 = tr.position.length();
+        tr.position.addScaledVector(_vtH, VANGUARD_FORMATION.advanceSpeed * dt);
+        tr.position.normalize().multiplyScalar(r0);  // 贴回球面，保持行走高度
+      }
+    }
+
     // 瞄准（主人 2026-09-05：远距离激光炮要瞄准的）：接敌即转身面对目标
     if (dist <= boltRange) {
       _vtE.copy(_vtA).normalize();                 // 径向
@@ -643,7 +723,12 @@ function fireBoltRing(squadRoot, from, to, target, hit, trooper) {
 
 /** 萤火虫光斑纹理（懒建一次：白心 → 萤黄 → 透明径向渐变） */
 let _fireflyTex = null;
-function fireflyTexture() {
+/**
+ * 萤火光点贴图（径向渐变，加色混合用）。
+ * 2026-09-06 导出：泡机的麻醉弹也要这层光晕，两处必须是同一个视觉语汇——
+ * 各画各的迟早会漂成两种萤火。
+ */
+export function fireflyTexture() {
   if (_fireflyTex) return _fireflyTex;
   const c = document.createElement("canvas");
   c.width = 64;
@@ -782,35 +867,53 @@ export function vanguardAliveCount(squadRoot) {
  */
 export function assignVanguardFireteams(squadRoot) {
   const troopers = squadRoot?.userData?.troopers || [];
-  const { groups: G, perGroup, teamsPerGroup, perTeam } = VANGUARD_FORMATION;
+  const { groups: G, teamsPerGroup, perTeam } = VANGUARD_FORMATION;
   const groups = [];
   for (let g = 0; g < G; g++) {
-    const slice = troopers.slice(g * perGroup, (g + 1) * perGroup);
-    const teams = [];
-    for (let ti = 0; ti < teamsPerGroup; ti++) teams.push([]);
-    let leader = null;
-    slice.forEach((tr, i) => {
-      tr.userData.group = g;
-      if (i === 0) {
-        // 每组第一个人当组长
-        tr.userData.role = "leader";
-        tr.userData.team = -1;
-        tr.userData.slot = -1;
-        leader = tr;
-        return;
-      }
-      const k = i - 1;                       // 0..8
-      const ti = Math.floor(k / perTeam);    // 0/1/2
-      const slot = k % perTeam;              // 0/1/2
-      tr.userData.role = "member";
-      tr.userData.team = ti;
-      tr.userData.slot = slot;
-      teams[ti].push(tr);
-    });
-    groups.push({ index: g, leader, teams, all: slice });
+    groups.push({ index: g, leader: null, teams: Array.from({ length: teamsPerGroup }, () => []), all: [] });
   }
-  squadRoot.userData.formation = { groups };
-  return { groups };
+  const assault = [];
+
+  for (const tr of troopers) {
+    const slot = vanguardRosterSlot(tr.userData.uid ?? 0);
+    tr.userData.vehicleSlot = slot;
+    // 看护身份在这里一次定死。旧代码写在 vanguardAssault.setupMission 里
+    // （`uid >= 20`），跟他坐哪条艇无关——撤离时「回自己乘来的那艘艇」对不上号。
+    tr.userData.vehicleGuard = slot.guard;
+
+    if (slot.kind === "pod") {
+      // 泡机突击兵：不进三三制方阵，走前后型突击对
+      tr.userData.role = "assault";
+      tr.userData.group = -1;
+      tr.userData.team = -1;
+      tr.userData.slot = slot.seat;
+      tr.userData.pod = slot.vehicle;
+      assault.push(tr);
+      continue;
+    }
+    tr.userData.pod = -1;
+    if (slot.guard) {
+      // 留守看护：守在自己那艘艇旁，不进阵型（updateVanguardAdvance 会跳过）
+      tr.userData.role = "guard";
+      tr.userData.group = slot.vehicle;
+      tr.userData.team = -1;
+      tr.userData.slot = -1;
+      continue;
+    }
+    const g = Math.min(G - 1, slot.vehicle);
+    const ti = Math.floor(slot.seat / perTeam) % teamsPerGroup;
+    const inner = slot.seat % perTeam;
+    tr.userData.role = slot.lead ? "leader" : "member";
+    tr.userData.group = g;
+    tr.userData.team = ti;
+    tr.userData.slot = inner;
+    groups[g].teams[ti].push(tr);
+    groups[g].all.push(tr);
+    if (slot.lead) groups[g].leader = tr;
+  }
+
+  squadRoot.userData.formation = { groups, assault };
+  return { groups, assault };
 }
 
 /**
@@ -823,12 +926,20 @@ export function assignVanguardFireteams(squadRoot) {
  * @returns {{right:number, forward:number}} 局部偏移
  */
 export function vanguardFormationOffset(trooper) {
-  const { teamSpacing, teamGap, groupGap } = VANGUARD_FORMATION;
+  const { teamSpacing, teamGap, groupGap, assaultLead, assaultPairGap } = VANGUARD_FORMATION;
+  // 泡机突击对（主人 2026-09-06：「快速突击型 前后型战斗」）：
+  // 不进三三制方阵，三对人压在阵列前方横排，每对一前一后。
+  // 前出是有战术含义的——他们是索降下来的，落点本就在敌人跟前。
+  if (trooper.userData.role === "assault") {
+    const pod = trooper.userData.pod ?? 0;
+    const lead = (trooper.userData.slot ?? 0) === 0;
+    return {
+      right: (pod - (VANGUARD_FORMATION.assaultPods - 1) / 2) * assaultPairGap * 1.8,
+      forward: assaultLead + (lead ? assaultPairGap * 0.5 : -assaultPairGap * 0.5),
+    };
+  }
   const g = trooper.userData.group ?? 0;
   const groupOff = (g - (VANGUARD_FORMATION.groups - 1) / 2) * groupGap;
-  if (trooper.userData.role === "leader") {
-    return { right: groupOff, forward: teamGap * 0.55 };
-  }
   const ti = trooper.userData.team ?? 0;
   const slot = trooper.userData.slot ?? 0;
   // 子小组锚点：左前 / 右前 / 中后
@@ -843,9 +954,13 @@ export function vanguardFormationOffset(trooper) {
     { right: -teamSpacing * 0.55, forward: -teamSpacing * 0.35 },
     { right: teamSpacing * 0.55, forward: -teamSpacing * 0.35 },
   ][slot % 3];
+  // 组长站在自己那个三人小组的位子上，只往前挪半步——他是小组的一员，
+  // 不是飘在阵型外的一个点。旧写法把组长单独摆在组前方，于是 team 0
+  // 永远缺一个人，三人小组的三角在画面上是残的。
+  const leadBump = trooper.userData.role === "leader" ? teamSpacing * 0.45 : 0;
   return {
     right: groupOff + TEAM_ANCHOR.right + SLOT.right,
-    forward: TEAM_ANCHOR.forward + SLOT.forward,
+    forward: TEAM_ANCHOR.forward + SLOT.forward + leadBump,
   };
 }
 

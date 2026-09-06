@@ -11,13 +11,34 @@ const DEFAULT_COUNT = 5;
 const ZONE_DWELL = 18;
 const SCAN_INTERVAL = 0.32;
 const SCOUT_SPEED = 21; // 速度感（2026-08-28）：巡航速度 13→21
-const SCOUT_TURN_ACCEL = 30; // 转向加速度上限（u/s²）：产生大半径滑翔弧线，而非苍蝇抖动
+const SCOUT_TURN_ACCEL = 38; // 转向加速度上限（u/s²）：滑翔弧线；侦察机「轻灵迅捷」，比运输/攻击平台利落
 const ATTACK_RANGE = 10.5;
 const MIN_FORMATION_GAP = 7.2;
 const SHOT_INTERVAL = 1.55;
 const SHOT_FLIGHT_TIME = 0.28;
 const BIRD_DOWN_TIME = 5.2;
 const BIRD_COOLDOWN = 6.5;
+
+// ---- 舰队分队（主人 2026-09-06）----------------------------------------
+/** 编入舰队的机在战场上空的巡航高度（米，地表之上） */
+const FLEET_SCOUT_ALT = 46;
+/** 环绕战场的盘旋半径（米）——「环绕战场飞行」要看得出是在绕圈，不是悬停 */
+const FLEET_ORBIT_RADIUS = 62;
+/** 盘旋角速度（弧度/秒） */
+const FLEET_ORBIT_SPEED = 0.55;
+/** 同一个目标被重复指示的冷却（秒）：曳光是指示，不是刷屏 */
+const DESIGNATE_COOLDOWN = 4.5;
+/**
+ * 曳光指示的有效射程（米）。**这就是 standoff 的具体数值**：
+ * 盘旋半径 ~52 + 高度 46 → 到战场中心的斜距约 70，到战场边缘约 85。
+ * 给到 110 才能做到「在圈上指示、不下去贴脸」。
+ * 对照：ATTACK_RANGE=10.5 是水晶城猎鸟用的**接敌**距离，两回事，别混。
+ */
+const DESIGNATE_RANGE = 110;
+/** 硬性最低离地高度（米）。侦察机不许俯冲到地面高度——截屏那种贴地是事故 */
+const FLEET_MIN_AGL = 30;
+/** 俯仰限幅（弧度，≈23°）：机头跟速度矢量走，但侦察机不做垂直机动 */
+const SCOUT_PITCH_LIMIT = 0.40;
 
 const HOME_SLOTS = [
   { along: -0.9, side: 0, up: 0.8 },
@@ -91,6 +112,15 @@ export function createScoutDefenseSquad(options = {}) {
     surfacePosition = null,
     count = DEFAULT_COUNT,
     onHit = () => {},
+    // ---- 舰队分队（主人 2026-09-06）----
+    /** 编入莫比斯舰队的架数；其余留守水晶城。0 = 全部留守（旧行为） */
+    fleetCount = 0,
+    /** 战场中心（主舰地面投影方向，单位向量）；null = 舰队不在场 */
+    getFleetAnchor = () => null,
+    /** 战场上待指示的目标（由 vanguardAssault 提供） */
+    getFleetTargets = () => [],
+    /** 曳光弹指示回调：把目标推给舰队的优先打击名单 */
+    onDesignate = () => {},
   } = options;
   if (!scene) throw new Error("createScoutDefenseSquad requires scene");
 
@@ -106,6 +136,9 @@ export function createScoutDefenseSquad(options = {}) {
   const units = [];
   const shots = [];
   const targets = [];
+  /** 战场目标（舰队分队专用）。与 targets 分开：两支分队打的是两件事 */
+  const fleetTargets = [];
+  const nFleet = Math.max(0, Math.min(count | 0, fleetCount | 0));
   let zone = "city";
   let zoneT = 0;
   let scanT = 0;
@@ -233,18 +266,111 @@ export function createScoutDefenseSquad(options = {}) {
     }
   }
 
+  /**
+   * 战场目标 → 指示记录。
+   *
+   * hit 回调**不造成伤害**：主人 2026-09-06 选的是分工制——侦察机只标记，
+   * 标出来的东西交给舰队各打各的（空中生物归泡机麻醉、地面归重甲兵、
+   * 贴到艇边的归登陆艇撞）。这里只把目标推进优先打击名单。
+   */
+  function addFleetTargets(time) {
+    const list = getFleetTargets?.() || [];
+    for (const object of list) {
+      if (!object?.parent || object.userData?.dead) continue;
+      const ud = object.userData || {};
+      if ((ud.scoutDesignatedUntil || 0) > time) continue; // 指示冷却中
+      const position = new THREE.Vector3();
+      object.getWorldPosition(position);
+      fleetTargets.push({
+        zone: "fleet",
+        kind: "fleet-designated",
+        object,
+        position,
+        hit: (at) => {
+          object.userData.scoutDesignatedUntil = at + DESIGNATE_COOLDOWN;
+          object.userData.scoutDesignated = true;
+          onDesignate(object);
+          return true;
+        },
+      });
+    }
+  }
+
+  /**
+   * 舰队分队的巡航位：绕**战场中心**盘旋（主人：「前出侦查，环绕战场飞行」）。
+   *
+   * 战场中心 = 主舰的地面投影。这是「随主舰移动」在侦察机这一侧的落点：
+   * 主舰飞到哪，这三架就绕到哪，不再回水晶城换岗。
+   */
+  function fleetOrbitPosition(index, time, anchorDir, out = new THREE.Vector3()) {
+    const up = _up.copy(anchorDir).normalize();
+    // 切平面基底（球面世界的老规矩：先取一个不与 up 平行的参考轴）
+    _forward.set(0, 1, 0);
+    if (Math.abs(_forward.dot(up)) > 0.95) _forward.set(1, 0, 0);
+    projectTangent(_forward, up);
+    _right.crossVectors(up, _forward).normalize();
+    // 三架机在同一个圈上均分相位，读起来是一队在绕，不是三架各转各的
+    const phase = time * FLEET_ORBIT_SPEED + (index / Math.max(1, nFleet)) * Math.PI * 2;
+    // 真实的侦察盘旋圈不是节拍器：半径与高度都有缓慢起伏（换个角度看同一片地）。
+    // 系数取自 index，确定性，不用 Math.random。
+    const wob = index * 1.7;
+    const radius = FLEET_ORBIT_RADIUS * (1 + Math.sin(phase * 0.5 + wob) * 0.14);
+    const alt = FLEET_SCOUT_ALT + Math.sin(phase * 0.37 + wob) * 7;
+    // 球面偏移铁律：**先乘半径再切向平移，最后归一化**
+    out.copy(up).multiplyScalar(R + alt)
+      .addScaledVector(_forward, Math.cos(phase) * radius)
+      .addScaledVector(_right, Math.sin(phase) * radius);
+    return out;
+  }
+
   function scan(time) {
     targets.length = 0;
     if (zone === "city") addCityTargets(getCityBirdFlocks?.(), time);
     else addGateTargets(getGateBirdVortex?.(), time);
     targetCursor = targets.length ? targetCursor % targets.length : 0;
+    // 舰队分队自己的目标池
+    fleetTargets.length = 0;
+    if (nFleet > 0 && getFleetAnchor?.()) addFleetTargets(time);
   }
 
+  /**
+   * 姿态：机头指速度矢量 + 协调转弯压坡度。
+   *
+   * 旧版把 forward 完全投影到切平面（projectTangent），俯仰恒为 0——
+   * 爬升、俯冲、贴地平移，机身姿态一模一样，看起来就像在地面上滑行。
+   * 现在保留一部分径向分量（限幅 SCOUT_PITCH_LIMIT ≈ 23°）：
+   * 爬升抬头、下降低头，转弯时坡度和机头一起动，才像一架在飞的飞机。
+   */
   function orientAircraft(aircraft, forwardHint = null, bank = 0) {
     _up.copy(aircraft.position).normalize();
     _forward.copy(forwardHint || aircraft.userData.forward || new THREE.Vector3(0, 0, 1));
-    projectTangent(_forward, _up);
-    _right.crossVectors(_up, _forward).normalize();
+    if (_forward.lengthSq() < 1e-10) _forward.set(0, 0, 1);
+    _forward.normalize();
+    const vert = _forward.dot(_up);
+    const maxVert = Math.sin(SCOUT_PITCH_LIMIT);
+    if (Math.abs(vert) > maxVert) {
+      // ⚠️ 不能只「削掉超限的径向分量再归一化」——那样在接近垂直时会失效：
+      // 水平分量本来就很小，削完再归一化，径向占比反而被放大回去
+      // （实测能到 79°）。正确做法是把水平/垂直**分别**摆到限幅上：
+      // 水平分量拉到 cos(limit)、垂直分量设成 ±sin(limit)，航向不变。
+      _right.copy(_forward).addScaledVector(_up, -vert); // 借 _right 当水平分量的暂存
+      if (_right.lengthSq() < 1e-10) {
+        // 正对着天顶/地心飞：没有航向可留，退回上一帧的航向
+        _right.copy(aircraft.userData.forward || new THREE.Vector3(0, 0, 1));
+        _right.addScaledVector(_up, -_right.dot(_up));
+        if (_right.lengthSq() < 1e-10) _right.set(1, 0, 0).addScaledVector(_up, -_up.x);
+      }
+      _right.normalize().multiplyScalar(Math.cos(SCOUT_PITCH_LIMIT));
+      _forward.copy(_right).addScaledVector(_up, Math.sign(vert) * maxVert).normalize();
+    }
+    _right.crossVectors(_up, _forward);
+    // forward 与 up 几乎共线时叉积退化：退回切平面版本，别让基底塌掉
+    if (_right.lengthSq() < 1e-8) {
+      _forward.copy(aircraft.userData.forward || new THREE.Vector3(0, 0, 1));
+      projectTangent(_forward, _up);
+      _right.crossVectors(_up, _forward);
+    }
+    _right.normalize();
     _right.applyAxisAngle(_forward, THREE.MathUtils.clamp(bank, -0.72, 0.72));
     _bankedUp.crossVectors(_forward, _right).normalize();
     _basis.makeBasis(_right, _bankedUp, _forward);
@@ -331,7 +457,10 @@ export function createScoutDefenseSquad(options = {}) {
     }
   }
 
-  function moveUnit(unit, desired, dt, speed = SCOUT_SPEED) {
+  /**
+   * @param {number} minAgl 硬性最低离地高度（米）。0 = 不限（水晶城守卫沿用旧行为）
+   */
+  function moveUnit(unit, desired, dt, speed = SCOUT_SPEED, minAgl = 0) {
     // 飞机感（主人验收 2026-08-28）：速度矢量 + 转向加速度上限——
     // 速度不能瞬变，只能沿有限加速度收敛 → 大半径滑翔弧线与压坡度，
     // 不再出现每帧瞬移方向的苍蝇抖动。
@@ -353,9 +482,26 @@ export function createScoutDefenseSquad(options = {}) {
 
     unit.group.position.addScaledVector(unit.velocity, dt);
     _up.copy(unit.group.position).normalize();
+
+    // ---- 硬性 AGL 下限：侦察机不许掉到地面高度 ----
+    // 主人 2026-09-06 的截屏就是这条缺失的后果：三架机贴着地面停在红盔堆里。
+    // 撞到下限时把**向下的速度分量**抹掉（不是弹回去），飞机会自然改平。
+    if (minAgl > 0) {
+      const minR = R + minAgl;
+      if (unit.group.position.length() < minR) {
+        unit.group.position.setLength(minR);
+        const sink = unit.velocity.dot(_up);
+        if (sink < 0) unit.velocity.addScaledVector(_up, -sink);
+      }
+    }
+
+    // 机头跟速度矢量走（不再压平）：爬升抬头、下降低头，俯仰由 orientAircraft 限幅
     _forward.copy(unit.velocity);
-    projectTangent(_forward, _up, unit.group.userData.forward);
-    _axis.crossVectors(unit.group.userData.forward || _forward, _forward);
+    if (_forward.lengthSq() < 1e-10) _forward.copy(unit.group.userData.forward || _up);
+    _forward.normalize();
+    // 坡度只看**航向**的变化率，别把爬升/下降算成转弯
+    _axis.copy(unit.group.userData.forward || _forward);
+    _axis.crossVectors(_axis, _forward);
     const turn = _axis.dot(_up);
     const bankGoal = THREE.MathUtils.clamp(-turn * 5.2, -0.78, 0.78);
     unit.bank += (bankGoal - unit.bank) * Math.min(1, dt * 5);
@@ -365,7 +511,10 @@ export function createScoutDefenseSquad(options = {}) {
 
   function updateUnits(dt, time) {
     const activeTargets = targets.filter((target) => !target.pending);
+    const activeFleet = fleetTargets.filter((target) => !target.pending);
     const frame = zone === "city" ? cityHomeFrame() : gateHomeFrame();
+    // 战场中心：有它，前 nFleet 架就是舰队分队；没有（舰队不在场）就全员守家
+    const fleetAnchor = nFleet > 0 ? getFleetAnchor?.() : null;
     for (const unit of units) {
       unit.group.userData.update?.(time, dt);
       if (unit.manual) continue;
@@ -374,9 +523,45 @@ export function createScoutDefenseSquad(options = {}) {
       const light = unit.group.userData.beaconLight;
       if (light) light.intensity = unit.flashT > 0 ? 1.4 : 0.55;
 
-      if (activeTargets.length) {
-        const target = activeTargets[
-          (targetCursor + unit.index * 2 + volley) % activeTargets.length
+      // 编入舰队的那几架：目标池、巡航位都换成战场那一套
+      const onFleet = !!fleetAnchor && unit.index < nFleet;
+      unit.fleet = onFleet;
+      const pool = onFleet ? activeFleet : activeTargets;
+
+      if (onFleet) {
+        // ================= 编入舰队的侦察机：standoff 盘旋 =================
+        // 业界 ISR 机的基本盘：**在目标外侧保持一个盘旋圈，传感器内指**，
+        // 机身自始至终不进入对方的近距。这里就是那个圈——不管圈里有没有目标，
+        // 航迹都是同一个圈，指示靠射程（DESIGNATE_RANGE），不靠飞过去。
+        //
+        // 旧代码在这儿走的是水晶城猎鸟那套「飞到目标身上打」，
+        // 目标又趴在地上，于是侦察机一头扎进红盔堆里贴地悬停（主人 2026-09-06 截屏）。
+        const orbit = fleetOrbitPosition(unit.index, time, fleetAnchor, _desired);
+        // 僚机间隔：在圈上也要互相让开，别叠在一起
+        for (const other of units) {
+          if (other === unit || !other.fleet) continue;
+          _axis.subVectors(unit.group.position, other.group.position);
+          const gap = _axis.length();
+          if (gap > 1e-5 && gap < MIN_FORMATION_GAP) {
+            orbit.addScaledVector(_axis.normalize(), (MIN_FORMATION_GAP - gap) * 1.8);
+          }
+        }
+        // 「轻灵迅捷」：编入舰队的机比守家的快一档。三个舰种的质感要拉开——
+        // 气垫船稳重如山、武装直升机沉着悬停、侦察机轻快地绕着圈跑。
+        moveUnit(unit, orbit, dt, SCOUT_SPEED * 1.25, FLEET_MIN_AGL);
+        // 曳光指示：够得着就打，够不着就等下一圈转过来——不许为了打而下高度
+        if (unit.attackCd <= 0 && pool.length) {
+          const target = pool[(targetCursor + unit.index * 2 + volley) % pool.length];
+          if (target && unit.group.position.distanceTo(target.position) <= DESIGNATE_RANGE) {
+            makeShot(unit, target, time);
+          }
+        }
+        continue;
+      }
+
+      if (pool.length) {
+        const target = pool[
+          (targetCursor + unit.index * 2 + volley) % pool.length
         ];
         const slot = ATTACK_FORMATION[unit.index % ATTACK_FORMATION.length];
         _desired.copy(target.position);
@@ -411,9 +596,10 @@ export function createScoutDefenseSquad(options = {}) {
         moveUnit(unit, home, dt, SCOUT_SPEED * 0.7);
       }
     }
-    if (activeTargets.length) {
-      targetCursor = (targetCursor + Math.max(1, Math.floor(dt * 3))) % activeTargets.length;
-      volley = (volley + 1) % Math.max(1, activeTargets.length);
+    const cursorPool = Math.max(activeTargets.length, activeFleet.length);
+    if (cursorPool) {
+      targetCursor = (targetCursor + Math.max(1, Math.floor(dt * 3))) % cursorPool;
+      volley = (volley + 1) % Math.max(1, cursorPool);
     }
   }
 
@@ -467,7 +653,10 @@ export function createScoutDefenseSquad(options = {}) {
   root.userData.setPilot = setPilot;
   root.userData.getZone = () => zone;
   root.userData.getTargetCount = () => targets.length;
-  root.userData.getStatus = () => ({ zone, targetCount: targets.length, count: units.length });
+  root.userData.getStatus = () => ({
+    zone, targetCount: targets.length, count: units.length,
+    fleetCount: nFleet, fleetTargets: fleetTargets.length,
+  });
 
   return {
     root,
@@ -476,6 +665,11 @@ export function createScoutDefenseSquad(options = {}) {
     setPilot,
     getZone: () => zone,
     getTargetCount: () => targets.length,
-    getStatus: () => ({ zone, targetCount: targets.length, count: units.length }),
+    getStatus: () => ({
+      zone, targetCount: targets.length, count: units.length,
+      fleetCount: nFleet, fleetTargets: fleetTargets.length,
+    }),
+    /** 编入舰队的那几架（测试/调试用） */
+    fleetUnits: () => units.filter((u) => u.index < nFleet),
   };
 }

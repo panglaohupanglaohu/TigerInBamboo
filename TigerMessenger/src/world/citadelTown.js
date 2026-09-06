@@ -152,25 +152,41 @@ export const TOWNSCAPER_CANAL_PALETTE = Object.freeze([
 export const TOWNSCAPER_CANAL_GATE_COLOR = 0xf6efe3;
 
 /**
- * 高山圣城 15 个可编辑户色槽仍保留，但全部收敛到方尖碑的冷白石材。
- * 昼夜冷暖来自环境光、窗灯和雾色，而不是把墙体本身涂成红蓝黄绿。
+ * 高山圣城 15 个可编辑户色槽 —— Townscaper 配色（主人指定，2026-09-05）。
+ *
+ * **这一版推翻了上一版「全部收敛到方尖碑冷白石材」的决定。** 上一版把 15 个槽位
+ * 全压到 max−min ≤ 42 的冷灰蓝里，`tools/test_odyssey_citadel.mjs` 还加了一条断言
+ * 专门拦住「恢复彩色墙体」。主人 2026-09-05 明确要 Townscaper 那种配色，
+ * 所以断言按 PLAN §5.1 的第二种改法更新（设计变更 → 改测试并写明理由），
+ * 不是为了让测试转绿而放宽。
+ *
+ * 取色口径：Townscaper 的 16 色藏在游戏的 `TownPalette.png` 里，官方没公布十六进制
+ * （Steam 官方指南只说明怎么改那张图），所以**不抄不可靠的网上数值**。这里沿用
+ * 本仓库已被验证过的同族口径——`TOWNSCAPER_CANAL_PALETTE` 的「马卡龙色调」明度/
+ * 彩度区间，把编辑面板里那套过饱和糖果色（#32CBB2 一类）按同一柔和度重做：
+ * **色相保留、彩度下调、明度抬高**。于是名字不用改（松石绿仍是青绿），
+ * 主人点哪个色就建出哪个色。
+ *
+ * ⚠️ 面板色块**不要再抄一份十六进制**。`citadelEditorPanel.js` 现在直接从本表派生，
+ * 这正是历史上漂过两次的根因（第一次注释写着「修复选薄荷建成色差」，
+ * 第二次就是这次的「选松石绿建成风化白石」）。
  */
 export const TOWNSCAPER_HIGHLAND_PALETTE = Object.freeze([
-  Object.freeze({ name: "峰顶瓷白", char: "0", color: 0xdce5ea }),
-  Object.freeze({ name: "冷雾石", char: "1", color: 0xd1dce3 }),
-  Object.freeze({ name: "月灰石", char: "2", color: 0xc6d3dc }),
-  Object.freeze({ name: "浅银蓝", char: "3", color: 0xbccbd6 }),
-  Object.freeze({ name: "山雾蓝", char: "4", color: 0xb2c3cf }),
-  Object.freeze({ name: "阴影银", char: "5", color: 0xa9bbc8 }),
-  Object.freeze({ name: "旧白石", char: "6", color: 0xd7ddd9 }),
-  Object.freeze({ name: "冷灰白", char: "7", color: 0xcdd6d5 }),
-  Object.freeze({ name: "雾青灰", char: "8", color: 0xbfcdd0 }),
-  Object.freeze({ name: "淡岩蓝", char: "9", color: 0xafc0cb }),
-  Object.freeze({ name: "方尖碑中灰", char: "A", color: 0xa2b5c2 }),
-  Object.freeze({ name: "方尖碑阴面", char: "B", color: 0x95a9b7 }),
-  Object.freeze({ name: "风化白石", char: "C", color: 0xd5d9d2 }),
-  Object.freeze({ name: "暮色灰石", char: "D", color: 0xaeb8bc }),
-  Object.freeze({ name: "深雾蓝灰", char: "E", color: 0x899eae }),
+  Object.freeze({ name: "奶油白", char: "0", color: 0xf6efe0 }),
+  Object.freeze({ name: "暖砂石", char: "1", color: 0xe8cfa0 }),
+  Object.freeze({ name: "杏粉", char: "2", color: 0xefb3a6 }),
+  Object.freeze({ name: "奶油黄", char: "3", color: 0xf0dc8a }),
+  Object.freeze({ name: "蜜橙", char: "4", color: 0xe9ae70 }),
+  Object.freeze({ name: "珊瑚红", char: "5", color: 0xe28a90 }),
+  Object.freeze({ name: "覆盆子", char: "6", color: 0xc9819b }),
+  Object.freeze({ name: "薄荷绿", char: "7", color: 0x8fcfa8 }),
+  Object.freeze({ name: "翡翠绿", char: "8", color: 0x7cbe8c }),
+  Object.freeze({ name: "天青", char: "9", color: 0x92bee0 }),
+  Object.freeze({ name: "湖蓝", char: "A", color: 0x7fa9d6 }),
+  Object.freeze({ name: "鲜草绿", char: "B", color: 0xa3ce86 }),
+  Object.freeze({ name: "松石绿", char: "C", color: 0x82c7bc }),
+  Object.freeze({ name: "灰紫", char: "D", color: 0xb79bcb }),
+  Object.freeze({ name: "钴蓝", char: "E", color: 0x94a2ce }),
 ]);
 
 /** 高山圣城正门墙体色（奶油白，与 0 户同色系）。 */
@@ -1489,6 +1505,19 @@ function makeGableRoofGeometry(cs, ch) {
  * @returns {{ levels: THREE.Group[], stats: object }}
  */
 export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
+  // 原型几何登记（2026-09-05）：本函数开头急切造 ~40 个**共享**原型几何
+  // （cellGeometry / winFrameGeometry / …），全量建城时每个都有网格在用；
+  // 但增量 dirty build 只造少数几格，绝大多数原型一个网格都没用上——它们
+  // 既不在场景里，也进不了 geometryMerge 的回收清单，于是**每次编辑漏一整套**。
+  // 见 tools/probe_geom_leak.mjs：修掉这一处之前每次编辑净漏 ~245 个几何。
+  const _protoGeometries = [];
+  const proto = (g) => { _protoGeometries.push(g); return g; };
+  // ctx.archWindowGeometry 由调用方（odysseyCitadel.buildCitadelTownAssembly）
+  // 每次装配现造一条，全函数只有「水门」一处用得上（见规则 4 的 town-watergate）。
+  // 绝大多数层压根没有水门，于是每次建城/每次编辑都漏一条——probe_geom_leak
+  // 的排行榜上它单独占 105 条。它是本次调用独有的实例，交给同一套
+  // 「没有任何网格引用就释放」的清扫即可，不会误伤共享原型。
+  if (ctx?.archWindowGeometry) proto(ctx.archWindowGeometry);
   // dirty 增量（G30-A）：只生成 dirty 集的格子几何；所有"判定"循环保持全量，
   // 只在生成点按所属格过滤，保证与全量路径逐格同构（dirty 集外不生成、旧网格保留）。
   const dirtySet = dirty ? new Set(dirty.map((cell) => {
@@ -1694,7 +1723,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   const towerTops = new Set();
 
   // ---------- 规则 0：实心体块（只画外露面 + 顶底渐变 + 角点扰动） ----------
-  const cellGeometry = new THREE.BoxGeometry(cs, ch, cs);
+  const cellGeometry = proto(new THREE.BoxGeometry(cs, ch, cs));
   const leanDecor = ctx.leanDecor === true;
   // 运河交汇古堡：Townscaper 高饱和彩城模式——墙面抹渐变色块、
   // 屋顶用带顶点渐变的陶瓦材质（高山圣城保持原平涂路径不变）。
@@ -1937,23 +1966,23 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   }
 
   // 围栏构件几何（低层开阔屋顶边缘：立柱 + 通长横杆）
-  const fencePostGeometry = new THREE.BoxGeometry(0.09, 0.5, 0.09);
+  const fencePostGeometry = proto(new THREE.BoxGeometry(0.09, 0.5, 0.09));
   const fenceRailXGeometry = new THREE.BoxGeometry(cs + 0.06, 0.07, 0.07); // 横杆沿 x
   const fenceRailZGeometry = new THREE.BoxGeometry(0.07, 0.07, cs + 0.06); // 横杆沿 z
   // 二次庭院规则：围墙/矮墙 + 中央井盆。与第一轮体块共用格坐标，
   // 只在空域上添细节，不改变可编辑的建筑占格。
-  const courtyardWallGeometry = new THREE.BoxGeometry(cs * 0.96, 0.34, 0.12);
-  const courtyardBasinGeometry = new THREE.CylinderGeometry(cs * 0.2, cs * 0.24, 0.12, 8);
-  const courtyardWaterGeometry = new THREE.CylinderGeometry(cs * 0.13, cs * 0.13, 0.035, 8);
+  const courtyardWallGeometry = proto(new THREE.BoxGeometry(cs * 0.96, 0.34, 0.12));
+  const courtyardBasinGeometry = proto(new THREE.CylinderGeometry(cs * 0.2, cs * 0.24, 0.12, 8));
+  const courtyardWaterGeometry = proto(new THREE.CylinderGeometry(cs * 0.13, cs * 0.13, 0.035, 8));
 
   // ---------- 建筑构件统一几何（Townscaper 立面层次）----------
   // 深色盘 trim：檐口线 / 墙裙 / 窗台窗楣 / 阳台栏杆 / 屋脊瓦 / 山墙圆窗 / 风向标
   const trimMat = materials.trim ?? materials.ink;
   // 楼板檐口线：外露面层顶压条（宽跨格、突出 0.08）
-  const corniceGeometry = new THREE.BoxGeometry(cs + 0.16, 0.16, 0.09);
-  const floorBandGeometry = new THREE.BoxGeometry(cs * 0.88, 0.07, 0.075);
+  const corniceGeometry = proto(new THREE.BoxGeometry(cs + 0.16, 0.16, 0.09));
+  const floorBandGeometry = proto(new THREE.BoxGeometry(cs * 0.88, 0.07, 0.075));
   // 底层墙裙：外露面底部基座条
-  const plinthGeometry = new THREE.BoxGeometry(cs + 0.16, 0.46, 0.09);
+  const plinthGeometry = proto(new THREE.BoxGeometry(cs + 0.16, 0.46, 0.09));
   // 窗台（下托）/ 窗楣（上压）
   // C13-2（S23 / PLAN §10.2，证据 docs/z1.png）：窗是**三件套**，不是一块贴片。
   //   frame   白色厚外框，比洞口大 12%，外凸 0.02 → 在墙上投一道细影
@@ -1961,30 +1990,30 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   //   mullion 白色十字窗棂（2×2 分格）
   // 尺寸按 z1 读数：窗接近正方形，边长 ≈ 0.62 世界单位。
   const WIN_W = 0.62;
-  const winFrameGeometry = new THREE.BoxGeometry(WIN_W * 1.12, WIN_W * 1.12, 0.05);
-  const winGlassGeometry = new THREE.BoxGeometry(WIN_W, WIN_W, 0.03);
-  const winMullionVGeometry = new THREE.BoxGeometry(WIN_W * 0.09, WIN_W, 0.045);
-  const winMullionHGeometry = new THREE.BoxGeometry(WIN_W, WIN_W * 0.09, 0.045);
+  const winFrameGeometry = proto(new THREE.BoxGeometry(WIN_W * 1.12, WIN_W * 1.12, 0.05));
+  const winGlassGeometry = proto(new THREE.BoxGeometry(WIN_W, WIN_W, 0.03));
+  const winMullionVGeometry = proto(new THREE.BoxGeometry(WIN_W * 0.09, WIN_W, 0.045));
+  const winMullionHGeometry = proto(new THREE.BoxGeometry(WIN_W, WIN_W * 0.09, 0.045));
   // 山墙菱形窗（z1 右下：山墙上是 45° 旋转的方窗，无棂）
-  const gableDiamondFrameGeometry = new THREE.BoxGeometry(WIN_W * 0.62, WIN_W * 0.62, 0.05);
-  const gableDiamondGlassGeometry = new THREE.BoxGeometry(WIN_W * 0.44, WIN_W * 0.44, 0.03);
-  const sillGeometry = new THREE.BoxGeometry(0.92, 0.09, 0.16);
-  const lintelGeometry = new THREE.BoxGeometry(1.06, 0.1, 0.12);
+  const gableDiamondFrameGeometry = proto(new THREE.BoxGeometry(WIN_W * 0.62, WIN_W * 0.62, 0.05));
+  const gableDiamondGlassGeometry = proto(new THREE.BoxGeometry(WIN_W * 0.44, WIN_W * 0.44, 0.03));
+  const sillGeometry = proto(new THREE.BoxGeometry(0.92, 0.09, 0.16));
+  const lintelGeometry = proto(new THREE.BoxGeometry(1.06, 0.1, 0.12));
   // 转角壁柱：竖向细柱
-  const pilasterGeometry = new THREE.BoxGeometry(0.3, ch * 0.96, 0.3);
+  const pilasterGeometry = proto(new THREE.BoxGeometry(0.3, ch * 0.96, 0.3));
   // 阳台：悬挑板 + 铁艺栏杆（3 根竖条 + 扶手横杆）
-  const balconySlabGeometry = new THREE.BoxGeometry(0.96, 0.08, 0.5);
-  const balconyRailPostGeometry = new THREE.BoxGeometry(0.05, 0.42, 0.05);
-  const balconyRailBarGeometry = new THREE.BoxGeometry(0.96, 0.045, 0.05);
-  const balconyCanopyGeometry = new THREE.BoxGeometry(1.08, 0.06, 0.42);
-  const flowerBoxGeometry = new THREE.BoxGeometry(0.44, 0.14, 0.22);
-  const windowAwningGeometry = new THREE.BoxGeometry(1.08, 0.06, 0.26);
-  const balconyTileAccentGeometry = new THREE.BoxGeometry(0.12, 0.035, 0.12);
+  const balconySlabGeometry = proto(new THREE.BoxGeometry(0.96, 0.08, 0.5));
+  const balconyRailPostGeometry = proto(new THREE.BoxGeometry(0.05, 0.42, 0.05));
+  const balconyRailBarGeometry = proto(new THREE.BoxGeometry(0.96, 0.045, 0.05));
+  const balconyCanopyGeometry = proto(new THREE.BoxGeometry(1.08, 0.06, 0.42));
+  const flowerBoxGeometry = proto(new THREE.BoxGeometry(0.44, 0.14, 0.22));
+  const windowAwningGeometry = proto(new THREE.BoxGeometry(1.08, 0.06, 0.26));
+  const balconyTileAccentGeometry = proto(new THREE.BoxGeometry(0.12, 0.035, 0.12));
   // 连拱柱廊细柱
-  const arcadeColumnGeometry = new THREE.CylinderGeometry(0.13, 0.17, ch, 6);
+  const arcadeColumnGeometry = proto(new THREE.CylinderGeometry(0.13, 0.17, ch, 6));
   // 屋脊瓦 / 挑檐压条
-  const ridgeGeometry = new THREE.BoxGeometry(cs * 0.92, 0.12, 0.18);
-  const eaveGeometry = new THREE.BoxGeometry(cs, 0.09, 0.24);
+  const ridgeGeometry = proto(new THREE.BoxGeometry(cs * 0.92, 0.12, 0.18));
+  const eaveGeometry = proto(new THREE.BoxGeometry(cs, 0.09, 0.24));
   // ---- C13-4 檐口三层色带（PLAN §10.4）----
   // z1 的檐口剖面自上而下是「瓦面橙 → 白色檐板 → 暗红封檐」，出挑约 0.04 格。
   // 原来的坡面只是一条硬边，所以屋顶像纸片。这里在**落水侧两条檐口**各挂两片薄板：
@@ -2007,14 +2036,14 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     return geo;
   };
   // 山墙圆窗（口沿 + 十字格）
-  const oculusGeometry = new THREE.CylinderGeometry(0.24, 0.24, 0.08, 10);
-  const oculusCrossGeometry = new THREE.BoxGeometry(0.34, 0.06, 0.08);
+  const oculusGeometry = proto(new THREE.CylinderGeometry(0.24, 0.24, 0.08, 10));
+  const oculusCrossGeometry = proto(new THREE.BoxGeometry(0.34, 0.06, 0.08));
   // 风向标：细杆 + 箭头尾翼（教堂尖塔顶饰；旗杆不做——用户偏好）
-  const vanePostGeometry = new THREE.BoxGeometry(0.03, 0.5, 0.03);
-  const vaneTailGeometry = new THREE.BoxGeometry(0.26, 0.05, 0.04);
+  const vanePostGeometry = proto(new THREE.BoxGeometry(0.03, 0.5, 0.03));
+  const vaneTailGeometry = proto(new THREE.BoxGeometry(0.26, 0.05, 0.04));
   // 烟囱（Townscaper 签名构件）：墙色方柱 + 深色压顶，立在坡屋顶一端
-  const chimneyGeometry = new THREE.BoxGeometry(cs * 0.16, ch * 0.52, cs * 0.16);
-  const chimneyCapGeometry = new THREE.BoxGeometry(cs * 0.22, 0.07, cs * 0.22);
+  const chimneyGeometry = proto(new THREE.BoxGeometry(cs * 0.16, ch * 0.52, cs * 0.16));
+  const chimneyCapGeometry = proto(new THREE.BoxGeometry(cs * 0.22, 0.07, cs * 0.22));
   // 拱形门口几何缓存：矩形身 + 半圆拱顶，底部对齐 y=0（ExtrudeGeometry 薄挤出）
   const archDoorCache = new Map();
   const archDoorGeometry = (w, h, depth) => {
@@ -2103,13 +2132,15 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   const roofCells = new Set();
   const roofPlazas = []; // 大平顶分量（花园/晒台判定，规则 3.5 消费）
   {
-    const gableX = makeGableRoofGeometry(cs, ch); // 屋脊沿 +x
-    const gableZ = gableX.clone().rotateY(Math.PI / 2); // 屋脊沿 +z
-    const spireGeometry = new THREE.ConeGeometry(cs * 0.58, ch * 0.55, 4);
+    // 这一段的原型必须登记进 proto()：屋脊/尖塔/教堂塔是「有就用一批、
+    // 没有就一条都不用」的类型，某一层没有十字形分量时它们全是纯泄漏。
+    const gableX = proto(makeGableRoofGeometry(cs, ch)); // 屋脊沿 +x
+    const gableZ = proto(gableX.clone().rotateY(Math.PI / 2)); // 屋脊沿 +z
+    const spireGeometry = proto(new THREE.ConeGeometry(cs * 0.58, ch * 0.55, 4));
     spireGeometry.rotateY(Math.PI / 4); // 四坡尖顶对齐格边
     // 教堂尖塔：白石塔身 + 红瓦四棱锥 + 墨色小十字顶饰
-    const steepleTowerGeometry = new THREE.BoxGeometry(cs * 0.5, ch * 0.85, cs * 0.5);
-    const steepleConeGeometry = new THREE.ConeGeometry(cs * 0.4, ch * 0.95, 4);
+    const steepleTowerGeometry = proto(new THREE.BoxGeometry(cs * 0.5, ch * 0.85, cs * 0.5));
+    const steepleConeGeometry = proto(new THREE.ConeGeometry(cs * 0.4, ch * 0.95, 4));
     steepleConeGeometry.rotateY(Math.PI / 4);
 
     // 柱高表（孤立尖顶按柱高拉高）
@@ -2968,10 +2999,11 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // 悬空段（下方全空、同层连续、两端有支撑）长度 ≥2：每格出拱，
   // 段内每两格出细柱，形成连续拱廊。单格悬空仍由规则 3 的单拱处理。
   {
-    const archGeoX = new THREE.CylinderGeometry(cs * 0.48, cs * 0.48, cs * 0.96, 12, 1, false, 0, Math.PI);
+    // 悬空格才有拱廊，多数层一个都没有 → 不登记就是每次建城两条纯泄漏
+    const archGeoX = proto(new THREE.CylinderGeometry(cs * 0.48, cs * 0.48, cs * 0.96, 12, 1, false, 0, Math.PI));
     archGeoX.rotateZ(Math.PI / 2);
     archGeoX.rotateX(-Math.PI / 2);
-    const archGeoZ = archGeoX.clone().rotateY(Math.PI / 2);
+    const archGeoZ = proto(archGeoX.clone().rotateY(Math.PI / 2));
     const visitedArcade = new Set();
     for (const key of grid.keys()) {
       const [ix, iy, iz] = key.split(",").map(Number);
@@ -3073,7 +3105,8 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         queue.push([nx, nz]);
       }
     }
-    const waterGeometry = new THREE.BoxGeometry(cs * 0.98, 0.12, cs * 0.98);
+    // leanDecor（水上城堡）会直接 break 掉整个循环，一个网格都不产出
+    const waterGeometry = proto(new THREE.BoxGeometry(cs * 0.98, 0.12, cs * 0.98));
     for (const key of reached) {
       if (leanDecor) break; // 水上城堡坐在真水面上，不再叠一层假水道
       const [ix, iz] = key.split(",").map(Number);
@@ -3121,8 +3154,8 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // Townscaper：空地被房屋四面（或 ≥3 面）围出即自动成石板铺装；
   // 与水道互斥（水道格已连通边界水面，reached 集合排除）。
   {
-    const plazaGeometry = new THREE.BoxGeometry(cs * 0.97, 0.08, cs * 0.97);
-    const seamGeometry = new THREE.BoxGeometry(cs * 0.97, 0.085, 0.045);
+    const plazaGeometry = proto(new THREE.BoxGeometry(cs * 0.97, 0.08, cs * 0.97));
+    const seamGeometry = proto(new THREE.BoxGeometry(cs * 0.97, 0.085, 0.045));
     for (let ix = 0; ix < cols; ix++) {
       for (let iz = 0; iz < rows; iz++) {
         if (at(ix, 0, iz) !== ".") continue;
@@ -3292,8 +3325,9 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         waterKeys.push([ix, iz]);
       }
     }
-    const boatGeometry = new THREE.BoxGeometry(0.72, 0.22, 0.3);
-    const sailGeometry = new THREE.BoxGeometry(0.02, 0.5, 0.22);
+    // 小船是概率装饰（roll），大多数层摇不出来
+    const boatGeometry = proto(new THREE.BoxGeometry(0.72, 0.22, 0.3));
+    const sailGeometry = proto(new THREE.BoxGeometry(0.02, 0.5, 0.22));
     for (const [ix, iz] of waterKeys) {
       if (!want(ix, 0, iz)) continue;
       const seed = (ix * 997 + iz * 811) >>> 0;
@@ -3591,6 +3625,18 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // 那时 _ownerCell 已是陈旧值，必须还原原生 add。
   ownNone();
   for (const group of levelGroups) group.userData.restoreAdd?.();
+
+  // 原型几何清扫：本次调用没被任何网格用上的原型，就地释放。
+  // 用「网格是否引用」判定而不是「有没有被 proto() 登记」——共享实例只要还有
+  // 一个活着的网格在用就不能碰。
+  {
+    const used = new Set();
+    for (const lg of levelGroups) {
+      lg?.traverse?.((o) => { if (o.isMesh && o.geometry) used.add(o.geometry); });
+    }
+    for (const g of _protoGeometries) if (g && !used.has(g)) g.dispose();
+    _protoGeometries.length = 0;
+  }
 
   return { levels: levelGroups, stats };
 }

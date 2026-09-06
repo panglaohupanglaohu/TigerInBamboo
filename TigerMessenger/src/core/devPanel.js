@@ -18,7 +18,10 @@ const SLIDERS = [
   { key: "tramSpeed", label: "电车速度", min: 0, max: 10, step: 0.2, group: "交通" },
   { key: "aircraftSpeed", label: "飞船速度", min: 0.5, max: 20, step: 0.1, group: "交通" },
   { key: "aircraftScale", label: "飞船体积倍", min: 1, max: 12, step: 1, group: "交通" },
-  { key: "aircraftHoldSec", label: "飞船停留秒", min: 0, max: 60, step: 5, group: "交通" },
+  // 主人 2026-09-06「不要 missionlock」之后，这个值就是**一场舰队作战的时长上限**：
+  // 主舰不再为地面部队停留，它打完这一段驻留就走，登陆队跟着撤。
+  // 上限从 60 放到 180，好让主人自己调出「打得完」的节奏。
+  { key: "aircraftHoldSec", label: "飞船停留秒", min: 0, max: 180, step: 10, group: "交通" },
   { key: "windSpeed", label: "风速", min: 0, max: 4, step: 0.1, group: "交通" },
   { key: "windDir", label: "风向", min: 0, max: 360, step: 5, group: "交通" },
   { key: "daySpeed", label: "昼夜速度", min: 0, max: 2, step: 0.05, group: "天空" },

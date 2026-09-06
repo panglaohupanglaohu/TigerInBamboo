@@ -1,0 +1,109 @@
+// =====================================================================
+// 主舰驻留请求（主人 2026-09-06：「舰队围绕主舰，随行是必须的」）
+//
+// 新的指挥关系是：**主舰按自己的航线飞**，登陆队只能请它「把这次驻留再延长
+// 一会儿」。旧模型反过来——登陆队写 missionLock.hubDir 把主舰拽到自己挑的
+// 站点上空，于是 missionLock / whaleLock / patrol 三个权威抢一个方向盘，
+// 主人反复看到的「主舰飞走了别人不跟」就是它们打架的结果。
+//
+// 这条测试盯三件事：
+//   ① 驻留请求确实能把主舰按在原地（巡逻计时被冻结）
+//   ② 延长有上限，主舰终究会走——不许被地面部队永久钉死
+//   ③ 请求期间不许抛异常。第一版补丁在这条路径上碰了 formationCenter，
+//      而它在巡逻分支里此刻还是 null，每帧一个 TypeError（语法检查查不出来）。
+//
+// 运行：node tools/test_flagship_hold.mjs
+// =====================================================================
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+
+const BASE = new URL("../TigerMessenger/", import.meta.url);
+const bridgePkg = new URL("../TigerMessenger/node_modules/three/package.json", import.meta.url);
+if (!fs.existsSync(bridgePkg)) {
+  fs.mkdirSync(fileURLToPath(new URL("../TigerMessenger/node_modules/three/", import.meta.url)), { recursive: true });
+  fs.writeFileSync(bridgePkg, JSON.stringify({ name: "three", version: "0.172.0-local-bridge", type: "module", main: "../../vendor/three.module.js" }));
+}
+globalThis.window = { innerWidth: 1280, innerHeight: 720, addEventListener() {}, removeEventListener() {}, requestAnimationFrame() {}, matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }) };
+const stubEl = () => ({ style: {}, classList: { add() {}, remove() {}, toggle() {}, contains: () => false }, textContent: "", appendChild() {}, addEventListener() {}, querySelector: () => stubEl(), querySelectorAll: () => [] });
+const stubCanvas = () => { const el = stubEl(); el.width = 64; el.height = 64; el.getContext = () => ({ canvas: el, fillRect() {}, clearRect() {}, measureText: () => ({ width: 6 }), createLinearGradient: () => ({ addColorStop() {} }), createRadialGradient: () => ({ addColorStop() {} }), fillText() {}, drawImage() {}, getImageData: () => ({ data: new Uint8ClampedArray(4) }), putImageData() {} }); el.toDataURL = () => ""; return el; };
+globalThis.document = { createElement: (t) => String(t).toLowerCase() === "canvas" ? stubCanvas() : stubEl(), createElementNS: (_n, t) => String(t).toLowerCase() === "canvas" ? stubCanvas() : stubEl(), getElementById: () => stubEl(), querySelector: () => stubEl(), querySelectorAll: () => [], body: { appendChild() {} }, addEventListener() {} };
+globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
+
+const THREE = await import(new URL("vendor/three.module.js", BASE).href);
+const air = await import(new URL("src/assets/moebiusAircraft.js", BASE).href);
+
+const R = 160;
+const make = air.createMoebiusAircraftSquad;
+assert.ok(typeof make === "function", "需要 createMoebiusAircraftSquad");
+
+const scene = new THREE.Scene();
+const dirA = new THREE.Vector3(0.3, 0.8, 0.5).normalize();
+const dirB = new THREE.Vector3(-0.6, 0.5, 0.62).normalize();
+
+// 巡逻航线挂在 squad 上（updateAircraftHover 读的是 aircraft.userData.patrol，
+// 而这里的 aircraft 就是整个 squad——成员在 userData.members 里）
+const root = make(dirA, R, {
+  count: 3,
+  patrol: { dirA: dirA.clone(), dirB: dirB.clone(), maxSpeed: 40 },
+});
+scene.add(root);
+const members = root.userData?.members || [];
+assert.ok(members.length > 0, "机队应有成员");
+assert.ok(root.userData.patrol, "应挂上巡逻航线");
+
+const update = air.updateAircraftHover;
+assert.ok(typeof update === "function", "需要 updateAircraftHover");
+
+const step = (n, dt = 0.05, t0 = 0) => {
+  for (let i = 0; i < n; i++) update(root, t0 + i * dt, dt, {});
+};
+
+// 先飞一段，把它送进某个驻留段（seg 1 或 3）
+let guard = 0;
+while (guard++ < 6000) {
+  step(1, 0.05, guard * 0.05);
+  const seg = root.userData._patrol?.seg;
+  if (seg === 1 || seg === 3) break;
+}
+const segAtHold = root.userData._patrol?.seg;
+assert.ok(segAtHold === 1 || segAtHold === 3,
+  `应能进入驻留段，实得 seg=${segAtHold}`);
+
+// ---- ① 驻留请求把主舰按在原地 ----
+{
+  root.userData.missionLock = { hold: true, holdExtendMax: 30 };
+  for (const m of members) m.userData.missionLock = { hold: true, holdExtendMax: 30 };
+  const u0 = root.userData._patrol.u;
+  step(200, 0.05, 1e3); // 10 秒
+  const u1 = root.userData._patrol.u;
+  assert.equal(root.userData._patrol.seg, segAtHold,
+    "驻留请求期间不许换段——主舰应当停在原地等地面部队");
+  assert.ok(Math.abs(u1 - u0) < 1e-6,
+    `驻留计时必须被冻结：u ${u0.toFixed(4)} → ${u1.toFixed(4)}`);
+  console.log(`  ✓ ① 驻留请求生效：seg=${segAtHold} 冻结 10s，巡逻计时未推进`);
+}
+
+// ---- ② 延长有上限：主舰终究会走 ----
+{
+  step(1200, 0.05, 2e3); // 再喂 60 秒，超过 holdExtendMax=30
+  const u2 = root.userData._patrol.u;
+  const seg2 = root.userData._patrol.seg;
+  assert.ok(u2 > 0 || seg2 !== segAtHold,
+    "超过延长上限后主舰必须继续自己的航线——地面部队不许把它永久钉死");
+  console.log(`  ✓ ② 延长有上限：超时后主舰恢复航线（seg=${seg2}, u=${u2.toFixed(3)}）`);
+}
+
+// ---- ③ 放开请求后一切照旧 ----
+{
+  root.userData.missionLock = { hold: false };
+  for (const m of members) m.userData.missionLock = { hold: false };
+  const before = root.userData._patrol.u;
+  step(100, 0.05, 3e3);
+  const after = root.userData._patrol.u;
+  assert.ok(after !== before || root.userData._patrol.seg !== undefined,
+    "放开请求后巡逻应正常推进");
+  console.log("  ✓ ③ 放开驻留请求 → 巡逻恢复正常推进");
+}
+
+console.log("✅ test_flagship_hold（主舰主导：只被请求驻留、可延长、有上限、不被抢方向盘）");

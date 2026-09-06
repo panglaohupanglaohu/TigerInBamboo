@@ -35,7 +35,7 @@ import {
   CITADEL_TOWN_SPEC,
   HIGHLAND_TOWNSCAPER_TOWN_SPEC,
   citadelGridCellCenter,
-} from "./world/citadelTown.js?v=20260905-wfc-wire-v1";
+} from "./world/citadelTown.js?v=20260905-townscaper-palette-v1";
 import { citadelColumnCenter } from "./world/citadel/gridMigration.js";
 import { rebuildMoebiusCrystalMetropolis } from "./world/moebiusCity.js";
 import { P, FEATURES, isOskLightingV1, isVoxelAoV1, isLocalLightBudgetV1 } from "./core/params.js";
@@ -114,6 +114,11 @@ import {
   listScenes,
 } from "./scenes/registry.js";
 import { mergeColliders, updateScenes } from "./scenes/sceneApi.js";
+import {
+  resolveWorldLandmarks,
+  locateWorldContext,
+  visibleLandmarks,
+} from "./world/worldStructure.js?v=20260905-world-structure-v1";
 
 // ---------- 舞台 ----------
 const { scene, camera, renderer } = createStage();
@@ -141,7 +146,7 @@ const distanceCulling = P.distanceCullV1
       cullDistance: P.distanceCullMeters,
     })
   : null;
-const nightBloom = P.nightBloomV1
+let nightBloom = P.nightBloomV1
   ? createMiniBloom(THREE, renderer, {
       strength: P.nightBloomStrength,
       threshold: P.nightBloomThreshold,
@@ -271,6 +276,30 @@ const touchControls = createTouchControls({
   onBubbleAim: (dx, dy) => bubblePodRide?.aimByDelta?.(dx, dy),
 });
 
+/**
+ * 送信人是否正在**驾驶载具**（飞艇 / 飞行器 / 侦察机 / 气泡艇 / 小船）。
+ *
+ * 为什么所有 E 键交互都要过这道闸：搭乘期间 `player.position` 被载具接管
+ * （`airshipRide` 每帧 `player.position.copy(seat)`），于是「离 NPC 多近」量的
+ * 其实是**座位**离 NPC 多近。飞艇停在村口、人坐在船上，按 E 就能隔着船舷跟
+ * 地上的居民接信送信——主人 2026-09-05 报的就是这个。
+ *
+ * **电车不算**：那是公共交通，玩家是乘客不是驾驶员，阿狸还会跟着上车卧在
+ * 身旁，车上聊天是原本就有的设计，不能顺手一起封掉。
+ *
+ * 写成函数声明（会提升）而不是 const 箭头：`quest` 在这些 ride 之前就构造了，
+ * 只有提升过的函数名才能被它安全地闭包捕获。
+ */
+function isPlayerPilotingVehicle() {
+  const air = airshipRide?.getState?.();
+  if (air && air !== "idle") return true;
+  if (aircraftRide?.isRiding?.()) return true;
+  if (scoutAircraftRide?.isRiding?.()) return true;
+  if (bubblePodRide?.isRiding?.()) return true;
+  if (boatRide?.isRiding?.()) return true;
+  return false;
+}
+
 // ---------- 任务（依赖平台；无 messenger 场景时任务仍可创建但不贴台） ----------
 const quest = createQuestSystem({
   scene,
@@ -280,6 +309,7 @@ const quest = createQuestSystem({
   holdAura,
   camera,
   isGameStarted: () => gameStarted,
+  isBusyRiding: isPlayerPilotingVehicle,
 });
 
 // ---------- 地图编辑器（🤖 菜单 · 建筑放置/移动/复制） ----------
@@ -313,6 +343,16 @@ mapEditor.loadPersisted();
 // 地图打开时：3D 左键点选模型 → 地图同步选中高亮
 mapEditor.bindScenePick({ camera, domElement: renderer.domElement });
 
+// ---------- 世界空间结构：Planet → Region → Landmark → Zone ----------
+// 声明在 world/worldStructure.js，这里只做「绑定到活的 scene handle」。
+// makeVec 注入让它能取移动苔庭（骑在白鲸上）的实时世界位置，
+// 同时 worldStructure.js 自身不 import Three.js，因而可 headless 测试。
+const worldLandmarks = resolveWorldLandmarks({
+  messenger,
+  saihoji: sceneHandles.find((h) => h.id === "saihoji") ?? null,
+  makeVec: () => new THREE.Vector3(),
+});
+
 // ---------- 小地图（左上角 · 经典场景标注 + 送信人位置/视野框） ----------
 // getDir 惰性求值：三重门/白鲸湖可被开发者菜单搬迁，每次绘制取最新方向
 const _mmViewFwd = new THREE.Vector3();
@@ -330,28 +370,16 @@ const minimap = createMinimap({
     };
   },
   toast: showToast,
-  landmarks: [
-    { id: "bookshop", name: "书店镇", color: "#d98a2b",
-      getDir: () => messenger?.landmarks?.bookshop?.position },
-    { id: "camp", name: "出发营地", color: "#4aa76c",
-      getDir: () => messenger?.landmarks?.camp?.landmarks?.anchor?.position },
-    { id: "gate", name: "叹息之门", color: "#b85a42",
-      getDir: () => messenger?.landmarks?.abandonedGate?.userData?.seatRoot?.position },
-    { id: "citadel", name: "高山圣城", color: "#d4af37",
-      getDir: () => messenger?.landmarks?.odysseyCitadel?.position },
-    { id: "city", name: "水晶城", color: "#7eb0ff",
-      getDir: () => messenger?.landmarks?.moebius?.grand?.dir },
-    { id: "lake", name: "白鲸海水湖", color: "#48c9b0",
-      getDir: () => messenger?.landmarks?.citySeaLake?.centerDir },
-    { id: "harbor", name: "旧港码头", color: "#8a9bb8",
-      getDir: () => messenger?.landmarks?.boat?.position },
-    { id: "moon", name: "月亮湖", color: "#c9a8ff",
-      getDir: () => messenger?.landmarks?.moonLake?.centerWorld },
-    { id: "saihoji", name: "西芳寺苔庭", color: "#2f8f7a",
-      getDir: () =>
-        sceneHandles.find((h) => h.id === "saihoji")?.landmarks?.zones?.["moss-entry"]
-          ?.pathDirection },
-  ],
+  // 四级空间结构（Planet → Region → Landmark → Zone）：地标不再手写平铺，
+  // 由 world/worldStructure.js 声明并绑定到活的 scene handle。
+  // 三级导航 = Tier0 恒显 ∪ Tier1(当前区域) ∪ Tier2(苔庭六景)，
+  // 这样六景不会和水晶城同级堆在 HUD 上。见 docs/WORLD_STRUCTURE_ARCHITECTURE.md
+  landmarks: worldLandmarks,
+  getVisible: () =>
+    visibleLandmarks(
+      worldLandmarks,
+      locateWorldContext(player.position, worldLandmarks)
+    ),
 });
 
 // ---------- 书店上方忽聚忽散的鸟群 ----------
@@ -1333,6 +1361,7 @@ const elderMusic = createElderMusicInteraction({
     null,
   elHint: document.getElementById("elder-hint"),
   isGameStarted: () => gameStarted,
+  isBusyRiding: isPlayerPilotingVehicle,
 });
 // 双保险：按名称在场景里再绑一次（避免 landmarks 路径漏引用）
 {
@@ -1428,6 +1457,7 @@ const foxNpc = createFoxNpc({
   fox: foxAli,
   camera,
   isGameStarted: () => gameStarted,
+  isBusyRiding: isPlayerPilotingVehicle,
   elHint: document.getElementById("fox-hint"),
   planetRadius: PLANET_RADIUS,
   isElderNear: () => elderMusic.isNear?.() ?? false,
@@ -1466,6 +1496,39 @@ elStartBtn.addEventListener("click", () => {
 const timer = new Timer();
 cameraRig.snapToPlayer();
 playerGroup.position.copy(player.position);
+
+/**
+ * 渲染的最后一道保险：render 抛异常时不许把画面钉死。
+ *
+ * 2026-09-05 主人报「系统播放声音，但是无法继续编辑，画面不动了」，控制台
+ * 每帧刷同一条 THREE.WebGLAttributes 尺寸不符。根因已经在
+ * mergedCellPatch.js 修掉了，但这里暴露出一个更要命的结构问题：
+ * **render 一旦持续抛异常，整个应用就只剩音频还活着**。rAF 在函数头就排好了
+ * 下一帧，逻辑其实一直在跑，只是画面再也不更新——用户看到的是「死机」，
+ * 于是只能杀掉页面，正在编辑的城堡跟着没了。
+ *
+ * 所以这里把它降级成「画面可能有瑕疵，但还能操作」：
+ *   · 第一次失败打完整堆栈（要能定位，不能吞）
+ *   · 之后同类错误按次数收敛，不刷屏
+ *   · 无论如何不让异常逃出 animate，编辑器、快捷键、存档继续可用
+ */
+let renderFailures = 0;
+let lastRenderError = "";
+function safeRender() {
+  try {
+    renderer.render(scene, camera);
+    renderFailures = 0;
+  } catch (error) {
+    const msg = error?.message || String(error);
+    renderFailures++;
+    if (renderFailures === 1 || msg !== lastRenderError) {
+      console.error("[render] 本帧渲染失败（画面可能停更，但编辑器仍可操作）：", error);
+      lastRenderError = msg;
+    } else if (renderFailures === 60 || renderFailures % 600 === 0) {
+      console.error(`[render] 已连续 ${renderFailures} 帧渲染失败：${msg}`);
+    }
+  }
+}
 
 function animate() {
   requestAnimationFrame(animate);
@@ -1684,10 +1747,15 @@ function animate() {
     } catch (error) {
       console.warn("[perf] bloom disabled:", error?.message);
       nightBloom.dispose?.();
-      renderer.render(scene, camera);
+      // ⚠️ 必须置空。原来只 dispose 不置空，下一帧照样走进这个分支再抛一次，
+      // 于是控制台每帧刷一行「bloom disabled」，而 catch 里的兜底 render 也在
+      // 抛——异常从 animate 里逃出去，画面停在最后一帧
+      // （主人 2026-09-05 贴的那几千行同一条报错就是这么来的）。
+      nightBloom = null;
+      safeRender();
     }
   } else {
-    renderer.render(scene, camera);
+    safeRender();
   }
   // 必须在 render 之后读，renderer.info 才是本帧的真实提交数
   perfProbe?.update(dt);
@@ -1707,8 +1775,64 @@ window.addEventListener("keydown", (e) => {
 });
 
 // 调试：场景列表与句柄
+/**
+ * 舰队自检（主人 2026-09-05 反复反馈「没形成以 aircraft 为主导的舰队 / 没伴飞」）。
+ *
+ * 之前每轮都是「我改代码 → 主人看画面 → 还是不像」，没有中间那把尺子，
+ * 谁也说不清是逻辑没接上、还是浏览器还在跑旧模块、还是当下正处在任务的某一段。
+ * 这个函数就是那把尺子：**只读**，按名字从场景里现取，不依赖任何内部句柄。
+ *
+ *   __tm.fleet()
+ *
+ * 读法：
+ *   · aircraft.n  = 0            → 机队根本没建，后面都不用看
+ *   · pods.strayed > 0           → 泡机掉在 scene 下没回僚机翼，不会伴飞
+ *   · haulers.visible = 0 且 phase 为 idle/done → 运输艇没在随队巡航
+ *   · haulers.dist 很大且不收敛   → 跟位没生效
+ *   · phase 一直停在某一段         → 任务卡住了，去看 vanguardAssault
+ */
+function fleetSelfCheck() {
+  const V3 = THREE.Vector3;
+  const squad = scene.getObjectByName("moebius-aircraft-squad");
+  const members = (squad?.userData?.members || []).filter((m) => m?.parent);
+  const wing = squad?.userData?.gatePodEscort || null;
+  const pods = [];
+  scene.traverse((o) => { if (o.userData?.escortSlot) pods.push(o); });
+  const haulers = [];
+  scene.traverse((o) => { if (/^vanguard-hauler-/.test(o.name || "")) haulers.push(o); });
+  const troops = scene.getObjectByName("vanguard-squad");
+
+  const center = new V3();
+  for (const m of members) center.add(m.getWorldPosition(new V3()));
+  if (members.length) center.multiplyScalar(1 / members.length);
+  const groundTrack = members.length
+    ? center.clone().normalize().multiplyScalar(PLANET_RADIUS)
+    : null;
+  const dist = (o) => (groundTrack ? +o.getWorldPosition(new V3()).distanceTo(groundTrack).toFixed(1) : null);
+
+  // messenger 是 sceneHandles 里的场景句柄，vanguardAssault 挂在它身上（main.js:1780 已注明）
+  const assault = messenger?.vanguardAssault || messenger?.combatPack?.vanguardAssault || null;
+  return {
+    phase: assault?.phase?.() ?? "(无 vanguardAssault)",
+    aircraft: { n: members.length, center: center.toArray().map((v) => +v.toFixed(1)) },
+    pods: {
+      n: pods.length,
+      inWing: pods.filter((p) => wing && p.parent === wing).length,
+      strayed: pods.filter((p) => !wing || p.parent !== wing).length,
+      dist: pods.map(dist),
+    },
+    haulers: {
+      n: haulers.length,
+      visible: haulers.filter((h) => h.visible).length,
+      dist: haulers.map(dist),
+    },
+    troopers: { visible: !!troops?.visible, state: troops?.userData?.state ?? "(无)" },
+  };
+}
+
 window.__tm = {
   THREE, // 控制台调试用：new __tm.THREE.Raycaster() 等
+  fleet: fleetSelfCheck, // 舰队自检：__tm.fleet()——见上方读法
   player,
   quest,
   cameraRig,

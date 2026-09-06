@@ -14,7 +14,7 @@ import {
   CITADEL_GATE_CHAR,
   CITADEL_GATE_COLOR,
   citadelPaletteIndexOfChar,
-} from "../world/citadelTown.js?v=20260905-wfc-wire-v1";
+} from "../world/citadelTown.js?v=20260905-townscaper-palette-v1";
 import { createCitadelEditFx } from "../world/citadelEditFx.js";
 import { citadelColumnCenter } from "../world/citadel/gridMigration.js";
 

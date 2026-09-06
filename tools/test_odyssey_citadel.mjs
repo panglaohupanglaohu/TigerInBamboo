@@ -783,12 +783,41 @@ console.log("[12] 默认 mountain-valley 设计（2026-08-23 新默认视觉骨�
   assert(highlandColumnStats.filter((item) => item.height >= 8).length >= 2,
     "参考图必须保留至少两根九层侧塔，同时让中央方尖碑保持唯一最高点");
   assert(usedColors.size >= 10, "参考坡城必须保持 Townscaper 彩色街区变化");
-  for (const entry of TOWNSCAPER_HIGHLAND_PALETTE) {
-    const r = (entry.color >> 16) & 0xff;
-    const g = (entry.color >> 8) & 0xff;
-    const b = entry.color & 0xff;
-    assert(Math.max(r, g, b) - Math.min(r, g, b) <= 42,
-      `${entry.name} 必须保持方尖碑冷白/灰蓝石材，不得恢复彩色墙体`);
+  // ---------------------------------------------------------------------
+  // 2026-09-05：这里原本断言 `max−min ≤ 42`，即「必须保持方尖碑冷白/灰蓝石材，
+  // 不得恢复彩色墙体」。**主人 2026-09-05 明确要求改回 Townscaper 配色**，
+  // 那条断言守的设计已经作废，所以按 PLAN §5.1 的第二种改法翻转它，
+  // 并在此写明为什么当初防的退化现在可接受：
+  //
+  //   · 当初的意图是「墙体不涂红蓝黄绿，冷暖交给环境光/窗灯/雾色」。
+  //     那一版把 15 个槽位全压进灰蓝，代价是编辑面板的 15 色形同虚设——
+  //     实测 15 个字符里 14 个与面板对不上（松石绿 #32CBB2 → 风化白石 #D5D9D2，
+  //     RGB 距离 167），主人点哪个色都建出同一片白石。
+  //   · 想要「冷白石材」的话，正确做法是 `?citadelPaletteV3=1` 那条路
+  //     （`v3HighlandWallPalette()` 按权重把 15 槽映射到 6 个墙 token），
+  //     而不是把色板本身抹平——抹平会连带毁掉逐户配色这个玩法。
+  //
+  // 所以新断言换成守「配色确实是彩色的、且各槽有区分度」，
+  // 面板与色板是否一致由 tools/test_palette_panel_parity.mjs 单独守。
+  {
+    const spreads = TOWNSCAPER_HIGHLAND_PALETTE.map((entry) => {
+      const r = (entry.color >> 16) & 0xff;
+      const g = (entry.color >> 8) & 0xff;
+      const b = entry.color & 0xff;
+      return { name: entry.name, spread: Math.max(r, g, b) - Math.min(r, g, b) };
+    });
+    // 允许「奶油白」这类近中性色存在（Townscaper 本身也有奶白），
+    // 但不能整板都是中性——否则就是又抹平了一次。
+    const chromatic = spreads.filter((s) => s.spread >= 40);
+    assert(chromatic.length >= 12,
+      `Townscaper 配色：至少 12 个槽位要有色相（现 ${chromatic.length}/15）。` +
+      `若要冷白石材请走 ?citadelPaletteV3=1，不要把色板抹平：` +
+      spreads.map((s) => `${s.name}=${s.spread}`).join(" "));
+    // 上限防的是另一个方向：别把马卡龙调成霓虹（Townscaper 是柔和粉彩）。
+    for (const s of spreads) {
+      assert(s.spread <= 150,
+        `${s.name} 彩度过高（spread=${s.spread}）：Townscaper 是柔和粉彩，不是霓虹糖果色`);
+    }
   }
   assert.equal(protectedCoreCells, 0, "中央方尖碑 5×5 hard cavity 必须全层净空");
   assert.equal(HIGHLAND_TOWNSCAPER_TOWN_SPEC.levels[0][22][12], "G", "湖岸中轴必须有正门");

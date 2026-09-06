@@ -52,6 +52,8 @@ export function createFoxNpc({
   planetRadius = PLANET_RADIUS,
   isElderNear = () => false,
   isQuestNear = () => false,
+  /** 送信人是否正在**驾驶**载具——电车不算（阿狸会跟着上车卧在身旁） */
+  isBusyRiding = () => false,
   isPlayerOnTram = () => false,
   getActiveTram = () => null,
   getFoxTramSeatLocal = null,
@@ -170,6 +172,9 @@ export function createFoxNpc({
   }
 
   function nearTalk() {
+    // 驾驶载具时不算近身：座位落进 talkRange 会让人在飞艇上跟阿狸对话。
+    // 电车不在此列——那是公共交通，阿狸本来就会跟上车。
+    if (isBusyRiding()) return false;
     const range = P.talkRange ? Math.max(P.talkRange, TALK_RANGE) : TALK_RANGE;
     return distToPlayer() <= range;
   }
