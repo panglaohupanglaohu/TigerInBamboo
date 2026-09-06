@@ -34,7 +34,23 @@ const _quat = new THREE.Quaternion();
  *   入口苔径 ── 主石之庭 ── 枯瀑之庭 (南排 · 游线起)
  * 圆心距 ≥ rᵢ+rⱼ+1.25m，保证相邻不重叠。
  */
-export const SAIHOJI_HUB = Object.freeze({ lat: 56, lon: -120 });
+/**
+ * 苔庭中枢。2026-09-05 按主人指示从 lat 56 平移到 lat 32
+ * （与高山圣城拉开纬度，见 docs/WORLD_LANDMARK_LAYOUT.md §5）。
+ *
+ * ⚠️ 六景的 lat/lon 是**绝对坐标**，平移中枢必须让六景整体加同一个偏移
+ * （本次 SAIHOJI_LAT_SHIFT = −24），否则六景会和中枢脱开。
+ * 净空约束 SAIHOJI_MIN_DISTANCE 由 tools/test_saihoji_layout.mjs 复验：
+ * 往低纬走 cos(lat) 变大（cos56=0.559 → cos32=0.848），同样的 Δlon 张开成
+ * **更大**的球面弧长，所以间距只会变宽不会变窄——但仍然要用数字验，不靠推理。
+ *
+ * 另：`messengerIsland.js` 曾硬抄过两份 (56, -120)，已改为从本常量取。
+ * 别再复制这对数字。
+ */
+export const SAIHOJI_HUB = Object.freeze({ lat: 32, lon: -120 });
+
+/** 本次球面平移的纬度偏移量（六景与中枢共用，供验收脚本反查原始布局） */
+export const SAIHOJI_LAT_SHIFT = -24;
 
 /** 固定的“苔海六景”：半径为各景区需要留出的球面距离（世界单位）。 */
 export const SAIHOJI_ZONES = Object.freeze([
@@ -43,7 +59,8 @@ export const SAIHOJI_ZONES = Object.freeze([
   {
     id: "moss-entry",
     name: "入口苔径",
-    lat: 56.0,
+    // 原 lat 56.0，随中枢平移 −24（SAIHOJI_LAT_SHIFT）
+    lat: 32.0,
     lon: -120.0,
     radius: 5.5,
     heading: 1.571,
@@ -52,7 +69,7 @@ export const SAIHOJI_ZONES = Object.freeze([
   {
     id: "master-stones",
     name: "主石之庭",
-    lat: 55.5136,
+    lat: 31.5136,
     lon: -130.9127,
     radius: 7.5,
     heading: 1.571,
@@ -61,7 +78,7 @@ export const SAIHOJI_ZONES = Object.freeze([
   {
     id: "dry-cascade",
     name: "枯瀑之庭",
-    lat: 53.9805,
+    lat: 29.9805,
     lon: -141.9182,
     radius: 7.0,
     heading: 0.0,
@@ -71,7 +88,7 @@ export const SAIHOJI_ZONES = Object.freeze([
   {
     id: "moss-islands",
     name: "苔海岛群",
-    lat: 59.8020,
+    lat: 35.8020,
     lon: -145.7141,
     radius: 8.5,
     heading: -1.571,
@@ -80,7 +97,7 @@ export const SAIHOJI_ZONES = Object.freeze([
   {
     id: "empty-court",
     name: "空庭",
-    lat: 61.7147,
+    lat: 37.7147,
     lon: -132.9937,
     radius: 9.0,
     heading: -1.571,
@@ -89,7 +106,7 @@ export const SAIHOJI_ZONES = Object.freeze([
   {
     id: "return-view",
     name: "回望石组",
-    lat: 62.3304,
+    lat: 38.3304,
     lon: -120.0,
     radius: 7.0,
     heading: Math.PI,

@@ -9,6 +9,7 @@
 import * as THREE from "three";
 import { latLonToDir, flatToWorld } from "./sphereMath.js";
 import { WORLD_SCALE } from "./worldScale.js";
+import { islandLiftFor } from "./seaLevel.js";
 
 // 土丘的 x/z/r 是世界布局量；peak/lift/depth 是玩家局部高度，保持不变。
 // 土丘定义：flatX / flatZ / 半径 r / 峰高 peak。
@@ -32,7 +33,68 @@ const HILL_DEFS_BASE = [
   { x: 5.8, z: 6.8, r: 2.4, peak: 0.45 },
   // —— 书店山坡（Hard To Find Bookshop，主岛东侧可见）
   { x: 11.5, z: 5.5, r: 5.6, peak: 2.2 },
+
+  // ================= 地标连接走廊（2026-09-05） =================
+  // 主人要求「地标与地标之间用山脉与森林连接」。这一批是主岛内部的两条山脊：
+  //   走廊 A：出发营地 (-17, 9) → 书店镇 (11.5, 5.5)
+  //   走廊 B：书店镇 (11.5, 5.5) → 月亮湖 (4, -1)
+  // 森林部分见 CORRIDOR_FOREST_PATH（供 nature.js 沿脊撒树）。
+  //
+  // ⚠️ 两条硬避让，别照直线连：
+  //  ① **池塘**（心 (0, 9.1)、半轴 9.2×4.9）：营地→书店的直线在 x=0 处 z≈6.9，
+  //     正落在池内。所以走廊 A 一律走**池南**，即 tramSystem 注释里那个
+  //     「池塘与西坡丘之间的针眼」。每个丘心都验过 ((x/9.2)²+((z-9.1)/4.9)² > 1)。
+  //  ② **月亮湖**（心 (4, -1)、rOuter 3.5）：丘心到湖心距离必须 > 3.5，
+  //     否则山会长进湖里。(1.5,1.2) 与 (6.0,0.2) 的初稿都因此挪过位。
+  //
+  // 峰高压在 0.8–1.1：既能读出「山脊连着两地」，又低于轨面净空口径
+  // （carveHillsForTrack 的 capLift 0.62 会把压到轨道走廊里的部分削平，
+  // 所以走廊与电车相交处不会穿车体）。
+
+  // —— 走廊 A：营地 → 书店（绕池南；西段接已有的西坡丘 (-6.2, 1.6)）
+  { x: -13.0, z: 5.5, r: 3.0, peak: 0.9 },
+  { x: -9.5, z: 2.8, r: 2.8, peak: 1.0 },
+  { x: -2.5, z: 0.8, r: 3.0, peak: 1.1 },
+  { x: 1.5, z: 2.2, r: 2.8, peak: 0.95 },
+  { x: 5.0, z: 3.0, r: 2.6, peak: 1.0 },
+
+  // —— 走廊 B：书店 → 月亮湖（东段接已有的东坡丘 (8.8, 4.8)）
+  { x: 8.5, z: 2.0, r: 2.4, peak: 1.0 },
+  { x: 7.5, z: 1.0, r: 2.2, peak: 0.8 },
 ];
+
+/**
+ * 走廊中心线（平面设计坐标，未乘 WORLD_SCALE）。
+ * 供 `nature.js` 沿线撒树成林带 —— 森林与山脊共用同一条路径，
+ * 免得「山在这、树在那」。端点是地标本体，中间点与上面的走廊丘心对齐。
+ */
+export const CORRIDOR_FOREST_PATH = Object.freeze([
+  Object.freeze({
+    id: "camp-bookshop",
+    name: "营地—书店 山脊林道",
+    points: Object.freeze([
+      Object.freeze({ x: -17.0, z: 9.0 }), // 出发营地
+      Object.freeze({ x: -13.0, z: 5.5 }),
+      Object.freeze({ x: -9.5, z: 2.8 }),
+      Object.freeze({ x: -6.2, z: 1.6 }), // 已有西坡丘
+      Object.freeze({ x: -2.5, z: 0.8 }),
+      Object.freeze({ x: 1.5, z: 2.2 }),
+      Object.freeze({ x: 5.0, z: 3.0 }),
+      Object.freeze({ x: 8.8, z: 4.8 }), // 已有东坡丘
+      Object.freeze({ x: 11.5, z: 5.5 }), // 书店镇
+    ]),
+  }),
+  Object.freeze({
+    id: "bookshop-moon",
+    name: "书店—月亮湖 林带",
+    points: Object.freeze([
+      Object.freeze({ x: 11.5, z: 5.5 }), // 书店镇
+      Object.freeze({ x: 8.5, z: 2.0 }),
+      Object.freeze({ x: 7.5, z: 1.0 }),
+      Object.freeze({ x: 4.0, z: -1.0 }), // 月亮湖
+    ]),
+  }),
+]);
 
 const HILL_DEFS = HILL_DEFS_BASE.map((def) => ({
   ...def,
@@ -57,6 +119,38 @@ function bookshopIslandLift(x, z) {
   const t = 1 - d / BOOKSHOP_TOWN.r;
   const s = t * t * (3 - 2 * t);
   return BOOKSHOP_OCEAN_ISLAND_LIFT * s;
+}
+
+/**
+ * 出发营地海湾台地（2026-09-05）。
+ *
+ * 营地锚点在平面 (-17, 9) → 世界 (-68, 36)，`hypot = 76.95 > ISLAND_FLAT_R = 72`
+ * —— **它在主岛足迹之外**，于是 `groundLiftAt` 只返回 `town`（那里为 0），
+ * 营地锚点落在 r = R，比海面低 `SEA_LEVEL = 0.5`。
+ * 出发营地是玩家出生点、也是 Tier0 地标，沉在水下违反主人的硬约束
+ * 「除水晶城和湖沼外，其余地标必须在海面之上」。
+ *
+ * 这是「岛台抬升」（方案 B）的第一个应用点。抬升量**相对海面基线派生**
+ * （`islandLiftFor`），不再像 `BOOKSHOP_OCEAN_ISLAND_LIFT = 3.2` 那样写死数字
+ * —— 当年那个写死的补丁只救了一个镇，营地就是这么被漏掉的。
+ *
+ * 剖面沿用书店镇同一条 smoothstep：湾心足量抬升、湾缘平滑归零，
+ * 这样营地的「草坡→沙滩→浅海阶梯」多层海岸线仍然能斜插入海。
+ */
+export const CAMP_COVE = Object.freeze({
+  x: -17 * WORLD_SCALE,
+  z: 9 * WORLD_SCALE,
+  r: 9.5 * WORLD_SCALE,
+});
+/** 湾心目标净空：高出海面 0.45（与主岛地面 +0.10 相比留更厚余量，营地是出生点） */
+export const CAMP_OCEAN_ISLAND_LIFT = islandLiftFor(0, 0.45);
+
+function campIslandLift(x, z) {
+  const d = Math.hypot(x - CAMP_COVE.x, z - CAMP_COVE.z);
+  if (d >= CAMP_COVE.r) return 0;
+  const t = 1 - d / CAMP_COVE.r;
+  const s = t * t * (3 - 2 * t);
+  return CAMP_OCEAN_ISLAND_LIFT * s;
 }
 
 // 起始庭园的池水不是贴在岛面上的透明平板，而是球面岛上的一个浅盆。
@@ -99,10 +193,19 @@ export function hillHeightAt(x, z) {
 }
 
 /** 地面真实抬升：岛内 = 岛面 + 丘高 + 池盆下挖 + 书店镇海岛台地；岛外 = 0 */
+/**
+ * 岛外台地合计：书店镇 + 出发营地海湾。
+ * 二者都在 ISLAND_FLAT_R 之外，靠自带台地浮出海面；取 max 而非相加，
+ * 避免两片台地万一重叠时叠出尖峰（与 hillHeightAt 的多丘取 max 同一口径）。
+ */
+function offIslandLift(x, z) {
+  return Math.max(bookshopIslandLift(x, z), campIslandLift(x, z));
+}
+
 export function groundLiftAt(x, z) {
-  const town = bookshopIslandLift(x, z);
-  if (Math.hypot(x, z) > ISLAND_FLAT_R) return town;
-  return ISLAND_BASE_LIFT + hillHeightAt(x, z) + pondDepressionAt(x, z) + town;
+  const off = offIslandLift(x, z);
+  if (Math.hypot(x, z) > ISLAND_FLAT_R) return off;
+  return ISLAND_BASE_LIFT + hillHeightAt(x, z) + pondDepressionAt(x, z) + off;
 }
 
 /**

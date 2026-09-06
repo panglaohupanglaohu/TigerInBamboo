@@ -6,11 +6,11 @@ import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { buildWorld } from "../world/platforms.js";
 import { buildHills, groundLiftAt } from "../world/hills.js";
-import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets } from "../world/nature.js";
+import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets, decorateCorridorForests } from "../world/nature.js";
 import { createMoonLake } from "../world/lake.js";
 import { GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { canyonOffsetDir } from "../world/canyon.js";
-import { SAIHOJI_ZONES } from "../world/saihoji.js";
+import { SAIHOJI_ZONES, SAIHOJI_HUB } from "../world/saihoji.js";
 import { buildStartingCamp } from "../world/startingCamp.js";
 import { placeObjectOnSphere, latLonToDir, quatYToDir } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
@@ -254,7 +254,11 @@ export const messengerIslandScene = {
       flatten: true,
     }));
     const mossSaihoji = buildImpastoMossyGround({
-      dir: latLonToDir(56, -120, new THREE.Vector3()),
+      // 苔庭中枢：**从 SAIHOJI_HUB 取，不要手抄 (56, -120)**。
+      // 这里原本硬写着经纬度，与 world/saihoji.js 的 SAIHOJI_HUB 是同一事实的两份副本；
+      // 一旦苔庭做球面平移，忘改这里就会让苔丘留在旧位、和六景脱开。
+      // 同一个病 2026-09-05 已在配色上犯过两次（面板硬抄色值 vs 生产色板）。
+      dir: latLonToDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3()),
       planetRadius: R,
       seed: 9101,
       yaw: 0.6,
@@ -279,7 +283,8 @@ export const messengerIslandScene = {
           return state / 4294967296;
         };
       })();
-      const mossDir = latLonToDir(56, -120, new THREE.Vector3());
+      // 同上：中枢方向只有一个来源 SAIHOJI_HUB，禁止再手抄经纬度
+      const mossDir = latLonToDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
       const surfaceR = R + 0.62 + 0.18;
       const upT = mossDir.clone();
       const rightT = new THREE.Vector3().crossVectors(upT, new THREE.Vector3(0, 0, 1)).normalize();
@@ -393,6 +398,19 @@ export const messengerIslandScene = {
     });
     // 兼容旧版调试句柄：现在代表5架侦察机组成的 squad，而非单机。
     const tripleGateScoutAircraft = scoutDefense.root;
+
+    // ---------- 地标连接走廊 · 林带（2026-09-05） ----------
+    // 山脊由 hills.js 的走廊丘出，森林在此沿同一条中心线撒。
+    // 必须放在电车建成之后：要拿轨道曲线做净空避让，否则树会种在
+    // carveHillsForTrack 削平的走廊里、悬在半空。
+    // 也必须放在 settleBuriedAssets 之前，让沉降 pass 顺手把边界树落回地表。
+    const corridorForest = decorateCorridorForests(scene, R, {
+      trackCurves: tramSystem
+        ? [tramSystem.curve, ...Object.values(tramSystem.curves || {})]
+        : null,
+    });
+    colliders.push(...corridorForest.colliders);
+
     settleBuriedAssets(scene, colliders);
 
     // eslint-disable-next-line prefer-const
@@ -464,6 +482,7 @@ export const messengerIslandScene = {
       camp,
       platforms,
       clouds,
+      moonLake, // 月亮 + 涟漪 / 涉水水花 / 倒影的逐帧（updateIsland → updateLakeFx）
       tramSystem,
       vanguardAssault: combatPack.vanguardAssault, // 控制台可经 __tm 句柄驱动验收
       canalBoats: traffic.canalBoats,

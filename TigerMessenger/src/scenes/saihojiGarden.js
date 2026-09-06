@@ -11,6 +11,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
+import { applyWhaleCombatShake } from "../world/whaleMaw.js";
 import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
 import { buildSaihojiPlanet, SAIHOJI_HUB, SAIHOJI_ZONES, latLonToGardenDir } from "../world/saihoji.js";
 import {
@@ -611,6 +612,11 @@ export const saihojiGardenScene = {
         leviathan.setAnchorRadius(currentR);
       }
       leviathan.update(dt, t);
+      // 苔庭之鲸参战（主人 2026-09-06）：把 whaleMaw 发布的挣扎甩动补上。
+      // ⚠️ 必须在这一行**之后**——leviathan.update 刚刚把姿态复位成 poseQ，
+      // 写在它之前的甩动会被整条抹掉（场景更新顺序是 messenger 在前、saihoji 在后，
+      // 而 whaleMaw 挂在 messenger 那一侧的苔庭方阵里）。
+      applyWhaleCombatShake(leviathanGroup);
       // 档位下沉震颤：叠在球面直立姿态上，禁止写死 rotation.x/z=0（会拆掉直立四元数）
       stepShake = Math.max(0, stepShake - step * 1.7);
       if (stepShake > 0.01) {

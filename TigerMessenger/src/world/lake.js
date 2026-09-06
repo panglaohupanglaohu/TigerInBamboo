@@ -9,6 +9,7 @@ import { flatToWorld, quatYToDir, latLonToDir, flatXZToLatLon } from "./sphereMa
 import { PLANET_RADIUS } from "./planet.js";
 import { canyonOffsetDir } from "./canyon.js";
 import { WORLD_SCALE } from "./worldScale.js";
+import { createMoonOrb } from "./moonOrb.js";
 
 export const LAKE = {
   x: 4 * WORLD_SCALE,
@@ -147,6 +148,11 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
     splashes.push(p);
   }
 
+  // 月亮：湖的同名主角（主人 2026-09-06）。挂在 g 下——g 已经把
+  // 「径向 = 局部 +Y、切平面 = 局部 XZ」摆好了，月亮用平面坐标即可。
+  // 尺寸/站位/张角的推导见 moonOrb.js 顶部注释。
+  const moonOrb = createMoonOrb(g);
+
   scene.add(g);
 
   // 深水碰撞体（世界坐标，切向阻挡与资产同一套）
@@ -160,6 +166,7 @@ export function createMoonLake(scene, planetRadius = PLANET_RADIUS) {
     ripples,
     splashes,
     reflect,
+    moonOrb,
     _splashCooldown: 0,
   };
 }
@@ -189,6 +196,16 @@ export function updateLakeWade(player, lake) {
 export function updateLakeFx(lake, player, t, dt) {
   if (!lake) return;
 
+  // 月亮：浮沉呼吸 + 昼夜强度 + 月光路朝观察者铺开。
+  // 玩家坐标要换到湖局部（月光路是在切平面里摆的）——下面涉水水花那段
+  // 也要做同一次换算，所以这里先算一次，两边共用。
+  let viewerLocal = null;
+  if (player?.position) {
+    _quatInv.copy(lake.group.quaternion).invert();
+    viewerLocal = _local.copy(player.position).sub(lake.group.position).applyQuaternion(_quatInv);
+  }
+  lake.moonOrb?.update?.(t, dt, viewerLocal);
+
   // 涟漪：scale 从 0.3→maxR，opacity 先升后降
   if (lake.ripples) {
     for (const ring of lake.ripples) {
@@ -207,7 +224,9 @@ export function updateLakeFx(lake, player, t, dt) {
   }
 
   // 涉水水花：在浅水且移动时从池中取粒子
-  const wading = (player.wadeFactor || 1) < 0.99;
+  // ⚠️ player 可能还没就位（场景装配途中、桩环境）：这个函数以前全仓库
+  // 没有调用点，所以从没被这种情况打到过；现在接上主循环了，必须防。
+  const wading = ((player?.wadeFactor) || 1) < 0.99;
   if (lake.splashes) {
     // 推进已有粒子
     for (const p of lake.splashes) {

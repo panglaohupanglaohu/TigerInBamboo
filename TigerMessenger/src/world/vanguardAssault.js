@@ -350,7 +350,12 @@ export function createVanguardAssault({
     st.tranq.pool.push(m);
   }
   const troopersOf = () => squad?.userData?.troopers || [];
-  const aliveTroopers = () => troopersOf().filter((tr) => tr.visible && !tr.userData.dead);
+  // ⚠️ `swallowed` 也要滤掉（主人 2026-09-06：鲸会把重甲兵吸进肚子里）。
+  // 光靠 `visible` 不够：被吸进去的那两三秒人还在画面上挣扎，
+  // 这边的推进逻辑一边把他往敌人那儿挪、鲸那边一边把他往嘴里拽，
+  // 两个作者抢同一个 position，人就会在半空抽搐着原地不动。
+  const aliveTroopers = () =>
+    troopersOf().filter((tr) => tr.visible && !tr.userData.dead && !tr.userData.swallowed);
   const vanguardAlive = () => troopersOf().filter((tr) => !tr.userData.dead).length;
   const guardsOf = () => troopersOf().filter((tr) => tr.userData.vehicleGuard && !tr.userData.dead);
 

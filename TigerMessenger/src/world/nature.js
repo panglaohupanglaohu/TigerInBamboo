@@ -6,6 +6,7 @@ import * as THREE from "three";
 import {
   createLowPolyHouse,
   createLowPolyRock,
+  createLowPolyTree,
   createLowPolyFlower,
   createLowPolyCloud,
   createLowPolySignpost,
@@ -14,10 +15,19 @@ import {
   placeOnSphere,
   INK_FLOWER_COLORS,
 } from "../assets/lowPoly.js";
-import { placeObjectOnSphere, latLonToDir } from "./sphereMath.js";
+import { placeObjectOnSphere, latLonToDir, flatXZToLatLon, flatToWorld } from "./sphereMath.js";
 
 import { QUEST_DEFS } from "../quest/questSystem.js";
-import { groundLiftAt } from "./hills.js";
+import {
+  groundLiftAt,
+  CORRIDOR_FOREST_PATH,
+  POND_CENTER_X,
+  POND_CENTER_Z,
+  POND_RADIUS_X,
+  POND_RADIUS_Z,
+} from "./hills.js";
+import { LAKE } from "./lake.js";
+import { SEA_LEVEL } from "./seaLevel.js";
 import { isInsideSaihojiReserve } from "./saihoji.js";
 import { WORLD_SCALE } from "./worldScale.js";
 
@@ -300,4 +310,113 @@ export function settleBuriedAssets(scene, colliders = []) {
     moved++;
   }
   return moved;
+}
+
+/**
+ * 地标连接走廊的林带（2026-09-05）。
+ *
+ * 主人要求「地标与地标之间用山脉与森林连接」。山脊由 `hills.js` 的
+ * 走廊丘负责，本函数负责**森林**——沿同一条 `CORRIDOR_FOREST_PATH` 撒树，
+ * 山与树共用一条中心线，免得出现「山在这、树在那」。
+ *
+ * 三条避让（都验过，别拿掉）：
+ *  ① **海面**：逐棵查 `groundLiftAt > SEA_LEVEL`，避免树长在水里
+ *     （主人硬约束的同一条口径）
+ *  ② **水体**：池塘椭圆与月亮湖 rOuter 内不种
+ *  ③ **电车轨道**：`carveHillsForTrack` 会把轨道走廊的山削平到 capLift 0.62，
+ *     那里的树会悬空，所以轨道净空半径内不种。轨道曲线由调用方传入；
+ *     没传就跳过这条（构建顺序上轨道可能还没建好）。
+ *
+ * 撒点是**确定性**的（lcg 固定种子）：同 seed 同结果，便于回归比对。
+ *
+ * @param {THREE.Scene} scene
+ * @param {number} planetRadius
+ * @param {{ seed?: number, perUnit?: number, jitter?: number, trackCurves?: THREE.Curve[], trackClearR?: number }} [opts]
+ * @returns {{ meshes: THREE.Object3D[], colliders: Array<{position: THREE.Vector3, radius: number}> }}
+ */
+export function decorateCorridorForests(scene, planetRadius, opts = {}) {
+  const {
+    seed = 20260905,
+    // 每单位走廊长度的目标树数（设计坐标）。走廊 A 长约 31.9、B 约 10.1
+    perUnit = 1.15,
+    jitter = 1.5,
+    trackCurves = null,
+    trackClearR = 2.6,
+  } = opts;
+
+  const rnd = lcg(seed);
+  const S = WORLD_SCALE;
+  const meshes = [];
+  const colliders = [];
+
+  const inPond = (wx, wz) => {
+    const nx = (wx - POND_CENTER_X) / POND_RADIUS_X;
+    const nz = (wz - POND_CENTER_Z) / POND_RADIUS_Z;
+    return nx * nx + nz * nz < 1;
+  };
+  const inLake = (wx, wz) => Math.hypot(wx - LAKE.x, wz - LAKE.z) < LAKE.rOuter + 0.8;
+
+  // 轨道净空：在**世界坐标**里比距离。
+  // 不走「世界→平面」反投影是有意的：sphereMath 没有那个逆函数，
+  // 而平面坐标只是北极方位投影，逆变换在远离极点处会失真。
+  const trackPts = [];
+  if (Array.isArray(trackCurves)) {
+    for (const curve of trackCurves) {
+      if (!curve?.getPoints) continue;
+      for (const p of curve.getPoints(400)) trackPts.push(p);
+    }
+  }
+  const _tw = new THREE.Vector3();
+  const nearTrack = (wx, wz, lift) => {
+    if (!trackPts.length) return false;
+    flatToWorld(wx, lift, wz, planetRadius, _tw);
+    const limit = trackClearR * S;
+    return trackPts.some((p) => _tw.distanceTo(p) < limit);
+  };
+
+  for (const corridor of CORRIDOR_FOREST_PATH) {
+    const pts = corridor.points;
+    for (let seg = 0; seg < pts.length - 1; seg++) {
+      const a = pts[seg];
+      const b = pts[seg + 1];
+      const segLen = Math.hypot(b.x - a.x, b.z - a.z);
+      const count = Math.max(1, Math.round(segLen * perUnit));
+      for (let i = 0; i < count; i++) {
+        // 沿段均匀 + 抖动；左右偏移让林带有宽度而不是一条线
+        const t = (i + 0.5) / count;
+        const cx = a.x + (b.x - a.x) * t;
+        const cz = a.z + (b.z - a.z) * t;
+        // 段法向（用于左右铺开）
+        const nx = -(b.z - a.z) / (segLen || 1);
+        const nz = (b.x - a.x) / (segLen || 1);
+        const side = (rnd() - 0.5) * 2 * jitter;
+        const along = (rnd() - 0.5) * jitter * 0.6;
+        const fx = cx + nx * side + ((b.x - a.x) / (segLen || 1)) * along;
+        const fz = cz + nz * side + ((b.z - a.z) / (segLen || 1)) * along;
+        const wx = fx * S;
+        const wz = fz * S;
+
+        if (inPond(wx, wz) || inLake(wx, wz)) continue;
+        // isInsideSaihojiReserve 收的是 **lat/lon**（度），不是平面 x/z——
+        // 直接传平面坐标会静默判错（角距函数不会报错，只会一直返回 false）。
+        const geo = flatXZToLatLon(wx, wz, planetRadius);
+        if (isInsideSaihojiReserve(geo.lat, geo.lon)) continue;
+        const lift = groundLiftAt(wx, wz);
+        if (!(lift > SEA_LEVEL)) continue; // 不种在水里
+        if (nearTrack(wx, wz, lift)) continue; // 轨道走廊会被削平，树会悬空
+
+        const tree = createLowPolyTree();
+        placeObjectOnSphere(tree, wx, wz, lift, planetRadius);
+        tree.rotateY(rnd() * Math.PI * 2);
+        const s = 0.85 + rnd() * 0.5;
+        tree.scale.multiplyScalar(s);
+        tree.userData.corridorId = corridor.id;
+        scene.add(tree);
+        meshes.push(tree);
+        colliders.push({ position: tree.position.clone(), radius: 0.55 * s });
+      }
+    }
+  }
+
+  return { meshes, colliders };
 }

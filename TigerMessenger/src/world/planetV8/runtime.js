@@ -16,6 +16,7 @@ import {
 import { compilePlanetV8 } from "../../procgen/planet/planetCompilerV8.js?v=20260827-terrain-v11";
 import { createBufferGeometryFromMesh } from "../../procgen/three/bufferGeometryAdapter.js";
 import { compileCurvedWater } from "../waterV8/curvedWaterCompiler.js";
+import { SEA_LEVEL } from "../seaLevel.js";
 import {
   compileOfficialOcean,
   OFFICIAL_OCEAN_SEA_LEVEL,
@@ -170,7 +171,10 @@ export function createPlanetV8Runtime({ scene, planet = null, radius = 160, seed
 
   if (enabledWater && enabledTerrain && state.compiler?.grid) {
     const basins = state.compiler.manifest.filter((entry) => entry.waterNeeds === "closed-lake-basin").map((entry) => ({ direction: entry.direction, angularRadius: entry.angularRadius, level: 0.08 }));
-    const water = state.compiler.water || compileCurvedWater({ grid: state.compiler.grid, radius, seaLevel: 0, basins, fieldRecipe: state.compiler.field });
+    // 海面基线走唯一真源（world/seaLevel.js）。这里原本硬编码 seaLevel: 0，
+    // 与 official ocean 的 0.72 并存 —— 同一个世界两套水面高度，
+    // 导致「地标是否在海面之上」取决于走了哪条分支。见 seaLevel.js 文件头。
+    const water = state.compiler.water || compileCurvedWater({ grid: state.compiler.grid, radius, seaLevel: SEA_LEVEL, basins, fieldRecipe: state.compiler.field });
     state.water = water;
     const ocean = waterMesh(water.ocean, createCurvedWaterMaterial(THREE, { color: 0x0f5e87, opacity: 0.96, kind: "ocean" }));
     ocean.name = "planet-v8-curved-ocean";

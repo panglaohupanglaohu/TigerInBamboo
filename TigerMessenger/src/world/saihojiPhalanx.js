@@ -11,6 +11,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { PLANET_RADIUS } from "./planet.js";
+import { createWhaleMaw } from "./whaleMaw.js";
 import { SAIHOJI_HUB } from "./saihoji.js";
 import { CITADEL_CASCADE_POOL_SPECS } from "./odysseyCitadel.js";
 import { citadelWalkFlights, citadelWalkMetrics } from "./citadelRange.js";
@@ -3194,6 +3195,20 @@ export function createSaihojiPhalanxBattle({
     }
   }
 
+  // ---------- 苔庭之鲸参战（主人 2026-09-06）----------
+  //  在此之前鲸是**被动**的：红盔用绳索把它往下拽、机队用光束把它往上吸，
+  //  它自己一句话都没有。现在它有两手——被网住时挣扎，谁凑到嘴边就吞下去。
+  //  具体动作全在 whaleMaw.js；这里只负责「什么时候撒网 / 什么时候开吞」。
+  const whaleMaw = createWhaleMaw({
+    scene,
+    getWhale: () => scene.getObjectByName("leviathanGroup"),
+    getTroopers: () => liveVanguards,
+    groundHeightAt: (dir) => groundHeightAt(dir),
+    spawnSmoke,
+  });
+  /** 开吞的节流：由 whaleMaw 自己的冷却兜底，这里只是别每帧敲门 */
+  let mawPoke = 0;
+
   // ---------- 绳索小队：告警后抛绳挂鲸身、拔河式拉回地面 ----------
   // 4 队（东/西/北/南）× 3 人：锚点在地面、绳头挂在鲸身中腰侧缘
   // （绳路避开鲸体，整段可见）；拉力汇入 root.userData.ropePull01 供苔庭鲸
@@ -3595,6 +3610,27 @@ export function createSaihojiPhalanxBattle({
       if (allS.length >= 4) dispatchRopeTeams(allS);
     }
     updateRopeTeams(dt, t);
+
+    // ---------- 鲸的反击 ----------
+    // ⚠️ 必须排在鲸自己的 update 之后。leviathanIsland 每帧
+    // `group.quaternion.copy(poseQ)` 把姿态复位，挣扎的甩动写在它前面会被抹掉。
+    // 本文件的 update 由场景在 leviathan.update 之后调用，所以这里是安全的。
+    {
+      // 拉扯：**拉力就是绳索小队自己的拔河**（主人 2026-09-06：
+      // 「不必出现网，有那种被拉扯挣脱的感觉即可」）。
+      // ropePull01 是四队拉力的归一化汇总，本来就在算，直接喂进去——
+      // 拉得越狠鲸挣得越凶，绳一松就平息，因果是现成的，不用再造道具。
+      const pull = whaleUp ? (root.userData.ropePull01 || 0) : 0;
+      whaleMaw.setTug(pull);
+      // 开吞：被拽到一定程度才动嘴——先被激怒，再还手，读起来才有因果。
+      // 够不够得着由 whaleMaw 自己判断（嘴前方 + 射程内），这里只定节奏。
+      mawPoke -= dt;
+      if (pull > 0.35 && mawPoke <= 0) {
+        mawPoke = 2.0;
+        whaleMaw.swallow();
+      }
+      whaleMaw.update(dt, t);
+    }
     // 绳索士兵的后仰姿态（拔河）
     for (const team of ropeTeams) {
       for (const s of team.soldiers) {
@@ -3738,6 +3774,7 @@ export function createSaihojiPhalanxBattle({
     // 3 台 GatePodCraft 索降 6 名 + SOCCO 运输艇贴海送 14 名，逐人采样苔庭地表落地。
     // 落地半径、战斗推进、绳索撤离全归它管；这里只负责扣响发令枪。
     root.userData.groundHeightAt = groundHeightAt;
+    root.userData.whaleMaw = whaleMaw; // 控制台/测试可驱动：castNet() / swallow() / stats()
     root.userData.getDefenders = () => shooters.filter((s) => s?.parent && !s.userData?.dead);
     root.userData.spawnSmoke = spawnSmoke; // 灰烬/麻醉雾复用现成烟池
     if (vanguardRoot && whaleUp && fightFormed &&

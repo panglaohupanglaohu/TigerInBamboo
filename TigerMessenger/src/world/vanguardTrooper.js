@@ -450,6 +450,47 @@ function vtHash(a, b = 0) {
  * 造一支先锋兵中队。
  * @param {{count?:number, scale?:number}} [opts]
  */
+/**
+ * 军服糊成土黄（主人 2026-09-06：重甲兵「拉出去后，军服变成土黄色」）。
+ *
+ * 做法是**换材质引用**，不是改颜色值：`toonMat` 是按 (颜色, 选项) 缓存的，
+ * 全场 27 名重甲兵共用同一批材质实例，直接 `material.color.set(...)`
+ * 会把没被吞的人也一起染了。
+ *
+ * 换过去的那一套同样走 toonMat 缓存——所以无论多少人被吞过，
+ * 全场也只多出这四个材质实例，draw call 不涨。
+ * 只染军服（装甲主色 / 卡其副板 / 内衬 / 大腿红条），
+ * 关节和枪身不动：那是装备，不是军服。
+ */
+let _soilMap = null;
+function soilMap() {
+  if (_soilMap) return _soilMap;
+  const opt = { flatShading: true };
+  _soilMap = new Map([
+    [toonMat(0x4a4f55, opt), toonMat(0x8a7434, opt)], // 深灰装甲 → 土黄
+    [toonMat(0x8d8375, opt), toonMat(0xa89250, opt)], // 卡其副板 → 更黄
+    [toonMat(0x3a4550, opt), toonMat(0x6b5a2c, opt)], // 靛灰内衬 → 土褐
+    [toonMat(0xb2402f, opt), toonMat(0x8a6a34, opt)], // 大腿红条 → 一并糊掉
+  ]);
+  return _soilMap;
+}
+
+/**
+ * @param {THREE.Object3D} trooper 一名重甲兵
+ * @returns {boolean} 是否真的染上了（已经染过的返回 false）
+ */
+export function soilVanguardUniform(trooper) {
+  if (!trooper || trooper.userData?.uniformSoiled) return false;
+  const map = soilMap();
+  trooper.traverse((o) => {
+    if (!o.isMesh || !o.material) return;
+    const next = map.get(o.material);
+    if (next) o.material = next;
+  });
+  trooper.userData.uniformSoiled = true;
+  return true;
+}
+
 export function createVanguardSquad({ count = VANGUARD_SQUAD_SIZE, scale = 1 } = {}) {
   const root = new THREE.Group();
   root.name = "vanguard-squad";

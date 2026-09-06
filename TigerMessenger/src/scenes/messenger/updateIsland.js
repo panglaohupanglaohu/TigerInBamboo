@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { P } from "../../core/params.js";
 import { updatePlatformPulse } from "../../world/platforms.js";
 import { updateClouds } from "../../assets/lowPoly.js";
+import { updateLakeFx } from "../../world/lake.js";
 import { updateBubblePodPatrol } from "../../assets/bubblePod.js";
 import { updateAircraftHover } from "../../assets/moebiusAircraft.js";
 import { updateGatePodCraft, updateGatePodEscort } from "../../world/gatePodCraft.js";
@@ -32,6 +33,11 @@ export function updateMessengerIsland(s, dt, t, runtime) {
   s.harborBuilt?.update?.(dt, t);
   // 弹唱老人（2026-08-29 修订）：不再随狐——老人在旧港灯杆/半沉战船旁站立（loadCitadel snap 落位）。
 
+
+  // 月亮湖：月亮的浮沉/昼夜/月光路，外加涟漪、涉水水花、倒影呼吸。
+  // ⚠️ updateLakeFx 在 2026-09-06 之前**全仓库没有一个调用点**——
+  // 涟漪、水花、倒影三样都写好了却从来没跑过。接月亮的时候顺手接上。
+  if (s.moonLake) updateLakeFx(s.moonLake, runtime?.player, t, dt);
 
   s.canalLakeLink?.update?.(dt, t);
   updateBubblePodPatrol(s.bubblePods, t);

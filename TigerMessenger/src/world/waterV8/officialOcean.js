@@ -3,8 +3,17 @@
 // canyon; this shell matches the planet tessellation so the sea stays on top.
 import * as THREE from "three";
 import { CANYON, canyonOffsetDirSmooth } from "../canyon.js";
+import { SEA_LEVEL } from "../seaLevel.js";
 
-export const OFFICIAL_OCEAN_SEA_LEVEL = 0.72;
+/**
+ * 海平面（相对 R 的抬升）—— **从 world/seaLevel.js 的唯一真源派生，别在这里写数字**。
+ *
+ * 2026-09-05 之前这里硬写着 0.72，而 procgen 链默认 `seaLevel = 0`，
+ * 于是「地标在不在海面之上」取决于走了哪条水面分支。基线已收拢到
+ * `SEA_LEVEL`，本常量保留只为兼容既有 import。
+ * 由来、余量与改动须知全部记在 `world/seaLevel.js` 的文件头。
+ */
+export const OFFICIAL_OCEAN_SEA_LEVEL = SEA_LEVEL;
 export const OFFICIAL_OCEAN_COLOR = 0x17698b;
 export const OFFICIAL_OCEAN_OPACITY = 0.94;
 export const OFFICIAL_OCEAN_WIDTH_SEGMENTS = 72;
