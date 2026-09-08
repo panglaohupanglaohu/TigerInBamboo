@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "mask": "Gold text pixels from dark-after: R>100,G>80,B<90; sRGB8 image comparison",
+  "gold_pixels": 16191,
+  "old_dark_gold_mean_rgb": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "fixed_dark_gold_mean_rgb": [
+    197.24248039034032,
+    164.02223457476376,
+    50.55709962324748
+  ],
+  "fixed_text_normal_vs_dark_mean_abs_difference": 2.216498877977477,
+  "normal_before_after_changed_pixels": 20176
+}

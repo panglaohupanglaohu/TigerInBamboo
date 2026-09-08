@@ -1,3 +1,50 @@
+## 2026-09-09 区域接续：书店原场景与海岸关系
+
+书店 Godot 原世界修复已完成：仅对唯一原招牌恢复 Web 原有不受灯光影响的文字材质，保留纹理、透明策略及所有节点关系。默认日光前后变化很小；独立暗光诊断确认文字不再消失。真实原世界截图、12,727 个有 sourcePath 节点的身份/父级/变换保留、6 次回退检查通过。正式报告 `artifacts/pipeline/bookshop-world-sign/final-03/report.json`；源入口 `godot/scripts/original_world.gd` 默认启用 `bookshop_world_adapter.gd`。这不是书店完整区域收口或全局布光完成，活动编辑器未被本轮隔离检查刷新。
+
+用户要求每区同时接入、优化环境和整体布局。当前只推进书店镇收口，不重复已完成的石板/两阶材质/六树，也不恢复已停用随机房屋、路灯、电线杆。
+
+全球交通这批新增 10 条基于实际候选海底网格的绕陆海路；383 条边独立检查通过，预览无页面错误。入口 `http://127.0.0.1:8765/TigerMessenger/tools/world-terrain/` 的“绕陆航线候选”显示青色海路和橙色未建岸上连接。原场景/地形未搬迁，Godot 载具尚未使用新路线。
+
+发现必须先修的布局问题：V3 候选书店到外洋约 66.16 世界单位、旧港约 61.86，大陆支撑过宽。下一动作是结合原书店—营地—月湖内部占地调整区域外缘/海湾，重算海路；不能把区域锚直接吸附海边或将未建连接标成可玩。详情与复验见 `docs/WORLD_LAYOUT_V2.md` 最新节。
+
+新增工程文件：`tools/pipeline/build_coastal_routes.mjs`、`test_coastal_routes.mjs`、`godot/data/world-coastal-routes-v1.json`。证据 `artifacts/world-terrain/coastal-validation.json`、`coastal-browser.json`。
+
+## 2026-09-09 最新批次：红蓝短剑兵战斗接入与全球地势展开
+
+Godot 同批补充：已完成可复用 `roman_combat_adapter.gd` 与 `roman_combat_runtime.gd`，独立 `roman_combat_slice.tscn` 复用原近战规则；24 项原函数伤害对照、红蓝自动命中、108 原节点/父级保留、阵亡 3.7 秒隐藏通过。正式证据 `artifacts/pipeline/roman-combat-godot/final-02/report.json`。**原 Godot 世界仍有 0 个真实 gladius 角色，尚缺生成/运兵部署生命周期，不能称全局战斗已接完。** 下一步实际部署实例赋球面变换后 register_actor，卸载前 unregister_actor；不能把搬运工和木马绑定兵误当短剑兵。活动编辑器未被隔离测试刷新。
+
+本节优先于下方历史待办。继续 Astra + 已认可图 + Blender 资源 + Godot；Qwen/LLaDA 暂缓。
+
+- Web：已将认可的 v3 盔甲、原红蓝盔缨、盾把接到 `saihojiPhalanx` 实际生成/更新/销毁流程，保留原角色与伤害规则，支持回退。独立浏览器运行真实战斗模块 720 帧，34 项检查通过；原方阵 6 组/15 项通过。不是完整世界通关测试。证据：`artifacts/pipeline/roman-equipment-web/REPORT.md`、`report.json`。
+- 动作：覆盖行走、挥击、攀爬、倒地；569 个非攀爬/非倒地姿态验证盾与身体/腿、剑分离。裙板仍为静态十片，裙腿自碰撞及攀爬背盾/举臂全身穿插尚未验收。
+- 地势：复用原 geodesicGrid 与 terrainProfilesV8/classifyProfileField 生成 R160 双半球地势候选，16,002 顶点/32,000 三角，闭合无缝拓扑；陆地顶点采样约 37%。同一 GLB 已通过 Web 预览和隔离 Godot 实例检查（14 地标）。本批没有执行 WFC 求解或迁移原建筑，不能计作完整地形部署。
+- 查看：`http://127.0.0.1:8765/TigerMessenger/tools/world-terrain/`，拖动旋转、切另一半球、选择区域；打开路线显示穿陆航线及水上陆路问题。原游戏入口仍为 `/TigerMessenger/`。Godot 对应 `res://scenes/world_layout.tscn`。
+- 下一批地势先修真实海岸/港口入口与海陆交通路径，再核对场景所有权和真实占地。原 camp/city/castle 复合范围大，规划圆不能当模型边界，更不能整个组重复旋转。详细阶段见 `docs/WORLD_LAYOUT_V2.md` 最新节。
+
+当前地势证据：`artifacts/world-terrain/generation.json`、`browser.json`、`godot-validation.json`；源文件 `tools/pipeline/build_world_terrain.mjs`，产物 `godot/assets/terrain/world-terrain-v3.glb`。原活动世界地形、存档和建筑位置未替换。
+
+## 最新交付：湖沼对答地面修复 + Godot 原作待机尾摆
+
+沿用已经认可的概念和 Blender anatomy-v3 资源，继续接入原游戏。Qwen/LLaDA 按用户要求暂缓。
+
+- **Web 湖沼地面已修**：旧通用球面把玩家从半径 139.21 顶到 151.43，单步位移 12.21；新判定沿真实径向采样原坑壁、湖底和八级入口石阶。只对有实际交点的局部范围覆盖，坑外回退原地面，不把装饰当作地面。平台横向推出后重新采样最终位置，地面登记独立于虎，删除角色不会删地面。
+- **真实对答回归通过**：独立浏览器初始化玩家到湖沼近虎位置一次，随后保留正常物理 160 帧（7.76 秒），全部在 7.5 世界单位内；原灯谜经历 tiger → messenger → cool。另六帧受控近距确认原冷却仍保留。没有修改剧情门控或推进救援章节；这不是从出生地步行到湖沼的完整通关验收。正式报告：`artifacts/pipeline/tiger-web-v3/world-physics-2026-09-08T20-05-25-512Z/report.json`。
+- **独立局部检查 38 项通过**：旋转/缩放、坑外/对跖点回退、装饰排除、移除角色/整个区域、平台推出进入/离开局部范围。报告 `artifacts/pipeline/swamp-ground-review/fixture-review.json`，审查 `artifacts/pipeline/swamp-ground-review/REVIEW.md`。
+- **Godot 已加入原作尾部待机**：9 个原 pivot、约 -150° 的真实尾根 rest，37 姿态与独立 Three.js 原公式对照，最大矩阵差 0.0000633；80 原 ID、六次开关恢复和原世界变换通过。正式报告 `artifacts/pipeline/godot-tiger-idle/final-01/report.json`。动作图/动图是实际引擎关节采样的绘图，不是模型渲染截图。
+
+修改入口：`src/world/swampGround.js`、`src/world/collision.js`、`src/world/moebiusSwamp.js`、`src/main.js`；Godot 为 `godot/scripts/tiger_world_adapter.gd`。原 .blend/GLB 未再次重制或覆盖。活动 Godot 编辑器未被本轮隔离验证刷新，需重新运行原世界查看新尾摆。
+
+后续：按原角色契约推进红蓝短剑兵在真实战斗中的盔甲与握盾回接；继续 Godot 湖沼巡游/饮水/救援适配。坑口与球体整体地形的连续进出、外部路线和完整救援尚未验收，不把这次局部修复当作全世界地形完成。
+
+历史报告保留：20:02 的160帧已完成对答，但旧测试随后期待立即重复触发，故总体失败；最终报告修正了冷却期的验收条件。更早的 world smoke 失败已由本次针对性修复解释，不删除历史。
+
+## 当前执行方向：继续 Astra + Blender + 图像参考 + Godot
+
+用户明确暂缓 Qwen/LLaDA 接入。保留现有桥接程序，暂停模型部署、端点追问与生产线扩建；不把本地模型连接列为游戏开发阻塞。继续原作认可参考 → Blender 迭代 → Godot 真实场景与动作接入 → Web 兼容验证。已有认可图优先复用，只有设计缺口需要时再生图。
+
+当前两项：根线程定位湖沼近距被推出的问题；Godot 工作者将实际尾部待机动画从原 Web 契约接到候选，保留真实 rest 和世界身份。完整巡游、救援与区域地形仍逐步推进，不以静态导入代替玩法。
+
 ## 2026-09-09：最新检查点——新虎已进入原 Web 湖沼
 
 此节更新下方历史状态中的“Web 尚未回接”。本次将已有 Blender anatomy-v3 的实际几何、材质、4 张纹理和原节点变换接回原角色，而不是再建一只独立展示虎。原角色身份、80 个节点、尾巴、灯光引用、巡游、饮水、相见回调和救援目标保留；默认使用新外观，可通过 anatomy:false 回退。旧原作采集页面显式使用原模型。
@@ -6,10 +53,11 @@
 - [x] 浏览器 36 项检查通过：原身份、切换/回退、纹理解码失败恢复、资源释放、行走/饮水/相见与平面脚掌接触。最新证据：`artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/`。旧拓扑优化的 idle/walk/drink 对照也保持零像素差异。
 - [x] 原游戏完整场景确认新虎默认加载、40 次真实帧更新、相见状态和救援目标仍是同一角色；无页面、控制台或请求错误。实景：`artifacts/pipeline/tiger-web-v3/world-2026-09-08T19-35-35-092Z/02-candidate-world.png`。
 - [ ] **完整场景对话没有触发，world smoke 总结果仍为失败。** 必须查距离/阻塞条件并完成实际触发，不能把独立 fixture 的对话通过写成完整救援通关。详情与诊断入口：`artifacts/pipeline/tiger-web-v3/world-smoke-summary.json`。脚掌平面支撑通过也不等于球面坡地/踏水接触验收。
+- [x] 一次精确对话诊断完成：初始站位距虎 1.4142 世界单位，但原世界更新后实际对话采样距虎 10.59–18.47，24 帧均在范围外；游戏开始和阻挡条件正常。受控保持 2 世界单位时，6 帧均激活原对话（idle → tiger）。生产源码未改、救援章节未推进。证明对话链能用，尚不能证明自然靠近能触发；下一步查玩家地面/碰撞更新为何把站位推出近距。新证据：`artifacts/pipeline/tiger-web-v3/world-dialog-2026-09-08T19-47-11-400Z/report.json`；原 smoke 的失败状态继续保留。
 - [x] 本地执行器增加 Web 作业，现在有六个受审查的工程任务；修改输入会重新检查，已通过且哈希一致则复用。作业数不是新优化资产数。
 - [x] 恢复用户原预览地址 `http://127.0.0.1:8765/TigerMessenger/`，HTTP 200；服务写入文件日志，避免原服务空响应。启动记录 `artifacts/pipeline/preview-server/server.json`。
 
-**下一步顺序**：1. 依据 smoke 诊断补齐实际相见对话与地形接触；2. 同家族沉淀可审查的建模修改模板，推进红蓝兵的 Web 回接/真实战斗检查；3. 接通目标 Studio 后执行真实 Qwen 工具续答与双图理解，单独验证 LLaDA Mac 推理。当前连接主机仍为 M2 16GiB，未向它下载目标机权重。Godot 完整行为迁移和前台最新资源验收仍待做。
+**下一步顺序**：1. 按新诊断核对玩家地面/碰撞更新造成的近距脱离，补齐自然相见与地形接触；2. 同家族沉淀可审查的建模修改模板，推进红蓝兵的 Web 回接/真实战斗检查；3. 接通目标 Studio 后执行真实 Qwen 工具续答与双图理解，单独验证 LLaDA Mac 推理。当前连接主机仍为 M2 16GiB，未向它下载目标机权重。Godot 完整行为迁移和前台最新资源验收仍待做。
 
 接手时先读此节、`docs/LOCAL_PIPELINE_RUNBOOK.md`、状态页与原始失败报告，再领取具体任务；不要重新生成已有虎，也不要把工程通过自动提升为美术/玩法完成。最新读取的现有续作任务已设为每 2.5 小时检查（ACTIVE）；未改动这个外部更新的频率。下方旧记录的“每小时”仅为当时状态。执行器本身运行一轮后退出。
 
@@ -57,7 +105,7 @@
 
 ## 2026-09-09：用户圣城概念图已接收
 
-用户上传的蓝夜峡谷灯城作为当前圣城主要视觉目标，已保存 `assets/references/citadel/user-concept-20260909.jpg`，完整执行依据见 `docs/CITADEL_ART_TARGET.md`。概念输入已具备，不再将imagegen网络恢复作为开工依赖。采用青蓝暮光/靛蓝山体、层叠浅色塔城、暖金与桃红窗灯、原水系倒影；保留原中央圣塔、街巷关系与球面世界。下一可见交付是原圣城一片区同镜头的「原版／蓝夜候选」对照，Blender局部接缝与Godot材质灯光分别验证；当前未据此声称新渲染或建模完成。
+用户上传的蓝夜峡谷灯城作为当前圣城主要视觉目标，已保存 `assets/references/citadel/user-concept-20260909.jpg`，完整执行依据见 `docs/CITADEL_ART_TARGET.md`。概念输入已具备，不再将imagegen网络恢复作为开工依赖。采用青蓝暮光/靛蓝山体、层叠浅色塔城、暖金与桃红窗灯、原水系倒影；保留原中央圣塔、街巷关系与球面世界。下一可见交付是原圣城一片区同镜头的「原版／蓝夜候选」对照。按用户最新分工：Blender只制作远山、峡谷地形地势与植物；建筑用原工程Townscaper式模块及WFC约束搭建，保留中央圣塔、街巷与原水系；Godot负责材质、布光、雾与本片区倒影。生成目标图已保存于 assets/concepts/citadel-user-reference-target-20260909-v1.png。执行与验收清单以 docs/CITADEL_ART_TARGET.md 为准；本次是计划修订，不据此声称新建模/渲染完成。
 
 
 ## 2026-09-09：罗马短剑兵握持候选已可见

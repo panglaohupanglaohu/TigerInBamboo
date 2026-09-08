@@ -1,0 +1,10 @@
+config_version=5
+[application]
+config/name="TigerMessenger · 圣城蓝夜第三轮候选"
+run/main_scene="res://review.tscn"
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=960
+[rendering]
+renderer/rendering_method="forward_plus"
+renderer/rendering_method.mobile="forward_plus"

@@ -1,0 +1,16 @@
+{
+  "scope": "Web battle adapter, Godot combat subset, spherical terrain candidate; not global gameplay acceptance",
+  "reports": [
+    "artifacts/pipeline/roman-equipment-web/report.json",
+    "artifacts/pipeline/roman-combat-godot/final-02/report.json",
+    "artifacts/world-terrain/browser.json",
+    "artifacts/world-terrain/godot-validation.json"
+  ],
+  "terrainPreview": "http://127.0.0.1:8765/TigerMessenger/tools/world-terrain/",
+  "next": [
+    "coast and harbor entrances, mode-correct routes",
+    "region ownership and real geometry footprints",
+    "Godot actual gladius spawn lifecycle"
+  ],
+  "originalWorldTerrainReplaced": false
+}

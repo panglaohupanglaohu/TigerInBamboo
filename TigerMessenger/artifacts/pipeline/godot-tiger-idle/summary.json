@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "runtimeEntry": "godot/scripts/tiger_world_adapter.gd: set_enabled(true) automatically starts OriginalIdleTail",
+  "validationCommand": "rtk proxy python3 tools/pipeline/test_tiger_idle_godot.py --output artifacts/pipeline/godot-tiger-idle/NEW_RUN_NAME",
+  "canonicalReport": "final-01/report.json",
+  "validation": "final-01/validation.json",
+  "staticWorldRegression": "final-01/static.json",
+  "isolatedProject": "/private/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/tiger-godot-job-zlmi377d/godot",
+  "originalIdentityCount": 80,
+  "originalEmbeddedWorldNodesChecked": 16,
+  "sampleCount": 37,
+  "maximumMatrixErrorAgainstIndependentThree": 6.33050047673667e-05,
+  "actualSceneTreeAnimation": true,
+  "tailRootRestDegrees": -149.9999948896018,
+  "toggleRestorations": 6,
+  "sameWorldTransform": true,
+  "loopSeamPreserved": true,
+  "sourceSnapshotCurrent": true,
+  "activeEditorImportPerformed": false,
+  "scope": "Original idle-tail motion at original swamp placement only. No new art, roaming, drinking, dialog, rescue or visual acceptance.",
+  "visualEvidence": {
+    "beforeAfter": "motion-before-after.png",
+    "motion": "motion-measured.gif",
+    "kind": "Measured Godot pivot positions plotted with matplotlib, not model screenshots",
+    "metrics": {
+      "maximumLastJointDisplacementMeters": 0.3504071615172924,
+      "loopSeconds": 2.0943951023932,
+      "source": "final-01/validation.json",
+      "visualizationOnly": true,
+      "engineScreenshot": false
+    }
+  },
+  "priorDiagnostics": [
+    "idle-validation-01.log contains the initial test-only GDScript inference error; fixed before canonical run.",
+    "static-regression-01 and idle-validation-02 are earlier passing intermediate evidence; final-01 is canonical."
+  ]
+}

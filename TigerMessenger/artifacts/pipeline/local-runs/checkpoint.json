@@ -74,5 +74,11 @@
   "web_tiger_default_deployed": true,
   "world_smoke_passed": false,
   "world_smoke_report": "artifacts/pipeline/tiger-web-v3/world-2026-09-08T19-35-35-092Z/report.json",
-  "world_smoke_gap": "Dialog activation not observed; full gameplay and terrain contact acceptance pending."
+  "world_smoke_gap": "Dialog activation not observed; full gameplay and terrain contact acceptance pending.",
+  "dialog_diagnostic": {
+    "report": "artifacts/pipeline/tiger-web-v3/world-dialog-2026-09-08T19-47-11-400Z/report.json",
+    "controlled_activation_passed": true,
+    "natural_proximity_passed": false,
+    "source_unchanged": true
+  }
 }

@@ -45,14 +45,17 @@ function platformTopAt(p, pos) {
  * @param {() => void} onVoidFall
  * @param {object|null} [hills] buildHills 返回对象；存在时山区地面按高度场吸附
  */
-export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, hills = null) {
+export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, hills = null, localGround = null) {
   pos.addScaledVector(vel, dt);
 
   let grounded = false;
   let groundR = PLANET_RADIUS;
 
+  const localRadius = localGround?.(pos);
+  const hasLocalGround = Number.isFinite(localRadius);
+
   // ---- 山区高度场（连绵土坡）：视觉与碰撞共用 groundLiftAt，斜坡平滑吸附 ----
-  if (hills) {
+  if (hills && !hasLocalGround) {
     const flat = worldToFlatXZ(pos, PLANET_RADIUS);
     if (flat) {
       const surfaceR = hills.sampleRadius?.(pos) ?? PLANET_RADIUS + groundLiftAt(flat.x, flat.z);
@@ -164,7 +167,10 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
     const canyon = canyonOffsetDir(_up.copy(pos).normalize());
     const citadel = citadelWalkLiftDir(_up);
     const baseRadius = PLANET_RADIUS + canyon + citadel;
-    const surfR = hillRadius == null ? baseRadius : citadel > 0 ? Math.max(hillRadius, baseRadius) : hillRadius;
+    // Platform side resolution can change the angular position on a slope.
+    // Sample the final footprint, including entry into or exit from the crater.
+    const finalLocalRadius = localGround?.(pos);
+    const surfR = Number.isFinite(finalLocalRadius) ? finalLocalRadius : hillRadius == null ? baseRadius : citadel > 0 ? Math.max(hillRadius, baseRadius) : hillRadius;
     if (r < surfR + 0.1) {
       pos.setLength(surfR);
       const n = _up.copy(pos).normalize();

@@ -109,5 +109,51 @@
       "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
       "tools/pipeline/test_tiger_world_web.mjs": "a89bf3e367e2d332eb20bc70f01bbea7b9ebe5de8004241257770b9b48599c51"
     }
+  },
+  "dialogBoundedRetest": {
+    "report": "world-dialog-2026-09-08T19-47-11-400Z/report.json",
+    "script": "tools/pipeline/test_tiger_world_dialog_web.mjs",
+    "diagnosticExecutionPassed": true,
+    "naturalProximityPassed": false,
+    "controlledDialogPassed": true,
+    "naturalFrames": 24,
+    "naturalWorldDistanceRange": [
+      10.594378602834192,
+      18.469082124889585
+    ],
+    "naturalNearFrames": 0,
+    "gameStartedEveryNaturalFrame": true,
+    "blockedAnyNaturalFrame": false,
+    "controlledFrames": 6,
+    "controlledWorldDistance": 2,
+    "controlledStates": [
+      "tiger",
+      "tiger",
+      "tiger",
+      "tiger",
+      "tiger",
+      "tiger"
+    ],
+    "productionSourcesUnchanged": true,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedRequests": [],
+    "conclusion": "单次同浏览器复测测得：原物理阶段24帧距离10.5944–18.4691米，0帧进入7.5米范围；isGameStarted始终true，isBlocked始终false。受控在真实对话调用前保持2世界单位距离的6帧全部激活原对话。原系统对话触发链可用；原物理接近场景未通过，不能称自然游玩、完整对答或救援通关通过。",
+    "intervention": "只在独立浏览器模块响应中包装原对话函数记录实际门控；原实现每次调用一次。受控阶段每个对话帧显式定位测试玩家；生产源码未改，原失败报告未覆盖。",
+    "nextAction": "无需再复测本次适配器触发链。后续自然玩法任务应检查玩家原物理落点与虎问候落点的世界距离/地形可达性；对话范围本次不修改。",
+    "immediateTeleportWorldDistance": 1.4142135623730945,
+    "parentWorldScale": [
+      0.49999999999999994,
+      0.5,
+      0.49999999999999994
+    ],
+    "firstActualDialogWorldDistance": 12.194310568623115,
+    "refinedFinding": "传送后立即距离为1.4142米，父级世界缩放为0.5，因此局部偏移本身没有超范围。第一帧真实对话时距离已变为12.1943米；随后自然阶段始终超范围。可确认是传送之后、对话之前的原世界更新导致双方位置脱离近距，尚未细分哪个地形/碰撞或问候位移贡献最大。"
+  },
+  "targetedResolution": {
+    "passed": true,
+    "report": "artifacts/pipeline/tiger-web-v3/world-physics-2026-09-08T20-05-25-512Z/report.json",
+    "scope": "Default Blender v3 on original actor. Focused real-world pit proximity verified after one-time initial placement: 160 normal-physics frames, original tiger/messenger/cool exchange, original cooldown preserved. No full route or rescue acceptance.",
+    "originalFailurePreserved": true
   }
 }

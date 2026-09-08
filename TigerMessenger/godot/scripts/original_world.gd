@@ -19,6 +19,7 @@ var scout_deployment_error := ""
 var scout_preview_toggle: CheckButton
 var tiger_adapter = preload("res://scripts/tiger_world_adapter.gd").new()
 var tiger_toggle: CheckButton
+var bookshop_adapter = preload("res://scripts/bookshop_world_adapter.gd").new()
 var castle_adapter = preload("res://scripts/castle_world_adapter.gd").new()
 var castle_toggle: CheckButton
 
@@ -44,6 +45,7 @@ func _ready() -> void:
                     node.set_surface_override_material(surface,adapted)
     set_scout_candidate_preview(scout_candidate_preview)
     if tiger_adapter.bind(model): tiger_adapter.set_enabled(true)
+    if bookshop_adapter.bind(model): bookshop_adapter.set_enabled(true)
     if castle_adapter.bind(model): castle_adapter.set_enabled(true)
     var environment := WorldEnvironment.new()
     environment.environment = Environment.new()

@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Cannot infer the type of "blocked" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/world_layout.gd:111)
+          GDScript backtrace (most recent call first):
+              [0] run (res://scripts/test_world_layout.gd:5)
+ERROR: Failed to load script "res://scripts/world_layout.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] run (res://scripts/test_world_layout.gd:5)
+SCRIPT ERROR: Invalid access to property or key 'points' on a base object of type 'Node3D'.
+          at: run (res://scripts/test_world_layout.gd:8)
+          GDScript backtrace (most recent call first):
+              [0] run (res://scripts/test_world_layout.gd:8)

@@ -1,0 +1,39 @@
+{
+  "camera": {
+    "fov": 48,
+    "position": [
+      38,
+      38,
+      70
+    ],
+    "target": [
+      0,
+      20,
+      0
+    ]
+  },
+  "original_layout_preserved": true,
+  "scope": "Isolated original factory vs WFC blue-night candidate; no world deployment or navigation acceptance.",
+  "views": [
+    {
+      "blue": false,
+      "draw_calls": 7968,
+      "file": "../original-day.png",
+      "material_resources": 244,
+      "primitives": 200856,
+      "real_lights": 1,
+      "rendered_objects": 7998,
+      "shadow_lights": 1
+    },
+    {
+      "blue": true,
+      "draw_calls": 7118,
+      "file": "../blue-night.png",
+      "material_resources": 244,
+      "primitives": 191868,
+      "real_lights": 1,
+      "rendered_objects": 7192,
+      "shadow_lights": 1
+    }
+  ]
+}

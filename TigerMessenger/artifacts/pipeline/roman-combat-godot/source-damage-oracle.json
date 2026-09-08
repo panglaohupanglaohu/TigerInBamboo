@@ -1,0 +1,150 @@
+{
+  "source": "src/world/saihojiPhalanx.js",
+  "sourceSha256": "c14f8abe8c45fabecad0b2de7903e8ebbd8d4f09cdec89094f4c0155eace814c",
+  "method": "Execute exact extracted existing applySoldierDamage function with source thresholds; no rewritten damage oracle.",
+  "scenarios": [
+    {
+      "name": "two-melee",
+      "hits": [
+        "melee",
+        "melee"
+      ],
+      "states": [
+        {
+          "arrowHits": 0,
+          "meleeHits": 1,
+          "downed": true,
+          "dead": false,
+          "fallTime": 0,
+          "deathTime": null
+        },
+        {
+          "arrowHits": 0,
+          "meleeHits": 2,
+          "downed": true,
+          "dead": true,
+          "fallTime": 0,
+          "deathTime": 3.7
+        }
+      ]
+    },
+    {
+      "name": "four-arrows",
+      "hits": [
+        "arrow",
+        "arrow",
+        "arrow",
+        "arrow"
+      ],
+      "states": [
+        {
+          "arrowHits": 1,
+          "meleeHits": 0,
+          "downed": false,
+          "dead": false,
+          "fallTime": null,
+          "deathTime": null
+        },
+        {
+          "arrowHits": 2,
+          "meleeHits": 0,
+          "downed": true,
+          "dead": false,
+          "fallTime": 0,
+          "deathTime": null
+        },
+        {
+          "arrowHits": 3,
+          "meleeHits": 0,
+          "downed": true,
+          "dead": false,
+          "fallTime": 0,
+          "deathTime": null
+        },
+        {
+          "arrowHits": 4,
+          "meleeHits": 0,
+          "downed": true,
+          "dead": true,
+          "fallTime": 0,
+          "deathTime": 3.7
+        }
+      ]
+    },
+    {
+      "name": "pike",
+      "hits": [
+        "pike"
+      ],
+      "states": [
+        {
+          "arrowHits": 0,
+          "meleeHits": 2,
+          "downed": true,
+          "dead": true,
+          "fallTime": 0,
+          "deathTime": 3.7
+        }
+      ]
+    },
+    {
+      "name": "vanguard-bolt",
+      "hits": [
+        "vanguardBolt"
+      ],
+      "states": [
+        {
+          "arrowHits": 0,
+          "meleeHits": 2,
+          "downed": true,
+          "dead": true,
+          "fallTime": 0,
+          "deathTime": 3.7
+        }
+      ]
+    },
+    {
+      "name": "mixed",
+      "hits": [
+        "arrow",
+        "melee",
+        "arrow",
+        "melee"
+      ],
+      "states": [
+        {
+          "arrowHits": 1,
+          "meleeHits": 0,
+          "downed": false,
+          "dead": false,
+          "fallTime": null,
+          "deathTime": null
+        },
+        {
+          "arrowHits": 1,
+          "meleeHits": 1,
+          "downed": true,
+          "dead": false,
+          "fallTime": 0,
+          "deathTime": null
+        },
+        {
+          "arrowHits": 2,
+          "meleeHits": 1,
+          "downed": true,
+          "dead": false,
+          "fallTime": 0,
+          "deathTime": null
+        },
+        {
+          "arrowHits": 2,
+          "meleeHits": 2,
+          "downed": true,
+          "dead": true,
+          "fallTime": 0,
+          "deathTime": 3.7
+        }
+      ]
+    }
+  ]
+}

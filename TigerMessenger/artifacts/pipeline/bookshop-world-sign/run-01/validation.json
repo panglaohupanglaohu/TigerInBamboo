@@ -1,0 +1,9 @@
+{
+  "adapter_error": "Bookshop sign must retain its original transparent canvas texture",
+  "failures": [
+    "Default real original_world hook enables sign repair",
+    "Exactly one original source sign binds"
+  ],
+  "passed": false,
+  "scope": "Original-world bookshop sign only; no complete region gameplay claim"
+}

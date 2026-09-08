@@ -1,0 +1,570 @@
+{
+  "checks": [
+    {
+      "name": "spear/red real factory binds",
+      "passed": true
+    },
+    {
+      "name": "spear/red original parent/material/geometry references preserved",
+      "passed": true
+    },
+    {
+      "name": "spear/red bind preserves bow arm/string/arrow pose",
+      "passed": true
+    },
+    {
+      "name": "spear/red 360 finite live poses and stable crests",
+      "passed": true
+    },
+    {
+      "name": "spear/red retained original helm color",
+      "passed": true
+    },
+    {
+      "name": "spear/red original spear limb and weapon poses retained",
+      "passed": true,
+      "detail": {
+        "gripCorrection": "Not applied: no approved spear grip contract"
+      }
+    },
+    {
+      "name": "spear/red six toggles preserve live bow pose",
+      "passed": true
+    },
+    {
+      "name": "spear/red pooling/broken shield not resurrected",
+      "passed": true
+    },
+    {
+      "name": "spear/red live original structure retained",
+      "passed": true
+    },
+    {
+      "name": "spear/red dispose removes only owned additions",
+      "passed": true
+    },
+    {
+      "name": "spear/red rebind after disposal succeeds",
+      "passed": true
+    },
+    {
+      "name": "spear/blue real factory binds",
+      "passed": true
+    },
+    {
+      "name": "spear/blue original parent/material/geometry references preserved",
+      "passed": true
+    },
+    {
+      "name": "spear/blue bind preserves bow arm/string/arrow pose",
+      "passed": true
+    },
+    {
+      "name": "spear/blue 360 finite live poses and stable crests",
+      "passed": true
+    },
+    {
+      "name": "spear/blue retained original helm color",
+      "passed": true
+    },
+    {
+      "name": "spear/blue original spear limb and weapon poses retained",
+      "passed": true,
+      "detail": {
+        "gripCorrection": "Not applied: no approved spear grip contract"
+      }
+    },
+    {
+      "name": "spear/blue six toggles preserve live bow pose",
+      "passed": true
+    },
+    {
+      "name": "spear/blue pooling/broken shield not resurrected",
+      "passed": true
+    },
+    {
+      "name": "spear/blue live original structure retained",
+      "passed": true
+    },
+    {
+      "name": "spear/blue dispose removes only owned additions",
+      "passed": true
+    },
+    {
+      "name": "spear/blue rebind after disposal succeeds",
+      "passed": true
+    },
+    {
+      "name": "longbow/red real factory binds",
+      "passed": true
+    },
+    {
+      "name": "longbow/red original parent/material/geometry references preserved",
+      "passed": true
+    },
+    {
+      "name": "longbow/red bind preserves bow arm/string/arrow pose",
+      "passed": true
+    },
+    {
+      "name": "longbow/red 360 finite live poses and stable crests",
+      "passed": true
+    },
+    {
+      "name": "longbow/red retained original helm color",
+      "passed": true
+    },
+    {
+      "name": "longbow/red all seven real shot phases survive adapter and presentation",
+      "passed": true,
+      "detail": {
+        "phases": {
+          "reach": 39,
+          "nock": 51,
+          "draw": 123,
+          "hold": 45,
+          "loose": 24,
+          "follow": 48,
+          "recover": 30
+        },
+        "releases": 3
+      }
+    },
+    {
+      "name": "longbow/red six toggles preserve live bow pose",
+      "passed": true
+    },
+    {
+      "name": "longbow/red pooling/broken shield not resurrected",
+      "passed": true
+    },
+    {
+      "name": "longbow/red live original structure retained",
+      "passed": true
+    },
+    {
+      "name": "longbow/red dispose removes only owned additions",
+      "passed": true
+    },
+    {
+      "name": "longbow/red rebind after disposal succeeds",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue real factory binds",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue original parent/material/geometry references preserved",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue bind preserves bow arm/string/arrow pose",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue 360 finite live poses and stable crests",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue retained original helm color",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue all seven real shot phases survive adapter and presentation",
+      "passed": true,
+      "detail": {
+        "phases": {
+          "reach": 39,
+          "nock": 51,
+          "draw": 123,
+          "hold": 45,
+          "loose": 24,
+          "follow": 48,
+          "recover": 30
+        },
+        "releases": 3
+      }
+    },
+    {
+      "name": "longbow/blue six toggles preserve live bow pose",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue pooling/broken shield not resurrected",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue live original structure retained",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue dispose removes only owned additions",
+      "passed": true
+    },
+    {
+      "name": "longbow/blue rebind after disposal succeeds",
+      "passed": true
+    },
+    {
+      "name": "gladius/red real factory binds",
+      "passed": true
+    },
+    {
+      "name": "gladius/red original parent/material/geometry references preserved",
+      "passed": true
+    },
+    {
+      "name": "gladius/red bind preserves bow arm/string/arrow pose",
+      "passed": true
+    },
+    {
+      "name": "gladius/red 360 finite live poses and stable crests",
+      "passed": true
+    },
+    {
+      "name": "gladius/red retained original helm color",
+      "passed": true
+    },
+    {
+      "name": "gladius/red hand contacts remain attached after both updates",
+      "passed": true,
+      "detail": {
+        "maxGrip": 1.2432050435751766e-16
+      }
+    },
+    {
+      "name": "gladius/red six toggles preserve live bow pose",
+      "passed": true
+    },
+    {
+      "name": "gladius/red pooling/broken shield not resurrected",
+      "passed": true
+    },
+    {
+      "name": "gladius/red optout restores original local transforms",
+      "passed": true
+    },
+    {
+      "name": "gladius/red live original structure retained",
+      "passed": true
+    },
+    {
+      "name": "gladius/red dispose removes only owned additions",
+      "passed": true
+    },
+    {
+      "name": "gladius/red rebind after disposal succeeds",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue real factory binds",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue original parent/material/geometry references preserved",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue bind preserves bow arm/string/arrow pose",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue 360 finite live poses and stable crests",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue retained original helm color",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue hand contacts remain attached after both updates",
+      "passed": true,
+      "detail": {
+        "maxGrip": 1.2432050435751766e-16
+      }
+    },
+    {
+      "name": "gladius/blue six toggles preserve live bow pose",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue pooling/broken shield not resurrected",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue optout restores original local transforms",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue live original structure retained",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue dispose removes only owned additions",
+      "passed": true
+    },
+    {
+      "name": "gladius/blue rebind after disposal succeeds",
+      "passed": true
+    },
+    {
+      "name": "candidate armor geometry shared across all three families",
+      "passed": true
+    },
+    {
+      "name": "remaining family keeps shared geometry alive",
+      "passed": true
+    },
+    {
+      "name": "last family releases shared geometry exactly once",
+      "passed": true
+    },
+    {
+      "name": "world helper binds 6 original tie and 8 original night factory actors",
+      "passed": true
+    },
+    {
+      "name": "world helper keeps original rope-pulling, torch and shield poses at binding",
+      "passed": true
+    },
+    {
+      "name": "world helper leaves 120 frames of owner-written rope/torch poses untouched",
+      "passed": true
+    },
+    {
+      "name": "world helper removal releases detached actor only",
+      "passed": true
+    },
+    {
+      "name": "world helper disposal releases all retained source actors",
+      "passed": true
+    },
+    {
+      "name": "actual battle 720 frames cover all three families in both colors",
+      "passed": true,
+      "detail": {
+        "initial": {
+          "spear-blue": 32,
+          "gladius-blue": 8,
+          "longbow-blue": 10,
+          "spear-red": 18,
+          "gladius-red": 18,
+          "longbow-red": 4
+        },
+        "coverage": {
+          "spear-blue": 35872,
+          "gladius-blue": 8968,
+          "longbow-blue": 11210,
+          "spear-red": 13520,
+          "gladius-red": 13520,
+          "longbow-red": 2880
+        }
+      }
+    },
+    {
+      "name": "actual battle every family receives active new assembly",
+      "passed": true,
+      "detail": {
+        "missing": []
+      }
+    },
+    {
+      "name": "actual battle all frames finite and original crests stable",
+      "passed": true
+    },
+    {
+      "name": "actual battle melee grip contacts remain attached",
+      "passed": true,
+      "detail": {
+        "maxGrip": 7.134372975750759e-14
+      }
+    },
+    {
+      "name": "actual battle original node parent/material/geometry and actor IDs retained",
+      "passed": true
+    },
+    {
+      "name": "actual battle longbow cycles through original shot phases",
+      "passed": true,
+      "detail": {
+        "bowPhases": {
+          "reach": 1821,
+          "follow": 2466,
+          "draw": 3574,
+          "nock": 3548,
+          "hold": 1094,
+          "recover": 1200,
+          "loose": 387
+        }
+      }
+    },
+    {
+      "name": "battle family-wide optout deactivates all controllers",
+      "passed": true
+    },
+    {
+      "name": "battle family-wide re-enable reuses assemblies",
+      "passed": true
+    },
+    {
+      "name": "battle reset releases all three families",
+      "passed": true
+    }
+  ],
+  "fixtureMetrics": {
+    "spear-red": {
+      "frames": 360,
+      "maxGrip": 0,
+      "finite": true,
+      "phaseSafe": true,
+      "crestStable": true,
+      "phases": {},
+      "releases": 0,
+      "originalNodes": 50
+    },
+    "spear-blue": {
+      "frames": 360,
+      "maxGrip": 0,
+      "finite": true,
+      "phaseSafe": true,
+      "crestStable": true,
+      "phases": {},
+      "releases": 0,
+      "originalNodes": 50
+    },
+    "longbow-red": {
+      "frames": 360,
+      "maxGrip": 0,
+      "finite": true,
+      "phaseSafe": true,
+      "crestStable": true,
+      "phases": {
+        "reach": 39,
+        "nock": 51,
+        "draw": 123,
+        "hold": 45,
+        "loose": 24,
+        "follow": 48,
+        "recover": 30
+      },
+      "releases": 3,
+      "originalNodes": 89
+    },
+    "longbow-blue": {
+      "frames": 360,
+      "maxGrip": 0,
+      "finite": true,
+      "phaseSafe": true,
+      "crestStable": true,
+      "phases": {
+        "reach": 39,
+        "nock": 51,
+        "draw": 123,
+        "hold": 45,
+        "loose": 24,
+        "follow": 48,
+        "recover": 30
+      },
+      "releases": 3,
+      "originalNodes": 89
+    },
+    "gladius-red": {
+      "frames": 360,
+      "maxGrip": 1.2432050435751766e-16,
+      "finite": true,
+      "phaseSafe": true,
+      "crestStable": true,
+      "phases": {},
+      "releases": 0,
+      "originalNodes": 55
+    },
+    "gladius-blue": {
+      "frames": 360,
+      "maxGrip": 1.2432050435751766e-16,
+      "finite": true,
+      "phaseSafe": true,
+      "crestStable": true,
+      "phases": {},
+      "releases": 0,
+      "originalNodes": 55
+    }
+  },
+  "battle": {
+    "frames": 720,
+    "initial": {
+      "spear-blue": 32,
+      "gladius-blue": 8,
+      "longbow-blue": 10,
+      "spear-red": 18,
+      "gladius-red": 18,
+      "longbow-red": 4
+    },
+    "coverage": {
+      "spear-blue": 35872,
+      "gladius-blue": 8968,
+      "longbow-blue": 11210,
+      "spear-red": 13520,
+      "gladius-red": 13520,
+      "longbow-red": 2880
+    },
+    "actions": {
+      "spear:guard": 10227,
+      "gladius:guard": 7600,
+      "longbow:bow-reach": 653,
+      "longbow:bow-follow": 897,
+      "longbow:bow-draw": 1858,
+      "longbow:bow-nock": 922,
+      "longbow:bow-hold": 693,
+      "longbow:bow-recover": 506,
+      "longbow:bow-loose": 387,
+      "gladius:downed": 3386,
+      "longbow:downed": 1382,
+      "spear:downed": 9284,
+      "spear:dead": 5520,
+      "spear:walk": 9958,
+      "gladius:walk": 2487,
+      "gladius:dead": 4979,
+      "gladius:strike": 222,
+      "spear:pooled": 12832,
+      "gladius:pooled": 3208,
+      "longbow:pooled": 4010,
+      "longbow:dead": 2782,
+      "gladius:climb": 606,
+      "spear:climb": 1571
+    },
+    "bowPhases": {
+      "reach": 1821,
+      "follow": 2466,
+      "draw": 3574,
+      "nock": 3548,
+      "hold": 1094,
+      "recover": 1200,
+      "loose": 387
+    },
+    "finite": true,
+    "stableCrest": true,
+    "maxGrip": 7.134372975750759e-14,
+    "missing": []
+  },
+  "scope": "Real original factories and production phalanx battle module in a bounded sphere/castle fixture; no complete original-world playthrough claim",
+  "captureFiles": [
+    "spear-red.png",
+    "spear-blue.png",
+    "longbow-red.png",
+    "longbow-blue.png",
+    "gladius-red.png",
+    "gladius-blue.png"
+  ],
+  "runtimeHashes": {
+    "src/assets/harbor.js": "c3045f59f391f101be020a4a73300b033db1ea018ac197643265d048f30b5394",
+    "src/assets/romanSoldierEquipment.js": "3f068d57da1ff92362503e5667d74af3a114206985e7f1d9993bc72caa976cb7",
+    "src/assets/romanEquipmentData.js": "53bec664593c11b0071b18e501ba093ba051efe77ba297f39a66ea439afc5a44",
+    "src/world/romanSoldierCombatPose.js": "f219e8cda722fc23c474ad72c151c2b8f18e4b6d531680d5770f5bcdb0567398",
+    "src/world/saihojiPhalanx.js": "7029538db19ae640164caa5dd0c460e71e445d57c44c45ced4ea0d10dc2c418d",
+    "src/world/romanWorldArmor.js": "546f8166ee5cb2a5abbb09be7f4c97a3eba4241b44925d4a75d31ed97885d02e"
+  },
+  "sourceSnapshotStillCurrent": true,
+  "errors": [],
+  "passed": true
+}

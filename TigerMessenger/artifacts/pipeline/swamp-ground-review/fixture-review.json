@@ -1,0 +1,229 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "sampler does not mutate player position 0:0,11,0",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 0:8,18,2",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 0:20,28,4",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 0:29,42,5",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 0:34,40,19",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 0:-23,25,-10",
+      "passed": true
+    },
+    {
+      "name": "radial intersections match native raycast under fixture transform 0",
+      "passed": true,
+      "detail": {
+        "hits": 6,
+        "maxError": 0
+      }
+    },
+    {
+      "name": "outside footprint and height range fall back 0",
+      "passed": true
+    },
+    {
+      "name": "opposite hemisphere is excluded 0",
+      "passed": true
+    },
+    {
+      "name": "unlisted decorations and mesh children do not become ground 0",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 1:0,11,0",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 1:8,18,2",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 1:20,28,4",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 1:29,42,5",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 1:34,40,19",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 1:-23,25,-10",
+      "passed": true
+    },
+    {
+      "name": "radial intersections match native raycast under fixture transform 1",
+      "passed": true,
+      "detail": {
+        "hits": 6,
+        "maxError": 0
+      }
+    },
+    {
+      "name": "outside footprint and height range fall back 1",
+      "passed": true
+    },
+    {
+      "name": "opposite hemisphere is excluded 1",
+      "passed": true
+    },
+    {
+      "name": "unlisted decorations and mesh children do not become ground 1",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 2:0,11,0",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 2:8,18,2",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 2:20,28,4",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 2:29,42,5",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 2:34,40,19",
+      "passed": true
+    },
+    {
+      "name": "sampler does not mutate player position 2:-23,25,-10",
+      "passed": true
+    },
+    {
+      "name": "radial intersections match native raycast under fixture transform 2",
+      "passed": true,
+      "detail": {
+        "hits": 6,
+        "maxError": 0
+      }
+    },
+    {
+      "name": "outside footprint and height range fall back 2",
+      "passed": true
+    },
+    {
+      "name": "opposite hemisphere is excluded 2",
+      "passed": true
+    },
+    {
+      "name": "unlisted decorations and mesh children do not become ground 2",
+      "passed": true
+    },
+    {
+      "name": "local crater ground suppresses general planet shell pop",
+      "passed": true,
+      "detail": {
+        "generalRadius": 161.43,
+        "localRadius": 146.63000001192097,
+        "actualGround": 146.63000001192097
+      }
+    },
+    {
+      "name": "pit-exterior collision is unchanged",
+      "passed": true
+    },
+    {
+      "name": "deleting tiger does not delete crater ground",
+      "passed": true
+    },
+    {
+      "name": "removed whole wrapper invalidates main cached sampler",
+      "passed": true
+    },
+    {
+      "name": "physics substeps never rescan the scene",
+      "passed": true
+    },
+    {
+      "name": "platform tangent push does not ground player on stale slope sample",
+      "passed": true,
+      "detail": {
+        "residual": 0.20991409032373554,
+        "onGround": false
+      }
+    },
+    {
+      "name": "platform push entering local footprint resamples before generic shell",
+      "passed": true,
+      "detail": {
+        "position": [
+          0,
+          146.98546772779378,
+          1.3499430677420825
+        ],
+        "radius": 146.9916666666667
+      }
+    },
+    {
+      "name": "platform push leaving local footprint restores generic shell",
+      "passed": true,
+      "detail": {
+        "position": [
+          0,
+          161.4231921671143,
+          1.4825419315761958
+        ],
+        "radius": 161.42999999999998
+      }
+    }
+  ],
+  "observations": [
+    {
+      "name": "local radius after platform tangent push",
+      "residual": 0.20991409032373554,
+      "finalRadius": 146.62166666666667,
+      "radiusAtFinalPoint": 146.41175257634293,
+      "onGround": false,
+      "position": [
+        0,
+        146.6154520867486,
+        1.3499427800605455
+      ],
+      "sourceQuery": [
+        0,
+        146.63,
+        0
+      ]
+    }
+  ],
+  "performance": {
+    "fixtureTriangles": 256,
+    "calls": 1000,
+    "medianMs": 0,
+    "p95Ms": 0.09999999403953552,
+    "maxMs": 0.10000002384185791,
+    "meanMs": 0.014599999994039535
+  },
+  "scope": "Small authored-shape fixtures and actual collision/main-helper code; no full-world construction or gameplay acceptance",
+  "runtimeHashes": {
+    "src/world/swampGround.js": "b889847c03217a8672f434364db1c364791f9a42aba6381a8f01eab876ff7364",
+    "src/world/moebiusSwamp.js": "c8457459a645983c5261b5b850b771fe7981bb9c7deacbfca28963088f6b3b0f",
+    "src/world/collision.js": "7e00e76ca4db89a34b9afde21e69732bb04f5b4d1a87d14fb28d38db0c7d0254",
+    "src/main.js": "3d5897b60f67b928575526f6c33c9bdf34d186f97a80d62a55b2f3dcd872604e"
+  },
+  "inputsUnchanged": true
+}

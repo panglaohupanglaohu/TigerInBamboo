@@ -1,0 +1,2453 @@
+{
+  "autonomousSceneTreeHits": 26,
+  "damageOracleCases": 24,
+  "events": [
+    {
+      "attacker": "red-0",
+      "cooldown": 1.2075,
+      "defender": "blue-0",
+      "distance": 1.29999993030841,
+      "time": 0.0166666666666667,
+      "type": "melee_attack"
+    },
+    {
+      "arrowHits": 0,
+      "dead": false,
+      "downed": true,
+      "kind": "melee",
+      "meleeHits": 1,
+      "side": "blue",
+      "time": 0.0166666666666667,
+      "type": "hit",
+      "unit": "blue-0"
+    },
+    {
+      "attacker": "blue-1",
+      "cooldown": 1.2075,
+      "defender": "red-1",
+      "distance": 1.29999993030841,
+      "time": 0.0166666666666667,
+      "type": "melee_attack"
+    },
+    {
+      "arrowHits": 0,
+      "dead": false,
+      "downed": true,
+      "kind": "melee",
+      "meleeHits": 1,
+      "side": "red",
+      "time": 0.0166666666666667,
+      "type": "hit",
+      "unit": "red-1"
+    },
+    {
+      "attacker": "red-0",
+      "cooldown": 1.2075,
+      "defender": "blue-0",
+      "distance": 1.29999993030841,
+      "time": 1.23333333333333,
+      "type": "melee_attack"
+    },
+    {
+      "arrowHits": 0,
+      "dead": true,
+      "downed": true,
+      "kind": "melee",
+      "meleeHits": 2,
+      "side": "blue",
+      "time": 1.23333333333333,
+      "type": "hit",
+      "unit": "blue-0"
+    },
+    {
+      "attacker": "blue-1",
+      "cooldown": 1.2075,
+      "defender": "red-1",
+      "distance": 1.29999993030841,
+      "time": 1.23333333333333,
+      "type": "melee_attack"
+    },
+    {
+      "arrowHits": 0,
+      "dead": true,
+      "downed": true,
+      "kind": "melee",
+      "meleeHits": 2,
+      "side": "red",
+      "time": 1.23333333333333,
+      "type": "hit",
+      "unit": "red-1"
+    },
+    {
+      "side": "blue",
+      "time": 4.93333333333332,
+      "type": "despawn_visual",
+      "unit": "blue-0"
+    },
+    {
+      "side": "red",
+      "time": 4.93333333333332,
+      "type": "despawn_visual",
+      "unit": "red-1"
+    },
+    {
+      "side": "red",
+      "time": 5.99999999999998,
+      "type": "shield_break",
+      "unit": "red-0"
+    },
+    {
+      "side": "blue",
+      "time": 5.99999999999998,
+      "type": "shield_break",
+      "unit": "blue-0"
+    },
+    {
+      "side": "red",
+      "time": 5.99999999999998,
+      "type": "shield_break",
+      "unit": "red-1"
+    },
+    {
+      "side": "blue",
+      "time": 5.99999999999998,
+      "type": "shield_break",
+      "unit": "blue-1"
+    }
+  ],
+  "failures": [],
+  "lifecycle": [
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.0166666666666667,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153793844219763,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000152985794557026,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.0166666666666667,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153702567331493,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000107288360595703,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 0.0166666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 0.957500000000001,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.266666666666667,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000194369640666991,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.00000429153442382812,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.266666666666667,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000194369640666991,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000435113906860352,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.957500000000001,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 0.266666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 0.7075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000309944152832031,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.00000429153442382812,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000309944152832031,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000429153442382812,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.7075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 0.516666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 0.457499999999999,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000309944152832031,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.00000429153442382812,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000309944152832031,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000429153442382812,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.457499999999999,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 0.766666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 0.207499999999999,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000309944152832031,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.00000429153442382812,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 1,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000309944152832031,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000429153442382812,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.207499999999999,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 1.01666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 3.65,
+          "downed": true,
+          "fallTime": 0.05,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000039411247598764,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000119209289550781,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 3.65,
+          "downed": true,
+          "fallTime": 0.05,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000157879185280763,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000596046447753906,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 1.17416666666667,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 1.26666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 3.4,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 3.4,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.924166666666667,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 1.51666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 3.15,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 3.15,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.674166666666666,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 1.76666666666667
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 2.9,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 2.9,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.424166666666666,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 2.01666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 2.65,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 2.65,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.174166666666666,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 2.26666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 2.4,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 2.4,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -0.075833333333334,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 2.51666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 2.15000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 2.15000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -0.325833333333334,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 2.76666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 1.90000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 1.90000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -0.575833333333334,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 3.01666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 1.65000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 1.65000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -0.825833333333335,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 3.26666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 1.40000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 1.40000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -1.07583333333334,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 3.51666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 1.15000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000151991844177246,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 1.15000000000001,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153256969497306,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000250339508056641,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -1.32583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 3.76666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 0.900000000000009,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.649552941322327,
+            159.889953613281,
+            -1.9986252784729
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 0.900000000000009,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.000000357627868652344,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.000000596046447753906,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.649552941322327,
+            159.889953613281,
+            1.9986252784729
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -1.57583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 4.01666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 0.650000000000009,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000152637076098472,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000015320249076467,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.648994147777557,
+            159.752395629883,
+            -1.99690687656403
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 0.650000000000009,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153372839122312,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.000015305284250644,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.648994147777557,
+            159.752395629883,
+            1.99690687656403
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -1.82583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 4.26666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 0.400000000000008,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153421769937268,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000549527669591043,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.648435354232788,
+            159.614837646484,
+            -1.99518847465515
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 0.400000000000008,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000226497650146484,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.00000131130218505859,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.648435354232788,
+            159.614837646484,
+            1.99518847465515
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -2.07583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 4.51666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": 0.150000000000008,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000154107692651451,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000153125074575655,
+          "unit": "blue-0",
+          "visible": true,
+          "worldPosition": [
+            0.647876560688019,
+            159.477279663086,
+            -1.99347007274628
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": 0.150000000000008,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000152662378241075,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.000000476837158203125,
+          "unit": "red-1",
+          "visible": true,
+          "worldPosition": [
+            -0.647876560688019,
+            159.477279663086,
+            1.99347007274628
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -2.32583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 4.76666666666666
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000038165595128703,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": false,
+          "worldPosition": [
+            0.647504031658173,
+            159.38557434082,
+            -1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153372839122312,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.000015305284250644,
+          "unit": "red-1",
+          "visible": false,
+          "worldPosition": [
+            -0.647504031658173,
+            159.38557434082,
+            1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -2.57583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 5.01666666666665
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000038165595128703,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": false,
+          "worldPosition": [
+            0.647504031658173,
+            159.38557434082,
+            -1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153372839122312,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.000015305284250644,
+          "unit": "red-1",
+          "visible": false,
+          "worldPosition": [
+            -0.647504031658173,
+            159.38557434082,
+            1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -2.82583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 5.26666666666665
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000038165595128703,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": false,
+          "worldPosition": [
+            0.647504031658173,
+            159.38557434082,
+            -1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153372839122312,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.000015305284250644,
+          "unit": "red-1",
+          "visible": false,
+          "worldPosition": [
+            -0.647504031658173,
+            159.38557434082,
+            1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -3.07583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 5.51666666666665
+    },
+    {
+      "states": [
+        {
+          "arrowHits": 0,
+          "cooldown": 1.2075,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "red-0",
+          "visible": true,
+          "worldPosition": [
+            -0.649999976158142,
+            160.0,
+            -2.0
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.0,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.00000038165595128703,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.000000536441802978516,
+          "unit": "blue-0",
+          "visible": false,
+          "worldPosition": [
+            0.647504031658173,
+            159.38557434082,
+            -1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": 0.783333333333333,
+          "dead": true,
+          "deathTime": -0.0166666666666583,
+          "downed": true,
+          "fallTime": 0.283333333333333,
+          "meleeHits": 2,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000153372839122312,
+          "side": "red",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+          "swordGripError": 0.000015305284250644,
+          "unit": "red-1",
+          "visible": false,
+          "worldPosition": [
+            -0.647504031658173,
+            159.38557434082,
+            1.99232447147369
+          ]
+        },
+        {
+          "arrowHits": 0,
+          "cooldown": -3.32583333333333,
+          "dead": false,
+          "deathTime": 0.0,
+          "downed": false,
+          "fallTime": -1.0,
+          "meleeHits": 0,
+          "role": "gladius",
+          "shieldBroken": false,
+          "shieldGripError": 0.0000000298023223876953,
+          "side": "blue",
+          "sourcePath": "",
+          "sourceScene": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+          "swordGripError": 0.0000000298023223876953,
+          "unit": "blue-1",
+          "visible": true,
+          "worldPosition": [
+            0.649999976158142,
+            160.0,
+            2.0
+          ]
+        }
+      ],
+      "time": 5.76666666666665
+    }
+  ],
+  "maximumWorldGripError": 0.0000332391427946277,
+  "passed": true,
+  "scope": "Reusable equipment/lifecycle adapter and original gladius siege algorithm subset. Real autonomous hits, not pose playback. Global transport, siege routes, projectiles and original-world combat deployment remain unported.",
+  "screenshotsCaptured": false
+}

@@ -1,0 +1,20 @@
+{
+  "geometry_unchanged": {
+    "candidate.glb": true,
+    "original.glb": true,
+    "terrain-blue.glb": true
+  },
+  "same_resolution": true,
+  "mean_absolute_channel_difference": [
+    1.3319392903645833,
+    0.42204833984375,
+    0.08852620442708334
+  ],
+  "changed_pixel_bounds": [
+    0,
+    9,
+    1280,
+    960
+  ],
+  "scope": "Image difference demonstrates local-light contribution, not visual target acceptance or gameplay verification"
+}

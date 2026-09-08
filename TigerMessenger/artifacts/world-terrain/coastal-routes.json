@@ -1,0 +1,227 @@
+{
+  "version": 1,
+  "status": "coastal-route-proposal",
+  "terrainSHA256": "c00b75813b9531f4f4ed36e15d1eebc2ee20ad94e3b604280e732523f48cbda8",
+  "scope": "Sea centerlines on submerged candidate triangles. Region access legs, ship dimensions, collision, currents and gameplay are not validated.",
+  "oceanVertices": 9945,
+  "disconnectedWaterComponents": 2,
+  "ports": {
+    "coast-civil": {
+      "vertex": 4754,
+      "direction": [
+        0.07704834060858805,
+        0.9937887337605759,
+        0.0802963626823415
+      ],
+      "accessDistance": 66.15945734129777,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        12.481831178591264,
+        160.9937748692133,
+        13.008010754539322
+      ]
+    },
+    "old-harbor": {
+      "vertex": 7767,
+      "direction": [
+        0.00006047201580951504,
+        0.09156980998942059,
+        0.9957986574813388
+      ],
+      "accessDistance": 61.85768002362023,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        0.009796466561141436,
+        14.834309218286135,
+        161.31938251197687
+      ]
+    },
+    "saihoji": {
+      "vertex": 13007,
+      "direction": [
+        0.9697735627932417,
+        -0.2390738447649334,
+        -0.048815301459842066
+      ],
+      "accessDistance": 78.88449726054334,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        157.10331717250514,
+        -38.72996285191921,
+        -7.908078836494415
+      ]
+    },
+    "abandoned-gate": {
+      "vertex": 13063,
+      "direction": [
+        0.8765701192156151,
+        -0.3256382009115288,
+        -0.35437915881923054
+      ],
+      "accessDistance": 61.97992448322255,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        142.00435931292964,
+        -52.75338854766766,
+        -57.409423728715346
+      ]
+    },
+    "crystal-city": {
+      "vertex": 14748,
+      "direction": [
+        -0.7189268482925171,
+        -0.6038839007687262,
+        -0.3441924188539536
+      ],
+      "accessDistance": 94.4966674933397,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        -116.46614942338776,
+        -97.82919192453365,
+        -55.75917185434048
+      ]
+    },
+    "moebius-swamp": {
+      "vertex": 11754,
+      "direction": [
+        0.030890583025883985,
+        -0.9938336974376364,
+        -0.10649109689433005
+      ],
+      "accessDistance": 74.75842759972623,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        5.004274450193206,
+        -161.0010589848971,
+        -17.251557696881466
+      ]
+    },
+    "western-ocean": {
+      "vertex": 6849,
+      "direction": [
+        -0.8502259376685253,
+        0.40268056256522744,
+        -0.33906373950605384
+      ],
+      "accessDistance": 0.9688050966006835,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        -137.7366019023011,
+        65.23425113556685,
+        -54.92832579998072
+      ]
+    },
+    "northern-island-chain": {
+      "vertex": 5576,
+      "direction": [
+        -0.04986974681842959,
+        0.864937056392274,
+        -0.4993965326589018
+      ],
+      "accessDistance": 1.0425841735208583,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        -8.078898984585592,
+        140.11980313554838,
+        -80.90223829074209
+      ]
+    },
+    "eastern-ocean": {
+      "vertex": 2101,
+      "direction": [
+        -0.8868627880107106,
+        -0.247008786160171,
+        0.3904626163943846
+      ],
+      "accessDistance": 2.05573222048727,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        -143.67177165773512,
+        -40.015423357947704,
+        63.25494385589031
+      ]
+    },
+    "southern-ocean": {
+      "vertex": 10768,
+      "direction": [
+        0.42504677507962063,
+        -0.8897621372186145,
+        0.16630868337696014
+      ],
+      "accessDistance": 0.9136229172449226,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        68.85757756289854,
+        -144.14146622941556,
+        26.94200670706754
+      ]
+    },
+    "leviathan-migration": {
+      "vertex": 8706,
+      "direction": [
+        -0.9818984382680273,
+        -0.0771815415693656,
+        -0.1729695538751989
+      ],
+      "accessDistance": 1.1915189695252946,
+      "accessStatus": "unbuilt-region-to-shore-connection",
+      "position": [
+        -159.06754699942041,
+        -12.503409734237227,
+        -28.021067727782224
+      ]
+    }
+  },
+  "routes": {
+    "story-reunion": {
+      "vertices": 59,
+      "length": 284.8344391079302,
+      "certifiedPlayable": false
+    },
+    "story-return-boundary": {
+      "vertices": 67,
+      "length": 328.0633266081188,
+      "certifiedPlayable": false
+    },
+    "harbor-east-ocean": {
+      "vertices": 43,
+      "length": 205.44749655746213,
+      "certifiedPlayable": false
+    },
+    "east-to-whale-sea": {
+      "vertices": 23,
+      "length": 107.99583836797281,
+      "certifiedPlayable": false
+    },
+    "whale-west-ocean": {
+      "vertices": 20,
+      "length": 91.7070033769657,
+      "certifiedPlayable": false
+    },
+    "west-crystal-port": {
+      "vertices": 42,
+      "length": 184.35100835858032,
+      "certifiedPlayable": false
+    },
+    "west-northern-isles": {
+      "vertices": 34,
+      "length": 164.69562408310088,
+      "certifiedPlayable": false
+    },
+    "northern-coast": {
+      "vertices": 23,
+      "length": 111.48097400568972,
+      "certifiedPlayable": false
+    },
+    "east-southern-sea": {
+      "vertices": 62,
+      "length": 290.4267789685856,
+      "certifiedPlayable": false
+    },
+    "southern-swamp": {
+      "vertices": 20,
+      "length": 90.07980622912095,
+      "certifiedPlayable": false
+    }
+  }
+}

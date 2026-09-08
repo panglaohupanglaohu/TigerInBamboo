@@ -1,0 +1,67 @@
+{
+  "camera": {
+    "fov": 48,
+    "position": [
+      38,
+      38,
+      70
+    ],
+    "target": [
+      0,
+      20,
+      0
+    ]
+  },
+  "original_layout_preserved": true,
+  "scope": "Isolated original factory vs WFC blue-night candidate; no world deployment or navigation acceptance.",
+  "views": [
+    {
+      "blue": false,
+      "draw_calls": 7387,
+      "file": "../original-day.png",
+      "material_resources": 243,
+      "primitives": 205312,
+      "real_lights": 1,
+      "rendered_objects": 7413,
+      "shadow_lights": 1,
+      "viewport": "(1280, 610)",
+      "capturePixels": [
+        1280,
+        960
+      ],
+      "sha256": "797afe931695bfeac0a3570ea935cc961ff8ffadc8e648a30d437eaccf345cc2"
+    },
+    {
+      "blue": true,
+      "draw_calls": 6762,
+      "file": "../blue-night.png",
+      "material_resources": 243,
+      "primitives": 196484,
+      "real_lights": 3,
+      "rendered_objects": 6832,
+      "shadow_lights": 1,
+      "viewport": "(1280, 610)",
+      "capturePixels": [
+        1280,
+        960
+      ],
+      "sha256": "67aa59b6e2487e88ef217dd3aa74c0c247aa6872b786fa2f271295c4322dff9d"
+    }
+  ],
+  "window_materials": [
+    {
+      "albedo": "(1.0, 0.5961, 0.1804, 1.0)",
+      "emission": "(1.0, 0.5961, 0.1804, 1.0)",
+      "energy": 0.550000011920929
+    },
+    {
+      "albedo": "(0.9216, 0.2706, 0.4941, 1.0)",
+      "emission": "(0.9216, 0.2706, 0.4941, 1.0)",
+      "energy": 0.550000011920929
+    }
+  ],
+  "costNote": "Single captured frame counters, not a frame-time benchmark; high draw count remains an optimization issue.",
+  "reflectionAccepted": false,
+  "navigationAccepted": false,
+  "worldDeployed": false
+}

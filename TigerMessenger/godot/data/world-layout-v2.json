@@ -13,12 +13,26 @@
   "provenance": {
     "numericalPositions": "project-authored proposal, not original user coordinates",
     "sourceManifest": "godot/data/original-world-manifest.json",
-    "sourceManifestSha256": "aae60f37ccbe847874ef8f75361b0dff2f458b74b890d1e5bea2481c0a160927",
+    "sourceManifestSha256": "28853ea5be777431c2184014121fa8c5dfce3c3c43f72f21aad6de0bd83021dc",
     "userReference": "assets/references/world/layout-reference.png",
     "referenceInterpretation": "user requests full 360-degree inhabited/useful coverage with meaningful oceans; map coordinates are a new proposal",
     "existingManifestScope": "assembled default Web world; saved browser edits not included",
     "userReferenceSha256": "b88065cb546c1dd32ac60d13816e1eef8b0a445a34db9ac84bc30aa6fa89388e",
-    "referenceRead": "Viewed supplied world layout image; borrowed region hierarchy and moving-garden intent, not its clustered longitude coordinates."
+    "referenceRead": "Viewed supplied world layout image; borrowed region hierarchy and moving-garden intent, not its clustered longitude coordinates.",
+    "previousSourceManifestSha256": "aae60f37ccbe847874ef8f75361b0dff2f458b74b890d1e5bea2481c0a160927",
+    "sourceManifestReview": {
+      "reviewedLandmarks": [
+        "bookshop",
+        "odysseyCitadel",
+        "oldHarbor",
+        "mossSaihoji",
+        "abandonedGate",
+        "moebius",
+        "moebiusSwamp"
+      ],
+      "radius": 160,
+      "scope": "Confirmed current landmark identities and matrices/compound bounds. No original geometry relocation. Camp/city/castle composite bounds exceed planning circles; future ownership partition and footprint measurement required."
+    }
   },
   "constraints": {
     "minimumCenterSeparationDegrees": 20,
@@ -534,5 +548,12 @@
     "刚性球面旋转原区域，保留局部几何/朝向/比例和内部附属，不按angularRadius裁剪",
     "真实网格占地/海岸/交通净空另测；中心角距测试不等于无穿模",
     "主线、交通、鲸迁移与存档迁移通过后再讨论正式启用"
-  ]
+  ],
+  "terrainCandidate": {
+    "resource": "res://assets/terrain/world-terrain-v3.glb",
+    "data": "res://data/world-terrain-v3.json",
+    "status": "preview-generated",
+    "activeWorldTerrainUnchanged": true,
+    "scope": "Original profile-based terrain candidate; original scenes, transport and saved positions have not been relocated. constraints.rebuildTerrainNow remains false for the active production world."
+  }
 }

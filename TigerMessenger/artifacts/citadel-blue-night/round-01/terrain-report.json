@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "scope": "Only original mountain surface and matching highlight geometry; building/shore foundations protected. Vegetation refinement still pending.",
+  "changed": [
+    {
+      "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+      "modifiedVertices": 94,
+      "protectedVertices": 270,
+      "maxLift": 25.0
+    },
+    {
+      "name": "citadel-oskar-grid-mountain-surface",
+      "modifiedVertices": 92,
+      "protectedVertices": 272,
+      "maxLift": 25.0
+    }
+  ],
+  "protectedRule": "radial distance <=33 or height <=5 untouched",
+  "source": "project/assets/terrain.glb",
+  "output": "project/assets/terrain-blue.glb"
+}

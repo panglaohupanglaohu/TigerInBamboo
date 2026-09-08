@@ -1,0 +1,20 @@
+{
+  "worldSource": "godot/assets/world-source/original-world-v1.glb",
+  "sha256": "86a9212c55583a88059da4e5d5e04050352e64465f204cdb662507b9c7290093",
+  "totalGltfNodes": 20197,
+  "gladiusNames": 0,
+  "exactGladiusRoleOwners": 0,
+  "soldierNameNodes": 46,
+  "nonCombatNameExamples": [
+    "old-harbor-scene[61]/porter-squad[28]/porter[0]/Group[0]/porter-body[0]/soldier-helm[3]",
+    "old-harbor-scene[61]/porter-squad[28]/porter[0]/Group[0]/porter-body[0]/soldier-crest[4]",
+    "old-harbor-scene[61]/porter-squad[28]/porter[0]/Group[0]/porter-body[0]/soldier-crest-feathers[5]",
+    "old-harbor-scene[61]/porter-squad[28]/porter[0]/Group[0]/porter-body[0]/soldier-crest-stems[6]",
+    "old-harbor-scene[61]/porter-squad[28]/porter[1]/Group[0]/porter-body[0]/soldier-helm[3]",
+    "old-harbor-scene[61]/porter-squad[28]/porter[1]/Group[0]/porter-body[0]/soldier-crest[4]",
+    "old-harbor-scene[61]/porter-squad[28]/porter[1]/Group[0]/porter-body[0]/soldier-crest-feathers[5]",
+    "old-harbor-scene[61]/porter-squad[28]/porter[1]/Group[0]/porter-body[0]/soldier-crest-stems[6]"
+  ],
+  "bindingPolicy": "Only explicit phalanxRole=gladius, helmSide red/blue and original parts/equipment refs; sourcePath records identity but is not guessed from a soldier-like name.",
+  "missingHook": "Godot transport/spawn lifecycle must register actual gladius instances with roman_combat_runtime.register_actor(actor). Current original_world static export contains no such actors; no global static replacements made."
+}

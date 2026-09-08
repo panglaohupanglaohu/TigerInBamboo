@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "deliveryStatus": "Reusable combat adapter + original algorithm subset; NOT original-world global combat deployment",
+  "canonicalReport": "final-02/report.json",
+  "validation": "final-02/validation.json",
+  "originalWorldRoleAudit": "original-world-role-audit.json",
+  "visualEvidence": "combat-lifecycle.png",
+  "visualEvidenceKind": "Plot of actual Godot state and root-position samples, not a battlefield screenshot",
+  "runtimeScene": "godot/scenes/roman_combat_slice.tscn",
+  "validationCommand": "rtk proxy python3 tools/pipeline/test_roman_combat_godot.py --output artifacts/pipeline/roman-combat-godot/NEW_RUN",
+  "actualSceneTreeHits": 2,
+  "sourceDamageOracleCases": 24,
+  "originalNodeIdentitiesChecked": 108,
+  "maxWorldGripError": 3.32391427946277e-05,
+  "cooldownEvidence": [
+    {
+      "attacker": "red-0",
+      "gap": 1.2166666666666635,
+      "previousCooldown": 1.2075
+    },
+    {
+      "attacker": "blue-1",
+      "gap": 1.2166666666666635,
+      "previousCooldown": 1.2075
+    }
+  ],
+  "deathLifetimeEvidence": [
+    {
+      "unit": "blue-0",
+      "deathToHiddenSeconds": 3.6999999999999904
+    },
+    {
+      "unit": "red-1",
+      "deathToHiddenSeconds": 3.6999999999999904
+    }
+  ],
+  "sourceSnapshotStillCurrent": true,
+  "activeEditorImportPerformed": false,
+  "equipmentAssets": [
+    "godot/assets/art-pilots/roman-armor-v3-direction.glb",
+    "godot/assets/art-pilots/roman-shield-handle-v1.glb",
+    "godot/assets/supplemental/romanSoldier_gladius_red.glb",
+    "godot/assets/supplemental/romanSoldier_gladius_blue.glb"
+  ],
+  "existingArmorGeometryEvidence": "armor-regression-01.json (252 source/candidate pose cases unchanged)",
+  "minimalHook": [
+    "Create roman_combat_runtime.gd under the relevant deployed battle domain.",
+    "After the original Godot troop spawner attaches a real red/blue gladius actor to the scene and assigns its surface transform, call register_actor(actor). Adapter resolves exact original phalanxRole/helmSide/parts/equipment refs; preserves root and records sourcePath when supplied, otherwise scene_file_path.",
+    "Only register troops that have actually entered the battle; hidden ancestors are additionally excluded. Remove them with unregister_actor(actor) before freeing the actor.",
+    "Forward existing shield-break/hit events through the returned adapter; do not label direct event tests as migrated arrows or vanguard combat."
+  ],
+  "knownGaps": [
+    "Current original_world GLB contains zero gladius name/role owners; porter and tie-soldier sourcePaths are rejected, not replaced.",
+    "Global troop spawning, transport, siege waves/routes/ladders, target body facing/movement and projectile travel are not ported by this subset.",
+    "Candidate weapon aims at a real selected foe and grips remain constrained; this test does not prove per-triangle separation for every future combat pose.",
+    "Arrow damage/block entry is an event bridge, not a projectile simulator. Hidden/broken shields cannot block, preserving the existing shield-break meaning.",
+    "No new art, sounds or alternative combat mechanics were created. This is a first bounded Godot transfer, not complete global battle acceptance."
+  ],
+  "priorAttempts": [
+    "First diagnostic had an explicit-type compile defect and reached the 90-second cap before a report; fixed.",
+    "combat-validation-02 and final-01 are intermediate passing results; final-02 adds hidden-parent battle exclusion and is canonical."
+  ]
+}

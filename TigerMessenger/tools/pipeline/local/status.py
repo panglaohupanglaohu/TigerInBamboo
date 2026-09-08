@@ -62,7 +62,7 @@ body{margin:0;background:#101e26;color:#e5edf0;font:16px/1.65 system-ui,sans-ser
     tiger = next((a for a in registry.get('assets', []) if a.get('id') == 'moebiusTiger'), {})
     web = tiger.get('webReplacement', {})
     if web:
-        page += '<h2>游戏里已经改变了什么</h2><section><strong>湖沼之虎：Blender 新造型已默认接回原 Web 游戏</strong><p>保留原角色、动作回调和救援身份，修正静止姿态、平面脚掌支撑与眼灯过亮。Godot 完整行为迁移仍待完成。</p>'
+        page += '<h2>游戏里已经改变了什么</h2><section><strong>湖沼之虎：Blender 新造型已默认接回原 Web 游戏</strong><p>保留原角色、动作回调和救援身份，修正静止姿态、平面脚掌支撑与眼灯过亮。Godot 已补原作待机尾摆；完整行为迁移仍待完成。</p>'
         fixture = web.get('fixtureEvidence', '')
         if fixture:
             comparison = str(Path(fixture).parent / 'idle-before-after.png')
@@ -70,11 +70,11 @@ body{margin:0;background:#101e26;color:#e5edf0;font:16px/1.65 system-ui,sans-ser
                 src = esc(os.path.relpath(root / comparison, output.parent), quote=True)
                 page += '<img style="width:100%;height:auto;border-radius:8px" alt="同镜头：左侧原虎，右侧已回接的 Blender 新虎" src="' + src + '">'
             page += '<p>' + link(fixture, '36 项浏览器检查') + ' · ' + link(comparison, '打开大图') + '</p>'
-        page += '<p><strong>未完成：</strong>完整场景的自然接近对话与复杂地形接触尚未验收；工程通过不代表完整救援已通过。</p>'
+        page += '<p><strong>未完成：</strong>坑内原对答已通过 160 帧正常物理回归；从其他区域连续进入湖沼、整体地形和完整救援仍待验收。</p>'
         page += '<p>' + link(web.get('worldEvidence', ''), '完整场景原始检查') + ' · ' + link('artifacts/pipeline/tiger-web-v3/world-smoke-summary.json', '失败诊断与后续复测') + '</p></section>'
     page += '<h2>实际执行记录</h2><div class="scroll"><table><thead><tr><th>任务</th><th>最新状态</th><th>执行次数</th><th>证据</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table></div>'
     page += '<p>缓存复用需要输入和报告哈希一致；相同输入失败两次后停止自动重试。Godot 测试在隔离副本执行；后台 Blender 作业只输出新候选，前台原作保留。</p>'
-    page += '<h2>仍需完成</h2><p>Studio 真实 Qwen 文本、工具与看图联调；LLaDA 的 Mac 推理验证；建模改动模板与跨阶段产物交接；实际区域的动画、碰撞、战争与救援验收。模型的口头“完成”不能改变这些状态。</p>'
+    page += '<h2>仍需完成</h2><p>当前按用户要求继续 Astra + Blender + 认可图像参考 + Godot，优先实际区域的动画、碰撞、战争与救援验收。Qwen／LLaDA 接入暂缓，已有桥接程序保留。模型的口头“完成”不能改变这些状态。</p>'
     page += '<section>' + ' · '.join([link('docs/LOCAL_ASSET_FACTORY.md', '总方案'), link('docs/LOCAL_ASSET_FACTORY_MAC.md', 'Mac 部署'), link('docs/PROJECT_HANDOFF.md', '接手指南')]) + '</section></main></html>'
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(page)

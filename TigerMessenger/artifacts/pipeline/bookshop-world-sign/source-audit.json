@@ -1,0 +1,31 @@
+{
+  "sourcePath": "hard-to-find-bookshop[76]/Group[22]/bookshop-sign-text[2]",
+  "matches": 1,
+  "world_glb_sha256": "86a9212c55583a88059da4e5d5e04050352e64465f204cdb662507b9c7290093",
+  "web_source": "src/assets/bookshop.js:253",
+  "web_source_sha256": "9305d54db7f2691859dd03add2ca3fb5e076c05a695617dbc7381af0bdd41591",
+  "web_material": "MeshBasicMaterial({map: makeSignTexture(...), transparent: true})",
+  "exported_material": {
+    "name": "MeshBasicMaterial__material_342",
+    "pbrMetallicRoughness": {
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metallicFactor": 0,
+      "roughnessFactor": 0.85,
+      "baseColorTexture": {
+        "index": 6
+      }
+    },
+    "doubleSided": false,
+    "extras": {
+      "sourceType": "MeshBasicMaterial",
+      "shaderAdaptationPending": false
+    },
+    "alphaMode": "BLEND"
+  },
+  "missing_unlit_extension": true
+}

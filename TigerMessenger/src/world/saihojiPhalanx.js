@@ -38,6 +38,7 @@ import { P, isCitadelPaletteV3 } from "../core/params.js";
 import { v3TokenInt } from "./citadelVisualTheme.js";
 import { createRng } from "../core/rng.js";
 import { projectWorldObjectToPlanetSurface } from "./planetV8/riderProjection.js";
+import { createRomanCombatPresentation } from "./romanSoldierCombatPose.js";
 import {
   applyVanguardHit,
   updateVanguardCombat,
@@ -336,6 +337,7 @@ export function createSaihojiPhalanxBattle({
   disableSiegeLadders = false,
   surfaceProvider = null,
   surfaceProjectionEnabled = false,
+  romanEquipment = true,
   seed = 1, // P0 · 攻防 V2：注入式种子随机源；同 seed 同输入 → 同事件序列
   rng: rngOpt = null,
   events = null, // 可选 CombatEventLog（P0 事件记录/重放）
@@ -348,6 +350,9 @@ export function createSaihojiPhalanxBattle({
   root.userData.combatEvents = events; // P0 事件日志（可为 null）
   root.userData.siegeLaddersDisabled = !!disableSiegeLadders;
   root.userData.surfaceProjectionEnabled = !!surfaceProjectionEnabled;
+  const romanPresentation = createRomanCombatPresentation();
+  romanPresentation.setEnabled(romanEquipment);
+  root.userData.setRomanEquipment = value => romanPresentation.setEnabled(value);
 
   // 旧港是独立的即时交战区：红缨战斗单位一旦进入港区就切换为战斗状态，
   // 不再被当作普通巡查/运输单位。港区判定基于 old-harbor-scene 的本地
@@ -576,6 +581,8 @@ export function createSaihojiPhalanxBattle({
           : createHarborPatrolSoldier();
     s.userData.uid = nextUid++; // P0 稳定士兵 ID（事件流比对用）
     s.userData.phalanxRole = role;
+    // Shared approved armor, with weapon-specific presentation owned by each role.
+    romanPresentation.add(s);
     // 苔庭方阵原本就是红盔；完成鲸拉回任务、随船返回圣城攻城时才换蓝盔
     // （beginSiege 中逐个 paintSoldierHelm(s, "blue")，蓝盔人数 = 完成任务人数）
     paintSoldierHelm(s, "red");
@@ -1137,6 +1144,7 @@ export function createSaihojiPhalanxBattle({
 
   /** 硬重置（调试/热重载）：士兵撤阵清场，回到 atCastle 等下一轮鼓息运兵 */
   function resetBattle() {
+    romanPresentation.dispose();
     detachRopes();
     resetFightFormation();
     clearRedGarrison();
@@ -3022,6 +3030,7 @@ export function createSaihojiPhalanxBattle({
     for (let i = 0; i < TROJAN_PATROL_COUNT; i++) {
       const s = createHarborPatrolSoldier();
       s.name = `trojan-patrol-soldier-${i}`;
+      romanPresentation.add(s);
       paintSoldierHelm(s, "red"); // 守城方盔色
       s.userData.dead = false;
       s.userData.phalanxRole = "spear";
@@ -3394,7 +3403,7 @@ export function createSaihojiPhalanxBattle({
     root.userData.ropePull01 = ropeTeams.length ? pullSum / ROPE_TEAMS : 0;
   }
 
-  function update(dt, t) {
+  function updateSimulation(dt, t) {
     simT += dt; // P0 仿真时钟：事件记录以此为准
     const drums = isInfiltrationMissionActive();
     if (drums) quietT = 0;
@@ -3856,6 +3865,15 @@ export function createSaihojiPhalanxBattle({
     updateJavelins(dt);
     // 调试/验收：累计发射箭数
     root.userData.arrowsFired = arrowI;
+  }
+
+  function update(dt, t) {
+    try {
+      updateSimulation(dt, t);
+    } finally {
+      // All branches (including early returns) finish after movement, weapon aim and damage.
+      romanPresentation.update(dt, t, root);
+    }
   }
 
   // 苔庭鲸故事线通过 root.userData 与此方阵松耦合：

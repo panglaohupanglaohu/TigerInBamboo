@@ -1,3 +1,35 @@
+## 2026-09-09 接续：海路已按真实候选网格绕陆
+
+新增 `tools/pipeline/build_coastal_routes.mjs`，直接读取 V3 地势 GLB，使用三顶点均低于水面 0.1 单位的三角形边建立海路图，并只在最大连通外洋选择端点，避免将内陆湖当作港口。10 条海路按球面距离寻路，383 条路径边经独立 GLB 拓扑复核。预览新增“绕陆航线候选”：青线为海路，橙色虚线是**未建设的区域到海岸连接**。
+
+这一检查暴露大陆支撑过宽：候选书店锚到最近外洋节点约 66.16 世界单位，旧港约 61.86。不能把端点吸附到海边就说港口已经修好，也不能直接搬书店去海岸。下一轮需保留原书店—营地—月湖内部关系，缩整本区域外缘地势/海湾，再重新生成海路、校验真实占地和出行距离。
+
+数据 `godot/data/world-coastal-routes-v1.json` 绑定实际 GLB 哈希；预览拒绝不匹配路线。Godot 引擎总览目前仍显示旧直线路线诊断，未把本次新海路接为载具导航。船宽/吃水、区域连接、上下船与剧情均未验收。
+
+复验：`rtk proxy node tools/pipeline/build_coastal_routes.mjs`，随后 `rtk proxy node tools/pipeline/test_coastal_routes.mjs`。报告 `artifacts/world-terrain/coastal-validation.json`、`coastal-browser.json`；实景 `coastal-bookshop.png`、`coastal-opposite.png`。
+
+## 2026-09-09：地势 V3 已展开，V2 继续作为布局数据源
+
+最新状态覆盖下方“本批不生成地形”的历史说明。`godot/data/world-layout-v2.json` 仍为区域/主线布局的唯一数据源；新增 `world-terrain-v3.json` 是由它生成的地形与路线采样，不能反向冒充原坐标。
+
+已生成 `godot/assets/terrain/world-terrain-v3.glb`：原球面网格算法细化为 32,000 三角闭合球面，复用原书店丘陵、高山圣城、港口、苔庭、门区、水晶峡谷和湖沼 profile。大陆支撑范围属于本次提案，未扩大或裁剪任何原资产。陆地顶点采样约 37%，不是精确陆地面积测量。本批没有运行 WFC，不以程序生成地形冒充 Townscaper 建筑完成。
+
+可查看 http://127.0.0.1:8765/TigerMessenger/tools/world-terrain/ 或 Godot `res://scenes/world_layout.tscn`。两个入口使用同一 GLB；浏览器截图在 `artifacts/world-terrain/hemisphere-east.png` 与 `hemisphere-west.png`。Godot 已通过隔离导入/实例检查，未声称活动编辑器前台已刷新。
+
+### 接续顺序与验收
+
+1. **已做：全局地势候选。** 14 区域、19 路线，32,000 三角、边共享两次、Euler=2；两半球显示与 Godot 实例检查通过。原生产世界未动。
+2. **下一步：海岸、港口和交通。** 当前直线采样揭示旧港到门等航路穿陆，水晶城到湖沼的陆路有水段。先确定沿岸登陆口，再按交通方式寻路；海路检查水深/船体净空，陆路检查坡度与断崖，电车检查曲率/坡度。红线只是冲突诊断，不是可运行导航。
+3. **区域所有权与真实占地。** 核对 camp/city/castle 等复合根及子地标，保留内部设计；原大包围范围超过规划圆，不能拿规划半径强行裁剪。输出唯一归属与重复变换检查后，再执行球面刚性旋转候选。
+4. **局部地势与通行。** 将海岸、圣城峡谷、书店近景、湖沼入口细化，接真实碰撞、坡地脚掌、桥阶和载具；建筑继续原模块/WFC体系。保存原地势作回退。
+5. **区域迁移与主线。** 在候选场景依次接出生接信→门/苔庭→旧港→湖沼→圣城；迁移存档坐标/交通后再考虑替换默认世界。原实验关卡保留镜像小岛身份。
+
+每条路线目前 `certifiedWalkable:false`。海岸形状、桥梁、导航和完整救援均未验收。7 个原锚点及 R160 已与最新原 manifest 复核并更新来源哈希；复核同时记录了复合范围风险，不据此认定模型占地通过。
+
+复现：项目目录运行 `rtk proxy node tools/pipeline/build_world_terrain.mjs`；布局检查 `rtk proxy python3 tools/pipeline/test_world_layout.py`。浏览器与 Godot 报告分别为 `artifacts/world-terrain/browser.json`、`godot-validation.json`。
+
+---
+
 # 全球布局 V2 候选
 
 这是供 Godot 切换预览的**全局布局候选数据，尚未正式部署**。本批只写 `godot/data/world-layout-v2.json`、本说明和验证脚本；没有改原世界坐标、海洋、地形、场景或资产库。

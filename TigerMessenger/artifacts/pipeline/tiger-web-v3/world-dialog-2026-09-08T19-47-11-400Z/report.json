@@ -1,0 +1,1452 @@
+{
+  "passed": true,
+  "scope": "Bounded diagnostic execution and controlled real-system dialog activation only. Natural proximity and controlled activation are separate outcomes; no natural playthrough, complete spoken exchange or rescue completion claim.",
+  "startedAt": "2026-09-08T19:47:11.401Z",
+  "url": "http://127.0.0.1:8877/TigerMessenger/",
+  "sourceHashesBefore": {
+    "src/main.js": "bc16b77d48b4dcb45c807215a7528e16ece2e4e97fb71cfa523c5e46d6c49023",
+    "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+    "src/assets/characters/moebiusTiger.js": "2da2888359caa08f09e73344e0000e39b4c2f32660f892ec249d40b7ecef6243",
+    "src/assets/tigerAnatomy.js": "401fb1a6f93c527c774bd742b592e92296b9902e1b5171cba2ba91507e8dc85c",
+    "src/player/player.js": "c3a286786996a1c30edbef0ed2ef815f9a02ff116e41e7d00788bba98013320c",
+    "src/quest/questSystem.js": "5722bf664df1348e0701224fe683ebfa4c134064d30a2b05d6de756695f99791",
+    "assets/models/optimized/moebiusTigerAnatomyData.js": "a20c2257fcab14d2b8f748287bfbab963bdbe697439f2be14f1077edc7d17403"
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "interventions": [
+    "Fresh headless browser seeds chapter 4 only to inspect the original live rescue target.",
+    "Browser-only module response wrapper observes exact dialog arguments and calls the original implementation once; no production file modifications.",
+    "Natural phase repeats the original one-time local +(2,0,2) player teleport, with normal game physics for 24 dialog frames.",
+    "Controlled phase sets the test player exactly 2 world units from the live tiger immediately before each of 6 real dialog calls. Original physics and the entire original dialog implementation continue; this phase does not prove natural proximity."
+  ],
+  "browserObserver": {
+    "originalResponseSha256": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+    "observedResponseSha256": "38613b35b5505485b3c779a5f634e10328c2af66f5e7a7fdd24298211d73b1b0",
+    "productionSourceMatches": true,
+    "implementationInvocationsPerGameCall": 1
+  },
+  "initial": {
+    "uuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+    "kind": "moebius-swamp-tiger",
+    "defaultAnatomy": true,
+    "textureStatus": "ready",
+    "speech": {
+      "line": "两家秋雨一家声，你猜",
+      "reply": "芭蕉与荷"
+    },
+    "localTeleportOffset": [
+      2,
+      0,
+      2
+    ],
+    "immediateWorldDistance": 1.4142135623730945,
+    "parentWorldScale": [
+      0.49999999999999994,
+      0.5,
+      0.49999999999999994
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 4,
+      "rescuedFox": true,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "tiger"
+    }
+  },
+  "natural": {
+    "passed": false,
+    "observedFrames": 24,
+    "totalSimulationSeconds": 1.0875999999642376,
+    "minimumWorldDistance": 10.594378602834192,
+    "maximumWorldDistance": 18.469082124889585,
+    "startedEveryFrame": true,
+    "blockedAnyFrame": false,
+    "nearFrames": 0,
+    "rows": [
+      {
+        "frame": 1,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.7459795835724,
+          -37.30720657430908,
+          -121.65395546873006
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841505,
+          61.98188806107643,
+          21.67927169129024
+        ],
+        "worldDistance": 12.194310568623115,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 2,
+        "mode": "natural",
+        "dt": 0.033299999982118605,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.83009135110215,
+          -37.358809901538606,
+          -121.8244773520151
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841505,
+          61.98188806107643,
+          21.67927169129024
+        ],
+        "worldDistance": 11.999199687078619,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 3,
+        "mode": "natural",
+        "dt": 0.034,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.90626930566017,
+          -37.40233352613605,
+          -121.99892089935702
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841505,
+          61.98188806107643,
+          21.67927169129024
+        ],
+        "worldDistance": 11.804568738992902,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 4,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.99913673624909,
+          -37.44906887444125,
+          -122.25096680027863
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841505,
+          61.98188806107643,
+          21.67927169129024
+        ],
+        "worldDistance": 11.531924520570847,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 5,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -57.06756670344944,
+          -37.4747762794114,
+          -122.49105862241197
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841505,
+          61.98188806107643,
+          21.67927169129024
+        ],
+        "worldDistance": 11.28220060480421,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 6,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -57.110071145544154,
+          -37.47915964820555,
+          -122.71233780981413
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841505,
+          61.98188806107643,
+          21.67927169129024
+        ],
+        "worldDistance": 11.062464338116293,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 7,
+        "mode": "natural",
+        "dt": 0.026699999988079072,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -57.12177014319254,
+          -37.47275586753543,
+          -122.82064046424972
+        ],
+        "playerWorldPosition": [
+          -60.901923379229395,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.901923379229395,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.876926788415034,
+          61.98188806107643,
+          21.679271691290246
+        ],
+        "worldDistance": 10.95963763785208,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 8,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -57.12266537386949,
+          -37.444568699224305,
+          -123.00142810067516
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.3999223132156,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841505,
+          61.98188806107643,
+          21.67927169129024
+        ],
+        "worldDistance": 10.797930777019024,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 9,
+        "mode": "natural",
+        "dt": 0.0265,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -57.11197443723888,
+          -37.42122908398188,
+          -123.08426526561998
+        ],
+        "playerWorldPosition": [
+          -60.901923379229395,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.901923379229395,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841502,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 10.729898985157385,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 10,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -57.07090725666594,
+          -37.36192063002643,
+          -123.21346966906715
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.876926788415034,
+          61.98188806107643,
+          21.679271691290182
+        ],
+        "worldDistance": 10.63745904655941,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 11,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -57.003232786956964,
+          -37.28373438612339,
+          -123.30463884325276
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.876926788415034,
+          61.98188806107643,
+          21.679271691290182
+        ],
+        "worldDistance": 10.594378602834192,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 12,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.91038403937226,
+          -37.1883610674486,
+          -123.35562356702941
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.876926788415034,
+          61.98188806107643,
+          21.679271691290182
+        ],
+        "worldDistance": 10.60225275568552,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 13,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.794476208093634,
+          -37.07795538528748,
+          -123.36537443010474
+        ],
+        "playerWorldPosition": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "playerBeforeControl": [
+          -60.90192337922939,
+          -39.39992231321563,
+          -132.92559608789045
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.876926788415034,
+          61.98188806107643,
+          21.679271691290182
+        ],
+        "worldDistance": 10.66116742313234,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 14,
+        "mode": "natural",
+        "dt": 0.026599999994039534,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.72434936348839,
+          -37.01397454205713,
+          -123.35372892700445
+        ],
+        "playerWorldPosition": [
+          -60.90192337922938,
+          -39.39992231321564,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.90192337922938,
+          -39.39992231321564,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.876926788415076,
+          61.98188806107649,
+          21.679271691290182
+        ],
+        "worldDistance": 10.712866673740457,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 15,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.578750366647164,
+          -36.885760994665475,
+          -123.3007455129394
+        ],
+        "playerWorldPosition": [
+          -60.90192337922938,
+          -39.39992231321564,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.90192337922938,
+          -39.39992231321564,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.876926788415076,
+          61.98188806107649,
+          21.679271691290182
+        ],
+        "worldDistance": 10.846593042174547,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 16,
+        "mode": "natural",
+        "dt": 0.0405,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.44980712383725,
+          -36.77619416194584,
+          -123.22903681684897
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 10.987654447611332,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 17,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.28066479216982,
+          -36.6369530778363,
+          -123.10704509392897
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 11.197945059034112,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 18,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -56.10500295455595,
+          -36.49703826639156,
+          -122.95112130614085
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 11.442348033586192,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 19,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -55.92801971784889,
+          -36.3607013244108,
+          -122.76518629488669
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 11.713688958362052,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 20,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -55.75526223297127,
+          -36.23243125582423,
+          -122.55372362813986
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 12.004035108012232,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 21,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -55.592525447037254,
+          -36.11688560655464,
+          -122.32161636927702
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 12.304975509622707,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 22,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -55.554404172077454,
+          -36.09074953193277,
+          -122.26144898153375
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 12.380251195886874,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 23,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.520197096870454,
+          -34.0269918003113,
+          -117.36972013161493
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 18.469082124889585,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      },
+      {
+        "frame": 24,
+        "mode": "natural",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.520197096870454,
+          -34.0269918003113,
+          -117.36972013161493
+        ],
+        "playerWorldPosition": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 0,
+        "playerLocalPosition": [
+          37.87692678841515,
+          61.98188806107649,
+          21.67927169129019
+        ],
+        "worldDistance": 18.469082124889585,
+        "near": false,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "returnedActive": false
+      }
+    ]
+  },
+  "controlled": {
+    "passed": true,
+    "observedFrames": 6,
+    "totalSimulationSeconds": 0.3,
+    "originalActorAndUpdatePreserved": true,
+    "rescueTargetDistanceToActor": 0,
+    "rescue": {
+      "version": 1,
+      "chapter": 4,
+      "rescuedFox": true,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "tiger"
+    },
+    "rows": [
+      {
+        "frame": 1,
+        "mode": "controlled",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.520197096870454,
+          -34.0269918003113,
+          -117.36972013161493
+        ],
+        "playerWorldPosition": [
+          -50.842814194044685,
+          -33.923135060295266,
+          -118.45397119795567
+        ],
+        "playerBeforeControl": [
+          -60.901923379229345,
+          -39.39992231321562,
+          -132.92559608789048
+        ],
+        "controlledDisplacement": 18.455590024927357,
+        "playerLocalPosition": [
+          39.62783110455605,
+          25.150000000000006,
+          20.011468164238366
+        ],
+        "worldDistance": 1.9999999999999991,
+        "near": true,
+        "before": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        },
+        "after": {
+          "phase": "tiger",
+          "timer": 3.2,
+          "active": true
+        },
+        "returnedActive": true
+      },
+      {
+        "frame": 2,
+        "mode": "controlled",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.46979761925364,
+          -34.006568001492774,
+          -117.41646621273435
+        ],
+        "playerWorldPosition": [
+          -50.79241471642787,
+          -33.90271126147674,
+          -118.50071727907509
+        ],
+        "playerBeforeControl": [
+          -57.7602361549142,
+          -38.538549119635725,
+          -134.57023294911815
+        ],
+        "controlledDisplacement": 18.118246662288524,
+        "playerLocalPosition": [
+          39.76517596408688,
+          25.160988175872575,
+          20.051285114905866
+        ],
+        "worldDistance": 1.9999999999999991,
+        "near": true,
+        "before": {
+          "phase": "tiger",
+          "timer": 3.2,
+          "active": true
+        },
+        "after": {
+          "phase": "tiger",
+          "timer": 3.1500000000000004,
+          "active": true
+        },
+        "returnedActive": true
+      },
+      {
+        "frame": 3,
+        "mode": "controlled",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.419015338725025,
+          -33.98589425604058,
+          -117.46260062290403
+        ],
+        "playerWorldPosition": [
+          -50.741632435899255,
+          -33.882037516024546,
+          -118.54685168924478
+        ],
+        "playerBeforeControl": [
+          -57.69556141202821,
+          -38.51039511590985,
+          -134.60603220608408
+        ],
+        "controlledDisplacement": 18.10182590651819,
+        "playerLocalPosition": [
+          39.90252568444012,
+          25.17044916280068,
+          20.091085294790894
+        ],
+        "worldDistance": 1.9999999999999991,
+        "near": true,
+        "before": {
+          "phase": "tiger",
+          "timer": 3.1500000000000004,
+          "active": true
+        },
+        "after": {
+          "phase": "tiger",
+          "timer": 3.1000000000000005,
+          "active": true
+        },
+        "returnedActive": true
+      },
+      {
+        "frame": 4,
+        "mode": "controlled",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.367524200375534,
+          -33.96474834764472,
+          -117.50759746249454
+        ],
+        "playerWorldPosition": [
+          -50.690141297549765,
+          -33.86089160762869,
+          -118.59184852883529
+        ],
+        "playerBeforeControl": [
+          -57.63077831671337,
+          -38.482171330835904,
+          -134.6418513136684
+        ],
+        "controlledDisplacement": 18.086770245266607,
+        "playerLocalPosition": [
+          40.039880055973256,
+          25.17706802782297,
+          20.130869420026286
+        ],
+        "worldDistance": 1.9999999999999991,
+        "near": true,
+        "before": {
+          "phase": "tiger",
+          "timer": 3.1000000000000005,
+          "active": true
+        },
+        "after": {
+          "phase": "tiger",
+          "timer": 3.0500000000000007,
+          "active": true
+        },
+        "returnedActive": true
+      },
+      {
+        "frame": 5,
+        "mode": "controlled",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.315096295837904,
+          -33.94297442281799,
+          -117.55108885682833
+        ],
+        "playerWorldPosition": [
+          -50.637713393012135,
+          -33.839117682801955,
+          -118.63533992316907
+        ],
+        "playerBeforeControl": [
+          -57.565795301463176,
+          -38.45381182837632,
+          -134.67774802125192
+        ],
+        "controlledDisplacement": 18.073532542722216,
+        "playerLocalPosition": [
+          40.177238686208554,
+          25.179924849598166,
+          20.17063883918069
+        ],
+        "worldDistance": 1.9999999999999991,
+        "near": true,
+        "before": {
+          "phase": "tiger",
+          "timer": 3.0500000000000007,
+          "active": true
+        },
+        "after": {
+          "phase": "tiger",
+          "timer": 3.000000000000001,
+          "active": true
+        },
+        "returnedActive": true
+      },
+      {
+        "frame": 6,
+        "mode": "controlled",
+        "dt": 0.05,
+        "gameStarted": true,
+        "blocked": false,
+        "holdingLetter": false,
+        "tigerUuid": "14de23f7-218f-4714-9c4e-f91b158b96be",
+        "sameActor": true,
+        "greeting": true,
+        "tigerWorldPosition": [
+          -52.26163353806609,
+          -33.920504654187276,
+          -117.59291608492087
+        ],
+        "playerWorldPosition": [
+          -50.58425063524032,
+          -33.81664791417124,
+          -118.67716715126161
+        ],
+        "playerBeforeControl": [
+          -57.500546969704196,
+          -38.425269336940744,
+          -134.71376328893186
+        ],
+        "controlledDisplacement": 18.062307773019167,
+        "playerLocalPosition": [
+          40.31460105561325,
+          25.17862257344828,
+          20.210395341435387
+        ],
+        "worldDistance": 1.9999999999999991,
+        "near": true,
+        "before": {
+          "phase": "tiger",
+          "timer": 3.000000000000001,
+          "active": true
+        },
+        "after": {
+          "phase": "tiger",
+          "timer": 2.950000000000001,
+          "active": true
+        },
+        "returnedActive": true
+      }
+    ],
+    "playerRestored": true
+  },
+  "sourceHashesAfter": {
+    "src/main.js": "bc16b77d48b4dcb45c807215a7528e16ece2e4e97fb71cfa523c5e46d6c49023",
+    "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+    "src/assets/characters/moebiusTiger.js": "2da2888359caa08f09e73344e0000e39b4c2f32660f892ec249d40b7ecef6243",
+    "src/assets/tigerAnatomy.js": "401fb1a6f93c527c774bd742b592e92296b9902e1b5171cba2ba91507e8dc85c",
+    "src/player/player.js": "c3a286786996a1c30edbef0ed2ef815f9a02ff116e41e7d00788bba98013320c",
+    "src/quest/questSystem.js": "5722bf664df1348e0701224fe683ebfa4c134064d30a2b05d6de756695f99791",
+    "assets/models/optimized/moebiusTigerAnatomyData.js": "a20c2257fcab14d2b8f748287bfbab963bdbe697439f2be14f1077edc7d17403"
+  },
+  "sourcesUnchanged": true,
+  "finishedAt": "2026-09-08T19:47:58.815Z"
+}

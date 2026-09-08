@@ -2891,7 +2891,7 @@
         ],
         "history": [],
         "previewScene": "res://scenes/tiger_anatomy_candidate.tscn",
-        "scope": "Godot: user approved black swamp tiger reference; rebuilt anatomy, preserved original joint IDs. Original-world static visual replacement; full roam and rescue logic pending. Web status is tracked separately in webReplacement."
+        "scope": "Godot original-world visual replacement plus original idle-tail loop on 9 original pivots; full roaming, drinking and rescue migration pending. Web tracked separately."
       },
       "placementRefs": [
         {
@@ -2928,7 +2928,8 @@
         "worldIntegrated": false,
         "gameplayAccepted": false,
         "staticWorldDeployed": true,
-        "webRuntimeDeployed": true
+        "webRuntimeDeployed": true,
+        "godotIdleTailDeployed": true
       },
       "evidence": {
         "exportReport": "godot/assets/originals/export-report.json",
@@ -2936,12 +2937,13 @@
         "concept": "assets/references/tiger/user-target-20260909.png",
         "anatomyAssembly": "artifacts/pipeline/moebius-tiger-anatomy-v3/assembly.json",
         "candidateValidation": "artifacts/pipeline/tiger-anatomy-v3/godot-candidate-validation.json",
-        "staticWorldValidation": "artifacts/pipeline/tiger-anatomy-v3/world-validation.json"
+        "staticWorldValidation": "artifacts/pipeline/tiger-anatomy-v3/world-validation.json",
+        "godotIdleTail": "artifacts/pipeline/godot-tiger-idle/final-01/report.json"
       },
       "knownGaps": [
-        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收；Web 已回接，不代表 Godot 玩法迁移完成。",
-        "最新虎 GLB 已在隔离工程导入并原位检视；活动主编辑器的最新导入仍待前台确认。",
-        "Web 新模型已默认进入原湖沼；完整游戏 smoke 的对话未触发，报告保持失败。脚掌平面支撑检查通过，球面与湖沼复杂地形接触仍待实玩验收。"
+        "Godot 已加入原作待机尾摆，完整巡游、饮水、相见和救援程序尚未迁移；不是完整动画验收。",
+        "最新尾摆已在隔离 Godot 工程运行，活动主编辑器最新脚本与模型仍需重新运行确认。",
+        "Web 通用球面将湖沼玩家顶出的缺陷已修；局部地面38项检查通过。完整通关、从其他区域连续进入湖沼及球体整体地形仍待验收。"
       ],
       "exportStatus": "partial",
       "webReplacement": {
@@ -2954,11 +2956,14 @@
         "adapter": "src/assets/tigerAnatomy.js",
         "fallback": "Factory option anatomy:false; live userData.setTigerAnatomy(false)",
         "preserved": "Original actor/root, 80 identities, callbacks, tail and eye-light references, rescue target identity",
-        "scope": "36 browser fixture checks pass. Default model, 40 live updates, greeting and rescue target verified in original swamp. Full-game dialog activation remains unverified; world smoke passed:false. Flat foot support is not terrain-contact acceptance.",
+        "scope": "Default Blender v3 on original actor. Focused real-world pit proximity verified after one-time initial placement: 160 normal-physics frames, original tiger/messenger/cool exchange, original cooldown preserved. No full route or rescue acceptance.",
         "fixtureEvidence": "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/browser-check.json",
-        "worldEvidence": "artifacts/pipeline/tiger-web-v3/world-2026-09-08T19-35-35-092Z/report.json",
+        "worldEvidence": "artifacts/pipeline/tiger-web-v3/world-physics-2026-09-08T20-05-25-512Z/report.json",
         "visualApproved": false,
-        "gameplayAccepted": false
+        "gameplayAccepted": false,
+        "groundEvidence": "artifacts/pipeline/swamp-ground-review/fixture-review.json",
+        "initialWorldEvidence": "artifacts/pipeline/tiger-web-v3/world-2026-09-08T19-35-35-092Z/report.json",
+        "groundAndDialogueDeployed": true
       }
     },
     {
@@ -9776,13 +9781,31 @@
         "fullCandidate": "artifacts/pipeline/romanSoldier/full-candidate-validation.json",
         "shieldArmorGeometry": "artifacts/pipeline/romanSoldier/shield-armor-validation.json",
         "concept": "assets/concepts/roman-soldier-target-v2.png",
-        "directionValidation": "artifacts/pipeline/roman-armor-v3-direction/godot-validation.json"
+        "directionValidation": "artifacts/pipeline/roman-armor-v3-direction/godot-validation.json",
+        "webCombat": "artifacts/pipeline/roman-equipment-web/report.json",
+        "godotCombatSubset": "artifacts/pipeline/roman-combat-godot/final-02/report.json"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
-        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender",
+        "裙腿自碰撞、攀爬背盾/举臂全身穿插未验收；Godot 原世界短剑兵生成与运兵部署尚缺。"
       ],
-      "exportStatus": "partial"
+      "exportStatus": "partial",
+      "runtimeIntegration": {
+        "web": {
+          "status": "production-battle-module-adapter",
+          "source": "src/world/saihojiPhalanx.js",
+          "validation": "isolated actual battle module, 720 frames, 34 checks; full world playthrough pending"
+        },
+        "godot": {
+          "status": "original-combat-rule-subset-tested",
+          "adapter": "res://scripts/roman_combat_adapter.gd",
+          "runtime": "res://scripts/roman_combat_runtime.gd",
+          "scene": "res://scenes/roman_combat_slice.tscn",
+          "globalEligibleGladiusActors": 0,
+          "globalDeployment": false
+        }
+      }
     },
     {
       "id": "romanSoldier_gladius_blue",
@@ -9849,13 +9872,31 @@
         "fullCandidate": "artifacts/pipeline/romanSoldier/full-candidate-validation.json",
         "shieldArmorGeometry": "artifacts/pipeline/romanSoldier/shield-armor-validation.json",
         "concept": "assets/concepts/roman-soldier-target-v2.png",
-        "directionValidation": "artifacts/pipeline/roman-armor-v3-direction/godot-validation.json"
+        "directionValidation": "artifacts/pipeline/roman-armor-v3-direction/godot-validation.json",
+        "webCombat": "artifacts/pipeline/roman-equipment-web/report.json",
+        "godotCombatSubset": "artifacts/pipeline/roman-combat-godot/final-02/report.json"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
-        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender",
+        "裙腿自碰撞、攀爬背盾/举臂全身穿插未验收；Godot 原世界短剑兵生成与运兵部署尚缺。"
       ],
-      "exportStatus": "partial"
+      "exportStatus": "partial",
+      "runtimeIntegration": {
+        "web": {
+          "status": "production-battle-module-adapter",
+          "source": "src/world/saihojiPhalanx.js",
+          "validation": "isolated actual battle module, 720 frames, 34 checks; full world playthrough pending"
+        },
+        "godot": {
+          "status": "original-combat-rule-subset-tested",
+          "adapter": "res://scripts/roman_combat_adapter.gd",
+          "runtime": "res://scripts/roman_combat_runtime.gd",
+          "scene": "res://scenes/roman_combat_slice.tscn",
+          "globalEligibleGladiusActors": 0,
+          "globalDeployment": false
+        }
+      }
     },
     {
       "id": "romanSoldier_longbow_red",

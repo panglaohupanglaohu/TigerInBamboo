@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "scope": "Original-world bookshop sign unlit semantics repair only",
+  "report": "final-03/report.json",
+  "validation": "final-03/validation.json",
+  "pixels": "final-03/pixel-validation.json",
+  "source": "source-audit.json",
+  "source_nodes_preserved": 12727,
+  "toggle_cycles": 6,
+  "screenshots": [
+    "final-03/sign-before.png",
+    "final-03/sign-after.png",
+    "final-03/sign-dark-before.png",
+    "final-03/sign-dark-after.png",
+    "final-03/bookshop-original-context.png"
+  ],
+  "remaining": [
+    "Original-world bookshop walking, delivery interaction and source sign-text editing are not migrated or validated by this batch",
+    "Source static world canopy/joinery facing and unrelated region materials remain separate future review; this batch changes one sign material only",
+    "Compact native main.tscn environment reports do not prove complete original-world region integration"
+  ],
+  "constraints": {
+    "disabled_houses_streetlights_poles_restored": false,
+    "terrain_or_props_added": false,
+    "stone_material_changed": false,
+    "web_source_changed": false,
+    "active_editor_import": false
+  },
+  "diagnostic_history": {
+    "run-01": "Validation gate initially rejected importer alpha-depth-prepass; fixed to preserve both valid BLEND import forms",
+    "run-02": "Assertions and actual captures passed but test Dictionary.merge preserved initial passed=false; final-03 fixes report overwrite and reruns"
+  }
+}

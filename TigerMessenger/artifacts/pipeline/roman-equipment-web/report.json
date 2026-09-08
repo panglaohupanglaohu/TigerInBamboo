@@ -1,0 +1,313 @@
+{
+  "checks": [
+    {
+      "name": "unadapted factory remains original archived node tree",
+      "passed": true,
+      "detail": {
+        "nodes": 55
+      }
+    },
+    {
+      "name": "unadapted factory has no candidate metadata",
+      "passed": true
+    },
+    {
+      "name": "shared armor accepts original spear actor",
+      "passed": true
+    },
+    {
+      "name": "same actor and original dynamic references retained",
+      "passed": true
+    },
+    {
+      "name": "original parents and geometry/material references retained",
+      "passed": true
+    },
+    {
+      "name": "six candidate meshes exactly match approved GLB extraction",
+      "passed": true
+    },
+    {
+      "name": "old helmet and skirt hidden without removing them",
+      "passed": true
+    },
+    {
+      "name": "crest is rotated once and seated lower",
+      "passed": true
+    },
+    {
+      "name": "red original crest colors retained",
+      "passed": true
+    },
+    {
+      "name": "blue original crest colors retained",
+      "passed": true
+    },
+    {
+      "name": "252 rotated nonuniform-scale poses keep both hands on grips",
+      "passed": true,
+      "detail": {
+        "maxGripError": 7.105427357601002e-15
+      }
+    },
+    {
+      "name": "pooling and broken shield visibility survive toggles",
+      "passed": true
+    },
+    {
+      "name": "repeated optout restores every original local transform",
+      "passed": true
+    },
+    {
+      "name": "original helmet and skirt visible on optout",
+      "passed": true
+    },
+    {
+      "name": "dispose removes only owned additions",
+      "passed": true
+    },
+    {
+      "name": "rebind after dispose creates exactly six meshes",
+      "passed": true
+    },
+    {
+      "name": "candidate immutable geometry is shared across actors",
+      "passed": true
+    },
+    {
+      "name": "disposing one actor preserves another actor resources",
+      "passed": true
+    },
+    {
+      "name": "last adapter releases shared candidate resources once",
+      "passed": true
+    },
+    {
+      "name": "real battle spawn enables both original color variants",
+      "passed": true,
+      "detail": {
+        "gladiusCount": 26
+      }
+    },
+    {
+      "name": "real actor uid, original short sword and hidden spear retained",
+      "passed": true
+    },
+    {
+      "name": "720 real battle frames keep poses finite and both grips attached",
+      "passed": true,
+      "detail": {
+        "frames": 720,
+        "maxSwordGrip": 7.134372975750759e-14,
+        "maxShieldGrip": 6.653784348268753e-14,
+        "finite": true,
+        "animationMoved": true,
+        "crestLocalStable": true,
+        "skirtGeometryStable": true,
+        "separationSamples": 569,
+        "minBodySeparation": 0.12893649457487286,
+        "minSwordSeparation": 0.051604104833792186
+      }
+    },
+    {
+      "name": "real movement and combat produce animated walk and strike",
+      "passed": true,
+      "detail": {
+        "actions": {
+          "guard": 7600,
+          "downed": 3386,
+          "walk": 2487,
+          "dead": 4979,
+          "strike": 222,
+          "pooled": 3208,
+          "climb": 606
+        },
+        "stages": {
+          "gather": 4008,
+          "other": 13520,
+          "advance": 3520,
+          "climb": 1334,
+          "capture": 106
+        }
+      }
+    },
+    {
+      "name": "actual battle instances captured in walk strike climb and downed",
+      "passed": true,
+      "detail": {
+        "downed": {
+          "uid": 56,
+          "side": "red",
+          "frame": 48,
+          "position": [
+            -1.5588598287392805,
+            91.16039277453591,
+            -131.01356175684623
+          ]
+        },
+        "walk": {
+          "uid": 7,
+          "side": "blue",
+          "stage": "advance",
+          "frame": 100,
+          "position": [
+            0.5223980211537392,
+            56.356210670025426,
+            -149.6522528742179
+          ]
+        },
+        "strike": {
+          "uid": 82,
+          "side": "red",
+          "frame": 317,
+          "position": [
+            2.770928975033887,
+            86.30981537865242,
+            -134.07273950347306
+          ]
+        },
+        "climb": {
+          "uid": 34,
+          "side": "blue",
+          "stage": "climb",
+          "frame": 415,
+          "position": [
+            2.4959839355951394,
+            94.9292134216179,
+            -128.59659001817383
+          ]
+        }
+      }
+    },
+    {
+      "name": "sampled real guard/walk/strike poses separate shield from body and sword",
+      "passed": true,
+      "detail": {
+        "samples": 569,
+        "body": 0.12893649457487286,
+        "sword": 0.051604104833792186
+      }
+    },
+    {
+      "name": "battle actions retain stable actor IDs and original hierarchy",
+      "passed": true
+    },
+    {
+      "name": "all three crests retain body parent and stable local transforms every battle frame",
+      "passed": true
+    },
+    {
+      "name": "approved static skirt geometry and body attachment remain stable during motion",
+      "passed": true
+    },
+    {
+      "name": "battle-wide rollback deactivates existing actors",
+      "passed": true
+    },
+    {
+      "name": "battle-wide re-enable reuses owned additions",
+      "passed": true
+    },
+    {
+      "name": "battle cannot resurrect hidden dead actors or broken shields",
+      "passed": true
+    },
+    {
+      "name": "detached battle actor releases adapter resources",
+      "passed": true
+    },
+    {
+      "name": "battle reset disposes adapters on retained external references",
+      "passed": true
+    },
+    {
+      "name": "next battle cycle creates fresh adapted actors",
+      "passed": true
+    }
+  ],
+  "metrics": {
+    "frames": 720,
+    "maxSwordGrip": 7.134372975750759e-14,
+    "maxShieldGrip": 6.653784348268753e-14,
+    "finite": true,
+    "animationMoved": true,
+    "crestLocalStable": true,
+    "skirtGeometryStable": true,
+    "separationSamples": 569,
+    "minBodySeparation": 0.12893649457487286,
+    "minSwordSeparation": 0.051604104833792186
+  },
+  "actions": {
+    "guard": 7600,
+    "downed": 3386,
+    "walk": 2487,
+    "dead": 4979,
+    "strike": 222,
+    "pooled": 3208,
+    "climb": 606
+  },
+  "stages": {
+    "gather": 4008,
+    "other": 13520,
+    "advance": 3520,
+    "climb": 1334,
+    "capture": 106
+  },
+  "captureInfo": {
+    "downed": {
+      "uid": 56,
+      "side": "red",
+      "frame": 48,
+      "position": [
+        -1.5588598287392805,
+        91.16039277453591,
+        -131.01356175684623
+      ]
+    },
+    "walk": {
+      "uid": 7,
+      "side": "blue",
+      "stage": "advance",
+      "frame": 100,
+      "position": [
+        0.5223980211537392,
+        56.356210670025426,
+        -149.6522528742179
+      ]
+    },
+    "strike": {
+      "uid": 82,
+      "side": "red",
+      "frame": 317,
+      "position": [
+        2.770928975033887,
+        86.30981537865242,
+        -134.07273950347306
+      ]
+    },
+    "climb": {
+      "uid": 34,
+      "side": "blue",
+      "stage": "climb",
+      "frame": 415,
+      "position": [
+        2.4959839355951394,
+        94.9292134216179,
+        -128.59659001817383
+      ]
+    }
+  },
+  "sourceHashes": {
+    "armor": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+    "handle": "3c558adf9be55ece0f80bbe536eee48d79fbec2bed4778e6a7c37141a27bde18"
+  },
+  "scope": "Production Web factories and real phalanx battle module in a bounded scene; not the full game world",
+  "errors": [],
+  "passed": true,
+  "runtimeHashes": {
+    "src/assets/romanSoldierEquipment.js": "3f068d57da1ff92362503e5667d74af3a114206985e7f1d9993bc72caa976cb7",
+    "src/assets/romanEquipmentData.js": "53bec664593c11b0071b18e501ba093ba051efe77ba297f39a66ea439afc5a44",
+    "src/world/romanSoldierCombatPose.js": "f219e8cda722fc23c474ad72c151c2b8f18e4b6d531680d5770f5bcdb0567398",
+    "src/world/saihojiPhalanx.js": "7029538db19ae640164caa5dd0c460e71e445d57c44c45ced4ea0d10dc2c418d"
+  }
+}

@@ -20,6 +20,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { addOutline, INK_COLOR } from "../assets/toon.js";
+import { createSwampGroundSampler } from "./swampGround.js";
 import { createMoebiusTiger } from "./moebiusTiger.js";
 import { facet } from "../assets/lowPoly.js";
 import { quatYToDir, latLonToDir, flatXZToLatLon } from "./sphereMath.js";
@@ -1290,6 +1291,7 @@ export function createMoebiusSwampZone(opts = {}) {
   // 见 messengerIsland saihoji-scree-rocks；湖沼坑缘不再放置）。
 
   // 入口缓坡石阶：8 级宽石板从草地 Y=40 一路下行没入水下 Y≈22，可直接走入
+  const walkSurfaces = [wall];
   const stepMat = toonMat(0x2f6a66, { flatShading: true });
   for (let i = 0; i < 8; i++) {
     const t = i / 7;
@@ -1303,6 +1305,7 @@ export function createMoebiusSwampZone(opts = {}) {
     step.rotation.y = -ENTRANCE_A;
     step.rotation.x = 0.16; // 微微向坑心下倾
     swampZone.add(step);
+    walkSurfaces.push(step);
   }
 
   // 注：放置区「地表草地」已按需求移除——湖沼先挖坑，不展示坑口地面，
@@ -1580,6 +1583,8 @@ export function createMoebiusSwampZone(opts = {}) {
   floor.name = "swamp-lake-floor";
   floor.position.y = SWAMP_FLOOR_Y - 0.2;
   swampZone.add(floor);
+  walkSurfaces.push(floor);
+  swampZone.userData.sampleGroundRadius = createSwampGroundSampler(swampZone, walkSurfaces);
 
   // 藻类簇：湖底散布的蓝绿发光藻团（高低起伏，营造水下植被层）
   const algaeTuftMat = toonMat(ALGAE_GLOW, { flatShading: true });

@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "scope": "Focused original-game crater ground/dialogue and Godot idle-tail integration, no full-world acceptance",
+  "webReport": "artifacts/pipeline/tiger-web-v3/world-physics-2026-09-08T20-05-25-512Z/report.json",
+  "groundFixture": "artifacts/pipeline/swamp-ground-review/fixture-review.json",
+  "godotReport": "artifacts/pipeline/godot-tiger-idle/final-01/report.json",
+  "qwenLlada": "deferred-by-user",
+  "webNormalPhysicsFrames": 160,
+  "webDialogPhases": [
+    "tiger",
+    "messenger",
+    "cool"
+  ],
+  "fullGameplayAccepted": false,
+  "foregroundGodotRefreshed": false
+}

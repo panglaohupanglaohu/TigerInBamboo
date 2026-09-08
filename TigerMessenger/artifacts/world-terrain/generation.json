@@ -1,0 +1,157 @@
+{
+  "version": 3,
+  "status": "terrain-candidate-not-world-deployed",
+  "scope": "Original scalar-profile terrain proposal on whole geodesic globe. No WFC solve or original building/transport relocation in this batch.",
+  "radius": 160,
+  "vertices": 16002,
+  "triangles": 32000,
+  "closedManifold": true,
+  "euler": 2,
+  "reorientedFaces": 0,
+  "landFraction": 0.37201599800025,
+  "latitudeBands": [
+    {
+      "min": -90,
+      "max": -45,
+      "landFraction": 0.28042105263157896
+    },
+    {
+      "min": -45,
+      "max": 0,
+      "landFraction": 0.3460441910192445
+    },
+    {
+      "min": 0,
+      "max": 45,
+      "landFraction": 0.40390070921985816
+    },
+    {
+      "min": 45,
+      "max": 90,
+      "landFraction": 0.44926315789473686
+    }
+  ],
+  "heightRange": [
+    -2.5,
+    9.4
+  ],
+  "regionalHeights": {
+    "coast-civil": 3.0999999999999996,
+    "highland-sanctum": 9.4,
+    "old-harbor": 0.7,
+    "saihoji": 0.6999999999999985,
+    "abandoned-gate": 7.89999999999994,
+    "crystal-city": 1.2509599999999998,
+    "moebius-swamp": -0.3,
+    "western-ocean": -2.5,
+    "northern-island-chain": -2.5,
+    "eastern-ocean": -2.5,
+    "southern-ocean": -2.5,
+    "leviathan-migration": -2.5,
+    "mirror-lab": -2.5,
+    "north-ecology": -0.12
+  },
+  "profileMapping": {
+    "coast-civil": "bookshop-auckland-hills",
+    "highland-sanctum": "highland-snow-massif",
+    "old-harbor": "coastal-harbor-citadel",
+    "saihoji": "saihoji-plain",
+    "abandoned-gate": "triple-gate-highland",
+    "crystal-city": "crystal-rift-canyon",
+    "moebius-swamp": "swamp-rift-lake"
+  },
+  "continentalSupport": "coastal-harbor-citadel profile, angularRadius=min(40, planningRadius*1.8+10) degrees; proposed footprint independent of original geometry",
+  "routes": {
+    "story-identity": {
+      "mode": "tram",
+      "landFraction": 0.7835051546391752,
+      "certifiedWalkable": false
+    },
+    "story-alliance": {
+      "mode": "tram",
+      "landFraction": 0.9896907216494846,
+      "certifiedWalkable": false
+    },
+    "story-reunion": {
+      "mode": "sea",
+      "landFraction": 0.7525773195876289,
+      "certifiedWalkable": false
+    },
+    "story-return-boundary": {
+      "mode": "sea",
+      "landFraction": 0.8556701030927835,
+      "certifiedWalkable": false
+    },
+    "story-enter-crystal": {
+      "mode": "tram",
+      "landFraction": 0.8041237113402062,
+      "certifiedWalkable": false
+    },
+    "story-find-tiger": {
+      "mode": "ground",
+      "landFraction": 0.845360824742268,
+      "certifiedWalkable": false
+    },
+    "story-family-escape": {
+      "mode": "bubble-pod",
+      "landFraction": 0.30927835051546393,
+      "certifiedWalkable": false
+    },
+    "harbor-citadel-path": {
+      "mode": "ground",
+      "landFraction": 1,
+      "certifiedWalkable": false
+    },
+    "harbor-east-ocean": {
+      "mode": "sea",
+      "landFraction": 0.24742268041237114,
+      "certifiedWalkable": false
+    },
+    "east-to-whale-sea": {
+      "mode": "sea",
+      "landFraction": 0,
+      "certifiedWalkable": false
+    },
+    "whale-west-ocean": {
+      "mode": "sea",
+      "landFraction": 0,
+      "certifiedWalkable": false
+    },
+    "west-crystal-port": {
+      "mode": "sea",
+      "landFraction": 0.5154639175257731,
+      "certifiedWalkable": false
+    },
+    "west-northern-isles": {
+      "mode": "sea",
+      "landFraction": 0,
+      "certifiedWalkable": false
+    },
+    "northern-coast": {
+      "mode": "sea",
+      "landFraction": 0.4329896907216495,
+      "certifiedWalkable": false
+    },
+    "east-southern-sea": {
+      "mode": "sea",
+      "landFraction": 0,
+      "certifiedWalkable": false
+    },
+    "southern-swamp": {
+      "mode": "sea",
+      "landFraction": 0.4845360824742268,
+      "certifiedWalkable": false
+    },
+    "northern-ecology-access": {
+      "mode": "ecology",
+      "landFraction": 0.9381443298969072,
+      "certifiedWalkable": false
+    },
+    "mirror-lab-optional": {
+      "mode": "debug-transfer",
+      "landFraction": 0,
+      "certifiedWalkable": false
+    }
+  },
+  "sha256": "c00b75813b9531f4f4ed36e15d1eebc2ee20ad94e3b604280e732523f48cbda8"
+}

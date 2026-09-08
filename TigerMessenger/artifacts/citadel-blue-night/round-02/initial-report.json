@@ -1,0 +1,67 @@
+{
+  "camera": {
+    "fov": 48,
+    "position": [
+      38,
+      38,
+      70
+    ],
+    "target": [
+      0,
+      20,
+      0
+    ]
+  },
+  "original_layout_preserved": true,
+  "scope": "Round 2 isolated local light-pool study; original WFC geometry unchanged, no street navigation or reflection acceptance.",
+  "street_anchors": [
+    [
+      -11.9999952316284,
+      7.79000473022461,
+      21.0280055999756
+    ],
+    [
+      12.9719953536987,
+      7.79000473022461,
+      20.0000057220459
+    ],
+    [
+      4.00000476837158,
+      7.79000473022461,
+      19.0280055999756
+    ],
+    [
+      -6.00000476837158,
+      7.79000473022461,
+      16.9719944000244
+    ],
+    [
+      0.971994996070862,
+      11.7900047302246,
+      14.0000047683716
+    ],
+    [
+      -15.9999952316284,
+      7.79000473022461,
+      13.0280046463013
+    ]
+  ],
+  "views": [
+    {
+      "draw_calls": 6757,
+      "file": "../street-off.png",
+      "local_lights": 0,
+      "primitives": 196358,
+      "shadow_lights": 1,
+      "street_lights_enabled": false
+    },
+    {
+      "draw_calls": 8602,
+      "file": "../street-on.png",
+      "local_lights": 6,
+      "primitives": 196358,
+      "shadow_lights": 7,
+      "street_lights_enabled": true
+    }
+  ]
+}

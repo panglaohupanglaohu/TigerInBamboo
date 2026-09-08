@@ -1,5 +1,7 @@
 extends Node3D
 ## Navigation planning overlay. Does not move or replace original geometry.
+var terrain_data: Dictionary = {}
+var terrain: Node3D
 var layout: Dictionary
 var camera: Camera3D
 var globe: Node3D
@@ -50,6 +52,17 @@ func _ready() -> void:
     sphere.radius=160; sphere.height=320; sphere.radial_segments=96; sphere.rings=48
     ocean.mesh=sphere; ocean.material_override=material(Color("153b51"))
     globe.add_child(ocean)
+    if ResourceLoader.exists("res://assets/terrain/world-terrain-v3.glb"):
+        terrain = load("res://assets/terrain/world-terrain-v3.glb").instantiate()
+        globe.add_child(terrain)
+        terrain_data = JSON.parse_string(FileAccess.get_file_as_string("res://data/world-terrain-v3.json"))
+        var sun := DirectionalLight3D.new()
+        sun.rotation_degrees = Vector3(-35,-25,0)
+        sun.light_energy = 1.4
+        add_child(sun)
+        env.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+        env.environment.ambient_light_color = Color("b2c9d1")
+        env.environment.ambient_light_energy = 0.6
     for lat in range(-60,61,30):
         var ring := PackedVector3Array()
         for lon in range(-180,181,3): ring.append(unit(lat,lon)*160.5)
@@ -76,10 +89,10 @@ func _ready() -> void:
         line(ring,color)
         var marker := MeshInstance3D.new()
         var dot := SphereMesh.new();dot.radius=2.0;dot.height=4.0
-        marker.mesh=dot;marker.material_override=material(color);marker.position=p*164
+        marker.mesh=dot;marker.material_override=material(color);marker.position=p*(164+maxf(0,float(terrain_data.get("regionalHeights",{}).get(region.id,0))))
         globe.add_child(marker)
         var label := Label3D.new()
-        label.text=region.label;label.position=p*170;label.font_size=32;label.pixel_size=.15
+        label.text=region.label;label.position=p*(170+maxf(0,float(terrain_data.get("regionalHeights",{}).get(region.id,0))));label.font_size=32;label.pixel_size=.15
         label.billboard=BaseMaterial3D.BILLBOARD_ENABLED
         label.modulate=color;label.no_depth_test=false
         globe.add_child(label)
@@ -89,8 +102,17 @@ func _ready() -> void:
                 var a:Dictionary=route.waypoints[i];var b:Dictionary=route.waypoints[i+1]
                 arc(unit(a.lat,a.lon),unit(b.lat,b.lon),Color("c29bdf"),165)
         elif route.from!=route.to:
-            arc(points[route.from],points[route.to],Color("e5b870") if route.storyOrder!=null else Color("497789"))
-    camera=Camera3D.new();camera.far=2000;camera.fov=50;camera.h_offset=-65
+            var terrain_route: Dictionary = terrain_data.get("routes",{}).get(route.id,{})
+            if not terrain_route.is_empty():
+                var path := PackedVector3Array()
+                for row in terrain_route.points:
+                    var v: Array = row.position
+                    path.append(Vector3(v[0],v[1],v[2]))
+                var blocked: bool = (route.mode=="sea" and float(terrain_route.landFraction)>0.15) or (route.mode in ["ground","tram"] and float(terrain_route.landFraction)<0.99)
+                line(path,Color("df8665") if blocked else Color("e5b870"))
+            else:
+                arc(points[route.from],points[route.to],Color("e5b870") if route.storyOrder!=null else Color("497789"))
+    camera=Camera3D.new();camera.near=5;camera.far=2000;camera.fov=50;camera.h_offset=-65
     add_child(camera);camera.current=true
     _ui();_camera()
 
@@ -99,21 +121,25 @@ func _ui() -> void:
     var panel:=PanelContainer.new();panel.position=Vector2(16,16);panel.custom_minimum_size=Vector2(290,0)
     canvas.add_child(panel)
     var box:=VBoxContainer.new();panel.add_child(box)
-    var title:=Label.new();title.text="全球布局 V2 · 候选方案\n完整球体 / 区域与航线";box.add_child(title)
+    var title:=Label.new();title.text="全球地势 V3 · 候选\n原地形规则 / 全球陆海与通路";box.add_child(title)
     var source:=Button.new();source.text="返回原作实际世界 · 对照";box.add_child(source)
     source.pressed.connect(func():get_tree().change_scene_to_file("res://scenes/original_world.tscn"))
+    var terrain_toggle:=CheckButton.new();terrain_toggle.text="显示地形候选";terrain_toggle.button_pressed=true;box.add_child(terrain_toggle)
+    terrain_toggle.toggled.connect(func(on:bool):
+        if terrain:terrain.visible=on
+    )
     var flip:=Button.new();flip.text="旋转至另一半球";box.add_child(flip)
-    flip.pressed.connect(func():yaw+=PI;_camera())
+    flip.pressed.connect(func():yaw+=PI;pitch=-pitch;_camera())
     var list:=ItemList.new();list.custom_minimum_size=Vector2(290,300);box.add_child(list)
     for region in layout.regions:list.add_item(region.label)
     details=Label.new();details.custom_minimum_size=Vector2(290,0);details.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-    details.text="绿：传统文明  蓝：科幻文明\n金线：主线通路  紫线：白鲸迁徙\n灰：后续内容预留\n\n当前只显示布局提案。圆圈是规划范围，\n不是已建地形，也未移动原作建筑。\n\n拖动转球 · 滚轮缩放"
+    details.text="绿：传统文明  蓝：科幻文明\n金线：主线通路  紫线：白鲸迁徙\n灰：后续内容预留\n\n已生成原地形规则的全球地势候选。\n圆圈仍是规划范围；原建筑未搬迁。\n橙红通路与陆海冲突，须修港口/桥/绕行。\n\n拖动转球 · 滚轮缩放"
     box.add_child(details)
     list.item_selected.connect(func(index:int):
         var row:Dictionary=layout.regions[index]
         var p:Vector3=points[row.id]
         yaw=atan2(p.z,p.x);pitch=asin(p.y);_camera()
-        details.text="%s\n纬度 %.0f° / 经度 %.0f°\n%s\n\n%s\n\n规划范围未做真实地形占地验证。" % [row.label,row.targetLat,row.targetLon,row.purpose,row.contentResponsibility]
+        details.text="%s\n纬度 %.0f° / 经度 %.0f°\n%s\n\n%s\n\n已采样地势；建筑占地、交通与存档迁移仍待逐区验证。" % [row.label,row.targetLat,row.targetLon,row.purpose,row.contentResponsibility]
     )
 
 func _camera() -> void:

@@ -1,3 +1,4 @@
+import { bindOriginalWorldRomanArmor } from "./world/romanWorldArmor.js";
 // =====================================================================
 //  TigerMessenger 运行时入口（薄装配）
 //  - 舞台 / 玩家 / 相机 / 输入 / 任务 / 音频 / 主循环
@@ -189,6 +190,7 @@ const sceneHandles = loadScenes(sceneIds, {
 });
 
 // 从已加载场景中取玩法依赖（平台/土坡）；若未加载 messenger 则为空
+const originalWorldRomanArmor = bindOriginalWorldRomanArmor(scene);
 const messenger = sceneHandles.find((h) => h.id === "messenger") || null;
 
 // ---------- 城头云墙（搁置中：默认不进场景，开发者菜单可开关） ----------
@@ -1563,6 +1565,26 @@ function safeRender() {
   }
 }
 
+function activeSwampTiger() {
+  let root = window.__tmSwampTiger;
+  while (root?.parent) root = root.parent;
+  if (root !== scene) window.__tmSwampTiger = findSwampTiger(scene);
+  return window.__tmSwampTiger;
+}
+let swampGroundZone = null;
+function refreshSwampGroundZone() {
+  let root = swampGroundZone;
+  while (root?.parent) root = root.parent;
+  if (root === scene) return;
+  swampGroundZone = null;
+  scene.traverse(node => {
+    if (!swampGroundZone && typeof node.userData?.sampleGroundRadius === "function") swampGroundZone = node;
+  });
+}
+function sampleSwampGround(position) {
+  return swampGroundZone?.userData?.sampleGroundRadius(position) ?? null;
+}
+
 function animate() {
   requestAnimationFrame(animate);
   timer.update();
@@ -1624,6 +1646,8 @@ function animate() {
   mapEditor.tickHighlight?.(dt);
   citadelSceneEdit?.tick(dt);
 
+  activeSwampTiger(); // Validate once per frame, never traverse the scene per physics substep.
+  refreshSwampGroundZone(); // Terrain remains valid if the tiger is removed or replaced.
   // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
   const riding =
     scoutAircraftRide?.update(dt) ||
@@ -1645,7 +1669,8 @@ function animate() {
       platforms,
       player,
       () => showToast("掉下去了… 已回到检查点"),
-      hills
+      hills,
+      sampleSwampGround
     );
     resolveAssetColliders(player.position, assetColliders);
     }
@@ -1681,6 +1706,7 @@ function animate() {
 
   // 场景模块自更新（湖、云、平台脉动等）
   updateScenes(sceneHandles, dt, t, { player, gameStarted, keys });
+  originalWorldRomanArmor.update();
   // 故事板时间线（无故事板时内部直接返回）
   storyEngine.update(dt);
 
@@ -1739,9 +1765,6 @@ function animate() {
 
   // ---------- 湖沼墨虎遇送信人：灯谜对答气泡 ----------
   {
-    if (!window.__tmSwampTiger || !window.__tmSwampTiger.parent) {
-      window.__tmSwampTiger = findSwampTiger(scene);
-    }
     updateSwampTigerDialog({
       tiger: window.__tmSwampTiger,
       player,

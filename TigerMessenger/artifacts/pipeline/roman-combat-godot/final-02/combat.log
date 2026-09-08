@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+WARNING: Expected exact original gladius role, red/blue side and parts/equipment refs; names alone are not combat identity.
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] register_actor (res://scripts/roman_combat_runtime.gd:20)
+         [1] run (res://scripts/test_roman_combat_runtime.gd:119)
+ROMAN_COMBAT {"failures":[],"maxGrip":0.0000332391427946277,"oracleCases":24,"passed":true}
