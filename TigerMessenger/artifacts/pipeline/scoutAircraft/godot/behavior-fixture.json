@@ -1,0 +1,83 @@
+{
+  "source": "TigerMessenger/src/world/planetV8/tripleGateScout.js",
+  "sourceSha256": "87ff16b29f8be69031f2750a2cc7bd2ba2d1e83c59d459a5ffba7daa3e125156",
+  "callbackSource": "\n    if (!root.userData.basePosition || !root.userData.up) return;\n    const bob = Math.sin(time * 1.7 + 0.35) * 0.32;\n    root.position.fromArray(root.userData.basePosition);\n    root.position.addScaledVector(root.userData.up, bob);\n    const pulse = 0.78 + 0.22 * Math.sin(time * 5.2);\n    beacon.material.opacity = pulse;\n    beaconLight.intensity = 0.45 + pulse * 0.35;\n    // Keep the callback explicitly dt-aware for future GPU/CPU animation gates.\n    root.userData.lastDelta = dt;",
+  "base": [
+    2,
+    3,
+    4
+  ],
+  "up": [
+    0.6,
+    0.8,
+    0
+  ],
+  "samples": [
+    {
+      "time": 0,
+      "position": [
+        2.0658363790314467,
+        3.0877818387085956,
+        4
+      ],
+      "opacity": 0.78,
+      "intensity": 0.723,
+      "lastDelta": 0.02
+    },
+    {
+      "time": 0.25,
+      "position": [
+        2.1343454864665476,
+        3.1791273152887305,
+        4
+      ],
+      "opacity": 0.9919828007917825,
+      "intensity": 0.7971939802771238,
+      "lastDelta": 0.02
+    },
+    {
+      "time": 0.75,
+      "position": [
+        2.1917180173836477,
+        3.2556240231781968,
+        4
+      ],
+      "opacity": 0.6286914449795258,
+      "intensity": 0.670042005742834,
+      "lastDelta": 0.02
+    },
+    {
+      "time": 1,
+      "position": [
+        2.1703735747776083,
+        3.227164766370144,
+        4
+      ],
+      "opacity": 0.5856399757415663,
+      "intensity": 0.6549739915095483,
+      "lastDelta": 0.02
+    },
+    {
+      "time": 2,
+      "position": [
+        1.89026022680147,
+        2.85368030240196,
+        4
+      ],
+      "opacity": 0.5978781768011562,
+      "intensity": 0.6592573618804046,
+      "lastDelta": 0.02
+    },
+    {
+      "time": 10,
+      "position": [
+        1.8084870127267365,
+        2.744649350302315,
+        4
+      ],
+      "opacity": 0.9970580702489068,
+      "intensity": 0.7989703245871174,
+      "lastDelta": 0.02
+    }
+  ]
+}

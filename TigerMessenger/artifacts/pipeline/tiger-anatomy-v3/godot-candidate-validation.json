@@ -1,0 +1,35 @@
+{
+  "failures": [],
+  "models": [
+    {
+      "candidate": false,
+      "min": [
+        -0.473502397537231,
+        0.0000000745058059692383,
+        -2.4193708896637
+      ],
+      "size": [
+        0.947004795074463,
+        2.29717946052551,
+        3.88831639289856
+      ],
+      "triangles": 1144
+    },
+    {
+      "candidate": true,
+      "min": [
+        -0.523999989032745,
+        0.0,
+        -2.37197732925415
+      ],
+      "size": [
+        1.04799997806549,
+        1.67223989963531,
+        3.903977394104
+      ],
+      "triangles": 8376
+    }
+  ],
+  "passed": true,
+  "scope": "Same-camera geometry and retained-joint pose fixture; not full roam/quest behavior"
+}

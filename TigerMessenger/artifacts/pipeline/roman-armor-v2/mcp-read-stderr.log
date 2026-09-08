@@ -1,0 +1,21 @@
+2026-09-09 01:01:02,888 - BlenderMCPServer - INFO - BlenderMCP server starting up
+2026-09-09 01:01:02,889 - BlenderMCPServer - INFO - Blender addon on disk is current (protocol 5).
+2026-09-09 01:01:02,890 - blender-mcp-telemetry - WARNING - Telemetry disabled via environment variable
+2026-09-09 01:01:02,891 - BlenderMCPServer - INFO - Connected to Blender at 127.0.0.1:9876
+2026-09-09 01:01:02,891 - BlenderMCPServer - INFO - Created new persistent connection to Blender
+2026-09-09 01:01:02,891 - BlenderMCPServer - INFO - Sending command: get_addon_info with params: None
+2026-09-09 01:01:02,891 - BlenderMCPServer - INFO - Command sent, waiting for response...
+2026-09-09 01:01:02,947 - BlenderMCPServer - INFO - Received complete response (358 bytes)
+2026-09-09 01:01:02,947 - BlenderMCPServer - INFO - Received 358 bytes of data
+2026-09-09 01:01:02,947 - BlenderMCPServer - INFO - Response parsed, status: success
+2026-09-09 01:01:02,947 - BlenderMCPServer - INFO - Blender addon up to date (protocol 5, addon [1, 6], Blender 5.2.1 LTS)
+2026-09-09 01:01:02,947 - BlenderMCPServer - INFO - Successfully connected to Blender on startup
+2026-09-09 01:01:02,950 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-09 01:01:02,952 - BlenderMCPServer - INFO - Sending command: execute_code with params: {'code': "import bpy,json\nfrom pathlib import Path\nsource='/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/supplemental/blender-r3/romanSoldier_gladius_blue.blend'\nwith bpy.data.libraries.load(source,link=False) as (src,dst): dst.scenes=src.scenes\ns=dst.scenes[0];s.name='Roman Armor Original Reference'\nbounds=[]\nfor o in s.objects:\n if o.get('three_node_id') in ['n2','n5','n7','n9','n11','n13','n15']:\n  bounds.append({'id':o.get('three_node_id'),'name':o.name,'parent':o.parent.get('three_node_id') if o.parent else None,'localMatrix':[list(row) for row in o.matrix_local],'meshBounds':[[min(v.co[k] for v in o.data.vertices),max(v.co[k] for v in o.data.vertices)]for k in range(3)]if o.type=='MESH' else None})\nr={'source':source,'scene':s.name,'boundsBlenderZUp':bounds,'currentFile':bpy.data.filepath,'dirty':bpy.data.is_dirty}\nPath('/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/roman-armor-v2/source-blender-read.json').write_text(json.dumps(r,indent=2));print(json.dumps(r))\n"}
+2026-09-09 01:01:02,952 - BlenderMCPServer - INFO - Command sent, waiting for response...
+2026-09-09 01:01:03,062 - BlenderMCPServer - INFO - Received complete response (2582 bytes)
+2026-09-09 01:01:03,062 - BlenderMCPServer - INFO - Received 2582 bytes of data
+2026-09-09 01:01:03,062 - BlenderMCPServer - INFO - Response parsed, status: success
+2026-09-09 01:01:03,065 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-09 01:01:03,071 - BlenderMCPServer - INFO - Disconnecting from Blender on shutdown
+2026-09-09 01:01:03,071 - BlenderMCPServer - INFO - BlenderMCP server shut down

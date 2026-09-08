@@ -1,0 +1,38 @@
+{
+  "id": "swamp_ribbonFish",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "f686a595d21531e5ce6a7617647df4d6a09b085d44226b9f12bfd87080005303",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n4",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n1",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.4901161193847656e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.4901161193847656e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 2,
+  "removedEditVertices": 140
+}

@@ -12,6 +12,8 @@ import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js";
 import { createDevPanel } from "./core/devPanel.js";
 import { createStoryEngine } from "./story/storyEngine.js";
+import { createRescueCampaign } from "./story/rescueCampaign.js";
+import { createFootsteps } from "./audio/footsteps.js";
 import { requestStoryboard } from "./story/storyLLM.js";
 import { createStoryboardPanel } from "./story/storyboardPanel.js";
 import { createMapEditor } from "./core/mapEditor.js";
@@ -125,6 +127,7 @@ const { scene, camera, renderer } = createStage();
 // 性能探针（F10 显隐 / F9 截图）。performance.now() 以页面导航为起点，
 // 首帧读数即完整 boot 耗时，无需额外基准。
 const perfProbe = createPerfProbe(renderer);
+const footsteps = createFootsteps();
 // 固定容量灯池：接管全部点光，常驻 lightPoolCapacity 盏代理灯追随最重要的灯位。
 // 它与 idleLightCulling 会争抢同一批灯的 visible，所以二选一。回滚：?lightPoolV1=0
 const lightPool = P.lightPoolV1 === false
@@ -229,6 +232,24 @@ distanceCulling?.recollect();
 // ---------- 玩家 / 相机 / 输入 ----------
 const { player, playerGroup, messengerMesh, holdAura } = createPlayer(scene);
 
+// Open the rescue story at its first readable landmark. Legacy panorama remains
+// available through ?spawn=legacy; the dedicated garden tour keeps its spawn.
+const entryParams = new URLSearchParams(location.search);
+const entryBookshop = messenger?.landmarks?.bookshop;
+if (entryBookshop && !entryParams.has('tour') && entryParams.get('spawn') !== 'legacy') {
+  entryBookshop.updateWorldMatrix(true, false);
+  const start = entryBookshop.localToWorld(new THREE.Vector3(0, 0, 7));
+  start.setLength((hills?.sampleRadius?.(start) ?? entryBookshop.position.length()) + 0.15);
+  resolveAssetColliders(start, assetColliders);
+  player.position.copy(start);
+  player.checkpoint.copy(start);
+  const up = start.clone().normalize();
+  player.forward.copy(entryBookshop.position).sub(start);
+  player.forward.addScaledVector(up, -player.forward.dot(up)).normalize();
+  player.facing.copy(player.forward);
+  player.groundR = start.length() - 0.15;
+}
+
 // 庭园视觉验收/漫游入口：?tour=saihoji 从第一景开始，不影响默认出生点。
 if (new URLSearchParams(location.search).get("tour") === "saihoji") {
   const saihoji = sceneHandles.find((handle) => handle.id === "saihoji");
@@ -247,6 +268,11 @@ if (new URLSearchParams(location.search).get("tour") === "saihoji") {
   }
 }
 const cameraRig = createCameraRig(camera, player);
+// Give the bookshop entrance breathing room on a fresh default camera.
+if (entryBookshop && !entryParams.has('tour') && entryParams.get('spawn') !== 'legacy' && P.camDist === 7.5) {
+  P.camDist = 14;
+  cameraRig.setDist(14);
+}
 
 let gameStarted = false;
 const keys = createInput({
@@ -1134,6 +1160,7 @@ const citadelEditorPanel = messenger?.landmarks?.odysseyCitadel
         } else {
           stats = rebuildCitadelTown(citadel, layout);
         }
+        if (stats?.ok === false) return stats; // 候选失败：旧场景与派生缓存保持原状。
         citadelObstacle = null; // 建筑体量变了，净空区下帧重算
         citadelSupportCache.clear(); // 包围盒可能变，支撑缓存失效
         lightingDirector.invalidateShadowFit(); // 建筑 dirty → V5 阴影重拟合
@@ -1471,6 +1498,12 @@ const foxNpc = createFoxNpc({
   getFoxTramSeatLocal: () => tramRide.getFoxSeatLocal?.() ?? null,
 });
 
+const rescueCampaign = createRescueCampaign({
+  scene, player, camera, messenger, worldLandmarks, fox: foxAli,
+  platforms, hills, colliders: assetColliders,
+  isStarted: () => gameStarted, isRiding: isPlayerPilotingVehicle, toast: showToast,
+});
+
 // ---------- 开场 ----------
 elStartBtn.addEventListener("click", () => {
   gameStarted = true;
@@ -1486,7 +1519,7 @@ elStartBtn.addEventListener("click", () => {
   showToast(
     past > 0
       ? `信袋里已有 ${past} 封往事 · ${sceneHint}`
-      : `去找发光的寄件人接信吧 · ${sceneHint}`
+      : messenger ? '在书店按 R 接过家书，出发寻找红狐与虎虎' : `去找发光的寄件人接信吧 · ${sceneHint}`
   );
   quest.updateQuestUI();
   touchControls.onGameStart?.();
@@ -1600,18 +1633,24 @@ function animate() {
     tramRide.update(dt) ||
     airshipRide.update(dt);
   if (!riding) {
-    updatePlayerControl({ player, keys, camera, dt, gameStarted, onJump: sfxJump });
+    // Bound travel per physics step: thin obstacles must survive a slow frame.
+    const physicsSteps = Math.max(1, Math.ceil(dt / (1 / 120)));
+    const physicsDt = dt / physicsSteps;
+    for (let step = 0; step < physicsSteps; step++) {
+    updatePlayerControl({ player, keys, camera, dt: physicsDt, gameStarted, onJump: sfxJump });
     resolveCollisions(
       player.position,
       player.velocity,
-      dt,
+      physicsDt,
       platforms,
       player,
       () => showToast("掉下去了… 已回到检查点"),
       hills
     );
     resolveAssetColliders(player.position, assetColliders);
+    }
   }
+  footsteps.update(dt, player, gameStarted && !riding);
 
   // 电车搭乘 BGM：车上必须保持电车曲。峡谷曲只记 wanted，声道不抢。
   {
@@ -1665,6 +1704,7 @@ function animate() {
   elderMusic.update(dt, t);
   // 阿狸在任务气泡之后更新，避免被 hideBubble 冲掉
   foxNpc.update(dt, t);
+  rescueCampaign.update(dt);
   quest.updateCompass();
   quest.animateMarkers(t);
   minimap?.update();
@@ -1835,6 +1875,7 @@ window.__tm = {
   fleet: fleetSelfCheck, // 舰队自检：__tm.fleet()——见上方读法
   player,
   quest,
+  rescueCampaign,
   cameraRig,
   camera, // 调试/验收截图用
   renderer, // 性能探针读取 draw calls / triangles

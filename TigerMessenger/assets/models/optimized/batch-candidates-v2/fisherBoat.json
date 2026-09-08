@@ -1,0 +1,2780 @@
+{
+  "id": "fisherBoat",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "cc82906a48e1e82025b84242dd4870889a98256eb2e6fe9ddc5068bc97d23010",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "crew-crestFeathers",
+      "result": {
+        "verticesBefore": 720,
+        "verticesAfter": 150,
+        "normalError": 7.748603820800781e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-legL",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.1241396720151897e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "hull-prow",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 9,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n110",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n142",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n175",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n102",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n12",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n150",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n182",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n232",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.519603405446105e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n246",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n275",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n284",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n292",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n336",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n47",
+      "result": {
+        "verticesBefore": 120,
+        "verticesAfter": 24,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.005",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.012",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n58",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n236",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n296",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n50",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 1.8401969725800882e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.016",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n289",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 7.608263103975332e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n37",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.009",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n271",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n61",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.32816085240961e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.020",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n40",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n162",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n263",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n33",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n82",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n132",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n25",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 1.8401969725800882e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n309",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.020",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.024",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n44",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n170",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n267",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n333",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n90",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n140",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n253",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n312",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.024",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 2.6863414603894853e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n192",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "night-lantern-mast",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n279",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n7",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.113892432793364e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n302",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.017",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n22",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.002",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n282",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n326",
+      "result": {
+        "verticesBefore": 48,
+        "verticesAfter": 12,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n77",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n24",
+      "result": {
+        "verticesBefore": 120,
+        "verticesAfter": 24,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n269",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.002",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n257",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n316",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n323",
+      "result": {
+        "verticesBefore": 48,
+        "verticesAfter": 12,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.013",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n243",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n272",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.006",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-crestStems",
+      "result": {
+        "verticesBefore": 540,
+        "verticesAfter": 120,
+        "normalError": 5.164463073015213e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-skirt",
+      "result": {
+        "verticesBefore": 108,
+        "verticesAfter": 20,
+        "normalError": 2.8866349310874284e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "mast",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 9.41199959925143e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n112",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n145",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n177",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n105",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n120",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n152",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n185",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n260",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n32",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.113892432793364e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n327",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n233",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n293",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n48",
+      "result": {
+        "verticesBefore": 120,
+        "verticesAfter": 24,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n55",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n286",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 9.41199959925143e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n34",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.006",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.013",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n59",
+      "result": {
+        "verticesBefore": 360,
+        "verticesAfter": 67,
+        "normalError": 1.5497207641601562e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n237",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n297",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n52",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 9,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.017",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n187",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n29",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n38",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.010",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n127",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n247",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n306",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.021",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n41",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n165",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n264",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n330",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n85",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n135",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n250",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n31",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.113892432793364e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.021",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.025",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n45",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n172",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n268",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n334",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n92",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n276",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n62",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.32816085240961e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.025",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n30",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 16,
+        "normalError": 5.622314063202793e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "night-lantern-stern",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n28",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 2.6863414603894853e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n70",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n303",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n23",
+      "result": {
+        "verticesBefore": 120,
+        "verticesAfter": 24,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.003",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n254",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n313",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n320",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.010",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n240",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n27",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 2.6863414603894853e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.003",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n258",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n317",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n324",
+      "result": {
+        "verticesBefore": 48,
+        "verticesAfter": 12,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.014",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n244",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n273",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.275957614183426e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.007",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-head",
+      "result": {
+        "verticesBefore": 108,
+        "verticesAfter": 20,
+        "normalError": 7.152557373046875e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-armL",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.242977062560385e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-torso",
+      "result": {
+        "verticesBefore": 108,
+        "verticesAfter": 20,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n10",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n115",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n147",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n18",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n107",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n122",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n155",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n56",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n234",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n294",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n49",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 1.8401969725800882e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.014",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n287",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.1920928955078125e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n35",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.007",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n238",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n298",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n53",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 3.9170022086863266e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.018",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n19",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n290",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 7.608263103975332e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n39",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.011",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n16",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n261",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n328",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.113892432793364e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n13",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n248",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n307",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.018",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.022",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.015",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n42",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n167",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n265",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n331",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n87",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n137",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n251",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n310",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.022",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.008",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n46",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n95",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n277",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 8.278423021994062e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n65",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n300",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n20",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n280",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n72",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n304",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n231",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.519603405446105e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "sail",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n255",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n314",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n321",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.011",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n241",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n270",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.004",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n259",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n318",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n325",
+      "result": {
+        "verticesBefore": 48,
+        "verticesAfter": 12,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-crest",
+      "result": {
+        "verticesBefore": 120,
+        "verticesAfter": 22,
+        "normalError": 1.5497207641601562e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "crew-helmet",
+      "result": {
+        "verticesBefore": 216,
+        "verticesAfter": 48,
+        "normalError": 2.794977156383993e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "hull-low",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 16,
+        "normalError": 5.622314063202793e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n100",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n117",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n15",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n180",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n11",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n125",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n157",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n245",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n283",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n335",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.004",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.005",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n57",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n235",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n26",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 1.8401969725800882e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n295",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n5",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n288",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.1920928955078125e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n36",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.008",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.015",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n60",
+      "result": {
+        "verticesBefore": 360,
+        "verticesAfter": 67,
+        "normalError": 1.5497207641601562e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n239",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n299",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n319",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n54",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 3.9170022086863266e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 2.6863414603894853e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.019",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n160",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n262",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n329",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n80",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n130",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n249",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n308",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.019",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.023",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n43",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n17",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n266",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n332",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6553050247457577e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n9",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n14",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n252",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n311",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.023",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.001",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.016",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n190",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n97",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n278",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 8.278423021994062e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n67",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n301",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.009",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n21",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-blade.001",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.105427357601002e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n274",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 7.275957614183426e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n281",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n75",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n305",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 1.5300789527827874e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n256",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n315",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n322",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2342873390025488e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "oar-shaft.012",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 14,
+        "normalError": 7.283681441094814e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n242",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 273,
+  "removedEditVertices": 11252
+}

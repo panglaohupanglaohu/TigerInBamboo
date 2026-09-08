@@ -1,0 +1,94 @@
+{
+  "id": "swamp_bird",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "05ea708fbcdddd7f13d82560d811610ebcbee123f2b37b67ac469367e3b18375",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n5",
+      "result": {
+        "verticesBefore": 6,
+        "verticesAfter": 4,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 1.998470463843259e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": {
+        "verticesBefore": 6,
+        "verticesAfter": 4,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 6,
+        "verticesAfter": 4,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 1.998470463843259e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 6,
+        "verticesAfter": 4,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n7",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 7,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 7,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n9",
+      "result": "already has no exact duplicate positions"
+    }
+  ],
+  "changedMeshes": 8,
+  "removedEditVertices": 86
+}

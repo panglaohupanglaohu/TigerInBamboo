@@ -1,0 +1,30 @@
+{
+  "id": "bridge",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "b969d0d526f86e506ce437f62a347535f0d5aab2d51350872e3ae576946c1c11",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n2",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n4",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n5",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n3",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

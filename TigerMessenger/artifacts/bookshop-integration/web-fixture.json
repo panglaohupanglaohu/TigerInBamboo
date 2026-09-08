@@ -1,0 +1,112 @@
+{
+  "applied": true,
+  "windows": [
+    {
+      "id": "n15",
+      "position": [
+        -1.60000002,
+        1.62,
+        2.58000016
+      ],
+      "visible": true
+    },
+    {
+      "id": "n17",
+      "position": [
+        -1.60000002,
+        2.81999993,
+        2.58000016
+      ],
+      "visible": true
+    },
+    {
+      "id": "n19",
+      "position": [
+        -1.60000002,
+        4.01999998,
+        2.58000016
+      ],
+      "visible": true
+    },
+    {
+      "id": "n21",
+      "position": [
+        -0.86000001,
+        2.81999993,
+        2.2900002
+      ],
+      "visible": true
+    },
+    {
+      "id": "n23",
+      "position": [
+        -2.33999991,
+        2.81999993,
+        2.2900002
+      ],
+      "visible": true
+    },
+    {
+      "id": "n27",
+      "position": [
+        1.60000002,
+        1.62,
+        2.58000016
+      ],
+      "visible": true
+    },
+    {
+      "id": "n29",
+      "position": [
+        1.60000002,
+        2.81999993,
+        2.58000016
+      ],
+      "visible": true
+    },
+    {
+      "id": "n31",
+      "position": [
+        1.60000002,
+        4.01999998,
+        2.58000016
+      ],
+      "visible": true
+    },
+    {
+      "id": "n33",
+      "position": [
+        0.86000001,
+        2.81999993,
+        2.2900002
+      ],
+      "visible": true
+    },
+    {
+      "id": "n35",
+      "position": [
+        2.33999991,
+        2.81999993,
+        2.2900002
+      ],
+      "visible": true
+    }
+  ],
+  "idempotent": true,
+  "editableSign": true,
+  "terrainVariantPreserved": true,
+  "atomicFallback": true,
+  "metadata": {
+    "version": 3,
+    "source": "assets/models/optimized/bookshop-art-v3.blend",
+    "sha256": "e2b65549a56af4f37ca3d1f9f0b7cdbebf223fbebc6cadd8d202fcad1956b3a5",
+    "joineryMembers": 50
+  },
+  "stats": {
+    "frame": 3,
+    "calls": 58,
+    "triangles": 1454,
+    "points": 0,
+    "lines": 0
+  }
+}

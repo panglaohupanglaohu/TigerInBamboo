@@ -1,0 +1,314 @@
+{
+  "id": "bubblePod",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "0e48add64363234549d51f3db1e67238a59692117f86d68befce270af3467e01",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "cockpit-console",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "bottom-ring",
+      "result": {
+        "verticesBefore": 720,
+        "verticesAfter": 129,
+        "normalError": 8.434057235717773e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "bubble-highlight-ring",
+      "result": {
+        "verticesBefore": 175,
+        "verticesAfter": 153,
+        "normalError": 5.599856376647949e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "bubble-shell",
+      "result": {
+        "verticesBefore": 648,
+        "verticesAfter": 118,
+        "normalError": 7.450580596923828e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "bubble-highlight-arc",
+      "result": "preserved: line/point geometry"
+    },
+    {
+      "mesh": "cockpit-panel",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "control-grip--1",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 2.980232238769531e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "control-grip-1",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 2.980232238769531e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "control-stick--1",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 8.7080269395301e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "control-stick-1",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 8.7080269395301e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n19",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 8.7080269395301e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 648,
+        "verticesAfter": 118,
+        "normalError": 7.450580596923828e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "equatorial-ring",
+      "result": {
+        "verticesBefore": 1344,
+        "verticesAfter": 235,
+        "normalError": 8.702278137207031e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n21",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 2.980232238769531e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n10",
+      "result": {
+        "verticesBefore": 720,
+        "verticesAfter": 129,
+        "normalError": 8.434057235717773e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n23",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 8.7080269395301e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n12",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.8162403847554742e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n14",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n25",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 2.980232238769531e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n16",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 1344,
+        "verticesAfter": 235,
+        "normalError": 8.702278137207031e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n27",
+      "result": {
+        "verticesBefore": 120,
+        "verticesAfter": 24,
+        "normalError": 3.5762786865234375e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n29",
+      "result": {
+        "verticesBefore": 420,
+        "verticesAfter": 78,
+        "normalError": 4.172325134277344e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "pilot-body",
+      "result": {
+        "verticesBefore": 120,
+        "verticesAfter": 24,
+        "normalError": 3.5762786865234375e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n31",
+      "result": {
+        "verticesBefore": 450,
+        "verticesAfter": 89,
+        "normalError": 2.115964889526367e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "pilot-helmet",
+      "result": {
+        "verticesBefore": 420,
+        "verticesAfter": 78,
+        "normalError": 4.172325134277344e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "pilot-seat-back",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "pilot-seat-base",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.8162403847554742e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "pilot-visor",
+      "result": {
+        "verticesBefore": 450,
+        "verticesAfter": 89,
+        "normalError": 2.115964889526367e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 540,
+        "verticesAfter": 105,
+        "normalError": 8.344650268554688e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "purple-lower-cabin",
+      "result": {
+        "verticesBefore": 540,
+        "verticesAfter": 105,
+        "normalError": 8.344650268554688e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 30,
+  "removedEditVertices": 8206
+}

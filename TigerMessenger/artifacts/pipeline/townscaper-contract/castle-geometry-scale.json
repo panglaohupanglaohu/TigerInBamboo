@@ -1,0 +1,18 @@
+{
+  "source": "Original HIGHLAND_TOWNSCAPER_TOWN_SPEC, complete mountain-valley factory, WFC seed37 old graph vs shared-edge graph",
+  "geometryMatches": true,
+  "triangles": 92424,
+  "creationMs": 771.6000000238419,
+  "topology": "legacy-faces",
+  "wfc": {
+    "enabled": true,
+    "ok": true,
+    "ms": 21,
+    "fromCache": false,
+    "unresolved": 0,
+    "hash": "5a8616a8",
+    "topology": "legacy-faces",
+    "topologyHash": "face-layer-v1:1b5fbb95"
+  },
+  "scope": "town-layer positions and winding at 1e-4 tolerance; not pixel/material/gameplay acceptance"
+}

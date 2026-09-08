@@ -1,0 +1,1870 @@
+{
+  "schema": "TigerMessenger.tiger-anatomy-v3.audit",
+  "targetImage": "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/codex-clipboard-ac3c36cf-cbae-4f61-804d-46bcb3ce3efa.png",
+  "sourceFactory": "src/assets/characters/moebiusTiger.js",
+  "runtime": "src/world/moebiusTiger.js",
+  "sourceGlb": "godot/assets/originals/moebiusTiger.glb",
+  "sha256": "cb4ec830188dd77022b81a9f9aed0b7354e1a29136e691c8d6545d3f2898f57a",
+  "axes": {
+    "up": "+Y",
+    "forward": "+Z",
+    "tail": "-Z"
+  },
+  "rootScale": 0.4,
+  "measurementsFrame": "root local BEFORE its 0.4 scale; snapshot visible mesh vertices, outlines excluded",
+  "measurements": {
+    "torso": {
+      "min": [
+        -1.0,
+        0.8392000001668932,
+        -2.6629583120346068
+      ],
+      "max": [
+        1.0,
+        2.439200000166893,
+        2.6629583120346068
+      ],
+      "size": [
+        2.0,
+        1.6,
+        5.3259166240692135
+      ]
+    },
+    "trunk": {
+      "min": [
+        -1.0,
+        0.8392000001668932,
+        -3.0659999907016755
+      ],
+      "max": [
+        1.0,
+        2.439200000166893,
+        2.6629583120346068
+      ],
+      "size": [
+        2.0,
+        1.6,
+        5.728958302736283
+      ]
+    },
+    "head": {
+      "min": [
+        -0.9944264602661133,
+        1.4392000001668932,
+        1.3446694469451903
+      ],
+      "max": [
+        0.9344552206993103,
+        3.4114061426333446,
+        3.6399999982118603
+      ],
+      "size": [
+        1.9288816809654237,
+        1.9722061424664514,
+        2.29533055126667
+      ]
+    },
+    "skull": {
+      "min": [
+        -0.9944264602661133,
+        1.4392000001668932,
+        1.3446694469451903
+      ],
+      "max": [
+        0.9344552206993103,
+        3.279200000166893,
+        3.4953305530548096
+      ],
+      "size": [
+        1.9288816809654237,
+        1.8399999999999999,
+        2.1506611061096192
+      ]
+    },
+    "pawFront": {
+      "min": [
+        -1.1437559254964191,
+        0.019199993014335837,
+        1.226393210887909
+      ],
+      "max": [
+        -0.38291074117024737,
+        0.3792000073194506,
+        1.9500000059604645
+      ],
+      "size": [
+        0.7608451843261718,
+        0.36000001430511475,
+        0.7236067950725555
+      ]
+    },
+    "frontLeg": {
+      "min": [
+        -1.1437559254964191,
+        5.551115123125783e-17,
+        1.226393210887909
+      ],
+      "max": [
+        -0.38291074117024737,
+        1.5592000240087511,
+        1.9500000059604645
+      ],
+      "size": [
+        0.7608451843261718,
+        1.5592000240087511,
+        0.7236067950725555
+      ]
+    },
+    "tail": {
+      "min": [
+        -0.2743533234511103,
+        1.7626838995995209,
+        -5.989287329247125
+      ],
+      "max": [
+        0.2743533234511103,
+        5.679530315758068,
+        -2.3215649640127545
+      ],
+      "size": [
+        0.5487066469022206,
+        3.9168464161585472,
+        3.6677223652343702
+      ]
+    },
+    "all": {
+      "min": [
+        -1.1837559254964192,
+        5.551115123125783e-17,
+        -5.989287329247125
+      ],
+      "max": [
+        1.1837559254964192,
+        5.679530315758068,
+        3.6399999982118603
+      ],
+      "size": [
+        2.3675118509928383,
+        5.679530315758068,
+        9.629287327458986
+      ]
+    }
+  },
+  "roles": {
+    "root": "n0",
+    "body": "n1",
+    "torso": "n2",
+    "haunch": "n4",
+    "chest": "n6",
+    "head": "n8",
+    "skull": "n9",
+    "cheeks": [
+      "n11",
+      "n13"
+    ],
+    "ears": [
+      "n15",
+      "n17"
+    ],
+    "eyes": [
+      "n19",
+      "n21"
+    ],
+    "muzzle": "n23",
+    "nose": "n25",
+    "tailRoot": "n27",
+    "tailJoints": [
+      "n28",
+      "n31",
+      "n34",
+      "n37",
+      "n40",
+      "n43",
+      "n46",
+      "n49"
+    ],
+    "legs": [
+      "n52",
+      "n59",
+      "n66",
+      "n73"
+    ],
+    "upperLegMeshes": [
+      "n53",
+      "n60",
+      "n67",
+      "n74"
+    ],
+    "pawMeshes": [
+      "n55",
+      "n62",
+      "n69",
+      "n76"
+    ],
+    "padMeshes": [
+      "n57",
+      "n64",
+      "n71",
+      "n78"
+    ]
+  },
+  "nodes": {
+    "n0": {
+      "name": "moebius-cyber-ink-tiger",
+      "parentSourceId": null,
+      "snapshotLocalMatrixColumnMajor": [
+        0.4,
+        0,
+        0,
+        0,
+        0,
+        0.4,
+        0,
+        0,
+        0,
+        0,
+        0.4,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbNodeIndex": 49,
+      "glbParentSourceId": null,
+      "glbTranslation": [
+        0,
+        0,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        0.4000000059604645,
+        0.4000000059604645,
+        0.4000000059604645
+      ]
+    },
+    "n1": {
+      "name": "tiger-body",
+      "parentSourceId": "n0",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1.6392000001668932,
+        0,
+        1
+      ],
+      "glbNodeIndex": 48,
+      "glbParentSourceId": "n0",
+      "glbTranslation": [
+        0,
+        1.63919997215271,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n2": {
+      "name": "tiger-torso",
+      "parentSourceId": "n1",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.7999999999999999,
+        0,
+        0,
+        0,
+        0,
+        2.8,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbNodeIndex": 47,
+      "glbParentSourceId": "n1",
+      "glbTranslation": [
+        0,
+        0,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        0.8000000715255737,
+        2.799999952316284
+      ]
+    },
+    "n4": {
+      "name": "",
+      "parentSourceId": "n1",
+      "snapshotLocalMatrixColumnMajor": [
+        0.8333333333333333,
+        0,
+        0,
+        0,
+        0,
+        0.7,
+        0,
+        0,
+        0,
+        0,
+        1.3,
+        0,
+        0,
+        0.05,
+        -2,
+        1
+      ],
+      "glbNodeIndex": 16,
+      "glbParentSourceId": "n1",
+      "glbTranslation": [
+        0,
+        0.04999983310699463,
+        -2
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        0.8333333730697632,
+        0.699999988079071,
+        1.2999999523162842
+      ]
+    },
+    "n6": {
+      "name": "",
+      "parentSourceId": "n1",
+      "snapshotLocalMatrixColumnMajor": [
+        0.7666666666666666,
+        0,
+        0,
+        0,
+        0,
+        0.6666666666666666,
+        0,
+        0,
+        0,
+        0,
+        1.1,
+        0,
+        0,
+        0.08,
+        1.65,
+        1
+      ],
+      "glbNodeIndex": 17,
+      "glbParentSourceId": "n1",
+      "glbTranslation": [
+        0,
+        0.08000016212463379,
+        1.649999976158142
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        0.7666666507720947,
+        0.6666666865348816,
+        1.100000023841858
+      ]
+    },
+    "n8": {
+      "name": "tiger-head",
+      "parentSourceId": "n1",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0.72,
+        2.42,
+        1
+      ],
+      "glbNodeIndex": 46,
+      "glbParentSourceId": "n1",
+      "glbTranslation": [
+        0,
+        0.7200000286102295,
+        2.4200003147125244
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n9": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        1.02,
+        0,
+        0,
+        0,
+        0,
+        0.92,
+        0,
+        0,
+        0,
+        0,
+        1.12,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbNodeIndex": 35,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        0,
+        0,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1.0199999809265137,
+        0.9200000166893005,
+        1.1200000047683716
+      ]
+    },
+    "n11": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        0.6318594445610684,
+        0,
+        0.34518638779502614,
+        0,
+        0,
+        0.62,
+        0,
+        0,
+        -0.40751170781357254,
+        0,
+        0.7459451776068168,
+        0,
+        -0.42,
+        -0.28,
+        0.62,
+        1
+      ],
+      "glbNodeIndex": 36,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        -0.41999998688697815,
+        -0.2799997329711914,
+        0.6200001239776611
+      ],
+      "glbRotationQuaternion": [
+        0,
+        -0.24740397930145264,
+        0,
+        0.9689124226570129
+      ],
+      "glbScale": [
+        0.7200000286102295,
+        0.6200000047683716,
+        0.8500000238418579
+      ]
+    },
+    "n13": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        0.6318594445610684,
+        0,
+        -0.34518638779502614,
+        0,
+        0,
+        0.62,
+        0,
+        0,
+        0.40751170781357254,
+        0,
+        0.7459451776068168,
+        0,
+        0.42,
+        -0.28,
+        0.62,
+        1
+      ],
+      "glbNodeIndex": 37,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        0.41999998688697815,
+        -0.2799997329711914,
+        0.6200001239776611
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0.24740397930145264,
+        0,
+        0.9689124226570129
+      ],
+      "glbScale": [
+        0.7200000286102295,
+        0.6200000047683716,
+        0.8500000238418579
+      ]
+    },
+    "n15": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        0.9393727128473789,
+        0.3390474346996321,
+        -0.051242007975434455,
+        0,
+        -0.34289780745545134,
+        0.9288245698658072,
+        -0.1403781039045709,
+        0,
+        0,
+        0.14943813247359922,
+        0.9887710779360422,
+        0,
+        -0.55,
+        0.82,
+        0.05,
+        1
+      ],
+      "glbNodeIndex": 38,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        -0.550000011920929,
+        0.820000171661377,
+        0.05000019073486328
+      ],
+      "glbRotationQuaternion": [
+        -0.07378527522087097,
+        0.013045883737504482,
+        0.17361867427825928,
+        0.9819583296775818
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n17": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        0.9393727128473789,
+        -0.3390474346996321,
+        0.051242007975434455,
+        0,
+        0.34289780745545134,
+        0.9288245698658072,
+        -0.1403781039045709,
+        0,
+        0,
+        0.14943813247359922,
+        0.9887710779360422,
+        0,
+        0.55,
+        0.82,
+        0.05,
+        1
+      ],
+      "glbNodeIndex": 39,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        0.550000011920929,
+        0.820000171661377,
+        0.05000019073486328
+      ],
+      "glbRotationQuaternion": [
+        -0.07378527522087097,
+        -0.013045883737504482,
+        -0.17361867427825928,
+        0.9819583296775818
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n19": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        0.9492354180824408,
+        -0.31456656061611776,
+        2.7755575615628914e-17,
+        0,
+        2.7755575615628914e-17,
+        2.220446049250313e-16,
+        0.9999999999999999,
+        0,
+        -0.31456656061611776,
+        -0.9492354180824408,
+        2.220446049250313e-16,
+        0,
+        -0.42,
+        0.14,
+        0.98,
+        1
+      ],
+      "glbNodeIndex": 40,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        -0.41999998688697815,
+        0.1400003433227539,
+        0.9800002574920654
+      ],
+      "glbRotationQuaternion": [
+        0.6980751156806946,
+        -0.11265500634908676,
+        -0.11265496909618378,
+        0.6980751156806946
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n21": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        0.9492354180824408,
+        0.31456656061611776,
+        -2.7755575615628914e-17,
+        0,
+        -2.7755575615628914e-17,
+        2.220446049250313e-16,
+        0.9999999999999999,
+        0,
+        0.31456656061611776,
+        -0.9492354180824408,
+        2.220446049250313e-16,
+        0,
+        0.42,
+        0.14,
+        0.98,
+        1
+      ],
+      "glbNodeIndex": 42,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        0.41999998688697815,
+        0.1400003433227539,
+        0.9800002574920654
+      ],
+      "glbRotationQuaternion": [
+        0.6980751156806946,
+        0.11265500634908676,
+        0.11265496909618378,
+        0.6980751156806946
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n23": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        0.38,
+        0,
+        0,
+        0,
+        0,
+        0.27685590182209185,
+        0.041842677092607784,
+        0,
+        0,
+        -0.017932575896831907,
+        0.11865252935232506,
+        0,
+        0,
+        -0.34,
+        1.02,
+        1
+      ],
+      "glbNodeIndex": 44,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        0,
+        -0.3399999141693115,
+        1.0199999809265137
+      ],
+      "glbRotationQuaternion": [
+        0.07492971420288086,
+        0,
+        0,
+        0.9971888065338135
+      ],
+      "glbScale": [
+        0.3799999952316284,
+        0.2800000011920929,
+        0.12000000476837158
+      ]
+    },
+    "n25": {
+      "name": "",
+      "parentSourceId": "n8",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2.220446049250313e-16,
+        1,
+        0,
+        0,
+        -1,
+        2.220446049250313e-16,
+        0,
+        0,
+        -0.16,
+        1.14,
+        1
+      ],
+      "glbNodeIndex": 45,
+      "glbParentSourceId": "n8",
+      "glbTranslation": [
+        0,
+        -0.15999984741210938,
+        1.1400001049041748
+      ],
+      "glbRotationQuaternion": [
+        0.7071068286895752,
+        0,
+        0,
+        0.7071068286895752
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n27": {
+      "name": "tiger-brush-tail-root",
+      "parentSourceId": "n1",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.7071067811865475,
+        -0.7071067811865476,
+        0,
+        0,
+        0.7071067811865476,
+        0.7071067811865475,
+        0,
+        0,
+        0.15,
+        -2.35,
+        1
+      ],
+      "glbNodeIndex": 34,
+      "glbParentSourceId": "n1",
+      "glbTranslation": [
+        0,
+        0.14999985694885254,
+        -2.3499999046325684
+      ],
+      "glbRotationQuaternion": [
+        -0.3826834261417389,
+        0,
+        0,
+        0.9238795638084412
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n28": {
+      "name": "TigerTailBase",
+      "parentSourceId": "n27",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9993908270190958,
+        0.03489949670250097,
+        0,
+        0,
+        -0.03489949670250097,
+        0.9993908270190958,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbNodeIndex": 33,
+      "glbParentSourceId": "n27",
+      "glbTranslation": [
+        0,
+        0,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0.01745239458978176,
+        0,
+        0,
+        0.9998477101325989
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n31": {
+      "name": "TigerTail-2",
+      "parentSourceId": "n28",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9998476951563913,
+        0.01745240643728351,
+        0,
+        0,
+        -0.01745240643728351,
+        0.9998476951563913,
+        0,
+        0,
+        0.42336000000000007,
+        0,
+        1
+      ],
+      "glbNodeIndex": 32,
+      "glbParentSourceId": "n28",
+      "glbTranslation": [
+        0,
+        0.423359751701355,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0.0087265120819211,
+        0,
+        0,
+        0.9999619722366333
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n34": {
+      "name": "TigerTail-3",
+      "parentSourceId": "n31",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9998476951563913,
+        0.01745240643728351,
+        0,
+        0,
+        -0.01745240643728351,
+        0.9998476951563913,
+        0,
+        0,
+        0.5292,
+        0,
+        1
+      ],
+      "glbNodeIndex": 31,
+      "glbParentSourceId": "n31",
+      "glbTranslation": [
+        0,
+        0.5292001962661743,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0.008726556785404682,
+        0,
+        0,
+        0.9999619126319885
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n37": {
+      "name": "TigerTailMid",
+      "parentSourceId": "n34",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0.63504,
+        0,
+        1
+      ],
+      "glbNodeIndex": 30,
+      "glbParentSourceId": "n34",
+      "glbTranslation": [
+        0,
+        0.6350398063659668,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n40": {
+      "name": "TigerTail-5",
+      "parentSourceId": "n37",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9998476951563913,
+        -0.01745240643728351,
+        0,
+        0,
+        0.01745240643728351,
+        0.9998476951563913,
+        0,
+        0,
+        0.7408800000000001,
+        0,
+        1
+      ],
+      "glbNodeIndex": 29,
+      "glbParentSourceId": "n37",
+      "glbTranslation": [
+        0,
+        0.7408797740936279,
+        0
+      ],
+      "glbRotationQuaternion": [
+        -0.008726556785404682,
+        0,
+        0,
+        0.9999619722366333
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n43": {
+      "name": "TigerTail-6",
+      "parentSourceId": "n40",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9998476951563913,
+        -0.01745240643728351,
+        0,
+        0,
+        0.01745240643728351,
+        0.9998476951563913,
+        0,
+        0,
+        0.7408800000000001,
+        0,
+        1
+      ],
+      "glbNodeIndex": 28,
+      "glbParentSourceId": "n40",
+      "glbTranslation": [
+        0,
+        0.740880012512207,
+        0
+      ],
+      "glbRotationQuaternion": [
+        -0.008726526983082294,
+        0,
+        0,
+        0.9999619722366333
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n46": {
+      "name": "TigerTail-7",
+      "parentSourceId": "n43",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9993908270190958,
+        -0.03489949670250097,
+        0,
+        0,
+        0.03489949670250097,
+        0.9993908270190958,
+        0,
+        0,
+        0.7408800000000001,
+        0,
+        1
+      ],
+      "glbNodeIndex": 27,
+      "glbParentSourceId": "n43",
+      "glbTranslation": [
+        0,
+        0.740880012512207,
+        0
+      ],
+      "glbRotationQuaternion": [
+        -0.017452441155910492,
+        0,
+        0,
+        0.9998477101325989
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n49": {
+      "name": "TigerTailTip",
+      "parentSourceId": "n46",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9993908270190958,
+        -0.03489949670250097,
+        0,
+        0,
+        0.03489949670250097,
+        0.9993908270190958,
+        0,
+        0,
+        0.7408800000000001,
+        0,
+        1
+      ],
+      "glbNodeIndex": 26,
+      "glbParentSourceId": "n46",
+      "glbTranslation": [
+        0,
+        0.7408797740936279,
+        0
+      ],
+      "glbRotationQuaternion": [
+        -0.017452409490942955,
+        0,
+        0,
+        0.9998477101325989
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n52": {
+      "name": "",
+      "parentSourceId": "n0",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -0.7633333333333333,
+        1.559200000166893,
+        1.55,
+        1
+      ],
+      "glbNodeIndex": 3,
+      "glbParentSourceId": "n0",
+      "glbTranslation": [
+        -0.7633333802223206,
+        1.5592001676559448,
+        1.5499998331069946
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n59": {
+      "name": "",
+      "parentSourceId": "n0",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0.7633333333333333,
+        1.559200000166893,
+        1.55,
+        1
+      ],
+      "glbNodeIndex": 7,
+      "glbParentSourceId": "n0",
+      "glbTranslation": [
+        0.7633333802223206,
+        1.5592001676559448,
+        1.5499998331069946
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n66": {
+      "name": "",
+      "parentSourceId": "n0",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -0.8033333333333333,
+        1.559200000166893,
+        -1.55,
+        1
+      ],
+      "glbNodeIndex": 11,
+      "glbParentSourceId": "n0",
+      "glbTranslation": [
+        -0.8033334016799927,
+        1.5592000484466553,
+        -1.5500001907348633
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n73": {
+      "name": "",
+      "parentSourceId": "n0",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0.8033333333333333,
+        1.559200000166893,
+        -1.55,
+        1
+      ],
+      "glbNodeIndex": 15,
+      "glbParentSourceId": "n0",
+      "glbTranslation": [
+        0.8033334016799927,
+        1.5592000484466553,
+        -1.5500001907348633
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n53": {
+      "name": "",
+      "parentSourceId": "n52",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -0.6,
+        0,
+        1
+      ],
+      "glbNodeIndex": 0,
+      "glbParentSourceId": "n52",
+      "glbTranslation": [
+        0,
+        -0.5999999046325684,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n60": {
+      "name": "",
+      "parentSourceId": "n59",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -0.6,
+        0,
+        1
+      ],
+      "glbNodeIndex": 4,
+      "glbParentSourceId": "n59",
+      "glbTranslation": [
+        0,
+        -0.5999999046325684,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n67": {
+      "name": "",
+      "parentSourceId": "n66",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -0.6,
+        0,
+        1
+      ],
+      "glbNodeIndex": 8,
+      "glbParentSourceId": "n66",
+      "glbTranslation": [
+        0,
+        -0.6000000834465027,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n74": {
+      "name": "",
+      "parentSourceId": "n73",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -0.6,
+        0,
+        1
+      ],
+      "glbNodeIndex": 12,
+      "glbParentSourceId": "n73",
+      "glbTranslation": [
+        0,
+        -0.6000000834465027,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n55": {
+      "name": "",
+      "parentSourceId": "n52",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1.3599999999999999,
+        0,
+        1
+      ],
+      "glbNodeIndex": 1,
+      "glbParentSourceId": "n52",
+      "glbTranslation": [
+        0,
+        -1.3600000143051147,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n62": {
+      "name": "",
+      "parentSourceId": "n59",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1.3599999999999999,
+        0,
+        1
+      ],
+      "glbNodeIndex": 5,
+      "glbParentSourceId": "n59",
+      "glbTranslation": [
+        0,
+        -1.3600000143051147,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n69": {
+      "name": "",
+      "parentSourceId": "n66",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1.3599999999999999,
+        0,
+        1
+      ],
+      "glbNodeIndex": 9,
+      "glbParentSourceId": "n66",
+      "glbTranslation": [
+        0,
+        -1.3600001335144043,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n76": {
+      "name": "",
+      "parentSourceId": "n73",
+      "snapshotLocalMatrixColumnMajor": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1.3599999999999999,
+        0,
+        1
+      ],
+      "glbNodeIndex": 13,
+      "glbParentSourceId": "n73",
+      "glbTranslation": [
+        0,
+        -1.3600001335144043,
+        0
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "n57": {
+      "name": "",
+      "parentSourceId": "n52",
+      "snapshotLocalMatrixColumnMajor": [
+        1.15,
+        0,
+        0,
+        0,
+        0,
+        0.28,
+        0,
+        0,
+        0,
+        0,
+        1.2,
+        0,
+        0,
+        -1.52,
+        0.04,
+        1
+      ],
+      "glbNodeIndex": 2,
+      "glbParentSourceId": "n52",
+      "glbTranslation": [
+        0,
+        -1.5199998617172241,
+        0.040000081062316895
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1.149999976158142,
+        0.2800000011920929,
+        1.2000000476837158
+      ]
+    },
+    "n64": {
+      "name": "",
+      "parentSourceId": "n59",
+      "snapshotLocalMatrixColumnMajor": [
+        1.15,
+        0,
+        0,
+        0,
+        0,
+        0.28,
+        0,
+        0,
+        0,
+        0,
+        1.2,
+        0,
+        0,
+        -1.52,
+        0.04,
+        1
+      ],
+      "glbNodeIndex": 6,
+      "glbParentSourceId": "n59",
+      "glbTranslation": [
+        0,
+        -1.5199998617172241,
+        0.040000081062316895
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1.149999976158142,
+        0.2800000011920929,
+        1.2000000476837158
+      ]
+    },
+    "n71": {
+      "name": "",
+      "parentSourceId": "n66",
+      "snapshotLocalMatrixColumnMajor": [
+        1.15,
+        0,
+        0,
+        0,
+        0,
+        0.28,
+        0,
+        0,
+        0,
+        0,
+        1.2,
+        0,
+        0,
+        -1.52,
+        0.04,
+        1
+      ],
+      "glbNodeIndex": 10,
+      "glbParentSourceId": "n66",
+      "glbTranslation": [
+        0,
+        -1.5199999809265137,
+        0.039999961853027344
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1.149999976158142,
+        0.2800000011920929,
+        1.2000000476837158
+      ]
+    },
+    "n78": {
+      "name": "",
+      "parentSourceId": "n73",
+      "snapshotLocalMatrixColumnMajor": [
+        1.15,
+        0,
+        0,
+        0,
+        0,
+        0.28,
+        0,
+        0,
+        0,
+        0,
+        1.2,
+        0,
+        0,
+        -1.52,
+        0.04,
+        1
+      ],
+      "glbNodeIndex": 14,
+      "glbParentSourceId": "n73",
+      "glbTranslation": [
+        0,
+        -1.5199999809265137,
+        0.039999961853027344
+      ],
+      "glbRotationQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "glbScale": [
+        1.149999976158142,
+        0.2800000011920929,
+        1.2000000476837158
+      ]
+    }
+  },
+  "glbAnimationClips": 0,
+  "glbSkins": 0,
+  "animation": {
+    "walk": "phase += dt*7.5; legs RX [s,-s,-0.9s,0.9s], s=sin(phase)*0.28; root Y=baseY+abs(sin(phase))*.03",
+    "drink": "head RX=0.95*u; head local pos=(0,0.72-0.55*u,2.42-0.5*u); body RX=0.1*u; u approaches _drinking with min(1,dt*3)",
+    "tail": "8-node hierarchy along local +Y; root XZY Euler, baseLeanX=-pi/4. Root+joint X/Z driven every frame. Current original axis/rest values need explicit adapter override for downward target tail.",
+    "stateKeys": [
+      "_walking",
+      "_drinking",
+      "_greeting",
+      "_baseY",
+      "_mode",
+      "forceDrink"
+    ],
+    "identityKeys": [
+      "kind=moebius-swamp-tiger",
+      "displayName",
+      "speech",
+      "tailRoot.nodeRef",
+      "tailSegs[].nodeRef"
+    ],
+    "caveat": "head/body/legs are closure references, not root parts metadata. GLB runtimeFunction text is not executable Godot animation."
+  },
+  "placement": {
+    "catalog": "src/core/buildingCatalog.js:394 independent actor factory, collideRadius 1",
+    "world": "src/world/moebiusSwamp.js:2115 createMoebiusTiger(rnd,{rim,steps,drink,speed:2.6}) -> swampZone.add(tiger) -> userData.tiger",
+    "wrapper": "createMoebiusSwampPlacement default scale .5, inner Y -40; nested tiger retains .4",
+    "rimRadius": 37.4,
+    "rimAngles": [
+      0.5,
+      1.6,
+      2.7,
+      3.9,
+      5.1
+    ],
+    "waterWalkY": 25.15,
+    "footPlane": "root local y=0; preserve foot alignment for spherical-ground runtime",
+    "godotEmbeddedWorld": {
+      "resource": "godot/assets/world-source/original-world-v1.glb",
+      "path": [
+        "moebius-swamp-placement",
+        "moebius-swamp-zone",
+        "moebius-cyber-ink-tiger"
+      ],
+      "nodeIndices": [
+        5814,
+        5815,
+        6241
+      ],
+      "warning": "Embedded world export has no three_node_id for these nodes; standalone originals/moebiusTiger.glb IDs must not be assumed globally applicable."
+    }
+  },
+  "sourceGlbConsistency": {
+    "parentIdsMatch": true,
+    "maxLocalMatrixAbsoluteError": 3.433227538929273e-07,
+    "nodesChecked": 40
+  }
+}

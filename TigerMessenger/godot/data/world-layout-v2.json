@@ -1,0 +1,538 @@
+{
+  "version": 2,
+  "id": "world-layout-v2-candidate",
+  "status": "candidate-not-deployed",
+  "radius": 160,
+  "coordinateConvention": {
+    "units": "degrees",
+    "upAxis": "+Y",
+    "zeroLongitudeAxis": "+X",
+    "positiveLongitudeToward": "+Z",
+    "unitVector": "[cos(lat)*cos(lon), sin(lat), cos(lat)*sin(lon)]"
+  },
+  "provenance": {
+    "numericalPositions": "project-authored proposal, not original user coordinates",
+    "sourceManifest": "godot/data/original-world-manifest.json",
+    "sourceManifestSha256": "aae60f37ccbe847874ef8f75361b0dff2f458b74b890d1e5bea2481c0a160927",
+    "userReference": "assets/references/world/layout-reference.png",
+    "referenceInterpretation": "user requests full 360-degree inhabited/useful coverage with meaningful oceans; map coordinates are a new proposal",
+    "existingManifestScope": "assembled default Web world; saved browser edits not included",
+    "userReferenceSha256": "b88065cb546c1dd32ac60d13816e1eef8b0a445a34db9ac84bc30aa6fa89388e",
+    "referenceRead": "Viewed supplied world layout image; borrowed region hierarchy and moving-garden intent, not its clustered longitude coordinates."
+  },
+  "constraints": {
+    "minimumCenterSeparationDegrees": 20,
+    "maximumEmptyLongitudeArcDegrees": 100,
+    "latitudeRange": [
+      -65,
+      75
+    ],
+    "polarSettlementExclusionBeyondAbsLat": 80,
+    "angularRadiusMeaning": "navigation/region planning radius, not a crop, scale command or certified mesh footprint",
+    "preserveRegionLocalTransforms": true,
+    "rebuildTerrainNow": false,
+    "randomOceanDecorationFill": false,
+    "mainStoryRegionIds": [
+      "coast-civil",
+      "abandoned-gate",
+      "saihoji",
+      "old-harbor",
+      "crystal-city",
+      "moebius-swamp",
+      "highland-sanctum"
+    ],
+    "minimumPlanningBoundaryGapDegrees": 3
+  },
+  "regions": [
+    {
+      "id": "coast-civil",
+      "stableId": "world-region:coast-civil",
+      "label": "书店与营地海岸",
+      "sourceLandmark": "bookshop",
+      "targetLat": 60,
+      "targetLon": 38,
+      "angularRadius": 10,
+      "role": "traditional",
+      "purpose": "书店身份信、营地、月湖林道；保持原区域内部关系",
+      "status": "layout-candidate",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "原区域部署与行为移植",
+      "includedLandmarks": [
+        "camp",
+        "bookshop"
+      ],
+      "additionalSourceModules": [
+        "src/world/lake.js",
+        "src/world/hills.js",
+        "src/world/startingCamp.js"
+      ]
+    },
+    {
+      "id": "highland-sanctum",
+      "stableId": "world-region:highland-sanctum",
+      "label": "高山圣城",
+      "sourceLandmark": "odysseyCitadel",
+      "targetLat": 44,
+      "targetLon": 126,
+      "angularRadius": 15,
+      "role": "traditional",
+      "purpose": "木马夜潜、街区与屋顶终章",
+      "status": "layout-candidate",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "原区域部署与行为移植",
+      "includedLandmarks": [
+        "odysseyCitadel"
+      ],
+      "additionalSourceModules": [
+        "src/world/citadelRange.js",
+        "src/world/citadelInfiltration.js"
+      ]
+    },
+    {
+      "id": "old-harbor",
+      "stableId": "world-region:old-harbor",
+      "label": "旧港海运枢纽",
+      "sourceLandmark": "oldHarbor",
+      "targetLat": 20,
+      "targetLon": 73,
+      "angularRadius": 9,
+      "role": "traditional-port",
+      "purpose": "红狐/老人/音乐重逢与海陆换乘",
+      "status": "layout-candidate",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "原区域部署与行为移植"
+    },
+    {
+      "id": "saihoji",
+      "stableId": "world-region:saihoji",
+      "label": "苔庭与英雄会合",
+      "sourceLandmark": "mossSaihoji",
+      "targetLat": 14,
+      "targetLon": 2,
+      "angularRadius": 13,
+      "role": "cross-civilization",
+      "purpose": "六景、诱敌与鲲反击；移动花园另绑定白鲸载体",
+      "status": "layout-candidate",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "原区域部署与行为移植",
+      "additionalSourceModules": [
+        "src/world/saihoji.js",
+        "src/scenes/saihojiGarden.js"
+      ],
+      "mobileAttachmentPolicy": "六景与载体父子关系保持；动态导航每帧查询，不把此规划点当永久鲸位",
+      "sourceCoverage": "assembled manifest contains mossSaihoji ground anchor; complete six-zone mobile garden requires its separate scene source, not inferred from this one node"
+    },
+    {
+      "id": "abandoned-gate",
+      "stableId": "world-region:abandoned-gate",
+      "label": "叹息之门",
+      "sourceLandmark": "abandonedGate",
+      "targetLat": -10,
+      "targetLon": -43,
+      "angularRadius": 9,
+      "role": "cross-civilization",
+      "purpose": "轨道边界、英雄结盟与战争通路",
+      "status": "layout-candidate",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "原区域部署与行为移植"
+    },
+    {
+      "id": "crystal-city",
+      "stableId": "world-region:crystal-city",
+      "label": "莫比斯水晶城与峡谷",
+      "sourceLandmark": "moebius",
+      "targetLat": -27,
+      "targetLon": -116,
+      "angularRadius": 18,
+      "role": "science-fiction",
+      "purpose": "城内水湖/运河、花厅与舰队；不拆散城市内部",
+      "status": "layout-candidate",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "原区域部署与行为移植",
+      "includedLandmarks": [
+        "moebius",
+        "citySeaLake",
+        "canal",
+        "bubblePods"
+      ]
+    },
+    {
+      "id": "moebius-swamp",
+      "stableId": "world-region:moebius-swamp",
+      "label": "莫比斯湖沼",
+      "sourceLandmark": "moebiusSwamp",
+      "targetLat": -57,
+      "targetLon": -63,
+      "angularRadius": 12,
+      "role": "science-fiction",
+      "purpose": "虎与湖沼群落、认女、吸食威胁与气泡艇逃离",
+      "status": "layout-candidate",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "原区域部署与行为移植"
+    },
+    {
+      "id": "western-ocean",
+      "stableId": "world-region:western-ocean",
+      "label": "西洋长航与迁徙水域",
+      "sourceLandmark": null,
+      "targetLat": 24,
+      "targetLon": -158,
+      "angularRadius": 13,
+      "role": "ocean-reserve",
+      "purpose": "水晶城海运外环、迁徙窗口与救援补给；不铺随机饰物",
+      "status": "content-reservation",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "后续地形/交通/生态批次；尚未建成"
+    },
+    {
+      "id": "northern-island-chain",
+      "stableId": "world-region:northern-island-chain",
+      "label": "北西岛链候选带",
+      "sourceLandmark": null,
+      "targetLat": 60,
+      "targetLon": -95,
+      "angularRadius": 9,
+      "role": "future-island-chain",
+      "purpose": "小规模航道中继与生态登陆点；具体岛型尚待后续制作",
+      "status": "content-reservation",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "后续地形/交通/生态批次；尚未建成"
+    },
+    {
+      "id": "eastern-ocean",
+      "stableId": "world-region:eastern-ocean",
+      "label": "东洋跨日界航道",
+      "sourceLandmark": null,
+      "targetLat": -15,
+      "targetLon": 156,
+      "angularRadius": 13,
+      "role": "ocean-reserve",
+      "purpose": "旧港至外洋航运、跨180度航道与返回路径",
+      "status": "content-reservation",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "后续地形/交通/生态批次；尚未建成"
+    },
+    {
+      "id": "southern-ocean",
+      "stableId": "world-region:southern-ocean",
+      "label": "南方生态避让海域",
+      "sourceLandmark": null,
+      "targetLat": -63,
+      "targetLon": 22,
+      "angularRadius": 10,
+      "role": "ecology-reserve",
+      "purpose": "季节迁徙、静水休息与湖沼救援退路；无自动装饰生成",
+      "status": "content-reservation",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "后续地形/交通/生态批次；尚未建成"
+    },
+    {
+      "id": "leviathan-migration",
+      "stableId": "world-region:leviathan-migration",
+      "label": "鲲·迁游海区",
+      "sourceLandmark": null,
+      "targetLat": -4,
+      "targetLon": -170,
+      "angularRadius": 10,
+      "role": "mobile-ecology",
+      "purpose": "鲲跨经度迁移走廊中继；不是固定岛屿",
+      "status": "content-reservation",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "后续地形/交通/生态批次；尚未建成",
+      "sourceModule": "src/assets/leviathanIsland.js",
+      "mobile": true
+    },
+    {
+      "id": "mirror-lab",
+      "stableId": "world-region:mirror-lab",
+      "label": "镜像小岛实验区",
+      "sourceLandmark": null,
+      "targetLat": -43,
+      "targetLon": 96,
+      "angularRadius": 5,
+      "role": "experimental",
+      "purpose": "原Godot镜像实验小岛；不进入救援主线或补齐世界计数",
+      "status": "experimental-existing",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "实验隔离",
+      "sourceModule": "godot/scripts/original_world.gd::_mirror_island",
+      "mainStory": false
+    },
+    {
+      "id": "north-ecology",
+      "stableId": "world-region:north-ecology",
+      "label": "北方生态边界",
+      "sourceLandmark": null,
+      "targetLat": 75,
+      "targetLon": -20,
+      "angularRadius": 5,
+      "role": "ecology-reserve",
+      "purpose": "高纬天气、候鸟与生态边界；聚落不伸入极冠",
+      "status": "content-reservation",
+      "preserveInternalDesign": true,
+      "contentResponsibility": "后续地形/交通/生态批次；尚未建成"
+    }
+  ],
+  "routes": [
+    {
+      "id": "story-identity",
+      "from": "coast-civil",
+      "to": "abandoned-gate",
+      "mode": "tram",
+      "storyOrder": 1,
+      "bidirectional": false,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "story-alliance",
+      "from": "abandoned-gate",
+      "to": "saihoji",
+      "mode": "tram",
+      "storyOrder": 2,
+      "bidirectional": false,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "story-reunion",
+      "from": "saihoji",
+      "to": "old-harbor",
+      "mode": "sea",
+      "storyOrder": 3,
+      "bidirectional": false,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "story-return-boundary",
+      "from": "old-harbor",
+      "to": "abandoned-gate",
+      "mode": "sea",
+      "storyOrder": 4,
+      "bidirectional": false,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "story-enter-crystal",
+      "from": "abandoned-gate",
+      "to": "crystal-city",
+      "mode": "tram",
+      "storyOrder": 5,
+      "bidirectional": false,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "story-find-tiger",
+      "from": "crystal-city",
+      "to": "moebius-swamp",
+      "mode": "ground",
+      "storyOrder": 6,
+      "bidirectional": false,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "story-family-escape",
+      "from": "moebius-swamp",
+      "to": "highland-sanctum",
+      "mode": "bubble-pod",
+      "storyOrder": 7,
+      "bidirectional": false,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending",
+      "requirements": [
+        "红狐与虎同行",
+        "aircraft吸食被战争延迟",
+        "抵达后木马夜潜与屋顶终章"
+      ]
+    },
+    {
+      "id": "harbor-citadel-path",
+      "from": "old-harbor",
+      "to": "highland-sanctum",
+      "mode": "ground",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "harbor-east-ocean",
+      "from": "old-harbor",
+      "to": "eastern-ocean",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "east-to-whale-sea",
+      "from": "eastern-ocean",
+      "to": "leviathan-migration",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "whale-west-ocean",
+      "from": "leviathan-migration",
+      "to": "western-ocean",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "west-crystal-port",
+      "from": "western-ocean",
+      "to": "crystal-city",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "west-northern-isles",
+      "from": "western-ocean",
+      "to": "northern-island-chain",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "northern-coast",
+      "from": "northern-island-chain",
+      "to": "coast-civil",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "east-southern-sea",
+      "from": "eastern-ocean",
+      "to": "southern-ocean",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "southern-swamp",
+      "from": "southern-ocean",
+      "to": "moebius-swamp",
+      "mode": "sea",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "northern-ecology-access",
+      "from": "coast-civil",
+      "to": "north-ecology",
+      "mode": "ecology",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending"
+    },
+    {
+      "id": "mirror-lab-optional",
+      "from": "eastern-ocean",
+      "to": "mirror-lab",
+      "mode": "debug-transfer",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending",
+      "experimental": true
+    },
+    {
+      "id": "leviathan-circuit",
+      "from": "saihoji",
+      "to": "saihoji",
+      "mode": "leviathan-migration",
+      "storyOrder": null,
+      "bidirectional": true,
+      "deploymentStatus": "candidate; coastline/height/traffic validation pending",
+      "dynamic": true,
+      "loop": true,
+      "carrierSource": "src/assets/leviathanIsland.js",
+      "navigationAnchor": "live carrier matrixWorld, not cached targetLat/targetLon",
+      "corridorAngularRadius": 5,
+      "viaRegions": [
+        "southern-ocean",
+        "leviathan-migration",
+        "eastern-ocean"
+      ],
+      "waypoints": [
+        {
+          "lat": 14,
+          "lon": 2
+        },
+        {
+          "lat": -60,
+          "lon": 22
+        },
+        {
+          "lat": -38,
+          "lon": -20
+        },
+        {
+          "lat": -8,
+          "lon": -65
+        },
+        {
+          "lat": 10,
+          "lon": -110
+        },
+        {
+          "lat": -4,
+          "lon": -170
+        },
+        {
+          "lat": -10,
+          "lon": 140
+        },
+        {
+          "lat": 4,
+          "lon": 85
+        },
+        {
+          "lat": 14,
+          "lon": 2
+        }
+      ],
+      "purpose": "候选迁移闭环；苔庭六景作为载体局部设计保留，战争时按任务约束停留/升沉",
+      "interpolation": "spherical shortest arc between successive waypoints; longitude wraps across +/-180, never interpolate raw longitude through 0"
+    }
+  ],
+  "contentResponsibilities": [
+    {
+      "scope": "北西岛链",
+      "ownerPhase": "future terrain and port connections",
+      "deliverable": "少量有补给/停泊/生态用途的岛，不复制随机镇",
+      "status": "reserved"
+    },
+    {
+      "scope": "东洋与西洋",
+      "ownerPhase": "traffic systems",
+      "deliverable": "跨日界航线、搭乘/航行与可读地平线，先通路后装饰",
+      "status": "reserved"
+    },
+    {
+      "scope": "南海与北极边界",
+      "ownerPhase": "ecology and weather",
+      "deliverable": "迁徙、季节/风浪及休息窗口，保留开阔海洋",
+      "status": "reserved"
+    },
+    {
+      "scope": "白鲸迁移带",
+      "ownerPhase": "leviathan behavior and route validation",
+      "deliverable": "动态载体导航、六景附着、战争停留、沿途海面与碰撞检查",
+      "status": "reserved"
+    }
+  ],
+  "deploymentGates": [
+    "仅预览候选；默认原manifest与源码坐标不改",
+    "先解析源节点唯一归属，防止camp/city父场景与子地标重复变换",
+    "刚性球面旋转原区域，保留局部几何/朝向/比例和内部附属，不按angularRadius裁剪",
+    "真实网格占地/海岸/交通净空另测；中心角距测试不等于无穿模",
+    "主线、交通、鲸迁移与存档迁移通过后再讨论正式启用"
+  ]
+}

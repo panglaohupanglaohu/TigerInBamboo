@@ -1,0 +1,78 @@
+{
+  "created_unix": 1788896654.578333,
+  "scope": "Six reviewed engineering export/validation jobs, default Web tiger integration and bounded Qwen bridge; not autonomous art or full gameplay acceptance",
+  "jobs": {
+    "godot-tiger-world": {
+      "status": "passed",
+      "reports": {
+        "artifacts/pipeline/local-runs/godot-tiger-world/8f17bbae9d9c43e8b35499e4f6a27966/report.json": "cf7552ae0743418be808dc53781513c923b10421f6d370dda80e3b27db19cc25"
+      },
+      "artifacts": {}
+    },
+    "godot-roman-armor": {
+      "status": "passed",
+      "reports": {
+        "artifacts/pipeline/local-runs/godot-roman-armor/0389b41e32db486da060f3d393609c1f/report.json": "d5ff57a468eebb836a6d8072c9431ed9ce4b158147f5738e1f52063b05982913"
+      },
+      "artifacts": {}
+    },
+    "godot-castle-world": {
+      "status": "passed",
+      "reports": {
+        "artifacts/pipeline/local-runs/godot-castle-world/6fa4affe38da4acf96037b2179a1042e/report.json": "0467129840ce70dc20d2ec8c975bb23113734e564803030db56473defc4d97d1"
+      },
+      "artifacts": {}
+    },
+    "blender-tiger-roundtrip": {
+      "status": "passed",
+      "reports": {
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/report.json": "cb42a7edb69fa8ddca97d8b5c9e6780bbaacf9a621a704c0f897ff2c86c71b53"
+      },
+      "artifacts": {
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/candidate.glb": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be",
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/blender-roundtrip.json": "5385f6a2dc7c233259eefea1f586658ba2c9512001fcedfa0fbdad34eba0f0f9",
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/godot-roundtrip.json": "7e4544bcc5e87147ab11178ebf6a129e343258b5c399eb674835fdbf1542e3a0"
+      }
+    },
+    "blender-roman-armor-roundtrip": {
+      "status": "passed",
+      "reports": {
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/report.json": "2c80cb58451ad4505adb25d6e8e3b0d944149364a544c1232fd7509ee1ec7633"
+      },
+      "artifacts": {
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/candidate.glb": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/blender-roundtrip.json": "4878a8740e9874aa826463a1067c3f7cdd1af4690e970803a7d9bdc2473faba7",
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/godot-roundtrip.json": "67d348904b974430a339fe57d3f868d1a399dd76f329d68a342f12e6cba7ca3e"
+      }
+    },
+    "web-tiger-anatomy": {
+      "status": "passed",
+      "reports": {
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/report.json": "ec4907d9198496ec9582e51d412c7eb76a457df63279be0a56a3f7715cd3207d"
+      },
+      "artifacts": {
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/browser-check.json": "07959b415e0e9fc1ea7f899143107e34d3c3bde781cc611febee66155a9cc229",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/idle-before-after.png": "defbcda31f0b76b2cd22572680deb8495867f34f32a905ba8d4c41b0879bf3a5",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/walk-before-after.png": "4e607783e54c681275ff1bbbce094d9aa0cef6b1bdad34d911421597ef6854e5",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/drink-before-after.png": "a87946c874c5a199eabcef5315db346eb2d9d7680e4561cb83d355a4296aeb8f",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/preview.html": "7fd3b64ecd4e5efedb3daf5ece246ea099398ecf222acd57ca589d26cfd36a9e"
+      }
+    }
+  },
+  "tests": {
+    "local_suite_passed": 57,
+    "existing_queue_passed": 8,
+    "total_passed": 65
+  },
+  "qwen_real_inference": false,
+  "llada_real_inference": false,
+  "blender_mcp_read_only_verified": true,
+  "all_five_cached_resume_verified": true,
+  "art_stages_auto_promoted": false,
+  "job_count": 6,
+  "web_fixture_checks_passed": 36,
+  "web_tiger_default_deployed": true,
+  "world_smoke_passed": false,
+  "world_smoke_report": "artifacts/pipeline/tiger-web-v3/world-2026-09-08T19-35-35-092Z/report.json",
+  "world_smoke_gap": "Dialog activation not observed; full gameplay and terrain contact acceptance pending."
+}

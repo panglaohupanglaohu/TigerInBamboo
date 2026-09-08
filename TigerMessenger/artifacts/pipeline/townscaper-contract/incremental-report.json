@@ -1,0 +1,79 @@
+{
+  "description": "Read-only mechanism contracts; failed checks identify gaps, not expected-good regressions",
+  "checks": [
+    {
+      "name": "Local edit can propagate a forced legal change across a 12-cell component",
+      "pass": true,
+      "detail": {
+        "before": true,
+        "fullAfter": true,
+        "incremental": true,
+        "ringUsed": null,
+        "failure": null
+      }
+    },
+    {
+      "name": "Incremental regression: unrelated near and far disconnected components stay pinned",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "scope": "affected-component",
+        "unrelatedPreserved": [
+          {
+            "cell": "0,0,2",
+            "before": "A@r0",
+            "after": "A@r0",
+            "inRegion": false
+          },
+          {
+            "cell": "1,0,2",
+            "before": "A@r0",
+            "after": "A@r0",
+            "inRegion": false
+          },
+          {
+            "cell": "50,0,0",
+            "before": "A@r0",
+            "after": "A@r0",
+            "inRegion": false
+          }
+        ],
+        "previousNotMutated": true
+      }
+    },
+    {
+      "name": "Incremental regression: deletion updates both surviving components",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "scope": "affected-component",
+        "region": [
+          "6,0,0",
+          "4,0,0",
+          "7,0,0",
+          "3,0,0",
+          "8,0,0",
+          "2,0,0",
+          "9,0,0",
+          "1,0,0",
+          "10,0,0",
+          "0,0,0",
+          "11,0,0"
+        ]
+      }
+    },
+    {
+      "name": "Incremental regression: truly contradictory component remains a reported failure",
+      "pass": true,
+      "detail": {
+        "ok": false,
+        "scope": "affected-component",
+        "unresolved": [
+          "11,0,0"
+        ]
+      }
+    }
+  ],
+  "passed": 4,
+  "failed": 0
+}

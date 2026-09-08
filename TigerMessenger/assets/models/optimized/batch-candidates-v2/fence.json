@@ -1,0 +1,50 @@
+{
+  "id": "fence",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "8e308e419ae72511c3a8fa72ce003a460c8662c36d10639ed75fa8905a03e2f8",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2103022584142309e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.2103022584142309e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 4,
+  "removedEditVertices": 112
+}

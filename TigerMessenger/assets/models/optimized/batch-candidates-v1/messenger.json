@@ -1,0 +1,50 @@
+{
+  "id": "messenger",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "787e1000f18ebba06a83d8a63d64dec73c2c09585e9d1a701810e5252e2411f5",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n2",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n1",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n12",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n14",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n10",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n3",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n5",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n7",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n8",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n9",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

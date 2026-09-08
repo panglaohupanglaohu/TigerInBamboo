@@ -1,0 +1,1690 @@
+{
+  "id": "saihoji",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "a977083a0cdf8e40bd92fe3c03f979128e3b819d895b28c4b6596f9c06932ca1",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n110",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n165",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n236",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n340",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n49",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n497",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n537",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n504",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n126",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n181",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n660",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n97",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n738",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n646",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n618",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n426",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n634",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n111",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n171",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n19",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n237",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n349",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n284",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n490",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n498",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n715",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n769",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n657",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n748",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n538",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n733",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n531",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n8",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n708",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n613",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n33",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n562",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n387",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n400",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n573",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n625",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n636",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n112",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n194",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n239",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n255",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n101",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n505",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n711",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n765",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n565",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n159",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n585",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n744",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n410",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n684",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n73",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n127",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n528",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n78",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n576",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n703",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n642",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n177",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n409",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n478",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n211",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n694",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n508",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n137",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n183",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n252",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n298",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n53",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n627",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n574",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n336",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n564",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n760",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n561",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n338",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n125",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n36",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n67",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n412",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n453",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n68",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n726",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n772",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n571",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n70",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n251",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n639",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n390",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n63",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n502",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n676",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n406",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n47",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n209",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n690",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n114",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n173",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n196",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n243",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n351",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n286",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n493",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n543",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n51",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n138",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n556",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n666",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n84",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n721",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n65",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n672",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n757",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n123",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n197",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n245",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n352",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n494",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n544",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n609",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n510",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n139",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n254",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n651",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n661",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n82",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n247",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n98",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n401",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n299",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n739",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n753",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n648",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n339",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n568",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n391",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n404",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n424",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n579",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n630",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n124",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n156",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n169",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n324",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n80",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n241",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n257",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n717",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n771",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n658",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n373",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n161",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n59",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n750",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n491",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n540",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n735",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n532",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n600",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n643",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n153",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n314",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n615",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n20",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n513",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n149",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n310",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n535",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n34",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n57",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n4",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n405",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n580",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n411",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n489",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n256",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n507",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n712",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n766",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n567",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n592",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n654",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n268",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n363",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n160",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n586",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n745",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n464",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n685",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n730",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n136",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n529",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n577",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n705",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n150",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n311",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n610",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n221",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n262",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n582",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n207",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n278",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n438",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n549",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n362",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n370",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n514",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n696",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n709",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n762",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n741",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n681",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n727",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n774",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n700",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n64",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n21",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n691",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n413",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n454",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n594",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n151",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n312",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n407",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n476",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n612",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n158",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n222",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n667",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n678",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n723",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n249",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n388",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n673",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n688",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n759",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n223",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n364",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n371",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n517",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n603",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n416",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n46",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n595",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n152",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n313",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n326",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n61",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n652",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n35",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n663",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n248",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n175",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n72",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n99",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n520",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n622",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n499",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n402",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n300",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n495",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n546",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n439",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n55",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n754",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n274",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n606",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n649",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n280",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n441",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n552",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n224",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n365",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n372",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n519",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n604",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n463",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n597",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n157",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n325",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n260",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n198",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n511",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n718",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n516",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n598",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n66",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n367",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n374",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n162",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n591",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n751",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n297",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n492",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n541",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n736",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n140",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n534",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n288",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n601",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n645",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n154",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n210",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n23",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n32",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n588",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n479",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n616",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n45",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n553",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n270",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n366",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n167",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n195",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n714",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n768",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n655",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n747",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n687",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n732",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n706",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n418",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n465",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n6",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n607",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n155",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n323",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n48",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n179",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n589",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n276",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n697",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n71",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n763",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n88",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n583",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n742",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n682",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n729",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n526",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n775",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n422",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n702",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n253",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n640",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n631",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n408",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n477",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n10",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n693",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n22",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n619",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n234",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n368",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n375",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n523",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n451",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n466",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n282",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n100",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n559",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n86",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n337",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n353",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n669",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n679",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n724",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n266",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n420",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n570",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n699",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n250",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n637",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n389",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n628",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n501",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n675",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n437",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n208",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n69",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n450",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n555",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n76",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n220",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n452",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n558",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n621",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n235",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n272",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n369",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n378",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n525",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n467",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n327",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n113",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n350",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n664",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n720",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n264",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n233",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n522",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n633",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n624",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n500",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n670",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n428",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n403",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n185",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n301",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n496",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n547",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n440",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n550",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n756",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n480",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

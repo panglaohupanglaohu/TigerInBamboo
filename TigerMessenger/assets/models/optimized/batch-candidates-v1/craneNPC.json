@@ -1,0 +1,114 @@
+{
+  "id": "craneNPC",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "bc014794be440d33e40cc6d49c5fb8a114b4e4da2affda09badd45a539dd35e3",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n14",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n1",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n10",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n11",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n12",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n15",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n17",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n18",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n2",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n20",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n4",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n5",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n6",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n7",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n8",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n9",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n23",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n24",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n25",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n26",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n27",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n28",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n29",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n3",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n21",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n22",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

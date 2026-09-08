@@ -1,0 +1,51 @@
+{
+  "actions": [
+    {
+      "asset": "moebiusTiger",
+      "stage": "concept",
+      "state": "evidenced",
+      "artifact": {
+        "path": "assets/references/tiger/user-target-20260909.png",
+        "sha256": "b827b4d81e79917a57b5ea8ae5865352e563421b3772b359878ece2f40d933a3",
+        "bytes": 1900501
+      },
+      "acceptance": "Evidence recorded; artistic/gameplay acceptance is not inferred."
+    },
+    {
+      "asset": "moebiusTiger",
+      "stage": "candidate",
+      "state": "evidenced",
+      "artifact": {
+        "path": "assets/models/optimized/moebius-tiger-anatomy-v3.blend",
+        "sha256": "209743e402d44e15bbd007868ae50371344a7120b7f649bd27207d603d899352",
+        "bytes": 223231
+      },
+      "acceptance": "Evidence recorded; artistic/gameplay acceptance is not inferred."
+    },
+    {
+      "asset": "moebiusTiger",
+      "stage": "godotResource",
+      "state": "evidenced",
+      "artifact": {
+        "path": "godot/assets/art-pilots/moebius-tiger-anatomy-v3.glb",
+        "sha256": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be",
+        "bytes": 726332
+      },
+      "acceptance": "Evidence recorded; artistic/gameplay acceptance is not inferred."
+    },
+    {
+      "asset": "moebiusTiger",
+      "stage": "worldPlacement",
+      "state": "evidenced",
+      "artifact": {
+        "path": "artifacts/pipeline/tiger-anatomy-v3/world-validation.json",
+        "sha256": "dc6c839fd291892eefb0456ede0a5984f4468235cd039844d3312099dcddc5f4",
+        "bytes": 274
+      },
+      "acceptance": "Evidence recorded; artistic/gameplay acceptance is not inferred."
+    }
+  ],
+  "behaviorAccepted": false,
+  "visualApproved": false,
+  "note": "Existing evidence backfill; no new model and no completion-count claim."
+}

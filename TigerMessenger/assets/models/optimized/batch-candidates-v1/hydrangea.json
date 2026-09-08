@@ -1,0 +1,38 @@
+{
+  "id": "hydrangea",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "26bc90331355d7fdf40a157f95c9b5398ef474336b091238d390e4b382eff078",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n25",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n27",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n29",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n28",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n26",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n30",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n31",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

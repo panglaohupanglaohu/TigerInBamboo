@@ -1,0 +1,15 @@
+00:00.436  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/moebius-tiger-anatomy-v3.blend"
+00:00.442  reports          | WARNING Library file, loading empty scene
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+Traceback (most recent call last):
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/local/blender_export_check.py", line 158, in <module>
+    run(parser.parse_args(sys.argv[sys.argv.index("--") + 1:]))
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/local/blender_export_check.py", line 151, in run
+    raise RuntimeError("Candidate roundtrip failed; see report")
+RuntimeError: Candidate roundtrip failed; see report
+BLENDER_ROUNDTRIP {"passed": false, "failures": ["ValueError: Empty mesh: n4.008"]}
+
+Error: script failed, file: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/local/blender_export_check.py', exiting.
+
+Blender quit

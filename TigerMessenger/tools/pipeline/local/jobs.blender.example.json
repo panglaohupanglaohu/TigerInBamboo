@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "purpose": "Reviewed background Blender saved-candidate export and isolated Godot import chain. Export only into fresh run directories.",
+  "jobs": [
+    {
+      "id": "blender-tiger-roundtrip",
+      "asset_id": "moebiusTiger",
+      "inputs": [
+        "assets/models/optimized/moebius-tiger-anatomy-v3.blend",
+        "godot/assets/art-pilots/moebius-tiger-anatomy-v3.glb",
+        "tools/pipeline/local/blender_jobs.py",
+        "tools/pipeline/local/blender_export_check.py",
+        "tools/pipeline/local/godot_export_check.gd"
+      ],
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "tools/pipeline/local/blender_jobs.py",
+        "--job",
+        "blender-tiger-roundtrip",
+        "--output",
+        "{run_dir}/report.json"
+      ],
+      "cwd": ".",
+      "resource_lock": "blender-background",
+      "timeout_seconds": 360,
+      "expected_reports": [
+        "{run_dir}/report.json"
+      ],
+      "expected_artifacts": [
+        "{run_dir}/candidate.glb",
+        "{run_dir}/blender-roundtrip.json",
+        "{run_dir}/godot-roundtrip.json"
+      ],
+      "success_criteria": {
+        "exit_code": 0,
+        "report_equals": {
+          "passed": true,
+          "source_blend_unchanged": true,
+          "production_glb_unchanged": true,
+          "input_snapshot_still_current": true,
+          "visual_approved": false,
+          "foreground_touched": false,
+          "new_export_godot_passed": true
+        },
+        "regression": {
+          "passed": true,
+          "node_hierarchy_preserved": true,
+          "custom_extras_preserved": true,
+          "triangle_material_usage_preserved": true,
+          "finite_geometry": true,
+          "maximum_bound_error_lte": 0.0001,
+          "maximum_transform_error_lte": 0.0001
+        }
+      },
+      "scope": "Saved candidate Blender export/re-import and that exact new GLB imported/instantiated in a fresh minimal Godot project; no adapters, production deployment, new art or visual acceptance."
+    },
+    {
+      "id": "blender-roman-armor-roundtrip",
+      "asset_id": "romanSoldier_gladius_red",
+      "inputs": [
+        "assets/models/optimized/roman-armor-v3-direction.blend",
+        "godot/assets/art-pilots/roman-armor-v3-direction.glb",
+        "tools/pipeline/local/blender_jobs.py",
+        "tools/pipeline/local/blender_export_check.py",
+        "tools/pipeline/local/godot_export_check.gd"
+      ],
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "tools/pipeline/local/blender_jobs.py",
+        "--job",
+        "blender-roman-armor-roundtrip",
+        "--output",
+        "{run_dir}/report.json"
+      ],
+      "cwd": ".",
+      "resource_lock": "blender-background",
+      "timeout_seconds": 360,
+      "expected_reports": [
+        "{run_dir}/report.json"
+      ],
+      "expected_artifacts": [
+        "{run_dir}/candidate.glb",
+        "{run_dir}/blender-roundtrip.json",
+        "{run_dir}/godot-roundtrip.json"
+      ],
+      "success_criteria": {
+        "exit_code": 0,
+        "report_equals": {
+          "passed": true,
+          "source_blend_unchanged": true,
+          "production_glb_unchanged": true,
+          "input_snapshot_still_current": true,
+          "visual_approved": false,
+          "foreground_touched": false,
+          "new_export_godot_passed": true
+        },
+        "regression": {
+          "passed": true,
+          "node_hierarchy_preserved": true,
+          "custom_extras_preserved": true,
+          "triangle_material_usage_preserved": true,
+          "finite_geometry": true,
+          "maximum_bound_error_lte": 0.0001,
+          "maximum_transform_error_lte": 0.0001
+        }
+      },
+      "scope": "Saved candidate Blender export/re-import and that exact new GLB imported/instantiated in a fresh minimal Godot project; no adapters, production deployment, new art or visual acceptance.",
+      "related_asset_ids": [
+        "romanSoldier_gladius_blue"
+      ]
+    }
+  ]
+}

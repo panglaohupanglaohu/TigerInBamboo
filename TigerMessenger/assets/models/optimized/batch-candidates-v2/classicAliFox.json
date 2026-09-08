@@ -1,0 +1,850 @@
+{
+  "id": "classicAliFox",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "5fddb75fe9ee49d435fdd448dd213b4f54129bb01d9f50ea41ae528efd68ef83",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "fox-hips-mesh",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 4.172325134277344e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-1",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 2.82016577202171e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-5",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.9371509552001953e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n28",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 2.912066232596544e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n74",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.552713678800501e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n9",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n31",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n78",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6662775098884595e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n55",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.1920928955078125e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n95",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 1.2446745323302366e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n65",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n7",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n62",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 12,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-6",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 2.912066232596544e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n47",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n13",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 2.82016577202171e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-walk-leg-0",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n50",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n25",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.9371509552001953e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n84",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 2.682209014892578e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-chest-mesh",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 5.960464477539062e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-2",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.8196505635614812e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 4.172325134277344e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n75",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n90",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 7.095790977018623e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n34",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.382971788643772e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n79",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6662775098884595e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n41",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n57",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n66",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n98",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 7.095790977018623e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n91",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 7.095790977018623e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n96",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 1.2446745323302366e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n70",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-walk-leg-3",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-7",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n48",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n16",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.8196505635614812e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-walk-leg-1",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n51",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n81",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 2.682209014892578e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n86",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 7,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-neck-base",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.1920928955078125e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-3",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.266967712138676e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n76",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n88",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 1.2446745323302366e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n36",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n58",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.329456864596068e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n68",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.552713678800501e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n46",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 5.960464477539062e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n63",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.1669815336290412e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n93",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 7,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n97",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 7.095790977018623e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n42",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n71",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n100",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-tip",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.382971788643772e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n49",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n19",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.266967712138676e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-walk-leg-2",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n52",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n82",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 2.682209014892578e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n87",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 7,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-neck-top",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-mid-mesh",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 48,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-tail-flame-4",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.1920928955078125e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n89",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 1.2446745323302366e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n77",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6662775098884595e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n38",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n80",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 6,
+        "normalError": 2.6662775098884595e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n59",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.329456864596068e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n69",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.552713678800501e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n64",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.1669815336290412e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n94",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 7,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n43",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n73",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 3.552713678800501e-15,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n102",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "fox-walk-head-shell",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 12,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n5",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n22",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 16,
+        "normalError": 1.1920928955078125e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n83",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 2.682209014892578e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 84,
+  "removedEditVertices": 5170
+}

@@ -1,0 +1,65 @@
+00:00.567  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/supplemental/blender-r3/romanSoldier_longbow_blue.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+21:01:59 | INFO: Starting glTF 2.0 export
+21:01:59 | INFO: Extracting primitive: n59.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n61.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n54.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n56.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: bow-string-bot.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: bow-string-top.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n51.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n75.001
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n77.001
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n79.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n81.001
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n83.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n85.001
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n87.001
+21:01:59 | INFO: Primitives created: 6
+21:01:59 | INFO: Extracting primitive: n18.001
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n18.002
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n24.001
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n24.002
+21:01:59 | INFO: Primitives created: 3
+21:01:59 | INFO: Extracting primitive: n3.001
+21:01:59 | INFO: Primitives created: 1
+21:01:59 | INFO: Extracting primitive: n5.001
+21:01:59 | INFO: Primitives created: 1
+21:01:59 | INFO: Extracting primitive: n7.001
+21:01:59 | INFO: Primitives created: 1
+21:01:59 | INFO: Extracting primitive: soldier-crest.001
+21:01:59 | INFO: Primitives created: 2
+21:01:59 | INFO: Extracting primitive: soldier-crest-feathers.001
+21:01:59 | INFO: Primitives created: 1
+21:01:59 | INFO: Extracting primitive: soldier-crest-stems.001
+21:01:59 | INFO: Primitives created: 1
+21:01:59 | INFO: Extracting primitive: soldier-helm.001
+21:01:59 | INFO: Primitives created: 1
+21:01:59 | INFO: Finished glTF 2.0 export in 0.07789397239685059 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/supplemental-import/romanSoldier_longbow_blue.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

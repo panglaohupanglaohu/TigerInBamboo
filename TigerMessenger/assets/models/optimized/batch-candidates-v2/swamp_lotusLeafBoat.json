@@ -1,0 +1,454 @@
+{
+  "id": "swamp_lotusLeafBoat",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "dd16f4e33f99192cc921be43d45da9b158650f21f07d355dd013400bf1c04aae",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 10,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n13",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n11",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n12",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n10",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n14",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n15",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n16",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n18",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 2.76456513598765e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n19",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 2.76456513598765e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n20",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n21",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n29",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n47",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 9,
+        "normalError": 9.46105487287241e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n48",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n49",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n5",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 1.6806806968361343e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 1.6806806968361343e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n7",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.384185791015625e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n9",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 2.086162567138672e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n31",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 2.8754037373346364e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n32",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 8,
+        "normalError": 2.8754037373346364e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n33",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.086162567138672e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n34",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 2.086162567138672e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n35",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n36",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n37",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n38",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n28",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n39",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n40",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n41",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n42",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.824176170117653e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n43",
+      "result": {
+        "verticesBefore": 48,
+        "verticesAfter": 12,
+        "normalError": 4.582645374284766e-10,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n44",
+      "result": {
+        "verticesBefore": 48,
+        "verticesAfter": 12,
+        "normalError": 4.582645374284766e-10,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 96,
+        "verticesAfter": 20,
+        "normalError": 2.086162567138672e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n46",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 9,
+        "normalError": 9.46105487287241e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n22",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n23",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n24",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n25",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n26",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n27",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 1.488425631634982e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 44,
+  "removedEditVertices": 2909
+}

@@ -3,7 +3,7 @@
 //  有 gridV6 时按四格中心做笼形变形；方格时与轴向 box 恒等。
 // =====================================================================
 import * as THREE from "three";
-import { createCornerGraph, cornerMaskAt } from "./cornerGraphAdapter.js";
+import { createCornerGraph } from "./cornerGraphAdapter.js";
 import { cornerAllowedProtoIds, cornerGeometryParts } from "./cornerPrototypes.js";
 import { cageMapUnit, cornerCageCorners } from "./cageDeform.js";
 import { citadelColumnCenter } from "./gridMigration.js";
@@ -127,22 +127,8 @@ export function assembleCornerBody({
     emitNode(gx, gz, iy, graph.maskOf(index));
   }
 
-  // ---------- 地面层下半：必须补一圈 iy = -1 的节点 ----------
-  // 节点 iy 覆盖的竖向区间是「层 iy 心 → 层 iy+1 心」（这里 y0=(iy+0.5)*ch），
-  // 而 createCornerGraph 从 iy=0 起 → 层 0 的**下半**（0 … 0.5*ch）没有任何柱子。
-  // 2026-09-05 A/B 实测：外壳底面从格体路径的 4.950 抬到 5.950，高 1.000 = 半层
-  // （ch=2），沿地面是一圈环形洞。`tools/test_corner_assembly.mjs` 第 4 项守这条。
-  //
-  // iy=-1 的 mask：下四格取层 -1（恒空）、上四格取层 0 → 形态必为 soffit，
-  // 而 `soffit.under` 的 `emitWalls(1, 0.5, 1)` 映射到 y0+0.5*ch … y0+ch
-  // = 0 … 0.5*ch，正好补满缺口。**目录不用改。**
-  // 层组下标已 clamp 到 0，iy=-1 的几何挂在 level-0 组里。
-  for (let gz = 0; gz <= cols; gz++) {
-    for (let gx = 0; gx <= cols; gx++) {
-      const mask = cornerMaskAt(grid, gx, gz, -1);
-      if (mask) emitNode(gx, gz, -1, mask);
-    }
-  }
+  // Ground half-cells (iy=-1) are included in graph.cells(), just like all
+  // other corner nodes. Their geometry remains clamped to level group 0.
 
   if (stats) stats.cornerPartCount = parts;
   return parts;

@@ -1,0 +1,17 @@
+{
+  "job_id": "blender-tiger-roundtrip",
+  "started_at": 1788894462.97839,
+  "fingerprint": "2b4172580e33166a1e2bc73f1c7c9abba1d2f4fafba92af780e05c6febd1561d",
+  "status": "passed",
+  "run_dir": "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438",
+  "finished_at": 1788894466.539806,
+  "reports": {
+    "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/report.json": "cb42a7edb69fa8ddca97d8b5c9e6780bbaacf9a621a704c0f897ff2c86c71b53"
+  },
+  "artifacts": {
+    "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/candidate.glb": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be",
+    "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/blender-roundtrip.json": "5385f6a2dc7c233259eefea1f586658ba2c9512001fcedfa0fbdad34eba0f0f9",
+    "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/godot-roundtrip.json": "7e4544bcc5e87147ab11178ebf6a129e343258b5c399eb674835fdbf1542e3a0"
+  },
+  "visual_approved": false
+}

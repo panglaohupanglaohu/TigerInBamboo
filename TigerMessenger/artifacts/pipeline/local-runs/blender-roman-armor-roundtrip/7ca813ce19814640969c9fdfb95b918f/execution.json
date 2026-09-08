@@ -1,0 +1,17 @@
+{
+  "job_id": "blender-roman-armor-roundtrip",
+  "started_at": 1788894466.59502,
+  "fingerprint": "0f03630ff9758221138e3498f92e387c4f442c23f857f9c7f0aefa12bb75c709",
+  "status": "passed",
+  "run_dir": "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f",
+  "finished_at": 1788894469.575813,
+  "reports": {
+    "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/report.json": "2c80cb58451ad4505adb25d6e8e3b0d944149364a544c1232fd7509ee1ec7633"
+  },
+  "artifacts": {
+    "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/candidate.glb": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+    "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/blender-roundtrip.json": "4878a8740e9874aa826463a1067c3f7cdd1af4690e970803a7d9bdc2473faba7",
+    "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/godot-roundtrip.json": "67d348904b974430a339fe57d3f868d1a399dd76f329d68a342f12e6cba7ca3e"
+  },
+  "visual_approved": false
+}

@@ -1,0 +1,26 @@
+{
+  "id": "swamp_shell",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "fec64db5673f59c1549363f89d40062f04cca99099240cb5da52c72a83e30af6",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n3",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n4",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n2",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

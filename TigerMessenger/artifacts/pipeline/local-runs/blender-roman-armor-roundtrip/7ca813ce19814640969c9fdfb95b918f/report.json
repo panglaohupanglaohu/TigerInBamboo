@@ -1,0 +1,184 @@
+{
+  "job_id": "blender-roman-armor-roundtrip",
+  "asset_id": "romanSoldier_gladius_red",
+  "passed": true,
+  "visual_approved": false,
+  "production_overwritten": false,
+  "foreground_touched": false,
+  "input_sha256": {
+    "assets/models/optimized/roman-armor-v3-direction.blend": "6cbfe1b3ebc1601492cf8a517dad20cf73f617bfdd15539f0cdca28da3c4879a",
+    "godot/assets/art-pilots/roman-armor-v3-direction.glb": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+    "tools/pipeline/local/blender_export_check.py": "44db49c359621b3bccc17509187058a6a8665d831e17e3a20c65eb34a9e95a7e",
+    "tools/pipeline/local/godot_export_check.gd": "b9c40f53556d9f640fd0ea1facc254dc39f3704af8c50025f70fb6a755bc204b",
+    "tools/pipeline/local/blender_jobs.py": "80077cba50a63af12ffb1e060686fecb821ea2ac6e8dcbfd708dac66ab7aeb7f"
+  },
+  "started_unix": 1788894466.6401742,
+  "failure": null,
+  "argv": [
+    "/Applications/Blender.app/Contents/MacOS/Blender",
+    "--background",
+    "--factory-startup",
+    "--disable-autoexec",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/roman-armor-v3-direction.blend",
+    "--python-exit-code",
+    "1",
+    "--python",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/local/blender_export_check.py",
+    "--",
+    "--scene",
+    "Roman Armor V3 Direction",
+    "--candidate",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/candidate.glb",
+    "--report",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/blender-roundtrip.json"
+  ],
+  "result": {
+    "passed": true,
+    "failures": [],
+    "blender_version": "5.2.1 LTS",
+    "scene": "Roman Armor V3 Direction",
+    "visual_approved": false,
+    "scope": "Saved candidate mesh/empty hierarchy export-import; node, extras, triangle/material usage, transforms and bounds only. Shader appearance, textures, animations and runtime acceptance are not certified.",
+    "excluded_review_objects": [],
+    "saved_visibility": {
+      "Roman_Armor_V3_Direction_BodyLocal": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Helmet_Galea.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Skirt_Ten_Separated_Lames.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Waist_Belt.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      }
+    },
+    "source": {
+      "nodes": 4,
+      "mesh_objects": 3,
+      "triangles": 696,
+      "bounds_min": [
+        -0.08064543455839157,
+        -0.05584089830517769,
+        -0.06199999898672104
+      ],
+      "bounds_max": [
+        0.08064543455839157,
+        0.05584089830517769,
+        0.2809999883174896
+      ],
+      "materials": [
+        "Roman_V2_Original_Bronze.001",
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "hidden_outline_nodes": [],
+      "empty_mesh_anchors": [],
+      "original_node_ids": []
+    },
+    "roundtrip": {
+      "nodes": 4,
+      "mesh_objects": 3,
+      "triangles": 696,
+      "bounds_min": [
+        -0.08064543455839157,
+        -0.05584089830517769,
+        -0.06199999898672104
+      ],
+      "bounds_max": [
+        0.08064543455839157,
+        0.05584089830517769,
+        0.2809999883174896
+      ],
+      "materials": [
+        "Roman_V2_Original_Bronze.001",
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "hidden_outline_nodes": [],
+      "empty_mesh_anchors": [],
+      "original_node_ids": []
+    },
+    "node_hierarchy_preserved": true,
+    "custom_extras_preserved": true,
+    "triangle_material_usage_preserved": true,
+    "finite_geometry": true,
+    "maximum_bound_error": 0.0,
+    "maximum_transform_error": 0.0,
+    "hidden_outlines_exported": true,
+    "source_visibility_not_encoded": true
+  },
+  "isolated_godot_project": "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/tiger-new-export-godot-gbm7se06",
+  "godot_commands": [
+    [
+      "/Users/panglaohu/Downloads/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/tiger-new-export-godot-gbm7se06",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    [
+      "/Users/panglaohu/Downloads/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/tiger-new-export-godot-gbm7se06",
+      "--script",
+      "res://inspect.gd",
+      "--",
+      "--expected",
+      "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/blender-roundtrip.json",
+      "--report",
+      "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/godot-roundtrip.json"
+    ]
+  ],
+  "godot_result": {
+    "bounds_max": [
+      0.0805999860167503,
+      0.28099998831749,
+      0.0557999983429909
+    ],
+    "bounds_min": [
+      -0.0806000009179115,
+      -0.061999998986721,
+      -0.0557999983429909
+    ],
+    "failures": [],
+    "finite_geometry_materials": true,
+    "godot_version": "4.7.2-stable (official)",
+    "hidden_outline_nodes": 0,
+    "identity_scene_wrapper": true,
+    "materials": [
+      "Roman_V2_Original_Bronze.001",
+      "Roman_V2_Original_Skirt.001"
+    ],
+    "maximum_bound_error": 4.54485416412354e-05,
+    "mesh_objects": 3,
+    "nodes": 5,
+    "original_node_ids": [],
+    "passed": true,
+    "scope": "Fresh Blender-exported GLB imported/instantiated in isolated minimal Godot project; no runtime adapters, art or gameplay acceptance",
+    "triangles": 696,
+    "visual_approved": false
+  },
+  "new_export_godot_passed": true,
+  "godot_tested_candidate_sha256": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+  "input_snapshot_still_current": true,
+  "source_blend_unchanged": true,
+  "production_glb_unchanged": true,
+  "candidate": {
+    "path": "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/candidate.glb",
+    "sha256": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+    "bytes": 38176
+  },
+  "finished_unix": 1788894469.557476,
+  "scope": "Saved candidate Blender export/re-import plus new-GLB isolated Godot import/instantiation. No new art, shader/texture fidelity, animation, runtime deployment or visual approval. All hidden-outline geometry retained and identified by extras."
+}

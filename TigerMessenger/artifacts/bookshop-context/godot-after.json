@@ -1,0 +1,1089 @@
+{
+  "asset": "res://assets/art-pilots/bookshop-art-v3.glb",
+  "boundary_overlaps": [
+    {
+      "aabb_overlap": "[P: (21.11234, 22.66727, 11.73235), S: (1.434021, 0.27771, 2.840094)]",
+      "distance": 18.3343658447266,
+      "legacy_local": "(-15.67649, -5.886038, -7.466684)",
+      "legacy_position": [
+        22.0769195556641,
+        20.049015045166,
+        12.5334558486938
+      ],
+      "source_id": "original-corridor-tree-5"
+    },
+    {
+      "aabb_overlap": "[P: (19.23236, 22.66727, 13.45198), S: (2.785751, 0.70141, 1.344707)]",
+      "distance": 16.7943363189697,
+      "legacy_local": "(-13.31301, -5.027357, -8.918474)",
+      "legacy_position": [
+        19.9619426727295,
+        21.2462596893311,
+        14.1223306655884
+      ],
+      "source_id": "original-corridor-tree-5"
+    }
+  ],
+  "capture_size": "(976, 610)",
+  "chapter_after_r": 1,
+  "draw_calls": 565.0,
+  "failures": [],
+  "forest_camera_transform": "[X: (-0.419571, 0.035435, 0.907031), Y: (0.503982, 0.840166, 0.200307), Z: (-0.754959, 0.54117, -0.370368), O: (-0.856202, 41.29049, -2.009181)]",
+  "legacy": [
+    {
+      "distance": 26.9330558776855,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.43568,-0.90010,0.00000,0.90010,0.43568,0.00000,0.00000,0.00000,1.00000,29.67506,14.36385,3.00000",
+      "kind": "pine",
+      "position": [
+        29.6750640869141,
+        14.3638458251953,
+        3.0
+      ],
+      "protected_chapter": true
+    },
+    {
+      "distance": 52.2974662780762,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.52201,-0.85294,0.00000,0.85294,-0.52201,0.00000,0.00000,0.00000,1.00000,28.17117,-17.24104,3.00000",
+      "kind": "pine",
+      "position": [
+        28.1711730957031,
+        -17.2410411834717,
+        3.0
+      ],
+      "protected_chapter": true
+    },
+    {
+      "distance": 61.2812957763672,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/tower.glb:-0.87682,-0.48082,0.00000,0.48082,-0.87682,0.00000,0.00000,0.00000,1.00000,16.15961,-29.46832,3.00000",
+      "kind": "tower",
+      "position": [
+        16.1596126556396,
+        -29.4683246612549,
+        3.0
+      ],
+      "protected_chapter": true
+    },
+    {
+      "distance": 59.3700141906738,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/tower.glb:-0.55803,-0.45498,0.00000,0.44767,-0.54907,-0.12852,0.08122,-0.09961,0.70844,20.83866,-25.55850,-5.98261",
+      "kind": "tower",
+      "position": [
+        20.8386611938477,
+        -25.5584964752197,
+        -5.9826078414917
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.5592842102051,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.59684,-0.40271,0.00000,0.39609,-0.58702,-0.13009,0.07276,-0.10783,0.70815,18.37701,-27.23565,-6.03554",
+      "kind": "house",
+      "position": [
+        18.3770084381104,
+        -27.2356548309326,
+        -6.03554248809814
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.4971237182617,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.66044,-0.28674,-0.00000,0.28202,-0.64957,-0.13009,0.05181,-0.11932,0.70815,12.95739,-29.84392,-5.97671",
+      "kind": "house",
+      "position": [
+        12.9573945999146,
+        -29.8439178466797,
+        -5.97671270370483
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 63.0193176269531,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/tower.glb:-0.68364,-0.22592,-0.00000,0.22229,-0.67266,-0.12852,0.04033,-0.12203,0.70844,10.08686,-30.52340,-5.83200",
+      "kind": "tower",
+      "position": [
+        10.0868606567383,
+        -30.5233955383301,
+        -5.83200025558472
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 59.3515090942383,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.55803,-0.45498,-0.00000,0.45312,-0.55575,-0.06504,0.04110,-0.05041,0.71706,21.21337,-26.01808,-3.04509",
+      "kind": "house",
+      "position": [
+        21.2133712768555,
+        -26.0180759429932,
+        -3.04509210586548
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.5741844177246,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.59684,-0.40271,0.00000,0.40103,-0.59434,-0.06585,0.03683,-0.05459,0.71698,18.71964,-27.74345,-3.07404",
+      "kind": "house",
+      "position": [
+        18.7196426391602,
+        -27.7434539794922,
+        -3.07403659820557
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.524284362793,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.66044,-0.28674,-0.00000,0.28554,-0.65767,-0.06585,0.02623,-0.06041,0.71698,13.18762,-30.37418,-3.04145",
+      "kind": "house",
+      "position": [
+        13.1876182556152,
+        -30.3741798400879,
+        -3.04145264625549
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 63.0185661315918,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.68364,-0.22592,-0.00000,0.22499,-0.68084,-0.06504,0.02041,-0.06176,0.71706,10.24939,-31.01523,-2.96299",
+      "kind": "house",
+      "position": [
+        10.2493925094604,
+        -31.0152263641357,
+        -2.9629864692688
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 58.6987991333008,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.55803,-0.45498,0.00000,0.45312,-0.55575,0.06504,-0.04110,0.05041,0.71706,21.21337,-26.01808,3.04509",
+      "kind": "house",
+      "position": [
+        21.2133712768555,
+        -26.0180759429932,
+        3.04509210586548
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 59.9286804199219,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.59684,-0.40271,-0.00000,0.40103,-0.59434,0.06585,-0.03683,0.05459,0.71698,18.71964,-27.74345,3.07404",
+      "kind": "house",
+      "position": [
+        18.7196426391602,
+        -27.7434539794922,
+        3.07403659820557
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 61.9057807922363,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.66044,-0.28674,0.00000,0.28554,-0.65767,0.06585,-0.02623,0.06041,0.71698,13.18762,-30.37418,3.04145",
+      "kind": "house",
+      "position": [
+        13.1876182556152,
+        -30.3741798400879,
+        3.04145264625549
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.4208679199219,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.68364,-0.22592,0.00000,0.22499,-0.68084,0.06504,-0.02041,0.06176,0.71706,10.24939,-31.01523,2.96299",
+      "kind": "house",
+      "position": [
+        10.2493925094604,
+        -31.0152263641357,
+        2.9629864692688
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 58.081111907959,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/tower.glb:-0.55803,-0.45498,-0.00000,0.44767,-0.54907,0.12852,-0.08122,0.09961,0.70844,20.83866,-25.55850,5.98261",
+      "kind": "tower",
+      "position": [
+        20.8386611938477,
+        -25.5584964752197,
+        5.9826078414917
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 59.2849426269531,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.59684,-0.40271,-0.00000,0.39609,-0.58702,0.13009,-0.07276,0.10783,0.70815,18.37701,-27.23565,6.03554",
+      "kind": "house",
+      "position": [
+        18.3770084381104,
+        -27.2356548309326,
+        6.03554248809814
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 61.2752532958984,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/house.glb:-0.66044,-0.28674,0.00000,0.28202,-0.64957,0.13009,-0.05181,0.11932,0.70815,12.95739,-29.84392,5.97671",
+      "kind": "house",
+      "position": [
+        12.9573945999146,
+        -29.8439178466797,
+        5.97671270370483
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 61.8373870849609,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/tower.glb:-0.68364,-0.22592,0.00000,0.22229,-0.67266,0.12852,-0.04033,0.12203,0.70844,10.08686,-30.52340,5.83200",
+      "kind": "tower",
+      "position": [
+        10.0868606567383,
+        -30.5233955383301,
+        5.83200025558472
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 53.6308097839355,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.61325,-0.74660,0.00000,0.71827,-0.58999,0.26360,-0.20369,0.16731,0.92952,24.36552,-20.01376,8.94192",
+      "kind": "pine",
+      "position": [
+        24.3655242919922,
+        -20.0137596130371,
+        8.94191741943359
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 20.7916507720947,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.70311,-0.95747,0.00000,0.93698,0.68806,0.24443,-0.19701,-0.14467,1.16248,25.62077,18.81435,6.68365",
+      "kind": "pine",
+      "position": [
+        25.6207675933838,
+        18.8143482208252,
+        6.68364906311035
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 61.6886863708496,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.66154,-0.21995,0.00000,0.21567,-0.64868,0.13680,-0.04316,0.12981,0.68360,10.09958,-30.37637,6.40593",
+      "kind": "pine",
+      "position": [
+        10.0995826721191,
+        -30.3763675689697,
+        6.40593099594116
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 31.894926071167,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.19821,-0.73086,0.00000,0.72654,0.19704,0.08222,-0.07936,-0.02152,0.75278,31.03916,8.41802,3.51274",
+      "kind": "pine",
+      "position": [
+        31.0391616821289,
+        8.41801834106445,
+        3.51274061203003
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.0839424133301,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-1.03294,-0.40375,0.00000,0.40170,-1.02769,0.11161,-0.04063,0.10395,1.10341,11.97560,-30.63762,3.32722",
+      "kind": "pine",
+      "position": [
+        11.9755954742432,
+        -30.6376171112061,
+        3.32722210884094
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 50.1759223937988,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.35243,-0.68044,0.00000,0.67537,-0.34981,0.09331,-0.08286,0.04292,0.76059,28.61397,-14.82052,3.95337",
+      "kind": "pine",
+      "position": [
+        28.6139717102051,
+        -14.8205223083496,
+        3.95337176322937
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 59.1196098327637,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.73313,-0.54129,0.00000,0.49019,-0.66393,-0.38649,0.22956,-0.31092,0.82528,17.46156,-23.65030,-13.76736",
+      "kind": "pine",
+      "position": [
+        17.4615631103516,
+        -23.6502990722656,
+        -13.7673587799072
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 18.3343658447266,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.74695,-0.82250,-0.00000,0.75826,0.68861,0.43048,-0.31868,-0.28940,1.02427,22.07692,20.04902,12.53346",
+      "kind": "pine",
+      "position": [
+        22.0769195556641,
+        20.049015045166,
+        12.5334558486938
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.1241340637207,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.85730,-0.41080,-0.00000,0.40085,-0.83653,-0.20798,0.08987,-0.18756,0.92761,13.95356,-29.11979,-7.23982",
+      "kind": "pine",
+      "position": [
+        13.953558921814,
+        -29.1197948455811,
+        -7.23981666564941
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.0823059082031,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.93428,-0.40803,0.00000,0.38883,-0.89031,0.30908,-0.12370,0.28324,0.97151,12.47813,-28.57143,9.91883",
+      "kind": "pine",
+      "position": [
+        12.4781293869019,
+        -28.5714263916016,
+        9.91882801055908
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.7259864807129,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.53132,-0.32283,-0.00000,0.30638,-0.50425,-0.19590,0.10172,-0.16742,0.59003,16.18900,-26.64447,-10.35128",
+      "kind": "pine",
+      "position": [
+        16.1889972686768,
+        -26.6444721221924,
+        -10.351279258728
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 19.0705585479736,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.70536,-0.85220,0.00000,0.83460,0.69079,0.22371,-0.17234,-0.14264,1.08339,24.64337,20.39700,6.60564",
+      "kind": "pine",
+      "position": [
+        24.6433658599854,
+        20.3970031738281,
+        6.60563564300537
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 25.0207595825195,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.49920,-0.78095,0.00000,0.77556,0.49576,-0.10869,0.09158,0.05854,0.92047,27.12624,17.33986,-3.80149",
+      "kind": "pine",
+      "position": [
+        27.1262435913086,
+        17.339864730835,
+        -3.80148959159851
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 63.217399597168,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-1.12630,-0.32569,0.00000,0.32043,-1.10810,-0.20992,0.05831,-0.20166,1.15350,8.88796,-30.73650,-5.82275",
+      "kind": "pine",
+      "position": [
+        8.88795948028564,
+        -30.736499786377,
+        -5.82274580001831
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 54.8683586120605,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.56977,-0.74848,0.00000,0.74471,-0.56689,-0.09436,0.07508,-0.05716,0.93593,26.16062,-19.91416,-3.31486",
+      "kind": "pine",
+      "position": [
+        26.160623550415,
+        -19.914155960083,
+        -3.31485509872437
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.9010925292969,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.76014,-0.32970,0.00000,0.32132,-0.74084,0.18553,-0.07383,0.17021,0.80752,12.78293,-29.47192,7.38073",
+      "kind": "pine",
+      "position": [
+        12.7829341888428,
+        -29.4719219207764,
+        7.38072729110718
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 20.8747043609619,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.76584,-0.82260,-0.00000,0.81242,0.75637,-0.17625,0.12900,0.12010,1.11001,23.86338,22.21693,-5.17711",
+      "kind": "pine",
+      "position": [
+        23.8633785247803,
+        22.2169342041016,
+        -5.17711210250854
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.9067230224609,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.58464,-0.21161,0.00000,0.20391,-0.56336,0.16622,-0.05657,0.15630,0.59913,10.68999,-29.53396,8.71413",
+      "kind": "pine",
+      "position": [
+        10.6899929046631,
+        -29.5339603424072,
+        8.71413421630859
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 63.0004005432129,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.84834,-0.28789,-0.00000,0.28574,-0.84200,-0.10932,0.03513,-0.10352,0.88916,10.46184,-30.82835,-4.00246",
+      "kind": "pine",
+      "position": [
+        10.4618377685547,
+        -30.8283462524414,
+        -4.00246477127075
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 54.9538078308105,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.61144,-0.65647,-0.00000,0.63362,-0.59016,0.23462,-0.17168,0.15991,0.86589,23.30539,-21.70698,8.62967",
+      "kind": "pine",
+      "position": [
+        23.3053894042969,
+        -21.7069759368896,
+        8.62966632843018
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 15.5902919769287,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:1.09985,-0.42641,0.00000,0.41051,1.05885,-0.31911,0.11535,0.29753,1.13564,11.55240,29.79783,-8.98039",
+      "kind": "pine",
+      "position": [
+        11.5523977279663,
+        29.7978286743164,
+        -8.980393409729
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.2594871520996,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.65425,-0.30326,-0.00000,0.29663,-0.63993,-0.15002,0.06309,-0.13611,0.70534,13.61119,-29.36454,-6.88404",
+      "kind": "pine",
+      "position": [
+        13.6111850738525,
+        -29.364538192749,
+        -6.8840389251709
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 53.5552215576172,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.63139,-0.95631,-0.00000,0.94791,-0.62585,-0.15155,0.12647,-0.08350,1.13588,27.16541,-17.93562,-4.34319",
+      "kind": "pine",
+      "position": [
+        27.1654090881348,
+        -17.935619354248,
+        -4.34318971633911
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.0898323059082,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.66317,-0.48632,-0.00000,0.48071,-0.65552,-0.12451,0.07363,-0.10040,0.81289,19.60525,-26.73452,-5.07785",
+      "kind": "pine",
+      "position": [
+        19.6052532196045,
+        -26.7345218658447,
+        -5.0778489112854
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 16.9232273101807,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.51383,-0.39601,0.00000,0.39112,0.50748,-0.10166,0.06206,0.08052,0.64071,20.26716,26.29661,-5.26776",
+      "kind": "pine",
+      "position": [
+        20.2671566009521,
+        26.2966060638428,
+        -5.26775503158569
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 57.287296295166,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.75456,-0.76321,-0.00000,0.71824,-0.71010,-0.36296,0.25811,-0.25519,1.01000,21.95911,-21.71036,-11.09714",
+      "kind": "pine",
+      "position": [
+        21.9591121673584,
+        -21.710355758667,
+        -11.0971412658691
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 55.3484077453613,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.39474,-0.49982,0.00000,0.48407,-0.38230,-0.15862,0.12448,-0.09831,0.61683,24.92605,-19.68544,-8.16800",
+      "kind": "pine",
+      "position": [
+        24.9260540008545,
+        -19.6854438781738,
+        -8.16800403594971
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.9867668151855,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.63932,-0.20991,0.00000,0.20521,-0.62501,-0.14157,0.04416,-0.13450,0.65783,9.94238,-30.28164,-6.85896",
+      "kind": "pine",
+      "position": [
+        9.94238090515137,
+        -30.2816410064697,
+        -6.85896110534668
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 58.5635757446289,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.89072,-0.58178,0.00000,0.55915,-0.85607,0.29383,-0.16068,0.24600,1.02250,17.36900,-26.59246,9.12734",
+      "kind": "pine",
+      "position": [
+        17.3689975738525,
+        -26.592456817627,
+        9.12733936309814
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 60.763542175293,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.95745,-0.37569,-0.00000,0.36230,-0.92333,0.27214,-0.09941,0.25334,0.99187,11.52213,-29.36406,8.65473",
+      "kind": "pine",
+      "position": [
+        11.5221261978149,
+        -29.3640594482422,
+        8.65473365783691
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 62.0396194458008,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-1.12243,-0.34120,-0.00000,0.33629,-1.10631,0.19814,-0.05763,0.18957,1.15629,9.34152,-30.73076,5.50387",
+      "kind": "pine",
+      "position": [
+        9.34152412414551,
+        -30.7307567596436,
+        5.50386714935303
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 57.7067832946777,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.51279,-0.50380,-0.00000,0.48440,-0.49304,-0.19756,0.13845,-0.14092,0.69119,22.29596,-22.69360,-9.09299",
+      "kind": "pine",
+      "position": [
+        22.2959594726562,
+        -22.6935977935791,
+        -9.09299087524414
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 61.615535736084,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-1.08325,-0.48226,-0.00000,0.47839,-1.07456,0.14986,-0.06095,0.13691,1.17624,13.40863,-30.11844,4.20035",
+      "kind": "pine",
+      "position": [
+        13.4086303710938,
+        -30.1184387207031,
+        4.2003493309021
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 20.5105781555176,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.55989,-0.46982,-0.00000,0.45132,0.53784,-0.20309,0.13055,0.15558,0.70211,20.47090,24.39559,-9.21186",
+      "kind": "pine",
+      "position": [
+        20.4709014892578,
+        24.3955917358398,
+        -9.21185874938965
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 26.0899257659912,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.61872,-0.57005,0.00000,0.50191,0.54476,-0.39887,0.27027,0.29334,0.74073,19.24085,20.88375,-15.29077",
+      "kind": "pine",
+      "position": [
+        19.2408466339111,
+        20.8837451934814,
+        -15.2907695770264
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 61.7676582336426,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.71780,-0.22157,-0.00000,0.21703,-0.70311,0.15121,-0.04460,0.14448,0.73584,9.40341,-30.46345,6.55125",
+      "kind": "pine",
+      "position": [
+        9.40341091156006,
+        -30.463451385498,
+        6.55124664306641
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 23.01633644104,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.49251,-0.35794,0.00000,0.32414,0.44601,-0.25824,0.15182,0.20890,0.55136,17.31064,23.81914,-13.79130",
+      "kind": "pine",
+      "position": [
+        17.3106384277344,
+        23.8191356658936,
+        -13.7912950515747
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 59.4270973205566,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.65234,-0.51496,0.00000,0.49645,-0.62889,-0.22081,0.13682,-0.17332,0.80123,19.83788,-25.13014,-8.82344",
+      "kind": "pine",
+      "position": [
+        19.8378791809082,
+        -25.1301403045654,
+        -8.82343864440918
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 51.3653984069824,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.34789,-0.57333,-0.00000,0.56328,-0.34179,0.12502,-0.10688,0.06486,0.65887,27.42855,-16.64310,6.08787",
+      "kind": "pine",
+      "position": [
+        27.4285469055176,
+        -16.6431007385254,
+        6.08786773681641
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 52.3287963867188,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.40580,-0.69324,0.00000,0.68895,-0.40329,-0.08928,0.07705,-0.04510,0.79831,28.03792,-16.41249,-3.63323",
+      "kind": "pine",
+      "position": [
+        28.0379180908203,
+        -16.4124946594238,
+        -3.63322806358337
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 15.0816125869751,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.81965,-0.43258,-0.00000,0.42260,0.80073,-0.19799,0.09241,0.17510,0.90540,15.32077,29.02969,-7.17782",
+      "kind": "pine",
+      "position": [
+        15.3207740783691,
+        29.0296859741211,
+        -7.17781734466553
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 16.7943363189697,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:0.57142,-0.53688,-0.00000,0.48317,0.51426,0.34183,-0.23406,-0.24912,0.70564,19.96194,21.24626,14.12233",
+      "kind": "pine",
+      "position": [
+        19.9619426727295,
+        21.2462596893311,
+        14.1223306655884
+      ],
+      "protected_chapter": false
+    },
+    {
+      "distance": 51.7142105102539,
+      "expected_excluded": false,
+      "fingerprint": "res://assets/pine.glb:-0.38273,-0.71146,-0.00000,0.69762,-0.37529,-0.15855,0.13963,-0.07511,0.79216,28.02823,-15.07791,-6.37006",
+      "kind": "pine",
+      "position": [
+        28.0282287597656,
+        -15.0779104232788,
+        -6.37006139755249
+      ],
+      "protected_chapter": false
+    }
+  ],
+  "mode": "after",
+  "near_legacy": {},
+  "original_trees": [
+    {
+      "bounds_min": [
+        22.4002361297607,
+        24.1154537200928,
+        2.67774963378906
+      ],
+      "bounds_size": [
+        3.00856590270996,
+        3.08090591430664,
+        2.15408802032471
+      ],
+      "collider_radius": 0.588918,
+      "corridor": "camp-bookshop",
+      "height": 3.89290943735131,
+      "id": "original-corridor-tree-0",
+      "native_xz": [
+        -15.0716276168823,
+        2.06075549125671
+      ],
+      "position": [
+        22.6678352355957,
+        24.2926845550537,
+        3.65181112289429
+      ],
+      "scale": [
+        1.713215,
+        1.713215,
+        1.713215
+      ],
+      "source_xz": [
+        -15.0716257095337,
+        2.06075501441956
+      ],
+      "terrain_collider": "/root/TigerMessenger/Terrain_Visual_And_Collision/Terrain_Visual_And_Collision_col",
+      "triangles": 660,
+      "yaw": -2.634021
+    },
+    {
+      "bounds_min": [
+        20.3096866607666,
+        24.9488143920898,
+        6.6692066192627
+      ],
+      "bounds_size": [
+        2.61557769775391,
+        2.86849212646484,
+        2.0367259979248
+      ],
+      "collider_radius": 0.524705,
+      "corridor": "camp-bookshop",
+      "height": 3.55344834788292,
+      "id": "original-corridor-tree-1",
+      "native_xz": [
+        -12.8792514801025,
+        -1.67638492584229
+      ],
+      "position": [
+        20.6203002929688,
+        25.1053314208984,
+        7.50057172775269
+      ],
+      "scale": [
+        1.526415,
+        1.526415,
+        1.526415
+      ],
+      "source_xz": [
+        -12.8792524337769,
+        -1.67638504505157
+      ],
+      "terrain_collider": "/root/TigerMessenger/Terrain_Visual_And_Collision/Terrain_Visual_And_Collision_col",
+      "triangles": 660,
+      "yaw": 2.86159
+    },
+    {
+      "bounds_min": [
+        15.7690181732178,
+        29.6738700866699,
+        -3.08266377449036
+      ],
+      "bounds_size": [
+        2.84099197387695,
+        4.12283325195312,
+        2.65858173370361
+      ],
+      "collider_radius": 0.664693,
+      "corridor": "camp-bookshop",
+      "height": 4.49630169155958,
+      "id": "original-corridor-tree-2",
+      "native_xz": [
+        -7.42834997177124,
+        7.98773717880249
+      ],
+      "position": [
+        16.2976303100586,
+        29.7970275878906,
+        -1.70041370391846
+      ],
+      "scale": [
+        1.933652,
+        1.933652,
+        1.933652
+      ],
+      "source_xz": [
+        -7.42834997177124,
+        7.98773717880249
+      ],
+      "terrain_collider": "/root/TigerMessenger/Terrain_Visual_And_Collision/Terrain_Visual_And_Collision_col",
+      "triangles": 660,
+      "yaw": -2.081926
+    },
+    {
+      "bounds_min": [
+        11.0245761871338,
+        27.4718456268311,
+        12.5624942779541
+      ],
+      "bounds_size": [
+        1.90943431854248,
+        2.83002090454102,
+        1.99193382263184
+      ],
+      "collider_radius": 0.518774,
+      "corridor": "bookshop-moon",
+      "height": 3.15052304398478,
+      "id": "original-corridor-tree-3",
+      "native_xz": [
+        -3.53453993797302,
+        -7.19950103759766
+      ],
+      "position": [
+        11.6089334487915,
+        27.5814456939697,
+        13.1054039001465
+      ],
+      "scale": [
+        1.509161,
+        1.509161,
+        1.509161
+      ],
+      "source_xz": [
+        -3.53453898429871,
+        -7.19950199127197
+      ],
+      "terrain_collider": "/root/TigerMessenger/Terrain_Visual_And_Collision/Terrain_Visual_And_Collision_col",
+      "triangles": 576,
+      "yaw": -1.822445
+    },
+    {
+      "bounds_min": [
+        19.5701007843018,
+        26.5487880706787,
+        3.46830654144287
+      ],
+      "bounds_size": [
+        2.94868659973145,
+        3.45105934143066,
+        2.30880928039551
+      ],
+      "collider_radius": 0.604462,
+      "corridor": "bookshop-moon",
+      "height": 4.07378511036757,
+      "id": "original-corridor-tree-4",
+      "native_xz": [
+        -11.8300580978394,
+        1.53685092926025
+      ],
+      "position": [
+        19.9928092956543,
+        26.7197036743164,
+        4.49494647979736
+      ],
+      "scale": [
+        1.758434,
+        1.758434,
+        1.758434
+      ],
+      "source_xz": [
+        -11.8300590515137,
+        1.53685104846954
+      ],
+      "terrain_collider": "/root/TigerMessenger/Terrain_Visual_And_Collision/Terrain_Visual_And_Collision_col",
+      "triangles": 660,
+      "yaw": 0.67644
+    },
+    {
+      "bounds_min": [
+        19.0433158874512,
+        22.6672687530518,
+        11.7323474884033
+      ],
+      "bounds_size": [
+        3.50304985046387,
+        3.85324096679688,
+        3.0643367767334
+      ],
+      "collider_radius": 0.721389,
+      "corridor": "bookshop-moon",
+      "height": 4.92628390817231,
+      "id": "original-corridor-tree-5",
+      "native_xz": [
+        -12.3817367553711,
+        -7.20719814300537
+      ],
+      "position": [
+        19.4823989868164,
+        22.9484367370605,
+        12.6710605621338
+      ],
+      "scale": [
+        2.098586,
+        2.098586,
+        2.098586
+      ],
+      "source_xz": [
+        -12.3817348480225,
+        -7.20719814300537
+      ],
+      "terrain_collider": "/root/TigerMessenger/Terrain_Visual_And_Collision/Terrain_Visual_And_Collision_col",
+      "triangles": 660,
+      "yaw": 0.152077
+    }
+  ],
+  "passed": true,
+  "primitives": 169722.0,
+  "scene": "res://scenes/main.tscn",
+  "skipped": [
+    {
+      "kind": "tower",
+      "position": "(3.113932, 32.06157, -5.867733)"
+    },
+    {
+      "kind": "house",
+      "position": "(6.048663, 31.8571, -5.981578)"
+    },
+    {
+      "kind": "house",
+      "position": "(11.9963, 30.71356, -6.08248)"
+    },
+    {
+      "kind": "tower",
+      "position": "(14.82653, 29.68774, -6.044739)"
+    },
+    {
+      "kind": "house",
+      "position": "(3.162771, 32.56441, -2.979881)"
+    },
+    {
+      "kind": "house",
+      "position": "(6.152565, 32.40433, -3.042164)"
+    },
+    {
+      "kind": "house",
+      "position": "(12.22731, 31.30501, -3.099805)"
+    },
+    {
+      "kind": "house",
+      "position": "(15.11478, 30.26492, -3.08113)"
+    },
+    {
+      "kind": "pine",
+      "position": "(4.81328, 32.4043, 3.920565)"
+    },
+    {
+      "kind": "pine",
+      "position": "(16.66166, 29.32115, 3.575419)"
+    },
+    {
+      "kind": "pine",
+      "position": "(10.29132, 30.49619, 7.97648)"
+    },
+    {
+      "kind": "pine",
+      "position": "(14.04057, 29.0983, 8.538745)"
+    },
+    {
+      "kind": "pine",
+      "position": "(16.36391, 27.07169, 9.953397)"
+    },
+    {
+      "kind": "pine",
+      "position": "(16.92338, 27.39059, 8.663156)"
+    },
+    {
+      "kind": "pine",
+      "position": "(13.84768, 30.71856, -3.59339)"
+    },
+    {
+      "kind": "pine",
+      "position": "(15.64878, 27.54555, 9.911102)"
+    },
+    {
+      "kind": "pine",
+      "position": "(8.390704, 31.23533, -6.862962)"
+    },
+    {
+      "kind": "pine",
+      "position": "(18.74938, 27.48508, 5.241781)"
+    },
+    {
+      "kind": "pine",
+      "position": "(5.533736, 32.2534, -4.444008)"
+    },
+    {
+      "kind": "pine",
+      "position": "(14.29417, 28.61647, 9.305725)"
+    }
+  ]
+}

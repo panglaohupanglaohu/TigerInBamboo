@@ -1,0 +1,44 @@
+{
+  "failures": [],
+  "kunInstantiated": true,
+  "passed": true,
+  "poses": [
+    {
+      "pose": 0,
+      "shieldError": 0.0000000149011611938477,
+      "swordError": 0.0,
+      "variant": "blue"
+    },
+    {
+      "pose": 1,
+      "shieldError": 0.0,
+      "swordError": 0.0,
+      "variant": "blue"
+    },
+    {
+      "pose": 2,
+      "shieldError": 0.0000000149011611938477,
+      "swordError": 0.0,
+      "variant": "blue"
+    },
+    {
+      "pose": 0,
+      "shieldError": 0.0000000149011611938477,
+      "swordError": 0.0,
+      "variant": "red"
+    },
+    {
+      "pose": 1,
+      "shieldError": 0.0,
+      "swordError": 0.0,
+      "variant": "red"
+    },
+    {
+      "pose": 2,
+      "shieldError": 0.0000000149011611938477,
+      "swordError": 0.0,
+      "variant": "red"
+    }
+  ],
+  "scope": "Red/blue soldier candidate UI, armor/handgrip integration, four review cameras; fixture poses, not world combat"
+}

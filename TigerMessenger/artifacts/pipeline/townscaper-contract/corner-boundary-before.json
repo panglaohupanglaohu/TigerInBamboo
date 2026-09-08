@@ -1,0 +1,65 @@
+[
+  {
+    "name": "empty",
+    "parts": 0,
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "minY": null,
+    "maxY": null,
+    "graphNodes": 0,
+    "expectedNodes": 0,
+    "missing": [],
+    "extra": []
+  },
+  {
+    "name": "single",
+    "parts": 32,
+    "hash": "15803a37f9f0c28dc1838d90b441155165fcb79bc828246d5724621547da3ec4",
+    "minY": 0,
+    "maxY": 2.440000057220459,
+    "graphNodes": 4,
+    "expectedNodes": 8,
+    "missing": [
+      "c:0:0:-1",
+      "c:0:1:-1",
+      "c:1:0:-1",
+      "c:1:1:-1"
+    ],
+    "extra": []
+  },
+  {
+    "name": "three-floors",
+    "parts": 72,
+    "hash": "0247c80d7c9d4444c6e0440277672e3aec13174cc68eedd1b3c30ac3270bfe35",
+    "minY": 0,
+    "maxY": 6.440000057220459,
+    "graphNodes": 12,
+    "expectedNodes": 16,
+    "missing": [
+      "c:0:0:-1",
+      "c:0:1:-1",
+      "c:1:0:-1",
+      "c:1:1:-1"
+    ],
+    "extra": []
+  },
+  {
+    "name": "stepped",
+    "parts": 89,
+    "hash": "7515444ab78673bed59762f0d1c2e262147ea89d74db3d3e3ceb99964d37fbfc",
+    "minY": 0,
+    "maxY": 4.440000057220459,
+    "graphNodes": 12,
+    "expectedNodes": 20,
+    "missing": [
+      "c:0:0:-1",
+      "c:0:1:-1",
+      "c:1:0:-1",
+      "c:1:1:-1",
+      "c:2:0:-1",
+      "c:2:1:-1",
+      "c:1:2:-1",
+      "c:2:2:-1"
+    ],
+    "extra": []
+  }
+]

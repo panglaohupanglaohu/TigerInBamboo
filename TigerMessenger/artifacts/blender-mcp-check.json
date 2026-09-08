@@ -1,0 +1,38 @@
+{
+  "mcpHandshake": true,
+  "toolCount": 28,
+  "toolNames": [
+    "get_addon_status",
+    "disable_telemetry",
+    "get_scene_info",
+    "get_object_info",
+    "get_viewport_screenshot",
+    "execute_blender_code",
+    "get_polyhaven_categories",
+    "search_polyhaven_assets",
+    "download_polyhaven_asset",
+    "set_texture",
+    "get_polyhaven_status",
+    "get_hyper3d_status",
+    "get_sketchfab_status",
+    "search_sketchfab_models",
+    "get_sketchfab_model_preview",
+    "download_sketchfab_model",
+    "get_polypizza_status",
+    "search_polypizza_models",
+    "download_polypizza_model",
+    "generate_hyper3d_model_via_text",
+    "generate_hyper3d_model_via_images",
+    "poll_rodin_job_status",
+    "import_generated_asset",
+    "get_hunyuan3d_status",
+    "generate_hunyuan3d_model",
+    "poll_hunyuan_job_status",
+    "import_generated_asset_hunyuan",
+    "record_trajectory_feedback"
+  ],
+  "sceneReadIsError": false,
+  "scene": [
+    "{\n  \"name\": \"Scene\",\n  \"object_count\": 80,\n  \"objects\": [\n    {\n      \"name\": \"moebius-cyber-ink-tiger\",\n      \"type\": \"EMPTY\",\n      \"location\": [\n        0.0,\n        0.0,\n        0.0\n      ]\n    },\n    {\n      \"name\": \"tiger-body\",\n      \"type\": \"EMPTY\",\n      \"location\": [\n        0.0,\n        0.0,\n        1.64\n      ]\n    },\n    {\n      \"name\": \"tiger-torso\",\n      \"type\": \"MESH\",\n      \"location\": [\n        0.0,\n        0.0,\n        0.0\n      ]\n    },\n    {\n      \"name\": \"n3\",\n      \"type\": \"MESH\",\n      \"location\": [\n        0.0,\n        0.0,\n        0.0\n      ]\n    },\n    {\n      \"name\": \"n4\",\n      \"type\": \"MESH\",\n      \"location\": [\n        0.0,\n        2.0,\n        0.05\n      ]\n    },\n    {\n      \"name\": \"n5\",\n      \"type\": \"MESH\",\n      \"location\": [\n        0.0,\n        0.0,\n        0.0\n      ]\n    },\n    {\n      \"name\": \"n6\",\n      \"type\": \"MESH\",\n      \"location\": [\n        0.0,\n        -1.65,\n        0.08\n      ]\n    },\n    {\n      \"name\": \"n7\",\n      \"type\": \"MESH\",\n      \"location\": [\n        0.0,\n        0.0,\n        0.0\n      ]\n    },\n    {\n      \"name\": \"tiger-head\",\n      \"type\": \"EMPTY\",\n      \"location\": [\n        0.0,\n        -2.42,\n        0.72\n      ]\n    },\n    {\n      \"name\": \"n9\",\n      \"type\": \"MESH\",\n      \"location\": [\n        0.0,\n        0.0,\n        0.0\n      ]\n    }\n  ],\n  \"materials_count\": 12\n}"
+  ]
+}

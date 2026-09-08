@@ -6,7 +6,8 @@ import * as THREE from "three";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { buildWorld } from "../world/platforms.js";
 import { buildHills, groundLiftAt } from "../world/hills.js";
-import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets, decorateCorridorForests } from "../world/nature.js";
+import { decorateFarSide, decoratePlayZone, createCloudRing, settleBuriedAssets, decorateCorridorForests } from "../world/nature.js?v=bookshop-clearance-20260908";
+import { fitBookshopPath } from "../assets/bookshopPath.js";
 import { createMoonLake } from "../world/lake.js";
 import { GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { canyonOffsetDir } from "../world/canyon.js";
@@ -25,6 +26,7 @@ import { loadMoebiusDistrict, placeMoebiusSwampAndSky } from "./messenger/loadMo
 import { loadTram, loadCanalNetwork, loadAbandonedGateBlock } from "./messenger/loadTraffic.js";
 import { updateMessengerIsland } from "./messenger/updateIsland.js";
 import { createSwampBgmState } from "./messenger/swampBgm.js";
+import { createBookshopPlantingClearance } from "./messenger/bookshopLayout.js";
 import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
 import { createScoutDefenseSquad } from "../world/scoutDefense.js";
 import { pruneTaggedOfficialOceanOccludeds } from "../core/officialOceanOcclusionPruning.js";
@@ -175,7 +177,7 @@ export const messengerIslandScene = {
     bookshop.userData.mapUid = "world-bookshop";
     placeObjectOnSphere(bookshop, bookshopX, bookshopZ, groundLiftAt(bookshopX, bookshopZ), R);
     bookshop.rotateY(-0.5);
-    bookshop.add(createBookshopHydrangeas());
+    bookshop.add(createBookshopHydrangeas({ layout: bookshop.userData.blenderArt ? "blender-v3" : "original" }));
     scene.add(bookshop);
 
     const skyPack = placeMoebiusSwampAndSky({
@@ -404,14 +406,18 @@ export const messengerIslandScene = {
     // 必须放在电车建成之后：要拿轨道曲线做净空避让，否则树会种在
     // carveHillsForTrack 削平的走廊里、悬在半空。
     // 也必须放在 settleBuriedAssets 之前，让沉降 pass 顺手把边界树落回地表。
+    const bookshopPlanting = createBookshopPlantingClearance(bookshop);
     const corridorForest = decorateCorridorForests(scene, R, {
       trackCurves: tramSystem
         ? [tramSystem.curve, ...Object.values(tramSystem.curves || {})]
         : null,
+      acceptTree: bookshopPlanting.accepts,
     });
+    bookshop.userData.plantingClearance = bookshopPlanting.report;
     colliders.push(...corridorForest.colliders);
 
     settleBuriedAssets(scene, colliders);
+    if (bookshop.userData.blenderArt) fitBookshopPath(bookshop, hills.sampleRadius);
 
     // eslint-disable-next-line prefer-const
     const combatPack = loadCitadelCombat({

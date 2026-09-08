@@ -1,0 +1,52 @@
+{
+  "id": "agentMessenger",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "ba1aac557c20b07e66c9210a234699d8e2b40ac724671c99aedfa45dc316b5e1",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n6",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 429,
+        "verticesAfter": 393,
+        "normalError": 5.4262014828054816e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n5",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 429,
+        "verticesAfter": 389,
+        "normalError": 5.602934163562168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n7",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 3,
+  "removedEditVertices": 92
+}

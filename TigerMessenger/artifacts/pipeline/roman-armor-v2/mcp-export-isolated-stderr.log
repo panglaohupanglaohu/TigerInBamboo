@@ -1,0 +1,21 @@
+2026-09-09 01:05:46,717 - BlenderMCPServer - INFO - BlenderMCP server starting up
+2026-09-09 01:05:46,718 - BlenderMCPServer - INFO - Blender addon on disk is current (protocol 5).
+2026-09-09 01:05:46,718 - blender-mcp-telemetry - WARNING - Telemetry disabled via environment variable
+2026-09-09 01:05:46,719 - BlenderMCPServer - INFO - Connected to Blender at 127.0.0.1:9876
+2026-09-09 01:05:46,719 - BlenderMCPServer - INFO - Created new persistent connection to Blender
+2026-09-09 01:05:46,719 - BlenderMCPServer - INFO - Sending command: get_addon_info with params: None
+2026-09-09 01:05:46,719 - BlenderMCPServer - INFO - Command sent, waiting for response...
+2026-09-09 01:05:46,766 - BlenderMCPServer - INFO - Received complete response (358 bytes)
+2026-09-09 01:05:46,766 - BlenderMCPServer - INFO - Received 358 bytes of data
+2026-09-09 01:05:46,766 - BlenderMCPServer - INFO - Response parsed, status: success
+2026-09-09 01:05:46,766 - BlenderMCPServer - INFO - Blender addon up to date (protocol 5, addon [1, 6], Blender 5.2.1 LTS)
+2026-09-09 01:05:46,766 - BlenderMCPServer - INFO - Successfully connected to Blender on startup
+2026-09-09 01:05:46,769 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-09 01:05:46,774 - BlenderMCPServer - INFO - Sending command: execute_code with params: {'code': "import bpy,json\nfrom pathlib import Path\nbase=Path('/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger')\nfor scene_name,filename in [('Roman Shield Handle V1','roman-shield-handle-v1.glb'),('Roman Armor V2 Refined','roman-armor-v2.glb')]:\n scene=bpy.data.scenes[scene_name];bpy.context.window.scene=scene\n for o in scene.objects:o.select_set(o.parent is not None and o.parent.name.startswith('Roman_') or o.type=='EMPTY' and o.name.startswith('Roman_'))\n bpy.ops.export_scene.gltf(filepath=str(base/'godot/assets/art-pilots'/filename),export_format='GLB',use_selection=True,use_active_scene=True,export_yup=True,export_extras=True)\nprint('Exported single active scene, selection only; preserved mesh geometry and local transforms')\n"}
+2026-09-09 01:05:46,774 - BlenderMCPServer - INFO - Command sent, waiting for response...
+2026-09-09 01:05:46,872 - BlenderMCPServer - INFO - Received complete response (976 bytes)
+2026-09-09 01:05:46,873 - BlenderMCPServer - INFO - Received 976 bytes of data
+2026-09-09 01:05:46,873 - BlenderMCPServer - INFO - Response parsed, status: success
+2026-09-09 01:05:46,878 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-09 01:05:46,881 - BlenderMCPServer - INFO - Disconnecting from Blender on shutdown
+2026-09-09 01:05:46,881 - BlenderMCPServer - INFO - BlenderMCP server shut down

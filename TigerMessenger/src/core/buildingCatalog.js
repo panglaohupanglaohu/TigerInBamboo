@@ -6,7 +6,7 @@
 //    - collideRadius 优先读 object.userData（工厂写入）
 // =====================================================================
 import * as THREE from "three";
-import { createHardToFindBookshop, createGrassTuft } from "../assets/bookshop.js";
+import { createHardToFindBookshop, createGrassTuft } from "../assets/bookshop.js?v=entrance-path-20260908";
 import {
   createLowPolyHouse,
   createLowPolySignpost,
@@ -62,10 +62,10 @@ import { buildHills } from "../world/hills.js";
 import { createMoonLake } from "../world/lake.js";
 import { buildChristchurchTramSystem } from "../world/tramSystem.js";
 import { createDynamicMoebiusClouds } from "../world/equatorialClouds.js";
-import { buildImpastoMossyGround } from "../world/mossyGround.js";
+import { buildImpastoMossyGround } from "../assets/terrain/mossyGround.js";
 import { buildWorld } from "../world/platforms.js";
-import { buildMessenger } from "../player/messenger.js";
-import { buildAgentMessenger } from "../player/agentMessenger.js";
+import { buildMessenger } from "../assets/characters/messenger.js";
+import { buildAgentMessenger } from "../assets/characters/agentMessenger.js";
 
 /**
  * @typedef {object} BuildingDef
@@ -281,6 +281,7 @@ export const BUILDING_CATALOG = {
       createMoebiusSwampPlacement({
         seed: opts.seed ?? 7711,
         scale: opts.scale ?? 0.5,
+        tigerAnatomy: opts.anatomy,
       }),
     defaultYaw: 0.6,
     collideRadius: 0, // 可走入：不设碰撞墙，送信人可直接进入坑缘/跳入湖沼
@@ -394,7 +395,7 @@ export const BUILDING_CATALOG = {
   moebiusTiger: {
     id: "moebiusTiger",
     label: "赛博水墨虎",
-    create: () => createMoebiusTiger(),
+    create: (opts = {}) => createMoebiusTiger(opts.rnd ?? Math.random, null, opts),
     defaultYaw: 0,
     collideRadius: 1.0,
     color: "#FF6347",
@@ -650,7 +651,7 @@ export const BUILDING_CATALOG = {
   swampZone: {
     id: "swampZone",
     label: "莫比斯湖沼生态区",
-    create: (opts = {}) => createMoebiusSwampZone({ seed: opts.seed ?? 20260804 }),
+    create: (opts = {}) => createMoebiusSwampZone({ seed: opts.seed ?? 20260804, tigerAnatomy: opts.anatomy }),
     defaultYaw: 0,
     collideRadius: 0,
     color: "#48C9B0",

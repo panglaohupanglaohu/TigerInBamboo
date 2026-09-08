@@ -1,0 +1,51 @@
+[
+  {
+    "original": "src/player/messenger.js",
+    "canonical": "src/assets/characters/messenger.js",
+    "beforeSha256": "4677695e75f589dabec978e9325e9b0d94fa812b183252ffb68ad189214aa40f",
+    "afterSha256": "4677695e75f589dabec978e9325e9b0d94fa812b183252ffb68ad189214aa40f",
+    "change": "path/imports only; model code unchanged"
+  },
+  {
+    "original": "src/player/agentMessenger.js",
+    "canonical": "src/assets/characters/agentMessenger.js",
+    "beforeSha256": "67aed898cb35851a249379098a2869fa7c6832aee627f2ceab45675a0b9be9fd",
+    "afterSha256": "67aed898cb35851a249379098a2869fa7c6832aee627f2ceab45675a0b9be9fd",
+    "change": "path/imports only; model code unchanged"
+  },
+  {
+    "original": "src/agents/citadel/paperMesh.js",
+    "canonical": "src/assets/characters/paperSoldier.js",
+    "beforeSha256": "eee06301aa5c60302a6325e523b1674e280e99f0dae74fe377eb63bb42828a1b",
+    "afterSha256": "f11c5b103b1172111b5282340adfe4b165e0d3fad6916cd7236dc1c26acc46a2",
+    "change": "path/imports only; model code unchanged"
+  },
+  {
+    "original": "src/world/citadel/familyMesh.js",
+    "canonical": "src/assets/citadel/familyMesh.js",
+    "beforeSha256": "cbd088af93781cf14ed650c1638b26220e6e98c86db932700a53b8f7d6aedc08",
+    "afterSha256": "e67318546569dd095f039f8f2ef5e56e2060aafe632b21314c540e9af527907a",
+    "change": "path/imports only; model code unchanged"
+  },
+  {
+    "original": "src/world/citadel/terrainMesh.js",
+    "canonical": "src/assets/citadel/terrainMesh.js",
+    "beforeSha256": "6798ac61af2cbfa9ab090ef848db6fadbb8770e069a0b9a3071f9d0ba862d719",
+    "afterSha256": "4bb277a30728e2d046fb9d72f65d6cab0ae280f80d8e0b1963c37423289c3bf0",
+    "change": "path/imports only; model code unchanged"
+  },
+  {
+    "original": "src/world/sphereShell.js",
+    "canonical": "src/assets/terrain/sphereShell.js",
+    "beforeSha256": "1ec5f506685287895ccab5ed78a1e051e224b60a470fa2f5c0f7e22fa78d965e",
+    "afterSha256": "1ec5f506685287895ccab5ed78a1e051e224b60a470fa2f5c0f7e22fa78d965e",
+    "change": "path/imports only; model code unchanged"
+  },
+  {
+    "original": "src/world/mossyGround.js",
+    "canonical": "src/assets/terrain/mossyGround.js",
+    "beforeSha256": "cb38a6924be5980cf354555c31d2577ad74455ed61e1646d6a55d470d91e784e",
+    "afterSha256": "1c8b8c77fd670981fbf2052833bb54b5d6a1a7a3fca9c5520480d28c3a804b53",
+    "change": "path/imports only; model code unchanged"
+  }
+]

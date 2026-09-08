@@ -1,0 +1,25 @@
+{
+  "asset": "res://assets/art-pilots/bookshop-art-v3.glb",
+  "capture": "godot-gameplay.png",
+  "capture_size": "(976, 610)",
+  "chapter_after_r": 1,
+  "draw_calls_ink_off": 702.0,
+  "draw_calls_ink_on": 703.0,
+  "facade_collision": "(9.367293, 32.57573, 4.749636)",
+  "failures": [],
+  "forecourt_grounded": true,
+  "garden_rim_max_distance": 0.0468447171151638,
+  "ink_expansion": [
+    0.00992133917233878,
+    0.0311850460109599
+  ],
+  "ink_parts": 26,
+  "ink_surfaces": 1,
+  "ink_triangles": 416,
+  "passed": true,
+  "primitives_ink_off": 157486.0,
+  "primitives_ink_on": 157902.0,
+  "scene": "res://scenes/main.tscn",
+  "spawn_grounded": true,
+  "wall_dimensions": "(4.60001, 7.00001, 3.60001)"
+}

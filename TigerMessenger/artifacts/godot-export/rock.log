@@ -1,0 +1,17 @@
+00:00.342  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/blender-r3/rock.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+04:15:41 | INFO: Starting glTF 2.0 export
+04:15:41 | INFO: Extracting primitive: n1.001
+04:15:41 | INFO: Primitives created: 1
+04:15:41 | INFO: Finished glTF 2.0 export in 0.004986763000488281 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/godot-export/rock.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

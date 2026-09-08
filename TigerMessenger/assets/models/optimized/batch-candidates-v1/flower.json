@@ -1,0 +1,22 @@
+{
+  "id": "flower",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "ca18d2b952871d1814b26771b4ef6626cd9bd2e31b5a4ba1665df0bffad8fa08",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n3",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n2",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

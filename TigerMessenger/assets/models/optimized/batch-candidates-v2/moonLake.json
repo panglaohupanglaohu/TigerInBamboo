@@ -1,0 +1,242 @@
+{
+  "id": "moonLake",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "503fe64c2de9755f2f2d6500b7ae470cd281b1367da7849affc70807a43027a4",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n10",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "moon-lake-orb-body",
+      "result": "preserved: welding would collapse a face"
+    },
+    {
+      "mesh": "moon-lake-orb-halo",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n11",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "moon-lake-orb-earthshine",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n12",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n13",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n14",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n15",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n16",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n30",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n7",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n9",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n35",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 114,
+        "verticesAfter": 113,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n29",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n8",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n32",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n31",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n28",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n22",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n21",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 114,
+        "verticesAfter": 113,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n17",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n19",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n18",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n20",
+      "result": {
+        "verticesBefore": 30,
+        "verticesAfter": 20,
+        "normalError": 5.480647087097168e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n38",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n39",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n4",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n6",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n5",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n37",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n36",
+      "result": "already has no exact duplicate positions"
+    }
+  ],
+  "changedMeshes": 16,
+  "removedEditVertices": 142
+}

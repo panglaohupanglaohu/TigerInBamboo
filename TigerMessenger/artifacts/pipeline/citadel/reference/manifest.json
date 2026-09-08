@@ -1,0 +1,797 @@
+{
+  "url": "http://127.0.0.1:8767/TigerMessenger/",
+  "featureFlags": {
+    "citadelCombatV2": false,
+    "citadelTownV4": false,
+    "citadelTerrainUvV2": false,
+    "citadelCombatV3": false,
+    "citadelPaletteV3": false,
+    "oskLightingV1": false,
+    "voxelAoV1": false,
+    "voxelBounceV1": false,
+    "lightingQuality": "medium",
+    "localLightBudgetV1": null,
+    "planetTerrainV1": false,
+    "curvedWaterV1": false,
+    "terrainSemanticShaderV1": false,
+    "cloudImpostorV1": false,
+    "oceanWorldRoutesV1": false,
+    "planetSurfaceRidersV1": false,
+    "legacyCanalWorld": true,
+    "seasonBandsV1": true,
+    "canalJunctionV1": true,
+    "planetPresentationVersion": "legacy",
+    "worldVersion": "custom",
+    "combatSeed": 1,
+    "townSeed": 1,
+    "terrainSeed": 1
+  },
+  "parameters": {
+    "irregularGridV1": false,
+    "wfcTownV1": false
+  },
+  "root": {
+    "name": "castleContainer",
+    "type": "Group",
+    "visible": true,
+    "children": 8,
+    "localBounds": {
+      "min": [
+        -95.39253792541143,
+        -41.69570617675782,
+        -80.6481550904379
+      ],
+      "max": [
+        91.79999999999997,
+        72.28758712690703,
+        63.805668213618354
+      ]
+    },
+    "userDataKeys": [
+      "highlandCloudBlobs",
+      "highlandHeroClouds",
+      "highlandHeroCloudCount",
+      "highlandCanopyImpostorCount",
+      "highlandLightVolumes",
+      "highlandShoreWaves",
+      "highlandBacklit",
+      "skipOuterTerrain",
+      "townBaseLift",
+      "outerTerrainSystem",
+      "highlandTownscaperGrid",
+      "skipDecor",
+      "update",
+      "anchor",
+      "curvatureDrop",
+      "kind",
+      "blueprint",
+      "blueprintSummary",
+      "buildStages",
+      "blueprintVersion",
+      "instanceId",
+      "highlandLatestDesign",
+      "highlandLatestDesignVersion",
+      "highlandLatestDesignMetrics",
+      "highlandLatestDesignRoot",
+      "highlandAssaultAnchors",
+      "floors",
+      "spec",
+      "contourSpec",
+      "townBaseY",
+      "townBaseYs",
+      "terrainMaterials",
+      "layers",
+      "mainCastle",
+      "terrainObjects",
+      "terrainObjectsSpec",
+      "townSpec",
+      "townCtxCache",
+      "wfcTownV1",
+      "wfcSeed",
+      "townStats",
+      "gridV6",
+      "buildingOwnedPropSlots",
+      "buildingOwnedProps",
+      "buildingOwnedPropHash",
+      "nonBuildingPropCount",
+      "townSurfaceConformance",
+      "mainOutlinedSurfaceCount",
+      "terrainOutlinedSurfaceCount",
+      "outlinedSurfaceCount",
+      "gradientMap",
+      "windowDarkMat",
+      "windowLitMat",
+      "townWindows",
+      "latestDesignWindows",
+      "windowNightRolled",
+      "windowInstances",
+      "windowInstanceSignature",
+      "v4RuntimeSuppressed"
+    ]
+  },
+  "rootTransform": {
+    "position": [
+      114.44628925433727,
+      63.31980449134136,
+      83.30278587832983
+    ],
+    "quaternion": [
+      0.2681168976936125,
+      0.7641018096689944,
+      0.4732315490121727,
+      -0.34686258756351956
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "townBounds": {
+    "min": [
+      -19.450000762939457,
+      3.7950000286102155,
+      -23.65999984741211
+    ],
+    "max": [
+      19.450000762939442,
+      30.019999694824207,
+      22.645305633544915
+    ],
+    "center": [
+      -7.105427357601002e-15,
+      16.907499861717213,
+      -0.5073471069335973
+    ]
+  },
+  "assembly": {
+    "name": "odyssey-citadel-mountain-valley-assembly",
+    "type": "Group",
+    "visible": true,
+    "children": 13,
+    "localBounds": {
+      "min": [
+        -63.87199999999999,
+        -9.519860267639164,
+        -51.87254095813298
+      ],
+      "max": [
+        63.882997541385116,
+        44,
+        57.999999999999986
+      ]
+    },
+    "userDataKeys": [
+      "buildStage"
+    ]
+  },
+  "assemblyChildren": [
+    {
+      "name": "citadel-layer-0",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -19.450000762939457,
+          3.7950000286102155,
+          -23.450000762939453
+        ],
+        "max": [
+          19.450000762939442,
+          8.745000076293934,
+          22.645305633544915
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-1",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -17.659999847412113,
+          6.949999999999986,
+          -23.65999984741211
+        ],
+        "max": [
+          17.6599998474121,
+          13.47999973297118,
+          21.659999847412102
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-2",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -17.659999847412113,
+          4.949999957084654,
+          -23.65999984741211
+        ],
+        "max": [
+          17.6599998474121,
+          15.47999973297118,
+          15.659999847412102
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-3",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -17.659999847412113,
+          4.949999999999987,
+          -23.15374183654785
+        ],
+        "max": [
+          17.6599998474121,
+          14.745000076293934,
+          15.659999847412102
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-4",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -17.659999847412113,
+          4.949999999999987,
+          -21.65999984741211
+        ],
+        "max": [
+          17.053000000372524,
+          19.479999732971184,
+          -2.946999999627479
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-5",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -17.659999847412113,
+          14.949999999999985,
+          -21.65999984741211
+        ],
+        "max": [
+          17.053000000372524,
+          18.782500457763664,
+          -7.019342422485353
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-6",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -17.659999847412113,
+          16.949999999999985,
+          -21.65999984741211
+        ],
+        "max": [
+          15.659999847412099,
+          23.480000686645496,
+          -12.34000015258789
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-7",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -17.659999847412113,
+          18.949999999999985,
+          -19.65999984741211
+        ],
+        "max": [
+          15.659999847412099,
+          23.277499389648426,
+          -12.34000015258789
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-8",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -15.659999847412111,
+          20.94999999999999,
+          -19.65999984741211
+        ],
+        "max": [
+          15.6599998474121,
+          27.480000686645493,
+          -12.34000015258789
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-9",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -15.659999847412111,
+          22.94999999999999,
+          -17.239999771118164
+        ],
+        "max": [
+          -13.016652107238771,
+          24.949999999999985,
+          -14.340000152587892
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-10",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": {
+        "min": [
+          -15.659999847412111,
+          24.949999999999985,
+          -17.239999771118164
+        ],
+        "max": [
+          -13.016934394836428,
+          30.019999694824207,
+          -14.340000152587892
+        ]
+      },
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-layer-11",
+      "type": "Group",
+      "visible": true,
+      "children": 5,
+      "localBounds": null,
+      "userDataKeys": [
+        "layerIndex"
+      ]
+    },
+    {
+      "name": "citadel-latest-design-v1",
+      "type": "Group",
+      "visible": true,
+      "children": 6,
+      "localBounds": {
+        "min": [
+          -63.87199999999999,
+          -9.519860267639164,
+          -51.87254095813298
+        ],
+        "max": [
+          63.882997541385116,
+          44,
+          57.999999999999986
+        ]
+      },
+      "userDataKeys": [
+        "nonNavigable",
+        "presentationOnly",
+        "groundSurfaceHeight",
+        "cityGroundHeight",
+        "walkSurfaceProvider",
+        "castleUnits",
+        "castleUnitEditor",
+        "castleEditMode",
+        "castleOccupiedUnitCount",
+        "castleExpansionSlotCount",
+        "castleUnitBandCount",
+        "castleUnitPalette",
+        "editCastleUnit",
+        "editCastleUnits",
+        "latestDesign",
+        "assaultAnchors"
+      ]
+    }
+  ],
+  "rootChildren": [
+    {
+      "name": "highland-hero-cloud-impostors",
+      "type": "Mesh",
+      "visible": true,
+      "children": 0,
+      "localBounds": {
+        "min": [
+          -0.500000000000007,
+          -0.5,
+          -3.580469254416123e-15
+        ],
+        "max": [
+          0.4999999999999928,
+          0.5,
+          -3.524958103184865e-15
+        ]
+      },
+      "userDataKeys": [
+        "cloudAlgorithm",
+        "lowLayerInstances",
+        "heroCloudCount",
+        "heroRoles",
+        "impostorShape",
+        "sharedImpostor",
+        "canopyCount",
+        "cloudCount",
+        "heroDayPhaseWeight",
+        "kind",
+        "heroCount",
+        "cap"
+      ]
+    },
+    {
+      "name": "highland-hero-cloud-blobs",
+      "type": "Group",
+      "visible": true,
+      "children": 41,
+      "localBounds": {
+        "min": [
+          -95.39253792541143,
+          6.903514879615338,
+          -80.6481550904379
+        ],
+        "max": [
+          84.62951800325625,
+          72.28758712690703,
+          63.805668213618354
+        ]
+      },
+      "userDataKeys": [
+        "kind",
+        "clusterCount",
+        "update",
+        "blobCount"
+      ]
+    },
+    {
+      "name": "highland-light-volumes",
+      "type": "Group",
+      "visible": true,
+      "children": 15,
+      "localBounds": {
+        "min": [
+          -23.079292191891003,
+          -5.0664965672292235,
+          -23
+        ],
+        "max": [
+          22.87381521803326,
+          12.399999999999974,
+          51.999999999999986
+        ]
+      },
+      "userDataKeys": [
+        "kind",
+        "lampCount",
+        "bakeHashes",
+        "volumeShellCount",
+        "realLightCount",
+        "waterReflectionCount",
+        "update"
+      ]
+    },
+    {
+      "name": "citadel-continuous-mountain-terrain-system",
+      "type": "Group",
+      "visible": true,
+      "children": 7,
+      "localBounds": {
+        "min": [
+          -91.8,
+          -41.69570617675782,
+          -60.17999999999999
+        ],
+        "max": [
+          91.79999999999997,
+          57.91655204772949,
+          60.17999999999999
+        ]
+      },
+      "userDataKeys": [
+        "terrainLayerCount",
+        "terraceLayerCount",
+        "waterfallCount",
+        "continuousGround",
+        "heightFunction",
+        "gridMethod",
+        "flatBase",
+        "canalRockObstructionRemoved",
+        "frontObstaclePolicy",
+        "wfc",
+        "surfaceRadius",
+        "groundSurfaceHeight",
+        "mountainRangeSpan",
+        "buildStage",
+        "townFoundation",
+        "highlandSlopeGrass"
+      ]
+    },
+    {
+      "name": "odyssey-citadel-mountain-valley-assembly",
+      "type": "Group",
+      "visible": true,
+      "children": 13,
+      "localBounds": {
+        "min": [
+          -63.87199999999999,
+          -9.519860267639164,
+          -51.87254095813298
+        ],
+        "max": [
+          63.882997541385116,
+          44,
+          57.999999999999986
+        ]
+      },
+      "userDataKeys": [
+        "buildStage"
+      ]
+    },
+    {
+      "name": "citadel-terrain-objects",
+      "type": "Group",
+      "visible": true,
+      "children": 0,
+      "localBounds": null,
+      "userDataKeys": [
+        "placements",
+        "objectCount",
+        "buildStage"
+      ]
+    },
+    {
+      "name": "citadel-svarbova-ambient",
+      "type": "AmbientLight",
+      "visible": true,
+      "children": 0,
+      "localBounds": null,
+      "userDataKeys": []
+    },
+    {
+      "name": "citadel-svarbova-sun",
+      "type": "DirectionalLight",
+      "visible": true,
+      "children": 0,
+      "localBounds": null,
+      "userDataKeys": []
+    }
+  ],
+  "meshCount": 1212,
+  "hiddenMeshCount": 24,
+  "design": {
+    "highlandLatestDesign": true,
+    "version": "2026.08.27-reference-obelisk-stone-v12-vegetation-bands",
+    "v4RuntimeSuppressed": "retired-five-terrace-topology",
+    "instanceId": null
+  },
+  "captures": [
+    {
+      "id": "01-overview",
+      "label": "完整默认圣城全景",
+      "selection": "Actual town layer bounds inside full mountain-valley assembly",
+      "walkabilityVerified": false,
+      "camera": {
+        "localPosition": [
+          37.199999999999996,
+          55.90749986171721,
+          68.4926528930664
+        ],
+        "localTarget": [
+          -7.105427357601002e-15,
+          16.907499861717213,
+          -0.5073471069335973
+        ],
+        "worldPosition": [
+          113.88192448519045,
+          151.4513600017507,
+          121.16097464695657
+        ],
+        "worldTarget": [
+          127.06471595029709,
+          69.76237494721859,
+          92.54343230055746
+        ],
+        "up": [
+          0.7380298526751614,
+          0.4083304603813851,
+          0.5371947241783054
+        ],
+        "quaternion": [
+          0.2600573458889937,
+          0.5185978047474896,
+          0.6606255438578128,
+          -0.4764455735578051
+        ],
+        "fov": 48,
+        "near": 0.1,
+        "far": 2500,
+        "aspect": 1.3333333333333333
+      },
+      "renderInfo": {
+        "frame": 3,
+        "calls": 1785,
+        "triangles": 458918,
+        "points": 0,
+        "lines": 2
+      },
+      "file": "01-overview.png",
+      "sha256": "8456bee089843c99b6e6f5a79be932a1eddcfc4d76066478ed2f919f73112042"
+    },
+    {
+      "id": "02-buildings",
+      "label": "圣城建筑群近景",
+      "selection": "Front quarter of actual town layer bounds",
+      "walkabilityVerified": false,
+      "camera": {
+        "localPosition": [
+          11.999999999999993,
+          27.107499861717216,
+          36.45813842773437
+        ],
+        "localTarget": [
+          -7.105427357601002e-15,
+          16.907499861717213,
+          12.45813842773437
+        ],
+        "worldPosition": [
+          116.99135033820808,
+          108.51346369113253,
+          95.91501163674921
+        ],
+        "worldTarget": [
+          123.48217191988856,
+          81.55051151726282,
+          88.50498833959249
+        ],
+        "up": [
+          0.7380298526751614,
+          0.4083304603813851,
+          0.5371947241783054
+        ],
+        "quaternion": [
+          0.24240444270407902,
+          0.5587244599264102,
+          0.6335185136143782,
+          -0.4772015894201265
+        ],
+        "fov": 48,
+        "near": 0.1,
+        "far": 2500,
+        "aspect": 1.3333333333333333
+      },
+      "renderInfo": {
+        "frame": 4,
+        "calls": 1166,
+        "triangles": 435954,
+        "points": 0,
+        "lines": 2
+      },
+      "file": "02-buildings.png",
+      "sha256": "589fb8e6fc000e2b3a71b0847f889a54cc3fa1637ef180091b5a8d793b705181"
+    },
+    {
+      "id": "03-architectural-detail",
+      "label": "建筑细节（未验证可通行入口）",
+      "selection": "Actual named object: town-window",
+      "walkabilityVerified": false,
+      "camera": {
+        "localPosition": [
+          -9.200000000000003,
+          9.59000000000002,
+          28.227999999999994
+        ],
+        "localTarget": [
+          -12.000000000000004,
+          7.790000000000019,
+          21.027999999999995
+        ],
+        "worldPosition": [
+          119.3877204417938,
+          92.15112068408928,
+          72.4508022618004
+        ],
+        "worldTarget": [
+          121.77240505143682,
+          84.64188707140647,
+          71.53173215419908
+        ],
+        "up": [
+          0.7380298526751614,
+          0.4083304603813851,
+          0.5371947241783054
+        ],
+        "quaternion": [
+          0.23013609254328285,
+          0.6237825019193939,
+          0.5896538413993951,
+          -0.4585205737270988
+        ],
+        "fov": 48,
+        "near": 0.1,
+        "far": 2500,
+        "aspect": 1.3333333333333333
+      },
+      "renderInfo": {
+        "frame": 5,
+        "calls": 654,
+        "triangles": 419882,
+        "points": 0,
+        "lines": 2
+      },
+      "file": "03-architectural-detail.png",
+      "sha256": "edb59945f0bd54bee0c7cee9ad7489d9e00e4454eeb14268dccd84418e7a0fb2"
+    }
+  ],
+  "canvas": {
+    "width": 1440,
+    "height": 1080
+  },
+  "localStorageKeys": [
+    "tm.questPanel.collapsed",
+    "tm.citadelEditor.collapsed",
+    "tm.equatorialClouds.enabled",
+    "tm.touchPad.open",
+    "tm.citadelEditor.dropToGround"
+  ],
+  "note": "Fresh isolated browser context with default world; no user profile/storage accessed. Full live scene directly rendered with temporary cameras using existing renderer. No overlay UI/postprocessing pass is captured; no culling or visibility overrides. Third view is architectural detail, not passage validation.",
+  "capturedAt": "2026-09-08T14:37:12.509Z",
+  "pageErrors": []
+}

@@ -1,0 +1,333 @@
+{
+  "exclusion_counts_by_chord_radius": {
+    "12": {
+      "house": 4,
+      "pine": 11
+    },
+    "14": {
+      "house": 6,
+      "pine": 12,
+      "tower": 2
+    },
+    "16": {
+      "house": 6,
+      "pine": 14,
+      "tower": 2
+    }
+  },
+  "nearby_legacy_roots": [
+    {
+      "bookshop_local": [
+        5.86773252487183,
+        -3.20582008361816,
+        11.7989101409912
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 13.5617799758911,
+      "kind": "tower"
+    },
+    {
+      "bookshop_local": [
+        2.99078845977783,
+        -2.62427139282227,
+        12.02783203125
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 12.6688737869263,
+      "kind": "house"
+    },
+    {
+      "bookshop_local": [
+        -3.04124164581299,
+        -2.10884094238281,
+        12.2307262420654
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 12.7783813476562,
+      "kind": "house"
+    },
+    {
+      "bookshop_local": [
+        -6.04474067687988,
+        -2.30163383483887,
+        12.1548347473145
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 13.7686748504639,
+      "kind": "tower"
+    },
+    {
+      "bookshop_local": [
+        5.95976066589355,
+        -2.16757774353027,
+        9.05874252319336
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 11.0579376220703,
+      "kind": "house"
+    },
+    {
+      "bookshop_local": [
+        3.04216265678406,
+        -1.51939010620117,
+        9.24808120727539
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 9.85344219207764,
+      "kind": "house"
+    },
+    {
+      "bookshop_local": [
+        -3.09980654716492,
+        -0.919513702392578,
+        9.42330741882324
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 9.96258163452148,
+      "kind": "house"
+    },
+    {
+      "bookshop_local": [
+        -6.16226005554199,
+        -1.11387252807617,
+        9.36653518676758
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 1,
+      "distance": 11.2670373916626,
+      "kind": "house"
+    },
+    {
+      "bookshop_local": [
+        4.32928371429443,
+        -0.555244445800781,
+        2.34250283241272
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 4.95361614227295,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -7.90971946716309,
+        -0.315475463867188,
+        2.74066519737244
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 8.37701797485352,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -1.46273696422577,
+        -0.0959930419921875,
+        -1.70000600814819
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 2.24473428726196,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -15.6764869689941,
+        -5.88603782653809,
+        -7.46668434143066
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 18.3343658447266,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -5.45228242874146,
+        -0.290477752685547,
+        -2.31055116653442
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 5.92877721786499,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -18.0468158721924,
+        -5.9916820526123,
+        -1.44861364364624
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 19.0705585479736,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -8.24521350860596,
+        -1.30243301391602,
+        -3.94818115234375
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 9.2340669631958,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -8.69476222991943,
+        -1.09578704833984,
+        -2.59369468688965
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 9.13930416107178,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -2.86769700050354,
+        -3.64570236206055,
+        14.8843002319336
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 15.5902919769287,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -12.2106475830078,
+        -3.87680816650391,
+        11.0573997497559
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 16.9232273101807,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -4.81914520263672,
+        -1.12730407714844,
+        9.8857593536377
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 11.0554599761963,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -7.42697620391846,
+        -1.05744934082031,
+        -3.85751533508301
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 8.43555450439453,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        0.568128407001495,
+        -2.74353790283203,
+        12.9025211334229
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 13.2032117843628,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -10.4235353469849,
+        -1.16359329223633,
+        0.878442287445068
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 10.5250005722046,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        3.59518098831177,
+        -2.09693717956543,
+        10.5639495849609
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 11.3542728424072,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -6.7015962600708,
+        -3.00440216064453,
+        13.1725940704346
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 15.0816125869751,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -13.3130111694336,
+        -5.02735710144043,
+        -8.9184741973877
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 16.7943363189697,
+      "kind": "pine"
+    },
+    {
+      "bookshop_local": [
+        -5.82916784286499,
+        -0.530021667480469,
+        -3.13838768005371
+      ],
+      "chapter_landmark_protected": false,
+      "colliders": 0,
+      "distance": 6.64150476455688,
+      "kind": "pine"
+    }
+  ],
+  "scope": "read-only inspection; no generation changed",
+  "waypoints": [
+    {
+      "chapter": 0,
+      "distance_to_bookshop": 6.38911151885986
+    },
+    {
+      "chapter": 1,
+      "distance_to_bookshop": 16.3932991027832
+    },
+    {
+      "chapter": 2,
+      "distance_to_bookshop": 27.4653472900391
+    },
+    {
+      "chapter": 3,
+      "distance_to_bookshop": 37.7568702697754
+    },
+    {
+      "chapter": 4,
+      "distance_to_bookshop": 52.5735740661621
+    },
+    {
+      "chapter": 5,
+      "distance_to_bookshop": 61.5170936584473
+    }
+  ]
+}

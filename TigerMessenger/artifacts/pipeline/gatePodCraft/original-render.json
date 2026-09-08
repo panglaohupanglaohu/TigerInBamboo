@@ -1,0 +1,60 @@
+{
+  "assetId": "gatePodCraft_pod-55-2",
+  "source": "assets/models/originals/supplemental/blender-r3/gatePodCraft_pod-55-2.blend",
+  "sourceSha256": "30380609d545061aec16bddc7e548201a5f4686ca8c6451638fbc1c546bcdb81",
+  "sourceUnchanged": true,
+  "render": "artifacts/pipeline/gatePodCraft/original.png",
+  "renderer": "Cycles",
+  "samples": 40,
+  "materials": "original imported node materials; no overrides",
+  "originalAxes": {
+    "nose": "+Z",
+    "up": "+Y",
+    "right": "+X"
+  },
+  "blenderAxes": {
+    "nose": "-Y",
+    "up": "+Z",
+    "right": "+X"
+  },
+  "camera": {
+    "location": [
+      19.544260025024414,
+      -29.03456687927246,
+      18.204696655273438
+    ],
+    "rotationEuler": [
+      1.0894321203231812,
+      4.0781735322070745e-08,
+      0.5950697660446167
+    ],
+    "orthoScale": 18.880836486816406
+  },
+  "bounds": {
+    "min": [
+      -6.555845737457275,
+      -3.664729118347168,
+      -1.840000033378601
+    ],
+    "max": [
+      6.555845737457275,
+      3.3400001525878906,
+      1.8259999752044678
+    ]
+  },
+  "visibleMeshCount": 64,
+  "limitations": [
+    "Blender material interpretation is not Web toon lighting parity",
+    "Hidden Web shader outlines remain excluded by archive import",
+    "No asset edits; no new geometry or concept image"
+  ],
+  "renderSha256": "99085a81af2ac4589062a585a3ebc5d792da98c656949a7527d53628e6245fa6",
+  "visualInspection": {
+    "viewed": true,
+    "observations": [
+      "完整机鼻、高翼、方箱后段和绿色端板都在画面内",
+      "灰褐/鼠尾草绿/橙点可识别；半透明座舱在归档材质渲染中偏不透明",
+      "此图只用作原作轮廓参考，不作为Web材质还原或优化后的验收"
+    ]
+  }
+}

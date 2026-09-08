@@ -1,0 +1,59 @@
+00:00.338  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/blender-r3/fox.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+04:14:22 | INFO: Starting glTF 2.0 export
+04:14:22 | INFO: Extracting primitive: fox-glow-ring.001
+04:14:22 | INFO: Primitives created: 1
+04:14:22 | INFO: Extracting primitive: fox-sleep-body.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n5.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n8.001
+04:14:22 | INFO: Primitives created: 1
+04:14:22 | INFO: Extracting primitive: n10.001
+04:14:22 | INFO: Primitives created: 1
+04:14:22 | INFO: Extracting primitive: n13.001
+04:14:22 | INFO: Primitives created: 1
+04:14:22 | INFO: Extracting primitive: n15.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n17.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n20.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n22.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n25.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n27.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n29.001
+04:14:22 | INFO: Primitives created: 2
+04:14:22 | INFO: Extracting primitive: n31.001
+04:14:22 | INFO: Primitives created: 2
+04:14:22 | INFO: Extracting primitive: n34.001
+04:14:22 | INFO: Primitives created: 2
+04:14:22 | INFO: Extracting primitive: n36.001
+04:14:22 | INFO: Primitives created: 2
+04:14:22 | INFO: Extracting primitive: n39.001
+04:14:22 | INFO: Primitives created: 2
+04:14:22 | INFO: Extracting primitive: n41.001
+04:14:22 | INFO: Primitives created: 2
+04:14:22 | INFO: Extracting primitive: n43.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n45.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n47.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Extracting primitive: n49.001
+04:14:22 | INFO: Primitives created: 6
+04:14:22 | INFO: Finished glTF 2.0 export in 0.04036092758178711 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/godot-export/fox.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

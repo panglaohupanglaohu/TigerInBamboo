@@ -1,0 +1,18 @@
+{
+  "id": "blackRock",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "8ff0bc5655e04e41064b865933d56085d4bb53fc270b6e11c570921fc7246c7d",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n2",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

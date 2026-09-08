@@ -42,7 +42,7 @@
 //  纯数据，禁止 import Three.js / DOM。
 // =====================================================================
 
-import { solveTownSelection } from "./wfcTownSelection.js";
+import { solveTownSelection, assertTownGraphMatchesGrid } from "./wfcTownSelection.js";
 
 /** 布局签名：只要它不变，解就不用重算 */
 export function townGridSignature(grid) {
@@ -69,13 +69,15 @@ export function townGridSignature(grid) {
  * @returns {{ ok:boolean, byCell:object, roleAt:(ix:number,iy:number,iz:number)=>string|null,
  *             hash:string|null, unresolved:string[], fromCache:boolean, ms:number }}
  */
-export function resolveTownSelection(grid, { cache = null, seed = 1 } = {}) {
-  const sig = `${townGridSignature(grid)}|${seed}`;
+export function resolveTownSelection(grid, { cache = null, seed = 1, graph = null } = {}) {
+  assertTownGraphMatchesGrid(graph, grid);
+  if (graph && !graph.topologyHash) throw new Error("Face graph cache requires topologyHash");
+  const sig = graph ? `face:${graph.topologyHash}|${seed}` : `${townGridSignature(grid)}|${seed}`;
   if (cache && cache.wfcTownSelection?.sig === sig) {
     return { ...cache.wfcTownSelection.value, fromCache: true };
   }
   const t0 = Date.now();
-  const r = solveTownSelection({ grid, seed });
+  const r = solveTownSelection({ grid, seed, graph });
   const byCell = r.byCell ?? {};
   // 求解失败**不回退哈希路径**（S20④ 静默失败：只标格，不假装成功）。
   // roleAt 全部返回 null，调用方于是原样走手写规则。
@@ -83,6 +85,8 @@ export function resolveTownSelection(grid, { cache = null, seed = 1 } = {}) {
     ok: r.ok === true,
     byCell,
     hash: r.hash ?? null,
+    topologyHash: r.topologyHash,
+    roleAtFace: r.roleAtFace,
     unresolved: r.unresolved ?? [],
     ms: Date.now() - t0,
   };

@@ -1,0 +1,25 @@
+00:00.345  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/blender-r3/bookshopHydrangeas.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+04:16:13 | INFO: Starting glTF 2.0 export
+04:16:13 | INFO: Extracting primitive: n226.001
+04:16:13 | INFO: Primitives created: 1
+04:16:13 | INFO: Extracting primitive: n227.001
+04:16:13 | INFO: Primitives created: 1
+04:16:13 | INFO: Extracting primitive: n228.001
+04:16:13 | INFO: Primitives created: 1
+04:16:13 | INFO: Extracting primitive: n229.001
+04:16:13 | INFO: Primitives created: 1
+04:16:13 | INFO: Extracting primitive: n230.001
+04:16:13 | INFO: Primitives created: 1
+04:16:13 | INFO: Finished glTF 2.0 export in 0.11286401748657227 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/godot-export/bookshopHydrangeas.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

@@ -207,3 +207,43 @@ export function compileTokenCompatibilityTable(variants, tokens, opts = {}) {
     },
   };
 }
+
+/** Compile compatibility for the two actual local sides of a shared edge.
+ * Unlike a Cartesian neighbor, an irregular face's E side can meet E or N.
+ * Reuses the exact production connector/parity/exclusion/walkable predicate.
+ * No boundary is silently matched to an occupied neighbor.
+ */
+export function compileSidePairCompatibilityTable(compiled, sidePairs) {
+  const faces = new Set(["N", "E", "S", "W", "U", "D"]);
+  const pairs = new Map();
+  for (const pair of sidePairs) {
+    const { direction, sourceSide, targetSide } = pair;
+    if (typeof direction !== "string" || !direction || !faces.has(sourceSide) || !faces.has(targetSide)) {
+      throw new Error("invalid side-pair compatibility descriptor");
+    }
+    const old = pairs.get(direction);
+    if (old && (old.sourceSide !== sourceSide || old.targetSide !== targetSide)) throw new Error("conflicting side-pair token");
+    pairs.set(direction, { sourceSide, targetSide });
+  }
+  for (const pair of pairs.values()) {
+    if (![...pairs.values()].some(p => p.sourceSide === pair.targetSide && p.targetSide === pair.sourceSide)) {
+      throw new Error("side-pair has no reverse descriptor");
+    }
+  }
+  const compatible = {};
+  const { variants } = compiled;
+  for (const [direction, pair] of pairs) {
+    compatible[direction] = variants.map(() => new BitSet(variants.length, false));
+    for (let a = 0; a < variants.length; a++) for (let b = 0; b < variants.length; b++) {
+      const va = variants[a], vb = variants[b];
+      const fa = va.faces[pair.sourceSide], fb = vb.faces[pair.targetSide];
+      if (!fa || !fb || fa.connector === "boundary" || fb.connector === "boundary") continue;
+      if (facesCompatible(fa, fb, va, vb)) compatible[direction][a].set(b);
+    }
+  }
+  return {
+    directions: [...pairs.keys()], compatible, deadVariants: [],
+    isCompatible(a, direction, b) { return compatible[direction][a].has(b); },
+    neighborsOf(a, direction) { return compatible[direction][a]; },
+  };
+}

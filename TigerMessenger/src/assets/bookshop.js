@@ -6,6 +6,9 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
+import { applyOptimizedBookshopGeometry } from "./bookshopGeometry.js";
+import { applyBookshopArt } from "./bookshopArt.js";
+import { fitBookshopPath } from "./bookshopPath.js";
 
 const BRICK = 0xb87352; // 砖红
 const TRIM = 0xf5f5f0; // 奶白（门廊/柱）
@@ -149,6 +152,8 @@ export function setBookshopSignText(group, line1, line2) {
 }
 
 export function createHardToFindBookshop({
+  optimizedGeometry = true,
+  artGeometry = true,
   bermEdgeY = 0.02,
   signLine1 = "HARD TO FIND",
   signLine2 = "BOOKSHOP",
@@ -288,5 +293,7 @@ export function createHardToFindBookshop({
   g.userData.signLine1 = signLine1;
   g.userData.signLine2 = signLine2;
   g.userData.setSignText = (l1, l2) => setBookshopSignText(g, l1, l2);
+  if (optimizedGeometry) applyOptimizedBookshopGeometry(g);
+  if (artGeometry && applyBookshopArt(g)) fitBookshopPath(g);
   return g;
 }

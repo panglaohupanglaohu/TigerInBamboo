@@ -6,6 +6,7 @@
 import * as THREE from "three";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
+import { mergeStaticGroup } from "../world/geometryMerge.js";
 
 // 三种标志性插画色：淡蓝 / 乳白 / 淡黄绿（嫩苞）
 const FLOWER_COLORS = [0xa9cbef, 0xf4f7ed, 0xcbe685];
@@ -58,7 +59,7 @@ function createFlowerBall(rnd, r, color) {
  * 底部稍大（成熟蓝白），顶部稍小且多黄绿（嫩苞）；球间微重叠无机械间隙。
  * @param {number} scale 整体倍率（1 ≈ 半人高）
  */
-export function createLowPolyHydrangeaBush(scale = 1, seed = 7) {
+export function createLowPolyHydrangeaBush(scale = 1, seed = 7, { merge = true } = {}) {
   const rnd = lcg(seed);
   const bush = new THREE.Group();
   bush.name = "hydrangea-bush";
@@ -88,6 +89,7 @@ export function createLowPolyHydrangeaBush(scale = 1, seed = 7) {
   bush.userData.factoryScale = scale;
   bush.userData.factorySeed = seed;
   bush.userData.collideRadius = 0.35 * scale; // 轻挡路
+  if (merge) mergeStaticGroup(bush);
   return bush;
 }
 
@@ -97,26 +99,42 @@ export function createLowPolyHydrangeaBush(scale = 1, seed = 7) {
  *  - 门廊台阶左右各 1 丛（半人高）
  *  - 两侧贴墙 2 丛（包裹外墙）
  */
-export function createBookshopHydrangeas() {
+export function createBookshopHydrangeas({ merge = true, layout = "original" } = {}) {
   const g = new THREE.Group();
   g.name = "bookshop-hydrangeas";
+  if (layout === "blender-v3") {
+    // Same original bush and planting transforms as bookshop-art-v3.blend.
+    // Leave the entrance open instead of overlaying the legacy nine-bush row.
+    for (const x of [-2.2, 2.4]) {
+      const bush = createLowPolyHydrangeaBush(1, 7, { merge: false });
+      bush.position.set(x, 0.2, 2.75);
+      bush.scale.setScalar(0.65);
+      g.add(bush);
+    }
+    g.userData.layout = layout;
+    if (merge) mergeStaticGroup(g);
+    return g;
+  }
   // 草坪斜坡前沿一排
   for (let i = 0; i < 5; i++) {
-    const bush = createLowPolyHydrangeaBush(0.9 + (i % 2) * 0.15, 100 + i * 17);
+    const bush = createLowPolyHydrangeaBush(0.9 + (i % 2) * 0.15, 100 + i * 17, { merge: false });
     bush.position.set(-2.8 + i * 1.4, 0.28, 3.1);
     g.add(bush);
   }
   // 门廊台阶两侧（半人高小丛）
   for (const side of [-1, 1]) {
-    const bush = createLowPolyHydrangeaBush(0.55, 300 + side);
+    const bush = createLowPolyHydrangeaBush(0.55, 300 + side, { merge: false });
     bush.position.set(side * 1.15, 0.32, 2.3);
     g.add(bush);
   }
   // 贴墙两丛（包裹外墙）
   for (const side of [-1, 1]) {
-    const bush = createLowPolyHydrangeaBush(1.05, 400 + side);
+    const bush = createLowPolyHydrangeaBush(1.05, 400 + side, { merge: false });
     bush.position.set(side * 2.55, 0.32, 0.9);
     g.add(bush);
   }
+  // 216 flower balls and their leaves: five colour surfaces + two outlines.
+  // No per-flower runtime behaviour or picking contract is lost.
+  if (merge) mergeStaticGroup(g);
   return g;
 }

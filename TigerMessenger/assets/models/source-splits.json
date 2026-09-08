@@ -1,0 +1,14 @@
+[
+  {
+    "original": "src/world/moebiusTiger.js",
+    "canonical": "src/assets/characters/moebiusTiger.js",
+    "runtime": "src/world/moebiusTiger.js",
+    "preserved": "original mesh, palette, texture, joints; patrol and dialogue remain in world"
+  },
+  {
+    "original": "src/world/airshipEscort.js",
+    "canonical": "src/assets/characters/longWingGlider.js",
+    "runtime": "src/world/airshipEscort.js",
+    "preserved": "original wing/torso geometry, palette, hierarchy; escort forces and wing animation remain in manager"
+  }
+]

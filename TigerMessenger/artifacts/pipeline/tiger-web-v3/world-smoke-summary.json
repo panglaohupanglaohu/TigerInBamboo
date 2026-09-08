@@ -1,0 +1,113 @@
+{
+  "passed": false,
+  "canonicalReport": "world-2026-09-08T19-35-35-092Z/report.json",
+  "script": "tools/pipeline/test_tiger_world_web.mjs",
+  "scope": "Focused real-game smoke in a fresh headless browser, not a full player playthrough or art acceptance.",
+  "defaultCandidate": true,
+  "activationMode": "game-default",
+  "checks": {
+    "identityPreserved": true,
+    "textureReady": true,
+    "actualFrameUpdates": true,
+    "originalGreetingAndDialog": false,
+    "rescueTargetIdentity": true,
+    "visibilityRestored": true,
+    "observerRestored": true
+  },
+  "actualFramesObserved": 40,
+  "greetingObserved": true,
+  "dialogObserved": false,
+  "dialogReferenceIsSameTiger": true,
+  "rescueTargetDistanceToActor": 0,
+  "sourcesUnchanged": true,
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "visibilityOverridesApplied": 0,
+  "captures": [
+    "world-2026-09-08T19-35-35-092Z/01-initial-world.png",
+    "world-2026-09-08T19-35-35-092Z/02-candidate-world.png",
+    "world-2026-09-08T19-35-35-092Z/03-live-greeting-world.png"
+  ],
+  "knownLimitations": [
+    "Original dialog stayed idle after a one-time test-player teleport; proximity/terrain behavior remains unverified, with no claim of a full chapter interaction.",
+    "Temporary camera captures show original full scene but omit UI/postprocessing; no materials, geometry, terrain or lights were replaced.",
+    "Greeting uses existing world height/path behavior; terrain contact correctness has not been established by this smoke.",
+    "Chapter 4 was seeded only in an isolated test browser to inspect target resolution, never advanced."
+  ],
+  "priorAttempts": [
+    {
+      "run": "world-2026-09-08T19-31-39-895Z",
+      "result": "Harness captured before distance-culling proximity settled; no visible geometry error."
+    },
+    {
+      "run": "world-2026-09-08T19-33-06-622Z",
+      "result": "Combined greeting/dialog observation timed out; screenshots captured. Replaced by bounded frame evidence in canonical run."
+    }
+  ],
+  "dialogFailureDiagnosis": {
+    "method": "仅复核现有最终脚本、40帧记录和当前原游戏调用条件；未重跑浏览器，未修改运行时代码。",
+    "conclusion": "现有证据不支持把 idle 归因于模型适配器。游戏未开始和诗歌遮挡可由当前源码与测试路径排除；未验证实际世界距离是最明确的触发缺口，具体每帧距离与碰撞位移未记录，不能倒推出已证实的碰撞缺陷。",
+    "gates": [
+      {
+        "gate": "isGameStarted",
+        "assessment": "当前代码路径可排除为主要原因，但原报告未直接采样布尔值。",
+        "evidence": [
+          "smoke 等待 intro.hidden；main.js:1508-1510 的开始按钮处理同时设置 gameStarted=true 和隐藏 intro。",
+          "当前 main.js 只有初始化 false 与开始按钮 true 两处赋值；无复位 false 路径。",
+          "40条记录已有 _dialog={phase:idle,timer:0,active:false}；该对象在 updateSwampTigerDialog 通过开始状态检查之后才初始化。"
+        ],
+        "nextMeasurement": "记录 args[2].gameStarted 和 intro.hidden；不要仅依赖 DOM 等待。"
+      },
+      {
+        "gate": "isBlocked / poemBubbleActive",
+        "assessment": "当前静态路径可排除诗歌遮挡；原报告未直接记录闭包变量。",
+        "evidence": [
+          "main.js:1752 仅以 poemBubbleActive 阻挡虎对话；main.js:1721-1736 每帧先用 holdingLetter 与朝向云墙的状态计算/清除它。",
+          "player.js:33 初始化 holdingLetter=false；全 src 仅 questSystem.js:291 的接信交互改为 true。",
+          "smoke 仅在独立浏览器设置救援章索引和自动点击开始；未发送 E/接信交互。救援 chapter=4 不等于玩家持普通任务信。"
+        ],
+        "nextMeasurement": "记录 player.holdingLetter 和 isCloudWallEnabled()；holdingLetter=false 时根据现有主循环顺序可确认为未被诗歌遮挡。"
+      },
+      {
+        "gate": "near: world distance <= 7.5",
+        "assessment": "未测量；是测试中可证实的触发前提缺口。",
+        "evidence": [
+          "smoke 在虎父节点局部坐标加 (2,0,2)，再换到世界坐标；没有验证转换后距离 <=7.5。父级缩放不在 live 报告内。",
+          "main.js:1634-1650 在虎和对话更新前运行玩家控制、重力/地形碰撞与资产碰撞；一次性传送不保证下一次对话时仍在近处。",
+          "问候条件使用沼泽局部水平距离/是否进坑，而对话使用完整世界三维距离；greeting=true 不能证明 near=true。",
+          "虎实际从第一条记录本地 y=38.41184247363298 移至 y=25.15；原记录没有每帧玩家坐标或世界距离，不能判断玩家是否追上落点。"
+        ],
+        "nextMeasurement": "每帧记录 tiger.getWorldPosition()、player.position、二者世界距离、是否 <=7.5，以及玩家相对于虎父节点的坐标。"
+      }
+    ],
+    "observationLimits": {
+      "sampleCount": 40,
+      "simulationSeconds": 1.8152999999821187,
+      "wallSecondsBetweenFirstAndLastT": 35.48569999998808,
+      "dialogStates": [
+        "idle"
+      ],
+      "sampleOrder": "现有观察器在虎自身 update 返回时采样，而 main.js 的 updateSwampTigerDialog 在随后执行；样本读取的是前一帧对话状态，最终当帧的对话状态也未单独保存。",
+      "durationMeaning": "40次帧更新仅累计约1.8153秒模拟时间；达到 near 时应当立即进入 tiger，因此不足3.2秒不能解释一直idle，但无法据此要求完整虎语→信使回复。",
+      "camera": "视锥判断只控制气泡显示，不控制 idle→tiger 状态转移，临时截图相机不能单独解释 phase idle。",
+      "sourceEvidence": "原 smoke 哈希覆盖适配器/模型/虎世界模块和导出数据，未覆盖 main.js/quest/player；本次静态排除以本次读取源码为准，摘要额外保存其哈希。"
+    },
+    "nextBoundedRetest": [
+      "先仅修改测试观察器：在原虎更新前后记录玩家世界位置、虎世界位置、worldDistance、runtime.gameStarted、holdingLetter、cloudWallEnabled、dialog；通过真实帧结束后的观察采样再保存当帧最终dialog，不直接调用对话函数。",
+      "仅启动一次全游戏独立上下文，保留chapter4只用于目标身份检查。先采集现有一次性传送场景最多24个实际更新或45秒墙钟，记录具体第一帧距离是否已超过7.5；该阶段不改碰撞/物理。",
+      "若所有门控满足但未曾 near，则在同一次浏览器运行、问候落定后，把测试玩家用明确世界坐标放在虎旁2个世界单位并记录干预，等待最多6个真实更新；保持物理继续运行，不持续锁住玩家。记录首次进入/离开7.5范围的当帧值。",
+      "判据：任一实际对话帧 gameStarted=true、holdingLetter=false且worldDistance<=7.5时，idle应立即变tiger。若始终被碰撞推离范围，将结果归为原世界可达性/测试站位问题，不作为材质/节点适配失败；保留两种状态的准确坐标供后续检查地形。",
+      "若在明确满足门控的完整帧后仍idle，下一步才用测试浏览器的临时模块响应观察器记录 updateSwampTigerDialog 实际收到的 isGameStarted()/isBlocked()/tiger引用及前后状态；不修改磁盘运行时代码，也不绕过原函数。不要再次盲跑大场景。",
+      "只需验证对话触发可在首次状态转移后停止；若验证完整对答，则按累计模拟时间至少6.2秒设判据，不能把墙钟秒数当模拟时间。"
+    ],
+    "passedPreserved": false,
+    "reviewedSourceHashes": {
+      "src/main.js": "bc16b77d48b4dcb45c807215a7528e16ece2e4e97fb71cfa523c5e46d6c49023",
+      "src/player/player.js": "c3a286786996a1c30edbef0ed2ef815f9a02ff116e41e7d00788bba98013320c",
+      "src/quest/questSystem.js": "5722bf664df1348e0701224fe683ebfa4c134064d30a2b05d6de756695f99791",
+      "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+      "tools/pipeline/test_tiger_world_web.mjs": "a89bf3e367e2d332eb20bc70f01bbea7b9ebe5de8004241257770b9b48599c51"
+    }
+  }
+}

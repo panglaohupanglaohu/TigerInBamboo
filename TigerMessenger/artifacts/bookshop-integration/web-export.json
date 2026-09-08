@@ -1,0 +1,19 @@
+{
+  "source": "assets/models/optimized/bookshop-art-v3.blend",
+  "sha256": "e2b65549a56af4f37ca3d1f9f0b7cdbebf223fbebc6cadd8d202fcad1956b3a5",
+  "output": "assets/models/optimized/bookshopArtGeometryData.js",
+  "buildingMeshes": 27,
+  "joineryMembers": 50,
+  "joineryDrawCalls": 1,
+  "triangles": 1018,
+  "bytes": 146027,
+  "sourceModified": false,
+  "preservedRuntime": [
+    "terrain berm",
+    "editable sign",
+    "toon materials",
+    "brush outlines",
+    "hydrangeas",
+    "collider and quest references"
+  ]
+}

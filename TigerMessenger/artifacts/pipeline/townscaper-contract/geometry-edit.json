@@ -1,0 +1,142 @@
+{
+  "editSequence": [
+    {
+      "label": "remove-top",
+      "actual": 3464,
+      "expected": 3464,
+      "geometryMatches": true,
+      "dirtyCount": 25
+    },
+    {
+      "label": "recolor-column-base",
+      "actual": 3464,
+      "expected": 3464,
+      "geometryMatches": true,
+      "dirtyCount": 24
+    },
+    {
+      "label": "recolor-column-upper",
+      "actual": 3338,
+      "expected": 3338,
+      "geometryMatches": true,
+      "dirtyCount": 24
+    },
+    {
+      "label": "restore-base",
+      "actual": 3338,
+      "expected": 3338,
+      "geometryMatches": true,
+      "dirtyCount": 24
+    },
+    {
+      "label": "restore-upper",
+      "actual": 3464,
+      "expected": 3464,
+      "geometryMatches": true,
+      "dirtyCount": 24
+    }
+  ],
+  "cacheIsolation": {
+    "sizes": [
+      24,
+      2
+    ],
+    "distinct": true
+  },
+  "geometry": {
+    "incrementalTriangles": 3846,
+    "fullTriangles": 3846,
+    "legacyTriangles": 3846
+  },
+  "topology": "legacy-faces",
+  "result": {
+    "ok": true,
+    "dirtyCount": 25,
+    "wfcDirtyAdded": 24,
+    "spanClosure": {
+      "passes": 0,
+      "added": 0
+    },
+    "removedCount": 14,
+    "newMeshCount": 144,
+    "outlineCount": 118,
+    "mergedCount": 20,
+    "editMs": 27.599999994039536,
+    "stats": {
+      "cellCount": 25,
+      "windowCount": 16,
+      "crenelCount": 0,
+      "domeCount": 0,
+      "towerCount": 1,
+      "archCount": 0,
+      "shrubCount": 0,
+      "fenceCount": 0,
+      "roofCount": 11,
+      "canalCount": 0,
+      "waterGateCount": 0,
+      "doorCount": 12,
+      "steepleCount": 0,
+      "gardenCount": 0,
+      "plazaCount": 0,
+      "boatCount": 0,
+      "birdCount": 0,
+      "corniceCount": 0,
+      "plinthCount": 26,
+      "balconyCount": 13,
+      "pilasterCount": 0,
+      "arcadeColumnCount": 0,
+      "ridgeCount": 11,
+      "eaveCount": 1,
+      "oculusCount": 2,
+      "chimneyCount": 1,
+      "supportCount": 0,
+      "courtyardCount": 0,
+      "courtyardCellCount": 0,
+      "courtyardWallCount": 0,
+      "courtyardWellCount": 0,
+      "moduleCount": 61,
+      "cornerPartCount": 0,
+      "wfcTown": {
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "cfd59940",
+        "topology": "legacy-faces",
+        "topologyHash": "face-layer-v1:4010c13d"
+      },
+      "moduleFamilyCounts": {
+        "foundation": 26,
+        "floor": 0,
+        "fence": 0,
+        "balcony": 13,
+        "stairs": 5,
+        "support": 0,
+        "hole": 0,
+        "decor": 17
+      },
+      "gate": null,
+      "gates": []
+    }
+  },
+  "seed": 37,
+  "cacheKeys": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4"
+  ],
+  "wfc": {
+    "enabled": true,
+    "ok": true,
+    "ms": 0,
+    "fromCache": false,
+    "unresolved": 0,
+    "hash": "74399113",
+    "topology": "legacy-faces",
+    "topologyHash": "face-layer-v1:a543dba5"
+  },
+  "meshes": 103
+}

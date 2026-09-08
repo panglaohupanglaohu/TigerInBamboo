@@ -1,0 +1,28 @@
+{
+  "oldV2Sha256": "23dfd3e9b36ef29a2344e947980e4de66d9aec5ff904e1088f6502d64d7738f8",
+  "newV3Sha256": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+  "meshes": [
+    {
+      "mesh": "Helmet_Galea.002",
+      "oldVertexCount": 816,
+      "newVertexCount": 816,
+      "maxExpectedPositionError": 5.268356063861754e-09
+    },
+    {
+      "mesh": "Skirt_Ten_Separated_Lames.002",
+      "oldVertexCount": 240,
+      "newVertexCount": 240,
+      "maxExpectedPositionError": 0.0
+    },
+    {
+      "mesh": "Waist_Belt.002",
+      "oldVertexCount": 240,
+      "newVertexCount": 240,
+      "maxExpectedPositionError": 0.0
+    }
+  ],
+  "singleScene": true,
+  "meshCount": 3,
+  "allNodeTransformsIdentity": true,
+  "expectedChange": "Only Helmet_Galea source-Y>.1 vertices map (x,y,z)->(z,y,-x); all other positions unchanged within tolerance."
+}

@@ -1,0 +1,101 @@
+{
+  "factory": "buildOdysseyCitadel",
+  "sourceModule": "src/world/odysseyCitadel.js",
+  "spec": "HIGHLAND_TOWNSCAPER_TOWN_SPEC",
+  "seed": 20260808,
+  "wfcSeed": 37,
+  "topology": "legacy-faces",
+  "wfc": {
+    "enabled": true,
+    "ok": true,
+    "ms": 17,
+    "fromCache": false,
+    "unresolved": 0,
+    "hash": "5a8616a8",
+    "topology": "legacy-faces",
+    "topologyHash": "face-layer-v1:1b5fbb95"
+  },
+  "originalDefaultTownGeometryMatches": false,
+  "defaultTriangles": 95396,
+  "wfcOldGraphGeometryMatches": true,
+  "originalTownLayoutMatches": true,
+  "triangles": 92424,
+  "layerNames": [
+    "citadel-layer-0",
+    "citadel-layer-1",
+    "citadel-layer-2",
+    "citadel-layer-3",
+    "citadel-layer-4",
+    "citadel-layer-5",
+    "citadel-layer-6",
+    "citadel-layer-7",
+    "citadel-layer-8",
+    "citadel-layer-9",
+    "citadel-layer-10",
+    "citadel-layer-11"
+  ],
+  "textureReport": [
+    {
+      "name": "citadel-townscaper-wall-pattern",
+      "width": 128,
+      "height": 128,
+      "repeat": [
+        1,
+        1
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "sourceColorSpace": "",
+      "pngEncoding": "sRGB; explicit linear-to-sRGB conversion for source NoColorSpace"
+    },
+    {
+      "name": "citadel-townscaper-roof-pattern",
+      "width": 128,
+      "height": 128,
+      "repeat": [
+        1,
+        1
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "sourceColorSpace": "",
+      "pngEncoding": "sRGB; explicit linear-to-sRGB conversion for source NoColorSpace"
+    },
+    {
+      "name": "citadel-townscaper-balcony-pattern",
+      "width": 128,
+      "height": 128,
+      "repeat": [
+        1,
+        1
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "sourceColorSpace": "",
+      "pngEncoding": "sRGB; explicit linear-to-sRGB conversion for source NoColorSpace"
+    }
+  ],
+  "export": {
+    "radius": 160,
+    "source": "assembled default Web world; no saved browser edits copied",
+    "nodes": 1033,
+    "meshes": 796,
+    "instances": 0,
+    "materials": 88,
+    "textures": 3,
+    "bytes": 11439736,
+    "landmarks": {},
+    "warnings": [],
+    "limitations": [
+      "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
+      "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them"
+    ]
+  },
+  "scope": "Town mesh layers only; original terrain, global transform, bridges/props outside these layers retained by runtime adapter; no Godot WFC editing or collision migration."
+}

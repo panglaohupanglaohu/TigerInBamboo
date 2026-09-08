@@ -1,0 +1,44 @@
+{
+  "id": "swamp_stamenSpike",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "f5d6ea8a338f2cd2aaca4986d839116c186c526a390d3727c13bc5566cb47e1b",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n4",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 9,
+        "normalError": 9.46105487287241e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 9,
+        "normalError": 9.46105487287241e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 144,
+        "verticesAfter": 29,
+        "normalError": 1.7881393432617188e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 3,
+  "removedEditVertices": 169
+}

@@ -1,0 +1,47 @@
+{
+  "id": "leviathanIsland",
+  "snapshotSha256": "07e94ae441cb4ab9f48e759412e8a8518a7b7d772bafdc28dc49c473ad8c8af9",
+  "blendSha256": "53f3069f9cca770f535ae812dc10e438b0e84559def3df61a6d131bec3b4240f",
+  "glbSha256": "dc3337647cc1d6600450ac70e0432e7edb4dcd3c668602787778c0cd02ad9e3f",
+  "expectedTriangles": 4008,
+  "exportedTriangles": 4008,
+  "triangleMatch": true,
+  "bytes": 308596,
+  "blenderImport": {
+    "revision": 3,
+    "asset": "leviathanIsland",
+    "nodes": 295,
+    "meshDatablocks": 173,
+    "verticesIncludingOutline": 10604,
+    "maxLocalVertexError": 0,
+    "expandedInstances": 0,
+    "maxInstanceMatrixError": 0,
+    "primitiveNodes": {
+      "Line": 0,
+      "LineSegments": 0,
+      "LineLoop": 0,
+      "Points": 0
+    },
+    "warnings": [],
+    "status": "imported original; optimization and render parity pending"
+  },
+  "exportCounts": {
+    "objects": 295,
+    "visibleMeshes": 100,
+    "hiddenMeshes": 180,
+    "edgeOnlyMeshes": 0,
+    "pointOnlyMeshes": 0,
+    "gltfMeshes": 100,
+    "gltfMaterials": 15,
+    "gltfImages": 0,
+    "animationClips": 0
+  },
+  "godotImported": true,
+  "scope": "original factory archive only; excludes runtime-attached six garden scenes",
+  "godotReview": {
+    "label": "鲲",
+    "catalogEntries": 92,
+    "instantiatedNodes": 116,
+    "screenshot": "artifacts/pipeline/leviathan-kun-review.png"
+  }
+}

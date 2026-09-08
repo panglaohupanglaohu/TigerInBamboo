@@ -304,6 +304,9 @@ export function createCitadelEditorPanel({
   let redoStack = [];
   let open = false;
   let dirty = false; // 有未保存改动（编辑实时进 3D，保存才落盘）
+  let applyFailure = null;
+  let draftTargetId = getInstanceId() ?? null;
+  const failedDrafts = new Map();
   let latestDirty = false;
   let latestActiveColor = "0";
   let latestActiveBand = 0;
@@ -1982,6 +1985,9 @@ export function createCitadelEditorPanel({
     btn.style.color = dirty ? "#fff" : "#2a2b2d";
     btn.title = dirty ? dirtyTitle : cleanTitle;
   }
+  function failedSceneStatus() {
+    return applyFailure?.preservedPreviousGeometry === true ? "旧场景已保留" : "当前场景尚未验证";
+  }
   function applyDirty() {
     styleSaveButton(
       btnSave,
@@ -1997,12 +2003,24 @@ export function createCitadelEditorPanel({
       "台地/护城河有未保存改动（Ctrl+S 也可保存全部）",
       "台地层 · 地形地貌 · 护城河已写入存档"
     );
+    for (const button of [btnSave, btnTerrainSave]) {
+      if (!button) continue;
+      button.disabled = !!applyFailure;
+      if (applyFailure) {
+        button.textContent = "草稿未应用 · 暂不能保存";
+        button.title = `${failedSceneStatus()}；请修改或撤销失败草稿，应用成功后再保存`;
+      }
+    }
   }
   function markDirty() {
     dirty = true;
     applyDirty();
   }
   function save() {
+    if (applyFailure) {
+      toast(`草稿尚未应用，${failedSceneStatus()}。请修改或撤销后再保存。`, 2.6);
+      return;
+    }
     try {
       saveCitadelLevelsSave(localStorage, serializeLayout(), getCitadelTarget?.()?.userData?.lastIncrementalEdit || {
         lastDirtyCells: [],
@@ -2052,9 +2070,23 @@ export function createCitadelEditorPanel({
   /** 布局变更统一出口：回调上层即时重建 3D → 重画面板 → 标脏（保存才落盘） */
   function commit(shouldMarkDirty = true) {
     terraceGrids[activeTerrace] = grid;
-    const stats = onApply(serializeLayout());
+    let stats;
+    try {
+      stats = onApply(serializeLayout());
+    } catch (error) {
+      console.warn("[citadel-editor] 应用失败：", error);
+      stats = { ok: false, error: String(error) };
+    }
+    applyFailure = stats?.ok === false ? stats : null;
+    if (!applyFailure) failedDrafts.delete(draftTargetId);
     if (shouldMarkDirty) markDirty();
+    else applyDirty();
     draw();
+    if (applyFailure) {
+      statsEl.textContent = `本次修改未应用，${failedSceneStatus()}。草稿可继续修改或撤销，应用成功后才能保存。`;
+      toast(`修改未应用，${failedSceneStatus()}；草稿可继续修改或撤销。`, 2.6);
+      return stats;
+    }
     if (stats) {
       statsEl.textContent =
         `格 ${stats.cellCount} · 穹顶 ${stats.domeCount} · 塔顶 ${stats.towerCount}` +
@@ -2259,13 +2291,13 @@ export function createCitadelEditorPanel({
     if (!open || e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
       e.preventDefault();
-      if (isLatestValley()) saveLatestUnits();
+      if (usesHighlandUnitMap()) saveLatestUnits();
       else save();
       return;
     }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
       e.preventDefault();
-      if (isLatestValley()) {
+      if (usesHighlandUnitMap()) {
         panel.querySelector(e.shiftKey ? "#ce-latest-redo" : "#ce-latest-undo")?.click();
       } else if (e.shiftKey) redo();
       else undo();
@@ -2273,7 +2305,7 @@ export function createCitadelEditorPanel({
     }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
       e.preventDefault();
-      if (isLatestValley()) panel.querySelector("#ce-latest-redo")?.click();
+      if (usesHighlandUnitMap()) panel.querySelector("#ce-latest-redo")?.click();
       else redo();
       return;
     }
@@ -2444,6 +2476,7 @@ export function createCitadelEditorPanel({
       hideAbove,
       dropToGround,
       terrainObjectTool,
+      applyFailed: !!applyFailure,
     }),
     applySceneEdit,
     applyHighlandAction,
@@ -2473,12 +2506,19 @@ export function createCitadelEditorPanel({
      */
     switchTarget(tryApply) {
       if (!tryApply(getInstanceId())) return false;
-      terraceGrids = loadTerraceGrids();
+      if (applyFailure) failedDrafts.set(draftTargetId, { terraceGrids, activeTerrace, activeLayer, undoStack, redoStack, applyFailure });
+      draftTargetId = getInstanceId() ?? null;
+      const failedDraft = failedDrafts.get(draftTargetId);
+      terraceGrids = failedDraft?.terraceGrids ?? loadTerraceGrids();
+      applyFailure = failedDraft?.applyFailure ?? null;
+      undoStack = failedDraft?.undoStack ?? [];
+      redoStack = failedDraft?.redoStack ?? [];
       terrain = loadTerrain();
       terrainObjects = loadTerrainObjects();
-      activeTerrace = 0;
-      grid = terraceGrids[0];
-      activeLayer = 0;
+      activeTerrace = failedDraft?.activeTerrace ?? 0;
+      grid = terraceGrids[activeTerrace];
+      activeLayer = failedDraft?.activeLayer ?? 0;
+      statsEl.textContent = applyFailure ? `本次修改未应用，${failedSceneStatus()}。草稿可继续修改或撤销，应用成功后才能保存。` : "";
       hideAbove = false;
       applyInstanceMode();
       refreshTargetSelect(); // 点选命中切换后，下拉选中态同步

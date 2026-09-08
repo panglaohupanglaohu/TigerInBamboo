@@ -1,0 +1,277 @@
+{
+  "fixture": {
+    "beforeCount": 47,
+    "afterCount": 45,
+    "unchanged": true,
+    "collisionsMatch": true,
+    "clearance": {
+      "owner": "world-bookshop",
+      "zones": [
+        {
+          "id": "building",
+          "minX": -2.75,
+          "maxX": 2.75,
+          "minZ": -2.2,
+          "maxZ": 2.9
+        },
+        {
+          "id": "sign",
+          "minX": -4.55,
+          "maxX": -1.85,
+          "minZ": 1.5,
+          "maxZ": 18
+        },
+        {
+          "id": "approach",
+          "minX": -1.65,
+          "maxX": 1.65,
+          "minZ": 2.9,
+          "maxZ": 11
+        }
+      ],
+      "rejected": [
+        {
+          "zone": "sign",
+          "corridor": "camp-bookshop",
+          "position": [
+            40.111971809812665,
+            157.88683689203296,
+            26.312197657854004
+          ],
+          "local": [
+            -3.971466691507058,
+            -1.1682544220830382,
+            6.654201220560504
+          ],
+          "crownRadius": 1.4337025111522534
+        },
+        {
+          "zone": "building",
+          "corridor": "bookshop-moon",
+          "position": [
+            46.8175761398725,
+            157.89896552656526,
+            18.64243227333381
+          ],
+          "local": [
+            -1.9053976596109181,
+            -0.29817500084215004,
+            -3.283851815364085
+          ],
+          "crownRadius": 1.9936571719106286
+        }
+      ]
+    }
+  },
+  "site": {
+    "samples": [
+      {
+        "x": -0.6,
+        "y": -0.22,
+        "treeHits": 0
+      },
+      {
+        "x": -0.6,
+        "y": 0,
+        "treeHits": 0
+      },
+      {
+        "x": -0.6,
+        "y": 0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0,
+        "y": -0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "treeHits": 0
+      },
+      {
+        "x": 0,
+        "y": 0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0.6,
+        "y": -0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0.6,
+        "y": 0,
+        "treeHits": 0
+      },
+      {
+        "x": 0.6,
+        "y": 0.22,
+        "treeHits": 0
+      }
+    ],
+    "cameraSamples": [
+      {
+        "x": -0.6,
+        "y": -0.22,
+        "treeHits": 0
+      },
+      {
+        "x": -0.6,
+        "y": 0,
+        "treeHits": 0
+      },
+      {
+        "x": -0.6,
+        "y": 0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0,
+        "y": -0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "treeHits": 0
+      },
+      {
+        "x": 0,
+        "y": 0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0.6,
+        "y": -0.22,
+        "treeHits": 0
+      },
+      {
+        "x": 0.6,
+        "y": 0,
+        "treeHits": 0
+      },
+      {
+        "x": 0.6,
+        "y": 0.22,
+        "treeHits": 0
+      }
+    ],
+    "route": [
+      {
+        "x": -0.8,
+        "treeHits": 0
+      },
+      {
+        "x": 0,
+        "treeHits": 0
+      },
+      {
+        "x": 0.8,
+        "treeHits": 0
+      }
+    ],
+    "clearance": {
+      "owner": "world-bookshop",
+      "zones": [
+        {
+          "id": "building",
+          "minX": -2.75,
+          "maxX": 2.75,
+          "minZ": -2.2,
+          "maxZ": 2.9
+        },
+        {
+          "id": "sign",
+          "minX": -4.55,
+          "maxX": -1.85,
+          "minZ": 1.5,
+          "maxZ": 18
+        },
+        {
+          "id": "approach",
+          "minX": -1.65,
+          "maxX": 1.65,
+          "minZ": 2.9,
+          "maxZ": 11
+        }
+      ],
+      "rejected": [
+        {
+          "zone": "sign",
+          "corridor": "camp-bookshop",
+          "position": [
+            40.465235383431825,
+            157.7030466722826,
+            26.866318819740513
+          ],
+          "local": [
+            -3.3663316277480186,
+            -1.1680289617838187,
+            6.969535587779676
+          ],
+          "crownRadius": 1.9201825650762783
+        },
+        {
+          "zone": "building",
+          "corridor": "camp-bookshop",
+          "position": [
+            47.13494745023546,
+            157.74345033944243,
+            20.891410340379384
+          ],
+          "local": [
+            -0.5631889822849452,
+            -0.05212540507889686,
+            -1.4615600354739906
+          ],
+          "crownRadius": 1.888453381991014
+        },
+        {
+          "zone": "building",
+          "corridor": "bookshop-moon",
+          "position": [
+            43.26974111793238,
+            158.34762937247487,
+            22.99207043101368
+          ],
+          "local": [
+            -3.007392295182199,
+            -0.2869241901711917,
+            2.238218985948351
+          ],
+          "crownRadius": 1.5147621349971745
+        }
+      ]
+    },
+    "chapter": 0,
+    "start": [
+      43.31881347185524,
+      156.80544202512218,
+      28.418944503253663
+    ],
+    "treeCount": 38
+  },
+  "played": {
+    "position": [
+      45.14495263506246,
+      157.41325928603337,
+      25.51421000566188
+    ],
+    "onGround": true,
+    "chapter": 1
+  },
+  "render": {
+    "frame": 1,
+    "calls": 1433,
+    "triangles": 310702,
+    "points": 0,
+    "lines": 139
+  },
+  "errors": [],
+  "captures": [
+    "web-gameplay.png",
+    "web-site-close.png"
+  ]
+}

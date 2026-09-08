@@ -1,0 +1,34 @@
+https://raw.githubusercontent.com/godotengine/godot/4.7/editor/import/3d/scene_import_settings.cpp
+204: void SceneImportSettingsDialog::_fill_material(Tree *p_tree, const Ref<Material> &p_material, TreeItem *p_parent) {
+205: 	String import_id;
+206: 	bool has_import_id = false;
+207: 
+208: 	if (p_material->has_meta("import_id")) {
+209: 		import_id = p_material->get_meta("import_id");
+210: 		has_import_id = true;
+211: 	} else if (!p_material->get_name().is_empty()) {
+212: 		import_id = p_material->get_name();
+213: 		has_import_id = true;
+214: 	} else if (unnamed_material_name_map.has(p_material)) {
+215: 		import_id = unnamed_material_name_map[p_material];
+216: 	} else {
+217: 		import_id = "@MATERIAL:" + itos(material_map.size());
+218: 		unnamed_material_name_map[p_material] = import_id;
+219: 	}
+220: 
+221: 	bool created = false;
+222: 	if (!material_map.has(import_id)) {
+223: 		MaterialData md;
+224: 		created = true;
+225: 		md.has_import_id = has_import_id;
+226: 		md.material = p_material;
+227: 
+228: 		_load_default_subresource_settings(md.settings, "materials", import_id, ResourceImporterScene::INTERNAL_IMPORT_CATEGORY_MATERIAL);
+229: 
+230: 		material_map[import_id] = md;
+231: 	}
+232: 
+233: 	MaterialData &material_data = material_map[import_id];
+234: 	ERR_FAIL_COND(p_material != material_data.material);
+235: 
+236: 	Variant value;

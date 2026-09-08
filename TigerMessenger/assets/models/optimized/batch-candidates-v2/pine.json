@@ -1,0 +1,100 @@
+{
+  "id": "pine",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "bb7377d4787d2ce3a8acedcc21ef239cba964b76a664963a6f3cdb13e6990bc2",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n13",
+      "result": {
+        "verticesBefore": 504,
+        "verticesAfter": 92,
+        "normalError": 1.2189149856567383e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n10",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n12",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n14",
+      "result": {
+        "verticesBefore": 1092,
+        "verticesAfter": 208,
+        "normalError": 1.119077205657959e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n11",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n15",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 2.6671955765777966e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n16",
+      "result": {
+        "verticesBefore": 6960,
+        "verticesAfter": 1218,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 298,
+        "normalError": 1.2189149856567383e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n9",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 2.6671955765777966e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 9,
+  "removedEditVertices": 16534
+}

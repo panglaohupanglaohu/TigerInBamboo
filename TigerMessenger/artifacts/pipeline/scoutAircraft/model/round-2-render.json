@@ -1,0 +1,50 @@
+{
+  "source": "assets/models/optimized/scoutAircraft-art-v1.blend",
+  "sourceSha256": "c5cc6171db866243c53bcd7482fc181b7ba301e5cb20267521b0f4801fab41a2",
+  "sourceUnchanged": true,
+  "render": "artifacts/pipeline/scoutAircraft/model/round-2.png",
+  "renderer": "Cycles",
+  "samples": 40,
+  "materials": "candidate refined materials",
+  "originalAxes": {
+    "nose": "+Z",
+    "up": "+Y",
+    "right": "+X"
+  },
+  "blenderAxes": {
+    "nose": "-Y",
+    "up": "+Z",
+    "right": "+X"
+  },
+  "camera": {
+    "location": [
+      9.937524795532227,
+      -15.312031745910645,
+      9.549965858459473
+    ],
+    "rotationEuler": [
+      1.0894321203231812,
+      -3.2325946364153424e-08,
+      0.5950697064399719
+    ],
+    "orthoScale": 9.600197792053223
+  },
+  "bounds": {
+    "min": [
+      -2.9940032958984375,
+      -3.9650001525878906,
+      -0.6799999475479126
+    ],
+    "max": [
+      2.9940032958984375,
+      2.7018039226531982,
+      1.2599999904632568
+    ]
+  },
+  "visibleMeshCount": 23,
+  "limitations": [
+    "Blender material interpretation is not Web toon lighting parity",
+    "Hidden Web shader outlines remain excluded by archive import",
+    "Read-only render of separately saved candidate"
+  ]
+}

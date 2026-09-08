@@ -1,0 +1,50 @@
+{
+  "captures": [
+    "res://../artifacts/pipeline/scoutAircraft/deployment/world-original.png",
+    "res://../artifacts/pipeline/scoutAircraft/deployment/world-candidate.png"
+  ],
+  "failures": [],
+  "formationAi": false,
+  "hoverApplied": false,
+  "instances": [
+    {
+      "globalPosition": "(-60.29985, -154.7982, 92.68596)",
+      "id": "scoutDefense:0",
+      "nodeIds": 46,
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourceHidden": true
+    },
+    {
+      "globalPosition": "(-173.5654, 25.08119, 73.26998)",
+      "id": "scoutDefense:1",
+      "nodeIds": 46,
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourceHidden": true
+    },
+    {
+      "globalPosition": "(122.5634, -144.1442, -17.33922)",
+      "id": "scoutDefense:2",
+      "nodeIds": 46,
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourceHidden": true
+    },
+    {
+      "globalPosition": "(-138.2844, 100.4058, 10.10262)",
+      "id": "scoutDefense:3",
+      "nodeIds": 46,
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourceHidden": true
+    },
+    {
+      "globalPosition": "(140.9285, -59.02551, -75.35635)",
+      "id": "scoutDefense:4",
+      "nodeIds": 46,
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourceHidden": true
+    }
+  ],
+  "originalSquadRetained": true,
+  "passed": true,
+  "playerPiloting": false,
+  "staticWorldDeployment": true
+}

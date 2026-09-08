@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-09-08T18:41:56.802436+00:00",
+  "mode": "read-only",
+  "networkPackageDownloadsDisabled": true,
+  "commandPackage": "blender-mcp==1.9.1",
+  "handshake": true,
+  "sceneReadSucceeded": true,
+  "protocolVersion": "2025-06-18",
+  "toolCount": 28,
+  "sceneInfoToolAvailable": true,
+  "sceneReadIsError": false,
+  "contentTypes": [
+    "text"
+  ],
+  "object_count": 94,
+  "listedObjectCount": 10,
+  "elapsedSeconds": 0.511,
+  "diagnostics": {
+    "stderrBytes": 1798,
+    "stderrCapturedBytes": 1798,
+    "stderrContentsWithheld": true,
+    "notificationCount": 0,
+    "returnCode": 0
+  }
+}

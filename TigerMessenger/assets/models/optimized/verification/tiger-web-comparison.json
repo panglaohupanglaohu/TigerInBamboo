@@ -1,0 +1,30 @@
+{
+  "applied": true,
+  "poses": [
+    {
+      "name": "idle",
+      "changedBytes": 0,
+      "transformsEqual": true
+    },
+    {
+      "name": "walking",
+      "changedBytes": 0,
+      "transformsEqual": true
+    },
+    {
+      "name": "drinking",
+      "changedBytes": 0,
+      "transformsEqual": true
+    }
+  ],
+  "animationReferencesPreserved": true,
+  "materialsPreserved": true,
+  "stats": {
+    "version": 1,
+    "sourceVertices": 1340,
+    "gpuVertices": 1162,
+    "sourceBufferBytes": 49744,
+    "optimizedBufferBytes": 44048,
+    "materialsAndNodesReplaced": false
+  }
+}

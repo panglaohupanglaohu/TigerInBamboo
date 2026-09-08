@@ -1,0 +1,211 @@
+{
+  "schema": "TigerMessenger.scout-placement.v1",
+  "worldGlbSha256": "86a9212c55583a88059da4e5d5e04050352e64465f204cdb662507b9c7290093",
+  "legacyLandmark": "tripleGateScoutAircraft",
+  "actualLandmarkKind": "crystal-scout-defense-squad",
+  "parentMatrix": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "instances": [
+    {
+      "id": "scoutDefense:0",
+      "gltfNode": 16543,
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[0]",
+      "parentGltfNode": 16542,
+      "parentSourcePath": "crystal-scout-defense-squad[111]",
+      "localMatrix": [
+        -0.6527775355509597,
+        0.2007834400844171,
+        0.2279638113119783,
+        0,
+        0.007245769197029552,
+        -0.5298627931245534,
+        0.48743504109880165,
+        0,
+        0.30369225855915283,
+        0.4442200250440252,
+        0.4783718025146615,
+        0,
+        -60.29984510908583,
+        -154.79819112755166,
+        92.68595595785972,
+        1
+      ],
+      "scale": [
+        0.7200000000000003,
+        0.7200000000000002,
+        0.72
+      ],
+      "visibleCaptureDescendantNodes": 5,
+      "visibleCaptureMeshNodes": 0,
+      "role": "fleetWhenAnchorAvailableElseCityGateDefense",
+      "identityEvidence": "messengerIsland.js:381-402; scoutDefense.js:605-613"
+    },
+    {
+      "id": "scoutDefense:1",
+      "gltfNode": 16548,
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[1]",
+      "parentGltfNode": 16542,
+      "parentSourcePath": "crystal-scout-defense-squad[111]",
+      "localMatrix": [
+        -0.013197167234519717,
+        0.3561253346329389,
+        0.6256201569719133,
+        0,
+        -0.6295970739314453,
+        -0.30910408675137463,
+        0.1626720260234096,
+        0,
+        0.34904635691258307,
+        -0.544085847625332,
+        0.3170760652270646,
+        0,
+        -173.5654093729711,
+        25.081185550255412,
+        73.26998129146517,
+        1
+      ],
+      "scale": [
+        0.7200000000000001,
+        0.72,
+        0.72
+      ],
+      "visibleCaptureDescendantNodes": 5,
+      "visibleCaptureMeshNodes": 0,
+      "role": "fleetWhenAnchorAvailableElseCityGateDefense",
+      "identityEvidence": "messengerIsland.js:381-402; scoutDefense.js:605-613"
+    },
+    {
+      "id": "scoutDefense:2",
+      "gltfNode": 16553,
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[2]",
+      "parentGltfNode": 16542,
+      "parentSourcePath": "crystal-scout-defense-squad[111]",
+      "localMatrix": [
+        -0.6248743462357164,
+        -0.049943847086399325,
+        -0.3541717994910047,
+        0,
+        0.19798333056763245,
+        -0.6420612491663484,
+        -0.25876621328198124,
+        0,
+        -0.297883621963064,
+        -0.32196733445670944,
+        0.5709661840328267,
+        0,
+        122.56339973899074,
+        -144.14424853895804,
+        -17.339223095613555,
+        1
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ],
+      "visibleCaptureDescendantNodes": 5,
+      "visibleCaptureMeshNodes": 0,
+      "role": "fleetWhenAnchorAvailableElseCityGateDefense",
+      "identityEvidence": "messengerIsland.js:381-402; scoutDefense.js:605-613"
+    },
+    {
+      "id": "scoutDefense:3",
+      "gltfNode": 16558,
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[3]",
+      "parentGltfNode": 16542,
+      "parentSourcePath": "crystal-scout-defense-squad[111]",
+      "localMatrix": [
+        0.4136444779688316,
+        0.5887487800610033,
+        0.025944552849745263,
+        0,
+        -0.5348797706907018,
+        0.3617623743872187,
+        0.31848330471719244,
+        0,
+        0.2473901306676462,
+        -0.20224455111177214,
+        0.6452094735772582,
+        0,
+        -138.2844253509708,
+        100.40582559099913,
+        10.102622935591608,
+        1
+      ],
+      "scale": [
+        0.7200000000000001,
+        0.72,
+        0.72
+      ],
+      "visibleCaptureDescendantNodes": 27,
+      "visibleCaptureMeshNodes": 22,
+      "role": "cityGateDefense",
+      "identityEvidence": "messengerIsland.js:381-402; scoutDefense.js:605-613"
+    },
+    {
+      "id": "scoutDefense:4",
+      "gltfNode": 16585,
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[4]",
+      "parentGltfNode": 16542,
+      "parentSourcePath": "crystal-scout-defense-squad[111]",
+      "localMatrix": [
+        -0.30520780291624533,
+        -0.6514635511086319,
+        -0.029042014667877154,
+        0,
+        0.6515735947484903,
+        -0.30335289572144625,
+        -0.04276530467497419,
+        0,
+        0.026458413889883355,
+        -0.044410159134416406,
+        0.7181418314651273,
+        0,
+        140.92845175366597,
+        -59.02550568549037,
+        -75.3563531420494,
+        1
+      ],
+      "scale": [
+        0.7199999999999999,
+        0.7199999999999999,
+        0.7199999999999999
+      ],
+      "visibleCaptureDescendantNodes": 5,
+      "visibleCaptureMeshNodes": 0,
+      "role": "cityGateDefense",
+      "identityEvidence": "messengerIsland.js:381-402; scoutDefense.js:605-613"
+    }
+  ],
+  "mountedGateScoutInstances": 0,
+  "candidateReplacementEnabled": false,
+  "worldIntegrated": false,
+  "reason": "Current production creates a five-aircraft defense squad. mountTripleGateScoutAircraft is defined but not called by production; no unique mounted instance exists in this capture. Do not replace a defense variant by landmark name or configure mounted hover on it.",
+  "sources": {
+    "src/scenes/messengerIsland.js": "f22cf07c34fcf1a5af609ccb3cd39231f41212bec056f5f4113dadab9db94153",
+    "src/world/scoutDefense.js": "423eaec39973ce75df3c49a8b704872e2ff4e52bdd8d611069dbab696fb55f1a",
+    "src/world/planetV8/tripleGateScout.js": "87ff16b29f8be69031f2750a2cc7bd2ba2d1e83c59d459a5ffba7daa3e125156",
+    "src/scenes/messenger/updateIsland.js": "a6cb140309314c8b6bf1394d3101d8de4b64f2d4e0e5e9b98a1fa0fccb527853"
+  },
+  "limitations": [
+    "Capture is a visible static snapshot, not a patrol home-position manifest.",
+    "Four capture instances contain fewer descendants, consistent with runtime visibility/LOD; no inference that their missing anchors never exist in Web.",
+    "Piloting, fleet movement and war targeting remain unported."
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "bookshopHydrangeas",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "48fd7a94a7bbcc5c8747c734947bce57186f26e036ea5a097d0afc9a89ec52c5",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n230",
+      "result": {
+        "verticesBefore": 17280,
+        "verticesAfter": 3024,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n226",
+      "result": {
+        "verticesBefore": 17520,
+        "verticesAfter": 3066,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n227",
+      "result": {
+        "verticesBefore": 17784,
+        "verticesAfter": 3458,
+        "normalError": 1.946091651916504e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n229",
+      "result": {
+        "verticesBefore": 17040,
+        "verticesAfter": 2982,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n228",
+      "result": {
+        "verticesBefore": 21024,
+        "verticesAfter": 4088,
+        "normalError": 2.3663043975830078e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n231",
+      "result": {
+        "verticesBefore": 51840,
+        "verticesAfter": 9072,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n232",
+      "result": {
+        "verticesBefore": 38808,
+        "verticesAfter": 7546,
+        "normalError": 2.3663043975830078e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 7,
+  "removedEditVertices": 148060
+}

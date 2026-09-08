@@ -1,0 +1,44 @@
+{
+  "armorFixture": "assembly.json n2 identity; hidden original n5/n9 descendants; crest offsets applied",
+  "candidateSha256": {
+    "armor": "23dfd3e9b36ef29a2344e947980e4de66d9aec5ff904e1088f6502d64d7738f8",
+    "assembly": "60fcf0ba03f696b9c4ab2fe03ec98184d6c0ba4ff7d2da396e1ecf337f804bbc",
+    "handle": "3c558adf9be55ece0f80bbe536eee48d79fbec2bed4778e6a7c37141a27bde18"
+  },
+  "cases": 252,
+  "failures": [],
+  "geometryCounts": {
+    "blue": {
+      "armorTriangleVertices": 2088,
+      "bodyTriangleVertices": 3684,
+      "shieldTriangleVertices": 396
+    },
+    "red": {
+      "armorTriangleVertices": 2088,
+      "bodyTriangleVertices": 3684,
+      "shieldTriangleVertices": 396
+    }
+  },
+  "maxGripError": 5.33120157797384e-7,
+  "minimumBodySeparation": 0.180871769785881,
+  "minimumSwordSeparation": 0.032878965139389,
+  "separationMethod": "supporting planes over actual triangle vertices, model-root units",
+  "sourceSha256": {
+    "blue": "54267e3c01848ad3954c3947c72f5fc283be647da6304038adae97e38987813c",
+    "red": "55e43df87033317b92fba8ebe15ca09e1c6f2b4ffd4647bcea2e170fb9debd55"
+  },
+  "test": "roman_shield",
+  "variants": [
+    "blue",
+    "red"
+  ],
+  "verification": {
+    "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+    "isolatedProject": "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/tiger-shield-final-hgqjnsd7/godot",
+    "script": "godot/scripts/test_roman_shield.gd",
+    "exitCode": 0,
+    "scope": "252 discrete pose fixtures, not continuous animation or visual acceptance; body includes original retained body/head/crest and candidate helmet/skirt/belt plus legs, excludes intended arm/handle contact.",
+    "method": "For each tested pose, project every visible shield-surface triangle vertex and every visible body/leg or sword triangle vertex onto candidate axes, including oblique shield-frame directions. A strictly positive supporting-plane gap proves these complete mesh sets are disjoint. Hidden original helmet/skirt descendants are excluded.",
+    "reversibility": "Original arm/shield transforms, armor fixture visibility and crest transforms restore; repeated bind/OFF, damage-hidden shield, hidden-at-bind, handle release, sword independence and source GLB immutability pass."
+  }
+}

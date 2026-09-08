@@ -6,6 +6,7 @@
 //  断崖基岩、五层台地/折返石阶外围地势、水墨描边与球面放置。
 // ============================================================================
 import * as THREE from "three";
+import { affectedComponent } from "./citadel/wfcIncremental.js";
 import {
   addOutline,
   SVARBOVA_OUTLINE_COLOR,
@@ -55,6 +56,7 @@ import {
 } from "./citadelVisualTheme.js";
 import {
   CITADEL_TOWN_SPEC,
+  migrateLegacyTownChars,
   HIGHLAND_TOWNSCAPER_TOWN_SPEC,
   buildCitadelTown,
   normalizeCitadelTerraceLayout,
@@ -1837,6 +1839,7 @@ export function buildCitadelTownAssembly(spec, options = {}) {
     skipDecor: options.skipDecor === true,
     townCtxCache: options.townCtxCache ?? null,
     wfcTownV1: options.wfcTownV1,
+    wfcTopology: options.wfcTopology,
     wfcSeed: options.wfcSeed ?? options.seed ?? 1,
     gridV6: options.gridV6 ?? null,
     colorful: townscaperMode,
@@ -1969,7 +1972,14 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     gates: [],
   };
 
+  const wfcReports = [];
   layout.terraces.forEach((terrace, terraceIndex) => {
+    // A terrace's prior assignment belongs to that terrace, never its sibling.
+    let selectionCache = null;
+    if (options.townCtxCache) {
+      options.townCtxCache.terraces ??= {};
+      selectionCache = options.townCtxCache.terraces[terraceIndex] ??= {};
+    }
     const assembly = buildCitadelTownAssembly(
       {
         cellSize: CITADEL_TOWN_SPEC.cellSize,
@@ -1979,6 +1989,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
       },
       {
         ...options,
+        townCtxCache: selectionCache,
         leanDecor: options.leanDecor === true || options.baseYOverride !== undefined,
         // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升
         baseY: options.baseYOverride ?? metrics[terraceIndex].top - 0.06,
@@ -2007,7 +2018,10 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     for (const [key, value] of Object.entries(assembly.stats)) {
       if (typeof value === "number" && typeof stats[key] === "number") stats[key] += value;
     }
-    if (assembly.stats.wfcTown?.enabled) stats.wfcTown = assembly.stats.wfcTown;
+    if (assembly.stats.wfcTown?.enabled) {
+      stats.wfcTown = assembly.stats.wfcTown;
+      wfcReports.push({ terraceIndex, ...assembly.stats.wfcTown });
+    }
     for (const [family, count] of Object.entries(assembly.stats.moduleFamilyCounts ?? {})) {
       if (typeof stats.moduleFamilyCounts[family] === "number") stats.moduleFamilyCounts[family] += count;
     }
@@ -2027,6 +2041,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     group,
     levels,
     terraceLevels,
+    wfcReports,
     stats,
     layout,
     baseYs: metrics.map((metric) =>
@@ -2595,7 +2610,13 @@ export function buildOdysseyCitadel(options = {}) {
         gridSize: townSpec.gridSize ?? CITADEL_GRID_SIZE,
       })
     : null;
+  const initialTownCache = (options.wfcTownV1 ?? P.wfcTownV1) === true ? {} : null;
+  const initialWfcSeed = options.wfcSeed ?? options.seed ?? 1;
   const townAssembly = buildCitadelTerraceTownAssembly(townSpec, contourSpec, {
+    townCtxCache: initialTownCache,
+    wfcTownV1: options.wfcTownV1,
+    wfcTopology: options.wfcTopology,
+    wfcSeed: initialWfcSeed,
     floors: castleFloors,
     leanDecor: skipOuterTerrain,
     skipDecor: options.skipDecor === true,
@@ -2832,6 +2853,10 @@ export function buildOdysseyCitadel(options = {}) {
   castleContainer.userData.terrainObjects = terrainObjects;
   castleContainer.userData.terrainObjectsSpec = terrainObjects.userData?.placements ?? [];
   castleContainer.userData.townSpec = townAssembly.layout;
+  castleContainer.userData.townCtxCache = initialTownCache;
+  castleContainer.userData.wfcTownV1 = options.wfcTownV1;
+  castleContainer.userData.wfcSeed = initialWfcSeed;
+  castleContainer.userData.wfcTopology = options.wfcTopology;
   castleContainer.userData.townStats = townAssembly.stats;
   castleContainer.userData.gridV6 = gridV6;
   attachBuildingOwnedProps(castleContainer, townAssembly.layout, { seed: options.seed ?? 20260808 });
@@ -2860,21 +2885,6 @@ export function buildOdysseyCitadel(options = {}) {
   }
 
   return castleContainer;
-}
-
-/** 释放一组 town-level 组的几何与材质（描边材质在 toon.js 全局缓存，不动）。 */
-function disposeTownLevels(levelGroups) {
-  const geometries = new Set();
-  const materials = new Set();
-  for (const group of levelGroups) {
-    group.traverse((o) => {
-      if (!o.isMesh || o.userData.isOutline) return;
-      if (o.geometry) geometries.add(o.geometry);
-      if (o.material) materials.add(o.material);
-    });
-  }
-  for (const g of geometries) g.dispose();
-  for (const m of materials) m.dispose();
 }
 
 /**
@@ -3100,6 +3110,24 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   const animate = options.animate === true;
   const layers = castleContainer?.userData?.layers;
   if (!layers?.length) return { ok: false, error: "no-layers" };
+  // A local edit cannot atomically change a world-wide selection configuration.
+  // Refuse before touching caches, geometry, saved settings or dirty regions.
+  // The caller can perform a separate full rebuild with the requested settings.
+  const oldWfc = {
+    enabled: (castleContainer.userData.wfcTownV1 ?? P.wfcTownV1) === true,
+    seed: castleContainer.userData.wfcSeed ?? 1,
+    topology: castleContainer.userData.wfcTopology === "legacy-faces" ? "legacy-faces" : "legacy-grid",
+  };
+  const requestedWfc = {
+    enabled: (options.wfcTownV1 ?? castleContainer.userData.wfcTownV1 ?? P.wfcTownV1) === true,
+    seed: options.wfcSeed ?? oldWfc.seed,
+    topology: (options.wfcTopology ?? castleContainer.userData.wfcTopology) === "legacy-faces" ? "legacy-faces" : "legacy-grid",
+  };
+  const changedWfcSettings = Object.keys(oldWfc).filter(key => oldWfc[key] !== requestedWfc[key]);
+  if (changedWfcSettings.length) return {
+    ok: false, error: "wfc-configuration-requires-full-rebuild", requiresFullRebuild: true,
+    changedWfcSettings, currentWfc: oldWfc, requestedWfc, preservedPreviousGeometry: true,
+  };
   // 永远复制一份：闭包会往里加格，不能改调用方传进来的 Set。
   const dirty = new Set(
     (dirtyKeys instanceof Set ? [...dirtyKeys] : dirtyKeys).map((cell) =>
@@ -3107,15 +3135,10 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     )
   );
   if (!dirty.size) return { ok: true, dirtyCount: 0, editMs: 0, removedCount: 0, mergedCount: 0 };
-  castleContainer.userData.pendingDecorMerge = null;
   // 两道保险叠加（2026-09-04 实测，20 次连续编辑 vs 同布局全量重建）：
   //   只靠 ownSpanning 声明即门 …… 累积 2.2%，合并块净增 58
   //   再加这层闭包       …… 累积 0.6%，合并块净增 16，P50 只多 0.8ms
   // 所以默认开；`closeSpans: false` 可关掉单独观察前者的效果。
-  const spanClosure = options.closeSpans === false
-    ? { passes: 0, added: 0 }
-    : closeDirtyOverSpanningParts(layers, dirty);
-  const affectedLevels = citadelAffectedLevels(dirty);
   const t0 = performance.now();
 
   const blueprint = createCitadelBlueprint({
@@ -3126,8 +3149,45 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     skipOuterTerrain: castleContainer.userData.skipOuterTerrain === true,
     townBaseLift: castleContainer.userData.townBaseLift ?? 0.6,
   });
+  // Geometry replacement must cover the same constraint influence as selection.
+  // Expand before BOTH old mesh removal and new mesh emission. Keeping this at
+  // the coordinator also covers spanning roofs and all terrace instances.
+  const wfcDirtyBefore = dirty.size;
+  const wfcFlag = options.wfcTownV1 ?? castleContainer.userData.wfcTownV1;
+  const wfcSeed = options.wfcSeed ?? castleContainer.userData.wfcSeed ?? 1;
+  const wfcTopology = options.wfcTopology ?? castleContainer.userData.wfcTopology;
+  const wfcEnabled = (wfcFlag ?? P.wfcTownV1) === true;
+  const graphs = wfcEnabled ? blueprint.town.layout.terraces.map((terrace) => {
+    const grid = new Map();
+    terrace.levels.forEach((rows, y) => rows.forEach((row, z) => {
+      [...migrateLegacyTownChars(row)].forEach((ch, x) => {
+        if (ch !== ".") grid.set(`${x},${y},${z}`, ch);
+      });
+    }));
+    return grid;
+  }) : [];
+  const spanClosure = { passes: 0, added: 0 };
+  // Roof ownership can reach another constrained component. Reach a fixed
+  // point before emitting anything, so neither propagation direction is lost.
+  let previousDirtySize;
+  do {
+    previousDirtySize = dirty.size;
+    const seeds = [...dirty];
+    for (const grid of graphs) for (const key of affectedComponent(grid, seeds)) dirty.add(key);
+    if (options.closeSpans !== false) {
+      const closure = closeDirtyOverSpanningParts(layers, dirty);
+      spanClosure.passes += closure.passes;
+      spanClosure.added += closure.added;
+    }
+  } while (wfcEnabled && dirty.size !== previousDirtySize);
+  const affectedLevels = citadelAffectedLevels(dirty);
+  const wfcDirtyAdded = dirty.size - wfcDirtyBefore;
   if (!castleContainer.userData.townCtxCache) castleContainer.userData.townCtxCache = {};
   const townCtxCache = castleContainer.userData.townCtxCache;
+  const previousTerraceSelections = { ...(townCtxCache.terraces ?? {}) };
+  for (const [key, value] of Object.entries(previousTerraceSelections)) {
+    previousTerraceSelections[key] = { ...value };
+  }
   const assembly = buildCitadelTerraceTownAssembly(
     blueprint.town.layout,
     blueprint.terrain.config,
@@ -3149,9 +3209,25 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
       highlandColors: castleContainer.userData.instanceId !== "canal-junction",
       gridV6: castleContainer.userData.gridV6 ?? null,
       dirty: [...dirty],
+      wfcTownV1: wfcFlag,
+      wfcTopology,
+      wfcSeed,
       townCtxCache,
     }
   );
+
+  const failedWfc = assembly.wfcReports.filter((r) => !r.ok);
+  if (failedWfc.length) {
+    // Build is a candidate until all terraces solve. Preserve the last visible
+    // city and cached assignments; candidate materials may be shared with it.
+    const geometry = new Set();
+    assembly.group.traverse((o) => { if (o.isMesh && o.geometry) geometry.add(o.geometry); });
+    for (const g of geometry) g.dispose();
+    townCtxCache.terraces = previousTerraceSelections;
+    return { ok: false, error: "wfc-unsatisfied", failedWfc, preservedPreviousGeometry: true };
+  }
+
+  castleContainer.userData.pendingDecorMerge = null;
 
   // 1) 收集现有 level 组（"terrace:iy" → Group）与 dirty 相关 level
   //    （编辑格 iy±2 所在层；高山 layout 保留 5 个 terrace 层组，仅一个有内容，
@@ -3307,6 +3383,9 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
 
   // 7) 元数据与统计
   castleContainer.userData.townSpec = spec;
+  castleContainer.userData.wfcTownV1 = wfcFlag;
+  castleContainer.userData.wfcSeed = wfcSeed;
+  castleContainer.userData.wfcTopology = wfcTopology;
   castleContainer.userData.townStats = assembly.stats;
   castleContainer.userData.blueprint = blueprint;
   castleContainer.userData.blueprintSummary = citadelBlueprintSummary(blueprint);
@@ -3320,6 +3399,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   const result = {
     ok: true,
     dirtyCount: dirty.size,
+    wfcDirtyAdded,
     spanClosure,
     removedCount: stale.length,
     newMeshCount: newMeshes.length,
@@ -3336,28 +3416,36 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
   return result;
 }
 
-export function rebuildCitadelTown(castleContainer, spec) {
+export function rebuildCitadelTown(castleContainer, spec, options = {}) {
   const layers = castleContainer?.userData?.layers;
   if (!layers?.length) return null;
-  // G30-A：全量重建后旧材质被 dispose，增量 ctx 缓存必须失效
-  castleContainer.userData.townCtxCache = null;
-  castleContainer.userData.pendingDecorMerge = null;
-  castleContainer.userData.pendingMerge = null;
-  castleContainer.userData.mergeDebounceLeft = null;
-
-  const oldLevels = [];
-  for (const layer of layers) {
-    for (const child of [...layer.children]) {
-      if (
-        child.name?.startsWith("town-level-") ||
-        child.name?.startsWith("town-terrace-")
-      ) {
-        layer.remove(child);
-        oldLevels.push(child);
-      }
-    }
-  }
-  disposeTownLevels(oldLevels);
+  const wfcFlag = options.wfcTownV1 ?? castleContainer.userData.wfcTownV1;
+  const wfcSeed = options.wfcSeed ?? castleContainer.userData.wfcSeed ?? 1;
+  const wfcTopology = options.wfcTopology ?? castleContainer.userData.wfcTopology;
+  const candidateCache = (wfcFlag ?? P.wfcTownV1) === true ? {} : null;
+  // Cached material factories are shared across towns. Also preserve resources
+  // still referenced by the live world or the replacement candidate.
+  const releaseUnshared = (groups, keepRoots = []) => {
+    const keepGeometry = new Set(), keepMaterials = new Set([
+      ..._pastelMatCache.values(), ..._canalMatCache.values(),
+    ]);
+    for (const root of keepRoots) root?.traverse(o => {
+      if (o.geometry) keepGeometry.add(o.geometry);
+      for (const material of Array.isArray(o.material) ? o.material : [o.material]) if (material) keepMaterials.add(material);
+    });
+    const geometries = new Set(), materials = new Set();
+    for (const group of groups) group.traverse(o => {
+      if (!o.isMesh) return;
+      if (o.geometry) geometries.add(o.geometry);
+      if (!o.userData.isOutline) for (const material of Array.isArray(o.material) ? o.material : [o.material]) if (material) materials.add(material);
+    });
+    for (const geometry of geometries) if (!keepGeometry.has(geometry)) geometry.dispose();
+    for (const material of materials) if (!keepMaterials.has(material)) material.dispose();
+    // Material textures are globally cached or separately owned: do not dispose
+    // them transitively merely because one mesh/material is being replaced.
+  };
+  let liveRoot = castleContainer;
+  while (liveRoot.parent) liveRoot = liveRoot.parent;
 
   // 新装配自带材质/gradientMap：旧小镇材质随旧组释放，断崖与外围地势的
   // 材质实例（cliff/contour/pilgrimageStone）仍归初始构建所有，不受影响。
@@ -3375,6 +3463,10 @@ export function rebuildCitadelTown(castleContainer, spec) {
     blueprint.terrain.config,
     {
       floors: blueprint.floors,
+      townCtxCache: candidateCache,
+      wfcTownV1: wfcFlag,
+      wfcTopology,
+      wfcSeed,
       // 无台地模式：基座保持方框水面平台抬升（防热重建后城堡悬空）
       baseYOverride: castleContainer.userData.skipOuterTerrain
         ? castleContainer.userData.townBaseLift ?? 0.6
@@ -3392,7 +3484,32 @@ export function rebuildCitadelTown(castleContainer, spec) {
       highlandColors: castleContainer.userData.instanceId !== "canal-junction",
     }
   );
+  const failedWfc = assembly.wfcReports.filter(report => !report.ok);
+  if (failedWfc.length) {
+    releaseUnshared([assembly.group], [liveRoot]);
+    // This context was made for the candidate; its gradient was not injected
+    // from the old city and is not a global material-pattern texture.
+    const gradient = candidateCache?.ctx?.gradientMap;
+    if (gradient && gradient !== castleContainer.userData.gradientMap) gradient.dispose();
+    return { ok: false, error: "wfc-unsatisfied", failedWfc, preservedPreviousGeometry: true };
+  }
   applyInkOutlines(assembly.group, true, TOWNSCAPER_OUTLINE_COLOR);
+  // Commit only after all terrace constraints pass. Until here old levels,
+  // merge work, selection caches and saved layout have remained untouched.
+  const oldLevels = [];
+  for (const layer of layers) for (const child of [...layer.children]) {
+    if (child.name?.startsWith("town-level-") || child.name?.startsWith("town-terrace-")) {
+      layer.remove(child); oldLevels.push(child);
+    }
+  }
+  releaseUnshared(oldLevels, [liveRoot, assembly.group]);
+  castleContainer.userData.townCtxCache = (wfcFlag ?? P.wfcTownV1) === true ? candidateCache : null;
+  castleContainer.userData.wfcTownV1 = wfcFlag;
+  castleContainer.userData.wfcSeed = wfcSeed;
+  castleContainer.userData.wfcTopology = wfcTopology;
+  castleContainer.userData.pendingDecorMerge = null;
+  castleContainer.userData.pendingMerge = null;
+  castleContainer.userData.mergeDebounceLeft = null;
   assembly.terraceLevels.forEach((terrace) => {
     terrace.forEach((levelGroup, floorIndex) => {
       layers[floorIndex].add(levelGroup);

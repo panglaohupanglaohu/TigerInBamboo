@@ -1,0 +1,196 @@
+{
+  "description": "Read-only mechanism contracts; failed checks identify gaps, not expected-good regressions",
+  "checks": [
+    {
+      "name": "256 occupancy masks reproduce exact independent input bits",
+      "pass": true,
+      "detail": {
+        "maskFailures": []
+      }
+    },
+    {
+      "name": "256 masks have allowed prototypes and nonempty solid geometry",
+      "pass": true,
+      "detail": {
+        "emptyGeometry": []
+      }
+    },
+    {
+      "name": "Adjacent corner nodes agree on four shared occupancy bits",
+      "pass": true,
+      "detail": {
+        "shared": 684,
+        "bad": 0,
+        "reverse": {
+          "ok": true,
+          "errors": []
+        }
+      }
+    },
+    {
+      "name": "Corner graph itself includes all eight nodes around a ground voxel",
+      "pass": true,
+      "detail": {
+        "actual": 8,
+        "expected": 8,
+        "note": "Ground boundary must be present in graph itself; assembly consumes that same graph"
+      }
+    },
+    {
+      "name": "Finite irregular quad samples are deterministic convex and manifold",
+      "pass": true,
+      "detail": {
+        "seeds": 10,
+        "faceCount": 1984,
+        "badFaces": 0,
+        "nonManifold": 0,
+        "deterministic": true
+      }
+    },
+    {
+      "name": "ASCII-neighbor mapping preserves actual irregular face adjacency",
+      "pass": false,
+      "detail": {
+        "checkedEdges": 144,
+        "nonAdjacent": 48,
+        "examples": [
+          {
+            "cells": [
+              "0,0",
+              "1,0"
+            ],
+            "faces": [
+              "f:235",
+              "f:233"
+            ],
+            "sharedVertices": 1
+          },
+          {
+            "cells": [
+              "1,0",
+              "1,1"
+            ],
+            "faces": [
+              "f:233",
+              "f:156"
+            ],
+            "sharedVertices": 1
+          },
+          {
+            "cells": [
+              "2,0",
+              "2,1"
+            ],
+            "faces": [
+              "f:157",
+              "f:159"
+            ],
+            "sharedVertices": 1
+          },
+          {
+            "cells": [
+              "3,0",
+              "3,1"
+            ],
+            "faces": [
+              "f:158",
+              "f:148"
+            ],
+            "sharedVertices": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "Bilinear cages preserve a genuinely shared boundary",
+      "pass": true,
+      "detail": {
+        "cageError": 0,
+        "note": "Does not establish that production cages use actual topological neighbors"
+      }
+    },
+    {
+      "name": "Local edit can propagate a forced legal change across a 12-cell component",
+      "pass": true,
+      "detail": {
+        "before": true,
+        "fullAfter": true,
+        "incremental": true,
+        "ringUsed": null,
+        "failure": null
+      }
+    },
+    {
+      "name": "Incremental regression: unrelated near and far disconnected components stay pinned",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "scope": "affected-component",
+        "unrelatedPreserved": [
+          {
+            "cell": "0,0,2",
+            "before": "A@r0",
+            "after": "A@r0",
+            "inRegion": false
+          },
+          {
+            "cell": "1,0,2",
+            "before": "A@r0",
+            "after": "A@r0",
+            "inRegion": false
+          },
+          {
+            "cell": "50,0,0",
+            "before": "A@r0",
+            "after": "A@r0",
+            "inRegion": false
+          }
+        ],
+        "previousNotMutated": true
+      }
+    },
+    {
+      "name": "Incremental regression: deletion updates both surviving components",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "scope": "affected-component",
+        "region": [
+          "6,0,0",
+          "4,0,0",
+          "7,0,0",
+          "3,0,0",
+          "8,0,0",
+          "2,0,0",
+          "9,0,0",
+          "1,0,0",
+          "10,0,0",
+          "0,0,0",
+          "11,0,0"
+        ]
+      }
+    },
+    {
+      "name": "Incremental regression: truly contradictory component remains a reported failure",
+      "pass": true,
+      "detail": {
+        "ok": false,
+        "scope": "affected-component",
+        "unresolved": [
+          "11,0,0"
+        ]
+      }
+    },
+    {
+      "name": "Solver success must certify a globally connected battle route",
+      "pass": false,
+      "detail": {
+        "solverOk": true,
+        "components": 2,
+        "note": "Intentional counterexample: local socket constraints do not encode global route reachability; separate gameplay validator required"
+      }
+    }
+  ],
+  "passed": 10,
+  "failed": 2
+}

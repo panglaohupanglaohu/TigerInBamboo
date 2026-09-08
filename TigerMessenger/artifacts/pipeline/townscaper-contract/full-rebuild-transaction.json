@@ -1,0 +1,104 @@
+{
+  "failed": {
+    "ok": false,
+    "error": "wfc-unsatisfied",
+    "failedWfc": [
+      {
+        "terraceIndex": 1,
+        "enabled": true,
+        "ok": false,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 1,
+        "hash": null,
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    ],
+    "preservedPreviousGeometry": true
+  },
+  "preserved": {
+    "geometry": true,
+    "cache": true,
+    "spec": true,
+    "blueprint": true,
+    "stats": true,
+    "pending": true,
+    "configuration": true,
+    "oldResourceDisposals": 0
+  },
+  "committed": {
+    "solved": true,
+    "newCache": true,
+    "newSpec": true,
+    "newGeometry": true,
+    "seed": 41,
+    "topology": "legacy-grid",
+    "pendingCleared": true
+  },
+  "successStats": {
+    "cellCount": 7,
+    "windowCount": 7,
+    "crenelCount": 0,
+    "domeCount": 0,
+    "towerCount": 1,
+    "archCount": 0,
+    "shrubCount": 0,
+    "fenceCount": 7,
+    "roofCount": 0,
+    "canalCount": 0,
+    "waterGateCount": 0,
+    "doorCount": 3,
+    "steepleCount": 0,
+    "gardenCount": 0,
+    "plazaCount": 0,
+    "boatCount": 0,
+    "birdCount": 0,
+    "corniceCount": 0,
+    "plinthCount": 10,
+    "balconyCount": 6,
+    "pilasterCount": 0,
+    "arcadeColumnCount": 0,
+    "ridgeCount": 0,
+    "eaveCount": 0,
+    "oculusCount": 0,
+    "chimneyCount": 0,
+    "supportCount": 0,
+    "courtyardCount": 0,
+    "courtyardCellCount": 0,
+    "courtyardWallCount": 0,
+    "courtyardWellCount": 0,
+    "moduleCount": 35,
+    "cornerPartCount": 0,
+    "wfcTown": {
+      "enabled": true,
+      "ok": true,
+      "ms": 0,
+      "fromCache": false,
+      "unresolved": 0,
+      "hash": "a1cac9ec",
+      "topology": "legacy-grid",
+      "topologyHash": null
+    },
+    "moduleFamilyCounts": {
+      "foundation": 10,
+      "floor": 0,
+      "fence": 7,
+      "balcony": 6,
+      "stairs": 5,
+      "support": 0,
+      "hole": 0,
+      "decor": 7
+    },
+    "gate": null,
+    "gates": []
+  },
+  "legacyTwoArgStats": true,
+  "disabled": {
+    "success": true,
+    "flag": false,
+    "seed": 43,
+    "topology": "legacy-faces",
+    "cache": null
+  }
+}

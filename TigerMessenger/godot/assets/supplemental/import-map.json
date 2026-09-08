@@ -1,0 +1,907 @@
+{
+  "version": 1,
+  "note": "补充条目包含涂装/装备变体，不能计为独立新设计；独立模型导出不等于原世界移植",
+  "assets": [
+    {
+      "id": "scoutAircraft",
+      "label": "三重门侦察机",
+      "family": "scoutAircraft",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/scoutAircraft.source.json",
+        "exists": true,
+        "bytes": 338678
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/scoutAircraft.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/scoutAircraft.glb",
+        "res": "res://assets/supplemental/scoutAircraft.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "scoutAircraft",
+        "nodes": 46,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 4500,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gatePodCraft_pod-55-2",
+      "label": "泡形侦察艇 pod-55-2",
+      "family": "gatePodCraft",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gatePodCraft_pod-55-2.source.json",
+        "exists": true,
+        "bytes": 472686
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gatePodCraft_pod-55-2.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gatePodCraft_pod-55-2.glb",
+        "res": "res://assets/supplemental/gatePodCraft_pod-55-2.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gatePodCraft_pod-55-2",
+        "nodes": 78,
+        "meshDatablocks": 77,
+        "verticesIncludingOutline": 5124,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gatePodCraft_pod-41-7",
+      "label": "泡形侦察艇 pod-41-7",
+      "family": "gatePodCraft",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gatePodCraft_pod-41-7.source.json",
+        "exists": true,
+        "bytes": 477976
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gatePodCraft_pod-41-7.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gatePodCraft_pod-41-7.glb",
+        "res": "res://assets/supplemental/gatePodCraft_pod-41-7.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gatePodCraft_pod-41-7",
+        "nodes": 80,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gatePodCraft_pod-08-9",
+      "label": "泡形侦察艇 pod-08-9",
+      "family": "gatePodCraft",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gatePodCraft_pod-08-9.source.json",
+        "exists": true,
+        "bytes": 477972
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gatePodCraft_pod-08-9.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gatePodCraft_pod-08-9.glb",
+        "res": "res://assets/supplemental/gatePodCraft_pod-08-9.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gatePodCraft_pod-08-9",
+        "nodes": 80,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gatePodEscort_pod-55-2",
+      "label": "伴飞泡机（含麻醉炮口） pod-55-2",
+      "family": "gatePodCraft",
+      "relationship": "equipment/formation variant of gatePodCraft_pod-55-2",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gatePodEscort_pod-55-2.source.json",
+        "exists": true,
+        "bytes": 473246
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-55-2.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gatePodEscort_pod-55-2.glb",
+        "res": "res://assets/supplemental/gatePodEscort_pod-55-2.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gatePodEscort_pod-55-2",
+        "nodes": 79,
+        "meshDatablocks": 77,
+        "verticesIncludingOutline": 5124,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gatePodEscort_pod-41-7",
+      "label": "伴飞泡机（含麻醉炮口） pod-41-7",
+      "family": "gatePodCraft",
+      "relationship": "equipment/formation variant of gatePodCraft_pod-41-7",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gatePodEscort_pod-41-7.source.json",
+        "exists": true,
+        "bytes": 478551
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-41-7.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gatePodEscort_pod-41-7.glb",
+        "res": "res://assets/supplemental/gatePodEscort_pod-41-7.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gatePodEscort_pod-41-7",
+        "nodes": 81,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gatePodEscort_pod-08-9",
+      "label": "伴飞泡机（含麻醉炮口） pod-08-9",
+      "family": "gatePodCraft",
+      "relationship": "equipment/formation variant of gatePodCraft_pod-08-9",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gatePodEscort_pod-08-9.source.json",
+        "exists": true,
+        "bytes": 478534
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-08-9.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gatePodEscort_pod-08-9.glb",
+        "res": "res://assets/supplemental/gatePodEscort_pod-08-9.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gatePodEscort_pod-08-9",
+        "nodes": 81,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gateHaulerCraft_hauler-71-4",
+      "label": "重型运输艇 hauler-71-4",
+      "family": "gateHaulerCraft",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gateHaulerCraft_hauler-71-4.source.json",
+        "exists": true,
+        "bytes": 505997
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gateHaulerCraft_hauler-71-4.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gateHaulerCraft_hauler-71-4.glb",
+        "res": "res://assets/supplemental/gateHaulerCraft_hauler-71-4.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gateHaulerCraft_hauler-71-4",
+        "nodes": 69,
+        "meshDatablocks": 68,
+        "verticesIncludingOutline": 5528,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gateHaulerCraft_hauler-23-8",
+      "label": "重型运输艇 hauler-23-8",
+      "family": "gateHaulerCraft",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gateHaulerCraft_hauler-23-8.source.json",
+        "exists": true,
+        "bytes": 511316
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gateHaulerCraft_hauler-23-8.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gateHaulerCraft_hauler-23-8.glb",
+        "res": "res://assets/supplemental/gateHaulerCraft_hauler-23-8.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gateHaulerCraft_hauler-23-8",
+        "nodes": 71,
+        "meshDatablocks": 70,
+        "verticesIncludingOutline": 5576,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "gateHaulerCraft_hauler-96-1",
+      "label": "重型运输艇 hauler-96-1",
+      "family": "gateHaulerCraft",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/gateHaulerCraft_hauler-96-1.source.json",
+        "exists": true,
+        "bytes": 505996
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/gateHaulerCraft_hauler-96-1.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/gateHaulerCraft_hauler-96-1.glb",
+        "res": "res://assets/supplemental/gateHaulerCraft_hauler-96-1.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "gateHaulerCraft_hauler-96-1",
+        "nodes": 69,
+        "meshDatablocks": 68,
+        "verticesIncludingOutline": 5528,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "soccoCraft",
+      "label": "先锋兵登陆艇（货舱与活动尾门）",
+      "family": "gateHaulerCraft",
+      "relationship": "carrier variant with cargo hold; 3 runtime instances share factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/soccoCraft.source.json",
+        "exists": true,
+        "bytes": 633603
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/soccoCraft.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/soccoCraft.glb",
+        "res": "res://assets/supplemental/soccoCraft.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "soccoCraft",
+        "nodes": 127,
+        "meshDatablocks": 109,
+        "verticesIncludingOutline": 7618,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "citadelTrojanHorse",
+      "label": "特洛伊木马",
+      "family": "citadelTrojanHorse",
+      "relationship": "standalone extraction; already nested in citadelRange parent snapshot",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/citadelTrojanHorse.source.json",
+        "exists": true,
+        "bytes": 261873
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/citadelTrojanHorse.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/citadelTrojanHorse.glb",
+        "res": "res://assets/supplemental/citadelTrojanHorse.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "citadelTrojanHorse",
+        "nodes": 170,
+        "meshDatablocks": 150,
+        "verticesIncludingOutline": 4268,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "vanguardTrooper",
+      "label": "先锋重甲兵",
+      "family": "vanguardTrooper",
+      "relationship": "standalone original factory",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/vanguardTrooper.source.json",
+        "exists": true,
+        "bytes": 189684
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/vanguardTrooper.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/vanguardTrooper.glb",
+        "res": "res://assets/supplemental/vanguardTrooper.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "vanguardTrooper",
+        "nodes": 84,
+        "meshDatablocks": 75,
+        "verticesIncludingOutline": 2740,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "romanSoldier_spear_red",
+      "label": "罗马羽冠兵 spear red",
+      "family": "romanSoldier",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/romanSoldier_spear_red.source.json",
+        "exists": true,
+        "bytes": 309516
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/romanSoldier_spear_red.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/romanSoldier_spear_red.glb",
+        "res": "res://assets/supplemental/romanSoldier_spear_red.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "romanSoldier_spear_red",
+        "nodes": 50,
+        "meshDatablocks": 36,
+        "verticesIncludingOutline": 5688,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "romanSoldier_spear_blue",
+      "label": "罗马羽冠兵 spear blue",
+      "family": "romanSoldier",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/romanSoldier_spear_blue.source.json",
+        "exists": true,
+        "bytes": 309518
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/romanSoldier_spear_blue.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/romanSoldier_spear_blue.glb",
+        "res": "res://assets/supplemental/romanSoldier_spear_blue.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "romanSoldier_spear_blue",
+        "nodes": 50,
+        "meshDatablocks": 36,
+        "verticesIncludingOutline": 5688,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "romanSoldier_gladius_red",
+      "label": "罗马羽冠兵 gladius red",
+      "family": "romanSoldier",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/romanSoldier_gladius_red.source.json",
+        "exists": true,
+        "bytes": 323593
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/romanSoldier_gladius_red.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/romanSoldier_gladius_red.glb",
+        "res": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "romanSoldier_gladius_red",
+        "nodes": 55,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 5880,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "romanSoldier_gladius_blue",
+      "label": "罗马羽冠兵 gladius blue",
+      "family": "romanSoldier",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/romanSoldier_gladius_blue.source.json",
+        "exists": true,
+        "bytes": 323595
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/romanSoldier_gladius_blue.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/romanSoldier_gladius_blue.glb",
+        "res": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "romanSoldier_gladius_blue",
+        "nodes": 55,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 5880,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "romanSoldier_longbow_red",
+      "label": "罗马羽冠兵 longbow red",
+      "family": "romanSoldier",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/romanSoldier_longbow_red.source.json",
+        "exists": true,
+        "bytes": 398285
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/romanSoldier_longbow_red.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/romanSoldier_longbow_red.glb",
+        "res": "res://assets/supplemental/romanSoldier_longbow_red.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "romanSoldier_longbow_red",
+        "nodes": 89,
+        "meshDatablocks": 70,
+        "verticesIncludingOutline": 7056,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "romanSoldier_longbow_blue",
+      "label": "罗马羽冠兵 longbow blue",
+      "family": "romanSoldier",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/supplemental/romanSoldier_longbow_blue.source.json",
+        "exists": true,
+        "bytes": 398287
+      },
+      "exportSource": {
+        "path": "assets/models/originals/supplemental/blender-r3/romanSoldier_longbow_blue.blend",
+        "exists": true,
+        "why": "原作补充归档，未改造造型"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/romanSoldier_longbow_blue.glb",
+        "res": "res://assets/supplemental/romanSoldier_longbow_blue.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "romanSoldier_longbow_blue",
+        "nodes": 89,
+        "meshDatablocks": 70,
+        "verticesIncludingOutline": 7056,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ],
+      "status": "partial"
+    },
+    {
+      "id": "leviathanIsland",
+      "label": "鲲",
+      "family": "leviathanIsland",
+      "relationship": "original whale/island factory; distinct from swamp_whale; six garden scenes assembled separately at runtime",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/leviathan/leviathanIsland.source.json",
+        "exists": true,
+        "bytes": 872523
+      },
+      "exportSource": {
+        "path": "assets/models/originals/leviathan/blender-r3/leviathanIsland.blend",
+        "exists": true,
+        "why": "原工厂归档，未优化，未含鲸背六景"
+      },
+      "godot": {
+        "file": "godot/assets/supplemental/leviathanIsland.glb",
+        "res": "res://assets/supplemental/leviathanIsland.glb",
+        "exists": true
+      },
+      "scale": {
+        "revision": 3,
+        "asset": "leviathanIsland",
+        "nodes": 295,
+        "meshDatablocks": 173,
+        "verticesIncludingOutline": 10604,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "knownGaps": [
+        "这是原工厂本体、浮岛地台及工厂植被的独立归档，不含saihojiGarden.js运行时装到鲸背的六景；不能直接替换完整鲸背场景根节点。",
+        "非swamp_whale；没有改造原作造型或完成美术优化。",
+        "原始默认姿态及可见性保留，180个隐藏mesh未强制显示；程序升降、摆尾、眨眼、雨滴和鲸背六景行为未迁移。"
+      ],
+      "status": "partial"
+    }
+  ]
+}

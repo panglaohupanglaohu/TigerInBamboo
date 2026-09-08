@@ -55,7 +55,7 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
   if (hills) {
     const flat = worldToFlatXZ(pos, PLANET_RADIUS);
     if (flat) {
-      const surfaceR = PLANET_RADIUS + groundLiftAt(flat.x, flat.z);
+      const surfaceR = hills.sampleRadius?.(pos) ?? PLANET_RADIUS + groundLiftAt(flat.x, flat.z);
       const r = pos.length();
       if (r < surfaceR + 0.1 && r > surfaceR - 1.5) {
         const n0 = _up.copy(pos).normalize();
@@ -160,10 +160,11 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
   // 送信人可沿石阶一路走上圣城正门门廊。
   if (!grounded) {
     const r = pos.length();
-    const surfR =
-      PLANET_RADIUS +
-      canyonOffsetDir(_up.copy(pos).normalize()) +
-      citadelWalkLiftDir(_up);
+    const hillRadius = hills?.sampleRadius?.(pos);
+    const canyon = canyonOffsetDir(_up.copy(pos).normalize());
+    const citadel = citadelWalkLiftDir(_up);
+    const baseRadius = PLANET_RADIUS + canyon + citadel;
+    const surfR = hillRadius == null ? baseRadius : citadel > 0 ? Math.max(hillRadius, baseRadius) : hillRadius;
     if (r < surfR + 0.1) {
       pos.setLength(surfR);
       const n = _up.copy(pos).normalize();
@@ -197,8 +198,13 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
  */
 export function resolveAssetColliders(pos, colliders, radius = PLAYER_RADIUS) {
   if (!colliders || !colliders.length) return;
-  _up.copy(pos).normalize();
+  const radialHeight = pos.length();
+  if (radialHeight < 1e-6) return;
   for (const c of colliders) {
+    _up.copy(pos).normalize();
+    // Optional radial extent makes elevated decorations passable underneath.
+    if (Number.isFinite(c.minRadius) && radialHeight + PLAYER_HEIGHT < c.minRadius) continue;
+    if (Number.isFinite(c.maxRadius) && radialHeight > c.maxRadius) continue;
     const colliderRadius = c.radius || 0.4;
     const min = radius + colliderRadius;
     const colliderLen = c.position?.length?.() || 0;
@@ -223,5 +229,6 @@ export function resolveAssetColliders(pos, colliders, radius = PLAYER_RADIUS) {
     } else if (d < min) {
       pos.addScaledVector(_delta, (min - d) / d);
     }
+    pos.setLength(radialHeight);
   }
 }

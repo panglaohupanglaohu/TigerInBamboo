@@ -74,12 +74,23 @@ export function updateMessengerIsland(s, dt, t, runtime) {
     };
   }
 
-  s.scene.traverse((o) => {
-    const kind = o.userData?.kind;
-    if ((kind === "moebius-swamp" || kind === "moebius-airship") && o.userData.update) {
-      o.userData.update(dt, t, runtime);
-    }
-  });
+  // The scene has thousands of meshes; only a few roots own these updates.
+  // Recollect on root edits and once per simulation second for nested edits.
+  s.storyActorAge = (s.storyActorAge || 0) + dt;
+  if (!s.storyActors || s.storyActorAge >= 1 || s.storyRootCount !== s.scene.children.length) {
+    s.storyActors = [];
+    s.scene.traverse((o) => {
+      const kind = o.userData?.kind;
+      if ((kind === "moebius-swamp" || kind === "moebius-airship") && o.userData.update) s.storyActors.push(o);
+    });
+    s.storyActorAge = 0;
+    s.storyRootCount = s.scene.children.length;
+  }
+  for (const o of s.storyActors) {
+    let root = o;
+    while (root.parent) root = root.parent;
+    if (root === s.scene) o.userData.update(dt, t, runtime);
+  }
 
   let swampRoot = s.airshipAnchor.swamp;
   if (!swampRoot || !swampRoot.parent) {

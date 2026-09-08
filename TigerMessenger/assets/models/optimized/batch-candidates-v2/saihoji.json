@@ -1,0 +1,3706 @@
+{
+  "id": "saihoji",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "a977083a0cdf8e40bd92fe3c03f979128e3b819d895b28c4b6596f9c06932ca1",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n100",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n156",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n161",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n169",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n375",
+      "result": {
+        "verticesBefore": 41760,
+        "verticesAfter": 7308,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n424",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n480",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n556",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n140",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n404",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n522",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n753",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n675",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n748",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n669",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n642",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n672",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n547",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n631",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n369",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n101",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n157",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n162",
+      "result": {
+        "verticesBefore": 34800,
+        "verticesAfter": 6090,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n378",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 42,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n489",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 299,
+        "normalError": 1.7434358596801758e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n437",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 295,
+        "normalError": 1.341104507446289e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n558",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n639",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n735",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n33",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 2.6672005787986564e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n66",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n510",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n589",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n63",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n82",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 42,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n744",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n513",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n574",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n262",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n549",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n633",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n370",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n110",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 295,
+        "normalError": 1.8863007426261902e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n165",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n181",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n49",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n255",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n438",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 2.889454094656685e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n726",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n730",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n366",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n691",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n325",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n268",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n538",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n237",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n655",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n507",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n585",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n625",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n252",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n48",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n405",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n739",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n153",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n570",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n721",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n151",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n407",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n531",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n55",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n634",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n111",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 2.8894560728076613e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n158",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n171",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n323",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 1.1622905731201172e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n465",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n630",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n727",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n688",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n774",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n714",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n266",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n534",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n651",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n502",
+      "result": {
+        "verticesBefore": 34800,
+        "verticesAfter": 6090,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n580",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n621",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n249",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n477",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 3.111724204572959e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n23",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n598",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n211",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n768",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n150",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 3.111719811981937e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n561",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n99",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n684",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n718",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n413",
+      "result": {
+        "verticesBefore": 13920,
+        "verticesAfter": 2436,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n528",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n349",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 300,
+        "normalError": 2.0176172256469727e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n70",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 273,
+        "normalError": 9.733438491821289e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n313",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n365",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n195",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 3.333988206577487e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n112",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n159",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n387",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 1.3053417205810547e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n491",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n440",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n562",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n152",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n177",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n408",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n550",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n667",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n673",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n769",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n71",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n759",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n222",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n763",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n68",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n696",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n663",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n648",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n552",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n637",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n372",
+      "result": {
+        "verticesBefore": 3024,
+        "verticesAfter": 547,
+        "normalError": 7.888674736022949e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n113",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n160",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n167",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n183",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n388",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 2.1517276763916016e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n492",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n441",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n138",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n706",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n754",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n495",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n59",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n606",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n676",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n67",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n643",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n612",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n519",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n553",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n373",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n114",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n173",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n389",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n428",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n493",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n257",
+      "result": {
+        "verticesBefore": 27840,
+        "verticesAfter": 4872,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n45",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 298,
+        "normalError": 1.4841556549072266e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n565",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n750",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n64",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n736",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n288",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n601",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n336",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 296,
+        "normalError": 1.6123056411743164e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n245",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.235713646963177e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n544",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n409",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 42,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n745",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n609",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n464",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 3.333987706355401e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n514",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n80",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n155",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n179",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n555",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n374",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n123",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 298,
+        "normalError": 2.127513289451599e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n576",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n390",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n494",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n260",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n450",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 1.4863908290863037e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n426",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n636",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n732",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n693",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n391",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n326",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n239",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.1343119865614426e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n540",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n657",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n508",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n586",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n627",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n253",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n406",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n741",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n439",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n154",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n567",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n571",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n723",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n124",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 2.8894546630908735e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n198",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n22",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n234",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 2.905726432800293e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n339",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n410",
+      "result": {
+        "verticesBefore": 1008,
+        "verticesAfter": 182,
+        "normalError": 8.852779865264893e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n511",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n523",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n568",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n247",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n705",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n729",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n69",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n775",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n649",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n703",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n715",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n652",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n250",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n72",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n700",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n235",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n467",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n535",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n310",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 294,
+        "normalError": 1.8715858459472656e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n452",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n20",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 3.333997551635548e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n220",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 294,
+        "normalError": 1.694471575319767e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n34",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n411",
+      "result": {
+        "verticesBefore": 2184,
+        "verticesAfter": 402,
+        "normalError": 9.012222290039062e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n196",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n685",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n771",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n711",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n76",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n88",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n499",
+      "result": {
+        "verticesBefore": 2520,
+        "verticesAfter": 455,
+        "normalError": 8.372962474822998e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n595",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n21",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n765",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n97",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 298,
+        "normalError": 1.4573335647583008e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n681",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n525",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n697",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n311",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 1.9490718841552734e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n453",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n280",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n664",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n670",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n504",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n582",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n622",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n126",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n362",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 1.7344951629638672e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n610",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n420",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n47",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n537",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n600",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n616",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n139",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n618",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n708",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n756",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n86",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n496",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n591",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n207",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 2.1673738956451416e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n760",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n274",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n298",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 3.333990252940566e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n403",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n607",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n678",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n185",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 42,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n353",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n278",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n660",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n645",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n136",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 300,
+        "normalError": 2.8036534786224365e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n613",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n327",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n498",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n594",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n516",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n505",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n583",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n624",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n19",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 2.0816922187805176e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n127",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n363",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 286,
+        "normalError": 2.962350845336914e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n546",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n751",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n84",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n272",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n666",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n400",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 1.2248754501342773e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n603",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n337",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 2.6671923023968702e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n368",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n256",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n264",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n747",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n640",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n125",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n61",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n209",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n46",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 2.5451183319091797e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n35",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n416",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n517",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n529",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n573",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n223",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n251",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n297",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 1.9162893295288086e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n733",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n694",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n658",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n628",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n742",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n241",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.1662146803814721e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n401",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 2.8894548677271814e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n422",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n478",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n541",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n604",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n615",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n314",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n463",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 295,
+        "normalError": 1.936173066496849e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n10",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n724",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n73",
+      "result": {
+        "verticesBefore": 20880,
+        "verticesAfter": 3654,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n690",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n78",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n324",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 2.6672002604755107e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n236",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n654",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n738",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n564",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n57",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n720",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n53",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n350",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 2.110004425048828e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n702",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n32",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 297,
+        "normalError": 1.1026859283447266e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n51",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n588",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n520",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n351",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n243",
+      "result": {
+        "verticesBefore": 36,
+        "verticesAfter": 8,
+        "normalError": 1.1999614812907566e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n270",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n402",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n479",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n543",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n286",
+      "result": {
+        "verticesBefore": 240,
+        "verticesAfter": 42,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n367",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n197",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n687",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n772",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n712",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n501",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n579",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n619",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n248",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n476",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 299,
+        "normalError": 2.1288171410560608e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n224",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n500",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n597",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n210",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n766",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n149",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 295,
+        "normalError": 1.1682510375976562e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n175",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n559",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n98",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 2.8894573233628762e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n682",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n717",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n340",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n412",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n526",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n699",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n284",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n312",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n454",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n194",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 298,
+        "normalError": 1.4066696166992188e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n364",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n352",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n418",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n532",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n577",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n233",
+      "result": {
+        "verticesBefore": 1596,
+        "verticesAfter": 298,
+        "normalError": 1.3232231140136719e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n254",
+      "result": {
+        "verticesBefore": 2016,
+        "verticesAfter": 364,
+        "normalError": 6.908178329467773e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n300",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n338",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n276",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n65",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n709",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n490",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 284,
+        "normalError": 2.667191665750579e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n757",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n466",
+      "result": {
+        "verticesBefore": 3600,
+        "verticesAfter": 630,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n221",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 2.619624137878418e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n497",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n592",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n208",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 2.8894560045955586e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n762",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n299",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n679",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n371",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n282",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n301",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n451",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 285,
+        "normalError": 2.6464462280273438e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n36",
+      "result": {
+        "verticesBefore": 1680,
+        "verticesAfter": 294,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n661",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n646",
+      "result": {
+        "verticesBefore": 84,
+        "verticesAfter": 18,
+        "normalError": 3.2782554626464844e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n137",
+      "result": {
+        "verticesBefore": 1512,
+        "verticesAfter": 283,
+        "normalError": 3.111727053192173e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 336,
+  "removedEditVertices": 373919
+}

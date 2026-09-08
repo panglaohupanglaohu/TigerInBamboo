@@ -52,7 +52,9 @@ export function createCornerGraph(grid, { cols, rows, floors } = {}) {
 
   const ids = [];
   const masks = [];
-  for (let iy = 0; iy <= F; iy++) {
+  // A corner spans two layer centers. Ground occupancy also contributes to
+  // iy=-1; keep that boundary in the same graph used by assembly and solving.
+  for (let iy = -1; iy <= F; iy++) {
     for (let gz = 0; gz <= R; gz++) {
       for (let gx = 0; gx <= C; gx++) {
         const mask = cornerMaskAt(grid, gx, gz, iy);

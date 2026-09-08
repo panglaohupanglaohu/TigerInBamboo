@@ -1,0 +1,70 @@
+{
+  "id": "bird",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "0826d31cabeaf511bdbe83f1434e709db159c388db3a7f209c9ed31361d61aba",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 6,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 23,
+        "verticesAfter": 8,
+        "normalError": 3.481779060621193e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 23,
+        "verticesAfter": 8,
+        "normalError": 3.481779060621193e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n5",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 6,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 6,
+        "normalError": 8.940696716308594e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n7",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 6,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 6,
+  "removedEditVertices": 102
+}

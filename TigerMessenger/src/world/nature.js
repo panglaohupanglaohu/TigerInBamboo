@@ -331,7 +331,7 @@ export function settleBuriedAssets(scene, colliders = []) {
  *
  * @param {THREE.Scene} scene
  * @param {number} planetRadius
- * @param {{ seed?: number, perUnit?: number, jitter?: number, trackCurves?: THREE.Curve[], trackClearR?: number }} [opts]
+ * @param {{ seed?: number, perUnit?: number, jitter?: number, trackCurves?: THREE.Curve[], trackClearR?: number, acceptTree?: (tree: THREE.Object3D) => boolean }} [opts]
  * @returns {{ meshes: THREE.Object3D[], colliders: Array<{position: THREE.Vector3, radius: number}> }}
  */
 export function decorateCorridorForests(scene, planetRadius, opts = {}) {
@@ -342,6 +342,7 @@ export function decorateCorridorForests(scene, planetRadius, opts = {}) {
     jitter = 1.5,
     trackCurves = null,
     trackClearR = 2.6,
+    acceptTree = null,
   } = opts;
 
   const rnd = lcg(seed);
@@ -411,6 +412,14 @@ export function decorateCorridorForests(scene, planetRadius, opts = {}) {
         const s = 0.85 + rnd() * 0.5;
         tree.scale.multiplyScalar(s);
         tree.userData.corridorId = corridor.id;
+        // Apply site clearance AFTER consuming the existing tree/yaw/scale RNG.
+        // Rejecting an obstructing tree must not rearrange the rest of the forest.
+        if (acceptTree && !acceptTree(tree)) {
+          const geometries = new Set();
+          tree.traverse(node => { if (node.geometry) geometries.add(node.geometry); });
+          for (const geometry of geometries) geometry.dispose();
+          continue; // No orphan collision is registered for the rejected tree.
+        }
         scene.add(tree);
         meshes.push(tree);
         colliders.push({ position: tree.position.clone(), radius: 0.55 * s });

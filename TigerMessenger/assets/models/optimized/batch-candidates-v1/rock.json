@@ -1,0 +1,18 @@
+{
+  "id": "rock",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "853076877f7b1c5d60f7a661a71bb6ee07cb2917ab7de6a15fce376c8a83c94e",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n2",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

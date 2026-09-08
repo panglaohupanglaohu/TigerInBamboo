@@ -1,10 +1,11 @@
 // =====================================================================
 //  WFC 增量重解：编辑格 + ring 邻域重置为全集，其余格 pins 为上次解。
-//  失败且冲突格在区域外时 ring+1 重试 ≤2 次。不整城重解，不静默填格。
+//  小范围失败后扩圈，最终升级到受影响连通分量；无关分量始终 pin 旧解。
 //  纯数据，禁止 import Three.js / DOM。
 // =====================================================================
 
-import { solveTownSelection, defaultBanPolicy } from "./wfcTownSelection.js";
+import { solveTownSelection, defaultBanPolicy, assertTownGraphMatchesGrid } from "./wfcTownSelection.js";
+import { createCitadelCellGraph, CITADEL_DELTA, CITADEL_OPP } from "./wfcGraphAdapter.js";
 
 function parseKey(key) {
   const [ix, iy, iz] = String(key).split(",").map(Number);
@@ -25,10 +26,29 @@ export function manhattanNeighbors(key, ring) {
   return out;
 }
 
-function involvedOutside(failure, region) {
-  const cells = failure?.conflict?.involvedCells ?? [];
-  if (!cells.length) return false;
-  return cells.every((id) => id != null && !region.has(String(id)));
+// A deletion has no node in the new graph. Its surviving immediate neighbors
+// still changed exposure; a recolor can likewise affect both former sides.
+export function affectedComponent(grid, dirtyKeys) {
+  const graph = createCitadelCellGraph(grid);
+  const pending = [];
+  const affected = new Set();
+  const add = (id) => {
+    const index = graph.indexOfId(id);
+    if (index < 0 || affected.has(id)) return;
+    affected.add(id);
+    pending.push(index);
+  };
+  for (const key of dirtyKeys) {
+    add(String(key));
+    const [x, y, z] = parseKey(key);
+    for (const [dx, dy, dz] of Object.values(CITADEL_DELTA)) {
+      add(`${x + dx},${y + dy},${z + dz}`);
+    }
+  }
+  for (let head = 0; head < pending.length; head++) {
+    for (const edge of graph.neighborsOf(pending[head])) add(graph.cellId(edge.to));
+  }
+  return affected;
 }
 
 /**
@@ -43,6 +63,7 @@ function involvedOutside(failure, region) {
  */
 export function resolveIncremental({
   grid,
+  graph = null,
   prototypes,
   seed,
   previous = {},
@@ -50,14 +71,31 @@ export function resolveIncremental({
   ring = 2,
   banPolicy = defaultBanPolicy,
 } = {}) {
+  if (graph) {
+    assertTownGraphMatchesGrid(graph, grid);
+    const legacy = createCitadelCellGraph(grid);
+    if (graph.cellCount !== legacy.cellCount) throw new Error("incremental face graph must preserve legacy cells");
+    for (const {id, index} of legacy.cells()) {
+      const target = graph.indexOfId(id);
+      const oldEdges = legacy.neighborsOf(index).map(e => `${legacy.cellId(e.to)}:${e.direction}:${CITADEL_OPP[e.direction]}`).sort();
+      const newEdges = graph.neighborsOf(target).map(e => `${graph.cellId(e.to)}:${e.sourceSide}:${e.targetSide}`).sort();
+      if (target < 0 || graph.levelOf(target) !== parseKey(id)[1] ||
+          Object.keys(CITADEL_DELTA).some(side => graph.exposure(target)[side] !== legacy.exposure(index)[side]) ||
+          JSON.stringify(oldEdges) !== JSON.stringify(newEdges)) {
+        throw new Error("incremental face graph requires legacy-preserving adjacency");
+      }
+    }
+  }
+  const affected = affectedComponent(grid, dirtyKeys);
   let ringUsed = ring;
   let last = null;
-  for (let attempt = 0; attempt <= 2; attempt++) {
+  for (let attempt = 0; attempt <= 3; attempt++) {
     ringUsed = ring + attempt;
-    const region = new Set();
+    const componentFallback = attempt === 3;
+    const region = componentFallback ? new Set(affected) : new Set();
     for (const k of dirtyKeys) {
       for (const n of manhattanNeighbors(k, ringUsed)) {
-        if (grid.has(n)) region.add(n);
+        if (affected.has(n)) region.add(n);
       }
     }
     const pins = [];
@@ -66,10 +104,13 @@ export function resolveIncremental({
         pins.push({ cell: id, variant: previous[id].key, source: "previous" });
       }
     }
-    const r = solveTownSelection({ grid, prototypes, seed, pins, banPolicy });
-    last = { ...r, region: [...region], ringUsed };
+    const r = solveTownSelection({ grid, graph, prototypes, seed, pins, banPolicy });
+    last = { ...r, region: [...region], ringUsed: componentFallback ? null : ringUsed,
+      scope: componentFallback ? "affected-component" : "local", attempts: attempt + 1 };
     if (r.ok) return last;
-    if (!involvedOutside(r.failure, region)) return last;
+    // Mixed inside/outside conflicts can require distant changes too. Do not
+    // depend on the optional conflict explanation to decide whether to expand.
+    if (region.size === affected.size) return last;
   }
   return last;
 }

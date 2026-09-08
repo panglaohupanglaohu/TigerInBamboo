@@ -1,0 +1,43 @@
+{
+  "sha256": "23dfd3e9b36ef29a2344e947980e4de66d9aec5ff904e1088f6502d64d7738f8",
+  "bytes": 38148,
+  "meshes": 3,
+  "materials": 2,
+  "primitives": 3,
+  "triangles": 696,
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "Helmet_Galea.001"
+    },
+    {
+      "mesh": 1,
+      "name": "Skirt_Ten_Separated_Lames.001"
+    },
+    {
+      "mesh": 2,
+      "name": "Waist_Belt.001"
+    },
+    {
+      "children": [
+        0,
+        1,
+        2
+      ],
+      "extras": {
+        "attachToOriginalNodeId": "n2",
+        "bodyLocalYUp": true
+      },
+      "name": "Roman_Armor_V2_BodyLocal.001"
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Roman Armor V2 Refined",
+      "nodes": [
+        3
+      ]
+    }
+  ],
+  "allNodeTransformsIdentity": true
+}

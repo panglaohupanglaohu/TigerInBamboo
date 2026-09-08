@@ -1,0 +1,41 @@
+{
+  "armorFixture": "real v3 direction adapter: identity wearable at n2, crest +90Y then offset",
+  "candidateSha256": {
+    "armor": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+    "assembly": "e519213b35b24458ebe62dfc12412fb71467db870467b95b20b2fb9f0e3927c6",
+    "handle": "3c558adf9be55ece0f80bbe536eee48d79fbec2bed4778e6a7c37141a27bde18"
+  },
+  "cases": 252,
+  "failures": [],
+  "geometryCounts": {
+    "blue": {
+      "armorTriangleVertices": 2088,
+      "bodyTriangleVertices": 3684,
+      "shieldTriangleVertices": 396
+    },
+    "red": {
+      "armorTriangleVertices": 2088,
+      "bodyTriangleVertices": 3684,
+      "shieldTriangleVertices": 396
+    }
+  },
+  "maxGripError": 5.33120157797384e-7,
+  "minimumBodySeparation": 0.180871769785881,
+  "minimumSwordSeparation": 0.032878965139389,
+  "separationMethod": "supporting planes over actual triangle vertices, model-root units",
+  "sourceSha256": {
+    "blue": "54267e3c01848ad3954c3947c72f5fc283be647da6304038adae97e38987813c",
+    "red": "55e43df87033317b92fba8ebe15ca09e1c6f2b4ffd4647bcea2e170fb9debd55"
+  },
+  "test": "roman_armor_direction",
+  "variants": [
+    "blue",
+    "red"
+  ],
+  "verification": {
+    "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+    "isolatedProject": "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/tiger-roman-direction-x01zrjpq/godot",
+    "exitCode": 0,
+    "scope": "252 discrete poses; actual v3 armor adapter, source blue/red soldiers, shield/sword adapters. Crest +90Y direction, repeated bind, OFF restoration and unbind release verified. Not continuous gameplay or foreground visual acceptance."
+  }
+}

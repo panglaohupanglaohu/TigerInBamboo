@@ -283,6 +283,35 @@ export function worldToFlatXZ(pos, R) {
  * 构建山区网格：单个合并高度场（视觉=碰撞，连绵无接缝），
  * 顶点色从草绿渐变到土褐，模拟草坡与坡顶露土。
  */
+// Query the actual triangles, including track carving. Only nine grid cells
+// are visited, never a whole-world raycast. Ray origin is the planet centre.
+const groundRay = new THREE.Ray();
+const groundA = new THREE.Vector3(), groundB = new THREE.Vector3(), groundC = new THREE.Vector3();
+const groundHit = new THREE.Vector3();
+export function sampleHillMeshRadius(mesh, pos, R) {
+  const flat = worldToFlatXZ(pos, R);
+  if (!flat || !mesh?.geometry?.index) return null;
+  const nx = Math.round((GRID_MAX_X - GRID_MIN_X) / GRID_STEP) + 1;
+  const nz = Math.round((GRID_MAX_Z - GRID_MIN_Z) / GRID_STEP) + 1;
+  const ix = Math.floor((flat.x - GRID_MIN_X) / GRID_STEP);
+  const iz = Math.floor((flat.z - GRID_MIN_Z) / GRID_STEP);
+  const geo = mesh.geometry, vertices = geo.attributes.position;
+  groundRay.origin.set(0, 0, 0);
+  groundRay.direction.copy(pos).normalize();
+  for (let z = Math.max(0, iz - 1); z <= Math.min(nz - 2, iz + 1); z++) {
+    for (let x = Math.max(0, ix - 1); x <= Math.min(nx - 2, ix + 1); x++) {
+      const first = (z * (nx - 1) + x) * 6;
+      for (let k = first; k < first + 6; k += 3) {
+        groundA.fromBufferAttribute(vertices, geo.index.getX(k));
+        groundB.fromBufferAttribute(vertices, geo.index.getX(k + 1));
+        groundC.fromBufferAttribute(vertices, geo.index.getX(k + 2));
+        if (groundRay.intersectTriangle(groundA, groundB, groundC, false, groundHit)) return groundHit.length();
+      }
+    }
+  }
+  return null;
+}
+
 export function buildHills(scene, R) {
   const nx = Math.round((GRID_MAX_X - GRID_MIN_X) / GRID_STEP) + 1;
   const nz = Math.round((GRID_MAX_Z - GRID_MIN_Z) / GRID_STEP) + 1;
@@ -435,5 +464,5 @@ export function buildHills(scene, R) {
   skirt.name = "hills-closed-skirt";
   scene.add(skirt);
 
-  return { mesh, skirt };
+  return { mesh, skirt, sampleRadius: (pos) => sampleHillMeshRadius(mesh, pos, R) };
 }

@@ -1,0 +1,14 @@
+{
+  "id": "planet",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "876e825c3b812738b7219fea0fb7c0f1c7e4a502295b7e9633d3279e39ad8734",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "planet-surface",
+      "result": "preserved: deformation or color attributes"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

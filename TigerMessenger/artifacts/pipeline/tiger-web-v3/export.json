@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "source": "godot/assets/art-pilots/moebius-tiger-anatomy-v3.glb",
+  "sourceSha256": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be",
+  "sourceSnapshotSha256": "b1c91b4af412057f36241455e3f363c50973602fb94103bdb98dbaa4162f706b",
+  "output": "assets/models/optimized/moebiusTigerAnatomyData.js",
+  "outputSha256": "a20c2257fcab14d2b8f748287bfbab963bdbe697439f2be14f1077edc7d17403",
+  "outputBytes": 2676505,
+  "stats": {
+    "originalNodes": 80,
+    "nodes": 90,
+    "addedNodes": 10,
+    "meshNodes": 71,
+    "materials": 13,
+    "textures": 4,
+    "totalTriangles": 9440,
+    "visibleTriangles": 8376,
+    "hiddenOutlineNodes": 30,
+    "factoryBounds": {
+      "min": [
+        -0.5240000206828119,
+        0,
+        -2.4687828785435553
+      ],
+      "max": [
+        0.5240000206828119,
+        1.7200000065565106,
+        1.532000039994717
+      ]
+    },
+    "visibleFactoryBounds": {
+      "min": [
+        -0.5240000206828119,
+        0,
+        -2.360710064383312
+      ],
+      "max": [
+        0.5240000206828119,
+        1.672239996079206,
+        1.532000039994717
+      ]
+    },
+    "visibleRootLocalBounds": {
+      "min": [
+        -1.3100000321865082,
+        0,
+        -5.901775073014978
+      ],
+      "max": [
+        1.3100000321865082,
+        4.180599927902222,
+        3.8300000429153442
+      ]
+    }
+  },
+  "originalParentsPreserved": true,
+  "allAttributesDecoded": [
+    "POSITION",
+    "NORMAL",
+    "TEXCOORD_0"
+  ],
+  "primitiveGroupsPreserved": true,
+  "embeddedImageHashes": [
+    "0d754a84e66520951befa8c2c36843292f67744339d9a0e16b2d6f6b6a910cc6",
+    "451d68fe6cbed3e1bebf0cf7fe3c9ccbc494479c2964590645ed2aa5f8a82e83",
+    "57f7e4d658b1854fdcf4654e5366a5438c9fd62e7e873400dcf5a851f4b6a533",
+    "f9f488475a7323d16d0c79b8e40832f54e8fd2cdc8e7e5717212a2c5b01f843b"
+  ],
+  "pointLightIdentityIds": [
+    "n20",
+    "n22"
+  ],
+  "emptyMeshIds": [
+    "n4"
+  ],
+  "staleAnimationMetadataExcluded": true,
+  "sourceFilesUnchanged": true,
+  "scope": "Data export only; no Web runtime, animation, story, material adaptation or visual approval.",
+  "notes": [
+    "Keep original PointLight instances at n20/n22; candidate records supply only their new transforms.",
+    "n4 remains an original Mesh identity with empty geometry; do not hide its parent subtree. Its n5 outline is separately marked hidden.",
+    "geometry.groups[].materialIndex indexes each node materialIndices; those values index top-level materials.",
+    "materials retain glTF defaults when a factor is absent; textured baseColorFactor defaults to white."
+  ],
+  "independentThreeCheck": {
+    "passed": true,
+    "version": "172",
+    "nodeMatricesCompared": 90,
+    "maxMatrixDifference": 0,
+    "visibleTriangles": 8376,
+    "maximumWorldBoundError": 0,
+    "groupCoverageValidated": true
+  }
+}

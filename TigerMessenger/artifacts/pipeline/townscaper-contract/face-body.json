@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "seam": {
+    "ok": true,
+    "errors": [],
+    "faceCount": 2,
+    "sharedEdges": 1,
+    "sampleCount": 5
+  },
+  "checkedNormals": 60,
+  "minNormalDot": 0.9999999894722101,
+  "tiltedNormals": 36,
+  "internalWallsSuppressed": true,
+  "foreignWallsSuppressed": true,
+  "floatingUnderside": true,
+  "legacyNormalsPreserved": true,
+  "scope": "actual production face wall shells; roofs/windows/navigation not migrated"
+}

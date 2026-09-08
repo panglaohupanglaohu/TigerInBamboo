@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>原模型保真归档工具</title>
+<script type="importmap">{"imports":{"three":"../../vendor/three.module.js","three/addons/":"../../vendor/jsm/"}}</script>
+<script type="module">
+import { BUILDING_CATALOG, createCatalogObject } from '../../src/core/buildingCatalog.js';
+import { captureObject } from './capture.js';
+window.catalog = Object.values(BUILDING_CATALOG).map(({id,label,create})=>({id,label,factory:create.toString()}));
+window.captureOriginal = (id) => {
+  let seed=20260907;
+  const previous=Math.random;
+  Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  try {
+    // An archive request must stay on authored source geometry even when the
+    // playable default has a newer reversible Blender candidate.
+    const obj=createCatalogObject(id,{anatomy:false,optimizedGeometry:false});
+    if(!obj)throw new Error(`No model ${id}`);
+    window.subject=obj;
+    return captureObject(obj,{id,label:BUILDING_CATALOG[id].label,seed:20260907,factory:BUILDING_CATALOG[id].create.toString()});
+  } finally { Math.random=previous; }
+};
+window.ready=true;
+</script>

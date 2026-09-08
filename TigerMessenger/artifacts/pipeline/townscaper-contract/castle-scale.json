@@ -1,0 +1,79 @@
+{
+  "source": "HIGHLAND_TOWNSCAPER_TOWN_SPEC default source layout, not browser saved edits",
+  "rows": [
+    {
+      "faceGraph": {
+        "ok": true,
+        "hash": "18d9af3f",
+        "topologyHash": "face-layer-v1:1b5fbb95",
+        "ms": 14.300000011920929
+      },
+      "terrace": 0,
+      "seed": 1,
+      "cells": 978,
+      "ok": true,
+      "hash": "18d9af3f",
+      "ms": 59.30000001192093,
+      "unresolved": [],
+      "stats": {
+        "bans": 5001,
+        "queuePushes": 528,
+        "bitsetWords": 37296,
+        "peakQueue": 978,
+        "propagations": 404,
+        "observations": 403,
+        "backtracks": 0
+      }
+    },
+    {
+      "faceGraph": {
+        "ok": true,
+        "hash": "5a8616a8",
+        "topologyHash": "face-layer-v1:1b5fbb95",
+        "ms": 10
+      },
+      "terrace": 0,
+      "seed": 37,
+      "cells": 978,
+      "ok": true,
+      "hash": "5a8616a8",
+      "ms": 39.5,
+      "unresolved": [],
+      "stats": {
+        "bans": 5001,
+        "queuePushes": 528,
+        "bitsetWords": 37044,
+        "peakQueue": 978,
+        "propagations": 399,
+        "observations": 398,
+        "backtracks": 0
+      }
+    },
+    {
+      "faceGraph": {
+        "ok": true,
+        "hash": "760c1c3f",
+        "topologyHash": "face-layer-v1:1b5fbb95",
+        "ms": 11.5
+      },
+      "terrace": 0,
+      "seed": 20260808,
+      "cells": 978,
+      "ok": true,
+      "hash": "760c1c3f",
+      "ms": 32.30000001192093,
+      "unresolved": [],
+      "stats": {
+        "bans": 5001,
+        "queuePushes": 528,
+        "bitsetWords": 37580,
+        "peakQueue": 978,
+        "propagations": 412,
+        "observations": 411,
+        "backtracks": 0
+      }
+    }
+  ],
+  "passed": true,
+  "scope": "pure production selection at real source layout scale; not geometry or gameplay acceptance"
+}

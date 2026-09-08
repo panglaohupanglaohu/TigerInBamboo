@@ -49,7 +49,7 @@ export function updatePlayerControl({ player, keys, camera, dt, gameStarted, onJ
     if (_wish.lengthSq() > 0) {
       _wish.normalize();
       // 记录朝向：用切向 wish 在本地构建 yaw 近似（视觉用 quaternion）
-      player.facing = _wish.clone();
+      (player.facing ??= new THREE.Vector3()).copy(_wish);
     }
   }
 
@@ -68,7 +68,10 @@ export function updatePlayerControl({ player, keys, camera, dt, gameStarted, onJ
   player.velocity.copy(_tang).addScaledVector(up, radial);
 
   // 跳跃：沿 +up
-  if (gameStarted && (keys["Space"] || keys["KeyJ"]) && player.onGround) {
+  const jumpHeld = !!(keys["Space"] || keys["KeyJ"]);
+  const jumpPressed = jumpHeld && !player.jumpHeld;
+  player.jumpHeld = jumpHeld;
+  if (gameStarted && jumpPressed && player.onGround) {
     const vr = up.dot(player.velocity);
     if (vr < 0) player.velocity.addScaledVector(up, -vr);
     player.velocity.addScaledVector(up, P.jumpV);
@@ -84,7 +87,7 @@ export function updatePlayerControl({ player, keys, camera, dt, gameStarted, onJ
     _fwd.copy(player.facing).addScaledVector(up, -player.facing.dot(up));
     if (_fwd.lengthSq() > 1e-6) {
       _fwd.normalize();
-      player.forward = _fwd.clone();
+      (player.forward ??= new THREE.Vector3()).copy(_fwd);
     }
   }
   if (!player.forward) player.forward = new THREE.Vector3(0, 0, 1);

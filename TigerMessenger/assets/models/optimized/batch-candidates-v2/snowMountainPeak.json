@@ -1,0 +1,26 @@
+{
+  "id": "snowMountainPeak",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "5376364ec05950cbd0394e29eb2df734e83d1badb3ef151799d787f5a59e2cc5",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n2",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "n4",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "snow-mountain-peak-snow-cap",
+      "result": "already has no exact duplicate positions"
+    },
+    {
+      "mesh": "snow-mountain-peak-rock",
+      "result": "already has no exact duplicate positions"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

@@ -133,6 +133,18 @@ export function createInput(hooks = {}) {
     if (e.button === 2) endRightDrag();
   });
   window.addEventListener("blur", endRightDrag);
+  const clearHeldKeys = () => {
+    for (const code of Object.keys(keys)) keys[code] = false;
+    endMidDrag();
+    endRightDrag();
+  };
+  window.addEventListener("blur", clearHeldKeys);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) clearHeldKeys();
+  });
+  document.addEventListener("focusin", (e) => {
+    if (isTypingTarget(e.target)) clearHeldKeys();
+  });
 
   // 禁止中键默认的自动滚动（autoscroll）
   window.addEventListener("auxclick", (e) => {

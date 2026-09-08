@@ -1,0 +1,42 @@
+{
+  "sha256": "3c558adf9be55ece0f80bbe536eee48d79fbec2bed4778e6a7c37141a27bde18",
+  "bytes": 5256,
+  "meshes": 3,
+  "materials": 2,
+  "primitives": 3,
+  "triangles": 52,
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "Gold_Lower_Bracket"
+    },
+    {
+      "mesh": 1,
+      "name": "Gold_Upper_Bracket"
+    },
+    {
+      "mesh": 2,
+      "name": "Wooden_Grip"
+    },
+    {
+      "children": [
+        0,
+        1,
+        2
+      ],
+      "extras": {
+        "coordinateContract": "Godot shield local +X front, -X rear; wooden grip center (-0.055,0,0)"
+      },
+      "name": "Roman_Shield_Handle_V1"
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Roman Shield Handle V1",
+      "nodes": [
+        3
+      ]
+    }
+  ],
+  "allNodeTransformsIdentity": true
+}

@@ -1,0 +1,7 @@
+https://raw.githubusercontent.com/godotengine/godot/4.7/editor/file_system/editor_file_system.cpp
+3258: void EditorFileSystem::reimport_files(const Vector<String> &p_files) {
+3259: 	ERR_FAIL_COND_MSG(importing, "Attempted to call reimport_files() recursively, this is not allowed.");
+3260: 	importing = true;
+3261: 
+3262: 	Vector<String> reloads;
+3263: 

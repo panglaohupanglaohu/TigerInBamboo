@@ -892,7 +892,7 @@ export function updateAircraftHover(aircraft, t, dt = 0.016, opts = {}) {
     formationPitch,
     R: aircraft.userData.patrol?.R,
     // 仅在已发现且不在归航义务内时允许新吸蜜
-    swampFound: !!scan.found && !onPostFeedPatrol,
+    swampFound: !!scan.found && !onPostFeedPatrol && !aircraft.userData.rescueSuppressed,
     scan,
     onSuccessfulFeed: () => {
       duty.feeds = (duty.feeds || 0) + 1;
@@ -1183,7 +1183,7 @@ function updateHummingbirdForage(members, nectarList, ctx) {
     0,
     ARROW_SINK_STEPS
   );
-  const wantSquadSuction = 1 - sinkStep / ARROW_SINK_STEPS;
+  const wantSquadSuction = aircraft?.userData.rescueSuppressed ? 0 : 1 - sinkStep / ARROW_SINK_STEPS;
   const prevSquadSuction = Number.isFinite(aircraft?.userData?.squadSuction01)
     ? aircraft.userData.squadSuction01
     : 1;
@@ -1200,6 +1200,15 @@ function updateHummingbirdForage(members, nectarList, ctx) {
       member.userData._forage = { mode: "cruise", t: 0, flower: null, cooldown: i * 0.7 };
     }
     const fg = member.userData._forage;
+
+    // Rescue support cancels an ongoing feed as well as preventing new ones.
+    // Patrol/whale navigation keep their existing ownership.
+    if (aircraft?.userData.rescueSuppressed && (fg.mode === "approach" || fg.mode === "hover")) {
+      if (fg.flower) fg.flower.userData.feeding = false;
+      fg.flower = null;
+      fg.mode = "depart";
+      fg.t = 0;
+    }
 
     // 阵位目标（巡航归位用）
     const slot = member.userData.formationSlot || { fwd: 0, side: 0, up: 0 };

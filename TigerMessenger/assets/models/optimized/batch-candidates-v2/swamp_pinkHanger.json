@@ -1,0 +1,58 @@
+{
+  "id": "swamp_pinkHanger",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "b2cb04f827a6afac40ee79a3c63aa2d6a857cd8ffbbba19e1ec50b3d99fedac6",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n4",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 210,
+        "verticesAfter": 41,
+        "normalError": 5.662441253662109e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 210,
+        "verticesAfter": 41,
+        "normalError": 5.662441253662109e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n5",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 2.682209014892578e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 90,
+        "verticesAfter": 20,
+        "normalError": 2.682209014892578e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 4,
+  "removedEditVertices": 478
+}

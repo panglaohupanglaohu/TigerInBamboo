@@ -1,0 +1,29 @@
+{
+  "bounds_max": [
+    0.0805999860167503,
+    0.28099998831749,
+    0.0557999983429909
+  ],
+  "bounds_min": [
+    -0.0806000009179115,
+    -0.061999998986721,
+    -0.0557999983429909
+  ],
+  "failures": [],
+  "finite_geometry_materials": true,
+  "godot_version": "4.7.2-stable (official)",
+  "hidden_outline_nodes": 0,
+  "identity_scene_wrapper": true,
+  "materials": [
+    "Roman_V2_Original_Bronze.001",
+    "Roman_V2_Original_Skirt.001"
+  ],
+  "maximum_bound_error": 0.0000454485416412354,
+  "mesh_objects": 3,
+  "nodes": 5,
+  "original_node_ids": [],
+  "passed": true,
+  "scope": "Fresh Blender-exported GLB imported/instantiated in isolated minimal Godot project; no runtime adapters, art or gameplay acceptance",
+  "triangles": 696,
+  "visual_approved": false
+}

@@ -380,7 +380,7 @@ export function createQuestSystem({
           ? `${q.sender.name}：这封「${q.letter}」拜托你了`
           : `${q.receiver.name}：是给我的信吗？`;
       _bubbleWorld.copy(near.position);
-      _bubbleWorld.y += 2.6;
+      _bubbleWorld.addScaledVector(near.position.clone().normalize(), 2.6);
       _bubbleWorld.project(camera);
       if (_bubbleWorld.z < 1) {
         showBubble(

@@ -1,0 +1,37 @@
+{
+  "failures": [],
+  "passed": true,
+  "poses": [
+    {
+      "gripError": 0.0,
+      "pose": 0,
+      "variant": "blue"
+    },
+    {
+      "gripError": 0.0,
+      "pose": 1,
+      "variant": "blue"
+    },
+    {
+      "gripError": 0.0,
+      "pose": 2,
+      "variant": "blue"
+    },
+    {
+      "gripError": 0.0,
+      "pose": 0,
+      "variant": "red"
+    },
+    {
+      "gripError": 0.0,
+      "pose": 1,
+      "variant": "red"
+    },
+    {
+      "gripError": 0.0,
+      "pose": 2,
+      "variant": "red"
+    }
+  ],
+  "scope": "reversible candidate grip only; fixture poses, no combat AI or complete animation migration"
+}

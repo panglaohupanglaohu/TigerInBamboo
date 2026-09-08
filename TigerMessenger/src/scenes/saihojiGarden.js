@@ -71,7 +71,7 @@ function readSquadSuction01(squad) {
 export const saihojiGardenScene = {
   id: "saihoji",
   name: "西芳寺 · 苔寺",
-  description: "西芳寺苔海六景：整座庭园扎根太古浮岛白鲸，随鲸呼吸遨游天空",
+  description: "西芳寺苔海六景：整座庭园扎根鲲，随鲸呼吸遨游天空",
 
   load(ctx) {
     const scene = ctx.scene;
@@ -87,7 +87,7 @@ export const saihojiGardenScene = {
       rockCount: opt.rockCount ?? 28,
     });
 
-    // ---------- 太古浮岛白鲸：栖于苔庭中枢，平时藏地、扫描灯艇掠过时升空 ----------
+    // ---------- 鲲：栖于苔庭中枢，平时藏地、扫描灯艇掠过时升空 ----------
     const hubDir = latLonToGardenDir(SAIHOJI_HUB.lat, SAIHOJI_HUB.lon, new THREE.Vector3());
     const hubEast = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), hubDir).normalize();
     const buriedR = R - WHALE_BURIED_DEPTH; // 鲸身全沉地下

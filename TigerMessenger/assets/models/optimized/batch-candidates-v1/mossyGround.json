@@ -1,0 +1,26 @@
+{
+  "id": "mossyGround",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "0d0e859095fb5fee920a8f7c07d1fa381eedc866d97e8a5d1116b28865ec705b",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "mossy-terrain",
+      "result": "preserved: deformation or color attributes"
+    },
+    {
+      "mesh": "n2",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n3",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    },
+    {
+      "mesh": "n8",
+      "result": "preserved: additional attributes .select_vert,.select_poly,.select_edge"
+    }
+  ],
+  "changedMeshes": 0,
+  "removedEditVertices": 0
+}

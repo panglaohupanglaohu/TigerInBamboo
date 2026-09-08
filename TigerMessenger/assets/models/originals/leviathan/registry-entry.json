@@ -1,0 +1,83 @@
+{
+  "id": "leviathanIsland",
+  "stableId": "tiger:leviathanIsland",
+  "label": "鲲",
+  "catalog": "supplemental",
+  "family": "leviathanIsland",
+  "variant": "factory-default-local",
+  "relationship": "original whale/island factory; distinct from swamp_whale; six garden scenes assembled separately at runtime",
+  "source": {
+    "factory": "buildEcoLeviathanIsland",
+    "files": [
+      "src/assets/leviathanIsland.js"
+    ],
+    "snapshot": "assets/models/originals/leviathan/leviathanIsland.source.json",
+    "blend": "assets/models/originals/leviathan/blender-r3/leviathanIsland.blend",
+    "runtimeSource": "src/scenes/saihojiGarden.js",
+    "seed": 9901
+  },
+  "archiveResource": "res://assets/supplemental/leviathanIsland.glb",
+  "currentResource": {
+    "res": "res://assets/supplemental/leviathanIsland.glb",
+    "revision": "original-archive",
+    "role": "independent factory review; not a replacement for the assembled whale-back world"
+  },
+  "replacement": {
+    "candidateResource": null,
+    "status": "not-started",
+    "requiredChecks": [
+      "six garden scene attachment",
+      "original animation and hidden state",
+      "world transform and collision",
+      "visual review"
+    ],
+    "history": []
+  },
+  "placementRefs": [
+    {
+      "world": "original-world-v1",
+      "node": 19304,
+      "sourcePath": "leviathanGroup[156]",
+      "matrix": [
+        -0.43301270189221963,
+        -4.163336342344337e-17,
+        0.24999999999999994,
+        0,
+        -0.21201202403910646,
+        0.2649596321166025,
+        -0.36721559745124666,
+        0,
+        -0.13247981605830123,
+        -0.42402404807821303,
+        -0.22946177239035725,
+        0,
+        -62.65007480334576,
+        77.41547201176854,
+        -108.01282773790481,
+        1
+      ],
+      "match": "verified original named root, whose runtime subtree additionally contains six garden scenes; no direct replacement authorized by this archive"
+    }
+  ],
+  "stages": {
+    "captured": true,
+    "blenderArchived": true,
+    "glbExported": true,
+    "godotInstantiated": true,
+    "artOptimized": false,
+    "worldIntegrated": false,
+    "gameplayAccepted": false
+  },
+  "evidence": {
+    "exportReport": "assets/models/originals/leviathan/validation.json",
+    "factoryCatalog": "assets/models/originals/leviathan/catalog-entry.json",
+    "godotReview": "artifacts/pipeline/leviathan-kun-review.png"
+  },
+  "knownGaps": [
+    "这是原工厂本体、浮岛地台及工厂植被的独立归档，不含saihojiGarden.js运行时装到鲸背的六景；不能直接替换完整鲸背场景根节点。",
+    "非swamp_whale；没有改造原作造型或完成美术优化。",
+    "原始默认姿态及可见性保留，180个隐藏mesh未强制显示；程序升降、摆尾、眨眼、雨滴和鲸背六景行为未迁移。"
+  ],
+  "exportStatus": "partial",
+  "description": "承载苔庭六景的太古浮岛生灵，正式名称：鲲。"
+}

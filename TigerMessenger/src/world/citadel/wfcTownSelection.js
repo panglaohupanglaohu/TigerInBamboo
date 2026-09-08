@@ -6,7 +6,7 @@
 // =====================================================================
 
 import { compileVariants } from "../../procgen/wfc/socketCompiler.js";
-import { compileCompatibilityTable } from "../../procgen/wfc/compatibilityTable.js";
+import { compileCompatibilityTable, compileSidePairCompatibilityTable } from "../../procgen/wfc/compatibilityTable.js";
 import { solveWfc } from "../../procgen/wfc/solver.js";
 import { createCitadelCellGraph, CITADEL_DIRS } from "./wfcGraphAdapter.js";
 import { TOWN_MODULE_PROTOTYPES, townBanPolicy } from "./townModulePrototypes.js";
@@ -49,23 +49,47 @@ function protoFamilyOf(protoId, prototypes) {
  * @param {Function} [opts.banPolicy]
  * @param {number} [opts.maxBacktrack]
  */
+// When both inputs are present they must describe the same occupied cells.
+// Face-native callers may omit grid; legacy geometry callers may not silently
+// solve stale face occupancy while building a different ASCII layout.
+export function assertTownGraphMatchesGrid(graph, grid) {
+  if (!graph || grid == null) return;
+  if (!(grid instanceof Map) || graph.cellCount !== grid.size) throw new Error("Town graph/grid occupancy mismatch");
+  for (const {id,index} of graph.cells()) {
+    if (!grid.has(id) || graph.charOf(index) !== grid.get(id)) throw new Error(`Town graph/grid cell mismatch: ${id}`);
+    const legacyCoordinates = /^-?\d+,-?\d+,-?\d+$/.test(id) ? id.split(",").map(Number) : null;
+    if (legacyCoordinates && graph.levelOf(index) !== legacyCoordinates[1]) throw new Error(`Town graph/grid level mismatch: ${id}`);
+  }
+}
+
 export function solveTownSelection({
   grid,
+  graph: suppliedGraph = null,
   prototypes = TOWN_MODULE_PROTOTYPES,
   seed,
   pins = [],
   banPolicy = defaultBanPolicy,
   maxBacktrack = 64,
 } = {}) {
-  const graph = createCitadelCellGraph(grid);
-  const { compiled, table } = compileTown(prototypes);
+  const graph = suppliedGraph ?? createCitadelCellGraph(grid);
+  if (suppliedGraph) {
+    for (const method of ["levelOf", "charOf", "exposure", "columnHeight", "columnIsolated", "validate"]) {
+      if (typeof graph[method] !== "function") throw new Error(`Town graph missing ${method}`);
+    }
+    const validation = graph.validate();
+    if (!validation.ok) throw new Error(`Invalid Town graph: ${validation.errors.join(", ")}`);
+    assertTownGraphMatchesGrid(graph, grid);
+  }
+  const base = compileTown(prototypes);
+  const compiled = base.compiled;
+  const table = graph.sidePairs ? compileSidePairCompatibilityTable(compiled, graph.sidePairs) : base.table;
   const bans = [];
   for (const { id, index } of graph.cells()) {
     const exposure = graph.exposure(index);
-    const iy = Number(id.split(",")[1]);
+    const iy = graph.levelOf ? graph.levelOf(index) : Number(id.split(",")[1]);
     const columnHeight = graph.columnHeight(index);
     const columnIsolated = graph.columnIsolated(index);
-    const char = grid.get(id);
+    const char = graph.charOf(index);
     for (const v of compiled.variants) {
       if (!banPolicy({ cellId: id, char, iy, exposure, columnHeight, columnIsolated, variant: v })) {
         bans.push({ cell: index, variant: v.index, reason: "policy" });
@@ -95,6 +119,11 @@ export function solveTownSelection({
     unresolved: r.ok
       ? []
       : [typeof r.cell === "number" ? graph.cellId(r.cell) : r.cell].filter((x) => x != null && x !== ""),
+    topologyHash: graph.topologyHash ?? null,
+    roleAtFace(faceId, level) {
+      const index = graph.indexOfFaceLevel?.(faceId, level) ?? -1;
+      return index < 0 ? null : byCell[graph.cellId(index)]?.variant ?? null;
+    },
     graph,
     compiled,
     table,

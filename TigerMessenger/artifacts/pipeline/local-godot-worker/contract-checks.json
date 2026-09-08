@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "godot-tiger-world rejects explicit failures",
+    "godot-tiger-world rejects invalid sameWorldTransform",
+    "godot-roman-armor rejects explicit failures",
+    "godot-roman-armor rejects invalid cases",
+    "godot-castle-world rejects explicit failures",
+    "godot-castle-world rejects invalid hiddenTownLayers"
+  ]
+}

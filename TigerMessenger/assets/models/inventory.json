@@ -1,0 +1,6046 @@
+{
+  "version": 1,
+  "scope": "Original authored assets; generated shader/debug geometry is distinguished from authored models",
+  "sources": [
+    {
+      "id": "agents__citadel__paperMesh",
+      "category": "圣城与建筑",
+      "originalSource": "src/agents/citadel/paperMesh.js",
+      "canonicalSource": "src/assets/characters/paperSoldier.js",
+      "exports": [
+        "createPaperSoldierMesh"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CylinderGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "moved to assets; compatibility entry retained",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__ancient",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/ancient.js",
+      "canonicalSource": "src/assets/ancient.js",
+      "exports": [
+        "createAncientPineTree",
+        "BANYAN_BARK",
+        "BANYAN_BARK_GROOVE",
+        "BANYAN_CANOPY_DARK",
+        "BANYAN_CANOPY",
+        "BANYAN_CANOPY_LIGHT",
+        "BANYAN_DESIGN_HEIGHT",
+        "BANYAN_OUTLINE",
+        "BANYAN_ZONE_FILL",
+        "createColossalVernacularTree",
+        "createCraneNPC",
+        "createBlackRock",
+        "createCraneOnRock"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__blenderKit",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/blenderKit.js",
+      "canonicalSource": "src/assets/blenderKit.js",
+      "exports": [
+        "loadBlenderAsset"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__bookshop",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/bookshop.js",
+      "canonicalSource": "src/assets/bookshop.js",
+      "exports": [
+        "createGrassTuft",
+        "makeSignTexture",
+        "setBookshopSignText",
+        "createHardToFindBookshop"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "PlaneGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__bubblePod",
+      "category": "载具",
+      "originalSource": "src/assets/bubblePod.js",
+      "canonicalSource": "src/assets/bubblePod.js",
+      "exports": [
+        "createBubblePod",
+        "createBubblePodsAroundFlowerBuildings",
+        "updateBubblePodPatrol",
+        "createBubbleShot",
+        "stickBubbleShot",
+        "updateBubbleShot",
+        "disposeBubbleShot",
+        "findNearestBubblePod"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "SphereGeometry",
+        "TorusGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__citadelElderTree",
+      "category": "圣城与建筑",
+      "originalSource": "src/assets/citadelElderTree.js",
+      "canonicalSource": "src/assets/citadelElderTree.js",
+      "exports": [
+        "createCitadelElderTree"
+      ],
+      "geometry": [
+        "CylinderGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__citadelMoat",
+      "category": "圣城与建筑",
+      "originalSource": "src/assets/citadelMoat.js",
+      "canonicalSource": "src/assets/citadelMoat.js",
+      "exports": [
+        "CITADEL_MOAT_SPEC",
+        "createCitadelMoat",
+        "moatHarborPadLocal"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__citadelTrojanHorse",
+      "category": "圣城与建筑",
+      "originalSource": "src/assets/citadelTrojanHorse.js",
+      "canonicalSource": "src/assets/citadelTrojanHorse.js",
+      "exports": [
+        "createCitadelTrojanHorse"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__citadelWatchtower",
+      "category": "圣城与建筑",
+      "originalSource": "src/assets/citadelWatchtower.js",
+      "canonicalSource": "src/assets/citadelWatchtower.js",
+      "exports": [
+        "createCitadelWatchtower",
+        "createCitadelForegroundDefenseTower"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CylinderGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__fox",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/fox.js",
+      "canonicalSource": "src/assets/fox.js",
+      "exports": [
+        "FOX_ORANGE",
+        "createWalkingFox",
+        "createClassicAliFox",
+        "createLowPolyFox",
+        "FOX_FOLLOW_GAP",
+        "FOX_FOLLOW_LERP",
+        "FOX_FOOT_LIFT",
+        "FOX_TURN_SLERP",
+        "FOX_HOP_AMP",
+        "FOX_GAIT_HZ",
+        "FOX_HEAD_CLAMP",
+        "updateFoxFollow",
+        "animateFoxCompanion",
+        "animateClassicRun"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "RingGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__harbor",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/harbor.js",
+      "canonicalSource": "src/assets/harbor.js",
+      "exports": [
+        "nightBoatLanternMaterial",
+        "setNightBoatLanternWeight",
+        "createFisherBoat",
+        "updateWarshipOars",
+        "updateBoatWake",
+        "applyBoatOarWobble",
+        "sedateWarshipCrewNearest",
+        "boatCrewCount",
+        "createPorterSquad",
+        "startHarborCraneJob",
+        "updateHarborCrane",
+        "ensureDeckCargoMarkers",
+        "updateDeckCargoMarkers",
+        "createTieSoldier",
+        "paintSoldierHelm",
+        "paintBoatCrewCrest",
+        "emptyBoatCrew",
+        "createHarborPatrolSoldier",
+        "createCitadelMeleeSoldier",
+        "createGladiusSoldier",
+        "createLongbowSoldier",
+        "updateLongbowShot",
+        "createNightInfiltrationSoldier",
+        "createCrate",
+        "createStackedCrates",
+        "createHarborCrane",
+        "buildOldHarborScene"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "DodecahedronGeometry",
+        "ExtrudeGeometry",
+        "InstancedMesh",
+        "Mesh",
+        "PlaneGeometry",
+        "RingGeometry",
+        "TorusGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__hydrangea",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/hydrangea.js",
+      "canonicalSource": "src/assets/hydrangea.js",
+      "exports": [
+        "createLowPolyHydrangeaBush",
+        "createBookshopHydrangeas"
+      ],
+      "geometry": [
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__leviathanIsland",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/leviathanIsland.js",
+      "canonicalSource": "src/assets/leviathanIsland.js",
+      "exports": [
+        "LEVIATHAN_PLATE_Y",
+        "LEVIATHAN_GARDEN_SCALE",
+        "LEVIATHAN_SIZE",
+        "buildEcoLeviathanIsland"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__lowPoly",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/lowPoly.js",
+      "canonicalSource": "src/assets/lowPoly.js",
+      "exports": [
+        "facet",
+        "createLowPolyTree",
+        "createLowPolyHouse",
+        "createLowPolyRock",
+        "createLowPolyLawnHill",
+        "createLowPolyCloud",
+        "INK_FLOWER_COLORS",
+        "createLowPolyFlower",
+        "createLowPolySignpost",
+        "createLowPolyStreetLamp",
+        "createLowPolyUtilityPole",
+        "createLowPolyFence",
+        "createLowPolyBridge",
+        "placeOnSphere",
+        "scatterOnSphere",
+        "updateClouds"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__moebiusAircraft",
+      "category": "载具",
+      "originalSource": "src/assets/moebiusAircraft.js",
+      "canonicalSource": "src/assets/moebiusAircraft.js",
+      "exports": [
+        "ARROW_SINK_STEP",
+        "ARROW_SINK_STEPS",
+        "ARROW_SINK_TOTAL",
+        "createMoebiusAircraft",
+        "placeAircraftAbove",
+        "syncAircraftSquadToAnchor",
+        "createMoebiusAircraftSquad",
+        "updateAircraftHover"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CircleGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "LatheGeometry",
+        "Mesh",
+        "RingGeometry",
+        "SphereGeometry",
+        "TorusGeometry",
+        "TubeGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__moebiusAirship",
+      "category": "载具",
+      "originalSource": "src/assets/moebiusAirship.js",
+      "canonicalSource": "src/assets/moebiusAirship.js",
+      "exports": [
+        "ROPE_LEN",
+        "createMoebiusAirship",
+        "placeMoebiusAirshipAbove"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "TorusGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__moebiusTower",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/moebiusTower.js",
+      "canonicalSource": "src/assets/moebiusTower.js",
+      "exports": [
+        "hallLightColorAt",
+        "createDetailedMoebiusTower"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "EdgesGeometry",
+        "LineSegments",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__snowMassif",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/snowMassif.js",
+      "canonicalSource": "src/assets/snowMassif.js",
+      "exports": [
+        "CITADEL_SNOW_MASSIF_PEAKS",
+        "CITADEL_SNOW_MASSIF_ANCHOR",
+        "createSnowMountainPeak",
+        "createSnowMassifSaddle",
+        "createSnowMassif"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__toon",
+      "category": "地形与场景构件",
+      "originalSource": "src/assets/toon.js",
+      "canonicalSource": "src/assets/toon.js",
+      "exports": [
+        "getToonGradient",
+        "toonMat",
+        "OUTLINE",
+        "OUTLINE_DRY",
+        "INK_COLOR",
+        "SVARBOVA_OUTLINE_COLOR",
+        "SVARBOVA_OUTLINE_THICKNESS",
+        "addOutline",
+        "outlineAs"
+      ],
+      "geometry": [
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "read for preservation",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__townscaperBuilding",
+      "category": "圣城与建筑",
+      "originalSource": "src/assets/townscaperBuilding.js",
+      "canonicalSource": "src/assets/townscaperBuilding.js",
+      "exports": [
+        "buildTownscaperBuilding",
+        "addTownscaperAmbient"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CircleGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "assets__tram",
+      "category": "载具",
+      "originalSource": "src/assets/tram.js",
+      "canonicalSource": "src/assets/tram.js",
+      "exports": [
+        "TRAM_PALETTES",
+        "createChristchurchTram"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CircleGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "PlaneGeometry",
+        "RingGeometry"
+      ],
+      "sourceStatus": "already in assets",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "core__mapEditor",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/core/mapEditor.js",
+      "canonicalSource": "src/core/mapEditor.js",
+      "exports": [
+        "createMapEditor"
+      ],
+      "geometry": [
+        "Mesh",
+        "RingGeometry"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "planet__letterQuest",
+      "category": "地形与场景构件",
+      "originalSource": "src/planet/letterQuest.js",
+      "canonicalSource": "src/planet/letterQuest.js",
+      "exports": [
+        "createLetterQuest",
+        "createCarryLetterVisual"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "planet__npcs",
+      "category": "地形与场景构件",
+      "originalSource": "src/planet/npcs.js",
+      "canonicalSource": "src/planet/npcs.js",
+      "exports": [
+        "NPC_DEFS",
+        "createNpcs",
+        "findNearbyNpc"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "planet__sphericalPlayer",
+      "category": "角色与鸟群",
+      "originalSource": "src/planet/sphericalPlayer.js",
+      "canonicalSource": "src/planet/sphericalPlayer.js",
+      "exports": [
+        "CUBE_SIZE",
+        "PLAYER_COLLIDE_R",
+        "createSphericalPlayer",
+        "resolveSphericalColliders",
+        "updateSphericalPlayer"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "player__agentMessenger",
+      "category": "角色与鸟群",
+      "originalSource": "src/player/agentMessenger.js",
+      "canonicalSource": "src/assets/characters/agentMessenger.js",
+      "exports": [
+        "buildAgentMessenger"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "Mesh",
+        "RingGeometry",
+        "TorusGeometry",
+        "TubeGeometry"
+      ],
+      "sourceStatus": "moved to assets; compatibility entry retained",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "player__airshipRide",
+      "category": "载具",
+      "originalSource": "src/player/airshipRide.js",
+      "canonicalSource": "src/player/airshipRide.js",
+      "exports": [
+        "createAirshipRide"
+      ],
+      "geometry": [
+        "IcosahedronGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "player__bubblePodRide",
+      "category": "载具",
+      "originalSource": "src/player/bubblePodRide.js",
+      "canonicalSource": "src/player/bubblePodRide.js",
+      "exports": [
+        "createBubblePodRide"
+      ],
+      "geometry": [
+        "ConeGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "player__messenger",
+      "category": "角色与鸟群",
+      "originalSource": "src/player/messenger.js",
+      "canonicalSource": "src/assets/characters/messenger.js",
+      "exports": [
+        "buildMessenger"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "Mesh",
+        "PlaneGeometry"
+      ],
+      "sourceStatus": "moved to assets; compatibility entry retained",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "procgen__three__bufferGeometryAdapter",
+      "category": "地形与场景构件",
+      "originalSource": "src/procgen/three/bufferGeometryAdapter.js",
+      "canonicalSource": "src/procgen/three/bufferGeometryAdapter.js",
+      "exports": [
+        "createBufferGeometryFromMesh",
+        "updateBufferGeometryFromMesh",
+        "disposeBufferGeometry"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "quest__npc",
+      "category": "地形与场景构件",
+      "originalSource": "src/quest/npc.js",
+      "canonicalSource": "src/quest/npc.js",
+      "exports": [
+        "createNpc",
+        "setNpcMarker",
+        "animateMarkers"
+      ],
+      "geometry": [
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "RingGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "render__ao__voxelAoRenderer",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/render/ao/voxelAoRenderer.js",
+      "canonicalSource": "src/render/ao/voxelAoRenderer.js",
+      "exports": [
+        "INJECTABLE",
+        "createContactShadow",
+        "createVoxelAoSystem"
+      ],
+      "geometry": [
+        "Mesh",
+        "PlaneGeometry"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "render__clouds__cloudImpostorSystem",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/render/clouds/cloudImpostorSystem.js",
+      "canonicalSource": "src/render/clouds/cloudImpostorSystem.js",
+      "exports": [
+        "createCloudImpostorSystem"
+      ],
+      "geometry": [
+        "InstancedBufferGeometry",
+        "Mesh",
+        "PlaneGeometry"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "render__debug__g8Overlay",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/render/debug/g8Overlay.js",
+      "canonicalSource": "src/render/debug/g8Overlay.js",
+      "exports": [
+        "G8_OVERLAY_SUPPORTED",
+        "heatColor",
+        "townCellLocal",
+        "planLayerGeometry",
+        "buildRuntimeWfcSource",
+        "createG8DebugOverlay"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "LineSegments",
+        "Points"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "render__lighting__highlandLightVolumes",
+      "category": "圣城与建筑",
+      "originalSource": "src/render/lighting/highlandLightVolumes.js",
+      "canonicalSource": "src/render/lighting/highlandLightVolumes.js",
+      "exports": [
+        "LIGHT_VOLUME_SCHEMA_VERSION",
+        "LIGHT_VOLUME_GRID",
+        "LAMP_MIN_RADIUS",
+        "LIGHT_ORB_RADIUS_SCALE",
+        "LAMP_BREATH_MAX",
+        "LAMP_BREATH_PERIOD",
+        "REAL_LIGHT_BUDGET",
+        "HIGHLAND_LAMP_COLOR",
+        "LAMP_COLOR_LOW",
+        "LAMP_COLOR_MID",
+        "LAMP_COLOR_HIGH",
+        "LAMP_COLOR_BEACON",
+        "WATER_COOL_WASH_COLOR",
+        "HIGHLAND_LAMP_BASE_Y",
+        "falloff01",
+        "highlandLampLayout",
+        "bakeLightVolume",
+        "nightWeightAt",
+        "createHighlandLightVolumes"
+      ],
+      "geometry": [
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "OctahedronGeometry"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "render__stencilWindows",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/render/stencilWindows.js",
+      "canonicalSource": "src/render/stencilWindows.js",
+      "exports": [
+        "STENCIL_WINDOW_REF",
+        "STENCIL_ORDER",
+        "stencilWindowPlan",
+        "windowSpansCellCorner",
+        "windowCellFootprint",
+        "mergeQuads",
+        "applyStencilWindows"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "render__vegetation__vegetationRuntime",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/render/vegetation/vegetationRuntime.js",
+      "canonicalSource": "src/render/vegetation/vegetationRuntime.js",
+      "exports": [
+        "bindVegetationChunks",
+        "createVegetationRuntime"
+      ],
+      "geometry": [
+        "ConeGeometry",
+        "DodecahedronGeometry",
+        "IcosahedronGeometry",
+        "InstancedMesh"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "scenes__messengerIsland",
+      "category": "角色与鸟群",
+      "originalSource": "src/scenes/messengerIsland.js",
+      "canonicalSource": "src/scenes/messengerIsland.js",
+      "exports": [
+        "officialPagePlanetFeatures",
+        "messengerIslandScene"
+      ],
+      "geometry": [
+        "IcosahedronGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "scenes__saihojiGarden",
+      "category": "苔庭与植被",
+      "originalSource": "src/scenes/saihojiGarden.js",
+      "canonicalSource": "src/scenes/saihojiGarden.js",
+      "exports": [
+        "saihojiGardenScene"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "RingGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "story__rescueCampaign",
+      "category": "地形与场景构件",
+      "originalSource": "src/story/rescueCampaign.js",
+      "canonicalSource": "src/story/rescueCampaign.js",
+      "exports": [
+        "createRescueCampaign"
+      ],
+      "geometry": [
+        "Mesh",
+        "OctahedronGeometry"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "ui__citadelSceneEdit",
+      "category": "圣城与建筑",
+      "originalSource": "src/ui/citadelSceneEdit.js",
+      "canonicalSource": "src/ui/citadelSceneEdit.js",
+      "exports": [
+        "citadelTerrainObjectFromHits",
+        "lookupMergedCell",
+        "highlandUnitFromHits",
+        "citadelEditBaseY",
+        "citadelEditCellLocalPosition",
+        "raycastCitadelTerraceTop",
+        "raycastNearestCitadelTerraceTop",
+        "raycastCascadePoolTop",
+        "createCitadelSceneEdit"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "runtime/helper; assets entry only",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__abandonedGate",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/abandonedGate.js",
+      "canonicalSource": "src/world/abandonedGate.js",
+      "exports": [
+        "GATE",
+        "GATE_DEPTH",
+        "GATE_SETBACK",
+        "createGateShape",
+        "createGateCapShape",
+        "findGateSeatU",
+        "buildAbandonedGate",
+        "relocateAbandonedGate"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "DodecahedronGeometry",
+        "ExtrudeGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__airshipEscort",
+      "category": "载具",
+      "originalSource": "src/world/airshipEscort.js",
+      "canonicalSource": "src/assets/characters/longWingGlider.js",
+      "exports": [
+        "GLIDER_COLORS",
+        "createGliderGeometries",
+        "createLongWingGlider"
+      ],
+      "geometry": [
+        "ConeGeometry",
+        "ExtrudeGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "model extracted; behavior remains in world",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__backlitHighlight",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/backlitHighlight.js",
+      "canonicalSource": "src/world/backlitHighlight.js",
+      "exports": [
+        "BACKLIT_HIGHLIGHT_SCHEMA_VERSION",
+        "createBacklitHighlightLayer"
+      ],
+      "geometry": [
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__birdVortex",
+      "category": "角色与鸟群",
+      "originalSource": "src/world/birdVortex.js",
+      "canonicalSource": "src/world/birdVortex.js",
+      "exports": [
+        "VORTEX_LIT",
+        "VORTEX_SHADE",
+        "createVortexBirdTemplate",
+        "BirdVortexManager"
+      ],
+      "geometry": [
+        "ConeGeometry",
+        "ExtrudeGeometry",
+        "InstancedMesh",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__canalLakeLink",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/canalLakeLink.js",
+      "canonicalSource": "src/world/canalLakeLink.js",
+      "exports": [
+        "buildCanalLakeLink"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "PlaneGeometry",
+        "RingGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__canalSystem",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/canalSystem.js",
+      "canonicalSource": "src/world/canalSystem.js",
+      "exports": [
+        "CANAL_DEPTH",
+        "CANAL_WATER_LIFT",
+        "CANAL_HALF_WIDTH",
+        "CANAL_LIP_WIDTH",
+        "CANAL_LIP_THICK",
+        "CANAL_WALL_THICK",
+        "CANAL_BANK_COLOR",
+        "CANAL_LIP_COLOR",
+        "SHARED_WATER_COLOR",
+        "OPEN_SEA_WATER_COLOR",
+        "getWaterBumpTexture",
+        "scrollWaterBumpTexture",
+        "createCanalWaterMaterial",
+        "createTownscaperWaterMaterial",
+        "tickCanalWater",
+        "insertWindingPoints",
+        "sweepPrism",
+        "buildWorldCanal",
+        "buildCanalJunctionBox"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "CircleGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadel__cornerAssembly",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadel/cornerAssembly.js",
+      "canonicalSource": "src/world/citadel/cornerAssembly.js",
+      "exports": [
+        "assembleCornerBody"
+      ],
+      "geometry": [
+        "BufferGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadel__familyMesh",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadel/familyMesh.js",
+      "canonicalSource": "src/assets/citadel/familyMesh.js",
+      "exports": [
+        "buildClusterSampleMesh"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "moved to assets; compatibility entry retained",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadel__presentationMesh",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadel/presentationMesh.js",
+      "canonicalSource": "src/world/citadel/presentationMesh.js",
+      "exports": [
+        "buildTownV4Mesh",
+        "restoreLegacyTownPresentation",
+        "syncTownPresentation",
+        "applyTownV4Presentation",
+        "refreshTownV4"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadel__presentationOverlay",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadel/presentationOverlay.js",
+      "canonicalSource": "src/world/citadel/presentationOverlay.js",
+      "exports": [
+        "createTownV4Overlay",
+        "syncMixedStateOverlay"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadel__terrainMesh",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadel/terrainMesh.js",
+      "canonicalSource": "src/assets/citadel/terrainMesh.js",
+      "exports": [
+        "buildTerrainSampleMesh"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "moved to assets; compatibility entry retained",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadelEditFx",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadelEditFx.js",
+      "canonicalSource": "src/world/citadelEditFx.js",
+      "exports": [
+        "EDIT_RIPPLE_LIFE",
+        "EDIT_SPLASH_COUNT",
+        "createCitadelEditFx"
+      ],
+      "geometry": [
+        "Mesh",
+        "PlaneGeometry",
+        "RingGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadelInfiltration",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadelInfiltration.js",
+      "canonicalSource": "src/world/citadelInfiltration.js",
+      "exports": [
+        "createCitadelNightInfiltration"
+      ],
+      "geometry": [
+        "CylinderGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadelRange",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadelRange.js",
+      "canonicalSource": "src/world/citadelRange.js",
+      "exports": [
+        "RANGE_SITE",
+        "CITADEL_PEAK",
+        "VIEW_PEAK",
+        "OUTPOST_CUT",
+        "citadelRangeLiftLocal",
+        "visibleGroundLiftLocal",
+        "citadelRangeEdgeDist",
+        "citadelRangeLiftDir",
+        "citadelRangeInBounds",
+        "rangeLocalToWorld",
+        "sphericalGroundLift",
+        "citadelWalkLiftLocal",
+        "citadelWalkFlights",
+        "citadelWalkMetrics",
+        "citadelWalkLiftDir",
+        "citadelSiteDir",
+        "rangeWorldToLocal",
+        "curvedFootprintGroundElevation",
+        "buildCitadelRange"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CircleGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadelTacticalGraph",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadelTacticalGraph.js",
+      "canonicalSource": "src/world/citadelTacticalGraph.js",
+      "exports": [
+        "createCitadelTacticalGraph",
+        "createTacticalGraphDebugView"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "LineSegments",
+        "Points"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citadelTown",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/citadelTown.js",
+      "canonicalSource": "src/world/citadelTown.js",
+      "exports": [
+        "CITADEL_LEVELS_KEY",
+        "citadelLevelsKey",
+        "CITADEL_TERRACE_COUNT",
+        "CITADEL_CASTLE_FLOORS",
+        "CITADEL_GRID_SIZE",
+        "townscaperModuleSelection",
+        "CITADEL_PALETTE",
+        "CITADEL_GATE_CHAR",
+        "CITADEL_GATE_COLOR",
+        "TOWNSCAPER_CANAL_PALETTE",
+        "TOWNSCAPER_CANAL_GATE_COLOR",
+        "TOWNSCAPER_HIGHLAND_PALETTE",
+        "TOWNSCAPER_HIGHLAND_GATE_COLOR",
+        "CITADEL_PALETTE_CHARS",
+        "citadelPaletteIndexOfChar",
+        "citadelPaletteCharAt",
+        "migrateLegacyTownChars",
+        "citadelShadeStep",
+        "computeTownClusters",
+        "townCellFacing",
+        "CITADEL_DISTORTION_ENABLED",
+        "citadelGridVertexJitter",
+        "applyVerticalVertexColors",
+        "applyPatchyWallColors",
+        "makeExposedCellGeometry",
+        "makeDistortedCellGeometry",
+        "applyWorldBrickUv",
+        "citadelGridCellCenter",
+        "CITADEL_TOWN_SPEC",
+        "CANAL_JUNCTION_TOWN_SPEC",
+        "HIGHLAND_TOWNSCAPER_TOWN_SPEC",
+        "normalizeCitadelTerraceLayout",
+        "levelsToGrid",
+        "collectCitadelCourtyardRegions",
+        "gridToLevels",
+        "trimCitadelGridToTerrain",
+        "setCell",
+        "clearCell",
+        "classifyRoofComponent",
+        "collectCitadelHouses",
+        "resolveCitadelDropTarget",
+        "buildCitadelTown"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "ExtrudeGeometry",
+        "Mesh",
+        "TubeGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__citySeaLake",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/citySeaLake.js",
+      "canonicalSource": "src/world/citySeaLake.js",
+      "exports": [
+        "CITY_SEA_LAKE",
+        "WATER_CITY_WATER_DROP",
+        "WATER_CITY_ANG_R",
+        "waterCityShoreAng",
+        "crystalCanyonSwampDir",
+        "waterCityCanalWaypointDir",
+        "createCitySeaLake"
+      ],
+      "geometry": [
+        "CircleGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "DodecahedronGeometry",
+        "Mesh",
+        "PlaneGeometry",
+        "RingGeometry",
+        "SphereGeometry",
+        "TubeGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__environment",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/environment.js",
+      "canonicalSource": "src/world/environment.js",
+      "exports": [
+        "setupEnvironment",
+        "updateLanterns"
+      ],
+      "geometry": [
+        "Mesh",
+        "PlaneGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__equatorialClouds",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/world/equatorialClouds.js",
+      "canonicalSource": "src/world/equatorialClouds.js",
+      "exports": [
+        "weldIcosahedron",
+        "getCloudGradient",
+        "deformBlob",
+        "rollBlob",
+        "createDynamicMoebiusClouds",
+        "updateDynamicMoebiusClouds"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "IcosahedronGeometry",
+        "LineSegments",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__flock",
+      "category": "角色与鸟群",
+      "originalSource": "src/world/flock.js",
+      "canonicalSource": "src/world/flock.js",
+      "exports": [
+        "avoidCrystalPillars",
+        "createLowPolyBird",
+        "FlockManager"
+      ],
+      "geometry": [
+        "ConeGeometry",
+        "ExtrudeGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__gateHaulerCraft",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/gateHaulerCraft.js",
+      "canonicalSource": "src/world/gateHaulerCraft.js",
+      "exports": [
+        "GATE_HAULER_VARIANTS",
+        "createGateHaulerCraft",
+        "SOCCO",
+        "createSoccoCraft",
+        "setSoccoRamp",
+        "soccoRampReady",
+        "soccoSeatWorldPositions",
+        "soccoRampFootWorld",
+        "updateSoccoSeaSkim",
+        "mountGateHaulerCraft",
+        "updateGateHaulerCraft"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CircleGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__gatePodCraft",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/gatePodCraft.js",
+      "canonicalSource": "src/world/gatePodCraft.js",
+      "exports": [
+        "GATE_POD_VARIANTS",
+        "createGatePodCraft",
+        "mountGatePodCraft",
+        "updateGatePodCraft",
+        "mountGatePodEscort",
+        "updateGatePodEscort"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CircleGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "PlaneGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__geometryMerge",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/geometryMerge.js",
+      "canonicalSource": "src/world/geometryMerge.js",
+      "exports": [
+        "mergeStaticGroup",
+        "countMeshes"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__highlandCitadelDesign",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/highlandCitadelDesign.js",
+      "canonicalSource": "src/world/highlandCitadelDesign.js",
+      "exports": [
+        "HIGHLAND_CITADEL_DESIGN_VERSION",
+        "HIGHLAND_TOWNSCAPER_BASE_Y",
+        "HIGHLAND_TOWNSCAPER_PLATFORM",
+        "HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE",
+        "HIGHLAND_REFERENCE_PROPORTIONS",
+        "HIGHLAND_CITADEL_DESIGN_PALETTE",
+        "HIGHLAND_MOUNTAIN_TREE_PLACEMENTS",
+        "highlandCityGroundHeight",
+        "highlandMountainGridHeight",
+        "localSphericalSurfaceOffset",
+        "highlandTownscaperSurfaceHeight",
+        "solveHighlandTerrainTiles",
+        "HIGHLAND_LAKE_CHART",
+        "highlandCurvedLakeSurfaceHeight",
+        "highlandWaterCenterX",
+        "highlandWaterHalfWidth",
+        "isHighlandWaterfrontCutout",
+        "HIGHLAND_HARBOR_COVE",
+        "isHighlandHarborCove",
+        "solveHighlandWaterTiles",
+        "highlandTerrainSurfaceHeight",
+        "highlandMountainSlope",
+        "buildHighlandCitadelContinuousTerrain",
+        "HIGHLAND_CASTLE_UNIT_CATALOG",
+        "HIGHLAND_CITY_BANDS",
+        "solveHighlandCastleUnitGrid",
+        "buildHighlandCitadelLatestDesign",
+        "buildHighlandSlopeShrubs",
+        "compileHighlandCanopyGroves",
+        "buildHighlandCanopyGroves",
+        "mountHighlandCanopyGroves",
+        "mountHighlandSlopeShrubs"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CapsuleGeometry",
+        "CircleGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "InstancedMesh",
+        "Mesh",
+        "OctahedronGeometry",
+        "PlaneGeometry",
+        "ShapeGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__highlandHeroClouds",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/highlandHeroClouds.js",
+      "canonicalSource": "src/world/highlandHeroClouds.js",
+      "exports": [
+        "compileHighlandLocalHeroClouds",
+        "mountHighlandLocalHeroClouds"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "IcosahedronGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__highlandShoreWaves",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/highlandShoreWaves.js",
+      "canonicalSource": "src/world/highlandShoreWaves.js",
+      "exports": [
+        "SHORE_WAVES_SCHEMA_VERSION",
+        "bakeHighlandShoreWaves",
+        "lakeHeightAt",
+        "createHighlandShoreWaveSystem",
+        "traceGridOutlineRings",
+        "bakeContourFoamBand"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__highlandSlopeGrass",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/highlandSlopeGrass.js",
+      "canonicalSource": "src/world/highlandSlopeGrass.js",
+      "exports": [
+        "compileHighlandSlopeGrass",
+        "mountHighlandSlopeGrass"
+      ],
+      "geometry": [
+        "ConeGeometry",
+        "InstancedMesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__hills",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/hills.js",
+      "canonicalSource": "src/world/hills.js",
+      "exports": [
+        "CORRIDOR_FOREST_PATH",
+        "ISLAND_FLAT_R",
+        "ISLAND_BASE_LIFT",
+        "BOOKSHOP_TOWN",
+        "BOOKSHOP_OCEAN_ISLAND_LIFT",
+        "CAMP_COVE",
+        "CAMP_OCEAN_ISLAND_LIFT",
+        "POND_CENTER_X",
+        "POND_CENTER_Z",
+        "POND_RADIUS_X",
+        "POND_RADIUS_Z",
+        "POND_DEPTH",
+        "pondDepressionAt",
+        "hillHeightAt",
+        "groundLiftAt",
+        "carveHillsForTrack",
+        "worldToFlatXZ",
+        "sampleHillMeshRadius",
+        "buildHills"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__lake",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/lake.js",
+      "canonicalSource": "src/world/lake.js",
+      "exports": [
+        "LAKE",
+        "HARBOR",
+        "createMoonLake",
+        "updateLakeWade",
+        "updateLakeFx"
+      ],
+      "geometry": [
+        "CircleGeometry",
+        "Mesh",
+        "RingGeometry",
+        "ShapeGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__lifecycleClouds",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/world/lifecycleClouds.js",
+      "canonicalSource": "src/world/lifecycleClouds.js",
+      "exports": [
+        "createLifecycleClouds",
+        "updateLifecycleClouds"
+      ],
+      "geometry": [
+        "CylinderGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__mangaWaterfall",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/mangaWaterfall.js",
+      "canonicalSource": "src/world/mangaWaterfall.js",
+      "exports": [
+        "createMangaWaterfall"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "CircleGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "InstancedMesh",
+        "Mesh",
+        "PlaneGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__moebiusCity",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/moebiusCity.js",
+      "canonicalSource": "src/world/moebiusCity.js",
+      "exports": [
+        "CITY_FOOTPRINT_RADIUS",
+        "GRAND_CRYSTAL",
+        "footprintSurfaceRange",
+        "buildingPlacementOnTerrain",
+        "buildMoebiusCrystalMetropolis",
+        "rebuildMoebiusCrystalMetropolis",
+        "buildMoebiusCity"
+      ],
+      "geometry": [
+        "CircleGeometry",
+        "CylinderGeometry",
+        "InstancedMesh",
+        "Mesh",
+        "PlaneGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__moebiusSwamp",
+      "category": "湖沼与生物",
+      "originalSource": "src/world/moebiusSwamp.js",
+      "canonicalSource": "src/world/moebiusSwamp.js",
+      "exports": [
+        "SWAMP_LOCAL_GROUND_Y",
+        "SWAMP_GROUND_Y",
+        "SWAMP_WATER_Y",
+        "SWAMP_FLOOR_Y",
+        "createMoebiusSwampZone",
+        "applySwampSphereFit",
+        "createMoebiusSwampPlacement",
+        "swampMidwayDir",
+        "placeMoebiusSwampOnTrack",
+        "placeMoebiusSwampOnSphere",
+        "SWAMP_COMPONENT_BUILDERS"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CircleGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "PlaneGeometry",
+        "RingGeometry",
+        "SphereGeometry",
+        "TorusGeometry",
+        "TubeGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__moebiusTiger",
+      "category": "湖沼与生物",
+      "originalSource": "src/world/moebiusTiger.js",
+      "canonicalSource": "src/assets/characters/moebiusTiger.js",
+      "exports": [
+        "TIGER_SCALE",
+        "createMoebiusTigerModel"
+      ],
+      "geometry": [
+        "ConeGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "model extracted; behavior remains in world",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__moonOrb",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/moonOrb.js",
+      "canonicalSource": "src/world/moonOrb.js",
+      "exports": [
+        "MOON_ORB",
+        "createMoonOrb"
+      ],
+      "geometry": [
+        "CircleGeometry",
+        "ExtrudeGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__mossyGround",
+      "category": "苔庭与植被",
+      "originalSource": "src/world/mossyGround.js",
+      "canonicalSource": "src/assets/terrain/mossyGround.js",
+      "exports": [
+        "buildImpastoMossyGround"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "PlaneGeometry"
+      ],
+      "sourceStatus": "moved to assets; compatibility entry retained",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__navonaPlaza",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/navonaPlaza.js",
+      "canonicalSource": "src/world/navonaPlaza.js",
+      "exports": [
+        "NAVONA_PLAZA_SPEC",
+        "createNavonaCanalPlaza",
+        "conformPlazaToTerrain"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "PlaneGeometry",
+        "TorusGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__odysseyCitadel",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/odysseyCitadel.js",
+      "canonicalSource": "src/world/odysseyCitadel.js",
+      "exports": [
+        "SVARBOVA",
+        "CITADEL_SVARBOVA_LAYER",
+        "CITADEL_SINK",
+        "CITADEL",
+        "CITADEL_CASCADE_POOL_SPECS",
+        "CITADEL_CASCADE_MARKER",
+        "CITADEL_RIM_FALL_DEFAULTS",
+        "normalizeCitadelRimFalls",
+        "CITADEL_TERRAIN_KEY",
+        "CITADEL_TERRAIN_OBJECTS_KEY",
+        "citadelTerrainKey",
+        "citadelTerrainObjectsKey",
+        "CITADEL_MIN_TERRACE_HEIGHT",
+        "normalizeCitadelTerrain",
+        "isCitadelCascadeEnabled",
+        "isCitadelCascadePoolsEnabled",
+        "citadelTerraceMetrics",
+        "citadelCurvatureDrop",
+        "normalizeCitadelTerrainObjects",
+        "isCitadelCascadePoolSupported",
+        "citadelTerrainPointSupported",
+        "citadelTerrainCellSupported",
+        "contourTownBaseY",
+        "makePastelStandard",
+        "CANAL_TOWNSCAPER",
+        "HIGHLAND_TOWNSCAPER",
+        "makeCanalMat",
+        "CITADEL_WINDOW_LIT_CHANCE",
+        "refreshCitadelWindowLights",
+        "rebuildCitadelWindowInstances",
+        "syncCitadelWindowInstances",
+        "updateCitadelNightWindows",
+        "markCitadelFloorCaptured",
+        "applyInkOutlines",
+        "mergeCitadelTownStatic",
+        "buildCitadelTownAssembly",
+        "enableSvarbovaCitadelLayer",
+        "buildOdysseyCitadel",
+        "computeCitadelDirtyCells",
+        "diffCitadelLayouts",
+        "playCitadelGrowAnimation",
+        "rebuildCitadelTownIncremental",
+        "rebuildCitadelTown",
+        "trimCitadelTownToTerrain",
+        "rebuildCitadelTerrain",
+        "rebuildCitadelTerrainObjects",
+        "terrainSupportLevel"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CylinderGeometry",
+        "ExtrudeGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "PlaneGeometry",
+        "ShapeGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__planet",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/planet.js",
+      "canonicalSource": "src/world/planet.js",
+      "exports": [
+        "PLANET_RADIUS",
+        "PLANET_COLOR",
+        "SOUTH_COLOR",
+        "createPlanet",
+        "PLANET_NIGHT_TINT",
+        "applyPlanetNightGrade",
+        "paintPlanetOceanBed"
+      ],
+      "geometry": [
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__planetV8__runtime",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/planetV8/runtime.js",
+      "canonicalSource": "src/world/planetV8/runtime.js",
+      "exports": [
+        "planetRendererOwnership",
+        "selectPlanetV9LOD",
+        "createPlanetV8Runtime",
+        "updatePlanetV8Runtime",
+        "disposePlanetV8Runtime"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__planetV8__tripleGateScout",
+      "category": "圣城与建筑",
+      "originalSource": "src/world/planetV8/tripleGateScout.js",
+      "canonicalSource": "src/world/planetV8/tripleGateScout.js",
+      "exports": [
+        "createTripleGateScoutAircraft",
+        "mountTripleGateScoutAircraft"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "ExtrudeGeometry",
+        "Mesh",
+        "SphereGeometry",
+        "TorusGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__platforms",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/platforms.js",
+      "canonicalSource": "src/world/platforms.js",
+      "exports": [
+        "PLATFORM_DEFS",
+        "buildWorld",
+        "updatePlatformPulse",
+        "findPlatformTopAtFlat"
+      ],
+      "geometry": [
+        "LineSegments",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__saihoji",
+      "category": "苔庭与植被",
+      "originalSource": "src/world/saihoji.js",
+      "canonicalSource": "src/world/saihoji.js",
+      "exports": [
+        "SAIHOJI_PINE_SIZE",
+        "SAIHOJI_PINE_SPREAD",
+        "SAIHOJI_HUB",
+        "SAIHOJI_LAT_SHIFT",
+        "SAIHOJI_ZONES",
+        "SAIHOJI_MIN_DISTANCE",
+        "latLonToGardenDir",
+        "phiThetaToDir",
+        "placeByPhiTheta",
+        "isInsideSaihojiReserve",
+        "buildSaihojiPlanet",
+        "paintPlanetMossSea",
+        "paintPlanetHemispheres"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__saihojiPhalanx",
+      "category": "苔庭与植被",
+      "originalSource": "src/world/saihojiPhalanx.js",
+      "canonicalSource": "src/world/saihojiPhalanx.js",
+      "exports": [
+        "saihoujiHubDir",
+        "createSaihojiPhalanxBattle"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__scoutDefense",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/scoutDefense.js",
+      "canonicalSource": "src/world/scoutDefense.js",
+      "exports": [
+        "createScoutDefenseSquad"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__sphereShell",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/sphereShell.js",
+      "canonicalSource": "src/assets/terrain/sphereShell.js",
+      "exports": [
+        "createSphericalShellPatch"
+      ],
+      "geometry": [
+        "BufferGeometry"
+      ],
+      "sourceStatus": "moved to assets; compatibility entry retained",
+      "reading": "reviewed for extraction or geometry-preserving optimization",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__startGarden",
+      "category": "苔庭与植被",
+      "originalSource": "src/world/startGarden.js",
+      "canonicalSource": "src/world/startGarden.js",
+      "exports": [
+        "createStartGardenVista",
+        "updateStartGardenVista"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "ConeGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "RingGeometry",
+        "ShapeGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__startingCamp",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/startingCamp.js",
+      "canonicalSource": "src/world/startingCamp.js",
+      "exports": [
+        "buildStartingCamp"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "Mesh",
+        "RingGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__tramSystem",
+      "category": "载具",
+      "originalSource": "src/world/tramSystem.js",
+      "canonicalSource": "src/world/tramSystem.js",
+      "exports": [
+        "trackLiftAt",
+        "buildChristchurchTramSystem"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "Mesh",
+        "TubeGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__vanguardAssault",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/vanguardAssault.js",
+      "canonicalSource": "src/world/vanguardAssault.js",
+      "exports": [
+        "VANGUARD_ASSAULT",
+        "createVanguardAssault"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "RingGeometry",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__vanguardTrooper",
+      "category": "角色与鸟群",
+      "originalSource": "src/world/vanguardTrooper.js",
+      "canonicalSource": "src/world/vanguardTrooper.js",
+      "exports": [
+        "VANGUARD_COMBAT",
+        "VANGUARD_SQUAD_SIZE",
+        "vanguardRosterSlot",
+        "VANGUARD_BOLT",
+        "VANGUARD_FORMATION",
+        "createVanguardTrooper",
+        "applyVanguardHit",
+        "vanguardStrikeLands",
+        "soilVanguardUniform",
+        "createVanguardSquad",
+        "updateVanguardAboard",
+        "deployVanguardSquad",
+        "updateVanguardCombat",
+        "fireflyTexture",
+        "vanguardAliveCount",
+        "assignVanguardFireteams",
+        "vanguardFormationOffset",
+        "boltHitChance",
+        "boltArcPath",
+        "updateBoltCharge",
+        "bladeVsShield",
+        "updateVanguardAdvance",
+        "vanguardMuzzleWorld",
+        "createBoltArcFx"
+      ],
+      "geometry": [
+        "BoxGeometry",
+        "BufferGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "TorusGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__waterV8__officialOcean",
+      "category": "地形与场景构件",
+      "originalSource": "src/world/waterV8/officialOcean.js",
+      "canonicalSource": "src/world/waterV8/officialOcean.js",
+      "exports": [
+        "OFFICIAL_OCEAN_SEA_LEVEL",
+        "OFFICIAL_OCEAN_COLOR",
+        "OFFICIAL_OCEAN_OPACITY",
+        "OFFICIAL_OCEAN_WIDTH_SEGMENTS",
+        "OFFICIAL_OCEAN_HEIGHT_SEGMENTS",
+        "OFFICIAL_HIGHLAND_ISLAND_LIFT",
+        "HIGHLAND_CASTLE_SEA_DROP",
+        "officialOceanLevelAt",
+        "drapeOceanOnLegacyPlanet",
+        "compileOfficialOcean",
+        "buildOceanPatrolCurve"
+      ],
+      "geometry": [
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__weather",
+      "category": "渲染与辅助几何",
+      "originalSource": "src/world/weather.js",
+      "canonicalSource": "src/world/weather.js",
+      "exports": [
+        "createWeatherSystem"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "LineSegments",
+        "Mesh",
+        "Points"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    },
+    {
+      "id": "world__whaleMaw",
+      "category": "湖沼与生物",
+      "originalSource": "src/world/whaleMaw.js",
+      "canonicalSource": "src/world/whaleMaw.js",
+      "exports": [
+        "WHALE_MAW",
+        "applyWhaleCombatShake",
+        "createWhaleMaw"
+      ],
+      "geometry": [
+        "BufferGeometry",
+        "LineSegments",
+        "Mesh",
+        "SphereGeometry"
+      ],
+      "sourceStatus": "mixed module; extraction pending",
+      "reading": "indexed; detailed review pending",
+      "blenderStatus": "per-model capture required; source module is not a single mesh"
+    }
+  ],
+  "catalog": [
+    {
+      "id": "bookshop",
+      "label": "Hard To Find 书店",
+      "sourceSnapshot": "originals/bookshop.source.json",
+      "blend": "originals/blender-r3/bookshop.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "bookshop",
+        "nodes": 59,
+        "meshDatablocks": 56,
+        "verticesIncludingOutline": 2520,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": {
+        "asset": "original bookshop",
+        "source": "assets/models/originals/blender-r3/bookshop.blend",
+        "result": "assets/models/optimized/bookshop.blend",
+        "verticesBefore": 2520,
+        "verticesAfter": 574,
+        "facesUnchanged": 852,
+        "maxFaceCornerPositionError": 0,
+        "maxFaceCornerNormalError": 3.6872923374176025e-05,
+        "maxUVError": 0,
+        "materialIndicesUnchanged": true,
+        "runtimeIntegrated": true,
+        "renderParity": "Web same-camera same-light image comparison: zero changed bytes; original shader, material and editable sign retained. See verification/bookshop-web-comparison.json"
+      },
+      "runtimeReplacement": true,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/bookshop.blend",
+        "changedMeshes": 52,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "house",
+      "label": "水墨小房",
+      "sourceSnapshot": "originals/house.source.json",
+      "blend": "originals/blender-r3/house.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "house",
+        "nodes": 8,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 228,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/house.blend",
+        "changedMeshes": 7,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "pine",
+      "label": "古松",
+      "sourceSnapshot": "originals/pine.source.json",
+      "blend": "originals/blender-r3/pine.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "pine",
+        "nodes": 17,
+        "meshDatablocks": 9,
+        "verticesIncludingOutline": 20136,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/pine.blend",
+        "changedMeshes": 9,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "signpost",
+      "label": "路牌",
+      "sourceSnapshot": "originals/signpost.source.json",
+      "blend": "originals/blender-r3/signpost.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "signpost",
+        "nodes": 6,
+        "meshDatablocks": 5,
+        "verticesIncludingOutline": 240,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/signpost.blend",
+        "changedMeshes": 5,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "lamp",
+      "label": "街灯",
+      "sourceSnapshot": "originals/lamp.source.json",
+      "blend": "originals/blender-r3/lamp.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "lamp",
+        "nodes": 6,
+        "meshDatablocks": 5,
+        "verticesIncludingOutline": 456,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/lamp.blend",
+        "changedMeshes": 5,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "pole",
+      "label": "电线杆",
+      "sourceSnapshot": "originals/pole.source.json",
+      "blend": "originals/blender-r3/pole.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "pole",
+        "nodes": 8,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 396,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/pole.blend",
+        "changedMeshes": 7,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "rock",
+      "label": "焦墨岩",
+      "sourceSnapshot": "originals/rock.source.json",
+      "blend": "originals/blender-r3/rock.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "rock",
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 480,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/rock.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "hydrangea",
+      "label": "绣球花丛",
+      "sourceSnapshot": "originals/hydrangea.source.json",
+      "blend": "originals/blender-r3/hydrangea.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "hydrangea",
+        "nodes": 32,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 20016,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/hydrangea.blend",
+        "changedMeshes": 7,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "flower",
+      "label": "水墨小花",
+      "sourceSnapshot": "originals/flower.source.json",
+      "blend": "originals/blender-r3/flower.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "flower",
+        "nodes": 4,
+        "meshDatablocks": 3,
+        "verticesIncludingOutline": 180,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/flower.blend",
+        "changedMeshes": 3,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "lawnHill",
+      "label": "草坪山丘",
+      "sourceSnapshot": "originals/lawnHill.source.json",
+      "blend": "originals/blender-r3/lawnHill.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "lawnHill",
+        "nodes": 11,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 2292,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/lawnHill.blend",
+        "changedMeshes": 8,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "fox",
+      "label": "阿狸（小狐狸）",
+      "sourceSnapshot": "originals/fox.source.json",
+      "blend": "originals/blender-r3/fox.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "fox",
+        "nodes": 155,
+        "meshDatablocks": 127,
+        "verticesIncludingOutline": 8830,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/fox.blend",
+        "changedMeshes": 126,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "fisherBoat",
+      "label": "古战船",
+      "sourceSnapshot": "originals/fisherBoat.source.json",
+      "blend": "originals/blender-r3/fisherBoat.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "fisherBoat",
+        "nodes": 340,
+        "meshDatablocks": 283,
+        "verticesIncludingOutline": 16992,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 286,
+        "maxInstanceMatrixError": 1.5099580240562196e-07,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/fisherBoat.blend",
+        "changedMeshes": 273,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "harborCrane",
+      "label": "港口起重机",
+      "sourceSnapshot": "originals/harborCrane.source.json",
+      "blend": "originals/blender-r3/harborCrane.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "harborCrane",
+        "nodes": 29,
+        "meshDatablocks": 28,
+        "verticesIncludingOutline": 2016,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/harborCrane.blend",
+        "changedMeshes": 28,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "stackedCrates",
+      "label": "货柜木箱堆",
+      "sourceSnapshot": "originals/stackedCrates.source.json",
+      "blend": "originals/blender-r3/stackedCrates.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "stackedCrates",
+        "nodes": 135,
+        "meshDatablocks": 118,
+        "verticesIncludingOutline": 4248,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/stackedCrates.blend",
+        "changedMeshes": 118,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "oldHarbor",
+      "label": "修船厂码头",
+      "sourceSnapshot": "originals/oldHarbor.source.json",
+      "blend": "originals/blender-r3/oldHarbor.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "oldHarbor",
+        "nodes": 762,
+        "meshDatablocks": 567,
+        "verticesIncludingOutline": 45960,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 286,
+        "maxInstanceMatrixError": 9.5367431640625e-07,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/oldHarbor.blend",
+        "changedMeshes": 557,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "citadelWatchtower",
+      "label": "圣城瞭望塔",
+      "sourceSnapshot": "originals/citadelWatchtower.source.json",
+      "blend": "originals/blender-r3/citadelWatchtower.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "citadelWatchtower",
+        "nodes": 29,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 840,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/citadelWatchtower.blend",
+        "changedMeshes": 8,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "citadelElderTree",
+      "label": "圣城参天树",
+      "sourceSnapshot": "originals/citadelElderTree.source.json",
+      "blend": "originals/blender-r3/citadelElderTree.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "citadelElderTree",
+        "nodes": 31,
+        "meshDatablocks": 30,
+        "verticesIncludingOutline": 1764,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/citadelElderTree.blend",
+        "changedMeshes": 30,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "snowMassif",
+      "label": "雪山组",
+      "sourceSnapshot": "originals/snowMassif.source.json",
+      "blend": "originals/blender-r3/snowMassif.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "snowMassif",
+        "nodes": 36,
+        "meshDatablocks": 28,
+        "verticesIncludingOutline": 912,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/snowMassif.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "snowMountainPeak",
+      "label": "单座雪峰",
+      "sourceSnapshot": "originals/snowMountainPeak.source.json",
+      "blend": "originals/blender-r3/snowMountainPeak.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "snowMountainPeak",
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 144,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/snowMountainPeak.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "moebiusSwamp",
+      "label": "莫比斯湖沼",
+      "sourceSnapshot": "originals/moebiusSwamp.source.json",
+      "blend": "originals/blender-r3/moebiusSwamp.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "moebiusSwamp",
+        "nodes": 4004,
+        "meshDatablocks": 3723,
+        "verticesIncludingOutline": 289381,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 572,
+        "maxInstanceMatrixError": 4.76837158203125e-07,
+        "primitiveNodes": {
+          "Line": 4,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/moebiusSwamp.blend",
+        "changedMeshes": 3440,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "moebiusTower",
+      "label": "莫比斯塔",
+      "sourceSnapshot": "originals/moebiusTower.source.json",
+      "blend": "originals/blender-r3/moebiusTower.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "moebiusTower",
+        "nodes": 162,
+        "meshDatablocks": 151,
+        "verticesIncludingOutline": 13116,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 3,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/moebiusTower.blend",
+        "changedMeshes": 148,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "moebiusAirship",
+      "label": "莫比斯航空艇",
+      "sourceSnapshot": "originals/moebiusAirship.source.json",
+      "blend": "originals/blender-r3/moebiusAirship.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "moebiusAirship",
+        "nodes": 283,
+        "meshDatablocks": 260,
+        "verticesIncludingOutline": 11064,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/moebiusAirship.blend",
+        "changedMeshes": 260,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "moebiusAircraft",
+      "label": "莫比斯飞碟",
+      "sourceSnapshot": "originals/moebiusAircraft.source.json",
+      "blend": "originals/blender-r3/moebiusAircraft.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "moebiusAircraft",
+        "nodes": 67,
+        "meshDatablocks": 56,
+        "verticesIncludingOutline": 24305,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/moebiusAircraft.blend",
+        "changedMeshes": 49,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "tram",
+      "label": "基督城电车",
+      "sourceSnapshot": "originals/tram.source.json",
+      "blend": "originals/blender-r3/tram.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "tram",
+        "nodes": 143,
+        "meshDatablocks": 142,
+        "verticesIncludingOutline": 5910,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/tram.blend",
+        "changedMeshes": 132,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "bubblePod",
+      "label": "气泡座舱",
+      "sourceSnapshot": "originals/bubblePod.source.json",
+      "blend": "originals/blender-r3/bubblePod.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "bubblePod",
+        "nodes": 35,
+        "meshDatablocks": 31,
+        "verticesIncludingOutline": 10268,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 1,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/bubblePod.blend",
+        "changedMeshes": 30,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "fence",
+      "label": "木栅栏",
+      "sourceSnapshot": "originals/fence.source.json",
+      "blend": "originals/blender-r3/fence.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "fence",
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 144,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/fence.blend",
+        "changedMeshes": 4,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "bridge",
+      "label": "木桥",
+      "sourceSnapshot": "originals/bridge.source.json",
+      "blend": "originals/blender-r3/bridge.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "bridge",
+        "nodes": 6,
+        "meshDatablocks": 5,
+        "verticesIncludingOutline": 180,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/bridge.blend",
+        "changedMeshes": 5,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "lowPolyTree",
+      "label": "低多边形树",
+      "sourceSnapshot": "originals/lowPolyTree.source.json",
+      "blend": "originals/blender-r3/lowPolyTree.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "lowPolyTree",
+        "nodes": 101,
+        "meshDatablocks": 84,
+        "verticesIncludingOutline": 3456,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/lowPolyTree.blend",
+        "changedMeshes": 84,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "cloud",
+      "label": "云朵",
+      "sourceSnapshot": "originals/cloud.source.json",
+      "blend": "originals/blender-r3/cloud.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "cloud",
+        "nodes": 11,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 1680,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/cloud.blend",
+        "changedMeshes": 10,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "blackRock",
+      "label": "黑岩",
+      "sourceSnapshot": "originals/blackRock.source.json",
+      "blend": "originals/blender-r3/blackRock.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "blackRock",
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 480,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/blackRock.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "craneOnRock",
+      "label": "岩上鹤",
+      "sourceSnapshot": "originals/craneOnRock.source.json",
+      "blend": "originals/blender-r3/craneOnRock.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "craneOnRock",
+        "nodes": 34,
+        "meshDatablocks": 28,
+        "verticesIncludingOutline": 2052,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/craneOnRock.blend",
+        "changedMeshes": 26,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "classicAliFox",
+      "label": "阿狸（经典版）",
+      "sourceSnapshot": "originals/classicAliFox.source.json",
+      "blend": "originals/blender-r3/classicAliFox.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "classicAliFox",
+        "nodes": 103,
+        "meshDatablocks": 84,
+        "verticesIncludingOutline": 6588,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/classicAliFox.blend",
+        "changedMeshes": 84,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "moebiusTiger",
+      "label": "赛博水墨虎",
+      "sourceSnapshot": "originals/moebiusTiger.source.json",
+      "blend": "originals/blender-r3/moebiusTiger.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "moebiusTiger",
+        "nodes": 80,
+        "meshDatablocks": 62,
+        "verticesIncludingOutline": 2552,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": {
+        "preservedMeshes": [
+          {
+            "mesh": "n19",
+            "normalError": 0.00012468986096791923
+          },
+          {
+            "mesh": "n21",
+            "normalError": 0.00012468986096791923
+          }
+        ],
+        "asset": "original moebiusTiger",
+        "source": "assets/models/originals/blender-r3/moebiusTiger.blend",
+        "result": "assets/models/optimized/moebiusTiger.blend",
+        "verticesBefore": 2552,
+        "verticesAfter": 1468,
+        "facesUnchanged": 2208,
+        "maxFaceCornerPositionError": 0,
+        "maxFaceCornerNormalError": 7.003289665497014e-05,
+        "maxUVError": 0,
+        "materialIndicesUnchanged": true,
+        "runtimeIntegrated": true,
+        "renderParity": "Web idle/walking/drinking: zero changed pixels; original floats, shader and animation references retained. See verification/tiger-web-comparison.json"
+      },
+      "runtimeReplacement": true,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/moebiusTiger.blend",
+        "changedMeshes": 60,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "bird",
+      "label": "Boids 小鸟",
+      "sourceSnapshot": "originals/bird.source.json",
+      "blend": "originals/blender-r3/bird.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "bird",
+        "nodes": 8,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 142,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/bird.blend",
+        "changedMeshes": 6,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "longWingGlider",
+      "label": "异星滑翔长翼鸟",
+      "sourceSnapshot": "originals/longWingGlider.source.json",
+      "blend": "originals/blender-r3/longWingGlider.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "longWingGlider",
+        "nodes": 16,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 278,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/longWingGlider.blend",
+        "changedMeshes": 10,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "craneNPC",
+      "label": "丹顶鹤 NPC",
+      "sourceSnapshot": "originals/craneNPC.source.json",
+      "blend": "originals/blender-r3/craneNPC.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "craneNPC",
+        "nodes": 30,
+        "meshDatablocks": 26,
+        "verticesIncludingOutline": 1572,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/craneNPC.blend",
+        "changedMeshes": 26,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "messenger",
+      "label": "送信人（玩家）",
+      "sourceSnapshot": "originals/messenger.source.json",
+      "blend": "originals/blender-r3/messenger.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "messenger",
+        "nodes": 15,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 306,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/messenger.blend",
+        "changedMeshes": 9,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "agentMessenger",
+      "label": "数字孪生送信人",
+      "sourceSnapshot": "originals/agentMessenger.source.json",
+      "blend": "originals/blender-r3/agentMessenger.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "agentMessenger",
+        "nodes": 13,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 1542,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/agentMessenger.blend",
+        "changedMeshes": 3,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "bookshopHydrangeas",
+      "label": "书店绣球",
+      "sourceSnapshot": "originals/bookshopHydrangeas.source.json",
+      "blend": "originals/blender-r3/bookshopHydrangeas.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "bookshopHydrangeas",
+        "nodes": 233,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 181296,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/bookshopHydrangeas.blend",
+        "changedMeshes": 7,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "grassTuft",
+      "label": "草丛",
+      "sourceSnapshot": "originals/grassTuft.source.json",
+      "blend": "originals/blender-r3/grassTuft.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "grassTuft",
+        "nodes": 4,
+        "meshDatablocks": 3,
+        "verticesIncludingOutline": 54,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/grassTuft.blend",
+        "changedMeshes": 3,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "mossyGround",
+      "label": "厚涂苔藓地被",
+      "sourceSnapshot": "originals/mossyGround.source.json",
+      "blend": "originals/blender-r3/mossyGround.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "mossyGround",
+        "nodes": 196,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 15865,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/mossyGround.blend",
+        "changedMeshes": 3,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_whale",
+      "label": "沼泽·白鲸",
+      "sourceSnapshot": "originals/swamp_whale.source.json",
+      "blend": "originals/blender-r3/swamp_whale.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_whale",
+        "nodes": 20,
+        "meshDatablocks": 19,
+        "verticesIncludingOutline": 2787,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 1,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_whale.blend",
+        "changedMeshes": 18,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_worldTree",
+      "label": "沼泽·世界树",
+      "sourceSnapshot": "originals/swamp_worldTree.source.json",
+      "blend": "originals/blender-r3/swamp_worldTree.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_worldTree",
+        "nodes": 42,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 24312,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_worldTree.blend",
+        "changedMeshes": 28,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_nativeDoll",
+      "label": "沼泽·原住民人偶",
+      "sourceSnapshot": "originals/swamp_nativeDoll.source.json",
+      "blend": "originals/blender-r3/swamp_nativeDoll.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_nativeDoll",
+        "nodes": 13,
+        "meshDatablocks": 12,
+        "verticesIncludingOutline": 1068,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_nativeDoll.blend",
+        "changedMeshes": 12,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_lotusLeafBoat",
+      "label": "沼泽·莲叶舟",
+      "sourceSnapshot": "originals/swamp_lotusLeafBoat.source.json",
+      "blend": "originals/blender-r3/swamp_lotusLeafBoat.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_lotusLeafBoat",
+        "nodes": 50,
+        "meshDatablocks": 45,
+        "verticesIncludingOutline": 3736,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_lotusLeafBoat.blend",
+        "changedMeshes": 44,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_eel",
+      "label": "沼泽·黄绿鳗",
+      "sourceSnapshot": "originals/swamp_eel.source.json",
+      "blend": "originals/blender-r3/swamp_eel.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_eel",
+        "nodes": 7,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 4056,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_eel.blend",
+        "changedMeshes": 4,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_tubeWorm",
+      "label": "沼泽·橙红管虫丛",
+      "sourceSnapshot": "originals/swamp_tubeWorm.source.json",
+      "blend": "originals/blender-r3/swamp_tubeWorm.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_tubeWorm",
+        "nodes": 25,
+        "meshDatablocks": 24,
+        "verticesIncludingOutline": 2592,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_tubeWorm.blend",
+        "changedMeshes": 24,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_mushroom",
+      "label": "沼泽·紫蘑菇/珊瑚",
+      "sourceSnapshot": "originals/swamp_mushroom.source.json",
+      "blend": "originals/blender-r3/swamp_mushroom.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_mushroom",
+        "nodes": 9,
+        "meshDatablocks": 8,
+        "verticesIncludingOutline": 870,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_mushroom.blend",
+        "changedMeshes": 8,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_pinkHanger",
+      "label": "沼泽·粉垂生物",
+      "sourceSnapshot": "originals/swamp_pinkHanger.source.json",
+      "blend": "originals/blender-r3/swamp_pinkHanger.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_pinkHanger",
+        "nodes": 7,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 1560,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_pinkHanger.blend",
+        "changedMeshes": 4,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_bird",
+      "label": "沼泽·沼泽鸟",
+      "sourceSnapshot": "originals/swamp_bird.source.json",
+      "blend": "originals/blender-r3/swamp_bird.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_bird",
+        "nodes": 10,
+        "meshDatablocks": 9,
+        "verticesIncludingOutline": 136,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_bird.blend",
+        "changedMeshes": 8,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_monkey",
+      "label": "沼泽·长尾猴",
+      "sourceSnapshot": "originals/swamp_monkey.source.json",
+      "blend": "originals/blender-r3/swamp_monkey.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_monkey",
+        "nodes": 21,
+        "meshDatablocks": 20,
+        "verticesIncludingOutline": 2568,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_monkey.blend",
+        "changedMeshes": 18,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_lizard",
+      "label": "沼泽·发光蜥蜴",
+      "sourceSnapshot": "originals/swamp_lizard.source.json",
+      "blend": "originals/blender-r3/swamp_lizard.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_lizard",
+        "nodes": 16,
+        "meshDatablocks": 15,
+        "verticesIncludingOutline": 820,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_lizard.blend",
+        "changedMeshes": 14,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_ribbonFish",
+      "label": "沼泽·发光带鱼",
+      "sourceSnapshot": "originals/swamp_ribbonFish.source.json",
+      "blend": "originals/blender-r3/swamp_ribbonFish.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_ribbonFish",
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 218,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_ribbonFish.blend",
+        "changedMeshes": 2,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_shell",
+      "label": "沼泽·贝壳",
+      "sourceSnapshot": "originals/swamp_shell.source.json",
+      "blend": "originals/blender-r3/swamp_shell.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_shell",
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 768,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_shell.blend",
+        "changedMeshes": 4,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_rimPalm",
+      "label": "沼泽·坑缘棕榈",
+      "sourceSnapshot": "originals/swamp_rimPalm.source.json",
+      "blend": "originals/blender-r3/swamp_rimPalm.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_rimPalm",
+        "nodes": 17,
+        "meshDatablocks": 16,
+        "verticesIncludingOutline": 396,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_rimPalm.blend",
+        "changedMeshes": 16,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_toweringTree",
+      "label": "沼泽·苍天巨树",
+      "sourceSnapshot": "originals/swamp_toweringTree.source.json",
+      "blend": "originals/blender-r3/swamp_toweringTree.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_toweringTree",
+        "nodes": 171,
+        "meshDatablocks": 170,
+        "verticesIncludingOutline": 13800,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_toweringTree.blend",
+        "changedMeshes": 164,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_canopy",
+      "label": "沼泽·树冠顶棚",
+      "sourceSnapshot": "originals/swamp_canopy.source.json",
+      "blend": "originals/blender-r3/swamp_canopy.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_canopy",
+        "nodes": 182,
+        "meshDatablocks": 180,
+        "verticesIncludingOutline": 3588,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 108,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_canopy.blend",
+        "changedMeshes": 72,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_glowFlower",
+      "label": "沼泽·发光花蕊花",
+      "sourceSnapshot": "originals/swamp_glowFlower.source.json",
+      "blend": "originals/blender-r3/swamp_glowFlower.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_glowFlower",
+        "nodes": 15,
+        "meshDatablocks": 14,
+        "verticesIncludingOutline": 304,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_glowFlower.blend",
+        "changedMeshes": 13,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_giantFlower",
+      "label": "沼泽·巨花",
+      "sourceSnapshot": "originals/swamp_giantFlower.source.json",
+      "blend": "originals/blender-r3/swamp_giantFlower.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_giantFlower",
+        "nodes": 17,
+        "meshDatablocks": 16,
+        "verticesIncludingOutline": 412,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_giantFlower.blend",
+        "changedMeshes": 15,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_stamenSpike",
+      "label": "沼泽·花蕊尖锥",
+      "sourceSnapshot": "originals/swamp_stamenSpike.source.json",
+      "blend": "originals/blender-r3/swamp_stamenSpike.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_stamenSpike",
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 220,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_stamenSpike.blend",
+        "changedMeshes": 3,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_fishSchool",
+      "label": "沼泽·绿黑斑纹小鱼群",
+      "sourceSnapshot": "originals/swamp_fishSchool.source.json",
+      "blend": "originals/blender-r3/swamp_fishSchool.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_fishSchool",
+        "nodes": 68,
+        "meshDatablocks": 58,
+        "verticesIncludingOutline": 1812,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_fishSchool.blend",
+        "changedMeshes": 58,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swamp_fireflies",
+      "label": "沼泽·萤火虫群",
+      "sourceSnapshot": "originals/swamp_fireflies.source.json",
+      "blend": "originals/blender-r3/swamp_fireflies.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swamp_fireflies",
+        "nodes": 47,
+        "meshDatablocks": 46,
+        "verticesIncludingOutline": 184,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swamp_fireflies.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "swampZone",
+      "label": "莫比斯湖沼生态区",
+      "sourceSnapshot": "originals/swampZone.source.json",
+      "blend": "originals/blender-r3/swampZone.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "swampZone",
+        "nodes": 3917,
+        "meshDatablocks": 3637,
+        "verticesIncludingOutline": 281515,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 572,
+        "maxInstanceMatrixError": 9.5367431640625e-07,
+        "primitiveNodes": {
+          "Line": 4,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/swampZone.blend",
+        "changedMeshes": 3360,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "moebiusCity",
+      "label": "莫比斯水晶城",
+      "sourceSnapshot": "originals/moebiusCity.source.json",
+      "blend": "originals/blender-r3/moebiusCity.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "moebiusCity",
+        "nodes": 709,
+        "meshDatablocks": 629,
+        "verticesIncludingOutline": 46332,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 420,
+        "maxInstanceMatrixError": 3.0547380447387695e-07,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 8,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/moebiusCity.blend",
+        "changedMeshes": 538,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "startingCamp",
+      "label": "起始营地",
+      "sourceSnapshot": "originals/startingCamp.source.json",
+      "blend": "originals/blender-r3/startingCamp.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "startingCamp",
+        "nodes": 228,
+        "meshDatablocks": 196,
+        "verticesIncludingOutline": 11627,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/startingCamp.blend",
+        "changedMeshes": 173,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "saihoji",
+      "label": "西芳寺·苔海",
+      "sourceSnapshot": "originals/saihoji.source.json",
+      "blend": "originals/blender-r3/saihoji.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "saihoji",
+        "nodes": 776,
+        "meshDatablocks": 420,
+        "verticesIncludingOutline": 566820,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/saihoji.blend",
+        "changedMeshes": 336,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "planet",
+      "label": "小星球本体",
+      "sourceSnapshot": "originals/planet.source.json",
+      "blend": "originals/blender-r3/planet.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "planet",
+        "nodes": 2,
+        "meshDatablocks": 1,
+        "verticesIncludingOutline": 1617,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/planet.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "hills",
+      "label": "岛丘地形",
+      "sourceSnapshot": "originals/hills.source.json",
+      "blend": "originals/blender-r3/hills.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "hills",
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 2321,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/hills.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "moonLake",
+      "label": "月牙湖",
+      "sourceSnapshot": "originals/moonLake.source.json",
+      "blend": "originals/blender-r3/moonLake.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "moonLake",
+        "nodes": 40,
+        "meshDatablocks": 34,
+        "verticesIncludingOutline": 2898,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/moonLake.blend",
+        "changedMeshes": 16,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "tramSystem",
+      "label": "电车轨道系统",
+      "sourceSnapshot": "originals/tramSystem.source.json",
+      "blend": "originals/blender-r3/tramSystem.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "tramSystem",
+        "nodes": 553,
+        "meshDatablocks": 548,
+        "verticesIncludingOutline": 47704,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 2,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/tramSystem.blend",
+        "changedMeshes": 512,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "equatorialClouds",
+      "label": "轨道云墙（书店→峡谷）",
+      "sourceSnapshot": "originals/equatorialClouds.source.json",
+      "blend": "originals/blender-r3/equatorialClouds.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "equatorialClouds",
+        "nodes": 149,
+        "meshDatablocks": 145,
+        "verticesIncludingOutline": 1580440,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 1,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/equatorialClouds.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    },
+    {
+      "id": "platforms",
+      "label": "平台土坡",
+      "sourceSnapshot": "originals/platforms.source.json",
+      "blend": "originals/blender-r3/platforms.blend",
+      "importReport": {
+        "revision": 3,
+        "asset": "platforms",
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 2140,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 1,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "optimization": "pending",
+      "runtimeReplacement": false,
+      "batchCandidate": {
+        "blend": "optimized/batch-candidates-v2/platforms.blend",
+        "changedMeshes": 0,
+        "status": "candidate only; source review, visual parity and runtime integration pending"
+      }
+    }
+  ],
+  "generationSupport": [
+    {
+      "source": "src/procgen/bridge/buildingFeatureGuard.js",
+      "exports": [
+        "MODULE_FEATURE_KINDS",
+        "auditModuleFeatureClearance",
+        "assertModuleFeaturesClear"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/bridge/moduleFieldBridge.js",
+      "exports": [
+        "placementWorldAabb",
+        "foundationCollarVolume",
+        "doorGateClearanceVolume",
+        "canalSegmentVolume",
+        "waterfallNotchVolume",
+        "caveVolume",
+        "smoothUnionVolumes",
+        "subtractVolumes"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/bridge/surfacePipeline.js",
+      "exports": [
+        "runProcgenSurface"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/bridge/surfaceProvider.js",
+      "exports": [
+        "createSurfaceProviderFromIndexedMesh"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/bridge/surfaceRegistry.js",
+      "exports": [
+        "mergeSurfaceNamespaces",
+        "mergeMcAndModuleSurfaces",
+        "createSharedMeshBindings",
+        "assertSharedMeshData"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/bridge/wfcFieldBridge.js",
+      "exports": [
+        "occupancyToScalarField",
+        "compileWfcSurface"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/constraints/hardRoutePlanner.js",
+      "exports": [
+        "HARD_ROUTE_KINDS",
+        "createHardConstraintSchema",
+        "compileHardRouteLocks",
+        "solverPinsFromHardLocks",
+        "validateRouteChains",
+        "validateLoadPaths",
+        "validateOpeningsAndCoverage",
+        "validateWaterRoute",
+        "validateVisibilityKeepouts",
+        "validateTacticalRoutes",
+        "repairLocalRegion",
+        "summarizeHardRouteFailure"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/constraints/validators.js",
+      "exports": [
+        "validateLockedCells",
+        "validateConnectivity",
+        "validateSupport",
+        "validateWaterContinuity",
+        "validateClearance",
+        "validateExclusionVolumes",
+        "validateTacticalFairness",
+        "validateWorldSolution"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/core/bitSet.js",
+      "exports": [
+        "BitSet",
+        "popcount32",
+        "ntz32",
+        "bitSetOf"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/core/diagnostics.js",
+      "exports": [
+        "TraceRingBuffer",
+        "Diagnostics",
+        "EventLog"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/core/priorityQueue.js",
+      "exports": [
+        "VersionedMinHeap"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/core/schema.js",
+      "exports": [
+        "PROCGEN_ENGINE_SCHEMA_VERSION",
+        "WFC_MODEL_SCHEMA_VERSION",
+        "FIELD_SCHEMA_VERSION",
+        "MC_MESH_SCHEMA_VERSION",
+        "GOLDEN_SEEDS",
+        "RNG_STREAMS",
+        "DELIVERY_LEVELS",
+        "schemaVersionStamp"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/core/stableRng.js",
+      "exports": [
+        "StableRng",
+        "createStableRng"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/core/trail.js",
+      "exports": [
+        "ChoicePoint",
+        "Trail"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/ambiguity.js",
+      "exports": [
+        "AMBIGUOUS_CASES",
+        "cubeCase",
+        "ambiguityDecision"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/chunkField.js",
+      "exports": [
+        "createChunkField",
+        "chunkKey",
+        "chunkBounds",
+        "dirtyAabbToChunks",
+        "fieldSampleHash",
+        "fieldCacheKey",
+        "MC_BASELINE_CELLS",
+        "MC_BASELINE_HALO",
+        "assertUniformChunkResolution"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/composites.js",
+      "exports": [
+        "sdTerraceShoulder",
+        "sdMountain",
+        "sdCanalVolume",
+        "sdWaterfallNotch",
+        "sdFoundationCollar",
+        "sampleWithProvenance"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/marchingCubes.js",
+      "exports": [
+        "marchingCubes",
+        "MARCHING_CUBES_CASE_COUNT",
+        "MARCHING_CUBES_TABLE_SIZE"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/marchingCubesTables.js",
+      "exports": [
+        "EDGE_TABLE",
+        "TRI_TABLE"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/scalarField.js",
+      "exports": [
+        "ScalarField",
+        "createScalarField"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/sdf.js",
+      "exports": [
+        "sdSphere",
+        "sdBox",
+        "sdPlane",
+        "sdCapsule",
+        "sdCylinderY",
+        "sdTorusXZ",
+        "sdCave",
+        "sdRoundedBox",
+        "sdHeightfield",
+        "sdfUnion",
+        "sdfIntersection",
+        "sdfSubtract",
+        "smoothUnion",
+        "smoothSubtract",
+        "composeSdf"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/seamValidator.js",
+      "exports": [
+        "seamVertexKeys",
+        "validateChunkSeam"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/field/semantics.js",
+      "exports": [
+        "SEMANTIC_NAMES",
+        "SEMANTIC_IDS",
+        "semanticId",
+        "semanticName",
+        "SEMANTIC_COLORS"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/fixtures/castleFixtures.js",
+      "exports": [
+        "HIGHLAND_REAL",
+        "HIGHLAND_MINIMAL",
+        "ANCIENT_MINIMAL",
+        "ANCIENT_REAL",
+        "CANAL_MINIMAL",
+        "CANAL_REAL",
+        "CASTLE_FIXTURES",
+        "castleFixtureHash",
+        "CASTLE_FIXTURE_HASHES"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/fixtures/decorFixtures.js",
+      "exports": [
+        "DECOR_STRUCTURE",
+        "DECOR_SAMPLE",
+        "DECOR_OUTPUT"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/fixtures/edgeTrimFixtures.js",
+      "exports": [
+        "WALL_CORNER",
+        "ROOF_EDGE",
+        "BALCONY_EDGE",
+        "COURT_GROUND",
+        "EDGE_TRIM_FIXTURE"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/fixtures/structureFixtures3d.js",
+      "exports": [
+        "V3_FOUNDATION",
+        "V3_SUPPORT",
+        "V3_TOWER",
+        "V3_BRIDGE",
+        "V3_STAIRS",
+        "V3_ROOF",
+        "STRUCTURE3D_PROTOTYPES",
+        "STRUCTURE3D_SOLVE",
+        "V3_DOOR",
+        "SEALED_DOOR_FIXTURE",
+        "V3_ROOF_INVERTED",
+        "INVERTED_ROOF_FIXTURE"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/graph/halfEdgeGraph.js",
+      "exports": [
+        "createHalfEdgeGraph",
+        "buildCrossIds"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/graph/irregularQuadGrid.js",
+      "exports": [
+        "createIrregularQuadGrid"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/graph/rectGrid2d.js",
+      "exports": [
+        "DIR2",
+        "OPP2",
+        "createRectGrid2D"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/graph/voxelGrid3d.js",
+      "exports": [
+        "DIR3",
+        "OPP3",
+        "createVoxelGrid3D"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/inspector/procgenInspector.js",
+      "exports": [
+        "createProcgenInspector",
+        "summarizeFailure"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/migration/migrationGate.js",
+      "exports": [
+        "CAPABILITY_LEVEL_ORDER",
+        "canPromote",
+        "evaluateMigrationGate"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/migration/rolloutPlan.js",
+      "exports": [
+        "PROCGEN_ROLLOUT_STAGES",
+        "validateRolloutStage",
+        "rollbackFlags"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/barycentric.js",
+      "exports": [
+        "tangentBasis",
+        "projectToTangent",
+        "planarBarycentric",
+        "clampNormalizeWeights",
+        "nearestBarycentricTriangle"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/chartSeamValidator.js",
+      "exports": [
+        "canonicalBoundaryVertexKey",
+        "canonicalBoundaryEdgeKey",
+        "validateChartSeams",
+        "exportChartDebug"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/climateFieldV10.js",
+      "exports": [
+        "angularDistance",
+        "projectWindTangent",
+        "upwindNeighbors",
+        "solveClimateV10",
+        "hashClimateFieldV10"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/ecologyFieldV10.js",
+      "exports": [
+        "angularDistance",
+        "SPECIES_BANDS_V10",
+        "SPECIES_BAND_INDEX_V10",
+        "solveEcologyV10",
+        "hashEcologyFieldV10"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/editorDirtyV10.js",
+      "exports": [
+        "localHaloV10",
+        "downwindConeV10",
+        "invalidateRegionsV10",
+        "dirtyRegionHashV10"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/fieldDependencyGraphV10.js",
+      "exports": [
+        "FIELD_DEPENDENCY_GRAPH_VERSION",
+        "FIELD_DEPENDENCY_GRAPH_V10",
+        "allowedDependencyEdgeV10",
+        "validateDependencyGraphV10",
+        "assertNoCloudEcologyFeedbackV10"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/fieldOverlayV10.js",
+      "exports": [
+        "FIELD_OVERLAY_LAYERS_V10",
+        "normalizeLayerV10",
+        "buildFieldOverlayV10"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/forceModulePatch.js",
+      "exports": [
+        "forceModulePatch"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/geodesicDualGrid.js",
+      "exports": [],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/geodesicGrid.js",
+      "exports": [
+        "buildGeodesicMainAndDualGrid",
+        "sampleBarycentricDirection"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/geodesicMainGrid.js",
+      "exports": [],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/globalConstraints.js",
+      "exports": [
+        "validatePlanetLandmarkLinks",
+        "measurePlanetArea",
+        "validatePlanetGlobalConstraints"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/hierarchicalSmoothing.js",
+      "exports": [
+        "hierarchicalSmoothPositions",
+        "classifyHardLevels"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/hydrologyFieldV10.js",
+      "exports": [
+        "angularDistance",
+        "solveHydrologyV10",
+        "hashHydrologyFieldV10",
+        "shorelineEdgesV10",
+        "shoreTokenV10"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/landformChainV8.js",
+      "exports": [
+        "LANDFORM_CHAIN_VERSION",
+        "LANDFORM_CHAIN_V8",
+        "LANDFORM_TRANSITIONS_V8",
+        "angularDistance",
+        "slerpUnit",
+        "compileLandformChain",
+        "validateChainCoverage",
+        "validateElevationNarrative",
+        "validateFinalElevationNarrative",
+        "landformChainHash",
+        "buildTransitionCollars",
+        "migrateLandformSnapshot",
+        "DEFAULT_CHAIN_ANCHOR",
+        "DEFAULT_CHAIN_TERMINAL",
+        "validateChainAdjacency"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/planetCompilerV8.js",
+      "exports": [
+        "trianglesFromMesh",
+        "compilePlanetV8"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/planetDebugExport.js",
+      "exports": [
+        "buildPlanetGridDebug",
+        "planetGridDebugSvg"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/planetFieldComposer.js",
+      "exports": [
+        "classifyProfileField",
+        "createPlanetFieldRecipe",
+        "createRadialChartField"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/planetValidatorsV8.js",
+      "exports": [
+        "validatePlanetTopology",
+        "validateCurvedWaterRoutes"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/profiles/bookshopHillChainV8.js",
+      "exports": [
+        "createBookshopHillChainProfile"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/profiles/crystalCanyonProfileV8.js",
+      "exports": [
+        "createCrystalCanyonProfile"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/profiles/highlandTerrainProfileV8.js",
+      "exports": [
+        "createHighlandTerrainProfile"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/profiles/saihojiHillsProfileV8.js",
+      "exports": [
+        "createSaihojiHillsProfile"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/profiles/swampLakeProfileV8.js",
+      "exports": [
+        "createSwampLakeProfile"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/profiles/tripleGateHighlandProfileV8.js",
+      "exports": [
+        "createTripleGateHighlandProfile"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/schema.js",
+      "exports": [
+        "PLANET_GRAPH_SCHEMA_VERSION",
+        "TERRAIN_TILESET_VERSION",
+        "PLANET_FIELD_VERSION",
+        "CURVED_WATER_VERSION",
+        "CLOUD_ATLAS_VERSION",
+        "WORLD_SNAPSHOT_VERSION",
+        "TERRAIN_SEMANTICS",
+        "assertFinite",
+        "assertVec3",
+        "createPlanetVersionManifest",
+        "validatePlanetSnapshot",
+        "createEmptyPlanetSnapshot"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/semanticFieldV10.js",
+      "exports": [
+        "SEMANTIC_FIELD_V10_VERSION",
+        "SEMANTIC_CELL_V10_SCHEMA",
+        "DEFAULT_SEMANTIC_CELL_V10",
+        "validateSemanticCellV10",
+        "clamp01",
+        "clampSemanticCellV10",
+        "createSemanticCellV10",
+        "stableCellOrder"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/semanticTextureBakeV10.js",
+      "exports": [
+        "elevation01",
+        "lift01",
+        "fetch01",
+        "cloudBase01",
+        "bakeSemanticTexturesV10"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/sphericalWfc.js",
+      "exports": [
+        "compileSphericalTerrainTable",
+        "solveSphericalTerrain",
+        "terrainAssignmentMap"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/tangentChartPartition.js",
+      "exports": [
+        "chartForDirection"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/terrainPatchBlendingV10.js",
+      "exports": [
+        "sphericalProjectedUv",
+        "shorelineManualUv",
+        "terrainPatchBlendAt"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/terrainProfilesV8.js",
+      "exports": [
+        "TERRAIN_PROFILES_V8",
+        "profileById",
+        "TERRAIN_PROFILE_ALIASES",
+        "canonicalProfileId"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/terrainSemanticBake.js",
+      "exports": [
+        "bakeTerrainSemantic",
+        "forestDensityAt",
+        "sampleForestInstances"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/terrainTileSchema.js",
+      "exports": [
+        "validateTerrainTile"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/terrainTiles.js",
+      "exports": [
+        "TERRAIN_TILE_PROTOTYPES",
+        "createTerrainTiles",
+        "terrainTileById"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/vegetationCompilerV8.js",
+      "exports": [
+        "vegetationScaleMultiplier",
+        "compileVegetationV8",
+        "validateVegetationKeepouts"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/planet/vegetationCompilerV9.js",
+      "exports": [
+        "readEcologySample",
+        "speciesFromEcologyBand",
+        "compileVegetationV9",
+        "vegetationInstanceHash",
+        "mergeVegetationChunks"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/profiles/castleModuleCompilerV7.js",
+      "exports": [
+        "compileCastleProfileV7",
+        "validateCastleProfileV7",
+        "compileCastleProfileMatrix"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/profiles/castleProfiles.js",
+      "exports": [
+        "CASTLE_PROFILE_VERSION",
+        "createHighlandProfile",
+        "createAncientProfile",
+        "createCanalProfile",
+        "createCastleProfile",
+        "validateCastleProfile",
+        "CASTLE_PROFILE_FACTORIES"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/profiles/profilePlanners.js",
+      "exports": [
+        "compileHighlandRoutePlan",
+        "compileAncientFortressPlan",
+        "compileCanalCitadelPlan",
+        "validateCastlePlan"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/snapshot/incrementalSnapshot.js",
+      "exports": [
+        "PROCGEN_SNAPSHOT_VERSION",
+        "SNAPSHOT_LAYERS",
+        "SNAPSHOT_DIRTY_KINDS",
+        "SNAPSHOT_SCHEMA_KEYS",
+        "SNAPSHOT_SCHEMA_DEFAULTS",
+        "DirtyLayerTracker",
+        "createDirtyRegionPlan",
+        "stableSnapshotString",
+        "createSnapshotV3",
+        "diffSnapshots",
+        "applySnapshotPatch",
+        "replaySnapshot",
+        "validateSnapshotV3",
+        "checkSnapshotConsistency",
+        "migrateSnapshotV2toV3",
+        "loadSnapshot"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/snapshot/sourceGuard.js",
+      "exports": [
+        "SNAPSHOT_SOURCE_ENGINES",
+        "checkSourceMix",
+        "assertCompatibleSources"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/snapshot/versionedCache.js",
+      "exports": [
+        "createVersionedCache"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/backtracker.js",
+      "exports": [
+        "DEFAULT_MAX_BACKTRACK",
+        "resolveMaxBacktrack",
+        "Backtracker"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/columnTemplate.js",
+      "exports": [
+        "createColumnTemplate",
+        "instantiateColumnTemplate",
+        "mergeSolutionWithTemplate"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/compatibilityTable.js",
+      "exports": [
+        "compileCompatibilityTable",
+        "compileTokenCompatibilityTable"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/conflictExplain.js",
+      "exports": [
+        "CONFLICT_CHAIN_CAP",
+        "explainFailure"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/entropy.js",
+      "exports": [
+        "TIE_NOISE_SCALE",
+        "shannonEntropy",
+        "tieNoise",
+        "cellPriority",
+        "weightedChoiceFromDomain"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/layerExport.js",
+      "exports": [
+        "exportVoxelLayers",
+        "voxelLayersToSvg"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/migrateCatalog.js",
+      "exports": [
+        "migrateCatalogModule",
+        "migrateCatalogModules"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/moduleSchema.js",
+      "exports": [
+        "WFC_MODULE_SCHEMA_VERSION",
+        "FACE_KEYS",
+        "HORIZONTAL_FACES",
+        "PARITIES",
+        "ORIENTATION_GROUPS",
+        "validateModulePrototype",
+        "createModuleSetManifest",
+        "faceSignature"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/moduleSets.js",
+      "exports": [
+        "buildCastleModuleSets"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/orientationGroup.js",
+      "exports": [
+        "OPPOSITE_FACE",
+        "MIRROR_FACE",
+        "orientationTransforms",
+        "invertTransform",
+        "applyTransformToFaces",
+        "validateOrientationGroup"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/overlappingModel2d.js",
+      "exports": [
+        "createOverlappingModel2D",
+        "solveOverlapping2D",
+        "renderOverlappingAssignment"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/partialObservation.js",
+      "exports": [
+        "partialObservation"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/propagator.js",
+      "exports": [
+        "createPropagateStats",
+        "createPropagator",
+        "SupportCountState"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/referenceSolver.js",
+      "exports": [
+        "referenceArcClosure",
+        "fullDomains",
+        "referenceEnumerate"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/simpleTiledModel.js",
+      "exports": [
+        "createSimpleTiledModel",
+        "defaultEdgeClass",
+        "solveSimpleTiled",
+        "pin2D",
+        "assignmentGrid"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/socketCompiler.js",
+      "exports": [
+        "expandPrototype",
+        "compileVariants"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/solver.js",
+      "exports": [
+        "SUPPORT_COUNT_VARIANT_THRESHOLD",
+        "selectPropagateMode",
+        "solveWfc"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/voxelModel3d.js",
+      "exports": [
+        "createVoxelModuleModel",
+        "structuralBans",
+        "solveVoxelModel",
+        "validateVoxelAssignment",
+        "validateFloorPortals",
+        "validateDoorways",
+        "validateRoofOrientation",
+        "boundaryFaces"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/wfc/waveState.js",
+      "exports": [
+        "WaveState"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/worker/compileWorker.js",
+      "exports": [
+        "createPlanetCompileHost"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/worker/cooperativeFallback.js",
+      "exports": [
+        "runCooperative"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/worker/jobProtocol.js",
+      "exports": [
+        "PROCGEN_PROTOCOL_VERSION",
+        "JOB_TYPES",
+        "PROCGEN_SCHEMA_KEYS",
+        "PROCGEN_SCHEMA_DEFAULTS",
+        "createProcgenJob",
+        "createProcgenResult",
+        "createCancelledResult",
+        "createProgressResult",
+        "transferablesForMesh",
+        "validateProcgenJob"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/worker/planetWorker.js",
+      "exports": [
+        "planetWorkerHandler"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/procgen/worker/procgenWorker.js",
+      "exports": [
+        "createWorkerHandler",
+        "installProcgenWorker"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/audioAdapter.js",
+      "exports": [
+        "footstepCue",
+        "combatCue",
+        "bindCombatAudio"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/baselineSpec.js",
+      "exports": [
+        "CITADEL_V4_WEATHERS",
+        "CITADEL_V4_CAMERAS",
+        "CITADEL_V4_WEATHER_PARAMS",
+        "CITADEL_V4_SEEDS",
+        "CITADEL_V4_BASELINES"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/blueprintStore.js",
+      "exports": [
+        "createBlueprintStore",
+        "validateAndNormalize",
+        "readTownChar",
+        "patchTownCell"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/cageDeform.js",
+      "exports": [
+        "bilinearXZ",
+        "cageMapUnit",
+        "squareCellCorners",
+        "orderFaceCorners",
+        "cellCageCorners",
+        "cornerCageCorners"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/cameraMatrix.js",
+      "exports": [
+        "CAMERA_LOCAL",
+        "listGpuShots",
+        "buildCameraMatrix"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/clusterGeometry.js",
+      "exports": [
+        "unitQuad",
+        "frameForCell",
+        "exerciseAllBuilders",
+        "pickSampleCluster",
+        "materializeCells",
+        "materializeTownGeometry",
+        "buildClusterSampleGeometry",
+        "clusterToSvg"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/compileWorker.js",
+      "exports": [
+        "compileCitadelV4Payload",
+        "createCompileHost"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/constraintSolver.js",
+      "exports": [
+        "MAX_BACKTRACK",
+        "GOLDEN_SEEDS",
+        "DIRS",
+        "OPP",
+        "DELTA",
+        "parseTownCellId",
+        "normalizeCellId",
+        "rotateSockets",
+        "mirrorSockets",
+        "uniqueTransforms",
+        "initializeDomain",
+        "expandByTopology",
+        "buildNeighborMap",
+        "socketsCompatible",
+        "minEntropyCell",
+        "explainConflict",
+        "appearanceHash",
+        "solveDirtyRegion"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/cornerGraphAdapter.js",
+      "exports": [
+        "cornerMaskAt",
+        "createCornerGraph",
+        "cornerBans"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/cornerPrototypes.js",
+      "exports": [
+        "cornerBit",
+        "lowerNibble",
+        "upperNibble",
+        "popcount4",
+        "rotNibble",
+        "nibbleOrbit",
+        "cornerShapeOf",
+        "CORNER_SHAPES",
+        "CORNER_SOCKET",
+        "CORNER_SOCKET_PARITY",
+        "CORNER_PROTOTYPES",
+        "cornerProtoAllowsMask",
+        "cornerAllowedProtoIds",
+        "cornerBuildAllowedClasses",
+        "CORNER_METRICS",
+        "cornerGeometryParts",
+        "CORNER_DIRS",
+        "CORNER_OPP",
+        "CORNER_DELTA",
+        "cornerFaceBits",
+        "CORNER_CATALOG_VERSION"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/debugLayers.js",
+      "exports": [
+        "DEBUG_LAYER_IDS",
+        "snapshotDebugLayers"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/decoratePass.js",
+      "exports": [
+        "DECOR_MESH_NAMES",
+        "isDecorName",
+        "isDecorTree",
+        "stripDecorMeshes",
+        "decorateTown"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/editPreview.js",
+      "exports": [
+        "occupancyHash",
+        "screenshotHash",
+        "domainKeyList",
+        "previewEdit"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/editSession.js",
+      "exports": [
+        "EDIT_GROW_DURATION",
+        "EDIT_GROW_STAGGER",
+        "EDIT_FEEDBACK_MS",
+        "EDIT_P95_MS",
+        "animateModuleTransition",
+        "hashesFromTown",
+        "createEditSession"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/environmentBus.js",
+      "exports": [
+        "createEnvironmentBus"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/familyBuilders.js",
+      "exports": [
+        "FAMILY_BUILDERS",
+        "STRUCTURAL_SEMANTICS",
+        "buildResolvedModule",
+        "emitPropSlots",
+        "solidsWorldAABB",
+        "resetBuilderIds"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/gridMigration.js",
+      "exports": [
+        "CITADEL_GRID_SCHEMA_V6",
+        "CITADEL_IRREGULAR_GRID_SEED",
+        "citadelLevelsKeyV6",
+        "citadelIrregularGrid",
+        "buildFaceCellMapping",
+        "migrateAsciiToFaces",
+        "facesToAscii",
+        "createCitadelLevelsV6",
+        "readCitadelLevelsV6",
+        "citadelColumnCenter",
+        "citadelLocalToColumn",
+        "createCitadelGridV6"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/incrementalBuilder.js",
+      "exports": [
+        "CLUSTER_PARTS",
+        "buildClusterSample",
+        "expandNeighborhood",
+        "diffBlueprintCells",
+        "createIncrementalBuilder"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/irregularSkeleton.js",
+      "exports": [
+        "SKELETON_AMP_CELL",
+        "SKELETON_AMP_RING",
+        "parseCellVertexId",
+        "parseRingVertexId",
+        "collectLockedVertices",
+        "perturbSkeletonVertices",
+        "skeletonHash"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/legacyMarks.js",
+      "exports": [
+        "CITADEL_LEGACY",
+        "LEGACY_BANNER"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/mergedCellPatch.js",
+      "exports": [
+        "dropCellsFromMerged",
+        "mergedTriangleCount"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/moduleCatalog.js",
+      "exports": [
+        "MODULE_COMBINATION_SPACE",
+        "createModuleCatalog",
+        "encodeSignature",
+        "catalogMatch"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/moduleFamilies.js",
+      "exports": [
+        "TOWNSCAPER_MODULE_VARIANTS",
+        "TOWNSCAPER_MODULE_FAMILIES"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/moduleFrame.js",
+      "exports": [
+        "classifyFootprint",
+        "moduleFrameFromIrregularQuad",
+        "cellQuadFromTopology",
+        "frameToWorld",
+        "exposedDirs",
+        "edgeUv",
+        "parseCellId"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/moduleGeometryNormalize.js",
+      "exports": [
+        "triangleCount",
+        "moduleSlotSize",
+        "padGeometryToTriangles",
+        "normalizeModuleGeometries",
+        "slotRange"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/moduleResolver.js",
+      "exports": [
+        "resolveCell",
+        "extractTownCells",
+        "resolveTown",
+        "moduleCoverage"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/pipeline.js",
+      "exports": [
+        "compileCitadelV4"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/presentation.js",
+      "exports": [
+        "createPresentationDump",
+        "weatherTintedSvg",
+        "cameraShotId",
+        "listPresentationShots"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/propPlacement.js",
+      "exports": [
+        "PROP_KINDS",
+        "SLOT_KINDS",
+        "chooseProp",
+        "placeProps",
+        "reconcileProps",
+        "propUsage",
+        "geometryUsage",
+        "appearancePropHash"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/questAdapter.js",
+      "exports": [
+        "withQuestWorldIds",
+        "bindQuestTarget"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/runtimeAdapter.js",
+      "exports": [
+        "readCitadelSnapshotFlags",
+        "wrapWalkLift",
+        "selectWalkLift",
+        "weatherFromParams",
+        "attachCitadelV4Runtime"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/saveSchema.js",
+      "exports": [
+        "CURRENT_SAVE_VERSION",
+        "canonicalize",
+        "validateSave",
+        "migrateSave",
+        "createSave",
+        "saveCanonicalHash",
+        "questTargetId"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/snapshotCommit.js",
+      "exports": [
+        "createSnapshotCommitQueue",
+        "occupantsFromRiders",
+        "bindRidersToSnapshot"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/socketVocabulary.js",
+      "exports": [
+        "SOCKET",
+        "SOCKET_PARITY",
+        "face",
+        "NEIGHBOR_KIND"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/solverDebug.js",
+      "exports": [
+        "solverDebugModel",
+        "solverToSvg"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/surfaceGraph.js",
+      "exports": [
+        "compileSurfaceGraph"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/surfaceProvider.js",
+      "exports": [
+        "createSurfaceProvider"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/terrainExtract.js",
+      "exports": [
+        "HEIGHT_EPS",
+        "COLOR_DE00",
+        "COVER_SEMANTICS",
+        "HARD_SEMANTICS",
+        "SEMANTIC_HEX",
+        "classifyTerrainFace",
+        "hexToRgb",
+        "deltaE76",
+        "isAxisAlignedQuad",
+        "axisAlignedCoverPatches",
+        "extractLowPolySurface",
+        "inspectExtract",
+        "triangulateFace"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/terrainGenerator.js",
+      "exports": [
+        "TERRAIN_PASSES",
+        "createTerrainPipeline",
+        "buildCitadelTerrain"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/terrainSample.js",
+      "exports": [
+        "isWaterfallL1Region",
+        "extractL1Sample",
+        "surfaceFromExtract",
+        "attachOnSemanticSurface",
+        "buildTerrainSamplePack",
+        "terrainLayerSvg",
+        "writeTerrainSampleSvgs"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/terrainUvCompiler.js",
+      "exports": [
+        "compileTerrainUV",
+        "waterfallVMonotonic",
+        "waterfallVStrict"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/themePresets/themePresetLoader.js",
+      "exports": [
+        "validateThemePreset",
+        "formatPresetErrors",
+        "resolvePreset",
+        "mergeOverlay"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/topology.js",
+      "exports": [
+        "destVertex",
+        "buildHalfEdgeFromFaces",
+        "faceVertexIds",
+        "facePoints",
+        "validateHalfEdge",
+        "boundaryLoops",
+        "buildDualGrid",
+        "buildStableCrossGridIds",
+        "buildMainGrid",
+        "compileTopology",
+        "assertStableCrossIds",
+        "topologyToSvg",
+        "transformVertices"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/townModulePrototypes.js",
+      "exports": [
+        "TOWN_MODULE_PROTOTYPES",
+        "townBanPolicy",
+        "TOWN_BUILDER_KEYS"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/visualTheme.js",
+      "exports": [
+        "TILE_ACCENTS",
+        "THEME",
+        "WEATHER_GRADES",
+        "DAY_GRADES",
+        "setThemePresetOverrides",
+        "getActiveThemeTables",
+        "finalColor",
+        "resolveBuildingTheme",
+        "outlineWeight",
+        "torchFlicker"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/wfcGraphAdapter.js",
+      "exports": [
+        "CITADEL_DELTA",
+        "CITADEL_OPP",
+        "CITADEL_DIRS",
+        "CITADEL_HORIZ",
+        "createCitadelCellGraph"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/wfcIncremental.js",
+      "exports": [
+        "manhattanNeighbors",
+        "resolveIncremental"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/wfcTownSelection.js",
+      "exports": [
+        "defaultBanPolicy",
+        "solveTownSelection"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/wfcTownWiring.js",
+      "exports": [
+        "townGridSignature",
+        "resolveTownSelection",
+        "WFC_SLOPED_ROOF_ROLES",
+        "WFC_FLAT_TOP_ROLES",
+        "makeTownRoleOracle",
+        "partitionRoofComponent"
+      ],
+      "status": "generation rules/data; review pending"
+    },
+    {
+      "source": "src/world/citadel/worldSnapshot.js",
+      "exports": [
+        "SNAPSHOT_SCHEMA_VERSION",
+        "SNAPSHOT_LAYERS",
+        "normalizeSnapshotFlags",
+        "snapshotSources",
+        "mixedStateDump",
+        "assertNoMixedSources",
+        "snapshotFingerprint",
+        "compileWorldSnapshot",
+        "assertSnapshotConsistent",
+        "pathOnSnapshot",
+        "projectOnSnapshot",
+        "propsOnSnapshot",
+        "migrateOccupants",
+        "censusCitadelGraph",
+        "detectMixedState",
+        "snapshotVisualOracle"
+      ],
+      "status": "generation rules/data; review pending"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "swamp_shell",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "fec64db5673f59c1549363f89d40062f04cca99099240cb5da52c72a83e30af6",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n4",
+      "result": {
+        "verticesBefore": 192,
+        "verticesAfter": 38,
+        "normalError": 5.364418029785156e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 192,
+        "verticesAfter": 39,
+        "normalError": 4.172325134277344e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 192,
+        "verticesAfter": 39,
+        "normalError": 4.172325134277344e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 192,
+        "verticesAfter": 38,
+        "normalError": 5.364418029785156e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 4,
+  "removedEditVertices": 614
+}

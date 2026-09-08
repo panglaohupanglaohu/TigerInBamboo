@@ -1,0 +1,24 @@
+{
+  "preservedMeshes": [
+    {
+      "mesh": "n19",
+      "normalError": 0.00012468986096791923
+    },
+    {
+      "mesh": "n21",
+      "normalError": 0.00012468986096791923
+    }
+  ],
+  "asset": "original moebiusTiger",
+  "source": "assets/models/originals/blender-r3/moebiusTiger.blend",
+  "result": "assets/models/optimized/moebiusTiger.blend",
+  "verticesBefore": 2552,
+  "verticesAfter": 1468,
+  "facesUnchanged": 2208,
+  "maxFaceCornerPositionError": 0,
+  "maxFaceCornerNormalError": 7.003289665497014e-05,
+  "maxUVError": 0,
+  "materialIndicesUnchanged": true,
+  "runtimeIntegrated": true,
+  "renderParity": "Web idle/walking/drinking: zero changed pixels; original floats, shader and animation references retained. See verification/tiger-web-comparison.json"
+}

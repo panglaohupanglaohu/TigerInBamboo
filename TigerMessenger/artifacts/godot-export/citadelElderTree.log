@@ -1,0 +1,45 @@
+00:00.352  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/blender-r3/citadelElderTree.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+04:17:43 | INFO: Starting glTF 2.0 export
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-branch.005
+04:17:43 | INFO: Primitives created: 3
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-branch.006
+04:17:43 | INFO: Primitives created: 3
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-branch.007
+04:17:43 | INFO: Primitives created: 3
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-branch.008
+04:17:43 | INFO: Primitives created: 3
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-branch.009
+04:17:43 | INFO: Primitives created: 3
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.008
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.009
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.010
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.011
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.012
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.013
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.014
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-crown.015
+04:17:43 | INFO: Primitives created: 1
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-trunk.002
+04:17:43 | INFO: Primitives created: 3
+04:17:43 | INFO: Extracting primitive: citadel-elder-tree-trunk.003
+04:17:43 | INFO: Primitives created: 3
+04:17:43 | INFO: Finished glTF 2.0 export in 0.01964426040649414 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/godot-export/citadelElderTree.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

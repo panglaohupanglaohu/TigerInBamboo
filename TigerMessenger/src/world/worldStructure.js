@@ -12,7 +12,7 @@
 //     headless 下被 tools/test_world_structure.mjs 直接测。
 //
 //  ② **位置一律惰性求值（getDir 函数），禁止存快照。**
-//     理由只有一个：西芳寺骑在太古浮岛白鲸上（saihojiGarden.js 把苔庭
+//     理由只有一个：西芳寺骑在鲲上（saihojiGarden.js 把苔庭
 //     re-parent 进 islandGroup → leviathanGroup，鲸会 setAnchorRadius
 //     升沉并抖动）。存快照会在鲸游走后指错方向，而且**不会报错**，
 //     只会让导航悄悄骗人。这就是 REGION_KIND.MOBILE 存在的唯一理由。

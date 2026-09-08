@@ -1,0 +1,21 @@
+2026-09-09 01:44:35,137 - BlenderMCPServer - INFO - BlenderMCP server starting up
+2026-09-09 01:44:35,139 - BlenderMCPServer - INFO - Blender addon on disk is current (protocol 5).
+2026-09-09 01:44:35,140 - blender-mcp-telemetry - WARNING - Telemetry disabled via environment variable
+2026-09-09 01:44:35,141 - BlenderMCPServer - INFO - Connected to Blender at 127.0.0.1:9876
+2026-09-09 01:44:35,141 - BlenderMCPServer - INFO - Created new persistent connection to Blender
+2026-09-09 01:44:35,141 - BlenderMCPServer - INFO - Sending command: get_addon_info with params: None
+2026-09-09 01:44:35,141 - BlenderMCPServer - INFO - Command sent, waiting for response...
+2026-09-09 01:44:35,161 - BlenderMCPServer - INFO - Received complete response (358 bytes)
+2026-09-09 01:44:35,162 - BlenderMCPServer - INFO - Received 358 bytes of data
+2026-09-09 01:44:35,162 - BlenderMCPServer - INFO - Response parsed, status: success
+2026-09-09 01:44:35,162 - BlenderMCPServer - INFO - Blender addon up to date (protocol 5, addon [1, 6], Blender 5.2.1 LTS)
+2026-09-09 01:44:35,162 - BlenderMCPServer - INFO - Successfully connected to Blender on startup
+2026-09-09 01:44:35,167 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-09 01:44:35,169 - BlenderMCPServer - INFO - Sending command: execute_code with params: {'code': "import bpy\nfrom pathlib import Path\ns=bpy.data.scenes['Tiger Anatomy V3'];bpy.context.window.scene=s\nfor o in s.objects:\n if o.get('candidateHiddenOutline'):o.hide_viewport=False;o.hide_set(False);o.hide_render=False\n o.select_set(bool(o.get('three_node_id')or o.get('candidateAddition')))\nbpy.ops.export_scene.gltf(filepath='/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/godot/assets/art-pilots/moebius-tiger-anatomy-v3.glb',export_format='GLB',use_selection=True,use_active_scene=True,export_yup=True,export_extras=True)\nfor o in s.objects:\n if o.get('candidateHiddenOutline'):o.hide_set(True);o.hide_render=True\nprint('Export ordering fixed: unhide then select all original outline IDs')\n"}
+2026-09-09 01:44:35,170 - BlenderMCPServer - INFO - Command sent, waiting for response...
+2026-09-09 01:44:35,362 - BlenderMCPServer - INFO - Received complete response (7373 bytes)
+2026-09-09 01:44:35,362 - BlenderMCPServer - INFO - Received 7373 bytes of data
+2026-09-09 01:44:35,362 - BlenderMCPServer - INFO - Response parsed, status: success
+2026-09-09 01:44:35,367 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-09 01:44:35,370 - BlenderMCPServer - INFO - Disconnecting from Blender on shutdown
+2026-09-09 01:44:35,370 - BlenderMCPServer - INFO - BlenderMCP server shut down

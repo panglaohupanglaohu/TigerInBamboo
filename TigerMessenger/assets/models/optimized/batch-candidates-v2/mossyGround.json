@@ -1,0 +1,44 @@
+{
+  "id": "mossyGround",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "0d0e859095fb5fee920a8f7c07d1fa381eedc866d97e8a5d1116b28865ec705b",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 12,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "mossy-terrain",
+      "result": "preserved: deformation or color attributes"
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 12,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 60,
+        "verticesAfter": 12,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 3,
+  "removedEditVertices": 144
+}

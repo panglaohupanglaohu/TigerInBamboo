@@ -250,7 +250,10 @@ function buildJawSplit(whale) {
     const x0 = 1.5;                    // 从嘴角稍前
     const x1 = jawTipX - eyeX;         // 到下颌前端
     for (let j = -6; j <= 6; j++) {
-      const zf = j / 6;
+      // ⚠️ zf 除以 8 而不是 6：|zf| 最多到 0.75。
+      // 取到 ±1 的话 sqrt(1−zf²) = 0，那一条褶的 y 会算成鲸腹的中线
+      // ——也就是跑到嘴角上方去，渲出来是从嘴里甩出去的一条长线（截图实锤）。
+      const zf = j / 8;
       for (let i = 0; i < 12; i++) {
         const ax = x0 + (x1 - x0) * (i / 12);
         const bx = x0 + (x1 - x0) * ((i + 1) / 12);

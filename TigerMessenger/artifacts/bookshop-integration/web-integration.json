@@ -1,0 +1,160 @@
+{
+  "start": {
+    "position": [
+      43.3188134718553,
+      156.80544202512218,
+      28.41894450325368
+    ],
+    "chapter": 0,
+    "source": {
+      "version": 3,
+      "source": "assets/models/optimized/bookshop-art-v3.blend",
+      "sha256": "e2b65549a56af4f37ca3d1f9f0b7cdbebf223fbebc6cadd8d202fcad1956b3a5",
+      "joineryMembers": 50
+    },
+    "visible": true,
+    "hydrangeas": "blender-v3",
+    "collider": true,
+    "distance": 7.029724547942387
+  },
+  "played": {
+    "position": [
+      45.145532583677586,
+      157.41531503658985,
+      25.514560710759703
+    ],
+    "chapter": 1,
+    "distance": 3.557181523587691,
+    "onGround": true,
+    "terrainRadius": 165.73201716411185,
+    "playerRadius": 165.7368194717027
+  },
+  "fixture": {
+    "applied": true,
+    "windows": [
+      {
+        "id": "n15",
+        "position": [
+          -1.60000002,
+          1.62,
+          2.58000016
+        ],
+        "visible": true
+      },
+      {
+        "id": "n17",
+        "position": [
+          -1.60000002,
+          2.81999993,
+          2.58000016
+        ],
+        "visible": true
+      },
+      {
+        "id": "n19",
+        "position": [
+          -1.60000002,
+          4.01999998,
+          2.58000016
+        ],
+        "visible": true
+      },
+      {
+        "id": "n21",
+        "position": [
+          -0.86000001,
+          2.81999993,
+          2.2900002
+        ],
+        "visible": true
+      },
+      {
+        "id": "n23",
+        "position": [
+          -2.33999991,
+          2.81999993,
+          2.2900002
+        ],
+        "visible": true
+      },
+      {
+        "id": "n27",
+        "position": [
+          1.60000002,
+          1.62,
+          2.58000016
+        ],
+        "visible": true
+      },
+      {
+        "id": "n29",
+        "position": [
+          1.60000002,
+          2.81999993,
+          2.58000016
+        ],
+        "visible": true
+      },
+      {
+        "id": "n31",
+        "position": [
+          1.60000002,
+          4.01999998,
+          2.58000016
+        ],
+        "visible": true
+      },
+      {
+        "id": "n33",
+        "position": [
+          0.86000001,
+          2.81999993,
+          2.2900002
+        ],
+        "visible": true
+      },
+      {
+        "id": "n35",
+        "position": [
+          2.33999991,
+          2.81999993,
+          2.2900002
+        ],
+        "visible": true
+      }
+    ],
+    "idempotent": true,
+    "editableSign": true,
+    "terrainVariantPreserved": true,
+    "atomicFallback": true,
+    "metadata": {
+      "version": 3,
+      "source": "assets/models/optimized/bookshop-art-v3.blend",
+      "sha256": "e2b65549a56af4f37ca3d1f9f0b7cdbebf223fbebc6cadd8d202fcad1956b3a5",
+      "joineryMembers": 50
+    },
+    "stats": {
+      "frame": 3,
+      "calls": 58,
+      "triangles": 1454,
+      "points": 0,
+      "lines": 0
+    }
+  },
+  "worldRender": {
+    "frame": 1,
+    "calls": 1665,
+    "triangles": 313538,
+    "points": 380,
+    "lines": 139
+  },
+  "errors": [],
+  "environment": "Chrome software WebGL; draw counts are diagnostic, not a hardware FPS benchmark",
+  "captures": [
+    "web-building-before.png",
+    "web-building-after.png",
+    "web-world-player.png",
+    "web-world-interaction.png",
+    "web-world-close.png"
+  ]
+}

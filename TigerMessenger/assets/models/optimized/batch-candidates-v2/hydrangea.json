@@ -1,0 +1,80 @@
+{
+  "id": "hydrangea",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "26bc90331355d7fdf40a157f95c9b5398ef474336b091238d390e4b382eff078",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n28",
+      "result": {
+        "verticesBefore": 1728,
+        "verticesAfter": 336,
+        "normalError": 4.06801700592041e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n25",
+      "result": {
+        "verticesBefore": 2160,
+        "verticesAfter": 378,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n27",
+      "result": {
+        "verticesBefore": 1440,
+        "verticesAfter": 252,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n29",
+      "result": {
+        "verticesBefore": 2160,
+        "verticesAfter": 378,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n26",
+      "result": {
+        "verticesBefore": 2520,
+        "verticesAfter": 490,
+        "normalError": 4.567205905914307e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n30",
+      "result": {
+        "verticesBefore": 5760,
+        "verticesAfter": 1008,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n31",
+      "result": {
+        "verticesBefore": 4248,
+        "verticesAfter": 826,
+        "normalError": 4.567205905914307e-06,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 7,
+  "removedEditVertices": 16348
+}

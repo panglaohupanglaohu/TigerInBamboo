@@ -1,0 +1,52 @@
+{
+  "albedo_preserved": true,
+  "asset": "res://assets/art-pilots/bookshop-art-v3.glb",
+  "capture_size": "(976, 610)",
+  "changed_bounds": [
+    "(309, 52)",
+    "(592, 365)"
+  ],
+  "changed_pixels": 58975,
+  "chapter_after_r": 1,
+  "draw_calls_after": 703.0,
+  "draw_calls_before": 703.0,
+  "facade_collision": "(9.367293, 32.57573, 4.749636)",
+  "failures": [],
+  "meshes": 76,
+  "passed": true,
+  "path_nodes": [
+    {
+      "cull_mode": 2,
+      "local_position": "(-0.065, 0.25968, 3.1)",
+      "name": "Entrance path 0",
+      "projected_center": "(637.2489, 483.3439)",
+      "visible_in_tree": true
+    },
+    {
+      "cull_mode": 2,
+      "local_position": "(0.065, 0.185562, 3.78)",
+      "name": "Entrance path 1",
+      "projected_center": "(644.8837, 498.4806)",
+      "visible_in_tree": true
+    },
+    {
+      "cull_mode": 2,
+      "local_position": "(-0.065, 0.072082, 4.46)",
+      "name": "Entrance path 2",
+      "projected_center": "(637.3972, 517.4218)",
+      "visible_in_tree": true
+    },
+    {
+      "cull_mode": 2,
+      "local_position": "(0.065, -0.07565, 5.14)",
+      "name": "Entrance path 3",
+      "projected_center": "(645.8128, 540.3516)",
+      "visible_in_tree": true
+    }
+  ],
+  "primitives_after": 157902.0,
+  "primitives_before": 157902.0,
+  "scene": "res://scenes/main.tscn",
+  "surfaces": 181,
+  "unique_toon_materials": 9
+}

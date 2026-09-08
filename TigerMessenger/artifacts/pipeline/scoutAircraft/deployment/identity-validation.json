@@ -1,0 +1,50 @@
+{
+  "candidateReplacementEnabled": false,
+  "failures": [],
+  "instances": [
+    {
+      "godotNodePath": "/root/original-world-v1/crystal-scout-defense-squad/triple-gate-scout-aircraft",
+      "id": "scoutDefense:0",
+      "position": "(-60.29985, -154.7982, 92.68596)",
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[0]",
+      "visible": true
+    },
+    {
+      "godotNodePath": "/root/original-world-v1/crystal-scout-defense-squad/triple-gate-scout-aircraft2",
+      "id": "scoutDefense:1",
+      "position": "(-173.5654, 25.08119, 73.26998)",
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[1]",
+      "visible": true
+    },
+    {
+      "godotNodePath": "/root/original-world-v1/crystal-scout-defense-squad/triple-gate-scout-aircraft3",
+      "id": "scoutDefense:2",
+      "position": "(122.5634, -144.1442, -17.33922)",
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[2]",
+      "visible": true
+    },
+    {
+      "godotNodePath": "/root/original-world-v1/crystal-scout-defense-squad/triple-gate-scout-aircraft4",
+      "id": "scoutDefense:3",
+      "position": "(-138.2844, 100.4058, 10.10262)",
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[3]",
+      "visible": true
+    },
+    {
+      "godotNodePath": "/root/original-world-v1/crystal-scout-defense-squad/triple-gate-scout-aircraft5",
+      "id": "scoutDefense:4",
+      "position": "(140.9285, -59.02551, -75.35635)",
+      "scale": "(0.72, 0.72, 0.72)",
+      "sourcePath": "crystal-scout-defense-squad[111]/triple-gate-scout-aircraft[4]",
+      "visible": true
+    }
+  ],
+  "mountedGateScoutInstances": 0,
+  "passed": true,
+  "runtime": "Godot existing imported GLB, headless scene load only, no import process",
+  "worldIntegrated": false
+}

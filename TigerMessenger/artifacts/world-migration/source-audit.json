@@ -1,0 +1,3442 @@
+{
+  "meshes": 8735,
+  "triangles": 710716,
+  "materialTypes": {
+    "ShaderMaterial": 5,
+    "MeshBasicMaterial": 449,
+    "MeshToonMaterial": 6591,
+    "MeshStandardMaterial": 1690
+  },
+  "roots": [
+    {
+      "name": "light-pool-0",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "light-pool-1",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "light-pool-2",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "light-pool-3",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "light-pool-4",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "light-pool-5",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "light-pool-6",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "light-pool-7",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "AmbientLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "HemisphereLight",
+      "meshes": 0,
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "DirectionalLight",
+      "meshes": 0,
+      "position": [
+        20,
+        28,
+        16
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "DirectionalLight",
+      "meshes": 0,
+      "position": [
+        -10,
+        6,
+        -8
+      ],
+      "visible": true
+    },
+    {
+      "name": "sky-background",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        55,
+        70,
+        40
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        55,
+        70,
+        40
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        20.75874229439235,
+        30.38053603079235,
+        44.21697926773871
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        -29.62406193694671,
+        36.092868083578125,
+        41.393681938638636
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        -51.73773354948803,
+        40.59766541304482,
+        -8.07871520819678
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        -34.08125916614233,
+        29.37455748152459,
+        -34.99334809444314
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        33.18804458440249,
+        34.96268336782121,
+        -38.59502100977464
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        52.36396153005782,
+        41.30680163655799,
+        0.272479598491568
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        -27.577811772646534,
+        28.513853531140274,
+        32.95947591744982
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        12.113093009403142,
+        37.34751970778888,
+        45.6447698653304
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        18.10634111365265,
+        22.521412407295394,
+        38.53596795902555
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        33.88668693396565,
+        24.416258522001957,
+        30.724397090519457
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        29.90622007769463,
+        35.28964934743894,
+        35.13623367115361
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        34.26671155214636,
+        24.475131434543677,
+        29.74727145639135
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        48.104139618101705,
+        37.80574522455147,
+        -0.4045381713474219
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        -22.78461526845992,
+        18.28497023116548,
+        38.26429468693116
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        11.995792012089964,
+        17.121519051514124,
+        -41.24419396621689
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        20.422534236866277,
+        19.693318643617772,
+        -41.36980420140427
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        -37.57094901950118,
+        22.10469172009533,
+        -22.17977532653046
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        39.063157857716966,
+        28.024054532416233,
+        5.08023265168114
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        43.52444758917049,
+        20.15915575971058,
+        33.71671271061959
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        -20.50871647612832,
+        32.707145304971995,
+        -45.330010174326155
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        -15.307433272965536,
+        22.634711189258766,
+        52.51412137423911
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        -17.791172878127373,
+        15.55441337295851,
+        -46.02748118983787
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        19.744011385024205,
+        30.060976808945796,
+        34.55852460437064
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        -39.88191241233273,
+        34.2593083860353,
+        14.24453625759474
+      ],
+      "visible": true
+    },
+    {
+      "name": "osk-lighting-v5",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "planet-surface",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "LineSegments",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "hills",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "hills-closed-skirt",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        -11.50788225054296,
+        151.6127639633995,
+        -51.798456623079254
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        22.819036994708878,
+        159.08272168455966,
+        17.391030164876444
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        -44.9231567127307,
+        154.10134686309837,
+        -5.200469780941029
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        -17.66288243767229,
+        157.53353973336442,
+        -31.39798585687819
+      ],
+      "visible": true
+    },
+    {
+      "name": "starting-camp",
+      "type": "Group",
+      "meshes": 68,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        54.28824091535638,
+        9.318443424653857,
+        -150.21968416441885
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        152.9786052067701,
+        -6.406022345068085,
+        -46.438230227966784
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        -103.03860271862212,
+        -37.295862961441074,
+        -116.5850117114347
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        24.40489020434809,
+        74.39739386010697,
+        -139.53289619633725
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        -50.20799154151987,
+        96.48469425948768,
+        117.34505255450635
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        -73.54980679276278,
+        -40.905994957861935,
+        -137.88707626557107
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        -23.141684932365983,
+        112.62996412023764,
+        -111.26074600129684
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        105.05833552120663,
+        12.03920729477719,
+        -120.07415885704533
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        -43.245456475366424,
+        49.092524749736086,
+        146.01285733774864
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        -149.08033309945398,
+        58.06738058463833,
+        -1.7982199516783606
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 14,
+      "position": [
+        16.049543663303087,
+        159.9266122553161,
+        -4.012385915825772
+      ],
+      "visible": true
+    },
+    {
+      "name": "old-harbor-scene",
+      "type": "Group",
+      "meshes": 185,
+      "position": [
+        97.2720224632227,
+        102.79624211518438,
+        87.77053972506398
+      ],
+      "visible": true
+    },
+    {
+      "name": "christchurch-tram-system",
+      "type": "Group",
+      "meshes": 1920,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "moebius-metropolis",
+      "type": "Group",
+      "meshes": 83,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "flower-hall-bubble-patrol",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "city-sea-lake",
+      "type": "Group",
+      "meshes": 153,
+      "position": [
+        -32.747776838629875,
+        -104.18204426418102,
+        -81.05359193190347
+      ],
+      "visible": true
+    },
+    {
+      "name": "flock-root",
+      "type": "Group",
+      "meshes": 36,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "flock-root",
+      "type": "Group",
+      "meshes": 54,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "citadel-background-snow-massif",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "castleContainer",
+      "type": "Group",
+      "meshes": 1025,
+      "position": [
+        114.44628925433727,
+        63.31980449134136,
+        83.30278587832983
+      ],
+      "visible": true
+    },
+    {
+      "name": "citadel-navona-canal-plaza",
+      "type": "Group",
+      "meshes": 30,
+      "position": [
+        101.93619469590605,
+        88.77563956448711,
+        85.41404124194217
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-harbor-causeway",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        118.37998836909591,
+        65.49620584517416,
+        86.1660337582002
+      ],
+      "visible": true
+    },
+    {
+      "name": "citadel-moat",
+      "type": "Group",
+      "meshes": 24,
+      "position": [
+        118.75638359396025,
+        65.70445437996867,
+        86.44000306753114
+      ],
+      "visible": true
+    },
+    {
+      "name": "citadel-trojan-horse",
+      "type": "Group",
+      "meshes": 203,
+      "position": [
+        98.01346672756479,
+        91.9100235572536,
+        86.71494306360808
+      ],
+      "visible": true
+    },
+    {
+      "name": "citadel-night-infiltration",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "planet-v9-runtime",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "hard-to-find-bookshop",
+      "type": "Group",
+      "meshes": 36,
+      "position": [
+        46.92124737996349,
+        157.64141641635604,
+        22.44059657302602
+      ],
+      "visible": true
+    },
+    {
+      "name": "moebius-swamp-placement",
+      "type": "Group",
+      "meshes": 205,
+      "position": [
+        -68.89845161756955,
+        -46.86223078983698,
+        -111.07763416885717
+      ],
+      "visible": true
+    },
+    {
+      "name": "moebius-aircraft-squad",
+      "type": "Group",
+      "meshes": 211,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "moebius-airship",
+      "type": "Group",
+      "meshes": 131,
+      "position": [
+        -89.31280765240497,
+        -60.74733620904794,
+        -143.98952577444447
+      ],
+      "visible": true
+    },
+    {
+      "name": "airship-escort-root",
+      "type": "Group",
+      "meshes": 9,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "swamp-shipwreck",
+      "type": "Group",
+      "meshes": 149,
+      "position": [
+        -62.60826573197292,
+        -47.02276801477686,
+        -112.94357566763497
+      ],
+      "visible": true
+    },
+    {
+      "name": "music-elder",
+      "type": "Group",
+      "meshes": 7,
+      "position": [
+        -69.7,
+        142.01,
+        27.71
+      ],
+      "visible": true
+    },
+    {
+      "name": "canal-junction-box",
+      "type": "Group",
+      "meshes": 11,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "castleContainer-canal-junction",
+      "type": "Group",
+      "meshes": 663,
+      "position": [
+        62.830039320429634,
+        80.10372783245701,
+        -123.40737152349092
+      ],
+      "visible": true
+    },
+    {
+      "name": "ocean-warship-0",
+      "type": "Group",
+      "meshes": 149,
+      "position": [
+        45.007251903764654,
+        152.6645875871471,
+        21.602207593608586
+      ],
+      "visible": true
+    },
+    {
+      "name": "ocean-warship-1",
+      "type": "Group",
+      "meshes": 149,
+      "position": [
+        105.06845523013881,
+        97.5743153795589,
+        72.37856791732409
+      ],
+      "visible": true
+    },
+    {
+      "name": "ocean-warship-2",
+      "type": "Group",
+      "meshes": 149,
+      "position": [
+        93.3245626980642,
+        110.36462289244393,
+        -70.06397370277912
+      ],
+      "visible": true
+    },
+    {
+      "name": "fisher-boat",
+      "type": "Group",
+      "meshes": 149,
+      "position": [
+        -28.965351832231445,
+        154.69512986697524,
+        32.0812965553874
+      ],
+      "visible": true
+    },
+    {
+      "name": "world-canal",
+      "type": "Group",
+      "meshes": 6,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        46.69130874849336,
+        156.5935696418021,
+        27.026847059946622
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        48.33035328522975,
+        156.36184108908287,
+        26.054836553761152
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        49.67409293758566,
+        156.61230690800105,
+        22.675066460506528
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        49.874983417935375,
+        156.71757572177938,
+        21.098067076027956
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        44.6502626261851,
+        158.44024534397664,
+        18.578951163394947
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        43.6392265009635,
+        158.6246595698383,
+        19.160300993378723
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        45.23630348390823,
+        158.2650494728151,
+        20.712928046639266
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        43.68169023887917,
+        158.6133164561503,
+        19.472799487329883
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        48.3725410157923,
+        157.40160598222568,
+        19.48273992204993
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        50.33273094896787,
+        156.10073267108757,
+        23.836150783417146
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        43.899000761453884,
+        158.12269070971288,
+        23.76185307546601
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        47.04009994842653,
+        156.97594424624194,
+        25.46590392955644
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        46.318101720613775,
+        158.03351457649842,
+        18.058548899348853
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        44.2439803060964,
+        158.43132680601872,
+        21.136936202506813
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        43.19660533130425,
+        158.56066156400016,
+        21.534782951056265
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 3,
+      "position": [
+        49.043243601051906,
+        156.45727934165555,
+        24.724509741224615
+      ],
+      "visible": true
+    },
+    {
+      "name": "mossyGround",
+      "type": "Group",
+      "meshes": 94,
+      "position": [
+        -68.10674260232256,
+        85.11563222113739,
+        -117.9643385252385
+      ],
+      "visible": true
+    },
+    {
+      "name": "saihoji-scree-rocks",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "mossyGround",
+      "type": "Group",
+      "meshes": 1,
+      "position": [
+        -79.38916235769331,
+        -53.997632185820386,
+        -127.99068957728397
+      ],
+      "visible": true
+    },
+    {
+      "name": "cyber-megalithic-twin-gates",
+      "type": "Group",
+      "meshes": 236,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "bird-vortex-triple-gate",
+      "type": "Group",
+      "meshes": 6,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "crystal-scout-defense-squad",
+      "type": "Group",
+      "meshes": 22,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -65.01445330843625,
+        143.57844335398397,
+        32.54452834227476
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -59.353256039348885,
+        145.89780115976004,
+        35.50144724551635
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -61.14372360860714,
+        146.28821248509655,
+        30.502315729658765
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -59.1638226313764,
+        147.83749120376888,
+        26.39561540723831
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -35.965118153370575,
+        156.69616671033165,
+        14.02513054549563
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -35.88644791381719,
+        156.6546699056223,
+        14.308434652753443
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -30.935845707687957,
+        157.31783513775562,
+        13.252079614598216
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -29.248887609325703,
+        158.65518051478202,
+        7.546973296488041
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -28.592357701472928,
+        158.73714025009468,
+        1.591722340152831
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -24.568675998066652,
+        159.72810903808406,
+        7.492805720726323
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -20.77070830884175,
+        160.09652733148522,
+        5.393564150424211
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -15.565350879766777,
+        160.28366202118923,
+        -0.7707570672783479
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -12.282973090538075,
+        160.98787767592225,
+        5.2662291627227615
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -7.387504488775179,
+        160.98303487925872,
+        -2.0685764551036696
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -6.567277945830507,
+        161.1140103965504,
+        6.074844220351229
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        -2.7400036838165773,
+        160.39467323194376,
+        9.624515781324288
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        -0.37079018292440585,
+        160.77981223766793,
+        7.5089693447117565
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        3.4518272772205405,
+        161.09540607222573,
+        9.650638525521616
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        7.575092219500628,
+        160.5928665350297,
+        12.675775902071777
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        12.764816899639053,
+        160.23960700081204,
+        6.910346876592352
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        16.087688662673923,
+        160.099254563372,
+        10.91556724383526
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        18.21575702724958,
+        159.4937977395431,
+        16.44757732142993
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        20.676976622500796,
+        159.52431765914065,
+        16.153897595235936
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        22.31759362168591,
+        158.71878671302187,
+        19.194723908210975
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        26.19724494602472,
+        158.3428195012748,
+        21.342149593987276
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        32.4714474806207,
+        159.28756538926794,
+        16.91085748335492
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        36.18909316407907,
+        158.91003434243314,
+        14.683233957439004
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        36.31890000050517,
+        158.04981827010482,
+        25.76775638253783
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        47.06028070023377,
+        157.43826022300703,
+        14.327100806922852
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        35.70313225584691,
+        159.21898876471516,
+        18.070112158363834
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        39.09582947770199,
+        158.1725658888525,
+        9.981211858579316
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        37.79280854461874,
+        158.0206744943335,
+        5.780740246601821
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        33.652012154849864,
+        159.17793795715417,
+        8.245580966334401
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        31.262772825979038,
+        158.91908859133414,
+        3.2926497082150097
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        30.16182800146006,
+        159.15160223764084,
+        4.26304150886233
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        23.24132856803715,
+        159.1170135984472,
+        3.847122000094246
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        22.200888185745544,
+        159.0914618711361,
+        1.1647863790149775
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 42,
+      "position": [
+        20.50685461677357,
+        159.28527514272463,
+        0.17917373997987732
+      ],
+      "visible": true
+    },
+    {
+      "name": "vanguard-squad",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "vanguard-hauler-0",
+      "type": "Group",
+      "meshes": 80,
+      "position": [
+        -48.696374443297685,
+        -93.28822582918787,
+        -122.57521790198514
+      ],
+      "visible": true
+    },
+    {
+      "name": "vanguard-hauler-1",
+      "type": "Group",
+      "meshes": 80,
+      "position": [
+        -62.828105969287876,
+        -90.41388026152934,
+        -118.22298153220595
+      ],
+      "visible": true
+    },
+    {
+      "name": "vanguard-hauler-2",
+      "type": "Group",
+      "meshes": 80,
+      "position": [
+        -55.550700932969356,
+        -98.46662890138141,
+        -115.39998537544093
+      ],
+      "visible": true
+    },
+    {
+      "name": "vanguard-assault",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "saihoji-phalanx-battle",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "leviathanGroup",
+      "type": "Group",
+      "meshes": 398,
+      "position": [
+        -62.561342770210445,
+        77.63308182729357,
+        -108.18601229414796
+      ],
+      "visible": true
+    },
+    {
+      "name": "saihoji-scan-leaves",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "saihoji-suction-beam",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "saihoji-beam-spot",
+      "type": "SpotLight",
+      "meshes": 0,
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "saihoji-beam-spot-target",
+      "type": "Object3D",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 5,
+      "position": [
+        43.31881347185524,
+        156.80544202512218,
+        28.418944503253663
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 5,
+      "position": [
+        12.01822539205944,
+        159.4075355722203,
+        16.024300522745918
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        23.95972437818126,
+        157.99731042027992,
+        -15.973149585454172
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        -27.950093765328567,
+        157.9473969332179,
+        -7.985741075808166
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        -35.65770518082424,
+        154.1631280923654,
+        27.733770696196597
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        1.0002556740418059e-9,
+        155.21015505651448,
+        -48.012127266510305
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        27.627292114514344,
+        152.23899329910597,
+        43.414316179951115
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        51.232586760033904,
+        151.74913831657048,
+        -11.8229046369309
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Group",
+      "meshes": 2,
+      "position": [
+        -15.439323793850445,
+        143.2989173607347,
+        -69.47695707232704
+      ],
+      "visible": true
+    },
+    {
+      "name": "flock-root",
+      "type": "Group",
+      "meshes": 48,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "osk-v5-local-light-pool",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "citadel-edit-ghost",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "citadel-edit-fx",
+      "type": "Group",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "LineSegments",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Points",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": true
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "rescue-objective",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        49.60652750414235,
+        151.17559369016598,
+        23.58696027483444
+      ],
+      "visible": true
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        103.27342460963932,
+        101.7292140923482,
+        69.69203084392312
+      ],
+      "visible": true
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 1,
+      "position": [
+        92.20092837913644,
+        108.46700476266454,
+        -74.86728309109034
+      ],
+      "visible": true
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    },
+    {
+      "name": "boat-wake-ring",
+      "type": "Mesh",
+      "meshes": 0,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "visible": false
+    }
+  ],
+  "landmarks": {
+    "camp": {
+      "name": "starting-camp",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "bookshop": {
+      "name": "hard-to-find-bookshop",
+      "matrix": [
+        0.8322234309296539,
+        -0.31286664808086084,
+        0.4577320411882068,
+        0,
+        0.2826581167467679,
+        0.9496470868455182,
+        0.13518431670497597,
+        0,
+        -0.47697856351082074,
+        0.016878120880816576,
+        0.8787528543263381,
+        0,
+        46.92124737996349,
+        157.64141641635604,
+        22.44059657302602,
+        1
+      ],
+      "position": [
+        46.92124737996349,
+        157.64141641635604,
+        22.44059657302602
+      ]
+    },
+    "tramSystem": {
+      "name": "christchurch-tram-system",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "harbor": {
+      "name": "old-harbor-scene",
+      "matrix": [
+        0.5647598308451636,
+        0.06187479651383587,
+        -0.82293246564959,
+        0,
+        0.7380298526751616,
+        0.40833046038138465,
+        0.5371947241783056,
+        0,
+        0.36926720680832403,
+        -0.9107347279428285,
+        0.18494319477850674,
+        0,
+        97.2720224632227,
+        102.79624211518438,
+        87.77053972506398,
+        1
+      ],
+      "position": [
+        97.2720224632227,
+        102.79624211518438,
+        87.77053972506398
+      ]
+    },
+    "oldHarbor": {
+      "name": "old-harbor-scene",
+      "matrix": [
+        0.5647598308451636,
+        0.06187479651383587,
+        -0.82293246564959,
+        0,
+        0.7380298526751616,
+        0.40833046038138465,
+        0.5371947241783056,
+        0,
+        0.36926720680832403,
+        -0.9107347279428285,
+        0.18494319477850674,
+        0,
+        97.2720224632227,
+        102.79624211518438,
+        87.77053972506398,
+        1
+      ],
+      "position": [
+        97.2720224632227,
+        102.79624211518438,
+        87.77053972506398
+      ]
+    },
+    "boat": {
+      "name": "fisher-boat",
+      "matrix": [
+        0.8276648924016263,
+        0.7515406552906204,
+        -1.6583598732878064,
+        0,
+        1.4751683708511254,
+        0.7909299619466612,
+        1.0946725870941914,
+        0,
+        1.0671687324534211,
+        -1.676191050787588,
+        -0.22701202112082308,
+        0,
+        -28.965351832231445,
+        154.69512986697524,
+        32.0812965553874,
+        1
+      ],
+      "position": [
+        -28.965351832231445,
+        154.69512986697524,
+        32.0812965553874
+      ]
+    },
+    "moebius": {
+      "name": "moebius-metropolis",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "abandonedGate": {
+      "name": "cyber-megalithic-twin-gates",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "gatePods": {
+      "name": "gate-pod-squadron",
+      "matrix": [
+        -0.27249223857459715,
+        0.15422174251499238,
+        -0.9497176601770889,
+        0,
+        -0.8182291023496784,
+        -0.5564608855464441,
+        0.14440366659093873,
+        0,
+        -0.5062105451140311,
+        0.8164355069400809,
+        0.2778199903225985,
+        0,
+        -130.26207309406877,
+        -88.58857297899387,
+        22.989063721277432,
+        1
+      ],
+      "position": [
+        -130.26207309406877,
+        -88.58857297899387,
+        22.989063721277432
+      ]
+    },
+    "bubblePods": {
+      "name": "flower-hall-bubble-patrol",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "citySeaLake": {
+      "name": "city-sea-lake",
+      "matrix": [
+        0.752170806991706,
+        0.24079247675463136,
+        -0.6133987775075982,
+        0,
+        -0.24079247675463136,
+        -0.7660444431189777,
+        -0.595982293616937,
+        0,
+        -0.6133987775075982,
+        0.595982293616937,
+        -0.5182152501106836,
+        0,
+        -32.747776838629875,
+        -104.18204426418102,
+        -81.05359193190347,
+        1
+      ],
+      "position": [
+        -32.747776838629875,
+        -104.18204426418102,
+        -81.05359193190347
+      ]
+    },
+    "odysseyCitadel": {
+      "name": "castleContainer",
+      "matrix": [
+        -0.6155993490397853,
+        0.08144457424694246,
+        0.7838394113512837,
+        0,
+        0.7380298526751614,
+        0.4083304603813851,
+        0.5371947241783054,
+        0,
+        -0.2763139121037377,
+        0.9091936077923449,
+        -0.31147649273655853,
+        0,
+        114.44628925433727,
+        63.31980449134136,
+        83.30278587832983,
+        1
+      ],
+      "position": [
+        114.44628925433727,
+        63.31980449134136,
+        83.30278587832983
+      ]
+    },
+    "canalJunctionCitadel": {
+      "name": "castleContainer-canal-junction",
+      "matrix": [
+        0.9084787455290392,
+        -0.08088380399918296,
+        0.4100294857356054,
+        0,
+        0.3927368378574174,
+        0.5007108878138331,
+        -0.7713924960838288,
+        0,
+        -0.14291306837283957,
+        0.8618273708088557,
+        0.4866512486503609,
+        0,
+        62.830039320429634,
+        80.10372783245701,
+        -123.40737152349092,
+        1
+      ],
+      "position": [
+        62.830039320429634,
+        80.10372783245701,
+        -123.40737152349092
+      ]
+    },
+    "canalJunctionBox": {
+      "name": "canal-junction-box",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "airship": {
+      "name": "moebius-airship",
+      "matrix": [
+        1.0832181631258955,
+        -0.16979441752416885,
+        -0.6002568340733732,
+        0,
+        -0.620227830919479,
+        -0.421856501451722,
+        -0.999927262322531,
+        0,
+        -0.06675214473767119,
+        1.1643482932355513,
+        -0.4498190783108019,
+        0,
+        -89.31280765240497,
+        -60.74733620904794,
+        -143.98952577444447,
+        1
+      ],
+      "position": [
+        -89.31280765240497,
+        -60.74733620904794,
+        -143.98952577444447
+      ]
+    },
+    "aircraftSquad": {
+      "name": "moebius-aircraft-squad",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "tripleGateScoutAircraft": {
+      "name": "crystal-scout-defense-squad",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "mossSaihoji": {
+      "name": "mossyGround",
+      "matrix": [
+        0.843275521927648,
+        -0.06472889797109221,
+        -0.5335696429568504,
+        0,
+        -0.4240240480782128,
+        0.5299192642332051,
+        -0.7344311949024931,
+        0,
+        0.3302877544944989,
+        0.8455742091395564,
+        0.4194213347804271,
+        0,
+        -68.10674260232256,
+        85.11563222113739,
+        -117.9643385252385,
+        1
+      ],
+      "position": [
+        -68.10674260232256,
+        85.11563222113739,
+        -117.9643385252385
+      ]
+    },
+    "moebiusSwamp": {
+      "name": "moebius-swamp-placement",
+      "matrix": [
+        0.41934572570644163,
+        0.025964185004007795,
+        -0.2710627665851868,
+        0,
+        -0.24809113236779154,
+        -0.1687426005806888,
+        -0.3999709049290124,
+        0,
+        -0.1122495094519559,
+        0.46994871618756845,
+        -0.1286400084789,
+        0,
+        -68.89845161756955,
+        -46.86223078983698,
+        -111.07763416885717,
+        1
+      ],
+      "position": [
+        -68.89845161756955,
+        -46.86223078983698,
+        -111.07763416885717
+      ]
+    },
+    "canal": {
+      "name": "world-canal",
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    "mossSwamp": {
+      "name": "mossyGround",
+      "matrix": [
+        0.3637824873330382,
+        -0.9173955542651969,
+        0.16139299527625212,
+        0,
+        -0.49618226473558324,
+        -0.3374852011613776,
+        -0.7999418098580249,
+        0,
+        0.7883308075114506,
+        0.21092447940321457,
+        -0.5779666096902378,
+        0,
+        -79.38916235769331,
+        -53.997632185820386,
+        -127.99068957728397,
+        1
+      ],
+      "position": [
+        -79.38916235769331,
+        -53.997632185820386,
+        -127.99068957728397
+      ]
+    }
+  }
+}

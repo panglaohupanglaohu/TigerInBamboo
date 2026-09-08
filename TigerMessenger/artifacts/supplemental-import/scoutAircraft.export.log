@@ -1,0 +1,59 @@
+00:00.817  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/supplemental/blender-r3/scoutAircraft.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+21:01:31 | INFO: Starting glTF 2.0 export
+21:01:31 | INFO: Extracting primitive: n1.001
+21:01:31 | INFO: Primitives created: 1
+21:01:31 | INFO: Extracting primitive: n3.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n5.001
+21:01:31 | INFO: Primitives created: 2
+21:01:31 | INFO: Extracting primitive: n7.001
+21:01:31 | INFO: Primitives created: 1
+21:01:31 | INFO: Extracting primitive: n10.001
+21:01:31 | INFO: Primitives created: 1
+21:01:31 | INFO: Extracting primitive: n12.001
+21:01:31 | INFO: Primitives created: 2
+21:01:31 | INFO: Extracting primitive: n14.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n16.001
+21:01:31 | INFO: Primitives created: 2
+21:01:31 | INFO: Extracting primitive: n18.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n20.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n22.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n24.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n29.001
+21:01:31 | INFO: Primitives created: 3
+21:01:31 | INFO: Extracting primitive: n32.001
+21:01:31 | INFO: Primitives created: 3
+21:01:31 | INFO: Extracting primitive: n35.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n37.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n39.001
+21:01:31 | INFO: Primitives created: 6
+21:01:31 | INFO: Extracting primitive: n41.001
+21:01:31 | INFO: Primitives created: 1
+21:01:31 | INFO: Extracting primitive: n42.001
+21:01:31 | INFO: Primitives created: 1
+21:01:31 | INFO: Extracting primitive: n43.001
+21:01:31 | INFO: Primitives created: 1
+21:01:31 | INFO: Extracting primitive: triple-gate-scout-canopy.001
+21:01:31 | INFO: Primitives created: 1
+21:01:31 | INFO: Extracting primitive: n27.001
+21:01:31 | INFO: Primitives created: 2
+21:01:31 | INFO: Finished glTF 2.0 export in 0.10097622871398926 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/supplemental-import/scoutAircraft.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

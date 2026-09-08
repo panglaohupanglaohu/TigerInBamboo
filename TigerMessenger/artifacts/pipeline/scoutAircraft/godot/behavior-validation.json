@@ -1,0 +1,46 @@
+{
+  "captures": [
+    "res://../artifacts/pipeline/scoutAircraft/godot/behavior-0.png",
+    "res://../artifacts/pipeline/scoutAircraft/godot/behavior-2.png"
+  ],
+  "defense_light_override_implemented": true,
+  "failures": [],
+  "flight_ai_implemented": false,
+  "mounted_hover_implemented": true,
+  "passed": true,
+  "player_piloting_implemented": false,
+  "reference": "behavior-fixture.json executes original JS callback",
+  "samples": [
+    {
+      "energy": 0.72299998998642,
+      "position": "(2.065836, 3.087782, 4.0)",
+      "time": 0.0
+    },
+    {
+      "energy": 0.797194004058838,
+      "position": "(2.134346, 3.179127, 4.0)",
+      "time": 0.25
+    },
+    {
+      "energy": 0.670041978359222,
+      "position": "(2.191718, 3.255624, 4.0)",
+      "time": 0.75
+    },
+    {
+      "energy": 0.654973983764648,
+      "position": "(2.170374, 3.227165, 4.0)",
+      "time": 1.0
+    },
+    {
+      "energy": 0.659257352352142,
+      "position": "(1.89026, 2.85368, 4.0)",
+      "time": 2.0
+    },
+    {
+      "energy": 0.798970341682434,
+      "position": "(1.808487, 2.744649, 4.0)",
+      "time": 10.0
+    }
+  ],
+  "world_integrated": false
+}

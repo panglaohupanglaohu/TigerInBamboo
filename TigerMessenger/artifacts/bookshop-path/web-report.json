@@ -1,0 +1,57 @@
+{
+  "source": {
+    "source": "assets/models/optimized/bookshop-art-v3.blend",
+    "sha256": "e2b65549a56af4f37ca3d1f9f0b7cdbebf223fbebc6cadd8d202fcad1956b3a5",
+    "stones": 4
+  },
+  "groundAdapted": true,
+  "triangles": 176,
+  "beforeStats": {
+    "frame": 1,
+    "calls": 2997,
+    "triangles": 375394,
+    "points": 0,
+    "lines": 139
+  },
+  "afterStats": {
+    "frame": 2,
+    "calls": 2998,
+    "triangles": 375570,
+    "points": 0,
+    "lines": 139
+  },
+  "samples": [
+    {
+      "stone": 0,
+      "radialClearance": 0.4267371376368203
+    },
+    {
+      "stone": 1,
+      "radialClearance": 0.09897718276693013
+    },
+    {
+      "stone": 2,
+      "radialClearance": 0.0778906061682676
+    },
+    {
+      "stone": 3,
+      "radialClearance": 0.06841553572402859
+    }
+  ],
+  "start": [
+    43.318813471855236,
+    156.80544202512218,
+    28.41894450325367
+  ],
+  "chapter": 0,
+  "played": {
+    "position": [
+      45.14463456863343,
+      157.41213156187445,
+      25.51401748048325
+    ],
+    "grounded": true,
+    "chapter": 1
+  },
+  "errors": []
+}

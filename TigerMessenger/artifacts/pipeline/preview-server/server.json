@@ -1,0 +1,10 @@
+{
+  "url": "http://127.0.0.1:8765/TigerMessenger/",
+  "pid": 45669,
+  "http_status": 200,
+  "log": "artifacts/pipeline/preview-server/8765.log",
+  "previous_pid": 17696,
+  "previous_failure": "Empty HTTP reply; old server stdout/stderr pipes unavailable",
+  "started_unix": 1788896233.608196,
+  "note": "Same project directory and existing browser URL; file-backed logs, no foreground navigation."
+}

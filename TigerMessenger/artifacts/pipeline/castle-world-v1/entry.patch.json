@@ -1,0 +1,39 @@
+{
+  "schema": "TigerMessenger.castle-world-entry.v1",
+  "status": "ready-for-root-integration; isolated actual-world test passed; active original_world.gd not modified",
+  "targetFile": "godot/scripts/original_world.gd",
+  "resource": "res://assets/art-pilots/castle-shared-edge-town-v1.glb",
+  "adapter": "res://scripts/castle_world_adapter.gd",
+  "sourcePath": "castleContainer[69]",
+  "attachment": "candidate identity child of existing castleContainer; original global transform retained",
+  "replacesOnly": [
+    "citadel-layer-0",
+    "citadel-layer-1",
+    "citadel-layer-2",
+    "citadel-layer-3",
+    "citadel-layer-4",
+    "citadel-layer-5",
+    "citadel-layer-6",
+    "citadel-layer-7",
+    "citadel-layer-8",
+    "citadel-layer-9",
+    "citadel-layer-10",
+    "citadel-layer-11"
+  ],
+  "suggestedIntegration": {
+    "member": "var castle_adapter = preload(\"res://scripts/castle_world_adapter.gd\").new()",
+    "afterModelAdded": "if castle_adapter.bind(model): castle_adapter.set_enabled(true)",
+    "toggle": "castle_adapter.set_enabled(value)",
+    "cleanup": "castle_adapter.unbind()",
+    "focus": "use existing odysseyCitadel region entry; no invented/new global location"
+  },
+  "rollback": "set_enabled(false) restores original layer visibility; unbind also releases candidate; original GLB remains intact",
+  "requiredLabel": "共享边WFC输出 · 原位静态候选；原布局保留，细节与默认版有差异；交互/碰撞/战斗仍待接入",
+  "limitations": [
+    "This exports existing shared-edge production factory output; it does not port the JS solver to Godot.",
+    "Default Web flags remain false; no user saved layout changed.",
+    "Default WFC-off town 95396 triangles vs candidate 92424. Same original town layout, but not identical default geometry.",
+    "Only old-WFC graph vs shared-edge graph triangles are equal at 1e-4 tolerance.",
+    "No claim of full Townscaper replication or walkability/combat completion."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "leviathanIsland",
+  "label": "鲲",
+  "family": "leviathanIsland",
+  "relationship": "original whale/island factory; distinct from swamp_whale; six garden scenes assembled separately at runtime",
+  "representative": true,
+  "sourceSnapshot": {
+    "path": "assets/models/originals/leviathan/leviathanIsland.source.json",
+    "exists": true,
+    "bytes": 872523
+  },
+  "exportSource": {
+    "path": "assets/models/originals/leviathan/blender-r3/leviathanIsland.blend",
+    "exists": true,
+    "why": "原工厂归档，未优化，未含鲸背六景"
+  },
+  "godot": {
+    "file": "godot/assets/supplemental/leviathanIsland.glb",
+    "res": "res://assets/supplemental/leviathanIsland.glb",
+    "exists": true
+  },
+  "scale": {
+    "revision": 3,
+    "asset": "leviathanIsland",
+    "nodes": 295,
+    "meshDatablocks": 173,
+    "verticesIncludingOutline": 10604,
+    "maxLocalVertexError": 0,
+    "expandedInstances": 0,
+    "maxInstanceMatrixError": 0,
+    "primitiveNodes": {
+      "Line": 0,
+      "LineSegments": 0,
+      "LineLoop": 0,
+      "Points": 0
+    },
+    "warnings": [],
+    "status": "imported original; optimization and render parity pending"
+  },
+  "knownGaps": [
+    "这是原工厂本体、浮岛地台及工厂植被的独立归档，不含saihojiGarden.js运行时装到鲸背的六景；不能直接替换完整鲸背场景根节点。",
+    "非swamp_whale；没有改造原作造型或完成美术优化。",
+    "原始默认姿态及可见性保留，180个隐藏mesh未强制显示；程序升降、摆尾、眨眼、雨滴和鲸背六景行为未迁移。"
+  ],
+  "status": "partial"
+}

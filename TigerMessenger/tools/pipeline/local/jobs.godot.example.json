@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "purpose": "Three bounded Godot candidate regressions; fresh private snapshots, no active-editor import or visual approval.",
+  "execution": "Serial; every run retains an isolated temporary project and requires a new report output path.",
+  "jobs": [
+    {
+      "id": "godot-tiger-world",
+      "asset_id": "moebiusTiger",
+      "inputs": [
+        "godot",
+        "artifacts/pipeline/roman-armor-v3-direction/assembly.json",
+        "artifacts/pipeline/20260909-integration-checkpoint.json",
+        "tools/pipeline/local/godot_jobs.py"
+      ],
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "tools/pipeline/local/godot_jobs.py",
+        "--job",
+        "godot-tiger-world",
+        "--output",
+        "{run_dir}/report.json"
+      ],
+      "cwd": ".",
+      "expected_reports": [
+        "{run_dir}/report.json"
+      ],
+      "timeout_seconds": 360,
+      "success_criteria": {
+        "exit_code": 0,
+        "report_equals": {
+          "passed": true,
+          "input_snapshot_still_current": true,
+          "visual_approved": false,
+          "active_editor_import_performed": false
+        },
+        "regression": {
+          "passed": true,
+          "sameWorldTransform": true
+        }
+      },
+      "existing_script": "godot/scripts/test_tiger_world_deployment.gd",
+      "scope": "Structural/static regression only; no foreground refresh, visual or full gameplay acceptance.",
+      "resource_lock": "godot",
+      "screenshots_enabled": false,
+      "visual_inputs": [
+        {
+          "path": "assets/references/tiger/user-target-20260909.png",
+          "type": "reference"
+        },
+        {
+          "path": "artifacts/pipeline/tiger-anatomy-v3/godot-after-view0.png",
+          "type": "render"
+        }
+      ],
+      "visual_input_note": "Previously captured anatomy v3 candidate view; submitted as context only, not a fresh screenshot from this headless regression."
+    },
+    {
+      "id": "godot-roman-armor",
+      "asset_id": "romanSoldier_gladius_red",
+      "inputs": [
+        "godot",
+        "artifacts/pipeline/roman-armor-v3-direction/assembly.json",
+        "artifacts/pipeline/20260909-integration-checkpoint.json",
+        "tools/pipeline/local/godot_jobs.py"
+      ],
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "tools/pipeline/local/godot_jobs.py",
+        "--job",
+        "godot-roman-armor",
+        "--output",
+        "{run_dir}/report.json"
+      ],
+      "cwd": ".",
+      "expected_reports": [
+        "{run_dir}/report.json"
+      ],
+      "timeout_seconds": 360,
+      "success_criteria": {
+        "exit_code": 0,
+        "report_equals": {
+          "passed": true,
+          "input_snapshot_still_current": true,
+          "visual_approved": false,
+          "active_editor_import_performed": false
+        },
+        "regression": {
+          "failures": [],
+          "cases": 252,
+          "variants": [
+            "blue",
+            "red"
+          ],
+          "maxGripError_lt": 1e-05,
+          "minimumBodySeparation_gt": 0.002,
+          "minimumSwordSeparation_gt": 0.002
+        }
+      },
+      "existing_script": "godot/scripts/test_roman_armor_direction.gd",
+      "scope": "Structural/static regression only; no foreground refresh, visual or full gameplay acceptance.",
+      "related_asset_ids": [
+        "romanSoldier_gladius_blue"
+      ],
+      "resource_lock": "godot",
+      "screenshots_enabled": false
+    },
+    {
+      "id": "godot-castle-world",
+      "asset_id": null,
+      "inputs": [
+        "godot",
+        "artifacts/pipeline/roman-armor-v3-direction/assembly.json",
+        "artifacts/pipeline/20260909-integration-checkpoint.json",
+        "tools/pipeline/local/godot_jobs.py"
+      ],
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "tools/pipeline/local/godot_jobs.py",
+        "--job",
+        "godot-castle-world",
+        "--output",
+        "{run_dir}/report.json"
+      ],
+      "cwd": ".",
+      "expected_reports": [
+        "{run_dir}/report.json"
+      ],
+      "timeout_seconds": 360,
+      "success_criteria": {
+        "exit_code": 0,
+        "report_equals": {
+          "passed": true,
+          "input_snapshot_still_current": true,
+          "visual_approved": false,
+          "active_editor_import_performed": false
+        },
+        "regression": {
+          "passed": true,
+          "hiddenTownLayers": 12,
+          "originalNodesChecked_gte": 20202,
+          "originalCastleGlobalTransformPreserved": true
+        }
+      },
+      "existing_script": "godot/scripts/test_castle_world_adapter.gd",
+      "scope": "Structural/static regression only; no foreground refresh, visual or full gameplay acceptance.",
+      "asset_id_note": "Original world placement identity, not an independent asset-registry row.",
+      "resource_lock": "godot",
+      "screenshots_enabled": false,
+      "world_placement": "castleContainer"
+    }
+  ]
+}

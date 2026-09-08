@@ -38,8 +38,9 @@ import {
   townGridSignature,
 } from "./citadel/wfcTownWiring.js";
 import { resolveIncremental } from "./citadel/wfcIncremental.js";
+import { createFaceLayerGraph, createLegacyFaceLayout } from "./citadel/faceLayerGraph.js";
 import { assembleCornerBody } from "./citadel/cornerAssembly.js";
-import { cellCageCorners, cageMapUnit } from "./citadel/cageDeform.js";
+import { cellCageCorners, cageMapUnit, faceCageFromGraph } from "./citadel/cageDeform.js";
 import { citadelColumnCenter } from "./citadel/gridMigration.js";
 
 /** 编辑器（citadelEditorPanel / townscaper.html）与主场景共用的布局存档键。 */
@@ -471,8 +472,31 @@ export function makeExposedCellGeometry(cs, ch, expose, ix, iz, floor = 0, cage 
   geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
   geo.setAttribute("normal", new THREE.Float32BufferAttribute(nrm, 3));
   geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  // A sheared cage changes wall directions. Axis normals would light a sloped
+  // wall as if it were still square; keep the authored legacy path unchanged.
+  if (cage) geo.computeVertexNormals();
   applyVerticalVertexColors(geo, 1.22, 0.68);
   return geo;
+}
+
+/** Wall-shell bridge: the same face graph supplies occupancy AND its cage.
+ * This does not move the legacy roof/window/decoration builders. Callers must
+ * integrate those owners before deploying a deformed complete town.
+ */
+export function makeExposedFaceGeometry({ graph, cellIndex, cellSize = 2, cellHeight = 2, gridSize = 25 }) {
+  if (!Number.isFinite(cellSize) || !Number.isFinite(cellHeight) || !(cellSize > 0) || !(cellHeight > 0) || !Number.isInteger(gridSize) || gridSize < 1) {
+    throw new Error("Invalid face body dimensions");
+  }
+  const half = (gridSize - 1) / 2 * cellSize;
+  const cage = faceCageFromGraph(graph, cellIndex, { scale: cellSize, offset: [-half, -half] });
+  const exposure = graph.exposure(cellIndex);
+  if (!exposure) throw new Error("Missing face body exposure");
+  // Foreign-color occupied faces are still neighbors: no coincident internal
+  // wall is emitted. A genuinely empty lower layer exposes the underside.
+  const expose = Object.fromEntries(Object.entries({px:"E",nx:"W",py:"U",ny:"D",pz:"S",nz:"N"})
+    .map(([axis, side]) => [axis, exposure[side] === "air"]));
+  const geometry = makeExposedCellGeometry(cellSize, cellHeight, expose, 0, 0, cage.level, cage);
+  return { geometry, center: [cage.cx, (cage.level + 0.5) * cellHeight, cage.cz], faceId: cage.faceId, level: cage.level, expose };
 }
 
 export function makeDistortedCellGeometry(source, ix, iz, floor = 0) {
@@ -1568,6 +1592,10 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   const at = (ix, iy, iz) => gridFlat.get((ix << 12) | (iy << 6) | iz) ?? ".";
 
   const wfcOn = (ctx.wfcTownV1 ?? P.wfcTownV1) === true && grid.size > 0;
+  // First production topology bridge preserves every original street edge.
+  // Arbitrary remeshed faces are not admitted to the legacy geometry builder.
+  const wfcGraph = wfcOn && ctx.wfcTopology === "legacy-faces"
+    ? createFaceLayerGraph(createLegacyFaceLayout(grid)) : null;
   let wfcOracle = makeTownRoleOracle(null);
   let wfcReport = { enabled: false, ok: false };
   if (wfcOn) {
@@ -1583,18 +1611,21 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         grid,
         seed,
         previous: cache.wfcTownSelection.value.byCell,
+        graph: wfcGraph,
         dirtyKeys,
       });
       const roleAt = (ix, iy, iz) => inc.byCell?.[`${ix},${iy},${iz}`]?.variant ?? null;
       selection = { ...inc, roleAt, fromCache: false };
       if (inc.ok && cache) {
         cache.wfcTownSelection = {
-          sig: `${townGridSignature(grid)}|${seed}`,
-          value: { ok: true, byCell: inc.byCell, hash: inc.hash ?? null, roleAt },
+          sig: wfcGraph ? `face:${wfcGraph.topologyHash}|${seed}` : `${townGridSignature(grid)}|${seed}`,
+          value: { ok: true, byCell: inc.byCell, hash: inc.hash ?? null, roleAt,
+            topologyHash: inc.topologyHash ?? null, roleAtFace: inc.roleAtFace,
+            unresolved: inc.unresolved ?? [] },
         };
       }
     } else {
-      selection = resolveTownSelection(grid, { cache, seed });
+      selection = resolveTownSelection(grid, { cache, seed, graph: wfcGraph });
     }
     wfcOracle = makeTownRoleOracle(selection);
     wfcReport = {
@@ -1604,6 +1635,8 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       fromCache: selection.fromCache === true,
       unresolved: selection.unresolved?.length ?? 0,
       hash: selection.hash ?? null,
+      topology: wfcGraph ? "legacy-faces" : "legacy-grid",
+      topologyHash: wfcGraph?.topologyHash ?? null,
     };
   }
   // V3 簇配色（C2）：同字符 4 连通簇 + 朝向近似；非 V3 的 shade 工厂忽略第五参

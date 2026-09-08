@@ -1,0 +1,99 @@
+00:00.363  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/blender-r3/classicAliFox.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+04:14:25 | INFO: Starting glTF 2.0 export
+04:14:25 | INFO: Extracting primitive: fox-chest-mesh.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: fox-neck-base.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-neck-top.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: n68.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: n70.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: n73.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: n75.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: fox-walk-head-shell.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n63.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: n65.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: n77.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n79.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n81.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n83.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n86.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n88.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n90.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n93.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n95.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n97.001
+04:14:25 | INFO: Primitives created: 2
+04:14:25 | INFO: Extracting primitive: n58.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: fox-walk-leg-0.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: fox-walk-leg-1.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: n47.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n49.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n51.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-1.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-2.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-3.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-4.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-5.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-6.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-7.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-tail-flame-tip.001
+04:14:25 | INFO: Primitives created: 3
+04:14:25 | INFO: Extracting primitive: fox-hips-mesh.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: fox-walk-leg-2.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: fox-walk-leg-3.001
+04:14:25 | INFO: Primitives created: 6
+04:14:25 | INFO: Extracting primitive: n4.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n6.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n8.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: fox-mid-mesh.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Extracting primitive: n42.001
+04:14:25 | INFO: Primitives created: 1
+04:14:25 | INFO: Finished glTF 2.0 export in 0.05970573425292969 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/godot-export/classicAliFox.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

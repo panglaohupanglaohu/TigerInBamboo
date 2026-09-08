@@ -1,0 +1,1739 @@
+{
+  "generatedBy": "tools/originals/export_godot_originals.py",
+  "blender": "/Applications/Blender.app/Contents/MacOS/Blender",
+  "counts": {
+    "ok": 0,
+    "partial": 72,
+    "failed": 0
+  },
+  "results": [
+    {
+      "id": "bookshop",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/bookshop.blend",
+      "target": "godot/assets/originals/bookshop.glb",
+      "res": "res://assets/originals/bookshop.glb",
+      "blenderCounts": {
+        "objects": 59,
+        "visibleMeshes": 29,
+        "hiddenMeshes": 27,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 29,
+        "gltfMaterials": 11,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 167568,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "6a8a8a5bbf611e4713f643b31f129ff900ccc9a1a08bda6244652a3e36078ee2",
+      "outputSha256": "884ea0643ccb2eb2522b2be2d589c0a0801b53f0b447a66212ad1508d7d88ceb"
+    },
+    {
+      "id": "fox",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/fox.blend",
+      "target": "godot/assets/originals/fox.glb",
+      "res": "res://assets/originals/fox.glb",
+      "blenderCounts": {
+        "objects": 155,
+        "visibleMeshes": 22,
+        "hiddenMeshes": 105,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 22,
+        "gltfMaterials": 4,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 109508,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "94932cd0921e8d3a6e4da2636f6a1ed17d1cbf3a76a80442b83d5cf4f53f958d",
+      "outputSha256": "66e8bdbab78ee4957f9fd9313abbb8fabee783f7375e668acfdd7759437451e5"
+    },
+    {
+      "id": "fisherBoat",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/fisherBoat.blend",
+      "target": "godot/assets/originals/fisherBoat.glb",
+      "res": "res://assets/originals/fisherBoat.glb",
+      "blenderCounts": {
+        "objects": 626,
+        "visibleMeshes": 424,
+        "hiddenMeshes": 136,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 424,
+        "gltfMaterials": 18,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 2628036,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "cc82906a48e1e82025b84242dd4870889a98256eb2e6fe9ddc5068bc97d23010",
+      "outputSha256": "992967bb0bfd9dcd7bf5a2eecca777b76563cec49912c1ad93dd71c417fa901f"
+    },
+    {
+      "id": "citadelWatchtower",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/citadelWatchtower.blend",
+      "target": "godot/assets/originals/citadelWatchtower.glb",
+      "res": "res://assets/originals/citadelWatchtower.glb",
+      "blenderCounts": {
+        "objects": 29,
+        "visibleMeshes": 14,
+        "hiddenMeshes": 14,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 14,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 67780,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "b368bc49a461797c202259ab408c0109c8ad717306ec92442dccdf91df241fc6",
+      "outputSha256": "c58bef27ad6e6842f9cb9d471afa9fee5e9b27cdea5499ebdfe471dc7c3d5bcc"
+    },
+    {
+      "id": "classicAliFox",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/classicAliFox.blend",
+      "target": "godot/assets/originals/classicAliFox.glb",
+      "res": "res://assets/originals/classicAliFox.glb",
+      "blenderCounts": {
+        "objects": 103,
+        "visibleMeshes": 42,
+        "hiddenMeshes": 42,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 42,
+        "gltfMaterials": 4,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 205796,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "5fddb75fe9ee49d435fdd448dd213b4f54129bb01d9f50ea41ae528efd68ef83",
+      "outputSha256": "72ba1446659aeae41bb0c1330d5c58bebf03fc281ef5d72e5f40c8d72a4b5900"
+    },
+    {
+      "id": "moebiusTiger",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/moebiusTiger.blend",
+      "target": "godot/assets/originals/moebiusTiger.glb",
+      "res": "res://assets/originals/moebiusTiger.glb",
+      "blenderCounts": {
+        "objects": 80,
+        "visibleMeshes": 32,
+        "hiddenMeshes": 30,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 32,
+        "gltfMaterials": 8,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 150140,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "c901460d6f128bf9f0a30cb3a3a9fa363da7ca6509715e69a0ab474b3b970065",
+      "outputSha256": "cb4ec830188dd77022b81a9f9aed0b7354e1a29136e691c8d6545d3f2898f57a"
+    },
+    {
+      "id": "saihoji",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/saihoji.blend",
+      "target": "godot/assets/originals/saihoji.glb",
+      "res": "res://assets/originals/saihoji.glb",
+      "blenderCounts": {
+        "objects": 776,
+        "visibleMeshes": 298,
+        "hiddenMeshes": 122,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 298,
+        "gltfMaterials": 15,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 9871344,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "a977083a0cdf8e40bd92fe3c03f979128e3b819d895b28c4b6596f9c06932ca1",
+      "outputSha256": "7523a762e8d35b711d785e6d634c07cec15021c8438590fb425fea069fa9b8d8"
+    },
+    {
+      "id": "house",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/house.blend",
+      "target": "godot/assets/originals/house.glb",
+      "res": "res://assets/originals/house.glb",
+      "blenderCounts": {
+        "objects": 8,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 5,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 32116,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "65245df3be5d8a3155829c6aea1b7c96f652d2c8890fcfa40bc1af5e2c924cdd",
+      "outputSha256": "7d79d43c3cda257596d944dea28f95784d172165f256146b913e46048e3aa183"
+    },
+    {
+      "id": "pine",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/pine.blend",
+      "target": "godot/assets/originals/pine.glb",
+      "res": "res://assets/originals/pine.glb",
+      "blenderCounts": {
+        "objects": 17,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 4,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 5,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 355248,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "bb7377d4787d2ce3a8acedcc21ef239cba964b76a664963a6f3cdb13e6990bc2",
+      "outputSha256": "4f79656679ea1e1ffce29eed455434dbfb5a774ee9ca5e22b317ae8d674e8031"
+    },
+    {
+      "id": "signpost",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/signpost.blend",
+      "target": "godot/assets/originals/signpost.glb",
+      "res": "res://assets/originals/signpost.glb",
+      "blenderCounts": {
+        "objects": 6,
+        "visibleMeshes": 3,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 3,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 18396,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "c827d4cf01ef1f74078facded7b0f275d2fa651711ee4d0ca5ff5f768771886a",
+      "outputSha256": "0ae104da6ade585eacbe5dbc70e0b89d9b0031ccbdb1e271157bab975dfe9be9"
+    },
+    {
+      "id": "lamp",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/lamp.blend",
+      "target": "godot/assets/originals/lamp.glb",
+      "res": "res://assets/originals/lamp.glb",
+      "blenderCounts": {
+        "objects": 6,
+        "visibleMeshes": 3,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 3,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 25200,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "2765e736171c9f24b106b89b4a1a097c8b470c1e682d18ace9822cb52bb37a15",
+      "outputSha256": "5060c2cbd34db13dd6d0e01d733e0202bbfea8627e6fd58284da7f41ea1d56db"
+    },
+    {
+      "id": "pole",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/pole.blend",
+      "target": "godot/assets/originals/pole.glb",
+      "res": "res://assets/originals/pole.glb",
+      "blenderCounts": {
+        "objects": 8,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 28144,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "411158c14f3b78579a1133bcc7b7f3b9e0148222f381cc5770a1200d79adb2d2",
+      "outputSha256": "69f3df9cc5d98718fb09697026521d1799e1bb8d128897b2efd5a37512f58b44"
+    },
+    {
+      "id": "rock",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/rock.blend",
+      "target": "godot/assets/originals/rock.glb",
+      "res": "res://assets/originals/rock.glb",
+      "blenderCounts": {
+        "objects": 3,
+        "visibleMeshes": 1,
+        "hiddenMeshes": 1,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 1,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 11684,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "853076877f7b1c5d60f7a661a71bb6ee07cb2917ab7de6a15fce376c8a83c94e",
+      "outputSha256": "3b4df18dff724bbb5ee8d42b52f912447259fc828819d13e0803a306a997ba4d"
+    },
+    {
+      "id": "hydrangea",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/hydrangea.blend",
+      "target": "godot/assets/originals/hydrangea.glb",
+      "res": "res://assets/originals/hydrangea.glb",
+      "blenderCounts": {
+        "objects": 32,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 5,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 355988,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "26bc90331355d7fdf40a157f95c9b5398ef474336b091238d390e4b382eff078",
+      "outputSha256": "b4af780341f16252115e70e9473b5d461731c8e46918d48fc92c5a3aadff1d13"
+    },
+    {
+      "id": "flower",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/flower.blend",
+      "target": "godot/assets/originals/flower.glb",
+      "res": "res://assets/originals/flower.glb",
+      "blenderCounts": {
+        "objects": 4,
+        "visibleMeshes": 3,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 3,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 16936,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "ca18d2b952871d1814b26771b4ef6626cd9bd2e31b5a4ba1665df0bffad8fa08",
+      "outputSha256": "56bd4f96411fda032ab81367d7196489bace6caf8657a7e4169252e03bd9136f"
+    },
+    {
+      "id": "lawnHill",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/lawnHill.blend",
+      "target": "godot/assets/originals/lawnHill.glb",
+      "res": "res://assets/originals/lawnHill.glb",
+      "blenderCounts": {
+        "objects": 11,
+        "visibleMeshes": 9,
+        "hiddenMeshes": 1,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 9,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 70700,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "5d39ab193f45fa91f79199690be12bc50f8ea1eb629ca1764d233924bf126945",
+      "outputSha256": "b4e1af97314b3e09d15dece2b3f25c6b9cc8ca450034d93f8735d2f32f4b2fdc"
+    },
+    {
+      "id": "harborCrane",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/harborCrane.blend",
+      "target": "godot/assets/originals/harborCrane.glb",
+      "res": "res://assets/originals/harborCrane.glb",
+      "blenderCounts": {
+        "objects": 29,
+        "visibleMeshes": 14,
+        "hiddenMeshes": 14,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 14,
+        "gltfMaterials": 5,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 89508,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "b8d80a7b187632b3d4b6e88d2d7b8587673ab2e2b2516e7fc171060542d21f42",
+      "outputSha256": "51af37556c4caeb8e6496e9d47ec7cc96c39743670151b5ce3e3d36e16e7a120"
+    },
+    {
+      "id": "stackedCrates",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/stackedCrates.blend",
+      "target": "godot/assets/originals/stackedCrates.glb",
+      "res": "res://assets/originals/stackedCrates.glb",
+      "blenderCounts": {
+        "objects": 135,
+        "visibleMeshes": 59,
+        "hiddenMeshes": 59,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 59,
+        "gltfMaterials": 4,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 310020,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "170399def9c1c95d6bc95c9544173854c376b5dd45f9493511c26aec563b040b",
+      "outputSha256": "a5276b8e87d77d8af727507a7d67b93b819d23b19bf67c88466f7678f49d229a"
+    },
+    {
+      "id": "oldHarbor",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/oldHarbor.blend",
+      "target": "godot/assets/originals/oldHarbor.glb",
+      "res": "res://assets/originals/oldHarbor.glb",
+      "blenderCounts": {
+        "objects": 1048,
+        "visibleMeshes": 602,
+        "hiddenMeshes": 321,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 602,
+        "gltfMaterials": 29,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 3639812,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "217a3007585bb5e5ccb61f0281ac5fc0038e137eaa612624ed5298ea220ad073",
+      "outputSha256": "fbe8918fa36708e6b5fc70f9ed4c4ae8ffa557142dcb36b37d726faf3487ad10"
+    },
+    {
+      "id": "citadelElderTree",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/citadelElderTree.blend",
+      "target": "godot/assets/originals/citadelElderTree.glb",
+      "res": "res://assets/originals/citadelElderTree.glb",
+      "blenderCounts": {
+        "objects": 31,
+        "visibleMeshes": 15,
+        "hiddenMeshes": 15,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 15,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 57908,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "6ebc2e3e1096c10d85dbe65799a6c8966585f4418fd4f679694178633332b312",
+      "outputSha256": "b0d12bc6369849e349aba93c6cc16503d627ea49c4cbbe49806fe3299722e59b"
+    },
+    {
+      "id": "snowMassif",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/snowMassif.blend",
+      "target": "godot/assets/originals/snowMassif.glb",
+      "res": "res://assets/originals/snowMassif.glb",
+      "blenderCounts": {
+        "objects": 36,
+        "visibleMeshes": 14,
+        "hiddenMeshes": 14,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 14,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 28288,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "4462bdd49db661c8a51b3d7d13923030fa4b049d49fe4e75639d19941278e60f",
+      "outputSha256": "72fe4c02f00846a49d6ecf0427b3530a1ba5a4c17a07b1ab944e310dc6e0beb1"
+    },
+    {
+      "id": "snowMountainPeak",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/snowMountainPeak.blend",
+      "target": "godot/assets/originals/snowMountainPeak.glb",
+      "res": "res://assets/originals/snowMountainPeak.glb",
+      "blenderCounts": {
+        "objects": 5,
+        "visibleMeshes": 2,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 2,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 8508,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "5376364ec05950cbd0394e29eb2df734e83d1badb3ef151799d787f5a59e2cc5",
+      "outputSha256": "82973efd75a3837004c91bd9a0db37e8f71ded1b1d9cdb3fdb35e020664fbff7"
+    },
+    {
+      "id": "moebiusSwamp",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/moebiusSwamp.blend",
+      "target": "godot/assets/originals/moebiusSwamp.glb",
+      "res": "res://assets/originals/moebiusSwamp.glb",
+      "blenderCounts": {
+        "objects": 4576,
+        "visibleMeshes": 2418,
+        "hiddenMeshes": 1878,
+        "edgeOnlyMeshes": 4,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 2418,
+        "gltfMaterials": 463,
+        "gltfImages": 2,
+        "animationClips": 0
+      },
+      "bytes": 12477276,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "14a66c3fe9a470f1c22ed321cf7faeb0e6aa40d2f83a557eb2a1efa4a3472d83",
+      "outputSha256": "6ddf049e0bdd6f775d79565ca08c201be1d8c71f0d6a18264e3e72945f60811c"
+    },
+    {
+      "id": "moebiusTower",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/moebiusTower.blend",
+      "target": "godot/assets/originals/moebiusTower.glb",
+      "res": "res://assets/originals/moebiusTower.glb",
+      "blenderCounts": {
+        "objects": 162,
+        "visibleMeshes": 74,
+        "hiddenMeshes": 77,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 74,
+        "gltfMaterials": 24,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 461268,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "0e82d05c10b2cec40e6dea4f47187fb0357cec3c0c9d37db4527aa015a13029a",
+      "outputSha256": "3e0b5ee985ff55be7506a144b3e87f71d1f584826f702c433e9d7065cd0f4ee4"
+    },
+    {
+      "id": "moebiusAirship",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/moebiusAirship.blend",
+      "target": "godot/assets/originals/moebiusAirship.glb",
+      "res": "res://assets/originals/moebiusAirship.glb",
+      "blenderCounts": {
+        "objects": 283,
+        "visibleMeshes": 131,
+        "hiddenMeshes": 131,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 131,
+        "gltfMaterials": 9,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 677568,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "4efde4485f7fb063f7c4039a1dbc2b3b1641cb7e0bd9c122d223f50263d40723",
+      "outputSha256": "60140180c4f4f4827f4f7fd6c692bae1762618a5e8ece92fbed629ab4157f1b3"
+    },
+    {
+      "id": "moebiusAircraft",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/moebiusAircraft.blend",
+      "target": "godot/assets/originals/moebiusAircraft.glb",
+      "res": "res://assets/originals/moebiusAircraft.glb",
+      "blenderCounts": {
+        "objects": 67,
+        "visibleMeshes": 31,
+        "hiddenMeshes": 25,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 31,
+        "gltfMaterials": 19,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 539064,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "f0b0a0fc7703c6e5f832800c9a978afd547c69040d0cb1aa4457f7acc03950a7",
+      "outputSha256": "18935f2d68a62e74e942cfbb5dbe2beb6d0511d6a901f93c27abadc5c3778c87"
+    },
+    {
+      "id": "tram",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/tram.blend",
+      "target": "godot/assets/originals/tram.glb",
+      "res": "res://assets/originals/tram.glb",
+      "blenderCounts": {
+        "objects": 143,
+        "visibleMeshes": 75,
+        "hiddenMeshes": 67,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 75,
+        "gltfMaterials": 22,
+        "gltfImages": 2,
+        "animationClips": 0
+      },
+      "bytes": 389252,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "869355d56b0ab6c862f1beb1e79ffa216958c4add88dfa5d13d184e30001877d",
+      "outputSha256": "18a9d051ba883022290203f07882668b58b9b654f7eab746d6caa461f3c8b2a8"
+    },
+    {
+      "id": "bubblePod",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/bubblePod.blend",
+      "target": "godot/assets/originals/bubblePod.glb",
+      "res": "res://assets/originals/bubblePod.glb",
+      "blenderCounts": {
+        "objects": 35,
+        "visibleMeshes": 17,
+        "hiddenMeshes": 14,
+        "edgeOnlyMeshes": 1,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 17,
+        "gltfMaterials": 13,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 236216,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "0e48add64363234549d51f3db1e67238a59692117f86d68befce270af3467e01",
+      "outputSha256": "522decbead39f657b5f0149f32e67a7c318e0a3ef6737b79174b6ec610d22d17"
+    },
+    {
+      "id": "fence",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/fence.blend",
+      "target": "godot/assets/originals/fence.glb",
+      "res": "res://assets/originals/fence.glb",
+      "blenderCounts": {
+        "objects": 5,
+        "visibleMeshes": 4,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 4,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 22000,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "8e308e419ae72511c3a8fa72ce003a460c8662c36d10639ed75fa8905a03e2f8",
+      "outputSha256": "85845d5beb136e55968f2c386984a9dcda9b50d1d8d3b3ae04ab86271564acb9"
+    },
+    {
+      "id": "bridge",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/bridge.blend",
+      "target": "godot/assets/originals/bridge.glb",
+      "res": "res://assets/originals/bridge.glb",
+      "blenderCounts": {
+        "objects": 6,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 31064,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "b969d0d526f86e506ce437f62a347535f0d5aab2d51350872e3ae576946c1c11",
+      "outputSha256": "739f2a0a8653c7196928c25184c9beb8afb738a2512cdcf3f9530158462ed3cc"
+    },
+    {
+      "id": "lowPolyTree",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/lowPolyTree.blend",
+      "target": "godot/assets/originals/lowPolyTree.glb",
+      "res": "res://assets/originals/lowPolyTree.glb",
+      "blenderCounts": {
+        "objects": 101,
+        "visibleMeshes": 42,
+        "hiddenMeshes": 42,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 42,
+        "gltfMaterials": 6,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 144960,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "83d9280b2ef6656e0be5312d934587bee44da07fafbd2716ddd3039da4b7e8a9",
+      "outputSha256": "1880fb5c25d4e7b74855d8c4708ea9d5a42871698ecb9cc37f22010248716179"
+    },
+    {
+      "id": "cloud",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/cloud.blend",
+      "target": "godot/assets/originals/cloud.glb",
+      "res": "res://assets/originals/cloud.glb",
+      "blenderCounts": {
+        "objects": 11,
+        "visibleMeshes": 10,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 10,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 65544,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "4c4e0e89c4122931bd1358e31765e7962baa5ac8f2f1ae0b1a3eb7e0d01f1631",
+      "outputSha256": "2058eae6df1380f0adbcafc2c35fd667414d90c1167d305177ebd76672f00069"
+    },
+    {
+      "id": "blackRock",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/blackRock.blend",
+      "target": "godot/assets/originals/blackRock.glb",
+      "res": "res://assets/originals/blackRock.glb",
+      "blenderCounts": {
+        "objects": 3,
+        "visibleMeshes": 1,
+        "hiddenMeshes": 1,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 1,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 11668,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "8ff0bc5655e04e41064b865933d56085d4bb53fc270b6e11c570921fc7246c7d",
+      "outputSha256": "c5828f71824a6dacd9d18ea4a72fdfdfca3d9fe720bc448011429b38fb437928"
+    },
+    {
+      "id": "craneOnRock",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/craneOnRock.blend",
+      "target": "godot/assets/originals/craneOnRock.glb",
+      "res": "res://assets/originals/craneOnRock.glb",
+      "blenderCounts": {
+        "objects": 34,
+        "visibleMeshes": 14,
+        "hiddenMeshes": 14,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 14,
+        "gltfMaterials": 4,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 69608,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "60ec93a2af69fce2f77b6be5961b76539c2baeea32bb04c369b00013f46fb3de",
+      "outputSha256": "2d39b12bf4e6937aacc0c25528d27c5735d5c4799b22f8da2c98298f903f8721"
+    },
+    {
+      "id": "bird",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/bird.blend",
+      "target": "godot/assets/originals/bird.glb",
+      "res": "res://assets/originals/bird.glb",
+      "blenderCounts": {
+        "objects": 8,
+        "visibleMeshes": 3,
+        "hiddenMeshes": 3,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 3,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 9672,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "0826d31cabeaf511bdbe83f1434e709db159c388db3a7f209c9ed31361d61aba",
+      "outputSha256": "187e45c11ffc3168696eedf221889615858f38c27525db64503fbc08340a8d34"
+    },
+    {
+      "id": "longWingGlider",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/longWingGlider.blend",
+      "target": "godot/assets/originals/longWingGlider.glb",
+      "res": "res://assets/originals/longWingGlider.glb",
+      "blenderCounts": {
+        "objects": 16,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 5,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 15692,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "3a3957e124df2ba9663c0c5ed0dd7e9c100a3f3152eb3769c19a5d12bb227d12",
+      "outputSha256": "9d572d72672487ee1129321f9ea5ff244f2875313c0b84ebd3ae9fbe2534bc45"
+    },
+    {
+      "id": "craneNPC",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/craneNPC.blend",
+      "target": "godot/assets/originals/craneNPC.glb",
+      "res": "res://assets/originals/craneNPC.glb",
+      "blenderCounts": {
+        "objects": 30,
+        "visibleMeshes": 13,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 13,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 58124,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "bc014794be440d33e40cc6d49c5fb8a114b4e4da2affda09badd45a539dd35e3",
+      "outputSha256": "42ae5568c576470ede82795086e867a5d3c21ed2e480047ae168304c6ef412f9"
+    },
+    {
+      "id": "messenger",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/messenger.blend",
+      "target": "godot/assets/originals/messenger.glb",
+      "res": "res://assets/originals/messenger.glb",
+      "blenderCounts": {
+        "objects": 15,
+        "visibleMeshes": 13,
+        "hiddenMeshes": 1,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 13,
+        "gltfMaterials": 6,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 63652,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "787e1000f18ebba06a83d8a63d64dec73c2c09585e9d1a701810e5252e2411f5",
+      "outputSha256": "567e1840aa06d027bfe35faeb7dcd62130e4c96d64b1262c3cdb48c949fa3bdb"
+    },
+    {
+      "id": "agentMessenger",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/agentMessenger.blend",
+      "target": "godot/assets/originals/agentMessenger.glb",
+      "res": "res://assets/originals/agentMessenger.glb",
+      "blenderCounts": {
+        "objects": 13,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 1,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 67888,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "ba1aac557c20b07e66c9210a234699d8e2b40ac724671c99aedfa45dc316b5e1",
+      "outputSha256": "11a7cd85eb6fd87a34a97f65cb2f14a718e9b3e8d4bd7b44866a47c7d4e3e551"
+    },
+    {
+      "id": "bookshopHydrangeas",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/bookshopHydrangeas.blend",
+      "target": "godot/assets/originals/bookshopHydrangeas.glb",
+      "res": "res://assets/originals/bookshopHydrangeas.glb",
+      "blenderCounts": {
+        "objects": 233,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 5,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 3148748,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "48fd7a94a7bbcc5c8747c734947bce57186f26e036ea5a097d0afc9a89ec52c5",
+      "outputSha256": "08e31025394c3fb6b7cf32bece40b7b57c12f1547ae193ae39b0dd7a4f71a937"
+    },
+    {
+      "id": "grassTuft",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/grassTuft.blend",
+      "target": "godot/assets/originals/grassTuft.glb",
+      "res": "res://assets/originals/grassTuft.glb",
+      "blenderCounts": {
+        "objects": 4,
+        "visibleMeshes": 3,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 3,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 8740,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "5f9a43b16db1eb1bf5bfc4e78a5d088ab95b0251aab77ecdc06b1d347ea3c569",
+      "outputSha256": "daeadac52bf426c4d65f0ce40caefc8cc1cc9789894a5ed96262488fe7540378"
+    },
+    {
+      "id": "mossyGround",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/mossyGround.blend",
+      "target": "godot/assets/originals/mossyGround.glb",
+      "res": "res://assets/originals/mossyGround.glb",
+      "blenderCounts": {
+        "objects": 196,
+        "visibleMeshes": 98,
+        "hiddenMeshes": 97,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 98,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 512800,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "0d0e859095fb5fee920a8f7c07d1fa381eedc866d97e8a5d1116b28865ec705b",
+      "outputSha256": "e232a912a5fb17c5935e667edad468ce31c20404c74331cfa15a740bbd8c031e"
+    },
+    {
+      "id": "swamp_whale",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_whale.blend",
+      "target": "godot/assets/originals/swamp_whale.glb",
+      "res": "res://assets/originals/swamp_whale.glb",
+      "blenderCounts": {
+        "objects": 20,
+        "visibleMeshes": 10,
+        "hiddenMeshes": 9,
+        "edgeOnlyMeshes": 1,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 10,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 65280,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "a66c07fb98ed613abee2bc677441c8195f8510c02b65676c69a6cefca0e04bc5",
+      "outputSha256": "8d3aa633b93eed4cc455fc143338436b19acd8e8652e1207918507ee9ee19750"
+    },
+    {
+      "id": "swamp_worldTree",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_worldTree.blend",
+      "target": "godot/assets/originals/swamp_worldTree.glb",
+      "res": "res://assets/originals/swamp_worldTree.glb",
+      "blenderCounts": {
+        "objects": 42,
+        "visibleMeshes": 20,
+        "hiddenMeshes": 20,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 20,
+        "gltfMaterials": 10,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 433752,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "9e970c10c4d29055615ac27ddf8de3f1a8d9bc4144140061f4e4d2c7259eaa8b",
+      "outputSha256": "f0472876c920e25bc9fb122b78b573401d69f13b9cb98071ef153350d524fb6c"
+    },
+    {
+      "id": "swamp_nativeDoll",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_nativeDoll.blend",
+      "target": "godot/assets/originals/swamp_nativeDoll.glb",
+      "res": "res://assets/originals/swamp_nativeDoll.glb",
+      "blenderCounts": {
+        "objects": 13,
+        "visibleMeshes": 6,
+        "hiddenMeshes": 6,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 6,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 27708,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "e35fb46cc15e55fb8d0611ae4d8a8bdce2e07a898643b787b57ec1ea606ff879",
+      "outputSha256": "f1ab6cf73bbe7dc7f06c7d606b4fee16ef61bc74aa45e77f410f0d776f94eefc"
+    },
+    {
+      "id": "swamp_lotusLeafBoat",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_lotusLeafBoat.blend",
+      "target": "godot/assets/originals/swamp_lotusLeafBoat.glb",
+      "res": "res://assets/originals/swamp_lotusLeafBoat.glb",
+      "blenderCounts": {
+        "objects": 50,
+        "visibleMeshes": 24,
+        "hiddenMeshes": 21,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 24,
+        "gltfMaterials": 12,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 115940,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "dd16f4e33f99192cc921be43d45da9b158650f21f07d355dd013400bf1c04aae",
+      "outputSha256": "caa3874aea3d1ed0d60e733a7728b89541f40756dfc3c895aa05a9e420ad49be"
+    },
+    {
+      "id": "swamp_eel",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_eel.blend",
+      "target": "godot/assets/originals/swamp_eel.glb",
+      "res": "res://assets/originals/swamp_eel.glb",
+      "blenderCounts": {
+        "objects": 7,
+        "visibleMeshes": 4,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 4,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 81428,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "b78f2bfd8a8004571401f133dd061b237fb739fa2aadd6c358029ba7f5587577",
+      "outputSha256": "17f684ae7251460d3e7288fba1f283a7c6c5582b3e025e56612c60de27069f81"
+    },
+    {
+      "id": "swamp_tubeWorm",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_tubeWorm.blend",
+      "target": "godot/assets/originals/swamp_tubeWorm.glb",
+      "res": "res://assets/originals/swamp_tubeWorm.glb",
+      "blenderCounts": {
+        "objects": 25,
+        "visibleMeshes": 12,
+        "hiddenMeshes": 12,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 12,
+        "gltfMaterials": 7,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 73140,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "90349ad9bf2876f585d4381243cc200441dc4468acfe1b6db0cdc15f252efd8e",
+      "outputSha256": "f4a79db6a92ab4268a742508060f5e533185ae9538c0ca2f78664e187cbaecdc"
+    },
+    {
+      "id": "swamp_mushroom",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_mushroom.blend",
+      "target": "godot/assets/originals/swamp_mushroom.glb",
+      "res": "res://assets/originals/swamp_mushroom.glb",
+      "blenderCounts": {
+        "objects": 9,
+        "visibleMeshes": 4,
+        "hiddenMeshes": 4,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 4,
+        "gltfMaterials": 4,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 28360,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "be2a70456ef11df57dbff8ea2ae1ce5657f41e34a44b4d9564bbfe26f32d76d6",
+      "outputSha256": "07aa4ebfe543dd5ecc5a6d54fea016c3b8c023ebc1fcf6bdd6cbfe7f6a8718a9"
+    },
+    {
+      "id": "swamp_pinkHanger",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_pinkHanger.blend",
+      "target": "godot/assets/originals/swamp_pinkHanger.glb",
+      "res": "res://assets/originals/swamp_pinkHanger.glb",
+      "blenderCounts": {
+        "objects": 7,
+        "visibleMeshes": 4,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 4,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 37276,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "b2cb04f827a6afac40ee79a3c63aa2d6a857cd8ffbbba19e1ec50b3d99fedac6",
+      "outputSha256": "3d5b720bcb80fafb72a31c1ec8294987ee06c0719d2f5ccd2004c659788dc9cd"
+    },
+    {
+      "id": "swamp_bird",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_bird.blend",
+      "target": "godot/assets/originals/swamp_bird.glb",
+      "res": "res://assets/originals/swamp_bird.glb",
+      "blenderCounts": {
+        "objects": 10,
+        "visibleMeshes": 5,
+        "hiddenMeshes": 4,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 5,
+        "gltfMaterials": 5,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 21836,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "05ea708fbcdddd7f13d82560d811610ebcbee123f2b37b67ac469367e3b18375",
+      "outputSha256": "16c62f0d3a8f97e492dabf6d156a844fe10121e97c7327b086c41f34a9b153ed"
+    },
+    {
+      "id": "swamp_monkey",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_monkey.blend",
+      "target": "godot/assets/originals/swamp_monkey.glb",
+      "res": "res://assets/originals/swamp_monkey.glb",
+      "blenderCounts": {
+        "objects": 21,
+        "visibleMeshes": 10,
+        "hiddenMeshes": 10,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 10,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 60748,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "42598e107a4b51466330247f6ba8812f476cbf777944d4015bf848e3095e19da",
+      "outputSha256": "01df289ad58ae21f5860163d79421b71ff8d7fda94ac1ed7855dce2614faab89"
+    },
+    {
+      "id": "swamp_lizard",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_lizard.blend",
+      "target": "godot/assets/originals/swamp_lizard.glb",
+      "res": "res://assets/originals/swamp_lizard.glb",
+      "blenderCounts": {
+        "objects": 16,
+        "visibleMeshes": 8,
+        "hiddenMeshes": 7,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 8,
+        "gltfMaterials": 2,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 32328,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "05e1c2cb1e32d37d35f6ef8de0db66ed7a1229876ca6e17b7167cfa21feae9b0",
+      "outputSha256": "ba4396542202727498456281870c573c0096556410464373cad2b2580442bb1c"
+    },
+    {
+      "id": "swamp_ribbonFish",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_ribbonFish.blend",
+      "target": "godot/assets/originals/swamp_ribbonFish.glb",
+      "res": "res://assets/originals/swamp_ribbonFish.glb",
+      "blenderCounts": {
+        "objects": 5,
+        "visibleMeshes": 3,
+        "hiddenMeshes": 1,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 3,
+        "gltfMaterials": 3,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 18328,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "f686a595d21531e5ce6a7617647df4d6a09b085d44226b9f12bfd87080005303",
+      "outputSha256": "78ccb532f3c79c051f60aea8bff04c9294d1daf4b8e6d1b8e3b54365cd876e92"
+    },
+    {
+      "id": "swamp_shell",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_shell.blend",
+      "target": "godot/assets/originals/swamp_shell.glb",
+      "res": "res://assets/originals/swamp_shell.glb",
+      "blenderCounts": {
+        "objects": 5,
+        "visibleMeshes": 2,
+        "hiddenMeshes": 2,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 2,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 18552,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "fec64db5673f59c1549363f89d40062f04cca99099240cb5da52c72a83e30af6",
+      "outputSha256": "561036176862d53a9aa82a97fa8421f69d01be938ade66df74529bc9ebf8cb93"
+    },
+    {
+      "id": "swamp_rimPalm",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_rimPalm.blend",
+      "target": "godot/assets/originals/swamp_rimPalm.glb",
+      "res": "res://assets/originals/swamp_rimPalm.glb",
+      "blenderCounts": {
+        "objects": 17,
+        "visibleMeshes": 8,
+        "hiddenMeshes": 8,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 8,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 19176,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "06af6d98107becce2d9a02b5e096f17c618f3fde3ca13851fe45703571babc03",
+      "outputSha256": "e12adf13a00e9040d8152fec66bf0523c36495cd5f70ab22bb3499f70f3f2728"
+    },
+    {
+      "id": "swamp_toweringTree",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_toweringTree.blend",
+      "target": "godot/assets/originals/swamp_toweringTree.glb",
+      "res": "res://assets/originals/swamp_toweringTree.glb",
+      "blenderCounts": {
+        "objects": 171,
+        "visibleMeshes": 85,
+        "hiddenMeshes": 85,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 85,
+        "gltfMaterials": 6,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 374332,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "cbebe25d291f018467eb3c98f549c22e881442e67451d2a7c9b8f7e3cb6a6da1",
+      "outputSha256": "914c920d65d6810d4c0900b2320d6559798b1b3635a3f3d193f8b9892198484f"
+    },
+    {
+      "id": "swamp_canopy",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_canopy.blend",
+      "target": "godot/assets/originals/swamp_canopy.glb",
+      "res": "res://assets/originals/swamp_canopy.glb",
+      "blenderCounts": {
+        "objects": 182,
+        "visibleMeshes": 144,
+        "hiddenMeshes": 36,
+        "edgeOnlyMeshes": 108,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 144,
+        "gltfMaterials": 17,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 190116,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "7556a2c694884d0d0c7940c39ab33c59fe1e3bcfcfb5774b7cac14c60d4ab433",
+      "outputSha256": "21d39937ba6c4bc862d2a3c6f40c18d11e3d13336b0573d91aee4acef3d4c1fd"
+    },
+    {
+      "id": "swamp_glowFlower",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_glowFlower.blend",
+      "target": "godot/assets/originals/swamp_glowFlower.glb",
+      "res": "res://assets/originals/swamp_glowFlower.glb",
+      "blenderCounts": {
+        "objects": 15,
+        "visibleMeshes": 8,
+        "hiddenMeshes": 6,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 8,
+        "gltfMaterials": 4,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 28368,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "10dbc23ad82534e8831da193cc7c14e95facc0a0e09d1ecde942ec39ad23e9f5",
+      "outputSha256": "bafa1fc591cdc3acf56e5ef8e77337406636cf9a076c01094e3c6add753fd12b"
+    },
+    {
+      "id": "swamp_giantFlower",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_giantFlower.blend",
+      "target": "godot/assets/originals/swamp_giantFlower.glb",
+      "res": "res://assets/originals/swamp_giantFlower.glb",
+      "blenderCounts": {
+        "objects": 17,
+        "visibleMeshes": 9,
+        "hiddenMeshes": 7,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 9,
+        "gltfMaterials": 3,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 29540,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "4e695e30f92377db258727e517cc9f76106a113f2abbbf8c3a098b9a3b2afb82",
+      "outputSha256": "d68c42b7902566831374a262f8365894434ac77ab91289e1b695f3d3846e5cbf"
+    },
+    {
+      "id": "swamp_stamenSpike",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_stamenSpike.blend",
+      "target": "godot/assets/originals/swamp_stamenSpike.glb",
+      "res": "res://assets/originals/swamp_stamenSpike.glb",
+      "blenderCounts": {
+        "objects": 5,
+        "visibleMeshes": 3,
+        "hiddenMeshes": 1,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 3,
+        "gltfMaterials": 3,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 19668,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "f5d6ea8a338f2cd2aaca4986d839116c186c526a390d3727c13bc5566cb47e1b",
+      "outputSha256": "648443856664d33b05c18f5b3690407ec112a765634cf91bb4ecd0d82af60448"
+    },
+    {
+      "id": "swamp_fishSchool",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_fishSchool.blend",
+      "target": "godot/assets/originals/swamp_fishSchool.glb",
+      "res": "res://assets/originals/swamp_fishSchool.glb",
+      "blenderCounts": {
+        "objects": 68,
+        "visibleMeshes": 40,
+        "hiddenMeshes": 18,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 40,
+        "gltfMaterials": 3,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 99668,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "b9cb280d03f2378faa19e04ab08f4f608df8a47c7ec5ab2bd0c72697f964a05e",
+      "outputSha256": "7e210f1326d340591d8927af14830c0518443c712df269d3e1200ed83b48e515"
+    },
+    {
+      "id": "swamp_fireflies",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swamp_fireflies.blend",
+      "target": "godot/assets/originals/swamp_fireflies.glb",
+      "res": "res://assets/originals/swamp_fireflies.glb",
+      "blenderCounts": {
+        "objects": 47,
+        "visibleMeshes": 46,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 46,
+        "gltfMaterials": 46,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 142024,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "f54348b5201dd09e09e6e001de8374378677c3667f2312e9aee640461981a8ea",
+      "outputSha256": "30a431cbeae8b14a83e8166153216617b32ac0f898354ca1a87b962dd0848f49"
+    },
+    {
+      "id": "swampZone",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/swampZone.blend",
+      "target": "godot/assets/originals/swampZone.glb",
+      "res": "res://assets/originals/swampZone.glb",
+      "blenderCounts": {
+        "objects": 4489,
+        "visibleMeshes": 2375,
+        "hiddenMeshes": 1835,
+        "edgeOnlyMeshes": 4,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 2375,
+        "gltfMaterials": 459,
+        "gltfImages": 2,
+        "animationClips": 0
+      },
+      "bytes": 12278252,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "ed035bc3e3bd96d9851bcd932de5a20a4b866399a30a843bbeb5d45ecde36886",
+      "outputSha256": "4d2dbd1c9f14a952d2a484e5108160b5d3ba92ad66605084008c8b4f8e27176b"
+    },
+    {
+      "id": "moebiusCity",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/moebiusCity.blend",
+      "target": "godot/assets/originals/moebiusCity.glb",
+      "res": "res://assets/originals/moebiusCity.glb",
+      "blenderCounts": {
+        "objects": 1129,
+        "visibleMeshes": 754,
+        "hiddenMeshes": 294,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 754,
+        "gltfMaterials": 53,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 2211328,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "24da9658c96356b31522bf21eb679b9df7a323d3bada35ea6cb9d3d4ed3543da",
+      "outputSha256": "1a5749ee480ff27bfe6fd828f0359b3d0c105623d522845d66a30571dfded800"
+    },
+    {
+      "id": "startingCamp",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/startingCamp.blend",
+      "target": "godot/assets/originals/startingCamp.glb",
+      "res": "res://assets/originals/startingCamp.glb",
+      "blenderCounts": {
+        "objects": 228,
+        "visibleMeshes": 75,
+        "hiddenMeshes": 121,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 75,
+        "gltfMaterials": 17,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 296616,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "df4963fd132ae0d5764265f1070bc253a3bd1a13b97d2d72dd486405976a7488",
+      "outputSha256": "12951d30667209ebb19ee84d660ec5a96b5a5492e8a4126be549e6ae9b35fc82"
+    },
+    {
+      "id": "planet",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/planet.blend",
+      "target": "godot/assets/originals/planet.glb",
+      "res": "res://assets/originals/planet.glb",
+      "blenderCounts": {
+        "objects": 2,
+        "visibleMeshes": 1,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 1,
+        "gltfMaterials": 1,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 85808,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "876e825c3b812738b7219fea0fb7c0f1c7e4a502295b7e9633d3279e39ad8734",
+      "outputSha256": "3e6ad8701017057d83b501bbc8b5e0136e0ed2aa3ac5e962793b2cdc1f2ce091"
+    },
+    {
+      "id": "hills",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/hills.blend",
+      "target": "godot/assets/originals/hills.glb",
+      "res": "res://assets/originals/hills.glb",
+      "blenderCounts": {
+        "objects": 3,
+        "visibleMeshes": 2,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 2,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 96244,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "7fe5ac32169a0a0a09a49f6bc570d52a3ad4b52476ef073d31ad332f6e5fd6d6",
+      "outputSha256": "b06901eda5a1d3bfc2a6d4f47c81a50f2bf9eadd27536a26a13595eb1029ce9f"
+    },
+    {
+      "id": "moonLake",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/moonLake.blend",
+      "target": "godot/assets/originals/moonLake.glb",
+      "res": "res://assets/originals/moonLake.glb",
+      "blenderCounts": {
+        "objects": 40,
+        "visibleMeshes": 20,
+        "hiddenMeshes": 14,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 20,
+        "gltfMaterials": 16,
+        "gltfImages": 1,
+        "animationClips": 0
+      },
+      "bytes": 161800,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "503fe64c2de9755f2f2d6500b7ae470cd281b1367da7849affc70807a43027a4",
+      "outputSha256": "c50fe53126d4e60d7d23203b0d7995154b8563db782725cb643924040ea8e9ea"
+    },
+    {
+      "id": "tramSystem",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/tramSystem.blend",
+      "target": "godot/assets/originals/tramSystem.glb",
+      "res": "res://assets/originals/tramSystem.glb",
+      "blenderCounts": {
+        "objects": 553,
+        "visibleMeshes": 387,
+        "hiddenMeshes": 161,
+        "edgeOnlyMeshes": 2,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 387,
+        "gltfMaterials": 43,
+        "gltfImages": 4,
+        "animationClips": 0
+      },
+      "bytes": 2428020,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "491726ca8a959d68fc86d54095057083743d0a26624192cb793ef33adb11b191",
+      "outputSha256": "79b168c95b6d774bd8703627b808e78f7b7cf8cba895926b7132a6e13ce8c20c"
+    },
+    {
+      "id": "equatorialClouds",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/equatorialClouds.blend",
+      "target": "godot/assets/originals/equatorialClouds.glb",
+      "res": "res://assets/originals/equatorialClouds.glb",
+      "blenderCounts": {
+        "objects": 149,
+        "visibleMeshes": 73,
+        "hiddenMeshes": 72,
+        "edgeOnlyMeshes": 1,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 73,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 19541012,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "6e66e2b3d99e960450053fc37812a3b92f53d465ad349ea94347429da4e4c3ce",
+      "outputSha256": "5eb40162508875c2dfa16fa5390c8f118301256ae1415beacef681d45e329f6e"
+    },
+    {
+      "id": "platforms",
+      "status": "partial",
+      "source": "assets/models/originals/blender-r3/platforms.blend",
+      "target": "godot/assets/originals/platforms.glb",
+      "res": "res://assets/originals/platforms.glb",
+      "blenderCounts": {
+        "objects": 3,
+        "visibleMeshes": 2,
+        "hiddenMeshes": 0,
+        "edgeOnlyMeshes": 1,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 2,
+        "gltfMaterials": 2,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "bytes": 74968,
+      "lost": [
+        "Three.js 描边着色器、程序动画与交互尚未迁移；材质视觉待验收"
+      ],
+      "sourceSha256": "13cde72e41925d17a1ba324e72e03638017a57d07f7d3a807e0898fbf09522a7",
+      "outputSha256": "036c0848fce121369d5da4f5d849aa3bf076464a68cd408709c389ce4d73700e"
+    }
+  ]
+}

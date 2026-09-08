@@ -1,0 +1,40 @@
+{
+  "id": "flower",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "ca18d2b952871d1814b26771b4ef6626cd9bd2e31b5a4ba1665df0bffad8fa08",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 48,
+        "verticesAfter": 12,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 108,
+        "verticesAfter": 24,
+        "normalError": 2.980232238769531e-07,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 7,
+        "normalError": 5.960464477539063e-08,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 3,
+  "removedEditVertices": 137
+}

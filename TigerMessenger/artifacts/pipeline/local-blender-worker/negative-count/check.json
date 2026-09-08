@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "rejects_wrong_export_triangle_count": true,
+  "actual_exit_code": 1,
+  "failures": [
+    "Godot triangle count differs from Blender export"
+  ]
+}

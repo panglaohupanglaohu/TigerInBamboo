@@ -1,0 +1,362 @@
+[
+  {
+    "id": "bookshop",
+    "label": "Hard To Find 书店",
+    "factory": "(opts = {}) =>\n      createHardToFindBookshop({\n        bermEdgeY: 0.02,\n        signLine1: opts.signLine1 ?? \"HARD TO FIND\",\n        signLine2: opts.signLine2 ?? \"BOOKSHOP\",\n      })"
+  },
+  {
+    "id": "house",
+    "label": "水墨小房",
+    "factory": "() => createLowPolyHouse()"
+  },
+  {
+    "id": "pine",
+    "label": "古松",
+    "factory": "(opts = {}) => createAncientPineTree(opts.seed)"
+  },
+  {
+    "id": "signpost",
+    "label": "路牌",
+    "factory": "() => createLowPolySignpost()"
+  },
+  {
+    "id": "lamp",
+    "label": "街灯",
+    "factory": "() => createLowPolyStreetLamp()"
+  },
+  {
+    "id": "pole",
+    "label": "电线杆",
+    "factory": "() => createLowPolyUtilityPole()"
+  },
+  {
+    "id": "rock",
+    "label": "焦墨岩",
+    "factory": "() => createLowPolyRock()"
+  },
+  {
+    "id": "hydrangea",
+    "label": "绣球花丛",
+    "factory": "(opts = {}) => {\n      const scale = opts.scale ?? 1;\n      const seed = opts.seed ?? 7;\n      return createLowPolyHydrangeaBush(scale, seed);\n    }"
+  },
+  {
+    "id": "flower",
+    "label": "水墨小花",
+    "factory": "(opts = {}) => {\n      const cols = INK_FLOWER_COLORS;\n      const hue =\n        opts.hue ?? cols[((opts.seed ?? 0) >>> 0) % cols.length] ?? cols[0];\n      return createLowPolyFlower(hue);\n    }"
+  },
+  {
+    "id": "lawnHill",
+    "label": "草坪山丘",
+    "factory": "(opts = {}) =>\n      createLowPolyLawnHill({\n        scale: opts.scale ?? 1,\n        seed: opts.seed ?? 11,\n      })"
+  },
+  {
+    "id": "fox",
+    "label": "阿狸（小狐狸）",
+    "factory": "() => createLowPolyFox({ scale: 0.52 })"
+  },
+  {
+    "id": "fisherBoat",
+    "label": "古战船",
+    "factory": "() => createFisherBoat()"
+  },
+  {
+    "id": "harborCrane",
+    "label": "港口起重机",
+    "factory": "() => createHarborCrane()"
+  },
+  {
+    "id": "stackedCrates",
+    "label": "货柜木箱堆",
+    "factory": "(opts = {}) => createStackedCrates({ seed: opts.seed ?? 11 })"
+  },
+  {
+    "id": "oldHarbor",
+    "label": "修船厂码头",
+    "factory": "(opts = {}) => buildOldHarborScene({ seed: opts.seed ?? 8844 }).group"
+  },
+  {
+    "id": "citadelWatchtower",
+    "label": "圣城瞭望塔",
+    "factory": "(opts = {}) => createCitadelWatchtower({ seed: opts.seed ?? 0 })"
+  },
+  {
+    "id": "citadelElderTree",
+    "label": "圣城参天树",
+    "factory": "(opts = {}) => createCitadelElderTree({\n      seed: opts.seed ?? 0,\n      scale: opts.scale ?? 0.45,\n    })"
+  },
+  {
+    "id": "snowMassif",
+    "label": "雪山组",
+    "factory": "(opts = {}) =>\n      createSnowMassif({\n        seed: opts.seed ?? 7100,\n        name: \"snow-massif\",\n      })"
+  },
+  {
+    "id": "snowMountainPeak",
+    "label": "单座雪峰",
+    "factory": "(opts = {}) =>\n      createSnowMountainPeak({\n        radius: opts.radius ?? 16,\n        height: opts.height ?? 74,\n        seed: opts.seed ?? 7101,\n      })"
+  },
+  {
+    "id": "moebiusSwamp",
+    "label": "莫比斯湖沼",
+    "factory": "(opts = {}) =>\n      createMoebiusSwampPlacement({\n        seed: opts.seed ?? 7711,\n        scale: opts.scale ?? 0.5,\n      })"
+  },
+  {
+    "id": "moebiusTower",
+    "label": "莫比斯塔",
+    "factory": "(opts = {}) =>\n      createDetailedMoebiusTower({\n        stages: opts.stages ?? 3,\n        goldScales: opts.goldScales ?? false,\n      })"
+  },
+  {
+    "id": "moebiusAirship",
+    "label": "莫比斯航空艇",
+    "factory": "() => createMoebiusAirship()"
+  },
+  {
+    "id": "moebiusAircraft",
+    "label": "莫比斯飞碟",
+    "factory": "() => createMoebiusAircraft()"
+  },
+  {
+    "id": "tram",
+    "label": "基督城电车",
+    "factory": "(opts = {}) =>\n      createChristchurchTram({ variant: opts.variant ?? \"red\" })"
+  },
+  {
+    "id": "bubblePod",
+    "label": "气泡座舱",
+    "factory": "() => createBubblePod({})"
+  },
+  {
+    "id": "fence",
+    "label": "木栅栏",
+    "factory": "() => createLowPolyFence()"
+  },
+  {
+    "id": "bridge",
+    "label": "木桥",
+    "factory": "() => createLowPolyBridge()"
+  },
+  {
+    "id": "lowPolyTree",
+    "label": "低多边形树",
+    "factory": "() => createLowPolyTree()"
+  },
+  {
+    "id": "cloud",
+    "label": "云朵",
+    "factory": "() => createLowPolyCloud({})"
+  },
+  {
+    "id": "blackRock",
+    "label": "黑岩",
+    "factory": "() => createBlackRock()"
+  },
+  {
+    "id": "craneOnRock",
+    "label": "岩上鹤",
+    "factory": "() => createCraneOnRock()"
+  },
+  {
+    "id": "classicAliFox",
+    "label": "阿狸（经典版）",
+    "factory": "() => createClassicAliFox()"
+  },
+  {
+    "id": "moebiusTiger",
+    "label": "赛博水墨虎",
+    "factory": "() => createMoebiusTiger()"
+  },
+  {
+    "id": "bird",
+    "label": "Boids 小鸟",
+    "factory": "() => createLowPolyBird()"
+  },
+  {
+    "id": "longWingGlider",
+    "label": "异星滑翔长翼鸟",
+    "factory": "() => createLongWingGlider()"
+  },
+  {
+    "id": "craneNPC",
+    "label": "丹顶鹤 NPC",
+    "factory": "() => createCraneNPC()"
+  },
+  {
+    "id": "messenger",
+    "label": "送信人（玩家）",
+    "factory": "() => buildMessenger()"
+  },
+  {
+    "id": "agentMessenger",
+    "label": "数字孪生送信人",
+    "factory": "() => buildAgentMessenger({})"
+  },
+  {
+    "id": "bookshopHydrangeas",
+    "label": "书店绣球",
+    "factory": "() => createBookshopHydrangeas()"
+  },
+  {
+    "id": "grassTuft",
+    "label": "草丛",
+    "factory": "() => createGrassTuft()"
+  },
+  {
+    "id": "mossyGround",
+    "label": "厚涂苔藓地被",
+    "factory": "(opts = {}) =>\n      buildImpastoMossyGround({ size: opts.size ?? 8, seed: opts.seed ?? 5 })"
+  },
+  {
+    "id": "swamp_whale",
+    "label": "沼泽·白鲸",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.whale(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_worldTree",
+    "label": "沼泽·世界树",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      SWAMP_COMPONENT_BUILDERS.worldTree(opts.rnd ?? Math.random, g);\n      return g;\n    }"
+  },
+  {
+    "id": "swamp_nativeDoll",
+    "label": "沼泽·原住民人偶",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.nativeDoll(opts.scale ?? 0.9)"
+  },
+  {
+    "id": "swamp_lotusLeafBoat",
+    "label": "沼泽·莲叶舟",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.lotusLeafBoat(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_eel",
+    "label": "沼泽·黄绿鳗",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.swampEel(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_tubeWorm",
+    "label": "沼泽·橙红管虫丛",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.tubeWormCluster(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_mushroom",
+    "label": "沼泽·紫蘑菇/珊瑚",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.moebiusMushroom(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_pinkHanger",
+    "label": "沼泽·粉垂生物",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.pinkHanger(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_bird",
+    "label": "沼泽·沼泽鸟",
+    "factory": "(opts = {}) =>\n      SWAMP_COMPONENT_BUILDERS.swampBird(opts.rnd ?? Math.random, opts.color ?? 0xeaf6ff)"
+  },
+  {
+    "id": "swamp_monkey",
+    "label": "沼泽·长尾猴",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.longTailMonkey(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_lizard",
+    "label": "沼泽·发光蜥蜴",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.glowLizard(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_ribbonFish",
+    "label": "沼泽·发光带鱼",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.ribbonFish(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_shell",
+    "label": "沼泽·贝壳",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.shell(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_rimPalm",
+    "label": "沼泽·坑缘棕榈",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.rimPalm(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_toweringTree",
+    "label": "沼泽·苍天巨树",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.toweringTree(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_canopy",
+    "label": "沼泽·树冠顶棚",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      SWAMP_COMPONENT_BUILDERS.canopyCeiling(opts.rnd ?? Math.random, g);\n      return g;\n    }"
+  },
+  {
+    "id": "swamp_glowFlower",
+    "label": "沼泽·发光花蕊花",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.glowFlower(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_giantFlower",
+    "label": "沼泽·巨花",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.giantFlower(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_stamenSpike",
+    "label": "沼泽·花蕊尖锥",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.stamenSpike(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_fishSchool",
+    "label": "沼泽·绿黑斑纹小鱼群",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.fishSchool(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swamp_fireflies",
+    "label": "沼泽·萤火虫群",
+    "factory": "(opts = {}) => SWAMP_COMPONENT_BUILDERS.fireflies(opts.rnd ?? Math.random)"
+  },
+  {
+    "id": "swampZone",
+    "label": "莫比斯湖沼生态区",
+    "factory": "(opts = {}) => createMoebiusSwampZone({ seed: opts.seed ?? 20260804 })"
+  },
+  {
+    "id": "moebiusCity",
+    "label": "莫比斯水晶城",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      buildMoebiusCrystalMetropolis(g, opts.R ?? 6, {});\n      return g;\n    }"
+  },
+  {
+    "id": "startingCamp",
+    "label": "起始营地",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      buildStartingCamp(g, opts.R ?? 40);\n      return g;\n    }"
+  },
+  {
+    "id": "saihoji",
+    "label": "西芳寺·苔海",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      buildSaihojiPlanet(g, {});\n      return g;\n    }"
+  },
+  {
+    "id": "planet",
+    "label": "小星球本体",
+    "factory": "() => {\n      const g = new THREE.Group();\n      createPlanet(g);\n      return g;\n    }"
+  },
+  {
+    "id": "hills",
+    "label": "岛丘地形",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      buildHills(g, opts.R ?? 40);\n      return g;\n    }"
+  },
+  {
+    "id": "moonLake",
+    "label": "月牙湖",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      createMoonLake(g, opts.R ?? 40);\n      return g;\n    }"
+  },
+  {
+    "id": "tramSystem",
+    "label": "电车轨道系统",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      buildChristchurchTramSystem(g, opts.R ?? 6, {});\n      return g;\n    }"
+  },
+  {
+    "id": "equatorialClouds",
+    "label": "轨道云墙（书店→峡谷）",
+    "factory": "(opts = {}) => {\n      const g = new THREE.Group();\n      createDynamicMoebiusClouds(g, opts.R ?? 6, {\n        trackCurve: opts.trackCurve ?? null,\n      });\n      return g;\n    }"
+  },
+  {
+    "id": "platforms",
+    "label": "平台土坡",
+    "factory": "() => {\n      const g = new THREE.Group();\n      buildWorld(g);\n      return g;\n    }"
+  }
+]

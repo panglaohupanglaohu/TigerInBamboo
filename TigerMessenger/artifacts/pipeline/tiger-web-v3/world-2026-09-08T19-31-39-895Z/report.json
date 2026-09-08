@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "url": "http://127.0.0.1:8877/TigerMessenger/",
+  "startedAt": "2026-09-08T19:31:39.896Z",
+  "scope": "Actual game scene, actor identity, live updates, original greeting/dialog and chapter-4 target resolution. No player playthrough, chapter completion, art acceptance or hardware performance claim.",
+  "interventions": [
+    "Fresh isolated browser context seeded with chapter 4 solely to resolve the live tiger rescue target.",
+    "Candidate enabled in place only if game default is original.",
+    "Test player teleported near tiger; original game frame loop remains responsible for movement/dialog.",
+    "Temporary inspection cameras render full original scene; only hidden actor ancestors temporarily revealed and restored synchronously."
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "initial": {
+    "uuid": "3cd75939-670f-4b22-911e-9ec7312fa350",
+    "name": "moebius-cyber-ink-tiger",
+    "kind": "moebius-swamp-tiger",
+    "parent": {
+      "name": "moebius-swamp-zone",
+      "uuid": "5549ed9c-9646-4747-b00d-078051f1e3ec"
+    },
+    "defaultAnatomy": true,
+    "speech": {
+      "line": "两家秋雨一家声，你猜",
+      "reply": "芭蕉与荷"
+    },
+    "position": [
+      32.82158781469994,
+      37.806922517430394,
+      17.93051514379719
+    ],
+    "scale": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 4,
+      "rescuedFox": true,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "tiger"
+    },
+    "sceneChildren": 262
+  },
+  "failure": "page.evaluate: Error: No visible tiger geometry\n    at eval (eval at evaluate (:234:30), <anonymous>:11:35)\n    at UtilityScript.evaluate (<anonymous>:236:17)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at capture (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/test_tiger_world_web.mjs:34:31)\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/test_tiger_world_web.mjs:64:9",
+  "finishedAt": "2026-09-08T19:32:07.526Z",
+  "worldErrors": {
+    "pageErrors": [],
+    "note": "Reported separately from focused tiger checks; this smoke does not certify the whole game error-free."
+  },
+  "sourceHashes": {
+    "src/assets/tigerAnatomy.js": "401fb1a6f93c527c774bd742b592e92296b9902e1b5171cba2ba91507e8dc85c",
+    "src/assets/characters/moebiusTiger.js": "2da2888359caa08f09e73344e0000e39b4c2f32660f892ec249d40b7ecef6243",
+    "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+    "assets/models/optimized/moebiusTigerAnatomyData.js": "a20c2257fcab14d2b8f748287bfbab963bdbe697439f2be14f1077edc7d17403"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "candidate": "assets/models/optimized/scoutAircraft-art-v1.blend",
+  "nodeCount": 46,
+  "nodeTransformsAndParentsPreserved": true,
+  "changes": [
+    "Original canopy: transmissive 6mm glass, smooth existing facets; silhouette unchanged",
+    "11 existing hard-surface meshes: welded export vertices, 12mm one-segment bevel, original transforms",
+    "Round 2: contained 16-sided cockpit cavity and dark open liner under original canopy, no exterior silhouette change"
+  ],
+  "noPropellerBladesAdded": true,
+  "noNewWeapons": true,
+  "cockpitInterior": "Factory had no seat. Added only recessed liner; concept seat remains unimplemented.",
+  "foregroundExistingScenesPreserved": [
+    "Bookshop Art V1",
+    "Scene",
+    "Scout Aircraft Art V1"
+  ],
+  "sourceSha256": "65bd0ede2e296a06f8b87968a440a5e2e8d75334d518a5108c05f32d2969a31c",
+  "addedMeshCount": 1,
+  "originalNodeCount": 46
+}

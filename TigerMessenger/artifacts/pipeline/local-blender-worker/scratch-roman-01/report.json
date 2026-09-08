@@ -1,0 +1,107 @@
+{
+  "job_id": "blender-roman-armor-roundtrip",
+  "asset_id": "romanSoldier_gladius_red",
+  "passed": true,
+  "visual_approved": false,
+  "production_overwritten": false,
+  "foreground_touched": false,
+  "input_sha256": {
+    "assets/models/optimized/roman-armor-v3-direction.blend": "6cbfe1b3ebc1601492cf8a517dad20cf73f617bfdd15539f0cdca28da3c4879a",
+    "godot/assets/art-pilots/roman-armor-v3-direction.glb": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+    "tools/pipeline/local/blender_export_check.py": "ed0deaa6c112b07759c76c070564cabbf9d9f32f8770a35f71f7318a1362f17f",
+    "tools/pipeline/local/blender_jobs.py": "703ca2fd348f5a623e3eb2dac600959b63b3a8e836377d7c7d609affd6409fd7"
+  },
+  "started_unix": 1788894020.583305,
+  "failure": null,
+  "argv": [
+    "/Applications/Blender.app/Contents/MacOS/Blender",
+    "--background",
+    "--factory-startup",
+    "--disable-autoexec",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/roman-armor-v3-direction.blend",
+    "--python-exit-code",
+    "1",
+    "--python",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/local/blender_export_check.py",
+    "--",
+    "--scene",
+    "Roman Armor V3 Direction",
+    "--candidate",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-blender-worker/scratch-roman-01/candidate.glb",
+    "--report",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-blender-worker/scratch-roman-01/blender-roundtrip.json"
+  ],
+  "result": {
+    "passed": true,
+    "failures": [],
+    "blender_version": "5.2.1 LTS",
+    "scene": "Roman Armor V3 Direction",
+    "visual_approved": false,
+    "scope": "Saved candidate mesh/empty hierarchy export-import; node, extras, triangle/material usage, transforms and bounds only. Shader appearance, textures, animations and runtime acceptance are not certified.",
+    "excluded_review_objects": [],
+    "saved_visibility": {
+      "Roman_Armor_V3_Direction_BodyLocal": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Helmet_Galea.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Skirt_Ten_Separated_Lames.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Waist_Belt.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      }
+    },
+    "source": {
+      "nodes": 4,
+      "mesh_objects": 3,
+      "triangles": 696,
+      "materials": [
+        "Roman_V2_Original_Bronze.001",
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "hidden_outline_nodes": [],
+      "empty_mesh_anchors": [],
+      "original_node_ids": []
+    },
+    "roundtrip": {
+      "nodes": 4,
+      "mesh_objects": 3,
+      "triangles": 696,
+      "materials": [
+        "Roman_V2_Original_Bronze.001",
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "hidden_outline_nodes": [],
+      "empty_mesh_anchors": [],
+      "original_node_ids": []
+    },
+    "node_hierarchy_preserved": true,
+    "custom_extras_preserved": true,
+    "triangle_material_usage_preserved": true,
+    "finite_geometry": true,
+    "maximum_bound_error": 0.0,
+    "maximum_transform_error": 0.0,
+    "hidden_outlines_exported": true,
+    "source_visibility_not_encoded": true
+  },
+  "input_snapshot_still_current": true,
+  "source_blend_unchanged": true,
+  "production_glb_unchanged": true,
+  "candidate": {
+    "path": "artifacts/pipeline/local-blender-worker/scratch-roman-01/candidate.glb",
+    "sha256": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+    "bytes": 38176
+  },
+  "finished_unix": 1788894021.4921532,
+  "scope": "Saved candidate roundtrip validation only. No new art, shader/texture fidelity, animation, runtime deployment or visual approval. All hidden-outline geometry retained and identified by extras."
+}

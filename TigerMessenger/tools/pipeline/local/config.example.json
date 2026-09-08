@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "qwen": {
+    "configured": false,
+    "baseURL": "http://127.0.0.1:8000/v1",
+    "model": "REPLACE_WITH_ID_FROM_V1_MODELS",
+    "apiKeyEnv": null,
+    "timeoutSeconds": 3,
+    "probeTimeoutSeconds": 30,
+    "serverHint": "Apple Silicon: oMLX with a verified MLX-VLM checkpoint; discover the actual served model ID from /v1/models. See docs/LOCAL_ASSET_FACTORY_MAC.md."
+  },
+  "blender": {
+    "binary": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "mcpCommand": [
+      "uvx",
+      "blender-mcp==1.9.1"
+    ],
+    "tcpHost": "127.0.0.1",
+    "tcpPort": 9876
+  },
+  "godot": {
+    "binary": "/Users/panglaohu/Downloads/Godot.app/Contents/MacOS/Godot"
+  },
+  "llada": {
+    "configured": false,
+    "model": "LLaDA-Image6B",
+    "serviceURL": null,
+    "apiKeyEnv": null,
+    "wrapperStatus": "not-built",
+    "note": "Independent image worker HTTP wrapper required; no generic official OpenAI-compatible API assumed. URL configuration is not installation or model readiness."
+  }
+}

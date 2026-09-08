@@ -1,0 +1,12 @@
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+Info: Saved as "soccoCraft.blend"
+ORIGINAL_BLEND_OK {"revision": 3, "asset": "soccoCraft", "nodes": 127, "meshDatablocks": 109, "verticesIncludingOutline": 7618, "maxLocalVertexError": 0, "expandedInstances": 0, "maxInstanceMatrixError": 0, "primitiveNodes": {"Line": 0, "LineSegments": 0, "LineLoop": 0, "Points": 0}, "warnings": [], "status": "imported original; optimization and render parity pending"}
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/originals/import_blender.py:34: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes=True

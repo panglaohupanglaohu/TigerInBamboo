@@ -1,0 +1,184 @@
+{
+  "passed": false,
+  "url": "http://127.0.0.1:8877/TigerMessenger/",
+  "startedAt": "2026-09-08T19:33:06.622Z",
+  "scope": "Actual game scene, actor identity, live updates, original greeting/dialog and chapter-4 target resolution. No player playthrough, chapter completion, art acceptance or hardware performance claim.",
+  "interventions": [
+    "Fresh isolated browser context seeded with chapter 4 solely to resolve the live tiger rescue target.",
+    "Candidate enabled in place only if game default is original.",
+    "Test player teleported near tiger; original game frame loop remains responsible for movement/dialog.",
+    "Temporary inspection cameras render full original scene; only hidden actor ancestors temporarily revealed and restored synchronously."
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "initial": {
+    "uuid": "bac184f6-675a-4118-b08d-dbff93af3eb3",
+    "name": "moebius-cyber-ink-tiger",
+    "kind": "moebius-swamp-tiger",
+    "parent": {
+      "name": "moebius-swamp-zone",
+      "uuid": "eafc90b2-44a5-4f80-a4bc-6157e12d6283"
+    },
+    "defaultAnatomy": true,
+    "speech": {
+      "line": "两家秋雨一家声，你猜",
+      "reply": "芭蕉与荷"
+    },
+    "position": [
+      32.82158781469994,
+      37.806922517430394,
+      17.93051514379719
+    ],
+    "scale": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 4,
+      "rescuedFox": true,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "tiger"
+    },
+    "sceneChildren": 262
+  },
+  "captures": [
+    {
+      "id": "01-initial-world",
+      "anatomy": true,
+      "actorPosition": [
+        34.579704103530524,
+        41.10410746780252,
+        19.234235820744072
+      ],
+      "localBounds": {
+        "min": [
+          -1.3100000321865561,
+          -1.1368683772161603e-13,
+          -5.427413432559975
+        ],
+        "max": [
+          1.9095118937113726,
+          4.180599927902108,
+          3.830000042915316
+        ]
+      },
+      "camera": {
+        "localPosition": [
+          11.408652101332757,
+          7.181877375462408,
+          8.921577454426725
+        ],
+        "localTarget": [
+          0.29975593076240825,
+          2.090299963950997,
+          -0.7987066948223296
+        ],
+        "worldPosition": [
+          -55.02847935477195,
+          -38.17505755551354,
+          -125.83152716361444
+        ],
+        "up": [
+          -0.49618226473558313,
+          -0.33748520116137765,
+          -0.7999418098580248
+        ],
+        "fov": 43
+      },
+      "visibilityOverrides": [],
+      "renderInfo": {
+        "frame": 22,
+        "calls": 990,
+        "triangles": 249468,
+        "points": 0,
+        "lines": 66
+      },
+      "note": "Existing full scene/terrain/materials/lights; direct renderer capture omits UI and postprocessing. Runtime culling outside actor ancestry is unchanged.",
+      "file": "01-initial-world.png",
+      "sha256": "9f130d78fdf0b4590c742a62fbe5ba7c133c192f0bee2ef883455e785d57b8a0"
+    },
+    {
+      "id": "02-candidate-world",
+      "anatomy": true,
+      "actorPosition": [
+        34.90566345903146,
+        40.68246807093545,
+        19.47594904205409
+      ],
+      "localBounds": {
+        "min": [
+          -1.3100000321864993,
+          0,
+          -5.7920686537290695
+        ],
+        "max": [
+          1.310000032186517,
+          4.180599927902222,
+          3.8300000429153727
+        ]
+      },
+      "camera": {
+        "localPosition": [
+          11.546482435973338,
+          7.382437747105555,
+          9.122137826069817
+        ],
+        "localTarget": [
+          8.881784197001252e-15,
+          2.090299963951111,
+          -0.9810343054068484
+        ],
+        "worldPosition": [
+          -54.79381913168442,
+          -37.99121946662913,
+          -125.84123943411029
+        ],
+        "up": [
+          -0.49618226473558313,
+          -0.33748520116137765,
+          -0.7999418098580248
+        ],
+        "fov": 43
+      },
+      "visibilityOverrides": [],
+      "renderInfo": {
+        "frame": 25,
+        "calls": 973,
+        "triangles": 248046,
+        "points": 0,
+        "lines": 66
+      },
+      "note": "Existing full scene/terrain/materials/lights; direct renderer capture omits UI and postprocessing. Runtime culling outside actor ancestry is unchanged.",
+      "file": "02-candidate-world.png",
+      "sha256": "cdbdf79f0de1b340d1d46e8554390a9dd4359253e833960b83815962224551d0"
+    }
+  ],
+  "activation": {
+    "mode": "game-default",
+    "sameParent": true,
+    "sameUpdate": false,
+    "sameSpeech": true,
+    "sameTail": true,
+    "sameLights": true,
+    "active": true,
+    "textureStatus": "ready",
+    "sha256": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be"
+  },
+  "failure": "page.waitForFunction: Timeout 90000ms exceeded.\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/test_tiger_world_web.mjs:87:14",
+  "finishedAt": "2026-09-08T19:35:20.982Z",
+  "worldErrors": {
+    "pageErrors": [],
+    "note": "Reported separately from focused tiger checks; this smoke does not certify the whole game error-free."
+  },
+  "sourceHashes": {
+    "src/assets/tigerAnatomy.js": "401fb1a6f93c527c774bd742b592e92296b9902e1b5171cba2ba91507e8dc85c",
+    "src/assets/characters/moebiusTiger.js": "2da2888359caa08f09e73344e0000e39b4c2f32660f892ec249d40b7ecef6243",
+    "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+    "assets/models/optimized/moebiusTigerAnatomyData.js": "a20c2257fcab14d2b8f748287bfbab963bdbe697439f2be14f1077edc7d17403"
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "jobs": {
+    "godot-tiger-world": {
+      "status": "passed",
+      "fingerprint": "fc2ebc6d6b30c62862aea9ae7e934d88454b7acd01c958eece2cd99fb0ea0339",
+      "history": [
+        {
+          "started_at": 1788893569.288527,
+          "fingerprint": "3714dee9b5dd0b13008ea39d94ef420154da00602d6124b96e21c5f62e49598e",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-tiger-world/cf4b53546a69430485bd448488eafd62",
+          "finished_at": 1788893575.5268118
+        },
+        {
+          "started_at": 1788894469.843947,
+          "fingerprint": "35b014bd9a3ddc837687257c2ecd2813184c8bc204367fef839be2c3f8a6f199",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-tiger-world/6094de9fd36d40289e541e37635020e8",
+          "finished_at": 1788894474.9280279
+        },
+        {
+          "started_at": 1788896601.573924,
+          "fingerprint": "fc2ebc6d6b30c62862aea9ae7e934d88454b7acd01c958eece2cd99fb0ea0339",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-tiger-world/8f17bbae9d9c43e8b35499e4f6a27966",
+          "finished_at": 1788896608.7126322
+        }
+      ],
+      "lease": null,
+      "reports": {
+        "artifacts/pipeline/local-runs/godot-tiger-world/8f17bbae9d9c43e8b35499e4f6a27966/report.json": "cf7552ae0743418be808dc53781513c923b10421f6d370dda80e3b27db19cc25"
+      },
+      "artifacts": {}
+    },
+    "godot-roman-armor": {
+      "status": "passed",
+      "fingerprint": "75e4bc46266cce0e37571fe46b52fdbd1a78f2d4809595f8aaef3ee5f4e5855c",
+      "history": [
+        {
+          "started_at": 1788893575.703883,
+          "fingerprint": "2b3bb8b9260686537005a5bb261010ac610b8c6f1f06270a20edf18913ffec20",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-roman-armor/53c5538cba91420aa7da820571ddb585",
+          "finished_at": 1788893581.817728
+        },
+        {
+          "started_at": 1788894475.088659,
+          "fingerprint": "41b494f15cf511709a9f540158294e18ad43c27b140c4eba59c7a09b11bed04b",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-roman-armor/4af419b0250f4eefaa9475649fecedf7",
+          "finished_at": 1788894480.947584
+        },
+        {
+          "started_at": 1788896608.8758621,
+          "fingerprint": "75e4bc46266cce0e37571fe46b52fdbd1a78f2d4809595f8aaef3ee5f4e5855c",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-roman-armor/0389b41e32db486da060f3d393609c1f",
+          "finished_at": 1788896614.062454
+        }
+      ],
+      "lease": null,
+      "reports": {
+        "artifacts/pipeline/local-runs/godot-roman-armor/0389b41e32db486da060f3d393609c1f/report.json": "d5ff57a468eebb836a6d8072c9431ed9ce4b158147f5738e1f52063b05982913"
+      },
+      "artifacts": {}
+    },
+    "godot-castle-world": {
+      "status": "passed",
+      "fingerprint": "8ff227f54ef48a59a052a7718837823e3dde67b59dd7b2367f2868e271544118",
+      "history": [
+        {
+          "started_at": 1788893581.956657,
+          "fingerprint": "80cec107bc5d5906fb09cb417f5fbdfa9658aad9b69a9995c2a2029fed7ba6ac",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-castle-world/8bc5a5ee31564c129c1bb518ef3ddcf6",
+          "finished_at": 1788893587.013083
+        },
+        {
+          "started_at": 1788894481.075617,
+          "fingerprint": "3adfbc33c692658d63650a89c623a15d41b469b82f35edb28013ee854a0c1226",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-castle-world/a4c3419e3bd74990be52157d351e85dd",
+          "finished_at": 1788894485.65012
+        },
+        {
+          "started_at": 1788896614.206892,
+          "fingerprint": "8ff227f54ef48a59a052a7718837823e3dde67b59dd7b2367f2868e271544118",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/godot-castle-world/6fa4affe38da4acf96037b2179a1042e",
+          "finished_at": 1788896618.397311
+        }
+      ],
+      "lease": null,
+      "reports": {
+        "artifacts/pipeline/local-runs/godot-castle-world/6fa4affe38da4acf96037b2179a1042e/report.json": "0467129840ce70dc20d2ec8c975bb23113734e564803030db56473defc4d97d1"
+      },
+      "artifacts": {}
+    },
+    "blender-tiger-roundtrip": {
+      "status": "passed",
+      "fingerprint": "2b4172580e33166a1e2bc73f1c7c9abba1d2f4fafba92af780e05c6febd1561d",
+      "history": [
+        {
+          "started_at": 1788894462.97839,
+          "fingerprint": "2b4172580e33166a1e2bc73f1c7c9abba1d2f4fafba92af780e05c6febd1561d",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438",
+          "finished_at": 1788894466.539806
+        }
+      ],
+      "lease": null,
+      "reports": {
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/report.json": "cb42a7edb69fa8ddca97d8b5c9e6780bbaacf9a621a704c0f897ff2c86c71b53"
+      },
+      "artifacts": {
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/candidate.glb": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be",
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/blender-roundtrip.json": "5385f6a2dc7c233259eefea1f586658ba2c9512001fcedfa0fbdad34eba0f0f9",
+        "artifacts/pipeline/local-runs/blender-tiger-roundtrip/f8f0b4936e8c456da6780280d4aae438/godot-roundtrip.json": "7e4544bcc5e87147ab11178ebf6a129e343258b5c399eb674835fdbf1542e3a0"
+      }
+    },
+    "blender-roman-armor-roundtrip": {
+      "status": "passed",
+      "fingerprint": "0f03630ff9758221138e3498f92e387c4f442c23f857f9c7f0aefa12bb75c709",
+      "history": [
+        {
+          "started_at": 1788894466.59502,
+          "fingerprint": "0f03630ff9758221138e3498f92e387c4f442c23f857f9c7f0aefa12bb75c709",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f",
+          "finished_at": 1788894469.575813
+        }
+      ],
+      "lease": null,
+      "reports": {
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/report.json": "2c80cb58451ad4505adb25d6e8e3b0d944149364a544c1232fd7509ee1ec7633"
+      },
+      "artifacts": {
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/candidate.glb": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/blender-roundtrip.json": "4878a8740e9874aa826463a1067c3f7cdd1af4690e970803a7d9bdc2473faba7",
+        "artifacts/pipeline/local-runs/blender-roman-armor-roundtrip/7ca813ce19814640969c9fdfb95b918f/godot-roundtrip.json": "67d348904b974430a339fe57d3f868d1a399dd76f329d68a342f12e6cba7ca3e"
+      }
+    },
+    "web-tiger-anatomy": {
+      "status": "passed",
+      "fingerprint": "1e50308a74ebae2a7f2d06e5a9f89984f228bb6f945fd007ed0ba97438fff99b",
+      "history": [
+        {
+          "started_at": 1788895819.578645,
+          "fingerprint": "1e50308a74ebae2a7f2d06e5a9f89984f228bb6f945fd007ed0ba97438fff99b",
+          "status": "passed",
+          "run_dir": "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c",
+          "finished_at": 1788895827.0116339
+        }
+      ],
+      "lease": null,
+      "reports": {
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/report.json": "ec4907d9198496ec9582e51d412c7eb76a457df63279be0a56a3f7715cd3207d"
+      },
+      "artifacts": {
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/browser-check.json": "07959b415e0e9fc1ea7f899143107e34d3c3bde781cc611febee66155a9cc229",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/idle-before-after.png": "defbcda31f0b76b2cd22572680deb8495867f34f32a905ba8d4c41b0879bf3a5",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/walk-before-after.png": "4e607783e54c681275ff1bbbce094d9aa0cef6b1bdad34d911421597ef6854e5",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/drink-before-after.png": "a87946c874c5a199eabcef5315db346eb2d9d7680e4561cb83d355a4296aeb8f",
+        "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/preview.html": "7fd3b64ecd4e5efedb3daf5ece246ea099398ecf222acd57ca589d26cfd36a9e"
+      }
+    }
+  },
+  "updated_at": 1788896618.398711
+}

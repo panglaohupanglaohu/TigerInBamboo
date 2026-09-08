@@ -1,0 +1,14 @@
+{
+  "asset": "original bookshop",
+  "source": "assets/models/originals/blender-r3/bookshop.blend",
+  "result": "assets/models/optimized/bookshop.blend",
+  "verticesBefore": 2520,
+  "verticesAfter": 574,
+  "facesUnchanged": 852,
+  "maxFaceCornerPositionError": 0,
+  "maxFaceCornerNormalError": 3.6872923374176025e-05,
+  "maxUVError": 0,
+  "materialIndicesUnchanged": true,
+  "runtimeIntegrated": true,
+  "renderParity": "Web same-camera same-light image comparison: zero changed bytes; original shader, material and editable sign retained. See verification/bookshop-web-comparison.json"
+}

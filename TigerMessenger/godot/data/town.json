@@ -1,0 +1,206 @@
+{
+  "seed": 20260906,
+  "hash": "cce72379",
+  "modules": [
+    {
+      "cell": "-2,0,-2",
+      "x": -2,
+      "y": 0,
+      "z": -2,
+      "family": "body",
+      "variant": "body",
+      "rot": "r0",
+      "key": "body.plain@r0"
+    },
+    {
+      "cell": "-1,0,-2",
+      "x": -1,
+      "y": 0,
+      "z": -2,
+      "family": "flat",
+      "variant": "flat",
+      "rot": "r270",
+      "key": "flat.w1@r270"
+    },
+    {
+      "cell": "1,0,-2",
+      "x": 1,
+      "y": 0,
+      "z": -2,
+      "family": "flat",
+      "variant": "flat",
+      "rot": "r90",
+      "key": "flat.w1@r90"
+    },
+    {
+      "cell": "2,0,-2",
+      "x": 2,
+      "y": 0,
+      "z": -2,
+      "family": "body",
+      "variant": "body",
+      "rot": "r0",
+      "key": "body.plain@r0"
+    },
+    {
+      "cell": "-2,0,-1",
+      "x": -2,
+      "y": 0,
+      "z": -1,
+      "family": "flat",
+      "variant": "flat",
+      "rot": "r0",
+      "key": "flat.w1@r0"
+    },
+    {
+      "cell": "-1,0,-1",
+      "x": -1,
+      "y": 0,
+      "z": -1,
+      "family": "flat",
+      "variant": "flat",
+      "rot": "r0",
+      "key": "flat.w0@r0"
+    },
+    {
+      "cell": "1,0,-1",
+      "x": 1,
+      "y": 0,
+      "z": -1,
+      "family": "flat",
+      "variant": "flat",
+      "rot": "r0",
+      "key": "flat.w0@r0"
+    },
+    {
+      "cell": "2,0,-1",
+      "x": 2,
+      "y": 0,
+      "z": -1,
+      "family": "flat",
+      "variant": "flat",
+      "rot": "r0",
+      "key": "flat.w1@r0"
+    },
+    {
+      "cell": "-2,0,1",
+      "x": -2,
+      "y": 0,
+      "z": 1,
+      "family": "terrace",
+      "variant": "terrace",
+      "rot": "r180",
+      "key": "terrace.w1@r180"
+    },
+    {
+      "cell": "-1,0,1",
+      "x": -1,
+      "y": 0,
+      "z": 1,
+      "family": "terrace",
+      "variant": "terrace",
+      "rot": "r0",
+      "key": "terrace.w0@r0"
+    },
+    {
+      "cell": "1,0,1",
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "family": "terrace",
+      "variant": "terrace",
+      "rot": "r0",
+      "key": "terrace.w0@r0"
+    },
+    {
+      "cell": "2,0,1",
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "family": "terrace",
+      "variant": "terrace",
+      "rot": "r180",
+      "key": "terrace.w1@r180"
+    },
+    {
+      "cell": "-2,0,2",
+      "x": -2,
+      "y": 0,
+      "z": 2,
+      "family": "body",
+      "variant": "body",
+      "rot": "r0",
+      "key": "body.plain@r0"
+    },
+    {
+      "cell": "-1,0,2",
+      "x": -1,
+      "y": 0,
+      "z": 2,
+      "family": "terrace",
+      "variant": "terrace",
+      "rot": "r270",
+      "key": "terrace.w1@r270"
+    },
+    {
+      "cell": "1,0,2",
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "family": "terrace",
+      "variant": "terrace",
+      "rot": "r90",
+      "key": "terrace.w1@r90"
+    },
+    {
+      "cell": "2,0,2",
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "family": "body",
+      "variant": "body",
+      "rot": "r0",
+      "key": "body.plain@r0"
+    },
+    {
+      "cell": "-2,1,-2",
+      "x": -2,
+      "y": 1,
+      "z": -2,
+      "family": "roof",
+      "variant": "gable",
+      "rot": "r90",
+      "key": "roof.gable@r90"
+    },
+    {
+      "cell": "2,1,-2",
+      "x": 2,
+      "y": 1,
+      "z": -2,
+      "family": "terrace",
+      "variant": "terrace",
+      "rot": "r0",
+      "key": "terrace.w0@r0"
+    },
+    {
+      "cell": "-2,1,2",
+      "x": -2,
+      "y": 1,
+      "z": 2,
+      "family": "roof",
+      "variant": "gable",
+      "rot": "r90",
+      "key": "roof.gable@r90"
+    },
+    {
+      "cell": "2,1,2",
+      "x": 2,
+      "y": 1,
+      "z": 2,
+      "family": "roof",
+      "variant": "gable",
+      "rot": "r0",
+      "key": "roof.gable@r0"
+    }
+  ]
+}

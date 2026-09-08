@@ -1,0 +1,35 @@
+{
+  "meshes": [
+    {
+      "name": "Helmet_Galea.002",
+      "vertices": 240,
+      "rotatedUpperHelmetVertices": 160,
+      "otherVerticesExactlyUnchanged": true
+    },
+    {
+      "name": "Skirt_Ten_Separated_Lames.002",
+      "vertices": 80,
+      "rotatedUpperHelmetVertices": 0,
+      "otherVerticesExactlyUnchanged": true
+    },
+    {
+      "name": "Waist_Belt.002",
+      "vertices": 80,
+      "rotatedUpperHelmetVertices": 0,
+      "otherVerticesExactlyUnchanged": true
+    }
+  ],
+  "glbSha256": "22652d070ba2277e26bf3b100f381ab51f37f8ad4424563d716530b86a08fdd3",
+  "sourceBlendSha256": "fd6a9f4ba678e6887cde23bcd8f614699f42f6777ce12e028ebc0069f569804a",
+  "frontAxisBefore": "+Z",
+  "frontAxisAfter": "+X",
+  "blenderUpperHelmetRotationZDegrees": 90,
+  "crestAssemblyRotationYDegrees": 90,
+  "contextIncludesOriginalNodes": [
+    "n3",
+    "n7",
+    "n11",
+    "n13",
+    "n15"
+  ]
+}

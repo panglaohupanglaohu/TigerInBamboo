@@ -1,0 +1,1 @@
+{"tool": "execute_blender_code", "arguments": {"code": "import bpy,json\nprint(json.dumps({\"filepath\":bpy.data.filepath,\"dirty\":bpy.data.is_dirty,\"scene\":bpy.context.scene.name,\"scenes\":[s.name for s in bpy.data.scenes]}))"}}

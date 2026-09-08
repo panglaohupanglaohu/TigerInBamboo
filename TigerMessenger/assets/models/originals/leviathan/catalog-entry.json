@@ -1,0 +1,28 @@
+{
+  "id": "leviathanIsland",
+  "label": "鲲",
+  "source": "src/assets/leviathanIsland.js",
+  "factory": "buildEcoLeviathanIsland",
+  "options": {
+    "seed": 9901
+  },
+  "seed": 9901,
+  "runtimeSource": "src/scenes/saihojiGarden.js",
+  "sourceSha256": "653a7fc117ebe4652877b85329b15a12c6cf95be9b91ac7a49fa6e6b429f1f00",
+  "runtimeSourceSha256": "251031bac881590a8b45ddb21d9b37724e88298ff7d1993226cb29d51770458d",
+  "captureScope": "Original factory defaults in local coordinates. Includes whale, factory island plate, flora and dynamic nodes; excludes six garden scenes attached by saihojiGarden.js. Not swamp_whale, not optimized.",
+  "family": "leviathanIsland",
+  "variant": "factory-default-local",
+  "nodes": 295,
+  "snapshotSha256": "07e94ae441cb4ab9f48e759412e8a8518a7b7d772bafdc28dc49c473ad8c8af9",
+  "unresolvedNodeRefs": [],
+  "stages": {
+    "captured": true,
+    "blenderArchived": true,
+    "optimized": false,
+    "godotImported": false,
+    "worldBehaviorVerified": false,
+    "glbExported": true
+  },
+  "validation": "assets/models/originals/leviathan/validation.json"
+}

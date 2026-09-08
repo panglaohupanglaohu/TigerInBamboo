@@ -1,0 +1,2937 @@
+{
+  "version": 1,
+  "generatedBy": "tools/originals/build_godot_import_map.py",
+  "note": "G01 导入映射。只描述**映射关系**，不代表已导出或已导入。导出请用 tools/originals/export_godot_originals.py（需要 Blender）。",
+  "godotProjectRoot": "godot",
+  "targetSubdir": "assets/originals",
+  "legacyGlbKeepOut": {
+    "files": [
+      "aircraft.glb",
+      "bookshop.glb",
+      "fox.glb",
+      "gate.glb",
+      "house.glb",
+      "messenger.glb",
+      "pine.glb",
+      "postbox.glb",
+      "tiger.glb",
+      "tower.glb"
+    ],
+    "rule": "godot/assets/*.glb 是前期 10 项实验资产，本批不覆盖、不计入成果"
+  },
+  "exportSourceRule": "默认 originals/blender-r3/<id>.blend（原作存档）。batch-candidates-v2 视觉对照未做，不作默认源；optimized/<id>.blend 只有 bookshop 与 moebiusTiger 有，且是 Web 运行时优化产物。",
+  "counts": {
+    "catalog": 72,
+    "exportSourceExists": 72,
+    "withKnownGaps": 72,
+    "representatives": 7,
+    "alreadyInGodot": 72
+  },
+  "assets": [
+    {
+      "id": "bookshop",
+      "label": "Hard To Find 书店",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/bookshop.source.json",
+        "exists": true,
+        "bytes": 170948
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/bookshop.blend",
+        "exists": true,
+        "bytes": 346337,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/bookshop.blend",
+          "exists": true,
+          "bytes": 341112,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": {
+          "path": "assets/models/optimized/bookshop.blend",
+          "exists": true,
+          "bytes": 340790,
+          "renderParity": "Web same-camera same-light image comparison: zero changed bytes; original shader, material and editable sign retained. See verification/bookshop-web-comparison.json",
+          "runtimeIntegrated": true
+        }
+      },
+      "godot": {
+        "file": "godot/assets/originals/bookshop.glb",
+        "res": "res://assets/originals/bookshop.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 59,
+        "meshDatablocks": 56,
+        "verticesIncludingOutline": 2520
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "house",
+      "label": "水墨小房",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/house.source.json",
+        "exists": true,
+        "bytes": 24937
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/house.blend",
+        "exists": true,
+        "bytes": 139699,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/house.blend",
+          "exists": true,
+          "bytes": 136507,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/house.glb",
+        "res": "res://assets/originals/house.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 8,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 228
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "pine",
+      "label": "古松",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/pine.source.json",
+        "exists": true,
+        "bytes": 2918368
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/pine.blend",
+        "exists": true,
+        "bytes": 1991219,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/pine.blend",
+          "exists": true,
+          "bytes": 1965882,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/pine.glb",
+        "res": "res://assets/originals/pine.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 17,
+        "meshDatablocks": 9,
+        "verticesIncludingOutline": 20136
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "signpost",
+      "label": "路牌",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/signpost.source.json",
+        "exists": true,
+        "bytes": 21007
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/signpost.blend",
+        "exists": true,
+        "bytes": 128513,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/signpost.blend",
+          "exists": true,
+          "bytes": 126000,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/signpost.glb",
+        "res": "res://assets/originals/signpost.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 6,
+        "meshDatablocks": 5,
+        "verticesIncludingOutline": 240
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "lamp",
+      "label": "街灯",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/lamp.source.json",
+        "exists": true,
+        "bytes": 52370
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/lamp.blend",
+        "exists": true,
+        "bytes": 150214,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/lamp.blend",
+          "exists": true,
+          "bytes": 147182,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/lamp.glb",
+        "res": "res://assets/originals/lamp.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 6,
+        "meshDatablocks": 5,
+        "verticesIncludingOutline": 456
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "pole",
+      "label": "电线杆",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/pole.source.json",
+        "exists": true,
+        "bytes": 37285
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/pole.blend",
+        "exists": true,
+        "bytes": 144762,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/pole.blend",
+          "exists": true,
+          "bytes": 141592,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/pole.glb",
+        "res": "res://assets/originals/pole.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 8,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 396
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "rock",
+      "label": "焦墨岩",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/rock.source.json",
+        "exists": true,
+        "bytes": 38401
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/rock.blend",
+        "exists": true,
+        "bytes": 135081,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/rock.blend",
+          "exists": true,
+          "bytes": 132184,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/rock.glb",
+        "res": "res://assets/originals/rock.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 480
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "hydrangea",
+      "label": "绣球花丛",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/hydrangea.source.json",
+        "exists": true,
+        "bytes": 2854127
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/hydrangea.blend",
+        "exists": true,
+        "bytes": 1902689,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/hydrangea.blend",
+          "exists": true,
+          "bytes": 1887574,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/hydrangea.glb",
+        "res": "res://assets/originals/hydrangea.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 32,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 20016
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "flower",
+      "label": "水墨小花",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/flower.source.json",
+        "exists": true,
+        "bytes": 26973
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/flower.blend",
+        "exists": true,
+        "bytes": 129400,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/flower.blend",
+          "exists": true,
+          "bytes": 126298,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/flower.glb",
+        "res": "res://assets/originals/flower.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 4,
+        "meshDatablocks": 3,
+        "verticesIncludingOutline": 180
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "lawnHill",
+      "label": "草坪山丘",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/lawnHill.source.json",
+        "exists": true,
+        "bytes": 273944
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/lawnHill.blend",
+        "exists": true,
+        "bytes": 303892,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/lawnHill.blend",
+          "exists": true,
+          "bytes": 301512,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/lawnHill.glb",
+        "res": "res://assets/originals/lawnHill.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 11,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 2292
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "fox",
+      "label": "阿狸（小狐狸）",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/fox.source.json",
+        "exists": true,
+        "bytes": 613485
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/fox.blend",
+        "exists": true,
+        "bytes": 680137,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/fox.blend",
+          "exists": true,
+          "bytes": 676501,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/fox.glb",
+        "res": "res://assets/originals/fox.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 155,
+        "meshDatablocks": 127,
+        "verticesIncludingOutline": 8830
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "fisherBoat",
+      "label": "古战船",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/fisherBoat.source.json",
+        "exists": true,
+        "bytes": 1163309
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/fisherBoat.blend",
+        "exists": true,
+        "bytes": 1338889,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/fisherBoat.blend",
+          "exists": true,
+          "bytes": 1331177,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/fisherBoat.glb",
+        "res": "res://assets/originals/fisherBoat.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 340,
+        "meshDatablocks": 283,
+        "verticesIncludingOutline": 16992
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "286 个实例被展开（层级与实例关系需复核）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "harborCrane",
+      "label": "港口起重机",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/harborCrane.source.json",
+        "exists": true,
+        "bytes": 135374
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/harborCrane.blend",
+        "exists": true,
+        "bytes": 254806,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/harborCrane.blend",
+          "exists": true,
+          "bytes": 251434,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/harborCrane.glb",
+        "res": "res://assets/originals/harborCrane.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 29,
+        "meshDatablocks": 28,
+        "verticesIncludingOutline": 2016
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "stackedCrates",
+      "label": "货柜木箱堆",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/stackedCrates.source.json",
+        "exists": true,
+        "bytes": 236169
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/stackedCrates.blend",
+        "exists": true,
+        "bytes": 435909,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/stackedCrates.blend",
+          "exists": true,
+          "bytes": 431811,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/stackedCrates.glb",
+        "res": "res://assets/originals/stackedCrates.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 135,
+        "meshDatablocks": 118,
+        "verticesIncludingOutline": 4248
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "oldHarbor",
+      "label": "修船厂码头",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/oldHarbor.source.json",
+        "exists": true,
+        "bytes": 1855813
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/oldHarbor.blend",
+        "exists": true,
+        "bytes": 2254621,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/oldHarbor.blend",
+          "exists": true,
+          "bytes": 2248902,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/oldHarbor.glb",
+        "res": "res://assets/originals/oldHarbor.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 762,
+        "meshDatablocks": 567,
+        "verticesIncludingOutline": 45960
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "286 个实例被展开（层级与实例关系需复核）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "citadelWatchtower",
+      "label": "圣城瞭望塔",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/citadelWatchtower.source.json",
+        "exists": true,
+        "bytes": 36818
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/citadelWatchtower.blend",
+        "exists": true,
+        "bytes": 158717,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/citadelWatchtower.blend",
+          "exists": true,
+          "bytes": 155697,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/citadelWatchtower.glb",
+        "res": "res://assets/originals/citadelWatchtower.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 29,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 840
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "citadelElderTree",
+      "label": "圣城参天树",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/citadelElderTree.source.json",
+        "exists": true,
+        "bytes": 127008
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/citadelElderTree.blend",
+        "exists": true,
+        "bytes": 264553,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/citadelElderTree.blend",
+          "exists": true,
+          "bytes": 263122,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/citadelElderTree.glb",
+        "res": "res://assets/originals/citadelElderTree.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 31,
+        "meshDatablocks": 30,
+        "verticesIncludingOutline": 1764
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "snowMassif",
+      "label": "雪山组",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/snowMassif.source.json",
+        "exists": true,
+        "bytes": 78651
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/snowMassif.blend",
+        "exists": true,
+        "bytes": 241637,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/snowMassif.blend",
+          "exists": true,
+          "bytes": 238398,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/snowMassif.glb",
+        "res": "res://assets/originals/snowMassif.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 36,
+        "meshDatablocks": 28,
+        "verticesIncludingOutline": 912
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "snowMountainPeak",
+      "label": "单座雪峰",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/snowMountainPeak.source.json",
+        "exists": true,
+        "bytes": 17977
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/snowMountainPeak.blend",
+        "exists": true,
+        "bytes": 131598,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/snowMountainPeak.blend",
+          "exists": true,
+          "bytes": 128437,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/snowMountainPeak.glb",
+        "res": "res://assets/originals/snowMountainPeak.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 144
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "moebiusSwamp",
+      "label": "莫比斯湖沼",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/moebiusSwamp.source.json",
+        "exists": true,
+        "bytes": 20104405
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/moebiusSwamp.blend",
+        "exists": true,
+        "bytes": 19060217,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/moebiusSwamp.blend",
+          "exists": true,
+          "bytes": 18975906,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/moebiusSwamp.glb",
+        "res": "res://assets/originals/moebiusSwamp.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 4004,
+        "meshDatablocks": 3723,
+        "verticesIncludingOutline": 289381
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "4 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "572 个实例被展开（层级与实例关系需复核）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "moebiusTower",
+      "label": "莫比斯塔",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/moebiusTower.source.json",
+        "exists": true,
+        "bytes": 909306
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/moebiusTower.blend",
+        "exists": true,
+        "bytes": 928919,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/moebiusTower.blend",
+          "exists": true,
+          "bytes": 919479,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/moebiusTower.glb",
+        "res": "res://assets/originals/moebiusTower.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 162,
+        "meshDatablocks": 151,
+        "verticesIncludingOutline": 13116
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "3 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "moebiusAirship",
+      "label": "莫比斯航空艇",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/moebiusAirship.source.json",
+        "exists": true,
+        "bytes": 612158
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/moebiusAirship.blend",
+        "exists": true,
+        "bytes": 860995,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/moebiusAirship.blend",
+          "exists": true,
+          "bytes": 851737,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/moebiusAirship.glb",
+        "res": "res://assets/originals/moebiusAirship.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 283,
+        "meshDatablocks": 260,
+        "verticesIncludingOutline": 11064
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "moebiusAircraft",
+      "label": "莫比斯飞碟",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/moebiusAircraft.source.json",
+        "exists": true,
+        "bytes": 1946083
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/moebiusAircraft.blend",
+        "exists": true,
+        "bytes": 1556716,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/moebiusAircraft.blend",
+          "exists": true,
+          "bytes": 1554540,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/moebiusAircraft.glb",
+        "res": "res://assets/originals/moebiusAircraft.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 67,
+        "meshDatablocks": 56,
+        "verticesIncludingOutline": 24305
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "tram",
+      "label": "基督城电车",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/tram.source.json",
+        "exists": true,
+        "bytes": 351673
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/tram.blend",
+        "exists": true,
+        "bytes": 583103,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/tram.blend",
+          "exists": true,
+          "bytes": 571768,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/tram.glb",
+        "res": "res://assets/originals/tram.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 143,
+        "meshDatablocks": 142,
+        "verticesIncludingOutline": 5910
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "bubblePod",
+      "label": "气泡座舱",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/bubblePod.source.json",
+        "exists": true,
+        "bytes": 750596
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/bubblePod.blend",
+        "exists": true,
+        "bytes": 670157,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/bubblePod.blend",
+          "exists": true,
+          "bytes": 667731,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/bubblePod.glb",
+        "res": "res://assets/originals/bubblePod.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 35,
+        "meshDatablocks": 31,
+        "verticesIncludingOutline": 10268
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "1 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "fence",
+      "label": "木栅栏",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/fence.source.json",
+        "exists": true,
+        "bytes": 14401
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/fence.blend",
+        "exists": true,
+        "bytes": 119473,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/fence.blend",
+          "exists": true,
+          "bytes": 116373,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/fence.glb",
+        "res": "res://assets/originals/fence.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 144
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "bridge",
+      "label": "木桥",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/bridge.source.json",
+        "exists": true,
+        "bytes": 21371
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/bridge.blend",
+        "exists": true,
+        "bytes": 129343,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/bridge.blend",
+          "exists": true,
+          "bytes": 126345,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/bridge.glb",
+        "res": "res://assets/originals/bridge.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 6,
+        "meshDatablocks": 5,
+        "verticesIncludingOutline": 180
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "lowPolyTree",
+      "label": "低多边形树",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/lowPolyTree.source.json",
+        "exists": true,
+        "bytes": 225497
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/lowPolyTree.blend",
+        "exists": true,
+        "bytes": 374052,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/lowPolyTree.blend",
+          "exists": true,
+          "bytes": 369976,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/lowPolyTree.glb",
+        "res": "res://assets/originals/lowPolyTree.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 101,
+        "meshDatablocks": 84,
+        "verticesIncludingOutline": 3456
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "cloud",
+      "label": "云朵",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/cloud.source.json",
+        "exists": true,
+        "bytes": 249132
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/cloud.blend",
+        "exists": true,
+        "bytes": 271137,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/cloud.blend",
+          "exists": true,
+          "bytes": 266632,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/cloud.glb",
+        "res": "res://assets/originals/cloud.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 11,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 1680
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "blackRock",
+      "label": "黑岩",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/blackRock.source.json",
+        "exists": true,
+        "bytes": 38464
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/blackRock.blend",
+        "exists": true,
+        "bytes": 135083,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/blackRock.blend",
+          "exists": true,
+          "bytes": 132162,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/blackRock.glb",
+        "res": "res://assets/originals/blackRock.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 480
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "craneOnRock",
+      "label": "岩上鹤",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/craneOnRock.source.json",
+        "exists": true,
+        "bytes": 157695
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/craneOnRock.blend",
+        "exists": true,
+        "bytes": 264926,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/craneOnRock.blend",
+          "exists": true,
+          "bytes": 264416,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/craneOnRock.glb",
+        "res": "res://assets/originals/craneOnRock.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 34,
+        "meshDatablocks": 28,
+        "verticesIncludingOutline": 2052
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "classicAliFox",
+      "label": "阿狸（经典版）",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/classicAliFox.source.json",
+        "exists": true,
+        "bytes": 466475
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/classicAliFox.blend",
+        "exists": true,
+        "bytes": 519528,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/classicAliFox.blend",
+          "exists": true,
+          "bytes": 513434,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/classicAliFox.glb",
+        "res": "res://assets/originals/classicAliFox.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 103,
+        "meshDatablocks": 84,
+        "verticesIncludingOutline": 6588
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "moebiusTiger",
+      "label": "湖沼之虎",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/moebiusTiger.source.json",
+        "exists": true,
+        "bytes": 235504
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/moebiusTiger.blend",
+        "exists": true,
+        "bytes": 435964,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/moebiusTiger.blend",
+          "exists": true,
+          "bytes": 432800,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": {
+          "path": "assets/models/optimized/moebiusTiger.blend",
+          "exists": true,
+          "bytes": 432006,
+          "renderParity": "Web idle/walking/drinking: zero changed pixels; original floats, shader and animation references retained. See verification/tiger-web-comparison.json",
+          "runtimeIntegrated": true
+        }
+      },
+      "godot": {
+        "file": "godot/assets/originals/moebiusTiger.glb",
+        "res": "res://assets/originals/moebiusTiger.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 80,
+        "meshDatablocks": 62,
+        "verticesIncludingOutline": 2552
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "bird",
+      "label": "Boids 小鸟",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/bird.source.json",
+        "exists": true,
+        "bytes": 15195
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/bird.blend",
+        "exists": true,
+        "bytes": 120491,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/bird.blend",
+          "exists": true,
+          "bytes": 117483,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/bird.glb",
+        "res": "res://assets/originals/bird.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 8,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 142
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "longWingGlider",
+      "label": "异星滑翔长翼鸟",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/longWingGlider.source.json",
+        "exists": true,
+        "bytes": 24291
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/longWingGlider.blend",
+        "exists": true,
+        "bytes": 133449,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/longWingGlider.blend",
+          "exists": true,
+          "bytes": 130622,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/longWingGlider.glb",
+        "res": "res://assets/originals/longWingGlider.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 16,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 278
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "craneNPC",
+      "label": "丹顶鹤 NPC",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/craneNPC.source.json",
+        "exists": true,
+        "bytes": 119559
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/craneNPC.blend",
+        "exists": true,
+        "bytes": 233257,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/craneNPC.blend",
+          "exists": true,
+          "bytes": 230540,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/craneNPC.glb",
+        "res": "res://assets/originals/craneNPC.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 30,
+        "meshDatablocks": 26,
+        "verticesIncludingOutline": 1572
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "messenger",
+      "label": "送信人（玩家）",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/messenger.source.json",
+        "exists": true,
+        "bytes": 34509
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/messenger.blend",
+        "exists": true,
+        "bytes": 156656,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/messenger.blend",
+          "exists": true,
+          "bytes": 152801,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/messenger.glb",
+        "res": "res://assets/originals/messenger.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 15,
+        "meshDatablocks": 10,
+        "verticesIncludingOutline": 306
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "agentMessenger",
+      "label": "数字孪生送信人",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/agentMessenger.source.json",
+        "exists": true,
+        "bytes": 225113
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/agentMessenger.blend",
+        "exists": true,
+        "bytes": 369654,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/agentMessenger.blend",
+          "exists": true,
+          "bytes": 370702,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/agentMessenger.glb",
+        "res": "res://assets/originals/agentMessenger.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 13,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 1542
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "bookshopHydrangeas",
+      "label": "书店绣球",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/bookshopHydrangeas.source.json",
+        "exists": true,
+        "bytes": 25237832
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/bookshopHydrangeas.blend",
+        "exists": true,
+        "bytes": 16883883,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/bookshopHydrangeas.blend",
+          "exists": true,
+          "bytes": 16190469,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/bookshopHydrangeas.glb",
+        "res": "res://assets/originals/bookshopHydrangeas.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 233,
+        "meshDatablocks": 7,
+        "verticesIncludingOutline": 181296
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "grassTuft",
+      "label": "草丛",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/grassTuft.source.json",
+        "exists": true,
+        "bytes": 9038
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/grassTuft.blend",
+        "exists": true,
+        "bytes": 111164,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/grassTuft.blend",
+          "exists": true,
+          "bytes": 108208,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/grassTuft.glb",
+        "res": "res://assets/originals/grassTuft.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 4,
+        "meshDatablocks": 3,
+        "verticesIncludingOutline": 54
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "mossyGround",
+      "label": "厚涂苔藓地被",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/mossyGround.source.json",
+        "exists": true,
+        "bytes": 892096
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/mossyGround.blend",
+        "exists": true,
+        "bytes": 1419065,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/mossyGround.blend",
+          "exists": true,
+          "bytes": 1417409,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/mossyGround.glb",
+        "res": "res://assets/originals/mossyGround.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 196,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 15865
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_whale",
+      "label": "沼泽·白鲸",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_whale.source.json",
+        "exists": true,
+        "bytes": 201783
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_whale.blend",
+        "exists": true,
+        "bytes": 265640,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_whale.blend",
+          "exists": true,
+          "bytes": 263460,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_whale.glb",
+        "res": "res://assets/originals/swamp_whale.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 20,
+        "meshDatablocks": 19,
+        "verticesIncludingOutline": 2787
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "1 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_worldTree",
+      "label": "沼泽·世界树",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_worldTree.source.json",
+        "exists": true,
+        "bytes": 1710677
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_worldTree.blend",
+        "exists": true,
+        "bytes": 1375709,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_worldTree.blend",
+          "exists": true,
+          "bytes": 1372152,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_worldTree.glb",
+        "res": "res://assets/originals/swamp_worldTree.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 42,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 24312
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_nativeDoll",
+      "label": "沼泽·原住民人偶",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_nativeDoll.source.json",
+        "exists": true,
+        "bytes": 85172
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_nativeDoll.blend",
+        "exists": true,
+        "bytes": 174028,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_nativeDoll.blend",
+          "exists": true,
+          "bytes": 171285,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_nativeDoll.glb",
+        "res": "res://assets/originals/swamp_nativeDoll.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 13,
+        "meshDatablocks": 12,
+        "verticesIncludingOutline": 1068
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_lotusLeafBoat",
+      "label": "沼泽·莲叶舟",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_lotusLeafBoat.source.json",
+        "exists": true,
+        "bytes": 303947
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_lotusLeafBoat.blend",
+        "exists": true,
+        "bytes": 378664,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_lotusLeafBoat.blend",
+          "exists": true,
+          "bytes": 372484,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_lotusLeafBoat.glb",
+        "res": "res://assets/originals/swamp_lotusLeafBoat.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 50,
+        "meshDatablocks": 45,
+        "verticesIncludingOutline": 3736
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_eel",
+      "label": "沼泽·黄绿鳗",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_eel.source.json",
+        "exists": true,
+        "bytes": 316141
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_eel.blend",
+        "exists": true,
+        "bytes": 333404,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_eel.blend",
+          "exists": true,
+          "bytes": 331182,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_eel.glb",
+        "res": "res://assets/originals/swamp_eel.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 7,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 4056
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_tubeWorm",
+      "label": "沼泽·橙红管虫丛",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_tubeWorm.source.json",
+        "exists": true,
+        "bytes": 184109
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_tubeWorm.blend",
+        "exists": true,
+        "bytes": 269042,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_tubeWorm.blend",
+          "exists": true,
+          "bytes": 264085,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_tubeWorm.glb",
+        "res": "res://assets/originals/swamp_tubeWorm.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 25,
+        "meshDatablocks": 24,
+        "verticesIncludingOutline": 2592
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_mushroom",
+      "label": "沼泽·紫蘑菇/珊瑚",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_mushroom.source.json",
+        "exists": true,
+        "bytes": 73009
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_mushroom.blend",
+        "exists": true,
+        "bytes": 171968,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_mushroom.blend",
+          "exists": true,
+          "bytes": 168579,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_mushroom.glb",
+        "res": "res://assets/originals/swamp_mushroom.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 9,
+        "meshDatablocks": 8,
+        "verticesIncludingOutline": 870
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_pinkHanger",
+      "label": "沼泽·粉垂生物",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_pinkHanger.source.json",
+        "exists": true,
+        "bytes": 132894
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_pinkHanger.blend",
+        "exists": true,
+        "bytes": 208407,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_pinkHanger.blend",
+          "exists": true,
+          "bytes": 206004,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_pinkHanger.glb",
+        "res": "res://assets/originals/swamp_pinkHanger.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 7,
+        "meshDatablocks": 6,
+        "verticesIncludingOutline": 1560
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_bird",
+      "label": "沼泽·沼泽鸟",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_bird.source.json",
+        "exists": true,
+        "bytes": 27434
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_bird.blend",
+        "exists": true,
+        "bytes": 146944,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_bird.blend",
+          "exists": true,
+          "bytes": 143849,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_bird.glb",
+        "res": "res://assets/originals/swamp_bird.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 10,
+        "meshDatablocks": 9,
+        "verticesIncludingOutline": 136
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_monkey",
+      "label": "沼泽·长尾猴",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_monkey.source.json",
+        "exists": true,
+        "bytes": 183877
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_monkey.blend",
+        "exists": true,
+        "bytes": 265262,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_monkey.blend",
+          "exists": true,
+          "bytes": 263669,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_monkey.glb",
+        "res": "res://assets/originals/swamp_monkey.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 21,
+        "meshDatablocks": 20,
+        "verticesIncludingOutline": 2568
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_lizard",
+      "label": "沼泽·发光蜥蜴",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_lizard.source.json",
+        "exists": true,
+        "bytes": 72763
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_lizard.blend",
+        "exists": true,
+        "bytes": 182358,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_lizard.blend",
+          "exists": true,
+          "bytes": 179175,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_lizard.glb",
+        "res": "res://assets/originals/swamp_lizard.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 16,
+        "meshDatablocks": 15,
+        "verticesIncludingOutline": 820
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_ribbonFish",
+      "label": "沼泽·发光带鱼",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_ribbonFish.source.json",
+        "exists": true,
+        "bytes": 28488
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_ribbonFish.blend",
+        "exists": true,
+        "bytes": 140985,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_ribbonFish.blend",
+          "exists": true,
+          "bytes": 137987,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_ribbonFish.glb",
+        "res": "res://assets/originals/swamp_ribbonFish.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 218
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_shell",
+      "label": "沼泽·贝壳",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_shell.source.json",
+        "exists": true,
+        "bytes": 58519
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_shell.blend",
+        "exists": true,
+        "bytes": 151007,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_shell.blend",
+          "exists": true,
+          "bytes": 148309,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_shell.glb",
+        "res": "res://assets/originals/swamp_shell.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 768
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_rimPalm",
+      "label": "沼泽·坑缘棕榈",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_rimPalm.source.json",
+        "exists": true,
+        "bytes": 30761
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_rimPalm.blend",
+        "exists": true,
+        "bytes": 146130,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_rimPalm.blend",
+          "exists": true,
+          "bytes": 143586,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_rimPalm.glb",
+        "res": "res://assets/originals/swamp_rimPalm.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 17,
+        "meshDatablocks": 16,
+        "verticesIncludingOutline": 396
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_toweringTree",
+      "label": "沼泽·苍天巨树",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_toweringTree.source.json",
+        "exists": true,
+        "bytes": 884577
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_toweringTree.blend",
+        "exists": true,
+        "bytes": 917061,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_toweringTree.blend",
+          "exists": true,
+          "bytes": 913463,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_toweringTree.glb",
+        "res": "res://assets/originals/swamp_toweringTree.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 171,
+        "meshDatablocks": 170,
+        "verticesIncludingOutline": 13800
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_canopy",
+      "label": "沼泽·树冠顶棚",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_canopy.source.json",
+        "exists": true,
+        "bytes": 301654
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_canopy.blend",
+        "exists": true,
+        "bytes": 473113,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_canopy.blend",
+          "exists": true,
+          "bytes": 469250,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_canopy.glb",
+        "res": "res://assets/originals/swamp_canopy.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 182,
+        "meshDatablocks": 180,
+        "verticesIncludingOutline": 3588
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "108 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_glowFlower",
+      "label": "沼泽·发光花蕊花",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_glowFlower.source.json",
+        "exists": true,
+        "bytes": 47428
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_glowFlower.blend",
+        "exists": true,
+        "bytes": 163570,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_glowFlower.blend",
+          "exists": true,
+          "bytes": 160565,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_glowFlower.glb",
+        "res": "res://assets/originals/swamp_glowFlower.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 15,
+        "meshDatablocks": 14,
+        "verticesIncludingOutline": 304
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_giantFlower",
+      "label": "沼泽·巨花",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_giantFlower.source.json",
+        "exists": true,
+        "bytes": 56256
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_giantFlower.blend",
+        "exists": true,
+        "bytes": 171213,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_giantFlower.blend",
+          "exists": true,
+          "bytes": 167631,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_giantFlower.glb",
+        "res": "res://assets/originals/swamp_giantFlower.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 17,
+        "meshDatablocks": 16,
+        "verticesIncludingOutline": 412
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_stamenSpike",
+      "label": "沼泽·花蕊尖锥",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_stamenSpike.source.json",
+        "exists": true,
+        "bytes": 36625
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_stamenSpike.blend",
+        "exists": true,
+        "bytes": 145194,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_stamenSpike.blend",
+          "exists": true,
+          "bytes": 140919,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_stamenSpike.glb",
+        "res": "res://assets/originals/swamp_stamenSpike.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 5,
+        "meshDatablocks": 4,
+        "verticesIncludingOutline": 220
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_fishSchool",
+      "label": "沼泽·绿黑斑纹小鱼群",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_fishSchool.source.json",
+        "exists": true,
+        "bytes": 208168
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_fishSchool.blend",
+        "exists": true,
+        "bytes": 292970,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_fishSchool.blend",
+          "exists": true,
+          "bytes": 290107,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_fishSchool.glb",
+        "res": "res://assets/originals/swamp_fishSchool.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 68,
+        "meshDatablocks": 58,
+        "verticesIncludingOutline": 1812
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swamp_fireflies",
+      "label": "沼泽·萤火虫群",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swamp_fireflies.source.json",
+        "exists": true,
+        "bytes": 84634
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swamp_fireflies.blend",
+        "exists": true,
+        "bytes": 340851,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swamp_fireflies.blend",
+          "exists": true,
+          "bytes": 334947,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swamp_fireflies.glb",
+        "res": "res://assets/originals/swamp_fireflies.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 47,
+        "meshDatablocks": 46,
+        "verticesIncludingOutline": 184
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "swampZone",
+      "label": "莫比斯湖沼生态区",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/swampZone.source.json",
+        "exists": true,
+        "bytes": 19571718
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/swampZone.blend",
+        "exists": true,
+        "bytes": 18589977,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/swampZone.blend",
+          "exists": true,
+          "bytes": 18614299,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/swampZone.glb",
+        "res": "res://assets/originals/swampZone.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 3917,
+        "meshDatablocks": 3637,
+        "verticesIncludingOutline": 281515
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "4 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "572 个实例被展开（层级与实例关系需复核）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "moebiusCity",
+      "label": "莫比斯水晶城",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/moebiusCity.source.json",
+        "exists": true,
+        "bytes": 3595479
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/moebiusCity.blend",
+        "exists": true,
+        "bytes": 3628946,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/moebiusCity.blend",
+          "exists": true,
+          "bytes": 3612282,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/moebiusCity.glb",
+        "res": "res://assets/originals/moebiusCity.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 709,
+        "meshDatablocks": 629,
+        "verticesIncludingOutline": 46332
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "8 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "420 个实例被展开（层级与实例关系需复核）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "startingCamp",
+      "label": "起始营地",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/startingCamp.source.json",
+        "exists": true,
+        "bytes": 886479
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/startingCamp.blend",
+        "exists": true,
+        "bytes": 1004669,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/startingCamp.blend",
+          "exists": true,
+          "bytes": 995886,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/startingCamp.glb",
+        "res": "res://assets/originals/startingCamp.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 228,
+        "meshDatablocks": 196,
+        "verticesIncludingOutline": 11627
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "saihoji",
+      "label": "西芳寺·苔海",
+      "representative": true,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/saihoji.source.json",
+        "exists": true,
+        "bytes": 79790857
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/saihoji.blend",
+        "exists": true,
+        "bytes": 52580797,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/saihoji.blend",
+          "exists": true,
+          "bytes": 51757994,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/saihoji.glb",
+        "res": "res://assets/originals/saihoji.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 776,
+        "meshDatablocks": 420,
+        "verticesIncludingOutline": 566820
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "planet",
+      "label": "小星球本体",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/planet.source.json",
+        "exists": true,
+        "bytes": 355084
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/planet.blend",
+        "exists": true,
+        "bytes": 483962,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/planet.blend",
+          "exists": true,
+          "bytes": 481015,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/planet.glb",
+        "res": "res://assets/originals/planet.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 2,
+        "meshDatablocks": 1,
+        "verticesIncludingOutline": 1617
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "hills",
+      "label": "岛丘地形",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/hills.source.json",
+        "exists": true,
+        "bytes": 418091
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/hills.blend",
+        "exists": true,
+        "bytes": 640144,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/hills.blend",
+          "exists": true,
+          "bytes": 636132,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/hills.glb",
+        "res": "res://assets/originals/hills.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 2321
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "moonLake",
+      "label": "月牙湖",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/moonLake.source.json",
+        "exists": true,
+        "bytes": 412575
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/moonLake.blend",
+        "exists": true,
+        "bytes": 557611,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/moonLake.blend",
+          "exists": true,
+          "bytes": 554787,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/moonLake.glb",
+        "res": "res://assets/originals/moonLake.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 40,
+        "meshDatablocks": 34,
+        "verticesIncludingOutline": 2898
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "tramSystem",
+      "label": "电车轨道系统",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/tramSystem.source.json",
+        "exists": true,
+        "bytes": 3809139
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/tramSystem.blend",
+        "exists": true,
+        "bytes": 5087351,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/tramSystem.blend",
+          "exists": true,
+          "bytes": 5048599,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/tramSystem.glb",
+        "res": "res://assets/originals/tramSystem.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 553,
+        "meshDatablocks": 548,
+        "verticesIncludingOutline": 47704
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "2 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "equatorialClouds",
+      "label": "轨道云墙（书店→峡谷）",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/equatorialClouds.source.json",
+        "exists": true,
+        "bytes": 97009030
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/equatorialClouds.blend",
+        "exists": true,
+        "bytes": 72555078,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/equatorialClouds.blend",
+          "exists": true,
+          "bytes": 72552161,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/equatorialClouds.glb",
+        "res": "res://assets/originals/equatorialClouds.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 149,
+        "meshDatablocks": 145,
+        "verticesIncludingOutline": 1580440
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "1 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    },
+    {
+      "id": "platforms",
+      "label": "平台土坡",
+      "representative": false,
+      "sourceSnapshot": {
+        "path": "assets/models/originals/platforms.source.json",
+        "exists": true,
+        "bytes": 280474
+      },
+      "exportSource": {
+        "path": "assets/models/originals/blender-r3/platforms.blend",
+        "exists": true,
+        "bytes": 441998,
+        "why": "原作存档（AGENTS.md：用户原作是唯一美术基准）"
+      },
+      "alternates": {
+        "batchCandidate": {
+          "path": "assets/models/optimized/batch-candidates-v2/platforms.blend",
+          "exists": true,
+          "bytes": 437223,
+          "status": "candidate only; source review, visual parity and runtime integration pending"
+        },
+        "optimizedRuntime": null
+      },
+      "godot": {
+        "file": "godot/assets/originals/platforms.glb",
+        "res": "res://assets/originals/platforms.glb",
+        "exists": true
+      },
+      "scale": {
+        "nodes": 3,
+        "meshDatablocks": 2,
+        "verticesIncludingOutline": 2140
+      },
+      "knownGaps": [
+        "Godot 材质、描边、程序动画与交互仍需适配和视觉验收",
+        "1 个线/点图元（glTF 可保留坐标；线宽、点精灵和着色器需引擎适配）",
+        "尚无优化/渲染对照记录（optimization=pending）"
+      ],
+      "status": "exported; validation pending"
+    }
+  ]
+}

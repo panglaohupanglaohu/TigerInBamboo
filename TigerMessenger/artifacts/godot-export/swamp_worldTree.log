@@ -1,0 +1,55 @@
+00:00.366  blend            | Read blend: "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/originals/blender-r3/swamp_worldTree.blend"
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+04:16:17 | INFO: Starting glTF 2.0 export
+04:16:17 | INFO: Extracting primitive: n4.001
+04:16:17 | INFO: Primitives created: 2
+04:16:17 | INFO: Extracting primitive: n6.001
+04:16:17 | INFO: Primitives created: 2
+04:16:17 | INFO: Extracting primitive: n8.001
+04:16:17 | INFO: Primitives created: 2
+04:16:17 | INFO: Extracting primitive: n10.001
+04:16:17 | INFO: Primitives created: 2
+04:16:17 | INFO: Extracting primitive: n12.001
+04:16:17 | INFO: Primitives created: 2
+04:16:17 | INFO: Extracting primitive: n14.001
+04:16:17 | INFO: Primitives created: 2
+04:16:17 | INFO: Extracting primitive: n16.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: n18.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: n20.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: n22.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: n24.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: n26.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: n28.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: swamp-vine-0.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: swamp-vine-1.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: swamp-vine-2.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: swamp-vine-3.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: swamp-vine-4.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: swamp-vine-5.001
+04:16:17 | INFO: Primitives created: 1
+04:16:17 | INFO: Extracting primitive: world-tree-trunk.001
+04:16:17 | INFO: Primitives created: 3
+04:16:17 | INFO: Finished glTF 2.0 export in 0.03812217712402344 s
+
+EXPORT_OK /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/godot-export/swamp_worldTree.glb
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

@@ -1,0 +1,98 @@
+{
+  "id": "citadelWatchtower",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "b368bc49a461797c202259ab408c0109c8ad717306ec92442dccdf91df241fc6",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 52,
+        "verticesAfter": 20,
+        "normalError": 4.795193672180176e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n12",
+      "result": {
+        "verticesBefore": 52,
+        "verticesAfter": 20,
+        "normalError": 4.801154136657715e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    },
+    {
+      "mesh": "n14",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "watchtower-crenel",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "watchtower-lookout-window",
+      "result": {
+        "verticesBefore": 24,
+        "verticesAfter": 8,
+        "normalError": 0.0,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "watchtower-lower",
+      "result": {
+        "verticesBefore": 52,
+        "verticesAfter": 20,
+        "normalError": 4.795193672180176e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "watchtower-octagonal-parapet",
+      "result": {
+        "verticesBefore": 52,
+        "verticesAfter": 20,
+        "normalError": 4.801154136657715e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "watchtower-upper",
+      "result": "preserved: normal roundtrip exceeds tolerance"
+    }
+  ],
+  "changedMeshes": 8,
+  "removedEditVertices": 192
+}

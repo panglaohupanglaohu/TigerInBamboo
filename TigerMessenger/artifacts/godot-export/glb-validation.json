@@ -1,0 +1,734 @@
+{
+  "tested": 72,
+  "mismatches": [],
+  "results": [
+    {
+      "id": "agentMessenger",
+      "expectedTriangles": 2624,
+      "exportedTriangles": 2624,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 5
+      },
+      "images": 0
+    },
+    {
+      "id": "bird",
+      "expectedTriangles": 26,
+      "exportedTriangles": 26,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 6
+      },
+      "images": 0
+    },
+    {
+      "id": "blackRock",
+      "expectedTriangles": 80,
+      "exportedTriangles": 80,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 1
+      },
+      "images": 0
+    },
+    {
+      "id": "bookshop",
+      "expectedTriangles": 428,
+      "exportedTriangles": 428,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 134
+      },
+      "images": 1
+    },
+    {
+      "id": "bookshopHydrangeas",
+      "expectedTriangles": 30216,
+      "exportedTriangles": 30216,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 5
+      },
+      "images": 0
+    },
+    {
+      "id": "bridge",
+      "expectedTriangles": 60,
+      "exportedTriangles": 60,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 30
+      },
+      "images": 0
+    },
+    {
+      "id": "bubblePod",
+      "expectedTriangles": 1974,
+      "exportedTriangles": 1974,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 42,
+        "1": 1
+      },
+      "images": 0
+    },
+    {
+      "id": "citadelElderTree",
+      "expectedTriangles": 916,
+      "exportedTriangles": 916,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 29
+      },
+      "images": 0
+    },
+    {
+      "id": "citadelWatchtower",
+      "expectedTriangles": 228,
+      "exportedTriangles": 228,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 75
+      },
+      "images": 0
+    },
+    {
+      "id": "classicAliFox",
+      "expectedTriangles": 1098,
+      "exportedTriangles": 1098,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 120
+      },
+      "images": 0
+    },
+    {
+      "id": "cloud",
+      "expectedTriangles": 560,
+      "exportedTriangles": 560,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 10
+      },
+      "images": 0
+    },
+    {
+      "id": "craneNPC",
+      "expectedTriangles": 262,
+      "exportedTriangles": 262,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 35
+      },
+      "images": 0
+    },
+    {
+      "id": "craneOnRock",
+      "expectedTriangles": 342,
+      "exportedTriangles": 342,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 36
+      },
+      "images": 0
+    },
+    {
+      "id": "equatorialClouds",
+      "expectedTriangles": 263040,
+      "exportedTriangles": 263040,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 72,
+        "1": 1
+      },
+      "images": 0
+    },
+    {
+      "id": "fence",
+      "expectedTriangles": 48,
+      "exportedTriangles": 48,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 24
+      },
+      "images": 0
+    },
+    {
+      "id": "fisherBoat",
+      "expectedTriangles": 21208,
+      "exportedTriangles": 21208,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 1163
+      },
+      "images": 0
+    },
+    {
+      "id": "flower",
+      "expectedTriangles": 60,
+      "exportedTriangles": 60,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 6
+      },
+      "images": 0
+    },
+    {
+      "id": "fox",
+      "expectedTriangles": 420,
+      "exportedTriangles": 420,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 88
+      },
+      "images": 0
+    },
+    {
+      "id": "grassTuft",
+      "expectedTriangles": 18,
+      "exportedTriangles": 18,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 6
+      },
+      "images": 0
+    },
+    {
+      "id": "harborCrane",
+      "expectedTriangles": 336,
+      "exportedTriangles": 336,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 70
+      },
+      "images": 0
+    },
+    {
+      "id": "hills",
+      "expectedTriangles": 3520,
+      "exportedTriangles": 3520,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 2
+      },
+      "images": 0
+    },
+    {
+      "id": "house",
+      "expectedTriangles": 56,
+      "exportedTriangles": 56,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 26
+      },
+      "images": 0
+    },
+    {
+      "id": "hydrangea",
+      "expectedTriangles": 3336,
+      "exportedTriangles": 3336,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 5
+      },
+      "images": 0
+    },
+    {
+      "id": "lamp",
+      "expectedTriangles": 116,
+      "exportedTriangles": 116,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 10
+      },
+      "images": 0
+    },
+    {
+      "id": "lawnHill",
+      "expectedTriangles": 526,
+      "exportedTriangles": 526,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 9
+      },
+      "images": 0
+    },
+    {
+      "id": "longWingGlider",
+      "expectedTriangles": 48,
+      "exportedTriangles": 48,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 10
+      },
+      "images": 0
+    },
+    {
+      "id": "lowPolyTree",
+      "expectedTriangles": 576,
+      "exportedTriangles": 576,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 105
+      },
+      "images": 0
+    },
+    {
+      "id": "messenger",
+      "expectedTriangles": 138,
+      "exportedTriangles": 138,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 65
+      },
+      "images": 0
+    },
+    {
+      "id": "moebiusAircraft",
+      "expectedTriangles": 4782,
+      "exportedTriangles": 4782,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 80
+      },
+      "images": 0
+    },
+    {
+      "id": "moebiusAirship",
+      "expectedTriangles": 1844,
+      "exportedTriangles": 1844,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 721
+      },
+      "images": 0
+    },
+    {
+      "id": "moebiusCity",
+      "expectedTriangles": 10980,
+      "exportedTriangles": 10980,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 1516
+      },
+      "images": 0
+    },
+    {
+      "id": "moebiusSwamp",
+      "expectedTriangles": 86516,
+      "exportedTriangles": 86516,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 5125,
+        "1": 4
+      },
+      "images": 2
+    },
+    {
+      "id": "moebiusTiger",
+      "expectedTriangles": 1144,
+      "exportedTriangles": 1144,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 71
+      },
+      "images": 1
+    },
+    {
+      "id": "moebiusTower",
+      "expectedTriangles": 2126,
+      "exportedTriangles": 2126,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 300
+      },
+      "images": 0
+    },
+    {
+      "id": "moonLake",
+      "expectedTriangles": 1256,
+      "exportedTriangles": 1256,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 21
+      },
+      "images": 1
+    },
+    {
+      "id": "mossyGround",
+      "expectedTriangles": 10132,
+      "exportedTriangles": 10132,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 98
+      },
+      "images": 0
+    },
+    {
+      "id": "oldHarbor",
+      "expectedTriangles": 25996,
+      "exportedTriangles": 25996,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 2000
+      },
+      "images": 0
+    },
+    {
+      "id": "pine",
+      "expectedTriangles": 3356,
+      "exportedTriangles": 3356,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 5
+      },
+      "images": 0
+    },
+    {
+      "id": "planet",
+      "expectedTriangles": 2976,
+      "exportedTriangles": 2976,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 1
+      },
+      "images": 0
+    },
+    {
+      "id": "platforms",
+      "expectedTriangles": 3360,
+      "exportedTriangles": 3360,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 1,
+        "1": 1
+      },
+      "images": 0
+    },
+    {
+      "id": "pole",
+      "expectedTriangles": 96,
+      "exportedTriangles": 96,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 18
+      },
+      "images": 0
+    },
+    {
+      "id": "rock",
+      "expectedTriangles": 80,
+      "exportedTriangles": 80,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 1
+      },
+      "images": 0
+    },
+    {
+      "id": "saihoji",
+      "expectedTriangles": 98696,
+      "exportedTriangles": 98696,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 519
+      },
+      "images": 0
+    },
+    {
+      "id": "signpost",
+      "expectedTriangles": 44,
+      "exportedTriangles": 44,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 11
+      },
+      "images": 0
+    },
+    {
+      "id": "snowMassif",
+      "expectedTriangles": 752,
+      "exportedTriangles": 752,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 14
+      },
+      "images": 0
+    },
+    {
+      "id": "snowMountainPeak",
+      "expectedTriangles": 120,
+      "exportedTriangles": 120,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 2
+      },
+      "images": 0
+    },
+    {
+      "id": "stackedCrates",
+      "expectedTriangles": 708,
+      "exportedTriangles": 708,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 354
+      },
+      "images": 0
+    },
+    {
+      "id": "startingCamp",
+      "expectedTriangles": 1338,
+      "exportedTriangles": 1338,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 220
+      },
+      "images": 0
+    },
+    {
+      "id": "swampZone",
+      "expectedTriangles": 85205,
+      "exportedTriangles": 85205,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 5049,
+        "1": 4
+      },
+      "images": 2
+    },
+    {
+      "id": "swamp_bird",
+      "expectedTriangles": 24,
+      "exportedTriangles": 24,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 7
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_canopy",
+      "expectedTriangles": 552,
+      "exportedTriangles": 552,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 36,
+        "1": 108
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_eel",
+      "expectedTriangles": 706,
+      "exportedTriangles": 706,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 4
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_fireflies",
+      "expectedTriangles": 92,
+      "exportedTriangles": 92,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 46
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_fishSchool",
+      "expectedTriangles": 478,
+      "exportedTriangles": 478,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 58
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_giantFlower",
+      "expectedTriangles": 110,
+      "exportedTriangles": 110,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 9
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_glowFlower",
+      "expectedTriangles": 76,
+      "exportedTriangles": 76,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 10
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_lizard",
+      "expectedTriangles": 138,
+      "exportedTriangles": 138,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 13
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_lotusLeafBoat",
+      "expectedTriangles": 652,
+      "exportedTriangles": 652,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 32
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_monkey",
+      "expectedTriangles": 428,
+      "exportedTriangles": 428,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 18
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_mushroom",
+      "expectedTriangles": 145,
+      "exportedTriangles": 145,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 8
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_nativeDoll",
+      "expectedTriangles": 178,
+      "exportedTriangles": 178,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 7
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_pinkHanger",
+      "expectedTriangles": 290,
+      "exportedTriangles": 290,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 4
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_ribbonFish",
+      "expectedTriangles": 64,
+      "exportedTriangles": 64,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 3
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_rimPalm",
+      "expectedTriangles": 66,
+      "exportedTriangles": 66,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 10
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_shell",
+      "expectedTriangles": 128,
+      "exportedTriangles": 128,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 2
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_stamenSpike",
+      "expectedTriangles": 62,
+      "exportedTriangles": 62,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 4
+      },
+      "images": 1
+    },
+    {
+      "id": "swamp_toweringTree",
+      "expectedTriangles": 2300,
+      "exportedTriangles": 2300,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 181
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_tubeWorm",
+      "expectedTriangles": 432,
+      "exportedTriangles": 432,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 24
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_whale",
+      "expectedTriangles": 464,
+      "exportedTriangles": 464,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 14,
+        "1": 1
+      },
+      "images": 0
+    },
+    {
+      "id": "swamp_worldTree",
+      "expectedTriangles": 4052,
+      "exportedTriangles": 4052,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 28
+      },
+      "images": 0
+    },
+    {
+      "id": "tram",
+      "expectedTriangles": 1046,
+      "exportedTriangles": 1046,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 372
+      },
+      "images": 2
+    },
+    {
+      "id": "tramSystem",
+      "expectedTriangles": 27548,
+      "exportedTriangles": 27548,
+      "triangleMatch": true,
+      "primitiveModes": {
+        "4": 2119,
+        "1": 2
+      },
+      "images": 4
+    }
+  ]
+}

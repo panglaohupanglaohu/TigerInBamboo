@@ -1,0 +1,19 @@
+{
+  "job_id": "web-tiger-anatomy",
+  "started_at": 1788895819.578645,
+  "fingerprint": "1e50308a74ebae2a7f2d06e5a9f89984f228bb6f945fd007ed0ba97438fff99b",
+  "status": "passed",
+  "run_dir": "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c",
+  "finished_at": 1788895827.0116339,
+  "reports": {
+    "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/report.json": "ec4907d9198496ec9582e51d412c7eb76a457df63279be0a56a3f7715cd3207d"
+  },
+  "artifacts": {
+    "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/browser-check.json": "07959b415e0e9fc1ea7f899143107e34d3c3bde781cc611febee66155a9cc229",
+    "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/idle-before-after.png": "defbcda31f0b76b2cd22572680deb8495867f34f32a905ba8d4c41b0879bf3a5",
+    "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/walk-before-after.png": "4e607783e54c681275ff1bbbce094d9aa0cef6b1bdad34d911421597ef6854e5",
+    "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/drink-before-after.png": "a87946c874c5a199eabcef5315db346eb2d9d7680e4561cb83d355a4296aeb8f",
+    "artifacts/pipeline/local-runs/web-tiger-anatomy/11b8305744ac41b1856b78380159c18c/preview.html": "7fd3b64ecd4e5efedb3daf5ece246ea099398ecf222acd57ca589d26cfd36a9e"
+  },
+  "visual_approved": false
+}

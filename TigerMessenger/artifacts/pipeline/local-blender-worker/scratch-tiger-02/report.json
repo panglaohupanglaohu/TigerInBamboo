@@ -1,0 +1,802 @@
+{
+  "job_id": "blender-tiger-roundtrip",
+  "asset_id": "moebiusTiger",
+  "passed": true,
+  "visual_approved": false,
+  "production_overwritten": false,
+  "foreground_touched": false,
+  "input_sha256": {
+    "assets/models/optimized/moebius-tiger-anatomy-v3.blend": "209743e402d44e15bbd007868ae50371344a7120b7f649bd27207d603d899352",
+    "godot/assets/art-pilots/moebius-tiger-anatomy-v3.glb": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be",
+    "tools/pipeline/local/blender_export_check.py": "ed0deaa6c112b07759c76c070564cabbf9d9f32f8770a35f71f7318a1362f17f",
+    "tools/pipeline/local/blender_jobs.py": "caecde93f2324f0aebe8e582fb3550a72ac913839103d80428e9b4aa19800e30"
+  },
+  "started_unix": 1788893984.662175,
+  "failure": null,
+  "argv": [
+    "/Applications/Blender.app/Contents/MacOS/Blender",
+    "--background",
+    "--factory-startup",
+    "--disable-autoexec",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/moebius-tiger-anatomy-v3.blend",
+    "--python-exit-code",
+    "1",
+    "--python",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/local/blender_export_check.py",
+    "--",
+    "--scene",
+    "Tiger Anatomy V3",
+    "--candidate",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-blender-worker/scratch-tiger-02/candidate.glb",
+    "--report",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/local-blender-worker/scratch-tiger-02/blender-roundtrip.json"
+  ],
+  "result": {
+    "passed": true,
+    "failures": [],
+    "blender_version": "5.2.1 LTS",
+    "scene": "Tiger Anatomy V3",
+    "visual_approved": false,
+    "scope": "Saved candidate mesh/empty hierarchy export-import; node, extras, triangle/material usage, transforms and bounds only. Shader appearance, textures, animations and runtime acceptance are not certified.",
+    "excluded_review_objects": [
+      {
+        "name": "Tiger_Review_Camera",
+        "type": "CAMERA"
+      },
+      {
+        "name": "Tiger_Key",
+        "type": "LIGHT"
+      },
+      {
+        "name": "Tiger_Fill",
+        "type": "LIGHT"
+      },
+      {
+        "name": "Tiger_Rim",
+        "type": "LIGHT"
+      }
+    ],
+    "saved_visibility": {
+      "Tiger_Round_Ear_Inner_n15": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Round_Ear_Inner_n17": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Round_Pupil_n19": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Heavy_Brow_n19": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Round_Pupil_n21": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Heavy_Brow_n21": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Ivory_Chin": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Broad_Nasal_Bridge": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Whisker_Follicles": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "Tiger_Fine_Whiskers": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "moebius-cyber-ink-tiger.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-body.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-torso.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n3.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n4.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n5.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n6.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n7.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "tiger-head.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n9.006": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n10.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n11.007": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n12.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n13.007": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n14.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n15.007": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n16.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n17.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n18.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n19.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n20.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n21.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n22.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n23.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n24.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n25.008": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n26.006": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "tiger-brush-tail-root.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "TigerTailBase.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-1.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n30.008": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "TigerTail-2.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-2.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n33.006": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "TigerTail-3.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-3.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n36.006": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "TigerTailMid.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-4.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n39.005": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "TigerTail-5.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-5.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n42.006": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "TigerTail-6.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-6.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n45.005": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "TigerTail-7.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-tip.004": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n48.004": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "TigerTailTip.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "tiger-tail-brush-tip.005": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n51.004": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n52.004": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n53.005": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n54.005": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n55.004": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n56.004": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n57.004": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n58.004": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n59.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n60.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n61.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n62.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n63.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n64.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n65.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n66.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n67.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n68.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n69.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n70.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n71.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n72.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n73.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n74.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n75.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n76.002": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n77.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      },
+      "n78.003": {
+        "hide_render": false,
+        "hide_viewport": false,
+        "hide_set": false
+      },
+      "n79.003": {
+        "hide_render": true,
+        "hide_viewport": true,
+        "hide_set": true
+      }
+    },
+    "source": {
+      "nodes": 90,
+      "mesh_objects": 71,
+      "triangles": 9440,
+      "materials": [
+        "MeshBasicMaterial_m1.005",
+        "MeshBasicMaterial_m2.002",
+        "MeshBasicMaterial_m7.003",
+        "MeshBasicMaterial_m9.002",
+        "Tiger_V3_Charcoal_Striped",
+        "Tiger_V3_Deep_Ink",
+        "Tiger_V3_Ear_Inner",
+        "Tiger_V3_Face_Pattern",
+        "Tiger_V3_Ivory",
+        "Tiger_V3_Leg_Pattern",
+        "Tiger_V3_Nose",
+        "Tiger_V3_Red_Eyes",
+        "Tiger_V3_Tail_Pattern"
+      ],
+      "hidden_outline_nodes": [
+        "n10.008",
+        "n12.008",
+        "n14.008",
+        "n16.008",
+        "n18.008",
+        "n24.008",
+        "n26.006",
+        "n3.008",
+        "n30.008",
+        "n33.006",
+        "n36.006",
+        "n39.005",
+        "n42.006",
+        "n45.005",
+        "n48.004",
+        "n5.008",
+        "n51.004",
+        "n54.005",
+        "n56.004",
+        "n58.004",
+        "n61.003",
+        "n63.003",
+        "n65.003",
+        "n68.003",
+        "n7.008",
+        "n70.003",
+        "n72.003",
+        "n75.003",
+        "n77.003",
+        "n79.003"
+      ],
+      "empty_mesh_anchors": [
+        "n4.008"
+      ],
+      "original_node_ids": [
+        "n0",
+        "n1",
+        "n10",
+        "n11",
+        "n12",
+        "n13",
+        "n14",
+        "n15",
+        "n16",
+        "n17",
+        "n18",
+        "n19",
+        "n2",
+        "n20",
+        "n21",
+        "n22",
+        "n23",
+        "n24",
+        "n25",
+        "n26",
+        "n27",
+        "n28",
+        "n29",
+        "n3",
+        "n30",
+        "n31",
+        "n32",
+        "n33",
+        "n34",
+        "n35",
+        "n36",
+        "n37",
+        "n38",
+        "n39",
+        "n4",
+        "n40",
+        "n41",
+        "n42",
+        "n43",
+        "n44",
+        "n45",
+        "n46",
+        "n47",
+        "n48",
+        "n49",
+        "n5",
+        "n50",
+        "n51",
+        "n52",
+        "n53",
+        "n54",
+        "n55",
+        "n56",
+        "n57",
+        "n58",
+        "n59",
+        "n6",
+        "n60",
+        "n61",
+        "n62",
+        "n63",
+        "n64",
+        "n65",
+        "n66",
+        "n67",
+        "n68",
+        "n69",
+        "n7",
+        "n70",
+        "n71",
+        "n72",
+        "n73",
+        "n74",
+        "n75",
+        "n76",
+        "n77",
+        "n78",
+        "n79",
+        "n8",
+        "n9"
+      ]
+    },
+    "roundtrip": {
+      "nodes": 90,
+      "mesh_objects": 71,
+      "triangles": 9440,
+      "materials": [
+        "MeshBasicMaterial_m1.005",
+        "MeshBasicMaterial_m2.002",
+        "MeshBasicMaterial_m7.003",
+        "MeshBasicMaterial_m9.002",
+        "Tiger_V3_Charcoal_Striped",
+        "Tiger_V3_Deep_Ink",
+        "Tiger_V3_Ear_Inner",
+        "Tiger_V3_Face_Pattern",
+        "Tiger_V3_Ivory",
+        "Tiger_V3_Leg_Pattern",
+        "Tiger_V3_Nose",
+        "Tiger_V3_Red_Eyes",
+        "Tiger_V3_Tail_Pattern"
+      ],
+      "hidden_outline_nodes": [
+        "n10.008",
+        "n12.008",
+        "n14.008",
+        "n16.008",
+        "n18.008",
+        "n24.008",
+        "n26.006",
+        "n3.008",
+        "n30.008",
+        "n33.006",
+        "n36.006",
+        "n39.005",
+        "n42.006",
+        "n45.005",
+        "n48.004",
+        "n5.008",
+        "n51.004",
+        "n54.005",
+        "n56.004",
+        "n58.004",
+        "n61.003",
+        "n63.003",
+        "n65.003",
+        "n68.003",
+        "n7.008",
+        "n70.003",
+        "n72.003",
+        "n75.003",
+        "n77.003",
+        "n79.003"
+      ],
+      "empty_mesh_anchors": [],
+      "original_node_ids": [
+        "n0",
+        "n1",
+        "n10",
+        "n11",
+        "n12",
+        "n13",
+        "n14",
+        "n15",
+        "n16",
+        "n17",
+        "n18",
+        "n19",
+        "n2",
+        "n20",
+        "n21",
+        "n22",
+        "n23",
+        "n24",
+        "n25",
+        "n26",
+        "n27",
+        "n28",
+        "n29",
+        "n3",
+        "n30",
+        "n31",
+        "n32",
+        "n33",
+        "n34",
+        "n35",
+        "n36",
+        "n37",
+        "n38",
+        "n39",
+        "n4",
+        "n40",
+        "n41",
+        "n42",
+        "n43",
+        "n44",
+        "n45",
+        "n46",
+        "n47",
+        "n48",
+        "n49",
+        "n5",
+        "n50",
+        "n51",
+        "n52",
+        "n53",
+        "n54",
+        "n55",
+        "n56",
+        "n57",
+        "n58",
+        "n59",
+        "n6",
+        "n60",
+        "n61",
+        "n62",
+        "n63",
+        "n64",
+        "n65",
+        "n66",
+        "n67",
+        "n68",
+        "n69",
+        "n7",
+        "n70",
+        "n71",
+        "n72",
+        "n73",
+        "n74",
+        "n75",
+        "n76",
+        "n77",
+        "n78",
+        "n79",
+        "n8",
+        "n9"
+      ]
+    },
+    "node_hierarchy_preserved": true,
+    "custom_extras_preserved": true,
+    "triangle_material_usage_preserved": true,
+    "finite_geometry": true,
+    "maximum_bound_error": 2.384185791015625e-07,
+    "maximum_transform_error": 2.384185791015625e-07,
+    "hidden_outlines_exported": true,
+    "source_visibility_not_encoded": true
+  },
+  "input_snapshot_still_current": true,
+  "source_blend_unchanged": true,
+  "production_glb_unchanged": true,
+  "candidate": {
+    "path": "artifacts/pipeline/local-blender-worker/scratch-tiger-02/candidate.glb",
+    "sha256": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be",
+    "bytes": 726332
+  },
+  "finished_unix": 1788893985.8821828,
+  "scope": "Saved candidate roundtrip validation only. No new art, shader/texture fidelity, animation, runtime deployment or visual approval. All hidden-outline geometry retained and identified by extras."
+}

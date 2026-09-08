@@ -1,0 +1,170 @@
+{
+  "id": "swamp_rimPalm",
+  "status": "Blender candidate; source review and engine parity pending",
+  "sourceSHA256": "06af6d98107becce2d9a02b5e096f17c618f3fde3ca13851fe45703571babc03",
+  "runtimeIntegrated": false,
+  "meshes": [
+    {
+      "mesh": "n13",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.842170943040401e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n1",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 14,
+        "normalError": 1.1399388313293457e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n11",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 3.552713678800501e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n12",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 3.552713678800501e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n10",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.842170943040401e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n14",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.842170943040401e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n15",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 4.973799150320701e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n16",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 4.973799150320701e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n2",
+      "result": {
+        "verticesBefore": 72,
+        "verticesAfter": 14,
+        "normalError": 1.1399388313293457e-05,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n3",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.1316282072803006e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n9",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.842170943040401e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n4",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.1316282072803006e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n5",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.1316282072803006e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n6",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.1316282072803006e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n7",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.842170943040401e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    },
+    {
+      "mesh": "n8",
+      "result": {
+        "verticesBefore": 18,
+        "verticesAfter": 8,
+        "normalError": 2.842170943040401e-14,
+        "faceCornerPositionError": 0,
+        "uvError": 0
+      }
+    }
+  ],
+  "changedMeshes": 16,
+  "removedEditVertices": 256
+}

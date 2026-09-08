@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "qwen": {
+    "configured": false,
+    "baseURL": "http://127.0.0.1:8000/v1",
+    "model": "REPLACE_WITH_ID_FROM_V1_MODELS",
+    "apiKeyEnv": null,
+    "timeoutSeconds": 3,
+    "probeTimeoutSeconds": 30,
+    "serverHint": "Apple Silicon: oMLX with a verified MLX-VLM checkpoint; discover the actual served model ID from /v1/models. See docs/LOCAL_ASSET_FACTORY_MAC.md."
+  },
+  "blender": {
+    "binary": "/Applications/Blender.app/Contents/MacOS/Blender",
+    "mcpCommand": [
+      "uvx",
+      "blender-mcp==1.9.1"
+    ],
+    "tcpHost": "127.0.0.1",
+    "tcpPort": 9876
+  },
+  "godot": {
+    "binary": "/Users/panglaohu/Downloads/Godot.app/Contents/MacOS/Godot"
+  },
+  "llada": {
+    "configured": false,
+    "model": "inclusionAI/LLaDA-Image",
+    "serviceURL": null,
+    "apiKeyEnv": null,
+    "wrapperStatus": "not-built",
+    "note": "Apple Silicon compatibility unverified. Upstream pins flash-attn and documents CUDA. MPS attention, complex RoPE and full text/edit pipelines require testing. Reuse approved references until verified; no silent model substitution."
+  },
+  "deployment": {
+    "profile": "mac-studio-m5-max-64gb",
+    "hardwareSource": "user-reported",
+    "targetAccessVerified": false,
+    "currentConnectedHost": "Apple M2, 16 GiB; not the requested target",
+    "configurationStatus": "planning-only; limits below are not enforced by preflight tools",
+    "memoryPolicy": {
+      "unifiedMemoryGB": 64,
+      "reserveForOSAndAppsGB": 24,
+      "maxContextTokensInitial": 32768,
+      "inferenceConcurrency": 1,
+      "blenderBackgroundConcurrency": 1,
+      "godotImportConcurrency": 1,
+      "serializeInferenceImageAndHeavyRendering": true
+    },
+    "qwenCheckpoint": "mlx-community/Qwen3.8-27B-4bit",
+    "qwenWeightsDownloadGB": 16.1
+  }
+}

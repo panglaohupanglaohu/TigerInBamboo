@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "purpose": "Actual tiger factory and world-wrapper browser regression; no full-game acceptance",
+  "jobs": [
+    {
+      "id": "web-tiger-anatomy",
+      "asset_id": "moebiusTiger",
+      "inputs": [
+        "src",
+        "vendor",
+        "tools/pipeline/test_tiger_anatomy_web.mjs",
+        "tools/pipeline/local/web_jobs.py",
+        "assets/models/optimized/moebiusTigerAnatomyData.js",
+        "assets/models/optimized/moebiusTigerGeometryData.js",
+        "assets/models/originals/moebiusTiger.source.json"
+      ],
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "tools/pipeline/local/web_jobs.py",
+        "--output",
+        "{run_dir}/report.json"
+      ],
+      "cwd": ".",
+      "expected_reports": [
+        "{run_dir}/report.json"
+      ],
+      "expected_artifacts": [
+        "{run_dir}/browser-check.json",
+        "{run_dir}/idle-before-after.png",
+        "{run_dir}/walk-before-after.png",
+        "{run_dir}/drink-before-after.png",
+        "{run_dir}/preview.html"
+      ],
+      "timeout_seconds": 240,
+      "resource_lock": "web-browser",
+      "success_criteria": {
+        "exit_code": 0,
+        "report_equals": {
+          "passed": true,
+          "browser_passed": true,
+          "runtime_inputs_unchanged": true,
+          "foreground_touched": false,
+          "visual_approved": false
+        }
+      },
+      "scope": "Real browser fixture and old world callbacks; not a full-game rescue playthrough."
+    }
+  ]
+}

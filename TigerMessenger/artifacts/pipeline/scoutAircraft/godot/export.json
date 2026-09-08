@@ -1,0 +1,312 @@
+{
+  "source": "assets/models/optimized/scoutAircraft-art-v1.blend",
+  "sourceUnchanged": true,
+  "glb": "godot/assets/art-pilots/scoutAircraft-art-v1.glb",
+  "selectedOriginalNodeIds": [
+    "n0",
+    "n1",
+    "n10",
+    "n11",
+    "n12",
+    "n13",
+    "n14",
+    "n15",
+    "n16",
+    "n17",
+    "n18",
+    "n19",
+    "n2",
+    "n20",
+    "n21",
+    "n22",
+    "n23",
+    "n24",
+    "n25",
+    "n26",
+    "n27",
+    "n28",
+    "n29",
+    "n3",
+    "n30",
+    "n31",
+    "n32",
+    "n33",
+    "n34",
+    "n35",
+    "n36",
+    "n37",
+    "n38",
+    "n39",
+    "n4",
+    "n40",
+    "n41",
+    "n42",
+    "n43",
+    "n44",
+    "n45",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9"
+  ],
+  "addedNodes": [
+    "scout-cockpit-inner-liner"
+  ],
+  "scene": "Scout Aircraft Art V1",
+  "glbSha256": "2be409f886a02bf2d0cda5a4278234a97c71a26d09867523e0c5f957359a084f",
+  "slotOptimization": {
+    "beforeSlots": 42,
+    "afterSlots": 41,
+    "meshes": [
+      {
+        "node": "scout-cockpit-inner-liner",
+        "before": 1,
+        "after": 1,
+        "faces": 17
+      },
+      {
+        "node": "n1",
+        "before": 2,
+        "after": 1,
+        "faces": 162
+      },
+      {
+        "node": "n2",
+        "before": 1,
+        "after": 1,
+        "faces": 144
+      },
+      {
+        "node": "n3",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n4",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n5",
+        "before": 1,
+        "after": 1,
+        "faces": 16
+      },
+      {
+        "node": "n6",
+        "before": 1,
+        "after": 1,
+        "faces": 16
+      },
+      {
+        "node": "n7",
+        "before": 1,
+        "after": 1,
+        "faces": 144
+      },
+      {
+        "node": "n8",
+        "before": 1,
+        "after": 1,
+        "faces": 144
+      },
+      {
+        "node": "n9",
+        "before": 1,
+        "after": 1,
+        "faces": 476
+      },
+      {
+        "node": "n10",
+        "before": 1,
+        "after": 1,
+        "faces": 168
+      },
+      {
+        "node": "n11",
+        "before": 1,
+        "after": 1,
+        "faces": 168
+      },
+      {
+        "node": "n12",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n13",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n14",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n15",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n16",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n17",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n18",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n19",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n20",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n21",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n22",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n23",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n24",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n25",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n27",
+        "before": 1,
+        "after": 1,
+        "faces": 28
+      },
+      {
+        "node": "n28",
+        "before": 1,
+        "after": 1,
+        "faces": 28
+      },
+      {
+        "node": "n29",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n30",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n32",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n33",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n35",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n36",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n37",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n38",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n39",
+        "before": 1,
+        "after": 1,
+        "faces": 32
+      },
+      {
+        "node": "n40",
+        "before": 1,
+        "after": 1,
+        "faces": 12
+      },
+      {
+        "node": "n41",
+        "before": 1,
+        "after": 1,
+        "faces": 80
+      },
+      {
+        "node": "n42",
+        "before": 1,
+        "after": 1,
+        "faces": 80
+      },
+      {
+        "node": "n43",
+        "before": 1,
+        "after": 1,
+        "faces": 80
+      }
+    ],
+    "canonicalMaterials": 19
+  },
+  "note": "Godot adapter hides original archived outline shells and translates glass; no world replacement"
+}

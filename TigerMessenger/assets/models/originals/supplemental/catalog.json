@@ -1,0 +1,333 @@
+{
+  "version": 1,
+  "scope": "Supplemental standalone capture; historical 72 catalog unchanged",
+  "existingCatalogReferences": [
+    {
+      "id": "bubblePod",
+      "status": "already in original 72; no duplicate capture"
+    }
+  ],
+  "entries": [
+    {
+      "id": "scoutAircraft",
+      "label": "三重门侦察机",
+      "source": "src/world/planetV8/tripleGateScout.js",
+      "factory": "createTripleGateScoutAircraft",
+      "options": {
+        "scale": 1
+      },
+      "dynamicKeys": [
+        "propeller",
+        "canopy",
+        "cockpitAnchor",
+        "navigationLights",
+        "gunMuzzles"
+      ],
+      "runtimeSource": "src/player/scoutAircraftRide.js",
+      "sourceSha256": "87ff16b29f8be69031f2750a2cc7bd2ba2d1e83c59d459a5ffba7daa3e125156",
+      "runtimeSourceSha256": "47dd64a3f77bf50b28519133057e6f17f4b26ebbb2de85ba841a4b2f11330873"
+    },
+    {
+      "id": "gatePodCraft_pod-55-2",
+      "label": "泡形侦察艇 pod-55-2",
+      "source": "src/world/gatePodCraft.js",
+      "factory": "createGatePodCraft",
+      "options": {
+        "hull": 9141100,
+        "accent": 10337454,
+        "serial": 2
+      },
+      "family": "gatePodCraft",
+      "variant": "pod-55-2",
+      "sourceSha256": "addeaf2c51d26024c9a6885b8b79c240dd5f71c34fdc613160c7155dfe75b285"
+    },
+    {
+      "id": "gatePodCraft_pod-41-7",
+      "label": "泡形侦察艇 pod-41-7",
+      "source": "src/world/gatePodCraft.js",
+      "factory": "createGatePodCraft",
+      "options": {
+        "hull": 8221030,
+        "accent": 11059108,
+        "serial": 7
+      },
+      "family": "gatePodCraft",
+      "variant": "pod-41-7",
+      "sourceSha256": "addeaf2c51d26024c9a6885b8b79c240dd5f71c34fdc613160c7155dfe75b285"
+    },
+    {
+      "id": "gatePodCraft_pod-08-9",
+      "label": "泡形侦察艇 pod-08-9",
+      "source": "src/world/gatePodCraft.js",
+      "factory": "createGatePodCraft",
+      "options": {
+        "hull": 9732719,
+        "accent": 9417645,
+        "serial": 9
+      },
+      "family": "gatePodCraft",
+      "variant": "pod-08-9",
+      "sourceSha256": "addeaf2c51d26024c9a6885b8b79c240dd5f71c34fdc613160c7155dfe75b285"
+    },
+    {
+      "id": "gatePodEscort_pod-55-2",
+      "label": "伴飞泡机（含麻醉炮口） pod-55-2",
+      "source": "src/world/gatePodCraft.js",
+      "factory": "mountGatePodEscort",
+      "options": {
+        "slotIndex": 0
+      },
+      "family": "gatePodCraft",
+      "variant": "pod-55-2",
+      "relationship": "equipment/formation variant of gatePodCraft_pod-55-2",
+      "dynamicKeys": [
+        "tranqMuzzle"
+      ],
+      "runtimeSource": "src/world/vanguardAssault.js",
+      "sourceSha256": "addeaf2c51d26024c9a6885b8b79c240dd5f71c34fdc613160c7155dfe75b285",
+      "runtimeSourceSha256": "06f2eac041c57276fbb3bc283f90a6f2152e9b43d2254c5769856dfe2a89a1cb"
+    },
+    {
+      "id": "gatePodEscort_pod-41-7",
+      "label": "伴飞泡机（含麻醉炮口） pod-41-7",
+      "source": "src/world/gatePodCraft.js",
+      "factory": "mountGatePodEscort",
+      "options": {
+        "slotIndex": 1
+      },
+      "family": "gatePodCraft",
+      "variant": "pod-41-7",
+      "relationship": "equipment/formation variant of gatePodCraft_pod-41-7",
+      "dynamicKeys": [
+        "tranqMuzzle"
+      ],
+      "runtimeSource": "src/world/vanguardAssault.js",
+      "sourceSha256": "addeaf2c51d26024c9a6885b8b79c240dd5f71c34fdc613160c7155dfe75b285",
+      "runtimeSourceSha256": "06f2eac041c57276fbb3bc283f90a6f2152e9b43d2254c5769856dfe2a89a1cb"
+    },
+    {
+      "id": "gatePodEscort_pod-08-9",
+      "label": "伴飞泡机（含麻醉炮口） pod-08-9",
+      "source": "src/world/gatePodCraft.js",
+      "factory": "mountGatePodEscort",
+      "options": {
+        "slotIndex": 2
+      },
+      "family": "gatePodCraft",
+      "variant": "pod-08-9",
+      "relationship": "equipment/formation variant of gatePodCraft_pod-08-9",
+      "dynamicKeys": [
+        "tranqMuzzle"
+      ],
+      "runtimeSource": "src/world/vanguardAssault.js",
+      "sourceSha256": "addeaf2c51d26024c9a6885b8b79c240dd5f71c34fdc613160c7155dfe75b285",
+      "runtimeSourceSha256": "06f2eac041c57276fbb3bc283f90a6f2152e9b43d2254c5769856dfe2a89a1cb"
+    },
+    {
+      "id": "gateHaulerCraft_hauler-71-4",
+      "label": "重型运输艇 hauler-71-4",
+      "source": "src/world/gateHaulerCraft.js",
+      "factory": "createGateHaulerCraft",
+      "options": {
+        "shell": 13199706,
+        "belly": 15786967,
+        "serial": 4
+      },
+      "family": "gateHaulerCraft",
+      "variant": "hauler-71-4",
+      "sourceSha256": "8add69d252ade5b71307816ca1fea95ea1d73bbe7b42c1141673be8c717f4d88"
+    },
+    {
+      "id": "gateHaulerCraft_hauler-23-8",
+      "label": "重型运输艇 hauler-23-8",
+      "source": "src/world/gateHaulerCraft.js",
+      "factory": "createGateHaulerCraft",
+      "options": {
+        "shell": 12083026,
+        "belly": 15260621,
+        "serial": 8
+      },
+      "family": "gateHaulerCraft",
+      "variant": "hauler-23-8",
+      "sourceSha256": "8add69d252ade5b71307816ca1fea95ea1d73bbe7b42c1141673be8c717f4d88"
+    },
+    {
+      "id": "gateHaulerCraft_hauler-96-1",
+      "label": "重型运输艇 hauler-96-1",
+      "source": "src/world/gateHaulerCraft.js",
+      "factory": "createGateHaulerCraft",
+      "options": {
+        "shell": 13924714,
+        "belly": 16051169,
+        "serial": 1
+      },
+      "family": "gateHaulerCraft",
+      "variant": "hauler-96-1",
+      "sourceSha256": "8add69d252ade5b71307816ca1fea95ea1d73bbe7b42c1141673be8c717f4d88"
+    },
+    {
+      "id": "soccoCraft",
+      "label": "先锋兵登陆艇（货舱与活动尾门）",
+      "source": "src/world/gateHaulerCraft.js",
+      "factory": "createSoccoCraft",
+      "options": {},
+      "family": "gateHaulerCraft",
+      "relationship": "carrier variant with cargo hold; 3 runtime instances share factory",
+      "dynamicKeys": [
+        "soccoRamp",
+        "soccoSeats",
+        "soccoRopeAnchors"
+      ],
+      "runtimeSource": "src/world/vanguardAssault.js",
+      "sourceSha256": "8add69d252ade5b71307816ca1fea95ea1d73bbe7b42c1141673be8c717f4d88",
+      "runtimeSourceSha256": "06f2eac041c57276fbb3bc283f90a6f2152e9b43d2254c5769856dfe2a89a1cb"
+    },
+    {
+      "id": "citadelTrojanHorse",
+      "label": "特洛伊木马",
+      "source": "src/assets/citadelTrojanHorse.js",
+      "factory": "createCitadelTrojanHorse",
+      "options": {
+        "seed": 9901,
+        "scale": 1
+      },
+      "relationship": "standalone extraction; already nested in citadelRange parent snapshot",
+      "dynamicKeys": [
+        "bellyHatch"
+      ],
+      "runtimeSource": "src/world/citadelRange.js",
+      "sourceSha256": "c01f6f31c187a531838641faf7d329200846f072d18ae4ce3b9d1370d28b0f0a",
+      "runtimeSourceSha256": "5d4a0b71ec16a0a82755d8d950680867eb7cf44e42c703934a8212873c66ce66"
+    },
+    {
+      "id": "vanguardTrooper",
+      "label": "先锋重甲兵",
+      "source": "src/world/vanguardTrooper.js",
+      "factory": "createVanguardTrooper",
+      "options": {
+        "seed": 0,
+        "scale": 1
+      },
+      "dynamicKeys": [
+        "parts"
+      ],
+      "runtimeSource": "src/world/vanguardAssault.js",
+      "sourceSha256": "38e377e15266ec4fb88dfdee45bdc6d9cb4b419eafbbf607b794c6a5084b1405",
+      "runtimeSourceSha256": "06f2eac041c57276fbb3bc283f90a6f2152e9b43d2254c5769856dfe2a89a1cb"
+    },
+    {
+      "id": "romanSoldier_spear_red",
+      "label": "罗马羽冠兵 spear red",
+      "source": "src/assets/harbor.js",
+      "factory": "createHarborPatrolSoldier + paintSoldierHelm",
+      "options": {
+        "side": "red"
+      },
+      "family": "romanSoldier",
+      "variant": "spear_red",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "dynamicKeys": [
+        "parts",
+        "equipment"
+      ],
+      "runtimeSource": "src/world/saihojiPhalanx.js",
+      "sourceSha256": "c3045f59f391f101be020a4a73300b033db1ea018ac197643265d048f30b5394",
+      "runtimeSourceSha256": "0b1f12fe61b107731b58c1fe7cf841ccff81b518933cbc71cfc0bc2218fb473f"
+    },
+    {
+      "id": "romanSoldier_spear_blue",
+      "label": "罗马羽冠兵 spear blue",
+      "source": "src/assets/harbor.js",
+      "factory": "createHarborPatrolSoldier + paintSoldierHelm",
+      "options": {
+        "side": "blue"
+      },
+      "family": "romanSoldier",
+      "variant": "spear_blue",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "dynamicKeys": [
+        "parts",
+        "equipment"
+      ],
+      "runtimeSource": "src/world/saihojiPhalanx.js",
+      "sourceSha256": "c3045f59f391f101be020a4a73300b033db1ea018ac197643265d048f30b5394",
+      "runtimeSourceSha256": "0b1f12fe61b107731b58c1fe7cf841ccff81b518933cbc71cfc0bc2218fb473f"
+    },
+    {
+      "id": "romanSoldier_gladius_red",
+      "label": "罗马羽冠兵 gladius red",
+      "source": "src/assets/harbor.js",
+      "factory": "createGladiusSoldier + paintSoldierHelm",
+      "options": {
+        "side": "red"
+      },
+      "family": "romanSoldier",
+      "variant": "gladius_red",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "dynamicKeys": [
+        "parts",
+        "equipment"
+      ],
+      "runtimeSource": "src/world/saihojiPhalanx.js",
+      "sourceSha256": "c3045f59f391f101be020a4a73300b033db1ea018ac197643265d048f30b5394",
+      "runtimeSourceSha256": "0b1f12fe61b107731b58c1fe7cf841ccff81b518933cbc71cfc0bc2218fb473f"
+    },
+    {
+      "id": "romanSoldier_gladius_blue",
+      "label": "罗马羽冠兵 gladius blue",
+      "source": "src/assets/harbor.js",
+      "factory": "createGladiusSoldier + paintSoldierHelm",
+      "options": {
+        "side": "blue"
+      },
+      "family": "romanSoldier",
+      "variant": "gladius_blue",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "dynamicKeys": [
+        "parts",
+        "equipment"
+      ],
+      "runtimeSource": "src/world/saihojiPhalanx.js",
+      "sourceSha256": "c3045f59f391f101be020a4a73300b033db1ea018ac197643265d048f30b5394",
+      "runtimeSourceSha256": "0b1f12fe61b107731b58c1fe7cf841ccff81b518933cbc71cfc0bc2218fb473f"
+    },
+    {
+      "id": "romanSoldier_longbow_red",
+      "label": "罗马羽冠兵 longbow red",
+      "source": "src/assets/harbor.js",
+      "factory": "createLongbowSoldier + paintSoldierHelm",
+      "options": {
+        "side": "red"
+      },
+      "family": "romanSoldier",
+      "variant": "longbow_red",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "dynamicKeys": [
+        "parts",
+        "equipment"
+      ],
+      "runtimeSource": "src/world/saihojiPhalanx.js",
+      "sourceSha256": "c3045f59f391f101be020a4a73300b033db1ea018ac197643265d048f30b5394",
+      "runtimeSourceSha256": "0b1f12fe61b107731b58c1fe7cf841ccff81b518933cbc71cfc0bc2218fb473f"
+    },
+    {
+      "id": "romanSoldier_longbow_blue",
+      "label": "罗马羽冠兵 longbow blue",
+      "source": "src/assets/harbor.js",
+      "factory": "createLongbowSoldier + paintSoldierHelm",
+      "options": {
+        "side": "blue"
+      },
+      "family": "romanSoldier",
+      "variant": "longbow_blue",
+      "relationship": "equipment/crest variant; retain shared lineage, not a new independent design",
+      "dynamicKeys": [
+        "parts",
+        "equipment"
+      ],
+      "runtimeSource": "src/world/saihojiPhalanx.js",
+      "sourceSha256": "c3045f59f391f101be020a4a73300b033db1ea018ac197643265d048f30b5394",
+      "runtimeSourceSha256": "0b1f12fe61b107731b58c1fe7cf841ccff81b518933cbc71cfc0bc2218fb473f"
+    }
+  ]
+}

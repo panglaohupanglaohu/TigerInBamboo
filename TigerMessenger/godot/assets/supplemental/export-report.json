@@ -1,0 +1,1014 @@
+{
+  "generatedBy": "tools/originals/build_supplemental_assets.py",
+  "counts": {
+    "partial": 20,
+    "failed": 0
+  },
+  "results": [
+    {
+      "id": "scoutAircraft",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/scoutAircraft.blend",
+      "target": "godot/assets/supplemental/scoutAircraft.glb",
+      "res": "res://assets/supplemental/scoutAircraft.glb",
+      "sourceSha256": "65bd0ede2e296a06f8b87968a440a5e2e8d75334d518a5108c05f32d2969a31c",
+      "outputSha256": "d63670f177dfb5e5e17cc952376a9c9d6789b87b4ea869132769ef3cf1509fdc",
+      "sourceSnapshotSha256": "74e1ce7b6ea21eb938a757874cea47bbee1073830812dfca63f822a070000ff0",
+      "bytes": 155864,
+      "blenderCounts": {
+        "objects": 46,
+        "visibleMeshes": 22,
+        "hiddenMeshes": 18,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 22,
+        "gltfMaterials": 11,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1146,
+        "exportedTriangles": 1146,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 28,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "scoutAircraft",
+        "nodes": 46,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 4500,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gatePodCraft_pod-55-2",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gatePodCraft_pod-55-2.blend",
+      "target": "godot/assets/supplemental/gatePodCraft_pod-55-2.glb",
+      "res": "res://assets/supplemental/gatePodCraft_pod-55-2.glb",
+      "sourceSha256": "30380609d545061aec16bddc7e548201a5f4686ca8c6451638fbc1c546bcdb81",
+      "outputSha256": "0c7ca830b96706bc96c1e80387b10967a5d7a0012f4fc24bd73f53982dabab3d",
+      "sourceSnapshotSha256": "1ff2fc35548f0712d8013aa637965da52eec9f932a8e1921af79a8bfbb6650d6",
+      "bytes": 279148,
+      "blenderCounts": {
+        "objects": 78,
+        "visibleMeshes": 64,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 64,
+        "gltfMaterials": 8,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1426,
+        "exportedTriangles": 1426,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 65,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gatePodCraft_pod-55-2",
+        "nodes": 78,
+        "meshDatablocks": 77,
+        "verticesIncludingOutline": 5124,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gatePodCraft_pod-41-7",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gatePodCraft_pod-41-7.blend",
+      "target": "godot/assets/supplemental/gatePodCraft_pod-41-7.glb",
+      "res": "res://assets/supplemental/gatePodCraft_pod-41-7.glb",
+      "sourceSha256": "b71fc928e111b541e887335ed31c1bc4b02492db9aa602b58d72ab348586b774",
+      "outputSha256": "bb21826528c1aa10c438c7003d57259ec8b4c1de539bb69959e1561cb868056d",
+      "sourceSnapshotSha256": "4128b066a8978d792a404b7c3b271e3ad85869fcc6fff4e74fe9e8096bc68728",
+      "bytes": 288512,
+      "blenderCounts": {
+        "objects": 80,
+        "visibleMeshes": 66,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 66,
+        "gltfMaterials": 8,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1450,
+        "exportedTriangles": 1450,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 67,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gatePodCraft_pod-41-7",
+        "nodes": 80,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gatePodCraft_pod-08-9",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gatePodCraft_pod-08-9.blend",
+      "target": "godot/assets/supplemental/gatePodCraft_pod-08-9.glb",
+      "res": "res://assets/supplemental/gatePodCraft_pod-08-9.glb",
+      "sourceSha256": "263e33b2730ecc320d711d44eb0a991f2281f53f9244cd158d8920ed4fbf4fb8",
+      "outputSha256": "7ac154b7e7362aa43c9d0052e6091a447a5ce6ac7e30569c2813616cff800ea8",
+      "sourceSnapshotSha256": "9b238ce771161bc0bbd6fdd9e246d4bfa3ab1be7a1f0d678b90454b454b5b2a4",
+      "bytes": 288500,
+      "blenderCounts": {
+        "objects": 80,
+        "visibleMeshes": 66,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 66,
+        "gltfMaterials": 8,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1450,
+        "exportedTriangles": 1450,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 67,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gatePodCraft_pod-08-9",
+        "nodes": 80,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gatePodEscort_pod-55-2",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-55-2.blend",
+      "target": "godot/assets/supplemental/gatePodEscort_pod-55-2.glb",
+      "res": "res://assets/supplemental/gatePodEscort_pod-55-2.glb",
+      "sourceSha256": "e405fe5237b830be9d1aecebc226b4e5fe73aa7e9761c5b842c18e941a5cefb8",
+      "outputSha256": "6359bfc3a90e0764985efb40384413a8b954160f21f833edacef23fb773061a0",
+      "sourceSnapshotSha256": "7cd642c827afc35928d37fb9332b4507b69d8e58f4e39ddbcabe5ae3a0f9f5ba",
+      "bytes": 279516,
+      "blenderCounts": {
+        "objects": 79,
+        "visibleMeshes": 64,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 64,
+        "gltfMaterials": 8,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1426,
+        "exportedTriangles": 1426,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 66,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gatePodEscort_pod-55-2",
+        "nodes": 79,
+        "meshDatablocks": 77,
+        "verticesIncludingOutline": 5124,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gatePodEscort_pod-41-7",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-41-7.blend",
+      "target": "godot/assets/supplemental/gatePodEscort_pod-41-7.glb",
+      "res": "res://assets/supplemental/gatePodEscort_pod-41-7.glb",
+      "sourceSha256": "2a00be86551ce14274fc4e33c498d8b109fcc966b17221c9c791f1cb21b8f274",
+      "outputSha256": "1e9eac9ae9943b5afb7e06c1bf678fa6882c5c5a9c8347ba9d25364239d51978",
+      "sourceSnapshotSha256": "3730d1853a179f3b9d58f3e3d355530be9432ff8b1ec83b3c1d734b116709ec6",
+      "bytes": 288884,
+      "blenderCounts": {
+        "objects": 81,
+        "visibleMeshes": 66,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 66,
+        "gltfMaterials": 8,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1450,
+        "exportedTriangles": 1450,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 68,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gatePodEscort_pod-41-7",
+        "nodes": 81,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gatePodEscort_pod-08-9",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-08-9.blend",
+      "target": "godot/assets/supplemental/gatePodEscort_pod-08-9.glb",
+      "res": "res://assets/supplemental/gatePodEscort_pod-08-9.glb",
+      "sourceSha256": "650bb412be63d5c1f2395094911b036a8c2fe7946fb3621666891db52fa33cd6",
+      "outputSha256": "f55da3eadc928f95b348d482c046da18232cb6b9320294dcff2df78db35df511",
+      "sourceSnapshotSha256": "61fd440ce6e324c494f05cd9ff7960ca958f212c9210e97c4ab14393e7e38f02",
+      "bytes": 288908,
+      "blenderCounts": {
+        "objects": 81,
+        "visibleMeshes": 66,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 66,
+        "gltfMaterials": 8,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1450,
+        "exportedTriangles": 1450,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 68,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gatePodEscort_pod-08-9",
+        "nodes": 81,
+        "meshDatablocks": 79,
+        "verticesIncludingOutline": 5172,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gateHaulerCraft_hauler-71-4",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gateHaulerCraft_hauler-71-4.blend",
+      "target": "godot/assets/supplemental/gateHaulerCraft_hauler-71-4.glb",
+      "res": "res://assets/supplemental/gateHaulerCraft_hauler-71-4.glb",
+      "sourceSha256": "31ab5fc852e7ef416be92d0619f22fb6c79099469f4d6dd4aa11f05d6f559145",
+      "outputSha256": "60e5277d94cb97eb8dce1790a27db8ba6166ba524d3d2684eb265c3b233ea599",
+      "sourceSnapshotSha256": "c529bac72a7cef0c9af7b724351866fe2821fc134bb2d30e7c7a3fec761ea2c3",
+      "bytes": 327712,
+      "blenderCounts": {
+        "objects": 69,
+        "visibleMeshes": 55,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 55,
+        "gltfMaterials": 10,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1426,
+        "exportedTriangles": 1426,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 56,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gateHaulerCraft_hauler-71-4",
+        "nodes": 69,
+        "meshDatablocks": 68,
+        "verticesIncludingOutline": 5528,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gateHaulerCraft_hauler-23-8",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gateHaulerCraft_hauler-23-8.blend",
+      "target": "godot/assets/supplemental/gateHaulerCraft_hauler-23-8.glb",
+      "res": "res://assets/supplemental/gateHaulerCraft_hauler-23-8.glb",
+      "sourceSha256": "257974492a2b2cdd28e0dda5afecbc7300afd17fbf865b6ec7f44bb737811ef2",
+      "outputSha256": "35f17ebe33a61317452d154360c4cf289abb5b61465162fc9736fe93065eaba7",
+      "sourceSnapshotSha256": "06e024b4531a294acd72bacbbd8cbfc4ca5aa2eff08c68e5ef693912f3bb9d02",
+      "bytes": 337124,
+      "blenderCounts": {
+        "objects": 71,
+        "visibleMeshes": 57,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 57,
+        "gltfMaterials": 10,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1450,
+        "exportedTriangles": 1450,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 58,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gateHaulerCraft_hauler-23-8",
+        "nodes": 71,
+        "meshDatablocks": 70,
+        "verticesIncludingOutline": 5576,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "gateHaulerCraft_hauler-96-1",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/gateHaulerCraft_hauler-96-1.blend",
+      "target": "godot/assets/supplemental/gateHaulerCraft_hauler-96-1.glb",
+      "res": "res://assets/supplemental/gateHaulerCraft_hauler-96-1.glb",
+      "sourceSha256": "bf6d6e50a3061674151bea05bdfc85221f81814b3f4cfd969251fbae2ae073bf",
+      "outputSha256": "ebc451989b8b855ef14b7f77b673575a83d53184a60d268e037d8f95c2d2bbe9",
+      "sourceSnapshotSha256": "b2b026cabb9ff39d1e454e23fb3d90639fe685ff69cc01a14c09ec1938da5149",
+      "bytes": 327708,
+      "blenderCounts": {
+        "objects": 69,
+        "visibleMeshes": 55,
+        "hiddenMeshes": 13,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 55,
+        "gltfMaterials": 10,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1426,
+        "exportedTriangles": 1426,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 56,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "gateHaulerCraft_hauler-96-1",
+        "nodes": 69,
+        "meshDatablocks": 68,
+        "verticesIncludingOutline": 5528,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "citadelTrojanHorse",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/citadelTrojanHorse.blend",
+      "target": "godot/assets/supplemental/citadelTrojanHorse.glb",
+      "res": "res://assets/supplemental/citadelTrojanHorse.glb",
+      "sourceSha256": "35aee8703d42dcc429b9cbb33d83a9a62882624bc042c2cfe64868b519874b28",
+      "outputSha256": "77747d7d43e32d361b67bdb0f6bb209aea47f6ad95836b2161f2ddadb96b990a",
+      "sourceSnapshotSha256": "9e50582733cd155c7e3c0bf4797ab538c0743a4f39d6bdf13b15da4b6b6b99ae",
+      "bytes": 373492,
+      "blenderCounts": {
+        "objects": 170,
+        "visibleMeshes": 83,
+        "hiddenMeshes": 85,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 83,
+        "gltfMaterials": 4,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1096,
+        "exportedTriangles": 1096,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 85,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "citadelTrojanHorse",
+        "nodes": 170,
+        "meshDatablocks": 150,
+        "verticesIncludingOutline": 4268,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "soccoCraft",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/soccoCraft.blend",
+      "target": "godot/assets/supplemental/soccoCraft.glb",
+      "res": "res://assets/supplemental/soccoCraft.glb",
+      "sourceSha256": "3a0335e5f754fb6d4fdcd81dd0cae14b2aabb08cc15a93f4431a8238c69f118d",
+      "outputSha256": "0d632c547dd5c4680aa27df6a09135d6b26daa6672293c46d1df432f05439cb8",
+      "sourceSnapshotSha256": "6df0bbbd4e9e37a631c8a8ee1b3c8b96249517884632dca7676dda3edac14bed",
+      "bytes": 457464,
+      "blenderCounts": {
+        "objects": 127,
+        "visibleMeshes": 80,
+        "hiddenMeshes": 29,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 80,
+        "gltfMaterials": 12,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 1858,
+        "exportedTriangles": 1858,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 98,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "soccoCraft",
+        "nodes": 127,
+        "meshDatablocks": 109,
+        "verticesIncludingOutline": 7618,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "romanSoldier_spear_red",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/romanSoldier_spear_red.blend",
+      "target": "godot/assets/supplemental/romanSoldier_spear_red.glb",
+      "res": "res://assets/supplemental/romanSoldier_spear_red.glb",
+      "sourceSha256": "1e77cdaa48b648aa3af558b314463077dcc7698dc06310ddb0d999c1ac8fb1eb",
+      "outputSha256": "effdd1abf58635d7857902da8c1d7b2e09fdf6dc9a6c5994c274477152af9baf",
+      "sourceSnapshotSha256": "7af4d28ba808169a294e0df9f7d7ca4cfe20dc23beb0de612423c93029ce54dc",
+      "bytes": 137896,
+      "blenderCounts": {
+        "objects": 50,
+        "visibleMeshes": 19,
+        "hiddenMeshes": 21,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 19,
+        "gltfMaterials": 11,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 936,
+        "exportedTriangles": 936,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 29,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "romanSoldier_spear_red",
+        "nodes": 50,
+        "meshDatablocks": 36,
+        "verticesIncludingOutline": 5688,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "vanguardTrooper",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/vanguardTrooper.blend",
+      "target": "godot/assets/supplemental/vanguardTrooper.glb",
+      "res": "res://assets/supplemental/vanguardTrooper.glb",
+      "sourceSha256": "3f319fa6f69d686a80c6a3f9f5b573879a51b1009966e99caf7c89bb67f67c64",
+      "outputSha256": "72b6c335a8f2815921a7f1bf0d526f6cf0064776e784bf4abe026815774cddc3",
+      "sourceSnapshotSha256": "e5059f9307511da81a0d3ee1436d71ae94f147e31b957494277bad2d0eaf0259",
+      "bytes": 244996,
+      "blenderCounts": {
+        "objects": 84,
+        "visibleMeshes": 45,
+        "hiddenMeshes": 30,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 45,
+        "gltfMaterials": 11,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 572,
+        "exportedTriangles": 572,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 54,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "vanguardTrooper",
+        "nodes": 84,
+        "meshDatablocks": 75,
+        "verticesIncludingOutline": 2740,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "romanSoldier_gladius_red",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/romanSoldier_gladius_red.blend",
+      "target": "godot/assets/supplemental/romanSoldier_gladius_red.glb",
+      "res": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+      "sourceSha256": "804efdda3234740a0d21b46dd40431c86b096b1b9fd7188295edd0d4d69080ba",
+      "outputSha256": "55e43df87033317b92fba8ebe15ca09e1c6f2b4ffd4647bcea2e170fb9debd55",
+      "sourceSnapshotSha256": "424d4b89081cac4f112cca1f6767576e4bad996f0007a6c4ccdbbf744aac524a",
+      "bytes": 133124,
+      "blenderCounts": {
+        "objects": 55,
+        "visibleMeshes": 17,
+        "hiddenMeshes": 27,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 17,
+        "gltfMaterials": 12,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 884,
+        "exportedTriangles": 884,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 27,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "romanSoldier_gladius_red",
+        "nodes": 55,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 5880,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "romanSoldier_spear_blue",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/romanSoldier_spear_blue.blend",
+      "target": "godot/assets/supplemental/romanSoldier_spear_blue.glb",
+      "res": "res://assets/supplemental/romanSoldier_spear_blue.glb",
+      "sourceSha256": "adab1b07828152d83031609f012b2b7e04281f92917726d6e14d28082ba63ed8",
+      "outputSha256": "96c97f0a7fde521c8c3353979e8d64fb8d3fd7974f3f061824507093e45eadd8",
+      "sourceSnapshotSha256": "a7a7d971eef4d1f26ce185560f737efdd6bc51e1eade9e68bb33eff755364e72",
+      "bytes": 137888,
+      "blenderCounts": {
+        "objects": 50,
+        "visibleMeshes": 19,
+        "hiddenMeshes": 21,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 19,
+        "gltfMaterials": 11,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 936,
+        "exportedTriangles": 936,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 29,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "romanSoldier_spear_blue",
+        "nodes": 50,
+        "meshDatablocks": 36,
+        "verticesIncludingOutline": 5688,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "romanSoldier_gladius_blue",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/romanSoldier_gladius_blue.blend",
+      "target": "godot/assets/supplemental/romanSoldier_gladius_blue.glb",
+      "res": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+      "sourceSha256": "d442826953742c95bab9cf48430537a61ae75a0fff06c22447f2882c90b938ed",
+      "outputSha256": "54267e3c01848ad3954c3947c72f5fc283be647da6304038adae97e38987813c",
+      "sourceSnapshotSha256": "318d1071b98896e344b5a60db790f13fc8f479121309477bf6eb1dda2f69ceaa",
+      "bytes": 133112,
+      "blenderCounts": {
+        "objects": 55,
+        "visibleMeshes": 17,
+        "hiddenMeshes": 27,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 17,
+        "gltfMaterials": 12,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 884,
+        "exportedTriangles": 884,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 27,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "romanSoldier_gladius_blue",
+        "nodes": 55,
+        "meshDatablocks": 40,
+        "verticesIncludingOutline": 5880,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "romanSoldier_longbow_red",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/romanSoldier_longbow_red.blend",
+      "target": "godot/assets/supplemental/romanSoldier_longbow_red.glb",
+      "res": "res://assets/supplemental/romanSoldier_longbow_red.glb",
+      "sourceSha256": "1361175d358619a168a9254276c9016141124ecc40f05a32d764ea3890adefa5",
+      "outputSha256": "4bd7eaa3c67967c55a38d71e4fb1f9b63a3cb9d7b19a2987f30ac02ee76fa408",
+      "sourceSnapshotSha256": "4902f2dfd5aaffa9c19837450e04eee13ea2922983a18fb3ff9116aa4bb48e01",
+      "bytes": 172500,
+      "blenderCounts": {
+        "objects": 89,
+        "visibleMeshes": 25,
+        "hiddenMeshes": 49,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 25,
+        "gltfMaterials": 14,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 912,
+        "exportedTriangles": 912,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 37,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "romanSoldier_longbow_red",
+        "nodes": 89,
+        "meshDatablocks": 70,
+        "verticesIncludingOutline": 7056,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "romanSoldier_longbow_blue",
+      "status": "partial",
+      "source": "assets/models/originals/supplemental/blender-r3/romanSoldier_longbow_blue.blend",
+      "target": "godot/assets/supplemental/romanSoldier_longbow_blue.glb",
+      "res": "res://assets/supplemental/romanSoldier_longbow_blue.glb",
+      "sourceSha256": "6bf93fc54305b571f3db1b32d219aae1077308044a71f3a3cb1128f9ee78fd0d",
+      "outputSha256": "b5ef2217837b7b7573051ab90544890d55f0b7a453be6c5f4701838519263dbd",
+      "sourceSnapshotSha256": "2bc59ad98c83f325bfade954d6f799843c362e1fdb7149bb3fc6a26e64e60fe6",
+      "bytes": 172492,
+      "blenderCounts": {
+        "objects": 89,
+        "visibleMeshes": 25,
+        "hiddenMeshes": 49,
+        "edgeOnlyMeshes": 0,
+        "pointOnlyMeshes": 0,
+        "gltfMeshes": 25,
+        "gltfMaterials": 14,
+        "gltfImages": 0,
+        "animationClips": 0
+      },
+      "validation": {
+        "expectedTriangles": 912,
+        "exportedTriangles": 912,
+        "triangleMatch": true,
+        "images": 0,
+        "nodes": 37,
+        "animationClips": 0
+      },
+      "blenderImport": {
+        "revision": 3,
+        "asset": "romanSoldier_longbow_blue",
+        "nodes": 89,
+        "meshDatablocks": 70,
+        "verticesIncludingOutline": 7056,
+        "maxLocalVertexError": 0,
+        "expandedInstances": 0,
+        "maxInstanceMatrixError": 0,
+        "primitiveNodes": {
+          "Line": 0,
+          "LineSegments": 0,
+          "LineLoop": 0,
+          "Points": 0
+        },
+        "warnings": [],
+        "status": "imported original; optimization and render parity pending"
+      },
+      "lost": [
+        "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
+        "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
+      ]
+    },
+    {
+      "id": "leviathanIsland",
+      "status": "partial",
+      "source": "assets/models/originals/leviathan/blender-r3/leviathanIsland.blend",
+      "target": "godot/assets/supplemental/leviathanIsland.glb",
+      "res": "res://assets/supplemental/leviathanIsland.glb",
+      "outputSha256": "dc3337647cc1d6600450ac70e0432e7edb4dcd3c668602787778c0cd02ad9e3f",
+      "bytes": 308596,
+      "validation": {
+        "expectedTriangles": 4008,
+        "exportedTriangles": 4008,
+        "triangleMatch": true
+      },
+      "lost": [
+        "程序动画、升沉、眨眼、落雨和运行时苔庭六景仍待适配。"
+      ]
+    }
+  ]
+}

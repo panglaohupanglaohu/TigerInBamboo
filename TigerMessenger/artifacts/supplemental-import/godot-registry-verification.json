@@ -1,0 +1,826 @@
+{
+  "failed": false,
+  "registryMatchesGallery": true,
+  "results": [
+    {
+      "duplicate": false,
+      "id": "bookshop",
+      "instantiated": true,
+      "meshes": 29,
+      "passed": true,
+      "resource": "res://assets/originals/bookshop.glb",
+      "sha256": "884ea0643ccb2eb2522b2be2d589c0a0801b53f0b447a66212ad1508d7d88ceb"
+    },
+    {
+      "duplicate": false,
+      "id": "house",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/house.glb",
+      "sha256": "7d79d43c3cda257596d944dea28f95784d172165f256146b913e46048e3aa183"
+    },
+    {
+      "duplicate": false,
+      "id": "pine",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/pine.glb",
+      "sha256": "4f79656679ea1e1ffce29eed455434dbfb5a774ee9ca5e22b317ae8d674e8031"
+    },
+    {
+      "duplicate": false,
+      "id": "signpost",
+      "instantiated": true,
+      "meshes": 3,
+      "passed": true,
+      "resource": "res://assets/originals/signpost.glb",
+      "sha256": "0ae104da6ade585eacbe5dbc70e0b89d9b0031ccbdb1e271157bab975dfe9be9"
+    },
+    {
+      "duplicate": false,
+      "id": "lamp",
+      "instantiated": true,
+      "meshes": 3,
+      "passed": true,
+      "resource": "res://assets/originals/lamp.glb",
+      "sha256": "5060c2cbd34db13dd6d0e01d733e0202bbfea8627e6fd58284da7f41ea1d56db"
+    },
+    {
+      "duplicate": false,
+      "id": "pole",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/pole.glb",
+      "sha256": "69f3df9cc5d98718fb09697026521d1799e1bb8d128897b2efd5a37512f58b44"
+    },
+    {
+      "duplicate": false,
+      "id": "rock",
+      "instantiated": true,
+      "meshes": 1,
+      "passed": true,
+      "resource": "res://assets/originals/rock.glb",
+      "sha256": "3b4df18dff724bbb5ee8d42b52f912447259fc828819d13e0803a306a997ba4d"
+    },
+    {
+      "duplicate": false,
+      "id": "hydrangea",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/hydrangea.glb",
+      "sha256": "b4af780341f16252115e70e9473b5d461731c8e46918d48fc92c5a3aadff1d13"
+    },
+    {
+      "duplicate": false,
+      "id": "flower",
+      "instantiated": true,
+      "meshes": 3,
+      "passed": true,
+      "resource": "res://assets/originals/flower.glb",
+      "sha256": "56bd4f96411fda032ab81367d7196489bace6caf8657a7e4169252e03bd9136f"
+    },
+    {
+      "duplicate": false,
+      "id": "lawnHill",
+      "instantiated": true,
+      "meshes": 9,
+      "passed": true,
+      "resource": "res://assets/originals/lawnHill.glb",
+      "sha256": "b4e1af97314b3e09d15dece2b3f25c6b9cc8ca450034d93f8735d2f32f4b2fdc"
+    },
+    {
+      "duplicate": false,
+      "id": "fox",
+      "instantiated": true,
+      "meshes": 22,
+      "passed": true,
+      "resource": "res://assets/originals/fox.glb",
+      "sha256": "66e8bdbab78ee4957f9fd9313abbb8fabee783f7375e668acfdd7759437451e5"
+    },
+    {
+      "duplicate": false,
+      "id": "fisherBoat",
+      "instantiated": true,
+      "meshes": 424,
+      "passed": true,
+      "resource": "res://assets/originals/fisherBoat.glb",
+      "sha256": "992967bb0bfd9dcd7bf5a2eecca777b76563cec49912c1ad93dd71c417fa901f"
+    },
+    {
+      "duplicate": false,
+      "id": "harborCrane",
+      "instantiated": true,
+      "meshes": 14,
+      "passed": true,
+      "resource": "res://assets/originals/harborCrane.glb",
+      "sha256": "51af37556c4caeb8e6496e9d47ec7cc96c39743670151b5ce3e3d36e16e7a120"
+    },
+    {
+      "duplicate": false,
+      "id": "stackedCrates",
+      "instantiated": true,
+      "meshes": 59,
+      "passed": true,
+      "resource": "res://assets/originals/stackedCrates.glb",
+      "sha256": "a5276b8e87d77d8af727507a7d67b93b819d23b19bf67c88466f7678f49d229a"
+    },
+    {
+      "duplicate": false,
+      "id": "oldHarbor",
+      "instantiated": true,
+      "meshes": 602,
+      "passed": true,
+      "resource": "res://assets/originals/oldHarbor.glb",
+      "sha256": "fbe8918fa36708e6b5fc70f9ed4c4ae8ffa557142dcb36b37d726faf3487ad10"
+    },
+    {
+      "duplicate": false,
+      "id": "citadelWatchtower",
+      "instantiated": true,
+      "meshes": 14,
+      "passed": true,
+      "resource": "res://assets/originals/citadelWatchtower.glb",
+      "sha256": "c58bef27ad6e6842f9cb9d471afa9fee5e9b27cdea5499ebdfe471dc7c3d5bcc"
+    },
+    {
+      "duplicate": false,
+      "id": "citadelElderTree",
+      "instantiated": true,
+      "meshes": 15,
+      "passed": true,
+      "resource": "res://assets/originals/citadelElderTree.glb",
+      "sha256": "b0d12bc6369849e349aba93c6cc16503d627ea49c4cbbe49806fe3299722e59b"
+    },
+    {
+      "duplicate": false,
+      "id": "snowMassif",
+      "instantiated": true,
+      "meshes": 14,
+      "passed": true,
+      "resource": "res://assets/originals/snowMassif.glb",
+      "sha256": "72fe4c02f00846a49d6ecf0427b3530a1ba5a4c17a07b1ab944e310dc6e0beb1"
+    },
+    {
+      "duplicate": false,
+      "id": "snowMountainPeak",
+      "instantiated": true,
+      "meshes": 2,
+      "passed": true,
+      "resource": "res://assets/originals/snowMountainPeak.glb",
+      "sha256": "82973efd75a3837004c91bd9a0db37e8f71ded1b1d9cdb3fdb35e020664fbff7"
+    },
+    {
+      "duplicate": false,
+      "id": "moebiusSwamp",
+      "instantiated": true,
+      "meshes": 2418,
+      "passed": true,
+      "resource": "res://assets/originals/moebiusSwamp.glb",
+      "sha256": "6ddf049e0bdd6f775d79565ca08c201be1d8c71f0d6a18264e3e72945f60811c"
+    },
+    {
+      "duplicate": false,
+      "id": "moebiusTower",
+      "instantiated": true,
+      "meshes": 74,
+      "passed": true,
+      "resource": "res://assets/originals/moebiusTower.glb",
+      "sha256": "3e0b5ee985ff55be7506a144b3e87f71d1f584826f702c433e9d7065cd0f4ee4"
+    },
+    {
+      "duplicate": false,
+      "id": "moebiusAirship",
+      "instantiated": true,
+      "meshes": 131,
+      "passed": true,
+      "resource": "res://assets/originals/moebiusAirship.glb",
+      "sha256": "60140180c4f4f4827f4f7fd6c692bae1762618a5e8ece92fbed629ab4157f1b3"
+    },
+    {
+      "duplicate": false,
+      "id": "moebiusAircraft",
+      "instantiated": true,
+      "meshes": 31,
+      "passed": true,
+      "resource": "res://assets/originals/moebiusAircraft.glb",
+      "sha256": "18935f2d68a62e74e942cfbb5dbe2beb6d0511d6a901f93c27abadc5c3778c87"
+    },
+    {
+      "duplicate": false,
+      "id": "tram",
+      "instantiated": true,
+      "meshes": 75,
+      "passed": true,
+      "resource": "res://assets/originals/tram.glb",
+      "sha256": "18a9d051ba883022290203f07882668b58b9b654f7eab746d6caa461f3c8b2a8"
+    },
+    {
+      "duplicate": false,
+      "id": "bubblePod",
+      "instantiated": true,
+      "meshes": 17,
+      "passed": true,
+      "resource": "res://assets/originals/bubblePod.glb",
+      "sha256": "522decbead39f657b5f0149f32e67a7c318e0a3ef6737b79174b6ec610d22d17"
+    },
+    {
+      "duplicate": false,
+      "id": "fence",
+      "instantiated": true,
+      "meshes": 4,
+      "passed": true,
+      "resource": "res://assets/originals/fence.glb",
+      "sha256": "85845d5beb136e55968f2c386984a9dcda9b50d1d8d3b3ae04ab86271564acb9"
+    },
+    {
+      "duplicate": false,
+      "id": "bridge",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/bridge.glb",
+      "sha256": "739f2a0a8653c7196928c25184c9beb8afb738a2512cdcf3f9530158462ed3cc"
+    },
+    {
+      "duplicate": false,
+      "id": "lowPolyTree",
+      "instantiated": true,
+      "meshes": 42,
+      "passed": true,
+      "resource": "res://assets/originals/lowPolyTree.glb",
+      "sha256": "1880fb5c25d4e7b74855d8c4708ea9d5a42871698ecb9cc37f22010248716179"
+    },
+    {
+      "duplicate": false,
+      "id": "cloud",
+      "instantiated": true,
+      "meshes": 10,
+      "passed": true,
+      "resource": "res://assets/originals/cloud.glb",
+      "sha256": "2058eae6df1380f0adbcafc2c35fd667414d90c1167d305177ebd76672f00069"
+    },
+    {
+      "duplicate": false,
+      "id": "blackRock",
+      "instantiated": true,
+      "meshes": 1,
+      "passed": true,
+      "resource": "res://assets/originals/blackRock.glb",
+      "sha256": "c5828f71824a6dacd9d18ea4a72fdfdfca3d9fe720bc448011429b38fb437928"
+    },
+    {
+      "duplicate": false,
+      "id": "craneOnRock",
+      "instantiated": true,
+      "meshes": 14,
+      "passed": true,
+      "resource": "res://assets/originals/craneOnRock.glb",
+      "sha256": "2d39b12bf4e6937aacc0c25528d27c5735d5c4799b22f8da2c98298f903f8721"
+    },
+    {
+      "duplicate": false,
+      "id": "classicAliFox",
+      "instantiated": true,
+      "meshes": 42,
+      "passed": true,
+      "resource": "res://assets/originals/classicAliFox.glb",
+      "sha256": "72ba1446659aeae41bb0c1330d5c58bebf03fc281ef5d72e5f40c8d72a4b5900"
+    },
+    {
+      "duplicate": false,
+      "id": "moebiusTiger",
+      "instantiated": true,
+      "meshes": 32,
+      "passed": true,
+      "resource": "res://assets/originals/moebiusTiger.glb",
+      "sha256": "cb4ec830188dd77022b81a9f9aed0b7354e1a29136e691c8d6545d3f2898f57a"
+    },
+    {
+      "duplicate": false,
+      "id": "bird",
+      "instantiated": true,
+      "meshes": 3,
+      "passed": true,
+      "resource": "res://assets/originals/bird.glb",
+      "sha256": "187e45c11ffc3168696eedf221889615858f38c27525db64503fbc08340a8d34"
+    },
+    {
+      "duplicate": false,
+      "id": "longWingGlider",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/longWingGlider.glb",
+      "sha256": "9d572d72672487ee1129321f9ea5ff244f2875313c0b84ebd3ae9fbe2534bc45"
+    },
+    {
+      "duplicate": false,
+      "id": "craneNPC",
+      "instantiated": true,
+      "meshes": 13,
+      "passed": true,
+      "resource": "res://assets/originals/craneNPC.glb",
+      "sha256": "42ae5568c576470ede82795086e867a5d3c21ed2e480047ae168304c6ef412f9"
+    },
+    {
+      "duplicate": false,
+      "id": "messenger",
+      "instantiated": true,
+      "meshes": 13,
+      "passed": true,
+      "resource": "res://assets/originals/messenger.glb",
+      "sha256": "567e1840aa06d027bfe35faeb7dcd62130e4c96d64b1262c3cdb48c949fa3bdb"
+    },
+    {
+      "duplicate": false,
+      "id": "agentMessenger",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/agentMessenger.glb",
+      "sha256": "11a7cd85eb6fd87a34a97f65cb2f14a718e9b3e8d4bd7b44866a47c7d4e3e551"
+    },
+    {
+      "duplicate": false,
+      "id": "bookshopHydrangeas",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/bookshopHydrangeas.glb",
+      "sha256": "08e31025394c3fb6b7cf32bece40b7b57c12f1547ae193ae39b0dd7a4f71a937"
+    },
+    {
+      "duplicate": false,
+      "id": "grassTuft",
+      "instantiated": true,
+      "meshes": 3,
+      "passed": true,
+      "resource": "res://assets/originals/grassTuft.glb",
+      "sha256": "daeadac52bf426c4d65f0ce40caefc8cc1cc9789894a5ed96262488fe7540378"
+    },
+    {
+      "duplicate": false,
+      "id": "mossyGround",
+      "instantiated": true,
+      "meshes": 98,
+      "passed": true,
+      "resource": "res://assets/originals/mossyGround.glb",
+      "sha256": "e232a912a5fb17c5935e667edad468ce31c20404c74331cfa15a740bbd8c031e"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_whale",
+      "instantiated": true,
+      "meshes": 10,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_whale.glb",
+      "sha256": "8d3aa633b93eed4cc455fc143338436b19acd8e8652e1207918507ee9ee19750"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_worldTree",
+      "instantiated": true,
+      "meshes": 20,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_worldTree.glb",
+      "sha256": "f0472876c920e25bc9fb122b78b573401d69f13b9cb98071ef153350d524fb6c"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_nativeDoll",
+      "instantiated": true,
+      "meshes": 6,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_nativeDoll.glb",
+      "sha256": "f1ab6cf73bbe7dc7f06c7d606b4fee16ef61bc74aa45e77f410f0d776f94eefc"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_lotusLeafBoat",
+      "instantiated": true,
+      "meshes": 24,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_lotusLeafBoat.glb",
+      "sha256": "caa3874aea3d1ed0d60e733a7728b89541f40756dfc3c895aa05a9e420ad49be"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_eel",
+      "instantiated": true,
+      "meshes": 4,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_eel.glb",
+      "sha256": "17f684ae7251460d3e7288fba1f283a7c6c5582b3e025e56612c60de27069f81"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_tubeWorm",
+      "instantiated": true,
+      "meshes": 12,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_tubeWorm.glb",
+      "sha256": "f4a79db6a92ab4268a742508060f5e533185ae9538c0ca2f78664e187cbaecdc"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_mushroom",
+      "instantiated": true,
+      "meshes": 4,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_mushroom.glb",
+      "sha256": "07aa4ebfe543dd5ecc5a6d54fea016c3b8c023ebc1fcf6bdd6cbfe7f6a8718a9"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_pinkHanger",
+      "instantiated": true,
+      "meshes": 4,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_pinkHanger.glb",
+      "sha256": "3d5b720bcb80fafb72a31c1ec8294987ee06c0719d2f5ccd2004c659788dc9cd"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_bird",
+      "instantiated": true,
+      "meshes": 5,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_bird.glb",
+      "sha256": "16c62f0d3a8f97e492dabf6d156a844fe10121e97c7327b086c41f34a9b153ed"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_monkey",
+      "instantiated": true,
+      "meshes": 10,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_monkey.glb",
+      "sha256": "01df289ad58ae21f5860163d79421b71ff8d7fda94ac1ed7855dce2614faab89"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_lizard",
+      "instantiated": true,
+      "meshes": 8,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_lizard.glb",
+      "sha256": "ba4396542202727498456281870c573c0096556410464373cad2b2580442bb1c"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_ribbonFish",
+      "instantiated": true,
+      "meshes": 3,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_ribbonFish.glb",
+      "sha256": "78ccb532f3c79c051f60aea8bff04c9294d1daf4b8e6d1b8e3b54365cd876e92"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_shell",
+      "instantiated": true,
+      "meshes": 2,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_shell.glb",
+      "sha256": "561036176862d53a9aa82a97fa8421f69d01be938ade66df74529bc9ebf8cb93"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_rimPalm",
+      "instantiated": true,
+      "meshes": 8,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_rimPalm.glb",
+      "sha256": "e12adf13a00e9040d8152fec66bf0523c36495cd5f70ab22bb3499f70f3f2728"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_toweringTree",
+      "instantiated": true,
+      "meshes": 85,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_toweringTree.glb",
+      "sha256": "914c920d65d6810d4c0900b2320d6559798b1b3635a3f3d193f8b9892198484f"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_canopy",
+      "instantiated": true,
+      "meshes": 144,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_canopy.glb",
+      "sha256": "21d39937ba6c4bc862d2a3c6f40c18d11e3d13336b0573d91aee4acef3d4c1fd"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_glowFlower",
+      "instantiated": true,
+      "meshes": 8,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_glowFlower.glb",
+      "sha256": "bafa1fc591cdc3acf56e5ef8e77337406636cf9a076c01094e3c6add753fd12b"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_giantFlower",
+      "instantiated": true,
+      "meshes": 9,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_giantFlower.glb",
+      "sha256": "d68c42b7902566831374a262f8365894434ac77ab91289e1b695f3d3846e5cbf"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_stamenSpike",
+      "instantiated": true,
+      "meshes": 3,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_stamenSpike.glb",
+      "sha256": "648443856664d33b05c18f5b3690407ec112a765634cf91bb4ecd0d82af60448"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_fishSchool",
+      "instantiated": true,
+      "meshes": 40,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_fishSchool.glb",
+      "sha256": "7e210f1326d340591d8927af14830c0518443c712df269d3e1200ed83b48e515"
+    },
+    {
+      "duplicate": false,
+      "id": "swamp_fireflies",
+      "instantiated": true,
+      "meshes": 46,
+      "passed": true,
+      "resource": "res://assets/originals/swamp_fireflies.glb",
+      "sha256": "30a431cbeae8b14a83e8166153216617b32ac0f898354ca1a87b962dd0848f49"
+    },
+    {
+      "duplicate": false,
+      "id": "swampZone",
+      "instantiated": true,
+      "meshes": 2375,
+      "passed": true,
+      "resource": "res://assets/originals/swampZone.glb",
+      "sha256": "4d2dbd1c9f14a952d2a484e5108160b5d3ba92ad66605084008c8b4f8e27176b"
+    },
+    {
+      "duplicate": false,
+      "id": "moebiusCity",
+      "instantiated": true,
+      "meshes": 754,
+      "passed": true,
+      "resource": "res://assets/originals/moebiusCity.glb",
+      "sha256": "1a5749ee480ff27bfe6fd828f0359b3d0c105623d522845d66a30571dfded800"
+    },
+    {
+      "duplicate": false,
+      "id": "startingCamp",
+      "instantiated": true,
+      "meshes": 75,
+      "passed": true,
+      "resource": "res://assets/originals/startingCamp.glb",
+      "sha256": "12951d30667209ebb19ee84d660ec5a96b5a5492e8a4126be549e6ae9b35fc82"
+    },
+    {
+      "duplicate": false,
+      "id": "saihoji",
+      "instantiated": true,
+      "meshes": 298,
+      "passed": true,
+      "resource": "res://assets/originals/saihoji.glb",
+      "sha256": "7523a762e8d35b711d785e6d634c07cec15021c8438590fb425fea069fa9b8d8"
+    },
+    {
+      "duplicate": false,
+      "id": "planet",
+      "instantiated": true,
+      "meshes": 1,
+      "passed": true,
+      "resource": "res://assets/originals/planet.glb",
+      "sha256": "3e6ad8701017057d83b501bbc8b5e0136e0ed2aa3ac5e962793b2cdc1f2ce091"
+    },
+    {
+      "duplicate": false,
+      "id": "hills",
+      "instantiated": true,
+      "meshes": 2,
+      "passed": true,
+      "resource": "res://assets/originals/hills.glb",
+      "sha256": "b06901eda5a1d3bfc2a6d4f47c81a50f2bf9eadd27536a26a13595eb1029ce9f"
+    },
+    {
+      "duplicate": false,
+      "id": "moonLake",
+      "instantiated": true,
+      "meshes": 20,
+      "passed": true,
+      "resource": "res://assets/originals/moonLake.glb",
+      "sha256": "c50fe53126d4e60d7d23203b0d7995154b8563db782725cb643924040ea8e9ea"
+    },
+    {
+      "duplicate": false,
+      "id": "tramSystem",
+      "instantiated": true,
+      "meshes": 387,
+      "passed": true,
+      "resource": "res://assets/originals/tramSystem.glb",
+      "sha256": "79b168c95b6d774bd8703627b808e78f7b7cf8cba895926b7132a6e13ce8c20c"
+    },
+    {
+      "duplicate": false,
+      "id": "equatorialClouds",
+      "instantiated": true,
+      "meshes": 73,
+      "passed": true,
+      "resource": "res://assets/originals/equatorialClouds.glb",
+      "sha256": "5eb40162508875c2dfa16fa5390c8f118301256ae1415beacef681d45e329f6e"
+    },
+    {
+      "duplicate": false,
+      "id": "platforms",
+      "instantiated": true,
+      "meshes": 2,
+      "passed": true,
+      "resource": "res://assets/originals/platforms.glb",
+      "sha256": "036c0848fce121369d5da4f5d849aa3bf076464a68cd408709c389ce4d73700e"
+    },
+    {
+      "duplicate": false,
+      "id": "scoutAircraft",
+      "instantiated": true,
+      "meshes": 22,
+      "passed": true,
+      "resource": "res://assets/supplemental/scoutAircraft.glb",
+      "sha256": "d63670f177dfb5e5e17cc952376a9c9d6789b87b4ea869132769ef3cf1509fdc"
+    },
+    {
+      "duplicate": false,
+      "id": "gatePodCraft_pod-55-2",
+      "instantiated": true,
+      "meshes": 64,
+      "passed": true,
+      "resource": "res://assets/supplemental/gatePodCraft_pod-55-2.glb",
+      "sha256": "0c7ca830b96706bc96c1e80387b10967a5d7a0012f4fc24bd73f53982dabab3d"
+    },
+    {
+      "duplicate": false,
+      "id": "gatePodCraft_pod-41-7",
+      "instantiated": true,
+      "meshes": 66,
+      "passed": true,
+      "resource": "res://assets/supplemental/gatePodCraft_pod-41-7.glb",
+      "sha256": "bb21826528c1aa10c438c7003d57259ec8b4c1de539bb69959e1561cb868056d"
+    },
+    {
+      "duplicate": false,
+      "id": "gatePodCraft_pod-08-9",
+      "instantiated": true,
+      "meshes": 66,
+      "passed": true,
+      "resource": "res://assets/supplemental/gatePodCraft_pod-08-9.glb",
+      "sha256": "7ac154b7e7362aa43c9d0052e6091a447a5ce6ac7e30569c2813616cff800ea8"
+    },
+    {
+      "duplicate": false,
+      "id": "gatePodEscort_pod-55-2",
+      "instantiated": true,
+      "meshes": 64,
+      "passed": true,
+      "resource": "res://assets/supplemental/gatePodEscort_pod-55-2.glb",
+      "sha256": "6359bfc3a90e0764985efb40384413a8b954160f21f833edacef23fb773061a0"
+    },
+    {
+      "duplicate": false,
+      "id": "gatePodEscort_pod-41-7",
+      "instantiated": true,
+      "meshes": 66,
+      "passed": true,
+      "resource": "res://assets/supplemental/gatePodEscort_pod-41-7.glb",
+      "sha256": "1e9eac9ae9943b5afb7e06c1bf678fa6882c5c5a9c8347ba9d25364239d51978"
+    },
+    {
+      "duplicate": false,
+      "id": "gatePodEscort_pod-08-9",
+      "instantiated": true,
+      "meshes": 66,
+      "passed": true,
+      "resource": "res://assets/supplemental/gatePodEscort_pod-08-9.glb",
+      "sha256": "f55da3eadc928f95b348d482c046da18232cb6b9320294dcff2df78db35df511"
+    },
+    {
+      "duplicate": false,
+      "id": "gateHaulerCraft_hauler-71-4",
+      "instantiated": true,
+      "meshes": 55,
+      "passed": true,
+      "resource": "res://assets/supplemental/gateHaulerCraft_hauler-71-4.glb",
+      "sha256": "60e5277d94cb97eb8dce1790a27db8ba6166ba524d3d2684eb265c3b233ea599"
+    },
+    {
+      "duplicate": false,
+      "id": "gateHaulerCraft_hauler-23-8",
+      "instantiated": true,
+      "meshes": 57,
+      "passed": true,
+      "resource": "res://assets/supplemental/gateHaulerCraft_hauler-23-8.glb",
+      "sha256": "35f17ebe33a61317452d154360c4cf289abb5b61465162fc9736fe93065eaba7"
+    },
+    {
+      "duplicate": false,
+      "id": "gateHaulerCraft_hauler-96-1",
+      "instantiated": true,
+      "meshes": 55,
+      "passed": true,
+      "resource": "res://assets/supplemental/gateHaulerCraft_hauler-96-1.glb",
+      "sha256": "ebc451989b8b855ef14b7f77b673575a83d53184a60d268e037d8f95c2d2bbe9"
+    },
+    {
+      "duplicate": false,
+      "id": "soccoCraft",
+      "instantiated": true,
+      "meshes": 80,
+      "passed": true,
+      "resource": "res://assets/supplemental/soccoCraft.glb",
+      "sha256": "0d632c547dd5c4680aa27df6a09135d6b26daa6672293c46d1df432f05439cb8"
+    },
+    {
+      "duplicate": false,
+      "id": "citadelTrojanHorse",
+      "instantiated": true,
+      "meshes": 83,
+      "passed": true,
+      "resource": "res://assets/supplemental/citadelTrojanHorse.glb",
+      "sha256": "77747d7d43e32d361b67bdb0f6bb209aea47f6ad95836b2161f2ddadb96b990a"
+    },
+    {
+      "duplicate": false,
+      "id": "vanguardTrooper",
+      "instantiated": true,
+      "meshes": 45,
+      "passed": true,
+      "resource": "res://assets/supplemental/vanguardTrooper.glb",
+      "sha256": "72b6c335a8f2815921a7f1bf0d526f6cf0064776e784bf4abe026815774cddc3"
+    },
+    {
+      "duplicate": false,
+      "id": "romanSoldier_spear_red",
+      "instantiated": true,
+      "meshes": 19,
+      "passed": true,
+      "resource": "res://assets/supplemental/romanSoldier_spear_red.glb",
+      "sha256": "effdd1abf58635d7857902da8c1d7b2e09fdf6dc9a6c5994c274477152af9baf"
+    },
+    {
+      "duplicate": false,
+      "id": "romanSoldier_spear_blue",
+      "instantiated": true,
+      "meshes": 19,
+      "passed": true,
+      "resource": "res://assets/supplemental/romanSoldier_spear_blue.glb",
+      "sha256": "96c97f0a7fde521c8c3353979e8d64fb8d3fd7974f3f061824507093e45eadd8"
+    },
+    {
+      "duplicate": false,
+      "id": "romanSoldier_gladius_red",
+      "instantiated": true,
+      "meshes": 17,
+      "passed": true,
+      "resource": "res://assets/supplemental/romanSoldier_gladius_red.glb",
+      "sha256": "55e43df87033317b92fba8ebe15ca09e1c6f2b4ffd4647bcea2e170fb9debd55"
+    },
+    {
+      "duplicate": false,
+      "id": "romanSoldier_gladius_blue",
+      "instantiated": true,
+      "meshes": 17,
+      "passed": true,
+      "resource": "res://assets/supplemental/romanSoldier_gladius_blue.glb",
+      "sha256": "54267e3c01848ad3954c3947c72f5fc283be647da6304038adae97e38987813c"
+    },
+    {
+      "duplicate": false,
+      "id": "romanSoldier_longbow_red",
+      "instantiated": true,
+      "meshes": 25,
+      "passed": true,
+      "resource": "res://assets/supplemental/romanSoldier_longbow_red.glb",
+      "sha256": "4bd7eaa3c67967c55a38d71e4fb1f9b63a3cb9d7b19a2987f30ac02ee76fa408"
+    },
+    {
+      "duplicate": false,
+      "id": "romanSoldier_longbow_blue",
+      "instantiated": true,
+      "meshes": 25,
+      "passed": true,
+      "resource": "res://assets/supplemental/romanSoldier_longbow_blue.glb",
+      "sha256": "b5ef2217837b7b7573051ab90544890d55f0b7a453be6c5f4701838519263dbd"
+    }
+  ],
+  "tested": 91
+}

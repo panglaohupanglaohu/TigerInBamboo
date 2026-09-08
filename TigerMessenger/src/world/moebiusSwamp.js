@@ -2117,7 +2117,7 @@ export function createMoebiusSwampZone(opts = {}) {
     steps: tigerSteps,
     drink: tigerSteps[3],
     speed: 2.6,
-  });
+  }, { anatomy: opts.tigerAnatomy });
   swampZone.add(tiger);
   swampZone.userData.tiger = tiger;
 
@@ -3055,7 +3055,7 @@ export function applySwampSphereFit(swampZone, scale, surfaceR = PLANET_RADIUS) 
 export function createMoebiusSwampPlacement(opts = {}) {
   const scale = opts.scale ?? 0.5;
   const seed = opts.seed ?? 7711;
-  const inner = createMoebiusSwampZone({ seed });
+  const inner = createMoebiusSwampZone({ seed, tigerAnatomy: opts.tigerAnatomy });
   // 将局部 Y=40 的地表对齐包装原点：inner.y = -40
   inner.position.y = -SWAMP_LOCAL_GROUND_Y;
 

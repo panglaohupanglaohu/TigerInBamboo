@@ -1,0 +1,1281 @@
+{
+  "passed": false,
+  "url": "http://127.0.0.1:8877/TigerMessenger/",
+  "startedAt": "2026-09-08T19:35:35.092Z",
+  "scope": "Actual game scene, actor identity, live updates, original greeting/dialog and chapter-4 target resolution. No player playthrough, chapter completion, art acceptance or hardware performance claim.",
+  "interventions": [
+    "Fresh isolated browser context seeded with chapter 4 solely to resolve the live tiger rescue target.",
+    "Candidate enabled in place only if game default is original.",
+    "Test player teleported near tiger; original game frame loop remains responsible for movement/dialog.",
+    "Temporary inspection cameras render full original scene; only hidden actor ancestors temporarily revealed and restored synchronously."
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "sourceHashesBefore": {
+    "src/assets/tigerAnatomy.js": "401fb1a6f93c527c774bd742b592e92296b9902e1b5171cba2ba91507e8dc85c",
+    "src/assets/characters/moebiusTiger.js": "2da2888359caa08f09e73344e0000e39b4c2f32660f892ec249d40b7ecef6243",
+    "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+    "assets/models/optimized/moebiusTigerAnatomyData.js": "a20c2257fcab14d2b8f748287bfbab963bdbe697439f2be14f1077edc7d17403"
+  },
+  "initial": {
+    "uuid": "d0270364-ade8-40f7-8be9-ebbb6796f0ec",
+    "name": "moebius-cyber-ink-tiger",
+    "kind": "moebius-swamp-tiger",
+    "parent": {
+      "name": "moebius-swamp-zone",
+      "uuid": "5279170f-9ec1-4482-9190-3dbe372d5eec"
+    },
+    "defaultAnatomy": true,
+    "speech": {
+      "line": "两家秋雨一家声，你猜",
+      "reply": "芭蕉与荷"
+    },
+    "position": [
+      32.82158781469994,
+      37.806922517430394,
+      17.93051514379719
+    ],
+    "scale": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 4,
+      "rescuedFox": true,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "tiger"
+    },
+    "sceneChildren": 262
+  },
+  "captures": [
+    {
+      "id": "01-initial-world",
+      "anatomy": true,
+      "actorPosition": [
+        34.525254969057315,
+        41.149992110659,
+        19.193859388931475
+      ],
+      "localBounds": {
+        "min": [
+          -1.310000032186542,
+          -1.1368683772161603e-13,
+          -5.973676637654589
+        ],
+        "max": [
+          1.3100000321864744,
+          4.180599927902222,
+          3.830000042915316
+        ]
+      },
+      "camera": {
+        "localPosition": [
+          11.76441201668385,
+          7.482322138264501,
+          9.222022217228764
+        ],
+        "localTarget": [
+          -3.375077994860476e-14,
+          2.090299963951054,
+          -1.0718382973696365
+        ],
+        "worldPosition": [
+          -55.00715785098257,
+          -38.23883801164235,
+          -125.92164080072067
+        ],
+        "up": [
+          -0.49618226473558313,
+          -0.33748520116137765,
+          -0.7999418098580248
+        ],
+        "fov": 43
+      },
+      "visibilityOverrides": [],
+      "renderInfo": {
+        "frame": 24,
+        "calls": 998,
+        "triangles": 248536,
+        "points": 0,
+        "lines": 66
+      },
+      "note": "Existing full scene/terrain/materials/lights; direct renderer capture omits UI and postprocessing. Runtime culling outside actor ancestry is unchanged.",
+      "file": "01-initial-world.png",
+      "sha256": "d42b8a3da700bccbe2b9a520308acf25cc1f9f38c06fe793e49a88abecc0d87f"
+    },
+    {
+      "id": "02-candidate-world",
+      "anatomy": true,
+      "actorPosition": [
+        34.93107448854799,
+        40.637836219496684,
+        19.49479243985074
+      ],
+      "localBounds": {
+        "min": [
+          -1.3100000321865704,
+          -1.1368683772161603e-13,
+          -5.556011343929079
+        ],
+        "max": [
+          1.7639873235085823,
+          4.180599927902108,
+          3.8300000429153727
+        ]
+      },
+      "camera": {
+        "localPosition": [
+          11.490207309874346,
+          7.252606226715446,
+          8.992306305679822
+        ],
+        "localTarget": [
+          0.226993645661006,
+          2.090299963950997,
+          -0.8630056505068531
+        ],
+        "worldPosition": [
+          -54.78299434571605,
+          -37.9728808088432,
+          -125.79533342330316
+        ],
+        "up": [
+          -0.49618226473558313,
+          -0.33748520116137765,
+          -0.7999418098580248
+        ],
+        "fov": 43
+      },
+      "visibilityOverrides": [],
+      "renderInfo": {
+        "frame": 27,
+        "calls": 976,
+        "triangles": 247896,
+        "points": 0,
+        "lines": 66
+      },
+      "note": "Existing full scene/terrain/materials/lights; direct renderer capture omits UI and postprocessing. Runtime culling outside actor ancestry is unchanged.",
+      "file": "02-candidate-world.png",
+      "sha256": "f6580e366b8f29e1f337a5af15c003f562c2c0022ce120b17dc7522391f92ee5"
+    },
+    {
+      "id": "03-live-greeting-world",
+      "anatomy": true,
+      "actorPosition": [
+        35.62783110455602,
+        25.15,
+        20.01146816423836
+      ],
+      "localBounds": {
+        "min": [
+          -1.72797506338408,
+          4.440892098500627e-16,
+          -5.552782261643633
+        ],
+        "max": [
+          1.3100000321864835,
+          4.180599927902223,
+          3.830000042915416
+        ]
+      },
+      "camera": {
+        "localPosition": [
+          11.05035124987206,
+          7.250830231458589,
+          8.990530310422894
+        ],
+        "localTarget": [
+          -0.20898751559879825,
+          2.0902999639511117,
+          -0.8613911093641082
+        ],
+        "worldPosition": [
+          -50.76624051420414,
+          -35.03492032850441,
+          -119.84525923862185
+        ],
+        "up": [
+          -0.49618226473558313,
+          -0.33748520116137765,
+          -0.7999418098580248
+        ],
+        "fov": 43
+      },
+      "visibilityOverrides": [],
+      "renderInfo": {
+        "frame": 50,
+        "calls": 727,
+        "triangles": 251708,
+        "points": 0,
+        "lines": 66
+      },
+      "note": "Existing full scene/terrain/materials/lights; direct renderer capture omits UI and postprocessing. Runtime culling outside actor ancestry is unchanged.",
+      "file": "03-live-greeting-world.png",
+      "sha256": "2847324591d8a82ddd99e7f948ff17386ad38dd70fe5cb6313a53ec6b8d7fd5c"
+    }
+  ],
+  "activation": {
+    "mode": "game-default",
+    "sameParent": true,
+    "sameUpdate": true,
+    "sameSpeech": true,
+    "sameTail": true,
+    "sameLights": true,
+    "active": true,
+    "textureStatus": "ready",
+    "sha256": "48ba89ee6e96804ff3ada760e7726185257fdc85c36441d05bf406e7183750be"
+  },
+  "live": {
+    "calls": 40,
+    "samples": [
+      {
+        "call": 1,
+        "dt": 0.05,
+        "t": 24.939100000023842,
+        "runtimePlayer": true,
+        "position": [
+          32.84409013004359,
+          38.41184247363298,
+          17.947201601899575
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.614514415197063,
+          0,
+          -0.04437018342645175,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 2,
+        "dt": 0.05,
+        "t": 25.325700000017882,
+        "runtimePlayer": true,
+        "position": [
+          32.90832401202455,
+          38.99382285217997,
+          17.994833855028205
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6144815699315362,
+          0,
+          0.04423171468302421,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 3,
+        "dt": 0.05,
+        "t": 25.681600000023842,
+        "runtimePlayer": true,
+        "position": [
+          33.00937986456784,
+          39.537468861931266,
+          18.069771221415284
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.626643507064356,
+          0,
+          0.08061796620612058,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 4,
+        "dt": 0.05,
+        "t": 26.61180000001192,
+        "runtimePlayer": true,
+        "position": [
+          33.14234809159849,
+          40.0282786455604,
+          18.168373019293018
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.625451454082693,
+          0,
+          -0.07780740646705651,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 5,
+        "dt": 0.05,
+        "t": 27.40160000002384,
+        "runtimePlayer": true,
+        "position": [
+          33.30231909704152,
+          40.45305921613041,
+          18.286998566893615
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6136156620038613,
+          0,
+          0.04041045153546063,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 6,
+        "dt": 0.026699999988079072,
+        "t": 27.428300000011923,
+        "runtimePlayer": true,
+        "position": [
+          33.397104849321266,
+          40.64879011981293,
+          18.357286377723963
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6148801976298146,
+          0,
+          0.045884014559052305,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 7,
+        "dt": 0.05,
+        "t": 29.228,
+        "runtimePlayer": true,
+        "position": [
+          33.588955933924616,
+          40.9506111939051,
+          18.49955240840754
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.610585857943661,
+          0,
+          -0.022389528179605184,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 8,
+        "dt": 0.02410000002384186,
+        "t": 29.25210000002384,
+        "runtimePlayer": true,
+        "position": [
+          33.68693187519552,
+          41.06395444979985,
+          18.572205884909465
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6099921571965607,
+          0,
+          -0.01671908230565746,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 9,
+        "dt": 0.05,
+        "t": 30.15930000001192,
+        "runtimePlayer": true,
+        "position": [
+          33.89861011807424,
+          41.22844421231567,
+          18.72917462688292
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6152893862145015,
+          0,
+          0.04752037222631598,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 10,
+        "dt": 0.05,
+        "t": 30.885200000017882,
+        "runtimePlayer": true,
+        "position": [
+          34.117574201527056,
+          41.29402870946576,
+          18.89154614059891
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.626735809892785,
+          0,
+          -0.08083151658731733,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 11,
+        "dt": 0.05,
+        "t": 31.364700000017883,
+        "runtimePlayer": true,
+        "position": [
+          34.33891452947899,
+          41.25875730348313,
+          19.05567974428964
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.609653871833885,
+          0,
+          -0.012376146269295773,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 12,
+        "dt": 0.022699999988079072,
+        "t": 31.38740000000596,
+        "runtimePlayer": true,
+        "position": [
+          34.43886180752843,
+          41.20956775169254,
+          19.12979505385445
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.609371665578253,
+          0,
+          -0.006910668595122248,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 13,
+        "dt": 0.019800000011920928,
+        "t": 31.40720000001788,
+        "runtimePlayer": true,
+        "position": [
+          34.525254969057315,
+          41.149992110659,
+          19.193859388931475
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6092558017231284,
+          0,
+          -0.0021163795072162393,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 14,
+        "dt": 0.05,
+        "t": 39.09210000002384,
+        "runtimePlayer": true,
+        "position": [
+          34.73804842667995,
+          40.93226976458775,
+          19.35165511176514
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6222190619317503,
+          0,
+          -0.06961757506667647,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 15,
+        "dt": 0.04789999997615814,
+        "t": 39.14,
+        "runtimePlayer": true,
+        "position": [
+          34.93107448854799,
+          40.637836219496684,
+          19.49479243985074
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6242176935362775,
+          0,
+          -0.0747873627393606,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 16,
+        "dt": 0.05,
+        "t": 40.89570000001788,
+        "runtimePlayer": true,
+        "position": [
+          35.11651899214567,
+          40.248881344498926,
+          19.632307708495034
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.609715863454488,
+          0,
+          -0.013278725110040957,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 17,
+        "dt": 0.04240000000596046,
+        "t": 40.938100000023844,
+        "runtimePlayer": true,
+        "position": [
+          35.25733674340921,
+          39.86144489145998,
+          19.736730274379774
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6106958017314885,
+          0,
+          -0.023288579719278335,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 18,
+        "dt": 0.05,
+        "t": 40.993100000023844,
+        "runtimePlayer": true,
+        "position": [
+          35.399702958526674,
+          39.347618014885214,
+          19.842301094425334
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.612653795912671,
+          0,
+          -0.03568923700299291,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 19,
+        "dt": 0.02339999997615814,
+        "t": 41.0165,
+        "runtimePlayer": true,
+        "position": [
+          35.45622031084059,
+          39.08969819017651,
+          19.88421120087623
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6136763402402403,
+          0,
+          -0.04068991954894719,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 20,
+        "dt": 0.05,
+        "t": 41.27920000001788,
+        "runtimePlayer": true,
+        "position": [
+          35.55241664520977,
+          38.51053258996933,
+          19.955545020465042
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.625627676635597,
+          0,
+          -0.07822925528629376,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 21,
+        "dt": 0.05,
+        "t": 41.545200000017886,
+        "runtimePlayer": true,
+        "position": [
+          35.61110366556904,
+          37.9065511609428,
+          19.99906403135008
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6220763531570435,
+          0,
+          -0.06923367083778346,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 22,
+        "dt": 0.05,
+        "t": 41.86120000001788,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          37.38021172199268,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.609355867856086,
+          0,
+          -0.006469657229235237,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 23,
+        "dt": 0.05,
+        "t": 42.1315,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.617040133399183,
+          0,
+          0.053964220740970244,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 24,
+        "dt": 0.05,
+        "t": 42.39380000001192,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6266945090566236,
+          0,
+          0.08073603344465818,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 25,
+        "dt": 0.05,
+        "t": 42.648400000005964,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.619296213798805,
+          0,
+          0.061276782418872175,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 26,
+        "dt": 0.05,
+        "t": 42.90920000001788,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6093492473251443,
+          0,
+          0.006275628861133869,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 27,
+        "dt": 0.05,
+        "t": 43.16140000000596,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.616144173255138,
+          0,
+          -0.05076880750476165,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 28,
+        "dt": 0.05,
+        "t": 43.41410000002384,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6264324054292874,
+          0,
+          -0.0801274254844679,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 29,
+        "dt": 0.05,
+        "t": 43.674700000017886,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.620368048797769,
+          0,
+          -0.06446086700679603,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 30,
+        "dt": 0.05,
+        "t": 43.938100000023844,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.609549670370299,
+          0,
+          -0.010688635852636517,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 31,
+        "dt": 0.05,
+        "t": 44.18930000001192,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6151685414576367,
+          0,
+          0.047043033459059455,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 32,
+        "dt": 0.05,
+        "t": 44.44980000001192,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6262528579631335,
+          0,
+          0.07970783203913484,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 33,
+        "dt": 0.05,
+        "t": 44.70370000001788,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.621271613656471,
+          0,
+          0.06702767522631442,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 34,
+        "dt": 0.05,
+        "t": 44.95490000000596,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6101056663431246,
+          0,
+          0.017942308773729786,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 35,
+        "dt": 0.05,
+        "t": 45.23920000001788,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.615303186122546,
+          0,
+          -0.04757457739990837,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 36,
+        "dt": 0.05,
+        "t": 45.49790000000596,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.626268383902876,
+          0,
+          -0.07974420258597616,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 37,
+        "dt": 0.05,
+        "t": 46.86610000002384,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6177833276014377,
+          0,
+          0.056477785198835374,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 38,
+        "dt": 0.05,
+        "t": 60.3665,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6233236172066388,
+          0,
+          -0.07252025907515544,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 39,
+        "dt": 0.03560000002384186,
+        "t": 60.40210000002384,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.6217314765384736,
+          0,
+          -0.06829700175681194,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      },
+      {
+        "call": 40,
+        "dt": 0.022699999988079072,
+        "t": 60.42480000001192,
+        "runtimePlayer": true,
+        "position": [
+          35.62783110455602,
+          25.15,
+          20.01146816423836
+        ],
+        "walking": false,
+        "greeting": true,
+        "drinking": false,
+        "tailRotation": [
+          -2.620622640064585,
+          0,
+          -0.06519432557660008,
+          "XZY"
+        ],
+        "dialog": {
+          "phase": "idle",
+          "timer": 0,
+          "active": false
+        }
+      }
+    ],
+    "sameRoot": true,
+    "sameParent": true,
+    "sameTail": true,
+    "sameSpeech": true,
+    "sameLights": true,
+    "candidateActive": true,
+    "textureStatus": "ready",
+    "rescue": {
+      "version": 1,
+      "chapter": 4,
+      "rescuedFox": true,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "tiger"
+    },
+    "rescueTargetDistanceToActor": 0,
+    "actualDialogReference": true,
+    "greetingObserved": true,
+    "dialogObserved": false,
+    "motionObserved": true,
+    "observerRestored": true
+  },
+  "checks": {
+    "identityPreserved": true,
+    "textureReady": true,
+    "actualFrameUpdates": true,
+    "originalGreetingAndDialog": false,
+    "rescueTargetIdentity": true,
+    "visibilityRestored": true,
+    "observerRestored": true
+  },
+  "finishedAt": "2026-09-08T19:36:38.500Z",
+  "worldErrors": {
+    "pageErrors": [],
+    "note": "Reported separately from focused tiger checks; this smoke does not certify the whole game error-free."
+  },
+  "sourceHashes": {
+    "src/assets/tigerAnatomy.js": "401fb1a6f93c527c774bd742b592e92296b9902e1b5171cba2ba91507e8dc85c",
+    "src/assets/characters/moebiusTiger.js": "2da2888359caa08f09e73344e0000e39b4c2f32660f892ec249d40b7ecef6243",
+    "src/world/moebiusTiger.js": "d39f4ba207ba59dbfea5bf08b7a00f3434cab8330589b2a5153a1d82849e4c58",
+    "assets/models/optimized/moebiusTigerAnatomyData.js": "a20c2257fcab14d2b8f748287bfbab963bdbe697439f2be14f1077edc7d17403"
+  },
+  "sourcesUnchangedDuringRun": true
+}
