@@ -49,16 +49,17 @@ for i in range(25):
  for kind in kinds:
   data=donor(role,kind);tag='add:stored-weapon-'+str(i)+'-'+kind
   if kind=='shield':
-   x=[-1.60,-1.3,-1,-.7,-.4,-.1,.2,.94,1.24,1.54][shieldcount%10];y=.86;z=-.035 if shieldcount<10 else .035;shieldcount+=1
-  elif role=='spear':x=-.95 if j<8 else 1.20;y=.706+(j%4)*.021;z=-.02 if j%8<4 else .02
-  elif role=='gladius':x=-1.4+j*.35;y=.82;z=0
-  else:x=-1.1 if j<3 else 1.15;y=.805+(j%3)*.014;z=0
+   x=[-1.60,-1.3,-1,-.7,-.4,-.1,.2,.94,1.24,1.54][shieldcount%10];y=1.05;z=-.065 if shieldcount<10 else .065;shieldcount+=1
+  elif role=='spear':x=-.95 if j<8 else 1.20;y=.709+(j%4)*.059;z=-.030 if j%8<4 else .030
+  elif role=='gladius':x=[-1.65,-.30,.30,1.85][j];y=.80;z=0
+  else:x=-1.1 if j<3 else 1.15;y=.952+(j%3)*.070;z=0
   o=bpy.data.objects.new('Stowed '+role+' '+kind+' crew '+str(i),data);bpy.context.scene.collection.objects.link(o);o.parent=root;s.setm(o,Matrix.Translation((x,y,z)));o['warship_added_id']=tag;o['warship_crew_index']=i;o['warship_weapon_role']=role;o['warship_weapon_kind']=kind;obs[tag]=o;items.append({'id':tag,'crewIndex':i,'role':role,'kind':kind,'position':[x,y,z]})
 # Two centre saddles support the longitudinal slots without a mast collision.
 wood=obs['n231'].data.materials[0]
 for j,x in enumerate([-1.42,-.49,.94,1.46]):
  o=s.box('Central weapon cradle '+str(j),(.035,.035,.16),(x,.684,0),root,wood,'add:stored-rack-'+str(j),.003);obs[s.ident(o)]=o
 a=json.loads((OUT/'warship-battle-v9.assembly.json').read_text());a['storedWeapons']={'slots':items,'roleCounts':rolecounts,'count':25,'pieces':len(items),'crewIndex25':'remaining rowing station, not part of 5x5 landing formation','sourceGeometry':provenance,'layout':'longitudinal central slots split either side of mast; vertical shields in two thin rows'}
+a['addedNodes']=[n for n in a['addedNodes'] if not n['id'].startswith('add:stored-')]
 for item in items:a['addedNodes'].append({'id':item['id'],'parent':'n0','name':obs[item['id']].name})
 for tag,o in obs.items():
  if tag.startswith('add:stored-'):a['restTransforms'][tag]=s.flat(s.local(o))
