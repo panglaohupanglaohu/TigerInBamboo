@@ -1,0 +1,575 @@
+{
+  "slots": [
+    {
+      "id": "add:stored-weapon-0-weapon",
+      "crewIndex": 0,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.706,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-0-shield",
+      "crewIndex": 0,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -1.6,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-1-weapon",
+      "crewIndex": 1,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.727,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-1-shield",
+      "crewIndex": 1,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -1.3,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-2-weapon",
+      "crewIndex": 2,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.748,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-2-shield",
+      "crewIndex": 2,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -1,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-3-weapon",
+      "crewIndex": 3,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.7689999999999999,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-3-shield",
+      "crewIndex": 3,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -0.7,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-4-weapon",
+      "crewIndex": 4,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.706,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-4-shield",
+      "crewIndex": 4,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -0.4,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-5-weapon",
+      "crewIndex": 5,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.727,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-5-shield",
+      "crewIndex": 5,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -0.1,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-6-weapon",
+      "crewIndex": 6,
+      "role": "gladius",
+      "kind": "weapon",
+      "position": [
+        -1.4,
+        0.82,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-6-shield",
+      "crewIndex": 6,
+      "role": "gladius",
+      "kind": "shield",
+      "position": [
+        0.2,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-7-weapon",
+      "crewIndex": 7,
+      "role": "longbow",
+      "kind": "weapon",
+      "position": [
+        -1.1,
+        0.805,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-8-weapon",
+      "crewIndex": 8,
+      "role": "gladius",
+      "kind": "weapon",
+      "position": [
+        -1.0499999999999998,
+        0.82,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-8-shield",
+      "crewIndex": 8,
+      "role": "gladius",
+      "kind": "shield",
+      "position": [
+        0.94,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-9-weapon",
+      "crewIndex": 9,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.748,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-9-shield",
+      "crewIndex": 9,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        1.24,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-10-weapon",
+      "crewIndex": 10,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        -0.95,
+        0.7689999999999999,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-10-shield",
+      "crewIndex": 10,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        1.54,
+        0.86,
+        -0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-11-weapon",
+      "crewIndex": 11,
+      "role": "longbow",
+      "kind": "weapon",
+      "position": [
+        -1.1,
+        0.8190000000000001,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-12-weapon",
+      "crewIndex": 12,
+      "role": "longbow",
+      "kind": "weapon",
+      "position": [
+        -1.1,
+        0.8330000000000001,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-13-weapon",
+      "crewIndex": 13,
+      "role": "longbow",
+      "kind": "weapon",
+      "position": [
+        1.15,
+        0.805,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-14-weapon",
+      "crewIndex": 14,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.706,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-14-shield",
+      "crewIndex": 14,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -1.6,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-15-weapon",
+      "crewIndex": 15,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.727,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-15-shield",
+      "crewIndex": 15,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -1.3,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-16-weapon",
+      "crewIndex": 16,
+      "role": "gladius",
+      "kind": "weapon",
+      "position": [
+        -0.7,
+        0.82,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-16-shield",
+      "crewIndex": 16,
+      "role": "gladius",
+      "kind": "shield",
+      "position": [
+        -1,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-17-weapon",
+      "crewIndex": 17,
+      "role": "longbow",
+      "kind": "weapon",
+      "position": [
+        1.15,
+        0.8190000000000001,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-18-weapon",
+      "crewIndex": 18,
+      "role": "gladius",
+      "kind": "weapon",
+      "position": [
+        -0.3500000000000001,
+        0.82,
+        0
+      ]
+    },
+    {
+      "id": "add:stored-weapon-18-shield",
+      "crewIndex": 18,
+      "role": "gladius",
+      "kind": "shield",
+      "position": [
+        -0.7,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-19-weapon",
+      "crewIndex": 19,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.748,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-19-shield",
+      "crewIndex": 19,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -0.4,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-20-weapon",
+      "crewIndex": 20,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.7689999999999999,
+        -0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-20-shield",
+      "crewIndex": 20,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        -0.1,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-21-weapon",
+      "crewIndex": 21,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.706,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-21-shield",
+      "crewIndex": 21,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        0.2,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-22-weapon",
+      "crewIndex": 22,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.727,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-22-shield",
+      "crewIndex": 22,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        0.94,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-23-weapon",
+      "crewIndex": 23,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.748,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-23-shield",
+      "crewIndex": 23,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        1.24,
+        0.86,
+        0.035
+      ]
+    },
+    {
+      "id": "add:stored-weapon-24-weapon",
+      "crewIndex": 24,
+      "role": "spear",
+      "kind": "weapon",
+      "position": [
+        1.2,
+        0.7689999999999999,
+        0.02
+      ]
+    },
+    {
+      "id": "add:stored-weapon-24-shield",
+      "crewIndex": 24,
+      "role": "spear",
+      "kind": "shield",
+      "position": [
+        1.54,
+        0.86,
+        0.035
+      ]
+    }
+  ],
+  "roleCounts": {
+    "spear": 16,
+    "gladius": 4,
+    "longbow": 5
+  },
+  "count": 25,
+  "pieces": 45,
+  "crewIndex25": "remaining rowing station, not part of 5x5 landing formation",
+  "sourceGeometry": {
+    "spear_weapon": {
+      "source": "assets/models/optimized/roman-family-v1/romanSoldier_spear_blue.blend",
+      "sha256": "58672d8ec18dacbfa8f5ba577626f565ee41c0f0b730880f5615ce17a9a60c4f",
+      "nodes": [
+        "add:spear-grip-wrap",
+        "n46",
+        "n44",
+        "n42",
+        "n48"
+      ],
+      "vertices": 238
+    },
+    "spear_shield": {
+      "source": "assets/models/optimized/roman-family-v1/romanSoldier_spear_blue.blend",
+      "sha256": "58672d8ec18dacbfa8f5ba577626f565ee41c0f0b730880f5615ce17a9a60c4f",
+      "nodes": [
+        "add:shield-handle:Wooden_Grip",
+        "n39",
+        "n37",
+        "n35",
+        "n33",
+        "add:shield-handle:Gold_Upper_Bracket",
+        "add:shield-handle:Gold_Lower_Bracket"
+      ],
+      "vertices": 492
+    },
+    "gladius_weapon": {
+      "source": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.blend",
+      "sha256": "a1ed75c7a07208edb9425a4408b7e9a69459c049e2380a891efaea2d0519096e",
+      "nodes": [
+        "add:sword-pommel",
+        "add:sword-guard",
+        "n53",
+        "n51"
+      ],
+      "vertices": 85
+    },
+    "gladius_shield": {
+      "source": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.blend",
+      "sha256": "a1ed75c7a07208edb9425a4408b7e9a69459c049e2380a891efaea2d0519096e",
+      "nodes": [
+        "add:shield-handle:Wooden_Grip",
+        "n39",
+        "n37",
+        "n35",
+        "n33",
+        "add:shield-handle:Gold_Upper_Bracket",
+        "add:shield-handle:Gold_Lower_Bracket"
+      ],
+      "vertices": 492
+    },
+    "longbow_weapon": {
+      "source": "assets/models/optimized/roman-family-v1/romanSoldier_longbow_blue.blend",
+      "sha256": "30eef75c221e55b3aa19d6042fdd260c086312e0fecc212e0ddbda8efa9729a1",
+      "nodes": [
+        "n61",
+        "n59",
+        "n56",
+        "n54",
+        "n51",
+        "n63",
+        "n65"
+      ],
+      "vertices": 220
+    }
+  },
+  "layout": "longitudinal central slots split either side of mast; vertical shields in two thin rows"
+}

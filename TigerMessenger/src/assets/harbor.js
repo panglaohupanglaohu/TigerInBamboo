@@ -1579,7 +1579,7 @@ export function paintSoldierHelm(root, side = "blue") {
 
 /**
  * 给战船甲板桨手（warship-crew 的 InstancedMesh）换缨穗颜色。
- * 船上看到的士兵是船自带的剪纸桨手，不是方阵士兵；方阵换边时船组也要同步换，
+ * 船上坐姿与方阵行走姿态由 crewManifest 绑定同一批士兵；方阵换边时船组也要同步换，
  * 否则「蓝缨士兵乘船」看起来仍是红缨。只换羽冠三件，盔体保持亮青铜；
  * 不改动 CREW_SHARED 共享材质（运河巡航船/红缨增援船仍是红缨）。
  * @param {THREE.Object3D} boat createFisherBoat 的战船

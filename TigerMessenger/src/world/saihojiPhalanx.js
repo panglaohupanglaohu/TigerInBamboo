@@ -695,6 +695,7 @@ export function createSaihojiPhalanxBattle({
     surfaceBasis(origin, face, _up, _fwd, _right);
     const c = (GRID - 1) / 2;
     for (const s of wave.soldiers) {
+      if (s.userData.dead || s.userData.downed) continue;
       const lx = (s.userData.gx - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 0);
       const lz = (s.userData.gz - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 1);
       _tmp.copy(_up).multiplyScalar(PLANET_RADIUS + groundLift(_up))
@@ -829,6 +830,7 @@ export function createSaihojiPhalanxBattle({
     surfaceBasis(centerDir, face, _up, _fwd, _right);
     const c = (GRID - 1) / 2;
     for (const s of wave.soldiers) {
+      if (s.userData.dead || s.userData.downed) continue;
       const lx = (s.userData.gx - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 0);
       const lz = (s.userData.gz - c) * CELL + slotJitter(s.userData.gx, s.userData.gz, 1);
       if (plazaDeckPoint(_right, _fwd, lx, -lz, _up, _deckPt)) {

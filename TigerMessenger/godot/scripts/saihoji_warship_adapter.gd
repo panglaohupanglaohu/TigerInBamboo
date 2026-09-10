@@ -21,7 +21,7 @@ func bind(node: Node3D) -> Dictionary:
     for key in ["n0", "n219", "n220", "n63", "n188", "add:hand-0L", "add:hand-25R", "add:boarding-hinge"]:
         if not ids.has(key): push_error("Warship v6 missing " + key); return {}
     node.set_meta("warship_revision", "warship-battle-v8")
-    var row := {"node":node, "ids":ids, "time":0.0, "last_frame":-1}
+    var row := {"node":node, "ids":ids, "time":0.0, "last_frame":-1, "crew_state":{}, "crew_identity":{}}
     apply_frame(row, 0)
     report.instances += 1
     return row
@@ -57,6 +57,10 @@ func apply_frame(row: Dictionary, frame: int) -> void:
         if row.ids.has(key): row.ids[key].transform = decoded[frame][key]
     # The old deployment sequence is not valid for the v6 deck. Keep its board stowed.
     row.ids["add:boarding-hinge"].transform = _transform(data.boarding.stowedMatrix)
+    for seat in row.crew_state:
+        if not row.crew_state[seat]:
+            var oar_key := "n%d" % (63+int(seat)*5)
+            row.ids[oar_key].transform = _transform(data.poseFrames[180].transforms[oar_key])
     row.last_frame = frame
 
 func tick(row: Dictionary, delta: float, moving: bool) -> void:
@@ -72,3 +76,23 @@ func tick(row: Dictionary, delta: float, moving: bool) -> void:
 
 func reset() -> void:
     report.instances = 0
+
+# The standing actor and seated drawing share one soldier identity, never two units.
+func set_crew_embarked(row: Dictionary, seat: int, embarked: bool, identity: String = "") -> void:
+    if not identity.is_empty(): row.crew_identity[seat] = identity
+    if row.crew_state.get(seat, null) == embarked: return
+    row.crew_state[seat] = embarked
+    for part in range(220,231):
+        var key := "n%d:i%d" % [part,seat]
+        if row.ids.has(key): row.ids[key].visible = embarked
+    for part in ["forearm", "hand"]:
+        for side in ["L","R"]:
+            var key := "add:%s-%d%s" % [part,seat,side]
+            if row.ids.has(key): row.ids[key].visible = embarked
+    for key in row.ids:
+        var node: Node = row.ids[key]
+        var extras: Dictionary = node.get_meta("extras",{})
+        if int(extras.get("warship_crew_index",-1)) == seat:
+            node.visible = embarked
+            node.set_meta("soldier_identity",identity)
+    row.last_frame = -1

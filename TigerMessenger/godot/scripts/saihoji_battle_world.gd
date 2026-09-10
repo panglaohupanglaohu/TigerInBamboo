@@ -390,11 +390,13 @@ func _launch_ship(id: String) -> void:
     var row := {"node": node, "visual":visual, "id": id, "index": index, "u": 0.0, "state": "out", "land_reported": false}
     ships.append(row)
     var grid:=3 if index>=100 else 5
+    for seat in range(grid*grid,25): warship_visual.set_crew_embarked(visual,seat,false)
     for i in range(grid*grid):
         var x := i % grid; var z := int(i / grid)
         var edge := maxi(absi(x-2), absi(z-2)); var man := absi(x-2)+absi(z-2)
         var role := "spear" if edge >= 2 else ("gladius" if man == 2 else "longbow")
-        var actor: Node3D = prefabs[role].instantiate(); actor.name = "blue-%d-%d" % [index,i]; add_child(actor)
+        var actor: Node3D = prefabs[role].instantiate(); actor.name = "blue-%d-%d" % [index,i]; actor.visible = false; add_child(actor)
+        warship_visual.set_crew_embarked(visual,i,true,str(actor.name))
         var nodes: Dictionary = {}; _candidate_index(actor,nodes)
         var formation_origin:=landing
         if index>=100:
@@ -464,6 +466,9 @@ func _soldiers(delta: float) -> void:
         var actor: Node3D = tr.node
         if tr.state == "down": continue
         var ship = ships.filter(func(s):return s.id==tr.ship)[0]
+        var onboard: bool = tr.state == "aboard"
+        warship_visual.set_crew_embarked(ship.visual,int(tr.index),onboard,str(tr.id))
+        actor.visible = not onboard
         if tr.state == "aboard":
             var deck: Vector3 = ship.node.global_position + ship.node.global_basis.y.normalized()*0.65 + ship.node.global_basis.x.normalized()*((tr.index%5-2)*0.45) + ship.node.global_basis.z.normalized()*((int(tr.index/5)-2)*0.28)
             _orient(actor,deck,fleet_center)
@@ -997,12 +1002,12 @@ func _update_status()->void:
     var names:Dictionary={"at_castle":"待命","prelude":"序曲","fight":"守卫苔庭","withdrawal":"撤军","complete":"鲲已脱离吸取","stopped":"任务结束"}
     var phase_name:String=names.get(director.phase,"运兵前往苔庭")
     var alive:=troops.filter(func(t):return t.state!="down").size()
-    status.text="鼓息后运兵出发；拖动旋转、滚轮缩放。\n%s\n舰队受击 %d / 300 · 鲲回落 %d/6\n蓝盔守卫 %d · 重甲敌军 %d"%[phase_name,director.snapshot().hits,director.snapshot().sink_step,alive,heavies.filter(func(h):return h.state!="down").size()]
+    status.text="苔庭五区已遮蔽鲲背；鼓息后运兵出发。拖动旋转、滚轮缩放。\n%s\n舰队受击 %d / 300 · 鲲回落 %d/6\n蓝盔守卫 %d · 重甲敌军 %d"%[phase_name,director.snapshot().hits,director.snapshot().sink_step,alive,heavies.filter(func(h):return h.state!="down").size()]
     if not outcome_message.is_empty():status.text+="\n"+outcome_message
     if not load_error.is_empty():status.text=load_error
 
 func evidence()->Dictionary:
-    return {"scope":"original-world native integration candidate; pending visual/gameplay acceptance","source_whale":"leviathanGroup[156]","six_scenes_preserved":garden!=null,"fleet_members":fleet_members.size(),"terrain_collision_meshes":collision_mesh_count,"jaw_triangles":jaw_triangles,"kun_candidate_active":kun_candidate_active,"water":water_result,"terrain_repair":terrain_result,"aircraft_visual":aircraft_visual.report,"gatepod_visual":gatepod_visual.report,"socco_transport":socco_transport.report,"transport_occupants":heavies.map(func(h):return {"id":h.id,"state":h.state,"kind":h.kind,"vehicle":h.vehicle,"seat":h.seat}),"render_inventory":_render_inventory(),"original_instances":original_instances_result,"pines":pine_visual.report,"root_support":root_support.report,"original_surfaces":original_surface_result,"landing_plan":landing_planner.report,"foot_offsets":foot_offsets,"heavy_pose_frames":heavy_frames.size(),"swallow_geometry":swallow_geometry,"ropes":_rope_evidence(),"feet":_feet_evidence(),"escort_pods":escort_pods.size(),"ground_samples":ground_samples,"ground_fallbacks":ground_fallbacks,"blocked_projectiles":blocked_projectiles,"state":director.snapshot(),"troops":troops.size(),"heavies":heavies.size(),"events":events.duplicate(true),"source_node_count":source_nodes.size(),"load_error":load_error}
+    return {"scope":"original-world native integration candidate; pending visual/gameplay acceptance","source_whale":"leviathanGroup[156]","six_scenes_preserved":garden!=null,"five_zone_concealment":concealment_result,"fleet_members":fleet_members.size(),"terrain_collision_meshes":collision_mesh_count,"jaw_triangles":jaw_triangles,"kun_candidate_active":kun_candidate_active,"water":water_result,"terrain_repair":terrain_result,"aircraft_visual":aircraft_visual.report,"gatepod_visual":gatepod_visual.report,"socco_transport":socco_transport.report,"transport_occupants":heavies.map(func(h):return {"id":h.id,"state":h.state,"kind":h.kind,"vehicle":h.vehicle,"seat":h.seat}),"render_inventory":_render_inventory(),"original_instances":original_instances_result,"pines":pine_visual.report,"root_support":root_support.report,"original_surfaces":original_surface_result,"landing_plan":landing_planner.report,"foot_offsets":foot_offsets,"heavy_pose_frames":heavy_frames.size(),"swallow_geometry":swallow_geometry,"ropes":_rope_evidence(),"feet":_feet_evidence(),"escort_pods":escort_pods.size(),"ground_samples":ground_samples,"ground_fallbacks":ground_fallbacks,"blocked_projectiles":blocked_projectiles,"state":director.snapshot(),"troops":troops.size(),"heavies":heavies.size(),"events":events.duplicate(true),"source_node_count":source_nodes.size(),"load_error":load_error}
 
 func _measure_foot_offset(actor:Node3D,ids:Array)->float:
     var nodes:Dictionary={};_candidate_index(actor,nodes)
