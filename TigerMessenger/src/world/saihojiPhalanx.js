@@ -14,6 +14,7 @@ import { PLANET_RADIUS } from "./planet.js";
 import { createWhaleMaw } from "./whaleMaw.js";
 import { createSaihojiAmbush } from "./saihojiAmbush.js";
 import { orientWarship, placeWarshipOnSphere, sampleWarshipRoute } from "./warshipNavigation.js";
+import { bindRomanShipCarryPose } from "./romanShipCarryPose.js";
 import { bindWarshipCohort } from "./warshipCrewContinuity.js";
 import { createWarshipWaterRoutes } from "./warshipWaterRoutes.js";
 import { SAIHOJI_HUB } from "./saihoji.js";
@@ -349,6 +350,14 @@ export function createSaihojiPhalanxBattle({
   root.userData.siegeLaddersDisabled = !!disableSiegeLadders;
   root.userData.surfaceProjectionEnabled = !!surfaceProjectionEnabled;
   const romanPresentation = createRomanCombatPresentation();
+  const shipCarry = new Map();
+  function setShipCarry(actor, enabled) {
+    let controller = shipCarry.get(actor);
+    if (!controller && enabled) { controller = bindRomanShipCarryPose(actor); if (controller) shipCarry.set(actor, controller); }
+    controller?.setEnabled(enabled);
+    actor.userData.shipCarryActive = !!controller?.active;
+    if (actor.userData.shieldBroken && actor.userData.equipment?.shield) actor.userData.equipment.shield.visible = false;
+  }
   romanPresentation.setEnabled(romanEquipment);
   root.userData.setRomanEquipment = value => romanPresentation.setEnabled(value);
 
@@ -1199,6 +1208,8 @@ export function createSaihojiPhalanxBattle({
   /** 硬重置（调试/热重载）：士兵撤阵清场，回到 atCastle 等下一轮鼓息运兵 */
   function resetBattle() {
     ambush.reset();
+    for (const controller of shipCarry.values()) controller.dispose();
+    shipCarry.clear();
     romanPresentation.dispose();
     detachRopes();
     resetFightFormation();
@@ -3472,7 +3483,10 @@ export function createSaihojiPhalanxBattle({
         // 就有多少人换缨并被战船运往纳沃纳广场集结攻城。
         // 先在队列里换缨、原地列队 BOARD_HOLD_SEC 秒（肉眼可见缨穗变色），
         // 随后才撤阵入舱——避免「红缨消失、空船开走」看不见换装。
-        for (const s of w.soldiers) paintSoldierHelm(s, "blue");
+        for (const s of w.soldiers) {
+          paintSoldierHelm(s, "blue");
+          if (!s.userData.dead && !s.userData.downed) setShipCarry(s, true);
+        }
         // 船上座位呈现与地面士兵共享身份、装备配色
         paintBoatCrewCrest(w.boat, "blue");
         w.state = "board";
@@ -3547,6 +3561,7 @@ export function createSaihojiPhalanxBattle({
           if (w.boardT <= 0) {
             w.state = "return";
             w.u = 0;
+            for (const s of w.soldiers) setShipCarry(s, false);
             w.crewContinuity.embark(); // 同一 UID 回到原座位，武器收回船中央
           }
           continue;
@@ -3918,6 +3933,13 @@ export function createSaihojiPhalanxBattle({
       // All branches (including early returns) finish after movement, weapon aim and damage.
       romanPresentation.update(dt, t, root);
       ambush.applyConcealmentPose();
+      // During the existing pre-boarding hold, weapons stay in a compact carry
+      // pose. This does not move actors or claim the boarding path is complete.
+      for (const [actor, controller] of shipCarry) {
+        if (!controller.active) continue;
+        if (actor.userData.dead || actor.userData.downed) setShipCarry(actor, false);
+        else controller.update();
+      }
       campaignStatus.phase=phase;campaignStatus.shipCount=waves.length;
     }
   }

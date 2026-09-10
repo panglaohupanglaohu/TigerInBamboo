@@ -1,10 +1,10 @@
 extends RefCounted
 ## Replays the saved v6 poses without rebuilding the original 26 rowers.
-const MODEL := "res://assets/warship-battle-v8/warship-battle-v8.glb"
-const ASSEMBLY := "res://assets/warship-battle-v8/warship-battle-v8.assembly.json"
+const MODEL := "res://assets/warship-battle-v11/warship-battle-v11.glb"
+const ASSEMBLY := "res://assets/warship-battle-v11/warship-battle-v11.assembly.json"
 var data: Dictionary = {}
 var decoded: Dictionary = {}
-var report: Dictionary = {"asset":"warship-battle-v8", "instances":0, "rowers_per_ship":26, "boarding_validated":false}
+var report: Dictionary = {"asset":"warship-battle-v11", "instances":0, "rowers_per_ship":26, "boarding_validated":false}
 
 func load_data() -> bool:
     if not data.is_empty(): return true
@@ -20,8 +20,8 @@ func bind(node: Node3D) -> Dictionary:
     _index(node, ids)
     for key in ["n0", "n219", "n220", "n63", "n188", "add:hand-0L", "add:hand-25R", "add:boarding-hinge"]:
         if not ids.has(key): push_error("Warship v6 missing " + key); return {}
-    node.set_meta("warship_revision", "warship-battle-v8")
-    var row := {"node":node, "ids":ids, "time":0.0, "last_frame":-1, "crew_state":{}, "crew_identity":{}}
+    node.set_meta("warship_revision", "warship-battle-v11")
+    var row := {"node":node, "ids":ids, "time":0.0, "last_frame":-1, "crew_state":{}, "crew_identity":{}, "crew_stage":{}}
     apply_frame(row, 0)
     report.instances += 1
     return row
@@ -77,22 +77,41 @@ func tick(row: Dictionary, delta: float, moving: bool) -> void:
 func reset() -> void:
     report.instances = 0
 
-# The standing actor and seated drawing share one soldier identity, never two units.
-func set_crew_embarked(row: Dictionary, seat: int, embarked: bool, identity: String = "") -> void:
+# The caller controls the standing actor and its motion. This adapter controls only
+# the saved seated representation and that soldier's stored weapons.
+func set_crew_stage(row: Dictionary, seat: int, stage: String, identity: String = "") -> bool:
+    if seat < 0 or seat > 25 or stage not in ["seated", "deck-unarmed", "deck-armed", "ashore"]:
+        return false
+    if seat == 25 and stage != "seated": return false
+    if not row.has("ids") or not row.ids.has("n220:i%d" % seat): return false
+    if row.crew_stage.get(seat, "") == stage and (identity.is_empty() or row.crew_identity.get(seat, "") == identity):
+        return true
+    var seated := stage == "seated"
+    var stored := stage in ["seated", "deck-unarmed"]
     if not identity.is_empty(): row.crew_identity[seat] = identity
-    if row.crew_state.get(seat, null) == embarked: return
-    row.crew_state[seat] = embarked
+    var soldier_id: String = row.crew_identity.get(seat, "")
+    row.crew_stage[seat] = stage
+    row.crew_state[seat] = seated
     for part in range(220,231):
         var key := "n%d:i%d" % [part,seat]
-        if row.ids.has(key): row.ids[key].visible = embarked
+        if row.ids.has(key):
+            row.ids[key].visible = seated
+            row.ids[key].set_meta("soldier_identity", soldier_id)
     for part in ["forearm", "hand"]:
         for side in ["L","R"]:
             var key := "add:%s-%d%s" % [part,seat,side]
-            if row.ids.has(key): row.ids[key].visible = embarked
+            if row.ids.has(key):
+                row.ids[key].visible = seated
+                row.ids[key].set_meta("soldier_identity", soldier_id)
     for key in row.ids:
         var node: Node = row.ids[key]
         var extras: Dictionary = node.get_meta("extras",{})
         if int(extras.get("warship_crew_index",-1)) == seat:
-            node.visible = embarked
-            node.set_meta("soldier_identity",identity)
+            node.visible = stored
+            node.set_meta("soldier_identity", soldier_id)
     row.last_frame = -1
+    return true
+
+# Compatibility for existing instantaneous embark/disembark callers.
+func set_crew_embarked(row: Dictionary, seat: int, embarked: bool, identity: String = "") -> void:
+    set_crew_stage(row, seat, "seated" if embarked else "ashore", identity)

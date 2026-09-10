@@ -1,0 +1,206 @@
+{
+  "status": "blocked_for_physical_boarding",
+  "shipSha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+  "scaleContract": {
+    "boatWorldScale": 1.7,
+    "landRootScale": 1,
+    "landFigScale": 2,
+    "savedSeatedDonorScale": 0.5,
+    "seatedEffectiveDonorWorldScale": 0.85,
+    "standingEffectiveDonorWorldScale": 1,
+    "scope": "Actual public factories plus approved presentation; default static weapon pose only, not full combat cycle."
+  },
+  "lane": {
+    "conservativeLocalWidth": 0.3143333122,
+    "worldWidth": 0.53436663074,
+    "candidateLocalCenterZ": [
+      -0.29,
+      0.29
+    ],
+    "candidateLocalFootY": 0.663,
+    "certified": false,
+    "note": "The lane excludes mast, turning and movement envelope. Width alone is not a proof of path validity."
+  },
+  "actors": {
+    "spear": {
+      "bodyWorldWidth": 0.33000001311302185,
+      "equippedWorldWidth": 0.6346666717529297,
+      "equippedWorldHeight": 1.1535740697157593,
+      "bodyFitsConservativeWidth": true,
+      "equippedFitsConservativeWidth": false
+    },
+    "gladius": {
+      "bodyWorldWidth": 0.33000001311302185,
+      "equippedWorldWidth": 0.7259169079243404,
+      "equippedWorldHeight": 1.1602120855389302,
+      "bodyFitsConservativeWidth": true,
+      "equippedFitsConservativeWidth": false
+    },
+    "longbow": {
+      "bodyWorldWidth": 0.22336359322071075,
+      "equippedWorldWidth": 0.24568179965019227,
+      "equippedWorldHeight": 1.2854510536988593,
+      "bodyFitsConservativeWidth": true,
+      "equippedFitsConservativeWidth": true
+    }
+  },
+  "mastLocalBounds": {
+    "min": [
+      0.4866296947002411,
+      0.5699999332427979,
+      -0.10248509794473648
+    ],
+    "max": [
+      0.6133702993392944,
+      3.4700000286102295,
+      0.11375010758638382
+    ],
+    "size": [
+      0.12674060463905334,
+      2.9000000953674316,
+      0.2162352055311203
+    ]
+  },
+  "storageLocalZExtent": [
+    -0.114,
+    0.114
+  ],
+  "deployment": {
+    "frames": [
+      180,
+      211
+    ],
+    "intersectionRecords": 577,
+    "finalFrameRecords": [
+      {
+        "frame": 211,
+        "board": "add:boarding-beam--0.17",
+        "obstacle": "add:bow-landing-knee-1.77",
+        "name": "Boarding landing structural knee",
+        "triangle_pairs": 20,
+        "board_center_gltf": [
+          1.769999384880066,
+          0.5553954839706421,
+          1.506793737411499
+        ]
+      },
+      {
+        "frame": 211,
+        "board": "add:boarding-beam--0.17",
+        "obstacle": "n1",
+        "name": "hull-low",
+        "triangle_pairs": 23,
+        "board_center_gltf": [
+          1.769999384880066,
+          0.5553954839706421,
+          1.506793737411499
+        ]
+      },
+      {
+        "frame": 211,
+        "board": "add:boarding-beam-0.17",
+        "obstacle": "add:bow-landing-knee-2.11",
+        "name": "Boarding landing structural knee.001",
+        "triangle_pairs": 16,
+        "board_center_gltf": [
+          2.110002040863037,
+          0.5553954839706421,
+          1.506793737411499
+        ]
+      },
+      {
+        "frame": 211,
+        "board": "add:boarding-beam-0.17",
+        "obstacle": "n1",
+        "name": "hull-low",
+        "triangle_pairs": 6,
+        "board_center_gltf": [
+          2.110002040863037,
+          0.5553954839706421,
+          1.506793737411499
+        ]
+      }
+    ],
+    "obstacleIds": [
+      "add:bench-25",
+      "add:bow-landing",
+      "add:bow-landing-knee-1.77",
+      "add:bow-landing-knee-2.11",
+      "add:deck-plank-17",
+      "add:deck-plank-18",
+      "add:deck-plank-19",
+      "add:deck-plank-20",
+      "add:deck-plank-21",
+      "add:deck-plank-22",
+      "add:deck-plank-23",
+      "add:deck-plank-24",
+      "add:hand-25L",
+      "add:oar-collar-23",
+      "add:oar-collar-24",
+      "add:oar-collar-25",
+      "add:oar-handle-24",
+      "add:oar-handle-25",
+      "add:oarlock-pin-22--0.043",
+      "add:oarlock-pin-23-0.043",
+      "add:oarlock-pin-24--0.043",
+      "add:oarlock-pin-24-0.043",
+      "add:oarlock-pin-25--0.043",
+      "add:oarlock-pin-25-0.043",
+      "add:oarlock-shoe-22",
+      "add:oarlock-shoe-23",
+      "add:oarlock-shoe-24",
+      "add:oarlock-shoe-25",
+      "n1",
+      "n174",
+      "n179",
+      "n184",
+      "n189",
+      "n229:i24",
+      "n229:i25",
+      "n230:i24",
+      "n230:i25",
+      "n231",
+      "n267",
+      "n269",
+      "n27",
+      "n271",
+      "n31",
+      "n41",
+      "n43"
+    ],
+    "accepted": false
+  },
+  "oldPath": {
+    "pointsLocal": [
+      [
+        0.800000011920929,
+        0.6899999976158142,
+        0.0
+      ],
+      [
+        1.940000057220459,
+        0.6899999976158142,
+        0.0
+      ],
+      [
+        1.940000057220459,
+        0.7039999961853027,
+        0.8399999737739563
+      ],
+      [
+        1.940000057220459,
+        0.5662160515785217,
+        2.1831648349761963
+      ]
+    ],
+    "sampledCollisionRecords": 180,
+    "whyNotReuse": "Old centerline walks through middle weapons. Proxy dimensions radius .14/height .65 are historical and are not full equipped actor verification."
+  },
+  "nextActions": [
+    "Author compact carry poses: sword down/inboard, shield edge-on or carried flat against torso, spear upright, bow upright, then measure continuous envelope.",
+    "Resolve seated-to-standing 0.85 scale discrepancy by unified person rig/dimensions, not visible scaling during stand-up.",
+    "Candidate longitudinal lanes z +/-0.29 on y .663; independently sweep active soldier plus equipment around mast at x .55, keeping remaining crew and racks present.",
+    "Deploy board only after removing contacts throughout 180..211, including seats 24/25, oars and hull; re-audit stowed source matrix vs declared rootPoint.",
+    "Physical shore point needs stopped vessel and verified terrain support along entire ramp; staged state transition is not physical passage."
+  ]
+}

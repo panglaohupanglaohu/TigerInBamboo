@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "roles": {
+    "gladius": {
+      "before": "[P: (-0.163333, 0.016008, -0.297843), S: (0.832501, 1.160659, 0.838829)]",
+      "carry": "[P: (-0.163333, 0.018126, -0.203843), S: (0.56827, 1.15854, 0.570843)]",
+      "carry_height": 1.15854048728943,
+      "carry_width_z": 0.570843398571014,
+      "grip_error": 0.0000000537269002620633,
+      "restored": true,
+      "string_error": 0.0
+    },
+    "longbow": {
+      "before": "[P: (-0.229137, -0.006698, -0.225083), S: (0.765314, 1.251896, 0.431644)]",
+      "carry": "[P: (-0.242913, -0.002713, -0.225083), S: (0.456083, 1.63989, 0.431644)]",
+      "carry_height": 1.63989043235779,
+      "carry_width_z": 0.431644082069397,
+      "grip_error": 0.0000000307195300308649,
+      "restored": true,
+      "string_error": 0.0000000365002428281969
+    },
+    "spear": {
+      "before": "[P: (-0.163333, 0.016008, -0.357959), S: (0.569183, 1.70519, 0.898945)]",
+      "carry": "[P: (-0.163333, 0.018126, -0.263959), S: (0.761677, 1.715879, 0.630959)]",
+      "carry_height": 1.71587872505188,
+      "carry_width_z": 0.630959272384644,
+      "grip_error": 0.0000000471216097253091,
+      "restored": true,
+      "string_error": 0.0
+    }
+  },
+  "scope": "Approved Blender family carry grip, visible bounds and restoration. Not staircase movement or weapon collision acceptance."
+}

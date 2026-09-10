@@ -1,0 +1,3368 @@
+{
+  "expected": {
+    "source": "assets/models/optimized/warship-battle-v11",
+    "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+    "revision": 11,
+    "boardingValidated": false
+  },
+  "passed": true,
+  "checks": [
+    {
+      "name": "chapter2 launches original two boats with current runtime revision/hash",
+      "passed": true
+    },
+    {
+      "name": "50 unique combat identities already aboard",
+      "passed": true
+    },
+    {
+      "name": "all 25 seats own same identities and central stored weapons",
+      "passed": true
+    },
+    {
+      "name": "aboard actors do not also appear ashore",
+      "passed": true
+    },
+    {
+      "name": "original voyage reaches 50 concealed actors",
+      "passed": true
+    },
+    {
+      "name": "disembarking removes duplicate seat people and their stored weapons",
+      "passed": true
+    },
+    {
+      "name": "one noncombat shipkeeper remains per boat",
+      "passed": true
+    },
+    {
+      "name": "return hold uses compact carry pose on the same 50 actors",
+      "passed": true
+    },
+    {
+      "name": "return callback restores same seats and stows weapons",
+      "passed": true
+    },
+    {
+      "name": "no respawn or extra combat identities on return",
+      "passed": true
+    },
+    {
+      "name": "return has no simultaneous ground copies",
+      "passed": true
+    },
+    {
+      "name": "carry controller releases before seated voyage resumes",
+      "passed": true
+    }
+  ],
+  "outbound": {
+    "time": 16.43333333333368,
+    "phase": "sailOut",
+    "ships": [
+      {
+        "name": "saihoji-troopship-0",
+        "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+        "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+        "visible": true,
+        "seats": [
+          {
+            "index": 0,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 1,
+              "role": "spear",
+              "seat": 0,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 1,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 2,
+              "role": "spear",
+              "seat": 1,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 2,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 3,
+              "role": "spear",
+              "seat": 2,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 3,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 4,
+              "role": "spear",
+              "seat": 3,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 4,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 5,
+              "role": "spear",
+              "seat": 4,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 5,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 6,
+              "role": "spear",
+              "seat": 5,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 6,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 7,
+              "role": "gladius",
+              "seat": 6,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 7,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 8,
+              "role": "longbow",
+              "seat": 7,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 8,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 9,
+              "role": "gladius",
+              "seat": 8,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 9,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 10,
+              "role": "spear",
+              "seat": 9,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 10,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 11,
+              "role": "spear",
+              "seat": 10,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 11,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 12,
+              "role": "longbow",
+              "seat": 11,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 12,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 13,
+              "role": "longbow",
+              "seat": 12,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 13,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 14,
+              "role": "longbow",
+              "seat": 13,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 14,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 15,
+              "role": "spear",
+              "seat": 14,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 15,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 16,
+              "role": "spear",
+              "seat": 15,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 16,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 17,
+              "role": "gladius",
+              "seat": 16,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 17,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 18,
+              "role": "longbow",
+              "seat": 17,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 18,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 19,
+              "role": "gladius",
+              "seat": 18,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 19,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 20,
+              "role": "spear",
+              "seat": 19,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 20,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 21,
+              "role": "spear",
+              "seat": 20,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 21,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 22,
+              "role": "spear",
+              "seat": 21,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 22,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 23,
+              "role": "spear",
+              "seat": 22,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 23,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 24,
+              "role": "spear",
+              "seat": 23,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 24,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 25,
+              "role": "spear",
+              "seat": 24,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 25,
+            "embarked": true,
+            "weaponStored": false,
+            "identity": {
+              "uid": "saihoji-troopship-0:shipkeeper",
+              "role": "shipkeeper",
+              "seat": 25,
+              "combatant": false,
+              "embarked": true,
+              "weaponStored": false
+            },
+            "weaponNodes": 0
+          }
+        ]
+      },
+      {
+        "name": "saihoji-troopship-1",
+        "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+        "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+        "visible": true,
+        "seats": [
+          {
+            "index": 0,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 26,
+              "role": "spear",
+              "seat": 0,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 1,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 27,
+              "role": "spear",
+              "seat": 1,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 2,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 28,
+              "role": "spear",
+              "seat": 2,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 3,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 29,
+              "role": "spear",
+              "seat": 3,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 4,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 30,
+              "role": "spear",
+              "seat": 4,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 5,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 31,
+              "role": "spear",
+              "seat": 5,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 6,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 32,
+              "role": "gladius",
+              "seat": 6,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 7,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 33,
+              "role": "longbow",
+              "seat": 7,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 8,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 34,
+              "role": "gladius",
+              "seat": 8,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 9,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 35,
+              "role": "spear",
+              "seat": 9,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 10,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 36,
+              "role": "spear",
+              "seat": 10,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 11,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 37,
+              "role": "longbow",
+              "seat": 11,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 12,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 38,
+              "role": "longbow",
+              "seat": 12,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 13,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 39,
+              "role": "longbow",
+              "seat": 13,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 14,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 40,
+              "role": "spear",
+              "seat": 14,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 15,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 41,
+              "role": "spear",
+              "seat": 15,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 16,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 42,
+              "role": "gladius",
+              "seat": 16,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 17,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 43,
+              "role": "longbow",
+              "seat": 17,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 18,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 44,
+              "role": "gladius",
+              "seat": 18,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 19,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 45,
+              "role": "spear",
+              "seat": 19,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 20,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 46,
+              "role": "spear",
+              "seat": 20,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 21,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 47,
+              "role": "spear",
+              "seat": 21,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 22,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 48,
+              "role": "spear",
+              "seat": 22,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 23,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 49,
+              "role": "spear",
+              "seat": 23,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 24,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 50,
+              "role": "spear",
+              "seat": 24,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 25,
+            "embarked": true,
+            "weaponStored": false,
+            "identity": {
+              "uid": "saihoji-troopship-1:shipkeeper",
+              "role": "shipkeeper",
+              "seat": 25,
+              "combatant": false,
+              "embarked": true,
+              "weaponStored": false
+            },
+            "weaponNodes": 0
+          }
+        ]
+      }
+    ],
+    "actors": [
+      {
+        "uid": 1,
+        "uuid": "3bfebeca-c4b6-4e29-9ae8-ccfca841de79",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 2,
+        "uuid": "2e485ecb-6bc5-4736-80c1-3946f82d16cd",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 3,
+        "uuid": "697b5de2-6f0a-4b58-a8a7-2c11cd6d1de0",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 4,
+        "uuid": "ebc10028-ab53-4e28-ac50-d7d99b598507",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 5,
+        "uuid": "3b879128-3aee-4c2c-b36c-8ea5d5c6e59a",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 6,
+        "uuid": "f4031034-8ded-4786-83cc-304c36c0dd7d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 7,
+        "uuid": "9b105e23-7c6b-469f-bd99-222f9b5cc770",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 8,
+        "uuid": "c8b15703-d4c7-4b52-b329-05eba9497102",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 9,
+        "uuid": "95982752-69f3-4ab7-bcab-edef28b9ca83",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 10,
+        "uuid": "21131b62-54bd-462a-aa43-ac574312f373",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 11,
+        "uuid": "cec22138-61fe-42c9-8f51-6cba555a741f",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 12,
+        "uuid": "bf7e4aba-da40-404a-9580-58b08c4d67d9",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 13,
+        "uuid": "3042230c-4ff2-4776-9a9c-e234da158596",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 14,
+        "uuid": "f0f39c02-77b2-47bc-9c0d-3cb3b41262ba",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 15,
+        "uuid": "c2625403-48cb-4c40-be52-2ddc8968503f",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 16,
+        "uuid": "92717e9c-b1c1-428e-b738-2fabba6c91b3",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 17,
+        "uuid": "0173c333-c2b1-431d-b819-6b6aa332fa2e",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 18,
+        "uuid": "7369fd1c-ad77-43fd-86b8-18271dddcf12",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 19,
+        "uuid": "4adc548d-a1ed-4987-90f2-b9e3e21d58b1",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 20,
+        "uuid": "bf712310-9483-4287-8f2b-48d7460d52f1",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 21,
+        "uuid": "bdb126b1-7889-4f27-bd2b-a955a0f965e0",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 22,
+        "uuid": "75dcb1b0-8cb7-44ed-8462-5adfca479329",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 23,
+        "uuid": "b5d29e06-5fa7-4307-8418-96b6e4a5879e",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 24,
+        "uuid": "b9dfddb3-4318-43a7-ade6-e4d4f01125ff",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 25,
+        "uuid": "2c3e9c19-3fc7-48df-8554-24ef9bef7b6f",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 26,
+        "uuid": "44aed4e6-49c4-4094-8967-50ca8ba3e268",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 27,
+        "uuid": "0c2b4254-a85d-4d8b-9fb0-f6b8e098c060",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 28,
+        "uuid": "99f17809-015d-466c-9306-36789cf67d8a",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 29,
+        "uuid": "e9f50d2b-5dcc-4ed5-b188-e7c1383bb13c",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 30,
+        "uuid": "e1b76b3b-e6cf-47b4-bce4-df254547566d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 31,
+        "uuid": "969b3dad-b31b-4092-b4cf-cbf88345b28b",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 32,
+        "uuid": "a598c4bb-7db6-428d-9ab5-c962ba4c4a90",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 33,
+        "uuid": "bdae49c0-4153-4ef7-8246-03eacfce8295",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 34,
+        "uuid": "0e3bf0a6-6156-42d3-839f-1da558bc5f02",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 35,
+        "uuid": "f4f194aa-00ad-44e0-99ba-653ae3d8f2d8",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 36,
+        "uuid": "369e52a5-d01a-431f-aa13-b55df50e7e94",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 37,
+        "uuid": "9ae71863-c093-4e9d-95cb-74864cb62508",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 38,
+        "uuid": "b9bb4806-130e-449d-8e68-63b1c67d932d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 39,
+        "uuid": "1a48898f-4667-489c-8582-de0744281ec7",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 40,
+        "uuid": "04899f9b-69bb-4a76-bdff-555e5844776c",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 41,
+        "uuid": "e2a77b09-0fe4-4048-90ef-602ef8baf2dd",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 42,
+        "uuid": "21e8fdfe-68a9-4496-ab2c-b448f860f06d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 43,
+        "uuid": "942fdb27-bd18-4161-a226-5ff301395331",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 44,
+        "uuid": "c3849116-4a7b-4928-b76d-aa32850b1faa",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 45,
+        "uuid": "2cb7021a-1b05-4aa1-91ba-7f1d183797e9",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 46,
+        "uuid": "56d3bdcb-ae76-45d5-a440-81ae791f02a4",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 47,
+        "uuid": "f5a76b65-11d0-4c51-9cc0-e1e6f9dc799a",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 48,
+        "uuid": "493cd6d0-85c5-4036-b688-ac9c67a853ab",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 49,
+        "uuid": "d0255e2d-053f-4e78-b1ff-2a6fde07b473",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 50,
+        "uuid": "1152183f-f699-454e-8a67-87626cf7f711",
+        "visible": false,
+        "embarked": true
+      }
+    ]
+  },
+  "ashore": {
+    "time": 57.116666666664706,
+    "phase": "concealment",
+    "ships": [
+      {
+        "name": "saihoji-troopship-0",
+        "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+        "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+        "visible": true,
+        "seats": [
+          {
+            "index": 0,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 1,
+              "role": "spear",
+              "seat": 0,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 1,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 2,
+              "role": "spear",
+              "seat": 1,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 2,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 3,
+              "role": "spear",
+              "seat": 2,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 3,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 4,
+              "role": "spear",
+              "seat": 3,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 4,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 5,
+              "role": "spear",
+              "seat": 4,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 5,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 6,
+              "role": "spear",
+              "seat": 5,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 6,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 7,
+              "role": "gladius",
+              "seat": 6,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 7,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 8,
+              "role": "longbow",
+              "seat": 7,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 8,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 9,
+              "role": "gladius",
+              "seat": 8,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 9,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 10,
+              "role": "spear",
+              "seat": 9,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 10,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 11,
+              "role": "spear",
+              "seat": 10,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 11,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 12,
+              "role": "longbow",
+              "seat": 11,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 12,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 13,
+              "role": "longbow",
+              "seat": 12,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 13,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 14,
+              "role": "longbow",
+              "seat": 13,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 14,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 15,
+              "role": "spear",
+              "seat": 14,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 15,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 16,
+              "role": "spear",
+              "seat": 15,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 16,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 17,
+              "role": "gladius",
+              "seat": 16,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 17,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 18,
+              "role": "longbow",
+              "seat": 17,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 18,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 19,
+              "role": "gladius",
+              "seat": 18,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 19,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 20,
+              "role": "spear",
+              "seat": 19,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 20,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 21,
+              "role": "spear",
+              "seat": 20,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 21,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 22,
+              "role": "spear",
+              "seat": 21,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 22,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 23,
+              "role": "spear",
+              "seat": 22,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 23,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 24,
+              "role": "spear",
+              "seat": 23,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 24,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 25,
+              "role": "spear",
+              "seat": 24,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 25,
+            "embarked": true,
+            "weaponStored": false,
+            "identity": {
+              "uid": "saihoji-troopship-0:shipkeeper",
+              "role": "shipkeeper",
+              "seat": 25,
+              "combatant": false,
+              "embarked": true,
+              "weaponStored": false
+            },
+            "weaponNodes": 0
+          }
+        ]
+      },
+      {
+        "name": "saihoji-troopship-1",
+        "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+        "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+        "visible": true,
+        "seats": [
+          {
+            "index": 0,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 26,
+              "role": "spear",
+              "seat": 0,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 1,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 27,
+              "role": "spear",
+              "seat": 1,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 2,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 28,
+              "role": "spear",
+              "seat": 2,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 3,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 29,
+              "role": "spear",
+              "seat": 3,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 4,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 30,
+              "role": "spear",
+              "seat": 4,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 5,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 31,
+              "role": "spear",
+              "seat": 5,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 6,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 32,
+              "role": "gladius",
+              "seat": 6,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 7,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 33,
+              "role": "longbow",
+              "seat": 7,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 8,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 34,
+              "role": "gladius",
+              "seat": 8,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 9,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 35,
+              "role": "spear",
+              "seat": 9,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 10,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 36,
+              "role": "spear",
+              "seat": 10,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 11,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 37,
+              "role": "longbow",
+              "seat": 11,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 12,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 38,
+              "role": "longbow",
+              "seat": 12,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 13,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 39,
+              "role": "longbow",
+              "seat": 13,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 14,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 40,
+              "role": "spear",
+              "seat": 14,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 15,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 41,
+              "role": "spear",
+              "seat": 15,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 16,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 42,
+              "role": "gladius",
+              "seat": 16,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 17,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 43,
+              "role": "longbow",
+              "seat": 17,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 18,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 44,
+              "role": "gladius",
+              "seat": 18,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 19,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 45,
+              "role": "spear",
+              "seat": 19,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 20,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 46,
+              "role": "spear",
+              "seat": 20,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 21,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 47,
+              "role": "spear",
+              "seat": 21,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 22,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 48,
+              "role": "spear",
+              "seat": 22,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 23,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 49,
+              "role": "spear",
+              "seat": 23,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 24,
+            "embarked": false,
+            "weaponStored": false,
+            "identity": {
+              "uid": 50,
+              "role": "spear",
+              "seat": 24,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 25,
+            "embarked": true,
+            "weaponStored": false,
+            "identity": {
+              "uid": "saihoji-troopship-1:shipkeeper",
+              "role": "shipkeeper",
+              "seat": 25,
+              "combatant": false,
+              "embarked": true,
+              "weaponStored": false
+            },
+            "weaponNodes": 0
+          }
+        ]
+      }
+    ],
+    "actors": [
+      {
+        "uid": 1,
+        "uuid": "3bfebeca-c4b6-4e29-9ae8-ccfca841de79",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 2,
+        "uuid": "2e485ecb-6bc5-4736-80c1-3946f82d16cd",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 3,
+        "uuid": "697b5de2-6f0a-4b58-a8a7-2c11cd6d1de0",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 4,
+        "uuid": "ebc10028-ab53-4e28-ac50-d7d99b598507",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 5,
+        "uuid": "3b879128-3aee-4c2c-b36c-8ea5d5c6e59a",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 6,
+        "uuid": "f4031034-8ded-4786-83cc-304c36c0dd7d",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 7,
+        "uuid": "9b105e23-7c6b-469f-bd99-222f9b5cc770",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 8,
+        "uuid": "c8b15703-d4c7-4b52-b329-05eba9497102",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 9,
+        "uuid": "95982752-69f3-4ab7-bcab-edef28b9ca83",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 10,
+        "uuid": "21131b62-54bd-462a-aa43-ac574312f373",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 11,
+        "uuid": "cec22138-61fe-42c9-8f51-6cba555a741f",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 12,
+        "uuid": "bf7e4aba-da40-404a-9580-58b08c4d67d9",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 13,
+        "uuid": "3042230c-4ff2-4776-9a9c-e234da158596",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 14,
+        "uuid": "f0f39c02-77b2-47bc-9c0d-3cb3b41262ba",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 15,
+        "uuid": "c2625403-48cb-4c40-be52-2ddc8968503f",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 16,
+        "uuid": "92717e9c-b1c1-428e-b738-2fabba6c91b3",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 17,
+        "uuid": "0173c333-c2b1-431d-b819-6b6aa332fa2e",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 18,
+        "uuid": "7369fd1c-ad77-43fd-86b8-18271dddcf12",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 19,
+        "uuid": "4adc548d-a1ed-4987-90f2-b9e3e21d58b1",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 20,
+        "uuid": "bf712310-9483-4287-8f2b-48d7460d52f1",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 21,
+        "uuid": "bdb126b1-7889-4f27-bd2b-a955a0f965e0",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 22,
+        "uuid": "75dcb1b0-8cb7-44ed-8462-5adfca479329",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 23,
+        "uuid": "b5d29e06-5fa7-4307-8418-96b6e4a5879e",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 24,
+        "uuid": "b9dfddb3-4318-43a7-ade6-e4d4f01125ff",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 25,
+        "uuid": "2c3e9c19-3fc7-48df-8554-24ef9bef7b6f",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 26,
+        "uuid": "44aed4e6-49c4-4094-8967-50ca8ba3e268",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 27,
+        "uuid": "0c2b4254-a85d-4d8b-9fb0-f6b8e098c060",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 28,
+        "uuid": "99f17809-015d-466c-9306-36789cf67d8a",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 29,
+        "uuid": "e9f50d2b-5dcc-4ed5-b188-e7c1383bb13c",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 30,
+        "uuid": "e1b76b3b-e6cf-47b4-bce4-df254547566d",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 31,
+        "uuid": "969b3dad-b31b-4092-b4cf-cbf88345b28b",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 32,
+        "uuid": "a598c4bb-7db6-428d-9ab5-c962ba4c4a90",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 33,
+        "uuid": "bdae49c0-4153-4ef7-8246-03eacfce8295",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 34,
+        "uuid": "0e3bf0a6-6156-42d3-839f-1da558bc5f02",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 35,
+        "uuid": "f4f194aa-00ad-44e0-99ba-653ae3d8f2d8",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 36,
+        "uuid": "369e52a5-d01a-431f-aa13-b55df50e7e94",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 37,
+        "uuid": "9ae71863-c093-4e9d-95cb-74864cb62508",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 38,
+        "uuid": "b9bb4806-130e-449d-8e68-63b1c67d932d",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 39,
+        "uuid": "1a48898f-4667-489c-8582-de0744281ec7",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 40,
+        "uuid": "04899f9b-69bb-4a76-bdff-555e5844776c",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 41,
+        "uuid": "e2a77b09-0fe4-4048-90ef-602ef8baf2dd",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 42,
+        "uuid": "21e8fdfe-68a9-4496-ab2c-b448f860f06d",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 43,
+        "uuid": "942fdb27-bd18-4161-a226-5ff301395331",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 44,
+        "uuid": "c3849116-4a7b-4928-b76d-aa32850b1faa",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 45,
+        "uuid": "2cb7021a-1b05-4aa1-91ba-7f1d183797e9",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 46,
+        "uuid": "56d3bdcb-ae76-45d5-a440-81ae791f02a4",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 47,
+        "uuid": "f5a76b65-11d0-4c51-9cc0-e1e6f9dc799a",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 48,
+        "uuid": "493cd6d0-85c5-4036-b688-ac9c67a853ab",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 49,
+        "uuid": "d0255e2d-053f-4e78-b1ff-2a6fde07b473",
+        "visible": true,
+        "embarked": false
+      },
+      {
+        "uid": 50,
+        "uuid": "1152183f-f699-454e-8a67-87626cf7f711",
+        "visible": true,
+        "embarked": false
+      }
+    ]
+  },
+  "returning": {
+    "time": 60.33333333333119,
+    "phase": "return",
+    "ships": [
+      {
+        "name": "saihoji-troopship-0",
+        "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+        "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+        "visible": true,
+        "seats": [
+          {
+            "index": 0,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 1,
+              "role": "spear",
+              "seat": 0,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 1,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 2,
+              "role": "spear",
+              "seat": 1,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 2,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 3,
+              "role": "spear",
+              "seat": 2,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 3,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 4,
+              "role": "spear",
+              "seat": 3,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 4,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 5,
+              "role": "spear",
+              "seat": 4,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 5,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 6,
+              "role": "spear",
+              "seat": 5,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 6,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 7,
+              "role": "gladius",
+              "seat": 6,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 7,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 8,
+              "role": "longbow",
+              "seat": 7,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 8,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 9,
+              "role": "gladius",
+              "seat": 8,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 9,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 10,
+              "role": "spear",
+              "seat": 9,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 10,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 11,
+              "role": "spear",
+              "seat": 10,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 11,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 12,
+              "role": "longbow",
+              "seat": 11,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 12,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 13,
+              "role": "longbow",
+              "seat": 12,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 13,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 14,
+              "role": "longbow",
+              "seat": 13,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 14,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 15,
+              "role": "spear",
+              "seat": 14,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 15,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 16,
+              "role": "spear",
+              "seat": 15,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 16,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 17,
+              "role": "gladius",
+              "seat": 16,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 17,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 18,
+              "role": "longbow",
+              "seat": 17,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 18,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 19,
+              "role": "gladius",
+              "seat": 18,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 19,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 20,
+              "role": "spear",
+              "seat": 19,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 20,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 21,
+              "role": "spear",
+              "seat": 20,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 21,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 22,
+              "role": "spear",
+              "seat": 21,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 22,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 23,
+              "role": "spear",
+              "seat": 22,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 23,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 24,
+              "role": "spear",
+              "seat": 23,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 24,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 25,
+              "role": "spear",
+              "seat": 24,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 25,
+            "embarked": true,
+            "weaponStored": false,
+            "identity": {
+              "uid": "saihoji-troopship-0:shipkeeper",
+              "role": "shipkeeper",
+              "seat": 25,
+              "combatant": false,
+              "embarked": true,
+              "weaponStored": false
+            },
+            "weaponNodes": 0
+          }
+        ]
+      },
+      {
+        "name": "saihoji-troopship-1",
+        "source": "assets/models/optimized/warship-battle-v11/warship-battle-v11.glb",
+        "sha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+        "visible": true,
+        "seats": [
+          {
+            "index": 0,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 26,
+              "role": "spear",
+              "seat": 0,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 1,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 27,
+              "role": "spear",
+              "seat": 1,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 2,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 28,
+              "role": "spear",
+              "seat": 2,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 3,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 29,
+              "role": "spear",
+              "seat": 3,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 4,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 30,
+              "role": "spear",
+              "seat": 4,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 5,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 31,
+              "role": "spear",
+              "seat": 5,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 6,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 32,
+              "role": "gladius",
+              "seat": 6,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 7,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 33,
+              "role": "longbow",
+              "seat": 7,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 8,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 34,
+              "role": "gladius",
+              "seat": 8,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 9,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 35,
+              "role": "spear",
+              "seat": 9,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 10,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 36,
+              "role": "spear",
+              "seat": 10,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 11,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 37,
+              "role": "longbow",
+              "seat": 11,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 12,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 38,
+              "role": "longbow",
+              "seat": 12,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 13,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 39,
+              "role": "longbow",
+              "seat": 13,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 14,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 40,
+              "role": "spear",
+              "seat": 14,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 15,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 41,
+              "role": "spear",
+              "seat": 15,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 16,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 42,
+              "role": "gladius",
+              "seat": 16,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 17,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 43,
+              "role": "longbow",
+              "seat": 17,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 1
+          },
+          {
+            "index": 18,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 44,
+              "role": "gladius",
+              "seat": 18,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 19,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 45,
+              "role": "spear",
+              "seat": 19,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 20,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 46,
+              "role": "spear",
+              "seat": 20,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 21,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 47,
+              "role": "spear",
+              "seat": 21,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 22,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 48,
+              "role": "spear",
+              "seat": 22,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 23,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 49,
+              "role": "spear",
+              "seat": 23,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 24,
+            "embarked": true,
+            "weaponStored": true,
+            "identity": {
+              "uid": 50,
+              "role": "spear",
+              "seat": 24,
+              "combatant": true,
+              "embarked": false,
+              "weaponStored": false,
+              "stage": "ashore"
+            },
+            "weaponNodes": 2
+          },
+          {
+            "index": 25,
+            "embarked": true,
+            "weaponStored": false,
+            "identity": {
+              "uid": "saihoji-troopship-1:shipkeeper",
+              "role": "shipkeeper",
+              "seat": 25,
+              "combatant": false,
+              "embarked": true,
+              "weaponStored": false
+            },
+            "weaponNodes": 0
+          }
+        ]
+      }
+    ],
+    "actors": [
+      {
+        "uid": 1,
+        "uuid": "3bfebeca-c4b6-4e29-9ae8-ccfca841de79",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 2,
+        "uuid": "2e485ecb-6bc5-4736-80c1-3946f82d16cd",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 3,
+        "uuid": "697b5de2-6f0a-4b58-a8a7-2c11cd6d1de0",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 4,
+        "uuid": "ebc10028-ab53-4e28-ac50-d7d99b598507",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 5,
+        "uuid": "3b879128-3aee-4c2c-b36c-8ea5d5c6e59a",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 6,
+        "uuid": "f4031034-8ded-4786-83cc-304c36c0dd7d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 7,
+        "uuid": "9b105e23-7c6b-469f-bd99-222f9b5cc770",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 8,
+        "uuid": "c8b15703-d4c7-4b52-b329-05eba9497102",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 9,
+        "uuid": "95982752-69f3-4ab7-bcab-edef28b9ca83",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 10,
+        "uuid": "21131b62-54bd-462a-aa43-ac574312f373",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 11,
+        "uuid": "cec22138-61fe-42c9-8f51-6cba555a741f",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 12,
+        "uuid": "bf7e4aba-da40-404a-9580-58b08c4d67d9",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 13,
+        "uuid": "3042230c-4ff2-4776-9a9c-e234da158596",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 14,
+        "uuid": "f0f39c02-77b2-47bc-9c0d-3cb3b41262ba",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 15,
+        "uuid": "c2625403-48cb-4c40-be52-2ddc8968503f",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 16,
+        "uuid": "92717e9c-b1c1-428e-b738-2fabba6c91b3",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 17,
+        "uuid": "0173c333-c2b1-431d-b819-6b6aa332fa2e",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 18,
+        "uuid": "7369fd1c-ad77-43fd-86b8-18271dddcf12",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 19,
+        "uuid": "4adc548d-a1ed-4987-90f2-b9e3e21d58b1",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 20,
+        "uuid": "bf712310-9483-4287-8f2b-48d7460d52f1",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 21,
+        "uuid": "bdb126b1-7889-4f27-bd2b-a955a0f965e0",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 22,
+        "uuid": "75dcb1b0-8cb7-44ed-8462-5adfca479329",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 23,
+        "uuid": "b5d29e06-5fa7-4307-8418-96b6e4a5879e",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 24,
+        "uuid": "b9dfddb3-4318-43a7-ade6-e4d4f01125ff",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 25,
+        "uuid": "2c3e9c19-3fc7-48df-8554-24ef9bef7b6f",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 26,
+        "uuid": "44aed4e6-49c4-4094-8967-50ca8ba3e268",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 27,
+        "uuid": "0c2b4254-a85d-4d8b-9fb0-f6b8e098c060",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 28,
+        "uuid": "99f17809-015d-466c-9306-36789cf67d8a",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 29,
+        "uuid": "e9f50d2b-5dcc-4ed5-b188-e7c1383bb13c",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 30,
+        "uuid": "e1b76b3b-e6cf-47b4-bce4-df254547566d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 31,
+        "uuid": "969b3dad-b31b-4092-b4cf-cbf88345b28b",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 32,
+        "uuid": "a598c4bb-7db6-428d-9ab5-c962ba4c4a90",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 33,
+        "uuid": "bdae49c0-4153-4ef7-8246-03eacfce8295",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 34,
+        "uuid": "0e3bf0a6-6156-42d3-839f-1da558bc5f02",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 35,
+        "uuid": "f4f194aa-00ad-44e0-99ba-653ae3d8f2d8",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 36,
+        "uuid": "369e52a5-d01a-431f-aa13-b55df50e7e94",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 37,
+        "uuid": "9ae71863-c093-4e9d-95cb-74864cb62508",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 38,
+        "uuid": "b9bb4806-130e-449d-8e68-63b1c67d932d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 39,
+        "uuid": "1a48898f-4667-489c-8582-de0744281ec7",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 40,
+        "uuid": "04899f9b-69bb-4a76-bdff-555e5844776c",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 41,
+        "uuid": "e2a77b09-0fe4-4048-90ef-602ef8baf2dd",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 42,
+        "uuid": "21e8fdfe-68a9-4496-ab2c-b448f860f06d",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 43,
+        "uuid": "942fdb27-bd18-4161-a226-5ff301395331",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 44,
+        "uuid": "c3849116-4a7b-4928-b76d-aa32850b1faa",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 45,
+        "uuid": "2cb7021a-1b05-4aa1-91ba-7f1d183797e9",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 46,
+        "uuid": "56d3bdcb-ae76-45d5-a440-81ae791f02a4",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 47,
+        "uuid": "f5a76b65-11d0-4c51-9cc0-e1e6f9dc799a",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 48,
+        "uuid": "493cd6d0-85c5-4036-b688-ac9c67a853ab",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 49,
+        "uuid": "d0255e2d-053f-4e78-b1ff-2a6fde07b473",
+        "visible": false,
+        "embarked": true
+      },
+      {
+        "uid": 50,
+        "uuid": "1152183f-f699-454e-8a67-87626cf7f711",
+        "visible": false,
+        "embarked": true
+      }
+    ]
+  },
+  "scope": "Actual 8931 world and runtime-pointer factory; RAF held, original scheduled chapter2 voyage and updates. Explicit real whaleReturned callback tests return identity; intervening fight and physical boarding path are not validated.",
+  "sourceStable": true,
+  "errors": []
+}

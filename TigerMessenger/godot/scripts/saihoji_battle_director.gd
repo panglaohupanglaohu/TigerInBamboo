@@ -12,6 +12,8 @@ var phase := "at_castle"
 var whale_phase := "buried"
 var assault_phase := "idle"
 var running := false
+var require_ambush_signal := false
+var _ambush_signal := false
 var clock := 0.0
 var round_id := 0
 var _fleet: Dictionary = {}
@@ -97,7 +99,9 @@ func tick(delta: float, observation: Dictionary) -> void:
         var ship_id := "saihoji-warship-%d" % _ships_sent
         _ships_sent += 1; _ship_due = clock + 16.0
         _emit("ship_departure_requested", {"ship_id": ship_id, "faction": "blue"})
-    if whale_phase == "buried" and near:
+    var discovery_allowed := not require_ambush_signal or (_formation and _ambush_signal)
+    if whale_phase == "buried" and near and discovery_allowed:
+        if require_ambush_signal: phase = "fight"
         whale_phase = "prelude"; _prelude_time = 0.0; _bgm("kun_prelude_once")
     elif whale_phase == "prelude":
         if far:
@@ -130,14 +134,23 @@ func report_landing(ship_id: String) -> bool:
     var index := ["saihoji-warship-0", "saihoji-warship-1"].find(ship_id)
     if index < 0 or index >= _ships_sent or _landed.has(ship_id): return false
     _landed[ship_id] = true; _emit("ship_landed", {"ship_id": ship_id})
-    if _landed.size() == 2: phase = "fight"; _emit("formation_requested")
+    if _landed.size() == 2:
+        phase = "concealment" if require_ambush_signal else "fight"
+        _emit("formation_requested")
     return true
 
 func report_formation_ready() -> bool:
-    if not running or phase != "fight" or _formation: return false
+    if not running or phase not in ["fight", "concealment"] or _formation: return false
     _formation = true; _emit("formation_ready"); return true
 
+func request_ambush_signal() -> bool:
+    if not running or not require_ambush_signal or phase != "concealment" or not _formation or _ambush_signal: return false
+    _ambush_signal = true
+    _emit("ambush_signal_sent")
+    return true
+
 func report_fleet_hit(event_id: String, shooter_id: String, aircraft_id: String, kind: String = "arrow") -> bool:
+    if require_ambush_signal and (phase != "fight" or whale_phase != "resisting" or not _formation): return false
     if not running or not _fleet_present or not _blue.has(shooter_id) or not _fleet.has(aircraft_id): return false
     if kind not in ["arrow", "javelin"] or not _unique("hit", event_id): return false
     _threats[shooter_id] = clock
@@ -208,6 +221,7 @@ func _clear_round() -> void:
     phase = "at_castle"; whale_phase = "buried"; assault_phase = "idle"
     _seen.clear(); _landed.clear(); _threats.clear(); _swept.clear()
     _ships_sent = 0; _quiet = 0.0; _ship_due = 0.0; _prelude_time = 0.0
+    _ambush_signal = false
     _hits = 0; _sink_step = 0; _formation = false; _settle_time = 0.0
     _settle_dir = Vector3.ZERO; _fleet_dir = Vector3.ZERO; _mission_dir = Vector3.ZERO
     _fleet_present = false; _whale_lift = 0.0; _departed = false; _final_scan = false
@@ -216,5 +230,5 @@ func _clear_round() -> void:
 func snapshot() -> Dictionary:
     return {"phase": phase, "whale_phase": whale_phase, "assault_phase": assault_phase,
         "running": running, "round_id": round_id, "hits": _hits, "sink_step": _sink_step,
-        "ships_sent": _ships_sent, "landed": _landed.keys(), "formation": _formation,
+        "ambush_signal": _ambush_signal, "requires_signal": require_ambush_signal, "ships_sent": _ships_sent, "landed": _landed.keys(), "formation": _formation,
         "threat_ids": _threats.keys(), "music": _music}

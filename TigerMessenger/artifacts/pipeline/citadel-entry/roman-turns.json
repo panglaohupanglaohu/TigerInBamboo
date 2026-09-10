@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "roles": {
+    "gladius": {
+      "failures": [],
+      "grip_error": 0.0000000149011611938477,
+      "hull_only_false_positives": 0,
+      "passed": true,
+      "samples": 2976,
+      "source_vertices": 5909
+    },
+    "longbow": {
+      "failures": [],
+      "grip_error": 0.0,
+      "hull_only_false_positives": 0,
+      "passed": true,
+      "samples": 2976,
+      "source_vertices": 5885
+    },
+    "spear": {
+      "failures": [],
+      "grip_error": 0.0000000149011611938477,
+      "hull_only_false_positives": 0,
+      "passed": true,
+      "samples": 2976,
+      "source_vertices": 6057
+    }
+  },
+  "scope": "Actual carried meshes at each waypoint with orientation interpolated in at most 2 degree increments; fixed 0.14 step-up reserve. Discrete rotational sampling, not a mathematical continuous sweep or walking animation."
+}

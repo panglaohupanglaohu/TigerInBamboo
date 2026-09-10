@@ -1,0 +1,422 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "seat": 0,
+      "stage": "seated",
+      "passed": true,
+      "result": {
+        "stage": "seated",
+        "uid": 100,
+        "seatVisible": true,
+        "actorVisible": false,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 0,
+      "stage": "deck-unarmed",
+      "passed": true,
+      "result": {
+        "stage": "deck-unarmed",
+        "uid": 100,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 0,
+      "stage": "deck-armed",
+      "passed": true,
+      "result": {
+        "stage": "deck-armed",
+        "uid": 100,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": false,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": true
+          },
+          {
+            "key": "spear",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "seat": 0,
+      "stage": "ashore",
+      "passed": true,
+      "result": {
+        "stage": "ashore",
+        "uid": 100,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": false,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": true
+          },
+          {
+            "key": "spear",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "seat": 0,
+      "stage": "seated",
+      "passed": true,
+      "result": {
+        "stage": "seated",
+        "uid": 100,
+        "seatVisible": true,
+        "actorVisible": false,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 6,
+      "stage": "seated",
+      "passed": true,
+      "result": {
+        "stage": "seated",
+        "uid": 106,
+        "seatVisible": true,
+        "actorVisible": false,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "gladius",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 6,
+      "stage": "deck-unarmed",
+      "passed": true,
+      "result": {
+        "stage": "deck-unarmed",
+        "uid": 106,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "gladius",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 6,
+      "stage": "deck-armed",
+      "passed": true,
+      "result": {
+        "stage": "deck-armed",
+        "uid": 106,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": false,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": true
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "gladius",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "seat": 6,
+      "stage": "ashore",
+      "passed": true,
+      "result": {
+        "stage": "ashore",
+        "uid": 106,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": false,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": true
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "gladius",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "seat": 6,
+      "stage": "seated",
+      "passed": true,
+      "result": {
+        "stage": "seated",
+        "uid": 106,
+        "seatVisible": true,
+        "actorVisible": false,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "gladius",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 12,
+      "stage": "seated",
+      "passed": true,
+      "result": {
+        "stage": "seated",
+        "uid": 112,
+        "seatVisible": true,
+        "actorVisible": false,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "bow",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 12,
+      "stage": "deck-unarmed",
+      "passed": true,
+      "result": {
+        "stage": "deck-unarmed",
+        "uid": 112,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "bow",
+            "visible": false
+          }
+        ]
+      }
+    },
+    {
+      "seat": 12,
+      "stage": "deck-armed",
+      "passed": true,
+      "result": {
+        "stage": "deck-armed",
+        "uid": 112,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": false,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "bow",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "seat": 12,
+      "stage": "ashore",
+      "passed": true,
+      "result": {
+        "stage": "ashore",
+        "uid": 112,
+        "seatVisible": false,
+        "actorVisible": true,
+        "stored": false,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "bow",
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "seat": 12,
+      "stage": "seated",
+      "passed": true,
+      "result": {
+        "stage": "seated",
+        "uid": 112,
+        "seatVisible": true,
+        "actorVisible": false,
+        "stored": true,
+        "otherActorsHidden": true,
+        "shipkeeper": true,
+        "finite": true,
+        "weapons": [
+          {
+            "key": "shield",
+            "visible": false
+          },
+          {
+            "key": "spear",
+            "visible": false
+          },
+          {
+            "key": "bow",
+            "visible": false
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "scope": "Public factories, per-person ownership stages and interactive position samples; not natural movement, picking animation or shoreline validation."
+}

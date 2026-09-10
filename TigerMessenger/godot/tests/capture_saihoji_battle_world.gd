@@ -18,6 +18,7 @@ func run()->void:
     for i in range(3):await process_frame
     await capture("before")
     world.begin_battle()
+    var ambush_signal_sent:=false
     var ramp_captured:=false
     var return_captured:=false
     var mouth_captured:=false
@@ -25,6 +26,10 @@ func run()->void:
     var expel_captured:=false
     for i in range(60*360):
         world._physics_process(1.0/60.0)
+        if not ambush_signal_sent and world.director.phase=="concealment" and world.director.snapshot().formation:
+            await capture("waiting-for-signal")
+            samples["before_signal"]=world.evidence()
+            ambush_signal_sent=world.director.request_ambush_signal()
         if i%120==0:await physics_frame
         if i in [60*64,60*84,60*110]:
             if i==60*84:world.camera_focus="battle";world.distance=35.0;world.pitch=0.5;world.yaw=1.7;world._camera()

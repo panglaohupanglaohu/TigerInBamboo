@@ -1,0 +1,80 @@
+{
+  "sourceSha256": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+  "candidateSha256": "4e5ebacf90863a3076c66dd88cf2fbcfe28533cec31380d25751c733db4f0060",
+  "sampleCount": 65,
+  "sweepSampling": "65 evenly spaced translation samples; exact triangle surface intersections per sample, not mathematical continuous sweep. Contacts count per frame and pair, not distinct defects.",
+  "intersections": [],
+  "translationSweptVolumesAgainstDeployedSnapshot": [],
+  "compactHumanProxy": {
+    "radiusLocal": 0.12,
+    "heightLocal": 1.3,
+    "samples": 65,
+    "routeX": 2.05,
+    "routeZ": [
+      0.16,
+      1.66
+    ],
+    "surfaceIntersections": [
+      {
+        "sample": 23,
+        "obstacle": "add:boarding-slide-0",
+        "trianglePairs": 11
+      },
+      {
+        "sample": 24,
+        "obstacle": "add:boarding-slide-0",
+        "trianglePairs": 11
+      },
+      {
+        "sample": 25,
+        "obstacle": "add:boarding-slide-0",
+        "trianglePairs": 9
+      },
+      {
+        "sample": 26,
+        "obstacle": "add:boarding-slide-0",
+        "trianglePairs": 7
+      },
+      {
+        "sample": 27,
+        "obstacle": "add:boarding-slide-0",
+        "trianglePairs": 5
+      },
+      {
+        "sample": 46,
+        "obstacle": "add:boarding-slide-1",
+        "trianglePairs": 11
+      },
+      {
+        "sample": 47,
+        "obstacle": "add:boarding-slide-1",
+        "trianglePairs": 11
+      },
+      {
+        "sample": 48,
+        "obstacle": "add:boarding-slide-1",
+        "trianglePairs": 9
+      },
+      {
+        "sample": 49,
+        "obstacle": "add:boarding-slide-1",
+        "trianglePairs": 9
+      },
+      {
+        "sample": 50,
+        "obstacle": "add:boarding-slide-1",
+        "trianglePairs": 7
+      }
+    ],
+    "unsupportedSamples": [],
+    "scope": "Cylinder covers compact torso/legs at actual world scale, not posed limbs or held weapons; no deck-to-board access or shore support certification."
+  },
+  "sourcePreserved": true,
+  "physicalBoardingValidated": false,
+  "shoreSupportValidated": false,
+  "limitations": [
+    "One intermediate access tread added at y .758 before board top .851; physical posed foot placement still needs verification.",
+    "Human foot/leg swept clearance not certified.",
+    "Sliding leaves overlap in plan but are vertically separated; timber bearing mechanics unverified."
+  ]
+}

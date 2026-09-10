@@ -6,7 +6,7 @@ function fixture(offset) {
   bindCrewIdentity:(i,v)=>identity.set(i,v), setCrewEmbarked:(i,v)=>seated.set(i,v),
   setCrewWeaponStored:(i,v)=>stored.set(i,v), render:()=>{},
  }}};
- const soldiers = Array.from({length:25},(_,i)=>({visible:true,userData:{uid:offset+i,phalanxRole:['spear','gladius','longbow'][i%3],hp:100-i}}));
+ const soldiers = Array.from({length:25},(_,i)=>({visible:true,userData:{uid:offset+i,equipment:{spear:{visible:true},shield:{visible:true}},phalanxRole:['spear','gladius','longbow'][i%3],hp:100-i}}));
  const cohort={visible:false};
  const state=bindWarshipCohort(boat,soldiers,cohort);
  return {boat,soldiers,cohort,state,seated,stored,identity};
@@ -18,6 +18,20 @@ for(const f of [a,b]) {
  assert.equal(f.state.manifest.filter(s=>s.combatant).length,25);
  assert.equal(f.identity.get(25).combatant,false);
  assert(f.soldiers.every((s,i)=>!s.visible&&f.seated.get(i)&&f.stored.get(i)));
+ // One soldier rises while the other 24 retain seats and their owned weapons.
+ assert(f.state.setStage(0,'deck-unarmed'));
+ assert(f.soldiers[0].visible && !f.seated.get(0) && f.stored.get(0));
+ assert(!f.soldiers[0].userData.equipment.spear.visible);
+ assert(f.seated.get(1) && !f.soldiers[1].visible);
+ assert(f.state.setStage(0,'deck-armed'));
+ assert(!f.stored.get(0) && f.soldiers[0].userData.equipment.spear.visible);
+ assert.equal(f.state.manifest[0].uid,refs[0].userData.uid);
+ assert(f.state.setStage(0,'deck-unarmed'));
+ assert(f.stored.get(0) && !f.soldiers[0].userData.equipment.spear.visible);
+ assert(f.state.setStage(0,'seated'));
+ assert(!f.soldiers[0].visible && f.seated.get(0));
+ assert.equal(f.state.setStage(0,'teleport'),false);
+ assert.equal(f.state.setStage(25,'deck-armed'),false);
  f.state.disembark();
  assert(f.soldiers.every((s,i)=>s.visible&&!f.seated.get(i)&&!f.stored.get(i)));
  assert.equal(f.seated.get(25),true);
@@ -25,10 +39,16 @@ for(const f of [a,b]) {
  assert(f.soldiers.every((s,i)=>s===refs[i]&&!s.visible&&f.seated.get(i)&&f.stored.get(i)));
  assert.deepEqual(f.soldiers.map(s=>s.userData.hp),hp);
  f.state.disembark();
+ f.soldiers[2].userData.shieldBroken=true;
+ f.state.setStage(2,'deck-armed');
+ assert.equal(f.soldiers[2].userData.equipment.shield.visible,false);
+ f.state.embark();f.state.disembark();
+ assert.equal(f.soldiers[2].userData.equipment.shield.visible,false);
  f.soldiers[0].userData.dead=true;f.soldiers[0].visible=false;
  f.soldiers[1].userData.downed=true;
  f.state.embark();
  assert(!f.seated.get(0)&&!f.seated.get(1));
+ assert.equal(f.state.setStage(1,'seated'),false);
  assert.equal(f.soldiers[0].visible,false);assert.equal(f.soldiers[1].visible,true);
  assert.equal(f.cohort.visible,true);
  assert.equal(f.state.manifest[0].uid,refs[0].userData.uid);

@@ -1,0 +1,1047 @@
+{
+  "failures": [
+    {
+      "fraction": 0.142857142857143,
+      "reason": "floor_offset_or_slope",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(121.8254, 66.0406, 81.5799)"
+    },
+    {
+      "fraction": 0.214285714285714,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(121.96, 66.12705, 81.75867)"
+    },
+    {
+      "fraction": 0.285714285714286,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(122.0947, 66.21351, 81.93745)"
+    },
+    {
+      "fraction": 0.357142857142857,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(122.2293, 66.29996, 82.11623)"
+    },
+    {
+      "fraction": 0.428571428571429,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(122.364, 66.38642, 82.29501)"
+    },
+    {
+      "fraction": 0.5,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(122.4986, 66.47287, 82.47379)"
+    },
+    {
+      "fraction": 0.571428571428571,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(122.6332, 66.55933, 82.65256)"
+    },
+    {
+      "fraction": 0.642857142857143,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(122.7679, 66.64578, 82.83134)"
+    },
+    {
+      "fraction": 0.714285714285714,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(122.9025, 66.73224, 83.01012)"
+    },
+    {
+      "fraction": 0.785714285714286,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(123.0372, 66.8187, 83.1889)"
+    },
+    {
+      "fraction": 0.857142857142857,
+      "reason": "floor_offset_or_slope",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(123.1718, 66.90514, 83.36767)"
+    },
+    {
+      "fraction": 0.928571428571429,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(123.3065, 66.9916, 83.54645)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 3,
+      "world_position": "(123.4411, 67.07806, 83.72523)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(123.4411, 67.07806, 83.72523)"
+    },
+    {
+      "fraction": 0.0769230769230769,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(123.2324, 67.09924, 83.82406)"
+    },
+    {
+      "fraction": 0.153846153846154,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(123.0237, 67.12043, 83.9229)"
+    },
+    {
+      "fraction": 0.230769230769231,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(122.8149, 67.14162, 84.02173)"
+    },
+    {
+      "fraction": 0.307692307692308,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(122.6062, 67.1628, 84.12057)"
+    },
+    {
+      "fraction": 0.384615384615385,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(122.3975, 67.18399, 84.2194)"
+    },
+    {
+      "fraction": 0.461538461538462,
+      "reason": "no_nearby_floor",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(122.1887, 67.20518, 84.31824)"
+    },
+    {
+      "fraction": 0.538461538461538,
+      "reason": "floor_offset_or_slope",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(121.98, 67.22636, 84.41707)"
+    },
+    {
+      "fraction": 0.615384615384615,
+      "reason": "floor_offset_or_slope",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(121.7713, 67.24754, 84.51591)"
+    },
+    {
+      "fraction": 0.692307692307692,
+      "reason": "floor_offset_or_slope",
+      "route": 0,
+      "segment": 4,
+      "world_position": "(121.5625, 67.26873, 84.61474)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 0,
+      "world_position": "(119.5538, 65.75642, 87.83666)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 0,
+      "world_position": "(119.7456, 66.25238, 88.1246)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 0,
+      "world_position": "(119.8095, 66.4177, 88.22058)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 0,
+      "world_position": "(119.8735, 66.58302, 88.31656)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 1,
+      "world_position": "(119.8735, 66.58302, 88.31656)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 1,
+      "world_position": "(120.3049, 67.25, 88.45476)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 1,
+      "world_position": "(120.4128, 67.41674, 88.4893)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 2,
+      "world_position": "(120.4128, 67.41674, 88.4893)"
+    },
+    {
+      "fraction": 0.2,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 2,
+      "world_position": "(120.5711, 67.54149, 88.48647)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 2,
+      "world_position": "(121.046, 67.91575, 88.47797)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 2,
+      "world_position": "(121.2043, 68.0405, 88.47514)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 3,
+      "world_position": "(121.2043, 68.0405, 88.47514)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 3,
+      "world_position": "(121.9767, 68.27165, 88.47614)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 3,
+      "world_position": "(122.1698, 68.32944, 88.47639)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 4,
+      "world_position": "(122.1698, 68.32944, 88.47639)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 4,
+      "world_position": "(122.9578, 68.31047, 88.64614)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 4,
+      "world_position": "(123.1548, 68.30573, 88.68858)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 5,
+      "world_position": "(123.1548, 68.30573, 88.68858)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 5,
+      "world_position": "(123.8278, 68.16422, 89.10943)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 5,
+      "world_position": "(123.996, 68.12885, 89.21464)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 6,
+      "world_position": "(123.996, 68.12885, 89.21464)"
+    },
+    {
+      "fraction": 0.4,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 6,
+      "world_position": "(124.2351, 68.08751, 89.53664)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 6,
+      "world_position": "(124.5936, 68.02551, 90.01964)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 1,
+      "segment": 7,
+      "world_position": "(124.5936, 68.02551, 90.01964)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 7,
+      "world_position": "(124.8101, 68.1243, 90.57556)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 7,
+      "world_position": "(124.8822, 68.15723, 90.76086)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "no_nearby_floor",
+      "route": 1,
+      "segment": 7,
+      "world_position": "(124.9544, 68.19016, 90.94617)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 0,
+      "world_position": "(124.0913, 69.43349, 91.18681)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 0,
+      "world_position": "(124.5598, 69.81587, 91.18103)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 0,
+      "world_position": "(124.7159, 69.94334, 91.1791)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 0,
+      "world_position": "(124.8721, 70.07079, 91.17718)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 1,
+      "world_position": "(124.8721, 70.07079, 91.17718)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 1,
+      "world_position": "(125.6405, 70.31498, 91.1738)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 1,
+      "world_position": "(125.8326, 70.37602, 91.17295)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 2,
+      "world_position": "(125.8326, 70.37602, 91.17295)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 2,
+      "world_position": "(126.6229, 70.36656, 91.33225)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 2,
+      "world_position": "(126.8205, 70.3642, 91.37208)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 3,
+      "world_position": "(126.8205, 70.3642, 91.37208)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 3,
+      "world_position": "(127.5012, 70.22449, 91.78098)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 3,
+      "world_position": "(127.6714, 70.18957, 91.88321)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 4,
+      "world_position": "(127.6714, 70.18957, 91.88321)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 4,
+      "world_position": "(128.1591, 70.1002, 92.51903)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 4,
+      "world_position": "(128.281, 70.07787, 92.67798)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 5,
+      "world_position": "(128.281, 70.07787, 92.67798)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 5,
+      "world_position": "(128.503, 70.16747, 93.23327)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 5,
+      "world_position": "(128.577, 70.19734, 93.41837)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 5,
+      "world_position": "(128.651, 70.22721, 93.60346)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 6,
+      "world_position": "(128.651, 70.22721, 93.60346)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 6,
+      "world_position": "(128.7935, 70.52353, 94.11099)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 6,
+      "world_position": "(128.8409, 70.6223, 94.28017)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 6,
+      "world_position": "(128.8884, 70.72107, 94.44935)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 7,
+      "world_position": "(128.8884, 70.72107, 94.44935)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "floor_offset_or_slope",
+      "route": 2,
+      "segment": 7,
+      "world_position": "(129.0503, 71.1834, 94.8039)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 7,
+      "world_position": "(129.1043, 71.33751, 94.92208)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "no_nearby_floor",
+      "route": 2,
+      "segment": 7,
+      "world_position": "(129.1583, 71.49162, 95.04027)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 0,
+      "world_position": "(129.4954, 72.4219, 93.86998)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 0,
+      "world_position": "(130.2841, 72.42017, 94.01633)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 0,
+      "world_position": "(130.4813, 72.41975, 94.05293)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 1,
+      "world_position": "(130.4813, 72.41975, 94.05293)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 1,
+      "world_position": "(131.1658, 72.2802, 94.44714)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 1,
+      "world_position": "(131.3369, 72.24532, 94.5457)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 2,
+      "world_position": "(131.3369, 72.24532, 94.5457)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 2,
+      "world_position": "(131.8306, 72.14759, 95.17036)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 2,
+      "world_position": "(131.954, 72.12316, 95.32653)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 3,
+      "world_position": "(131.954, 72.12316, 95.32653)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 3,
+      "world_position": "(132.179, 72.20216, 95.8789)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 3,
+      "world_position": "(132.2539, 72.2285, 96.06302)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 3,
+      "world_position": "(132.3289, 72.25484, 96.24714)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 4,
+      "world_position": "(132.3289, 72.25484, 96.24714)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 4,
+      "world_position": "(132.5173, 72.63533, 96.92773)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 4,
+      "world_position": "(132.5644, 72.73045, 97.09788)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 5,
+      "world_position": "(132.5644, 72.73045, 97.09788)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 5,
+      "world_position": "(132.7204, 73.18564, 97.45901)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 5,
+      "world_position": "(132.7724, 73.33737, 97.57939)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 5,
+      "world_position": "(132.8244, 73.4891, 97.69977)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 6,
+      "world_position": "(132.8244, 73.4891, 97.69977)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 6,
+      "world_position": "(133.1746, 74.17426, 97.92645)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 6,
+      "world_position": "(133.2621, 74.34554, 97.98312)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 3,
+      "segment": 7,
+      "world_position": "(133.2621, 74.34554, 97.98312)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 7,
+      "world_position": "(133.8147, 74.92641, 98.01112)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "no_nearby_floor",
+      "route": 3,
+      "segment": 7,
+      "world_position": "(133.9528, 75.07163, 98.01812)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 0,
+      "world_position": "(134.9835, 74.29099, 97.19541)"
+    },
+    {
+      "fraction": 0.4,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 0,
+      "world_position": "(135.2352, 74.23914, 97.50338)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 0,
+      "world_position": "(135.361, 74.21321, 97.65736)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 0,
+      "world_position": "(135.6127, 74.16136, 97.96532)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 1,
+      "world_position": "(135.6127, 74.16136, 97.96532)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 1,
+      "world_position": "(135.8434, 74.23141, 98.5165)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 1,
+      "world_position": "(135.9203, 74.25477, 98.70023)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 1,
+      "world_position": "(135.9973, 74.27812, 98.88395)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 2,
+      "world_position": "(135.9973, 74.27812, 98.88395)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 2,
+      "world_position": "(136.1881, 74.64597, 99.57079)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 2,
+      "world_position": "(136.2358, 74.73793, 99.74249)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 3,
+      "world_position": "(136.2358, 74.73793, 99.74249)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 3,
+      "world_position": "(136.3889, 75.18726, 100.1121)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 3,
+      "world_position": "(136.4399, 75.33703, 100.2353)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 3,
+      "world_position": "(136.4909, 75.4868, 100.3586)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 4,
+      "world_position": "(136.4909, 75.4868, 100.3586)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 4,
+      "world_position": "(136.8325, 76.17241, 100.5967)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 4,
+      "world_position": "(136.9179, 76.34381, 100.6562)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 5,
+      "world_position": "(136.9179, 76.34381, 100.6562)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 5,
+      "world_position": "(137.461, 76.9332, 100.6908)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 5,
+      "world_position": "(137.5967, 77.08054, 100.6994)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 6,
+      "world_position": "(137.5967, 77.08054, 100.6994)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 6,
+      "world_position": "(138.3166, 77.43324, 100.6709)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 6,
+      "world_position": "(138.4966, 77.52141, 100.6637)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 4,
+      "segment": 7,
+      "world_position": "(138.4966, 77.52141, 100.6637)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 7,
+      "world_position": "(139.2911, 77.60088, 100.7404)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "no_nearby_floor",
+      "route": 4,
+      "segment": 7,
+      "world_position": "(139.4898, 77.62074, 100.7595)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 0,
+      "world_position": "(139.6653, 76.30219, 101.5206)"
+    },
+    {
+      "fraction": 0.4,
+      "reason": "no_nearby_floor",
+      "route": 5,
+      "segment": 0,
+      "world_position": "(139.4711, 76.55879, 101.8343)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 5,
+      "segment": 0,
+      "world_position": "(139.3741, 76.6871, 101.9911)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 0,
+      "world_position": "(139.277, 76.81541, 102.148)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 0,
+      "world_position": "(139.1799, 76.94371, 102.3048)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 1,
+      "world_position": "(139.1799, 76.94371, 102.3048)"
+    },
+    {
+      "fraction": 0.2,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 1,
+      "world_position": "(139.201, 77.15631, 102.2353)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 1,
+      "world_position": "(139.2643, 77.79411, 102.0265)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 1,
+      "world_position": "(139.2854, 78.00671, 101.9569)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 2,
+      "world_position": "(139.2854, 78.00671, 101.9569)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 2,
+      "world_position": "(140.0105, 78.03053, 101.4265)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 2,
+      "world_position": "(140.1918, 78.03648, 101.2939)"
+    },
+    {
+      "fraction": 0.0,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 3,
+      "world_position": "(140.1918, 78.03648, 101.2939)"
+    },
+    {
+      "fraction": 0.4,
+      "reason": "floor_offset_or_slope",
+      "route": 5,
+      "segment": 3,
+      "world_position": "(140.4579, 77.69949, 101.4266)"
+    },
+    {
+      "fraction": 0.6,
+      "reason": "no_nearby_floor",
+      "route": 5,
+      "segment": 3,
+      "world_position": "(140.5909, 77.53098, 101.4929)"
+    },
+    {
+      "fraction": 0.8,
+      "reason": "no_nearby_floor",
+      "route": 5,
+      "segment": 3,
+      "world_position": "(140.7239, 77.36249, 101.5592)"
+    },
+    {
+      "fraction": 1.0,
+      "reason": "no_nearby_floor",
+      "route": 5,
+      "segment": 3,
+      "world_position": "(140.8569, 77.19398, 101.6256)"
+    }
+  ],
+  "mesh_count": 1609,
+  "samples": 347,
+  "scope": "Ray support samples at 0.25m on visible opaque castle meshes; excludes body clearance, swept movement, inter-route continuity and moving stairs. Does not establish a playable siege.",
+  "support_passed": false,
+  "supported": 199,
+  "unsupported": 148,
+  "walkability_validated": false
+}

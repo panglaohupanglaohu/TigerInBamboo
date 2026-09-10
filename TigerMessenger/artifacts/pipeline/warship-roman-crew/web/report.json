@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "actual public boat factory loads selected saved Blender revision",
+      "passed": true
+    },
+    {
+      "name": "all 26 rower attachments and oars exist",
+      "passed": true
+    },
+    {
+      "name": "original night controller still lights saved ship",
+      "passed": true
+    },
+    {
+      "name": "daylight extinguishes ship light",
+      "passed": true
+    },
+    {
+      "name": "blue crest changes actual drawn material",
+      "passed": true
+    },
+    {
+      "name": "rowing changes live oar poses",
+      "passed": true
+    },
+    {
+      "name": "original sedation API still reaches optimized rower",
+      "passed": true
+    },
+    {
+      "name": "sedation expires",
+      "passed": true
+    },
+    {
+      "name": "saved animated hands remain on their oars",
+      "passed": true,
+      "detail": {
+        "gripMax": 9.612938956666752e-8
+      }
+    },
+    {
+      "name": "bounded draw batches",
+      "passed": true,
+      "detail": {
+        "batches": 59,
+        "static": 11,
+        "total": 70
+      }
+    },
+    {
+      "name": "same soldier seat and central weapons depart together",
+      "passed": true
+    },
+    {
+      "name": "same identity returns to seat and storage",
+      "passed": true
+    },
+    {
+      "name": "broken shield does not reappear in central storage",
+      "passed": true
+    },
+    {
+      "name": "original empty crew API hides crew controller",
+      "passed": true
+    },
+    {
+      "name": "board deploy and flat stow are distinct",
+      "passed": true
+    },
+    {
+      "name": "no nonfinite node poses",
+      "passed": true
+    }
+  ],
+  "bounds": {
+    "min": [
+      -2.5999999046325684,
+      -0.5690788241477893,
+      -2.362499952316284
+    ],
+    "max": [
+      3.640000104904175,
+      3.8899998664855957,
+      2.362499952316284
+    ]
+  },
+  "source": "7c9273f5f39e7b8e87b70d76b51216e8e8b488e3f941840899fc134a719bc8ff",
+  "scope": "Actual public factory and original interaction APIs, isolated rendering; full battle integration and boarding collision separate.",
+  "errors": []
+}

@@ -1,0 +1,32 @@
+{
+  "id": "saihoji-surroundings-v2",
+  "type": "static external concealment scenery",
+  "zones": [
+    {
+      "id": "moss-entry",
+      "name": "入口苔径"
+    },
+    {
+      "id": "master-stones",
+      "name": "主石之庭"
+    },
+    {
+      "id": "dry-cascade",
+      "name": "枯瀑之庭"
+    },
+    {
+      "id": "moss-islands",
+      "name": "苔海岛群"
+    },
+    {
+      "id": "return-view",
+      "name": "回望石组"
+    }
+  ],
+  "movement": "remains on planet when Kun rises",
+  "centralOpening": "Kun and live garden emerge through it",
+  "files": [
+    "saihoji-surroundings-v2.blend",
+    "saihoji-surroundings-v2.glb"
+  ]
+}

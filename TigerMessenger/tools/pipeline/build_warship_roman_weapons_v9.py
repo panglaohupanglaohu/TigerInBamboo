@@ -33,7 +33,7 @@ def donor(role,kind):
    if material not in mats:mats.append(material)
    remap.append(mats.index(material))
   for poly in o.data.polygons:ff.append(tuple(off+i for i in poly.vertices));mi.append(remap[min(poly.material_index,len(remap)-1)])
- rotate=Matrix.Rotation(-math.pi/2,4,'Y') if kind=='shield' else Matrix.Rotation(-math.pi/2,4,'Z')
+ rotate=Matrix.Identity(4) if kind=='shield' else Matrix.Rotation(-math.pi/2,4,'Z')
  vv=[rotate@v for v in vv];center=Vector(tuple((min(v[k] for v in vv)+max(v[k] for v in vv))/2 for k in range(3)));vv=[v-center for v in vv]
  data=bpy.data.meshes.new('Stored_approved_'+role+'_'+kind);data.from_pydata([s.C.to_3x3()@v for v in vv],[],ff)
  for material in mats:data.materials.append(material)
@@ -49,15 +49,21 @@ for i in range(25):
  for kind in kinds:
   data=donor(role,kind);tag='add:stored-weapon-'+str(i)+'-'+kind
   if kind=='shield':
-   x=[-1.60,-1.3,-1,-.7,-.4,-.1,.2,.94,1.24,1.54][shieldcount%10];y=1.05;z=-.065 if shieldcount<10 else .065;shieldcount+=1
-  elif role=='spear':x=-.95 if j<8 else 1.20;y=.709+(j%4)*.059;z=-.030 if j%8<4 else .030
-  elif role=='gladius':x=[-1.65,-.30,.30,1.85][j];y=.80;z=0
-  else:x=-1.1 if j<3 else 1.15;y=.952+(j%3)*.070;z=0
+   x=(-1.72+shieldcount*.13) if shieldcount<15 else (.91+(shieldcount-15)*.13);y=.825;z=0;shieldcount+=1
+  elif role=='spear':x=-.95 if j<8 else 1.20;y=.973+(j%4)*.059;z=-.030 if j%8<4 else .030
+  elif role=='gladius':x=[-1.65,-.30,.30,1.85][j];y=.98;z=0
+  else:x=-1.1 if j<3 else 1.15;y=.975+(j%3)*.070;z=-.075 if j<3 else .075
   o=bpy.data.objects.new('Stowed '+role+' '+kind+' crew '+str(i),data);bpy.context.scene.collection.objects.link(o);o.parent=root;s.setm(o,Matrix.Translation((x,y,z)));o['warship_added_id']=tag;o['warship_crew_index']=i;o['warship_weapon_role']=role;o['warship_weapon_kind']=kind;obs[tag]=o;items.append({'id':tag,'crewIndex':i,'role':role,'kind':kind,'position':[x,y,z]})
 # Two centre saddles support the longitudinal slots without a mast collision.
 wood=obs['n231'].data.materials[0]
 for j,x in enumerate([-1.42,-.49,.94,1.46]):
  o=s.box('Central weapon cradle '+str(j),(.035,.035,.16),(x,.684,0),root,wood,'add:stored-rack-'+str(j),.003);obs[s.ident(o)]=o
+for j,x in enumerate([-1.74,-.55,.82,1.70]):
+ for side in [-1,1]:
+  o=s.box('Weapon rack upright '+str(j)+str(side),(.018,.39,.012),(x,.875,side*.075),root,wood,'add:stored-rack-post-'+str(j)+'-'+str(side),.002);obs[s.ident(o)]=o
+for j,(x,length) in enumerate([(-.7,2.18),(1.26,.94)]):
+ for side in [-1,1]:
+  o=s.box('Shield supporting rack rail '+str(j)+str(side),(length,.018,.015),(x,.717,side*.105),root,wood,'add:stored-rack-rail-'+str(j)+'-'+str(side),.002);obs[s.ident(o)]=o
 a=json.loads((OUT/'warship-battle-v9.assembly.json').read_text());a['storedWeapons']={'slots':items,'roleCounts':rolecounts,'count':25,'pieces':len(items),'crewIndex25':'remaining rowing station, not part of 5x5 landing formation','sourceGeometry':provenance,'layout':'longitudinal central slots split either side of mast; vertical shields in two thin rows'}
 a['addedNodes']=[n for n in a['addedNodes'] if not n['id'].startswith('add:stored-')]
 for item in items:a['addedNodes'].append({'id':item['id'],'parent':'n0','name':obs[item['id']].name})

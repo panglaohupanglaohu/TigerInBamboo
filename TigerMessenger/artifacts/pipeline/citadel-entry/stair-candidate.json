@@ -1,0 +1,57 @@
+{
+  "built": true,
+  "candidate_support_and_capsule_passed": true,
+  "capture_deck_connected": false,
+  "entry_connected": false,
+  "failures": [],
+  "floor_heights_preserved": true,
+  "floors": [
+    {
+      "end_index": 48,
+      "floor": 0,
+      "rise": 0.138541666666667,
+      "start_index": 0,
+      "turns": 2.30959731370564
+    },
+    {
+      "end_index": 97,
+      "floor": 1,
+      "rise": 0.138541666666667,
+      "start_index": 49,
+      "turns": 2.30959731370564
+    },
+    {
+      "end_index": 146,
+      "floor": 2,
+      "rise": 0.1375,
+      "start_index": 98,
+      "turns": 2.30959731370564
+    },
+    {
+      "end_index": 195,
+      "floor": 3,
+      "rise": 0.1375,
+      "start_index": 147,
+      "turns": 2.30959731370564
+    },
+    {
+      "end_index": 206,
+      "floor": 4,
+      "rise": 0.13,
+      "start_index": 196,
+      "turns": 0.481166107022009
+    }
+  ],
+  "max_riser": 0.138541666666667,
+  "old_angular_endpoints_preserved": false,
+  "original_restored": true,
+  "radius": 0.86,
+  "samples": 1422,
+  "scope": "Candidate steps only: 0.05m ray samples and 0.38m-wide / 0.9m-high body proxy with at most 0.14m explicit step-up; excludes solid original tower shell, weapons, entrance, top deck and walking animation. No siege acceptance.",
+  "step_up_limit": 0.14,
+  "step_up_required_samples": 1216,
+  "tower_shell_hollowed": false,
+  "treads": 207,
+  "walkability_validated": false,
+  "width": 0.66
+}

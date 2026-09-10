@@ -1,0 +1,30 @@
+{
+  "failures": [],
+  "pose": "rigid-leg forward hip hinge; not a knee crouch",
+  "roles": [
+    {
+      "frames": 101,
+      "hand_relative_error": 0.000000103238271265127,
+      "head_lowered": 0.0270377397537231,
+      "role": "gladius",
+      "scale_error": 0.000000168587391158326,
+      "sole_error": 0.0
+    },
+    {
+      "frames": 101,
+      "hand_relative_error": 0.0000000802482489348222,
+      "head_lowered": 0.0270377397537231,
+      "role": "spear",
+      "scale_error": 0.000000168587391158326,
+      "sole_error": 0.0
+    },
+    {
+      "frames": 101,
+      "hand_relative_error": 0.000000149011611938477,
+      "head_lowered": 0.0408799052238464,
+      "role": "longbow",
+      "scale_error": 0.000000168587391158326,
+      "sole_error": 0.0
+    }
+  ]
+}

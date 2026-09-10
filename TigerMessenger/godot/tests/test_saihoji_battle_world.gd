@@ -9,20 +9,33 @@ func run() -> void:
     if OS.has_environment("SAIHOJI_BATTLE_SEED"):world.battle_seed=int(OS.get_environment("SAIHOJI_BATTLE_SEED"))
     world.begin_battle()
     var snapshots: Array = []
+    var ready_wait := 0.0
+    var held_before_signal := false
+    var signal_sent := false
+    var covered_low_stance := false
     for i in range(60 * 720):
         world._physics_process(1.0/60.0)
+        if world.director.phase == "concealment" and world.director.snapshot().formation and not signal_sent:
+            ready_wait += 1.0/60.0
+            if ready_wait >= 10.0:
+                held_before_signal = world.lift_value == 0.0 and world.heavies.is_empty() and world.projectiles.is_empty()
+                covered_low_stance = world.pine_cover.report.get("assigned",0)==50 and world.troops.filter(func(t):return t.conceal_weight>=0.99).size()==50
+                signal_sent = world.director.request_ambush_signal()
         if i % 600 == 0: snapshots.append(world.evidence().state)
         if i % 120 == 0: await physics_frame
         if not world.director.running: break
     var report:Dictionary = world.evidence()
     report.snapshots = snapshots
     report.seed=world.battle_seed
-    report.test_scope = "manual fixed-step native movement and swept contacts; no injected hit/landing events"
+    report.test_scope = "manual fixed-step native movement and swept contacts; messenger signal after ten seconds of actual readiness; no injected hit/landing events"
     var types:Array=report.events.map(func(e):return e.type)
     var units:Dictionary={}
     for unit in world.troops: units[unit.id]=true
     var contacts:Array=report.events.filter(func(e):return e.type=="projectile_contact")
     var checks:Dictionary={
+        "all_fifty_under_static_pines_in_low_stance":covered_low_stance,
+        "waits_for_signal_without_lift_or_combat":held_before_signal,
+        "messenger_signal_accepted_after_actual_arrival":signal_sent,
         "source_world_loaded": world.source_nodes.has("planet-surface[40]") and world.source_nodes.has("leviathanGroup[156]"),
         "six_gardens_under_original_island": world.garden.get_parent()==world.garden_island,
         "source_five_fleet_members":world.fleet_members.size()==5,
@@ -55,4 +68,4 @@ func run() -> void:
     report.reset_cleared_actors=world.troops.is_empty() and world.heavies.is_empty() and world.ships.is_empty() and world.projectiles.is_empty()
     FileAccess.open(OS.get_environment("SAIHOJI_WORLD_REPORT"),FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     world.queue_free();await process_frame
-    quit()
+    quit(0 if report.passed and report.reset_cleared_actors else 1)

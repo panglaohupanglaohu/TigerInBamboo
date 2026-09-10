@@ -8,5 +8,5 @@ poses=struct.pack('<'+'f'*len(data),*data)
 for node in d['nodes']:
  e=node.get('extras',{});node['sourceId']=str(e['three_instance_owner'])+':i'+str(e['three_instance_index']) if 'three_instance_owner' in e else e.get('three_node_id',e.get('warship_added_id'))
  node['hidden']=bool(e.get('candidateHidden') or e.get('three_visible') is False)
-d['frameIndex']={str(f):i for i,f in enumerate(frames)};d['binary']=base64.b64encode(binary).decode();d['poseBinary']=base64.b64encode(poses).decode();d['poseKeys']=keys;d['sourceSHA256']=hashlib.sha256(raw).hexdigest();d['source']=str(p.relative_to(r))
+d['boarding']=a.get('boarding',{});d['frameIndex']={str(f):i for i,f in enumerate(frames)};d['binary']=base64.b64encode(binary).decode();d['poseBinary']=base64.b64encode(poses).decode();d['poseKeys']=keys;d['sourceSHA256']=hashlib.sha256(raw).hexdigest();d['source']=str(p.relative_to(r))
 (r/'src/assets/warshipV6Data.js').write_text('// Generated from saved Blender GLB and assembly; do not edit by hand.\nexport default '+json.dumps(d,separators=(',',':'))+';\n');print('packed 91 runtime pose frames; original full 301 remain in asset assembly')

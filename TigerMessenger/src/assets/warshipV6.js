@@ -38,13 +38,13 @@ export function createWarshipV6(){
  const crewVisuals=rows.map((_,i)=>[...byId.entries()].filter(([key])=>new RegExp('^n(?:22[0-9]|230):i'+i+'$').test(key)||key==='add:forearm-'+i+'L'||key==='add:forearm-'+i+'R'||key==='add:hand-'+i+'L'||key==='add:hand-'+i+'R').map(([,node])=>({node,visible:node.visible})));
  const storedWeapons=rows.map((_,i)=>nodes.filter(n=>n.userData.crewWeaponOwner===i));
  let time=0,boarding=0;
- boat.userData={...boat.userData,kind:'fisherBoat',collideRadius:6.8,crew,oars:Array.from({length:26},(_,i)=>byId.get('n'+(63+i*5))),oarPhase:0,oarSpeed:0,
+ boat.userData={...boat.userData,kind:'fisherBoat',collideRadius:7.5,crew,oars:Array.from({length:26},(_,i)=>byId.get('n'+(63+i*5))),oarPhase:0,oarSpeed:0,
   warshipV6:{source:source.source,sha256:source.sourceSHA256,nodes:byId,batches:batches.length,staticDraws:staticGroups.size,pose,render,
    lanternMaterials:new Set(source.nodes.filter(n=>n.name?.startsWith("night-lantern-")&&n.mesh!==undefined).flatMap(n=>source.meshes[n.mesh].primitives.map(p=>materials[p.material]))),
-   boardingContract:Object.freeze({rootPoint:Object.freeze([1.94,.664,.48]),length:1.35,width:.34,deployedPitch:.12,clearanceValidated:false,source:source.source.replace(".glb",".assembly.json")}),
+   boardingContract:Object.freeze({rootPoint:Object.freeze(source.boarding?.rootPoint||[1.94,.664,.48]),length:source.boarding?.length||1.35,width:.34,deployedPitch:.12,clearanceValidated:false,source:source.source.replace(".glb",".assembly.json")}),
    bindCrewIdentity(index,identity){if(!rows[index])return false;rows[index].identity={...identity};for(const n of storedWeapons[index])n.userData.soldierUid=identity.uid;return true;},
    setCrewEmbarked(index,value){const r=rows[index];if(!r)return false;r.embarked=!!value;for(const item of crewVisuals[index])item.node.visible=r.embarked&&item.visible;render();return true;},
-   setCrewWeaponStored(index,value){const r=rows[index];if(!r)return false;r.weaponStored=!!value;for(const node of storedWeapons[index])node.visible=r.weaponStored;render();return true;},
+   setCrewWeaponStored(index,value,{shieldBroken=false}={}){const r=rows[index];if(!r)return false;r.weaponStored=!!value;r.shieldBroken=shieldBroken;for(const node of storedWeapons[index])node.visible=r.weaponStored&&!(shieldBroken&&node.userData.crewWeaponRole==='shield');render();return true;},
    crewStatus(){return rows.map((r,i)=>({index:i,embarked:r.embarked,weaponStored:r.weaponStored,identity:r.identity||null,weaponNodes:storedWeapons[i].length}));},
    setBoarding(value){boarding=THREE.MathUtils.clamp(value,0,1);},
    update(dt,moving){const d=Math.min(.05,Math.max(0,dt)),target=moving===true?1:Math.max(0,Math.min(1,Number(moving)||0));boat.userData.oarSpeed+=(target-boat.userData.oarSpeed)*Math.min(1,d*5.5);time+=d*boat.userData.oarSpeed;

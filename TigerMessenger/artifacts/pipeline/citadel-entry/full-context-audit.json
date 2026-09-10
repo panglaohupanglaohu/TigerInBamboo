@@ -1,0 +1,84 @@
+{
+  "built": true,
+  "candidate_support_and_capsule_passed": true,
+  "capture_deck_connected": true,
+  "cavity_collision_controls": {
+    "door_hole": true,
+    "solid_slab": true,
+    "tower_hole": true
+  },
+  "entry_connected": true,
+  "exterior_approach_connected": false,
+  "failures": [],
+  "floor_heights_preserved": true,
+  "floors": [
+    {
+      "end_index": 101,
+      "floor": 0,
+      "rise": 0.138541666666667,
+      "start_index": 53,
+      "turns": 3.02024264099969
+    },
+    {
+      "end_index": 150,
+      "floor": 1,
+      "rise": 0.138541666666667,
+      "start_index": 102,
+      "turns": 3.02024264099969
+    },
+    {
+      "end_index": 199,
+      "floor": 2,
+      "rise": 0.1375,
+      "start_index": 151,
+      "turns": 3.02024264099969
+    },
+    {
+      "end_index": 248,
+      "floor": 3,
+      "rise": 0.1375,
+      "start_index": 200,
+      "turns": 3.02024264099969
+    },
+    {
+      "end_index": 259,
+      "floor": 4,
+      "rise": 0.13,
+      "start_index": 249,
+      "turns": 0.629217216874935
+    }
+  ],
+  "max_riser": 0.138541666666667,
+  "old_angular_endpoints_preserved": false,
+  "original_restored": true,
+  "radius": 0.86,
+  "retained_slab_collision_samples": 19,
+  "samples": 2115,
+  "scope": "Tower candidate plus all visible opaque original castle and current WFC town geometry: 0.05m ray samples and 0.38m-wide / 1.2m-high body proxy with at most 0.14m explicit step-up; includes opened capture deck and portal-to-stair route; excludes weapons, exterior approach, walking animation. No siege acceptance.",
+  "shell": {
+    "capture_deck_opened": true,
+    "collision_boxes": 43,
+    "entry_stairs_connected": false,
+    "outer_bounds_max_error": 0.0,
+    "portal_floor": 3.55,
+    "portal_height": 2.8,
+    "portal_width": 1.75,
+    "sections": 10,
+    "walkability_validated": false,
+    "wall_thickness": 0.12
+  },
+  "step_up_limit": 0.14,
+  "step_up_required_samples": 1090,
+  "tower_shell_hollowed": false,
+  "town_cavity": {
+    "door_corridor_width": 1.75,
+    "method": "CSG subtraction on the existing mesh; source retained",
+    "slab_bounds": "[P: (-8.93, 4.01, -8.93), S: (19.86, 0.19, 19.86)]",
+    "source": "castle-shared-edge-town-candidate[0]/citadel-layer-1[1]/town-terrace-0-level-1[0]/Mesh[165]",
+    "tower_opening": "(6.7, 6.0)",
+    "visual_verified": false
+  },
+  "treads": 264,
+  "walkability_validated": false,
+  "width": 0.66
+}

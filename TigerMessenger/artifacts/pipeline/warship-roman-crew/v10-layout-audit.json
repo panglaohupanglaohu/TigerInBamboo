@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "maxHandOarError": 2.2302015940987714e-07,
+  "gripChecks": 15652,
+  "frames": 301,
+  "centralStoredWeaponWidth": 0.2280000001192093,
+  "leftLaneMinimum": 0.31433331221342087,
+  "rightLaneMinimum": 0.31433331221342087,
+  "worstCases": [
+    {
+      "frame": 1,
+      "part": "add:forearm-0L",
+      "side": 0,
+      "lane": 0.5131942853331566
+    },
+    {
+      "frame": 1,
+      "part": "add:forearm-0R",
+      "side": 0,
+      "lane": 0.48918821662664413
+    },
+    {
+      "frame": 1,
+      "part": "add:forearm-13L",
+      "side": 1,
+      "lane": 0.51877810806036
+    },
+    {
+      "frame": 1,
+      "part": "add:forearm-13R",
+      "side": 1,
+      "lane": 0.48222651332616806
+    },
+    {
+      "frame": 1,
+      "part": "add:forearm-20R",
+      "side": 1,
+      "lane": 0.4822264537215233
+    },
+    {
+      "frame": 1,
+      "part": "n220:i0",
+      "side": 0,
+      "lane": 0.35599999874830246
+    },
+    {
+      "frame": 1,
+      "part": "n220:i13",
+      "side": 1,
+      "lane": 0.35599999874830246
+    },
+    {
+      "frame": 1,
+      "part": "n221:i0",
+      "side": 0,
+      "lane": 0.33256473392248154
+    },
+    {
+      "frame": 1,
+      "part": "n221:i13",
+      "side": 1,
+      "lane": 0.33256473392248154
+    },
+    {
+      "frame": 1,
+      "part": "n224:i0",
+      "side": 0,
+      "lane": 0.31433331221342087
+    },
+    {
+      "frame": 1,
+      "part": "n224:i13",
+      "side": 1,
+      "lane": 0.31433331221342087
+    }
+  ],
+  "glbSha256": "0568f590f32383a96c7dd8728a4643a0f98be8442da8f71714cd97bb9bbb98d5",
+  "scope": "All original 301 animation samples; conservative X-independent crew-to-centre-weapon clear width, including helmets/skirts/legs; not a swept-volume walking route around mast or boarding ramp."
+}

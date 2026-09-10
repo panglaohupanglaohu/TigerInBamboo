@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "roles": {
+    "gladius": {
+      "failures": [],
+      "grip_error": 0.0000000149011611938477,
+      "hull_only_false_positives": 0,
+      "passed": true,
+      "samples": 2081,
+      "source_vertices": 5909
+    },
+    "longbow": {
+      "failures": [],
+      "grip_error": 0.0,
+      "hull_only_false_positives": 0,
+      "passed": true,
+      "samples": 2081,
+      "source_vertices": 5885
+    },
+    "spear": {
+      "failures": [],
+      "grip_error": 0.0000000149011611938477,
+      "hull_only_false_positives": 0,
+      "passed": true,
+      "samples": 2081,
+      "source_vertices": 6057
+    }
+  },
+  "scope": "Convex envelope of actual visible carried body and equipment vertices at path samples, with 0.14 step-up. Per-visible-mesh convex refinement rejects whole-body hull empty-space false positives; excludes swept turn transitions and walking animation."
+}

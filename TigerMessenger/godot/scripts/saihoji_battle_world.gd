@@ -33,6 +33,8 @@ var root_support=preload("res://scripts/saihoji_root_support.gd").new()
 var pine_visual=preload("res://scripts/saihoji_pine_adapter.gd").new()
 var concealment_visual=preload("res://scripts/saihoji_concealment_adapter.gd").new()
 var concealment_result:Dictionary={}
+var pine_cover=preload("res://scripts/saihoji_pine_cover.gd").new()
+const ConcealPose=preload("res://scripts/roman_concealment_pose.gd")
 var socco_transport=preload("res://scripts/saihoji_socco_transport.gd").new()
 var heavy_boot_corners:Array=[]
 var gatepod_visual=preload("res://scripts/saihoji_gatepod_adapter.gd").new()
@@ -137,7 +139,7 @@ func _ready() -> void:
     terrain_result=preload("res://scripts/saihoji_terrain_adapter.gd").apply(model)
     _build_jaw()
     root_support.apply(garden_island)
-    concealment_result=concealment_visual.apply(garden_island)
+    concealment_result=concealment_visual.apply(model,hub,east,north)
     if not bool(concealment_result.get("applied",false)):
         load_error="苔庭五区外围隐蔽环境未接入：%s" % str(concealment_result.get("reason","unknown"))
     garden_island.position.y=maxf(6.08,(root_support.dry_plate_radius-kun.position.length())/0.5)
@@ -147,8 +149,9 @@ func _ready() -> void:
     _setup_view()
     _terrain_collision()
     await get_tree().physics_frame
-    landing_planner.build(get_world_3d(),landing)
+    landing_planner.build(get_world_3d(),landing,30.0,1.0)
     if landing_planner.available.is_empty():load_error="苔庭现有地面没有足够的连通干燥站位"
+    pine_cover.build(concealment_visual.node,kun,landing_planner.available)
     initial_load_error=load_error
     ready_for_battle = load_error.is_empty() and fleet_members.size() == 5
     _update_status()
@@ -240,6 +243,7 @@ func _setup_view() -> void:
     var panel := HBoxContainer.new(); panel.position = Vector2(16,16); layer.add_child(panel)
     var title := Label.new(); title.text = "苔庭之战"; panel.add_child(title)
     var begin := Button.new(); begin.text = "开始苔庭守卫任务"; begin.pressed.connect(begin_battle); panel.add_child(begin)
+    var signal_button := Button.new(); signal_button.text = "R · 发送伏击信号"; signal_button.pressed.connect(func(): director.request_ambush_signal()); panel.add_child(signal_button)
     var reset_button := Button.new(); reset_button.text = "结束并复位"; reset_button.pressed.connect(reset_battle); panel.add_child(reset_button)
     var mute:=CheckButton.new();mute.text="本场静音";mute.toggled.connect(func(value:bool):music.set_muted(value));panel.add_child(mute)
     var back:=Button.new();back.text="返回球形原世界";back.pressed.connect(func():reset_battle();get_tree().change_scene_to_file("res://scenes/original_world.tscn"));panel.add_child(back)
@@ -263,6 +267,7 @@ func begin_battle() -> void:
     for i in range(fleet_members.size()): fleet_ids.append("moebius-%d" % i)
     director.configure(fleet_ids, blue_ids, heavy_ids)
     battle_rng.seed = battle_seed
+    director.require_ambush_signal = true
     battle_started = director.start()
 
 func reset_battle() -> void:
@@ -275,6 +280,7 @@ func reset_battle() -> void:
     swallowed.clear(); events.clear()
     reinforcement_count=0;reinforcement_wait=20.0
     landing_planner.release_all()
+    pine_cover.release_all()
     for rope in ropes: rope.queue_free()
     ropes.clear()
     for i in range(escort_pods.size()): escort_pods[i].global_transform = escort_original[i]
@@ -326,12 +332,12 @@ func _physics_process(delta: float) -> void:
     garden_island.position.y = maxf(6.08,(root_support.dry_plate_radius-kun.position.length())/0.5)
     _kun_retaliation(delta)
     _reinforcements(delta)
-    _ships(delta); _soldiers(delta); _assault(delta); _projectiles(delta); _swallow(delta)
+    _ships(delta); _soldiers(delta); _update_concealment(delta); _assault(delta); _projectiles(delta); _swallow(delta)
     var scan_distance := fleet_center.normalized().angle_to(hub) * 160.0
     director.tick(delta, {"fleet_present": true, "fleet_ground_dir": fleet_center.normalized(), "near": scan_distance < 68.0, "far": scan_distance > 78.0, "drum_active": mission_drumming, "whale_lift": lift_value})
-    if director.phase == "fight" and not director.snapshot().formation:
+    if director.phase in ["fight", "concealment"] and not director.snapshot().formation:
         var first_wave:=troops.filter(func(t):return int(t.id.get_slice("-",1))<2)
-        if first_wave.size() == 50 and first_wave.all(func(t): return t.state == "formed" or t.state == "down"):
+        if first_wave.size() == 50 and first_wave.all(func(t): return t.state == "down" or (t.state == "formed" and t.conceal_weight>=0.99 and t.conceal_time>=1.6)):
             director.report_formation_ready()
     beam.visible = lift_value > 0.01 and scan_distance < 78.0
     aircraft_visual.tick(elapsed,1.0-float(director.snapshot().sink_step)/6.0,beam.visible)
@@ -403,11 +409,17 @@ func _launch_ship(id: String) -> void:
             var angle:float=(index-100)*2.399963
             formation_origin=(landing*cos(12.0/160.0)+east*cos(angle)*sin(12.0/160.0)+north*sin(angle)*sin(12.0/160.0)).normalized()
         var requested:Vector3=formation_origin + east*((x-2)*0.008+(index*0.035 if index<2 else 0.0)) + north*((z-2)*0.008)
-        var point:Vector3=landing_planner.reserve(requested.normalized()*160.8)
+        var point:Vector3=Vector3.ZERO
+        if index < 2:
+            point=pine_cover.reserve(requested.normalized()*160.8,landing_planner.occupied)
+            if point!=Vector3.ZERO:landing_planner.occupied.append(point)
+        else:point=landing_planner.reserve(requested.normalized()*160.8)
         if point==Vector3.ZERO:
-            load_error="苔庭干燥站位不足，无法继续部署";actor.queue_free();director.stop("landing_capacity_exhausted");return
+            load_error="苔庭松下隐蔽站位不足，无法继续部署";actor.queue_free();director.stop("landing_capacity_exhausted");return
         point+=point.normalized()*(float(foot_offsets[role])-0.22)
-        troops.append({"node": actor, "id": str(actor.name), "role": role, "ship": id, "index": i, "state": "aboard", "hp": 2, "shield_broken": false, "grudge": 0.0, "cooldown": i*0.11, "pose_time": i*0.08, "last_pose": -1, "nodes": nodes, "slot": point})
+        var conceal_pose=ConcealPose.new()
+        conceal_pose.bind(actor,nodes)
+        troops.append({"conceal_pose":conceal_pose,"conceal_weight":0.0,"conceal_time":0.0,"node": actor, "id": str(actor.name), "role": role, "ship": id, "index": i, "state": "aboard", "hp": 2, "shield_broken": false, "grudge": 0.0, "cooldown": i*0.11, "pose_time": i*0.08, "last_pose": -1, "nodes": nodes, "slot": point})
 
 func _candidate_index(node: Node, result: Dictionary) -> void:
     var extras: Dictionary = node.get_meta("extras", {})
@@ -478,6 +490,9 @@ func _soldiers(delta: float) -> void:
             _orient(actor,next,target)
             if next.distance_to(target)<0.08: tr.state = "formed" if tr.state=="landing" else "aboard"
         elif tr.state == "formed":
+            if director.phase in ["sail_out", "concealment"] or float(tr.conceal_weight)>0.0:
+                _orient(actor,actor.position.move_toward(tr.slot,delta*2.6),fleet_center)
+                continue
             if _retaliate(tr,delta): continue
             _orient(actor,actor.position.move_toward(tr.slot,delta*2.6),fleet_center)
             tr.cooldown -= delta
@@ -502,6 +517,15 @@ func _soldiers(delta: float) -> void:
                         if enemy.state=="ground" and enemy.node.position.distance_to(actor.position)<1.7:
                             _damage_heavy(enemy,"melee"); tr.cooldown=1.15
                             break
+
+func _update_concealment(delta:float)->void:
+    for tr in troops:
+        var hide:bool=tr.state=="formed" and director.phase in ["sail_out","concealment"] and not returning
+        tr.conceal_time=tr.conceal_time+delta if hide else 0.0
+        var previous:float=tr.conceal_weight
+        tr.conceal_weight=move_toward(previous,1.0 if hide else 0.0,delta/0.7)
+        if previous>0.0 or tr.conceal_weight>0.0:
+            tr.conceal_pose.update(tr.conceal_weight)
 
 func _pose(tr: Dictionary, frame: Dictionary) -> void:
     for id in frame.transforms:
@@ -992,6 +1016,9 @@ func _camera()->void:
     camera.look_at(center,hub)
 
 func _unhandled_input(event:InputEvent)->void:
+    if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_R:
+        director.request_ambush_signal()
+        get_viewport().set_input_as_handled()
     if event is InputEventMouseButton:
         if event.button_index==MOUSE_BUTTON_LEFT:dragging=event.pressed
         if event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:distance=clampf(distance*(0.88 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1.12),10,250);_camera()
@@ -999,15 +1026,17 @@ func _unhandled_input(event:InputEvent)->void:
 
 func _update_status()->void:
     if not status:return
-    var names:Dictionary={"at_castle":"待命","prelude":"序曲","fight":"守卫苔庭","withdrawal":"撤军","complete":"鲲已脱离吸取","stopped":"任务结束"}
+    var names:Dictionary={"at_castle":"待命","concealment":"伏击准备：等待全员到位","prelude":"序曲","fight":"守卫苔庭","withdrawal":"撤军","complete":"鲲已脱离吸取","stopped":"任务结束"}
     var phase_name:String=names.get(director.phase,"运兵前往苔庭")
+    if director.phase == "concealment" and director.snapshot().formation:
+        phase_name = "已发信号，等待舰队发现鲲" if director.snapshot().ambush_signal else "50 名守卫已在松下就位：按 R 发送伏击信号"
     var alive:=troops.filter(func(t):return t.state!="down").size()
-    status.text="苔庭五区已遮蔽鲲背；鼓息后运兵出发。拖动旋转、滚轮缩放。\n%s\n舰队受击 %d / 300 · 鲲回落 %d/6\n蓝盔守卫 %d · 重甲敌军 %d"%[phase_name,director.snapshot().hits,director.snapshot().sink_step,alive,heavies.filter(func(h):return h.state!="down").size()]
+    status.text="苔庭伏击：运兵到位后发送信号，再等待舰队发现鲲。拖动旋转、滚轮缩放。\n%s\n舰队受击 %d / 300 · 鲲回落 %d/6\n蓝盔守卫 %d · 重甲敌军 %d"%[phase_name,director.snapshot().hits,director.snapshot().sink_step,alive,heavies.filter(func(h):return h.state!="down").size()]
     if not outcome_message.is_empty():status.text+="\n"+outcome_message
     if not load_error.is_empty():status.text=load_error
 
 func evidence()->Dictionary:
-    return {"scope":"original-world native integration candidate; pending visual/gameplay acceptance","source_whale":"leviathanGroup[156]","six_scenes_preserved":garden!=null,"five_zone_concealment":concealment_result,"fleet_members":fleet_members.size(),"terrain_collision_meshes":collision_mesh_count,"jaw_triangles":jaw_triangles,"kun_candidate_active":kun_candidate_active,"water":water_result,"terrain_repair":terrain_result,"aircraft_visual":aircraft_visual.report,"gatepod_visual":gatepod_visual.report,"socco_transport":socco_transport.report,"transport_occupants":heavies.map(func(h):return {"id":h.id,"state":h.state,"kind":h.kind,"vehicle":h.vehicle,"seat":h.seat}),"render_inventory":_render_inventory(),"original_instances":original_instances_result,"pines":pine_visual.report,"root_support":root_support.report,"original_surfaces":original_surface_result,"landing_plan":landing_planner.report,"foot_offsets":foot_offsets,"heavy_pose_frames":heavy_frames.size(),"swallow_geometry":swallow_geometry,"ropes":_rope_evidence(),"feet":_feet_evidence(),"escort_pods":escort_pods.size(),"ground_samples":ground_samples,"ground_fallbacks":ground_fallbacks,"blocked_projectiles":blocked_projectiles,"state":director.snapshot(),"troops":troops.size(),"heavies":heavies.size(),"events":events.duplicate(true),"source_node_count":source_nodes.size(),"load_error":load_error}
+    return {"scope":"original-world native integration candidate; pending visual/gameplay acceptance","source_whale":"leviathanGroup[156]","six_scenes_preserved":garden!=null,"five_zone_concealment":concealment_result,"pine_cover":pine_cover.report,"low_stance_count":troops.filter(func(t):return t.conceal_weight>=0.99).size(),"fleet_members":fleet_members.size(),"terrain_collision_meshes":collision_mesh_count,"jaw_triangles":jaw_triangles,"kun_candidate_active":kun_candidate_active,"water":water_result,"terrain_repair":terrain_result,"aircraft_visual":aircraft_visual.report,"gatepod_visual":gatepod_visual.report,"socco_transport":socco_transport.report,"transport_occupants":heavies.map(func(h):return {"id":h.id,"state":h.state,"kind":h.kind,"vehicle":h.vehicle,"seat":h.seat}),"render_inventory":_render_inventory(),"original_instances":original_instances_result,"pines":pine_visual.report,"root_support":root_support.report,"original_surfaces":original_surface_result,"landing_plan":landing_planner.report,"foot_offsets":foot_offsets,"heavy_pose_frames":heavy_frames.size(),"swallow_geometry":swallow_geometry,"ropes":_rope_evidence(),"feet":_feet_evidence(),"escort_pods":escort_pods.size(),"ground_samples":ground_samples,"ground_fallbacks":ground_fallbacks,"blocked_projectiles":blocked_projectiles,"state":director.snapshot(),"troops":troops.size(),"heavies":heavies.size(),"events":events.duplicate(true),"source_node_count":source_nodes.size(),"load_error":load_error}
 
 func _measure_foot_offset(actor:Node3D,ids:Array)->float:
     var nodes:Dictionary={};_candidate_index(actor,nodes)
