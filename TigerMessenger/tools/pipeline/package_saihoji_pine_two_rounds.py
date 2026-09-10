@@ -1,0 +1,29 @@
+"""Archive and publish the two user-requested sequential Blender rounds."""
+from pathlib import Path
+import hashlib,json,shutil
+B=Path(__file__).resolve().parents[2];A=B/'assets/models/optimized/saihoji-pines-v2/811';E=B/'artifacts/pipeline/saihoji-pine-v2-811'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+ad=A/'user-round-2';ed=E/'user-round-2';ad.mkdir(exist_ok=True);ed.mkdir(exist_ok=True)
+for name in ['ancient-pine-811-v2-aged.glb','ancient-pine-811-v2-aged.blend','ancient-pine-811-v2-lod0.glb']:shutil.copy2(A/name,ad/name)
+for name in ['v2-aged-full.png','v2-aged-trunk.png','v2-aged-root.png','report.json','bark-color-report.json']:shutil.copy2(E/name,ed/name)
+for name in ['build_saihoji_pine_v2_hero.py','color_saihoji_pine_v2_bark.py']:shutil.copy2(B/'tools/pipeline'/name,ed/name)
+geometry=json.loads((E/'report.json').read_text());color=json.loads((E/'bark-color-report.json').read_text())
+delivery={'round':'user-round-2','changes':['Crown vertical factor 1.42 to 1.00 and horizontal 1.14 to 1.20, keeping original clump anchors','No physical bark noise; subdivided overlong wood facets to carry narrow coherent colored planes','Seven closer gray-brown colors; less near-white or near-black contrast','Six original root directions gain tapered blended webs with thin rising endpoints'],
+ 'glb':str((ad/'ancient-pine-811-v2-aged.glb').relative_to(B)),'glbSHA256':sha(ad/'ancient-pine-811-v2-aged.glb'),'blend':str((ad/'ancient-pine-811-v2-aged.blend').relative_to(B)),'blendSHA256':sha(ad/'ancient-pine-811-v2-aged.blend'),
+ 'renders':[str((ed/n).relative_to(B)) for n in ['v2-aged-full.png','v2-aged-trunk.png','v2-aged-root.png']],
+ 'triangles':geometry['lods'][0]['triangles'],'colorChecks':color['actualGlbColorChecks'],'scope':'Only seed 811. No Web/Godot integration or batch replacement.'}
+(ed/'delivery.json').write_text(json.dumps(delivery,indent=2)+'\n')
+r1=json.loads((E/'user-round-1/bark-color-report.json').read_text());r2=color
+delta=max(abs(a-b) for x,y in zip(r1['renders'],r2['renders']) for k in ['camera','target'] for a,b in zip(x[k],y[k]))
+ortho=max(abs(x['ortho']-y['ortho']) for x,y in zip(r1['renders'],r2['renders']))
+assert delta<1e-7 and ortho<1e-7,(delta,ortho)
+manifest={'status':'Two sequential actual Blender rounds completed for seed 811; visual improvement is not exact-reference equivalence','rounds':[json.loads((E/'user-round-1/delivery.json').read_text()),delivery],
+ 'sameCameraMaxDelta':delta,'sameOrthoMaxDelta':ortho,'sameLights':True,'reference':'assets/concepts/pine-review-2026-09-10/approved-target-crop.png','rejectedBaseline':'assets/concepts/pine-review-2026-09-10/rejected-trunk.png',
+ 'limitations':['Not batch completed and not Web/Godot integrated','Authored branch paths remain seed 811, so exact reference silhouette is not duplicated','Root entourage/moss and more detailed needle silhouette remain different from reference','13k-class hero mesh needs actual runtime distance/LOD work before multiplying across 25 trees']}
+(E/'two-rounds.json').write_text(json.dumps(manifest,indent=2)+'\n')
+html='''<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>811古松 · 两轮真实Blender迭代</title><style>body{margin:28px;background:#1b211e;color:#ebeee7;font:16px/1.7 system-ui}main{max-width:1680px;margin:auto}h1{font-size:29px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}img{width:100%;border-radius:10px}article{min-width:0}a{color:#bad4a3}.links{word-break:break-all}small{color:#b7c4b8}section{margin:30px 0}table{border-collapse:collapse;width:100%}td,th{padding:10px;border-bottom:1px solid #495448;text-align:left}@media(max-width:1000px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.grid{grid-template-columns:1fr}}</style><main><h1>811古松 · 两轮真实Blender迭代</h1><p>依据你的反馈，以不同木面配色表现苍老。两轮都实际导出GLB、重新导入、同相机同灯光渲染。只处理811这一株；目前没有批量或替换网页里的25株。</p><section class="grid"><article><h2>被否定基准</h2><img src="iteration1-v2-aged-full.png"><p>物理噪动带来石柱感、孤立深三角；厚冠过圆。此版本不计入新两轮。</p></article><article><h2>原目标</h2><img src="../../../assets/concepts/pine-review-2026-09-10/approved-target-crop.png"><p>连贯灰褐木面、纵向深沟与浅棱；宽而有厚度的层冠。</p></article><article><h2>新第一轮</h2><img src="user-round-1/v2-aged-full.png"><p>移除全部物理噪动，七色纵向分区进入实际GLB。但仍有大平木管、云冠过圆。</p></article><article><h2>新第二轮</h2><img src="user-round-2/v2-aged-full.png"><p>长面细分承载窄色带、收紧明暗范围；冠变宽、厚度回调；六向根片减薄融合。</p></article></section><h2>树干近景</h2><section class="grid"><article><img src="../../../assets/concepts/pine-review-2026-09-10/rejected-trunk.png"><small>你上传的被否定基准</small></article><article><img src="../../../assets/concepts/ancient-pine-target-v1.png"><small>原概念图的树皮、根盘特写；概念图并非3D同机位截图。</small></article><article><img src="user-round-1/v2-aged-trunk.png"><small>新第一轮 · 真实GLB回读</small></article><article><img src="user-round-2/v2-aged-trunk.png"><small>新第二轮 · 真实GLB回读</small></article></section><h2>根盘两轮对照</h2><section class="grid"><article><img src="user-round-1/v2-aged-root.png"></article><article><img src="user-round-2/v2-aged-root.png"></article></section><h2>工程文件与检查</h2><p>两轮树皮均为白基色×线性COLOR_0，后续接入必须启用vertexColors。颜色保留在GLB里，不依赖临时预览灯光。每轮保留独立Blend、GLB、构建脚本快照和哈希。</p><div class="links">__LINKS__</div><p><a href="two-rounds.json">两轮总证据与同机位检查</a></p><p>仍有差距：原811分枝走向继续保留，目标的针叶细节和根盘苔藓未完全呈现；不能称为目标图的完美复刻。是否进入游戏及批量，需要后续实际场景与性能验收。</p></main></html>'''
+links=[]
+for r in manifest['rounds']:
+ links.append(f'<p><strong>{r["round"]}</strong>：<a href="../../../{r["glb"]}">实际GLB</a> · <a href="../../../{r["blend"]}">Blender工程</a> · <a href="{r["round"]}/bark-color-report.json">顶点色与回读报告</a><br>GLB SHA256：{r["glbSHA256"]}</p>')
+(E/'index.html').write_text(html.replace('__LINKS__',''.join(links)))
+print(json.dumps({'rounds':2,'sameCameraMaxDelta':delta,'triangles':delivery['triangles'],'glb':delivery['glb'],'sha256':delivery['glbSHA256']}))

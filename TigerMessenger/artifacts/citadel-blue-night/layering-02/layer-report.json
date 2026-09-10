@@ -1,0 +1,3956 @@
+{
+  "method": "Blender common depth-plane cuts with rigid slab translation across all material surfaces. Supersedes first iteration component-based offsets.",
+  "bands": [
+    0,
+    4,
+    9,
+    15
+  ],
+  "changes": [
+    {
+      "object": "Mesh.004",
+      "components": 18,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.005",
+      "components": 44,
+      "lifted": 26
+    },
+    {
+      "object": "Mesh.006",
+      "components": 36,
+      "lifted": 34
+    },
+    {
+      "object": "Mesh.007",
+      "components": 50,
+      "lifted": 32
+    },
+    {
+      "object": "Mesh.008",
+      "components": 26,
+      "lifted": 26
+    },
+    {
+      "object": "Mesh.009",
+      "components": 30,
+      "lifted": 30
+    },
+    {
+      "object": "Mesh.010",
+      "components": 30,
+      "lifted": 30
+    },
+    {
+      "object": "Mesh.011",
+      "components": 26,
+      "lifted": 26
+    },
+    {
+      "object": "Mesh.012",
+      "components": 18,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.013",
+      "components": 42,
+      "lifted": 22
+    },
+    {
+      "object": "Mesh.014",
+      "components": 52,
+      "lifted": 40
+    },
+    {
+      "object": "Mesh.015",
+      "components": 54,
+      "lifted": 54
+    },
+    {
+      "object": "Mesh.016",
+      "components": 38,
+      "lifted": 32
+    },
+    {
+      "object": "Mesh.017",
+      "components": 26,
+      "lifted": 22
+    },
+    {
+      "object": "Mesh.018",
+      "components": 34,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.019",
+      "components": 26,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.020",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.021",
+      "components": 22,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.022",
+      "components": 38,
+      "lifted": 28
+    },
+    {
+      "object": "Mesh.023",
+      "components": 54,
+      "lifted": 48
+    },
+    {
+      "object": "Mesh.024",
+      "components": 32,
+      "lifted": 32
+    },
+    {
+      "object": "Mesh.025",
+      "components": 32,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.026",
+      "components": 22,
+      "lifted": 22
+    },
+    {
+      "object": "Mesh.027",
+      "components": 26,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.028",
+      "components": 38,
+      "lifted": 30
+    },
+    {
+      "object": "Mesh.029",
+      "components": 14,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.030",
+      "components": 42,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.031",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.032",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.033",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.034",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.035",
+      "components": 32,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.036",
+      "components": 34,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.037",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.038",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.039",
+      "components": 26,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.040",
+      "components": 12,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.041",
+      "components": 16,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.042",
+      "components": 18,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.043",
+      "components": 8,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.044",
+      "components": 8,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.045",
+      "components": 10,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.046",
+      "components": 8,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.047",
+      "components": 6,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.048",
+      "components": 11128,
+      "lifted": 7498
+    },
+    {
+      "object": "Mesh.049",
+      "components": 11480,
+      "lifted": 7508
+    },
+    {
+      "object": "Mesh.050",
+      "components": 2152,
+      "lifted": 1328
+    },
+    {
+      "object": "Mesh.051",
+      "components": 584,
+      "lifted": 202
+    },
+    {
+      "object": "Mesh.052",
+      "components": 1840,
+      "lifted": 1080
+    },
+    {
+      "object": "Mesh.053",
+      "components": 396,
+      "lifted": 144
+    },
+    {
+      "object": "Mesh.054",
+      "components": 7020,
+      "lifted": 5286
+    },
+    {
+      "object": "Mesh.055",
+      "components": 416,
+      "lifted": 272
+    },
+    {
+      "object": "Mesh.056",
+      "components": 160,
+      "lifted": 160
+    },
+    {
+      "object": "Mesh.057",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.058",
+      "components": 22,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.059",
+      "components": 26,
+      "lifted": 22
+    },
+    {
+      "object": "Mesh.060",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.061",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.062",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.063",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.064",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.065",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.066",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.067",
+      "components": 36,
+      "lifted": 26
+    },
+    {
+      "object": "Mesh.068",
+      "components": 32,
+      "lifted": 32
+    },
+    {
+      "object": "Mesh.069",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.070",
+      "components": 26,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.071",
+      "components": 12,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.072",
+      "components": 22,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.073",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.074",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.075",
+      "components": 6,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.076",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.077",
+      "components": 40,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.078",
+      "components": 8,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.079",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.080",
+      "components": 12,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.081",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.082",
+      "components": 18,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.083",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.084",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.085",
+      "components": 10,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.086",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.087",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.088",
+      "components": 16,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.089",
+      "components": 14,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.090",
+      "components": 12,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.091",
+      "components": 4,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.092",
+      "components": 6,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.093",
+      "components": 16,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.094",
+      "components": 10,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.095",
+      "components": 148,
+      "lifted": 100
+    },
+    {
+      "object": "Mesh.096",
+      "components": 158,
+      "lifted": 94
+    },
+    {
+      "object": "Mesh.097",
+      "components": 216,
+      "lifted": 152
+    },
+    {
+      "object": "Mesh.098",
+      "components": 150,
+      "lifted": 84
+    },
+    {
+      "object": "Mesh.099",
+      "components": 72,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.100",
+      "components": 120,
+      "lifted": 60
+    },
+    {
+      "object": "Mesh.101",
+      "components": 2436,
+      "lifted": 1834
+    },
+    {
+      "object": "Mesh.102",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.103",
+      "components": 48,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.104",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.105",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.106",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.107",
+      "components": 420,
+      "lifted": 410
+    },
+    {
+      "object": "Mesh.108",
+      "components": 1211,
+      "lifted": 999
+    },
+    {
+      "object": "Mesh.109",
+      "components": 280,
+      "lifted": 280
+    },
+    {
+      "object": "Mesh.110",
+      "components": 1232,
+      "lifted": 850
+    },
+    {
+      "object": "Mesh.111",
+      "components": 1152,
+      "lifted": 648
+    },
+    {
+      "object": "Mesh.112",
+      "components": 1340,
+      "lifted": 984
+    },
+    {
+      "object": "Mesh.113",
+      "components": 1232,
+      "lifted": 836
+    },
+    {
+      "object": "Mesh.114",
+      "components": 1276,
+      "lifted": 930
+    },
+    {
+      "object": "Mesh.115",
+      "components": 1236,
+      "lifted": 528
+    },
+    {
+      "object": "Mesh.116",
+      "components": 48,
+      "lifted": 48
+    },
+    {
+      "object": "Mesh.117",
+      "components": 508,
+      "lifted": 508
+    },
+    {
+      "object": "Mesh.118",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.119",
+      "components": 24,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.120",
+      "components": 18,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.121",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.122",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.123",
+      "components": 32,
+      "lifted": 32
+    },
+    {
+      "object": "Mesh.124",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.125",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.126",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.127",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.128",
+      "components": 28,
+      "lifted": 28
+    },
+    {
+      "object": "Mesh.129",
+      "components": 26,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.130",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.131",
+      "components": 16,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.132",
+      "components": 32,
+      "lifted": 26
+    },
+    {
+      "object": "Mesh.133",
+      "components": 28,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.134",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.135",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.136",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.137",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.138",
+      "components": 18,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.139",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.140",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.141",
+      "components": 28,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.142",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.143",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.144",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.145",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.146",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.147",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.148",
+      "components": 36,
+      "lifted": 26
+    },
+    {
+      "object": "Mesh.149",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.150",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.151",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.152",
+      "components": 12,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.153",
+      "components": 8,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.154",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.155",
+      "components": 4,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.156",
+      "components": 52,
+      "lifted": 52
+    },
+    {
+      "object": "Mesh.157",
+      "components": 1104,
+      "lifted": 1104
+    },
+    {
+      "object": "Mesh.158",
+      "components": 172,
+      "lifted": 124
+    },
+    {
+      "object": "Mesh.159",
+      "components": 148,
+      "lifted": 114
+    },
+    {
+      "object": "Mesh.160",
+      "components": 168,
+      "lifted": 122
+    },
+    {
+      "object": "Mesh.161",
+      "components": 136,
+      "lifted": 136
+    },
+    {
+      "object": "Mesh.162",
+      "components": 112,
+      "lifted": 112
+    },
+    {
+      "object": "Mesh.163",
+      "components": 2248,
+      "lifted": 1704
+    },
+    {
+      "object": "Mesh.164",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.165",
+      "components": 56,
+      "lifted": 56
+    },
+    {
+      "object": "Mesh.166",
+      "components": 100,
+      "lifted": 100
+    },
+    {
+      "object": "Mesh.167",
+      "components": 186,
+      "lifted": 154
+    },
+    {
+      "object": "Mesh.168",
+      "components": 32,
+      "lifted": 32
+    },
+    {
+      "object": "Mesh.169",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.170",
+      "components": 1212,
+      "lifted": 1212
+    },
+    {
+      "object": "Mesh.171",
+      "components": 184,
+      "lifted": 184
+    },
+    {
+      "object": "Mesh.172",
+      "components": 1172,
+      "lifted": 956
+    },
+    {
+      "object": "Mesh.173",
+      "components": 1108,
+      "lifted": 812
+    },
+    {
+      "object": "Mesh.174",
+      "components": 1372,
+      "lifted": 1148
+    },
+    {
+      "object": "Mesh.175",
+      "components": 1276,
+      "lifted": 1108
+    },
+    {
+      "object": "Mesh.176",
+      "components": 1184,
+      "lifted": 970
+    },
+    {
+      "object": "Mesh.177",
+      "components": 1968,
+      "lifted": 1766
+    },
+    {
+      "object": "Mesh.178",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.179",
+      "components": 64,
+      "lifted": 64
+    },
+    {
+      "object": "Mesh.180",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.181",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.182",
+      "components": 34,
+      "lifted": 28
+    },
+    {
+      "object": "Mesh.183",
+      "components": 40,
+      "lifted": 40
+    },
+    {
+      "object": "Mesh.184",
+      "components": 28,
+      "lifted": 28
+    },
+    {
+      "object": "Mesh.185",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.186",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.187",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.188",
+      "components": 50,
+      "lifted": 50
+    },
+    {
+      "object": "Mesh.189",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.190",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.191",
+      "components": 18,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.192",
+      "components": 22,
+      "lifted": 22
+    },
+    {
+      "object": "Mesh.193",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.194",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.195",
+      "components": 22,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.196",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.197",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.198",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.199",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.200",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.201",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.202",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.203",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.204",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.205",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.206",
+      "components": 24,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.207",
+      "components": 10,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.208",
+      "components": 16,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.209",
+      "components": 8,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.210",
+      "components": 8,
+      "lifted": 0
+    },
+    {
+      "object": "Mesh.211",
+      "components": 92,
+      "lifted": 72
+    },
+    {
+      "object": "Mesh.212",
+      "components": 148,
+      "lifted": 148
+    },
+    {
+      "object": "Mesh.213",
+      "components": 148,
+      "lifted": 108
+    },
+    {
+      "object": "Mesh.214",
+      "components": 92,
+      "lifted": 92
+    },
+    {
+      "object": "Mesh.215",
+      "components": 1624,
+      "lifted": 1300
+    },
+    {
+      "object": "Mesh.216",
+      "components": 112,
+      "lifted": 112
+    },
+    {
+      "object": "Mesh.217",
+      "components": 618,
+      "lifted": 490
+    },
+    {
+      "object": "Mesh.218",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.219",
+      "components": 432,
+      "lifted": 432
+    },
+    {
+      "object": "Mesh.220",
+      "components": 50,
+      "lifted": 50
+    },
+    {
+      "object": "Mesh.221",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.222",
+      "components": 580,
+      "lifted": 580
+    },
+    {
+      "object": "Mesh.223",
+      "components": 796,
+      "lifted": 716
+    },
+    {
+      "object": "Mesh.224",
+      "components": 268,
+      "lifted": 268
+    },
+    {
+      "object": "Mesh.225",
+      "components": 856,
+      "lifted": 718
+    },
+    {
+      "object": "Mesh.226",
+      "components": 920,
+      "lifted": 756
+    },
+    {
+      "object": "Mesh.227",
+      "components": 948,
+      "lifted": 764
+    },
+    {
+      "object": "Mesh.228",
+      "components": 1040,
+      "lifted": 858
+    },
+    {
+      "object": "Mesh.229",
+      "components": 896,
+      "lifted": 848
+    },
+    {
+      "object": "Mesh.230",
+      "components": 828,
+      "lifted": 620
+    },
+    {
+      "object": "Mesh.231",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.232",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.233",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.234",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.235",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.236",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.237",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.238",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.239",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.240",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.241",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.242",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.243",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.244",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.245",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.246",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.247",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.248",
+      "components": 28,
+      "lifted": 28
+    },
+    {
+      "object": "Mesh.249",
+      "components": 26,
+      "lifted": 26
+    },
+    {
+      "object": "Mesh.250",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.251",
+      "components": 22,
+      "lifted": 22
+    },
+    {
+      "object": "Mesh.252",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.253",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.254",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.255",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.256",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.257",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.258",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.259",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.260",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.261",
+      "components": 28,
+      "lifted": 28
+    },
+    {
+      "object": "Mesh.262",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.263",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.264",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.265",
+      "components": 68,
+      "lifted": 68
+    },
+    {
+      "object": "Mesh.266",
+      "components": 94,
+      "lifted": 94
+    },
+    {
+      "object": "Mesh.267",
+      "components": 38,
+      "lifted": 38
+    },
+    {
+      "object": "Mesh.268",
+      "components": 768,
+      "lifted": 768
+    },
+    {
+      "object": "Mesh.269",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.270",
+      "components": 432,
+      "lifted": 432
+    },
+    {
+      "object": "Mesh.271",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.272",
+      "components": 100,
+      "lifted": 100
+    },
+    {
+      "object": "Mesh.273",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.274",
+      "components": 468,
+      "lifted": 468
+    },
+    {
+      "object": "Mesh.275",
+      "components": 424,
+      "lifted": 424
+    },
+    {
+      "object": "Mesh.276",
+      "components": 504,
+      "lifted": 504
+    },
+    {
+      "object": "Mesh.277",
+      "components": 492,
+      "lifted": 492
+    },
+    {
+      "object": "Mesh.278",
+      "components": 480,
+      "lifted": 480
+    },
+    {
+      "object": "Mesh.279",
+      "components": 288,
+      "lifted": 288
+    },
+    {
+      "object": "Mesh.280",
+      "components": 444,
+      "lifted": 444
+    },
+    {
+      "object": "Mesh.281",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.282",
+      "components": 28,
+      "lifted": 28
+    },
+    {
+      "object": "Mesh.283",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.284",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.285",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.286",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.287",
+      "components": 14,
+      "lifted": 14
+    },
+    {
+      "object": "Mesh.288",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.289",
+      "components": 18,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.290",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.291",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.292",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.293",
+      "components": 40,
+      "lifted": 40
+    },
+    {
+      "object": "Mesh.294",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.295",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.296",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.297",
+      "components": 360,
+      "lifted": 360
+    },
+    {
+      "object": "Mesh.298",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.299",
+      "components": 324,
+      "lifted": 324
+    },
+    {
+      "object": "Mesh.300",
+      "components": 312,
+      "lifted": 312
+    },
+    {
+      "object": "Mesh.301",
+      "components": 348,
+      "lifted": 348
+    },
+    {
+      "object": "Mesh.302",
+      "components": 552,
+      "lifted": 552
+    },
+    {
+      "object": "Mesh.303",
+      "components": 336,
+      "lifted": 336
+    },
+    {
+      "object": "Mesh.304",
+      "components": 336,
+      "lifted": 336
+    },
+    {
+      "object": "Mesh.305",
+      "components": 192,
+      "lifted": 192
+    },
+    {
+      "object": "Mesh.306",
+      "components": 18,
+      "lifted": 18
+    },
+    {
+      "object": "Mesh.307",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.308",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.309",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.310",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.311",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.312",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.313",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.314",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.315",
+      "components": 216,
+      "lifted": 216
+    },
+    {
+      "object": "Mesh.316",
+      "components": 192,
+      "lifted": 192
+    },
+    {
+      "object": "Mesh.317",
+      "components": 228,
+      "lifted": 228
+    },
+    {
+      "object": "Mesh.318",
+      "components": 192,
+      "lifted": 192
+    },
+    {
+      "object": "Mesh.319",
+      "components": 168,
+      "lifted": 168
+    },
+    {
+      "object": "Mesh.320",
+      "components": 312,
+      "lifted": 312
+    },
+    {
+      "object": "Mesh.321",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.322",
+      "components": 192,
+      "lifted": 192
+    },
+    {
+      "object": "Mesh.323",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.324",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.325",
+      "components": 4,
+      "lifted": 4
+    },
+    {
+      "object": "Mesh.326",
+      "components": 16,
+      "lifted": 16
+    },
+    {
+      "object": "Mesh.327",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.328",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.329",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.330",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.331",
+      "components": 156,
+      "lifted": 156
+    },
+    {
+      "object": "Mesh.332",
+      "components": 144,
+      "lifted": 144
+    },
+    {
+      "object": "Mesh.333",
+      "components": 144,
+      "lifted": 144
+    },
+    {
+      "object": "Mesh.334",
+      "components": 144,
+      "lifted": 144
+    },
+    {
+      "object": "Mesh.335",
+      "components": 144,
+      "lifted": 144
+    },
+    {
+      "object": "Mesh.336",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.337",
+      "components": 120,
+      "lifted": 120
+    },
+    {
+      "object": "Mesh.338",
+      "components": 48,
+      "lifted": 48
+    },
+    {
+      "object": "Mesh.339",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.340",
+      "components": 144,
+      "lifted": 144
+    },
+    {
+      "object": "Mesh.341",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.342",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.343",
+      "components": 2,
+      "lifted": 2
+    },
+    {
+      "object": "Mesh.344",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.345",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.346",
+      "components": 6,
+      "lifted": 6
+    },
+    {
+      "object": "Mesh.347",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.348",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.349",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.350",
+      "components": 108,
+      "lifted": 108
+    },
+    {
+      "object": "Mesh.351",
+      "components": 120,
+      "lifted": 120
+    },
+    {
+      "object": "Mesh.352",
+      "components": 120,
+      "lifted": 120
+    },
+    {
+      "object": "Mesh.353",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.354",
+      "components": 216,
+      "lifted": 216
+    },
+    {
+      "object": "Mesh.355",
+      "components": 48,
+      "lifted": 48
+    },
+    {
+      "object": "Mesh.356",
+      "components": 192,
+      "lifted": 192
+    },
+    {
+      "object": "Mesh.357",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.358",
+      "components": 8,
+      "lifted": 8
+    },
+    {
+      "object": "Mesh.359",
+      "components": 48,
+      "lifted": 48
+    },
+    {
+      "object": "Mesh.360",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.361",
+      "components": 36,
+      "lifted": 36
+    },
+    {
+      "object": "Mesh.362",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.363",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.364",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "Mesh.365",
+      "components": 10,
+      "lifted": 10
+    },
+    {
+      "object": "Mesh.366",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "Mesh.367",
+      "components": 48,
+      "lifted": 48
+    },
+    {
+      "object": "Mesh.368",
+      "components": 96,
+      "lifted": 96
+    },
+    {
+      "object": "Mesh.369",
+      "components": 36,
+      "lifted": 36
+    },
+    {
+      "object": "Mesh.370",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "Mesh.371",
+      "components": 24,
+      "lifted": 24
+    },
+    {
+      "object": "town-window",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.001",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.002",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.003",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.004",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.005",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.006",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.007",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.008",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.009",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.010",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.011",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.012",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.013",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.014",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.015",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.016",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.017",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.018",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.019",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.020",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.021",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.022",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.023",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.024",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.025",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.026",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.027",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.028",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.029",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.030",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.031",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.032",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.033",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.034",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.035",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.036",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.037",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.038",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.039",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.040",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.041",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.042",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.043",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.044",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.045",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.046",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.047",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.048",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.049",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.050",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.051",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.052",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.053",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.054",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.055",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.056",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.057",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.058",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.059",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.060",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.061",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.062",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.063",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.064",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.065",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.066",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.067",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.068",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.069",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.070",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.071",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.072",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.073",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.074",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.075",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.076",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.077",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.078",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.079",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.080",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.081",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.082",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.083",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.084",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.085",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.086",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.087",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.088",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.089",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.090",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.091",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.092",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.093",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.094",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.095",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.096",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.097",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.098",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.099",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.100",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.101",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.102",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.103",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.104",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.105",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.106",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.107",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.108",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.109",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.110",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.111",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.112",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.113",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.114",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.115",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.116",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.117",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.118",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.119",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.120",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.121",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.122",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.123",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.124",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.125",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.126",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.127",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.128",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.129",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.130",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.131",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.132",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.133",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.134",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.135",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.136",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.137",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.138",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.139",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.140",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.141",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.142",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.143",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.144",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.145",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.146",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.147",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.148",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.149",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.150",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.151",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.152",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.153",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.154",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.155",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.156",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.157",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.158",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.159",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.160",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.161",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.162",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.163",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.164",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.165",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.166",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.167",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.168",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.169",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.170",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.171",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.172",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.173",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.174",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.175",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.176",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.177",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.178",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.179",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.180",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.181",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.182",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.183",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.184",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.185",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.186",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.187",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.188",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.189",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.190",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.191",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.192",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.193",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.194",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.195",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.196",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.197",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.198",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.199",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.200",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.201",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.202",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.203",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.204",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.205",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.206",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.207",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.208",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.209",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.210",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.211",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.212",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.213",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.214",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.215",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.216",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.217",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.218",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.219",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.220",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.221",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.222",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.223",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.224",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.225",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.226",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.227",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.228",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.229",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.230",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.231",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.232",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.233",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.234",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.235",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.236",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.237",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.238",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.239",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.240",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.241",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.242",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.243",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.244",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.245",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.246",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.247",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.248",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.249",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.250",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.251",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.252",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.253",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.254",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.255",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.256",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.257",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.258",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.259",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.260",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.261",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.262",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.263",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.264",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.265",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.266",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.267",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.268",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.269",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.270",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.271",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.272",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.273",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.274",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.275",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.276",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.277",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.278",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.279",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.280",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.281",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.282",
+      "components": 20,
+      "lifted": 10
+    },
+    {
+      "object": "town-window.283",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.284",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.285",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.286",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.287",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.288",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.289",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.290",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.291",
+      "components": 12,
+      "lifted": 0
+    },
+    {
+      "object": "town-window.292",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.293",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.294",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.295",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.296",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.297",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.298",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.299",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.300",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.301",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.302",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.303",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.304",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.305",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.306",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.307",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.308",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.309",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.310",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.311",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.312",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.313",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.314",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.315",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.316",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.317",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.318",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.319",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.320",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.321",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.322",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.323",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.324",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.325",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.326",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.327",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.328",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.329",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.330",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.331",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.332",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.333",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.334",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.335",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.336",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.337",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.338",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.339",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.340",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.341",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.342",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.343",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.344",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.345",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.346",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.347",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.348",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.349",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.350",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.351",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.352",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.353",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.354",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.355",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.356",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.357",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.358",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.359",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.360",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.361",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.362",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.363",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.364",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.365",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.366",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.367",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.368",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.369",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.370",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.371",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.372",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.373",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.374",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.375",
+      "components": 20,
+      "lifted": 20
+    },
+    {
+      "object": "town-window.376",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.377",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.378",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.379",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.380",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.381",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.382",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.383",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.384",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.385",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.386",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.387",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.388",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.389",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.390",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.391",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.392",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.393",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.394",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.395",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.396",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.397",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.398",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.399",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.400",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.401",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.402",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.403",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.404",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.405",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.406",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.407",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.408",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.409",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.410",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.411",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.412",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.413",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.414",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.415",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.416",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.417",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.418",
+      "components": 12,
+      "lifted": 12
+    },
+    {
+      "object": "town-window.419",
+      "components": 12,
+      "lifted": 12
+    }
+  ],
+  "navigation_validated": false,
+  "limitations": [
+    "Prototype geometric staging; not a new WFC solve",
+    "Cut boundaries and walkability require further integration checks"
+  ]
+}

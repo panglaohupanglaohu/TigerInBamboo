@@ -1,0 +1,75 @@
+{
+  "checks": {
+    "buildingGLBUnchanged": true,
+    "sourceLampReused": true,
+    "originalTreeArchivedUnchanged": true,
+    "newPlantBlenderSaved": true,
+    "sixFixtures": true,
+    "twelveTreeReplacements": true,
+    "wfcChecks": true
+  },
+  "allListedChecksPassed": true,
+  "imagePairs": {
+    "batching": {
+      "sameSize": true,
+      "meanChannelDifference": [
+        0.014771321614583333,
+        0.023734537760416667,
+        0.022410481770833334
+      ],
+      "changedBounds": [
+        0,
+        47,
+        1280,
+        948
+      ]
+    },
+    "reflection": {
+      "sameSize": true,
+      "meanChannelDifference": [
+        2.5660017903645835,
+        5.28293212890625,
+        7.91306640625
+      ],
+      "changedBounds": [
+        0,
+        0,
+        1280,
+        960
+      ]
+    },
+    "wallShadows": {
+      "sameSize": true,
+      "meanChannelDifference": [
+        2.4491080729166668,
+        0.5681355794270834,
+        0.15488118489583333
+      ],
+      "changedBounds": [
+        0,
+        383,
+        1280,
+        960
+      ]
+    },
+    "waveMotion": {
+      "sameSize": true,
+      "meanChannelDifference": [
+        0.32741943359375,
+        0.3592171223958333,
+        0.4763362630208333
+      ],
+      "changedBounds": [
+        0,
+        770,
+        987,
+        960
+      ]
+    }
+  },
+  "plantAssets": {
+    "broadleaf-reference-v1.glb": "ccce249ed5e9139c8f11b15e830c32f468fbd26e74f0249ce6f0e2a011a8ad6e",
+    "cypress-reference-v1.glb": "c5509cdb93dc454a5de682e79c30042a466065d2cc778533f619ab8a8db6c56e"
+  },
+  "scope": "Engineering and rendered-difference checks; not full visual target or playable navigation acceptance"
+}

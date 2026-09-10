@@ -1,0 +1,34 @@
+{
+  "asset": "soccoCraft",
+  "sourceBlend": "assets/models/originals/supplemental/blender-r3/soccoCraft.blend",
+  "sourceBlendSha256": "3a0335e5f754fb6d4fdcd81dd0cae14b2aabb08cc15a93f4431a8238c69f118d",
+  "sourceSnapshot": "assets/models/originals/supplemental/soccoCraft.source.json",
+  "sourceSnapshotSha256": "6df0bbbd4e9e37a631c8a8ee1b3c8b96249517884632dca7676dda3edac14bed",
+  "scope": "Original SOCCO craft, seats and ramp.",
+  "render": "artifacts/pipeline/saihoji-source-references/soccoCraft-source-three-quarter.png",
+  "renderSha256": "e2ca3a9f64d4612ce6e7195a04b82bea6b6c5c6a29b0862928742bde0f19770a",
+  "sourceNodes": 127,
+  "visibleMeshObjects": 80,
+  "blenderBounds": [
+    [
+      -3.5999999046325684,
+      -3.5,
+      -2.1730003356933594
+    ],
+    [
+      3.5999999046325684,
+      5.5199995040893555,
+      2.688398599624634
+    ]
+  ],
+  "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+  "sourceFileUnchanged": true,
+  "foregroundUsed": false,
+  "sourceFileSaved": false,
+  "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+  "camera": {
+    "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+    "framing": "per-asset actual visible projected bounds plus 12% margin",
+    "orthographicScale": 8.496491432189941
+  }
+}

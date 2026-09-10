@@ -1,0 +1,37 @@
+{
+  "id": "saihoji-concealment-v1",
+  "kind": "supplemental Blender environment asset",
+  "sourcePreserved": [
+    "original Kun mesh",
+    "original Saihoji six scenes",
+    "original pine placements"
+  ],
+  "zones": [
+    {
+      "id": "moss-entry",
+      "name": "入口苔径"
+    },
+    {
+      "id": "master-stones",
+      "name": "主石之庭"
+    },
+    {
+      "id": "dry-cascade",
+      "name": "枯瀑之庭"
+    },
+    {
+      "id": "moss-islands",
+      "name": "苔海岛群"
+    },
+    {
+      "id": "return-view",
+      "name": "回望石组"
+    }
+  ],
+  "centralClearing": "reserved for original garden, battle routes and Kun reveal",
+  "reveal": "asset follows the Kun; its uneven outline hides the resting body, then rises as part of the garden",
+  "files": [
+    "saihoji-concealment-v1.blend",
+    "saihoji-concealment-v1.glb"
+  ]
+}

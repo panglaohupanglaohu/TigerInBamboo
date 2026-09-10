@@ -1,0 +1,114 @@
+{
+  "glbSha256": "bcd6a117143647c358131757df8c1b58889962c41ab36e8968782133b0d5c754",
+  "sourceNodeCount": 67,
+  "sourceParentsExact": true,
+  "maxLocalMatrixError": 3.714032954516e-07,
+  "allOriginalNodeReferencesResolve": true,
+  "referencedNodeIDs": [
+    "n11",
+    "n56",
+    "n57",
+    "n58",
+    "n59",
+    "n60",
+    "n61",
+    "n52",
+    "n55",
+    "n54",
+    "n53",
+    "n65",
+    "n66",
+    "n16",
+    "n21",
+    "n14",
+    "n62",
+    "n63",
+    "n64"
+  ],
+  "originalHullAndDynamicMeshBounds": [
+    {
+      "id": "n1",
+      "localPositionBoundsMaxError": 0.0,
+      "meshPresent": true
+    },
+    {
+      "id": "n11",
+      "localPositionBoundsMaxError": 0.0,
+      "meshPresent": true
+    },
+    {
+      "id": "n14",
+      "localPositionBoundsMaxError": 8.940696716308594e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n53",
+      "localPositionBoundsMaxError": 0.0,
+      "meshPresent": true
+    },
+    {
+      "id": "n54",
+      "localPositionBoundsMaxError": 0.0,
+      "meshPresent": true
+    },
+    {
+      "id": "n56",
+      "localPositionBoundsMaxError": 5.960464477539063e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n57",
+      "localPositionBoundsMaxError": 4.470348358154297e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n58",
+      "localPositionBoundsMaxError": 5.960464477539063e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n59",
+      "localPositionBoundsMaxError": 4.470348358154297e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n60",
+      "localPositionBoundsMaxError": 5.960464477539063e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n61",
+      "localPositionBoundsMaxError": 4.470348358154297e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n62",
+      "localPositionBoundsMaxError": 4.470348358154297e-08,
+      "meshPresent": true
+    },
+    {
+      "id": "n63",
+      "localPositionBoundsMaxError": 1.1324685544877866e-07,
+      "meshPresent": true
+    },
+    {
+      "id": "n64",
+      "localPositionBoundsMaxError": 1.3212132898843265e-07,
+      "meshPresent": true
+    },
+    {
+      "id": "n65",
+      "localPositionBoundsMaxError": 0.0,
+      "meshPresent": true
+    }
+  ],
+  "energyVertexColorsPresent": true,
+  "energyColorBoundsMaxError": 0.0,
+  "hiddenScanGeometryAndVisibilityMetadataPreserved": [
+    "n62",
+    "n63",
+    "n64"
+  ],
+  "addedStaticNodes": 5,
+  "note": "Animation contracts and original geometry preservation checks are not a runtime animation test. Importer must honor source_visible=false."
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "asset": "罗马三兵种 · 红蓝六组",
+    "reference": "roman-soldier-target-v2.png",
+    "model_image": "roman-family-blender/roman-family-v1-overview.png",
+    "status": "脸型、装备与握持候选完成；六组独立结构和保存动作检查通过。蓝兵进入苔庭战斗候选；尚待连续游玩验收。"
+  },
+  {
+    "asset": "鲲 · 背岛与鲸吞",
+    "reference": "kun-battle-target-v1.png",
+    "model_image": "kun-battle-v2/v2-open-three-quarter-glb-roundtrip.png",
+    "status": "鲲v2已修真实内壁、收窄喉道和内部横杆；121姿态无内外表面交叉。已在Godot海面上的真实吞噬场面出现，保留原背岛/六庭。完整巡航结束与重置继续验证。"
+  },
+  {
+    "asset": "苔庭古松",
+    "reference": "ancient-pine-target-v1.png",
+    "model_image": "saihoji-pines-v1/root-ground-near-after.png",
+    "status": "原枝干连接、根盘和层叠树冠已优化，单树三档模型进入 Godot 资产目录。六庭25种原树的25份Blender、75份GLB已完成检查；125个原可见网格逐棵匹配实际位置。最终五页对照已完成；25棵LOD0已接原位置并通过近远GPU核对。已补连续岛缘承托，425个根盘采样全命中；待机整体提高约0.553米避免海水淹没，升鲲恢复原设置。地面折面与根际过渡仍需打磨，没有自动LOD或新增导航。"
+  },
+  {
+    "asset": "莫比斯重甲兵",
+    "reference": "vanguard-trooper-target-v1.png",
+    "model_image": "vanguard-color-v2/after-three-quarter.png",
+    "status": "Blender 关节、握柄与肩炮支架候选已完成，161 帧保存姿态检查通过，真实 GLB 材质回读通过。已在 Godot 战斗候选替换；移动仍缺完整行走步态，不能把保存姿态当作全套动作完成。 本轮配色已按目标图调整并接入Godot：深炭蓝灰装甲与灰褐护板/肩炮；已有真实出舱画面。 网页8931已接入新版几何与配色，27名重甲/3艘运兵艇加载检查通过。坡道与岸边路径已接实际地形和树石避让；诊断运行21人离艇、21人回舱、0超时兜底。完整战斗区域避障、自然触发与伤亡/紧急撤离仍待验。"
+  },
+  {
+    "asset": "莫比斯吸食飞艇",
+    "reference": "moebius-aircraft-target-v1.png",
+    "model_image": "moebius-aircraft-v1/glb-roundtrip-full-three-quarter.png",
+    "status": "Blender 采集口、支架与驾驶舱候选已完成并实际 GLB 回读。67 个原节点及动画引用保留，已在 Godot 五机编队接入新视觉，保留原运动根并接尾焰脉动；实际画面继续核对。"
+  },
+  {
+    "asset": "SOCCO 运兵艇",
+    "reference": "socco-craft-target-v1.png",
+    "model_image": "socco-color-v2/after-three-quarter.png",
+    "status": "Blender 货舱、坡道和七席新重甲候选已完成，已导入 Godot 资源目录。已在实际战场完成逐座出舱和幸存者回艇；整舱底/全坡道的地形穿入已修。完整行走步态仍待补。 本轮配色已按目标图调整并接入Godot：珊瑚砖红上壳、暖象牙下舱、深棕底座和木坡道；已有真实出舱画面。 网页8931已接入新版几何与配色，27名重甲/3艘运兵艇加载检查通过。坡道与岸边路径已接实际地形和树石避让；诊断运行21人离艇、21人回舱、0超时兜底。完整战斗区域避障、自然触发与伤亡/紧急撤离仍待验。"
+  },
+  {
+    "asset": "传统战船 · 26 桨手",
+    "reference": "warship-target-v1.png",
+    "model_image": "warship-battle-v4/glb-frame51-three-quarter.png",
+    "status": "已按主透视目标完成两轮Blender迭代：双眼移到卷曲高端，船壳、甲板与上层平台两端收尖。v3发现眼穿壳与旧封口接触，v4已修；301保存帧的新壳体及划桨检查通过，450登船接面采样无缺口。保留26原桨手与动作；尚未正式战場回接或完成25人调度。"
+  },
+  {
+    "asset": "GatePod 护航艇",
+    "reference": "gatepod-escort-target-v1.png",
+    "model_image": "gatepod-escort-v1/pod-41-7-glb-roundtrip.png",
+    "status": "已归并为一种共用护航艇，以pod-41-7为母版；三艘战场实例共用模型和动作数据，保留各自航线、比例与双索降连接。旧版仅作历史归档。已进入真实 Godot 战场并连接两名重甲的实际索降；斜绳端点已修正，完整身体扫掠仍待验。"
+  }
+]

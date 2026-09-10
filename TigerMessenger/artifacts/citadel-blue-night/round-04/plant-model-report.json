@@ -1,0 +1,17 @@
+{
+  "source": "Original lowPolyTree imported and archived; trunk reused in broadleaf, canopy and branching redesigned against user reference",
+  "variants": [
+    {
+      "name": "Broadleaf",
+      "file": "broadleaf-reference-v1.glb",
+      "meshes": 20,
+      "triangles": 1020
+    },
+    {
+      "name": "Cypress",
+      "file": "cypress-reference-v1.glb",
+      "meshes": 10,
+      "triangles": 748
+    }
+  ]
+}

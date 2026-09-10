@@ -1,0 +1,27 @@
+{
+  "seeds": 25,
+  "glbs": 75,
+  "originalNodesPerSeed": 17,
+  "sourceParentsExact": true,
+  "maxSourceLocalMatrixError": 1.0681152344815814e-06,
+  "maxPaletteFactorError": 3.052039454498612e-09,
+  "allWoodConnectedClosed": true,
+  "allCrownComponentsTouchWood": true,
+  "maxTerminalTipToFoliageSurfaceDistance": 0.1166231781244278,
+  "maxAbsoluteRootEnvelopeDelta": 0.019157692790031433,
+  "LODtriangleRanges": {
+    "0": [
+      3594,
+      3600
+    ],
+    "1": [
+      2226,
+      2230
+    ],
+    "2": [
+      1220,
+      1222
+    ]
+  },
+  "runtimeIntegrated": false
+}

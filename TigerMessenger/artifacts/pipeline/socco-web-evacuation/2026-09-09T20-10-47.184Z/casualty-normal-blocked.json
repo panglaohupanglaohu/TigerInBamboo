@@ -1,0 +1,1135 @@
+{
+  "scenario": "casualty-normal-blocked",
+  "checks": [
+    {
+      "name": "original 45/12 rules unchanged",
+      "passed": true,
+      "detail": {
+        "normal": 45,
+        "emergency": 12
+      }
+    },
+    {
+      "name": "diagnostic began and reached injection point",
+      "passed": true,
+      "detail": {
+        "startPhase": "idle",
+        "began": true,
+        "injected": true
+      }
+    },
+    {
+      "name": "same 21 transport identities and unique ship seats",
+      "passed": true
+    },
+    {
+      "name": "three injected fatalities remain deaths, never recovery",
+      "passed": true,
+      "detail": [
+        {
+          "uid": 6,
+          "dead": true,
+          "life": 0
+        },
+        {
+          "uid": 13,
+          "dead": true,
+          "life": 0
+        },
+        {
+          "uid": 20,
+          "dead": true,
+          "life": 0
+        }
+      ]
+    },
+    {
+      "name": "wounded survivors not mistaken for deaths",
+      "passed": true
+    },
+    {
+      "name": "all recovery claims observed on ramp and at actual cabin floor endpoint",
+      "passed": true,
+      "detail": {
+        "count": 16,
+        "maxEndpointError": 0.010000014419479397,
+        "seatCenterOffset": 0,
+        "reason": "Root feet follow the raycast floor at the assigned seat; the seat transform itself can be above this floor."
+      }
+    },
+    {
+      "name": "mutually exclusive identity accounting",
+      "passed": true,
+      "detail": {
+        "accounting": {
+          "returned": 16,
+          "dead": 3,
+          "forced": 2,
+          "unresolved": 0,
+          "ambiguous": 0,
+          "assigned": 21,
+          "departed": 21
+        },
+        "categories": {
+          "returned": [
+            9,
+            10,
+            11,
+            12,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "dead": [
+            6,
+            13,
+            20
+          ],
+          "forced": [
+            7,
+            8
+          ],
+          "unresolved": [],
+          "ambiguous": []
+        }
+      }
+    },
+    {
+      "name": "blocked living soldier explicitly recorded as fallback, not return",
+      "passed": true,
+      "detail": {
+        "blockedFrames": 2701,
+        "forced": [
+          {
+            "uid": 7,
+            "ship": "vanguard-hauler-0",
+            "seat": 1,
+            "frame": 5540,
+            "seconds": 92.35,
+            "state": {
+              "seconds": 45.016666666665394,
+              "limit": 45,
+              "returnT": null,
+              "distance": 1.0593755670747558
+            },
+            "returned": false,
+            "dead": false,
+            "seenOnRamp": false
+          },
+          {
+            "uid": 8,
+            "ship": "vanguard-hauler-0",
+            "seat": 2,
+            "frame": 5540,
+            "seconds": 92.35,
+            "state": {
+              "seconds": 45.016666666665394,
+              "limit": 45,
+              "returnT": null,
+              "distance": 88.17719928421464
+            },
+            "returned": false,
+            "dead": false,
+            "seenOnRamp": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "fallback uses exact existing deadline and strict greater-than step",
+      "passed": true,
+      "detail": {
+        "expectedLimit": 45,
+        "firstForcedFrame": 5540,
+        "withdrawFrame": 2840,
+        "forcedSeconds": [
+          45.016666666665394,
+          45.016666666665394
+        ]
+      }
+    },
+    {
+      "name": "mission exits without watchdog or stranded identities",
+      "passed": true,
+      "detail": {
+        "endFrame": 5874,
+        "phase": "done"
+      }
+    }
+  ],
+  "passed": true,
+  "injections": [
+    {
+      "kind": "diagnostic-start",
+      "frame": 2839,
+      "phase": "insert",
+      "all21Departed": true
+    },
+    {
+      "kind": "lethal-real-damage-function",
+      "uid": 6,
+      "arrowHitsInjected": 60,
+      "result": {
+        "wounded": true,
+        "dead": true,
+        "arrowHits": 0,
+        "javelinHits": 0,
+        "meleeHits": 0,
+        "life": 0
+      }
+    },
+    {
+      "kind": "lethal-real-damage-function",
+      "uid": 13,
+      "arrowHitsInjected": 60,
+      "result": {
+        "wounded": true,
+        "dead": true,
+        "arrowHits": 0,
+        "javelinHits": 0,
+        "meleeHits": 0,
+        "life": 0
+      }
+    },
+    {
+      "kind": "lethal-real-damage-function",
+      "uid": 20,
+      "arrowHitsInjected": 60,
+      "result": {
+        "wounded": true,
+        "dead": true,
+        "arrowHits": 0,
+        "javelinHits": 0,
+        "meleeHits": 0,
+        "life": 0
+      }
+    },
+    {
+      "kind": "one-wound-real-damage-function",
+      "uid": 7,
+      "arrowHitsInjected": 20,
+      "result": {
+        "wounded": true,
+        "dead": false,
+        "arrowHits": 0,
+        "javelinHits": 0,
+        "meleeHits": 0,
+        "life": 2
+      }
+    },
+    {
+      "kind": "one-wound-real-damage-function",
+      "uid": 14,
+      "arrowHitsInjected": 20,
+      "result": {
+        "wounded": true,
+        "dead": false,
+        "arrowHits": 0,
+        "javelinHits": 0,
+        "meleeHits": 0,
+        "life": 2
+      }
+    },
+    {
+      "kind": "one-wound-real-damage-function",
+      "uid": 21,
+      "arrowHitsInjected": 20,
+      "result": {
+        "wounded": true,
+        "dead": false,
+        "arrowHits": 0,
+        "javelinHits": 0,
+        "meleeHits": 0,
+        "life": 2
+      }
+    },
+    {
+      "kind": "persistent-position-blocker",
+      "uid": 8,
+      "reason": "Explicit diagnostic impassable-return substitute, applied before each update until forced or genuinely aboard.",
+      "distanceFromStart": 88.31345630206745
+    },
+    {
+      "kind": "triggerWithdraw-api",
+      "frame": 2840
+    }
+  ],
+  "accounting": {
+    "returned": 16,
+    "dead": 3,
+    "forced": 2,
+    "unresolved": 0,
+    "ambiguous": 0,
+    "assigned": 21,
+    "departed": 21
+  },
+  "categories": {
+    "returned": [
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "dead": [
+      6,
+      13,
+      20
+    ],
+    "forced": [
+      7,
+      8
+    ],
+    "unresolved": [],
+    "ambiguous": []
+  },
+  "returns": [
+    {
+      "uid": 26,
+      "ship": "vanguard-hauler-2",
+      "seat": 6,
+      "frame": 3113,
+      "seconds": 51.9,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999991825153098,
+      "visible": false
+    },
+    {
+      "uid": 12,
+      "ship": "vanguard-hauler-0",
+      "seat": 6,
+      "frame": 3140,
+      "seconds": 52.35,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999991825178784,
+      "visible": false
+    },
+    {
+      "uid": 19,
+      "ship": "vanguard-hauler-1",
+      "seat": 6,
+      "frame": 3178,
+      "seconds": 52.983333333333334,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999991825154975,
+      "visible": false
+    },
+    {
+      "uid": 18,
+      "ship": "vanguard-hauler-1",
+      "seat": 5,
+      "frame": 3288,
+      "seconds": 54.81666666666666,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999919883725618,
+      "visible": false
+    },
+    {
+      "uid": 11,
+      "ship": "vanguard-hauler-0",
+      "seat": 5,
+      "frame": 3359,
+      "seconds": 56,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999919883737505,
+      "visible": false
+    },
+    {
+      "uid": 17,
+      "ship": "vanguard-hauler-1",
+      "seat": 4,
+      "frame": 3379,
+      "seconds": 56.333333333333336,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999919883728146,
+      "visible": false
+    },
+    {
+      "uid": 25,
+      "ship": "vanguard-hauler-2",
+      "seat": 5,
+      "frame": 3405,
+      "seconds": 56.766666666666666,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999919883731927,
+      "visible": false
+    },
+    {
+      "uid": 16,
+      "ship": "vanguard-hauler-1",
+      "seat": 3,
+      "frame": 3535,
+      "seconds": 58.93333333333333,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999967151585437,
+      "visible": false
+    },
+    {
+      "uid": 10,
+      "ship": "vanguard-hauler-0",
+      "seat": 4,
+      "frame": 3559,
+      "seconds": 59.333333333333336,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999919883737555,
+      "visible": false
+    },
+    {
+      "uid": 24,
+      "ship": "vanguard-hauler-2",
+      "seat": 4,
+      "frame": 3561,
+      "seconds": 59.36666666666667,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999919883739857,
+      "visible": false
+    },
+    {
+      "uid": 15,
+      "ship": "vanguard-hauler-1",
+      "seat": 2,
+      "frame": 3645,
+      "seconds": 60.766666666666666,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999967151595221,
+      "visible": false
+    },
+    {
+      "uid": 23,
+      "ship": "vanguard-hauler-2",
+      "seat": 3,
+      "frame": 3671,
+      "seconds": 61.199999999999996,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999967151599384,
+      "visible": false
+    },
+    {
+      "uid": 9,
+      "ship": "vanguard-hauler-0",
+      "seat": 3,
+      "frame": 3742,
+      "seconds": 62.38333333333333,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999967151606405,
+      "visible": false
+    },
+    {
+      "uid": 14,
+      "ship": "vanguard-hauler-1",
+      "seat": 1,
+      "frame": 3781,
+      "seconds": 63.03333333333333,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.010000014419479397,
+      "visible": false
+    },
+    {
+      "uid": 22,
+      "ship": "vanguard-hauler-2",
+      "seat": 2,
+      "frame": 3845,
+      "seconds": 64.1,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.009999967151596987,
+      "visible": false
+    },
+    {
+      "uid": 21,
+      "ship": "vanguard-hauler-2",
+      "seat": 1,
+      "frame": 4000,
+      "seconds": 66.68333333333334,
+      "departed": true,
+      "dead": false,
+      "aboard": true,
+      "forced": false,
+      "seenOnRamp": true,
+      "worldSeatError": 0,
+      "worldBoardingEndpointError": 0.010000014419471496,
+      "visible": false
+    }
+  ],
+  "forced": [
+    {
+      "uid": 7,
+      "ship": "vanguard-hauler-0",
+      "seat": 1,
+      "frame": 5540,
+      "seconds": 92.35,
+      "state": {
+        "seconds": 45.016666666665394,
+        "limit": 45,
+        "returnT": null,
+        "distance": 1.0593755670747558
+      },
+      "returned": false,
+      "dead": false,
+      "seenOnRamp": false
+    },
+    {
+      "uid": 8,
+      "ship": "vanguard-hauler-0",
+      "seat": 2,
+      "frame": 5540,
+      "seconds": 92.35,
+      "state": {
+        "seconds": 45.016666666665394,
+        "limit": 45,
+        "returnT": null,
+        "distance": 88.17719928421464
+      },
+      "returned": false,
+      "dead": false,
+      "seenOnRamp": false
+    }
+  ],
+  "transitions": [
+    {
+      "frame": 552,
+      "seconds": 9.216666666666667,
+      "from": "approach",
+      "to": "insert"
+    },
+    {
+      "frame": 2839,
+      "seconds": 47.333333333333336,
+      "from": "insert",
+      "to": "combat"
+    },
+    {
+      "frame": 2840,
+      "seconds": 47.35,
+      "from": "combat",
+      "to": "withdraw"
+    },
+    {
+      "frame": 5540,
+      "seconds": 92.35,
+      "from": "withdraw",
+      "to": "extract"
+    },
+    {
+      "frame": 5874,
+      "seconds": 97.91666666666667,
+      "from": "extract",
+      "to": "done"
+    }
+  ],
+  "transport": [
+    {
+      "name": "vanguard-hauler-0",
+      "cancelled": false,
+      "groundRoutes": "resolved",
+      "roster": [
+        {
+          "uid": 6,
+          "seat": 0,
+          "departed": true,
+          "returned": false,
+          "forcedReturn": false,
+          "dead": true,
+          "aboard": false,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 7.278192398394555,
+          "returnPathStatus": "pending",
+          "yieldSteps": 0
+        },
+        {
+          "uid": 7,
+          "seat": 1,
+          "departed": true,
+          "returned": false,
+          "forcedReturn": true,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 7.011689021112773,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0,
+          "forcedState": {
+            "seconds": 45.016666666665394,
+            "limit": 45,
+            "returnT": null,
+            "distance": 1.0593755670747558
+          }
+        },
+        {
+          "uid": 8,
+          "seat": 2,
+          "departed": true,
+          "returned": false,
+          "forcedReturn": true,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 6.296744224825799,
+          "returnPathStatus": "missing-dry-endpoint",
+          "yieldSteps": 0,
+          "forcedState": {
+            "seconds": 45.016666666665394,
+            "limit": 45,
+            "returnT": null,
+            "distance": 88.17719928421464
+          }
+        },
+        {
+          "uid": 9,
+          "seat": 3,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.82617243160408,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.4613922385709617e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 10,
+          "seat": 4,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 5.3092317061028815,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 11,
+          "seat": 5,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 5.801684069233982,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 12,
+          "seat": 6,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 3.607807690970273,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        }
+      ]
+    },
+    {
+      "name": "vanguard-hauler-1",
+      "cancelled": false,
+      "groundRoutes": "resolved",
+      "roster": [
+        {
+          "uid": 13,
+          "seat": 0,
+          "departed": true,
+          "returned": false,
+          "forcedReturn": false,
+          "dead": true,
+          "aboard": false,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 5.300815221918797,
+          "returnPathStatus": "pending",
+          "yieldSteps": 0
+        },
+        {
+          "uid": 14,
+          "seat": 1,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 3.604501648852436,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.4613922385709617e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 15,
+          "seat": 2,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.8966514246802078,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 16,
+          "seat": 3,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.101826051825369,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 17,
+          "seat": 4,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.4029081532811745,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 18,
+          "seat": 5,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.905845658783491,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 3.1776437161565096e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 19,
+          "seat": 6,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.623175564778801,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.4613922385709617e-14,
+          "yieldSteps": 0
+        }
+      ]
+    },
+    {
+      "name": "vanguard-hauler-2",
+      "cancelled": false,
+      "groundRoutes": "resolved",
+      "roster": [
+        {
+          "uid": 20,
+          "seat": 0,
+          "departed": true,
+          "returned": false,
+          "forcedReturn": false,
+          "dead": true,
+          "aboard": false,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.4005490308191257,
+          "returnPathStatus": "pending",
+          "yieldSteps": 0
+        },
+        {
+          "uid": 21,
+          "seat": 1,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.102056158172262,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 22,
+          "seat": 2,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.610253417589991,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 23,
+          "seat": 3,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.900576680922521,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 24,
+          "seat": 4,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.103055418335555,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 25,
+          "seat": 5,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 7.760229149705006,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 26,
+          "seat": 6,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.897565657738518,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.842170943040401e-14,
+          "yieldSteps": 0
+        }
+      ]
+    }
+  ],
+  "returnPathObservation": {
+    "positive": 0,
+    "maxLength": 0,
+    "entries": [
+      {
+        "uid": 6,
+        "status": "pending"
+      },
+      {
+        "uid": 7,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 1.4210854715202004e-14
+      },
+      {
+        "uid": 8,
+        "status": "missing-dry-endpoint"
+      },
+      {
+        "uid": 9,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.4613922385709617e-14
+      },
+      {
+        "uid": 10,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.0097183471152322e-14
+      },
+      {
+        "uid": 11,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 1.4210854715202004e-14
+      },
+      {
+        "uid": 12,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 0
+      },
+      {
+        "uid": 13,
+        "status": "pending"
+      },
+      {
+        "uid": 14,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.4613922385709617e-14
+      },
+      {
+        "uid": 15,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 0
+      },
+      {
+        "uid": 16,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.0097183471152322e-14
+      },
+      {
+        "uid": 17,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.0097183471152322e-14
+      },
+      {
+        "uid": 18,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 3.1776437161565096e-14
+      },
+      {
+        "uid": 19,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.4613922385709617e-14
+      },
+      {
+        "uid": 20,
+        "status": "pending"
+      },
+      {
+        "uid": 21,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 0
+      },
+      {
+        "uid": 22,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 0
+      },
+      {
+        "uid": 23,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 1.4210854715202004e-14
+      },
+      {
+        "uid": 24,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.0097183471152322e-14
+      },
+      {
+        "uid": 25,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 0
+      },
+      {
+        "uid": 26,
+        "status": "resolved",
+        "length": 0,
+        "startCorrection": 2.842170943040401e-14
+      }
+    ]
+  },
+  "withdrawFrame": 2840,
+  "firstForcedFrame": 5540,
+  "endFrame": 5874,
+  "simulatedSeconds": 97.91666666666667,
+  "scope": "Diagnostic begin, injected damage, optional explicit persistent return blocker and fleet displacement; only original assault updater is advanced synchronously. Not natural projectile/fleet-route or complete game loop evidence.",
+  "errors": [],
+  "servedHashes": {
+    "src/world/vanguardTrooper.js": "ffe5bac05f8ed97bd1da6712a6608887a3567cd650e3883b3f2dee903879b0d6",
+    "src/world/gateHaulerCraft.js": "2305c602ded93b1aee6e14f671a2eaa71fd0da15de57b53fed7b45b6f6e1913a",
+    "src/world/vanguardAssault.js": "75b76562f787eda629514bbfd00660f73683525c9fa93ff8a62316d4e37095c7",
+    "src/world/soccoBerth.js": "a397d4105737d99eea3c857e02581558a88fa1c4c8480c9b302c4816380140d4",
+    "src/world/soccoGroundRoutes.js": "08e779fc8aab924ecaa3e00edfb9a5caaccffd68661d0dcbef0e456ff774818f"
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "checks": [
+    {
+      "name": "time alone cannot discover whale or ambush",
+      "passed": true
+    },
+    {
+      "name": "concealment retains visible actor and lowers body pose",
+      "passed": true
+    },
+    {
+      "name": "concealed actor follows moving cover anchor",
+      "passed": true
+    },
+    {
+      "name": "discovery event distinct from ambush",
+      "passed": true
+    },
+    {
+      "name": "ambush restores body pose and identity",
+      "passed": true
+    },
+    {
+      "name": "reset clears event and pose state",
+      "passed": true
+    },
+    {
+      "name": "insufficient real cover blocks instead of hiding or attacking",
+      "passed": true
+    },
+    {
+      "name": "actual garden has at least 50 anchored cover slots",
+      "passed": true,
+      "detail": {
+        "count": 50
+      }
+    },
+    {
+      "name": "actual traditional ship troops reach concealment",
+      "passed": true,
+      "detail": {
+        "concealedAt": 3741,
+        "state": {
+          "stage": "concealed",
+          "discovery": null,
+          "blocked": null,
+          "settleSeconds": 1.6,
+          "registered": 50,
+          "concealed": 50
+        },
+        "actors": 50
+      }
+    },
+    {
+      "name": "all 50 initial troops are blue and genuinely present",
+      "passed": true
+    },
+    {
+      "name": "actual ten-second hidden wait fires no arrows and no heavy deployment",
+      "passed": true,
+      "detail": {
+        "stage": "concealed",
+        "arrows": 0,
+        "assaultPhase": "idle"
+      }
+    },
+    {
+      "name": "actual whale rise and fleet lock drive discovery",
+      "passed": true,
+      "detail": {
+        "discoveredAt": 321,
+        "ambushAt": 322,
+        "lift": 0.43353123301408525,
+        "whaleRadius": 163.09894763166935,
+        "events": [
+          {
+            "from": "landing",
+            "to": "concealed",
+            "seconds": 60.74999999999783
+          },
+          {
+            "from": "concealed",
+            "to": "discovered",
+            "seconds": 76.11666666666363,
+            "evidence": {
+              "detected": true,
+              "source": "saihojiGarden.whaleLock+actualLift",
+              "fleetMembers": 5,
+              "whaleLockActive": true,
+              "whaleRisen": true,
+              "seconds": 76.11666666666363
+            }
+          },
+          {
+            "from": "discovered",
+            "to": "ambush",
+            "seconds": 76.1333333333303
+          }
+        ]
+      }
+    },
+    {
+      "name": "ambush itself does not start heavy drop",
+      "passed": true,
+      "detail": {
+        "assaultPhase": "idle"
+      }
+    },
+    {
+      "name": "ambush resumes original traditional attack and preserves soldiers",
+      "passed": true,
+      "detail": {
+        "arrows": 38,
+        "initialArrows": 0
+      }
+    }
+  ],
+  "passed": true,
+  "state": {
+    "stage": "ambush",
+    "discovery": {
+      "detected": true,
+      "source": "saihojiGarden.whaleLock+actualLift",
+      "fleetMembers": 5,
+      "whaleLockActive": true,
+      "whaleRisen": true,
+      "seconds": 76.11666666666363
+    },
+    "blocked": null,
+    "settleSeconds": 1.6,
+    "registered": 50,
+    "concealed": 50
+  },
+  "events": [
+    {
+      "from": "landing",
+      "to": "concealed",
+      "seconds": 60.74999999999783
+    },
+    {
+      "from": "concealed",
+      "to": "discovered",
+      "seconds": 76.11666666666363,
+      "evidence": {
+        "detected": true,
+        "source": "saihojiGarden.whaleLock+actualLift",
+        "fleetMembers": 5,
+        "whaleLockActive": true,
+        "whaleRisen": true,
+        "seconds": 76.11666666666363
+      }
+    },
+    {
+      "from": "discovered",
+      "to": "ambush",
+      "seconds": 76.1333333333303
+    }
+  ],
+  "scope": "Actual Web scene and real garden/battle updates with diagnostic fleet position. Not a naturally timed whole-game fleet tour; Godot not changed.",
+  "errors": [],
+  "sourceBefore": {
+    "src/world/saihojiPhalanx.js": "483ae817bb95512de876618a495feb2860c7c6dac95d1390ba8a4b814827489d",
+    "src/world/saihojiAmbush.js": "a444ca7449a8a8ba76d64496963b1206d32224301cd1573f7e72d98aa3917355",
+    "src/scenes/saihojiGarden.js": "b2f84d9fdbb7c4612804fa43125a704c5f35180b37208a0911f8012a154159e9",
+    "src/world/vanguardAssault.js": "fad9f339848d105c97bcbcc5a7e9b3f0cb0e195d4197f9bec5615bc7d7e0e5c9"
+  },
+  "sourceAfter": {
+    "src/world/saihojiPhalanx.js": "fbf4153e9e25a0a9448b7fa2caae3c68291e309224cbb23ca92d6ee4daca0bc5",
+    "src/world/saihojiAmbush.js": "bd208173fabab10682ec1d1be793da8c0ee79f0617253f55cd6192713b7531e9",
+    "src/scenes/saihojiGarden.js": "b2f84d9fdbb7c4612804fa43125a704c5f35180b37208a0911f8012a154159e9",
+    "src/world/vanguardAssault.js": "fad9f339848d105c97bcbcc5a7e9b3f0cb0e195d4197f9bec5615bc7d7e0e5c9"
+  },
+  "sourceStable": false
+}

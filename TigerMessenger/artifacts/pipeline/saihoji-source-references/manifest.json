@@ -1,0 +1,280 @@
+{
+  "status": "read-only original source renders; no optimization or image generation",
+  "assets": [
+    {
+      "asset": "gatePodEscort_pod-55-2",
+      "sourceBlend": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-55-2.blend",
+      "sourceBlendSha256": "e405fe5237b830be9d1aecebc226b4e5fe73aa7e9761c5b842c18e941a5cefb8",
+      "sourceSnapshot": "assets/models/originals/supplemental/gatePodEscort_pod-55-2.source.json",
+      "sourceSnapshotSha256": "7cd642c827afc35928d37fb9332b4507b69d8e58f4e39ddbcabe5ae3a0f9f5ba",
+      "scope": "Original escort pod 55-2, including tranquilizer muzzle.",
+      "render": "artifacts/pipeline/saihoji-source-references/gatePodEscort_pod-55-2-source-three-quarter.png",
+      "renderSha256": "b8d7ceb84f0db847a296f05762af027ee877d6aabb004efc31027973bd7fc8c8",
+      "sourceNodes": 79,
+      "visibleMeshObjects": 64,
+      "blenderBounds": [
+        [
+          -4.064624309539795,
+          -2.2582290172576904,
+          -1.14080011844635
+        ],
+        [
+          4.064624309539795,
+          2.0708000659942627,
+          1.13211989402771
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 7.5320234298706055
+      }
+    },
+    {
+      "asset": "moebiusAircraft",
+      "sourceBlend": "assets/models/originals/blender-r3/moebiusAircraft.blend",
+      "sourceBlendSha256": "f0b0a0fc7703c6e5f832800c9a978afd547c69040d0cb1aa4457f7acc03950a7",
+      "sourceSnapshot": "assets/models/originals/moebiusAircraft.source.json",
+      "sourceSnapshotSha256": "a8575b5009ac9c371ba9597e778ec3eea95f3c512637cd00663806c939d84852",
+      "scope": "Original single craft. No independent AircraftSquad archive was found; this does not claim to show its runtime formation.",
+      "render": "artifacts/pipeline/saihoji-source-references/moebiusAircraft-source-three-quarter.png",
+      "renderSha256": "e3bbc8ae4964f8b43c10d7662cbd162399a50ba6ca7518421cb39e400e0d6d11",
+      "sourceNodes": 67,
+      "visibleMeshObjects": 31,
+      "blenderBounds": [
+        [
+          -1.600000023841858,
+          -5.549999713897705,
+          -1.600000262260437
+        ],
+        [
+          1.600000023841858,
+          4.525000095367432,
+          1.5999999046325684
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 7.036799907684326
+      }
+    },
+    {
+      "asset": "gatePodEscort_pod-08-9",
+      "sourceBlend": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-08-9.blend",
+      "sourceBlendSha256": "650bb412be63d5c1f2395094911b036a8c2fe7946fb3621666891db52fa33cd6",
+      "sourceSnapshot": "assets/models/originals/supplemental/gatePodEscort_pod-08-9.source.json",
+      "sourceSnapshotSha256": "61fd440ce6e324c494f05cd9ff7960ca958f212c9210e97c4ab14393e7e38f02",
+      "scope": "Original escort pod 08-9, including tranquilizer muzzle.",
+      "render": "artifacts/pipeline/saihoji-source-references/gatePodEscort_pod-08-9-source-three-quarter.png",
+      "renderSha256": "5bc311b16d13b1e2eae03762113569d2b8d4023f0b5f9f7ee05989b40d080c53",
+      "sourceNodes": 81,
+      "visibleMeshObjects": 66,
+      "blenderBounds": [
+        [
+          -3.8023903369903564,
+          -2.112536668777466,
+          -1.0672000646591187
+        ],
+        [
+          3.8023903369903564,
+          1.9372000694274902,
+          1.0590800046920776
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 7.046087265014648
+      }
+    },
+    {
+      "asset": "leviathanIsland",
+      "sourceBlend": "assets/models/originals/leviathan/blender-r3/leviathanIsland.blend",
+      "sourceBlendSha256": "53f3069f9cca770f535ae812dc10e438b0e84559def3df61a6d131bec3b4240f",
+      "sourceSnapshot": "assets/models/originals/leviathan/leviathanIsland.source.json",
+      "sourceSnapshotSha256": "07e94ae441cb4ab9f48e759412e8a8518a7b7d772bafdc28dc49c473ad8c8af9",
+      "scope": "Original whale/island/flora factory; excludes six runtime-attached garden scenes.",
+      "render": "artifacts/pipeline/saihoji-source-references/leviathanIsland-source-three-quarter.png",
+      "renderSha256": "857af22063f43aead295bea49aa5558a2ed7b31f64f5cd6aa8a3c751f7163798",
+      "sourceNodes": 295,
+      "visibleMeshObjects": 100,
+      "blenderBounds": [
+        [
+          -25.341480255126953,
+          -16.56498146057129,
+          -13.783699989318848
+        ],
+        [
+          22.029956817626953,
+          16.564979553222656,
+          4.965492248535156
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 45.59748077392578
+      }
+    },
+    {
+      "asset": "ancientPineTree",
+      "sourceBlend": "assets/models/originals/blender-r3/pine.blend",
+      "sourceBlendSha256": "bb7377d4787d2ce3a8acedcc21ef239cba964b76a664963a6f3cdb13e6990bc2",
+      "sourceSnapshot": "assets/models/originals/pine.source.json",
+      "sourceSnapshotSha256": "654a2d2b692020db9bca1bd6bb7d82c09b4301b895bbd20c61793ef2e1e9ef08",
+      "scope": "Archive ID pine; provenance factory createAncientPineTree.",
+      "render": "artifacts/pipeline/saihoji-source-references/ancientPineTree-source-three-quarter.png",
+      "renderSha256": "69712426b150d72a14e6617bf3aff03b3df12928d7501fabcef65f40a2d9d8f2",
+      "sourceNodes": 17,
+      "visibleMeshObjects": 5,
+      "blenderBounds": [
+        [
+          -3.1488165855407715,
+          -1.1259337663650513,
+          -0.15270772576332092
+        ],
+        [
+          2.1071152687072754,
+          0.9956833720207214,
+          5.379024982452393
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 6.156116485595703
+      }
+    },
+    {
+      "asset": "gatePodEscort_pod-41-7",
+      "sourceBlend": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-41-7.blend",
+      "sourceBlendSha256": "2a00be86551ce14274fc4e33c498d8b109fcc966b17221c9c791f1cb21b8f274",
+      "sourceSnapshot": "assets/models/originals/supplemental/gatePodEscort_pod-41-7.source.json",
+      "sourceSnapshotSha256": "3730d1853a179f3b9d58f3e3d355530be9432ff8b1ec83b3c1d734b116709ec6",
+      "scope": "Original escort pod 41-7, including tranquilizer muzzle.",
+      "render": "artifacts/pipeline/saihoji-source-references/gatePodEscort_pod-41-7-source-three-quarter.png",
+      "renderSha256": "bc19406ecbc04b6106061e6ed1695cea99d175b7ff105354aa8bd3cfd03eaaf0",
+      "sourceNodes": 81,
+      "visibleMeshObjects": 66,
+      "blenderBounds": [
+        [
+          -3.605715036392212,
+          -2.003267526626587,
+          -1.0120000839233398
+        ],
+        [
+          3.605715036392212,
+          1.8370001316070557,
+          1.0042999982833862
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 6.681633472442627
+      }
+    },
+    {
+      "asset": "vanguardTrooper",
+      "sourceBlend": "assets/models/originals/supplemental/blender-r3/vanguardTrooper.blend",
+      "sourceBlendSha256": "3f319fa6f69d686a80c6a3f9f5b573879a51b1009966e99caf7c89bb67f67c64",
+      "sourceSnapshot": "assets/models/originals/supplemental/vanguardTrooper.source.json",
+      "sourceSnapshotSha256": "e5059f9307511da81a0d3ee1436d71ae94f147e31b957494277bad2d0eaf0259",
+      "scope": "Original vanguard heavy trooper, original weapons and armor.",
+      "render": "artifacts/pipeline/saihoji-source-references/vanguardTrooper-source-three-quarter.png",
+      "renderSha256": "8104bccf1b92b71b9e36426a07e7516cdfc5b4d08237befbe3bb66347dfdcdbd",
+      "sourceNodes": 84,
+      "visibleMeshObjects": 45,
+      "blenderBounds": [
+        [
+          -0.38503146171569824,
+          -0.9146072864532471,
+          0.032654765993356705
+        ],
+        [
+          0.5924127101898193,
+          0.2950000762939453,
+          1.8886436223983765
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 1.5999127626419067
+      }
+    },
+    {
+      "asset": "soccoCraft",
+      "sourceBlend": "assets/models/originals/supplemental/blender-r3/soccoCraft.blend",
+      "sourceBlendSha256": "3a0335e5f754fb6d4fdcd81dd0cae14b2aabb08cc15a93f4431a8238c69f118d",
+      "sourceSnapshot": "assets/models/originals/supplemental/soccoCraft.source.json",
+      "sourceSnapshotSha256": "6df0bbbd4e9e37a631c8a8ee1b3c8b96249517884632dca7676dda3edac14bed",
+      "scope": "Original SOCCO craft, seats and ramp.",
+      "render": "artifacts/pipeline/saihoji-source-references/soccoCraft-source-three-quarter.png",
+      "renderSha256": "e2ca3a9f64d4612ce6e7195a04b82bea6b6c5c6a29b0862928742bde0f19770a",
+      "sourceNodes": 127,
+      "visibleMeshObjects": 80,
+      "blenderBounds": [
+        [
+          -3.5999999046325684,
+          -3.5,
+          -2.1730003356933594
+        ],
+        [
+          3.5999999046325684,
+          5.5199995040893555,
+          2.688398599624634
+        ]
+      ],
+      "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+      "sourceFileUnchanged": true,
+      "foregroundUsed": false,
+      "sourceFileSaved": false,
+      "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+      "camera": {
+        "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+        "framing": "per-asset actual visible projected bounds plus 12% margin",
+        "orthographicScale": 8.496491432189941
+      }
+    }
+  ],
+  "missingIndependentArchive": [
+    "moebiusAircraftSquad runtime formation"
+  ]
+}

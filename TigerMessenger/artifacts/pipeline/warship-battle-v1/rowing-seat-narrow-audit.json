@@ -1,0 +1,1976 @@
+{
+  "passed": false,
+  "frames": 301,
+  "rowerFrameSamples": 7826,
+  "scope": "Every saved frame: all inner handles versus all 26 torso/skirt/head/helmet/crest/legs, shafts+handles versus deck/rails, all legs versus deck. Intentional hand/handle and joint connections excluded. No all-body self-collision claim.",
+  "bladeLowestPointRangeDuringRowing": [
+    -0.6345193982124329,
+    -0.10291248559951782
+  ],
+  "failures": [
+    {
+      "frame": 22,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 23,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 24,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 25,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 26,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 27,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ]
+      ]
+    },
+    {
+      "frame": 28,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ]
+      ]
+    },
+    {
+      "frame": 29,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ]
+      ]
+    },
+    {
+      "frame": 30,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ]
+      ]
+    },
+    {
+      "frame": 31,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ]
+      ]
+    },
+    {
+      "frame": 32,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ]
+      ]
+    },
+    {
+      "frame": 33,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ]
+      ]
+    },
+    {
+      "frame": 34,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ]
+      ]
+    },
+    {
+      "frame": 35,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ]
+      ]
+    },
+    {
+      "frame": 36,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ]
+      ]
+    },
+    {
+      "frame": 37,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ]
+      ]
+    },
+    {
+      "frame": 38,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ]
+      ]
+    },
+    {
+      "frame": 39,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ]
+      ]
+    },
+    {
+      "frame": 40,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ]
+      ]
+    },
+    {
+      "frame": 41,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ]
+      ]
+    },
+    {
+      "frame": 42,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ]
+      ]
+    },
+    {
+      "frame": 43,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ]
+      ]
+    },
+    {
+      "frame": 44,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ]
+      ]
+    },
+    {
+      "frame": 45,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ]
+      ]
+    },
+    {
+      "frame": 46,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ]
+      ]
+    },
+    {
+      "frame": 47,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ]
+      ]
+    },
+    {
+      "frame": 48,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ]
+      ]
+    },
+    {
+      "frame": 49,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ]
+      ]
+    },
+    {
+      "frame": 50,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ]
+      ]
+    },
+    {
+      "frame": 51,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ]
+      ]
+    },
+    {
+      "frame": 52,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ]
+      ]
+    },
+    {
+      "frame": 53,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ]
+      ]
+    },
+    {
+      "frame": 54,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ]
+      ]
+    },
+    {
+      "frame": 81,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 82,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 83,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 84,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 85,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 86,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 87,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 88,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ],
+        [
+          "n230:i25",
+          "add:seat-leaf-25"
+        ]
+      ]
+    },
+    {
+      "frame": 89,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i12",
+          "add:seat-leaf-12"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ]
+      ]
+    },
+    {
+      "frame": 90,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ],
+        [
+          "n230:i24",
+          "add:seat-leaf-24"
+        ]
+      ]
+    },
+    {
+      "frame": 91,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i11",
+          "add:seat-leaf-11"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ]
+      ]
+    },
+    {
+      "frame": 92,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ],
+        [
+          "n230:i23",
+          "add:seat-leaf-23"
+        ]
+      ]
+    },
+    {
+      "frame": 93,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i10",
+          "add:seat-leaf-10"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ]
+      ]
+    },
+    {
+      "frame": 94,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ],
+        [
+          "n230:i22",
+          "add:seat-leaf-22"
+        ]
+      ]
+    },
+    {
+      "frame": 95,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n229:i9",
+          "add:seat-leaf-9"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ]
+      ]
+    },
+    {
+      "frame": 96,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ],
+        [
+          "n230:i21",
+          "add:seat-leaf-21"
+        ]
+      ]
+    },
+    {
+      "frame": 97,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n229:i8",
+          "add:seat-leaf-8"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ]
+      ]
+    },
+    {
+      "frame": 98,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ],
+        [
+          "n230:i20",
+          "add:seat-leaf-20"
+        ]
+      ]
+    },
+    {
+      "frame": 99,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ]
+      ]
+    },
+    {
+      "frame": 100,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n229:i7",
+          "add:seat-leaf-7"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ]
+      ]
+    },
+    {
+      "frame": 101,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ],
+        [
+          "n230:i19",
+          "add:seat-leaf-19"
+        ]
+      ]
+    },
+    {
+      "frame": 102,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n229:i6",
+          "add:seat-leaf-6"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ]
+      ]
+    },
+    {
+      "frame": 103,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ],
+        [
+          "n230:i18",
+          "add:seat-leaf-18"
+        ]
+      ]
+    },
+    {
+      "frame": 104,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n229:i5",
+          "add:seat-leaf-5"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ]
+      ]
+    },
+    {
+      "frame": 105,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ],
+        [
+          "n230:i17",
+          "add:seat-leaf-17"
+        ]
+      ]
+    },
+    {
+      "frame": 106,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n229:i4",
+          "add:seat-leaf-4"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ]
+      ]
+    },
+    {
+      "frame": 107,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ],
+        [
+          "n230:i16",
+          "add:seat-leaf-16"
+        ]
+      ]
+    },
+    {
+      "frame": 108,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n229:i3",
+          "add:seat-leaf-3"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ]
+      ]
+    },
+    {
+      "frame": 109,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ],
+        [
+          "n230:i15",
+          "add:seat-leaf-15"
+        ]
+      ]
+    },
+    {
+      "frame": 110,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n229:i2",
+          "add:seat-leaf-2"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ]
+      ]
+    },
+    {
+      "frame": 111,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ],
+        [
+          "n230:i14",
+          "add:seat-leaf-14"
+        ]
+      ]
+    },
+    {
+      "frame": 112,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n229:i1",
+          "add:seat-leaf-1"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ]
+      ]
+    },
+    {
+      "frame": 113,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ],
+        [
+          "n230:i13",
+          "add:seat-leaf-13"
+        ]
+      ]
+    },
+    {
+      "frame": 114,
+      "handleBody": [],
+      "oarDeck": [],
+      "legsDeck": [],
+      "legsSeats": [
+        [
+          "n229:i0",
+          "add:seat-leaf-0"
+        ]
+      ]
+    }
+  ]
+}

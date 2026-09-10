@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "actorLocalGripErrors": {
+    "add:handL": 0.0,
+    "add:handR": 1.4552111177317274e-07
+  },
+  "changedGeometryNodes": [],
+  "testedMeshNodes": 29,
+  "geometryTolerance": 1e-06,
+  "scope": "Carry pose uses the original optimized soldier local geometry; full original figure scale retained. Exact hand anchor contact at retained shield and sword grip points."
+}

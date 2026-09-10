@@ -1,0 +1,34 @@
+{
+  "asset": "leviathanIsland",
+  "sourceBlend": "assets/models/originals/leviathan/blender-r3/leviathanIsland.blend",
+  "sourceBlendSha256": "53f3069f9cca770f535ae812dc10e438b0e84559def3df61a6d131bec3b4240f",
+  "sourceSnapshot": "assets/models/originals/leviathan/leviathanIsland.source.json",
+  "sourceSnapshotSha256": "07e94ae441cb4ab9f48e759412e8a8518a7b7d772bafdc28dc49c473ad8c8af9",
+  "scope": "Original whale/island/flora factory; excludes six runtime-attached garden scenes.",
+  "render": "artifacts/pipeline/saihoji-source-references/leviathanIsland-source-three-quarter.png",
+  "renderSha256": "857af22063f43aead295bea49aa5558a2ed7b31f64f5cd6aa8a3c751f7163798",
+  "sourceNodes": 295,
+  "visibleMeshObjects": 100,
+  "blenderBounds": [
+    [
+      -25.341480255126953,
+      -16.56498146057129,
+      -13.783699989318848
+    ],
+    [
+      22.029956817626953,
+      16.564979553222656,
+      4.965492248535156
+    ]
+  ],
+  "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+  "sourceFileUnchanged": true,
+  "foregroundUsed": false,
+  "sourceFileSaved": false,
+  "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+  "camera": {
+    "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+    "framing": "per-asset actual visible projected bounds plus 12% margin",
+    "orthographicScale": 45.59748077392578
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "source_sha256": "c18dfbd2d37dff6501fa799d99dd7e698aa1623d1c9c74939240562836a9a397",
+  "candidate_sha256": "0799b8c42bb3e0ba24227a2d221ec2b04af4718c3f2ebdfc943e67f7a9756ee7",
+  "removed": [
+    "add:boarding-rope--0.17",
+    "add:boarding-rope-0.17",
+    "add:boarding-post--0.17-0.1",
+    "add:boarding-post--0.17-1.23",
+    "add:boarding-post-0.17-0.1",
+    "add:boarding-post-0.17-1.23"
+  ],
+  "unchanged": "26 rowers,52 grips,all retained pose transforms, original hull/bow/cargo",
+  "runtime_integrated": false
+}

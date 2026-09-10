@@ -1,0 +1,5059 @@
+{
+  "passed": true,
+  "failures": [],
+  "asset": "romanSoldier_spear_blue",
+  "blender_version": "5.2.1 LTS",
+  "saved_objects": {
+    "add:forearmL": {
+      "name": "Forearm_L",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:forearmL",
+      "parent_id": "n17",
+      "matrix_world": [
+        1.3066290616989136,
+        1.1405491828918457,
+        0.9959253668785095,
+        0.0,
+        1.1405487060546875,
+        0.1238723173737526,
+        -1.6382317543029785,
+        0.0,
+        -0.10457221418619156,
+        0.17201431095600128,
+        -0.059797339141368866,
+        0.0,
+        0.0454278364777565,
+        -0.08798560500144958,
+        0.41020262241363525,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 16,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.012549933977425098,
+        -0.2773362696170807,
+        0.37481263279914856
+      ],
+      "bounds_max": [
+        0.17630228400230408,
+        -0.0663151741027832,
+        0.4983120560646057
+      ]
+    },
+    "add:sleeveL": {
+      "name": "Short_blue_sleeve_L",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:sleeveL",
+      "parent_id": "n17",
+      "matrix_world": [
+        1.9520392417907715,
+        -0.04858008027076721,
+        0.4326460659503937,
+        0.0,
+        -0.04858012869954109,
+        1.9507925510406494,
+        0.43823346495628357,
+        0.0,
+        -0.021632302552461624,
+        -0.02191167324781418,
+        0.09514158964157104,
+        0.0,
+        -0.004326460417360067,
+        -0.13838227093219757,
+        0.6290283203125,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 16,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m0"
+      ],
+      "bounds_min": [
+        -0.05703151971101761,
+        -0.19105367362499237,
+        0.520585298538208
+      ],
+      "bounds_max": [
+        0.05946989730000496,
+        -0.07433362305164337,
+        0.6456550359725952
+      ]
+    },
+    "add:handL": {
+      "name": "Closed_gripping_hand_L",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:handL",
+      "parent_id": "n17",
+      "matrix_world": [
+        1.0389349460601807,
+        -1.7089804410934448,
+        1.2902441426376754e-07,
+        0.0,
+        1.7089804410934448,
+        1.0389349460601807,
+        7.255837175534907e-08,
+        0.0,
+        -1.2902441426376754e-07,
+        7.255838596620379e-08,
+        2.0,
+        0.0,
+        0.15000000596046448,
+        -0.25999996066093445,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 248,
+      "triangles": 372,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.08728355169296265,
+        -0.2989935278892517,
+        0.4180000126361847
+      ],
+      "bounds_max": [
+        0.19237437844276428,
+        -0.19493834674358368,
+        0.5320000052452087
+      ]
+    },
+    "add:forearmR": {
+      "name": "Forearm_R",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:forearmR",
+      "parent_id": "n20",
+      "matrix_world": [
+        0.4738602340221405,
+        0.982405424118042,
+        1.6764057874679565,
+        0.0,
+        0.9824044704437256,
+        1.3676072359085083,
+        -1.0791347026824951,
+        0.0,
+        -0.17602264881134033,
+        0.11330905556678772,
+        -0.016645902767777443,
+        0.0,
+        0.023977339267730713,
+        0.31330907344818115,
+        0.503354012966156,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 16,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.004412381909787655,
+        0.1747419238090515,
+        0.4663332402706146
+      ],
+      "bounds_max": [
+        0.21565188467502594,
+        0.3448815643787384,
+        0.5496166348457336
+      ]
+    },
+    "add:sleeveR": {
+      "name": "Short_blue_sleeve_R",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:sleeveR",
+      "parent_id": "n20",
+      "matrix_world": [
+        1.9827079772949219,
+        -0.12931233644485474,
+        0.2283554971218109,
+        0.0,
+        -0.12931236624717712,
+        1.0329662561416626,
+        1.7077054977416992,
+        0.0,
+        -0.011417774483561516,
+        -0.0853852778673172,
+        0.05078372359275818,
+        0.0,
+        -0.0022835559211671352,
+        0.11692299693822861,
+        0.6201567649841309,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 16,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m0"
+      ],
+      "bounds_min": [
+        -0.05581667274236679,
+        0.08903290331363678,
+        0.5324864983558655
+      ],
+      "bounds_max": [
+        0.051960721611976624,
+        0.2246202677488327,
+        0.6662648320198059
+      ]
+    },
+    "add:handR": {
+      "name": "Closed_gripping_hand_R",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:handR",
+      "parent_id": "n20",
+      "matrix_world": [
+        1.6744489669799805,
+        -1.090030550956726,
+        -0.08974607288837433,
+        0.0,
+        1.087113857269287,
+        1.6767330169677734,
+        -0.08215845376253128,
+        0.0,
+        0.12001771479845047,
+        0.020002970471978188,
+        1.99629545211792,
+        0.0,
+        0.20000000298023224,
+        0.20000004768371582,
+        0.5199999809265137,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 248,
+      "triangles": 372,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.12829646468162537,
+        0.15556205809116364,
+        0.4673171043395996
+      ],
+      "bounds_max": [
+        0.24526739120483398,
+        0.2660007178783417,
+        0.5858427286148071
+      ]
+    },
+    "add:spear-grip-wrap": {
+      "name": "Spear_grip_wrap",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:spear-grip-wrap",
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006006688345223665,
+        1.9998998641967773,
+        -0.020002029836177826,
+        0.0,
+        0.008401243016123772,
+        0.001400141860358417,
+        0.13974067568778992,
+        0.0,
+        0.20000000298023224,
+        0.20000004768371582,
+        0.5199999809265137,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 16,
+      "triangles": 28,
+      "materials": [
+        "Spear leather grip"
+      ],
+      "bounds_min": [
+        0.17483723163604736,
+        0.17830094695091248,
+        0.4488694667816162
+      ],
+      "bounds_max": [
+        0.22516277432441711,
+        0.22169914841651917,
+        0.5911304950714111
+      ]
+    },
+    "add:armor:Helmet_Galea.002": {
+      "name": "Helmet_Galea.002",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:armor:Helmet_Galea.002",
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 816,
+      "triangles": 416,
+      "materials": [
+        "Roman_V2_Original_Bronze.001"
+      ],
+      "bounds_min": [
+        -0.10600001364946365,
+        -0.13399997353553772,
+        0.3579999804496765
+      ],
+      "bounds_max": [
+        0.09079086035490036,
+        0.1340000331401825,
+        0.9019999504089355
+      ]
+    },
+    "add:armor:Skirt_Ten_Separated_Lames.002": {
+      "name": "Skirt_Ten_Separated_Lames.002",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:armor:Skirt_Ten_Separated_Lames.002",
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 240,
+      "triangles": 120,
+      "materials": [
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "bounds_min": [
+        -0.11168180406093597,
+        -0.16129085421562195,
+        0.21599999070167542
+      ],
+      "bounds_max": [
+        0.11168178915977478,
+        0.16129088401794434,
+        0.35600000619888306
+      ]
+    },
+    "add:armor:Waist_Belt.002": {
+      "name": "Waist_Belt.002",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:armor:Waist_Belt.002",
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 240,
+      "triangles": 160,
+      "materials": [
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "bounds_min": [
+        -0.08399999886751175,
+        -0.12199997901916504,
+        0.35199999809265137
+      ],
+      "bounds_max": [
+        0.08399999886751175,
+        0.12200002372264862,
+        0.3880000114440918
+      ]
+    },
+    "add:shield-handle:Gold_Lower_Bracket": {
+      "name": "Gold_Lower_Bracket",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:shield-handle:Gold_Lower_Bracket",
+      "parent_id": "n32",
+      "matrix_world": [
+        1.8008939027786255,
+        -0.8699313998222351,
+        6.567797328216329e-08,
+        0.0,
+        0.8699313998222351,
+        1.8008939027786255,
+        1.5032078692911455e-08,
+        0.0,
+        -6.567798038759065e-08,
+        1.5032078692911455e-08,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 24,
+      "triangles": 12,
+      "materials": [
+        "Roman_Handle_Gold_Brackets"
+      ],
+      "bounds_min": [
+        0.13589803874492645,
+        -0.3154159188270569,
+        0.35600003600120544
+      ],
+      "bounds_max": [
+        0.2361377775669098,
+        -0.23938119411468506,
+        0.40400001406669617
+      ]
+    },
+    "add:shield-handle:Gold_Upper_Bracket": {
+      "name": "Gold_Upper_Bracket",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:shield-handle:Gold_Upper_Bracket",
+      "parent_id": "n32",
+      "matrix_world": [
+        1.8008939027786255,
+        -0.8699313998222351,
+        6.567797328216329e-08,
+        0.0,
+        0.8699313998222351,
+        1.8008939027786255,
+        1.5032078692911455e-08,
+        0.0,
+        -6.567798038759065e-08,
+        1.5032078692911455e-08,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 24,
+      "triangles": 12,
+      "materials": [
+        "Roman_Handle_Gold_Brackets"
+      ],
+      "bounds_min": [
+        0.13589802384376526,
+        -0.3154159188270569,
+        0.5360000133514404
+      ],
+      "bounds_max": [
+        0.2361377775669098,
+        -0.23938119411468506,
+        0.5840000510215759
+      ]
+    },
+    "add:shield-handle:Wooden_Grip": {
+      "name": "Wooden_Grip",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:shield-handle:Wooden_Grip",
+      "parent_id": "n32",
+      "matrix_world": [
+        1.8008939027786255,
+        -0.8699313998222351,
+        6.567797328216329e-08,
+        0.0,
+        0.8699313998222351,
+        1.8008939027786255,
+        1.5032078692911455e-08,
+        0.0,
+        -6.567798038759065e-08,
+        1.5032078692911455e-08,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "Roman_Handle_Dark_Wood"
+      ],
+      "bounds_min": [
+        0.1348915547132492,
+        -0.2751083970069885,
+        0.40000003576278687
+      ],
+      "bounds_max": [
+        0.16510848701000214,
+        -0.2448914647102356,
+        0.5400000214576721
+      ]
+    },
+    "n0": {
+      "name": "harbor-patrol-soldier",
+      "type": "EMPTY",
+      "original_id": "n0",
+      "added_id": null,
+      "parent_id": null,
+      "matrix_world": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n1": {
+      "name": "n1",
+      "type": "EMPTY",
+      "original_id": "n1",
+      "added_id": null,
+      "parent_id": "n0",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n2": {
+      "name": "porter-body",
+      "type": "EMPTY",
+      "original_id": "n2",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n3": {
+      "name": "n3",
+      "type": "MESH",
+      "original_id": "n3",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 45,
+      "triangles": 79,
+      "materials": [
+        "MeshToonMaterial_m0"
+      ],
+      "bounds_min": [
+        -0.07999999821186066,
+        -0.1419999599456787,
+        0.38199999928474426
+      ],
+      "bounds_max": [
+        0.07999999821186066,
+        0.14200004935264587,
+        0.6599999666213989
+      ]
+    },
+    "n4": {
+      "name": "n4",
+      "type": "MESH",
+      "original_id": "n4",
+      "added_id": null,
+      "parent_id": "n3",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 108,
+      "triangles": 36,
+      "materials": [
+        "MeshBasicMaterial_m1"
+      ],
+      "bounds_min": [
+        -0.16067764163017273,
+        -0.10836396366357803,
+        0.33342882990837097
+      ],
+      "bounds_max": [
+        0.16067764163017273,
+        0.108364038169384,
+        0.7145711183547974
+      ]
+    },
+    "n5": {
+      "name": "n5",
+      "type": "MESH",
+      "original_id": "n5",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 108,
+      "triangles": 36,
+      "materials": [
+        "MeshToonMaterial_m2"
+      ],
+      "bounds_min": [
+        -0.2017812281847,
+        -0.12704741954803467,
+        0.17031945288181305
+      ],
+      "bounds_max": [
+        0.2017812281847,
+        0.12704746425151825,
+        0.3496805429458618
+      ]
+    },
+    "n6": {
+      "name": "n6",
+      "type": "MESH",
+      "original_id": "n6",
+      "added_id": null,
+      "parent_id": "n5",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 108,
+      "triangles": 36,
+      "materials": [
+        "MeshBasicMaterial_m1"
+      ],
+      "bounds_min": [
+        -0.2017812281847,
+        -0.12704741954803467,
+        0.17031945288181305
+      ],
+      "bounds_max": [
+        0.2017812281847,
+        0.12704746425151825,
+        0.3496805429458618
+      ]
+    },
+    "n7": {
+      "name": "n7",
+      "type": "MESH",
+      "original_id": "n7",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        6.278329465203569e-07,
+        2.0,
+        -1.5099583094979607e-07,
+        0.0,
+        -2.0,
+        6.278329465203569e-07,
+        1.5099574568466778e-07,
+        0.0,
+        1.5099578831723193e-07,
+        1.5099578831723193e-07,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 108,
+      "triangles": 36,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.06023543328046799,
+        -0.08743848651647568,
+        0.6071875691413879
+      ],
+      "bounds_max": [
+        0.06023543328046799,
+        0.08743859082460403,
+        0.8248124122619629
+      ]
+    },
+    "n8": {
+      "name": "n8",
+      "type": "MESH",
+      "original_id": "n8",
+      "added_id": null,
+      "parent_id": "n7",
+      "matrix_world": [
+        6.278329465203569e-07,
+        2.0,
+        -1.5099583094979607e-07,
+        0.0,
+        -2.0,
+        6.278329465203569e-07,
+        1.5099574568466778e-07,
+        0.0,
+        1.5099578831723193e-07,
+        1.5099578831723193e-07,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 108,
+      "triangles": 36,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        -0.06023543328046799,
+        -0.08743848651647568,
+        0.6071875691413879
+      ],
+      "bounds_max": [
+        0.06023543328046799,
+        0.08743859082460403,
+        0.8248124122619629
+      ]
+    },
+    "n9": {
+      "name": "soldier-helm",
+      "type": "MESH",
+      "original_id": "n9",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 216,
+      "triangles": 72,
+      "materials": [
+        "MeshToonMaterial_m5"
+      ],
+      "bounds_min": [
+        -0.15199999511241913,
+        -0.05799994245171547,
+        0.6419999599456787
+      ],
+      "bounds_max": [
+        0.15199999511241913,
+        0.05800005793571472,
+        0.9459999799728394
+      ]
+    },
+    "n10": {
+      "name": "n10",
+      "type": "MESH",
+      "original_id": "n10",
+      "added_id": null,
+      "parent_id": "n9",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.5669287140317465e-08,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 216,
+      "triangles": 72,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        -0.15199999511241913,
+        -0.05799994245171547,
+        0.6419999599456787
+      ],
+      "bounds_max": [
+        0.15199999511241913,
+        0.05800005793571472,
+        0.9459999799728394
+      ]
+    },
+    "n11": {
+      "name": "soldier-crest",
+      "type": "MESH",
+      "original_id": "n11",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.2951363476408915e-08,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 120,
+      "triangles": 40,
+      "materials": [
+        "MeshToonMaterial_m6"
+      ],
+      "bounds_min": [
+        -0.16333334147930145,
+        -0.013333265669643879,
+        0.8880000114440918
+      ],
+      "bounds_max": [
+        0.1666666716337204,
+        0.013333422131836414,
+        1.1766667366027832
+      ]
+    },
+    "n12": {
+      "name": "n12",
+      "type": "MESH",
+      "original_id": "n12",
+      "added_id": null,
+      "parent_id": "n11",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.2951363476408915e-08,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 120,
+      "triangles": 40,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        -0.16333334147930145,
+        -0.013333265669643879,
+        0.8880000114440918
+      ],
+      "bounds_max": [
+        0.1666666716337204,
+        0.013333422131836414,
+        1.1766667366027832
+      ]
+    },
+    "n13": {
+      "name": "soldier-crest-feathers",
+      "type": "MESH",
+      "original_id": "n13",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.2951363476408915e-08,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 720,
+      "triangles": 240,
+      "materials": [
+        "MeshToonMaterial_m7"
+      ],
+      "bounds_min": [
+        -0.1623866707086563,
+        -0.018666600808501244,
+        0.890666663646698
+      ],
+      "bounds_max": [
+        0.1623866707086563,
+        -0.010666578076779842,
+        1.1766667366027832
+      ]
+    },
+    "n14": {
+      "name": "n14",
+      "type": "MESH",
+      "original_id": "n14",
+      "added_id": null,
+      "parent_id": "n13",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.2951363476408915e-08,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 720,
+      "triangles": 240,
+      "materials": [
+        "MeshBasicMaterial_m8"
+      ],
+      "bounds_min": [
+        -0.1623866707086563,
+        -0.018666600808501244,
+        0.890666663646698
+      ],
+      "bounds_max": [
+        0.1623866707086563,
+        -0.010666578076779842,
+        1.1766667366027832
+      ]
+    },
+    "n15": {
+      "name": "soldier-crest-stems",
+      "type": "MESH",
+      "original_id": "n15",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.2951363476408915e-08,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 540,
+      "triangles": 180,
+      "materials": [
+        "MeshToonMaterial_m9"
+      ],
+      "bounds_min": [
+        -0.16107602417469025,
+        -0.023999935016036034,
+        0.8952013850212097
+      ],
+      "bounds_max": [
+        0.16107602417469025,
+        -0.014666576869785786,
+        1.1766667366027832
+      ]
+    },
+    "n16": {
+      "name": "n16",
+      "type": "MESH",
+      "original_id": "n16",
+      "added_id": null,
+      "parent_id": "n15",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        2.2951363476408915e-08,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 540,
+      "triangles": 180,
+      "materials": [
+        "MeshBasicMaterial_m10"
+      ],
+      "bounds_min": [
+        -0.16107602417469025,
+        -0.023999935016036034,
+        0.8952013850212097
+      ],
+      "bounds_max": [
+        0.16107602417469025,
+        -0.014666576869785786,
+        1.1766667366027832
+      ]
+    },
+    "n17": {
+      "name": "n17",
+      "type": "EMPTY",
+      "original_id": "n17",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        -0.13399995863437653,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n18": {
+      "name": "n18",
+      "type": "MESH",
+      "original_id": "n18",
+      "added_id": null,
+      "parent_id": "n17",
+      "matrix_world": [
+        1.9520392417907715,
+        -0.048580002039670944,
+        0.43264612555503845,
+        0.0,
+        -0.04858003929257393,
+        1.950792670249939,
+        0.4382326602935791,
+        0.0,
+        -0.0454278402030468,
+        -0.04601443186402321,
+        0.1997973620891571,
+        0.0,
+        0.0,
+        -0.13399995863437653,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 16,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.04294486343860626,
+        -0.1769174039363861,
+        0.3993644714355469
+      ],
+      "bounds_max": [
+        0.07978373020887375,
+        -0.05365172401070595,
+        0.6235477328300476
+      ]
+    },
+    "n19": {
+      "name": "n19",
+      "type": "MESH",
+      "original_id": "n19",
+      "added_id": null,
+      "parent_id": "n18",
+      "matrix_world": [
+        1.9520392417907715,
+        -0.048580002039670944,
+        0.43264612555503845,
+        0.0,
+        -0.04858003929257393,
+        1.950792670249939,
+        0.4382326602935791,
+        0.0,
+        -0.0454278402030468,
+        -0.04601443186402321,
+        0.1997973620891571,
+        0.0,
+        0.0,
+        -0.13399995863437653,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        -0.04106449708342552,
+        -0.1778184324502945,
+        0.5658112168312073
+      ],
+      "bounds_max": [
+        0.05547348037362099,
+        -0.08532156050205231,
+        0.6209591627120972
+      ]
+    },
+    "n20": {
+      "name": "n20",
+      "type": "EMPTY",
+      "original_id": "n20",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.1340000480413437,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n21": {
+      "name": "n21",
+      "type": "MESH",
+      "original_id": "n21",
+      "added_id": null,
+      "parent_id": "n20",
+      "matrix_world": [
+        1.9827079772949219,
+        -0.12931230664253235,
+        0.2283555269241333,
+        0.0,
+        -0.12931232154369354,
+        1.0329668521881104,
+        1.7077052593231201,
+        0.0,
+        -0.023977333679795265,
+        -0.17930908501148224,
+        0.10664591938257217,
+        0.0,
+        0.0,
+        0.1340000480413437,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 16,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.04361957684159279,
+        0.11127477884292603,
+        0.4732983410358429
+      ],
+      "bounds_max": [
+        0.058873001486063004,
+        0.3314892649650574,
+        0.6475695371627808
+      ]
+    },
+    "n22": {
+      "name": "n22",
+      "type": "MESH",
+      "original_id": "n22",
+      "added_id": null,
+      "parent_id": "n21",
+      "matrix_world": [
+        1.9827079772949219,
+        -0.12931230664253235,
+        0.2283555269241333,
+        0.0,
+        -0.12931232154369354,
+        1.0329668521881104,
+        1.7077052593231201,
+        0.0,
+        -0.023977333679795265,
+        -0.17930908501148224,
+        0.10664591938257217,
+        0.0,
+        0.0,
+        0.1340000480413437,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        -0.04439179599285126,
+        0.11540664732456207,
+        0.549602746963501
+      ],
+      "bounds_max": [
+        0.05366290360689163,
+        0.18460048735141754,
+        0.6372841596603394
+      ]
+    },
+    "n23": {
+      "name": "n23",
+      "type": "EMPTY",
+      "original_id": "n23",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        -0.19966664910316467,
+        0.0,
+        0.0,
+        0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        0.012000000104308128,
+        -0.06199997290968895,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n24": {
+      "name": "n24",
+      "type": "MESH",
+      "original_id": "n24",
+      "added_id": null,
+      "parent_id": "n23",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        -0.19966664910316467,
+        0.0,
+        0.0,
+        0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        0.012000000104308128,
+        -0.06199997290968895,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.04125916212797165,
+        -0.149666890501976,
+        0.01707572489976883
+      ],
+      "bounds_max": [
+        0.0652591660618782,
+        -0.03141091391444206,
+        0.343793660402298
+      ]
+    },
+    "n25": {
+      "name": "n25",
+      "type": "MESH",
+      "original_id": "n25",
+      "added_id": null,
+      "parent_id": "n24",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        -0.19966664910316467,
+        0.0,
+        0.0,
+        0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        0.012000000104308128,
+        -0.06199997290968895,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        -0.04125916212797165,
+        -0.149666890501976,
+        0.01707572489976883
+      ],
+      "bounds_max": [
+        0.0652591660618782,
+        -0.03141091391444206,
+        0.343793660402298
+      ]
+    },
+    "n26": {
+      "name": "n26",
+      "type": "EMPTY",
+      "original_id": "n26",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        0.19966664910316467,
+        0.0,
+        0.0,
+        -0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        -0.012000000104308128,
+        0.06200002506375313,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n27": {
+      "name": "n27",
+      "type": "MESH",
+      "original_id": "n27",
+      "added_id": null,
+      "parent_id": "n26",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        0.19966664910316467,
+        0.0,
+        0.0,
+        -0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        -0.012000000104308128,
+        0.06200002506375313,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.0652591660618782,
+        0.024189867079257965,
+        0.01600799895823002
+      ],
+      "bounds_max": [
+        0.04125916212797165,
+        0.13902528584003448,
+        0.3430691361427307
+      ]
+    },
+    "n28": {
+      "name": "n28",
+      "type": "MESH",
+      "original_id": "n28",
+      "added_id": null,
+      "parent_id": "n27",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        0.19966664910316467,
+        0.0,
+        0.0,
+        -0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        -0.012000000104308128,
+        0.06200002506375313,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        -0.0652591660618782,
+        0.024189867079257965,
+        0.01600799895823002
+      ],
+      "bounds_max": [
+        0.04125916212797165,
+        0.13902528584003448,
+        0.3430691361427307
+      ]
+    },
+    "n29": {
+      "name": "porter-crate",
+      "type": "MESH",
+      "original_id": "n29",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        1.9900083541870117,
+        -1.5074427039962757e-08,
+        -0.199666827917099,
+        0.0,
+        1.5074427039962757e-08,
+        2.0,
+        -7.543500823992133e-10,
+        0.0,
+        0.199666827917099,
+        -7.543499713769108e-10,
+        1.9900083541870117,
+        0.0,
+        0.47999998927116394,
+        4.076886739312613e-08,
+        0.5400000214576721,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": false,
+      "candidate_hidden": true,
+      "vertices": 36,
+      "triangles": 12,
+      "materials": [
+        "MeshToonMaterial_m11"
+      ],
+      "bounds_min": [
+        0.31976768374443054,
+        -0.1199999675154686,
+        0.4155745506286621
+      ],
+      "bounds_max": [
+        0.640232264995575,
+        0.12000004947185516,
+        0.6644254922866821
+      ]
+    },
+    "n30": {
+      "name": "n30",
+      "type": "MESH",
+      "original_id": "n30",
+      "added_id": null,
+      "parent_id": "n29",
+      "matrix_world": [
+        1.9900083541870117,
+        -1.5074427039962757e-08,
+        -0.199666827917099,
+        0.0,
+        1.5074427039962757e-08,
+        2.0,
+        -7.543500823992133e-10,
+        0.0,
+        0.199666827917099,
+        -7.543499713769108e-10,
+        1.9900083541870117,
+        0.0,
+        0.47999998927116394,
+        4.076886739312613e-08,
+        0.5400000214576721,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 36,
+      "triangles": 12,
+      "materials": [
+        "MeshBasicMaterial_m1"
+      ],
+      "bounds_min": [
+        0.31976768374443054,
+        -0.1199999675154686,
+        0.4155745506286621
+      ],
+      "bounds_max": [
+        0.640232264995575,
+        0.12000004947185516,
+        0.6644254922866821
+      ]
+    },
+    "n31": {
+      "name": "infiltration-equipment",
+      "type": "EMPTY",
+      "original_id": "n31",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n32": {
+      "name": "left-hand-shield",
+      "type": "EMPTY",
+      "original_id": "n32",
+      "added_id": null,
+      "parent_id": "n31",
+      "matrix_world": [
+        1.8008939027786255,
+        -0.8699313998222351,
+        6.567797328216329e-08,
+        0.0,
+        0.8699313998222351,
+        1.8008939027786255,
+        1.5032078692911455e-08,
+        0.0,
+        -6.567798038759065e-08,
+        1.5032078692911455e-08,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n33": {
+      "name": "n33",
+      "type": "MESH",
+      "original_id": "n33",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        7.028573634215718e-08,
+        -5.064591590553391e-08,
+        2.0,
+        0.0,
+        0.8699312806129456,
+        1.800894021987915,
+        1.5032085798338812e-08,
+        0.0,
+        -1.800894021987915,
+        0.8699312806129456,
+        8.531782924592335e-08,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 96,
+      "triangles": 32,
+      "materials": [
+        "MeshToonMaterial_m12"
+      ],
+      "bounds_min": [
+        0.13684353232383728,
+        -0.5001145601272583,
+        0.27000001072883606
+      ],
+      "bounds_max": [
+        0.36125484108924866,
+        -0.11557772755622864,
+        0.6700000166893005
+      ]
+    },
+    "n34": {
+      "name": "n34",
+      "type": "MESH",
+      "original_id": "n34",
+      "added_id": null,
+      "parent_id": "n33",
+      "matrix_world": [
+        7.028573634215718e-08,
+        -5.064591590553391e-08,
+        2.0,
+        0.0,
+        0.8699312806129456,
+        1.800894021987915,
+        1.5032085798338812e-08,
+        0.0,
+        -1.800894021987915,
+        0.8699312806129456,
+        8.531782924592335e-08,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 96,
+      "triangles": 32,
+      "materials": [
+        "MeshBasicMaterial_m4"
+      ],
+      "bounds_min": [
+        0.13684353232383728,
+        -0.5001145601272583,
+        0.27000001072883606
+      ],
+      "bounds_max": [
+        0.36125484108924866,
+        -0.11557772755622864,
+        0.6700000166893005
+      ]
+    },
+    "n35": {
+      "name": "n35",
+      "type": "MESH",
+      "original_id": "n35",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        0.8699317574501038,
+        1.800893783569336,
+        -1.3596373094060255e-07,
+        0.0,
+        -1.800893783569336,
+        0.8699317574501038,
+        8.531780082421392e-08,
+        0.0,
+        1.3596371672974783e-07,
+        8.53177866133592e-08,
+        2.0,
+        0.0,
+        0.28506705164909363,
+        -0.3252447843551636,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 192,
+      "triangles": 64,
+      "materials": [
+        "MeshToonMaterial_m13"
+      ],
+      "bounds_min": [
+        0.174723282456398,
+        -0.5305466651916504,
+        0.2420000284910202
+      ],
+      "bounds_max": [
+        0.39541080594062805,
+        -0.11994288861751556,
+        0.6980000138282776
+      ]
+    },
+    "n36": {
+      "name": "n36",
+      "type": "MESH",
+      "original_id": "n36",
+      "added_id": null,
+      "parent_id": "n35",
+      "matrix_world": [
+        0.8699317574501038,
+        1.800893783569336,
+        -1.3596373094060255e-07,
+        0.0,
+        -1.800893783569336,
+        0.8699317574501038,
+        8.531780082421392e-08,
+        0.0,
+        1.3596371672974783e-07,
+        8.53177866133592e-08,
+        2.0,
+        0.0,
+        0.28506705164909363,
+        -0.3252447843551636,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 192,
+      "triangles": 64,
+      "materials": [
+        "MeshBasicMaterial_m14"
+      ],
+      "bounds_min": [
+        0.174723282456398,
+        -0.5305466651916504,
+        0.2420000284910202
+      ],
+      "bounds_max": [
+        0.39541080594062805,
+        -0.11994288861751556,
+        0.6980000138282776
+      ]
+    },
+    "n37": {
+      "name": "shield-boss",
+      "type": "MESH",
+      "original_id": "n37",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        7.028573634215718e-08,
+        -5.064591590553391e-08,
+        2.0,
+        0.0,
+        0.8699312806129456,
+        1.800894021987915,
+        1.5032085798338812e-08,
+        0.0,
+        -1.800894021987915,
+        0.8699312806129456,
+        8.531782924592335e-08,
+        0.0,
+        0.29947420954704285,
+        -0.33220425248146057,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m15"
+      ],
+      "bounds_min": [
+        0.2462102770805359,
+        -0.39245039224624634,
+        0.4266987442970276
+      ],
+      "bounds_max": [
+        0.3527381420135498,
+        -0.2719581127166748,
+        0.5133013129234314
+      ]
+    },
+    "n38": {
+      "name": "n38",
+      "type": "MESH",
+      "original_id": "n38",
+      "added_id": null,
+      "parent_id": "n37",
+      "matrix_world": [
+        7.028573634215718e-08,
+        -5.064591590553391e-08,
+        2.0,
+        0.0,
+        0.8699312806129456,
+        1.800894021987915,
+        1.5032085798338812e-08,
+        0.0,
+        -1.800894021987915,
+        0.8699312806129456,
+        8.531782924592335e-08,
+        0.0,
+        0.29947420954704285,
+        -0.33220425248146057,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshBasicMaterial_m16"
+      ],
+      "bounds_min": [
+        0.2462102770805359,
+        -0.39245039224624634,
+        0.4266987442970276
+      ],
+      "bounds_max": [
+        0.3527381420135498,
+        -0.2719581127166748,
+        0.5133013129234314
+      ]
+    },
+    "n39": {
+      "name": "shield-sigil",
+      "type": "MESH",
+      "original_id": "n39",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        1.8008939027786255,
+        -0.8699313998222351,
+        6.567797328216329e-08,
+        0.0,
+        0.8699313998222351,
+        1.8008939027786255,
+        1.5032078692911455e-08,
+        0.0,
+        -6.567798038759065e-08,
+        1.5032078692911455e-08,
+        2.0,
+        0.0,
+        0.29587242007255554,
+        -0.33046436309814453,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 36,
+      "triangles": 12,
+      "materials": [
+        "MeshToonMaterial_m13"
+      ],
+      "bounds_min": [
+        0.27549782395362854,
+        -0.35549378395080566,
+        0.406000018119812
+      ],
+      "bounds_max": [
+        0.31624701619148254,
+        -0.3054349422454834,
+        0.534000039100647
+      ]
+    },
+    "n40": {
+      "name": "n40",
+      "type": "MESH",
+      "original_id": "n40",
+      "added_id": null,
+      "parent_id": "n39",
+      "matrix_world": [
+        1.8008939027786255,
+        -0.8699313998222351,
+        6.567797328216329e-08,
+        0.0,
+        0.8699313998222351,
+        1.8008939027786255,
+        1.5032078692911455e-08,
+        0.0,
+        -6.567798038759065e-08,
+        1.5032078692911455e-08,
+        2.0,
+        0.0,
+        0.29587242007255554,
+        -0.33046436309814453,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 36,
+      "triangles": 12,
+      "materials": [
+        "MeshBasicMaterial_m8"
+      ],
+      "bounds_min": [
+        0.27549782395362854,
+        -0.35549378395080566,
+        0.406000018119812
+      ],
+      "bounds_max": [
+        0.31624701619148254,
+        -0.3054349422454834,
+        0.534000039100647
+      ]
+    },
+    "n41": {
+      "name": "right-hand-long-spear",
+      "type": "EMPTY",
+      "original_id": "n41",
+      "added_id": null,
+      "parent_id": "n31",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006007248302921653,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001775205135345,
+        0.020002959296107292,
+        1.99629545211792,
+        0.0,
+        0.20000000298023224,
+        0.20000004768371582,
+        0.5199999809265137,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n42": {
+      "name": "n42",
+      "type": "MESH",
+      "original_id": "n42",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.3575490713119507,
+        -0.00040850526420399547,
+        -0.08161207288503647,
+        0.0,
+        -0.00040849242941476405,
+        1.3599319458007812,
+        -0.013602006249129772,
+        0.0,
+        0.12001775205135345,
+        0.020002948120236397,
+        1.99629545211792,
+        0.0,
+        0.21320195496082306,
+        0.20220038294792175,
+        0.7395924925804138,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m17"
+      ],
+      "bounds_min": [
+        0.15718244016170502,
+        0.17424052953720093,
+        0.11950122565031052
+      ],
+      "bounds_max": [
+        0.26451796293258667,
+        0.22472050786018372,
+        1.3593738079071045
+      ]
+    },
+    "n43": {
+      "name": "n43",
+      "type": "MESH",
+      "original_id": "n43",
+      "added_id": null,
+      "parent_id": "n42",
+      "matrix_world": [
+        1.3575490713119507,
+        -0.00040850526420399547,
+        -0.08161207288503647,
+        0.0,
+        -0.00040849242941476405,
+        1.3599319458007812,
+        -0.013602006249129772,
+        0.0,
+        0.12001775205135345,
+        0.020002948120236397,
+        1.99629545211792,
+        0.0,
+        0.21320195496082306,
+        0.20220038294792175,
+        0.7395924925804138,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshBasicMaterial_m8"
+      ],
+      "bounds_min": [
+        0.15718244016170502,
+        0.17424052953720093,
+        0.11950122565031052
+      ],
+      "bounds_max": [
+        0.26451796293258667,
+        0.22472050786018372,
+        1.3593738079071045
+      ]
+    },
+    "n44": {
+      "name": "n44",
+      "type": "MESH",
+      "original_id": "n44",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006007248302921653,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001775205135345,
+        0.020002959296107292,
+        1.99629545211792,
+        0.0,
+        0.17479628324508667,
+        0.19579939544200897,
+        0.10077795386314392,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m5"
+      ],
+      "bounds_min": [
+        0.1463705450296402,
+        0.16025127470493317,
+        0.05449402704834938
+      ],
+      "bounds_max": [
+        0.20862281322479248,
+        0.23224766552448273,
+        0.1477455198764801
+      ]
+    },
+    "n45": {
+      "name": "n45",
+      "type": "MESH",
+      "original_id": "n45",
+      "added_id": null,
+      "parent_id": "n44",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006007248302921653,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001775205135345,
+        0.020002959296107292,
+        1.99629545211792,
+        0.0,
+        0.17479628324508667,
+        0.19579939544200897,
+        0.10077795386314392,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshBasicMaterial_m8"
+      ],
+      "bounds_min": [
+        0.1463705450296402,
+        0.16025127470493317,
+        0.05449402704834938
+      ],
+      "bounds_max": [
+        0.20862281322479248,
+        0.23224766552448273,
+        0.1477455198764801
+      ]
+    },
+    "n46": {
+      "name": "n46",
+      "type": "MESH",
+      "original_id": "n46",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006007248302921653,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001775205135345,
+        0.020002959296107292,
+        1.99629545211792,
+        0.0,
+        0.24980737268924713,
+        0.2083013355731964,
+        1.3484625816345215,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m5"
+      ],
+      "bounds_min": [
+        0.20447632670402527,
+        0.15795378386974335,
+        1.3106789588928223
+      ],
+      "bounds_max": [
+        0.295138418674469,
+        0.25864890217781067,
+        1.3862462043762207
+      ]
+    },
+    "n47": {
+      "name": "n47",
+      "type": "MESH",
+      "original_id": "n47",
+      "added_id": null,
+      "parent_id": "n46",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006007248302921653,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001775205135345,
+        0.020002959296107292,
+        1.99629545211792,
+        0.0,
+        0.24980737268924713,
+        0.2083013355731964,
+        1.3484625816345215,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshBasicMaterial_m8"
+      ],
+      "bounds_min": [
+        0.20447632670402527,
+        0.15795378386974335,
+        1.3106789588928223
+      ],
+      "bounds_max": [
+        0.295138418674469,
+        0.25864890217781067,
+        1.3862462043762207
+      ]
+    },
+    "n48": {
+      "name": "long-spear-head",
+      "type": "MESH",
+      "original_id": "n48",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006007248302921653,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001775205135345,
+        0.020002959296107292,
+        1.99629545211792,
+        0.0,
+        0.2618091404438019,
+        0.21030165255069733,
+        1.5480921268463135,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 6,
+      "triangles": 8,
+      "materials": [
+        "Candidate bronze"
+      ],
+      "bounds_min": [
+        0.2055061012506485,
+        0.19190248847007751,
+        1.3784070014953613
+      ],
+      "bounds_max": [
+        0.31331145763397217,
+        0.2279006838798523,
+        1.7177772521972656
+      ]
+    },
+    "n49": {
+      "name": "n49",
+      "type": "MESH",
+      "original_id": "n49",
+      "added_id": null,
+      "parent_id": "n48",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007430492900312,
+        -0.12001775205135345,
+        0.0,
+        -0.0006007248302921653,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001775205135345,
+        0.020002959296107292,
+        1.99629545211792,
+        0.0,
+        0.2618091404438019,
+        0.21030165255069733,
+        1.5480921268463135,
+        1.0
+      ],
+      "hide_render": true,
+      "source_visible": true,
+      "candidate_hidden": true,
+      "vertices": 36,
+      "triangles": 12,
+      "materials": [
+        "MeshBasicMaterial_m14"
+      ],
+      "bounds_min": [
+        0.1616876870393753,
+        0.10460659116506577,
+        1.372482180595398
+      ],
+      "bounds_max": [
+        0.3415275812149048,
+        0.3125961720943451,
+        1.7177772521972656
+      ]
+    }
+  },
+  "glb_objects": {
+    "n0": {
+      "name": "harbor-patrol-soldier",
+      "type": "EMPTY",
+      "original_id": "n0",
+      "added_id": null,
+      "parent_id": null,
+      "matrix_world": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n1": {
+      "name": "n1",
+      "type": "EMPTY",
+      "original_id": "n1",
+      "added_id": null,
+      "parent_id": "n0",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n31": {
+      "name": "infiltration-equipment",
+      "type": "EMPTY",
+      "original_id": "n31",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n32": {
+      "name": "left-hand-shield",
+      "type": "EMPTY",
+      "original_id": "n32",
+      "added_id": null,
+      "parent_id": "n31",
+      "matrix_world": [
+        1.800894021987915,
+        -0.8699315190315247,
+        0.0,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "add:shield-handle:Gold_Lower_Bracket": {
+      "name": "Gold_Lower_Bracket",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:shield-handle:Gold_Lower_Bracket",
+      "parent_id": "n32",
+      "matrix_world": [
+        1.800894021987915,
+        -0.8699315190315247,
+        0.0,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 24,
+      "triangles": 12,
+      "materials": [
+        "Roman_Handle_Gold_Brackets"
+      ],
+      "bounds_min": [
+        0.13589802384376526,
+        -0.3154159188270569,
+        0.35600003600120544
+      ],
+      "bounds_max": [
+        0.2361377775669098,
+        -0.23938119411468506,
+        0.40400004386901855
+      ]
+    },
+    "add:shield-handle:Gold_Upper_Bracket": {
+      "name": "Gold_Upper_Bracket",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:shield-handle:Gold_Upper_Bracket",
+      "parent_id": "n32",
+      "matrix_world": [
+        1.800894021987915,
+        -0.8699315190315247,
+        0.0,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 24,
+      "triangles": 12,
+      "materials": [
+        "Roman_Handle_Gold_Brackets"
+      ],
+      "bounds_min": [
+        0.13589802384376526,
+        -0.3154159188270569,
+        0.5360000133514404
+      ],
+      "bounds_max": [
+        0.2361377775669098,
+        -0.23938119411468506,
+        0.5840000510215759
+      ]
+    },
+    "n33": {
+      "name": "n33",
+      "type": "MESH",
+      "original_id": "n33",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        -2.419660631858278e-07,
+        1.1688300105561211e-07,
+        2.000000238418579,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        -1.8008942604064941,
+        0.8699316382408142,
+        -2.687177129701013e-07,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 96,
+      "triangles": 32,
+      "materials": [
+        "MeshToonMaterial_m12"
+      ],
+      "bounds_min": [
+        0.1368435025215149,
+        -0.5001146197319031,
+        0.26999998092651367
+      ],
+      "bounds_max": [
+        0.36125487089157104,
+        -0.11557772010564804,
+        0.6700000762939453
+      ]
+    },
+    "n34": {
+      "name": "n34",
+      "type": "EMPTY",
+      "original_id": "n34",
+      "added_id": null,
+      "parent_id": "n33",
+      "matrix_world": [
+        -2.419660631858278e-07,
+        1.1688300105561211e-07,
+        2.000000238418579,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        -1.8008942604064941,
+        0.8699316382408142,
+        -2.687177129701013e-07,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n35": {
+      "name": "n35",
+      "type": "MESH",
+      "original_id": "n35",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        0.8699321150779724,
+        1.8008935451507568,
+        0.0,
+        0.0,
+        -1.8008935451507568,
+        0.8699321150779724,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.285067081451416,
+        -0.3252447843551636,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 192,
+      "triangles": 64,
+      "materials": [
+        "MeshToonMaterial_m13"
+      ],
+      "bounds_min": [
+        0.174723282456398,
+        -0.5305466651916504,
+        0.2420000284910202
+      ],
+      "bounds_max": [
+        0.3954108953475952,
+        -0.11994291841983795,
+        0.6980000138282776
+      ]
+    },
+    "n36": {
+      "name": "n36",
+      "type": "EMPTY",
+      "original_id": "n36",
+      "added_id": null,
+      "parent_id": "n35",
+      "matrix_world": [
+        0.8699321150779724,
+        1.8008935451507568,
+        0.0,
+        0.0,
+        -1.8008935451507568,
+        0.8699321150779724,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.285067081451416,
+        -0.3252447843551636,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n37": {
+      "name": "shield-boss",
+      "type": "MESH",
+      "original_id": "n37",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        -2.419660631858278e-07,
+        1.1688300105561211e-07,
+        2.000000238418579,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        -1.8008942604064941,
+        0.8699316382408142,
+        -2.687177129701013e-07,
+        0.0,
+        0.29947423934936523,
+        -0.33220425248146057,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m15"
+      ],
+      "bounds_min": [
+        0.24621029198169708,
+        -0.3924504220485687,
+        0.4266987442970276
+      ],
+      "bounds_max": [
+        0.3527381718158722,
+        -0.2719580829143524,
+        0.5133013129234314
+      ]
+    },
+    "n38": {
+      "name": "n38",
+      "type": "EMPTY",
+      "original_id": "n38",
+      "added_id": null,
+      "parent_id": "n37",
+      "matrix_world": [
+        -2.419660631858278e-07,
+        1.1688300105561211e-07,
+        2.000000238418579,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        -1.8008942604064941,
+        0.8699316382408142,
+        -2.687177129701013e-07,
+        0.0,
+        0.29947423934936523,
+        -0.33220425248146057,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n39": {
+      "name": "shield-sigil",
+      "type": "MESH",
+      "original_id": "n39",
+      "added_id": null,
+      "parent_id": "n32",
+      "matrix_world": [
+        1.800894021987915,
+        -0.8699315190315247,
+        0.0,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.29587242007255554,
+        -0.33046436309814453,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 36,
+      "triangles": 12,
+      "materials": [
+        "MeshToonMaterial_m13"
+      ],
+      "bounds_min": [
+        0.27549779415130615,
+        -0.35549378395080566,
+        0.406000018119812
+      ],
+      "bounds_max": [
+        0.31624704599380493,
+        -0.3054349422454834,
+        0.534000039100647
+      ]
+    },
+    "n40": {
+      "name": "n40",
+      "type": "EMPTY",
+      "original_id": "n40",
+      "added_id": null,
+      "parent_id": "n39",
+      "matrix_world": [
+        1.800894021987915,
+        -0.8699315190315247,
+        0.0,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.29587242007255554,
+        -0.33046436309814453,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "add:shield-handle:Wooden_Grip": {
+      "name": "Wooden_Grip",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:shield-handle:Wooden_Grip",
+      "parent_id": "n32",
+      "matrix_world": [
+        1.800894021987915,
+        -0.8699315190315247,
+        0.0,
+        0.0,
+        0.8699315190315247,
+        1.800894021987915,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.24904918670654297,
+        -0.30784615874290466,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "Roman_Handle_Dark_Wood"
+      ],
+      "bounds_min": [
+        0.1348915547132492,
+        -0.2751083970069885,
+        0.40000003576278687
+      ],
+      "bounds_max": [
+        0.16510848701000214,
+        -0.2448914647102356,
+        0.5400000214576721
+      ]
+    },
+    "n41": {
+      "name": "right-hand-long-spear",
+      "type": "EMPTY",
+      "original_id": "n41",
+      "added_id": null,
+      "parent_id": "n31",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.20000000298023224,
+        0.20000004768371582,
+        0.5199999809265137,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n48": {
+      "name": "long-spear-head",
+      "type": "MESH",
+      "original_id": "n48",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.2618091404438019,
+        0.21030157804489136,
+        1.5480921268463135,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 24,
+      "triangles": 8,
+      "materials": [
+        "Candidate bronze"
+      ],
+      "bounds_min": [
+        0.2055061012506485,
+        0.19190241396427155,
+        1.3784070014953613
+      ],
+      "bounds_max": [
+        0.31331145763397217,
+        0.22790060937404633,
+        1.7177772521972656
+      ]
+    },
+    "n49": {
+      "name": "n49",
+      "type": "EMPTY",
+      "original_id": "n49",
+      "added_id": null,
+      "parent_id": "n48",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.2618091404438019,
+        0.21030157804489136,
+        1.5480921268463135,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n42": {
+      "name": "n42",
+      "type": "MESH",
+      "original_id": "n42",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.3575491905212402,
+        -0.00040849909419193864,
+        -0.08161207288503647,
+        0.0,
+        -0.0004084990650881082,
+        1.3599319458007812,
+        -0.013602013699710369,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.21320195496082306,
+        0.20220036804676056,
+        0.7395924925804138,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m17"
+      ],
+      "bounds_min": [
+        0.15718242526054382,
+        0.17424049973487854,
+        0.11950122565031052
+      ],
+      "bounds_max": [
+        0.26451796293258667,
+        0.22472050786018372,
+        1.3593738079071045
+      ]
+    },
+    "n43": {
+      "name": "n43",
+      "type": "EMPTY",
+      "original_id": "n43",
+      "added_id": null,
+      "parent_id": "n42",
+      "matrix_world": [
+        1.3575491905212402,
+        -0.00040849909419193864,
+        -0.08161207288503647,
+        0.0,
+        -0.0004084990650881082,
+        1.3599319458007812,
+        -0.013602013699710369,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.21320195496082306,
+        0.20220036804676056,
+        0.7395924925804138,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n44": {
+      "name": "n44",
+      "type": "MESH",
+      "original_id": "n44",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.17479628324508667,
+        0.19579942524433136,
+        0.10077798366546631,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m5"
+      ],
+      "bounds_min": [
+        0.1463705450296402,
+        0.16025130450725555,
+        0.05449405685067177
+      ],
+      "bounds_max": [
+        0.20862281322479248,
+        0.23224769532680511,
+        0.1477455496788025
+      ]
+    },
+    "n45": {
+      "name": "n45",
+      "type": "EMPTY",
+      "original_id": "n45",
+      "added_id": null,
+      "parent_id": "n44",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.17479628324508667,
+        0.19579942524433136,
+        0.10077798366546631,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n46": {
+      "name": "n46",
+      "type": "MESH",
+      "original_id": "n46",
+      "added_id": null,
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.24980737268924713,
+        0.20830127596855164,
+        1.3484625816345215,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 72,
+      "triangles": 24,
+      "materials": [
+        "MeshToonMaterial_m5"
+      ],
+      "bounds_min": [
+        0.20447632670402527,
+        0.15795372426509857,
+        1.3106789588928223
+      ],
+      "bounds_max": [
+        0.295138418674469,
+        0.2586488425731659,
+        1.3862462043762207
+      ]
+    },
+    "n47": {
+      "name": "n47",
+      "type": "EMPTY",
+      "original_id": "n47",
+      "added_id": null,
+      "parent_id": "n46",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.12001774460077286,
+        0.02000296115875244,
+        1.99629545211792,
+        0.0,
+        0.24980737268924713,
+        0.20830127596855164,
+        1.3484625816345215,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "add:spear-grip-wrap": {
+      "name": "Spear_grip_wrap",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:spear-grip-wrap",
+      "parent_id": "n41",
+      "matrix_world": [
+        1.9963955879211426,
+        -0.0006007339106872678,
+        -0.12001774460077286,
+        0.0,
+        -0.0006007339106872678,
+        1.9998998641967773,
+        -0.02000296115875244,
+        0.0,
+        0.008401242084801197,
+        0.0014002072857692838,
+        0.13974067568778992,
+        0.0,
+        0.20000000298023224,
+        0.20000004768371582,
+        0.5199999809265137,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "Spear leather grip"
+      ],
+      "bounds_min": [
+        0.17483723163604736,
+        0.1783009171485901,
+        0.4488694667816162
+      ],
+      "bounds_max": [
+        0.22516277432441711,
+        0.22169917821884155,
+        0.5911304950714111
+      ]
+    },
+    "n17": {
+      "name": "n17",
+      "type": "EMPTY",
+      "original_id": "n17",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        -0.13399995863437653,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "add:handL": {
+      "name": "Closed_gripping_hand_L",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:handL",
+      "parent_id": "n17",
+      "matrix_world": [
+        1.0389349460601807,
+        -1.7089804410934448,
+        0.0,
+        0.0,
+        1.7089804410934448,
+        1.0389349460601807,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.15000000596046448,
+        -0.25999996066093445,
+        0.4700000286102295,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 744,
+      "triangles": 372,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.08728355169296265,
+        -0.2989935278892517,
+        0.4180000126361847
+      ],
+      "bounds_max": [
+        0.19237439334392548,
+        -0.19493834674358368,
+        0.5320000052452087
+      ]
+    },
+    "add:forearmL": {
+      "name": "Forearm_L",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:forearmL",
+      "parent_id": "n17",
+      "matrix_world": [
+        1.3066291809082031,
+        1.1405490636825562,
+        0.9959257245063782,
+        0.0,
+        1.1405490636825562,
+        0.12387239187955856,
+        -1.6382317543029785,
+        0.0,
+        -0.10457219183444977,
+        0.17201431095600128,
+        -0.05979733541607857,
+        0.0,
+        0.0454278364777565,
+        -0.08798560500144958,
+        0.41020262241363525,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.012549927458167076,
+        -0.2773362696170807,
+        0.37481263279914856
+      ],
+      "bounds_max": [
+        0.17630226910114288,
+        -0.0663151741027832,
+        0.4983120560646057
+      ]
+    },
+    "n18": {
+      "name": "n18",
+      "type": "MESH",
+      "original_id": "n18",
+      "added_id": null,
+      "parent_id": "n17",
+      "matrix_world": [
+        1.9520392417907715,
+        -0.048580020666122437,
+        0.43264609575271606,
+        0.0,
+        -0.048580020666122437,
+        1.950792670249939,
+        0.4382326602935791,
+        0.0,
+        -0.0454278402030468,
+        -0.04601443186402321,
+        0.1997973620891571,
+        0.0,
+        0.0,
+        -0.13399995863437653,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.04294486343860626,
+        -0.1769174039363861,
+        0.3993644714355469
+      ],
+      "bounds_max": [
+        0.07978373020887375,
+        -0.05365172401070595,
+        0.6235477328300476
+      ]
+    },
+    "n19": {
+      "name": "n19",
+      "type": "EMPTY",
+      "original_id": "n19",
+      "added_id": null,
+      "parent_id": "n18",
+      "matrix_world": [
+        1.9520392417907715,
+        -0.048580020666122437,
+        0.43264609575271606,
+        0.0,
+        -0.048580020666122437,
+        1.950792670249939,
+        0.4382326602935791,
+        0.0,
+        -0.0454278402030468,
+        -0.04601443186402321,
+        0.1997973620891571,
+        0.0,
+        0.0,
+        -0.13399995863437653,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "add:sleeveL": {
+      "name": "Short_blue_sleeve_L",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:sleeveL",
+      "parent_id": "n17",
+      "matrix_world": [
+        1.9520392417907715,
+        -0.048580102622509,
+        0.4326460361480713,
+        0.0,
+        -0.048580102622509,
+        1.9507925510406494,
+        0.43823349475860596,
+        0.0,
+        -0.021632302552461624,
+        -0.021911675110459328,
+        0.09514158964157104,
+        0.0,
+        -0.004326460417360067,
+        -0.13838227093219757,
+        0.6290283203125,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m0"
+      ],
+      "bounds_min": [
+        -0.05703151971101761,
+        -0.19105367362499237,
+        0.520585298538208
+      ],
+      "bounds_max": [
+        0.05946989730000496,
+        -0.07433362305164337,
+        0.6456550359725952
+      ]
+    },
+    "n20": {
+      "name": "n20",
+      "type": "EMPTY",
+      "original_id": "n20",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.1340000480413437,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "add:handR": {
+      "name": "Closed_gripping_hand_R",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:handR",
+      "parent_id": "n20",
+      "matrix_world": [
+        1.674448847770691,
+        -1.0900306701660156,
+        -0.08974608033895493,
+        0.0,
+        1.0871139764785767,
+        1.6767328977584839,
+        -0.08215846121311188,
+        0.0,
+        0.12001772224903107,
+        0.02000296488404274,
+        1.99629545211792,
+        0.0,
+        0.20000000298023224,
+        0.20000004768371582,
+        0.5199999809265137,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 744,
+      "triangles": 372,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.12829646468162537,
+        0.15556207299232483,
+        0.4673171043395996
+      ],
+      "bounds_max": [
+        0.24526739120483398,
+        0.2660007178783417,
+        0.5858427286148071
+      ]
+    },
+    "add:forearmR": {
+      "name": "Forearm_R",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:forearmR",
+      "parent_id": "n20",
+      "matrix_world": [
+        0.4738602638244629,
+        0.9824050068855286,
+        1.6764060258865356,
+        0.0,
+        0.9824050068855286,
+        1.3676073551177979,
+        -1.079134225845337,
+        0.0,
+        -0.17602263391017914,
+        0.1133091002702713,
+        -0.016645904630422592,
+        0.0,
+        0.023977339267730713,
+        0.31330907344818115,
+        0.503354012966156,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        0.004412373993545771,
+        0.17474187910556793,
+        0.4663332402706146
+      ],
+      "bounds_max": [
+        0.21565186977386475,
+        0.3448815643787384,
+        0.5496166348457336
+      ]
+    },
+    "n21": {
+      "name": "n21",
+      "type": "MESH",
+      "original_id": "n21",
+      "added_id": null,
+      "parent_id": "n20",
+      "matrix_world": [
+        1.982708215713501,
+        -0.12931233644485474,
+        0.2283555418252945,
+        0.0,
+        -0.12931233644485474,
+        1.0329667329788208,
+        1.7077054977416992,
+        0.0,
+        -0.023977333679795265,
+        -0.17930909991264343,
+        0.10664589703083038,
+        0.0,
+        0.0,
+        0.1340000480413437,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.04361958056688309,
+        0.11127477884292603,
+        0.4732983708381653
+      ],
+      "bounds_max": [
+        0.0588730089366436,
+        0.33148929476737976,
+        0.6475695371627808
+      ]
+    },
+    "n22": {
+      "name": "n22",
+      "type": "EMPTY",
+      "original_id": "n22",
+      "added_id": null,
+      "parent_id": "n21",
+      "matrix_world": [
+        1.982708215713501,
+        -0.12931233644485474,
+        0.2283555418252945,
+        0.0,
+        -0.12931233644485474,
+        1.0329667329788208,
+        1.7077054977416992,
+        0.0,
+        -0.023977333679795265,
+        -0.17930909991264343,
+        0.10664589703083038,
+        0.0,
+        0.0,
+        0.1340000480413437,
+        0.6100000143051147,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "add:sleeveR": {
+      "name": "Short_blue_sleeve_R",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:sleeveR",
+      "parent_id": "n20",
+      "matrix_world": [
+        1.982708215713501,
+        -0.12931236624717712,
+        0.2283555120229721,
+        0.0,
+        -0.12931236624717712,
+        1.0329663753509521,
+        1.7077057361602783,
+        0.0,
+        -0.011417774483561516,
+        -0.0853852778673172,
+        0.05078372359275818,
+        0.0,
+        -0.0022835559211671352,
+        0.11692299693822861,
+        0.6201567649841309,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 48,
+      "triangles": 28,
+      "materials": [
+        "MeshToonMaterial_m0"
+      ],
+      "bounds_min": [
+        -0.05581667646765709,
+        0.08903290331363678,
+        0.5324864387512207
+      ],
+      "bounds_max": [
+        0.05196072906255722,
+        0.2246202677488327,
+        0.6662648320198059
+      ]
+    },
+    "n23": {
+      "name": "n23",
+      "type": "EMPTY",
+      "original_id": "n23",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        -0.19966664910316467,
+        0.0,
+        0.0,
+        0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        0.012000000104308128,
+        -0.06199997290968895,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n24": {
+      "name": "n24",
+      "type": "MESH",
+      "original_id": "n24",
+      "added_id": null,
+      "parent_id": "n23",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        -0.19966664910316467,
+        0.0,
+        0.0,
+        0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        0.012000000104308128,
+        -0.06199997290968895,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.04125916212797165,
+        -0.149666890501976,
+        0.01707572489976883
+      ],
+      "bounds_max": [
+        0.0652591660618782,
+        -0.03141091391444206,
+        0.343793660402298
+      ]
+    },
+    "n25": {
+      "name": "n25",
+      "type": "EMPTY",
+      "original_id": "n25",
+      "added_id": null,
+      "parent_id": "n24",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        -0.19966664910316467,
+        0.0,
+        0.0,
+        0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        0.012000000104308128,
+        -0.06199997290968895,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n26": {
+      "name": "n26",
+      "type": "EMPTY",
+      "original_id": "n26",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        0.19966664910316467,
+        0.0,
+        0.0,
+        -0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        -0.012000000104308128,
+        0.06200002506375313,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "n27": {
+      "name": "n27",
+      "type": "MESH",
+      "original_id": "n27",
+      "added_id": null,
+      "parent_id": "n26",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        0.19966664910316467,
+        0.0,
+        0.0,
+        -0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        -0.012000000104308128,
+        0.06200002506375313,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 60,
+      "triangles": 20,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.0652591660618782,
+        0.024189867079257965,
+        0.01600799895823002
+      ],
+      "bounds_max": [
+        0.04125916212797165,
+        0.13902528584003448,
+        0.3430691361427307
+      ]
+    },
+    "n28": {
+      "name": "n28",
+      "type": "EMPTY",
+      "original_id": "n28",
+      "added_id": null,
+      "parent_id": "n27",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9900083541870117,
+        0.19966664910316467,
+        0.0,
+        0.0,
+        -0.19966664910316467,
+        1.9900083541870117,
+        0.0,
+        -0.012000000104308128,
+        0.06200002506375313,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n2": {
+      "name": "porter-body",
+      "type": "EMPTY",
+      "original_id": "n2",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false
+    },
+    "add:armor:Helmet_Galea.002": {
+      "name": "Helmet_Galea.002",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:armor:Helmet_Galea.002",
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 824,
+      "triangles": 416,
+      "materials": [
+        "Roman_V2_Original_Bronze.001"
+      ],
+      "bounds_min": [
+        -0.10600001364946365,
+        -0.1340000033378601,
+        0.3579999804496765
+      ],
+      "bounds_max": [
+        0.09079086035490036,
+        0.1340000033378601,
+        0.9019999504089355
+      ]
+    },
+    "n3": {
+      "name": "n3",
+      "type": "MESH",
+      "original_id": "n3",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 169,
+      "triangles": 79,
+      "materials": [
+        "MeshToonMaterial_m0"
+      ],
+      "bounds_min": [
+        -0.07999999821186066,
+        -0.1419999897480011,
+        0.38199999928474426
+      ],
+      "bounds_max": [
+        0.07999999821186066,
+        0.1420000195503235,
+        0.6599999666213989
+      ]
+    },
+    "n4": {
+      "name": "n4",
+      "type": "EMPTY",
+      "original_id": "n4",
+      "added_id": null,
+      "parent_id": "n3",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n5": {
+      "name": "n5",
+      "type": "EMPTY",
+      "original_id": "n5",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n6": {
+      "name": "n6",
+      "type": "EMPTY",
+      "original_id": "n6",
+      "added_id": null,
+      "parent_id": "n5",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n7": {
+      "name": "n7",
+      "type": "MESH",
+      "original_id": "n7",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        7.428066055581439e-07,
+        1.9999998807907104,
+        0.0,
+        0.0,
+        -1.9999998807907104,
+        7.428066055581439e-07,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 108,
+      "triangles": 36,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ],
+      "bounds_min": [
+        -0.060235459357500076,
+        -0.08743853121995926,
+        0.6071876287460327
+      ],
+      "bounds_max": [
+        0.0602354034781456,
+        0.08743853121995926,
+        0.8248124122619629
+      ]
+    },
+    "n8": {
+      "name": "n8",
+      "type": "EMPTY",
+      "original_id": "n8",
+      "added_id": null,
+      "parent_id": "n7",
+      "matrix_world": [
+        7.428066055581439e-07,
+        1.9999998807907104,
+        0.0,
+        0.0,
+        -1.9999998807907104,
+        7.428066055581439e-07,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "add:armor:Skirt_Ten_Separated_Lames.002": {
+      "name": "Skirt_Ten_Separated_Lames.002",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:armor:Skirt_Ten_Separated_Lames.002",
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 244,
+      "triangles": 120,
+      "materials": [
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "bounds_min": [
+        -0.11168180406093597,
+        -0.16129088401794434,
+        0.21599999070167542
+      ],
+      "bounds_max": [
+        0.11168178915977478,
+        0.16129085421562195,
+        0.35600000619888306
+      ]
+    },
+    "n11": {
+      "name": "soldier-crest",
+      "type": "MESH",
+      "original_id": "n11",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 120,
+      "triangles": 40,
+      "materials": [
+        "MeshToonMaterial_m6"
+      ],
+      "bounds_min": [
+        -0.16333334147930145,
+        -0.013333288952708244,
+        0.8880000114440918
+      ],
+      "bounds_max": [
+        0.1666666716337204,
+        0.013333398848772049,
+        1.1766667366027832
+      ]
+    },
+    "n12": {
+      "name": "n12",
+      "type": "EMPTY",
+      "original_id": "n12",
+      "added_id": null,
+      "parent_id": "n11",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n13": {
+      "name": "soldier-crest-feathers",
+      "type": "MESH",
+      "original_id": "n13",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 720,
+      "triangles": 240,
+      "materials": [
+        "MeshToonMaterial_m7"
+      ],
+      "bounds_min": [
+        -0.1623866707086563,
+        -0.018666623160243034,
+        0.890666663646698
+      ],
+      "bounds_max": [
+        0.1623866707086563,
+        -0.010666601359844208,
+        1.1766667366027832
+      ]
+    },
+    "n14": {
+      "name": "n14",
+      "type": "EMPTY",
+      "original_id": "n14",
+      "added_id": null,
+      "parent_id": "n13",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n15": {
+      "name": "soldier-crest-stems",
+      "type": "MESH",
+      "original_id": "n15",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": false,
+      "vertices": 540,
+      "triangles": 180,
+      "materials": [
+        "MeshToonMaterial_m9"
+      ],
+      "bounds_min": [
+        -0.16107602417469025,
+        -0.023999957367777824,
+        0.8952013850212097
+      ],
+      "bounds_max": [
+        0.16107602417469025,
+        -0.014666600152850151,
+        1.1766667366027832
+      ]
+    },
+    "n16": {
+      "name": "n16",
+      "type": "EMPTY",
+      "original_id": "n16",
+      "added_id": null,
+      "parent_id": "n15",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.30400002002716064,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n9": {
+      "name": "soldier-helm",
+      "type": "EMPTY",
+      "original_id": "n9",
+      "added_id": null,
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "n10": {
+      "name": "n10",
+      "type": "EMPTY",
+      "original_id": "n10",
+      "added_id": null,
+      "parent_id": "n9",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    },
+    "add:armor:Waist_Belt.002": {
+      "name": "Waist_Belt.002",
+      "type": "MESH",
+      "original_id": null,
+      "added_id": "add:armor:Waist_Belt.002",
+      "parent_id": "n2",
+      "matrix_world": [
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3400000035762787,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": null,
+      "candidate_hidden": false,
+      "vertices": 240,
+      "triangles": 160,
+      "materials": [
+        "Roman_V2_Original_Skirt.001"
+      ],
+      "bounds_min": [
+        -0.08399999886751175,
+        -0.12200000137090683,
+        0.35199999809265137
+      ],
+      "bounds_max": [
+        0.08399999886751175,
+        0.12200000137090683,
+        0.3880000114440918
+      ]
+    },
+    "n29": {
+      "name": "porter-crate",
+      "type": "EMPTY",
+      "original_id": "n29",
+      "added_id": null,
+      "parent_id": "n1",
+      "matrix_world": [
+        1.9900083541870117,
+        0.0,
+        -0.199666827917099,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.199666827917099,
+        0.0,
+        1.9900083541870117,
+        0.0,
+        0.47999998927116394,
+        0.0,
+        0.5400000214576721,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": false,
+      "candidate_hidden": true
+    },
+    "n30": {
+      "name": "n30",
+      "type": "EMPTY",
+      "original_id": "n30",
+      "added_id": null,
+      "parent_id": "n29",
+      "matrix_world": [
+        1.9900083541870117,
+        0.0,
+        -0.199666827917099,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.199666827917099,
+        0.0,
+        1.9900083541870117,
+        0.0,
+        0.47999998927116394,
+        0.0,
+        0.5400000214576721,
+        1.0
+      ],
+      "hide_render": false,
+      "source_visible": true,
+      "candidate_hidden": true
+    }
+  },
+  "maximum_transform_error": 9.313225746154785e-07,
+  "saved_timeline": {
+    "applicable": true,
+    "passed": true,
+    "frames": 5,
+    "animated_nodes": [
+      "add:forearmR",
+      "add:sleeveR",
+      "add:handR",
+      "n21",
+      "n41"
+    ],
+    "maximum_local_matrix_error": 2.384185791015625e-07,
+    "failed_frames": 0,
+    "examples": [],
+    "scope": "Saved Blender timeline evaluated at every declared sample against portable authored local matrices; independent from static GLB pose."
+  },
+  "source_file_saved": false,
+  "scope": "Structure and geometry roundtrip; contact/pose validation is a separate section",
+  "pose_validation": {
+    "anchor_checks_passed": true,
+    "errors": [],
+    "poses": [
+      {
+        "name": "ready",
+        "frame": 1,
+        "phase": null,
+        "contacts": {
+          "handL_shieldGrip": 3.332000937312528e-08,
+          "handR_weaponGrip": 0.0
+        },
+        "crest_plane": {
+          "passed": true,
+          "thin_axis_body_three": [
+            0.001143611641108693,
+            0.00579874808429251,
+            0.9999825331839896
+          ],
+          "bounds_size_body_three": [
+            0.16500000655651093,
+            0.1443333625793457,
+            0.018666678108274937
+          ],
+          "criterion": "Actual crest fan plane contains body +X forward; thin normal aligns with +/-Z, not +/-X"
+        },
+        "actual_hand_surface_gaps": {
+          "handL_shieldGrip": 0.0020721652545034885,
+          "handR_weaponGrip": 0.0005566928302869201
+        },
+        "garment_observations": {
+          "torso_widths_body_z": {
+            "lower": 0.10000000149011612,
+            "shoulder": 0.1420000046491623
+          },
+          "shoulders_wider_than_waist": true,
+          "sleeves": {
+            "L": {
+              "present": true,
+              "parent_id": "n17",
+              "follows_original_arm": true
+            },
+            "R": {
+              "present": true,
+              "parent_id": "n20",
+              "follows_original_arm": true
+            }
+          },
+          "scope": "Geometry silhouette and parent attachment only; collar shape, sleeve seams and target likeness require image review."
+        },
+        "sampled_surface_crossings": {
+          "legL / Skirt_Ten_Separated_Lames.002": {
+            "crossing_triangle_pairs": 0,
+            "tested": true,
+            "example_actor_three": null
+          },
+          "legR / Skirt_Ten_Separated_Lames.002": {
+            "crossing_triangle_pairs": 0,
+            "tested": true,
+            "example_actor_three": null
+          }
+        },
+        "helmet_front_dot_x": 0.8750340342521667,
+        "helmet_direction_space": "Original body local +X; excludes animated body lean"
+      },
+      {
+        "name": "ready_to_thrust",
+        "frame": 25,
+        "phase": null,
+        "contacts": {
+          "handL_shieldGrip": 3.332000937312528e-08,
+          "handR_weaponGrip": 0.0
+        },
+        "crest_plane": {
+          "passed": true,
+          "thin_axis_body_three": [
+            0.001143611641108693,
+            0.00579874808429251,
+            0.9999825331839896
+          ],
+          "bounds_size_body_three": [
+            0.16500000655651093,
+            0.1443333625793457,
+            0.018666678108274937
+          ],
+          "criterion": "Actual crest fan plane contains body +X forward; thin normal aligns with +/-Z, not +/-X"
+        },
+        "actual_hand_surface_gaps": {
+          "handL_shieldGrip": 0.0020721652545034885,
+          "handR_weaponGrip": 0.0008412642637267709
+        },
+        "helmet_front_dot_x": 0.8750340342521667,
+        "helmet_direction_space": "Original body local +X; excludes animated body lean"
+      },
+      {
+        "name": "thrust",
+        "frame": 49,
+        "phase": null,
+        "contacts": {
+          "handL_shieldGrip": 3.332000937312528e-08,
+          "handR_weaponGrip": 0.0
+        },
+        "crest_plane": {
+          "passed": true,
+          "thin_axis_body_three": [
+            0.001143611641108693,
+            0.00579874808429251,
+            0.9999825331839896
+          ],
+          "bounds_size_body_three": [
+            0.16500000655651093,
+            0.1443333625793457,
+            0.018666678108274937
+          ],
+          "criterion": "Actual crest fan plane contains body +X forward; thin normal aligns with +/-Z, not +/-X"
+        },
+        "actual_hand_surface_gaps": {
+          "handL_shieldGrip": 0.0020721652545034885,
+          "handR_weaponGrip": 0.0007829011883586645
+        },
+        "garment_observations": {
+          "torso_widths_body_z": {
+            "lower": 0.10000000149011612,
+            "shoulder": 0.1420000046491623
+          },
+          "shoulders_wider_than_waist": true,
+          "sleeves": {
+            "L": {
+              "present": true,
+              "parent_id": "n17",
+              "follows_original_arm": true
+            },
+            "R": {
+              "present": true,
+              "parent_id": "n20",
+              "follows_original_arm": true
+            }
+          },
+          "scope": "Geometry silhouette and parent attachment only; collar shape, sleeve seams and target likeness require image review."
+        },
+        "sampled_surface_crossings": {
+          "legL / Skirt_Ten_Separated_Lames.002": {
+            "crossing_triangle_pairs": 0,
+            "tested": true,
+            "example_actor_three": null
+          },
+          "legR / Skirt_Ten_Separated_Lames.002": {
+            "crossing_triangle_pairs": 0,
+            "tested": true,
+            "example_actor_three": null
+          }
+        },
+        "helmet_front_dot_x": 0.8750340342521667,
+        "helmet_direction_space": "Original body local +X; excludes animated body lean"
+      },
+      {
+        "name": "ready_to_thrust",
+        "frame": 73,
+        "phase": null,
+        "contacts": {
+          "handL_shieldGrip": 3.332000937312528e-08,
+          "handR_weaponGrip": 0.0
+        },
+        "crest_plane": {
+          "passed": true,
+          "thin_axis_body_three": [
+            0.001143611641108693,
+            0.00579874808429251,
+            0.9999825331839896
+          ],
+          "bounds_size_body_three": [
+            0.16500000655651093,
+            0.1443333625793457,
+            0.018666678108274937
+          ],
+          "criterion": "Actual crest fan plane contains body +X forward; thin normal aligns with +/-Z, not +/-X"
+        },
+        "actual_hand_surface_gaps": {
+          "handL_shieldGrip": 0.0020721652545034885,
+          "handR_weaponGrip": 0.0008412642637267709
+        },
+        "helmet_front_dot_x": 0.8750340342521667,
+        "helmet_direction_space": "Original body local +X; excludes animated body lean"
+      },
+      {
+        "name": "ready_to_thrust",
+        "frame": 97,
+        "phase": null,
+        "contacts": {
+          "handL_shieldGrip": 3.332000937312528e-08,
+          "handR_weaponGrip": 0.0
+        },
+        "crest_plane": {
+          "passed": true,
+          "thin_axis_body_three": [
+            0.001143611641108693,
+            0.00579874808429251,
+            0.9999825331839896
+          ],
+          "bounds_size_body_three": [
+            0.16500000655651093,
+            0.1443333625793457,
+            0.018666678108274937
+          ],
+          "criterion": "Actual crest fan plane contains body +X forward; thin normal aligns with +/-Z, not +/-X"
+        },
+        "actual_hand_surface_gaps": {
+          "handL_shieldGrip": 0.0020721652545034885,
+          "handR_weaponGrip": 0.0005566928302869201
+        },
+        "garment_observations": {
+          "torso_widths_body_z": {
+            "lower": 0.10000000149011612,
+            "shoulder": 0.1420000046491623
+          },
+          "shoulders_wider_than_waist": true,
+          "sleeves": {
+            "L": {
+              "present": true,
+              "parent_id": "n17",
+              "follows_original_arm": true
+            },
+            "R": {
+              "present": true,
+              "parent_id": "n20",
+              "follows_original_arm": true
+            }
+          },
+          "scope": "Geometry silhouette and parent attachment only; collar shape, sleeve seams and target likeness require image review."
+        },
+        "sampled_surface_crossings": {
+          "legL / Skirt_Ten_Separated_Lames.002": {
+            "crossing_triangle_pairs": 0,
+            "tested": true,
+            "example_actor_three": null
+          },
+          "legR / Skirt_Ten_Separated_Lames.002": {
+            "crossing_triangle_pairs": 0,
+            "tested": true,
+            "example_actor_three": null
+          }
+        },
+        "helmet_front_dot_x": 0.8750340342521667,
+        "helmet_direction_space": "Original body local +X; excludes animated body lean"
+      }
+    ],
+    "sampled_surface_crossings_clear": true,
+    "surface_crossing_frames": [],
+    "geometry_sample_indices": [
+      0,
+      2,
+      4
+    ],
+    "measurement_space": "Actor root local units (root scale removed); example points use original Three +Y up/+X forward axes.",
+    "geometry_scope": "Exact noncoplanar edge/triangle surface crossings at first/middle/last sample per phase and every release. Excludes intentional hand contact; not a swept collision, containment, coplanar overlap or complete gait proof.",
+    "scope": "Actual anchor, nearest hand/weapon surface, rod endpoint, event and head-direction checks. Visual wrapping and armor intersection are separate acceptance items."
+  }
+}

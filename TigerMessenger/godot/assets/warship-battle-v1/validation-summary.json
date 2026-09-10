@@ -1,0 +1,50 @@
+{
+  "candidate": "warship-battle-v1",
+  "structureAndSavedAnimationPassed": true,
+  "rowingBoundedClearancePassed": true,
+  "singleActorBoardingPathPassed": true,
+  "carryGeometryAndGripPassed": true,
+  "sourceUnchanged": true,
+  "gameplayIntegrated": false,
+  "fleetPerformanceCertified": false,
+  "files": {
+    "warship-battle-v1.blend": "29d6962938a3a319982295a40f4d8365ac2c4f4753531fa265b1a7764d81e0fa",
+    "warship-battle-v1.glb": "6fe88d3bea51f18d424d5d22498cfd7d81719d9fea0477e5c743e874a38e2241"
+  },
+  "metrics": {
+    "sourceNodes": 340,
+    "sourceCrewInstances": 286,
+    "oars": 26,
+    "rowers": 26,
+    "landingSoldiersBaked": 0,
+    "savedFrames": 301,
+    "localMatricesPerFrame": 486,
+    "gripChecks": 15652,
+    "maxGripError": 1.7120130796843852e-07,
+    "maxSavedMatrixError": 0,
+    "maxGLBMatrixError": 4.76837158203125e-07,
+    "boardingPathSamples": 229,
+    "visibleMeshNodes": 754,
+    "visibleTriangles": 50040,
+    "glbBytes": 3184712,
+    "adjacentOarCrossingFrames": 36
+  },
+  "reports": {
+    "structure": "validation.json",
+    "rowing": "rowing-clearance-final.json",
+    "boarding": "boarding-path-validation.json",
+    "carry": "carry-contract-validation.json",
+    "adjacentOars": "oar-source-comparison.json"
+  },
+  "limitations": [
+    "Unresolved original adjacent-oar blade intersections in36/301frames; exact same frames and pairs in read-only source and candidate. Not eligible for battle release.",
+    "Static GLB, portable/saved Blender review actions; not formal game integration.",
+    "Single narrow-carry actor route is not 25-person scheduling; gait/foot IK and actual ground-fit remain runtime work.",
+    "Keep original casualty/sedation/night/wake states. These alternate states were not validated.",
+    "Restore original crew instancing/batch compatible meshes before fleet use."
+  ],
+  "status": "blocked_candidate",
+  "readyForBattle": false,
+  "adjacentOarClearancePassed": false,
+  "sourceAndCandidateOarContactsIdentical": true
+}

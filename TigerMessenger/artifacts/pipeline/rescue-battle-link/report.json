@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "restored pact chapter synchronizes before simulation",
+      "passed": true
+    },
+    {
+      "name": "actual R pact completion authorizes chapter 2",
+      "passed": true
+    },
+    {
+      "name": "Achilles protects without sending diversion",
+      "passed": true
+    },
+    {
+      "name": "Odysseus protects without silently skipping signal",
+      "passed": true
+    },
+    {
+      "name": "screenshot distance 28 cannot send signal",
+      "passed": true
+    },
+    {
+      "name": "panel explains ships are approaching",
+      "passed": true
+    },
+    {
+      "name": "panel explains actual R signal after concealment",
+      "passed": true
+    },
+    {
+      "name": "actual signal advances and syncs chapter 3",
+      "passed": true
+    },
+    {
+      "name": "signal progress persists",
+      "passed": true
+    },
+    {
+      "name": "panel describes waiting for real fleet discovery",
+      "passed": true
+    },
+    {
+      "name": "not started state synchronizes without advancing",
+      "passed": true
+    }
+  ],
+  "scope": "Actual campaign DOM/controller with mock battle receiver. Full ship/whale simulation is verified separately.",
+  "errors": []
+}

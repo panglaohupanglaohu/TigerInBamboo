@@ -1,0 +1,755 @@
+{
+  "checks": [
+    {
+      "name": "actual chapter 2 voyage produced two saved Blender v6 ships",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "outbound actual ship +X follows travel",
+      "passed": true,
+      "detail": {
+        "forwardVelocityDot": {
+          "count": 3754,
+          "min": 0.9999999999999997,
+          "max": 1.0000000000000004,
+          "sum": 3754,
+          "mean": 1
+        },
+        "quaternionLength": {
+          "count": 3754,
+          "min": 0.9999999999999999,
+          "max": 1.0000000000000002,
+          "sum": 3754,
+          "mean": 1
+        },
+        "upDot": {
+          "count": 3754,
+          "min": 0.9999999999999998,
+          "max": 1.0000000000000004,
+          "sum": 3754,
+          "mean": 1
+        },
+        "actualProwVelocityDot": {
+          "count": 3754,
+          "min": 0.9990696711048657,
+          "max": 0.9990696711048666,
+          "sum": 3750.50754532753,
+          "mean": 0.9990696711048295
+        }
+      }
+    },
+    {
+      "name": "outbound unit quaternion and radial deck up",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "outbound actual bronze prow leads",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "return actual ship +X follows travel",
+      "passed": true,
+      "detail": {
+        "forwardVelocityDot": {
+          "count": 3756,
+          "min": 0.9999999999999997,
+          "max": 1.0000000000000004,
+          "sum": 3756,
+          "mean": 1
+        },
+        "quaternionLength": {
+          "count": 3756,
+          "min": 0.9999999999999999,
+          "max": 1.0000000000000002,
+          "sum": 3756,
+          "mean": 1
+        },
+        "upDot": {
+          "count": 3756,
+          "min": 0.9999999999999998,
+          "max": 1.0000000000000004,
+          "sum": 3756,
+          "mean": 1
+        },
+        "actualProwVelocityDot": {
+          "count": 3756,
+          "min": 0.9990696711048657,
+          "max": 0.9990696711048666,
+          "sum": 3752.5056846697394,
+          "mean": 0.9990696711048295
+        }
+      }
+    },
+    {
+      "name": "return unit quaternion and radial deck up",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "return actual bronze prow leads",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "all four route forms incl both blue lanes keep +X tangent",
+      "passed": true,
+      "detail": {
+        "samples": 60060,
+        "min": 0.9999999999999993
+      }
+    },
+    {
+      "name": "stationary junction retains heading",
+      "passed": true,
+      "detail": {
+        "max": 0
+      }
+    },
+    {
+      "name": "reproduces old reflected frame failure",
+      "passed": true,
+      "detail": {
+        "oldMin": -0.9287243849946633,
+        "maxOldQuaternionError": 0.29289321876612584
+      }
+    }
+  ],
+  "stats": {
+    "outbound": {
+      "forwardVelocityDot": {
+        "count": 3754,
+        "min": 0.9999999999999997,
+        "max": 1.0000000000000004,
+        "sum": 3754,
+        "mean": 1
+      },
+      "quaternionLength": {
+        "count": 3754,
+        "min": 0.9999999999999999,
+        "max": 1.0000000000000002,
+        "sum": 3754,
+        "mean": 1
+      },
+      "upDot": {
+        "count": 3754,
+        "min": 0.9999999999999998,
+        "max": 1.0000000000000004,
+        "sum": 3754,
+        "mean": 1
+      },
+      "actualProwVelocityDot": {
+        "count": 3754,
+        "min": 0.9990696711048657,
+        "max": 0.9990696711048666,
+        "sum": 3750.50754532753,
+        "mean": 0.9990696711048295
+      }
+    },
+    "return": {
+      "forwardVelocityDot": {
+        "count": 3756,
+        "min": 0.9999999999999997,
+        "max": 1.0000000000000004,
+        "sum": 3756,
+        "mean": 1
+      },
+      "quaternionLength": {
+        "count": 3756,
+        "min": 0.9999999999999999,
+        "max": 1.0000000000000002,
+        "sum": 3756,
+        "mean": 1
+      },
+      "upDot": {
+        "count": 3756,
+        "min": 0.9999999999999998,
+        "max": 1.0000000000000004,
+        "sum": 3756,
+        "mean": 1
+      },
+      "actualProwVelocityDot": {
+        "count": 3756,
+        "min": 0.9990696711048657,
+        "max": 0.9990696711048666,
+        "sum": 3752.5056846697394,
+        "mean": 0.9990696711048295
+      }
+    }
+  },
+  "fixture": [
+    {
+      "rotation": 0,
+      "name": "out",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8363966606661326,
+      "oldNormError": 0.2928932159389489,
+      "movingCount": 881
+    },
+    {
+      "rotation": 0,
+      "name": "back",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": 0.2845066928407218,
+      "oldNormError": 0.29289321832172377,
+      "movingCount": 881
+    },
+    {
+      "rotation": 0,
+      "name": "red",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": 0.2845066928407217,
+      "oldNormError": 0.29280163578268725,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 0,
+      "name": "blue-left",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.279633667025856,
+      "oldNormError": 0.29249765453534105,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 0,
+      "name": "blue-right",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": 0.2890403629969324,
+      "oldNormError": 0.2928932166957121,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 1,
+      "name": "out",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.7143712026631343,
+      "oldNormError": 0.2923900470446483,
+      "movingCount": 881
+    },
+    {
+      "rotation": 1,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.14170269981306677,
+      "oldNormError": 0.28992874494527254,
+      "movingCount": 881
+    },
+    {
+      "rotation": 1,
+      "name": "red",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.14163881943043763,
+      "oldNormError": 0.28992874494527254,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 1,
+      "name": "blue-left",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": 0.14618176466742988,
+      "oldNormError": 0.2909413465493472,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 1,
+      "name": "blue-right",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.1364968774961498,
+      "oldNormError": 0.28868234256027825,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 2,
+      "name": "out",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.5475136282731445,
+      "oldNormError": 0.2885873735656107,
+      "movingCount": 881
+    },
+    {
+      "rotation": 2,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.07723060875042242,
+      "oldNormError": 0.22821229712234092,
+      "movingCount": 881
+    },
+    {
+      "rotation": 2,
+      "name": "red",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.0774666221883103,
+      "oldNormError": 0.22821229712234092,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 2,
+      "name": "blue-left",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.06951131874059796,
+      "oldNormError": 0.23413358361706382,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 2,
+      "name": "blue-right",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": -0.08587924253754081,
+      "oldNormError": 0.22182776207136745,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 3,
+      "name": "out",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.33092510430431504,
+      "oldNormError": 0.2809161210155977,
+      "movingCount": 881
+    },
+    {
+      "rotation": 3,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.13493779183767612,
+      "oldNormError": 0.2806541270378986,
+      "movingCount": 881
+    },
+    {
+      "rotation": 3,
+      "name": "red",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.1350821676165726,
+      "oldNormError": 0.28065262046761497,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 3,
+      "name": "blue-left",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.15006730017514425,
+      "oldNormError": 0.27760477294838815,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 3,
+      "name": "blue-right",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": 0.022145859373688237,
+      "oldNormError": 0.2819842010767646,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 4,
+      "name": "out",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.061417122943186686,
+      "oldNormError": 0.27819899418691507,
+      "movingCount": 881
+    },
+    {
+      "rotation": 4,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.11926140495116481,
+      "oldNormError": 0.27819899418691507,
+      "movingCount": 881
+    },
+    {
+      "rotation": 4,
+      "name": "red",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": 0.06852557191074274,
+      "oldNormError": 0.270242093625211,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 4,
+      "name": "blue-left",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.07011091238007577,
+      "oldNormError": 0.268971056695388,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 4,
+      "name": "blue-right",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.06696834941150087,
+      "oldNormError": 0.27151076633382276,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 5,
+      "name": "out",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.021826452319970824,
+      "oldNormError": 0.2928932141068832,
+      "movingCount": 881
+    },
+    {
+      "rotation": 5,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.6681078044118866,
+      "oldNormError": 0.29289321410688307,
+      "movingCount": 881
+    },
+    {
+      "rotation": 5,
+      "name": "red",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.6684380152870519,
+      "oldNormError": 0.26436041710030067,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 5,
+      "name": "blue-left",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.6625391214006727,
+      "oldNormError": 0.2601605502865415,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 5,
+      "name": "blue-right",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.6745879284979782,
+      "oldNormError": 0.26824794341793656,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 6,
+      "name": "out",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": -0.10809040906562958,
+      "oldNormError": 0.29158462504571825,
+      "movingCount": 881
+    },
+    {
+      "rotation": 6,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8044673570157537,
+      "oldNormError": 0.2928924754336919,
+      "movingCount": 881
+    },
+    {
+      "rotation": 6,
+      "name": "red",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8047544423358904,
+      "oldNormError": 0.292892475433692,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 6,
+      "name": "blue-left",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.7987820730944933,
+      "oldNormError": 0.29289321876612584,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 6,
+      "name": "blue-right",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8108613350852942,
+      "oldNormError": 0.2927205811146397,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 7,
+      "name": "out",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": 0.5504290868420383,
+      "oldNormError": 0.26278161515636256,
+      "movingCount": 881
+    },
+    {
+      "rotation": 7,
+      "name": "back",
+      "min": 0.9999999999999994,
+      "maxHoldTurn": 0,
+      "oldMin": 0.004336092801871361,
+      "oldNormError": 0.292855814652347,
+      "movingCount": 881
+    },
+    {
+      "rotation": 7,
+      "name": "red",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.08256661123088356,
+      "oldNormError": 0.2873458412877723,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 7,
+      "name": "blue-left",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.08335390788206207,
+      "oldNormError": 0.2872019117561231,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 7,
+      "name": "blue-right",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.08184786427818624,
+      "oldNormError": 0.28747829213567366,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 8,
+      "name": "out",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": 0.7082400722424773,
+      "oldNormError": 0.2765689872073861,
+      "movingCount": 881
+    },
+    {
+      "rotation": 8,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.00005604938570222262,
+      "oldNormError": 0.2928932163950072,
+      "movingCount": 881
+    },
+    {
+      "rotation": 8,
+      "name": "red",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": 0.000033352251951723755,
+      "oldNormError": 0.2928932179571021,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 8,
+      "name": "blue-left",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": 0.000014992706258515343,
+      "oldNormError": 0.29289321863987994,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 8,
+      "name": "blue-right",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": 0.000029877726170718377,
+      "oldNormError": 0.29289321812836666,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 9,
+      "name": "out",
+      "min": 0.9999999999999998,
+      "maxHoldTurn": 0,
+      "oldMin": 0.5468932701307001,
+      "oldNormError": 0.28799881570223684,
+      "movingCount": 881
+    },
+    {
+      "rotation": 9,
+      "name": "back",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.022574339807081262,
+      "oldNormError": 0.2924887414894811,
+      "movingCount": 881
+    },
+    {
+      "rotation": 9,
+      "name": "red",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.022574339807081345,
+      "oldNormError": 0.2924887414894811,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 9,
+      "name": "blue-left",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.02092592043919081,
+      "oldNormError": 0.2925453059647444,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 9,
+      "name": "blue-right",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": 0.02420478418663133,
+      "oldNormError": 0.29242877149955093,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 10,
+      "name": "out",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.3876387369894657,
+      "oldNormError": 0.2928823714116622,
+      "movingCount": 881
+    },
+    {
+      "rotation": 10,
+      "name": "back",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.9267569155609013,
+      "oldNormError": 0.28090992663840497,
+      "movingCount": 881
+    },
+    {
+      "rotation": 10,
+      "name": "red",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": -0.9267569144506479,
+      "oldNormError": 0.28093451011401716,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 10,
+      "name": "blue-left",
+      "min": 0.9999999999999993,
+      "maxHoldTurn": 0,
+      "oldMin": -0.9226384938850731,
+      "oldNormError": 0.2899077243036544,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 10,
+      "name": "blue-right",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.9287243849946633,
+      "oldNormError": 0.06941396360582397,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 11,
+      "name": "out",
+      "min": 0.9999999999999997,
+      "maxHoldTurn": 0,
+      "oldMin": 0.22570980788765177,
+      "oldNormError": 0.29289321661258183,
+      "movingCount": 881
+    },
+    {
+      "rotation": 11,
+      "name": "back",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8708061620502935,
+      "oldNormError": 0.27894216931265525,
+      "movingCount": 881
+    },
+    {
+      "rotation": 11,
+      "name": "red",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8708061620502935,
+      "oldNormError": 0.2535620574205826,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 11,
+      "name": "blue-left",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8740099426096927,
+      "oldNormError": 0.24782475416490501,
+      "movingCount": 1001
+    },
+    {
+      "rotation": 11,
+      "name": "blue-right",
+      "min": 0.9999999999999996,
+      "maxHoldTurn": 0,
+      "oldMin": -0.8677125814482525,
+      "oldNormError": 0.2588763351802861,
+      "movingCount": 1001
+    }
+  ],
+  "dockingTransitions": [
+    {
+      "boat": "saihoji-troopship-0",
+      "delta": 3.9932452061989276,
+      "scope": "Original beginSiege docking placement; not sailing and not accepted by this direction test"
+    },
+    {
+      "boat": "saihoji-troopship-1",
+      "delta": 3.963225847360914,
+      "scope": "Original beginSiege docking placement; not sailing and not accepted by this direction test"
+    }
+  ],
+  "phase": "siege",
+  "scope": "Actual 8931 page, chapter2 restored, deterministic original battle updates. Return invoked via original whaleReturned story callback (diagnostic, not natural full battle). Red/blue reinforcements validated as route-math fixtures across 12 rotations, not live siege. Actual public createFisherBoat now instantiates saved Blender v6; original campaign scheduling retained. No passenger, collision, or docking continuity acceptance.",
+  "errors": [],
+  "sourceBefore": {
+    "src/world/warshipNavigation.js": "00bd6fbd686c8f2594149208905090562d96896870cd1fc2eb5b382110128eb1",
+    "src/world/saihojiPhalanx.js": "b7d9dcfb0a7ee63d06329721f0091c7d717cc7cb9f562f0db206ee035b813311",
+    "src/assets/harbor.js": "57708b2cd8466fd0e8a51ee19a80f5ad4b3e31277dcc8bc28adc849b6c7424fa",
+    "src/assets/warshipV6.js": "af1cc1bbb0a76f70ebc173bf66837d5f0403c9a303a3e8c8a00ddca06591820e",
+    "src/assets/warshipV6Data.js": "b3a11dc31a0564a33d1540c9c15692a08fb174ce091b1e8a370928265f0e0121"
+  },
+  "sourceAfter": {
+    "src/world/warshipNavigation.js": "00bd6fbd686c8f2594149208905090562d96896870cd1fc2eb5b382110128eb1",
+    "src/world/saihojiPhalanx.js": "b7d9dcfb0a7ee63d06329721f0091c7d717cc7cb9f562f0db206ee035b813311",
+    "src/assets/harbor.js": "57708b2cd8466fd0e8a51ee19a80f5ad4b3e31277dcc8bc28adc849b6c7424fa",
+    "src/assets/warshipV6.js": "af1cc1bbb0a76f70ebc173bf66837d5f0403c9a303a3e8c8a00ddca06591820e",
+    "src/assets/warshipV6Data.js": "b3a11dc31a0564a33d1540c9c15692a08fb174ce091b1e8a370928265f0e0121"
+  },
+  "sourceStable": true,
+  "passed": true
+}

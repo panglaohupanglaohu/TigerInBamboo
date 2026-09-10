@@ -1,0 +1,13 @@
+{
+  "geometrySource": "assets/models/optimized/vanguard-battle-v1",
+  "sameNodeIDsAndParents": true,
+  "sameMatricesAndGeometry": true,
+  "reuseExactContracts": [
+    {
+      "path": "assets/models/optimized/vanguard-battle-v1/vanguard-battle-v1.assembly.json",
+      "sha256": "72bd3e32793e482bc60160ebeb6297e6226b746750603afdf0947231d6f3c051"
+    }
+  ],
+  "instruction": "Continue the existing node/pose adapter and geometry/boarding rules. Load only the new GLB prefab; do not replace its material factors with the archived source palette.",
+  "noNewRuntimeBehavior": true
+}

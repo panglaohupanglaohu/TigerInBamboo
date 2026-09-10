@@ -1,0 +1,35 @@
+{
+  "asset": "vanguard-color-v2",
+  "status": "validated_color_only_candidate",
+  "checksPassed": true,
+  "geometryAndAnimationChanged": false,
+  "runtimeIntegrationOwnedByMainTask": true,
+  "files": {
+    "README.md": {
+      "sha256": "a35734bfd6ef7e40218d6774334e67cbf39418ebcb5cfa1d9b4ced13c60316e0",
+      "bytes": 1392
+    },
+    "contract-reuse.json": {
+      "sha256": "e1dd9e3f285f89fffc541fd455d1679cfd59392cf81b5d2fd2e05a0e721ba710",
+      "bytes": 577
+    },
+    "material-mapping.json": {
+      "sha256": "eb40862827b7a1d867d56806f6e63d08fbe0637cd4ab3948c1fdbb13f9a76281",
+      "bytes": 6896
+    },
+    "validation.json": {
+      "sha256": "96f61156c2785a670851c4e18846c24b5839ba996d0cc21471fa9db1f867106e",
+      "bytes": 2122
+    },
+    "vanguard-color-v2.blend": {
+      "sha256": "c550b4e366c658de3cdb4082178f593643bdbf6481d7a3cb172feacc9b349e54",
+      "bytes": 1006503
+    },
+    "vanguard-color-v2.glb": {
+      "sha256": "505aa165c3610d8261ad271fe838371cd6e9366ff22d6b0b2fdb921de098f6dc",
+      "bytes": 464436
+    }
+  },
+  "evidenceDirectory": "artifacts/pipeline/vanguard-color-v2",
+  "target": "assets/concepts/vanguard-trooper-target-v1.png"
+}

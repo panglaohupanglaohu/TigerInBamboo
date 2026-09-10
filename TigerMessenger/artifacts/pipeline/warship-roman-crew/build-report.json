@@ -1,0 +1,84 @@
+{
+  "version": 9,
+  "sourceHashes": {
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/warship-battle-v8/warship-battle-v8.blend": "d27b8b5c104d4b2493f7674bae0d68fa7df92fbbb3c4f45ceac19f8f0b5feb29",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/warship-battle-v8/warship-battle-v8.glb": "1b5405e87f162cbf3b2db9e3af95a7a948fbd1ebf257103734013ac248306b0d",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.blend": "a1ed75c7a07208edb9425a4408b7e9a69459c049e2380a891efaea2d0519096e"
+  },
+  "sourceUnchanged": true,
+  "mapping": [
+    {
+      "target": "n220:i0..25",
+      "sources": [
+        "n3"
+      ],
+      "vertices": 45,
+      "polygons": 46,
+      "materials": 1,
+      "sharedGeometryCopies": 1
+    },
+    {
+      "target": "n221:i0..25",
+      "sources": [
+        "add:armor:Skirt_Ten_Separated_Lames.002",
+        "add:armor:Waist_Belt.002"
+      ],
+      "vertices": 480,
+      "polygons": 280,
+      "materials": 1,
+      "sharedGeometryCopies": 1
+    },
+    {
+      "target": "n222:i0..25",
+      "sources": [
+        "n7"
+      ],
+      "vertices": 69,
+      "polygons": 54,
+      "materials": 1,
+      "sharedGeometryCopies": 1
+    },
+    {
+      "target": "n223:i0..25",
+      "sources": [
+        "add:armor:Helmet_Galea.002"
+      ],
+      "vertices": 780,
+      "polygons": 418,
+      "materials": 1,
+      "sharedGeometryCopies": 1
+    },
+    {
+      "target": "n224:i0..25",
+      "sources": [
+        "n11"
+      ],
+      "vertices": 120,
+      "polygons": 40,
+      "materials": 1,
+      "sharedGeometryCopies": 1
+    },
+    {
+      "target": "n225:i0..25",
+      "sources": [
+        "n13"
+      ],
+      "vertices": 720,
+      "polygons": 240,
+      "materials": 1,
+      "sharedGeometryCopies": 1
+    },
+    {
+      "target": "n226:i0..25",
+      "sources": [
+        "n15"
+      ],
+      "vertices": 540,
+      "polygons": 180,
+      "materials": 1,
+      "sharedGeometryCopies": 1
+    }
+  ],
+  "glbSha256": "10887991c95c8baccd25ff9b2c80d2888788a68e8b24499f4447ccd1b1971210",
+  "status": "geometry produced; visual and contact audit follows"
+}

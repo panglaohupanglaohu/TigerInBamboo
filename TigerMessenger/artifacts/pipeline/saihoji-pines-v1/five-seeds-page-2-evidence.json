@@ -1,0 +1,134 @@
+{
+  "rows": [
+    {
+      "seed": 1238,
+      "zone": "master-stones",
+      "sourceBlendSHA256": "fb20c153ecc0dce9b2cfdfa2817521629af246c384cea2fca11207f6f8f3496c",
+      "actualGlbSHA256": "6f4df77ba63c877ef27ca12922f522d81e12c81b60d4efe13f42f02ad94b4939",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3596,
+        2228,
+        1220
+      ],
+      "sourceReviewOffset": [
+        -8.013258934020996,
+        -4.398988246917725,
+        2.9290082454681396
+      ],
+      "candidateReviewOffset": [
+        -3.533259153366089,
+        -1.0389885902404785,
+        2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 1247,
+      "zone": "master-stones",
+      "sourceBlendSHA256": "ca8b950e9b7c07132d04c7b4bddb91c5b9d04dfafcc1ab8e43e6632c206c95f2",
+      "actualGlbSHA256": "1d964261de796dcf4c3d32289bdc945cf2395fe881db18379a8434f23a791bb5",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3596,
+        2228,
+        1220
+      ],
+      "sourceReviewOffset": [
+        1.9867424964904785,
+        3.101011037826538,
+        2.9290082454681396
+      ],
+      "candidateReviewOffset": [
+        6.466743469238281,
+        6.461010456085205,
+        2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 1256,
+      "zone": "master-stones",
+      "sourceBlendSHA256": "45cdaa6c0011ff8c9c995b0ca5ba90975dd40d3a8f7f38ef1abb1cf97cec8bdc",
+      "actualGlbSHA256": "2b3bf80658ab597fbb43d2509c83cd9fa24bc053e29c86296a0e78d71712fd25",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3600,
+        2230,
+        1222
+      ],
+      "sourceReviewOffset": [
+        -6.466743469238281,
+        -6.461010456085205,
+        -2.9290084838867188
+      ],
+      "candidateReviewOffset": [
+        -1.9867427349090576,
+        -3.10101056098938,
+        -2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 1401,
+      "zone": "dry-cascade",
+      "sourceBlendSHA256": "5c596b336fbb2cfab6c01ca35d6cd58f27ed4ec7d9cf9b80c260eae34726d762",
+      "actualGlbSHA256": "67f513c092b9ed1a3da737f4e0bb21fe2c37e7eb1d02ce5cc3758e44f729f7dc",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3600,
+        2230,
+        1222
+      ],
+      "sourceReviewOffset": [
+        3.5332586765289307,
+        1.0389885902404785,
+        -2.9290080070495605
+      ],
+      "candidateReviewOffset": [
+        8.013258934020996,
+        4.398987770080566,
+        -2.9290080070495605
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 1410,
+      "zone": "dry-cascade",
+      "sourceBlendSHA256": "b8fa77031d36335b543d7edf8d975b4e58e033b6a74f16482e6a9ad0cd3c8e28",
+      "actualGlbSHA256": "5b8d247c097177d21b159ecafb02828cdc7b7a97af9747f74138e3a35b65e28d",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3594,
+        2226,
+        1220
+      ],
+      "sourceReviewOffset": [
+        -4.920226097106934,
+        -8.523032188415527,
+        -8.78702449798584
+      ],
+      "candidateReviewOffset": [
+        -0.44022607803344727,
+        -5.1630330085754395,
+        -8.78702449798584
+      ],
+      "worldPlacementBaked": false
+    }
+  ],
+  "sameCameraLightScale": true,
+  "actualGlbImport": true,
+  "renderEngine": "CYCLES",
+  "resolution": [
+    960,
+    750
+  ],
+  "samples": 16,
+  "renderPasses": 1,
+  "scope": "Five pairs per page; all image sources match current candidate GLB hashes. Review board only, not world integration."
+}

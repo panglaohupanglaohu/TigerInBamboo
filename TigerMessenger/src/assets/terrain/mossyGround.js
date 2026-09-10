@@ -287,8 +287,10 @@ export function buildImpastoMossyGround(opts = {}) {
     const phase = rnd() * Math.PI * 2;
     const rings = [];
     const pushTriangle = (a, b, c) => {
-      positions.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
-      for (const p of [a, b, c]) {
+      // XZ 环按此方向排列原本朝 -Y，导致陆面从上方不可见且射线漏地。
+      // 仅反转绕序，保留坐标与各顶点配色，地形轮廓及高度不变。
+      positions.push(a.x, a.y, a.z, c.x, c.y, c.z, b.x, b.y, b.z);
+      for (const p of [a, c, b]) {
         const tint = colorAt(p.x, p.z, _c);
         faceColors.push(tint.r, tint.g, tint.b);
       }

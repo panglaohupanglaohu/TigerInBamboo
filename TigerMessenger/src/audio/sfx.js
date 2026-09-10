@@ -3,6 +3,26 @@
 //  全局环境不含持续低频振荡；电车声仅在听距内按距离渐入/渐出
 // =====================================================================
 import { showToast } from "../ui/hud.js";
+import { createBgmOwnership } from "./bgmOwnership.js";
+const bgmOwnership = createBgmOwnership();
+const bgmAudio = (key, url) => bgmOwnership.wrap(key, new Audio(url));
+export const getBgmOwnershipSnapshot = () => bgmOwnership.snapshot();
+
+export function updateBgmListenerContext(context) {
+  bgmOwnership.setContext(context);
+  const owner = bgmOwnership.takeResume();
+  if (muted) return;
+  if (!owner) {if(!bgmOwnership.owner)resumeDefaultAmbience();return;}
+  if (owner === "tram") setTramRideBgm(true, {variant:tramRideVariant,skipIntro:tramRidePhase === "main"});
+  else if (owner === "storm") setLeviathanStormBgm(true);
+  else if (owner === "fleet") setFleetAssaultBgm(true);
+  else if (owner === "siege") setSiegeAssaultBgm(true, {resume:true});
+  else if (owner === "infiltration") updateInfiltrationBgm(context.listener, bgmOwnership.source("infiltration"));
+  else if (owner === "swamp") setSwampBgm(true);
+  else if (owner === "canyon") setCanyonApproachBgm(true);
+  if (!bgmOwnership.owner) resumeDefaultAmbience();
+}
+
 
 let audioCtx = null;
 let muted = false;
@@ -543,7 +563,7 @@ function ensureMusicBoxEl() {
     }
     return musicBoxEl;
   }
-  const el = new Audio(MUSIC_BOX_BGM_URL);
+  const el = bgmAudio("musicBox", MUSIC_BOX_BGM_URL);
   el.preload = "auto";
   el.loop = false; // 不循环
   el.volume = MUSIC_BOX_VOLUME;
@@ -574,8 +594,9 @@ export function toggleMusicBox(hooks = {}) {
     return false;
   }
   if (muted) return false;
+  if (!bgmOwnership.request("musicBox",true)) {bgmOwnership.request("musicBox",false);return false;}
   // 潜入太鼓 / 蓝盔攻城曲独占时不播八音盒
-  if (infiltrationBgmWanted || siegeAssaultWanted) return false;
+  if (!bgmOwnership.allowed("musicBox")) {bgmOwnership.request("musicBox",false);return false;}
   ensureAudio();
 
   // 压低默认环境点缀
@@ -622,6 +643,7 @@ export function toggleMusicBox(hooks = {}) {
 
 function finishMusicBox(session) {
   if (!session || musicBoxSession !== session) return;
+  bgmOwnership.request("musicBox",false);
   musicBoxSession = null;
   setAmbienceDuck(1);
   for (const timer of session.timers || []) clearTimeout(timer);
@@ -639,6 +661,7 @@ function finishMusicBox(session) {
 }
 
 export function stopMusicBox() {
+  bgmOwnership.request("musicBox",false);
   const session = musicBoxSession;
   if (!session) return;
   finishMusicBox(session);
@@ -717,7 +740,7 @@ export function sfxWaterTrain() {
  * 白天环境点缀：仅稀疏高音风铃，无持续低频垫音（旧版 110Hz 和弦会嗡嗡响）
  */
 export function startAmbience() {
-  if (padStarted || muted || infiltrationBgmWanted || siegeAssaultWanted) return;
+  if (padStarted || muted || bgmOwnership.owner) return;
   const ctx = ensureAudio();
   if (!ctx) return;
   padStarted = true;
@@ -769,23 +792,14 @@ export function pauseDefaultAmbience() {
  * 恢复默认环境音（离开峡谷场景且未静音时）
  */
 export function resumeDefaultAmbience() {
-  if (
-    muted ||
-    infiltrationBgmWanted ||
-    leviathanStormWanted ||
-    leviathanCueWanted ||
-    bubblePodCannonWanted ||
-    siegeAssaultWanted
-  ) {
-    return;
-  }
+  if (muted || bgmOwnership.owner) return;
   ambienceDuck = 1;
   if (!padStarted) startAmbience();
 }
 
 function ensureCanyonBgmEl() {
   if (canyonBgmEl) return canyonBgmEl;
-  const el = new Audio(CANYON_BGM_URL);
+  const el = bgmAudio("canyon", CANYON_BGM_URL);
   // 主人 2026-09-05：BGM 只播一遍——到 57s 段尾即收，不再区间回环
   el.loop = false;
   el.preload = "auto";
@@ -810,6 +824,7 @@ function ensureCanyonBgmEl() {
  * 不再回 21s 回环；是否重播由离开/再进触发区决定。
  */
 function onCanyonBgmSegmentEnd(el) {
+  bgmOwnership.request("canyon",false);
   canyonBgmPendingStop = false;
   canyonBgmWanted = false;
   canyonBgmDone = true;
@@ -847,6 +862,8 @@ function isCanyonBgmAudible() {
  * @param {{ fade?: number }} [opts] fade 秒数
  */
 export function setCanyonApproachBgm(active, opts = {}) {
+  const permitted = bgmOwnership.request("canyon", !!active && !muted && !canyonBgmDone);
+  if (active && !permitted) {canyonBgmWanted=false;canyonBgmPendingStop=false;return;}
   const fade = opts.fade ?? 1.2;
   // 电车是移动中的主场景：保留峡谷的 wanted 状态，实际声道让给电车；
   // 下车后主循环再次调用本函数时，峡谷曲会从这里恢复。
@@ -865,7 +882,7 @@ export function setCanyonApproachBgm(active, opts = {}) {
     return;
   }
   // 木马潜入太鼓 / 蓝盔攻城曲独占时不抢播
-  const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
+  const next = !!active && !muted;
 
   if (next) {
     // 主人 2026-09-05：本轮进谷已播完整段就不再重播（离开谷区才复位）
@@ -971,7 +988,9 @@ function fadeAudioTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   canyonBgmFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!canyonBgmEl || canyonBgmEl !== el) return;
     const k = Math.min(1, (performance.now() - t0) / dur);
     el.volume = start + (end - start) * k;
@@ -997,7 +1016,9 @@ function fadeOutCanyonBgm(seconds = 1.4) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   canyonBgmFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!canyonBgmEl || canyonBgmEl !== el) return;
     // 若中途又要求播放，中止淡出
     if (canyonBgmWanted) {
@@ -1032,19 +1053,7 @@ function fadeOutCanyonBgm(seconds = 1.4) {
 
 /** 任一区段 BGM（峡谷 / 湖沼 / 潜入太鼓 / 电车搭乘 / 苔庭鲸风暴 / 气泡艇开炮 / 蓝盔攻城）仍在占用声道时，默认环境音不得恢复 */
 function anySegmentBgmEngaged() {
-  return (
-    canyonBgmWanted ||
-    canyonBgmPendingStop ||
-    swampBgmWanted ||
-    swampBgmPendingStop ||
-    infiltrationBgmWanted ||
-    tramRideWanted ||
-    leviathanStormWanted ||
-    leviathanCueWanted ||
-    bubblePodCannonWanted ||
-    siegeAssaultWanted ||
-    fleetAssaultWanted
-  );
+  return bgmOwnership.owner !== null;
 }
 
 /** 电车上暂停区域曲，但不清除区域 wanted，便于下车后恢复。 */
@@ -1063,7 +1072,7 @@ function suspendRegionalBgmForTram() {
 /** 乘车是当前场景：攻城/潜入只保留 wanted，声道让给电车曲。 */
 function suspendExclusiveBgmForTram() {
   suspendRegionalBgmForTram();
-  for (const el of [siegeAssaultEl, infiltrationBgmEl]) {
+  for (const el of [siegeAssaultEl, infiltrationBgmEl, leviathanStormEl, leviathanCueEl, fleetAssaultEl, bubblePodCannonEl]) {
     if (!el || el.paused) continue;
     try {
       el.pause();
@@ -1075,17 +1084,7 @@ function suspendExclusiveBgmForTram() {
 }
 
 function resumeExclusiveBgmAfterTram() {
-  if (muted) return;
-  if (siegeAssaultWanted && siegeAssaultEl && !siegeAssaultEl.ended) {
-    siegeAssaultEl.volume = SIEGE_ASSAULT_VOLUME;
-    siegeAssaultEl.play()?.catch?.(() => {});
-    return;
-  }
-  // 只播一遍：已播完的曲子不在下车时复活
-  if (infiltrationBgmWanted && infiltrationBgmEl && !infiltrationBgmEl.ended) {
-    infiltrationBgmEl.volume = INFILTRATION_BGM_VOLUME;
-    infiltrationBgmEl.play()?.catch?.(() => {});
-  }
+  // Main updates the listener after disembarking; no old scene flag may resume here.
 }
 
 // =====================================================================
@@ -1095,7 +1094,7 @@ function resumeExclusiveBgmAfterTram() {
 
 function ensureTramIntroEl() {
   if (tramIntroEl) return tramIntroEl;
-  const el = new Audio(TRAM_INTRO_URL);
+  const el = bgmAudio("tram", TRAM_INTRO_URL);
   el.preload = "auto";
   el.loop = false;
   el.volume = 0;
@@ -1116,7 +1115,7 @@ function ensureTramIntroEl() {
 
 function ensureTramMainEl() {
   if (tramMainEl) return tramMainEl;
-  const el = new Audio(TRAM_MAIN_URL);
+  const el = bgmAudio("tram", TRAM_MAIN_URL);
   el.preload = "auto";
   el.loop = true;
   el.volume = 0;
@@ -1127,7 +1126,7 @@ function ensureTramMainEl() {
 
 function ensureTramRedRideEl() {
   if (tramRedRideEl) return tramRedRideEl;
-  const el = new Audio(TRAM_RED_BGM_URL);
+  const el = bgmAudio("tram", TRAM_RED_BGM_URL);
   el.preload = "auto";
   el.loop = true;
   el.volume = 0;
@@ -1184,6 +1183,7 @@ function advanceTramRideToMain() {
  * @param {{ fade?: number, skipIntro?: boolean, variant?: 'red'|'blue' }} [opts]
  */
 export function setTramRideBgm(active, opts = {}) {
+  bgmOwnership.request("tram", !!active && !muted);
   const fade = opts.fade ?? 0.7;
   const next = !!active && !muted;
 
@@ -1312,7 +1312,9 @@ function fadeTramRideAudioTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   tramRideFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (el !== tramIntroEl && el !== tramMainEl && el !== tramRedRideEl) return;
     if (!tramRideWanted && end > 0) {
       tramRideFading = false;
@@ -1349,7 +1351,9 @@ function fadeOutTramRideBgm(seconds = 0.9) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   tramRideFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (tramRideWanted) {
       tramRideFading = false;
       return;
@@ -1374,7 +1378,7 @@ function fadeOutTramRideBgm(seconds = 0.9) {
 
 function ensureInfiltrationBgmEl() {
   if (infiltrationBgmEl) return infiltrationBgmEl;
-  const el = new Audio(INFILTRATION_BGM_URL);
+  const el = bgmAudio("infiltration", INFILTRATION_BGM_URL);
   // 主人 2026-09-05：BGM 只播一遍——整首走完即止，任务结束才复位
   el.loop = false;
   el.preload = "auto";
@@ -1476,6 +1480,7 @@ function pauseOthersForInfiltration() {
  * @param {{ fade?: number }} [opts]
  */
 export function setInfiltrationBgm(active, opts = {}) {
+  if(!active)bgmOwnership.request("infiltration",false);
   const fade = opts.fade ?? 0.8;
   const next = !!active && !muted;
   if (next) {
@@ -1506,6 +1511,8 @@ export function setInfiltrationBgm(active, opts = {}) {
  * @param {THREE.Vector3|{x:number,y:number,z:number}|null|undefined} sourcePos 木马/场景锚点
  */
 export function updateInfiltrationBgm(listenerPos, sourcePos) {
+  const permitted=bgmOwnership.request("infiltration", infiltrationMissionActive && !muted, {source:sourcePos,priority:bgmOwnership.isRequested("siege")&&!siegeAssaultHandoff?0:90});
+  if(!permitted){infiltrationBgmWanted=false;return;}
   if (tramRideWanted) return;
   // 蓝盔进攻曲独占到「夜晚鼓声响起」：交接前不启太鼓
   if (siegeAssaultWanted && !siegeAssaultHandoff) return;
@@ -1601,7 +1608,9 @@ function silenceInfiltrationBgmKeepMission(seconds = 0.7) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   infiltrationBgmFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!infiltrationBgmEl || infiltrationBgmEl !== el) return;
     // 又靠近了：中止静音
     if (infiltrationBgmWanted) {
@@ -1647,7 +1656,9 @@ function fadeInfiltrationAudioTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   infiltrationBgmFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!infiltrationBgmEl || infiltrationBgmEl !== el) return;
     if (!infiltrationBgmWanted && end > 0) {
       infiltrationBgmFading = false;
@@ -1675,7 +1686,9 @@ function fadeOutInfiltrationBgm(seconds = 1.0) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   infiltrationBgmFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!infiltrationBgmEl || infiltrationBgmEl !== el) return;
     if (infiltrationBgmWanted) {
       infiltrationBgmFading = false;
@@ -1702,7 +1715,7 @@ function fadeOutInfiltrationBgm(seconds = 1.0) {
 
 function ensureSwampBgmEl() {
   if (swampBgmEl) return swampBgmEl;
-  const el = new Audio(SWAMP_BGM_URL);
+  const el = bgmAudio("swamp", SWAMP_BGM_URL);
   // 主人 2026-09-05：BGM 只播一遍——到 53s 段尾即收，不再区间回环
   el.loop = false;
   el.preload = "auto";
@@ -1726,6 +1739,7 @@ function ensureSwampBgmEl() {
  * 不再回 18s 回环；是否重播由离开/再进湖沼决定。
  */
 function onSwampBgmSegmentEnd(el) {
+  bgmOwnership.request("swamp",false);
   swampBgmPendingStop = false;
   swampBgmWanted = false;
   swampBgmDone = true;
@@ -1763,6 +1777,8 @@ function isSwampBgmAudible() {
  * @param {{ fade?: number }} [opts] fade 秒数
  */
 export function setSwampBgm(active, opts = {}) {
+  const permitted = bgmOwnership.request("swamp", !!active && !muted && !swampBgmDone);
+  if (active && !permitted) {swampBgmWanted=false;swampBgmPendingStop=false;return;}
   const fade = opts.fade ?? 1.2;
   // 电车上保留湖沼 wanted 状态，但不让区域 BGM 抢主声道。
   // 本轮已播完整段（swampBgmDone）则不再保留 wanted——不回环。
@@ -1780,7 +1796,7 @@ export function setSwampBgm(active, opts = {}) {
     return;
   }
   // 木马潜入太鼓 / 蓝盔攻城曲独占时不抢播
-  const next = !!active && !muted && !infiltrationBgmWanted && !siegeAssaultWanted;
+  const next = !!active && !muted;
 
   if (next) {
     // 主人 2026-09-05：本轮进湖沼已播完整段就不再重播（离开才复位）
@@ -1863,7 +1879,9 @@ function fadeSwampAudioTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   swampBgmFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!swampBgmEl || swampBgmEl !== el) return;
     const k = Math.min(1, (performance.now() - t0) / dur);
     el.volume = start + (end - start) * k;
@@ -1888,7 +1906,9 @@ function fadeOutSwampBgm(seconds = 1.4) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   swampBgmFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!swampBgmEl || swampBgmEl !== el) return;
     // 若中途又要求播放，中止淡出
     if (swampBgmWanted) {
@@ -1942,7 +1962,7 @@ const LEVIATHAN_CUE_VOLUME = 0.52;
 
 function makeLeviathanAudio(url, loop) {
   if (typeof Audio === "undefined") return null;
-  const el = new Audio(url);
+  const el = bgmAudio(url === LEVIATHAN_STORM_BGM_URL ? "storm" : "cue", url);
   el.loop = !!loop;
   el.preload = "auto";
   el.volume = 0;
@@ -2011,6 +2031,7 @@ function pauseOthersForLeviathanStorm() {
 }
 
 function stopLeviathanCue(fade = 0.35) {
+  bgmOwnership.request("cue",false);
   leviathanCueWanted = false;
   const el = leviathanCueEl;
   if (!el) return;
@@ -2018,7 +2039,9 @@ function stopLeviathanCue(fade = 0.35) {
   const start = el.volume;
   const t0 = performance.now();
   const dur = Math.max(0.05, fade) * 1000;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (leviathanCueWanted) return;
     const k = Math.min(1, (performance.now() - t0) / dur);
     el.volume = start * (1 - k);
@@ -2042,7 +2065,8 @@ function stopLeviathanCue(fade = 0.35) {
  * 同一轮升空里重复调用不会重头。
  */
 export function cueLeviathanStormOnce() {
-  if (muted || siegeAssaultWanted) return false;
+  if (!bgmOwnership.request("cue", !muted)) {bgmOwnership.request("cue",false);return false;}
+  if (muted || !bgmOwnership.allowed("cue")) return false;
   if (leviathanCueWanted && leviathanCueEl && !leviathanCueEl.paused) return false;
   const el = ensureLeviathanCueEl();
   if (!el) return false;
@@ -2060,7 +2084,9 @@ export function cueLeviathanStormOnce() {
   const start = 0;
   const end = LEVIATHAN_CUE_VOLUME;
   const dur = 450;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!leviathanCueWanted || !leviathanCueEl) return;
     const k = Math.min(1, (performance.now() - t0) / dur);
     el.volume = start + (end - start) * k;
@@ -2076,8 +2102,10 @@ export function cueLeviathanStormOnce() {
  * @param {{ fade?: number }} [opts]
  */
 export function setLeviathanStormBgm(active, opts = {}) {
+  const permitted = bgmOwnership.request("storm", !!active && !muted && !leviathanStormDone);
+  if (active && !permitted) {leviathanStormWanted=false;return;}
   const fade = opts.fade ?? 1.1;
-  const next = !!active && !muted && !siegeAssaultWanted;
+  const next = !!active && !muted && bgmOwnership.allowed("storm");
   if (next) {
     leviathanStormWanted = true;
     // 主人 2026-09-05：本轮升空已播完整首就不再重播（收飞才复位）。
@@ -2127,7 +2155,9 @@ function fadeLeviathanStormTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   leviathanStormFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!leviathanStormEl || leviathanStormEl !== el) return;
     if (!leviathanStormWanted && end > 0) {
       leviathanStormFading = false;
@@ -2155,7 +2185,9 @@ function fadeOutLeviathanStormBgm(seconds = 1.2) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   leviathanStormFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!leviathanStormEl || leviathanStormEl !== el) return;
     if (leviathanStormWanted) {
       leviathanStormFading = false;
@@ -2202,7 +2234,7 @@ const BUBBLE_POD_CANNON_VOLUME = 0.5;
 function ensureBubblePodCannonEl() {
   if (bubblePodCannonEl) return bubblePodCannonEl;
   if (typeof Audio === "undefined") return null;
-  const el = new Audio(BUBBLE_POD_CANNON_BGM_URL);
+  const el = bgmAudio("bubble", BUBBLE_POD_CANNON_BGM_URL);
   // 主人 2026-09-05：BGM 只播一遍——整首走完即止，再次开炮才是新触发
   el.loop = false;
   el.preload = "auto";
@@ -2251,7 +2283,9 @@ function fadeBubblePodCannonTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   bubblePodCannonFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!bubblePodCannonEl || bubblePodCannonEl !== el) return;
     if (!bubblePodCannonWanted && end > 0) {
       bubblePodCannonFading = false;
@@ -2279,7 +2313,9 @@ function fadeOutBubblePodCannonBgm(seconds = 0.9) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   bubblePodCannonFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!bubblePodCannonEl || bubblePodCannonEl !== el) return;
     if (bubblePodCannonWanted) {
       bubblePodCannonFading = false;
@@ -2312,14 +2348,13 @@ function fadeOutBubblePodCannonBgm(seconds = 0.9) {
  * @param {{ fade?: number }} [opts]
  */
 export function setBubblePodCannonBgm(active, opts = {}) {
+  const permitted = bgmOwnership.request("bubble", !!active && !muted);
+  if (active && !permitted) {bubblePodCannonWanted=false;return false;}
   const fade = opts.fade ?? 0.7;
   const next = !!active && !muted;
   if (next) {
     if (
-      leviathanStormWanted ||
-      leviathanCueWanted ||
-      infiltrationBgmWanted ||
-      siegeAssaultWanted
+      !bgmOwnership.allowed("bubble")
     ) {
       return false;
     }
@@ -2370,7 +2405,7 @@ const FLEET_ASSAULT_VOLUME = 0.46;
 function ensureFleetAssaultEl() {
   if (fleetAssaultEl) return fleetAssaultEl;
   if (typeof Audio === "undefined") return null;
-  const el = new Audio(FLEET_ASSAULT_BGM_URL);
+  const el = bgmAudio("fleet", FLEET_ASSAULT_BGM_URL);
   // 一场作战从进场打到收队要一两分钟，循环，别中途冷场
   el.loop = true;
   el.preload = "auto";
@@ -2404,7 +2439,9 @@ function fadeFleetAssaultTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   fleetAssaultFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!fleetAssaultEl || fleetAssaultEl !== el) return;
     if (!fleetAssaultWanted && end > 0) {
       fleetAssaultFading = false;
@@ -2432,7 +2469,9 @@ function fadeOutFleetAssaultBgm(seconds = 1.1) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   fleetAssaultFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!fleetAssaultEl || fleetAssaultEl !== el) return;
     if (fleetAssaultWanted) {
       fleetAssaultFading = false;
@@ -2470,14 +2509,13 @@ function fadeOutFleetAssaultBgm(seconds = 1.1) {
  * @returns {boolean} 是否改变了播放状态
  */
 export function setFleetAssaultBgm(active, opts = {}) {
+  const permitted = bgmOwnership.request("fleet", !!active && !muted, opts.source ? {source:opts.source} : {});
+  if (active && !permitted) {fleetAssaultWanted=false;return false;}
   const fade = opts.fade ?? 1.0;
   const next = !!active && !muted;
   if (next) {
     if (
-      leviathanStormWanted ||
-      leviathanCueWanted ||
-      infiltrationBgmWanted ||
-      tramRideWanted
+      !bgmOwnership.allowed("fleet")
     ) {
       return false;
     }
@@ -2525,7 +2563,7 @@ const SIEGE_ASSAULT_VOLUME = 0.5;
 function ensureSiegeAssaultEl() {
   if (siegeAssaultEl) return siegeAssaultEl;
   if (typeof Audio === "undefined") return null;
-  const el = new Audio(SIEGE_ASSAULT_BGM_URL);
+  const el = bgmAudio("siege", SIEGE_ASSAULT_BGM_URL);
   // 主人 2026-09-05：BGM 只播一遍——整首走完即止，下次攻城才是新触发
   el.loop = false;
   el.preload = "auto";
@@ -2591,7 +2629,9 @@ function fadeSiegeAssaultTo(el, targetVol, seconds) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   siegeAssaultFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!siegeAssaultEl || siegeAssaultEl !== el) return;
     if (!siegeAssaultWanted && end > 0) {
       siegeAssaultFading = false;
@@ -2620,7 +2660,9 @@ function fadeOutSiegeAssaultBgm(seconds = 1.2) {
   const t0 = performance.now();
   const dur = Math.max(0.05, seconds) * 1000;
   siegeAssaultFading = true;
+  const validFade = bgmOwnership.fade(el);
   const step = () => {
+    if (!validFade()) return;
     if (!siegeAssaultEl || siegeAssaultEl !== el) return;
     if (siegeAssaultWanted) {
       siegeAssaultFading = false;
@@ -2653,11 +2695,14 @@ function fadeOutSiegeAssaultBgm(seconds = 1.2) {
  * @param {{ fade?: number }} [opts]
  */
 export function setSiegeAssaultBgm(active, opts = {}) {
+  const wasRequested = bgmOwnership.isRequested("siege");
+  const permitted = bgmOwnership.request("siege", !!active && !muted, opts.source ? {source:opts.source} : {});
+  if (active && !permitted) {siegeAssaultWanted=false;return false;}
   const fade = opts.fade ?? 0.9;
   const next = !!active && !muted;
   if (next) {
     siegeAssaultWanted = true;
-    siegeAssaultHandoff = false;
+    if (!wasRequested && !opts.resume) siegeAssaultHandoff = false;
     if (tramRideWanted) return true;
     const el = ensureSiegeAssaultEl();
     if (!el) return false;
@@ -2682,7 +2727,7 @@ export function setSiegeAssaultBgm(active, opts = {}) {
 
 /** 允许夜晚太鼓接手：攻城曲继续播，直到太鼓真正起声再淡出 */
 export function allowSiegeAssaultBgmHandoff() {
-  if (!siegeAssaultWanted) return false;
+  if (!bgmOwnership.isRequested("siege")) return false;
   siegeAssaultHandoff = true;
   return true;
 }
@@ -2697,6 +2742,7 @@ export function isSiegeAssaultBgmHandoff() {
 
 function setMuted(next) {
   muted = next;
+  bgmOwnership.setContext({muted});
   if (muted) {
     stopMusicBox();
     stopAmbienceNodes();

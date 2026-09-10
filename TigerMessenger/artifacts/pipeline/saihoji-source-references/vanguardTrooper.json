@@ -1,0 +1,34 @@
+{
+  "asset": "vanguardTrooper",
+  "sourceBlend": "assets/models/originals/supplemental/blender-r3/vanguardTrooper.blend",
+  "sourceBlendSha256": "3f319fa6f69d686a80c6a3f9f5b573879a51b1009966e99caf7c89bb67f67c64",
+  "sourceSnapshot": "assets/models/originals/supplemental/vanguardTrooper.source.json",
+  "sourceSnapshotSha256": "e5059f9307511da81a0d3ee1436d71ae94f147e31b957494277bad2d0eaf0259",
+  "scope": "Original vanguard heavy trooper, original weapons and armor.",
+  "render": "artifacts/pipeline/saihoji-source-references/vanguardTrooper-source-three-quarter.png",
+  "renderSha256": "8104bccf1b92b71b9e36426a07e7516cdfc5b4d08237befbe3bb66347dfdcdbd",
+  "sourceNodes": 84,
+  "visibleMeshObjects": 45,
+  "blenderBounds": [
+    [
+      -0.38503146171569824,
+      -0.9146072864532471,
+      0.032654765993356705
+    ],
+    [
+      0.5924127101898193,
+      0.2950000762939453,
+      1.8886436223983765
+    ]
+  ],
+  "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+  "sourceFileUnchanged": true,
+  "foregroundUsed": false,
+  "sourceFileSaved": false,
+  "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+  "camera": {
+    "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+    "framing": "per-asset actual visible projected bounds plus 12% margin",
+    "orthographicScale": 1.5999127626419067
+  }
+}

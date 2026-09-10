@@ -1,0 +1,49 @@
+{
+  "asset": "warship-battle-v3",
+  "status": "retained_failed_first_pass",
+  "passedWithinListedScope": false,
+  "runtimeIntegrated": false,
+  "readyForFullBattle": false,
+  "files": {
+    "README.md": {
+      "sha256": "0e31a9110e8b3a6e209ff5a3fc1098cb60a8b72adf3036d40bb0b99d1719af5f",
+      "bytes": 2084
+    },
+    "new-shape-validation.json": {
+      "sha256": "d878c14cbd151279b7bc4462b5fb9127aa187e5bd42e9d8350133abed28bb6fd",
+      "bytes": 209467
+    },
+    "oar-neighbor-validation.json": {
+      "sha256": "d2c19c474cf45c940316b3408be94548324bcd93fbc8989f6dbb73042b74d65d",
+      "bytes": 193
+    },
+    "rowing-seat-audit.json": {
+      "sha256": "e74a2c40e5c692c911382b72d3d587a3f1fd690425ea0cb23e7031031042a9f5",
+      "bytes": 427
+    },
+    "validation-summary.json": {
+      "sha256": "3310f82f8a7da92987bbf9396154a5d36a1de4c74421b29daee1e928e782e417",
+      "bytes": 2040
+    },
+    "validation.json": {
+      "sha256": "14e7d5a36a1ddc073aa75129318bb9445a788eef9fb7b896b350bcf0622c7959",
+      "bytes": 6104
+    },
+    "warship-battle-v3.assembly.json": {
+      "sha256": "81002ef1830284a7423bc986f141a71c9525b71a03d602d357b8b7a4a86ff258",
+      "bytes": 32613565
+    },
+    "warship-battle-v3.blend": {
+      "sha256": "34cadb4d717937c8a1ef3b5909da4eeefdca405516eef5a9701d597f22c660d9",
+      "bytes": 4998491
+    },
+    "warship-battle-v3.glb": {
+      "sha256": "d885f87ea8384af122f3e70e1aa9fc52d1ee2010a2c1f8a469c0420f178ac53c",
+      "bytes": 3309300
+    }
+  },
+  "evidenceDirectory": "artifacts/pipeline/warship-battle-v3",
+  "retainedPrevious": [
+    "warship-battle-v2"
+  ]
+}

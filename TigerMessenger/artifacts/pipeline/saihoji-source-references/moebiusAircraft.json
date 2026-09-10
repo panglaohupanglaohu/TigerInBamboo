@@ -1,0 +1,34 @@
+{
+  "asset": "moebiusAircraft",
+  "sourceBlend": "assets/models/originals/blender-r3/moebiusAircraft.blend",
+  "sourceBlendSha256": "f0b0a0fc7703c6e5f832800c9a978afd547c69040d0cb1aa4457f7acc03950a7",
+  "sourceSnapshot": "assets/models/originals/moebiusAircraft.source.json",
+  "sourceSnapshotSha256": "a8575b5009ac9c371ba9597e778ec3eea95f3c512637cd00663806c939d84852",
+  "scope": "Original single craft. No independent AircraftSquad archive was found; this does not claim to show its runtime formation.",
+  "render": "artifacts/pipeline/saihoji-source-references/moebiusAircraft-source-three-quarter.png",
+  "renderSha256": "e3bbc8ae4964f8b43c10d7662cbd162399a50ba6ca7518421cb39e400e0d6d11",
+  "sourceNodes": 67,
+  "visibleMeshObjects": 31,
+  "blenderBounds": [
+    [
+      -1.600000023841858,
+      -5.549999713897705,
+      -1.600000262260437
+    ],
+    [
+      1.600000023841858,
+      4.525000095367432,
+      1.5999999046325684
+    ]
+  ],
+  "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+  "sourceFileUnchanged": true,
+  "foregroundUsed": false,
+  "sourceFileSaved": false,
+  "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+  "camera": {
+    "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+    "framing": "per-asset actual visible projected bounds plus 12% margin",
+    "orthographicScale": 7.036799907684326
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "asset": "warship-battle-v1",
+  "status": "blocked_candidate",
+  "readyForBattle": false,
+  "source": "assets/models/originals/blender-r3/fisherBoat.blend",
+  "sourceSHA256": "cc82906a48e1e82025b84242dd4870889a98256eb2e6fe9ddc5068bc97d23010",
+  "blockers": [
+    "36 inherited adjacent-oar intersection frames; solve before battlefield integration."
+  ],
+  "files": {
+    "warship-battle-v1.glb": {
+      "sha256": "6fe88d3bea51f18d424d5d22498cfd7d81719d9fea0477e5c743e874a38e2241",
+      "bytes": 3184712
+    },
+    "warship-battle-v1.assembly.json": {
+      "sha256": "849a675d4a92592142aef78afe8c913738e2192f76b5b4b45130b44792f1cc6a",
+      "bytes": 32851109
+    },
+    "boarding-path.json": {
+      "sha256": "bb8c38eeedbbe546c1d7ffa357f950269f6323cd3dbaa5534ee1bdd0030f2b64",
+      "bytes": 58609
+    },
+    "PLACEMENT.md": {
+      "sha256": "47d4a09117f788749171f872fcbdf5609319e9d8f3850250451449e09c79056a",
+      "bytes": 5746
+    },
+    "README.md": {
+      "sha256": "a9f4d59061666a3f14a826b6607bb1f12cf7c77eb18b18e04938c99677373a1e",
+      "bytes": 2986
+    },
+    "validation-summary.json": {
+      "sha256": "405f5b9e92019d52bb12d68d2cc97c9396305a04e6161fda2018490675f8c341",
+      "bytes": 1992
+    },
+    "validation.json": {
+      "sha256": "52becf8a4d15887aaf8b00a466fec7fe701a80511cefb3b2b8e999a7ad42cc5b",
+      "bytes": 6633
+    },
+    "rowing-clearance-final.json": {
+      "sha256": "38fc2484b70f8343137b9780a77ed2f5f6c6ddeec4d664fe150646e18cd0e632",
+      "bytes": 692
+    },
+    "boarding-path-validation.json": {
+      "sha256": "ffadb675e91a52ab478b387b17d60aa7eb7d6ae80411cda1ae1cf6f66dafd69b",
+      "bytes": 63343
+    },
+    "carry-contract-validation.json": {
+      "sha256": "4bb52dd2d972fce91ad5e1d391d1418176c10be6a3e522e559e40f1ef71cedb2",
+      "bytes": 382
+    },
+    "oar-source-comparison.json": {
+      "sha256": "e60f36db24e756a1ea1d364d5be28f1cfe8f515e30d7704a0414c3ffcf16ebd9",
+      "bytes": 779
+    }
+  },
+  "review": "artifacts/pipeline/warship-battle-v1/review.html",
+  "next": [
+    "Resolve rowing synchronization and adjacent-oar clearance",
+    "25-person boarding scheduling and terrain foot support",
+    "Restore original instancing and measure fleet performance"
+  ],
+  "blenderReviewFile": "assets/models/optimized/warship-battle-v1/warship-battle-v1.blend"
+}

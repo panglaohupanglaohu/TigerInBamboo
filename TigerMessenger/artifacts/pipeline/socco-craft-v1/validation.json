@@ -1,0 +1,510 @@
+{
+  "glbSha256": "98729864e994acd2df77d51cae537f630badda795105871d7b389dd2c3c76ac2",
+  "sourceNodeCount": 127,
+  "sourceParentsExact": true,
+  "maxLocalMatrixError": 3.714032954516e-07,
+  "allOriginalNodeReferencesResolve": true,
+  "referencedNodeIDs": [
+    "n87",
+    "n109",
+    "n110",
+    "n111",
+    "n112",
+    "n113",
+    "n114",
+    "n115",
+    "n116",
+    "n117",
+    "n118",
+    "n119",
+    "n120",
+    "n121",
+    "n122",
+    "n123",
+    "n125"
+  ],
+  "all14SeatIDsPresent": true,
+  "materialChecks": [
+    {
+      "node": "n1",
+      "material": "m0",
+      "maxFactorError": 1.3246388430587785e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n3",
+      "material": "m0",
+      "maxFactorError": 1.3246388430587785e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n5",
+      "material": "m0",
+      "maxFactorError": 1.3246388430587785e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n7",
+      "material": "m0",
+      "maxFactorError": 1.3246388430587785e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n9",
+      "material": "m3",
+      "maxFactorError": 2.22950167216851e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n11",
+      "material": "m3",
+      "maxFactorError": 2.22950167216851e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n13",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n14",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n15",
+      "material": "m6",
+      "maxFactorError": 2.7730498897149403e-08,
+      "alpha": 0.44999998807907104
+    },
+    {
+      "node": "n16",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n18",
+      "material": "m8",
+      "maxFactorError": 4.3512138059309535e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n19",
+      "material": "m9",
+      "maxFactorError": 1.3985182567566312e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n20",
+      "material": "m8",
+      "maxFactorError": 4.3512138059309535e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n21",
+      "material": "m10",
+      "maxFactorError": 1.6229213598006886e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n22",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n23",
+      "material": "m10",
+      "maxFactorError": 1.6229213598006886e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n24",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n25",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n27",
+      "material": "m12",
+      "maxFactorError": 1.0065912103840446e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n29",
+      "material": "m10",
+      "maxFactorError": 1.6229213598006886e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n31",
+      "material": "m14",
+      "maxFactorError": 3.70168298791107e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n32",
+      "material": "m12",
+      "maxFactorError": 1.0065912103840446e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n34",
+      "material": "m12",
+      "maxFactorError": 1.0065912103840446e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n36",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n37",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n38",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n39",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n40",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n41",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n42",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n43",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n44",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n45",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n46",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n47",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n48",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n49",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n50",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n51",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n52",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n53",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n54",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n55",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n56",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n57",
+      "material": "m0",
+      "maxFactorError": 1.3246388430587785e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n59",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n60",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n61",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n62",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n63",
+      "material": "m10",
+      "maxFactorError": 1.6229213598006886e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n64",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n65",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n66",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n67",
+      "material": "m5",
+      "maxFactorError": 2.9215697083806447e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n68",
+      "material": "m10",
+      "maxFactorError": 1.6229213598006886e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n104",
+      "material": "m3",
+      "maxFactorError": 2.22950167216851e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n106",
+      "material": "m3",
+      "maxFactorError": 2.22950167216851e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n102",
+      "material": "m3",
+      "maxFactorError": 2.22950167216851e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n90",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n91",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n92",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n93",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n94",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n95",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n96",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n97",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n98",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n100",
+      "material": "m11",
+      "maxFactorError": 7.647490696260917e-10,
+      "alpha": 1
+    },
+    {
+      "node": "n88",
+      "material": "m12",
+      "maxFactorError": 1.0065912103840446e-08,
+      "alpha": 1
+    },
+    {
+      "node": "n123",
+      "material": "m10",
+      "maxFactorError": 1.6229213598006886e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n125",
+      "material": "m10",
+      "maxFactorError": 1.6229213598006886e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n70",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n72",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n74",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n76",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n78",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n80",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n82",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n84",
+      "material": "m15",
+      "maxFactorError": 3.010993829266617e-09,
+      "alpha": 1
+    },
+    {
+      "node": "n86",
+      "material": "m16",
+      "maxFactorError": 1.3417989830344368e-08,
+      "alpha": 0.30000001192092896
+    }
+  ],
+  "scope": "Actual exported GLB node/transform/material validation. Runtime behavior separate."
+}

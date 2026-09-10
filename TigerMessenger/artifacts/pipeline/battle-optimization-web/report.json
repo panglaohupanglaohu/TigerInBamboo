@@ -1,0 +1,258 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "heavy binds synchronously",
+      "passed": true,
+      "detail": {
+        "asset": "vanguard-color-v2",
+        "active": true,
+        "geometryApplied": true,
+        "geometrySha256": "536164af174d2d8be66dcbaedf561960481752772853a072c95a82c09d700474",
+        "sourceGlbSha256": "505aa165c3610d8261ad271fe838371cd6e9366ff22d6b0b2fdb921de098f6dc",
+        "originalNodeCount": 84,
+        "addedNodeCount": 33,
+        "colorRevision": 2,
+        "action": "idle",
+        "liveRig": true,
+        "leftHandRole": "gun grip"
+      }
+    },
+    {
+      "name": "84 original IDs and parents retained",
+      "passed": true
+    },
+    {
+      "name": "117 candidate nodes",
+      "passed": true,
+      "detail": 117
+    },
+    {
+      "name": "parts identities retained",
+      "passed": true
+    },
+    {
+      "name": "heavy exact GLB linear factors and complete vertex attributes",
+      "passed": true,
+      "detail": {
+        "maxColorError": 0,
+        "attributeValid": true,
+        "colorEnabled": true
+      }
+    },
+    {
+      "name": "aim cannon points actor +Z",
+      "passed": true
+    },
+    {
+      "name": "original muzzle interface follows candidate",
+      "passed": true
+    },
+    {
+      "name": "seven poses maintain actual hand/weapon anchors under transformed parent",
+      "passed": true,
+      "detail": {
+        "maxGrip": 9.155133597044475e-16,
+        "poses": {
+          "idle": {
+            "left": 9.155133597044475e-16,
+            "right": 0
+          },
+          "aim": {
+            "left": 8.881784197001252e-16,
+            "right": 0
+          },
+          "windup": {
+            "left": 9.155133597044475e-16,
+            "right": 0
+          },
+          "slash": {
+            "left": 9.155133597044475e-16,
+            "right": 0
+          },
+          "walk": {
+            "left": 9.155133597044475e-16,
+            "right": 0
+          },
+          "stagger": {
+            "left": 2.220446049250313e-16,
+            "right": 0
+          },
+          "rope": {
+            "left": 0,
+            "right": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "poses finite and gameplay Euler commands retained",
+      "passed": true,
+      "detail": {
+        "finite": true,
+        "commands": true
+      }
+    },
+    {
+      "name": "original aim commands select live rig",
+      "passed": true,
+      "detail": "aim"
+    },
+    {
+      "name": "original climbing lifecycle selects rope",
+      "passed": true
+    },
+    {
+      "name": "real combat updater preserves hands through charging and melee",
+      "passed": true,
+      "detail": {
+        "combatGrip": 1.5888218580782548e-14,
+        "chargeScale": 1.7000000000000002,
+        "actionCounts": {
+          "aim": 115,
+          "idle": 47,
+          "windup": 12,
+          "slash": 33,
+          "walk": 33
+        }
+      }
+    },
+    {
+      "name": "actors share geometry and own mutable materials",
+      "passed": true
+    },
+    {
+      "name": "optout restores original geometry/materials",
+      "passed": true
+    },
+    {
+      "name": "toggle preserves external root and blade visibility",
+      "passed": true
+    },
+    {
+      "name": "toggle creates no duplicate nodes",
+      "passed": true
+    },
+    {
+      "name": "dispose restores original nodes and parts",
+      "passed": true
+    },
+    {
+      "name": "socco serial 4 bind and parent contract",
+      "passed": true,
+      "detail": {
+        "asset": "socco-color-v2",
+        "active": true,
+        "geometryApplied": true,
+        "geometrySha256": "62312f2ba9b2c3e84174d7d8c763732208ef2d57789e09b8c09971748e92abfd",
+        "sourceGlbSha256": "fe39c03297ea37d161eaa561563009aac9b600d8684cfb90293ce43bceaff4f6",
+        "originalNodeCount": 127,
+        "addedNodeCount": 4,
+        "colorRevision": 2
+      }
+    },
+    {
+      "name": "socco serial 4 dynamic refs and VFX material retained",
+      "passed": true
+    },
+    {
+      "name": "socco serial 4 GLB colors and vertex attributes",
+      "passed": true,
+      "detail": {
+        "maxColorError": 0,
+        "attributeValid": true,
+        "colorEnabled": true
+      }
+    },
+    {
+      "name": "socco serial 4 original sea skim and fourteen seats work",
+      "passed": true
+    },
+    {
+      "name": "socco serial 4 closes upward",
+      "passed": true
+    },
+    {
+      "name": "socco serial 4 ramp tip solves explicit ground",
+      "passed": true,
+      "detail": {
+        "footY": -1.99,
+        "a": -0.20142907735358467,
+        "status": "resolved-local-ground"
+      }
+    },
+    {
+      "name": "socco serial 4 impossible ground not ready",
+      "passed": true
+    },
+    {
+      "name": "socco serial 4 missing ground explicit",
+      "passed": true
+    },
+    {
+      "name": "socco serial 4 optout restores original meshes",
+      "passed": true
+    },
+    {
+      "name": "socco serial 8 bind and parent contract",
+      "passed": true,
+      "detail": {
+        "asset": "socco-color-v2",
+        "active": true,
+        "geometryApplied": true,
+        "geometrySha256": "62312f2ba9b2c3e84174d7d8c763732208ef2d57789e09b8c09971748e92abfd",
+        "sourceGlbSha256": "fe39c03297ea37d161eaa561563009aac9b600d8684cfb90293ce43bceaff4f6",
+        "originalNodeCount": 127,
+        "addedNodeCount": 4,
+        "colorRevision": 2
+      }
+    },
+    {
+      "name": "socco serial 8 dynamic refs and VFX material retained",
+      "passed": true
+    },
+    {
+      "name": "socco serial 8 GLB colors and vertex attributes",
+      "passed": true,
+      "detail": {
+        "maxColorError": 0,
+        "attributeValid": true,
+        "colorEnabled": true
+      }
+    },
+    {
+      "name": "socco serial 8 original sea skim and fourteen seats work",
+      "passed": true
+    },
+    {
+      "name": "socco serial 8 closes upward",
+      "passed": true
+    },
+    {
+      "name": "socco serial 8 ramp tip solves explicit ground",
+      "passed": true,
+      "detail": {
+        "footY": -1.99,
+        "a": -0.20142907735358467,
+        "status": "resolved-local-ground"
+      }
+    },
+    {
+      "name": "socco serial 8 impossible ground not ready",
+      "passed": true
+    },
+    {
+      "name": "socco serial 8 missing ground explicit",
+      "passed": true
+    },
+    {
+      "name": "socco serial 8 optout restores original meshes",
+      "passed": true
+    }
+  ],
+  "limits": [
+    "Factory and seven authored action samples; not a full natural battle or collision sweep.",
+    "Explicit local ground ramp fixture; production terrain does not yet provide this sample."
+  ],
+  "pageErrors": []
+}

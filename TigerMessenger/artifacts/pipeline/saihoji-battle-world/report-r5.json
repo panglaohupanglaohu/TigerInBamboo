@@ -1,0 +1,2893 @@
+{
+  "blocked_projectiles": 231,
+  "escort_pods": 3,
+  "events": [
+    {
+      "defender_faction": "blue",
+      "narrative_revision": true,
+      "round_id": 1,
+      "time": 0.0,
+      "type": "round_started"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "ship_id": "saihoji-warship-0",
+      "time": 6.03333333333332,
+      "type": "ship_departure_requested"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "ship_id": "saihoji-warship-1",
+      "time": 22.0333333333334,
+      "type": "ship_departure_requested"
+    },
+    {
+      "cue": "kun_prelude_once",
+      "restart": false,
+      "round_id": 1,
+      "time": 32.6499999999994,
+      "type": "bgm_intent"
+    },
+    {
+      "cue": "kun_storm_once",
+      "restart": false,
+      "round_id": 1,
+      "time": 35.4666666666659,
+      "type": "bgm_intent"
+    },
+    {
+      "round_id": 1,
+      "suction": 1.0,
+      "target": 1.0,
+      "time": 35.4666666666659,
+      "type": "whale_lift_requested"
+    },
+    {
+      "round_id": 1,
+      "ship_id": "saihoji-warship-0",
+      "time": 40.0333333333323,
+      "type": "ship_landed"
+    },
+    {
+      "round_id": 1,
+      "time": 45.1666666666654,
+      "type": "whale_risen"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 1,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 46.1666666666653,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 2,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 46.333333333332,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 3,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 46.3666666666653,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 4,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 46.383333333332,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 5,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 46.4166666666653,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 6,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 46.433333333332,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 7,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-1",
+      "time": 46.6499999999986,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 8,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-0-7",
+      "time": 46.7499999999986,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 9,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-0-13",
+      "time": 47.0833333333319,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 10,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-0-7",
+      "time": 48.6666666666652,
+      "type": "fleet_hit"
+    },
+    {
+      "direction": "(-0.441749, 0.410208, -0.797864)",
+      "heavy_ids": [
+        "vanguard-0",
+        "vanguard-1",
+        "vanguard-2",
+        "vanguard-3",
+        "vanguard-4",
+        "vanguard-5",
+        "vanguard-6",
+        "vanguard-7",
+        "vanguard-8",
+        "vanguard-9",
+        "vanguard-10",
+        "vanguard-11",
+        "vanguard-12",
+        "vanguard-13",
+        "vanguard-14",
+        "vanguard-15",
+        "vanguard-16",
+        "vanguard-17",
+        "vanguard-18",
+        "vanguard-19",
+        "vanguard-20",
+        "vanguard-21",
+        "vanguard-22",
+        "vanguard-23",
+        "vanguard-24",
+        "vanguard-25",
+        "vanguard-26"
+      ],
+      "round_id": 1,
+      "threat_ids": [
+        "blue-0-2",
+        "blue-0-4",
+        "blue-0-9",
+        "blue-0-14",
+        "blue-0-19",
+        "blue-0-24",
+        "blue-0-1",
+        "blue-0-7",
+        "blue-0-13"
+      ],
+      "time": 48.6666666666652,
+      "type": "assault_requested"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 11,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-0-13",
+      "time": 48.9833333333318,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 12,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 50.0333333333318,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 13,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 50.1666666666651,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 14,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 50.1833333333318,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 15,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 50.1999999999984,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 16,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 50.2166666666651,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 17,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 50.2499999999984,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 18,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 54.0166666666649,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 19,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 54.0666666666649,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 20,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 54.0833333333315,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 21,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 54.0833333333315,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 22,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 54.0999999999982,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 23,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 54.1166666666649,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "ship_id": "saihoji-warship-1",
+      "time": 56.0333333333314,
+      "type": "ship_landed"
+    },
+    {
+      "round_id": 1,
+      "time": 56.0333333333314,
+      "type": "formation_requested"
+    },
+    {
+      "round_id": 1,
+      "stage": "insert",
+      "time": 56.6499999999981,
+      "type": "assault_stage"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 24,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 58.0333333333313,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 25,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 58.049999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 26,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 58.049999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 27,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 58.049999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 28,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 58.049999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 29,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 58.0666666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 30,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 58.6333333333313,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 31,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 58.6333333333313,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 32,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 58.9666666666646,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 33,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 59.1666666666646,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 34,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 59.2666666666646,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 35,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 59.3333333333312,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 36,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 59.4333333333312,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 37,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 59.6166666666646,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "time": 59.6999999999979,
+      "type": "formation_ready"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "target_ids": [
+        "moebius-0",
+        "moebius-1",
+        "moebius-2",
+        "moebius-3",
+        "moebius-4"
+      ],
+      "time": 59.7166666666646,
+      "type": "resistance_enabled"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 38,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 59.8166666666646,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 39,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-15",
+      "time": 60.0999999999979,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 40,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 60.3499999999979,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 41,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 60.7999999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 42,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-20",
+      "time": 60.8833333333312,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 43,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 60.9499999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 44,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 60.9833333333312,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 45,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 61.1499999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 46,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 61.2666666666645,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 47,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 61.2833333333311,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 48,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-21",
+      "time": 61.3499999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 49,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-22",
+      "time": 61.4499999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 50,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-14",
+      "time": 61.6666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 1,
+      "suction": 0.833333333333333,
+      "time": 61.6666666666644,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.833333333333333,
+      "time": 61.6666666666644,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 51,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 61.7999999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 52,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 62.0499999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 53,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 62.0666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 54,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 62.0666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 55,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 62.0666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 56,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 62.0666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 57,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 62.0833333333311,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 58,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-19",
+      "time": 62.1166666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 59,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 62.3499999999977,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 60,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-24",
+      "time": 62.6333333333311,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 61,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 62.6499999999977,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 62,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 62.6499999999977,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 63,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-23",
+      "time": 62.7666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 64,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 62.8166666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 65,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 62.983333333331,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 66,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 63.1666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 67,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 63.2666666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 68,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 63.3499999999977,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 69,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 63.4499999999977,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 70,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 63.633333333331,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 71,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 63.8166666666643,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 72,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-15",
+      "time": 64.1166666666643,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "stage": "combat",
+      "time": 64.1999999999976,
+      "type": "assault_stage"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-0",
+        "vanguard-1",
+        "vanguard-9"
+      ],
+      "round_id": 1,
+      "time": 64.1999999999976,
+      "type": "whale_swallow"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 73,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 64.3499999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 64.7499999999976,
+      "type": "shield_block",
+      "unit_id": "blue-1-23"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 74,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 64.7999999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 64.8499999999976,
+      "type": "shield_block",
+      "unit_id": "blue-1-24"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 75,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-20",
+      "time": 64.8999999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 64.9499999999976,
+      "type": "shield_block",
+      "unit_id": "blue-1-24"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 76,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 64.9666666666643,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 77,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 64.9999999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 78,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 65.1499999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 79,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 65.2666666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 80,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 65.2999999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 81,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-21",
+      "time": 65.3666666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 82,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-22",
+      "time": 65.4666666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 65.5666666666642,
+      "type": "shield_block",
+      "unit_id": "blue-1-22"
+    },
+    {
+      "time": 65.6499999999976,
+      "type": "shield_block",
+      "unit_id": "blue-1-23"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 83,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-14",
+      "time": 65.6833333333309,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 84,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 65.7999999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 85,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 66.0666666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 86,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 66.0833333333309,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 87,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 66.0833333333309,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 88,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 66.0833333333309,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 89,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 66.0833333333309,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 90,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 66.0999999999975,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 91,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-19",
+      "time": 66.1333333333309,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 92,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 66.3499999999975,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 66.3999999999975,
+      "type": "shield_block",
+      "unit_id": "blue-1-21"
+    },
+    {
+      "time": 66.5999999999975,
+      "type": "shield_block",
+      "unit_id": "blue-1-22"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 93,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 66.6666666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 94,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 66.6666666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 95,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-23",
+      "time": 66.7833333333308,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 96,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 66.8166666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 97,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 66.9999999999975,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 67.0499999999975,
+      "type": "shield_block",
+      "unit_id": "blue-1-19"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 98,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 67.1666666666641,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 99,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 67.2666666666641,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 100,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 67.3666666666641,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 2,
+      "suction": 0.666666666666667,
+      "time": 67.3666666666641,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.666666666666667,
+      "time": 67.3666666666641,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 101,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 67.4666666666641,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 102,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 67.6499999999974,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 67.7666666666641,
+      "type": "shield_block",
+      "unit_id": "blue-1-19"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 103,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 67.8166666666641,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 104,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-15",
+      "time": 68.1333333333308,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 105,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 68.3499999999974,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 68.6666666666641,
+      "type": "shield_block",
+      "unit_id": "blue-1-21"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 106,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 68.7999999999974,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 107,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-20",
+      "time": 68.916666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 108,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 68.9833333333307,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 109,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 69.016666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 110,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 69.1499999999974,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 111,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 69.266666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 69.3333333333307,
+      "type": "shield_block",
+      "unit_id": "blue-1-18"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 112,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 69.316666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 113,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-21",
+      "time": 69.3833333333307,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 114,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-14",
+      "time": 69.6999999999973,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 69.7999999999973,
+      "type": "shield_block",
+      "unit_id": "blue-1-18"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 115,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 69.7999999999973,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 116,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 70.0833333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 117,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 70.0999999999973,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 118,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 70.0999999999973,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 119,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 70.0999999999973,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 120,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 70.0999999999973,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 121,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 70.116666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 70.2833333333306,
+      "type": "shield_block",
+      "unit_id": "blue-1-20"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 122,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 70.3499999999973,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 70.4999999999973,
+      "type": "shield_block",
+      "unit_id": "blue-1-20"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 123,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 70.6833333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 124,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 70.6833333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 125,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 70.8166666666639,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 70.9833333333306,
+      "type": "shield_block",
+      "unit_id": "blue-1-14"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 126,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 71.0166666666639,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 127,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 71.1666666666639,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 128,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 71.2666666666639,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 129,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 71.3833333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 130,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 71.4833333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 131,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 71.6666666666639,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 71.6999999999972,
+      "type": "shield_block",
+      "unit_id": "blue-1-14"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 132,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 71.8166666666639,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 133,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-15",
+      "time": 72.1499999999972,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 134,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 72.3499999999972,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 72.5833333333305,
+      "type": "shield_block",
+      "unit_id": "blue-0-24"
+    },
+    {
+      "time": 72.6999999999972,
+      "type": "shield_block",
+      "unit_id": "blue-0-24"
+    },
+    {
+      "time": 72.8166666666638,
+      "type": "shield_block",
+      "unit_id": "blue-1-16"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 135,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 72.9999999999971,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 136,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 73.0333333333305,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 137,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 73.1499999999971,
+      "type": "fleet_hit"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-2",
+        "vanguard-10",
+        "vanguard-18"
+      ],
+      "round_id": 1,
+      "time": 73.2166666666638,
+      "type": "whale_swallow"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 138,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 73.2666666666638,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 139,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 73.3333333333305,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 140,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-14",
+      "time": 73.7166666666638,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 141,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 73.7999999999971,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 74.0999999999971,
+      "type": "shield_block",
+      "unit_id": "blue-1-16"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 142,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 74.0999999999971,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 143,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 74.1166666666637,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 144,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 74.1166666666637,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 145,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 74.1166666666637,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 146,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 74.1166666666637,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 147,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 74.1333333333304,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 148,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 74.3499999999971,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 74.4166666666637,
+      "type": "shield_block",
+      "unit_id": "blue-0-23"
+    },
+    {
+      "time": 74.4166666666637,
+      "type": "shield_block",
+      "unit_id": "blue-0-23"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 149,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 74.699999999997,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 150,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 74.699999999997,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 3,
+      "suction": 0.5,
+      "time": 74.699999999997,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.5,
+      "time": 74.699999999997,
+      "type": "whale_lift_requested"
+    },
+    {
+      "time": 74.899999999997,
+      "type": "shield_block",
+      "unit_id": "blue-1-9"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 151,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 75.0333333333304,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 152,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 75.1666666666637,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 153,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 75.2666666666637,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 154,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 75.399999999997,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 155,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 75.499999999997,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 156,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 75.6833333333303,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 157,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 75.8166666666637,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 158,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-15",
+      "time": 76.1666666666636,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 76.6166666666636,
+      "type": "shield_block",
+      "unit_id": "blue-1-15"
+    },
+    {
+      "time": 76.7499999999969,
+      "type": "shield_block",
+      "unit_id": "blue-1-15"
+    },
+    {
+      "time": 76.9666666666636,
+      "type": "shield_block",
+      "unit_id": "blue-1-9"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 159,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 77.0166666666636,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 160,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 77.0499999999969,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 161,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 77.1499999999969,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 162,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 77.3499999999969,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 163,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 77.7999999999969,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 77.8999999999969,
+      "type": "shield_block",
+      "unit_id": "blue-1-8"
+    },
+    {
+      "time": 77.9999999999969,
+      "type": "shield_block",
+      "unit_id": "blue-1-8"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 164,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 78.1166666666635,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 165,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 78.1333333333302,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 166,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 78.1333333333302,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 167,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 78.1333333333302,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 168,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 78.1333333333302,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 78.3166666666635,
+      "type": "shield_block",
+      "unit_id": "blue-0-22"
+    },
+    {
+      "time": 78.3333333333302,
+      "type": "shield_block",
+      "unit_id": "blue-0-19"
+    },
+    {
+      "time": 78.3499999999968,
+      "type": "shield_block",
+      "unit_id": "blue-0-19"
+    },
+    {
+      "time": 78.3666666666635,
+      "type": "shield_block",
+      "unit_id": "blue-0-22"
+    },
+    {
+      "time": 78.7166666666635,
+      "type": "shield_block",
+      "unit_id": "blue-1-10"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 169,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 78.7166666666635,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 170,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 78.7166666666635,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 171,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 79.0499999999968,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 172,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 79.4166666666634,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 173,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 79.5166666666634,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 174,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 79.6999999999968,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 175,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 79.8166666666634,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 80.5999999999967,
+      "type": "shield_block",
+      "unit_id": "blue-1-10"
+    },
+    {
+      "time": 80.9166666666634,
+      "type": "shield_block",
+      "unit_id": "blue-1-3"
+    },
+    {
+      "time": 81.0166666666634,
+      "type": "shield_block",
+      "unit_id": "blue-1-3"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 176,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 81.03333333333,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 177,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 81.0666666666634,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 81.1166666666633,
+      "type": "shield_block",
+      "unit_id": "blue-1-4"
+    },
+    {
+      "time": 81.38333333333,
+      "type": "shield_block",
+      "unit_id": "blue-0-18"
+    },
+    {
+      "time": 81.7166666666633,
+      "type": "shield_block",
+      "unit_id": "blue-1-6"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 178,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 82.13333333333,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 179,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 82.1499999999966,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 180,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 82.1499999999966,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 181,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 82.1499999999966,
+      "type": "fleet_hit"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-21",
+        "vanguard-20",
+        "vanguard-11"
+      ],
+      "round_id": 1,
+      "time": 82.23333333333,
+      "type": "whale_swallow"
+    },
+    {
+      "time": 82.4999999999966,
+      "type": "shield_block",
+      "unit_id": "blue-0-18"
+    },
+    {
+      "time": 82.6166666666633,
+      "type": "shield_block",
+      "unit_id": "blue-0-14"
+    },
+    {
+      "time": 82.7333333333299,
+      "type": "shield_block",
+      "unit_id": "blue-1-4"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 182,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 82.7333333333299,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 183,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 82.7333333333299,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 82.8166666666633,
+      "type": "shield_block",
+      "unit_id": "blue-1-6"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 184,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 83.0666666666632,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 185,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 83.4333333333299,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 186,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 83.7166666666632,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 84.6166666666631,
+      "type": "shield_block",
+      "unit_id": "blue-0-14"
+    },
+    {
+      "time": 84.8999999999965,
+      "type": "shield_block",
+      "unit_id": "blue-1-2"
+    },
+    {
+      "time": 84.9999999999965,
+      "type": "shield_block",
+      "unit_id": "blue-1-2"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 187,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 85.0499999999965,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 188,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 86.1499999999964,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 86.1833333333297,
+      "type": "shield_block",
+      "unit_id": "blue-0-21"
+    },
+    {
+      "time": 86.1833333333297,
+      "type": "shield_block",
+      "unit_id": "blue-0-21"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 189,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 86.1666666666631,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 190,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 86.1666666666631,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 191,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 86.1666666666631,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 192,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 86.7499999999964,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 193,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 86.7499999999964,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 86.7833333333297,
+      "type": "shield_block",
+      "unit_id": "blue-1-5"
+    },
+    {
+      "time": 86.7833333333297,
+      "type": "shield_block",
+      "unit_id": "blue-1-1"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 194,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 87.0833333333297,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 195,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 87.4499999999963,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 87.4833333333297,
+      "type": "shield_block",
+      "unit_id": "blue-1-1"
+    },
+    {
+      "time": 88.8333333333296,
+      "type": "shield_block",
+      "unit_id": "blue-1-5"
+    },
+    {
+      "time": 89.1333333333296,
+      "type": "shield_block",
+      "unit_id": "blue-1-0"
+    },
+    {
+      "time": 89.8333333333295,
+      "type": "shield_block",
+      "unit_id": "blue-1-0"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 196,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 90.1666666666628,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 90.1999999999962,
+      "type": "shield_block",
+      "unit_id": "blue-0-20"
+    },
+    {
+      "time": 90.1999999999962,
+      "type": "shield_block",
+      "unit_id": "blue-0-20"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 197,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 90.1833333333295,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 198,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 90.1833333333295,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 90.5499999999961,
+      "type": "shield_block",
+      "unit_id": "blue-0-16"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 199,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 90.7666666666628,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 200,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 90.7666666666628,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 4,
+      "suction": 0.333333333333333,
+      "time": 90.7666666666628,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.333333333333333,
+      "time": 90.7666666666628,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 201,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 91.0999999999961,
+      "type": "fleet_hit"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-1",
+        "vanguard-22",
+        "vanguard-3"
+      ],
+      "round_id": 1,
+      "time": 91.2499999999961,
+      "type": "whale_swallow"
+    },
+    {
+      "time": 91.3333333333294,
+      "type": "shield_block",
+      "unit_id": "blue-0-16"
+    },
+    {
+      "time": 91.4666666666628,
+      "type": "shield_block",
+      "unit_id": "blue-0-4"
+    },
+    {
+      "time": 92.849999999996,
+      "type": "shield_block",
+      "unit_id": "blue-0-9"
+    },
+    {
+      "time": 92.9333333333293,
+      "type": "shield_block",
+      "unit_id": "blue-0-4"
+    },
+    {
+      "time": 93.6333333333293,
+      "type": "shield_block",
+      "unit_id": "blue-0-8"
+    },
+    {
+      "time": 93.749999999996,
+      "type": "shield_block",
+      "unit_id": "blue-0-9"
+    },
+    {
+      "time": 93.849999999996,
+      "type": "shield_block",
+      "unit_id": "blue-0-3"
+    },
+    {
+      "time": 93.949999999996,
+      "type": "shield_block",
+      "unit_id": "blue-0-3"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 202,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 94.1833333333293,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 94.2166666666626,
+      "type": "shield_block",
+      "unit_id": "blue-0-15"
+    },
+    {
+      "time": 94.2166666666626,
+      "type": "shield_block",
+      "unit_id": "blue-0-15"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 203,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 94.2499999999959,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 94.6499999999959,
+      "type": "shield_block",
+      "unit_id": "blue-0-8"
+    },
+    {
+      "time": 96.9499999999958,
+      "type": "shield_block",
+      "unit_id": "blue-0-2"
+    },
+    {
+      "time": 97.0499999999958,
+      "type": "shield_block",
+      "unit_id": "blue-0-2"
+    },
+    {
+      "time": 97.8833333333291,
+      "type": "shield_block",
+      "unit_id": "blue-0-1"
+    },
+    {
+      "time": 97.9833333333291,
+      "type": "shield_block",
+      "unit_id": "blue-0-1"
+    },
+    {
+      "time": 98.233333333329,
+      "type": "shield_block",
+      "unit_id": "blue-0-10"
+    },
+    {
+      "time": 98.233333333329,
+      "type": "shield_block",
+      "unit_id": "blue-0-10"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 204,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 98.2499999999957,
+      "type": "fleet_hit"
+    },
+    {
+      "time": 98.6999999999957,
+      "type": "shield_block",
+      "unit_id": "blue-0-6"
+    },
+    {
+      "time": 98.883333333329,
+      "type": "shield_block",
+      "unit_id": "blue-0-6"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-4",
+        "vanguard-13",
+        "vanguard-23"
+      ],
+      "round_id": 1,
+      "time": 100.266666666662,
+      "type": "whale_swallow"
+    },
+    {
+      "time": 100.966666666662,
+      "type": "shield_block",
+      "unit_id": "blue-0-0"
+    },
+    {
+      "time": 101.066666666662,
+      "type": "shield_block",
+      "unit_id": "blue-0-0"
+    },
+    {
+      "time": 101.783333333329,
+      "type": "shield_block",
+      "unit_id": "blue-0-5"
+    },
+    {
+      "time": 101.866666666662,
+      "type": "shield_block",
+      "unit_id": "blue-0-5"
+    },
+    {
+      "cue": "",
+      "restart": false,
+      "round_id": 1,
+      "time": 102.249999999995,
+      "type": "bgm_intent"
+    },
+    {
+      "reason": "defenders_defeated",
+      "round_id": 1,
+      "time": 102.249999999995,
+      "type": "cleanup_requested"
+    }
+  ],
+  "fleet_members": 5,
+  "ground_fallbacks": 0,
+  "ground_samples": 48947,
+  "heavies": 27,
+  "jaw_triangles": 75,
+  "load_error": "",
+  "scope": "original-world native integration candidate; pending visual/gameplay acceptance",
+  "six_scenes_preserved": true,
+  "snapshots": [
+    {
+      "assault_phase": "idle",
+      "formation": false,
+      "hits": 0,
+      "landed": [],
+      "music": "",
+      "phase": "at_castle",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 0,
+      "sink_step": 0,
+      "threat_ids": [],
+      "whale_phase": "buried"
+    },
+    {
+      "assault_phase": "idle",
+      "formation": false,
+      "hits": 0,
+      "landed": [],
+      "music": "",
+      "phase": "sail_out",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 1,
+      "sink_step": 0,
+      "threat_ids": [],
+      "whale_phase": "buried"
+    },
+    {
+      "assault_phase": "idle",
+      "formation": false,
+      "hits": 0,
+      "landed": [],
+      "music": "",
+      "phase": "sail_out",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 1,
+      "sink_step": 0,
+      "threat_ids": [],
+      "whale_phase": "buried"
+    },
+    {
+      "assault_phase": "idle",
+      "formation": false,
+      "hits": 0,
+      "landed": [],
+      "music": "",
+      "phase": "sail_out",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 0,
+      "threat_ids": [],
+      "whale_phase": "buried"
+    },
+    {
+      "assault_phase": "idle",
+      "formation": false,
+      "hits": 0,
+      "landed": [],
+      "music": "kun_storm_once",
+      "phase": "sail_out",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 0,
+      "threat_ids": [],
+      "whale_phase": "rising"
+    },
+    {
+      "assault_phase": "approach",
+      "formation": false,
+      "hits": 11,
+      "landed": [
+        "saihoji-warship-0"
+      ],
+      "music": "kun_storm_once",
+      "phase": "sail_out",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 0,
+      "threat_ids": [
+        "blue-0-2",
+        "blue-0-4",
+        "blue-0-9",
+        "blue-0-14",
+        "blue-0-19",
+        "blue-0-24",
+        "blue-0-1",
+        "blue-0-7",
+        "blue-0-13"
+      ],
+      "whale_phase": "resisting"
+    },
+    {
+      "assault_phase": "insert",
+      "formation": true,
+      "hits": 38,
+      "landed": [
+        "saihoji-warship-0",
+        "saihoji-warship-1"
+      ],
+      "music": "kun_storm_once",
+      "phase": "fight",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 0,
+      "threat_ids": [
+        "blue-0-2",
+        "blue-0-4",
+        "blue-0-9",
+        "blue-0-14",
+        "blue-0-19",
+        "blue-0-24",
+        "blue-0-1",
+        "blue-0-7",
+        "blue-0-13",
+        "blue-1-0",
+        "blue-0-3",
+        "blue-1-5",
+        "blue-1-11",
+        "blue-1-12",
+        "blue-1-1",
+        "blue-1-10",
+        "blue-1-2",
+        "blue-1-7"
+      ],
+      "whale_phase": "resisting"
+    },
+    {
+      "assault_phase": "combat",
+      "formation": true,
+      "hits": 115,
+      "landed": [
+        "saihoji-warship-0",
+        "saihoji-warship-1"
+      ],
+      "music": "kun_storm_once",
+      "phase": "fight",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 2,
+      "threat_ids": [
+        "blue-0-2",
+        "blue-0-4",
+        "blue-0-9",
+        "blue-0-14",
+        "blue-0-19",
+        "blue-0-24",
+        "blue-0-1",
+        "blue-0-7",
+        "blue-0-13",
+        "blue-1-0",
+        "blue-0-3",
+        "blue-1-5",
+        "blue-1-11",
+        "blue-1-12",
+        "blue-1-1",
+        "blue-1-10",
+        "blue-1-2",
+        "blue-1-7",
+        "blue-1-15",
+        "blue-1-13",
+        "blue-1-17",
+        "blue-1-20",
+        "blue-1-4",
+        "blue-1-3",
+        "blue-1-9",
+        "blue-1-21",
+        "blue-1-22",
+        "blue-1-14",
+        "blue-1-19",
+        "blue-1-24",
+        "blue-1-23"
+      ],
+      "whale_phase": "resisting"
+    },
+    {
+      "assault_phase": "combat",
+      "formation": true,
+      "hits": 175,
+      "landed": [
+        "saihoji-warship-0",
+        "saihoji-warship-1"
+      ],
+      "music": "kun_storm_once",
+      "phase": "fight",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 3,
+      "threat_ids": [
+        "blue-0-2",
+        "blue-0-4",
+        "blue-0-9",
+        "blue-0-14",
+        "blue-0-19",
+        "blue-0-24",
+        "blue-0-1",
+        "blue-0-7",
+        "blue-0-13",
+        "blue-1-0",
+        "blue-0-3",
+        "blue-1-5",
+        "blue-1-11",
+        "blue-1-12",
+        "blue-1-1",
+        "blue-1-10",
+        "blue-1-2",
+        "blue-1-7",
+        "blue-1-15",
+        "blue-1-13",
+        "blue-1-17",
+        "blue-1-20",
+        "blue-1-4",
+        "blue-1-3",
+        "blue-1-9",
+        "blue-1-21",
+        "blue-1-22",
+        "blue-1-14",
+        "blue-1-19",
+        "blue-1-24",
+        "blue-1-23"
+      ],
+      "whale_phase": "resisting"
+    },
+    {
+      "assault_phase": "combat",
+      "formation": true,
+      "hits": 195,
+      "landed": [
+        "saihoji-warship-0",
+        "saihoji-warship-1"
+      ],
+      "music": "kun_storm_once",
+      "phase": "fight",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 3,
+      "threat_ids": [
+        "blue-0-2",
+        "blue-0-4",
+        "blue-0-9",
+        "blue-0-14",
+        "blue-0-19",
+        "blue-0-24",
+        "blue-0-1",
+        "blue-0-7",
+        "blue-0-13",
+        "blue-1-0",
+        "blue-0-3",
+        "blue-1-5",
+        "blue-1-11",
+        "blue-1-12",
+        "blue-1-1",
+        "blue-1-10",
+        "blue-1-2",
+        "blue-1-7",
+        "blue-1-15",
+        "blue-1-13",
+        "blue-1-17",
+        "blue-1-20",
+        "blue-1-4",
+        "blue-1-3",
+        "blue-1-9",
+        "blue-1-21",
+        "blue-1-22",
+        "blue-1-14",
+        "blue-1-19",
+        "blue-1-24",
+        "blue-1-23"
+      ],
+      "whale_phase": "resisting"
+    },
+    {
+      "assault_phase": "combat",
+      "formation": true,
+      "hits": 204,
+      "landed": [
+        "saihoji-warship-0",
+        "saihoji-warship-1"
+      ],
+      "music": "kun_storm_once",
+      "phase": "fight",
+      "round_id": 1,
+      "running": true,
+      "ships_sent": 2,
+      "sink_step": 4,
+      "threat_ids": [
+        "blue-0-2",
+        "blue-0-4",
+        "blue-0-9",
+        "blue-0-14",
+        "blue-0-19",
+        "blue-0-24",
+        "blue-0-1",
+        "blue-0-7",
+        "blue-0-13",
+        "blue-1-0",
+        "blue-0-3",
+        "blue-1-5",
+        "blue-1-11",
+        "blue-1-12",
+        "blue-1-1",
+        "blue-1-10",
+        "blue-1-2",
+        "blue-1-7",
+        "blue-1-15",
+        "blue-1-13",
+        "blue-1-17",
+        "blue-1-20",
+        "blue-1-4",
+        "blue-1-3",
+        "blue-1-9",
+        "blue-1-21",
+        "blue-1-22",
+        "blue-1-14",
+        "blue-1-19",
+        "blue-1-24",
+        "blue-1-23"
+      ],
+      "whale_phase": "resisting"
+    }
+  ],
+  "source_whale": "leviathanGroup[156]",
+  "state": {
+    "assault_phase": "combat",
+    "formation": true,
+    "hits": 204,
+    "landed": [
+      "saihoji-warship-0",
+      "saihoji-warship-1"
+    ],
+    "music": "",
+    "phase": "stopped",
+    "round_id": 1,
+    "running": false,
+    "ships_sent": 2,
+    "sink_step": 4,
+    "threat_ids": [
+      "blue-0-2",
+      "blue-0-4",
+      "blue-0-9",
+      "blue-0-14",
+      "blue-0-19",
+      "blue-0-24",
+      "blue-0-1",
+      "blue-0-7",
+      "blue-0-13",
+      "blue-1-0",
+      "blue-0-3",
+      "blue-1-5",
+      "blue-1-11",
+      "blue-1-12",
+      "blue-1-1",
+      "blue-1-10",
+      "blue-1-2",
+      "blue-1-7",
+      "blue-1-15",
+      "blue-1-13",
+      "blue-1-17",
+      "blue-1-20",
+      "blue-1-4",
+      "blue-1-3",
+      "blue-1-9",
+      "blue-1-21",
+      "blue-1-22",
+      "blue-1-14",
+      "blue-1-19",
+      "blue-1-24",
+      "blue-1-23"
+    ],
+    "whale_phase": "resisting"
+  },
+  "terrain_collision_meshes": 95,
+  "test_scope": "manual fixed-step native movement and swept contacts; no injected hit/landing events",
+  "troops": 50
+}

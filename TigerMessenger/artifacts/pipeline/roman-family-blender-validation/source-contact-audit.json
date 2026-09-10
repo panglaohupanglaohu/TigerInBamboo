@@ -1,0 +1,41 @@
+{
+  "scope": "Unadapted original pose distances, not accepted contact targets. Arrow hidden at rest.",
+  "rest": [
+    {
+      "role": "spear",
+      "side": "red",
+      "left_hand_to_legacy_anchor": 0.4522378233057748,
+      "right_hand_to_legacy_anchor": 0.31844117509444675
+    },
+    {
+      "role": "spear",
+      "side": "blue",
+      "left_hand_to_legacy_anchor": 0.4522378233057748,
+      "right_hand_to_legacy_anchor": 0.31844117509444675
+    },
+    {
+      "role": "gladius",
+      "side": "red",
+      "left_hand_to_legacy_anchor": 0.44308715825704587,
+      "right_hand_to_legacy_anchor": 0.40617175871355204
+    },
+    {
+      "role": "gladius",
+      "side": "blue",
+      "left_hand_to_legacy_anchor": 0.44308715825704587,
+      "right_hand_to_legacy_anchor": 0.40617175871355204
+    },
+    {
+      "role": "longbow",
+      "side": "red",
+      "left_hand_to_legacy_anchor": 0.060299253726725344,
+      "right_hand_to_legacy_anchor": 0.4944970366118652
+    },
+    {
+      "role": "longbow",
+      "side": "blue",
+      "left_hand_to_legacy_anchor": 0.060299253726725344,
+      "right_hand_to_legacy_anchor": 0.4944970366118652
+    }
+  ]
+}

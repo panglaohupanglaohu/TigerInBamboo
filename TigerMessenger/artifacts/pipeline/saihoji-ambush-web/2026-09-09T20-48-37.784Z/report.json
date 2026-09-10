@@ -1,0 +1,593 @@
+{
+  "checks": [
+    {
+      "name": "time alone cannot discover whale or ambush",
+      "passed": true
+    },
+    {
+      "name": "concealment retains visible actor and lowers body pose",
+      "passed": true
+    },
+    {
+      "name": "concealed actor follows moving cover anchor",
+      "passed": true
+    },
+    {
+      "name": "discovery event distinct from ambush",
+      "passed": true
+    },
+    {
+      "name": "ambush restores body pose and identity",
+      "passed": true
+    },
+    {
+      "name": "reset clears event and pose state",
+      "passed": true
+    },
+    {
+      "name": "approaching soldier does not inherit island lift",
+      "passed": true
+    },
+    {
+      "name": "insufficient real cover blocks instead of hiding or attacking",
+      "passed": true
+    },
+    {
+      "name": "actual garden has at least 50 anchored cover slots",
+      "passed": true,
+      "detail": {
+        "count": 50
+      }
+    },
+    {
+      "name": "actual traditional ship troops reach concealment",
+      "passed": true,
+      "detail": {
+        "concealedAt": 3741,
+        "state": {
+          "stage": "concealed",
+          "discovery": null,
+          "blocked": null,
+          "settleSeconds": 1.6,
+          "registered": 50,
+          "concealed": 50
+        },
+        "actors": 50
+      }
+    },
+    {
+      "name": "concealed actors stand on island local up",
+      "passed": true,
+      "detail": {
+        "minDot": 1
+      }
+    },
+    {
+      "name": "concealed visible equipment fits below measured canopy",
+      "passed": true,
+      "detail": [
+        {
+          "upDot": 1,
+          "uid": 1,
+          "role": "spear",
+          "top": 1.0403413410289026,
+          "clearance": 3.2879298836882085,
+          "margin": 2.247588542659306
+        },
+        {
+          "upDot": 1,
+          "uid": 2,
+          "role": "spear",
+          "top": 1.0403413410288977,
+          "clearance": 2.004243295122138,
+          "margin": 0.9639019540932403
+        },
+        {
+          "upDot": 1,
+          "uid": 3,
+          "role": "spear",
+          "top": 1.0403413410288997,
+          "clearance": 2.992384173138761,
+          "margin": 1.9520428321098613
+        },
+        {
+          "upDot": 1,
+          "uid": 4,
+          "role": "spear",
+          "top": 1.0403413410289024,
+          "clearance": 1.178020156627611,
+          "margin": 0.13767881559870854
+        },
+        {
+          "upDot": 1,
+          "uid": 5,
+          "role": "spear",
+          "top": 1.040341341028903,
+          "clearance": 1.3099792249180957,
+          "margin": 0.26963788388919263
+        },
+        {
+          "upDot": 1,
+          "uid": 6,
+          "role": "spear",
+          "top": 1.0403413410289097,
+          "clearance": 3.7292711933692733,
+          "margin": 2.6889298523403635
+        },
+        {
+          "upDot": 1,
+          "uid": 7,
+          "role": "gladius",
+          "top": 1.0469793568520849,
+          "clearance": 1.7476988953414156,
+          "margin": 0.7007195384893308
+        },
+        {
+          "upDot": 1,
+          "uid": 8,
+          "role": "longbow",
+          "top": 1.0468206012097254,
+          "clearance": 1.12339282865068,
+          "margin": 0.0765722274409546
+        },
+        {
+          "upDot": 1,
+          "uid": 9,
+          "role": "gladius",
+          "top": 1.046979356852078,
+          "clearance": 1.2805585403463062,
+          "margin": 0.23357918349422824
+        },
+        {
+          "upDot": 1,
+          "uid": 10,
+          "role": "spear",
+          "top": 1.0403413410289037,
+          "clearance": 1.5570023993796844,
+          "margin": 0.5166610583507807
+        },
+        {
+          "upDot": 1.0000000000000002,
+          "uid": 11,
+          "role": "spear",
+          "top": 1.0403413410289168,
+          "clearance": 1.5672653293277399,
+          "margin": 0.526923988298823
+        },
+        {
+          "upDot": 1,
+          "uid": 12,
+          "role": "longbow",
+          "top": 1.1744797958093511,
+          "clearance": 1.4140816456211673,
+          "margin": 0.2396018498118162
+        },
+        {
+          "upDot": 1,
+          "uid": 13,
+          "role": "longbow",
+          "top": 1.1747663947885605,
+          "clearance": 1.9820360144475169,
+          "margin": 0.8072696196589564
+        },
+        {
+          "upDot": 1,
+          "uid": 14,
+          "role": "longbow",
+          "top": 1.167767593464108,
+          "clearance": 1.300695085512246,
+          "margin": 0.13292749204813803
+        },
+        {
+          "upDot": 1,
+          "uid": 15,
+          "role": "spear",
+          "top": 1.040341341028906,
+          "clearance": 1.251963917612273,
+          "margin": 0.21162257658336703
+        },
+        {
+          "upDot": 1,
+          "uid": 16,
+          "role": "spear",
+          "top": 1.0403413410289093,
+          "clearance": 1.756122843825751,
+          "margin": 0.7157815027968417
+        },
+        {
+          "upDot": 1,
+          "uid": 17,
+          "role": "gladius",
+          "top": 1.0469793568520835,
+          "clearance": 3.3052569066480273,
+          "margin": 2.2582775497959435
+        },
+        {
+          "upDot": 1,
+          "uid": 18,
+          "role": "longbow",
+          "top": 1.1593860968876242,
+          "clearance": 2.9694836093993913,
+          "margin": 1.810097512511767
+        },
+        {
+          "upDot": 1,
+          "uid": 19,
+          "role": "gladius",
+          "top": 1.046979356852085,
+          "clearance": 1.3057922872868637,
+          "margin": 0.2588129304347786
+        },
+        {
+          "upDot": 1.0000000000000002,
+          "uid": 20,
+          "role": "spear",
+          "top": 1.0403413410289049,
+          "clearance": 2.313540980380737,
+          "margin": 1.2731996393518323
+        },
+        {
+          "upDot": 1,
+          "uid": 21,
+          "role": "spear",
+          "top": 1.0403413410289164,
+          "clearance": 2.118938490747184,
+          "margin": 1.0785971497182678
+        },
+        {
+          "upDot": 1,
+          "uid": 22,
+          "role": "spear",
+          "top": 1.040341341028899,
+          "clearance": 1.1389739406207586,
+          "margin": 0.09863259959185955
+        },
+        {
+          "upDot": 1,
+          "uid": 23,
+          "role": "spear",
+          "top": 1.0403413410288953,
+          "clearance": 1.1230529344593667,
+          "margin": 0.08271159343047141
+        },
+        {
+          "upDot": 1,
+          "uid": 24,
+          "role": "spear",
+          "top": 1.0403413410289093,
+          "clearance": 1.980379580518048,
+          "margin": 0.9400382394891387
+        },
+        {
+          "upDot": 1,
+          "uid": 25,
+          "role": "spear",
+          "top": 1.0403413410289082,
+          "clearance": 2.819323468386473,
+          "margin": 1.7789821273575648
+        },
+        {
+          "upDot": 1,
+          "uid": 26,
+          "role": "spear",
+          "top": 1.0403413410289022,
+          "clearance": 2.1547302423115022,
+          "margin": 1.1143889012826
+        },
+        {
+          "upDot": 1,
+          "uid": 27,
+          "role": "spear",
+          "top": 1.0403413410289042,
+          "clearance": 1.8664748329828464,
+          "margin": 0.8261334919539423
+        },
+        {
+          "upDot": 1,
+          "uid": 28,
+          "role": "spear",
+          "top": 1.0403413410289084,
+          "clearance": 1.4384090245311263,
+          "margin": 0.3980676835022179
+        },
+        {
+          "upDot": 1,
+          "uid": 29,
+          "role": "spear",
+          "top": 1.040341341028916,
+          "clearance": 2.5482953039633016,
+          "margin": 1.5079539629343857
+        },
+        {
+          "upDot": 1,
+          "uid": 30,
+          "role": "spear",
+          "top": 1.0403413410289075,
+          "clearance": 1.5520782444498884,
+          "margin": 0.5117369034209809
+        },
+        {
+          "upDot": 1,
+          "uid": 31,
+          "role": "spear",
+          "top": 1.0403413410289049,
+          "clearance": 1.5387814394827337,
+          "margin": 0.49844009845382886
+        },
+        {
+          "upDot": 1,
+          "uid": 32,
+          "role": "gladius",
+          "top": 1.0469793568520815,
+          "clearance": 2.8119311137462275,
+          "margin": 1.764951756894146
+        },
+        {
+          "upDot": 1,
+          "uid": 33,
+          "role": "longbow",
+          "top": 1.0467017977530322,
+          "clearance": 1.8508939186803568,
+          "margin": 0.8041921209273246
+        },
+        {
+          "upDot": 1,
+          "uid": 34,
+          "role": "gladius",
+          "top": 1.0469793568520798,
+          "clearance": 1.3437069953678822,
+          "margin": 0.2967276385158024
+        },
+        {
+          "upDot": 1,
+          "uid": 35,
+          "role": "spear",
+          "top": 1.0403413410289102,
+          "clearance": 3.522232416860591,
+          "margin": 2.481891075831681
+        },
+        {
+          "upDot": 1,
+          "uid": 36,
+          "role": "spear",
+          "top": 1.0403413410289069,
+          "clearance": 2.837868320092356,
+          "margin": 1.7975269790634492
+        },
+        {
+          "upDot": 1,
+          "uid": 37,
+          "role": "longbow",
+          "top": 1.0468187582934005,
+          "clearance": 1.3806753445786064,
+          "margin": 0.33385658628520587
+        },
+        {
+          "upDot": 1,
+          "uid": 38,
+          "role": "longbow",
+          "top": 1.1744983827878608,
+          "clearance": 1.407720044636904,
+          "margin": 0.23322166184904325
+        },
+        {
+          "upDot": 1,
+          "uid": 39,
+          "role": "longbow",
+          "top": 1.046820601209735,
+          "clearance": 2.096458166343724,
+          "margin": 1.0496375651339889
+        },
+        {
+          "upDot": 1,
+          "uid": 40,
+          "role": "spear",
+          "top": 1.0403413410289104,
+          "clearance": 2.1707558238877604,
+          "margin": 1.13041448285885
+        },
+        {
+          "upDot": 1,
+          "uid": 41,
+          "role": "spear",
+          "top": 1.0403413410289144,
+          "clearance": 3.9697135168260917,
+          "margin": 2.9293721757971776
+        },
+        {
+          "upDot": 1,
+          "uid": 42,
+          "role": "gladius",
+          "top": 1.0469793568520807,
+          "clearance": 1.9903996388486016,
+          "margin": 0.943420281996521
+        },
+        {
+          "upDot": 1.0000000000000002,
+          "uid": 43,
+          "role": "longbow",
+          "top": 1.169482985939212,
+          "clearance": 3.547781909357555,
+          "margin": 2.378298923418343
+        },
+        {
+          "upDot": 1,
+          "uid": 44,
+          "role": "gladius",
+          "top": 1.0469793568520767,
+          "clearance": 1.3917042896468679,
+          "margin": 0.3447249327947912
+        },
+        {
+          "upDot": 1.0000000000000002,
+          "uid": 45,
+          "role": "spear",
+          "top": 1.0403413410289004,
+          "clearance": 1.35178510959932,
+          "margin": 0.31144376857041967
+        },
+        {
+          "upDot": 1,
+          "uid": 46,
+          "role": "spear",
+          "top": 1.0403413410289075,
+          "clearance": 1.9334505791508727,
+          "margin": 0.8931092381219652
+        },
+        {
+          "upDot": 1.0000000000000002,
+          "uid": 47,
+          "role": "spear",
+          "top": 1.0403413410289133,
+          "clearance": 2.7290881680320367,
+          "margin": 1.6887468270031234
+        },
+        {
+          "upDot": 1,
+          "uid": 48,
+          "role": "spear",
+          "top": 1.040341341028906,
+          "clearance": 3.6465624905837632,
+          "margin": 2.606221149554857
+        },
+        {
+          "upDot": 1,
+          "uid": 49,
+          "role": "spear",
+          "top": 1.0403413410288933,
+          "clearance": 2.6077988499965286,
+          "margin": 1.5674575089676352
+        },
+        {
+          "upDot": 1,
+          "uid": 50,
+          "role": "spear",
+          "top": 1.0403413410289033,
+          "clearance": 1.4521304488291384,
+          "margin": 0.41178910780023514
+        }
+      ]
+    },
+    {
+      "name": "all 50 initial troops are blue and genuinely present",
+      "passed": true
+    },
+    {
+      "name": "actual ten-second hidden wait fires no arrows and no heavy deployment",
+      "passed": true,
+      "detail": {
+        "stage": "concealed",
+        "arrows": 0,
+        "assaultPhase": "idle"
+      }
+    },
+    {
+      "name": "actual whale rise and fleet lock drive discovery",
+      "passed": true,
+      "detail": {
+        "discoveredAt": 321,
+        "ambushAt": 322,
+        "lift": 0.43353123301408525,
+        "whaleRadius": 163.09894763166935,
+        "events": [
+          {
+            "from": "landing",
+            "to": "concealed",
+            "seconds": 60.74999999999783
+          },
+          {
+            "from": "concealed",
+            "to": "discovered",
+            "seconds": 76.11666666666363,
+            "evidence": {
+              "detected": true,
+              "source": "saihojiGarden.whaleLock+actualLift",
+              "fleetMembers": 5,
+              "whaleLockActive": true,
+              "whaleRisen": true,
+              "seconds": 76.11666666666363
+            }
+          },
+          {
+            "from": "discovered",
+            "to": "ambush",
+            "seconds": 76.1333333333303
+          }
+        ]
+      }
+    },
+    {
+      "name": "ambush itself does not start heavy drop",
+      "passed": true,
+      "detail": {
+        "assaultPhase": "idle"
+      }
+    },
+    {
+      "name": "ambush resumes original traditional attack and preserves soldiers",
+      "passed": true,
+      "detail": {
+        "arrows": 38,
+        "initialArrows": 0
+      }
+    }
+  ],
+  "passed": true,
+  "state": {
+    "stage": "ambush",
+    "discovery": {
+      "detected": true,
+      "source": "saihojiGarden.whaleLock+actualLift",
+      "fleetMembers": 5,
+      "whaleLockActive": true,
+      "whaleRisen": true,
+      "seconds": 76.11666666666363
+    },
+    "blocked": null,
+    "settleSeconds": 1.6,
+    "registered": 50,
+    "concealed": 50
+  },
+  "events": [
+    {
+      "from": "landing",
+      "to": "concealed",
+      "seconds": 60.74999999999783
+    },
+    {
+      "from": "concealed",
+      "to": "discovered",
+      "seconds": 76.11666666666363,
+      "evidence": {
+        "detected": true,
+        "source": "saihojiGarden.whaleLock+actualLift",
+        "fleetMembers": 5,
+        "whaleLockActive": true,
+        "whaleRisen": true,
+        "seconds": 76.11666666666363
+      }
+    },
+    {
+      "from": "discovered",
+      "to": "ambush",
+      "seconds": 76.1333333333303
+    }
+  ],
+  "scope": "Actual Web scene and real garden/battle updates with diagnostic fleet position. Not a naturally timed whole-game fleet tour; Godot not changed.",
+  "errors": [],
+  "sourceBefore": {
+    "src/world/saihojiPhalanx.js": "2b3668d7521d5234be17117bad2e6bd25f0da1ec962492c12bb19d4591142a68",
+    "src/world/saihojiAmbush.js": "88d86ab21762e7d8ca5a55b335691610bc434c3bb658f969a30f2951707303ec",
+    "src/scenes/saihojiGarden.js": "b2f84d9fdbb7c4612804fa43125a704c5f35180b37208a0911f8012a154159e9",
+    "src/world/vanguardAssault.js": "fad9f339848d105c97bcbcc5a7e9b3f0cb0e195d4197f9bec5615bc7d7e0e5c9",
+    "src/world/saihojiPineLayout.js": "ad6d88415b9eb87f41a1c00d81a8d0d53788d30d4734f7f289d8768b9afc22cb"
+  },
+  "sourceAfter": {
+    "src/world/saihojiPhalanx.js": "2b3668d7521d5234be17117bad2e6bd25f0da1ec962492c12bb19d4591142a68",
+    "src/world/saihojiAmbush.js": "88d86ab21762e7d8ca5a55b335691610bc434c3bb658f969a30f2951707303ec",
+    "src/scenes/saihojiGarden.js": "b2f84d9fdbb7c4612804fa43125a704c5f35180b37208a0911f8012a154159e9",
+    "src/world/vanguardAssault.js": "fad9f339848d105c97bcbcc5a7e9b3f0cb0e195d4197f9bec5615bc7d7e0e5c9",
+    "src/world/saihojiPineLayout.js": "ad6d88415b9eb87f41a1c00d81a8d0d53788d30d4734f7f289d8768b9afc22cb"
+  },
+  "sourceStable": true
+}

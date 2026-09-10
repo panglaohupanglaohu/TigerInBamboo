@@ -1,0 +1,33 @@
+{
+  "status": "partially_verified_full_body_not_accepted",
+  "programPassed": true,
+  "programCheckCount": 88,
+  "headwearRegressionPassed": true,
+  "fullBodyGeometryAccepted": false,
+  "programReport": "2026-09-08T23-35-54.932Z/report.json",
+  "geometryReport": "bow-contact-2026-09-08T23-36-51.799Z/report.json",
+  "index": "index.html",
+  "originalLowerBodyCrossingFrames": 46,
+  "candidateLowerBodyCrossingFrames": 46,
+  "geometryFrames": 180,
+  "battleFrames": 720,
+  "sourceSnapshotStillCurrent": true,
+  "adapterSha256": "b3daa2258ff22fa01f2a8d4b293f6e142f9c4bb7c8d633e4f5bc200c3e42d860",
+  "captures": [
+    "2026-09-08T23-35-54.932Z/spear-red.png",
+    "2026-09-08T23-35-54.932Z/spear-blue.png",
+    "2026-09-08T23-35-54.932Z/longbow-red.png",
+    "2026-09-08T23-35-54.932Z/longbow-blue.png",
+    "2026-09-08T23-35-54.932Z/gladius-red.png",
+    "2026-09-08T23-35-54.932Z/gladius-blue.png"
+  ],
+  "limitations": [
+    "Original lower bow string crosses skirt/waist in both original and candidate; not fixed",
+    "Spear retains original grip/poses; new spear grip and full-body interpenetration not accepted",
+    "Bounded production-battle-module test is separate from full-world playthrough"
+  ],
+  "diagnosticCorrections": [
+    "Earlier contact baseline omitted original skirt. Final baseline includes old skirt and head, finds 46 lower-body crossing frames on both sides",
+    "23-35-53 diagnostic had an ambiguous aggregate passed flag; final 23-36-51 intentionally exposes separate headwear and fullArmor acceptance flags only"
+  ]
+}

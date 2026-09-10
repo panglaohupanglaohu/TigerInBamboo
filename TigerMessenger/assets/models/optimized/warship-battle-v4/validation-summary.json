@@ -1,0 +1,49 @@
+{
+  "asset": "warship-battle-v4",
+  "status": "geometry_and_motion_checked_candidate",
+  "passedWithinListedScope": true,
+  "runtimeIntegrated": false,
+  "readyForFullBattle": false,
+  "originalNodes": 340,
+  "originalInstances": 286,
+  "rowers": 26,
+  "oars": 26,
+  "sourcePaletteFactorsChecked": 31,
+  "visibleUVMeshes": 757,
+  "savedFrames": 301,
+  "gripChecks": 15652,
+  "maximumGripError": 1.7120130796843852e-07,
+  "maximumSavedMatrixError": 0,
+  "maximumGLBMatrixError": 4.76837158203125e-07,
+  "all301PortableMotionRecordsExactlyEqualV2": true,
+  "newHullFailedFrames": 0,
+  "eyeHullContacts": [],
+  "maximumEyeCenterMotion": 0,
+  "boardingJunction": {
+    "hingeThree": [
+      1.94,
+      0.664,
+      0.48
+    ],
+    "poseFrame": 212,
+    "actualFloorRaySamples": 450,
+    "missingSupport": [],
+    "topHeightRange": [
+      0.6639998555183411,
+      0.6819319128990173
+    ],
+    "maximumAdjacentHeightStep": 0.01793205738067627,
+    "scope": "Actual landing/lip/deployed board floor support across x1.77..2.11,z.38...62; does not validate a walking character or25-person path."
+  },
+  "differentOarsPassed": true,
+  "deckSeatsAndBodyPassed": true,
+  "shapeChecks": "Saved new n1 shell against specified26 body parts and oar handles/shafts, new landing supports against these bodies/oars, eyes against shell; existing deck/seat and different-oar checks rerun.",
+  "coverageLimits": [
+    "No full-body/self/cabin/cargo collision claim.",
+    "No single-soldier traversal rerun on changed deck; no25-person scheduler.",
+    "The V2 901-state study was NOT repeated on changed geometry; new checks cover301 saved frames.",
+    "No runtime/Godot integration; GLB is static frame1, Blend/assembly retain301 frames.",
+    "26 original rowers retain their old simple face/helmet family."
+  ],
+  "referenceDecision": "Follow target main3q eyes on curled -X end; conflicting target sideview is not used for eye placement. Original +X navigation/ram stays unchanged."
+}

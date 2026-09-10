@@ -1,0 +1,34 @@
+{
+  "asset": "ancientPineTree",
+  "sourceBlend": "assets/models/originals/blender-r3/pine.blend",
+  "sourceBlendSha256": "bb7377d4787d2ce3a8acedcc21ef239cba964b76a664963a6f3cdb13e6990bc2",
+  "sourceSnapshot": "assets/models/originals/pine.source.json",
+  "sourceSnapshotSha256": "654a2d2b692020db9bca1bd6bb7d82c09b4301b895bbd20c61793ef2e1e9ef08",
+  "scope": "Archive ID pine; provenance factory createAncientPineTree.",
+  "render": "artifacts/pipeline/saihoji-source-references/ancientPineTree-source-three-quarter.png",
+  "renderSha256": "69712426b150d72a14e6617bf3aff03b3df12928d7501fabcef65f40a2d9d8f2",
+  "sourceNodes": 17,
+  "visibleMeshObjects": 5,
+  "blenderBounds": [
+    [
+      -3.1488165855407715,
+      -1.1259337663650513,
+      -0.15270772576332092
+    ],
+    [
+      2.1071152687072754,
+      0.9956833720207214,
+      5.379024982452393
+    ]
+  ],
+  "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+  "sourceFileUnchanged": true,
+  "foregroundUsed": false,
+  "sourceFileSaved": false,
+  "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+  "camera": {
+    "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+    "framing": "per-asset actual visible projected bounds plus 12% margin",
+    "orthographicScale": 6.156116485595703
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "versions": [
+    {
+      "version": 5,
+      "passed": true,
+      "checks": [
+        {
+          "name": "26 original rower torso nodes retained",
+          "passed": true
+        },
+        {
+          "name": "26 original oar pivots retained",
+          "passed": true
+        },
+        {
+          "name": "bow eyes all ahead of midship",
+          "passed": true
+        },
+        {
+          "name": "all cargo remains at stern",
+          "passed": true
+        },
+        {
+          "name": "sailing boarding planks lie flat below deck",
+          "passed": true
+        },
+        {
+          "name": "bronze prow points in positive X",
+          "passed": true
+        },
+        {
+          "name": "candidate metadata does not claim runtime clearance",
+          "passed": true
+        },
+        {
+          "name": "301 rowing pose frames preserved",
+          "passed": true
+        },
+        {
+          "name": "no nonfinite mesh coordinates",
+          "passed": true
+        },
+        {
+          "name": "all original crew and oar poses unchanged",
+          "passed": true
+        }
+      ],
+      "glbSHA256": "e75b27a3a401768d3ae9f69347495be68ac4a8d22be3c17ed97d2887ba05d155"
+    },
+    {
+      "version": 6,
+      "passed": true,
+      "checks": [
+        {
+          "name": "26 original rower torso nodes retained",
+          "passed": true
+        },
+        {
+          "name": "26 original oar pivots retained",
+          "passed": true
+        },
+        {
+          "name": "bow eyes all ahead of midship",
+          "passed": true
+        },
+        {
+          "name": "all cargo remains at stern",
+          "passed": true
+        },
+        {
+          "name": "sailing boarding planks lie flat below deck",
+          "passed": true
+        },
+        {
+          "name": "bronze prow points in positive X",
+          "passed": true
+        },
+        {
+          "name": "candidate metadata does not claim runtime clearance",
+          "passed": true
+        },
+        {
+          "name": "301 rowing pose frames preserved",
+          "passed": true
+        },
+        {
+          "name": "no nonfinite mesh coordinates",
+          "passed": true
+        },
+        {
+          "name": "all original crew and oar poses unchanged",
+          "passed": true
+        }
+      ],
+      "glbSHA256": "c18dfbd2d37dff6501fa799d99dd7e698aa1623d1c9c74939240562836a9a397"
+    }
+  ]
+}

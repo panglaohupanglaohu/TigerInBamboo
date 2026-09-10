@@ -1,0 +1,96 @@
+{
+  "sourceAsset": "soccoCraft",
+  "factorySeats": 14,
+  "battleActiveSeats": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    8,
+    9
+  ],
+  "seatNodeIDs": [
+    "n109",
+    "n110",
+    "n111",
+    "n113",
+    "n114",
+    "n117",
+    "n118"
+  ],
+  "allSeatNodeIDs": [
+    "n109",
+    "n110",
+    "n111",
+    "n112",
+    "n113",
+    "n114",
+    "n115",
+    "n116",
+    "n117",
+    "n118",
+    "n119",
+    "n120",
+    "n121",
+    "n122"
+  ],
+  "hinge": "n87",
+  "hingeRootPosition": [
+    0,
+    -1.4,
+    -2.62
+  ],
+  "rampLength": 2.9,
+  "rampTipHalfThickness": 0.01,
+  "closedAngleRad": 1.5707963267948966,
+  "fixtureGroundLocalY": -1.99,
+  "fixtureOpenAngleRad": -0.20142907735358465,
+  "maxBoardingSlopeRad": 0.4363323129985824,
+  "runtimeGroundEquation": "a=asin((ground_y-hinge_y)/sqrt(L^2+tip_half^2))+atan(tip_half/L); raycast actual ground in craft local frame, then sample/refine endpoint. Reposition craft if slope exceeds 25 deg or endpoint is unreachable.",
+  "passengerPath": "rear-most rows exit first; keep own x lane inside hold/ramp, then converge after ramp foot; no direct diagonal through occupied rows",
+  "sourceNodeMatricesRetainedAtArchiveRest": true,
+  "changedGeometryNodes": [
+    "n1",
+    "n3",
+    "n7",
+    "n9",
+    "n16",
+    "n22",
+    "n24",
+    "n25",
+    "n27",
+    "n29",
+    "n31",
+    "n32",
+    "n36",
+    "n37",
+    "n38",
+    "n39",
+    "n40",
+    "n41",
+    "n42",
+    "n43",
+    "n44",
+    "n57",
+    "n88"
+  ],
+  "propulsionRepack": "Original lower assembly geometrically compacted under floor around center(0,-1.76,-1.65), factors(.8,.30,.58); eliminates original pod intersecting boarding ramp; source node matrices unchanged.",
+  "oldRampIssue": "factory setSoccoRamp(0) leaves deck horizontal; -1.36 at 1 points steeply down. New closed is +pi/2 and deployed angle resolves ground.",
+  "newCrewTransport": {
+    "asset": "vanguard-battle-v1",
+    "glbPose": "static idle frame 1; original emitter nodes n62,n63 hidden during transport",
+    "activeRootLocalXOffsetBySeatSide": {
+      "left": -0.12,
+      "right": 0.09
+    },
+    "resultingCraftLocalXLanes": [
+      -0.4,
+      0.43
+    ],
+    "footSupport": "Per-frame support raycasts under actual boot soles; keep 0.001 contact skin. Do not use only root Y or fixed ramp angle.",
+    "bodyScale": 1,
+    "sourceAnchorsChanged": false
+  },
+  "capacityScope": "14 original seat anchors retained; this battle validates 7 occupants, not 14 simultaneous bodies. 3 SOCCO x7 + 3 GatePod x2 =27."
+}

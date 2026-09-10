@@ -1,0 +1,46 @@
+{
+  "round": "user-round-2",
+  "changes": [
+    "Crown vertical factor 1.42 to 1.00 and horizontal 1.14 to 1.20, keeping original clump anchors",
+    "No physical bark noise; subdivided overlong wood facets to carry narrow coherent colored planes",
+    "Seven closer gray-brown colors; less near-white or near-black contrast",
+    "Six original root directions gain tapered blended webs with thin rising endpoints"
+  ],
+  "glb": "assets/models/optimized/saihoji-pines-v2/811/user-round-2/ancient-pine-811-v2-aged.glb",
+  "glbSHA256": "79fae93ecc205baac365a5252bdf2d3046cf7ad2e52f4b304ad95efbc5e73f01",
+  "blend": "assets/models/optimized/saihoji-pines-v2/811/user-round-2/ancient-pine-811-v2-aged.blend",
+  "blendSHA256": "40f5008056bba85335f645bb18bcdd522dcb0a206517a4ac7eaa16319118c51e",
+  "renders": [
+    "artifacts/pipeline/saihoji-pine-v2-811/user-round-2/v2-aged-full.png",
+    "artifacts/pipeline/saihoji-pine-v2-811/user-round-2/v2-aged-trunk.png",
+    "artifacts/pipeline/saihoji-pine-v2-811/user-round-2/v2-aged-root.png"
+  ],
+  "triangles": 13020,
+  "colorChecks": [
+    {
+      "node": "n8",
+      "uniqueColors": 7,
+      "maxLinearPaletteError": 1.278216599231996e-08,
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "colorAccessorCount": 12600
+    },
+    {
+      "node": "n9",
+      "uniqueColors": 7,
+      "maxLinearPaletteError": 1.278216599231996e-08,
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "colorAccessorCount": 5179
+    }
+  ],
+  "scope": "Only seed 811. No Web/Godot integration or batch replacement."
+}

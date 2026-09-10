@@ -27,6 +27,29 @@ export function createRescueCampaign({ scene, player, camera, messenger, worldLa
   const $ = (s) => panel.querySelector(s);
   const objective = $('.rescue-objective'), navigation = $('.rescue-nav'), action = $('.rescue-action');
   const story = $('.rescue-story');
+  const battleStatus = document.createElement('p');
+  battleStatus.className = 'rescue-battle-status';
+  battleStatus.setAttribute('role', 'status');
+  objective.after(battleStatus);
+  const battle = messenger.landmarks?.saihojiPhalanx;
+  function syncBattle() {
+    battle?.setCampaignProgress?.({ chapter: state.chapter, started: isStarted() });
+  }
+  function describeBattle() {
+    battleStatus.hidden = state.chapter < 2 || state.chapter > 3;
+    if (battleStatus.hidden) return;
+    const status = battle?.root?.userData?.campaignStatus;
+    const stage = battle?.root?.userData?.saihojiAmbush?.state?.stage;
+    if (!status) { battleStatus.textContent = '盟军尚未就绪。'; return; }
+    if (status.phase === 'atCastle') battleStatus.textContent = '盟约已成，蓝盔盟军正在准备出航。';
+    else if (status.phase === 'sailOut') battleStatus.textContent = '蓝盔盟军正乘战船前往苔庭，随后在松林下隐蔽。';
+    else if (stage === 'landing') battleStatus.textContent = '盟军已登陆，正在松林下隐蔽；舰队发现鲲后才会反击。';
+    else if (stage === 'concealed') battleStatus.textContent = state.chapter === 2
+      ? '盟军已在松林下埋伏。靠近苔庭信号点，按 R 送出诱敌信号。'
+      : '诱敌信号已送出。盟军静候舰队发现鲲。';
+    else if (status.phase === 'fight') battleStatus.textContent = '伏击已开始，蓝盔盟军正在反击。';
+    else battleStatus.textContent = '盟军正继续执行作战计划。';
+  }
   let cooldown = 0, protection = 0, uiElapsed = 1, tiger = null;
   const targetPos = new THREE.Vector3(), up = new THREE.Vector3(), forward = new THREE.Vector3(), side = new THREE.Vector3();
   const followPos = new THREE.Vector3();
@@ -61,6 +84,8 @@ export function createRescueCampaign({ scene, player, camera, messenger, worldLa
     objective.textContent = ch ? `前往${ch.place}` : '虎虎与红狐已与你重逢。你可以继续探索两个世界。';
     action.textContent = ch ? `[R] ${ch.action}` : '家书已送达';
     $('.rescue-abilities').hidden = state.chapter < 2;
+    syncBattle();
+    describeBattle();
     uiElapsed = 1;
   }
   function protect(seconds) {
@@ -153,6 +178,7 @@ export function createRescueCampaign({ scene, player, camera, messenger, worldLa
     getTargetPosition: () => resolveTarget()?.clone() ?? null,
     update(dt) {
       panel.hidden = !isStarted();
+      syncBattle();
       if (!isStarted()) { marker.visible = false; return; }
       cooldown = Math.max(0, cooldown - dt); protection = Math.max(0, protection - dt);
       if (fleet) fleet.userData.rescueSuppressed = protection > 0;
@@ -164,6 +190,7 @@ export function createRescueCampaign({ scene, player, camera, messenger, worldLa
       uiElapsed += dt;
       if (uiElapsed < 0.15) return;
       uiElapsed = 0;
+      describeBattle();
       const ch = RESCUE_CHAPTERS[state.chapter];
       const distance = pos ? pos.distanceTo(player.position) : Infinity;
       action.disabled = !ch || distance > 9 || (isRiding() && !['tiger', 'citadel'].includes(ch.target));
@@ -175,7 +202,7 @@ export function createRescueCampaign({ scene, player, camera, messenger, worldLa
         const direction = Math.abs(angle) < 0.4 ? '↑ 前方' : Math.abs(angle) > 2.5 ? '↓ 身后' : angle > 0 ? '→ 右侧' : '← 左侧';
         navigation.textContent = `${direction} · 直线 ${Math.round(distance)} m${protection > 0 ? ` · 掩护 ${Math.ceil(protection)} s` : ''}`;
       } else navigation.textContent = ch ? '目标未加载，请使用完整世界入口' : '家书主线完成 · 自由探索';
-      for (const b of panel.querySelectorAll('[data-power]')) { b.disabled = cooldown > 0; b.title = cooldown ? `冷却 ${Math.ceil(cooldown)} 秒` : '暂停机队吸食，为救援争取时间'; }
+      for (const b of panel.querySelectorAll('[data-power]')) { b.disabled = cooldown > 0; b.title = cooldown ? `冷却 ${Math.ceil(cooldown)} 秒` : '暂停机队吸食，为救援争取时间；诱敌信号请靠近苔庭后按 R'; }
     },
   };
 }

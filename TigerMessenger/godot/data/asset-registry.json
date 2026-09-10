@@ -9653,13 +9653,24 @@
       },
       "evidence": {
         "exportReport": "godot/assets/supplemental/export-report.json",
-        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json"
+        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json",
+        "webFamilyWorld": "artifacts/pipeline/roman-family-world/report.json",
+        "webFamilyReview": "artifacts/pipeline/roman-family-web/summary.json",
+        "familyConcept": "assets/concepts/roman-spearman-target-v1.png"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
         "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
       ],
-      "exportStatus": "partial"
+      "exportStatus": "partial",
+      "runtimeIntegration": {
+        "web": {
+          "status": "shared-armor-integrated-program-verified",
+          "source": "src/world/saihojiPhalanx.js",
+          "familyGuide": "docs/ROMAN_FAMILY_INTEGRATION.md",
+          "scope": "88 family checks passed; bow headwear regression resolved; original lower-string/skirt contact and full body geometry remain unaccepted"
+        }
+      }
     },
     {
       "id": "romanSoldier_spear_blue",
@@ -9708,13 +9719,24 @@
       },
       "evidence": {
         "exportReport": "godot/assets/supplemental/export-report.json",
-        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json"
+        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json",
+        "webFamilyWorld": "artifacts/pipeline/roman-family-world/report.json",
+        "webFamilyReview": "artifacts/pipeline/roman-family-web/summary.json",
+        "familyConcept": "assets/concepts/roman-spearman-target-v1.png"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
         "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
       ],
-      "exportStatus": "partial"
+      "exportStatus": "partial",
+      "runtimeIntegration": {
+        "web": {
+          "status": "shared-armor-integrated-program-verified",
+          "source": "src/world/saihojiPhalanx.js",
+          "familyGuide": "docs/ROMAN_FAMILY_INTEGRATION.md",
+          "scope": "88 family checks passed; bow headwear regression resolved; original lower-string/skirt contact and full body geometry remain unaccepted"
+        }
+      }
     },
     {
       "id": "romanSoldier_gladius_red",
@@ -9783,7 +9805,10 @@
         "concept": "assets/concepts/roman-soldier-target-v2.png",
         "directionValidation": "artifacts/pipeline/roman-armor-v3-direction/godot-validation.json",
         "webCombat": "artifacts/pipeline/roman-equipment-web/report.json",
-        "godotCombatSubset": "artifacts/pipeline/roman-combat-godot/final-02/report.json"
+        "godotCombatSubset": "artifacts/pipeline/roman-combat-godot/final-02/report.json",
+        "webFamilyWorld": "artifacts/pipeline/roman-family-world/report.json",
+        "webFamilyReview": "artifacts/pipeline/roman-family-web/summary.json",
+        "familyConcept": "assets/concepts/roman-soldier-target-v2.png"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
@@ -9793,9 +9818,10 @@
       "exportStatus": "partial",
       "runtimeIntegration": {
         "web": {
-          "status": "production-battle-module-adapter",
+          "status": "shared-armor-integrated-program-verified",
           "source": "src/world/saihojiPhalanx.js",
-          "validation": "isolated actual battle module, 720 frames, 34 checks; full world playthrough pending"
+          "familyGuide": "docs/ROMAN_FAMILY_INTEGRATION.md",
+          "scope": "88 family checks passed; bow headwear regression resolved; original lower-string/skirt contact and full body geometry remain unaccepted"
         },
         "godot": {
           "status": "original-combat-rule-subset-tested",
@@ -9874,7 +9900,10 @@
         "concept": "assets/concepts/roman-soldier-target-v2.png",
         "directionValidation": "artifacts/pipeline/roman-armor-v3-direction/godot-validation.json",
         "webCombat": "artifacts/pipeline/roman-equipment-web/report.json",
-        "godotCombatSubset": "artifacts/pipeline/roman-combat-godot/final-02/report.json"
+        "godotCombatSubset": "artifacts/pipeline/roman-combat-godot/final-02/report.json",
+        "webFamilyWorld": "artifacts/pipeline/roman-family-world/report.json",
+        "webFamilyReview": "artifacts/pipeline/roman-family-web/summary.json",
+        "familyConcept": "assets/concepts/roman-soldier-target-v2.png"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
@@ -9884,9 +9913,10 @@
       "exportStatus": "partial",
       "runtimeIntegration": {
         "web": {
-          "status": "production-battle-module-adapter",
+          "status": "shared-armor-integrated-program-verified",
           "source": "src/world/saihojiPhalanx.js",
-          "validation": "isolated actual battle module, 720 frames, 34 checks; full world playthrough pending"
+          "familyGuide": "docs/ROMAN_FAMILY_INTEGRATION.md",
+          "scope": "88 family checks passed; bow headwear regression resolved; original lower-string/skirt contact and full body geometry remain unaccepted"
         },
         "godot": {
           "status": "original-combat-rule-subset-tested",
@@ -9945,13 +9975,24 @@
       },
       "evidence": {
         "exportReport": "godot/assets/supplemental/export-report.json",
-        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json"
+        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json",
+        "webFamilyWorld": "artifacts/pipeline/roman-family-world/report.json",
+        "webFamilyReview": "artifacts/pipeline/roman-family-web/summary.json",
+        "familyConcept": "assets/concepts/roman-archer-target-v1.png"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
         "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
       ],
-      "exportStatus": "partial"
+      "exportStatus": "partial",
+      "runtimeIntegration": {
+        "web": {
+          "status": "shared-armor-integrated-program-verified",
+          "source": "src/world/saihojiPhalanx.js",
+          "familyGuide": "docs/ROMAN_FAMILY_INTEGRATION.md",
+          "scope": "88 family checks passed; bow headwear regression resolved; original lower-string/skirt contact and full body geometry remain unaccepted"
+        }
+      }
     },
     {
       "id": "romanSoldier_longbow_blue",
@@ -10000,13 +10041,24 @@
       },
       "evidence": {
         "exportReport": "godot/assets/supplemental/export-report.json",
-        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json"
+        "godotInstantiation": "artifacts/supplemental-import/godot-registry-verification.json",
+        "webFamilyWorld": "artifacts/pipeline/roman-family-world/report.json",
+        "webFamilyReview": "artifacts/pipeline/roman-family-web/summary.json",
+        "familyConcept": "assets/concepts/roman-archer-target-v1.png"
       },
       "knownGaps": [
         "原作资源归档；完整场景位置/尺度与交互尚待验证，实际引擎导入证据单独记录",
         "墨线、程序动画、灯光与隐藏装备状态切换需要引擎适配；GLB 只含当前可见状态，完整动态节点保存在源快照与 Blender"
       ],
-      "exportStatus": "partial"
+      "exportStatus": "partial",
+      "runtimeIntegration": {
+        "web": {
+          "status": "shared-armor-integrated-program-verified",
+          "source": "src/world/saihojiPhalanx.js",
+          "familyGuide": "docs/ROMAN_FAMILY_INTEGRATION.md",
+          "scope": "88 family checks passed; bow headwear regression resolved; original lower-string/skirt contact and full body geometry remain unaccepted"
+        }
+      }
     },
     {
       "id": "leviathanIsland",

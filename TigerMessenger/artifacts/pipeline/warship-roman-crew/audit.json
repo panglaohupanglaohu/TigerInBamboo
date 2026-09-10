@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "All 301 original v8 pose frames and 52 grasp anchors retained",
+      "passed": true
+    },
+    {
+      "name": "15,652 evaluated saved Blender hand/oar contacts within 0.01 mm",
+      "passed": true
+    },
+    {
+      "name": "26 actual transplanted faces torsos helmets and separated skirts",
+      "passed": true
+    },
+    {
+      "name": "One shared mesh datablock per new body component",
+      "passed": true
+    },
+    {
+      "name": "Face retains sculpted profile geometry",
+      "passed": true
+    },
+    {
+      "name": "Skirt and waist belt preserve donor shared material",
+      "passed": true
+    },
+    {
+      "name": "All 26 torso GLB instances share one mesh index",
+      "passed": true
+    },
+    {
+      "name": "Crest recolor node prefixes retained",
+      "passed": true
+    },
+    {
+      "name": "Fresh GLB import contains all original 26 rower bodies",
+      "passed": true
+    }
+  ],
+  "savedBlenderContactCount": 15652,
+  "maxHandOarError": 1.7120130796843852e-07,
+  "glbSha256": "10887991c95c8baccd25ff9b2c80d2888788a68e8b24499f4447ccd1b1971210",
+  "limitations": [
+    "Hands and rowing forearm/leg rig remain the validated v8 rowing rig, not combat weapon pose.",
+    "Seated skirt tips flare from accepted separate-lame mesh; complete body collision certification is not claimed.",
+    "This asset audit does not certify sailing terrain, docking or 25 landing soldier spawning."
+  ]
+}

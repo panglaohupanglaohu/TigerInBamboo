@@ -1,0 +1,582 @@
+{
+  "status": "Blender structural candidate, not integrated",
+  "sourceHashesBefore": {
+    "blend": "f0b0a0fc7703c6e5f832800c9a978afd547c69040d0cb1aa4457f7acc03950a7",
+    "snapshot": "a8575b5009ac9c371ba9597e778ec3eea95f3c512637cd00663806c939d84852"
+  },
+  "sourceHashesAfter": {
+    "blend": "f0b0a0fc7703c6e5f832800c9a978afd547c69040d0cb1aa4457f7acc03950a7",
+    "snapshot": "a8575b5009ac9c371ba9597e778ec3eea95f3c512637cd00663806c939d84852"
+  },
+  "sourceVisibleTriangles": 4782,
+  "candidateVisibleTriangles": 5878,
+  "candidateVisibleMeshes": 36,
+  "contract": {
+    "sourceNodes": 67,
+    "sourceParentsExact": true,
+    "sourceLocalMatrixMaxError": 0.0,
+    "rootUserData": {
+      "kind": "moebius-aircraft",
+      "thrusters": [
+        {
+          "nodeRef": "n11"
+        }
+      ],
+      "flames": [
+        {
+          "nodeRef": "n56"
+        },
+        {
+          "nodeRef": "n57"
+        },
+        {
+          "nodeRef": "n58"
+        },
+        {
+          "nodeRef": "n59"
+        },
+        {
+          "nodeRef": "n60"
+        },
+        {
+          "nodeRef": "n61"
+        }
+      ],
+      "cockpitAnchor": {
+        "nodeRef": "n52"
+      },
+      "cockpitLight": {
+        "nodeRef": "n55"
+      },
+      "cockpitGlow": {
+        "nodeRef": "n54"
+      },
+      "cockpitCore": {
+        "nodeRef": "n53"
+      },
+      "cockpitOrangeDot": {
+        "nodeRef": "n65"
+      },
+      "cockpitOrangeLight": {
+        "nodeRef": "n66"
+      },
+      "neonLight": {
+        "nodeRef": "n16"
+      },
+      "thrusterLight": {
+        "nodeRef": "n21"
+      },
+      "energyTube": {
+        "nodeRef": "n14"
+      },
+      "scanBeam": {
+        "nodeRef": "n62"
+      },
+      "scanSpot": {
+        "nodeRef": "n63"
+      },
+      "scanRing": {
+        "nodeRef": "n64"
+      },
+      "scanPhase": 0.5465542199827937,
+      "assetType": "moebiusAircraft",
+      "mapType": "moebiusAircraft",
+      "collideRadius": 2,
+      "factoryOpts": {}
+    },
+    "hiddenDynamicEffectNodes": [
+      "n62",
+      "n63",
+      "n64"
+    ],
+    "hiddenOutlineNodes": [
+      "n2",
+      "n4",
+      "n6",
+      "n8",
+      "n10",
+      "n12",
+      "n15",
+      "n18",
+      "n20",
+      "n23",
+      "n25",
+      "n27",
+      "n29",
+      "n31",
+      "n34",
+      "n36",
+      "n39",
+      "n41",
+      "n44",
+      "n46",
+      "n49",
+      "n51"
+    ],
+    "addedNodes": [
+      {
+        "id": "aircraft-details-n0-AircraftV1_Source_m7",
+        "parent": "n0"
+      },
+      {
+        "id": "intake-cyan-iris",
+        "parent": "n0"
+      },
+      {
+        "id": "aircraft-details-n0-AircraftV1_OrangePanelSeam",
+        "parent": "n0"
+      },
+      {
+        "id": "cockpit-exterior-lime-lens",
+        "parent": "n52"
+      },
+      {
+        "id": "aircraft-details-n52-AircraftV1_Source_m7",
+        "parent": "n52"
+      }
+    ],
+    "animationNote": "Source references and matrices preserved. No flight, flame pulse, scan, nectar suction or squad behavior is claimed migrated."
+  },
+  "glbSha256": "bcd6a117143647c358131757df8c1b58889962c41ab36e8968782133b0d5c754",
+  "blendSha256": "ce61c1fcb532f6cbba965d0091a1c176afdbf008d1ce53a216d6f3acebd1b1c5",
+  "sourceMaterialChecks": [
+    {
+      "id": "m22",
+      "factor": [
+        1,
+        0.2541520893573761,
+        0.03189603239297867,
+        1
+      ],
+      "error": 4.962653510354187e-09,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m7",
+      "factor": [
+        0.01032982300966978,
+        0.01032982300966978,
+        0.01032982300966978,
+        1
+      ],
+      "error": 1.6694767096536722e-11,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m0",
+      "factor": [
+        0.6514056324958801,
+        0.08865558356046677,
+        0,
+        1
+      ],
+      "error": 4.91691276582884e-09,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m4",
+      "factor": [
+        1,
+        0.6444796919822693,
+        0.06847816705703735,
+        1
+      ],
+      "error": 1.0018833207503519e-08,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m19",
+      "factor": [
+        0.040915198624134064,
+        1,
+        0.32314321398735046,
+        0.550000011920929
+      ],
+      "error": 1.1920928910669204e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m21",
+      "factor": [
+        0.34191441535949707,
+        1,
+        0.6038273572921753,
+        0.4000000059604645
+      ],
+      "error": 1.8444634486414202e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m20",
+      "factor": [
+        0.13286831974983215,
+        1,
+        0.4019777774810791,
+        0.5
+      ],
+      "error": 2.3408674998393053e-09,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m3",
+      "factor": [
+        0.6583748459815979,
+        1,
+        0.32314321398735046,
+        1
+      ],
+      "error": 2.8709063348841823e-08,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m11",
+      "factor": [
+        0.8069522380828857,
+        1,
+        0.4793201684951782,
+        1
+      ],
+      "error": 1.958220152697976e-08,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m12",
+      "factor": [
+        0.4564110338687897,
+        1,
+        0.1441284716129303,
+        0.5
+      ],
+      "error": 1.0698123720231933e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m2",
+      "factor": [
+        0.006995410192757845,
+        0.006995410192757845,
+        0.006995410192757845,
+        1
+      ],
+      "error": 8.159451413136676e-12,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m5",
+      "factor": [
+        0.023153366521000862,
+        0.023153366521000862,
+        0.027320891618728638,
+        1
+      ],
+      "error": 3.4774949933535915e-10,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m6",
+      "factor": [
+        0.6938717365264893,
+        0.6583748459815979,
+        0.577580451965332,
+        1
+      ],
+      "error": 2.8709063348841823e-08,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m8",
+      "factor": [
+        0.520995557308197,
+        0.5520114302635193,
+        0.6038273572921753,
+        1
+      ],
+      "error": 2.8760079318068676e-08,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m9",
+      "factor": [
+        0.5906188488006592,
+        0.520995557308197,
+        0.3915724754333496,
+        1
+      ],
+      "error": 1.5887179793949713e-08,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m10",
+      "factor": [
+        0.1946178376674652,
+        0.10224173218011856,
+        0.0423114113509655,
+        1
+      ],
+      "error": 7.236393484433279e-09,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "id": "m13",
+      "factor": [
+        1,
+        0.2541520893573761,
+        0.023153366521000862,
+        0.550000011920929
+      ],
+      "error": 1.1920928910669204e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m14",
+      "factor": [
+        1,
+        0.04373503103852272,
+        0.006048833020031452,
+        0.9200000166893005
+      ],
+      "error": 1.6689300497141346e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m15",
+      "factor": [
+        1,
+        0.2541520893573761,
+        0.023153366521000862,
+        0.550000011920929
+      ],
+      "error": 1.1920928910669204e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m16",
+      "factor": [
+        1,
+        0.04373503103852272,
+        0.006048833020031452,
+        0.9200000166893005
+      ],
+      "error": 1.6689300497141346e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m17",
+      "factor": [
+        1,
+        0.2541520893573761,
+        0.023153366521000862,
+        0.550000011920929
+      ],
+      "error": 1.1920928910669204e-08,
+      "alphaMode": "BLEND"
+    },
+    {
+      "id": "m18",
+      "factor": [
+        1,
+        0.04373503103852272,
+        0.006048833020031452,
+        0.9200000166893005
+      ],
+      "error": 1.6689300497141346e-08,
+      "alphaMode": "BLEND"
+    }
+  ],
+  "review": [
+    {
+      "state": "before",
+      "view": "full-three-quarter",
+      "camera": [
+        11.066157341003418,
+        -15.267376899719238,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        -0.5124998092651367,
+        -1.7881393432617188e-07
+      ],
+      "orthoScale": 7.8
+    },
+    {
+      "state": "before",
+      "view": "intake-interface",
+      "camera": [
+        11.066157341003418,
+        -18.7548770904541,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        -4.0,
+        0.0
+      ],
+      "orthoScale": 2.5
+    },
+    {
+      "state": "before",
+      "view": "cockpit-interface",
+      "camera": [
+        11.066157341003418,
+        -16.654876708984375,
+        8.765182495117188
+      ],
+      "target": [
+        0.0,
+        -1.899999976158142,
+        0.6499999761581421
+      ],
+      "orthoScale": 2.75
+    },
+    {
+      "state": "before",
+      "view": "tail-interface",
+      "camera": [
+        11.066157341003418,
+        -11.854877471923828,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        2.9000000953674316,
+        0.0
+      ],
+      "orthoScale": 4.2
+    },
+    {
+      "state": "after",
+      "view": "full-three-quarter",
+      "camera": [
+        11.066157341003418,
+        -15.267376899719238,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        -0.5124998092651367,
+        -1.7881393432617188e-07
+      ],
+      "orthoScale": 7.8
+    },
+    {
+      "state": "after",
+      "view": "intake-interface",
+      "camera": [
+        11.066157341003418,
+        -18.7548770904541,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        -4.0,
+        0.0
+      ],
+      "orthoScale": 2.5
+    },
+    {
+      "state": "after",
+      "view": "cockpit-interface",
+      "camera": [
+        11.066157341003418,
+        -16.654876708984375,
+        8.765182495117188
+      ],
+      "target": [
+        0.0,
+        -1.899999976158142,
+        0.6499999761581421
+      ],
+      "orthoScale": 2.75
+    },
+    {
+      "state": "after",
+      "view": "tail-interface",
+      "camera": [
+        11.066157341003418,
+        -11.854877471923828,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        2.9000000953674316,
+        0.0
+      ],
+      "orthoScale": 4.2
+    },
+    {
+      "state": "glb-roundtrip",
+      "view": "full-three-quarter",
+      "camera": [
+        11.066157341003418,
+        -15.267376899719238,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        -0.5124998092651367,
+        -1.7881393432617188e-07
+      ],
+      "orthoScale": 7.8
+    },
+    {
+      "state": "glb-roundtrip",
+      "view": "intake-interface",
+      "camera": [
+        11.066157341003418,
+        -18.7548770904541,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        -4.0,
+        0.0
+      ],
+      "orthoScale": 2.5
+    },
+    {
+      "state": "glb-roundtrip",
+      "view": "cockpit-interface",
+      "camera": [
+        11.066157341003418,
+        -16.654876708984375,
+        8.765182495117188
+      ],
+      "target": [
+        0.0,
+        -1.899999976158142,
+        0.6499999761581421
+      ],
+      "orthoScale": 2.75
+    },
+    {
+      "state": "glb-roundtrip",
+      "view": "tail-interface",
+      "camera": [
+        11.066157341003418,
+        -11.854877471923828,
+        8.115182876586914
+      ],
+      "target": [
+        0.0,
+        2.9000000953674316,
+        0.0
+      ],
+      "orthoScale": 4.2
+    }
+  ],
+  "changes": [
+    "Open cream intake with recessed inner wall and cyan indicator",
+    "Probe geometry extended to intake, three small support struts, original cage feet attached",
+    "Three conformal orange hull seams",
+    "Lime cockpit external lens and seated border parented to original cockpit anchor",
+    "Original aft rim geometry corrected to nozzle axis without modifying node transform",
+    "Eight original fin/inset panels receive small edge bevel"
+  ],
+  "limits": [
+    "Toon ramp and additive blends require engine adaptation",
+    "Three scan meshes keep original geometry and source_visible=false metadata; importer must honor it (as roundtrip review does)",
+    "No flock, combat, suction or flame animation port is claimed",
+    "No runtime integration or LOD switching"
+  ]
+}

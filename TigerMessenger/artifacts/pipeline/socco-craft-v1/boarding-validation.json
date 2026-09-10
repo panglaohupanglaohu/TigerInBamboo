@@ -1,0 +1,233 @@
+{
+  "candidateGlbSha256": "98729864e994acd2df77d51cae537f630badda795105871d7b389dd2c3c76ac2",
+  "realPassengerCount": 7,
+  "factorySeatAnchorsPreserved": 14,
+  "activeSeatIndices": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    8,
+    9
+  ],
+  "groundSolutions": [
+    {
+      "groundLocalY": -2.6,
+      "angle": -0.42316571888064664,
+      "tipContactError": 1.4305114737211966e-07
+    },
+    {
+      "groundLocalY": -2.5533333333333332,
+      "angle": -0.4055591240213784,
+      "tipContactError": 1.875559489938894e-07
+    },
+    {
+      "groundLocalY": -2.506666666666667,
+      "angle": -0.38808589889237116,
+      "tipContactError": 2.320607501715699e-07
+    },
+    {
+      "groundLocalY": -2.46,
+      "angle": -0.37073783843605995,
+      "tipContactError": 2.7656555179333964e-07
+    },
+    {
+      "groundLocalY": -2.4133333333333336,
+      "angle": -0.3535071767021852,
+      "tipContactError": 3.2107035297102016e-07
+    },
+    {
+      "groundLocalY": -2.3666666666666667,
+      "angle": -0.3363865452967373,
+      "tipContactError": 1.2715657549122739e-07
+    },
+    {
+      "groundLocalY": -2.3200000000000003,
+      "angle": -0.3193689361481138,
+      "tipContactError": 1.716613766689079e-07
+    },
+    {
+      "groundLocalY": -2.2733333333333334,
+      "angle": -0.302447668019937,
+      "tipContactError": 2.1616617829067764e-07
+    },
+    {
+      "groundLocalY": -2.2266666666666666,
+      "angle": -0.2856163562841109,
+      "tipContactError": 2.6067097991244736e-07
+    },
+    {
+      "groundLocalY": -2.18,
+      "angle": -0.26886888553756527,
+      "tipContactError": 3.051757810901279e-07
+    },
+    {
+      "groundLocalY": -2.1333333333333333,
+      "angle": -0.2521993847044258,
+      "tipContactError": 1.1126200361033511e-07
+    },
+    {
+      "groundLocalY": -2.086666666666667,
+      "angle": -0.23560220431414472,
+      "tipContactError": 1.5576680478801563e-07
+    },
+    {
+      "groundLocalY": -2.04,
+      "angle": -0.21907189568710203,
+      "tipContactError": 2.0027160640978536e-07
+    },
+    {
+      "groundLocalY": -1.9933333333333336,
+      "angle": -0.20260319179373448,
+      "tipContactError": 2.447764075874659e-07
+    },
+    {
+      "groundLocalY": -1.9466666666666668,
+      "angle": -0.18619098958240152,
+      "tipContactError": 1.7007191965845436e-07
+    },
+    {
+      "groundLocalY": -1.9000000000000001,
+      "angle": -0.1698303335959032,
+      "tipContactError": 2.145767210581795e-07
+    },
+    {
+      "groundLocalY": -1.8533333333333335,
+      "angle": -0.1535164007174855,
+      "tipContactError": 2.590815224579046e-07
+    },
+    {
+      "groundLocalY": -1.8066666666666669,
+      "angle": -0.1372444859049431,
+      "tipContactError": 3.0358632385762974e-07
+    },
+    {
+      "groundLocalY": -1.7600000000000002,
+      "angle": -0.12100998878649699,
+      "tipContactError": 2.288818357065736e-07
+    },
+    {
+      "groundLocalY": -1.7133333333333334,
+      "angle": -0.10480840100491128,
+      "tipContactError": 2.7338663732834334e-07
+    },
+    {
+      "groundLocalY": -1.666666666666667,
+      "angle": -0.08863529420712131,
+      "tipContactError": 1.986821489552426e-07
+    },
+    {
+      "groundLocalY": -1.62,
+      "angle": -0.07248630858575214,
+      "tipContactError": 2.4318695057701234e-07
+    },
+    {
+      "groundLocalY": -1.5733333333333335,
+      "angle": -0.05635714188652947,
+      "tipContactError": 1.6848246242595621e-07
+    },
+    {
+      "groundLocalY": -1.5266666666666668,
+      "angle": -0.040243538801888266,
+      "tipContactError": 2.1298726382568134e-07
+    },
+    {
+      "groundLocalY": -1.4800000000000002,
+      "angle": -0.024141280676235864,
+      "tipContactError": 2.5749206522540646e-07
+    },
+    {
+      "groundLocalY": -1.4333333333333336,
+      "angle": -0.008046175452413356,
+      "tipContactError": 1.8278757707435034e-07
+    },
+    {
+      "groundLocalY": -1.386666666666667,
+      "angle": 0.008045952207966453,
+      "tipContactError": 2.2729237847407546e-07
+    },
+    {
+      "groundLocalY": -1.3400000000000003,
+      "angle": 0.024139270695390333,
+      "tipContactError": 2.717971798738006e-07
+    },
+    {
+      "groundLocalY": -1.2933333333333334,
+      "angle": 0.040237951178219086,
+      "tipContactError": 1.9709269194478907e-07
+    },
+    {
+      "groundLocalY": -1.2466666666666668,
+      "angle": 0.05634617734648401,
+      "tipContactError": 2.415974933445142e-07
+    },
+    {
+      "groundLocalY": -1.2000000000000002,
+      "angle": 0.07246815523705528,
+      "tipContactError": 1.6689300519345807e-07
+    }
+  ],
+  "closedHingeTipBlender": [
+    0.0,
+    2.619999647140503,
+    1.4999998807907104
+  ],
+  "realMeshExitSamples": 231,
+  "fullPassengerSurfaceTrianglesChecked": true,
+  "footSupportSamples": 2772,
+  "footSupportMaxPenetration": 0,
+  "footSupportMaxCornerGap": 0.20644230937957753,
+  "footSupportMaxContactError": 0.001000000000000112,
+  "footSupportMaxCorrection": 0.048063231468200684,
+  "newCrewRootLocalXOffsetBySeatSide": null,
+  "wallTriangleIntersections": [
+    {
+      "phase": "exit",
+      "passenger": 0,
+      "sample": 13,
+      "obstacle": "n74.003"
+    },
+    {
+      "phase": "exit",
+      "passenger": 1,
+      "sample": 13,
+      "obstacle": "n74.003"
+    },
+    {
+      "phase": "exit",
+      "passenger": 2,
+      "sample": 13,
+      "obstacle": "n74.003"
+    },
+    {
+      "phase": "exit",
+      "passenger": 3,
+      "sample": 13,
+      "obstacle": "n74.003"
+    },
+    {
+      "phase": "exit",
+      "passenger": 4,
+      "sample": 13,
+      "obstacle": "n74.003"
+    },
+    {
+      "phase": "exit",
+      "passenger": 5,
+      "sample": 13,
+      "obstacle": "n74.003"
+    },
+    {
+      "phase": "exit",
+      "passenger": 6,
+      "sample": 13,
+      "obstacle": "n74.003"
+    }
+  ],
+  "passengerTriangleIntersections": [],
+  "footRootPlacementMaxError": 1.1920928955078125e-07,
+  "crewModel": "archived vanguardTrooper with stowed transport arms",
+  "crewGlbSha256": null,
+  "scope": "Actual passenger meshes and candidate GLB geometry, kinematic fixture. Not a world navigation/playtest assertion."
+}

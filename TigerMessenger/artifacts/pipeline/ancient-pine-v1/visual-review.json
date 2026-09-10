@@ -1,0 +1,15 @@
+{
+  "reviewed": "actual exported LOD0 GLB re-import full three-quarter, branch junction and root detail renders compared with same-camera before renders",
+  "observations": [
+    "Original zigzag trunk, branch counts and crown layer positions remain recognizable.",
+    "Visible source trunk cap gaps are closed; root transition has continuous taper instead of separate collar and thin rod.",
+    "Foliage is lower and flatter with dark underside; remains stylized low-poly crown masses, not individual needles.",
+    "GLB re-import displays original bark and three green palette rather than white default material."
+  ],
+  "limitations": [
+    "Requires root visual approval before integration.",
+    "Toon ramp, original outline shader, automatic LOD switching and world collision not integrated.",
+    "Root remains original exposed-root arrangement; concept moss and rocks were not added."
+  ],
+  "runtimeChanged": false
+}

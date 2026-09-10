@@ -1,0 +1,516 @@
+{
+  "checks": [
+    {
+      "name": "actual mission reaches combat before return",
+      "passed": true
+    },
+    {
+      "name": "real garden offers a blocked direct line with a safe detour",
+      "passed": true
+    },
+    {
+      "name": "production updater uses a nonzero exact return path",
+      "passed": true,
+      "detail": {
+        "uid": 6,
+        "seat": 0,
+        "departed": true,
+        "returned": true,
+        "forcedReturn": false,
+        "dead": false,
+        "aboard": true,
+        "state": "done",
+        "returning": false,
+        "returningOnRamp": false,
+        "routeLength": 7.278192398394555,
+        "returnPathStatus": "resolved",
+        "returnPathLength": 6.052736867122345,
+        "returnPathStartCorrection": 1.4210854715202004e-14,
+        "yieldSteps": 0
+      }
+    },
+    {
+      "name": "actual return avoids solids with continuous movement",
+      "passed": true,
+      "detail": {
+        "inspected": 1286,
+        "blocked": 0,
+        "maxStep": 0.047819015013760235,
+        "maxStepDetail": {
+          "from": [
+            -65.16803183308235,
+            77.99888445916234,
+            -126.0240175605279
+          ],
+          "to": [
+            -65.13991295365726,
+            77.9631132706955,
+            -126.00930671784526
+          ],
+          "heightChange": -0.03999999999999204
+        }
+      }
+    },
+    {
+      "name": "reserved assembly point reached before boarding",
+      "passed": true,
+      "detail": {
+        "arrivalError": 2.0097183471152322e-14
+      }
+    },
+    {
+      "name": "all 21 recover without timeout after the detour",
+      "passed": true
+    },
+    {
+      "name": "actual battlefield return frame captured",
+      "passed": true
+    }
+  ],
+  "entry": {
+    "uid": 6,
+    "seat": 0,
+    "departed": true,
+    "returned": true,
+    "forcedReturn": false,
+    "dead": false,
+    "aboard": true,
+    "state": "done",
+    "returning": false,
+    "returningOnRamp": false,
+    "routeLength": 7.278192398394555,
+    "returnPathStatus": "resolved",
+    "returnPathLength": 6.052736867122345,
+    "returnPathStartCorrection": 1.4210854715202004e-14,
+    "yieldSteps": 0
+  },
+  "transport": [
+    {
+      "name": "vanguard-hauler-0",
+      "cancelled": false,
+      "groundRoutes": "resolved",
+      "roster": [
+        {
+          "uid": 6,
+          "seat": 0,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 7.278192398394555,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 6.052736867122345,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 7,
+          "seat": 1,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 7.011689021112773,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 8,
+          "seat": 2,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 7.497980484801104,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 3.4809342861069267e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 9,
+          "seat": 3,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.82617243160408,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.4613922385709617e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 10,
+          "seat": 4,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 5.3092317061028815,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 11,
+          "seat": 5,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 5.801684069233982,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 12,
+          "seat": 6,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 3.607807690970273,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        }
+      ]
+    },
+    {
+      "name": "vanguard-hauler-1",
+      "cancelled": false,
+      "groundRoutes": "resolved",
+      "roster": [
+        {
+          "uid": 13,
+          "seat": 0,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 5.300815221918797,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 14,
+          "seat": 1,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 3.604501648852436,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.4613922385709617e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 15,
+          "seat": 2,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.8966514246802078,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 16,
+          "seat": 3,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.101826051825369,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 17,
+          "seat": 4,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.4029081532811745,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 18,
+          "seat": 5,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.905845658783491,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 3.1776437161565096e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 19,
+          "seat": 6,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.623175564778801,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.4613922385709617e-14,
+          "yieldSteps": 0
+        }
+      ]
+    },
+    {
+      "name": "vanguard-hauler-2",
+      "cancelled": false,
+      "groundRoutes": "resolved",
+      "roster": [
+        {
+          "uid": 20,
+          "seat": 0,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.4005490308191257,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 21,
+          "seat": 1,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.102056158172262,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 22,
+          "seat": 2,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.610253417589991,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 23,
+          "seat": 3,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.900576680922521,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 1.4210854715202004e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 24,
+          "seat": 4,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 4.103055418335555,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.0097183471152322e-14,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 25,
+          "seat": 5,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 7.760229149705006,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 0,
+          "yieldSteps": 0
+        },
+        {
+          "uid": 26,
+          "seat": 6,
+          "departed": true,
+          "returned": true,
+          "forcedReturn": false,
+          "dead": false,
+          "aboard": true,
+          "state": "done",
+          "returning": false,
+          "returningOnRamp": false,
+          "routeLength": 2.897565657738518,
+          "returnPathStatus": "resolved",
+          "returnPathLength": 0,
+          "returnPathStartCorrection": 2.842170943040401e-14,
+          "yieldSteps": 0
+        }
+      ]
+    }
+  ],
+  "selected": {
+    "start": [
+      -69.03220345882967,
+      77.60702464325315,
+      -123.15357337228386
+    ],
+    "goal": [
+      -64.91522092991062,
+      77.97578004408228,
+      -126.02829403891758
+    ],
+    "directDistance": 5.034833125361395,
+    "routeLength": 6.052736867122345,
+    "points": [
+      [
+        -69.03220345882966,
+        77.60702464325315,
+        -123.15357337228386
+      ],
+      [
+        -67.98721486771284,
+        77.60905502251478,
+        -123.74356306358413
+      ],
+      [
+        -67.00535251714155,
+        77.6843358928685,
+        -124.45093133275883
+      ],
+      [
+        -65.74469438441936,
+        78.82099660625697,
+        -124.66641112995086
+      ],
+      [
+        -65.09604446245298,
+        77.90731514581383,
+        -125.98619133407256
+      ],
+      [
+        -64.91522092991063,
+        77.97578004408227,
+        -126.02829403891758
+      ]
+    ]
+  },
+  "scope": "Actual garden and mission updater with one deliberately displaced living soldier; not natural combat or whole-world dynamic avoidance",
+  "errors": [],
+  "passed": true
+}

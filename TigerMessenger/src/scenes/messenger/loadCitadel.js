@@ -32,8 +32,6 @@ import { createSaihojiPhalanxBattle } from "../../world/saihojiPhalanx.js?v=2026
 import { createVanguardSquad } from "../../world/vanguardTrooper.js";
 import { createVanguardAssault } from "../../world/vanguardAssault.js";
 import { createSoccoCraft } from "../../world/gateHaulerCraft.js";
-import { isCitadelCombatV3 } from "../../core/params.js";
-import { createHarborLandingSample, selectCombatBackend } from "../../agents/citadel/combatSample.js";
 import {
   createCitadelTacticalGraph,
   createTacticalGraphDebugView,
@@ -274,10 +272,8 @@ function placeHarborOnCitadel({ R, camp, harbor, harborBuilt, islandLift = 0 }) 
 
 export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harbor, harborBuilt, tramSystem, aircraftSquad, v4Runtime, planetV8 }) {
   const latestAssault = odysseyCitadel.userData.highlandAssaultAnchors || null;
-  // V3's compiled surfaces still describe the retired terrace graph.  Until
-  // that optional backend is rebuilt for this landmark, the latest scene keeps
-  // the live phalanx battle, which consumes explicit castle-top routes.
-  const useV3 = !latestAssault && selectCombatBackend({ combat: isCitadelCombatV3() }) === "v3";
+  // The full messenger story always needs the live voyage/cover/return chain.
+  // The optional V3 harbor sample has its separate sample entry; do not run both here.
   // 先锋重甲兵中队（用户 2026-09-04）：随莫比斯 aircraft 出行 → 苔庭之战落地参战。
   // 挂在 scene 上而不是机队下——伴飞是每帧跟位，落地后就该留在地面，
   // 挂成机队子节点的话机队一走它们会被拖上天。
@@ -337,9 +333,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
   });
   scene.add(vanguardAssault.root);
 
-  const saihojiPhalanxBattle = useV3
-    ? null
-    : createSaihojiPhalanxBattle({
+  const saihojiPhalanxBattle = createSaihojiPhalanxBattle({
         scene,
         isWhaleRisen: () => {
           const lev = scene.getObjectByName("leviathanGroup");
@@ -358,11 +352,7 @@ export function loadCitadelCombat({ scene, R, odysseyCitadel, citadelRange, harb
         events: createCombatEventLog({ seed: FEATURES.combatSeed, scenario: "siege" }),
       });
   saihojiPhalanx = saihojiPhalanxBattle;
-  let paperLanding = null;
-  if (useV3 && v4Runtime?.v4) {
-    paperLanding = createHarborLandingSample(v4Runtime.v4, { seed: FEATURES.combatSeed });
-    v4Runtime.combat = paperLanding;
-  }
+  const paperLanding = null;
 
   let tacticalGraph = null;
   let tacticalGraphView = null;

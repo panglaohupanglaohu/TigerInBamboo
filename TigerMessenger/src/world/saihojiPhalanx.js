@@ -1,5 +1,5 @@
 // =====================================================================
-//  @legacy 日间攻城状态机（禁止追加新玩法）
+//  @legacy 日间攻城状态机；2026-09-10用户授权在原运兵链新增松下伏击流程。
 //  V4 真源：src/agents/citadel/siegeDirector.js · combatAgent.js · combatSim.js
 //  本文件暂留：完整运兵/弓箭/拔河仍在这里。见 docs/citadel-v4-legacy.md
 //
@@ -12,6 +12,10 @@
 import * as THREE from "three";
 import { PLANET_RADIUS } from "./planet.js";
 import { createWhaleMaw } from "./whaleMaw.js";
+import { createSaihojiAmbush } from "./saihojiAmbush.js";
+import { orientWarship, placeWarshipOnSphere, sampleWarshipRoute } from "./warshipNavigation.js";
+import { bindWarshipCohort } from "./warshipCrewContinuity.js";
+import { createWarshipWaterRoutes } from "./warshipWaterRoutes.js";
 import { SAIHOJI_HUB } from "./saihoji.js";
 import { CITADEL_CASCADE_POOL_SPECS } from "./odysseyCitadel.js";
 import { citadelWalkFlights, citadelWalkMetrics } from "./citadelRange.js";
@@ -32,7 +36,6 @@ import {
   updateWarshipOars,
   paintSoldierHelm,
   paintBoatCrewCrest,
-  emptyBoatCrew,
 } from "../assets/harbor.js";
 import { P, isCitadelPaletteV3 } from "../core/params.js";
 import { v3TokenInt } from "./citadelVisualTheme.js";
@@ -148,12 +151,6 @@ function surfaceBasis(dir, face, outUp, outFwd, outRight) {
   outFwd.normalize();
   outRight.crossVectors(outUp, outFwd).normalize();
   outFwd.crossVectors(outRight, outUp).normalize();
-}
-
-function placeOnSphere(obj, dir, lift, face) {
-  surfaceBasis(dir, face, _up, _fwd, _right);
-  obj.position.copy(_up).multiplyScalar(PLANET_RADIUS + lift);
-  obj.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
 }
 
 function roleAt(ix, iz) {
@@ -338,6 +335,7 @@ export function createSaihojiPhalanxBattle({
   surfaceProvider = null,
   surfaceProjectionEnabled = false,
   romanEquipment = true,
+  getAmbushCoverPoints = null,
   seed = 1, // P0 · 攻防 V2：注入式种子随机源；同 seed 同输入 → 同事件序列
   rng: rngOpt = null,
   events = null, // 可选 CombatEventLog（P0 事件记录/重放）
@@ -398,7 +396,8 @@ export function createSaihojiPhalanxBattle({
    * 完整故事线状态机：
    *  atCastle（高山圣城，鼓声控制）→ 鼓声结束发船
    *  → sailOut（运兵：城堡 → 运河交汇处城堡 → 苔庭下岸）
-   *  → fight（整队成阵，鲸起才攒箭对 aircraft 射击）
+   *  → concealment（蓝盔短暂整理、移至松下隐蔽；真实舰队发现鲲后伏击）
+   *  → fight（原列阵/攒箭/绳索战斗）
    *  → return（苔庭鲸恢复原位后，全员换蓝盔、撤阵登船经运河去纳沃纳广场）
    *  → siege（广场集结 → 由攻城梯或山路/阶梯登城，夺取古堡顶层；
    *          红盔原地防守（梯顶/城顶）+ 少量红盔长弓手俯射，
@@ -444,6 +443,34 @@ export function createSaihojiPhalanxBattle({
   let stragglersMarked = false;
   let wasWhaleUp = false;
   const waves = [];
+  const ambush = createSaihojiAmbush({
+    getCoverPoints: () => (root.userData.getAmbushCoverPoints || getAmbushCoverPoints)?.()
+      || scene.getObjectByName("leviathanGroup")?.userData?.saihojiCoverPoints || [],
+    projectGround: point => {const direction=point.clone().normalize();point.copy(direction).multiplyScalar(PLANET_RADIUS+groundLift(direction));},
+    onEvent: event => {
+      logEvent("saihojiAmbush", event);
+      if(event.to === "ambush") {
+        setPhase("fight");
+        for(const wave of waves)if(wave.state === "ashore")wave.state = "fight";
+      }
+    },
+  });
+  root.userData.saihojiAmbush = {state:ambush.state,events:ambush.events};
+  const campaignStatus = {managed:false,chapter:null,launchAllowed:false,discoveryAllowed:false,phase,shipCount:0,waitingReason:null};
+  root.userData.campaignStatus = campaignStatus;
+  function setCampaignProgress({chapter,started=true}={}) {
+    if(!Number.isFinite(chapter))return {...campaignStatus};
+    campaignStatus.managed=true;
+    campaignStatus.chapter=Math.max(0,Math.floor(chapter));
+    campaignStatus.launchAllowed=!!started&&campaignStatus.chapter>=2;
+    campaignStatus.discoveryAllowed=!!started&&campaignStatus.chapter>=3;
+    // Only authorize the existing voyage; never respawn/reset a battle or later siege.
+    campaignStatus.phase=phase;campaignStatus.shipCount=waves.length;
+    campaignStatus.waitingReason=phase==='atCastle'&&!campaignStatus.launchAllowed?'awaiting-pact':
+      !campaignStatus.discoveryAllowed&&ambush.state.stage!=='ambush'?'awaiting-signal':null;
+    return {...campaignStatus};
+  }
+  root.userData.setCampaignProgress=setCampaignProgress;
   const arrows = [];
   for (let i = 0; i < ARROW_POOL; i++) {
     const a = makeArrow();
@@ -547,29 +574,53 @@ export function createSaihojiPhalanxBattle({
       .addScaledVector(castleNorth, -0.14)
       .normalize();
   })();
-  // 去程：城堡 → 交汇处城堡（稍作停留）→ 苔庭下岸；
-  // 回程：苔庭 → 交汇处 → 纳沃纳广场（攻城部队在广场下船集结）
-  const OUT_LEGS = [
-    [castleDir, junctionDir, 0.44],
-    [junctionDir, junctionDir, 0.12],
-    [junctionDir, landDir, 0.44],
-  ];
-  const BACK_LEGS = [
-    [landDir, junctionDir, 0.44],
-    [junctionDir, junctionDir, 0.12],
-    [junctionDir, plazaDir, 0.44],
-  ];
+  // Real water berths near the same three authored destinations.
   const SAIL_TIME = 34; // 单程运兵时长（两段航程 + 交汇处停留）
-  function pathDirAt(legs, u) {
-    let acc = 0;
-    for (const [a, b, w] of legs) {
-      if (u <= acc + w) {
-        const t = THREE.MathUtils.clamp((u - acc) / Math.max(1e-6, w), 0, 1);
-        return a.clone().lerp(b, t).normalize();
-      }
-      acc += w;
+
+  // Explicit diagnostic candidate until real boarding and shoreline clearance pass.
+  const waterRoutesEnabled = typeof location !== 'undefined' && new URLSearchParams(location.search).get('warshipWaterRoutes') === '1';
+  const legacyOutLegs=[[castleDir,junctionDir,.44],[junctionDir,junctionDir,.12],[junctionDir,landDir,.44]];
+  const legacyBackLegs=[[landDir,junctionDir,.44],[junctionDir,junctionDir,.12],[junctionDir,plazaDir,.44]];
+  root.userData.warshipWaterRoutesEnabled=waterRoutesEnabled;
+  let waterNavigation = null;
+  function ensureWaterNavigation() {
+    if(!waterRoutesEnabled)return false;
+    if(waterNavigation)return waterNavigation.valid;
+    const preparationStart=performance.now();
+    const solver=createWarshipWaterRoutes(scene,PLANET_RADIUS);
+    const homes=[],beaches=[],routes=[],boats=[];
+    const junction=solver.berth(junctionDir);
+    const reverse=path=>({...path,points:path.points.slice().reverse()});
+    const join=(a,b)=>{const points=[...a.points,...b.points.slice(1)];return {points,length:a.length+b.length};};
+    for(let i=0;i<SHIP_COUNT&&junction;i++) {
+      const boat=createFisherBoat();boat.scale.setScalar(1.7);boats.push(boat);
+      const home=solver.dock(boat,plazaDir,homes),beach=solver.dock(boat,landDir,beaches);
+      if(!home.valid||!beach.valid){root.userData.warshipDockFailure={index:i,home:{valid:home.valid,reason:home.reason,attempts:home.attempts},beach:{valid:beach.valid,reason:beach.reason,attempts:beach.attempts}};break;}
+      const oceanFirst=solver.route(home.entry,junction),oceanSecond=solver.route(junction,beach.entry);
+      if(!oceanFirst||!oceanSecond)break;
+      homes.push(home);beaches.push(beach);
+      const first=join(reverse(home.approach),oceanFirst),second=join(oceanSecond,beach.approach);
+      routes.push({out:[first,second],back:[reverse(second),reverse(first)]});
     }
-    return legs[legs.length - 1][1].clone().normalize();
+    waterNavigation={valid:routes.length===SHIP_COUNT,solver,homes,beaches,junction,routes,boats};
+    const describeDock=d=>({position:d.position.toArray(),quaternion:d.quaternion.toArray(),shorePoint:d.shorePoint.toArray(),shoreObject:d.shoreObject,angle:d.angle,attempts:d.attempts,triangleCount:d.triangleCount});
+    root.userData.warshipNavigation={
+      status:waterNavigation.valid?'ready':'blocked',reason:waterNavigation.valid?null:'No mesh-clear water route and reachable boarding shore near authored ports',
+      ...solver.stats,preparationMs:performance.now()-preparationStart,homes:homes.map(describeDock),beaches:beaches.map(describeDock),
+      routes:routes.map(r=>({out:r.out.map(p=>p.points.map(d=>solver.position(d).toArray())),length:r.out.reduce((n,p)=>n+p.length,0)})),
+    };
+    return waterNavigation.valid;
+  }
+  function sailWaterRoute(boat,index,progress,back=false) {
+    if(!waterRoutesEnabled){const moving=sampleWarshipRoute(back?legacyBackLegs:legacyOutLegs,progress,_tmp,_tmpB);placeWarshipOnSphere(boat,_tmp,PLANET_RADIUS+.18,moving?_tmpB:null);return true;}
+    if(!ensureWaterNavigation())return false;
+    const pair=waterNavigation.routes[index%SHIP_COUNT][back?'back':'out'];
+    if(progress<=.44)waterNavigation.solver.place(boat,pair[0],progress/.44);
+    else if(progress<=.56)waterNavigation.solver.place(boat,pair[0],1);
+    else waterNavigation.solver.place(boat,pair[1],(progress-.56)/.44);
+    boat.userData.waterRoute={direction:back?'return':'outbound',index:index%SHIP_COUNT,progress};
+    boat.userData.waterDock=progress>=1?(back?root.userData.warshipNavigation.homes:root.userData.warshipNavigation.beaches)[index%SHIP_COUNT]:null;
+    return true;
   }
 
   function spawnSoldier(role) {
@@ -583,8 +634,7 @@ export function createSaihojiPhalanxBattle({
     s.userData.phalanxRole = role;
     // Shared approved armor, with weapon-specific presentation owned by each role.
     romanPresentation.add(s);
-    // 苔庭方阵原本就是红盔；完成鲸拉回任务、随船返回圣城攻城时才换蓝盔
-    // （beginSiege 中逐个 paintSoldierHelm(s, "blue")，蓝盔人数 = 完成任务人数）
+    // 共用工厂默认保留圣城红守军；传统登陆船与蓝方增援在 spawnWave 明确换蓝。
     paintSoldierHelm(s, "red");
     if (role === "longbow") {
       const order = ["reach", "nock", "draw", "hold", "follow", "recover"];
@@ -606,7 +656,7 @@ export function createSaihojiPhalanxBattle({
 
   function spawnWave(index, grid = GRID, ringIndex = null) {
     logEvent("wave", { index, grid, ringIndex });
-    const boat = createFisherBoat();
+    const boat = index<SHIP_COUNT&&waterNavigation?.boats[index]||createFisherBoat();
     boat.name = `saihoji-troopship-${index}`;
     boat.scale.setScalar(1.7);
     boat.userData.kind = "saihoji-troopship";
@@ -620,6 +670,7 @@ export function createSaihojiPhalanxBattle({
       for (let ix = 0; ix < grid; ix++) {
         const role = roleAt(ix, iz);
         const s = spawnSoldier(role);
+        paintSoldierHelm(s, "blue");
         s.userData.gx = ix;
         s.userData.gz = iz;
         cohort.add(s);
@@ -627,7 +678,10 @@ export function createSaihojiPhalanxBattle({
       }
     }
     root.add(cohort);
+    paintBoatCrewCrest(boat, "blue");
     waves.push({
+      crewContinuity: bindWarshipCohort(boat, soldiers, cohort),
+      navigationIndex: index % SHIP_COUNT,
       boat,
       cohort,
       soldiers,
@@ -650,8 +704,7 @@ export function createSaihojiPhalanxBattle({
       s.userData.formationPos = _tmp.clone(); // 鲸起时的归位点
       s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
     }
-    wave.cohort.visible = true;
-    wave.boat.visible = false;
+    wave.crewContinuity.disembark();
   }
 
   // ---------- 纳沃纳广场集结落位：站在广场铺装甲板上，而不是球面贴地 ----------
@@ -793,8 +846,7 @@ export function createSaihojiPhalanxBattle({
       s.userData.formationPos = s.position.clone();
       s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
     }
-    wave.cohort.visible = true; // 不藏战船：船就泊在广场水盆边
-    emptyBoatCrew(wave.boat); // 士兵全部离船登岸 → 战船应为空船
+    wave.crewContinuity.disembark(); // 同一队伍下岸；第 26 座留守者仍在船上
   }
 
   function fireArrow(from, toAc) {
@@ -1144,6 +1196,7 @@ export function createSaihojiPhalanxBattle({
 
   /** 硬重置（调试/热重载）：士兵撤阵清场，回到 atCastle 等下一轮鼓息运兵 */
   function resetBattle() {
+    ambush.reset();
     romanPresentation.dispose();
     detachRopes();
     resetFightFormation();
@@ -2231,27 +2284,18 @@ export function createSaihojiPhalanxBattle({
       w.state = "siege";
       w.boat.visible = true;
       paintBoatCrewCrest(w.boat, "blue"); // 幂等：集结泊船仍是蓝缨桨手
-      const bd = plazaDir
-        .clone()
-        .addScaledVector(castleEast, (wi - 0.5) * 0.03)
-        .addScaledVector(castleNorth, -0.02)
-        .normalize();
-      // 战船泊进广场水盆：对广场网格射线取真实水面高度，不埋进抬升地形
-      surfaceBasis(bd, castleDir, _up, _fwd, _right);
-      if (plazaDeckPoint(_right, _fwd, 0, 0, _up, _deckPt)) {
-        w.boat.position.copy(_deckPt).addScaledVector(_up, 0.1);
-        w.boat.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
-      } else {
-        placeOnSphere(w.boat, bd, 0.18, castleDir);
+      if(waterRoutesEnabled){
+        // Candidate returns end at their actual water berth without a plaza teleport.
+        if(!w.boat.userData.waterRoute&&ensureWaterNavigation())sailWaterRoute(w.boat,w.navigationIndex,1,true);
+      }else{
+        const bd=plazaDir.clone().addScaledVector(castleEast,(wi-.5)*.03).addScaledVector(castleNorth,-.02).normalize();
+        surfaceBasis(bd,castleDir,_up,_fwd,_right);
+        if(plazaDeckPoint(_right,_fwd,0,0,_up,_deckPt)){w.boat.position.copy(_deckPt).addScaledVector(_up,.1);orientWarship(w.boat,_up,_fwd);}
+        else placeWarshipOnSphere(w.boat,bd,PLANET_RADIUS+.18,castleDir);
       }
       for (const s of w.soldiers) {
         paintSoldierHelm(s, "blue");
-        s.userData.dead = false;
-        s.userData.downed = false;
-        s.userData._fell = false;
-        s.userData.arrowHits = 0;
-        s.userData.meleeHits = 0;
-        s.userData._meleeCd = 0;
+        if (s.userData.dead || s.userData.downed) continue;
         s.visible = true;
         s.userData.ropeTeam = null;
         // 集结 → 按真实可用通道分配路线：有梯优先上梯；新圣城中梯子
@@ -2408,9 +2452,8 @@ export function createSaihojiPhalanxBattle({
       if (rs.unloaded) continue;
       rs.u = Math.min(1, rs.u + dt / RED_SHIP_SAIL_TIME);
       const e = rs.u * rs.u * (3 - 2 * rs.u);
-      _tmp.copy(junctionDir).lerp(castleDir, e).normalize();
-      _tmpB.copy(junctionDir).lerp(castleDir, Math.min(1, e + 0.02)).normalize();
-      placeOnSphere(rs.boat, _tmp, 0.18, _tmpB);
+      if(waterRoutesEnabled){if(!ensureWaterNavigation())continue;waterNavigation.solver.place(rs.boat,waterNavigation.routes[0].back[1],e);}
+      else{_tmp.copy(junctionDir).lerp(castleDir,e).normalize();_tmpB.copy(castleDir).sub(junctionDir);placeWarshipOnSphere(rs.boat,_tmp,PLANET_RADIUS+.18,_tmpB);}
       updateWarshipOars?.(rs.boat, dt, 0.85);
       if (rs.u >= 1) {
         // 战船到岸：卸下 4 人红盔小队投入战斗（随机路口），船没入港内
@@ -2434,8 +2477,8 @@ export function createSaihojiPhalanxBattle({
       w.state = "blueReinforce"; // 不进 sailOut/return 状态机，由 updateBlueShips 驾驶
       paintBoatCrewCrest(w.boat, "blue"); // 航行中船上就是蓝缨
       const side = i === 0 ? 1 : -1;
-      const d0 = junctionDir.clone().addScaledVector(castleEast, side * 0.03).normalize();
-      placeOnSphere(w.boat, d0, 0.18, plazaDir); // 出发点：运河交汇处
+      if(waterRoutesEnabled&&ensureWaterNavigation())waterNavigation.solver.place(w.boat,waterNavigation.routes[i].back[1],0);
+      else{const d0=junctionDir.clone().addScaledVector(castleEast,side*.03).normalize();placeWarshipOnSphere(w.boat,d0,PLANET_RADIUS+.18,plazaDir.clone().sub(junctionDir));}
       let k = 0;
       for (const s of w.soldiers) {
         paintSoldierHelm(s, "blue"); // 苔庭战役后的换装部队：出征即蓝缨
@@ -2481,13 +2524,8 @@ export function createSaihojiPhalanxBattle({
       if (bs.arrived) continue;
       bs.u = Math.min(1, bs.u + dt / BLUE_SHIP_SAIL_TIME);
       const e = bs.u * bs.u * (3 - 2 * bs.u);
-      _tmp
-        .copy(junctionDir)
-        .lerp(plazaDir, e)
-        .addScaledVector(castleEast, bs.side * 0.03)
-        .normalize();
-      _tmpB.copy(junctionDir).lerp(plazaDir, Math.min(1, e + 0.02)).normalize();
-      placeOnSphere(bs.wave.boat, _tmp, 0.18, _tmpB);
+      if(waterRoutesEnabled){if(!ensureWaterNavigation())continue;waterNavigation.solver.place(bs.wave.boat,waterNavigation.routes[bs.wave.navigationIndex].back[1],e);}
+      else{_tmp.copy(junctionDir).lerp(plazaDir,e).addScaledVector(castleEast,bs.side*.03).normalize();_tmpB.copy(plazaDir).sub(junctionDir);placeWarshipOnSphere(bs.wave.boat,_tmp,PLANET_RADIUS+.18,_tmpB);}
       updateWarshipOars?.(bs.wave.boat, dt, 0.9);
       if (bs.u >= 1) {
         bs.arrived = true;
@@ -2496,12 +2534,7 @@ export function createSaihojiPhalanxBattle({
           bs.wave.boat.visible = false;
           continue;
         }
-        // 泊进广场水盆（射线取真实水面），两船左右错开
-        surfaceBasis(_tmp, castleDir, _up, _fwd, _right);
-        if (plazaDeckPoint(_right, _fwd, bs.side * 1.2, 0.4, _up, _deckPt)) {
-          bs.wave.boat.position.copy(_deckPt).addScaledVector(_up, 0.1);
-          bs.wave.boat.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd, _up, _right));
-        }
+        if(!waterRoutesEnabled){surfaceBasis(_tmp,castleDir,_up,_fwd,_right);if(plazaDeckPoint(_right,_fwd,bs.side*1.2,.4,_up,_deckPt)){bs.wave.boat.position.copy(_deckPt).addScaledVector(_up,.1);orientWarship(bs.wave.boat,_up,_fwd);}}
         // 全员下岸（空船）→ 直接编入攻城：集结落位后随大流转入中央突破
         const center = plazaDir
           .clone()
@@ -2708,7 +2741,7 @@ export function createSaihojiPhalanxBattle({
       const advancing = siegeGatherT > SIEGE_GATHER_SEC;
       if (advancing && !root.userData.siegeAssaultBgm) {
         root.userData.siegeAssaultBgm = true;
-        setSiegeAssaultBgm(true);
+        setSiegeAssaultBgm(true, {source:blues[0]?.getWorldPosition(new THREE.Vector3())});
       }
       for (const s of blues) {
         if (s.userData.downed) continue;
@@ -3186,7 +3219,7 @@ export function createSaihojiPhalanxBattle({
         if (s.userData.ropeTeam) continue;
         if (arrived) {
           // 落位：鲸未升起 → 苔庭内分散巡查；鲸起 → 列阵/护壁
-          patrolSoldier(s, dt, whaleUp);
+          if(ambush.active)patrolSoldier(s, dt, whaleUp);
           continue;
         }
         slerpDir(
@@ -3438,13 +3471,14 @@ export function createSaihojiPhalanxBattle({
         // 先在队列里换缨、原地列队 BOARD_HOLD_SEC 秒（肉眼可见缨穗变色），
         // 随后才撤阵入舱——避免「红缨消失、空船开走」看不见换装。
         for (const s of w.soldiers) paintSoldierHelm(s, "blue");
-        // 甲板上的剪纸桨手也换蓝缨——玩家在船上看到的士兵是他们
+        // 船上座位呈现与地面士兵共享身份、装备配色
         paintBoatCrewCrest(w.boat, "blue");
         w.state = "board";
         w.boardT = BOARD_HOLD_SEC;
         w.u = 0;
         w.boat.visible = true; // 战船已靠岸，排队等候登船
-        placeOnSphere(w.boat, landDir, 0.18, landDir);
+        // Candidate preserves arrival pose; default retains the verified story chain.
+        if(!waterRoutesEnabled)placeWarshipOnSphere(w.boat,landDir,PLANET_RADIUS+.18,junctionDir.clone().sub(landDir));
       }
       // 残箭回收：撤阵时把扎在机队上的箭/枪取回
       for (const a of arrows) {
@@ -3460,8 +3494,8 @@ export function createSaihojiPhalanxBattle({
     }
 
     if (phase === "atCastle") {
-      // 高山圣城 · 受鼓声控制：鼓声结束后才发船
-      if (quietT > 1.6) {
+      // The campaign pact launches this voyage. Unmanaged legacy tests retain drum timing.
+      if (campaignStatus.managed ? campaignStatus.launchAllowed : quietT > 1.6) {
         setPhase("sailOut");
         shipIdx = 0;
         nextShipIn = 0.4;
@@ -3470,6 +3504,7 @@ export function createSaihojiPhalanxBattle({
     }
 
     if (phase === "sailOut") {
+      if(waterRoutesEnabled&&!ensureWaterNavigation())return;
       nextShipIn -= dt;
       if (shipIdx < SHIP_COUNT && nextShipIn <= 0) {
         spawnWave(shipIdx);
@@ -3482,9 +3517,7 @@ export function createSaihojiPhalanxBattle({
         allLanded = false;
         w.u = Math.min(1, w.u + dt / SAIL_TIME);
         const u = w.u * w.u * (3 - 2 * w.u);
-        _tmp.copy(pathDirAt(OUT_LEGS, u));
-        _tmpB.copy(pathDirAt(OUT_LEGS, Math.min(1, u + 0.02)));
-        placeOnSphere(w.boat, _tmp, 0.18, _tmpB);
+        sailWaterRoute(w.boat,w.navigationIndex,u);
         updateWarshipOars?.(w.boat, dt, 0.85);
         if (w.u >= 1) {
           w.state = "ashore";
@@ -3498,8 +3531,7 @@ export function createSaihojiPhalanxBattle({
         }
       }
       if (allLanded && waves.every((w) => w.state === "ashore" || w.state === "fight")) {
-        setPhase("fight");
-        for (const w of waves) w.state = "fight";
+        setPhase("concealment");
       }
     }
 
@@ -3513,7 +3545,7 @@ export function createSaihojiPhalanxBattle({
           if (w.boardT <= 0) {
             w.state = "return";
             w.u = 0;
-            w.cohort.visible = false; // 登船撤阵（入舱隐身）
+            w.crewContinuity.embark(); // 同一 UID 回到原座位，武器收回船中央
           }
           continue;
         }
@@ -3521,13 +3553,11 @@ export function createSaihojiPhalanxBattle({
         allHome = false;
         w.u = Math.min(1, w.u + dt / SAIL_TIME);
         const u = w.u * w.u * (3 - 2 * w.u);
-        _tmp.copy(pathDirAt(BACK_LEGS, u));
-        _tmpB.copy(pathDirAt(BACK_LEGS, Math.min(1, u + 0.02)));
-        placeOnSphere(w.boat, _tmp, 0.18, _tmpB);
+        sailWaterRoute(w.boat,w.navigationIndex,u,true);
         updateWarshipOars?.(w.boat, dt, 0.85);
         if (w.u >= 1) {
           w.state = "done";
-          w.boat.visible = false;
+          if(!waterRoutesEnabled)w.boat.visible=false; // Candidate remains at its water berth.
         }
       }
       if (allHome) {
@@ -3548,12 +3578,12 @@ export function createSaihojiPhalanxBattle({
     // —— 白天源源不断的运兵（鼓声暂停全线；电车下车 + 战船补给）——
     if (!drums) {
       nextTramDrop -= dt;
-      if (nextTramDrop <= 0) {
+      if (ambush.active && nextTramDrop <= 0) {
         nextTramDrop = TRAM_CHECK_INTERVAL;
         tryTramDrop();
       }
       const deployed =
-        phase !== "siege" &&
+        ambush.active && phase !== "siege" &&
         phase !== "siegeNight" &&
         (phase === "fight" ||
           waves.some((w) => w.state === "ashore" || w.state === "fight"));
@@ -3569,6 +3599,17 @@ export function createSaihojiPhalanxBattle({
       }
     }
     updateGarrison(dt, whaleUp);
+    if(phase === "sailOut" || phase === "concealment" || phase === "fight") {
+      const fleet=typeof getSquad === "function" ? getSquad() : null;
+      const members=(fleet?.userData?.members||[]).filter(m=>m.parent&&!m.userData.dead);
+      const lock=fleet?.userData?.whaleLock;
+      const units=[...waves.filter(w=>w.state === "ashore" || w.state === "fight").flatMap(w=>w.soldiers),...garrison.filter(g=>g.u>=1).flatMap(g=>g.soldiers)];
+      ambush.update(dt,{
+        units,
+        allLanded:shipIdx>=SHIP_COUNT&&waves.slice(0,SHIP_COUNT).every(w=>w.state !== "sailOut"),
+        discovery:{detected:(!campaignStatus.managed||campaignStatus.discoveryAllowed)&&members.length>0&&!!lock?.active&&whaleUp,source:"saihojiGarden.whaleLock+actualLift",fleetMembers:members.length,whaleLockActive:!!lock?.active,whaleRisen:whaleUp},
+      });
+    }
     // The opt-in gate is deliberately last: all legacy movement paths finish,
     // then the provider-owned surface becomes the final placement authority
     // for visible ground combatants.
@@ -3577,6 +3618,7 @@ export function createSaihojiPhalanxBattle({
     // 故事波次（主阵/补给）落位后同样两态：鲸未升起 → 苔庭内分散巡查
     for (const w of waves) {
       if (w.state !== "ashore" && w.state !== "fight") continue;
+      if(!ambush.active)continue;
       for (const s of w.soldiers) {
         if (s.userData.ropeTeam) continue;
         patrolSoldier(s, dt, whaleUp);
@@ -3584,17 +3626,17 @@ export function createSaihojiPhalanxBattle({
     }
 
     // ---------- 告警 + 整队：鲸起瞬间响号角，全营奔向北翼列阵 ----------
-    if (whaleUp && !wasWhaleUp) {
+    if (ambush.active && whaleUp && !wasWhaleUp) {
       cuePhalanxAlarmOnce();
     }
-    if (whaleUp && !fightFormed) {
+    if (ambush.active && whaleUp && !fightFormed) {
       fightFormed = true;
       fightSlotLongbow = 0;
       fightSlotShield = 0;
     }
     // 注：fightFormed/绳索小队在战斗期内保持（鲸被拽到半空不算落回，
     // 避免拔河拉锯时反复解散重排）；鲸落回地面后由 whaleReturned/reset 解散。
-    wasWhaleUp = whaleUp;
+    wasWhaleUp = ambush.active && whaleUp;
 
     const squad = typeof getSquad === "function" ? getSquad() : null;
     const members = squad?.userData?.members || [];
@@ -3609,7 +3651,7 @@ export function createSaihojiPhalanxBattle({
     // 记仇衰减见下方 shooters 就位之后
 
     // ---------- 绳索小队：抛绳挂鲸、拔河拉回（告警后稍候出发） ----------
-    if (whaleUp && !ropesDispatched && fightFormed) {
+    if (ambush.active && whaleUp && !ropesDispatched && fightFormed) {
       const allS = [
         ...waves
           .filter((w) => w.state === "fight" || w.state === "ashore")
@@ -3675,7 +3717,7 @@ export function createSaihojiPhalanxBattle({
 
     // ---------- 长弓手攒射：整理队伍后按列齐射，箭矢追射盘顶机队 ----------
     // 战斗期用 fightFormed 锁定（鲸被拽到半空也不停箭），直到鲸落回地面
-    if ((whaleUp || fightFormed) && shooters.length && live.length) {
+    if (ambush.active && (whaleUp || fightFormed) && shooters.length && live.length) {
       for (const s of shooters) {
         if (s.userData.ropeTeam) continue;
         // 冲击眩晕：跳过射击
@@ -3873,6 +3915,8 @@ export function createSaihojiPhalanxBattle({
     } finally {
       // All branches (including early returns) finish after movement, weapon aim and damage.
       romanPresentation.update(dt, t, root);
+      ambush.applyConcealmentPose();
+      campaignStatus.phase=phase;campaignStatus.shipCount=waves.length;
     }
   }
 
@@ -3893,6 +3937,7 @@ export function createSaihojiPhalanxBattle({
   // 鼓息发船与航程链路另有 test_phalanx 覆盖，此处跳过只为快速到达攻城画面
   root.userData.debugSiege = () => {
     logCommand("debugSiege");
+    ambush.reset();
     while (shipIdx < SHIP_COUNT) {
       spawnWave(shipIdx);
       shipIdx++;
@@ -3908,6 +3953,7 @@ export function createSaihojiPhalanxBattle({
     update,
     isAssembled,
     reset: resetBattle,
+    setCampaignProgress,
     /** 苔庭之战数值口径（先锋兵不对称伤害），供 UI / 测试读，不许在别处硬编码第二份 */
     combatRules: VANGUARD_COMBAT,
   };

@@ -1,0 +1,19 @@
+{
+  "asset": "moebius-aircraft-v1",
+  "status": "visual-approved structural candidate; engine behavior adaptation pending",
+  "path": "res://assets/moebius-aircraft-v1/moebius-aircraft-v1.glb",
+  "sha256": "bcd6a117143647c358131757df8c1b58889962c41ab36e8968782133b0d5c754",
+  "sourceHashes": {
+    "blend": "f0b0a0fc7703c6e5f832800c9a978afd547c69040d0cb1aa4457f7acc03950a7",
+    "snapshot": "a8575b5009ac9c371ba9597e778ec3eea95f3c512637cd00663806c939d84852"
+  },
+  "visibleTriangles": 5878,
+  "visibleMeshes": 36,
+  "hiddenSourceIDs": [
+    "n62",
+    "n63",
+    "n64"
+  ],
+  "visibilityContract": "honor source_visible=false and candidate_hidden_outline=true",
+  "factory": "src/assets/moebiusAircraft.js:createMoebiusAircraft"
+}

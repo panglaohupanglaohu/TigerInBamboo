@@ -1,0 +1,14 @@
+{
+  "source": "assets/models/optimized/warship-battle-v6",
+  "files": [
+    {
+      "file": "warship-battle-v6.glb",
+      "sha256": "c18dfbd2d37dff6501fa799d99dd7e698aa1623d1c9c74939240562836a9a397"
+    },
+    {
+      "file": "warship-battle-v6.assembly.json",
+      "sha256": "f3c3589138ebed0953dfd86d54532034e8b584ec4cc143b58ea3e870aa49699f"
+    }
+  ],
+  "scope": "Godot battle visual/rowing integration; boarding geometry validation pending"
+}

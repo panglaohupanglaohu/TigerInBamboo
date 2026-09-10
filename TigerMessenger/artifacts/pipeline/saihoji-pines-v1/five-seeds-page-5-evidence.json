@@ -1,0 +1,134 @@
+{
+  "rows": [
+    {
+      "seed": 4101,
+      "zone": "return-view",
+      "sourceBlendSHA256": "18c4bb2e94d8d3d53caa572d10f5eb2364af42b1fd6f4c4cf6e9ef3818a6f887",
+      "actualGlbSHA256": "8a9e9017bd3ac141901d301f83c2e82bd00f402b2c1028c16075534b8b5f9841",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3598,
+        2228,
+        1222
+      ],
+      "sourceReviewOffset": [
+        -8.013258934020996,
+        -4.398988246917725,
+        2.9290082454681396
+      ],
+      "candidateReviewOffset": [
+        -3.533259153366089,
+        -1.0389885902404785,
+        2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 4110,
+      "zone": "return-view",
+      "sourceBlendSHA256": "92ab13433538197a8accbf50fe1e395af8c019462c988161bc8bfd2e9200567d",
+      "actualGlbSHA256": "5eadd921f146cfdf9ab420fb2a1f86266e7fd8568e8626c48dbe89d65daa4b1e",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3596,
+        2228,
+        1220
+      ],
+      "sourceReviewOffset": [
+        1.9867424964904785,
+        3.101011037826538,
+        2.9290082454681396
+      ],
+      "candidateReviewOffset": [
+        6.466743469238281,
+        6.461010456085205,
+        2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 4119,
+      "zone": "return-view",
+      "sourceBlendSHA256": "c30e1bf49e60657c2a58adefa751b3d7cadb9dd5824d664ba8ca638ee4f9dbc1",
+      "actualGlbSHA256": "c399dd881dd1185f3c3826da22c70f69801bcc7d5c15d0f089e26f8efebef9bf",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3600,
+        2230,
+        1222
+      ],
+      "sourceReviewOffset": [
+        -6.466743469238281,
+        -6.461010456085205,
+        -2.9290084838867188
+      ],
+      "candidateReviewOffset": [
+        -1.9867427349090576,
+        -3.10101056098938,
+        -2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 4128,
+      "zone": "return-view",
+      "sourceBlendSHA256": "797219e6ff2138a7ea69c0913c289d4ef43b644225b90db0f5b22cb0a7352d0a",
+      "actualGlbSHA256": "ef6546255d5ec16e9d7898a00e8ed3342a7d3a6ee7d58baf6b4fa202cab99582",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3594,
+        2226,
+        1220
+      ],
+      "sourceReviewOffset": [
+        3.5332586765289307,
+        1.0389885902404785,
+        -2.9290080070495605
+      ],
+      "candidateReviewOffset": [
+        8.013258934020996,
+        4.398987770080566,
+        -2.9290080070495605
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 4137,
+      "zone": "return-view",
+      "sourceBlendSHA256": "34d4befed0d6a1af40f254e76ff8f45c1644294bc139647cc5c87a1ba2352c46",
+      "actualGlbSHA256": "b045237fd5d21e07ececba8c65c2a0c65ad9fdfe0b8ebc074a45cf0c82a87333",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3600,
+        2230,
+        1222
+      ],
+      "sourceReviewOffset": [
+        -4.920226097106934,
+        -8.523032188415527,
+        -8.78702449798584
+      ],
+      "candidateReviewOffset": [
+        -0.44022607803344727,
+        -5.1630330085754395,
+        -8.78702449798584
+      ],
+      "worldPlacementBaked": false
+    }
+  ],
+  "sameCameraLightScale": true,
+  "actualGlbImport": true,
+  "renderEngine": "CYCLES",
+  "resolution": [
+    960,
+    750
+  ],
+  "samples": 16,
+  "renderPasses": 1,
+  "scope": "Five pairs per page; all image sources match current candidate GLB hashes. Review board only, not world integration."
+}

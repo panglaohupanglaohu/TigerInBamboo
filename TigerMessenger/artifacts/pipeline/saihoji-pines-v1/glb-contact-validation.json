@@ -1,0 +1,4013 @@
+{
+  "rows": [
+    {
+      "seed": 1229,
+      "zone": "master-stones",
+      "lod": 0,
+      "glbSha256": "5b40f49c20335f6c77d787eaa9f4435dba53484169e6f952fb132e678a6b9b5e",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          267,
+          174,
+          165,
+          152,
+          145,
+          134
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        14,
+        12,
+        15,
+        12,
+        29,
+        16
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0638580471277237,
+        0.07666477560997009,
+        0.09602629393339157,
+        0.09024138003587723,
+        0.06740996986627579,
+        0.07690846920013428,
+        0.10143066197633743
+      ],
+      "rootMinimumYDelta": 0.006920337677001953,
+      "issues": []
+    },
+    {
+      "seed": 1229,
+      "zone": "master-stones",
+      "lod": 1,
+      "glbSha256": "ed26e8645ccf9254a5fca1e542cb0999268440364317e6f93c2c7f3101056baf",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          170,
+          106,
+          100,
+          92,
+          91,
+          88
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        12,
+        12,
+        12,
+        27,
+        14
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0573807992041111,
+        0.07419685274362564,
+        0.09305208176374435,
+        0.09001253545284271,
+        0.06790882349014282,
+        0.07440018653869629,
+        0.0983588844537735
+      ],
+      "rootMinimumYDelta": 0.006920337677001953,
+      "issues": []
+    },
+    {
+      "seed": 1229,
+      "zone": "master-stones",
+      "lod": 2,
+      "glbSha256": "b167da84962a58893e41ef0fca16781374470d0233c15637f680ca141558958e",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          96,
+          60,
+          56,
+          52,
+          50,
+          46
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        8,
+        9,
+        7,
+        9,
+        18,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0581606887280941,
+        0.07502981275320053,
+        0.08599202334880829,
+        0.08013693988323212,
+        0.06396239995956421,
+        0.06359075009822845,
+        0.0869179219007492
+      ],
+      "rootMinimumYDelta": 0.006920337677001953,
+      "issues": []
+    },
+    {
+      "seed": 1238,
+      "zone": "master-stones",
+      "lod": 0,
+      "glbSha256": "6f4df77ba63c877ef27ca12922f522d81e12c81b60d4efe13f42f02ad94b4939",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3596,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          775
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          275,
+          187,
+          154,
+          146,
+          141,
+          134
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        13,
+        16,
+        25,
+        10,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0819164365530014,
+        0.03441370278596878,
+        0.09014029055833817,
+        0.08458974212408066,
+        0.06945589184761047,
+        0.08408616483211517,
+        0.0953795537352562
+      ],
+      "rootMinimumYDelta": 0.010020747780799866,
+      "issues": []
+    },
+    {
+      "seed": 1238,
+      "zone": "master-stones",
+      "lod": 1,
+      "glbSha256": "00d4717c36b0d14882cb4ce12bce3396e96b5d59a764a258ac6cd51fad09c6a8",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          180,
+          109,
+          95,
+          94,
+          89,
+          80
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        15,
+        15,
+        22,
+        15,
+        13
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08675579726696014,
+        0.036920830607414246,
+        0.08557534217834473,
+        0.0851973369717598,
+        0.06812918931245804,
+        0.08587255328893661,
+        0.09537654370069504
+      ],
+      "rootMinimumYDelta": 0.010020747780799866,
+      "issues": []
+    },
+    {
+      "seed": 1238,
+      "zone": "master-stones",
+      "lod": 2,
+      "glbSha256": "44aaaae07c47dc13d36d8ecde51a3d8dd0af522816620d6a71b5b64a41fe2fab",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1220,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          264
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          101,
+          59,
+          53,
+          51,
+          51,
+          45
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        6,
+        8,
+        15,
+        8,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07598624378442764,
+        0.03333039954304695,
+        0.0845099464058876,
+        0.07687653601169586,
+        0.056337688118219376,
+        0.08339259028434753,
+        0.08749198913574219
+      ],
+      "rootMinimumYDelta": 0.009090736508369446,
+      "issues": []
+    },
+    {
+      "seed": 1247,
+      "zone": "master-stones",
+      "lod": 0,
+      "glbSha256": "1d964261de796dcf4c3d32289bdc945cf2395fe881db18379a8434f23a791bb5",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3596,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          775
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          262,
+          172,
+          163,
+          159,
+          144,
+          137
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        12,
+        11,
+        30,
+        12,
+        14
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09285935759544373,
+        0.06699953228235245,
+        0.09085915982723236,
+        0.08246252685785294,
+        0.09862171858549118,
+        0.06853969395160675,
+        0.07987609505653381
+      ],
+      "rootMinimumYDelta": 0.01172955334186554,
+      "issues": []
+    },
+    {
+      "seed": 1247,
+      "zone": "master-stones",
+      "lod": 1,
+      "glbSha256": "60ba49a8c7a7ca94dbb391964524928bfb91b2bc17a9336c96bdd84733d4c895",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          169,
+          108,
+          101,
+          101,
+          89,
+          79
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        11,
+        24,
+        12,
+        12,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09211653470993042,
+        0.06360800564289093,
+        0.09068338572978973,
+        0.07310320436954498,
+        0.09041370451450348,
+        0.06686107814311981,
+        0.07744254171848297
+      ],
+      "rootMinimumYDelta": 0.01172955334186554,
+      "issues": []
+    },
+    {
+      "seed": 1247,
+      "zone": "master-stones",
+      "lod": 2,
+      "glbSha256": "7373b5a4f8cc496585ada2ab293e80e930146f07d9b085a6fdeee57215dc63f1",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1220,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          264
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          98,
+          59,
+          55,
+          53,
+          49,
+          46
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        7,
+        21,
+        14,
+        10,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09365446865558624,
+        0.06480495631694794,
+        0.0880516991019249,
+        0.07126490026712418,
+        0.08738293498754501,
+        0.06247605383396149,
+        0.07990197837352753
+      ],
+      "rootMinimumYDelta": 0.011239558458328247,
+      "issues": []
+    },
+    {
+      "seed": 1256,
+      "zone": "master-stones",
+      "lod": 0,
+      "glbSha256": "2b3bf80658ab597fbb43d2509c83cd9fa24bc053e29c86296a0e78d71712fd25",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          192,
+          159,
+          146,
+          145,
+          143,
+          129,
+          125
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        13,
+        13,
+        17,
+        11,
+        15,
+        15
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08282039314508438,
+        0.02374478243291378,
+        0.09843810647726059,
+        0.0676468014717102,
+        0.09225323796272278,
+        0.0556894913315773,
+        0.08644843101501465
+      ],
+      "rootMinimumYDelta": 0.010656580328941345,
+      "issues": []
+    },
+    {
+      "seed": 1256,
+      "zone": "master-stones",
+      "lod": 1,
+      "glbSha256": "cb4972b8fefb30f0548a232c657047ab5ea2eaf85102d5bbb73bc612416a1dc8",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          113,
+          95,
+          94,
+          93,
+          93,
+          82,
+          79
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        11,
+        17,
+        14,
+        9,
+        9,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07804363965988159,
+        0.021969230845570564,
+        0.09477744251489639,
+        0.06393927335739136,
+        0.09572825580835342,
+        0.05626058205962181,
+        0.08590766787528992
+      ],
+      "rootMinimumYDelta": 0.010106593370437622,
+      "issues": []
+    },
+    {
+      "seed": 1256,
+      "zone": "master-stones",
+      "lod": 2,
+      "glbSha256": "b3899fca294d512b95cf6d3dcfaff4cd3552304d641820f46b400fe16560b9c5",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          61,
+          55,
+          52,
+          51,
+          51,
+          48,
+          44
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        9,
+        10,
+        9,
+        6,
+        7,
+        7
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06812558323144913,
+        0.023839294910430908,
+        0.0885469913482666,
+        0.05752898007631302,
+        0.08547865599393845,
+        0.05634693801403046,
+        0.07822727411985397
+      ],
+      "rootMinimumYDelta": 0.006816580891609192,
+      "issues": []
+    },
+    {
+      "seed": 1401,
+      "zone": "dry-cascade",
+      "lod": 0,
+      "glbSha256": "67f513c092b9ed1a3da737f4e0bb21fe2c37e7eb1d02ce5cc3758e44f729f7dc",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          260,
+          172,
+          170,
+          152,
+          142,
+          141
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        9,
+        12,
+        34,
+        12,
+        13
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07521749287843704,
+        0.06501678377389908,
+        0.10746259987354279,
+        0.03367410972714424,
+        0.08273400366306305,
+        0.08698644489049911,
+        0.0759153962135315
+      ],
+      "rootMinimumYDelta": 0.00898607075214386,
+      "issues": []
+    },
+    {
+      "seed": 1401,
+      "zone": "dry-cascade",
+      "lod": 1,
+      "glbSha256": "f26acfd9b578f450d689624c083ee4d7e45e5d3f1d8d632d1399c14db6bf804e",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          168,
+          109,
+          101,
+          97,
+          87,
+          85
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        9,
+        10,
+        27,
+        12,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07230167090892792,
+        0.057409483939409256,
+        0.10772380977869034,
+        0.037081874907016754,
+        0.08577480167150497,
+        0.0857452005147934,
+        0.06850293278694153
+      ],
+      "rootMinimumYDelta": 0.00898607075214386,
+      "issues": []
+    },
+    {
+      "seed": 1401,
+      "zone": "dry-cascade",
+      "lod": 2,
+      "glbSha256": "6997dc5dec0a33e2c7088c9c837a26994a669ba3bab91cb3a67613dbe27ee1f2",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          95,
+          60,
+          57,
+          54,
+          47,
+          47
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        6,
+        9,
+        6,
+        20,
+        7,
+        8
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06853731721639633,
+        0.05102958157658577,
+        0.09636387974023819,
+        0.0257370974868536,
+        0.08850707113742828,
+        0.06539255380630493,
+        0.05413005128502846
+      ],
+      "rootMinimumYDelta": 0.009026065468788147,
+      "issues": []
+    },
+    {
+      "seed": 1410,
+      "zone": "dry-cascade",
+      "lod": 0,
+      "glbSha256": "5b8d247c097177d21b159ecafb02828cdc7b7a97af9747f74138e3a35b65e28d",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3594,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          774
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          277,
+          176,
+          168,
+          146,
+          136,
+          134
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        11,
+        26,
+        12,
+        15,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.024809399619698524,
+        0.0897548720240593,
+        0.1166231781244278,
+        0.10337375849485397,
+        0.05802826210856438,
+        0.10996279120445251,
+        0.07968720048666
+      ],
+      "rootMinimumYDelta": 0.008947253227233887,
+      "issues": []
+    },
+    {
+      "seed": 1410,
+      "zone": "dry-cascade",
+      "lod": 1,
+      "glbSha256": "e061bc3040cb5baac4931f8535871e7765bc1986baa740713fc163b773189bb4",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2226,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          480
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          182,
+          107,
+          106,
+          90,
+          83,
+          79
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        11,
+        24,
+        12,
+        11,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.022697290405631065,
+        0.07928542047739029,
+        0.11211226880550385,
+        0.09417553246021271,
+        0.056033436208963394,
+        0.10682718455791473,
+        0.07429680973291397
+      ],
+      "rootMinimumYDelta": 0.008947253227233887,
+      "issues": []
+    },
+    {
+      "seed": 1410,
+      "zone": "dry-cascade",
+      "lod": 2,
+      "glbSha256": "d4e7b6e78d00f12f4e3ec453029828ee43d5959d289e8fe4f415eca0767a0e5b",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1220,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          264
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          100,
+          61,
+          58,
+          52,
+          46,
+          43
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        6,
+        17,
+        6,
+        10,
+        7
+      ],
+      "terminalTipToFoliageDistances": [
+        0.018687654286623,
+        0.07787834107875824,
+        0.1047692596912384,
+        0.09171787649393082,
+        0.044539015740156174,
+        0.09517772495746613,
+        0.054519250988960266
+      ],
+      "rootMinimumYDelta": 0.006837248802185059,
+      "issues": []
+    },
+    {
+      "seed": 1419,
+      "zone": "dry-cascade",
+      "lod": 0,
+      "glbSha256": "0190545b3c7e3c9345ab803799322fc7e422970ed508ebdaec99d4fc8f3c0961",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          258,
+          182,
+          169,
+          153,
+          146,
+          129
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        12,
+        13,
+        13,
+        28,
+        18
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06654174625873566,
+        0.07219292968511581,
+        0.07998469471931458,
+        0.03978385031223297,
+        0.06407666206359863,
+        0.11156944185495377,
+        0.08814395219087601
+      ],
+      "rootMinimumYDelta": 0.011188670992851257,
+      "issues": []
+    },
+    {
+      "seed": 1419,
+      "zone": "dry-cascade",
+      "lod": 1,
+      "glbSha256": "c08f4886512bcef6232a205e99937926ed0dcdcfc873a62d71e466a6b99f8ac7",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          171,
+          105,
+          101,
+          100,
+          92,
+          78
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        10,
+        13,
+        13,
+        28,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0615316778421402,
+        0.07390117645263672,
+        0.08227120339870453,
+        0.039360351860523224,
+        0.06126272678375244,
+        0.1128486841917038,
+        0.07778919488191605
+      ],
+      "rootMinimumYDelta": 0.011188670992851257,
+      "issues": []
+    },
+    {
+      "seed": 1419,
+      "zone": "dry-cascade",
+      "lod": 2,
+      "glbSha256": "a11154456f293e5cc4fcb1dae7542cc298b9ef7badb6af4130f26d94150c46c2",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          95,
+          61,
+          57,
+          55,
+          50,
+          42
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        5,
+        10,
+        8,
+        17,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0615316778421402,
+        0.050239644944667816,
+        0.07368171960115433,
+        0.039360351860523224,
+        0.05726037919521332,
+        0.107547327876091,
+        0.07183437794446945
+      ],
+      "rootMinimumYDelta": 0.011338666081428528,
+      "issues": []
+    },
+    {
+      "seed": 1428,
+      "zone": "dry-cascade",
+      "lod": 0,
+      "glbSha256": "16da0d9d46753b7707d189ab7527431aadb98595d1384a79014cf5074ec2bbac",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          274,
+          181,
+          159,
+          145,
+          140,
+          138
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        13,
+        11,
+        25,
+        11,
+        14
+      ],
+      "terminalTipToFoliageDistances": [
+        0.03362580016255379,
+        0.06715060770511627,
+        0.06212638318538666,
+        0.043887171894311905,
+        0.08214022219181061,
+        0.06816522032022476,
+        0.10033638775348663
+      ],
+      "rootMinimumYDelta": 0.019157692790031433,
+      "issues": []
+    },
+    {
+      "seed": 1428,
+      "zone": "dry-cascade",
+      "lod": 1,
+      "glbSha256": "76e5cc9dbe5fcd1d99319d3b27dd590ac11dd90ecc09a80e3096cfa7537b8cc4",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          177,
+          106,
+          97,
+          92,
+          88,
+          87
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        11,
+        11,
+        27,
+        13,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.03785507008433342,
+        0.06805171072483063,
+        0.057317256927490234,
+        0.0402165912091732,
+        0.08626741915941238,
+        0.07119858264923096,
+        0.10253459960222244
+      ],
+      "rootMinimumYDelta": 0.019157692790031433,
+      "issues": []
+    },
+    {
+      "seed": 1428,
+      "zone": "dry-cascade",
+      "lod": 2,
+      "glbSha256": "64a2fd02de294f9091855af10ea4218e709294b29aa6d49dcd3b352767b0a9cb",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          101,
+          59,
+          55,
+          51,
+          48,
+          46
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        8,
+        8,
+        6,
+        18,
+        9,
+        8
+      ],
+      "terminalTipToFoliageDistances": [
+        0.035663481801748276,
+        0.0664464458823204,
+        0.048430606722831726,
+        0.03962917998433113,
+        0.07016192376613617,
+        0.06446028500795364,
+        0.09468530863523483
+      ],
+      "rootMinimumYDelta": 0.014407694339752197,
+      "issues": []
+    },
+    {
+      "seed": 1997,
+      "zone": "moss-islands",
+      "lod": 0,
+      "glbSha256": "08ec3be8680ac7733ab5fe0f14a55f75fdf14587277cee6df8a57b947eec9ee5",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3598,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          776
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          263,
+          188,
+          154,
+          148,
+          144,
+          140
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        16,
+        30,
+        16,
+        16,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06440359354019165,
+        0.05583951249718666,
+        0.1035807728767395,
+        0.054768845438957214,
+        0.03801529482007027,
+        0.09566988795995712,
+        0.046918876469135284
+      ],
+      "rootMinimumYDelta": 0.009614303708076477,
+      "issues": []
+    },
+    {
+      "seed": 1997,
+      "zone": "moss-islands",
+      "lod": 1,
+      "glbSha256": "bc352d3b636e4cbc007dfdfbb912f6390ce3cd26c5aab59b0725b9e131989469",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          170,
+          114,
+          93,
+          92,
+          92,
+          86
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        12,
+        27,
+        10,
+        12,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.058505769819021225,
+        0.05158183351159096,
+        0.1068066954612732,
+        0.05441700667142868,
+        0.037818457931280136,
+        0.08803874999284744,
+        0.04908941313624382
+      ],
+      "rootMinimumYDelta": 0.009034305810928345,
+      "issues": []
+    },
+    {
+      "seed": 1997,
+      "zone": "moss-islands",
+      "lod": 2,
+      "glbSha256": "b184f5197469d506bb6deed6608bdd36850d66018cc6e6ac01e40bac6f26246e",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          96,
+          63,
+          51,
+          50,
+          50,
+          50
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        8,
+        9,
+        19,
+        6,
+        7,
+        8
+      ],
+      "terminalTipToFoliageDistances": [
+        0.049412380903959274,
+        0.053563475608825684,
+        0.10424355417490005,
+        0.05468825250864029,
+        0.026928676292300224,
+        0.08656433969736099,
+        0.03466010093688965
+      ],
+      "rootMinimumYDelta": 0.00999431312084198,
+      "issues": []
+    },
+    {
+      "seed": 2153,
+      "zone": "moss-islands",
+      "lod": 0,
+      "glbSha256": "0b6644158887d50e38be4ec7096475698358a597b9324779359f5ec101686254",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          257,
+          189,
+          169,
+          156,
+          143,
+          123
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        15,
+        15,
+        22,
+        11,
+        15
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06061604619026184,
+        0.044346172362565994,
+        0.10382267832756042,
+        0.05331060662865639,
+        0.04920387640595436,
+        0.08222727477550507,
+        0.06508402526378632
+      ],
+      "rootMinimumYDelta": 0.011281177401542664,
+      "issues": []
+    },
+    {
+      "seed": 2153,
+      "zone": "moss-islands",
+      "lod": 1,
+      "glbSha256": "721449676db55ad1154fea30f35864ad381ce9f60e0fc36cd308689638255c69",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          167,
+          109,
+          105,
+          98,
+          90,
+          78
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        11,
+        25,
+        13,
+        13,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.05433429032564163,
+        0.04209824278950691,
+        0.09819260984659195,
+        0.04998784139752388,
+        0.04900545999407768,
+        0.08333802968263626,
+        0.060791872441768646
+      ],
+      "rootMinimumYDelta": 0.011281177401542664,
+      "issues": []
+    },
+    {
+      "seed": 2153,
+      "zone": "moss-islands",
+      "lod": 2,
+      "glbSha256": "932f2a108d2f6ea6eb042abde8d320172dc782aebf29327ee8fb5c9daef2e37b",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          95,
+          57,
+          56,
+          54,
+          51,
+          47
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        9,
+        25,
+        6,
+        8,
+        7
+      ],
+      "terminalTipToFoliageDistances": [
+        0.04766521230340004,
+        0.04701116681098938,
+        0.1028832346200943,
+        0.045542676001787186,
+        0.04834388941526413,
+        0.07632816582918167,
+        0.05138256773352623
+      ],
+      "rootMinimumYDelta": 0.009601175785064697,
+      "issues": []
+    },
+    {
+      "seed": 2162,
+      "zone": "moss-islands",
+      "lod": 0,
+      "glbSha256": "a6fe66b5fcdc28ade5408b003ad4709c7050573a93bccdd384fc0c4e5389edc0",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.977135151269408e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3598,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          776
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          253,
+          191,
+          153,
+          151,
+          146,
+          143
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        15,
+        32,
+        12,
+        9,
+        15
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09374390542507172,
+        0.10093564540147781,
+        0.11188067495822906,
+        0.09515874832868576,
+        0.0752253606915474,
+        0.07615868002176285,
+        0.08345039188861847
+      ],
+      "rootMinimumYDelta": 0.004685878753662109,
+      "issues": []
+    },
+    {
+      "seed": 2162,
+      "zone": "moss-islands",
+      "lod": 1,
+      "glbSha256": "708e2e93604b81ea729c6caa8daa5f7fc53f8fac5d41a9df5d71d909a8f120f7",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.977135151269408e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          165,
+          109,
+          96,
+          94,
+          93,
+          90
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        11,
+        26,
+        12,
+        11,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09215647727251053,
+        0.10026568919420242,
+        0.11285344511270523,
+        0.09197341650724411,
+        0.07142973691225052,
+        0.071745365858078,
+        0.08349040150642395
+      ],
+      "rootMinimumYDelta": 0.004685878753662109,
+      "issues": []
+    },
+    {
+      "seed": 2162,
+      "zone": "moss-islands",
+      "lod": 2,
+      "glbSha256": "559e796c826347485fb7ce3abb780b1fcf2895aae3a54cf42ba7dd6c2aa01072",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.977135151269408e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          92,
+          64,
+          53,
+          53,
+          51,
+          47
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        9,
+        18,
+        10,
+        8,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08107046037912369,
+        0.10518383234739304,
+        0.09979128837585449,
+        0.09115924686193466,
+        0.06737084686756134,
+        0.07215855270624161,
+        0.072332963347435
+      ],
+      "rootMinimumYDelta": 0.005545884370803833,
+      "issues": []
+    },
+    {
+      "seed": 2171,
+      "zone": "moss-islands",
+      "lod": 0,
+      "glbSha256": "1b39f99094985e390c1bf9003389d285c1d226aa3074eecc200b13c0aa641d4b",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          775
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          193,
+          153,
+          152,
+          150,
+          132,
+          130,
+          129
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        14,
+        11,
+        12,
+        13,
+        11,
+        12,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06062275543808937,
+        0.0941653698682785,
+        0.08401667326688766,
+        0.04124145954847336,
+        0.06004014238715172,
+        0.09257843345403671,
+        0.07107459753751755
+      ],
+      "rootMinimumYDelta": 0.009410232305526733,
+      "issues": []
+    },
+    {
+      "seed": 2171,
+      "zone": "moss-islands",
+      "lod": 1,
+      "glbSha256": "4d723f237cf345f4bdad8d3dc303a470d8347ddb58536e80bedd4e8bc1c9515e",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          480
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          111,
+          101,
+          95,
+          94,
+          85,
+          83,
+          80
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        14,
+        11,
+        11,
+        11,
+        11,
+        12,
+        17
+      ],
+      "terminalTipToFoliageDistances": [
+        0.05876735970377922,
+        0.09509284049272537,
+        0.08237569779157639,
+        0.040815792977809906,
+        0.05937136709690094,
+        0.0925571396946907,
+        0.06623399257659912
+      ],
+      "rootMinimumYDelta": 0.008160233497619629,
+      "issues": []
+    },
+    {
+      "seed": 2171,
+      "zone": "moss-islands",
+      "lod": 2,
+      "glbSha256": "a8ff5da89e43df4d82646b78ff8684fe8673bb550f745004612c76ac083aea62",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          263
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          62,
+          55,
+          54,
+          52,
+          47,
+          47,
+          45
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        8,
+        9,
+        9,
+        9,
+        7,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0424131415784359,
+        0.09407002478837967,
+        0.08022107183933258,
+        0.04215630143880844,
+        0.05481851100921631,
+        0.09106047451496124,
+        0.06623399257659912
+      ],
+      "rootMinimumYDelta": 0.008800238370895386,
+      "issues": []
+    },
+    {
+      "seed": 2180,
+      "zone": "moss-islands",
+      "lod": 0,
+      "glbSha256": "e5a0cebd0b5e6b93137d648a059ac77d7104a53d283ffd6f19bfadbaa092e073",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3598,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          775
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          279,
+          175,
+          163,
+          141,
+          141,
+          137
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        16,
+        15,
+        38,
+        9,
+        12,
+        14
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07963738590478897,
+        0.05752390995621681,
+        0.10417527705430984,
+        0.0641690343618393,
+        0.07428259402513504,
+        0.07022702693939209,
+        0.08487072587013245
+      ],
+      "rootMinimumYDelta": 0.010285913944244385,
+      "issues": []
+    },
+    {
+      "seed": 2180,
+      "zone": "moss-islands",
+      "lod": 1,
+      "glbSha256": "ee852ec48c2d49518eea208c4d1ccc222dd14b55659e1b52b2155c84f528b735",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          480
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          182,
+          102,
+          101,
+          91,
+          90,
+          80
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        11,
+        28,
+        9,
+        12,
+        14
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07432183623313904,
+        0.05196671187877655,
+        0.10119324177503586,
+        0.06540288776159286,
+        0.07232778519392014,
+        0.07331834733486176,
+        0.07972455769777298
+      ],
+      "rootMinimumYDelta": 0.010285913944244385,
+      "issues": []
+    },
+    {
+      "seed": 2180,
+      "zone": "moss-islands",
+      "lod": 2,
+      "glbSha256": "500252d4a6f4e660c993ff955706169b623f34e30d199f793365086f1289cf21",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          263
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          101,
+          59,
+          54,
+          52,
+          48,
+          46
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        6,
+        14,
+        6,
+        8,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06589481979608536,
+        0.04908404126763344,
+        0.0959528386592865,
+        0.06574105471372604,
+        0.07174801081418991,
+        0.05884896218776703,
+        0.07970193028450012
+      ],
+      "rootMinimumYDelta": 0.010865911841392517,
+      "issues": []
+    },
+    {
+      "seed": 2189,
+      "zone": "moss-islands",
+      "lod": 0,
+      "glbSha256": "77b97298d82607cdcd9089c9261ec6162d452645f360f4d4d5759bad7a8e71d0",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          264,
+          168,
+          163,
+          159,
+          148,
+          135
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        12,
+        30,
+        16,
+        11,
+        16
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0959203764796257,
+        0.08550083637237549,
+        0.08417811989784241,
+        0.07664947211742401,
+        0.09802018105983734,
+        0.06480880826711655,
+        0.0836578756570816
+      ],
+      "rootMinimumYDelta": 0.010681778192520142,
+      "issues": []
+    },
+    {
+      "seed": 2189,
+      "zone": "moss-islands",
+      "lod": 1,
+      "glbSha256": "61c59c9da5e739a435eef9a4d1672d6c4f90f741079935e20ccdd78aded2334b",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          175,
+          102,
+          99,
+          94,
+          93,
+          84
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        12,
+        26,
+        12,
+        9,
+        14
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09018748998641968,
+        0.0784853920340538,
+        0.08702642470598221,
+        0.07070603966712952,
+        0.0947091355919838,
+        0.06492169201374054,
+        0.07993413507938385
+      ],
+      "rootMinimumYDelta": 0.009821772575378418,
+      "issues": []
+    },
+    {
+      "seed": 2189,
+      "zone": "moss-islands",
+      "lod": 2,
+      "glbSha256": "f93d8a4f2efc1f0d25956cacd6c400e87b4d6dff8a74f1844c2ad281b9ce64dc",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          98,
+          58,
+          57,
+          51,
+          50,
+          46
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        8,
+        10,
+        19,
+        9,
+        9,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08290159702301025,
+        0.07151252031326294,
+        0.10075792670249939,
+        0.06508779525756836,
+        0.09448572248220444,
+        0.04788264259696007,
+        0.07864104211330414
+      ],
+      "rootMinimumYDelta": 0.007401779294013977,
+      "issues": []
+    },
+    {
+      "seed": 3011,
+      "zone": "empty-court",
+      "lod": 0,
+      "glbSha256": "47049e50c229cf8e39823316c75bfe0d8f44cfedc6edcc3faf0c300bf5b05ecc",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          275,
+          169,
+          158,
+          153,
+          149,
+          133
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        11,
+        30,
+        11,
+        11,
+        17
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08799493312835693,
+        0.03435449302196503,
+        0.08132043480873108,
+        0.07689543813467026,
+        0.05618346109986305,
+        0.08968708664178848,
+        0.09845031052827835
+      ],
+      "rootMinimumYDelta": 0.012039348483085632,
+      "issues": []
+    },
+    {
+      "seed": 3011,
+      "zone": "empty-court",
+      "lod": 1,
+      "glbSha256": "2cfb05a0f0f2b1b4e4b4b2f78227defba75060024e57aad362f014b2c0864e24",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          182,
+          100,
+          96,
+          95,
+          92,
+          82
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        9,
+        26,
+        11,
+        11,
+        13
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08542221039533615,
+        0.0386679582297802,
+        0.07646891474723816,
+        0.07177964597940445,
+        0.051825400441884995,
+        0.09007898718118668,
+        0.09788443893194199
+      ],
+      "rootMinimumYDelta": 0.012039348483085632,
+      "issues": []
+    },
+    {
+      "seed": 3011,
+      "zone": "empty-court",
+      "lod": 2,
+      "glbSha256": "a1d35b8082ef00f305958039e2c73952585586d3d812c21e48304448546bb68b",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          101,
+          54,
+          54,
+          53,
+          53,
+          45
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        7,
+        19,
+        6,
+        7,
+        8
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06078081578016281,
+        0.04013616964221001,
+        0.06388191133737564,
+        0.06166597455739975,
+        0.04452120140194893,
+        0.088636614382267,
+        0.0747862160205841
+      ],
+      "rootMinimumYDelta": 0.01028934121131897,
+      "issues": []
+    },
+    {
+      "seed": 3020,
+      "zone": "empty-court",
+      "lod": 0,
+      "glbSha256": "3cbe7b492be1ee35de4e91c78b90888cb7ccb7c528c7617a83b5d391eb0e18f5",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3596,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          775
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          272,
+          193,
+          167,
+          145,
+          132,
+          128
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        15,
+        16,
+        28,
+        12,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08276589214801788,
+        0.06884992867708206,
+        0.08176873624324799,
+        0.07335679233074188,
+        0.04044452682137489,
+        0.11172754317522049,
+        0.06754697859287262
+      ],
+      "rootMinimumYDelta": 0.011846199631690979,
+      "issues": []
+    },
+    {
+      "seed": 3020,
+      "zone": "empty-court",
+      "lod": 1,
+      "glbSha256": "2ede2682b8d002cbdfbc1ebba979b553fc252e584b3c4865de72086e7e1796c6",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          177,
+          118,
+          103,
+          91,
+          80,
+          78
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        11,
+        16,
+        28,
+        12,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08535897731781006,
+        0.062208883464336395,
+        0.08199933171272278,
+        0.06785771995782852,
+        0.04404918849468231,
+        0.10367084294557571,
+        0.06870827078819275
+      ],
+      "rootMinimumYDelta": 0.011846199631690979,
+      "issues": []
+    },
+    {
+      "seed": 3020,
+      "zone": "empty-court",
+      "lod": 2,
+      "glbSha256": "f964b1e0240e60376bb00d03027d4324c0e9829b30765796e2aed9dfd56d4cd8",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1220,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          264
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          97,
+          62,
+          58,
+          52,
+          47,
+          44
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        9,
+        25,
+        6,
+        10,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08433718234300613,
+        0.059677887707948685,
+        0.07344482094049454,
+        0.05907011032104492,
+        0.04007727652788162,
+        0.10205967724323273,
+        0.06234580650925636
+      ],
+      "rootMinimumYDelta": 0.013616204261779785,
+      "issues": []
+    },
+    {
+      "seed": 4101,
+      "zone": "return-view",
+      "lod": 0,
+      "glbSha256": "8a9e9017bd3ac141901d301f83c2e82bd00f402b2c1028c16075534b8b5f9841",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3598,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          776
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          248,
+          175,
+          175,
+          155,
+          143,
+          141
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        15,
+        16,
+        26,
+        12,
+        15
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09568846225738525,
+        0.07066282629966736,
+        0.10699208080768585,
+        0.07798027992248535,
+        0.06560630351305008,
+        0.07150482386350632,
+        0.09570714086294174
+      ],
+      "rootMinimumYDelta": 0.012799158692359924,
+      "issues": []
+    },
+    {
+      "seed": 4101,
+      "zone": "return-view",
+      "lod": 1,
+      "glbSha256": "64f6bb7001b8cadf6f08d87c1068d4507768229af6a6d9abb5aca15f8b1a6997",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          162,
+          111,
+          104,
+          97,
+          89,
+          84
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        11,
+        11,
+        21,
+        10,
+        13
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09604120254516602,
+        0.06887609511613846,
+        0.10699880868196487,
+        0.07651878148317337,
+        0.06500755995512009,
+        0.07302989065647125,
+        0.09532824903726578
+      ],
+      "rootMinimumYDelta": 0.012799158692359924,
+      "issues": []
+    },
+    {
+      "seed": 4101,
+      "zone": "return-view",
+      "lod": 2,
+      "glbSha256": "ae836a5b54f1d58ba6b5d257df8432307aef845ada236bb28b74f97243075194",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 1.0681152344815814e-06,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          91,
+          59,
+          59,
+          52,
+          50,
+          49
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        9,
+        8,
+        18,
+        6,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09642770886421204,
+        0.07241833209991455,
+        0.11595194041728973,
+        0.06958533823490143,
+        0.06201422959566116,
+        0.05491804704070091,
+        0.07462086528539658
+      ],
+      "rootMinimumYDelta": 0.012179151177406311,
+      "issues": []
+    },
+    {
+      "seed": 4110,
+      "zone": "return-view",
+      "lod": 0,
+      "glbSha256": "5eadd921f146cfdf9ab420fb2a1f86266e7fd8568e8626c48dbe89d65daa4b1e",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3596,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          775
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          253,
+          205,
+          166,
+          142,
+          137,
+          134
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        14,
+        15,
+        28,
+        14,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06444747000932693,
+        0.0427720881998539,
+        0.09766550362110138,
+        0.05867953598499298,
+        0.07032307237386703,
+        0.08670966327190399,
+        0.08392993360757828
+      ],
+      "rootMinimumYDelta": 0.008824571967124939,
+      "issues": []
+    },
+    {
+      "seed": 4110,
+      "zone": "return-view",
+      "lod": 1,
+      "glbSha256": "cad8ce8a947b00af202bde03086f9ff42d908dde36d26dbdf5c179f219e32c0a",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          160,
+          123,
+          101,
+          92,
+          87,
+          84
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        9,
+        21,
+        12,
+        12,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.057948943227529526,
+        0.04074964299798012,
+        0.09909871965646744,
+        0.06118195131421089,
+        0.06298969686031342,
+        0.08044783771038055,
+        0.0755116418004036
+      ],
+      "rootMinimumYDelta": 0.008824571967124939,
+      "issues": []
+    },
+    {
+      "seed": 4110,
+      "zone": "return-view",
+      "lod": 2,
+      "glbSha256": "444e0689266cdffffa7dc355ffba81e6ce136f25ecdefa746805b9018a41d290",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1220,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          264
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          91,
+          68,
+          56,
+          50,
+          48,
+          47
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        8,
+        20,
+        6,
+        7,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.05366543307900429,
+        0.032741326838731766,
+        0.092606320977211,
+        0.0645839273929596,
+        0.05011887103319168,
+        0.08122427016496658,
+        0.06908862292766571
+      ],
+      "rootMinimumYDelta": 0.010164573788642883,
+      "issues": []
+    },
+    {
+      "seed": 4119,
+      "zone": "return-view",
+      "lod": 0,
+      "glbSha256": "c399dd881dd1185f3c3826da22c70f69801bcc7d5c15d0f089e26f8efebef9bf",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          264,
+          177,
+          160,
+          150,
+          146,
+          140
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        11,
+        17,
+        16,
+        28,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.08081609755754471,
+        0.06235494837164879,
+        0.09267274290323257,
+        0.09409290552139282,
+        0.08908946812152863,
+        0.10378686338663101,
+        0.09094956517219543
+      ],
+      "rootMinimumYDelta": 0.008337169885635376,
+      "issues": []
+    },
+    {
+      "seed": 4119,
+      "zone": "return-view",
+      "lod": 1,
+      "glbSha256": "e2d0b7a29a659fd20a7db7da34ce70b75df96528b38b338e9e33b3daa486e9ab",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          171,
+          106,
+          97,
+          94,
+          93,
+          86
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        11,
+        17,
+        12,
+        22,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07186029106378555,
+        0.06673921644687653,
+        0.09287256002426147,
+        0.08664530515670776,
+        0.0846400335431099,
+        0.09887915849685669,
+        0.08403737843036652
+      ],
+      "rootMinimumYDelta": 0.008337169885635376,
+      "issues": []
+    },
+    {
+      "seed": 4119,
+      "zone": "return-view",
+      "lod": 2,
+      "glbSha256": "b73cf8dcd74c343346c92bed1287c1d6acb260ac6768a1e4d21938526439a59c",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          97,
+          62,
+          51,
+          51,
+          50,
+          49
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        8,
+        8,
+        6,
+        7,
+        14,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.05910377949476242,
+        0.06743158400058746,
+        0.09034965932369232,
+        0.07944948971271515,
+        0.08287041634321213,
+        0.10070165246725082,
+        0.07449117302894592
+      ],
+      "rootMinimumYDelta": 0.005957171320915222,
+      "issues": []
+    },
+    {
+      "seed": 4128,
+      "zone": "return-view",
+      "lod": 0,
+      "glbSha256": "ef6546255d5ec16e9d7898a00e8ed3342a7d3a6ee7d58baf6b4fa202cab99582",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3594,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          774
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          195,
+          161,
+          153,
+          139,
+          137,
+          132,
+          122
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        13,
+        11,
+        12,
+        18,
+        17,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.041463714092969894,
+        0.05800582095980644,
+        0.09808549284934998,
+        0.09395931661128998,
+        0.09821116924285889,
+        0.10612070560455322,
+        0.07396571338176727
+      ],
+      "rootMinimumYDelta": 0.005656644701957703,
+      "issues": []
+    },
+    {
+      "seed": 4128,
+      "zone": "return-view",
+      "lod": 1,
+      "glbSha256": "fd8bc96a426974a955da239f01a7300642fbca457ae770fa97306a4ac8bb9b7c",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2226,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          480
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          124,
+          101,
+          93,
+          93,
+          84,
+          78,
+          76
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        10,
+        11,
+        11,
+        12,
+        15,
+        13,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.044655654579401016,
+        0.05570927634835243,
+        0.09547474980354309,
+        0.08427306264638901,
+        0.09021216630935669,
+        0.09776006639003754,
+        0.07340133935213089
+      ],
+      "rootMinimumYDelta": 0.005126640200614929,
+      "issues": []
+    },
+    {
+      "seed": 4128,
+      "zone": "return-view",
+      "lod": 2,
+      "glbSha256": "19f7224394c14d764f7b7c98af35ac8f2136fda6d063c760ae3a10ee44d1a1c4",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1220,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          264
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          64,
+          56,
+          54,
+          53,
+          46,
+          46,
+          43
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        8,
+        8,
+        7,
+        8,
+        8,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.024345168843865395,
+        0.054577555507421494,
+        0.08734162896871567,
+        0.07007792592048645,
+        0.07772527635097504,
+        0.09765629470348358,
+        0.06686915457248688
+      ],
+      "rootMinimumYDelta": 0.006096646189689636,
+      "issues": []
+    },
+    {
+      "seed": 4137,
+      "zone": "return-view",
+      "lod": 0,
+      "glbSha256": "b045237fd5d21e07ececba8c65c2a0c65ad9fdfe0b8ebc074a45cf0c82a87333",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          259,
+          176,
+          167,
+          153,
+          150,
+          132
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        11,
+        13,
+        32,
+        13,
+        14
+      ],
+      "terminalTipToFoliageDistances": [
+        0.053148966282606125,
+        0.0674540102481842,
+        0.09418982267379761,
+        0.07983935624361038,
+        0.05761563032865524,
+        0.05914100259542465,
+        0.0698961541056633
+      ],
+      "rootMinimumYDelta": 0.0074154287576675415,
+      "issues": []
+    },
+    {
+      "seed": 4137,
+      "zone": "return-view",
+      "lod": 1,
+      "glbSha256": "1095b5c69e447d2703df9b2e9703979e06f03a5cbcc89a9fcf35295a4ed0235b",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          170,
+          105,
+          102,
+          93,
+          91,
+          86
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        15,
+        13,
+        30,
+        11,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.051193688064813614,
+        0.06572111696004868,
+        0.0951763316988945,
+        0.07334501296281815,
+        0.059885039925575256,
+        0.06303304433822632,
+        0.05966993421316147
+      ],
+      "rootMinimumYDelta": 0.009195417165756226,
+      "issues": []
+    },
+    {
+      "seed": 4137,
+      "zone": "return-view",
+      "lod": 2,
+      "glbSha256": "88fb6d92b85e27962b71fb0ccdc2bdd3faa45e12f6c5a5686502c9a060026a72",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          95,
+          59,
+          55,
+          53,
+          51,
+          47
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        7,
+        20,
+        5,
+        8,
+        8
+      ],
+      "terminalTipToFoliageDistances": [
+        0.04751821607351303,
+        0.0554191917181015,
+        0.09132663905620575,
+        0.07382017374038696,
+        0.06364849209785461,
+        0.0704081729054451,
+        0.05585996434092522
+      ],
+      "rootMinimumYDelta": 0.0067854225635528564,
+      "issues": []
+    },
+    {
+      "seed": 5566,
+      "zone": "master-stones",
+      "lod": 0,
+      "glbSha256": "d1308afa521cf4cd5bbe0778238a045e4901cc9c60c7c3ef8dedd6aadf149d2a",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          190,
+          160,
+          150,
+          139,
+          139,
+          132,
+          129
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        11,
+        11,
+        17,
+        13,
+        12,
+        15,
+        15
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06436832994222641,
+        0.07965803146362305,
+        0.093552365899086,
+        0.06056002154946327,
+        0.07676509767770767,
+        0.07345112413167953,
+        0.06504296511411667
+      ],
+      "rootMinimumYDelta": 0.005525246262550354,
+      "issues": []
+    },
+    {
+      "seed": 5566,
+      "zone": "master-stones",
+      "lod": 1,
+      "glbSha256": "4ad3648933c963e1a2149c09e5c297a222c85150e7b2a581539eb3be86f16605",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          115,
+          99,
+          90,
+          90,
+          88,
+          84,
+          83
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        9,
+        12,
+        11,
+        13,
+        14,
+        13
+      ],
+      "terminalTipToFoliageDistances": [
+        0.06364711374044418,
+        0.07383780181407928,
+        0.09257446974515915,
+        0.052348509430885315,
+        0.07314455509185791,
+        0.07467015832662582,
+        0.059338320046663284
+      ],
+      "rootMinimumYDelta": 0.004565238952636719,
+      "issues": []
+    },
+    {
+      "seed": 5566,
+      "zone": "master-stones",
+      "lod": 2,
+      "glbSha256": "9606b8b54f43d44a4e46a0fce1c53799f8cd44f16160b7b384d989930b5f0d75",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          63,
+          55,
+          52,
+          50,
+          49,
+          48,
+          45
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        6,
+        8,
+        10,
+        10,
+        7,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.05980970710515976,
+        0.07181230187416077,
+        0.0829252302646637,
+        0.040239375084638596,
+        0.06992132216691971,
+        0.059434276074171066,
+        0.05752307176589966
+      ],
+      "rootMinimumYDelta": 0.007365241646766663,
+      "issues": []
+    },
+    {
+      "seed": 811,
+      "zone": "moss-entry",
+      "lod": 0,
+      "glbSha256": "f2453f21f23f6e46a7ee4db4cfe001b5292af0935a4bc0f64b3008102fa03db6",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3600,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          259,
+          182,
+          170,
+          161,
+          133,
+          132
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        11,
+        8,
+        28,
+        15,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.0815403014421463,
+        0.06441638618707657,
+        0.09339170902967453,
+        0.07039015740156174,
+        0.07073356211185455,
+        0.0824621170759201,
+        0.07354942709207535
+      ],
+      "rootMinimumYDelta": 0.005797207355499268,
+      "issues": []
+    },
+    {
+      "seed": 811,
+      "zone": "moss-entry",
+      "lod": 1,
+      "glbSha256": "ed3717526129d7348ad76dc60f86f5473aa9cc03d3d556017c343ef04f397f90",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2230,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          170,
+          105,
+          102,
+          101,
+          86,
+          83
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        11,
+        8,
+        26,
+        16,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07737971097230911,
+        0.059616874903440475,
+        0.08612220734357834,
+        0.05877882242202759,
+        0.07131738215684891,
+        0.08609989285469055,
+        0.07015425711870193
+      ],
+      "rootMinimumYDelta": 0.005797207355499268,
+      "issues": []
+    },
+    {
+      "seed": 811,
+      "zone": "moss-entry",
+      "lod": 2,
+      "glbSha256": "9287d2368e94342a8706445f486b1baf98465b6b966a705f58d2f065ba1e7057",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 7.247924802555872e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          93,
+          58,
+          58,
+          55,
+          49,
+          47
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        7,
+        8,
+        6,
+        25,
+        10,
+        6
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07208815217018127,
+        0.05281287059187889,
+        0.08812636882066727,
+        0.0516531839966774,
+        0.06548348069190979,
+        0.07673101127147675,
+        0.06471320986747742
+      ],
+      "rootMinimumYDelta": 0.007677197456359863,
+      "issues": []
+    },
+    {
+      "seed": 820,
+      "zone": "moss-entry",
+      "lod": 0,
+      "glbSha256": "2dc81feb156edb133c196d8b6e0191302b8c51e5e826d1a7f8ada8f465ecb1c9",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3598,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          776
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          252,
+          184,
+          171,
+          153,
+          140,
+          137
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        15,
+        12,
+        10,
+        14,
+        27,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.058970849961042404,
+        0.06031639128923416,
+        0.09603091329336166,
+        0.06812393665313721,
+        0.09095564484596252,
+        0.11196698248386383,
+        0.10431868582963943
+      ],
+      "rootMinimumYDelta": 0.008471459150314331,
+      "issues": []
+    },
+    {
+      "seed": 820,
+      "zone": "moss-entry",
+      "lod": 1,
+      "glbSha256": "40c4ddf354ab3ef68b0831dc9fe932d99f9ac9d8139bf5e80371ae9c7081d430",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          165,
+          113,
+          104,
+          94,
+          89,
+          82
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        13,
+        10,
+        12,
+        12,
+        26,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.05723320320248604,
+        0.05741148814558983,
+        0.0956556424498558,
+        0.06505273282527924,
+        0.08742774277925491,
+        0.11289600282907486,
+        0.09838638454675674
+      ],
+      "rootMinimumYDelta": 0.008471459150314331,
+      "issues": []
+    },
+    {
+      "seed": 820,
+      "zone": "moss-entry",
+      "lod": 2,
+      "glbSha256": "4a7b9d8434ec87864eea06aef39619433b105c2d7fabc8720fc4d8dd6a61315c",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 6,
+        "componentVertices": [
+          93,
+          65,
+          58,
+          51,
+          47,
+          46
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        6,
+        7,
+        12,
+        6,
+        16,
+        8
+      ],
+      "terminalTipToFoliageDistances": [
+        0.051778338849544525,
+        0.048332761973142624,
+        0.10107576102018356,
+        0.05425583943724632,
+        0.08305007964372635,
+        0.09430215507745743,
+        0.09661705791950226
+      ],
+      "rootMinimumYDelta": 0.01106145977973938,
+      "issues": []
+    },
+    {
+      "seed": 829,
+      "zone": "moss-entry",
+      "lod": 0,
+      "glbSha256": "3018fdd911a4274262be70afff3bd9e66ffbf8ffbcb9b26048f0353af22947ba",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 3598,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          777
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          185,
+          164,
+          143,
+          143,
+          138,
+          136,
+          129
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        14,
+        13,
+        12,
+        11,
+        13,
+        13,
+        12
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09674115478992462,
+        0.08806096017360687,
+        0.08039482682943344,
+        0.0773988589644432,
+        0.06949644535779953,
+        0.08574875444173813,
+        0.08033113181591034
+      ],
+      "rootMinimumYDelta": 0.007623568177223206,
+      "issues": []
+    },
+    {
+      "seed": 829,
+      "zone": "moss-entry",
+      "lod": 1,
+      "glbSha256": "e4ed14b38e3d2886226cdc047fd0b79502dd234f6f5d59efde6872faaeda0341",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 2228,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          482
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          112,
+          101,
+          91,
+          90,
+          88,
+          84,
+          82
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        12,
+        11,
+        10,
+        11,
+        12,
+        11,
+        10
+      ],
+      "terminalTipToFoliageDistances": [
+        0.09257665276527405,
+        0.08689150959253311,
+        0.08253499865531921,
+        0.07021614909172058,
+        0.0673990473151207,
+        0.08349402248859406,
+        0.07057849317789078
+      ],
+      "rootMinimumYDelta": 0.007623568177223206,
+      "issues": []
+    },
+    {
+      "seed": 829,
+      "zone": "moss-entry",
+      "lod": 2,
+      "glbSha256": "f86742cbc03834e2584ec661af1ab32557960641f0e75eefe8b9c2ff271c07a3",
+      "sourceNodes": 17,
+      "parentIDsExact": true,
+      "maxSourceMatrixError": 5.912780762784564e-07,
+      "maxPaletteFactorError": 3.052039454498612e-09,
+      "triangles": 1222,
+      "wood": {
+        "components": 1,
+        "componentVertices": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "foliage": {
+        "components": 7,
+        "componentVertices": [
+          62,
+          57,
+          51,
+          50,
+          48,
+          47,
+          47
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "crownWoodTriangleContactPairs": [
+        9,
+        10,
+        8,
+        9,
+        10,
+        7,
+        11
+      ],
+      "terminalTipToFoliageDistances": [
+        0.07645389437675476,
+        0.07420258969068527,
+        0.06219480559229851,
+        0.06743217259645462,
+        0.05878272280097008,
+        0.07512732595205307,
+        0.06995192170143127
+      ],
+      "rootMinimumYDelta": 0.0038635730743408203,
+      "issues": []
+    }
+  ],
+  "checkedGLBs": 75,
+  "issues": 0,
+  "scope": "Actual GLB geometry and material batches. Crown triangle contact/branch endpoint proximity and source-local root envelope; not real-world terrain collision.",
+  "passed": true
+}

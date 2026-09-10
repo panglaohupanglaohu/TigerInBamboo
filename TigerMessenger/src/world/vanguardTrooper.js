@@ -18,6 +18,7 @@
 import * as THREE from "three";
 import { facet } from "../assets/lowPoly.js";
 import { addOutline, toonMat } from "../assets/toon.js";
+import { bindVanguardOptimization } from "../assets/battleOptimization.js";
 
 /**
  * 苔庭之战伤害口径（用户 2026-09-04 裁定）。
@@ -180,7 +181,7 @@ function glow(geo, color, opacity = 1) {
  * 一名先锋重甲兵。整体高约 1.45（普通纸士兵约 1.33，略高一档但不出戏）。
  * @param {{scale?:number, seed?:number}} [opts]
  */
-export function createVanguardTrooper({ scale = 1, seed = 0 } = {}) {
+export function createVanguardTrooper({ scale = 1, seed = 0, optimized = true } = {}) {
   const root = new THREE.Group();
   root.name = "vanguard-trooper";
 
@@ -350,6 +351,7 @@ export function createVanguardTrooper({ scale = 1, seed = 0 } = {}) {
   root.userData.wounds = 0;
   root.userData.life = VANGUARD_COMBAT.vanguardLife;
   root.scale.setScalar(scale);
+  if (optimized) bindVanguardOptimization(root);
   return root;
 }
 

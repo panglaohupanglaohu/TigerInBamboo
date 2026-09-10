@@ -1,0 +1,17 @@
+{
+  "geometrySource": "assets/models/optimized/socco-craft-v1",
+  "sameNodeIDsAndParents": true,
+  "sameMatricesAndGeometry": true,
+  "reuseExactContracts": [
+    {
+      "path": "artifacts/pipeline/socco-craft-v1/boarding-contract.json",
+      "sha256": "01bac3cba5b0f4e9a62191fe5d95b8d9c5bbf196a1bfa177552624f4f43c521d"
+    },
+    {
+      "path": "artifacts/pipeline/socco-craft-v1/boarding-paths-new-crew.json",
+      "sha256": "18cd04321f6ade86eb61df9789e2606dbaecbe5a1f9b861c3aaefc5e1d860e53"
+    }
+  ],
+  "instruction": "Continue the existing node/pose adapter and geometry/boarding rules. Load only the new GLB prefab; do not replace its material factors with the archived source palette.",
+  "noNewRuntimeBehavior": true
+}

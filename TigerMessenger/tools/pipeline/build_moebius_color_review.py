@@ -1,0 +1,15 @@
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+OUT = ROOT/'artifacts/pipeline/moebius-color-review'
+OUT.mkdir(parents=True,exist_ok=True)
+cards=[]
+for asset,title,target,description in [
+    ('vanguard-color-v2','重甲兵','vanguard-trooper-target-v1.png','炭蓝灰装甲、灰褐护板与肩炮，保留红色标记和发光部件。'),
+    ('socco-color-v2','SOCCO 运兵艇','socco-craft-target-v1.png','珊瑚砖红上壳、暖象牙白下舱、深棕底座与木色坡道。')]:
+    paths=[ROOT/'artifacts/pipeline'/asset/(v+'-three-quarter.png') for v in ['before','after']]
+    assert all(p.is_file() for p in paths)
+    cards.append(f'<section><h2>{title}</h2><p>{description}</p><details><summary>目标图</summary><img src="../../../assets/concepts/{target}"></details><div class="pair">'+''.join(f'<figure><img src="../{asset}/{v}-three-quarter.png"><figcaption>{label} · 相同灯光与镜头，实际GLB回读</figcaption></figure>' for v,label in [('before','调整前'),('after','调整后')])+'</div></section>')
+if (OUT/'godot-actual-disembarkation.png').is_file():
+    cards.append('<section><h2>Godot 实际战场出舱</h2><img src="godot-actual-disembarkation.png"><p>新版重甲兵与新版SOCCO在自然战斗触发后出舱；本轮验证配色接入，不等于整场战斗验收。</p></section>')
+(OUT/'index.html').write_text('''<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>重甲兵与SOCCO · 配色对照</title><style>body{background:#14252c;color:#e6ece8;font:17px/1.65 system-ui;margin:0}main{max-width:1200px;margin:auto;padding:24px}section{margin:24px 0;background:#21363f;padding:20px;border-radius:12px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}figure{margin:0}img{width:100%}a{color:#ace0e5}figcaption{padding:6px}@media(max-width:800px){.pair{grid-template-columns:1fr}}</style><main><h1>重甲兵与 SOCCO · 配色对照</h1><p>只调整材质配色，保持几何、层级、动作以及原金属度和粗糙度。目标图带有绘制光影，不能把材质色值相同当成最终画面完全一致。</p>'''+''.join(cards)+'<p><a href="../saihoji-battle-review/index.html">返回苔庭总览</a></p></main></html>')
+print(OUT/'index.html')

@@ -1,0 +1,59 @@
+{
+  "blocked_projectiles": 0,
+  "escort_pods": 3,
+  "events": [],
+  "feet": [],
+  "fleet_members": 5,
+  "foot_offsets": {
+    "gladius": 0.00399201035499573,
+    "heavy": -0.0126546654105186,
+    "longbow": 0.0252748918533325,
+    "spear": 0.00399201035499573
+  },
+  "ground_fallbacks": 0,
+  "ground_samples": 0,
+  "heavies": 0,
+  "jaw_triangles": 0,
+  "kun_candidate_active": true,
+  "landing_plan": {
+    "assigned": 0,
+    "components": 12,
+    "connected_cells": 0,
+    "dry_cells": 22,
+    "foot_offset": 0.22,
+    "geometry_changed": false,
+    "layout_revision": "Existing dry terrain slots; original berth preserved",
+    "min_ground_radius": 160.607,
+    "sampled": 1793,
+    "sea_radius": 160.5,
+    "unassigned": 0
+  },
+  "load_error": "苔庭现有地面没有足够的连通干燥站位",
+  "scope": "original-world native integration candidate; pending visual/gameplay acceptance",
+  "six_scenes_preserved": true,
+  "source_node_count": 11694,
+  "source_whale": "leviathanGroup[156]",
+  "state": {
+    "assault_phase": "idle",
+    "formation": false,
+    "hits": 0,
+    "landed": [],
+    "music": "",
+    "phase": "at_castle",
+    "round_id": 0,
+    "running": false,
+    "ships_sent": 0,
+    "sink_step": 0,
+    "threat_ids": [],
+    "whale_phase": "buried"
+  },
+  "terrain_collision_meshes": 95,
+  "troops": 0,
+  "water": {
+    "applied": true,
+    "geometry_preserved": true,
+    "sea_radius": 160.5,
+    "vertices": 3575,
+    "wave_max": 0.067
+  }
+}

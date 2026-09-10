@@ -1,0 +1,60 @@
+{
+  "renders": [
+    {
+      "label": "before",
+      "view": "three-quarter",
+      "inputGLB": "8961c19fdc1c8d1f8de9147a5a4d5a84c7e6c648751a8fd37eefe9cbd6748048",
+      "cameraMatrix": [
+        0.800000011920929,
+        -0.24164314568042755,
+        0.549189031124115,
+        10.957513809204102,
+        0.6000000238418579,
+        0.32219091057777405,
+        -0.7322520017623901,
+        -14.717659950256348,
+        -2.5415634041792146e-08,
+        0.9153150320053101,
+        0.4027386009693146,
+        8.966647148132324,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "orthoScale": 2.1914355754852295,
+      "viewTransform": "AgX",
+      "look": "None",
+      "exposure": 0.0
+    },
+    {
+      "label": "after",
+      "view": "three-quarter",
+      "inputGLB": "505aa165c3610d8261ad271fe838371cd6e9366ff22d6b0b2fdb921de098f6dc",
+      "cameraMatrix": [
+        0.800000011920929,
+        -0.24164314568042755,
+        0.549189031124115,
+        10.957513809204102,
+        0.6000000238418579,
+        0.32219091057777405,
+        -0.7322520017623901,
+        -14.717659950256348,
+        -2.5415634041792146e-08,
+        0.9153150320053101,
+        0.4027386009693146,
+        8.966647148132324,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "orthoScale": 2.1914355754852295,
+      "viewTransform": "AgX",
+      "look": "None",
+      "exposure": 0.0
+    }
+  ],
+  "crew": "SOCCO empty craft; no old crew color mixed into comparison",
+  "geometryPose": "Vanguard static original GLB pose. SOCCO n87 local rotationX=-.2011 used for both before/after review only; saved file actions unmodified."
+}

@@ -1,0 +1,18 @@
+{
+  "adapter": {
+    "groups": 71,
+    "instances": 8503,
+    "scope": "Original archive instances; no new character or morph batching",
+    "skipped": [],
+    "surfaces_after": 137,
+    "surfaces_before": 16208
+  },
+  "after_calls": 20151.0,
+  "after_primitives": 347168.0,
+  "before_calls": 23214.0,
+  "before_primitives": 366786.0,
+  "changed_byte_fraction": 0.0,
+  "max_byte_error": 0,
+  "mean_byte_error": 0.0,
+  "scope": "Same source scene/camera/light, 12 settled GPU frames each; no game animation or FPS claim"
+}

@@ -43,19 +43,9 @@
       "name": "highland-mountain-vegetation-0"
     },
     {
-      "after_y": 24.1291961669922,
-      "before_y": 26.6674633026123,
-      "name": "highland-mountain-vegetation-0-canopy-0"
-    },
-    {
-      "after_y": 24.2315979003906,
-      "before_y": 27.0314636230469,
-      "name": "highland-mountain-vegetation-0-canopy-1"
-    },
-    {
-      "after_y": 24.1583862304688,
-      "before_y": 27.6554622650146,
-      "name": "highland-mountain-vegetation-0-canopy-2"
+      "after_y": 18.6370544433594,
+      "before_y": 6.8366436958313,
+      "name": "highland-mountain-vegetation-1"
     },
     {
       "after_y": 37.664306640625,
@@ -63,39 +53,14 @@
       "name": "highland-mountain-vegetation-2"
     },
     {
-      "after_y": 37.3505401611328,
-      "before_y": 40.0163078308105,
-      "name": "highland-mountain-vegetation-2-canopy-0"
-    },
-    {
-      "after_y": 37.8929595947266,
-      "before_y": 40.3593063354492,
-      "name": "highland-mountain-vegetation-2-canopy-1"
-    },
-    {
-      "after_y": 37.6786804199219,
-      "before_y": 40.9473075866699,
-      "name": "highland-mountain-vegetation-2-canopy-2"
-    },
-    {
       "after_y": 47.7220001220703,
       "before_y": 36.3018760681152,
       "name": "highland-mountain-vegetation-3"
     },
     {
-      "after_y": 47.4902954101562,
-      "before_y": 50.1699981689453,
-      "name": "highland-mountain-vegetation-3-canopy-0"
-    },
-    {
-      "after_y": 47.8032836914062,
-      "before_y": 50.5270004272461,
-      "name": "highland-mountain-vegetation-3-canopy-1"
-    },
-    {
-      "after_y": 47.7339782714844,
-      "before_y": 51.1389999389648,
-      "name": "highland-mountain-vegetation-3-canopy-2"
+      "after_y": 25.9734649658203,
+      "before_y": 10.5692367553711,
+      "name": "highland-mountain-vegetation-4"
     },
     {
       "after_y": 6.50177001953125,
@@ -103,39 +68,9 @@
       "name": "highland-mountain-vegetation-5"
     },
     {
-      "after_y": 6.77488708496094,
-      "before_y": 8.75777053833008,
-      "name": "highland-mountain-vegetation-5-canopy-0"
-    },
-    {
-      "after_y": 6.30671691894531,
-      "before_y": 9.08677005767822,
-      "name": "highland-mountain-vegetation-5-canopy-1"
-    },
-    {
-      "after_y": 6.48725891113281,
-      "before_y": 9.65077018737793,
-      "name": "highland-mountain-vegetation-5-canopy-2"
-    },
-    {
       "after_y": 38.1861877441406,
       "before_y": 17.3207855224609,
       "name": "highland-mountain-vegetation-6"
-    },
-    {
-      "after_y": 38.6777801513672,
-      "before_y": 40.5381889343262,
-      "name": "highland-mountain-vegetation-6-canopy-0"
-    },
-    {
-      "after_y": 37.7947540283203,
-      "before_y": 40.8811874389648,
-      "name": "highland-mountain-vegetation-6-canopy-1"
-    },
-    {
-      "after_y": 38.1806640625,
-      "before_y": 41.4691886901855,
-      "name": "highland-mountain-vegetation-6-canopy-2"
     },
     {
       "after_y": 50.7287445068359,
@@ -143,19 +78,24 @@
       "name": "highland-mountain-vegetation-7"
     },
     {
-      "after_y": 50.3580780029297,
-      "before_y": 53.1767425537109,
-      "name": "highland-mountain-vegetation-7-canopy-0"
+      "after_y": 22.8602294921875,
+      "before_y": 6.94666433334351,
+      "name": "highland-mountain-vegetation-8"
     },
     {
-      "after_y": 51.0658569335938,
-      "before_y": 53.5337448120117,
-      "name": "highland-mountain-vegetation-7-canopy-1"
+      "after_y": 46.8701324462891,
+      "before_y": 10.3823757171631,
+      "name": "highland-mountain-vegetation-9"
     },
     {
-      "after_y": 50.7114105224609,
-      "before_y": 54.1457443237305,
-      "name": "highland-mountain-vegetation-7-canopy-2"
+      "after_y": 42.1482391357422,
+      "before_y": 8.60683441162109,
+      "name": "highland-mountain-vegetation-10"
+    },
+    {
+      "after_y": 16.1736145019531,
+      "before_y": 6.52614974975586,
+      "name": "highland-mountain-vegetation-11"
     }
   ],
   "scope": "Round 3: original lamp/tree assets, grounded vegetation and SSR candidate. No full navigation acceptance.",
@@ -193,18 +133,18 @@
   ],
   "views": [
     {
-      "draw_calls": 6970,
+      "draw_calls": 6974,
       "file": "../street-off.png",
       "local_lights": 0,
-      "primitives": 202372,
+      "primitives": 202692,
       "shadow_lights": 1,
       "street_lights_enabled": false
     },
     {
-      "draw_calls": 6970,
+      "draw_calls": 6974,
       "file": "../street-on.png",
       "local_lights": 6,
-      "primitives": 202372,
+      "primitives": 202692,
       "shadow_lights": 7,
       "street_lights_enabled": true
     }

@@ -1,0 +1,6109 @@
+{
+  "id": "saihoji-pines-v1",
+  "scope": "25 exact original seed candidates, three LODs each; no world placement baked",
+  "sourceManifest": "assets/models/originals/saihoji-pines-r1/manifest.json",
+  "sourceManifestSHA256": "cb9365d3ca0831934c7813c5f04e47112b71216298e13d4fb060d12952c790be",
+  "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+  "target": "assets/concepts/ancient-pine-target-v1.png",
+  "seeds": [
+    {
+      "seed": 1229,
+      "zone": "master-stones",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "e921992759053a99c69c22f2b3356589c8026adb7094647bfc6c1649b7ecedb4",
+        "snapshot": "aded60cbd18df443e035d0e86f0580feeb9f08fb98a17c1216050e882be07f5b"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1229/ancient-pine-1229-lod0.glb",
+          "sha256": "5b40f49c20335f6c77d787eaa9f4435dba53484169e6f952fb132e678a6b9b5e",
+          "bytes": 298396
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1229/ancient-pine-1229-lod1.glb",
+          "sha256": "ed26e8645ccf9254a5fca1e542cb0999268440364317e6f93c2c7f3101056baf",
+          "bytes": 191668
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1229/ancient-pine-1229-lod2.glb",
+          "sha256": "b167da84962a58893e41ef0fca16781374470d0233c15637f680ca141558958e",
+          "bytes": 113020
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1229/ancient-pine-1229.blend",
+      "blendSha256": "61a279b8ab5b3189d69080777397084dcb64b74d0bcc89a7f8c545e5872bd015",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "master-stones",
+        "index": 1,
+        "x": -3.55,
+        "z": 2.85,
+        "scale": 0.92,
+        "yaw": 1.35,
+        "lift": 0.08,
+        "seed": 1229,
+        "role": "secondary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1229/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u4e3b\u77f3\u4e4b\u5ead[1]/giantTreeGroup[8]"
+    },
+    {
+      "seed": 1238,
+      "zone": "master-stones",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "fb20c153ecc0dce9b2cfdfa2817521629af246c384cea2fca11207f6f8f3496c",
+        "snapshot": "28d958bd69184c16d80bc2a2e472b888681d067cd4e4e2cd773b12f2af4b5275"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3596,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1238/ancient-pine-1238-lod0.glb",
+          "sha256": "6f4df77ba63c877ef27ca12922f522d81e12c81b60d4efe13f42f02ad94b4939",
+          "bytes": 298128
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1238/ancient-pine-1238-lod1.glb",
+          "sha256": "00d4717c36b0d14882cb4ce12bce3396e96b5d59a764a258ac6cd51fad09c6a8",
+          "bytes": 191504
+        },
+        {
+          "lod": 2,
+          "triangles": 1220,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1238/ancient-pine-1238-lod2.glb",
+          "sha256": "44aaaae07c47dc13d36d8ecde51a3d8dd0af522816620d6a71b5b64a41fe2fab",
+          "bytes": 112856
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1238/ancient-pine-1238.blend",
+      "blendSha256": "88fd96787f350a39a82595545fd5f42f8894d0229076e45049d3e105273648ef",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "master-stones",
+        "index": 2,
+        "x": -5.35,
+        "z": 0.15,
+        "scale": 0.68,
+        "yaw": 0.2,
+        "lift": 0.07,
+        "seed": 1238,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1238/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u4e3b\u77f3\u4e4b\u5ead[1]/giantTreeGroup[9]"
+    },
+    {
+      "seed": 1247,
+      "zone": "master-stones",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "ca8b950e9b7c07132d04c7b4bddb91c5b9d04dfafcc1ab8e43e6632c206c95f2",
+        "snapshot": "2b9299006be3872550187e89e68861520c96f586b8b3cd63f4628b298ef70b67"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3596,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1247/ancient-pine-1247-lod0.glb",
+          "sha256": "1d964261de796dcf4c3d32289bdc945cf2395fe881db18379a8434f23a791bb5",
+          "bytes": 298128
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1247/ancient-pine-1247-lod1.glb",
+          "sha256": "60ba49a8c7a7ca94dbb391964524928bfb91b2bc17a9336c96bdd84733d4c895",
+          "bytes": 191508
+        },
+        {
+          "lod": 2,
+          "triangles": 1220,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1247/ancient-pine-1247-lod2.glb",
+          "sha256": "7373b5a4f8cc496585ada2ab293e80e930146f07d9b085a6fdeee57215dc63f1",
+          "bytes": 112864
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1247/ancient-pine-1247.blend",
+      "blendSha256": "eec46ca400fcba6235f94db4ab4ecac11f70a6674677a6c340e1013a173044cf",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "master-stones",
+        "index": 3,
+        "x": 5.05,
+        "z": -2.55,
+        "scale": 1.05,
+        "yaw": -2.1,
+        "lift": 0.09,
+        "seed": 1247,
+        "role": "solitary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1247/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u4e3b\u77f3\u4e4b\u5ead[1]/giantTreeGroup[10]"
+    },
+    {
+      "seed": 1256,
+      "zone": "master-stones",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "45cdaa6c0011ff8c9c995b0ca5ba90975dd40d3a8f7f38ef1abb1cf97cec8bdc",
+        "snapshot": "b89f5a84abb3b00e55c8b1d2af6146509855e4cca225c17bb2e3e3dcdc385239"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1256/ancient-pine-1256-lod0.glb",
+          "sha256": "2b3bf80658ab597fbb43d2509c83cd9fa24bc053e29c86296a0e78d71712fd25",
+          "bytes": 298396
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1256/ancient-pine-1256-lod1.glb",
+          "sha256": "cb4972b8fefb30f0548a232c657047ab5ea2eaf85102d5bbb73bc612416a1dc8",
+          "bytes": 191572
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1256/ancient-pine-1256-lod2.glb",
+          "sha256": "b3899fca294d512b95cf6d3dcfaff4cd3552304d641820f46b400fe16560b9c5",
+          "bytes": 112968
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1256/ancient-pine-1256.blend",
+      "blendSha256": "356597c7da503eb013205c47ca9bbb561f5ca71a060d312143adfa8d75c27abc",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "master-stones",
+        "index": 4,
+        "x": 1.85,
+        "z": 5.35,
+        "scale": 0.58,
+        "yaw": -0.55,
+        "lift": 0.07,
+        "seed": 1256,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1256/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u4e3b\u77f3\u4e4b\u5ead[1]/giantTreeGroup[11]"
+    },
+    {
+      "seed": 1401,
+      "zone": "dry-cascade",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "5c596b336fbb2cfab6c01ca35d6cd58f27ed4ec7d9cf9b80c260eae34726d762",
+        "snapshot": "a8e875c2359f535a67dfc5820b4ecbce9db1ae0f4e3e11cadb28733fe8d74ead"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1401/ancient-pine-1401-lod0.glb",
+          "sha256": "67f513c092b9ed1a3da737f4e0bb21fe2c37e7eb1d02ce5cc3758e44f729f7dc",
+          "bytes": 298500
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1401/ancient-pine-1401-lod1.glb",
+          "sha256": "f26acfd9b578f450d689624c083ee4d7e45e5d3f1d8d632d1399c14db6bf804e",
+          "bytes": 191664
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1401/ancient-pine-1401-lod2.glb",
+          "sha256": "6997dc5dec0a33e2c7088c9c837a26994a669ba3bab91cb3a67613dbe27ee1f2",
+          "bytes": 113016
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1401/ancient-pine-1401.blend",
+      "blendSha256": "b349f1ce0ebada3b68eb9866e057ba71a88cb94633379fc3e4fea92f356de326",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "dry-cascade",
+        "index": 0,
+        "x": -3.95,
+        "z": 3.55,
+        "scale": 1.22,
+        "yaw": 0.55,
+        "lift": 0.11,
+        "seed": 1401,
+        "role": "master"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1401/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u67af\u7011\u4e4b\u5ead[2]/giantTreeGroup[11]"
+    },
+    {
+      "seed": 1410,
+      "zone": "dry-cascade",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "b8fa77031d36335b543d7edf8d975b4e58e033b6a74f16482e6a9ad0cd3c8e28",
+        "snapshot": "eaa99f59c6fe7a21d817010ac43ceb6a92eb89457e0adf28cab30e358fef0bfc"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3594,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1410/ancient-pine-1410-lod0.glb",
+          "sha256": "5b8d247c097177d21b159ecafb02828cdc7b7a97af9747f74138e3a35b65e28d",
+          "bytes": 297972
+        },
+        {
+          "lod": 1,
+          "triangles": 2226,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1410/ancient-pine-1410-lod1.glb",
+          "sha256": "e061bc3040cb5baac4931f8535871e7765bc1986baa740713fc163b773189bb4",
+          "bytes": 191352
+        },
+        {
+          "lod": 2,
+          "triangles": 1220,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1410/ancient-pine-1410-lod2.glb",
+          "sha256": "d4e7b6e78d00f12f4e3ec453029828ee43d5959d289e8fe4f415eca0767a0e5b",
+          "bytes": 112856
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1410/ancient-pine-1410.blend",
+      "blendSha256": "4fb470bd5fa1f613a44738a9ebdcc7ff057235544655dca93c35d7cc0bc16caf",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "dry-cascade",
+        "index": 1,
+        "x": 3.45,
+        "z": 2.85,
+        "scale": 0.86,
+        "yaw": -0.85,
+        "lift": 0.09,
+        "seed": 1410,
+        "role": "secondary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1410/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u67af\u7011\u4e4b\u5ead[2]/giantTreeGroup[12]"
+    },
+    {
+      "seed": 1419,
+      "zone": "dry-cascade",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "1cc34c74a7ffbc0805d4ec506d3defbc055fdeba9ac1f0fb7bdf5d955bbe02f6",
+        "snapshot": "b5e2c44eda47858ea0ba293e897710249ce7af96af93b073d8a85688c193543d"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1419/ancient-pine-1419-lod0.glb",
+          "sha256": "0190545b3c7e3c9345ab803799322fc7e422970ed508ebdaec99d4fc8f3c0961",
+          "bytes": 298308
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1419/ancient-pine-1419-lod1.glb",
+          "sha256": "c08f4886512bcef6232a205e99937926ed0dcdcfc873a62d71e466a6b99f8ac7",
+          "bytes": 191668
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1419/ancient-pine-1419-lod2.glb",
+          "sha256": "a11154456f293e5cc4fcb1dae7542cc298b9ef7badb6af4130f26d94150c46c2",
+          "bytes": 113020
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1419/ancient-pine-1419.blend",
+      "blendSha256": "ed02a651bd0480f942442e69184e663057a00e0a4e9ed0eae1c1bae3a53186ec",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "dry-cascade",
+        "index": 2,
+        "x": -4.55,
+        "z": 0.65,
+        "scale": 0.64,
+        "yaw": 1.1,
+        "lift": 0.08,
+        "seed": 1419,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1419/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u67af\u7011\u4e4b\u5ead[2]/giantTreeGroup[13]"
+    },
+    {
+      "seed": 1428,
+      "zone": "dry-cascade",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "95e934949ec3c9ca9a351a06edefe7ffa393485105cd093ac0384e731e07a2d0",
+        "snapshot": "d47bee3c0b145358c99864b43aecaf57895d2f0a9590d96cfb50beba0ae5b53d"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1428/ancient-pine-1428-lod0.glb",
+          "sha256": "16da0d9d46753b7707d189ab7527431aadb98595d1384a79014cf5074ec2bbac",
+          "bytes": 298496
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1428/ancient-pine-1428-lod1.glb",
+          "sha256": "76e5cc9dbe5fcd1d99319d3b27dd590ac11dd90ecc09a80e3096cfa7537b8cc4",
+          "bytes": 191668
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1428/ancient-pine-1428-lod2.glb",
+          "sha256": "64a2fd02de294f9091855af10ea4218e709294b29aa6d49dcd3b352767b0a9cb",
+          "bytes": 113016
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1428/ancient-pine-1428.blend",
+      "blendSha256": "79c2de29051c9c2bb6d9f50a7ee9a74d1321ce45afe30ae06dc88cbad95487d6",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "dry-cascade",
+        "index": 3,
+        "x": 4.15,
+        "z": -3.35,
+        "scale": 0.95,
+        "yaw": -2.4,
+        "lift": 0.08,
+        "seed": 1428,
+        "role": "solitary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1428/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u67af\u7011\u4e4b\u5ead[2]/giantTreeGroup[14]"
+    },
+    {
+      "seed": 1997,
+      "zone": "moss-islands",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "847e4ecf63e75e9d651f017b143717c1a12bc5926949c7fbafefc47eb8256840",
+        "snapshot": "ab460e356e2e8c327efa923d2fa09d2db4cb5882e830dc1be3253469de96b1a2"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3598,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1997/ancient-pine-1997-lod0.glb",
+          "sha256": "08ec3be8680ac7733ab5fe0f14a55f75fdf14587277cee6df8a57b947eec9ee5",
+          "bytes": 298196
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1997/ancient-pine-1997-lod1.glb",
+          "sha256": "bc352d3b636e4cbc007dfdfbb912f6390ce3cd26c5aab59b0725b9e131989469",
+          "bytes": 191512
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/1997/ancient-pine-1997-lod2.glb",
+          "sha256": "b184f5197469d506bb6deed6608bdd36850d66018cc6e6ac01e40bac6f26246e",
+          "bytes": 113016
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/1997/ancient-pine-1997.blend",
+      "blendSha256": "18806b2cab21973ad425738095dad1b057177bc338c5f00ffaeeb21b63a4c453",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-islands",
+        "index": 0,
+        "x": -5.35,
+        "z": 0.85,
+        "scale": 1.2,
+        "yaw": 0.35,
+        "lift": 0.1,
+        "seed": 1997,
+        "role": "master"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "1997/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u82d4\u6d77\u5c9b\u7fa4[3]/giantTreeGroup[15]"
+    },
+    {
+      "seed": 2153,
+      "zone": "moss-islands",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "05b72ac30e0c1eb7e3ca8bf0d661ef5b86e1dde6db9ebbc7bef96d247e2f7ebf",
+        "snapshot": "1ad5b1e1805f4978b14906619cbc4b50aa3d7aaccd5be6a5dc49f1bd84d76892"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2153/ancient-pine-2153-lod0.glb",
+          "sha256": "0b6644158887d50e38be4ec7096475698358a597b9324779359f5ec101686254",
+          "bytes": 298496
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2153/ancient-pine-2153-lod1.glb",
+          "sha256": "721449676db55ad1154fea30f35864ad381ce9f60e0fc36cd308689638255c69",
+          "bytes": 191668
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2153/ancient-pine-2153-lod2.glb",
+          "sha256": "932f2a108d2f6ea6eb042abde8d320172dc782aebf29327ee8fb5c9daef2e37b",
+          "bytes": 113024
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/2153/ancient-pine-2153.blend",
+      "blendSha256": "bf6e4f16ff02a29e5ea5ba776c60fab6b75402132dffb6f1772f8d26273cb3dc",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-islands",
+        "index": 1,
+        "x": -4.15,
+        "z": 2.15,
+        "scale": 0.78,
+        "yaw": 1.55,
+        "lift": 0.08,
+        "seed": 2153,
+        "role": "secondary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "2153/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u82d4\u6d77\u5c9b\u7fa4[3]/giantTreeGroup[16]"
+    },
+    {
+      "seed": 2162,
+      "zone": "moss-islands",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "25afb5beaea57fb3e4e7cdd19d82e48a92178b008747259bddbb749c6d4cda06",
+        "snapshot": "5e77619f16b6217553772f3908991a6554f051162d7e2cf5e4e386848cb155fe"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3598,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2162/ancient-pine-2162-lod0.glb",
+          "sha256": "a6fe66b5fcdc28ade5408b003ad4709c7050573a93bccdd384fc0c4e5389edc0",
+          "bytes": 298292
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2162/ancient-pine-2162-lod1.glb",
+          "sha256": "708e2e93604b81ea729c6caa8daa5f7fc53f8fac5d41a9df5d71d909a8f120f7",
+          "bytes": 191504
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2162/ancient-pine-2162-lod2.glb",
+          "sha256": "559e796c826347485fb7ce3abb780b1fcf2895aae3a54cf42ba7dd6c2aa01072",
+          "bytes": 113020
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/2162/ancient-pine-2162.blend",
+      "blendSha256": "0885671a9612daac222222bff574f161ebd08bccc47501653af2fe850642496a",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-islands",
+        "index": 2,
+        "x": -6.05,
+        "z": -0.65,
+        "scale": 0.6,
+        "yaw": -0.4,
+        "lift": 0.07,
+        "seed": 2162,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "2162/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u82d4\u6d77\u5c9b\u7fa4[3]/giantTreeGroup[17]"
+    },
+    {
+      "seed": 2171,
+      "zone": "moss-islands",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "dc772b75b144d1a46bef8825252f03e9ce4a724a5236bc99c975d213a3d74020",
+        "snapshot": "b401521f12be84ef3f3eeb0110e85f7077bc921766853e1b71d1cab2bbfeab2e"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2171/ancient-pine-2171-lod0.glb",
+          "sha256": "1b39f99094985e390c1bf9003389d285c1d226aa3074eecc200b13c0aa641d4b",
+          "bytes": 298452
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2171/ancient-pine-2171-lod1.glb",
+          "sha256": "4d723f237cf345f4bdad8d3dc303a470d8347ddb58536e80bedd4e8bc1c9515e",
+          "bytes": 191676
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2171/ancient-pine-2171-lod2.glb",
+          "sha256": "a8ff5da89e43df4d82646b78ff8684fe8673bb550f745004612c76ac083aea62",
+          "bytes": 113024
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/2171/ancient-pine-2171.blend",
+      "blendSha256": "71ce3d0fd168b0b566ef6192b4509dd115e349240abad5b3215dc039fe37cf96",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-islands",
+        "index": 3,
+        "x": 0.95,
+        "z": -4.85,
+        "scale": 1.08,
+        "yaw": 2.65,
+        "lift": 0.09,
+        "seed": 2171,
+        "role": "solitary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "2171/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u82d4\u6d77\u5c9b\u7fa4[3]/giantTreeGroup[18]"
+    },
+    {
+      "seed": 2180,
+      "zone": "moss-islands",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "14fc6d2327d0367d6cafce738ea6c5abf531fe2995ae54d5b91b730cecd17a39",
+        "snapshot": "3434ff3aca7610012c2411ba96e09969d318f2b68729becfcf441de85b56acf1"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3598,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2180/ancient-pine-2180-lod0.glb",
+          "sha256": "e5a0cebd0b5e6b93137d648a059ac77d7104a53d283ffd6f19bfadbaa092e073",
+          "bytes": 298172
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2180/ancient-pine-2180-lod1.glb",
+          "sha256": "ee852ec48c2d49518eea208c4d1ccc222dd14b55659e1b52b2155c84f528b735",
+          "bytes": 191504
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2180/ancient-pine-2180-lod2.glb",
+          "sha256": "500252d4a6f4e660c993ff955706169b623f34e30d199f793365086f1289cf21",
+          "bytes": 113024
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/2180/ancient-pine-2180.blend",
+      "blendSha256": "75040f8acfcacef0f8308d6b3d989118130cd6653047a96b12029e0327350354",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-islands",
+        "index": 4,
+        "x": 5.55,
+        "z": 2.45,
+        "scale": 0.98,
+        "yaw": -1.15,
+        "lift": 0.09,
+        "seed": 2180,
+        "role": "secondary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "2180/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u82d4\u6d77\u5c9b\u7fa4[3]/giantTreeGroup[19]"
+    },
+    {
+      "seed": 2189,
+      "zone": "moss-islands",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "22f85ae0eaa53d4b8399581692bb1de01166394ffb63c2d22cf5d966a9ec822a",
+        "snapshot": "530780da65abf21560e1d853bb71aa34e3fd8d64cd70845039f1391df3167865"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2189/ancient-pine-2189-lod0.glb",
+          "sha256": "77b97298d82607cdcd9089c9261ec6162d452645f360f4d4d5759bad7a8e71d0",
+          "bytes": 298448
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2189/ancient-pine-2189-lod1.glb",
+          "sha256": "61c59c9da5e739a435eef9a4d1672d6c4f90f741079935e20ccdd78aded2334b",
+          "bytes": 191664
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/2189/ancient-pine-2189-lod2.glb",
+          "sha256": "f93d8a4f2efc1f0d25956cacd6c400e87b4d6dff8a74f1844c2ad281b9ce64dc",
+          "bytes": 113020
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/2189/ancient-pine-2189.blend",
+      "blendSha256": "892cfb1a9cfe1972dec0394e2cd7c535c43b0ca513a21e81358109907fd7d49b",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-islands",
+        "index": 5,
+        "x": 4.35,
+        "z": 3.65,
+        "scale": 0.58,
+        "yaw": 0.85,
+        "lift": 0.07,
+        "seed": 2189,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "2189/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u82d4\u6d77\u5c9b\u7fa4[3]/giantTreeGroup[20]"
+    },
+    {
+      "seed": 3011,
+      "zone": "empty-court",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "5eb0fac92502ebeeed136861f8e0b94def02492d5cd90588c934dc1463c25aa6",
+        "snapshot": "b38db6420ab7c5883cd7ec58a4ec2ffcc4327be857513621fc92088d7c82ddd6"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/3011/ancient-pine-3011-lod0.glb",
+          "sha256": "47049e50c229cf8e39823316c75bfe0d8f44cfedc6edcc3faf0c300bf5b05ecc",
+          "bytes": 298452
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/3011/ancient-pine-3011-lod1.glb",
+          "sha256": "2cfb05a0f0f2b1b4e4b4b2f78227defba75060024e57aad362f014b2c0864e24",
+          "bytes": 191668
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/3011/ancient-pine-3011-lod2.glb",
+          "sha256": "a1d35b8082ef00f305958039e2c73952585586d3d812c21e48304448546bb68b",
+          "bytes": 113020
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/3011/ancient-pine-3011.blend",
+      "blendSha256": "9b588ca2d45399e3a2d46a67dcacf4b3c3ea658bd6306f3d417cea981a963181",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "empty-court",
+        "index": 0,
+        "x": -6.25,
+        "z": 3.45,
+        "scale": 1.12,
+        "yaw": 0.65,
+        "lift": 0.09,
+        "seed": 3011,
+        "role": "solitary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "3011/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u7a7a\u5ead[4]/giantTreeGroup[1]"
+    },
+    {
+      "seed": 3020,
+      "zone": "empty-court",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "7ab112ce553a8fff0427bd6c72bc707852a5e47d35defbec3d130a3ebac903aa",
+        "snapshot": "b475ab3e839b6dcea851277694d4326727381e90e6a9aaeba51236a79c22c8b1"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3596,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/3020/ancient-pine-3020-lod0.glb",
+          "sha256": "3cbe7b492be1ee35de4e91c78b90888cb7ccb7c528c7617a83b5d391eb0e18f5",
+          "bytes": 298092
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/3020/ancient-pine-3020-lod1.glb",
+          "sha256": "2ede2682b8d002cbdfbc1ebba979b553fc252e584b3c4865de72086e7e1796c6",
+          "bytes": 191508
+        },
+        {
+          "lod": 2,
+          "triangles": 1220,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/3020/ancient-pine-3020-lod2.glb",
+          "sha256": "f964b1e0240e60376bb00d03027d4324c0e9829b30765796e2aed9dfd56d4cd8",
+          "bytes": 112872
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/3020/ancient-pine-3020.blend",
+      "blendSha256": "b15d3126934d1a5d62a47231ae3612a7af88840e31743745394cc8f97c35fe81",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "empty-court",
+        "index": 1,
+        "x": 5.85,
+        "z": -4.15,
+        "scale": 0.72,
+        "yaw": -2.05,
+        "lift": 0.08,
+        "seed": 3020,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "3020/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u7a7a\u5ead[4]/giantTreeGroup[2]"
+    },
+    {
+      "seed": 4101,
+      "zone": "return-view",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "18c4bb2e94d8d3d53caa572d10f5eb2364af42b1fd6f4c4cf6e9ef3818a6f887",
+        "snapshot": "cff1dbffa74a3c36e50b2e6c6871513861c47ff2067ae1dbaaa947a8fb936b99"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3598,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4101/ancient-pine-4101-lod0.glb",
+          "sha256": "8a9e9017bd3ac141901d301f83c2e82bd00f402b2c1028c16075534b8b5f9841",
+          "bytes": 298236
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4101/ancient-pine-4101-lod1.glb",
+          "sha256": "64f6bb7001b8cadf6f08d87c1068d4507768229af6a6d9abb5aca15f8b1a6997",
+          "bytes": 191504
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4101/ancient-pine-4101-lod2.glb",
+          "sha256": "ae836a5b54f1d58ba6b5d257df8432307aef845ada236bb28b74f97243075194",
+          "bytes": 113012
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/4101/ancient-pine-4101.blend",
+      "blendSha256": "70da4bbaa966894e872c0d0f6271eab54f383a72b6b2f8db123b9387d947f275",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "return-view",
+        "index": 0,
+        "x": -1.15,
+        "z": 4.65,
+        "scale": 1.32,
+        "yaw": 3,
+        "lift": 0.1,
+        "seed": 4101,
+        "role": "master"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "4101/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u56de\u671b\u77f3\u7ec4[5]/giantTreeGroup[7]"
+    },
+    {
+      "seed": 4110,
+      "zone": "return-view",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "92ab13433538197a8accbf50fe1e395af8c019462c988161bc8bfd2e9200567d",
+        "snapshot": "7d3cd73a2f5f21c9f7d61099c479d11925977c6e4ea16934db6f8004d4d29c41"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3596,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4110/ancient-pine-4110-lod0.glb",
+          "sha256": "5eadd921f146cfdf9ab420fb2a1f86266e7fd8568e8626c48dbe89d65daa4b1e",
+          "bytes": 298080
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4110/ancient-pine-4110-lod1.glb",
+          "sha256": "cad8ce8a947b00af202bde03086f9ff42d908dde36d26dbdf5c179f219e32c0a",
+          "bytes": 191512
+        },
+        {
+          "lod": 2,
+          "triangles": 1220,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4110/ancient-pine-4110-lod2.glb",
+          "sha256": "444e0689266cdffffa7dc355ffba81e6ce136f25ecdefa746805b9018a41d290",
+          "bytes": 112812
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/4110/ancient-pine-4110.blend",
+      "blendSha256": "9573d483890c76fcc334ac7e2955630af08a9d1028ef8e09fc4a098b175fc86f",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "return-view",
+        "index": 1,
+        "x": -2.85,
+        "z": 3.55,
+        "scale": 0.9,
+        "yaw": 2.55,
+        "lift": 0.08,
+        "seed": 4110,
+        "role": "secondary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "4110/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u56de\u671b\u77f3\u7ec4[5]/giantTreeGroup[8]"
+    },
+    {
+      "seed": 4119,
+      "zone": "return-view",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "c30e1bf49e60657c2a58adefa751b3d7cadb9dd5824d664ba8ca638ee4f9dbc1",
+        "snapshot": "6143f8521933824ae406631f2e1960090e6c5c23c57542abba4c483c3a9eec5a"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4119/ancient-pine-4119-lod0.glb",
+          "sha256": "c399dd881dd1185f3c3826da22c70f69801bcc7d5c15d0f089e26f8efebef9bf",
+          "bytes": 298444
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4119/ancient-pine-4119-lod1.glb",
+          "sha256": "e2d0b7a29a659fd20a7db7da34ce70b75df96528b38b338e9e33b3daa486e9ab",
+          "bytes": 191644
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4119/ancient-pine-4119-lod2.glb",
+          "sha256": "b73cf8dcd74c343346c92bed1287c1d6acb260ac6768a1e4d21938526439a59c",
+          "bytes": 113008
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/4119/ancient-pine-4119.blend",
+      "blendSha256": "51cf717dc529ad1f79d599ab77b18d6f243f7bbda102217b1c43dc4527564975",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "return-view",
+        "index": 2,
+        "x": 0.95,
+        "z": 4.15,
+        "scale": 0.66,
+        "yaw": -2.85,
+        "lift": 0.07,
+        "seed": 4119,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "4119/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u56de\u671b\u77f3\u7ec4[5]/giantTreeGroup[9]"
+    },
+    {
+      "seed": 4128,
+      "zone": "return-view",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "797219e6ff2138a7ea69c0913c289d4ef43b644225b90db0f5b22cb0a7352d0a",
+        "snapshot": "410ff54a782f6147fa5f37ba0804ce87b41ce541699e5e13f9e929e4c2855479"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3594,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4128/ancient-pine-4128-lod0.glb",
+          "sha256": "ef6546255d5ec16e9d7898a00e8ed3342a7d3a6ee7d58baf6b4fa202cab99582",
+          "bytes": 297928
+        },
+        {
+          "lod": 1,
+          "triangles": 2226,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4128/ancient-pine-4128-lod1.glb",
+          "sha256": "fd8bc96a426974a955da239f01a7300642fbca457ae770fa97306a4ac8bb9b7c",
+          "bytes": 191308
+        },
+        {
+          "lod": 2,
+          "triangles": 1220,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4128/ancient-pine-4128-lod2.glb",
+          "sha256": "19f7224394c14d764f7b7c98af35ac8f2136fda6d063c760ae3a10ee44d1a1c4",
+          "bytes": 112812
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/4128/ancient-pine-4128.blend",
+      "blendSha256": "1e1da73fdfba95f97e03b0a94cc900447ecf31ba72ba00e235fd59c4dfd49622",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "return-view",
+        "index": 3,
+        "x": -4.65,
+        "z": -1.55,
+        "scale": 0.82,
+        "yaw": 1.15,
+        "lift": 0.08,
+        "seed": 4128,
+        "role": "solitary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "4128/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u56de\u671b\u77f3\u7ec4[5]/giantTreeGroup[10]"
+    },
+    {
+      "seed": 4137,
+      "zone": "return-view",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "34d4befed0d6a1af40f254e76ff8f45c1644294bc139647cc5c87a1ba2352c46",
+        "snapshot": "9fce0d8d4735b02f8fae26c5be3ec72079d8ee52e093c0f02f47182f64413f8b"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4137/ancient-pine-4137-lod0.glb",
+          "sha256": "b045237fd5d21e07ececba8c65c2a0c65ad9fdfe0b8ebc074a45cf0c82a87333",
+          "bytes": 298492
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4137/ancient-pine-4137-lod1.glb",
+          "sha256": "1095b5c69e447d2703df9b2e9703979e06f03a5cbcc89a9fcf35295a4ed0235b",
+          "bytes": 191660
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/4137/ancient-pine-4137-lod2.glb",
+          "sha256": "88fb6d92b85e27962b71fb0ccdc2bdd3faa45e12f6c5a5686502c9a060026a72",
+          "bytes": 113016
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/4137/ancient-pine-4137.blend",
+      "blendSha256": "a9c5838c80afa079b688ae93676c5111822cc4963ad3f86fe8f1fcaafd00b3f6",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "return-view",
+        "index": 4,
+        "x": 4.45,
+        "z": -0.85,
+        "scale": 0.6,
+        "yaw": -1.45,
+        "lift": 0.07,
+        "seed": 4137,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "4137/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u56de\u671b\u77f3\u7ec4[5]/giantTreeGroup[11]"
+    },
+    {
+      "seed": 5566,
+      "zone": "master-stones",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "bc7bef90fcbee9a578c9060d97ba50f81918da4552024cb51577071b178962ee",
+        "snapshot": "01c5ae4f2efac066a5981ff0ec89aa4a205f8b3edc1b50934c405e0db5f15a4b"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/5566/ancient-pine-5566-lod0.glb",
+          "sha256": "d1308afa521cf4cd5bbe0778238a045e4901cc9c60c7c3ef8dedd6aadf149d2a",
+          "bytes": 298452
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/5566/ancient-pine-5566-lod1.glb",
+          "sha256": "4ad3648933c963e1a2149c09e5c297a222c85150e7b2a581539eb3be86f16605",
+          "bytes": 191664
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/5566/ancient-pine-5566-lod2.glb",
+          "sha256": "9606b8b54f43d44a4e46a0fce1c53799f8cd44f16160b7b384d989930b5f0d75",
+          "bytes": 113012
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/5566/ancient-pine-5566.blend",
+      "blendSha256": "aadc5e0f15281de50fabedbbf36369c952e6da5bc6a3f9a05291937c8ff0c483",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "master-stones",
+        "index": 0,
+        "x": -4.85,
+        "z": 1.65,
+        "scale": 1.28,
+        "yaw": 0.72,
+        "lift": 0.1,
+        "seed": 5566,
+        "role": "master"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "5566/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u4e3b\u77f3\u4e4b\u5ead[1]/giantTreeGroup[7]"
+    },
+    {
+      "seed": 811,
+      "zone": "moss-entry",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "4f0f131401392752c2d47e879bc48f0bbe0a8246a164a7482998a6894b796084",
+        "snapshot": "a708c4bdd3f7640abea949ab7a3aaf6475f0dfa54b7f75f62a07668032493ea1"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3600,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/811/ancient-pine-811-lod0.glb",
+          "sha256": "f2453f21f23f6e46a7ee4db4cfe001b5292af0935a4bc0f64b3008102fa03db6",
+          "bytes": 298440
+        },
+        {
+          "lod": 1,
+          "triangles": 2230,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/811/ancient-pine-811-lod1.glb",
+          "sha256": "ed3717526129d7348ad76dc60f86f5473aa9cc03d3d556017c343ef04f397f90",
+          "bytes": 191660
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/811/ancient-pine-811-lod2.glb",
+          "sha256": "9287d2368e94342a8706445f486b1baf98465b6b966a705f58d2f065ba1e7057",
+          "bytes": 113012
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/811/ancient-pine-811.blend",
+      "blendSha256": "7b6f2af53d6e5a6e04ea8f36629230b023195b0c272db2e0fe018da374b07a3c",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-entry",
+        "index": 0,
+        "x": -3.55,
+        "z": 1.15,
+        "scale": 1.18,
+        "yaw": 0.95,
+        "lift": 0.09,
+        "seed": 811,
+        "role": "master"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "811/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u5165\u53e3\u82d4\u5f84[0]/giantTreeGroup[4]"
+    },
+    {
+      "seed": 820,
+      "zone": "moss-entry",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "a30e3f366ca99778368aa69c324a19e47266c3c142839ca0b14a464e375c71f6",
+        "snapshot": "e8da2a49c8b9732b78967d44fb2590e1b744a2c41aee7d4518b93afa4e26d316"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3598,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/820/ancient-pine-820-lod0.glb",
+          "sha256": "2dc81feb156edb133c196d8b6e0191302b8c51e5e826d1a7f8ada8f465ecb1c9",
+          "bytes": 298276
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/820/ancient-pine-820-lod1.glb",
+          "sha256": "40c4ddf354ab3ef68b0831dc9fe932d99f9ac9d8139bf5e80371ae9c7081d430",
+          "bytes": 191500
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/820/ancient-pine-820-lod2.glb",
+          "sha256": "4a7b9d8434ec87864eea06aef39619433b105c2d7fabc8720fc4d8dd6a61315c",
+          "bytes": 113012
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/820/ancient-pine-820.blend",
+      "blendSha256": "71d0766d280aa3bafcecdbbe694813ab565d5160445dd5154f0a6cf7b944b503",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-entry",
+        "index": 1,
+        "x": 3.15,
+        "z": 0.55,
+        "scale": 0.88,
+        "yaw": -1.25,
+        "lift": 0.08,
+        "seed": 820,
+        "role": "secondary"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "820/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u5165\u53e3\u82d4\u5f84[0]/giantTreeGroup[5]"
+    },
+    {
+      "seed": 829,
+      "zone": "moss-entry",
+      "stage": "optimized candidate, actual GLB topology/material/anchor checks passed; not world-integrated",
+      "sourceHashes": {
+        "blend": "6f51c77c05725a8e141c1cec581dfd376ddd86058f9a8e93396cbc447dafa677",
+        "snapshot": "213f1526c067f12a04be3346fff7151ba80b2387696a5595dbe663eab9725ee4"
+      },
+      "sourceHashesUnchanged": true,
+      "originalTriangles": 3356,
+      "lods": [
+        {
+          "lod": 0,
+          "triangles": 3598,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/829/ancient-pine-829-lod0.glb",
+          "sha256": "3018fdd911a4274262be70afff3bd9e66ffbf8ffbcb9b26048f0353af22947ba",
+          "bytes": 298332
+        },
+        {
+          "lod": 1,
+          "triangles": 2228,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/829/ancient-pine-829-lod1.glb",
+          "sha256": "e4ed14b38e3d2886226cdc047fd0b79502dd234f6f5d59efde6872faaeda0341",
+          "bytes": 191452
+        },
+        {
+          "lod": 2,
+          "triangles": 1222,
+          "visibleMeshes": 5,
+          "glb": "assets/models/optimized/saihoji-pines-v1/829/ancient-pine-829-lod2.glb",
+          "sha256": "f86742cbc03834e2584ec661af1ab32557960641f0e75eefe8b9c2ff271c07a3",
+          "bytes": 112964
+        }
+      ],
+      "originalBranchSegments": 37,
+      "originalClumpCenters": 29,
+      "sourceParentsExact": true,
+      "sourceMatrixError": 0.0,
+      "actualGlbMaterialChecks": [
+        {
+          "lod": 0,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 1,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        },
+        {
+          "lod": 2,
+          "materials": [
+            {
+              "sourceMaterial": "m0",
+              "baseColorFactor": [
+                0.13286831974983215,
+                0.109461709856987,
+                0.08437620848417282,
+                1
+              ],
+              "maxError": 3.051584818170028e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m1",
+              "baseColorFactor": [
+                0.05951123684644699,
+                0.04970656707882881,
+                0.0382043719291687,
+                1
+              ],
+              "maxError": 1.3091747755322736e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m2",
+              "baseColorFactor": [
+                0.012983032502233982,
+                0.06847816705703735,
+                0.03310476616024971,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m3",
+              "baseColorFactor": [
+                0.028426039963960648,
+                0.14126329123973846,
+                0.06301001459360123,
+                1
+              ],
+              "maxError": 3.052039454498612e-09,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "sourceMaterial": "m4",
+              "baseColorFactor": [
+                0.06847816705703735,
+                0.2158605009317398,
+                0.09084171056747437,
+                1
+              ],
+              "maxError": 2.7795902662886007e-09,
+              "alphaMode": "OPAQUE"
+            }
+          ]
+        }
+      ],
+      "blend": "assets/models/optimized/saihoji-pines-v1/829/ancient-pine-829.blend",
+      "blendSha256": "090925001fdf5a86568e1dcc12fa31523d0ba7ab6202f9b0ffba51eac1641e16",
+      "reference": "assets/concepts/ancient-pine-target-v1.png",
+      "baseGeneratorSHA256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+      "placement": {
+        "zone": "moss-entry",
+        "index": 2,
+        "x": -2.05,
+        "z": -2.85,
+        "scale": 0.62,
+        "yaw": 0.4,
+        "lift": 0.07,
+        "seed": 829,
+        "role": "companion"
+      },
+      "runtimeIntegrated": false,
+      "contactChecksPassed": true,
+      "placementContract": "829/placement-contract.json",
+      "originalWorldSourcePath": "leviathanGroup[156]/leviathan-island[39]/SaihojiSixScenes[45]/Saihoji:\u5165\u53e3\u82d4\u5f84[0]/giantTreeGroup[6]"
+    }
+  ],
+  "runtimeIntegrated": false,
+  "stage": "25 original-seed candidates, 75 actual GLBs verified and final current-hash five-page contact review ready; not runtime-integrated",
+  "batchGeneratorSHA256": "f36cdf674458bfd3ab2b48ccb567b960ce01c78547c12f9dd2eaab4c3f375fd7",
+  "validationSummary": {
+    "seeds": 25,
+    "glbs": 75,
+    "originalNodesPerSeed": 17,
+    "sourceParentsExact": true,
+    "maxSourceLocalMatrixError": 1.0681152344815814e-06,
+    "maxPaletteFactorError": 3.052039454498612e-09,
+    "allWoodConnectedClosed": true,
+    "allCrownComponentsTouchWood": true,
+    "maxTerminalTipToFoliageSurfaceDistance": 0.1166231781244278,
+    "maxAbsoluteRootEnvelopeDelta": 0.019157692790031433,
+    "LODtriangleRanges": {
+      "0": [
+        3594,
+        3600
+      ],
+      "1": [
+        2226,
+        2230
+      ],
+      "2": [
+        1220,
+        1222
+      ]
+    },
+    "runtimeIntegrated": false
+  },
+  "validationReport": "artifacts/pipeline/saihoji-pines-v1/glb-contact-validation.json",
+  "placementContract": "PLACEMENT.md",
+  "verifiedWorldMapping": {
+    "path": "artifacts/pipeline/saihoji-pine-source-mapping.json",
+    "sha256": "19fc5aff52d015869bbf9bb3b1e9336f6f6a68463150327056955036f6dfb566",
+    "worldSnapshotSHA256": "86a9212c55583a88059da4e5d5e04050352e64465f204cdb662507b9c7290093",
+    "matchedTrees": 25,
+    "matchedMeshes": 125,
+    "maxVertexError": 2.220446049250313e-16,
+    "rule": "Per-seed verifiedWorldSource in placement-contract.json; normalize candidate n0 when retaining original root."
+  },
+  "contactPages": [
+    "artifacts/pipeline/saihoji-pines-v1/five-seeds-page-1.png",
+    "artifacts/pipeline/saihoji-pines-v1/five-seeds-page-2.png",
+    "artifacts/pipeline/saihoji-pines-v1/five-seeds-page-3.png",
+    "artifacts/pipeline/saihoji-pines-v1/five-seeds-page-4.png",
+    "artifacts/pipeline/saihoji-pines-v1/five-seeds-page-5.png"
+  ],
+  "contactEvidence": "artifacts/pipeline/saihoji-pines-v1/final-contact-pages.json"
+}

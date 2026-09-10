@@ -1,0 +1,14 @@
+{
+  "scope": "Original project music copied for native Godot playback; no new composition",
+  "tracks": {
+    "storm_cue.ogg": "CV君言君与-狂风暴雨.mp3",
+    "kun_battle.ogg": "The Original Movies Orchestra (电影原声带)-Terminator 2.mp3",
+    "fleet_assault.ogg": "徐嘉良-战 (大提琴版).mp3"
+  },
+  "rules": {
+    "storm_cue": "once per cycle",
+    "kun_battle": "once per cycle, has priority over fleet",
+    "fleet_assault": "loop only when no Saihoji cue/battle owns music"
+  },
+  "format_note": "Original filenames say mp3 but file signatures are Ogg/Vorbis. Native copies use correct .ogg extension without transcoding."
+}

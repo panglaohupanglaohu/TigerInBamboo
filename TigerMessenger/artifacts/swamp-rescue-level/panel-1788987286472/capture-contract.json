@@ -1,0 +1,35 @@
+{
+  "runId": "panel-1788987286472",
+  "captures": [
+    {
+      "mode": "desktop",
+      "state": "load-failed",
+      "screenshot": "desktop-load-failed.png"
+    },
+    {
+      "mode": "desktop",
+      "state": "configured",
+      "screenshot": "desktop-configured.png"
+    },
+    {
+      "mode": "desktop",
+      "state": "armor-stage",
+      "screenshot": "desktop-armor-stage.png"
+    },
+    {
+      "mode": "mobile",
+      "state": "load-failed",
+      "screenshot": "mobile-load-failed.png"
+    },
+    {
+      "mode": "mobile",
+      "state": "configured",
+      "screenshot": "mobile-configured.png"
+    },
+    {
+      "mode": "mobile",
+      "state": "armor-stage",
+      "screenshot": "mobile-armor-stage.png"
+    }
+  ]
+}

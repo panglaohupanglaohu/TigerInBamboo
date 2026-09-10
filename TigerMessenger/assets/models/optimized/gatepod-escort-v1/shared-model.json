@@ -1,0 +1,23 @@
+{
+  "asset": "gatepod-escort",
+  "shared_model": "pod-41-7",
+  "blend": "assets/models/optimized/gatepod-escort-v1/pod-41-7.blend",
+  "runtime": "res://assets/gatepod-escort-v1/pod-41-7.glb",
+  "assembly": "res://assets/gatepod-escort-v1/pod-41-7.assembly.json",
+  "instance_aliases": [
+    "pod-55-2",
+    "pod-41-7",
+    "pod-08-9"
+  ],
+  "retired_model_variants": [
+    "pod-55-2",
+    "pod-08-9"
+  ],
+  "old_files": "historical archive only; do not optimize separately",
+  "validation": {
+    "deployment_checks": 183,
+    "independent_instances": true,
+    "reset_passed": true
+  },
+  "scope": "Godot Saihoji escort adapter; old Web source and existing running windows unchanged"
+}

@@ -1,0 +1,23 @@
+{
+  "checksPassed": true,
+  "sourceFileUnchanged": true,
+  "candidateFileUnchanged": true,
+  "originalNodeCount": 295,
+  "addedNodeCount": 8,
+  "savedFramesChecked": 121,
+  "maxOriginalBasisError": 2.0116567611694336e-07,
+  "maxUnmodifiedMeshVertexError": 0,
+  "maxSavedJawMatrixError": 0,
+  "maxSavedMorphWeightError": 2.9542711055263737e-08,
+  "maxThroatEndpointErrorActorUnits": 2.7392209274950164e-06,
+  "maxGLBLocalMatrixError": 0,
+  "GLBColorMeshesChecked": 8,
+  "GLBArchivedHiddenMeshes": 180,
+  "failures": [],
+  "scope": "Structural and saved 30Hz jaw/morph coupling checks; not full visual acceptance, all-surface contact certification, or gameplay integration.",
+  "files": {
+    "blend": "6dd57754f3b2c2d0ef8f04a2fd93bba68763f8df431ca8c0a32edad56ec62a4f",
+    "glb": "9a5745a9f490ab87d73b6d896808b37e80a528b42d635c8260c9f378cbf33d09",
+    "assembly": "a3347c340376e9b36dd879b6004091e4d2bae862e696b964cafb4d0678110199"
+  }
+}

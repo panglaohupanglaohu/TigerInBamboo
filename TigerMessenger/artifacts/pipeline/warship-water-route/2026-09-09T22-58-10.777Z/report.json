@@ -1,0 +1,180 @@
+{
+  "waterRouteAccepted": false,
+  "defaultCandidateDisabled": true,
+  "depthSamples": [
+    {
+      "direction": [
+        0,
+        1,
+        0
+      ],
+      "waterRadius": 160.5,
+      "terrainRadius": 160,
+      "terrain": "planet-surface",
+      "depth": 0.5,
+      "circularFootprintAccepted": false
+    },
+    {
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "waterRadius": 160.5,
+      "terrainRadius": 160,
+      "terrain": "planet-surface",
+      "depth": 0.5,
+      "circularFootprintAccepted": false
+    },
+    {
+      "direction": [
+        -1,
+        0,
+        0
+      ],
+      "waterRadius": 160.5,
+      "terrainRadius": 160,
+      "terrain": "planet-surface",
+      "depth": 0.5,
+      "circularFootprintAccepted": false
+    },
+    {
+      "direction": [
+        0.20739033894608505,
+        0.8295613557843402,
+        -0.5184758473652126
+      ],
+      "waterRadius": 160.43708505334158,
+      "terrainRadius": 159.93541467035956,
+      "terrain": "planet-surface",
+      "depth": 0.501670382982013,
+      "circularFootprintAccepted": false
+    }
+  ],
+  "poses": [
+    {
+      "frame": 60,
+      "localBounds": {
+        "min": [
+          -3.0565805435180664,
+          -0.30550811521205573,
+          -1.9120147069839462
+        ],
+        "max": [
+          3.640000104904175,
+          3.8899998664855957,
+          1.893918740142859
+        ]
+      },
+      "triangles": 54172,
+      "requiredDraft": 0.7693637958604947,
+      "actualTriangleCrossing": {
+        "clear": false,
+        "mesh": "planet-surface",
+        "point": [
+          0,
+          160,
+          0
+        ]
+      }
+    },
+    {
+      "frame": 90,
+      "localBounds": {
+        "min": [
+          -3.0565805435180664,
+          -0.6156896192774319,
+          -1.6581383860605463
+        ],
+        "max": [
+          3.640000104904175,
+          3.8899998664855957,
+          1.6688946500319384
+        ]
+      },
+      "triangles": 54172,
+      "requiredDraft": 1.2966723527716342,
+      "actualTriangleCrossing": {
+        "clear": false,
+        "mesh": "planet-surface",
+        "point": [
+          0,
+          160,
+          0
+        ]
+      }
+    },
+    {
+      "frame": 119,
+      "localBounds": {
+        "min": [
+          -3.0565805435180664,
+          -0.3007828015513419,
+          -1.9553592315012107
+        ],
+        "max": [
+          3.640000104904175,
+          3.8899998664855957,
+          1.9286395649508021
+        ]
+      },
+      "triangles": 54172,
+      "requiredDraft": 0.7613307626372813,
+      "actualTriangleCrossing": {
+        "clear": false,
+        "mesh": "planet-surface",
+        "point": [
+          0,
+          160,
+          0
+        ]
+      }
+    },
+    {
+      "frame": 180,
+      "localBounds": {
+        "min": [
+          -3.0565805435180664,
+          -0.3060549079573971,
+          -1.8763188680615586
+        ],
+        "max": [
+          3.640000104904175,
+          3.8899998664855957,
+          1.8763187333976743
+        ]
+      },
+      "triangles": 54172,
+      "requiredDraft": 0.7702933435275751,
+      "actualTriangleCrossing": {
+        "clear": false,
+        "mesh": "planet-surface",
+        "point": [
+          0,
+          160,
+          0
+        ]
+      }
+    }
+  ],
+  "scope": "Actual 8931 page, read-only scene water/terrain ray samples and isolated actual v6 ship pose samples. Explicit poses diagnose geometry; not natural sailing. Default story uses its previously verified navigation, candidate only via warshipWaterRoutes=1. No terrain removed, global water level unchanged.",
+  "diagnosticCompleted": true,
+  "errors": [],
+  "sourceStable": true,
+  "sourceBefore": {
+    "src/world/saihojiPhalanx.js": "b7d9dcfb0a7ee63d06329721f0091c7d717cc7cb9f562f0db206ee035b813311",
+    "src/world/warshipWaterRoutes.js": "0b1e077be464d42fe18960215b8f6bbbb5b60d9cca033786610018185e2ef363",
+    "src/world/warshipClearance.js": "8e090bc9411f8ef63e43dfccf1a89d27870372b756c2723f547dac0ae97b1f80",
+    "src/assets/harbor.js": "e7c86d1ece5c3fd94b38c2842d1bb15383a2c69d33650bcfd04a7febf924ceb9",
+    "src/assets/warshipV6.js": "ab2b2b7f5fead29fdcd0c813cb1c3846e819e123cf97ea2430cc6500d5a43f17",
+    "src/assets/warshipV6Data.js": "b3a11dc31a0564a33d1540c9c15692a08fb174ce091b1e8a370928265f0e0121"
+  },
+  "sourceAfter": {
+    "src/world/saihojiPhalanx.js": "b7d9dcfb0a7ee63d06329721f0091c7d717cc7cb9f562f0db206ee035b813311",
+    "src/world/warshipWaterRoutes.js": "0b1e077be464d42fe18960215b8f6bbbb5b60d9cca033786610018185e2ef363",
+    "src/world/warshipClearance.js": "8e090bc9411f8ef63e43dfccf1a89d27870372b756c2723f547dac0ae97b1f80",
+    "src/assets/harbor.js": "e7c86d1ece5c3fd94b38c2842d1bb15383a2c69d33650bcfd04a7febf924ceb9",
+    "src/assets/warshipV6.js": "ab2b2b7f5fead29fdcd0c813cb1c3846e819e123cf97ea2430cc6500d5a43f17",
+    "src/assets/warshipV6Data.js": "b3a11dc31a0564a33d1540c9c15692a08fb174ce091b1e8a370928265f0e0121"
+  }
+}

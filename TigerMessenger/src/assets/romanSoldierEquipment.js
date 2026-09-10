@@ -5,6 +5,10 @@ import { ROMAN_EQUIPMENT_DATA as DATA } from "./romanEquipmentData.js";
 const HAND = new THREE.Vector3(0, -.138, 0);
 const SWORD_GRIP = new THREE.Vector3(0, .04, 0);
 const SHIELD_GRIP = new THREE.Vector3(-.055, 0, 0);
+// The original bow/string plane starts at fig-local z=.035. Its shot cycle never
+// changes that lateral plane. Keep archer headwear inside it without moving the shot.
+const ARCHER_HELMET_WIDTH = .5;
+const ARCHER_CREST_WIDTH = .35;
 const controllers = new WeakMap();
 let resources = null;
 let resourceUsers = 0;
@@ -38,18 +42,42 @@ function releaseResources() {
   if (--resourceUsers !== 0) return;
   for (const value of Object.values(resources)) {
     for (const mesh of value.meshes) mesh.geometry.dispose();
+    value.archerHelmet?.dispose();
     for (const material of value.materials) material.dispose();
   }
   resources = null;
 }
 
-function groupFrom(kind, shared) {
+function archerHelmetGeometry(shared, original) {
+  if (shared.armor.archerHelmet) return shared.armor.archerHelmet;
+  const geometry = original.clone();
+  const positions = geometry.attributes.position, normals = geometry.attributes.normal;
+  const normal = new THREE.Vector3();
+  for (let i = 0; i < positions.count; i++) {
+    // This approved mesh also contains waist studs. Only adapt its helmet vertices;
+    // the original stud positions and all skirt/belt geometry must remain untouched.
+    if (positions.getY(i) <= .1) continue;
+    positions.setZ(i, positions.getZ(i) * ARCHER_HELMET_WIDTH);
+    normal.fromBufferAttribute(normals, i);
+    normal.z /= ARCHER_HELMET_WIDTH;
+    normal.normalize();
+    normals.setXYZ(i, normal.x, normal.y, normal.z);
+  }
+  geometry.computeBoundingSphere();
+  shared.armor.archerHelmet = geometry;
+  return geometry;
+}
+
+function groupFrom(kind, shared, archer = false) {
   const group = new THREE.Group();
   group.name = `roman-${kind}-approved`;
   group.userData.romanEquipmentOwned = true;
   for (const spec of shared[kind].meshes) {
-    const mesh = new THREE.Mesh(spec.geometry, spec.material);
+    const isArcherHelmet = archer && kind === "armor" && spec.name.startsWith("Helmet_Galea");
+    const geometry = isArcherHelmet ? archerHelmetGeometry(shared, spec.geometry) : spec.geometry;
+    const mesh = new THREE.Mesh(geometry, spec.material);
     mesh.name = spec.name;
+    if (isArcherHelmet) mesh.userData.romanEquipmentVariant = "archer-head-clearance";
     mesh.castShadow = mesh.receiveShadow = true;
     mesh.frustumCulled = false;
     group.add(mesh);
@@ -96,7 +124,8 @@ export function bindRomanSoldierEquipment(actor, {armorOnly = false} = {}) {
   const saved = new Map(savedNodes.map(node => [node, snapshot(node)]));
   const originalVisibility = new Map([helm, skirt].map(node => [node, node.visible]));
   const shared = acquireResources();
-  const armor = groupFrom("armor", shared), handle = armorOnly ? null : groupFrom("handle", shared);
+  const archer = weaponRole === "longbow";
+  const armor = groupFrom("armor", shared, archer), handle = armorOnly ? null : groupFrom("handle", shared);
   body.add(armor);
   if (handle) shield.add(handle);
   armor.visible = false;
@@ -111,7 +140,9 @@ export function bindRomanSoldierEquipment(actor, {armorOnly = false} = {}) {
     version: 3, active: false, armorOnly, weaponRole, armorSha256: DATA.armor.sha256,
     handleSha256: handle ? DATA.handle.sha256 : null,
     originalNodeCount: originalNodes.length, addedMeshCount: handle ? 6 : 3,
-    frontAxis: "+X", action: "idle",
+    frontAxis: "+X", action: "idle", armorProfile: archer ? "archer-head-clearance" : "approved-v3",
+    ...(archer ? {headwearClearance: {helmetUpperWidthScale: ARCHER_HELMET_WIDTH,
+      crestWidthScale: ARCHER_CREST_WIDTH, shotTransformsChanged: false}} : {}),
   };
 
   function grip(arm, weapon, localGrip) {
@@ -136,6 +167,9 @@ export function bindRomanSoldierEquipment(actor, {armorOnly = false} = {}) {
         restore(crest, saved.get(crest));
         crest.position.applyQuaternion(turnY).y -= .018;
         crest.quaternion.premultiply(turnY);
+        // After the +90Y assembly turn, original crest-local X is body-local Z.
+        // Narrow all three original plume layers together, keeping their socket and height.
+        if (archer) crest.scale.x *= ARCHER_CREST_WIDTH;
       }
       helm.visible = skirt.visible = false;
     } else {

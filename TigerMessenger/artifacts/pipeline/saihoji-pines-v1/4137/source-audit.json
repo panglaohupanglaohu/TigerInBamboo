@@ -1,0 +1,196 @@
+{
+  "hashes": {
+    "blend": "34d4befed0d6a1af40f254e76ff8f45c1644294bc139647cc5c87a1ba2352c46",
+    "snapshot": "9fce0d8d4735b02f8fae26c5be3ec72079d8ee52e093c0f02f47182f64413f8b"
+  },
+  "nodes": [
+    {
+      "id": "n0",
+      "name": "giantTreeGroup",
+      "parent": null,
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n1",
+      "name": "n1",
+      "parent": "n0",
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n10",
+      "name": "n10",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 1680,
+      "triangles": 560,
+      "hidden": false,
+      "materials": [
+        "MeshToonMaterial_m2"
+      ]
+    },
+    {
+      "id": "n11",
+      "name": "n11",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 3600,
+      "triangles": 1200,
+      "hidden": false,
+      "materials": [
+        "MeshToonMaterial_m3"
+      ]
+    },
+    {
+      "id": "n12",
+      "name": "n12",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 1680,
+      "triangles": 560,
+      "hidden": false,
+      "materials": [
+        "MeshToonMaterial_m4"
+      ]
+    },
+    {
+      "id": "n13",
+      "name": "n13",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 504,
+      "triangles": 168,
+      "hidden": true,
+      "materials": [
+        "MeshBasicMaterial_m5"
+      ]
+    },
+    {
+      "id": "n14",
+      "name": "n14",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 1092,
+      "triangles": 364,
+      "hidden": true,
+      "materials": [
+        "MeshBasicMaterial_m6"
+      ]
+    },
+    {
+      "id": "n15",
+      "name": "n15",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 1512,
+      "triangles": 504,
+      "hidden": true,
+      "materials": [
+        "MeshBasicMaterial_m7"
+      ]
+    },
+    {
+      "id": "n16",
+      "name": "n16",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 6960,
+      "triangles": 2320,
+      "hidden": true,
+      "materials": [
+        "MeshBasicMaterial_m8"
+      ]
+    },
+    {
+      "id": "n2",
+      "name": "n2",
+      "parent": "n0",
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n3",
+      "name": "n3",
+      "parent": "n0",
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n4",
+      "name": "n4",
+      "parent": "n0",
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n5",
+      "name": "n5",
+      "parent": "n0",
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n6",
+      "name": "n6",
+      "parent": "n0",
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n7",
+      "name": "n7",
+      "parent": "n0",
+      "type": "EMPTY",
+      "vertices": 0,
+      "triangles": 0,
+      "hidden": false,
+      "materials": []
+    },
+    {
+      "id": "n8",
+      "name": "n8",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 1596,
+      "triangles": 532,
+      "hidden": false,
+      "materials": [
+        "MeshToonMaterial_m0"
+      ]
+    },
+    {
+      "id": "n9",
+      "name": "n9",
+      "parent": "n0",
+      "type": "MESH",
+      "vertices": 1512,
+      "triangles": 504,
+      "hidden": false,
+      "materials": [
+        "MeshToonMaterial_m1"
+      ]
+    }
+  ]
+}

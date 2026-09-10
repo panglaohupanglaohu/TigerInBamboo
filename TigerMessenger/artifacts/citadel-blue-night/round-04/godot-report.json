@@ -1,0 +1,291 @@
+{
+  "batching": {
+    "batches": 243,
+    "scope": "Static opaque leaf meshes only; transparent surfaces and water retained separately",
+    "source_meshes": 1795
+  },
+  "camera": {
+    "fov": 48,
+    "position": [
+      38,
+      38,
+      70
+    ],
+    "target": [
+      0,
+      20,
+      0
+    ]
+  },
+  "garden_pockets": [
+    [
+      -17.0,
+      7.44499969482422,
+      19.0
+    ],
+    [
+      17.0,
+      5.03000068664551,
+      18.0
+    ],
+    [
+      -10.0,
+      9.9496431350708,
+      19.0
+    ],
+    [
+      8.0,
+      7.44499969482422,
+      21.0
+    ]
+  ],
+  "lamp_count": 6,
+  "original_layout_preserved": true,
+  "original_tree_grounding": [
+    {
+      "after_y": 24.1714630126953,
+      "before_y": 13.1692371368408,
+      "name": "highland-mountain-vegetation-0"
+    },
+    {
+      "after_y": 18.6370544433594,
+      "before_y": 6.8366436958313,
+      "name": "highland-mountain-vegetation-1"
+    },
+    {
+      "after_y": 37.664306640625,
+      "before_y": 25.1371688842773,
+      "name": "highland-mountain-vegetation-2"
+    },
+    {
+      "after_y": 47.7220001220703,
+      "before_y": 36.3018760681152,
+      "name": "highland-mountain-vegetation-3"
+    },
+    {
+      "after_y": 25.9734649658203,
+      "before_y": 10.5692367553711,
+      "name": "highland-mountain-vegetation-4"
+    },
+    {
+      "after_y": 6.50177001953125,
+      "before_y": 4.29999876022339,
+      "name": "highland-mountain-vegetation-5"
+    },
+    {
+      "after_y": 38.1861877441406,
+      "before_y": 17.3207855224609,
+      "name": "highland-mountain-vegetation-6"
+    },
+    {
+      "after_y": 50.7287445068359,
+      "before_y": 36.2007865905762,
+      "name": "highland-mountain-vegetation-7"
+    },
+    {
+      "after_y": 22.8602294921875,
+      "before_y": 6.94666433334351,
+      "name": "highland-mountain-vegetation-8"
+    },
+    {
+      "after_y": 46.8701324462891,
+      "before_y": 10.3823757171631,
+      "name": "highland-mountain-vegetation-9"
+    },
+    {
+      "after_y": 42.1482391357422,
+      "before_y": 8.60683441162109,
+      "name": "highland-mountain-vegetation-10"
+    },
+    {
+      "after_y": 16.1736145019531,
+      "before_y": 6.52614974975586,
+      "name": "highland-mountain-vegetation-11"
+    }
+  ],
+  "plant_variants": [
+    {
+      "original_root": "highland-mountain-vegetation-0",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-1",
+      "variant": "cypress"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-2",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-3",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-4",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-5",
+      "variant": "cypress"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-6",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-7",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-8",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-9",
+      "variant": "cypress"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-10",
+      "variant": "broadleaf"
+    },
+    {
+      "original_root": "highland-mountain-vegetation-11",
+      "variant": "broadleaf"
+    }
+  ],
+  "reflection": {
+    "limitations": "SSR misses offscreen surfaces; probe is a spatial approximation, refresh required for dynamic world changes",
+    "method": "Scene cubemap probe plus screen-space reflection on original curved water; opaque procedural ripple normals",
+    "probe_position": [
+      0,
+      8,
+      30
+    ]
+  },
+  "scope": "Round 4 isolated environment integration and rendering checks; full gameplay/navigation not implemented.",
+  "street_anchors": [
+    [
+      -11.9999952316284,
+      7.79000473022461,
+      21.0280055999756
+    ],
+    [
+      12.9719953536987,
+      7.79000473022461,
+      20.0000057220459
+    ],
+    [
+      4.00000476837158,
+      7.79000473022461,
+      19.0280055999756
+    ],
+    [
+      -6.00000476837158,
+      7.79000473022461,
+      16.9719944000244
+    ],
+    [
+      0.971994996070862,
+      11.7900047302246,
+      14.0000047683716
+    ],
+    [
+      -15.9999952316284,
+      7.79000473022461,
+      13.0280046463013
+    ]
+  ],
+  "views": [
+    {
+      "camera_position": [
+        38.0,
+        38.0,
+        70.0
+      ],
+      "draw_calls": 6332,
+      "frame_median_ms": 16.664,
+      "local_shadows": true,
+      "mode": "unbatched",
+      "primitives": 212304,
+      "ssr": true
+    },
+    {
+      "camera_position": [
+        38.0,
+        38.0,
+        70.0
+      ],
+      "draw_calls": 517,
+      "frame_median_ms": 16.814,
+      "local_shadows": true,
+      "mode": "batched",
+      "primitives": 303650,
+      "ssr": true
+    },
+    {
+      "camera_position": [
+        10.0,
+        10.0,
+        53.0
+      ],
+      "draw_calls": 1304,
+      "frame_median_ms": 16.472,
+      "local_shadows": true,
+      "mode": "shore-no-reflection",
+      "primitives": 1549501,
+      "ssr": false
+    },
+    {
+      "camera_position": [
+        10.0,
+        10.0,
+        53.0
+      ],
+      "draw_calls": 1304,
+      "frame_median_ms": 16.725,
+      "local_shadows": true,
+      "mode": "shore-reflection",
+      "primitives": 1549501,
+      "ssr": true
+    },
+    {
+      "camera_position": [
+        10.0,
+        10.0,
+        53.0
+      ],
+      "draw_calls": 674,
+      "frame_median_ms": 16.683,
+      "local_shadows": false,
+      "mode": "shore-no-shadow",
+      "primitives": 418733,
+      "ssr": true
+    },
+    {
+      "camera_position": [
+        10.0,
+        10.0,
+        53.0
+      ],
+      "draw_calls": 1304,
+      "frame_median_ms": 16.7,
+      "local_shadows": true,
+      "mode": "shore-wave",
+      "primitives": 1549501,
+      "ssr": true
+    },
+    {
+      "camera_position": [
+        -40.0,
+        26.0,
+        58.0
+      ],
+      "draw_calls": 617,
+      "frame_median_ms": 16.778,
+      "local_shadows": true,
+      "mode": "side",
+      "primitives": 416325,
+      "ssr": true
+    }
+  ]
+}

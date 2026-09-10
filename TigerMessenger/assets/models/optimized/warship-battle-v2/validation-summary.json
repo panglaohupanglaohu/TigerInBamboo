@@ -1,0 +1,48 @@
+{
+  "status": "motion_validated_candidate",
+  "motionClearancePassed": true,
+  "runtimeIntegrated": false,
+  "readyForFullBattle": false,
+  "sourceAndV1Preserved": true,
+  "geometryChangedFromV1": false,
+  "sourceNodes": 340,
+  "sourceCrewInstances": 286,
+  "oars": 26,
+  "rowers": 26,
+  "sourceAdjacentCrossingFrames": 36,
+  "v2SavedAdjacentCrossingFrames": 0,
+  "memoryStudy": {
+    "cases": 901,
+    "gripChecks": 46852,
+    "maxGripError": 1.7120130796843852e-07,
+    "composition": "181 captured start/stop +720 full-cycle phase states (180 at each of .25/.5/.75/1 speed);720 are not saved timeline frames"
+  },
+  "savedTimeline": {
+    "frames": 301,
+    "composition": "Same181 start/stop +120 boarding deployment/hold/retraction frames",
+    "allFramesTriangleClearancePassed": true,
+    "gripChecks": 15652,
+    "maxGripError": 1.7120130796843852e-07,
+    "maxMatrixError": 0
+  },
+  "glbReimport": {
+    "passed": true,
+    "maxLocalMatrixError": 4.76837158203125e-07,
+    "visibleUVMeshes": 754,
+    "originalMaterialFactors": 31,
+    "visibleOriginalMaterials": 18,
+    "staticStoredFrame": 1,
+    "animations": 0
+  },
+  "boardingCarryRouteRerunThisRevision": false,
+  "boarding120FrameVsV1MaxMatrixDifference": 1.7285346984863281e-06,
+  "limitations": [
+    "No formal runtime integration,25-person boarding scheduling, sedated/dead rower poses, arbitrary ground footIK, fleet instancing/performance certification.",
+    "The26 rowers retain their original faces/helmets; not the refined six Roman battle soldier family.",
+    "901 and301 are distinct coverage sets, not1202 independent saved frames."
+  ],
+  "files": {
+    "warship-battle-v2.blend": "99365ac14156bc5d629cce7fb1c0ae2f7329f8031141c820b3c29085c43ed484",
+    "warship-battle-v2.glb": "6a0082a8a4922366529811c1555ee35328b88adf3a65a02c816710fe055dba63"
+  }
+}

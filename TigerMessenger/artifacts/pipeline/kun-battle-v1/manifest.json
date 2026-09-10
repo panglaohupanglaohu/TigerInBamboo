@@ -1,0 +1,81 @@
+{
+  "status": "reviewed mouth candidate; ready for separate runtime integration",
+  "runtimeIntegrated": false,
+  "blenderTimeline": {
+    "fps": 30,
+    "frames": 121
+  },
+  "glb": "static closed with morph targets; portable pose contract separately provided",
+  "validated": true,
+  "originalGardenInterfacePreserved": true,
+  "files": [
+    {
+      "path": "assets/models/optimized/kun-battle-v1/kun-battle-v1.blend",
+      "sha256": "f4d5c78169e4628861fe8a6743bd05059a9746405b307498ffc77e7bdd76b232"
+    },
+    {
+      "path": "assets/models/optimized/kun-battle-v1/kun-battle-v1.glb",
+      "sha256": "1b7190a3861514c141355c7967f8418c37877f5ddfe6ba7e6a8a07e571699260"
+    },
+    {
+      "path": "assets/models/optimized/kun-battle-v1/kun-battle-v1.assembly.json",
+      "sha256": "2fa07b69352f8403e5ccb1f534e5cccd5c1b93db87e0caaaa3de2ea364cf0ff8"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/open-glb-roundtrip.png",
+      "sha256": "681eb7cf863ad3cfbab131014a57848ea95378470be8968d7bb4e2419021bc83"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/closed-glb-roundtrip.png",
+      "sha256": "b605cd6a49093238bd17ac00c822d3823620d64fb79901ba6e53d0f28083e976"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/engulf-mouth-detail.png",
+      "sha256": "deab99847b6d7a7093108a5b333af2d63b99946e288b49877d1f262abe58a7de"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/closed-mouth-side-below.png",
+      "sha256": "27b11fd5f90557b1fe22da6d90d19e9e1ede427851f174d8f310a657c13685e2"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/engulf-mouth-side-below.png",
+      "sha256": "7b4490a9f8f13dca2058e6ba792a2f1c5562a1dd040b304bcf4b412791d7198f"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/closed-three-quarter.png",
+      "sha256": "636579edac4e5512b6d7376cff9682a69988201fc38c100014c052a2c47ae893"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/engulf-three-quarter.png",
+      "sha256": "ef7a5aeafb53dd047dcb896bef8e1f59316156613e10233436cfaa8b76173803"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/open-three-quarter.png",
+      "sha256": "46b90ce157bec6f3b2af04f207964cd76dcb756fb19c37cd47724ae5dd6f60ff"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/before-three-quarter.png",
+      "sha256": "f7e08c5e7dc0790bccb28dd5d675bebc907b303f3d21d1a32bcbd22bbb574279"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/open-mouth-side-below.png",
+      "sha256": "f5394c975ddcfb072ee5b91512f394f6c677dfdcaf1b61eb01430fbd24d2e717"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/open-mouth-detail.png",
+      "sha256": "18697d4123815e971c864855ba9be37e89bcb53ebeb5b4167eac5b0ec36eddf9"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/closed-mouth-detail.png",
+      "sha256": "bcc11f836c1c16aca366e6a19aa0d1a8e23c1cae69e2858a856d38e5622e7062"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/validation-report.json",
+      "sha256": "cb83a72bc31273d60b00a651dfefc26d6dc40d4fad2174e49a99d801227f5c9e"
+    },
+    {
+      "path": "artifacts/pipeline/kun-battle-v1/glb-roundtrip-report.json",
+      "sha256": "db33578a008d3daf67f6315d63ba0c1f2d0a671578ec6a0740174e0f8794537f"
+    }
+  ]
+}

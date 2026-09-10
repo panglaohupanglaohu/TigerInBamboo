@@ -1,0 +1,42 @@
+{
+  "id": "socco-craft-v1",
+  "stage": "validated geometry and kinematic boarding candidate; world integration separate",
+  "sourceHashes": {
+    "blend": "3a0335e5f754fb6d4fdcd81dd0cae14b2aabb08cc15a93f4431a8238c69f118d",
+    "snapshot": "6df0bbbd4e9e37a631c8a8ee1b3c8b96249517884632dca7676dda3edac14bed"
+  },
+  "files": {
+    "socco-craft-v1.glb": {
+      "path": "assets/models/optimized/socco-craft-v1/socco-craft-v1.glb",
+      "sha256": "98729864e994acd2df77d51cae537f630badda795105871d7b389dd2c3c76ac2"
+    },
+    "PLACEMENT.md": {
+      "path": "assets/models/optimized/socco-craft-v1/PLACEMENT.md",
+      "sha256": "baf0e0d25514c7af67953a75fa7ee168c1cb300ce9b950c82ed8f7f144312d3f"
+    },
+    "socco-boarding-demo.blend": {
+      "path": "assets/models/optimized/socco-craft-v1/socco-boarding-demo.blend",
+      "sha256": "2bb2891414b4b077a8727508e4e2a65e5ce2b4aa1a8f13e2840ee88898e9a64b"
+    },
+    "socco-craft-v1.blend": {
+      "path": "assets/models/optimized/socco-craft-v1/socco-craft-v1.blend",
+      "sha256": "74745b1c5a58ff48a80a392a1bd2d395ce568cd4e536eb194d4fc29eff65e056"
+    },
+    "socco-boarding-new-crew-demo.blend": {
+      "path": "assets/models/optimized/socco-craft-v1/socco-boarding-new-crew-demo.blend",
+      "sha256": "8bb39efd8e8e0aa3619a61c7088286b4f5702c18fddb7bfde98e1127f53450cd"
+    }
+  },
+  "triangles": {
+    "source": 1858,
+    "candidate": 2970
+  },
+  "sourceNodesPreserved": 127,
+  "factorySeatCount": 14,
+  "activeOccupantsTested": 7,
+  "glbContainsCrew": false,
+  "newCrewGLBSha256": "8961c19fdc1c8d1f8de9147a5a4d5a84c7e6c648751a8fd37eefe9cbd6748048",
+  "evidenceDirectory": "artifacts/pipeline/socco-craft-v1",
+  "validatedBoardingCrew": "vanguard-battle-v1",
+  "oldCrewRegression": "7 full-boot threshold contacts retained as failed evidence"
+}

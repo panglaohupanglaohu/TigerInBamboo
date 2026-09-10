@@ -22,6 +22,8 @@
 // ============================================================================
 
 import * as THREE from "three";
+import { createSoccoBerthSolver } from './soccoBerth.js';
+import { createSoccoGroundRoutes } from './soccoGroundRoutes.js';
 import {
   assignVanguardFireteams,
   updateVanguardAdvance,
@@ -34,6 +36,7 @@ import {
   soccoRampReady,
   soccoSeatWorldPositions,
   soccoRampFootWorld,
+  soccoBoardingPoint,
   updateSoccoSeaSkim,
 } from "./gateHaulerCraft.js";
 import { OFFICIAL_OCEAN_SEA_LEVEL } from "./waterV8/officialOcean.js";
@@ -189,7 +192,7 @@ function standPose(tr, up, fwd) {
   _s1.copy(fwd).addScaledVector(up, -fwd.dot(up));
   if (_s1.lengthSq() < 1e-8) _s1.set(0, 0, 1).addScaledVector(up, -up.z);
   _s1.normalize();
-  _s2.crossVectors(_s1, up).normalize();
+  _s2.crossVectors(up, _s1).normalize();
   _sBasis.makeBasis(_s2, up, _s1);
   tr.quaternion.setFromRotationMatrix(_sBasis);
 }
@@ -252,6 +255,31 @@ export function createVanguardAssault({
   scene.add(root);
 
   const seaR = Number.isFinite(seaRadius) ? seaRadius : R + OFFICIAL_OCEAN_SEA_LEVEL;
+  const berthSolver = createSoccoBerthSolver(scene, seaR);
+  function prepareBerth(h) {
+    if (!h.craft.userData.battleOptimization?.active) return true;
+    if (!h.berth) {
+      h.berth = berthSolver.solve(h.craft, h.beachDir, st.hub,
+        st.haulers.filter(other=>other!==h&&other.berth?.valid).map(other=>other.berth.ground));
+      h.craft.userData.soccoBerth = h.berth;
+      if (h.berth.valid) {
+        h.beachDir = h.berth.ground.clone().normalize();
+        h.craft.userData.soccoGroundLocalY = h.berth.groundLocalY;
+      } else {
+        h.cancelled = true; h.state = 'closed'; h.craft.visible = false;
+        h.craft.userData.soccoRampGroundValid = false;
+        h.craft.userData.soccoRampGroundStatus = 'no-safe-berth';
+        for (const e of h.exits) { e.state='done'; e.tr.visible=false; e.tr.userData.aboard=true; }
+      }
+    }
+    return h.berth.valid;
+  }
+  function holdBerth(h) {
+    if (h.berth?.valid) {
+      h.craft.position.copy(h.berth.position); h.craft.quaternion.copy(h.berth.quaternion);
+      updateSoccoSeaSkim(h.craft, {t:st.t,speed:0});
+    } else updateSoccoSeaSkim(h.craft, {t:st.t,seaRadius:seaR,speed:0});
+  }
   const gh = (dir) => {
     const fn = typeof getGroundHeightAt === "function" ? getGroundHeightAt() : null;
     return (fn ? fn(dir) : null) ?? (R + 0.3);
@@ -385,7 +413,7 @@ export function createVanguardAssault({
     _w2.copy(targetDir).normalize();
     const cosA = Math.max(-1, Math.min(1, _w1.dot(_w2)));
     const remain = Math.acos(cosA);
-    if (remain < 0.02) {
+    if (remain * R <= Math.max(.06,speed*dt)) {
       tr.position.copy(_w2).multiplyScalar(gh(_w2));
       return true;
     }
@@ -546,6 +574,7 @@ export function createVanguardAssault({
   function setupMission(centerDir) {
     st.sawFleet = false;
     st.withdrawT = 0;
+    troopersOf().forEach(tr=>{tr.userData.transportForcedReturn=false;});
     // 清上一轮绳索（防重入累积泄漏）
     st.pods.forEach((p) => p.ropes.forEach((r) => root.remove(r)));
     st.haulers.forEach((h) => h.ropes.forEach((r) => root.remove(r)));
@@ -624,6 +653,9 @@ export function createVanguardAssault({
         state: "seat", posted: false,
       }));
       exits.forEach((e) => {
+        e.departed = false;
+        e.returned = false;
+        e.forcedReturn = false;
         e.tr.userData.onGround = false;
         e.tr.userData.aboard = false;
         e.tr.userData.climbing = false;
@@ -798,9 +830,11 @@ export function createVanguardAssault({
     // ---- 气垫艇：滩头停住 → 开尾门 → 放出重甲兵（不是索降）；看护留守艇旁
     for (const h of st.haulers) {
       if (h.state === "fly") {
+        if (!prepareBerth(h)) continue;
         _a1.copy(h.beachDir);
         // 滩头悬停：seaR+skim 时跳板末端（-2.85）会探进海里——整体再抬 2.4
         _a2.copy(_a1).multiplyScalar(seaR + SOCCO.skimHeight + 2.4 + Math.sin(st.t * 0.9) * 0.12);
+        if (h.berth?.valid) { _a2.copy(h.berth.position); h.craft.quaternion.copy(h.berth.quaternion); }
         if (chaseObj(h.craft, _a2, dt, 1.2, 0.4)) h.state = "ramp";
         // ⚠️ 不传 seaRadius：seaSkim 的径向钉制会与 chaseObj 的抬高目标打架
         //（每帧拉回旧高度，永远到不了 snap 距离）。此处只做气帘脉动。
@@ -809,7 +843,7 @@ export function createVanguardAssault({
         continue;
       }
       if (h.state === "ramp") {
-        updateSoccoSeaSkim(h.craft, { t: st.t, seaRadius: seaR, speed: 0 });
+        holdBerth(h);
         h.ramp = Math.min(1, h.ramp + dt / VANGUARD_ASSAULT.rampOpenTime);
         setSoccoRamp(h.craft, h.ramp);
         if (soccoRampReady(h.craft)) h.state = "unload";
@@ -818,13 +852,31 @@ export function createVanguardAssault({
       }
       if (h.state === "closed") continue;
       if (h.state === "unload") {
-        updateSoccoSeaSkim(h.craft, { t: st.t, seaRadius: seaR, speed: 0 });
+        holdBerth(h);
         const seats = soccoSeatWorldPositions(h.craft);
         const rampFoot = soccoRampFootWorld(h.craft, new THREE.Vector3());
+        if(h.berth?.valid)rampFoot.addScaledVector(new THREE.Vector3(0,1,0).applyQuaternion(h.craft.quaternion),.06);
         const up = _a1.copy(h.beachDir).normalize();
         const east = _a2.crossVectors(UP_Y, up).normalize();
         const north = _a3.crossVectors(up, east).normalize();
         h.craft.updateWorldMatrix(true, false);
+        if(h.berth?.valid&&!h.groundNavigator){
+          h.groundNavigator=createSoccoGroundRoutes(scene,berthSolver,h.craft);
+          const occupied=[];
+          for(const e of h.exits){
+            const row=Math.floor((h.exits.length-1)/3)-Math.floor(e.seat/3);
+            const target=h.craft.localToWorld(new THREE.Vector3(((e.seat%3)-1)*1.6,-2,-8.7-row*1.7));
+            e.groundRoute=h.groundNavigator.plan(rampFoot,target,occupied);
+            if(e.groundRoute)occupied.push(e.groundRoute.points.at(-1));
+          }
+          h.craft.userData.soccoGroundRouteStatus=h.exits.every(e=>e.groundRoute)?'resolved':'blocked';
+          if(h.craft.userData.soccoGroundRouteStatus==='blocked'){
+            // No unsafe straight-line fallback: abort this carrier before unloading.
+            h.cancelled=true;h.state='closed';
+            for(const e of h.exits){e.state='done';e.tr.userData.aboard=true;e.tr.visible=false;}
+            setSoccoRamp(h.craft,0);continue;
+          }
+        }
         let unloadDone = true;
         for (const e of h.exits) {
           const tr = e.tr;
@@ -832,6 +884,10 @@ export function createVanguardAssault({
           if (tr.userData.dead) { e.state = "done"; continue; }
           unloadDone = false;
           battleReady = false;
+          // One soldier owns the narrow cabin/ramp route until it is clear.
+          // Seats wait in the cabin; no independently timed overlapping walks.
+          if (e.state === 'seat' && h.exits.some(other=>other!==e&&other.state==='walk'&&!other.tr.userData.dead)) continue;
+          if (e.state === 'seat') e.t=Math.max(0,e.t);
           e.t += dt;
           if (e.t < 0) continue; // 错相（0.45s，跳板上前后脚）
           // 岸上落点：艇左右各展开，向苔庭方向推 2.2（先乘半径再偏移）
@@ -839,21 +895,31 @@ export function createVanguardAssault({
             .addScaledVector(east, ((e.seat % 4) - 1.5) * 1.15)
             .addScaledVector(north, 2.2 + Math.floor(e.seat / 4) * 0.8)
             .normalize();
-          const targetR = gh(targetDir);
+          let targetR = gh(targetDir);
+          if(e.groundRoute){const end=e.groundRoute.points.at(-1);targetDir.copy(end).normalize();targetR=end.length();}
           if (e.state === "seat") {
             e.from = seats[e.seat % seats.length].clone();
             e.state = "walk";
           }
           tr.visible = true;
-          const legT = Math.min(1, e.t / VANGUARD_ASSAULT.exitTime);
-          if (legT < 0.45) {
-            tr.position.lerpVectors(e.from, rampFoot, legT / 0.45);
+          const cabinTime=VANGUARD_ASSAULT.exitTime*.45;
+          const shoreTime=e.groundRoute?Math.max(.3,e.groundRoute.length/VANGUARD_ASSAULT.withdrawSpeed):0;
+          const legT = Math.min(1, e.t / (e.groundRoute?cabinTime+shoreTime:VANGUARD_ASSAULT.exitTime));
+          if(e.groundRoute){
+            if(e.t<cabinTime)soccoBoardingPoint(h.craft,e.seat,e.t/cabinTime,tr.position);
+            else h.groundNavigator.pointAt(e.groundRoute,(e.t-cabinTime)/shoreTime,tr.position);
+          } else if (legT < 0.45) {
+            if(h.berth?.valid)soccoBoardingPoint(h.craft,e.seat,legT/.45,tr.position);
+            else tr.position.lerpVectors(e.from, rampFoot, legT / 0.45);
           } else {
             const kk = (legT - 0.45) / 0.55;
             tr.position.lerpVectors(rampFoot, _a5.copy(targetDir).multiplyScalar(targetR), kk);
-            if (kk > 0.4) tr.position.copy(targetDir).multiplyScalar(targetR);
+            if(h.berth?.valid){const ground=berthSolver.sample(tr.position);if(ground)tr.position.copy(ground).addScaledVector(ground.clone().normalize(),.06);}
           }
-          standPose(tr, tr.position.clone().normalize(), north);
+          const heading=e.groundRoute&&e.t>=cabinTime
+            ?h.groundNavigator.pointAt(e.groundRoute,Math.min(1,(e.t-cabinTime)/shoreTime+.02)).sub(tr.position)
+            :new THREE.Vector3(0,0,-1).applyQuaternion(h.craft.quaternion);
+          standPose(tr, tr.position.clone().normalize(), heading);
           // 出舱行走（真实人类动作）：腿摆 + 手臂反相摆
           {
             const ph = (tr.userData.uid ?? 0) * 0.7;
@@ -865,6 +931,7 @@ export function createVanguardAssault({
             if (parts.armR) parts.armR.rotation.x = sw * 0.55;
           }
           if (legT >= 1) {
+            e.departed = true;
             e.state = "done";
             tr.userData.onGround = true;
             tr.position.copy(targetDir).multiplyScalar(targetR);
@@ -881,6 +948,9 @@ export function createVanguardAssault({
           if (e.state !== "guard") continue;
           const tr = e.tr;
           if (!e.posted) {
+            if(e.groundRoute){
+              e.postDir=e.groundRoute.points.at(-1).clone().normalize();e.posted=true;
+            } else {
             const up = _a1.copy(h.beachDir).normalize();
             const east = _a2.crossVectors(UP_Y, up).normalize();
             const postDir = _a3.copy(up).multiplyScalar(R)
@@ -888,12 +958,14 @@ export function createVanguardAssault({
               .normalize();
             e.postDir = postDir.clone();
             e.posted = true;
+            }
           }
-          const arrived = walkOnGround(tr, e.postDir, VANGUARD_ASSAULT.withdrawSpeed, dt);
+          const arrived = e.groundRoute?true:walkOnGround(tr, e.postDir, VANGUARD_ASSAULT.withdrawSpeed, dt);
           if (arrived) {
             e.state = "done";
             tr.userData.onGround = true;
-            tr.position.copy(e.postDir).multiplyScalar(gh(e.postDir));
+            if(e.groundRoute)tr.position.copy(e.groundRoute.points.at(-1));
+            else tr.position.copy(e.postDir).multiplyScalar(gh(e.postDir));
             // 站哨：面向苔庭中枢，持枪警戒（不进战斗阵型）
             standPose(tr, tr.position.clone().normalize(), st.hub);
           }
@@ -1051,23 +1123,26 @@ export function createVanguardAssault({
     let rampsReady = true;
     for (const h of st.haulers) {
       if (h.state === "done") continue;
+      if (h.cancelled) continue;
       if (!h.retArrived) {
         // 飞回滩头贴海悬停（同投送：抬 2.4 防跳板探水）
         _a1.copy(h.beachDir);
         _a2.copy(_a1).multiplyScalar(seaR + SOCCO.skimHeight + 2.4 + Math.sin(st.t * 0.9) * 0.12);
+        if (h.berth?.valid) _a2.copy(h.berth.position);
         h.retArrived = chaseObj(h.craft, _a2, dt, 0.9, 0.4);
         // 同 fly：seaSkim 不钉高度，避免与抬高目标打架
         updateSoccoSeaSkim(h.craft, { t: st.t, speed: 0.3 });
         if (h.retArrived) h.ramp = 0;
         _a3.copy(h.craft.position).normalize();
         orientCraft(h.craft, _a4.copy(st.hub).sub(_a3), _a3);
+        if (h.berth?.valid) h.craft.quaternion.copy(h.berth.quaternion);
       } else if (h.ramp < 1) {
         // 到位后开尾门放坡
-        updateSoccoSeaSkim(h.craft, { t: st.t, seaRadius: seaR, speed: 0 });
+        holdBerth(h);
         h.ramp = Math.min(1, h.ramp + dt / VANGUARD_ASSAULT.rampOpenTime);
         setSoccoRamp(h.craft, h.ramp);
       }
-      if (!h.retArrived || h.ramp < 0.9) rampsReady = false;
+      if (!h.retArrived || !soccoRampReady(h.craft)) rampsReady = false;
     }
 
     // 士兵回撤：滩头集合点（卸兵时的岸上落点）→ 踏跳板 → 回腹入座
@@ -1099,28 +1174,89 @@ export function createVanguardAssault({
         };
         h.exits.push(e);
       }
-      if (!e || !h.retArrived || h.ramp < 0.9) continue; // 自己的艇还没放好坡
+      if (!e || !h.retArrived || !soccoRampReady(h.craft)) continue;
       if (!e.ret) {
         // 阶段一：沿地表走回滩头集合点（沉重的行走，逐帧贴地）
-        const arrived = walkOnGround(tr, e.groundDir, VANGUARD_ASSAULT.withdrawSpeed, dt);
-        const near = tr.position.distanceTo(_a2.copy(e.groundDir).multiplyScalar(gh(e.groundDir))) < 0.8;
-        if (arrived || near) {
+        let arrived=false;
+        if(e.groundRoute){
+          if(!h.returnNavigator)h.returnNavigator=createSoccoGroundRoutes(scene,berthSolver,h.craft);
+          if(!e.returnPath){
+            e.returnPath=h.returnNavigator.planReturn(tr.position,e.groundRoute.points.at(-1));
+            e.returnDistance=0;
+          }
+          if(e.returnPath.valid){
+            const nextDistance=Math.min(e.returnPath.length,e.returnDistance+VANGUARD_ASSAULT.withdrawSpeed*dt);
+            const nextProgress=e.returnPath.length?nextDistance/e.returnPath.length:1;
+            const next=h.returnNavigator.pointAt(e.returnPath,nextProgress);
+            const oldHeight=tr.position.length(),rise=next.length()-oldHeight,verticalStep=2.4*dt;
+            // Step over heightfield seams without a one-frame root drop. Lift
+            // before moving onto a higher step; settle gradually after its edge.
+            if(rise>verticalStep){
+              tr.position.setLength(oldHeight+verticalStep);
+            } else {
+              e.returnDistance=nextDistance;tr.position.copy(next);
+              if(rise< -verticalStep)tr.position.setLength(oldHeight-verticalStep);
+            }
+            const progress=e.returnPath.length?e.returnDistance/e.returnPath.length:1;
+            const heading=h.returnNavigator.pointAt(e.returnPath,Math.min(1,progress+.02)).sub(tr.position);
+            standPose(tr,tr.position.clone().normalize(),heading);
+            const swing=Math.sin(st.t*2.6+(tr.userData.uid??0)*.7)*.32,parts=tr.userData.parts||{};
+            if(parts.legL)parts.legL.rotation.x=swing;
+            if(parts.legR)parts.legR.rotation.x=-swing;
+            arrived=progress>=1&&tr.position.distanceTo(e.returnPath.points.at(-1))<.04;
+          }
+        } else arrived=walkOnGround(tr,e.groundDir,VANGUARD_ASSAULT.withdrawSpeed,dt);
+        const occupied = h.exits.some(other=>other!==e&&!other.tr.userData.aboard&&!other.tr.userData.dead&&
+          (e.groundRoute?other.seat>e.seat&&(!other.ret||other.ret.t<Math.max(.3,(other.groundRoute?.length||0)/VANGUARD_ASSAULT.withdrawSpeed)):(other.ret||other.seat>e.seat)));
+        if (arrived && !occupied) {
           e.ret = { t: 0, from: tr.position.clone() };
         }
         continue;
       }
       // 阶段二：踏跳板回腹（集合点 → 跳板末端 → 座位）
+      const routeShoreTime=e.groundRoute?Math.max(.3,e.groundRoute.length/VANGUARD_ASSAULT.withdrawSpeed):0;
+      if(e.groundRoute&&e.ret.t+dt>=routeShoreTime&&h.exits.some(other=>other!==e&&other.ret&&!other.tr.userData.aboard&&!other.tr.userData.dead&&other.ret.t>=Math.max(.3,(other.groundRoute?.length||0)/VANGUARD_ASSAULT.withdrawSpeed)))continue;
+      if(e.groundRoute&&e.ret.t<routeShoreTime){
+        const next=h.groundNavigator.pointAt(e.groundRoute,Math.max(0,1-(e.ret.t+dt)/routeShoreTime));
+        const blockers=h.exits.filter(other=>{
+          if(other===e||!other.ret||other.tr.userData.aboard||other.tr.userData.dead)return false;
+          const distance=next.distanceTo(other.tr.position);
+          return distance<.8&&distance<tr.position.distanceTo(other.tr.position);
+        });
+        if(blockers.length){
+          // At crossing paths the later queue member yields backwards on its
+          // already checked route. Two stationary "wait" decisions deadlock.
+          if(blockers.some(other=>other.seat>e.seat)&&e.ret.t>0){
+            const backTime=Math.max(0,e.ret.t-dt);
+            const back=h.groundNavigator.pointAt(e.groundRoute,1-backTime/routeShoreTime);
+            const safe=h.exits.every(other=>other===e||!other.ret||other.tr.userData.aboard||other.tr.userData.dead||back.distanceTo(other.tr.position)>=Math.min(.8,tr.position.distanceTo(other.tr.position)));
+            if(safe){e.ret.t=backTime;tr.position.copy(back);e.yieldSteps=(e.yieldSteps||0)+1;}
+          }
+          continue;
+        }
+      }
       e.ret.t += dt;
       const seats = soccoSeatWorldPositions(h.craft);
       const rampFoot = soccoRampFootWorld(h.craft, new THREE.Vector3());
-      const legT = Math.min(1, e.ret.t / VANGUARD_ASSAULT.exitTime);
-      if (legT < 0.45) {
+      if(h.berth?.valid)rampFoot.addScaledVector(new THREE.Vector3(0,1,0).applyQuaternion(h.craft.quaternion),.06);
+      const cabinTime=VANGUARD_ASSAULT.exitTime*.55;
+      const shoreTime=e.groundRoute?Math.max(.3,e.groundRoute.length/VANGUARD_ASSAULT.withdrawSpeed):0;
+      const legT = Math.min(1, e.ret.t / (e.groundRoute?shoreTime+cabinTime:VANGUARD_ASSAULT.exitTime));
+      if(e.groundRoute){
+        if(e.ret.t<shoreTime)h.groundNavigator.pointAt(e.groundRoute,1-e.ret.t/shoreTime,tr.position);
+        else soccoBoardingPoint(h.craft,e.seat,1-(e.ret.t-shoreTime)/cabinTime,tr.position);
+      } else if (legT < 0.45) {
         tr.position.lerpVectors(e.ret.from, rampFoot, legT / 0.45);
       } else {
-        tr.position.lerpVectors(rampFoot, seats[e.seat % seats.length], (legT - 0.45) / 0.55);
+        if(h.berth?.valid)soccoBoardingPoint(h.craft,e.seat,1-(legT-.45)/.55,tr.position);
+        else tr.position.lerpVectors(rampFoot, seats[e.seat % seats.length], (legT - 0.45) / 0.55);
       }
-      standPose(tr, tr.position.clone().normalize(), _a3.copy(h.craft.position).sub(tr.position));
+      const returnHeading=e.groundRoute&&e.ret.t<shoreTime
+        ?h.groundNavigator.pointAt(e.groundRoute,Math.max(0,1-e.ret.t/shoreTime-.02)).sub(tr.position)
+        :_a3.copy(h.craft.position).sub(tr.position);
+      standPose(tr, tr.position.clone().normalize(), returnHeading);
       if (legT >= 1) {
+        e.returned = true;
         tr.userData.aboard = true;
         tr.visible = false;
         const seat = seats[e.seat % seats.length];
@@ -1202,6 +1338,11 @@ export function createVanguardAssault({
     if (!allAboard && overdue) {
       for (const tr of aliveTroopers()) {
         if (tr.userData.aboard) continue;
+        for (const h of st.haulers) {
+          const entry=h.exits.find(e=>e.tr===tr);
+          if(entry){entry.forcedReturn=true;entry.forcedState={seconds:st.withdrawT,limit,returnT:entry.ret?.t??null,distance:entry.groundDir?tr.position.distanceTo(entry.groundDir.clone().multiplyScalar(gh(entry.groundDir))):null};}
+        }
+        tr.userData.transportForcedReturn = true;
         tr.userData.aboard = true;
         tr.visible = false;
       }
@@ -1881,7 +2022,7 @@ export function createVanguardAssault({
     // 逐帧维持而不是「开局点一次」——任务可能从任何一个岔路提前结束
     // （主舰飞走、场景切换、看门狗强制收队），少一条出口音乐就会一直响着。
     // 苔庭之战那首优先，sfx 内部会让路。
-    try { setFleetAssaultBgm(onMission); } catch { /* 音频未就绪时静默 */ }
+    try { setFleetAssaultBgm(onMission, {source:(st.anchor.lengthSq()>1e-8?st.anchor:st.hub).clone().normalize().multiplyScalar(Math.max(st.baseRadius || R,R))}); } catch { /* 音频未就绪时静默 */ }
     // 不在任务中 → 泡机必须回到僚机翼去伴飞，一帧都不许滞留在 scene 下
     if (!onMission) { releasePods(); enforceOffstage(dt); }
 
@@ -1992,6 +2133,21 @@ export function createVanguardAssault({
       aboard: st.aboardCount,
       alive: vanguardAlive(),
       guards: guardsOf().length,
+      transport: st.haulers.map(h=>({
+        name:h.craft.name,cancelled:!!h.cancelled,groundRoutes:h.craft.userData.soccoGroundRouteStatus,
+        roster:h.exits.map(e=>({uid:e.tr.userData.uid,seat:e.seat,
+          departed:!!e.departed,returned:!!e.returned,forcedReturn:!!e.forcedReturn,
+          dead:!!e.tr.userData.dead,aboard:!!e.tr.userData.aboard,
+          state:e.state,returning:!!e.ret&&!e.tr.userData.aboard,
+          returningOnRamp:!!e.ret&&!e.tr.userData.aboard&&(!e.groundRoute||e.ret.t>=Math.max(.3,e.groundRoute.length/VANGUARD_ASSAULT.withdrawSpeed)),
+          routeLength:e.groundRoute?.length,
+          returnPathStatus:e.returnPath?(e.returnPath.valid?'resolved':e.returnPath.reason):'pending',
+          returnPathLength:e.returnPath?.length,
+          returnPathStartCorrection:e.returnPath?.startCorrection,
+          yieldSteps:e.yieldSteps||0,
+          forcedState:e.forcedState,
+        })),
+      })),
       haulerStates: st.haulers.map((h) => `${h.state}@${h.craft.position.length().toFixed(0)}`).join(","),
     };
   }

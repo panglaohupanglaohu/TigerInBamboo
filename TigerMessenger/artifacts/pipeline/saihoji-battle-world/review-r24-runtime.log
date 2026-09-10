@@ -1,0 +1,86 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M2
+
+ERROR: Parse JSON failed. Error at line 0: Unknown error getting token
+   at: parse_string (core/io/json.cpp:629)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/original_world.gd:28)
+SCRIPT ERROR: Trying to assign value of type 'Nil' to a variable of type 'Dictionary'.
+          at: _ready (res://scripts/original_world.gd:28)
+          GDScript backtrace (most recent call first):
+              [0] _ready (res://scripts/original_world.gd:28)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)
+SCRIPT ERROR: Invalid assignment of property or key 'position' with value of type 'Vector3' on a base object of type 'Nil'.
+          at: _camera (res://scripts/original_world.gd:222)
+          GDScript backtrace (most recent call first):
+              [0] _camera (res://scripts/original_world.gd:222)
+              [1] _unhandled_input (res://scripts/original_world.gd:231)

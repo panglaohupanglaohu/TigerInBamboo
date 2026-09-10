@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "version": 4,
+  "all301MotionRecordsExactlyEqualV2": true,
+  "newShapeFrames": 301,
+  "newShapeScope": "Actual new hull versus 26 original torso/skirt/head/helmet/crest/legs and all shafts/handles; new landing support versus those bodies/oars. Existing deck/seat and different-oar checks independently rerun.",
+  "failedFrames": [],
+  "eyeRootCentersThree": {
+    "n23": [
+      -1.9600001573562622,
+      0.4699999988079071,
+      -0.5082894563674927
+    ],
+    "n25": [
+      -1.968000054359436,
+      0.476000040769577,
+      -0.5344366431236267
+    ],
+    "n47": [
+      -1.9600001573562622,
+      0.46999993920326233,
+      0.5082895159721375
+    ],
+    "n49": [
+      -1.968000054359436,
+      0.47600001096725464,
+      0.5344367623329163
+    ]
+  },
+  "maxEyeCenterMotion": 0,
+  "eyeHullTriangleContacts": [],
+  "boardingJunction": {
+    "hingeThree": [
+      1.94,
+      0.664,
+      0.48
+    ],
+    "poseFrame": 212,
+    "actualFloorRaySamples": 450,
+    "missingSupport": [],
+    "topHeightRange": [
+      0.6639998555183411,
+      0.6819319128990173
+    ],
+    "maximumAdjacentHeightStep": 0.01793205738067627,
+    "scope": "Actual landing/lip/deployed board floor support across x1.77..2.11,z.38...62; does not validate a walking character or25-person path."
+  },
+  "limits": [
+    "No all-body self collision certification.",
+    "No25-person scheduler; V1 single-actor path NOT revalidated on reshaped deck.",
+    "Static GLB and authored saved review poses, no runtime integration."
+  ]
+}

@@ -1,0 +1,279 @@
+{
+  "adapter": {
+    "groups": 6,
+    "instances": 6000,
+    "scope": "Original archive instances; no new character or morph batching",
+    "skipped": [
+      {
+        "path": "moebius-metropolis[63]/moebius-crystal-instances[1]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "moebius-metropolis[63]/Mesh[2]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "moebius-metropolis[63]/moebius-crystal-instances[3]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "moebius-metropolis[63]/Mesh[4]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "moebius-metropolis[63]/moebius-crystal-instances[5]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "moebius-metropolis[63]/Mesh[6]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "moebius-metropolis[63]/moebius-waterline-platforms[7]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "moebius-metropolis[63]/Mesh[11]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "castleContainer[69]/citadel-continuous-mountain-terrain-system[3]/highland-slope-grass-billboards[2]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "castleContainer[69]/citadel-continuous-mountain-terrain-system[3]/highland-canopy-groves[4]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-torso[0]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-skirt[1]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-head[2]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-helmet[3]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-crest[4]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-crestFeathers[5]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-crestStems[6]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-armL[7]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-armR[8]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-legL[9]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "swamp-shipwreck[81]/warship-crew[83]/crew-legR[10]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-torso[0]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-skirt[1]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-head[2]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-helmet[3]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-crest[4]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-crestFeathers[5]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-crestStems[6]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-armL[7]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-armR[8]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-legL[9]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-0[85]/warship-crew[83]/crew-legR[10]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-torso[0]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-skirt[1]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-head[2]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-helmet[3]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-crest[4]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-crestFeathers[5]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-crestStems[6]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-armL[7]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-armR[8]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-legL[9]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-1[86]/warship-crew[83]/crew-legR[10]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-torso[0]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-skirt[1]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-head[2]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-helmet[3]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-crest[4]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-crestFeathers[5]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-crestStems[6]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-armL[7]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-armR[8]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-legL[9]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "ocean-warship-2[87]/warship-crew[83]/crew-legR[10]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-torso[0]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-skirt[1]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-head[2]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-helmet[3]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-crest[4]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-crestFeathers[5]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-crestStems[6]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-armL[7]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-armR[8]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-legL[9]",
+        "reason": "geometry, material or original transform differs"
+      },
+      {
+        "path": "fisher-boat[88]/warship-crew[83]/crew-legR[10]",
+        "reason": "geometry, material or original transform differs"
+      }
+    ],
+    "surfaces_after": 12,
+    "surfaces_before": 12000
+  },
+  "after_calls": 12.0,
+  "after_primitives": 52000.0,
+  "before_calls": 12000.0,
+  "before_primitives": 52000.0,
+  "changed_byte_fraction": 0.0,
+  "max_byte_error": 0,
+  "mean_byte_error": 0.0,
+  "scope": "Isolated original 6000 bird instances, identical camera/light; other meshes hidden in both images, not battle acceptance"
+}

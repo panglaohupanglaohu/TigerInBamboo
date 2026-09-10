@@ -1,0 +1,36 @@
+{
+  "runId": "panel-1788987254125",
+  "passed": true,
+  "reports": [
+    {
+      "mode": "desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "stages": 16,
+      "levelRequests": 2,
+      "oldDraftPreserved": true,
+      "noStorageWrites": true,
+      "noExecution": true,
+      "noHorizontalOverflow": true,
+      "errors": []
+    },
+    {
+      "mode": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stages": 16,
+      "levelRequests": 2,
+      "oldDraftPreserved": true,
+      "noStorageWrites": true,
+      "noExecution": true,
+      "noHorizontalOverflow": true,
+      "errors": []
+    }
+  ],
+  "inertText": true,
+  "scope": "Isolated real workbench UI; not gameplay deployment or full-world playtest."
+}

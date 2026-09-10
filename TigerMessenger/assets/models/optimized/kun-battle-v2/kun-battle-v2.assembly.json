@@ -1,0 +1,5471 @@
+{
+  "stage": "mouth candidate, visual review pending",
+  "sourceBlend": "assets/models/originals/leviathan/blender-r3/leviathanIsland.blend",
+  "sourceSha256": "53f3069f9cca770f535ae812dc10e438b0e84559def3df61a6d131bec3b4240f",
+  "reference": {
+    "path": "assets/concepts/kun-battle-target-v1.png",
+    "sha256": "baac21e5a8de1c148fcff51181a8ee2b8c6ef9697f46547a52d0acc032b05f00"
+  },
+  "originalNodes": 295,
+  "originalParentsAndMatricesUnchanged": true,
+  "islandGeometryAndMatricesUnchanged": true,
+  "islandNode": "n102",
+  "plateY": 6.08,
+  "runtimeGardenScale": 0.43,
+  "rootScale": 0.5,
+  "runtimeGardenScenesBaked": false,
+  "axes": "Three +X forward,+Y up; Blender C=RotX(+90deg)",
+  "jawPivotThree": [
+    24.0,
+    -11.5,
+    0.0
+  ],
+  "jawRotationThreeZDegrees": -38,
+  "addedNodes": [
+    {
+      "id": "add:jaw-pivot",
+      "parentId": "n0",
+      "name": "Kun lower jaw pivot",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:jaw-shell",
+      "parentId": "add:jaw-pivot",
+      "name": "Kun lower jaw warm pale shell",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:mouth-roof",
+      "parentId": "n0",
+      "name": "Kun mouth roof",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:mouth-floor",
+      "parentId": "add:jaw-pivot",
+      "name": "Kun recessed lower mouth lining",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:jaw-rim-thickness",
+      "parentId": "add:jaw-pivot",
+      "name": "Kun thick warm pale jaw rim",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:upper-lip-line",
+      "parentId": "n0",
+      "name": "Kun upper mouth line",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:lower-lip",
+      "parentId": "add:jaw-pivot",
+      "name": "Kun lower pale lip",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:throat-membrane",
+      "parentId": "n0",
+      "name": "Kun flexible rear throat",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": "add:inner-throat",
+      "parentId": "add:mouth-roof",
+      "name": "Kun v2 inward tapering throat",
+      "localMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "poses": [
+    {
+      "name": "closed",
+      "frame": 1,
+      "jawOpen01": 0,
+      "throatInflation": 0
+    },
+    {
+      "name": "open",
+      "frame": 31,
+      "jawOpen01": 1,
+      "throatInflation": 0.45
+    },
+    {
+      "name": "engulf",
+      "frame": 61,
+      "jawOpen01": 1,
+      "throatInflation": 1
+    },
+    {
+      "name": "recover",
+      "frame": 91,
+      "jawOpen01": 0.4,
+      "throatInflation": 0.35
+    },
+    {
+      "name": "closed_end",
+      "frame": 121,
+      "jawOpen01": 0,
+      "throatInflation": 0
+    }
+  ],
+  "poseFrames": [
+    {
+      "frame": 1,
+      "jawOpen01": 0.0,
+      "throatInflation": 0.0,
+      "jawLocalMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.0,
+          "JawTurnCos": 0.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.0
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.0
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.0,
+          "JawTurnCos": 0.0
+        }
+      }
+    },
+    {
+      "frame": 2,
+      "jawOpen01": 0.003259259259259259,
+      "throatInflation": 0.0014666666666666667,
+      "jawLocalMatrix": [
+        0.9999976754188538,
+        -0.002161620883271098,
+        -1.6319784412743843e-10,
+        0.0,
+        0.002161620883271098,
+        0.9999976754188538,
+        -1.7763568394002505e-13,
+        0.0,
+        1.6319784412743843e-10,
+        -1.7763568394002505e-13,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.003511054441332817,
+          "JawTurnCos": 1.1020866622857284e-05
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.0014666666666666667
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.003259259259259259
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.0014666666666666667
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.003511054441332817,
+          "JawTurnCos": 1.1020866622857284e-05
+        }
+      }
+    },
+    {
+      "frame": 3,
+      "jawOpen01": 0.012740740740740742,
+      "throatInflation": 0.005733333333333334,
+      "jawLocalMatrix": [
+        0.9999642968177795,
+        -0.008449878543615341,
+        -6.37948083248574e-10,
+        0.0,
+        0.008449878543615341,
+        0.9999642968177795,
+        -2.6929569685307797e-12,
+        0.0,
+        6.37948083248574e-10,
+        -2.6929569685307797e-12,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.013724878430366516,
+          "JawTurnCos": 0.00016840883472468704
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.005733333333333334
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.012740740740740742
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.005733333333333334
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.013724878430366516,
+          "JawTurnCos": 0.00016840883472468704
+        }
+      }
+    },
+    {
+      "frame": 4,
+      "jawOpen01": 0.028000000000000004,
+      "throatInflation": 0.012600000000000002,
+      "jawLocalMatrix": [
+        0.9998275637626648,
+        -0.018569236621260643,
+        -1.40193834319291e-09,
+        0.0,
+        0.018569236621260643,
+        0.9998275637626648,
+        -1.3017142919125035e-11,
+        0.0,
+        1.40193834319291e-09,
+        -1.3017142919125035e-11,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.030161438509821892,
+          "JawTurnCos": 0.000813357881270349
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.012600000000000002
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.028000000000000004
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.012600000000000002
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.030161438509821892,
+          "JawTurnCos": 0.000813357881270349
+        }
+      }
+    },
+    {
+      "frame": 5,
+      "jawOpen01": 0.0485925925925926,
+      "throatInflation": 0.02186666666666667,
+      "jawLocalMatrix": [
+        0.9994807243347168,
+        -0.03222225233912468,
+        -2.4327124759082608e-09,
+        0.0,
+        0.03222225233912468,
+        0.9994807243347168,
+        -3.920774815924233e-11,
+        0.0,
+        2.4327124759082608e-09,
+        -3.920774815924233e-11,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.052337609231472015,
+          "JawTurnCos": 0.002449518069624901
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.02186666666666667
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.0485925925925926
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.02186666666666667
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.052337609231472015,
+          "JawTurnCos": 0.002449518069624901
+        }
+      }
+    },
+    {
+      "frame": 6,
+      "jawOpen01": 0.07407407407407407,
+      "throatInflation": 0.03333333333333333,
+      "jawLocalMatrix": [
+        0.9987934827804565,
+        -0.049108028411865234,
+        -3.7075531533758976e-09,
+        0.0,
+        0.049108028411865234,
+        0.9987934827804565,
+        -9.109157872444484e-11,
+        0.0,
+        3.7075531533758976e-09,
+        -9.109157872444484e-11,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.07976465672254562,
+          "JawTurnCos": 0.005691453814506531
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.03333333333333333
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.07407407407407407
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.03333333333333333
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.07976465672254562,
+          "JawTurnCos": 0.005691453814506531
+        }
+      }
+    },
+    {
+      "frame": 7,
+      "jawOpen01": 0.10400000000000002,
+      "throatInflation": 0.04680000000000001,
+      "jawLocalMatrix": [
+        0.9976221323013306,
+        -0.06892073154449463,
+        -5.203370623263481e-09,
+        0.0,
+        0.06892073154449463,
+        0.9976221323013306,
+        -1.7952572761714691e-10,
+        0.0,
+        5.203370623263481e-09,
+        -1.7952572761714691e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.11194582283496857,
+          "JawTurnCos": 0.011216893792152405
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.04680000000000001
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.10400000000000002
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.04680000000000001
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.11194582283496857,
+          "JawTurnCos": 0.011216893792152405
+        }
+      }
+    },
+    {
+      "frame": 8,
+      "jawOpen01": 0.13792592592592592,
+      "throatInflation": 0.062066666666666666,
+      "jawLocalMatrix": [
+        0.9958189725875854,
+        -0.09134841710329056,
+        -6.896613946594243e-09,
+        0.0,
+        0.09134841710329056,
+        0.9958189725875854,
+        -3.156586103614245e-10,
+        0.0,
+        6.896613946594243e-09,
+        -3.156586103614245e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.14837442338466644,
+          "JawTurnCos": 0.01972273178398609
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.062066666666666666
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.13792592592592592
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.062066666666666666
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.14837442338466644,
+          "JawTurnCos": 0.01972273178398609
+        }
+      }
+    },
+    {
+      "frame": 9,
+      "jawOpen01": 0.17540740740740743,
+      "throatInflation": 0.07893333333333334,
+      "jawLocalMatrix": [
+        0.9932407736778259,
+        -0.11607236415147781,
+        -8.763219483398643e-09,
+        0.0,
+        0.11607236415147781,
+        0.9932407736778259,
+        -5.103046873955464e-10,
+        0.0,
+        8.763219483398643e-09,
+        -5.103046873955464e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.1885327845811844,
+          "JawTurnCos": 0.03188483044505119
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.07893333333333334
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.17540740740740743
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.07893333333333334
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.1885327845811844,
+          "JawTurnCos": 0.03188483044505119
+        }
+      }
+    },
+    {
+      "frame": 10,
+      "jawOpen01": 0.216,
+      "throatInflation": 0.0972,
+      "jawLocalMatrix": [
+        0.9897562861442566,
+        -0.14276713132858276,
+        -1.0778618886320146e-08,
+        0.0,
+        0.14276713132858276,
+        0.9897562861442566,
+        -7.733760298833658e-10,
+        0.0,
+        1.0778618886320146e-08,
+        -7.733760298833658e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.23189225792884827,
+          "JawTurnCos": 0.048321761190891266
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.0972
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.216
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.0972
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.23189225792884827,
+          "JawTurnCos": 0.048321761190891266
+        }
+      }
+    },
+    {
+      "frame": 11,
+      "jawOpen01": 0.25925925925925924,
+      "throatInflation": 0.11666666666666667,
+      "jawLocalMatrix": [
+        0.9852534532546997,
+        -0.17110121250152588,
+        -1.2917782399313182e-08,
+        0.0,
+        0.17110121250152588,
+        0.9852534532546997,
+        -1.1133352018077858e-09,
+        0.0,
+        1.2917782399313182e-08,
+        -1.1133352018077858e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.277914434671402,
+          "JawTurnCos": 0.06956268846988678
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.11666666666666667
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.25925925925925924
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.11666666666666667
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.277914434671402,
+          "JawTurnCos": 0.06956268846988678
+        }
+      }
+    },
+    {
+      "frame": 12,
+      "jawOpen01": 0.3047407407407407,
+      "throatInflation": 0.13713333333333333,
+      "jawLocalMatrix": [
+        0.9796448349952698,
+        -0.20073850452899933,
+        -1.515533654128376e-08,
+        0.0,
+        0.20073850452899933,
+        0.9796448349952698,
+        -1.5367689343293023e-09,
+        0.0,
+        1.515533654128376e-08,
+        -1.5367689343293023e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.3260533809661865,
+          "JawTurnCos": 0.0960196778178215
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.13713333333333333
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.3047407407407407
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.13713333333333333
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.3260533809661865,
+          "JawTurnCos": 0.0960196778178215
+        }
+      }
+    },
+    {
+      "frame": 13,
+      "jawOpen01": 0.3520000000000001,
+      "throatInflation": 0.15840000000000004,
+      "jawLocalMatrix": [
+        0.9728728532791138,
+        -0.2313404083251953,
+        -1.7465715984599228e-08,
+        0.0,
+        0.2313404083251953,
+        0.9728728532791138,
+        -2.0480399598454824e-09,
+        0.0,
+        1.7465715984599228e-08,
+        -2.0480399598454824e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.375759094953537,
+          "JawTurnCos": 0.12796466052532196
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.15840000000000004
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.3520000000000001
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.15840000000000004
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.375759094953537,
+          "JawTurnCos": 0.12796466052532196
+        }
+      }
+    },
+    {
+      "frame": 14,
+      "jawOpen01": 0.4005925925925926,
+      "throatInflation": 0.1802666666666667,
+      "jawLocalMatrix": [
+        0.9649133682250977,
+        -0.2625684142112732,
+        -1.9823364283411138e-08,
+        0.0,
+        0.2625684142112732,
+        0.9649133682250977,
+        -2.648967267759872e-09,
+        0.0,
+        1.9823364283411138e-08,
+        -2.648967267759872e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.42648181319236755,
+          "JawTurnCos": 0.165511354804039
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.1802666666666667
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4005925925925926
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.1802666666666667
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.42648181319236755,
+          "JawTurnCos": 0.165511354804039
+        }
+      }
+    },
+    {
+      "frame": 15,
+      "jawOpen01": 0.45007407407407407,
+      "throatInflation": 0.20253333333333334,
+      "jawLocalMatrix": [
+        0.9557785987854004,
+        -0.2940872609615326,
+        -2.2202970129114874e-08,
+        0.0,
+        0.2940872609615326,
+        0.9557785987854004,
+        -3.338620047088625e-09,
+        0.0,
+        2.2202970129114874e-08,
+        -3.338620047088625e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4776769280433655,
+          "JawTurnCos": 0.20860223472118378
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.20253333333333334
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.45007407407407407
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.20253333333333334
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4776769280433655,
+          "JawTurnCos": 0.20860223472118378
+        }
+      }
+    },
+    {
+      "frame": 16,
+      "jawOpen01": 0.5,
+      "throatInflation": 0.225,
+      "jawLocalMatrix": [
+        0.9455185532569885,
+        -0.32556813955307007,
+        -2.4579710711236658e-08,
+        0.0,
+        0.32556813955307007,
+        0.9455185532569885,
+        -4.1132324213322136e-09,
+        0.0,
+        2.4579710711236658e-08,
+        -4.1132324213322136e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.5288103222846985,
+          "JawTurnCos": 0.2570008933544159
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.225
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.5
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.225
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.5288103222846985,
+          "JawTurnCos": 0.2570008933544159
+        }
+      }
+    },
+    {
+      "frame": 17,
+      "jawOpen01": 0.5499259259259259,
+      "throatInflation": 0.24746666666666667,
+      "jawLocalMatrix": [
+        0.9342219829559326,
+        -0.3566921055316925,
+        -2.692950573646158e-08,
+        0.0,
+        0.3566921055316925,
+        0.9342219829559326,
+        -4.9661039724924194e-09,
+        0.0,
+        2.692950573646158e-08,
+        -4.9661039724924194e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.579364001750946,
+          "JawTurnCos": 0.31028932332992554
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.24746666666666667
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.5499259259259259
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.24746666666666667
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.579364001750946,
+          "JawTurnCos": 0.31028932332992554
+        }
+      }
+    },
+    {
+      "frame": 18,
+      "jawOpen01": 0.5994074074074074,
+      "throatInflation": 0.2697333333333333,
+      "jawLocalMatrix": [
+        0.922015368938446,
+        -0.3871532678604126,
+        -2.9229259013163755e-08,
+        0.0,
+        0.3871532678604126,
+        0.922015368938446,
+        -5.887677900773269e-09,
+        0.0,
+        2.9229259013163755e-08,
+        -5.887677900773269e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.6288411021232605,
+          "JawTurnCos": 0.36787062883377075
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.2697333333333333
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.5994074074074074
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.2697333333333333
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.6288411021232605,
+          "JawTurnCos": 0.36787062883377075
+        }
+      }
+    },
+    {
+      "frame": 19,
+      "jawOpen01": 0.648,
+      "throatInflation": 0.2916,
+      "jawLocalMatrix": [
+        0.9090616703033447,
+        -0.4166616201400757,
+        -3.145707694329758e-08,
+        0.0,
+        0.4166616201400757,
+        0.9090616703033447,
+        -6.865654711418756e-09,
+        0.0,
+        3.145707694329758e-08,
+        -6.865654711418756e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.6767706274986267,
+          "JawTurnCos": 0.4289762079715729
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.2916
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.648
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.2916
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.6767706274986267,
+          "JawTurnCos": 0.4289762079715729
+        }
+      }
+    },
+    {
+      "frame": 20,
+      "jawOpen01": 0.6952592592592592,
+      "throatInflation": 0.3128666666666667,
+      "jawLocalMatrix": [
+        0.8955576419830322,
+        -0.44494548439979553,
+        -3.3592449710795336e-08,
+        0.0,
+        0.44494548439979553,
+        0.8955576419830322,
+        -7.885176955824136e-09,
+        0.0,
+        3.3592449710795336e-08,
+        -7.885176955824136e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.7227112650871277,
+          "JawTurnCos": 0.49267759919166565
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3128666666666667
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.6952592592592592
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3128666666666667
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.7227112650871277,
+          "JawTurnCos": 0.49267759919166565
+        }
+      }
+    },
+    {
+      "frame": 21,
+      "jawOpen01": 0.7407407407407407,
+      "throatInflation": 0.3333333333333333,
+      "jawLocalMatrix": [
+        0.8817307353019714,
+        -0.47175300121307373,
+        -3.5616363192048084e-08,
+        0.0,
+        0.47175300121307373,
+        0.8817307353019714,
+        -8.929077921493445e-09,
+        0.0,
+        3.5616363192048084e-08,
+        -8.929077921493445e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.7662538886070251,
+          "JawTurnCos": 0.5579021573066711
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3333333333333333
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.7407407407407407
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3333333333333333
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.7662538886070251,
+          "JawTurnCos": 0.5579021573066711
+        }
+      }
+    },
+    {
+      "frame": 22,
+      "jawOpen01": 0.7839999999999999,
+      "throatInflation": 0.35279999999999995,
+      "jawLocalMatrix": [
+        0.8678348064422607,
+        -0.4968528151512146,
+        -3.751134514118348e-08,
+        0.0,
+        0.4968528151512146,
+        0.8678348064422607,
+        -9.978194270843233e-09,
+        0.0,
+        3.751134514118348e-08,
+        -9.978194270843233e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.8070226907730103,
+          "JawTurnCos": 0.6234521865844727
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.35279999999999995
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.7839999999999999
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.35279999999999995
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.8070226907730103,
+          "JawTurnCos": 0.6234521865844727
+        }
+      }
+    },
+    {
+      "frame": 23,
+      "jawOpen01": 0.8245925925925925,
+      "throatInflation": 0.37106666666666666,
+      "jawLocalMatrix": [
+        0.8541457056999207,
+        -0.5200337767601013,
+        -3.9261458084638434e-08,
+        0.0,
+        0.5200337767601013,
+        0.8541457056999207,
+        -1.1011692890861013e-08,
+        0.0,
+        3.9261458084638434e-08,
+        -1.1011692890861013e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.8446748852729797,
+          "JawTurnCos": 0.6880269646644592
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.37106666666666666
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.8245925925925925
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.37106666666666666
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.8446748852729797,
+          "JawTurnCos": 0.6880269646644592
+        }
+      }
+    },
+    {
+      "frame": 24,
+      "jawOpen01": 0.8620740740740741,
+      "throatInflation": 0.38793333333333335,
+      "jawLocalMatrix": [
+        0.8409557938575745,
+        -0.5411038398742676,
+        -4.085220339788975e-08,
+        0.0,
+        0.5411038398742676,
+        0.8409557938575745,
+        -1.2007504324174079e-08,
+        0.0,
+        4.085220339788975e-08,
+        -1.2007504324174079e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.8788983821868896,
+          "JawTurnCos": 0.7502466440200806
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.38793333333333335
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.8620740740740741
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.38793333333333335
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.8788983821868896,
+          "JawTurnCos": 0.7502466440200806
+        }
+      }
+    },
+    {
+      "frame": 25,
+      "jawOpen01": 0.8960000000000001,
+      "throatInflation": 0.40320000000000006,
+      "jawLocalMatrix": [
+        0.8285688161849976,
+        -0.5598872303962708,
+        -4.227031169534712e-08,
+        0.0,
+        0.5598872303962708,
+        0.8285688161849976,
+        -1.2942692251272092e-08,
+        0.0,
+        4.227031169534712e-08,
+        -1.2942692251272092e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9094076156616211,
+          "JawTurnCos": 0.8086786866188049
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.40320000000000006
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.8960000000000001
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.40320000000000006
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9094076156616211,
+          "JawTurnCos": 0.8086786866188049
+        }
+      }
+    },
+    {
+      "frame": 26,
+      "jawOpen01": 0.925925925925926,
+      "throatInflation": 0.41666666666666674,
+      "jawLocalMatrix": [
+        0.8172938823699951,
+        -0.5762210488319397,
+        -4.3503479929540845e-08,
+        0.0,
+        0.5762210488319397,
+        0.8172938823699951,
+        -1.379392955414005e-08,
+        0.0,
+        4.3503479929540845e-08,
+        -1.379392955414005e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9359380602836609,
+          "JawTurnCos": 0.8618648648262024
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.41666666666666674
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.925925925925926
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.41666666666666674
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9359380602836609,
+          "JawTurnCos": 0.8618648648262024
+        }
+      }
+    },
+    {
+      "frame": 27,
+      "jawOpen01": 0.9514074074074075,
+      "throatInflation": 0.42813333333333337,
+      "jawLocalMatrix": [
+        0.8074395656585693,
+        -0.5899503231048584,
+        -4.454001256704032e-08,
+        0.0,
+        0.5899503231048584,
+        0.8074395656585693,
+        -1.453791043104502e-08,
+        0.0,
+        4.454001256704032e-08,
+        -1.453791043104502e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9582381248474121,
+          "JawTurnCos": 0.9083500504493713
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.42813333333333337
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9514074074074075
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.42813333333333337
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9582381248474121,
+          "JawTurnCos": 0.9083500504493713
+        }
+      }
+    },
+    {
+      "frame": 28,
+      "jawOpen01": 0.972,
+      "throatInflation": 0.4374,
+      "jawLocalMatrix": [
+        0.7993072271347046,
+        -0.6009225845336914,
+        -4.5368395262812555e-08,
+        0.0,
+        0.6009225845336914,
+        0.7993072271347046,
+        -1.5151883303587965e-08,
+        0.0,
+        4.5368395262812555e-08,
+        -1.5151883303587965e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9760600328445435,
+          "JawTurnCos": 0.9467119574546814
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.4374
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.972
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.4374
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9760600328445435,
+          "JawTurnCos": 0.9467119574546814
+        }
+      }
+    },
+    {
+      "frame": 29,
+      "jawOpen01": 0.9872592592592593,
+      "throatInflation": 0.4442666666666667,
+      "jawLocalMatrix": [
+        0.7931848764419556,
+        -0.6089808940887451,
+        -4.597677971673875e-08,
+        0.0,
+        0.6089808940887451,
+        0.7931848764419556,
+        -1.5614105564054626e-08,
+        0.0,
+        4.597677971673875e-08,
+        -1.5614105564054626e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9891489744186401,
+          "JawTurnCos": 0.9755924940109253
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.4442666666666667
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9872592592592593
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.4442666666666667
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9891489744186401,
+          "JawTurnCos": 0.9755924940109253
+        }
+      }
+    },
+    {
+      "frame": 30,
+      "jawOpen01": 0.9967407407407407,
+      "throatInflation": 0.44853333333333334,
+      "jawLocalMatrix": [
+        0.7893397212028503,
+        -0.61395663022995,
+        -4.6352436555707754e-08,
+        0.0,
+        0.61395663022995,
+        0.7893397212028503,
+        -1.590440845689045e-08,
+        0.0,
+        4.6352436555707754e-08,
+        -1.590440845689045e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9972308874130249,
+          "JawTurnCos": 0.993730902671814
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.44853333333333334
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9967407407407407
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.44853333333333334
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9972308874130249,
+          "JawTurnCos": 0.993730902671814
+        }
+      }
+    },
+    {
+      "frame": 31,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.45,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.45
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.45
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 32,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.4517925925925926,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.4517925925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.4517925925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 33,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.4570074074074074,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.4570074074074074
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.4570074074074074
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 34,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.46540000000000004,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.46540000000000004
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.46540000000000004
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 35,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.47672592592592594,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.47672592592592594
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.47672592592592594
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 36,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.49074074074074076,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.49074074074074076
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.49074074074074076
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 37,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.5072,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5072
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5072
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 38,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.5258592592592592,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5258592592592592
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5258592592592592
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 39,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.5464740740740741,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5464740740740741
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5464740740740741
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 40,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.5688,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5688
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5688
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 41,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.5925925925925926,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5925925925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5925925925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 42,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.6176074074074074,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.6176074074074074
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.6176074074074074
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 43,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.6436000000000001,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.6436000000000001
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.6436000000000001
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 44,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.670325925925926,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.670325925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.670325925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 45,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.6975407407407408,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.6975407407407408
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.6975407407407408
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 46,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.7250000000000001,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.7250000000000001
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.7250000000000001
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 47,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.7524592592592593,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.7524592592592593
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.7524592592592593
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 48,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.7796740740740741,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.7796740740740741
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.7796740740740741
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 49,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.8064,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8064
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8064
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 50,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.8323925925925926,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8323925925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8323925925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 51,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.8574074074074074,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8574074074074074
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8574074074074074
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 52,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.8812,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8812
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8812
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 53,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.903525925925926,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.903525925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.903525925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 54,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.9241407407407408,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9241407407407408
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9241407407407408
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 55,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.9428000000000001,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9428000000000001
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9428000000000001
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 56,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.9592592592592595,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9592592592592595
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9592592592592595
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 57,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.9732740740740742,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9732740740740742
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9732740740740742
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 58,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.9846000000000001,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9846000000000001
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9846000000000001
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 59,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.9929925925925926,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9929925925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9929925925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 60,
+      "jawOpen01": 1.0,
+      "throatInflation": 0.9982074074074074,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9982074074074074
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9982074074074074
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 61,
+      "jawOpen01": 1.0,
+      "throatInflation": 1.0,
+      "jawLocalMatrix": [
+        0.7880107760429382,
+        -0.6156615018844604,
+        -4.6481151372290697e-08,
+        0.0,
+        0.6156615018844604,
+        0.7880107760429382,
+        -1.6004740643893456e-08,
+        0.0,
+        4.6481151372290697e-08,
+        -1.6004740643893456e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 1.0
+        },
+        "add:lower-lip": {
+          "LipFullness": 1.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 1.0
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 1.0,
+          "JawTurnCos": 1.0
+        }
+      }
+    },
+    {
+      "frame": 62,
+      "jawOpen01": 0.9980444444444444,
+      "throatInflation": 0.9978814814814815,
+      "jawLocalMatrix": [
+        0.7888085842132568,
+        -0.6146389245986938,
+        -4.640394735133668e-08,
+        0.0,
+        0.6146389245986938,
+        0.7888085842132568,
+        -1.5944507936183072e-08,
+        0.0,
+        4.640394735133668e-08,
+        -1.5944507936183072e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9983391165733337,
+          "JawTurnCos": 0.9962364435195923
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9978814814814815
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9980444444444444
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9978814814814815
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9983391165733337,
+          "JawTurnCos": 0.9962364435195923
+        }
+      }
+    },
+    {
+      "frame": 63,
+      "jawOpen01": 0.9923555555555555,
+      "throatInflation": 0.9917185185185186,
+      "jawLocalMatrix": [
+        0.7911220192909241,
+        -0.6116583943367004,
+        -4.617892557234882e-08,
+        0.0,
+        0.6116583943367004,
+        0.7911220192909241,
+        -1.5769849426305882e-08,
+        0.0,
+        4.617892557234882e-08,
+        -1.5769849426305882e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.993497908115387,
+          "JawTurnCos": 0.9853235483169556
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9917185185185186
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9923555555555555
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9917185185185186
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.993497908115387,
+          "JawTurnCos": 0.9853235483169556
+        }
+      }
+    },
+    {
+      "frame": 64,
+      "jawOpen01": 0.9832,
+      "throatInflation": 0.9818,
+      "jawLocalMatrix": [
+        0.7948215007781982,
+        -0.6068432927131653,
+        -4.5815394145165556e-08,
+        0.0,
+        0.6068432927131653,
+        0.7948215007781982,
+        -1.5490549287733302e-08,
+        0.0,
+        4.5815394145165556e-08,
+        -1.5490549287733302e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9856768846511841,
+          "JawTurnCos": 0.967872142791748
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9818
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9832
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9818
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9856768846511841,
+          "JawTurnCos": 0.967872142791748
+        }
+      }
+    },
+    {
+      "frame": 65,
+      "jawOpen01": 0.9708444444444444,
+      "throatInflation": 0.9684148148148148,
+      "jawLocalMatrix": [
+        0.7997675538063049,
+        -0.6003097891807556,
+        -4.5322128272573536e-08,
+        0.0,
+        0.6003097891807556,
+        0.7997675538063049,
+        -1.511713065838194e-08,
+        0.0,
+        4.5322128272573536e-08,
+        -1.511713065838194e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.975064754486084,
+          "JawTurnCos": 0.9445405602455139
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9684148148148148
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9708444444444444
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9684148148148148
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.975064754486084,
+          "JawTurnCos": 0.9445405602455139
+        }
+      }
+    },
+    {
+      "frame": 66,
+      "jawOpen01": 0.9555555555555556,
+      "throatInflation": 0.9518518518518518,
+      "jawLocalMatrix": [
+        0.8058134317398071,
+        -0.592169463634491,
+        -4.4707551438705195e-08,
+        0.0,
+        0.592169463634491,
+        0.8058134317398071,
+        -1.466067800492965e-08,
+        0.0,
+        4.4707551438705195e-08,
+        -1.466067800492965e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9618426561355591,
+          "JawTurnCos": 0.9160206913948059
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9518518518518518
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9555555555555556
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9518518518518518
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9618426561355591,
+          "JawTurnCos": 0.9160206913948059
+        }
+      }
+    },
+    {
+      "frame": 67,
+      "jawOpen01": 0.9376,
+      "throatInflation": 0.9324,
+      "jawLocalMatrix": [
+        0.8128080368041992,
+        -0.5825316309928894,
+        -4.3979916597436386e-08,
+        0.0,
+        0.5825316309928894,
+        0.8128080368041992,
+        -1.4132602643712744e-08,
+        0.0,
+        4.3979916597436386e-08,
+        -1.4132602643712744e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9461881518363953,
+          "JawTurnCos": 0.8830257058143616
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9324
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9376
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9324
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9461881518363953,
+          "JawTurnCos": 0.8830257058143616
+        }
+      }
+    },
+    {
+      "frame": 68,
+      "jawOpen01": 0.9172444444444444,
+      "throatInflation": 0.9103481481481481,
+      "jawLocalMatrix": [
+        0.8205981254577637,
+        -0.5715056657791138,
+        -4.314747670264296e-08,
+        0.0,
+        0.5715056657791138,
+        0.8205981254577637,
+        -1.3544465105042036e-08,
+        0.0,
+        4.314747670264296e-08,
+        -1.3544465105042036e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.9282791018486023,
+          "JawTurnCos": 0.8462783098220825
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.9103481481481481
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.9172444444444444
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.9103481481481481
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.9282791018486023,
+          "JawTurnCos": 0.8462783098220825
+        }
+      }
+    },
+    {
+      "frame": 69,
+      "jawOpen01": 0.8947555555555555,
+      "throatInflation": 0.8859851851851852,
+      "jawLocalMatrix": [
+        0.8290306329727173,
+        -0.5592032074928284,
+        -4.2218669449312074e-08,
+        0.0,
+        0.5592032074928284,
+        0.8290306329727173,
+        -1.2907825919228344e-08,
+        0.0,
+        4.2218669449312074e-08,
+        -1.2907825919228344e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.908296525478363,
+          "JawTurnCos": 0.8065001964569092
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8859851851851852
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.8947555555555555
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8859851851851852
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.908296525478363,
+          "JawTurnCos": 0.8065001964569092
+        }
+      }
+    },
+    {
+      "frame": 70,
+      "jawOpen01": 0.8704000000000001,
+      "throatInflation": 0.8596,
+      "jawLocalMatrix": [
+        0.8379549980163574,
+        -0.5457393527030945,
+        -4.120217411696103e-08,
+        0.0,
+        0.5457393527030945,
+        0.8379549980163574,
+        -1.2234060875471187e-08,
+        0.0,
+        4.120217411696103e-08,
+        -1.2234060875471187e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.8864275813102722,
+          "JawTurnCos": 0.764401912689209
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8596
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.8704000000000001
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8596
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.8864275813102722,
+          "JawTurnCos": 0.764401912689209
+        }
+      }
+    },
+    {
+      "frame": 71,
+      "jawOpen01": 0.8444444444444444,
+      "throatInflation": 0.8314814814814815,
+      "jawLocalMatrix": [
+        0.8472249507904053,
+        -0.5312342643737793,
+        -4.010707144175285e-08,
+        0.0,
+        0.5312342643737793,
+        0.8472249507904053,
+        -1.153419759702956e-08,
+        0.0,
+        4.010707144175285e-08,
+        -1.153419759702956e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.862867534160614,
+          "JawTurnCos": 0.7206735610961914
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8314814814814815
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.8444444444444444
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8314814814814815
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.862867534160614,
+          "JawTurnCos": 0.7206735610961914
+        }
+      }
+    },
+    {
+      "frame": 72,
+      "jawOpen01": 0.8171555555555556,
+      "throatInflation": 0.8019185185185185,
+      "jawLocalMatrix": [
+        0.8567003011703491,
+        -0.515814483165741,
+        -3.8942911118056145e-08,
+        0.0,
+        0.515814483165741,
+        0.8567003011703491,
+        -1.0818823170666292e-08,
+        0.0,
+        3.8942911118056145e-08,
+        -1.0818823170666292e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.8378216028213501,
+          "JawTurnCos": 0.6759762167930603
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.8019185185185185
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.8171555555555556
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.8019185185185185
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.8378216028213501,
+          "JawTurnCos": 0.6759762167930603
+        }
+      }
+    },
+    {
+      "frame": 73,
+      "jawOpen01": 0.7888,
+      "throatInflation": 0.7711999999999999,
+      "jawLocalMatrix": [
+        0.8662487268447876,
+        -0.4996130168437958,
+        -3.7719733114727205e-08,
+        0.0,
+        0.4996130168437958,
+        0.8662487268447876,
+        -1.0097942038100882e-08,
+        0.0,
+        3.7719733114727205e-08,
+        -1.0097942038100882e-08,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.8115060329437256,
+          "JawTurnCos": 0.6309342980384827
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.7711999999999999
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.7888
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.7711999999999999
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.8115060329437256,
+          "JawTurnCos": 0.6309342980384827
+        }
+      }
+    },
+    {
+      "frame": 74,
+      "jawOpen01": 0.7596444444444445,
+      "throatInflation": 0.7396148148148147,
+      "jawLocalMatrix": [
+        0.87574702501297,
+        -0.48277026414871216,
+        -3.644814228209725e-08,
+        0.0,
+        0.48277026414871216,
+        0.87574702501297,
+        -9.380840992889716e-09,
+        0.0,
+        3.644814228209725e-08,
+        -9.380840992889716e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.7841488718986511,
+          "JawTurnCos": 0.5861285924911499
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.7396148148148147
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.7596444444444445
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.7396148148148147
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.7841488718986511,
+          "JawTurnCos": 0.5861285924911499
+        }
+      }
+    },
+    {
+      "frame": 75,
+      "jawOpen01": 0.7299555555555556,
+      "throatInflation": 0.7074518518518518,
+      "jawLocalMatrix": [
+        0.8850826025009155,
+        -0.4654339849948883,
+        -3.513929058840404e-08,
+        0.0,
+        0.4654339849948883,
+        0.8850826025009155,
+        -8.676025231579843e-09,
+        0.0,
+        3.513929058840404e-08,
+        -8.676025231579843e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.7559900879859924,
+          "JawTurnCos": 0.542090654373169
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.7074518518518518
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.7299555555555556
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.7074518518518518
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.7559900879859924,
+          "JawTurnCos": 0.542090654373169
+        }
+      }
+    },
+    {
+      "frame": 76,
+      "jawOpen01": 0.7,
+      "throatInflation": 0.675,
+      "jawLocalMatrix": [
+        0.8941542506217957,
+        -0.44775906205177307,
+        -3.3804870014364496e-08,
+        0.0,
+        0.44775906205177307,
+        0.8941542506217957,
+        -7.991133088580682e-09,
+        0.0,
+        3.3804870014364496e-08,
+        -7.991133088580682e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.7272813320159912,
+          "JawTurnCos": 0.4992977976799011
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.675
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.7
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.675
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.7272813320159912,
+          "JawTurnCos": 0.4992977976799011
+        }
+      }
+    },
+    {
+      "frame": 77,
+      "jawOpen01": 0.6700444444444444,
+      "throatInflation": 0.6425481481481481,
+      "jawLocalMatrix": [
+        0.9028729200363159,
+        -0.4299074709415436,
+        -3.245711255317474e-08,
+        0.0,
+        0.4299074709415436,
+        0.9028729200363159,
+        -7.332893403599883e-09,
+        0.0,
+        3.245711255317474e-08,
+        -7.332893403599883e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.6982855200767517,
+          "JawTurnCos": 0.45816972851753235
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.6425481481481481
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.6700444444444444
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.6425481481481481
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.6982855200767517,
+          "JawTurnCos": 0.45816972851753235
+        }
+      }
+    },
+    {
+      "frame": 78,
+      "jawOpen01": 0.6403555555555556,
+      "throatInflation": 0.6103851851851851,
+      "jawLocalMatrix": [
+        0.9111624360084534,
+        -0.4120473265647888,
+        -3.110870849809544e-08,
+        0.0,
+        0.4120473265647888,
+        0.9111624360084534,
+        -6.7070473619423865e-09,
+        0.0,
+        3.110870849809544e-08,
+        -6.7070473619423865e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.6692758202552795,
+          "JawTurnCos": 0.4190663695335388
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.6103851851851851
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.6403555555555556
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.6103851851851851
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.6692758202552795,
+          "JawTurnCos": 0.4190663695335388
+        }
+      }
+    },
+    {
+      "frame": 79,
+      "jawOpen01": 0.6112,
+      "throatInflation": 0.5788,
+      "jawLocalMatrix": [
+        0.9189592003822327,
+        -0.3943525552749634,
+        -2.9772790455240283e-08,
+        0.0,
+        0.3943525552749634,
+        0.9189592003822327,
+        -6.118412443356647e-09,
+        0.0,
+        2.9772790455240283e-08,
+        -6.118412443356647e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.6405346989631653,
+          "JawTurnCos": 0.3822871744632721
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5788
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.6112
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5788
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.6405346989631653,
+          "JawTurnCos": 0.3822871744632721
+        }
+      }
+    },
+    {
+      "frame": 80,
+      "jawOpen01": 0.5828444444444445,
+      "throatInflation": 0.5480814814814815,
+      "jawLocalMatrix": [
+        0.9262125492095947,
+        -0.3770017623901367,
+        -2.846284097302032e-08,
+        0.0,
+        0.3770017623901367,
+        0.9262125492095947,
+        -5.5707971569063375e-09,
+        0.0,
+        2.846284097302032e-08,
+        -5.5707971569063375e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.6123523712158203,
+          "JawTurnCos": 0.34807172417640686
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5480814814814815
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.5828444444444445
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5480814814814815
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.6123523712158203,
+          "JawTurnCos": 0.34807172417640686
+        }
+      }
+    },
+    {
+      "frame": 81,
+      "jawOpen01": 0.5555555555555556,
+      "throatInflation": 0.5185185185185186,
+      "jawLocalMatrix": [
+        0.9328836798667908,
+        -0.3601777255535126,
+        -2.719266234407769e-08,
+        0.0,
+        0.3601777255535126,
+        0.9328836798667908,
+        -5.067143149517506e-09,
+        0.0,
+        2.719266234407769e-08,
+        -5.067143149517506e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.5850256085395813,
+          "JawTurnCos": 0.31660234928131104
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.5185185185185186
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.5555555555555556
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.5185185185185186
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.5850256085395813,
+          "JawTurnCos": 0.31660234928131104
+        }
+      }
+    },
+    {
+      "frame": 82,
+      "jawOpen01": 0.5296000000000001,
+      "throatInflation": 0.49040000000000006,
+      "jawLocalMatrix": [
+        0.9389454126358032,
+        -0.34406614303588867,
+        -2.5976271800232098e-08,
+        0.0,
+        0.34406614303588867,
+        0.9389454126358032,
+        -4.609489678841783e-09,
+        0.0,
+        2.5976271800232098e-08,
+        -4.609489678841783e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.5588560700416565,
+          "JawTurnCos": 0.2880079448223114
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.49040000000000006
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.5296000000000001
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.49040000000000006
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.5588560700416565,
+          "JawTurnCos": 0.2880079448223114
+        }
+      }
+    },
+    {
+      "frame": 83,
+      "jawOpen01": 0.5052444444444445,
+      "throatInflation": 0.4640148148148149,
+      "jawLocalMatrix": [
+        0.9443804621696472,
+        -0.3288549482822418,
+        -2.4827858879916676e-08,
+        0.0,
+        0.3288549482822418,
+        0.9443804621696472,
+        -4.1991583543676825e-09,
+        0.0,
+        2.4827858879916676e-08,
+        -4.1991583543676825e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.5341489315032959,
+          "JawTurnCos": 0.26236966252326965
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.4640148148148149
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.5052444444444445
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.4640148148148149
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.5341489315032959,
+          "JawTurnCos": 0.26236966252326965
+        }
+      }
+    },
+    {
+      "frame": 84,
+      "jawOpen01": 0.4827555555555556,
+      "throatInflation": 0.43965185185185185,
+      "jawLocalMatrix": [
+        0.9491801857948303,
+        -0.31473326683044434,
+        -2.376170193940652e-08,
+        0.0,
+        0.31473326683044434,
+        0.9491801857948303,
+        -3.836788664557389e-09,
+        0.0,
+        2.376170193940652e-08,
+        -3.836788664557389e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.5112115144729614,
+          "JawTurnCos": 0.23972837626934052
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.43965185185185185
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4827555555555556
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.43965185185185185
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.5112115144729614,
+          "JawTurnCos": 0.23972837626934052
+        }
+      }
+    },
+    {
+      "frame": 85,
+      "jawOpen01": 0.4623999999999999,
+      "throatInflation": 0.41759999999999986,
+      "jawLocalMatrix": [
+        0.9533425569534302,
+        -0.3018907308578491,
+        -2.279211663847036e-08,
+        0.0,
+        0.3018907308578491,
+        0.9533425569534302,
+        -3.5225369288127695e-09,
+        0.0,
+        2.279211663847036e-08,
+        -3.5225369288127695e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4903518259525299,
+          "JawTurnCos": 0.22009354829788208
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.41759999999999986
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4623999999999999
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.41759999999999986
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4903518259525299,
+          "JawTurnCos": 0.22009354829788208
+        }
+      }
+    },
+    {
+      "frame": 86,
+      "jawOpen01": 0.4444444444444444,
+      "throatInflation": 0.39814814814814803,
+      "jawLocalMatrix": [
+        0.9568699598312378,
+        -0.2905166447162628,
+        -2.193339732059485e-08,
+        0.0,
+        0.2905166447162628,
+        0.9568699598312378,
+        -3.256225511449884e-09,
+        0.0,
+        2.193339732059485e-08,
+        -3.256225511449884e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.47187724709510803,
+          "JawTurnCos": 0.20345400273799896
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.39814814814814803
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4444444444444444
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.39814814814814803
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.47187724709510803,
+          "JawTurnCos": 0.20345400273799896
+        }
+      }
+    },
+    {
+      "frame": 87,
+      "jawOpen01": 0.4291555555555555,
+      "throatInflation": 0.38158518518518514,
+      "jawLocalMatrix": [
+        0.9597665071487427,
+        -0.2807992398738861,
+        -2.119975306413835e-08,
+        0.0,
+        0.2807992398738861,
+        0.9597665071487427,
+        -3.037541773664998e-09,
+        0.0,
+        2.119975306413835e-08,
+        -3.037541773664998e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.45609354972839355,
+          "JawTurnCos": 0.18979014456272125
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.38158518518518514
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4291555555555555
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.38158518518518514
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.45609354972839355,
+          "JawTurnCos": 0.18979014456272125
+        }
+      }
+    },
+    {
+      "frame": 88,
+      "jawOpen01": 0.41680000000000006,
+      "throatInflation": 0.36819999999999997,
+      "jawLocalMatrix": [
+        0.9620352983474731,
+        -0.2729250490665436,
+        -2.0605268602480464e-08,
+        0.0,
+        0.2729250490665436,
+        0.9620352983474731,
+        -2.866258341782668e-09,
+        0.0,
+        2.0605268602480464e-08,
+        -2.866258341782668e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.44330379366874695,
+          "JawTurnCos": 0.17908789217472076
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.36819999999999997
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.41680000000000006
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.36819999999999997
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.44330379366874695,
+          "JawTurnCos": 0.17908789217472076
+        }
+      }
+    },
+    {
+      "frame": 89,
+      "jawOpen01": 0.4076444444444445,
+      "throatInflation": 0.3582814814814814,
+      "jawLocalMatrix": [
+        0.963674783706665,
+        -0.2670783996582031,
+        -2.0163858138744217e-08,
+        0.0,
+        0.2670783996582031,
+        0.963674783706665,
+        -2.742474691785901e-09,
+        0.0,
+        2.0163858138744217e-08,
+        -2.742474691785901e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.43380725383758545,
+          "JawTurnCos": 0.17135396599769592
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3582814814814814
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4076444444444445
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3582814814814814
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.43380725383758545,
+          "JawTurnCos": 0.17135396599769592
+        }
+      }
+    },
+    {
+      "frame": 90,
+      "jawOpen01": 0.4019555555555556,
+      "throatInflation": 0.3521185185185185,
+      "jawLocalMatrix": [
+        0.9646756052970886,
+        -0.2634405493736267,
+        -1.9889208502377187e-08,
+        0.0,
+        0.2634405493736267,
+        0.9646756052970886,
+        -2.666915577265172e-09,
+        0.0,
+        1.9889208502377187e-08,
+        -2.666915577265172e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4278984069824219,
+          "JawTurnCos": 0.16663283109664917
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3521185185185185
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4019555555555556
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3521185185185185
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4278984069824219,
+          "JawTurnCos": 0.16663283109664917
+        }
+      }
+    },
+    {
+      "frame": 91,
+      "jawOpen01": 0.4,
+      "throatInflation": 0.35,
+      "jawLocalMatrix": [
+        0.9650164842605591,
+        -0.26218917965888977,
+        -1.9794732963873685e-08,
+        0.0,
+        0.26218917965888977,
+        0.9650164842605591,
+        -2.641179719375941e-09,
+        0.0,
+        1.9794732963873685e-08,
+        -2.641179719375941e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4258658289909363,
+          "JawTurnCos": 0.16502490639686584
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.35
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.4
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.35
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4258658289909363,
+          "JawTurnCos": 0.16502490639686584
+        }
+      }
+    },
+    {
+      "frame": 92,
+      "jawOpen01": 0.3986962962962963,
+      "throatInflation": 0.34885925925925926,
+      "jawLocalMatrix": [
+        0.965242862701416,
+        -0.2613546848297119,
+        -1.9731730915850676e-08,
+        0.0,
+        0.2613546848297119,
+        0.965242862701416,
+        -2.624091166580911e-09,
+        0.0,
+        1.9731730915850676e-08,
+        -2.624091166580911e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4245103597640991,
+          "JawTurnCos": 0.16395720839500427
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.34885925925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.3986962962962963
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.34885925925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4245103597640991,
+          "JawTurnCos": 0.16395720839500427
+        }
+      }
+    },
+    {
+      "frame": 93,
+      "jawOpen01": 0.3949037037037037,
+      "throatInflation": 0.3455407407407407,
+      "jawLocalMatrix": [
+        0.9658972024917603,
+        -0.2589259445667267,
+        -1.9548364704746746e-08,
+        0.0,
+        0.2589259445667267,
+        0.9658972024917603,
+        -2.574687130163511e-09,
+        0.0,
+        1.9548364704746746e-08,
+        -2.574687130163511e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4205654263496399,
+          "JawTurnCos": 0.1608705222606659
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3455407407407407
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.3949037037037037
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3455407407407407
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4205654263496399,
+          "JawTurnCos": 0.1608705222606659
+        }
+      }
+    },
+    {
+      "frame": 94,
+      "jawOpen01": 0.38880000000000003,
+      "throatInflation": 0.3402,
+      "jawLocalMatrix": [
+        0.9669374227523804,
+        -0.25501373410224915,
+        -1.925300097127547e-08,
+        0.0,
+        0.25501373410224915,
+        0.9669374227523804,
+        -2.4961579470073048e-09,
+        0.0,
+        1.925300097127547e-08,
+        -2.4961579470073048e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4142110049724579,
+          "JawTurnCos": 0.1559634506702423
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3402
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.38880000000000003
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3402
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4142110049724579,
+          "JawTurnCos": 0.1559634506702423
+        }
+      }
+    },
+    {
+      "frame": 95,
+      "jawOpen01": 0.380562962962963,
+      "throatInflation": 0.33299259259259256,
+      "jawLocalMatrix": [
+        0.9683161377906799,
+        -0.24972757697105408,
+        -1.8853908656524254e-08,
+        0.0,
+        0.24972757697105408,
+        0.9683161377906799,
+        -2.39206343621845e-09,
+        0.0,
+        1.8853908656524254e-08,
+        -2.39206343621845e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.4056248366832733,
+          "JawTurnCos": 0.14945977926254272
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.33299259259259256
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.380562962962963
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.33299259259259256
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.4056248366832733,
+          "JawTurnCos": 0.14945977926254272
+        }
+      }
+    },
+    {
+      "frame": 96,
+      "jawOpen01": 0.3703703703703704,
+      "throatInflation": 0.32407407407407407,
+      "jawLocalMatrix": [
+        0.9699821472167969,
+        -0.24317613244056702,
+        -1.8359287423663773e-08,
+        0.0,
+        0.24317613244056702,
+        0.9699821472167969,
+        -2.266283161134197e-09,
+        0.0,
+        1.8359287423663773e-08,
+        -2.266283161134197e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.3949835002422333,
+          "JawTurnCos": 0.1416008174419403
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.32407407407407407
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.3703703703703704
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.32407407407407407
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.3949835002422333,
+          "JawTurnCos": 0.1416008174419403
+        }
+      }
+    },
+    {
+      "frame": 97,
+      "jawOpen01": 0.3584,
+      "throatInflation": 0.3136,
+      "jawLocalMatrix": [
+        0.971882164478302,
+        -0.2354678064584732,
+        -1.777732450136682e-08,
+        0.0,
+        0.2354678064584732,
+        0.971882164478302,
+        -2.122838793638948e-09,
+        0.0,
+        1.777732450136682e-08,
+        -2.122838793638948e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.38246312737464905,
+          "JawTurnCos": 0.1326380968093872
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3136
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.3584
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3136
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.38246312737464905,
+          "JawTurnCos": 0.1326380968093872
+        }
+      }
+    },
+    {
+      "frame": 98,
+      "jawOpen01": 0.34482962962962965,
+      "throatInflation": 0.3017259259259259,
+      "jawLocalMatrix": [
+        0.9739620089530945,
+        -0.226711243391037,
+        -1.7116223105517747e-08,
+        0.0,
+        0.226711243391037,
+        0.9739620089530945,
+        -1.9658159544633236e-09,
+        0.0,
+        1.7116223105517747e-08,
+        -1.9658159544633236e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.368240088224411,
+          "JawTurnCos": 0.12282690405845642
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.3017259259259259
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.34482962962962965
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.3017259259259259
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.368240088224411,
+          "JawTurnCos": 0.12282690405845642
+        }
+      }
+    },
+    {
+      "frame": 99,
+      "jawOpen01": 0.32983703703703704,
+      "throatInflation": 0.28860740740740737,
+      "jawLocalMatrix": [
+        0.9761680960655212,
+        -0.21701565384864807,
+        -1.638422553185137e-08,
+        0.0,
+        0.21701565384864807,
+        0.9761680960655212,
+        -1.7992576317737985e-09,
+        0.0,
+        1.638422553185137e-08,
+        -1.7992576317737985e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.3524918258190155,
+          "JawTurnCos": 0.11242020130157471
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.28860740740740737
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.32983703703703704
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.28860740740740737
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.3524918258190155,
+          "JawTurnCos": 0.11242020130157471
+        }
+      }
+    },
+    {
+      "frame": 100,
+      "jawOpen01": 0.3136,
+      "throatInflation": 0.2744,
+      "jawLocalMatrix": [
+        0.9784485101699829,
+        -0.20649109780788422,
+        -1.5589645130376084e-08,
+        0.0,
+        0.20649109780788422,
+        0.9784485101699829,
+        -1.6270931268991262e-09,
+        0.0,
+        1.5589645130376084e-08,
+        -1.6270931268991262e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.3353971242904663,
+          "JawTurnCos": 0.1016632691025734
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.2744
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.3136
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.2744
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.3353971242904663,
+          "JawTurnCos": 0.1016632691025734
+        }
+      }
+    },
+    {
+      "frame": 101,
+      "jawOpen01": 0.29629629629629634,
+      "throatInflation": 0.25925925925925924,
+      "jawLocalMatrix": [
+        0.9807537198066711,
+        -0.1952488273382187,
+        -1.4740876963514893e-08,
+        0.0,
+        0.1952488273382187,
+        0.9807537198066711,
+        -1.4530527892020473e-09,
+        0.0,
+        1.4740876963514893e-08,
+        -1.4530527892020473e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.31713664531707764,
+          "JawTurnCos": 0.09078884869813919
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.25925925925925924
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.29629629629629634
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.25925925925925924
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.31713664531707764,
+          "JawTurnCos": 0.09078884869813919
+        }
+      }
+    },
+    {
+      "frame": 102,
+      "jawOpen01": 0.27810370370370374,
+      "throatInflation": 0.24334074074074075,
+      "jawLocalMatrix": [
+        0.9830381274223328,
+        -0.18340133130550385,
+        -1.3846415569673809e-08,
+        0.0,
+        0.18340133130550385,
+        0.9830381274223328,
+        -1.2805827509509982e-09,
+        0.0,
+        1.3846415569673809e-08,
+        -1.2805827509509982e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.29789313673973083,
+          "JawTurnCos": 0.08001291006803513
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.24334074074074075
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.27810370370370374
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.24334074074074075
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.29789313673973083,
+          "JawTurnCos": 0.08001291006803513
+        }
+      }
+    },
+    {
+      "frame": 103,
+      "jawOpen01": 0.2592,
+      "throatInflation": 0.22679999999999995,
+      "jawLocalMatrix": [
+        0.9852601885795593,
+        -0.17106248438358307,
+        -1.291485851595553e-08,
+        0.0,
+        0.17106248438358307,
+        0.9852601885795593,
+        -1.1128236110380385e-09,
+        0.0,
+        1.291485851595553e-08,
+        -1.1128236110380385e-09,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.27785152196884155,
+          "JawTurnCos": 0.06953097134828568
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.22679999999999995
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.2592
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.22679999999999995
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.27785152196884155,
+          "JawTurnCos": 0.06953097134828568
+        }
+      }
+    },
+    {
+      "frame": 104,
+      "jawOpen01": 0.23976296296296296,
+      "throatInflation": 0.20979259259259259,
+      "jawLocalMatrix": [
+        0.9873834252357483,
+        -0.1583475023508072,
+        -1.1954903733624178e-08,
+        0.0,
+        0.1583475023508072,
+        0.9873834252357483,
+        -9.5252516985056e-10,
+        0.0,
+        1.1954903733624178e-08,
+        -9.5252516985056e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.2571989893913269,
+          "JawTurnCos": 0.05951507017016411
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.20979259259259259
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.23976296296296296
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.20979259259259259
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.2571989893913269,
+          "JawTurnCos": 0.05951507017016411
+        }
+      }
+    },
+    {
+      "frame": 105,
+      "jawOpen01": 0.21997037037037037,
+      "throatInflation": 0.19247407407407408,
+      "jawLocalMatrix": [
+        0.989376962184906,
+        -0.1453729122877121,
+        -1.0975349518105304e-08,
+        0.0,
+        0.1453729122877121,
+        0.989376962184906,
+        -8.020180075618555e-10,
+        0.0,
+        1.0975349518105304e-08,
+        -8.020180075618555e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.23612473905086517,
+          "JawTurnCos": 0.05011134222149849
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.19247407407407408
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.21997037037037037
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.19247407407407408
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.23612473905086517,
+          "JawTurnCos": 0.05011134222149849
+        }
+      }
+    },
+    {
+      "frame": 106,
+      "jawOpen01": 0.2,
+      "throatInflation": 0.175,
+      "jawLocalMatrix": [
+        0.9912155270576477,
+        -0.1322563886642456,
+        -9.985079429952748e-09,
+        0.0,
+        0.1322563886642456,
+        0.9912155270576477,
+        -6.632063787037623e-10,
+        0.0,
+        9.985079429952748e-09,
+        -6.632063787037623e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.2148199826478958,
+          "JawTurnCos": 0.041438233107328415
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.175
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.2
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.175
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.2148199826478958,
+          "JawTurnCos": 0.041438233107328415
+        }
+      }
+    },
+    {
+      "frame": 107,
+      "jawOpen01": 0.18002962962962965,
+      "throatInflation": 0.1575259259259259,
+      "jawLocalMatrix": [
+        0.9928802847862244,
+        -0.11911667138338089,
+        -8.993058742134963e-09,
+        0.0,
+        0.11911667138338089,
+        0.9928802847862244,
+        -5.375255796025158e-10,
+        0.0,
+        8.993058742134963e-09,
+        -5.375255796025158e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.1934775412082672,
+          "JawTurnCos": 0.03358536586165428
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.1575259259259259
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.18002962962962965
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.1575259259259259
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.1934775412082672,
+          "JawTurnCos": 0.03358536586165428
+        }
+      }
+    },
+    {
+      "frame": 108,
+      "jawOpen01": 0.16023703703703707,
+      "throatInflation": 0.1402074074074074,
+      "jawLocalMatrix": [
+        0.9943583011627197,
+        -0.106073297560215,
+        -8.008311347396102e-09,
+        0.0,
+        0.106073297560215,
+        0.9943583011627197,
+        -4.2593484295139206e-10,
+        0.0,
+        8.008311347396102e-09,
+        -4.2593484295139206e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.1722915917634964,
+          "JawTurnCos": 0.026613079011440277
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.1402074074074074
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.16023703703703707
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.1402074074074074
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.1722915917634964,
+          "JawTurnCos": 0.026613079011440277
+        }
+      }
+    },
+    {
+      "frame": 109,
+      "jawOpen01": 0.14079999999999998,
+      "throatInflation": 0.12319999999999998,
+      "jawLocalMatrix": [
+        0.9956430792808533,
+        -0.09324643760919571,
+        -7.039910432382612e-09,
+        0.0,
+        0.09324643760919571,
+        0.9956430792808533,
+        -3.289386540927808e-10,
+        0.0,
+        7.039910432382612e-09,
+        -3.289386540927808e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.15145732462406158,
+          "JawTurnCos": 0.02055264823138714
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.12319999999999998
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.14079999999999998
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.12319999999999998
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.15145732462406158,
+          "JawTurnCos": 0.02055264823138714
+        }
+      }
+    },
+    {
+      "frame": 110,
+      "jawOpen01": 0.12189629629629634,
+      "throatInflation": 0.10665925925925926,
+      "jawLocalMatrix": [
+        0.9967338442802429,
+        -0.08075664937496185,
+        -6.0969576054503705e-09,
+        0.0,
+        0.08075664937496185,
+        0.9967338442802429,
+        -2.4658675101818517e-10,
+        0.0,
+        6.0969576054503705e-09,
+        -2.4658675101818517e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.13117054104804993,
+          "JawTurnCos": 0.015407158993184566
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.10665925925925926
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.12189629629629634
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.10665925925925926
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.13117054104804993,
+          "JawTurnCos": 0.015407158993184566
+        }
+      }
+    },
+    {
+      "frame": 111,
+      "jawOpen01": 0.10370370370370374,
+      "throatInflation": 0.09074074074074073,
+      "jawLocalMatrix": [
+        0.9976356625556946,
+        -0.06872469186782837,
+        -5.1885700180775984e-09,
+        0.0,
+        0.06872469186782837,
+        0.9976356625556946,
+        -1.7850254607765237e-10,
+        0.0,
+        5.1885700180775984e-09,
+        -1.7850254607765237e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.11162739247083664,
+          "JawTurnCos": 0.01115309540182352
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.09074074074074073
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.10370370370370374
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.09074074074074073
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.11162739247083664,
+          "JawTurnCos": 0.01115309540182352
+        }
+      }
+    },
+    {
+      "frame": 112,
+      "jawOpen01": 0.08640000000000003,
+      "throatInflation": 0.0756,
+      "jawLocalMatrix": [
+        0.9983586668968201,
+        -0.05727129429578781,
+        -4.323862601296469e-09,
+        0.0,
+        0.05727129429578781,
+        0.9983586668968201,
+        -1.2391865311656147e-10,
+        0.0,
+        4.323862601296469e-09,
+        -1.2391865311656147e-10,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.09302400052547455,
+          "JawTurnCos": 0.007742598652839661
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.0756
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.08640000000000003
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.0756
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.09302400052547455,
+          "JawTurnCos": 0.007742598652839661
+        }
+      }
+    },
+    {
+      "frame": 113,
+      "jawOpen01": 0.07016296296296298,
+      "throatInflation": 0.06139259259259261,
+      "jawLocalMatrix": [
+        0.9989175200462341,
+        -0.04651704430580139,
+        -3.5119391839089076e-09,
+        0.0,
+        0.04651704430580139,
+        0.9989175200462341,
+        -8.172662546712672e-11,
+        0.0,
+        3.5119391839089076e-09,
+        -8.172662546712672e-11,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.0755562111735344,
+          "JawTurnCos": 0.00510640861466527
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.06139259259259261
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.07016296296296298
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.06139259259259261
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.0755562111735344,
+          "JawTurnCos": 0.00510640861466527
+        }
+      }
+    },
+    {
+      "frame": 114,
+      "jawOpen01": 0.05517037037037037,
+      "throatInflation": 0.04827407407407408,
+      "jawLocalMatrix": [
+        0.9993306398391724,
+        -0.036582209169864655,
+        -2.7618800579887193e-09,
+        0.0,
+        0.036582209169864655,
+        0.9993306398391724,
+        -5.0533799367258325e-11,
+        0.0,
+        2.7618800579887193e-09,
+        -5.0533799367258325e-11,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.059419360011816025,
+          "JawTurnCos": 0.0031574859749525785
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.04827407407407408
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.05517037037037037
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.04827407407407408
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.059419360011816025,
+          "JawTurnCos": 0.0031574859749525785
+        }
+      }
+    },
+    {
+      "frame": 115,
+      "jawOpen01": 0.04159999999999997,
+      "throatInflation": 0.03639999999999993,
+      "jawLocalMatrix": [
+        0.9996194243431091,
+        -0.027586665004491806,
+        -2.0827353175434382e-09,
+        0.0,
+        0.027586665004491806,
+        0.9996194243431091,
+        -2.873434823413845e-11,
+        0.0,
+        2.0827353175434382e-09,
+        -2.873434823413845e-11,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.044808171689510345,
+          "JawTurnCos": 0.0017953007481992245
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.03639999999999993
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.04159999999999997
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.03639999999999993
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.044808171689510345,
+          "JawTurnCos": 0.0017953007481992245
+        }
+      }
+    },
+    {
+      "frame": 116,
+      "jawOpen01": 0.02962962962962956,
+      "throatInflation": 0.025925925925925908,
+      "jawLocalMatrix": [
+        0.9998069405555725,
+        -0.019649850204586983,
+        -1.4835224160236749e-09,
+        0.0,
+        0.019649850204586983,
+        0.9998069405555725,
+        -1.4573231510439655e-11,
+        0.0,
+        1.4835224160236749e-09,
+        -1.4573231510439655e-11,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.031916648149490356,
+          "JawTurnCos": 0.0009107864461839199
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.025925925925925908
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.02962962962962956
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.025925925925925908
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.031916648149490356,
+          "JawTurnCos": 0.0009107864461839199
+        }
+      }
+    },
+    {
+      "frame": 117,
+      "jawOpen01": 0.01943703703703703,
+      "throatInflation": 0.01700740740740736,
+      "jawLocalMatrix": [
+        0.9999169111251831,
+        -0.012890774756669998,
+        -9.732263883677206e-10,
+        0.0,
+        0.012890774756669998,
+        0.9999169111251831,
+        -6.274092356761685e-12,
+        0.0,
+        9.732263883677206e-10,
+        -6.274092356761685e-12,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.02093808725476265,
+          "JawTurnCos": 0.0003919513837900013
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.01700740740740736
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.01943703703703703
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.01700740740740736
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.02093808725476265,
+          "JawTurnCos": 0.0003919513837900013
+        }
+      }
+    },
+    {
+      "frame": 118,
+      "jawOpen01": 0.011199999999999988,
+      "throatInflation": 0.009800000000000031,
+      "jawLocalMatrix": [
+        0.999972403049469,
+        -0.007428052835166454,
+        -5.608024045145044e-10,
+        0.0,
+        0.007428052835166454,
+        0.999972403049469,
+        -2.0818902157770935e-12,
+        0.0,
+        5.608024045145044e-10,
+        -2.0818902157770935e-12,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.012065158225595951,
+          "JawTurnCos": 0.00013014039723202586
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.009800000000000031
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.011199999999999988
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.009800000000000031
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.012065158225595951,
+          "JawTurnCos": 0.00013014039723202586
+        }
+      }
+    },
+    {
+      "frame": 119,
+      "jawOpen01": 0.0050962962962962655,
+      "throatInflation": 0.004459259259259274,
+      "jawLocalMatrix": [
+        0.9999942779541016,
+        -0.003379985224455595,
+        -2.5518179236350136e-10,
+        0.0,
+        0.003379985224455595,
+        0.9999942779541016,
+        -4.334310688136611e-13,
+        0.0,
+        2.5518179236350136e-10,
+        -4.334310688136611e-13,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.005490005947649479,
+          "JawTurnCos": 2.6945548597723246e-05
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.004459259259259274
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.0050962962962962655
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.004459259259259274
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.005490005947649479,
+          "JawTurnCos": 2.6945548597723246e-05
+        }
+      }
+    },
+    {
+      "frame": 120,
+      "jawOpen01": 0.0013037037037036958,
+      "throatInflation": 0.0011407407407407755,
+      "jawLocalMatrix": [
+        0.9999996423721313,
+        -0.0008646489004604518,
+        -6.527917789656001e-11,
+        0.0,
+        0.0008646489004604518,
+        0.9999996423721313,
+        -2.842170943040401e-14,
+        0.0,
+        6.527917789656001e-11,
+        -2.842170943040401e-14,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.001404422684572637,
+          "JawTurnCos": 1.7633392417337745e-06
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.0011407407407407755
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.0013037037037036958
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.0011407407407407755
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.001404422684572637,
+          "JawTurnCos": 1.7633392417337745e-06
+        }
+      }
+    },
+    {
+      "frame": 121,
+      "jawOpen01": 0.0,
+      "throatInflation": 0.0,
+      "jawLocalMatrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        24.0,
+        -11.5,
+        0.0,
+        1.0
+      ],
+      "morphs": {
+        "add:throat-membrane": {
+          "JawTurnSin": 0.0,
+          "JawTurnCos": 0.0
+        },
+        "add:jaw-shell": {
+          "ThroatInflation": 0.0
+        },
+        "add:lower-lip": {
+          "LipFullness": 0.0
+        },
+        "add:mouth-floor": {
+          "ThroatInflation": 0.0
+        },
+        "add:inner-throat": {
+          "JawTurnSin": 0.0,
+          "JawTurnCos": 0.0
+        }
+      }
+    }
+  ],
+  "fps": 30,
+  "glbPose": "closed, frame 1; morph targets retained, no animation clips",
+  "throatCoupling": "Exact rotation: JawTurnSin=sin(theta)/sin(38deg); JawTurnCos=(1-cos(theta))/(1-cos(38deg)); theta=38deg*jawOpen01",
+  "morphEndpointIndices": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "morphEndpointOriginalPoints": [
+    [
+      24.0,
+      -11.653619766235352,
+      -13.581830024719238
+    ],
+    [
+      24.0,
+      -13.40503978729248,
+      -10.220100402832031
+    ],
+    [
+      24.0,
+      -14.658160209655762,
+      -7.841479778289795
+    ],
+    [
+      24.0,
+      -15.299229621887207,
+      -3.2492599487304688
+    ],
+    [
+      24.0,
+      -15.757909774780273,
+      -0.0
+    ],
+    [
+      24.0,
+      -15.116840362548828,
+      4.592219829559326
+    ],
+    [
+      24.0,
+      -14.658160209655762,
+      7.841479778289795
+    ],
+    [
+      24.0,
+      -12.906740188598633,
+      11.20320987701416
+    ],
+    [
+      24.0,
+      -11.653619766235352,
+      13.581830024719238
+    ],
+    [
+      24.0,
+      -11.5,
+      13.660840034484863
+    ],
+    [
+      24.0,
+      -11.5,
+      -13.6599702835083
+    ]
+  ],
+  "runtimeIntegrated": false,
+  "limitations": [
+    "Authored 121-frame review cycle; not original battle timing or gameplay acceptance.",
+    "Between-frame subframe interpolation is linear; exact coupling is sampled at 30 Hz and analytic formula is provided.",
+    "The six runtime garden scenes must still be attached to original n102; reference-image decorative garden is not baked."
+  ],
+  "files": {
+    "kun-battle-v2.blend": {
+      "path": "assets/models/optimized/kun-battle-v2/kun-battle-v2.blend",
+      "sha256": "f79744746621d3692ffebbe664ad1778f637ba14f2b573d13a263907f42a6fe7"
+    },
+    "kun-battle-v2.glb": {
+      "path": "assets/models/optimized/kun-battle-v2/kun-battle-v2.glb",
+      "sha256": "782c750ca98aee5c857a8369312e5a6440d7e4f62ab895af1af3e978f8a5c1fc"
+    }
+  },
+  "glbMaterialContract": "Original source linear base colors, opacity, metallic, roughness and basic-material emissive colors restored explicitly after glTF export. Original toon/brush engine shader parity is not claimed.",
+  "candidateVersion": "kun-battle-v2",
+  "derivedFromV1Hashes": {
+    "kun-battle-v1.glb": "1b7190a3861514c141355c7967f8418c37877f5ddfe6ba7e6a8a07e571699260",
+    "kun-battle-v1.assembly.json": "2fa07b69352f8403e5ccb1f534e5cccd5c1b93db87e0caaaa3de2ea364cf0ff8",
+    "kun-battle-v1.blend": "f4d5c78169e4628861fe8a6743bd05059a9746405b307498ffc77e7bdd76b232"
+  },
+  "mouthV2Contract": {
+    "replacementGeometry": [
+      "add:mouth-roof",
+      "add:mouth-floor"
+    ],
+    "addedUnderExistingAdoptedNode": {
+      "add:inner-throat": "add:mouth-roof"
+    },
+    "original295SourceGeometryUnchanged": true,
+    "externalLipContourUnchanged": true,
+    "internalLipBridgeFacesRemovedAtRearHinge": [
+      32
+    ],
+    "longitudinalSections": 23,
+    "crossSectionSegments": 10,
+    "throatRingCount": 5,
+    "throatRearX": 13,
+    "throatFrontX": 24,
+    "roofTipInsetX": 0.03,
+    "roofWidthFactor": 0.998,
+    "rearFloorReliefY": 1.0,
+    "floorMorph": "add:mouth-floor ThroatInflation follows original inflation weight",
+    "innerThroatMorph": "add:inner-throat JawTurnSin/JawTurnCos follow original analytic membrane weights",
+    "runtimeChangeRequired": "Add the two listed nodes to runtime morph mapping; existing root adoption includes inner-throat automatically.",
+    "scope": "Candidate geometry; awaiting front/3q/side-below actual GLB visual review."
+  }
+}

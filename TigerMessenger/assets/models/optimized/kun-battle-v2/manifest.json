@@ -1,0 +1,33 @@
+{
+  "id": "kun-battle-v2",
+  "stage": "local mouth candidate; root visual review before Godot copy",
+  "sourceV1GlbSHA": "1b7190a3861514c141355c7967f8418c37877f5ddfe6ba7e6a8a07e571699260",
+  "sourceIDs": 295,
+  "originalVisibleMeshGeometryChecks": 100,
+  "triangles": 6077,
+  "poseSurfaceChecks": {
+    "frames": 121,
+    "pairsPerFrame": 4,
+    "triangleIntersections": 0
+  },
+  "files": {
+    "kun-battle-v2.assembly.json": {
+      "path": "assets/models/optimized/kun-battle-v2/kun-battle-v2.assembly.json",
+      "sha256": "9f530f230a02018cfac207989dba1eebec46ce3ad4433d868eb110ec1c45c856"
+    },
+    "PLACEMENT.md": {
+      "path": "assets/models/optimized/kun-battle-v2/PLACEMENT.md",
+      "sha256": "f6acfa380873013a56567fea31651bec44e77d838456964bcad09c722ddf9946"
+    },
+    "kun-battle-v2.glb": {
+      "path": "assets/models/optimized/kun-battle-v2/kun-battle-v2.glb",
+      "sha256": "782c750ca98aee5c857a8369312e5a6440d7e4f62ab895af1af3e978f8a5c1fc"
+    },
+    "kun-battle-v2.blend": {
+      "path": "assets/models/optimized/kun-battle-v2/kun-battle-v2.blend",
+      "sha256": "f79744746621d3692ffebbe664ad1778f637ba14f2b573d13a263907f42a6fe7"
+    }
+  },
+  "evidenceDirectory": "artifacts/pipeline/kun-battle-v2",
+  "runtimeIntegrated": false
+}

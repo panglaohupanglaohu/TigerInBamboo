@@ -1,0 +1,26 @@
+# 西芳寺研究后修订 v3
+
+Mode: built-in image_gen. Status: concept proposal awaiting visual feedback; not an engine implementation or exact historical reconstruction. Earlier v1/v2 were rejected as insufficiently researched.
+
+## Primary research
+
+- https://intosaihoji.com/en/saihoji/keidai/ — Saihokai/Saihoji introduction: upper dry stone garden; lower strolling garden around Golden Pond; official photographs and site plan inspected in a browser.
+- https://www.city.kyoto.lg.jp/bunshi/page/0000005626.html — Kyoto City cultural property page: pond garden and Koinzan dry landscape relationship.
+
+Browser research captures are under artifacts/research/saihoji-official/. They are research references, not texture assets included in the game.
+
+## Full generation prompt
+
+Create a RESEARCH-CORRECTED game concept board, editing the garden of reference 1 (Kun whale) while preserving the creature design. This is TigerMessenger's fictional garden on Kun's back, INSPIRED BY Saihoji, not an exact temple reconstruction. Reference 2 is the user's approved ancient low-poly pine shape and aged grey-brown face-colored bark. References 3 and 4 are screenshots of Saihoji's official website: inspect the actual garden PHOTOGRAPHS embedded in them, IGNORE webpage text/UI. Reference 3 shows the lower garden's continuous undulating moss carpet under trees and dappled shade. Reference 4 shows the upper garden's modest weathered DRY STONE composition embedded in wooded sloping moss ground. Their quiet natural qualities must govern the new design. Do not use the previously imagined fantasy waterfalls.
+
+ENVIRONMENT: use nearly the WHOLE usable upper back of the same charcoal-gray/cream low-poly humpback Kun, from behind the head through both upper shoulders and mid-back to the rear before the tail. The garden should be generously long AND broad, organically conforming to the whale body rather than perched on a small square platform. Show exposed recognizable head, flippers, lower flanks and flukes. No landmass floating separately above the whale.
+
+RESEARCH-BASED SPATIAL STRUCTURE: a slightly elevated rear/one-side upper dry garden of LOW asymmetrical partly moss-covered weathered stones embedded into the slope, subtly implying a dry cascade through placement; absolutely ZERO waterfall, flowing water, stream, white spray, cliff, mountain, stacked rock tower, extravagant rock grotto or central rock pyramid. A lower front/mid-back garden with ONE quiet irregular dark-green reflective pond occupying a modest portion of the back, with a couple low moss islets and softly irregular banks inspired by Saihoji's Golden Pond; not a cyan tropical swimming pool. Extensive connected soft uneven moss ground around and between these. Moss is the dominant continuous surface, with muted olive, deep green and small golden-green light patches, not ornamental shrub balls, bright manicured lawn or flower beds. Roots emerge naturally from moss. A few softly worn irregular stepping stones are scattered in small asymmetrical groups separated by moss gaps; no paved or dotted-line road, no continuous necklace of stones or border fencing.
+
+TREES: approximately 25 mature ancient pines based on reference 2, spaced loosely in small organic groups across front, middle, rear and both shoulders with irregular clearings between. Distinct thick horizontal layered cloud crowns, rough-looking but structurally coherent grey-brown trunks whose different polygon FACE COLORS convey age. No thin disc foliage, no sausage chains, no straight evenly spaced tree rows, no tightly congested central forest. Retain enough canopy to create quiet pockets of dappled shade on the moss, but leave generous visible open moss between groups for gameplay and concealment. Use only a few tiny blue classical infantry figures concealed under selected pines for scale, no battle effects or giant army.
+
+COMPOSITION: landscape concept board, left 70% a beautiful elevated three-quarter view of the whole Kun and its broad garden, right upper a clear top-down plan of the SAME garden showing the larger usable back, right lower a small EYE-LEVEL inset of the shaded moss grove, trunk roots, embedded dry stones and calm pond edge to establish the correct Saihoji atmosphere. Dark soft grey-blue neutral background with minimal mist, NOT fantasy mountain peaks. Restrained premium low-poly game art, coherent lighting, soft natural shade, no photoreal collage and no copied website UI. Simple Chinese title “鲲背苔庭 · 西芳寺意境研究版”. Only three small callouts “苔林”, “静池”, “枯石”. Small caption “游戏改编概念 · 非实景复原”. No long legends, no invented temple buildings. Preserve an airy but shady moss garden character from official references while visibly making full use of Kun's back.
+
+## Visual check and engineering limits
+
+No flowing waterfall appears. The garden extends over the available dorsal surface, with a lower quiet pond, rear dry stones and continuous moss under spaced tree groups. The result is a game adaptation retaining the user's pine language, not a reconstruction of Saihoji's actual plan or species distribution. Tiny stones, exact canopy spacing, body support and matching all inset coordinates still need an engine layout; no coverage percentage has been measured from this image. The real Web/Godot garden footprint has not yet been expanded by this concept generation.

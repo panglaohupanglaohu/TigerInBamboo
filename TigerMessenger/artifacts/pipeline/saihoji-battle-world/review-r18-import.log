@@ -1,0 +1,1338 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started 项目初始化 (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | 正在扫描文件结构……[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | 正在加载全局类名……[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | 正在校验 GDExtension……[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | 正在创建自动加载脚本……[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | 正在初始化插件……[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | 正在启动文件扫描……[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started 正在注册全局类…… (64 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   1% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   3% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   4% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   6% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   7% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   9% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  10% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  12% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  13% ] [90m[1mupdate_scripts_classes[22m | CastleWorldAdapter[39m[0m
+[  15% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  16% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  18% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  20% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  21% ] [90m[1mupdate_scripts_classes[22m | RomanArmorAdapter[39m[0m
+[  23% ] [90m[1mupdate_scripts_classes[22m | RomanArmorDirectionAdapter[39m[0m
+[  24% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  26% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  27% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  29% ] [90m[1mupdate_scripts_classes[22m | RomanGripAdapter[39m[0m
+[  30% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  32% ] [90m[1mupdate_scripts_classes[22m | RomanShieldAdapter[39m[0m
+[  33% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  35% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  36% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  38% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  40% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  41% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  43% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  44% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  46% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  47% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  49% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  50% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  52% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  53% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  55% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  56% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  58% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  60% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  61% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  63% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  64% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  66% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  67% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  69% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  70% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  72% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  73% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  75% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  76% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  78% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  80% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  81% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  83% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  84% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  86% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  87% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  89% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  90% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  92% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  93% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  95% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  96% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Started 正在扫描动作…… (164 steps)[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | ancient-pine-v1-lod0.glb[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | ancient-pine-v1-lod1.glb[39m[0m
+[   1% ] [90m[1m_update_scan_actions[22m | ancient-pine-v1-lod2.glb[39m[0m
+[   1% ] [90m[1m_update_scan_actions[22m | bookshop-art-v3.glb[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | bookshop-art-v3_d49990925abeaa4511b717fb8ad831058c522eac9c2f7f88678767c18e7a3d32.png[39m[0m
+[   3% ] [90m[1m_update_scan_actions[22m | castle-shared-edge-town-v1.glb[39m[0m
+[   3% ] [90m[1m_update_scan_actions[22m | castle-shared-edge-town-v1_0.png[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | castle-shared-edge-town-v1_1.png[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | castle-shared-edge-town-v1_2.png[39m[0m
+[   5% ] [90m[1m_update_scan_actions[22m | moebius-tiger-anatomy-v3.glb[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | moebius-tiger-anatomy-v3_Tiger_V3_Face_Image.png[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | moebius-tiger-anatomy-v3_Tiger_V3_Ink_Stripes.png[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | moebius-tiger-anatomy-v3_Tiger_V3_Leg_Image.png[39m[0m
+[   7% ] [90m[1m_update_scan_actions[22m | moebius-tiger-anatomy-v3_Tiger_V3_Tail_Image.png[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | roman-armor-v2.glb[39m[0m
+[   9% ] [90m[1m_update_scan_actions[22m | roman-armor-v3-direction.glb[39m[0m
+[   9% ] [90m[1m_update_scan_actions[22m | roman-shield-handle-v1.glb[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | scoutAircraft-art-v1.glb[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | fleet_assault.ogg[39m[0m
+[  11% ] [90m[1m_update_scan_actions[22m | kun_battle.ogg[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | kun_step.wav[39m[0m
+[  12% ] [90m[1m_update_scan_actions[22m | phalanx_alarm.wav[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | storm_cue.ogg[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | kun-battle-v1.glb[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | moebius-aircraft-v1.glb[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | agentMessenger.glb[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | bird.glb[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | blackRock.glb[39m[0m
+[  16% ] [90m[1m_update_scan_actions[22m | bookshop.glb[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | bookshopHydrangeas.glb[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | bookshop_d49990925abeaa4511b717fb8ad831058c522eac9c2f7f88678767c18e7a3d32.png[39m[0m
+[  18% ] [90m[1m_update_scan_actions[22m | bridge.glb[39m[0m
+[  19% ] [90m[1m_update_scan_actions[22m | bubblePod.glb[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | citadelElderTree.glb[39m[0m
+[  20% ] [90m[1m_update_scan_actions[22m | citadelWatchtower.glb[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | classicAliFox.glb[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | cloud.glb[39m[0m
+[  22% ] [90m[1m_update_scan_actions[22m | craneNPC.glb[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | craneOnRock.glb[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | equatorialClouds.glb[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | fence.glb[39m[0m
+[  24% ] [90m[1m_update_scan_actions[22m | fisherBoat.glb[39m[0m
+[  25% ] [90m[1m_update_scan_actions[22m | flower.glb[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | fox.glb[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | grassTuft.glb[39m[0m
+[  27% ] [90m[1m_update_scan_actions[22m | harborCrane.glb[39m[0m
+[  27% ] [90m[1m_update_scan_actions[22m | hills.glb[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | house.glb[39m[0m
+[  29% ] [90m[1m_update_scan_actions[22m | hydrangea.glb[39m[0m
+[  29% ] [90m[1m_update_scan_actions[22m | lamp.glb[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | lawnHill.glb[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | longWingGlider.glb[39m[0m
+[  31% ] [90m[1m_update_scan_actions[22m | lowPolyTree.glb[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | messenger.glb[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | moebiusAircraft.glb[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | moebiusAirship.glb[39m[0m
+[  33% ] [90m[1m_update_scan_actions[22m | moebiusCity.glb[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | moebiusSwamp.glb[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | moebiusSwamp_8c85f1222f5bd0a4eac366c7c03b23995fda3abae732240524b392421fa01f62.png[39m[0m
+[  35% ] [90m[1m_update_scan_actions[22m | moebiusSwamp_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | moebiusTiger.glb[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | moebiusTiger_8c85f1222f5bd0a4eac366c7c03b23995fda3abae732240524b392421fa01f62.png[39m[0m
+[  37% ] [90m[1m_update_scan_actions[22m | moebiusTower.glb[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | moonLake.glb[39m[0m
+[  38% ] [90m[1m_update_scan_actions[22m | moonLake_b3fbc27c1091338b3835acbda46add78330dae843ac10869478618617dd346d8.png[39m[0m
+[  39% ] [90m[1m_update_scan_actions[22m | mossyGround.glb[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | oldHarbor.glb[39m[0m
+[  40% ] [90m[1m_update_scan_actions[22m | pine.glb[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | planet.glb[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | platforms.glb[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | pole.glb[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | rock.glb[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | saihoji.glb[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | signpost.glb[39m[0m
+[  44% ] [90m[1m_update_scan_actions[22m | snowMassif.glb[39m[0m
+[  45% ] [90m[1m_update_scan_actions[22m | snowMountainPeak.glb[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | stackedCrates.glb[39m[0m
+[  46% ] [90m[1m_update_scan_actions[22m | startingCamp.glb[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | swampZone.glb[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | swampZone_8c85f1222f5bd0a4eac366c7c03b23995fda3abae732240524b392421fa01f62.png[39m[0m
+[  48% ] [90m[1m_update_scan_actions[22m | swampZone_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  49% ] [90m[1m_update_scan_actions[22m | swamp_bird.glb[39m[0m
+[  49% ] [90m[1m_update_scan_actions[22m | swamp_bird_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | swamp_canopy.glb[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | swamp_eel.glb[39m[0m
+[  51% ] [90m[1m_update_scan_actions[22m | swamp_fireflies.glb[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | swamp_fireflies_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | swamp_fishSchool.glb[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | swamp_giantFlower.glb[39m[0m
+[  53% ] [90m[1m_update_scan_actions[22m | swamp_giantFlower_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | swamp_glowFlower.glb[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | swamp_glowFlower_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  55% ] [90m[1m_update_scan_actions[22m | swamp_lizard.glb[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | swamp_lizard_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | swamp_lotusLeafBoat.glb[39m[0m
+[  57% ] [90m[1m_update_scan_actions[22m | swamp_lotusLeafBoat_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | swamp_monkey.glb[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | swamp_mushroom.glb[39m[0m
+[  59% ] [90m[1m_update_scan_actions[22m | swamp_nativeDoll.glb[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | swamp_pinkHanger.glb[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | swamp_ribbonFish.glb[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | swamp_ribbonFish_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  61% ] [90m[1m_update_scan_actions[22m | swamp_rimPalm.glb[39m[0m
+[  62% ] [90m[1m_update_scan_actions[22m | swamp_shell.glb[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | swamp_stamenSpike.glb[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | swamp_stamenSpike_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | swamp_toweringTree.glb[39m[0m
+[  64% ] [90m[1m_update_scan_actions[22m | swamp_tubeWorm.glb[39m[0m
+[  65% ] [90m[1m_update_scan_actions[22m | swamp_whale.glb[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | swamp_worldTree.glb[39m[0m
+[  66% ] [90m[1m_update_scan_actions[22m | tram.glb[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | tramSystem.glb[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | tramSystem_71da6710c9ead4350bcbd5526334e71567d0c4e1d5f0dc59ae528788ff040646.png[39m[0m
+[  68% ] [90m[1m_update_scan_actions[22m | tramSystem_819c03afdf2662976b9f59cd22d826783142da8cd3cbd7dcdf2a4fa1e689eeaf.png[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | tramSystem_c13fa1686d4149d2273c35a1512d25af49a8fa0e376f6a026fb2b6e6b94419fb.png[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | tramSystem_d2fa74b73e08ddd6dec0751edffe9e935b9b4846498fdffe7dbbd24eb2637805.png[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | tram_71da6710c9ead4350bcbd5526334e71567d0c4e1d5f0dc59ae528788ff040646.png[39m[0m
+[  70% ] [90m[1m_update_scan_actions[22m | tram_c13fa1686d4149d2273c35a1512d25af49a8fa0e376f6a026fb2b6e6b94419fb.png[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | romanSoldier_gladius_blue.glb[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | romanSoldier_gladius_red.glb[39m[0m
+[  72% ] [90m[1m_update_scan_actions[22m | romanSoldier_longbow_blue.glb[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | romanSoldier_longbow_red.glb[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | romanSoldier_spear_blue.glb[39m[0m
+[  74% ] [90m[1m_update_scan_actions[22m | romanSoldier_spear_red.glb[39m[0m
+[  75% ] [90m[1m_update_scan_actions[22m | citadelTrojanHorse.glb[39m[0m
+[  75% ] [90m[1m_update_scan_actions[22m | gateHaulerCraft_hauler-23-8.glb[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | gateHaulerCraft_hauler-71-4.glb[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | gateHaulerCraft_hauler-96-1.glb[39m[0m
+[  77% ] [90m[1m_update_scan_actions[22m | gatePodCraft_pod-08-9.glb[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | gatePodCraft_pod-41-7.glb[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | gatePodCraft_pod-55-2.glb[39m[0m
+[  79% ] [90m[1m_update_scan_actions[22m | gatePodEscort_pod-08-9.glb[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | gatePodEscort_pod-41-7.glb[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | gatePodEscort_pod-55-2.glb[39m[0m
+[  81% ] [90m[1m_update_scan_actions[22m | leviathanIsland.glb[39m[0m
+[  81% ] [90m[1m_update_scan_actions[22m | romanSoldier_gladius_blue.glb[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | romanSoldier_gladius_red.glb[39m[0m
+[  83% ] [90m[1m_update_scan_actions[22m | romanSoldier_longbow_blue.glb[39m[0m
+[  83% ] [90m[1m_update_scan_actions[22m | romanSoldier_longbow_red.glb[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | romanSoldier_spear_blue.glb[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | romanSoldier_spear_red.glb[39m[0m
+[  85% ] [90m[1m_update_scan_actions[22m | scoutAircraft.glb[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | soccoCraft.glb[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | vanguardTrooper.glb[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | world-terrain-v3.glb[39m[0m
+[  87% ] [90m[1m_update_scan_actions[22m | vanguard-battle-v1.glb[39m[0m
+[  88% ] [90m[1m_update_scan_actions[22m | original-world-v1.glb[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | original-world-v1_0.png[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | original-world-v1_1.png[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | original-world-v1_2.png[39m[0m
+[  90% ] [90m[1m_update_scan_actions[22m | original-world-v1_3.png[39m[0m
+[  91% ] [90m[1m_update_scan_actions[22m | original-world-v1_4.png[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | original-world-v1_5.png[39m[0m
+[  92% ] [90m[1m_update_scan_actions[22m | original-world-v1_6.png[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | aircraft.glb[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | bookshop.glb[39m[0m
+[  94% ] [90m[1m_update_scan_actions[22m | fox.glb[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | gate.glb[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | house.glb[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | messenger.glb[39m[0m
+[  96% ] [90m[1m_update_scan_actions[22m | pine.glb[39m[0m
+[  97% ] [90m[1m_update_scan_actions[22m | postbox.glb[39m[0m
+[  98% ] [90m[1m_update_scan_actions[22m | tiger.glb[39m[0m
+[  98% ] [90m[1m_update_scan_actions[22m | tower.glb[39m[0m
+[92m[ DONE ][39m [1m_update_scan_actions[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started 正在导入或重新导入资产 (164 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   0% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   1% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   1% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   2% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   3% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   3% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   4% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   4% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   5% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   6% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   6% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   7% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   7% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   8% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   9% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   9% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  10% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  10% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  11% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  12% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  12% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  13% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  13% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  14% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  15% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  15% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  16% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  16% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  17% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  18% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  18% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  19% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  20% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  20% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  21% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  21% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  22% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  23% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  23% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  24% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  24% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  25% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  26% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  26% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  27% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  27% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  28% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  29% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  29% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  30% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  30% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  31% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  32% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  32% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  33% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  33% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  34% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  35% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  35% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  36% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  36% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  37% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  38% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  38% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  39% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  40% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  40% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  41% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  41% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  42% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  43% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  43% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  44% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  44% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  45% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  46% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  46% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  47% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  47% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  48% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  49% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  49% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  50% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  50% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  51% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  52% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  52% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  53% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  53% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  54% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  55% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  55% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  56% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  56% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  57% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  58% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  58% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  59% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  60% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  60% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  61% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  61% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  62% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  63% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  63% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  64% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  64% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  65% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  66% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  66% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  67% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  67% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  68% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  69% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  69% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  70% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  70% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  71% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  72% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  72% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  73% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  73% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  74% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  75% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  75% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  76% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  76% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  77% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  78% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  78% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  79% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  80% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  80% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  81% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  81% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  82% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  83% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  83% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  84% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  84% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  85% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  86% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  86% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  87% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  87% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  88% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  89% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  89% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  90% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  90% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  91% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  92% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  92% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  93% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  93% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  94% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  95% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  95% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  96% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  96% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  97% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  98% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[  98% ] [90m[1mreimport[22m | 正在准备重新导入文件……[39m[0m
+[   0% ] [90m[1mreimport[22m | 正在执行重新导入的前置操作……[39m[0m
+[   0% ] [90m[1mpreload_reimporting_scene[22m | Started 正在准备重新加载场景 (1 steps)[39m[0m
+[   0% ] [90m[1mpreload_reimporting_scene[22m | 正在分析场景 [空][39m[0m
+[  50% ] [90m[1mpreload_reimporting_scene[22m | 准备完成。[39m[0m
+[92m[ DONE ][39m [1mpreload_reimporting_scene[22m
+[0m
+[   0% ] [90m[1mreimport[22m | storm_cue.ogg[39m[0m
+[   0% ] [90m[1mreimport[22m | kun_battle.ogg[39m[0m
+[   1% ] [90m[1mreimport[22m | fleet_assault.ogg[39m[0m
+[   1% ] [90m[1mreimport[22m | storm_cue.ogg[39m[0m
+[   2% ] [90m[1mreimport[22m | kun_battle.ogg[39m[0m
+[   3% ] [90m[1mreimport[22m | fleet_assault.ogg[39m[0m
+[   3% ] [90m[1mreimport[22m | original-world-v1_4.png[39m[0m
+[   4% ] [90m[1mreimport[22m | original-world-v1_3.png[39m[0m
+[   4% ] [90m[1mreimport[22m | original-world-v1_2.png[39m[0m
+[   5% ] [90m[1mreimport[22m | original-world-v1_1.png[39m[0m
+[   6% ] [90m[1mreimport[22m | original-world-v1_0.png[39m[0m
+[   6% ] [90m[1mreimport[22m | bookshop_d49990925abeaa4511b717fb8ad831058c522eac9c2f7f88678767c18e7a3d32.png[39m[0m
+[   7% ] [90m[1mreimport[22m | swamp_ribbonFish_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[   7% ] [90m[1mreimport[22m | swamp_bird_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[   8% ] [90m[1mreimport[22m | swampZone_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[   9% ] [90m[1mreimport[22m | swampZone_8c85f1222f5bd0a4eac366c7c03b23995fda3abae732240524b392421fa01f62.png[39m[0m
+[   9% ] [90m[1mreimport[22m | swamp_stamenSpike_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  10% ] [90m[1mreimport[22m | tramSystem_71da6710c9ead4350bcbd5526334e71567d0c4e1d5f0dc59ae528788ff040646.png[39m[0m
+[  10% ] [90m[1mreimport[22m | tramSystem_819c03afdf2662976b9f59cd22d826783142da8cd3cbd7dcdf2a4fa1e689eeaf.png[39m[0m
+[  11% ] [90m[1mreimport[22m | tramSystem_c13fa1686d4149d2273c35a1512d25af49a8fa0e376f6a026fb2b6e6b94419fb.png[39m[0m
+[  12% ] [90m[1mreimport[22m | tramSystem_d2fa74b73e08ddd6dec0751edffe9e935b9b4846498fdffe7dbbd24eb2637805.png[39m[0m
+[  12% ] [90m[1mreimport[22m | tram_71da6710c9ead4350bcbd5526334e71567d0c4e1d5f0dc59ae528788ff040646.png[39m[0m
+[  13% ] [90m[1mreimport[22m | moonLake_b3fbc27c1091338b3835acbda46add78330dae843ac10869478618617dd346d8.png[39m[0m
+[  13% ] [90m[1mreimport[22m | tram_c13fa1686d4149d2273c35a1512d25af49a8fa0e376f6a026fb2b6e6b94419fb.png[39m[0m
+[  14% ] [90m[1mreimport[22m | moebiusTiger_8c85f1222f5bd0a4eac366c7c03b23995fda3abae732240524b392421fa01f62.png[39m[0m
+[  15% ] [90m[1mreimport[22m | moebiusSwamp_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  15% ] [90m[1mreimport[22m | moebiusSwamp_8c85f1222f5bd0a4eac366c7c03b23995fda3abae732240524b392421fa01f62.png[39m[0m
+[  16% ] [90m[1mreimport[22m | swamp_lizard_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  16% ] [90m[1mreimport[22m | swamp_lotusLeafBoat_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  17% ] [90m[1mreimport[22m | swamp_glowFlower_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  18% ] [90m[1mreimport[22m | bookshop-art-v3_d49990925abeaa4511b717fb8ad831058c522eac9c2f7f88678767c18e7a3d32.png[39m[0m
+[  18% ] [90m[1mreimport[22m | swamp_giantFlower_161eb9e28ec3eeb22c5ac0df765e759f547705e5e4c38cb2f7ea6393928d1cb3.png[39m[0m
+[  19% ] [90m[1mreimport[22m | castle-shared-edge-town-v1_0.png[39m[0m
+[  20% ] [90m[1mreimport[22m | castle-shared-edge-town-v1_1.png[39m[0m
+[  20% ] [90m[1mreimport[22m | castle-shared-edge-town-v1_2.png[39m[0m
+[  21% ] [90m[1mreimport[22m | moebius-tiger-anatomy-v3_Tiger_V3_Face_Image.png[39m[0m
+[  21% ] [90m[1mreimport[22m | moebius-tiger-anatomy-v3_Tiger_V3_Ink_Stripes.png[39m[0m
+[  22% ] [90m[1mreimport[22m | original-world-v1_5.png[39m[0m
+[  23% ] [90m[1mreimport[22m | original-world-v1_6.png[39m[0m
+[  23% ] [90m[1mreimport[22m | storm_cue.ogg[39m[0m
+[  24% ] [90m[1mreimport[22m | kun_battle.ogg[39m[0m
+[  24% ] [90m[1mreimport[22m | swamp_rimPalm.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  25% ] [90m[1mreimport[22m | romanSoldier_gladius_red.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  26% ] [90m[1mreimport[22m | romanSoldier_gladius_blue.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  26% ] [90m[1mreimport[22m | swamp_monkey.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  27% ] [90m[1mreimport[22m | swamp_ribbonFish.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  27% ] [90m[1mreimport[22m | swamp_pinkHanger.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  28% ] [90m[1mreimport[22m | swamp_shell.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  29% ] [90m[1mreimport[22m | swamp_nativeDoll.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  29% ] [90m[1mreimport[22m | swamp_mushroom.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  30% ] [90m[1mreimport[22m | tramSystem.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  30% ] [90m[1mreimport[22m | tram.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  31% ] [90m[1mreimport[22m | swamp_worldTree.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  32% ] [90m[1mreimport[22m | swamp_whale.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  32% ] [90m[1mreimport[22m | swamp_tubeWorm.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  33% ] [90m[1mreimport[22m | swamp_toweringTree.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  33% ] [90m[1mreimport[22m | swamp_stamenSpike.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  34% ] [90m[1mreimport[22m | romanSoldier_spear_blue.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  35% ] [90m[1mreimport[22m | romanSoldier_spear_red.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  35% ] [90m[1mreimport[22m | scoutAircraft.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  36% ] [90m[1mreimport[22m | soccoCraft.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  36% ] [90m[1mreimport[22m | vanguardTrooper.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  37% ] [90m[1mreimport[22m | world-terrain-v3.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  38% ] [90m[1mreimport[22m | vanguard-battle-v1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  38% ] [90m[1mreimport[22m | original-world-v1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  39% ] [90m[1mreimport[22m | aircraft.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  40% ] [90m[1mreimport[22m | bookshop.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  40% ] [90m[1mreimport[22m | fox.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  41% ] [90m[1mreimport[22m | gate.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  41% ] [90m[1mreimport[22m | house.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  42% ] [90m[1mreimport[22m | messenger.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  43% ] [90m[1mreimport[22m | pine.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  43% ] [90m[1mreimport[22m | postbox.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  44% ] [90m[1mreimport[22m | tiger.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  44% ] [90m[1mreimport[22m | tower.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  45% ] [90m[1mreimport[22m | romanSoldier_longbow_blue.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  46% ] [90m[1mreimport[22m | romanSoldier_longbow_red.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  46% ] [90m[1mreimport[22m | romanSoldier_spear_blue.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  47% ] [90m[1mreimport[22m | romanSoldier_spear_red.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  47% ] [90m[1mreimport[22m | citadelTrojanHorse.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  48% ] [90m[1mreimport[22m | gateHaulerCraft_hauler-23-8.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  49% ] [90m[1mreimport[22m | gateHaulerCraft_hauler-71-4.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  49% ] [90m[1mreimport[22m | gateHaulerCraft_hauler-96-1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  50% ] [90m[1mreimport[22m | gatePodCraft_pod-08-9.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  50% ] [90m[1mreimport[22m | gatePodCraft_pod-41-7.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  51% ] [90m[1mreimport[22m | gatePodCraft_pod-55-2.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  52% ] [90m[1mreimport[22m | gatePodEscort_pod-08-9.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  52% ] [90m[1mreimport[22m | gatePodEscort_pod-41-7.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  53% ] [90m[1mreimport[22m | gatePodEscort_pod-55-2.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  53% ] [90m[1mreimport[22m | leviathanIsland.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  54% ] [90m[1mreimport[22m | romanSoldier_gladius_blue.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  55% ] [90m[1mreimport[22m | romanSoldier_gladius_red.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  55% ] [90m[1mreimport[22m | romanSoldier_longbow_blue.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  56% ] [90m[1mreimport[22m | romanSoldier_longbow_red.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  56% ] [90m[1mreimport[22m | bubblePod.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  57% ] [90m[1mreimport[22m | citadelElderTree.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  58% ] [90m[1mreimport[22m | citadelWatchtower.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  58% ] [90m[1mreimport[22m | classicAliFox.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  59% ] [90m[1mreimport[22m | cloud.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  60% ] [90m[1mreimport[22m | craneNPC.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  60% ] [90m[1mreimport[22m | craneOnRock.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  61% ] [90m[1mreimport[22m | equatorialClouds.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  61% ] [90m[1mreimport[22m | fence.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  62% ] [90m[1mreimport[22m | fisherBoat.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  63% ] [90m[1mreimport[22m | flower.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  63% ] [90m[1mreimport[22m | fox.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  64% ] [90m[1mreimport[22m | grassTuft.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  64% ] [90m[1mreimport[22m | harborCrane.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  65% ] [90m[1mreimport[22m | hills.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  66% ] [90m[1mreimport[22m | house.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  66% ] [90m[1mreimport[22m | hydrangea.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  67% ] [90m[1mreimport[22m | ancient-pine-v1-lod0.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  67% ] [90m[1mreimport[22m | ancient-pine-v1-lod1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  68% ] [90m[1mreimport[22m | ancient-pine-v1-lod2.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  69% ] [90m[1mreimport[22m | bookshop-art-v3.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  69% ] [90m[1mreimport[22m | castle-shared-edge-town-v1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  70% ] [90m[1mreimport[22m | moebius-tiger-anatomy-v3.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  70% ] [90m[1mreimport[22m | roman-armor-v2.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  71% ] [90m[1mreimport[22m | roman-armor-v3-direction.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  72% ] [90m[1mreimport[22m | roman-shield-handle-v1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  72% ] [90m[1mreimport[22m | scoutAircraft-art-v1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  73% ] [90m[1mreimport[22m | kun-battle-v1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  73% ] [90m[1mreimport[22m | moebius-aircraft-v1.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  74% ] [90m[1mreimport[22m | agentMessenger.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  75% ] [90m[1mreimport[22m | bird.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  75% ] [90m[1mreimport[22m | blackRock.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  76% ] [90m[1mreimport[22m | bookshop.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  76% ] [90m[1mreimport[22m | bookshopHydrangeas.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  77% ] [90m[1mreimport[22m | bridge.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  78% ] [90m[1mreimport[22m | rock.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  78% ] [90m[1mreimport[22m | saihoji.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  79% ] [90m[1mreimport[22m | signpost.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  80% ] [90m[1mreimport[22m | snowMassif.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  80% ] [90m[1mreimport[22m | snowMountainPeak.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  81% ] [90m[1mreimport[22m | stackedCrates.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  81% ] [90m[1mreimport[22m | startingCamp.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  82% ] [90m[1mreimport[22m | swampZone.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  83% ] [90m[1mreimport[22m | swamp_bird.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  83% ] [90m[1mreimport[22m | swamp_canopy.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  84% ] [90m[1mreimport[22m | swamp_eel.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  84% ] [90m[1mreimport[22m | swamp_fireflies.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  85% ] [90m[1mreimport[22m | swamp_fishSchool.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  86% ] [90m[1mreimport[22m | swamp_giantFlower.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  86% ] [90m[1mreimport[22m | swamp_glowFlower.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  87% ] [90m[1mreimport[22m | swamp_lizard.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  87% ] [90m[1mreimport[22m | swamp_lotusLeafBoat.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  88% ] [90m[1mreimport[22m | lamp.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  89% ] [90m[1mreimport[22m | lawnHill.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  89% ] [90m[1mreimport[22m | longWingGlider.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  90% ] [90m[1mreimport[22m | lowPolyTree.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  90% ] [90m[1mreimport[22m | messenger.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  91% ] [90m[1mreimport[22m | moebiusAircraft.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  92% ] [90m[1mreimport[22m | moebiusAirship.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  92% ] [90m[1mreimport[22m | moebiusCity.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  93% ] [90m[1mreimport[22m | moebiusSwamp.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  93% ] [90m[1mreimport[22m | moebiusTiger.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  94% ] [90m[1mreimport[22m | moebiusTower.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  95% ] [90m[1mreimport[22m | moonLake.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  95% ] [90m[1mreimport[22m | mossyGround.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  96% ] [90m[1mreimport[22m | oldHarbor.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  96% ] [90m[1mreimport[22m | pine.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  97% ] [90m[1mreimport[22m | planet.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  98% ] [90m[1mreimport[22m | platforms.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  98% ] [90m[1mreimport[22m | pole.glb[39m[0m
+[   0% ] [90m[1mimport[22m | Started 导入场景 (104 steps)[39m[0m
+[   0% ] [90m[1mimport[22m | 导入场景中...[39m[0m
+[   1% ] [90m[1mimport[22m | 执行自定义脚本...[39m[0m
+[  99% ] [90m[1mimport[22m | 保存中...[39m[0m
+[92m[ DONE ][39m [1mimport[22m
+[0m
+[  99% ] [90m[1mreimport[22m | 正在结束资产导入……[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started 正在导入或重新导入资产 (164 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | 正在执行重新导入的后置操作……[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started 正在加载编辑器 (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | 正在加载编辑器布局……[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | 正在加载停靠面板……[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+ERROR: UVs are required to generate tangents.
+   at: generate_tangents (scene/resources/surface_tool.cpp:1157)
+ERROR: UVs are required to generate tangents.
+   at: generate_tangents (scene/resources/surface_tool.cpp:1157)
+ERROR: UVs are required to generate tangents.
+   at: generate_tangents (scene/resources/surface_tool.cpp:1157)
+ERROR: UVs are required to generate tangents.
+   at: generate_tangents (scene/resources/surface_tool.cpp:1157)

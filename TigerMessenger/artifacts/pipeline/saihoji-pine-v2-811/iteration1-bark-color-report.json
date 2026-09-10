@@ -1,0 +1,155 @@
+{
+  "seed": 811,
+  "scope": "Single seed 811 actual Blender v2 geometry plus exported face-color aging. No Web/Godot or batch integration.",
+  "inputGeometryGlb": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2-lod0.glb",
+  "inputGeometrySHA256": "bf06d118a5bb387331f72ff035a0ffd8d7bec7376201c9bb01f6ac67c99a0ade",
+  "sourceGeometryUnchangedByColorPass": true,
+  "paletteSRGB": [
+    "#403a31",
+    "#51483b",
+    "#615544",
+    "#746854",
+    "#887a65",
+    "#a29580",
+    "#b2a691"
+  ],
+  "paletteLinear": [
+    [
+      0.05126945837404324,
+      0.042311410620809675,
+      0.030713443732993635,
+      1
+    ],
+    [
+      0.0822827071298148,
+      0.06480326669290577,
+      0.043735029256973465,
+      1
+    ],
+    [
+      0.11953842798834562,
+      0.09084171118340768,
+      0.05780543019106723,
+      1
+    ],
+    [
+      0.17464740365558504,
+      0.13843161503245183,
+      0.08865558628577294,
+      1
+    ],
+    [
+      0.24620132670783548,
+      0.1946178304415758,
+      0.1301364766903643,
+      1
+    ],
+    [
+      0.3613067797835095,
+      0.3005437944157765,
+      0.21586050011389926,
+      1
+    ],
+    [
+      0.44520119451622786,
+      0.38132601143253014,
+      0.2831487404299921,
+      1
+    ]
+  ],
+  "method": "Seven face-flat related colors: gray-brown ground, coherent longitudinal dark grooves and pale facet ridges; no random per-face noise.",
+  "faceCounts": {
+    "b2a691": 169,
+    "51483b": 341,
+    "403a31": 224,
+    "746854": 543,
+    "887a65": 855,
+    "a29580": 659,
+    "615544": 609
+  },
+  "actualGlbColorChecks": [
+    {
+      "node": "n8",
+      "uniqueColors": 7,
+      "maxLinearPaletteError": 9.320561655812298e-09,
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "colorAccessorCount": 7257
+    },
+    {
+      "node": "n9",
+      "uniqueColors": 7,
+      "maxLinearPaletteError": 9.320561655812298e-09,
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "colorAccessorCount": 2941
+    }
+  ],
+  "glb": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2-aged.glb",
+  "glbSHA256": "6a4518697580e2b63c70e5ef8a594eb5130355f2b5dda524186c515691c6311b",
+  "blend": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2-aged.blend",
+  "blendSHA256": "0406eaa61346ff7ed9a0c39bdee9c94731a7402ec2d5648a88f7d294f1d07e34",
+  "generatorSHA256": "1f9fbf3e1547a4923ca55d016335bf1d6f6e16826897b7e3d481b257ac6a942e",
+  "renders": [
+    {
+      "view": "full",
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-aged-full.png",
+      "camera": [
+        9.201467514038086,
+        -14.74223518371582,
+        7.598331928253174
+      ],
+      "target": [
+        0.45905303955078125,
+        -0.1715463101863861,
+        2.6442975997924805
+      ],
+      "ortho": 6.489867925643922
+    },
+    {
+      "view": "trunk",
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-aged-trunk.png",
+      "camera": [
+        9.0894193649292,
+        -14.654573440551758,
+        6.586034297943115
+      ],
+      "target": [
+        0.34700486063957214,
+        -0.08388451486825943,
+        1.6319999694824219
+      ],
+      "ortho": 2.9
+    },
+    {
+      "view": "root",
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-aged-root.png",
+      "camera": [
+        8.742414474487305,
+        -14.57068920135498,
+        5.362034320831299
+      ],
+      "target": [
+        0.0,
+        0.0,
+        0.40799999237060547
+      ],
+      "ortho": 1.7
+    }
+  ],
+  "runtimeContract": "Bark baseColorFactor WHITE and vertexColors true; preserve COLOR_0. Leaves keep current Web target factors. Do not overwrite bark with solid palette.",
+  "limitations": [
+    "Only one hero seed",
+    "Portable colors verified; actual visual review still required",
+    "Crown geometry pass is separate and retains its original anchor contracts",
+    "No runtime replacement in this task"
+  ]
+}

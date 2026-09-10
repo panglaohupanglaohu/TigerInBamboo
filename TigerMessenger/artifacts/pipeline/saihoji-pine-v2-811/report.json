@@ -1,0 +1,166 @@
+{
+  "seed": 811,
+  "stage": "single Blender v2 hero candidate, actual GLB reimport rendered; NOT Web/Godot integrated or batch complete",
+  "reference": "assets/concepts/ancient-pine-target-v1.png",
+  "sources": {
+    "tools/pipeline/build_ancient_pine_candidate.py": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59",
+    "assets/models/originals/saihoji-pines-r1/blender-r3/ancient-pine-811.blend": "4f0f131401392752c2d47e879bc48f0bbe0a8246a164a7482998a6894b796084",
+    "assets/models/originals/saihoji-pines-r1/ancient-pine-811.source.json": "a708c4bdd3f7640abea949ab7a3aaf6475f0dfa54b7f75f62a07668032493ea1",
+    "assets/models/optimized/saihoji-pines-v1/811/ancient-pine-811-lod0.glb": "f2453f21f23f6e46a7ee4db4cfe001b5292af0935a4bc0f64b3008102fa03db6"
+  },
+  "sourceHashesUnchanged": true,
+  "generatorSHA256": "110772a5325e8aead501d282a5e70a44e8a70a6b1661e63760a293397c9d9b4b",
+  "geometryChanges": {
+    "clumpCenterInputsRetained": 29,
+    "originalBranchSegmentsRetained": 37,
+    "verticalClumpFactorFromOriginal": 1.0,
+    "v1VerticalFactor": 0.57,
+    "horizontalClumpFactor": 1.2,
+    "woodBudgetBeforeLargeFacetSubdivision": 3400,
+    "foliageBudget": 5600,
+    "flaredRootUnion": true,
+    "originalRootDirectionWebs": 6,
+    "largeFacetSubdivisionEdgeThreshold": 0.19,
+    "barkReliefMaxLocal": 0,
+    "userRequestedRound": 2
+  },
+  "materialTargetSRGB": [
+    "#766958",
+    "#504a3e",
+    "#253e2b",
+    "#446439",
+    "#72934d"
+  ],
+  "sourcePaletteUnchanged": false,
+  "comparisonPalette": "Both v1 and v2 actual GLBs rendered with current Web target palette; v1 material adjustment is preview-only, original v1 GLB untouched",
+  "lods": [
+    {
+      "lod": 0,
+      "triangles": 13020,
+      "visibleMeshes": 5,
+      "glb": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2-lod0.glb",
+      "sha256": "8d02cacadd5b05d84861f83d282d25bf015af013a85810962bfc1bd3194e7b98",
+      "bytes": 853912
+    }
+  ],
+  "actualGlbWoodTopology": {
+    "components": 1,
+    "boundaryEdges": 0,
+    "nonManifoldEdges": 0,
+    "vertices": 3712
+  },
+  "actualGlbFoliageTopology": {
+    "components": 6,
+    "boundaryEdges": 0,
+    "nonManifoldEdges": 0,
+    "vertices": 2812
+  },
+  "sourceNodeIdsPreserved": 17,
+  "sourceLocalMatrixMaxError": 0.0,
+  "blend": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2.blend",
+  "blendSHA256": "5ed37fab3bb174ea6154633d6627c4c5709dbcf8ad443315b7f0596c3756d6f3",
+  "renders": [
+    {
+      "state": "v1",
+      "view": "full",
+      "camera": [
+        9.248193740844727,
+        -14.819063186645508,
+        7.588015556335449
+      ],
+      "target": [
+        0.46109557151794434,
+        -0.17390179634094238,
+        2.6086602210998535
+      ],
+      "ortho": 6.523038625717164,
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v1-full.png"
+    },
+    {
+      "state": "v1",
+      "view": "crown",
+      "camera": [
+        10.299866676330566,
+        -15.11579418182373,
+        7.784355163574219
+      ],
+      "target": [
+        1.5127687454223633,
+        -0.47063279151916504,
+        2.804999828338623
+      ],
+      "ortho": 3.4,
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v1-crown.png"
+    },
+    {
+      "state": "v1",
+      "view": "root",
+      "camera": [
+        8.787097930908203,
+        -14.645161628723145,
+        5.387355327606201
+      ],
+      "target": [
+        0.0,
+        0.0,
+        0.40799999237060547
+      ],
+      "ortho": 1.7,
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v1-root.png"
+    },
+    {
+      "state": "v2",
+      "view": "full",
+      "camera": [
+        9.248193740844727,
+        -14.819063186645508,
+        7.588015556335449
+      ],
+      "target": [
+        0.46109557151794434,
+        -0.17390179634094238,
+        2.6086602210998535
+      ],
+      "ortho": 6.523038625717164,
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-full.png"
+    },
+    {
+      "state": "v2",
+      "view": "crown",
+      "camera": [
+        10.299866676330566,
+        -15.11579418182373,
+        7.784355163574219
+      ],
+      "target": [
+        1.5127687454223633,
+        -0.47063279151916504,
+        2.804999828338623
+      ],
+      "ortho": 3.4,
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-crown.png"
+    },
+    {
+      "state": "v2",
+      "view": "root",
+      "camera": [
+        8.787097930908203,
+        -14.645161628723145,
+        5.387355327606201
+      ],
+      "target": [
+        0.0,
+        0.0,
+        0.40799999237060547
+      ],
+      "ortho": 1.7,
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-root.png"
+    }
+  ],
+  "limitations": [
+    "One seed only, no world integration",
+    "Not a pixel match to reference; low-poly cloud detail and root texture still require visual review",
+    "Root/branch/clump input anchors preserved; remeshed surface centroids and vertices intentionally change",
+    "No external asset packs or paid generation used"
+  ]
+}

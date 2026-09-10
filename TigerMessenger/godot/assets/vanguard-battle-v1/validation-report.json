@@ -1,0 +1,76 @@
+{
+  "checksPassed": true,
+  "originalNodes": 84,
+  "addedNodes": 33,
+  "framesChecked": 161,
+  "maxSavedMatrixError": 3.725290298461914e-07,
+  "maxGLBMatrixError": 1.1920928955078125e-07,
+  "maxGripAnchorError": {
+    "R": 0,
+    "L": 2.407644485243637e-07
+  },
+  "keyPoseMinGripSurfaceDistance": {
+    "R": 0.0014837168855592608,
+    "L": 6.917160499142483e-05
+  },
+  "cannonArmorTriangleCrossings": [],
+  "aimHeadClearance": {
+    "gunDirectionActor": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "leftPositiveXClearance": 0.07900000363588333,
+    "gunXBounds": [
+      0.19900000095367432,
+      0.3109999895095825
+    ],
+    "headXBounds": [
+      -0.11999999731779099,
+      0.11999999731779099
+    ],
+    "definition": "Guaranteed separation of disjoint X intervals, all visible barrel/receiver/grip/collar vertices versus helmet/crown/visor/frame/face; actor-local units."
+  },
+  "forearmHandGripCrossings": [],
+  "GLBUVPrimitivesChecked": 77,
+  "GLBOriginalMaterialsChecked": 17,
+  "redStripeChecks": {
+    "n67": {
+      "sourceMaterial": "m8",
+      "baseColor": [
+        0.4452011945063733,
+        0.05126945836711539,
+        0.028426039499072558,
+        1
+      ],
+      "emissive": [
+        0,
+        0,
+        0
+      ]
+    },
+    "n77": {
+      "sourceMaterial": "m8",
+      "baseColor": [
+        0.4452011945063733,
+        0.05126945836711539,
+        0.028426039499072558,
+        1
+      ],
+      "emissive": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "sourceUnchanged": true,
+  "files": {
+    "source": "3f319fa6f69d686a80c6a3f9f5b573879a51b1009966e99caf7c89bb67f67c64",
+    "blend": "636db6573e2df89a02954dc7bafc4253e33272674f6642007a0cea31fa3c1b5c",
+    "glb": "8961c19fdc1c8d1f8de9147a5a4d5a84c7e6c648751a8fd37eefe9cbd6748048",
+    "assembly": "72bd3e32793e482bc60160ebeb6297e6226b746750603afdf0947231d6f3c051"
+  },
+  "failures": [],
+  "scope": "All saved 30Hz pose matrices/grip anchors and cannon versus shoulder, upper arm, helmet, chest actual triangle crossings; not all body-surface intersections or gameplay validation."
+}

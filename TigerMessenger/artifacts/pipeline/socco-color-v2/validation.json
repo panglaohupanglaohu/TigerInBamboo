@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "sourceFilesUnchanged": {
+    "assets/models/optimized/socco-craft-v1/socco-craft-v1.glb": "98729864e994acd2df77d51cae537f630badda795105871d7b389dd2c3c76ac2",
+    "assets/models/optimized/socco-craft-v1/socco-craft-v1.blend": "74745b1c5a58ff48a80a392a1bd2d395ce568cd4e536eb194d4fc29eff65e056"
+  },
+  "geometryMeshCount": 113,
+  "sourceAndSavedGeometryUVParentBasisHash": "8c9a27737eb003091168a77ae188d123cbc36f3372139c91a692079cf584f773",
+  "savedGeometryAndUVExactlyUnchanged": true,
+  "savedTimelineFramesCompared": 1,
+  "savedTimelineExactlyUnchanged": true,
+  "glbBinaryChunkSHA256": "be2c2626dbbfedfac6f82f536ba8f29101bc3e515d4651516a366680d0601505",
+  "glbBinaryExactlyUnchanged": true,
+  "allNonMaterialGLBJsonExactlyUnchanged": true,
+  "nodes": 131,
+  "meshes": 84,
+  "materialUUIDsChanged": [
+    "m0",
+    "m10",
+    "m11",
+    "m12",
+    "m14",
+    "m15",
+    "m3",
+    "m5",
+    "m8",
+    "m9"
+  ],
+  "transparencyAndAlphaUnchanged": true,
+  "originalEmissionStrengthRatiosRetained": true,
+  "colorOnly": true,
+  "runtimeIntegrated": false,
+  "freshGLBMaterialReadback": [
+    {
+      "uuid": "m0",
+      "maxLinearBaseError": 9.73297686890362e-09
+    },
+    {
+      "uuid": "m10",
+      "maxLinearBaseError": 8.424790413907868e-10
+    },
+    {
+      "uuid": "m11",
+      "maxLinearBaseError": 1.387742726288721e-09
+    },
+    {
+      "uuid": "m12",
+      "maxLinearBaseError": 1.4010067328484865e-08
+    },
+    {
+      "uuid": "m14",
+      "maxLinearBaseError": 7.306026200692983e-10
+    },
+    {
+      "uuid": "m15",
+      "maxLinearBaseError": 2.725306175177522e-09
+    },
+    {
+      "uuid": "m3",
+      "maxLinearBaseError": 1.8436837501134562e-08
+    },
+    {
+      "uuid": "m5",
+      "maxLinearBaseError": 1.4742983445170665e-08
+    },
+    {
+      "uuid": "m8",
+      "maxLinearBaseError": 7.22588941459712e-09
+    },
+    {
+      "uuid": "m9",
+      "maxLinearBaseError": 5.125457475108064e-09
+    }
+  ],
+  "beforeAfterCamerasAndColorManagementExactlyEqual": true
+}

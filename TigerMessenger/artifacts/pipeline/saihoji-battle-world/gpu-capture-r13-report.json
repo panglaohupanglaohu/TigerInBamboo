@@ -1,0 +1,3963 @@
+{
+  "blocked_projectiles": 80,
+  "escort_pods": 3,
+  "events": [
+    {
+      "defender_faction": "blue",
+      "narrative_revision": true,
+      "round_id": 1,
+      "time": 0.0,
+      "type": "round_started"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "ship_id": "saihoji-warship-0",
+      "time": 2.03333333333333,
+      "type": "ship_departure_requested"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "ship_id": "saihoji-warship-1",
+      "time": 18.0333333333336,
+      "type": "ship_departure_requested"
+    },
+    {
+      "cue": "kun_prelude_once",
+      "restart": false,
+      "round_id": 1,
+      "time": 32.6499999999994,
+      "type": "bgm_intent"
+    },
+    {
+      "cue": "kun_storm_once",
+      "restart": false,
+      "round_id": 1,
+      "time": 35.4666666666659,
+      "type": "bgm_intent"
+    },
+    {
+      "round_id": 1,
+      "suction": 1.0,
+      "target": 1.0,
+      "time": 35.4666666666659,
+      "type": "whale_lift_requested"
+    },
+    {
+      "round_id": 1,
+      "ship_id": "saihoji-warship-0",
+      "time": 36.0333333333326,
+      "type": "ship_landed"
+    },
+    {
+      "round_id": 1,
+      "time": 45.1666666666654,
+      "type": "whale_risen"
+    },
+    {
+      "round_id": 1,
+      "ship_id": "saihoji-warship-1",
+      "time": 52.0333333333317,
+      "type": "ship_landed"
+    },
+    {
+      "round_id": 1,
+      "time": 52.0333333333317,
+      "type": "formation_requested"
+    },
+    {
+      "round_id": 1,
+      "time": 55.6999999999981,
+      "type": "formation_ready"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "target_ids": [
+        "moebius-0",
+        "moebius-1",
+        "moebius-2",
+        "moebius-3",
+        "moebius-4"
+      ],
+      "time": 55.7166666666648,
+      "type": "resistance_enabled"
+    },
+    {
+      "distance": 4.62268590927124,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-9",
+      "shot_id": "shot-7",
+      "time": 56.949999999998,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 1,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 56.9333333333314,
+      "type": "fleet_hit"
+    },
+    {
+      "direction": "(-0.426428, 0.526929, -0.73519)",
+      "heavy_ids": [
+        "vanguard-0",
+        "vanguard-1",
+        "vanguard-2",
+        "vanguard-3",
+        "vanguard-4",
+        "vanguard-5",
+        "vanguard-6",
+        "vanguard-7",
+        "vanguard-8",
+        "vanguard-9",
+        "vanguard-10",
+        "vanguard-11",
+        "vanguard-12",
+        "vanguard-13",
+        "vanguard-14",
+        "vanguard-15",
+        "vanguard-16",
+        "vanguard-17",
+        "vanguard-18",
+        "vanguard-19",
+        "vanguard-20",
+        "vanguard-21",
+        "vanguard-22",
+        "vanguard-23",
+        "vanguard-24",
+        "vanguard-25",
+        "vanguard-26"
+      ],
+      "round_id": 1,
+      "threat_ids": [
+        "blue-0-9"
+      ],
+      "time": 56.9333333333314,
+      "type": "assault_requested"
+    },
+    {
+      "distance": 4.68619632720947,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-4",
+      "shot_id": "shot-5",
+      "time": 56.9666666666647,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 2,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 56.949999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.62905311584473,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-19",
+      "shot_id": "shot-11",
+      "time": 56.9833333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 3,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 56.9666666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.64290475845337,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-2",
+      "shot_id": "shot-3",
+      "time": 56.999999999998,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 4,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 56.9833333333314,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.61536979675293,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-10",
+      "shot_id": "shot-22",
+      "time": 57.0166666666647,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 5,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 56.999999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.74413204193115,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-14",
+      "shot_id": "shot-9",
+      "time": 57.0333333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 6,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 57.0166666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.68509292602539,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-2",
+      "shot_id": "shot-19",
+      "time": 57.049999999998,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 7,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 57.0333333333314,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.51413869857788,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-0",
+      "shot_id": "shot-17",
+      "time": 57.0833333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 8,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 57.0666666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.60989475250244,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-24",
+      "shot_id": "shot-16",
+      "time": 57.0833333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 9,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 57.0666666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.50308179855347,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-5",
+      "shot_id": "shot-21",
+      "time": 57.099999999998,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 10,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 57.0833333333314,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.70548534393311,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-3",
+      "shot_id": "shot-4",
+      "time": 57.099999999998,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 11,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 57.0833333333314,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.73163175582886,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-20",
+      "shot_id": "shot-24",
+      "time": 57.1166666666647,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 12,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-20",
+      "time": 57.099999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.56485271453857,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-15",
+      "shot_id": "shot-23",
+      "time": 57.1166666666647,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 13,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-15",
+      "time": 57.099999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.45599889755249,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-3",
+      "shot_id": "shot-20",
+      "time": 57.1333333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 14,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 57.1166666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.57588052749634,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-1",
+      "shot_id": "shot-18",
+      "time": 57.1333333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 15,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 57.1166666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.39468669891357,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-27",
+      "time": 57.149999999998,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 16,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 57.1333333333314,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.5273380279541,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-31",
+      "time": 57.2833333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 17,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 57.2666666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.76672077178955,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-4",
+      "shot_id": "shot-29",
+      "time": 57.3166666666647,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 18,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 57.299999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.78139734268188,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-21",
+      "shot_id": "shot-28",
+      "time": 57.4166666666647,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 19,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-21",
+      "time": 57.399999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.67249536514282,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-33",
+      "time": 57.4333333333314,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 20,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 57.4166666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.58971261978149,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-22",
+      "shot_id": "shot-35",
+      "time": 57.8166666666647,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 21,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-22",
+      "time": 57.799999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.63548517227173,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-9",
+      "shot_id": "shot-34",
+      "time": 57.8833333333313,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 22,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 57.8666666666647,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.73212575912476,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-14",
+      "shot_id": "shot-36",
+      "time": 58.1666666666646,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 23,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-14",
+      "time": 58.149999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.28654527664185,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-23",
+      "shot_id": "shot-37",
+      "time": 58.5666666666646,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 24,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-23",
+      "time": 58.549999999998,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.59882020950317,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-19",
+      "shot_id": "shot-38",
+      "time": 58.5833333333313,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 25,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-19",
+      "time": 58.5666666666646,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.46694993972778,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-40",
+      "time": 58.649999999998,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 26,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 58.6333333333313,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.39596939086914,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-42",
+      "time": 59.0166666666646,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 27,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 58.9999999999979,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.63857650756836,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-24",
+      "shot_id": "shot-41",
+      "time": 59.0833333333313,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 28,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-24",
+      "time": 59.0666666666646,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.77522277832031,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-44",
+      "time": 61.0666666666645,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 29,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 61.0499999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.76480913162231,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-46",
+      "time": 61.2333333333311,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 30,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 61.2166666666645,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.58951425552368,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-48",
+      "time": 61.3666666666645,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 31,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 61.3499999999978,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.79134750366211,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-50",
+      "time": 62.5999999999977,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 32,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 62.5833333333311,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.42921876907349,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-51",
+      "time": 63.033333333331,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 33,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 63.0166666666644,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "stage": "insert",
+      "time": 64.9166666666643,
+      "type": "assault_stage"
+    },
+    {
+      "distance": 4.52470684051514,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-55",
+      "time": 65.0833333333309,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 34,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 65.0666666666643,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.64865779876709,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-54",
+      "time": 65.1166666666643,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 35,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 65.0999999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.73276853561401,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-57",
+      "time": 65.5166666666642,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 36,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 65.4999999999976,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 3.9781322479248,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-59",
+      "time": 66.7333333333308,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 37,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 66.7166666666642,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.78607749938965,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-60",
+      "time": 67.0999999999975,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 38,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 67.0833333333308,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.510657787323,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-20",
+      "shot_id": "shot-63",
+      "time": 68.1666666666641,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 39,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-20",
+      "time": 68.1499999999974,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.67444562911987,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-2",
+      "shot_id": "shot-65",
+      "time": 68.3333333333307,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 40,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-2",
+      "time": 68.3166666666641,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.6391282081604,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-4",
+      "shot_id": "shot-67",
+      "time": 68.3499999999974,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 41,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-4",
+      "time": 68.3333333333307,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.49283027648926,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-19",
+      "shot_id": "shot-68",
+      "time": 68.5499999999974,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 42,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-19",
+      "time": 68.5333333333307,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.79524087905884,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-0",
+      "shot_id": "shot-69",
+      "time": 69.0333333333307,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 43,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 69.016666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.40916061401367,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-72",
+      "time": 69.166666666664,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 44,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 69.1499999999974,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.40950202941895,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-71",
+      "time": 69.1833333333307,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 45,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 69.166666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.74679231643677,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-14",
+      "shot_id": "shot-73",
+      "time": 69.2499999999974,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 46,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-14",
+      "time": 69.2333333333307,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.46956014633179,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-10",
+      "shot_id": "shot-74",
+      "time": 69.6999999999973,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 47,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-10",
+      "time": 69.6833333333307,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.72534656524658,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-2",
+      "shot_id": "shot-75",
+      "time": 69.7833333333307,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 48,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-2",
+      "time": 69.766666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.50732803344727,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-9",
+      "shot_id": "shot-77",
+      "time": 70.0333333333306,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 49,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-9",
+      "time": 70.016666666664,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.70877456665039,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-9",
+      "shot_id": "shot-79",
+      "time": 70.2499999999973,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 50,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 70.2333333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 1,
+      "suction": 0.833333333333333,
+      "time": 70.2333333333306,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.833333333333333,
+      "time": 70.2333333333306,
+      "type": "whale_lift_requested"
+    },
+    {
+      "distance": 4.18777942657471,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-82",
+      "time": 70.6999999999973,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 51,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 70.6833333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.67964220046997,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-87",
+      "time": 71.4666666666639,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 52,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 71.4499999999972,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.64780712127686,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-3",
+      "shot_id": "shot-85",
+      "time": 71.6166666666639,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 53,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 71.5999999999972,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.79656505584717,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-21",
+      "shot_id": "shot-86",
+      "time": 71.6499999999972,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 54,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-21",
+      "time": 71.6333333333306,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.63509559631348,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-4",
+      "shot_id": "shot-88",
+      "time": 72.6333333333305,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 55,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 72.6166666666638,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.50806713104248,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-91",
+      "time": 72.9999999999971,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 56,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 72.9833333333305,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.63205337524414,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-93",
+      "time": 73.0833333333305,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 57,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 73.0666666666638,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.70589160919189,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-24",
+      "shot_id": "shot-92",
+      "time": 73.1999999999971,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 58,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-24",
+      "time": 73.1833333333305,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.37194871902466,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-94",
+      "time": 73.2499999999971,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 59,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 73.2333333333305,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "stage": "combat",
+      "time": 73.3999999999971,
+      "type": "assault_stage"
+    },
+    {
+      "distance": 4.68421268463135,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-15",
+      "shot_id": "shot-95",
+      "time": 73.5499999999971,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 60,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-15",
+      "time": 73.5333333333304,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.49308681488037,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-1",
+      "shot_id": "shot-96",
+      "time": 73.7166666666638,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 61,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-1",
+      "time": 73.6999999999971,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.28408622741699,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-23",
+      "shot_id": "shot-99",
+      "time": 73.8999999999971,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 62,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-23",
+      "time": 73.8833333333304,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.51607370376587,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-5",
+      "shot_id": "shot-101",
+      "time": 73.9666666666638,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 63,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-5",
+      "time": 73.9499999999971,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.61785936355591,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-22",
+      "shot_id": "shot-102",
+      "time": 74.0333333333304,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 64,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-22",
+      "time": 74.0166666666638,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.67869472503662,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-14",
+      "shot_id": "shot-103",
+      "time": 74.2499999999971,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 65,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-14",
+      "time": 74.2333333333304,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.59783554077148,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-0-3",
+      "shot_id": "shot-105",
+      "time": 75.049999999997,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 66,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-0-3",
+      "time": 75.0333333333304,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.47889518737793,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-19",
+      "shot_id": "shot-108",
+      "time": 75.1666666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 67,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-19",
+      "time": 75.149999999997,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 0.442138910293579,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-7",
+      "shot_id": "shot-118",
+      "time": 75.2333333333304,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": false,
+      "time": 75.2333333333304,
+      "type": "defender_hit",
+      "unit_id": "blue-0-20",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.506029486656189,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-5",
+      "shot_id": "shot-116",
+      "time": 75.249999999997,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-5",
+      "dead": true,
+      "time": 75.249999999997,
+      "type": "defender_hit",
+      "unit_id": "blue-0-20",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.629774391651154,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-16",
+      "shot_id": "shot-126",
+      "time": 75.2666666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.513594329357147,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-4",
+      "shot_id": "shot-115",
+      "time": 75.2666666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.354885786771774,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-15",
+      "shot_id": "shot-125",
+      "time": 75.2833333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.676267743110657,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-14",
+      "shot_id": "shot-124",
+      "time": 75.2833333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.614671051502228,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-3",
+      "shot_id": "shot-114",
+      "time": 75.2833333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.629344940185547,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-13",
+      "shot_id": "shot-123",
+      "time": 75.299999999997,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.384193450212479,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-25",
+      "shot_id": "shot-134",
+      "time": 75.3166666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.583052277565002,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-24",
+      "shot_id": "shot-133",
+      "time": 75.3166666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.367589324712753,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-23",
+      "shot_id": "shot-132",
+      "time": 75.3333333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.670872032642365,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-1",
+      "shot_id": "shot-112",
+      "time": 75.3333333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.393588781356812,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-11",
+      "shot_id": "shot-122",
+      "time": 75.349999999997,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.327023208141327,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-21",
+      "shot_id": "shot-130",
+      "time": 75.3666666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.640735387802124,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-10",
+      "shot_id": "shot-121",
+      "time": 75.3666666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.538437843322754,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-0",
+      "shot_id": "shot-111",
+      "time": 75.3666666666637,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.433829128742218,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-20",
+      "shot_id": "shot-129",
+      "time": 75.3833333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.461746126413345,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-9",
+      "shot_id": "shot-120",
+      "time": 75.399999999997,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.391611903905869,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-18",
+      "shot_id": "shot-128",
+      "time": 75.4333333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.74965333938599,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-110",
+      "time": 75.449999999997,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 68,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 75.4333333333303,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.6847071647644,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-24",
+      "shot_id": "shot-135",
+      "time": 76.5166666666636,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 69,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-24",
+      "time": 76.4999999999969,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.69560813903809,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-137",
+      "time": 76.6833333333303,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 70,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 76.6666666666636,
+      "type": "fleet_hit"
+    },
+    {
+      "by": "vanguard-8",
+      "time": 76.8499999999969,
+      "type": "shield_broken",
+      "unit_id": "blue-0-21"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 76.9333333333303,
+      "type": "defender_hit",
+      "unit_id": "blue-0-21",
+      "weapon": "blade"
+    },
+    {
+      "distance": 4.53692197799683,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-138",
+      "time": 76.9666666666636,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 71,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 76.9499999999969,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.71458101272583,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-140",
+      "time": 77.0499999999969,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 72,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 77.0333333333302,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.58244562149048,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-139",
+      "time": 77.1333333333302,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 73,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 77.1166666666636,
+      "type": "fleet_hit"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 77.2499999999969,
+      "type": "shield_broken",
+      "unit_id": "blue-0-22"
+    },
+    {
+      "by": "vanguard-17",
+      "dead": true,
+      "time": 77.2833333333302,
+      "type": "defender_hit",
+      "unit_id": "blue-0-22",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 77.5333333333302,
+      "type": "shield_broken",
+      "unit_id": "blue-0-23"
+    },
+    {
+      "by": "vanguard-8",
+      "dead": true,
+      "time": 77.5499999999969,
+      "type": "defender_hit",
+      "unit_id": "blue-0-23",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-5",
+      "time": 77.6166666666635,
+      "type": "shield_broken",
+      "unit_id": "blue-0-15"
+    },
+    {
+      "distance": 0.632684886455536,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-15",
+      "shot_id": "shot-153",
+      "time": 77.6166666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-15",
+      "dead": false,
+      "time": 77.6166666666635,
+      "type": "defender_hit",
+      "unit_id": "blue-0-15",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.299780994653702,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-5",
+      "shot_id": "shot-147",
+      "time": 77.6166666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-5",
+      "dead": true,
+      "time": 77.6166666666635,
+      "type": "defender_hit",
+      "unit_id": "blue-0-15",
+      "weapon": "bolt"
+    },
+    {
+      "by": "vanguard-7",
+      "time": 77.6333333333302,
+      "type": "shield_broken",
+      "unit_id": "blue-0-16"
+    },
+    {
+      "distance": 0.689396798610687,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-14",
+      "shot_id": "shot-152",
+      "time": 77.6333333333302,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.595680594444275,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-4",
+      "shot_id": "shot-146",
+      "time": 77.6333333333302,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.400193393230438,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-25",
+      "shot_id": "shot-160",
+      "time": 77.6499999999969,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.24233415722847,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-24",
+      "shot_id": "shot-159",
+      "time": 77.6666666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.420711249113083,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-13",
+      "shot_id": "shot-151",
+      "time": 77.6666666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.504753768444061,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-3",
+      "shot_id": "shot-145",
+      "time": 77.6666666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.231288745999336,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-23",
+      "shot_id": "shot-158",
+      "time": 77.6833333333302,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.397028595209122,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-22",
+      "shot_id": "shot-157",
+      "time": 77.6999999999969,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.515033781528473,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-2",
+      "shot_id": "shot-144",
+      "time": 77.6999999999969,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.651217758655548,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-21",
+      "shot_id": "shot-156",
+      "time": 77.7166666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.253731936216354,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-11",
+      "shot_id": "shot-150",
+      "time": 77.7333333333302,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.576241672039032,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-1",
+      "shot_id": "shot-143",
+      "time": 77.7333333333302,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.513326704502106,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-20",
+      "shot_id": "shot-155",
+      "time": 77.7499999999969,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.257761597633362,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-10",
+      "shot_id": "shot-149",
+      "time": 77.7666666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.677288174629211,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-0",
+      "shot_id": "shot-142",
+      "time": 77.7666666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-15",
+      "dead": true,
+      "time": 77.7833333333302,
+      "type": "defender_hit",
+      "unit_id": "blue-0-16",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.433573007583618,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-18",
+      "shot_id": "shot-154",
+      "time": 77.8166666666635,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 77.9499999999969,
+      "type": "shield_broken",
+      "unit_id": "blue-0-24"
+    },
+    {
+      "by": "vanguard-17",
+      "dead": true,
+      "time": 77.9833333333302,
+      "type": "defender_hit",
+      "unit_id": "blue-0-24",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-25",
+      "time": 78.1333333333302,
+      "type": "shield_broken",
+      "unit_id": "blue-1-20"
+    },
+    {
+      "by": "vanguard-14",
+      "dead": true,
+      "time": 78.2166666666635,
+      "type": "defender_hit",
+      "unit_id": "blue-1-20",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 78.2333333333302,
+      "type": "shield_broken",
+      "unit_id": "blue-0-18"
+    },
+    {
+      "by": "vanguard-8",
+      "dead": true,
+      "time": 78.2499999999968,
+      "type": "defender_hit",
+      "unit_id": "blue-0-18",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-5",
+      "time": 78.3166666666635,
+      "type": "shield_broken",
+      "unit_id": "blue-0-10"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 78.3333333333302,
+      "type": "defender_hit",
+      "unit_id": "blue-0-10",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-15",
+      "time": 78.4833333333302,
+      "type": "shield_broken",
+      "unit_id": "blue-1-21"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 78.6499999999968,
+      "type": "shield_broken",
+      "unit_id": "blue-1-15"
+    },
+    {
+      "by": "vanguard-24",
+      "dead": true,
+      "time": 78.6666666666635,
+      "type": "defender_hit",
+      "unit_id": "blue-1-15",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-17",
+      "dead": true,
+      "time": 78.6833333333302,
+      "type": "defender_hit",
+      "unit_id": "blue-1-21",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-4",
+      "time": 78.6999999999968,
+      "type": "shield_broken",
+      "unit_id": "blue-0-19"
+    },
+    {
+      "by": "vanguard-25",
+      "time": 78.8333333333301,
+      "type": "shield_broken",
+      "unit_id": "blue-1-16"
+    },
+    {
+      "by": "vanguard-14",
+      "dead": true,
+      "time": 78.9166666666635,
+      "type": "defender_hit",
+      "unit_id": "blue-1-16",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "dead": true,
+      "time": 78.9333333333301,
+      "type": "defender_hit",
+      "unit_id": "blue-0-19",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-8",
+      "time": 78.9499999999968,
+      "type": "shield_broken",
+      "unit_id": "blue-0-14"
+    },
+    {
+      "by": "vanguard-5",
+      "time": 79.0166666666635,
+      "type": "shield_broken",
+      "unit_id": "blue-1-10"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 79.0333333333301,
+      "type": "defender_hit",
+      "unit_id": "blue-1-10",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-15",
+      "time": 79.1833333333301,
+      "type": "shield_broken",
+      "unit_id": "blue-0-5"
+    },
+    {
+      "by": "vanguard-6",
+      "dead": true,
+      "time": 79.3499999999968,
+      "type": "defender_hit",
+      "unit_id": "blue-0-5",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-13",
+      "time": 79.3666666666634,
+      "type": "shield_broken",
+      "unit_id": "blue-0-6"
+    },
+    {
+      "by": "vanguard-24",
+      "dead": true,
+      "time": 79.3666666666634,
+      "type": "defender_hit",
+      "unit_id": "blue-0-6",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-17",
+      "time": 79.3833333333301,
+      "type": "shield_broken",
+      "unit_id": "blue-0-8"
+    },
+    {
+      "by": "vanguard-4",
+      "time": 79.3999999999968,
+      "type": "shield_broken",
+      "unit_id": "blue-1-5"
+    },
+    {
+      "by": "vanguard-23",
+      "dead": true,
+      "time": 79.4166666666634,
+      "type": "defender_hit",
+      "unit_id": "blue-1-5",
+      "weapon": "blade"
+    },
+    {
+      "distance": 4.41192674636841,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-166",
+      "time": 79.4999999999968,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 74,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-7",
+      "time": 79.4833333333301,
+      "type": "fleet_hit"
+    },
+    {
+      "by": "vanguard-25",
+      "time": 79.5333333333301,
+      "type": "shield_broken",
+      "unit_id": "blue-0-0"
+    },
+    {
+      "by": "vanguard-14",
+      "dead": true,
+      "time": 79.6166666666634,
+      "type": "defender_hit",
+      "unit_id": "blue-0-0",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 79.6333333333301,
+      "type": "shield_broken",
+      "unit_id": "blue-0-1"
+    },
+    {
+      "by": "vanguard-8",
+      "dead": true,
+      "time": 79.6499999999968,
+      "type": "defender_hit",
+      "unit_id": "blue-0-1",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-5",
+      "dead": true,
+      "time": 79.7166666666634,
+      "type": "defender_hit",
+      "unit_id": "blue-0-14",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-7",
+      "time": 79.7333333333301,
+      "type": "shield_broken",
+      "unit_id": "blue-0-2"
+    },
+    {
+      "by": "vanguard-3",
+      "dead": true,
+      "time": 79.7999999999968,
+      "type": "defender_hit",
+      "unit_id": "blue-0-2",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-15",
+      "time": 79.8833333333301,
+      "type": "shield_broken",
+      "unit_id": "blue-0-3"
+    },
+    {
+      "by": "vanguard-6",
+      "dead": true,
+      "time": 80.0499999999967,
+      "type": "defender_hit",
+      "unit_id": "blue-0-3",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-13",
+      "dead": true,
+      "time": 80.0666666666634,
+      "type": "defender_hit",
+      "unit_id": "blue-0-8",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-24",
+      "time": 80.0666666666634,
+      "type": "shield_broken",
+      "unit_id": "blue-0-9"
+    },
+    {
+      "by": "vanguard-17",
+      "dead": true,
+      "time": 80.0833333333301,
+      "type": "defender_hit",
+      "unit_id": "blue-0-9",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.66818106174469,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-22",
+      "shot_id": "shot-182",
+      "time": 80.4166666666634,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-22",
+      "dead": false,
+      "time": 80.4166666666634,
+      "type": "defender_hit",
+      "unit_id": "blue-0-17",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.317814856767654,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-2",
+      "shot_id": "shot-175",
+      "time": 80.4166666666634,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-2",
+      "dead": true,
+      "time": 80.4166666666634,
+      "type": "defender_hit",
+      "unit_id": "blue-0-17",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.643147647380829,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-11",
+      "shot_id": "shot-178",
+      "time": 80.4333333333301,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.64656537771225,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-1",
+      "shot_id": "shot-174",
+      "time": 80.4333333333301,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.320271849632263,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-21",
+      "shot_id": "shot-181",
+      "time": 80.4499999999967,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.527732968330383,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-20",
+      "shot_id": "shot-180",
+      "time": 80.4666666666634,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.439959973096848,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-10",
+      "shot_id": "shot-177",
+      "time": 80.4666666666634,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.601523041725159,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-18",
+      "shot_id": "shot-179",
+      "time": 80.5166666666634,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.76594638824463,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-168",
+      "time": 80.63333333333,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 75,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-17",
+      "time": 80.6166666666634,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.61848640441895,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-171",
+      "time": 81.0166666666634,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 76,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-13",
+      "time": 80.9999999999967,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.17859792709351,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-172",
+      "time": 81.0666666666634,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 77,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-12",
+      "time": 81.0499999999967,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.53088331222534,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-183",
+      "time": 81.1166666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-2",
+      "hits": 78,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue-1-11",
+      "time": 81.0999999999967,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.48901462554932,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-0",
+      "shot_id": "shot-169",
+      "time": 81.3166666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 79,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-0",
+      "time": 81.2999999999967,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 0.376307994127274,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-17",
+      "shot_id": "shot-198",
+      "time": 81.7666666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-17",
+      "dead": false,
+      "time": 81.7666666666633,
+      "type": "defender_hit",
+      "unit_id": "blue-1-22",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.416726589202881,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-16",
+      "shot_id": "shot-197",
+      "time": 81.7666666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-16",
+      "dead": true,
+      "time": 81.7666666666633,
+      "type": "defender_hit",
+      "unit_id": "blue-1-22",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.376307994127274,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-8",
+      "shot_id": "shot-193",
+      "time": 81.7666666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.376307994127274,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-7",
+      "shot_id": "shot-192",
+      "time": 81.7666666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.376307994127274,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-6",
+      "shot_id": "shot-191",
+      "time": 81.7666666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.525435090065002,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-15",
+      "shot_id": "shot-196",
+      "time": 81.78333333333,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.559028744697571,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-5",
+      "shot_id": "shot-190",
+      "time": 81.78333333333,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.360419183969498,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-25",
+      "shot_id": "shot-187",
+      "time": 81.78333333333,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.6809287071228,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-14",
+      "shot_id": "shot-184",
+      "time": 81.78333333333,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 80,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-14",
+      "time": 81.7666666666633,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 0.26300635933876,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-14",
+      "shot_id": "shot-195",
+      "time": 81.8166666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.467758506536484,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-4",
+      "shot_id": "shot-189",
+      "time": 81.8166666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.610517263412476,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-23",
+      "shot_id": "shot-185",
+      "time": 81.8166666666633,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.5966756939888,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-13",
+      "shot_id": "shot-194",
+      "time": 81.83333333333,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.384029000997543,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-3",
+      "shot_id": "shot-188",
+      "time": 81.8499999999966,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 82.4999999999966,
+      "type": "shield_broken",
+      "unit_id": "blue-1-23"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 82.4999999999966,
+      "type": "defender_hit",
+      "unit_id": "blue-1-23",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-8",
+      "time": 82.7166666666633,
+      "type": "shield_broken",
+      "unit_id": "blue-1-18"
+    },
+    {
+      "by": "vanguard-17",
+      "dead": true,
+      "time": 82.7166666666633,
+      "type": "defender_hit",
+      "unit_id": "blue-1-18",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 82.8166666666633,
+      "type": "shield_broken",
+      "unit_id": "blue-1-6"
+    },
+    {
+      "distance": 0.552366197109222,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-22",
+      "shot_id": "shot-212",
+      "time": 82.8666666666632,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-22",
+      "dead": false,
+      "time": 82.8666666666632,
+      "type": "defender_hit",
+      "unit_id": "blue-1-6",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.264694958925247,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-21",
+      "shot_id": "shot-211",
+      "time": 82.8999999999966,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-21",
+      "dead": true,
+      "time": 82.8999999999966,
+      "type": "defender_hit",
+      "unit_id": "blue-1-6",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.37329038977623,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-11",
+      "shot_id": "shot-208",
+      "time": 82.8999999999966,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.696612417697906,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-1",
+      "shot_id": "shot-204",
+      "time": 82.8999999999966,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-1",
+      "dead": false,
+      "time": 82.8999999999966,
+      "type": "defender_hit",
+      "unit_id": "blue-0-4",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.352206707000732,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-10",
+      "shot_id": "shot-207",
+      "time": 82.9333333333299,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.663074374198914,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-0",
+      "shot_id": "shot-203",
+      "time": 82.9333333333299,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-0",
+      "dead": true,
+      "time": 82.9333333333299,
+      "type": "defender_hit",
+      "unit_id": "blue-0-4",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.39186704158783,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-9",
+      "shot_id": "shot-206",
+      "time": 82.9666666666632,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.486748784780502,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-18",
+      "shot_id": "shot-209",
+      "time": 82.9833333333299,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-5",
+      "time": 83.1333333333299,
+      "type": "shield_broken",
+      "unit_id": "blue-1-0"
+    },
+    {
+      "distance": 4.71221971511841,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-202",
+      "time": 83.1333333333299,
+      "type": "projectile_contact"
+    },
+    {
+      "time": 83.1333333333299,
+      "type": "vanguard_deflect",
+      "unit_id": "vanguard-17"
+    },
+    {
+      "by": "vanguard-15",
+      "dead": true,
+      "time": 83.1666666666632,
+      "type": "defender_hit",
+      "unit_id": "blue-1-0",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 83.1999999999966,
+      "type": "shield_broken",
+      "unit_id": "blue-1-1"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 83.1999999999966,
+      "type": "defender_hit",
+      "unit_id": "blue-1-1",
+      "weapon": "blade"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-8",
+        "vanguard-17"
+      ],
+      "round_id": 1,
+      "time": 83.2666666666632,
+      "type": "whale_swallow"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 83.5166666666632,
+      "type": "shield_broken",
+      "unit_id": "blue-1-2"
+    },
+    {
+      "by": "vanguard-25",
+      "dead": true,
+      "time": 83.6166666666632,
+      "type": "defender_hit",
+      "unit_id": "blue-1-2",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 83.8999999999965,
+      "type": "shield_broken",
+      "unit_id": "blue-1-24"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 83.8999999999965,
+      "type": "defender_hit",
+      "unit_id": "blue-1-24",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 84.2166666666632,
+      "type": "shield_broken",
+      "unit_id": "blue-1-19"
+    },
+    {
+      "by": "vanguard-15",
+      "dead": true,
+      "time": 84.2333333333298,
+      "type": "defender_hit",
+      "unit_id": "blue-1-19",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.559552013874054,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-14",
+      "shot_id": "shot-225",
+      "time": 84.2999999999965,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.202712625265121,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-24",
+      "shot_id": "shot-221",
+      "time": 84.2999999999965,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.253543823957443,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-4",
+      "shot_id": "shot-223",
+      "time": 84.3166666666632,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.342415601015091,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-23",
+      "shot_id": "shot-220",
+      "time": 84.3166666666632,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.32744038105011,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-13",
+      "shot_id": "shot-224",
+      "time": 84.3333333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.602208495140076,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-3",
+      "shot_id": "shot-222",
+      "time": 84.3333333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.77689933776855,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-214",
+      "time": 84.4333333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.4140248298645,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-3",
+      "shot_id": "shot-213",
+      "time": 84.4833333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 81,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-3",
+      "time": 84.4666666666632,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.70770645141602,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-216",
+      "time": 84.4999999999965,
+      "type": "projectile_contact"
+    },
+    {
+      "time": 84.4999999999965,
+      "type": "vanguard_deflect",
+      "unit_id": "vanguard-6"
+    },
+    {
+      "distance": 4.78399801254272,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-219",
+      "time": 84.6666666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.72204828262329,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-218",
+      "time": 84.9166666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "time": 84.9166666666631,
+      "type": "vanguard_deflect",
+      "unit_id": "vanguard-6"
+    },
+    {
+      "distance": 4.72254276275635,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-228",
+      "time": 85.1166666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.517236471176147,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-5",
+      "shot_id": "shot-229",
+      "time": 85.3166666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-5",
+      "dead": false,
+      "time": 85.3166666666631,
+      "type": "defender_hit",
+      "unit_id": "blue-0-12",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.582668304443359,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-25",
+      "shot_id": "shot-230",
+      "time": 85.3333333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-25",
+      "dead": true,
+      "time": 85.3333333333298,
+      "type": "defender_hit",
+      "unit_id": "blue-0-12",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.414127439260483,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-2",
+      "shot_id": "shot-233",
+      "time": 85.4666666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-2",
+      "dead": false,
+      "time": 85.4666666666631,
+      "type": "defender_hit",
+      "unit_id": "blue-0-11",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.561593949794769,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-22",
+      "shot_id": "shot-240",
+      "time": 85.4833333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-22",
+      "dead": true,
+      "time": 85.4833333333298,
+      "type": "defender_hit",
+      "unit_id": "blue-0-11",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.650523722171783,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-11",
+      "shot_id": "shot-236",
+      "time": 85.4833333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.61251831054688,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-9",
+      "shot_id": "shot-226",
+      "time": 85.4833333333298,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 82,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-9",
+      "time": 85.4666666666631,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 0.491167217493057,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-21",
+      "shot_id": "shot-239",
+      "time": 85.4999999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.652958512306213,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-10",
+      "shot_id": "shot-235",
+      "time": 85.4999999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.346268326044083,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-0",
+      "shot_id": "shot-231",
+      "time": 85.4999999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.468678057193756,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-20",
+      "shot_id": "shot-238",
+      "time": 85.5166666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.692583918571472,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-9",
+      "shot_id": "shot-234",
+      "time": 85.5166666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.589929401874542,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-18",
+      "shot_id": "shot-237",
+      "time": 85.5499999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.295182824134827,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-16",
+      "shot_id": "shot-243",
+      "time": 85.8999999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-16",
+      "dead": false,
+      "time": 85.8999999999964,
+      "type": "defender_hit",
+      "unit_id": "blue-0-13",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.252870708703995,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-7",
+      "shot_id": "shot-245",
+      "time": 85.9166666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 85.9166666666631,
+      "type": "defender_hit",
+      "unit_id": "blue-0-13",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.252870708703995,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-6",
+      "shot_id": "shot-244",
+      "time": 85.9166666666631,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.246472090482712,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-15",
+      "shot_id": "shot-246",
+      "time": 85.9333333333297,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.76100969314575,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-242",
+      "time": 86.3499999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.64937835931778,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-14",
+      "shot_id": "shot-252",
+      "time": 86.916666666663,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-14",
+      "dead": false,
+      "time": 86.916666666663,
+      "type": "defender_hit",
+      "unit_id": "blue-1-8",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.34900888800621,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-24",
+      "shot_id": "shot-248",
+      "time": 86.916666666663,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-24",
+      "dead": true,
+      "time": 86.916666666663,
+      "type": "defender_hit",
+      "unit_id": "blue-1-8",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.387073427438736,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-4",
+      "shot_id": "shot-250",
+      "time": 86.9333333333297,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.535548508167267,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-23",
+      "shot_id": "shot-247",
+      "time": 86.9333333333297,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.447902202606201,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-13",
+      "shot_id": "shot-251",
+      "time": 86.9499999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.625924110412598,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-3",
+      "shot_id": "shot-249",
+      "time": 86.9499999999964,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-3",
+      "dead": false,
+      "time": 86.9499999999964,
+      "type": "defender_hit",
+      "unit_id": "blue-0-7",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 4.65723323822021,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-1-4",
+      "shot_id": "shot-241",
+      "time": 86.966666666663,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-4",
+      "hits": 83,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-1-4",
+      "time": 86.9499999999964,
+      "type": "fleet_hit"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 87.616666666663,
+      "type": "shield_broken",
+      "unit_id": "blue-1-14"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 87.616666666663,
+      "type": "defender_hit",
+      "unit_id": "blue-1-14",
+      "weapon": "blade"
+    },
+    {
+      "distance": 4.15383100509644,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-17",
+      "shot_id": "shot-253",
+      "time": 87.6833333333296,
+      "type": "projectile_contact"
+    },
+    {
+      "time": 87.6833333333296,
+      "type": "vanguard_deflect",
+      "unit_id": "vanguard-6"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 87.7999999999963,
+      "type": "shield_broken",
+      "unit_id": "blue-1-3"
+    },
+    {
+      "distance": 0.586755871772766,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-25",
+      "shot_id": "shot-255",
+      "time": 87.8333333333296,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-25",
+      "dead": false,
+      "time": 87.8333333333296,
+      "type": "defender_hit",
+      "unit_id": "blue-1-3",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.36808255314827,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-5",
+      "shot_id": "shot-254",
+      "time": 87.8333333333296,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-5",
+      "dead": true,
+      "time": 87.8333333333296,
+      "type": "defender_hit",
+      "unit_id": "blue-1-3",
+      "weapon": "bolt"
+    },
+    {
+      "by": "vanguard-15",
+      "time": 87.9833333333296,
+      "type": "shield_broken",
+      "unit_id": "blue-1-9"
+    },
+    {
+      "distance": 0.599266886711121,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-22",
+      "shot_id": "shot-265",
+      "time": 87.9999999999963,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-22",
+      "dead": false,
+      "time": 87.9999999999963,
+      "type": "defender_hit",
+      "unit_id": "blue-1-9",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.692477464675903,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-2",
+      "shot_id": "shot-258",
+      "time": 87.9999999999963,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-2",
+      "dead": true,
+      "time": 87.9999999999963,
+      "type": "defender_hit",
+      "unit_id": "blue-0-7",
+      "weapon": "bolt"
+    },
+    {
+      "by": "vanguard-5",
+      "dead": true,
+      "time": 88.0333333333296,
+      "type": "defender_hit",
+      "unit_id": "blue-1-9",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.259528517723083,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-21",
+      "shot_id": "shot-264",
+      "time": 88.0333333333296,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.532546699047089,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-10",
+      "shot_id": "shot-260",
+      "time": 88.0499999999963,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.292012721300125,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-0",
+      "shot_id": "shot-256",
+      "time": 88.0499999999963,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.289199441671371,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-20",
+      "shot_id": "shot-263",
+      "time": 88.066666666663,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.48224067687988,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-267",
+      "time": 88.0833333333296,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.78987884521484,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-13",
+      "shot_id": "shot-266",
+      "time": 88.1333333333296,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 3.49477386474609,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-11",
+      "shot_id": "shot-268",
+      "time": 88.1666666666629,
+      "type": "projectile_contact"
+    },
+    {
+      "time": 88.1666666666629,
+      "type": "vanguard_deflect",
+      "unit_id": "vanguard-6"
+    },
+    {
+      "distance": 4.7600622177124,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-7",
+      "shot_id": "shot-269",
+      "time": 88.5333333333296,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 88.7666666666629,
+      "type": "shield_broken",
+      "unit_id": "blue-1-4"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 88.7666666666629,
+      "type": "defender_hit",
+      "unit_id": "blue-1-4",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "dead": true,
+      "time": 89.2666666666629,
+      "type": "defender_hit",
+      "unit_id": "blue-1-11",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.276734352111816,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-14",
+      "shot_id": "shot-275",
+      "time": 89.4999999999962,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-14",
+      "dead": false,
+      "time": 89.4999999999962,
+      "type": "defender_hit",
+      "unit_id": "blue-1-17",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.568897068500519,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-23",
+      "shot_id": "shot-270",
+      "time": 89.4999999999962,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-23",
+      "dead": true,
+      "time": 89.4999999999962,
+      "type": "defender_hit",
+      "unit_id": "blue-1-17",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.636770248413086,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-13",
+      "shot_id": "shot-274",
+      "time": 89.5166666666629,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.260908663272858,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-4",
+      "shot_id": "shot-273",
+      "time": 89.5166666666629,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.504769325256348,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-3",
+      "shot_id": "shot-272",
+      "time": 89.5333333333295,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.497940331697464,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-15",
+      "shot_id": "shot-276",
+      "time": 89.6833333333295,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-15",
+      "dead": false,
+      "time": 89.6833333333295,
+      "type": "defender_hit",
+      "unit_id": "blue-1-12",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 2.84696412086487,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-1-12",
+      "shot_id": "shot-277",
+      "time": 90.0666666666628,
+      "type": "projectile_contact"
+    },
+    {
+      "time": 90.0666666666628,
+      "type": "vanguard_deflect",
+      "unit_id": "vanguard-6"
+    },
+    {
+      "by": "vanguard-6",
+      "dead": true,
+      "time": 90.1999999999962,
+      "type": "defender_hit",
+      "unit_id": "blue-1-12",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.460744649171829,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-25",
+      "shot_id": "shot-279",
+      "time": 90.4499999999962,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-25",
+      "dead": false,
+      "time": 90.4499999999962,
+      "type": "defender_hit",
+      "unit_id": "blue-1-7",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.22854320704937,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-5",
+      "shot_id": "shot-278",
+      "time": 90.4499999999962,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-5",
+      "dead": true,
+      "time": 90.4499999999962,
+      "type": "defender_hit",
+      "unit_id": "blue-1-7",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.254451781511307,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-22",
+      "shot_id": "shot-289",
+      "time": 90.6333333333295,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.407581239938736,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-2",
+      "shot_id": "shot-282",
+      "time": 90.6333333333295,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.557626664638519,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-11",
+      "shot_id": "shot-285",
+      "time": 90.6499999999961,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.691608071327209,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-1",
+      "shot_id": "shot-281",
+      "time": 90.6499999999961,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.261370927095413,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-20",
+      "shot_id": "shot-287",
+      "time": 90.6833333333295,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.682752907276154,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-9",
+      "shot_id": "shot-283",
+      "time": 90.6999999999961,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.384443759918213,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-18",
+      "shot_id": "shot-286",
+      "time": 90.7333333333295,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.486136198043823,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-16",
+      "shot_id": "shot-291",
+      "time": 90.9166666666628,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-16",
+      "dead": false,
+      "time": 90.9166666666628,
+      "type": "defender_hit",
+      "unit_id": "blue-1-13",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.344186395406723,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-7",
+      "shot_id": "shot-290",
+      "time": 90.9166666666628,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 90.9166666666628,
+      "type": "defender_hit",
+      "unit_id": "blue-1-13",
+      "weapon": "bolt"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-11",
+        "vanguard-2",
+        "vanguard-20"
+      ],
+      "round_id": 1,
+      "time": 92.2833333333294,
+      "type": "whale_swallow"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-3",
+        "vanguard-21",
+        "vanguard-22"
+      ],
+      "round_id": 1,
+      "time": 101.299999999996,
+      "type": "whale_swallow"
+    },
+    {
+      "ship_id": "saihoji-warship-100",
+      "time": 106.049999999995,
+      "type": "reinforcement_landed"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "vanguard-1",
+        "vanguard-10",
+        "vanguard-13"
+      ],
+      "round_id": 1,
+      "time": 110.316666666662,
+      "type": "whale_swallow"
+    },
+    {
+      "distance": 0.279142677783966,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-6",
+      "shot_id": "shot-296",
+      "time": 110.616666666662,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-6",
+      "dead": false,
+      "time": 110.616666666662,
+      "type": "defender_hit",
+      "unit_id": "blue-100-6",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.450712352991104,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-24",
+      "shot_id": "shot-298",
+      "time": 110.816666666662,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-24",
+      "dead": true,
+      "time": 110.816666666662,
+      "type": "defender_hit",
+      "unit_id": "blue-100-6",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 0.396980792284012,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-14",
+      "shot_id": "shot-301",
+      "time": 110.833333333328,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.68140697479248,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-23",
+      "shot_id": "shot-297",
+      "time": 110.833333333328,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.367342352867126,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-4",
+      "shot_id": "shot-300",
+      "time": 110.849999999995,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.614196717739105,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-15",
+      "shot_id": "shot-302",
+      "time": 110.983333333328,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-15",
+      "dead": false,
+      "time": 110.983333333328,
+      "type": "defender_hit",
+      "unit_id": "blue-100-3",
+      "weapon": "bolt"
+    },
+    {
+      "distance": 4.39530181884766,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-100-0",
+      "shot_id": "shot-292",
+      "time": 111.083333333328,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-0",
+      "hits": 84,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-100-0",
+      "time": 111.066666666662,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.79853582382202,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-100-7",
+      "shot_id": "shot-303",
+      "time": 111.266666666662,
+      "type": "projectile_contact"
+    },
+    {
+      "time": 111.266666666662,
+      "type": "vanguard_deflect",
+      "unit_id": "vanguard-6"
+    },
+    {
+      "by": "vanguard-6",
+      "time": 111.316666666662,
+      "type": "shield_broken",
+      "unit_id": "blue-100-3"
+    },
+    {
+      "by": "vanguard-7",
+      "dead": true,
+      "time": 111.316666666662,
+      "type": "defender_hit",
+      "unit_id": "blue-100-3",
+      "weapon": "blade"
+    },
+    {
+      "by": "vanguard-16",
+      "time": 111.549999999995,
+      "type": "shield_broken",
+      "unit_id": "blue-100-0"
+    },
+    {
+      "distance": 0.509810864925385,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-8",
+      "shot_id": "shot-304",
+      "time": 111.566666666662,
+      "type": "projectile_contact"
+    },
+    {
+      "by": "vanguard-15",
+      "dead": true,
+      "time": 111.699999999995,
+      "type": "defender_hit",
+      "unit_id": "blue-100-0",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.613925457000732,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-25",
+      "shot_id": "shot-308",
+      "time": 111.699999999995,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.483445137739182,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-5",
+      "shot_id": "shot-307",
+      "time": 111.699999999995,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 3.75607824325562,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-100-3",
+      "shot_id": "shot-293",
+      "time": 111.699999999995,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-3",
+      "hits": 85,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-100-3",
+      "time": 111.683333333328,
+      "type": "fleet_hit"
+    },
+    {
+      "distance": 4.38732814788818,
+      "kind": "javelin",
+      "radius": 4.8,
+      "shooter_id": "blue-100-1",
+      "shot_id": "shot-295",
+      "time": 111.816666666662,
+      "type": "projectile_contact"
+    },
+    {
+      "aircraft_id": "moebius-1",
+      "hits": 86,
+      "kind": "javelin",
+      "round_id": 1,
+      "shooter_id": "blue-100-1",
+      "time": 111.799999999995,
+      "type": "fleet_hit"
+    },
+    {
+      "by": "vanguard-5",
+      "time": 111.866666666662,
+      "type": "shield_broken",
+      "unit_id": "blue-100-4"
+    },
+    {
+      "by": "vanguard-25",
+      "dead": true,
+      "time": 111.883333333328,
+      "type": "defender_hit",
+      "unit_id": "blue-100-4",
+      "weapon": "blade"
+    },
+    {
+      "distance": 0.512118339538574,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-9",
+      "shot_id": "shot-311",
+      "time": 111.966666666662,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 0.608364164829254,
+      "kind": "bolt",
+      "radius": 0.7,
+      "shooter_id": "vanguard-18",
+      "shot_id": "shot-313",
+      "time": 111.983333333328,
+      "type": "projectile_contact"
+    },
+    {
+      "distance": 4.74336051940918,
+      "kind": "arrow",
+      "radius": 4.8,
+      "shooter_id": "blue-100-5",
+      "shot_id": "shot-306",
+      "time": 111.983333333328,
+      "type": "projectile_contact"
+    }
+  ],
+  "fleet_members": 5,
+  "ground_fallbacks": 0,
+  "ground_samples": 44876,
+  "heavies": 27,
+  "jaw_triangles": 0,
+  "kun_candidate_active": true,
+  "load_error": "",
+  "scope": "original-world native integration candidate; pending visual/gameplay acceptance",
+  "six_scenes_preserved": true,
+  "source_node_count": 11694,
+  "source_whale": "leviathanGroup[156]",
+  "state": {
+    "assault_phase": "combat",
+    "formation": true,
+    "hits": 86,
+    "landed": [
+      "saihoji-warship-0",
+      "saihoji-warship-1"
+    ],
+    "music": "kun_storm_once",
+    "phase": "fight",
+    "round_id": 1,
+    "running": true,
+    "ships_sent": 2,
+    "sink_step": 1,
+    "threat_ids": [
+      "blue-0-9",
+      "blue-0-4",
+      "blue-0-19",
+      "blue-0-2",
+      "blue-1-10",
+      "blue-0-14",
+      "blue-1-2",
+      "blue-1-0",
+      "blue-0-24",
+      "blue-1-5",
+      "blue-0-3",
+      "blue-1-20",
+      "blue-1-15",
+      "blue-1-3",
+      "blue-1-1",
+      "blue-1-12",
+      "blue-1-11",
+      "blue-1-4",
+      "blue-1-21",
+      "blue-1-7",
+      "blue-1-22",
+      "blue-1-9",
+      "blue-1-14",
+      "blue-1-23",
+      "blue-1-19",
+      "blue-1-17",
+      "blue-1-13",
+      "blue-1-24",
+      "blue-100-0",
+      "blue-100-3",
+      "blue-100-1"
+    ],
+    "whale_phase": "resisting"
+  },
+  "terrain_collision_meshes": 95,
+  "troops": 68,
+  "water": {
+    "applied": false,
+    "reason": "Unexpected ocean topology; do not infer official water mask",
+    "vertices": 3575
+  }
+}

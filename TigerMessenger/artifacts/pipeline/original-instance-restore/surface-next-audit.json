@@ -1,0 +1,26 @@
+{
+  "scope": "Read-only source GLB potential; same-material surface merging not implemented or visually accepted",
+  "rows": [
+    {
+      "source": "christchurch-tram-system[62]",
+      "direct_mesh_nodes": 1920,
+      "surface_submissions": 11329,
+      "unique_material_surfaces": 1920,
+      "potential_redundant_surfaces": 9409
+    },
+    {
+      "source": "castleContainer[69]",
+      "direct_mesh_nodes": 1023,
+      "surface_submissions": 3428,
+      "unique_material_surfaces": 1023,
+      "potential_redundant_surfaces": 2405
+    },
+    {
+      "source": "castleContainer-canal-junction[84]",
+      "direct_mesh_nodes": 663,
+      "surface_submissions": 1933,
+      "unique_material_surfaces": 663,
+      "potential_redundant_surfaces": 1270
+    }
+  ]
+}

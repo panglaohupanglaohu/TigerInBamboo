@@ -1,0 +1,81 @@
+{
+  "status": "Two sequential actual Blender rounds completed for seed 811; visual improvement is not exact-reference equivalence",
+  "rounds": [
+    {
+      "round": "user-round-1",
+      "changes": [
+        "Removed all physical bark noise",
+        "Restored four smoothing passes on connected wood",
+        "Seven exported coherent longitudinal face colors",
+        "Retained 1.42 crown thickness for this intermediate review"
+      ],
+      "glb": "assets/models/optimized/saihoji-pines-v2/811/user-round-1/ancient-pine-811-v2-aged.glb",
+      "glbSHA256": "8d449ef6629c7df0c8de30d8e326954282c04d50a803d6443e1d9bfb70e550a7",
+      "blend": "assets/models/optimized/saihoji-pines-v2/811/user-round-1/ancient-pine-811-v2-aged.blend",
+      "blendSHA256": "753312517acb4505481cc9fced48981ec868c233dd2903e47bfe835466345b9e",
+      "renders": [
+        "artifacts/pipeline/saihoji-pine-v2-811/user-round-1/v2-aged-full.png",
+        "artifacts/pipeline/saihoji-pine-v2-811/user-round-1/v2-aged-trunk.png",
+        "artifacts/pipeline/saihoji-pine-v2-811/user-round-1/v2-aged-root.png"
+      ],
+      "reviewFinding": "Trunk broad flat poles and round sausage-like crowns still differ from approved target; this directly motivates user-round-2."
+    },
+    {
+      "round": "user-round-2",
+      "changes": [
+        "Crown vertical factor 1.42 to 1.00 and horizontal 1.14 to 1.20, keeping original clump anchors",
+        "No physical bark noise; subdivided overlong wood facets to carry narrow coherent colored planes",
+        "Seven closer gray-brown colors; less near-white or near-black contrast",
+        "Six original root directions gain tapered blended webs with thin rising endpoints"
+      ],
+      "glb": "assets/models/optimized/saihoji-pines-v2/811/user-round-2/ancient-pine-811-v2-aged.glb",
+      "glbSHA256": "79fae93ecc205baac365a5252bdf2d3046cf7ad2e52f4b304ad95efbc5e73f01",
+      "blend": "assets/models/optimized/saihoji-pines-v2/811/user-round-2/ancient-pine-811-v2-aged.blend",
+      "blendSHA256": "40f5008056bba85335f645bb18bcdd522dcb0a206517a4ac7eaa16319118c51e",
+      "renders": [
+        "artifacts/pipeline/saihoji-pine-v2-811/user-round-2/v2-aged-full.png",
+        "artifacts/pipeline/saihoji-pine-v2-811/user-round-2/v2-aged-trunk.png",
+        "artifacts/pipeline/saihoji-pine-v2-811/user-round-2/v2-aged-root.png"
+      ],
+      "triangles": 13020,
+      "colorChecks": [
+        {
+          "node": "n8",
+          "uniqueColors": 7,
+          "maxLinearPaletteError": 1.278216599231996e-08,
+          "baseColorFactor": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "colorAccessorCount": 12600
+        },
+        {
+          "node": "n9",
+          "uniqueColors": 7,
+          "maxLinearPaletteError": 1.278216599231996e-08,
+          "baseColorFactor": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "colorAccessorCount": 5179
+        }
+      ],
+      "scope": "Only seed 811. No Web/Godot integration or batch replacement."
+    }
+  ],
+  "sameCameraMaxDelta": 0.0,
+  "sameOrthoMaxDelta": 0.0,
+  "sameLights": true,
+  "reference": "assets/concepts/pine-review-2026-09-10/approved-target-crop.png",
+  "rejectedBaseline": "assets/concepts/pine-review-2026-09-10/rejected-trunk.png",
+  "limitations": [
+    "Not batch completed and not Web/Godot integrated",
+    "Authored branch paths remain seed 811, so exact reference silhouette is not duplicated",
+    "Root entourage/moss and more detailed needle silhouette remain different from reference",
+    "13k-class hero mesh needs actual runtime distance/LOD work before multiplying across 25 trees"
+  ]
+}

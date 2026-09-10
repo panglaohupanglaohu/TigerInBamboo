@@ -1,0 +1,201 @@
+{
+  "asset": "gatepod-escort-v1",
+  "stage": "source-derived three-variant candidate",
+  "variants": [
+    "pod-55-2",
+    "pod-41-7",
+    "pod-08-9"
+  ],
+  "originalNodeCounts": [
+    79,
+    81,
+    81
+  ],
+  "addedNodesPerVariant": 28,
+  "allValidationPassed": true,
+  "sourceUnchanged": true,
+  "runtimeCodeModified": false,
+  "foregroundBlenderTouched": false,
+  "files": [
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/README.md",
+      "bytes": 1261,
+      "sha256": "bc33ba2d7571d79b61ede056510896522611a9bf01140c341e17c97fe89266f8"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-08-9-before.png",
+      "bytes": 1096290,
+      "sha256": "ce74e790e06c58168d8184f51aae2d606829b5058a6793066c4f71abfd8797d2"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-08-9-belly-glb-roundtrip.png",
+      "bytes": 1118152,
+      "sha256": "007727495715d9a9fa7014ef04abb8da662c713ef3f0635c99ad50241bd9a4d3"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-08-9-belly.png",
+      "bytes": 1121430,
+      "sha256": "df40f5585c893a8b5babfe3aa61663c7b7da9b28c586a85403b8472b167a2ed9"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-08-9-deployed.png",
+      "bytes": 1121696,
+      "sha256": "6a0197318f76c16f92625ba282be6956684ff0ae5c92dc1e6fef3d99063f81f1"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-08-9-glb-roundtrip.png",
+      "bytes": 1095001,
+      "sha256": "b1c43c0962bf81416ac44b3638b8e15e4bdae3a6e636a2d980efab52f67effa1"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-08-9-three-quarter.png",
+      "bytes": 1099344,
+      "sha256": "e6df71b90878244c961c9e30cc0025d80b936cef71ac0636a52a7407d86dcca2"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-08-9-validation.json",
+      "bytes": 3879,
+      "sha256": "eda6a1ddab022875c58f7825a191c1789376b11b2d3dfae8f399bb74e5bb9f05"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-41-7-before.png",
+      "bytes": 1101993,
+      "sha256": "4458d38ebe2d308476e56be89d765c01e291c40c3998b9effd301708f2b833da"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-41-7-belly-glb-roundtrip.png",
+      "bytes": 1117737,
+      "sha256": "bcdf051478e19279554ce45cbc5b1b51455aeddcbf80cad78026c1748799e2e1"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-41-7-belly.png",
+      "bytes": 1119770,
+      "sha256": "f9d10a94ee633349a1820412d8eff6c677c623f6c16ae0e12c831878750e47d6"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-41-7-deployed.png",
+      "bytes": 1122777,
+      "sha256": "86bcf57419a748f3a905b754c0ef555086cc66ce128cdde65f9259b3385e4511"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-41-7-glb-roundtrip.png",
+      "bytes": 1099755,
+      "sha256": "1b5f2fbed13a5c69541f57ddb4cd7e8c24954f2b0820b053bd0060a41f18fc37"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-41-7-three-quarter.png",
+      "bytes": 1104413,
+      "sha256": "26b65d664d4ccea1fc8927c4d6ca5733639e0fb00c47d14e63fda6eaae03d8d1"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-41-7-validation.json",
+      "bytes": 3843,
+      "sha256": "34fd78e5f69cc9ba929f4860cc2bb74c6f39e9ab20aa8edf5758d51801b8608f"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-55-2-before.png",
+      "bytes": 1096406,
+      "sha256": "b363d8c69029386e161385793c89c76a6e7acf11c8683b9e1bc6cfa38f11e74f"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-55-2-belly-glb-roundtrip.png",
+      "bytes": 1119868,
+      "sha256": "975057e4e56266263ea953f9b14c60f5d7fc083b561ccabc0fe08696f465ed07"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-55-2-belly.png",
+      "bytes": 1122830,
+      "sha256": "6a3b1f30cffff4899fc763a91d07be6c54d68baf1e81a0bc6d367a445055e989"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-55-2-deployed.png",
+      "bytes": 1122788,
+      "sha256": "79d8daacbe012ba9fefbc91069d85eb14df6f7dc3849621747de7548c24532d0"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-55-2-glb-roundtrip.png",
+      "bytes": 1095443,
+      "sha256": "bb981baa02f5080d9932c563d0032ba7dc0392e72d958d995b1b047dcf20c207"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-55-2-three-quarter.png",
+      "bytes": 1099674,
+      "sha256": "837eca93492dc4ef7cf54818d901844aab953d71230c7820b275dc62f169958e"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/pod-55-2-validation.json",
+      "bytes": 3859,
+      "sha256": "9f3e9876005aecec233a2b1a8b4f6cedabbcc09e1aac29ef29c3cf36fe271118"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/validate_and_roundtrip.py",
+      "bytes": 6818,
+      "sha256": "1f252c5136d883bf8350fdc5237acc6639bdb71b3c7c2c07ce557d3e7058d751"
+    },
+    {
+      "path": "artifacts/pipeline/gatepod-escort-v1/validation-summary.json",
+      "bytes": 295,
+      "sha256": "f24ac2846edb04595ee8231255dfa90c9f3f255c71aa2ef00dc156805dc1fa66"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/PLACEMENT.md",
+      "bytes": 3613,
+      "sha256": "7d1d113a569b2abaf24cb56298af277b064cdbf4995dbf6fc71c196bc6c59160"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-08-9.assembly.json",
+      "bytes": 4624400,
+      "sha256": "65f22c28d1d255142c056d25c9eeb921017c858674c0a80da4993aecebac131e"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-08-9.blend",
+      "bytes": 837805,
+      "sha256": "2952145fdcd608a67e686ad19033f4c0f10776489dbf46665fc9ac30e90dd988"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-08-9.glb",
+      "bytes": 385332,
+      "sha256": "0c97f1b68c01e11bcf66236192eb232ad53b987472f2b2eb36099942bff92a8c"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-41-7.assembly.json",
+      "bytes": 4624051,
+      "sha256": "8b3515d4ddcc24cc6e26f93726421d9a221a108c6b92ce4b91200ff66ecd207e"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-41-7.blend",
+      "bytes": 837466,
+      "sha256": "6c8151ac4b245eaaffae749b61cba6f4bbe429bd359331c7014b41541f081b1a"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-41-7.glb",
+      "bytes": 385348,
+      "sha256": "265ca57de4ab546989615585e1fafd68113b233d6b1366efccf9cc49431c3345"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-55-2.assembly.json",
+      "bytes": 4549016,
+      "sha256": "c4ce957b446f5fe6161ce298dd1d1ce61f1691636ac43203ceeafef53d8ac209"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-55-2.blend",
+      "bytes": 830794,
+      "sha256": "650d4595c7703db70a39de2c50240f7dac10f70657bd874a4aa1f0989ffe0ebc"
+    },
+    {
+      "path": "assets/models/optimized/gatepod-escort-v1/pod-55-2.glb",
+      "bytes": 381972,
+      "sha256": "1993a918b04e49aa0bf302dd3d0114f9c624634d19633c91cfde08e4fb654b14"
+    },
+    {
+      "path": "tools/pipeline/build_gatepod_escort_blender.py",
+      "bytes": 11947,
+      "sha256": "c4fd5308f8a8697497a0304e7c61e52cf99f44616604fcc378234e70acecc31b"
+    },
+    {
+      "path": "tools/pipeline/build_vanguard_battle_blender.py",
+      "bytes": 21523,
+      "sha256": "d43bcb390a35956fa4f9c62c6c684b40ffa336c3746655717b1cff90da566b30"
+    }
+  ]
+}

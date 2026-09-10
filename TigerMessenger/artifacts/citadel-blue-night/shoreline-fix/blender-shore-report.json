@@ -1,0 +1,66 @@
+{
+  "mountain_layers": [
+    {
+      "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+      "before": 407,
+      "after": 1000,
+      "lowered": 543
+    },
+    {
+      "name": "citadel-oskar-grid-mountain-surface",
+      "before": 407,
+      "after": 1006,
+      "lowered": 548
+    }
+  ],
+  "mountain_vertices_before": 407,
+  "mountain_vertices_after": 1006,
+  "lowered_shore_vertices": 548,
+  "protected_vertices": 441,
+  "side_old_world_bounds": [
+    [
+      -23.0,
+      -23.0,
+      4.03000020980835
+    ],
+    [
+      -23.0,
+      -23.0,
+      5.03000020980835
+    ],
+    [
+      -23.0,
+      27.0,
+      5.03000020980835
+    ],
+    [
+      -23.0,
+      27.0,
+      4.03000020980835
+    ],
+    [
+      23.0,
+      -23.0,
+      4.03000020980835
+    ],
+    [
+      23.0,
+      -23.0,
+      5.03000020980835
+    ],
+    [
+      23.0,
+      27.0,
+      5.03000020980835
+    ],
+    [
+      23.0,
+      27.0,
+      4.03000020980835
+    ]
+  ],
+  "top_edge_segments": 96,
+  "top_height": 5.03000020980835,
+  "building_and_water_glb_unchanged": true,
+  "scope": "Rebuild mismatched quay side and lower original mountain intersections beneath the actual curved water; preserve top footprint and city geometry"
+}

@@ -1,0 +1,210 @@
+{
+  "asset": "socco-color-v2",
+  "source": "assets/models/optimized/socco-craft-v1/socco-craft-v1.glb",
+  "target": "assets/concepts/socco-craft-target-v1.png",
+  "targetSHA256": "440025d04b655d31959e41a06a298d8ad9f83fa97ea4d2bfbb32641f75086134",
+  "colorSpace": "Hex palette is sRGB; piecewise IEC sRGB EOTF applied once to produce Blender and glTF linear baseColorFactor. Alpha untouched.",
+  "authority": "Use these GLB material factors. Material three_source color is also updated; archived old source retained in color_v2_original_three_source. No original snapshot or source file edited.",
+  "materials": [
+    {
+      "materialIndex": 0,
+      "materialUUID": "m0",
+      "semantic": "coral brick-red principal hull and upper casing",
+      "srgbHex": "#B94F3E",
+      "oldBaseColorLinear": [
+        0.5840784311294556,
+        0.14126329123973846,
+        0.10224173218011856,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.4851499400560704,
+        0.07818742180518633,
+        0.04817182422688942,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 1,
+      "materialUUID": "m3",
+      "semantic": "warm ivory flotation and lower hull",
+      "srgbHex": "#D6CCBA",
+      "oldBaseColorLinear": [
+        0.8713670969009399,
+        0.7681511640548706,
+        0.6795424818992615,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.6724431569576875,
+        0.6038273388553378,
+        0.4910208498478356,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 2,
+      "materialUUID": "m5",
+      "semantic": "darker brick-red seams nose rings and door frame",
+      "srgbHex": "#A44737",
+      "oldBaseColorLinear": [
+        0.3277781009674072,
+        0.07818742096424103,
+        0.05951123684644699,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.3712376804741491,
+        0.06301001765316767,
+        0.0382043715953465,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 4,
+      "materialUUID": "m8",
+      "semantic": "pilot warm gray uniform",
+      "srgbHex": "#7B7A6D",
+      "oldBaseColorLinear": [
+        0.2581828534603119,
+        0.26635560393333435,
+        0.16826939582824707,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.19806931955994886,
+        0.1946178304415758,
+        0.15292615199615017,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 5,
+      "materialUUID": "m9",
+      "semantic": "pilot helmet neutral gray",
+      "srgbHex": "#8D8D7E",
+      "oldBaseColorLinear": [
+        0.32314321398735046,
+        0.3324515223503113,
+        0.2158605009317398,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.26635560480286247,
+        0.26635560480286247,
+        0.20863687014525575,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 6,
+      "materialUUID": "m10",
+      "semantic": "dark warm hardware and nose apertures",
+      "srgbHex": "#292824",
+      "oldBaseColorLinear": [
+        0.023153366521000862,
+        0.03189603239297867,
+        0.05126945674419403,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.02217388479338738,
+        0.021219010376003555,
+        0.017641954488384078,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 7,
+      "materialUUID": "m11",
+      "semantic": "wood ramp ribs boarding threshold and interior benches",
+      "srgbHex": "#8B694B",
+      "oldBaseColorLinear": [
+        0.2581828534603119,
+        0.1441284716129303,
+        0.08228270709514618,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.2581828529215958,
+        0.14126329114027164,
+        0.07036009569659588,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 8,
+      "materialUUID": "m12",
+      "semantic": "wood boarding ramp and supporting structure",
+      "srgbHex": "#947151",
+      "oldBaseColorLinear": [
+        0.43415364623069763,
+        0.2581828534603119,
+        0.15592646598815918,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.2961382707983211,
+        0.1651321945016676,
+        0.0822827071298148,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 9,
+      "materialUUID": "m14",
+      "semantic": "dark propulsion core",
+      "srgbHex": "#252522",
+      "oldBaseColorLinear": [
+        0.00802319310605526,
+        0.011612244881689548,
+        0.019382361322641373,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.018500220128379697,
+        0.018500220128379697,
+        0.01599629336550963,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 10,
+      "materialUUID": "m15",
+      "semantic": "deep brown keel skids",
+      "srgbHex": "#544435",
+      "oldBaseColorLinear": [
+        0.15896083414554596,
+        0.10702310502529144,
+        0.07227185368537903,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.08865558628577294,
+        0.05780543019106723,
+        0.03560131487502034,
+        1
+      ],
+      "oldEmissiveLinear": null,
+      "newEmissiveLinear": null
+    }
+  ]
+}

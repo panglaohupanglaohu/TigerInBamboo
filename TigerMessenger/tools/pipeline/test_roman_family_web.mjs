@@ -98,12 +98,20 @@ try{
    const rebound=bind(actor);check(`${role}/${side} rebind after disposal succeeds`,!!rebound&&rebound!==controller);rebound?.dispose();renderScene.remove(actor);
    fixtureMetrics[`${role}-${side}`]={frames:360,maxGrip,finite,phaseSafe,crestStable,phases,releases,originalNodes:original.length};
   }
-  const resourceActors=['spear','longbow','gladius'].map(factory),resourceControllers=resourceActors.map(bind);
+  const resourceActors=['spear','longbow','gladius','longbow'].map(factory),resourceControllers=resourceActors.map(bind);
   if(resourceControllers.every(Boolean)){
-   const geometry=resourceControllers[0].armor.children[0].geometry;let released=0;geometry.addEventListener('dispose',()=>released++);
-   check('candidate armor geometry shared across all three families',resourceControllers.every(c=>c.armor.children[0].geometry===geometry));
-   resourceControllers[0].dispose();resourceControllers[1].dispose();check('remaining family keeps shared geometry alive',released===0);
-   resourceControllers[2].dispose();check('last family releases shared geometry exactly once',released===1);
+   const helmet=c=>c.armor.children.find(m=>m.name.startsWith('Helmet_Galea')).geometry;
+   const source=helmet(resourceControllers[0]),archer=helmet(resourceControllers[1]);
+   const sourcePos=source.attributes.position,archerPos=archer.attributes.position;let studsSame=true,studVertices=0;
+   for(let i=0;i<sourcePos.count;i++)if(sourcePos.getY(i)<=.1){studVertices++;studsSame&&=sourcePos.getX(i)===archerPos.getX(i)&&sourcePos.getY(i)===archerPos.getY(i)&&sourcePos.getZ(i)===archerPos.getZ(i);}
+   check('archer-specific helmet shared by archers without changing melee helmets',archer!==source&&helmet(resourceControllers[2])===source&&helmet(resourceControllers[3])===archer);
+   check('archer-specific helmet preserves all low waist-stud vertices',studsSame&&studVertices>0,{studVertices});
+   check('all families still share unchanged skirt and belt geometry',resourceControllers[0].armor.children.filter(m=>!m.name.startsWith('Helmet_Galea')).every(m=>resourceControllers.every(c=>c.armor.children.find(n=>n.name===m.name).geometry===m.geometry)));
+   const normal=archer.attributes.normal;let normalsValid=true;for(let i=0;i<normal.count;i++){const v=new T.Vector3().fromBufferAttribute(normal,i);normalsValid&&=Number.isFinite(v.length())&&Math.abs(v.length()-1)<1e-5;}
+   check('archer helmet normals remain finite and normalized',normalsValid);
+   let released=0,archerReleased=0;source.addEventListener('dispose',()=>released++);archer.addEventListener('dispose',()=>archerReleased++);
+   resourceControllers[0].dispose();resourceControllers[1].dispose();resourceControllers[2].dispose();check('remaining archer keeps shared and specialized geometry alive',released===0&&archerReleased===0);
+   resourceControllers[3].dispose();check('last family releases both shared and archer geometry exactly once',released===1&&archerReleased===1);
   }
   const {bindOriginalWorldRomanArmor}=await import(base+'/src/world/romanWorldArmor.js');
   const originalWorldRoles=new T.Group(),worldActors=[];

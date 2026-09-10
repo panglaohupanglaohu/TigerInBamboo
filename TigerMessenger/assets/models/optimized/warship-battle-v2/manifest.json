@@ -1,0 +1,52 @@
+{
+  "asset": "warship-battle-v2",
+  "status": "motion_validated_candidate",
+  "motionClearancePassed": true,
+  "runtimeIntegrated": false,
+  "readyForFullBattle": false,
+  "files": {
+    "warship-battle-v2.blend": {
+      "sha256": "99365ac14156bc5d629cce7fb1c0ae2f7329f8031141c820b3c29085c43ed484",
+      "bytes": 4995939
+    },
+    "oar-sync-study.json": {
+      "sha256": "b49a2d511357ea0580b6816cc3a419d7013620379e0ce3d07bed6f92ae600319",
+      "bytes": 38426
+    },
+    "warship-battle-v2.glb": {
+      "sha256": "6a0082a8a4922366529811c1555ee35328b88adf3a65a02c816710fe055dba63",
+      "bytes": 3182792
+    },
+    "build-provenance.json": {
+      "sha256": "66b5214663800bdb955d1c370e5ea0831bf25949984a0151abac4773a96bbab3",
+      "bytes": 742
+    },
+    "oar-neighbor-validation.json": {
+      "sha256": "d2c19c474cf45c940316b3408be94548324bcd93fbc8989f6dbb73042b74d65d",
+      "bytes": 193
+    },
+    "README.md": {
+      "sha256": "611d312907e7fad4d0ccca68441a35545691ef6fd1d053cbb32421e682036922",
+      "bytes": 3414
+    },
+    "warship-battle-v2.assembly.json": {
+      "sha256": "1c907fa2aa3c026514f3bf5816622f602fcaf16aaee682debf64929bd52bb58d",
+      "bytes": 32611008
+    },
+    "validation.json": {
+      "sha256": "1863e9b81df11491dda2050c8ae110150a706efdcde3df0a9390daa7fd5ac2a5",
+      "bytes": 6633
+    },
+    "rowing-seat-audit.json": {
+      "sha256": "8705bdf7f2c13d63d377f0092d71f24ba9588ec25f0c3bd98e78c633313386ed",
+      "bytes": 600
+    },
+    "validation-summary.json": {
+      "sha256": "24e063ecc745b2e14e5a8349866416dcbeaea64ce834c34f32dc900e72da3a8c",
+      "bytes": 1832
+    }
+  },
+  "images": "artifacts/pipeline/warship-battle-v2/review.html",
+  "retainedV1": "assets/models/optimized/warship-battle-v1",
+  "geometryChanged": false
+}

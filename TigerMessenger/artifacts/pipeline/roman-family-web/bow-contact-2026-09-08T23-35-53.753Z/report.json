@@ -1,0 +1,4911 @@
+{
+  "samples": [
+    {
+      "frame": 0,
+      "phase": "reach",
+      "t": 0.10666666666666666,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 1,
+      "phase": "reach",
+      "t": 0.12333333333333332,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 2,
+      "phase": "reach",
+      "t": 0.13999999999999999,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 3,
+      "phase": "reach",
+      "t": 0.15666666666666665,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 4,
+      "phase": "reach",
+      "t": 0.1733333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 5,
+      "phase": "reach",
+      "t": 0.18999999999999997,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 6,
+      "phase": "reach",
+      "t": 0.20666666666666664,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 7,
+      "phase": "nock",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 8,
+      "phase": "nock",
+      "t": 0.016666666666666666,
+      "draw": 0.0008165964798617859,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 9,
+      "phase": "nock",
+      "t": 0.03333333333333333,
+      "draw": 0.0031314112946766006,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 10,
+      "phase": "nock",
+      "t": 0.05,
+      "draw": 0.00674198250728863,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 11,
+      "phase": "nock",
+      "t": 0.06666666666666667,
+      "draw": 0.011445848180542059,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 12,
+      "phase": "nock",
+      "t": 0.08333333333333333,
+      "draw": 0.017040546377281068,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 13,
+      "phase": "nock",
+      "t": 0.09999999999999999,
+      "draw": 0.023323615160349847,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 14,
+      "phase": "nock",
+      "t": 0.11666666666666665,
+      "draw": 0.030092592592592584,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 15,
+      "phase": "nock",
+      "t": 0.13333333333333333,
+      "draw": 0.03714501673685346,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 16,
+      "phase": "nock",
+      "t": 0.15,
+      "draw": 0.04427842565597667,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 17,
+      "phase": "nock",
+      "t": 0.16666666666666666,
+      "draw": 0.05129035741280638,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 18,
+      "phase": "nock",
+      "t": 0.18333333333333332,
+      "draw": 0.0579783500701868,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 19,
+      "phase": "nock",
+      "t": 0.19999999999999998,
+      "draw": 0.0641399416909621,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 20,
+      "phase": "nock",
+      "t": 0.21666666666666665,
+      "draw": 0.06957267033797644,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 21,
+      "phase": "nock",
+      "t": 0.2333333333333333,
+      "draw": 0.07407407407407406,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 22,
+      "phase": "nock",
+      "t": 0.24999999999999997,
+      "draw": 0.07744169096209913,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 23,
+      "phase": "nock",
+      "t": 0.26666666666666666,
+      "draw": 0.07947305906489581,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 24,
+      "phase": "draw",
+      "t": 0,
+      "draw": 0.08,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 25,
+      "phase": "draw",
+      "t": 0.016666666666666666,
+      "draw": 0.00014187777814449003,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 26,
+      "phase": "draw",
+      "t": 0.03333333333333333,
+      "draw": 0.0010929906547622506,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 27,
+      "phase": "draw",
+      "t": 0.05,
+      "draw": 0.00354985269863444,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 28,
+      "phase": "draw",
+      "t": 0.06666666666666667,
+      "draw": 0.008091799055020466,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 29,
+      "phase": "draw",
+      "t": 0.08333333333333333,
+      "draw": 0.015187354365414615,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 30,
+      "phase": "draw",
+      "t": 0.09999999999999999,
+      "draw": 0.025200601187302656,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 31,
+      "phase": "draw",
+      "t": 0.11666666666666665,
+      "draw": 0.038397548413918466,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 32,
+      "phase": "draw",
+      "t": 0.13333333333333333,
+      "draw": 0.054952499694000644,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 33,
+      "phase": "draw",
+      "t": 0.15,
+      "draw": 0.0749544218515491,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 34,
+      "phase": "draw",
+      "t": 0.16666666666666666,
+      "draw": 0.09841331330558176,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 35,
+      "phase": "draw",
+      "t": 0.18333333333333332,
+      "draw": 0.12526657248989112,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 36,
+      "phase": "draw",
+      "t": 0.19999999999999998,
+      "draw": 0.15538536627280067,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 37,
+      "phase": "draw",
+      "t": 0.21666666666666665,
+      "draw": 0.1885809983769219,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 38,
+      "phase": "draw",
+      "t": 0.2333333333333333,
+      "draw": 0.2246112777989109,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 39,
+      "phase": "draw",
+      "t": 0.24999999999999997,
+      "draw": 0.2631868872292244,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 40,
+      "phase": "draw",
+      "t": 0.26666666666666666,
+      "draw": 0.303977751471877,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 41,
+      "phase": "draw",
+      "t": 0.2833333333333333,
+      "draw": 0.3466194058641974,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 42,
+      "phase": "draw",
+      "t": 0.3,
+      "draw": 0.39071936469658547,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 43,
+      "phase": "draw",
+      "t": 0.31666666666666665,
+      "draw": 0.4358634896322685,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 44,
+      "phase": "draw",
+      "t": 0.3333333333333333,
+      "draw": 0.48162235812705767,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 45,
+      "phase": "draw",
+      "t": 0.35,
+      "draw": 0.5275576318491051,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 46,
+      "phase": "draw",
+      "t": 0.36666666666666664,
+      "draw": 0.5732284250986603,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 47,
+      "phase": "draw",
+      "t": 0.3833333333333333,
+      "draw": 0.6181976732278266,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 48,
+      "phase": "draw",
+      "t": 0.39999999999999997,
+      "draw": 0.6620385010603179,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 5,
+          "point": [
+            0.11339010379446446,
+            0.24446427418841266,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 5,
+          "point": [
+            0.10093746512455537,
+            0.21709904957341652,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 49,
+      "phase": "draw",
+      "t": 0.41666666666666663,
+      "draw": 0.7043405913112156,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 13,
+          "point": [
+            0.08628804834743475,
+            0.2116256252493321,
+            0.09195501471664833
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 10,
+          "point": [
+            0.0720076315261412,
+            0.2188415603743739,
+            0.09331114624427635
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 50,
+      "phase": "draw",
+      "t": 0.4333333333333333,
+      "draw": 0.7447165530067243,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 12,
+          "point": [
+            0.07134670232872409,
+            0.23985229345215486,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 18,
+          "point": [
+            0.056304819733297234,
+            0.21284819425086404,
+            0.09785741275369814
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 51,
+      "phase": "draw",
+      "t": 0.44999999999999996,
+      "draw": 0.7828082899039301,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            0.07139670212861848,
+            0.2881000435919622,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 17,
+          "point": [
+            0.03658249043535394,
+            0.2309787684844462,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 52,
+      "phase": "draw",
+      "t": 0.4666666666666666,
+      "draw": 0.8182933689105554,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            0.04530084403513418,
+            0.28833784420337905,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 30,
+          "point": [
+            0.018715766704371195,
+            0.24817044746032335,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 53,
+      "phase": "draw",
+      "t": 0.4833333333333333,
+      "draw": 0.8508913885047157,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            0.020588627867380138,
+            0.28879057445307776,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            0.03681014793390347,
+            0.33908683238016735,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 27,
+          "point": [
+            -0.015628612763766647,
+            0.23801375681284553,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 54,
+      "phase": "draw",
+      "t": 0.49999999999999994,
+      "draw": 0.8803703471546781,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            -0.0022138102833391127,
+            0.289391773311403,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 18,
+          "point": [
+            0.03521195904722723,
+            0.3384591204566793,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 25,
+          "point": [
+            -0.04442375470601917,
+            0.2340520960511432,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 4,
+          "point": [
+            0.01959216514746248,
+            0.34436307558177837,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 55,
+      "phase": "draw",
+      "t": 0.5166666666666666,
+      "draw": 0.9065530117386159,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 14,
+          "point": [
+            -0.02270750180790093,
+            0.29007527609578176,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 8,
+          "point": [
+            0.03538786330583249,
+            0.3618588929481785,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 26,
+          "point": [
+            -0.08076533721816984,
+            0.218338031580469,
+            0.09437057699646559
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 16,
+          "point": [
+            0.019575342434913837,
+            0.3423206744096358,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 56,
+      "phase": "draw",
+      "t": 0.5333333333333333,
+      "draw": 0.9293232859643652,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 19,
+          "point": [
+            -0.040626748769863885,
+            0.29078045327654745,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 10,
+          "point": [
+            -0.08664828442624148,
+            0.23676511708891124,
+            0.08866203712808095
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 16,
+          "point": [
+            0.0209387202575982,
+            0.3630396567046502,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 57,
+      "phase": "draw",
+      "t": 0.55,
+      "draw": 0.9486325787891846,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 20,
+          "point": [
+            -0.05583409434949477,
+            0.2914560516709036,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 8,
+          "point": [
+            -0.033006039518825636,
+            0.3411739224406421,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 6,
+          "point": [
+            -0.06325966764225054,
+            0.283112289924523,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 14,
+          "point": [
+            0.012572815846984758,
+            0.3683216266215017,
+            0.08296071715701717
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 58,
+      "phase": "draw",
+      "t": 0.5666666666666668,
+      "draw": 0.964506172839506,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 16,
+          "point": [
+            -0.0683081035782897,
+            0.2920625201938988,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 12,
+          "point": [
+            -0.04431904972359335,
+            0.34166661429381834,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 10,
+          "point": [
+            0.0023475233058658593,
+            0.3686592377203098,
+            0.08391193926025743
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 59,
+      "phase": "draw",
+      "t": 0.5833333333333335,
+      "draw": 0.9770495928306983,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 14,
+          "point": [
+            -0.07738072218386603,
+            0.2933607682778672,
+            0.09608313043497978
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 18,
+          "point": [
+            -0.032469591884097176,
+            0.34068652810329353,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 6,
+          "point": [
+            -0.015838959550654647,
+            0.3582112999427929,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 60,
+      "phase": "draw",
+      "t": 0.6000000000000002,
+      "draw": 0.9864549739868165,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 12,
+          "point": [
+            -0.07910114067488798,
+            0.2995340252105715,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 18,
+          "point": [
+            -0.03892418240676461,
+            0.34097863814585216,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 4,
+          "point": [
+            -0.015295627391294087,
+            0.36535271620076354,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 61,
+      "phase": "draw",
+      "t": 0.6166666666666669,
+      "draw": 0.9930074304603662,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.08410609030640706,
+            0.2998107512394613,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 18,
+          "point": [
+            -0.043392901169819906,
+            0.34118887151782173,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 62,
+      "phase": "draw",
+      "t": 0.6333333333333336,
+      "draw": 0.9970914237520544,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.087216137783688,
+            0.2999865669120407,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 18,
+          "point": [
+            -0.04616539092043,
+            0.34132259458662706,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 63,
+      "phase": "draw",
+      "t": 0.6500000000000004,
+      "draw": 0.9991971311305465,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.0888166497792838,
+            0.3000782009181848,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 13,
+          "point": [
+            -0.02532862934789931,
+            0.3637022348860107,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 64,
+      "phase": "draw",
+      "t": 0.6666666666666671,
+      "draw": 0.9999268140522285,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.08937077093359752,
+            0.3001101089980806,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.025611510119020943,
+            0.3639000614086713,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 65,
+      "phase": "hold",
+      "t": 0,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.0894263339752749,
+            0.3001133136919235,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.025657644666540077,
+            0.3639020843511649,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 66,
+      "phase": "hold",
+      "t": 0.016666666666666666,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.08967334318430957,
+            0.3001306326334052,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.02591299203929636,
+            0.36391998791930946,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 67,
+      "phase": "hold",
+      "t": 0.03333333333333333,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.08991207673552547,
+            0.30014737133079794,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026159787407058842,
+            0.363937291867405,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 68,
+      "phase": "hold",
+      "t": 0.05,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09013609954093038,
+            0.3001630785907522,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026391377151341152,
+            0.36395352967993305,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 69,
+      "phase": "hold",
+      "t": 0.06666666666666667,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09033947931467225,
+            0.3001773384736682,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.02660162752790258,
+            0.36396827129212805,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 70,
+      "phase": "hold",
+      "t": 0.08333333333333333,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09051692039097918,
+            0.3001897796762818,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026785063195313326,
+            0.3639811328028465,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 71,
+      "phase": "hold",
+      "t": 0.09999999999999999,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09066387307161296,
+            0.30020008319851255,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026936980339065927,
+            0.36399178440621394,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 72,
+      "phase": "hold",
+      "t": 0.11666666666666665,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09077661956953414,
+            0.3002079883693659,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.027053535490982973,
+            0.3639999566191583,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 73,
+      "phase": "hold",
+      "t": 0.13333333333333333,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09085233850145226,
+            0.30021329736879987,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.027131812088316477,
+            0.36400544494817205,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 74,
+      "phase": "hold",
+      "t": 0.15,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            -0.09088915025732501,
+            0.30021587840878733,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.02716986722521099,
+            0.36400811316727016,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 75,
+      "phase": "hold",
+      "t": 0.16666666666666666,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            -0.09088614546423349,
+            0.30021566772904823,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.027166760941665993,
+            0.3640078953715728,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 76,
+      "phase": "hold",
+      "t": 0.18333333333333332,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09084339824190117,
+            0.3002126705264542,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.027122569849524457,
+            0.3640047969326854,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 77,
+      "phase": "hold",
+      "t": 0.19999999999999998,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.0907619651349894,
+            0.3002069608801669,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.02703838603528963,
+            0.36399889442177036,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 78,
+      "phase": "hold",
+      "t": 0.21666666666666665,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09064386964845676,
+            0.30019868066734195,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026916301161470157,
+            0.3639903344948196,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 79,
+      "phase": "hold",
+      "t": 0.2333333333333333,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09049207136550504,
+            0.3001880373978471,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026759374683111917,
+            0.3639793316641711,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 80,
+      "phase": "loose",
+      "t": 0,
+      "draw": 1,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 10,
+          "point": [
+            -0.09031041785066667,
+            0.3001753008419683,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026571584274357712,
+            0.36396616482268873,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 81,
+      "phase": "loose",
+      "t": 0.016666666666666666,
+      "draw": 0.6944444444444445,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            0.035424202165316054,
+            0.2895563293437564,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 30,
+          "point": [
+            0.011537596451431653,
+            0.2564121561313826,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 82,
+      "phase": "loose",
+      "t": 0.03333333333333333,
+      "draw": 0.44444444444444453,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 13,
+          "point": [
+            0.08691713990106467,
+            0.20450256599199051,
+            0.09285896559840365
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 12,
+          "point": [
+            0.0726584991979368,
+            0.21176143571239464,
+            0.0969313398597753
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 83,
+      "phase": "loose",
+      "t": 0.05,
+      "draw": 0.25,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 84,
+      "phase": "loose",
+      "t": 0.06666666666666667,
+      "draw": 0.11111111111111113,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 85,
+      "phase": "loose",
+      "t": 0.08333333333333333,
+      "draw": 0.027777777777777804,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 86,
+      "phase": "loose",
+      "t": 0.09999999999999999,
+      "draw": 1.232595164407831e-32,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 87,
+      "phase": "loose",
+      "t": 0.11666666666666665,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 88,
+      "phase": "follow",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 89,
+      "phase": "follow",
+      "t": 0.016666666666666666,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 90,
+      "phase": "follow",
+      "t": 0.03333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 91,
+      "phase": "follow",
+      "t": 0.05,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 92,
+      "phase": "follow",
+      "t": 0.06666666666666667,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 93,
+      "phase": "follow",
+      "t": 0.08333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 94,
+      "phase": "follow",
+      "t": 0.09999999999999999,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 95,
+      "phase": "follow",
+      "t": 0.11666666666666665,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 96,
+      "phase": "follow",
+      "t": 0.13333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 97,
+      "phase": "follow",
+      "t": 0.15,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 98,
+      "phase": "follow",
+      "t": 0.16666666666666666,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 99,
+      "phase": "follow",
+      "t": 0.18333333333333332,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 100,
+      "phase": "follow",
+      "t": 0.19999999999999998,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 101,
+      "phase": "follow",
+      "t": 0.21666666666666665,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 102,
+      "phase": "follow",
+      "t": 0.2333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 103,
+      "phase": "follow",
+      "t": 0.24999999999999997,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 104,
+      "phase": "recover",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 105,
+      "phase": "recover",
+      "t": 0.016666666666666666,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 106,
+      "phase": "recover",
+      "t": 0.03333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 107,
+      "phase": "recover",
+      "t": 0.05,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 108,
+      "phase": "recover",
+      "t": 0.06666666666666667,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 109,
+      "phase": "recover",
+      "t": 0.08333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 110,
+      "phase": "recover",
+      "t": 0.09999999999999999,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 111,
+      "phase": "recover",
+      "t": 0.11666666666666665,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 112,
+      "phase": "recover",
+      "t": 0.13333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 113,
+      "phase": "recover",
+      "t": 0.15,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 114,
+      "phase": "reach",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 115,
+      "phase": "reach",
+      "t": 0.016666666666666666,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 116,
+      "phase": "reach",
+      "t": 0.03333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 117,
+      "phase": "reach",
+      "t": 0.05,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 118,
+      "phase": "reach",
+      "t": 0.06666666666666667,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 119,
+      "phase": "reach",
+      "t": 0.08333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 120,
+      "phase": "reach",
+      "t": 0.09999999999999999,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 121,
+      "phase": "reach",
+      "t": 0.11666666666666665,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 122,
+      "phase": "reach",
+      "t": 0.13333333333333333,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 123,
+      "phase": "reach",
+      "t": 0.15,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 124,
+      "phase": "reach",
+      "t": 0.16666666666666666,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 125,
+      "phase": "reach",
+      "t": 0.18333333333333332,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 126,
+      "phase": "reach",
+      "t": 0.19999999999999998,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 127,
+      "phase": "reach",
+      "t": 0.21666666666666665,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 128,
+      "phase": "nock",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 129,
+      "phase": "nock",
+      "t": 0.016666666666666666,
+      "draw": 0.0008165964798617859,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 130,
+      "phase": "nock",
+      "t": 0.03333333333333333,
+      "draw": 0.0031314112946766006,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 131,
+      "phase": "nock",
+      "t": 0.05,
+      "draw": 0.00674198250728863,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 132,
+      "phase": "nock",
+      "t": 0.06666666666666667,
+      "draw": 0.011445848180542059,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 133,
+      "phase": "nock",
+      "t": 0.08333333333333333,
+      "draw": 0.017040546377281068,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 134,
+      "phase": "nock",
+      "t": 0.09999999999999999,
+      "draw": 0.023323615160349847,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 135,
+      "phase": "nock",
+      "t": 0.11666666666666665,
+      "draw": 0.030092592592592584,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 136,
+      "phase": "nock",
+      "t": 0.13333333333333333,
+      "draw": 0.03714501673685346,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 137,
+      "phase": "nock",
+      "t": 0.15,
+      "draw": 0.04427842565597667,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 138,
+      "phase": "nock",
+      "t": 0.16666666666666666,
+      "draw": 0.05129035741280638,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 139,
+      "phase": "nock",
+      "t": 0.18333333333333332,
+      "draw": 0.0579783500701868,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 140,
+      "phase": "nock",
+      "t": 0.19999999999999998,
+      "draw": 0.0641399416909621,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 141,
+      "phase": "nock",
+      "t": 0.21666666666666665,
+      "draw": 0.06957267033797644,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 142,
+      "phase": "nock",
+      "t": 0.2333333333333333,
+      "draw": 0.07407407407407406,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 143,
+      "phase": "nock",
+      "t": 0.24999999999999997,
+      "draw": 0.07744169096209913,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 144,
+      "phase": "nock",
+      "t": 0.26666666666666666,
+      "draw": 0.07947305906489581,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 145,
+      "phase": "draw",
+      "t": 0,
+      "draw": 0.08,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 146,
+      "phase": "draw",
+      "t": 0.016666666666666666,
+      "draw": 0.00014187777814449003,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 147,
+      "phase": "draw",
+      "t": 0.03333333333333333,
+      "draw": 0.0010929906547622506,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 148,
+      "phase": "draw",
+      "t": 0.05,
+      "draw": 0.00354985269863444,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 149,
+      "phase": "draw",
+      "t": 0.06666666666666667,
+      "draw": 0.008091799055020466,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 150,
+      "phase": "draw",
+      "t": 0.08333333333333333,
+      "draw": 0.015187354365414615,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 151,
+      "phase": "draw",
+      "t": 0.09999999999999999,
+      "draw": 0.025200601187302656,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 152,
+      "phase": "draw",
+      "t": 0.11666666666666665,
+      "draw": 0.038397548413918466,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 153,
+      "phase": "draw",
+      "t": 0.13333333333333333,
+      "draw": 0.054952499694000644,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 154,
+      "phase": "draw",
+      "t": 0.15,
+      "draw": 0.0749544218515491,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 155,
+      "phase": "draw",
+      "t": 0.16666666666666666,
+      "draw": 0.09841331330558176,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 156,
+      "phase": "draw",
+      "t": 0.18333333333333332,
+      "draw": 0.12526657248989112,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 157,
+      "phase": "draw",
+      "t": 0.19999999999999998,
+      "draw": 0.15538536627280067,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 158,
+      "phase": "draw",
+      "t": 0.21666666666666665,
+      "draw": 0.1885809983769219,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 159,
+      "phase": "draw",
+      "t": 0.2333333333333333,
+      "draw": 0.2246112777989109,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 160,
+      "phase": "draw",
+      "t": 0.24999999999999997,
+      "draw": 0.2631868872292244,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 161,
+      "phase": "draw",
+      "t": 0.26666666666666666,
+      "draw": 0.303977751471877,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 162,
+      "phase": "draw",
+      "t": 0.2833333333333333,
+      "draw": 0.3466194058641974,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 163,
+      "phase": "draw",
+      "t": 0.3,
+      "draw": 0.39071936469658547,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 164,
+      "phase": "draw",
+      "t": 0.31666666666666665,
+      "draw": 0.4358634896322685,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 165,
+      "phase": "draw",
+      "t": 0.3333333333333333,
+      "draw": 0.48162235812705767,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 166,
+      "phase": "draw",
+      "t": 0.35,
+      "draw": 0.5275576318491051,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 167,
+      "phase": "draw",
+      "t": 0.36666666666666664,
+      "draw": 0.5732284250986603,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 168,
+      "phase": "draw",
+      "t": 0.3833333333333333,
+      "draw": 0.6181976732278266,
+      "original": [],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 169,
+      "phase": "draw",
+      "t": 0.39999999999999997,
+      "draw": 0.6620385010603179,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 5,
+          "point": [
+            0.11339010379446446,
+            0.24446427418841266,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 5,
+          "point": [
+            0.10093746512455537,
+            0.21709904957341652,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 170,
+      "phase": "draw",
+      "t": 0.41666666666666663,
+      "draw": 0.7043405913112156,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 13,
+          "point": [
+            0.08628804834743475,
+            0.2116256252493321,
+            0.09195501471664833
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 10,
+          "point": [
+            0.0720076315261412,
+            0.2188415603743739,
+            0.09331114624427635
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 171,
+      "phase": "draw",
+      "t": 0.4333333333333333,
+      "draw": 0.7447165530067243,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 12,
+          "point": [
+            0.07134670232872409,
+            0.23985229345215486,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 18,
+          "point": [
+            0.056304819733297234,
+            0.21284819425086404,
+            0.09785741275369814
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 172,
+      "phase": "draw",
+      "t": 0.44999999999999996,
+      "draw": 0.7828082899039301,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            0.07139670212861848,
+            0.2881000435919622,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 17,
+          "point": [
+            0.03658249043535394,
+            0.2309787684844462,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 173,
+      "phase": "draw",
+      "t": 0.4666666666666666,
+      "draw": 0.8182933689105554,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            0.04530084403513418,
+            0.28833784420337905,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 30,
+          "point": [
+            0.018715766704371195,
+            0.24817044746032335,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 174,
+      "phase": "draw",
+      "t": 0.4833333333333333,
+      "draw": 0.8508913885047157,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            0.020588627867380138,
+            0.28879057445307776,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            0.03681014793390347,
+            0.33908683238016735,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 27,
+          "point": [
+            -0.015628612763766647,
+            0.23801375681284553,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 175,
+      "phase": "draw",
+      "t": 0.49999999999999994,
+      "draw": 0.8803703471546781,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 8,
+          "point": [
+            -0.0022138102833391127,
+            0.289391773311403,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 18,
+          "point": [
+            0.03521195904722723,
+            0.3384591204566793,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 25,
+          "point": [
+            -0.04442375470601917,
+            0.2340520960511432,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 4,
+          "point": [
+            0.01959216514746248,
+            0.34436307558177837,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 176,
+      "phase": "draw",
+      "t": 0.5166666666666666,
+      "draw": 0.9065530117386159,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 14,
+          "point": [
+            -0.02270750180790093,
+            0.29007527609578176,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 8,
+          "point": [
+            0.03538786330583249,
+            0.3618588929481785,
+            0.09079086035490036
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 26,
+          "point": [
+            -0.08076533721816984,
+            0.218338031580469,
+            0.09437057699646559
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 16,
+          "point": [
+            0.019575342434913837,
+            0.3423206744096358,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 177,
+      "phase": "draw",
+      "t": 0.5333333333333333,
+      "draw": 0.9293232859643652,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 19,
+          "point": [
+            -0.040626748769863885,
+            0.29078045327654745,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 10,
+          "point": [
+            -0.08664828442624148,
+            0.23676511708891124,
+            0.08866203712808095
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 16,
+          "point": [
+            0.0209387202575982,
+            0.3630396567046502,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 178,
+      "phase": "draw",
+      "t": 0.55,
+      "draw": 0.9486325787891846,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 20,
+          "point": [
+            -0.05583409434949477,
+            0.2914560516709036,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 8,
+          "point": [
+            -0.033006039518825636,
+            0.3411739224406421,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Skirt_Ten_Separated_Lames.002",
+          "count": 6,
+          "point": [
+            -0.06325966764225054,
+            0.283112289924523,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 14,
+          "point": [
+            0.012572815846984758,
+            0.3683216266215017,
+            0.08296071715701717
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    },
+    {
+      "frame": 179,
+      "phase": "draw",
+      "t": 0.5666666666666668,
+      "draw": 0.964506172839506,
+      "original": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "",
+          "count": 16,
+          "point": [
+            -0.0683081035782897,
+            0.2920625201938988,
+            0.09800000037997961
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "originalLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.12704743444919586,
+        "gap": -0.05704743400216103
+      },
+      "candidate": [
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Helmet_Galea.002",
+          "count": 12,
+          "point": [
+            -0.04431904972359335,
+            0.34166661429381834,
+            0.08199999962002039
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "5c9b6206-1371-4ddc-9fa1-da67fa1f6811",
+          "head": "Waist_Belt.002",
+          "count": 10,
+          "point": [
+            0.0023475233058658593,
+            0.3686592377203098,
+            0.08391193926025743
+          ],
+          "regions": [
+            "lowerArmor"
+          ]
+        }
+      ],
+      "candidateLateralSeparation": {
+        "weaponMinZ": 0.07000000044703483,
+        "armorMaxZ": 0.11168179661035538,
+        "gap": -0.041681796163320545
+      }
+    }
+  ],
+  "scope": "Same actor, same actual shot state, only equipment toggle. Triangle-edge/face crossing of visible non-outline bow/arrow against crest, helmet and approved armor; coplanar/containment not tested.",
+  "adapterSha256": "b3daa2258ff22fa01f2a8d4b293f6e142f9c4bb7c8d633e4f5bc200c3e42d860",
+  "sourceSnapshotStillCurrent": true,
+  "headwearRegressionPassed": true,
+  "candidateCrossingFrames": 46,
+  "originalCrossingFrames": 46,
+  "passed": true
+}

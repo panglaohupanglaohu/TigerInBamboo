@@ -1,0 +1,34 @@
+{
+  "asset": "gatePodEscort_pod-55-2",
+  "sourceBlend": "assets/models/originals/supplemental/blender-r3/gatePodEscort_pod-55-2.blend",
+  "sourceBlendSha256": "e405fe5237b830be9d1aecebc226b4e5fe73aa7e9761c5b842c18e941a5cefb8",
+  "sourceSnapshot": "assets/models/originals/supplemental/gatePodEscort_pod-55-2.source.json",
+  "sourceSnapshotSha256": "7cd642c827afc35928d37fb9332b4507b69d8e58f4e39ddbcabe5ae3a0f9f5ba",
+  "scope": "Original escort pod 55-2, including tranquilizer muzzle.",
+  "render": "artifacts/pipeline/saihoji-source-references/gatePodEscort_pod-55-2-source-three-quarter.png",
+  "renderSha256": "b8d7ceb84f0db847a296f05762af027ee877d6aabb004efc31027973bd7fc8c8",
+  "sourceNodes": 79,
+  "visibleMeshObjects": 64,
+  "blenderBounds": [
+    [
+      -4.064624309539795,
+      -2.2582290172576904,
+      -1.14080011844635
+    ],
+    [
+      4.064624309539795,
+      2.0708000659942627,
+      1.13211989402771
+    ]
+  ],
+  "sourceGeometryTransformsVisibilityMaterialGraphsUnchanged": true,
+  "sourceFileUnchanged": true,
+  "foregroundUsed": false,
+  "sourceFileSaved": false,
+  "lighting": "Same normalized three area lights + world, AgX, Cycles 24; original material graphs and source lights retained.",
+  "camera": {
+    "view": "same three-quarter direction (3,-4,2.2) in Blender coordinates",
+    "framing": "per-asset actual visible projected bounds plus 12% margin",
+    "orthographicScale": 7.5320234298706055
+  }
+}

@@ -7,6 +7,7 @@
 //  约定：MeshToonMaterial 卡通色块 + facet 硬边 + addOutline(0.04)
 // =====================================================================
 import * as THREE from "three";
+import { createWarshipV6 } from "./warshipV6.js";
 import { toonMat, addOutline } from "./toon.js";
 import { facet } from "./lowPoly.js";
 import { isCitadelCombatV3, isCitadelPaletteV3 } from "../core/params.js";
@@ -113,6 +114,23 @@ function attachNightLanterns(boat) {
 }
 
 export function createFisherBoat() {
+  const boat = createWarshipV6();
+  // Bind the saved lantern meshes to the existing day/night controller; do not add duplicate geometry.
+  const lanterns = boat.userData.warshipV6.lanternMaterials;
+  boat.traverse(node => {
+    if (node.isMesh && lanterns.has(node.material)) node.material = nightBoatLanternMaterial();
+  });
+  const lightAnchor = boat.getObjectByName("night-lantern-light");
+  if (lightAnchor) {
+    const light = new THREE.PointLight(0xffa04c, 0, 9, 2);
+    light.name = "night-lantern-runtime-light";
+    lightAnchor.add(light);
+    _nightBoatLights.push(light);
+  }
+  return boat;
+}
+
+export function createOriginalFisherBoat() {
   const g = new THREE.Group();
   g.name = "fisher-boat";
 
@@ -427,6 +445,7 @@ export function createFisherBoat() {
 const _oarEuler = new THREE.Euler();
 const _oarOffQ = new THREE.Quaternion();
 export function updateWarshipOars(boat, dt = 1 / 60, moving = false) {
+  if (boat?.userData?.warshipV6) { boat.userData.warshipV6.update(dt,moving); updateBoatWake(boat,dt,boat.userData.oarSpeed); return; }
   const oars = boat?.userData?.oars;
   if (!Array.isArray(oars) || !oars.length) return;
   const d = Math.min(0.05, Math.max(0, Number(dt) || 0));
@@ -1473,7 +1492,8 @@ export function ensureDeckCargoMarkers(boat, slots = 8) {
   const wood = toonMat(CRATE_WOOD);
   for (let i = 0; i < slots; i++) {
     const c = new THREE.Mesh(facet(new THREE.BoxGeometry(0.24, 0.2, 0.24)), wood);
-    c.position.set(-1.15 + (i % 4) * 0.55, 0.95, i < 4 ? 0.14 : -0.14);
+    if (boat.userData.warshipV6) c.position.set(-2.10 + (i % 2) * 0.30, 1.50 + Math.floor(i / 4) * 0.21, Math.floor(i / 2) % 2 ? -0.14 : 0.14);
+    else c.position.set(-1.15 + (i % 4) * 0.55, 0.95, i < 4 ? 0.14 : -0.14);
     c.rotation.y = (i * 0.37) % 1;
     c.visible = false;
     c.castShadow = true;
@@ -1570,6 +1590,7 @@ export function paintBoatCrewCrest(boat, side = "blue") {
   if (boat.userData.crewCrestSide === side) return boat; // 幂等
   boat.userData.crewCrestSide = side;
   const pal = SOLDIER_CREST[side] || SOLDIER_CREST.blue;
+  if (boat.userData.warshipV6) { boat.userData.warshipV6.paintCrest(pal); return boat; }
   const mats = {
     "crew-crest": toonMat(pal.crest),
     "crew-crestFeathers": toonMat(pal.feathers),
@@ -1592,6 +1613,7 @@ export function emptyBoatCrew(boat) {
   if (!boat) return boat;
   const crew = boat.userData.crew || boat.getObjectByName?.("warship-crew");
   if (crew) crew.visible = false;
+  boat.userData.warshipV6?.render();
   return boat;
 }
 

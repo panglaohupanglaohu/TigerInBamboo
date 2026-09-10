@@ -1,0 +1,171 @@
+{
+  "seed": 811,
+  "scope": "Single seed 811 actual Blender v2 geometry plus exported face-color aging. No Web/Godot or batch integration.",
+  "inputGeometryGlb": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2-lod0.glb",
+  "inputGeometrySHA256": "2f970ea4149db486604754ee63b8821b4b6452a3c099915659e3484286f6cc81",
+  "sourceGeometryUnchangedByColorPass": true,
+  "actualTriangleFingerprintsBefore": {
+    "n8": "10848aced3fc303ebdc01b27b3cc50262a40e11624fb7a90ef14f47362d030ba",
+    "n9": "cdb973bb35d71b0299e40a7a48064930ab69869cea6ce2f58a085f5629432020",
+    "n10": "3ee73a14cb670e8e6ce269e01ee245d931893c29e3d8b9ba53b69e840f142664",
+    "n11": "c284e5d1ef71ea519fef9c2aebff1ab3d74c0580f6318b39e68459301323af58",
+    "n12": "6a68464285897631da7d28a8ab32702b961a09069c33769826c94068557148ca"
+  },
+  "actualTriangleFingerprintsAfter": {
+    "n8": "10848aced3fc303ebdc01b27b3cc50262a40e11624fb7a90ef14f47362d030ba",
+    "n9": "cdb973bb35d71b0299e40a7a48064930ab69869cea6ce2f58a085f5629432020",
+    "n10": "3ee73a14cb670e8e6ce269e01ee245d931893c29e3d8b9ba53b69e840f142664",
+    "n11": "c284e5d1ef71ea519fef9c2aebff1ab3d74c0580f6318b39e68459301323af58",
+    "n12": "6a68464285897631da7d28a8ab32702b961a09069c33769826c94068557148ca"
+  },
+  "iteration": 2,
+  "physicalBarkNoiseRemoved": true,
+  "paletteSRGB": [
+    "#403a31",
+    "#51483b",
+    "#615544",
+    "#746854",
+    "#887a65",
+    "#a29580",
+    "#b2a691"
+  ],
+  "paletteLinear": [
+    [
+      0.05126945837404324,
+      0.042311410620809675,
+      0.030713443732993635,
+      1
+    ],
+    [
+      0.0822827071298148,
+      0.06480326669290577,
+      0.043735029256973465,
+      1
+    ],
+    [
+      0.11953842798834562,
+      0.09084171118340768,
+      0.05780543019106723,
+      1
+    ],
+    [
+      0.17464740365558504,
+      0.13843161503245183,
+      0.08865558628577294,
+      1
+    ],
+    [
+      0.24620132670783548,
+      0.1946178304415758,
+      0.1301364766903643,
+      1
+    ],
+    [
+      0.3613067797835095,
+      0.3005437944157765,
+      0.21586050011389926,
+      1
+    ],
+    [
+      0.44520119451622786,
+      0.38132601143253014,
+      0.2831487404299921,
+      1
+    ]
+  ],
+  "method": "Seven face-flat related colors: gray-brown ground, coherent longitudinal dark grooves and pale facet ridges; no random per-face noise.",
+  "faceCounts": {
+    "746854": 1764,
+    "615544": 528,
+    "887a65": 515,
+    "403a31": 153,
+    "51483b": 341,
+    "a29580": 59,
+    "b2a691": 40
+  },
+  "actualGlbColorChecks": [
+    {
+      "node": "n8",
+      "uniqueColors": 7,
+      "maxLinearPaletteError": 9.320561655812298e-09,
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "colorAccessorCount": 5676
+    },
+    {
+      "node": "n9",
+      "uniqueColors": 7,
+      "maxLinearPaletteError": 9.320561655812298e-09,
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "colorAccessorCount": 4522
+    }
+  ],
+  "glb": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2-aged.glb",
+  "glbSHA256": "8d449ef6629c7df0c8de30d8e326954282c04d50a803d6443e1d9bfb70e550a7",
+  "blend": "assets/models/optimized/saihoji-pines-v2/811/ancient-pine-811-v2-aged.blend",
+  "blendSHA256": "753312517acb4505481cc9fced48981ec868c233dd2903e47bfe835466345b9e",
+  "generatorSHA256": "7a4a17de2e227481233a292443844c60df14b352d38a10f9620828433cfbadfe",
+  "renders": [
+    {
+      "view": "full",
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-aged-full.png",
+      "camera": [
+        9.201467514038086,
+        -14.74223518371582,
+        7.60689640045166
+      ],
+      "target": [
+        0.45905303955078125,
+        -0.1715463101863861,
+        2.6528618335723877
+      ],
+      "ortho": 6.489867925643922
+    },
+    {
+      "view": "trunk",
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-aged-trunk.png",
+      "camera": [
+        9.0894193649292,
+        -14.654573440551758,
+        6.586034297943115
+      ],
+      "target": [
+        0.34700486063957214,
+        -0.08388451486825943,
+        1.6319999694824219
+      ],
+      "ortho": 2.9
+    },
+    {
+      "view": "root",
+      "path": "artifacts/pipeline/saihoji-pine-v2-811/v2-aged-root.png",
+      "camera": [
+        8.742414474487305,
+        -14.57068920135498,
+        5.362034320831299
+      ],
+      "target": [
+        0.0,
+        0.0,
+        0.40799999237060547
+      ],
+      "ortho": 1.7
+    }
+  ],
+  "runtimeContract": "Bark baseColorFactor WHITE and vertexColors true; preserve COLOR_0. Leaves keep current Web target factors. Do not overwrite bark with solid palette.",
+  "limitations": [
+    "Only one hero seed",
+    "Portable colors verified; actual visual review still required",
+    "Crown geometry pass is separate and retains its original anchor contracts",
+    "No runtime replacement in this task"
+  ]
+}

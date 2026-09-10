@@ -1,0 +1,53 @@
+{
+  "status": "web_factories_integrated",
+  "files": [
+    {
+      "path": "src/world/vanguardTrooper.js",
+      "bytes": 56150,
+      "sha256": "ffe5bac05f8ed97bd1da6712a6608887a3567cd650e3883b3f2dee903879b0d6"
+    },
+    {
+      "path": "src/world/gateHaulerCraft.js",
+      "bytes": 22994,
+      "sha256": "46c1451f8c0f6bfb9d46a3b0385e15ae2b80b5fe962de1aea02090f833e6ff4f"
+    },
+    {
+      "path": "src/assets/battleOptimization.js",
+      "bytes": 7672,
+      "sha256": "5da8a30952a0c7e75070464acfd5c8e172c942275670f22f40d9f48b684e09ec"
+    },
+    {
+      "path": "src/assets/vanguardOptimizedRig.js",
+      "bytes": 7012,
+      "sha256": "07dd0eaa573839d2c1789a1fad869d445f8c12f8ec58f8d3bc652bfb87dce050"
+    },
+    {
+      "path": "src/assets/battleVanguardData.js",
+      "bytes": 1238140,
+      "sha256": "6d8e8d1ae231898bb55b81e5cc92ec0b9d945688c8047cf7a11cce1aeace1d64"
+    },
+    {
+      "path": "src/assets/battleSoccoData.js",
+      "bytes": 877857,
+      "sha256": "c37eb75c9430fae97ac9d9f4cb0602823ef36b100a99675f7d30db54010f40b2"
+    },
+    {
+      "path": "tools/pipeline/export_battle_web_data.py",
+      "bytes": 3188,
+      "sha256": "691f4e6f32e09afafcb9fdf2cf8054ffac2d21a984f5fdd1a45654e1505ca41b"
+    },
+    {
+      "path": "tools/pipeline/test_battle_optimization_web.mjs",
+      "bytes": 11479,
+      "sha256": "8806a52fd5f5db3939f175e76c0acd62878ba7aa6c1cb08ea590f9323fc4c430"
+    }
+  ],
+  "verification": "report.json:35 factory checks, zero page errors; root independently verifies actual 8931 page",
+  "limits": [
+    "240 frames of actual combat update on a small fixture, seven authored poses; no complete natural battle or full surface collision sweep.",
+    "Production SOCCO has no explicit local ground sample yet; ramp fallback is tagged review-angle-ground-unresolved. Explicit local-ground and unreachable-ground fixtures passed.",
+    "SOCCO production defaults with pilot and four serial marks per side bind; serial eight preserves its extra original marks. Pilot-less or serial multiples of three remain original fallback.",
+    "Original combat damage, timing, actor objects, parts and world layout remain owned by existing code.",
+    "Static JS geometry modules are 2.116 MB total uncompressed; geometry shared, mutable materials per actor."
+  ]
+}

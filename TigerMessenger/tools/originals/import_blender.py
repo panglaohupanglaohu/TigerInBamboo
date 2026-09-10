@@ -11,7 +11,8 @@ source=root/'assets/models/originals'/f'{asset}.source.json'
 data=json.loads(source.read_text())
 revision_dir=source.parent/'blender-r3'
 revision_dir.mkdir(exist_ok=True)
-out=revision_dir/f'{asset}.blend'
+asset_basename=Path(asset).name
+out=revision_dir/f'{asset_basename}.blend'
 if out.exists():raise RuntimeError('Archive exists; use a new revision to preserve edits: '+str(out))
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene
@@ -169,6 +170,6 @@ for child,n,i in instance_objects:
     expected=objects[n['id']].matrix_world@C@I@C.inverted()
     instance_error=max(instance_error,max(abs(expected[r][c]-child.matrix_world[r][c]) for r in range(4) for c in range(4)))
 report={'revision':3,'asset':asset,'nodes':len(objects),'meshDatablocks':len(meshes),'verticesIncludingOutline':surface_vertices,'maxLocalVertexError':max_error,'expandedInstances':len(instance_objects),'maxInstanceMatrixError':instance_error,'primitiveNodes':primitive_counts,'warnings':warnings,'status':'imported original; optimization and render parity pending'}
-(revision_dir/f'{asset}.import-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+(revision_dir/f'{asset_basename}.import-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
 bpy.ops.wm.save_as_mainfile(filepath=str(out),compress=True)
 print('ORIGINAL_BLEND_OK',json.dumps(report,ensure_ascii=False))

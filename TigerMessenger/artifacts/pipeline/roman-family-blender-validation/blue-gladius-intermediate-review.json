@@ -1,0 +1,18 @@
+{
+  "status": "intermediate_blue_gladius_review",
+  "final_six_role_acceptance": false,
+  "structure_report": "gladius-blue-stance-v1/report.json",
+  "image_report": "gladius-blue-chest-v2/images",
+  "image_scope": "Images show chest/sleeve revision before final ready stance narrowing; do not present as final six-role renders.",
+  "observations": {
+    "crest": "Top and side views show the real crest fan aligned along character +X, thin on Z; original 55 identities remain.",
+    "chest": "Current faceted tunic has wider shoulders than waist (.142 vs .100 in body local Z), shallow collar, and two sleeves parented to original upper arms. Target likeness and dynamic sleeve seams remain review items.",
+    "grip": "Actual fingers surround sword grip and the back shield handle; anchor and surface proximity checks passed.",
+    "skirt": "Distinct hanging plates retained. Initial ready stance had 16 left and 7 right triangle crossing pairs; stance narrowing cleared both in saved candidate.",
+    "limits": [
+      "Ready pose only at this checkpoint; no walking, attack or battle lifecycle acceptance.",
+      "No full six-role visual acceptance.",
+      "Triangle surface tests exclude full containment and coplanar overlap; program flags are not visual approval."
+    ]
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "asset": "vanguard-color-v2",
+  "source": "assets/models/optimized/vanguard-battle-v1/vanguard-battle-v1.glb",
+  "target": "assets/concepts/vanguard-trooper-target-v1.png",
+  "targetSHA256": "d80ffed7ec6f58008fed06aecf80bcaf0b07c7c6363d089ef1568655c41fa9d1",
+  "colorSpace": "Hex palette is sRGB; piecewise IEC sRGB EOTF applied once to produce Blender and glTF linear baseColorFactor. Alpha untouched.",
+  "authority": "Use these GLB material factors. Material three_source color is also updated; archived old source retained in color_v2_original_three_source. No original snapshot or source file edited.",
+  "materials": [
+    {
+      "materialIndex": 0,
+      "materialUUID": "m0",
+      "semantic": "charcoal blue-gray primary armor",
+      "srgbHex": "#343D49",
+      "oldBaseColorLinear": [
+        0.06847816983662762,
+        0.07818742179702069,
+        0.09084171117479915,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.03433980680868217,
+        0.046665086336880095,
+        0.06662593864377289,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0,
+        0,
+        0
+      ],
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 1,
+      "materialUUID": "m4",
+      "semantic": "joints gloves trunnion backpack vents",
+      "srgbHex": "#20252B",
+      "oldBaseColorLinear": [
+        0.01764195448412081,
+        0.02121901037134225,
+        0.025186859622305935,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.014443843596092545,
+        0.018500220128379697,
+        0.024157632448504756,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0,
+        0,
+        0
+      ],
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 4,
+      "materialUUID": "m2",
+      "semantic": "warm gray-brown chest face thigh shoulder armor",
+      "srgbHex": "#8B857B",
+      "oldBaseColorLinear": [
+        0.2663556047920505,
+        0.22696587349938613,
+        0.17788841597328695,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.2581828529215958,
+        0.23455058216100522,
+        0.19806931955994886,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0,
+        0,
+        0
+      ],
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 6,
+      "materialUUID": "m6",
+      "semantic": "red face signal strip",
+      "srgbHex": "#BF5140",
+      "oldBaseColorLinear": [
+        0.6866853124288864,
+        0.05126945836711539,
+        0.025186859622305935,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.5209955732043543,
+        0.0822827071298148,
+        0.05126945837404324,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0.6866853124288864,
+        0.05126945836711539,
+        0.025186859622305935
+      ],
+      "newEmissiveLinear": [
+        0.5209955732043543,
+        0.0822827071298148,
+        0.05126945837404324
+      ]
+    },
+    {
+      "materialIndex": 7,
+      "materialUUID": "m7",
+      "semantic": "pale green visor",
+      "srgbHex": "#B4CF7B",
+      "oldBaseColorLinear": [
+        0.3231432091022285,
+        0.6375968739867731,
+        0.04231141061442144,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.45641102318040466,
+        0.6239603916750761,
+        0.19806931955994886,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0.3231432091022285,
+        0.6375968739867731,
+        0.04231141061442144
+      ],
+      "newEmissiveLinear": [
+        0.45641102318040466,
+        0.6239603916750761,
+        0.19806931955994886
+      ]
+    },
+    {
+      "materialIndex": 8,
+      "materialUUID": "m8",
+      "semantic": "muted brick waist connectors",
+      "srgbHex": "#9E4534",
+      "oldBaseColorLinear": [
+        0.4452011945063733,
+        0.05126945836711539,
+        0.028426039499072558,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.3419144249086609,
+        0.0595112381629812,
+        0.03433980680868217,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0,
+        0,
+        0
+      ],
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 9,
+      "materialUUID": "m9",
+      "semantic": "secondary blue-gray limb armor",
+      "srgbHex": "#303B49",
+      "oldBaseColorLinear": [
+        0.04231141061442144,
+        0.059511238155621766,
+        0.08021982030622662,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.0295568344378088,
+        0.043735029256973465,
+        0.06662593864377289,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0,
+        0,
+        0
+      ],
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 11,
+      "materialUUID": "m11",
+      "semantic": "left shoulder cannon gray-brown casing, remove yellow",
+      "srgbHex": "#827D73",
+      "oldBaseColorLinear": [
+        0.3231432091022285,
+        0.2746773120495699,
+        0.14412847084818123,
+        1
+      ],
+      "newBaseColorLinear": [
+        0.2232279573168085,
+        0.20507873639031693,
+        0.1714411007328226,
+        1
+      ],
+      "oldEmissiveLinear": [
+        0,
+        0,
+        0
+      ],
+      "newEmissiveLinear": null
+    },
+    {
+      "materialIndex": 13,
+      "materialUUID": "m13",
+      "semantic": "ice blue cannon emitter",
+      "srgbHex": "#B8E5F0",
+      "oldBaseColorLinear": [
+        0.158960835050774,
+        0.6866853124288864,
+        1,
+        0.85
+      ],
+      "newBaseColorLinear": [
+        0.4793201831008268,
+        0.7835377915261935,
+        0.8713671191987972,
+        0.85
+      ],
+      "oldEmissiveLinear": [
+        0.158960835050774,
+        0.6866853124288864,
+        1
+      ],
+      "newEmissiveLinear": [
+        0.4793201831008268,
+        0.7835377915261935,
+        0.8713671191987972
+      ]
+    },
+    {
+      "materialIndex": 14,
+      "materialUUID": "m14",
+      "semantic": "coral-red laser blade",
+      "srgbHex": "#FF7057",
+      "oldBaseColorLinear": [
+        1,
+        0.04231141061442144,
+        0.015996293361446288,
+        1
+      ],
+      "newBaseColorLinear": [
+        1.0,
+        0.162029375639111,
+        0.0953074666309647,
+        1
+      ],
+      "oldEmissiveLinear": [
+        1,
+        0.04231141061442144,
+        0.015996293361446288
+      ],
+      "newEmissiveLinear": [
+        1.0,
+        0.162029375639111,
+        0.0953074666309647
+      ]
+    },
+    {
+      "materialIndex": 15,
+      "materialUUID": "m15",
+      "semantic": "warm laser halo",
+      "srgbHex": "#FF956F",
+      "oldBaseColorLinear": [
+        1,
+        0.19461783043107173,
+        0.06847816983662762,
+        0.3
+      ],
+      "newBaseColorLinear": [
+        1.0,
+        0.3005437944157765,
+        0.1589608350608804,
+        0.3
+      ],
+      "oldEmissiveLinear": [
+        1,
+        0.19461783043107173,
+        0.06847816983662762
+      ],
+      "newEmissiveLinear": [
+        1.0,
+        0.3005437944157765,
+        0.1589608350608804
+      ]
+    }
+  ]
+}

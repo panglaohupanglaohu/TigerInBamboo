@@ -1,0 +1,35 @@
+{
+  "asset": "socco-color-v2",
+  "status": "validated_color_only_candidate",
+  "checksPassed": true,
+  "geometryAndAnimationChanged": false,
+  "runtimeIntegrationOwnedByMainTask": true,
+  "files": {
+    "README.md": {
+      "sha256": "be913b0bc9b7a4f3a1c4f1bb73fe543947fa0c5ac7632e767d1a3f1dc80759df",
+      "bytes": 1377
+    },
+    "contract-reuse.json": {
+      "sha256": "b09a64e635a50e33dbb6b452125ff3a8ebc9b384ad100f427f6308965265c223",
+      "bytes": 730
+    },
+    "material-mapping.json": {
+      "sha256": "666d80ca5a0fff2ce8e72435939d5b593a9cdf7198662dd8fb275591b7d8b2e0",
+      "bytes": 5501
+    },
+    "socco-color-v2.blend": {
+      "sha256": "05f97b5b1f6594d5662dae8b1028acaef990a896c6f21c9192e6543c8efb82e7",
+      "bytes": 1145037
+    },
+    "socco-color-v2.glb": {
+      "sha256": "fe39c03297ea37d161eaa561563009aac9b600d8684cfb90293ce43bceaff4f6",
+      "bytes": 348188
+    },
+    "validation.json": {
+      "sha256": "f7f97fff9a84fbfe6fb610de7010d4e3ad8dfe92127e475e90bc479968bcc3ad",
+      "bytes": 2007
+    }
+  },
+  "evidenceDirectory": "artifacts/pipeline/socco-color-v2",
+  "target": "assets/concepts/socco-craft-target-v1.png"
+}

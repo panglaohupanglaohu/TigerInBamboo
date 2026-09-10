@@ -1,0 +1,27 @@
+{
+  "after_calls": 97.0,
+  "after_primitives": 1046.0,
+  "before_calls": 372.0,
+  "before_primitives": 1046.0,
+  "compaction": {
+    "indices_after": 93672,
+    "indices_before": 93672,
+    "nodes": 2602,
+    "scope": "Only original opaque same-material six-quad boxes; no morphs, skin, LOD reduction or node merging",
+    "surfaces_after": 2602,
+    "surfaces_before": 15612,
+    "vertices_after": 84924,
+    "vertices_before": 84924
+  },
+  "idempotent": true,
+  "materials_preserved": true,
+  "normal_error": 0.0000322085616062395,
+  "passed": true,
+  "pixel_changed_fraction": 0.0,
+  "pixel_max_byte_error": 1,
+  "position_error": 0.0,
+  "restored": true,
+  "scope": "Full eligible original box geometry check plus isolated actual red tram GPU; no full battlefield FPS claim",
+  "topology_preserved": true,
+  "uv_error": 0.0
+}

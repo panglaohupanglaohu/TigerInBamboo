@@ -9,6 +9,9 @@ var street_lights: Array[OmniLight3D] = []
 var ground_faces: Array[PackedVector3Array] = []
 var batches: Array[MeshInstance3D] = []
 var batched_sources: Array[MeshInstance3D] = []
+var reflection_probe: ReflectionProbe
+var water_material: ShaderMaterial
+var wave_clock: float=0.0
 var blue := false
 var material_cache: Dictionary = {}
 var terrain: Node3D
@@ -46,6 +49,7 @@ func _ready() -> void:
     sun.shadow_enabled=true
     collect_ground()
     report["original_tree_grounding"]=[]
+    report["plant_variants"]=[]
     for tree in night.find_children("*","Node3D",true,false):
         var parts=String(tree.name).split("-")
         if not String(tree.name).begins_with("highland-mountain-vegetation-") or not String(tree.name).trim_prefix("highland-mountain-vegetation-").is_valid_int():continue
@@ -53,6 +57,14 @@ func _ready() -> void:
         var foot=ground_hit(Vector3(before.x,180,before.z),300.0)
         if foot!=null:
             tree.global_position=foot
+            for child in tree.get_children():
+                if child is Node3D:child.visible=false
+            var number=int(String(tree.name).trim_prefix("highland-mountain-vegetation-"))
+            var variant="cypress" if number%4==1 else "broadleaf"
+            var replacement=load("res://assets/"+variant+"-reference-v1.glb").instantiate()
+            tree.add_child(replacement)
+            replacement.scale=Vector3.ONE*0.9
+            report.plant_variants.append({"original_root":String(tree.name),"variant":variant})
             report.original_tree_grounding.append({"name":String(tree.name),"before_y":before.y,"after_y":foot.y})
 
     # Reuse actual low-level luminous window anchors, separated into small light pools.
@@ -103,7 +115,8 @@ func _ready() -> void:
     for loc in [Vector3(-17,12,19),Vector3(17,12,18),Vector3(-10,12,19),Vector3(8,12,21)]:
         var foot=ground_hit(loc)
         if foot==null:continue
-        var tree=load("res://assets/lowPolyTree.glb").instantiate()
+        var variant="cypress" if report.garden_pockets.size()==2 else "broadleaf"
+        var tree=load("res://assets/"+variant+"-reference-v1.glb").instantiate()
         night.add_child(tree)
         tree.position=foot
         tree.scale=Vector3.ONE*0.85
@@ -115,6 +128,22 @@ func _ready() -> void:
                 mat.roughness=0.95
                 mesh.set_surface_override_material(surf,mat)
     build_batches()
+    for water in night.find_children("*","MeshInstance3D",true,false):
+        if String(water.name)=="highland-waterfront-water":
+            var mat=ShaderMaterial.new()
+            mat.shader=load("res://water.gdshader")
+            water.material_override=mat
+            water_material=mat
+            water.layers=2
+    var probe=ReflectionProbe.new()
+    add_child(probe)
+    probe.position=Vector3(0,8,30)
+    probe.size=Vector3(100,100,140)
+    probe.cull_mask=1
+    probe.intensity=2.0
+    reflection_probe=probe
+    probe.update_mode=ReflectionProbe.UPDATE_ONCE
+    report["reflection"]={"method":"Scene cubemap probe plus screen-space reflection on original curved water; opaque procedural ripple normals","probe_position":[0,8,30],"limitations":"SSR misses offscreen surfaces; probe is a spatial approximation, refresh required for dynamic world changes"}
     environment.ssr_enabled=true
     environment.ssr_max_steps=128
     environment.ssao_enabled=true
@@ -126,7 +155,7 @@ func _ready() -> void:
     label.position=Vector2(24,20)
     label.add_theme_font_size_override("font_size",22)
     ui.add_child(label)
-    set_blue(false)
+    set_blue(true)
     if "--capture" in OS.get_cmdline_user_args(): call_deferred("capture")
 func adapt(root: Node3D, is_blue: bool) -> void:
     for n in root.find_children("*", "Node3D", true, false):
@@ -196,18 +225,31 @@ func set_blue(value: bool) -> void:
     environment.fog_density=0.0025
     sun.light_color=Color("8abcf4") if blue else Color("fff0d1")
     sun.light_energy=0.35 if blue else 0.7
-    label.text="蓝夜候选 · WFC + Blender 远山 | 空格切换" if blue else "原工厂日景 · Godot 同镜头 | 空格切换"
+    label.text="蓝夜第四轮 · 1总览 / 2水岸 / 3侧面 / L街灯 / 空格日夜" if blue else "原工厂日景 · Godot 同镜头 | 空格切换"
 func _unhandled_key_input(event: InputEvent) -> void:
     if event.is_action_pressed("ui_accept"): set_blue(not blue)
+    if event is InputEventKey and event.pressed:
+        if event.keycode==KEY_1:
+            camera.position=Vector3(38,38,70)
+            camera.look_at(Vector3(0,20,0))
+        elif event.keycode==KEY_2:
+            camera.position=Vector3(10,10,53)
+            camera.look_at(Vector3(0,12,8))
+        elif event.keycode==KEY_3:
+            camera.position=Vector3(-40,26,58)
+            camera.look_at(Vector3(0,16,0))
     if event is InputEventKey and event.pressed and event.keycode==KEY_L:
         for lamp in street_lights: lamp.visible=not lamp.visible
 func capture() -> void:
     set_blue(true)
     label.visible=false
     report.views=[]
-    for mode in ["unbatched","batched","shore-no-ssr","shore-ssr","side"]:
+    for mode in ["unbatched","batched","shore-no-reflection","shore-reflection","shore-no-shadow","shore-wave","side"]:
         set_batches(mode!="unbatched")
-        environment.ssr_enabled=mode!="shore-no-ssr"
+        for lamp in street_lights:lamp.shadow_enabled=mode!="shore-no-shadow"
+        environment.ssr_enabled=mode!="shore-no-reflection"
+        reflection_probe.intensity=0.0 if mode=="shore-no-reflection" else 2.0
+        water_material.set_shader_parameter("wave_time",0.9 if mode=="shore-wave" else 0.0)
         if mode.begins_with("shore"):
             camera.position=Vector3(10,10,53)
             camera.look_at(Vector3(0,12,8))
@@ -217,6 +259,9 @@ func capture() -> void:
         else:
             camera.position=Vector3(38,38,70)
             camera.look_at(Vector3(0,20,0))
+        reflection_probe.update_mode=ReflectionProbe.UPDATE_ALWAYS
+        for i in range(8):await get_tree().process_frame
+        reflection_probe.update_mode=ReflectionProbe.UPDATE_ONCE
         for i in range(16):await get_tree().process_frame
         var frame_times=[]
         for i in range(30):
@@ -226,9 +271,11 @@ func capture() -> void:
         frame_times.sort()
         await RenderingServer.frame_post_draw
         get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path("res://../"+mode+".png"))
-        report.views.append({"mode":mode,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"draw_calls":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),"primitives":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME),"frame_median_ms":frame_times[15],"ssr":environment.ssr_enabled})
+        report.views.append({"mode":mode,"camera_position":[camera.position.x,camera.position.y,camera.position.z],"draw_calls":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),"primitives":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME),"frame_median_ms":frame_times[15],"ssr":environment.ssr_enabled,"local_shadows":mode!="shore-no-shadow"})
     report["scope"]="Round 4 isolated environment integration and rendering checks; full gameplay/navigation not implemented."
     FileAccess.open("res://../godot-report.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
+    reflection_probe.queue_free()
+    for i in range(4):await get_tree().process_frame
     get_tree().quit()
 func build_batches() -> void:
     var groups={}
@@ -260,6 +307,10 @@ func build_batches() -> void:
 func set_batches(value:bool) -> void:
     for mesh in batches:mesh.visible=value
     for mesh in batched_sources:mesh.visible=not value
+func _process(dt:float) -> void:
+    if "--capture" in OS.get_cmdline_user_args():return
+    wave_clock+=dt
+    if water_material:water_material.set_shader_parameter("wave_time",wave_clock)
 func collect_ground() -> void:
     for mesh in night.find_children("*","MeshInstance3D",true,false):
         if not mesh.is_visible_in_tree() or "water" in String(mesh.name).to_lower():continue

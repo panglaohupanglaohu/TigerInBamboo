@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "meaningOfPassed": "Diagnostic rule/accounting assertions passed; does not mean every survivor physically returned or a natural full battle passed.",
+  "testSha256": "87c9ad053ea5109001a4b10a5e9580fee813e7c2de158ee3e5257869aedd1b00",
+  "localBefore": {
+    "src/world/vanguardAssault.js": "75b76562f787eda629514bbfd00660f73683525c9fa93ff8a62316d4e37095c7",
+    "src/world/vanguardTrooper.js": "ffe5bac05f8ed97bd1da6712a6608887a3567cd650e3883b3f2dee903879b0d6",
+    "src/world/soccoBerth.js": "a397d4105737d99eea3c857e02581558a88fa1c4c8480c9b302c4816380140d4",
+    "src/world/soccoGroundRoutes.js": "08e779fc8aab924ecaa3e00edfb9a5caaccffd68661d0dcbef0e456ff774818f",
+    "src/world/gateHaulerCraft.js": "2305c602ded93b1aee6e14f671a2eaa71fd0da15de57b53fed7b45b6f6e1913a"
+  },
+  "localAfter": {
+    "src/world/vanguardAssault.js": "75b76562f787eda629514bbfd00660f73683525c9fa93ff8a62316d4e37095c7",
+    "src/world/vanguardTrooper.js": "ffe5bac05f8ed97bd1da6712a6608887a3567cd650e3883b3f2dee903879b0d6",
+    "src/world/soccoBerth.js": "a397d4105737d99eea3c857e02581558a88fa1c4c8480c9b302c4816380140d4",
+    "src/world/soccoGroundRoutes.js": "08e779fc8aab924ecaa3e00edfb9a5caaccffd68661d0dcbef0e456ff774818f",
+    "src/world/gateHaulerCraft.js": "2305c602ded93b1aee6e14f671a2eaa71fd0da15de57b53fed7b45b6f6e1913a"
+  },
+  "localStable": true,
+  "cases": [
+    {
+      "scenario": "casualty-normal",
+      "passed": true,
+      "allSurvivorsGenuinelyReturned": true,
+      "accounting": {
+        "returned": 18,
+        "dead": 3,
+        "forced": 0,
+        "unresolved": 0,
+        "ambiguous": 0,
+        "assigned": 21,
+        "departed": 21
+      },
+      "failed": [],
+      "servedHashes": {
+        "src/world/vanguardTrooper.js": "ffe5bac05f8ed97bd1da6712a6608887a3567cd650e3883b3f2dee903879b0d6",
+        "src/world/gateHaulerCraft.js": "2305c602ded93b1aee6e14f671a2eaa71fd0da15de57b53fed7b45b6f6e1913a",
+        "src/world/vanguardAssault.js": "75b76562f787eda629514bbfd00660f73683525c9fa93ff8a62316d4e37095c7",
+        "src/world/soccoBerth.js": "a397d4105737d99eea3c857e02581558a88fa1c4c8480c9b302c4816380140d4",
+        "src/world/soccoGroundRoutes.js": "08e779fc8aab924ecaa3e00edfb9a5caaccffd68661d0dcbef0e456ff774818f"
+      },
+      "servedMatchesFinalLocal": true
+    },
+    {
+      "scenario": "casualty-normal-blocked",
+      "passed": true,
+      "allSurvivorsGenuinelyReturned": false,
+      "accounting": {
+        "returned": 16,
+        "dead": 3,
+        "forced": 2,
+        "unresolved": 0,
+        "ambiguous": 0,
+        "assigned": 21,
+        "departed": 21
+      },
+      "failed": [],
+      "servedHashes": {
+        "src/world/vanguardTrooper.js": "ffe5bac05f8ed97bd1da6712a6608887a3567cd650e3883b3f2dee903879b0d6",
+        "src/world/gateHaulerCraft.js": "2305c602ded93b1aee6e14f671a2eaa71fd0da15de57b53fed7b45b6f6e1913a",
+        "src/world/vanguardAssault.js": "75b76562f787eda629514bbfd00660f73683525c9fa93ff8a62316d4e37095c7",
+        "src/world/soccoBerth.js": "a397d4105737d99eea3c857e02581558a88fa1c4c8480c9b302c4816380140d4",
+        "src/world/soccoGroundRoutes.js": "08e779fc8aab924ecaa3e00edfb9a5caaccffd68661d0dcbef0e456ff774818f"
+      },
+      "servedMatchesFinalLocal": true
+    },
+    {
+      "scenario": "casualty-emergency-blocked",
+      "passed": true,
+      "allSurvivorsGenuinelyReturned": false,
+      "accounting": {
+        "returned": 9,
+        "dead": 3,
+        "forced": 9,
+        "unresolved": 0,
+        "ambiguous": 0,
+        "assigned": 21,
+        "departed": 21
+      },
+      "failed": [],
+      "servedHashes": {
+        "src/world/vanguardTrooper.js": "ffe5bac05f8ed97bd1da6712a6608887a3567cd650e3883b3f2dee903879b0d6",
+        "src/world/gateHaulerCraft.js": "2305c602ded93b1aee6e14f671a2eaa71fd0da15de57b53fed7b45b6f6e1913a",
+        "src/world/vanguardAssault.js": "75b76562f787eda629514bbfd00660f73683525c9fa93ff8a62316d4e37095c7",
+        "src/world/soccoBerth.js": "a397d4105737d99eea3c857e02581558a88fa1c4c8480c9b302c4816380140d4",
+        "src/world/soccoGroundRoutes.js": "08e779fc8aab924ecaa3e00edfb9a5caaccffd68661d0dcbef0e456ff774818f"
+      },
+      "servedMatchesFinalLocal": true
+    }
+  ],
+  "limits": [
+    "Injected casualties and displacement are diagnostic, not naturally triggered combat.",
+    "Runs original assault updater on actual scene synchronously; full natural game loop, ground-route revisions and moving obstacles need separate validation.",
+    "Hidden or done never count as genuine return; only returned event plus ramp and seat observations do."
+  ]
+}

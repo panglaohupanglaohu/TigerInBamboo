@@ -6,7 +6,7 @@
 // =====================================================================
 import * as THREE from "three";
 import { facet } from "../assets/lowPoly.js";
-import { createAncientPineTree } from "../assets/ancient.js";
+import { createOptimizedSaihojiPine } from "../assets/saihojiPineOptimized.js";
 import { toonMat, addOutline, INK_COLOR } from "../assets/toon.js";
 import { mergeStaticGroup } from "./geometryMerge.js";
 import { PLANET_RADIUS } from "./planet.js";
@@ -16,8 +16,9 @@ const STONE_COLORS = Object.freeze([0x706b61, 0x625f58, 0x4f514b]);
 const SAND_COLOR = 0xc8bea8;
 const PATH_COLOR = 0x8e887d;
 const HEAVY_INK = 0.022;
-/** 苔庭古松整体体积倍率（相对 createAncientPineTree 原尺寸；主人 2026-09-05 ×2） */
-export const SAIHOJI_PINE_SIZE = 6;
+/** 鲸背实例尺度；原作25株比例不变，2026-09-10按鲸背面积由6收至2.4。 */
+// Whale-back footprint: retain 25 authored variants, fit crowns to the small island.
+export const SAIHOJI_PINE_SIZE = 2.4;
 /** 苔庭古松间距倍率（主人 2026-09-05：树与树之间 ×2）——作用于布局表 x/z */
 export const SAIHOJI_PINE_SPREAD = 2;
 const _yUp = new THREE.Vector3(0, 1, 0);
@@ -524,22 +525,26 @@ function slerpDirection(a, b, t, out = new THREE.Vector3()) {
 }
 
 function addPilgrimagePath(root, radius, rnd) {
-  const directions = SAIHOJI_ZONES.map((zone) =>
-    directionAtLocal(zone, zone.path?.[0] ?? 0, zone.path?.[1] ?? 0, radius, new THREE.Vector3())
-  );
-  const route = [];
-  for (let segment = 0; segment < directions.length - 1; segment++) {
-    const a = directions[segment];
-    const b = directions[segment + 1];
-    const arcLength = a.angleTo(b) * radius;
-    const steps = Math.max(8, Math.floor(arcLength / 1.35));
-    for (let i = 1; i < steps; i++) {
-      const t = i / steps;
-      const dir = slerpDirection(a, b, t, new THREE.Vector3());
-      const step = createStoneStep(rnd, i % 3 === 0 ? 0.86 : 1);
-      placeOnDirection(step, dir, radius, 0.04, (rnd() - 0.5) * 0.35);
-      root.add(step);
-      route.push(step);
+  // Zen stepping stones are loose, uneven groups, not a sampled centreline.
+  // Keep the legacy return field for callers; no navigation uses these props.
+  const route=[];
+  for(const zone of SAIHOJI_ZONES){
+    const count=zone.id==='empty-court'?2:4+Math.floor(rnd()*4);
+    const occupied=[];
+    for(let i=0;i<count;i++){
+      let x,z;
+      for(let attempt=0;attempt<32;attempt++){
+        const angle=rnd()*Math.PI*2;
+        const r=zone.radius*(.28+Math.sqrt(rnd())*.48);
+        x=Math.cos(angle)*r;z=Math.sin(angle)*r;
+        if(occupied.every(p=>Math.hypot(x-p.x,z-p.z)>1.15))break;
+      }
+      occupied.push({x,z});
+      const step=createStoneStep(rnd,.7+rnd()*.65);
+      step.userData.gardenZone=zone.id;
+      step.userData.placementStyle='scattered-zen';
+      placeAtLocal(step,zone,x,z,radius,.04,rnd()*Math.PI*2);
+      root.add(step);route.push(step);
     }
   }
   return route;
@@ -609,7 +614,7 @@ export function buildSaihojiPlanet(scene, opts = {}) {
     const pines = PINE_LAYOUTS[zone.id] || [];
     for (const spec of pines) {
       const sc = Number.isFinite(spec.scale) ? spec.scale : 1;
-      const pine = createAncientPineTree(spec.seed);
+      const pine = createOptimizedSaihojiPine(spec.seed);
       const visual = sc * SAIHOJI_PINE_SIZE;
       pine.scale.multiplyScalar(visual);
       // lift：根盘明显坐于苔面之上——苔庭（苔斑 + 苔丘地形）略高于球面，
@@ -630,16 +635,16 @@ export function buildSaihojiPlanet(scene, opts = {}) {
       const cr = (pine.userData.collideRadius ?? 0.58) * visual * 1.15;
       pushCollider(colliders, pine, Math.max(0.45, cr));
       // 根际苔裙略小于树冠投影，不把树干埋进厚苔（跟随间距倍率）
-      addStoneMossSkirt(group, zone, spec.x * SAIHOJI_PINE_SPREAD, spec.z * SAIHOJI_PINE_SPREAD, radius, rnd, 0.55 * visual);
+      const rootMoss = new THREE.Group();
+      rootMoss.name = `pine-root-moss-${spec.seed}`;
+      group.add(rootMoss);
+      addStoneMossSkirt(rootMoss, zone, spec.x * SAIHOJI_PINE_SPREAD, spec.z * SAIHOJI_PINE_SPREAD, radius, rnd, 0.55 * visual);
+      pine.userData.rootMoss = rootMoss;
     }
 
-    if (zone.id === "moss-entry") {
-      for (let i = 0; i < 7; i++) {
-        const step = createStoneStep(rnd, 0.95);
-        placeAtLocal(step, zone, -1.7 + i * 0.58, -2.8 + i * 0.75, radius, 0.04, i * 0.08);
-        group.add(step);
-      }
-    }
+    // Preserve subsequent authored random decoration when removing the old
+    // seven-stone entrance line (each stone consumed two shape samples).
+    if(zone.id === "moss-entry")for(let i=0;i<14;i++)rnd();
 
     // 枯瀑之庭：补阶梯式浅蓝跌水唇（垂直层叠）
     if (zone.id === "dry-cascade") {

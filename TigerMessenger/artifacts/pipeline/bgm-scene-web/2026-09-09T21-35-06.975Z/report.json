@@ -1,0 +1,740 @@
+{
+  "checks": [
+    {
+      "name": "local walking battle uses original storm track",
+      "passed": true
+    },
+    {
+      "name": "native HTMLAudio media clock advances",
+      "passed": true,
+      "detail": {
+        "start": 0.015153,
+        "end": 0.62348
+      }
+    },
+    {
+      "name": "actual tram ride callback owns music",
+      "passed": true
+    },
+    {
+      "name": "battle and cue requests cannot interrupt tram",
+      "passed": true
+    },
+    {
+      "name": "native tram clock continues despite combat requests",
+      "passed": true
+    },
+    {
+      "name": "distant alighting does not restore old battle",
+      "passed": true
+    },
+    {
+      "name": "battle can remain active elsewhere without audible music",
+      "passed": true
+    },
+    {
+      "name": "return restores only currently eligible battle",
+      "passed": true
+    },
+    {
+      "name": "battle end cancels music and pending fades",
+      "passed": true
+    },
+    {
+      "name": "production main publishes actual player position",
+      "passed": true
+    }
+  ],
+  "states": [
+    {
+      "label": "walking-near-battle",
+      "owner": "storm",
+      "revision": 1,
+      "listener": {
+        "x": -62.82876843969529,
+        "y": 77.6210313567637,
+        "z": -107.72605454062256
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": true,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": false,
+          "volume": 0.40041666676600773,
+          "currentTime": 0.015153
+        }
+      ]
+    },
+    {
+      "label": "native-storm-progress",
+      "owner": "storm",
+      "revision": 1,
+      "listener": {
+        "x": -62.82876843969529,
+        "y": 77.6210313567637,
+        "z": -107.72605454062256
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": true,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 0.62348
+        }
+      ]
+    },
+    {
+      "label": "actual-keyF-board",
+      "owner": "tram",
+      "revision": 2,
+      "listener": {
+        "x": -62.80649329845493,
+        "y": 78.50184227923845,
+        "z": -108.01618543682613
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": true,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "tram",
+          "active": true,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.626784
+        },
+        {
+          "key": "tram",
+          "paused": false,
+          "volume": 0.0555028571503503,
+          "currentTime": 0.014515
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "remote-sources-keep-requesting",
+      "owner": "tram",
+      "revision": 2,
+      "listener": {
+        "x": -62.80649329845493,
+        "y": 78.50184227923845,
+        "z": -108.01618543682613
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": true,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": true,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "tram",
+          "active": true,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.626784
+        },
+        {
+          "key": "tram",
+          "paused": false,
+          "volume": 0.44,
+          "currentTime": 0.96077
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "alight-away-from-battle",
+      "owner": null,
+      "revision": 3,
+      "listener": {
+        "x": -110.79459567193032,
+        "y": 79.20559112172408,
+        "z": 54.32555160420174
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": true,
+          "inRange": false,
+          "distance": 169.0087407971511
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": true,
+          "inRange": false,
+          "distance": 169.0087407971511
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.626784
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "far-with-live-battle-intent",
+      "owner": null,
+      "revision": 3,
+      "listener": {
+        "x": -110.79459567193032,
+        "y": 79.20559112172408,
+        "z": 54.32555160420174
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": true,
+          "inRange": false,
+          "distance": 169.0087407971511
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": true,
+          "inRange": false,
+          "distance": 169.0087407971511
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.626784
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "walk-back-near-battle",
+      "owner": "storm",
+      "revision": 4,
+      "listener": {
+        "x": -62.82876843969529,
+        "y": 77.6210313567637,
+        "z": -107.72605454062256
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": true,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": true,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": false,
+          "volume": 0.043590909107164906,
+          "currentTime": 0.014374
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "actual-battle-request-ended",
+      "owner": null,
+      "revision": 6,
+      "listener": {
+        "x": -62.82876843969529,
+        "y": 77.6210313567637,
+        "z": -107.72605454062256
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": false,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.014406
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "one-production-main-frame",
+      "owner": null,
+      "revision": 6,
+      "listener": {
+        "x": -121.88570076090018,
+        "y": 84.5473542478721,
+        "z": 59.963495892994146
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "storm",
+          "active": false,
+          "inRange": true,
+          "distance": 0
+        },
+        {
+          "key": "cue",
+          "active": false,
+          "inRange": true,
+          "distance": 0.9276313923105404
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "storm",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0.014406
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "scope": "Actual 8931 page, native HTMLAudio files and media clocks, real KeyF tram callbacks/update. Diagnostic player/tram positioning and direct battle audio intents; world RAF held while audio RAF runs. Not a natural full ride or acoustic listening comparison.",
+  "errors": [],
+  "sourceBefore": {
+    "src/audio/bgmOwnership.js": "1eaf732afa05a6d13c98b11896e92b6a8c931d5850efd27dd9f6e07c9e464398",
+    "src/audio/sfx.js": "711e78e878de70770d7069ccc0813ecc8df6a35d792436e478e2ac304861a51f",
+    "src/main.js": "c3a4a31374563607ec26a5a3c2dd4da6ed010201bc42e4563b366c65bffb4fed",
+    "src/world/vanguardAssault.js": "3f32d15cdbe1691d709a5dc491e3037c92e1a8c1b969ae94a96a1515794380eb",
+    "src/world/saihojiPhalanx.js": "1957eb876353c48c79fc13284d09a2b18238a7f20babef80fc222e89e3090ca6"
+  },
+  "sourceAfter": {
+    "src/audio/bgmOwnership.js": "1eaf732afa05a6d13c98b11896e92b6a8c931d5850efd27dd9f6e07c9e464398",
+    "src/audio/sfx.js": "711e78e878de70770d7069ccc0813ecc8df6a35d792436e478e2ac304861a51f",
+    "src/main.js": "c3a4a31374563607ec26a5a3c2dd4da6ed010201bc42e4563b366c65bffb4fed",
+    "src/world/vanguardAssault.js": "3f32d15cdbe1691d709a5dc491e3037c92e1a8c1b969ae94a96a1515794380eb",
+    "src/world/saihojiPhalanx.js": "1957eb876353c48c79fc13284d09a2b18238a7f20babef80fc222e89e3090ca6"
+  },
+  "sourceStable": true
+}

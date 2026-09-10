@@ -101,6 +101,8 @@ import {
 } from "./ui/hud.js";
 import {
   ensureAudio,
+  updateBgmListenerContext,
+  getBgmOwnershipSnapshot,
   startAmbience,
   startTramSound,
   sfxJump,
@@ -1704,6 +1706,9 @@ function animate() {
     setCanyonApproachBgm(wantCanyonBgm, { fade: wantCanyonBgm ? 1.4 : 1.8 });
   }
 
+  const bgmWhale = scene.getObjectByName("leviathanGroup");
+  updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(new THREE.Vector3()) || null});
+
   // 场景模块自更新（湖、云、平台脉动等）
   updateScenes(sceneHandles, dt, t, { player, gameStarted, keys });
   originalWorldRomanArmor.update();
@@ -1925,6 +1930,7 @@ window.__tm = {
   storyEngine, // 故事板引擎（验收/调试用）
   storyboardPanel,
   tramRide,
+  bgm: { snapshot:getBgmOwnershipSnapshot },
   airshipRide,
   scoutAircraftRide,
   elderMusic,

@@ -1,0 +1,428 @@
+{
+  "groups": [
+    {
+      "name": "castleContainer",
+      "position": [
+        114.44628925433727,
+        63.31980449134136,
+        83.30278587832983
+      ],
+      "userData": {
+        "highlandHeroCloudCount": 79,
+        "highlandCanopyImpostorCount": 7,
+        "skipOuterTerrain": false,
+        "townBaseLift": 0.6,
+        "highlandTownscaperGrid": true,
+        "skipDecor": false,
+        "curvatureDrop": 0,
+        "kind": "odyssey-citadel",
+        "blueprintVersion": 1,
+        "highlandLatestDesign": true,
+        "highlandLatestDesignVersion": "2026.08.27-reference-obelisk-stone-v12-vegetation-bands",
+        "floors": 12,
+        "townBaseY": 4.95,
+        "wfcSeed": 20260808,
+        "buildingOwnedPropHash": "860623c2",
+        "nonBuildingPropCount": 0,
+        "mainOutlinedSurfaceCount": 6476,
+        "terrainOutlinedSurfaceCount": 5,
+        "outlinedSurfaceCount": 6481,
+        "windowNightRolled": false,
+        "v4RuntimeSuppressed": "retired-five-terrace-topology"
+      }
+    },
+    {
+      "name": "canal-junction-box",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "userData": {
+        "halfLength": 22,
+        "halfWidth": 18,
+        "waterLift": 0.6,
+        "excludeRadius": 30.025340807103795
+      }
+    },
+    {
+      "name": "citadel-navona-canal-plaza",
+      "position": [
+        101.93619469590605,
+        88.77563956448711,
+        85.41404124194217
+      ],
+      "userData": {
+        "kind": "navona-canal-plaza",
+        "isFlooded": false,
+        "floodAmount": 0,
+        "canalWaterLift": 0.67
+      }
+    },
+    {
+      "name": "old-harbor-scene",
+      "position": [
+        97.2720224632227,
+        102.79624211518438,
+        87.77053972506398
+      ],
+      "userData": {
+        "kind": "oldHarbor",
+        "collideRadius": 4,
+        "oldHarborGiantTreeCount": 2
+      }
+    },
+    {
+      "name": "leviathanGroup",
+      "position": [
+        -62.834991830225675,
+        77.64856559671948,
+        -107.73496478315242
+      ],
+      "userData": {}
+    }
+  ],
+  "meshes": [
+    {
+      "name": "moebius-waterline-platforms",
+      "parent": "moebius-metropolis",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "box": {
+        "min": [
+          -1.1799999475479126,
+          -0.17499999701976776,
+          -1.1799999475479126
+        ],
+        "max": [
+          1.1799999475479126,
+          0.17499999701976776,
+          1.1799999475479126
+        ]
+      },
+      "vertices": 96,
+      "userData": {}
+    },
+    {
+      "name": "moebius-hall-waterline-platform",
+      "parent": "moebius-metropolis",
+      "pos": [
+        -66.3912238716448,
+        -61.55601024968372,
+        -102.15337975302616
+      ],
+      "box": {
+        "min": [
+          -71.75810708000749,
+          -66.94480782718387,
+          -105.15488522333801
+        ],
+        "max": [
+          -61.0243406632821,
+          -56.16721267218358,
+          -99.1518742827143
+        ]
+      },
+      "vertices": 120,
+      "userData": {}
+    },
+    {
+      "name": "highland-waterfront-water",
+      "parent": "highland-waterfront-foreground",
+      "pos": [
+        114.44628925433727,
+        63.31980449134136,
+        83.30278587832983
+      ],
+      "box": {
+        "min": [
+          71.69496211223351,
+          78.64697577660392,
+          35.040269425677934
+        ],
+        "max": [
+          129.72469879852176,
+          119.88241171261244,
+          102.51937498544916
+        ]
+      },
+      "vertices": 255,
+      "userData": {
+        "nonNavigable": true,
+        "presentationOnly": true,
+        "semantic": "waterfront-water",
+        "waterTopology": "curved-lake-cap-v10-navona-gentle",
+        "flatSurface": false,
+        "curved": true,
+        "gridMethod": "primary-grid+dual-grid+alternating-triangles",
+        "surfaceRadius": 160,
+        "shoreline": "wfc-tile-mask",
+        "surfaceProfile": "navona-gentle-basin",
+        "maxAuthoredRelief": 0.12,
+        "skipInkOutline": true
+      }
+    },
+    {
+      "name": "navona-plaza-basin-stone",
+      "parent": "citadel-navona-canal-plaza",
+      "pos": [
+        101.93619469590605,
+        88.77563956448711,
+        85.41404124194217
+      ],
+      "box": {
+        "min": [
+          87.6911805058137,
+          74.4589739666869,
+          68.32544198795017
+        ],
+        "max": [
+          117.35006030111818,
+          103.43113400430074,
+          103.25779545829471
+        ]
+      },
+      "vertices": 435,
+      "userData": {
+        "conform": "basin"
+      }
+    },
+    {
+      "name": "navona-plaza-inlay-channel",
+      "parent": "citadel-navona-canal-plaza",
+      "pos": [
+        101.96571589001306,
+        88.79197278290236,
+        85.43552903090931
+      ],
+      "box": {
+        "min": [
+          91.51091444911161,
+          80.61601589154563,
+          69.41804972168056
+        ],
+        "max": [
+          111.83035728472038,
+          96.43813133837443,
+          100.95301861930844
+        ]
+      },
+      "vertices": 75,
+      "userData": {
+        "conform": "shell"
+      }
+    },
+    {
+      "name": "citadel-moat-water",
+      "parent": "citadel-moat",
+      "pos": [
+        118.75638359396025,
+        65.70445437996867,
+        86.44000306753114
+      ],
+      "box": {
+        "min": [
+          72.6675643884653,
+          22.41989854948374,
+          36.07394971023098
+        ],
+        "max": [
+          156.2952816501712,
+          104.59128275652472,
+          130.58276814335113
+        ]
+      },
+      "vertices": 964,
+      "userData": {}
+    },
+    {
+      "name": "planet-v8-curved-ocean",
+      "parent": "planet-v9-runtime",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "box": {
+        "min": [
+          -160.5,
+          -160.30728149414062,
+          -160.5
+        ],
+        "max": [
+          160.5,
+          160.5,
+          160.5
+        ]
+      },
+      "vertices": 3577,
+      "userData": {
+        "officialOcean": true
+      }
+    },
+    {
+      "name": "swamp-underground-waterline",
+      "parent": "moebius-swamp-zone",
+      "pos": [
+        -65.17708463205267,
+        -44.331091781126645,
+        -105.07807059492198
+      ],
+      "box": {
+        "min": [
+          -82.75438572235956,
+          -60.719790860993434,
+          -118.32413810566266
+        ],
+        "max": [
+          -47.599714170431454,
+          -27.94234551740498,
+          -91.83189124420096
+        ]
+      },
+      "vertices": 50,
+      "userData": {}
+    },
+    {
+      "name": "swamp-water-volume",
+      "parent": "moebius-swamp-zone",
+      "pos": [
+        -63.31640113929424,
+        -43.06552227677148,
+        -102.0782888079544
+      ],
+      "box": {
+        "min": [
+          -82.4539297747006,
+          -60.448261069852876,
+          -118.0684107845048
+        ],
+        "max": [
+          -44.17887250388789,
+          -25.682783483690088,
+          -86.08816683140398
+        ]
+      },
+      "vertices": 297,
+      "userData": {}
+    },
+    {
+      "name": "canal-junction-water-deep",
+      "parent": "canal-junction-box",
+      "pos": [
+        62.85753089907965,
+        80.13877759460398,
+        -123.46136899821678
+      ],
+      "box": {
+        "min": [
+          39.80252361567672,
+          59.13911491437437,
+          -141.42708211571392
+        ],
+        "max": [
+          85.91253818248258,
+          101.13844027483358,
+          -105.49565588071967
+        ]
+      },
+      "vertices": 38,
+      "userData": {}
+    },
+    {
+      "name": "canal-junction-water",
+      "parent": "canal-junction-box",
+      "pos": [
+        63.065681423144085,
+        80.40415436514532,
+        -123.87020702114121
+      ],
+      "box": {
+        "min": [
+          40.42559714173558,
+          59.739402060539476,
+          -141.52321343465337
+        ],
+        "max": [
+          85.70576570455259,
+          101.06890666975116,
+          -106.21720060762904
+        ]
+      },
+      "vertices": 38,
+      "userData": {}
+    },
+    {
+      "name": "canal-water",
+      "parent": "world-canal",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "box": {
+        "min": [
+          -46.254661560058594,
+          -101.76397705078125,
+          -70.47927856445312
+        ],
+        "max": [
+          -20.440160751342773,
+          -79.4383773803711,
+          -45.763973236083984
+        ]
+      },
+      "vertices": 5604,
+      "userData": {}
+    },
+    {
+      "name": "mossy-terrain",
+      "parent": "mossyGround",
+      "pos": [
+        -68.10674260232256,
+        85.11563222113739,
+        -117.9643385252385
+      ],
+      "box": {
+        "min": [
+          -89.72617950768387,
+          72.78064776896116,
+          -133.706618988154
+        ],
+        "max": [
+          -48.91722304744127,
+          96.70336098301257,
+          -101.65818176648821
+        ]
+      },
+      "vertices": 1008,
+      "userData": {}
+    },
+    {
+      "name": "mossy-terrain",
+      "parent": "mossyGround",
+      "pos": [
+        -79.38916235769331,
+        -53.997632185820386,
+        -127.99068957728397
+      ],
+      "box": {
+        "min": [
+          -98.89561681423805,
+          -72.43563046816539,
+          -142.66781920195066
+        ],
+        "max": [
+          -61.431422194124075,
+          -36.61301325991988,
+          -115.8103870311426
+        ]
+      },
+      "vertices": 4225,
+      "userData": {}
+    }
+  ]
+}

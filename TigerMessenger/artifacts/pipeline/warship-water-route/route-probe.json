@@ -1,0 +1,109 @@
+{
+  "stats": {
+    "envelope": 7,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 8,
+    "obstacleMeshes": 1996
+  },
+  "samples": [
+    {
+      "direction": [
+        0,
+        1,
+        0
+      ],
+      "surface": {
+        "water": 160.5,
+        "ground": 160,
+        "object": "planet-surface"
+      }
+    },
+    {
+      "direction": [
+        1,
+        0,
+        0
+      ],
+      "surface": {
+        "water": 160.5,
+        "ground": 160,
+        "object": "planet-surface"
+      }
+    },
+    {
+      "direction": [
+        -1,
+        0,
+        0
+      ],
+      "surface": {
+        "water": 160.5,
+        "ground": 160,
+        "object": "planet-surface"
+      }
+    },
+    {
+      "direction": [
+        0.2,
+        0.8,
+        -0.5
+      ],
+      "surface": {
+        "water": 160.43708505334158,
+        "ground": 159.93541467035956,
+        "object": "planet-surface"
+      }
+    }
+  ],
+  "dockDetails": {
+    "port": {
+      "valid": false,
+      "reason": "No actual-mesh-clear dock within deployed boarding reach",
+      "attempts": 5376,
+      "rejected": {
+        "angle": 0,
+        "center": 5122,
+        "support": 155,
+        "hull": 99,
+        "entry": 0,
+        "approach": 0
+      },
+      "lastFailure": {
+        "clear": false,
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "point": [
+          64.15334996865487,
+          110.73362597587273,
+          103.8600944014407
+        ]
+      }
+    },
+    "beach": {
+      "valid": false,
+      "reason": "No actual-mesh-clear dock within deployed boarding reach",
+      "attempts": 2752,
+      "rejected": {
+        "angle": 0,
+        "center": 2170,
+        "support": 227,
+        "hull": 353,
+        "entry": 2,
+        "approach": 0
+      },
+      "lastFailure": {
+        "clear": false,
+        "mesh": "planet-surface",
+        "point": [
+          -50.910343170166,
+          88.8912353515625,
+          -122.90843963623048
+        ]
+      }
+    }
+  },
+  "docks": {},
+  "paths": {
+    "out1": null,
+    "out2": null
+  }
+}

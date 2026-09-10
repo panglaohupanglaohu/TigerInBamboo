@@ -1,0 +1,101 @@
+{
+  "glbs": [
+    {
+      "lod": 0,
+      "sha256": "7dbf5a08ce126d8e9ef6b30f34b7763273917246717fdf8cdaf9664119b625fe",
+      "sourceNodeIDs": 17,
+      "sourceParentIDsExact": true,
+      "triangles": 3598,
+      "visibleMeshNodes": 5,
+      "hiddenOutlineMetadataOnly": true,
+      "woodSurface": {
+        "weldTolerance": 1e-05,
+        "components": 1,
+        "componentVertexCounts": [
+          776
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "gltfRootTRS": {
+        "rotation": [
+          0,
+          -0.09720034897327423,
+          0,
+          0.9952648282051086
+        ],
+        "scale": [
+          1.0199997425079346,
+          1.0199999809265137,
+          1.0199997425079346
+        ]
+      }
+    },
+    {
+      "lod": 1,
+      "sha256": "9fcda77a8a5c3f0a3224da446b7ea74afbeb6b70b00e5c58f2bc267f467c9300",
+      "sourceNodeIDs": 17,
+      "sourceParentIDsExact": true,
+      "triangles": 2228,
+      "visibleMeshNodes": 5,
+      "hiddenOutlineMetadataOnly": true,
+      "woodSurface": {
+        "weldTolerance": 1e-05,
+        "components": 1,
+        "componentVertexCounts": [
+          481
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "gltfRootTRS": {
+        "rotation": [
+          0,
+          -0.09720034897327423,
+          0,
+          0.9952648282051086
+        ],
+        "scale": [
+          1.0199997425079346,
+          1.0199999809265137,
+          1.0199997425079346
+        ]
+      }
+    },
+    {
+      "lod": 2,
+      "sha256": "71b486c4eda9678a82807bc3370df16aac28b65768b9a6b5dff5ada8b21b90b3",
+      "sourceNodeIDs": 17,
+      "sourceParentIDsExact": true,
+      "triangles": 1222,
+      "visibleMeshNodes": 5,
+      "hiddenOutlineMetadataOnly": true,
+      "woodSurface": {
+        "weldTolerance": 1e-05,
+        "components": 1,
+        "componentVertexCounts": [
+          265
+        ],
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0
+      },
+      "gltfRootTRS": {
+        "rotation": [
+          0,
+          -0.09720034897327423,
+          0,
+          0.9952648282051086
+        ],
+        "scale": [
+          1.0199997425079346,
+          1.0199999809265137,
+          1.0199997425079346
+        ]
+      }
+    }
+  ],
+  "note": "Wood topology weld is evaluated across the two original bark material batches; no rendering-based collision claim."
+}

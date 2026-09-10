@@ -7,3 +7,5 @@
 @media(max-width:700px){#rescue-campaign{right:8px;top:72px;width:224px;font-size:12px}.rescue-body{padding:0 12px 10px}.rescue-chapter{font-size:14px}.rescue-story{max-height:75px}}
 
 #rescue-campaign .rescue-restart{display:block;margin:12px 0 0;padding:2px 0;border:0;background:none;color:#a9b8ab;font:11px system-ui;text-decoration:underline;cursor:pointer}
+
+#rescue-campaign .rescue-battle-status{margin:6px 0 10px;color:#b7cdb9;font-size:12px;line-height:1.55}

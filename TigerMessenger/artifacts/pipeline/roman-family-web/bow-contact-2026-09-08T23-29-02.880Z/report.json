@@ -1,0 +1,152 @@
+{
+  "samples": [
+    {
+      "frame": 0,
+      "phase": "reach",
+      "t": 0.10666666666666666,
+      "draw": 0,
+      "original": [],
+      "candidate": []
+    },
+    {
+      "frame": 7,
+      "phase": "nock",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "candidate": []
+    },
+    {
+      "frame": 24,
+      "phase": "draw",
+      "t": 0,
+      "draw": 0.08,
+      "original": [],
+      "candidate": []
+    },
+    {
+      "frame": 65,
+      "phase": "hold",
+      "t": 0,
+      "draw": 1,
+      "original": [],
+      "candidate": [
+        {
+          "weapon": "bow-string-top",
+          "weaponUuid": "08062440-43e6-458a-9f4e-0f50f3ea1b23",
+          "head": "soldier-crest",
+          "count": 18,
+          "point": [
+            0.02982088544883535,
+            0.9359484275052551,
+            0.09800000037997961
+          ]
+        },
+        {
+          "weapon": "bow-string-top",
+          "weaponUuid": "08062440-43e6-458a-9f4e-0f50f3ea1b23",
+          "head": "soldier-crest-feathers",
+          "count": 34,
+          "point": [
+            0.05244040772630995,
+            0.9154191927067223,
+            0.09800000037997961
+          ]
+        },
+        {
+          "weapon": "bow-string-top",
+          "weaponUuid": "08062440-43e6-458a-9f4e-0f50f3ea1b23",
+          "head": "soldier-crest-stems",
+          "count": 20,
+          "point": [
+            0.056210326935551704,
+            0.9119976546358192,
+            0.0973596166772386
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "aeeb8225-07bb-4740-bce4-f243b2da0e87",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.025657644666540077,
+            0.3639020843511649,
+            0.09079086035490036
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 80,
+      "phase": "loose",
+      "t": 0,
+      "draw": 1,
+      "original": [],
+      "candidate": [
+        {
+          "weapon": "bow-string-top",
+          "weaponUuid": "08062440-43e6-458a-9f4e-0f50f3ea1b23",
+          "head": "soldier-crest",
+          "count": 18,
+          "point": [
+            0.029849455361733335,
+            0.936355902268915,
+            0.09800000037997961
+          ]
+        },
+        {
+          "weapon": "bow-string-top",
+          "weaponUuid": "08062440-43e6-458a-9f4e-0f50f3ea1b23",
+          "head": "soldier-crest-feathers",
+          "count": 34,
+          "point": [
+            0.05247793128458966,
+            0.9159543677034507,
+            0.09800000037997961
+          ]
+        },
+        {
+          "weapon": "bow-string-top",
+          "weaponUuid": "08062440-43e6-458a-9f4e-0f50f3ea1b23",
+          "head": "soldier-crest-stems",
+          "count": 20,
+          "point": [
+            0.0562493427675985,
+            0.9125541129981185,
+            0.09741858791500564
+          ]
+        },
+        {
+          "weapon": "bow-string-bot",
+          "weaponUuid": "aeeb8225-07bb-4740-bce4-f243b2da0e87",
+          "head": "Helmet_Galea.002",
+          "count": 10,
+          "point": [
+            -0.026571584274357712,
+            0.36396616482268873,
+            0.09079086035490036
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 88,
+      "phase": "follow",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "candidate": []
+    },
+    {
+      "frame": 104,
+      "phase": "recover",
+      "t": 0,
+      "draw": 0,
+      "original": [],
+      "candidate": []
+    }
+  ],
+  "scope": "Same actor, same actual shot state, only equipment toggle. Triangle-edge/face crossing of visible non-outline bow/arrow against crest, helmet and approved armor; coplanar/containment not tested.",
+  "adapterSha256": "3f068d57da1ff92362503e5667d74af3a114206985e7f1d9993bc72caa976cb7"
+}

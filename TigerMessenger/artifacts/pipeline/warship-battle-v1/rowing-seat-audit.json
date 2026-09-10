@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "frames": 301,
+  "rowerFrameSamples": 7826,
+  "scope": "Every saved frame: all inner handles versus all 26 torso/skirt/head/helmet/crest/legs, shafts+handles versus deck/rails, all legs versus deck. Intentional hand/handle and joint connections excluded. No all-body self-collision claim.",
+  "bladeLowestPointRangeDuringRowing": [
+    -0.6345193982124329,
+    -0.10291248559951782
+  ],
+  "failures": []
+}

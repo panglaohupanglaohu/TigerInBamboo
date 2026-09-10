@@ -1,0 +1,106 @@
+{
+  "checks": [
+    {
+      "name": "direct line crosses solid rock",
+      "passed": true
+    },
+    {
+      "name": "detour found to exact requested endpoint",
+      "passed": true,
+      "detail": {
+        "length": 10.978253592809187,
+        "visits": 20
+      }
+    },
+    {
+      "name": "no substitute destination beyond obstacle",
+      "passed": true
+    },
+    {
+      "name": "walking samples remain outside rock without jumps",
+      "passed": true,
+      "detail": {
+        "blockedSamples": 0,
+        "maxStep": 0.10978459668457001
+      }
+    },
+    {
+      "name": "embedded start is reported instead of teleported",
+      "passed": true,
+      "detail": {
+        "valid": false,
+        "reason": "obstructed-endpoint"
+      }
+    },
+    {
+      "name": "exhausted search never claims arrival",
+      "passed": true,
+      "detail": {
+        "valid": false,
+        "reason": "search-budget",
+        "visits": 1
+      }
+    },
+    {
+      "name": "missing terrain fails without a straight-line fallback",
+      "passed": true,
+      "detail": {
+        "valid": false,
+        "reason": "missing-dry-endpoint"
+      }
+    }
+  ],
+  "route": {
+    "length": 10.978253592809187,
+    "points": [
+      [
+        0,
+        161.06,
+        0
+      ],
+      [
+        1.1995863477712925,
+        161.0044809767037,
+        -1.1995863477712925
+      ],
+      [
+        2.398345862186984,
+        160.94899356826485,
+        -2.398345862186984
+      ],
+      [
+        2.3978916024456836,
+        160.91850895412574,
+        -3.596837403668526
+      ],
+      [
+        2.397382919178721,
+        160.88437206788532,
+        -4.794765838357442
+      ],
+      [
+        2.3968505868183945,
+        160.8486481304044,
+        -5.992126467045986
+      ],
+      [
+        1.198220629878647,
+        160.82117887354573,
+        -7.189323779271882
+      ],
+      [
+        0,
+        160.78550362844567,
+        -8.385683785415022
+      ],
+      [
+        0,
+        160.7658169041259,
+        -8.986909019485298
+      ]
+    ]
+  },
+  "scope": "Synthetic spherical terrain with a real solid obstacle; exact pathfinding contract, not full battle acceptance",
+  "errors": [],
+  "passed": true
+}

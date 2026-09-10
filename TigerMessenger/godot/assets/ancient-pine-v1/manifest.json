@@ -1,0 +1,65 @@
+{
+  "asset": "ancient-pine-v1",
+  "sourceAsset": "pine",
+  "status": "visual-approved candidate assets copied; world integration pending",
+  "lods": [
+    {
+      "lod": 0,
+      "triangles": 3598,
+      "visibleMeshes": 5,
+      "glb": "assets/models/optimized/ancient-pine-v1/ancient-pine-v1-lod0.glb",
+      "sha256": "7dbf5a08ce126d8e9ef6b30f34b7763273917246717fdf8cdaf9664119b625fe",
+      "bytes": 298208,
+      "godotPath": "res://assets/ancient-pine-v1/ancient-pine-v1-lod0.glb"
+    },
+    {
+      "lod": 1,
+      "triangles": 2228,
+      "visibleMeshes": 5,
+      "glb": "assets/models/optimized/ancient-pine-v1/ancient-pine-v1-lod1.glb",
+      "sha256": "9fcda77a8a5c3f0a3224da446b7ea74afbeb6b70b00e5c58f2bc267f467c9300",
+      "bytes": 191476,
+      "godotPath": "res://assets/ancient-pine-v1/ancient-pine-v1-lod1.glb"
+    },
+    {
+      "lod": 2,
+      "triangles": 1222,
+      "visibleMeshes": 5,
+      "glb": "assets/models/optimized/ancient-pine-v1/ancient-pine-v1-lod2.glb",
+      "sha256": "71b486c4eda9678a82807bc3370df16aac28b65768b9a6b5dff5ada8b21b90b3",
+      "bytes": 112984,
+      "godotPath": "res://assets/ancient-pine-v1/ancient-pine-v1-lod2.glb"
+    }
+  ],
+  "placement": {
+    "rootSourceID": "n0",
+    "rootLocalMatrix": [
+      1.0007262229919434,
+      0.19734975695610046,
+      -1.4899494082953879e-08,
+      0.0,
+      -0.19734975695610046,
+      1.0007262229919434,
+      1.4551262417228372e-09,
+      0.0,
+      1.4899494082953879e-08,
+      1.4551261307005348e-09,
+      1.0199999809265137,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "blenderUp": "+Z",
+    "gltfUp": "+Y",
+    "sourceScaleAndYawRetained": true,
+    "collideRadius": 0.58,
+    "animation": "original static merged tree; no animation added"
+  },
+  "sourceHashes": {
+    "blend": "bb7377d4787d2ce3a8acedcc21ef239cba964b76a664963a6f3cdb13e6990bc2",
+    "snapshot": "654a2d2b692020db9bca1bd6bb7d82c09b4301b895bbd20c61793ef2e1e9ef08"
+  },
+  "note": "Single captured seed shape. Preserve actual source tree world placement, scale, yaw, role, collider and per-seed variation. Do not replace every seed tree with one silhouette. n0 already has factory transform; no double scale/yaw."
+}

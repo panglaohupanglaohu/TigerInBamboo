@@ -1,0 +1,141 @@
+{
+  "asset": "vanguard-battle-v1",
+  "status": "source-derived authored motion candidate; not gameplay acceptance",
+  "originalNodes": 84,
+  "addedNodes": 33,
+  "fps": 30,
+  "savedFrames": 161,
+  "glbStaticFrame": 1,
+  "sourceUnchanged": true,
+  "runtimeCodeModified": false,
+  "foregroundBlenderTouched": false,
+  "checksPassed": true,
+  "glbRoundtripPassed": true,
+  "files": [
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/README.md",
+      "sha256": "7e2c88a8a4ffd4eeaf98ddf4ac97f4cfc77fc62dd9afc53e57b3bce38c5a9033",
+      "bytes": 1948
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/aim-front-glb-roundtrip.png",
+      "sha256": "362c9aae66d29da69a86e7b0d8bf62b5ac7efe86c04b878737c46dbaed76ad43",
+      "bytes": 1232212
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/aim-front.png",
+      "sha256": "8c4b2c0d9e1298f93bb5337434de453659a8dc40901da7fb3061413503406a31",
+      "bytes": 1232503
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/aim-glb-roundtrip.png",
+      "sha256": "4011037cf19be331229744f847083bb08fdb1b64c4db7536d0547c3cefebbc80",
+      "bytes": 1320405
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/aim-three-quarter.png",
+      "sha256": "aeceecbaa5d04b2c3cf7119ce3497a93dc6ad96c67f2c642227c9ccae84e03bc",
+      "bytes": 1320341
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/aim-top.png",
+      "sha256": "1f5f07a8dac3dd9129c79f51a4ddd81d1996e8b4ae0089074afcb9adc272ebba",
+      "bytes": 1186707
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/before-three-quarter.png",
+      "sha256": "1f93ce035844036be34e5ba35085c3b8d3e2b333d1963c82f8cb45815071bfae",
+      "bytes": 1281374
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/glb-roundtrip-report.json",
+      "sha256": "2703ef25c4decc3d799e5ee3e4e374c1281429b0f0d833a1d07b2c2f27286ef2",
+      "bytes": 3528
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/idle-cannon-detail.png",
+      "sha256": "11c21691d00499d692c0586787c77a6a585225b791c4109c1e8db2c9e7e8df3d",
+      "bytes": 1325373
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/idle-glb-roundtrip.png",
+      "sha256": "ca265069723de0dd2b63c2f8c14610fde68adf83f06dbd51c527abce995ecf97",
+      "bytes": 1243363
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/idle-hand-detail.png",
+      "sha256": "7ca88311d0702a777255c9674585922f8425c8756465dcab7174e6fc6a5cf8eb",
+      "bytes": 1267450
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/idle-three-quarter.png",
+      "sha256": "2af61514016bde9a8dea3cf9b25a10d8ddfcdac891297cb7054c8902f8384425",
+      "bytes": 1242819
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/render_glb_roundtrip.py",
+      "sha256": "b10dd00a8efbf61360d27889e05f2a6f006dc42a4808dd04b6081b79db71ee5c",
+      "bytes": 2870
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/render_saved.py",
+      "sha256": "b842d887a9ef3ac60a7e5195dd6437cdf5bca8614ff431bd22cbac2f267d0007",
+      "bytes": 941
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/rope-three-quarter.png",
+      "sha256": "7a0ac88d1f129535262e204357154c535794f004485cfe0c8135613fd66b7f5e",
+      "bytes": 1241823
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/slash-glb-roundtrip.png",
+      "sha256": "37db7d42d4176125fdfa29b140498406b5135a89eda6a8ad1d60d35556343406",
+      "bytes": 1242914
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/slash-three-quarter.png",
+      "sha256": "f79f2343bc519e9d8915e0f64e58f64b3c9098e94fc2f88ed4cdd2422a44dc77",
+      "bytes": 1244268
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/stagger-three-quarter.png",
+      "sha256": "c18fdfb677387f30ebe28877d62cf6592427aab44c823098c62cccafd262462f",
+      "bytes": 1247693
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/validate_candidate.py",
+      "sha256": "3057ccc692caba1b14b139adbd2f013c8a11758c2fa748dda3d0057f8476a14e",
+      "bytes": 7648
+    },
+    {
+      "path": "artifacts/pipeline/vanguard-battle-v1/validation-report.json",
+      "sha256": "2eee91b03067b00a3521c29d459c0aea8a5b902276464572b82de61981c95972",
+      "bytes": 2072
+    },
+    {
+      "path": "assets/models/optimized/vanguard-battle-v1/PLACEMENT.md",
+      "sha256": "c100fd06a4439a09cf4f0abbfbd44739ff02b5409615add534e60b479a7a5c48",
+      "bytes": 3928
+    },
+    {
+      "path": "assets/models/optimized/vanguard-battle-v1/vanguard-battle-v1.assembly.json",
+      "sha256": "72bd3e32793e482bc60160ebeb6297e6226b746750603afdf0947231d6f3c051",
+      "bytes": 6868765
+    },
+    {
+      "path": "assets/models/optimized/vanguard-battle-v1/vanguard-battle-v1.blend",
+      "sha256": "636db6573e2df89a02954dc7bafc4253e33272674f6642007a0cea31fa3c1b5c",
+      "bytes": 1006585
+    },
+    {
+      "path": "assets/models/optimized/vanguard-battle-v1/vanguard-battle-v1.glb",
+      "sha256": "8961c19fdc1c8d1f8de9147a5a4d5a84c7e6c648751a8fd37eefe9cbd6748048",
+      "bytes": 446456
+    },
+    {
+      "path": "tools/pipeline/build_vanguard_battle_blender.py",
+      "sha256": "d43bcb390a35956fa4f9c62c6c684b40ffa336c3746655717b1cff90da566b30",
+      "bytes": 21523
+    }
+  ]
+}

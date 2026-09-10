@@ -1,0 +1,424 @@
+{
+  "status": "Blender candidate optimized; Web/Godot not integrated; awaiting visual review",
+  "sourceAsset": "pine",
+  "factory": "src/assets/ancient.js:createAncientPineTree",
+  "sourceHashesBefore": {
+    "blend": "bb7377d4787d2ce3a8acedcc21ef239cba964b76a664963a6f3cdb13e6990bc2",
+    "snapshot": "654a2d2b692020db9bca1bd6bb7d82c09b4301b895bbd20c61793ef2e1e9ef08"
+  },
+  "sourceHashesAfter": {
+    "blend": "bb7377d4787d2ce3a8acedcc21ef239cba964b76a664963a6f3cdb13e6990bc2",
+    "snapshot": "654a2d2b692020db9bca1bd6bb7d82c09b4301b895bbd20c61793ef2e1e9ef08"
+  },
+  "originalVisibleTriangles": 3356,
+  "lods": [
+    {
+      "lod": 0,
+      "triangles": 3598,
+      "visibleMeshes": 5,
+      "glb": "assets/models/optimized/ancient-pine-v1/ancient-pine-v1-lod0.glb",
+      "sha256": "7dbf5a08ce126d8e9ef6b30f34b7763273917246717fdf8cdaf9664119b625fe",
+      "bytes": 298208
+    },
+    {
+      "lod": 1,
+      "triangles": 2228,
+      "visibleMeshes": 5,
+      "glb": "assets/models/optimized/ancient-pine-v1/ancient-pine-v1-lod1.glb",
+      "sha256": "9fcda77a8a5c3f0a3224da446b7ea74afbeb6b70b00e5c58f2bc267f467c9300",
+      "bytes": 191476
+    },
+    {
+      "lod": 2,
+      "triangles": 1222,
+      "visibleMeshes": 5,
+      "glb": "assets/models/optimized/ancient-pine-v1/ancient-pine-v1-lod2.glb",
+      "sha256": "71b486c4eda9678a82807bc3370df16aac28b65768b9a6b5dff5ada8b21b90b3",
+      "bytes": 112984
+    }
+  ],
+  "nodesPreserved": 17,
+  "sourceParentsExact": true,
+  "sourceLocalMatrixMaxError": 0.0,
+  "extraRuntimeNodes": [],
+  "metadataOnlyExportNodes": [
+    "n13",
+    "n14",
+    "n15",
+    "n16"
+  ],
+  "originalAuthoredWoodSegments": 37,
+  "sharedJunctionsFilled": 25,
+  "woodContinuityMethod": "exact original 37 segment endpoints; shared angle-bisector rings and averaged incident radii, voxel union and local fairing",
+  "originalLeafClumpCentersRetained": 29,
+  "sourcePaletteUnchanged": true,
+  "actualGlbMaterialChecks": [
+    {
+      "lod": 0,
+      "materials": [
+        {
+          "sourceMaterial": "m0",
+          "baseColorFactor": [
+            0.13286831974983215,
+            0.109461709856987,
+            0.08437620848417282,
+            1
+          ],
+          "maxError": 3.051584818170028e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m1",
+          "baseColorFactor": [
+            0.05951123684644699,
+            0.04970656707882881,
+            0.0382043719291687,
+            1
+          ],
+          "maxError": 1.3091747755322736e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m2",
+          "baseColorFactor": [
+            0.012983032502233982,
+            0.06847816705703735,
+            0.03310476616024971,
+            1
+          ],
+          "maxError": 2.7795902662886007e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m3",
+          "baseColorFactor": [
+            0.028426039963960648,
+            0.14126329123973846,
+            0.06301001459360123,
+            1
+          ],
+          "maxError": 3.052039454498612e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m4",
+          "baseColorFactor": [
+            0.06847816705703735,
+            0.2158605009317398,
+            0.09084171056747437,
+            1
+          ],
+          "maxError": 2.7795902662886007e-09,
+          "alphaMode": "OPAQUE"
+        }
+      ]
+    },
+    {
+      "lod": 1,
+      "materials": [
+        {
+          "sourceMaterial": "m0",
+          "baseColorFactor": [
+            0.13286831974983215,
+            0.109461709856987,
+            0.08437620848417282,
+            1
+          ],
+          "maxError": 3.051584818170028e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m1",
+          "baseColorFactor": [
+            0.05951123684644699,
+            0.04970656707882881,
+            0.0382043719291687,
+            1
+          ],
+          "maxError": 1.3091747755322736e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m2",
+          "baseColorFactor": [
+            0.012983032502233982,
+            0.06847816705703735,
+            0.03310476616024971,
+            1
+          ],
+          "maxError": 2.7795902662886007e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m3",
+          "baseColorFactor": [
+            0.028426039963960648,
+            0.14126329123973846,
+            0.06301001459360123,
+            1
+          ],
+          "maxError": 3.052039454498612e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m4",
+          "baseColorFactor": [
+            0.06847816705703735,
+            0.2158605009317398,
+            0.09084171056747437,
+            1
+          ],
+          "maxError": 2.7795902662886007e-09,
+          "alphaMode": "OPAQUE"
+        }
+      ]
+    },
+    {
+      "lod": 2,
+      "materials": [
+        {
+          "sourceMaterial": "m0",
+          "baseColorFactor": [
+            0.13286831974983215,
+            0.109461709856987,
+            0.08437620848417282,
+            1
+          ],
+          "maxError": 3.051584818170028e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m1",
+          "baseColorFactor": [
+            0.05951123684644699,
+            0.04970656707882881,
+            0.0382043719291687,
+            1
+          ],
+          "maxError": 1.3091747755322736e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m2",
+          "baseColorFactor": [
+            0.012983032502233982,
+            0.06847816705703735,
+            0.03310476616024971,
+            1
+          ],
+          "maxError": 2.7795902662886007e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m3",
+          "baseColorFactor": [
+            0.028426039963960648,
+            0.14126329123973846,
+            0.06301001459360123,
+            1
+          ],
+          "maxError": 3.052039454498612e-09,
+          "alphaMode": "OPAQUE"
+        },
+        {
+          "sourceMaterial": "m4",
+          "baseColorFactor": [
+            0.06847816705703735,
+            0.2158605009317398,
+            0.09084171056747437,
+            1
+          ],
+          "maxError": 2.7795902662886007e-09,
+          "alphaMode": "OPAQUE"
+        }
+      ]
+    }
+  ],
+  "glbRoundtripRendered": true,
+  "materialAssignmentChange": "same two bark colors nearest source segment; original 3 leaf greens redistributed dark underside/mid edge/light top",
+  "placement": {
+    "rootSourceID": "n0",
+    "rootLocalMatrix": [
+      1.0007262229919434,
+      0.19734975695610046,
+      -1.4899494082953879e-08,
+      0.0,
+      -0.19734975695610046,
+      1.0007262229919434,
+      1.4551262417228372e-09,
+      0.0,
+      1.4899494082953879e-08,
+      1.4551261307005348e-09,
+      1.0199999809265137,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "blenderUp": "+Z",
+    "gltfUp": "+Y",
+    "sourceScaleAndYawRetained": true,
+    "collideRadius": 0.58,
+    "animation": "original static merged tree; no animation added"
+  },
+  "review": [
+    {
+      "state": "before",
+      "view": "full-three-quarter",
+      "path": "artifacts/pipeline/ancient-pine-v1/before-full-three-quarter.png",
+      "cameraPosition": [
+        8.592193603515625,
+        -12.220388412475586,
+        9.296686172485352
+      ],
+      "target": [
+        -0.5217058658599854,
+        -0.06852146983146667,
+        2.613158702850342
+      ],
+      "orthoScale": 6.416809768676758
+    },
+    {
+      "state": "before",
+      "view": "branch-junction",
+      "path": "artifacts/pipeline/ancient-pine-v1/before-branch-junction.png",
+      "cameraPosition": [
+        8.404419898986816,
+        -12.276924133300781,
+        9.825125694274902
+      ],
+      "target": [
+        -0.7094793915748596,
+        -0.12505720555782318,
+        3.14159893989563
+      ],
+      "orthoScale": 1.65
+    },
+    {
+      "state": "before",
+      "view": "root-detail",
+      "path": "artifacts/pipeline/ancient-pine-v1/before-root-detail.png",
+      "cameraPosition": [
+        9.113899230957031,
+        -12.151866912841797,
+        6.918127059936523
+      ],
+      "target": [
+        -3.4268836657247448e-09,
+        3.3467903448602954e-10,
+        0.2345999926328659
+      ],
+      "orthoScale": 1.9
+    },
+    {
+      "state": "after",
+      "view": "full-three-quarter",
+      "path": "artifacts/pipeline/ancient-pine-v1/after-full-three-quarter.png",
+      "cameraPosition": [
+        8.592193603515625,
+        -12.220388412475586,
+        9.296686172485352
+      ],
+      "target": [
+        -0.5217058658599854,
+        -0.06852146983146667,
+        2.613158702850342
+      ],
+      "orthoScale": 6.416809768676758
+    },
+    {
+      "state": "after",
+      "view": "branch-junction",
+      "path": "artifacts/pipeline/ancient-pine-v1/after-branch-junction.png",
+      "cameraPosition": [
+        8.404419898986816,
+        -12.276924133300781,
+        9.825125694274902
+      ],
+      "target": [
+        -0.7094793915748596,
+        -0.12505720555782318,
+        3.14159893989563
+      ],
+      "orthoScale": 1.65
+    },
+    {
+      "state": "after",
+      "view": "root-detail",
+      "path": "artifacts/pipeline/ancient-pine-v1/after-root-detail.png",
+      "cameraPosition": [
+        9.113899230957031,
+        -12.151866912841797,
+        6.918127059936523
+      ],
+      "target": [
+        -3.4268836657247448e-09,
+        3.3467903448602954e-10,
+        0.2345999926328659
+      ],
+      "orthoScale": 1.9
+    },
+    {
+      "state": "glb-roundtrip",
+      "view": "full-three-quarter",
+      "path": "artifacts/pipeline/ancient-pine-v1/glb-roundtrip-full-three-quarter.png",
+      "cameraPosition": [
+        8.592193603515625,
+        -12.220388412475586,
+        9.296686172485352
+      ],
+      "target": [
+        -0.5217058658599854,
+        -0.06852146983146667,
+        2.613158702850342
+      ],
+      "orthoScale": 6.416809768676758
+    },
+    {
+      "state": "glb-roundtrip",
+      "view": "branch-junction",
+      "path": "artifacts/pipeline/ancient-pine-v1/glb-roundtrip-branch-junction.png",
+      "cameraPosition": [
+        8.404419898986816,
+        -12.276924133300781,
+        9.825125694274902
+      ],
+      "target": [
+        -0.7094793915748596,
+        -0.12505720555782318,
+        3.14159893989563
+      ],
+      "orthoScale": 1.65
+    },
+    {
+      "state": "glb-roundtrip",
+      "view": "root-detail",
+      "path": "artifacts/pipeline/ancient-pine-v1/glb-roundtrip-root-detail.png",
+      "cameraPosition": [
+        9.113899230957031,
+        -12.151866912841797,
+        6.918127059936523
+      ],
+      "target": [
+        -3.4268836657247448e-09,
+        3.3467903448602954e-10,
+        0.2345999926328659
+      ],
+      "orthoScale": 1.9
+    }
+  ],
+  "skills": [
+    "threejs-game-director",
+    "threejs-aaa-graphics-builder (authoring-recipes, technical-art)"
+  ],
+  "limitations": [
+    "LOD variants exported, distance switching not wired",
+    "Source outline archive nodes retained; hidden obsolete outline geometry intentionally not rendered in candidate GLBs",
+    "No separate moss/rock entourage added; original root positions retained",
+    "Not a new generic pine or a replacement game factory"
+  ],
+  "candidateBlend": "assets/models/optimized/ancient-pine-v1/ancient-pine-v1.blend",
+  "candidateBlendSha256": "7e6f601f81e1d45ab97df01375d5e29e2521e32055e16928793836cfac5b9951",
+  "generatorSha256": "5de7c726d33e24cd9704a64061af2215577a24e063bdcf6a58a4d98695dc2d59"
+}

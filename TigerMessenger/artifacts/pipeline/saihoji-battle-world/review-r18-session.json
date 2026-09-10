@@ -1,0 +1,25 @@
+{
+  "version": "r18 frozen candidate, automatic battle not started",
+  "project": "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/TigerMessenger-saihoji-review-r18-r6burp81",
+  "pid": 94838,
+  "command": [
+    "/Users/panglaohu/Downloads/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/TigerMessenger-saihoji-review-r18-r6burp81",
+    "--rendering-method",
+    "gl_compatibility",
+    "--position",
+    "120,100",
+    "--resolution",
+    "1440x900",
+    "res://scenes/saihoji_battle_world.tscn"
+  ],
+  "log": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/saihoji-battle-world/review-r18-runtime.log",
+  "route_check": "review-r18-routes.log",
+  "limitations": [
+    "new dry layout has no whale swallow yet; counter turn under development in separate copy",
+    "sound listening acceptance pending"
+  ],
+  "status": "Obsolete generated r18 runtime closed and temporary copy removed to recover disk; source/assets/evidence preserved",
+  "removed_copy_bytes": 287341879
+}

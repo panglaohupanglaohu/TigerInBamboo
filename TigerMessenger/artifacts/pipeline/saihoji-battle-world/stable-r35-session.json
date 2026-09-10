@@ -1,0 +1,19 @@
+{
+  "version": "r35 source-correct first-ground retaliation + SOCCO + Kun v2 + original instances",
+  "project": "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/saihoji-world-t5s9wp81",
+  "status": "validated; not launched as another user window",
+  "command": [
+    "/Users/panglaohu/Downloads/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/var/folders/n7/kzrzmcl11nz_2g29sqbjtd980000gn/T/saihoji-world-t5s9wp81",
+    "res://scenes/saihoji_battle_world.tscn"
+  ],
+  "evidence": "artifacts/pipeline/saihoji-battle-world/report-r35.json",
+  "source_scene": "godot/scenes/saihoji_battle_world.tscn",
+  "frozen_copy_created": false,
+  "reason": "Disk low; reuse verified inactive test project rather than duplicating assets",
+  "user_windows_unchanged": [
+    "r18",
+    "r24"
+  ]
+}

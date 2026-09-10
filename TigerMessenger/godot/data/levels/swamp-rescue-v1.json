@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "id": "swamp-rescue-borrowed-armor",
+  "title": "湖沼救虎 · 一家声 / 借来的盔甲",
+  "status": "configured_not_deployed",
+  "summary": "灯谜相认后，一家人捕获并救出失散重甲兵，协助改装护甲，借助定向保护抵达气泡艇；三名家人与合作兵一同撤离。",
+  "storyboard": {"document": "docs/SWAMP_RESCUE_STORYBOARD.md", "title": "湖沼救虎 · 故事板 v2"},
+  "activation": {
+    "enabled": false,
+    "campaignChapterId": "tiger",
+    "campaignChapterIndex": 4,
+    "entryStage": "arrival",
+    "requires": ["foxFollowing", "saihojiOpportunityOpen", "trooperHandoffReady", "repairKitStaged", "boatStaged"],
+    "blockers": [
+      "湖沼九处区域尚未完成真实地面、净空、遮蔽与通行绑定；配置不提供虚构世界坐标。",
+      "苔庭失散兵身份移交、脱离原舰队回收名单及保存恢复尚未接入。",
+      "捕获、获救合作、实际护甲改装及定向抗吸防护尚未实现。",
+      "家人和合作兵共同寻路、四名乘员的真实登艇空间与载重尚未验收。",
+      "主线原有近距一次交互推进尚未替换为本关多阶段提交。"
+    ]
+  },
+  "savePolicy": {
+    "namespace": "tm.level.swamp-rescue.v1",
+    "legacyCampaignKey": "tm.rescue.campaign.v1",
+    "legacyWorkspaceKey": "tm.storyboard.workspace.v1",
+    "writeExistingSavesDuringConfiguration": false,
+    "autoMigrate": false,
+    "completedLegacyChapter": "preserve_do_not_replay",
+    "persist": ["completedStages", "checkpointId", "rosterIdentity", "cooperation", "armorRevision", "passengerIdentities", "completionCommitted"],
+    "completion": {"stage": "departure", "nextChapterId": "escape", "commitOnce": true, "requires": ["familyRecognized", "armorReady", "allFourAboard", "boatLeftSwamp"]}
+  },
+  "actors": [
+    {"id": "father", "label": "父亲／玩家", "binding": "existing_player", "spawn": false},
+    {"id": "mother", "label": "红狐／母亲", "binding": "existing_rescued_fox", "spawn": false, "speaks": false},
+    {"id": "daughter", "label": "湖沼之虎／女儿", "binding": "existing_swamp_tiger", "spawn": false},
+    {"id": "protector", "label": "失散重甲兵／临时护送者", "binding": "saihoji_roster_handoff", "spawn": false, "count": 1}
+  ],
+  "trooperHandoff": {
+    "source": "src/world/vanguardAssault.js",
+    "identity": {"fleetId": null, "rosterUid": null, "sourceVehicle": null},
+    "status": "unresolved",
+    "selection": "one_alive_injured_story_handoff_actor",
+    "preserveCombatConstants": true,
+    "spawnOnAircraftArrival": false,
+    "duplicateOnRetry": false,
+    "captureCountsAsDeath": false,
+    "cooperationRequires": ["trooperDisarmed", "trooperRescued", "cooperationAgreed", "fleetOwnershipReleased"],
+    "equipmentOnlyModification": true,
+    "permanentAllegianceChange": false
+  },
+  "zones": [
+    {"id": "entry", "title": "入口石阶与补给点", "purpose": "引入红狐跟随、展示泊位、取得维修包", "placement": {"status": "unresolved", "reference": "现有湖沼入口八级石阶", "position": null}, "checks": ["drySupport", "fourActorClearance", "boatSightline"]},
+    {"id": "monkey_pass", "title": "蓝猴狭路", "purpose": "可读投石方向、掩体与驱退出口", "placement": {"status": "unresolved", "reference": "入口与虎所在岸线之间", "position": null}, "checks": ["drySupport", "throwTelegraph", "nonlethalExit"]},
+    {"id": "reunion", "title": "相认岸边", "purpose": "稳定近距对白与三者同框", "placement": {"status": "unresolved", "reference": "真实虎巡游／饮水／相见路径邻近岸地", "position": null}, "checks": ["drySupport", "tigerContact", "cameraClearance"]},
+    {"id": "capture", "title": "软泥捕获点", "purpose": "有预告的失衡与缴械，不改变重甲伤害数值", "placement": {"status": "unresolved", "reference": "相认区域通向泊位的路段旁", "position": null}, "checks": ["playerBypass", "trooperApproach", "safeRecoveryEdge"]},
+    {"id": "repair", "title": "树根维修避风处", "purpose": "安全阅读、合作与三步装配", "placement": {"status": "unresolved", "reference": "捕获点相邻的真实遮蔽空间", "position": null}, "checks": ["drySupport", "fourActorClearance", "physicalOcclusion"]},
+    {"id": "shield_trial", "title": "第一次掩护", "purpose": "低风险教授定向护幕", "placement": {"status": "unresolved", "reference": "维修点出口至下一处遮蔽物", "position": null}, "checks": ["scanTelegraph", "shieldCoverage", "safeFallback"]},
+    {"id": "escape_cover", "title": "根隙与巨叶撤离路", "purpose": "两次扫描窗口、移动与冷却交替", "placement": {"status": "unresolved", "reference": "护幕教学点至最后会合点", "position": null}, "checks": ["continuousRoute", "fourActorClearance", "physicalOcclusion", "cooldownRefuge"]},
+    {"id": "rally", "title": "最后会合点", "purpose": "确认红狐、虎和合作兵都跟上", "placement": {"status": "unresolved", "reference": "泊位前最后的天然遮蔽物", "position": null}, "checks": ["drySupport", "boatSightline", "returnRoute"]},
+    {"id": "dock", "title": "气泡艇泊位", "purpose": "全员登艇与飞离交接", "placement": {"status": "unresolved", "reference": "剧情事先安排的湖沼泊位", "position": null}, "checks": ["supportedBoardingRoute", "fourPassengerFit", "armorStowage", "takeoffClearance"]}
+  ],
+  "tuning": {
+    "status": "prototype_values_not_playtested",
+    "units": "seconds_and_world_units",
+    "interaction": {"range": 3, "riddleRange": 7.5, "dialogTimeout": null, "skipCommitsRecognition": true},
+    "monkeys": {"maxSimultaneousThrowers": 1, "telegraphSeconds": 1.2, "catchWindowSeconds": 0.6, "assistedCatchWindowSeconds": 1.2, "firstThrowHarmless": true, "killsRequired": 0},
+    "capture": {"trooperCount": 1, "damageThresholdOverride": null, "success": "immobilized_and_disarmed", "autoKill": false},
+    "repair": {"steps": ["weaponsSafe", "adapterInstalled", "defenseTestPassed"], "safeWhileReading": true},
+    "shield": {"activeSeconds": 5, "cooldownSeconds": 8, "warningSeconds": 1.5, "radius": 3, "arcDegrees": 100, "stationaryForSuctionProtection": true, "cooldownInCover": true, "automaticOffense": false},
+    "scan": {"telegraphSeconds": 2, "suctionPulseSeconds": 3, "safeWindowSeconds": 10, "escapeWindows": 2, "fullCoverTestRequired": true},
+    "escort": {"commands": ["advance", "cover", "regroup"], "rallyRadius": 3, "waitIfSeparatedBeyond": 6, "teleportToCatchUp": false, "permanentDeath": false},
+    "boarding": {"requiredActors": ["father", "mother", "daughter", "protector"], "capacityRequired": 4, "capacityVerified": false, "requireAllSeated": true, "requireArmorStowed": true, "shrinkActorsToFit": false}
+  },
+  "checkpoints": [
+    {"id": "entry_safe", "resumeStage": "arrival", "zone": "entry", "afterStage": null, "reset": ["localTransientThreats"], "preserve": ["campaignProgress", "rosterIdentity"]},
+    {"id": "family_recognized", "resumeStage": "fleet_return", "zone": "reunion", "afterStage": "recognition", "reset": ["localTransientThreats"], "preserve": ["campaignProgress", "rosterIdentity", "recognition"]},
+    {"id": "capture_start", "resumeStage": "capture_trooper", "zone": "capture", "afterStage": "fleet_return", "reset": ["localTransientThreats", "captureAttempt"], "preserve": ["campaignProgress", "rosterIdentity", "recognition", "repairKit"]},
+    {"id": "armor_ready", "resumeStage": "shield_trial", "zone": "repair", "afterStage": "retrofit", "reset": ["localTransientThreats", "shieldHeat"], "preserve": ["campaignProgress", "rosterIdentity", "recognition", "cooperation", "armorRevision"]},
+    {"id": "escort_start", "resumeStage": "route_reveal", "zone": "shield_trial", "afterStage": "shield_trial", "reset": ["localTransientThreats", "shieldHeat"], "preserve": ["campaignProgress", "rosterIdentity", "recognition", "cooperation", "armorRevision"]},
+    {"id": "dock_safe", "resumeStage": "boarding", "zone": "rally", "afterStage": "regroup", "reset": ["localTransientThreats", "partialBoarding"], "preserve": ["campaignProgress", "rosterIdentity", "recognition", "cooperation", "armorRevision"]}
+  ],
+  "stages": [
+    {"id": "arrival", "shot": "01", "title": "湖沼入口", "zone": "entry", "objective": "和红狐进入湖沼，拿到维修包并确认泊位", "requires": ["foxFollowing", "trooperHandoffReady"], "completeWhen": ["entryReached", "repairKitAcquired", "boatSeen"], "produces": ["arrivalComplete"], "next": "monkey_warning", "checkpoint": "entry_safe", "estimatedSeconds": [20, 35]},
+    {"id": "monkey_warning", "shot": "02", "title": "第一块石头", "zone": "monkey_pass", "objective": "观察蓝猴举石与落点", "requires": ["arrivalComplete"], "completeWhen": ["harmlessThrowSeen"], "produces": ["throwLearned"], "next": "monkey_pass", "checkpoint": "entry_safe", "estimatedSeconds": [10, 15]},
+    {"id": "monkey_pass", "shot": "03", "title": "接石驱猴", "zone": "monkey_pass", "objective": "驱退蓝猴，保护红狐通过", "requires": ["throwLearned"], "completeWhen": ["monkeysRetreated", "motherThroughPass"], "produces": ["passCleared"], "next": "tiger_sighting", "checkpoint": "entry_safe", "estimatedSeconds": [45, 70]},
+    {"id": "tiger_sighting", "shot": "04", "title": "看见虎", "zone": "reunion", "objective": "在真实岸地站稳，慢慢靠近虎", "requires": ["passCleared"], "completeWhen": ["tigerNear", "playerGrounded", "tigerGreeting"], "produces": ["greetingReady"], "next": "riddle", "checkpoint": "entry_safe", "estimatedSeconds": [20, 35]},
+    {"id": "riddle", "shot": "05", "title": "灯谜", "zone": "reunion", "objective": "听完灯谜并回答「芭蕉与荷」", "requires": ["greetingReady"], "completeWhen": ["riddleHeard", "replyFinished"], "produces": ["riddleComplete"], "next": "recognition", "checkpoint": "entry_safe", "estimatedSeconds": [10, 10]},
+    {"id": "recognition", "shot": "06", "title": "是你的姑娘", "zone": "reunion", "objective": "完成相认，确认一家三口同行", "requires": ["riddleComplete"], "completeWhen": ["recognitionCommitted", "familyTogether"], "produces": ["familyRecognized"], "next": "fleet_return", "checkpoint": "entry_safe", "estimatedSeconds": [12, 12]},
+    {"id": "fleet_return", "shot": "07", "title": "话还没说完", "zone": "reunion", "objective": "辨认机队再临的预告，转入撤离", "requires": ["familyRecognized"], "completeWhen": ["fleetThreatTelegraphed"], "produces": ["escapeThreatActive"], "next": "capture_trooper", "checkpoint": "family_recognized", "estimatedSeconds": [8, 8]},
+    {"id": "capture_trooper", "shot": "07A", "title": "铁甲拦路", "zone": "capture", "objective": "利用软泥让失散重甲兵失衡并缴械", "requires": ["escapeThreatActive", "trooperHandoffReady"], "completeWhen": ["sameRosterActor", "trooperImmobilized", "trooperDisarmed", "trooperAlive"], "produces": ["trooperCaptured"], "next": "rescue_trooper", "checkpoint": "capture_start", "estimatedSeconds": [35, 50]},
+    {"id": "rescue_trooper", "shot": "07B", "title": "捉住，也拉住", "zone": "repair", "objective": "把重甲兵拉回安全地带，达成共同撤离约定", "requires": ["trooperCaptured"], "completeWhen": ["trooperRescued", "cooperationAgreed", "fleetOwnershipReleased", "trooperAlive"], "produces": ["cooperationReady"], "next": "retrofit", "checkpoint": "capture_start", "estimatedSeconds": [25, 40]},
+    {"id": "retrofit", "shot": "07C", "title": "借来的盔甲", "zone": "repair", "objective": "收起武器、安装防护转接组件、联合测试", "requires": ["cooperationReady", "repairKitAcquired"], "completeWhen": ["weaponsSafe", "adapterInstalled", "defenseTestPassed"], "produces": ["armorReady"], "next": "shield_trial", "checkpoint": "capture_start", "estimatedSeconds": [60, 90]},
+    {"id": "shield_trial", "shot": "07D", "title": "第一次挡在前面", "zone": "shield_trial", "objective": "发出掩护指令，带家人穿过一次吸取脉冲", "requires": ["armorReady"], "completeWhen": ["coverCommandIssued", "familyInsideShield", "pulseSurvived", "trialCoverReached"], "produces": ["shieldLearned"], "next": "route_reveal", "checkpoint": "armor_ready", "estimatedSeconds": [20, 30]},
+    {"id": "route_reveal", "shot": "08", "title": "找到回去的路", "zone": "shield_trial", "objective": "跟随女儿指路，确认下一个可达掩体", "requires": ["shieldLearned"], "completeWhen": ["nextCoverReachable", "routeRevealed"], "produces": ["escortStarted"], "next": "protected_escape", "checkpoint": "escort_start", "estimatedSeconds": [20, 35]},
+    {"id": "protected_escape", "shot": "09", "title": "移动的掩体", "zone": "escape_cover", "objective": "交替前进、掩护和冷却，穿过两次扫描窗口", "requires": ["escortStarted", "armorReady"], "completeWhen": ["twoWindowsPassed", "allFourAtRally", "protectorAlive"], "produces": ["routePassed"], "next": "regroup", "checkpoint": "escort_start", "estimatedSeconds": [60, 90]},
+    {"id": "regroup", "shot": "10", "title": "等一下妈妈", "zone": "rally", "objective": "确认红狐、虎与重甲兵都在，再走向泊位", "requires": ["routePassed"], "completeWhen": ["allFourTogether", "boardingRouteClear"], "produces": ["readyToBoard"], "next": "boarding", "checkpoint": "escort_start", "estimatedSeconds": [20, 35]},
+    {"id": "boarding", "shot": "11", "title": "谁也不留下", "zone": "dock", "objective": "四名乘员真实登艇，收好护板后才能起飞", "requires": ["readyToBoard", "armorReady"], "completeWhen": ["fatherSeated", "motherSeated", "daughterSeated", "protectorSeated", "uniquePassengerIdentities", "armorStowed", "boatCapacityValidated"], "produces": ["allFourAboard"], "next": "departure", "checkpoint": "dock_safe", "estimatedSeconds": [25, 35]},
+    {"id": "departure", "shot": "12", "title": "一家声", "zone": "dock", "objective": "共同离开湖沼，接续前往圣城的航程", "requires": ["allFourAboard", "familyRecognized", "armorReady"], "completeWhen": ["boatLeftSwamp", "allFourStillAboard"], "produces": ["swampRescueComplete"], "next": null, "checkpoint": "dock_safe", "estimatedSeconds": [15, 20]}
+  ],
+  "conditionLabels": {
+    "foxFollowing": "红狐已获救并同行", "saihojiOpportunityOpen": "苔庭行动已建立救援机会", "trooperHandoffReady": "唯一失散兵已完成前章身份移交", "repairKitStaged": "维修包已在补给点", "boatStaged": "气泡艇已预置到泊位",
+    "entryReached": "抵达入口安全点", "repairKitAcquired": "已实际取得维修包", "boatSeen": "已交代泊位方向", "arrivalComplete": "入口段完成", "harmlessThrowSeen": "已看见无伤害教学投石", "throwLearned": "投石预告教学完成", "monkeysRetreated": "蓝猴已退让开路", "motherThroughPass": "红狐已通过狭路", "passCleared": "狭路已通过",
+    "tigerNear": "进入虎的有效近距", "playerGrounded": "玩家脚下有真实支撑", "tigerGreeting": "虎进入相见动作", "greetingReady": "相见条件就绪", "riddleHeard": "已听完灯谜", "replyFinished": "父亲回答完毕", "riddleComplete": "完整对答结束", "recognitionCommitted": "相认演出或跳过已正确提交", "familyTogether": "三名家人在场", "familyRecognized": "认亲已完成且保存",
+    "fleetThreatTelegraphed": "机队威胁预告已展示", "escapeThreatActive": "本章撤离威胁已启动", "sameRosterActor": "捕获的是前章同一名士兵", "trooperImmobilized": "重甲兵已失衡停住", "trooperDisarmed": "重甲兵已缴械", "trooperAlive": "被捕兵仍存活", "trooperCaptured": "捕获完成", "trooperRescued": "士兵已被救回安全点", "cooperationAgreed": "双方明确同意共同撤离", "fleetOwnershipReleased": "原舰队攻击和回收控制已解除", "cooperationReady": "临时合作就绪",
+    "weaponsSafe": "攻击装备收起并停用", "adapterInstalled": "防护组件已真实安装", "defenseTestPassed": "装配测试完成", "armorReady": "改装护甲可用", "coverCommandIssued": "玩家已下达掩护指令", "familyInsideShield": "家人处于有效防护范围", "pulseSurvived": "已承受一次实际吸取脉冲", "trialCoverReached": "全员到达教学终点掩体", "shieldLearned": "护盾教学通过", "nextCoverReachable": "下一处掩体路径可达", "routeRevealed": "撤离方向已明确", "escortStarted": "开始保护撤离",
+    "twoWindowsPassed": "两次扫描窗口已实际通过", "allFourAtRally": "四名参与者到达会合区域", "protectorAlive": "合作兵存活", "routePassed": "撤离路线通过", "allFourTogether": "全员在会合距离内", "boardingRouteClear": "登艇路径支撑与净空有效", "readyToBoard": "可以开始登艇", "fatherSeated": "父亲已入艇", "motherSeated": "红狐已入艇", "daughterSeated": "虎已入艇", "protectorSeated": "重甲兵已入艇", "uniquePassengerIdentities": "四名乘员身份唯一且无替身", "armorStowed": "护板已安全收纳", "boatCapacityValidated": "四乘员空间与载重已验证", "allFourAboard": "全员真实登艇完成", "boatLeftSwamp": "气泡艇实际离开湖沼", "allFourStillAboard": "起飞后四名乘员仍在艇内", "swampRescueComplete": "本关救援成功"
+  }
+}

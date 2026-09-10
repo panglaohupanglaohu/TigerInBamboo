@@ -10,6 +10,7 @@
 //  构建逻辑在 world/saihoji.js + assets/leviathanIsland.js。
 // =====================================================================
 import * as THREE from "three";
+import { arrangeSaihojiPines } from "../world/saihojiPineLayout.js";
 import { PLANET_RADIUS } from "../world/planet.js";
 import { applyWhaleCombatShake } from "../world/whaleMaw.js";
 import { registerLocalLight } from "../render/lighting/localLightRegistry.js";
@@ -176,6 +177,7 @@ export const saihojiGardenScene = {
       }
     }
     islandGroup.add(garden);
+    arrangeSaihojiPines(islandGroup, built.landmarks.zones, leviathanGroup);
 
     // ---------- 扫描吸食感：松树波动 + 树叶螺旋升空被吸进灯艇 ----------
     // 扫描灯艇掠近时（同升空触发圈），古松按强度左右摇摆；
@@ -400,6 +402,7 @@ export const saihojiGardenScene = {
     const update = (dt, t) => {
       const step = Math.min(1, Number(dt) || 0.016);
       if (!squad) squad = scene.getObjectByName("moebius-aircraft-squad") || null;
+      if (phalanxRoot) {let owner=phalanxRoot;while(owner.parent)owner=owner.parent;if(owner!==scene)phalanxRoot=null;}
       if (!phalanxRoot) phalanxRoot = scene.getObjectByName("saihoji-phalanx-battle") || null;
       let target = null;
       let scanDist = Infinity;
@@ -419,9 +422,20 @@ export const saihojiGardenScene = {
         near = scanDist < RISE_RADIUS;
         far = scanDist > SINK_RADIUS;
         if (storyPhase === 0) {
-          // 常规：唯一前提——莫比斯飞艇飞过来吸食松树（切向掠近即触发）；
-          // 远去藏回；升到顶后故事线接管
-          if (near) {
+          // 伏击序章：蓝盔先完成松下隐蔽。提前掠过的舰队可以扫描，
+          // 但尚不能揭示鲲、提前吸起承载正在登陆士兵的苔台。
+          const campaign = phalanxRoot?.userData?.campaignStatus;
+          const ambushState = phalanxRoot?.userData?.saihojiAmbush?.state;
+          const gateReason = !ambushState ? "missing-phalanx" :
+            ambushState.stage === "landing" ? "allies-landing" :
+              campaign?.managed && !campaign.discoveryAllowed ? "awaiting-signal" : null;
+          leviathanGroup.userData.saihojiDiscoveryGate = {blocked:!!gateReason,reason:gateReason};
+          const preparingAmbush = !!gateReason;
+          if (preparingAmbush) {
+            target = buriedR;
+            stormArmed = false;
+            stormPreludeT = 0;
+          } else if (near) {
             // 升起前先触发一次《狂风暴雨》；真正升空后切 Terminator 2
             if (!stormArmed) {
               cueLeviathanStormOnce();

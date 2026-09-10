@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "actual public boat factory loads saved v6",
+      "passed": true
+    },
+    {
+      "name": "all 26 rower attachments and oars exist",
+      "passed": true
+    },
+    {
+      "name": "original night controller still lights saved ship",
+      "passed": true
+    },
+    {
+      "name": "daylight extinguishes ship light",
+      "passed": true
+    },
+    {
+      "name": "blue crest changes actual drawn material",
+      "passed": true
+    },
+    {
+      "name": "rowing changes live oar poses",
+      "passed": true
+    },
+    {
+      "name": "original sedation API still reaches optimized rower",
+      "passed": true
+    },
+    {
+      "name": "sedation expires",
+      "passed": true
+    },
+    {
+      "name": "saved animated hands remain on their oars",
+      "passed": true,
+      "detail": {
+        "gripMax": 9.612938956666752e-8
+      }
+    },
+    {
+      "name": "bounded draw batches",
+      "passed": true,
+      "detail": {
+        "batches": 29,
+        "static": 10,
+        "total": 39
+      }
+    },
+    {
+      "name": "original empty crew API hides crew controller",
+      "passed": true
+    },
+    {
+      "name": "board deploy and flat stow are distinct",
+      "passed": true
+    },
+    {
+      "name": "no nonfinite node poses",
+      "passed": true
+    }
+  ],
+  "bounds": {
+    "min": [
+      -3.0565805435180664,
+      -0.5690788241477893,
+      -1.5767660819294271
+    ],
+    "max": [
+      3.640000104904175,
+      3.8899998664855957,
+      1.616517517008505
+    ]
+  },
+  "source": "c18dfbd2d37dff6501fa799d99dd7e698aa1623d1c9c74939240562836a9a397",
+  "scope": "Actual public factory and original interaction APIs, isolated rendering; full battle integration and boarding collision separate.",
+  "errors": []
+}

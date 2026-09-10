@@ -1,0 +1,64 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Failed to decode mp3 file. Make sure it is a valid mp3 audio file.
+   at: set_data (modules/mp3/audio_stream_mp3.cpp:229)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/saihoji_battle_audio.gd:22)
+       [1] run (res://tests/test_saihoji_battle_audio.gd:15)
+ERROR: Failed to decode mp3 file. Make sure it is a valid mp3 audio file.
+   at: set_data (modules/mp3/audio_stream_mp3.cpp:229)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/saihoji_battle_audio.gd:22)
+       [1] run (res://tests/test_saihoji_battle_audio.gd:15)
+ERROR: Failed to decode mp3 file. Make sure it is a valid mp3 audio file.
+   at: set_data (modules/mp3/audio_stream_mp3.cpp:229)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/saihoji_battle_audio.gd:22)
+       [1] run (res://tests/test_saihoji_battle_audio.gd:15)
+ERROR: This AudioStreamMP3 does not have an audio file assigned to it. AudioStreamMP3 should not be created from the inspector or with `.new()`. Instead, load an audio file.
+   at: instantiate_playback (modules/mp3/audio_stream_mp3.cpp:198)
+   GDScript backtrace (most recent call first):
+       [0] set_fleet_active (res://scripts/saihoji_battle_audio.gd:49)
+       [1] run (res://tests/test_saihoji_battle_audio.gd:20)
+ERROR: Failed to instantiate playback.
+   at: play_basic (scene/audio/audio_stream_player_internal.cpp:150)
+   GDScript backtrace (most recent call first):
+       [0] set_fleet_active (res://scripts/saihoji_battle_audio.gd:49)
+       [1] run (res://tests/test_saihoji_battle_audio.gd:20)
+ERROR: This AudioStreamMP3 does not have an audio file assigned to it. AudioStreamMP3 should not be created from the inspector or with `.new()`. Instead, load an audio file.
+   at: instantiate_playback (modules/mp3/audio_stream_mp3.cpp:198)
+   GDScript backtrace (most recent call first):
+       [0] _play_once (res://scripts/saihoji_battle_audio.gd:80)
+       [1] cue (res://scripts/saihoji_battle_audio.gd:36)
+       [2] run (res://tests/test_saihoji_battle_audio.gd:22)
+ERROR: Failed to instantiate playback.
+   at: play_basic (scene/audio/audio_stream_player_internal.cpp:150)
+   GDScript backtrace (most recent call first):
+       [0] _play_once (res://scripts/saihoji_battle_audio.gd:80)
+       [1] cue (res://scripts/saihoji_battle_audio.gd:36)
+       [2] run (res://tests/test_saihoji_battle_audio.gd:22)
+ERROR: This AudioStreamMP3 does not have an audio file assigned to it. AudioStreamMP3 should not be created from the inspector or with `.new()`. Instead, load an audio file.
+   at: instantiate_playback (modules/mp3/audio_stream_mp3.cpp:198)
+   GDScript backtrace (most recent call first):
+       [0] _play_once (res://scripts/saihoji_battle_audio.gd:80)
+       [1] begin_battle (res://scripts/saihoji_battle_audio.gd:42)
+       [2] run (res://tests/test_saihoji_battle_audio.gd:25)
+ERROR: Failed to instantiate playback.
+   at: play_basic (scene/audio/audio_stream_player_internal.cpp:150)
+   GDScript backtrace (most recent call first):
+       [0] _play_once (res://scripts/saihoji_battle_audio.gd:80)
+       [1] begin_battle (res://scripts/saihoji_battle_audio.gd:42)
+       [2] run (res://tests/test_saihoji_battle_audio.gd:25)
+ERROR: This AudioStreamMP3 does not have an audio file assigned to it. AudioStreamMP3 should not be created from the inspector or with `.new()`. Instead, load an audio file.
+   at: instantiate_playback (modules/mp3/audio_stream_mp3.cpp:198)
+   GDScript backtrace (most recent call first):
+       [0] _play_once (res://scripts/saihoji_battle_audio.gd:80)
+       [1] cue (res://scripts/saihoji_battle_audio.gd:36)
+       [2] run (res://tests/test_saihoji_battle_audio.gd:37)
+ERROR: Failed to instantiate playback.
+   at: play_basic (scene/audio/audio_stream_player_internal.cpp:150)
+   GDScript backtrace (most recent call first):
+       [0] _play_once (res://scripts/saihoji_battle_audio.gd:80)
+       [1] cue (res://scripts/saihoji_battle_audio.gd:36)
+       [2] run (res://tests/test_saihoji_battle_audio.gd:37)
+{"checks":14,"failures":["Original music bytes present","Original music bytes present","Original music bytes present","Fleet music starts outside Saihoji","User mute applies to battle"],"passed":false,"scope":"Native stream load, music ownership, repeat prevention, mute and reset. Headless test; listening review still required."}

@@ -1,0 +1,4431 @@
+{
+  "scope": "Actual saihojiGarden SceneModule isolated render; default idle state. No generic substitute terrain or trees. Not full game/battle acceptance.",
+  "checks": [
+    {
+      "name": "25 distinct Blender source seeds in actual scene",
+      "passed": true,
+      "detail": [
+        811,
+        820,
+        829,
+        5566,
+        1229,
+        1238,
+        1247,
+        1256,
+        1401,
+        1410,
+        1419,
+        1428,
+        1997,
+        2153,
+        2162,
+        2171,
+        2180,
+        2189,
+        3011,
+        3020,
+        4101,
+        4110,
+        4119,
+        4128,
+        4137
+      ]
+    },
+    {
+      "name": "all pine roots have real island terrain beneath",
+      "passed": true,
+      "detail": [
+        {
+          "seed": 811,
+          "delta": 0.007500000000016098
+        },
+        {
+          "seed": 820,
+          "delta": 0.0074999999999981306
+        },
+        {
+          "seed": 829,
+          "delta": 0.007499999999974137
+        },
+        {
+          "seed": 5566,
+          "delta": 0.0074999999999906
+        },
+        {
+          "seed": 1229,
+          "delta": 0.007499999999992105
+        },
+        {
+          "seed": 1238,
+          "delta": 0.007499999999978548
+        },
+        {
+          "seed": 1247,
+          "delta": 0.007499999999968112
+        },
+        {
+          "seed": 1256,
+          "delta": 0.0075000000000085675
+        },
+        {
+          "seed": 1401,
+          "delta": 0.007499999999992105
+        },
+        {
+          "seed": 1410,
+          "delta": -0.007850156426411922
+        },
+        {
+          "seed": 1419,
+          "delta": -0.008987281874714606
+        },
+        {
+          "seed": 1428,
+          "delta": 0.000773001431689863
+        },
+        {
+          "seed": 1997,
+          "delta": 0.007500000000010072
+        },
+        {
+          "seed": 2153,
+          "delta": 0.007499999999992105
+        },
+        {
+          "seed": 2162,
+          "delta": 0.0074999999999756425
+        },
+        {
+          "seed": 2171,
+          "delta": 0.007500000000002542
+        },
+        {
+          "seed": 2180,
+          "delta": 0.007499999999978548
+        },
+        {
+          "seed": 2189,
+          "delta": 0.007499999999992105
+        },
+        {
+          "seed": 3011,
+          "delta": 0.007499999999974137
+        },
+        {
+          "seed": 3020,
+          "delta": 0.007499999999992105
+        },
+        {
+          "seed": 4101,
+          "delta": 0.0075000000000085675
+        },
+        {
+          "seed": 4110,
+          "delta": -0.009887038517237483
+        },
+        {
+          "seed": 4119,
+          "delta": 0.0074999999999845746
+        },
+        {
+          "seed": 4128,
+          "delta": 0.0075000000000085675
+        },
+        {
+          "seed": 4137,
+          "delta": 0.0074999999999981306
+        }
+      ]
+    },
+    {
+      "name": "relocated roots align with island up",
+      "passed": true,
+      "detail": [
+        {
+          "seed": 811,
+          "tilt": 0
+        },
+        {
+          "seed": 820,
+          "tilt": 0
+        },
+        {
+          "seed": 829,
+          "tilt": 0
+        },
+        {
+          "seed": 5566,
+          "tilt": 0
+        },
+        {
+          "seed": 1229,
+          "tilt": 0
+        },
+        {
+          "seed": 1238,
+          "tilt": 0
+        },
+        {
+          "seed": 1247,
+          "tilt": 0
+        },
+        {
+          "seed": 1256,
+          "tilt": 0
+        },
+        {
+          "seed": 1401,
+          "tilt": 0
+        },
+        {
+          "seed": 1410,
+          "tilt": 0
+        },
+        {
+          "seed": 1419,
+          "tilt": 0
+        },
+        {
+          "seed": 1428,
+          "tilt": 0
+        },
+        {
+          "seed": 1997,
+          "tilt": 0
+        },
+        {
+          "seed": 2153,
+          "tilt": 0
+        },
+        {
+          "seed": 2162,
+          "tilt": 0
+        },
+        {
+          "seed": 2171,
+          "tilt": 0
+        },
+        {
+          "seed": 2180,
+          "tilt": 0
+        },
+        {
+          "seed": 2189,
+          "tilt": 0
+        },
+        {
+          "seed": 3011,
+          "tilt": 0
+        },
+        {
+          "seed": 3020,
+          "tilt": 0
+        },
+        {
+          "seed": 4101,
+          "tilt": 0
+        },
+        {
+          "seed": 4110,
+          "tilt": 0
+        },
+        {
+          "seed": 4119,
+          "tilt": 0
+        },
+        {
+          "seed": 4128,
+          "tilt": 0
+        },
+        {
+          "seed": 4137,
+          "tilt": 0
+        }
+      ]
+    },
+    {
+      "name": "actual scene exposes layout report",
+      "passed": true,
+      "detail": {
+        "revision": "kun-spread-v1",
+        "trees": 25,
+        "coverCount": 50,
+        "minRootWorldSpacing": 1.2643845998660594,
+        "entries": [
+          {
+            "seed": 4101,
+            "zone": "return-view",
+            "before": [
+              -12.69477324888203,
+              0.1842857551837369,
+              -7.83712711829466
+            ],
+            "after": [
+              -8.440000000000012,
+              0.044418813074528316,
+              -3.5499999999998977
+            ]
+          },
+          {
+            "seed": 5566,
+            "zone": "master-stones",
+            "before": [
+              -4.768396026236757,
+              0.18912554949491778,
+              2.8024749268253544
+            ],
+            "after": [
+              -4.54000000000002,
+              0.06912540097557894,
+              2.950000000000088
+            ]
+          },
+          {
+            "seed": 1401,
+            "zone": "dry-cascade",
+            "before": [
+              6.956205639221424,
+              0.1504508626990173,
+              1.5959233120208438
+            ],
+            "after": [
+              7.1599999999999975,
+              0.05282172725283317,
+              1.650000000000091
+            ]
+          },
+          {
+            "seed": 1997,
+            "zone": "moss-islands",
+            "before": [
+              8.320356410282812,
+              0.11532514434105678,
+              -3.4106683615069215
+            ],
+            "after": [
+              8.459999999999994,
+              0.054054498624466304,
+              -3.5499999999998977
+            ]
+          },
+          {
+            "seed": 811,
+            "zone": "moss-entry",
+            "before": [
+              -14.76120573506455,
+              0.1851251313308353,
+              2.7838617817430418
+            ],
+            "after": [
+              -10.700000000000003,
+              0.04519055323153452,
+              1.000000000000128
+            ]
+          },
+          {
+            "seed": 3011,
+            "zone": "empty-court",
+            "before": [
+              -5.0504121207487875,
+              0.1793139701806581,
+              -6.130633305948777
+            ],
+            "after": [
+              -5.190000000000025,
+              0.04539395495852659,
+              -4.8499999999999375
+            ]
+          },
+          {
+            "seed": 2171,
+            "zone": "moss-islands",
+            "before": [
+              14.452753662499575,
+              -0.0021457121546859526,
+              0.0823059312949539
+            ],
+            "after": [
+              10.409999999999982,
+              0.06847966723820718,
+              -0.9499999999998892
+            ]
+          },
+          {
+            "seed": 1247,
+            "zone": "master-stones",
+            "before": [
+              3.9410795262682266,
+              0.16486844804893508,
+              5.541202120408883
+            ],
+            "after": [
+              4.249999999999987,
+              0.061327900351627704,
+              4.900000000000077
+            ]
+          },
+          {
+            "seed": 2180,
+            "zone": "moss-islands",
+            "before": [
+              16.396949065301527,
+              -0.14056008191147384,
+              -6.889049325412685
+            ],
+            "after": [
+              5.209999999999966,
+              0.06819122388760888,
+              -4.849999999999895
+            ]
+          },
+          {
+            "seed": 1428,
+            "zone": "dry-cascade",
+            "before": [
+              14.519452261151912,
+              -0.003923926793447663,
+              6.033813847376379
+            ],
+            "after": [
+              3.9099999999999975,
+              0.06182918318957263,
+              1.650000000000091
+            ]
+          },
+          {
+            "seed": 1229,
+            "zone": "master-stones",
+            "before": [
+              -3.7703609148231285,
+              0.17992281792811582,
+              1.6629007569533059
+            ],
+            "after": [
+              -1.5999999999999934,
+              0.06989300189032065,
+              1.000000000000128
+            ]
+          },
+          {
+            "seed": 4110,
+            "zone": "return-view",
+            "before": [
+              -14.157243346477571,
+              0.1769002179491963,
+              -6.897165290200775
+            ],
+            "after": [
+              -6.490000000000022,
+              0.05988968392558945,
+              -0.9499999999998749
+            ]
+          },
+          {
+            "seed": 820,
+            "zone": "moss-entry",
+            "before": [
+              -8.993556347481743,
+              0.18080162687988377,
+              3.300207990737306
+            ],
+            "after": [
+              -8.100000000000009,
+              0.060073598668466274,
+              3.600000000000108
+            ]
+          },
+          {
+            "seed": 1410,
+            "zone": "dry-cascade",
+            "before": [
+              12.984357903266101,
+              0.04081713038141288,
+              0.925795494308602
+            ],
+            "after": [
+              5.549999999999984,
+              0.055655655860916795,
+              -1.5999999999998948
+            ]
+          },
+          {
+            "seed": 4128,
+            "zone": "return-view",
+            "before": [
+              -15.704677260048896,
+              0.18030650977226514,
+              -2.5350436580451827
+            ],
+            "after": [
+              -3.239999999999994,
+              0.05946606378434126,
+              -2.249999999999943
+            ]
+          },
+          {
+            "seed": 2153,
+            "zone": "moss-islands",
+            "before": [
+              8.975587323823333,
+              0.08864113655380379,
+              -4.732685699974539
+            ],
+            "after": [
+              2.299999999999998,
+              0.06977146221613793,
+              -2.899999999999892
+            ]
+          },
+          {
+            "seed": 3020,
+            "zone": "empty-court",
+            "before": [
+              5.964672971010175,
+              0.14186750240861556,
+              -0.931014148291311
+            ],
+            "after": [
+              0.3499999999999952,
+              0.04219092680393942,
+              -5.499999999999915
+            ]
+          },
+          {
+            "seed": 1238,
+            "zone": "master-stones",
+            "before": [
+              -5.065426100901191,
+              0.17626616956090402,
+              4.128959360938239
+            ],
+            "after": [
+              -0.3000000000000247,
+              0.05416131224008268,
+              4.900000000000077
+            ]
+          },
+          {
+            "seed": 4119,
+            "zone": "return-view",
+            "before": [
+              -10.888183082448151,
+              0.17206934887764191,
+              -7.4117113491255395
+            ],
+            "after": [
+              -0.29999999999999627,
+              0.06146835231397972,
+              -1.5999999999998948
+            ]
+          },
+          {
+            "seed": 1419,
+            "zone": "dry-cascade",
+            "before": [
+              6.9493951616109095,
+              0.13833480239856044,
+              4.142587062185456
+            ],
+            "after": [
+              0.9999999999999725,
+              0.06602489867630311,
+              2.3000000000000966
+            ]
+          },
+          {
+            "seed": 829,
+            "zone": "moss-entry",
+            "before": [
+              -13.47007491459189,
+              0.1765089405434992,
+              6.2268716692599355
+            ],
+            "after": [
+              -8.100000000000009,
+              0.051306822287258455,
+              1.0000000000001137
+            ]
+          },
+          {
+            "seed": 2162,
+            "zone": "moss-islands",
+            "before": [
+              8.090088034482008,
+              0.1110298442413864,
+              -2.0205451633386957
+            ],
+            "after": [
+              9.760000000000005,
+              0.04434018323139753,
+              1.6500000000000767
+            ]
+          },
+          {
+            "seed": 4137,
+            "zone": "return-view",
+            "before": [
+              -7.877601652959924,
+              0.1757736884273413,
+              -3.134825458364247
+            ],
+            "after": [
+              -10.049999999999997,
+              0.053341839600207094,
+              -1.5999999999998806
+            ]
+          },
+          {
+            "seed": 1256,
+            "zone": "master-stones",
+            "before": [
+              0.5667279888400012,
+              0.16730001991521704,
+              -0.938503839102097
+            ],
+            "after": [
+              -2.5900000000000167,
+              0.04330743472617314,
+              -4.849999999999895
+            ]
+          },
+          {
+            "seed": 2189,
+            "zone": "moss-islands",
+            "before": [
+              15.212346059870313,
+              -0.11373464929363308,
+              -7.651727599530261
+            ],
+            "after": [
+              7.160000000000026,
+              0.05416480928336341,
+              4.250000000000114
+            ]
+          }
+        ],
+        "scope": "Actual terrain supported roots and cover slots; canopy overlap and walking routes require visual/runtime review"
+      }
+    },
+    {
+      "name": "root spacing improves on original placement",
+      "passed": true,
+      "detail": {
+        "before": 0.6796972088458308,
+        "after": 1.2643845998660537
+      }
+    },
+    {
+      "name": "scattered stepping stones remain grounded and leave empty courtyard sparse",
+      "passed": true,
+      "detail": [
+        {
+          "zone": "moss-entry",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -65.09556807694334,
+              84.50965603749464,
+              -121.08891725286571
+            ],
+            "delta": 0.003999999999999404,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-entry",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -65.65913295069427,
+              84.51046631969409,
+              -120.76504024756346
+            ],
+            "delta": 0.003999999999988967,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-entry",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -64.96779586937876,
+              83.80980003781772,
+              -121.61631109348978
+            ],
+            "delta": 0.00400000000000543,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-entry",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -64.92324472150338,
+              85.06076283281477,
+              -120.79044444591293
+            ],
+            "delta": 0.003999999999981437,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-entry",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -66.33674743671273,
+              83.6881018023737,
+              -120.97870296529207
+            ],
+            "delta": 0.004000000000015866,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-entry",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -66.16261815843443,
+              84.2369516660267,
+              -120.67710220822879
+            ],
+            "delta": 0.003999999999981437,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "master-stones",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -68.54869910520078,
+              84.53021852296524,
+              -119.10363940854812
+            ],
+            "delta": -0.005706299733812911,
+            "terrain": "leviathan-moss-bed-5"
+          }
+        },
+        {
+          "zone": "master-stones",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -70.22719915491078,
+              83.41018438754074,
+              -118.92716300560477
+            ],
+            "delta": 0.00399999999997541,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "master-stones",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -70.03057356579446,
+              83.95902775452878,
+              -118.6472768790369
+            ],
+            "delta": 0.003999999999951417,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "master-stones",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -68.19512720735433,
+              84.51405300802519,
+              -119.30751114780152
+            ],
+            "delta": 0.003999999999999404,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "dry-cascade",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -73.19729844333159,
+              84.23473197905604,
+              -116.6115258766738
+            ],
+            "delta": 0.003999999999988967,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "dry-cascade",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -72.8680416622851,
+              83.9595206786826,
+              -117.00123640316463
+            ],
+            "delta": 0.003999999999991873,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "dry-cascade",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -73.41507040736775,
+              83.84041552710742,
+              -116.76977618832822
+            ],
+            "delta": 0.003999999999923013,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "dry-cascade",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -72.69564228034278,
+              84.51053246074022,
+              -116.70263191444708
+            ],
+            "delta": 0.003999999999964974,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "dry-cascade",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -73.4158593442497,
+              85.33730936780583,
+              -115.69008446161192
+            ],
+            "delta": 0.003999999999957443,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-islands",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -72.78995124763505,
+              86.43976899512364,
+              -115.25597983740666
+            ],
+            "delta": 0.003999999999988967,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-islands",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -72.91633473510284,
+              85.61577373482561,
+              -115.78488245893858
+            ],
+            "delta": 0.003999999999999404,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-islands",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -72.46187634519943,
+              86.16603473419345,
+              -115.64773743769996
+            ],
+            "delta": 0.004000000000006935,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-islands",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -71.9451699161192,
+              86.43926089782441,
+              -115.74277564993548
+            ],
+            "delta": 0.003999999999982941,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "moss-islands",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -72.12080480689434,
+              85.89229265638173,
+              -116.04698420433985
+            ],
+            "delta": 0.003999999999999404,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "empty-court",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -68.84775794092396,
+              87.81797101026172,
+              -116.53790073692507
+            ],
+            "delta": 0.003999999999999404,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "empty-court",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -69.23915587230849,
+              86.06582933862205,
+              -117.60357234722991
+            ],
+            "delta": -0.007396442959728934,
+            "terrain": "leviathan-moss-bed-14"
+          }
+        },
+        {
+          "zone": "return-view",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -64.18883543755503,
+              85.61290764104592,
+              -120.81841025256415
+            ],
+            "delta": 0.003999999999988967,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "return-view",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -64.62701324018443,
+              86.43895844361646,
+              -119.96735646946715
+            ],
+            "delta": 0.003999999999981437,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "return-view",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -65.19004548588691,
+              86.43910307992904,
+              -119.64255692532346
+            ],
+            "delta": 0.003999999999970999,
+            "terrain": "leviathan-crust-plate"
+          }
+        },
+        {
+          "zone": "return-view",
+          "visible": true,
+          "style": "scattered-zen",
+          "support": {
+            "point": [
+              -64.80127115805878,
+              85.89026934584551,
+              -120.26918003684669
+            ],
+            "delta": 0.00400000000001296,
+            "terrain": "leviathan-crust-plate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "50 distinct cover slots on real island terrain",
+      "passed": true,
+      "detail": [
+        {
+          "id": "pine-5566-cover-0",
+          "delta": 0.01999999999997723
+        },
+        {
+          "id": "pine-4101-cover-1",
+          "delta": 0.01999999999997723
+        },
+        {
+          "id": "pine-1401-cover-2",
+          "delta": 0.0199999999999952
+        },
+        {
+          "id": "pine-4101-cover-3",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-1997-cover-4",
+          "delta": 0.01999999999995324
+        },
+        {
+          "id": "pine-1401-cover-5",
+          "delta": 0.005877704490268042
+        },
+        {
+          "id": "pine-2171-cover-6",
+          "delta": 0.02000000000000273
+        },
+        {
+          "id": "pine-5566-cover-7",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-1247-cover-8",
+          "delta": 0.020000000000005635
+        },
+        {
+          "id": "pine-2180-cover-9",
+          "delta": 0.019999999999978736
+        },
+        {
+          "id": "pine-820-cover-10",
+          "delta": 0.019999999999990786
+        },
+        {
+          "id": "pine-820-cover-11",
+          "delta": 0.01999999999997723
+        },
+        {
+          "id": "pine-1401-cover-12",
+          "delta": 0.020000000000005635
+        },
+        {
+          "id": "pine-1247-cover-13",
+          "delta": 0.0023196356008189896
+        },
+        {
+          "id": "pine-4101-cover-14",
+          "delta": 0.01999999999998476
+        },
+        {
+          "id": "pine-5566-cover-15",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-2180-cover-16",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-2180-cover-17",
+          "delta": 0.020000000000008754
+        },
+        {
+          "id": "pine-5566-cover-18",
+          "delta": 0.019999999999966794
+        },
+        {
+          "id": "pine-2171-cover-19",
+          "delta": 0.020000000000013167
+        },
+        {
+          "id": "pine-1247-cover-20",
+          "delta": 0.020000000000013167
+        },
+        {
+          "id": "pine-1229-cover-21",
+          "delta": 0.02000000000001166
+        },
+        {
+          "id": "pine-811-cover-22",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-820-cover-23",
+          "delta": 0.0199999999999952
+        },
+        {
+          "id": "pine-5566-cover-24",
+          "delta": 0.01999999999997723
+        },
+        {
+          "id": "pine-1229-cover-25",
+          "delta": 0.005445675411113607
+        },
+        {
+          "id": "pine-3011-cover-26",
+          "delta": 0.0199999999999683
+        },
+        {
+          "id": "pine-1401-cover-27",
+          "delta": 0.019999999999971204
+        },
+        {
+          "id": "pine-4101-cover-28",
+          "delta": 0.01999999999998476
+        },
+        {
+          "id": "pine-1428-cover-29",
+          "delta": 0.020000000000005635
+        },
+        {
+          "id": "pine-4128-cover-30",
+          "delta": 0.019999999999978736
+        },
+        {
+          "id": "pine-2153-cover-31",
+          "delta": 0.0029324619883266583
+        },
+        {
+          "id": "pine-2171-cover-32",
+          "delta": 0.0199999999999952
+        },
+        {
+          "id": "pine-3011-cover-33",
+          "delta": 0.01999999999998476
+        },
+        {
+          "id": "pine-4119-cover-34",
+          "delta": -0.00012187613720261476
+        },
+        {
+          "id": "pine-1428-cover-35",
+          "delta": 0.01999999999998476
+        },
+        {
+          "id": "pine-829-cover-36",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-4119-cover-37",
+          "delta": 0.008287192562927375
+        },
+        {
+          "id": "pine-1997-cover-38",
+          "delta": 0.02000000000002672
+        },
+        {
+          "id": "pine-2180-cover-39",
+          "delta": 0.0199999999999952
+        },
+        {
+          "id": "pine-1401-cover-40",
+          "delta": 0.019999999999960768
+        },
+        {
+          "id": "pine-811-cover-41",
+          "delta": 0.020000000000008754
+        },
+        {
+          "id": "pine-3020-cover-42",
+          "delta": 0.019999999999956358
+        },
+        {
+          "id": "pine-1410-cover-43",
+          "delta": 0.00800517129014841
+        },
+        {
+          "id": "pine-1410-cover-44",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-829-cover-45",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-5566-cover-46",
+          "delta": 0.005008159474797722
+        },
+        {
+          "id": "pine-1238-cover-47",
+          "delta": 0.020000000000001225
+        },
+        {
+          "id": "pine-4128-cover-48",
+          "delta": 0.01999999999998476
+        },
+        {
+          "id": "pine-1229-cover-49",
+          "delta": 0.013002507459662496
+        }
+      ]
+    },
+    {
+      "name": "all slots provide actual helmet clearance above crouched troops",
+      "passed": true,
+      "detail": [
+        {
+          "id": "pine-5566-cover-0",
+          "height": 2.7693034426801066
+        },
+        {
+          "id": "pine-4101-cover-1",
+          "height": 1.3604131287458259
+        },
+        {
+          "id": "pine-1401-cover-2",
+          "height": 1.9282078157278042
+        },
+        {
+          "id": "pine-4101-cover-3",
+          "height": 2.1801394955551614
+        },
+        {
+          "id": "pine-1997-cover-4",
+          "height": 1.2612856417001137
+        },
+        {
+          "id": "pine-1401-cover-5",
+          "height": 1.2716692055995882
+        },
+        {
+          "id": "pine-2171-cover-6",
+          "height": 1.7302919852020824
+        },
+        {
+          "id": "pine-5566-cover-7",
+          "height": 2.0788192449276357
+        },
+        {
+          "id": "pine-1247-cover-8",
+          "height": 1.1363915764741648
+        },
+        {
+          "id": "pine-2180-cover-9",
+          "height": 1.100553859030371
+        },
+        {
+          "id": "pine-820-cover-10",
+          "height": 2.7341996549028758
+        },
+        {
+          "id": "pine-820-cover-11",
+          "height": 1.9123506585670174
+        },
+        {
+          "id": "pine-1401-cover-12",
+          "height": 1.3099413992271853
+        },
+        {
+          "id": "pine-1247-cover-13",
+          "height": 2.2653154698863345
+        },
+        {
+          "id": "pine-4101-cover-14",
+          "height": 3.631702394953683
+        },
+        {
+          "id": "pine-5566-cover-15",
+          "height": 3.970797773031643
+        },
+        {
+          "id": "pine-2180-cover-16",
+          "height": 1.5383925901891868
+        },
+        {
+          "id": "pine-2180-cover-17",
+          "height": 2.1883199056336493
+        },
+        {
+          "id": "pine-5566-cover-18",
+          "height": 1.3644118793171536
+        },
+        {
+          "id": "pine-2171-cover-19",
+          "height": 1.142419123994208
+        },
+        {
+          "id": "pine-1247-cover-20",
+          "height": 1.7464062837889427
+        },
+        {
+          "id": "pine-1229-cover-21",
+          "height": 1.561683570168104
+        },
+        {
+          "id": "pine-811-cover-22",
+          "height": 2.6020465101911214
+        },
+        {
+          "id": "pine-820-cover-23",
+          "height": 1.415546309266216
+        },
+        {
+          "id": "pine-5566-cover-24",
+          "height": 3.918485298150896
+        },
+        {
+          "id": "pine-1229-cover-25",
+          "height": 1.5329561352720047
+        },
+        {
+          "id": "pine-3011-cover-26",
+          "height": 1.3233437786464703
+        },
+        {
+          "id": "pine-1401-cover-27",
+          "height": 1.315273859538249
+        },
+        {
+          "id": "pine-4101-cover-28",
+          "height": 1.3720602483446114
+        },
+        {
+          "id": "pine-1428-cover-29",
+          "height": 2.944487549349091
+        },
+        {
+          "id": "pine-4128-cover-30",
+          "height": 1.8466565086195674
+        },
+        {
+          "id": "pine-2153-cover-31",
+          "height": 2.4096057804033437
+        },
+        {
+          "id": "pine-2171-cover-32",
+          "height": 3.2969134100393522
+        },
+        {
+          "id": "pine-3011-cover-33",
+          "height": 3.4607912895825335
+        },
+        {
+          "id": "pine-4119-cover-34",
+          "height": 2.0477699098905084
+        },
+        {
+          "id": "pine-1428-cover-35",
+          "height": 2.098957771880146
+        },
+        {
+          "id": "pine-829-cover-36",
+          "height": 1.913473438998652
+        },
+        {
+          "id": "pine-4119-cover-37",
+          "height": 1.1095195892753633
+        },
+        {
+          "id": "pine-1997-cover-38",
+          "height": 3.76216828801629
+        },
+        {
+          "id": "pine-2180-cover-39",
+          "height": 2.1419798811667325
+        },
+        {
+          "id": "pine-1401-cover-40",
+          "height": 1.9844078574905355
+        },
+        {
+          "id": "pine-811-cover-41",
+          "height": 1.8954516714513767
+        },
+        {
+          "id": "pine-3020-cover-42",
+          "height": 1.2063344055964635
+        },
+        {
+          "id": "pine-1410-cover-43",
+          "height": 1.3566364441255645
+        },
+        {
+          "id": "pine-1410-cover-44",
+          "height": 2.6837864278371057
+        },
+        {
+          "id": "pine-829-cover-45",
+          "height": 1.3716925542557872
+        },
+        {
+          "id": "pine-5566-cover-46",
+          "height": 1.3213299450653049
+        },
+        {
+          "id": "pine-1238-cover-47",
+          "height": 2.13478047551256
+        },
+        {
+          "id": "pine-4128-cover-48",
+          "height": 2.5283358373233207
+        },
+        {
+          "id": "pine-1229-cover-49",
+          "height": 2.799340412511146
+        }
+      ]
+    },
+    {
+      "name": "every cover slot lies below its assigned actual Blender crown",
+      "passed": true,
+      "detail": [
+        {
+          "id": "pine-5566-cover-0",
+          "canopy": {
+            "mesh": "pine-5566-n12",
+            "height": 2.9445764316117033
+          }
+        },
+        {
+          "id": "pine-4101-cover-1",
+          "canopy": {
+            "mesh": "pine-4101-n12",
+            "height": 2.326711075114869
+          }
+        },
+        {
+          "id": "pine-1401-cover-2",
+          "canopy": {
+            "mesh": "pine-1401-n12",
+            "height": 2.0754574297117427
+          }
+        },
+        {
+          "id": "pine-4101-cover-3",
+          "canopy": {
+            "mesh": "pine-4101-n12",
+            "height": 2.277552419826855
+          }
+        },
+        {
+          "id": "pine-1997-cover-4",
+          "canopy": {
+            "mesh": "pine-1997-n12",
+            "height": 1.3621259699915131
+          }
+        },
+        {
+          "id": "pine-1401-cover-5",
+          "canopy": {
+            "mesh": "pine-1401-n12",
+            "height": 1.4322004737893559
+          }
+        },
+        {
+          "id": "pine-2171-cover-6",
+          "canopy": {
+            "mesh": "pine-2171-n12",
+            "height": 1.843442019637652
+          }
+        },
+        {
+          "id": "pine-5566-cover-7",
+          "canopy": {
+            "mesh": "pine-5566-n12",
+            "height": 3.6546375090160326
+          }
+        },
+        {
+          "id": "pine-1247-cover-8",
+          "canopy": {
+            "mesh": "pine-1247-n12",
+            "height": 1.1920890706372638
+          }
+        },
+        {
+          "id": "pine-2180-cover-9",
+          "canopy": {
+            "mesh": "pine-2180-n12",
+            "height": 1.1678880933962685
+          }
+        },
+        {
+          "id": "pine-820-cover-10",
+          "canopy": {
+            "mesh": "pine-820-n12",
+            "height": 2.8649403698445086
+          }
+        },
+        {
+          "id": "pine-820-cover-11",
+          "canopy": {
+            "mesh": "pine-820-n12",
+            "height": 2.0152949519689454
+          }
+        },
+        {
+          "id": "pine-1401-cover-12",
+          "canopy": {
+            "mesh": "pine-1401-n12",
+            "height": 1.4660349326038296
+          }
+        },
+        {
+          "id": "pine-1247-cover-13",
+          "canopy": {
+            "mesh": "pine-1247-n12",
+            "height": 2.4192171578314055
+          }
+        },
+        {
+          "id": "pine-4101-cover-14",
+          "canopy": {
+            "mesh": "pine-4101-n11",
+            "height": 3.6923501889793995
+          }
+        },
+        {
+          "id": "pine-5566-cover-15",
+          "canopy": {
+            "mesh": "pine-5566-n12",
+            "height": 4.047061567528906
+          }
+        },
+        {
+          "id": "pine-2180-cover-16",
+          "canopy": {
+            "mesh": "pine-2180-n12",
+            "height": 2.738817457686145
+          }
+        },
+        {
+          "id": "pine-2180-cover-17",
+          "canopy": {
+            "mesh": "pine-2180-n12",
+            "height": 2.2704278677722414
+          }
+        },
+        {
+          "id": "pine-5566-cover-18",
+          "canopy": {
+            "mesh": "pine-5566-n12",
+            "height": 1.4932915426524676
+          }
+        },
+        {
+          "id": "pine-2171-cover-19",
+          "canopy": {
+            "mesh": "pine-2171-n12",
+            "height": 1.2618392269328331
+          }
+        },
+        {
+          "id": "pine-1247-cover-20",
+          "canopy": {
+            "mesh": "pine-1247-n12",
+            "height": 1.8005322001172157
+          }
+        },
+        {
+          "id": "pine-1229-cover-21",
+          "canopy": {
+            "mesh": "pine-1229-n12",
+            "height": 1.605764944047781
+          }
+        },
+        {
+          "id": "pine-811-cover-22",
+          "canopy": {
+            "mesh": "pine-811-n12",
+            "height": 2.692439201480769
+          }
+        },
+        {
+          "id": "pine-820-cover-23",
+          "canopy": {
+            "mesh": "pine-820-n12",
+            "height": 1.4888766342261253
+          }
+        },
+        {
+          "id": "pine-5566-cover-24",
+          "canopy": {
+            "mesh": "pine-5566-n12",
+            "height": 4.06879835988379
+          }
+        },
+        {
+          "id": "pine-1229-cover-25",
+          "canopy": {
+            "mesh": "pine-1229-n12",
+            "height": 1.6156467547451507
+          }
+        },
+        {
+          "id": "pine-3011-cover-26",
+          "canopy": {
+            "mesh": "pine-3011-n11",
+            "height": 1.3355108115565835
+          }
+        },
+        {
+          "id": "pine-1401-cover-27",
+          "canopy": {
+            "mesh": "pine-1401-n12",
+            "height": 1.4321622967335517
+          }
+        },
+        {
+          "id": "pine-4101-cover-28",
+          "canopy": {
+            "mesh": "pine-4101-n11",
+            "height": 1.3954584267896606
+          }
+        },
+        {
+          "id": "pine-1428-cover-29",
+          "canopy": {
+            "mesh": "pine-1428-n11",
+            "height": 3.0524398674495856
+          }
+        },
+        {
+          "id": "pine-4128-cover-30",
+          "canopy": {
+            "mesh": "pine-4128-n12",
+            "height": 1.8918411803920618
+          }
+        },
+        {
+          "id": "pine-2153-cover-31",
+          "canopy": {
+            "mesh": "pine-2153-n11",
+            "height": 2.440021969728373
+          }
+        },
+        {
+          "id": "pine-2171-cover-32",
+          "canopy": {
+            "mesh": "pine-2171-n12",
+            "height": 3.4036763053878705
+          }
+        },
+        {
+          "id": "pine-3011-cover-33",
+          "canopy": {
+            "mesh": "pine-3011-n12",
+            "height": 3.5805627490048
+          }
+        },
+        {
+          "id": "pine-4119-cover-34",
+          "canopy": {
+            "mesh": "pine-4119-n12",
+            "height": 2.1404473613157795
+          }
+        },
+        {
+          "id": "pine-1428-cover-35",
+          "canopy": {
+            "mesh": "pine-1428-n12",
+            "height": 2.179652358794981
+          }
+        },
+        {
+          "id": "pine-829-cover-36",
+          "canopy": {
+            "mesh": "pine-829-n12",
+            "height": 2.001621002053612
+          }
+        },
+        {
+          "id": "pine-4119-cover-37",
+          "canopy": {
+            "mesh": "pine-4119-n12",
+            "height": 1.1352984415471514
+          }
+        },
+        {
+          "id": "pine-1997-cover-38",
+          "canopy": {
+            "mesh": "pine-1997-n11",
+            "height": 3.7988206558265323
+          }
+        },
+        {
+          "id": "pine-2180-cover-39",
+          "canopy": {
+            "mesh": "pine-2180-n12",
+            "height": 2.25255508399401
+          }
+        },
+        {
+          "id": "pine-1401-cover-40",
+          "canopy": {
+            "mesh": "pine-1401-n12",
+            "height": 2.049588699367689
+          }
+        },
+        {
+          "id": "pine-811-cover-41",
+          "canopy": {
+            "mesh": "pine-811-n12",
+            "height": 3.376800114618327
+          }
+        },
+        {
+          "id": "pine-3020-cover-42",
+          "canopy": {
+            "mesh": "pine-3020-n12",
+            "height": 2.0629103662324333
+          }
+        },
+        {
+          "id": "pine-1410-cover-43",
+          "canopy": {
+            "mesh": "pine-1410-n12",
+            "height": 2.464737790071347
+          }
+        },
+        {
+          "id": "pine-1410-cover-44",
+          "canopy": {
+            "mesh": "pine-1410-n12",
+            "height": 2.791783574938581
+          }
+        },
+        {
+          "id": "pine-829-cover-45",
+          "canopy": {
+            "mesh": "pine-829-n12",
+            "height": 1.4138451868199637
+          }
+        },
+        {
+          "id": "pine-5566-cover-46",
+          "canopy": {
+            "mesh": "pine-5566-n12",
+            "height": 1.4707183151026526
+          }
+        },
+        {
+          "id": "pine-1238-cover-47",
+          "canopy": {
+            "mesh": "pine-1238-n12",
+            "height": 2.1926335650256124
+          }
+        },
+        {
+          "id": "pine-4128-cover-48",
+          "canopy": {
+            "mesh": "pine-4128-n11",
+            "height": 2.5583808108582695
+          }
+        },
+        {
+          "id": "pine-1229-cover-49",
+          "canopy": {
+            "mesh": "pine-1229-n12",
+            "height": 2.9312748961703923
+          }
+        }
+      ]
+    },
+    {
+      "name": "browser page errors absent",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "trees": [
+    {
+      "seed": 811,
+      "position": [
+        -64.36286002811303,
+        85.06392694509711,
+        -121.11982968517694
+      ],
+      "islandLocal": [
+        -10.700000000000003,
+        0.04519055323152088,
+        1.000000000000142
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -64.35967984775245,
+          85.05995255061532,
+          -121.11432145121518
+        ],
+        "delta": 0.007500000000016098,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/811/ancient-pine-811-lod0.glb",
+        "sourceGlbSha256": "f2453f21f23f6e46a7ee4db4cfe001b5292af0935a4bc0f64b3008102fa03db6",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 820,
+      "position": [
+        -65.83629595937133,
+        83.9654078263375,
+        -121.07189557981387
+      ],
+      "islandLocal": [
+        -8.100000000000009,
+        0.06007359866845263,
+        3.6000000000001364
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -65.83311577901074,
+          83.96143343185572,
+          -121.06638734585212
+        ],
+        "delta": 0.0074999999999981306,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/820/ancient-pine-820-lod0.glb",
+        "sourceGlbSha256": "2dc81feb156edb133c196d8b6e0191302b8c51e5e826d1a7f8ada8f465ecb1c9",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 829,
+      "position": [
+        -65.48998977561486,
+        85.06554750949603,
+        -120.4720756745724
+      ],
+      "islandLocal": [
+        -8.100000000000023,
+        0.05130682228724481,
+        1.0000000000001705
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -65.48680959525429,
+          85.06157311501427,
+          -120.46656744061066
+        ],
+        "delta": 0.007499999999974137,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/829/ancient-pine-829-lod0.glb",
+        "sourceGlbSha256": "3018fdd911a4274262be70afff3bd9e66ffbf8ffbcb9b26048f0353af22947ba",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 5566,
+      "position": [
+        -67.29362838859808,
+        84.24342181979762,
+        -120.03606939075236
+      ],
+      "islandLocal": [
+        -4.539999999999991,
+        0.0691254009755653,
+        2.950000000000159
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -67.29044820823749,
+          84.23944742531586,
+          -120.03056115679061
+        ],
+        "delta": 0.0074999999999906,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/5566/ancient-pine-5566-lod0.glb",
+        "sourceGlbSha256": "d1308afa521cf4cd5bbe0778238a045e4901cc9c60c7c3ef8dedd6aadf149d2a",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1229,
+      "position": [
+        -68.30851283147112,
+        85.0704720968061,
+        -118.85390080961967
+      ],
+      "islandLocal": [
+        -1.5999999999999792,
+        0.069893001890307,
+        1.000000000000199
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -68.30533265111055,
+          85.06649770232433,
+          -118.84839257565793
+        ],
+        "delta": 0.007499999999992105,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1229/ancient-pine-1229-lod0.glb",
+        "sourceGlbSha256": "5b40f49c20335f6c77d787eaa9f4435dba53484169e6f952fb132e678a6b9b5e",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1238,
+      "position": [
+        -69.38476531919406,
+        83.4126100465988,
+        -119.41802480012824
+      ],
+      "islandLocal": [
+        -0.3000000000000105,
+        0.05416131224006904,
+        4.900000000000148
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -69.3815851388335,
+          83.40863565211704,
+          -119.41251656616649
+        ],
+        "delta": 0.007499999999978548,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1238/ancient-pine-1238-lod0.glb",
+        "sourceGlbSha256": "6f4df77ba63c877ef27ca12922f522d81e12c81b60d4efe13f42f02ad94b4939",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1247,
+      "position": [
+        -71.35649251565464,
+        83.41450890314836,
+        -118.28315648306328
+      ],
+      "islandLocal": [
+        4.250000000000001,
+        0.06132790035161406,
+        4.900000000000105
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -71.35331233529408,
+          83.4105345086666,
+          -118.27764824910155
+        ],
+        "delta": 0.007499999999968112,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1247/ancient-pine-1247-lod0.glb",
+        "sourceGlbSha256": "1d964261de796dcf4c3d32289bdc945cf2395fe881db18379a8434f23a791bb5",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1256,
+      "position": [
+        -67.09918687275203,
+        87.54396867596824,
+        -117.74928680620633
+      ],
+      "islandLocal": [
+        -2.590000000000045,
+        0.0433074347261595,
+        -4.849999999999852
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -67.09600669239144,
+          87.53999428148647,
+          -117.74377857224457
+        ],
+        "delta": 0.0075000000000085675,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1256/ancient-pine-1256-lod0.glb",
+        "sourceGlbSha256": "2b3bf80658ab597fbb43d2509c83cd9fa24bc053e29c86296a0e78d71712fd25",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1401,
+      "position": [
+        -72.18419666499602,
+        84.79033326690757,
+        -116.80678212335813
+      ],
+      "islandLocal": [
+        7.160000000000012,
+        0.05282172725281953,
+        1.6500000000001478
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -72.18101648463545,
+          84.7863588724258,
+          -116.80127388939638
+        ],
+        "delta": 0.007499999999992105,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1401/ancient-pine-1401-lod0.glb",
+        "sourceGlbSha256": "67f513c092b9ed1a3da737f4e0bb21fe2c37e7eb1d02ce5cc3758e44f729f7dc",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1410,
+      "position": [
+        -71.05708763970024,
+        86.1691622998432,
+        -116.46457202587645
+      ],
+      "islandLocal": [
+        5.54999999999997,
+        0.05565565586090315,
+        -1.5999999999998238
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -71.06041629480623,
+          86.17332224896077,
+          -116.47033742564088
+        ],
+        "delta": -0.007850156426411922,
+        "terrain": "leviathan-moss-bed-16"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1410/ancient-pine-1410-lod0.glb",
+        "sourceGlbSha256": "5b8d247c097177d21b159ecafb02828cdc7b7a97af9747f74138e3a35b65e28d",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1419,
+      "position": [
+        -69.60574953287505,
+        84.51821594309985,
+        -118.5007806858944
+      ],
+      "islandLocal": [
+        0.9999999999999583,
+        0.06602489867628947,
+        2.300000000000182
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -69.60956035651681,
+          84.52297847689833,
+          -118.50738122606057
+        ],
+        "delta": -0.008987281874714606,
+        "terrain": "leviathan-moss-bed-3"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1419/ancient-pine-1419-lod0.glb",
+        "sourceGlbSha256": "0190545b3c7e3c9345ab803799322fc7e422970ed508ebdaec99d4fc8f3c0961",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1428,
+      "position": [
+        -70.77881507281089,
+        84.79271987911888,
+        -117.62258980167148
+      ],
+      "islandLocal": [
+        3.909999999999969,
+        0.06182918318955899,
+        1.6500000000001336
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -70.77848730161466,
+          84.79231025076892,
+          -117.62202208530636
+        ],
+        "delta": 0.000773001431689863,
+        "terrain": "leviathan-moss-bed-2"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1428/ancient-pine-1428-lod0.glb",
+        "sourceGlbSha256": "16da0d9d46753b7707d189ab7527431aadb98595d1384a79014cf5074ec2bbac",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 1997,
+      "position": [
+        -72.05847949630642,
+        86.99558495156339,
+        -115.28903359980404
+      ],
+      "islandLocal": [
+        8.459999999999994,
+        0.05405449862445266,
+        -3.5499999999998266
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -72.05529931594585,
+          86.9916105570816,
+          -115.28352536584228
+        ],
+        "delta": 0.007500000000010072,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/1997/ancient-pine-1997-lod0.glb",
+        "sourceGlbSha256": "08ec3be8680ac7733ab5fe0f14a55f75fdf14587277cee6df8a57b947eec9ee5",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 2153,
+      "position": [
+        -69.48056531835105,
+        86.72413368120377,
+        -116.9839552660332
+      ],
+      "islandLocal": [
+        2.299999999999984,
+        0.06977146221612429,
+        -2.899999999999835
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -69.47738513799048,
+          86.720159286722,
+          -116.97844703207146
+        ],
+        "delta": 0.007499999999992105,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/2153/ancient-pine-2153-lod0.glb",
+        "sourceGlbSha256": "0b6644158887d50e38be4ec7096475698358a597b9324779359f5ec101686254",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 2162,
+      "position": [
+        -73.30823150060083,
+        84.78808600012387,
+        -116.15366756810299
+      ],
+      "islandLocal": [
+        9.760000000000005,
+        0.044340183231327046,
+        1.6500000000001336
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -73.30505132024027,
+          84.7841116056421,
+          -116.14815933414125
+        ],
+        "delta": 0.0074999999999756425,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/2162/ancient-pine-2162-lod0.glb",
+        "sourceGlbSha256": "a6fe66b5fcdc28ade5408b003ad4709c7050573a93bccdd384fc0c4e5389edc0",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 2171,
+      "position": [
+        -73.25036009594274,
+        85.89694451392914,
+        -115.40343135492981
+      ],
+      "islandLocal": [
+        10.409999999999997,
+        0.06847966723825039,
+        -0.9499999999998181
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -73.24717991558217,
+          85.89297011944737,
+          -115.39792312096804
+        ],
+        "delta": 0.007500000000002542,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/2171/ancient-pine-2171-lod0.glb",
+        "sourceGlbSha256": "1b39f99094985e390c1bf9003389d285c1d226aa3074eecc200b13c0aa641d4b",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 2180,
+      "position": [
+        -70.48196161001721,
+        87.55056187559012,
+        -115.8084245217101
+      ],
+      "islandLocal": [
+        5.209999999999938,
+        0.06819122388759524,
+        -4.849999999999852
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -70.47878142965665,
+          87.54658748110836,
+          -115.80291628774835
+        ],
+        "delta": 0.007499999999978548,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/2180/ancient-pine-2180-lod0.glb",
+        "sourceGlbSha256": "e5a0cebd0b5e6b93137d648a059ac77d7104a53d283ffd6f19bfadbaa092e073",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 2189,
+      "position": [
+        -72.52892893628737,
+        83.6882266044249,
+        -117.40387593224334
+      ],
+      "islandLocal": [
+        7.16000000000004,
+        0.05416480928334977,
+        4.250000000000199
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -72.5257487559268,
+          83.68425220994312,
+          -117.39836769828159
+        ],
+        "delta": 0.007499999999992105,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/2189/ancient-pine-2189-lod0.glb",
+        "sourceGlbSha256": "77b97298d82607cdcd9089c9261ec6162d452645f360f4d4d5759bad7a8e71d0",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 3011,
+      "position": [
+        -65.97379621520992,
+        87.54452151960142,
+        -118.40005300898001
+      ],
+      "islandLocal": [
+        -5.190000000000011,
+        0.045393954958456106,
+        -4.849999999999909
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -65.97061603484934,
+          87.54054712511966,
+          -118.39454477501828
+        ],
+        "delta": 0.007499999999974137,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/3011/ancient-pine-3011-lod0.glb",
+        "sourceGlbSha256": "47049e50c229cf8e39823316c75bfe0d8f44cfedc6edcc3faf0c300bf5b05ecc",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 3020,
+      "position": [
+        -68.28589562277281,
+        87.81928847769075,
+        -116.86472665502885
+      ],
+      "islandLocal": [
+        0.3499999999999952,
+        0.04219092680392578,
+        -5.499999999999886
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -68.28271544241224,
+          87.81531408320897,
+          -116.8592184210671
+        ],
+        "delta": 0.007499999999992105,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/3020/ancient-pine-3020-lod0.glb",
+        "sourceGlbSha256": "3cbe7b492be1ee35de4e91c78b90888cb7ccb7c528c7617a83b5d391eb0e18f5",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 4101,
+      "position": [
+        -64.73852195313145,
+        86.99303188386489,
+        -119.51049522577799
+      ],
+      "islandLocal": [
+        -8.44000000000004,
+        0.044418813074514674,
+        -3.5499999999998266
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -64.73534177277087,
+          86.98905748938311,
+          -119.50498699181622
+        ],
+        "delta": 0.0075000000000085675,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/4101/ancient-pine-4101-lod0.glb",
+        "sourceGlbSha256": "8a9e9017bd3ac141901d301f83c2e82bd00f402b2c1028c16075534b8b5f9841",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 4110,
+      "position": [
+        -65.93062425421564,
+        85.89466851511074,
+        -119.62527697907558
+      ],
+      "islandLocal": [
+        -6.490000000000037,
+        0.05988968392563265,
+        -0.9499999999998181
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -65.93481659631124,
+          85.89990784728721,
+          -119.63253832858786
+        ],
+        "delta": -0.009887038517237483,
+        "terrain": "leviathan-moss-bed-10"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/4110/ancient-pine-4110-lod0.glb",
+        "sourceGlbSha256": "5eadd921f146cfdf9ab420fb2a1f86266e7fd8568e8626c48dbe89d65daa4b1e",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 4119,
+      "position": [
+        -68.52519569517091,
+        86.17070242975701,
+        -117.92920653867725
+      ],
+      "islandLocal": [
+        -0.29999999999999627,
+        0.06146835231396608,
+        -1.599999999999838
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -68.52201551481033,
+          86.16672803527526,
+          -117.9236983047155
+        ],
+        "delta": 0.0074999999999845746,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/4119/ancient-pine-4119-lod0.glb",
+        "sourceGlbSha256": "c399dd881dd1185f3c3826da22c70f69801bcc7d5c15d0f089e26f8efebef9bf",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 4128,
+      "position": [
+        -67.165601961926,
+        86.44578753537566,
+        -118.51432111504484
+      ],
+      "islandLocal": [
+        -3.240000000000008,
+        0.059466063784327616,
+        -2.249999999999872
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -67.16242178156541,
+          86.44181314089388,
+          -118.50881288108307
+        ],
+        "delta": 0.0075000000000085675,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/4128/ancient-pine-4128-lod0.glb",
+        "sourceGlbSha256": "ef6546255d5ec16e9d7898a00e8ed3342a7d3a6ee7d58baf6b4fa202cab99582",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    },
+    {
+      "seed": 4137,
+      "position": [
+        -64.30159893331295,
+        86.16854923193797,
+        -120.36372235645588
+      ],
+      "islandLocal": [
+        -10.049999999999997,
+        0.053341839600250296,
+        -1.5999999999998096
+      ],
+      "upTiltDegrees": 0,
+      "support": {
+        "point": [
+          -64.29841875295236,
+          86.1645748374562,
+          -120.35821412249413
+        ],
+        "delta": 0.0074999999999981306,
+        "terrain": "leviathan-crust-plate"
+      },
+      "optimization": {
+        "asset": "saihoji-pines-v1",
+        "lod": 0,
+        "source": "assets/models/optimized/saihoji-pines-v1/4137/ancient-pine-4137-lod0.glb",
+        "sourceGlbSha256": "b045237fd5d21e07ececba8c65c2a0c65ad9fdfe0b8ebc074a45cf0c82a87333",
+        "geometryApplied": true,
+        "palette": "target-palette-web-v1",
+        "rootContract": "original factory root, placement overwrites yaw"
+      }
+    }
+  ],
+  "minimumDistance": 1.2643845998660537,
+  "previousMinimumDistance": 0.6796972088458308,
+  "layout": {
+    "revision": "kun-spread-v1",
+    "trees": 25,
+    "coverCount": 50,
+    "minRootWorldSpacing": 1.2643845998660594,
+    "entries": [
+      {
+        "seed": 4101,
+        "zone": "return-view",
+        "before": [
+          -12.69477324888203,
+          0.1842857551837369,
+          -7.83712711829466
+        ],
+        "after": [
+          -8.440000000000012,
+          0.044418813074528316,
+          -3.5499999999998977
+        ]
+      },
+      {
+        "seed": 5566,
+        "zone": "master-stones",
+        "before": [
+          -4.768396026236757,
+          0.18912554949491778,
+          2.8024749268253544
+        ],
+        "after": [
+          -4.54000000000002,
+          0.06912540097557894,
+          2.950000000000088
+        ]
+      },
+      {
+        "seed": 1401,
+        "zone": "dry-cascade",
+        "before": [
+          6.956205639221424,
+          0.1504508626990173,
+          1.5959233120208438
+        ],
+        "after": [
+          7.1599999999999975,
+          0.05282172725283317,
+          1.650000000000091
+        ]
+      },
+      {
+        "seed": 1997,
+        "zone": "moss-islands",
+        "before": [
+          8.320356410282812,
+          0.11532514434105678,
+          -3.4106683615069215
+        ],
+        "after": [
+          8.459999999999994,
+          0.054054498624466304,
+          -3.5499999999998977
+        ]
+      },
+      {
+        "seed": 811,
+        "zone": "moss-entry",
+        "before": [
+          -14.76120573506455,
+          0.1851251313308353,
+          2.7838617817430418
+        ],
+        "after": [
+          -10.700000000000003,
+          0.04519055323153452,
+          1.000000000000128
+        ]
+      },
+      {
+        "seed": 3011,
+        "zone": "empty-court",
+        "before": [
+          -5.0504121207487875,
+          0.1793139701806581,
+          -6.130633305948777
+        ],
+        "after": [
+          -5.190000000000025,
+          0.04539395495852659,
+          -4.8499999999999375
+        ]
+      },
+      {
+        "seed": 2171,
+        "zone": "moss-islands",
+        "before": [
+          14.452753662499575,
+          -0.0021457121546859526,
+          0.0823059312949539
+        ],
+        "after": [
+          10.409999999999982,
+          0.06847966723820718,
+          -0.9499999999998892
+        ]
+      },
+      {
+        "seed": 1247,
+        "zone": "master-stones",
+        "before": [
+          3.9410795262682266,
+          0.16486844804893508,
+          5.541202120408883
+        ],
+        "after": [
+          4.249999999999987,
+          0.061327900351627704,
+          4.900000000000077
+        ]
+      },
+      {
+        "seed": 2180,
+        "zone": "moss-islands",
+        "before": [
+          16.396949065301527,
+          -0.14056008191147384,
+          -6.889049325412685
+        ],
+        "after": [
+          5.209999999999966,
+          0.06819122388760888,
+          -4.849999999999895
+        ]
+      },
+      {
+        "seed": 1428,
+        "zone": "dry-cascade",
+        "before": [
+          14.519452261151912,
+          -0.003923926793447663,
+          6.033813847376379
+        ],
+        "after": [
+          3.9099999999999975,
+          0.06182918318957263,
+          1.650000000000091
+        ]
+      },
+      {
+        "seed": 1229,
+        "zone": "master-stones",
+        "before": [
+          -3.7703609148231285,
+          0.17992281792811582,
+          1.6629007569533059
+        ],
+        "after": [
+          -1.5999999999999934,
+          0.06989300189032065,
+          1.000000000000128
+        ]
+      },
+      {
+        "seed": 4110,
+        "zone": "return-view",
+        "before": [
+          -14.157243346477571,
+          0.1769002179491963,
+          -6.897165290200775
+        ],
+        "after": [
+          -6.490000000000022,
+          0.05988968392558945,
+          -0.9499999999998749
+        ]
+      },
+      {
+        "seed": 820,
+        "zone": "moss-entry",
+        "before": [
+          -8.993556347481743,
+          0.18080162687988377,
+          3.300207990737306
+        ],
+        "after": [
+          -8.100000000000009,
+          0.060073598668466274,
+          3.600000000000108
+        ]
+      },
+      {
+        "seed": 1410,
+        "zone": "dry-cascade",
+        "before": [
+          12.984357903266101,
+          0.04081713038141288,
+          0.925795494308602
+        ],
+        "after": [
+          5.549999999999984,
+          0.055655655860916795,
+          -1.5999999999998948
+        ]
+      },
+      {
+        "seed": 4128,
+        "zone": "return-view",
+        "before": [
+          -15.704677260048896,
+          0.18030650977226514,
+          -2.5350436580451827
+        ],
+        "after": [
+          -3.239999999999994,
+          0.05946606378434126,
+          -2.249999999999943
+        ]
+      },
+      {
+        "seed": 2153,
+        "zone": "moss-islands",
+        "before": [
+          8.975587323823333,
+          0.08864113655380379,
+          -4.732685699974539
+        ],
+        "after": [
+          2.299999999999998,
+          0.06977146221613793,
+          -2.899999999999892
+        ]
+      },
+      {
+        "seed": 3020,
+        "zone": "empty-court",
+        "before": [
+          5.964672971010175,
+          0.14186750240861556,
+          -0.931014148291311
+        ],
+        "after": [
+          0.3499999999999952,
+          0.04219092680393942,
+          -5.499999999999915
+        ]
+      },
+      {
+        "seed": 1238,
+        "zone": "master-stones",
+        "before": [
+          -5.065426100901191,
+          0.17626616956090402,
+          4.128959360938239
+        ],
+        "after": [
+          -0.3000000000000247,
+          0.05416131224008268,
+          4.900000000000077
+        ]
+      },
+      {
+        "seed": 4119,
+        "zone": "return-view",
+        "before": [
+          -10.888183082448151,
+          0.17206934887764191,
+          -7.4117113491255395
+        ],
+        "after": [
+          -0.29999999999999627,
+          0.06146835231397972,
+          -1.5999999999998948
+        ]
+      },
+      {
+        "seed": 1419,
+        "zone": "dry-cascade",
+        "before": [
+          6.9493951616109095,
+          0.13833480239856044,
+          4.142587062185456
+        ],
+        "after": [
+          0.9999999999999725,
+          0.06602489867630311,
+          2.3000000000000966
+        ]
+      },
+      {
+        "seed": 829,
+        "zone": "moss-entry",
+        "before": [
+          -13.47007491459189,
+          0.1765089405434992,
+          6.2268716692599355
+        ],
+        "after": [
+          -8.100000000000009,
+          0.051306822287258455,
+          1.0000000000001137
+        ]
+      },
+      {
+        "seed": 2162,
+        "zone": "moss-islands",
+        "before": [
+          8.090088034482008,
+          0.1110298442413864,
+          -2.0205451633386957
+        ],
+        "after": [
+          9.760000000000005,
+          0.04434018323139753,
+          1.6500000000000767
+        ]
+      },
+      {
+        "seed": 4137,
+        "zone": "return-view",
+        "before": [
+          -7.877601652959924,
+          0.1757736884273413,
+          -3.134825458364247
+        ],
+        "after": [
+          -10.049999999999997,
+          0.053341839600207094,
+          -1.5999999999998806
+        ]
+      },
+      {
+        "seed": 1256,
+        "zone": "master-stones",
+        "before": [
+          0.5667279888400012,
+          0.16730001991521704,
+          -0.938503839102097
+        ],
+        "after": [
+          -2.5900000000000167,
+          0.04330743472617314,
+          -4.849999999999895
+        ]
+      },
+      {
+        "seed": 2189,
+        "zone": "moss-islands",
+        "before": [
+          15.212346059870313,
+          -0.11373464929363308,
+          -7.651727599530261
+        ],
+        "after": [
+          7.160000000000026,
+          0.05416480928336341,
+          4.250000000000114
+        ]
+      }
+    ],
+    "scope": "Actual terrain supported roots and cover slots; canopy overlap and walking routes require visual/runtime review"
+  },
+  "covers": [
+    {
+      "minimumCrownHeight": 2.7693034426801066,
+      "index": 0,
+      "id": "pine-5566-cover-0",
+      "seed": 5566,
+      "localPoint": [
+        -4.340000000000045,
+        0.0879213025114973,
+        4.050000000000182
+      ],
+      "world": [
+        -67.5299436837689,
+        83.78197552206781,
+        -120.24537948859393
+      ],
+      "support": {
+        "point": [
+          -67.52146320280735,
+          83.77137713678314,
+          -120.2306908646959
+        ],
+        "delta": 0.01999999999997723,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-5566-n12",
+        "height": 2.9445764316117033
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3604131287458259,
+      "index": 1,
+      "id": "pine-4101-cover-1",
+      "seed": 4101,
+      "localPoint": [
+        -6.439999999999997,
+        0.07574170890180995,
+        -2.1499999999997783
+      ],
+      "world": [
+        -65.79665992994065,
+        86.40769751951056,
+        -119.34324396302961
+      ],
+      "support": {
+        "point": [
+          -65.7881794489791,
+          86.3970991342259,
+          -119.32855533913158
+        ],
+        "delta": 0.01999999999997723,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-4101-n12",
+        "height": 2.326711075114869
+      }
+    },
+    {
+      "minimumCrownHeight": 1.9282078157278042,
+      "index": 2,
+      "id": "pine-1401-cover-2",
+      "seed": 1401,
+      "localPoint": [
+        8.55999999999996,
+        0.07288028171158431,
+        1.550000000000196
+      ],
+      "world": [
+        -72.78141912076939,
+        84.83805037892553,
+        -116.44120176017871
+      ],
+      "support": {
+        "point": [
+          -72.77293863980783,
+          84.82745199364085,
+          -116.42651313628068
+        ],
+        "delta": 0.0199999999999952,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1401-n12",
+        "height": 2.0754574297117427
+      }
+    },
+    {
+      "minimumCrownHeight": 2.1801394955551614,
+      "index": 3,
+      "id": "pine-4101-cover-3",
+      "seed": 4101,
+      "localPoint": [
+        -4.940000000000025,
+        0.08320840086910494,
+        -1.2499999999998295
+      ],
+      "world": [
+        -66.56699384570828,
+        86.02805424819697,
+        -119.17750144393268
+      ],
+      "support": {
+        "point": [
+          -66.55851336474672,
+          86.01745586291229,
+          -119.16281282003465
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-4101-n12",
+        "height": 2.277552419826855
+      }
+    },
+    {
+      "minimumCrownHeight": 1.2612856417001137,
+      "index": 4,
+      "id": "pine-1997-cover-4",
+      "seed": 1997,
+      "localPoint": [
+        6.8599999999999435,
+        0.07727552978847371,
+        -2.1499999999997925
+      ],
+      "world": [
+        -71.55605405357782,
+        86.40810392012843,
+        -116.0188072059829
+      ],
+      "support": {
+        "point": [
+          -71.54757357261629,
+          86.39750553484377,
+          -116.00411858208489
+        ],
+        "delta": 0.01999999999995324,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1997-n12",
+        "height": 1.3621259699915131
+      }
+    },
+    {
+      "minimumCrownHeight": 1.2716692055995882,
+      "index": 5,
+      "id": "pine-1401-cover-5",
+      "seed": 1401,
+      "localPoint": [
+        4.659999999999969,
+        0.08223245505301066,
+        0.6500000000002188
+      ],
+      "world": [
+        -70.97542052213655,
+        85.22214997060395,
+        -117.21312042894844
+      ],
+      "support": {
+        "point": [
+          -70.97292823408519,
+          85.21903526176507,
+          -117.20880365941638
+        ],
+        "delta": 0.005877704490268042,
+        "terrain": "leviathan-moss-bed-1"
+      },
+      "canopy": {
+        "mesh": "pine-1401-n12",
+        "height": 1.4322004737893559
+      }
+    },
+    {
+      "minimumCrownHeight": 1.7302919852020824,
+      "index": 6,
+      "id": "pine-2171-cover-6",
+      "seed": 2171,
+      "localPoint": [
+        7.3099999999999605,
+        0.09240881719038271,
+        -0.44999999999977547
+      ],
+      "world": [
+        -71.9793338956209,
+        85.69127274865818,
+        -116.3019493982212
+      ],
+      "support": {
+        "point": [
+          -71.97085341465935,
+          85.68067436337348,
+          -116.28726077432316
+        ],
+        "delta": 0.02000000000000273,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-2171-n12",
+        "height": 1.843442019637652
+      }
+    },
+    {
+      "minimumCrownHeight": 2.0788192449276357,
+      "index": 7,
+      "id": "pine-5566-cover-7",
+      "seed": 5566,
+      "localPoint": [
+        -5.540000000000034,
+        0.08383842095478486,
+        0.15000000000020464
+      ],
+      "world": [
+        -66.49279153888813,
+        85.43458751077759,
+        -119.64897927848136
+      ],
+      "support": {
+        "point": [
+          -66.48431105792656,
+          85.42398912549291,
+          -119.63429065458332
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-5566-n12",
+        "height": 3.6546375090160326
+      }
+    },
+    {
+      "minimumCrownHeight": 1.1363915764741648,
+      "index": 8,
+      "id": "pine-1247-cover-8",
+      "seed": 1247,
+      "localPoint": [
+        4.449999999999975,
+        0.08490354366657812,
+        3.0000000000001705
+      ],
+      "world": [
+        -71.19638172537954,
+        84.22640118827657,
+        -117.80583645946685
+      ],
+      "support": {
+        "point": [
+          -71.18790124441799,
+          84.21580280299189,
+          -117.7911478355688
+        ],
+        "delta": 0.020000000000005635,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1247-n12",
+        "height": 1.1920890706372638
+      }
+    },
+    {
+      "minimumCrownHeight": 1.100553859030371,
+      "index": 9,
+      "id": "pine-2180-cover-9",
+      "seed": 2180,
+      "localPoint": [
+        3.0099999999999776,
+        0.0940881958195314,
+        -4.349999999999781
+      ],
+      "world": [
+        -69.60106404331927,
+        87.34541150370698,
+        -116.48266517992545
+      ],
+      "support": {
+        "point": [
+          -69.59258356235773,
+          87.3348131184223,
+          -116.46797655602742
+        ],
+        "delta": 0.019999999999978736,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-2180-n12",
+        "height": 1.1678880933962685
+      }
+    },
+    {
+      "minimumCrownHeight": 2.7341996549028758,
+      "index": 10,
+      "id": "pine-820-cover-10",
+      "seed": 820,
+      "localPoint": [
+        -9.700000000000003,
+        0.07543096495462806,
+        3.200000000000159
+      ],
+      "world": [
+        -65.09373965623071,
+        84.13908652769021,
+        -121.38575033529379
+      ],
+      "support": {
+        "point": [
+          -65.08525917526914,
+          84.12848814240553,
+          -121.37106171139577
+        ],
+        "delta": 0.019999999999990786,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-820-n12",
+        "height": 2.8649403698445086
+      }
+    },
+    {
+      "minimumCrownHeight": 1.9123506585670174,
+      "index": 11,
+      "id": "pine-820-cover-11",
+      "seed": 820,
+      "localPoint": [
+        -7.000000000000013,
+        0.09325848663244415,
+        4.100000000000179
+      ],
+      "world": [
+        -66.38588543474668,
+        83.76218845800511,
+        -120.92381247446912
+      ],
+      "support": {
+        "point": [
+          -66.37740495378513,
+          83.75159007272045,
+          -120.90912385057109
+        ],
+        "delta": 0.01999999999997723,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-820-n12",
+        "height": 2.0152949519689454
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3099413992271853,
+      "index": 12,
+      "id": "pine-1401-cover-12",
+      "seed": 1401,
+      "localPoint": [
+        3.1599999999999833,
+        0.0871256535269049,
+        0.6500000000002046
+      ],
+      "world": [
+        -70.3269388862107,
+        85.22344647067146,
+        -117.58991728774947
+      ],
+      "support": {
+        "point": [
+          -70.31845840524915,
+          85.21284808538678,
+          -117.57522866385142
+        ],
+        "delta": 0.020000000000005635,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1401-n12",
+        "height": 1.4660349326038296
+      }
+    },
+    {
+      "minimumCrownHeight": 2.2653154698863345,
+      "index": 13,
+      "id": "pine-1247-cover-13",
+      "seed": 1247,
+      "localPoint": [
+        2.9499999999999895,
+        0.0886387336273424,
+        2.7000000000001734
+      ],
+      "world": [
+        -70.50791063290747,
+        84.35459807725792,
+        -118.11336954776277
+      ],
+      "support": {
+        "point": [
+          -70.50692705162996,
+          84.35336885766702,
+          -118.11166593501673
+        ],
+        "delta": 0.0023196356008189896,
+        "terrain": "leviathan-moss-bed-3"
+      },
+      "canopy": {
+        "mesh": "pine-1247-n12",
+        "height": 2.4192171578314055
+      }
+    },
+    {
+      "minimumCrownHeight": 3.631702394953683,
+      "index": 14,
+      "id": "pine-4101-cover-14",
+      "seed": 4101,
+      "localPoint": [
+        -7.340000000000045,
+        0.07234989284334234,
+        -3.949999999999804
+      ],
+      "world": [
+        -65.16776572354495,
+        87.1700421117163,
+        -119.15396724496662
+      ],
+      "support": {
+        "point": [
+          -65.1592852425834,
+          87.15944372643162,
+          -119.1392786210686
+        ],
+        "delta": 0.01999999999998476,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-4101-n11",
+        "height": 3.6923501889793995
+      }
+    },
+    {
+      "minimumCrownHeight": 3.970797773031643,
+      "index": 15,
+      "id": "pine-5566-cover-15",
+      "seed": 5566,
+      "localPoint": [
+        -6.140000000000042,
+        0.08623876265685568,
+        2.550000000000196
+      ],
+      "world": [
+        -66.55144437759535,
+        84.4175657890442,
+        -120.35056897513043
+      ],
+      "support": {
+        "point": [
+          -66.54296389663378,
+          84.40696740375952,
+          -120.33588035123239
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-5566-n12",
+        "height": 4.047061567528906
+      }
+    },
+    {
+      "minimumCrownHeight": 1.5383925901891868,
+      "index": 16,
+      "id": "pine-2180-cover-16",
+      "seed": 2180,
+      "localPoint": [
+        6.609999999999929,
+        0.0909402326703139,
+        -4.049999999999784
+      ],
+      "world": [
+        -71.19898630890987,
+        87.21737020612558,
+        -115.65034773047398
+      ],
+      "support": {
+        "point": [
+          -71.1905058279483,
+          87.2067718208409,
+          -115.63565910657594
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-2180-n12",
+        "height": 2.738817457686145
+      }
+    },
+    {
+      "minimumCrownHeight": 2.1883199056336493,
+      "index": 17,
+      "id": "pine-2180-cover-17",
+      "seed": 2180,
+      "localPoint": [
+        1.8099999999999605,
+        0.07484717965994833,
+        -6.1499999999997925
+      ],
+      "world": [
+        -68.8389058053631,
+        88.10355669768457,
+        -116.36256838837821
+      ],
+      "support": {
+        "point": [
+          -68.83042532440153,
+          88.09295831239987,
+          -116.34787976448017
+        ],
+        "delta": 0.020000000000008754,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-2180-n12",
+        "height": 2.2704278677722414
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3644118793171536,
+      "index": 18,
+      "id": "pine-5566-cover-18",
+      "seed": 5566,
+      "localPoint": [
+        -5.540000000000034,
+        0.08707973090495444,
+        4.950000000000202
+      ],
+      "world": [
+        -67.12938185265104,
+        83.40013089629413,
+        -120.75158604552495
+      ],
+      "support": {
+        "point": [
+          -67.12090137168948,
+          83.38953251100946,
+          -120.73689742162694
+        ],
+        "delta": 0.019999999999966794,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-5566-n12",
+        "height": 1.4932915426524676
+      }
+    },
+    {
+      "minimumCrownHeight": 1.142419123994208,
+      "index": 19,
+      "id": "pine-2171-cover-19",
+      "seed": 2171,
+      "localPoint": [
+        9.709999999999994,
+        0.08057938103619564,
+        0.15000000000024727
+      ],
+      "world": [
+        -73.09554428709492,
+        85.43372399675968,
+        -115.83528250819055
+      ],
+      "support": {
+        "point": [
+          -73.08706380613337,
+          85.42312561147499,
+          -115.82059388429249
+        ],
+        "delta": 0.020000000000013167,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-2171-n12",
+        "height": 1.2618392269328331
+      }
+    },
+    {
+      "minimumCrownHeight": 1.7464062837889427,
+      "index": 20,
+      "id": "pine-1247-cover-20",
+      "seed": 1247,
+      "localPoint": [
+        5.350000000000009,
+        0.08370885833662897,
+        5.400000000000162
+      ],
+      "world": [
+        -71.90379142796758,
+        83.20842692950335,
+        -118.13110600611648
+      ],
+      "support": {
+        "point": [
+          -71.89531094700602,
+          83.19782854421865,
+          -118.11641738221843
+        ],
+        "delta": 0.020000000000013167,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1247-n12",
+        "height": 1.8005322001172157
+      }
+    },
+    {
+      "minimumCrownHeight": 1.561683570168104,
+      "index": 21,
+      "id": "pine-1229-cover-21",
+      "seed": 1229,
+      "localPoint": [
+        -2.3000000000000105,
+        0.09070977085728146,
+        2.4158453015843406e-13
+      ],
+      "world": [
+        -67.8773375294109,
+        85.50001174833162,
+        -118.80708327948255
+      ],
+      "support": {
+        "point": [
+          -67.86885704844933,
+          85.48941336304694,
+          -118.7923946555845
+        ],
+        "delta": 0.02000000000001166,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1229-n12",
+        "height": 1.605764944047781
+      }
+    },
+    {
+      "minimumCrownHeight": 2.6020465101911214,
+      "index": 22,
+      "id": "pine-811-cover-22",
+      "seed": 811,
+      "localPoint": [
+        -11.100000000000009,
+        0.0759504285984258,
+        -0.2999999999997556
+      ],
+      "world": [
+        -64.02395264991608,
+        85.62330833285988,
+        -120.93282488707987
+      ],
+      "support": {
+        "point": [
+          -64.01547216895452,
+          85.6127099475752,
+          -120.91813626318184
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-811-n12",
+        "height": 2.692439201480769
+      }
+    },
+    {
+      "minimumCrownHeight": 1.415546309266216,
+      "index": 23,
+      "id": "pine-820-cover-23",
+      "seed": 820,
+      "localPoint": [
+        -10.90000000000002,
+        0.07018983003318,
+        2.3000000000002387
+      ],
+      "world": [
+        -64.45378139588462,
+        84.51931948177992,
+        -121.47731011365099
+      ],
+      "support": {
+        "point": [
+          -64.44530091492307,
+          84.50872109649524,
+          -121.46262148975295
+        ],
+        "delta": 0.0199999999999952,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-820-n12",
+        "height": 1.4888766342261253
+      }
+    },
+    {
+      "minimumCrownHeight": 3.918485298150896,
+      "index": 24,
+      "id": "pine-5566-cover-24",
+      "seed": 5566,
+      "localPoint": [
+        -4.940000000000054,
+        0.08517432575170233,
+        1.6500000000001904
+      ],
+      "world": [
+        -66.95160211199081,
+        84.79890539950381,
+        -119.84366250214504
+      ],
+      "support": {
+        "point": [
+          -66.94312163102926,
+          84.78830701421914,
+          -119.82897387824701
+        ],
+        "delta": 0.01999999999997723,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-5566-n12",
+        "height": 4.06879835988379
+      }
+    },
+    {
+      "minimumCrownHeight": 1.5329561352720047,
+      "index": 25,
+      "id": "pine-1229-cover-25",
+      "seed": 1229,
+      "localPoint": [
+        -3.499999999999999,
+        0.08653389932371966,
+        -0.8999999999998067
+      ],
+      "world": [
+        -67.2376051177118,
+        85.88052695421672,
+        -118.89903423917114
+      ],
+      "support": {
+        "point": [
+          -67.23529602037945,
+          85.87764118590958,
+          -118.89503476527193
+        ],
+        "delta": 0.005445675411113607,
+        "terrain": "leviathan-moss-bed-9"
+      },
+      "canopy": {
+        "mesh": "pine-1229-n12",
+        "height": 1.6156467547451507
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3233437786464703,
+      "index": 26,
+      "id": "pine-3011-cover-26",
+      "seed": 3011,
+      "localPoint": [
+        -4.390000000000014,
+        0.022293056377272934,
+        -5.84999999999981
+      ],
+      "world": [
+        -66.18282889240007,
+        87.96242476208992,
+        -117.96210822631552
+      ],
+      "support": {
+        "point": [
+          -66.17434841143853,
+          87.95182637680524,
+          -117.94741960241751
+        ],
+        "delta": 0.0199999999999683,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-3011-n11",
+        "height": 1.3355108115565835
+      }
+    },
+    {
+      "minimumCrownHeight": 1.315273859538249,
+      "index": 27,
+      "id": "pine-1401-cover-27",
+      "seed": 1401,
+      "localPoint": [
+        9.159999999999997,
+        0.0764374742142104,
+        3.0500000000002103
+      ],
+      "world": [
+        -73.24070063357456,
+        84.20295681922507,
+        -116.63670067533435
+      ],
+      "support": {
+        "point": [
+          -73.23222015261302,
+          84.1923584339404,
+          -116.62201205143633
+        ],
+        "delta": 0.019999999999971204,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1401-n12",
+        "height": 1.4321622967335517
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3720602483446114,
+      "index": 28,
+      "id": "pine-4101-cover-28",
+      "seed": 4101,
+      "localPoint": [
+        -7.940000000000025,
+        0.07495225455270657,
+        -2.1499999999998067
+      ],
+      "world": [
+        -65.14697350328785,
+        86.40748834597666,
+        -119.71795406307915
+      ],
+      "support": {
+        "point": [
+          -65.1384930223263,
+          86.39688996069198,
+          -119.70326543918112
+        ],
+        "delta": 0.01999999999998476,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-4101-n11",
+        "height": 1.3954584267896606
+      }
+    },
+    {
+      "minimumCrownHeight": 2.944487549349091,
+      "index": 29,
+      "id": "pine-1428-cover-29",
+      "seed": 1428,
+      "localPoint": [
+        5.910000000000012,
+        0.08264831324564967,
+        1.8500000000001933
+      ],
+      "world": [
+        -71.67575034570893,
+        84.71343129854384,
+        -117.17612726543152
+      ],
+      "support": {
+        "point": [
+          -71.66726986474738,
+          84.70283291325916,
+          -117.16143864153346
+        ],
+        "delta": 0.020000000000005635,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1428-n11",
+        "height": 3.0524398674495856
+      }
+    },
+    {
+      "minimumCrownHeight": 1.8466565086195674,
+      "index": 30,
+      "id": "pine-4128-cover-30",
+      "seed": 4128,
+      "localPoint": [
+        -1.2400000000000082,
+        0.07107078837876998,
+        -4.4499999999998465
+      ],
+      "world": [
+        -67.74263211153186,
+        87.38171522470705,
+        -117.51376665166126
+      ],
+      "support": {
+        "point": [
+          -67.73415163057032,
+          87.37111683942237,
+          -117.49907802776323
+        ],
+        "delta": 0.019999999999978736,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-4128-n12",
+        "height": 1.8918411803920618
+      }
+    },
+    {
+      "minimumCrownHeight": 2.4096057804033437,
+      "index": 31,
+      "id": "pine-2153-cover-31",
+      "seed": 2153,
+      "localPoint": [
+        3.399999999999978,
+        0.09301972963690106,
+        -2.099999999999824
+      ],
+      "world": [
+        -70.06779205551041,
+        86.39107429512434,
+        -116.90106181035614
+      ],
+      "support": {
+        "point": [
+          -70.06654862110729,
+          86.38952032702508,
+          -116.89890811879405
+        ],
+        "delta": 0.0029324619883266583,
+        "terrain": "leviathan-moss-bed-15"
+      },
+      "canopy": {
+        "mesh": "pine-2153-n11",
+        "height": 2.440021969728373
+      }
+    },
+    {
+      "minimumCrownHeight": 3.2969134100393522,
+      "index": 32,
+      "id": "pine-2171-cover-32",
+      "seed": 2171,
+      "localPoint": [
+        11.509999999999962,
+        0.08961085224221052,
+        -1.3499999999997812
+      ],
+      "world": [
+        -73.67816220690389,
+        86.07215304416523,
+        -115.04440634669979
+      ],
+      "support": {
+        "point": [
+          -73.66968172594234,
+          86.06155465888055,
+          -115.02971772280175
+        ],
+        "delta": 0.0199999999999952,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-2171-n12",
+        "height": 3.4036763053878705
+      }
+    },
+    {
+      "minimumCrownHeight": 3.4607912895825335,
+      "index": 33,
+      "id": "pine-3011-cover-33",
+      "seed": 3011,
+      "localPoint": [
+        -4.390000000000028,
+        0.0763740104853605,
+        -3.749999999999858
+      ],
+      "world": [
+        -66.47250231866491,
+        87.08630353083069,
+        -118.4638373182088
+      ],
+      "support": {
+        "point": [
+          -66.46402183770336,
+          87.07570514554601,
+          -118.44914869431078
+        ],
+        "delta": 0.01999999999998476,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-3011-n12",
+        "height": 3.5805627490048
+      }
+    },
+    {
+      "minimumCrownHeight": 2.0477699098905084,
+      "index": 34,
+      "id": "pine-4119-cover-34",
+      "seed": 4119,
+      "localPoint": [
+        -1.6000000000000218,
+        0.08428118469962784,
+        -1.9999999999997868
+      ],
+      "world": [
+        -67.91412385105585,
+        86.34635652866469,
+        -118.17079905759519
+      ],
+      "support": {
+        "point": [
+          -67.91417552946892,
+          86.34642111317763,
+          -118.17088856723227
+        ],
+        "delta": -0.00012187613720261476,
+        "terrain": "leviathan-moss-bed-12"
+      },
+      "canopy": {
+        "mesh": "pine-4119-n12",
+        "height": 2.1404473613157795
+      }
+    },
+    {
+      "minimumCrownHeight": 2.098957771880146,
+      "index": 35,
+      "id": "pine-1428-cover-35",
+      "seed": 1428,
+      "localPoint": [
+        2.0099999999999776,
+        0.09052450963233924,
+        1.550000000000196
+      ],
+      "world": [
+        -69.94892671184944,
+        84.84272538706439,
+        -118.0851809958762
+      ],
+      "support": {
+        "point": [
+          -69.94044623088789,
+          84.83212700177971,
+          -118.07049237197818
+        ],
+        "delta": 0.01999999999998476,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1428-n12",
+        "height": 2.179652358794981
+      }
+    },
+    {
+      "minimumCrownHeight": 1.913473438998652,
+      "index": 36,
+      "id": "pine-829-cover-36",
+      "seed": 829,
+      "localPoint": [
+        -8.5,
+        0.07576334623284084,
+        2.10000000000025
+      ],
+      "world": [
+        -65.4676975696648,
+        84.60560104819741,
+        -120.83346444125408
+      ],
+      "support": {
+        "point": [
+          -65.45921708870323,
+          84.59500266291273,
+          -120.81877581735604
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-829-n12",
+        "height": 2.001621002053612
+      }
+    },
+    {
+      "minimumCrownHeight": 1.1095195892753633,
+      "index": 37,
+      "id": "pine-4119-cover-37",
+      "seed": 4119,
+      "localPoint": [
+        1.099999999999981,
+        0.09405494715711257,
+        -1.6999999999998323
+      ],
+      "world": [
+        -69.12507424614341,
+        86.22173896674637,
+        -117.56822666733245
+      ],
+      "support": {
+        "point": [
+          -69.12156027720569,
+          86.21734742376086,
+          -117.56214029459608
+        ],
+        "delta": 0.008287192562927375,
+        "terrain": "leviathan-moss-bed-14"
+      },
+      "canopy": {
+        "mesh": "pine-4119-n12",
+        "height": 1.1352984415471514
+      }
+    },
+    {
+      "minimumCrownHeight": 3.76216828801629,
+      "index": 38,
+      "id": "pine-1997-cover-38",
+      "seed": 1997,
+      "localPoint": [
+        8.36,
+        0.07661200367224638,
+        -2.1499999999997783
+      ],
+      "world": [
+        -72.20543243090128,
+        86.40792811249277,
+        -115.6435635488437
+      ],
+      "support": {
+        "point": [
+          -72.19695194993972,
+          86.39732972720806,
+          -115.62887492494565
+        ],
+        "delta": 0.02000000000002672,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1997-n11",
+        "height": 3.7988206558265323
+      }
+    },
+    {
+      "minimumCrownHeight": 2.1419798811667325,
+      "index": 39,
+      "id": "pine-2180-cover-39",
+      "seed": 2180,
+      "localPoint": [
+        3.3099999999999605,
+        0.08808168303924277,
+        -5.849999999999767
+      ],
+      "world": [
+        -69.53097467686752,
+        87.97985609240772,
+        -116.06126683616071
+      ],
+      "support": {
+        "point": [
+          -69.52249419590596,
+          87.96925770712303,
+          -116.04657821226267
+        ],
+        "delta": 0.0199999999999952,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-2180-n12",
+        "height": 2.25255508399401
+      }
+    },
+    {
+      "minimumCrownHeight": 1.9844078574905355,
+      "index": 40,
+      "id": "pine-1401-cover-40",
+      "seed": 1401,
+      "localPoint": [
+        10.960000000000022,
+        0.06505116415329668,
+        1.5500000000002103
+      ],
+      "world": [
+        -73.81898973825076,
+        84.83597597881749,
+        -115.83832678609701
+      ],
+      "support": {
+        "point": [
+          -73.81050925728923,
+          84.82537759353282,
+          -115.823638162199
+        ],
+        "delta": 0.019999999999960768,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1401-n12",
+        "height": 2.049588699367689
+      }
+    },
+    {
+      "minimumCrownHeight": 1.8954516714513767,
+      "index": 41,
+      "id": "pine-811-cover-41",
+      "seed": 811,
+      "localPoint": [
+        -9.000000000000014,
+        0.045792902890959795,
+        4.500000000000213
+      ],
+      "world": [
+        -65.56278868290434,
+        83.58000237516748,
+        -121.49816708073327
+      ],
+      "support": {
+        "point": [
+          -65.55430820194277,
+          83.56940398988279,
+          -121.48347845683523
+        ],
+        "delta": 0.020000000000008754,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-811-n12",
+        "height": 3.376800114618327
+      }
+    },
+    {
+      "minimumCrownHeight": 1.2063344055964635,
+      "index": 42,
+      "id": "pine-3020-cover-42",
+      "seed": 3020,
+      "localPoint": [
+        -0.6499999999999906,
+        0.010116617461769693,
+        -6.499999999999801
+      ],
+      "world": [
+        -67.71360296557903,
+        88.23481412856522,
+        -116.8734866959706
+      ],
+      "support": {
+        "point": [
+          -67.70512248461748,
+          88.22421574328055,
+          -116.8587980720726
+        ],
+        "delta": 0.019999999999956358,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-3020-n12",
+        "height": 2.0629103662324333
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3566364441255645,
+      "index": 43,
+      "id": "pine-1410-cover-43",
+      "seed": 1410,
+      "localPoint": [
+        5.7499999999999725,
+        0.09446637932681143,
+        -0.4999999999997726
+      ],
+      "world": [
+        -71.29764631777925,
+        85.71301912196881,
+        -116.6812318785109
+      ],
+      "support": {
+        "point": [
+          -71.29425193264325,
+          85.70877702748865,
+          -116.6753526309949
+        ],
+        "delta": 0.00800517129014841,
+        "terrain": "leviathan-moss-bed-17"
+      },
+      "canopy": {
+        "mesh": "pine-1410-n12",
+        "height": 2.464737790071347
+      }
+    },
+    {
+      "minimumCrownHeight": 2.6837864278371057,
+      "index": 44,
+      "id": "pine-1410-cover-44",
+      "seed": 1410,
+      "localPoint": [
+        5.449999999999947,
+        0.08876209795730802,
+        -2.8999999999998067
+      ],
+      "world": [
+        -70.8485815724328,
+        86.72916543306339,
+        -116.2034289236829
+      ],
+      "support": {
+        "point": [
+          -70.84010109147124,
+          86.7185670477787,
+          -116.18874029978487
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1410-n12",
+        "height": 2.791783574938581
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3716925542557872,
+      "index": 45,
+      "id": "pine-829-cover-45",
+      "seed": 829,
+      "localPoint": [
+        -7.600000000000008,
+        0.08082359134559966,
+        2.2737367544323206e-13
+      ],
+      "world": [
+        -65.58027422045384,
+        85.49739230984517,
+        -120.12845292016665
+      ],
+      "support": {
+        "point": [
+          -65.57179373949228,
+          85.48679392456049,
+          -120.11376429626861
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-829-n12",
+        "height": 1.4138451868199637
+      }
+    },
+    {
+      "minimumCrownHeight": 1.3213299450653049,
+      "index": 46,
+      "id": "pine-5566-cover-46",
+      "seed": 5566,
+      "localPoint": [
+        -4.040000000000048,
+        0.08565886745109538,
+        0.4500000000001734
+      ],
+      "world": [
+        -67.18244049309027,
+        85.30786264118808,
+        -119.34348630654624
+      ],
+      "support": {
+        "point": [
+          -67.18031691303635,
+          85.305208721004,
+          -119.33980815799892
+        ],
+        "delta": 0.005008159474797722,
+        "terrain": "leviathan-moss-bed-9"
+      },
+      "canopy": {
+        "mesh": "pine-5566-n12",
+        "height": 1.4707183151026526
+      }
+    },
+    {
+      "minimumCrownHeight": 2.13478047551256,
+      "index": 47,
+      "id": "pine-1238-cover-47",
+      "seed": 1238,
+      "localPoint": [
+        -0.7000000000000446,
+        0.07580268371030116,
+        6.000000000000185
+      ],
+      "world": [
+        -69.36187626706968,
+        82.95191768353597,
+        -119.77837979891176
+      ],
+      "support": {
+        "point": [
+          -69.35339578610811,
+          82.94131929825129,
+          -119.76369117501372
+        ],
+        "delta": 0.020000000000001225,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-1238-n12",
+        "height": 2.1926335650256124
+      }
+    },
+    {
+      "minimumCrownHeight": 2.5283358373233207,
+      "index": 48,
+      "id": "pine-4128-cover-48",
+      "seed": 4128,
+      "localPoint": [
+        -2.439999999999997,
+        0.07741251077207154,
+        -3.249999999999858
+      ],
+      "world": [
+        -67.38333716993166,
+        86.8745666674455,
+        -118.09144955790721
+      ],
+      "support": {
+        "point": [
+          -67.37485668897011,
+          86.86396828216083,
+          -118.07676093400919
+        ],
+        "delta": 0.01999999999998476,
+        "terrain": "leviathan-crust-plate"
+      },
+      "canopy": {
+        "mesh": "pine-4128-n11",
+        "height": 2.5583808108582695
+      }
+    },
+    {
+      "minimumCrownHeight": 2.799340412511146,
+      "index": 49,
+      "id": "pine-1229-cover-49",
+      "seed": 1229,
+      "localPoint": [
+        -0.8000000000000105,
+        0.08959019943385102,
+        1.8000000000002387
+      ],
+      "world": [
+        -68.76508288855062,
+        84.73647182055835,
+        -118.84470334569605
+      ],
+      "support": {
+        "point": [
+          -68.75956951270241,
+          84.72958154137213,
+          -118.83515389860572
+        ],
+        "delta": 0.013002507459662496,
+        "terrain": "leviathan-moss-bed-4"
+      },
+      "canopy": {
+        "mesh": "pine-1229-n12",
+        "height": 2.9312748961703923
+      }
+    }
+  ],
+  "captures": [
+    {
+      "view": "far",
+      "oldLayout": false,
+      "scope": "Actual current SceneModule layout",
+      "camera": [
+        -90.2169097103671,
+        76.78193319310876,
+        -131.20035731625094
+      ],
+      "islandCamera": [
+        24,
+        28,
+        38
+      ],
+      "drawCalls": 360,
+      "triangles": 111746
+    },
+    {
+      "view": "near",
+      "oldLayout": false,
+      "scope": "Actual current SceneModule layout",
+      "camera": [
+        -75.51546991999881,
+        82.34830138484864,
+        -122.73671665491834
+      ],
+      "islandCamera": [
+        7,
+        9,
+        13
+      ],
+      "drawCalls": 242,
+      "triangles": 100775
+    },
+    {
+      "view": "far",
+      "oldLayout": true,
+      "scope": "Same new models/scales restored to old root positions only; not a full old game screenshot",
+      "camera": [
+        -90.2169097103671,
+        76.78193319310876,
+        -131.20035731625094
+      ],
+      "islandCamera": [
+        24,
+        28,
+        38
+      ],
+      "drawCalls": 360,
+      "triangles": 111746
+    }
+  ],
+  "passed": true
+}

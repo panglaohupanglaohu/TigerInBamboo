@@ -1,0 +1,32 @@
+{
+  "captured": true,
+  "load_error": "",
+  "pose_frame": 66,
+  "reset_ship_count": 0,
+  "reset_visual_count": 0,
+  "revision": "warship-battle-v6",
+  "route_heading_dots": [
+    0.99999988079071,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.999999940395355,
+    0.99999988079071,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.999999940395355
+  ],
+  "rowers": 26,
+  "runtime": {
+    "asset": "warship-battle-v6",
+    "boarding_validated": false,
+    "instances": 1,
+    "rowers_per_ship": 26,
+    "saved_pose_frames": 301
+  },
+  "scope": "Actual original Saihoji world, natural ship departure; boarding route and complete battle NOT accepted",
+  "simulation_seconds": 6.1
+}

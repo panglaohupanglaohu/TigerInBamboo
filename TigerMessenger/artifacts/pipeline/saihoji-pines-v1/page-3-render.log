@@ -1,0 +1,51 @@
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/render_saihoji_pine_contact_sheet.py:6: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  sc.render.engine='CYCLES';sc.cycles.use_auto_tile=False;sc.cycles.samples=16;sc.cycles.max_bounces=4;sc.render.resolution_x=960;sc.render.resolution_y=750;sc.render.resolution_percentage=100;sc.view_settings.view_transform='AgX';world=bpy.data.worlds.new('Pine family studio');world.use_nodes=True;world.node_tree.nodes['Background'].inputs[0].default_value=(.42,.45,.47,1);world.node_tree.nodes['Background'].inputs[1].default_value=.8;sc.world=world
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/render_saihoji_pine_contact_sheet.py:10: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.use_nodes=True;b=m.node_tree.nodes.get('Principled BSDF');b.inputs['Base Color'].default_value=(*color,1);b.inputs['Roughness'].default_value=.85
+BlenderMCP: cannot start server in background mode (blender -b) - commands would never execute
+BlenderMCP: run Blender with a GUI, or use a virtual display: xvfb-run -a blender
+BlenderMCP addon registered
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+11:29:12 | INFO: Data are loaded, start creating Blender stuff
+11:29:12 | INFO: Blender create Mesh node PineV1_n8
+11:29:12 | INFO: Blender create Mesh node PineV1_n9
+11:29:12 | INFO: Blender create Mesh node PineV1_n10
+11:29:12 | INFO: Blender create Mesh node PineV1_n11
+11:29:12 | INFO: Blender create Mesh node PineV1_n12
+11:29:12 | INFO: glTF import finished in 0.02s
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/pipeline/render_saihoji_pine_contact_sheet.py:10: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.use_nodes=True;b=m.node_tree.nodes.get('Principled BSDF');b.inputs['Base Color'].default_value=(*color,1);b.inputs['Roughness'].default_value=.85
+11:29:12 | INFO: Data are loaded, start creating Blender stuff
+11:29:12 | INFO: Blender create Mesh node PineV1_n8
+11:29:12 | INFO: Blender create Mesh node PineV1_n9
+11:29:12 | INFO: Blender create Mesh node PineV1_n10
+11:29:12 | INFO: Blender create Mesh node PineV1_n11
+11:29:12 | INFO: Blender create Mesh node PineV1_n12
+11:29:12 | INFO: glTF import finished in 0.02s
+11:29:12 | INFO: Data are loaded, start creating Blender stuff
+11:29:12 | INFO: Blender create Mesh node PineV1_n8
+11:29:12 | INFO: Blender create Mesh node PineV1_n9
+11:29:12 | INFO: Blender create Mesh node PineV1_n10
+11:29:12 | INFO: Blender create Mesh node PineV1_n11
+11:29:12 | INFO: Blender create Mesh node PineV1_n12
+11:29:12 | INFO: glTF import finished in 0.03s
+11:29:12 | INFO: Data are loaded, start creating Blender stuff
+11:29:12 | INFO: Blender create Mesh node PineV1_n8
+11:29:12 | INFO: Blender create Mesh node PineV1_n9
+11:29:12 | INFO: Blender create Mesh node PineV1_n10
+11:29:12 | INFO: Blender create Mesh node PineV1_n11
+11:29:12 | INFO: Blender create Mesh node PineV1_n12
+11:29:12 | INFO: glTF import finished in 0.03s
+11:29:12 | INFO: Data are loaded, start creating Blender stuff
+11:29:12 | INFO: Blender create Mesh node PineV1_n8
+11:29:12 | INFO: Blender create Mesh node PineV1_n9
+11:29:12 | INFO: Blender create Mesh node PineV1_n10
+11:29:12 | INFO: Blender create Mesh node PineV1_n11
+11:29:12 | INFO: Blender create Mesh node PineV1_n12
+11:29:12 | INFO: glTF import finished in 0.03s
+00:04.727  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/saihoji-pines-v1/five-seeds-page-3.png'
+PINE_CONTACT_PAGE_DONE 3 5
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

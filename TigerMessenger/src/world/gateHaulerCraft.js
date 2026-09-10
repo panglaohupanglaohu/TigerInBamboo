@@ -29,6 +29,7 @@
 import * as THREE from "three";
 import { facet } from "../assets/lowPoly.js";
 import { addOutline, toonMat } from "../assets/toon.js";
+import { bindSoccoOptimization } from "../assets/battleOptimization.js";
 
 /** 三台的涂装差异（确定性常量，禁止 Math.random）。 */
 export const GATE_HAULER_VARIANTS = Object.freeze([
@@ -64,6 +65,7 @@ export function createGateHaulerCraft({
   serial = 4,
   pilot = true,
   carrier = false,
+  optimized = true,
 } = {}) {
   const root = new THREE.Group();
   root.name = "gate-hauler-craft";
@@ -195,29 +197,50 @@ export function createGateHaulerCraft({
   fin.position.set(0.85, 2.32, -1.9);
   fin.rotation.x = -0.25;
   root.add(fin);
+  // Stable archive IDs exclude variant-dependent serial ticks and optional pilot.
+  const sourceNodes = new Map();
+  let sourceOrdinal = 0;
+  root.traverse(node => {
+    if (!pilot && sourceOrdinal === 18) sourceOrdinal = 21;
+    const id = "n" + sourceOrdinal++;
+    node.userData.blenderSourceNode = id; sourceNodes.set(id, node);
+  });
   for (const sx of [-1, 1]) {
     // 舷号刻度条（抽象方点，不是字）
     for (let i = 0; i < 3 + (serial % 3); i++) {
       const tick = decal(new THREE.BoxGeometry(0.02, 0.16, 0.12), matShellDark);
       tick.position.set(sx * 1.312, 0.85, 0.9 - i * 0.2);
       root.add(tick);
+      const id = i < 4 ? "n" + ((sx < 0 ? 59 : 64) + i) : "variant:serial:" + sx + ":" + i;
+      tick.userData.blenderSourceNode = id; sourceNodes.set(id, tick);
     }
     // 警示点
     const dot = decal(new THREE.CircleGeometry(0.09, 8), matDark);
     dot.position.set(sx * 1.336, -0.30, 1.5);
     dot.lookAt(dot.position.clone().add(new THREE.Vector3(sx, 0, 0)));
     root.add(dot);
+    const id = sx < 0 ? "n63" : "n68";
+    dot.userData.blenderSourceNode = id; sourceNodes.set(id, dot);
   }
 
   // ---------- 8. SOCCO 专属：气垫裙 / 气帘 / 尾门跳板 / 腹内座位 / 绳锚 ----------
   if (carrier) {
+    const firstCarrierChild = root.children.length;
     buildSoccoCarrierParts(root, { matBelly, matTan, matTanDark, matDark, matShellDark });
+    let id = 69;
+    for (const child of root.children.slice(firstCarrierChild)) child.traverse(node => {
+      const key = "n" + id++; node.userData.blenderSourceNode = key; sourceNodes.set(key, node);
+    });
   }
 
   root.scale.setScalar(scale);
   root.userData.haulerSerial = serial;
   root.userData.haulerLength = 7.6 * scale;
   root.userData.isSocco = carrier === true;
+  if (optimized && carrier && pilot && serial % 3 >= 1) {
+    bindSoccoOptimization(root, sourceNodes);
+    setSoccoRamp(root, 0);
+  }
   return root;
 }
 
@@ -379,18 +402,29 @@ export function createSoccoCraft(opts = {}) {
  * 开合尾门。`open` 0 = 关（跳板收平贴腹）、1 = 全开（末端探到海面）。
  * 幂等、可反复调；不做插值（插值交给调用方的状态机，它才知道节奏）。
  */
-export function setSoccoRamp(craft, open = 0) {
+export function setSoccoRamp(craft, open = 0, groundLocalY = craft?.userData?.soccoGroundLocalY) {
   const hinge = craft?.userData?.soccoRamp;
   if (!hinge) return 0;
   const k = Math.max(0, Math.min(1, open));
-  hinge.rotation.x = SOCCO.rampOpenAngle * k;
+  if (craft.userData.battleOptimization?.active) {
+    const L = SOCCO.rampLength, tip = .01, limit = THREE.MathUtils.degToRad(25);
+    const resolved = Number.isFinite(groundLocalY);
+    const y = resolved ? groundLocalY : -1.99;
+    const ratio = (y + 1.4) / Math.hypot(L, tip);
+    const angle = Math.asin(THREE.MathUtils.clamp(ratio, -1, 1)) + Math.atan(tip / L);
+    const valid = Math.abs(ratio) <= 1 && Math.abs(angle) <= limit;
+    craft.userData.soccoRampGroundStatus = resolved ? (valid ? "resolved-local-ground" : "unreachable-ground") : "review-angle-ground-unresolved";
+    craft.userData.soccoRampGroundValid = resolved && valid;
+    hinge.rotation.x = THREE.MathUtils.lerp(Math.PI / 2, THREE.MathUtils.clamp(angle, -limit, limit), k);
+  } else hinge.rotation.x = SOCCO.rampOpenAngle * k;
   craft.userData.soccoRampOpen = k;
   return k;
 }
 
 /** 尾门是否已开到能放人（≥ 0.9） */
 export function soccoRampReady(craft) {
-  return (craft?.userData?.soccoRampOpen ?? 0) >= 0.9;
+  const threshold=craft?.userData?.battleOptimization?.active?1-1e-6:.9;
+  return (craft?.userData?.soccoRampOpen ?? 0) >= threshold && craft?.userData?.soccoRampGroundValid !== false;
 }
 
 /**
@@ -412,7 +446,31 @@ export function soccoRampFootWorld(craft, out = new THREE.Vector3()) {
   const hinge = craft?.userData?.soccoRamp;
   if (!hinge) return out.set(0, 0, 0);
   craft.updateWorldMatrix(true, true);
-  return out.set(0, 0, -SOCCO.rampLength).applyMatrix4(hinge.matrixWorld);
+  return out.set(0, craft.userData.battleOptimization?.active ? -.01 : 0, -SOCCO.rampLength).applyMatrix4(hinge.matrixWorld);
+}
+
+/** Follow the hold aisle, door hinge and deployed board, never a seat-to-tip diagonal. */
+export function soccoBoardingPoint(craft, seatIndex, progress, out = new THREE.Vector3()) {
+  const seats=soccoSeatWorldPositions(craft),seat=seats[seatIndex%seats.length];
+  if(!seat)return out.copy(craft.position);
+  const start=craft.worldToLocal(seat.clone()),lane=Math.sign(start.x||1)*.4;
+  const foot=craft.worldToLocal(soccoRampFootWorld(craft,new THREE.Vector3()));
+  const points=[start,new THREE.Vector3(lane,-1.34,start.z),new THREE.Vector3(lane,-1.34,-2.35),new THREE.Vector3(lane,-1.34,-2.62),new THREE.Vector3(lane,foot.y+.06,foot.z)];
+  const lengths=points.slice(1).map((p,i)=>p.distanceTo(points[i]));
+  let distance=THREE.MathUtils.clamp(progress,0,1)*lengths.reduce((a,b)=>a+b,0);
+  for(let i=0;i<lengths.length;i++){
+    if(distance<=lengths[i]||i===lengths.length-1){out.lerpVectors(points[i],points[i+1],lengths[i]>0?Math.min(1,distance/lengths[i]):1);break;}
+    distance-=lengths[i];
+  }
+  const down=new THREE.Vector3(0,-1,0).transformDirection(craft.matrixWorld);
+  const origin=craft.localToWorld(new THREE.Vector3(out.x,.1,out.z));
+  const ray=new THREE.Raycaster(origin,down,0,8);
+  const floor=ray.intersectObject(craft,true).find(hit=>{
+    for(let node=hit.object;node&&node!==craft;node=node.parent)if(!node.visible)return false;
+    return true;
+  });
+  if(floor)return out.copy(floor.point).addScaledVector(down,-.06);
+  return craft.localToWorld(out);
 }
 
 const _scA = new THREE.Vector3();

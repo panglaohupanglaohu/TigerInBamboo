@@ -1,0 +1,271 @@
+{
+  "schema": "TigerMessenger.roman-family-blender-candidates.v1",
+  "status": "review_candidates_not_runtime_integrated",
+  "artReview": "Shared tunic, skirt, face, headwear and left-arm corrections reviewed in conversation; no claim of final game integration.",
+  "coordinateContract": "Original Three +Y up/+X front; Blender C:(x,y,z)->(x,-z,y); every original node id and parent retained. Crest fan lies XY with thin axis Z.",
+  "candidates": [
+    {
+      "asset": "romanSoldier_gladius_blue",
+      "role": "gladius",
+      "side": "blue",
+      "files": {
+        "blend": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.blend",
+          "sha256": "a1ed75c7a07208edb9425a4408b7e9a69459c049e2380a891efaea2d0519096e"
+        },
+        "glb": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.glb",
+          "sha256": "3b7f3d8f1e4ff95cbcd1b525d051c7d8b09bd94251f475f857bff0d13063c2fa"
+        },
+        "assembly.json": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.assembly.json",
+          "sha256": "ac3ddd38f36cd39fde1f42ab7c9859281c12b35791b6f34fbfce1f21f5583a4c"
+        }
+      },
+      "sourceBlendUnchanged": true,
+      "originalNodeCount": 55,
+      "originalIdsAndParentsPreserved": true,
+      "actorExportRootAtOrigin": true,
+      "candidateAdditions": 14,
+      "archivedHiddenMeshNodes": 29,
+      "glbPose": {
+        "name": "ready",
+        "frame": 1
+      },
+      "blenderReviewPoseSamples": 4,
+      "blenderTimelineLastFrame": 73,
+      "blenderFps": 120,
+      "reference": {
+        "path": "assets/concepts/roman-soldier-target-v2.png",
+        "sha256": "3b3a88e5f80ee6a02199de07be14c23dcf1b72c5a02a1b1164795a5ae0c072ea"
+      },
+      "renders": "artifacts/pipeline/roman-family-blender/romanSoldier_gladius_blue"
+    },
+    {
+      "asset": "romanSoldier_gladius_red",
+      "role": "gladius",
+      "side": "red",
+      "files": {
+        "blend": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_red.blend",
+          "sha256": "28efe35f4b79ca4f0f31d7bd3d34218e683ed59a6996eed792e6a6100509cb0c"
+        },
+        "glb": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_red.glb",
+          "sha256": "254c60b6b59b318966c73c0903a09948cda22c9b4147e411ac19143a95541cba"
+        },
+        "assembly.json": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_red.assembly.json",
+          "sha256": "ee07fc8b3a59186e6805d94b17aa7444f3f288e3a1f367a0fca319946855e6a0"
+        }
+      },
+      "sourceBlendUnchanged": true,
+      "originalNodeCount": 55,
+      "originalIdsAndParentsPreserved": true,
+      "actorExportRootAtOrigin": true,
+      "candidateAdditions": 14,
+      "archivedHiddenMeshNodes": 29,
+      "glbPose": {
+        "name": "ready",
+        "frame": 1
+      },
+      "blenderReviewPoseSamples": 4,
+      "blenderTimelineLastFrame": 73,
+      "blenderFps": 120,
+      "reference": {
+        "path": "assets/concepts/roman-soldier-target-v2.png",
+        "sha256": "3b3a88e5f80ee6a02199de07be14c23dcf1b72c5a02a1b1164795a5ae0c072ea"
+      },
+      "renders": "artifacts/pipeline/roman-family-blender/romanSoldier_gladius_red"
+    },
+    {
+      "asset": "romanSoldier_spear_blue",
+      "role": "spear",
+      "side": "blue",
+      "files": {
+        "blend": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_spear_blue.blend",
+          "sha256": "58672d8ec18dacbfa8f5ba577626f565ee41c0f0b730880f5615ce17a9a60c4f"
+        },
+        "glb": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_spear_blue.glb",
+          "sha256": "4d1282f74c39ad603eddf32ef4194ae86f6d1b812201b4813ce14163e9cc14a8"
+        },
+        "assembly.json": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_spear_blue.assembly.json",
+          "sha256": "0b4783d98a05d2f594b701bd82a4a01e41c3524745a0adc2a3e4459583119a9e"
+        }
+      },
+      "sourceBlendUnchanged": true,
+      "originalNodeCount": 50,
+      "originalIdsAndParentsPreserved": true,
+      "actorExportRootAtOrigin": true,
+      "candidateAdditions": 13,
+      "archivedHiddenMeshNodes": 23,
+      "glbPose": {
+        "name": "ready",
+        "frame": 1
+      },
+      "blenderReviewPoseSamples": 5,
+      "blenderTimelineLastFrame": 97,
+      "blenderFps": 120,
+      "reference": {
+        "path": "assets/concepts/roman-spearman-target-v1.png",
+        "sha256": "6987d88357435e7d8d2d938f0f95ce33860207e5b102165e952362ea558fda36"
+      },
+      "renders": "artifacts/pipeline/roman-family-blender/romanSoldier_spear_blue"
+    },
+    {
+      "asset": "romanSoldier_spear_red",
+      "role": "spear",
+      "side": "red",
+      "files": {
+        "blend": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_spear_red.blend",
+          "sha256": "791048a9b0a0effd489858ca96ec82a16528e1ca25b11e89442f0f3287d05040"
+        },
+        "glb": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_spear_red.glb",
+          "sha256": "bbf10cf845828179ed3e5cbf45554e2c0f5a61182308a60923b888487c4ad529"
+        },
+        "assembly.json": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_spear_red.assembly.json",
+          "sha256": "91e990fc8695548635150bb7005a13560a250c42afa720802c309c2969711c42"
+        }
+      },
+      "sourceBlendUnchanged": true,
+      "originalNodeCount": 50,
+      "originalIdsAndParentsPreserved": true,
+      "actorExportRootAtOrigin": true,
+      "candidateAdditions": 13,
+      "archivedHiddenMeshNodes": 23,
+      "glbPose": {
+        "name": "ready",
+        "frame": 1
+      },
+      "blenderReviewPoseSamples": 5,
+      "blenderTimelineLastFrame": 97,
+      "blenderFps": 120,
+      "reference": {
+        "path": "assets/concepts/roman-spearman-target-v1.png",
+        "sha256": "6987d88357435e7d8d2d938f0f95ce33860207e5b102165e952362ea558fda36"
+      },
+      "renders": "artifacts/pipeline/roman-family-blender/romanSoldier_spear_red"
+    },
+    {
+      "asset": "romanSoldier_longbow_blue",
+      "role": "longbow",
+      "side": "blue",
+      "files": {
+        "blend": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_longbow_blue.blend",
+          "sha256": "30eef75c221e55b3aa19d6042fdd260c086312e0fecc212e0ddbda8efa9729a1"
+        },
+        "glb": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_longbow_blue.glb",
+          "sha256": "a7ba02aff336357ca962b4e16fa050948cb46d7a85e51f93eea12bd0538782a8"
+        },
+        "assembly.json": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_longbow_blue.assembly.json",
+          "sha256": "fd5e1a2fc434088e79ebcaecb420ea930202801af50253b9932c66829bfcdbea"
+        }
+      },
+      "sourceBlendUnchanged": true,
+      "originalNodeCount": 89,
+      "originalIdsAndParentsPreserved": true,
+      "actorExportRootAtOrigin": true,
+      "candidateAdditions": 15,
+      "archivedHiddenMeshNodes": 48,
+      "glbPose": {
+        "name": "hold",
+        "frame": 132,
+        "sourceIndex": 131
+      },
+      "blenderReviewPoseSamples": 480,
+      "blenderTimelineLastFrame": 480,
+      "blenderFps": 120,
+      "reference": {
+        "path": "assets/concepts/roman-archer-target-v1.png",
+        "sha256": "4fc4dc11c1eec4c7a19f21a02328ee7d33a398ed9ab7bdd19f6470c45b7d1536"
+      },
+      "renders": "artifacts/pipeline/roman-family-blender/romanSoldier_longbow_blue"
+    },
+    {
+      "asset": "romanSoldier_longbow_red",
+      "role": "longbow",
+      "side": "red",
+      "files": {
+        "blend": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_longbow_red.blend",
+          "sha256": "89c5cf420ba917a947d18175c45ef2710913176c95b9b0bda0bc4187fcae842a"
+        },
+        "glb": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_longbow_red.glb",
+          "sha256": "bfd7d26313ba2696477a5f1074b435cf9296ccba9562199dfca6e168482a9319"
+        },
+        "assembly.json": {
+          "path": "assets/models/optimized/roman-family-v1/romanSoldier_longbow_red.assembly.json",
+          "sha256": "f2014495d49d3ede7fa377371f301e1e3719a852f6e7efaa31f4002f30d41c65"
+        }
+      },
+      "sourceBlendUnchanged": true,
+      "originalNodeCount": 89,
+      "originalIdsAndParentsPreserved": true,
+      "actorExportRootAtOrigin": true,
+      "candidateAdditions": 15,
+      "archivedHiddenMeshNodes": 48,
+      "glbPose": {
+        "name": "hold",
+        "frame": 132,
+        "sourceIndex": 131
+      },
+      "blenderReviewPoseSamples": 480,
+      "blenderTimelineLastFrame": 480,
+      "blenderFps": 120,
+      "reference": {
+        "path": "assets/concepts/roman-archer-target-v1.png",
+        "sha256": "4fc4dc11c1eec4c7a19f21a02328ee7d33a398ed9ab7bdd19f6470c45b7d1536"
+      },
+      "renders": "artifacts/pipeline/roman-family-blender/romanSoldier_longbow_red"
+    }
+  ],
+  "outputs": {
+    "overviewBlend": "assets/models/optimized/roman-family-v1/roman-family-v1-overview.blend",
+    "overviewRender": "artifacts/pipeline/roman-family-blender/roman-family-v1-overview.png"
+  },
+  "animationScope": {
+    "gladius": "4 authored review key poses over 73 frames",
+    "spear": "5 authored ready/thrust review key poses over 97 frames",
+    "longbow": "480 explicit samples at 120Hz, preserved source phase/release/arrow visibility events; transforms LINEAR and arrow scale CONSTANT; stable authored shooting stance",
+    "glb": "Complete static ready or hold actor, export_current_frame=True; no runtime animation integration implied"
+  },
+  "preservation": {
+    "sourceFilesReadOnly": true,
+    "frontBlenderOrMcpUsed": false,
+    "webGodotRuntimeModified": false,
+    "overviewDisplayTransformsBakedIntoIndividualGlb": false
+  },
+  "validation": {
+    "manifestIdentityAndSourceChecksPassed": true,
+    "independentFinalBatch": {
+      "report": "artifacts/pipeline/roman-family-blender-validation/family-face-final-v1/report.json",
+      "sha256": "6c8229b46be75ef5dfaff662487d5eb38c10c933459a93f319ffca4d80d1dca8",
+      "status": "six assets passed structure, anchors, sampled surface crossings and saved timeline checks (independently run by root)",
+      "structurePassed": true,
+      "anchorsPassed": true,
+      "sampledSurfaceCrossingsClear": true,
+      "savedTimelinePassed": true,
+      "fullContactValidationPassed": false,
+      "fullContactScope": "Validator intentionally does not certify unrestricted whole-body motion/contact; sampled checks passed."
+    },
+    "earlierIndependentPassed": [
+      "gladius-blue-stance-v1 ready skirt/leg intersections zero",
+      "spear-left-arm-v2 structure/anchors/sampled surfaces",
+      "longbow-left-arm-v4 structure/anchors/sampled surfaces/480-frame saved timeline"
+    ]
+  },
+  "limits": [
+    "No claim of universal full-body collision freedom between sparse sword/spear key poses.",
+    "Candidates remain separate from the live Web/Godot game."
+  ]
+}

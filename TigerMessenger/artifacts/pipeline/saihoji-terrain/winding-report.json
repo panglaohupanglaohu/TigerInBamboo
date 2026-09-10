@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "kind": "organic-saihoji",
+      "normals": 1008,
+      "downward": 0,
+      "top_ray_hits": 9,
+      "passed": true
+    },
+    {
+      "kind": "legacy-square",
+      "normals": 4225,
+      "downward": 0,
+      "top_ray_hits": 9,
+      "passed": true
+    }
+  ],
+  "scope": "Actual original factory; visible front-face raycasts from above, organic and unchanged legacy branches"
+}

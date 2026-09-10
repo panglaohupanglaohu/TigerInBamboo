@@ -1,0 +1,47 @@
+{
+  "checksPassed": true,
+  "sourceFileUnchanged": true,
+  "candidateFileUnchanged": true,
+  "originalNodeCount": 295,
+  "addedNodeCount": 8,
+  "savedFramesChecked": 121,
+  "maxOriginalBasisError": 2.0116567611694336e-07,
+  "maxUnmodifiedMeshVertexError": 0,
+  "maxSavedJawMatrixError": 0,
+  "maxSavedMorphWeightError": 2.9542711055263737e-08,
+  "maxThroatEndpointErrorActorUnits": 2.7392209274950164e-06,
+  "maxGLBLocalMatrixError": 0,
+  "GLBColorMeshesChecked": 8,
+  "GLBArchivedHiddenMeshes": 180,
+  "failures": [],
+  "scope": "Structural and saved 30Hz jaw/morph coupling checks; not full visual acceptance, all-surface contact certification, or gameplay integration.",
+  "files": {
+    "blend": "f4d5c78169e4628861fe8a6743bd05059a9746405b307498ffc77e7bdd76b232",
+    "glb": "1b7190a3861514c141355c7967f8418c37877f5ddfe6ba7e6a8a07e571699260",
+    "assembly": "2fa07b69352f8403e5ccb1f534e5cccd5c1b93db87e0caaaa3de2ea364cf0ff8"
+  },
+  "geometryMetrics": {
+    "units": "source actor local units, before original root scale .5",
+    "closedSplitHullVertexToOriginalSurfaceMax": 3.198720833097468e-06,
+    "closedOriginalHullArea": 5562.420476990629,
+    "closedSplitHullArea": 5562.420445341566,
+    "closedSplitHullAreaRelativeError": 5.689800570452215e-09,
+    "closedAddedMouthMaxOutwardVertexDistance": 0.18328233063220978,
+    "closedAddedMouthMaxOutwardNode": "add:lower-lip",
+    "mouthPalateLongitudinalDepth": 19.0,
+    "lowerFloorCenterRecessBelowInnerRim": 2.84999890760942,
+    "openLowerLipDropBelowRearPalate": 8.964609146118164,
+    "measurementScope": "Surface distance on closed split hull vertices and combined triangle area; outward parity/nearest-surface checks on added mouth vertices. Not a continuous Hausdorff proof or silhouette pixel comparison."
+  },
+  "islandSignature": {
+    "source": "8173be608b152a6a6238b543805a4bee3206541e4a08f482574f5f7387259aa8",
+    "candidate": "8173be608b152a6a6238b543805a4bee3206541e4a08f482574f5f7387259aa8",
+    "identical": true,
+    "scope": "73 original n102\u2013n174 nodes: IDs, parents, local Blender matrix_basis, exact mesh vertices and face indices; direct independent read of both saved Blend files."
+  },
+  "GLBMaterialCheck": {
+    "originalMaterialsChecked": 23,
+    "maxLinearBaseColorOpacityError": 0,
+    "scope": "Against original source snapshot, including non-vertex-colored eyes, tubercles and moss; engine toon shading parity is not asserted."
+  }
+}

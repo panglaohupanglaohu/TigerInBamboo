@@ -1,0 +1,19 @@
+{
+  "round": "user-round-1",
+  "changes": [
+    "Removed all physical bark noise",
+    "Restored four smoothing passes on connected wood",
+    "Seven exported coherent longitudinal face colors",
+    "Retained 1.42 crown thickness for this intermediate review"
+  ],
+  "glb": "assets/models/optimized/saihoji-pines-v2/811/user-round-1/ancient-pine-811-v2-aged.glb",
+  "glbSHA256": "8d449ef6629c7df0c8de30d8e326954282c04d50a803d6443e1d9bfb70e550a7",
+  "blend": "assets/models/optimized/saihoji-pines-v2/811/user-round-1/ancient-pine-811-v2-aged.blend",
+  "blendSHA256": "753312517acb4505481cc9fced48981ec868c233dd2903e47bfe835466345b9e",
+  "renders": [
+    "artifacts/pipeline/saihoji-pine-v2-811/user-round-1/v2-aged-full.png",
+    "artifacts/pipeline/saihoji-pine-v2-811/user-round-1/v2-aged-trunk.png",
+    "artifacts/pipeline/saihoji-pine-v2-811/user-round-1/v2-aged-root.png"
+  ],
+  "reviewFinding": "Trunk broad flat poles and round sausage-like crowns still differ from approved target; this directly motivates user-round-2."
+}

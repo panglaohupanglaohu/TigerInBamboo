@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "sourceFilesUnchanged": {
+    "assets/models/optimized/vanguard-battle-v1/vanguard-battle-v1.glb": "8961c19fdc1c8d1f8de9147a5a4d5a84c7e6c648751a8fd37eefe9cbd6748048",
+    "assets/models/optimized/vanguard-battle-v1/vanguard-battle-v1.blend": "636db6573e2df89a02954dc7bafc4253e33272674f6642007a0cea31fa3c1b5c"
+  },
+  "geometryMeshCount": 107,
+  "sourceAndSavedGeometryUVParentBasisHash": "3d4f03e6fdb6a3cc3ba12b96b9251d7f11ee7d90ac8074c90c8b7823c0ec95e4",
+  "savedGeometryAndUVExactlyUnchanged": true,
+  "savedTimelineFramesCompared": 161,
+  "savedTimelineExactlyUnchanged": true,
+  "glbBinaryChunkSHA256": "12f46bfe212bccb30fe13bcd109e7718cc6b42bc4ac9d6c018b65e34dfcdb7f8",
+  "glbBinaryExactlyUnchanged": true,
+  "allNonMaterialGLBJsonExactlyUnchanged": true,
+  "nodes": 117,
+  "meshes": 107,
+  "materialUUIDsChanged": [
+    "m0",
+    "m11",
+    "m13",
+    "m14",
+    "m15",
+    "m2",
+    "m4",
+    "m6",
+    "m7",
+    "m8",
+    "m9"
+  ],
+  "transparencyAndAlphaUnchanged": true,
+  "originalEmissionStrengthRatiosRetained": true,
+  "colorOnly": true,
+  "runtimeIntegrated": false,
+  "freshGLBMaterialReadback": [
+    {
+      "uuid": "m13",
+      "maxLinearBaseError": 2.384185793236071e-08
+    },
+    {
+      "uuid": "m14",
+      "maxLinearBaseError": 4.973560757681739e-09
+    },
+    {
+      "uuid": "m15",
+      "maxLinearBaseError": 1.1920928966180355e-08
+    },
+    {
+      "uuid": "m6",
+      "maxLinearBaseError": 1.5896157279371437e-08
+    },
+    {
+      "uuid": "m7",
+      "maxLinearBaseError": 1.5889248472511497e-08
+    },
+    {
+      "uuid": "m0",
+      "maxLinearBaseError": 1.1189263196542676e-09
+    },
+    {
+      "uuid": "m11",
+      "maxLinearBaseError": 7.255534950623144e-09
+    },
+    {
+      "uuid": "m2",
+      "maxLinearBaseError": 1.7786581096856935e-09
+    },
+    {
+      "uuid": "m4",
+      "maxLinearBaseError": 3.0619938182208095e-10
+    },
+    {
+      "uuid": "m8",
+      "maxLinearBaseError": 9.54916384854343e-09
+    },
+    {
+      "uuid": "m9",
+      "maxLinearBaseError": 1.7815492553419077e-09
+    }
+  ],
+  "beforeAfterCamerasAndColorManagementExactlyEqual": true
+}

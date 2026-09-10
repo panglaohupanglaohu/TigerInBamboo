@@ -1,0 +1,3042 @@
+{
+  "checks": 42,
+  "events": [
+    {
+      "defender_faction": "blue",
+      "narrative_revision": true,
+      "round_id": 1,
+      "time": 0.0,
+      "type": "round_started"
+    },
+    {
+      "cue": "kun_prelude_once",
+      "restart": false,
+      "round_id": 1,
+      "time": 1.0,
+      "type": "bgm_intent"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "ship_id": "saihoji-warship-0",
+      "time": 3.0,
+      "type": "ship_departure_requested"
+    },
+    {
+      "cue": "kun_storm_once",
+      "restart": false,
+      "round_id": 1,
+      "time": 4.0,
+      "type": "bgm_intent"
+    },
+    {
+      "round_id": 1,
+      "suction": 1.0,
+      "target": 1.0,
+      "time": 4.0,
+      "type": "whale_lift_requested"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "ship_id": "saihoji-warship-1",
+      "time": 19.0,
+      "type": "ship_departure_requested"
+    },
+    {
+      "round_id": 1,
+      "ship_id": "saihoji-warship-0",
+      "time": 41.0,
+      "type": "ship_landed"
+    },
+    {
+      "round_id": 1,
+      "ship_id": "saihoji-warship-1",
+      "time": 41.0,
+      "type": "ship_landed"
+    },
+    {
+      "round_id": 1,
+      "time": 41.0,
+      "type": "formation_requested"
+    },
+    {
+      "round_id": 1,
+      "time": 41.0,
+      "type": "formation_ready"
+    },
+    {
+      "round_id": 1,
+      "time": 42.0,
+      "type": "whale_risen"
+    },
+    {
+      "faction": "blue",
+      "round_id": 1,
+      "target_ids": [
+        "fleet1"
+      ],
+      "time": 42.0,
+      "type": "resistance_enabled"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 1,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "direction": "(0.0, 1.0, 0.0)",
+      "heavy_ids": [
+        "heavy1",
+        "heavy2",
+        "heavy3",
+        "heavy4"
+      ],
+      "round_id": 1,
+      "threat_ids": [
+        "blue1"
+      ],
+      "time": 42.0,
+      "type": "assault_requested"
+    },
+    {
+      "round_id": 1,
+      "stage": "insert",
+      "time": 42.0,
+      "type": "assault_stage"
+    },
+    {
+      "round_id": 1,
+      "stage": "combat",
+      "time": 42.0,
+      "type": "assault_stage"
+    },
+    {
+      "cooldown": 9.0,
+      "enemy_ids": [
+        "heavy1"
+      ],
+      "round_id": 1,
+      "time": 42.0,
+      "type": "whale_swallow"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 2,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 3,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 4,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 5,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 6,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 7,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 8,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 9,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 10,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 11,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 12,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 13,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 14,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 15,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 16,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 17,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 18,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 19,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 20,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 21,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 22,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 23,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 24,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 25,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 26,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 27,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 28,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 29,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 30,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 31,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 32,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 33,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 34,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 35,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 36,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 37,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 38,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 39,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 40,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 41,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 42,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 43,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 44,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 45,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 46,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 47,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 48,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 49,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 50,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 1,
+      "suction": 0.833333333333333,
+      "time": 42.0,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.833333333333333,
+      "time": 42.0,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 51,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 52,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 53,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 54,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 55,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 56,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 57,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 58,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 59,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 60,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 61,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 62,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 63,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 64,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 65,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 66,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 67,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 68,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 69,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 70,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 71,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 72,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 73,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 74,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 75,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 76,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 77,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 78,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 79,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 80,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 81,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 82,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 83,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 84,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 85,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 86,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 87,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 88,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 89,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 90,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 91,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 92,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 93,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 94,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 95,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 96,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 97,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 98,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 99,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 100,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 2,
+      "suction": 0.666666666666667,
+      "time": 42.0,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.666666666666667,
+      "time": 42.0,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 101,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 102,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 103,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 104,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 105,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 106,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 107,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 108,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 109,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 110,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 111,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 112,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 113,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 114,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 115,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 116,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 117,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 118,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 119,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 120,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 121,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 122,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 123,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 124,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 125,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 126,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 127,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 128,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 129,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 130,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 131,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 132,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 133,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 134,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 135,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 136,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 137,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 138,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 139,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 140,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 141,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 142,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 143,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 144,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 145,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 146,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 147,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 148,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 149,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 150,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 3,
+      "suction": 0.5,
+      "time": 42.0,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.5,
+      "time": 42.0,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 151,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 152,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 153,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 154,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 155,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 156,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 157,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 158,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 159,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 160,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 161,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 162,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 163,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 164,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 165,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 166,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 167,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 168,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 169,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 170,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 171,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 172,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 173,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 174,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 175,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 176,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 177,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 178,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 179,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 180,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 181,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 182,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 183,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 184,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 185,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 186,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 187,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 188,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 189,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 190,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 191,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 192,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 193,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 194,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 195,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 196,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 197,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 198,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 199,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 200,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 4,
+      "suction": 0.333333333333333,
+      "time": 42.0,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.333333333333333,
+      "time": 42.0,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 201,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 202,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 203,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 204,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 205,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 206,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 207,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 208,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 209,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 210,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 211,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 212,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 213,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 214,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 215,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 216,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 217,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 218,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 219,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 220,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 221,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 222,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 223,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 224,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 225,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 226,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 227,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 228,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 229,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 230,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 231,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 232,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 233,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 234,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 235,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 236,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 237,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 238,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 239,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 240,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 241,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 242,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 243,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 244,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 245,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 246,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 247,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 248,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 249,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 250,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 5,
+      "suction": 0.166666666666667,
+      "time": 42.0,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.166666666666667,
+      "time": 42.0,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 251,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 252,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 253,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 254,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 255,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 256,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 257,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 258,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 259,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 260,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 261,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 262,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 263,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 264,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 265,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 266,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 267,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 268,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 269,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 270,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 271,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 272,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 273,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 274,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 275,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 276,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 277,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 278,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 279,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 280,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 281,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 282,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 283,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 284,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 285,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 286,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 287,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 288,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 289,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 290,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 291,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 292,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 293,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 294,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 295,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 296,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 297,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 298,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 299,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 300,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 42.0,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "step": 6,
+      "suction": 0.0,
+      "time": 42.0,
+      "type": "suction_changed"
+    },
+    {
+      "round_id": 1,
+      "target": 0.0,
+      "time": 42.0,
+      "type": "whale_lift_requested"
+    },
+    {
+      "cue": "",
+      "restart": false,
+      "round_id": 1,
+      "time": 43.0,
+      "type": "bgm_intent"
+    },
+    {
+      "round_id": 1,
+      "time": 43.0,
+      "type": "whale_returned"
+    },
+    {
+      "faction": "blue",
+      "hold_seconds": 3.2,
+      "round_id": 1,
+      "time": 43.0,
+      "type": "withdrawal_requested"
+    },
+    {
+      "round_id": 1,
+      "stage": "withdraw",
+      "time": 44.0,
+      "type": "assault_stage"
+    },
+    {
+      "round_id": 1,
+      "stage": "extract",
+      "time": 44.0,
+      "type": "assault_stage"
+    },
+    {
+      "round_id": 1,
+      "stage": "done",
+      "time": 44.0,
+      "type": "assault_stage"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 301,
+      "kind": "arrow",
+      "round_id": 1,
+      "shooter_id": "blue1",
+      "time": 44.0,
+      "type": "fleet_hit"
+    },
+    {
+      "round_id": 1,
+      "time": 47.0,
+      "type": "withdrawal_complete"
+    },
+    {
+      "round_id": 1,
+      "time": 48.0,
+      "type": "round_completed"
+    },
+    {
+      "reason": "reset",
+      "round_id": 1,
+      "time": 48.0,
+      "type": "cleanup_requested"
+    },
+    {
+      "defender_faction": "blue",
+      "narrative_revision": true,
+      "round_id": 2,
+      "time": 48.0,
+      "type": "round_started"
+    },
+    {
+      "reason": "test interruption",
+      "round_id": 2,
+      "time": 48.0,
+      "type": "cleanup_requested"
+    },
+    {
+      "reason": "reset",
+      "round_id": 2,
+      "time": 48.0,
+      "type": "cleanup_requested"
+    },
+    {
+      "defender_faction": "blue",
+      "narrative_revision": true,
+      "round_id": 3,
+      "time": 48.0,
+      "type": "round_started"
+    },
+    {
+      "cue": "kun_prelude_once",
+      "restart": false,
+      "round_id": 3,
+      "time": 48.1,
+      "type": "bgm_intent"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 1,
+      "kind": "arrow",
+      "round_id": 3,
+      "shooter_id": "blue1",
+      "time": 48.1,
+      "type": "fleet_hit"
+    },
+    {
+      "cue": "kun_storm_once",
+      "restart": false,
+      "round_id": 3,
+      "time": 53.1,
+      "type": "bgm_intent"
+    },
+    {
+      "round_id": 3,
+      "suction": 1.0,
+      "target": 1.0,
+      "time": 53.1,
+      "type": "whale_lift_requested"
+    },
+    {
+      "aircraft_id": "fleet1",
+      "hits": 2,
+      "kind": "arrow",
+      "round_id": 3,
+      "shooter_id": "blue1",
+      "time": 53.1,
+      "type": "fleet_hit"
+    },
+    {
+      "direction": "(0.0, 1.0, 0.0)",
+      "heavy_ids": [
+        "heavy1",
+        "heavy2",
+        "heavy3",
+        "heavy4"
+      ],
+      "round_id": 3,
+      "threat_ids": [
+        "blue1"
+      ],
+      "time": 53.1,
+      "type": "assault_requested"
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "scope": "isolated state/event core; observations supplied by tests, no actual world/physics/audio integration"
+}

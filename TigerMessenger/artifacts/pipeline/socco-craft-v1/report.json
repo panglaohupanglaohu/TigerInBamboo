@@ -1,0 +1,228 @@
+{
+  "status": "Blender functional geometry candidate; runtime integration pending",
+  "sourceHashesBefore": {
+    "blend": "3a0335e5f754fb6d4fdcd81dd0cae14b2aabb08cc15a93f4431a8238c69f118d",
+    "snapshot": "6df0bbbd4e9e37a631c8a8ee1b3c8b96249517884632dca7676dda3edac14bed"
+  },
+  "sourceHashesAfter": {
+    "blend": "3a0335e5f754fb6d4fdcd81dd0cae14b2aabb08cc15a93f4431a8238c69f118d",
+    "snapshot": "6df0bbbd4e9e37a631c8a8ee1b3c8b96249517884632dca7676dda3edac14bed"
+  },
+  "trooperSourceHashUnchanged": true,
+  "sourceVisibleTriangles": 1858,
+  "candidateVisibleTriangles": 2970,
+  "sourceNodeCount": 127,
+  "sourceLocalMatrixMaxError": 0.0,
+  "addedStaticNodes": 4,
+  "boardingContract": {
+    "sourceAsset": "soccoCraft",
+    "factorySeats": 14,
+    "battleActiveSeats": [
+      0,
+      1,
+      2,
+      4,
+      5,
+      8,
+      9
+    ],
+    "seatNodeIDs": [
+      "n109",
+      "n110",
+      "n111",
+      "n113",
+      "n114",
+      "n117",
+      "n118"
+    ],
+    "allSeatNodeIDs": [
+      "n109",
+      "n110",
+      "n111",
+      "n112",
+      "n113",
+      "n114",
+      "n115",
+      "n116",
+      "n117",
+      "n118",
+      "n119",
+      "n120",
+      "n121",
+      "n122"
+    ],
+    "hinge": "n87",
+    "hingeRootPosition": [
+      0,
+      -1.4,
+      -2.62
+    ],
+    "rampLength": 2.9,
+    "rampTipHalfThickness": 0.01,
+    "closedAngleRad": 1.5707963267948966,
+    "fixtureGroundLocalY": -1.99,
+    "fixtureOpenAngleRad": -0.20142907735358465,
+    "maxBoardingSlopeRad": 0.4363323129985824,
+    "runtimeGroundEquation": "a=asin((ground_y-hinge_y)/sqrt(L^2+tip_half^2))+atan(tip_half/L); raycast actual ground in craft local frame, then sample/refine endpoint. Reposition craft if slope exceeds 25 deg or endpoint is unreachable.",
+    "passengerPath": "rear-most rows exit first; keep own x lane inside hold/ramp, then converge after ramp foot; no direct diagonal through occupied rows",
+    "sourceNodeMatricesRetainedAtArchiveRest": true,
+    "changedGeometryNodes": [
+      "n1",
+      "n3",
+      "n7",
+      "n9",
+      "n16",
+      "n22",
+      "n24",
+      "n25",
+      "n27",
+      "n29",
+      "n31",
+      "n32",
+      "n36",
+      "n37",
+      "n38",
+      "n39",
+      "n40",
+      "n41",
+      "n42",
+      "n43",
+      "n44",
+      "n57",
+      "n88"
+    ],
+    "propulsionRepack": "Original lower assembly geometrically compacted under floor around center(0,-1.76,-1.65), factors(.8,.30,.58); eliminates original pod intersecting boarding ramp; source node matrices unchanged.",
+    "oldRampIssue": "factory setSoccoRamp(0) leaves deck horizontal; -1.36 at 1 points steeply down. New closed is +pi/2 and deployed angle resolves ground.",
+    "newCrewTransport": {
+      "asset": "vanguard-battle-v1",
+      "glbPose": "static idle frame 1; original emitter nodes n62,n63 hidden during transport",
+      "activeRootLocalXOffsetBySeatSide": {
+        "left": -0.12,
+        "right": 0.09
+      },
+      "resultingCraftLocalXLanes": [
+        -0.4,
+        0.43
+      ],
+      "footSupport": "Per-frame support raycasts under actual boot soles; keep 0.001 contact skin. Do not use only root Y or fixed ramp angle.",
+      "bodyScale": 1,
+      "sourceAnchorsChanged": false
+    },
+    "capacityScope": "14 original seat anchors retained; this battle validates 7 occupants, not 14 simultaneous bodies. 3 SOCCO x7 + 3 GatePod x2 =27."
+  },
+  "glbSha256": "98729864e994acd2df77d51cae537f630badda795105871d7b389dd2c3c76ac2",
+  "blendSha256": "74745b1c5a58ff48a80a392a1bd2d395ce568cd4e536eb194d4fc29eff65e056",
+  "review": [
+    {
+      "name": "before-full-three-quarter",
+      "camera": [
+        13.729723930358887,
+        -17.656299591064453,
+        10.318465232849121
+      ],
+      "target": [
+        0,
+        0.65,
+        0.25
+      ],
+      "ortho": 8.5
+    },
+    {
+      "name": "after-full-three-quarter",
+      "camera": [
+        13.729723930358887,
+        -17.656299591064453,
+        10.318465232849121
+      ],
+      "target": [
+        0,
+        0.65,
+        0.25
+      ],
+      "ortho": 8.5
+    },
+    {
+      "name": "glb-closed-rear-seven",
+      "camera": [
+        7.39140510559082,
+        23.574214935302734,
+        8.969687461853027
+      ],
+      "target": [
+        0,
+        1.4,
+        0.1
+      ],
+      "ortho": 6.8
+    },
+    {
+      "name": "glb-opening-rear-seven",
+      "camera": [
+        7.39140510559082,
+        23.574214935302734,
+        8.969687461853027
+      ],
+      "target": [
+        0,
+        1.4,
+        0.1
+      ],
+      "ortho": 6.8
+    },
+    {
+      "name": "glb-deployed-rear-seven",
+      "camera": [
+        7.39140510559082,
+        23.574214935302734,
+        8.969687461853027
+      ],
+      "target": [
+        0,
+        1.4,
+        0.1
+      ],
+      "ortho": 6.8
+    },
+    {
+      "name": "glb-deployed-side-ground",
+      "camera": [
+        23.156532287597656,
+        8.918844223022461,
+        5.503190517425537
+      ],
+      "target": [
+        0,
+        1.2,
+        0.1
+      ],
+      "ortho": 10.5
+    },
+    {
+      "name": "glb-seven-unloading",
+      "camera": [
+        10.206207275390625,
+        23.812414169311523,
+        10.156207084655762
+      ],
+      "target": [
+        0,
+        3.4,
+        -0.05
+      ],
+      "ortho": 8.5
+    }
+  ],
+  "limitations": [
+    "Ground solving is a mathematical/review fixture until the world adapter uses actual ground sampling.",
+    "Kinematic real-mesh checks cover original and new troop fixtures separately; actual world walking and continuous foot IK remain separate.",
+    "Factory 14-seat contract retained; candidate active battle occupancy 7.",
+    "VFX spray hidden only for fair studio review; its original geometry and metadata remain exported.",
+    "Archived old trooper full-boot regression retains 7 threshold contacts; only new vanguard candidate has passing full-body boarding result."
+  ],
+  "validationFiles": [
+    "validation.json",
+    "boarding-validation.json",
+    "boarding-validation-new-crew.json"
+  ],
+  "validatedBoardingCrew": "vanguard-battle-v1"
+}

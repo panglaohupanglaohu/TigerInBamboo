@@ -6,6 +6,7 @@
 // =====================================================================
 import { getStoryCatalog } from "./storyCatalog.js";
 import { makePanelDraggable } from "../ui/dragPanel.js";
+import { createStoryboardLevelPanel } from "./storyboardLevelPanel.js";
 
 const CAT_KEY = {
   动物: "animal",
@@ -121,6 +122,9 @@ export function createStoryboardPanel({ onExecute, onClear, toast = () => {} }) 
       <pre id="sb-compose"></pre>
     </details>
   `;
+
+  // 内置关卡是独立只读配置，不进入草稿、LLM 或 storyEngine 执行路径。
+  panel.querySelector(".sb-hint").after(createStoryboardLevelPanel());
 
   const elStory = panel.querySelector("#sb-story");
   const elTitle = panel.querySelector("#sb-title");

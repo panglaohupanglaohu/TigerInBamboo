@@ -1,0 +1,134 @@
+{
+  "rows": [
+    {
+      "seed": 1419,
+      "zone": "dry-cascade",
+      "sourceBlendSHA256": "1cc34c74a7ffbc0805d4ec506d3defbc055fdeba9ac1f0fb7bdf5d955bbe02f6",
+      "actualGlbSHA256": "0190545b3c7e3c9345ab803799322fc7e422970ed508ebdaec99d4fc8f3c0961",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3600,
+        2230,
+        1222
+      ],
+      "sourceReviewOffset": [
+        -8.013258934020996,
+        -4.398988246917725,
+        2.9290082454681396
+      ],
+      "candidateReviewOffset": [
+        -3.533259153366089,
+        -1.0389885902404785,
+        2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 1428,
+      "zone": "dry-cascade",
+      "sourceBlendSHA256": "95e934949ec3c9ca9a351a06edefe7ffa393485105cd093ac0384e731e07a2d0",
+      "actualGlbSHA256": "16da0d9d46753b7707d189ab7527431aadb98595d1384a79014cf5074ec2bbac",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3600,
+        2230,
+        1222
+      ],
+      "sourceReviewOffset": [
+        1.9867424964904785,
+        3.101011037826538,
+        2.9290082454681396
+      ],
+      "candidateReviewOffset": [
+        6.466743469238281,
+        6.461010456085205,
+        2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 1997,
+      "zone": "moss-islands",
+      "sourceBlendSHA256": "847e4ecf63e75e9d651f017b143717c1a12bc5926949c7fbafefc47eb8256840",
+      "actualGlbSHA256": "08ec3be8680ac7733ab5fe0f14a55f75fdf14587277cee6df8a57b947eec9ee5",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3598,
+        2228,
+        1222
+      ],
+      "sourceReviewOffset": [
+        -6.466743469238281,
+        -6.461010456085205,
+        -2.9290084838867188
+      ],
+      "candidateReviewOffset": [
+        -1.9867427349090576,
+        -3.10101056098938,
+        -2.9290082454681396
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 2153,
+      "zone": "moss-islands",
+      "sourceBlendSHA256": "05b72ac30e0c1eb7e3ca8bf0d661ef5b86e1dde6db9ebbc7bef96d247e2f7ebf",
+      "actualGlbSHA256": "0b6644158887d50e38be4ec7096475698358a597b9324779359f5ec101686254",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3600,
+        2230,
+        1222
+      ],
+      "sourceReviewOffset": [
+        3.5332586765289307,
+        1.0389885902404785,
+        -2.9290080070495605
+      ],
+      "candidateReviewOffset": [
+        8.013258934020996,
+        4.398987770080566,
+        -2.9290080070495605
+      ],
+      "worldPlacementBaked": false
+    },
+    {
+      "seed": 2162,
+      "zone": "moss-islands",
+      "sourceBlendSHA256": "25afb5beaea57fb3e4e7cdd19d82e48a92178b008747259bddbb749c6d4cda06",
+      "actualGlbSHA256": "a6fe66b5fcdc28ade5408b003ad4709c7050573a93bccdd384fc0c4e5389edc0",
+      "sourceObjectCount": 17,
+      "importedObjectCount": 17,
+      "lodTriangles": [
+        3598,
+        2228,
+        1222
+      ],
+      "sourceReviewOffset": [
+        -4.920226097106934,
+        -8.523032188415527,
+        -8.78702449798584
+      ],
+      "candidateReviewOffset": [
+        -0.44022607803344727,
+        -5.1630330085754395,
+        -8.78702449798584
+      ],
+      "worldPlacementBaked": false
+    }
+  ],
+  "sameCameraLightScale": true,
+  "actualGlbImport": true,
+  "renderEngine": "CYCLES",
+  "resolution": [
+    960,
+    750
+  ],
+  "samples": 16,
+  "renderPasses": 1,
+  "scope": "Five pairs per page; all image sources match current candidate GLB hashes. Review board only, not world integration."
+}
