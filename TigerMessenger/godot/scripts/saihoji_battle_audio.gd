@@ -22,7 +22,8 @@ func _ready() -> void:
         AudioServer.add_bus()
         AudioServer.set_bus_name(AudioServer.bus_count - 1, "BGM")
     for key in PATHS:
-        var stream := AudioStreamOggVorbis.load_from_buffer(FileAccess.get_file_as_bytes(PATHS[key]))
+        var imported := load(PATHS[key]) as AudioStreamOggVorbis
+        var stream: AudioStreamOggVorbis = imported.duplicate() if imported != null else null
         if stream == null:
             push_error("Cannot decode original Saihoji music: " + key)
             continue
@@ -38,7 +39,7 @@ func _ready() -> void:
         AudioServer.add_bus()
         AudioServer.set_bus_name(AudioServer.bus_count - 1, "SFX")
     for key in ["phalanx_alarm", "kun_step"]:
-        effect_streams[key] = AudioStreamWAV.load_from_buffer(FileAccess.get_file_as_bytes("res://assets/audio/saihoji/" + key + ".wav"))
+        effect_streams[key] = load("res://assets/audio/saihoji/" + key + ".wav") as AudioStreamWAV
 
 func play_effect(key: String, position: Vector3) -> void:
     if muted or not effect_streams.has(key): return

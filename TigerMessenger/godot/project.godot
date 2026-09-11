@@ -16,14 +16,22 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="TigerMessenger · 家书"
 config/description="原作全局部署与统一资产库；原实验关卡保留在镜像小岛，完整玩法迁移中。"
-run/main_scene="res://scenes/original_world.tscn"
+run/main_scene="res://scenes/test_hub.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[autoload]
+
+TestNavigation="*res://scripts/test_navigation.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=800
 window/stretch/mode="canvas_items"
+
+[gui]
+
+theme/custom_font="res://fonts/NotoSansCJKsc-Regular.otf"
 
 [rendering]
 

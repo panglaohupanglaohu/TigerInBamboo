@@ -1,0 +1,26 @@
+{
+  "status": "integrated-soldier-statue-pass",
+  "revision": "citadel-soldier-statue-r03",
+  "supersedes": "citadel-hero-statue-r01",
+  "source": "assets/models/optimized/roman-family-v1/romanSoldier_gladius_blue.blend",
+  "reviewed": [
+    "Blender three-quarter",
+    "Blender side r02 rejected due to placement",
+    "Blender three-quarter r03 corrected",
+    "actual Web close with preserved double-sided source material"
+  ],
+  "verified": [
+    "approved soldier helmet/chest/skirt reused",
+    "both hands on vertical sword grip",
+    "blade points down",
+    "feet and blade tip aligned to plinth",
+    "base at plaza y4",
+    "height6.88",
+    "center x8 z71.5"
+  ],
+  "remaining": [
+    "full night lighting and soldier-scale plaza population",
+    "statue solid collision verification"
+  ],
+  "scope": "Replaces the rejected civilian figure; not completion of the entire city"
+}

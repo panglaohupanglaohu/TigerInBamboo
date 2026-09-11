@@ -22,6 +22,7 @@ func bind(castle:Node3D)->bool:
                 if not (value is float or value is int) or not is_finite(float(value)):return false
             point_count+=1
     node=Node3D.new();node.name="AuthoredCitadelAssaultRoutes";castle.add_child(node)
+    node.transform=castle.get_meta("citadel_old_city_frame",Transform3D.IDENTITY)
     for i in range(routes.size()):
         var mesh=ImmediateMesh.new();mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
         for point in routes[i]:mesh.surface_add_vertex(Vector3(point[0],point[1],point[2]))

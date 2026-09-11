@@ -1,3 +1,4 @@
+import { isOldCityShelves } from '../world/citadel/oldCityShelves.js';
 // =====================================================================
 //  高山圣城 · 游戏内 3D 直编辑（townscaper.html 的场景编辑能力搬进主场景）
 //  - 搭建面板打开且满足 canEdit（已开局）时生效：
@@ -134,7 +135,8 @@ export function citadelEditCellLocalPosition(
   });
   const c = col ?? citadelGridCellCenter(target.ix, target.iy, target.iz);
   const y = citadelGridCellCenter(target.ix, target.iy, target.iz).y;
-  return out.set(c.x, baseY + y, c.z);
+  const offset = citadel.userData.compositionOffset ?? [0, 0, 0];
+  return out.set(c.x,baseY+y,c.z).applyAxisAngle(new THREE.Vector3(0,1,0),citadel.userData.oldCityYaw??0).add(new THREE.Vector3(...offset));
 }
 
 /**
@@ -370,7 +372,7 @@ export function createCitadelSceneEdit({
     const hits = ray.intersectObject(citadel, true);
     const activeTerrace = panel.getState().activeTerrace;
     const gridTownscaper = citadel.userData?.skipOuterTerrain === true
-      || citadel.userData?.highlandTownscaperGrid === true;
+      || (citadel.userData?.highlandTownscaperGrid === true && !isOldCityShelves(citadel.userData?.townSpec));
     // 选中台地归属梯湖的命中距离：水面在台壁之前时，台壁不得拦截拾取
     // （缺口内的梯湖本就压在邻层台壁后方，否则水面永远点不到）
     const poolSel = raycastCascadePoolTop(scene, ray, tmpV2, activeTerrace);
@@ -400,6 +402,7 @@ export function createCitadelSceneEdit({
         if (hit.object.userData.isCitadelTerrace) continue;
         if (hit.object.userData.isOutline) continue;
         frame.citadel.worldToLocal(tmpV.copy(hit.point));
+        tmpV.sub(new THREE.Vector3(...(frame.citadel.userData.compositionOffset ?? [0, 0, 0]))).applyAxisAngle(new THREE.Vector3(0,1,0),-(frame.citadel.userData.oldCityYaw??0));
         const col = panel.cellAtLocal(tmpV.x, tmpV.z, 0);
         if (!col) continue;
         const next = panel.dropTarget(col.ix, col.iz, 0);
@@ -452,6 +455,7 @@ export function createCitadelSceneEdit({
         if (tt > 0) {
           const p = ray.ray.at(tt, poolV);
           frame.citadel.worldToLocal(tmpV.copy(p));
+        tmpV.sub(new THREE.Vector3(...(frame.citadel.userData.compositionOffset ?? [0, 0, 0]))).applyAxisAngle(new THREE.Vector3(0,1,0),-(frame.citadel.userData.oldCityYaw??0));
           const c = panel.cellAtLocal(tmpV.x, tmpV.z, st.activeLayer);
           if (c && panel.supportsCell(c.ix, c.iz, st.activeTerrace)) {
             resolved = { terraceIndex: st.activeTerrace, point: p };
@@ -469,6 +473,7 @@ export function createCitadelSceneEdit({
     }
     if (!resolved) return null;
     frame.citadel.worldToLocal(tmpV.copy(resolved.point));
+        tmpV.sub(new THREE.Vector3(...(frame.citadel.userData.compositionOffset ?? [0, 0, 0]))).applyAxisAngle(new THREE.Vector3(0,1,0),-(frame.citadel.userData.oldCityYaw??0));
     const hit = panel.cellAtLocal(tmpV.x, tmpV.z, st.activeLayer);
     if (!hit) return null;
     const terrace = resolved.terraceIndex;
@@ -602,7 +607,7 @@ export function createCitadelSceneEdit({
     } else {
       const target = castPlane(e);
       const gridTownscaper = getCitadel()?.userData?.skipOuterTerrain === true
-        || getCitadel()?.userData?.highlandTownscaperGrid === true;
+        || (getCitadel()?.userData?.highlandTownscaperGrid === true && !isOldCityShelves(getCitadel()?.userData?.townSpec));
       if (target?.unsupported) {
         toast(gridTownscaper ? "此处是方尖碑保护核心，不能放置" : "此处没有可承重的土坡，不可放置", 1.6);
       } else if (target) {

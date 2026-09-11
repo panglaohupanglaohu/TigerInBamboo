@@ -1,0 +1,21 @@
+extends SceneTree
+func _initialize()->void:call_deferred("run")
+func run()->void:
+    root.size=Vector2i(1280,720)
+    var w=load("res://scenes/citadel_world.tscn").instantiate();root.add_child(w)
+    await process_frame
+    w.set_process(false);w.set_physics_process(false)
+    for ui in w.find_children("*","CanvasLayer",true,false):ui.visible=false
+    w.assault_route.set_visible(false)
+    var frame:Transform3D=w.castle_adapter.original.global_transform
+    w.camera.global_position=frame*Vector3(0,24,150)
+    w.camera.look_at(frame*Vector3(16,15,12),frame.basis.y.normalized())
+    w.camera.fov=50
+    var out="res://../artifacts/pipeline/citadel-plaza-horse/"
+    for night in [false,true]:
+        w.window_lights.set_enabled(night)
+        await process_frame
+        await RenderingServer.frame_post_draw
+        root.get_texture().get_image().save_png(out+("godot-current-night.png" if night else "godot-current-day.png"))
+    print("Captured actual citadel world, production day/night toggle, same castle-local camera")
+    w.queue_free();await process_frame;quit()

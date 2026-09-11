@@ -1,3 +1,4 @@
+import { isOldCityShelves, migrateOldCityShelves, oldCityShelfSupported, OLD_CITY_SHELVES_VERSION } from '../world/citadel/oldCityShelves.js';
 // =====================================================================
 //  高山圣城 · Townscaper 搭建面板（游戏内）
 //  - 已开局时用鼠标点选圣城弹出（main.js 接线）
@@ -343,6 +344,8 @@ export function createCitadelEditorPanel({
   }
 
   /** 运河古堡与高山圣城共用的单格生长/挖洞编辑模式。 */
+  function usesShelfBands() { return isOldCityShelves(getCitadelTarget?.()?.userData?.townSpec); }
+
   function usesTownscaperGrid() {
     return isCanalFlat() || (isLatestValley() && !usesHighlandUnitMap());
   }
@@ -358,7 +361,7 @@ export function createCitadelEditorPanel({
   /** 无存档时：高山圣城用内置 SPEC；运河交汇是空地基，由玩家自建。 */
   function defaultGridSpec() {
     if (isCanalFlat()) return CANAL_JUNCTION_TOWN_SPEC;
-    if (isLatestValley()) return HIGHLAND_TOWNSCAPER_TOWN_SPEC;
+    if (isLatestValley()) return usesShelfBands() ? migrateOldCityShelves(normalizeCitadelTerraceLayout(HIGHLAND_TOWNSCAPER_TOWN_SPEC, 12)) : HIGHLAND_TOWNSCAPER_TOWN_SPEC;
     return CITADEL_TOWN_SPEC;
   }
 
@@ -397,7 +400,7 @@ export function createCitadelEditorPanel({
           ? "与运河交汇古堡共用 Townscaper 网格：左键空格扩建/同色继续生长/异色改色；右键删除命中的单元并挖洞。<br/>邻接变化会自动重算屋顶、墙角、拱洞、阳台、支架与装饰；共 12 层，Ctrl+S 保存。"
         : "平面图：左键 放块/改色 · 右键 删块 · 滚轮 缩放网格 · 图顶=后排 图底=前排（正门）<br/>3D 直编辑：左键 点顶面叠块/侧面改色/空地加块 · 右键 删块 · H 隐藏高层<br/>台地 1 = 鸟瞰图第一层（最高层）· 五座台地共用台地 1 的中心<br/>台地/护城河/城堡改动都即时预览 3D · 必须点「保存台地配置」或「保存全部」（Ctrl+S）才写入存档";
     }
-    if (townscaperGrid) {
+    if (townscaperGrid && !usesShelfBands()) {
       activeTerrace = 0;
       grid = terraceGrids[0] ?? grid;
     }
@@ -414,6 +417,8 @@ export function createCitadelEditorPanel({
   }
 
   function loadTerraceGrids() {
+    const current = getCitadelTarget?.()?.userData?.townSpec;
+    if (isOldCityShelves(current)) return current.terraces.map(entry=>levelsToGrid(entry.levels));
     try {
       const migrated = loadCitadelLevelsSave(localStorage, {
         instanceId: getInstanceId() ?? null,
@@ -482,6 +487,7 @@ export function createCitadelEditorPanel({
   function serializeLayout() {
     return {
       version: 2,
+      ...(usesShelfBands() ? {compositionVersion:OLD_CITY_SHELVES_VERSION} : {}),
       gridSize: CITADEL_GRID_SIZE,
       terraces: terraceGrids.map((terraceGrid, terraceIndex) => ({
         terraceIndex,
@@ -1454,7 +1460,7 @@ export function createCitadelEditorPanel({
   applyAngleBtn.onclick = applySelectedYaw;
 
   function selectTerrace(index) {
-    if (usesTownscaperGrid()) {
+    if (usesTownscaperGrid() && !usesShelfBands()) {
       activeTerrace = 0;
       grid = terraceGrids[0] ?? grid;
       applyInstanceMode();
@@ -1472,14 +1478,16 @@ export function createCitadelEditorPanel({
   }
 
   function drawTerraceTabs() {
-    if (isLatestValley()) {
-      terraceTabsEl.innerHTML = "";
+    if (isLatestValley() && !usesShelfBands()) {
       terraceTabsEl.style.display = "none";
       return;
     }
     terraceTabsEl.style.display = "flex";
     terraceTabsEl.querySelectorAll("button").forEach((button) => {
-      const selected = Number(button.dataset.terrace) === activeTerrace;
+      const index = Number(button.dataset.terrace);
+      button.style.display = usesShelfBands() && index >= 3 ? "none" : "";
+      if (usesShelfBands()) button.textContent = ["山脚", "山腰", "山脊"][index] ?? "";
+      const selected = index === activeTerrace;
       button.style.background = selected ? "#2a2b2d" : "#fff";
       button.style.color = selected ? "#fff" : "#2a2b2d";
     });
@@ -2372,13 +2380,20 @@ export function createCitadelEditorPanel({
    * 有承重土坡落在其台面层级，无支撑（或台地超出可达层）返回 null = 不可放置。
    */
   function dropTarget(ix, iz, terraceIndex = activeTerrace) {
-    const support = getSupportLevel(ix, iz, terraceIndex);
+    const support = shelfSupportLevel(ix, iz, terraceIndex);
     return resolveCitadelDropTarget(grid, ix, iz, support, currentMaxLevel());
   }
 
   /** Single source of truth for 2D tinting/clicks and 3D plane placement. */
+  function shelfSupportLevel(ix, iz, terraceIndex) {
+    if (usesShelfBands()) {
+      if (Math.abs(ix-12)<=2 && Math.abs(iz-12)<=2) return -1;
+      return oldCityShelfSupported((ix-12)*2,(iz-12)*2,terraceIndex) ? 0 : -1;
+    }
+    return getSupportLevel(ix, iz, terraceIndex);
+  }
   function supportsCell(ix, iz, terraceIndex = activeTerrace) {
-    return getSupportLevel(ix, iz, terraceIndex) >= 0;
+    return shelfSupportLevel(ix, iz, terraceIndex) >= 0;
   }
 
   /**
@@ -2386,7 +2401,7 @@ export function createCitadelEditorPanel({
    * 无变化返回 false（不进撤销栈）；有变化走 commit 即时重建。
    */
   function applySceneEdit({ ix, iy, iz, terraceIndex = activeTerrace }, mode) {
-    if (usesTownscaperGrid()) terraceIndex = 0;
+    if (usesTownscaperGrid() && !usesShelfBands()) terraceIndex = 0;
     if (ix < 0 || ix > MAX_COORD || iz < 0 || iz > MAX_COORD) return false;
     if (iy < 0 || iy > currentMaxLevel()) return false;
     if (mode === "erase") {

@@ -1,3 +1,4 @@
+import {reverseWaterPath,joinWaterPaths} from './warshipRouteComposition.js';
 // =====================================================================
 //  @legacy 日间攻城状态机；2026-09-10用户授权在原运兵链新增松下伏击流程。
 //  V4 真源：src/agents/citadel/siegeDirector.js · combatAgent.js · combatSim.js
@@ -599,8 +600,8 @@ export function createSaihojiPhalanxBattle({
     const solver=createWarshipWaterRoutes(scene,PLANET_RADIUS);
     const homes=[],beaches=[],routes=[],boats=[];
     const junction=solver.berth(junctionDir);
-    const reverse=path=>({...path,points:path.points.slice().reverse()});
-    const join=(a,b)=>{const points=[...a.points,...b.points.slice(1)];return {points,length:a.length+b.length};};
+    const reverse=reverseWaterPath;
+    const join=joinWaterPaths;
     for(let i=0;i<SHIP_COUNT&&junction;i++) {
       const boat=createFisherBoat();boat.scale.setScalar(1.7);boats.push(boat);
       const home=solver.dock(boat,plazaDir,homes),beach=solver.dock(boat,landDir,beaches);

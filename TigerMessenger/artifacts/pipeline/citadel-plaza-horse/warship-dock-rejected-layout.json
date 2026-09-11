@@ -1,0 +1,110 @@
+{
+  "quayIncluded": true,
+  "ancestors": [
+    {
+      "name": "west-city-harbor-quay",
+      "visible": true,
+      "mesh": true
+    },
+    {
+      "name": "highland-west-city",
+      "visible": true,
+      "mesh": false
+    },
+    {
+      "name": "odyssey-citadel-mountain-valley-assembly",
+      "visible": true,
+      "mesh": false
+    },
+    {
+      "name": "castleContainer",
+      "visible": true,
+      "mesh": false
+    },
+    {
+      "name": "",
+      "visible": true,
+      "mesh": false
+    }
+  ],
+  "target": [
+    109.33538660018091,
+    106.42095120241822,
+    53.122340052620864
+  ],
+  "targetSurface": {
+    "water": 160.4424802569071,
+    "ground": 161.55998461744088,
+    "object": "west-city-harbor-boarding-deck"
+  },
+  "anchor": [
+    -17.000000000000004,
+    -2.3852639243044957,
+    50
+  ],
+  "quayWorld": [
+    104.65222869841838,
+    113.06502273050053,
+    50.98660598719481
+  ],
+  "valid": false,
+  "reason": "No actual-mesh-clear dock within deployed boarding reach",
+  "rejected": {
+    "angle": 0,
+    "center": 95,
+    "support": 798,
+    "hull": 243,
+    "entry": 0,
+    "approach": 0
+  },
+  "hullObstacles": {
+    "planet-surface": 73,
+    "west-city-harbor-boarding-pile": 38,
+    "backlit-highlight-citadel-oskar-grid-mountain-surface": 23,
+    "citadel-oskar-grid-mountain-surface": 82,
+    "west-city-harbor-boarding-deck": 20,
+    "west-city-harbor-quay": 7
+  },
+  "firstHullPose": {
+    "position": [
+      111.03003268684883,
+      102.05666346781206,
+      53.78910511841519
+    ],
+    "quaternion": [
+      0.347039616031412,
+      0.8922535659867098,
+      0.24670537046316346,
+      -0.1502782055835229
+    ],
+    "mesh": "planet-surface"
+  },
+  "attempts": 1136,
+  "elapsedMs": 23342.5,
+  "stats": {
+    "envelope": 7,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 8,
+    "obstacleMeshes": 2347
+  },
+  "lastFailure": {
+    "clear": false,
+    "mesh": "west-city-harbor-quay",
+    "point": [
+      109.23685991729327,
+      110.83968954096778,
+      46.84486133276699
+    ]
+  },
+  "scope": "Existing boat mesh, low boarding landing only, original clearance checks; no live fleet re-routing or unloading",
+  "candidate": {
+    "authorAnchor": [
+      35,
+      -2.3852639243044957,
+      50
+    ],
+    "channelMinX": 18,
+    "runtimeRetained": false,
+    "reason": "No valid dock; restored previously verified platform and channel."
+  }
+}

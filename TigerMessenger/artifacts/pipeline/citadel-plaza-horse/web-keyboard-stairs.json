@@ -1,0 +1,42 @@
+{
+  "frames": 192,
+  "start": {
+    "x": 7.999999999999998,
+    "y": 3.9999999999999707,
+    "z": 48.49999999999997,
+    "onGround": true
+  },
+  "end": {
+    "x": 8.87287399263156,
+    "y": 15.863636365126492,
+    "z": 12.599009436375823,
+    "onGround": true
+  },
+  "minY": 3.9999999999999707,
+  "maxY": 15.863636365126492,
+  "maxSideDrift": 0.8728739926315594,
+  "reached": true,
+  "passed": true,
+  "descent": {
+    "end": {
+      "x": 7.996028428463232,
+      "y": 4.0000000014900925,
+      "z": 49.06819537533019,
+      "onGround": true
+    },
+    "reached": true
+  },
+  "jump": {
+    "frames": 34,
+    "airborne": true,
+    "maxY": 5.9191272629180665,
+    "minY": 4.000000001490064,
+    "end": {
+      "x": 7.995867020619107,
+      "y": 4.000000001490121,
+      "z": 49.09128728943517,
+      "onGround": true
+    }
+  },
+  "scope": "Actual browser W ascent, S descent and Space jump through production animate/player/ground/wall physics, both processional stair flights to the main gate, 12m ascent and return. Camera fixed for deterministic direction; initial position placed at lower landing."
+}

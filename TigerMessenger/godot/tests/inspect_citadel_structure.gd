@@ -3,8 +3,10 @@ func _initialize()->void:call_deferred("run")
 func run()->void:
     var w=load("res://scenes/citadel_world.tscn").instantiate();root.add_child(w);await process_frame
     var tower=w.landmarks["塔内旋梯"].get_parent()
-    var obstruction=w.castle_adapter.candidate.get_node("castle-shared-edge-town-candidate/citadel-layer-1/town-terrace-0-level-1/Mesh114")
-    print("OBSTRUCTION "+str(obstruction.get_meta("extras",{}))+" bounds="+str(obstruction.get_aabb())+" tower_transform="+str(tower.global_transform.affine_inverse()*obstruction.global_transform))
+    print("TOWER_CLEARANCE "+JSON.stringify(w.town_cavity.report))
+    for row in w.town_cavity.changes:
+        var obstruction:MeshInstance3D=row.source
+        print("OBSTRUCTION "+str(obstruction.get_meta("extras",{}))+" bounds="+str(obstruction.get_aabb())+" tower_transform="+str(tower.global_transform.affine_inverse()*obstruction.global_transform))
     for n in tower.get_children():
         if str(n.name).contains("Candidate"):continue
         var meshes=n.find_children("*","MeshInstance3D",true,false)

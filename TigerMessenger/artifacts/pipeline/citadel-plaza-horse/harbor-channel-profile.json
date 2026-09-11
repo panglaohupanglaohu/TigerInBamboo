@@ -1,0 +1,461 @@
+{
+  "lanes": [
+    {
+      "x": 20,
+      "clearToZ": 41.25,
+      "firstFailure": {
+        "z": 41,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          124.01003518400658,
+          92.6438527948054,
+          45.94767257733979
+        ]
+      },
+      "checks": 37
+    },
+    {
+      "x": 20.5,
+      "clearToZ": 41,
+      "firstFailure": {
+        "z": 40.75,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          123.27510622156468,
+          92.23099066631481,
+          45.424255057792806
+        ]
+      },
+      "checks": 38
+    },
+    {
+      "x": 21,
+      "clearToZ": 40.75,
+      "firstFailure": {
+        "z": 40.5,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          123.27510622156464,
+          92.23099066631481,
+          45.424255057792806
+        ]
+      },
+      "checks": 39
+    },
+    {
+      "x": 21.5,
+      "clearToZ": 40.5,
+      "firstFailure": {
+        "z": 40.25,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          123.650106341669,
+          92.43675177768128,
+          47.31446945927266
+        ]
+      },
+      "checks": 40
+    },
+    {
+      "x": 22,
+      "clearToZ": 40.25,
+      "firstFailure": {
+        "z": 40,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          122.91700033943819,
+          92.02558058290828,
+          46.79074647481305
+        ]
+      },
+      "checks": 41
+    },
+    {
+      "x": 22.5,
+      "clearToZ": 40.25,
+      "firstFailure": {
+        "z": 40,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          122.91700033943816,
+          92.02558058290826,
+          46.79074647481303
+        ]
+      },
+      "checks": 41
+    },
+    {
+      "x": 23,
+      "clearToZ": 40,
+      "firstFailure": {
+        "z": 39.75,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          122.54731905949524,
+          91.811816188883,
+          48.16030941617043
+        ]
+      },
+      "checks": 42
+    },
+    {
+      "x": 23.5,
+      "clearToZ": 39.75,
+      "firstFailure": {
+        "z": 39.5,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          122.54731905949522,
+          91.811816188883,
+          48.16030941617043
+        ]
+      },
+      "checks": 43
+    },
+    {
+      "x": 24,
+      "clearToZ": 39.5,
+      "firstFailure": {
+        "z": 39.25,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          122.89562306999167,
+          91.997566765569,
+          50.05671226163861
+        ]
+      },
+      "checks": 44
+    },
+    {
+      "x": 24.5,
+      "clearToZ": 39.25,
+      "firstFailure": {
+        "z": 39,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          122.16599405587725,
+          91.58963345506774,
+          49.53260886962688
+        ]
+      },
+      "checks": 45
+    },
+    {
+      "x": 25,
+      "clearToZ": 39,
+      "firstFailure": {
+        "z": 38.75,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          122.16599405587725,
+          91.58963345506773,
+          49.53260886962691
+        ]
+      },
+      "checks": 46
+    },
+    {
+      "x": 25.5,
+      "clearToZ": 38.75,
+      "firstFailure": {
+        "z": 38.5,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          121.77296431701976,
+          91.35897343986147,
+          50.90730306361201
+        ]
+      },
+      "checks": 47
+    },
+    {
+      "x": 26,
+      "clearToZ": 38.5,
+      "firstFailure": {
+        "z": 38.25,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-S",
+        "point": [
+          121.77296431701981,
+          91.35897343986151,
+          50.90730306361202
+        ]
+      },
+      "checks": 48
+    },
+    {
+      "x": 26.5,
+      "clearToZ": 38.25,
+      "firstFailure": {
+        "z": 38,
+        "reason": "mesh",
+        "mesh": "navona-rim-wall-L",
+        "point": [
+          121.46496970555542,
+          91.04917230304272,
+          52.18217843698393
+        ]
+      },
+      "checks": 49
+    },
+    {
+      "x": 27,
+      "clearToZ": 37.75,
+      "firstFailure": {
+        "z": 37.5,
+        "reason": "mesh",
+        "mesh": "navona-rim-lip-S",
+        "point": [
+          121.45770753071805,
+          92.51610070806564,
+          52.85509735070255
+        ]
+      },
+      "checks": 51
+    },
+    {
+      "x": 27.5,
+      "clearToZ": 37.25,
+      "firstFailure": {
+        "z": 37,
+        "reason": "mesh",
+        "mesh": "navona-rim-lip-S",
+        "point": [
+          121.45770753071807,
+          92.51610070806561,
+          52.85509735070254
+        ]
+      },
+      "checks": 53
+    },
+    {
+      "x": 28,
+      "clearToZ": 36,
+      "firstFailure": {
+        "z": 35.75,
+        "reason": "mesh",
+        "mesh": "navona-rim-lip-S",
+        "point": [
+          121.45770753071805,
+          92.51610070806562,
+          52.855097350702536
+        ]
+      },
+      "checks": 58
+    },
+    {
+      "x": 28.5,
+      "clearToZ": 35.75,
+      "firstFailure": {
+        "z": 35.5,
+        "reason": "mesh",
+        "mesh": "navona-rim-lip-S",
+        "point": [
+          121.45770753071804,
+          92.51610070806562,
+          52.85509735070256
+        ]
+      },
+      "checks": 59
+    },
+    {
+      "x": 29,
+      "clearToZ": 34.25,
+      "firstFailure": {
+        "z": 34,
+        "reason": "mesh",
+        "mesh": "navona-rim-lip-L",
+        "point": [
+          121.87304292087843,
+          91.26123632004315,
+          54.066746966307804
+        ]
+      },
+      "checks": 65
+    },
+    {
+      "x": 29.5,
+      "clearToZ": 24.25,
+      "firstFailure": {
+        "z": 24,
+        "reason": "mesh",
+        "mesh": "lamp-pole",
+        "point": [
+          127.56037470646564,
+          87.70063606202497,
+          63.16502326014894
+        ]
+      },
+      "checks": 105
+    },
+    {
+      "x": 30,
+      "clearToZ": 24.25,
+      "firstFailure": {
+        "z": 24,
+        "reason": "mesh",
+        "mesh": "lamp-pole",
+        "point": [
+          127.56037470646561,
+          87.70063606202496,
+          63.165023260148935
+        ]
+      },
+      "checks": 105
+    },
+    {
+      "x": 30.5,
+      "clearToZ": 24.25,
+      "firstFailure": {
+        "z": 24,
+        "reason": "mesh",
+        "mesh": "lamp-pole",
+        "point": [
+          127.56037470646562,
+          87.70063606202497,
+          63.16502326014894
+        ]
+      },
+      "checks": 105
+    },
+    {
+      "x": 31,
+      "clearToZ": 50,
+      "firstFailure": {
+        "z": 50,
+        "reason": "mesh",
+        "mesh": "west-city-harbor-boarding-pile",
+        "point": [
+          108.25814075297555,
+          104.04261784800119,
+          51.63038968704569
+        ]
+      },
+      "checks": 1
+    },
+    {
+      "x": 31.5,
+      "clearToZ": 50,
+      "firstFailure": {
+        "z": 50,
+        "reason": "mesh",
+        "mesh": "west-city-harbor-boarding-pile",
+        "point": [
+          110.0039327453674,
+          105.30533537722762,
+          53.12542413992338
+        ]
+      },
+      "checks": 1
+    },
+    {
+      "x": 32,
+      "clearToZ": 50,
+      "firstFailure": {
+        "z": 50,
+        "reason": "mesh",
+        "mesh": "west-city-harbor-boarding-pile",
+        "point": [
+          110.00393274536742,
+          105.30533537722769,
+          53.125424139923396
+        ]
+      },
+      "checks": 1
+    },
+    {
+      "x": 32.5,
+      "clearToZ": 50,
+      "firstFailure": {
+        "z": 50,
+        "reason": "mesh",
+        "mesh": "west-city-harbor-boarding-deck",
+        "point": [
+          110.30364524954285,
+          105.02592522733721,
+          53.00710813169466
+        ]
+      },
+      "checks": 1
+    },
+    {
+      "x": 33,
+      "clearToZ": 50,
+      "firstFailure": {
+        "z": 50,
+        "reason": "mesh",
+        "mesh": "west-city-harbor-boarding-deck",
+        "point": [
+          110.30364524954287,
+          105.02592522733725,
+          53.007108131694665
+        ]
+      },
+      "checks": 1
+    },
+    {
+      "x": 33.5,
+      "clearToZ": 50,
+      "firstFailure": {
+        "z": 50,
+        "reason": "mesh",
+        "mesh": "west-city-harbor-boarding-deck",
+        "point": [
+          110.30364524954287,
+          105.02592522733724,
+          53.007108131694665
+        ]
+      },
+      "checks": 1
+    },
+    {
+      "x": 34,
+      "clearToZ": 50,
+      "firstFailure": {
+        "z": 50,
+        "reason": "mesh",
+        "mesh": "west-city-harbor-boarding-deck",
+        "point": [
+          107.89177359154715,
+          107.55297743072445,
+          52.89157261730103
+        ]
+      },
+      "checks": 1
+    }
+  ],
+  "best": {
+    "x": 29.5,
+    "clearToZ": 24.25,
+    "firstFailure": {
+      "z": 24,
+      "reason": "mesh",
+      "mesh": "lamp-pole",
+      "point": [
+        127.56037470646564,
+        87.70063606202497,
+        63.16502326014894
+      ]
+    },
+    "checks": 105
+  },
+  "stats": {
+    "envelope": 7,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 7,
+    "obstacleMeshes": 2345
+  },
+  "scope": "Original vessel, fixed channel heading, 0.25m samples; no turns, global route, rowing animation or troop boarding"
+}

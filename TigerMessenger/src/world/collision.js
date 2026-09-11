@@ -171,7 +171,9 @@ export function resolveCollisions(pos, vel, dt, platforms, player, onVoidFall, h
     // Sample the final footprint, including entry into or exit from the crater.
     const finalLocalRadius = localGround?.(pos);
     const surfR = Number.isFinite(finalLocalRadius) ? finalLocalRadius : hillRadius == null ? baseRadius : citadel > 0 ? Math.max(hillRadius, baseRadius) : hillRadius;
-    if (r < surfR + 0.1) {
+    // Do not cancel the first upward substep of a jump inside the snap margin.
+    // Penetration is still corrected regardless of velocity.
+    if (r < surfR || (r < surfR + 0.1 && vel.dot(_up) <= 0.6)) {
       pos.setLength(surfR);
       const n = _up.copy(pos).normalize();
       const vr = n.dot(vel);

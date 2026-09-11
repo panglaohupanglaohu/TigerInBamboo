@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "old_city_offset": [
+    -52,
+    0,
+    0
+  ],
+  "old_city_yaw_degrees": 30,
+  "candidate_layers_yaw_baked": true,
+  "candidate_root_translation_only": true,
+  "repeat_bind_no_yaw_drift": true,
+  "unbind_restores_transform": true,
+  "mesh_count_new_export": 164,
+  "original_tower_gladius_segments": 246,
+  "original_tower_blocking_control": true,
+  "new_bridge_city_gladius_segments": 385,
+  "new_bridge_city_route_points": 386,
+  "main_gate_wall_hits": 2,
+  "main_gate_passage_hits": 0,
+  "scope": "Actual imported Godot scene alignment and both routes; no visual/full battle acceptance",
+  "processes_exited": true
+}

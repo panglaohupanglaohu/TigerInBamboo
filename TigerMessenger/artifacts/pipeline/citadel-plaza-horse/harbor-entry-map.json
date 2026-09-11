@@ -1,0 +1,66 @@
+{
+  "clear": [
+    {
+      "local": [
+        26,
+        42
+      ],
+      "direction": [
+        0.7288825786954992,
+        0.6161554745851296,
+        0.29846711311796653
+      ]
+    },
+    {
+      "local": [
+        26,
+        46
+      ],
+      "direction": [
+        0.7168500567804984,
+        0.6347147105623078,
+        0.28855369047995566
+      ]
+    },
+    {
+      "local": [
+        26,
+        50
+      ],
+      "direction": [
+        0.7045790194214034,
+        0.6526413675286553,
+        0.2786173913837762
+      ]
+    },
+    {
+      "local": [
+        28,
+        42
+      ],
+      "direction": [
+        0.7225385014446416,
+        0.6184265089053318,
+        0.3090093315958196
+      ]
+    },
+    {
+      "local": [
+        30,
+        42
+      ],
+      "direction": [
+        0.7160561174862196,
+        0.620608955337233,
+        0.3195436764603388
+      ]
+    }
+  ],
+  "stats": {
+    "envelope": 7,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 8,
+    "obstacleMeshes": 2346
+  },
+  "scope": "Static turning disk-clear harbor endpoint candidates, no connection to ships or global sea route"
+}

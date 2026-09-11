@@ -50,3 +50,6 @@ backend/runtime.json
 # 私有记忆（含跨会话上下文，禁止入库）
 .codebuddy/
 .workbuddy/
+
+# Godot 导出包（index.pck 265MB，超过 GitHub 100MB 硬限，不入库）
+*.pck

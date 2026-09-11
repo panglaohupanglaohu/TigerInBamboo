@@ -1,0 +1,10 @@
+{
+  "excluded_meshes": 54,
+  "failures": [],
+  "gate_solid_meshes": 2,
+  "passed": true,
+  "scope": "Actual shipped left-city mesh collision registry and one face ray per walking mesh under rotated placement. Does not establish route continuity, actor movement, building avoidance, or battle.",
+  "supported_meshes": 108,
+  "walking_meshes": 108,
+  "water_excluded": true
+}

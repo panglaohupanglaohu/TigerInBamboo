@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "platforms": {
+    "west-city-harbor-boarding-deck": {
+      "clearance_with_max_wave": 0.756668003082275,
+      "samples": 4
+    },
+    "west-city-harbor-quay": {
+      "clearance_with_max_wave": 0.892017753601074,
+      "samples": 4
+    }
+  },
+  "scope": "Source ocean geometry and four corners of each quay and boarding deck above maximum wave; not boat docking, character traversal or full combat",
+  "source_positions_exact": true,
+  "triangles": 6768,
+  "vertices": 3577
+}

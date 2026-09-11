@@ -1,0 +1,39 @@
+{
+  "bounds_min": [
+    6.67000007629395,
+    4.0,
+    70.1699981689453
+  ],
+  "bounds_size": [
+    2.65999984741211,
+    6.88000011444092,
+    2.66000366210938
+  ],
+  "height_and_base_verified": true,
+  "march": {
+    "blocked": {},
+    "completed_steps": 385,
+    "geometry_queries": 996904,
+    "phase": "arrived",
+    "point": 385,
+    "role": "gladius",
+    "route_points": 386,
+    "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+    "step_clearance": 0.1
+  },
+  "mesh_count": 4,
+  "passed": true,
+  "placement": [
+    8.0,
+    4.0,
+    71.5
+  ],
+  "plaza_support_verified": true,
+  "position_verified": true,
+  "scope": "Actual Godot statue geometry, plaza support ray and existing new-city march; no statue collision, full siege or visual acceptance.",
+  "source_blender": "assets/models/optimized/citadel-statue/citadel-soldier-statue-r03.blend",
+  "source_id": "citadel-soldier-statue-r03",
+  "source_verified": true,
+  "statue_count": 1,
+  "support_y": 4.00001525878906
+}

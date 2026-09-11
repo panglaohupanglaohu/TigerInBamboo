@@ -172,6 +172,7 @@ export function nightWeightAt(timeOfDay) {
  */
 export function createHighlandLightVolumes(THREE_, parent, {
   lamps,
+  realLightBudget = REAL_LIGHT_BUDGET,
   getTimeOfDay = () => 0.5,
   terrainHeightAt,
   /** 海面在城堡局部坐标的 Y（岸湾灯倒影光斑贴水面用） */
@@ -340,7 +341,7 @@ export function createHighlandLightVolumes(THREE_, parent, {
 
     // 真实点光源：前 REAL_LIGHT_BUDGET 盏（预算纪律），其余只留光晕
     let light = null;
-    if (index < REAL_LIGHT_BUDGET) {
+    if (index < Math.max(0,Math.min(REAL_LIGHT_BUDGET,realLightBudget))) {
       light = new THREE_.PointLight(lamp.color, 0, lamp.radius * 2.3, 2);
       light.position.y = shellLift;
       light.name = "lamp-point-light";

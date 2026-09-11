@@ -1,0 +1,35 @@
+{
+  "balcony_guard_hits": 3,
+  "blocked": {},
+  "completed_steps": 753,
+  "court_guard_hits": 4,
+  "entry_flight_collision_shapes": 28,
+  "entry_flight_steps": 28,
+  "entry_flight_supported_steps": 28,
+  "gate_count": 1,
+  "gate_position": [
+    7.99999237060547,
+    16.0000152587891,
+    10.9999961853027
+  ],
+  "gate_triangles_checked": 414,
+  "gate_trimesh_shapes": 2,
+  "geometry_queries": 1978235,
+  "harbor_meshes": 85,
+  "harbor_supported_meshes": 85,
+  "parapet_physics_hits": 4,
+  "passage_ray_hits": 0,
+  "passed": true,
+  "phase": "arrived",
+  "physics_passage_hits": 0,
+  "physics_wall_hits": 2,
+  "point": 753,
+  "role": "gladius",
+  "route_points": 754,
+  "scope": "Production Godot main gate wall and carved surround use exact concave mesh collision. Nine passage rays stay clear, both side walls block, and actual new-city soldier march completes; 28 old tower entry treads each have registered collision and direct physical support; not Godot night-raid task migration or a full siege.",
+  "step_clearance": 0.1,
+  "wall_sources": [
+    "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/highland-west-city/citadel-new-main-gate/main-gate-wall",
+    "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/highland-west-city/citadel-new-main-gate/main-gate-wall"
+  ]
+}

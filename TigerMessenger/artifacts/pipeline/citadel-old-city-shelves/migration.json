@@ -1,0 +1,31 @@
+{
+  "beforeCells": 978,
+  "afterCells": 329,
+  "removedCells": 649,
+  "reports": [
+    {
+      "terraceIndex": 0,
+      "baseY": 4.95,
+      "cells": 219,
+      "wfcOk": true,
+      "hash": "8900f6c2"
+    },
+    {
+      "terraceIndex": 1,
+      "baseY": 10.95,
+      "cells": 52,
+      "wfcOk": true,
+      "hash": "4d46e992"
+    },
+    {
+      "terraceIndex": 2,
+      "baseY": 16.95,
+      "cells": 58,
+      "wfcOk": true,
+      "hash": "2969877c"
+    }
+  ],
+  "sourceUnchanged": true,
+  "idempotent": true,
+  "protectedCoreEmpty": true
+}

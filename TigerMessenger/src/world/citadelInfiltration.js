@@ -498,8 +498,9 @@ export function createCitadelNightInfiltration({
   const groupSpecs = topAssaultMode ? [
     {
       name: "ladder-infiltration-group",
-      routeKey: "ladder",
-      route: baseRoutes.ladder,
+      // Keep saved group identity; the obsolete ladder is disabled in the current city.
+      routeKey: "stairs",
+      route: baseRoutes.stairs,
       moveDuration: WATERFALL_MOVE_DURATION,
       patrolDuration: WATERFALL_PATROL_DURATION,
       patrolTerraces: [0],
@@ -608,7 +609,8 @@ export function createCitadelNightInfiltration({
         queueDistance: 0,
         queueSpacing: 0,
         descentSpacing: SOLDIER_BODY_LENGTH,
-        moveDuration: spec.moveDuration,
+        minimumMoveDuration: spec.moveDuration,
+        moveDuration: topAssaultMode ? Math.max(spec.moveDuration,approachPath.total/SOLDIER_BASE_PACE) : spec.moveDuration,
         patrolDuration: spec.patrolDuration,
         patrolTerraces: spec.patrolTerraces,
         patrolPlan: null,
@@ -674,6 +676,7 @@ export function createCitadelNightInfiltration({
         const routePoints = route.points.map((point) => point.clone());
         routePoints[0].copy(record.dropTarget);
         record.path = makePath(routePoints);
+        if(topAssaultMode)record.moveDuration=Math.max(record.minimumMoveDuration,record.path.total/SOLDIER_BASE_PACE);
       }
       const approachEnd = groupRecords[0].path.points.at(-1)?.clone()
         || baseGround.clone();
@@ -726,6 +729,7 @@ export function createCitadelNightInfiltration({
   let returnElapsed = 0;
   let returnRecords = [];
   let returnRecordsByRope = [];
+  let returnApproachDuration = RETURN_APPROACH_DURATION;
 
   const setRecordPose = (record, position, lookDirection) => {
     record.soldier.position.copy(position);
@@ -1049,6 +1053,8 @@ export function createCitadelNightInfiltration({
     assistanceRoot.visible = false;
     for (const record of records) {
       record.soldier.visible = false;
+      record.returnTrail = [record.dropTarget.clone()];
+      record.returnPath = null;
       record._landedLogged = false;
       record._stageLogged = null;
       setMovementPose(record, false, false, 0);
@@ -1073,6 +1079,8 @@ export function createCitadelNightInfiltration({
     assistanceRoot.visible = false;
     for (const record of records) {
       record.soldier.visible = false;
+      record.returnTrail = [record.dropTarget.clone()];
+      record.returnPath = null;
       record._landedLogged = false;
       record._stageLogged = null;
       setMovementPose(record, false, false, 0);
@@ -1102,6 +1110,8 @@ export function createCitadelNightInfiltration({
     assistanceRoot.visible = false;
     horse.userData.setBellyOpen?.(1);
     returnRecords = [];
+    returnRecordsByRope = descentRopes.map(() => []);
+    returnApproachDuration = RETURN_APPROACH_DURATION;
     for (const record of records) {
       const deployed = record.soldier.visible;
       record.returnSkip = !deployed;
@@ -1109,6 +1119,12 @@ export function createCitadelNightInfiltration({
         ? record.soldier.getWorldPosition(new THREE.Vector3())
         : record.anchor.clone();
       if (deployed) {
+        // Retrace the actual sortie, including patrol turns, instead of flying
+        // across the valley to the horse after the plaza relocation.
+        const trail = record.returnTrail || [record.dropTarget];
+        record.returnPath = makePath([record.returnStart, ...trail.slice().reverse()]);
+        record.returnWalkDuration = record.returnPath.total / SOLDIER_BASE_PACE;
+        returnApproachDuration = Math.max(returnApproachDuration, record.returnWalkDuration);
         const ropeReturnRecords = returnRecordsByRope[record.ropeIndex];
         record.returnIndex = ropeReturnRecords.length;
         ropeReturnRecords.push(record);
@@ -1128,7 +1144,7 @@ export function createCitadelNightInfiltration({
       ...returnRecordsByRope.map((ropeRecords) => ropeRecords.length)
     );
     horse.userData.setBellyOpen?.(1);
-    const allReturnEnd = RETURN_APPROACH_DURATION
+    const allReturnEnd = returnApproachDuration
       + Math.max(0, maxGroupReturnCount - 1) * RETURN_SEQUENCE_GAP
       + RETURN_DURATION;
 
@@ -1137,16 +1153,19 @@ export function createCitadelNightInfiltration({
         record.soldier.visible = false;
         continue;
       }
-      if (returnElapsed < RETURN_APPROACH_DURATION) {
+      if (returnElapsed < returnApproachDuration) {
         record.soldier.visible = true;
-        const t = smoothstep01(returnElapsed / RETURN_APPROACH_DURATION);
-        _tmpA.copy(record.returnStart).lerp(record.dropTarget, t);
-        setRecordPose(record, _tmpA, _tmpB.copy(record.dropTarget).sub(record.returnStart));
+        const distance = Math.min(record.returnPath.total, returnElapsed * SOLDIER_BASE_PACE);
+        samplePathDistance(record.returnPath, distance, _tmpA);
+        samplePathDistance(record.returnPath, Math.min(record.returnPath.total, distance + 0.24), _tmpB);
+        setMovementPose(record, distance < record.returnPath.total, false, returnElapsed);
+        setRecordPose(record, _tmpA, _tmpB.sub(_tmpA));
         continue;
       }
 
+      setMovementPose(record, false, false, returnElapsed);
       const localTime = returnElapsed
-        - RETURN_APPROACH_DURATION
+        - returnApproachDuration
         - record.returnIndex * RETURN_SEQUENCE_GAP;
       if (localTime <= 0) {
         record.soldier.visible = true;
@@ -1170,13 +1189,13 @@ export function createCitadelNightInfiltration({
       const ropeReturnRecords = returnRecordsByRope[ropeIndex] || [];
       const ascendingRecord = ropeReturnRecords.find((record) => {
         const localTime = returnElapsed
-          - RETURN_APPROACH_DURATION
+          - returnApproachDuration
           - record.returnIndex * RETURN_SEQUENCE_GAP;
         return localTime > 0 && localTime < RETURN_DURATION;
       });
       if (ascendingRecord) {
         const localTime = returnElapsed
-          - RETURN_APPROACH_DURATION
+          - returnApproachDuration
           - ascendingRecord.returnIndex * RETURN_SEQUENCE_GAP;
         const t = smoothstep01(localTime / RETURN_DURATION);
         returnRopeEnd
@@ -1185,7 +1204,7 @@ export function createCitadelNightInfiltration({
           .addScaledVector(_up, 0.34);
         updateRope(rope, ascendingRecord.anchor, returnRopeEnd);
       } else if (
-        returnElapsed >= RETURN_APPROACH_DURATION
+        returnElapsed >= returnApproachDuration
         && returnElapsed < allReturnEnd + 0.35
         && ropeReturnRecords.length
       ) {
@@ -1194,7 +1213,7 @@ export function createCitadelNightInfiltration({
           Math.max(
             0,
             Math.floor(
-              (returnElapsed - RETURN_APPROACH_DURATION - RETURN_DURATION)
+              (returnElapsed - returnApproachDuration - RETURN_DURATION)
               / RETURN_SEQUENCE_GAP
             )
           )
@@ -1364,6 +1383,16 @@ export function createCitadelNightInfiltration({
         record.soldier.userData.patrolTerrace = segment?.terraceIndex
           ?? segment?.toTerrace
           ?? null;
+      }
+      const trail = record.returnTrail;
+      if (trail[trail.length - 1].distanceToSquared(_tmpA) > 1e-10) {
+        // Collapse only collinear forward samples; retain every corner and reversal.
+        const last = trail[trail.length - 1], before = trail[trail.length - 2];
+        if (before) {
+          const a = last.clone().sub(before), b = _tmpA.clone().sub(last);
+          if (a.dot(b) >= 0 && a.clone().cross(b).lengthSq() <= 1e-16 * a.lengthSq() * b.lengthSq()) trail.pop();
+        }
+        trail.push(_tmpA.clone());
       }
       setRecordPose(record, _tmpA, _tmpC.copy(_tmpB).sub(_tmpA));
       record.soldier.userData.climbing = climbing;

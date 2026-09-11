@@ -1,0 +1,38 @@
+{
+  "plantCount": 32,
+  "supportedPlants": 32,
+  "minQuayClearance": 0.8422429973460339,
+  "lights": [
+    {
+      "name": "new-city-light-main-gate",
+      "intensity": 300,
+      "position": [
+        7.999999999999991,
+        19.999999999999996,
+        13.999999999999975
+      ]
+    },
+    {
+      "name": "new-city-light-plaza",
+      "intensity": 220,
+      "position": [
+        6.999999999999984,
+        7.999999999999998,
+        69.99999999999999
+      ]
+    },
+    {
+      "name": "new-city-light-moon-fill",
+      "intensity": 12000,
+      "position": [
+        -14.000000000000018,
+        57.999999999999986,
+        66
+      ]
+    }
+  ],
+  "oldCount": 1,
+  "total": 4,
+  "passed": true,
+  "scope": "Actual original scene, camera repositioned only; original night environment and production lights, not a separately lit geometry clone."
+}

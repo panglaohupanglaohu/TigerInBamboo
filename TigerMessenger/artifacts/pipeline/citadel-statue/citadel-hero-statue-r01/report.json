@@ -1,0 +1,30 @@
+{
+  "status": "candidate-needs-visual-review",
+  "sourceTarget": "assets/concepts/citadel/citadel-battle-target-v1.png",
+  "blend": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/citadel-statue/citadel-hero-statue-r01.blend",
+  "glb": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/assets/models/optimized/citadel-statue/citadel-hero-statue-r01.glb",
+  "renders": [
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-statue/citadel-hero-statue-r01/front.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-statue/citadel-hero-statue-r01/side.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-statue/citadel-hero-statue-r01/back.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-statue/citadel-hero-statue-r01/three-quarter.png"
+  ],
+  "meshObjects": 68,
+  "vertices": 3620,
+  "boundsBlenderZUp": {
+    "min": [
+      -1.3300000429153442,
+      -1.3300000429153442,
+      0.0
+    ],
+    "max": [
+      1.3300000429153442,
+      1.3300000429153442,
+      6.799999713897705
+    ]
+  },
+  "totalHeight": 6.799999713897705,
+  "baseCornerSpan": 3.7618080759124335,
+  "front": "Blender -Y; engine +Z after glTF conversion",
+  "scope": "Original carved hero candidate; no Web/Godot integration and no visual approval claimed."
+}

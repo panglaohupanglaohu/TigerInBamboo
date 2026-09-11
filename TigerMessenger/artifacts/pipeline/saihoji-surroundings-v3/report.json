@@ -1,0 +1,47 @@
+{
+  "id": "saihoji-surroundings-v3",
+  "type": "static external concealment scenery",
+  "treeSource": "five existing optimized Saihoji pine GLBs",
+  "scale": {
+    "originalKunIsland": [
+      15.04,
+      7.72
+    ],
+    "outerFootprint": [
+      18.4,
+      16.0
+    ],
+    "centralOpening": [
+      9.0,
+      7.0
+    ]
+  },
+  "movement": "remains on planet when Kun rises",
+  "zones": [
+    {
+      "id": "moss-entry",
+      "name": "入口苔径",
+      "pine": 811
+    },
+    {
+      "id": "master-stones",
+      "name": "主石之庭",
+      "pine": 5566
+    },
+    {
+      "id": "dry-cascade",
+      "name": "枯瀑之庭",
+      "pine": 1401
+    },
+    {
+      "id": "moss-islands",
+      "name": "苔海岛群",
+      "pine": 1997
+    },
+    {
+      "id": "return-view",
+      "name": "回望石组",
+      "pine": 4101
+    }
+  ]
+}

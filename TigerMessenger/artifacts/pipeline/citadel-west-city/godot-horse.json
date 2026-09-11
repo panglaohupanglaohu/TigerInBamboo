@@ -1,0 +1,35 @@
+{
+  "archive_restored_on_disable": true,
+  "archive_source": "citadel-trojan-horse[73]",
+  "landmark_focus_updated": true,
+  "march": {
+    "blocked": {},
+    "completed_steps": 385,
+    "geometry_queries": 996904,
+    "phase": "arrived",
+    "point": 385,
+    "role": "gladius",
+    "route_points": 386,
+    "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+    "step_clearance": 0.1
+  },
+  "passed": true,
+  "placement": [
+    18.9999923706055,
+    4.0,
+    71.5
+  ],
+  "relocated_source": {
+    "behaviorKeys": [],
+    "sourcePath": "citadel-trojan-horse[2]",
+    "sourceType": "Group"
+  },
+  "replacement_reused_on_enable": true,
+  "scale": [
+    0.720000028610229,
+    0.720000028610229,
+    0.720000028610229
+  ],
+  "scope": "Same Web horse asset exported at new placement as static Godot geometry. Archived duplicate hidden reversibly. Belly doors, ropes, infiltration actors and task logic are NOT migrated by this import.",
+  "single_visible_horse": true
+}

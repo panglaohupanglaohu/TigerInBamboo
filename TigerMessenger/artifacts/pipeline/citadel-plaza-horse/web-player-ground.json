@@ -1,0 +1,35 @@
+{
+  "wallCases": [
+    {
+      "name": "gate-front",
+      "blocked": true,
+      "expect": true,
+      "passed": true
+    },
+    {
+      "name": "gate-back",
+      "blocked": true,
+      "expect": true,
+      "passed": true
+    },
+    {
+      "name": "doorway",
+      "blocked": false,
+      "expect": false,
+      "passed": true
+    },
+    {
+      "name": "court-guard",
+      "blocked": true,
+      "expect": true,
+      "passed": true
+    }
+  ],
+  "routeBlocked": 0,
+  "samples": 249,
+  "maxError": 6.248839595007784e-9,
+  "noUpperSnap": true,
+  "failures": [],
+  "passed": true,
+  "scope": "Production resolveCollisions using mounted scene platforms and hills at route samples; ground contact plus authored wall/guard swept samples and clear route; not real keyboard traversal or exact capsule contact."
+}

@@ -1,0 +1,99 @@
+{
+  "horsePosition": [
+    18.99999999999999,
+    3.9999999999999707,
+    71.49999999999999
+  ],
+  "groups": [
+    {
+      "name": "ladder-infiltration-group",
+      "soldier": 0,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 556,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    },
+    {
+      "name": "ladder-infiltration-group",
+      "soldier": 1,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 556,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    },
+    {
+      "name": "ladder-infiltration-group",
+      "soldier": 2,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 556,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    },
+    {
+      "name": "ladder-infiltration-group",
+      "soldier": 3,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 556,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    },
+    {
+      "name": "mountain-stair-infiltration-group",
+      "soldier": 0,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 557,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    },
+    {
+      "name": "mountain-stair-infiltration-group",
+      "soldier": 1,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 557,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    },
+    {
+      "name": "mountain-stair-infiltration-group",
+      "soldier": 2,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 557,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    },
+    {
+      "name": "mountain-stair-infiltration-group",
+      "soldier": 3,
+      "speed": 2.4,
+      "pointCount": 101,
+      "samples": 557,
+      "missingCount": 0,
+      "missing": [],
+      "blockedCount": 0,
+      "blocked": []
+    }
+  ],
+  "scope": "actual paths of all eight soldiers; support and torso clearance; not full combat",
+  "passed": true
+}

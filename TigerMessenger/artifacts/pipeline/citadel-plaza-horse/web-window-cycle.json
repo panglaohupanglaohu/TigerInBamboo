@@ -1,0 +1,25 @@
+{
+  "rows": [
+    {
+      "phase": 0.5,
+      "total": 160,
+      "lit": 0,
+      "registered": 160
+    },
+    {
+      "phase": 0.9,
+      "total": 160,
+      "lit": 126,
+      "registered": 160
+    },
+    {
+      "phase": 0.5,
+      "total": 160,
+      "lit": 0,
+      "registered": 160
+    }
+  ],
+  "oldLightYaw": 0.5235987755982988,
+  "passed": true,
+  "scope": "Actual mounted new-city windows: day/night/day controller and old light-group yaw; not final night lighting or per-room combat."
+}

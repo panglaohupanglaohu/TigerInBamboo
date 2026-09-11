@@ -1,0 +1,14 @@
+{
+  "engine": "4.7.2",
+  "entry": "http://localhost:8931/TigerMessenger/",
+  "runtime": "WebAssembly/WebGL2 single-threaded",
+  "hub_chinese_visible": true,
+  "citadel_scene_visible": true,
+  "saihoji_scene_visible": true,
+  "return_hub_visible": true,
+  "audio_load_errors_after_fix": 0,
+  "battle_start_confirmed": false,
+  "full_battle_verified": false,
+  "manual_audio_accepted": false,
+  "notes": "Clicked start but captured state remains standby; do not claim Web battle progression passed. Temporary browser closed; lingering harness interrupted."
+}

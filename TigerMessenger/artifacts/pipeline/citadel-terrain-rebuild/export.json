@@ -1,0 +1,21 @@
+{
+  "radius": 160,
+  "source": "assembled default Web world; no saved browser edits copied",
+  "nodes": 2197,
+  "meshes": 1122,
+  "instances": 580,
+  "materials": 118,
+  "textures": 0,
+  "bytes": 18345884,
+  "landmarks": {},
+  "warnings": [
+    "Instance color pending: highland-canopy-groves",
+    "Texture unavailable: citadel-townscaper-wall-pattern",
+    "Texture unavailable: citadel-townscaper-roof-pattern",
+    "Texture unavailable: citadel-townscaper-balcony-pattern"
+  ],
+  "limitations": [
+    "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
+    "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them"
+  ]
+}

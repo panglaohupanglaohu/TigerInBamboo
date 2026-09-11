@@ -1515,7 +1515,13 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     radialRebuild(navonaPlaza, (rlx, rlz, y) => visibleGroundLiftLocal(rlx, rlz) + y + 0.12);
     // 切平面高差采样（供系绳班组士兵站高反解）：地形面 − 顶点沿 _site 的高差
     const _pt = new THREE.Vector3();
+    const newCity = patrolCastle?.getObjectByName("highland-west-city");
+    const horseReservation = newCity?.userData.horseReservation;
     const sampleDelta = (worldPos) => {
+      if(horseReservation){
+        const local=patrolCastle.worldToLocal(worldPos.clone());
+        return horseReservation[1]-local.y;
+      }
       const vlx = worldPos.dot(_right);
       const vlz = worldPos.dot(_fwd);
       rangeLocalToWorld(vlx, vlz, R, _pt); // 已含地形 lift
@@ -1647,6 +1653,16 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
       waterfallOrder: latestValleyMode ? null : "ground-to-castle",
       battleDestination: "castle-top",
     };
+    if(horseReservation){
+      patrolCastle.updateWorldMatrix(true,false);
+      trojanHorse.position.copy(patrolCastle.localToWorld(new THREE.Vector3(...horseReservation)));
+      const facing=new THREE.Vector3(newCity.userData.plazaAnchor[0]-horseReservation[0],0,50-horseReservation[2]);
+      const yaw=Math.atan2(facing.x,facing.z);
+      trojanHorse.quaternion.copy(patrolCastle.getWorldQuaternion(new THREE.Quaternion())).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),yaw));
+      const local=rangeWorldToLocal(trojanHorse.position);
+      trojanHorse.userData.rangeLocal={lx:local.x,lz:local.z};
+      trojanHorse.userData.placement={kind:'new-citadel-plaza-right',surface:'stone',castleLocal:[...horseReservation],yaw,facing:'new-citadel-stairs',battleDestination:'castle-top',lake:false};
+    }
     scene.add(trojanHorse);
 
     // ---- 系绳班组：一组纸士兵围马后仰、绳索绷直固定木马 ----
@@ -1721,7 +1737,14 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
           Number(tuple?.[2]) || 0
         ).applyMatrix4(castle.matrixWorld);
         const ladderRoute = [];
-        const stairRoute = (latestAnchors.stairRoute || []).map(toWorld);
+        let stairRoute = (latestAnchors.stairRoute || []).map(toWorld);
+        if(horseReservation){
+          const route=newCity.userData.walkRoute;
+          const end=route.findIndex(p=>Math.abs(p[0]-newCity.userData.plazaAnchor[0])<.01&&Math.abs(p[1]-4)<.01&&Math.abs(p[2]-50)<.01);
+          if(end<0)throw new Error('New city bridge landing missing for original horse');
+          const plazaExit=[[horseReservation[0],4,61],[newCity.userData.plazaAnchor[0],4,58]];
+          stairRoute=[...plazaExit,...route.slice(0,end+1).reverse()].map(toWorld).concat(stairRoute);
+        }
         const interiorFloorRoutes = (latestAnchors.interiorFloorRoutes || []).map((route) => ({
           floor: route.floor,
           surface: route.surface,

@@ -18,6 +18,10 @@
       "source": "castleContainer[69]/odyssey-citadel-mountain-valley-assembly[4]/citadel-latest-design-v1[12]/highland-central-sacred-tower[3]/highland-castle-top-capture-deck[16]"
     }
   },
+  "new_city_not_double_shifted": true,
+  "old_candidate_translation": true,
+  "old_city_translation": true,
+  "old_city_yaw": true,
   "passed": true,
   "playable_siege": false,
   "route": {
@@ -44,6 +48,7 @@
     "walkability_validated": false,
     "wall_thickness": 0.12
   },
+  "stair_frame_aligned": true,
   "stairs": {
     "built": true,
     "capture_deck_connected": true,
@@ -56,35 +61,35 @@
         "floor": 0,
         "rise": 0.138541666666667,
         "start_index": 53,
-        "turns": 2.30959731370564
+        "turns": 3.02024264099969
       },
       {
         "end_index": 150,
         "floor": 1,
         "rise": 0.138541666666667,
         "start_index": 102,
-        "turns": 2.30959731370564
+        "turns": 3.02024264099969
       },
       {
         "end_index": 199,
         "floor": 2,
         "rise": 0.1375,
         "start_index": 151,
-        "turns": 2.30959731370564
+        "turns": 3.02024264099969
       },
       {
         "end_index": 248,
         "floor": 3,
         "rise": 0.1375,
         "start_index": 200,
-        "turns": 2.30959731370564
+        "turns": 3.02024264099969
       },
       {
         "end_index": 259,
         "floor": 4,
         "rise": 0.13,
         "start_index": 249,
-        "turns": 0.481166107022009
+        "turns": 0.629217216874935
       }
     ],
     "max_riser": 0.138541666666667,
@@ -96,11 +101,15 @@
     "width": 0.66
   },
   "town_cavity": {
-    "door_corridor_width": 1.75,
-    "method": "CSG subtraction on the existing mesh; source retained",
-    "slab_bounds": "[P: (-8.93, 4.01, -8.93), S: (19.86, 0.19, 19.86)]",
-    "source": "castle-shared-edge-town-candidate[0]/citadel-layer-1[1]/town-terrace-0-level-1[0]/Mesh[165]",
-    "tower_opening": "(6.7, 6.0)",
+    "bound": true,
+    "geometry_verified": true,
+    "method": "Triangle-volume intersection in retained tower coordinates; CSG shaft and entrance subtraction only where required",
+    "missing_baked_meshes": 0,
+    "overlap_triangles_before": 0,
+    "remaining_overlap_triangles": 0,
+    "replacement_meshes": 0,
+    "scanned_meshes": 507,
+    "verified_empty_without_cut": true,
     "visual_verified": false
   }
 }

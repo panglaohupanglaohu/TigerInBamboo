@@ -1,0 +1,142 @@
+{
+  "cycles": [
+    {
+      "nightDuration": 1,
+      "deployed": 4,
+      "paths": [
+        {
+          "points": 2,
+          "length": 1.1648530634005687,
+          "duration": 0.4853554430835703
+        },
+        {
+          "points": 2,
+          "length": 1.157969423104408,
+          "duration": 0.4824872596268367
+        },
+        {
+          "points": 2,
+          "length": 1.1579694231044062,
+          "duration": 0.4824872596268359
+        },
+        {
+          "points": 2,
+          "length": 1.1648530634005791,
+          "duration": 0.48535544308357464
+        }
+      ],
+      "peakStep": 0.08000000000001453,
+      "returnSeconds": 7.533333333333333,
+      "insideHorse": 8,
+      "active": false,
+      "returning": false,
+      "passed": true
+    },
+    {
+      "nightDuration": 35,
+      "deployed": 8,
+      "paths": [
+        {
+          "points": 17,
+          "length": 76.1571015790861,
+          "duration": 31.732125657952544
+        },
+        {
+          "points": 17,
+          "length": 74.34281525625597,
+          "duration": 30.97617302343999
+        },
+        {
+          "points": 17,
+          "length": 64.98325015964818,
+          "duration": 27.07635423318674
+        },
+        {
+          "points": 17,
+          "length": 63.21505063027183,
+          "duration": 26.33960442927993
+        },
+        {
+          "points": 17,
+          "length": 76.14303863073863,
+          "duration": 31.726266096141096
+        },
+        {
+          "points": 17,
+          "length": 74.3429847169907,
+          "duration": 30.97624363207946
+        },
+        {
+          "points": 17,
+          "length": 65.01469215573022,
+          "duration": 27.08945506488759
+        },
+        {
+          "points": 17,
+          "length": 63.21397328819139,
+          "duration": 26.339155536746414
+        }
+      ],
+      "peakStep": 0.08000000000003148,
+      "returnSeconds": 37.766666666666666,
+      "insideHorse": 8,
+      "active": false,
+      "returning": false,
+      "passed": true
+    },
+    {
+      "nightDuration": 180,
+      "deployed": 8,
+      "paths": [
+        {
+          "points": 107,
+          "length": 213.02925201126334,
+          "duration": 88.76218833802639
+        },
+        {
+          "points": 107,
+          "length": 215.47147366385738,
+          "duration": 89.7797806932739
+        },
+        {
+          "points": 107,
+          "length": 214.89428512421745,
+          "duration": 89.53928546842394
+        },
+        {
+          "points": 107,
+          "length": 213.19271084817592,
+          "duration": 88.83029618673997
+        },
+        {
+          "points": 107,
+          "length": 213.12678421823298,
+          "duration": 88.80282675759707
+        },
+        {
+          "points": 107,
+          "length": 215.55203860561653,
+          "duration": 89.8133494190069
+        },
+        {
+          "points": 107,
+          "length": 215.16935969686457,
+          "duration": 89.65389987369358
+        },
+        {
+          "points": 107,
+          "length": 213.38495399662133,
+          "duration": 88.91039749859223
+        }
+      ],
+      "peakStep": 0.08000000000004275,
+      "returnSeconds": 95.83333333333333,
+      "insideHorse": 8,
+      "active": false,
+      "returning": false,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Actual mounted Web controller: partial descent, mid-approach, patrol, dawn return and repeated next night. Position continuity and reset only; not full combat or capsule collision."
+}

@@ -24,7 +24,7 @@ func run()->void:
     for r in range(routes.size()):
         for i in range(routes[r].size()-1):
             var aa:Array=routes[r][i];var bb:Array=routes[r][i+1]
-            var a:Vector3=w.castle_adapter.original.to_global(Vector3(aa[0],aa[1],aa[2]));var b:Vector3=w.castle_adapter.original.to_global(Vector3(bb[0],bb[1],bb[2]))
+            var a:Vector3=w.assault_route.node.to_global(Vector3(aa[0],aa[1],aa[2]));var b:Vector3=w.assault_route.node.to_global(Vector3(bb[0],bb[1],bb[2]))
             var n:=maxi(1,int(ceil(a.distance_to(b)/0.25)))
             for k in range(n+1):
                 var point:Vector3=a.lerp(b,float(k)/n)

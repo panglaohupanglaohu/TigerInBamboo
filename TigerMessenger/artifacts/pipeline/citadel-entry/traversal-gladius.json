@@ -1,0 +1,36 @@
+{
+  "blocking_control": {
+    "evidence": {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/@StaticBody3D@2093/@CollisionShape3D@2094",
+        "obstacle_bounds": "[P: (0.0, 0.0, 0.0), S: (0.0, 0.0, 0.0)]",
+        "part": "n35",
+        "phase": "hop",
+        "point": 0,
+        "progress": 0.625,
+        "reason": "mesh_overlap",
+        "route_position": "(0.0, 3.550003, 3.500011)"
+      },
+      "completed_steps": 0,
+      "geometry_queries": 1628,
+      "phase": "blocked",
+      "point": 0,
+      "role": "gladius",
+      "route_points": 247,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1
+    },
+    "passed": true
+  },
+  "gladius": {
+    "blocked": {},
+    "completed_steps": 246,
+    "geometry_queries": 744343,
+    "phase": "arrived",
+    "point": 246,
+    "role": "gladius",
+    "route_points": 247,
+    "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+    "step_clearance": 0.1
+  }
+}

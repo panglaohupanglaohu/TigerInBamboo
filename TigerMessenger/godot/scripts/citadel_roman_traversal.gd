@@ -19,8 +19,11 @@ var step_start:Vector3
 var step_end:Vector3
 var space:PhysicsDirectSpaceState3D
 var route_frame:Transform3D
-func bind(world:Node3D,kind:String)->bool:
-    role=kind;space=world.get_world_3d().direct_space_state;route_frame=world.stair_candidate.root.global_transform
+func bind(world:Node3D,kind:String,path_root:Node3D=null,local_route:Array=[])->bool:
+    var frame_root:Node3D=path_root if path_root!=null else world.stair_candidate.root
+    var route_points:Array=local_route if not local_route.is_empty() else world.stair_candidate.route
+    if route_points.size()<2:return false
+    role=kind;space=world.get_world_3d().direct_space_state;route_frame=frame_root.global_transform
     var path="res://assets/roman-family-v1/romanSoldier_%s_blue"%role
     actor=load(path+".glb").instantiate();world.add_child(actor)
     if not pose.bind(actor,role,JSON.parse_string(FileAccess.get_file_as_string(path+".assembly.json"))):return false
@@ -34,9 +37,9 @@ func bind(world:Node3D,kind:String)->bool:
                 var q:Vector3=transform*p;points.append(q);lowest=minf(lowest,q.y)
         if points.size()>=4:
             var shape=ConvexPolygonShape3D.new();shape.points=points;pieces.append({"shape":shape,"name":str(mesh.name)})
-    up=world.stair_candidate.root.global_basis.y.normalized()
-    for p in world.stair_candidate.route:
-        var q:Vector3=world.stair_candidate.root.to_global(p)
+    up=frame_root.global_basis.y.normalized()
+    for p in route_points:
+        var q:Vector3=frame_root.to_global(p)
         if route.is_empty() or route[-1].distance_to(q)>0.001:route.append(q)
     # Land toward the open edge of the tread: heels may overhang downhill,
     # but must not enter the next riser. Preserve the authored geometric route separately.

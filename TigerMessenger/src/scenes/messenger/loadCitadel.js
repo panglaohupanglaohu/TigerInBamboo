@@ -1,3 +1,6 @@
+import {buildCitadelHarborSeabed} from '../../world/citadel/harborSeabed.js';
+import {applyCliffBlenderRefinement} from '../../world/citadel/cliffBlenderRefinement.js';
+import {alignCitadelHarborToOcean} from '../../world/citadel/harborOceanAlignment.js';
 // =====================================================================
 //  高山圣城：range / 旧港贴地 / odyssey / V4 适配 / 台地鸟 / 攻城 / 战术图
 // =====================================================================
@@ -23,7 +26,7 @@ import {
 import { CITADEL_LEVELS_KEY, normalizeCitadelTerraceLayout } from "../../world/citadelTown.js?v=20260905-townscaper-palette-v1";
 
 import { loadCitadelLevelsSave } from "../../world/citadelLevelsSave.js";
-import { OFFICIAL_OCEAN_SEA_LEVEL, HIGHLAND_CASTLE_SEA_DROP } from "../../world/waterV8/officialOcean.js";
+import { OFFICIAL_OCEAN_SEA_LEVEL, HIGHLAND_CASTLE_SEA_DROP, officialOceanLevelAt } from "../../world/waterV8/officialOcean.js";
 import { highlandTerrainSurfaceHeight } from "../../world/highlandCitadelDesign.js?v=20260828-reference-light-v9";
 import {
   createCitadelTerraceBirds,
@@ -99,6 +102,9 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
   });
   scene.add(odysseyCitadel);
   odysseyCitadel.updateMatrixWorld(true);
+  alignCitadelHarborToOcean(odysseyCitadel,R);
+  buildCitadelHarborSeabed(scene,odysseyCitadel);
+  applyCliffBlenderRefinement(odysseyCitadel);
   snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborColliders, camp, R });
 
   // 纳沃纳广场落在城堡→旧港连线的 70% 处，门洞朗港（广场局部 +X）。
@@ -197,21 +203,29 @@ function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborCol
   harbor.updateMatrixWorld(true);
   const up = citadelSiteDir(new THREE.Vector3());
   const inv = new THREE.Matrix4().copy(odysseyCitadel.matrixWorld).invert();
+  const before=harbor.position.clone();
   const local = harbor.position.clone().applyMatrix4(inv);
-  const terrain = highlandTerrainSurfaceHeight(local.x, local.z);
+  if(odysseyCitadel.userData.compositionOffset){local.x=-72;local.z=32;}
+  const offset = odysseyCitadel.userData.compositionOffset ?? [0, 0, 0];
+  const terrain = highlandTerrainSurfaceHeight(local.x - offset[0], local.z - offset[2]) + offset[1];
   if (!Number.isFinite(terrain)) return;
-  const delta = terrain - local.y;
-  if (!(Math.abs(delta) > 1e-4)) return;
-  harbor.position.addScaledVector(up, delta);
+  local.y=terrain;
+  harbor.position.copy(local).applyMatrix4(odysseyCitadel.matrixWorld);
+  const delta=harbor.position.clone().sub(before);
+  harbor.userData.compositionPlacement={castleLocal:local.toArray(),role:"old-city-left-harbor"};
   harbor.updateMatrixWorld(true);
   // 船留在海面：泊位在水上，不跟港台一起上崖
   const boat = harborBuilt?.landmarks?.boat;
   if (boat) {
-    const boatR = boat.getWorldPosition(new THREE.Vector3()).length();
-    boat.position.y -= boatR - (R + OFFICIAL_OCEAN_SEA_LEVEL + 0.1);
+    const world=new THREE.Vector3();let low=-100,high=80;
+    for(let i=0;i<44;i++){
+      const y=(low+high)/2;world.set(boat.position.x,y,boat.position.z);boat.parent.localToWorld(world);
+      if(world.length()>R+officialOceanLevelAt(world)+.1)high=y;else low=y;
+    }
+    boat.position.y=(low+high)/2;
     boat.updateMatrixWorld(true);
   }
-  for (const collider of harborColliders || []) collider.position.addScaledVector(up, delta);
+  for (const collider of harborColliders || []) collider.position.add(delta);
   // 弹唱老人的最终落位在 messengerIsland 的沉船编排块（湖沼旁半沉沉船）
 }
 

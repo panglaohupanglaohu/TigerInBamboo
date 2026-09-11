@@ -1,3 +1,5 @@
+import {createCitadelPlayerWalls} from './world/citadel/playerWalls.js';
+import {createCitadelPlayerGround} from './world/citadel/playerGround.js';
 import { bindOriginalWorldRomanArmor } from "./world/romanWorldArmor.js";
 // =====================================================================
 //  TigerMessenger 运行时入口（薄装配）
@@ -1583,6 +1585,16 @@ function refreshSwampGroundZone() {
     if (!swampGroundZone && typeof node.userData?.sampleGroundRadius === "function") swampGroundZone = node;
   });
 }
+let citadelPlayerGround=null,citadelPlayerWalls=null;
+const citadelPreviousFoot=new THREE.Vector3();
+function refreshCitadelPlayerGround(){
+  if(citadelPlayerGround)return;
+  const city=scene.getObjectByName('highland-west-city');
+  if(city){citadelPlayerGround=createCitadelPlayerGround(city);citadelPlayerWalls=createCitadelPlayerWalls(city);}
+}
+function samplePlayerLocalGround(position){
+  return citadelPlayerGround?.(position) ?? sampleSwampGround(position);
+}
 function sampleSwampGround(position) {
   return swampGroundZone?.userData?.sampleGroundRadius(position) ?? null;
 }
@@ -1649,6 +1661,7 @@ function animate() {
   citadelSceneEdit?.tick(dt);
 
   activeSwampTiger(); // Validate once per frame, never traverse the scene per physics substep.
+  refreshCitadelPlayerGround();
   refreshSwampGroundZone(); // Terrain remains valid if the tiger is removed or replaced.
   // 搭乘接管：飞行器驾驶舱 / 气泡艇 / 电车 / 航空艇
   const riding =
@@ -1663,6 +1676,7 @@ function animate() {
     const physicsSteps = Math.max(1, Math.ceil(dt / (1 / 120)));
     const physicsDt = dt / physicsSteps;
     for (let step = 0; step < physicsSteps; step++) {
+    citadelPreviousFoot.copy(player.position);
     updatePlayerControl({ player, keys, camera, dt: physicsDt, gameStarted, onJump: sfxJump });
     resolveCollisions(
       player.position,
@@ -1672,8 +1686,9 @@ function animate() {
       player,
       () => showToast("掉下去了… 已回到检查点"),
       hills,
-      sampleSwampGround
+      samplePlayerLocalGround
     );
+    citadelPlayerWalls?.(citadelPreviousFoot,player.position,player.velocity);
     resolveAssetColliders(player.position, assetColliders);
     }
   }

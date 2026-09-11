@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "frame": "new-city-authored-local",
+  "points": [
+    {
+      "id": "main-gate",
+      "position": [
+        60,
+        20,
+        14
+      ],
+      "color": 16756068,
+      "intensity": 300,
+      "radius": 30,
+      "godotEnergy": 5
+    },
+    {
+      "id": "plaza",
+      "position": [
+        59,
+        8,
+        70
+      ],
+      "color": 16763257,
+      "intensity": 220,
+      "radius": 24,
+      "godotEnergy": 4
+    },
+    {
+      "id": "moon-fill",
+      "position": [
+        38,
+        58,
+        66
+      ],
+      "color": 9549288,
+      "intensity": 12000,
+      "radius": 160,
+      "godotEnergy": 8
+    }
+  ],
+  "lanterns": [
+    [
+      54,
+      4,
+      76
+    ],
+    [
+      66,
+      4,
+      76
+    ],
+    [
+      54,
+      4,
+      63
+    ],
+    [
+      66,
+      4,
+      63
+    ],
+    [
+      54,
+      10,
+      32
+    ],
+    [
+      66,
+      10,
+      32
+    ],
+    [
+      54,
+      16,
+      13
+    ],
+    [
+      66,
+      16,
+      13
+    ]
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "old_city_offset": [
+    -52,
+    0,
+    0
+  ],
+  "new_city_center_x": 8,
+  "mount": {
+    "passed": true,
+    "meshes": 156,
+    "replaced": 3,
+    "identity_placement": true,
+    "old_city_offset": [
+      -52,
+      0,
+      0
+    ],
+    "old_candidate_offset": [
+      -52,
+      0,
+      0
+    ],
+    "repeat_bind_verified": true,
+    "restore_verified": true,
+    "scope": "Godot scene mount and reversible layout alignment; no visual acceptance"
+  },
+  "old_town_clearance": {
+    "scanned_meshes": 507,
+    "overlap_triangles": 0,
+    "geometry_verified": true
+  },
+  "old_tower_gladius": {
+    "completed_segments": 246,
+    "route_points": 247,
+    "blocking_control_passed": true
+  },
+  "new_city_gladius": {
+    "completed_segments": 358,
+    "route_points": 359,
+    "geometry_queries": 923766
+  },
+  "scope": "Updated selective GLBs imported. Actual Godot citadel_world scene mount and two gladius traversal checks; no full siege, free player, lighting, or visual acceptance.",
+  "processes": "All headless import/test processes exited; no GUI opened."
+}

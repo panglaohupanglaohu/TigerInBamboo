@@ -2,6 +2,8 @@ extends "res://scripts/original_world.gd"
 ## Entry into the existing spherical world; does not invent a separate castle.
 func _ready() -> void:
     super._ready()
+    ocean_adapter.bind(model)
+    seabed_adapter.bind(model)
     var index := regions.find("odysseyCitadel")
     if index < 0:
         status.text = "高山圣城原场景入口缺失"
@@ -10,8 +12,11 @@ func _ready() -> void:
     _focus_region(index)
     _build_assault_view()
     status.text = "高山圣城 · 原场景与 WFC 城堡
-当前为场景检视；攻城玩法接入中"
+右侧可启动三兵种通行演练；完整攻城接入中"
 
+var seabed_adapter=preload("res://scripts/citadel_seabed_adapter.gd").new()
+var ocean_adapter=preload("res://scripts/original_ocean_adapter.gd").new()
+var window_lights=preload("res://scripts/citadel_window_lights.gd").new()
 var assault_route=preload("res://scripts/citadel_assault_route.gd").new()
 var landmarks:Dictionary={}
 var _cutaway_hidden:Array[Node3D]=[]
@@ -20,6 +25,7 @@ var traversal_context=preload("res://scripts/citadel_collision_context.gd").new(
 var traversal
 var traversal_epoch:=0
 var traversal_accumulator:=0.0
+var traversal_in_west_city:=false
 var town_cavity=preload("res://scripts/citadel_town_cavity.gd").new()
 var shell_candidate=preload("res://scripts/citadel_tower_shell.gd").new()
 var shell_toggle:CheckButton
@@ -29,14 +35,22 @@ var route_toggle:CheckButton
 func _build_assault_view()->void:
     for spec in [["纳沃纳广场","citadel-navona-canal-plaza[70]"],["塔内旋梯","highland-central-interior-rotating-staircase"],["顶层夺取点","highland-castle-top-capture-deck"],["木马","citadel-trojan-horse[73]"]]:
         landmarks[spec[0]]=_find_landmark(model,spec[1])
+    if is_instance_valid(castle_adapter.trojan_horse):landmarks["木马"]=castle_adapter.trojan_horse
+    var plazas=castle_adapter.west_city.find_children("citadel-navona-canal-plaza","Node3D",true,false)
+    if plazas.size()==1 and plazas[0].is_visible_in_tree():landmarks["纳沃纳广场"]=plazas[0]
     var loaded:bool=assault_route.bind(castle_adapter.original)
     if loaded:stair_candidate.bind(landmarks["塔内旋梯"],assault_route.anchors)
     shell_candidate.bind(landmarks["塔内旋梯"].get_parent())
-    town_cavity.bind(castle_adapter.candidate,landmarks["塔内旋梯"].get_parent())
+    if not town_cavity.bind(castle_adapter.candidate,landmarks["塔内旋梯"].get_parent()):
+        status.text="旧城与塔入口几何未能绑定；不可验收通行"
     var layer=CanvasLayer.new();add_child(layer)
     var panel=VBoxContainer.new();layer.add_child(panel)
     var place=func():panel.position=Vector2(maxf(16,get_viewport().get_visible_rect().size.x-285),18)
     get_viewport().size_changed.connect(place);place.call()
+    window_lights.bind(castle_adapter.candidate,castle_adapter.west_city)
+    window_lights.bind_environment(self)
+    var window_toggle=CheckButton.new();window_toggle.text="点亮城灯"
+    window_toggle.toggled.connect(window_lights.set_enabled);panel.add_child(window_toggle)
     var title=Label.new();title.text="圣城攻城 · 原场景核对";panel.add_child(title)
     for label in landmarks:
         var button=Button.new();button.text=label;button.disabled=landmarks[label]==null
@@ -47,6 +61,7 @@ func _build_assault_view()->void:
     var soldiers=Button.new();soldiers.text="检视三兵种携行";soldiers.pressed.connect(_show_carry_preview);panel.add_child(soldiers)
     for spec in [["短剑兵","gladius"],["长矛兵","spear"],["弓箭兵","longbow"]]:
         var walk=Button.new();walk.text=spec[0]+" · 通行演练";walk.pressed.connect(_start_traversal.bind(spec[1]));panel.add_child(walk)
+    var west_walk=Button.new();west_walk.text="短剑兵 · 新圣城行军";west_walk.pressed.connect(_start_traversal.bind("gladius",true));panel.add_child(west_walk)
     var reset_walk=Button.new();reset_walk.text="重置通行演练";reset_walk.pressed.connect(_reset_traversal);panel.add_child(reset_walk)
     var entry=Button.new();entry.text="进攻入口";entry.disabled=not loaded;entry.pressed.connect(_focus_approach);panel.add_child(entry)
     var toggle=CheckButton.new();toggle.text="显示原作路线 · 待通行验收";toggle.disabled=not loaded
@@ -69,6 +84,8 @@ func _find_landmark(root_node:Node,key:String)->Node3D:
 func _focus_landmark(label:String,keep_traversal:bool=false)->void:
     if not keep_traversal and traversal!=null:_reset_traversal()
     _restore_cutaway()
+    if label=="木马" and is_instance_valid(castle_adapter.original_horse):
+        landmarks[label]=castle_adapter.trojan_horse if castle_adapter.enabled and is_instance_valid(castle_adapter.trojan_horse) else castle_adapter.original_horse
     var landmark:Node3D=stair_candidate.root if label=="塔内旋梯" and stair_candidate.active else landmarks[label]
     if not is_instance_valid(landmark):return
     var box=AABB();var seeded:=false
@@ -84,7 +101,7 @@ func _focus_approach()->void:
     if traversal!=null:_reset_traversal()
     _restore_cutaway()
     var point:Array=assault_route.anchors.stairRoute[0]
-    center=castle_adapter.original.to_global(Vector3(point[0],point[1],point[2]));up=center.normalized();distance=18;pitch=0.4;_camera()
+    center=assault_route.node.to_global(Vector3(point[0],point[1],point[2]));up=center.normalized();distance=18;pitch=0.4;_camera()
     status.text="进攻入口 · 外部路线接塔内五层旋梯\n显示路线不等于通过碰撞验收"
 
 func assault_evidence()->Dictionary:
@@ -109,7 +126,7 @@ func _inspect_stair_interior(keep_traversal:bool=false)->void:
             _cutaway_hidden.append(child);child.visible=false
     route_toggle.button_pressed=true
     status.text="旋梯内部 · 临时隐藏塔壳供核对
-切换定位恢复塔壳；当前台阶仍有通行缺口"
+切换定位恢复塔壳；右侧可启动通行演练"
 
 func _set_shell(value:bool)->void:
     if traversal!=null:_reset_traversal()
@@ -151,29 +168,34 @@ func _reset_traversal()->void:
     traversal_epoch+=1;traversal_accumulator=0.0
     if traversal!=null:traversal.dispose();traversal=null
     status.text="通行演练已重置"
-func _start_traversal(kind:String)->void:
+func _start_traversal(kind:String,west_city:bool=false)->void:
     _reset_traversal()
     var token:=traversal_epoch
     for actor in carry_preview:
         if is_instance_valid(actor):actor.queue_free()
     carry_preview.clear()
     _restore_cutaway();stair_toggle.button_pressed=true;shell_toggle.button_pressed=true
-    if is_instance_valid(traversal_context.body):traversal_context.body.queue_free();traversal_context.body=null
+    traversal_context.dispose()
     traversal_context.bind(self)
     await get_tree().physics_frame
     await get_tree().physics_frame
     if token!=traversal_epoch:return
+    if not town_cavity.verify_geometry():
+        status.text="塔入口几何校验失败；通行演练未启动"
+        return
     traversal=preload("res://scripts/citadel_roman_traversal.gd").new()
-    if not traversal.bind(self,kind):status.text="士兵携行绑定失败";return
-    _inspect_stair_interior(true);route_toggle.button_pressed=false
+    traversal_in_west_city=west_city
+    var path:Array=preload("res://scripts/west_city_route.gd").new().points() if west_city else []
+    if not traversal.bind(self,kind,castle_adapter.original if west_city else null,path):status.text="士兵携行或路线绑定失败";return
+    if not west_city:_inspect_stair_interior(true)
+    route_toggle.button_pressed=false
 func _physics_process(dt:float)->void:
     if traversal==null:return
     traversal_accumulator+=minf(dt,0.1)
     while traversal_accumulator>=1.0/60.0:
         traversal.tick(1.0/60.0);traversal_accumulator-=1.0/60.0
     var row=traversal.evidence()
-    status.text="塔内通行演练 · %s / %s 段
-%s"%[row.completed_steps,row.route_points-1,"已到达顶层；尚未启动攻城" if row.phase=="arrived" else ("碰撞停止："+str(row.blocked.get("part",row.blocked.get("reason",""))) if row.phase=="blocked" else "刚性腿跃步候选；非最终步态")]
+    status.text="%s · %s / %s 段\n%s"%["新圣城行军" if traversal_in_west_city else "塔内通行演练",row.completed_steps,row.route_points-1,"已到达；尚未启动攻城" if row.phase=="arrived" else ("碰撞停止："+str(row.blocked.get("part",row.blocked.get("reason",""))) if row.phase=="blocked" else "刚性腿跃步候选；非最终步态")]
     if is_instance_valid(traversal.actor) and row.phase in ["turn","hop"]:
         var a:Node3D=traversal.actor
         camera.position=a.global_position+stair_candidate.root.global_basis.x*3.0+a.global_basis.y*1.7+stair_candidate.root.global_basis.z*2.2
@@ -186,3 +208,8 @@ func _focus_region(index:int)->void:
     if traversal!=null:_reset_traversal()
     _restore_cutaway()
     super._focus_region(index)
+
+func _exit_tree()->void:
+    if traversal!=null:traversal.dispose();traversal=null
+    traversal_context.dispose()
+    town_cavity.unbind()

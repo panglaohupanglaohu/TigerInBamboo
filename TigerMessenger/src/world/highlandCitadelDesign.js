@@ -1,3 +1,7 @@
+import {rotateOldCityPoint} from './citadel/oldCityOrientation.js';
+import {isOldCityShelves, oldCityShelfIndex, OLD_CITY_SHELF_BASE_YS} from './citadel/oldCityShelves.js';
+import { installTowerShell } from "./citadel/towerShell.js";
+import { buildContinuousStairSpec } from "./citadel/continuousStairs.js";
 // ============================================================================
 //  Highland Citadel — mountain-valley presentation layer
 //
@@ -5,6 +9,7 @@
 //  mountain-valley city. Local convention: +Y = sky, +Z = waterfront/player.
 // ============================================================================
 import * as THREE from "three";
+import { westCityBenchHeight, westCityWaterChannel } from './citadel/westCityLayout.js';
 import { TOWNSCAPER_HIGHLAND_PALETTE } from "./citadelTown.js?v=20260905-townscaper-palette-v1";
 import { mergeStaticGroup } from "./geometryMerge.js";
 
@@ -44,14 +49,13 @@ export const HIGHLAND_REFERENCE_PROPORTIONS = Object.freeze({
 });
 
 export const HIGHLAND_CITADEL_DESIGN_PALETTE = Object.freeze({
-  // 2026-08-28 主人验收：参考瓦片星球俯瞰图重上色——暖沙色崖壁 +
-  // 鼠尾草绿植被（替换 2026-08-25 冷蓝灰基线）。
-  mountainDeep: 0xc0ae86,
-  mountainMid: 0xd3c3a0,
-  mountainMist: 0xb9c6bd,
-  mountainFace: 0xd3c3a0,
-  mountainHigh: 0xe2d8ba,
-  mountainSnow: 0xf2efe2,
+  // Approved September citadel concept: blue rock faces, with dark crevices.
+  mountainDeep: 0x203b59,
+  mountainMid: 0x456d91,
+  mountainMist: 0x7fa1bc,
+  mountainFace: 0x375d80,
+  mountainHigh: 0x6686a5,
+  mountainSnow: 0x9bb3c9,
   // 山地植被：参考图的鼠尾草/青灰绿树冠
   foliageDeep: 0x6f9c8c,
   foliageMid: 0x84b09e,
@@ -64,7 +68,7 @@ export const HIGHLAND_CITADEL_DESIGN_PALETTE = Object.freeze({
   roof: 0x5d7790,
   windowDark: 0x13243a,
   windowWarm: 0xffb066,
-  windowCore: 0xff6c35,
+  windowCore: 0xffb96b,
   water: 0x163c59,
   quay: 0xc5d1d8,
   boat: 0x24283a,
@@ -144,11 +148,11 @@ export function highlandMountainGridHeight(x, z) {
   const naturalMountain = Math.max(
     0.9,
     3.2 + shoulder + basin + terraces
-      + ridge(0, -34, 34, 50)
-      + ridge(-48, -13, 28, 32)
-      + ridge(49, -18, 30, 36)
-      + ridge(-70, 26, 24, 22)
-      + ridge(72, 28, 26, 24)
+      + ridge(-10, -39, 28, 51)
+      + ridge(-35, -15, 22, 35)
+      + ridge(60, -22, 22, 38)
+      + ridge(-61, 13, 24, 22)
+      + ridge(72, 18, 24, 19)
   );
   // 城市有自己的地表标高。先挖出一个连续的山谷城市 footprint，再让
   // 山体从城墙外缘抬升；否则山体网格会穿过建筑底座，把城堡“埋”进山里。
@@ -348,6 +352,7 @@ export function highlandWaterHalfWidth(z) {
 }
 
 export function isHighlandWaterfrontCutout(x, z) {
+  if(westCityWaterChannel(x,z)) return true;
   if (z < HIGHLAND_LAKE_CHART.zStart - 1 || z > HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth + 7) return false;
   // 旧港岸湾：港台陆岬整体保留山体（主人验收 2026-08-27，港口双株古樟
   // 与栈桥要坐在实地之上，水面不得横穿树干）。
@@ -464,18 +469,23 @@ export function solveHighlandWaterTiles({ cols = 16, rows = 14, seed = 20260825 
 }
 
 function buildIrregularMountainGrid() {
-  const width = HIGHLAND_REFERENCE_PROPORTIONS.mountainRangeSpan;
-  const depth = 118;
-  const cols = 18;
-  const rows = 16;
+  // Extend the eastern foot of the new citadel without resampling the old city.
+  // Keep the original x=-90 origin and two-metre grid spacing.
+  const width = 220;
+  const minX = -90;
+  const depth = 160;
+  const cols = 110;
+  const zRows=Array.from({length:93},(_,i)=>-59+i*2).concat([-13.04,-3.04]).sort((a,b)=>a-b);
+  const rows = zRows.length-1;
   const dx = width / cols;
-  const dz = depth / rows;
+  const dz = depth / 82; // Preserve existing jitter while adding the southern foothill rows.
   const positions = [];
   const colors = [];
   const heights = [];
   const points = [];
   const tileValues = [];
-  const tileField = solveHighlandTerrainTiles({ cols, rows });
+  const tileCols=18, tileRows=16;
+  const tileField = solveHighlandTerrainTiles({ cols:tileCols, rows:tileRows });
   const low = new THREE.Color(HIGHLAND_CITADEL_DESIGN_PALETTE.mountainDeep);
   const mid = new THREE.Color(HIGHLAND_CITADEL_DESIGN_PALETTE.mountainFace);
   const high = new THREE.Color(HIGHLAND_CITADEL_DESIGN_PALETTE.mountainHigh);
@@ -484,20 +494,15 @@ function buildIrregularMountainGrid() {
   for (let row = 0; row <= rows; row++) {
     for (let col = 0; col <= cols; col++) {
       const edge = row === 0 || row === rows || col === 0 || col === cols;
-      const jitterX = edge ? 0 : Math.sin(row * 2.17 + col * 1.31) * dx * 0.16;
-      const jitterZ = edge ? 0 : Math.cos(row * 1.73 - col * 1.19) * dz * 0.14;
-      const x = -width / 2 + col * dx + jitterX;
-      const z = -depth / 2 + row * dz + jitterZ;
-      const tileIndex = tileField.tiles[Math.min(rows - 1, row) * cols + Math.min(cols - 1, col)];
-      const rawTileBias = HIGHLAND_TERRAIN_TILES[tileIndex]?.bias ?? 0;
-      // WFC 山体瓦片可以抬高外侧坡面，但不能在城址下重新长出 1~4u
-      // 的凸块；否则建筑按权威承重面落地后仍会被地形穿透。城域内把
-      // tile bias 平滑衰减到 0，出城后再恢复完整山体变化。
-      const cityFootprint = Math.max(Math.abs(x) / 28.5, Math.abs(z + 1.5) / 31.5);
-      const tileBias = rawTileBias * smoothMask(0.80, 1.10, cityFootprint);
-      const y = edge
-        ? mountainGridSurfaceHeight(x, z)
-        : localSphericalSurfaceOffset(x, z) + highlandMountainGridHeight(x, z) + tileBias;
+      const inOldCity=minX+col*width/cols>=-28&&minX+col*width/cols<=28&&zRows[row]>=-30&&zRows[row]<=26;
+      const jitterX = edge || inOldCity ? 0 : Math.sin(row * 2.17 + col * 1.31) * dx * 0.16;
+      const jitterZ = edge || inOldCity ? 0 : Math.cos(row * 1.73 - col * 1.19) * dz * 0.14;
+      const x = minX + col * dx + jitterX;
+      const z = zRows[row] + jitterZ;
+      const tileIndex = tileField.tiles[Math.min(tileRows-1,Math.floor(row/rows*tileRows))*tileCols+Math.min(tileCols-1,Math.floor(col/cols*tileCols))];
+      // Geometry and vegetation share the same height surface. WFC regions
+      // remain coarse; render sampling must not stretch an entire slope into one face.
+      const y = highlandTerrainSurfaceHeight(x,z);
       points.push({ x, y, z });
       tileValues.push(tileIndex);
       heights.push(y);
@@ -580,6 +585,7 @@ function buildIrregularMountainGrid() {
   geometry.userData = {
     gridMethod: "primary-grid+dual-grid+alternating-triangles",
     gridSize: { cols, rows },
+    terrainFootprint: { minX, maxX: minX+width, minZ: zRows[0], maxZ: zRows[rows], easternShoulderRun: 26 },
     dualGridOffset: true,
     flatBase: false,
     sideSkirt: true,
@@ -598,7 +604,7 @@ export function highlandTerrainSurfaceHeight(x, z, radius = 160) {
   const height = edge
     ? Math.max(0.9, highlandMountainGridHeight(x, z) * 0.58)
     : highlandMountainGridHeight(x, z);
-  return localSphericalSurfaceOffset(x, z, radius) + height;
+  return westCityBenchHeight(x,z,localSphericalSurfaceOffset(x, z, radius) + height);
 }
 
 /** 山体采样坡度；树、灌木、草都读取同一高度场，不能各自猜 Y。 */
@@ -724,6 +730,28 @@ function addFacadeWindow(group, material, {
 }
 
 function buildInteriorRotatingStaircase(materials) {
+  const spec = buildContinuousStairSpec();
+  const group = new THREE.Group();
+  group.name = "highland-central-interior-rotating-staircase";
+  Object.assign(group.userData, {
+    nonNavigable:false, presentationOnly:true, walkSurface:true,
+    routeKind:"interior-rotating-stairs", floorCount:5,
+    floorRoutes:spec.floorRoutes, entryRoute:spec.entryRoute, exitRoute:spec.exitRoute,
+    continuousStairs:{version:spec.version,treads:spec.treadCount,maxRise:spec.maxRise,width:spec.width,
+      shellIntegrated:true,entryIntegrated:true,fullTraversalVerified:false},
+  });
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(spec.positions, 3));
+  geometry.computeVertexNormals();
+  const mesh = presentationMesh(geometry, materials.band,
+    "highland-central-interior-continuous-treads", "interior-rotating-stair");
+  mesh.userData.walkSurface = true;
+  group.add(mesh);
+  return group;
+}
+
+// Preserved baseline for comparison; not used by the current factory.
+function buildLegacyInteriorRotatingStaircase(materials) {
   const group = new THREE.Group();
   group.name = "highland-central-interior-rotating-staircase";
   group.userData.nonNavigable = false;
@@ -801,6 +829,8 @@ function buildCentralSacredTower(materials) {
   tower.add(interiorStaircase);
   tower.userData.interiorFloorRoutes = interiorStaircase.userData.floorRoutes;
   tower.userData.interiorFloorCount = interiorStaircase.userData.floorCount;
+  tower.userData.entryRoute = interiorStaircase.userData.entryRoute;
+  tower.userData.exitRoute = interiorStaircase.userData.exitRoute;
 
   const podium = presentationMesh(
     new THREE.BoxGeometry(8.8, 2.0, 7.4),
@@ -981,6 +1011,7 @@ function buildCentralSacredTower(materials) {
     });
   }
 
+  installTowerShell(tower);
   return tower;
 }
 
@@ -1514,7 +1545,9 @@ function buildRavineWalls(materials) {
   group.userData.presentationOnly = true;
   group.userData.frontSightline = "kept-clear-for-curved-lake";
   group.userData.sideWingOffset = 8;
-  for (const side of [-1, 1]) {
+  // The east wall occupied the foreground-right new city; its source factory remains
+  // above, but the continuous heightfield now owns that bank.
+  for (const side of [-1]) {
     const wall = presentationMesh(
       makeRavineWallGeometry(side),
       materials.mountain,
@@ -1589,7 +1622,7 @@ function buildMountainVegetation(materials) {
   group.userData.presentationOnly = true;
   // 圣城只使用截图 2 的灰绿圆团低模树；旧港口参天古樟不跨场景复用。
   // 点位沿西/东山肩与北侧森林带排布，城址内部和湖面不再出现孤立树。
-  const placements = HIGHLAND_MOUNTAIN_TREE_PLACEMENTS;
+  const placements = HIGHLAND_MOUNTAIN_TREE_PLACEMENTS.filter(({x,z})=>!(x>=36&&x<=68&&z>=-1&&z<=61));
   // S17 小阴影：树根部共享 blob（圆形贴地暗斑）
   const blobShared = {
     geometry: new THREE.CircleGeometry(1, 14),
@@ -2132,18 +2165,34 @@ export function buildHighlandCitadelLatestDesign(options = {}) {
     waterfallCount: 0,
     palette: HIGHLAND_CITADEL_DESIGN_PALETTE,
   });
-  const captureY = centralTower.userData.captureDeckY;
+  const captureY = centralTower.userData.captureDeckY + 0.12;
   const captureFrontZ = 0.08;
   const entryY = centralTower.userData.baseY + 2.25;
   const interiorFloorRoutes = centralTower.userData.interiorFloorRoutes.map((route) => Object.freeze({
     floor: route.floor,
     surface: route.surface,
-    points: Object.freeze(route.points.map(([x, y, z]) => Object.freeze([
+    points: Object.freeze((route.floor === 4 ? [...route.points, ...centralTower.userData.exitRoute] : route.points).map(([x, y, z]) => Object.freeze([
       x,
       centralTower.userData.baseY + y,
       z,
     ]))),
   }));
+  // Connect the actual elevated tower doorway to the old-city ground.
+  const entryFlight=new THREE.Group();entryFlight.name='highland-old-city-entry-flight';
+  const entry=centralTower.userData.entryRoute[0];
+  const start=[entry[0],HIGHLAND_TOWNSCAPER_BASE_Y+.08,10];
+  const end=[entry[0],centralTower.userData.baseY+entry[1],entry[2]];
+  const entryPoints=[start];
+  const count=28;
+  for(let i=0;i<count;i++){
+    const t=(i+.5)/count,y=start[1]+(end[1]-start[1])*(i+1)/count;
+    const z=start[2]+(end[2]-start[2])*t;
+    const step=new THREE.Mesh(new THREE.BoxGeometry(2.4,.20,Math.abs(end[2]-start[2])/count+.025),materials.wallMid);
+    step.name='old-city-entry-step-'+i;step.position.set(entry[0],y-.10,z);
+    step.userData.walkSurface=true;step.userData.isCitadelTerrain=true;step.userData.westCityWalkable=true;
+    entryFlight.add(step);entryPoints.push([entry[0],y,z]);
+  }
+  entryPoints.push(end);root.add(entryFlight);
   root.userData.assaultAnchors = Object.freeze({
     destination: "castle-top",
     surfaceProvider: HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider,
@@ -2151,13 +2200,11 @@ export function buildHighlandCitadelLatestDesign(options = {}) {
     keepTop: Object.freeze([0, captureY, captureFrontZ]),
     approach: Object.freeze([0, highlandTownscaperSurfaceHeight(0, 18) + 0.22, 18]),
     stairRoute: Object.freeze([
-      Object.freeze([-7.8, highlandTownscaperSurfaceHeight(-7.8, 22) + 0.22, 22]),
-      Object.freeze([-9.1, highlandTownscaperSurfaceHeight(-9.1, 15) + 0.22, 15]),
-      Object.freeze([-7.0, highlandTownscaperSurfaceHeight(-7.0, 8) + 0.22, 8]),
-      Object.freeze([-5.8, highlandTownscaperSurfaceHeight(-5.8, 1) + 0.22, 1]),
-      Object.freeze([-4.9, entryY + 1.2, 0.8]),
-      Object.freeze([-2.2, entryY, 1.4]),
-      Object.freeze([0, entryY, 2.25]),
+      Object.freeze([21, HIGHLAND_TOWNSCAPER_BASE_Y+.08, 24]),
+      Object.freeze([3, HIGHLAND_TOWNSCAPER_BASE_Y+.08, 24]),
+      Object.freeze([3, HIGHLAND_TOWNSCAPER_BASE_Y+.08, 16]),
+      ...entryPoints.map(p=>Object.freeze(p)),
+      ...centralTower.userData.entryRoute.map(([x,y,z]) => Object.freeze([x,centralTower.userData.baseY+y,z])),
     ]),
     ladderPolicy: "disabled",
     captureMode: "interior-rotating-stairs",
@@ -2326,7 +2373,7 @@ function buildBlobShadow(THREE, { x, y, z, radius = 1.0, opacity = 0.26, shared 
   return blob;
 }
 
-function buildSlopeShrub(materials, index, x, z, size, placement = {}) {
+export function buildSlopeShrub(materials, index, x, z, size, placement = {}) {
   const shrub = new THREE.Group();
   shrub.name = `highland-slope-shrub-${index}`;
   shrub.position.set(x, placement.surfaceY ?? highlandTerrainSurfaceHeight(x, z) + 0.02, z);
@@ -2406,7 +2453,7 @@ export function buildHighlandSlopeShrubs(options = {}) {
   group.userData.vegetationLayer = "highland-slope-shrubs-v1";
   group.userData.shrubCount = 0;
   group.userData.blobShadowShared = blobShared;
-  const placements = compileHighlandShrubPlacements(count, seed);
+  const placements = compileHighlandShrubPlacements(count, seed).filter(({x,z})=>!(x>=36&&x<=68&&z>=-1&&z<=61));
   placements.forEach((placement, index) => {
     const shrub = buildSlopeShrub(
       materials,
@@ -2495,7 +2542,7 @@ export function compileHighlandCanopyGroves({ groves = 22, perGrove = 7, seed = 
       });
     }
   }
-  return { centers, canopies };
+  return { centers, canopies:canopies.filter(({x,z})=>!(x>=36&&x<=68&&z>=-1&&z<=61)) };
 }
 
 export function buildHighlandCanopyGroves(options = {}) {
@@ -2555,4 +2602,36 @@ export function mountHighlandSlopeShrubs(THREE, parent, options = {}) {
   const shrubs = buildHighlandSlopeShrubs(options);
   parent.add(shrubs);
   return shrubs;
+}
+
+/** Terrain shelves are conditional on the migrated layout, never on a user's legacy save. */
+export function applyHighlandCityShelves(group,layout){
+  if(!isOldCityShelves(layout))return false;
+  const mesh=group.getObjectByName('citadel-oskar-grid-mountain-surface');
+  if(!mesh)return false;
+  const height=(x,z,original)=>{
+    [x,,z]=rotateOldCityPoint([x,0,z],true);
+    // Ground approach follows the open southern edge of the old town.
+    if(x>=1&&x<=23&&Math.abs(z-24)<=2.5)original=Math.min(original,HIGHLAND_TOWNSCAPER_BASE_Y-.08);
+    const shelf=oldCityShelfIndex(x,z);
+    if(shelf===0||Math.abs(x)>28||z< -30||z> -3)return original;
+    const blendX=1-smoothMask(23,28,Math.abs(x));
+    const blendZ=smoothMask(-30,-26,z);
+    const blend=blendX*blendZ;
+    return THREE.MathUtils.lerp(original,OLD_CITY_SHELF_BASE_YS[shelf]-HIGHLAND_TOWNSCAPER_PLATFORM_VISUAL_CLEARANCE,blend);
+  };
+  const geometry=mesh.geometry,positions=geometry.attributes.position;
+  // The skirt is below the sampled top grid; keep submerged support vertices intact.
+  const surfaceCount=(geometry.userData.gridSize.cols+1)*(geometry.userData.gridSize.rows+1);
+  for(let i=0;i<Math.min(surfaceCount,positions.count);i++){
+    positions.setY(i,height(positions.getX(i),positions.getZ(i),positions.getY(i)));
+    geometry.attributes.mountainHeight?.setX(i,positions.getY(i));
+  }
+  positions.needsUpdate=true;geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
+  if(geometry.attributes.mountainHeight)geometry.attributes.mountainHeight.needsUpdate=true;
+  const highlight=group.getObjectByName('backlit-highlight-citadel-oskar-grid-mountain-surface');
+  if(highlight?.geometry){highlight.geometry.setAttribute('position',positions.clone());highlight.geometry.computeVertexNormals();highlight.geometry.computeBoundingBox();highlight.geometry.computeBoundingSphere();}
+  mesh.userData.oldCityShelves=true;
+  group.userData.groundSurfaceHeight=(x,z,radius=160)=>height(x,z,highlandTerrainSurfaceHeight(x,z,radius));
+  return true;
 }

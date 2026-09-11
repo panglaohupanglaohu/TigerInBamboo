@@ -1,3 +1,5 @@
+import { OLD_CITY_SHELF_BASE_YS, isOldCityShelves, migrateOldCityShelves, oldCityShelfSupported } from './citadel/oldCityShelves.js';
+import {applyCitadelCompositionFrame} from './citadel/compositionFrame.js';
 // ============================================================================
 //  Odyssey Citadel — Townscaper 式规则生成的高山圣城
 //
@@ -6,6 +8,7 @@
 //  断崖基岩、五层台地/折返石阶外围地势、水墨描边与球面放置。
 // ============================================================================
 import * as THREE from "three";
+import { buildWestCity } from './citadel/westCity.js';
 import { affectedComponent } from "./citadel/wfcIncremental.js";
 import {
   addOutline,
@@ -42,7 +45,7 @@ import {
 } from "./highlandCitadelDesign.js?v=20260828-reference-light-v9";
 import { mountHighlandLocalHeroClouds } from "./highlandHeroClouds.js?v=20260828-reference-light-v9";
 import { mountHighlandSlopeGrass } from "./highlandSlopeGrass.js";
-import { mountHighlandSlopeShrubs, mountHighlandCanopyGroves } from "./highlandCitadelDesign.js?v=20260828-reference-light-v9";
+import { applyHighlandCityShelves, mountHighlandSlopeShrubs, mountHighlandCanopyGroves } from "./highlandCitadelDesign.js?v=20260828-reference-light-v9";
 import { createBacklitHighlightLayer } from "./backlitHighlight.js?v=backlit-s16-v1";
 import {
   v3HighlandWallPalette,
@@ -892,7 +895,7 @@ function makeWindowLitMat(_gradientMap, highlandLatest = true) {
     roughness: highlandLatest ? 0.42 : 0.15,
     metalness: highlandLatest ? 0.0 : 0.02,
     emissive: new THREE.Color(emissive),
-    emissiveIntensity: highlandLatest ? 1.65 : 0.55,
+    emissiveIntensity: highlandLatest ? 2.2 : 0.55,
   });
   material.userData.shared = true;
   material.userData.svarbova = true;
@@ -1835,6 +1838,9 @@ export function buildCitadelTownAssembly(spec, options = {}) {
   } = ctx;
 
   const town = buildCitadelTown(spec, {
+    domeProfile: options.domeProfile,
+    domeMaterial: options.domeMaterial,
+    protectedCore: options.protectedCore ?? null,
     leanDecor: options.leanDecor === true,
     skipDecor: options.skipDecor === true,
     townCtxCache: options.townCtxCache ?? null,
@@ -1992,7 +1998,7 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
         townCtxCache: selectionCache,
         leanDecor: options.leanDecor === true || options.baseYOverride !== undefined,
         // 无台地模式（运河交汇古堡）：镇体基座 = 堤岸方框水面平台抬升
-        baseY: options.baseYOverride ?? metrics[terraceIndex].top - 0.06,
+        baseY: isOldCityShelves(layout) ? OLD_CITY_SHELF_BASE_YS[terraceIndex] : options.baseYOverride ?? metrics[terraceIndex].top - 0.06,
         // G30-A：增量编辑复用同一套材质/上下文（全量 rebuild 后由调用方清缓存）
         reuseCtx: options.townCtxCache?.ctx ?? undefined,
       }
@@ -2044,8 +2050,8 @@ function buildCitadelTerraceTownAssembly(spec, contourSpec, options = {}) {
     wfcReports,
     stats,
     layout,
-    baseYs: metrics.map((metric) =>
-      options.baseYOverride !== undefined ? options.baseYOverride : metric.top - 0.06
+    baseYs: metrics.map((metric,index) =>
+      isOldCityShelves(layout) ? OLD_CITY_SHELF_BASE_YS[index] : options.baseYOverride !== undefined ? options.baseYOverride : metric.top - 0.06
     ),
     surfaceConformance,
     materials: options.materials,
@@ -2511,8 +2517,13 @@ export function buildOdysseyCitadel(options = {}) {
   const castleFloors = Number.isFinite(options.floors)
     ? Math.min(20, Math.max(1, Math.round(options.floors)))
     : (options.spec?.floors ?? defaultTownSpec.floors ?? CITADEL_CASTLE_FLOORS);
+  const normalizedDefault = normalizeCitadelTerraceLayout(defaultTownSpec, castleFloors);
+  const supplied = options.spec ? normalizeCitadelTerraceLayout(options.spec, castleFloors) : null;
+  const pristineDefault = !supplied || JSON.stringify(supplied.terraces) === JSON.stringify(normalizedDefault.terraces);
+  const selectedSpec = useHighlandLatestDesign && pristineDefault
+    ? migrateOldCityShelves(normalizedDefault) : (options.spec ?? defaultTownSpec);
   const blueprint = createCitadelBlueprint({
-    spec: options.spec ?? defaultTownSpec,
+    spec: selectedSpec,
     contour: options.contour ?? CITADEL.contourTerrain,
     floors: castleFloors,
     instanceId: options.instanceId ?? null,
@@ -2613,6 +2624,7 @@ export function buildOdysseyCitadel(options = {}) {
   const initialTownCache = (options.wfcTownV1 ?? P.wfcTownV1) === true ? {} : null;
   const initialWfcSeed = options.wfcSeed ?? options.seed ?? 1;
   const townAssembly = buildCitadelTerraceTownAssembly(townSpec, contourSpec, {
+    protectedCore: useHighlandLatestDesign ? HIGHLAND_TOWNSCAPER_TOWN_SPEC.protectedCore : null,
     townCtxCache: initialTownCache,
     wfcTownV1: options.wfcTownV1,
     wfcTopology: options.wfcTopology,
@@ -2659,6 +2671,7 @@ export function buildOdysseyCitadel(options = {}) {
       })
     : null;
   if (highlandLatestDesign) citadelAssembly.add(highlandLatestDesign);
+  if (highlandLatestDesign) citadelAssembly.add(buildWestCity(buildCitadelTownAssembly,highlandCurvedLakeSurfaceHeight));
   const mainOutlinedSurfaceCount = applyInkOutlines(
     citadelAssembly,
     true,
@@ -2703,6 +2716,7 @@ export function buildOdysseyCitadel(options = {}) {
       THREE,
       castleContainer,
       {
+        realLightBudget: 1,
         getTimeOfDay: () => P.timeOfDay,
         terrainHeightAt: highlandTerrainSurfaceHeight,
         waterLocalY: (options.planetRadius ?? 160) + OFFICIAL_OCEAN_SEA_LEVEL - castleOriginRadius,
@@ -2732,6 +2746,7 @@ export function buildOdysseyCitadel(options = {}) {
   const terrainOutlinedSurfaceCount = skipOuterTerrain
     ? 0
     : applyInkOutlines(outerTerrainSystem);
+  applyHighlandCityShelves(outerTerrainSystem, blueprint.town.layout);
   castleContainer.add(outerTerrainSystem);
   castleContainer.add(citadelAssembly);
   castleContainer.userData.skipOuterTerrain = skipOuterTerrain;
@@ -2756,6 +2771,7 @@ export function buildOdysseyCitadel(options = {}) {
     outerTerrainSystem.userData.highlandSlopeGrass?.update?.(t);
     castleContainer.userData.highlandHeroClouds?.update?.(t);
     castleContainer.userData.highlandLightVolumes?.update?.(t);
+    castleContainer.getObjectByName("citadel-new-city-lighting")?.userData.update?.(P.timeOfDay);
     castleContainer.userData.highlandShoreWaves?.update?.(t);
   };
   castleContainer.update = update;
@@ -2838,7 +2854,7 @@ export function buildOdysseyCitadel(options = {}) {
     ? HIGHLAND_TOWNSCAPER_BASE_Y
     : townBaseY;
   // 无台地模式：所有台地基座统一 = 方框水面平台抬升
-  castleContainer.userData.townBaseYs = skipOuterTerrain
+  castleContainer.userData.townBaseYs = isOldCityShelves(townAssembly.layout) ? [...OLD_CITY_SHELF_BASE_YS] : skipOuterTerrain
     ? townAssembly.baseYs.map(() => options.townBaseLift ?? 0.6)
     : useHighlandLatestDesign
       ? townAssembly.baseYs.map(() => HIGHLAND_TOWNSCAPER_BASE_Y)
@@ -2883,6 +2899,8 @@ export function buildOdysseyCitadel(options = {}) {
   if (!useHighlandLatestDesign) {
     placeSvarbovaRedFigure(castleContainer, skipOuterTerrain, options.townBaseLift ?? 0.6);
   }
+
+  if (useHighlandLatestDesign) applyCitadelCompositionFrame(castleContainer);
 
   return castleContainer;
 }
@@ -3192,6 +3210,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
     blueprint.town.layout,
     blueprint.terrain.config,
     {
+      protectedCore: castleContainer.userData.highlandTownscaperGrid ? HIGHLAND_TOWNSCAPER_TOWN_SPEC.protectedCore : null,
       floors: blueprint.floors,
       baseYOverride: castleContainer.userData.skipOuterTerrain
         ? castleContainer.userData.townBaseLift ?? 0.6
@@ -3462,6 +3481,7 @@ export function rebuildCitadelTown(castleContainer, spec, options = {}) {
     blueprint.town.layout,
     blueprint.terrain.config,
     {
+      protectedCore: castleContainer.userData.highlandTownscaperGrid ? HIGHLAND_TOWNSCAPER_TOWN_SPEC.protectedCore : null,
       floors: blueprint.floors,
       townCtxCache: candidateCache,
       wfcTownV1: wfcFlag,
@@ -3552,7 +3572,7 @@ export function rebuildCitadelTown(castleContainer, spec, options = {}) {
   } else if (castleContainer.userData.highlandTownscaperGrid) {
     const n = Math.max(1, assembly.baseYs?.length ?? 1);
     castleContainer.userData.townBaseY = HIGHLAND_TOWNSCAPER_BASE_Y;
-    castleContainer.userData.townBaseYs = Array.from({ length: n }, () => HIGHLAND_TOWNSCAPER_BASE_Y);
+    castleContainer.userData.townBaseYs = isOldCityShelves(assembly.layout) ? [...OLD_CITY_SHELF_BASE_YS] : Array.from({ length: n }, () => HIGHLAND_TOWNSCAPER_BASE_Y);
     ensureSkipOuterTerrainEditPad(castleContainer);
   } else {
     castleContainer.userData.townBaseYs = assembly.baseYs;
@@ -3604,7 +3624,7 @@ export function trimCitadelTownToTerrain(castleContainer, contourSpec, spec = nu
         gridSize: current.gridSize ?? CITADEL_GRID_SIZE,
       });
       if (!c) return false;
-      return citadelTerrainCellSupported(contour, c.x, c.z, terraceIndex, c.inradius);
+      return isOldCityShelves(current) ? oldCityShelfSupported(c.x,c.z,terraceIndex) : citadelTerrainCellSupported(contour, c.x, c.z, terraceIndex, c.inradius);
     });
     totalTrimmed += result.trimmed;
     return { terraceIndex, levels: result.levels };
@@ -3661,6 +3681,7 @@ export function rebuildCitadelTerrain(castleContainer, contourSpec) {
     castleContainer.userData.terrainMaterials,
     normalized
   );
+  applyHighlandCityShelves(system, blueprint.town.layout);
   const outlined = applyInkOutlines(system);
   castleContainer.add(system);
   castleContainer.userData.outerTerrainSystem = system;
@@ -3688,7 +3709,7 @@ export function rebuildCitadelTerrain(castleContainer, contourSpec) {
     castleContainer.userData.mainOutlinedSurfaceCount + outlined;
 
   // 镇体基座跟随新顶层台面
-  const baseYs = citadelTerraceMetrics(normalized).map((metric) => metric.top - 0.06);
+  const baseYs = isOldCityShelves(castleContainer.userData.townSpec) ? [...OLD_CITY_SHELF_BASE_YS] : citadelTerraceMetrics(normalized).map((metric) => metric.top - 0.06);
   const baseY = baseYs[0];
   castleContainer.userData.townBaseY = baseY;
   castleContainer.userData.townBaseYs = baseYs;

@@ -1529,6 +1529,10 @@ function makeGableRoofGeometry(cs, ch) {
  * @returns {{ levels: THREE.Group[], stats: object }}
  */
 export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
+  // Explicit indoor circulation voids are not exterior courtyards or unsupported overhangs.
+  const interiorVoids=new Set(spec.interiorVoids ?? []);
+  const isInteriorVoid=(x,y,z)=>interiorVoids.has(`${x},${y},${z}`);
+
   // 原型几何登记（2026-09-05）：本函数开头急切造 ~40 个**共享**原型几何
   // （cellGeometry / winFrameGeometry / …），全量建城时每个都有网格在用；
   // 但增量 dirty build 只造少数几格，绝大多数原型一个网格都没用上——它们
@@ -1932,21 +1936,23 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       }
       const [bx, by, bz] = best;
       domeCenters.add(`${bx},${by},${bz}`);
+      const targetDome=ctx.domeProfile==='citadel-target';
+      if(targetDome)for(let dx=-1;dx<=1;dx++)for(let dz=-1;dz<=1;dz++)domeCenters.add(`${bx+dx},${by},${bz+dz}`);
       if (!want(bx, by, bz)) continue;
       const dome = new THREE.Group();
       dome.name = "town-dome";
       const drum = mesh(
-        new THREE.CylinderGeometry(cs * 0.72, cs * 0.8, 0.5, 10),
+        new THREE.CylinderGeometry(cs * (targetDome?1.36:.72), cs * (targetDome?1.42:.8), 0.5, targetDome?12:10),
         materials.W,
         "town-dome-drum",
         0.04
       );
       drum.position.y = 0.25;
       dome.add(drum);
-      const cap = ctx.buildHalfDome(cs * 0.78, materials.gold, "town-dome-cap", 1.28);
+      const cap = ctx.buildHalfDome(cs * (targetDome?1.42:.78), ctx.domeMaterial ?? materials.gold, "town-dome-cap", targetDome ? 0.60 : 1.28);
       cap.position.y = 0.5;
       dome.add(cap);
-      if (by >= Math.min(4, levels.length - 1)) {
+      if (!targetDome && by >= Math.min(4, levels.length - 1)) {
         // 主穹顶避雷针（2× 玩家身高）
         const finial = mesh(
           new THREE.CylinderGeometry(0.03, 0.03, ctx.finialHeight, 6),
@@ -1989,7 +1995,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       if (!isolated || domeCenters.has(`${ix},${top},${iz}`)) continue;
       towerTops.add(`${ix},${top},${iz}`);
       if (!want(ix, top, iz)) continue;
-      const cap = ctx.buildHalfDome(cs * 0.56, materials.gold, "town-tower-cap", 1.22);
+      const cap = ctx.buildHalfDome(cs * 0.56, ctx.domeMaterial ?? materials.gold, "town-tower-cap", 1.22);
       cap.position.set(cx(ix), (top + 1) * ch, cz(iz));
       ownCell(ix, top, iz, at(ix, top, iz));
       levelGroups[top].add(cap);
@@ -2022,6 +2028,22 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   //   glass   中蓝玻璃，相对外框内凹 0.01
   //   mullion 白色十字窗棂（2×2 分格）
   // 尺寸按 z1 读数：窗接近正方形，边长 ≈ 0.62 世界单位。
+  // Only the new holy-city profile uses tall arched panes and a stone reveal.
+  // This is a facade assembly, not a newly cut interior wall opening.
+  const targetWindows=ctx.domeProfile==='citadel-target';
+  function archOutline(half,bottom,spring,top){
+    const shape=new THREE.Shape();shape.moveTo(-half,bottom);shape.lineTo(half,bottom);
+    shape.lineTo(half,spring);shape.quadraticCurveTo(half,top,0,top);
+    shape.quadraticCurveTo(-half,top,-half,spring);shape.closePath();return shape;
+  }
+  let targetPaneGeometry,targetFrameGeometry;
+  if(targetWindows){
+    const pane=archOutline(.24,-.65,.35,.65);
+    targetPaneGeometry=proto(new THREE.ExtrudeGeometry(pane,{depth:.035,bevelEnabled:false,curveSegments:6}));
+    const surround=archOutline(.32,-.73,.35,.73);
+    surround.holes.push(archOutline(.24,-.65,.35,.65));
+    targetFrameGeometry=proto(new THREE.ExtrudeGeometry(surround,{depth:.08,bevelEnabled:false,curveSegments:6}));
+  }
   const WIN_W = 0.62;
   const winFrameGeometry = proto(new THREE.BoxGeometry(WIN_W * 1.12, WIN_W * 1.12, 0.05));
   const winGlassGeometry = proto(new THREE.BoxGeometry(WIN_W, WIN_W, 0.03));
@@ -2637,6 +2659,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
         if (at(ix + dx, iy, iz + dz) !== ".") continue;
         if (isGate && dz === 1) continue;
         if (!house.windowFaces.has(`${dx},${dz}`)) continue;
+        if (isInteriorVoid(ix+dx,iy,iz+dz)) continue;
         const winYaw = Math.atan2(dx, dz);
         const winY = cy(iy) - ch * 0.08;
         const winX = cx(ix) + dx * (cs / 2 + 0.028);
@@ -2652,9 +2675,10 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
           levelGroups[iy].add(part);
           return part;
         };
+        if(targetWindows) addWinPart(targetFrameGeometry, frameMat, "town-window-arch-surround", 0.01, "frame");
         if (!leanDecor) addWinPart(winFrameGeometry, frameMat, "town-window-frame", 0.014, "frame");
         const window = mesh(
-          leanDecor ? new THREE.BoxGeometry(0.38, 0.64, 0.05) : winGlassGeometry,
+          targetWindows ? targetPaneGeometry : leanDecor ? new THREE.BoxGeometry(0.38, 0.64, 0.05) : winGlassGeometry,
           winMat,
           "town-window",
           0.022
@@ -2961,7 +2985,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
 
     // 悬空格出拱：下方为空且某轴向两侧有支撑
     // （连拱柱廊由规则 3.7 统一处理，含连续悬空段的拱 + 中间细柱）
-    if (iy > 0 && at(ix, iy - 1, iz) === ".") {
+    if (iy > 0 && at(ix, iy - 1, iz) === "." && !isInteriorVoid(ix,iy-1,iz)) {
       const alongX = at(ix - 1, iy, iz) !== "." && at(ix + 1, iy, iz) !== ".";
       const alongZ = at(ix, iy, iz - 1) !== "." && at(ix, iy, iz + 1) !== ".";
       if (alongX || alongZ) {
@@ -3041,6 +3065,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
     for (const key of grid.keys()) {
       const [ix, iy, iz] = key.split(",").map(Number);
       if (iy === 0 || at(ix, iy - 1, iz) !== ".") continue; // 需悬空
+      if (isInteriorVoid(ix,iy-1,iz)) continue;
       if (visitedArcade.has(key)) continue;
       const arcChar = grid.get(key);
       // 沿 +x 扫描连续悬空段
@@ -3236,6 +3261,10 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
   // 水道是外部环境，不参与内院生成。
   {
     const courtyardRegions = collectCitadelCourtyardRegions(grid, cols, rows, levels.length);
+    // Monument voids are architectural reservations, not empty courtyards.
+    // Passed by the highland initial/full/incremental builders; other towns unchanged.
+    const core = ctx.protectedCore;
+    const reserved = (x,z) => core && Math.abs(x-core.centerX)<=core.halfX && Math.abs(z-core.centerZ)<=core.halfZ;
     const seenWalls = new Set();
     const courtyardSurfaceMaterial = materials.plazaStone ?? materials.weatherStone ?? trimMat;
     const courtyardWallMaterial = materials.trim ?? materials.iron ?? trimMat;
@@ -3261,7 +3290,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       // 底层围合空格已经由 plaza 规则铺好；上层才需要新铺庭院台面。
       if (iy > 0) {
         for (const [x, z] of cells) {
-          if (!want(x, iy, z)) continue;
+          if (!want(x, iy, z) || reserved(x,z)) continue;
           const surface = mesh(
             new THREE.BoxGeometry(cs * 0.93, 0.08, cs * 0.93),
             courtyardSurfaceMaterial,
@@ -3276,6 +3305,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
 
       // 只在每个围合边缘生成一次低墙，避免相邻内院格重复叠边。
       for (const [x, z] of cells) {
+        if (reserved(x,z)) continue;
         for (const [dx, dz] of DIRS) {
           if (at(x + dx, iy, z + dz) === ".") continue;
           const wallKey = `${iy}:${Math.min(x, x + dx)},${Math.min(z, z + dz)}:${dx},${dz}`;
@@ -3301,7 +3331,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       }
 
       const [centerX, centerZ] = cells[Math.floor(cells.length / 2)];
-      if (want(centerX, iy, centerZ)) {
+      if (want(centerX, iy, centerZ) && !reserved(centerX,centerZ)) {
         const basin = mesh(
           courtyardBasinGeometry,
           courtyardSurfaceMaterial,
@@ -3439,6 +3469,7 @@ export function buildCitadelTown(spec, ctx, { dirty = null } = {}) {
       if (!want(ix, iy, iz)) continue;
       if (iy === 0) continue; // 底层贴台地，无需支架
       if (at(ix, iy - 1, iz) !== ".") continue; // 下方有块，无需支架
+      if (isInteriorVoid(ix,iy-1,iz)) continue;
       // 向下找承重面：下一个非空块的顶面（iy2+1）或基座顶（0）
       let supportTop = 0;
       for (let iy2 = iy - 1; iy2 >= 0; iy2--) {

@@ -1,0 +1,742 @@
+{
+  "startClear": true,
+  "destinationClear": true,
+  "destination": [
+    0.3262335853823345,
+    0.6409116159448918,
+    -0.6948409518123515
+  ],
+  "routeFound": false,
+  "routeLength": null,
+  "routePoints": 0,
+  "routeVisits": 0,
+  "routeSearch": null,
+  "routeFailure": {
+    "reason": "disconnected",
+    "visits": 2,
+    "closed": 2,
+    "maxX": 1,
+    "minZ": 0,
+    "maxZ": 0,
+    "nx": 44,
+    "lateralSteps": 60,
+    "maxVisits": 20000
+  },
+  "routeDirections": [],
+  "berthSearchRadius": 64,
+  "distance": 187.4738121006375,
+  "samples": [
+    {
+      "meters": 0,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": true,
+      "local": [
+        26.04912074654348,
+        -5.283521170530036,
+        49.90553702587791
+      ]
+    },
+    {
+      "meters": 2.9757747952482143,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": true,
+      "local": [
+        23.6554343552466,
+        -6.226091395980573,
+        51.401132963083434
+      ]
+    },
+    {
+      "meters": 5.951549590496429,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": true,
+      "local": [
+        21.27155228319129,
+        -7.2201463827572905,
+        52.87894936811115
+      ]
+    },
+    {
+      "meters": 8.927324385744642,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        18.898299109634163,
+        -8.265342289555432,
+        54.338475067708366
+      ]
+    },
+    {
+      "meters": 11.903099180992857,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        16.536495737320575,
+        -9.361317585545121,
+        55.77920521533489
+      ]
+    },
+    {
+      "meters": 14.87887397624107,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        14.186959108536374,
+        -10.50769317542395,
+        57.20064146578816
+      ]
+    },
+    {
+      "meters": 17.854648771489284,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        11.850501922529316,
+        -11.70407253054543,
+        58.60229214757964
+      ]
+    },
+    {
+      "meters": 20.830423566737498,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        9.527932354398393,
+        -12.950041826076951,
+        59.98367243300299
+      ]
+    },
+    {
+      "meters": 23.806198361985714,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        7.220053775547923,
+        -14.245170084141048,
+        61.34430450583474
+      ]
+    },
+    {
+      "meters": 26.781973157233928,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        4.927664475803261,
+        -15.589009322889662,
+        62.683717726609856
+      ]
+    },
+    {
+      "meters": 29.75774795248214,
+      "depth": -8.967021366157837,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        2.6515573872841567,
+        -16.981094711459885,
+        64.00144879541475
+      ]
+    },
+    {
+      "meters": 32.733522747730355,
+      "depth": -10.13102667047957,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        0.3925198101314392,
+        -18.42094473075812,
+        65.29704191214176
+      ]
+    },
+    {
+      "meters": 35.70929754297857,
+      "depth": -9.724880674418529,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -1.8486668598182798,
+        -19.908061340015987,
+        66.57004893414927
+      ]
+    },
+    {
+      "meters": 38.68507233822678,
+      "depth": -10.575079231246974,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -4.071227401315652,
+        -21.441930149061957,
+        67.8200295312732
+      ]
+    },
+    {
+      "meters": 41.660847133474995,
+      "depth": -11.37008235853898,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -6.274393035845703,
+        -23.022020596247298,
+        69.04655133813627
+      ]
+    },
+    {
+      "meters": 44.636621928723216,
+      "depth": -12.105102290540088,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -8.457401693546734,
+        -24.647786131966477,
+        70.24919010370203
+      ]
+    },
+    {
+      "meters": 47.61239672397143,
+      "depth": -12.925247469078755,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -10.619498276808235,
+        -26.318664407707153,
+        71.42752983802247
+      ]
+    },
+    {
+      "meters": 50.58817151921964,
+      "depth": -13.731304934323475,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -12.759934921457667,
+        -28.034077470565087,
+        72.58116295612787
+      ]
+    },
+    {
+      "meters": 53.563946314467856,
+      "depth": -14.472556816017402,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -14.877971255444745,
+        -29.793431963157225,
+        73.70969041900946
+      ]
+    },
+    {
+      "meters": 56.53972110971607,
+      "depth": -15.228251941333667,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -16.97287465493444,
+        -31.596119328862038,
+        74.8127218716462
+      ]
+    },
+    {
+      "meters": 59.51549590496428,
+      "depth": -16.044118808138762,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -19.043920497720006,
+        -33.441516022318275,
+        75.88987577802769
+      ]
+    },
+    {
+      "meters": 62.491270700212496,
+      "depth": -16.788944616799967,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -21.090392413867885,
+        -35.328983725107655,
+        76.94077955312628
+      ]
+    },
+    {
+      "meters": 65.46704549546071,
+      "depth": -17.48973825529282,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -23.11158253350855,
+        -37.25786956654766,
+        77.96506969177383
+      ]
+    },
+    {
+      "meters": 68.44282029070892,
+      "depth": -18.305904535470233,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -25.106791731687018,
+        -39.22750634951816,
+        78.96239189439694
+      ]
+    },
+    {
+      "meters": 71.41859508595714,
+      "depth": -19.056017564322673,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -27.07532987018849,
+        -41.23721278124328,
+        79.93240118956855
+      ]
+    },
+    {
+      "meters": 74.39436988120535,
+      "depth": -19.74394055298208,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -29.01651603625566,
+        -43.2862937089489,
+        80.87476205333252
+      ]
+    },
+    {
+      "meters": 77.37014467645356,
+      "depth": -20.504722599225914,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -30.929678778114685,
+        -45.37404036031446,
+        81.78914852526097
+      ]
+    },
+    {
+      "meters": 80.34591947170178,
+      "depth": -20.32632019295903,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -32.81415633722896,
+        -47.49973058863565,
+        82.67524432120281
+      ]
+    },
+    {
+      "meters": 83.32169426694999,
+      "depth": -20.76782156273046,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -34.669296877199805,
+        -49.66262912261328,
+        83.532742942686
+      ]
+    },
+    {
+      "meters": 86.29746906219822,
+      "depth": -21.471909349735398,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -36.494458709235055,
+        -51.861987820681875,
+        84.36134778293444
+      ]
+    },
+    {
+      "meters": 89.27324385744643,
+      "depth": -22.23802879914851,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -38.289010514107865,
+        -54.0970459297901,
+        85.16077222946376
+      ]
+    },
+    {
+      "meters": 92.24901865269464,
+      "depth": -22.929323498895627,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -40.052331560528465,
+        -56.36703034854352,
+        85.93073976321979
+      ]
+    },
+    {
+      "meters": 95.22479344794286,
+      "depth": -23.572440638169184,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -41.78381191985368,
+        -58.67115589461851,
+        86.67098405422587
+      ]
+    },
+    {
+      "meters": 98.20056824319107,
+      "depth": -24.318403250818108,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -43.48285267705989,
+        -61.008625576355044,
+        87.3812490537057
+      ]
+    },
+    {
+      "meters": 101.17634303843928,
+      "depth": -24.99538511101312,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -45.1488661379063,
+        -63.37863086843414,
+        88.0612890826503
+      ]
+    },
+    {
+      "meters": 104.15211783368751,
+      "depth": -25.625911497390035,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -46.78127603221693,
+        -65.78035199154515,
+        88.71086891679742
+      ]
+    },
+    {
+      "meters": 107.12789262893571,
+      "depth": -26.256740876223915,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -48.379517713211214,
+        -68.2129581959452,
+        89.3297638679953
+      ]
+    },
+    {
+      "meters": 110.10366742418394,
+      "depth": -26.934424082156454,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -49.94303835281413,
+        -70.6756080488138,
+        89.91775986192175
+      ]
+    },
+    {
+      "meters": 113.07944221943214,
+      "depth": -26.909602694840316,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -51.47129713287782,
+        -73.16744972530232,
+        90.47465351213197
+      ]
+    },
+    {
+      "meters": 116.05521701468037,
+      "depth": -27.145689591301135,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -52.96376543224967,
+        -75.68762130317846,
+        91.00025219040933
+      ]
+    },
+    {
+      "meters": 119.03099180992857,
+      "depth": -27.783125139720795,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -54.41992700962082,
+        -78.23525106096294,
+        91.49437409339508
+      ]
+    },
+    {
+      "meters": 122.0067666051768,
+      "depth": -28.426076202481283,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -55.839278182093196,
+        -80.80945777945601,
+        91.9568483054739
+      ]
+    },
+    {
+      "meters": 124.98254140042499,
+      "depth": -28.59288240679217,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -57.22132799940182,
+        -83.40935104654912,
+        92.38751485789285
+      ]
+    },
+    {
+      "meters": 127.95831619567322,
+      "depth": -28.827399711522276,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -58.56559841373378,
+        -86.03403156521641,
+        92.78622478409457
+      ]
+    },
+    {
+      "meters": 130.93409099092142,
+      "depth": -29.50460247052405,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -59.871624445083526,
+        -88.6825914645793,
+        93.15284017124412
+      ]
+    },
+    {
+      "meters": 133.90986578616966,
+      "depth": -30.125744501899135,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -61.138954342088624,
+        -91.35411461393728,
+        93.48723420793297
+      ]
+    },
+    {
+      "meters": 136.88564058141785,
+      "depth": -30.672477474175423,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -62.367149738289314,
+        -94.04767693965492,
+        93.78929122804261
+      ]
+    },
+    {
+      "meters": 139.8614153766661,
+      "depth": -31.158388448710127,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -63.55578580375855,
+        -96.76234674479707,
+        94.05890675075332
+      ]
+    },
+    {
+      "meters": 142.83719017191427,
+      "depth": -31.760725201640156,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -64.70445139204959,
+        -99.4971850314007,
+        94.29598751668374
+      ]
+    },
+    {
+      "meters": 145.81296496716251,
+      "depth": -32.26706090462392,
+      "obstacle": "citadel-oskar-grid-mountain-surface",
+      "turnClear": false,
+      "local": [
+        -65.81274918241076,
+        -102.25124582527198,
+        94.50045152014901
+      ]
+    },
+    {
+      "meters": 148.7887397624107,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        -66.8802958172176,
+        -105.02357650319654,
+        94.67222803752665
+      ]
+    },
+    {
+      "meters": 151.76451455765894,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        -67.90672203457545,
+        -107.81321812244968,
+        94.81125765171929
+      ]
+    },
+    {
+      "meters": 154.74028935290713,
+      "depth": null,
+      "obstacle": null,
+      "turnClear": false,
+      "local": [
+        -68.89167279604634,
+        -110.61920575249245,
+        94.91749227270721
+      ]
+    },
+    {
+      "meters": 157.71606414815537,
+      "depth": -3.1038185699839005,
+      "obstacle": "contour-step-0",
+      "turnClear": false,
+      "local": [
+        -69.83480740945578,
+        -113.44056880873877,
+        94.99089515418244
+      ]
+    },
+    {
+      "meters": 160.69183894340355,
+      "depth": -2.5461637796582295,
+      "obstacle": "contour-step-0",
+      "turnClear": false,
+      "local": [
+        -70.73579964673759,
+        -116.27633138827846,
+        95.0314409062592
+      ]
+    },
+    {
+      "meters": 163.6676137386518,
+      "depth": -1.9925846365615598,
+      "obstacle": "contour-step-0",
+      "turnClear": false,
+      "local": [
+        -71.59433785677533,
+        -119.12551260743992,
+        95.03911550425629
+      ]
+    },
+    {
+      "meters": 166.64338853389998,
+      "depth": -1.5477807507582781,
+      "obstacle": "contour-step-0",
+      "turnClear": false,
+      "local": [
+        -72.41012507320171,
+        -121.98712694107512,
+        95.01391629354818
+      ]
+    },
+    {
+      "meters": 169.61916332914822,
+      "depth": -1.349749723666946,
+      "obstacle": "canal-junction-build-zone",
+      "turnClear": false,
+      "local": [
+        -73.18287911711853,
+        -124.86018456345084,
+        94.95585199048313
+      ]
+    },
+    {
+      "meters": 172.59493812439644,
+      "depth": -1.0892664579148459,
+      "obstacle": "canal-junction-build-zone",
+      "turnClear": false,
+      "local": [
+        -73.91233269470176,
+        -127.74369169062689,
+        94.86494267936834
+      ]
+    },
+    {
+      "meters": 175.57071291964465,
+      "depth": -0.8301266535438003,
+      "obstacle": "canal-junction-build-zone",
+      "turnClear": false,
+      "local": [
+        -74.5982334896578,
+        -130.6366509242037,
+        94.74121980552277
+      ]
+    },
+    {
+      "meters": 178.54648771489286,
+      "depth": -0.5718782338571771,
+      "obstacle": "canal-junction-build-zone",
+      "turnClear": false,
+      "local": [
+        -75.24034425049919,
+        -133.53806159632018,
+        94.58472616440038
+      ]
+    },
+    {
+      "meters": 181.52226251014108,
+      "depth": -4.420287670750781,
+      "obstacle": "",
+      "turnClear": false,
+      "local": [
+        -75.83844287260922,
+        -136.4469201157822,
+        94.39551588678714
+      ]
+    },
+    {
+      "meters": 184.4980373053893,
+      "depth": -10.907070375086704,
+      "obstacle": "",
+      "turnClear": false,
+      "local": [
+        -76.3923224750675,
+        -139.3622203152028,
+        94.17365442007738
+      ]
+    },
+    {
+      "meters": 187.4738121006375,
+      "depth": -2.301811155774118,
+      "obstacle": "",
+      "turnClear": false,
+      "local": [
+        -76.9017914722095,
+        -142.28295379903264,
+        93.91921850563574
+      ]
+    }
+  ],
+  "clearCount": 3,
+  "stats": {
+    "envelope": 7,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 7,
+    "obstacleMeshes": 2345
+  },
+  "scope": "Direct profile plus bounded wide A* from verified harbor start to a clear endpoint near the original junction; actual posed vessel playback still required"
+}

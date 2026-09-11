@@ -1,0 +1,888 @@
+{
+  "objects": [
+    {
+      "name": "old-harbor-scene",
+      "parent": "",
+      "position": [
+        17.289610657192146,
+        9.82000000000002,
+        39.24561329198645
+      ],
+      "center": [
+        15.537841581710754,
+        25.72493562795804,
+        37.582973521155104
+      ],
+      "size": [
+        35.341872438601285,
+        31.563385822085735,
+        46.42470541449826
+      ],
+      "visible": true
+    },
+    {
+      "name": "harbor-crates-by-crane",
+      "parent": "old-harbor-scene",
+      "position": [
+        14.960200069912478,
+        10.33000000000004,
+        38.602304411378206
+      ],
+      "center": [
+        14.805232404642926,
+        10.745607276013514,
+        38.59197563936552
+      ],
+      "size": [
+        1.790012269384377,
+        1.8086623501862817,
+        1.9447374472160135
+      ],
+      "visible": true
+    },
+    {
+      "name": "harbor-crane",
+      "parent": "old-harbor-scene",
+      "position": [
+        14.932974573048288,
+        10.33000000000001,
+        40.98594842261824
+      ],
+      "center": [
+        14.05521101447496,
+        11.895951037906654,
+        40.65131768162393
+      ],
+      "size": [
+        4.22604783807482,
+        2.0759784323844315,
+        2.7750983987222213
+      ],
+      "visible": true
+    },
+    {
+      "name": "citadel-sacred-tarn-elder-tree",
+      "parent": "old-harbor-scene",
+      "position": [
+        20.23774707703331,
+        9.82000000000002,
+        35.487822498181394
+      ],
+      "center": [
+        22.069942068144446,
+        29.415706970178228,
+        35.357315898490086
+      ],
+      "size": [
+        32.631588214701154,
+        22.414749161212498,
+        30.832663967092515
+      ],
+      "visible": true,
+      "role": "old-harbor-giant-tree"
+    },
+    {
+      "name": "citadel-tarn-companion-pine",
+      "parent": "old-harbor-scene",
+      "position": [
+        14.031058107421334,
+        9.82000000000002,
+        36.572724352957714
+      ],
+      "center": [
+        16.140723873588204,
+        29.119553198169505,
+        36.004401878607915
+      ],
+      "size": [
+        30.201119508816205,
+        31.563385822085735,
+        32.05008924681911
+      ],
+      "visible": true,
+      "role": "old-harbor-giant-tree"
+    },
+    {
+      "name": "west-city-harbor",
+      "parent": "highland-west-city",
+      "position": [
+        7.999999999999977,
+        -2.8421709430404e-14,
+        49.999999999999986
+      ],
+      "center": [
+        7.923131080912041,
+        5.208856897368917,
+        49.93215938809705
+      ],
+      "size": [
+        23.991636515896943,
+        15.746621921329961,
+        27.87832058171351
+      ],
+      "visible": true
+    },
+    {
+      "name": "citadel-navona-canal-plaza",
+      "parent": "",
+      "position": [
+        11.179274176752697,
+        2.4062709464440384,
+        25.375786645804048
+      ],
+      "center": [
+        10.685929264900038,
+        2.8489204013219758,
+        25.07648943758025
+      ],
+      "size": [
+        31.478790977880095,
+        29.52896588852323,
+        36.57048564270451
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-plaza-canal-rim",
+      "parent": "citadel-navona-canal-plaza",
+      "position": [
+        11.179274176752697,
+        2.4062709464440384,
+        25.375786645804048
+      ],
+      "center": [
+        10.679335192317891,
+        2.8158603636441906,
+        25.002877552486126
+      ],
+      "size": [
+        31.478790977880095,
+        29.367038034074582,
+        36.57048564270451
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-plaza-fountains",
+      "parent": "citadel-navona-canal-plaza",
+      "position": [
+        11.179274176752697,
+        2.4062709464440384,
+        25.375786645804048
+      ],
+      "center": [
+        11.074486734128902,
+        2.69395656500788,
+        25.19902074627654
+      ],
+      "size": [
+        11.620937437964699,
+        8.081651994656724,
+        18.44528529689292
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-fountain-0",
+      "parent": "navona-plaza-fountains",
+      "position": [
+        19.873007044703993,
+        2.4742709464440504,
+        21.54577243947224
+      ],
+      "center": [
+        19.754162084927028,
+        2.6932661105947484,
+        21.375711784417362
+      ],
+      "size": [
+        3.0463802072362682,
+        2.542656917139695,
+        2.457342146272964
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-fountain-0-spray",
+      "parent": "navona-fountain-0",
+      "position": [
+        19.873007044703993,
+        2.4742709464440504,
+        21.54577243947224
+      ],
+      "center": [
+        19.750777240820998,
+        3.534661606569016,
+        21.52546942693944
+      ],
+      "size": [
+        0.5383170022571022,
+        0.49709730357800197,
+        0.36681364533706073
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-fountain-1",
+      "parent": "navona-plaza-fountains",
+      "position": [
+        2.4855413088014013,
+        2.4742709464440504,
+        29.205800852135845
+      ],
+      "center": [
+        2.3939407010189195,
+        2.693159844174317,
+        29.02317531426928
+      ],
+      "size": [
+        3.04797068924168,
+        2.5424756203637457,
+        2.453852617793018
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-fountain-1-spray",
+      "parent": "navona-fountain-1",
+      "position": [
+        2.4855413088014013,
+        2.4742709464440504,
+        29.205800852135845
+      ],
+      "center": [
+        2.3992594037765396,
+        3.404121156638751,
+        29.155459979558664
+      ],
+      "size": [
+        0.5770715758297484,
+        0.6029501158635355,
+        0.1905211451136637
+      ],
+      "visible": true
+    },
+    {
+      "name": "navona-harbor-causeway",
+      "parent": "",
+      "position": [
+        -7.105427357601007e-15,
+        5.330000000000012,
+        3.5527136788005065e-15
+      ],
+      "center": [
+        17.54193220717428,
+        0.8782284605836137,
+        34.62606416906416
+      ],
+      "size": [
+        7.91000511366795,
+        6.4457217269501825,
+        8.742572577154917
+      ],
+      "visible": true
+    }
+  ],
+  "waters": [
+    {
+      "name": "harbor-water",
+      "parent": "old-harbor-scene",
+      "geometry": "BoxGeometry",
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        106.1332442544021,
+        106.4921916819111,
+        81.24892102998788
+      ]
+    },
+    {
+      "name": "moebius-waterline-platforms",
+      "parent": "moebius-metropolis",
+      "geometry": "BufferGeometry",
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "moebius-hall-waterline-platform",
+      "parent": "moebius-metropolis",
+      "geometry": "BufferGeometry",
+      "scale": [
+        1,
+        0.9999999999999999,
+        0.9999999999999999
+      ],
+      "position": [
+        -66.3912238716448,
+        -61.55601024968372,
+        -102.15337975302616
+      ]
+    },
+    {
+      "name": "pilot-seat-base",
+      "parent": "moebius-bubble-pod",
+      "geometry": "BufferGeometry",
+      "scale": [
+        0.7199999999999998,
+        0.7199999999999996,
+        0.7199999999999999
+      ],
+      "position": [
+        -94.20854032582244,
+        -128.33336283222272,
+        -49.95223266714403
+      ]
+    },
+    {
+      "name": "pilot-seat-back",
+      "parent": "moebius-bubble-pod",
+      "geometry": "BufferGeometry",
+      "scale": [
+        0.7199999999999998,
+        0.7199999999999998,
+        0.7199999999999999
+      ],
+      "position": [
+        -94.4098061416568,
+        -128.52334626734577,
+        -50.298906874081
+      ]
+    },
+    {
+      "name": "pilot-seat-base",
+      "parent": "moebius-bubble-pod",
+      "geometry": "BufferGeometry",
+      "scale": [
+        0.72,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        -73.40102312947235,
+        -64.24570529013647,
+        -111.35056237785017
+      ]
+    },
+    {
+      "name": "pilot-seat-back",
+      "parent": "moebius-bubble-pod",
+      "geometry": "BufferGeometry",
+      "scale": [
+        0.72,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        -73.37248156352824,
+        -64.3719687459716,
+        -111.77485892359857
+      ]
+    },
+    {
+      "name": "pilot-seat-base",
+      "parent": "moebius-bubble-pod",
+      "geometry": "BufferGeometry",
+      "scale": [
+        0.72,
+        0.7200000000000001,
+        0.7200000000000001
+      ],
+      "position": [
+        43.64684528064261,
+        161.25488103350855,
+        24.43823976601348
+      ]
+    },
+    {
+      "name": "pilot-seat-back",
+      "parent": "moebius-bubble-pod",
+      "geometry": "BufferGeometry",
+      "scale": [
+        0.72,
+        0.72,
+        0.7200000000000001
+      ],
+      "position": [
+        43.820455720079494,
+        161.54113307750674,
+        24.729278977504624
+      ]
+    },
+    {
+      "name": "highland-water-cool-wash",
+      "parent": "highland-water-light-reflections",
+      "geometry": "PlaneGeometry",
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        124.38211083117011,
+        92.10298238431142,
+        47.2906283301012
+      ]
+    },
+    {
+      "name": "highland-waterfront-water",
+      "parent": "highland-waterfront-foreground",
+      "geometry": "BufferGeometry",
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        146.45745540440612,
+        59.08468663050035,
+        42.54313648806308
+      ]
+    },
+    {
+      "name": "west-city-water-channel",
+      "parent": "highland-west-city",
+      "geometry": "BufferGeometry",
+      "scale": [
+        1,
+        1,
+        0.9999999999999999
+      ],
+      "position": [
+        146.45745540440612,
+        59.08468663050035,
+        42.54313648806308
+      ]
+    },
+    {
+      "name": "navona-plaza-flood-water",
+      "parent": "citadel-navona-canal-plaza",
+      "geometry": "BufferGeometry",
+      "scale": [
+        1.0000000000000002,
+        1,
+        1
+      ],
+      "position": [
+        102.37283405084027,
+        88.30885227911097,
+        85.48644828432802
+      ]
+    },
+    {
+      "name": "citadel-moat-water",
+      "parent": "citadel-moat",
+      "geometry": "BufferGeometry",
+      "scale": [
+        0.9999999999999999,
+        1,
+        1
+      ],
+      "position": [
+        118.75638359396025,
+        65.70445437996867,
+        86.44000306753114
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.72,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        88.94063681008913,
+        132.18766232164973,
+        78.61303945779771
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.72,
+        0.7199999999999999,
+        0.7199999999999999
+      ],
+      "position": [
+        86.85975662576077,
+        132.89194134025945,
+        80.33997820542166
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.72,
+        0.72
+      ],
+      "position": [
+        87.14692319408118,
+        133.98514499972777,
+        78.44245612004951
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        87.85568013075007,
+        132.85053162986804,
+        80.82386983970899
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        88.32140402240948,
+        133.09201963579196,
+        78.66961859447947
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.72,
+        0.7199999999999999,
+        0.72
+      ],
+      "position": [
+        87.08484221883486,
+        133.02398273494734,
+        80.50686729258851
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7200000000000001,
+        0.72,
+        0.7200000000000001
+      ],
+      "position": [
+        88.4216739388912,
+        133.49512257916768,
+        78.88402851008237
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.72,
+        0.7199999999999999,
+        0.7199999999999999
+      ],
+      "position": [
+        88.06705321342967,
+        130.9390999771519,
+        80.15251309001728
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.72,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        88.10902734551439,
+        134.06644490011115,
+        78.95926605082383
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.7199999999999999,
+        0.7199999999999999
+      ],
+      "position": [
+        86.4542734170155,
+        133.17319603808005,
+        80.25052965320029
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.7199999999999999,
+        0.7199999999999998
+      ],
+      "position": [
+        87.42000345381035,
+        133.6325547920189,
+        78.43631244230511
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.7199999999999999,
+        0.7199999999999999
+      ],
+      "position": [
+        87.86169462805731,
+        131.00009698582394,
+        80.07407681273345
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999998,
+        0.7199999999999999,
+        0.7199999999999996
+      ],
+      "position": [
+        88.09698918605082,
+        133.266189397791,
+        78.62764342143048
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ],
+      "position": [
+        87.453484253621,
+        131.7630966060504,
+        80.17924658927707
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999998,
+        0.7199999999999999,
+        0.7199999999999999
+      ],
+      "position": [
+        87.95853477256495,
+        133.53760061942353,
+        78.66844911406513
+      ]
+    },
+    {
+      "name": "troy-wood-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.7199999999999999,
+        0.7199999999999999
+      ],
+      "position": [
+        88.01311247598612,
+        131.0994770660627,
+        80.19063895100038
+      ]
+    },
+    {
+      "name": "troy-neck-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        89.49685973898583,
+        132.33239011797767,
+        79.67185470253779
+      ]
+    },
+    {
+      "name": "troy-neck-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        89.12601516834341,
+        132.03232006335205,
+        80.40943102180381
+      ]
+    },
+    {
+      "name": "troy-neck-seam",
+      "parent": "citadel-trojan-horse",
+      "geometry": "BoxGeometry",
+      "scale": [
+        0.7199999999999999,
+        0.72,
+        0.7199999999999999
+      ],
+      "position": [
+        89.49685973898583,
+        132.33239011797767,
+        79.67185470253779
+      ]
+    },
+    {
+      "name": "planet-v8-curved-ocean",
+      "parent": "planet-v9-runtime",
+      "geometry": "BufferGeometry",
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "swamp-underground-waterline",
+      "parent": "moebius-swamp-zone",
+      "geometry": "CircleGeometry",
+      "radius": 33,
+      "scale": [
+        0.49999999999999994,
+        0.5,
+        0.49999999999999994
+      ],
+      "position": [
+        -65.17708463205267,
+        -44.331091781126645,
+        -105.07807059492198
+      ]
+    },
+    {
+      "name": "swamp-water-volume",
+      "parent": "moebius-swamp-zone",
+      "geometry": "CylinderGeometry",
+      "scale": [
+        0.49999999999999994,
+        0.5,
+        0.49999999999999994
+      ],
+      "position": [
+        -63.31640113929424,
+        -43.06552227677148,
+        -102.0782888079544
+      ]
+    },
+    {
+      "name": "canal-junction-water-deep",
+      "parent": "canal-junction-box",
+      "geometry": "CircleGeometry",
+      "radius": 1,
+      "scale": [
+        22.350000000000005,
+        18.350000000000005,
+        1.0000000000000002
+      ],
+      "position": [
+        62.85753089907965,
+        80.13877759460398,
+        -123.46136899821678
+      ]
+    },
+    {
+      "name": "canal-junction-water",
+      "parent": "canal-junction-box",
+      "geometry": "CircleGeometry",
+      "radius": 1,
+      "scale": [
+        22,
+        18.000000000000004,
+        1.0000000000000002
+      ],
+      "position": [
+        63.065681423144085,
+        80.40415436514532,
+        -123.87020702114121
+      ]
+    },
+    {
+      "name": "canal-water",
+      "parent": "world-canal",
+      "geometry": "BufferGeometry",
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "castleOrigin": [
+    114.44628925433727,
+    63.31980449134136,
+    83.30278587832983
+  ],
+  "quayWorld": [
+    102.06640677940958,
+    111.6343626415815,
+    49.104446495243266
+  ],
+  "quayRadius": 159.03153454851727,
+  "passed": true
+}
