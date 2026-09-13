@@ -1,3 +1,5 @@
+> 已按用户要求关机暂停。当前两段式通路有两处碰撞失败，Godot仍为上一版已验证通路。恢复前先读 RESUME_AFTER_SHUTDOWN.md；不得自动当作已交付。
+
 > 2026-09-13 滨水门墙已按目标改尖拱、两面拱石及错缝石层；前港Blender r02回接，详见CITADEL_WATERGATE_MASONRY.md。门后平台空间和过亮夜光仍未收口，目标基准不变。
 
 > 当前美术与地势基准：用户已认可城门至广场整组新目标图，主图为 scene-target-r01.png，地势注释为 terrain-annotation-r03.png。后续以此验收；拓宽阶梯仅是基础，不等于完成平台设计。详见 CITADEL_APPROVED_TARGET.md。
