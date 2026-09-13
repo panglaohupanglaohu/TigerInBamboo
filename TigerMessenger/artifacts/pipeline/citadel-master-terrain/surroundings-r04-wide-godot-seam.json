@@ -1,0 +1,20 @@
+{
+  "blocked": {},
+  "carry_bounds": {
+    "centered_width": 0.734000086784363,
+    "maximum": "(0.404937, 1.176667, 0.367)",
+    "minimum": "(-0.163333, 0.018126, -0.193024)",
+    "width": 0.560023844242096
+  },
+  "completed_steps": 12,
+  "geometry_queries": 40977,
+  "max_plant_adjustment": 0.174551456570625,
+  "passed": true,
+  "phase": "arrived",
+  "point": 12,
+  "role": "gladius",
+  "route_points": 13,
+  "scope": "Original Godot gladius mesh and guarded rigid-leg traversal across the final 0.9m board/shoe/step/quay seam. Not full deck access, natural gait, ship deployment or production boarding.",
+  "step_clearance": 0.1,
+  "surface_following": true
+}

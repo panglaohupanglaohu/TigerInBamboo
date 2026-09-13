@@ -378,6 +378,9 @@ export function createCitadelSceneEdit({
     const poolSel = raycastCascadePoolTop(scene, ray, tmpV2, activeTerrace);
     const dPoolSel = poolSel ? ray.ray.origin.distanceTo(poolSel.point) : Infinity;
     for (const hit of hits) {
+      let hidden=false;
+      for(let node=hit.object;node;node=node.parent){if(!node.visible){hidden=true;break;}}
+      if(hidden)continue;
       const cell = hit.object.userData?.cell ?? lookupMergedCell(hit);
       if (cell && hit.face) {
         // 点击其它台地已建体块：自动切换编辑台地（不弹回 castPlane）

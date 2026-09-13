@@ -1,5 +1,8 @@
+import {CITY_ADVANCE,COMPACT_CITY_ENABLED} from './compactNewCity.js';
+import {PLAZA_LAYOUT as PLAZA,PLAZA_SHIFT} from './newPlazaLayout.js';
+import {buildMiddleTerraces} from './middleTerraces.js';
 import {buildPlazaEdgeGarden} from './plazaEdgeGarden.js';
-import {buildHorseTerrace,HORSE_TERRACE} from './horseTerrace.js';
+import {buildHorseTerrace,HORSE_TERRACE,horseSoldierExitRoute} from './horseTerrace.js';
 import {buildUpperTowerPortal} from './upperTowerPortal.js';
 import {applyTargetCastleSilhouette} from './targetCastleSilhouette.js';
 import {buildClaudeHouses,claudeHousesEnabled} from './claudeHouses.js';
@@ -17,10 +20,11 @@ import {buildCitadelPlazaStatue} from './plazaStatue.js';
 import {buildPlazaPaving} from './plazaPaving.js';
 import {buildHarborWatergate} from './harborWatergate.js';
 import {harborStairHeight} from './harborStairProfile.js';
-import {WEST_CITY,westCitySpec} from './westCityLayout.js';
+import {WEST_CITY as SOURCE_WEST_CITY,westCitySpec} from './westCityLayout.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
 
 export function buildWestCity(buildTown,waterHeight) {
+  const WEST_CITY={...SOURCE_WEST_CITY,districts:SOURCE_WEST_CITY.districts.map((t,i)=>({...t,z:t.z+CITY_ADVANCE[i]}))};
   const root=new THREE.Group(); root.name='highland-west-city';
   root.userData.sourceId='citadel-west-city-v1';
   root.userData.designRole='foreground-right-new-holy-city';
@@ -32,6 +36,7 @@ export function buildWestCity(buildTown,waterHeight) {
   root.add(buildNewCityBackdrop());
   root.add(buildNewCityLighting());
   root.add(buildCitadelGarden());
+  root.userData.compactAscent={enabled:COMPACT_CITY_ENABLED,advances:CITY_ADVANCE,stairCount:COMPACT_CITY_ENABLED?30:44};
   const reports=[];
   const bridgeStart=new THREE.Vector3(...rotateNewCityPoint(OLD_CITY_BRIDGE_ANCHOR,true));
   const bridgeEnd=new THREE.Vector3(WEST_CITY.x-14.35,5.03,WEST_CITY.districts[0].z);
@@ -104,7 +109,7 @@ export function buildWestCity(buildTown,waterHeight) {
     // Only the two residential facades are replaced. The crown and its interior
     // stairs/portals remain the original playable structure.
     if(tier<2 && claudeHousesEnabled){
-      const imported=buildClaudeHouses(tier);
+      const imported=buildClaudeHouses(tier);imported.position.z+=CITY_ADVANCE[tier];
       imported.userData.originalEditableSpec=spec;
       root.add(imported);
       // No original geometry is destroyed; the query switch restores the factory.
@@ -115,14 +120,15 @@ export function buildWestCity(buildTown,waterHeight) {
     const sideWidth=district.halfWidth-3.6,sideCenter=(district.halfWidth+3.6)/2;
     const back=Math.max(9.5,13.2*district.buildingWidthScale);
     const parts=tier ? [[-sideCenter,sideWidth,(9.5-back)/2,back+9.5],[sideCenter,sideWidth,(9.5-back)/2,back+9.5],[0,7.2,(2-back)/2,back+2]] : [[0,29,0,19]];
-    parts.forEach(([dx,width,dz,depth],part)=>{
+    if(tier===1){const terrace=buildMiddleTerraces(SOURCE_WEST_CITY.districts[tier],parts,stone,paving);terrace.position.z+=CITY_ADVANCE[tier];root.add(terrace);}
+    else parts.forEach(([dx,width,dz,depth],part)=>{
       box('west-city-'+district.id+'-retaining-wall-'+part,WEST_CITY.x+dx,district.y-2.1,district.z+dz,width,4,depth);
       walkBox('west-city-'+district.id+'-promenade-'+part,WEST_CITY.x+dx,district.y-.1,district.z+dz,width,.2,depth,paving);
     });
     if(tier){
       const lower=WEST_CITY.districts[tier-1];
       const startZ=lower.z-2,endZ=district.z+2;
-      const n=44;
+      const n=COMPACT_CITY_ENABLED?30:44;
       route.push([WEST_CITY.x,lower.y,startZ+.12]);
       for(let i=0;i<n;i++)walkBox('west-city-stair-'+tier+'-'+i,WEST_CITY.x,
         lower.y+(district.y-lower.y)*(i+1)/n-.1,startZ+(endZ-startZ)*(i+.5)/n,
@@ -131,6 +137,7 @@ export function buildWestCity(buildTown,waterHeight) {
       route.push([WEST_CITY.x,district.y,endZ-.12],[WEST_CITY.x,district.y,district.z]);
     }
   });
+  const courtChildStart=root.children.length,courtRouteStart=route.length;
   // Gate court switchback: two separated flights reach the east front tower roof.
   // Narrow inner flights leave the original main entrance axis accessible.
   route.push([WEST_CITY.x,16,9.5],[WEST_CITY.x+3,16,9.5]);
@@ -199,7 +206,9 @@ export function buildWestCity(buildTown,waterHeight) {
   courtStone.traverse(m=>{if(m.isMesh)m.name='court-solid-stone';});
   root.userData.upperRouteStatus='main-tower-37m-upper-balcony-connected; stone-parapet-and-corbels; battle-pending';
 
-  root.add(buildProcessionalDetails());
+  for(const child of root.children.slice(courtChildStart))child.position.z+=CITY_ADVANCE[2];
+  for(let i=courtRouteStart;i<route.length;i++)route[i]=[route[i][0],route[i][1],route[i][2]+CITY_ADVANCE[2]];
+  root.add(buildProcessionalDetails(WEST_CITY));
   // Harbor landing follows the existing spherical lake height, not the plaza's elevation.
   const dockY=waterHeight(30.5,56)+.9;
   walkBox('west-city-harbor-quay',36.75,dockY-.25,58,12.5,.5,4,paving);
@@ -225,24 +234,25 @@ export function buildWestCity(buildTown,waterHeight) {
   root.userData.harborRoute=harborRoute;
   root.userData.harborAnchor=[36.75,dockY,58];
   root.userData.harborStatus='landing-and-stairs; original-ships-and-unloading-not-connected';
-  const gate=buildCitadelMainGate();gate.position.set(WEST_CITY.x,16,11);root.add(gate);
+  const gate=buildCitadelMainGate();gate.position.set(WEST_CITY.x,16,11+CITY_ADVANCE[2]);root.add(gate);
   // Forecourt meets the first terrace without a raised lip. It stays open for
   // the Blender statue and the original horse actor reservation.
   // Leave the new stair's outer wall clear instead of letting the old square
   // podium intrude into its opening. The existing upper landing bridges this edge.
-  walkBox('west-city-plaza-deck',62.925,3.9,74,36.15,.2,29,paving);
-  box('west-city-plaza-foundation',62.925,1.8,74,36.15,4,29);
+  walkBox('west-city-plaza-deck',PLAZA.centerX,3.9,74,PLAZA.width,.2,29,paving);
+  box('west-city-plaza-foundation',PLAZA.centerX,1.8,74,PLAZA.width,4,29);
   // Reference statue is beside the processional axis, never in its centre.
-  const statueAnchor=[WEST_CITY.x-1,4,76];
+  const statueAnchor=[PLAZA.statueX,4,76];
   const ring=buildPlazaPaving();ring.position.set(statueAnchor[0],4.014,statueAnchor[2]);root.add(ring);
   const statue=buildCitadelPlazaStatue();statue.position.fromArray(statueAnchor);root.add(statue);
   root.userData.statueAnchor=statueAnchor;
+  root.userData.plazaLayout={...PLAZA,horseShift:PLAZA_SHIFT};
   root.userData.plazaAnchor=[WEST_CITY.x,4,71.5];
   root.add(buildHorseTerrace(stone,paving));
   root.add(buildPlazaEdgeGarden());
   root.userData.horseReservation=[HORSE_TERRACE.x,HORSE_TERRACE.y,HORSE_TERRACE.z];
   root.userData.processionalEntry=[WEST_CITY.x,4,50];
-  root.userData.horsePlazaExit=[[75,5.8,66],[75,5.8,65.5],[75,4,60],[WEST_CITY.x,4,60],[WEST_CITY.x,4,58]];
+  root.userData.horsePlazaExit=horseSoldierExitRoute();
   root.userData.artStatus='blue-dome-and-statue-pass; main-facade-horse-harbor-lighting-pending';
   // A raised crossing leaves an open water corridor between the two cities.
   const direction=bridgeEnd.clone().sub(bridgeStart),length=direction.length();
@@ -264,6 +274,9 @@ export function buildWestCity(buildTown,waterHeight) {
   root.userData.districts=reports;
   root.userData.connectedToMainGate=false;
   root.userData.walkRoute=route;
+  const ascentEntry=route.findIndex(p=>Math.hypot(p[0]-60,p[1]-4,p[2]-50)<.01);
+  if(ascentEntry<0)throw new Error('New city ascent entry missing');
+  root.userData.plazaToKeepRoute=[[60,4,65],[60,4,58],...route.slice(ascentEntry)];
   // Source cell ownership stays in merged metadata; district seeds remain above.
   root.children.filter(n=>n.name.startsWith('west-city-')&&n.isGroup&&!n.userData.importedHouseCount).forEach(g=>mergeStaticGroup(g,{
     mergedTag:'west-city',

@@ -1,0 +1,71 @@
+{
+  "frame": "citadel-front-harbor",
+  "status": "candidate-not-integrated",
+  "pose": {
+    "shipName": "ocean-warship-0",
+    "scale": [
+      1.84,
+      1.84,
+      1.84
+    ],
+    "frontLocalPosition": [
+      39.986712877064,
+      -4.403200209944856,
+      100.24898648084397
+    ],
+    "frontLocalQuaternion": [
+      -0.03088737415325818,
+      -0.9793345273455887,
+      -0.10954532137472281,
+      -0.16718156666217138
+    ],
+    "boardingAngle": -0.16899836166312232,
+    "shoreLocal": [
+      37.99754640790526,
+      -1.6436611247692383,
+      95.79790995183284
+    ],
+    "entryLocal": [
+      52.07814606016515,
+      -6.979644710932121,
+      107.30813610790236
+    ]
+  },
+  "boarding": {
+    "rootPoint": [
+      1.94,
+      0.664,
+      0.84
+    ],
+    "actualTip": [
+      94.64630789892587,
+      127.90091097424038,
+      30.329855234601727
+    ],
+    "solverTip": [
+      94.64630768385214,
+      127.90091081972074,
+      30.329855327900816
+    ],
+    "tipError": 2.807806024824919e-7,
+    "actualPitch": -0.16899847663719314,
+    "lanes": [
+      {
+        "x": -0.16,
+        "support": "front-harbor-walkable",
+        "error": -0.02860610041582845
+      },
+      {
+        "x": 0,
+        "support": "front-harbor-walkable",
+        "error": 0.0005535469217932132
+      },
+      {
+        "x": 0.16,
+        "support": "front-harbor-walkable",
+        "error": 0.029705005070269408
+      }
+    ]
+  },
+  "scope": "Original live boat geometry at the front quay; bounded berth/approach search and actual deployed hinge only. Candidate screenshot temporarily poses the SAME original ship, then restores it. No production fleet relocation, unloading or Godot integration."
+}

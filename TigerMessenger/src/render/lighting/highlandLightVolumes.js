@@ -410,7 +410,7 @@ export function createHighlandLightVolumes(THREE_, parent, {
       const breathe = 1 - LAMP_BREATH_MAX * (0.5 + 0.5 * Math.sin(time * (Math.PI * 2 / LAMP_BREATH_PERIOD) + entry.lamp.phase * Math.PI * 2));
       const intensity = nightWeight * breathe * entry.dimScale;
       entry.shell.material.uniforms.uIntensity.value = intensity;
-      entry.shell.visible = intensity > 0.004;
+      entry.shell.visible = !entry.shell.userData.retiredByLayout && intensity > 0.004;
       if (entry.light) entry.light.intensity = intensity * 1.15;
       if (entry.streak) {
         entry.streak.visible = intensity > 0.004;

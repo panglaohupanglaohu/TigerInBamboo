@@ -1,0 +1,34 @@
+{
+  "directions": [
+    {
+      "blocked": {},
+      "completed_steps": 14,
+      "geometry_queries": 129659,
+      "max_plant_adjustment": 0.0,
+      "phase": "arrived",
+      "point": 14,
+      "reverse": false,
+      "role": "gladius",
+      "route_points": 15,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    },
+    {
+      "blocked": {},
+      "completed_steps": 14,
+      "geometry_queries": 129601,
+      "max_plant_adjustment": 0.0,
+      "phase": "arrived",
+      "point": 14,
+      "reverse": true,
+      "role": "gladius",
+      "route_points": 15,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    }
+  ],
+  "passed": true,
+  "scope": "Original gladius carried geometry, production guarded controller, current original horse platform pedestrian stairs to processional entrance, both ways; no crowds or final gait."
+}

@@ -2,35 +2,54 @@
   "blocking_control": {
     "evidence": {
       "blocked": {
-        "obstacle": "/root/TigerMessengerCitadelWorld/@StaticBody3D@2093/@CollisionShape3D@2094",
+        "lowest": 0.0181261897087097,
+        "obstacle": "/root/TigerMessengerCitadelWorld/@StaticBody3D@4331/@CollisionShape3D@4332",
         "obstacle_bounds": "[P: (0.0, 0.0, 0.0), S: (0.0, 0.0, 0.0)]",
         "part": "n35",
         "phase": "hop",
         "point": 0,
         "progress": 0.625,
         "reason": "mesh_overlap",
-        "route_position": "(0.0, 3.550003, 3.500011)"
+        "route_position": "(-0.000004, 3.550003, 3.499985)",
+        "step_end": "(-0.000004, 3.546875, 3.289993)",
+        "step_start": "(0.000004, 3.54689, 3.499985)"
       },
       "completed_steps": 0,
       "geometry_queries": 1628,
+      "max_plant_adjustment": 0.0,
       "phase": "blocked",
       "point": 0,
       "role": "gladius",
       "route_points": 247,
       "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
-      "step_clearance": 0.1
+      "step_clearance": 0.1,
+      "surface_following": false
     },
     "passed": true
   },
   "gladius": {
-    "blocked": {},
-    "completed_steps": 246,
-    "geometry_queries": 744343,
-    "phase": "arrived",
-    "point": 246,
+    "blocked": {
+      "lowest": 0.0181261897087097,
+      "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/CitadelReleasedLayout/old-city-staggered-parcels/old-city-parcel-1/town-level-02/Mesh42",
+      "obstacle_bounds": "[P: (-0.999104, 0.0, 0.83256), S: (2.04984, 2.0, 2.124096)]",
+      "part": "n35",
+      "phase": "hop",
+      "point": 29,
+      "progress": 0.3125,
+      "reason": "mesh_overlap",
+      "route_position": "(1.732071, 2.310013, -0.574417)",
+      "step_end": "(1.682377, 2.3069, -0.706841)",
+      "step_start": "(1.732067, 2.306885, -0.574409)"
+    },
+    "completed_steps": 29,
+    "geometry_queries": 72359,
+    "max_plant_adjustment": 0.0,
+    "phase": "blocked",
+    "point": 29,
     "role": "gladius",
     "route_points": 247,
     "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
-    "step_clearance": 0.1
+    "step_clearance": 0.1,
+    "surface_following": false
   }
 }

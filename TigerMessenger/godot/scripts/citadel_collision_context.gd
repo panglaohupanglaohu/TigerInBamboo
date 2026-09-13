@@ -7,6 +7,10 @@ func bind(w:Node3D)->void:
     if is_instance_valid(w.old_harbor_grade_adapter.replacement):
         meshes.append_array(w.old_harbor_grade_adapter.replacement.find_children("*","MeshInstance3D",true,false))
     for mesh in meshes:
+        # Match the authored Web collision contract. Thin decorative paving
+        # shares its structural deck's support and must not block a planted foot.
+        var extras:Variant=mesh.get_meta("extras",{})
+        if mesh.get_meta("skipColliders",false) or (extras is Dictionary and extras.get("skipColliders",false)==true):continue
         var parent=mesh.get_parent()
         var visual_expansion=false
         while parent!=null and parent!=w.castle_adapter.original:

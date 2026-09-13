@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import {P} from '../../core/params.js';
 import {buildHarborArchitecture} from './harborArchitecture.js';
 import {createOceanHeightSampler} from './oceanSurface.js';
+import {buildHarborCurtain} from './harborCurtain.js';
 import {buildHarborWatergate} from './harborWatergate.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
 // The original rear port remains the active fleet berth until boarding migrates.
@@ -20,7 +21,8 @@ export function buildFrontHarborApproach(castle,radius){
  box(walking,'front-harbor-gate-landing',32,dockY,91.5,4,.3,5,paving);
  const route=[[32,dockY,95],[32,dockY,92.4],[30.5,dockY,92.4],[30.5,dockY,90],[32,dockY,90]];
  const midY=dockY+rise;
- const flights=[{start:[32,90],end:[39,90],low:dockY,high:midY},{start:[41.5,87.5],end:[41.5,80],low:midY,high:4}];
+ root.add(buildHarborCurtain(sea,midY));
+ const flights=[{start:[32,90],end:[39,90],low:dockY,high:midY},{start:[41.5,85.5],end:[41.5,80],low:midY,high:4}];
  for(let f=0;f<flights.length;f++){
   const flight=flights[f],dx=flight.end[0]-flight.start[0],dz=flight.end[1]-flight.start[1],run=Math.hypot(dx,dz),tx=dx/run,tz=dz/run;
   flight.steps=n;flight.width=stairWidth;flight.tread=run/n;
@@ -37,17 +39,17 @@ export function buildFrontHarborApproach(castle,radius){
   route.push([flight.end[0],flight.high,flight.end[1]]);
   if(f===0){
    const bottom=Math.min(dockY-1.5,sea(41.5,90)-1.5);
-   box(walking,'front-harbor-turn',41.5,midY,90,turnWidth,midY-bottom,5.2,paving);
-   box(walls,'front-harbor-turn-guard',44.35,midY+1,90,.3,1,5.2,stone);
-   route.push([41.5,midY,90],[41.5,midY,87.5]);
+   box(walking,'front-harbor-turn',41.5,midY,89,turnWidth,midY-bottom,7.2,paving);
+   box(walls,'front-harbor-turn-guard',44.35,midY+1,89,.3,1,7.2,stone);
+   route.push([41.5,midY,90],[41.5,midY,85.5]);
   }
  }
  box(walking,'front-harbor-plaza-link',46.25,4,78,13.5,.35,4,paving);
  route.push([41.5,4,78],[48,4,78],[51,4,78],[51,4,80]);
  // Broad side court below the plaza: buildings remain off the ceremonial square.
  const terraces=[{id:'quayside-arcade',x:24,z:91.5,y:dockY,w:5.7,d:3.7,h:3.35,bays:3,platformX:25,platformW:8,platformD:6.2,yaw:Math.PI/2},{id:'east-harbor-provisioner',x:35,z:83.8,y:midY,w:4.8,d:3,h:3.7,bays:2,platformX:35,platformW:8,platformD:7,yaw:0}];
- // Side-court threshold meets the lower part of the second flight, not a raised wall.
- box(walking,'front-harbor-court-threshold',38.7,midY,87.2,2.6,.35,1.2,paving);
+ // A level side entrance branches before the upper flight, clear of both sloping parapets.
+ box(walking,'front-harbor-court-threshold',38.4,midY,86.5,3.2,.35,2.0,paving);
  const shops=[];
  for(const t of terraces){
   const {platformX,platformW,platformD}=t;
@@ -75,7 +77,7 @@ export function buildFrontHarborApproach(castle,radius){
  }
  const toCastle=p=>castle.worldToLocal(city.localToWorld(new THREE.Vector3(p[0],p[1],p[2]+2))).toArray();
  city.userData.frontHarborRoute=route.map(toCastle);city.userData.frontHarborAnchor=toCastle([32,dockY,95]);
- city.userData.frontHarborApproach={dockY,flights:2,flightLayout:flights,stepsPerFlight:n,riser:rise/n,stairWidth,turnWidth,turnCourt:{center:[35,midY,83.8],width:8,depth:7},cuts,status:'walking approach; fleet still uses rear harbor'};
+ city.userData.frontHarborApproach={dockY,flights:2,flightLayout:flights,stepsPerFlight:n,riser:rise/n,stairWidth,turnWidth,turnCourt:{center:[35,midY,83.8],width:8,depth:7,entry:[[41.5,midY,86.2],[38,midY,86.2],[35,midY,86.2]],entryWidth:2},cuts,status:'walking approach; fleet still uses rear harbor'};
  root.userData.sourceId='citadel-front-harbor-v3';root.userData.frontHarborApproach=city.userData.frontHarborApproach;
  return root;
 }

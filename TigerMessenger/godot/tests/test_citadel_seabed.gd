@@ -6,7 +6,7 @@ func run()->void:
     var report:Dictionary=adapter.report.duplicate()
     var exact:bool=false
     if is_instance_valid(adapter.target):
-        var data=JSON.parse_string(FileAccess.get_file_as_string("res://data/citadel-seabed.json"))
+        var data=JSON.parse_string(FileAccess.get_file_as_string(adapter.source_path()))
         var vertices:PackedVector3Array=adapter.target.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
         exact=vertices.size()*3==data.positions.size()
         for i in range(vertices.size()):
@@ -18,5 +18,6 @@ func run()->void:
         exact=exact and adapter.target.global_transform.is_equal_approx(expected)
     report["geometry_and_transform_exact"]=exact
     report["passed"]=report.get("passed",false) and exact
-    FileAccess.open("res://../artifacts/pipeline/citadel-plaza-horse/seabed-godot.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
+    var output="res://../artifacts/pipeline/citadel-water-plan/r02-godot-seabed.json" if "--harbor-water=2" in OS.get_cmdline_user_args() else "res://../artifacts/pipeline/citadel-plaza-horse/seabed-godot.json"
+    FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print(JSON.stringify(report));world.queue_free();await process_frame;quit(0 if report.passed else 1)

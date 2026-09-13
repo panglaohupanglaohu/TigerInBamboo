@@ -1,0 +1,32 @@
+{
+  "blocked": {
+    "lowest": 0.0181261897087097,
+    "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/ocean-warship-0-front-port/fisher-boat/Retractable bow-side boarding board/Board rail post_001",
+    "obstacle_bounds": "[P: (-0.184, 0.0, 1.216), S: (0.028, 0.24, 0.028)]",
+    "part": "n33",
+    "phase": "turn",
+    "point": 0,
+    "progress": 0.208333333333333,
+    "reason": "mesh_overlap",
+    "route_position": "(49.52999, -5.121292, 110.49)",
+    "step_end": "(49.53003, -5.111267, 110.3384)",
+    "step_start": "(49.53002, -5.123993, 110.4884)"
+  },
+  "carry_bounds": {
+    "centered_width": 0.734000086784363,
+    "maximum": "(0.404937, 1.176667, 0.367)",
+    "minimum": "(-0.163333, 0.018126, -0.193024)",
+    "width": 0.560023844242096
+  },
+  "completed_steps": 0,
+  "geometry_queries": 3,
+  "max_plant_adjustment": 0.0,
+  "passed": false,
+  "phase": "blocked",
+  "point": 0,
+  "role": "gladius",
+  "route_points": 13,
+  "scope": "Original Godot gladius mesh and guarded rigid-leg traversal across the final 0.9m board/shoe/step/quay seam. Not full deck access, natural gait, ship deployment or production boarding.",
+  "step_clearance": 0.1,
+  "surface_following": true
+}

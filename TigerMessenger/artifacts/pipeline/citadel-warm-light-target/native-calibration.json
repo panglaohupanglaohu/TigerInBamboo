@@ -1,0 +1,188 @@
+{
+  "version": 2,
+  "old": [
+    {
+      "id": "old-shore-court",
+      "position": [
+        -8,
+        8,
+        19
+      ],
+      "color": 16751440,
+      "intensity": 150,
+      "radius": 20,
+      "godotEnergy": 10
+    },
+    {
+      "id": "old-middle-court",
+      "position": [
+        12,
+        18,
+        -7
+      ],
+      "color": 16755808,
+      "intensity": 220,
+      "radius": 22,
+      "godotEnergy": 14
+    },
+    {
+      "id": "old-upper-court",
+      "position": [
+        -8,
+        26,
+        -20
+      ],
+      "color": 16760181,
+      "intensity": 300,
+      "radius": 26,
+      "godotEnergy": 20
+    }
+  ],
+  "new": [
+    {
+      "id": "main-gate",
+      "position": [
+        60,
+        23,
+        21
+      ],
+      "color": 16755800,
+      "intensity": 220,
+      "radius": 24,
+      "godotEnergy": 80
+    },
+    {
+      "id": "plaza",
+      "position": [
+        59,
+        8,
+        70
+      ],
+      "color": 16759141,
+      "intensity": 70,
+      "radius": 18,
+      "godotEnergy": 15
+    },
+    {
+      "id": "shore-gate",
+      "position": [
+        34,
+        1.555796265216086,
+        93
+      ],
+      "color": 16752716,
+      "intensity": 45,
+      "radius": 10,
+      "godotEnergy": 22
+    }
+  ],
+  "oldBefore": 1,
+  "newBefore": 3,
+  "oldAfter": 3,
+  "newAfter": 3,
+  "scope": "candidate; separate old hillside courts and new gate/plaza/quay; six unshadowed points",
+  "expectedWorld": [
+    {
+      "side": "old",
+      "name": "old-city-tier-old-shore-court",
+      "position": [
+        -8,
+        8,
+        19
+      ],
+      "world": [
+        147.55333885592924,
+        86.5686555304206,
+        43.290946507948675
+      ],
+      "energy": 150,
+      "color": 16751440,
+      "radius": 20
+    },
+    {
+      "side": "old",
+      "name": "old-city-tier-old-middle-court",
+      "position": [
+        12,
+        18,
+        -7
+      ],
+      "world": [
+        168.09303807443825,
+        70.79169871421718,
+        65.76778769243973
+      ],
+      "energy": 220,
+      "color": 16755808,
+      "radius": 22
+    },
+    {
+      "side": "old",
+      "name": "old-city-tier-old-upper-court",
+      "position": [
+        -8,
+        26,
+        -20
+      ],
+      "world": [
+        187.5697874276632,
+        72.43883139394462,
+        49.92660122907702
+      ],
+      "energy": 300,
+      "color": 16760181,
+      "radius": 26
+    },
+    {
+      "side": "new",
+      "name": "new-city-light-main-gate",
+      "position": [
+        60,
+        23,
+        21
+      ],
+      "world": [
+        105.61978895553479,
+        112.42984154667468,
+        111.75200031931706
+      ],
+      "energy": 220,
+      "color": 16755800,
+      "radius": 24
+    },
+    {
+      "side": "new",
+      "name": "new-city-light-plaza",
+      "position": [
+        59,
+        8,
+        70
+      ],
+      "world": [
+        89.21764295984678,
+        128.85990357707874,
+        66.05711364243372
+      ],
+      "energy": 70,
+      "color": 16759141,
+      "radius": 18
+    },
+    {
+      "side": "new",
+      "name": "new-city-light-moon-fill",
+      "position": [
+        34,
+        1.555796265216086,
+        93
+      ],
+      "world": [
+        100.44944236033007,
+        125.58147528853965,
+        33.52057492118045
+      ],
+      "energy": 45,
+      "color": 16752716,
+      "radius": 10
+    }
+  ]
+}

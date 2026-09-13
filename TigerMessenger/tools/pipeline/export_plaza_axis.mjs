@@ -1,0 +1,10 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';import {writeFile} from 'node:fs/promises';
+const port=process.argv.includes("--port");
+const wide=process.argv.includes("--wide");
+const out=new URL('../../artifacts/pipeline/citadel-plaza-axis/',import.meta.url);const b=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+try{const p=await b.newPage();if(port)await p.route('**/frontHarborFinishR04.js*',r=>r.fulfill({contentType:'text/javascript',body:'export default null;'}));if(wide)for(const name of ['plazaEdgeR03.js','plazaRetainingR03.js'])await p.route('**/'+name+'*',r=>r.fulfill({contentType:'text/javascript',body:'export default null;'}));await p.route('**/plazaEdgeR02.js*',r=>r.fulfill({contentType:'text/javascript',body:'export default null;'}));await p.route('**/plazaRetainingR02.js*',r=>r.fulfill({contentType:'text/javascript',body:'export default null;'}));await p.goto('http://localhost:8931/TigerMessenger/?autostart=1&citadelPlazaOffset=1'+(wide?'&citadelMasterTerrain=9&citadelMassing=2&citadelPlaza=3':'')+(port?'&citadelMasterTerrain=9&citadelFrontGate=1&citadelPort=4':''),{timeout:180000});await p.waitForFunction(()=>window.__tm?.scene.getObjectByName('citadel-plaza-retaining-wall'),null,{timeout:180000});
+for(const [name,which]of (port?[['port-r04','integrated-harbor-stone-finish']]:[['edge','citadel-plaza-edge-garden'],['retaining','citadel-plaza-retaining-wall']])){
+ const data=await p.evaluate(which=>{const g=window.__tm.scene.getObjectByName(which);const parts=which.includes('garden')?g.children[0].children:g.children;return {layout:g.userData.layout||g.userData.support,parts:parts.map(m=>{const geo=m.geometry.index?m.geometry.toNonIndexed():m.geometry;return {positions:Array.from(geo.attributes.position.array),color:m.material.color.toArray()};})};},which);
+ await writeFile(new URL(name+(wide?'-r03':'')+'-blender-source.json',out),JSON.stringify(data));console.log(name,data.parts.length);
+}
+}finally{await b.close();}

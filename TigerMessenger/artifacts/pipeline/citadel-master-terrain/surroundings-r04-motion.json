@@ -1,0 +1,4754 @@
+{
+  "source": "assets/models/optimized/citadel-boarding-r04/citadel-boarding-r04-wide.blend",
+  "sha256": "71a2d50fea935f3893e11104071d357c5a80051af8f223a65398a63631023fd3",
+  "frames": [
+    {
+      "progress": 0.0,
+      "intersectingPairs": 8
+    },
+    {
+      "progress": 0.03333333333333333,
+      "intersectingPairs": 8
+    },
+    {
+      "progress": 0.06666666666666667,
+      "intersectingPairs": 8
+    },
+    {
+      "progress": 0.1,
+      "intersectingPairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "intersectingPairs": 11
+    },
+    {
+      "progress": 0.16666666666666666,
+      "intersectingPairs": 11
+    },
+    {
+      "progress": 0.2,
+      "intersectingPairs": 19
+    },
+    {
+      "progress": 0.23333333333333334,
+      "intersectingPairs": 40
+    },
+    {
+      "progress": 0.26666666666666666,
+      "intersectingPairs": 41
+    },
+    {
+      "progress": 0.3,
+      "intersectingPairs": 40
+    },
+    {
+      "progress": 0.3333333333333333,
+      "intersectingPairs": 44
+    },
+    {
+      "progress": 0.36666666666666664,
+      "intersectingPairs": 42
+    },
+    {
+      "progress": 0.4,
+      "intersectingPairs": 38
+    },
+    {
+      "progress": 0.43333333333333335,
+      "intersectingPairs": 38
+    },
+    {
+      "progress": 0.4666666666666667,
+      "intersectingPairs": 36
+    },
+    {
+      "progress": 0.5,
+      "intersectingPairs": 33
+    },
+    {
+      "progress": 0.5333333333333333,
+      "intersectingPairs": 25
+    },
+    {
+      "progress": 0.5666666666666667,
+      "intersectingPairs": 22
+    },
+    {
+      "progress": 0.6,
+      "intersectingPairs": 24
+    },
+    {
+      "progress": 0.6333333333333333,
+      "intersectingPairs": 24
+    },
+    {
+      "progress": 0.6666666666666666,
+      "intersectingPairs": 19
+    },
+    {
+      "progress": 0.7,
+      "intersectingPairs": 17
+    },
+    {
+      "progress": 0.7333333333333333,
+      "intersectingPairs": 16
+    },
+    {
+      "progress": 0.7666666666666667,
+      "intersectingPairs": 16
+    },
+    {
+      "progress": 0.8,
+      "intersectingPairs": 14
+    },
+    {
+      "progress": 0.8333333333333334,
+      "intersectingPairs": 13
+    },
+    {
+      "progress": 0.8666666666666667,
+      "intersectingPairs": 10
+    },
+    {
+      "progress": 0.9,
+      "intersectingPairs": 9
+    },
+    {
+      "progress": 0.9333333333333333,
+      "intersectingPairs": 11
+    },
+    {
+      "progress": 0.9666666666666667,
+      "intersectingPairs": 10
+    },
+    {
+      "progress": 1.0,
+      "intersectingPairs": 5
+    }
+  ],
+  "hits": [
+    {
+      "progress": 0.0,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.0,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.0,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.0,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.0,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.0,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.0,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.0,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.03333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.06666666666666667,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.1,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.13333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.16666666666666666,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.2,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-shoe-24",
+      "name": "Oarlock shoe 24",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-pin-24--0.043",
+      "name": "Oarlock bearing 24",
+      "trianglePairs": 11
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-pin-24-0.043",
+      "name": "Oarlock bearing 24.001",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oar-collar-24",
+      "name": "Oar pivot collar 24",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-shoe-25",
+      "name": "Oarlock shoe 25",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n174",
+      "name": "oar-shaft.022",
+      "trianglePairs": 13
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 25
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n269",
+      "name": "n269",
+      "trianglePairs": 13
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-20",
+      "name": "Deck plank 20",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-21",
+      "name": "Deck plank 21",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-22",
+      "name": "Deck plank 22",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n174",
+      "name": "oar-shaft.022",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n41",
+      "name": "n41",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.23333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n43",
+      "name": "n43",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 17
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-shoe-24",
+      "name": "Oarlock shoe 24",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-shoe-25",
+      "name": "Oarlock shoe 25",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-pin-25--0.043",
+      "name": "Oarlock bearing 25",
+      "trianglePairs": 13
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oar-collar-25",
+      "name": "Oar pivot collar 25",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-18",
+      "name": "Deck plank 18",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-19",
+      "name": "Deck plank 19",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-20",
+      "name": "Deck plank 20",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-21",
+      "name": "Deck plank 21",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-22",
+      "name": "Deck plank 22",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.26666666666666666,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n43",
+      "name": "n43",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-shoe-25",
+      "name": "Oarlock shoe 25",
+      "trianglePairs": 34
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-pin-25-0.043",
+      "name": "Oarlock bearing 25.001",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oar-collar-25",
+      "name": "Oar pivot collar 25",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-16",
+      "name": "Deck plank 16",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-17",
+      "name": "Deck plank 17",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-18",
+      "name": "Deck plank 18",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-19",
+      "name": "Deck plank 19",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-20",
+      "name": "Deck plank 20",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-21",
+      "name": "Deck plank 21",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-22",
+      "name": "Deck plank 22",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:oarlock-shoe-25",
+      "name": "Oarlock shoe 25",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-17",
+      "name": "Deck plank 17",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-18",
+      "name": "Deck plank 18",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-19",
+      "name": "Deck plank 19",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-20",
+      "name": "Deck plank 20",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-21",
+      "name": "Deck plank 21",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-22",
+      "name": "Deck plank 22",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n229:i23",
+      "name": "crew-legL \u00b7 instance 23",
+      "trianglePairs": 11
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-post-0.17-1.23",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.3333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n31",
+      "name": "n31",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-19",
+      "name": "Deck plank 19",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:deck-plank-20",
+      "name": "Deck plank 20",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oarlock-shoe-22",
+      "name": "Oarlock shoe 22",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oarlock-pin-22--0.043",
+      "name": "Oarlock bearing 22",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-collar-22",
+      "name": "Oar pivot collar 22",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n174",
+      "name": "oar-shaft.022",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n230:i24",
+      "name": "crew-legR \u00b7 instance 24",
+      "trianglePairs": 29
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.36666666666666664,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-post--0.17-1.23",
+      "obstacle": "n174",
+      "name": "oar-shaft.022",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oarlock-shoe-23",
+      "name": "Oarlock shoe 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oarlock-pin-23--0.043",
+      "name": "Oarlock bearing 23",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-collar-23",
+      "name": "Oar pivot collar 23",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n229:i24",
+      "name": "crew-legL \u00b7 instance 24",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n267",
+      "name": "n267",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 7
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.4,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oarlock-pin-23-0.043",
+      "name": "Oarlock bearing 23.001",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-collar-23",
+      "name": "Oar pivot collar 23",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:bench-25",
+      "name": "Rower bench 25",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:seat-leaf-25",
+      "name": "Folding inner rowing seat 25",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n229:i24",
+      "name": "crew-legL \u00b7 instance 24",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n269",
+      "name": "n269",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 7
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.43333333333333335,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-8",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oarlock-pin-24--0.043",
+      "name": "Oarlock bearing 24",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-collar-24",
+      "name": "Oar pivot collar 24",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-handle-24",
+      "name": "Inner oar handle 24",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:bench-25",
+      "name": "Rower bench 25",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n230:i25",
+      "name": "crew-legR \u00b7 instance 25",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n269",
+      "name": "n269",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-7",
+      "obstacle": "n179",
+      "name": "oar-shaft.023",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.4666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 32
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oarlock-pin-24-0.043",
+      "name": "Oarlock bearing 24.001",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-collar-24",
+      "name": "Oar pivot collar 24",
+      "trianglePairs": 34
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-handle-24",
+      "name": "Inner oar handle 24",
+      "trianglePairs": 11
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:bench-25",
+      "name": "Rower bench 25",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 11
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n221:i25",
+      "name": "crew-skirt \u00b7 instance 25",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n230:i25",
+      "name": "crew-legR \u00b7 instance 25",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.5,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 32
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-5",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n221:i25",
+      "name": "crew-skirt \u00b7 instance 25",
+      "trianglePairs": 40
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n229:i25",
+      "name": "crew-legL \u00b7 instance 25",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-plank-6",
+      "obstacle": "n184",
+      "name": "oar-shaft.024",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 32
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:hand-25L",
+      "name": "Rower gripping fingers add:hand-25L",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:hand-25R",
+      "name": "Rower gripping fingers add:hand-25R",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.5666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 40
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 30
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-handle-25",
+      "name": "Inner oar handle 25",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:forearm-25L",
+      "name": "Rower forearm 25L",
+      "trianglePairs": 31
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:hand-25L",
+      "name": "Rower gripping fingers add:hand-25L",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:hand-25R",
+      "name": "Rower gripping fingers add:hand-25R",
+      "trianglePairs": 30
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 32
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 30
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-4",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:oar-handle-25",
+      "name": "Inner oar handle 25",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:forearm-25L",
+      "name": "Rower forearm 25L",
+      "trianglePairs": 7
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "add:hand-25L",
+      "name": "Rower gripping fingers add:hand-25L",
+      "trianglePairs": 41
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:oar-handle-25",
+      "name": "Inner oar handle 25",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:hand-25R",
+      "name": "Rower gripping fingers add:hand-25R",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-post-0.17-0.1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 30
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 28
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-3",
+      "obstacle": "n189",
+      "name": "oar-shaft.025",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:deck-plank-23",
+      "name": "Deck plank 23",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:hand-25L",
+      "name": "Rower gripping fingers add:hand-25L",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-plank-2",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.6666666666666666,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-1",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 34
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 30
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-plank-1",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 11
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 15
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing",
+      "name": "Bow transfer deck",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 24
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n231",
+      "name": "n231",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 9
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.7666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-rope--0.17",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 11
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 26
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 22
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 9
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 9
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.8,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-post--0.17-0.1",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 13
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 9
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.8333333333333334,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 13
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 11
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.8666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n1",
+      "name": "hull-low",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.9,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-landing-knee-1.77",
+      "name": "Boarding landing structural knee",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-plank-8",
+      "obstacle": "add:citadel-quay-bearing-candidate",
+      "name": "Citadel quay timber bearing candidate",
+      "trianglePairs": 13
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-plank-8",
+      "obstacle": "add:citadel-landing-step-candidate",
+      "name": "Citadel landing transition board candidate",
+      "trianglePairs": 10
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:citadel-quay-bearing-candidate",
+      "name": "Citadel quay timber bearing candidate",
+      "trianglePairs": 8
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:citadel-landing-step-candidate",
+      "name": "Citadel landing transition board candidate",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.9333333333333333,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:citadel-quay-bearing-candidate",
+      "name": "Citadel quay timber bearing candidate",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:citadel-landing-step-candidate",
+      "name": "Citadel landing transition board candidate",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 18
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-landing-knee-2.11",
+      "name": "Boarding landing structural knee.001",
+      "trianglePairs": 6
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:citadel-quay-bearing-candidate",
+      "name": "Citadel quay timber bearing candidate",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:citadel-landing-step-candidate",
+      "name": "Citadel landing transition board candidate",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 0.9666666666666667,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 4
+    },
+    {
+      "progress": 1.0,
+      "board": "add:boarding-beam--0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 14
+    },
+    {
+      "progress": 1.0,
+      "board": "add:boarding-plank-0",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 16
+    },
+    {
+      "progress": 1.0,
+      "board": "add:boarding-plank-0",
+      "obstacle": "n271",
+      "name": "n271",
+      "trianglePairs": 20
+    },
+    {
+      "progress": 1.0,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "add:bow-hinge-lip",
+      "name": "Boarding hinge continuous landing lip",
+      "trianglePairs": 12
+    },
+    {
+      "progress": 1.0,
+      "board": "add:boarding-beam-0.17",
+      "obstacle": "n27",
+      "name": "n27",
+      "trianglePairs": 4
+    }
+  ],
+  "passed": false,
+  "scope": "31 sampled deployment poses against original ship and saved shore candidate pieces; triangle intersections include attachment contacts. Not continuous collision proof, external harbor sweep or full retract lifecycle."
+}

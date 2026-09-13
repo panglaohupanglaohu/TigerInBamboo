@@ -121,6 +121,7 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
       }
       // 旧港物流接管：离港入河 / 护城河进港途中，位置由 harborLogistics 写
       if (boat.userData.harborMission || boat.userData.harborDocked) {
+        if(boat.userData.frontHarborBerth||boat.userData.harborHoldingBerth)updateWarshipOars(boat,dt,0);
         continue;
       }
       // 运河—大湖落差互联（瀑布船道/升船机）接管：自驱动巡航与绕湖通航
@@ -166,6 +167,9 @@ export function createCanalBoatPatrol(scene, canal, opts = {}) {
     nearestU,
     /** 下船时调用，下一帧巡游从当前位置吸附回航道 */
     markNeedsSnap(boat) {
+      // The front-port resident remains where the player moored it; never snap
+      // it across the city to the old global patrol curve after F dismount.
+      if(boat?.userData.frontHarborBerth){boat.userData.harborDocked=true;boat.userData.needsSnap=false;return;}
       if (boat?.userData?.canalPatrol) boat.userData.needsSnap = true;
     },
   };

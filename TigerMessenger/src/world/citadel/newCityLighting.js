@@ -1,10 +1,12 @@
+import {CITY_ADVANCE} from './compactNewCity.js';
+import {PLAZA_SHIFT} from './newPlazaLayout.js';
 import * as THREE from 'three';
 import {nightWeightAt} from '../../render/lighting/highlandLightVolumes.js';
 export const NEW_CITY_LIGHTING={version:3,frame:'new-city-authored-local',points:[
- {id:'main-gate',position:[60,23,21],color:0xffa348,intensity:350,radius:30,godotEnergy:140},
- {id:'plaza',position:[59,8,70],color:0xffb653,intensity:500,radius:24,godotEnergy:9},
+ {id:'main-gate',position:[60,23,21+CITY_ADVANCE[2]],color:0xffa348,intensity:220,radius:24,godotEnergy:80},
+ {id:'plaza',position:[59+PLAZA_SHIFT,8,70],color:0xffb653,intensity:70,radius:18,godotEnergy:15},
  {id:'moon-fill',position:[30,60,42],color:0x629be8,intensity:6500,radius:160,godotEnergy:3.5}
-],lanterns:[[54,4,76],[66,4,76],[54,4,63],[66,4,63],[54,10,32],[66,10,32],[54,16,13],[66,16,13]]};
+],lanterns:[PLAZA_SHIFT?[56,4,79]:[54,4,76],PLAZA_SHIFT?[73,4,83]:[66,4,76],[54,4,63],[66,4,63],[54,10,32+CITY_ADVANCE[1]],[66,10,32+CITY_ADVANCE[1]],[54,16,13+CITY_ADVANCE[2]],[66,16,13+CITY_ADVANCE[2]]]};
 export function buildNewCityLighting(){
  const root=new THREE.Group();root.name='citadel-new-city-lighting';
  const iron=new THREE.MeshStandardMaterial({color:0x44484a,roughness:.85,metalness:.25});

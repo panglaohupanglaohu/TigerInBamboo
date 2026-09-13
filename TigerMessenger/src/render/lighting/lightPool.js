@@ -93,9 +93,16 @@ export function createLightPool({
     }
     scratch.sort((a, b) => b.score - a.score);
 
+    // Stable slots for the two released citadel architectural shadows. They
+    // replace slots in the existing budget rather than adding extra lights.
+    const reserved=adopted.filter(l=>Number.isInteger(l.userData.citadelShadowSlot)).sort((a,b)=>a.userData.citadelShadowSlot-b.userData.citadelShadowSlot).slice(0,Math.min(2,pool.length));
+    const ordinary=scratch.filter(p=>!reserved.includes(p.lamp));
+
     for (let i = 0; i < pool.length; i++) {
       const slot = pool[i];
-      const pick = scratch[i];
+      const source=reserved[i];
+      if(source)source.getWorldPosition(_lampWorld);
+      const pick = source?{lamp:source,intensity:source.intensity,x:_lampWorld.x,y:_lampWorld.y,z:_lampWorld.z}:ordinary[i-reserved.length];
       if (!pick) {
         // 空槽位保持 visible=true 但强度 0：灯数恒定才不会触发重编译
         slot.intensity = 0;
@@ -106,6 +113,15 @@ export function createLightPool({
       slot.intensity = pick.intensity;
       slot.distance = pick.lamp.distance;
       slot.decay = pick.lamp.decay;
+      slot.layers.mask=pick.lamp.layers.mask;
+      slot.userData.sourceLightName=pick.lamp.name;
+      slot.castShadow=!!source&&source.castShadow;
+      if(source){
+        slot.shadow.mapSize.copy(source.shadow.mapSize);slot.shadow.camera.near=source.shadow.camera.near;slot.shadow.camera.far=source.shadow.camera.far;
+        slot.shadow.camera.layers.mask=source.shadow.camera.layers.mask;
+        slot.shadow.bias=source.shadow.bias;slot.shadow.normalBias=source.shadow.normalBias;slot.shadow.autoUpdate=false;
+        if(source.shadow.needsUpdate||!slot.shadow.map){slot.shadow.needsUpdate=true;source.shadow.needsUpdate=false;}
+      }
     }
     lastActive = Math.min(scratch.length, pool.length);
   };

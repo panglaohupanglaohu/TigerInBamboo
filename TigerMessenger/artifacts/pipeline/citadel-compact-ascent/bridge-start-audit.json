@@ -1,0 +1,52 @@
+[
+  {
+    "result": {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/OldHarborOceanGrade/citadel-oskar-grid-mountain-surface",
+        "obstacle_bounds": "[P: (-130.571, -188.6548, -167.3318), S: (226.3707, 277.1878, 301.6316)]",
+        "part": "n35",
+        "phase": "turn",
+        "point": 0,
+        "progress": 0.208333333333333,
+        "reason": "mesh_overlap",
+        "route_position": "(-22.21132, 5.029984, 5.895508)"
+      },
+      "completed_steps": 0,
+      "geometry_queries": 4,
+      "max_plant_adjustment": 0.0,
+      "phase": "blocked",
+      "point": 0,
+      "role": "gladius",
+      "route_points": 707,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    },
+    "version": "before"
+  },
+  {
+    "result": {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/OldHarborOceanGrade/citadel-oskar-grid-mountain-surface",
+        "obstacle_bounds": "[P: (-130.571, -188.6548, -167.3318), S: (226.3707, 277.1878, 301.6316)]",
+        "part": "n35",
+        "phase": "turn",
+        "point": 0,
+        "progress": 0.208333333333333,
+        "reason": "mesh_overlap",
+        "route_position": "(-22.21132, 5.029984, 5.895508)"
+      },
+      "completed_steps": 0,
+      "geometry_queries": 4,
+      "max_plant_adjustment": 0.0,
+      "phase": "blocked",
+      "point": 0,
+      "role": "gladius",
+      "route_points": 707,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    },
+    "version": "after"
+  }
+]

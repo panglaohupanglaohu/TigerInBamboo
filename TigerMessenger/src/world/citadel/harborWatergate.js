@@ -2,11 +2,11 @@ import * as THREE from 'three';
 
 // Dry pedestrian watergate around the original stair, with a genuine opening.
 // Floor height is supplied by the same profile as the walkable stair treads.
-export function buildHarborWatergate(floorY,bottomY){
+export function buildHarborWatergate(floorY,bottomY,options={}){
   const root=new THREE.Group();root.name='citadel-harbor-watergate';
   const stone=new THREE.MeshStandardMaterial({color:0xc6c5bb,roughness:.94});
   const trim=new THREE.MeshStandardMaterial({color:0xe0d6bd,roughness:.91});
-  const half=6,inner=2.2,spring=3.1,apex=spring+inner,top=6.3,bottom=bottomY-floorY;
+  const half=6,inner=2.2,spring=3.1,apex=spring+inner,top=options.top??6.3,bottom=bottomY-floorY;
   const shape=new THREE.Shape();shape.moveTo(-half,bottom);shape.lineTo(-inner,bottom);shape.lineTo(-inner,spring);
   shape.quadraticCurveTo(-inner*.78,spring+inner*.68,0,apex);
   shape.quadraticCurveTo(inner*.78,spring+inner*.68,inner,spring);

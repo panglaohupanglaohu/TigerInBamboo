@@ -1,0 +1,244 @@
+{
+  "source": "placement-r02-stepped-keep-massing",
+  "towers": [
+    {
+      "id": "left-gate-bastion",
+      "x": 49.1,
+      "z": 10,
+      "w": 9.4,
+      "d": 8,
+      "bottom": 16,
+      "top": 28,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 1.276595744680851
+    },
+    {
+      "id": "right-gate-bastion",
+      "x": 73,
+      "z": 9,
+      "w": 9.6,
+      "d": 8,
+      "bottom": 16,
+      "top": 31.2,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 1.5833333333333333
+    },
+    {
+      "id": "left-outer-turret",
+      "x": 42.4,
+      "z": 6,
+      "w": 7.2,
+      "d": 8.4,
+      "bottom": 16,
+      "top": 23.8,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 1.0833333333333335
+    },
+    {
+      "id": "right-outer-turret",
+      "x": 81.2,
+      "z": 3,
+      "w": 7.4,
+      "d": 9.2,
+      "bottom": 16,
+      "top": 27,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 1.4864864864864864
+    },
+    {
+      "id": "left-blue-tower",
+      "x": 48.2,
+      "z": -3.5,
+      "w": 10.2,
+      "d": 10.2,
+      "bottom": 16,
+      "top": 32.6,
+      "shaft": false,
+      "cap": true,
+      "bodySlenderness": 1.627450980392157
+    },
+    {
+      "id": "right-blue-tower",
+      "x": 72,
+      "z": -3.6,
+      "w": 12,
+      "d": 12,
+      "bottom": 16,
+      "top": 38.8,
+      "shaft": false,
+      "cap": true,
+      "bodySlenderness": 1.8999999999999997
+    },
+    {
+      "id": "central-stair-keep",
+      "x": 60,
+      "z": -4.4,
+      "w": 8.6,
+      "d": 10.8,
+      "bottom": 16,
+      "top": 42.3,
+      "shaft": true,
+      "cap": false,
+      "bodySlenderness": 3.0581395348837206
+    },
+    {
+      "id": "offset-high-keep",
+      "x": 63.8,
+      "z": -15.5,
+      "w": 15,
+      "d": 14,
+      "bottom": 16,
+      "top": 46.4,
+      "shaft": false,
+      "cap": true,
+      "bodySlenderness": 2.0266666666666664
+    }
+  ],
+  "wfc": {
+    "scope": "seven front facades; authored volumes, side walls and stair keep",
+    "towers": [
+      {
+        "id": "left-gate-bastion",
+        "rows": 2,
+        "modules": 6,
+        "openings": 2,
+        "grid": [
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone",
+            "arch",
+            "stone"
+          ]
+        ],
+        "solutionHash": "4171e0f8"
+      },
+      {
+        "id": "right-gate-bastion",
+        "rows": 2,
+        "modules": 6,
+        "openings": 2,
+        "grid": [
+          [
+            "stone",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone-alt",
+            "arch",
+            "stone"
+          ]
+        ],
+        "solutionHash": "be05f928"
+      },
+      {
+        "id": "left-outer-turret",
+        "rows": 1,
+        "modules": 3,
+        "openings": 1,
+        "grid": [
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ]
+        ],
+        "solutionHash": "27bfdec7"
+      },
+      {
+        "id": "right-outer-turret",
+        "rows": 1,
+        "modules": 3,
+        "openings": 1,
+        "grid": [
+          [
+            "stone",
+            "arch",
+            "stone"
+          ]
+        ],
+        "solutionHash": "32fb88f7"
+      },
+      {
+        "id": "left-blue-tower",
+        "rows": 2,
+        "modules": 6,
+        "openings": 2,
+        "grid": [
+          [
+            "stone",
+            "arch",
+            "stone"
+          ],
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ]
+        ],
+        "solutionHash": "0a866f18"
+      },
+      {
+        "id": "right-blue-tower",
+        "rows": 3,
+        "modules": 9,
+        "openings": 3,
+        "grid": [
+          [
+            "stone",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone",
+            "arch",
+            "stone"
+          ]
+        ],
+        "solutionHash": "c5d9e0b0"
+      },
+      {
+        "id": "offset-high-keep",
+        "rows": 4,
+        "modules": 12,
+        "openings": 4,
+        "grid": [
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone-alt",
+            "slit",
+            "stone"
+          ],
+          [
+            "stone",
+            "arch",
+            "stone"
+          ],
+          [
+            "stone",
+            "slit",
+            "stone"
+          ]
+        ],
+        "solutionHash": "d2c02065"
+      }
+    ]
+  }
+}

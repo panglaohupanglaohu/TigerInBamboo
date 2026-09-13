@@ -1,0 +1,587 @@
+{
+  "inventory": [
+    {
+      "name": "fisher-boat",
+      "uuid": "a8bfc26d-0910-4152-8020-72d388eaf21d",
+      "kind": "fisherBoat",
+      "parent": "old-harbor-scene",
+      "scale": [
+        2,
+        2,
+        2
+      ],
+      "frontLocal": [
+        -2.0587686694614575,
+        -7.265567777635539,
+        93.37865547193461
+      ],
+      "distanceToQuay": 40.04206987008849,
+      "worldBounds": [
+        14.054641977149032,
+        14.561996022662314,
+        10.001370485922589
+      ],
+      "patrol": false
+    },
+    {
+      "name": "ocean-warship-0",
+      "uuid": "dd63b948-5f77-4809-9a5a-dacf685d6975",
+      "kind": "ocean-warship",
+      "parent": "",
+      "scale": [
+        1.84,
+        1.84,
+        1.84
+      ],
+      "frontLocal": [
+        39.986712877063994,
+        -4.403200209944998,
+        100.248986480844
+      ],
+      "distanceToQuay": 5.6435528346337085,
+      "worldBounds": [
+        13.164850103123428,
+        13.363206452144013,
+        11.068076232476667
+      ],
+      "patrol": true
+    },
+    {
+      "name": "ocean-warship-1",
+      "uuid": "2f16de16-3790-4762-97ec-83f3a576e72c",
+      "kind": "ocean-warship",
+      "parent": "",
+      "scale": [
+        1.84,
+        1.84,
+        1.84
+      ],
+      "frontLocal": [
+        48.351900464391065,
+        -0.34736261751680786,
+        65.35614523577141
+      ],
+      "distanceToQuay": 32.53446442441648,
+      "worldBounds": [
+        15.261561644168253,
+        13.517611990958699,
+        14.692536330827537
+      ],
+      "patrol": true
+    },
+    {
+      "name": "ocean-warship-2",
+      "uuid": "f465adc2-bc03-4601-8383-21412af009e1",
+      "kind": "ocean-warship",
+      "parent": "",
+      "scale": [
+        1.84,
+        1.84,
+        1.84
+      ],
+      "frontLocal": [
+        -31.898933486709915,
+        -88.45602119751567,
+        190.6076579208774
+      ],
+      "distanceToQuay": 145.95585825018878,
+      "worldBounds": [
+        15.447221168650728,
+        14.110966716857448,
+        14.122909111437892
+      ],
+      "patrol": true
+    }
+  ],
+  "samples": [
+    {
+      "x": 30,
+      "z": 95,
+      "water": 160.49814098478558,
+      "ground": 161.92935784667634,
+      "object": "front-harbor-walkable",
+      "seabed": 159.89490857993775,
+      "depth": -1.4312168618907606,
+      "quayAboveWater": 1.4312169101035295
+    },
+    {
+      "x": 30,
+      "z": 96,
+      "water": 160.4981052509777,
+      "ground": 162.1224715174444,
+      "object": "front-harbor-walkable",
+      "seabed": 159.91004028397126,
+      "depth": -1.6243662664667227,
+      "quayAboveWater": 1.624366314737017
+    },
+    {
+      "x": 30,
+      "z": 97,
+      "water": 160.49884967620335,
+      "ground": null,
+      "object": null,
+      "seabed": 159.90713651511527,
+      "depth": null,
+      "quayAboveWater": 1.8226665343744344
+    },
+    {
+      "x": 30,
+      "z": 99,
+      "water": 160.4984272307482,
+      "ground": null,
+      "object": null,
+      "seabed": 159.90419110093688,
+      "depth": null,
+      "quayAboveWater": 2.238883492855166
+    },
+    {
+      "x": 30,
+      "z": 102,
+      "water": 160.49777540612902,
+      "ground": null,
+      "object": null,
+      "seabed": 159.79329796364124,
+      "depth": null,
+      "quayAboveWater": 2.9071474588976116
+    },
+    {
+      "x": 30,
+      "z": 106,
+      "water": 160.4981927821979,
+      "ground": null,
+      "object": null,
+      "seabed": 159.72575970038022,
+      "depth": null,
+      "quayAboveWater": 3.877852217749819
+    },
+    {
+      "x": 30,
+      "z": 110,
+      "water": 160.49957412055088,
+      "ground": null,
+      "object": null,
+      "seabed": 159.7469764501906,
+      "depth": null,
+      "quayAboveWater": 4.938630424603673
+    },
+    {
+      "x": 34,
+      "z": 95,
+      "water": 160.49779832031032,
+      "ground": 161.82652622732076,
+      "object": "front-harbor-walkable",
+      "seabed": 159.87684341091617,
+      "depth": -1.3287279070104319,
+      "quayAboveWater": 1.3287279551926474
+    },
+    {
+      "x": 34,
+      "z": 96,
+      "water": 160.49955299474976,
+      "ground": 162.0197624646122,
+      "object": "front-harbor-walkable",
+      "seabed": 159.8683770151372,
+      "depth": -1.5202094698624364,
+      "quayAboveWater": 1.520209518102149
+    },
+    {
+      "x": 34,
+      "z": 97,
+      "water": 160.49798075466094,
+      "ground": null,
+      "object": null,
+      "seabed": 159.86578003420087,
+      "depth": null,
+      "quayAboveWater": 1.720952428385914
+    },
+    {
+      "x": 34,
+      "z": 99,
+      "water": 160.4981974226333,
+      "ground": null,
+      "object": null,
+      "seabed": 159.8659432222539,
+      "depth": null,
+      "quayAboveWater": 2.1367925386157935
+    },
+    {
+      "x": 34,
+      "z": 102,
+      "water": 160.4987904915645,
+      "ground": null,
+      "object": null,
+      "seabed": 159.75559903867688,
+      "depth": null,
+      "quayAboveWater": 2.804229917337466
+    },
+    {
+      "x": 34,
+      "z": 106,
+      "water": 160.4986283249122,
+      "ground": null,
+      "object": null,
+      "seabed": 159.68885898307437,
+      "depth": null,
+      "quayAboveWater": 3.776116623816307
+    },
+    {
+      "x": 34,
+      "z": 110,
+      "water": 160.4985395011881,
+      "ground": null,
+      "object": null,
+      "seabed": 159.71094461580822,
+      "depth": null,
+      "quayAboveWater": 4.839015764605477
+    },
+    {
+      "x": 38,
+      "z": 95,
+      "water": 160.49906495666806,
+      "ground": 161.82253319283896,
+      "object": "front-harbor-walkable",
+      "seabed": 159.73790926861363,
+      "depth": -1.3234682361708963,
+      "quayAboveWater": 1.3234682843518897
+    },
+    {
+      "x": 38,
+      "z": 96,
+      "water": 160.4980351219654,
+      "ground": 162.01577419262324,
+      "object": "front-harbor-walkable",
+      "seabed": 159.72962761320144,
+      "depth": -1.5177390706578535,
+      "quayAboveWater": 1.517739118896401
+    },
+    {
+      "x": 38,
+      "z": 97,
+      "water": 160.4982436497387,
+      "ground": null,
+      "object": null,
+      "seabed": 159.7272100997198,
+      "depth": null,
+      "quayAboveWater": 1.7167061581960184
+    },
+    {
+      "x": 38,
+      "z": 99,
+      "water": 160.49832896242654,
+      "ground": null,
+      "object": null,
+      "seabed": 159.73979397794815,
+      "depth": null,
+      "quayAboveWater": 2.1326878143266015
+    },
+    {
+      "x": 38,
+      "z": 102,
+      "water": 160.49861624927263,
+      "ground": 145.7245433822274,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.8015582315909,
+      "depth": 14.77407286704522,
+      "quayAboveWater": 2.8004472287988165
+    },
+    {
+      "x": 38,
+      "z": 106,
+      "water": 160.49910977545818,
+      "ground": null,
+      "object": null,
+      "seabed": 159.74661475282733,
+      "depth": null,
+      "quayAboveWater": 3.771701649197439
+    },
+    {
+      "x": 38,
+      "z": 110,
+      "water": 160.49790176640423,
+      "ground": null,
+      "object": null,
+      "seabed": 159.76836981815086,
+      "depth": null,
+      "quayAboveWater": 4.835745261096804
+    },
+    {
+      "x": 42,
+      "z": 95,
+      "water": 160.4988232930167,
+      "ground": 161.91738605558743,
+      "object": "front-harbor-walkable",
+      "seabed": 159.69669977965688,
+      "depth": -1.4185627625707298,
+      "quayAboveWater": 1.4185628107799744
+    },
+    {
+      "x": 42,
+      "z": 96,
+      "water": 160.49822169717987,
+      "ground": 162.1105139877169,
+      "object": "front-harbor-walkable",
+      "seabed": 159.68836496655976,
+      "depth": -1.6122922905370274,
+      "quayAboveWater": 1.612292338803769
+    },
+    {
+      "x": 42,
+      "z": 97,
+      "water": 160.4992951002066,
+      "ground": 155.56496624640036,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.68588635335237,
+      "depth": 4.9343288538062495,
+      "quayAboveWater": 1.8102782444847207
+    },
+    {
+      "x": 42,
+      "z": 99,
+      "water": 160.4995240176617,
+      "ground": 153.9855799035212,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.69832461041221,
+      "depth": 6.513944114140514,
+      "quayAboveWater": 2.225874356364443
+    },
+    {
+      "x": 42,
+      "z": 102,
+      "water": 160.49722722062606,
+      "ground": 151.49578722661963,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.75981345257517,
+      "depth": 9.001439994006432,
+      "quayAboveWater": 2.895831967823483
+    },
+    {
+      "x": 42,
+      "z": 106,
+      "water": 160.49812591335504,
+      "ground": 148.21562576255047,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.89914335983903,
+      "depth": 12.282500150804566,
+      "quayAboveWater": 3.8661255048280907
+    },
+    {
+      "x": 42,
+      "z": 110,
+      "water": 160.49708256334893,
+      "ground": 144.88015627626746,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.91335688353118,
+      "depth": 15.61692628708147,
+      "quayAboveWater": 4.929404123515297
+    },
+    {
+      "x": 46,
+      "z": 95,
+      "water": 160.4986071032485,
+      "ground": 158.84730583028534,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.75279683550028,
+      "depth": 1.6513012729631669,
+      "quayAboveWater": 1.612304253238932
+    },
+    {
+      "x": 46,
+      "z": 96,
+      "water": 160.49762683283822,
+      "ground": 157.85271902641,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.74417269634642,
+      "depth": 2.644907806428222,
+      "quayAboveWater": 1.8061821771656525
+    },
+    {
+      "x": 46,
+      "z": 97,
+      "water": 160.49686910086004,
+      "ground": 156.87854677086943,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.74139416157863,
+      "depth": 3.6183223299906047,
+      "quayAboveWater": 2.005762439311326
+    },
+    {
+      "x": 46,
+      "z": 99,
+      "water": 160.49818154349157,
+      "ground": 155.0098948136855,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.7532013835195,
+      "depth": 5.488286729806077,
+      "quayAboveWater": 2.4197822730577627
+    },
+    {
+      "x": 46,
+      "z": 102,
+      "water": 160.4982449583418,
+      "ground": 151.9233458458224,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.81366799339773,
+      "depth": 8.574899112519375,
+      "quayAboveWater": 3.0865937312664187
+    },
+    {
+      "x": 46,
+      "z": 106,
+      "water": 160.4980621114663,
+      "ground": 148.10260833804588,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.90116024117592,
+      "depth": 12.395453773420428,
+      "quayAboveWater": 4.056836941721031
+    },
+    {
+      "x": 46,
+      "z": 110,
+      "water": 160.4972098788081,
+      "ground": 143.94397615859117,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "seabed": 159.85354966734664,
+      "depth": 16.553233720216923,
+      "quayAboveWater": 5.1187016626383866
+    }
+  ],
+  "dockY": -1.6442037347839142,
+  "stats": {
+    "envelope": 7,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 6,
+    "obstacleMeshes": 2275
+  },
+  "berth": {
+    "valid": true,
+    "direction": {
+      "x": 0.5659680517994848,
+      "y": 0.8074786262497677,
+      "z": 0.16630824541219658
+    },
+    "position": {
+      "x": 90.69558037106438,
+      "y": 129.3973085797051,
+      "z": 26.65066127000475
+    },
+    "quaternion": {
+      "isQuaternion": true,
+      "_x": 0.10044237551037713,
+      "_y": 0.041695489879897144,
+      "_z": -0.2935507044395372,
+      "_w": 0.9497372264203185
+    },
+    "shorePoint": {
+      "x": 94.64630768385214,
+      "y": 127.90091081972074,
+      "z": 30.329855327900816
+    },
+    "shoreObject": "front-harbor-walkable",
+    "angle": -0.16899836166312232,
+    "entry": {
+      "x": 0.4918351432406579,
+      "y": 0.8559571309743484,
+      "z": 0.15948536549666079
+    },
+    "approach": {
+      "offset": 3,
+      "points": [
+        {
+          "x": 0.4918351432406579,
+          "y": 0.8559571309743484,
+          "z": 0.15948536549666079
+        },
+        {
+          "x": 0.5187124150764347,
+          "y": 0.8391397177819746,
+          "z": 0.16365196144978073
+        },
+        {
+          "x": 0.5452422687901791,
+          "y": 0.8209215737797488,
+          "z": 0.16970161468742218
+        },
+        {
+          "x": 0.5659680517994848,
+          "y": 0.8074786262497677,
+          "z": 0.16630824541219658
+        }
+      ],
+      "length": 14.346127383032716
+    },
+    "attempts": 12,
+    "triangleCount": 82474,
+    "elapsedMs": 3279.699999999255
+  },
+  "playback": {
+    "checked": 101,
+    "failures": []
+  },
+  "candidate": {
+    "shipName": "ocean-warship-0",
+    "scale": [
+      1.84,
+      1.84,
+      1.84
+    ],
+    "frontLocalPosition": [
+      39.986712877064,
+      -4.403200209944856,
+      100.24898648084397
+    ],
+    "frontLocalQuaternion": [
+      -0.03088737415325818,
+      -0.9793345273455887,
+      -0.10954532137472281,
+      -0.16718156666217138
+    ],
+    "boardingAngle": -0.16899836166312232,
+    "shoreLocal": [
+      37.99754640790526,
+      -1.6436611247692383,
+      95.79790995183284
+    ],
+    "entryLocal": [
+      52.07814606016515,
+      -6.979644710932121,
+      107.30813610790236
+    ]
+  },
+  "boarding": {
+    "rootPoint": [
+      1.94,
+      0.664,
+      0.84
+    ],
+    "actualTip": [
+      94.64630789892587,
+      127.90091097424038,
+      30.329855234601727
+    ],
+    "solverTip": [
+      94.64630768385214,
+      127.90091081972074,
+      30.329855327900816
+    ],
+    "tipError": 2.807806024824919e-7,
+    "actualPitch": -0.16899847663719314,
+    "lanes": [
+      {
+        "x": -0.16,
+        "support": "front-harbor-walkable",
+        "error": -0.02860610041582845
+      },
+      {
+        "x": 0,
+        "support": "front-harbor-walkable",
+        "error": 0.0005535469217932132
+      },
+      {
+        "x": 0.16,
+        "support": "front-harbor-walkable",
+        "error": 0.029705005070269408
+      }
+    ]
+  },
+  "scope": "Original live boat geometry at the front quay; bounded berth/approach search and actual deployed hinge only. Candidate screenshot temporarily poses the SAME original ship, then restores it. No production fleet relocation, unloading or Godot integration."
+}

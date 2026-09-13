@@ -1,10 +1,12 @@
+import {CITY_ADVANCE} from './compactNewCity.js';
+import {PLAZA_SHIFT} from './newPlazaLayout.js';
 import * as THREE from 'three';
 import {P} from '../../core/params.js';
 import {nightWeightAt} from '../../render/lighting/highlandLightVolumes.js';
 export const OLD_CITY_TIER_LIGHTS=[
- {id:'old-shore-court',position:[-8,8,19],color:0xff9b50,intensity:240,radius:20,godotEnergy:40},
- {id:'old-middle-court',position:[12,18,-7],color:0xffac60,intensity:320,radius:22,godotEnergy:55},
- {id:'old-upper-court',position:[-8,26,-20],color:0xffbd75,intensity:420,radius:26,godotEnergy:70}
+ {id:'old-shore-court',position:[-8,8,19],color:0xff9b50,intensity:150,radius:20,godotEnergy:10},
+ {id:'old-middle-court',position:[12,18,-7],color:0xffac60,intensity:220,radius:22,godotEnergy:14},
+ {id:'old-upper-court',position:[-8,26,-20],color:0xffbd75,intensity:300,radius:26,godotEnergy:20}
 ];
 export function applyCitadelTierLighting(castle){
  if(!castle.userData.oldShoreApproach||castle.userData.tierLighting)return null;
@@ -15,9 +17,9 @@ export function applyCitadelTierLighting(castle){
  for(const light of oldExisting.slice(oldPoints.length))light.removeFromParent();
  const dockY=city.userData.frontHarborApproach.dockY;
  const newSpecs=[
- {id:'main-gate',position:[60,23,21],color:0xffac58,intensity:350,radius:30,godotEnergy:140},
- {id:'plaza',position:[59,8,70],color:0xffb965,intensity:320,radius:24,godotEnergy:25},
- {id:'shore-gate',position:[34,dockY+3.2,93],color:0xffa04c,intensity:260,radius:20,godotEnergy:45}
+ {id:'main-gate',position:[60,23,21+CITY_ADVANCE[2]],color:0xffac58,intensity:220,radius:24,godotEnergy:80},
+ {id:'plaza',position:[59+PLAZA_SHIFT,8,70],color:0xffb965,intensity:70,radius:18,godotEnergy:15},
+ {id:'shore-gate',position:[34,dockY+3.2,93],color:0xffa04c,intensity:45,radius:10,godotEnergy:22}
  ];
  const newPoints=newRoot.children.filter(o=>o.isPointLight);
  if(newPoints.length!==3)throw new Error('Expected three authored new-city lights');
@@ -25,6 +27,6 @@ export function applyCitadelTierLighting(castle){
  const oldUpdate=oldRoot.update,newUpdate=newRoot.userData.update;
  oldRoot.update=oldRoot.userData.update=(time,phase=P.timeOfDay)=>{oldUpdate(time,phase);const weight=nightWeightAt(phase);oldPoints.forEach((light,i)=>light.intensity=OLD_CITY_TIER_LIGHTS[i].intensity*weight);};
  newRoot.userData.update=phase=>{newUpdate(phase);const weight=nightWeightAt(phase);newPoints.forEach((light,i)=>light.intensity=newSpecs[i].intensity*weight);};
- const report={version:1,old:OLD_CITY_TIER_LIGHTS,new:newSpecs,oldBefore:oldExisting.length,newBefore:3,oldAfter:3,newAfter:3,scope:'candidate; separate old hillside courts and new gate/plaza/quay; six unshadowed points'};
+ const report={version:2,old:OLD_CITY_TIER_LIGHTS,new:newSpecs,oldBefore:oldExisting.length,newBefore:3,oldAfter:3,newAfter:3,scope:'candidate; separate old hillside courts and new gate/plaza/quay; six unshadowed points'};
  castle.userData.tierLighting=report;oldRoot.update(0);newRoot.userData.update(P.timeOfDay);return report;
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "source": "Actual 8931 citadel directional light at timeOfDay 0.85; ambient calibrated for Godot Compatibility",
+  "source": "Citadel lighting round 2: cool backdrop behind localized warm gate/plaza light; Godot Compatibility calibration",
   "position": [
     156.4995654608874,
     91.10976620311112,
@@ -12,7 +12,7 @@
     0
   ],
   "color": "78aee0",
-  "energy": 0.62,
-  "ambientColor": "9db9d8",
-  "ambientEnergy": 0.85
+  "energy": 0.38,
+  "ambientColor": "8faed1",
+  "ambientEnergy": 0.48
 }

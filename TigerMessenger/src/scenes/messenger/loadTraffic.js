@@ -2,6 +2,7 @@
 //  电车 / 运河交汇古堡 / 星海运河 / 战船 / 叹息之门
 // =====================================================================
 import * as THREE from "three";
+import {dockFrontHarborPatrol} from '../../world/citadel/frontHarborBerth.js';
 import { buildChristchurchTramSystem } from "../../world/tramSystem.js";
 import { carveHillsForTrack } from "../../world/hills.js";
 import { buildWorldCanal, buildCanalJunctionBox } from "../../world/canalSystem.js";
@@ -192,6 +193,7 @@ export function loadCanalNetwork({
       routeBoat.position.normalize().multiplyScalar(oceanPatrol.waterR + 0.12);
       if (canalBoats?.boats && !canalBoats.boats.includes(routeBoat)) canalBoats.boats.push(routeBoat);
     }
+    dockFrontHarborPatrol(scene,canalBoats?.boats);
     waterRouteFleet = createWaterRouteFleet({ routes, boats: [] });
   }
   if (canalAnchors.length >= 3 && useCrystalCanal) {

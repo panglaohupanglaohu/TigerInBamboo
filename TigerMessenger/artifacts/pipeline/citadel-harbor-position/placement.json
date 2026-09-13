@@ -1,0 +1,74 @@
+{
+  "before": {
+    "offset": [
+      0,
+      0,
+      0
+    ],
+    "gate": [
+      31.999999999999996,
+      -1.644203734783872,
+      94
+    ],
+    "dockY": -1.6442037347839142,
+    "quayWaterClearance": [
+      {
+        "x": 30,
+        "z": 94,
+        "clearance": 0.8999999999999999
+      },
+      {
+        "x": 30,
+        "z": 98,
+        "clearance": 1.6561836051384735
+      },
+      {
+        "x": 45,
+        "z": 94,
+        "clearance": 1.0271554685023347
+      },
+      {
+        "x": 45,
+        "z": 98,
+        "clearance": 1.783951231057562
+      }
+    ],
+    "note": "placement-only preview; production routes and ground not migrated"
+  },
+  "proposal": {
+    "offset": [
+      18,
+      0,
+      8
+    ],
+    "gate": [
+      50,
+      -1.6442037347839005,
+      102
+    ],
+    "dockY": -1.6442037347839142,
+    "quayWaterClearance": [
+      {
+        "x": 48,
+        "z": 102,
+        "clearance": 2.845481203914954
+      },
+      {
+        "x": 48,
+        "z": 106,
+        "clearance": 3.817404077262115
+      },
+      {
+        "x": 63,
+        "z": 102,
+        "clearance": 4.716039266947774
+      },
+      {
+        "x": 63,
+        "z": 106,
+        "clearance": 5.699832182242098
+      }
+    ],
+    "note": "placement-only preview; production routes and ground not migrated"
+  }
+}

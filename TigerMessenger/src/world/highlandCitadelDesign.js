@@ -2485,7 +2485,8 @@ export function buildHighlandSlopeShrubs(options = {}) {
   // 42 株 × ~4 网格 + 42 光斑（≈210 draw）→ 按材质归并后的个位数 draw。
   // 独立 mergedTag 命名空间：mergeCitadelTownStatic 的幂等清扫按
   // mergedGeometry === true 误删其他组的合并网格（此处必须与之区分）
-  mergeStaticGroup(group, { mergedTag: "highland-slope-shrub-vegetation" });
+  // Merge after final spherical/Blender terrain grounding in messengerIsland.
+  group.userData.needsFinalGrounding = true;
   group.userData.bandIds = Object.freeze([...new Set(placements.map((entry) => entry.band))]);
   group.userData.surfaceProvider = "highlandTerrainSurfaceHeight";
   group.userData.assetSource = "buildHighlandSlopeShrubs-low-poly-round-cluster";

@@ -3447,6 +3447,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
 
   // 7) 元数据与统计
   castleContainer.userData.townSpec = spec;
+  castleContainer.userData.refreshOldCityParcels?.();
   if(castleContainer.userData.highlandTownscaperGrid)ensureSkipOuterTerrainEditPad(castleContainer);
   castleContainer.userData.wfcTownV1 = wfcFlag;
   castleContainer.userData.wfcSeed = wfcSeed;
@@ -3592,6 +3593,7 @@ export function rebuildCitadelTown(castleContainer, spec, options = {}) {
     ? assembly.surfaceConformance?.[0] ?? null
     : null;
   castleContainer.userData.townSpec = assembly.layout;
+  castleContainer.userData.refreshOldCityParcels?.();
   if (P.irregularGridV1 === true) {
     castleContainer.userData.gridV6 = createCitadelGridV6(assembly.layout, {
       cellSize: CITADEL_TOWN_SPEC.cellSize,
@@ -3703,6 +3705,17 @@ export function rebuildCitadelTerrain(castleContainer, contourSpec) {
   }
   const old = castleContainer?.userData?.outerTerrainSystem;
   if (!old) return null;
+
+  // Baked candidate deltas refer to the previous source mesh. A terrain edit
+  // must invalidate that readiness instead of claiming the removed mesh is live.
+  const masterTerrain = castleContainer.userData.masterTerrainCandidate;
+  if (masterTerrain?.status === "ready") {
+    castleContainer.userData.masterTerrainCandidate = {
+      status: "requires-regeneration",
+      source: masterTerrain.source,
+      reason: "Terrain source rebuilt; previous Blender vertex correspondence is no longer valid",
+    };
+  }
 
   // 只释放几何：contour / pilgrimageStone 材质归初始构建共享，不能 dispose
   const geometries = new Set();

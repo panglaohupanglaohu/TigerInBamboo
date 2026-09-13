@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>信使 · 人形重构</title><style>body{margin:0;background:#172029;color:#ecdfc6;font:16px system-ui}header{padding:18px 28px}h1{margin:0 0 10px}a{color:#edc88f}#view{height:70vh;min-height:480px}button{background:#364a52;color:white;border:1px solid #799095;border-radius:6px;padding:9px 17px;cursor:pointer}button:focus{outline:2px solid #deb663}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:24px}img{width:100%}p{max-width:1000px;line-height:1.7}.caption{padding:0 24px}canvas{display:block}</style>
+<header><h1>信使 · 按认可目标重构</h1><p>下方是 Blender 几何的实时模型。拖动旋转、滚轮缩放；可检查行走与持信。当前为造型候选，尚未经过你的视觉验收。</p>
+<button id="idle">站立</button> <button id="walk">行走</button> <button id="run">奔跑</button> <button id="letter">持信 / 空手</button> <a href="../../../index.html">进入原游戏</a></header>
+<div id="view"></div><p class="caption" id="stats"></p>
+<p class="caption">本轮修正：胸前披布经过左右肩连续连接到背后，是一张连通网格；肩宽由约57厘米收至31.8厘米，与站立双脚外侧同宽，头部比例保留。160个动作姿态下，斗篷与卷轴、袖子、前臂、衣摆、裤腿及靴子的相交检查通过。游戏使用同一份更新几何。Godot同步GLB资产，尚未把这套人形替换进Godot玩家控制器。</p>
+<div class="row"><section><h2>修改前：卷轴穿过斗篷</h2><img src="cloak-before.png"></section><section><h2>修改后：卷轴完整置于外层</h2><img src="back-three-quarter.png"></section></div>
+<div class="row"><section><h2>认可目标图</h2><img src="../../../assets/models/optimized/human-courier-v1/approved-target.png"></section><section><h2>Blender 实际渲染 · 连续斗篷与收肩</h2><img src="front-three-quarter.png"></section></div>
+<div class="row"><section><h2>背面与信包</h2><img src="back-three-quarter.png"></section><section><h2>交付文件</h2><p><a href="../../../assets/models/optimized/human-courier-v1/human-courier.blend">Blender 工程</a> · <a href="../../../assets/models/optimized/human-courier-v1/human-courier.glb">通用 GLB</a></p><p>酒红披风、青绿长衣、象牙白卷袖、右肩日轮胸针、左胯信包。信封挂在右手关节。原数字智能体源文件保留。</p><p>目前使用分关节的程序动画，尚未做蒙皮布料变形。近景脸部和头发仍可在这一版上继续雕修。</p></section></div>
+<script type="importmap">{"imports":{"three":"../../../vendor/three.module.js","three/addons/":"../../../vendor/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {buildHumanCourier,animateHumanCourier} from '../../../src/assets/characters/humanCourier.js';
+const host=document.querySelector('#view'),scene=new THREE.Scene();scene.background=new THREE.Color('#263039');
+const camera=new THREE.PerspectiveCamera(35,1,.01,100);camera.position.set(2,1.6,3.7);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;host.appendChild(renderer.domElement);
+let angle=.45, elevation=.16, distance=4.2, pointer=null;
+function orbit(){camera.position.set(Math.sin(angle)*distance,.9+elevation*distance,Math.cos(angle)*distance);camera.lookAt(0,.9,0)}orbit();
+renderer.domElement.style.touchAction='none';
+renderer.domElement.onpointerdown=e=>{pointer=[e.clientX,e.clientY];renderer.domElement.setPointerCapture(e.pointerId)};
+renderer.domElement.onpointermove=e=>{if(!pointer)return;angle-=(e.clientX-pointer[0])*.008;elevation=Math.max(-.15,Math.min(1,(e.clientY-pointer[1])*.005+elevation));pointer=[e.clientX,e.clientY];orbit()};
+renderer.domElement.onpointerup=()=>{pointer=null};
+renderer.domElement.onwheel=e=>{e.preventDefault();distance=Math.max(1.9,Math.min(7,distance+e.deltaY*.003));orbit()};
+scene.add(new THREE.HemisphereLight(0xffeed9,0x34454f,2));
+for(const [x,y,z,power] of [[-3,4,4,3],[3,2,1,1],[1,3,-3,2]]){const l=new THREE.DirectionalLight(0xffffff,power);l.position.set(x,y,z);scene.add(l);}
+const model=buildHumanCourier({scale:1});scene.add(model);
+const floor=new THREE.Mesh(new THREE.CircleGeometry(2,64),new THREE.MeshStandardMaterial({color:0x39434a,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-.01;scene.add(floor);
+const player={velocity:new THREE.Vector3(),onGround:true,animPhase:0,holdingLetter:false,riding:false};let moving=false;
+idle.onclick=()=>{moving=false;player.velocity.set(0,0,0)};walk.onclick=()=>{moving=true;player.velocity.set(0,0,4)};run.onclick=()=>{moving=true;player.velocity.set(0,0,10)};letter.onclick=()=>{player.holdingLetter=!player.holdingLetter;model.userData.letter.visible=player.holdingLetter;};
+const resize=()=>{renderer.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();};new ResizeObserver(resize).observe(host);resize();
+let last=performance.now();function tick(now){const dt=Math.min((now-last)/1000,.05);last=now;animateHumanCourier(player,model,dt,moving);renderer.render(scene,camera);requestAnimationFrame(tick)}requestAnimationFrame(tick);
+window.courierReview={model,player,renderer,scene,camera,animateHumanCourier};
+setTimeout(()=>{stats.textContent=`角色高度约 1.78 米；当前绘制 ${renderer.info.render.calls} 次 / ${renderer.info.render.triangles} 三角形（含展示地面）。游戏内维持原角色视觉尺寸。`},500);
+</script></html>

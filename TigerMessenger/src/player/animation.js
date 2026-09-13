@@ -4,10 +4,12 @@
 //  兼容旧接口：人形 / 竹虎（userData 四肢占位）
 // =====================================================================
 import * as THREE from "three";
+import { animateHumanCourier } from '../assets/characters/humanCourier.js';
 
 export function updatePlayerAnim(player, messengerMesh, dt, moving) {
   const u = messengerMesh.userData;
   if (!u) return;
+  if (u.isHumanCourier) return animateHumanCourier(player, messengerMesh, dt, moving);
 
   const sprinting = Math.hypot(player.velocity.x, player.velocity.z) > 8;
   const speedScale = sprinting ? 1.35 : 1;

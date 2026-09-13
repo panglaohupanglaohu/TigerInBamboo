@@ -23,6 +23,8 @@ var follow_support:=false
 var soles:Array[Vector3]=[]
 var landing_basis:Basis
 var max_plant_adjustment:=0.0
+var swing_height:=0.0
+var max_swing_adjustment:=0.0
 func bind(world:Node3D,kind:String,path_root:Node3D=null,local_route:Array=[],surface_following:bool=false)->bool:
     var frame_root:Node3D=path_root if path_root!=null else world.stair_candidate.root
     var route_points:Array=local_route if not local_route.is_empty() else world.stair_candidate.route
@@ -53,6 +55,19 @@ func bind(world:Node3D,kind:String,path_root:Node3D=null,local_route:Array=[],su
     # but must not enter the next riser. Preserve the authored geometric route separately.
     var authored:Array[Vector3]=route.duplicate()
     for i in range(route.size()):
+        if follow_support:
+            var here=_support(authored[i])
+            # Continuous ramps are not stair risers. Applying the stair-edge
+            # offset at the hinge moves the foot backwards off the board onto
+            # the lower hull, producing a false support normal and shield tilt.
+            var continuous_ramp=false
+            if not here.is_empty():
+                var normal:Vector3=here.normal
+                for neighbour in [i-1,i+1]:
+                    if neighbour<0 or neighbour>=route.size():continue
+                    var there=_support(authored[neighbour])
+                    if not there.is_empty() and normal.dot(up)<0.98 and normal.dot(Vector3(there.normal))>0.995 and absf((authored[i]-authored[neighbour]).dot(normal))<0.02:continuous_ramp=true
+            if continuous_ramp:continue
         var delta:Vector3=Vector3.ZERO
         if i>0 and absf((authored[i]-authored[i-1]).dot(up))>0.03:delta=authored[i]-authored[i-1]
         elif i<route.size()-1 and absf((authored[i+1]-authored[i]).dot(up))>0.03:delta=authored[i+1]-authored[i]
@@ -93,6 +108,33 @@ func _prepare_segment()->void:
     step_start=_plant(Vector3(a.position),end_basis).origin
     step_end=_plant(Vector3(b.position),landing_basis).origin
     if follow_support:step_start+=up*maxf(0.0,(actor.global_position-step_start).dot(up))
+    swing_height=maxf(step_start.dot(up),step_end.dot(up))+(0.1 if role=="gladius" else 0.01)
+    if follow_support:
+        # On a slope break, a trailing rigid foot still overlaps the higher
+        # surface while the body rotates toward the lower landing. Measure the
+        # whole sole sweep before choosing the lift, rather than ignoring hits.
+        var needed=swing_height
+        var obstruction={}
+        var count=maxi(2,int(ceil(step_start.distance_to(step_end)/0.02)))
+        for i in range(count+1):
+            var f=float(i)/count
+            var basis=Basis(end_basis.get_rotation_quaternion().slerp(landing_basis.get_rotation_quaternion(),f))
+            var origin=step_start.lerp(step_end,f)
+            origin+=up*(swing_height-origin.dot(up))
+            for sole in soles:
+                var foot=origin+basis*sole
+                var hit=space.intersect_ray(PhysicsRayQueryParameters3D.create(foot+up*0.18,foot-up*0.5))
+                if not hit.is_empty():
+                    var required=swing_height+(Vector3(hit.position)-foot).dot(up)+0.015
+                    if required>needed:
+                        needed=required
+                        var collider:CollisionObject3D=hit.collider
+                        var owner=collider.shape_owner_get_owner(collider.shape_find_owner(hit.shape))
+                        obstruction={"surface":str(owner.get_meta("source",owner.get_path())),"fraction":f,"point":str(route_frame.affine_inverse()*Vector3(hit.position))}
+        var extra=needed-swing_height
+        if extra>0.18:
+            phase="blocked";blocked={"reason":"swing_requires_excessive_lift","point":index,"extra":extra,"obstruction":obstruction};return
+        swing_height=needed;max_swing_adjustment=maxf(max_swing_adjustment,extra)
     progress=0.0;phase="turn"
 func _free(transform:Transform3D)->bool:
     for piece in pieces:
@@ -103,7 +145,7 @@ func _free(transform:Transform3D)->bool:
             var hit=hits[0];var collider:CollisionObject3D=hit.collider
             var owner=collider.shape_owner_get_owner(collider.shape_find_owner(hit.shape))
             var obstacle_node=actor.get_parent().get_node_or_null(NodePath(str(owner.get_meta("source",""))))
-            blocked={"progress":progress,"route_position":route_frame.affine_inverse()*route[index],"obstacle_bounds":obstacle_node.transform*obstacle_node.get_aabb() if obstacle_node is MeshInstance3D else AABB(),"reason":"mesh_overlap","part":piece.name,"point":index,"phase":phase,"obstacle":str(owner.get_meta("source",owner.get_path()))};return false
+            blocked={"progress":progress,"route_position":route_frame.affine_inverse()*route[index],"step_start":str(route_frame.affine_inverse()*step_start),"step_end":str(route_frame.affine_inverse()*step_end),"lowest":lowest,"obstacle_bounds":obstacle_node.transform*obstacle_node.get_aabb() if obstacle_node is MeshInstance3D else AABB(),"reason":"mesh_overlap","part":piece.name,"point":index,"phase":phase,"obstacle":str(owner.get_meta("source",owner.get_path()))};return false
     return true
 func _move_checked(target:Transform3D)->bool:
     var old:=actor.global_transform
@@ -124,7 +166,7 @@ func tick(dt:float)->void:
         if progress>=1:phase="hop";progress=0.0
     else:
         progress=minf(1,progress+dt/0.48)
-        var height:float=maxf(step_start.dot(up),step_end.dot(up))+(0.1 if role=="gladius" else 0.01)
+        var height:float=swing_height
         var p:Vector3
         if progress<0.25:
             p=step_start+up*(height-step_start.dot(up))*sin(PI*0.5*progress/0.25)

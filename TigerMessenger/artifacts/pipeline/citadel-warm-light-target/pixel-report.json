@@ -1,0 +1,26 @@
+{
+  "before": {
+    "gate": {
+      "pixels": 116870,
+      "nearWhite": 27,
+      "ratio": 0.00023102592624283392
+    },
+    "plaza": {
+      "pixels": 78540,
+      "nearWhite": 1406,
+      "ratio": 0.017901706137000255
+    }
+  },
+  "after": {
+    "gate": {
+      "pixels": 116870,
+      "nearWhite": 0,
+      "ratio": 0.0
+    },
+    "plaza": {
+      "pixels": 78540,
+      "nearWhite": 0,
+      "ratio": 0.0
+    }
+  }
+}

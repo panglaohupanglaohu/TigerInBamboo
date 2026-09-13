@@ -1,6 +1,14 @@
 extends RefCounted
 var report:Dictionary={}
 var target:MeshInstance3D
+static func source_path()->String:
+    if "--harbor-water=2" in OS.get_cmdline_user_args():return "res://data/citadel-front-seabed-r02.json"
+    if not OS.get_cmdline_user_args().has("--citadel-layout=legacy"):
+        var historical=false
+        for arg in OS.get_cmdline_user_args():
+            if arg.begins_with("--terrain-revision="):historical=true
+        if not historical:return "res://data/citadel-front-seabed-r02.json"
+    return preload("res://scripts/citadel_surface_variant.gd").data_path("res://data/citadel-seabed.json")
 func bind(model:Node3D)->bool:
     var matches:Array[MeshInstance3D]=[]
     for mesh in model.find_children("*","MeshInstance3D",true,false):
@@ -9,7 +17,7 @@ func bind(model:Node3D)->bool:
             matches.append(mesh)
     if matches.size()!=1:
         report={"passed":false,"matched":matches.size()};push_error("Citadel seabed original planet not unique");return false
-    var data=JSON.parse_string(FileAccess.get_file_as_string(preload("res://scripts/citadel_surface_variant.gd").data_path("res://data/citadel-seabed.json")))
+    var data=JSON.parse_string(FileAccess.get_file_as_string(source_path()))
     if not data is Dictionary:return false
     var arrays:Array=[];arrays.resize(Mesh.ARRAY_MAX)
     var vertices=PackedVector3Array();var normals=PackedVector3Array();var colors=PackedColorArray()

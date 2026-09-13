@@ -1,7 +1,20 @@
+import {alignReleasedLighting} from "../world/citadel/releasedLighting.js";
+import {buildTerracePlanting} from "../world/citadel/terracePlanting.js";
+import {groundCitadelShrubs} from "../world/citadel/shrubGrounding.js";
+import {compactNewCityTerrain} from '../world/citadel/compactNewCity.js';
+import {buildNewCityRockShoulder} from '../world/citadel/rockShoulder.js';
+import {buildUpperRockTerraces} from '../world/citadel/upperRockTerraces.js';
+import {loadMasterTerrainCandidate} from '../world/citadel/masterTerrainCandidate.js';
+import {applyCitadelHarborSeabed} from '../world/citadel/harborSeabedCandidate.js';
+import {applyOldCityParcelCandidate} from '../world/citadel/oldCityParcelCandidate.js';
+import {buildCitadelTownAssembly} from '../world/odysseyCitadel.js';
+import {buildIntegratedFrontGate} from '../world/citadel/integratedFrontGate.js';
+import {buildRetainingPlanting} from '../world/citadel/retainingPlanting.js';
 import {buildPlazaRetainingWall} from '../world/citadel/plazaRetainingWall.js';
 import {adaptCitadelMountainForest} from '../world/citadel/mountainForest.js';
 import {buildOldShoreArcades} from '../world/citadel/oldShoreArcades.js';
 import {buildOldCitySupport} from '../world/citadel/oldCitySupport.js';
+import {applyOldCityCoastalSlope} from '../world/citadel/oldCityCoastalSlope.js';
 import {buildCitadelShorePlanting} from '../world/citadel/shorePlanting.js';
 import {applyCitadelTierLighting} from '../world/citadel/tierLighting.js';
 import {buildOldShoreApproach} from '../world/citadel/oldShoreApproach.js';
@@ -188,15 +201,28 @@ export const messengerIslandScene = {
       buildOldShoreApproach(citadelPack.odysseyCitadel,harbor,R);
       applyCitadelTierLighting(citadelPack.odysseyCitadel);
       sealCitadelCoastalCliffs(citadelPack.odysseyCitadel,R);
+      applyOldCityCoastalSlope(citadelPack.odysseyCitadel);
+      compactNewCityTerrain(citadelPack.odysseyCitadel);
       conformNewCityBackdropToOcean(coastalCity,R);
       buildTargetHillside(citadelPack.odysseyCitadel,coastalCity);
-      groundCitadelCanopies(citadelPack.odysseyCitadel,R);
       conformWestMassifToOcean(citadelPack.odysseyCitadel,R);
-      adaptCitadelMountainForest(citadelPack.odysseyCitadel,R);
       buildOldCitySupport(citadelPack.odysseyCitadel);
       buildOldShoreArcades(citadelPack.odysseyCitadel);
       buildCitadelShorePlanting(citadelPack.odysseyCitadel,R);
       buildPlazaRetainingWall(citadelPack.odysseyCitadel,R);
+      buildNewCityRockShoulder(citadelPack.odysseyCitadel);
+      buildUpperRockTerraces(citadelPack.odysseyCitadel);
+      buildRetainingPlanting(citadelPack.odysseyCitadel,R);
+      buildIntegratedFrontGate(citadelPack.odysseyCitadel,R);
+      loadMasterTerrainCandidate(citadelPack.odysseyCitadel);
+      applyCitadelHarborSeabed(scene,citadelPack.odysseyCitadel,R);
+      applyOldCityParcelCandidate(citadelPack.odysseyCitadel,buildCitadelTownAssembly);
+      alignReleasedLighting(citadelPack.odysseyCitadel,R);
+      buildTerracePlanting(citadelPack.odysseyCitadel,R);
+      groundCitadelShrubs(citadelPack.odysseyCitadel,R);
+      // Plant against final released terrain and final harbor reservations.
+      groundCitadelCanopies(citadelPack.odysseyCitadel,R);
+      adaptCitadelMountainForest(citadelPack.odysseyCitadel,R);
     }
 
     if (worldOcean?.userData.officialOcean) conformCampShallowsToOcean(camp.group, worldOcean, R);

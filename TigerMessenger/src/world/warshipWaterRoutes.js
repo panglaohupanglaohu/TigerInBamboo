@@ -60,8 +60,10 @@ export function createWarshipWaterRoutes(scene, radius) {
   }
   function dock(boat,target,used=[],options={}) {
     const meshCheck=createWarshipClearance(boat,obstacles),scale=boat.scale.x;
-    // warship-battle-v6.assembly.json deployed anchor; stowed anchor is different.
-    const hx=1.94,hy=.664,hz=.48,length=1.35;
+    // Read the CURRENT Blender assembly: the V6 deployed hinge moved outward.
+    const contract=boat.userData.warshipV6?.boardingContract;
+    const [hx,hy,hz]=contract?.rootPoint??[1.94,.664,.48];
+    const length=contract?.length??1.35;
     const targetDir=target.clone().normalize(),east=Y.clone().cross(targetDir).normalize(),north=targetDir.clone().cross(east).normalize();
     const frame=new THREE.Group();let attempts=0,lastFailure=null,firstHullPose=null,firstEntryPose=null;const rejected={angle:0,center:0,support:0,hull:0,entry:0,approach:0},hullObstacles={},entryObstacles={};
     function validPose(direction,heading){const point=position(direction);if(!point)return null;orientWarship(frame,direction,heading);const result=meshCheck.clear(point,frame.quaternion,boat.scale);return result.clear?{position:point,quaternion:frame.quaternion.clone()}:null;}

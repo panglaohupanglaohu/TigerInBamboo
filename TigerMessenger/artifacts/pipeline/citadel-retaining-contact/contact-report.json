@@ -1,0 +1,986 @@
+{
+  "support": {
+    "piers": [
+      {
+        "x": 46,
+        "top": 3.86,
+        "bottom": -3.7442038536071776,
+        "feet": [
+          -3.4442038536071777,
+          -2.2368394095508393,
+          -3.4442038536071777,
+          -3.1403234162276306
+        ],
+        "sea": -2.093085975819424
+      },
+      {
+        "x": 53.5,
+        "top": 3.86,
+        "bottom": 0.480220219427747,
+        "feet": [
+          2.579056317719534,
+          2.483981258192699,
+          0.780220219427747,
+          1.0026140449646732
+        ],
+        "sea": -2.737762593062574
+      },
+      {
+        "x": 63,
+        "top": 3.86,
+        "bottom": -0.7474515976541227,
+        "feet": [
+          2.0076543365740065,
+          2.0390244026003472,
+          -0.4474515976541227,
+          -0.44011682090589943
+        ],
+        "sea": -4.073522498426092
+      },
+      {
+        "x": 72,
+        "top": 3.86,
+        "bottom": -1.487186454396823,
+        "feet": [
+          2.069016481945795,
+          1.7589999099724594,
+          -0.4869803792152254,
+          -1.187186454396823
+        ],
+        "sea": -5.887094223263114
+      },
+      {
+        "x": 80,
+        "top": 3.86,
+        "bottom": -3.6394870576599656,
+        "feet": [
+          1.0798315783366945,
+          -0.08136297193252062,
+          -2.4700607023808345,
+          -3.339487057659966
+        ],
+        "sea": -7.962347872951122
+      }
+    ],
+    "bays": [
+      {
+        "x": 45.970000000000006,
+        "bottom": -3.6442038536072063,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 47.510000000000005,
+        "bottom": -3.644203853607178,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 49.050000000000004,
+        "bottom": 0.23738703111873177,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 50.59,
+        "bottom": 1.9791552885957515,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 52.13,
+        "bottom": 1.988521536602167,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 53.67,
+        "bottom": 1.9394959651197212,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 55.21,
+        "bottom": 1.846880894634171,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 56.75,
+        "bottom": 1.7245742565345836,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 58.290000000000006,
+        "bottom": 1.5464221268016047,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 59.830000000000005,
+        "bottom": 1.1956416977472089,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 61.370000000000005,
+        "bottom": 1.1403411218139639,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 62.910000000000004,
+        "bottom": 1.1403411218139639,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 64.45,
+        "bottom": 1.2206495635037016,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 65.99000000000001,
+        "bottom": 1.2206495635037016,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 67.53,
+        "bottom": 1.2492257975667826,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 69.07000000000001,
+        "bottom": 1.249225797566811,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 70.61,
+        "bottom": 1.019652042418204,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 72.15,
+        "bottom": 0.866838766372996,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 73.69,
+        "bottom": 0.49200720741497433,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 75.23,
+        "bottom": 0.3857540157352332,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 76.77000000000001,
+        "bottom": 0.2764763075006044,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 78.31,
+        "bottom": 0.140578020788854,
+        "top": 3.82,
+        "width": 1.54
+      },
+      {
+        "x": 79.85,
+        "bottom": -0.7881102971344489,
+        "top": 3.82,
+        "width": 1.54
+      }
+    ],
+    "samples": [
+      {
+        "x": 45.05,
+        "z": 87.85,
+        "y": -3.4442038536071777
+      },
+      {
+        "x": 46.95,
+        "z": 87.85,
+        "y": -2.2368394095508393
+      },
+      {
+        "x": 45.05,
+        "z": 90.1,
+        "y": -3.4442038536071777
+      },
+      {
+        "x": 46.95,
+        "z": 90.1,
+        "y": -3.1403234162276306
+      },
+      {
+        "x": 52.55,
+        "z": 87.85,
+        "y": 2.579056317719534
+      },
+      {
+        "x": 54.45,
+        "z": 87.85,
+        "y": 2.483981258192699
+      },
+      {
+        "x": 52.55,
+        "z": 90.1,
+        "y": 0.780220219427747
+      },
+      {
+        "x": 54.45,
+        "z": 90.1,
+        "y": 1.0026140449646732
+      },
+      {
+        "x": 62.05,
+        "z": 87.85,
+        "y": 2.0076543365740065
+      },
+      {
+        "x": 63.95,
+        "z": 87.85,
+        "y": 2.0390244026003472
+      },
+      {
+        "x": 62.05,
+        "z": 90.1,
+        "y": -0.4474515976541227
+      },
+      {
+        "x": 63.95,
+        "z": 90.1,
+        "y": -0.44011682090589943
+      },
+      {
+        "x": 71.05,
+        "z": 87.85,
+        "y": 2.069016481945795
+      },
+      {
+        "x": 72.95,
+        "z": 87.85,
+        "y": 1.7589999099724594
+      },
+      {
+        "x": 71.05,
+        "z": 90.1,
+        "y": -0.4869803792152254
+      },
+      {
+        "x": 72.95,
+        "z": 90.1,
+        "y": -1.187186454396823
+      },
+      {
+        "x": 79.05,
+        "z": 87.85,
+        "y": 1.0798315783366945
+      },
+      {
+        "x": 80.95,
+        "z": 87.85,
+        "y": -0.08136297193252062
+      },
+      {
+        "x": 79.05,
+        "z": 90.1,
+        "y": -2.4700607023808345
+      },
+      {
+        "x": 80.95,
+        "z": 90.1,
+        "y": -3.339487057659966
+      },
+      {
+        "x": 45.2,
+        "z": 88.5,
+        "y": -3.444203853607206
+      },
+      {
+        "x": 46.74000000000001,
+        "z": 88.5,
+        "y": -3.4442038536071777
+      },
+      {
+        "x": 46.74,
+        "z": 88.5,
+        "y": -3.4442038536071777
+      },
+      {
+        "x": 48.28000000000001,
+        "z": 88.5,
+        "y": 0.4373870311187318
+      },
+      {
+        "x": 48.28,
+        "z": 88.5,
+        "y": 0.4373870311187318
+      },
+      {
+        "x": 49.82000000000001,
+        "z": 88.5,
+        "y": 2.1791552885957515
+      },
+      {
+        "x": 49.82,
+        "z": 88.5,
+        "y": 2.1791552885957515
+      },
+      {
+        "x": 51.36000000000001,
+        "z": 88.5,
+        "y": 2.204642361441671
+      },
+      {
+        "x": 51.36,
+        "z": 88.5,
+        "y": 2.204642361441671
+      },
+      {
+        "x": 52.900000000000006,
+        "z": 88.5,
+        "y": 2.188521536602167
+      },
+      {
+        "x": 52.9,
+        "z": 88.5,
+        "y": 2.188521536602167
+      },
+      {
+        "x": 54.440000000000005,
+        "z": 88.5,
+        "y": 2.139495965119721
+      },
+      {
+        "x": 54.44,
+        "z": 88.5,
+        "y": 2.139495965119721
+      },
+      {
+        "x": 55.980000000000004,
+        "z": 88.5,
+        "y": 2.046880894634171
+      },
+      {
+        "x": 55.98,
+        "z": 88.5,
+        "y": 2.046880894634171
+      },
+      {
+        "x": 57.52,
+        "z": 88.5,
+        "y": 1.9245742565345836
+      },
+      {
+        "x": 57.52,
+        "z": 88.5,
+        "y": 1.9245742565345836
+      },
+      {
+        "x": 59.06000000000001,
+        "z": 88.5,
+        "y": 1.7464221268016047
+      },
+      {
+        "x": 59.06,
+        "z": 88.5,
+        "y": 1.7464221268016047
+      },
+      {
+        "x": 60.60000000000001,
+        "z": 88.5,
+        "y": 1.3956416977472088
+      },
+      {
+        "x": 60.6,
+        "z": 88.5,
+        "y": 1.3956416977472088
+      },
+      {
+        "x": 62.14000000000001,
+        "z": 88.5,
+        "y": 1.3403411218139638
+      },
+      {
+        "x": 62.14,
+        "z": 88.5,
+        "y": 1.3403411218139638
+      },
+      {
+        "x": 63.68000000000001,
+        "z": 88.5,
+        "y": 1.4358528202689342
+      },
+      {
+        "x": 63.68,
+        "z": 88.5,
+        "y": 1.4358528202689342
+      },
+      {
+        "x": 65.22,
+        "z": 88.5,
+        "y": 1.4206495635037015
+      },
+      {
+        "x": 65.22000000000001,
+        "z": 88.5,
+        "y": 1.4206495635037015
+      },
+      {
+        "x": 66.76,
+        "z": 88.5,
+        "y": 1.664585378853502
+      },
+      {
+        "x": 66.76,
+        "z": 88.5,
+        "y": 1.664585378853502
+      },
+      {
+        "x": 68.3,
+        "z": 88.5,
+        "y": 1.4492257975667826
+      },
+      {
+        "x": 68.30000000000001,
+        "z": 88.5,
+        "y": 1.449225797566811
+      },
+      {
+        "x": 69.84,
+        "z": 88.5,
+        "y": 1.6287688615354625
+      },
+      {
+        "x": 69.84,
+        "z": 88.5,
+        "y": 1.6287688615354625
+      },
+      {
+        "x": 71.38,
+        "z": 88.5,
+        "y": 1.219652042418204
+      },
+      {
+        "x": 71.38000000000001,
+        "z": 88.5,
+        "y": 1.219652042418204
+      },
+      {
+        "x": 72.92,
+        "z": 88.5,
+        "y": 1.066838766372996
+      },
+      {
+        "x": 72.92,
+        "z": 88.5,
+        "y": 1.066838766372996
+      },
+      {
+        "x": 74.46,
+        "z": 88.5,
+        "y": 0.6920072074149743
+      },
+      {
+        "x": 74.46000000000001,
+        "z": 88.5,
+        "y": 0.6920072074149743
+      },
+      {
+        "x": 76,
+        "z": 88.5,
+        "y": 0.5857540157352332
+      },
+      {
+        "x": 76.00000000000001,
+        "z": 88.5,
+        "y": 0.5857540157352332
+      },
+      {
+        "x": 77.54,
+        "z": 88.5,
+        "y": 0.47647630750060443
+      },
+      {
+        "x": 77.54,
+        "z": 88.5,
+        "y": 0.47647630750060443
+      },
+      {
+        "x": 79.08,
+        "z": 88.5,
+        "y": 0.340578020788854
+      },
+      {
+        "x": 79.08,
+        "z": 88.5,
+        "y": 0.340578020788854
+      },
+      {
+        "x": 80.61999999999999,
+        "z": 88.5,
+        "y": -0.588110297134449
+      }
+    ],
+    "top": 3.86,
+    "source": "final Web cliff raycast",
+    "insidePlaza": false
+  },
+  "source": {
+    "visible": true,
+    "parents": "citadel-continuous-mountain-terrain-system",
+    "material": ""
+  },
+  "meshes": [
+    "citadel-oskar-grid-mountain-surface",
+    "citadel-coastal-cliff-seal",
+    "backlit-highlight-citadel-oskar-grid-mountain-surface",
+    "highland-mountain-vegetation-0-canopy-0",
+    "highland-mountain-vegetation-0-canopy-1",
+    "highland-mountain-vegetation-0-canopy-2",
+    "highland-mountain-vegetation-1-canopy-0",
+    "highland-mountain-vegetation-1-canopy-1",
+    "highland-mountain-vegetation-1-canopy-2",
+    "highland-mountain-vegetation-2-canopy-0",
+    "highland-mountain-vegetation-2-canopy-1",
+    "highland-mountain-vegetation-2-canopy-2",
+    "highland-mountain-vegetation-3-canopy-0",
+    "highland-mountain-vegetation-3-canopy-1",
+    "highland-mountain-vegetation-3-canopy-2",
+    "highland-mountain-vegetation-4-canopy-0",
+    "highland-mountain-vegetation-4-canopy-1",
+    "highland-mountain-vegetation-4-canopy-2",
+    "highland-mountain-vegetation-5-canopy-0",
+    "highland-mountain-vegetation-5-canopy-1",
+    "highland-mountain-vegetation-5-canopy-2",
+    "highland-mountain-vegetation-6-canopy-0",
+    "highland-mountain-vegetation-6-canopy-1",
+    "highland-mountain-vegetation-6-canopy-2",
+    "highland-mountain-vegetation-7-canopy-0",
+    "highland-mountain-vegetation-7-canopy-1",
+    "highland-mountain-vegetation-7-canopy-2",
+    "highland-mountain-vegetation-8-canopy-0",
+    "highland-mountain-vegetation-8-canopy-1",
+    "highland-mountain-vegetation-8-canopy-2",
+    "highland-mountain-vegetation-9-canopy-0",
+    "highland-mountain-vegetation-9-canopy-1",
+    "highland-mountain-vegetation-9-canopy-2",
+    "retaining-cliff-planting",
+    "retaining-cliff-planting",
+    "retaining-cliff-planting",
+    "retaining-cliff-planting",
+    "retaining-cliff-planting",
+    "retaining-cliff-planting",
+    "retaining-cliff-planting",
+    "old-shore-walkable",
+    "old-shore-defenses",
+    "old-shore-blender-rock-support",
+    "old-shore-arcade-founded-terrace",
+    "old-shore-arcade-side-landing",
+    "old-shore-arcade-founded-terrace",
+    "old-shore-arcade-side-landing",
+    "mountain-cypress-geometry",
+    "mountain-cypress-geometry",
+    "mountain-cypress-geometry",
+    "mountain-cypress-geometry",
+    "shore-cypress-geometry",
+    "shore-cypress-geometry",
+    "shore-cypress-geometry",
+    "shore-cypress-geometry",
+    "shore-cypress-geometry"
+  ],
+  "points": [
+    {
+      "x": 46,
+      "z": 87.85,
+      "pierBottom": -3.7442038536071776,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": -3.444203767776486,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -3.4442038536071777,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 46,
+      "z": 88.5,
+      "pierBottom": -3.7442038536071776,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": -3.4442037677765143,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -3.4442038536071777,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 46,
+      "z": 89,
+      "pierBottom": -3.7442038536071776,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": -3.444203767776486,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -3.4442038536071777,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 46,
+      "z": 90.1,
+      "pierBottom": -3.7442038536071776,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": -3.334576807718406,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -3.4442038536071777,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 53.5,
+      "z": 87.85,
+      "pierBottom": 0.480220219427747,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 2.7661370245106127,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 2.532710759012815,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 53.5,
+      "z": 88.5,
+      "pierBottom": 0.480220219427747,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 2.4766855528403937,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 2.182240695755638,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 53.5,
+      "z": 89,
+      "pierBottom": 0.480220219427747,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 2.1987413238147724,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 1.7535368813646244,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 53.5,
+      "z": 90.1,
+      "pierBottom": 0.480220219427747,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 1.5168697939422486,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 0.7331725887047185,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 63,
+      "z": 87.85,
+      "pierBottom": -0.7474515976541227,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 2.591105942463031,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 2.023936327526883,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 63,
+      "z": 88.5,
+      "pierBottom": -0.7474515976541227,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 2.211368745485572,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 1.3418636577440566,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 63,
+      "z": 89,
+      "pierBottom": -0.7474515976541227,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 1.8166566765671917,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 0.7100174978151017,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 63,
+      "z": 90.1,
+      "pierBottom": -0.7474515976541227,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 0.7117243842785399,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -0.5000424489620912,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 72,
+      "z": 87.85,
+      "pierBottom": -1.487186454396823,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 2.3258970636800314,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 1.866166880682897,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 72,
+      "z": 88.5,
+      "pierBottom": -1.487186454396823,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 1.84128779720794,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 1.1706215169557481,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 72,
+      "z": 89,
+      "pierBottom": -1.487186454396823,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 1.4417122610112756,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 0.6327583172469531,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 72,
+      "z": 90.1,
+      "pierBottom": -1.487186454396823,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 0.476985378320677,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -0.7964770084691111,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 80,
+      "z": 87.85,
+      "pierBottom": -3.6394870576599656,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 1.9046131130396589,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": 0.5283960207781035,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 80,
+      "z": 88.5,
+      "pierBottom": -3.6394870576599656,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 1.3262281481251819,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -0.19344378232042914,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 80,
+      "z": 89,
+      "pierBottom": -3.6394870576599656,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": 0.8813166366525138,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -0.7487051693194076,
+          "material": "",
+          "side": 2
+        }
+      ]
+    },
+    {
+      "x": 80,
+      "z": 90.1,
+      "pierBottom": -3.6394870576599656,
+      "hits": [
+        {
+          "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+          "y": -0.5411394407352361,
+          "material": "",
+          "side": 1
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "y": -2.5588141558372968,
+          "material": "",
+          "side": 2
+        }
+      ]
+    }
+  ]
+}

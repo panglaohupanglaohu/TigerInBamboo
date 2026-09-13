@@ -27,15 +27,15 @@ func bind(old_city:Node3D,new_city:Node3D)->void:
                 if str(mesh.name).begins_with("town-window"):
                     rows.append({"mesh":mesh,"surface":surface,"day":source,"night":warm,"city":"new" if city==new_city else "old"})
                 elif source is StandardMaterial3D and source.emission_enabled and source.emission.v>0.001 and (str(mesh.name).begins_with("target-castle-exterior") or source.resource_name.begins_with("claude-house-win_")):
-                    # Keep the authored pink/amber window hue rather than replacing
-                    # every newly imported window with the legacy shared yellow.
+                    # Preserve the approved amber variants from the current Web material.
+                    # Day albedo and night emission remain separate.
                     var day=source.duplicate() as StandardMaterial3D
                     var night=source.duplicate() as StandardMaterial3D
                     var hue:Color=source.emission
                     hue=hue/hue.v
                     day.emission=hue;night.emission=hue
                     day.emission_energy_multiplier=0.04
-                    night.emission_energy_multiplier=1.55
+                    night.emission_energy_multiplier=1.1 if str(mesh.name).begins_with("target-castle-exterior") else 1.0
                     mesh.set_surface_override_material(surface,day)
                     rows.append({"mesh":mesh,"surface":surface,"day":day,"night":night,"city":"new" if city==new_city else "old"})
     var hosts=new_city.find_children("highland-west-city","Node3D",true,false)
@@ -90,6 +90,46 @@ var environment_rows:Array=[]
 var sun_rows:Array=[]
 var night_environment:Dictionary={}
 var night_direction:=Vector3.ZERO
+func bind_released(patch:Node3D,castle:Node3D)->void:
+    var profile=JSON.parse_string(FileAccess.get_file_as_string("res://data/citadel-released-lighting.json"))
+    if profile is Dictionary:
+        for row in profile.lamps:
+            var holder=castle.find_child(str(row.name),true,false)
+            if holder==null:continue
+            holder.visible=row.visible
+            holder.global_position=castle.to_global(Vector3(row.castlePosition[0],row.castlePosition[1],row.castlePosition[2]))
+            var shell=holder.find_child("lamp-volume-shell",true,false)
+            if shell!=null:shell.visible=false
+        for row in profile.points:
+            var lights=old_points if row.side=="old" else points
+            if int(row.index)>=lights.size():continue
+            var light=lights[int(row.index)]
+            light.global_position=castle.to_global(Vector3(row.castlePosition[0],row.castlePosition[1],row.castlePosition[2]))
+            light.omni_range=row.radius
+            light.light_color=Color.hex((int(row.color)<<8)|255)
+            light.shadow_enabled=bool(row.get("shadow",false))
+            light.set_meta("night_energy",row.godotEnergy)
+    for mesh in patch.find_children("*","MeshInstance3D",true,false):
+        if mesh.mesh==null:continue
+        var parent=mesh
+        var side="new"
+        while parent!=null and parent!=patch:
+            if str(parent.name)=="old-city-staggered-parcels":side="old"
+            parent=parent.get_parent()
+        for surface in range(mesh.mesh.get_surface_count()):
+            var source=mesh.get_active_material(surface) as StandardMaterial3D
+            if source==null:continue
+            var window_surface=str(mesh.name).begins_with("town-window") or source.resource_name.begins_with("claude-house-win_") or str(mesh.name).begins_with("target-castle-exterior")
+            if not window_surface or not (str(mesh.name).begins_with("town-window") or (source.emission_enabled and source.emission.v>0.001)):continue
+            var day=source.duplicate() as StandardMaterial3D
+            var night=source.duplicate() as StandardMaterial3D
+            var hue=source.emission if source.emission.v>0.001 else Color("ffc979" if side=="new" else "ff9a55")
+            hue=hue/maxf(hue.v,0.001)
+            day.emission_enabled=true;day.emission=hue;day.emission_energy_multiplier=0.04
+            night.emission_enabled=true;night.emission=hue;night.emission_energy_multiplier=1.5 if side=="new" else 1.15
+            rows.append({"mesh":mesh,"surface":surface,"day":day,"night":night,"city":side})
+            mesh.set_surface_override_material(surface,night if enabled else day)
+    set_enabled(enabled)
 func bind_environment(world:Node)->void:
     if not environment_rows.is_empty():return
     var profile=JSON.parse_string(FileAccess.get_file_as_string("res://data/citadel-night-environment.json"))

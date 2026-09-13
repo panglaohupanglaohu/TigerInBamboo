@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {mergeStaticGroup} from '../geometryMerge.js';
 import {nightWeightAt} from '../../render/lighting/highlandLightVolumes.js';
+let sharedCanvasMap;
 
 // Reference-derived harbor kit. Coordinates belong to castleContainer, not world.
 // The shops sit on the existing plaza/harbor shelf; nothing enters x=42 stairs,
@@ -15,7 +16,7 @@ export function buildHarborArchitecture(waterHeight, options = {}) {
   const cloth = material('harbor-blue-canvas', 0x3d75b5);
   cloth.side = THREE.DoubleSide;
   if(typeof document!=='undefined'){
-    const canvasMap=new THREE.TextureLoader().load(new URL('../../../assets/textures/citadel/blue-woven-canvas-v1.png',import.meta.url).href);
+    const canvasMap=sharedCanvasMap??=new THREE.TextureLoader().load(new URL('../../../assets/textures/citadel/blue-woven-canvas-v1.png',import.meta.url).href);
     canvasMap.colorSpace=THREE.SRGBColorSpace;canvasMap.wrapS=canvasMap.wrapT=THREE.RepeatWrapping;
     cloth.map=canvasMap;cloth.color.setHex(0xffffff);
   }
@@ -89,7 +90,7 @@ export function buildHarborArchitecture(waterHeight, options = {}) {
     for(const sign of [-1,1])for(const dy of [.12,.73])box('harbor-crate-batten',x,y+s*dy,z+sign*s*.49,s,.085*s,.075*s,rope);
     bar('harbor-crate-brace',[x-s*.39,y+s*.15,z+s*.53],[x+s*.39,y+s*.70,z+s*.53],s*.055,wood);
   }
-  function awning(x,y,z,w,reach) {
+  function awning(x,y,z,w,reach,ground=()=>4) {
     const pts=[],ids=[],uvs=[],segments=12;
     for(let i=0;i<=segments;i++){
       const t=i/segments;
@@ -99,13 +100,13 @@ export function buildHarborArchitecture(waterHeight, options = {}) {
     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));g.setIndex(ids);g.computeVertexNormals();
     mesh('harbor-sagging-canvas',g,cloth,0,0,0);
     for(const side of [-1,1]){
-      bar('harbor-canopy-post',[x+side*w/2,4,z+reach],[x+side*w/2,y-.36,z+reach],.055);
+      bar('harbor-canopy-post',[x+side*w/2,ground(x+side*w/2,z+reach),z+reach],[x+side*w/2,y-.36,z+reach],.055);
       bar('harbor-canopy-side',[x+side*w/2,y,z],[x+side*w/2,y-.45,z+reach],.045);
     }
     bar('harbor-canopy-front',[x-w/2,y-.45,z+reach],[x+w/2,y-.45,z+reach],.06);
     for(let i=0;i<7;i++)box('harbor-canvas-valance',x+(i-3)*w/7,y-.56,z+reach,w/7-.025,.23,.035,cloth);
   }
-  function shop({id,x,z,w,d,h,bays,facade}) {
+  function shop({id,x,z,w,d,h,bays,facade,canopyReach=1.4,counter=false}) {
     const y=4, front=z+d/2;
     box('harbor-shop-floor',x,3.97,z,w,.06,d,trim);
     box('harbor-shop-rear-wall',x,y+h/2,z-d/2,w,h,.28);
@@ -127,7 +128,12 @@ export function buildHarborArchitecture(waterHeight, options = {}) {
     }
     box('harbor-shop-cornice',x,y+h+.02,z,w+.24,.20,d+.24,trim);
     hipRoof(x,y+h+.14,z,w+.42,d+.42,.93);
-    awning(x,y+2.82,front+.20,w-.35,1.4);
+    awning(x,y+2.82,front+.20,w-.35,canopyReach);
+    if(counter){
+      box('harbor-market-counter',x,y+.85,front+.80,w*.64,.12,.65,wood);
+      for(const side of [-1,1])box('harbor-counter-leg',x+side*w*.27,y+.40,front+.80,.12,.80,.48,dark);
+      for(const side of [-1,1])crate(x+side*w*.18,y+.91,front+.80,.32);
+    }
     lantern(x-w/2+.24,y+1.82,front+.32);
     lantern(x+w/2-.24,y+1.82,front+.32);
     crate(x-w*.24,y,z-.7,.70);
@@ -135,6 +141,11 @@ export function buildHarborArchitecture(waterHeight, options = {}) {
     root.userData.shops.push({id,position:[x,y,z],footprint:[w,d],front,roofTop:y+h+1.07});
   }
   root.userData.shops=[];
+  for(const stall of options.stalls||[]){
+    const {x,y,z,w,reach}=stall;
+    awning(x,y+2.82,z,w,reach,options.ground||(()=>y));
+    root.userData.shops.push({id:stall.id,position:[x,y,z],footprint:[w,reach],type:'open-canvas-stall'});
+  }
   if(options.shops)for(const spec of options.shops)shop(spec);
   else {shop({id:'quayside-arcade',x:48.8,z:68.1,w:5.7,d:6.2,h:3.35,bays:3});
   shop({id:'east-harbor-provisioner',x:69.8,z:62.9,w:3.0,d:3.7,h:3.7,bays:1});}

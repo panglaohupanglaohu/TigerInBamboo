@@ -1,0 +1,30 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {mkdir,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const out=new URL('../../artifacts/pipeline/citadel-side-court-audit/',import.meta.url);await mkdir(out,{recursive:true});
+const b=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+try{const p=await b.newPage({viewport:{width:1440,height:1000}}),errors=[];p.on('pageerror',e=>errors.push(String(e)));
+await p.goto('http://localhost:8931/TigerMessenger/?autostart=1',{timeout:180000});await p.waitForFunction(()=>window.__tm?.scene?.getObjectByName('citadel-front-harbor'),null,{timeout:180000});
+const report=await p.evaluate(async()=>{const t=window.__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer'),city=c.getObjectByName('highland-west-city'),ring=city.getObjectByName('west-city-plaza-paving-ring'),deck=city.getObjectByName('west-city-plaza-deck'),front=city.getObjectByName('citadel-front-harbor');t.P.daySpeed=0;t.P.timeOfDay=.85;t.cameraRig.update=()=>{};await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));c.updateWorldMatrix(true,true);
+const result={rings:ring.userData.rings,radius:ring.userData.outerRadius,statue:city.worldToLocal(c.localToWorld(new T.Vector3(...city.userData.statueAnchor))).toArray(),deck:{center:deck.position.toArray(),size:deck.geometry.parameters},shops:front.userData.landingShops,plazaShops:city.getObjectByName('citadel-harbor-architecture').userData.shops,horseError:t.scene.getObjectByName('citadel-trojan-horse').getWorldPosition(new T.Vector3()).distanceTo(c.localToWorld(new T.Vector3(...city.userData.horseReservation)))};
+result.ringToHorseStair=66.6-result.statue[0]-result.radius;
+const surfaces=[];city.traverse(o=>{if(o.isMesh&&o.userData.westCityWalkable)surfaces.push(o);});const ray=new T.Raycaster(),up=new T.Vector3(0,1,0).transformDirection(city.matrixWorld);ray.layers.enableAll();let samples=0,miss=[];
+for(let x=51.6;x<=66.4;x+=.4)for(let z=68.6;z<=83.4;z+=.4){ray.set(city.localToWorld(new T.Vector3(x,4.25,z)),up.clone().negate());ray.far=.5;const hit=ray.intersectObjects(surfaces,false)[0];samples++;if(!hit)miss.push([x,z]);}result.floor={samples,miss};
+const meta=front.userData.frontHarborApproach;result.approach=meta;const walk=front.getObjectsByProperty('name','front-harbor-walkable');let corridorSamples=0;const corridorMiss=[];
+for(let f=0;f<meta.flights;f++)for(let i=0;i<meta.stepsPerFlight;i++)for(const lateral of [-1.5,0,1.5]){
+ const fl=meta.flightLayout[f],dx=fl.end[0]-fl.start[0],dz=fl.end[1]-fl.start[1],len=Math.hypot(dx,dz),x=fl.start[0]+dx*(i+.5)/meta.stepsPerFlight-dz/len*lateral,y=fl.low+(i+1)*meta.riser,z=fl.start[1]+dz*(i+.5)/meta.stepsPerFlight+dx/len*lateral;
+ ray.set(front.localToWorld(new T.Vector3(x,y+.2,z)),up.clone().negate());ray.far=.4;corridorSamples++;if(!ray.intersectObjects(walk,false).length)corridorMiss.push([x,y,z]);
+}result.corridor={samples:corridorSamples,miss:corridorMiss};
+const obstacles=[];city.traverse(o=>{if(o.isMesh&&!o.userData.isOutline&&!o.material?.transparent)obstacles.push(o);});
+const courtRoute=meta.turnCourt.entry.map(p=>[p[0],p[2]]),blocked=[],unsupported=[];let courtSamples=0;
+for(const direction of [1,-1]){const pts=direction===1?courtRoute:[...courtRoute].reverse();
+for(let j=1;j<pts.length;j++)for(let k=0;k<=30;k++)for(const lateral of [-.35,0,.35]){
+ const a=new T.Vector3(pts[j-1][0],meta.turnCourt.center[1],pts[j-1][1]),end=new T.Vector3(pts[j][0],a.y,pts[j][1]),dir=end.clone().sub(a).normalize(),offset=new T.Vector3(-dir.z,0,dir.x).multiplyScalar(lateral);end.add(offset);const pt=a.add(offset).lerp(end,k/30),foot=front.localToWorld(pt.clone());
+ ray.set(foot.clone().addScaledVector(up,.18),up.clone().negate());ray.far=.4;if(!ray.intersectObjects(walk,false).length)unsupported.push(pt.toArray());
+ for(const h of [.4,1.4]){const d=front.localToWorld(end.clone()).sub(foot),len=Math.min(.15,d.length());if(len>.001){ray.set(foot.clone().addScaledVector(up,h),d.normalize());ray.far=len;const hit=ray.intersectObjects(obstacles,false)[0];if(hit)blocked.push({point:pt.toArray(),name:hit.object.name});}}courtSamples++;
+}}
+result.sideCourt={samples:courtSamples,blocked,unsupported};
+return result;});assert.equal(report.approach.stairWidth,4);assert.equal(report.corridor.miss.length,0);assert.equal(report.rings,6);assert.ok(report.ringToHorseStair>=.19);assert.equal(report.plazaShops.length,0);assert.ok(report.shops.every(s=>s.y<4));assert.equal(report.floor.miss.length,0);assert.ok(report.horseError<.001);assert.equal(errors.length,0);
+for(const [name,eye,look,fov]of [['approach',[-24,29,124],[-12,2,81],43],['plaza',[10,25,116],[7,5,73],45],['top',[6,65,78],[6,4,78],45]]){const data=await p.evaluate(({eye,look,fov})=>{const t=window.__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer');t.camera.position.copy(c.localToWorld(new T.Vector3(...eye)));t.camera.up.set(0,1,0).transformDirection(c.matrixWorld);t.camera.lookAt(c.localToWorld(new T.Vector3(...look)));t.camera.fov=fov;t.camera.updateProjectionMatrix();t.renderer.render(t.scene,t.camera);return t.renderer.domElement.toDataURL('image/png');},{eye,look,fov});await writeFile(new URL(name+'.png',out),Buffer.from(data.split(',')[1],'base64'));}
+report.errors=errors;report.passed=report.sideCourt.blocked.length===0&&report.sideCourt.unsupported.length===0;await writeFile(new URL('report.json',out),JSON.stringify(report,null,2));console.log(JSON.stringify(report));assert.ok(report.passed,'Side court route must be supported and unobstructed');
+}finally{await b.close();}

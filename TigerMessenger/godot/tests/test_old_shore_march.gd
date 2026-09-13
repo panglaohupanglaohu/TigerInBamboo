@@ -3,6 +3,8 @@ func _initialize()->void:call_deferred("run")
 func run()->void:
     var w=load("res://scenes/citadel_world.tscn").instantiate();root.add_child(w)
     await process_frame
+    var candidate=OS.get_cmdline_user_args().has("--placement-r04")
+    if candidate:preload("res://tests/master_terrain_fixture.gd").mount(w)
     await w._start_traversal("gladius",true,false,true)
     w.set_physics_process(false)
     var walker=w.traversal
@@ -14,5 +16,7 @@ func run()->void:
     result["passed"]=walker.phase=="arrived" and w.traversal_is_old_shore
     result["production_action"]="短剑兵 · 旧港沿坡入城"
     result["scope"]="Actual old shore candidate in citadel world, original equipped gladius actor and production collision guard. Not boarding, crowd combat or final gait."
-    FileAccess.open("res://../artifacts/pipeline/citadel-old-harbor-grade/godot-shore-march.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
+    var output="res://../artifacts/pipeline/citadel-master-terrain/placement-r05-old-shore-godot.json" if candidate else "res://../artifacts/pipeline/citadel-old-harbor-grade/godot-shore-march.json"
+    result["layout_candidate"]=candidate
+    FileAccess.open(output,FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print(JSON.stringify(result));w.free();quit(0 if result.passed else 1)

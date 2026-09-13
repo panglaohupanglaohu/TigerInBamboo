@@ -1,0 +1,179 @@
+{
+  "rings": 6,
+  "radius": 7.4,
+  "statue": [
+    59,
+    4,
+    76.00000000000003
+  ],
+  "deck": {
+    "center": [
+      62.925,
+      3.9,
+      74
+    ],
+    "size": {
+      "width": 36.15,
+      "height": 0.2,
+      "depth": 29,
+      "widthSegments": 1,
+      "heightSegments": 1,
+      "depthSegments": 1
+    }
+  },
+  "shops": [
+    {
+      "id": "quayside-arcade",
+      "x": 24,
+      "z": 91.5,
+      "y": -1.6442037347839142,
+      "w": 5.7,
+      "d": 3.7,
+      "h": 3.35,
+      "bays": 3,
+      "platformX": 25,
+      "platformW": 8,
+      "platformD": 6.2,
+      "yaw": 1.5707963267948966
+    },
+    {
+      "id": "east-harbor-provisioner",
+      "x": 35,
+      "z": 83.8,
+      "y": 1.177898132608043,
+      "w": 4.8,
+      "d": 3,
+      "h": 3.7,
+      "bays": 2,
+      "platformX": 35,
+      "platformW": 8,
+      "platformD": 7,
+      "yaw": 0
+    }
+  ],
+  "plazaShops": [],
+  "horseError": 0,
+  "ringToHorseStair": 0.19999999999999396,
+  "floor": {
+    "samples": 1406,
+    "miss": []
+  },
+  "approach": {
+    "dockY": -1.6442037347839142,
+    "flights": 2,
+    "flightLayout": [
+      {
+        "start": [
+          32,
+          90
+        ],
+        "end": [
+          39,
+          90
+        ],
+        "low": -1.6442037347839142,
+        "high": 1.177898132608043,
+        "steps": 16,
+        "width": 4,
+        "tread": 0.4375
+      },
+      {
+        "start": [
+          41.5,
+          85.5
+        ],
+        "end": [
+          41.5,
+          80
+        ],
+        "low": 1.177898132608043,
+        "high": 4,
+        "steps": 16,
+        "width": 4,
+        "tread": 0.34375
+      }
+    ],
+    "stepsPerFlight": 16,
+    "riser": 0.17638136671199733,
+    "stairWidth": 4,
+    "turnWidth": 5.4,
+    "turnCourt": {
+      "center": [
+        35,
+        1.177898132608043,
+        83.8
+      ],
+      "width": 8,
+      "depth": 7,
+      "entry": [
+        [
+          41.5,
+          1.177898132608043,
+          86.2
+        ],
+        [
+          38,
+          1.177898132608043,
+          86.2
+        ],
+        [
+          35,
+          1.177898132608043,
+          86.2
+        ]
+      ],
+      "entryWidth": 2
+    },
+    "cuts": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "changed": 29
+      },
+      {
+        "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+        "changed": 23
+      }
+    ],
+    "status": "walking approach; fleet still uses rear harbor"
+  },
+  "corridor": {
+    "samples": 96,
+    "miss": []
+  },
+  "curtain": {
+    "layout": {
+      "segments": [
+        [
+          37.9,
+          40.1,
+          3.327898132608043
+        ],
+        [
+          40.1,
+          42.2,
+          2.7278981326080434
+        ],
+        [
+          42.2,
+          44.5,
+          2.177898132608043
+        ]
+      ],
+      "wallZ": 92.45,
+      "depth": 0.75,
+      "stairEdge": 92,
+      "minimumStairGap": 0.075,
+      "gateJoinX": 37.9,
+      "returnX": 44.35
+    },
+    "sourceBlender": "assets/models/optimized/citadel-harbor-curtain/harbor-curtain-r01.blend",
+    "parts": 2
+  },
+  "sideCourt": {
+    "samples": 372,
+    "blocked": [],
+    "unsupported": []
+  },
+  "errors": [],
+  "passed": true
+}

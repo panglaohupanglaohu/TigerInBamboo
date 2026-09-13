@@ -1,0 +1,14 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>筑山 · Blender 总地形底稿</title><style>body{background:#162338;color:#eef3fa;max-width:1200px;margin:32px auto;padding:0 22px;font:18px/1.8 system-ui}img{width:100%}a{color:#9bd2ff}</style>
+<h1>筑山：Blender 地形底稿与地形候选</h1>
+<p>当前候选为R06：包含新城中上层侧坡、旧城空余地块外围的过渡坡面，并修复横向展开造成的网格折叠。保留广场前侧岩肩。R02扩展过大、掩埋部分原植被，已否决。候选尚未成为默认地形；同一Godot工程已导入，并以临时装配完成原短剑兵通行测试。</p>
+<p>R05近景出现重复顶点分离裂口，已否决。R06联动340个重复顶点，消除28处投影翻折/近退化面，同位置重复顶点分离为0。下方为同机位近景，尚不代表整体山势验收。</p><h2>R05裂口 · 已否决</h2><img src="r05-east-coast.png" alt="上一轮裂口问题"><h2>R06岸边 · 修复后</h2><img src="r06-east-coast.png" alt="联动重复顶点后的相同岸边"><h2>当前原游戏 · 同机位</h2><img src="baseline-target-angle-near.png" alt="默认原游戏地形">
+<h2>R06 · 原游戏候选实景</h2><img src="r06-target-angle-near.png" alt="第六轮地形候选游戏实景">
+<p>前港至广场、广场至主堡路线共1,353处中心线采样，修改前后在0.4米及1.4米高度的前向射线均未撞到本轮岩面。这不替代全装备人物、建筑、植被和Godot通行测试。旧城阶坎、整体山脊与目标仍未收口。</p>
+<p><a href="/TigerMessenger/?autostart=1&amp;citadelMasterTerrain=6">打开R06候选原游戏</a></p>
+<p>旧城184个带层级的WFC占地记录共920处中心与角点，支撑高度在修改前后保持一致。27处折叠及1处近退化投影面，经局部减小横向位移后不再出现。此检查不证明整个场景已达目标，Godot原短剑兵从广场到塔顶559段通过；这不包含船舶、完整战斗或所有路线。81处已登记植被根部间距与基线一致。实际水线和其他植被仍需检查。</p><h2>Blender R06 · 山体及台基</h2><img src="blender-r06.png" alt="Blender第五轮山体候选"><h2>同一Godot工程 · 候选夜景</h2><img src="r06-godot-after-night.png" alt="Godot地形候选实际夜景"><p>候选资产已导入，测试专用装配替换两块岩面后完成原短剑兵559段行进，普通场景尚未切换。整个测试及截图过程每次只运行一个Godot进程，结束自动退出。</p><h2>Blender 现状底稿</h2>
+<p>这是从8931实际场景提取的现状，并非改造完成图。蓝灰色为岩面，褐色为选取的现有建设台基；蓝色曲面按原游戏海面高度采样，只用于判断露出水面的山脚。</p>
+<img src="blender-baseline.png" alt="Blender中实际山体、台基及海面基准">
+<h2>本轮发现与下一次修改</h2>
+<ol><li>新城上、中、下台地之间仍有陡直岩面。下一次山体候选应先安排连续的侧坡与过渡岩台，保持中心上城通路的标高和净空。</li><li>新城广场临水侧的承托范围不能仅依靠现有岩肩决定；需连同未来门后台地预留整体建设范围，之后再设计城墙。</li><li>旧城山坡出现连续横向阶坎。应在整体山势方案中处理其与山脊的关系，不能靠继续加房屋遮住。</li></ol>
+<p>这份底稿没有改写默认游戏，也没有替换Godot地形。下一步是基于此工程制作地形候选，并补回建筑和实际通路检查。尚未完成筑山阶段。</p>
+<p><a href="../citadel-gate-plaza-design/index.html">认可目标</a> · <a href="../citadel-terrain-baseline/index.html">等高线与剖面</a> · <a href="/TigerMessenger/">原游戏</a></p></html>

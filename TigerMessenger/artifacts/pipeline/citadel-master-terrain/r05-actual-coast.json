@@ -1,0 +1,50 @@
+{
+  "scope": "exact officialOceanLevelAt reference surface intersected with straight terrain edges by 35-step bisection; excludes animated water displacement and triangle-interior crossings",
+  "rows": [
+    {
+      "mesh": "citadel-oskar-grid-mountain-surface",
+      "commonCrossingEdges": 1668,
+      "changedCrossingEdges": 0,
+      "maxShift": 0.761710628937809,
+      "worst": {
+        "edge": "36918,36919",
+        "before": [
+          38.1907036083599,
+          -7.864956981737917,
+          66.85114882944261
+        ],
+        "after": [
+          38.78898451979598,
+          -8.087999135308591,
+          67.2664983581273
+        ]
+      }
+    },
+    {
+      "mesh": "citadel-coastal-cliff-seal",
+      "commonCrossingEdges": 1026,
+      "changedCrossingEdges": 0,
+      "maxShift": 0.3088594271980752,
+      "worst": {
+        "edge": "757,758",
+        "before": [
+          4.542811893368747,
+          -1.9305574820714635,
+          34.88809999476634
+        ],
+        "after": [
+          4.236018150451462,
+          -1.9003229200314702,
+          34.90701074129229
+        ]
+      }
+    },
+    {
+      "mesh": "new-city-rock-shoulder",
+      "commonCrossingEdges": 520,
+      "changedCrossingEdges": 0,
+      "maxShift": 0,
+      "worst": null
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 //   3) 背光因子：相机看向太阳（逆光构图）时整体最强。
 // =====================================================================
 
-export const BACKLIT_HIGHLIGHT_SCHEMA_VERSION = 1;
+export const BACKLIT_HIGHLIGHT_SCHEMA_VERSION = 2;
 
 /**
  * 生成背光高光层。
@@ -33,11 +33,9 @@ export function createBacklitHighlightLayer(THREE, sourceMesh, {
   const material = new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
-    // 反向轮廓层：放大壳的背面（内壁）位于源物体之后，默认深度测试会把它
-    // 完全挡掉（这是我上一版"看不见高光"的根因）。轮廓光必须画在所有
-    // 物体之上——depthTest:false + rim（法线⊥视线）只在边缘发亮，
-    // 中心 alpha≈0，所以不会糊成整片光罩。
-    depthTest: false,
+    // The expanded shell must stay behind foreground architecture. Drawing it
+    // through every wall produced giant gold triangles over the new-city plaza.
+    depthTest: true,
     side: THREE.BackSide,
     uniforms: {
       uColor: { value: new THREE.Color(color) },
@@ -53,10 +51,12 @@ export function createBacklitHighlightLayer(THREE, sourceMesh, {
       void main() {
         vec4 world = modelMatrix * vec4(position, 1.0);
         gl_Position = projectionMatrix * viewMatrix * world;
-        vec3 n = normalize(normalMatrix * normal);
+        vec3 nv = normalize(normalMatrix * normal);
+        // normalMatrix is view-space; sun and camera uniforms are world-space.
+        vec3 n = normalize(vec3(dot(viewMatrix[0].xyz,nv),dot(viewMatrix[1].xyz,nv),dot(viewMatrix[2].xyz,nv)));
         vec3 viewDir = normalize(uCamPos - world.xyz);
         // 轮廓边缘（法线⊥视线）rim 高
-        vRim = pow(1.0 - max(dot(n, viewDir), 0.0), 1.8);
+        vRim = pow(1.0 - abs(dot(n, viewDir)), 1.8);
         // 受光面遮罩：只有朝向太阳的面显示高光（阴影侧不显示）
         vSun = max(dot(n, uSunDir), 0.0);
       }

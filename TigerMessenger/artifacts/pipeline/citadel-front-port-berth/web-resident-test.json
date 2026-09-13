@@ -1,0 +1,32 @@
+{
+  "before": {
+    "uuid": "807cc35c-30e9-49c9-ae50-c3acdb677f6a",
+    "old": "5c66a9e3-38e5-4c8b-b308-d6d1b3d24851",
+    "position": [
+      90.6955803710643,
+      129.39730857970503,
+      26.65066127000469
+    ],
+    "count": 3
+  },
+  "ashore": {
+    "distance": 0.0005533167075752958,
+    "snap": false
+  },
+  "after": {
+    "uuid": "807cc35c-30e9-49c9-ae50-c3acdb677f6a",
+    "old": "5c66a9e3-38e5-4c8b-b308-d6d1b3d24851",
+    "position": [
+      93.43875261181643,
+      127.5277682595063,
+      26.18162229010171
+    ],
+    "drift": 0,
+    "moored": true,
+    "snap": false,
+    "count": 3
+  },
+  "errors": [],
+  "passed": true,
+  "scope": "Default Web entry; real F mount/dismount at berth and brief WASD drive. No soldier unloading or full navigation certification."
+}

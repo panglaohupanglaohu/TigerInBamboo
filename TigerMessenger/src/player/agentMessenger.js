@@ -1,2 +1,2 @@
-// Compatibility entry: original model source now lives in src/assets.
-export * from "../assets/characters/agentMessenger.js";
+// Approved human courier; original digital-agent factory remains available for rollback.
+export { buildHumanCourier as buildAgentMessenger } from '../assets/characters/humanCourier.js';

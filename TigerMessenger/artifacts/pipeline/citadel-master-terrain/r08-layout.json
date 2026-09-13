@@ -1,0 +1,84 @@
+{
+  "oldFrame": [
+    0.8660254037844387,
+    -2.031849154396019e-17,
+    -0.49999999999999994,
+    0,
+    0,
+    1.0000000000000002,
+    -2.7755575615628914e-17,
+    0,
+    0.5,
+    -7.582964277521801e-17,
+    0.8660254037844389,
+    0,
+    -52.000000000000014,
+    -2.842170943040401e-14,
+    -7.105427357601002e-15,
+    1.0000000000000002
+  ],
+  "oldConstructionEnvelopes": [
+    {
+      "x": -17,
+      "z": 0,
+      "y": 5,
+      "width": 12,
+      "depth": 8
+    },
+    {
+      "x": 1,
+      "z": -4,
+      "y": 7,
+      "width": 13,
+      "depth": 8
+    },
+    {
+      "x": 16,
+      "z": -11,
+      "y": 10,
+      "width": 10,
+      "depth": 8
+    },
+    {
+      "x": -12,
+      "z": -14,
+      "y": 12,
+      "width": 12,
+      "depth": 8
+    },
+    {
+      "x": 3,
+      "z": -22,
+      "y": 16,
+      "width": 11,
+      "depth": 8
+    },
+    {
+      "x": -17,
+      "z": -28,
+      "y": 19,
+      "width": 10,
+      "depth": 7
+    },
+    {
+      "x": 13,
+      "z": -33,
+      "y": 23,
+      "width": 10,
+      "depth": 7
+    }
+  ],
+  "status": "planning envelopes, not migrated buildings",
+  "stats": [
+    {
+      "name": "citadel-oskar-grid-mountain-surface",
+      "changedVertices": 27118,
+      "maximumHeightChange": 35.18918609619143
+    },
+    {
+      "name": "citadel-coastal-cliff-seal",
+      "changedVertices": 130,
+      "maximumHeightChange": 4.921979904174771
+    }
+  ]
+}

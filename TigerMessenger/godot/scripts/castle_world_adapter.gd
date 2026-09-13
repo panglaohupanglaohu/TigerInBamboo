@@ -197,7 +197,19 @@ func _mount_west_city() -> void:
 
 func _adapt_materials(node: Node) -> void:
     if node is MeshInstance3D and node.mesh != null:
-        if node.name in ["citadel-oskar-grid-mountain-surface", "citadel-coastal-cliff-seal", "old-shore-blender-rock-support", "citadel-old-city-support-spur"]:
+        if node.name == "west-city-plaza-paving-ring":
+            # Compatibility for earlier GLBs that omitted Web skipColliders.
+            node.set_meta("skipColliders",true)
+            # The Web paving receives shadows but does not cast them. glTF does
+            # not preserve that flag: nearly coplanar stones otherwise shadow
+            # their own supporting slab in the native renderer.
+            node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+            var paving_material=ShaderMaterial.new()
+            paving_material.shader=preload("res://shaders/citadel_paving_color.gdshader")
+            for surface in range(node.mesh.get_surface_count()):node.set_surface_override_material(surface,paving_material)
+            for child in node.get_children():_adapt_materials(child)
+            return
+        if node.name in ["citadel-oskar-grid-mountain-surface", "citadel-coastal-cliff-seal", "old-shore-blender-rock-support", "citadel-old-city-support-spur", "new-city-rock-shoulder"]:
             var terrain_material:=ShaderMaterial.new()
             terrain_material.shader=preload("res://shaders/citadel_terrain_color.gdshader")
             for surface in range(node.mesh.get_surface_count()):node.set_surface_override_material(surface,terrain_material)

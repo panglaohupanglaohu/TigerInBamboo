@@ -1,0 +1,217 @@
+{
+  "lamps": [
+    {
+      "name": "highland-light-volume-highland-lamp-0",
+      "visible": false,
+      "castlePosition": [
+        -59.56238225024034,
+        4.950000000000016,
+        27.46015419547611
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-1",
+      "visible": false,
+      "castlePosition": [
+        -51.60943641712204,
+        4.950000000000016,
+        24.02321931625402
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-2",
+      "visible": true,
+      "castlePosition": [
+        -44.7407690203435,
+        3.1028043740116393,
+        20.288532453425756
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-3",
+      "visible": true,
+      "castlePosition": [
+        -37.67229025880452,
+        4.38000011444086,
+        15.976604230014193
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-4",
+      "visible": true,
+      "castlePosition": [
+        -30.736752118841707,
+        4.829999923705997,
+        11.51048920258013
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-5",
+      "visible": true,
+      "castlePosition": [
+        -24.769509121184456,
+        4.449999809265164,
+        6.91059931318358
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-6",
+      "visible": true,
+      "castlePosition": [
+        -21.899608016939357,
+        5.965504708314511,
+        24.76810023670933
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-7",
+      "visible": true,
+      "castlePosition": [
+        -15.455758449173187,
+        4.596687459153343,
+        22.548852654035098
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-8",
+      "visible": true,
+      "castlePosition": [
+        -17.179431565099858,
+        2.813459727886339,
+        27.008117406647976
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-9",
+      "visible": true,
+      "castlePosition": [
+        -47.60030160422589,
+        4.829999923705997,
+        14.20299075334577
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-10",
+      "visible": true,
+      "castlePosition": [
+        -42.07678167500897,
+        4.829999923706025,
+        11.0139850353381
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-11",
+      "visible": true,
+      "castlePosition": [
+        -51.22180631691777,
+        5.270882447387208,
+        1.8601107443494125
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-12",
+      "visible": true,
+      "castlePosition": [
+        -67.94271711991807,
+        15.692567373972533,
+        -15.044179285165537
+      ]
+    },
+    {
+      "name": "highland-light-volume-highland-lamp-beacon",
+      "visible": true,
+      "castlePosition": [
+        -52.89652791328458,
+        6.849999904632538,
+        -1.791790444687663
+      ]
+    }
+  ],
+  "points": [
+    {
+      "side": "old",
+      "index": 0,
+      "castlePosition": [
+        -66.72243186433545,
+        7.929999904632522,
+        8.499999999999977
+      ],
+      "color": 16754013,
+      "radius": 20,
+      "godotEnergy": 6,
+      "shadow": false,
+      "shadowMapSize": 0
+    },
+    {
+      "side": "old",
+      "index": 1,
+      "castlePosition": [
+        -69.39230484541325,
+        14.95023906468759,
+        -6.12435565298213
+      ],
+      "color": 16755813,
+      "radius": 22,
+      "godotEnergy": 8,
+      "shadow": false,
+      "shadowMapSize": 0
+    },
+    {
+      "side": "old",
+      "index": 2,
+      "castlePosition": [
+        -53.777568135664524,
+        27.004354684486536,
+        -37.07883832488648
+      ],
+      "color": 16758127,
+      "radius": 26,
+      "godotEnergy": 10,
+      "shadow": false,
+      "shadowMapSize": 0
+    },
+    {
+      "side": "new",
+      "index": 0,
+      "castlePosition": [
+        27.24999999999998,
+        22.999999999999996,
+        38.1580219542991
+      ],
+      "color": 16755548,
+      "radius": 24,
+      "godotEnergy": 95,
+      "shadow": true,
+      "shadowMapSize": 512
+    },
+    {
+      "side": "new",
+      "index": 1,
+      "castlePosition": [
+        8.080127018922191,
+        8.999999999999998,
+        81.3612159321677
+      ],
+      "color": 16758899,
+      "radius": 18,
+      "godotEnergy": 20,
+      "shadow": true,
+      "shadowMapSize": 512
+    },
+    {
+      "side": "new",
+      "index": 2,
+      "castlePosition": [
+        -15.446152422706627,
+        -2.411819752202774,
+        100.10992723813199
+      ],
+      "color": 16754010,
+      "radius": 10,
+      "godotEnergy": 25,
+      "shadow": false,
+      "shadowMapSize": 0
+    }
+  ],
+  "scope": "Final terrain lamp grounding; relocated city light anchors. Shadow and color refinement pending."
+}

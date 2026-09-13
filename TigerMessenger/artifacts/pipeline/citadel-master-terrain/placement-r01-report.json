@@ -1,0 +1,230 @@
+{
+  "status": "candidate",
+  "oldColumns": 184,
+  "oldCells": 329,
+  "newCells": 81,
+  "reports": [
+    {
+      "name": "old-city-parcel-0",
+      "cells": 12,
+      "wfc": {
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "85b9ef45",
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    },
+    {
+      "name": "old-city-parcel-1",
+      "cells": 13,
+      "wfc": {
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "b3b85a9c",
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    },
+    {
+      "name": "old-city-parcel-2",
+      "cells": 8,
+      "wfc": {
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "b4fcf06c",
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    },
+    {
+      "name": "old-city-parcel-3",
+      "cells": 21,
+      "wfc": {
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "e405ac1e",
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    },
+    {
+      "name": "old-city-parcel-4",
+      "cells": 8,
+      "wfc": {
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "525b3fa4",
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    },
+    {
+      "name": "old-city-parcel-5",
+      "cells": 11,
+      "wfc": {
+        "enabled": true,
+        "ok": true,
+        "ms": 0,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "c0e1b738",
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    },
+    {
+      "name": "old-city-parcel-6",
+      "cells": 8,
+      "wfc": {
+        "enabled": true,
+        "ok": true,
+        "ms": 1,
+        "fromCache": false,
+        "unresolved": 0,
+        "hash": "5d5ac6c7",
+        "topology": "legacy-grid",
+        "topologyHash": null
+      }
+    }
+  ],
+  "supports": [
+    {
+      "index": 0,
+      "proposed": [
+        -17,
+        5,
+        0
+      ],
+      "placed": [
+        -17,
+        4.929999904632569,
+        0
+      ],
+      "minimumRockY": 4.849856422262918,
+      "maxRockY": 4.849999904632569,
+      "samples": 9,
+      "foundationHeight": 0.23014348236965176
+    },
+    {
+      "index": 1,
+      "proposed": [
+        1,
+        7,
+        -4
+      ],
+      "placed": [
+        1,
+        6.955378034681662,
+        -4
+      ],
+      "minimumRockY": 6.849999904632513,
+      "maxRockY": 6.8753780346816615,
+      "samples": 9,
+      "foundationHeight": 0.25537813004914867
+    },
+    {
+      "index": 2,
+      "proposed": [
+        16,
+        10,
+        -11
+      ],
+      "placed": [
+        16,
+        10.095754649869964,
+        -11
+      ],
+      "minimumRockY": 9.83092663224082,
+      "maxRockY": 10.015754649869963,
+      "samples": 9,
+      "foundationHeight": 0.41482801762914434
+    },
+    {
+      "index": 3,
+      "proposed": [
+        -12,
+        12,
+        -14
+      ],
+      "placed": [
+        -12,
+        11.95023906468764,
+        -14
+      ],
+      "minimumRockY": 11.841631081376677,
+      "maxRockY": 11.87023906468764,
+      "samples": 9,
+      "foundationHeight": 0.2586079833109629
+    },
+    {
+      "index": 4,
+      "proposed": [
+        3,
+        16,
+        -22
+      ],
+      "placed": [
+        3,
+        16.02746639115701,
+        -22
+      ],
+      "minimumRockY": 15.727030162843793,
+      "maxRockY": 15.947466391157011,
+      "samples": 9,
+      "foundationHeight": 0.45043622831321706
+    },
+    {
+      "index": 5,
+      "proposed": [
+        -17,
+        19,
+        -28
+      ],
+      "placed": [
+        -21,
+        20.758385668308552,
+        -24
+      ],
+      "minimumRockY": 16.132442604122648,
+      "maxRockY": 20.678385668308554,
+      "samples": 9,
+      "foundationHeight": 4.775943064185904
+    },
+    {
+      "index": 6,
+      "proposed": [
+        13,
+        23,
+        -33
+      ],
+      "placed": [
+        17,
+        24.00435468448659,
+        -33
+      ],
+      "minimumRockY": 22.936790881122395,
+      "maxRockY": 23.92435468448659,
+      "samples": 9,
+      "foundationHeight": 1.2175638033641931
+    }
+  ],
+  "retiredGroups": 62,
+  "rebuilds": 1,
+  "scope": "Original palette rebuilt after town edits; direct picking of migrated parcels and story-path reconciliation remain pending."
+}

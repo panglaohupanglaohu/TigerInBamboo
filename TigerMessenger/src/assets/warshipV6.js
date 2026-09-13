@@ -24,9 +24,22 @@ export function createWarshipV6(){
  function hidden(n){for(let p=n;p&&p!==boat;p=p.parent)if(!p.visible)return true;return false;}
  source.nodes.forEach((s,i)=>{if(s.mesh===undefined||hidden(nodes[i]))return;for(const part of geometry[s.mesh]){
   if(controlled(nodes[i])){const key=part.signature+':'+part.material;let group=dynamicGroups.get(key);if(!group)dynamicGroups.set(key,group={part,nodes:[]});group.nodes.push(nodes[i]);}
-  else{const g=part.g.index?part.g.toNonIndexed():part.g.clone();g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inv,nodes[i].matrixWorld));const key=part.material+':'+Object.keys(g.attributes).sort().join(',');if(!staticGroups.has(key))staticGroups.set(key,{material:part.material,geometries:[]});staticGroups.get(key).geometries.push(g);}
+  else{const g=part.g.index?part.g.toNonIndexed():part.g.clone();g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inv,nodes[i].matrixWorld));const key=part.material+':'+Object.keys(g.attributes).sort().join(',');if(!staticGroups.has(key))staticGroups.set(key,{material:part.material,geometries:[],sources:[]});staticGroups.get(key).geometries.push(g);staticGroups.get(key).sources.push({node:nodes[i],part});}
  }});
- for(const group of staticGroups.values()){const g=mergeGeometries(group.geometries,false);if(!g)throw Error('Warship static merge failed');const mesh=new THREE.Mesh(g,materials[group.material]);mesh.castShadow=mesh.receiveShadow=true;renderRoot.add(mesh);group.geometries.forEach(g=>g.dispose());}
+ for(const group of staticGroups.values()){const g=mergeGeometries(group.geometries,false);if(!g)throw Error('Warship static merge failed');const mesh=new THREE.Mesh(g,materials[group.material]);mesh.castShadow=mesh.receiveShadow=true;renderRoot.add(mesh);group.mesh=mesh;group.geometries.forEach(g=>g.dispose());group.geometries=[];}
+ // Explicit authoring refresh: node edits must reach merged static meshes too.
+ // Never rebuild per frame, and never mutate the shared original geometry cache.
+ function refreshStaticGeometry(overrides={}){
+  boat.updateMatrixWorld(true);inv.copy(boat.matrixWorld).invert();
+  for(const group of staticGroups.values()){
+   const parts=group.sources.map(({node,part})=>{const replacement=overrides[node.userData.sourceNodeId];let g;
+    if(replacement){const box=new THREE.BoxGeometry(...replacement.boxSize);g=box.toNonIndexed();box.dispose();for(const key of Object.keys(g.attributes))if(!part.g.attributes[key])g.deleteAttribute(key);}
+    else g=part.g.index?part.g.toNonIndexed():part.g.clone();
+    return g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inv,node.matrixWorld));});
+   const geometry=mergeGeometries(parts);parts.forEach(g=>g.dispose());
+   group.mesh.geometry.dispose();group.mesh.geometry=geometry;
+  }
+ }
  const batches=[];
  for(const group of dynamicGroups.values()){const mesh=new THREE.InstancedMesh(group.part.g,materials[group.part.material],group.nodes.length);mesh.frustumCulled=false;mesh.castShadow=mesh.receiveShadow=true;renderRoot.add(mesh);batches.push({...group,mesh});}
  const matA=new THREE.Matrix4(),matB=new THREE.Matrix4(),pa=new THREE.Vector3(),pb=new THREE.Vector3(),qa=new THREE.Quaternion(),qb=new THREE.Quaternion(),sa=new THREE.Vector3(),sb=new THREE.Vector3(),zero=new THREE.Matrix4().makeScale(0,0,0);
@@ -37,9 +50,9 @@ export function createWarshipV6(){
  const rowTracks=rows.map((_,i)=>tracks.filter(tr=>tr.key==='n'+(63+i*5)||tr.key==='n'+(193+i)||new RegExp('^n(?:22[0-9]|230):i'+i+'$').test(tr.key)||tr.key==='add:forearm-'+i+'L'||tr.key==='add:forearm-'+i+'R'||tr.key==='add:hand-'+i+'L'||tr.key==='add:hand-'+i+'R'));
  const crewVisuals=rows.map((_,i)=>[...byId.entries()].filter(([key])=>new RegExp('^n(?:22[0-9]|230):i'+i+'$').test(key)||key==='add:forearm-'+i+'L'||key==='add:forearm-'+i+'R'||key==='add:hand-'+i+'L'||key==='add:hand-'+i+'R').map(([,node])=>({node,visible:node.visible})));
  const storedWeapons=rows.map((_,i)=>nodes.filter(n=>n.userData.crewWeaponOwner===i));
- let time=0,boarding=0;
+ let time=0,boarding=0,boardingPitch=null;
  boat.userData={...boat.userData,kind:'fisherBoat',collideRadius:7.5,crew,oars:Array.from({length:26},(_,i)=>byId.get('n'+(63+i*5))),oarPhase:0,oarSpeed:0,
-  warshipV6:{source:source.source,sha256:source.sourceSHA256,nodes:byId,batches:batches.length,staticDraws:staticGroups.size,pose,render,
+  warshipV6:{source:source.source,sha256:source.sourceSHA256,nodes:byId,batches:batches.length,staticDraws:staticGroups.size,pose,render,refreshStaticGeometry,
    lanternMaterials:new Set(source.nodes.filter(n=>n.name?.startsWith("night-lantern-")&&n.mesh!==undefined).flatMap(n=>source.meshes[n.mesh].primitives.map(p=>materials[p.material]))),
    boardingContract:Object.freeze({rootPoint:Object.freeze(source.boarding?.rootPoint||[1.94,.664,.48]),length:source.boarding?.length||1.35,width:.34,deployedPitch:.12,clearanceValidated:false,source:source.source.replace(".glb",".assembly.json")}),
    bindCrewIdentity(index,identity){if(!rows[index])return false;rows[index].identity={...identity};for(const n of storedWeapons[index])n.userData.soldierUid=identity.uid;return true;},
@@ -47,10 +60,17 @@ export function createWarshipV6(){
    setCrewWeaponStored(index,value,{shieldBroken=false}={}){const r=rows[index];if(!r)return false;r.weaponStored=!!value;r.shieldBroken=shieldBroken;for(const node of storedWeapons[index])node.visible=r.weaponStored&&!(shieldBroken&&node.userData.crewWeaponRole==='shield');render();return true;},
    crewStatus(){return rows.map((r,i)=>({index:i,embarked:r.embarked,weaponStored:r.weaponStored,identity:r.identity||null,weaponNodes:storedWeapons[i].length}));},
    setBoarding(value){boarding=THREE.MathUtils.clamp(value,0,1);},
+   setBoardingPitch(value){
+    if(value===null){boardingPitch=null;return true;}
+    if(!Number.isFinite(value)||Math.abs(value)>25*Math.PI/180)return false;
+    boardingPitch=value;return true;
+   },
    update(dt,moving){const d=Math.min(.05,Math.max(0,dt)),target=moving===true?1:Math.max(0,Math.min(1,Number(moving)||0));boat.userData.oarSpeed+=(target-boat.userData.oarSpeed)*Math.min(1,d*5.5);time+=d*boat.userData.oarSpeed;
     if(boarding>0){const f=180+boarding*30;pose(Math.floor(f),Math.min(210,Math.ceil(f)),f%1);}
     else if(boat.userData.oarSpeed<.02)pose(180,180,0);
     else{const f=60+(time*60)%60;pose(Math.floor(f),f>=119?60:Math.ceil(f),f%1);}
+    // Preserve the authored retract/swing animation; only tilt at the deployed end.
+    if(boardingPitch!==null&&boarding>0){const hinge=byId.get('add:boarding-hinge');if(hinge)hinge.rotation.x+=(boardingPitch-.12)*THREE.MathUtils.smoothstep(boarding,.8,1);}
     let left=0,right=0;for(let i=0;i<26;i++){const r=rows[i];r.sedateT=Math.max(0,r.sedateT-d);if(r.attach){r.attach.userData.sedated=r.sedateT>0;r.attach.userData.sedateT=r.sedateT;}if(r.sedateT>0||!r.embarked){if(r.sedateT>0){if(r.side<0)left++;else right++;}for(const tr of rowTracks[i])if(tr.node)matA.fromArray(poses,source.frameIndex[180]*stride+tr.offset).decompose(tr.node.position,tr.node.quaternion,tr.node.scale);}}
     boat.userData.oarSedatedCount=left+right;boat.userData.oarImbalance=(right-left)/13;boat.userData.oarPhase=time*6.2;render();},
    paintCrest(pal){for(const batch of batches){const id=batch.nodes[0].userData.sourceNodeId||'';const color=id.startsWith('n224:')?pal.crest:id.startsWith('n225:')?pal.feathers:id.startsWith('n226:')?pal.stems:null;if(color!==null){batch.mesh.userData.crewCrest=true;batch.mesh.material=batch.mesh.material.clone();batch.mesh.material.color.setHex(color);}}},

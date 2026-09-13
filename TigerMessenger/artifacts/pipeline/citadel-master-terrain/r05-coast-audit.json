@@ -1,0 +1,23 @@
+{
+  "scope": "edge intersections with six-metre sampled official sea; approximate, not exact shader shoreline or bathymetry",
+  "meshes": [
+    {
+      "mesh": "citadel-oskar-grid-mountain-surface",
+      "crossings": 1672,
+      "changedCrossingEdges": 0,
+      "maxShift": 0.746481368534814
+    },
+    {
+      "mesh": "citadel-coastal-cliff-seal",
+      "crossings": 1026,
+      "changedCrossingEdges": 0,
+      "maxShift": 0.30267816978373546
+    },
+    {
+      "mesh": "new-city-rock-shoulder",
+      "crossings": 520,
+      "changedCrossingEdges": 0,
+      "maxShift": 0.0
+    }
+  ]
+}

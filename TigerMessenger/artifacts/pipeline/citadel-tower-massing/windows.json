@@ -1,0 +1,444 @@
+{
+  "massing": [
+    {
+      "id": "left-gate-bastion",
+      "x": 49.1,
+      "z": 10,
+      "w": 8,
+      "d": 8,
+      "bottom": 16,
+      "top": 29.6,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 1.7000000000000002
+    },
+    {
+      "id": "right-gate-bastion",
+      "x": 73,
+      "z": 9,
+      "w": 8,
+      "d": 8,
+      "bottom": 16,
+      "top": 33.4,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 2.175
+    },
+    {
+      "id": "left-outer-turret",
+      "x": 42.4,
+      "z": 6,
+      "w": 5.2,
+      "d": 5.2,
+      "bottom": 16,
+      "top": 26.4,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 1.9999999999999996
+    },
+    {
+      "id": "right-outer-turret",
+      "x": 81.2,
+      "z": 3,
+      "w": 5.6,
+      "d": 5.6,
+      "bottom": 16,
+      "top": 29.6,
+      "shaft": false,
+      "cap": false,
+      "bodySlenderness": 2.428571428571429
+    },
+    {
+      "id": "left-blue-tower",
+      "x": 48.2,
+      "z": -3.5,
+      "w": 8.2,
+      "d": 8.2,
+      "bottom": 16,
+      "top": 34,
+      "shaft": false,
+      "cap": true,
+      "bodySlenderness": 2.1951219512195124
+    },
+    {
+      "id": "right-blue-tower",
+      "x": 72,
+      "z": -3.6,
+      "w": 10.4,
+      "d": 10.4,
+      "bottom": 16,
+      "top": 40,
+      "shaft": false,
+      "cap": true,
+      "bodySlenderness": 2.3076923076923075
+    },
+    {
+      "id": "central-stair-keep",
+      "x": 60,
+      "z": -4.4,
+      "w": 8.6,
+      "d": 10.8,
+      "bottom": 16,
+      "top": 42.3,
+      "shaft": true,
+      "cap": false,
+      "bodySlenderness": 3.0581395348837206
+    },
+    {
+      "id": "offset-high-keep",
+      "x": 63.8,
+      "z": -15.5,
+      "w": 12.4,
+      "d": 11,
+      "bottom": 16,
+      "top": 46.4,
+      "shaft": false,
+      "cap": true,
+      "bodySlenderness": 2.451612903225806
+    }
+  ],
+  "wfc": {
+    "scope": "seven front facades; authored volumes, side walls and stair keep",
+    "towers": [
+      {
+        "id": "left-gate-bastion",
+        "rows": 2,
+        "modules": 6,
+        "openings": 2,
+        "grid": [
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone",
+            "arch",
+            "stone"
+          ]
+        ],
+        "solutionHash": "4171e0f8"
+      },
+      {
+        "id": "right-gate-bastion",
+        "rows": 2,
+        "modules": 6,
+        "openings": 2,
+        "grid": [
+          [
+            "stone",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone-alt",
+            "arch",
+            "stone"
+          ]
+        ],
+        "solutionHash": "be05f928"
+      },
+      {
+        "id": "left-outer-turret",
+        "rows": 1,
+        "modules": 3,
+        "openings": 1,
+        "grid": [
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ]
+        ],
+        "solutionHash": "27bfdec7"
+      },
+      {
+        "id": "right-outer-turret",
+        "rows": 2,
+        "modules": 6,
+        "openings": 2,
+        "grid": [
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone-alt",
+            "slit",
+            "stone"
+          ]
+        ],
+        "solutionHash": "069b5274"
+      },
+      {
+        "id": "left-blue-tower",
+        "rows": 2,
+        "modules": 6,
+        "openings": 2,
+        "grid": [
+          [
+            "stone",
+            "arch",
+            "stone"
+          ],
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ]
+        ],
+        "solutionHash": "0a866f18"
+      },
+      {
+        "id": "right-blue-tower",
+        "rows": 3,
+        "modules": 9,
+        "openings": 3,
+        "grid": [
+          [
+            "stone",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone",
+            "arch",
+            "stone"
+          ]
+        ],
+        "solutionHash": "c5d9e0b0"
+      },
+      {
+        "id": "offset-high-keep",
+        "rows": 4,
+        "modules": 12,
+        "openings": 4,
+        "grid": [
+          [
+            "stone-alt",
+            "arch",
+            "stone-alt"
+          ],
+          [
+            "stone-alt",
+            "slit",
+            "stone"
+          ],
+          [
+            "stone",
+            "arch",
+            "stone"
+          ],
+          [
+            "stone",
+            "slit",
+            "stone"
+          ]
+        ],
+        "solutionHash": "d2c02065"
+      }
+    ]
+  },
+  "windows": [
+    {
+      "id": "left-gate-bastion",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800003051757699,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999618530219,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "left-gate-bastion",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800003051757834,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999618530162,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "right-gate-bastion",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800003051757834,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999618530357,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "right-gate-bastion",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800003051757837,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999618530219,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "left-outer-turret",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7799999237060596,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899995803833003,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "right-outer-turret",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800001144409199,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.39000024795533333,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "right-outer-turret",
+      "tile": "slit",
+      "opening": {
+        "depth": 0.7800001144409235,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.39000024795531973,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "left-blue-tower",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800000131130397,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999976158111,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "left-blue-tower",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800000131130316,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999976158111,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "right-blue-tower",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800000429153493,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.39000005722046177,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "right-blue-tower",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800000429153531,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.39000005722045017,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "right-blue-tower",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.780000042915343,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.39000005722044967,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "offset-high-keep",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800003051757524,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999618530298,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "offset-high-keep",
+      "tile": "slit",
+      "opening": {
+        "depth": 0.7800003051757834,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.38999996185304736,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "offset-high-keep",
+      "tile": "arch",
+      "opening": {
+        "depth": 0.7800003051757791,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.389999961853032,
+        "emissive": 0
+      }
+    },
+    {
+      "id": "offset-high-keep",
+      "tile": "slit",
+      "opening": {
+        "depth": 0.78000030517578,
+        "emissive": 16758631
+      },
+      "wall": {
+        "depth": 0.3899999618530197,
+        "emissive": 0
+      }
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

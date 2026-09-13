@@ -1,0 +1,52 @@
+{
+  "directions": [
+    {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/highland-west-city/citadel-original-horse-terrace/horse-terrace-exit-ramp",
+        "obstacle_bounds": "[P: (72.2, 3.8, 60.0), S: (5.600006, 2.0, 5.5)]",
+        "part": "n27",
+        "phase": "hop",
+        "point": 0,
+        "progress": 1.0,
+        "reason": "mesh_overlap",
+        "route_position": "(81.00001, 5.800003, 66.0)"
+      },
+      "completed_steps": 0,
+      "geometry_queries": 3646,
+      "max_plant_adjustment": 0.0,
+      "phase": "blocked",
+      "point": 0,
+      "reverse": false,
+      "role": "gladius",
+      "route_points": 5,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    },
+    {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/highland-west-city/citadel-original-horse-terrace/horse-terrace-exit-ramp",
+        "obstacle_bounds": "[P: (72.2, 3.8, 60.0), S: (5.600006, 2.0, 5.5)]",
+        "part": "n24",
+        "phase": "hop",
+        "point": 2,
+        "progress": 1.0,
+        "reason": "mesh_overlap",
+        "route_position": "(81.00001, 4.0, 59.86001)"
+      },
+      "completed_steps": 2,
+      "geometry_queries": 94966,
+      "max_plant_adjustment": 0.0,
+      "phase": "blocked",
+      "point": 2,
+      "reverse": true,
+      "role": "gladius",
+      "route_points": 5,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    }
+  ],
+  "passed": false,
+  "scope": "Original gladius carried geometry, production guarded controller, current original horse platform exit ramp to processional entrance, both ways; no crowds or final gait."
+}

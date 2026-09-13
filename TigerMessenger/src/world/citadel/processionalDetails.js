@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import {WEST_CITY} from './westCityLayout.js';
+import {WEST_CITY as DEFAULT_CITY} from './westCityLayout.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
 
 // Architecture around the existing walkable stair flights; never narrow their 7.2 m opening.
-export function buildProcessionalDetails(){
+export function buildProcessionalDetails(WEST_CITY=DEFAULT_CITY){
  const root=new THREE.Group();root.name='citadel-processional-stonework';
  const stone=new THREE.MeshStandardMaterial({color:0xd8d5c6,roughness:.93});
  const trim=new THREE.MeshStandardMaterial({color:0xb8b6aa,roughness:.91});

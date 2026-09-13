@@ -946,7 +946,10 @@ function pickNearestBoat() {
   for (const b of candidates) {
     if (!b) continue;
     b.getWorldPosition(_boatPick);
-    const d = player.position.distanceTo(_boatPick);
+    const berth=b.userData.frontHarborBerth;
+    const d = berth&&_boatPick.distanceTo(berth.position)<1
+      ? Math.min(player.position.distanceTo(_boatPick),player.position.distanceTo(berth.exit)+3.6)
+      : player.position.distanceTo(_boatPick);
     if (d < bestD) {
       bestD = d;
       best = b;

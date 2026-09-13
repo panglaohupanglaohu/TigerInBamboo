@@ -19,15 +19,15 @@ export function buildClaudeHouses(tier, customLots = null) {
     for (const x of [48.4,71.6]) for (const z of [44.9,54.8])
       lots.push([x,4,z,5.5,4.1,z<50?5.1:3.5]);
   } else {
-    for (const x of [46.8,52.2,67.8,73.2]) for (const z of [23.4,29.2,35.4])
-      lots.push([x,10,z,4.7,4.7,z<26?8.8:z<32?6.5:4.6]);
+    lots.push([46.8,10,23.4,4.7,4.7,8.8,4],[46.8,10,35.4,4.7,4.7,4.6,6],
+      [73.2,10,25,4.7,4.7,7.8,13],[73.2,10,34.8,4.7,4.7,4.6,15]);
   }
   const material = key => {
     if(materials.has(key))return materials.get(key);
     let m;
     if(data.emission[key]) {
-      const col = new THREE.Color(key==='win_pink'?0xff7084:0xff9a38);
-      m = new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:1.4,roughness:.7});
+      const col = new THREE.Color(key==='win_gold'?0xffd394:key==='win_pink'?0xffc279:0xffae55);
+      m = new THREE.MeshStandardMaterial({color:col.clone().multiplyScalar(.18),emissive:col,emissiveIntensity:1.0,roughness:.7});
       lamps.push(m);
     } else {
       const [col,roughness,metalness] = data.palette[key];
@@ -36,8 +36,8 @@ export function buildClaudeHouses(tier, customLots = null) {
     }
     m.name = 'claude-house-'+key;materials.set(key,m);return m;
   };
-  lots.forEach(([x,y,z,w,d,h],i) => {
-    const source = data.houses[(i+tier*4)%data.houses.length];
+  lots.forEach(([x,y,z,w,d,h,sourceIndex],i) => {
+    const source = data.houses[(sourceIndex??(i+tier*4))%data.houses.length];
     for(const [key,part] of Object.entries(source.parts)) {
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position',new THREE.Float32BufferAttribute(part.positions,3));
@@ -60,7 +60,7 @@ export function buildClaudeHouses(tier, customLots = null) {
   root.userData.importedHouseCount=lots.length;
   root.userData.update = phase => {
     const night = Math.max(0,Math.min(1,(Math.abs((phase??.85)-.5)-.18)/.14));
-    lamps.forEach(m=>m.emissiveIntensity=.04+night*1.55);
+    lamps.forEach(m=>m.emissiveIntensity=.04+night*1.0);
   };
   root.userData.update(.85);
   return root;

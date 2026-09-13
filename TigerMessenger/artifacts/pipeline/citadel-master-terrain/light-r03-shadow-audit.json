@@ -1,0 +1,172 @@
+{
+  "samples": {
+    "off": [
+      {
+        "ms": 26.299999997019768,
+        "calls": 3003,
+        "triangles": 909218
+      },
+      {
+        "ms": 24.80000000447035,
+        "calls": 3003,
+        "triangles": 909242
+      },
+      {
+        "ms": 24.799999997019768,
+        "calls": 2995,
+        "triangles": 908794
+      },
+      {
+        "ms": 24.600000001490116,
+        "calls": 2981,
+        "triangles": 907782
+      },
+      {
+        "ms": 23.899999998509884,
+        "calls": 2968,
+        "triangles": 907558
+      },
+      {
+        "ms": 26.299999997019768,
+        "calls": 2970,
+        "triangles": 907374
+      },
+      {
+        "ms": 25,
+        "calls": 2966,
+        "triangles": 907326
+      },
+      {
+        "ms": 24.400000005960464,
+        "calls": 2966,
+        "triangles": 907326
+      },
+      {
+        "ms": 24.899999998509884,
+        "calls": 2966,
+        "triangles": 907326
+      },
+      {
+        "ms": 24.399999998509884,
+        "calls": 2968,
+        "triangles": 907406
+      },
+      {
+        "ms": 26.5,
+        "calls": 2968,
+        "triangles": 907406
+      },
+      {
+        "ms": 24.900000005960464,
+        "calls": 2972,
+        "triangles": 907454
+      }
+    ],
+    "on": [
+      {
+        "ms": 19.600000001490116,
+        "calls": 2978,
+        "triangles": 907694
+      },
+      {
+        "ms": 19.599999994039536,
+        "calls": 2982,
+        "triangles": 907742
+      },
+      {
+        "ms": 19.5,
+        "calls": 2980,
+        "triangles": 907774
+      },
+      {
+        "ms": 19.600000001490116,
+        "calls": 2980,
+        "triangles": 907774
+      },
+      {
+        "ms": 19.899999998509884,
+        "calls": 2980,
+        "triangles": 907774
+      },
+      {
+        "ms": 19.399999998509884,
+        "calls": 2980,
+        "triangles": 907774
+      },
+      {
+        "ms": 19.19999999552965,
+        "calls": 2982,
+        "triangles": 907854
+      },
+      {
+        "ms": 20,
+        "calls": 2982,
+        "triangles": 907854
+      },
+      {
+        "ms": 19.399999998509884,
+        "calls": 2986,
+        "triangles": 907902
+      },
+      {
+        "ms": 19.700000002980232,
+        "calls": 2980,
+        "triangles": 907774
+      },
+      {
+        "ms": 19.5,
+        "calls": 2982,
+        "triangles": 907854
+      },
+      {
+        "ms": 23.299999997019768,
+        "calls": 2983,
+        "triangles": 907854
+      }
+    ]
+  },
+  "rendererShadowEnabled": true,
+  "shadows": [
+    {
+      "name": "light-pool-0",
+      "source": "new-city-light-main-gate",
+      "castShadow": true,
+      "visible": true,
+      "intensity": 300,
+      "mapReady": true,
+      "size": [
+        512,
+        512
+      ],
+      "cached": true,
+      "pending": false
+    },
+    {
+      "name": "light-pool-1",
+      "source": "new-city-light-plaza",
+      "castShadow": true,
+      "visible": true,
+      "intensity": 85,
+      "mapReady": true,
+      "size": [
+        512,
+        512
+      ],
+      "cached": true,
+      "pending": false
+    }
+  ],
+  "scope": "1280x800 desktop headless Chrome synchronized render timings; two cached architectural shadows in existing fixed pool, not mobile FPS or dynamic battle shadows.",
+  "errors": [],
+  "off": {
+    "meanMs": 25.066666667039197,
+    "calls": 3003,
+    "triangles": 909218
+  },
+  "on": {
+    "meanMs": 19.891666665673256,
+    "calls": 2978,
+    "triangles": 907694
+  },
+  "passed": true
+}

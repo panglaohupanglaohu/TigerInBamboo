@@ -1,0 +1,46 @@
+{
+  "actor_in_board": "[X: (0.01477, -0.272391, 0.470057), Y: (-0.0, 0.470231, 0.272492), Z: (-0.543278, -0.007405, 0.012779), O: (0.01026, -0.270309, 1.595825)]",
+  "blocked": {},
+  "carry_bounds": {
+    "centered_width": 0.734000086784363,
+    "maximum": "(0.404937, 1.176667, 0.367)",
+    "minimum": "(-0.163333, 0.018126, -0.193024)",
+    "width": 0.560023844242096
+  },
+  "completed_steps": 27,
+  "direction": "board_to_quay",
+  "geometry_queries": 87928,
+  "max_plant_adjustment": 0.174551456570625,
+  "max_swing_adjustment": 0.0264659136161072,
+  "parts_in_board": {
+    "Gold_Lower_Bracket": {
+      "max": "(-0.073755, -0.107285, 1.811541)",
+      "min": "(-0.124328, -0.141441, 1.778482)"
+    },
+    "n24": {
+      "max": "(0.002044, -0.105087, 1.71242)",
+      "min": "(-0.053482, -0.281616, 1.588415)"
+    },
+    "n33": {
+      "max": "(-0.118906, 0.022667, 1.925802)",
+      "min": "(-0.155239, -0.18779, 1.715061)"
+    },
+    "shield-boss": {
+      "max": "(-0.147743, -0.05555, 1.845146)",
+      "min": "(-0.187252, -0.110405, 1.797146)"
+    }
+  },
+  "passed": true,
+  "phase": "arrived",
+  "point": 27,
+  "role": "gladius",
+  "route_points": 28,
+  "scope": "Original gladius from the original board hinge across its full deployed length and shore seam. Does not certify deck access, deployment, natural gait or production boarding.",
+  "step_clearance": 0.1,
+  "support": {
+    "collider": "/root/TigerMessengerCitadelWorld/CitadelTraversalSurfaces",
+    "normal_in_city": "(0.0, 1.0, -0.0)",
+    "position": "(49.53001, -5.210938, 109.46)"
+  },
+  "surface_following": true
+}

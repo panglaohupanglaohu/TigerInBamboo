@@ -27,6 +27,9 @@ func bind(world:Node3D)->bool:
         replacement.queue_free();report={"passed":false,"reason":"mountain forest source identity mismatch"};return false
     for forest in previous_forest:forest.visible=false
     terrain[0].visible=false
+    var current_seals=replacement.find_children("citadel-coastal-cliff-seal","MeshInstance3D",true,false)
+    if current_seals.size()==1:
+        for previous_seal in world.castle_adapter.west_city.find_children("citadel-coastal-cliff-seal","MeshInstance3D",true,false):previous_seal.visible=false
     originals[0].visible=false
     report={"passed":true,"originals_replaced":1,"source":"actual Web citadelOldHarbor candidate","scope":"Original port, boat, crew, shore stairs and matching cut terrain; native logistics pending"}
     return true

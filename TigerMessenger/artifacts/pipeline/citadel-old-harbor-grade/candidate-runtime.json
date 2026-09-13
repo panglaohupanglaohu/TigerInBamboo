@@ -328,22 +328,22 @@
         "footprintDelta": 0.3332633175953106
       },
       {
-        "index": 53,
+        "index": 54,
         "root": [
-          -17.86833190917967,
-          3.274848699006044,
-          24.733779907226555
+          -17.150833129882816,
+          2.773674760133561,
+          26.68301582336423
         ],
         "surface": [
-          -17.86833190917967,
-          3.3722433911803185,
-          24.733779907226555
+          -17.150833129882816,
+          2.8675823180403195,
+          26.68301582336423
         ],
-        "size": 1.19,
-        "footprint": 0.1866,
-        "slope": 14.176682758299648,
-        "routeDistance": 7.444600313447557,
-        "footprintDelta": 0.07476174262683344
+        "size": 1.27,
+        "footprint": 0.1978,
+        "slope": 12.044442187051438,
+        "routeDistance": 7.99698463152886,
+        "footprintDelta": 0.06412300465092358
       },
       {
         "index": 57,
@@ -704,8 +704,8 @@
         "reason": "grove-spacing"
       },
       {
-        "index": 54,
-        "reason": "grove-spacing"
+        "index": 53,
+        "reason": "broken-root-surface"
       },
       {
         "index": 55,
@@ -1501,39 +1501,17 @@
         "footprintDelta": 0.0622881075237558
       },
       {
-        "index": 10,
-        "groundcover": true,
-        "zone": "old-shore",
-        "root": [
-          -36.931130519435385,
-          2.7078096561253173,
-          23.413311109762635
-        ],
-        "surface": [
-          -36.931130519435385,
-          2.8302606406096795,
-          23.413311109762635
-        ],
-        "size": 0.58,
-        "routeDistance": 2.900000000000001,
-        "canopyRadius": 0.52907078,
-        "walkEdgeClearance": 2.3709292200000007,
-        "crownSampleRays": 24,
-        "crownClearanceRadius": 0.49299999999999994,
-        "footprintDelta": 0.07245098448436238
-      },
-      {
         "index": 11,
         "groundcover": true,
         "zone": "old-shore",
         "root": [
-          -41.51702706242216,
-          3.0046314284867144,
+          -41.51702706242217,
+          3.0046309157615205,
           19.86231788292859
         ],
         "surface": [
-          -41.51702706242216,
-          3.115117516285806,
+          -41.51702706242217,
+          3.115117080075776,
           19.86231788292859
         ],
         "size": 0.58,
@@ -1542,35 +1520,17 @@
         "walkEdgeClearance": 2.3709292200000043,
         "crownSampleRays": 24,
         "crownClearanceRadius": 0.49299999999999994,
-        "footprintDelta": 0.06048608779909159
-      },
-      {
-        "index": 18,
-        "groundcover": true,
-        "zone": "new-city-slope",
-        "root": [
-          55.66858428704204,
-          15.220086278313751,
-          34.93559008996362
-        ],
-        "surface": [
-          55.66858428704204,
-          15.357865709674737,
-          34.93559008996362
-        ],
-        "size": 0.8,
-        "routeDistance": 18.662529303392922,
-        "canopyRadius": 0.7297528,
-        "walkEdgeClearance": 17.932776503392923,
-        "crownSampleRays": 24,
-        "crownClearanceRadius": 0.68,
-        "footprintDelta": 0.08777943136098543
+        "footprintDelta": 0.060486164314255575
       }
     ],
     "rejected": [
       {
         "index": 0,
         "reason": "no-dry-support"
+      },
+      {
+        "index": 10,
+        "reason": "unstable-root-footprint"
       },
       {
         "index": 12,
@@ -1594,7 +1554,11 @@
       },
       {
         "index": 17,
-        "reason": "no-dry-support"
+        "reason": "unstable-root-footprint"
+      },
+      {
+        "index": 18,
+        "reason": "building-or-wall-clearance"
       }
     ],
     "footprintRadius": 0.18

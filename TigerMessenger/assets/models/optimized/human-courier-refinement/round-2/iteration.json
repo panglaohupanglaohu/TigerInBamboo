@@ -1,0 +1,25 @@
+{
+  "round": 2,
+  "sourcePreserved": true,
+  "sourceSHA256": "e146fd34b4e07bbebb1e2cedc35fb57abacbdf68bd60b957c19c2eddc37778cf",
+  "shoulderWidthBefore": 0.3179999887943268,
+  "shoulderWidthAfter": 0.3179999887943268,
+  "target": "../human-courier-v1/approved-target.png",
+  "status": "isolated model iteration, not integrated",
+  "joints": [
+    "body",
+    "armL",
+    "elbowL",
+    "handL",
+    "armR",
+    "elbowR",
+    "handR",
+    "letter",
+    "cape",
+    "head",
+    "legL",
+    "kneeL",
+    "legR",
+    "kneeR"
+  ]
+}

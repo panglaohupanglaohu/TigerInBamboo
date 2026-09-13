@@ -1,0 +1,27 @@
+{
+  "before": {
+    "status": "ready",
+    "source": "assets/models/optimized/citadel-master-terrain/master-terrain-r06.blend",
+    "changed": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "count": 3023
+      },
+      {
+        "name": "citadel-coastal-cliff-seal",
+        "count": 40
+      },
+      {
+        "name": "new-city-rock-shoulder",
+        "count": 0
+      }
+    ]
+  },
+  "after": {
+    "status": "requires-regeneration",
+    "source": "assets/models/optimized/citadel-master-terrain/master-terrain-r06.blend",
+    "reason": "Terrain source rebuilt; previous Blender vertex correspondence is no longer valid"
+  },
+  "rebuilt": true,
+  "scope": "isolated browser rebuild with unchanged contour input; no saved game writes; verifies stale-state invalidation, not automatic reauthoring"
+}

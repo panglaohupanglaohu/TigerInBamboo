@@ -1,0 +1,3388 @@
+{
+  "plan": {
+    "version": "citadel-water-r01",
+    "terrainRevision": "r09",
+    "frame": "highland-west-city",
+    "status": "candidate; depth and vessel clearance under verification",
+    "gate": [
+      54,
+      107
+    ],
+    "quay": {
+      "xMin": 43,
+      "xMax": 67,
+      "z": 108,
+      "freeboard": 0.9
+    },
+    "basin": {
+      "xMin": 24,
+      "xMax": 76,
+      "zMin": 111,
+      "zMax": 152
+    },
+    "approach": [
+      [
+        30,
+        142
+      ],
+      [
+        44,
+        134
+      ],
+      [
+        54,
+        119
+      ]
+    ],
+    "turning": {
+      "center": [
+        48,
+        130
+      ],
+      "radius": 9
+    },
+    "minimumDepth": 1.25,
+    "turnClearanceRadius": 7,
+    "designDepth": 4.6,
+    "bedTargetDepth": 5.5,
+    "waterAuthority": "planet-v8-curved-ocean; no secondary local water plane"
+  },
+  "samples": [
+    {
+      "x": 24,
+      "z": 111,
+      "water": 160.498740615703,
+      "ground": null,
+      "seabed": 155.04777656874893,
+      "object": null,
+      "depth": 5.450964046954084
+    },
+    {
+      "x": 27,
+      "z": 111,
+      "water": 160.49775518122738,
+      "ground": null,
+      "seabed": 154.90992313585173,
+      "object": null,
+      "depth": 5.587832045375649
+    },
+    {
+      "x": 30,
+      "z": 111,
+      "water": 160.4986461978769,
+      "ground": null,
+      "seabed": 154.8293854786112,
+      "object": null,
+      "depth": 5.669260719265708
+    },
+    {
+      "x": 33,
+      "z": 111,
+      "water": 160.4971655821179,
+      "ground": null,
+      "seabed": 154.79885824190217,
+      "object": null,
+      "depth": 5.6983073402157345
+    },
+    {
+      "x": 36,
+      "z": 111,
+      "water": 160.49814546982293,
+      "ground": null,
+      "seabed": 154.81846299015734,
+      "object": null,
+      "depth": 5.679682479665587
+    },
+    {
+      "x": 39,
+      "z": 111,
+      "water": 160.49859475519636,
+      "ground": null,
+      "seabed": 154.88827279589188,
+      "object": null,
+      "depth": 5.6103219593044855
+    },
+    {
+      "x": 42,
+      "z": 111,
+      "water": 160.49827045382625,
+      "ground": 145.59485000806168,
+      "seabed": 155.00831203432875,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.489958419497498
+    },
+    {
+      "x": 45,
+      "z": 111,
+      "water": 160.49865095478754,
+      "ground": 145.31442595251227,
+      "seabed": 155.03293157556277,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.465719379224765
+    },
+    {
+      "x": 48,
+      "z": 111,
+      "water": 160.49874972765184,
+      "ground": 145.47389537495508,
+      "seabed": 154.91628140017232,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.582468327479518
+    },
+    {
+      "x": 51,
+      "z": 111,
+      "water": 160.49842879596346,
+      "ground": 145.86278151308665,
+      "seabed": 154.82713253658238,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.67129625938108
+    },
+    {
+      "x": 54,
+      "z": 111,
+      "water": 160.4996488256137,
+      "ground": 145.19312006901714,
+      "seabed": 154.8854373128504,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.614211512763291
+    },
+    {
+      "x": 57,
+      "z": 111,
+      "water": 160.49876771687158,
+      "ground": 144.2068816936647,
+      "seabed": 155.0707276175175,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.428040099354092
+    },
+    {
+      "x": 60,
+      "z": 111,
+      "water": 160.49867492869555,
+      "ground": 143.30153193268362,
+      "seabed": 155.30437930938334,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.194295619312214
+    },
+    {
+      "x": 63,
+      "z": 111,
+      "water": 160.4980209650256,
+      "ground": 142.2630351257455,
+      "seabed": 155.4550010912847,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.043019873740917
+    },
+    {
+      "x": 66,
+      "z": 111,
+      "water": 160.49745553698688,
+      "ground": 141.48489861952396,
+      "seabed": 155.35627773842089,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.141177798565991
+    },
+    {
+      "x": 69,
+      "z": 111,
+      "water": 160.4983926465517,
+      "ground": 142.15137298461386,
+      "seabed": 155.7266620638513,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.7717305827004
+    },
+    {
+      "x": 72,
+      "z": 111,
+      "water": 160.49881270673296,
+      "ground": 142.24547033215012,
+      "seabed": 156.1431170542153,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.355695652517653
+    },
+    {
+      "x": 75,
+      "z": 111,
+      "water": 160.4977684345165,
+      "ground": 141.77696416202974,
+      "seabed": 156.6050245066851,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 3.89274392783139
+    },
+    {
+      "x": 24,
+      "z": 114,
+      "water": 160.4996145422387,
+      "ground": null,
+      "seabed": 155.44649485648313,
+      "object": null,
+      "depth": 5.053119685755576
+    },
+    {
+      "x": 27,
+      "z": 114,
+      "water": 160.49829936298272,
+      "ground": null,
+      "seabed": 155.04395419325314,
+      "object": null,
+      "depth": 5.454345169729578
+    },
+    {
+      "x": 30,
+      "z": 114,
+      "water": 160.4984043331477,
+      "ground": null,
+      "seabed": 154.84200480288692,
+      "object": null,
+      "depth": 5.656399530260785
+    },
+    {
+      "x": 33,
+      "z": 114,
+      "water": 160.4978692290082,
+      "ground": null,
+      "seabed": 154.8120148884467,
+      "object": null,
+      "depth": 5.685854340561491
+    },
+    {
+      "x": 36,
+      "z": 114,
+      "water": 160.4988586214534,
+      "ground": null,
+      "seabed": 154.8316652464585,
+      "object": null,
+      "depth": 5.667193374994895
+    },
+    {
+      "x": 39,
+      "z": 114,
+      "water": 160.49937209950122,
+      "ground": null,
+      "seabed": 154.9010277451214,
+      "object": null,
+      "depth": 5.598344354379805
+    },
+    {
+      "x": 42,
+      "z": 114,
+      "water": 160.49812366609297,
+      "ground": 144.1245742426036,
+      "seabed": 154.93925293669906,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.558870729393902
+    },
+    {
+      "x": 45,
+      "z": 114,
+      "water": 160.49761388681023,
+      "ground": 143.3706004473675,
+      "seabed": 154.887974129944,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.6096397568662155
+    },
+    {
+      "x": 48,
+      "z": 114,
+      "water": 160.49719821418478,
+      "ground": 142.7471771482448,
+      "seabed": 154.88618193538096,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.611016278803817
+    },
+    {
+      "x": 51,
+      "z": 114,
+      "water": 160.49759783019047,
+      "ground": 142.83380970373287,
+      "seabed": 154.84199530849466,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.655602521695812
+    },
+    {
+      "x": 54,
+      "z": 114,
+      "water": 160.49804343555914,
+      "ground": 142.6161620765426,
+      "seabed": 154.80133650493735,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.696706930621787
+    },
+    {
+      "x": 57,
+      "z": 114,
+      "water": 160.4994070483646,
+      "ground": 141.934163044762,
+      "seabed": 154.80931003199393,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.6900970163706575
+    },
+    {
+      "x": 60,
+      "z": 114,
+      "water": 160.4986016283031,
+      "ground": 141.2773881708515,
+      "seabed": 154.8653311934147,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.633270434888402
+    },
+    {
+      "x": 63,
+      "z": 114,
+      "water": 160.49835945618443,
+      "ground": 140.11174309916834,
+      "seabed": 154.95996052545829,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.538398930726146
+    },
+    {
+      "x": 66,
+      "z": 114,
+      "water": 160.49763413730528,
+      "ground": 138.710501346003,
+      "seabed": 155.0986655984682,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.398968538837096
+    },
+    {
+      "x": 69,
+      "z": 114,
+      "water": 160.49934005652904,
+      "ground": 138.42451480444208,
+      "seabed": 155.52537825728564,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.973961799243398
+    },
+    {
+      "x": 72,
+      "z": 114,
+      "water": 160.49858855611456,
+      "ground": 138.64447564416932,
+      "seabed": 155.9368608365974,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.561727719517165
+    },
+    {
+      "x": 75,
+      "z": 114,
+      "water": 160.49755811350857,
+      "ground": 139.09979562246238,
+      "seabed": 156.39333153575845,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.104226577750126
+    },
+    {
+      "x": 24,
+      "z": 117,
+      "water": 160.49859296458825,
+      "ground": null,
+      "seabed": 155.88881465733166,
+      "object": null,
+      "depth": 4.60977830725659
+    },
+    {
+      "x": 27,
+      "z": 117,
+      "water": 160.4992038791572,
+      "ground": null,
+      "seabed": 155.4875013440629,
+      "object": null,
+      "depth": 5.011702535094287
+    },
+    {
+      "x": 30,
+      "z": 117,
+      "water": 160.4986300564099,
+      "ground": null,
+      "seabed": 155.13636487098742,
+      "object": null,
+      "depth": 5.362265185422473
+    },
+    {
+      "x": 33,
+      "z": 117,
+      "water": 160.49797866211003,
+      "ground": null,
+      "seabed": 154.87044214677124,
+      "object": null,
+      "depth": 5.6275365153387895
+    },
+    {
+      "x": 36,
+      "z": 117,
+      "water": 160.49849661209166,
+      "ground": null,
+      "seabed": 154.89015803746284,
+      "object": null,
+      "depth": 5.608338574628817
+    },
+    {
+      "x": 39,
+      "z": 117,
+      "water": 160.4974473997761,
+      "ground": null,
+      "seabed": 154.94220796851596,
+      "object": null,
+      "depth": 5.555239431260134
+    },
+    {
+      "x": 42,
+      "z": 117,
+      "water": 160.49779657427837,
+      "ground": null,
+      "seabed": 154.84148710652156,
+      "object": null,
+      "depth": 5.656309467756813
+    },
+    {
+      "x": 45,
+      "z": 117,
+      "water": 160.49733355516335,
+      "ground": 141.72051066044904,
+      "seabed": 154.789986739325,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.707346815838349
+    },
+    {
+      "x": 48,
+      "z": 117,
+      "water": 160.49779451004528,
+      "ground": 140.80148713544222,
+      "seabed": 154.78742986684432,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.710364643200961
+    },
+    {
+      "x": 51,
+      "z": 117,
+      "water": 160.49922833808785,
+      "ground": 140.26130621969708,
+      "seabed": 154.83349503994486,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.665733298142982
+    },
+    {
+      "x": 54,
+      "z": 117,
+      "water": 160.49844578920732,
+      "ground": 139.34581408579544,
+      "seabed": 154.859853314829,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.638592474378328
+    },
+    {
+      "x": 57,
+      "z": 117,
+      "water": 160.49754579504432,
+      "ground": 139.52749357005732,
+      "seabed": 154.86605087381253,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.631494921231791
+    },
+    {
+      "x": 60,
+      "z": 117,
+      "water": 160.49841735340246,
+      "ground": 138.97497987886405,
+      "seabed": 154.9198345796935,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.578582773708973
+    },
+    {
+      "x": 63,
+      "z": 117,
+      "water": 160.49841130336216,
+      "ground": 138.01109504817228,
+      "seabed": 154.86078421494344,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.637627088418725
+    },
+    {
+      "x": 66,
+      "z": 117,
+      "water": 160.49942669999578,
+      "ground": 136.5245155665372,
+      "seabed": 154.83408585221815,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.665340847777628
+    },
+    {
+      "x": 69,
+      "z": 117,
+      "water": 160.4976207088358,
+      "ground": 135.78563278002468,
+      "seabed": 155.02973676829015,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.467883940545647
+    },
+    {
+      "x": 72,
+      "z": 117,
+      "water": 160.49845309769384,
+      "ground": 135.2943463455974,
+      "seabed": 155.59996517825118,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.898487919442658
+    },
+    {
+      "x": 75,
+      "z": 117,
+      "water": 160.49891492396713,
+      "ground": 135.56803215666181,
+      "seabed": 156.2156292076585,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.283285716308626
+    },
+    {
+      "x": 24,
+      "z": 120,
+      "water": 160.49580236467358,
+      "ground": null,
+      "seabed": 156.37372152513342,
+      "object": null,
+      "depth": 4.1220808395401605
+    },
+    {
+      "x": 27,
+      "z": 120,
+      "water": 160.49549060707844,
+      "ground": null,
+      "seabed": 155.9736082105986,
+      "object": null,
+      "depth": 4.521882396479839
+    },
+    {
+      "x": 30,
+      "z": 120,
+      "water": 160.49776569919453,
+      "ground": null,
+      "seabed": 155.6232837649261,
+      "object": null,
+      "depth": 4.874481934268431
+    },
+    {
+      "x": 33,
+      "z": 120,
+      "water": 160.49771119421985,
+      "ground": null,
+      "seabed": 155.32264907115785,
+      "object": null,
+      "depth": 5.175062123061991
+    },
+    {
+      "x": 36,
+      "z": 120,
+      "water": 160.49398202877757,
+      "ground": null,
+      "seabed": 155.06966452278516,
+      "object": null,
+      "depth": 5.424317505992406
+    },
+    {
+      "x": 39,
+      "z": 120,
+      "water": 160.4912100329846,
+      "ground": null,
+      "seabed": 154.88979279241985,
+      "object": null,
+      "depth": 5.601417240564757
+    },
+    {
+      "x": 42,
+      "z": 120,
+      "water": 160.49069196728075,
+      "ground": null,
+      "seabed": 154.78924674206866,
+      "object": null,
+      "depth": 5.7014452252120975
+    },
+    {
+      "x": 45,
+      "z": 120,
+      "water": 160.48995895852318,
+      "ground": 140.0706410082961,
+      "seabed": 154.7374497734475,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.752509185075667
+    },
+    {
+      "x": 48,
+      "z": 120,
+      "water": 160.49304053653498,
+      "ground": 138.920329564106,
+      "seabed": 154.734048506245,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.758992030289988
+    },
+    {
+      "x": 51,
+      "z": 120,
+      "water": 160.49533439229404,
+      "ground": 137.76500358230533,
+      "seabed": 154.77872773648457,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.716606655809471
+    },
+    {
+      "x": 54,
+      "z": 120,
+      "water": 160.49778466879675,
+      "ground": 137.11427504161625,
+      "seabed": 154.87112974009497,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.626654928701782
+    },
+    {
+      "x": 57,
+      "z": 120,
+      "water": 160.49767736571854,
+      "ground": 136.55946043335365,
+      "seabed": 154.96613574056414,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.531541625154404
+    },
+    {
+      "x": 60,
+      "z": 120,
+      "water": 160.47945704176678,
+      "ground": 136.47280800698655,
+      "seabed": 154.88155116128894,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.597905880477839
+    },
+    {
+      "x": 63,
+      "z": 120,
+      "water": 160.49345215618746,
+      "ground": 136.0384335202143,
+      "seabed": 154.80619186976736,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.6872602864200985
+    },
+    {
+      "x": 66,
+      "z": 120,
+      "water": 160.48334347708672,
+      "ground": 134.6360797668707,
+      "seabed": 154.77741854786086,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.7059249292258585
+    },
+    {
+      "x": 69,
+      "z": 120,
+      "water": 160.49807599642025,
+      "ground": 133.630905578779,
+      "seabed": 154.79440758568612,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.703668410734139
+    },
+    {
+      "x": 72,
+      "z": 120,
+      "water": 160.4986876673378,
+      "ground": 132.86225926000674,
+      "seabed": 155.0448529743807,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.453834692957116
+    },
+    {
+      "x": 75,
+      "z": 120,
+      "water": 160.48778796494636,
+      "ground": 132.72134435363725,
+      "seabed": 155.65194946191636,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.835838503030004
+    },
+    {
+      "x": 24,
+      "z": 123,
+      "water": 160.4756807780797,
+      "ground": null,
+      "seabed": 156.5551345079318,
+      "object": null,
+      "depth": 3.920546270147895
+    },
+    {
+      "x": 27,
+      "z": 123,
+      "water": 160.49049938927126,
+      "ground": null,
+      "seabed": 156.04096594803698,
+      "object": null,
+      "depth": 4.44953344123428
+    },
+    {
+      "x": 30,
+      "z": 123,
+      "water": 160.47048536371105,
+      "ground": null,
+      "seabed": 155.57710552357375,
+      "object": null,
+      "depth": 4.8933798401373
+    },
+    {
+      "x": 33,
+      "z": 123,
+      "water": 160.47903543941996,
+      "ground": null,
+      "seabed": 155.16333837189867,
+      "object": null,
+      "depth": 5.315697067521285
+    },
+    {
+      "x": 36,
+      "z": 123,
+      "water": 160.47805519527085,
+      "ground": null,
+      "seabed": 154.89065357659854,
+      "object": null,
+      "depth": 5.587401618672317
+    },
+    {
+      "x": 39,
+      "z": 123,
+      "water": 160.4715142060597,
+      "ground": null,
+      "seabed": 154.8428079699448,
+      "object": null,
+      "depth": 5.628706236114908
+    },
+    {
+      "x": 42,
+      "z": 123,
+      "water": 160.48816078141306,
+      "ground": null,
+      "seabed": 154.8138138309574,
+      "object": null,
+      "depth": 5.674346950455657
+    },
+    {
+      "x": 45,
+      "z": 123,
+      "water": 160.46815476945508,
+      "ground": null,
+      "seabed": 154.7600455594568,
+      "object": null,
+      "depth": 5.70810920999827
+    },
+    {
+      "x": 48,
+      "z": 123,
+      "water": 160.4973487551356,
+      "ground": 137.76734160873468,
+      "seabed": 154.75413495625338,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.743213798882209
+    },
+    {
+      "x": 51,
+      "z": 123,
+      "water": 160.4709842324031,
+      "ground": 136.6969620839278,
+      "seabed": 154.7957715333776,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.675212699025508
+    },
+    {
+      "x": 54,
+      "z": 123,
+      "water": 160.48771719211632,
+      "ground": 135.22539304029215,
+      "seabed": 154.88460324115832,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.603113950958004
+    },
+    {
+      "x": 57,
+      "z": 123,
+      "water": 160.4762235992579,
+      "ground": 134.50177664556114,
+      "seabed": 154.91254011072846,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.563683488529449
+    },
+    {
+      "x": 60,
+      "z": 123,
+      "water": 160.4773947266557,
+      "ground": 134.41713907140684,
+      "seabed": 154.86825871608067,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.609136010575014
+    },
+    {
+      "x": 63,
+      "z": 123,
+      "water": 160.48896304073716,
+      "ground": 134.1571721417998,
+      "seabed": 154.79309144593742,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.6958715947997405
+    },
+    {
+      "x": 66,
+      "z": 123,
+      "water": 160.43887218958358,
+      "ground": 133.0205996676694,
+      "seabed": 154.76368260485583,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.675189584727747
+    },
+    {
+      "x": 69,
+      "z": 123,
+      "water": 160.41586815213734,
+      "ground": 132.48874305736294,
+      "seabed": 154.77791206938073,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.637956082756602
+    },
+    {
+      "x": 72,
+      "z": 123,
+      "water": 160.4711805607904,
+      "ground": 131.38565871277527,
+      "seabed": 154.83659017068615,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.6345903901042504
+    },
+    {
+      "x": 75,
+      "z": 123,
+      "water": 160.46927270644412,
+      "ground": 130.95749553935005,
+      "seabed": 155.13972986507554,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.329542841368578
+    },
+    {
+      "x": 24,
+      "z": 126,
+      "water": 160.4475113510405,
+      "ground": null,
+      "seabed": 156.3138468462457,
+      "object": null,
+      "depth": 4.133664504794808
+    },
+    {
+      "x": 27,
+      "z": 126,
+      "water": 160.4620386289341,
+      "ground": null,
+      "seabed": 155.80505471900432,
+      "object": null,
+      "depth": 4.656983909929778
+    },
+    {
+      "x": 30,
+      "z": 126,
+      "water": 160.45458824901644,
+      "ground": null,
+      "seabed": 155.3458899700261,
+      "object": null,
+      "depth": 5.108698278990346
+    },
+    {
+      "x": 33,
+      "z": 126,
+      "water": 160.4573522330655,
+      "ground": null,
+      "seabed": 154.93614174079997,
+      "object": null,
+      "depth": 5.5212104922655385
+    },
+    {
+      "x": 36,
+      "z": 126,
+      "water": 160.41900106935447,
+      "ground": null,
+      "seabed": 154.8146648092634,
+      "object": null,
+      "depth": 5.60433626009106
+    },
+    {
+      "x": 39,
+      "z": 126,
+      "water": 160.42058517860258,
+      "ground": null,
+      "seabed": 154.76703485951654,
+      "object": null,
+      "depth": 5.653550319086037
+    },
+    {
+      "x": 42,
+      "z": 126,
+      "water": 160.46107961667568,
+      "ground": null,
+      "seabed": 154.76687904671158,
+      "object": null,
+      "depth": 5.694200569964096
+    },
+    {
+      "x": 45,
+      "z": 126,
+      "water": 160.4556881766236,
+      "ground": null,
+      "seabed": 154.81407112580533,
+      "object": null,
+      "depth": 5.641617050818269
+    },
+    {
+      "x": 48,
+      "z": 126,
+      "water": 160.43329976347576,
+      "ground": null,
+      "seabed": 154.82084800299563,
+      "object": null,
+      "depth": 5.612451760480127
+    },
+    {
+      "x": 51,
+      "z": 126,
+      "water": 160.41411120766085,
+      "ground": 135.33592397654576,
+      "seabed": 154.86092755519664,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.553183652464213
+    },
+    {
+      "x": 54,
+      "z": 126,
+      "water": 160.44048120515876,
+      "ground": 133.5609741618984,
+      "seabed": 154.90872090989137,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.531760295267389
+    },
+    {
+      "x": 57,
+      "z": 126,
+      "water": 160.46363301541024,
+      "ground": 132.82543114140051,
+      "seabed": 154.83133895574332,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.632294059666918
+    },
+    {
+      "x": 60,
+      "z": 126,
+      "water": 160.471901176044,
+      "ground": 132.29430009499188,
+      "seabed": 154.80034582750457,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.671555348539442
+    },
+    {
+      "x": 63,
+      "z": 126,
+      "water": 160.45128807838844,
+      "ground": 131.9472598915167,
+      "seabed": 154.81509417753895,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.6361939008494915
+    },
+    {
+      "x": 66,
+      "z": 126,
+      "water": 160.3979672179059,
+      "ground": 131.44961070850795,
+      "seabed": 154.78417416642512,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.613793051480769
+    },
+    {
+      "x": 69,
+      "z": 126,
+      "water": 160.3962231819327,
+      "ground": 130.8867513802952,
+      "seabed": 154.79741130141133,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.598811880521367
+    },
+    {
+      "x": 72,
+      "z": 126,
+      "water": 160.43206902211946,
+      "ground": 130.25074685995844,
+      "seabed": 154.85461745409455,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.577451568024912
+    },
+    {
+      "x": 75,
+      "z": 126,
+      "water": 160.47330947366595,
+      "ground": 129.5773255005593,
+      "seabed": 154.95495546843512,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.518354005230833
+    },
+    {
+      "x": 24,
+      "z": 129,
+      "water": 160.39523011152275,
+      "ground": null,
+      "seabed": 156.18422229187635,
+      "object": null,
+      "depth": 4.211007819646397
+    },
+    {
+      "x": 27,
+      "z": 129,
+      "water": 160.4253972904866,
+      "ground": null,
+      "seabed": 155.6142007261122,
+      "object": null,
+      "depth": 4.811196564374399
+    },
+    {
+      "x": 30,
+      "z": 129,
+      "water": 160.4652068111439,
+      "ground": null,
+      "seabed": 155.15958875044092,
+      "object": null,
+      "depth": 5.305618060702983
+    },
+    {
+      "x": 33,
+      "z": 129,
+      "water": 160.4227977728357,
+      "ground": null,
+      "seabed": 154.87549036158464,
+      "object": null,
+      "depth": 5.547307411251069
+    },
+    {
+      "x": 36,
+      "z": 129,
+      "water": 160.3792360625923,
+      "ground": null,
+      "seabed": 154.7810924394439,
+      "object": null,
+      "depth": 5.598143623148388
+    },
+    {
+      "x": 39,
+      "z": 129,
+      "water": 160.38426983577082,
+      "ground": null,
+      "seabed": 154.733652549134,
+      "object": null,
+      "depth": 5.650617286636816
+    },
+    {
+      "x": 42,
+      "z": 129,
+      "water": 160.43786427511506,
+      "ground": null,
+      "seabed": 154.7330895166118,
+      "object": null,
+      "depth": 5.704774758503248
+    },
+    {
+      "x": 45,
+      "z": 129,
+      "water": 160.47067246006074,
+      "ground": null,
+      "seabed": 154.77927985467136,
+      "object": null,
+      "depth": 5.691392605389382
+    },
+    {
+      "x": 48,
+      "z": 129,
+      "water": 160.4020452252727,
+      "ground": null,
+      "seabed": 154.87205813432013,
+      "object": null,
+      "depth": 5.529987090952574
+    },
+    {
+      "x": 51,
+      "z": 129,
+      "water": 160.3816917253111,
+      "ground": null,
+      "seabed": 154.96659374751613,
+      "object": null,
+      "depth": 5.4150979777949715
+    },
+    {
+      "x": 54,
+      "z": 129,
+      "water": 160.40920773058525,
+      "ground": 133.0817381268786,
+      "seabed": 154.8707339472835,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.538473783301754
+    },
+    {
+      "x": 57,
+      "z": 129,
+      "water": 160.48201246679778,
+      "ground": 131.56898735158822,
+      "seabed": 154.79209731995266,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.689915146845124
+    },
+    {
+      "x": 60,
+      "z": 129,
+      "water": 160.44027423586107,
+      "ground": 130.59556702679586,
+      "seabed": 154.75928920896922,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.680985026891847
+    },
+    {
+      "x": 63,
+      "z": 129,
+      "water": 160.40136973633994,
+      "ground": 130.0111204014391,
+      "seabed": 154.77167595358648,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.629693782753463
+    },
+    {
+      "x": 66,
+      "z": 129,
+      "water": 160.40887614248862,
+      "ground": 129.7829733412418,
+      "seabed": 154.82859372557,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.580282416918635
+    },
+    {
+      "x": 69,
+      "z": 129,
+      "water": 160.40981021908655,
+      "ground": 129.67301663635993,
+      "seabed": 154.8546465560059,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.555163663080663
+    },
+    {
+      "x": 72,
+      "z": 129,
+      "water": 160.44477891063795,
+      "ground": 129.0405135209025,
+      "seabed": 154.90826232007078,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.5365165905671745
+    },
+    {
+      "x": 75,
+      "z": 129,
+      "water": 160.4693707994554,
+      "ground": 128.22761312936072,
+      "seabed": 155.16067853563206,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.308692263823332
+    },
+    {
+      "x": 24,
+      "z": 132,
+      "water": 160.36498592191128,
+      "ground": null,
+      "seabed": 156.1889271571289,
+      "object": null,
+      "depth": 4.176058764782397
+    },
+    {
+      "x": 27,
+      "z": 132,
+      "water": 160.40111658626446,
+      "ground": null,
+      "seabed": 155.60066512357045,
+      "object": null,
+      "depth": 4.800451462694014
+    },
+    {
+      "x": 30,
+      "z": 132,
+      "water": 160.48510940298075,
+      "ground": null,
+      "seabed": 154.98364843911523,
+      "object": null,
+      "depth": 5.501460963865526
+    },
+    {
+      "x": 33,
+      "z": 132,
+      "water": 160.42496537449304,
+      "ground": null,
+      "seabed": 154.88199418658525,
+      "object": null,
+      "depth": 5.542971187907796
+    },
+    {
+      "x": 36,
+      "z": 132,
+      "water": 160.38185476862697,
+      "ground": null,
+      "seabed": 154.78836197391922,
+      "object": null,
+      "depth": 5.593492794707743
+    },
+    {
+      "x": 39,
+      "z": 132,
+      "water": 160.38671747653171,
+      "ground": null,
+      "seabed": 154.74108800264807,
+      "object": null,
+      "depth": 5.645629473883645
+    },
+    {
+      "x": 42,
+      "z": 132,
+      "water": 160.439519471478,
+      "ground": null,
+      "seabed": 154.74009276720557,
+      "object": null,
+      "depth": 5.69942670427244
+    },
+    {
+      "x": 45,
+      "z": 132,
+      "water": 160.43492862984763,
+      "ground": null,
+      "seabed": 154.7852555228617,
+      "object": null,
+      "depth": 5.649673106985944
+    },
+    {
+      "x": 48,
+      "z": 132,
+      "water": 160.41290641070606,
+      "ground": null,
+      "seabed": 154.87641464362872,
+      "object": null,
+      "depth": 5.536491767077337
+    },
+    {
+      "x": 51,
+      "z": 132,
+      "water": 160.3913024202783,
+      "ground": null,
+      "seabed": 154.91780687514193,
+      "object": null,
+      "depth": 5.473495545136359
+    },
+    {
+      "x": 54,
+      "z": 132,
+      "water": 160.41697048052342,
+      "ground": 133.00323960638312,
+      "seabed": 154.8733035255973,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.543666954926124
+    },
+    {
+      "x": 57,
+      "z": 132,
+      "water": 160.4672394180227,
+      "ground": 131.0493816375535,
+      "seabed": 154.793276256214,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.6739631618087
+    },
+    {
+      "x": 60,
+      "z": 132,
+      "water": 160.4342744244305,
+      "ground": 130.05698816112604,
+      "seabed": 154.7585168190848,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.675757605345694
+    },
+    {
+      "x": 63,
+      "z": 132,
+      "water": 160.39312258581177,
+      "ground": 129.11239483160827,
+      "seabed": 154.76840516435976,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.624717421452004
+    },
+    {
+      "x": 66,
+      "z": 132,
+      "water": 160.39782644195742,
+      "ground": 128.3728093754885,
+      "seabed": 154.82229175725337,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.575534684704053
+    },
+    {
+      "x": 69,
+      "z": 132,
+      "water": 160.44763877126994,
+      "ground": 128.13000620399544,
+      "seabed": 154.91949926599727,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.528139505272662
+    },
+    {
+      "x": 72,
+      "z": 132,
+      "water": 160.4709315596985,
+      "ground": 128.05404762680203,
+      "seabed": 155.09159237821382,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.379339181484681
+    },
+    {
+      "x": 75,
+      "z": 132,
+      "water": 160.41902663709536,
+      "ground": 127.32394217003159,
+      "seabed": 155.5897038368313,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.829322800264066
+    },
+    {
+      "x": 24,
+      "z": 135,
+      "water": 160.37576618721104,
+      "ground": null,
+      "seabed": 155.97454193918924,
+      "object": null,
+      "depth": 4.401224248021805
+    },
+    {
+      "x": 27,
+      "z": 135,
+      "water": 160.4127899895861,
+      "ground": null,
+      "seabed": 155.2879654772333,
+      "object": null,
+      "depth": 5.124824512352774
+    },
+    {
+      "x": 30,
+      "z": 135,
+      "water": 160.42396629811498,
+      "ground": null,
+      "seabed": 154.8773704623796,
+      "object": null,
+      "depth": 5.546595835735388
+    },
+    {
+      "x": 33,
+      "z": 135,
+      "water": 160.39252250332765,
+      "ground": null,
+      "seabed": 154.8214238746807,
+      "object": null,
+      "depth": 5.571098628646951
+    },
+    {
+      "x": 36,
+      "z": 135,
+      "water": 160.4083811106497,
+      "ground": null,
+      "seabed": 154.8111342024757,
+      "object": null,
+      "depth": 5.597246908174014
+    },
+    {
+      "x": 39,
+      "z": 135,
+      "water": 160.4299354508062,
+      "ground": null,
+      "seabed": 154.78779581206973,
+      "object": null,
+      "depth": 5.642139638736467
+    },
+    {
+      "x": 42,
+      "z": 135,
+      "water": 160.45423385932645,
+      "ground": null,
+      "seabed": 154.7863454431191,
+      "object": null,
+      "depth": 5.667888416207347
+    },
+    {
+      "x": 45,
+      "z": 135,
+      "water": 160.39666224467115,
+      "ground": null,
+      "seabed": 154.8304574571148,
+      "object": null,
+      "depth": 5.566204787556359
+    },
+    {
+      "x": 48,
+      "z": 135,
+      "water": 160.3862611208398,
+      "ground": null,
+      "seabed": 154.91997400863184,
+      "object": null,
+      "depth": 5.466287112207965
+    },
+    {
+      "x": 51,
+      "z": 135,
+      "water": 160.4227354954735,
+      "ground": null,
+      "seabed": 154.84347020235018,
+      "object": null,
+      "depth": 5.5792652931233135
+    },
+    {
+      "x": 54,
+      "z": 135,
+      "water": 160.46510403473113,
+      "ground": null,
+      "seabed": 154.79956351515187,
+      "object": null,
+      "depth": 5.6655405195792525
+    },
+    {
+      "x": 57,
+      "z": 135,
+      "water": 160.42697057286975,
+      "ground": 130.78509343079153,
+      "seabed": 154.80048562487502,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.626484947994726
+    },
+    {
+      "x": 60,
+      "z": 135,
+      "water": 160.3953616522992,
+      "ground": 129.83729039824377,
+      "seabed": 154.79652674334855,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.598834908950636
+    },
+    {
+      "x": 63,
+      "z": 135,
+      "water": 160.40941647655038,
+      "ground": 128.8458116087817,
+      "seabed": 154.80379093373034,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.605625542820036
+    },
+    {
+      "x": 66,
+      "z": 135,
+      "water": 160.4267498812121,
+      "ground": 127.9962106129529,
+      "seabed": 154.85452054676196,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.572229334450128
+    },
+    {
+      "x": 69,
+      "z": 135,
+      "water": 160.47307354101036,
+      "ground": 127.1926903459716,
+      "seabed": 154.9480531059227,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.525020435087669
+    },
+    {
+      "x": 72,
+      "z": 135,
+      "water": 160.43636467446402,
+      "ground": 126.98041809955318,
+      "seabed": 155.37027948062757,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.066085193836443
+    },
+    {
+      "x": 75,
+      "z": 135,
+      "water": 160.4085072488149,
+      "ground": 126.07054934259028,
+      "seabed": 155.94259743494283,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.465909813872088
+    },
+    {
+      "x": 24,
+      "z": 138,
+      "water": 160.42597783566416,
+      "ground": null,
+      "seabed": 155.6708768349186,
+      "object": null,
+      "depth": 4.7551010007455545
+    },
+    {
+      "x": 27,
+      "z": 138,
+      "water": 160.46396051234169,
+      "ground": null,
+      "seabed": 154.99239395325532,
+      "object": null,
+      "depth": 5.471566559086369
+    },
+    {
+      "x": 30,
+      "z": 138,
+      "water": 160.40277442307,
+      "ground": null,
+      "seabed": 154.81533773440455,
+      "object": null,
+      "depth": 5.587436688665463
+    },
+    {
+      "x": 33,
+      "z": 138,
+      "water": 160.37204355945036,
+      "ground": null,
+      "seabed": 154.760271768912,
+      "object": null,
+      "depth": 5.61177179053837
+    },
+    {
+      "x": 36,
+      "z": 138,
+      "water": 160.3879644764407,
+      "ground": null,
+      "seabed": 154.7502225794608,
+      "object": null,
+      "depth": 5.63774189697989
+    },
+    {
+      "x": 39,
+      "z": 138,
+      "water": 160.45059624072815,
+      "ground": null,
+      "seabed": 154.7852249489455,
+      "object": null,
+      "depth": 5.665371291782634
+    },
+    {
+      "x": 42,
+      "z": 138,
+      "water": 160.4533190949462,
+      "ground": null,
+      "seabed": 154.8652743464872,
+      "object": null,
+      "depth": 5.588044748458998
+    },
+    {
+      "x": 45,
+      "z": 138,
+      "water": 160.39855431361357,
+      "ground": null,
+      "seabed": 154.9133739019982,
+      "object": null,
+      "depth": 5.485180411615374
+    },
+    {
+      "x": 48,
+      "z": 138,
+      "water": 160.38712110336832,
+      "ground": null,
+      "seabed": 154.89816876469447,
+      "object": null,
+      "depth": 5.48895233867384
+    },
+    {
+      "x": 51,
+      "z": 138,
+      "water": 160.42193266428245,
+      "ground": null,
+      "seabed": 154.8082916148916,
+      "object": null,
+      "depth": 5.61364104939085
+    },
+    {
+      "x": 54,
+      "z": 138,
+      "water": 160.46268964243512,
+      "ground": null,
+      "seabed": 154.76309756424223,
+      "object": null,
+      "depth": 5.699592078192893
+    },
+    {
+      "x": 57,
+      "z": 138,
+      "water": 160.4265209981564,
+      "ground": 131.25784987158818,
+      "seabed": 154.76212927536707,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.664391722789333
+    },
+    {
+      "x": 60,
+      "z": 138,
+      "water": 160.39280847099715,
+      "ground": 129.5288043555432,
+      "seabed": 154.80489674545842,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.587911725538731
+    },
+    {
+      "x": 63,
+      "z": 138,
+      "water": 160.40417003619135,
+      "ground": 128.5995991279602,
+      "seabed": 154.87636982826805,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.527800207923292
+    },
+    {
+      "x": 66,
+      "z": 138,
+      "water": 160.4599680969771,
+      "ground": 127.68962393950976,
+      "seabed": 154.92382786768283,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.536140229294261
+    },
+    {
+      "x": 69,
+      "z": 138,
+      "water": 160.45481221993944,
+      "ground": 126.79488143180481,
+      "seabed": 155.186394072172,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.2684181477674485
+    },
+    {
+      "x": 72,
+      "z": 138,
+      "water": 160.40600860776036,
+      "ground": 125.93961800506862,
+      "seabed": 155.63155962061322,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.774448987147139
+    },
+    {
+      "x": 75,
+      "z": 138,
+      "water": 160.40044103819906,
+      "ground": 125.2444390393723,
+      "seabed": 156.11816766782408,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.2822733703749805
+    },
+    {
+      "x": 24,
+      "z": 141,
+      "water": 160.4172011893691,
+      "ground": null,
+      "seabed": 155.4097715148203,
+      "object": null,
+      "depth": 5.007429674548803
+    },
+    {
+      "x": 27,
+      "z": 141,
+      "water": 160.4576796891088,
+      "ground": null,
+      "seabed": 154.8899383420178,
+      "object": null,
+      "depth": 5.567741347090987
+    },
+    {
+      "x": 30,
+      "z": 141,
+      "water": 160.42048131552897,
+      "ground": null,
+      "seabed": 154.79144677952678,
+      "object": null,
+      "depth": 5.6290345360021945
+    },
+    {
+      "x": 33,
+      "z": 141,
+      "water": 160.39047409540999,
+      "ground": null,
+      "seabed": 154.73726254249772,
+      "object": null,
+      "depth": 5.653211552912268
+    },
+    {
+      "x": 36,
+      "z": 141,
+      "water": 160.40647028396668,
+      "ground": null,
+      "seabed": 154.7274576324017,
+      "object": null,
+      "depth": 5.679012651564989
+    },
+    {
+      "x": 39,
+      "z": 141,
+      "water": 160.45570483084623,
+      "ground": null,
+      "seabed": 154.7620659463824,
+      "object": null,
+      "depth": 5.693638884463837
+    },
+    {
+      "x": 42,
+      "z": 141,
+      "water": 160.4028670742024,
+      "ground": null,
+      "seabed": 154.84108317474212,
+      "object": null,
+      "depth": 5.561783899460266
+    },
+    {
+      "x": 45,
+      "z": 141,
+      "water": 160.39601371976343,
+      "ground": null,
+      "seabed": 154.9644668406791,
+      "object": null,
+      "depth": 5.431546879084323
+    },
+    {
+      "x": 48,
+      "z": 141,
+      "water": 160.4264722233769,
+      "ground": null,
+      "seabed": 154.90132559681632,
+      "object": null,
+      "depth": 5.52514662656057
+    },
+    {
+      "x": 51,
+      "z": 141,
+      "water": 160.45957300893315,
+      "ground": null,
+      "seabed": 154.81068592008748,
+      "object": null,
+      "depth": 5.648887088845669
+    },
+    {
+      "x": 54,
+      "z": 141,
+      "water": 160.42436010435858,
+      "ground": null,
+      "seabed": 154.76411780633123,
+      "object": null,
+      "depth": 5.660242298027356
+    },
+    {
+      "x": 57,
+      "z": 141,
+      "water": 160.39470019620032,
+      "ground": null,
+      "seabed": 154.76117475325867,
+      "object": null,
+      "depth": 5.633525442941647
+    },
+    {
+      "x": 60,
+      "z": 141,
+      "water": 160.4098580861973,
+      "ground": 129.2614562304091,
+      "seabed": 154.80137845155244,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.608479634644851
+    },
+    {
+      "x": 63,
+      "z": 141,
+      "water": 160.4369389821758,
+      "ground": 128.30931057397098,
+      "seabed": 154.88422005558454,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.552718926591268
+    },
+    {
+      "x": 66,
+      "z": 141,
+      "water": 160.46785206115035,
+      "ground": 127.4081745560269,
+      "seabed": 155.01993274686058,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.447919314289777
+    },
+    {
+      "x": 69,
+      "z": 141,
+      "water": 160.42075265289478,
+      "ground": 126.52077806138018,
+      "seabed": 155.48712552540943,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.933627127485352
+    },
+    {
+      "x": 72,
+      "z": 141,
+      "water": 160.41346681956205,
+      "ground": 125.65424608482691,
+      "seabed": 155.92665178015335,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.486815039408697
+    },
+    {
+      "x": 75,
+      "z": 141,
+      "water": 160.40419604135957,
+      "ground": 124.80399777508357,
+      "seabed": 156.40716469251115,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 3.9970313488484237
+    },
+    {
+      "x": 24,
+      "z": 144,
+      "water": 160.42883300061533,
+      "ground": null,
+      "seabed": 155.18080666330235,
+      "object": null,
+      "depth": 5.248026337312979
+    },
+    {
+      "x": 27,
+      "z": 144,
+      "water": 160.40873474405316,
+      "ground": null,
+      "seabed": 154.901084936301,
+      "object": null,
+      "depth": 5.507649807752159
+    },
+    {
+      "x": 30,
+      "z": 144,
+      "water": 160.38303306012315,
+      "ground": null,
+      "seabed": 154.80410742794325,
+      "object": null,
+      "depth": 5.578925632179903
+    },
+    {
+      "x": 33,
+      "z": 144,
+      "water": 160.40259173661747,
+      "ground": null,
+      "seabed": 154.75080496405968,
+      "object": null,
+      "depth": 5.651786772557784
+    },
+    {
+      "x": 36,
+      "z": 144,
+      "water": 160.4622912598641,
+      "ground": null,
+      "seabed": 154.741247588366,
+      "object": null,
+      "depth": 5.72104367149808
+    },
+    {
+      "x": 39,
+      "z": 144,
+      "water": 160.44359197048263,
+      "ground": null,
+      "seabed": 154.775468323847,
+      "object": null,
+      "depth": 5.668123646635621
+    },
+    {
+      "x": 42,
+      "z": 144,
+      "water": 160.39067171076377,
+      "ground": null,
+      "seabed": 154.85346306805744,
+      "object": null,
+      "depth": 5.537208642706332
+    },
+    {
+      "x": 45,
+      "z": 144,
+      "water": 160.38307373148143,
+      "ground": null,
+      "seabed": 154.90045152822526,
+      "object": null,
+      "depth": 5.48262220325617
+    },
+    {
+      "x": 48,
+      "z": 144,
+      "water": 160.42060373506308,
+      "ground": null,
+      "seabed": 154.8326195981487,
+      "object": null,
+      "depth": 5.587984136914372
+    },
+    {
+      "x": 51,
+      "z": 144,
+      "water": 160.47289076760538,
+      "ground": null,
+      "seabed": 154.8083357871549,
+      "object": null,
+      "depth": 5.664554980450475
+    },
+    {
+      "x": 54,
+      "z": 144,
+      "water": 160.4238461883056,
+      "ground": null,
+      "seabed": 154.80108520411255,
+      "object": null,
+      "depth": 5.622760984193036
+    },
+    {
+      "x": 57,
+      "z": 144,
+      "water": 160.392323099804,
+      "ground": null,
+      "seabed": 154.7960912285208,
+      "object": null,
+      "depth": 5.596231871283209
+    },
+    {
+      "x": 60,
+      "z": 144,
+      "water": 160.40499855639897,
+      "ground": 129.45473534325177,
+      "seabed": 154.83365764194178,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.571340914457181
+    },
+    {
+      "x": 63,
+      "z": 144,
+      "water": 160.4613360783857,
+      "ground": 128.01421284432752,
+      "seabed": 154.91328794287446,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.548048135511237
+    },
+    {
+      "x": 66,
+      "z": 144,
+      "water": 160.45463730132,
+      "ground": 127.13280486060832,
+      "seabed": 155.0774740421434,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.377163259176598
+    },
+    {
+      "x": 69,
+      "z": 144,
+      "water": 160.40467511174728,
+      "ground": 126.25261697146078,
+      "seabed": 155.30715538198538,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.097519729761899
+    },
+    {
+      "x": 72,
+      "z": 144,
+      "water": 160.39734640830008,
+      "ground": 125.39004773449486,
+      "seabed": 155.7014170203661,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.6959293879339725
+    },
+    {
+      "x": 75,
+      "z": 144,
+      "water": 160.43185474497827,
+      "ground": 124.5542057314355,
+      "seabed": 156.38328799690444,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.048566748073824
+    },
+    {
+      "x": 24,
+      "z": 147,
+      "water": 160.46601400061934,
+      "ground": null,
+      "seabed": 155.48026703362217,
+      "object": null,
+      "depth": 4.985746966997169
+    },
+    {
+      "x": 27,
+      "z": 147,
+      "water": 160.3969212712559,
+      "ground": null,
+      "seabed": 155.18548367273098,
+      "object": null,
+      "depth": 5.211437598524924
+    },
+    {
+      "x": 30,
+      "z": 147,
+      "water": 160.37225249634253,
+      "ground": null,
+      "seabed": 154.93422806767182,
+      "object": null,
+      "depth": 5.438024428670701
+    },
+    {
+      "x": 33,
+      "z": 147,
+      "water": 160.39217737393042,
+      "ground": null,
+      "seabed": 154.79934946907295,
+      "object": null,
+      "depth": 5.592827904857472
+    },
+    {
+      "x": 36,
+      "z": 147,
+      "water": 160.4568276640305,
+      "ground": null,
+      "seabed": 154.7900423341464,
+      "object": null,
+      "depth": 5.666785329884107
+    },
+    {
+      "x": 39,
+      "z": 147,
+      "water": 160.4249100525092,
+      "ground": null,
+      "seabed": 154.82388191242802,
+      "object": null,
+      "depth": 5.601028140081183
+    },
+    {
+      "x": 42,
+      "z": 147,
+      "water": 160.41510793816377,
+      "ground": null,
+      "seabed": 154.90086431411825,
+      "object": null,
+      "depth": 5.51424362404552
+    },
+    {
+      "x": 45,
+      "z": 147,
+      "water": 160.40673544036315,
+      "ground": null,
+      "seabed": 154.85742432842252,
+      "object": null,
+      "depth": 5.549311111940625
+    },
+    {
+      "x": 48,
+      "z": 147,
+      "water": 160.4428371113791,
+      "ground": null,
+      "seabed": 154.7890712069653,
+      "object": null,
+      "depth": 5.6537659044138024
+    },
+    {
+      "x": 51,
+      "z": 147,
+      "water": 160.43149367103692,
+      "ground": null,
+      "seabed": 154.76362136115205,
+      "object": null,
+      "depth": 5.667872309884871
+    },
+    {
+      "x": 54,
+      "z": 147,
+      "water": 160.39841662450718,
+      "ground": null,
+      "seabed": 154.78073799842505,
+      "object": null,
+      "depth": 5.6176786260821245
+    },
+    {
+      "x": 57,
+      "z": 147,
+      "water": 160.40921715581322,
+      "ground": null,
+      "seabed": 154.84005216819406,
+      "object": null,
+      "depth": 5.5691649876191605
+    },
+    {
+      "x": 60,
+      "z": 147,
+      "water": 160.43620448890917,
+      "ground": 129.58982318453636,
+      "seabed": 154.90024938382265,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.535955105086515
+    },
+    {
+      "x": 63,
+      "z": 147,
+      "water": 160.46983664510137,
+      "ground": 127.74421121063908,
+      "seabed": 154.98433208975442,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.4855045553469495
+    },
+    {
+      "x": 66,
+      "z": 147,
+      "water": 160.4170637042083,
+      "ground": 126.85656605935145,
+      "seabed": 155.1688064981551,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.248257206053182
+    },
+    {
+      "x": 69,
+      "z": 147,
+      "water": 160.40681888921225,
+      "ground": 125.9948755366112,
+      "seabed": 155.39367699178453,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.013141897427715
+    },
+    {
+      "x": 72,
+      "z": 147,
+      "water": 160.4135082351312,
+      "ground": 125.1446983102768,
+      "seabed": 155.65843225146904,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.755075983662152
+    },
+    {
+      "x": 75,
+      "z": 147,
+      "water": 160.44392282612117,
+      "ground": 124.30646585754586,
+      "seabed": 155.96253633532393,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.4813864907972345
+    },
+    {
+      "x": 24,
+      "z": 150,
+      "water": 160.45320827685399,
+      "ground": null,
+      "seabed": 155.91629857995989,
+      "object": null,
+      "depth": 4.536909696894099
+    },
+    {
+      "x": 27,
+      "z": 150,
+      "water": 160.42062556600501,
+      "ground": null,
+      "seabed": 155.62366577378737,
+      "object": null,
+      "depth": 4.796959792217649
+    },
+    {
+      "x": 30,
+      "z": 150,
+      "water": 160.39700692948625,
+      "ground": null,
+      "seabed": 155.37402987167246,
+      "object": null,
+      "depth": 5.02297705781379
+    },
+    {
+      "x": 33,
+      "z": 150,
+      "water": 160.4173186412254,
+      "ground": null,
+      "seabed": 155.16736337857856,
+      "object": null,
+      "depth": 5.249955262646836
+    },
+    {
+      "x": 36,
+      "z": 150,
+      "water": 160.44847990035743,
+      "ground": null,
+      "seabed": 155.00360417439444,
+      "object": null,
+      "depth": 5.444875725962987
+    },
+    {
+      "x": 39,
+      "z": 150,
+      "water": 160.39432279008255,
+      "ground": null,
+      "seabed": 154.90579871511397,
+      "object": null,
+      "depth": 5.488524074968581
+    },
+    {
+      "x": 42,
+      "z": 150,
+      "water": 160.38420684641852,
+      "ground": null,
+      "seabed": 154.96065809481988,
+      "object": null,
+      "depth": 5.423548751598645
+    },
+    {
+      "x": 45,
+      "z": 150,
+      "water": 160.41801905733513,
+      "ground": null,
+      "seabed": 154.84916757715482,
+      "object": null,
+      "depth": 5.568851480180314
+    },
+    {
+      "x": 48,
+      "z": 150,
+      "water": 160.4956106054191,
+      "ground": null,
+      "seabed": 154.7802367737878,
+      "object": null,
+      "depth": 5.715373831631297
+    },
+    {
+      "x": 51,
+      "z": 150,
+      "water": 160.42595217355495,
+      "ground": null,
+      "seabed": 154.75356964271737,
+      "object": null,
+      "depth": 5.672382530837581
+    },
+    {
+      "x": 54,
+      "z": 150,
+      "water": 160.3913379535593,
+      "ground": null,
+      "seabed": 154.81340858829523,
+      "object": null,
+      "depth": 5.577929365264055
+    },
+    {
+      "x": 57,
+      "z": 150,
+      "water": 160.39995786876295,
+      "ground": null,
+      "seabed": 154.94936568300798,
+      "object": null,
+      "depth": 5.450592185754971
+    },
+    {
+      "x": 60,
+      "z": 150,
+      "water": 160.45136721469598,
+      "ground": null,
+      "seabed": 155.12648358451153,
+      "object": null,
+      "depth": 5.324883630184445
+    },
+    {
+      "x": 63,
+      "z": 150,
+      "water": 160.4596068017382,
+      "ground": 127.53274597395986,
+      "seabed": 155.21220771358892,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.24739908814928
+    },
+    {
+      "x": 66,
+      "z": 150,
+      "water": 160.41002135058935,
+      "ground": 126.60199139465513,
+      "seabed": 155.33307671407601,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.076944636513332
+    },
+    {
+      "x": 69,
+      "z": 150,
+      "water": 160.39657540802514,
+      "ground": 125.74037973646593,
+      "seabed": 155.51301272378518,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.883562684239962
+    },
+    {
+      "x": 72,
+      "z": 150,
+      "water": 160.42436261955697,
+      "ground": 124.8905341850595,
+      "seabed": 155.7719505729146,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.652412046642382
+    },
+    {
+      "x": 75,
+      "z": 150,
+      "water": 160.49005938952996,
+      "ground": 124.07304341507161,
+      "seabed": 156.0701816532663,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 4.419877736263658
+    }
+  ],
+  "lane": [
+    {
+      "x": 26.527027431502162,
+      "z": 135.9222980051288,
+      "water": 160.4153914281266,
+      "ground": null,
+      "seabed": 155.29701165304044,
+      "object": null,
+      "depth": 5.118379775086169
+    },
+    {
+      "x": 30,
+      "z": 142,
+      "water": 160.41075783839335,
+      "ground": null,
+      "seabed": 154.79168303498545,
+      "object": null,
+      "depth": 5.619074803407898
+    },
+    {
+      "x": 33.47297256849784,
+      "z": 148.0777019948712,
+      "water": 160.4044197903024,
+      "ground": null,
+      "seabed": 154.8526816502983,
+      "object": null,
+      "depth": 5.55173814000409
+    },
+    {
+      "x": 27.35055684326687,
+      "z": 135.45170976983468,
+      "water": 160.4254209433693,
+      "ground": null,
+      "seabed": 155.16386139044656,
+      "object": null,
+      "depth": 5.2615595529227335
+    },
+    {
+      "x": 30.823529411764707,
+      "z": 141.52941176470588,
+      "water": 160.41475588865745,
+      "ground": null,
+      "seabed": 154.7718337196559,
+      "object": null,
+      "depth": 5.642922169001565
+    },
+    {
+      "x": 34.29650198026254,
+      "z": 147.6071137595771,
+      "water": 160.41688424561403,
+      "ground": null,
+      "seabed": 154.80401907442604,
+      "object": null,
+      "depth": 5.612865171187991
+    },
+    {
+      "x": 28.174086255031575,
+      "z": 134.98112153454056,
+      "water": 160.4399244699599,
+      "ground": null,
+      "seabed": 155.03488622512955,
+      "object": null,
+      "depth": 5.405038244830337
+    },
+    {
+      "x": 31.647058823529413,
+      "z": 141.05882352941177,
+      "water": 160.39905109014072,
+      "ground": null,
+      "seabed": 154.7561209923423,
+      "object": null,
+      "depth": 5.642930097798427
+    },
+    {
+      "x": 35.12003139202725,
+      "z": 147.13652552428297,
+      "water": 160.43360031970502,
+      "ground": null,
+      "seabed": 154.79132957369484,
+      "object": null,
+      "depth": 5.642270746010183
+    },
+    {
+      "x": 28.99761566679628,
+      "z": 134.51053329924645,
+      "water": 160.45232164948015,
+      "ground": null,
+      "seabed": 154.9201504258512,
+      "object": null,
+      "depth": 5.53217122362895
+    },
+    {
+      "x": 32.470588235294116,
+      "z": 140.58823529411765,
+      "water": 160.38766615101133,
+      "ground": null,
+      "seabed": 154.74457495062765,
+      "object": null,
+      "depth": 5.6430912003836795
+    },
+    {
+      "x": 35.943560803791954,
+      "z": 146.66593728898886,
+      "water": 160.4546003645607,
+      "ground": null,
+      "seabed": 154.78270102418873,
+      "object": null,
+      "depth": 5.671899340371965
+    },
+    {
+      "x": 29.82114507856099,
+      "z": 134.03994506395233,
+      "water": 160.4426182775737,
+      "ground": null,
+      "seabed": 154.91034289632017,
+      "object": null,
+      "depth": 5.532275381253527
+    },
+    {
+      "x": 33.294117647058826,
+      "z": 140.11764705882354,
+      "water": 160.38063218775886,
+      "ground": null,
+      "seabed": 154.73722556649957,
+      "object": null,
+      "depth": 5.643406621259288
+    },
+    {
+      "x": 36.767090215556664,
+      "z": 146.19534905369474,
+      "water": 160.47554615243143,
+      "ground": null,
+      "seabed": 154.77816197730635,
+      "object": null,
+      "depth": 5.69738417512508
+    },
+    {
+      "x": 30.64467449032569,
+      "z": 133.56935682865821,
+      "water": 160.43740580438825,
+      "ground": null,
+      "seabed": 154.90487042429203,
+      "object": null,
+      "depth": 5.5325353800962205
+    },
+    {
+      "x": 34.11764705882353,
+      "z": 139.64705882352942,
+      "water": 160.37798018054863,
+      "ground": null,
+      "seabed": 154.7341026797516,
+      "object": null,
+      "depth": 5.643877500797032
+    },
+    {
+      "x": 37.59061962732137,
+      "z": 145.72476081840063,
+      "water": 160.46887664427678,
+      "ground": null,
+      "seabed": 154.77774085615707,
+      "object": null,
+      "depth": 5.691135788119709
+    },
+    {
+      "x": 31.468203902090394,
+      "z": 133.0987685933641,
+      "water": 160.43671651131163,
+      "ground": null,
+      "seabed": 154.90376413741572,
+      "object": null,
+      "depth": 5.53295237389591
+    },
+    {
+      "x": 34.94117647058823,
+      "z": 139.1764705882353,
+      "water": 160.37974096639044,
+      "ground": null,
+      "seabed": 154.73523599139082,
+      "object": null,
+      "depth": 5.64450497499962
+    },
+    {
+      "x": 38.41414903908607,
+      "z": 145.2541725831065,
+      "water": 160.46510253728215,
+      "ground": null,
+      "seabed": 154.78146594946162,
+      "object": null,
+      "depth": 5.68363658782053
+    },
+    {
+      "x": 32.291733313855104,
+      "z": 132.62818035806998,
+      "water": 160.4405825251894,
+      "ground": null,
+      "seabed": 154.90705501358204,
+      "object": null,
+      "depth": 5.53352751160736
+    },
+    {
+      "x": 35.76470588235294,
+      "z": 138.7058823529412,
+      "water": 160.3859452323205,
+      "ground": null,
+      "seabed": 154.74065505705832,
+      "object": null,
+      "depth": 5.645290175262176
+    },
+    {
+      "x": 39.23767845085078,
+      "z": 144.7835843478124,
+      "water": 160.44068669129038,
+      "ground": null,
+      "seabed": 154.78936540546673,
+      "object": null,
+      "depth": 5.651321285823656
+    },
+    {
+      "x": 33.11526272561981,
+      "z": 132.15759212277587,
+      "water": 160.4236794956224,
+      "ground": null,
+      "seabed": 154.87898389119485,
+      "object": null,
+      "depth": 5.544695604427545
+    },
+    {
+      "x": 36.588235294117645,
+      "z": 138.23529411764707,
+      "water": 160.39662350859936,
+      "ground": null,
+      "seabed": 154.75038928046558,
+      "object": null,
+      "depth": 5.646234228133778
+    },
+    {
+      "x": 40.06120786261548,
+      "z": 144.31299611251828,
+      "water": 160.42056114620706,
+      "ground": null,
+      "seabed": 154.80146722587713,
+      "object": null,
+      "depth": 5.619093920329931
+    },
+    {
+      "x": 33.93879213738452,
+      "z": 131.68700388748172,
+      "water": 160.40413655498284,
+      "ground": null,
+      "seabed": 154.84513364329533,
+      "object": null,
+      "depth": 5.559002911687514
+    },
+    {
+      "x": 37.411764705882355,
+      "z": 137.76470588235293,
+      "water": 160.41180616193319,
+      "ground": null,
+      "seabed": 154.76446790685299,
+      "object": null,
+      "depth": 5.6473382550802
+    },
+    {
+      "x": 40.88473727438019,
+      "z": 143.84240787722413,
+      "water": 160.40475249781775,
+      "ground": null,
+      "seabed": 154.8177992598106,
+      "object": null,
+      "depth": 5.5869532380071405
+    },
+    {
+      "x": 34.76232154914922,
+      "z": 131.2164156521876,
+      "water": 160.38917246148029,
+      "ground": null,
+      "seabed": 154.81568033671434,
+      "object": null,
+      "depth": 5.573492124765949
+    },
+    {
+      "x": 38.23529411764706,
+      "z": 137.2941176470588,
+      "water": 160.4315233986236,
+      "ground": null,
+      "seabed": 154.78292001647463,
+      "object": null,
+      "depth": 5.648603382148963
+    },
+    {
+      "x": 41.708266686144896,
+      "z": 143.37181964193002,
+      "water": 160.39328592181585,
+      "ground": null,
+      "seabed": 154.83838919777975,
+      "object": null,
+      "depth": 5.554896724036098
+    },
+    {
+      "x": 35.58585096091393,
+      "z": 130.7458274168935,
+      "water": 160.3788155757183,
+      "ground": null,
+      "seabed": 154.7906499926298,
+      "object": null,
+      "depth": 5.588165583088511
+    },
+    {
+      "x": 39.05882352941177,
+      "z": 136.8235294117647,
+      "water": 160.45580523998353,
+      "ground": null,
+      "seabed": 154.8057745181151,
+      "object": null,
+      "depth": 5.650030721868433
+    },
+    {
+      "x": 42.531796097909606,
+      "z": 142.9012314066359,
+      "water": 160.38618702079907,
+      "ground": null,
+      "seabed": 154.86326456570504,
+      "object": null,
+      "depth": 5.522922455094033
+    },
+    {
+      "x": 36.40938037267863,
+      "z": 130.27523918159937,
+      "water": 160.3730940040601,
+      "ground": null,
+      "seabed": 154.77006839942004,
+      "object": null,
+      "depth": 5.603025604640067
+    },
+    {
+      "x": 39.88235294117647,
+      "z": 136.35294117647058,
+      "water": 160.47265127454511,
+      "ground": null,
+      "seabed": 154.81610447310948,
+      "object": null,
+      "depth": 5.656546801435638
+    },
+    {
+      "x": 43.35532550967431,
+      "z": 142.43064317134179,
+      "water": 160.3834811863978,
+      "ground": null,
+      "seabed": 154.8924527189642,
+      "object": null,
+      "depth": 5.491028467433608
+    },
+    {
+      "x": 37.232909784443336,
+      "z": 129.80465094630526,
+      "water": 160.37203567087016,
+      "ground": null,
+      "seabed": 154.75396110821154,
+      "object": null,
+      "depth": 5.61807456265862
+    },
+    {
+      "x": 40.705882352941174,
+      "z": 135.88235294117646,
+      "water": 160.47383513499688,
+      "ground": null,
+      "seabed": 154.80230849124956,
+      "object": null,
+      "depth": 5.671526643747313
+    },
+    {
+      "x": 44.17885492143901,
+      "z": 141.96005493604767,
+      "water": 160.38519359317615,
+      "ground": null,
+      "seabed": 154.92598083648218,
+      "object": null,
+      "depth": 5.459212756693972
+    },
+    {
+      "x": 38.056439196208046,
+      "z": 129.33406271101114,
+      "water": 160.37566823096105,
+      "ground": null,
+      "seabed": 154.74235341614425,
+      "object": null,
+      "depth": 5.633314814816799
+    },
+    {
+      "x": 41.529411764705884,
+      "z": 135.41176470588235,
+      "water": 160.465531547167,
+      "ground": null,
+      "seabed": 154.79289912853147,
+      "object": null,
+      "depth": 5.672632418635516
+    },
+    {
+      "x": 45.00238433320372,
+      "z": 141.48946670075355,
+      "water": 160.39134919258717,
+      "ground": null,
+      "seabed": 154.96387591486607,
+      "object": null,
+      "depth": 5.427473277721106
+    },
+    {
+      "x": 38.87996860797275,
+      "z": 128.86347447571703,
+      "water": 160.38401908958716,
+      "ground": null,
+      "seabed": 154.7352703642313,
+      "object": null,
+      "depth": 5.648748725355858
+    },
+    {
+      "x": 42.35294117647059,
+      "z": 134.94117647058823,
+      "water": 160.4453557372441,
+      "ground": null,
+      "seabed": 154.78790028506373,
+      "object": null,
+      "depth": 5.657455452180386
+    },
+    {
+      "x": 45.825913744968425,
+      "z": 141.01887846545944,
+      "water": 160.4019727069876,
+      "ground": null,
+      "seabed": 154.95625081607622,
+      "object": null,
+      "depth": 5.445721890911386
+    },
+    {
+      "x": 39.70349801973745,
+      "z": 128.3928862404229,
+      "water": 160.39711539550592,
+      "ground": null,
+      "seabed": 154.73273673071498,
+      "object": null,
+      "depth": 5.664378664790945
+    },
+    {
+      "x": 43.17647058823529,
+      "z": 134.47058823529412,
+      "water": 160.42975326064163,
+      "ground": null,
+      "seabed": 154.78733560987405,
+      "object": null,
+      "depth": 5.642417650767584
+    },
+    {
+      "x": 46.64944315673313,
+      "z": 140.54829023016532,
+      "water": 160.4170886237163,
+      "ground": null,
+      "seabed": 154.95253959154863,
+      "object": null,
+      "depth": 5.4645490321676675
+    },
+    {
+      "x": 40.52702743150216,
+      "z": 127.92229800512878,
+      "water": 160.41498403411518,
+      "ground": null,
+      "seabed": 154.73477702450072,
+      "object": null,
+      "depth": 5.680207009614463
+    },
+    {
+      "x": 44,
+      "z": 134,
+      "water": 160.41874701429947,
+      "ground": null,
+      "seabed": 154.7912284948227,
+      "object": null,
+      "depth": 5.62751851947678
+    },
+    {
+      "x": 47.47297256849784,
+      "z": 140.0777019948712,
+      "water": 160.4091854820165,
+      "ground": null,
+      "seabed": 154.9169224052298,
+      "object": null,
+      "depth": 5.492263076786713
+    },
+    {
+      "x": 38.17564793963509,
+      "z": 130.1170986264234,
+      "water": 160.3741321976363,
+      "ground": null,
+      "seabed": 154.74009998464868,
+      "object": null,
+      "depth": 5.63403221298762
+    },
+    {
+      "x": 44,
+      "z": 134,
+      "water": 160.41874701429947,
+      "ground": null,
+      "seabed": 154.7912284948227,
+      "object": null,
+      "depth": 5.62751851947678
+    },
+    {
+      "x": 49.82435206036491,
+      "z": 137.8829013735766,
+      "water": 160.4020716842563,
+      "ground": null,
+      "seabed": 154.83880894006435,
+      "object": null,
+      "depth": 5.563262744191945
+    },
+    {
+      "x": 38.701963729108776,
+      "z": 129.32762494221288,
+      "water": 160.37983638254153,
+      "ground": null,
+      "seabed": 154.73512229390286,
+      "object": null,
+      "depth": 5.644714088638665
+    },
+    {
+      "x": 44.526315789473685,
+      "z": 133.21052631578948,
+      "water": 160.4204385073574,
+      "ground": null,
+      "seabed": 154.78874893287647,
+      "object": null,
+      "depth": 5.63168957448093
+    },
+    {
+      "x": 50.350667849838594,
+      "z": 137.09342768936608,
+      "water": 160.40648350595134,
+      "ground": null,
+      "seabed": 154.83047621069662,
+      "object": null,
+      "depth": 5.576007295254726
+    },
+    {
+      "x": 39.22827951858246,
+      "z": 128.53815125800236,
+      "water": 160.3899943372378,
+      "ground": null,
+      "seabed": 154.73440674285055,
+      "object": null,
+      "depth": 5.655587594387242
+    },
+    {
+      "x": 45.05263157894737,
+      "z": 132.42105263157896,
+      "water": 160.4264956094609,
+      "ground": null,
+      "seabed": 154.7904683697132,
+      "object": null,
+      "depth": 5.636027239747676
+    },
+    {
+      "x": 50.87698363931228,
+      "z": 136.30395400515556,
+      "water": 160.41518361052258,
+      "ground": null,
+      "seabed": 154.82624360790192,
+      "object": null,
+      "depth": 5.58894000262066
+    },
+    {
+      "x": 39.754595308056146,
+      "z": 127.74867757379181,
+      "water": 160.40465018208306,
+      "ground": null,
+      "seabed": 154.73799484659327,
+      "object": null,
+      "depth": 5.666655335489793
+    },
+    {
+      "x": 45.578947368421055,
+      "z": 131.6315789473684,
+      "water": 160.43696049458887,
+      "ground": null,
+      "seabed": 154.79642709512137,
+      "object": null,
+      "depth": 5.6405333994675
+    },
+    {
+      "x": 51.403299428785964,
+      "z": 135.514480320945,
+      "water": 160.42821203154583,
+      "ground": null,
+      "seabed": 154.82614923218517,
+      "object": null,
+      "depth": 5.602062799360652
+    },
+    {
+      "x": 40.28091109752983,
+      "z": 126.95920388958129,
+      "water": 160.42108021574518,
+      "ground": null,
+      "seabed": 154.74592816296072,
+      "object": null,
+      "depth": 5.675152052784455
+    },
+    {
+      "x": 46.10526315789474,
+      "z": 130.8421052631579,
+      "water": 160.44181592979731,
+      "ground": null,
+      "seabed": 154.80666543625543,
+      "object": null,
+      "depth": 5.635150493541886
+    },
+    {
+      "x": 51.92961521825965,
+      "z": 134.7250066367345,
+      "water": 160.43756630205598,
+      "ground": null,
+      "seabed": 154.83023120195554,
+      "object": null,
+      "depth": 5.607335100100443
+    },
+    {
+      "x": 40.807226887003516,
+      "z": 126.16973020537077,
+      "water": 160.43685587162273,
+      "ground": null,
+      "seabed": 154.7582482852598,
+      "object": null,
+      "depth": 5.678607586362915
+    },
+    {
+      "x": 46.631578947368425,
+      "z": 130.05263157894737,
+      "water": 160.42655966902433,
+      "ground": null,
+      "seabed": 154.821223749002,
+      "object": null,
+      "depth": 5.605335920022327
+    },
+    {
+      "x": 52.455931007733334,
+      "z": 133.93553295252397,
+      "water": 160.4250960577258,
+      "ground": null,
+      "seabed": 154.83852764685096,
+      "object": null,
+      "depth": 5.586568410874833
+    },
+    {
+      "x": 41.333542676477194,
+      "z": 125.38025652116025,
+      "water": 160.45723288699048,
+      "ground": null,
+      "seabed": 154.77499683495088,
+      "object": null,
+      "depth": 5.682236052039599
+    },
+    {
+      "x": 47.1578947368421,
+      "z": 129.26315789473685,
+      "water": 160.41573009347496,
+      "ground": null,
+      "seabed": 154.84014240251497,
+      "object": null,
+      "depth": 5.575587690959992
+    },
+    {
+      "x": 52.98224679720701,
+      "z": 133.14605926831345,
+      "water": 160.4169698519154,
+      "ground": null,
+      "seabed": 154.85107670100487,
+      "object": null,
+      "depth": 5.56589315091054
+    },
+    {
+      "x": 41.85985846595088,
+      "z": 124.59078283694973,
+      "water": 160.48108693039907,
+      "ground": null,
+      "seabed": 154.79621545425786,
+      "object": null,
+      "depth": 5.684871476141211
+    },
+    {
+      "x": 47.68421052631579,
+      "z": 128.47368421052633,
+      "water": 160.4093650869793,
+      "ground": null,
+      "seabed": 154.8634618078019,
+      "object": null,
+      "depth": 5.545903279177395
+    },
+    {
+      "x": 53.508562586680696,
+      "z": 132.35658558410293,
+      "water": 160.4132251771436,
+      "ground": null,
+      "seabed": 154.8679164962611,
+      "object": null,
+      "depth": 5.545308680882499
+    },
+    {
+      "x": 42.386174255424564,
+      "z": 123.8013091527392,
+      "water": 160.47855766232038,
+      "ground": null,
+      "seabed": 154.81834385427413,
+      "object": null,
+      "depth": 5.660213808046251
+    },
+    {
+      "x": 48.21052631578947,
+      "z": 127.6842105263158,
+      "water": 160.4075032796329,
+      "ground": null,
+      "seabed": 154.8774063877392,
+      "object": null,
+      "depth": 5.530096891893692
+    },
+    {
+      "x": 54.03487837615438,
+      "z": 131.5671118998924,
+      "water": 160.41389948426053,
+      "ground": 132.95293358030534,
+      "seabed": 154.86929653132927,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.544602952931257
+    },
+    {
+      "x": 42.91249004489825,
+      "z": 123.01183546852866,
+      "water": 160.47680994665146,
+      "ground": null,
+      "seabed": 154.79256505029747,
+      "object": null,
+      "depth": 5.684244896353988
+    },
+    {
+      "x": 48.73684210526316,
+      "z": 126.89473684210526,
+      "water": 160.41018345916942,
+      "ground": null,
+      "seabed": 154.8540645446549,
+      "object": null,
+      "depth": 5.556118914514514
+    },
+    {
+      "x": 54.561194165628066,
+      "z": 130.77763821568186,
+      "water": 160.419030175106,
+      "ground": 132.45764635314384,
+      "seabed": 154.84911044425914,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.569919730846863
+    },
+    {
+      "x": 43.438805834371934,
+      "z": 122.22236178431814,
+      "water": 160.4743692965272,
+      "ground": null,
+      "seabed": 154.7712133278184,
+      "object": null,
+      "depth": 5.703155968708785
+    },
+    {
+      "x": 49.26315789473684,
+      "z": 126.10526315789474,
+      "water": 160.41744435852044,
+      "ground": null,
+      "seabed": 154.8350778190797,
+      "object": null,
+      "depth": 5.582366539440756
+    },
+    {
+      "x": 55.08750995510175,
+      "z": 129.98816453147134,
+      "water": 160.4286549736768,
+      "ground": 132.05762083011822,
+      "seabed": 154.8331969042801,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.595458069396699
+    },
+    {
+      "x": 43.96512162384562,
+      "z": 121.4328881001076,
+      "water": 160.47660627797848,
+      "ground": null,
+      "seabed": 154.75432464619436,
+      "object": null,
+      "depth": 5.722281631784114
+    },
+    {
+      "x": 49.78947368421053,
+      "z": 125.3157894736842,
+      "water": 160.42932464796988,
+      "ground": 136.3049756444183,
+      "seabed": 154.82048104625568,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.608843601714199
+    },
+    {
+      "x": 55.613825744575436,
+      "z": 129.19869084726082,
+      "water": 160.4428118031503,
+      "ground": 131.97068972333003,
+      "seabed": 154.82158952335033,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.62122227979998
+    },
+    {
+      "x": 44.491437413319304,
+      "z": 120.64341441589708,
+      "water": 160.48355999538273,
+      "ground": null,
+      "seabed": 154.74193485823605,
+      "object": null,
+      "depth": 5.741625137146684
+    },
+    {
+      "x": 50.31578947368421,
+      "z": 124.52631578947368,
+      "water": 160.4452896177362,
+      "ground": 136.21347417011216,
+      "seabed": 154.8103089556403,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.634980662095899
+    },
+    {
+      "x": 56.14014153404912,
+      "z": 128.4092171630503,
+      "water": 160.46007602743472,
+      "ground": 131.98136475076464,
+      "seabed": 154.81432184106475,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.64575418636997
+    },
+    {
+      "x": 45.01775320279299,
+      "z": 119.85394073168655,
+      "water": 160.49180061767404,
+      "ground": 140.1417226560679,
+      "seabed": 154.73881581536733,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.752984802306713
+    },
+    {
+      "x": 50.8421052631579,
+      "z": 123.73684210526315,
+      "water": 160.4643757267091,
+      "ground": 136.40967778410658,
+      "seabed": 154.80459616310227,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.659779563606833
+    },
+    {
+      "x": 56.666457323522806,
+      "z": 127.61974347883975,
+      "water": 160.47049118708372,
+      "ground": 132.17618696176524,
+      "seabed": 154.81142725237245,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.65906393471127
+    },
+    {
+      "x": 45.544068992266666,
+      "z": 119.06446704747603,
+      "water": 160.4940279879926,
+      "ground": 140.35825743608325,
+      "seabed": 154.74488345924323,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.749144528749383
+    },
+    {
+      "x": 51.368421052631575,
+      "z": 122.94736842105263,
+      "water": 160.47059977751047,
+      "ground": 136.57468447069382,
+      "seabed": 154.80337716310476,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.667222614405716
+    },
+    {
+      "x": 57.192773112996484,
+      "z": 126.83026979462923,
+      "water": 160.46357352791216,
+      "ground": 132.44819087220975,
+      "seabed": 154.81293903337735,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.650634494534813
+    },
+    {
+      "x": 46.07038478174035,
+      "z": 118.27499336326551,
+      "water": 160.49881663752294,
+      "ground": 140.58022056253157,
+      "seabed": 154.75558220658786,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.743234430935075
+    },
+    {
+      "x": 51.89473684210526,
+      "z": 122.15789473684211,
+      "water": 160.4746130056646,
+      "ground": 136.56862356253487,
+      "seabed": 154.80668632088197,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.667926684782628
+    },
+    {
+      "x": 57.71908890247017,
+      "z": 126.04079611041871,
+      "water": 160.461236590474,
+      "ground": 132.72580200289173,
+      "seabed": 154.81889033396746,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.642346256506528
+    },
+    {
+      "x": 46.596700571214036,
+      "z": 117.48551967905497,
+      "water": 160.498836218649,
+      "ground": 140.7903458575269,
+      "seabed": 154.77094834833616,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.727887870312827
+    },
+    {
+      "x": 52.421052631578945,
+      "z": 121.36842105263158,
+      "water": 160.48207033795822,
+      "ground": 136.56656527424298,
+      "seabed": 154.81455786461564,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.667512473342583
+    },
+    {
+      "x": 58.245404691943854,
+      "z": 125.25132242620818,
+      "water": 160.46351378459318,
+      "ground": 133.00909030099,
+      "seabed": 154.82931417044594,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.634199614147235
+    },
+    {
+      "x": 47.12301636068772,
+      "z": 116.69604599484445,
+      "water": 160.49847598050206,
+      "ground": 141.05143911653602,
+      "seabed": 154.7910180413607,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.707457939141364
+    },
+    {
+      "x": 52.94736842105263,
+      "z": 120.57894736842105,
+      "water": 160.4925640367531,
+      "ground": 136.9415867234994,
+      "seabed": 154.82757999074715,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.664984046005941
+    },
+    {
+      "x": 58.77172048141754,
+      "z": 124.46184874199766,
+      "water": 160.47043836283618,
+      "ground": 133.48745996928983,
+      "seabed": 154.84424341817027,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.626194944665912
+    },
+    {
+      "x": 47.649332150161406,
+      "z": 115.90657231063392,
+      "water": 160.49841397149103,
+      "ground": 141.5123000596626,
+      "seabed": 154.81582730029098,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.682586671200056
+    },
+    {
+      "x": 53.473684210526315,
+      "z": 119.78947368421052,
+      "water": 160.497985742888,
+      "ground": 137.4381891470035,
+      "seabed": 154.85399211715827,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.643993625729735
+    },
+    {
+      "x": 59.298036270891224,
+      "z": 123.67237505778712,
+      "water": 160.4745299347561,
+      "ground": 133.99513271078263,
+      "seabed": 154.86371080420417,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.610819130551931
+    },
+    {
+      "x": 48.17564793963509,
+      "z": 115.1170986264234,
+      "water": 160.49830924039446,
+      "ground": 141.98849216456716,
+      "seabed": 154.84541198934647,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.652897251047989
+    },
+    {
+      "x": 54,
+      "z": 119,
+      "water": 160.4977208242676,
+      "ground": 137.83416687702288,
+      "seabed": 154.88509591161414,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.612624912653445
+    },
+    {
+      "x": 59.82435206036491,
+      "z": 122.8829013735766,
+      "water": 160.47686642436136,
+      "ground": 134.50295029439545,
+      "seabed": 154.87398277599596,
+      "object": "citadel-oskar-grid-mountain-surface",
+      "depth": 5.602883648365406
+    }
+  ],
+  "failures": [],
+  "vessel": {
+    "name": "ocean-warship-0",
+    "scale": [
+      1.84,
+      1.84,
+      1.84
+    ],
+    "localBounds": {
+      "min": [
+        -2.5999999046325715,
+        -2.143749952316284,
+        -2.3624999523162846
+      ],
+      "max": [
+        3.640000104904171,
+        3.8899998664855957,
+        2.3624999523162846
+      ]
+    },
+    "lowerEnvelopeBelowRoot": 3.9444999122619633,
+    "scope": "Whole current vessel geometry including oars and occupants; conservative envelope, not hydrodynamic draft"
+  },
+  "bedEdit": {
+    "version": "r02",
+    "terrainRevision": "r09",
+    "changedVertices": 156,
+    "maxLowering": 5.0000045080347775,
+    "targetDepth": 5.5,
+    "falloffMetres": 14,
+    "status": "candidate; measured depth and vessel sweep required"
+  },
+  "requiredDepth": 4.6,
+  "stats": {
+    "envelope": 7,
+    "water": "planet-v8-curved-ocean",
+    "obstacleRoots": 6,
+    "obstacleMeshes": 2248
+  },
+  "scope": "Actual rendered sea and highest authored obstacle or planet seabed; three parallel lane samples, not swept hull or full turning-circle clearance. Gate and ships not moved."
+}

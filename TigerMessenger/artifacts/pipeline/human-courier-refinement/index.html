@@ -1,0 +1,25 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>信使 · 三轮造型复核</title><style>body{background:#172029;color:#eee;font:18px/1.6 system-ui;margin:24px}a{color:#edc88f}img{max-width:100%}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}#view{height:600px}button{padding:12px}canvas{display:block}</style><h1>信使：三轮造型候选</h1><p>独立副本，没有替换8931原游戏及Godot玩家。当前源文件已收肩至约31.8厘米，本轮不宣称进一步缩窄骨架；重点为披肩上沿、脸部轮廓和五官贴合。仍与目标的发型、皮肤质感及成年男性神态存在差距，待视觉验收。</p><h2>认可目标</h2><img src="../../../assets/models/optimized/human-courier-v1/approved-target.png"><h2>三轮实际Blender渲染</h2><div class="grid"><section><h3>第1轮：肩部与披肩复核</h3><img src="round-1-body.png"><img src="round-1-face.png"></section><section><h3>第2轮：面部轮廓与鼻翼</h3><img src="round-2-body.png"><img src="round-2-face.png"></section><section><h3>第3轮：眉眼、唇线及披肩上沿</h3><img src="round-3-body.png"><img src="round-3-face.png"></section></div><h2>第3轮实时动作预览</h2><button id="idle">站立</button> <button id="walk">行走</button> <button id="run">奔跑</button> <button id="letter">持信</button><div id="view"></div><p id="stats"></p><p><a href="../../../assets/models/optimized/human-courier-refinement/round-3/human-courier.blend">Blender副本</a> · <a href="../../../assets/models/optimized/human-courier-refinement/round-3/human-courier.glb">GLB副本</a></p><script type="importmap">{"imports":{"three":"../../../vendor/three.module.js","three/addons/":"../../../vendor/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {buildHumanCourier,animateHumanCourier} from './courier-preview.js';
+const host=document.querySelector('#view'),scene=new THREE.Scene();scene.background=new THREE.Color('#263039');
+const camera=new THREE.PerspectiveCamera(35,1,.01,100);camera.position.set(2,1.6,3.7);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;host.appendChild(renderer.domElement);
+let angle=.45, elevation=.16, distance=4.2, pointer=null;
+function orbit(){camera.position.set(Math.sin(angle)*distance,.9+elevation*distance,Math.cos(angle)*distance);camera.lookAt(0,.9,0)}orbit();
+renderer.domElement.style.touchAction='none';
+renderer.domElement.onpointerdown=e=>{pointer=[e.clientX,e.clientY];renderer.domElement.setPointerCapture(e.pointerId)};
+renderer.domElement.onpointermove=e=>{if(!pointer)return;angle-=(e.clientX-pointer[0])*.008;elevation=Math.max(-.15,Math.min(1,(e.clientY-pointer[1])*.005+elevation));pointer=[e.clientX,e.clientY];orbit()};
+renderer.domElement.onpointerup=()=>{pointer=null};
+renderer.domElement.onwheel=e=>{e.preventDefault();distance=Math.max(1.9,Math.min(7,distance+e.deltaY*.003));orbit()};
+scene.add(new THREE.HemisphereLight(0xffeed9,0x34454f,2));
+for(const [x,y,z,power] of [[-3,4,4,3],[3,2,1,1],[1,3,-3,2]]){const l=new THREE.DirectionalLight(0xffffff,power);l.position.set(x,y,z);scene.add(l);}
+const model=buildHumanCourier({scale:1});scene.add(model);
+const floor=new THREE.Mesh(new THREE.CircleGeometry(2,64),new THREE.MeshStandardMaterial({color:0x39434a,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-.01;scene.add(floor);
+const player={velocity:new THREE.Vector3(),onGround:true,animPhase:0,holdingLetter:false,riding:false};let moving=false;
+idle.onclick=()=>{moving=false;player.velocity.set(0,0,0)};walk.onclick=()=>{moving=true;player.velocity.set(0,0,4)};run.onclick=()=>{moving=true;player.velocity.set(0,0,10)};letter.onclick=()=>{player.holdingLetter=!player.holdingLetter;model.userData.letter.visible=player.holdingLetter;};
+const resize=()=>{renderer.setSize(host.clientWidth,host.clientHeight);camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();};new ResizeObserver(resize).observe(host);resize();
+let last=performance.now();function tick(now){const dt=Math.min((now-last)/1000,.05);last=now;animateHumanCourier(player,model,dt,moving);renderer.render(scene,camera);requestAnimationFrame(tick)}requestAnimationFrame(tick);
+window.courierReview={model,player,renderer,scene,camera,animateHumanCourier};
+setTimeout(()=>{stats.textContent=`角色高度约 1.78 米；当前绘制 ${renderer.info.render.calls} 次 / ${renderer.info.render.triangles} 三角形（含展示地面）。游戏内维持原角色视觉尺寸。`},500);
+</script></html>

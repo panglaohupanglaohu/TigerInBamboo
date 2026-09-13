@@ -74,6 +74,26 @@ func tick(row: Dictionary, delta: float, moving: bool) -> void:
         if candidate < distance: best = i; distance = candidate
     apply_frame(row, best)
 
+# Explicit dock controller opt-in. Existing battle callers continue to stow it.
+# This poses the saved board; it does not certify a berth or unload the crew.
+func pose_boarding(row: Dictionary, progress: float, pitch: float) -> bool:
+    if not is_finite(progress) or not is_finite(pitch) or absf(pitch) > deg_to_rad(25.0): return false
+    if not row.has("ids") or not row.ids.has("add:boarding-hinge"): return false
+    progress = clampf(progress, 0.0, 1.0)
+    var f := 180.0 + progress * 30.0
+    var lo := int(floor(f))
+    var hi := mini(210, lo + 1)
+    apply_frame(row, lo)
+    var key := "add:boarding-hinge"
+    var a := _transform(data.poseFrames[lo].transforms[key])
+    var b := _transform(data.poseFrames[hi].transforms[key])
+    var hinge: Node3D = row.ids[key]
+    hinge.transform = a.interpolate_with(b, f - float(lo))
+    hinge.rotation.x += (pitch - 0.12) * smoothstep(0.8, 1.0, progress)
+    # Make a subsequent ordinary tick restore its own pose even at frame 180.
+    row.last_frame = -1
+    return true
+
 func reset() -> void:
     report.instances = 0
 

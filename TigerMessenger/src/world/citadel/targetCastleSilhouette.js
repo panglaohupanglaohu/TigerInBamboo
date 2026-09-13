@@ -1,3 +1,5 @@
+import {citadelRevision} from "./layoutRelease.js";
+import {CITY_ADVANCE} from './compactNewCity.js';
 import * as THREE from 'three';
 import {solveCastleFacade} from './castleFacadeWfc.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
@@ -9,15 +11,17 @@ export function applyTargetCastleSilhouette(city){
  if(city.getObjectByName('citadel-target-castle-silhouette'))return;
  const original=city.getObjectByName('west-city-crown');
  if(!original)return;
+ const placementR02=typeof location!=='undefined'&&citadelRevision('citadelMassing')==='2';
 
- const root=new THREE.Group();root.name='citadel-target-castle-silhouette';
+ const root=new THREE.Group();root.name='citadel-target-castle-silhouette';root.position.z=CITY_ADVANCE[2];
  const stone=new THREE.MeshStandardMaterial({color:0xcac3b1,roughness:.94});
  const edge=new THREE.MeshStandardMaterial({color:0xd9ceb8,roughness:.92});
  const shadow=new THREE.MeshStandardMaterial({color:0x766e66,roughness:1});
  const blue=new THREE.MeshStandardMaterial({color:0x1c61b1,roughness:.85,flatShading:true});
- const warm=new THREE.MeshStandardMaterial({color:0xffb963,emissive:0xff9637,emissiveIntensity:.6,roughness:.86});
+ const warm=new THREE.MeshStandardMaterial({color:0x573c23,emissive:0xffb767,emissiveIntensity:.6,roughness:.86});
  const unit=new THREE.BoxGeometry(1,1,1);
  const facadeReports=[];
+ const massingReports=[];
  const alternateStone=stone.clone();alternateStone.color.setHex(0xc6bfad);
  function box(name,x,y,z,w,h,d,mat=stone){
   const m=new THREE.Mesh(unit,mat);m.name=name;m.position.set(x,y,z);m.scale.set(w,h,d);
@@ -54,12 +58,36 @@ export function applyTargetCastleSilhouette(city){
   facadeReports.push({id,rows,modules:rows*3,openings,grid:solved.grid,solutionHash:solved.solutionHash});
  }
  function tower({id,x,z,w,d=w,bottom=16,top,cap=false,shaft=false}){
+  if(placementR02){
+   // Step the outer shoulders down and broaden the upper keeps. The central
+   // stair shaft is deliberately absent: its two portals are route anchors.
+   const sizes={
+    'left-gate-bastion':[9.4,8,28],
+    'right-gate-bastion':[9.6,8,31.2],
+    'left-outer-turret':[7.2,8.4,23.8],
+    'right-outer-turret':[7.4,9.2,27],
+    'left-blue-tower':[10.2,10.2,32.6],
+    'right-blue-tower':[12,12,38.8],
+    'offset-high-keep':[15,14,46.4],
+   };
+   if(sizes[id])[w,d,top]=sizes[id];
+  }
   const h=top-bottom,t=.45,front=z+d/2;
+  massingReports.push({id,x,z,w,d,bottom,top,shaft,cap,bodySlenderness:h/w});
   // Butt joints instead of intersecting boxes: overlapping top planes caused
   // visible black stippling along the former copings in the overview camera.
-  box(id+'-west',x-w/2+t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
-  box(id+'-east',x+w/2-t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
-  box(id+'-rear',x,bottom+h/2,z-d/2+t/2,w,h,t);
+  const cut=Math.min(w,d)*.292893218;
+  const footprint=[[-w/2+cut,-d/2],[w/2-cut,-d/2],[w/2,-d/2+cut],[w/2,d/2-cut],[w/2-cut,d/2],[-w/2+cut,d/2],[-w/2,d/2-cut],[-w/2,-d/2+cut]];
+  if(cap){
+   // Seven perimeter panels surround an open interior; front remains a real WFC facade.
+   footprint.forEach((a,i)=>{if(i===4)return;const b=footprint[(i+1)%8],dx=b[0]-a[0],dz=b[1]-a[1],len=Math.hypot(dx,dz),nx=-dz/len,nz=dx/len;
+    const m=box(id+'-octagonal-wall',x+(a[0]+b[0])/2+nx*t/2,bottom+h/2,z+(a[1]+b[1])/2+nz*t/2,len+.01,h,t);m.rotation.y=-Math.atan2(dz,dx);
+   });
+  }else{
+   box(id+'-west',x-w/2+t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
+   box(id+'-east',x+w/2-t/2,bottom+h/2,z+(t-.21)/2,t,h,d-t-.21);
+   box(id+'-rear',x,bottom+h/2,z-d/2+t/2,w,h,t);
+  }
   if(shaft){
    // Genuine holes precisely at the existing 22.3 m entry and 37 m exit.
    for(const side of [-1,1])frontPanel(id+'-front-pier',x+side*(w/4+.95),front,w/2-1.9,bottom,top);
@@ -69,18 +97,26 @@ export function applyTargetCastleSilhouette(city){
    frontPanel(id+'-courtyard-recess',x,front-.85,3.8,bottom,22.05);
    for(const side of [-1,1])box(id+'-recess-return',x+side*1.9,(bottom+22.05)/2,front-.425,.18,22.05-bottom,.85);
    for(const [lo,hi] of [[25.5,36.75],[39.7,top]])frontPanel(id+'-front-lintel',x,front,3.8,lo,hi);
-  }else facade(id,x,front,w,bottom,top);
-  for(const side of [-1,1])box(id+'-corner',x+side*(w/2-.25),bottom+(h-.3)/2,front+.12,.5,h-.3,.25,edge);
-  for(const side of [-1,1]){
-   box(id+'-side-cornice',x+side*w/2,top+.08,z,.65,.32,d-.65,edge);
-   box(id+'-end-cornice',x,top+.08,z+side*d/2,w+.65,.32,.65,edge);
+  }else facade(id,x,front,cap?w-2*cut:w,bottom,top);
+  if(cap){
+   const outer=footprint.map(([px,pz])=>new THREE.Vector2(px*(w+.65)/w,-pz*(d+.65)/d));
+   const inner=footprint.map(([px,pz])=>new THREE.Vector2(px*(w-.65)/w,-pz*(d-.65)/d)).reverse();
+   const rim=new THREE.Shape(outer);rim.holes.push(new THREE.Path(inner));
+   const cornice=new THREE.Mesh(new THREE.ExtrudeGeometry(rim,{depth:.32,bevelEnabled:false}),edge);cornice.rotation.x=-Math.PI/2;cornice.position.set(x,top-.08,z);cornice.name=id+'-octagonal-cornice';cornice.castShadow=true;cornice.receiveShadow=true;root.add(cornice);
+   for(const side of [-1,1])box(id+'-front-arrises',x+side*(w/2-cut),bottom+(h-.3)/2,front+.05,.22,h-.3,.22,edge);
+  }else{
+   for(const side of [-1,1])box(id+'-corner',x+side*(w/2-.25),bottom+(h-.3)/2,front+.12,.5,h-.3,.25,edge);
+   for(const side of [-1,1]){
+    box(id+'-side-cornice',x+side*w/2,top+.08,z,.65,.32,d-.65,edge);
+    box(id+'-end-cornice',x,top+.08,z+side*d/2,w+.65,.32,.65,edge);
+   }
   }
   if(cap){
-   const radius=Math.min(w,d)*.55;
-   const drum=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,.85,8),stone);drum.position.set(x,top+.2,z);root.add(drum);
-   const rise=radius*.98;
+   const radius=Math.max(w,d)*.55;
+   const drum=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,.85,8),stone);drum.position.set(x,top+.2,z);drum.rotation.y=Math.PI/8;root.add(drum);
+   const rise=radius*(placementR02?.58:.70);
    const profile=[new THREE.Vector2(radius,0),new THREE.Vector2(radius*.96,rise*.22),new THREE.Vector2(radius*.68,rise*.68),new THREE.Vector2(radius*.31,rise*.95),new THREE.Vector2(0,rise)];
-   const roof=new THREE.Mesh(new THREE.LatheGeometry(profile,8),blue);roof.position.set(x,top+.63,z);roof.castShadow=true;root.add(roof);
+   const roof=new THREE.Mesh(new THREE.LatheGeometry(profile,8),blue);roof.position.set(x,top+.63,z);roof.rotation.y=Math.PI/8;roof.castShadow=true;root.add(roof);
   }else{
    // Thin roof slab: no new solid block is inserted through the stair shaft.
    box(id+'-roof',x,top-.25,z,w-.35,.22,d-.35);
@@ -102,24 +138,26 @@ export function applyTargetCastleSilhouette(city){
  tower({id:'right-gate-bastion',x:73,z:9,w:8,d:8,top:33.4});
  tower({id:'left-outer-turret',x:42.4,z:6,w:5.2,top:26.4});
  tower({id:'right-outer-turret',x:81.2,z:3,w:5.6,top:29.6});
- tower({id:'left-blue-tower',x:48.2,z:-3.5,w:6.8,top:35.8,cap:true});
- tower({id:'right-blue-tower',x:72,z:-3.6,w:8.8,top:43,cap:true});
+ tower({id:'left-blue-tower',x:48.2,z:-3.5,w:8.2,top:34,cap:true});
+ tower({id:'right-blue-tower',x:72,z:-3.6,w:10.4,top:40,cap:true});
  tower({id:'central-stair-keep',x:60,z:-4.4,w:8.6,d:10.8,top:42.3,shaft:true});
- tower({id:'offset-high-keep',x:63.8,z:-14.6,w:9.8,d:9,top:52.4,cap:true});
+ tower({id:'offset-high-keep',x:63.8,z:-15.5,w:12.4,d:11,top:46.4,cap:true});
  // Side cheeks meet, not cover, the existing Blender-refined pointed portal.
  frontPanel('west-gate-shoulder',53.95,11.2,1.7,16,29.0);
  frontPanel('east-gate-shoulder',67.2,11.2,3.7,16,30.5);
  for(const x of [54.2,56.7,59.2,61.7,64.2])box('gate-top-merlon',x,29.55,11,.7,.8,.65,edge);
  mergeStaticGroup(root,{mergedTag:'target-castle-silhouette'});
  root.traverse(m=>{if(m.isMesh){m.name='target-castle-exterior';m.userData.isCitadelTerrain=false;m.userData.westCityWalkable=false;m.userData.citadelSolidExterior=true;}});
- root.userData.sourceId='reference-square-asymmetric-castle-v2-wfc-facades';
+ root.userData.sourceId='reference-broad-blue-towers-v4-wfc-facades';
+ if(placementR02)root.userData.sourceId='placement-r02-stepped-keep-massing';
+ root.userData.towerMassing=massingReports;
  root.userData.facadeWfc={scope:'seven front facades; authored volumes, side walls and stair keep',towers:facadeReports};
  root.userData.originalArchivedNode='west-city-crown';
- root.userData.update=phase=>{warm.emissiveIntensity=.12+nightWeightAt(phase)*1.45;};
+ root.userData.update=phase=>{warm.emissiveIntensity=.04+nightWeightAt(phase)*1.1;};
  root.userData.update(.85);
  original.visible=false;
  original.userData.archivedBy='target-square-asymmetric-castle';
  city.add(root);
- city.userData.targetCastleSilhouette={squareTowers:8,blueCaps:3,preserved:'gate, courtyard, spiral stairs, balcony'};
+ city.userData.targetCastleSilhouette={squareTowers:5,facetedTowers:3,blueCaps:3,preserved:'gate, courtyard, spiral stairs, balcony'};
  return root;
 }

@@ -1,0 +1,99 @@
+{
+  "version": "citadel-water-interface-r03",
+  "plan": {
+    "version": "citadel-water-r01",
+    "terrainRevision": "r09",
+    "frame": "highland-west-city",
+    "status": "candidate; depth and vessel clearance under verification",
+    "gate": [
+      54,
+      107
+    ],
+    "quay": {
+      "xMin": 43,
+      "xMax": 67,
+      "z": 108,
+      "freeboard": 0.9
+    },
+    "basin": {
+      "xMin": 24,
+      "xMax": 76,
+      "zMin": 111,
+      "zMax": 152
+    },
+    "approach": [
+      [
+        30,
+        142
+      ],
+      [
+        44,
+        134
+      ],
+      [
+        54,
+        119
+      ]
+    ],
+    "turning": {
+      "center": [
+        48,
+        130
+      ],
+      "radius": 9
+    },
+    "holdingBerth": {
+      "center": [
+        54,
+        114.5
+      ],
+      "heading": [
+        -1,
+        0
+      ],
+      "status": "holding pose; boarding connector still required"
+    },
+    "minimumDepth": 1.25,
+    "turnClearanceRadius": 7,
+    "designDepth": 4.6,
+    "bedTargetDepth": 5.5,
+    "waterAuthority": "planet-v8-curved-ocean; no secondary local water plane"
+  },
+  "holdingPose": {
+    "stage": "quay-approach",
+    "x": 54,
+    "z": 114.5,
+    "position": [
+      76.99812507444842,
+      138.5716458367673,
+      23.41723476181291
+    ],
+    "quaternion": [
+      0.127163200507482,
+      0.20664302531532439,
+      -0.2268507324401764,
+      0.9432215676693255
+    ],
+    "clear": true,
+    "scale": [
+      1.84,
+      1.84,
+      1.84
+    ],
+    "frame": "original Web world, before Godot model root transform"
+  },
+  "validation": {
+    "poseSamples": 275,
+    "failures": 0,
+    "triangleCount": 82474,
+    "scope": "Original visible vessel geometry at current pose, triangle-edge crossing against authored obstacles AND actual seabed; .75m approach samples and 5-degree turn samples. Not continuous collision proof, boarding, rowing animation sweep or cargo unloading."
+  },
+  "boardingConnected": false,
+  "defaultIntegrated": false,
+  "remaining": [
+    "Exact deployed gangplank-to-quay connection",
+    "Original rowing animation sweep",
+    "Continuous ship movement and unloading",
+    "Architecture rebuilt to approved target"
+  ]
+}

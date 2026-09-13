@@ -1,0 +1,52 @@
+{
+  "directions": [
+    {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/highland-west-city/citadel-original-horse-terrace/horse-terrace-side-step-10",
+        "obstacle_bounds": "[P: (68.6, 3.8, 75.8), S: (0.200012, 1.85001, 2.400009)]",
+        "part": "n24",
+        "phase": "hop",
+        "point": 2,
+        "progress": 0.972222222222222,
+        "reason": "mesh_overlap",
+        "route_position": "(74.8, 5.800018, 77.00001)"
+      },
+      "completed_steps": 2,
+      "geometry_queries": 11069,
+      "max_plant_adjustment": 0.0,
+      "phase": "blocked",
+      "point": 2,
+      "reverse": false,
+      "role": "gladius",
+      "route_points": 19,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    },
+    {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/highland-west-city/citadel-original-horse-terrace/horse-terrace-side-step-0",
+        "obstacle_bounds": "[P: (66.6, 3.8, 75.8), S: (0.200012, 0.35001, 2.400009)]",
+        "part": "n24",
+        "phase": "hop",
+        "point": 4,
+        "progress": 0.694444444444444,
+        "reason": "mesh_overlap",
+        "route_position": "(72.31, 4.0, 77.0)"
+      },
+      "completed_steps": 4,
+      "geometry_queries": 96126,
+      "max_plant_adjustment": 0.0,
+      "phase": "blocked",
+      "point": 4,
+      "reverse": true,
+      "role": "gladius",
+      "route_points": 19,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": false
+    }
+  ],
+  "passed": false,
+  "scope": "Original gladius carried geometry, production guarded controller, current original horse platform pedestrian stairs to processional entrance, both ways; no crowds or final gait."
+}

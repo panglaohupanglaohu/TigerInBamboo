@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "old": [
     {
       "id": "old-shore-court",
@@ -9,9 +9,9 @@
         19
       ],
       "color": 16751440,
-      "intensity": 240,
+      "intensity": 150,
       "radius": 20,
-      "godotEnergy": 40
+      "godotEnergy": 10
     },
     {
       "id": "old-middle-court",
@@ -21,9 +21,9 @@
         -7
       ],
       "color": 16755808,
-      "intensity": 320,
+      "intensity": 220,
       "radius": 22,
-      "godotEnergy": 55
+      "godotEnergy": 14
     },
     {
       "id": "old-upper-court",
@@ -33,9 +33,9 @@
         -20
       ],
       "color": 16760181,
-      "intensity": 420,
+      "intensity": 300,
       "radius": 26,
-      "godotEnergy": 70
+      "godotEnergy": 20
     }
   ],
   "new": [
@@ -44,24 +44,24 @@
       "position": [
         60,
         23,
-        21
+        33
       ],
       "color": 16755800,
-      "intensity": 350,
-      "radius": 30,
-      "godotEnergy": 140
+      "intensity": 220,
+      "radius": 24,
+      "godotEnergy": 80
     },
     {
       "id": "plaza",
       "position": [
-        59,
+        65,
         8,
         70
       ],
       "color": 16759141,
-      "intensity": 320,
-      "radius": 24,
-      "godotEnergy": 25
+      "intensity": 70,
+      "radius": 18,
+      "godotEnergy": 15
     },
     {
       "id": "shore-gate",
@@ -71,9 +71,9 @@
         93
       ],
       "color": 16752716,
-      "intensity": 260,
-      "radius": 20,
-      "godotEnergy": 45
+      "intensity": 45,
+      "radius": 10,
+      "godotEnergy": 22
     }
   ],
   "oldBefore": 1,
@@ -95,7 +95,7 @@
         86.5686555304206,
         43.290946507948675
       ],
-      "energy": 240,
+      "energy": 150,
       "color": 16751440,
       "radius": 20
     },
@@ -112,7 +112,7 @@
         70.79169871421718,
         65.76778769243973
       ],
-      "energy": 320,
+      "energy": 220,
       "color": 16755808,
       "radius": 22
     },
@@ -129,7 +129,7 @@
         72.43883139394462,
         49.92660122907702
       ],
-      "energy": 420,
+      "energy": 300,
       "color": 16760181,
       "radius": 26
     },
@@ -139,33 +139,33 @@
       "position": [
         60,
         23,
-        21
+        33
       ],
       "world": [
-        105.61978895553479,
-        112.42984154667468,
-        111.75200031931706
+        103.75216612005295,
+        119.09929548575445,
+        101.95249170414253
       ],
-      "energy": 350,
+      "energy": 220,
       "color": 16755800,
-      "radius": 30
+      "radius": 24
     },
     {
       "side": "new",
       "name": "new-city-light-plaza",
       "position": [
-        59,
+        65,
         8,
         70
       ],
       "world": [
-        89.21764295984678,
-        128.85990357707874,
-        66.05711364243372
+        84.68005694234114,
+        131.64867538281754,
+        68.81991384318174
       ],
-      "energy": 320,
+      "energy": 70,
       "color": 16759141,
-      "radius": 24
+      "radius": 18
     },
     {
       "side": "new",
@@ -180,9 +180,9 @@
         125.58147528853965,
         33.52057492118045
       ],
-      "energy": 260,
+      "energy": 45,
       "color": 16752716,
-      "radius": 20
+      "radius": 10
     }
   ]
 }

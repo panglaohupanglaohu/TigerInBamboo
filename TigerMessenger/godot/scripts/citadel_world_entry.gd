@@ -9,6 +9,12 @@ func _ready() -> void:
     region_list.select(index)
     _focus_region(index)
     _build_assault_view()
+    # Historical revision tests mount their own fixture; normal scene loads the released batch.
+    var explicit_revision=false
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--terrain-revision=") or arg.begins_with("--placement-r") or arg=="--citadel-layout=legacy":explicit_revision=true
+    if not explicit_revision:
+        preload("res://scripts/citadel_layout_release.gd").mount(self,true)
     status.text = "高山圣城 · 原场景与 WFC 城堡
 右侧可启动三兵种通行演练；完整攻城接入中"
 
@@ -62,6 +68,7 @@ func _build_assault_view()->void:
     var front_walk=Button.new();front_walk.text="短剑兵 · 前港登陆到广场";front_walk.pressed.connect(_start_traversal.bind("gladius",true,true));panel.add_child(front_walk)
     if preload("res://scripts/citadel_surface_variant.gd").harbor_enabled():
         var shore_walk=Button.new();shore_walk.text="短剑兵 · 旧港沿坡入城";shore_walk.pressed.connect(_start_traversal.bind("gladius",true,false,true));panel.add_child(shore_walk)
+    var horse_walk=Button.new();horse_walk.text="短剑兵 · 木马台到主城阶梯";horse_walk.pressed.connect(_start_traversal.bind("gladius",true,false,false,true));panel.add_child(horse_walk)
     var reset_walk=Button.new();reset_walk.text="重置通行演练";reset_walk.pressed.connect(_reset_traversal);panel.add_child(reset_walk)
     var entry=Button.new();entry.text="进攻入口";entry.disabled=not loaded;entry.pressed.connect(_focus_approach);panel.add_child(entry)
     var toggle=CheckButton.new();toggle.text="显示原作路线 · 待通行验收";toggle.disabled=not loaded
@@ -168,7 +175,7 @@ func _reset_traversal()->void:
     traversal_epoch+=1;traversal_accumulator=0.0
     if traversal!=null:traversal.dispose();traversal=null
     status.text="通行演练已重置"
-func _start_traversal(kind:String,west_city:bool=false,front_harbor:bool=false,old_shore:bool=false)->void:
+func _start_traversal(kind:String,west_city:bool=false,front_harbor:bool=false,old_shore:bool=false,horse_exit:bool=false)->void:
     _reset_traversal()
     var token:=traversal_epoch
     for actor in carry_preview:
@@ -186,12 +193,18 @@ func _start_traversal(kind:String,west_city:bool=false,front_harbor:bool=false,o
     traversal=preload("res://scripts/citadel_roman_traversal.gd").new()
     traversal_in_west_city=west_city
     traversal_is_old_shore=old_shore
-    var path:Array=preload("res://scripts/west_city_route.gd").new().points("res://data/citadel-front-harbor-route.json" if front_harbor else "res://data/citadel-west-city-route.json") if west_city else []
+    var path:Array=preload("res://scripts/west_city_route.gd").new().points(get_meta("front_harbor_data_path","res://data/citadel-front-harbor-route.json") if front_harbor else "res://data/citadel-plaza-keep-route.json") if west_city else []
     if old_shore:
         path=[]
         var data=JSON.parse_string(FileAccess.get_file_as_string("res://data/old-harbor-ocean-grade.json"))
         for p in data.shore.route:path.append(Vector3(p[0],p[1],p[2]))
-    if not traversal.bind(self,kind,castle_adapter.original if west_city else null,path,old_shore):status.text="士兵携行或路线绑定失败";return
+    var route_frame=castle_adapter.original if west_city else null
+    if horse_exit:
+        path=[]
+        var data=JSON.parse_string(FileAccess.get_file_as_string(get_meta("horse_exit_data_path","res://data/citadel-horse-plaza-exit.json")))
+        for p in data.points:path.append(Vector3(p[0],p[1],p[2]))
+        route_frame=castle_adapter.original.find_child("highland-west-city",true,false)
+    if not traversal.bind(self,kind,route_frame,path,old_shore):status.text="士兵携行或路线绑定失败";return
     if not west_city:_inspect_stair_interior(true)
     route_toggle.button_pressed=false
 func _physics_process(dt:float)->void:

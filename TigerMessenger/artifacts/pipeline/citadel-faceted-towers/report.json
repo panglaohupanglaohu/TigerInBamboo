@@ -1,0 +1,483 @@
+{
+  "before": {
+    "shape": {
+      "squareTowers": 8,
+      "blueCaps": 3,
+      "preserved": "gate, courtyard, spiral stairs, balcony"
+    },
+    "wfc": {
+      "scope": "seven front facades; authored volumes, side walls and stair keep",
+      "towers": [
+        {
+          "id": "left-gate-bastion",
+          "rows": 2,
+          "modules": 6,
+          "openings": 2,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone"
+            ]
+          ],
+          "solutionHash": "4171e0f8"
+        },
+        {
+          "id": "right-gate-bastion",
+          "rows": 2,
+          "modules": 6,
+          "openings": 2,
+          "grid": [
+            [
+              "stone",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ]
+          ],
+          "solutionHash": "be05f928"
+        },
+        {
+          "id": "left-outer-turret",
+          "rows": 1,
+          "modules": 3,
+          "openings": 1,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ]
+          ],
+          "solutionHash": "27bfdec7"
+        },
+        {
+          "id": "right-outer-turret",
+          "rows": 2,
+          "modules": 6,
+          "openings": 2,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "slit",
+              "stone"
+            ]
+          ],
+          "solutionHash": "069b5274"
+        },
+        {
+          "id": "left-blue-tower",
+          "rows": 3,
+          "modules": 9,
+          "openings": 3,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone-alt",
+              "slit",
+              "stone"
+            ]
+          ],
+          "solutionHash": "039ca89c"
+        },
+        {
+          "id": "right-blue-tower",
+          "rows": 4,
+          "modules": 12,
+          "openings": 4,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone"
+            ]
+          ],
+          "solutionHash": "bda457ef"
+        },
+        {
+          "id": "offset-high-keep",
+          "rows": 5,
+          "modules": 15,
+          "openings": 5,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone",
+              "slit",
+              "stone"
+            ],
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "slit",
+              "stone"
+            ],
+            [
+              "stone",
+              "slit",
+              "stone"
+            ]
+          ],
+          "solutionHash": "2409d469"
+        }
+      ]
+    },
+    "source": "reference-square-asymmetric-castle-v2-wfc-facades",
+    "windowRays": [
+      {
+        "x": 48.2,
+        "y": 21.3,
+        "z": -0.1,
+        "hit": [
+          48.199999999999996,
+          21.299999999999983,
+          -0.2800000011920929
+        ],
+        "material": "ffb767"
+      },
+      {
+        "x": 49.2,
+        "y": 21.3,
+        "z": -0.1,
+        "hit": [
+          49.20000000000003,
+          21.299999999999983,
+          0.10999998450280657
+        ],
+        "material": "000000"
+      },
+      {
+        "x": 72,
+        "y": 21.3,
+        "z": 0.8,
+        "hit": [
+          72,
+          21.30000000000001,
+          0.6200000047683858
+        ],
+        "material": "ffb767"
+      },
+      {
+        "x": 73,
+        "y": 21.3,
+        "z": 0.8,
+        "hit": [
+          73,
+          21.30000000000001,
+          1.009999990463271
+        ],
+        "material": "000000"
+      },
+      {
+        "x": 63.8,
+        "y": 21.3,
+        "z": -10.1,
+        "hit": [
+          63.800000000000004,
+          21.30000000000004,
+          -10.279999732971206
+        ],
+        "material": "ffb767"
+      },
+      {
+        "x": 64.8,
+        "y": 21.3,
+        "z": -10.1,
+        "hit": [
+          64.80000000000001,
+          21.30000000000001,
+          -9.89000034332274
+        ],
+        "material": "000000"
+      }
+    ],
+    "errors": []
+  },
+  "after": {
+    "shape": {
+      "squareTowers": 5,
+      "facetedTowers": 3,
+      "blueCaps": 3,
+      "preserved": "gate, courtyard, spiral stairs, balcony"
+    },
+    "wfc": {
+      "scope": "seven front facades; authored volumes, side walls and stair keep",
+      "towers": [
+        {
+          "id": "left-gate-bastion",
+          "rows": 2,
+          "modules": 6,
+          "openings": 2,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone"
+            ]
+          ],
+          "solutionHash": "4171e0f8"
+        },
+        {
+          "id": "right-gate-bastion",
+          "rows": 2,
+          "modules": 6,
+          "openings": 2,
+          "grid": [
+            [
+              "stone",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ]
+          ],
+          "solutionHash": "be05f928"
+        },
+        {
+          "id": "left-outer-turret",
+          "rows": 1,
+          "modules": 3,
+          "openings": 1,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ]
+          ],
+          "solutionHash": "27bfdec7"
+        },
+        {
+          "id": "right-outer-turret",
+          "rows": 2,
+          "modules": 6,
+          "openings": 2,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "slit",
+              "stone"
+            ]
+          ],
+          "solutionHash": "069b5274"
+        },
+        {
+          "id": "left-blue-tower",
+          "rows": 3,
+          "modules": 9,
+          "openings": 3,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone-alt",
+              "slit",
+              "stone"
+            ]
+          ],
+          "solutionHash": "039ca89c"
+        },
+        {
+          "id": "right-blue-tower",
+          "rows": 4,
+          "modules": 12,
+          "openings": 4,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone",
+              "arch",
+              "stone"
+            ]
+          ],
+          "solutionHash": "bda457ef"
+        },
+        {
+          "id": "offset-high-keep",
+          "rows": 5,
+          "modules": 15,
+          "openings": 5,
+          "grid": [
+            [
+              "stone-alt",
+              "arch",
+              "stone"
+            ],
+            [
+              "stone",
+              "slit",
+              "stone"
+            ],
+            [
+              "stone-alt",
+              "arch",
+              "stone-alt"
+            ],
+            [
+              "stone-alt",
+              "slit",
+              "stone"
+            ],
+            [
+              "stone",
+              "slit",
+              "stone"
+            ]
+          ],
+          "solutionHash": "2409d469"
+        }
+      ]
+    },
+    "source": "reference-faceted-blue-towers-v3-wfc-facades",
+    "windowRays": [
+      {
+        "x": 48.2,
+        "y": 21.3,
+        "z": -0.1,
+        "hit": [
+          48.199999999999996,
+          21.299999999999983,
+          -0.2800000011920929
+        ],
+        "material": "ffb767"
+      },
+      {
+        "x": 49.2,
+        "y": 21.3,
+        "z": -0.1,
+        "hit": [
+          49.20000000000002,
+          21.30000000000001,
+          0.10999999940395355
+        ],
+        "material": "000000"
+      },
+      {
+        "x": 72,
+        "y": 21.3,
+        "z": 0.8,
+        "hit": [
+          72,
+          21.30000000000001,
+          0.6200000047683858
+        ],
+        "material": "ffb767"
+      },
+      {
+        "x": 73,
+        "y": 21.3,
+        "z": 0.8,
+        "hit": [
+          73,
+          21.30000000000001,
+          1.009999990463271
+        ],
+        "material": "000000"
+      },
+      {
+        "x": 63.8,
+        "y": 21.3,
+        "z": -10.1,
+        "hit": [
+          63.800000000000004,
+          21.30000000000004,
+          -10.279999732971206
+        ],
+        "material": "ffb767"
+      },
+      {
+        "x": 64.8,
+        "y": 21.3,
+        "z": -10.1,
+        "hit": [
+          64.80000000000001,
+          21.30000000000001,
+          -9.89000034332274
+        ],
+        "material": "000000"
+      }
+    ],
+    "errors": []
+  }
+}

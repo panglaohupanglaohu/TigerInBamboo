@@ -38,6 +38,7 @@ export function applyCitadelCompositionFrame(castle) {
     city.rotation.y=NEW_CITY_YAW;city.position.fromArray(rotateNewCityPoint([0,0,0]));
     const cityPoint=p=>point(rotateNewCityPoint(p));
     city.userData.walkRoute=city.userData.walkRoute.map(cityPoint);
+    if(city.userData.plazaToKeepRoute)city.userData.plazaToKeepRoute=city.userData.plazaToKeepRoute.map(cityPoint);
     if(city.userData.harborRoute)city.userData.harborRoute=city.userData.harborRoute.map(cityPoint);
     if(city.userData.horsePlazaExit)city.userData.horsePlazaExit=city.userData.horsePlazaExit.map(cityPoint);
     for(const key of ['plazaAnchor','statueAnchor','horseReservation','harborAnchor','processionalEntry'])if(city.userData[key])city.userData[key]=cityPoint(city.userData[key]);

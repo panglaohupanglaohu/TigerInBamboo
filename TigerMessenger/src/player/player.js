@@ -39,7 +39,7 @@ export function createPlayer(scene) {
   const playerGroup = new THREE.Group();
   scene.add(playerGroup);
 
-  // 主人规格：送信人 = AgentsGroup2026 数字孪生智能体（非竹虎）
+  // 2026-09-13：采用认可目标图的人形信使，保留原球面移动与任务接口。
   const messengerMesh = buildAgentMessenger();
   playerGroup.add(messengerMesh);
 

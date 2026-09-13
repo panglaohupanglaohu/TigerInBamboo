@@ -1,0 +1,44 @@
+{
+  "walk": {
+    "samples": 2911,
+    "missingSupports": [],
+    "blocked": [],
+    "passed": true
+  },
+  "horse": {
+    "position": [
+      25.68653347947319,
+      5.799999999999982,
+      82.86602540378442
+    ],
+    "placement": {
+      "kind": "new-citadel-plaza-right",
+      "surface": "stone",
+      "castleLocal": [
+        25.686533479473212,
+        5.8,
+        82.86602540378443
+      ],
+      "yaw": -2.914262366790152,
+      "facing": "new-citadel-stairs",
+      "battleDestination": "castle-top",
+      "lake": false
+    },
+    "nightAttached": true
+  },
+  "statue": {
+    "min": [
+      7.899950404134094,
+      4,
+      75.71693770224186
+    ],
+    "max": [
+      12.260303633710302,
+      12.256000137329101,
+      80.07729093181808
+    ],
+    "height": 8.256000137329101,
+    "source": "citadel-soldier-statue-r04"
+  },
+  "errors": []
+}

@@ -1,0 +1,26 @@
+{
+  "blocked": {
+    "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/OldHarborOceanGrade/citadel-oskar-grid-mountain-surface",
+    "obstacle_bounds": "[P: (-130.571, -188.6548, -167.3318), S: (226.3707, 277.1878, 301.6316)]",
+    "part": "n35",
+    "phase": "turn",
+    "point": 0,
+    "progress": 0.208333333333333,
+    "reason": "mesh_overlap",
+    "route_position": "(-22.21132, 5.029984, 5.895508)"
+  },
+  "completed_steps": 0,
+  "distance_from_start": 0.0,
+  "front_landmark": true,
+  "geometry_queries": 4,
+  "max_plant_adjustment": 0.0,
+  "passed": false,
+  "phase": "blocked",
+  "point": 0,
+  "role": "gladius",
+  "route_points": 707,
+  "scope": "Actual citadel scene, approved gladius mesh and production collision-guarded controller from plaza through the main gate, courtyard, tower stair and upper exit; no ship boarding or combat.",
+  "step_clearance": 0.1,
+  "surface_following": false,
+  "tick_budget": 111548
+}

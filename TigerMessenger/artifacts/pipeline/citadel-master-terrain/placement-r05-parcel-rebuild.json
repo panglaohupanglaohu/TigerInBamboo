@@ -1,0 +1,88 @@
+{
+  "before": {
+    "roots": 1,
+    "cells": 81,
+    "rebuilds": 1,
+    "solutions": [
+      "85b9ef45",
+      "b3b85a9c",
+      "b4fcf06c",
+      "e405ac1e",
+      "525b3fa4",
+      "c0e1b738",
+      "5d5ac6c7"
+    ],
+    "visibleLegacy": 0
+  },
+  "after": {
+    "roots": 1,
+    "cells": 81,
+    "rebuilds": 2,
+    "solutions": [
+      "85b9ef45",
+      "b3b85a9c",
+      "b4fcf06c",
+      "e405ac1e",
+      "525b3fa4",
+      "c0e1b738",
+      "5d5ac6c7"
+    ],
+    "visibleLegacy": 0
+  },
+  "mappedFaces": 23068,
+  "pickedCell": {
+    "ix": 4,
+    "iz": 13,
+    "terraceIndex": 0,
+    "iy": 0,
+    "char": "7"
+  },
+  "deleted": {
+    "roots": 1,
+    "cells": 80,
+    "rebuilds": 3,
+    "solutions": [
+      "884369c9",
+      "b3b85a9c",
+      "b4fcf06c",
+      "e405ac1e",
+      "525b3fa4",
+      "c0e1b738",
+      "5d5ac6c7"
+    ],
+    "visibleLegacy": 0
+  },
+  "freshMapping": {
+    "roots": 1,
+    "cells": 80,
+    "rebuilds": 4,
+    "solutions": [
+      "884369c9",
+      "b3b85a9c",
+      "b4fcf06c",
+      "e405ac1e",
+      "525b3fa4",
+      "c0e1b738",
+      "5d5ac6c7"
+    ],
+    "visibleLegacy": 0
+  },
+  "mappingStable": true,
+  "restored": {
+    "roots": 1,
+    "cells": 81,
+    "rebuilds": 5,
+    "solutions": [
+      "85b9ef45",
+      "b3b85a9c",
+      "b4fcf06c",
+      "e405ac1e",
+      "525b3fa4",
+      "c0e1b738",
+      "5d5ac6c7"
+    ],
+    "visibleLegacy": 0
+  },
+  "scope": "Real merged-face source lookup, full rebuild, delete one mapped original cell and restore; fresh ownership reconstruction from edited source checked; actual pointer gesture and disk-save UI not covered.",
+  "passed": true
+}

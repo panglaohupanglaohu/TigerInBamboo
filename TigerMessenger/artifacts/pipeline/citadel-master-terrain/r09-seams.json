@@ -1,0 +1,13 @@
+{
+  "scope": "coincident source vertices within each modified mesh only; not all exterior coast seams",
+  "parts": [
+    {
+      "name": "citadel-oskar-grid-mountain-surface",
+      "maxDuplicateVertexSeparation": 0
+    },
+    {
+      "name": "citadel-coastal-cliff-seal",
+      "maxDuplicateVertexSeparation": 0
+    }
+  ]
+}

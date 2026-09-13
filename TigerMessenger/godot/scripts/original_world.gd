@@ -24,6 +24,7 @@ var castle_adapter = preload("res://scripts/castle_world_adapter.gd").new()
 var castle_toggle: CheckButton
 var window_lights=preload("res://scripts/citadel_window_lights.gd").new()
 var old_harbor_grade_adapter=preload("res://scripts/old_harbor_grade_adapter.gd").new()
+var front_harbor_berth_adapter=preload("res://scripts/front_harbor_berth_adapter.gd").new()
 var west_massif_adapter=preload("res://scripts/west_massif_adapter.gd").new()
 var camp_shallows_adapter=preload("res://scripts/camp_shallows_adapter.gd").new()
 var seabed_adapter=preload("res://scripts/citadel_seabed_adapter.gd").new()
@@ -58,6 +59,7 @@ func _ready() -> void:
 	camp_shallows_adapter.bind(model)
 	west_massif_adapter.bind(model)
 	old_harbor_grade_adapter.bind(self)
+	front_harbor_berth_adapter.bind(self)
 	var environment := WorldEnvironment.new()
 	environment.environment = Environment.new()
 	environment.environment.background_mode = Environment.BG_COLOR
@@ -153,6 +155,7 @@ func _ui() -> void:
 	castle_toggle.toggled.connect(func(value):
 		if not castle_adapter.set_enabled(value): castle_toggle.set_pressed_no_signal(castle_adapter.enabled)
 		if is_instance_valid(old_harbor_grade_adapter.replacement):old_harbor_grade_adapter.replacement.visible=castle_adapter.enabled
+		front_harbor_berth_adapter.set_enabled(castle_adapter.enabled)
 	)
 	box.add_child(castle_toggle)
 	var layout := Button.new()

@@ -51,6 +51,60 @@ export function createBoatRide({
   let boat = null;
   let surfaceRadius = 0;
   let prevCamDist = 0;
+  let crossing = null;
+  let deckPosition = null;
+
+  // The berth supplies a measured world-space route, ordered quay -> deck.
+  // Keep this opt-in until the actual quay connector has been installed.
+  function beginCrossing(target, leaving = false) {
+    const route = target?.userData.boardingRoute;
+    const gate = target?.userData.boardingGate;
+    if (!route || !gate || crossing) return false;
+    const points = route.map(p => p.clone());
+    if (leaving) points.reverse();
+    if (points.length < 2 || points.some(p => ![p.x,p.y,p.z].every(Number.isFinite))) return false;
+    if (player.position.distanceTo(points[0]) > 1.6) return false;
+    if (!gate.deploy({stopped:true})) return false;
+    crossing = {target, gate, points:[player.position.clone(), ...points], index:1, leaving, entered:false};
+    player.boardingOnFoot=true;player.onGround=true;
+    target.userData.piloted = true;
+    player.riding = true;
+    player.velocity.set(0,0,0);
+    if (playerGroup) playerGroup.visible = true;
+    return true;
+  }
+
+  function updateCrossing(dt) {
+    const c = crossing;
+    c.gate.tick(dt);
+    if (!c.entered) {
+      if (c.gate.snapshot().phase !== 'deployed') return true;
+      if (!c.gate.enter('player')) return true;
+      c.entered = true;
+    }
+    let remaining = Math.max(0,dt) * 1.2;
+    const before = player.position.clone();
+    while (remaining > 0 && c.index < c.points.length) {
+      const next = c.points[c.index], distance = player.position.distanceTo(next);
+      if (distance <= remaining) {player.position.copy(next);remaining -= distance;c.index++;}
+      else {player.position.lerp(next,remaining/distance);remaining=0;}
+    }
+    player.velocity.copy(player.position).sub(before).divideScalar(Math.max(dt,1e-6));
+    if (player.velocity.lengthSq() > 1e-8) {
+      player.forward.copy(player.velocity).normalize();player.facing.copy(player.forward);
+    }
+    setHint(c.leaving?'正在沿跳板下船':'正在沿跳板登船');
+    if (c.index === c.points.length) {
+      c.gate.leave('player');crossing=null;
+      if (c.leaving) finishDismount(c.target,player.position.clone());
+      else {
+        player.riding=false;
+        mount(c.target,player.position.clone());
+        c.gate.retract();
+      }
+    }
+    return true;
+  }
 
   function getWorldPosition(target) {
     const b = getBoat?.() || null;
@@ -61,7 +115,10 @@ export function createBoatRide({
 
   function nearBoat() {
     const b = getWorldPosition(_boatWorld);
-    return !!b && player.position.distanceTo(_boatWorld) <= BOARD_RANGE;
+    const berth=b?.userData.frontHarborBerth;
+    return !!b && (player.position.distanceTo(_boatWorld) <= BOARD_RANGE ||
+      (b.userData.boardingRoute?.[0] && player.position.distanceTo(b.userData.boardingRoute[0])<=1.6) ||
+      (berth&&_boatWorld.distanceTo(berth.position)<1&&player.position.distanceTo(berth.exit)<=1.6));
   }
 
   function boatLabel(target) {
@@ -102,7 +159,7 @@ export function createBoatRide({
     projectTangent(_fwd, _up);
   }
 
-  function mount(target) {
+  function mount(target, deckPoint = null) {
     if (!target || riding || player.riding) return false;
     exitOtherRides();
     boat = target;
@@ -112,13 +169,18 @@ export function createBoatRide({
     surfaceRadius = boat.position.length();
     captureForward();
     riding = true;
+    player.boardingOnFoot=!!deckPoint;
     player.riding = true;
     player.velocity.set(0, 0, 0);
     prevCamDist = cameraRig?.getDist?.() ?? 0;
     cameraRig?.setDist?.(CAMERA_DIST);
-    if (playerGroup) playerGroup.visible = false;
-    player.position.copy(boat.position).addScaledVector(_up, BOAT_EYE_HEIGHT);
-    player.position.setLength(surfaceRadius + BOAT_EYE_HEIGHT);
+    deckPosition = deckPoint ? boat.worldToLocal(deckPoint.clone()) : null;
+    if (playerGroup) playerGroup.visible = !!deckPosition;
+    if (deckPosition) player.position.copy(deckPoint);
+    else {
+      player.position.copy(boat.position).addScaledVector(_up, BOAT_EYE_HEIGHT);
+      player.position.setLength(surfaceRadius + BOAT_EYE_HEIGHT);
+    }
     player.forward.copy(_fwd);
     player.facing.copy(_fwd);
     setHint("[<kbd>WASD</kbd>] 驾驶 · [<kbd>F</kbd>] 下船");
@@ -137,13 +199,23 @@ export function createBoatRide({
       .addScaledVector(_up, 0.7)
       .addScaledVector(_side, EXIT_SIDE);
     _seat.setLength(surfaceRadius + 0.7);
-    player.position.copy(_seat);
+    const berth=left.userData.frontHarborBerth;
+    if(berth&&left.position.distanceTo(berth.position)<1){
+      _seat.copy(berth.exit).addScaledVector(berth.exit.clone().normalize(),.08);
+    }
+    finishDismount(left,_seat);
+  }
+
+  function finishDismount(left, position) {
+    player.position.copy(position);
     player.forward.copy(_fwd);
     player.facing.copy(_fwd);
     player.velocity.set(0, 0, 0);
-    boat.userData.piloted = false;
+    left.userData.piloted = false;
     boat = null;
     riding = false;
+    player.boardingOnFoot=false;
+    deckPosition = null;
     player.riding = false;
     if (playerGroup) playerGroup.visible = true;
     if (prevCamDist) cameraRig?.setDist?.(prevCamDist);
@@ -154,24 +226,29 @@ export function createBoatRide({
 
   window.addEventListener("keydown", (e) => {
     if (e.repeat || e.code !== "KeyF") return;
+    if (crossing) {e.preventDefault();return;}
     if (riding) {
       e.preventDefault();
-      dismount();
+      if (boat.userData.boardingRoute) beginCrossing(boat,true);
+      else dismount();
       return;
     }
     if (!player.riding && nearBoat()) {
       e.preventDefault();
-      mount(getBoat?.() || null);
+      const target=getBoat?.() || null;
+      if (target?.userData.boardingRoute) beginCrossing(target);
+      else mount(target);
     }
   });
 
   function update(dt) {
+    if (crossing) return updateCrossing(dt);
     if (!riding) {
       const otherRideActive = !!player.riding;
       if (!otherRideActive) player.riding = false;
       const b = getWorldPosition(_boatWorld);
       setHint(
-        !otherRideActive && b && player.position.distanceTo(_boatWorld) <= BOARD_RANGE
+        !otherRideActive && b && nearBoat()
           ? "[<kbd>F</kbd>] 上船 · WASD 驾驶"
           : null
       );
@@ -185,8 +262,10 @@ export function createBoatRide({
 
     _up.copy(boat.position).normalize();
     const k = keys || {};
-    const turn = (k.KeyA ? 1 : 0) - (k.KeyD ? 1 : 0);
-    const thrust = (k.KeyW ? 1 : 0) - (k.KeyS ? 1 : 0);
+    if (deckPosition) boat.userData.boardingGate?.tick(dt);
+    const boardingLocked=boat.userData.boardingGate?.snapshot().canSail===false;
+    const turn = boardingLocked?0:(k.KeyA ? 1 : 0) - (k.KeyD ? 1 : 0);
+    const thrust = boardingLocked?0:(k.KeyW ? 1 : 0) - (k.KeyS ? 1 : 0);
     if (turn) _fwd.applyAxisAngle(_up, turn * TURN_SPEED * dt);
     projectTangent(_fwd, _up);
 
@@ -195,27 +274,33 @@ export function createBoatRide({
       _next.normalize().multiplyScalar(surfaceRadius);
       boat.position.copy(_next);
     }
-    orientBoat();
+    if(!boardingLocked)orientBoat();
     // 有前进/后退推力时双侧船桨划水；仅转向时轻划
     const row = thrust ? 1 : turn ? 0.35 : 0;
     updateWarshipOars(boat, dt, row);
     // 部分桨手麻醉 → 航向歪扭
-    applyBoatOarWobble(boat, dt);
+    if(!boardingLocked)applyBoatOarWobble(boat, dt);
 
     _up.copy(boat.position).normalize();
-    player.position.copy(boat.position).addScaledVector(_up, BOAT_EYE_HEIGHT);
-    player.position.setLength(surfaceRadius + BOAT_EYE_HEIGHT);
+    if (deckPosition) player.position.copy(boat.localToWorld(deckPosition.clone()));
+    else {
+      player.position.copy(boat.position).addScaledVector(_up, BOAT_EYE_HEIGHT);
+      player.position.setLength(surfaceRadius + BOAT_EYE_HEIGHT);
+    }
     player.velocity.set(0, 0, 0);
     player.riding = true;
     player.forward.copy(_fwd);
     player.facing.copy(_fwd);
-    setHint("[<kbd>WASD</kbd>] 驾驶 · [<kbd>F</kbd>] 下船");
+    setHint(boardingLocked?"跳板尚未收起，船舶保持停靠":"[<kbd>WASD</kbd>] 驾驶 · [<kbd>F</kbd>] 下船");
     return true;
   }
 
   return {
     update,
-    forceExit: () => { if (riding) dismount(); },
-    isRiding: () => riding,
+    forceExit: () => {
+      if(crossing){const c=crossing;c.gate.leave('player');crossing=null;finishDismount(c.target,c.points[0]);}
+      else if (riding) dismount();
+    },
+    isRiding: () => riding || !!crossing,
   };
 }
