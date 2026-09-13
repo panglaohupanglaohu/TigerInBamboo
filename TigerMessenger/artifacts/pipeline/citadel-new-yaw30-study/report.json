@@ -1,0 +1,31 @@
+{
+  "candidateOnly": true,
+  "yawDegrees": -29.999999999999996,
+  "pivot": [
+    7.999999999999998,
+    4.0000000000000275,
+    71.49999999999997
+  ],
+  "keepGate": [
+    38.24999999999999,
+    16.000000000000025,
+    19.105463071041438
+  ],
+  "bridgeEndpointBefore": [
+    -22.211319523525574,
+    5.03,
+    5.895508075688776
+  ],
+  "bridgeEndpointAfter": [
+    14.638475772933663,
+    5.03,
+    -0.4208163705873601
+  ],
+  "bridgeEndpointDrift": 37.38720861339577,
+  "inverseBridgeInNewAuthorFrame": [
+    1.0339838486224764,
+    5.03,
+    29.790503152938207
+  ],
+  "scope": "Fixed-camera isolated-browser composition study. Terrain, original horse and battle paths not migrated; must not publish as integrated."
+}

@@ -1,4 +1,4 @@
-import {createCitadelPlayerWalls} from './world/citadel/playerWalls.js';
+import {createCitadelPlayerWalls,createCitadelCameraOccluders} from './world/citadel/playerWalls.js';
 import {createCitadelPlayerGround} from './world/citadel/playerGround.js';
 import { bindOriginalWorldRomanArmor } from "./world/romanWorldArmor.js";
 // =====================================================================
@@ -273,7 +273,10 @@ if (new URLSearchParams(location.search).get("tour") === "saihoji") {
     }
   }
 }
-const cameraRig = createCameraRig(camera, player);
+const cameraRig = createCameraRig(camera, player, {
+  // 相机遮挡回拉复用资产碰撞球，避免信使进建筑后被墙挡住
+  colliders: () => assetColliders,
+});
 // Give the bookshop entrance breathing room on a fresh default camera.
 if (entryBookshop && !entryParams.has('tour') && entryParams.get('spawn') !== 'legacy' && P.camDist === 7.5) {
   P.camDist = 14;
@@ -1590,7 +1593,10 @@ const citadelPreviousFoot=new THREE.Vector3();
 function refreshCitadelPlayerGround(){
   if(citadelPlayerGround)return;
   const city=scene.getObjectByName('highland-west-city');
-  if(city){citadelPlayerGround=createCitadelPlayerGround(city);citadelPlayerWalls=createCitadelPlayerWalls(city);}
+  if(city){citadelPlayerGround=createCitadelPlayerGround(city);citadelPlayerWalls=createCitadelPlayerWalls(city);
+    // Same authored walls drive the camera pull-in, so entering the gate or the tower
+    // no longer leaves the camera stranded outside the stone.
+    cameraRig.setOccluderMeshes(createCitadelCameraOccluders(city));}
 }
 function samplePlayerLocalGround(position){
   return citadelPlayerGround?.(position) ?? sampleSwampGround(position);
@@ -1599,6 +1605,8 @@ function sampleSwampGround(position) {
   return swampGroundZone?.userData?.sampleGroundRadius(position) ?? null;
 }
 
+let citadelBgmCity=null;
+const citadelBgmPoint=new THREE.Vector3();
 function animate() {
   requestAnimationFrame(animate);
   timer.update();
@@ -1652,7 +1660,7 @@ function animate() {
   // 纳沃纳双栖广场：雨天蓄洪 / 晴雪泄回旱季广场（与天气联动）
   {
     const plaza = messenger?.landmarks?.citadelRange?.navonaPlaza;
-    if (plaza?.setFlooded) {
+    if (plaza?.setFlooded && !plaza.userData?.retiredCitadelPresentation) {
       // weather mode: 0 晴 / 1 雨 / 2 雪 → 仅雨天 isFlooded
       plaza.setFlooded((P.weather | 0) === 1);
     }
@@ -1722,7 +1730,9 @@ function animate() {
   }
 
   const bgmWhale = scene.getObjectByName("leviathanGroup");
-  updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(new THREE.Vector3()) || null});
+  if(!citadelBgmCity?.parent)citadelBgmCity=scene.getObjectByName('highland-west-city');
+  const bgmCityCenter=citadelBgmCity?citadelBgmCity.localToWorld(citadelBgmPoint.set(60,4,71.5)):null;
+  updateBgmListenerContext({listener:player.position,saihoji:bgmWhale?.getWorldPosition(new THREE.Vector3()) || null,newCity:bgmCityCenter,gameStarted});
 
   // 场景模块自更新（湖、云、平台脉动等）
   updateScenes(sceneHandles, dt, t, { player, gameStarted, keys });

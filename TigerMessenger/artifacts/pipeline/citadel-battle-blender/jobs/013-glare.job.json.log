@@ -1,0 +1,5 @@
+00:00.018  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+GLARE_PROBE {"props": ["location", "location_absolute", "width", "height", "name", "label", "parent", "warning_propagation", "use_custom_color", "color", "select", "show_options", "show_preview", "hide", "mute", "show_texture", "bl_idname", "bl_label", "bl_description", "bl_icon", "bl_width_default", "bl_width_min", "bl_width_max", "bl_height_default", "bl_height_min", "bl_height_max"], "inputs": ["Image", "Type", "Quality", "Threshold", "Smoothness", "Clamp", "Maximum", "Strength", "Saturation", "Tint", "Size", "Streaks", "Streaks Angle", "Iterations", "Fade", "Color Modulation", "Diagonal", "Sun Position", "Jitter", "Kernel Data Type", "Kernel", "Kernel"], "outputs": ["Image", "Glare", "Highlights"]}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

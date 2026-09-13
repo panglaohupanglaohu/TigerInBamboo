@@ -1,4 +1,4 @@
-import { OLD_CITY_SHELF_BASE_YS, isOldCityShelves, migrateOldCityShelves, oldCityShelfSupported } from './citadel/oldCityShelves.js';
+import { OLD_CITY_SHELF_BASE_YS, isOldCityShelves, migrateOldCityShelves, oldCityShelfSupported, oldCityFoundationOutline } from './citadel/oldCityShelves.js';
 import {applyCitadelCompositionFrame} from './citadel/compositionFrame.js';
 // ============================================================================
 //  Odyssey Citadel — Townscaper 式规则生成的高山圣城
@@ -2200,7 +2200,12 @@ function refreshCanalTownReflection(castleContainer) {
   castleContainer.add(mirror);
 }
 
-function makeHighlandTownPlatformShape() {
+function makeHighlandTownPlatformShape(outline = null) {
+  if(outline?.length>=3){
+    const shape=new THREE.Shape();shape.moveTo(...outline[0]);
+    for(const point of outline.slice(1))shape.lineTo(...point);
+    shape.closePath();return shape;
+  }
   const {
     halfWidth: x,
     halfDepth: z,
@@ -2222,9 +2227,9 @@ function makeHighlandTownPlatformShape() {
   return shape;
 }
 
-function makeHighlandTownPlatformSideGeometry() {
+function makeHighlandTownPlatformSideGeometry(outline = null) {
   const spec = HIGHLAND_TOWNSCAPER_PLATFORM;
-  const points = makeHighlandTownPlatformShape().getPoints();
+  const points = makeHighlandTownPlatformShape(outline).getPoints();
   const ring = points.length > 1 && points[0].distanceTo(points[points.length - 1]) < 1e-6
     ? points.slice(0, -1)
     : points;
@@ -2252,16 +2257,32 @@ function makeHighlandTownPlatformSideGeometry() {
   return geometry;
 }
 
+function makeHighlandTownPlatformTopGeometry(outline = null) {
+  const geometry = new THREE.ShapeGeometry(makeHighlandTownPlatformShape(outline));
+  const positions = geometry.attributes.position;
+  // Shape Y is authored town Z. A -90-degree X rotation negated it and
+  // shifted this asymmetric footprint four metres relative to its side wall.
+  for (let i = 0; i < positions.count; i++) positions.setXYZ(i, positions.getX(i), 0, positions.getY(i));
+  const index = geometry.index;
+  for (let i = 0; i < index.count; i += 3) {
+    const b = index.getX(i + 1);
+    index.setX(i + 1, index.getX(i + 2));
+    index.setX(i + 2, b);
+  }
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
 /**
  * 运河交汇古堡同型的水平承重地台：顶面只提供一个 Y，厚底向下插入
  * 球面山体。山体曲率由地台侧壁吸收，Townscaper 单元无需逐格倾斜。
  */
-function buildHighlandTownFoundationPlatform(materials) {
+function buildHighlandTownFoundationPlatform(materials, layout) {
+  const outline = oldCityFoundationOutline(layout);
   const spec = HIGHLAND_TOWNSCAPER_PLATFORM;
-  const geometry = new THREE.ShapeGeometry(makeHighlandTownPlatformShape());
-  // ShapeGeometry 位于 XY 面；旋转到 XZ 后，法线朝向 +Y，作为统一水平顶面。
-  geometry.rotateX(-Math.PI / 2);
-  geometry.computeVertexNormals();
+  const geometry = makeHighlandTownPlatformTopGeometry(outline);
   geometry.userData.surfaceProvider = spec.surfaceProvider;
   geometry.userData.uniformTop = true;
   geometry.userData.embeddedFoundation = true;
@@ -2293,16 +2314,19 @@ function buildHighlandTownFoundationPlatform(materials) {
   });
   sideMaterial.userData.highlandLatestDesign = true;
   sideMaterial.userData.semanticToken = "highland-mountain-platform-side";
-  const side = new THREE.Mesh(makeHighlandTownPlatformSideGeometry(), sideMaterial);
+  const side = new THREE.Mesh(makeHighlandTownPlatformSideGeometry(outline), sideMaterial);
   side.name = "highland-town-foundation-platform-side";
   side.castShadow = false;
   side.receiveShadow = true;
   side.userData.nonNavigable = true;
   side.userData.presentationOnly = true;
   side.userData.skipInkOutline = true;
+  side.userData.citadelSolidExterior = true;
   platform.add(side);
+  platform.userData.footprintOutline = outline;
   platform.userData.buildStage = "foundation";
   platform.userData.isCitadelFoundation = true;
+  platform.userData.westCityWalkable = true;
   platform.userData.surfaceProvider = spec.surfaceProvider;
   platform.userData.topY = spec.topY;
   platform.userData.bottomY = spec.topY - spec.thickness;
@@ -2334,9 +2358,22 @@ function ensureSkipOuterTerrainEditPad(castleContainer) {
     castleContainer.add(terrain);
     castleContainer.userData.outerTerrainSystem = terrain;
   }
+  const foundation=terrain.getObjectByName("highland-town-foundation-platform");
+  const outline=castleContainer.userData.townSpec
+    ? oldCityFoundationOutline(castleContainer.userData.townSpec)
+    : foundation?.userData.footprintOutline ?? null;
+  const outlineKey=JSON.stringify(outline);
+  if(foundation && JSON.stringify(foundation.userData.footprintOutline)!==outlineKey){
+    const top=makeHighlandTownPlatformTopGeometry(outline);
+    top.userData={...foundation.geometry.userData};foundation.geometry.dispose();foundation.geometry=top;
+    const side=foundation.getObjectByName("highland-town-foundation-platform-side");
+    if(side){const g=makeHighlandTownPlatformSideGeometry(outline);side.geometry.dispose();side.geometry=g;}
+    foundation.userData.footprintOutline=outline;
+  }
   let pad = terrain.getObjectByName("contour-step-0");
   if (pad && (
-    pad.geometry?.type === "BoxGeometry"
+    (highlandPlatform && pad.geometry?.userData?.outlineKey !== outlineKey)
+    || pad.geometry?.type === "BoxGeometry"
     || (highlandPlatform && pad.geometry?.userData?.surfaceProvider !== HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider)
   )) {
     pad.removeFromParent();
@@ -2346,12 +2383,13 @@ function ensureSkipOuterTerrainEditPad(castleContainer) {
   if (!pad) {
     // 高山和运河都使用水平建造面；高山拾取形状与厚地台完全同形。
     const geometry = highlandPlatform
-      ? new THREE.ShapeGeometry(makeHighlandTownPlatformShape())
+      ? makeHighlandTownPlatformTopGeometry(outline)
       : new THREE.PlaneGeometry(48, 40, 1, 1);
-    geometry.rotateX(-Math.PI / 2);
+    if (!highlandPlatform) geometry.rotateX(-Math.PI / 2);
     geometry.userData.surfaceProvider = highlandPlatform
       ? HIGHLAND_TOWNSCAPER_PLATFORM.surfaceProvider
       : "uniform-town-base";
+    geometry.userData.outlineKey = outlineKey;
     geometry.userData.curved = false;
     geometry.userData.uniformTop = true;
     pad = new THREE.Mesh(
@@ -2694,7 +2732,7 @@ export function buildOdysseyCitadel(options = {}) {
       ? "continuous-mountain"
       : "terraces";
   if (useHighlandLatestDesign) {
-    outerTerrainSystem.add(buildHighlandTownFoundationPlatform(materials));
+    outerTerrainSystem.add(buildHighlandTownFoundationPlatform(materials, townAssembly.layout));
     outerTerrainSystem.userData.townFoundation = HIGHLAND_TOWNSCAPER_PLATFORM;
     mountHighlandSlopeGrass(THREE, outerTerrainSystem);
     // S13 山坡植被：城址外山坡成片暗绿灌木丛（视频画面归纳），
@@ -2772,6 +2810,13 @@ export function buildOdysseyCitadel(options = {}) {
     castleContainer.userData.highlandHeroClouds?.update?.(t);
     castleContainer.userData.highlandLightVolumes?.update?.(t);
     castleContainer.getObjectByName("citadel-new-city-lighting")?.userData.update?.(P.timeOfDay);
+    castleContainer.getObjectByName("citadel-harbor-architecture")?.userData.update?.(P.timeOfDay);
+    castleContainer.getObjectByName("citadel-harbor-reflections")?.userData.update?.(P.timeOfDay);
+    castleContainer.getObjectByName("citadel-new-main-gate")?.userData.update?.(P.timeOfDay);
+    castleContainer.getObjectByName("west-city-harbor")?.userData.update?.(P.timeOfDay);
+    castleContainer.getObjectByName("west-city-middle")?.userData.update?.(P.timeOfDay);
+    castleContainer.getObjectByName("citadel-target-hillside-houses")?.userData.update?.(P.timeOfDay);
+    castleContainer.getObjectByName("citadel-target-castle-silhouette")?.userData.update?.(P.timeOfDay);
     castleContainer.userData.highlandShoreWaves?.update?.(t);
   };
   castleContainer.update = update;
@@ -3402,6 +3447,7 @@ export function rebuildCitadelTownIncremental(castleContainer, spec, dirtyKeys =
 
   // 7) 元数据与统计
   castleContainer.userData.townSpec = spec;
+  if(castleContainer.userData.highlandTownscaperGrid)ensureSkipOuterTerrainEditPad(castleContainer);
   castleContainer.userData.wfcTownV1 = wfcFlag;
   castleContainer.userData.wfcSeed = wfcSeed;
   castleContainer.userData.wfcTopology = wfcTopology;

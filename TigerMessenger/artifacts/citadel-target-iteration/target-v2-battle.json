@@ -1,0 +1,158 @@
+{
+  "hits": [
+    {
+      "name": "sky-background",
+      "d": 2052.2459779965156,
+      "material": ""
+    }
+  ],
+  "trees": [],
+  "hillside": [],
+  "terrainApproxBounds": [
+    [
+      -20.25323219981716,
+      -327.7984652583205,
+      10.321231145888724
+    ],
+    [
+      60.25323219981719,
+      224.52410841627952,
+      55.67876885411127
+    ]
+  ],
+  "rangeKeys": [
+    "mesh",
+    "loessGroundSeal",
+    "castleFooting",
+    "foregroundTower",
+    "pilgrimageWaterSteps",
+    "pilgrimageCascades",
+    "interCascadeBridgePool",
+    "pilgrimageLookout",
+    "sacredTarnTree",
+    "tarnCompanionPine",
+    "lakeBallShrubs",
+    "snowMountains",
+    "snowMassifLeft",
+    "snowMassifRight",
+    "moat",
+    "trojanHorse",
+    "navonaPlaza",
+    "nightInfiltration",
+    "placeNavonaPlaza",
+    "update",
+    "vegetation",
+    "siteDir",
+    "fwd",
+    "right",
+    "userData",
+    "rebuildMoat",
+    "linkCanalToMoat",
+    "aimHorseToCanal",
+    "rebuildWaterTerraces",
+    "cascadeEnabled",
+    "contourSpec"
+  ],
+  "inf": {
+    "active": true,
+    "returning": false,
+    "night": true,
+    "activationPhase": 0.82,
+    "queueSpacing": 0,
+    "elapsed": 90.05019999999469,
+    "returnElapsed": 0,
+    "insideHorse": 0,
+    "groups": [
+      {
+        "name": "ladder-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 12,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 12
+      },
+      {
+        "name": "mountain-stair-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 18,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 18
+      }
+    ],
+    "torchBearers": 4,
+    "torchQueueIndices": [
+      "stairs:0",
+      "stairs:3",
+      "stairs:0",
+      "stairs:3"
+    ],
+    "equipmentRole": "torch-flank-shield-spear",
+    "javelinsActive": 0,
+    "javelinPhases": [],
+    "thrownTargetCount": 12,
+    "assistanceLinksVisible": 0,
+    "ropesVisible": 0,
+    "descentRopes": 0,
+    "descentOrder": [
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier",
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier"
+    ]
+  },
+  "errors": [],
+  "render": {
+    "frame": 250,
+    "calls": 3061,
+    "triangles": 859736,
+    "points": 0,
+    "lines": 2
+  }
+}

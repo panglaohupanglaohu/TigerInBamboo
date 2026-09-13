@@ -142,8 +142,9 @@ export function composeLightingState(snapshot) {
     background,
     fog: Object.freeze({
       color: background,
-      // 与旧管线 FogExp2 0.007 同量级；雨/雪加密
-      density: 0.007 * weather.fogMul,
+      // 与旧管线同量级；雨/雪加密。基数由 0.007 降到 0.0032：0.007 在 175 m 处
+      // 已是 ~78% 雾、300 m 处 ~99%，远景地标（船上看圣城、远山脊线）会整片化掉。
+      density: 0.0032 * weather.fogMul,
     }),
     // K5 bounce 是独立实验开关；未明确 enabled 时保持关闭且 intensity=0。
     bounce: composeBounceLighting(s.bounce),

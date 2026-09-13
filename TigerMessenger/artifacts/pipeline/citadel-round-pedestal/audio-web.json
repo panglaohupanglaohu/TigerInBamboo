@@ -1,0 +1,371 @@
+{
+  "rows": [
+    {
+      "label": "outside-201",
+      "owner": null,
+      "revision": 0,
+      "listener": {
+        "x": 286.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": false,
+          "inRange": null,
+          "distance": 201
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": []
+    },
+    {
+      "label": "inside-190",
+      "owner": "citadelElder",
+      "revision": 1,
+      "listener": {
+        "x": 275.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 190
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 1.049577
+        }
+      ]
+    },
+    {
+      "label": "clock-advances",
+      "owner": "citadelElder",
+      "revision": 1,
+      "listener": {
+        "x": 275.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 190
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 1.752594
+        }
+      ]
+    },
+    {
+      "label": "tram-takes-over",
+      "owner": "tram",
+      "revision": 2,
+      "listener": {
+        "x": 275.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 190
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "tram",
+          "active": true,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 1.752896
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": false,
+          "volume": 0.3055485714341913,
+          "currentTime": 0.328481
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "elder-resumes",
+      "owner": "citadelElder",
+      "revision": 3,
+      "listener": {
+        "x": 275.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": true,
+          "inRange": null,
+          "distance": 190
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": false,
+          "volume": 0.5,
+          "currentTime": 2.046765
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    },
+    {
+      "label": "outside-stops",
+      "owner": null,
+      "revision": 4,
+      "listener": {
+        "x": 286.6859834348349,
+        "y": 127.40138161956278,
+        "z": 63.90070581949376
+      },
+      "requests": [
+        {
+          "key": "infiltration",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "canyon",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "citadelElder",
+          "active": false,
+          "inRange": null,
+          "distance": 201
+        },
+        {
+          "key": "fleet",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "swamp",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        },
+        {
+          "key": "tram",
+          "active": false,
+          "inRange": null,
+          "distance": null
+        }
+      ],
+      "elements": [
+        {
+          "key": "citadelElder",
+          "source": "http://localhost:8931/TigerMessenger/music/Balmorhea-Remembrance.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/Various%20Artists-Tram.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        },
+        {
+          "key": "tram",
+          "source": "http://localhost:8931/TigerMessenger/music/%E4%B8%89%E4%BA%A9%E5%9C%B0%20-%20%E5%9F%8E%E5%8D%97%E8%8A%B1%E5%B7%B2%E5%BC%80.mp3",
+          "paused": true,
+          "volume": 0,
+          "currentTime": 0
+        }
+      ]
+    }
+  ],
+  "start": 1.049577,
+  "source": [
+    85.6859834348349,
+    127.40138161956278,
+    63.90070581949376
+  ],
+  "passed": true,
+  "errors": [],
+  "scope": "Actual Web media and ownership; positions controlled, autoplay policy relaxed for test. No acoustic listening judgment."
+}

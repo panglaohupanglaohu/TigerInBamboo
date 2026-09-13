@@ -1,0 +1,886 @@
+{
+  "baseline": [
+    19.22887040766105,
+    19.984918474670366,
+    21.523127912351583,
+    22.269685762685754
+  ],
+  "original": {
+    "position": [
+      154.46792804707806,
+      91.7894209381326,
+      19.462251037829077
+    ],
+    "quaternion": [
+      0.3375291439492982,
+      0.46226375405116404,
+      -0.20359077061026118,
+      0.7943154894610195
+    ]
+  },
+  "children": [
+    {
+      "name": "stacked-crates",
+      "position": [
+        -1.6,
+        0.51,
+        1.15
+      ],
+      "keys": [
+        "kind",
+        "count"
+      ]
+    },
+    {
+      "name": "harbor-crates-by-crane",
+      "position": [
+        2.2,
+        0.51,
+        1
+      ],
+      "keys": [
+        "kind",
+        "count"
+      ]
+    },
+    {
+      "name": "harbor-crane",
+      "position": [
+        2.6,
+        0.51,
+        -1.35
+      ],
+      "keys": [
+        "kind",
+        "collideRadius"
+      ]
+    },
+    {
+      "name": "porter-squad",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "keys": [
+        "from",
+        "to",
+        "period",
+        "offset",
+        "porters",
+        "cranePos",
+        "crane",
+        "craneChance",
+        "onDeliver",
+        "loading",
+        "update",
+        "_lastT"
+      ]
+    },
+    {
+      "name": "porter-squad",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "keys": [
+        "from",
+        "to",
+        "period",
+        "offset",
+        "porters",
+        "cranePos",
+        "crane",
+        "craneChance",
+        "onDeliver",
+        "loading",
+        "update",
+        "_lastT"
+      ]
+    },
+    {
+      "name": "citadel-sacred-tarn-elder-tree",
+      "position": [
+        -3.5,
+        0,
+        3.25
+      ],
+      "keys": [
+        "kind",
+        "assetType",
+        "style",
+        "seed",
+        "designHeight",
+        "canopyHeight",
+        "height",
+        "topY",
+        "collideRadius",
+        "crownCount",
+        "canopyBands",
+        "trunkCount",
+        "stemLayers",
+        "branchCount",
+        "cloudPads",
+        "zoneFill",
+        "outline",
+        "rangeLocal",
+        "presentationOnly",
+        "nonNavigable",
+        "designRole",
+        "pendingHarborRestore",
+        "referenceScale",
+        "harborLocal"
+      ]
+    },
+    {
+      "name": "citadel-tarn-companion-pine",
+      "position": [
+        2.8,
+        0,
+        3.15
+      ],
+      "keys": [
+        "kind",
+        "assetType",
+        "style",
+        "seed",
+        "designHeight",
+        "canopyHeight",
+        "height",
+        "topY",
+        "collideRadius",
+        "crownCount",
+        "canopyBands",
+        "trunkCount",
+        "stemLayers",
+        "branchCount",
+        "cloudPads",
+        "zoneFill",
+        "outline",
+        "rangeLocal",
+        "designRole",
+        "pendingHarborRestore",
+        "harborLocal",
+        "referenceScale"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.1945767742748432,
+        -0.24696900348482015,
+        -0.9492872011306756,
+        0,
+        0.8184537258953024,
+        0.5742792360273679,
+        0.018353681808287003,
+        0,
+        0.5406231381294125,
+        -0.7805188469124481,
+        0.3138741023620275,
+        0,
+        131.4732258711269,
+        92.2499847242221,
+        2.9482641200125386,
+        1
+      ],
+      "castleLocal": [
+        -72,
+        -12.341432701639121,
+        52
+      ],
+      "deckClearances": [
+        0.6999999999986812,
+        0.6999999999986528,
+        0.6999999999986812,
+        0.6999999999986812
+      ],
+      "terrainAtDeck": [
+        null,
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 2.60773572609433,
+          "point": [
+            -69.25111542924688,
+            -8.085339259160092,
+            49.28768540624242
+          ]
+        },
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 2.104205775592576,
+          "point": [
+            -75.14256939351965,
+            -10.944814008428123,
+            54.693265328139866
+          ]
+        },
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 10.563323753462265,
+          "point": [
+            -75.79760243606674,
+            -2.843498433955943,
+            50.56011771968276
+          ]
+        },
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": 7.8148026843605445,
+          "point": [
+            -74.06526537535467,
+            -5.408826239566564,
+            56.46837876133408
+          ]
+        },
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 9.948368187866194,
+          "point": [
+            -75.00102686470765,
+            -3.7864070266288357,
+            50.56388217782396
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 8.307239795912047,
+          "point": [
+            -85.88531135989047,
+            -9.816210465255294,
+            58.76582599393474
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 10.854682237311392,
+          "point": [
+            -86.8210728492434,
+            -7.779914314423875,
+            52.861329410424624
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.2281780273742715,
+        -0.22607469379202877,
+        -0.947008458594973,
+        0,
+        0.8062745039611483,
+        0.5891050485201436,
+        0.05363456040915665,
+        0,
+        0.5457620471284077,
+        -0.7757870033939211,
+        0.3166990894828874,
+        0,
+        129.51680299024923,
+        94.63154562732056,
+        8.615647350689514,
+        1
+      ],
+      "castleLocal": [
+        -66,
+        -9.971062370372863,
+        52
+      ],
+      "deckClearances": [
+        0.7000000000024329,
+        0.7000000000024329,
+        0.7000000000024329,
+        0.7000000000024329
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        null,
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 1.668273857001955,
+          "point": [
+            -69.83257112159332,
+            -9.213310084235927,
+            50.54657333624351
+          ]
+        },
+        null,
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 1.0271563325445194,
+          "point": [
+            -69.04980098730668,
+            -10.214061389116806,
+            50.5524436724547
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 6.628717978683121,
+          "point": [
+            -80.1278455893565,
+            -8.571118656030988,
+            58.71370975659969
+          ]
+        },
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 16.221436966502925,
+          "point": [
+            -81.06418339529291,
+            0.5555150901867306,
+            52.80557671301186
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.26062709916562277,
+        -0.20463588950651596,
+        -0.9435028711701886,
+        0,
+        0.7930174970389472,
+        0.6027618918765685,
+        0.08832525738124614,
+        0,
+        0.5506330580074138,
+        -0.7712342409587745,
+        0.31937592426816863,
+        0,
+        127.38724891735129,
+        96.82532787117425,
+        14.18822609806972,
+        1
+      ],
+      "castleLocal": [
+        -60,
+        -7.873131251723464,
+        52
+      ],
+      "deckClearances": [
+        0.7000000000006708,
+        0.7000000000006423,
+        0.7000000000006423,
+        0.7000000000006423
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 6.113990553277853,
+          "point": [
+            -74.34286289503778,
+            -6.432000812448647,
+            58.66758294504892
+          ]
+        },
+        {
+          "name": "highland-ravine-wall-west",
+          "relativeHeight": 6.954863984432452,
+          "point": [
+            -75.27970069731253,
+            -6.014222963682981,
+            52.756295009210326
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.19912080318360603,
+        -0.2674648724767601,
+        -0.9427690320171246,
+        0,
+        0.7926958196766902,
+        0.6095923947097961,
+        -0.005518131846586116,
+        0,
+        0.5761807383162126,
+        -0.7462302957552491,
+        0.3334008135719191,
+        0,
+        127.33557591597545,
+        97.92255330175685,
+        -0.886411255394151,
+        1
+      ],
+      "castleLocal": [
+        -72,
+        -12.395438747132914,
+        60
+      ],
+      "deckClearances": [
+        0.7000000000028024,
+        0.7000000000028308,
+        0.7000000000028024,
+        0.7000000000028024
+      ],
+      "terrainAtDeck": [
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 4.01166305126765,
+          "point": [
+            -68.59535935270573,
+            -6.456843708294512,
+            61.524944319661614
+          ]
+        },
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": 4.308557965894107,
+          "point": [
+            -69.25244217082172,
+            -6.295047455231694,
+            57.37886297436937
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 3.9116589960887143,
+          "point": [
+            -75.1412426519448,
+            -9.335185368216683,
+            62.652885801660105
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 5.8635456233595775,
+          "point": [
+            -75.79832547006075,
+            -7.518397402509434,
+            58.50680445636786
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 3.5791755864078554,
+          "point": [
+            -74.06306166332082,
+            -9.937437232386484,
+            64.41551189267673
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 6.829190446570591,
+          "point": [
+            -75.00175140348654,
+            -6.8804204601717895,
+            58.49253854225922
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 5.356741903799326,
+          "point": [
+            -85.88201762028024,
+            -13.176313812447997,
+            66.45207290184067
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 7.9526200181303714,
+          "point": [
+            -86.82070736044595,
+            -10.773433786065025,
+            60.529099551423116
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.23176625387662386,
+        -0.24482818591234196,
+        -0.9414582109402776,
+        0,
+        0.7805199632899462,
+        0.624421857486331,
+        0.029764589686089915,
+        0,
+        0.5805798743238155,
+        -0.7417253556918437,
+        0.3358132014289352,
+        0,
+        125.37969366354965,
+        100.30470057224903,
+        4.78126801668607,
+        1
+      ],
+      "castleLocal": [
+        -66,
+        -10.024217683032077,
+        60
+      ],
+      "deckClearances": [
+        0.7000000000003865,
+        0.7000000000003865,
+        0.7000000000003865,
+        0.7000000000003865
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 3.7521924960117223,
+          "point": [
+            -69.17599053417929,
+            -6.99756157483108,
+            62.64892073810557
+          ]
+        },
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": 5.048810776368695,
+          "point": [
+            -69.83320100495496,
+            -5.807733583623558,
+            58.50203392614097
+          ]
+        },
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": 3.096777596194746,
+          "point": [
+            -68.11155938463209,
+            -7.9666380918524435,
+            64.41263917305103
+          ]
+        },
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": 3.3544011202039523,
+          "point": [
+            -69.0504314857402,
+            -7.861572123770996,
+            58.48851515595868
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 3.6871865753393016,
+          "point": [
+            -80.12501330391567,
+            -11.91421755850257,
+            66.43342758233183
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 6.2641837593405425,
+          "point": [
+            -81.06388540502378,
+            -9.489777930429112,
+            60.509303565239506
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.26327865004744366,
+        -0.22173758385047987,
+        -0.9388912590589749,
+        0,
+        0.7672658478441876,
+        0.6380818369476061,
+        0.06445686999466005,
+        0,
+        0.584796948659221,
+        -0.7373493156338589,
+        0.3381249999233189,
+        0,
+        123.25060406619488,
+        102.49898658780174,
+        10.354101105085732,
+        1
+      ],
+      "castleLocal": [
+        -60,
+        -7.92555566575146,
+        60
+      ],
+      "deckClearances": [
+        0.7000000000039961,
+        0.7000000000039961,
+        0.7000000000039961,
+        0.7000000000039961
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 2.0531025155699103,
+          "point": [
+            -74.34045153511897,
+            -10.887602270710117,
+            66.41948043596707
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 4.94080595133587,
+          "point": [
+            -75.27945905803331,
+            -8.113453130963363,
+            60.49450193020303
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.20488470027013894,
+        -0.2879317429247594,
+        -0.9354771889316841,
+        0,
+        0.7652251882201324,
+        0.6430479259763591,
+        -0.030327812498861573,
+        0,
+        0.6102890060526066,
+        -0.7096370032022099,
+        0.3520833037471506,
+        0,
+        122.92280043454844,
+        103.29671983027214,
+        -4.871741940545661,
+        1
+      ],
+      "castleLocal": [
+        -72,
+        -12.882382271278914,
+        68
+      ],
+      "deckClearances": [
+        0.699999999998397,
+        0.6999999999983686,
+        0.6999999999983686,
+        0.6999999999983686
+      ],
+      "terrainAtDeck": [
+        null,
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": -1.3006299823318186,
+          "point": [
+            -69.25256649280763,
+            -12.252124912785032,
+            65.47940816461771
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 0.8483489793304085,
+          "point": [
+            -75.14111832995889,
+            -13.02758489611696,
+            70.6031386530591
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 2.649057337689721,
+          "point": [
+            -75.7983931449406,
+            -11.137701761448225,
+            66.4558458400471
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 0.507552749927442,
+          "point": [
+            -74.06285520620213,
+            -13.73301361048328,
+            72.3485588852255
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 3.1178155764899036,
+          "point": [
+            -75.00181922760459,
+            -10.995358246335938,
+            66.42385486663692
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 2.324312061602342,
+          "point": [
+            -85.88170888366442,
+            -17.03548127004475,
+            74.1115713547508
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 4.99084212958541,
+          "point": [
+            -86.82067290506689,
+            -14.241558664476823,
+            68.18686733616225
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.2364691772342693,
+        -0.2636084519545979,
+        -0.9351967238374224,
+        0,
+        0.7530797857437374,
+        0.6579104191640457,
+        0.004971585215641672,
+        0,
+        0.6139651166982651,
+        -0.705453375081224,
+        0.35409373203178207,
+        0,
+        120.9718101799369,
+        105.68417297765384,
+        0.7986161285766258,
+        1
+      ],
+      "castleLocal": [
+        -66,
+        -10.5034631602976,
+        68
+      ],
+      "deckClearances": [
+        0.7000000000025466,
+        0.7000000000025466,
+        0.7000000000025466,
+        0.7000000000025466
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        null,
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": 0.17697886593128478,
+          "point": [
+            -69.83319042107883,
+            -11.077915826222975,
+            66.45983707073539
+          ]
+        },
+        null,
+        {
+          "name": "citadel-coastal-cliff-seal",
+          "relativeHeight": -1.4568576478550583,
+          "point": [
+            -69.05042089053856,
+            -13.069953044667695,
+            66.42721626081256
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 0.6623979327053245,
+          "point": [
+            -80.12506094739156,
+            -15.752691942044773,
+            74.12742383236579
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 3.308874488255027,
+          "point": [
+            -81.06389044118328,
+            -12.943307188077252,
+            68.20356866022702
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.26694969916719824,
+        -0.2389204627513452,
+        -0.9336245876117581,
+        0,
+        0.7398518303192951,
+        0.6715987718703158,
+        0.039678190425883,
+        0,
+        0.6175411948102987,
+        -0.7013359409733446,
+        0.35604883177915625,
+        0,
+        118.84692282674015,
+        107.88301676101602,
+        6.373750313511437,
+        1
+      ],
+      "castleLocal": [
+        -60,
+        -8.398188492365932,
+        68
+      ],
+      "deckClearances": [
+        0.7000000000013529,
+        0.7000000000013529,
+        0.7000000000013529,
+        0.7000000000013529
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": -0.9716158044261133,
+          "point": [
+            -74.3408312377838,
+            -14.714973702821876,
+            74.14652124622098
+          ]
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "relativeHeight": 1.6535550402714514,
+          "point": [
+            -75.27949724443971,
+            -11.892149680183364,
+            68.22369765023244
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Read-only berth placement measurements; actual harbor restored, no actor/story movement committed"
+}

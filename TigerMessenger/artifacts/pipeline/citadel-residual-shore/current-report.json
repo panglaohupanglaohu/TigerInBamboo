@@ -1,0 +1,322 @@
+[
+  {
+    "candidate": false,
+    "picks": [
+      {
+        "pixel": [
+          572,
+          647
+        ],
+        "hits": [
+          {
+            "name": "citadel-coastal-cliff-seal",
+            "sourceLocal": [
+              16.825397052973333,
+              1.6535606880725875,
+              24.735664218257124
+            ],
+            "castleLocal": [
+              -35.17460294702668,
+              1.6535606880725875,
+              24.735664218257114
+            ]
+          },
+          {
+            "name": "planet-v8-curved-ocean",
+            "sourceLocal": [
+              17.062731347707928,
+              0.25935786735593064,
+              20.29606634946711
+            ],
+            "castleLocal": [
+              -34.93726865229208,
+              0.25935786735593064,
+              20.2960663494671
+            ]
+          },
+          {
+            "name": "planet-surface",
+            "sourceLocal": [
+              17.15548947831969,
+              -0.2855429338028727,
+              18.560923944373418
+            ],
+            "castleLocal": [
+              -34.84451052168032,
+              -0.2855429338028727,
+              18.560923944373407
+            ]
+          },
+          {
+            "name": "planet-v8-curved-ocean",
+            "sourceLocal": [
+              23.932317186407996,
+              -40.09551779096923,
+              -108.20705909672719
+            ],
+            "castleLocal": [
+              -28.067682813592015,
+              -40.09551779096923,
+              -108.2070590967272
+            ]
+          },
+          {
+            "name": "citadel-backdrop-ridge-mid",
+            "sourceLocal": [
+              24.356094027286268,
+              -42.58496360649115,
+              -116.13426894943606
+            ],
+            "castleLocal": [
+              -27.64390597271374,
+              -42.58496360649115,
+              -116.13426894943608
+            ]
+          }
+        ]
+      },
+      {
+        "pixel": [
+          580,
+          847
+        ],
+        "hits": [
+          {
+            "name": "planet-v8-curved-ocean",
+            "sourceLocal": [
+              15.91879668918882,
+              -6.340372846325378,
+              48.34526197141522
+            ],
+            "castleLocal": [
+              -36.08120331081119,
+              -6.340372846325378,
+              48.34526197141521
+            ]
+          },
+          {
+            "name": "planet-surface",
+            "sourceLocal": [
+              15.96984959826494,
+              -6.813804335086642,
+              47.47690401616501
+            ],
+            "castleLocal": [
+              -36.03015040173507,
+              -6.813804335086642,
+              47.476904016165
+            ]
+          },
+          {
+            "name": "planet-v8-curved-ocean",
+            "sourceLocal": [
+              27.807867283881897,
+              -116.59188433692631,
+              -153.87571266573934
+            ],
+            "castleLocal": [
+              -24.19213271611811,
+              -116.59188433692631,
+              -153.87571266573934
+            ]
+          },
+          {
+            "name": "sky-background",
+            "sourceLocal": [
+              124.71504953480269,
+              -1015.2460921963902,
+              -1802.168124426582
+            ],
+            "castleLocal": [
+              72.71504953480267,
+              -1015.2460921963902,
+              -1802.168124426582
+            ]
+          }
+        ]
+      }
+    ],
+    "coastThings": [
+      {
+        "name": "",
+        "parent": "",
+        "sourceLocal": [
+          17.642490201925344,
+          -185.39317054726632,
+          33.80029205306814
+        ]
+      },
+      {
+        "name": "",
+        "parent": "",
+        "sourceLocal": [
+          12.332432098213634,
+          -174.13768292379783,
+          30.055376069139125
+        ]
+      },
+      {
+        "name": "highland-water-cool-wash",
+        "parent": "highland-water-light-reflections",
+        "sourceLocal": [
+          19.999999999999996,
+          -0.2595598263539784,
+          34.64101615137754
+        ]
+      },
+      {
+        "name": "navona-rim-wall-S",
+        "parent": "navona-plaza-canal-rim",
+        "sourceLocal": [
+          17.23067943590262,
+          -1.892569061393004,
+          36.365439427634804
+        ]
+      },
+      {
+        "name": "navona-rim-lip-S",
+        "parent": "navona-plaza-canal-rim",
+        "sourceLocal": [
+          17.492638746507073,
+          -1.3775690613929894,
+          36.95484787649486
+        ]
+      },
+      {
+        "name": "navona-fountain-0-base",
+        "parent": "navona-fountain-0",
+        "sourceLocal": [
+          13.32768877712898,
+          -2.1285690613930224,
+          27.583710445394143
+        ]
+      },
+      {
+        "name": "navona-fountain-0-obelisk",
+        "parent": "navona-fountain-0",
+        "sourceLocal": [
+          13.32768877712898,
+          -0.9220690613930171,
+          27.58371044539414
+        ]
+      },
+      {
+        "name": "navona-fountain-0-bowl",
+        "parent": "navona-fountain-0",
+        "sourceLocal": [
+          13.327688777128987,
+          -1.9005690613929853,
+          27.58371044539414
+        ]
+      },
+      {
+        "name": "navona-fountain-0-jet",
+        "parent": "navona-fountain-0",
+        "sourceLocal": [
+          13.327688777128987,
+          -1.4195690613930194,
+          27.583710445394136
+        ]
+      },
+      {
+        "name": "navona-fountain-0-spray-0",
+        "parent": "navona-fountain-0-spray",
+        "sourceLocal": [
+          13.106615231512986,
+          -1.020624716300517,
+          27.670501789598337
+        ]
+      },
+      {
+        "name": "navona-fountain-0-spray-1",
+        "parent": "navona-fountain-0-spray",
+        "sourceLocal": [
+          13.120801990070422,
+          -0.9993285410942858,
+          27.46707379874915
+        ]
+      },
+      {
+        "name": "navona-fountain-0-spray-2",
+        "parent": "navona-fountain-0-spray",
+        "sourceLocal": [
+          13.265200689286,
+          -1.0176399683933537,
+          27.354578411671813
+        ]
+      },
+      {
+        "name": "navona-fountain-0-spray-3",
+        "parent": "navona-fountain-0-spray",
+        "sourceLocal": [
+          13.454991038308368,
+          -0.9139323976553724,
+          27.38321011048515
+        ]
+      },
+      {
+        "name": "navona-fountain-0-spray-4",
+        "parent": "navona-fountain-0-spray",
+        "sourceLocal": [
+          13.552081311249449,
+          -0.9697294559111922,
+          27.50590144443024
+        ]
+      },
+      {
+        "name": "",
+        "parent": "swamp-towering-tree",
+        "sourceLocal": [
+          17.712799812248992,
+          -299.671097629738,
+          24.02125790394839
+        ]
+      },
+      {
+        "name": "",
+        "parent": "swamp-towering-tree",
+        "sourceLocal": [
+          15.760451983081158,
+          -307.3544628348188,
+          25.213091094976793
+        ]
+      },
+      {
+        "name": "",
+        "parent": "swamp-towering-tree",
+        "sourceLocal": [
+          13.809982422621328,
+          -315.0368923628519,
+          26.413960885152086
+        ]
+      },
+      {
+        "name": "",
+        "parent": "swamp-towering-tree",
+        "sourceLocal": [
+          11.861391130869526,
+          -322.7183862138373,
+          27.623867274474264
+        ]
+      },
+      {
+        "name": "",
+        "parent": "swamp-rim-palm",
+        "sourceLocal": [
+          12.94862947084464,
+          -285.22412613541695,
+          26.619154299303744
+        ]
+      }
+    ],
+    "harbor": {
+      "castleLocal": [
+        -72,
+        7.700528556769836,
+        32
+      ],
+      "role": "old-city-left-harbor"
+    },
+    "terrainTriangles": 17860
+  }
+]

@@ -2,7 +2,8 @@
 import json, struct
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-source=ROOT/'assets/models/optimized/citadel-statue/citadel-soldier-statue-r03.glb'
+import sys
+source=ROOT/'assets/models/optimized/citadel-statue'/('citadel-soldier-statue-'+(sys.argv[1] if len(sys.argv)>1 else 'r03')+'.glb')
 b=source.read_bytes()
 assert b[:4]==b'glTF'
 n=struct.unpack_from('<I',b,12)[0]

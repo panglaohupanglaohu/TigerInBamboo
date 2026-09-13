@@ -1,0 +1,24 @@
+{
+  "before": {
+    "pixels": 33000,
+    "near_white_warm_pixels": 1757,
+    "mean_red": 210.45184848484848,
+    "roi": [
+      560,
+      520,
+      725,
+      720
+    ]
+  },
+  "balanced": {
+    "pixels": 33000,
+    "near_white_warm_pixels": 11,
+    "mean_red": 184.4440303030303,
+    "roi": [
+      560,
+      520,
+      725,
+      720
+    ]
+  }
+}

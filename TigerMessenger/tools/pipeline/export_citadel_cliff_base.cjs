@@ -17,7 +17,9 @@ const fs=require('fs');
   const result=exportWorldGLB(scene,T,{});window.__cliffBytes=result.bytes;
   return {bytes:result.bytes.length,terrainSource:'8931 live scene without prior Blender delta',scope:'Current mountain baseline plus current new-city reference geometry'};
  });
- const target='TigerMessenger/assets/models/optimized/citadel-cliff/citadel-cliff-input-v2.glb';const fd=fs.openSync(target,'w');
+ const version=process.env.CITADEL_CLIFF_BASE_VERSION||'v2';
+ if(!/^v\d+$/.test(version))throw Error('Invalid baseline version');
+ const target=`TigerMessenger/assets/models/optimized/citadel-cliff/citadel-cliff-input-${version}.glb`;const fd=fs.openSync(target,'w');
  try{for(let i=0;i<data.bytes;i+=1048576){const s=await p.evaluate(i=>{const a=window.__cliffBytes.subarray(i,i+1048576);let s='';for(let k=0;k<a.length;k+=8192)s+=String.fromCharCode(...a.subarray(k,k+8192));return btoa(s)},i);fs.writeSync(fd,Buffer.from(s,'base64'));}}finally{fs.closeSync(fd)}
- fs.writeFileSync('TigerMessenger/artifacts/pipeline/citadel-cliff-blender/input-v2.json',JSON.stringify(data,null,2));console.log(data);
+ fs.writeFileSync(`TigerMessenger/artifacts/pipeline/citadel-cliff-blender/input-${version}.json`,JSON.stringify(data,null,2));console.log(data);
 }finally{await b.close();}})().catch(e=>{console.error(e);process.exit(1)});

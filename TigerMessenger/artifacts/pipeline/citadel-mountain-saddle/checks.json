@@ -1,0 +1,17 @@
+{
+  "walk": {
+    "samples": 2561,
+    "missingSupports": [],
+    "blocked": [],
+    "passed": true
+  },
+  "cliff": {
+    "source": "assets/models/optimized/citadel-cliff/citadel-cliff-r08.blend",
+    "changedVertices": 1330,
+    "expectedChanges": 1330,
+    "deltaComplete": true,
+    "exportMode": "strict-blender-baseline"
+  },
+  "errors": [],
+  "scope": "Actual Web routes and source delta checks; Godot imported and rendered. Not a full battle or final art acceptance."
+}

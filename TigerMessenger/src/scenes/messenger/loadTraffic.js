@@ -177,7 +177,10 @@ export function loadCanalNetwork({
       });
     }
     const routeBoat = harborBuilt?.landmarks?.boat;
-    if (routeBoat && oceanPatrol) {
+    // The port-grade candidate keeps its original boat at the tested berth.
+    // The independent ocean patrol ships remain on their existing routes.
+    // Do not silently move this dock reference to u=.08 during scene load.
+    if (routeBoat && oceanPatrol && !harbor?.userData.oldHarborOceanGrade) {
       if (routeBoat.parent !== scene) scene.attach(routeBoat);
       routeBoat.userData.canalPatrol = true;
       routeBoat.userData.oceanPatrol = true;

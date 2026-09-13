@@ -34,7 +34,7 @@ export function setupEnvironment(scene) {
   // ---------- 天空球：参考图4的青蓝/薄荷双色，并加入漫画式大块云带 ----------
   let skyMat = null; // 昼夜循环要改 uniforms，提到函数作用域
   {
-    const skyGeo = new THREE.SphereGeometry(220, 24, 16);
+    const skyGeo = new THREE.SphereGeometry(2000, 48, 32);
     skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
@@ -43,6 +43,8 @@ export function setupEnvironment(scene) {
         midColor: { value: new THREE.Color(0x76cdc7) },
         botColor: { value: new THREE.Color(0xa8e1d4) },
         cloudColor: { value: new THREE.Color(0xc2eee0) },
+        citadelBlend: { value: 0 },
+        citadelUp: { value: new THREE.Vector3(0,1,0) },
       },
       vertexShader: /* glsl */ `
         varying vec3 vWorldPos;
@@ -50,6 +52,8 @@ export function setupEnvironment(scene) {
           vec4 wp = modelMatrix * vec4(position, 1.0);
           vWorldPos = wp.xyz;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          // Keep the sky behind the scene even with the gameplay camera's 500 m far clip.
+          gl_Position.z = gl_Position.w * .9999;
         }
       `,
       fragmentShader: /* glsl */ `
@@ -57,6 +61,8 @@ export function setupEnvironment(scene) {
         uniform vec3 midColor;
         uniform vec3 botColor;
         uniform vec3 cloudColor;
+        uniform float citadelBlend;
+        uniform vec3 citadelUp;
         varying vec3 vWorldPos;
         void main() {
           vec3 d = normalize(vWorldPos);
@@ -71,6 +77,9 @@ export function setupEnvironment(scene) {
           float cloud = smoothstep(0.48, 0.7, broad * 0.5 + 0.5 + torn);
           cloud *= smoothstep(-0.5, -0.05, h) * (1.0 - smoothstep(0.72, 0.94, h));
           col = mix(col, cloudColor, cloud * 0.58);
+          float localH=dot(normalize(vWorldPos-cameraPosition),citadelUp);
+          vec3 gorgeSky=mix(vec3(.035,.18,.39),vec3(.035,.40,.68),smoothstep(-.15,.55,localH));
+          col=mix(col,gorgeSky,citadelBlend);
           gl_FragColor = vec4(col, 1.0);
         }
       `,
@@ -79,6 +88,17 @@ export function setupEnvironment(scene) {
     const sky = new THREE.Mesh(skyGeo, skyMat);
     sky.name = "sky-background";
     sky.rotation.y = Math.PI / 2;
+    sky.frustumCulled=false;
+    const anchor=new THREE.Vector3();
+    sky.onBeforeRender=(_r,_s,camera)=>{
+      const city=scene.getObjectByName('highland-west-city');
+      if(!city)return;
+      city.localToWorld(anchor.set(35,15,20));
+      const near=1-THREE.MathUtils.smoothstep(camera.position.distanceTo(anchor),170,320);
+      const dusk=1-THREE.MathUtils.smoothstep(Math.abs((P.timeOfDay??.5)-.85),.025,.14);
+      skyMat.uniforms.citadelBlend.value=near*dusk;
+      skyMat.uniforms.citadelUp.value.set(0,1,0).transformDirection(city.matrixWorld);
+    };
     scene.add(sky);
   }
 

@@ -1,13 +1,22 @@
+import {buildPlazaEdgeGarden} from './plazaEdgeGarden.js';
+import {buildHorseTerrace,HORSE_TERRACE} from './horseTerrace.js';
 import {buildUpperTowerPortal} from './upperTowerPortal.js';
+import {applyTargetCastleSilhouette} from './targetCastleSilhouette.js';
+import {buildClaudeHouses,claudeHousesEnabled} from './claudeHouses.js';
 import {buildTowerInteriorStairs} from './towerInteriorStairs.js';
 import {buildCitadelGarden} from './citadelGarden.js';
 import {buildNewCityLighting} from './newCityLighting.js';
+import {buildNewCityBackdrop} from './newCityBackdrop.js';
 import {buildProcessionalDetails} from './processionalDetails.js';
 import {OLD_CITY_BRIDGE_ANCHOR} from './oldCityOrientation.js';
+import {rotateNewCityPoint} from './newCityOrientation.js';
 import * as THREE from 'three';
 import {applyCrownRoundProfiles,refineCitadelDomes} from './roundTowerProfiles.js';
 import {buildCitadelMainGate} from './mainGate.js';
 import {buildCitadelPlazaStatue} from './plazaStatue.js';
+import {buildPlazaPaving} from './plazaPaving.js';
+import {buildHarborWatergate} from './harborWatergate.js';
+import {harborStairHeight} from './harborStairProfile.js';
 import {WEST_CITY,westCitySpec} from './westCityLayout.js';
 import {mergeStaticGroup} from '../geometryMerge.js';
 
@@ -20,10 +29,11 @@ export function buildWestCity(buildTown,waterHeight) {
   const paving=new THREE.MeshStandardMaterial({color:0xd8d5c6,roughness:.93});
   const domeBlue=new THREE.MeshStandardMaterial({color:0x2059a6,roughness:.72});
   domeBlue.name='citadel-target-blue-dome';
+  root.add(buildNewCityBackdrop());
   root.add(buildNewCityLighting());
   root.add(buildCitadelGarden());
   const reports=[];
-  const bridgeStart=new THREE.Vector3(...OLD_CITY_BRIDGE_ANCHOR);
+  const bridgeStart=new THREE.Vector3(...rotateNewCityPoint(OLD_CITY_BRIDGE_ANCHOR,true));
   const bridgeEnd=new THREE.Vector3(WEST_CITY.x-14.35,5.03,WEST_CITY.districts[0].z);
   const route=[bridgeStart.toArray()];
   const waterPoints=[],waterIndices=[];
@@ -37,8 +47,38 @@ export function buildWestCity(buildTown,waterHeight) {
   const waterGeometry=new THREE.BufferGeometry();
   waterGeometry.setAttribute('position',new THREE.Float32BufferAttribute(waterPoints,3));
   waterGeometry.setIndex(waterIndices);waterGeometry.computeVertexNormals();
-  const water=new THREE.Mesh(waterGeometry,new THREE.MeshStandardMaterial({color:0x276c87,roughness:.24,metalness:.15}));
-  water.name='west-city-water-channel';water.userData.sourceId=water.name;root.add(water);
+  // Water: the old flat 0x276c87/rough .24 plate never caught a highlight, so the
+  // channel read as painted concrete. Darker + far glossier + more metallic lets the
+  // sky and the quay lanterns actually reflect; the swell below supplies the movement.
+  const waterMat=new THREE.MeshStandardMaterial({color:0x10405e,roughness:.075,metalness:.55});
+  waterMat.name='citadel-water-surface';
+  const water=new THREE.Mesh(waterGeometry,waterMat);
+  water.name='west-city-water-channel';water.userData.sourceId=water.name;
+  // Travelling swell. Purely visual: amplitude stays under 0.2 so every dock, boarding
+  // and collision sample that uses waterHeight() is unaffected. 175 verts, throttled to
+  // 30 Hz, and only while the mesh is actually being drawn.
+  {
+    const attr=waterGeometry.getAttribute('position');
+    const base=Float32Array.from(attr.array);
+    water.userData.waveBase=base;
+    water.userData.waveAmplitude=0.19;
+    let last=-1;
+    water.onBeforeRender=()=>{
+      const t=performance.now()*0.001;
+      if(t-last<1/30)return;
+      last=t;
+      for(let i=0;i<attr.count;i++){
+        const x=base[i*3],z=base[i*3+2];
+        attr.array[i*3+1]=base[i*3+1]
+          +Math.sin(x*0.55+t*1.15)*0.085
+          +Math.sin(z*0.42-t*0.85)*0.065
+          +Math.sin((x+z)*0.28+t*1.7)*0.04;
+      }
+      attr.needsUpdate=true;
+      waterGeometry.computeVertexNormals();
+    };
+  }
+  root.add(water);
   function box(name,x,y,z,w,h,d,mat=stone){
     const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
     m.name=name;m.position.set(x,y,z);m.receiveShadow=true;m.castShadow=true;
@@ -61,7 +101,14 @@ export function buildWestCity(buildTown,waterHeight) {
     a.group.userData.sourceId=a.group.name;
     a.group.userData.editableSpec=spec;
     a.group.userData.wfc=a.stats.wfcTown;
-    root.add(a.group);
+    // Only the two residential facades are replaced. The crown and its interior
+    // stairs/portals remain the original playable structure.
+    if(tier<2 && claudeHousesEnabled){
+      const imported=buildClaudeHouses(tier);
+      imported.userData.originalEditableSpec=spec;
+      root.add(imported);
+      // No original geometry is destroyed; the query switch restores the factory.
+    }else root.add(a.group);
     reports.push({id:district.id,cells:a.stats.cellCount,domeCount:a.stats.domeCount,wfc:a.stats.wfcTown});
     // Upper terraces have a real notch: the incoming staircase must not run
     // through the solid front face of the 4 m retaining wall.
@@ -159,12 +206,17 @@ export function buildWestCity(buildTown,waterHeight) {
   const harborRoute=[[WEST_CITY.x-14.5,4,78],[42,4,78]];
   walkBox('west-city-harbor-top-landing',43.75,3.9,79,5.5,.2,2.05,paving);
   const harborSteps=Math.ceil((4-dockY)/.14),harborRun=20;
+  const middleY=(4+dockY)/2;
+  const harborHeight=z=>harborStairHeight(dockY,z);
   for(let i=0;i<harborSteps;i++){
-    const z=78-harborRun*(i+.5)/harborSteps,y=4+(dockY-4)*(i+1)/harborSteps;
+    const z=78-harborRun*(i+.5)/harborSteps,y=harborHeight(78-harborRun*(i+1)/harborSteps);
     walkBox('west-city-stair-harbor-'+i,42,y-.1,z,3.6,.2,harborRun/harborSteps+.03,paving);
     harborRoute.push([42,y,z]);
   }
   harborRoute.push([42,dockY,58],[36.75,dockY,58]);
+  walkBox('west-city-harbor-middle-landing',42,middleY-.1,68,4.2,.2,2,paving);
+  const watergate=buildHarborWatergate(harborHeight(60.5),dockY-2);
+  watergate.position.set(42,harborHeight(60.5),60.5);root.add(watergate);
   for(const x of [31.5,36.75,42])for(const z of [56.6,59.4]){
     const bottom=waterHeight(x,z)-2;
     box('west-city-harbor-pile-'+x+'-'+z,x,(dockY+bottom)/2,z,.46,dockY-bottom,.46,stone);
@@ -176,14 +228,21 @@ export function buildWestCity(buildTown,waterHeight) {
   const gate=buildCitadelMainGate();gate.position.set(WEST_CITY.x,16,11);root.add(gate);
   // Forecourt meets the first terrace without a raised lip. It stays open for
   // the Blender statue and the original horse actor reservation.
-  walkBox('west-city-plaza-deck',WEST_CITY.x,3.9,71.5,32,.2,24,paving);
-  box('west-city-plaza-foundation',WEST_CITY.x,1.8,71.5,32,4,24);
-  const ring=new THREE.Mesh(new THREE.RingGeometry(4.6,5.2,48),stone);
-  ring.name='west-city-plaza-paving-ring';ring.rotation.x=-Math.PI/2;
-  ring.position.set(WEST_CITY.x,4.012,71.5);root.add(ring);
-  const statue=buildCitadelPlazaStatue();statue.position.set(WEST_CITY.x,4,71.5);root.add(statue);
+  // Leave the new stair's outer wall clear instead of letting the old square
+  // podium intrude into its opening. The existing upper landing bridges this edge.
+  walkBox('west-city-plaza-deck',62.925,3.9,74,36.15,.2,29,paving);
+  box('west-city-plaza-foundation',62.925,1.8,74,36.15,4,29);
+  // Reference statue is beside the processional axis, never in its centre.
+  const statueAnchor=[WEST_CITY.x-1,4,76];
+  const ring=buildPlazaPaving();ring.position.set(statueAnchor[0],4.014,statueAnchor[2]);root.add(ring);
+  const statue=buildCitadelPlazaStatue();statue.position.fromArray(statueAnchor);root.add(statue);
+  root.userData.statueAnchor=statueAnchor;
   root.userData.plazaAnchor=[WEST_CITY.x,4,71.5];
-  root.userData.horseReservation=[WEST_CITY.x+11,4,71.5];
+  root.add(buildHorseTerrace(stone,paving));
+  root.add(buildPlazaEdgeGarden());
+  root.userData.horseReservation=[HORSE_TERRACE.x,HORSE_TERRACE.y,HORSE_TERRACE.z];
+  root.userData.processionalEntry=[WEST_CITY.x,4,50];
+  root.userData.horsePlazaExit=[[75,5.8,66],[75,5.8,65.5],[75,4,60],[WEST_CITY.x,4,60],[WEST_CITY.x,4,58]];
   root.userData.artStatus='blue-dome-and-statue-pass; main-facade-horse-harbor-lighting-pending';
   // A raised crossing leaves an open water corridor between the two cities.
   const direction=bridgeEnd.clone().sub(bridgeStart),length=direction.length();
@@ -206,10 +265,11 @@ export function buildWestCity(buildTown,waterHeight) {
   root.userData.connectedToMainGate=false;
   root.userData.walkRoute=route;
   // Source cell ownership stays in merged metadata; district seeds remain above.
-  root.children.filter(n=>n.name.startsWith('west-city-')&&n.isGroup).forEach(g=>mergeStaticGroup(g,{
+  root.children.filter(n=>n.name.startsWith('west-city-')&&n.isGroup&&!n.userData.importedHouseCount).forEach(g=>mergeStaticGroup(g,{
     mergedTag:'west-city',
     skip:mesh=>mesh.name==='town-window',
     onSurface:(mesh,_material,segments)=>{mesh.userData.faceToCell=segments.map(s=>({triStart:s.triStart,triCount:s.triCount,cell:s.mesh.userData.cell,cells:s.mesh.userData.cells}));},
   }));
+  applyTargetCastleSilhouette(root);
   return root;
 }

@@ -1,0 +1,9 @@
+00:00.016  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py:653: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+00:04.345  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-quick.png'
+Info: Saved as "citadel-battle-v1.blend"
+CITADEL_BUILD_OK {"seed": 20260912, "troops": 142, "lights": 39, "composite": "skipped: 'CompositorNodeGlare' object has no attribute 'glare_type'", "objects": 439, "tris": 126258, "meshes": 72, "build_sec": 0.1, "blend": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/citadel-battle-v1.blend", "render_sec": 3.8, "render": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-quick.png"}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

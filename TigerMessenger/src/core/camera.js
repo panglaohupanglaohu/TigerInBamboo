@@ -15,7 +15,44 @@ const PITCH_MIN = -0.8;
 const PITCH_MAX = 1.0;
 const SPRING_BACK = 3; // 松手后环绕/俯仰回弹速率
 
-export function createCameraRig(camera, player) {
+// ---------------- 相机遮挡回拉 ----------------
+// 原来的装配把相机固定摆在身后 camDist 处，不做任何遮挡检测，所以信使一走进
+// 建筑（主门洞、塔内旋梯、民居），相机还留在墙外，画面被墙面糊满、人物看不见。
+// 资产碰撞体本来就是球体数组 {position, radius}，线段对球解析求交极便宜，
+// 因此直接用它做回拉，不需要网格射线，也不需要新的场景遍历。
+const OCCLUDER_MIN_RADIUS = 1.2;  // 只认墙体/房屋体量，忽略花草道具
+const OCCLUDER_PAD = 0.55;        // 命中点前留出的余量，避免贴面穿模
+const OCCLUDER_MIN_DIST = 2.0;    // 回拉下限：再近就会钻进人物模型
+const OCCLUDER_CHORD_MIN = 0.5;   // 擦边不算遮挡，必须真的穿过一段
+
+/**
+ * 视线 origin→(origin+dir*maxLen) 与碰撞球求最近有效遮挡距离。
+ * 玩家已经在球体内部时跳过该球：那是“人在屋里”，再按它回拉会把相机顶到墙上。
+ * @returns {number} 可用距离；无遮挡时返回 maxLen
+ */
+function occludedDistance(origin, dirN, maxLen, colliders, _oc) {
+  if (!colliders || !colliders.length) return maxLen;
+  let best = maxLen;
+  for (const c of colliders) {
+    const r = c.radius || 0;
+    if (r < OCCLUDER_MIN_RADIUS || !c.position) continue;
+    _oc.copy(c.position).sub(origin);
+    const proj = _oc.dot(dirN);
+    const distSq = _oc.lengthSq();
+    if (distSq <= r * r) continue;              // 相机目标点的起点在球内：人在屋内
+    if (proj <= 0 || proj - r > best) continue; // 在身后，或比已知遮挡更远
+    const perpSq = distSq - proj * proj;
+    const rSq = r * r;
+    if (perpSq >= rSq) continue;                // 擦不到
+    const half = Math.sqrt(rSq - perpSq);
+    if (half * 2 < OCCLUDER_CHORD_MIN) continue;
+    const enter = proj - half;
+    if (enter > 0 && enter < best) best = enter;
+  }
+  return best;
+}
+
+export function createCameraRig(camera, player, opts = {}) {
   const camTarget = new THREE.Vector3();
   const camDesired = new THREE.Vector3();
   const lookAtPoint = new THREE.Vector3();
@@ -25,6 +62,14 @@ export function createCameraRig(camera, player) {
   const _right = new THREE.Vector3();
   const _offset = new THREE.Vector3();
   const _fwd = new THREE.Vector3();
+  const _occ = new THREE.Vector3();
+  const _ray = new THREE.Vector3();
+  const getColliders = typeof opts.colliders === 'function' ? opts.colliders : null;
+  let getOccluderMeshes = typeof opts.occluderMeshes === 'function' ? opts.occluderMeshes : null;
+  const _camRay = new THREE.Raycaster();
+  _camRay.layers.enableAll();
+  let occlusionEnabled = true;
+  let lastOcclusionDist = null;
   let camOrbit = 0; // 绕法线的环绕角（yaw）
   let camPitch = 0; // 俯仰角（pitch）
   let camDist = P.camDist;
@@ -153,7 +198,39 @@ export function createCameraRig(camera, player) {
       camDesired.copy(player.position).add(_offset);
     }
 
-    camera.position.lerp(camDesired, t);
+    // ---------- 遮挡回拉：沿“看点→期望机位”这条线收短，保持取景方向不变 ----------
+    lastOcclusionDist = null;
+    if (occlusionEnabled && getColliders) {
+      lookAtPoint.copy(player.position).addScaledVector(_upSmooth, CAMERA_LOOK_Y);
+      _ray.copy(camDesired).sub(lookAtPoint);
+      const rayLen = _ray.length();
+      if (rayLen > 1e-4) {
+        _ray.multiplyScalar(1 / rayLen);
+        let free = occludedDistance(lookAtPoint, _ray, rayLen, getColliders(), _occ);
+        // Authored walls (gate jambs, tower shell, court stone) are meshes, not collider
+        // spheres — only 7 spheres in the whole world are wall-sized, so the sphere pass
+        // alone never catches a building. Raycast the same short list the walk collision
+        // uses; it is a handful of meshes, filtered by proximity.
+        if (getOccluderMeshes) {
+          const meshes = getOccluderMeshes(lookAtPoint, rayLen + 2);
+          if (meshes && meshes.length) {
+            _camRay.set(lookAtPoint, _ray);
+            _camRay.far = Math.min(free, rayLen);
+            const hits = _camRay.intersectObjects(meshes, false);
+            if (hits.length && hits[0].distance < free) free = hits[0].distance;
+          }
+        }
+        if (free < rayLen) {
+          const pulled = Math.max(OCCLUDER_MIN_DIST, free - OCCLUDER_PAD);
+          camDesired.copy(lookAtPoint).addScaledVector(_ray, pulled);
+          lastOcclusionDist = pulled;
+        }
+      }
+    }
+
+    // 被遮挡时收得快、恢复时放得慢，避免在门洞口来回抽搐
+    const posT = lastOcclusionDist != null ? Math.min(1, t * 2.4) : t;
+    camera.position.lerp(camDesired, posT);
     camera.up.copy(_upSmooth);
 
     lookAtPoint.copy(player.position).addScaledVector(_upSmooth, CAMERA_LOOK_Y);
@@ -195,5 +272,9 @@ export function createCameraRig(camera, player) {
     getDist: () => camDist,
     getYaw: () => camOrbit,
     getOrbit: () => ({ yaw: camOrbit, pitch: camPitch }), // 验收用
+    setOcclusionEnabled: (on) => { occlusionEnabled = !!on; },
+    setOccluderMeshes: (fn) => { getOccluderMeshes = typeof fn === 'function' ? fn : null; },
+    isOcclusionEnabled: () => occlusionEnabled,
+    getOcclusionDist: () => lastOcclusionDist, // 验收用：null=本帧无遮挡
   };
 }

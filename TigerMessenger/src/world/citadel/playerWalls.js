@@ -1,12 +1,35 @@
 import * as THREE from 'three';
 import {PLAYER_RADIUS,PLAYER_HEIGHT} from '../../core/constants.js';
 
+// The authored stone barriers. The camera occluder below shares this exact set so the
+// thing that stops the messenger is the same thing that pulls the camera in — one list,
+// no second definition to drift.
+export const CITADEL_WALL_MESH_NAMES=new Set(['tower-interior-solid','main-gate-wall','main-gate-carved-surround','court-solid-stone','processional-solid-stone','processional-solid-coping']);
+const isWall = o => o.isMesh && (CITADEL_WALL_MESH_NAMES.has(o.name) || o.userData.citadelSolidExterior === true);
+
+/**
+ * Camera occluders for the citadel: the same authored walls, returned as a short list
+ * of meshes near a point so the rig can raycast a handful of objects, not the scene.
+ * @param {THREE.Object3D} city
+ */
+export function createCitadelCameraOccluders(city){
+ city.updateWorldMatrix(true,true);
+ const obstacles=[];
+ city.traverse(o=>{if(isWall(o))obstacles.push({mesh:o,box:new THREE.Box3().setFromObject(o)});});
+ const out=[];
+ return (point,reach)=>{
+  out.length=0;
+  if(!point)return out;
+  for(const o of obstacles)if(o.box.distanceToPoint(point)<reach)out.push(o.mesh);
+  return out;
+ };
+}
+
 // Swept body samples for authored stone barriers. This does not replace
 // terrain grounding or claim full capsule/triangle contact for every asset.
 export function createCitadelPlayerWalls(city){
  city.updateWorldMatrix(true,true);
- const names=new Set(['tower-interior-solid','main-gate-wall','main-gate-carved-surround','court-solid-stone','processional-solid-stone','processional-solid-coping']);
- const obstacles=[];city.traverse(o=>{if(o.isMesh&&names.has(o.name))obstacles.push({mesh:o,box:new THREE.Box3().setFromObject(o)});});
+ const obstacles=[];city.traverse(o=>{if(isWall(o))obstacles.push({mesh:o,box:new THREE.Box3().setFromObject(o)});});
  const ray=new THREE.Raycaster(),up=new THREE.Vector3(),move=new THREE.Vector3(),side=new THREE.Vector3(),origin=new THREE.Vector3(),normal=new THREE.Vector3();ray.layers.enableAll();
  return (previous,position,velocity)=>{
   up.copy(previous).normalize();move.copy(position).sub(previous);move.addScaledVector(up,-move.dot(up));

@@ -1,0 +1,112 @@
+{
+  "harbor": {
+    "originals_replaced": 1,
+    "passed": true,
+    "scope": "Original port, boat, crew, shore stairs and matching cut terrain; native logistics pending",
+    "source": "actual Web citadelOldHarbor candidate"
+  },
+  "rows": [
+    {
+      "aabb": "[P: (-90.0, -40.87814, -59.0), S: (180.0, 97.65907, 118.0)]",
+      "layers": 1,
+      "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/citadel-continuous-mountain-terrain-system/citadel-oskar-grid-mountain-surface",
+      "surfaces": [
+        {
+          "color": "(0.5164, 0.4168, 0.2409, 1.0)",
+          "colors": 364,
+          "material": "StandardMaterial3D",
+          "override": "<Object#null>",
+          "shader": "standard",
+          "vertices": 364,
+          "zeroNormals": 0
+        }
+      ],
+      "visible": false
+    },
+    {
+      "aabb": "[P: (-61.87724, -41.44314, -30.50864), S: (39.34772, 76.27753, 68.72829)]",
+      "layers": 1,
+      "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/odyssey-citadel-mountain-valley-assembly/citadel-latest-design-v1/highland-mountain-ravine-walls/highland-ravine-wall-west",
+      "surfaces": [
+        {
+          "color": "(0.0216, 0.0631, 0.1318, 1.0)",
+          "colors": 3846,
+          "material": "ShaderMaterial",
+          "override": "<Object#null>",
+          "shader": "res://shaders/citadel_terrain_color.gdshader",
+          "vertices": 3846,
+          "zeroNormals": 0
+        }
+      ],
+      "visible": true
+    },
+    {
+      "aabb": "[P: (-90.0, -159.28, -59.0), S: (221.5061, 215.5411, 184.5694)]",
+      "layers": 1,
+      "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/citadel-oskar-grid-mountain-surface",
+      "surfaces": [
+        {
+          "color": "(0.0148, 0.0492, 0.1091, 1.0)",
+          "colors": 9263,
+          "material": "ShaderMaterial",
+          "override": "<Object#null>",
+          "shader": "res://shaders/citadel_terrain_color.gdshader",
+          "vertices": 9263,
+          "zeroNormals": 0
+        }
+      ],
+      "visible": false
+    },
+    {
+      "aabb": "[P: (-34.30624, -25.0, -15.26955), S: (113.215, 47.55025, 92.53971)]",
+      "layers": 1,
+      "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/citadel-oskar-grid-mountain-surface/citadel-coastal-cliff-seal",
+      "surfaces": [
+        {
+          "color": "(0.0123, 0.0402, 0.0891, 1.0)",
+          "colors": 1026,
+          "material": "ShaderMaterial",
+          "override": "<Object#null>",
+          "shader": "res://shaders/citadel_terrain_color.gdshader",
+          "vertices": 1026,
+          "zeroNormals": 0
+        }
+      ],
+      "visible": false
+    },
+    {
+      "aabb": "[P: (-90.0, -159.28, -59.0), S: (221.5061, 215.5411, 184.5694)]",
+      "layers": 1,
+      "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/OldHarborOceanGrade/citadel-oskar-grid-mountain-surface",
+      "surfaces": [
+        {
+          "color": "(0.0148, 0.0492, 0.1091, 1.0)",
+          "colors": 9263,
+          "material": "ShaderMaterial",
+          "override": "<Object#null>",
+          "shader": "res://shaders/citadel_terrain_color.gdshader",
+          "vertices": 9263,
+          "zeroNormals": 0
+        }
+      ],
+      "visible": true
+    },
+    {
+      "aabb": "[P: (-34.30624, -25.0, -15.26955), S: (113.215, 47.55025, 92.53971)]",
+      "layers": 1,
+      "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/OldHarborOceanGrade/citadel-oskar-grid-mountain-surface/citadel-coastal-cliff-seal",
+      "surfaces": [
+        {
+          "color": "(0.0123, 0.0402, 0.0891, 1.0)",
+          "colors": 1026,
+          "material": "ShaderMaterial",
+          "override": "<Object#null>",
+          "shader": "res://shaders/citadel_terrain_color.gdshader",
+          "vertices": 1026,
+          "zeroNormals": 0
+        }
+      ],
+      "visible": true
+    }
+  ]
+}

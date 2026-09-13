@@ -6,7 +6,10 @@ func run()->void:
     var gates=w.castle_adapter.west_city.find_children("citadel-new-main-gate","Node3D",true,false)
     if gates.size()!=1:push_error("Expected one main gate");w.free();quit(1);return
     var gate:Node3D=gates[0]
-    var inverse:Transform3D=w.castle_adapter.original.global_transform.affine_inverse()
+    var hosts=w.castle_adapter.west_city.find_children("highland-west-city","Node3D",true,false)
+    # Keep legacy probe coordinates in the new-city frame as its production yaw changes.
+    var reference:Transform3D=hosts[0].global_transform*Transform3D(Basis.IDENTITY,Vector3(52,0,0))
+    var inverse:Transform3D=reference.affine_inverse()
     var gate_position:Vector3=inverse*gate.global_position
     var hits:=0;var triangles:=0
     for mesh in gate.find_children("*","MeshInstance3D",true,false):
@@ -26,7 +29,7 @@ func run()->void:
                         if Geometry3D.segment_intersects_triangle(Vector3(x,y,15),Vector3(x,y,7),points[0],points[1],points[2])!=null:hits+=1
     await w._start_traversal("gladius",true)
     w.set_physics_process(false)
-    var frame:Transform3D=w.castle_adapter.original.global_transform
+    var frame:Transform3D=reference
     var physics=w.get_world_3d().direct_space_state
     var flight_steps:=0;var flight_supported:=0;var flight_shapes:=0
     var flights=w.castle_adapter.west_city.find_children("highland-old-city-entry-flight","Node3D",true,false)
@@ -106,6 +109,7 @@ func run()->void:
     var report:Dictionary=w.traversal.evidence()
     report["gate_count"]=gates.size()
     report["gate_position"]=[gate_position.x,gate_position.y,gate_position.z]
+    report["gate_position_frame"]="new-city authored frame translated by x=-52; follows city yaw, not castle-local"
     report["gate_triangles_checked"]=triangles
     report["passage_ray_hits"]=hits
     report["physics_passage_hits"]=actual_passage_hits

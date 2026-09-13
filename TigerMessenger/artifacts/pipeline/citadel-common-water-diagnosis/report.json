@@ -1,0 +1,288 @@
+{
+  "hits": [
+    {
+      "pixel": [
+        290,
+        880
+      ],
+      "hits": [
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.10276371299801212,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "altitude": -0.4786213538079096,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-surface",
+          "parent": "",
+          "altitude": -0.7348742169483558,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.13847416683583447,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "sky-background",
+          "parent": "",
+          "altitude": 1837.499335371506,
+          "materialType": "ShaderMaterial",
+          "transparent": false,
+          "depthWrite": false
+        }
+      ]
+    },
+    {
+      "pixel": [
+        485,
+        805
+      ],
+      "hits": [
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.001465603284628969,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "altitude": -0.3880874161491761,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "altitude": -0.44969139040469486,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-surface",
+          "parent": "",
+          "altitude": -0.6670576032584847,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.07473882216280003,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "sky-background",
+          "parent": "",
+          "altitude": 1836.6624658792084,
+          "materialType": "ShaderMaterial",
+          "transparent": false,
+          "depthWrite": false
+        }
+      ]
+    },
+    {
+      "pixel": [
+        1280,
+        875
+      ],
+      "hits": [
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.08473517149371901,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "altitude": -0.4510713126627195,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-surface",
+          "parent": "",
+          "altitude": -0.6663592494861348,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "citadel-backdrop-ridge-far",
+          "parent": "citadel-new-city-backdrop-range",
+          "altitude": -2.784655876203999,
+          "materialType": "MeshStandardMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.08647703935548634,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "sky-background",
+          "parent": "",
+          "altitude": 1838.847968316619,
+          "materialType": "ShaderMaterial",
+          "transparent": false,
+          "depthWrite": false
+        }
+      ]
+    },
+    {
+      "pixel": [
+        1110,
+        857
+      ],
+      "hits": [
+        {
+          "name": "",
+          "parent": "",
+          "altitude": 0.05905644746584926,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.0007629493865692893,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "altitude": -0.4140369182131849,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "altitude": -0.45267813974481896,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-surface",
+          "parent": "",
+          "altitude": -0.7227474042415452,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parent": "citadel-continuous-mountain-terrain-system",
+          "altitude": -8.4689639995255,
+          "materialType": "MeshStandardMaterial",
+          "transparent": false,
+          "depthWrite": true
+        }
+      ]
+    },
+    {
+      "pixel": [
+        725,
+        892
+      ],
+      "hits": [
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.00032528592606695383,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        },
+        {
+          "name": "hills-closed-skirt",
+          "parent": "",
+          "altitude": -0.030529844450796872,
+          "materialType": "MeshStandardMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "camp-flat-patch",
+          "parent": "starting-camp",
+          "altitude": -0.3782559874686626,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-surface",
+          "parent": "",
+          "altitude": -0.6521888869685029,
+          "materialType": "MeshToonMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "citadel-oskar-grid-mountain-surface",
+          "parent": "citadel-continuous-mountain-terrain-system",
+          "altitude": -9.585434870649465,
+          "materialType": "MeshStandardMaterial",
+          "transparent": false,
+          "depthWrite": true
+        },
+        {
+          "name": "planet-v8-curved-ocean",
+          "parent": "planet-v9-runtime",
+          "altitude": -0.1521617185027253,
+          "materialType": "ShaderMaterial",
+          "transparent": true,
+          "depthWrite": true
+        }
+      ]
+    }
+  ],
+  "ocean": {
+    "material": "ShaderMaterial",
+    "opacity": 1,
+    "transparent": true,
+    "depthWrite": true,
+    "uniforms": {
+      "uTime": 0,
+      "uNight": 1,
+      "uOpacity": 0.94,
+      "uWaterKind": 0
+    }
+  }
+}

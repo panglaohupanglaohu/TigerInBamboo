@@ -1,0 +1,277 @@
+{
+  "lighting": {
+    "version": 3,
+    "frame": "new-city-authored-local",
+    "points": [
+      {
+        "id": "main-gate",
+        "position": [
+          60,
+          23,
+          21
+        ],
+        "color": 16753480,
+        "intensity": 350,
+        "radius": 30,
+        "godotEnergy": 140
+      },
+      {
+        "id": "plaza",
+        "position": [
+          59,
+          8,
+          70
+        ],
+        "color": 16758355,
+        "intensity": 500,
+        "radius": 24,
+        "godotEnergy": 9
+      },
+      {
+        "id": "moon-fill",
+        "position": [
+          30,
+          60,
+          42
+        ],
+        "color": 6462440,
+        "intensity": 6500,
+        "radius": 160,
+        "godotEnergy": 3.5
+      }
+    ],
+    "lanterns": [
+      [
+        54,
+        4,
+        76
+      ],
+      [
+        66,
+        4,
+        76
+      ],
+      [
+        54,
+        4,
+        63
+      ],
+      [
+        66,
+        4,
+        63
+      ],
+      [
+        54,
+        10,
+        32
+      ],
+      [
+        66,
+        10,
+        32
+      ],
+      [
+        54,
+        16,
+        13
+      ],
+      [
+        66,
+        16,
+        13
+      ]
+    ]
+  },
+  "scope": "seven front facades; authored volumes, side walls and stair keep",
+  "towers": [
+    {
+      "id": "left-gate-bastion",
+      "rows": 2,
+      "modules": 6,
+      "openings": 2,
+      "grid": [
+        [
+          "stone-alt",
+          "arch",
+          "stone-alt"
+        ],
+        [
+          "stone",
+          "arch",
+          "stone"
+        ]
+      ],
+      "solutionHash": "4171e0f8"
+    },
+    {
+      "id": "right-gate-bastion",
+      "rows": 2,
+      "modules": 6,
+      "openings": 2,
+      "grid": [
+        [
+          "stone",
+          "arch",
+          "stone-alt"
+        ],
+        [
+          "stone-alt",
+          "arch",
+          "stone"
+        ]
+      ],
+      "solutionHash": "be05f928"
+    },
+    {
+      "id": "left-outer-turret",
+      "rows": 1,
+      "modules": 3,
+      "openings": 1,
+      "grid": [
+        [
+          "stone-alt",
+          "arch",
+          "stone-alt"
+        ]
+      ],
+      "solutionHash": "27bfdec7"
+    },
+    {
+      "id": "right-outer-turret",
+      "rows": 2,
+      "modules": 6,
+      "openings": 2,
+      "grid": [
+        [
+          "stone-alt",
+          "arch",
+          "stone-alt"
+        ],
+        [
+          "stone-alt",
+          "slit",
+          "stone"
+        ]
+      ],
+      "solutionHash": "069b5274"
+    },
+    {
+      "id": "left-blue-tower",
+      "rows": 3,
+      "modules": 9,
+      "openings": 3,
+      "grid": [
+        [
+          "stone-alt",
+          "arch",
+          "stone"
+        ],
+        [
+          "stone",
+          "arch",
+          "stone"
+        ],
+        [
+          "stone-alt",
+          "slit",
+          "stone"
+        ]
+      ],
+      "solutionHash": "039ca89c"
+    },
+    {
+      "id": "right-blue-tower",
+      "rows": 4,
+      "modules": 12,
+      "openings": 4,
+      "grid": [
+        [
+          "stone-alt",
+          "arch",
+          "stone"
+        ],
+        [
+          "stone",
+          "arch",
+          "stone-alt"
+        ],
+        [
+          "stone-alt",
+          "arch",
+          "stone-alt"
+        ],
+        [
+          "stone",
+          "arch",
+          "stone"
+        ]
+      ],
+      "solutionHash": "bda457ef"
+    },
+    {
+      "id": "offset-high-keep",
+      "rows": 5,
+      "modules": 15,
+      "openings": 5,
+      "grid": [
+        [
+          "stone-alt",
+          "arch",
+          "stone"
+        ],
+        [
+          "stone",
+          "slit",
+          "stone"
+        ],
+        [
+          "stone-alt",
+          "arch",
+          "stone-alt"
+        ],
+        [
+          "stone-alt",
+          "slit",
+          "stone"
+        ],
+        [
+          "stone",
+          "slit",
+          "stone"
+        ]
+      ],
+      "solutionHash": "2409d469"
+    }
+  ],
+  "openingHits": [
+    {
+      "z": 13.819999694824208,
+      "material": ""
+    },
+    {
+      "z": 6.449999809265126,
+      "material": ""
+    },
+    {
+      "z": 0.1099999845027817,
+      "material": ""
+    }
+  ],
+  "wallHits": [
+    {
+      "z": 14.210000038146948,
+      "material": ""
+    },
+    {
+      "z": 6.44999980926514,
+      "material": ""
+    },
+    {
+      "z": 0.1099999994039429,
+      "material": ""
+    }
+  ],
+  "visible": true,
+  "archivedCrown": true
+}

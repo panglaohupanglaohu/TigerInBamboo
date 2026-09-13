@@ -1,0 +1,200 @@
+{
+  "records": 8,
+  "checks": 2941,
+  "gaps": [],
+  "outRampSoldiers": 8,
+  "returnRampSoldiers": 8,
+  "nightState": {
+    "active": true,
+    "returning": false,
+    "night": true,
+    "activationPhase": 0.82,
+    "queueSpacing": 0,
+    "elapsed": 99.99999999999646,
+    "returnElapsed": 0,
+    "insideHorse": 0,
+    "groups": [
+      {
+        "name": "ladder-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 12,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 12
+      },
+      {
+        "name": "mountain-stair-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 18,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 18
+      }
+    ],
+    "torchBearers": 4,
+    "torchQueueIndices": [
+      "stairs:0",
+      "stairs:3",
+      "stairs:0",
+      "stairs:3"
+    ],
+    "equipmentRole": "torch-flank-shield-spear",
+    "javelinsActive": 0,
+    "javelinPhases": [],
+    "thrownTargetCount": 12,
+    "assistanceLinksVisible": 0,
+    "ropesVisible": 0,
+    "descentRopes": 0,
+    "descentOrder": [
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier",
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier"
+    ]
+  },
+  "dayState": {
+    "active": false,
+    "returning": false,
+    "night": false,
+    "activationPhase": 0.82,
+    "queueSpacing": 0,
+    "elapsed": 0,
+    "returnElapsed": 0,
+    "insideHorse": 8,
+    "groups": [
+      {
+        "name": "ladder-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 12,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 12
+      },
+      {
+        "name": "mountain-stair-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 18,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 18
+      }
+    ],
+    "torchBearers": 4,
+    "torchQueueIndices": [
+      "stairs:0",
+      "stairs:3",
+      "stairs:0",
+      "stairs:3"
+    ],
+    "equipmentRole": "torch-flank-shield-spear",
+    "javelinsActive": 0,
+    "javelinPhases": [],
+    "thrownTargetCount": 0,
+    "assistanceLinksVisible": 0,
+    "ropesVisible": 0,
+    "descentRopes": 0,
+    "descentOrder": [
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier",
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier"
+    ]
+  },
+  "horseDrift": 0,
+  "horseRotationDrift": 0,
+  "errors": [],
+  "passed": true,
+  "scope": "Real day/night lifecycle of original eight soldiers; terrain support sampled only on new terrace and ramp, not full castle combat."
+}

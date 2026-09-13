@@ -1,0 +1,9 @@
+00:00.018  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+Traceback (most recent call last):
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/probe.py", line 3, in <module>
+    "argv": sys.argv[-3:], "engines": [e.bl_idname for e in bpy.types.RenderEngine.__subclasses__()][:8]}
+                                       ^^^^^^^^^^^
+AttributeError: type object 'HydraRenderEngine' has no attribute 'bl_idname'
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

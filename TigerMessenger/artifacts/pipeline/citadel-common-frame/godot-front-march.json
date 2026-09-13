@@ -1,0 +1,17 @@
+{
+  "blocked": {},
+  "blocker_stops_actor": true,
+  "completed_steps": 202,
+  "distance_from_start": 24.8567276000977,
+  "geometry_queries": 564514,
+  "passed": true,
+  "phase": "arrived",
+  "point": 202,
+  "role": "gladius",
+  "route_file": "common-frame-citadel-front-harbor-route.json",
+  "route_points": 203,
+  "scope": "Actual approved gladius mesh moves using production collision-guarded controller on exported left-city walking surfaces. Building avoidance and battle not included.",
+  "simulated_ticks": 7274,
+  "step_clearance": 0.1,
+  "tick_budget": 31916
+}

@@ -1,0 +1,40 @@
+{
+  "initial": [
+    {
+      "name": "saihoji-troopship-0",
+      "radius": 160.18,
+      "visible": true
+    },
+    {
+      "name": "saihoji-troopship-1",
+      "radius": 160.18,
+      "visible": true
+    }
+  ],
+  "after": [
+    {
+      "name": "saihoji-troopship-0",
+      "radius": 160.18,
+      "visible": true
+    },
+    {
+      "name": "saihoji-troopship-1",
+      "radius": 160.18,
+      "visible": true
+    },
+    {
+      "name": "saihoji-troopship-200",
+      "radius": 160.18,
+      "visible": true
+    },
+    {
+      "name": "saihoji-troopship-201",
+      "radius": 160.18000000000006,
+      "visible": true
+    }
+  ],
+  "phase": "siege",
+  "passed": true,
+  "errors": [],
+  "scope": "Actual 8931 combat module: debug siege start plus 40 simulated seconds covering blue reinforcements. Verifies ships stay on legacy water placement rather than infantry paving; NOT verified docking, full natural campaign, or new-city assembly migration."
+}

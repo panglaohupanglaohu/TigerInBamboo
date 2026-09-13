@@ -1,0 +1,72 @@
+{
+  "garden_meshes": 7,
+  "imported_counts": {
+    "claude": 9,
+    "target": 1
+  },
+  "imported_hues_preserved": true,
+  "passed": true,
+  "scope": "Actual Godot world window materials switch and restore; preview only, not siege captured-room or global day-night logic.",
+  "stages": [
+    {
+      "counts": {
+        "new": 10,
+        "old": 167
+      },
+      "enabled": false,
+      "energies": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "environment_count": 1,
+      "environment_matching": true,
+      "lit_points": 0,
+      "matching": 1012,
+      "old_lit_points": 0,
+      "old_point_lights": 4,
+      "point_lights": 3,
+      "total": 1012
+    },
+    {
+      "counts": {
+        "new": 10,
+        "old": 167
+      },
+      "enabled": true,
+      "energies": [
+        16.0,
+        9.0,
+        2.5
+      ],
+      "environment_count": 1,
+      "environment_matching": true,
+      "lit_points": 3,
+      "matching": 1012,
+      "old_lit_points": 4,
+      "old_point_lights": 4,
+      "point_lights": 3,
+      "total": 1012
+    },
+    {
+      "counts": {
+        "new": 10,
+        "old": 167
+      },
+      "enabled": false,
+      "energies": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "environment_count": 1,
+      "environment_matching": true,
+      "lit_points": 0,
+      "matching": 1012,
+      "old_lit_points": 0,
+      "old_point_lights": 4,
+      "point_lights": 3,
+      "total": 1012
+    }
+  ]
+}

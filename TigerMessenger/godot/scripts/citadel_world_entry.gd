@@ -2,8 +2,6 @@ extends "res://scripts/original_world.gd"
 ## Entry into the existing spherical world; does not invent a separate castle.
 func _ready() -> void:
     super._ready()
-    ocean_adapter.bind(model)
-    seabed_adapter.bind(model)
     var index := regions.find("odysseyCitadel")
     if index < 0:
         status.text = "高山圣城原场景入口缺失"
@@ -14,13 +12,11 @@ func _ready() -> void:
     status.text = "高山圣城 · 原场景与 WFC 城堡
 右侧可启动三兵种通行演练；完整攻城接入中"
 
-var seabed_adapter=preload("res://scripts/citadel_seabed_adapter.gd").new()
-var ocean_adapter=preload("res://scripts/original_ocean_adapter.gd").new()
-var window_lights=preload("res://scripts/citadel_window_lights.gd").new()
 var assault_route=preload("res://scripts/citadel_assault_route.gd").new()
 var landmarks:Dictionary={}
 var _cutaway_hidden:Array[Node3D]=[]
 var carry_preview:Array[Node3D]=[]
+var traversal_is_old_shore:=false
 var traversal_context=preload("res://scripts/citadel_collision_context.gd").new()
 var traversal
 var traversal_epoch:=0
@@ -33,11 +29,12 @@ var stair_candidate=preload("res://scripts/citadel_stair_candidate.gd").new()
 var stair_toggle:CheckButton
 var route_toggle:CheckButton
 func _build_assault_view()->void:
-    for spec in [["纳沃纳广场","citadel-navona-canal-plaza[70]"],["塔内旋梯","highland-central-interior-rotating-staircase"],["顶层夺取点","highland-castle-top-capture-deck"],["木马","citadel-trojan-horse[73]"]]:
+    for spec in [["塔内旋梯","highland-central-interior-rotating-staircase"],["顶层夺取点","highland-castle-top-capture-deck"],["木马","citadel-trojan-horse[73]"]]:
         landmarks[spec[0]]=_find_landmark(model,spec[1])
     if is_instance_valid(castle_adapter.trojan_horse):landmarks["木马"]=castle_adapter.trojan_horse
-    var plazas=castle_adapter.west_city.find_children("citadel-navona-canal-plaza","Node3D",true,false)
-    if plazas.size()==1 and plazas[0].is_visible_in_tree():landmarks["纳沃纳广场"]=plazas[0]
+    for spec in [["新城广场","west-city-plaza-deck"],["木马高台","citadel-original-horse-terrace"],["新城港口","west-city-harbor-quay"],["前港登陆口","citadel-front-harbor"]]:
+        var current=castle_adapter.west_city.find_children(spec[1],"Node3D",true,false)
+        landmarks[spec[0]]=current[0] if current.size()==1 and current[0].is_visible_in_tree() else null
     var loaded:bool=assault_route.bind(castle_adapter.original)
     if loaded:stair_candidate.bind(landmarks["塔内旋梯"],assault_route.anchors)
     shell_candidate.bind(landmarks["塔内旋梯"].get_parent())
@@ -62,6 +59,9 @@ func _build_assault_view()->void:
     for spec in [["短剑兵","gladius"],["长矛兵","spear"],["弓箭兵","longbow"]]:
         var walk=Button.new();walk.text=spec[0]+" · 通行演练";walk.pressed.connect(_start_traversal.bind(spec[1]));panel.add_child(walk)
     var west_walk=Button.new();west_walk.text="短剑兵 · 新圣城行军";west_walk.pressed.connect(_start_traversal.bind("gladius",true));panel.add_child(west_walk)
+    var front_walk=Button.new();front_walk.text="短剑兵 · 前港登陆到广场";front_walk.pressed.connect(_start_traversal.bind("gladius",true,true));panel.add_child(front_walk)
+    if preload("res://scripts/citadel_surface_variant.gd").harbor_enabled():
+        var shore_walk=Button.new();shore_walk.text="短剑兵 · 旧港沿坡入城";shore_walk.pressed.connect(_start_traversal.bind("gladius",true,false,true));panel.add_child(shore_walk)
     var reset_walk=Button.new();reset_walk.text="重置通行演练";reset_walk.pressed.connect(_reset_traversal);panel.add_child(reset_walk)
     var entry=Button.new();entry.text="进攻入口";entry.disabled=not loaded;entry.pressed.connect(_focus_approach);panel.add_child(entry)
     var toggle=CheckButton.new();toggle.text="显示原作路线 · 待通行验收";toggle.disabled=not loaded
@@ -168,7 +168,7 @@ func _reset_traversal()->void:
     traversal_epoch+=1;traversal_accumulator=0.0
     if traversal!=null:traversal.dispose();traversal=null
     status.text="通行演练已重置"
-func _start_traversal(kind:String,west_city:bool=false)->void:
+func _start_traversal(kind:String,west_city:bool=false,front_harbor:bool=false,old_shore:bool=false)->void:
     _reset_traversal()
     var token:=traversal_epoch
     for actor in carry_preview:
@@ -185,8 +185,13 @@ func _start_traversal(kind:String,west_city:bool=false)->void:
         return
     traversal=preload("res://scripts/citadel_roman_traversal.gd").new()
     traversal_in_west_city=west_city
-    var path:Array=preload("res://scripts/west_city_route.gd").new().points() if west_city else []
-    if not traversal.bind(self,kind,castle_adapter.original if west_city else null,path):status.text="士兵携行或路线绑定失败";return
+    traversal_is_old_shore=old_shore
+    var path:Array=preload("res://scripts/west_city_route.gd").new().points("res://data/citadel-front-harbor-route.json" if front_harbor else "res://data/citadel-west-city-route.json") if west_city else []
+    if old_shore:
+        path=[]
+        var data=JSON.parse_string(FileAccess.get_file_as_string("res://data/old-harbor-ocean-grade.json"))
+        for p in data.shore.route:path.append(Vector3(p[0],p[1],p[2]))
+    if not traversal.bind(self,kind,castle_adapter.original if west_city else null,path,old_shore):status.text="士兵携行或路线绑定失败";return
     if not west_city:_inspect_stair_interior(true)
     route_toggle.button_pressed=false
 func _physics_process(dt:float)->void:
@@ -195,7 +200,7 @@ func _physics_process(dt:float)->void:
     while traversal_accumulator>=1.0/60.0:
         traversal.tick(1.0/60.0);traversal_accumulator-=1.0/60.0
     var row=traversal.evidence()
-    status.text="%s · %s / %s 段\n%s"%["新圣城行军" if traversal_in_west_city else "塔内通行演练",row.completed_steps,row.route_points-1,"已到达；尚未启动攻城" if row.phase=="arrived" else ("碰撞停止："+str(row.blocked.get("part",row.blocked.get("reason",""))) if row.phase=="blocked" else "刚性腿跃步候选；非最终步态")]
+    status.text="%s · %s / %s 段\n%s"%["旧港沿坡入城" if traversal_is_old_shore else ("新圣城行军" if traversal_in_west_city else "塔内通行演练"),row.completed_steps,row.route_points-1,"已到达；尚未启动攻城" if row.phase=="arrived" else ("碰撞停止："+str(row.blocked.get("part",row.blocked.get("reason",""))) if row.phase=="blocked" else "刚性腿跃步候选；非最终步态")]
     if is_instance_valid(traversal.actor) and row.phase in ["turn","hop"]:
         var a:Node3D=traversal.actor
         camera.position=a.global_position+stair_candidate.root.global_basis.x*3.0+a.global_basis.y*1.7+stair_candidate.root.global_basis.z*2.2

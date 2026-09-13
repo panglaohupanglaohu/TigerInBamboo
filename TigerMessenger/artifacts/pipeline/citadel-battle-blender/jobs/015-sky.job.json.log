@@ -1,0 +1,9 @@
+00:00.017  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/sky_probe.py:4: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w = bpy.data.worlds.new("W"); sc.world = w; w.use_nodes = True
+00:02.107  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/sky_agx.png'
+00:02.590  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/sky_std.png'
+SKY_PROBE {"links": [["ShaderNodeNewGeometry", "Incoming", "ShaderNodeSeparateXYZ", "Vector"], ["ShaderNodeSeparateXYZ", "Z", "ShaderNodeMapRange", "Value"], ["ShaderNodeMapRange", "Result", "ShaderNodeValToRGB", "Factor"], ["ShaderNodeValToRGB", "Color", "ShaderNodeBackground", "Color"], ["ShaderNodeBackground", "Background", "ShaderNodeOutputWorld", "Surface"]], "world": "W", "scene_world": "W", "px_agx": [0.5882, 0.6902, 0.7765, 1.0, 0.5922, 0.6941, 0.7843, 1.0, 0.5922, 0.6941, 0.7843, 1.0], "max_agx": 1.0, "px_std": [0.549, 0.7725, 1.0, 1.0, 0.5529, 0.7804, 1.0, 1.0, 0.5569, 0.7804, 1.0, 1.0], "max_std": 1.0}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

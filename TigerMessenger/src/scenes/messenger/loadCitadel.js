@@ -1,3 +1,5 @@
+import {oldHarborGradeEnabled,placeOldHarborAtOcean} from '../../world/citadel/oldHarborOceanGrade.js';
+import {commonSurfaceFrameEnabled,applyCitadelCommonSurfaceFrame} from '../../world/citadel/commonSurfaceFrame.js';
 import {buildCitadelHarborSeabed} from '../../world/citadel/harborSeabed.js';
 import {applyCliffBlenderRefinement} from '../../world/citadel/cliffBlenderRefinement.js';
 import {alignCitadelHarborToOcean} from '../../world/citadel/harborOceanAlignment.js';
@@ -101,6 +103,7 @@ export function loadCitadelBlock({ scene, R, moonLake, camp, harbor, harborBuilt
     latestDesign: true,
   });
   scene.add(odysseyCitadel);
+  if(commonSurfaceFrameEnabled())applyCitadelCommonSurfaceFrame(odysseyCitadel,R);
   odysseyCitadel.updateMatrixWorld(true);
   alignCitadelHarborToOcean(odysseyCitadel,R);
   buildCitadelHarborSeabed(scene,odysseyCitadel);
@@ -177,11 +180,11 @@ function restoreOldHarborTreePair({ harbor, harborBuilt, citadelRange }) {
     tree.visible = true;
     tree.position.set(x, y, z);
     tree.rotation.set(0, yaw, 0);
-    tree.scale.setScalar(1);
+    tree.scale.setScalar(.38);
     tree.userData.pendingHarborRestore = false;
     tree.userData.designRole = "old-harbor-giant-tree";
     tree.userData.harborLocal = { x, y, z, yaw };
-    tree.userData.referenceScale = 1;
+    tree.userData.referenceScale = .38;
   }
   const restored = trees.map(([tree]) => tree);
   harbor.userData.oldHarborGiantTreeCount = restored.length;
@@ -203,7 +206,7 @@ function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborCol
   harbor.updateMatrixWorld(true);
   const up = citadelSiteDir(new THREE.Vector3());
   const inv = new THREE.Matrix4().copy(odysseyCitadel.matrixWorld).invert();
-  const before=harbor.position.clone();
+  const beforeHarborInverse=harbor.matrixWorld.clone().invert();
   const local = harbor.position.clone().applyMatrix4(inv);
   if(odysseyCitadel.userData.compositionOffset){local.x=-72;local.z=32;}
   const offset = odysseyCitadel.userData.compositionOffset ?? [0, 0, 0];
@@ -211,7 +214,19 @@ function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborCol
   if (!Number.isFinite(terrain)) return;
   local.y=terrain;
   harbor.position.copy(local).applyMatrix4(odysseyCitadel.matrixWorld);
-  const delta=harbor.position.clone().sub(before);
+  if(odysseyCitadel.userData.commonSurfaceFrame){
+    const originalLocal=new THREE.Matrix4().fromArray(odysseyCitadel.userData.commonSurfaceFrame.originalMatrix);
+    const originalWorld=odysseyCitadel.parent.matrixWorld.clone().multiply(originalLocal);
+    const oldQ=new THREE.Quaternion().setFromRotationMatrix(originalWorld);
+    const turn=odysseyCitadel.getWorldQuaternion(new THREE.Quaternion()).multiply(oldQ.invert());
+    const parentQ=harbor.parent.getWorldQuaternion(new THREE.Quaternion());
+    const localTurn=parentQ.clone().invert().multiply(turn).multiply(parentQ);
+    harbor.quaternion.premultiply(localTurn);
+  }
+  if(odysseyCitadel.userData.commonSurfaceFrame&&oldHarborGradeEnabled()){
+    const grade=placeOldHarborAtOcean(odysseyCitadel,harbor,R);
+    local.fromArray(grade.castleLocal);
+  }
   harbor.userData.compositionPlacement={castleLocal:local.toArray(),role:"old-city-left-harbor"};
   harbor.updateMatrixWorld(true);
   // 船留在海面：泊位在水上，不跟港台一起上崖
@@ -225,7 +240,7 @@ function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborCol
     boat.position.y=(low+high)/2;
     boat.updateMatrixWorld(true);
   }
-  for (const collider of harborColliders || []) collider.position.add(delta);
+  for (const collider of harborColliders || []) collider.position.applyMatrix4(beforeHarborInverse).applyMatrix4(harbor.matrixWorld);
   // 弹唱老人的最终落位在 messengerIsland 的沉船编排块（湖沼旁半沉沉船）
 }
 

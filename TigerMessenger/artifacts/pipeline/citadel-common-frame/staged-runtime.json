@@ -1,0 +1,109 @@
+{
+  "frame": {
+    "version": 1,
+    "pivot": [
+      -10,
+      55
+    ],
+    "radius": 160,
+    "originalMatrix": [
+      -0.6155993490397853,
+      0.08144457424694246,
+      0.7838394113512837,
+      0,
+      0.7380298526751614,
+      0.4083304603813851,
+      0.5371947241783054,
+      0,
+      -0.2763139121037377,
+      0.9091936077923449,
+      -0.31147649273655853,
+      0,
+      114.44628925433727,
+      63.31980449134136,
+      83.30278587832983,
+      1
+    ],
+    "delta": [
+      0.9980571376913063,
+      0.05851768939064661,
+      0.021392286736499604,
+      0,
+      -0.06230529595015828,
+      0.9373841611194418,
+      0.3426791277258711,
+      0,
+      0,
+      -0.34334620212080474,
+      0.93920891471984,
+      0,
+      -0.01942862308693627,
+      14.849375870214722,
+      3.557432557773801,
+      1
+    ],
+    "status": "staged; old harbor shore access and full battle validation pending"
+  },
+  "corners": [
+    {
+      "x": 44.85,
+      "z": 59.5,
+      "clearance": 4.37589558368833
+    },
+    {
+      "x": 44.85,
+      "z": 83.5,
+      "clearance": 5.170665929562526
+    },
+    {
+      "x": 76,
+      "z": 59.5,
+      "clearance": 9.167725738275786
+    },
+    {
+      "x": 76,
+      "z": 83.5,
+      "clearance": 9.987141934643226
+    }
+  ],
+  "checks": {
+    "walkRoute": {
+      "samples": 2093,
+      "missingCount": 0,
+      "missing": []
+    },
+    "harborRoute": {
+      "samples": 410,
+      "missingCount": 0,
+      "missing": []
+    },
+    "frontHarborRoute": {
+      "samples": 620,
+      "missingCount": 0,
+      "missing": []
+    }
+  },
+  "frontHarbor": {
+    "dockY": -1.6442037347839142,
+    "flights": 3,
+    "stepsPerFlight": 11,
+    "riser": 0.17103647681163378,
+    "tread": 1,
+    "cuts": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "changed": 29
+      },
+      {
+        "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+        "changed": 23
+      }
+    ],
+    "status": "walking approach; fleet still uses rear harbor"
+  },
+  "horseError": 0,
+  "horseUp": 1,
+  "oldHarborUp": 1,
+  "scope": "Real build-time gated original game; support rays and actor anchor only. Full equipped traversal and battle not proven.",
+  "errors": []
+}

@@ -9,6 +9,24 @@ export function isOldCityShelves(layout) { return layout?.compositionVersion===O
 export function oldCityShelfSupported(x,z,index) {
   return index<3 && Math.abs(x)<=25 && Math.abs(z)<=25 && oldCityShelfIndex(x,z)===index;
 }
+
+/** Convex support outline of the surviving WFC lots, plus the original shore
+ * approach and harbor-side landing. Coordinates stay in the old-town frame. */
+export function oldCityFoundationOutline(layout) {
+  if(!isOldCityShelves(layout))return null;
+  const n=layout.gridSize||25,center=(n-1)/2,points=[];
+  for(const terrace of layout.terraces)for(const rows of terrace.levels)
+    for(let z=0;z<rows.length;z++)for(let x=0;x<rows[z].length;x++){
+      if(rows[z][x]==='.')continue;
+      for(const dx of [-1.6,1.6])for(const dz of [-1.6,1.6])points.push([(x-center)*2+dx,(z-center)*2+dz]);
+    }
+  if(!points.length)return null;
+  points.push([1,21.5],[23,21.5],[23,23],[1,23],[-23,8],[-23,19]);
+  const sorted=[...new Map(points.map(p=>[p.join(','),p])).values()].sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+  const half=items=>{const result=[];for(const p of items){while(result.length>1&&cross(result.at(-2),result.at(-1),p)<=0)result.pop();result.push(p);}return result;};
+  return [...half(sorted).slice(0,-1),...half([...sorted].reverse()).slice(0,-1)];
+}
 export function migrateOldCityShelves(layout) {
   if (isOldCityShelves(layout)) return layout;
   const n=layout.gridSize||25, center=(n-1)/2;

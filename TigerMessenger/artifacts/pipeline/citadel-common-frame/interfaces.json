@@ -1,0 +1,80 @@
+{
+  "pivot": [
+    -10,
+    55
+  ],
+  "external": [
+    "citadel-trojan-horse",
+    "old-harbor-scene"
+  ],
+  "frontHarbor": {
+    "dockY": -1.6442037347839142,
+    "flights": 3,
+    "stepsPerFlight": 11,
+    "riser": 0.17103647681163378,
+    "tread": 1,
+    "cuts": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "changed": 24
+      },
+      {
+        "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+        "changed": 21
+      }
+    ],
+    "status": "walking approach; fleet still uses rear harbor"
+  },
+  "harbor": {
+    "source": "officialOceanLevelAt in final world frame",
+    "dockY": 0.679835349168564,
+    "minFreeboard": 0.9
+  },
+  "perimeter": {
+    "source": "officialOceanLevelAt(final world direction)",
+    "depth": 2,
+    "topologyUnchanged": true,
+    "reports": [
+      {
+        "mesh": "citadel-oskar-grid-mountain-surface",
+        "count": 408,
+        "changed": 158,
+        "maxBefore": 28.733748308190343,
+        "maxAfter": -2
+      },
+      {
+        "mesh": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+        "count": 408,
+        "changed": 160,
+        "maxBefore": 29.075050980348664,
+        "maxAfter": -2
+      }
+    ]
+  },
+  "planting": {
+    "sourceCount": 106,
+    "placed": 105,
+    "waterOrMissing": 1,
+    "maxAdjustment": 2.022704164607628,
+    "surface": "citadel-oskar-grid-mountain-surface"
+  },
+  "checks": {
+    "walkRoute": {
+      "samples": 2093,
+      "missing": [],
+      "missingCount": 0
+    },
+    "harborRoute": {
+      "samples": 410,
+      "missing": [],
+      "missingCount": 0
+    },
+    "frontHarborRoute": {
+      "samples": 621,
+      "missing": [],
+      "missingCount": 0
+    }
+  },
+  "production": false,
+  "fullActorCollision": false
+}

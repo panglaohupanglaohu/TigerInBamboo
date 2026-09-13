@@ -1,16 +1,14 @@
 {
   "radius": 160,
   "source": "assembled default Web world; no saved browser edits copied",
-  "nodes": 1465,
-  "meshes": 922,
-  "instances": 0,
-  "materials": 91,
-  "textures": 0,
-  "bytes": 10930252,
+  "nodes": 1507,
+  "meshes": 931,
+  "instances": 234,
+  "materials": 130,
+  "textures": 1,
+  "bytes": 15071072,
   "landmarks": {},
-  "warnings": [
-    "Texture unavailable: citadel-townscaper-wall-pattern"
-  ],
+  "warnings": [],
   "limitations": [
     "Static visible-state capture; source animations, physics, quests and shader logic still require native migration",
     "Hidden states and non-mesh line/point effects excluded from this world overview; separate asset archives retain them"

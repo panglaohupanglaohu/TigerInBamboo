@@ -1,0 +1,58 @@
+{
+  "hits": [
+    {
+      "name": "sky-background",
+      "d": 124.65267063381174,
+      "material": ""
+    }
+  ],
+  "trees": [],
+  "rangeKeys": [
+    "mesh",
+    "loessGroundSeal",
+    "castleFooting",
+    "foregroundTower",
+    "pilgrimageWaterSteps",
+    "pilgrimageCascades",
+    "interCascadeBridgePool",
+    "pilgrimageLookout",
+    "sacredTarnTree",
+    "tarnCompanionPine",
+    "lakeBallShrubs",
+    "snowMountains",
+    "snowMassifLeft",
+    "snowMassifRight",
+    "moat",
+    "trojanHorse",
+    "navonaPlaza",
+    "nightInfiltration",
+    "placeNavonaPlaza",
+    "update",
+    "vegetation",
+    "siteDir",
+    "fwd",
+    "right",
+    "userData",
+    "rebuildMoat",
+    "linkCanalToMoat",
+    "aimHorseToCanal",
+    "rebuildWaterTerraces",
+    "cascadeEnabled",
+    "contourSpec"
+  ],
+  "infKeys": [
+    "root",
+    "update",
+    "reset",
+    "setRoutes",
+    "getState"
+  ],
+  "errors": [],
+  "render": {
+    "frame": 244,
+    "calls": 3195,
+    "triangles": 880888,
+    "points": 0,
+    "lines": 2
+  }
+}

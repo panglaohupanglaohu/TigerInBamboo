@@ -1,7 +1,8 @@
 extends RefCounted
 
-func points() -> Array[Vector3]:
-    var source = JSON.parse_string(FileAccess.get_file_as_string("res://data/citadel-west-city-route.json"))
+func points(source_path:String="res://data/citadel-west-city-route.json") -> Array[Vector3]:
+    source_path=preload("res://scripts/citadel_surface_variant.gd").data_path(source_path)
+    var source = JSON.parse_string(FileAccess.get_file_as_string(source_path))
     var result:Array[Vector3]=[]
     if not source is Dictionary:return result
     for row in source.get("points",[]):

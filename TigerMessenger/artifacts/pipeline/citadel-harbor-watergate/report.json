@@ -1,0 +1,59 @@
+{
+  "tests": 20,
+  "blocked": 0,
+  "wallHits": 2,
+  "guardHits": 6,
+  "visualPick": [
+    {
+      "name": "citadel-coastal-cliff-seal",
+      "parent": "citadel-oskar-grid-mountain-surface",
+      "cityPoint": [
+        44.3997816548127,
+        3.435953148450693,
+        64.25380975516778
+      ]
+    },
+    {
+      "name": "west-city-plaza-foundation",
+      "parent": "highland-west-city",
+      "cityPoint": [
+        44.850000190734875,
+        3.1755576439040567,
+        65.0073512370173
+      ]
+    },
+    {
+      "name": "citadel-oskar-grid-mountain-surface",
+      "parent": "citadel-continuous-mountain-terrain-system",
+      "cityPoint": [
+        62.756033665451625,
+        -7.180858738483153,
+        94.97710574956575
+      ]
+    }
+  ],
+  "opening": {
+    "width": 4.4,
+    "springHeight": 3.1,
+    "apexHeight": 5.300000000000001,
+    "depth": 1.5
+  },
+  "landing": {
+    "position": [
+      42,
+      1.9302697234338662,
+      68
+    ],
+    "size": {
+      "width": 4.2,
+      "height": 0.2,
+      "depth": 2,
+      "widthSegments": 1,
+      "heightSegments": 1,
+      "depthSegments": 1
+    }
+  },
+  "routePoints": 87,
+  "errors": [],
+  "passed": true
+}

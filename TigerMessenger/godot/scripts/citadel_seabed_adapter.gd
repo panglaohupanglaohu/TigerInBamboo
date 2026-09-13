@@ -9,7 +9,7 @@ func bind(model:Node3D)->bool:
             matches.append(mesh)
     if matches.size()!=1:
         report={"passed":false,"matched":matches.size()};push_error("Citadel seabed original planet not unique");return false
-    var data=JSON.parse_string(FileAccess.get_file_as_string("res://data/citadel-seabed.json"))
+    var data=JSON.parse_string(FileAccess.get_file_as_string(preload("res://scripts/citadel_surface_variant.gd").data_path("res://data/citadel-seabed.json")))
     if not data is Dictionary:return false
     var arrays:Array=[];arrays.resize(Mesh.ARRAY_MAX)
     var vertices=PackedVector3Array();var normals=PackedVector3Array();var colors=PackedColorArray()

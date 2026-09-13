@@ -1,0 +1,93 @@
+{
+  "label": "baseline-blue",
+  "errors": [],
+  "shots": [
+    {
+      "id": "overview",
+      "eye": [
+        12,
+        42,
+        141
+      ],
+      "target": [
+        34,
+        19,
+        16
+      ],
+      "fov": 52,
+      "phase": 0.8502235555555754,
+      "fog": 0.0032,
+      "render": {
+        "frame": 185,
+        "calls": 1,
+        "triangles": 2,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 3112,
+        "textures": 31
+      },
+      "lights": 1,
+      "oldYaw": 0.5235987755982988
+    },
+    {
+      "id": "harbor",
+      "eye": [
+        18,
+        15,
+        102
+      ],
+      "target": [
+        46,
+        11,
+        37
+      ],
+      "fov": 55,
+      "phase": 0.8502235555555754,
+      "fog": 0.0032,
+      "render": {
+        "frame": 251,
+        "calls": 2915,
+        "triangles": 863616,
+        "points": 0,
+        "lines": 2
+      },
+      "memory": {
+        "geometries": 3112,
+        "textures": 31
+      },
+      "lights": 1,
+      "oldYaw": 0.5235987755982988
+    },
+    {
+      "id": "gate",
+      "eye": [
+        60,
+        23,
+        57
+      ],
+      "target": [
+        60,
+        27,
+        9
+      ],
+      "fov": 56,
+      "phase": 0.8502235555555754,
+      "fog": 0.0032,
+      "render": {
+        "frame": 299,
+        "calls": 1644,
+        "triangles": 760167,
+        "points": 380,
+        "lines": 2
+      },
+      "memory": {
+        "geometries": 3119,
+        "textures": 32
+      },
+      "lights": 1,
+      "oldYaw": 0.5235987755982988
+    }
+  ]
+}

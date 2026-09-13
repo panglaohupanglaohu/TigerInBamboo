@@ -1,0 +1,1038 @@
+{
+  "lights": [
+    {
+      "name": "light-pool-0",
+      "type": "PointLight",
+      "color": "ffb965",
+      "intensity": 320,
+      "position": [
+        89.21764295984678,
+        128.85990357707874,
+        66.05711364243372
+      ]
+    },
+    {
+      "name": "light-pool-1",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 260,
+      "position": [
+        100.44944236033007,
+        125.58147528853965,
+        33.52057492118045
+      ]
+    },
+    {
+      "name": "light-pool-2",
+      "type": "PointLight",
+      "color": "ffac58",
+      "intensity": 350,
+      "position": [
+        105.61978895553479,
+        112.42984154667468,
+        111.75200031931706
+      ]
+    },
+    {
+      "name": "light-pool-3",
+      "type": "PointLight",
+      "color": "ffbd75",
+      "intensity": 420,
+      "position": [
+        187.5697874276632,
+        72.43883139394462,
+        49.92660122907702
+      ]
+    },
+    {
+      "name": "light-pool-4",
+      "type": "PointLight",
+      "color": "ff9b50",
+      "intensity": 240,
+      "position": [
+        147.55333885592924,
+        86.5686555304206,
+        43.290946507948675
+      ]
+    },
+    {
+      "name": "light-pool-5",
+      "type": "PointLight",
+      "color": "ffac60",
+      "intensity": 320,
+      "position": [
+        168.09303807443825,
+        70.79169871421718,
+        65.76778769243973
+      ]
+    },
+    {
+      "name": "light-pool-6",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 1.1,
+      "position": [
+        41.747553062959085,
+        159.8560872871661,
+        23.490354384368533
+      ]
+    },
+    {
+      "name": "light-pool-7",
+      "type": "PointLight",
+      "color": "ffd98e",
+      "intensity": 1.7,
+      "position": [
+        51.53960503123401,
+        160.01655398164039,
+        20.423130348785318
+      ]
+    },
+    {
+      "name": "",
+      "type": "AmbientLight",
+      "color": "ffffff",
+      "intensity": 0.2599999999999996,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "",
+      "type": "HemisphereLight",
+      "color": "ffffff",
+      "intensity": 0.1299999999999998,
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "ground": "f0e6e0"
+    },
+    {
+      "name": "",
+      "type": "DirectionalLight",
+      "color": "98acd8",
+      "intensity": 0.34999999999999953,
+      "position": [
+        20,
+        28,
+        16
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "",
+      "type": "DirectionalLight",
+      "color": "75cfc3",
+      "intensity": 0.08088888888888877,
+      "position": [
+        -10,
+        6,
+        -8
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ffe8b0",
+      "intensity": 0.35,
+      "position": [
+        55,
+        70,
+        40
+      ]
+    },
+    {
+      "name": "osk-v5-ambient-floor",
+      "type": "AmbientLight",
+      "color": "ffffff",
+      "intensity": 0.25,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-sky-ground-fill",
+      "type": "HemisphereLight",
+      "color": "d8f2ef",
+      "intensity": 0.96,
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "ground": "b6a790"
+    },
+    {
+      "name": "osk-v5-key-sun",
+      "type": "DirectionalLight",
+      "color": "ffe2b9",
+      "intensity": 1.7,
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "night-lantern-runtime-light",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 1.1,
+      "position": [
+        126.54080903524633,
+        108.9769454101491,
+        12.444734638665803
+      ]
+    },
+    {
+      "name": "tarn-elder-tree-zone-fill",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 1.4,
+      "position": [
+        136.20667475565813,
+        98.00418245766988,
+        13.004786303866567
+      ]
+    },
+    {
+      "name": "tarn-companion-zone-fill",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 1.4,
+      "position": [
+        132.74658443140555,
+        102.85620665792057,
+        10.958903582839937
+      ]
+    },
+    {
+      "name": "neon-dome-point-light",
+      "type": "PointLight",
+      "color": "ffc7da",
+      "intensity": 3.4,
+      "position": [
+        -89.91889646450474,
+        -129.90536148359666,
+        -50.45967376329587
+      ]
+    },
+    {
+      "name": "neon-dome-point-light",
+      "type": "PointLight",
+      "color": "ffb254",
+      "intensity": 2.6,
+      "position": [
+        -99.30006797339804,
+        -145.32853446037532,
+        -52.81735866440791
+      ]
+    },
+    {
+      "name": "neon-dome-point-light",
+      "type": "PointLight",
+      "color": "ffc7da",
+      "intensity": 2.4,
+      "position": [
+        -104.71897511091413,
+        -154.5030637025497,
+        -57.649438503963204
+      ]
+    },
+    {
+      "name": "neon-dome-point-light",
+      "type": "PointLight",
+      "color": "ffc7da",
+      "intensity": 3.4,
+      "position": [
+        -71.53069968364593,
+        -65.74355016025932,
+        -108.5523228231179
+      ]
+    },
+    {
+      "name": "neon-dome-point-light",
+      "type": "PointLight",
+      "color": "ffb254",
+      "intensity": 2.6,
+      "position": [
+        -74.11587009729114,
+        -69.34189254585435,
+        -115.15110623502557
+      ]
+    },
+    {
+      "name": "neon-dome-point-light",
+      "type": "PointLight",
+      "color": "ffc7da",
+      "intensity": 2.4,
+      "position": [
+        -77.15860651063691,
+        -71.12084248368095,
+        -118.84990707092722
+      ]
+    },
+    {
+      "name": "bubble-interior-light",
+      "type": "PointLight",
+      "color": "8effd8",
+      "intensity": 1.7,
+      "position": [
+        -88.44112768781511,
+        -133.65422945029513,
+        -48.43647541193452
+      ]
+    },
+    {
+      "name": "bubble-interior-light",
+      "type": "PointLight",
+      "color": "ffd98e",
+      "intensity": 1.7,
+      "position": [
+        -74.15645343642568,
+        -69.34065282602955,
+        -109.25155393291399
+      ]
+    },
+    {
+      "name": "bubble-interior-light",
+      "type": "PointLight",
+      "color": "ffd98e",
+      "intensity": 1.7,
+      "position": [
+        51.61153528310705,
+        159.9913558078645,
+        20.540965425263327
+      ]
+    },
+    {
+      "name": "old-city-tier-old-shore-court",
+      "type": "PointLight",
+      "color": "ff9b50",
+      "intensity": 240,
+      "position": [
+        147.55333885592924,
+        86.5686555304206,
+        43.290946507948675
+      ]
+    },
+    {
+      "name": "old-city-tier-old-middle-court",
+      "type": "PointLight",
+      "color": "ffac60",
+      "intensity": 320,
+      "position": [
+        168.09303807443825,
+        70.79169871421718,
+        65.76778769243973
+      ]
+    },
+    {
+      "name": "old-city-tier-old-upper-court",
+      "type": "PointLight",
+      "color": "ffbd75",
+      "intensity": 420,
+      "position": [
+        187.5697874276632,
+        72.43883139394462,
+        49.92660122907702
+      ]
+    },
+    {
+      "name": "new-city-light-main-gate",
+      "type": "PointLight",
+      "color": "ffac58",
+      "intensity": 350,
+      "position": [
+        105.61978895553479,
+        112.42984154667468,
+        111.75200031931706
+      ]
+    },
+    {
+      "name": "new-city-light-plaza",
+      "type": "PointLight",
+      "color": "ffb965",
+      "intensity": 320,
+      "position": [
+        89.21764295984678,
+        128.85990357707874,
+        66.05711364243372
+      ]
+    },
+    {
+      "name": "new-city-light-moon-fill",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 260,
+      "position": [
+        100.44944236033007,
+        125.58147528853965,
+        33.52057492118045
+      ]
+    },
+    {
+      "name": "citadel-svarbova-ambient",
+      "type": "AmbientLight",
+      "color": "8eb9e5",
+      "intensity": 0.34,
+      "position": [
+        154.445142550061,
+        66.1352771114472,
+        48.18789333516497
+      ]
+    },
+    {
+      "name": "citadel-svarbova-sun",
+      "type": "DirectionalLight",
+      "color": "78aee0",
+      "intensity": 0.62,
+      "position": [
+        156.4995654608874,
+        91.10976620311112,
+        58.19060502319397
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "infiltration-torch-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 0.75,
+      "position": [
+        76.30080541750435,
+        137.75391269717431,
+        72.06192565720917
+      ]
+    },
+    {
+      "name": "infiltration-torch-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 0.75,
+      "position": [
+        76.86427818433269,
+        138.14737363291465,
+        71.94755850994385
+      ]
+    },
+    {
+      "name": "infiltration-torch-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 0.75,
+      "position": [
+        76.68612037822301,
+        137.7001724165174,
+        71.50493432824672
+      ]
+    },
+    {
+      "name": "infiltration-torch-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 0.75,
+      "position": [
+        77.22450939662549,
+        138.07709137674993,
+        71.40250404402778
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ff2d55",
+      "intensity": 0.036000000000000004,
+      "position": [
+        -57.193724753187674,
+        -36.81202769451044,
+        -122.05710019862148
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ff2d55",
+      "intensity": 0.036000000000000004,
+      "position": [
+        -56.992438796850195,
+        -36.799564885213286,
+        -122.18721033175248
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-light",
+      "type": "PointLight",
+      "color": "b8ff66",
+      "intensity": 2.4,
+      "position": [
+        -59.67822355088096,
+        -59.17527062358727,
+        -157.88396066496
+      ]
+    },
+    {
+      "name": "aircraft-neon-light",
+      "type": "PointLight",
+      "color": "00e8ff",
+      "intensity": 0.9426853806589892,
+      "position": [
+        -59.81784243399763,
+        -60.8213128904139,
+        -156.83703591919385
+      ]
+    },
+    {
+      "name": "aircraft-thruster-light",
+      "type": "PointLight",
+      "color": "ff4a18",
+      "intensity": 0.8270483352317874,
+      "position": [
+        -60.10935647560028,
+        -63.54019524201638,
+        -155.37665983006713
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-fill",
+      "type": "PointLight",
+      "color": "c8ff70",
+      "intensity": 4.508627612875943,
+      "position": [
+        -59.76198494916322,
+        -59.03955987073949,
+        -158.39097804111123
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-orange-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 4.508627612875943,
+      "position": [
+        -59.688297502184184,
+        -59.1087646242129,
+        -157.9956542975106
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-light",
+      "type": "PointLight",
+      "color": "b8ff66",
+      "intensity": 2.4,
+      "position": [
+        -46.962547144559,
+        -77.37703220030085,
+        -152.81872001547418
+      ]
+    },
+    {
+      "name": "aircraft-neon-light",
+      "type": "PointLight",
+      "color": "00e8ff",
+      "intensity": 0.9426853806589892,
+      "position": [
+        -47.480756320310654,
+        -78.85889919842978,
+        -151.65230265876897
+      ]
+    },
+    {
+      "name": "aircraft-thruster-light",
+      "type": "PointLight",
+      "color": "ff4a18",
+      "intensity": 0.8270483352317874,
+      "position": [
+        -48.375864546091655,
+        -81.32310135234079,
+        -149.9980689966766
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-fill",
+      "type": "PointLight",
+      "color": "c8ff70",
+      "intensity": 4.508627612875943,
+      "position": [
+        -46.98106726568506,
+        -77.2806708869468,
+        -153.3410910544897
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-orange-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 4.508627612875943,
+      "position": [
+        -46.951711867044175,
+        -77.32141740433384,
+        -152.9361491056977
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-light",
+      "type": "PointLight",
+      "color": "b8ff66",
+      "intensity": 2.4,
+      "position": [
+        -74.99559693644629,
+        -69.97850772309641,
+        -144.6299687609713
+      ]
+    },
+    {
+      "name": "aircraft-neon-light",
+      "type": "PointLight",
+      "color": "00e8ff",
+      "intensity": 0.9426853806589892,
+      "position": [
+        -74.70452393338738,
+        -71.647642530656,
+        -143.65310362131115
+      ]
+    },
+    {
+      "name": "aircraft-thruster-light",
+      "type": "PointLight",
+      "color": "ff4a18",
+      "intensity": 0.8270483352317874,
+      "position": [
+        -74.31414788314365,
+        -74.40928064289842,
+        -142.29997337022434
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-fill",
+      "type": "PointLight",
+      "color": "c8ff70",
+      "intensity": 4.508627612875943,
+      "position": [
+        -75.16104198427584,
+        -69.84810893875766,
+        -145.11794836422504
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-orange-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 4.508627612875943,
+      "position": [
+        -75.03068879802593,
+        -69.91225894939461,
+        -144.73664425597315
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-light",
+      "type": "PointLight",
+      "color": "b8ff66",
+      "intensity": 2.4,
+      "position": [
+        -33.20370852480014,
+        -97.08836462665337,
+        -150.48824660482012
+      ]
+    },
+    {
+      "name": "aircraft-neon-light",
+      "type": "PointLight",
+      "color": "00e8ff",
+      "intensity": 0.9426853806589892,
+      "position": [
+        -33.685166338177524,
+        -98.53596545112606,
+        -149.26446140025033
+      ]
+    },
+    {
+      "name": "aircraft-thruster-light",
+      "type": "PointLight",
+      "color": "ff4a18",
+      "intensity": 0.8270483352317874,
+      "position": [
+        -34.53763472034639,
+        -100.94683665287252,
+        -147.51203516614177
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-fill",
+      "type": "PointLight",
+      "color": "c8ff70",
+      "intensity": 4.508627612875943,
+      "position": [
+        -33.2535215558537,
+        -96.99994264154462,
+        -151.00997470880407
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-orange-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 4.508627612875943,
+      "position": [
+        -33.19902005245041,
+        -97.03497788536092,
+        -150.60710733879563
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-light",
+      "type": "PointLight",
+      "color": "b8ff66",
+      "intensity": 2.4,
+      "position": [
+        -92.12367948500743,
+        -81.8402420128591,
+        -133.8484972380609
+      ]
+    },
+    {
+      "name": "aircraft-neon-light",
+      "type": "PointLight",
+      "color": "00e8ff",
+      "intensity": 0.9426853806589892,
+      "position": [
+        -91.80296519806645,
+        -83.47851769776051,
+        -132.82957863168807
+      ]
+    },
+    {
+      "name": "aircraft-thruster-light",
+      "type": "PointLight",
+      "color": "ff4a18",
+      "intensity": 0.8270483352317874,
+      "position": [
+        -91.38135201172892,
+        -86.19665015722089,
+        -131.39989396228216
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-fill",
+      "type": "PointLight",
+      "color": "c8ff70",
+      "intensity": 4.508627612875943,
+      "position": [
+        -92.319296953279,
+        -81.72406892679389,
+        -134.32884879700612
+      ]
+    },
+    {
+      "name": "aircraft-cockpit-orange-light",
+      "type": "PointLight",
+      "color": "ff8a32",
+      "intensity": 4.508627612875943,
+      "position": [
+        -92.16454274932074,
+        -81.77716689783037,
+        -133.95504170527423
+      ]
+    },
+    {
+      "name": "night-lantern-runtime-light",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 1.1,
+      "position": [
+        -61.36560668771287,
+        -40.650707707622,
+        -110.64082761625235
+      ]
+    },
+    {
+      "name": "citadel-svarbova-ambient",
+      "type": "AmbientLight",
+      "color": "ffffff",
+      "intensity": 0.62,
+      "position": [
+        62.830039320429634,
+        80.10372783245701,
+        -123.40737152349092
+      ]
+    },
+    {
+      "name": "citadel-svarbova-sun",
+      "type": "DirectionalLight",
+      "color": "fff4e6",
+      "intensity": 0.95,
+      "position": [
+        78.84008038810913,
+        100.65245777407577,
+        -130.43789659617477
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "night-lantern-runtime-light",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 1.1,
+      "position": [
+        41.33789834815926,
+        159.95023146849837,
+        23.573824296047846
+      ]
+    },
+    {
+      "name": "night-lantern-runtime-light",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 1.1,
+      "position": [
+        99.19037707010922,
+        117.00494170317918,
+        65.72470077782843
+      ]
+    },
+    {
+      "name": "night-lantern-runtime-light",
+      "type": "PointLight",
+      "color": "ffa04c",
+      "intensity": 1.1,
+      "position": [
+        84.64373766951944,
+        93.73254112742667,
+        -109.07920051842481
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ff9a43",
+      "intensity": 0.55,
+      "position": [
+        -60.825928052408784,
+        -158.20831233005495,
+        86.14529892217382
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ff9a43",
+      "intensity": 0.55,
+      "position": [
+        -176.51703240720158,
+        17.725033757990516,
+        68.39628185858777
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ff9a43",
+      "intensity": 0.55,
+      "position": [
+        118.23402755744172,
+        -147.06431659946358,
+        -23.30749522277957
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ff9a43",
+      "intensity": 0.55,
+      "position": [
+        -134.34013004607377,
+        86.60469594445048,
+        8.144123211340354
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "ff9a43",
+      "intensity": 0.55,
+      "position": [
+        126.4739391072686,
+        -62.35340582898711,
+        -71.98371013928454
+      ]
+    },
+    {
+      "name": "leviathan-eye-light-L",
+      "type": "PointLight",
+      "color": "ffcf8a",
+      "intensity": 0.9447276011333231,
+      "position": [
+        -71.10656409311582,
+        81.2358163286356,
+        -94.48144898659434
+      ]
+    },
+    {
+      "name": "leviathan-eye-light-R",
+      "type": "PointLight",
+      "color": "ffcf8a",
+      "intensity": 0.9447276011333231,
+      "position": [
+        -74.90439951491705,
+        69.08020200638826,
+        -101.05949289593883
+      ]
+    },
+    {
+      "name": "saihoji-beam-spot",
+      "type": "SpotLight",
+      "color": "9fffe8",
+      "intensity": 0,
+      "position": [
+        0,
+        1,
+        0
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "72d7e7",
+      "intensity": 0,
+      "position": [
+        43.51554705614553,
+        157.51757825816716,
+        28.548009922312403
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-0",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-1",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-2",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-3",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-4",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-5",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-6",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "osk-v5-pool-light-7",
+      "type": "PointLight",
+      "color": "ffffff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "",
+      "type": "PointLight",
+      "color": "cfe0ff",
+      "intensity": 0,
+      "position": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "phase": 0.85
+}

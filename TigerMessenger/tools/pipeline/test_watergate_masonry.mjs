@@ -1,0 +1,21 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import {mkdir,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const out=new URL('../../artifacts/pipeline/citadel-watergate-masonry/',import.meta.url);await mkdir(out,{recursive:true});
+const b=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+try{const p=await b.newPage({viewport:{width:1440,height:1000}}),errors=[];p.on('pageerror',e=>errors.push(String(e)));
+await p.goto('http://localhost:8931/TigerMessenger/?autostart=1',{timeout:180000});await p.waitForFunction(()=>window.__tm?.scene?.getObjectByName('citadel-front-harbor'),null,{timeout:180000});
+const report=await p.evaluate(async()=>{const t=window.__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer'),city=c.getObjectByName('highland-west-city'),ring=city.getObjectByName('west-city-plaza-paving-ring'),deck=city.getObjectByName('west-city-plaza-deck'),front=city.getObjectByName('citadel-front-harbor');t.P.daySpeed=0;t.P.timeOfDay=.85;t.cameraRig.update=()=>{};await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));c.updateWorldMatrix(true,true);
+const result={rings:ring.userData.rings,radius:ring.userData.outerRadius,statue:city.worldToLocal(c.localToWorld(new T.Vector3(...city.userData.statueAnchor))).toArray(),deck:{center:deck.position.toArray(),size:deck.geometry.parameters},shops:front.userData.landingShops,plazaShops:city.getObjectByName('citadel-harbor-architecture').userData.shops,horseError:t.scene.getObjectByName('citadel-trojan-horse').getWorldPosition(new T.Vector3()).distanceTo(c.localToWorld(new T.Vector3(...city.userData.horseReservation)))};
+result.ringToHorseStair=66.6-result.statue[0]-result.radius;
+const surfaces=[];city.traverse(o=>{if(o.isMesh&&o.userData.westCityWalkable)surfaces.push(o);});const ray=new T.Raycaster(),up=new T.Vector3(0,1,0).transformDirection(city.matrixWorld);ray.layers.enableAll();let samples=0,miss=[];
+for(let x=51.6;x<=66.4;x+=.4)for(let z=68.6;z<=83.4;z+=.4){ray.set(city.localToWorld(new T.Vector3(x,4.25,z)),up.clone().negate());ray.far=.5;const hit=ray.intersectObjects(surfaces,false)[0];samples++;if(!hit)miss.push([x,z]);}result.floor={samples,miss};
+const meta=front.userData.frontHarborApproach;result.approach=meta;const walk=front.getObjectsByProperty('name','front-harbor-walkable');let corridorSamples=0;const corridorMiss=[];
+for(let f=0;f<meta.flights;f++)for(let i=0;i<meta.stepsPerFlight;i++)for(const lateral of [-1.5,0,1.5]){
+ const from=f%2?43:32,to=f%2?32:43,x=from+(to-from)*(i+.5)/meta.stepsPerFlight,y=meta.dockY+(f*meta.stepsPerFlight+i+1)*meta.riser,z=90-f*5+lateral;
+ ray.set(front.localToWorld(new T.Vector3(x,y+.2,z)),up.clone().negate());ray.far=.4;corridorSamples++;if(!ray.intersectObjects(walk,false).length)corridorMiss.push([x,y,z]);
+}result.corridor={samples:corridorSamples,miss:corridorMiss};
+return result;});assert.equal(report.approach.stairWidth,4);assert.equal(report.corridor.miss.length,0);assert.equal(report.rings,6);assert.ok(report.ringToHorseStair>=.19);assert.equal(report.plazaShops.length,0);assert.ok(report.shops.every(s=>s.y<4));assert.equal(report.floor.miss.length,0);assert.ok(report.horseError<.001);assert.equal(errors.length,0);
+for(const [name,eye,look,fov]of [['gate-close',[-35,7,98],[-25,1,77],43],['plaza',[10,25,116],[7,5,73],45],['top',[6,65,78],[6,4,78],45]]){const data=await p.evaluate(({eye,look,fov})=>{const t=window.__tm,T=t.THREE,c=t.scene.getObjectByName('castleContainer');t.camera.position.copy(c.localToWorld(new T.Vector3(...eye)));t.camera.up.set(0,1,0).transformDirection(c.matrixWorld);t.camera.lookAt(c.localToWorld(new T.Vector3(...look)));t.camera.fov=fov;t.camera.updateProjectionMatrix();t.renderer.render(t.scene,t.camera);return t.renderer.domElement.toDataURL('image/png');},{eye,look,fov});await writeFile(new URL(name+'.png',out),Buffer.from(data.split(',')[1],'base64'));}
+report.errors=errors;report.passed=true;await writeFile(new URL('report.json',out),JSON.stringify(report,null,2));console.log(JSON.stringify(report));
+}finally{await b.close();}

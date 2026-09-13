@@ -1,0 +1,15 @@
+{
+ "exists": {
+  "/opt/homebrew/bin/node": true,
+  "/usr/local/bin/node": false,
+  "/usr/bin/node": false,
+  "/Users/panglaohu/.nvm/versions/node": false
+ },
+ "which": [
+  "/opt/homebrew/bin/node",
+  "v25.8.2",
+  "/opt/homebrew/bin/npx"
+ ],
+ "err": "",
+ "server_8931": "200"
+}

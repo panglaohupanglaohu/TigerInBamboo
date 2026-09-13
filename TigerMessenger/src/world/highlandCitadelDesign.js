@@ -1,3 +1,4 @@
+import {buildWestMassifGeometry} from './citadel/westMassifBlender.js';
 import {rotateOldCityPoint} from './citadel/oldCityOrientation.js';
 import {isOldCityShelves, oldCityShelfIndex, OLD_CITY_SHELF_BASE_YS} from './citadel/oldCityShelves.js';
 import { installTowerShell } from "./citadel/towerShell.js";
@@ -353,15 +354,17 @@ export function highlandWaterHalfWidth(z) {
 
 export function isHighlandWaterfrontCutout(x, z) {
   if(westCityWaterChannel(x,z)) return true;
-  if (z < HIGHLAND_LAKE_CHART.zStart - 1 || z > HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth + 7) return false;
-  // 旧港岸湾：港台陆岬整体保留山体（主人验收 2026-08-27，港口双株古樟
-  // 与栈桥要坐在实地之上，水面不得横穿树干）。
-  if (isHighlandHarborCove(x, z)) return false;
+  if (z < HIGHLAND_LAKE_CHART.zStart - 1 || z > 125) return false;
+  // The harbor now sits on the left shore (source x=-20, castle x=-72).
+  // Its former x=10.5..24 peninsula is unoccupied terrain in the middle of
+  // the bay. Keep the historical cove chart for legacy decoration metadata,
+  // but no longer use it to retain an isolated column above the global sea.
   const center = highlandWaterCenterX(z);
-  // A narrow downstream continuation keeps the front of the terrain open
-  // without turning the entire mountain chart into a lake.
+  // Open the bay gradually into the sea, all the way to the terrain boundary.
+  // The former seven-metre neck pinched shut and exposed another rock pillar.
+  // The new-city benches (source x=60) and old-city shore stay outside this cut.
   const continuation = z > HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth
-    ? Math.max(5.6, HIGHLAND_LAKE_CHART.shoreHalfWidth - (z - (HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth)) * 0.2)
+    ? HIGHLAND_LAKE_CHART.shoreHalfWidth + 14 * Math.min(1, (z - (HIGHLAND_LAKE_CHART.zStart + HIGHLAND_LAKE_CHART.depth)) / 22)
     : highlandWaterHalfWidth(z);
   return Math.abs(x - center) <= continuation + 1.8;
 }
@@ -577,6 +580,7 @@ function buildIrregularMountainGrid() {
   geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
   geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
   geometry.setAttribute("terrainTile", new THREE.Float32BufferAttribute(tileValues, 1));
+  geometry.setAttribute("shoreBoundaryBottom",new THREE.Float32BufferAttribute(points.map((_,i)=>i>=skirtStart?1:0),1));
   geometry.setAttribute("mountainHeight", new THREE.Float32BufferAttribute(heights.concat(boundary.map((index) => points[skirtStart + boundary.indexOf(index)]?.y ?? 0)), 1));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
@@ -1549,7 +1553,7 @@ function buildRavineWalls(materials) {
   // above, but the continuous heightfield now owns that bank.
   for (const side of [-1]) {
     const wall = presentationMesh(
-      makeRavineWallGeometry(side),
+      side < 0 ? buildWestMassifGeometry() : makeRavineWallGeometry(side),
       materials.mountain,
       side < 0 ? "highland-ravine-wall-west" : "highland-ravine-wall-east",
       "mountain-ravine"

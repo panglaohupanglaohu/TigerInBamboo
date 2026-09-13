@@ -1,0 +1,2861 @@
+{
+  "radius": 160,
+  "profiles": [
+    {
+      "centerZ": 71.5,
+      "corners": [
+        {
+          "x": 44.85,
+          "z": 59.5,
+          "sea": -3.7632696448363134,
+          "clearanceAtY4": 7.763269644836313
+        },
+        {
+          "x": 44.85,
+          "z": 83.5,
+          "sea": -13.247831546036737,
+          "clearanceAtY4": 17.247831546036736
+        },
+        {
+          "x": 76,
+          "z": 59.5,
+          "sea": -12.913758175992609,
+          "clearanceAtY4": 16.91375817599261
+        },
+        {
+          "x": 76,
+          "z": 83.5,
+          "sea": -23.05409980712173,
+          "clearanceAtY4": 27.05409980712173
+        }
+      ]
+    },
+    {
+      "centerZ": 63.5,
+      "corners": [
+        {
+          "x": 44.85,
+          "z": 51.5,
+          "sea": -1.5628024075141778,
+          "clearanceAtY4": 5.5628024075141775
+        },
+        {
+          "x": 44.85,
+          "z": 75.5,
+          "sea": -9.57683683789751,
+          "clearanceAtY4": 13.57683683789751
+        },
+        {
+          "x": 76,
+          "z": 51.5,
+          "sea": -10.573874960413603,
+          "clearanceAtY4": 14.573874960413603
+        },
+        {
+          "x": 76,
+          "z": 75.5,
+          "sea": -19.118056410845796,
+          "clearanceAtY4": 23.118056410845796
+        }
+      ]
+    },
+    {
+      "centerZ": 55.5,
+      "corners": [
+        {
+          "x": 44.85,
+          "z": 43.5,
+          "sea": 0.1949116015316722,
+          "clearanceAtY4": 3.8050883984683277
+        },
+        {
+          "x": 44.85,
+          "z": 67.5,
+          "sea": -6.426151863456997,
+          "clearanceAtY4": 10.426151863456997
+        },
+        {
+          "x": 76,
+          "z": 43.5,
+          "sea": -8.707903768144773,
+          "clearanceAtY4": 12.707903768144773
+        },
+        {
+          "x": 76,
+          "z": 67.5,
+          "sea": -15.751429710201263,
+          "clearanceAtY4": 19.751429710201265
+        }
+      ]
+    },
+    {
+      "centerZ": 51.5,
+      "corners": [
+        {
+          "x": 44.85,
+          "z": 39.5,
+          "sea": 0.9125609021528749,
+          "clearanceAtY4": 3.087439097847125
+        },
+        {
+          "x": 44.85,
+          "z": 63.5,
+          "sea": -5.035470241657084,
+          "clearanceAtY4": 9.035470241657084
+        },
+        {
+          "x": 76,
+          "z": 39.5,
+          "sea": -7.946821185959093,
+          "clearanceAtY4": 11.946821185959093
+        },
+        {
+          "x": 76,
+          "z": 63.5,
+          "sea": -14.26861308011719,
+          "clearanceAtY4": 18.26861308011719
+        }
+      ]
+    }
+  ],
+  "candidate": {
+    "type": "independent tangent plaza only; main castle untouched",
+    "center": [
+      60,
+      -5.598748524320934,
+      71.5
+    ],
+    "up": [
+      0.25727550747622063,
+      0.9010522741320873,
+      0.349162014735634
+    ],
+    "frame": [
+      0.9663380946919423,
+      -0.23989396916390496,
+      -0.09296004682622694,
+      0,
+      0.25727550747622063,
+      0.9010522741320873,
+      0.349162014735634,
+      0,
+      0,
+      -0.36132489928066325,
+      0.9324399804597714,
+      0,
+      60,
+      -5.598748524320934,
+      71.5,
+      1
+    ],
+    "corners": [
+      {
+        "point": [
+          45.35997786541707,
+          2.3715438998801854,
+          61.71906494390008
+        ],
+        "sea": -4.548698424862721,
+        "verticalClearance": 6.920242324742906
+      },
+      {
+        "point": [
+          45.35997786541707,
+          -6.3002536828557325,
+          84.09762447493459
+        ],
+        "sea": -13.644189408155174,
+        "verticalClearance": 7.343935725299442
+      },
+      {
+        "point": [
+          75.46140951507108,
+          -5.101153239575455,
+          58.82335948526311
+        ],
+        "sea": -12.476171308333916,
+        "verticalClearance": 7.375018068758461
+      },
+      {
+        "point": [
+          75.46140951507108,
+          -13.772950822311373,
+          81.20191901629762
+        ],
+        "sea": -21.626374867079804,
+        "verticalClearance": 7.853424044768431
+      }
+    ]
+  },
+  "childRows": [
+    {
+      "name": "citadel-new-city-backdrop-range",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-new-city-backdrop-v5-spherical-shore"
+    },
+    {
+      "name": "citadel-new-city-lighting",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true
+    },
+    {
+      "name": "citadel-terrace-garden",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true
+    },
+    {
+      "name": "west-city-water-channel",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "sourceId": "west-city-water-channel"
+    },
+    {
+      "name": "west-city-harbor",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "claude-citadel-houses-v1"
+    },
+    {
+      "name": "west-city-harbor-retaining-wall-0",
+      "position": [
+        60,
+        1.9,
+        50
+      ],
+      "sourceId": "west-city-harbor-retaining-wall-0"
+    },
+    {
+      "name": "west-city-harbor-promenade-0",
+      "position": [
+        60,
+        3.9,
+        50
+      ],
+      "sourceId": "west-city-harbor-promenade-0"
+    },
+    {
+      "name": "west-city-middle",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "claude-citadel-houses-v1"
+    },
+    {
+      "name": "west-city-middle-retaining-wall-0",
+      "position": [
+        49.5,
+        7.9,
+        26.830000000000002
+      ],
+      "sourceId": "west-city-middle-retaining-wall-0"
+    },
+    {
+      "name": "west-city-middle-promenade-0",
+      "position": [
+        49.5,
+        9.9,
+        26.830000000000002
+      ],
+      "sourceId": "west-city-middle-promenade-0"
+    },
+    {
+      "name": "west-city-middle-retaining-wall-1",
+      "position": [
+        70.5,
+        7.9,
+        26.830000000000002
+      ],
+      "sourceId": "west-city-middle-retaining-wall-1"
+    },
+    {
+      "name": "west-city-middle-promenade-1",
+      "position": [
+        70.5,
+        9.9,
+        26.830000000000002
+      ],
+      "sourceId": "west-city-middle-promenade-1"
+    },
+    {
+      "name": "west-city-middle-retaining-wall-2",
+      "position": [
+        60,
+        7.9,
+        23.080000000000002
+      ],
+      "sourceId": "west-city-middle-retaining-wall-2"
+    },
+    {
+      "name": "west-city-middle-promenade-2",
+      "position": [
+        60,
+        9.9,
+        23.080000000000002
+      ],
+      "sourceId": "west-city-middle-promenade-2"
+    },
+    {
+      "name": "west-city-stair-1-0",
+      "position": [
+        60,
+        4.036363636363637,
+        47.81818181818182
+      ],
+      "sourceId": "west-city-stair-1-0"
+    },
+    {
+      "name": "west-city-stair-1-1",
+      "position": [
+        60,
+        4.172727272727273,
+        47.45454545454545
+      ],
+      "sourceId": "west-city-stair-1-1"
+    },
+    {
+      "name": "west-city-stair-1-2",
+      "position": [
+        60,
+        4.3090909090909095,
+        47.09090909090909
+      ],
+      "sourceId": "west-city-stair-1-2"
+    },
+    {
+      "name": "west-city-stair-1-3",
+      "position": [
+        60,
+        4.445454545454545,
+        46.72727272727273
+      ],
+      "sourceId": "west-city-stair-1-3"
+    },
+    {
+      "name": "west-city-stair-1-4",
+      "position": [
+        60,
+        4.581818181818182,
+        46.36363636363637
+      ],
+      "sourceId": "west-city-stair-1-4"
+    },
+    {
+      "name": "west-city-stair-1-5",
+      "position": [
+        60,
+        4.718181818181819,
+        46
+      ],
+      "sourceId": "west-city-stair-1-5"
+    },
+    {
+      "name": "west-city-stair-1-6",
+      "position": [
+        60,
+        4.854545454545455,
+        45.63636363636363
+      ],
+      "sourceId": "west-city-stair-1-6"
+    },
+    {
+      "name": "west-city-stair-1-7",
+      "position": [
+        60,
+        4.990909090909091,
+        45.27272727272727
+      ],
+      "sourceId": "west-city-stair-1-7"
+    },
+    {
+      "name": "west-city-stair-1-8",
+      "position": [
+        60,
+        5.127272727272728,
+        44.90909090909091
+      ],
+      "sourceId": "west-city-stair-1-8"
+    },
+    {
+      "name": "west-city-stair-1-9",
+      "position": [
+        60,
+        5.263636363636364,
+        44.54545454545455
+      ],
+      "sourceId": "west-city-stair-1-9"
+    },
+    {
+      "name": "west-city-stair-1-10",
+      "position": [
+        60,
+        5.4,
+        44.18181818181818
+      ],
+      "sourceId": "west-city-stair-1-10"
+    },
+    {
+      "name": "west-city-stair-1-11",
+      "position": [
+        60,
+        5.536363636363637,
+        43.81818181818182
+      ],
+      "sourceId": "west-city-stair-1-11"
+    },
+    {
+      "name": "west-city-stair-1-12",
+      "position": [
+        60,
+        5.672727272727273,
+        43.45454545454545
+      ],
+      "sourceId": "west-city-stair-1-12"
+    },
+    {
+      "name": "west-city-stair-1-13",
+      "position": [
+        60,
+        5.8090909090909095,
+        43.09090909090909
+      ],
+      "sourceId": "west-city-stair-1-13"
+    },
+    {
+      "name": "west-city-stair-1-14",
+      "position": [
+        60,
+        5.945454545454545,
+        42.72727272727273
+      ],
+      "sourceId": "west-city-stair-1-14"
+    },
+    {
+      "name": "west-city-stair-1-15",
+      "position": [
+        60,
+        6.081818181818182,
+        42.36363636363636
+      ],
+      "sourceId": "west-city-stair-1-15"
+    },
+    {
+      "name": "west-city-stair-1-16",
+      "position": [
+        60,
+        6.218181818181819,
+        42
+      ],
+      "sourceId": "west-city-stair-1-16"
+    },
+    {
+      "name": "west-city-stair-1-17",
+      "position": [
+        60,
+        6.354545454545455,
+        41.63636363636364
+      ],
+      "sourceId": "west-city-stair-1-17"
+    },
+    {
+      "name": "west-city-stair-1-18",
+      "position": [
+        60,
+        6.490909090909091,
+        41.27272727272727
+      ],
+      "sourceId": "west-city-stair-1-18"
+    },
+    {
+      "name": "west-city-stair-1-19",
+      "position": [
+        60,
+        6.627272727272727,
+        40.90909090909091
+      ],
+      "sourceId": "west-city-stair-1-19"
+    },
+    {
+      "name": "west-city-stair-1-20",
+      "position": [
+        60,
+        6.763636363636364,
+        40.54545454545455
+      ],
+      "sourceId": "west-city-stair-1-20"
+    },
+    {
+      "name": "west-city-stair-1-21",
+      "position": [
+        60,
+        6.9,
+        40.18181818181818
+      ],
+      "sourceId": "west-city-stair-1-21"
+    },
+    {
+      "name": "west-city-stair-1-22",
+      "position": [
+        60,
+        7.036363636363637,
+        39.81818181818182
+      ],
+      "sourceId": "west-city-stair-1-22"
+    },
+    {
+      "name": "west-city-stair-1-23",
+      "position": [
+        60,
+        7.172727272727274,
+        39.45454545454545
+      ],
+      "sourceId": "west-city-stair-1-23"
+    },
+    {
+      "name": "west-city-stair-1-24",
+      "position": [
+        60,
+        7.3090909090909095,
+        39.09090909090909
+      ],
+      "sourceId": "west-city-stair-1-24"
+    },
+    {
+      "name": "west-city-stair-1-25",
+      "position": [
+        60,
+        7.445454545454545,
+        38.72727272727273
+      ],
+      "sourceId": "west-city-stair-1-25"
+    },
+    {
+      "name": "west-city-stair-1-26",
+      "position": [
+        60,
+        7.581818181818182,
+        38.36363636363636
+      ],
+      "sourceId": "west-city-stair-1-26"
+    },
+    {
+      "name": "west-city-stair-1-27",
+      "position": [
+        60,
+        7.718181818181819,
+        38
+      ],
+      "sourceId": "west-city-stair-1-27"
+    },
+    {
+      "name": "west-city-stair-1-28",
+      "position": [
+        60,
+        7.854545454545455,
+        37.63636363636364
+      ],
+      "sourceId": "west-city-stair-1-28"
+    },
+    {
+      "name": "west-city-stair-1-29",
+      "position": [
+        60,
+        7.99090909090909,
+        37.27272727272727
+      ],
+      "sourceId": "west-city-stair-1-29"
+    },
+    {
+      "name": "west-city-stair-1-30",
+      "position": [
+        60,
+        8.127272727272727,
+        36.90909090909091
+      ],
+      "sourceId": "west-city-stair-1-30"
+    },
+    {
+      "name": "west-city-stair-1-31",
+      "position": [
+        60,
+        8.263636363636364,
+        36.54545454545455
+      ],
+      "sourceId": "west-city-stair-1-31"
+    },
+    {
+      "name": "west-city-stair-1-32",
+      "position": [
+        60,
+        8.4,
+        36.18181818181818
+      ],
+      "sourceId": "west-city-stair-1-32"
+    },
+    {
+      "name": "west-city-stair-1-33",
+      "position": [
+        60,
+        8.536363636363637,
+        35.81818181818182
+      ],
+      "sourceId": "west-city-stair-1-33"
+    },
+    {
+      "name": "west-city-stair-1-34",
+      "position": [
+        60,
+        8.672727272727274,
+        35.45454545454545
+      ],
+      "sourceId": "west-city-stair-1-34"
+    },
+    {
+      "name": "west-city-stair-1-35",
+      "position": [
+        60,
+        8.80909090909091,
+        35.09090909090909
+      ],
+      "sourceId": "west-city-stair-1-35"
+    },
+    {
+      "name": "west-city-stair-1-36",
+      "position": [
+        60,
+        8.945454545454547,
+        34.72727272727273
+      ],
+      "sourceId": "west-city-stair-1-36"
+    },
+    {
+      "name": "west-city-stair-1-37",
+      "position": [
+        60,
+        9.081818181818182,
+        34.36363636363636
+      ],
+      "sourceId": "west-city-stair-1-37"
+    },
+    {
+      "name": "west-city-stair-1-38",
+      "position": [
+        60,
+        9.218181818181819,
+        34
+      ],
+      "sourceId": "west-city-stair-1-38"
+    },
+    {
+      "name": "west-city-stair-1-39",
+      "position": [
+        60,
+        9.354545454545454,
+        33.63636363636364
+      ],
+      "sourceId": "west-city-stair-1-39"
+    },
+    {
+      "name": "west-city-stair-1-40",
+      "position": [
+        60,
+        9.49090909090909,
+        33.27272727272727
+      ],
+      "sourceId": "west-city-stair-1-40"
+    },
+    {
+      "name": "west-city-stair-1-41",
+      "position": [
+        60,
+        9.627272727272727,
+        32.90909090909091
+      ],
+      "sourceId": "west-city-stair-1-41"
+    },
+    {
+      "name": "west-city-stair-1-42",
+      "position": [
+        60,
+        9.763636363636364,
+        32.54545454545455
+      ],
+      "sourceId": "west-city-stair-1-42"
+    },
+    {
+      "name": "west-city-stair-1-43",
+      "position": [
+        60,
+        9.9,
+        32.18181818181818
+      ],
+      "sourceId": "west-city-stair-1-43"
+    },
+    {
+      "name": "west-city-crown",
+      "position": [
+        60,
+        0,
+        10
+      ],
+      "isGroup": true,
+      "sourceId": "west-city-crown"
+    },
+    {
+      "name": "west-city-crown-retaining-wall-0",
+      "position": [
+        47.325,
+        13.9,
+        4.850000000000001
+      ],
+      "sourceId": "west-city-crown-retaining-wall-0"
+    },
+    {
+      "name": "west-city-crown-promenade-0",
+      "position": [
+        47.325,
+        15.9,
+        4.850000000000001
+      ],
+      "sourceId": "west-city-crown-promenade-0"
+    },
+    {
+      "name": "west-city-crown-retaining-wall-1",
+      "position": [
+        72.675,
+        13.9,
+        4.850000000000001
+      ],
+      "sourceId": "west-city-crown-retaining-wall-1"
+    },
+    {
+      "name": "west-city-crown-promenade-1",
+      "position": [
+        72.675,
+        15.9,
+        4.850000000000001
+      ],
+      "sourceId": "west-city-crown-promenade-1"
+    },
+    {
+      "name": "west-city-crown-retaining-wall-2",
+      "position": [
+        60,
+        13.9,
+        1.1000000000000014
+      ],
+      "sourceId": "west-city-crown-retaining-wall-2"
+    },
+    {
+      "name": "west-city-crown-promenade-2",
+      "position": [
+        60,
+        15.9,
+        1.1000000000000014
+      ],
+      "sourceId": "west-city-crown-promenade-2"
+    },
+    {
+      "name": "west-city-stair-2-0",
+      "position": [
+        60,
+        10.036363636363637,
+        27.818181818181817
+      ],
+      "sourceId": "west-city-stair-2-0"
+    },
+    {
+      "name": "west-city-stair-2-1",
+      "position": [
+        60,
+        10.172727272727274,
+        27.454545454545453
+      ],
+      "sourceId": "west-city-stair-2-1"
+    },
+    {
+      "name": "west-city-stair-2-2",
+      "position": [
+        60,
+        10.309090909090909,
+        27.09090909090909
+      ],
+      "sourceId": "west-city-stair-2-2"
+    },
+    {
+      "name": "west-city-stair-2-3",
+      "position": [
+        60,
+        10.445454545454545,
+        26.727272727272727
+      ],
+      "sourceId": "west-city-stair-2-3"
+    },
+    {
+      "name": "west-city-stair-2-4",
+      "position": [
+        60,
+        10.581818181818182,
+        26.363636363636363
+      ],
+      "sourceId": "west-city-stair-2-4"
+    },
+    {
+      "name": "west-city-stair-2-5",
+      "position": [
+        60,
+        10.718181818181819,
+        26
+      ],
+      "sourceId": "west-city-stair-2-5"
+    },
+    {
+      "name": "west-city-stair-2-6",
+      "position": [
+        60,
+        10.854545454545455,
+        25.636363636363637
+      ],
+      "sourceId": "west-city-stair-2-6"
+    },
+    {
+      "name": "west-city-stair-2-7",
+      "position": [
+        60,
+        10.99090909090909,
+        25.272727272727273
+      ],
+      "sourceId": "west-city-stair-2-7"
+    },
+    {
+      "name": "west-city-stair-2-8",
+      "position": [
+        60,
+        11.127272727272727,
+        24.90909090909091
+      ],
+      "sourceId": "west-city-stair-2-8"
+    },
+    {
+      "name": "west-city-stair-2-9",
+      "position": [
+        60,
+        11.263636363636364,
+        24.545454545454547
+      ],
+      "sourceId": "west-city-stair-2-9"
+    },
+    {
+      "name": "west-city-stair-2-10",
+      "position": [
+        60,
+        11.4,
+        24.18181818181818
+      ],
+      "sourceId": "west-city-stair-2-10"
+    },
+    {
+      "name": "west-city-stair-2-11",
+      "position": [
+        60,
+        11.536363636363637,
+        23.81818181818182
+      ],
+      "sourceId": "west-city-stair-2-11"
+    },
+    {
+      "name": "west-city-stair-2-12",
+      "position": [
+        60,
+        11.672727272727274,
+        23.454545454545453
+      ],
+      "sourceId": "west-city-stair-2-12"
+    },
+    {
+      "name": "west-city-stair-2-13",
+      "position": [
+        60,
+        11.80909090909091,
+        23.09090909090909
+      ],
+      "sourceId": "west-city-stair-2-13"
+    },
+    {
+      "name": "west-city-stair-2-14",
+      "position": [
+        60,
+        11.945454545454545,
+        22.727272727272727
+      ],
+      "sourceId": "west-city-stair-2-14"
+    },
+    {
+      "name": "west-city-stair-2-15",
+      "position": [
+        60,
+        12.081818181818182,
+        22.363636363636363
+      ],
+      "sourceId": "west-city-stair-2-15"
+    },
+    {
+      "name": "west-city-stair-2-16",
+      "position": [
+        60,
+        12.218181818181819,
+        22
+      ],
+      "sourceId": "west-city-stair-2-16"
+    },
+    {
+      "name": "west-city-stair-2-17",
+      "position": [
+        60,
+        12.354545454545455,
+        21.636363636363637
+      ],
+      "sourceId": "west-city-stair-2-17"
+    },
+    {
+      "name": "west-city-stair-2-18",
+      "position": [
+        60,
+        12.49090909090909,
+        21.272727272727273
+      ],
+      "sourceId": "west-city-stair-2-18"
+    },
+    {
+      "name": "west-city-stair-2-19",
+      "position": [
+        60,
+        12.627272727272727,
+        20.90909090909091
+      ],
+      "sourceId": "west-city-stair-2-19"
+    },
+    {
+      "name": "west-city-stair-2-20",
+      "position": [
+        60,
+        12.763636363636364,
+        20.545454545454547
+      ],
+      "sourceId": "west-city-stair-2-20"
+    },
+    {
+      "name": "west-city-stair-2-21",
+      "position": [
+        60,
+        12.9,
+        20.18181818181818
+      ],
+      "sourceId": "west-city-stair-2-21"
+    },
+    {
+      "name": "west-city-stair-2-22",
+      "position": [
+        60,
+        13.036363636363637,
+        19.81818181818182
+      ],
+      "sourceId": "west-city-stair-2-22"
+    },
+    {
+      "name": "west-city-stair-2-23",
+      "position": [
+        60,
+        13.172727272727274,
+        19.454545454545453
+      ],
+      "sourceId": "west-city-stair-2-23"
+    },
+    {
+      "name": "west-city-stair-2-24",
+      "position": [
+        60,
+        13.30909090909091,
+        19.090909090909093
+      ],
+      "sourceId": "west-city-stair-2-24"
+    },
+    {
+      "name": "west-city-stair-2-25",
+      "position": [
+        60,
+        13.445454545454545,
+        18.727272727272727
+      ],
+      "sourceId": "west-city-stair-2-25"
+    },
+    {
+      "name": "west-city-stair-2-26",
+      "position": [
+        60,
+        13.581818181818182,
+        18.363636363636363
+      ],
+      "sourceId": "west-city-stair-2-26"
+    },
+    {
+      "name": "west-city-stair-2-27",
+      "position": [
+        60,
+        13.718181818181819,
+        18
+      ],
+      "sourceId": "west-city-stair-2-27"
+    },
+    {
+      "name": "west-city-stair-2-28",
+      "position": [
+        60,
+        13.854545454545455,
+        17.636363636363637
+      ],
+      "sourceId": "west-city-stair-2-28"
+    },
+    {
+      "name": "west-city-stair-2-29",
+      "position": [
+        60,
+        13.99090909090909,
+        17.272727272727273
+      ],
+      "sourceId": "west-city-stair-2-29"
+    },
+    {
+      "name": "west-city-stair-2-30",
+      "position": [
+        60,
+        14.127272727272727,
+        16.909090909090907
+      ],
+      "sourceId": "west-city-stair-2-30"
+    },
+    {
+      "name": "west-city-stair-2-31",
+      "position": [
+        60,
+        14.263636363636364,
+        16.545454545454547
+      ],
+      "sourceId": "west-city-stair-2-31"
+    },
+    {
+      "name": "west-city-stair-2-32",
+      "position": [
+        60,
+        14.4,
+        16.18181818181818
+      ],
+      "sourceId": "west-city-stair-2-32"
+    },
+    {
+      "name": "west-city-stair-2-33",
+      "position": [
+        60,
+        14.536363636363637,
+        15.818181818181818
+      ],
+      "sourceId": "west-city-stair-2-33"
+    },
+    {
+      "name": "west-city-stair-2-34",
+      "position": [
+        60,
+        14.672727272727274,
+        15.454545454545455
+      ],
+      "sourceId": "west-city-stair-2-34"
+    },
+    {
+      "name": "west-city-stair-2-35",
+      "position": [
+        60,
+        14.80909090909091,
+        15.090909090909092
+      ],
+      "sourceId": "west-city-stair-2-35"
+    },
+    {
+      "name": "west-city-stair-2-36",
+      "position": [
+        60,
+        14.945454545454547,
+        14.727272727272727
+      ],
+      "sourceId": "west-city-stair-2-36"
+    },
+    {
+      "name": "west-city-stair-2-37",
+      "position": [
+        60,
+        15.081818181818182,
+        14.363636363636363
+      ],
+      "sourceId": "west-city-stair-2-37"
+    },
+    {
+      "name": "west-city-stair-2-38",
+      "position": [
+        60,
+        15.218181818181819,
+        14
+      ],
+      "sourceId": "west-city-stair-2-38"
+    },
+    {
+      "name": "west-city-stair-2-39",
+      "position": [
+        60,
+        15.354545454545454,
+        13.636363636363637
+      ],
+      "sourceId": "west-city-stair-2-39"
+    },
+    {
+      "name": "west-city-stair-2-40",
+      "position": [
+        60,
+        15.49090909090909,
+        13.272727272727273
+      ],
+      "sourceId": "west-city-stair-2-40"
+    },
+    {
+      "name": "west-city-stair-2-41",
+      "position": [
+        60,
+        15.627272727272727,
+        12.909090909090908
+      ],
+      "sourceId": "west-city-stair-2-41"
+    },
+    {
+      "name": "west-city-stair-2-42",
+      "position": [
+        60,
+        15.763636363636364,
+        12.545454545454545
+      ],
+      "sourceId": "west-city-stair-2-42"
+    },
+    {
+      "name": "west-city-stair-2-43",
+      "position": [
+        60,
+        15.9,
+        12.181818181818182
+      ],
+      "sourceId": "west-city-stair-2-43"
+    },
+    {
+      "name": "citadel-court-structure",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true
+    },
+    {
+      "name": "west-city-court-stair-0-0",
+      "position": [
+        63,
+        16.03125,
+        8.854166666666666
+      ],
+      "sourceId": "west-city-court-stair-0-0"
+    },
+    {
+      "name": "west-city-court-stair-0-1",
+      "position": [
+        63,
+        16.162499999999998,
+        8.5625
+      ],
+      "sourceId": "west-city-court-stair-0-1"
+    },
+    {
+      "name": "west-city-court-stair-0-2",
+      "position": [
+        63,
+        16.29375,
+        8.270833333333334
+      ],
+      "sourceId": "west-city-court-stair-0-2"
+    },
+    {
+      "name": "west-city-court-stair-0-3",
+      "position": [
+        63,
+        16.424999999999997,
+        7.979166666666667
+      ],
+      "sourceId": "west-city-court-stair-0-3"
+    },
+    {
+      "name": "west-city-court-stair-0-4",
+      "position": [
+        63,
+        16.55625,
+        7.6875
+      ],
+      "sourceId": "west-city-court-stair-0-4"
+    },
+    {
+      "name": "west-city-court-stair-0-5",
+      "position": [
+        63,
+        16.6875,
+        7.395833333333333
+      ],
+      "sourceId": "west-city-court-stair-0-5"
+    },
+    {
+      "name": "west-city-court-stair-0-6",
+      "position": [
+        63,
+        16.818749999999998,
+        7.104166666666667
+      ],
+      "sourceId": "west-city-court-stair-0-6"
+    },
+    {
+      "name": "west-city-court-stair-0-7",
+      "position": [
+        63,
+        16.95,
+        6.8125
+      ],
+      "sourceId": "west-city-court-stair-0-7"
+    },
+    {
+      "name": "west-city-court-stair-0-8",
+      "position": [
+        63,
+        17.081249999999997,
+        6.520833333333334
+      ],
+      "sourceId": "west-city-court-stair-0-8"
+    },
+    {
+      "name": "west-city-court-stair-0-9",
+      "position": [
+        63,
+        17.2125,
+        6.229166666666666
+      ],
+      "sourceId": "west-city-court-stair-0-9"
+    },
+    {
+      "name": "west-city-court-stair-0-10",
+      "position": [
+        63,
+        17.34375,
+        5.9375
+      ],
+      "sourceId": "west-city-court-stair-0-10"
+    },
+    {
+      "name": "west-city-court-stair-0-11",
+      "position": [
+        63,
+        17.474999999999998,
+        5.645833333333334
+      ],
+      "sourceId": "west-city-court-stair-0-11"
+    },
+    {
+      "name": "west-city-court-stair-0-12",
+      "position": [
+        63,
+        17.60625,
+        5.354166666666666
+      ],
+      "sourceId": "west-city-court-stair-0-12"
+    },
+    {
+      "name": "west-city-court-stair-0-13",
+      "position": [
+        63,
+        17.737499999999997,
+        5.0625
+      ],
+      "sourceId": "west-city-court-stair-0-13"
+    },
+    {
+      "name": "west-city-court-stair-0-14",
+      "position": [
+        63,
+        17.86875,
+        4.770833333333333
+      ],
+      "sourceId": "west-city-court-stair-0-14"
+    },
+    {
+      "name": "west-city-court-stair-0-15",
+      "position": [
+        63,
+        18,
+        4.479166666666667
+      ],
+      "sourceId": "west-city-court-stair-0-15"
+    },
+    {
+      "name": "west-city-court-stair-0-16",
+      "position": [
+        63,
+        18.131249999999998,
+        4.1875
+      ],
+      "sourceId": "west-city-court-stair-0-16"
+    },
+    {
+      "name": "west-city-court-stair-0-17",
+      "position": [
+        63,
+        18.2625,
+        3.895833333333333
+      ],
+      "sourceId": "west-city-court-stair-0-17"
+    },
+    {
+      "name": "west-city-court-stair-0-18",
+      "position": [
+        63,
+        18.393749999999997,
+        3.604166666666667
+      ],
+      "sourceId": "west-city-court-stair-0-18"
+    },
+    {
+      "name": "west-city-court-stair-0-19",
+      "position": [
+        63,
+        18.525,
+        3.3125
+      ],
+      "sourceId": "west-city-court-stair-0-19"
+    },
+    {
+      "name": "west-city-court-stair-0-20",
+      "position": [
+        63,
+        18.65625,
+        3.020833333333333
+      ],
+      "sourceId": "west-city-court-stair-0-20"
+    },
+    {
+      "name": "west-city-court-stair-0-21",
+      "position": [
+        63,
+        18.787499999999998,
+        2.729166666666667
+      ],
+      "sourceId": "west-city-court-stair-0-21"
+    },
+    {
+      "name": "west-city-court-stair-0-22",
+      "position": [
+        63,
+        18.91875,
+        2.4375
+      ],
+      "sourceId": "west-city-court-stair-0-22"
+    },
+    {
+      "name": "west-city-court-stair-0-23",
+      "position": [
+        63,
+        19.049999999999997,
+        2.145833333333333
+      ],
+      "sourceId": "west-city-court-stair-0-23"
+    },
+    {
+      "name": "west-city-court-turn",
+      "position": [
+        61.5,
+        19.05,
+        1.75
+      ],
+      "sourceId": "west-city-court-turn"
+    },
+    {
+      "name": "west-city-court-stair-1-0",
+      "position": [
+        60,
+        19.18125,
+        2.1458333333333335
+      ],
+      "sourceId": "west-city-court-stair-1-0"
+    },
+    {
+      "name": "west-city-court-stair-1-1",
+      "position": [
+        60,
+        19.312499999999996,
+        2.4375
+      ],
+      "sourceId": "west-city-court-stair-1-1"
+    },
+    {
+      "name": "west-city-court-stair-1-2",
+      "position": [
+        60,
+        19.443749999999998,
+        2.7291666666666665
+      ],
+      "sourceId": "west-city-court-stair-1-2"
+    },
+    {
+      "name": "west-city-court-stair-1-3",
+      "position": [
+        60,
+        19.574999999999996,
+        3.020833333333333
+      ],
+      "sourceId": "west-city-court-stair-1-3"
+    },
+    {
+      "name": "west-city-court-stair-1-4",
+      "position": [
+        60,
+        19.706249999999997,
+        3.3125
+      ],
+      "sourceId": "west-city-court-stair-1-4"
+    },
+    {
+      "name": "west-city-court-stair-1-5",
+      "position": [
+        60,
+        19.8375,
+        3.604166666666667
+      ],
+      "sourceId": "west-city-court-stair-1-5"
+    },
+    {
+      "name": "west-city-court-stair-1-6",
+      "position": [
+        60,
+        19.968749999999996,
+        3.895833333333333
+      ],
+      "sourceId": "west-city-court-stair-1-6"
+    },
+    {
+      "name": "west-city-court-stair-1-7",
+      "position": [
+        60,
+        20.099999999999998,
+        4.1875
+      ],
+      "sourceId": "west-city-court-stair-1-7"
+    },
+    {
+      "name": "west-city-court-stair-1-8",
+      "position": [
+        60,
+        20.231249999999996,
+        4.479166666666666
+      ],
+      "sourceId": "west-city-court-stair-1-8"
+    },
+    {
+      "name": "west-city-court-stair-1-9",
+      "position": [
+        60,
+        20.362499999999997,
+        4.770833333333334
+      ],
+      "sourceId": "west-city-court-stair-1-9"
+    },
+    {
+      "name": "west-city-court-stair-1-10",
+      "position": [
+        60,
+        20.49375,
+        5.0625
+      ],
+      "sourceId": "west-city-court-stair-1-10"
+    },
+    {
+      "name": "west-city-court-stair-1-11",
+      "position": [
+        60,
+        20.624999999999996,
+        5.354166666666666
+      ],
+      "sourceId": "west-city-court-stair-1-11"
+    },
+    {
+      "name": "west-city-court-stair-1-12",
+      "position": [
+        60,
+        20.756249999999998,
+        5.645833333333334
+      ],
+      "sourceId": "west-city-court-stair-1-12"
+    },
+    {
+      "name": "west-city-court-stair-1-13",
+      "position": [
+        60,
+        20.887499999999996,
+        5.9375
+      ],
+      "sourceId": "west-city-court-stair-1-13"
+    },
+    {
+      "name": "west-city-court-stair-1-14",
+      "position": [
+        60,
+        21.018749999999997,
+        6.229166666666667
+      ],
+      "sourceId": "west-city-court-stair-1-14"
+    },
+    {
+      "name": "west-city-court-stair-1-15",
+      "position": [
+        60,
+        21.15,
+        6.520833333333333
+      ],
+      "sourceId": "west-city-court-stair-1-15"
+    },
+    {
+      "name": "west-city-court-stair-1-16",
+      "position": [
+        60,
+        21.281249999999996,
+        6.8125
+      ],
+      "sourceId": "west-city-court-stair-1-16"
+    },
+    {
+      "name": "west-city-court-stair-1-17",
+      "position": [
+        60,
+        21.412499999999998,
+        7.104166666666667
+      ],
+      "sourceId": "west-city-court-stair-1-17"
+    },
+    {
+      "name": "west-city-court-stair-1-18",
+      "position": [
+        60,
+        21.543749999999996,
+        7.395833333333333
+      ],
+      "sourceId": "west-city-court-stair-1-18"
+    },
+    {
+      "name": "west-city-court-stair-1-19",
+      "position": [
+        60,
+        21.674999999999997,
+        7.6875
+      ],
+      "sourceId": "west-city-court-stair-1-19"
+    },
+    {
+      "name": "west-city-court-stair-1-20",
+      "position": [
+        60,
+        21.80625,
+        7.979166666666667
+      ],
+      "sourceId": "west-city-court-stair-1-20"
+    },
+    {
+      "name": "west-city-court-stair-1-21",
+      "position": [
+        60,
+        21.937499999999996,
+        8.270833333333332
+      ],
+      "sourceId": "west-city-court-stair-1-21"
+    },
+    {
+      "name": "west-city-court-stair-1-22",
+      "position": [
+        60,
+        22.068749999999998,
+        8.5625
+      ],
+      "sourceId": "west-city-court-stair-1-22"
+    },
+    {
+      "name": "west-city-court-stair-1-23",
+      "position": [
+        60,
+        22.199999999999996,
+        8.854166666666668
+      ],
+      "sourceId": "west-city-court-stair-1-23"
+    },
+    {
+      "name": "west-city-court-upper-landing",
+      "position": [
+        61.5,
+        22.2,
+        9.5
+      ],
+      "sourceId": "west-city-court-upper-landing"
+    },
+    {
+      "name": "west-city-court-upper-link",
+      "position": [
+        63,
+        22.2,
+        8.85
+      ],
+      "sourceId": "west-city-court-upper-link"
+    },
+    {
+      "name": "west-city-court-upper-gallery",
+      "position": [
+        64.5,
+        22.2,
+        8.3
+      ],
+      "sourceId": "west-city-court-upper-gallery"
+    },
+    {
+      "name": "west-city-main-tower-entry-bridge",
+      "position": [
+        63,
+        22.2,
+        6.1
+      ],
+      "sourceId": "west-city-main-tower-entry-bridge"
+    },
+    {
+      "name": "west-city-main-tower-entry-crossing",
+      "position": [
+        61.5,
+        22.2,
+        4
+      ],
+      "sourceId": "west-city-main-tower-entry-crossing"
+    },
+    {
+      "name": "west-city-main-tower-entry-floor",
+      "position": [
+        60,
+        22.2,
+        -0.6
+      ],
+      "sourceId": "west-city-main-tower-entry-floor"
+    },
+    {
+      "name": "citadel-main-tower-stairs",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true
+    },
+    {
+      "name": "west-city-main-tower-upper-exit",
+      "position": [
+        60,
+        36.9,
+        -0.05
+      ],
+      "sourceId": "west-city-main-tower-upper-exit"
+    },
+    {
+      "name": "west-city-main-tower-upper-balcony",
+      "position": [
+        60,
+        36.9,
+        2.4
+      ],
+      "sourceId": "west-city-main-tower-upper-balcony"
+    },
+    {
+      "name": "citadel-processional-stonework",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-processional-stonework-v1"
+    },
+    {
+      "name": "west-city-harbor-quay",
+      "position": [
+        36.75,
+        -0.18946055313226762,
+        58
+      ],
+      "sourceId": "west-city-harbor-quay"
+    },
+    {
+      "name": "west-city-harbor-top-landing",
+      "position": [
+        43.75,
+        3.9,
+        79
+      ],
+      "sourceId": "west-city-harbor-top-landing"
+    },
+    {
+      "name": "west-city-stair-harbor-0",
+      "position": [
+        42,
+        3.8472629109353123,
+        77.87951807228916
+      ],
+      "sourceId": "west-city-stair-harbor-0"
+    },
+    {
+      "name": "west-city-stair-harbor-1",
+      "position": [
+        42,
+        3.7945258218706206,
+        77.63855421686748
+      ],
+      "sourceId": "west-city-stair-harbor-1"
+    },
+    {
+      "name": "west-city-stair-harbor-2",
+      "position": [
+        42,
+        3.7417887328059325,
+        77.39759036144578
+      ],
+      "sourceId": "west-city-stair-harbor-2"
+    },
+    {
+      "name": "west-city-stair-harbor-3",
+      "position": [
+        42,
+        3.689051643741245,
+        77.1566265060241
+      ],
+      "sourceId": "west-city-stair-harbor-3"
+    },
+    {
+      "name": "west-city-stair-harbor-4",
+      "position": [
+        42,
+        3.6363145546765563,
+        76.91566265060241
+      ],
+      "sourceId": "west-city-stair-harbor-4"
+    },
+    {
+      "name": "west-city-stair-harbor-5",
+      "position": [
+        42,
+        3.583577465611865,
+        76.67469879518072
+      ],
+      "sourceId": "west-city-stair-harbor-5"
+    },
+    {
+      "name": "west-city-stair-harbor-6",
+      "position": [
+        42,
+        3.5308403765471774,
+        76.43373493975903
+      ],
+      "sourceId": "west-city-stair-harbor-6"
+    },
+    {
+      "name": "west-city-stair-harbor-7",
+      "position": [
+        42,
+        3.478103287482489,
+        76.19277108433735
+      ],
+      "sourceId": "west-city-stair-harbor-7"
+    },
+    {
+      "name": "west-city-stair-harbor-8",
+      "position": [
+        42,
+        3.4253661984177977,
+        75.95180722891567
+      ],
+      "sourceId": "west-city-stair-harbor-8"
+    },
+    {
+      "name": "west-city-stair-harbor-9",
+      "position": [
+        42,
+        3.37262910935311,
+        75.71084337349397
+      ],
+      "sourceId": "west-city-stair-harbor-9"
+    },
+    {
+      "name": "west-city-stair-harbor-10",
+      "position": [
+        42,
+        3.3198920202884215,
+        75.46987951807229
+      ],
+      "sourceId": "west-city-stair-harbor-10"
+    },
+    {
+      "name": "west-city-stair-harbor-11",
+      "position": [
+        42,
+        3.267154931223734,
+        75.2289156626506
+      ],
+      "sourceId": "west-city-stair-harbor-11"
+    },
+    {
+      "name": "west-city-stair-harbor-12",
+      "position": [
+        42,
+        3.2144178421590426,
+        74.98795180722891
+      ],
+      "sourceId": "west-city-stair-harbor-12"
+    },
+    {
+      "name": "west-city-stair-harbor-13",
+      "position": [
+        42,
+        3.161680753094354,
+        74.74698795180723
+      ],
+      "sourceId": "west-city-stair-harbor-13"
+    },
+    {
+      "name": "west-city-stair-harbor-14",
+      "position": [
+        42,
+        3.1089436640296664,
+        74.50602409638554
+      ],
+      "sourceId": "west-city-stair-harbor-14"
+    },
+    {
+      "name": "west-city-stair-harbor-15",
+      "position": [
+        42,
+        3.056206574964975,
+        74.26506024096386
+      ],
+      "sourceId": "west-city-stair-harbor-15"
+    },
+    {
+      "name": "west-city-stair-harbor-16",
+      "position": [
+        42,
+        3.0034694859002866,
+        74.02409638554217
+      ],
+      "sourceId": "west-city-stair-harbor-16"
+    },
+    {
+      "name": "west-city-stair-harbor-17",
+      "position": [
+        42,
+        2.950732396835599,
+        73.78313253012048
+      ],
+      "sourceId": "west-city-stair-harbor-17"
+    },
+    {
+      "name": "west-city-stair-harbor-18",
+      "position": [
+        42,
+        2.8979953077709073,
+        73.5421686746988
+      ],
+      "sourceId": "west-city-stair-harbor-18"
+    },
+    {
+      "name": "west-city-stair-harbor-19",
+      "position": [
+        42,
+        2.8452582187062196,
+        73.3012048192771
+      ],
+      "sourceId": "west-city-stair-harbor-19"
+    },
+    {
+      "name": "west-city-stair-harbor-20",
+      "position": [
+        42,
+        2.7925211296415315,
+        73.06024096385542
+      ],
+      "sourceId": "west-city-stair-harbor-20"
+    },
+    {
+      "name": "west-city-stair-harbor-21",
+      "position": [
+        42,
+        2.7397840405768434,
+        72.81927710843374
+      ],
+      "sourceId": "west-city-stair-harbor-21"
+    },
+    {
+      "name": "west-city-stair-harbor-22",
+      "position": [
+        42,
+        2.6870469515121522,
+        72.57831325301206
+      ],
+      "sourceId": "west-city-stair-harbor-22"
+    },
+    {
+      "name": "west-city-stair-harbor-23",
+      "position": [
+        42,
+        2.634309862447464,
+        72.33734939759036
+      ],
+      "sourceId": "west-city-stair-harbor-23"
+    },
+    {
+      "name": "west-city-stair-harbor-24",
+      "position": [
+        42,
+        2.581572773382776,
+        72.09638554216868
+      ],
+      "sourceId": "west-city-stair-harbor-24"
+    },
+    {
+      "name": "west-city-stair-harbor-25",
+      "position": [
+        42,
+        2.528835684318085,
+        71.855421686747
+      ],
+      "sourceId": "west-city-stair-harbor-25"
+    },
+    {
+      "name": "west-city-stair-harbor-26",
+      "position": [
+        42,
+        2.4760985952533967,
+        71.6144578313253
+      ],
+      "sourceId": "west-city-stair-harbor-26"
+    },
+    {
+      "name": "west-city-stair-harbor-27",
+      "position": [
+        42,
+        2.4233615061887086,
+        71.37349397590361
+      ],
+      "sourceId": "west-city-stair-harbor-27"
+    },
+    {
+      "name": "west-city-stair-harbor-28",
+      "position": [
+        42,
+        2.3706244171240205,
+        71.13253012048193
+      ],
+      "sourceId": "west-city-stair-harbor-28"
+    },
+    {
+      "name": "west-city-stair-harbor-29",
+      "position": [
+        42,
+        2.3178873280593293,
+        70.89156626506025
+      ],
+      "sourceId": "west-city-stair-harbor-29"
+    },
+    {
+      "name": "west-city-stair-harbor-30",
+      "position": [
+        42,
+        2.265150238994641,
+        70.65060240963855
+      ],
+      "sourceId": "west-city-stair-harbor-30"
+    },
+    {
+      "name": "west-city-stair-harbor-31",
+      "position": [
+        42,
+        2.212413149929953,
+        70.40963855421687
+      ],
+      "sourceId": "west-city-stair-harbor-31"
+    },
+    {
+      "name": "west-city-stair-harbor-32",
+      "position": [
+        42,
+        2.159676060865262,
+        70.16867469879519
+      ],
+      "sourceId": "west-city-stair-harbor-32"
+    },
+    {
+      "name": "west-city-stair-harbor-33",
+      "position": [
+        42,
+        2.1069389718005738,
+        69.92771084337349
+      ],
+      "sourceId": "west-city-stair-harbor-33"
+    },
+    {
+      "name": "west-city-stair-harbor-34",
+      "position": [
+        42,
+        2.0542018827358857,
+        69.6867469879518
+      ],
+      "sourceId": "west-city-stair-harbor-34"
+    },
+    {
+      "name": "west-city-stair-harbor-35",
+      "position": [
+        42,
+        2.0014647936711976,
+        69.44578313253012
+      ],
+      "sourceId": "west-city-stair-harbor-35"
+    },
+    {
+      "name": "west-city-stair-harbor-36",
+      "position": [
+        42,
+        1.9487277046065064,
+        69.20481927710844
+      ],
+      "sourceId": "west-city-stair-harbor-36"
+    },
+    {
+      "name": "west-city-stair-harbor-37",
+      "position": [
+        42,
+        1.9302697234338662,
+        68.96385542168674
+      ],
+      "sourceId": "west-city-stair-harbor-37"
+    },
+    {
+      "name": "west-city-stair-harbor-38",
+      "position": [
+        42,
+        1.9302697234338662,
+        68.72289156626506
+      ],
+      "sourceId": "west-city-stair-harbor-38"
+    },
+    {
+      "name": "west-city-stair-harbor-39",
+      "position": [
+        42,
+        1.9302697234338662,
+        68.48192771084338
+      ],
+      "sourceId": "west-city-stair-harbor-39"
+    },
+    {
+      "name": "west-city-stair-harbor-40",
+      "position": [
+        42,
+        1.9302697234338662,
+        68.24096385542168
+      ],
+      "sourceId": "west-city-stair-harbor-40"
+    },
+    {
+      "name": "west-city-stair-harbor-41",
+      "position": [
+        42,
+        1.9302697234338662,
+        68
+      ],
+      "sourceId": "west-city-stair-harbor-41"
+    },
+    {
+      "name": "west-city-stair-harbor-42",
+      "position": [
+        42,
+        1.9302697234338662,
+        67.75903614457832
+      ],
+      "sourceId": "west-city-stair-harbor-42"
+    },
+    {
+      "name": "west-city-stair-harbor-43",
+      "position": [
+        42,
+        1.9302697234338662,
+        67.51807228915662
+      ],
+      "sourceId": "west-city-stair-harbor-43"
+    },
+    {
+      "name": "west-city-stair-harbor-44",
+      "position": [
+        42,
+        1.9302697234338662,
+        67.27710843373494
+      ],
+      "sourceId": "west-city-stair-harbor-44"
+    },
+    {
+      "name": "west-city-stair-harbor-45",
+      "position": [
+        42,
+        1.911811742261226,
+        67.03614457831326
+      ],
+      "sourceId": "west-city-stair-harbor-45"
+    },
+    {
+      "name": "west-city-stair-harbor-46",
+      "position": [
+        42,
+        1.8590746531965348,
+        66.79518072289156
+      ],
+      "sourceId": "west-city-stair-harbor-46"
+    },
+    {
+      "name": "west-city-stair-harbor-47",
+      "position": [
+        42,
+        1.8063375641318467,
+        66.55421686746988
+      ],
+      "sourceId": "west-city-stair-harbor-47"
+    },
+    {
+      "name": "west-city-stair-harbor-48",
+      "position": [
+        42,
+        1.753600475067158,
+        66.3132530120482
+      ],
+      "sourceId": "west-city-stair-harbor-48"
+    },
+    {
+      "name": "west-city-stair-harbor-49",
+      "position": [
+        42,
+        1.7008633860024704,
+        66.07228915662651
+      ],
+      "sourceId": "west-city-stair-harbor-49"
+    },
+    {
+      "name": "west-city-stair-harbor-50",
+      "position": [
+        42,
+        1.6481262969377792,
+        65.83132530120481
+      ],
+      "sourceId": "west-city-stair-harbor-50"
+    },
+    {
+      "name": "west-city-stair-harbor-51",
+      "position": [
+        42,
+        1.5953892078730911,
+        65.59036144578313
+      ],
+      "sourceId": "west-city-stair-harbor-51"
+    },
+    {
+      "name": "west-city-stair-harbor-52",
+      "position": [
+        42,
+        1.542652118808403,
+        65.34939759036145
+      ],
+      "sourceId": "west-city-stair-harbor-52"
+    },
+    {
+      "name": "west-city-stair-harbor-53",
+      "position": [
+        42,
+        1.4899150297437118,
+        65.10843373493975
+      ],
+      "sourceId": "west-city-stair-harbor-53"
+    },
+    {
+      "name": "west-city-stair-harbor-54",
+      "position": [
+        42,
+        1.4371779406790237,
+        64.86746987951807
+      ],
+      "sourceId": "west-city-stair-harbor-54"
+    },
+    {
+      "name": "west-city-stair-harbor-55",
+      "position": [
+        42,
+        1.3844408516143356,
+        64.62650602409639
+      ],
+      "sourceId": "west-city-stair-harbor-55"
+    },
+    {
+      "name": "west-city-stair-harbor-56",
+      "position": [
+        42,
+        1.3317037625496475,
+        64.3855421686747
+      ],
+      "sourceId": "west-city-stair-harbor-56"
+    },
+    {
+      "name": "west-city-stair-harbor-57",
+      "position": [
+        42,
+        1.2789666734849563,
+        64.144578313253
+      ],
+      "sourceId": "west-city-stair-harbor-57"
+    },
+    {
+      "name": "west-city-stair-harbor-58",
+      "position": [
+        42,
+        1.2262295844202682,
+        63.903614457831324
+      ],
+      "sourceId": "west-city-stair-harbor-58"
+    },
+    {
+      "name": "west-city-stair-harbor-59",
+      "position": [
+        42,
+        1.1734924953555788,
+        63.66265060240964
+      ],
+      "sourceId": "west-city-stair-harbor-59"
+    },
+    {
+      "name": "west-city-stair-harbor-60",
+      "position": [
+        42,
+        1.1207554062908902,
+        63.42168674698795
+      ],
+      "sourceId": "west-city-stair-harbor-60"
+    },
+    {
+      "name": "west-city-stair-harbor-61",
+      "position": [
+        42,
+        1.0680183172262008,
+        63.18072289156626
+      ],
+      "sourceId": "west-city-stair-harbor-61"
+    },
+    {
+      "name": "west-city-stair-harbor-62",
+      "position": [
+        42,
+        1.0152812281615127,
+        62.93975903614458
+      ],
+      "sourceId": "west-city-stair-harbor-62"
+    },
+    {
+      "name": "west-city-stair-harbor-63",
+      "position": [
+        42,
+        0.9625441390968233,
+        62.69879518072289
+      ],
+      "sourceId": "west-city-stair-harbor-63"
+    },
+    {
+      "name": "west-city-stair-harbor-64",
+      "position": [
+        42,
+        0.9098070500321335,
+        62.45783132530121
+      ],
+      "sourceId": "west-city-stair-harbor-64"
+    },
+    {
+      "name": "west-city-stair-harbor-65",
+      "position": [
+        42,
+        0.8570699609674454,
+        62.21686746987952
+      ],
+      "sourceId": "west-city-stair-harbor-65"
+    },
+    {
+      "name": "west-city-stair-harbor-66",
+      "position": [
+        42,
+        0.8043328719027574,
+        61.975903614457835
+      ],
+      "sourceId": "west-city-stair-harbor-66"
+    },
+    {
+      "name": "west-city-stair-harbor-67",
+      "position": [
+        42,
+        0.7515957828380663,
+        61.734939759036145
+      ],
+      "sourceId": "west-city-stair-harbor-67"
+    },
+    {
+      "name": "west-city-stair-harbor-68",
+      "position": [
+        42,
+        0.6988586937733781,
+        61.493975903614455
+      ],
+      "sourceId": "west-city-stair-harbor-68"
+    },
+    {
+      "name": "west-city-stair-harbor-69",
+      "position": [
+        42,
+        0.6461216047086901,
+        61.25301204819277
+      ],
+      "sourceId": "west-city-stair-harbor-69"
+    },
+    {
+      "name": "west-city-stair-harbor-70",
+      "position": [
+        42,
+        0.5933845156440004,
+        61.01204819277108
+      ],
+      "sourceId": "west-city-stair-harbor-70"
+    },
+    {
+      "name": "west-city-stair-harbor-71",
+      "position": [
+        42,
+        0.5406474265793108,
+        60.77108433734939
+      ],
+      "sourceId": "west-city-stair-harbor-71"
+    },
+    {
+      "name": "west-city-stair-harbor-72",
+      "position": [
+        42,
+        0.48791033751462265,
+        60.53012048192771
+      ],
+      "sourceId": "west-city-stair-harbor-72"
+    },
+    {
+      "name": "west-city-stair-harbor-73",
+      "position": [
+        42,
+        0.435173248449933,
+        60.28915662650603
+      ],
+      "sourceId": "west-city-stair-harbor-73"
+    },
+    {
+      "name": "west-city-stair-harbor-74",
+      "position": [
+        42,
+        0.38243615938524333,
+        60.04819277108434
+      ],
+      "sourceId": "west-city-stair-harbor-74"
+    },
+    {
+      "name": "west-city-stair-harbor-75",
+      "position": [
+        42,
+        0.32969907032055523,
+        59.80722891566265
+      ],
+      "sourceId": "west-city-stair-harbor-75"
+    },
+    {
+      "name": "west-city-stair-harbor-76",
+      "position": [
+        42,
+        0.27696198125586713,
+        59.566265060240966
+      ],
+      "sourceId": "west-city-stair-harbor-76"
+    },
+    {
+      "name": "west-city-stair-harbor-77",
+      "position": [
+        42,
+        0.2242248921911775,
+        59.325301204819276
+      ],
+      "sourceId": "west-city-stair-harbor-77"
+    },
+    {
+      "name": "west-city-stair-harbor-78",
+      "position": [
+        42,
+        0.17148780312648784,
+        59.084337349397586
+      ],
+      "sourceId": "west-city-stair-harbor-78"
+    },
+    {
+      "name": "west-city-stair-harbor-79",
+      "position": [
+        42,
+        0.11875071406179974,
+        58.8433734939759
+      ],
+      "sourceId": "west-city-stair-harbor-79"
+    },
+    {
+      "name": "west-city-stair-harbor-80",
+      "position": [
+        42,
+        0.06601362499711011,
+        58.60240963855422
+      ],
+      "sourceId": "west-city-stair-harbor-80"
+    },
+    {
+      "name": "west-city-stair-harbor-81",
+      "position": [
+        42,
+        0.013276535932420466,
+        58.36144578313253
+      ],
+      "sourceId": "west-city-stair-harbor-81"
+    },
+    {
+      "name": "west-city-stair-harbor-82",
+      "position": [
+        42,
+        -0.03946055313226762,
+        58.12048192771084
+      ],
+      "sourceId": "west-city-stair-harbor-82"
+    },
+    {
+      "name": "west-city-harbor-middle-landing",
+      "position": [
+        42,
+        1.9302697234338662,
+        68
+      ],
+      "sourceId": "west-city-harbor-middle-landing"
+    },
+    {
+      "name": "citadel-harbor-watergate",
+      "position": [
+        42,
+        0.6076867459138806,
+        60.5
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-harbor-watergate-v1"
+    },
+    {
+      "name": "west-city-harbor-pile-31.5-56.6",
+      "position": [
+        31.5,
+        -1.5170073722436284,
+        56.6
+      ],
+      "sourceId": "west-city-harbor-pile-31.5-56.6"
+    },
+    {
+      "name": "west-city-harbor-bollard-31.5-56.6",
+      "position": [
+        31.5,
+        0.3405394468677324,
+        56.6
+      ],
+      "sourceId": "west-city-harbor-bollard-31.5-56.6"
+    },
+    {
+      "name": "west-city-harbor-pile-31.5-59.4",
+      "position": [
+        31.5,
+        -1.9219624036747445,
+        59.4
+      ],
+      "sourceId": "west-city-harbor-pile-31.5-59.4"
+    },
+    {
+      "name": "west-city-harbor-bollard-31.5-59.4",
+      "position": [
+        31.5,
+        0.3405394468677324,
+        59.4
+      ],
+      "sourceId": "west-city-harbor-bollard-31.5-59.4"
+    },
+    {
+      "name": "west-city-harbor-pile-36.75-56.6",
+      "position": [
+        36.75,
+        -1.8040062283996097,
+        56.6
+      ],
+      "sourceId": "west-city-harbor-pile-36.75-56.6"
+    },
+    {
+      "name": "west-city-harbor-bollard-36.75-56.6",
+      "position": [
+        36.75,
+        0.3405394468677324,
+        56.6
+      ],
+      "sourceId": "west-city-harbor-bollard-36.75-56.6"
+    },
+    {
+      "name": "west-city-harbor-pile-36.75-59.4",
+      "position": [
+        36.75,
+        -2.2104845787837424,
+        59.4
+      ],
+      "sourceId": "west-city-harbor-pile-36.75-59.4"
+    },
+    {
+      "name": "west-city-harbor-bollard-36.75-59.4",
+      "position": [
+        36.75,
+        0.3405394468677324,
+        59.4
+      ],
+      "sourceId": "west-city-harbor-bollard-36.75-59.4"
+    },
+    {
+      "name": "west-city-harbor-pile-42-56.6",
+      "position": [
+        42,
+        -2.182312789736968,
+        56.6
+      ],
+      "sourceId": "west-city-harbor-pile-42-56.6"
+    },
+    {
+      "name": "west-city-harbor-bollard-42-56.6",
+      "position": [
+        42,
+        0.3405394468677324,
+        56.6
+      ],
+      "sourceId": "west-city-harbor-bollard-42-56.6"
+    },
+    {
+      "name": "west-city-harbor-pile-42-59.4",
+      "position": [
+        42,
+        -2.5908167421280295,
+        59.4
+      ],
+      "sourceId": "west-city-harbor-pile-42-59.4"
+    },
+    {
+      "name": "west-city-harbor-bollard-42-59.4",
+      "position": [
+        42,
+        0.3405394468677324,
+        59.4
+      ],
+      "sourceId": "west-city-harbor-bollard-42-59.4"
+    },
+    {
+      "name": "citadel-new-main-gate",
+      "position": [
+        60,
+        16,
+        11
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-main-portal-v3-blender-beveled"
+    },
+    {
+      "name": "west-city-plaza-deck",
+      "position": [
+        60.425,
+        3.9,
+        71.5
+      ],
+      "sourceId": "west-city-plaza-deck"
+    },
+    {
+      "name": "west-city-plaza-foundation",
+      "position": [
+        60.425,
+        1.8,
+        71.5
+      ],
+      "sourceId": "west-city-plaza-foundation"
+    },
+    {
+      "name": "west-city-plaza-paving-ring",
+      "position": [
+        65,
+        4.014,
+        74
+      ],
+      "sourceId": "citadel-plaza-concentric-stones-v1"
+    },
+    {
+      "name": "citadel-plaza-hero-statue",
+      "position": [
+        65,
+        4,
+        74
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-soldier-statue-r03"
+    },
+    {
+      "name": "citadel-original-horse-terrace",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-original-horse-terrace-v2"
+    },
+    {
+      "name": "west-city-bridge-deck",
+      "position": [
+        23.34199192431123,
+        4.88,
+        39.89525157646911
+      ],
+      "sourceId": "west-city-bridge-deck"
+    },
+    {
+      "name": "west-city-bridge-landing-0",
+      "position": [
+        1.0339838486224622,
+        4.930000000000001,
+        29.790503152938207
+      ],
+      "sourceId": "west-city-bridge-landing-0"
+    },
+    {
+      "name": "west-city-bridge-landing-1",
+      "position": [
+        45.65,
+        4.930000000000001,
+        50
+      ],
+      "sourceId": "west-city-bridge-landing-1"
+    },
+    {
+      "name": "west-city-bridge-apron",
+      "position": [
+        46.9,
+        4.93,
+        50
+      ],
+      "sourceId": "west-city-bridge-apron"
+    },
+    {
+      "name": "west-city-stair-bridge-0",
+      "position": [
+        48.525,
+        4.8012500000000005,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-0"
+    },
+    {
+      "name": "west-city-stair-bridge-1",
+      "position": [
+        49.075,
+        4.6725,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-1"
+    },
+    {
+      "name": "west-city-stair-bridge-2",
+      "position": [
+        49.625,
+        4.543750000000001,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-2"
+    },
+    {
+      "name": "west-city-stair-bridge-3",
+      "position": [
+        50.175,
+        4.415000000000001,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-3"
+    },
+    {
+      "name": "west-city-stair-bridge-4",
+      "position": [
+        50.725,
+        4.286250000000001,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-4"
+    },
+    {
+      "name": "west-city-stair-bridge-5",
+      "position": [
+        51.275,
+        4.157500000000001,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-5"
+    },
+    {
+      "name": "west-city-stair-bridge-6",
+      "position": [
+        51.825,
+        4.0287500000000005,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-6"
+    },
+    {
+      "name": "west-city-stair-bridge-7",
+      "position": [
+        52.375,
+        3.9,
+        50
+      ],
+      "sourceId": "west-city-stair-bridge-7"
+    },
+    {
+      "name": "west-city-bridge-pier-0.25",
+      "position": [
+        12.187987886466846,
+        1.0300000000000002,
+        34.842877364703654
+      ],
+      "sourceId": "west-city-bridge-pier-0.25"
+    },
+    {
+      "name": "west-city-bridge-pier-0.7",
+      "position": [
+        32.265195154586735,
+        1.0300000000000002,
+        43.93715094588146
+      ],
+      "sourceId": "west-city-bridge-pier-0.7"
+    },
+    {
+      "name": "citadel-target-castle-silhouette",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "reference-square-asymmetric-castle-v2-wfc-facades"
+    },
+    {
+      "name": "citadel-harbor-boarding-landing",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true
+    },
+    {
+      "name": "citadel-harbor-stair-walls",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-stair-retaining-walls-v1"
+    },
+    {
+      "name": "citadel-harbor-architecture",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-reference-harbor-architecture-v1"
+    },
+    {
+      "name": "citadel-harbor-reflections",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true
+    },
+    {
+      "name": "citadel-front-harbor",
+      "position": [
+        0,
+        0,
+        2
+      ],
+      "isGroup": true,
+      "sourceId": "citadel-front-harbor-v1"
+    },
+    {
+      "name": "citadel-target-hillside-houses",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "isGroup": true,
+      "sourceId": "claude-citadel-houses-v1"
+    }
+  ]
+}

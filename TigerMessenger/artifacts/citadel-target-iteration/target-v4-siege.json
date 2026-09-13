@@ -1,0 +1,293 @@
+{
+  "hits": [
+    {
+      "name": "sky-background",
+      "d": 2052.2459779965156,
+      "material": ""
+    }
+  ],
+  "trees": [],
+  "hillside": [
+    [
+      -9.2,
+      55.893664173880055,
+      -40.9,
+      3.44,
+      3,
+      5.1
+    ],
+    [
+      -25.1,
+      18.022377510070807,
+      -16.5,
+      3.26,
+      3,
+      6
+    ],
+    [
+      -19.8,
+      16.900000839233396,
+      -16.5,
+      2.9,
+      3,
+      3.3
+    ],
+    [
+      -19.8,
+      10.89999988555908,
+      -4.300000000000004,
+      3.62,
+      3,
+      5.1
+    ],
+    [
+      -48,
+      15.230289192831487,
+      1.7999999999999972,
+      3.08,
+      3,
+      3.3
+    ],
+    [
+      -46.3,
+      15.075010583768142,
+      7.899999999999999,
+      3.44,
+      3,
+      6
+    ],
+    [
+      -41,
+      13.631788628116931,
+      7.899999999999999,
+      3.08,
+      3,
+      3.3
+    ],
+    [
+      -35.699999999999996,
+      12.339389397966807,
+      7.899999999999999,
+      3.62,
+      3,
+      4.2
+    ],
+    [
+      -30.400000000000002,
+      11.994403775524798,
+      7.899999999999999,
+      3.26,
+      3,
+      5.1
+    ],
+    [
+      -19.8,
+      4.859999923706054,
+      7.899999999999999,
+      3.44,
+      3,
+      3.3
+    ],
+    [
+      -48,
+      16.378658485589224,
+      14,
+      2.9,
+      3,
+      5.1
+    ],
+    [
+      -42.7,
+      13.159165515101074,
+      14,
+      3.44,
+      3,
+      6
+    ],
+    [
+      -32.1,
+      9.930747595353719,
+      14,
+      3.62,
+      3,
+      4.2
+    ],
+    [
+      -26.8,
+      10.075380115509002,
+      14,
+      3.26,
+      3,
+      5.1
+    ],
+    [
+      -21.5,
+      5.860174362659448,
+      14,
+      2.9,
+      3,
+      6
+    ]
+  ],
+  "diagnostics": {
+    "tested": 82,
+    "noHit": 0,
+    "height": 4,
+    "steep": 49
+  },
+  "terrainBounds": [
+    [
+      -89.99999999999999,
+      -159.5354461669922,
+      -58.99999999999999
+    ],
+    [
+      129.99999999999997,
+      56.26108932495118,
+      124.99999999999999
+    ]
+  ],
+  "rangeBounds": {
+    "sacredTarnTree": {
+      "name": "citadel-sacred-tarn-elder-tree",
+      "position": [
+        -3.5,
+        0,
+        3.25
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ]
+    },
+    "tarnCompanionPine": {
+      "name": "citadel-tarn-companion-pine",
+      "position": [
+        2.8,
+        0,
+        3.15
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ]
+    },
+    "snowMountains": {
+      "name": "citadel-background-snow-massif",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "inf": {
+    "active": true,
+    "returning": false,
+    "night": true,
+    "activationPhase": 0.82,
+    "queueSpacing": 0,
+    "elapsed": 90.05019999999469,
+    "returnElapsed": 0,
+    "insideHorse": 0,
+    "groups": [
+      {
+        "name": "ladder-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 12,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 12
+      },
+      {
+        "name": "mountain-stair-infiltration-group",
+        "count": 4,
+        "patrolTerraces": [
+          0
+        ],
+        "patrolTargetCount": 108,
+        "patrolTargetSource": "castle-top-capture-zone",
+        "patrolMode": "distributed-coverage",
+        "patrolFormation": "dispersed-running-inspection",
+        "climbingFormation": "mutual-support-no-queue",
+        "patrolTransferCount": 0,
+        "patrolSegments": [
+          {
+            "kind": "terrace-patrol",
+            "terraceIndex": 0,
+            "duration": 18,
+            "coverageCount": 108
+          }
+        ],
+        "queueSpacing": 0,
+        "queueOrder": [
+          "night-torch-soldier",
+          "night-shield-soldier",
+          "night-shield-soldier",
+          "night-torch-soldier"
+        ],
+        "patrolDuration": 18
+      }
+    ],
+    "torchBearers": 4,
+    "torchQueueIndices": [
+      "stairs:0",
+      "stairs:3",
+      "stairs:0",
+      "stairs:3"
+    ],
+    "equipmentRole": "torch-flank-shield-spear",
+    "javelinsActive": 0,
+    "javelinPhases": [],
+    "thrownTargetCount": 12,
+    "assistanceLinksVisible": 0,
+    "ropesVisible": 0,
+    "descentRopes": 0,
+    "descentOrder": [
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier",
+      "night-torch-soldier",
+      "night-shield-soldier",
+      "night-shield-soldier",
+      "night-torch-soldier"
+    ]
+  },
+  "errors": [],
+  "render": {
+    "frame": 33,
+    "calls": 6303,
+    "triangles": 1208978,
+    "points": 0,
+    "lines": 2
+  }
+}

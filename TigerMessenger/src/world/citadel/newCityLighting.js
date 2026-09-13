@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import {nightWeightAt} from '../../render/lighting/highlandLightVolumes.js';
-export const NEW_CITY_LIGHTING={version:2,frame:'new-city-authored-local',points:[
- {id:'main-gate',position:[60,20,14],color:0xffad64,intensity:300,radius:30,godotEnergy:5},
- {id:'plaza',position:[59,8,70],color:0xffc979,intensity:220,radius:24,godotEnergy:4},
- {id:'moon-fill',position:[38,58,66],color:0x91b5e8,intensity:12000,radius:160,godotEnergy:8}
+export const NEW_CITY_LIGHTING={version:3,frame:'new-city-authored-local',points:[
+ {id:'main-gate',position:[60,23,21],color:0xffa348,intensity:350,radius:30,godotEnergy:140},
+ {id:'plaza',position:[59,8,70],color:0xffb653,intensity:500,radius:24,godotEnergy:9},
+ {id:'moon-fill',position:[30,60,42],color:0x629be8,intensity:6500,radius:160,godotEnergy:3.5}
 ],lanterns:[[54,4,76],[66,4,76],[54,4,63],[66,4,63],[54,10,32],[66,10,32],[54,16,13],[66,16,13]]};
 export function buildNewCityLighting(){
  const root=new THREE.Group();root.name='citadel-new-city-lighting';

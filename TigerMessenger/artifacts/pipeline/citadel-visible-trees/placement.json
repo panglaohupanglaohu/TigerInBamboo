@@ -1,0 +1,865 @@
+{
+  "sourceCount": 105,
+  "retainedRound": [],
+  "cypress": [
+    {
+      "index": 0,
+      "root": [
+        -100.05591583251947,
+        15.075080371567791,
+        -3.3428878784180176
+      ],
+      "surface": [
+        -100.05591583251947,
+        15.307729574103686,
+        -3.3428878784180176
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 50.37612430533132,
+      "routeDistance": 63.39220967705392,
+      "footprintDelta": 0.34529840507184417
+    },
+    {
+      "index": 1,
+      "root": [
+        -105.09008026123043,
+        10.287140620031181,
+        -2.821952819824211
+      ],
+      "surface": [
+        -105.09008026123043,
+        10.404294905427035,
+        -2.821952819824211
+      ],
+      "size": 1.03,
+      "footprint": 0.1642,
+      "slope": 19.201559850263152,
+      "routeDistance": 67.05364422632391,
+      "footprintDelta": 0.11430857079182033
+    },
+    {
+      "index": 5,
+      "root": [
+        -102.69295120239254,
+        12.805690577942952,
+        -5.2860884666443
+      ],
+      "surface": [
+        -102.69295120239254,
+        13.119457059722489,
+        -5.2860884666443
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 59.08571172632918,
+      "routeDistance": 66.66694476560674,
+      "footprintDelta": 0.5075329635592709
+    },
+    {
+      "index": 7,
+      "root": [
+        -102.38190460205071,
+        13.36893694681194,
+        -1.109502196311922
+      ],
+      "surface": [
+        -102.38190460205071,
+        13.717182309371989,
+        -1.109502196311922
+      ],
+      "size": 1.1099999999999999,
+      "footprint": 0.1754,
+      "slope": 59.14967135728236,
+      "routeDistance": 63.86393492311472,
+      "footprintDelta": 0.5849415012000634
+    },
+    {
+      "index": 8,
+      "root": [
+        -97.95853042602539,
+        6.621849040863396,
+        -30.685058593750036
+      ],
+      "surface": [
+        -97.95853042602539,
+        7.012487289195574,
+        -30.685058593750036
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 61.45253721313617,
+      "routeDistance": 78.51159376744836,
+      "footprintDelta": 0.42524016268203013
+    },
+    {
+      "index": 10,
+      "root": [
+        -101.95499801635737,
+        4.538371518035548,
+        -26.90136528015136
+      ],
+      "surface": [
+        -101.95499801635737,
+        4.92370068653318,
+        -26.90136528015136
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 69.38343315844921,
+      "routeDistance": 79.31720762701742,
+      "footprintDelta": 0.650658336995491
+    },
+    {
+      "index": 14,
+      "root": [
+        -102.88159561157225,
+        -0.04566808557094987,
+        -31.489852905273445
+      ],
+      "surface": [
+        -102.88159561157225,
+        0.0823768964898761,
+        -31.489852905273445
+      ],
+      "size": 1.27,
+      "footprint": 0.1978,
+      "slope": 22.041061223193214,
+      "routeDistance": 82.85911823064971,
+      "footprintDelta": 0.1360899641215951
+    },
+    {
+      "index": 16,
+      "root": [
+        -2.383747100830108,
+        12.754103678059066,
+        -12.67864513397215
+      ],
+      "surface": [
+        -2.383747100830108,
+        13.021102540449274,
+        -12.67864513397215
+      ],
+      "size": 1.03,
+      "footprint": 0.1642,
+      "slope": 52.13021024830059,
+      "routeDistance": 27.168581038272702,
+      "footprintDelta": 0.41399772478033015
+    },
+    {
+      "index": 28,
+      "root": [
+        -98.57267761230467,
+        21.046377758320006,
+        9.810851097106925
+      ],
+      "surface": [
+        -98.57267761230467,
+        21.434629660237018,
+        9.810851097106925
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 60.506504799789276,
+      "routeDistance": 54.125535084130085,
+      "footprintDelta": 0.6609931654581089
+    },
+    {
+      "index": 34,
+      "root": [
+        -109.67060852050774,
+        12.68455422835194,
+        22.263034820556623
+      ],
+      "surface": [
+        -109.67060852050774,
+        12.941105252997172,
+        22.263034820556623
+      ],
+      "size": 1.27,
+      "footprint": 0.1978,
+      "slope": 50.17790994670813,
+      "routeDistance": 55.569658399103595,
+      "footprintDelta": 0.3931020492904338
+    },
+    {
+      "index": 35,
+      "root": [
+        -111.83921051025386,
+        6.88978222451587,
+        25.681457519531207
+      ],
+      "surface": [
+        -111.83921051025386,
+        7.197584914913987,
+        25.681457519531207
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 59.314971632493474,
+      "routeDistance": 56.01863490378658,
+      "footprintDelta": 0.4956053807963201
+    },
+    {
+      "index": 41,
+      "root": [
+        -106.98235702514646,
+        13.059436108303485,
+        23.982706069946243
+      ],
+      "surface": [
+        -106.98235702514646,
+        13.465591368452689,
+        23.982706069946243
+      ],
+      "size": 1.03,
+      "footprint": 0.1642,
+      "slope": 67.71271318833014,
+      "routeDistance": 52.3889249380878,
+      "footprintDelta": 0.6978561644767467
+    },
+    {
+      "index": 42,
+      "root": [
+        -18.061054229736325,
+        7.949638251888673,
+        -10.05899620056155
+      ],
+      "surface": [
+        -18.061054229736325,
+        8.066469392814865,
+        -10.05899620056155
+      ],
+      "size": 1.1099999999999999,
+      "footprint": 0.1754,
+      "slope": 17.96722770177634,
+      "routeDistance": 16.485475689518985,
+      "footprintDelta": 0.11475293511435325
+    },
+    {
+      "index": 45,
+      "root": [
+        -4.279182434082089,
+        9.010029060788355,
+        -32.53424072265626
+      ],
+      "surface": [
+        -4.279182434082089,
+        9.227148976000192,
+        -32.53424072265626
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 55.3191115099667,
+      "routeDistance": 42.40763060226893,
+      "footprintDelta": 0.3142398304236167
+    },
+    {
+      "index": 46,
+      "root": [
+        -1.354873657226635,
+        8.182384758429976,
+        -34.056964874267614
+      ],
+      "surface": [
+        -1.354873657226635,
+        8.540786275985083,
+        -34.056964874267614
+      ],
+      "size": 1.03,
+      "footprint": 0.1642,
+      "slope": 61.457822522770215,
+      "routeDistance": 45.06874115161033,
+      "footprintDelta": 0.5968030351100708
+    },
+    {
+      "index": 48,
+      "root": [
+        -3.8424148559570748,
+        13.459937441393093,
+        -29.422264099121072
+      ],
+      "surface": [
+        -3.8424148559570748,
+        13.834687396858211,
+        -29.422264099121072
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 63.95993426652425,
+      "routeDistance": 39.809065425829736,
+      "footprintDelta": 0.6294999109302637
+    },
+    {
+      "index": 50,
+      "root": [
+        -86.07924652099611,
+        18.773808787512905,
+        31.094841003417937
+      ],
+      "surface": [
+        -86.07924652099611,
+        19.022245897758832,
+        31.094841003417937
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 53.718846808838784,
+      "routeDistance": 30.77819909745082,
+      "footprintDelta": 0.3768742204918851
+    },
+    {
+      "index": 51,
+      "root": [
+        -83.99446487426756,
+        14.200441579434225,
+        27.815210342407255
+      ],
+      "surface": [
+        -83.99446487426756,
+        14.427073238231909,
+        27.815210342407255
+      ],
+      "size": 1.03,
+      "footprint": 0.1642,
+      "slope": 47.3067674884287,
+      "routeDistance": 31.146068401048492,
+      "footprintDelta": 0.3332633175953106
+    },
+    {
+      "index": 53,
+      "root": [
+        -17.86833190917967,
+        3.274848699006044,
+        24.733779907226555
+      ],
+      "surface": [
+        -17.86833190917967,
+        3.3722433911803185,
+        24.733779907226555
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 14.176682758299648,
+      "routeDistance": 7.444600313447557,
+      "footprintDelta": 0.07476174262683344
+    },
+    {
+      "index": 57,
+      "root": [
+        -86.05237960815427,
+        9.893123916942443,
+        11.85417556762693
+      ],
+      "surface": [
+        -86.05237960815427,
+        10.027320892062049,
+        11.85417556762693
+      ],
+      "size": 1.1099999999999999,
+      "footprint": 0.1754,
+      "slope": 23.5240128019364,
+      "routeDistance": 43.01575489678144,
+      "footprintDelta": 0.11372575800962181
+    },
+    {
+      "index": 58,
+      "root": [
+        -84.4935836791992,
+        10.422185243996694,
+        9.136369705200158
+      ],
+      "surface": [
+        -84.4935836791992,
+        10.514754140347888,
+        9.136369705200158
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 9.904463647637536,
+      "routeDistance": 43.44720892221426,
+      "footprintDelta": 0.06513779270238729
+    },
+    {
+      "index": 63,
+      "root": [
+        -114.7307434082031,
+        11.54938485513486,
+        5.38094520568844
+      ],
+      "surface": [
+        -114.7307434082031,
+        11.843227266428299,
+        5.38094520568844
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 57.82750920597827,
+      "routeDistance": 69.12502410327394,
+      "footprintDelta": 0.46768482258693034
+    },
+    {
+      "index": 66,
+      "root": [
+        -111.70010757446286,
+        10.261648839638639,
+        3.090424776077241
+      ],
+      "surface": [
+        -111.70010757446286,
+        10.55854483583465,
+        3.090424776077241
+      ],
+      "size": 1.03,
+      "footprint": 0.1642,
+      "slope": 55.82492566272461,
+      "routeDistance": 68.27961711516959,
+      "footprintDelta": 0.47680818952721893
+    },
+    {
+      "index": 69,
+      "root": [
+        -114.87672042846675,
+        5.66636457466757,
+        0.9389474987983488
+      ],
+      "surface": [
+        -114.87672042846675,
+        5.9843122269220705,
+        0.9389474987983488
+      ],
+      "size": 1.27,
+      "footprint": 0.1978,
+      "slope": 57.48051912423473,
+      "routeDistance": 72.08516267661142,
+      "footprintDelta": 0.5208472638317394
+    },
+    {
+      "index": 70,
+      "root": [
+        10.874095916748,
+        27.185652127243113,
+        -19.841625213623058
+      ],
+      "surface": [
+        10.874095916748,
+        27.417100988862664,
+        -19.841625213623058
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 50.042628103148445,
+      "routeDistance": 41.917117563201984,
+      "footprintDelta": 0.34289772323913326
+    },
+    {
+      "index": 78,
+      "root": [
+        -87.01829528808595,
+        23.853493136793304,
+        -29.04097557067869
+      ],
+      "surface": [
+        -87.01829528808595,
+        24.194456514003853,
+        -29.04097557067869
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 63.10674073717051,
+      "routeDistance": 69.26143596286016,
+      "footprintDelta": 0.5619267544211048
+    },
+    {
+      "index": 85,
+      "root": [
+        -108.28505706787107,
+        3.919328221704633,
+        -12.46400642395022
+      ],
+      "surface": [
+        -108.28505706787107,
+        4.225577683228777,
+        -12.46400642395022
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 62.18488508840894,
+      "routeDistance": 75.48307528382715,
+      "footprintDelta": 0.49249892304831633
+    },
+    {
+      "index": 86,
+      "root": [
+        -111.4204368591308,
+        -2.3953910688655897,
+        -15.401672363281246
+      ],
+      "surface": [
+        -111.4204368591308,
+        -2.0742134961367635,
+        -15.401672363281246
+      ],
+      "size": 1.03,
+      "footprint": 0.1642,
+      "slope": 57.880356553655865,
+      "routeDistance": 79.76068893881927,
+      "footprintDelta": 0.5223551454577091
+    },
+    {
+      "index": 89,
+      "root": [
+        -107.12326431274407,
+        5.074283915070682,
+        -16.5941314697266
+      ],
+      "surface": [
+        -107.12326431274407,
+        5.4249851580903785,
+        -16.5941314697266
+      ],
+      "size": 1.27,
+      "footprint": 0.1978,
+      "slope": 60.1736026899537,
+      "routeDistance": 77.09310712591775,
+      "footprintDelta": 0.5814024860395932
+    },
+    {
+      "index": 93,
+      "root": [
+        -18.24345016479492,
+        8.92574148265328,
+        -22.537717819213878
+      ],
+      "surface": [
+        -18.24345016479492,
+        9.018590429842673,
+        -22.537717819213878
+      ],
+      "size": 1.19,
+      "footprint": 0.1866,
+      "slope": 10.178164744269884,
+      "routeDistance": 28.708749921208977,
+      "footprintDelta": 0.06569789437881468
+    },
+    {
+      "index": 100,
+      "root": [
+        -88.94736480712892,
+        18.878852237816233,
+        -0.2025937438011311
+      ],
+      "surface": [
+        -88.94736480712892,
+        19.124857901249722,
+        -0.2025937438011311
+      ],
+      "size": 0.95,
+      "footprint": 0.153,
+      "slope": 50.98499456499142,
+      "routeDistance": 52.68637709994655,
+      "footprintDelta": 0.372011326866982
+    }
+  ],
+  "omitted": [
+    {
+      "index": 2,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 3,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 4,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 6,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 9,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 11,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 12,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 13,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 15,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 17,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 18,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 19,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 20,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 21,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 22,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 23,
+      "reason": "route-reservation"
+    },
+    {
+      "index": 24,
+      "reason": "route-reservation"
+    },
+    {
+      "index": 25,
+      "reason": "route-reservation"
+    },
+    {
+      "index": 26,
+      "reason": "route-reservation"
+    },
+    {
+      "index": 27,
+      "reason": "route-reservation"
+    },
+    {
+      "index": 29,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 30,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 31,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 32,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 33,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 36,
+      "reason": "broken-root-surface"
+    },
+    {
+      "index": 37,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 38,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 39,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 40,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 43,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 44,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 47,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 49,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 52,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 54,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 55,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 56,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 59,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 60,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 61,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 62,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 64,
+      "reason": "broken-root-surface"
+    },
+    {
+      "index": 65,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 67,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 68,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 71,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 72,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 73,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 74,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 75,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 76,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 77,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 79,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 80,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 81,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 82,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 83,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 84,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 87,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 88,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 90,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 91,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 92,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 94,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 95,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 96,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 97,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 98,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 99,
+      "reason": "broken-root-surface"
+    },
+    {
+      "index": 101,
+      "reason": "broken-root-surface"
+    },
+    {
+      "index": 102,
+      "reason": "grove-spacing"
+    },
+    {
+      "index": 103,
+      "reason": "broken-root-surface"
+    },
+    {
+      "index": 104,
+      "reason": "grove-spacing"
+    }
+  ],
+  "source": "assets/models/optimized/citadel-cypress/citadel-cypress-v1.blend",
+  "slopeLimit": 40,
+  "canopyTreatment": "replace-bare-crowns-with-approved-cypress"
+}

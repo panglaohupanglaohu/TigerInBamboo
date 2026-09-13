@@ -1,0 +1,27 @@
+00:00.019  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py:901: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+00:02.296  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-quick.png'
+00:04.082  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-harbor.png'
+Info: Saved as "citadel-battle-v1.blend"
+CITADEL_BUILD_OK {"seed": 20260912, "reflection_cards": 2022, "troops": 162, "lights": 48, "composite": "off", "objects": 507, "tris": 153838, "meshes": 112, "build_sec": 0.1, "blend": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/citadel-battle-v1.blend", "render_sec": 1.6, "render": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-quick.png", "render_harbor": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-harbor.png"}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3037 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3033 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3035 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3036 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3041 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3033 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3034 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3039 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3028 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3033 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3041 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3035 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3034 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3041 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3035 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3034 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3035 / 2048)
+
+Blender quit

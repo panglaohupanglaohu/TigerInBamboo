@@ -1,0 +1,40 @@
+{
+  "shots": [
+    {
+      "id": "plaza",
+      "world": [
+        102,
+        185.1,
+        71.1
+      ],
+      "fog": 0.007,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/backdrop-plaza.png"
+    },
+    {
+      "id": "plaza-clear",
+      "world": [
+        102,
+        185.1,
+        71.1
+      ],
+      "fog": 0.0022,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/backdrop-plaza-clear.png"
+    },
+    {
+      "id": "high",
+      "world": [
+        122.9,
+        236.6,
+        100
+      ],
+      "fog": 0.0022,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/backdrop-high.png"
+    }
+  ],
+  "errors": [],
+  "sanity": {
+    "backdrop": true,
+    "backdropKids": 3,
+    "fogDensity": 0.007
+  }
+}

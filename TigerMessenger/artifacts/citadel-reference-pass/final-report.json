@@ -1,0 +1,234 @@
+{
+  "label": "final",
+  "errors": [],
+  "shots": [
+    {
+      "id": "overview",
+      "eye": [
+        12,
+        42,
+        141
+      ],
+      "target": [
+        34,
+        19,
+        16
+      ],
+      "fov": 52,
+      "phase": 0.8502235555555423,
+      "fog": 0.0032,
+      "render": {
+        "frame": 243,
+        "calls": 3333,
+        "triangles": 923886,
+        "points": 0,
+        "lines": 2
+      },
+      "memory": {
+        "geometries": 3108,
+        "textures": 32
+      },
+      "lights": 1,
+      "oldYaw": 0.20943951023931953
+    },
+    {
+      "id": "harbor",
+      "eye": [
+        18,
+        15,
+        102
+      ],
+      "target": [
+        46,
+        11,
+        37
+      ],
+      "fov": 55,
+      "phase": 0.8502235555555423,
+      "fog": 0.0032,
+      "render": {
+        "frame": 295,
+        "calls": 3075,
+        "triangles": 911652,
+        "points": 380,
+        "lines": 2
+      },
+      "memory": {
+        "geometries": 3143,
+        "textures": 33
+      },
+      "lights": 1,
+      "oldYaw": 0.20943951023931953
+    },
+    {
+      "id": "gate",
+      "eye": [
+        60,
+        23,
+        57
+      ],
+      "target": [
+        60,
+        27,
+        9
+      ],
+      "fov": 56,
+      "phase": 0.8502235555555423,
+      "fog": 0.0032,
+      "render": {
+        "frame": 345,
+        "calls": 1634,
+        "triangles": 803667,
+        "points": 380,
+        "lines": 2
+      },
+      "memory": {
+        "geometries": 3143,
+        "textures": 33
+      },
+      "lights": 1,
+      "oldYaw": 0.20943951023931953
+    },
+    {
+      "id": "old-coast",
+      "eye": [
+        -25,
+        7,
+        80
+      ],
+      "target": [
+        -2,
+        5,
+        26
+      ],
+      "fov": 57,
+      "phase": 0.8502235555555423,
+      "fog": 0.0032,
+      "render": {
+        "frame": 392,
+        "calls": 2764,
+        "triangles": 905556,
+        "points": 380,
+        "lines": 2
+      },
+      "memory": {
+        "geometries": 3147,
+        "textures": 33
+      },
+      "lights": 1,
+      "oldYaw": 0.20943951023931953
+    },
+    {
+      "id": "east-coast",
+      "eye": [
+        112,
+        5,
+        100
+      ],
+      "target": [
+        70,
+        4,
+        64
+      ],
+      "fov": 60,
+      "phase": 0.8502235555555423,
+      "fog": 0.0032,
+      "render": {
+        "frame": 435,
+        "calls": 3520,
+        "triangles": 949374,
+        "points": 380,
+        "lines": 115
+      },
+      "memory": {
+        "geometries": 3147,
+        "textures": 33
+      },
+      "lights": 1,
+      "oldYaw": 0.20943951023931953
+    }
+  ],
+  "coast": {
+    "errors": [],
+    "retired": [
+      {
+        "name": "west-city-water-channel",
+        "visible": false,
+        "retired": true
+      },
+      {
+        "name": "highland-waterfront-water",
+        "visible": false,
+        "retired": true
+      }
+    ],
+    "samples": 273,
+    "maxHeightError": 8.810729923425242e-12,
+    "refinement": {
+      "originalTriangles": 6768,
+      "triangles": 38528,
+      "addedTriangles": 31760,
+      "originalVertices": 3577,
+      "vertices": 19457,
+      "iterations": 4,
+      "budgetLimited": false,
+      "targetEdgeLength": 2,
+      "longestRegionalEdge": 1.9838777564775132,
+      "sharedGeometricEdges": true,
+      "source": "existing-global-ocean-shell",
+      "frame": "city-authored-local",
+      "bounds": {
+        "x": [
+          -45,
+          100
+        ],
+        "z": [
+          -10,
+          115
+        ],
+        "y": [
+          -85,
+          35
+        ]
+      },
+      "attributes": [
+        "position",
+        "waterData0",
+        "waterData1",
+        "normal"
+      ],
+      "originalPositionsPreserved": true
+    },
+    "cliffs": {
+      "source": "citadel-oskar-grid-mountain-surface",
+      "sourceVertices": 10953,
+      "weldedVertices": 10953,
+      "boundaryEdges": 612,
+      "sealedEdges": 171,
+      "skippedInland": 413,
+      "skippedSubmerged": 28,
+      "skippedHigh": 0,
+      "triangles": 342,
+      "oceanSource": "officialOceanLevelAt(final world direction)",
+      "bottomDepth": 2,
+      "maxCoastalHeight": 48,
+      "topVerticesUnchanged": true
+    },
+    "route": {
+      "samples": 1646,
+      "missing": [],
+      "blocked": []
+    },
+    "port": {
+      "source": "officialOceanLevelAt in final world frame",
+      "dockY": -4.025902546920678,
+      "minFreeboard": 0.9
+    }
+  },
+  "dayNight": {
+    "dayHidden": true,
+    "nightVisible": true,
+    "portalBlender": true
+  },
+  "passed": true
+}

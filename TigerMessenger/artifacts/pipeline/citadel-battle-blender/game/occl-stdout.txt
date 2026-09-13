@@ -1,0 +1,3 @@
+OCCLUSION_TEST {"cases":[{"occlusionEnabled":true,"occlusionDist":null,"camToPlayer":14.78,"stoneBetweenCameraAndMessenger":0,"firstHit":null,"sampled":{"frames":40,"occludedFrames":0,"minPullDist":null}},{"occlusionEnabled":false,"occlusionDist":null,"camToPlayer":14.78,"stoneBetweenCameraAndMessenger":0,"firstHit":null,"sampled":{"frames":40,"occludedFrames":0,"minPullDist":null}}],"errors":[],"api":{"hasPullIn":true,"hasMeshHook":true,"wallMeshes":{"court-solid-stone":1,"tower-interior-solid":1,"processional-solid-stone":1,"processional-solid-coping":1,"main-gate-wall":1,"main-gate-carved-surround":1}},"placed":{"wall":"processional-solid-stone","wallSize":[47.1,42.8,53],"halfThickness":23.54,"playerPos":[128.15,83.71,75.29]}}
+
+--STDERR--

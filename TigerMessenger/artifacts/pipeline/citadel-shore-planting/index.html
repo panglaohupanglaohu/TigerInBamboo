@@ -1,0 +1,11 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>圣城岩肩与柏树 · 接入对照</title><style>body{max-width:1440px;margin:32px auto;padding:0 22px;background:#142433;color:#e9eef5;font:17px/1.7 system-ui}a{color:#a7d2ff}img{width:100%;display:block;margin:12px 0 24px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}p{max-width:1000px}summary{cursor:pointer}@media(max-width:700px){.grid{display:block}}</style>
+<h1>阶梯外侧岩肩、柏树与贴地植被</h1>
+<p>复用既有 Blender 柏树模型。近景检查后重做了种植岩肩，避免树木挂在陡直岩壁上；最终保留 12 处落点，并避开通路、建筑与无支撑区域。该批已接入 8931 原游戏候选并同步 Godot。</p>
+<p><a href="../../../?autostart=1&citadelCommonFrame=1&citadelOldHarbor=1">运行原游戏候选</a> · <a href="../citadel-tier-lighting/index.html">两城布光对照</a></p>
+<h2>当前近景</h2><img src="after-detail.png">
+<details><summary>第一轮与岩肩重做后的比较</summary><div class="grid"><div><p>第一轮：落点偏向陡壁，未接受</p><img src="r01-after-detail.png"></div><div><p>当前：拓宽岩肩后重新布点</p><img src="after-detail.png"></div></div></details>
+<details><summary>同一岩肩的布树前后对照</summary><div class="grid"><img src="before-detail.png"><img src="after-detail.png"></div></details>
+<h2>Web 全景</h2><img src="after.png"><h2>同工程 Godot 全景</h2><img src="godot-after-night.png">
+<p>加入植被后，Web 旧港通路 1,473 点检查通过；Godot 旧港入城 90 段、新前港到广场 202 段实兵演练通过。12 株柏树与地被合并为 5 个网格、2,019 个三角形。</p>
+<p><a href="report.json">布点及支撑记录</a> · <a href="godot-import.json">Godot 对象核对</a> · <a href="../citadel-old-harbor-grade/godot-shore-march.json">旧港实兵结果</a></p>
+<p><strong>整体未完成：</strong>当前只完善这条岸坡和一处新城山坡，不能代表整片山林已经优化。老城基础与山体的连接、连续滨水建筑以及运输/战斗仍需继续，默认布局未切换。</p>

@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "surfaces": [
+    {
+      "name": "highland-town-foundation-platform",
+      "min": [
+        -23,
+        0,
+        -27
+      ],
+      "max": [
+        23,
+        0,
+        23
+      ],
+      "extras": {
+        "sourcePath": "highland-town-foundation-platform[7]",
+        "sourceType": "Mesh",
+        "westCityWalkable": true,
+        "behaviorKeys": []
+      }
+    },
+    {
+      "name": "highland-town-foundation-platform-side",
+      "min": [
+        -23,
+        -1,
+        -27
+      ],
+      "max": [
+        23,
+        0,
+        23
+      ],
+      "extras": {
+        "sourcePath": "highland-town-foundation-platform[7]/highland-town-foundation-platform-side[0]",
+        "sourceType": "Mesh",
+        "citadelSolidExterior": true,
+        "behaviorKeys": []
+      }
+    }
+  ],
+  "scope": "Actual GLB top/side footprint and native physics metadata; not the entire old-city support envelope."
+}

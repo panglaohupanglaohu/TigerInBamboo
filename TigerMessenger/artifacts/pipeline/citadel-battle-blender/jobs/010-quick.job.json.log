@@ -1,0 +1,21 @@
+00:00.015  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+Traceback (most recent call last):
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py", line 868, in <module>
+    main()
+    ~~~~^^
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py", line 820, in main
+    terrain()
+    ~~~~~~~^^
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py", line 101, in terrain
+    p.bake(c=C_TERRAIN)
+    ~~~~~~^^^^^^^^^^^^^
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/citadel_lib.py", line 335, in bake
+    loc=loc, rot=rot, scale=scale, m=mat(key), c=c)
+                                     ~~~^^^^^
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/citadel_lib.py", line 84, in mat
+    nt.links.new(b.outputs[0], out.inputs[0])
+                               ~~~~~~~~~~^^^
+IndexError: bpy_prop_collection[index]: index 0 out of range, size 0
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

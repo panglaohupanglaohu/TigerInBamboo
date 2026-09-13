@@ -1,0 +1,24 @@
+{
+  "caps": [
+    {
+      "count": 1,
+      "hidden": true,
+      "name": "citadel-moat"
+    },
+    {
+      "count": 1,
+      "hidden": true,
+      "name": "highland-waterfront-water"
+    },
+    {
+      "count": 0,
+      "hidden": true,
+      "name": "west-city-water-channel"
+    }
+  ],
+  "ocean_reused": true,
+  "passed": true,
+  "protected_objects": 31,
+  "protected_preserved": true,
+  "scope": "Citadel actual entry, three legacy water groups hidden, repeated bind, ocean identity and bridge/sail/mast preservation; not full Web/Godot visual parity or navigation."
+}

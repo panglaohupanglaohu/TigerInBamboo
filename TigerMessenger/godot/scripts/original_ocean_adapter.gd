@@ -1,8 +1,16 @@
 extends RefCounted
 var ocean:MeshInstance3D
 func bind(model:Node3D)->void:
+    # The coastal citadel uses the global ocean. Retire whole legacy moat
+    # groups (including bed/levees), but retain actual bridges and ship sails.
+    # Reapply on bind so replacement imports cannot resurrect these caps.
+    for legacy_name in ["citadel-moat", "highland-waterfront-water", "west-city-water-channel"]:
+        for node in model.find_children(legacy_name, "Node3D", true, false):
+            node.visible = false
+            node.set_meta("retiredWaterCap", true)
+            node.set_meta("retiredReason", "global-ocean-coastal-citadel")
     if is_instance_valid(ocean):return
-    var data=JSON.parse_string(FileAccess.get_file_as_string("res://data/original-ocean.json"))
+    var data=JSON.parse_string(FileAccess.get_file_as_string(preload("res://scripts/citadel_surface_variant.gd").data_path("res://data/original-ocean.json")))
     if not data is Dictionary:return
     var arrays:Array=[];arrays.resize(Mesh.ARRAY_MAX)
     var vertices=PackedVector3Array();var normals=PackedVector3Array();var colors=PackedColorArray();var uv=PackedVector2Array();var uv2=PackedVector2Array()

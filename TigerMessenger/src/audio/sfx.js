@@ -10,6 +10,7 @@ export const getBgmOwnershipSnapshot = () => bgmOwnership.snapshot();
 
 export function updateBgmListenerContext(context) {
   bgmOwnership.setContext(context);
+  updateCitadelElderBgm(context);
   const owner = bgmOwnership.takeResume();
   if (muted) return;
   if (!owner) {if(!bgmOwnership.owner)resumeDefaultAmbience();return;}
@@ -548,6 +549,30 @@ export function sfxThunder(opts = {}) {
  */
 function setAmbienceDuck(level) {
   ambienceDuck = Math.max(0, Math.min(1, level));
+}
+
+
+// Regional rendition of the elder's existing track. One music owner at a time.
+let citadelElderEl=null, citadelElderRetryAt=0;
+export function updateCitadelElderBgm({listener,newCity,gameStarted=true}) {
+  const valid=p=>p&&['x','y','z'].every(k=>Number.isFinite(p[k]));
+  const distance=valid(listener)&&valid(newCity)?Math.hypot(listener.x-newCity.x,listener.y-newCity.y,listener.z-newCity.z):Infinity;
+  const active=gameStarted&&!muted&&distance<=200;
+  const permitted=bgmOwnership.request('citadelElder',active,{source:newCity,distance});
+  if(!active){if(citadelElderEl){citadelElderEl.pause();citadelElderEl.currentTime=MUSIC_BOX_START_SEC;}return;}
+  if(!permitted)return;
+  if(!citadelElderEl){
+    citadelElderEl=bgmAudio('citadelElder',MUSIC_BOX_BGM_URL);
+    citadelElderEl.loop=true;citadelElderEl.preload='auto';
+    citadelElderEl.addEventListener('timeupdate',()=>{if(citadelElderEl.currentTime>=MUSIC_BOX_END_SEC)citadelElderEl.currentTime=MUSIC_BOX_START_SEC;});
+  }
+  setAmbienceDuck(AMBIENCE_DUCK_MUSIC_BOX);
+  citadelElderEl.volume=MUSIC_BOX_VOLUME*Math.min(1,Math.max(0,(200-distance)/10));
+  const now=performance.now();
+  if(citadelElderEl.paused&&now>=citadelElderRetryAt){
+    citadelElderRetryAt=now+3000;
+    citadelElderEl.play().catch(()=>{citadelElderRetryAt=performance.now()+3000;});
+  }
 }
 
 function ensureMusicBoxEl() {

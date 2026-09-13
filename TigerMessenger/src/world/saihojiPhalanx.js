@@ -1,3 +1,4 @@
+import {createNewCityAssaultRoute} from './citadel/newCityAssaultRoute.js';
 import {reverseWaterPath,joinWaterPaths} from './warshipRouteComposition.js';
 // =====================================================================
 //  @legacy 日间攻城状态机；2026-09-10用户授权在原运兵链新增松下伏击流程。
@@ -14,7 +15,7 @@ import * as THREE from "three";
 import { PLANET_RADIUS } from "./planet.js";
 import { createWhaleMaw } from "./whaleMaw.js";
 import { createSaihojiAmbush } from "./saihojiAmbush.js";
-import { orientWarship, placeWarshipOnSphere, sampleWarshipRoute } from "./warshipNavigation.js";
+import { placeWarshipOnSphere, sampleWarshipRoute } from "./warshipNavigation.js";
 import { bindRomanShipCarryPose } from "./romanShipCarryPose.js";
 import { bindWarshipCohort } from "./warshipCrewContinuity.js";
 import { createWarshipWaterRoutes } from "./warshipWaterRoutes.js";
@@ -551,8 +552,10 @@ export function createSaihojiPhalanxBattle({
   // 攻城梯/台地落点需要在「含台地高度」的世界坐标插值，不能只做球面归一。
   const castleObj = scene.getObjectByName("castleContainer");
   const latestAssault = castleObj?.userData?.highlandAssaultAnchors ?? null;
+  const newCityAssault = createNewCityAssaultRoute(castleObj);
+  root.userData.infantryAssaultSource = newCityAssault?.source ?? "legacy-citadel";
   const ladderPolicyDisabled = !!(
-    disableSiegeLadders || latestAssault?.ladderPolicy === "disabled"
+    newCityAssault || disableSiegeLadders || latestAssault?.ladderPolicy === "disabled"
   );
   root.userData.siegeLaddersDisabled = ladderPolicyDisabled;
   root.userData.siegeLadderPolicy = latestAssault?.ladderPolicy
@@ -837,6 +840,24 @@ export function createSaihojiPhalanxBattle({
 
   const _deckPt = new THREE.Vector3();
   function placeCohortOnPlaza(wave, centerDir, face) {
+    if(newCityAssault){
+      const id=Number(wave.boat.name.split('-').at(-1));
+      const company=id>=200?id-198:id;
+      for(const s of wave.soldiers){
+        if(s.userData.dead||s.userData.downed)continue;
+        const path=newCityAssault.entryFor(company,s.userData.gx,s.userData.gz);
+        s.position.copy(path[0]).addScaledVector(newCityAssault.up,.06);
+        s.userData.formationPos=s.position.clone();
+        s.userData.siegeEntryRoute=path.map(p=>p.clone().addScaledVector(newCityAssault.up,.06));
+        s.userData.siegeRoute="stairs";s.userData.stairRoute=0;s.userData.stairPointIndex=0;
+        s.userData.ladder=-1;s.userData.waterfall=-1;
+        _fwd.copy(path[1]).sub(path[0]).normalize();
+        _right.crossVectors(_fwd,newCityAssault.up).normalize();
+        s.quaternion.setFromRotationMatrix(_basis.makeBasis(_fwd,newCityAssault.up,_right));
+      }
+      wave.crewContinuity.disembark();
+      return;
+    }
     surfaceBasis(centerDir, face, _up, _fwd, _right);
     const c = (GRID - 1) / 2;
     for (const s of wave.soldiers) {
@@ -1917,6 +1938,12 @@ export function createSaihojiPhalanxBattle({
   // 位置从地面直线插值到高台，因此没有攻城梯时也不会悬空穿过台地。
   function spawnSiegeStairRoutes() {
     if (siegeStairRoutes.length) return;
+    if(newCityAssault){
+      const points=newCityAssault.points.map(p=>p.clone().addScaledVector(newCityAssault.up,.06));
+      siegeStairRoutes.push({points,base:points[0].clone(),top:points.at(-1).clone(),capture:points.at(-1).clone(),terraces:[],floorRoutes:[],destination:"new-city-main-tower",routeSystem:newCityAssault.source});
+      logEvent("stairs",{routes:1,points:points.length,destination:"new-city-main-tower"});
+      return;
+    }
     if (latestAssault) {
       const points = (latestAssault.stairRoute || [])
         .map((tuple) => latestAssaultPoint(tuple))
@@ -2303,9 +2330,9 @@ export function createSaihojiPhalanxBattle({
         if(!w.boat.userData.waterRoute&&ensureWaterNavigation())sailWaterRoute(w.boat,w.navigationIndex,1,true);
       }else{
         const bd=plazaDir.clone().addScaledVector(castleEast,(wi-.5)*.03).addScaledVector(castleNorth,-.02).normalize();
-        surfaceBasis(bd,castleDir,_up,_fwd,_right);
-        if(plazaDeckPoint(_right,_fwd,0,0,_up,_deckPt)){w.boat.position.copy(_deckPt).addScaledVector(_up,.1);orientWarship(w.boat,_up,_fwd);}
-        else placeWarshipOnSphere(w.boat,bd,PLANET_RADIUS+.18,castleDir);
+        // Water placement belongs to the vessel; the infantry plaza ray must
+        // never raise the hull onto a ground deck when the plaza is relocated.
+        placeWarshipOnSphere(w.boat,bd,PLANET_RADIUS+.18,castleDir);
       }
       for (const s of w.soldiers) {
         paintSoldierHelm(s, "blue");
@@ -2361,7 +2388,11 @@ export function createSaihojiPhalanxBattle({
     redPostWorld.length = 0;
     for (let i = 0; i < RED_POSTS.length; i++) {
       let anchor = null;
-      if (latestAssault) {
+      if(newCityAssault){
+        anchor=newCityAssault.points.at(-1).clone()
+          .addScaledVector(castleEast,((i%3)-1)*.62)
+          .addScaledVector(castleFwdWorld,-Math.floor(i/3)*.48);
+      } else if (latestAssault) {
         const lane = siegeLadders[i % Math.max(1, siegeLadders.length)];
         anchor = lane?.capture?.clone()
           .addScaledVector(castleEast, ((i % 3) - 1) * 0.62)
@@ -2387,7 +2418,9 @@ export function createSaihojiPhalanxBattle({
       // 少量红盔长弓手：在古堡顶层居高俯射爬梯的蓝盔。
       const lx = siegeLadders[i % siegeLadders.length]?.x ?? 0.6 + i * 2.0;
       let bow = null;
-      if (latestAssault) {
+      if(newCityAssault){
+        bow=newCityAssault.points.at(-1).clone().addScaledVector(castleEast,(i-1)*.55);
+      } else if (latestAssault) {
         bow = latestAssaultPoint(latestAssault.keepTop)?.addScaledVector(
           castleEast,
           (i - (RED_LONGBOW_COUNT - 1) * 0.5) * 0.72
@@ -2548,7 +2581,8 @@ export function createSaihojiPhalanxBattle({
           bs.wave.boat.visible = false;
           continue;
         }
-        if(!waterRoutesEnabled){surfaceBasis(_tmp,castleDir,_up,_fwd,_right);if(plazaDeckPoint(_right,_fwd,bs.side*1.2,.4,_up,_deckPt)){bs.wave.boat.position.copy(_deckPt).addScaledVector(_up,.1);orientWarship(bs.wave.boat,_up,_fwd);}}
+        // Keep the arrival pose from the water route above. Disembarking the
+        // cohort does not reposition its ship onto the infantry assembly deck.
         // 全员下岸（空船）→ 直接编入攻城：集结落位后随大流转入中央突破
         const center = plazaDir
           .clone()
@@ -2789,6 +2823,10 @@ export function createSaihojiPhalanxBattle({
           lane = siegeStairRoutes[0];
         }
         if (!lane) continue;
+        if(newCityAssault && route==="stairs" && s.userData.siegeEntryRoute){
+          const points=s.userData.siegeEntryRoute;
+          lane={...lane,points,base:points[0]};
+        }
         const q = s.userData.queueIdx || 0;
         if (stage === "advance") {
           // 中央突破：梯/瀑布走到入口；石阶则走到第一块真实踏面。

@@ -11,6 +11,11 @@ func run()->void:
     w.camera.global_position=frame*Vector3(0,24,150)
     w.camera.look_at(frame*Vector3(16,15,12),frame.basis.y.normalized())
     w.camera.fov=50
+    var pads:Array=[];var foundations:Array=[]
+    for n in w.castle_adapter.original.find_children("*","MeshInstance3D",true,false):
+        if n.name=="contour-step-0":pads.append({"path":str(n.get_path()),"layers":n.layers})
+        if n.name=="highland-town-foundation-platform":foundations.append({"path":str(n.get_path()),"visible":n.is_visible_in_tree()})
+    print(JSON.stringify({"foundation_rendering":foundations,"edit_pad_rendering":pads}))
     var out="res://../artifacts/pipeline/citadel-plaza-horse/"
     for night in [false,true]:
         w.window_lights.set_enabled(night)

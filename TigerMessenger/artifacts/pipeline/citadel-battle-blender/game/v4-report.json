@@ -1,0 +1,40 @@
+{
+  "shots": [
+    {
+      "id": "horse2",
+      "world": [
+        76.5,
+        155.2,
+        89.8
+      ],
+      "fog": 0.0032,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/v4-horse2.png"
+    },
+    {
+      "id": "horse3",
+      "world": [
+        92.6,
+        146.8,
+        70.3
+      ],
+      "fog": 0.0032,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/v4-horse3.png"
+    },
+    {
+      "id": "plaza3",
+      "world": [
+        102,
+        185.1,
+        71.1
+      ],
+      "fog": 0.0032,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/v4-plaza3.png"
+    }
+  ],
+  "errors": [],
+  "sanity": {
+    "backdrop": true,
+    "backdropKids": 3,
+    "fogDensity": 0.0032
+  }
+}

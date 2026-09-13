@@ -1,0 +1,76 @@
+{
+  "day": {
+    "counts": {
+      "new": 10,
+      "old": 169
+    },
+    "enabled": false,
+    "energies": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "environment_count": 1,
+    "environment_matching": true,
+    "lit_points": 0,
+    "matching": 1014,
+    "old_lit_points": 0,
+    "old_point_lights": 3,
+    "point_lights": 3,
+    "total": 1014
+  },
+  "max_position_error": 0.0000170598450495163,
+  "night": {
+    "counts": {
+      "new": 10,
+      "old": 169
+    },
+    "enabled": true,
+    "energies": [
+      140.0,
+      25.0,
+      45.0
+    ],
+    "environment_count": 1,
+    "environment_matching": true,
+    "lit_points": 3,
+    "matching": 1014,
+    "old_lit_points": 3,
+    "old_point_lights": 3,
+    "point_lights": 3,
+    "total": 1014
+  },
+  "passed": true,
+  "points": [
+    {
+      "error": 0.00000762939453125,
+      "radius": 20.0,
+      "side": "old"
+    },
+    {
+      "error": 0.0000170598450495163,
+      "radius": 22.0,
+      "side": "old"
+    },
+    {
+      "error": 0.000003814697265625,
+      "radius": 26.0,
+      "side": "old"
+    },
+    {
+      "error": 0.00000762939453125,
+      "radius": 30.0,
+      "side": "new"
+    },
+    {
+      "error": 0.00000762939453125,
+      "radius": 24.0,
+      "side": "new"
+    },
+    {
+      "error": 0.00000762939453125,
+      "radius": 20.0,
+      "side": "new"
+    }
+  ]
+}

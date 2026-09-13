@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>旧港沿坡入城 · 实际接入</title><style>body{max-width:1440px;margin:32px auto;padding:0 22px;background:#142433;color:#e9eef5;font:17px/1.7 system-ui}a{color:#98c9ff}img{width:100%;margin:12px 0 24px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}p{max-width:1080px}@media(max-width:700px){.grid{display:block}}</style>
+<h1>旧港沿坡入城 · 结构与通行候选</h1><p><a href="../citadel-shore-planting/index.html">查看后续岩肩与柏树接入</a></p><p><a href="../citadel-tier-lighting/index.html">查看后续两城布光更新与真实对照</a></p>
+<p>旧港保留原船、起重机、树木及搬运兵。三段阶梯顺坡连到旧城原入口；Blender 两轮岩体替换大块空白石墙，已接入 8931 原游戏并同步同一个 Godot 工程。</p>
+<p><strong>已验证：</strong>Web 三条通行线 1,473 个采样点没有缺口或头顶遮挡；原船实际按键上下船通过。Godot 原装备短剑兵通过生产按钮走完 90 段，340,576 次碰撞查询无阻挡。原有前港到广场路线仍通过。</p>
+<p><strong>尚未完成：</strong>Web 玩家整段人工游玩验收、运输装卸/自动出航、群体战斗与最终步态。整体建筑、临水层次及布光仍与认可目标有差距，默认布局未切换。</p>
+<p><a href="../../../?autostart=1&citadelCommonFrame=1&citadelOldHarbor=1">运行 8931 原游戏候选</a> · <a href="shore-route-test.json">Web 通路检查</a> · <a href="godot-shore-march.json">Godot 实兵结果</a> · <a href="godot-candidate.json">导入对象及位置检查</a></p>
+<h2>认可目标 · 持续对照</h2><img src="approved-target.png"><p>当前仍缺少目标中的连续滨水建筑层次、细密植被及两城暖光分布；下方展示真实进度，不能视作已经复刻完成。</p><h2>实际 Web 场景</h2><img src="candidate-current.png?shore=r2">
+<h2>同工程 Godot</h2><img src="godot-after-night.png?shore=r2">
+<h2>Godot 实兵途经岸门与平台</h2><p>使用原装备模型；当前为保留刚性腿的风格化抬脚移动，尚不是最终步行动画。</p><div class="grid"><div><img src="godot-walk-02.png"><p>岸门进入第一段阶梯</p></div><div><img src="godot-walk-60.png"><p>中段平台继续上城</p></div></div>
+<h2>Blender 岩体迭代</h2><p>R01 检查轮廓；R02 增加岩层转折与分面材质。最终 760 三角形、非流形边 0。两轮使用同一实测通路基准，原 .blend 及导出数据已保存在 assets。</p><div class="grid"><img src="blender-rock-r01.png"><img src="blender-rock-r02.png"></div>

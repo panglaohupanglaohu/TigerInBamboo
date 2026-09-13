@@ -666,6 +666,9 @@ export function mountHighlandLocalHeroClouds(THREE, citadel, { radius = 160 } = 
   // 树冠卡片保留原 InstancedBufferGeometry（S12 共享管线）。
   try {
     const blobGroup = mountHighlandBlobClouds(THREE, citadel, { radius });
+    // Current target is a clear blue-hour gorge, not the previous cloud necklace.
+    // Keep the original cloud system recoverable and preserve canopy impostors.
+    blobGroup.visible = false;
     const canopyUpdate = renderer.update;
     renderer.update = (t) => {
       canopyUpdate?.(t);

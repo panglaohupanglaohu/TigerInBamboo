@@ -1,3 +1,4 @@
+import {horseTerraceHeight} from './citadel/horseTerrace.js';
 // =====================================================================
 //  @legacy Citadel Range — 外围地形网格 / walkLift / 瀑布 / 木马
 //  V4 真源：src/world/citadel/surfaceProvider.js · terrainGenerator.js
@@ -1357,6 +1358,16 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
         obj.geometry.userData.baseY = baseY;
       });
     }
+    // The current citadel is a coastal mountain on the global ocean. Every
+    // rebuild (including canal-link callbacks) must retire the legacy moat,
+    // not only the initial build below. Otherwise its blue water/bed/levees
+    // reappear across the bay and look like floating rectangular platforms.
+    if(latestValleyMode){
+      moat.visible=false;
+      moat.userData.hiddenByLatestValleyDesign=true;
+      moat.userData.retiredWaterCap=true;
+      moat.userData.retiredReason='global-ocean-coastal-citadel';
+    }
     moatMesh = moat;
     return moat;
   };
@@ -1520,7 +1531,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     const sampleDelta = (worldPos) => {
       if(horseReservation){
         const local=patrolCastle.worldToLocal(worldPos.clone());
-        return horseReservation[1]-local.y;
+        const authored=newCity.worldToLocal(worldPos.clone());
+        return horseTerraceHeight(authored.x,authored.z)-local.y;
       }
       const vlx = worldPos.dot(_right);
       const vlz = worldPos.dot(_fwd);
@@ -1532,7 +1544,19 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     scene.add(navonaPlaza);
 
     // ---------- 连港步道：广场 R 侧门洞 → 旧港码头陆侧（贴地石堤，跨护城河处护堤开缺） ----------
-    buildHarborCauseway(navonaPlaza);
+    const legacyCauseway=buildHarborCauseway(navonaPlaza);
+    if(newCity?.userData.walkRoute?.length && newCity?.userData.harborRoute?.length){
+      // Preserve the original object/position for marine fallback navigation.
+      // Infantry and the horse now use the new-city plaza and port. This old
+      // dry basin and its causeway must not remain as a second deck on the sea.
+      for(const legacy of [navonaPlaza,legacyCauseway]){
+        if(!legacy)continue;
+        legacy.visible=false;
+        legacy.userData.retiredCitadelPresentation=true;
+        legacy.userData.replacement='highland-west-city';
+      }
+      newCity.userData.legacyNavonaRetired=true;
+    }
 
     // 低多边形特洛伊木马：新圣城停在山脚水岸；历史模式仍兼容旧瀑布湖位。
     trojanHorse = createCitadelTrojanHorse({ name: "citadel-trojan-horse", seed: 9901 });
@@ -1656,7 +1680,8 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
     if(horseReservation){
       patrolCastle.updateWorldMatrix(true,false);
       trojanHorse.position.copy(patrolCastle.localToWorld(new THREE.Vector3(...horseReservation)));
-      const facing=new THREE.Vector3(newCity.userData.plazaAnchor[0]-horseReservation[0],0,50-horseReservation[2]);
+      const entry=newCity.userData.processionalEntry;
+      const facing=new THREE.Vector3(entry[0]-horseReservation[0],0,entry[2]-horseReservation[2]);
       const yaw=Math.atan2(facing.x,facing.z);
       trojanHorse.quaternion.copy(patrolCastle.getWorldQuaternion(new THREE.Quaternion())).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),yaw));
       const local=rangeWorldToLocal(trojanHorse.position);
@@ -1740,9 +1765,10 @@ export function buildCitadelRange(scene, R, contourSpec = CITADEL.contourTerrain
         let stairRoute = (latestAnchors.stairRoute || []).map(toWorld);
         if(horseReservation){
           const route=newCity.userData.walkRoute;
-          const end=route.findIndex(p=>Math.abs(p[0]-newCity.userData.plazaAnchor[0])<.01&&Math.abs(p[1]-4)<.01&&Math.abs(p[2]-50)<.01);
+          const entry=newCity.userData.processionalEntry;
+          const end=route.findIndex(p=>Math.hypot(p[0]-entry[0],p[1]-entry[1],p[2]-entry[2])<.01);
           if(end<0)throw new Error('New city bridge landing missing for original horse');
-          const plazaExit=[[horseReservation[0],4,61],[newCity.userData.plazaAnchor[0],4,58]];
+          const plazaExit=newCity.userData.horsePlazaExit;
           stairRoute=[...plazaExit,...route.slice(0,end+1).reverse()].map(toWorld).concat(stairRoute);
         }
         const interiorFloorRoutes = (latestAnchors.interiorFloorRoutes || []).map((route) => ({

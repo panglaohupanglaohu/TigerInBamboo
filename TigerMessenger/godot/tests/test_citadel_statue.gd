@@ -24,7 +24,7 @@ func run()->void:
                 else:bounds=bounds.expand(point)
         count+=1
     var placement:Vector3=inverse*statue.global_position
-    var dimensions_ok:bool=seeded and absf(bounds.position.y-4)<0.03 and absf(bounds.size.y-6.88)<0.03
+    var dimensions_ok:bool=seeded and absf(bounds.position.y-4)<0.03 and absf(bounds.size.y-6.88*1.2)<0.03
     var position_ok:bool=absf(placement.x-8)<0.03 and absf(placement.z-71.5)<0.03
     await w._start_traversal("gladius",true)
     w.set_physics_process(false)

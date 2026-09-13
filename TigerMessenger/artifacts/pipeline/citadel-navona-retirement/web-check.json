@@ -1,0 +1,24 @@
+{
+  "states": [
+    {
+      "flooded": true,
+      "visibleLegacyMeshes": 0
+    },
+    {
+      "flooded": false,
+      "visibleLegacyMeshes": 0
+    },
+    {
+      "flooded": true,
+      "visibleLegacyMeshes": 0
+    }
+  ],
+  "identity": true,
+  "anchorDrift": 0,
+  "horseDrift": 0,
+  "retired": true,
+  "infantrySource": "new-city-plaza-to-main-tower",
+  "passed": true,
+  "scope": "Retired visible basin/causeway, preserved source identities and nautical anchor; rain/dry toggles do not restore visible geometry. Not a migrated marine route.",
+  "errors": []
+}

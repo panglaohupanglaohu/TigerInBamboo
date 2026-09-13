@@ -1,0 +1,27 @@
+{
+  "bands": [
+    {
+      "name": "citadel-backdrop-ridge-near",
+      "vertices": 7488,
+      "boundaryVertices": 218,
+      "boundaryAboveWater": 163,
+      "maxBoundaryAltitude": 77.70755387932903
+    },
+    {
+      "name": "citadel-backdrop-ridge-mid",
+      "vertices": 8424,
+      "boundaryVertices": 242,
+      "boundaryAboveWater": 215,
+      "maxBoundaryAltitude": 152.4626125977287
+    },
+    {
+      "name": "citadel-backdrop-ridge-far",
+      "vertices": 9360,
+      "boundaryVertices": 266,
+      "boundaryAboveWater": 266,
+      "maxBoundaryAltitude": 281.1284071573747
+    }
+  ],
+  "conformance": null,
+  "errors": []
+}

@@ -1,21 +1,25 @@
 import {OLD_CITY_BRIDGE_ANCHOR} from './oldCityOrientation.js';
+import {rotateNewCityPoint} from './newCityOrientation.js';
 // Foreground-right new holy city; legacy WEST_CITY identifier retained for saved asset compatibility. Coordinates are local to castleContainer.
 export const WEST_CITY = Object.freeze({ x: 60, halfWidth: 15,
   districts: Object.freeze([{id:'harbor', z:50, y:4.0, halfWidth:14.5, buildingWidthScale:1}, {id:'middle', z:30, y:10, halfWidth:17.4, buildingWidthScale:1.2}, {id:'crown', z:10, y:16, halfWidth:21.75, buildingWidthScale:1.5}]) });
 
-export function westCityWaterChannel(x,z){return x>=18 && x<=43.8 && z>=52 && z<=69 || x>=18 && x<=37.5 && z>=-4 && z<=64;}
+function authoredWaterChannel(x,z){return x>=18 && x<=43.8 && z>=52 && z<=69 || x>=18 && x<=37.5 && z>=-4 && z<=64;}
+export function westCityWaterChannel(x,z){[x,,z]=rotateNewCityPoint([x,0,z],true);return authoredWaterChannel(x,z);}
 
 export function westCityBenchHeight(x,z,original) {
+  [x,,z]=rotateNewCityPoint([x,0,z],true);
   const dx=Math.abs(x-WEST_CITY.x);
   // Preserve clearance around the diagonal crossing out of the old city.
-  const ax=OLD_CITY_BRIDGE_ANCHOR[0],az=OLD_CITY_BRIDGE_ANCHOR[2],bx=WEST_CITY.x-14.35,bz=WEST_CITY.districts[0].z;
+  const bridge=rotateNewCityPoint(OLD_CITY_BRIDGE_ANCHOR,true);
+  const ax=bridge[0],az=bridge[2],bx=WEST_CITY.x-14.35,bz=WEST_CITY.districts[0].z;
   const vx=bx-ax,vz=bz-az;
   const t=Math.min(1,Math.max(0,((x-ax)*vx+(z-az)*vz)/(vx*vx+vz*vz)));
   if(Math.hypot(x-ax-vx*t,z-az-vz*t)<4.5)return Math.min(original,4.45);
 
   // Cut beneath the harbor stair and quay; retain the plaza above its top landing.
   if(x>=39.8&&x<=44.2&&z>=57.8&&z<=78.2)return Math.min(original,-25);
-  if(westCityWaterChannel(x,z)) return Math.min(original,-30);
+  if(authoredWaterChannel(x,z)) return Math.min(original,-30);
   // The plaza is a real rock shelf extending beyond the former z=59 mesh edge.
   const plazaSideRun=x>WEST_CITY.x?27:7;
   if(z>=58 && z<=116 && dx<=18+plazaSideRun){
@@ -28,7 +32,7 @@ export function westCityBenchHeight(x,z,original) {
     original=original*(1-weight)+3.78*weight;
     if(z>=64)return original;
   }
-  if(westCityWaterChannel(x,z)) return Math.min(original,-12);
+  if(authoredWaterChannel(x,z)) return Math.min(original,-12);
   if(dx>(x>WEST_CITY.x?55:27) || z < -14 || z > 64) return original;
   // Clear the *whole* processional staircase including terrain between samples,
   // not only the collision-tagged wooden/stone steps.

@@ -1,0 +1,66 @@
+{
+  "default": {
+    "source": "assets/models/optimized/citadel-west-massif/west-massif-r02.blend",
+    "conformance": {
+      "source": "assets/models/optimized/citadel-west-massif/west-massif-r02.blend",
+      "changed": 2510,
+      "vertices": 3846,
+      "maxFootClearance": -1.4999999999999716,
+      "scope": "Closed west-wing massif, final ocean foot; no original route changes"
+    },
+    "samples": 3237,
+    "missing": 0,
+    "wallBlocks": 0,
+    "matrix": [
+      -0.3949677187697489,
+      -0.38406373359791235,
+      0.8345630890859315,
+      0,
+      0.7380298526751614,
+      0.4083304603813851,
+      0.5371947241783054,
+      0,
+      -0.54709454182079,
+      0.8281070484300673,
+      0.12217315028410286,
+      0,
+      146.45745540440612,
+      59.08468663050035,
+      42.54313648806308,
+      1
+    ],
+    "errors": []
+  },
+  "common-frame": {
+    "source": "assets/models/optimized/citadel-west-massif/west-massif-r02.blend",
+    "conformance": {
+      "source": "assets/models/optimized/citadel-west-massif/west-massif-r02.blend",
+      "changed": 2510,
+      "vertices": 3846,
+      "maxFootClearance": -1.4999999999999432,
+      "scope": "Closed west-wing massif, final ocean foot; no original route changes"
+    },
+    "samples": 3123,
+    "missing": 0,
+    "wallBlocks": 0,
+    "matrix": [
+      -0.2433480997742053,
+      -0.24892872790620368,
+      0.9374519671744697,
+      0,
+      0.6354855835814281,
+      0.689249750214348,
+      0.3479839865419536,
+      0,
+      -0.7327617453145705,
+      0.6804184523162625,
+      -0.00953699906085087,
+      0,
+      154.445142550061,
+      66.1352771114472,
+      48.18789333516497,
+      1
+    ],
+    "errors": []
+  }
+}

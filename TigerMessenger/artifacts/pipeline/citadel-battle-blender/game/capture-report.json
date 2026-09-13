@@ -1,0 +1,132 @@
+{
+  "url": "http://localhost:8931/TigerMessenger/?autostart=1",
+  "shots": [
+    {
+      "deg": 0,
+      "pos": [
+        277.7,
+        92.3,
+        -101.6
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-0.png"
+    },
+    {
+      "deg": 45,
+      "pos": [
+        220.4,
+        207.7,
+        -64.8
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-45.png"
+    },
+    {
+      "deg": 90,
+      "pos": [
+        168.1,
+        255.5,
+        48.8
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-90.png"
+    },
+    {
+      "deg": 135,
+      "pos": [
+        151.4,
+        207.7,
+        172.8
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-135.png"
+    },
+    {
+      "deg": 180,
+      "pos": [
+        180,
+        92.3,
+        234.5
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-180.png"
+    },
+    {
+      "deg": 225,
+      "pos": [
+        237.2,
+        -23.1,
+        197.8
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-225.png"
+    },
+    {
+      "deg": 270,
+      "pos": [
+        289.5,
+        -70.9,
+        84.1
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-270.png"
+    },
+    {
+      "deg": 315,
+      "pos": [
+        306.3,
+        -23.1,
+        -39.9
+      ],
+      "look": [
+        146.5,
+        59.1,
+        42.5
+      ],
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/orbit-315.png"
+    }
+  ],
+  "errors": [],
+  "probe": {
+    "westCity": [
+      146.46,
+      59.08,
+      42.54
+    ],
+    "castle": [
+      114.45,
+      63.32,
+      83.3
+    ],
+    "massif": true,
+    "massifVisible": false
+  }
+}

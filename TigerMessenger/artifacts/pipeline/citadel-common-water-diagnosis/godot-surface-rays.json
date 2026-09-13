@@ -1,0 +1,157 @@
+[
+  {
+    "hits": [
+      {
+        "class": "ShaderMaterial",
+        "distance": 176.912521362305,
+        "material": "",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/odyssey-citadel-mountain-valley-assembly/citadel-latest-design-v1/highland-mountain-ravine-walls/highland-ravine-wall-west",
+        "source": {
+          "behaviorKeys": [],
+          "sourcePath": "castleContainer[69]/odyssey-citadel-mountain-valley-assembly[4]/citadel-latest-design-v1[12]/highland-mountain-ravine-walls[2]/highland-ravine-wall-west[0]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [
+          "(0.0392, 0.102, 0.2, 1.0)",
+          "(0.0392, 0.102, 0.2, 1.0)",
+          "(0.0392, 0.102, 0.2, 1.0)"
+        ],
+        "vertex_normals": [
+          "(0.659963, 0.495385, 0.564839)",
+          "(0.659963, 0.495385, 0.564839)",
+          "(0.659963, 0.495385, 0.564839)"
+        ]
+      }
+    ],
+    "uv": [
+      0.144999995827675,
+      0.409999996423721
+    ]
+  },
+  {
+    "hits": [
+      {
+        "class": "ShaderMaterial",
+        "distance": 247.907257080078,
+        "material": "",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/castleContainer/WestCityWFC/citadel-oskar-grid-mountain-surface",
+        "source": {
+          "behaviorKeys": [],
+          "sourcePath": "citadel-oskar-grid-mountain-surface[1]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [
+          "(0.0118, 0.0431, 0.098, 1.0)",
+          "(0.0078, 0.0275, 0.0667, 1.0)",
+          "(0.0118, 0.0431, 0.098, 1.0)"
+        ],
+        "vertex_normals": [
+          "(0.32691, -0.525601, -0.785413)",
+          "(0.367134, -0.425106, -0.827344)",
+          "(0.367134, -0.457305, -0.80999)"
+        ]
+      }
+    ],
+    "uv": [
+      0.270000010728836,
+      0.610000014305115
+    ]
+  },
+  {
+    "hits": [
+      {
+        "class": "ShaderMaterial",
+        "distance": 80.9896392822266,
+        "material": "",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/Original_Curved_Ocean_Runtime",
+        "source": {},
+        "vertex_colors": [
+          "(0.4196, 0.2, 0.5686, 0.6314)",
+          "(0.4196, 0.2, 0.5725, 0.6471)",
+          "(0.4196, 0.2, 0.5725, 0.6)"
+        ],
+        "vertex_normals": [
+          "(0.399548, 0.873447, 0.278303)",
+          "(0.408315, 0.869542, 0.277804)",
+          "(0.405344, 0.869451, 0.282403)"
+        ]
+      },
+      {
+        "class": "StandardMaterial3D",
+        "distance": 80.9957885742188,
+        "material": "res://assets/world-source/original-world-v1.glb::StandardMaterial3D_177w4",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/Mesh38",
+        "source": {
+          "behaviorKeys": [],
+          "sourcePath": "Mesh[41]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [],
+        "vertex_normals": [
+          "(0.841184, -0.000013, 0.540749)",
+          "(0.813722, -0.000065, 0.581255)",
+          "(0.841184, -0.000013, 0.540749)"
+        ]
+      },
+      {
+        "class": "StandardMaterial3D",
+        "distance": 81.5764923095703,
+        "material": "res://assets/world-source/original-world-v1.glb::StandardMaterial3D_5ffud",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/starting-camp/camp-flat-patch12",
+        "source": {
+          "behaviorKeys": [],
+          "sourcePath": "starting-camp[49]/camp-flat-patch[11]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [],
+        "vertex_normals": [
+          "(-0.004153, -0.999991, 0.000107)",
+          "(-0.016497, -0.999484, -0.027564)",
+          "(-0.03568, -0.999324, -0.008872)"
+        ]
+      },
+      {
+        "class": "StandardMaterial3D",
+        "distance": 81.6520156860352,
+        "material": "res://assets/world-source/original-world-v1.glb::StandardMaterial3D_b8o50",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/hills-closed-skirt",
+        "source": {
+          "behaviorKeys": [],
+          "sourcePath": "hills-closed-skirt[44]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [],
+        "vertex_normals": [
+          "(-0.396708, -0.866308, -0.303534)",
+          "(-0.397516, -0.866705, -0.301335)",
+          "(-0.397516, -0.866705, -0.301335)"
+        ]
+      },
+      {
+        "class": "StandardMaterial3D",
+        "distance": 81.9688034057617,
+        "material": "",
+        "path": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/planet-surface",
+        "source": {
+          "behaviorKeys": [],
+          "sourcePath": "planet-surface[40]",
+          "sourceType": "Mesh"
+        },
+        "vertex_colors": [
+          "(0.0588, 0.251, 0.1098, 1.0)",
+          "(0.0706, 0.3059, 0.1294, 1.0)",
+          "(0.0588, 0.2549, 0.1098, 1.0)"
+        ],
+        "vertex_normals": [
+          "(0.428102, 0.857234, 0.286144)",
+          "(0.428102, 0.857234, 0.286144)",
+          "(0.428102, 0.857234, 0.286144)"
+        ]
+      }
+    ],
+    "uv": [
+      0.584999978542328,
+      0.920000016689301
+    ]
+  }
+]

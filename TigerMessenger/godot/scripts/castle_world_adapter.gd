@@ -1,7 +1,10 @@
 class_name CastleWorldAdapter
 extends RefCounted
-## Opt-in static shared-edge WFC output at the original castle placement.
+## Current shared-edge WFC assembly at the original castle placement.
 ## Does not provide Godot WFC editing, navigation, combat, or animated windows.
+const SurfaceVariant=preload("res://scripts/citadel_surface_variant.gd")
+var _surface_original:Transform3D
+var _surface_applied:=false
 const CANDIDATE_PATH := "res://assets/art-pilots/castle-hillside-town-v2.glb"
 const WEST_CITY_PATH := "res://assets/art-pilots/citadel-west-city-v1.glb"
 const OLD_CITY_OFFSET := Vector3(-52, 0, 0)
@@ -18,6 +21,7 @@ var original_horse: Node3D
 var _horse_original_visible:=true
 var _west_replaced: Array[Dictionary] = []
 var _west_vegetation:Array[Dictionary]=[]
+var _edit_pad_layers:Array[Dictionary]=[]
 var _model: Node3D
 var _layers: Array[Dictionary] = []
 var _old_placement: Array[Dictionary] = []
@@ -45,6 +49,10 @@ func bind(model: Node3D) -> bool:
             return false
         found.append({"node":layer, "visible":layer.visible, "transform":layer.transform})
     original = roots[0]
+    if SurfaceVariant.enabled():
+        _surface_original=original.transform
+        original.transform=original.transform*SurfaceVariant.delta()
+        _surface_applied=true
     _model = model
     _layers = found
     # Translate archived content once, preserving the spherical world/sourcePath root.
@@ -122,7 +130,7 @@ func set_enabled(value: bool) -> bool:
 
 func _mount_west_city() -> void:
     if not is_instance_valid(west_city):
-        var packed := load(WEST_CITY_PATH) as PackedScene
+        var packed := load("res://assets/art-pilots/citadel-common-frame-candidate.glb" if SurfaceVariant.enabled() else WEST_CITY_PATH) as PackedScene
         if packed == null:
             push_warning("West city asset is not imported yet")
             return
@@ -133,9 +141,24 @@ func _mount_west_city() -> void:
         # The export is in original castle local coordinates, not world space.
         original.add_child(west_city)
         west_city.transform = Transform3D.IDENTITY
+        var city_hosts=west_city.find_children("highland-west-city","Node3D",true,false)
+        var retire_navona:bool=city_hosts.size()==1 and city_hosts[0].get_meta("extras",{}).get("legacyNavonaRetired",false)==true
+        var current_canopies=west_city.find_children("highland-canopy-groves","Node3D",true,false)
+        var current_slope_trees=west_city.find_children("highland-mountain-slope-vegetation","Node3D",true,false)
+        var current_foundations=west_city.find_children("highland-town-foundation-platform","Node3D",true,false)
         for node in original.find_children("*", "Node3D", true, false):
             if west_city.is_ancestor_of(node) or node == west_city: continue
-            if node.name in ["citadel-oskar-grid-mountain-surface", "backlit-highlight-citadel-oskar-grid-mountain-surface", "highland-ravine-wall-east"]:
+            if node.name=="highland-town-foundation-platform" and current_foundations.size()==1:
+                _west_replaced.append({"node":node,"visible":node.visible})
+            # The Web edit pad has material.visible=false. Keep its existing
+            # physics identity, but do not draw it as an opaque archived floor.
+            if node is MeshInstance3D and node.name=="contour-step-0" and node.get_parent().name=="citadel-continuous-mountain-terrain-system":
+                _edit_pad_layers.append({"node":node,"layers":node.layers})
+            if node.name=="highland-mountain-slope-vegetation" and current_slope_trees.size()==1:
+                _west_replaced.append({"node":node,"visible":node.visible})
+            if node.name=="highland-canopy-groves" and current_canopies.size()==1:
+                _west_replaced.append({"node":node,"visible":node.visible})
+            if node.name in ["citadel-oskar-grid-mountain-surface", "backlit-highlight-citadel-oskar-grid-mountain-surface", "highland-ravine-wall-east", "highland-hero-cloud-blobs"]:
                 _west_replaced.append({"node":node,"visible":node.visible})
         # A relocated export is the same Web asset, but Godot receives only its static pose.
         # Hide the archived sibling only when its replacement and identity match uniquely.
@@ -155,6 +178,9 @@ func _mount_west_city() -> void:
                 if west_city.is_ancestor_of(node):continue
                 var source:String=str(node.get_meta("extras",{}).get("sourcePath",""))
                 if source.begins_with(root_name+"[") and not source.contains("/"):originals.append(node)
+            if retire_navona and root_name in ["citadel-navona-canal-plaza","navona-harbor-causeway"] and originals.size()==1:
+                _west_replaced.append({"node":originals[0],"visible":originals[0].visible})
+                continue
             if replacements.size()==1 and originals.size()==1:
                 _west_replaced.append({"node":originals[0],"visible":originals[0].visible})
             else:
@@ -162,6 +188,7 @@ func _mount_west_city() -> void:
                 push_warning("Relocated harbor object not uniquely matched: "+root_name)
         _west_vegetation=preload("res://scripts/west_city_vegetation.gd").new().prepare(original)
     for row in _west_replaced: row.node.visible = false
+    for row in _edit_pad_layers: row.node.layers = 0
     for row in _west_vegetation:row.node.mesh=row.candidate
     west_city.visible = true
     if is_instance_valid(trojan_horse) and is_instance_valid(original_horse):
@@ -170,10 +197,14 @@ func _mount_west_city() -> void:
 
 func _adapt_materials(node: Node) -> void:
     if node is MeshInstance3D and node.mesh != null:
-        if node.name=="citadel-oskar-grid-mountain-surface":
+        if node.name in ["citadel-oskar-grid-mountain-surface", "citadel-coastal-cliff-seal", "old-shore-blender-rock-support", "citadel-old-city-support-spur"]:
             var terrain_material:=ShaderMaterial.new()
             terrain_material.shader=preload("res://shaders/citadel_terrain_color.gdshader")
             for surface in range(node.mesh.get_surface_count()):node.set_surface_override_material(surface,terrain_material)
+            # Both the main terrain and its coastal seal carry linear COLOR_0.
+            # Use the same Compatibility conversion; StandardMaterial would
+            # multiply these low linear values in display space and appear black.
+            for child in node.get_children():_adapt_materials(child)
             return
         for i in range(node.mesh.get_surface_count()):
             var arrays: Array = node.mesh.surface_get_arrays(i)
@@ -192,6 +223,8 @@ func _restore() -> void:
     if is_instance_valid(original_horse):original_horse.visible=_horse_original_visible
     for row in _west_replaced:
         if is_instance_valid(row.node): row.node.visible = row.visible
+    for row in _edit_pad_layers:
+        if is_instance_valid(row.node):row.node.layers=row.layers
     for row in _west_vegetation:
         if is_instance_valid(row.node):row.node.mesh=row.original
     for row in _layers:
@@ -213,11 +246,14 @@ func unbind() -> void:
         if is_instance_valid(row.node): row.node.transform = row.transform
     _old_placement.clear()
     if is_instance_valid(original):
+        if _surface_applied:original.transform=_surface_original
         original.remove_meta("citadel_old_city_offset")
         original.remove_meta("citadel_old_city_frame")
+    _surface_applied=false
     trojan_horse=null;original_horse=null
     west_city = null
     _west_replaced.clear()
+    _edit_pad_layers.clear()
     _west_vegetation.clear()
     candidate = null
     enabled = false

@@ -1,3 +1,17 @@
+import {buildPlazaRetainingWall} from '../world/citadel/plazaRetainingWall.js';
+import {adaptCitadelMountainForest} from '../world/citadel/mountainForest.js';
+import {buildOldShoreArcades} from '../world/citadel/oldShoreArcades.js';
+import {buildOldCitySupport} from '../world/citadel/oldCitySupport.js';
+import {buildCitadelShorePlanting} from '../world/citadel/shorePlanting.js';
+import {applyCitadelTierLighting} from '../world/citadel/tierLighting.js';
+import {buildOldShoreApproach} from '../world/citadel/oldShoreApproach.js';
+import {conformWestMassifToOcean} from '../world/citadel/westMassifBlender.js';
+import {buildFrontHarborApproach} from '../world/citadel/frontHarborApproach.js';
+import {applyFrontStrataBlender} from '../world/citadel/frontStrataBlender.js';
+import {shapeFrontCoastalSlope} from '../world/citadel/frontCoastalSlope.js';
+import {shapeWestCoastalSlope} from '../world/citadel/westCoastalSlope.js';
+import {alignCitadelPerimeterToOcean} from '../world/citadel/perimeterOceanAlignment.js';
+import {groundCitadelCanopies} from '../world/citadel/canopyGrounding.js';
 // =====================================================================
 //  场景：信使主岛（装配器）
 //  出生 / 交通 / 城堡 / 水晶城 / 逐帧更新拆到 scenes/messenger/
@@ -12,7 +26,7 @@ import { createMoonLake } from "../world/lake.js";
 import { GRAND_CRYSTAL } from "../world/moebiusCity.js";
 import { canyonOffsetDir } from "../world/canyon.js";
 import { SAIHOJI_ZONES, SAIHOJI_HUB } from "../world/saihoji.js";
-import { buildStartingCamp } from "../world/startingCamp.js";
+import { buildStartingCamp, conformCampShallowsToOcean } from "../world/startingCamp.js";
 import { placeObjectOnSphere, latLonToDir, quatYToDir } from "../world/sphereMath.js";
 import { createGrassTuft } from "../assets/bookshop.js";
 import { createBookshopHydrangeas } from "../assets/hydrangea.js";
@@ -28,9 +42,13 @@ import { updateMessengerIsland } from "./messenger/updateIsland.js";
 import { createSwampBgmState } from "./messenger/swampBgm.js";
 import { createBookshopPlantingClearance } from "./messenger/bookshopLayout.js";
 import { createPlanetV8Runtime, planetRendererOwnership } from "../world/planetV8/runtime.js";
+import {refineCitadelOceanCoast} from '../world/citadel/refineOceanCoast.js';
+import {sealCitadelCoastalCliffs} from '../world/citadel/coastalCliffSkirt.js';
+import {conformNewCityBackdropToOcean} from '../world/citadel/newCityBackdrop.js';
 import { createScoutDefenseSquad } from "../world/scoutDefense.js";
 import { pruneTaggedOfficialOceanOccludeds } from "../core/officialOceanOcclusionPruning.js";
 import { sampleSceneHeightAt, collectStaticTerrainMeshes } from "../world/planetV8/cloudTerrainRemap.js";
+import {buildTargetHillside} from '../world/citadel/targetHillside.js';
 import { FEATURES } from "../core/params.js";
 
 /** 正式主页（custom/legacy）挂球面 impostor 云海与曲率海洋，只留水晶城运河，不改全局 DEFAULT_ON。 */
@@ -158,6 +176,30 @@ export const messengerIslandScene = {
       features: planetFeatures,
       terrainMeshes,
     });
+    const coastalCity=citadelPack?.odysseyCitadel?.getObjectByName('highland-west-city');
+    const worldOcean=scene.getObjectByName('planet-v8-curved-ocean');
+    if(worldOcean?.userData.officialOcean && coastalCity){
+      refineCitadelOceanCoast(worldOcean,coastalCity,R);
+      shapeWestCoastalSlope(citadelPack.odysseyCitadel,R);
+      shapeFrontCoastalSlope(citadelPack.odysseyCitadel,R);
+      alignCitadelPerimeterToOcean(citadelPack.odysseyCitadel,R);
+      applyFrontStrataBlender(citadelPack.odysseyCitadel);
+      buildFrontHarborApproach(citadelPack.odysseyCitadel,R);
+      buildOldShoreApproach(citadelPack.odysseyCitadel,harbor,R);
+      applyCitadelTierLighting(citadelPack.odysseyCitadel);
+      sealCitadelCoastalCliffs(citadelPack.odysseyCitadel,R);
+      conformNewCityBackdropToOcean(coastalCity,R);
+      buildTargetHillside(citadelPack.odysseyCitadel,coastalCity);
+      groundCitadelCanopies(citadelPack.odysseyCitadel,R);
+      conformWestMassifToOcean(citadelPack.odysseyCitadel,R);
+      adaptCitadelMountainForest(citadelPack.odysseyCitadel,R);
+      buildOldCitySupport(citadelPack.odysseyCitadel);
+      buildOldShoreArcades(citadelPack.odysseyCitadel);
+      buildCitadelShorePlanting(citadelPack.odysseyCitadel,R);
+      buildPlazaRetainingWall(citadelPack.odysseyCitadel,R);
+    }
+
+    if (worldOcean?.userData.officialOcean) conformCampShallowsToOcean(camp.group, worldOcean, R);
 
     // 三重门编译锚点保留给门侧巡检逻辑，侦察队实际以门的 seatRoot
     // 读取最新姿态，保证开发者菜单搬迁叹息之门后仍能正确赶赴目标。

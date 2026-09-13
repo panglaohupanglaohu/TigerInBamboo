@@ -1,0 +1,43 @@
+{
+  "day": true,
+  "night": true,
+  "passed": false,
+  "roots": 1,
+  "routes": [
+    {
+      "blocked": {
+        "obstacle": "/root/TigerMessengerCitadelWorld/Original_Web_World_R160/OldHarborOceanGrade/citadel-old-shore-approach/Group22/old-shore-defenses",
+        "obstacle_bounds": "[P: (-59.70384, -7.618825, 18.82404), S: (23.33923, 13.03035, 28.19912)]",
+        "part": "n35",
+        "phase": "hop",
+        "point": 5,
+        "progress": 0.590277777777778,
+        "reason": "mesh_overlap",
+        "route_position": "(-58.51783, -7.61882, 44.75786)"
+      },
+      "completed_steps": 5,
+      "geometry_queries": 15867,
+      "max_plant_adjustment": 0.156114309430122,
+      "phase": "blocked",
+      "point": 5,
+      "role": "gladius",
+      "route_points": 31,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": true
+    },
+    {
+      "blocked": {},
+      "completed_steps": 30,
+      "geometry_queries": 82737,
+      "max_plant_adjustment": 0.156042232513428,
+      "phase": "arrived",
+      "point": 30,
+      "role": "gladius",
+      "route_points": 31,
+      "scope": "One actual carried actor, Lift-advance-land stylized step with original rigid legs, 0.01m / 2 degree discrete collision guards; no final articulated gait, no peer avoidance or siege.",
+      "step_clearance": 0.1,
+      "surface_following": true
+    }
+  ]
+}

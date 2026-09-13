@@ -5,8 +5,8 @@ import {mergeStaticGroup} from '../geometryMerge.js';
 // Same reviewed Blender geometry in Web and in the subsequent Godot city export.
 export function buildCitadelPlazaStatue(){
   const root=new THREE.Group();root.name='citadel-plaza-hero-statue';
-  root.userData.sourceId='citadel-soldier-statue-r03';
-  root.userData.sourceBlender='assets/models/optimized/citadel-statue/citadel-soldier-statue-r03.blend';
+  root.userData.sourceId='citadel-soldier-statue-r04';
+  root.userData.sourceBlender='assets/models/optimized/citadel-statue/citadel-soldier-statue-r04.blend';
   root.scale.setScalar(1.2);
   const materials=data.materials.map(m=>{
     const p=m.pbrMetallicRoughness;

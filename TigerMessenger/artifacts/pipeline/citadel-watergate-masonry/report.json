@@ -1,0 +1,79 @@
+{
+  "rings": 6,
+  "radius": 7.4,
+  "statue": [
+    59,
+    4,
+    76.00000000000003
+  ],
+  "deck": {
+    "center": [
+      62.925,
+      3.9,
+      74
+    ],
+    "size": {
+      "width": 36.15,
+      "height": 0.2,
+      "depth": 29,
+      "widthSegments": 1,
+      "heightSegments": 1,
+      "depthSegments": 1
+    }
+  },
+  "shops": [
+    {
+      "id": "quayside-arcade",
+      "x": 24,
+      "z": 91.5,
+      "y": -1.6442037347839142,
+      "w": 5.7,
+      "d": 3.7,
+      "h": 3.35,
+      "bays": 3
+    },
+    {
+      "id": "east-harbor-provisioner",
+      "x": 24,
+      "z": 84.5,
+      "y": 2.118598755072029,
+      "w": 3.7,
+      "d": 3,
+      "h": 3.7,
+      "bays": 1
+    }
+  ],
+  "plazaShops": [],
+  "horseError": 0,
+  "ringToHorseStair": 0.19999999999999396,
+  "floor": {
+    "samples": 1406,
+    "miss": []
+  },
+  "approach": {
+    "dockY": -1.6442037347839142,
+    "flights": 3,
+    "stepsPerFlight": 11,
+    "riser": 0.17103647681163378,
+    "tread": 1,
+    "stairWidth": 4,
+    "turnWidth": 4.8,
+    "cuts": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "changed": 29
+      },
+      {
+        "name": "backlit-highlight-citadel-oskar-grid-mountain-surface",
+        "changed": 23
+      }
+    ],
+    "status": "walking approach; fleet still uses rear harbor"
+  },
+  "corridor": {
+    "samples": 99,
+    "miss": []
+  },
+  "errors": [],
+  "passed": true
+}

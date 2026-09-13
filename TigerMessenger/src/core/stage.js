@@ -9,7 +9,11 @@ export function createStage() {
   // 莫比斯黄昏结界淡粉紫底（#EBB9B6）；昼夜循环会再 lerp 天空色
   scene.background = new THREE.Color(0xebb9b6);
   // 远景雾与背景同色相，避免纯黑/水泥灰吞没高空飞艇
-  scene.fog = new THREE.FogExp2(0xebb9b6, 0.007);
+  // Density was 0.007, which is ~78% fog at 175 m and ~99% at 300 m — every distant
+  // landmark (the citadel seen from a boat, the ridge lines) dissolved into flat sky.
+  // 0.0032 keeps the near-field haze but lets the silhouettes survive to the horizon.
+  scene.fog = new THREE.FogExp2(0xebb9b6, 0.0032);
+  scene.fog.userData = { legacyDensity: 0.007 };
 
   const camera = new THREE.PerspectiveCamera(
     60,

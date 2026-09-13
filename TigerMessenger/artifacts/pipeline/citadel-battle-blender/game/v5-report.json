@@ -1,0 +1,30 @@
+{
+  "shots": [
+    {
+      "id": "horse",
+      "world": [
+        92.6,
+        146.8,
+        70.3
+      ],
+      "fog": 0.0032,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/v5-horse.png"
+    },
+    {
+      "id": "horse-side",
+      "world": [
+        80.4,
+        137.5,
+        92.3
+      ],
+      "fog": 0.0032,
+      "file": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/game/v5-horse-side.png"
+    }
+  ],
+  "errors": [],
+  "sanity": {
+    "backdrop": true,
+    "backdropKids": 3,
+    "fogDensity": 0.0032
+  }
+}

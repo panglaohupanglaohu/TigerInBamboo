@@ -1,0 +1,406 @@
+[
+  {
+    "x": 760,
+    "y": 680,
+    "hits": [
+      {
+        "name": "hills-closed-skirt",
+        "parent": "",
+        "point": [
+          -7.065516655752299,
+          -32.526919821115506,
+          104.02012914934573
+        ],
+        "altitude": 0.3941120538218854,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          -6.770651507446173,
+          -32.84798705329549,
+          103.80470096566916
+        ],
+        "altitude": -0.002404649939734327,
+        "mask": 0.8600000143051149
+      },
+      {
+        "name": "camp-flat-patch",
+        "parent": "starting-camp",
+        "point": [
+          -6.642709788794248,
+          -32.98729783221902,
+          103.71122687344776
+        ],
+        "altitude": -0.17429918593521165,
+        "mask": null
+      },
+      {
+        "name": "planet-surface",
+        "parent": "",
+        "point": [
+          -6.2541734196343,
+          -33.410360026459536,
+          103.42736258910881
+        ],
+        "altitude": -0.6957384304369327,
+        "mask": null
+      },
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "parent": "citadel-continuous-mountain-terrain-system",
+        "point": [
+          -5.966896369132015,
+          -33.723164873025674,
+          103.21747826213021
+        ],
+        "altitude": -1.0807224128575683,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          151.72113962747454,
+          -205.42355590318894,
+          -11.98924378494893
+        ],
+        "altitude": -0.19239952987209108,
+        "mask": 0.8600000143051147
+      },
+      {
+        "name": "sky-background",
+        "parent": "",
+        "point": [
+          1281.5375353910217,
+          -1435.6368420212648,
+          -837.4319772702268
+        ],
+        "altitude": 1835.3662801037376,
+        "mask": null
+      }
+    ]
+  },
+  {
+    "x": 830,
+    "y": 715,
+    "hits": [
+      {
+        "name": "hills",
+        "parent": "",
+        "point": [
+          -2.0924061626922312,
+          -35.75941779336646,
+          111.22645053879636
+        ],
+        "altitude": 2.6279145011510536,
+        "mask": null
+      },
+      {
+        "name": "",
+        "parent": "",
+        "point": [
+          0.08365354188318362,
+          -38.058906976535646,
+          109.98397449424635
+        ],
+        "altitude": 0.08666673797026192,
+        "mask": null
+      },
+      {
+        "name": "camp-flat-patch",
+        "parent": "starting-camp",
+        "point": [
+          0.08806358125493573,
+          -38.063567160174635,
+          109.98145647129715
+        ],
+        "altitude": 0.0815489047317044,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          0.15922874228893844,
+          -38.1387689194242,
+          109.94082293187479
+        ],
+        "altitude": -0.001019620842328095,
+        "mask": 0.8600000143051147
+      },
+      {
+        "name": "planet-surface",
+        "parent": "",
+        "point": [
+          0.6793374278478516,
+          -38.68837897561908,
+          109.64385379035234
+        ],
+        "altitude": -0.6034150283263386,
+        "mask": null
+      },
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "parent": "citadel-continuous-mountain-terrain-system",
+        "point": [
+          1.7783679421183396,
+          -39.84974820378137,
+          109.0163346633084
+        ],
+        "altitude": -1.8701470720468762,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          152.42736318058178,
+          -199.04378790672533,
+          22.999500049002226
+        ],
+        "altitude": -0.1978725295427921,
+        "mask": 0.8600000143051147
+      },
+      {
+        "name": "sky-background",
+        "parent": "",
+        "point": [
+          1350.655855812966,
+          -1465.2376574866548,
+          -661.159208860821
+        ],
+        "altitude": 1833.9778843164424,
+        "mask": null
+      }
+    ]
+  },
+  {
+    "x": 650,
+    "y": 600,
+    "hits": [
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          -14.571671013284007,
+          -24.128339043124917,
+          91.66271900392822
+        ],
+        "altitude": -0.0004478963953147286,
+        "mask": 0.8600000143051147
+      },
+      {
+        "name": "camp-flat-patch",
+        "parent": "starting-camp",
+        "point": [
+          -14.404597844203831,
+          -24.309579075778025,
+          91.48687761397998
+        ],
+        "altitude": -0.2638339984125082,
+        "mask": null
+      },
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "parent": "citadel-continuous-mountain-terrain-system",
+        "point": [
+          -14.387653953232654,
+          -24.32795971325435,
+          91.46904448520228
+        ],
+        "altitude": -0.29053778364118443,
+        "mask": null
+      },
+      {
+        "name": "planet-surface",
+        "parent": "",
+        "point": [
+          -14.123612328060418,
+          -24.61439058082862,
+          91.19114560634516
+        ],
+        "altitude": -0.7064848277052818,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          139.47567282587642,
+          -191.23802985256202,
+          -70.4692331679898
+        ],
+        "altitude": -0.10204952390671451,
+        "mask": 0.8600000143051147
+      },
+      {
+        "name": "sky-background",
+        "parent": "",
+        "point": [
+          1164.0184892865689,
+          -1302.6563056427385,
+          -1148.781411597515
+        ],
+        "altitude": 1837.3969202468168,
+        "mask": null
+      }
+    ]
+  },
+  {
+    "x": 810,
+    "y": 545,
+    "hits": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "parent": "citadel-continuous-mountain-terrain-system",
+        "point": [
+          7.742014695222261,
+          -21.364265107087103,
+          99.09209258537643
+        ],
+        "altitude": 6.102536438506121,
+        "mask": null
+      },
+      {
+        "name": "",
+        "parent": "",
+        "point": [
+          14.350492165394595,
+          -26.24052738353253,
+          94.76465444884164
+        ],
+        "altitude": 0.0718199835654616,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          14.433039254542347,
+          -26.301437216191935,
+          94.71060002809946
+        ],
+        "altitude": -0.001547854151226602,
+        "mask": 0.8600000143051146
+      },
+      {
+        "name": "camp-flat-patch",
+        "parent": "starting-camp",
+        "point": [
+          14.67188482521632,
+          -26.477676546874413,
+          94.55419646374715
+        ],
+        "altitude": -0.2135504033401503,
+        "mask": null
+      },
+      {
+        "name": "hills-closed-skirt",
+        "parent": "",
+        "point": [
+          14.970481379295975,
+          -26.698004923434233,
+          94.35866608305135
+        ],
+        "altitude": -0.4779943331591312,
+        "mask": null
+      },
+      {
+        "name": "planet-surface",
+        "parent": "",
+        "point": [
+          15.245834911146463,
+          -26.901182742547483,
+          94.17835596167505
+        ],
+        "altitude": -0.7212657111211058,
+        "mask": null
+      },
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "parent": "citadel-continuous-mountain-terrain-system",
+        "point": [
+          52.423007975297246,
+          -54.33346913163517,
+          69.83357802265493
+        ],
+        "altitude": -27.185525782016697,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          158.83495278556984,
+          -132.8526975898648,
+          0.1517019425345367
+        ],
+        "altitude": -0.11866141518527229,
+        "mask": 0.8600000143051147
+      }
+    ]
+  },
+  {
+    "x": 510,
+    "y": 655,
+    "hits": [
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          -33.243261928223724,
+          -25.09733198778101,
+          88.10262011520342
+        ],
+        "altitude": -0.0005278357376710119,
+        "mask": 0.8600000143051147
+      },
+      {
+        "name": "camp-flat-patch",
+        "parent": "starting-camp",
+        "point": [
+          -33.129221750197196,
+          -25.28689044651116,
+          87.91057945567442
+        ],
+        "altitude": -0.2830507112962266,
+        "mask": null
+      },
+      {
+        "name": "planet-surface",
+        "parent": "",
+        "point": [
+          -32.92798244916284,
+          -25.62139195641864,
+          87.57169776711028
+        ],
+        "altitude": -0.7815088901500076,
+        "mask": null
+      },
+      {
+        "name": "planet-v8-curved-ocean",
+        "parent": "planet-v9-runtime",
+        "point": [
+          87.23457184367683,
+          -225.35651148180028,
+          -114.77888232156386
+        ],
+        "altitude": -0.11216988805452388,
+        "mask": 0.8600000143051147
+      },
+      {
+        "name": "sky-background",
+        "parent": "",
+        "point": [
+          804.5942229388088,
+          -1417.7572264748424,
+          -1322.793661847257
+        ],
+        "altitude": 1837.3823707397069,
+        "mask": null
+      }
+    ]
+  }
+]

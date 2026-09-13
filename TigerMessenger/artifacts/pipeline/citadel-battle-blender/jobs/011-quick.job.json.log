@@ -1,0 +1,19 @@
+00:00.021  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py:653: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py:800: DeprecationWarning: 'Scene.use_nodes' is expected to be removed in Blender 6.0
+  sc.use_nodes = True
+Traceback (most recent call last):
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py", line 868, in <module>
+    main()
+    ~~~~^^
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py", line 834, in main
+    render_settings(QUICK)
+    ~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py", line 801, in render_settings
+    nt = sc.node_tree
+         ^^^^^^^^^^^^
+AttributeError: 'Scene' object has no attribute 'node_tree'
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

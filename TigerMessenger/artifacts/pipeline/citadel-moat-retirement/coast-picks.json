@@ -1,0 +1,162 @@
+[
+  {
+    "pixel": [
+      460,
+      659
+    ],
+    "hits": [
+      {
+        "name": "causeway-deck",
+        "parents": [
+          "navona-harbor-causeway",
+          ""
+        ],
+        "point": [
+          -1.4659431826727738,
+          -5.400131912404162,
+          25.43760086417127
+        ]
+      },
+      {
+        "name": "planet-surface",
+        "parents": [
+          "",
+          null
+        ],
+        "point": [
+          -1.7652644712748393,
+          -6.453743113005741,
+          22.868877251272657
+        ]
+      }
+    ]
+  },
+  {
+    "pixel": [
+      518,
+      690
+    ],
+    "hits": [
+      {
+        "name": "planet-surface",
+        "parents": [
+          "",
+          null
+        ],
+        "point": [
+          6.143194818419472,
+          -5.893616568693488,
+          34.97636608115876
+        ]
+      },
+      {
+        "name": "sky-background",
+        "parents": [
+          "",
+          null
+        ],
+        "point": [
+          -98.64820904498285,
+          -862.8180251375476,
+          -1862.0246603481582
+        ]
+      }
+    ]
+  },
+  {
+    "pixel": [
+      660,
+      615
+    ],
+    "hits": [
+      {
+        "name": "navona-plaza-basin-stone",
+        "parents": [
+          "citadel-navona-canal-plaza",
+          ""
+        ],
+        "point": [
+          23.74729437739894,
+          0.7872294454496112,
+          30.610732817319384
+        ]
+      },
+      {
+        "name": "navona-rim-wall-L",
+        "parents": [
+          "navona-plaza-canal-rim",
+          "citadel-navona-canal-plaza"
+        ],
+        "point": [
+          23.871014406812787,
+          0.3531852288472805,
+          29.448136312622132
+        ]
+      }
+    ]
+  },
+  {
+    "pixel": [
+      572,
+      647
+    ],
+    "hits": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "parents": [
+          "citadel-continuous-mountain-terrain-system",
+          "castleContainer"
+        ],
+        "point": [
+          12.600949995789446,
+          2.948011050844485,
+          44.539381366425815
+        ]
+      },
+      {
+        "name": "citadel-coastal-cliff-seal",
+        "parents": [
+          "citadel-oskar-grid-mountain-surface",
+          "citadel-continuous-mountain-terrain-system"
+        ],
+        "point": [
+          12.612440027140433,
+          2.2013456369356557,
+          42.695075617192
+        ]
+      }
+    ]
+  },
+  {
+    "pixel": [
+      580,
+      847
+    ],
+    "hits": [
+      {
+        "name": "citadel-oskar-grid-mountain-surface",
+        "parents": [
+          "citadel-continuous-mountain-terrain-system",
+          "castleContainer"
+        ],
+        "point": [
+          12.6564235540835,
+          -8.529338229824075,
+          63.756330487843385
+        ]
+      },
+      {
+        "name": "citadel-coastal-cliff-seal",
+        "parents": [
+          "citadel-oskar-grid-mountain-surface",
+          "citadel-continuous-mountain-terrain-system"
+        ],
+        "point": [
+          12.672682588343722,
+          -9.78090550877627,
+          61.843072712174525
+        ]
+      }
+    ]
+  }
+]

@@ -22,6 +22,12 @@ var tiger_toggle: CheckButton
 var bookshop_adapter = preload("res://scripts/bookshop_world_adapter.gd").new()
 var castle_adapter = preload("res://scripts/castle_world_adapter.gd").new()
 var castle_toggle: CheckButton
+var window_lights=preload("res://scripts/citadel_window_lights.gd").new()
+var old_harbor_grade_adapter=preload("res://scripts/old_harbor_grade_adapter.gd").new()
+var west_massif_adapter=preload("res://scripts/west_massif_adapter.gd").new()
+var camp_shallows_adapter=preload("res://scripts/camp_shallows_adapter.gd").new()
+var seabed_adapter=preload("res://scripts/citadel_seabed_adapter.gd").new()
+var ocean_adapter=preload("res://scripts/original_ocean_adapter.gd").new()
 
 
 func _ready() -> void:
@@ -47,6 +53,11 @@ func _ready() -> void:
 	if tiger_adapter.bind(model): tiger_adapter.set_enabled(true)
 	if bookshop_adapter.bind(model): bookshop_adapter.set_enabled(true)
 	if castle_adapter.bind(model): castle_adapter.set_enabled(true)
+	ocean_adapter.bind(model)
+	seabed_adapter.bind(model)
+	camp_shallows_adapter.bind(model)
+	west_massif_adapter.bind(model)
+	old_harbor_grade_adapter.bind(self)
 	var environment := WorldEnvironment.new()
 	environment.environment = Environment.new()
 	environment.environment.background_mode = Environment.BG_COLOR
@@ -65,7 +76,17 @@ func _ready() -> void:
 	camera.far = 2500
 	camera.fov = 52
 	add_child(camera)
+	if is_instance_valid(castle_adapter.west_city):
+		var hosts=castle_adapter.west_city.find_children("highland-west-city","Node3D",true,false)
+		if hosts.size()==1:
+			var elder_audio=preload("res://scripts/citadel_elder_audio.gd").new()
+			elder_audio.name="CitadelElderRegionAudio";add_child(elder_audio)
+			elder_audio.bind(hosts[0],camera)
 	camera.current = true
+	if is_instance_valid(castle_adapter.candidate) and is_instance_valid(castle_adapter.west_city):
+		window_lights.bind(castle_adapter.candidate,castle_adapter.west_city)
+		window_lights.bind_environment(self)
+		window_lights.set_enabled(false)
 	_mirror_island()
 	_ui()
 	_camera()
@@ -131,6 +152,7 @@ func _ui() -> void:
 	castle_toggle.button_pressed = castle_adapter.enabled
 	castle_toggle.toggled.connect(func(value):
 		if not castle_adapter.set_enabled(value): castle_toggle.set_pressed_no_signal(castle_adapter.enabled)
+		if is_instance_valid(old_harbor_grade_adapter.replacement):old_harbor_grade_adapter.replacement.visible=castle_adapter.enabled
 	)
 	box.add_child(castle_toggle)
 	var layout := Button.new()

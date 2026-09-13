@@ -1,0 +1,314 @@
+{
+  "baseline": [
+    19.22887040766105,
+    19.984918474670366,
+    21.523127912351583,
+    22.269685762685754
+  ],
+  "original": {
+    "position": [
+      154.46792804707806,
+      91.7894209381326,
+      19.462251037829077
+    ],
+    "quaternion": [
+      0.3375291439492982,
+      0.46226375405116404,
+      -0.20359077061026118,
+      0.7943154894610195
+    ]
+  },
+  "children": [
+    {
+      "name": "stacked-crates",
+      "position": [
+        -1.6,
+        0.51,
+        1.15
+      ],
+      "keys": [
+        "kind",
+        "count"
+      ]
+    },
+    {
+      "name": "harbor-crates-by-crane",
+      "position": [
+        2.2,
+        0.51,
+        1
+      ],
+      "keys": [
+        "kind",
+        "count"
+      ]
+    },
+    {
+      "name": "harbor-crane",
+      "position": [
+        2.6,
+        0.51,
+        -1.35
+      ],
+      "keys": [
+        "kind",
+        "collideRadius"
+      ]
+    },
+    {
+      "name": "porter-squad",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "keys": [
+        "from",
+        "to",
+        "period",
+        "offset",
+        "porters",
+        "cranePos",
+        "crane",
+        "craneChance",
+        "onDeliver",
+        "loading",
+        "update",
+        "_lastT"
+      ]
+    },
+    {
+      "name": "porter-squad",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "keys": [
+        "from",
+        "to",
+        "period",
+        "offset",
+        "porters",
+        "cranePos",
+        "crane",
+        "craneChance",
+        "onDeliver",
+        "loading",
+        "update",
+        "_lastT"
+      ]
+    },
+    {
+      "name": "citadel-sacred-tarn-elder-tree",
+      "position": [
+        -3.5,
+        0,
+        3.25
+      ],
+      "keys": [
+        "kind",
+        "assetType",
+        "style",
+        "seed",
+        "designHeight",
+        "canopyHeight",
+        "height",
+        "topY",
+        "collideRadius",
+        "crownCount",
+        "canopyBands",
+        "trunkCount",
+        "stemLayers",
+        "branchCount",
+        "cloudPads",
+        "zoneFill",
+        "outline",
+        "rangeLocal",
+        "presentationOnly",
+        "nonNavigable",
+        "designRole",
+        "pendingHarborRestore",
+        "referenceScale",
+        "harborLocal"
+      ]
+    },
+    {
+      "name": "citadel-tarn-companion-pine",
+      "position": [
+        2.8,
+        0,
+        3.15
+      ],
+      "keys": [
+        "kind",
+        "assetType",
+        "style",
+        "seed",
+        "designHeight",
+        "canopyHeight",
+        "height",
+        "topY",
+        "collideRadius",
+        "crownCount",
+        "canopyBands",
+        "trunkCount",
+        "stemLayers",
+        "branchCount",
+        "cloudPads",
+        "zoneFill",
+        "outline",
+        "rangeLocal",
+        "designRole",
+        "pendingHarborRestore",
+        "harborLocal",
+        "referenceScale"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.19119473622486627,
+        -0.22648670035003066,
+        -0.9550645776095243,
+        0,
+        0.8425007846184778,
+        0.5371104865347893,
+        0.04128865669419779,
+        0,
+        0.5036238683354406,
+        -0.8125368298230655,
+        0.29350792054717956,
+        0,
+        135.33605193327455,
+        86.2793412501047,
+        6.632449356295282,
+        1
+      ],
+      "castleLocal": [
+        -72,
+        -12.719889484735347,
+        44
+      ],
+      "deckClearances": [
+        0.700000000001495,
+        0.7000000000014666,
+        0.7000000000014666,
+        0.700000000001495
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.18310909885054139,
+        -0.2538030844767543,
+        -0.9497657880910577,
+        0,
+        0.8222651383332427,
+        0.5690679609414553,
+        0.006457407509807334,
+        0,
+        0.53884237045722,
+        -0.7821417071989063,
+        0.31289494987938704,
+        0,
+        132.08547635332923,
+        91.41286574636119,
+        1.037292847741739,
+        1
+      ],
+      "castleLocal": [
+        -74,
+        -13.194327794541039,
+        52
+      ],
+      "deckClearances": [
+        0.6999999999962085,
+        0.6999999999961801,
+        0.6999999999962085,
+        0.6999999999961801
+      ],
+      "terrainAtDeck": [
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": "harbor-local-ocean-tangent",
+      "matrix": [
+        0.15213010922259818,
+        -0.2911280796897226,
+        -0.9445109163392951,
+        0,
+        0.8137654309448195,
+        0.5792514150643334,
+        -0.047472323991559484,
+        0,
+        0.560929811355318,
+        -0.7613883630330462,
+        0.3250315482699264,
+        0,
+        130.7201163898308,
+        93.04869624194976,
+        -7.625769640112935,
+        1
+      ],
+      "castleLocal": [
+        -80,
+        -15.949105627451843,
+        58
+      ],
+      "deckClearances": [
+        0.7000000000008129,
+        0.7000000000008129,
+        0.7000000000008413,
+        0.7000000000008413
+      ],
+      "terrainAtDeck": [
+        {
+          "relativeHeight": 5.5477818648511725,
+          "point": [
+            -76.7030422004354,
+            -8.268864936427859,
+            59.48754449431536
+          ]
+        },
+        {
+          "relativeHeight": 7.525720869635854,
+          "point": [
+            -77.35946219453713,
+            -6.5228421893648925,
+            55.34564545634404
+          ]
+        },
+        {
+          "relativeHeight": 6.9560417181433545,
+          "point": [
+            -83.08502066987661,
+            -9.975743683698338,
+            60.67340380927365
+          ]
+        },
+        {
+          "relativeHeight": 8.708995717173698,
+          "point": [
+            -83.74144066397838,
+            -8.45470594238972,
+            56.53150477130233
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Read-only berth placement measurements; actual harbor restored, no actor/story movement committed"
+}

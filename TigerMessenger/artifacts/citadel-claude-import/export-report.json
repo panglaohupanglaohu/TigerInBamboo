@@ -1,0 +1,15 @@
+{
+  "houses": 12,
+  "matchedSourceVertices": 1592,
+  "checkedSourceVertices": 1592,
+  "normalRepair": "Outward connected-solid winding; original vertex positions unchanged",
+  "coordinateConversion": "Blender (x,y,z) to Three (x,z,-y); individual ground-centered lots",
+  "excluded": [
+    "Terrain",
+    "Water",
+    "Troops",
+    "Ships",
+    "Keep",
+    "GrandStair"
+  ]
+}

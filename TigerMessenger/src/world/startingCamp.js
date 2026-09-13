@@ -48,6 +48,7 @@ function flatPatch(rnd, rx, rz, color, lift) {
   mesh.receiveShadow = true;
   mesh.name = "camp-flat-patch"; // 薄装饰色块（沙滩/浅海），沉降 pass 不作地表
   mesh.userData.lift = lift;
+  mesh.userData.shallowWaterDecoration = color === SHALLOW;
   return mesh;
 }
 
@@ -270,4 +271,45 @@ export function buildStartingCamp(scene, R) {
     colliders,
     landmarks: { elder, anchor: campAnchor, foxAli: ali, skyRing, hillCenter: HILL, campFlowers },
   };
+}
+
+/** Keep shallow-water colour patches below the final triangulated ocean.
+ * These are seabed decoration, never walkable terrain or a second water surface.
+ * Sample the rendered shell instead of the analytic radius (coarse faces sag).
+ */
+export function conformCampShallowsToOcean(camp, ocean, radius = 160) {
+  if (!camp || !ocean?.geometry) return null;
+  camp.updateWorldMatrix(true, true);
+  ocean.updateWorldMatrix(true, false);
+  const ray = new THREE.Raycaster();
+  ray.layers.enableAll();
+  const world = new THREE.Vector3();
+  const direction = new THREE.Vector3();
+  let patches = 0, vertices = 0, missing = 0;
+  const clearance = 0.35; // exceeds the 0.067 m GPU wave envelope.
+  camp.traverse(mesh => {
+    if (!mesh.isMesh || !mesh.userData.shallowWaterDecoration) return;
+    const position = mesh.geometry.attributes.position;
+    const next = position.array.slice();
+    const inverse = mesh.matrixWorld.clone().invert();
+    for (let i = 0; i < position.count; i++) {
+      world.fromBufferAttribute(position, i).applyMatrix4(mesh.matrixWorld);
+      direction.copy(world).normalize();
+      ray.set(direction.clone().multiplyScalar(radius + 60), direction.clone().negate());
+      ray.far = radius + 60;
+      const hit = ray.intersectObject(ocean, false)[0];
+      if (!hit) { missing++; return; }
+      world.copy(hit.point).addScaledVector(direction, -clearance).applyMatrix4(inverse);
+      world.toArray(next, i * 3);
+    }
+    position.array.set(next);
+    position.needsUpdate = true;
+    mesh.geometry.computeVertexNormals();
+    mesh.geometry.computeBoundingBox();
+    mesh.geometry.computeBoundingSphere();
+    patches++; vertices += position.count;
+  });
+  const report = {patches, vertices, missing, clearance, source: 'final-triangulated-ocean'};
+  camp.userData.shallowOceanConformance = report;
+  return report;
 }

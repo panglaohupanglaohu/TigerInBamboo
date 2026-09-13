@@ -1,0 +1,418 @@
+00:00.018  color_management | Using OCIO=/Applications/Blender.app/Contents/Resources/5.2/datafiles/colormanagement/config.ocio
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/scripts/build_citadel_battle.py:913: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3245 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3254 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3255 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3254 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3251 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3255 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3254 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3251 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3254 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3247 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3256 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3242 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3247 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3251 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3251 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3247 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3254 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3255 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3256 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3247 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3256 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3246 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (32500:12.937  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-full.png'
+Info: Saved as "citadel-battle-v1.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+10:02:22 | INFO: Starting glTF 2.0 export
+10:02:22 | INFO: Extracting primitive: BannerPole_src
+10:02:22 | INFO: Primitives created: 5
+10:02:22 | INFO: Extracting primitive: Barrel_src
+10:02:22 | INFO: Primitives created: 2
+10:02:22 | INFO: Extracting primitive: Boat_src
+10:02:22 | INFO: Primitives created: 2
+10:02:22 | INFO: Extracting primitive: Bollard_src
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Bush_src
+10:02:22 | INFO: Primitives created: 2
+10:02:22 | INFO: Extracting primitive: Crate_src
+10:02:22 | INFO: Primitives created: 3
+10:02:22 | INFO: Extracting primitive: Cypress_src
+10:02:22 | INFO: Primitives created: 3
+10:02:22 | INFO: Extracting primitive: EastTerrace_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: EastTerrace_roof_blue
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: EastTerrace_stone
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: EastTerrace_trim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: EastTerrace_wall
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: EastTerrace_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: EastTerrace_win_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: FarTowers_far_city
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: FarTowers_roof_deep
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: FarTowers_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_roof_blue
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_roof_deep
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_stone
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_trim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_wall
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_wall_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_win_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Foreground_wood
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Fox
+10:02:22 | INFO: Primitives created: 2
+10:02:22 | INFO: Extracting primitive: Galley_A
+10:02:22 | INFO: Primitives created: 7
+10:02:22 | INFO: Extracting primitive: Gangplank_wood_dark
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Gangplank_wood_light
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: GrandStair_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: GrandStair_stone
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: GrandStair_trim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: GrandStair_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Harbor_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Harbor_stone
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Harbor_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Hero
+10:02:22 | INFO: Primitives created: 6
+10:02:22 | INFO: Extracting primitive: Jetty_src
+10:02:22 | INFO: Primitives created: 3
+10:02:22 | INFO: Extracting primitive: Keep_banner
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_banner_mark
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_gate_core
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_gate_floor
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_gate_r1
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_gate_r2
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_gate_r3
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_gate_r4
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_gate_r5
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_roof_blue
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_roof_deep
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_trim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_wall
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_wall_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Keep_win_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Lamp_src
+10:02:22 | INFO: Primitives created: 3
+10:02:22 | INFO: Extracting primitive: Mountains_ridge_1
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Mountains_ridge_2
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Mountains_ridge_3
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Mountains_ridge_4
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Mountains_rock_mid
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_rock_dark
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_roof_blue
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_stone
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_trim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_wall
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_wall_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_win_gold
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_win_pink
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: OldCity_win_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Pier_src
+10:02:22 | INFO: Primitives created: 3
+10:02:22 | INFO: Extracting primitive: Pine_src
+10:02:22 | INFO: Primitives created: 3
+10:02:22 | INFO: Extracting primitive: Plaza_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Plaza_pave_line
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Plaza_stone
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Plaza_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: QuayGlow_armor_dark
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: QuayGlow_quay_lamp
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Scout
+10:02:22 | INFO: Primitives created: 2
+10:02:22 | INFO: Extracting primitive: Stall_src
+10:02:22 | INFO: Primitives created: 4
+10:02:22 | INFO: Extracting primitive: Statue_marble
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Statue_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Statue_trim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_ground
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_ground_dark
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_pave
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_rock_dark
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_rock_mid
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_stone
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_trim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_wall
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_wall_shade
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_wall_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Terrain_win_warm
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Torch_src
+10:02:22 | INFO: Primitives created: 3
+10:02:22 | INFO: Extracting primitive: TrojanHorse_wood
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: TrojanHorse_wood_dark
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: TrojanHorse_wood_light
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: Sol_BlueSpear
+10:02:22 | INFO: Primitives created: 6
+10:02:22 | INFO: Extracting primitive: Sol_BlueBow
+10:02:22 | INFO: Primitives created: 7
+10:02:22 | INFO: Extracting primitive: Sol_RedBow
+10:02:22 | INFO: Primitives created: 7
+10:02:22 | INFO: Extracting primitive: Sol_RedSpear
+10:02:22 | INFO: Primitives created: 6
+10:02:22 | INFO: Extracting primitive: Water
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: WaterReflections_refl_cool
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: WaterReflections_refl_dim
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: WaterReflections_refl_far
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: WaterReflections_refl_hot
+10:02:22 | INFO: Primitives created: 1
+10:02:22 | INFO: Extracting primitive: WaterReflections_refl_mid
+10:02:22 | INFO: Primitives created: 1
+10:02:23 | INFO: Finished glTF 2.0 export in 0.26700901985168457 s
+5 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3251 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3251 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3247 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3257 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3246 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3254 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3246 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3254 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3259 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3253 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3249 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3247 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3255 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3252 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3248 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3250 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (3258 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5057 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5024 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5143 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5120 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5141 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5139 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5124 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5144 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5124 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5123 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5140 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5139 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5131 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5142 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5132 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5123 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5143 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5137 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5132 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5138 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5135 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5123 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5142 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5134 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5130 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5140 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5128 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5123 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5143 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5138 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5129 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5135 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5132 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5125 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5141 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5121 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5129 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5138 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5140 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5128 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5146 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5137 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5124 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5139 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5138 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5119 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5139 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5135 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5122 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5134 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5139 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5129 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5144 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5121 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5131 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5140 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5126 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5145 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5131 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5132 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5137 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5128 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5123 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5136 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5138 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5129 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5139 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5138 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5127 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5140 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5128 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5130 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5133 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5143 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5125 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5144 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5129 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5131 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5135 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5122 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5128 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5140 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5133 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5128 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5135 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5137 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5122 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5144 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5127 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5129 / 2048)
+Error: Shadow buffer full, may result in missing shadows a00:29.186  render           | Saved: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-harbor.png'
+
+CITADEL_BUILD_OK {"seed": 20260912, "reflection_cards": 2286, "troops": 162, "lights": 49, "composite": "off", "objects": 507, "tris": 154490, "meshes": 112, "build_sec": 0.1, "blend": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/citadel-battle-v1.blend", "render_sec": 12.1, "render": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-full.png", "glb": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/citadel-battle-v1.glb", "glb_bytes": 3061112, "render_harbor": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/pipeline/citadel-battle-blender/render-harbor.png"}
+nd lower performance. (5135 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5140 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5126 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5141 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5131 / 2048)
+Error: Shadow buffer full, may result in missing shadows and lower performance. (5128 / 2048)
+
+Blender quit

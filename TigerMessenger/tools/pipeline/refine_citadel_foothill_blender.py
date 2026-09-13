@@ -5,7 +5,9 @@ ROOT=Path('/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger')
 OUT=ROOT/'artifacts/pipeline/citadel-cliff-blender';OUT.mkdir(parents=True,exist_ok=True)
 ASSET=ROOT/'assets/models/optimized/citadel-cliff';ASSET.mkdir(parents=True,exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
-bpy.ops.import_scene.gltf(filepath=str(ASSET/'citadel-cliff-input-v2.glb'))
+baseline=os.environ.get('CITADEL_CLIFF_BASE_VERSION','v2')
+first_round=int(os.environ.get('CITADEL_CLIFF_FIRST_ROUND','5'))
+bpy.ops.import_scene.gltf(filepath=str(ASSET/f'citadel-cliff-input-{baseline}.glb'))
 terrain=next(o for o in bpy.data.objects if o.type=='MESH' and o.name=='citadel-oskar-grid-mountain-surface')
 base=[v.co.copy() for v in terrain.data.vertices]
 world=terrain.matrix_world.copy();inv=world.inverted()
@@ -19,10 +21,15 @@ sun.rotation_euler=(.4,-.35,-.4)
 cam=bpy.data.objects.new('Cliff review camera',bpy.data.cameras.new('Cliff review camera'));scene.collection.objects.link(cam)
 cam.location=(85,-115,48);cam.rotation_euler=(Vector((8,-37,6))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.angle=math.radians(48);scene.camera=cam
 reports=[]
-for iteration in [5,6]:
+for iteration in [first_round,first_round+1]:
  changed=0
  for v,original in zip(terrain.data.vertices,base):
-  p=world@original;x,z,h=p.x,-p.y,p.z
+  p=world@original
+  if os.environ.get("CITADEL_NEW_CITY_YAW"):
+   a=-float(os.environ["CITADEL_NEW_CITY_YAW"])*math.pi/180;c,s=math.cos(a),math.sin(a)
+   dx,dz=p.x-8,-p.y-71.5
+   p.x=8+c*dx+s*dz;p.y=-(71.5-s*dx+c*dz)
+  x,z,h=p.x,-p.y,p.z
   # Protect the plaza top, harbor access, and all authored routes.
   cliff=(-19<x<65 and 60<z<116 and h<3.15 and (abs(x-8)>15.7 or z>83.7))
   if cliff and not(-13<x<-7 and z<80):
@@ -45,16 +52,20 @@ for iteration in [5,6]:
    side=1 if x>8 else -1
    p.x+=side*weight*(1.15*math.sin(z*.27)+.45*math.cos(h*.42))
    p.z+=weight*.38*math.sin(z*.23+h*.4)
-   if iteration==6:
+   if iteration==first_round+1:
     p.x+=side*weight*.65*math.sin(z*.13+h*.11)
     p.z+=weight*.30*math.cos(h*.55+z*.17)
    changed+=1
+  if os.environ.get("CITADEL_NEW_CITY_YAW"):
+   a=float(os.environ["CITADEL_NEW_CITY_YAW"])*math.pi/180;c,s=math.cos(a),math.sin(a)
+   dx,dz=p.x-8,-p.y-71.5
+   p.x=8+c*dx+s*dz;p.y=-(71.5-s*dx+c*dz)
   v.co=inv@p
  terrain.data.update()
  for polygon in terrain.data.polygons:polygon.use_smooth=False
  if not os.environ.get('CITADEL_CLIFF_EXPORT_ONLY'):
-  bpy.ops.wm.save_as_mainfile(filepath=str(ASSET/f'citadel-cliff-r0{iteration}.blend'))
-  scene.render.filepath=str(OUT/f'blender-r0{iteration}.png');bpy.ops.render.render(write_still=True)
+  bpy.ops.wm.save_as_mainfile(filepath=str(ASSET/f'citadel-cliff-r{iteration:02d}.blend'))
+  scene.render.filepath=str(OUT/f'blender-r{iteration:02d}.png');bpy.ops.render.render(write_still=True)
  reports.append({'iteration':iteration,'changed_vertices':changed,'protected_plaza_and_route_vertices_unchanged':True})
 # Export terrain in its original local coordinate frame: Blender XYZ -> Three X,Y,Z.
 terrain.data.calc_loop_triangles();positions=[];normals=[]
@@ -68,6 +79,6 @@ changes=[]
 for v,original in zip(terrain.data.vertices,base):
  if (v.co-original).length>1e-5:
   changes.append([round(original.x,4),round(original.z,4),round(-original.y,4),round(v.co.x-original.x,6),round(v.co.z-original.z,6),round(-v.co.y+original.y,6)])
-data={'changes':changes,'source':'assets/models/optimized/citadel-cliff/citadel-cliff-r06.blend','iterations':reports}
+data={'changes':changes,'source':f'assets/models/optimized/citadel-cliff/citadel-cliff-r{first_round+1:02d}.blend','baseline':baseline,'iterations':reports}
 (ASSET/'citadelCliffData.js').write_text('export default '+json.dumps(data,separators=(',',':'))+';\n')
 (OUT/'report.json').write_text(json.dumps({'iterations':reports,'triangles':len(positions)//9,'scope':'New-plaza front and outer middle/crown cliff faces, protected walkable tops; no old-city remodeling or final art acceptance.'},indent=2))

@@ -1,0 +1,55 @@
+{
+  "bands": [
+    {
+      "name": "citadel-backdrop-ridge-near",
+      "vertices": 7488,
+      "boundaryVertices": 218,
+      "boundaryAboveWater": 0,
+      "maxBoundaryAltitude": -2.9999969341154724
+    },
+    {
+      "name": "citadel-backdrop-ridge-mid",
+      "vertices": 8424,
+      "boundaryVertices": 242,
+      "boundaryAboveWater": 0,
+      "maxBoundaryAltitude": -2.999995054238326
+    },
+    {
+      "name": "citadel-backdrop-ridge-far",
+      "vertices": 9360,
+      "boundaryVertices": 266,
+      "boundaryAboveWater": 0,
+      "maxBoundaryAltitude": -2.9999937877966545
+    }
+  ],
+  "treeSupports": [
+    {
+      "ridge": "citadel-backdrop-ridge-near",
+      "trees": 80,
+      "missing": 0,
+      "maxGap": -0.34998496196446816
+    },
+    {
+      "ridge": "citadel-backdrop-ridge-mid",
+      "trees": 92,
+      "missing": 0,
+      "maxGap": -0.34998562435281233
+    },
+    {
+      "ridge": "citadel-backdrop-ridge-far",
+      "trees": 106,
+      "missing": 0,
+      "maxGap": -0.3499664384264447
+    }
+  ],
+  "conformance": {
+    "version": 1,
+    "radius": 160,
+    "vertices": 25272,
+    "trees": 278,
+    "perimeterDepth": 3,
+    "source": "officialOceanLevelAt",
+    "playableCityUnchanged": true
+  },
+  "errors": []
+}

@@ -1,0 +1,43 @@
+{
+  "initial": {
+    "count": 1,
+    "visible": false,
+    "referenced": true,
+    "retired": true
+  },
+  "rounds": [
+    {
+      "count": 1,
+      "visible": false,
+      "referenced": true,
+      "retired": true,
+      "oldDetached": true
+    },
+    {
+      "count": 1,
+      "visible": false,
+      "referenced": true,
+      "retired": true,
+      "oldDetached": true
+    },
+    {
+      "count": 1,
+      "visible": false,
+      "referenced": true,
+      "retired": true,
+      "oldDetached": true
+    }
+  ],
+  "restored": {
+    "count": 1,
+    "visible": false,
+    "referenced": true,
+    "retired": true
+  },
+  "protectedObjectCount": 31,
+  "protectedObjectsPreserved": true,
+  "globalOceanPresent": true,
+  "passed": true,
+  "errors": [],
+  "scope": "Actual 8931 startup and three moat rebuilds; bridge, walkway, sail and mast identity/visibility preservation. Does not prove full navigation, target fidelity or Godot parity."
+}

@@ -1,4 +1,5 @@
 import {OLD_CITY_YAW,rotateOldCityPoint} from './oldCityOrientation.js';
+import {NEW_CITY_YAW,rotateNewCityPoint} from './newCityOrientation.js';
 // Keep the spherical castle anchor stable. Move authored content in its tangent
 // plane so world navigation identities and the original tower internals survive.
 export const CITADEL_COMPOSITION_OFFSET = Object.freeze([-52, 0, 0]);
@@ -16,6 +17,13 @@ export function applyCitadelCompositionFrame(castle) {
   if(oldLights)oldLights.rotation.y+=OLD_CITY_YAW;
   const foundation=castle.getObjectByName('highland-town-foundation-platform');
   if(foundation)foundation.rotation.y+=OLD_CITY_YAW;
+  // The lake cutout is authored in the fixed terrain frame. Only buildings
+  // turn: undo the inherited yaw on its water cover to keep the shoreline sealed.
+  const waterfront=castle.getObjectByName('highland-waterfront-foreground');
+  if(waterfront)waterfront.rotation.y-=OLD_CITY_YAW;
+  // Mountain plants belong to the fixed terrain, not the rotated old buildings.
+  const slopePlants=castle.getObjectByName('highland-mountain-slope-vegetation');
+  if(slopePlants)slopePlants.rotation.y-=OLD_CITY_YAW;
   castle.userData.oldCityYaw=OLD_CITY_YAW;
   const point=p=>[p[0]+dx,p[1]+dy,p[2]+dz];
   const original=castle.userData.highlandAssaultAnchors;
@@ -27,11 +35,14 @@ export function applyCitadelCompositionFrame(castle) {
     castle.userData.highlandLatestDesignRoot.userData.assaultAnchors=moved;
   }
   if(city){
-    city.userData.walkRoute=city.userData.walkRoute.map(point);
-    if(city.userData.harborRoute)city.userData.harborRoute=city.userData.harborRoute.map(point);
-    for(const key of ['plazaAnchor','horseReservation','harborAnchor'])if(city.userData[key])city.userData[key]=point(city.userData[key]);
+    city.rotation.y=NEW_CITY_YAW;city.position.fromArray(rotateNewCityPoint([0,0,0]));
+    const cityPoint=p=>point(rotateNewCityPoint(p));
+    city.userData.walkRoute=city.userData.walkRoute.map(cityPoint);
+    if(city.userData.harborRoute)city.userData.harborRoute=city.userData.harborRoute.map(cityPoint);
+    if(city.userData.horsePlazaExit)city.userData.horsePlazaExit=city.userData.horsePlazaExit.map(cityPoint);
+    for(const key of ['plazaAnchor','statueAnchor','horseReservation','harborAnchor','processionalEntry'])if(city.userData[key])city.userData[key]=cityPoint(city.userData[key]);
   }
   castle.userData.compositionOffset=[dx,dy,dz];
-  castle.userData.compositionVersion='old-left-yaw30-new-center-v6';
+  castle.userData.compositionVersion='old-yaw30-new-yaw-minus30-v9';
   castle.updateMatrixWorld(true);
 }

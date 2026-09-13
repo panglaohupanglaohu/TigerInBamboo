@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import portalBlenderData from '../../assets/citadelPortalBlenderData.js';
+import {nightWeightAt} from '../../render/lighting/highlandLightVolumes.js';
 
 // Main portal joins the WFC shoulder/wings; the opening is real geometry,
 // with a 7.2-wide passage at ground level, not a door painted on a box.
@@ -13,12 +15,21 @@ export function buildCitadelMainGate(){
   shape.quadraticCurveTo(-inner,spring+1.6,0,apex);
   shape.quadraticCurveTo(inner,spring+1.6,inner,spring);
   shape.lineTo(inner,0);shape.lineTo(half,0);shape.lineTo(half,top);shape.lineTo(-half,top);shape.closePath();
-  const g=new THREE.ExtrudeGeometry(shape,{depth,bevelEnabled:false,curveSegments:12});g.translate(0,0,-depth/2);
+  const source=portalBlenderData[name];
+  const g=source?new THREE.BufferGeometry():new THREE.ExtrudeGeometry(shape,{depth,bevelEnabled:false,curveSegments:12});
+  if(source){g.setAttribute('position',new THREE.Float32BufferAttribute(source.positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(source.normals,3));g.computeBoundingSphere();}
+  else g.translate(0,0,-depth/2);
   const mesh=new THREE.Mesh(g,mat);mesh.name=name;mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);return mesh;
  }
  portal('main-gate-wall',5.3,13,3.9,5.8,9.1,2.4,stone);
  // A slightly smaller inner opening defines the carved arch surround.
  const frame=portal('main-gate-carved-surround',4.15,9.65,3.6,5.7,8.8,.20,trim);frame.position.z=1.3;
+ const glowMaterials=[];
+ for(let i=0;i<3;i++){
+  const m=new THREE.MeshStandardMaterial({color:[0xe0bd87,0xcda064,0xb67a48][i],roughness:.88,emissive:[0xffa13c,0xff7c26,0xff591c][i],emissiveIntensity:0});
+  const reveal=new THREE.Mesh(frame.geometry,m);reveal.name='portal-warm-reveal-'+i;
+  reveal.position.z=.82-i*.53;reveal.castShadow=false;reveal.receiveShadow=true;root.add(reveal);glowMaterials.push(m);
+ }
  // Target reference: suspended blue pennants flank the open pointed arch.
  const gold=new THREE.MeshStandardMaterial({color:0xe6cf96,roughness:.8});
  blue.side=THREE.DoubleSide;
@@ -44,7 +55,9 @@ export function buildCitadelMainGate(){
    join.rotation.z=-arm*.76;
   }
  }
- root.userData.sourceId='citadel-main-portal-v2-pennants';
+ root.userData.sourceId='citadel-main-portal-v3-blender-beveled';
+ root.userData.blenderSource='artifacts/citadel-reference-pass/citadel-portal-refined.blend';
+ root.userData.update=phase=>{const w=nightWeightAt(phase);glowMaterials.forEach((m,i)=>m.emissiveIntensity=w*(.22+i*.12));};
  root.userData.opening={width:7.2,springHeight:5.7,apexHeight:8.8};
  return root;
 }
